@@ -14,7 +14,6 @@
 CCanDo::checkRead();
 
 CApp::setTimeLimit(240);
-CApp::setMemoryLimit("512M");
 
 $date_limite = CMbDT::date("- 1 month");
 $qte_limite  = 1000;
@@ -32,24 +31,25 @@ $total = count($listHprimMedecins);
 
 // Liaison à un médecin existant
 $nouv = 0;
-
-CHprim21Object::massLoadExchanges($listHprimMedecins);
 foreach ($listHprimMedecins as $_medecin) {
   $_medecin->loadRefExchange();
+  $echg_hprim = $_medecin->_ref_echange_hprim21;
 
-  $mediuser = CMediusers::loadFromAdeli($_medecin->external_id);
-  if ($mediuser->_id) {
-    $_medecin->user_id = $mediuser->_id;
+  $medecin = new CMediusers();
+  $ljoin = array();
+  $ljoin["users"] = "users.user_id = users_mediboard.user_id";
+  $where = array();
+  $where["users_mediboard.adeli"] = " = '$_medecin->external_id'";
+  $medecin->loadObject($where, null, null, $ljoin);
+  if ($medecin->_id) {
+    $_medecin->user_id = $medecin->_id;
     $_medecin->store();
     $nouv++;
   }
 
-  $echg_hprim = $_medecin->_ref_echange_hprim21;
-  if (!$echg_hprim->object_id) {
-    $echg_hprim->object_class = "CMediusers";
-    $echg_hprim->object_id    = $mediuser->_id;
-    $echg_hprim->store();
-  }
+  $echg_hprim->object_class = "CMediusers";
+  $echg_hprim->object_id    = $medecin->_id;
+  $echg_hprim->store();
 }
 
 CAppUI::stepAjax("Médecins utilisés : '$total'");
@@ -70,42 +70,48 @@ $total = count($listHprimPatients);
 
 // Liaison à un patient existant
 $nouv = $anc = 0;
-CHprim21Object::massLoadExchanges($listHprimPatients);
 foreach ($listHprimPatients as $_patient) {
   $_patient->loadRefExchange();
   $echg_hprim = $_patient->_ref_echange_hprim21;
-
   // Recherche si la liaison a déjà été faite
-  $IPP = CIdSante400::getMatch("CPatient", $tag_ipp, $_patient->external_id);
+  $IPP               = new CIdSante400();
+  $IPP->object_class = "CPatient";
+  $IPP->tag          = $tag_ipp;
+  $IPP->id400        = "$_patient->external_id";
+  $IPP->loadMatchingObject("last_update DESC");
   if ($IPP->_id) {
-    $anc++;
-    
-    continue;
-  }
-  else {
-    // Sinon rattachement à un patient existant
-    $patient = new CPatient();
-    $patient->nom       = $_patient->nom;
-    $patient->prenom    = $_patient->prenom;
-    $patient->naissance = $_patient->naissance;
-    $return = $patient->loadMatchingPatient();
+    $_patient->patient_id = $IPP->object_id;
+    $_patient->store();
 
-    if ($return == 1) {
-      $IPP->object_id   = $patient->_id;
-      $IPP->store();
-
-      $nouv++;
-    }
-  }
-
-  $_patient->patient_id = $IPP->object_id;
-  $_patient->store();
-
-  if (!$echg_hprim->object_id) {
     $echg_hprim->object_class = $IPP->object_class;
     $echg_hprim->object_id    = $IPP->object_id;
     $echg_hprim->id_permanent = $IPP->id400;
     $echg_hprim->store();
+
+    $anc++;
+
+    continue;
+  }
+  // Sinon rattachement à un patient existant
+  $patient = new CPatient();
+  $patient->nom       = $_patient->nom;
+  $patient->prenom    = $_patient->prenom;
+  $patient->naissance = $_patient->naissance;
+  $return = $patient->loadMatchingPatient();
+  if ($return == 1) {
+    $IPP->object_id   = $patient->_id;
+    $IPP->last_update = CMbDT::dateTime();
+    $IPP->store();
+
+    $_patient->patient_id = $patient->_id;
+    $_patient->store();
+
+    $echg_hprim->object_class = $IPP->object_class;
+    $echg_hprim->object_id    = $IPP->object_id;
+    $echg_hprim->id_permanent = $IPP->id400;
+    $echg_hprim->store();
+
+    $nouv++;
   }
 }
 
@@ -129,10 +135,9 @@ $total = count($listHprimSejours);
 
 // Liaison à un sejour existant
 $nouv = $anc = $nopat = $moresej = $err = 0;
-CHprim21Object::massLoadExchanges($listHprimSejours);
 foreach ($listHprimSejours as $_sejour) {
-  $echg_hprim = $_sejour->loadRefExchange();
-
+  $_sejour->loadRefExchange();
+  $echg_hprim = $_sejour->_ref_echange_hprim21;
   // Vérification que le patient correspondant est bien lié
   $hprimPatient = new CHprim21Patient();
   $hprimPatient->load($_sejour->hprim21_patient_id);
@@ -141,21 +146,23 @@ foreach ($listHprimSejours as $_sejour) {
     continue;
   }
   // Recherche si la liaison a déjà été faite
-
-  $nda = CIdSante400::getMatch("CSejour", $tag_sejour, $_sejour->external_id);
+  $nda = new CIdSante400();
+  $nda->object_class = "CSejour";
+  $nda->tag = $tag_sejour;
+  $nda->id400 = "$_sejour->external_id";
+  $nda->loadMatchingObject("last_update DESC");
   if ($nda->_id) {
     $_sejour->sejour_id = $nda->object_id;
     $_sejour->store();
-    
+
     $echg_hprim->object_class = $nda->object_class;
     $echg_hprim->object_id    = $nda->object_id;
     $echg_hprim->id_permanent = $nda->id400;
     $echg_hprim->store();
-    
+
     $anc++;
     continue;
   }
-
   // Sinon rattachement à un sejour existant
   $sejour = new CSejour();
   $where = array();
@@ -177,7 +184,8 @@ foreach ($listHprimSejours as $_sejour) {
   }
   $sejour = reset($listSej);
   if ($sejour->_id) {
-    $nda->object_id = $sejour->_id;
+    $nda->object_id   = $sejour->_id;
+    $nda->last_update = CMbDT::dateTime();
     $nda->store();
 
     $_sejour->sejour_id = $sejour->_id;
@@ -187,7 +195,7 @@ foreach ($listHprimSejours as $_sejour) {
     $echg_hprim->object_id    = $nda->object_id;
     $echg_hprim->id_permanent = $nda->id400;
     $echg_hprim->store();
-    
+
     $nouv++;
   }
 }
