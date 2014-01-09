@@ -325,7 +325,9 @@
           Event.stop(event);
           var fromSalle = from.get("salle_id");
           var toSalle   = to.get("salle_id");
-          Operation.switchOperationsFromSalles(fromSalle, toSalle, "{{$date_planning}}", refreshPlanning);
+          if (fromSalle && toSalle) {
+            Operation.switchOperationsFromSalles(fromSalle, toSalle, "{{$date_planning}}", refreshPlanning);
+          }
         },
         accept: 'draggable',
         hoverclass:'dropover'
