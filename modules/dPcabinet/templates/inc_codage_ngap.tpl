@@ -18,11 +18,8 @@ ActesNGAP = {
   list_prats: { {{foreach from=$acte_ngap->_list_executants item=_executant name=executants}}{{$_executant->_id}}: {{if $_executant->spec_cpam_id}}{{$_executant->spec_cpam_id}}{{else}}0{{/if}}{{if !$smarty.foreach.executants.last}}, {{/if}}{{/foreach}} },
   checkExecutant: function(executant_id) {
     if (!ActesNGAP.list_prats[executant_id]) {
-      alert("{{if $app->_ref_user->isPraticien()}}{{tr}}CActeNGAP-specialty-unspecified_medecin{{/tr}}{{else}}{{tr}}CActeNGAP-specialty-unspecified_user{{/tr}}{{/if}}");
-      return 0;
+      alert("{{if $app->_ref_user->isPraticien()}}{{tr}}CActeNGAP-specialty-undefined_medecin{{/tr}}{{else}}{{tr}}CActeNGAP-specialty-undefined_user{{/tr}}{{/if}}");
     }
-
-    return 1;
   },
 
   refreshList: function() {
@@ -40,9 +37,7 @@ ActesNGAP = {
   },
   
   changeExecutant: function(acte_ngap_id, executant_id) {
-    if (!ActesNGAP.checkExecutant(executant_id)) {
-      return;
-    }
+    ActesNGAP.checkExecutant(executant_id);
 
     var oForm = document.changeExecutant;
     $V(oForm.acte_ngap_id, acte_ngap_id); 
@@ -52,9 +47,7 @@ ActesNGAP = {
   },
 
   submit: function() {
-    if (!ActesNGAP.checkExecutant($V(document.editNGAP.executant_id))) {
-      return;
-    }
+    ActesNGAP.checkExecutant($V(document.editNGAP.executant_id));
     var oForm = document.editNGAP;
     submitFormAjax(oForm, 'systemMsg', {
       onComplete: function() { 

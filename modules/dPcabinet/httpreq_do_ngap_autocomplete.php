@@ -27,7 +27,8 @@ $object->countActes();
 $praticien = $object->loadRefPraticien();
 $praticien->loadRefFunction();
 
-$praticien->spec_cpam_id ? $spe = $praticien->spec_cpam_id : $spe = 0;
+$praticien->spec_cpam_id ? $spe_undefined = false : $spe_undefined = true;
+$praticien->spec_cpam_id ? $spe = $praticien->spec_cpam_id : $spe = 1;
 
 // Creation de la requete permettant de retourner tous les codes correspondants
 if ($code) {
@@ -49,7 +50,7 @@ $smarty->debugging = false;
 
 $smarty->assign("code"      , $code);
 $smarty->assign("result"    , $result);
-$smarty->assign('specialite', $spe);
+$smarty->assign('spe_undefined', $spe_undefined);
 $smarty->assign("nodebug", true);
 
 $smarty->display("httpreq_do_ngap_autocomplete.tpl");

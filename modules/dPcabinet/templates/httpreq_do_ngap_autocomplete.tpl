@@ -1,4 +1,7 @@
 <ul>
+  {{if $spe_undefined}}
+    <li disabled><i>{{tr}}CActeNGAP-specialty-undefined{{/tr}}</i></li>
+  {{/if}}
   {{foreach from=$result item=ngap}}
     <li>
       <strong><span class="code">{{$ngap.code}}</span> (<span class="tarif">{{$ngap.tarif}}</span>)</strong>
@@ -8,11 +11,7 @@
     </li>
   {{foreachelse}}
     <li>
-      {{if !$specialite}}
-        {{tr}}CActeNGAP-specialty-unspecified{{/tr}}
-      {{else}}
-        <i>Aucun acte NGAP correspondant</i>
-      {{/if}}
+      <i>Aucun acte NGAP correspondant</i>
     </li>
   {{/foreach}}
 </ul>

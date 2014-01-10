@@ -174,25 +174,27 @@ class CActeNGAP extends CActe {
       return $msg;
     }
 
-    /* Check if the act exists */
-    $ds = CSQLDataSource::get("ccamV2");
-    $query = "SELECT *
+    if ($this->code) {
+      /* Check if the act exists */
+      $ds = CSQLDataSource::get("ccamV2");
+      $query = "SELECT *
       FROM `codes_ngap`
       WHERE `code` = ?;";
-    $query = $ds->prepare($query, $this->code);
-    $res = $ds->loadResult($query);
-    if (empty($res)) {
-      return 'CActeNGAP-unknown';
-    }
+      $query = $ds->prepare($query, $this->code);
+      $res = $ds->loadResult($query);
+      if (empty($res)) {
+        return 'CActeNGAP-unknown';
+      }
 
-    /* Check if the act is deprecated */
-    $query = "SELECT COUNT(t.`code`)
+      /* Check if the act is deprecated */
+      $query = "SELECT COUNT(t.`code`)
       FROM `codes_ngap` as c, `tarif_ngap` as t
       WHERE c.`code` = ? AND t.`code` = c.`code`;";
-    $query = $ds->prepare($query, $this->code);
-    $res = $ds->loadResult($query);
-    if ($res == 0) {
-      CAppUI::setMsg('CActeNGAP-deprecated', UI_MSG_WARNING);
+      $query = $ds->prepare($query, $this->code);
+      $res = $ds->loadResult($query);
+      if ($res == 0) {
+        CAppUI::setMsg('CActeNGAP-deprecated', UI_MSG_WARNING);
+      }
     }
 
     return parent::check();
@@ -219,7 +221,7 @@ class CActeNGAP extends CActe {
     $this->_ref_executant->loadRefFunction();
     $zone = self::getZone($this->_ref_executant->_ref_function);
 
-    $this->_ref_executant->spec_cpam_id ? $spe = $this->_ref_executant->spec_cpam_id : $spe = 0;
+    $this->_ref_executant->spec_cpam_id ? $spe = $this->_ref_executant->spec_cpam_id : $spe = 1;
 
     $ds = CSQLDataSource::get("ccamV2");
     $query = "SELECT t.`tarif`, t.`maj_nuit`, t.`maj_ferie`
