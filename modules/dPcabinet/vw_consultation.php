@@ -129,14 +129,7 @@ if ($patient->_vip) {
   CCanDo::redirect();
 }
 
-$consult->loadRefConsultAnesth();
-
-$consultAnesth = $consult->_ref_consult_anesth;
-
-// Si on a passé un id de dossier d'anesth
-if ($dossier_anesth_id && isset($consult->_refs_dossiers_anesth[$dossier_anesth_id])) {
-  $consultAnesth = $consult->_refs_dossiers_anesth[$dossier_anesth_id];
-}
+$consultAnesth = $consult->loadRefConsultAnesth($dossier_anesth_id);
 
 // Chargement du patient
 $patient->countBackRefs("consultations");

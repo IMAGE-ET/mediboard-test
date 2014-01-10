@@ -102,9 +102,9 @@ $op_sans_dossier_anesth = 0;
 // Chargement de la consultation
 if ($consult->_id) {
   $consult->loadRefsFwd();
-  $consultAnesth = $consult->loadRefConsultAnesth();
-  
+
   // Chargement de la consultation d'anesthésie
+  $consultAnesth = $consult->loadRefConsultAnesth($dossier_anesth_id);
   
   // Chargement de la vue de chacun des dossiers
   foreach ($consult->_refs_dossiers_anesth as $_dossier) {
@@ -113,10 +113,6 @@ if ($consult->_id) {
     $_dossier->loadRefOperation()->loadRefPlageOp();
   }
   
-  // Si on a passé un id de dossier d'anesth
-  if ($dossier_anesth_id && isset($consult->_refs_dossiers_anesth[$dossier_anesth_id])) {
-    $consultAnesth = $consult->_refs_dossiers_anesth[$dossier_anesth_id];
-  }
   if ($consultAnesth->_id) {
     $consultAnesth->loadRefs();
     if ($consultAnesth->_ref_operation->_id || $consultAnesth->_ref_sejour->_id) {
