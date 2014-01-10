@@ -6,5 +6,13 @@
       {{else}}<small>{{$ngap.libelle}}</small>
       {{/if}}
     </li>
+  {{foreachelse}}
+    <li>
+      {{if !$specialite}}
+        {{tr}}CActeNGAP-specialty-unspecified{{/tr}}
+      {{else}}
+        <i>Aucun acte NGAP correspondant</i>
+      {{/if}}
+    </li>
   {{/foreach}}
 </ul>

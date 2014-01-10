@@ -984,6 +984,9 @@ class CCodable extends CMbObject {
           $date = $this->_class == "CConsultation" ? "_date" : "date";
           $acte->date = $this->$date;
         }
+        if ($acte_class == "CActeNGAP") {
+          $acte->check();
+        }
         if (!$acte->countMatchingList()) {
           if ($msg = $acte->store()) {
             return $msg;

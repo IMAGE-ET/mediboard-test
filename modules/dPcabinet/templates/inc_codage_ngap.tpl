@@ -8,12 +8,23 @@ refreshTarif = function(){
   url.addElement(oForm.coefficient);
   url.addElement(oForm.demi);
   url.addElement(oForm.complement);
+  url.addElement(oForm.executant_id);
   url.requestUpdate('tarifActe', function() {
     $('inc_codage_ngap_button_create').disabled = false;
   });
 };
-  
+
 ActesNGAP = {
+  list_prats: { {{foreach from=$acte_ngap->_list_executants item=_executant name=executants}}{{$_executant->_id}}: {{if $_executant->spec_cpam_id}}{{$_executant->spec_cpam_id}}{{else}}0{{/if}}{{if !$smarty.foreach.executants.last}}, {{/if}}{{/foreach}} },
+  checkExecutant: function(executant_id) {
+    if (!ActesNGAP.list_prats[executant_id]) {
+      alert("{{if $app->_ref_user->isPraticien()}}{{tr}}CActeNGAP-specialty-unspecified_medecin{{/tr}}{{else}}{{tr}}CActeNGAP-specialty-unspecified_user{{/tr}}{{/if}}");
+      return 0;
+    }
+
+    return 1;
+  },
+
   refreshList: function() {
     var url = new Url("dPcabinet", "httpreq_vw_actes_ngap");
     url.addParam("object_id", "{{$object->_id}}");
@@ -28,7 +39,11 @@ ActesNGAP = {
     this.submit();
   },
   
-  changeExecutant: function(acte_ngap_id, executant_id){
+  changeExecutant: function(acte_ngap_id, executant_id) {
+    if (!ActesNGAP.checkExecutant(executant_id)) {
+      return;
+    }
+
     var oForm = document.changeExecutant;
     $V(oForm.acte_ngap_id, acte_ngap_id); 
     $V(oForm.executant_id, executant_id);
@@ -37,6 +52,9 @@ ActesNGAP = {
   },
 
   submit: function() {
+    if (!ActesNGAP.checkExecutant($V(document.editNGAP.executant_id))) {
+      return;
+    }
     var oForm = document.editNGAP;
     submitFormAjax(oForm, 'systemMsg', {
       onComplete: function() { 
@@ -56,7 +74,6 @@ ActesNGAP = {
     }
   }
 }
-
 </script>
 
 {{mb_default var=_is_dentiste value=false}}
@@ -178,7 +195,7 @@ ActesNGAP = {
           <td>{{mb_field object=$acte_ngap field=execution form="editNGAP" register=true}}</td>
 
           <td>
-            <select name="executant_id" style="width: 120px;" class="{{$acte_ngap->_props.executant_id}}">
+            <select onchange="ActesNGAP.checkExecutant($V(document.editNGAP.executant_id))" name="executant_id" style="width: 120px;" class="{{$acte_ngap->_props.executant_id}}">
               <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
               {{mb_include module=mediusers template=inc_options_mediuser list=$acte_ngap->_list_executants selected=$acte_ngap->executant_id}}
             </select>

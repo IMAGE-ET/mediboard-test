@@ -12,11 +12,12 @@
 CCanDo::checkRead();
 
 $acte = new CActeNGAP;
-$acte->quantite    = CValue::get("quantite", "1");
-$acte->code        = CValue::get("code");
-$acte->coefficient = CValue::get("coefficient", "1");
-$acte->demi        = CValue::get("demi");
-$acte->complement  = CValue::get("complement");
+$acte->quantite     = CValue::get("quantite", "1");
+$acte->code         = CValue::get("code");
+$acte->coefficient  = CValue::get("coefficient", "1");
+$acte->demi         = CValue::get("demi");
+$acte->complement   = CValue::get("complement");
+$acte->executant_id = CValue::get('executant_id');
 $acte->updateMontantBase();
 $acte->getLibelle();
 

@@ -174,6 +174,27 @@ class CActeNGAP extends CActe {
       return $msg;
     }
 
+    /* Check if the act exists */
+    $ds = CSQLDataSource::get("ccamV2");
+    $query = "SELECT *
+      FROM `codes_ngap`
+      WHERE `code` = ?;";
+    $query = $ds->prepare($query, $this->code);
+    $res = $ds->loadResult($query);
+    if (empty($res)) {
+      return 'CActeNGAP-unknown';
+    }
+
+    /* Check if the act is deprecated */
+    $query = "SELECT COUNT(t.`code`)
+      FROM `codes_ngap` as c, `tarif_ngap` as t
+      WHERE c.`code` = ? AND t.`code` = c.`code`;";
+    $query = $ds->prepare($query, $this->code);
+    $res = $ds->loadResult($query);
+    if ($res == 0) {
+      CAppUI::setMsg('CActeNGAP-deprecated', UI_MSG_WARNING);
+    }
+
     return parent::check();
   }
 
@@ -194,12 +215,24 @@ class CActeNGAP extends CActe {
    * @return float
    */
   function updateMontantBase() {
+    $this->loadRefExecutant();
+    $this->_ref_executant->loadRefFunction();
+    $zone = self::getZone($this->_ref_executant->_ref_function);
+
+    $this->_ref_executant->spec_cpam_id ? $spe = $this->_ref_executant->spec_cpam_id : $spe = 0;
+
     $ds = CSQLDataSource::get("ccamV2");
-    $query = "SELECT `tarif` 
-      FROM `codes_ngap` 
-      WHERE `code` = ? ";
-    $query = $ds->prepare($query, $this->code);
-    $this->montant_base = $ds->loadResult($query);
+    $query = "SELECT t.`tarif`, t.`maj_nuit`, t.`maj_ferie`
+      FROM `tarif_ngap` AS t, `specialite_to_tarif_ngap` AS s
+      WHERE t.`code` = ?1 AND t.`zone` = ?2 AND s.`specialite` = ?3 AND t.`tarif_ngap_id` = s.`tarif_id`;";
+    $query = $ds->prepare($query, $this->code, $zone, $spe);
+
+    $res = $ds->loadList($query);
+    if (empty($res)) {
+      $res[0] = array('tarif' => 0, 'maj_ferie' => 0, 'maj_nuit' => 0);
+    }
+
+    $this->montant_base = $res[0]['tarif'];
     $this->montant_base *= $this->coefficient;
     $this->montant_base *= $this->quantite;
 
@@ -208,30 +241,11 @@ class CActeNGAP extends CActe {
     }
 
     if ($this->complement == "F") {
-      $ds = CSQLDataSource::get("ccamV2");
-      $query = "SELECT `tarif`
-      FROM `codes_ngap`
-      WHERE `code` = 'F';";
-      $query = $ds->prepare($query);
-      $this->montant_base += $ds->loadResult($query);
+      $this->montant_base += $res[0]['maj_ferie'];
     }
 
     if ($this->complement == "N") {
-      $ds = CSQLDataSource::get("ccamV2");
-      $query = "SELECT `tarif`
-      FROM `codes_ngap`
-      WHERE `code` = 'MN';";
-      $query = $ds->prepare($query);
-      $this->montant_base += $ds->loadResult($query);
-    }
-
-    if ($this->complement == "U") {
-      $ds = CSQLDataSource::get("ccamV2");
-      $query = "SELECT `tarif`
-      FROM `codes_ngap`
-      WHERE `code` = 'U';";
-      $query = $ds->prepare($query);
-      $this->montant_base += $ds->loadResult($query);
+      $this->montant_base += $res[0]['maj_nuit'];
     }
 
     return $this->montant_base;
@@ -260,6 +274,37 @@ class CActeNGAP extends CActe {
       $this->lettre_cle = $hash['lettre_cle'];
     }
     return $this->_libelle;
+  }
+
+  /**
+   * Return the zone (metropole, antilles, guyane-reunion, mayotte) by using the zip code of the CFunctions or of the CGroups
+   *
+   * @param CFunctions $function The function
+   *
+   * @return string
+   */
+  static function getZone(CFunctions $function) {
+    if ($function->cp) {
+      $cp = $function->cp;
+    }
+    else {
+      $cp = CGroups::loadCurrent()->cp;
+    }
+    $cp = ceil($cp / 10);
+    if ($cp == 971 || $cp == 972) {
+      $zone = 'antilles';
+    }
+    elseif ($cp == 973 || $cp == 974) {
+      $zone = 'guyane-reunion';
+    }
+    elseif ($cp == 976) {
+      $zone = 'mayotte';
+    }
+    else {
+      $zone = 'metro';
+    }
+
+    return $zone;
   }
 
   /**
