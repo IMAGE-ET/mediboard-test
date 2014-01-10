@@ -24,7 +24,14 @@ class CMbConfig {
   public $sourcePath = "";
   public $targetPath = "";
   public $overloadPath = "";
-  
+
+  // Configs interdites à stocker en base de données
+  static $forbidden_values = array(
+    "config_db",
+    "root_dir",
+    "instance_role"
+  );
+
   function __construct() {
     global $mbpath;
     $this->sourcePath   = $mbpath."includes/config_dist.php";
@@ -146,7 +153,7 @@ class CMbConfig {
   static function loadValuesFromDB() {
     global $dPconfig;
     $ds = CSQLDataSource::get("std");
-    $request = "SELECT * FROM config_db;";
+    $request = "SELECT * FROM config_db WHERE config_db.key " . CSQLDataSource::prepareNotIn(self::$forbidden_values);
     $configs = $ds->loadList($request);
 
     foreach ($configs as $_value) {

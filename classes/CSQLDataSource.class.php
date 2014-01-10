@@ -917,8 +917,13 @@ abstract class CSQLDataSource {
     if (!count($values)) {
       return "IS NOT NULL AND 1";
     }
-    
-    $str = implode(", ", $values);
+
+    $quoted = array();
+    foreach ($values as $value) {
+      $quoted[] = "'$value'";
+    }
+
+    $str = implode(", ", $quoted);
     return "NOT IN ($str)";
   }
   
