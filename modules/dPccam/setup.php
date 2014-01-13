@@ -145,14 +145,6 @@ class CSetupdPccam extends CSetup {
     $query = "SHOW TABLES LIKE 'forfaits'";
     */
 
-    $query = "SELECT * FROM `codes_ngap` WHERE `code`=  'F';";
-
-    $this->addDatasource("ccamV2", $query);
-
-    $query = "SELECT * FROM `codes_ngap` WHERE `code`=  'U';";
-
-    $this->addDatasource("ccamV2", $query);
-
     $query = "SHOW TABLES LIKE 'tarif_ngap';";
     $this->addDatasource("ccamV2", $query);
   }
