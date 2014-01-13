@@ -1986,7 +1986,9 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return CSejourTask[]
    */
   function loadRefsTasks() {
-    return $this->_ref_tasks = $this->loadBackRefs("tasks");
+    $this->_ref_tasks = $this->loadBackRefs("tasks", 'sejour_id ASC');
+
+    return $this->_ref_tasks;
   }
 
   /**
