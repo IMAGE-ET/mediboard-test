@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage Hospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 // Récupération des  paramètres
@@ -71,15 +71,15 @@ else {
   $rpu = new CRPU();
   $rpus = $rpu->loadList($where, null, null, null, $ljoin);
   foreach ($rpus as $_rpu) {
-    $affectations[$_rpu->_ref_rpu->box_id] = "1";
+    $affectations[$_rpu->box_id] = "1";
   }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("chambre", $chambre);
-$smarty->assign("patient", $patient);
+$smarty->assign("chambre"     , $chambre);
+$smarty->assign("patient"     , $patient);
 $smarty->assign("affectations", $affectations);
 
 $smarty->display("inc_choice_lit.tpl");
