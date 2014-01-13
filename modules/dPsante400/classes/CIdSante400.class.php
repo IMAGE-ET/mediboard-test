@@ -79,7 +79,9 @@ class CIdSante400 extends CMbMetaObject {
   function updateFormFields() {
     parent::updateFormFields();
 
-    $this->_view = "$this->id400";
+    $this->_shortview = "$this->id400";
+
+    $this->_view = "[$this->id400] ($this->tag)";
   }
   
   /**
