@@ -365,7 +365,7 @@ class CMediusers extends CPerson {
     $backProps["etapes_didacticiel"]              = "CEtapeDidacticiel user_id";
     $backProps["astreintes"]                      = "CPlageAstreinte user_id";
     $backProps["dicom_sender"]                    = "CDicomSender user_id";
-    $backProps["CPS_pyxvital"]                    = "CPvCPS id_mediuser";
+    $backProps["cps_pyxvital"]                    = "CPvCPS id_mediuser";
     $backProps["affectation"]                     = "CAffectation praticien_id";
     $backProps["regles_sectorisation_mediuser"]   = "CRegleSectorisation praticien_id";
     $backProps["retrocession"]                    = "CRetrocession praticien_id";

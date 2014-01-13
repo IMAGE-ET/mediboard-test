@@ -360,7 +360,7 @@ class CPatient extends CPerson {
     // interfere avec CMbObject-back-observation_result_sets
     $backProps["patient_observation_result_sets"] = "CObservationResultSet patient_id";
     $backProps["patient_links"]         = "CPatient patient_link_id";
-    $backProps["CV_pyxvital"]           = "CPvCV id_patient";
+    $backProps["cv_pyxvital"]           = "CPvCV id_patient";
     $backProps["ins_patient"]           = "CINSPatient patient_id";
     $backProps["dmp_documents"]         = "CDMPDocument patient_id";
     return $backProps;
