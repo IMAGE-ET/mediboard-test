@@ -26,7 +26,11 @@ if (get_cfg_var("session.auto_start") > 0) {
 
 CSessionHandler::setHandler(CAppUI::conf("session_handler"));
 
+// Start session
 CSessionHandler::start();
+
+// Register shutdown function to end the session
+register_shutdown_function(array("CSessionHandler", "writeClose"));
 
 // Check if the session was made via a temporary token
 // and save its expiration date
