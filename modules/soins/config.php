@@ -22,4 +22,5 @@ $dPconfig["soins"] = array(
   "trans_compact"               => "0",
   "vue_condensee_dossier_soins" => "0",
   "soin_refresh_pancarte_service" => "20",
+  'refresh_vw_sejours_frequency' => 'disabled',
 );

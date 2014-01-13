@@ -71,6 +71,13 @@
 
     <tr>
       <th class="category" colspan="2">
+        Vue séjours
+      </th>
+    </tr>
+    {{mb_include module=system template=inc_config_enum var=refresh_vw_sejours_frequency values="disabled|600|1200|1800"}}
+
+    <tr>
+      <th class="category" colspan="2">
         Autres paramètres
       </th>
     </tr>

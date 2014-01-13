@@ -17,6 +17,8 @@ $only_non_checked = CValue::get("only_non_checked", 0);
 $print        = CValue::get("print", false);
 $_type_admission = CValue::getOrSession("_type_admission", "");
 $select_view = CValue::get("select_view", false);
+$refresh = CValue::get('refresh', false);
+$ecap = CValue::get('ecap', false);
 
 $lite_view = CValue::get("lite_view");
 
@@ -372,6 +374,7 @@ $smarty->assign("show_full_affectation", $select_view);
 $smarty->assign("only_non_checked", $only_non_checked);
 $smarty->assign("print"           , $print);
 $smarty->assign("_sejour"         , $_sejour);
+$smarty->assign('ecap'            , $ecap);
 
 $smarty->assign("select_view"     , $select_view);
 if ($select_view) {
@@ -391,9 +394,12 @@ if ($sejour_id) {
   
   $smarty->assign("sejour", $sejour);
   $smarty->display("../../soins/templates/inc_vw_sejour.tpl");
-} 
-
+}
+elseif ($refresh) {
+  // Raffraichissement de la liste des sejours
+  $smarty->display("inc_vw_sejours_global.tpl");
+}
 else {
-  // Rafraichissement de la liste des sejours
+  // Affichage de la liste des sejours
   $smarty->display("vw_sejours.tpl");
 }
