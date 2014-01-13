@@ -71,7 +71,7 @@ else {
   $rpu = new CRPU();
   $rpus = $rpu->loadList($where, null, null, null, $ljoin);
   foreach ($rpus as $_rpu) {
-    $affectations[$_rpu->_ref_rpu->box_id] = "1";
+    $affectations[$_rpu->box_id] = "1";
   }
 }
 
