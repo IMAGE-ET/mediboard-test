@@ -164,6 +164,9 @@ abstract class CMbPath {
       case "xll" :
         return "application/vnd.ms-excel";
 
+      case "odt":
+        return "application/vnd.oasis.opendocument.text";
+
       case "ppt" :
       case "pps" :
         return "application/vnd.ms-powerpoint";
