@@ -43,7 +43,7 @@ cancelTarif = function(action, callback) {
 validTarif = function(){
   var form = document.tarifFrm;
 
-  $V(form.du_tiers,  Math.round(($V(form._somme) - $V(form.du_patient))*100)/100);
+  $V(form.du_tiers,  Math.round(( parseFloat($V(form._somme)) -  parseFloat($V(form.du_patient)))*100)/100);
   
   if ($V(form.tarif) == ""){
     $V(form.tarif, "manuel");
