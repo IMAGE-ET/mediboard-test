@@ -71,38 +71,29 @@
       </tr>
     {{/foreach}}
 
-    <!-- 1 patient && pas de patient en session -->
-    {{if $patients|@count == 1 && !$patient->_id}}
-      <script>
+    <!-- JS -->
+    <script>
+      {{if $patients|@count == 1 && !$patient->_id}}
         reloadPatient('{{$_patient->_id}}', 0);
-      </script>
-    {{/if}}
+      {{/if}}
 
-    <!-- Plus d'un patient et pas de patient en session, on nettoie -->
-    {{if ($patients|@count > 1 || $patients|@count == 0) && !$patient->_id}}
-      <script>
+      {{if ($patients|@count > 1 || $patients|@count == 0) && !$patient->_id}}
         emptyPat();
-      </script>
-    {{/if}}
+      {{/if}}
 
-    <!-- un patient en session -->
-    {{if $patient->_id}}
-      <script>
+      {{if $patient->_id}}
         reloadPatient('{{$patient->_id}}', 0);
-      </script>
-    {{/if}}
+      {{/if}}
 
-    <!-- pas de result, bouton créer -->
-      <script>
-        var button_create = $("vw_idx_patient_button_create");
-        if (button_create) {
-          {{if $nom != '' || $prenom != ''}}
-            button_create.show();
-          {{else}}
-            button_create.hide();
-          {{/if}}
-        }
-      </script>
+      var button_create = $("vw_idx_patient_button_create");
+      if (button_create) {
+        {{if $nom != '' || $prenom != ''}}
+          button_create.show();
+        {{else}}
+          button_create.hide();
+        {{/if}}
+      }
+    </script>
 
     {{if $patientsLimited|@count}}
       <tr>
