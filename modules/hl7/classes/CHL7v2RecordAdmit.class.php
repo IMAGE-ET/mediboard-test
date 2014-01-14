@@ -1420,9 +1420,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       // Dans tous les cas le nom du lit est celui que l'on reçoit du flux
       default:
         $where = $ljoin = array();
-        $ljoin["service"]  = "service.service_id = chambre.service_id";
-        $where["chambre.nom"]      = " = '$nom_chambre'";
-        $where["group_id"] = " = '$sender->group_id'";
+        $ljoin["service"]        = "service.service_id = chambre.service_id";
+        $where["chambre.nom"]    = " = '$nom_chambre'";
+        $where["chambre.annule"] = " = '0'";
+        $where["group_id"]       = " = '$sender->group_id'";
 
         $chambre->escapeValues();
         $chambre->loadObject($where, null, null, $ljoin);
@@ -1466,7 +1467,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $affectation_uf->uf_id        = $uf->_id;
       $affectation_uf->object_class = "CService";
       $affectation_uf->loadMatchingObject();
-      
+
       $affectation->service_id = $affectation_uf->object_id;
     }
   }
