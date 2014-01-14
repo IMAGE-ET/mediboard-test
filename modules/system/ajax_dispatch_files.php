@@ -122,7 +122,7 @@ foreach ($files as $_filepath) {
     }
   }
   catch (CMbException $e) {
-    $source->renameFile($_filepath, $_old_filepath);
+    //$source->renameFile($_filepath, $_old_filepath);
 
     $e->stepAjax(UI_MSG_WARNING);
     continue;
