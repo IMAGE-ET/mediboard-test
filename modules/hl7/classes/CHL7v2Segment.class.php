@@ -561,7 +561,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     }
   }
   
-  function getXPN(CMbObject $object) {
+  function getXPN(CMbObject $object, CInteropReceiver $receiver) {
     $names = array();
     
     if ($object instanceof CPatient) {
@@ -605,7 +605,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         $patient_usualname[6] = "D";
       }
       $names[] = $patient_usualname;
-      if ($object->nom_jeune_fille) {
+      if ($object->nom_jeune_fille &&  $receiver->_configs["build_PID_6"] == "none") {
         $names[] = $patient_birthname;
       } 
     }

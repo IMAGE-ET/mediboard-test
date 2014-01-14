@@ -62,10 +62,24 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $data[] = null;
     
     // PID-5: Patient Name (XPN) (repeating)
-    $data[] = $this->getXPN($patient);
+    $data[] = $this->getXPN($patient, $receiver);
     
     // PID-6: Mother's Maiden Name (XPN) (optional repeating)
-    $data[] = null;
+    if ($patient->nom_jeune_fille && ($receiver->_configs["build_PID_6"] == "nom_naissance")) {
+      $data[] = array(
+        $patient->nom_jeune_fille,
+        $patient->prenom,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "L"
+      );
+    }
+    else {
+      $data[] = null;
+    }
     
     // PID-7: Date/Time of Birth (TS) (optional)
     if ($patient->naissance) {
