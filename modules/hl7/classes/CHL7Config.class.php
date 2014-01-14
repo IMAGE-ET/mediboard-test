@@ -23,7 +23,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "iti30_option_merge",
     "iti30_option_link_unlink",
     // => ITI-31
-    "iti31_in_outpatient_emanagement",
+    "iti31_in_outpatient_management",
     "iti31_pending_event_management",
     "iti31_advanced_encounter_management",
     "iti31_temporary_patient_transfer_tracking",
@@ -57,7 +57,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "handle_PV1_36",
     "handle_PV2_12",
     "handle_NSS",
-    "create_pregnancy",
+    "create_grossesse",
 
     // Send
     "send_assigning_authority",
