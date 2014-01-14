@@ -1,3 +1,4 @@
+#!/bin/sh
 # Openoffice memory leak...
 # If over 10%, restart it.
 
@@ -7,7 +8,7 @@ force_restart=$1
 if [ $percent -ge 10 ] || [ "$force_restart" = "1" ]
 then
   pkill soffice;
-  export HOME=/tmp; /usr/bin/soffice -accept="socket,host=localhost,port=8100;urp;StarOffice.ServiceManager" -no-logo -headless -nofirststartwizard -no-restore >> /tmp/log_ooo &
+  export HOME=/tmp; /usr/bin/soffice --accept="socket,host=localhost,port=8100;urp;StarOffice.ServiceManager" --nologo --headless --nofirststartwizard --norestore >> /tmp/log_ooo &
 fi
 
 echo $percent
