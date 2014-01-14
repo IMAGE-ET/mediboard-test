@@ -116,7 +116,15 @@
     cancelTarif(null, reloadFacture);
   };
 
-  Main.add( function(){
+  tiersPayant = function() {
+    var form = document.tarifFrm;
+    console.debug(form.du_tva.value);
+    var du_patient = parseFloat(form.secteur2.value) + parseFloat(form.secteur3.value) + parseFloat(form.du_tva.value);
+    $V(form.du_tiers, form.secteur1.value);
+    $V(form.du_patient, du_patient);
+  }
+
+  Main.add(function() {
     prepareForm(document.accidentTravail);
 
     {{if $consult->type_assurance}}
@@ -155,7 +163,7 @@
 
 <tr>
 {{if $gestionFSE}}
-{{if $modFSE->canRead()}}
+  {{if $modFSE->canRead() && $app->user_prefs.LogicielFSE != 'aucun'}}
 <td class="halfPane">
   <!-- Inclusion de la gestion de la FSE -->
   {{mb_include module=fse template=inc_gestion_fse}}
@@ -163,7 +171,7 @@
 {{/if}}
 {{/if}}
 
-<td>
+<td {{if !$gestionFSE || $app->user_prefs.LogicielFSE == 'aucun'}}colspan="2"{{/if}}>
 <fieldset>
 <legend>Cotation</legend>
 
@@ -381,11 +389,6 @@
       <th>{{mb_label object=$consult field="du_patient"}}</th>
       <td>
         {{mb_field object=$consult field="du_patient"}}
-        {{if !@$modules.tarmed->_can->read || $conf.tarmed.CCodeTarmed.use_cotation_tarmed != "1"}}
-        <button id="reglement_button_tiers_payant" type="button" class="tick" onclick="$V(this.form.du_tiers, this.form.du_patient.value);$V(this.form.du_patient, 0);">
-          Tiers-payant total
-        </button>
-        {{/if}}
       </td>
       {{else}}
       <td colspan="2"><input type="hidden" name="du_patient" value="0"/></td>
@@ -405,6 +408,11 @@
         {{mb_field object=$consult field="tarif" hidden=1}}
         <input type="hidden" name="patient_date_reglement" value="" />
         {{mb_field object=$consult field="du_tiers" readonly=readonly}}
+        {{if !@$modules.tarmed->_can->read || $conf.tarmed.CCodeTarmed.use_cotation_tarmed != "1"}}
+          <button id="reglement_button_tiers_payant" type="button" class="tick" onclick="tiersPayant();">
+            Tiers-payant total
+          </button>
+        {{/if}}
       </td>
     </tr>
     {{/if}}
