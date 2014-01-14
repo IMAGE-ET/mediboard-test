@@ -134,13 +134,11 @@
           {{/if}}
 
           {{if $can->edit}}
-            {{if $nom || $prenom || $patient_ipp || $naissance}}
-              <button id="vw_idx_patient_button_create" class="new" type="button" tabindex="15" onclick="Patient.create(this.form);" style="display:none;">
-                {{tr}}Create{{/tr}}
-                {{if $useVitale}}avec Vitale{{/if}}
-                {{if $useCoverCard}}avec Covercard{{/if}}
-              </button>
-            {{/if}}
+            <button id="vw_idx_patient_button_create" class="new" type="button" tabindex="15" onclick="Patient.create(this.form);" style="display:none;">
+              {{tr}}Create{{/tr}}
+              {{if $useVitale}}avec Vitale{{/if}}
+              {{if $useCoverCard}}avec Covercard{{/if}}
+            </button>
           {{/if}}
         {{/if}}
       </td>
