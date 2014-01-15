@@ -179,7 +179,9 @@ showModalTP = function(dossier_medical_id, sejour_id, prescription_sejour_id) {
 {{/if}}
 <form name="save_absence_ttt" action="?" method="post" onsubmit="return onSubmitFormAjax(this);" style="float: right;display: {{$display}}">
   {{mb_key   object=$dossier_medical}}
-  {{mb_class object=$dossier_medical}}
+  <input type="hidden" name="m"     value="patients" />
+  <input type="hidden" name="del"     value="0" />
+  <input type="hidden" name="dosql"     value="do_dossierMedical_aed" />
   <input type="hidden" name="object_id" value="{{$patient->_id}}" />
   <input type="hidden" name="object_class" value="{{$patient->_class}}" />
   {{mb_label object=$dossier_medical field=absence_traitement}}
