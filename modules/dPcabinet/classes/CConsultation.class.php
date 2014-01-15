@@ -1419,7 +1419,7 @@ class CConsultation extends CFacturable {
     $dossiers = $this->loadRefsDossiersAnesth();
 
     // Cas du choix initial du dossier à utiliser
-    if ($dossier_anesth_id !== null) {
+    if ($dossier_anesth_id !== null && isset($dossiers[$dossier_anesth_id])) {
       return $this->_ref_consult_anesth = $dossiers[$dossier_anesth_id];
     }
 
@@ -1947,10 +1947,10 @@ class CConsultation extends CFacturable {
     $consultAnesth = $this->loadRefConsultAnesth();
     $operation = new COperation();
     if (!$consultAnesth->_id || $this->_operation_id) {
-      if(!$consultAnesth->_id) {
+      if (!$consultAnesth->_id) {
         $consultAnesth->consultation_id = $this->_id;
       }
-      if($this->_operation_id) {
+      if ($this->_operation_id) {
         // Association à l'intervention
         $consultAnesth->operation_id = $this->_operation_id;
         $operation = $consultAnesth->loadRefOperation();
