@@ -79,6 +79,7 @@ class CSmartyMB extends Smarty {
     $this->register_modifier("pad"               , array($this, "pad"));
     $this->register_modifier("json"              , array($this, "json"));
     $this->register_modifier("purify"            , array($this, "purify"));
+    $this->register_modifier("markdown"          , array($this, "markdown"));
     $this->register_modifier("iso_date"          , array($this, "iso_date"));
     $this->register_modifier("iso_time"          , array($this, "iso_time"));
     $this->register_modifier("iso_datetime"      , array($this, "iso_datetime"));
@@ -482,6 +483,17 @@ class CSmartyMB extends Smarty {
    */
   function purify($html) {
     return CMbString::purifyHTML($html);
+  }
+
+  /**
+   * Markdown parser
+   *
+   * @param string $text Text input to parse
+   *
+   * @return string
+   */
+  function markdown($text) {
+    return CMbString::markdown($text);
   }
 
   /**

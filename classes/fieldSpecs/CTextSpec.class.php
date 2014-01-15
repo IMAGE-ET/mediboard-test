@@ -13,6 +13,8 @@
  * Long string
  */
 class CTextSpec extends CMbFieldSpec {
+  public $markdown;
+
   /**
    * @see parent::getSpecType()
    */
@@ -42,13 +44,18 @@ class CTextSpec extends CMbFieldSpec {
     if ($truncate = CValue::read($params, "truncate")) {
       $value = CMbString::truncate($value, $truncate === true ? null : $truncate);
     }
+
+    if ($this->markdown) {
+      return $value ? "<div class='markdown'>".CMbString::markdown($value)."</div>" : "";
+    }
+
     return $value ? '<p>'.nl2br(CMbString::htmlSpecialChars($value)).'</p>': "";
   }
 
   /**
    * @see parent::sample()
    */
-  function sample($object, $consistent = true){
+  function sample($object, $consistent = true) {
     parent::sample($object, $consistent);
     $chars = array_merge(CMbFieldSpec::$chars, array(' ', ' ', ', ', '. '));
     $object->{$this->fieldName} = self::randomString($chars, 200);
@@ -57,7 +64,7 @@ class CTextSpec extends CMbFieldSpec {
   /**
    * @see parent::getFormHtmlElement()
    */
-  function getFormHtmlElement($object, $params, $value, $className){
+  function getFormHtmlElement($object, $params, $value, $className) {
     return $this->getFormElementTextarea($object, $params, $value, $className);
   }
 

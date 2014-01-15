@@ -725,4 +725,38 @@ abstract class CMbString {
 
     return $purified;
   }
+
+  /**
+   * PHP-Markdown parser call
+   *
+   * @param string $text Text to parse
+   *
+   * @return string
+   */
+  static function markdown($text) {
+    if (trim($text) == "") {
+      return $text;
+    }
+
+    static $cache = array();
+
+    if (isset($cache[$text])) {
+      return $cache[$text];
+    }
+
+    if (!class_exists("Parsedown", false)) {
+      $root = CAppUI::conf("root_dir");
+      $file = "$root/lib/parsedown/Parsedown.php";
+
+      require_once $file;
+    }
+
+    $markdown = Parsedown::instance()->parse($text);
+
+    if (isset($markdown[5])) {
+      $cache[$text] = $markdown;
+    }
+
+    return $markdown;
+  }
 }

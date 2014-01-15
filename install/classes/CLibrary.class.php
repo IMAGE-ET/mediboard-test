@@ -519,3 +519,15 @@ $library->versionFile = "Changelog";
 $library->versionString = 'v1.3.9';
 
 CLibrary::$all[$library->name] = $library;
+
+$library = new CLibrary;
+$library->name          = "Parsedown";
+$library->url           = "https://github.com/erusev/parsedown";
+$library->fileName      = "Parsedown.zip";
+$library->description   = "Better Markdown parser for PHP.";
+$library->sourceDir     = "Parsedown";
+$library->targetDir     = "parsedown";
+$library->versionFile   = "Parsedown.php";
+$library->versionString = "private function parse_block_elements";
+
+CLibrary::$all[$library->name] = $library;
