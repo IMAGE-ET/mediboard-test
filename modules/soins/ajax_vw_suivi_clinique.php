@@ -44,10 +44,12 @@ $sejour->loadRefsNotes();
 foreach ($sejour->_ref_tasks as $key=>$_task) {
   if ($_task->realise) {
     unset($sejour->_ref_tasks[$key]);
+    continue;
   }
-  else {
-    $_task->loadRefPrescriptionLineElement();
-  }
+
+  $_task->loadRefPrescriptionLineElement();
+  $_task->loadFirstLog();
+  $_task->_ref_first_log->loadRefUser()->loadRefMediuser()->loadRefFunction();
 }
 
 // Tri des transmissions par catégorie
