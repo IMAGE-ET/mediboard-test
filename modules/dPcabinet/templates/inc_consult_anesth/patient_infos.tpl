@@ -17,7 +17,7 @@
       </a>
       Patient
     </th>
-    <th class="category">{{tr}}CConsultAnesth{{/tr}}</th>
+    <th class="category">Dossier d'anesthésie</th>
     <th class="category">
       <a style="float:right;" href="#" onclick="view_history_consult({{$consult->_id}})">
         <img src="images/icons/history.gif" alt="historique" />

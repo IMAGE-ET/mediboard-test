@@ -14,7 +14,7 @@ $consult_id = CValue::getOrSession("consult_id");
 
 $consult = new CConsultation();
 $consult->load($consult_id);
-$consult->loadRefPatient();
+$patient = $consult->loadRefPatient();
 $consult->loadRefsDossiersAnesth();
 
 $tab_op = array();
@@ -43,11 +43,30 @@ $dossier_medical_patient->loadRefsAntecedents();
 $dossier_medical_patient->loadRefsTraitements();
 $dossier_medical_patient->loadRefPrescription();
 
+$op_sans_dossier_anesth = 0;
+// Chargement du patient
+$patient->countBackRefs("sejours");
+$patient->loadRefsSejours();
+
+// Chargement de ses séjours
+foreach ($patient->_ref_sejours as $_key => $_sejour) {
+  $_sejour->loadRefsOperations();
+  foreach ($_sejour->_ref_operations as $_key_op => $_operation) {
+    $_operation->loadRefsConsultAnesth();
+    $_operation->loadRefPlageOp();
+    $_operation->loadRefChir()->loadRefFunction()->loadRefGroup();
+    if (!$_operation->_ref_consult_anesth->_id && !$op_sans_dossier_anesth) {
+      $op_sans_dossier_anesth = $_operation->_id;
+    }
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("consult"     , $consult);
 $smarty->assign("dm_patient"  , $dossier_medical_patient);
 $smarty->assign("tab_op"      , $tab_op);
+$smarty->assign("op_sans_dossier_anesth"      , $op_sans_dossier_anesth);
 
 $smarty->display("inc_check_consult_anesth.tpl");

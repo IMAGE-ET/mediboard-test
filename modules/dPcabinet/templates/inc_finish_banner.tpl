@@ -1,32 +1,10 @@
 {{mb_default var=current_m value=""}}
-{{mb_default var=op_sans_dossier_anesth value=0}}
 
 <script>
 function checkConsult() {
   var url = new Url("dPcabinet", "ajax_check_consult_anesth");
   url.addParam("consult_id", "{{$consult->_id}}");
   url.requestModal();
-}
-function duplicateDossier(close) {
-  {{if $consult_anesth && $consult_anesth->_id && $op_sans_dossier_anesth}}
-    var url = new Url("dPcabinet", "ajax_duplicate_consult_anesth");
-    url.addParam("consult_id", "{{$consult->_id}}");
-    url.addParam("operation_id", "{{$op_sans_dossier_anesth}}");
-    url.addParam("consult_anesth_id", "{{$consult_anesth->_id}}");
-    if (close) {
-      url.requestModal(null, null, { onClose: function(){ submitAll(); submitConsultWithChrono({{$consult|const:'TERMINE'}}); } } );
-    }
-    else {
-      url.requestModal();
-    }
-  {{else}}
-    if (close) {
-      submitAll(); submitConsultWithChrono({{$consult|const:'TERMINE'}});
-    }
-    else {
-      checkConsult();
-    }
-  {{/if}}
 }
 
 function submitConsultWithChrono(chrono) {
@@ -131,10 +109,10 @@ function changePratPec(prat_id) {
       (Etat : {{$consult->_etat}}
       {{if $consult->chrono <= $consult|const:'EN_COURS'}}
         /
-        {{if $conf.dPcabinet.CConsultAnesth.check_close && $consult_anesth && $consult_anesth->_id}}
-          <button class="tick" type="button" onclick="duplicateDossier(false);">
+        {{if $consult_anesth && $consult_anesth->_id}}
+          <button class="tick" type="button" onclick="checkConsult();">
         {{else}}
-          <button class="tick" type="button" onclick="duplicateDossier(true);">
+          <button class="tick" type="button" onclick="submitAll(); submitConsultWithChrono({{$consult|const:'TERMINE'}});">
         {{/if}}
         Terminer
         </button>

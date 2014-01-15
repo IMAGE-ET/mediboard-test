@@ -27,6 +27,7 @@ if (!isset($current_m)) {
 $prat_id           = CValue::getOrSession("chirSel", $user->_id);
 $selConsult        = CValue::getOrSession("selConsult");
 $dossier_anesth_id = CValue::getOrSession("dossier_anesth_id");
+$dossier_anesth_id = $dossier_anesth_id ? $dossier_anesth_id : null;
 
 $listPrats   = CConsultation::loadPraticiens(PERM_EDIT);
 $listChirs   = $user->loadPraticiens(PERM_READ);
@@ -98,7 +99,6 @@ $consultAnesth = $consult->_ref_consult_anesth;
 
 // Consultation courante
 $consult->_ref_chir = $userSel;
-$op_sans_dossier_anesth = 0;
 // Chargement de la consultation
 if ($consult->_id) {
   $consult->loadRefsFwd();
@@ -139,9 +139,6 @@ if ($consult->_id) {
     foreach ($_sejour->_ref_operations as $_key_op => $_operation) {
       $_operation->loadRefsFwd();
       $_operation->_ref_chir->loadRefFunction()->loadRefGroup();
-      if (!$_operation->_ref_consult_anesth->_id && !$op_sans_dossier_anesth) {
-        $op_sans_dossier_anesth = $_operation->_id;
-      }
     }
     $_sejour->loadRefsFwd();
   }
@@ -309,7 +306,6 @@ $smarty->assign("list_etat_dents", $list_etat_dents);
 $smarty->assign("now"            , $now);
 $smarty->assign("listPrats"      , $listPrats);
 $smarty->assign("list_mode_sortie", $list_mode_sortie);
-$smarty->assign("op_sans_dossier_anesth", $op_sans_dossier_anesth);
 
 if (CModule::getActive("dPprescription")) {
   $smarty->assign("line"           , new CPrescriptionLineMedicament());

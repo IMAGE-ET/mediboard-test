@@ -10,19 +10,25 @@
     submitOpConsult();
   }
   newOperation = function(chir_id, pat_id) {
-    var url = new Url;
-    url.setModuleTab("dPplanningOp", "vw_edit_planning");
+    var url = new Url("dPplanningOp", "vw_edit_planning");
     url.addParam("chir_id", chir_id);
     url.addParam("pat_id", pat_id);
     url.addParam("operation_id", 0);
     url.addParam("sejour_id", 0);
     url.redirect();
   }
+
   {{if !$consult_anesth->libelle_interv && !$consult_anesth->sejour_id && !$consult_anesth->operation_id && ($nextSejourAndOperation.COperation->_id || $nextSejourAndOperation.CSejour->_id)}}
-    modalWindow = null;
-    Main.add(function () {
-      modalWindow = Modal.open($('evenement-chooser-modal'));
-    });
+    {{if $conf.dPcabinet.CConsultAnesth.use_new_da}}
+      Main.add(function () {
+          GestionDA.edit();
+        });
+    {{else}}
+      modalWindow = null;
+      Main.add(function () {
+        modalWindow = Modal.open($('evenement-chooser-modal'));
+      });
+    {{/if}}
   {{/if}}
 </script>
 
@@ -30,53 +36,53 @@
   {{assign var=next_operation value=$nextSejourAndOperation.COperation}}
   {{assign var=next_sejour    value=$nextSejourAndOperation.CSejour   }}
   {{if $next_operation->_id}}
-  <tr>
-    <td colspan="2"> <div class="small-info">Une intervention à venir est présente pour ce patient</div></td>
-  </tr>
-  <tr>
-    <td></td>
-    <td><strong>{{$next_operation}}</strong></td>
-  </tr>
-  <tr>
-    <th>{{mb_title object=$next_operation field=libelle}}</th>
-    <td><strong>{{$next_operation->libelle}}</strong></td>
-  </tr>
-  <tr>
-    <th>{{mb_title object=$next_operation field=cote}}</th>
-    <td><strong>{{mb_value object=$next_operation field=cote}}</strong></td>
-  </tr>
-  <tr>
-    <th>Prévue le </th>
-    <td><strong>{{$next_operation->_datetime|date_format:$conf.date}}</strong></td>
-  </tr>
-  <tr>
-    <th>Avec le Dr </th>
-    <td><strong>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$next_operation->_ref_chir}}</strong></td>
-  </tr>
-  <tr>
-    <td class="button" colspan="2"><button class="tick" onclick="selectOperation('{{$next_operation->_id}}'); modalWindow.close();">Associer au dossier d'anesthésie</button>
-      {{elseif $next_sejour->_id}}
-  <tr>
-    <td colspan="2"> <div class="small-info">Un séjour à venir est présent dans le système pour ce patient</div></td>
-  </tr>
-  <tr>
-    <td></td>
-    <td><strong>{{$next_sejour}}</strong></td>
-  </tr>
-  <tr>
-    <th>{{mb_title object=$next_sejour field=libelle}}</th>
-    <td><strong>{{$next_sejour->libelle}}</strong></td>
-  </tr>
-  <tr>
-    <th>Avec le Dr </th>
-    <td><strong>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$next_sejour->_ref_praticien}}</strong></td>
-  </tr>
-  <tr>
-    <td class="button" colspan="2">
-      <button class="tick" onclick="selectSejour('{{$next_sejour->_id}}'); modalWindow.close();">Associer au dossier d'anesthésie</button>
+    <tr>
+      <td colspan="2"> <div class="small-info">Une intervention à venir est présente pour ce patient</div></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><strong>{{$next_operation}}</strong></td>
+    </tr>
+    <tr>
+      <th>{{mb_title object=$next_operation field=libelle}}</th>
+      <td><strong>{{$next_operation->libelle}}</strong></td>
+    </tr>
+    <tr>
+      <th>{{mb_title object=$next_operation field=cote}}</th>
+      <td><strong>{{mb_value object=$next_operation field=cote}}</strong></td>
+    </tr>
+    <tr>
+      <th>Prévue le </th>
+      <td><strong>{{$next_operation->_datetime|date_format:$conf.date}}</strong></td>
+    </tr>
+    <tr>
+      <th>Avec le Dr </th>
+      <td><strong>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$next_operation->_ref_chir}}</strong></td>
+    </tr>
+    <tr>
+      <td class="button" colspan="2"><button class="tick" onclick="selectOperation('{{$next_operation->_id}}'); modalWindow.close();">Associer au dossier d'anesthésie</button>
+        {{elseif $next_sejour->_id}}
+    <tr>
+      <td colspan="2"> <div class="small-info">Un séjour à venir est présent dans le système pour ce patient</div></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><strong>{{$next_sejour}}</strong></td>
+    </tr>
+    <tr>
+      <th>{{mb_title object=$next_sejour field=libelle}}</th>
+      <td><strong>{{$next_sejour->libelle}}</strong></td>
+    </tr>
+    <tr>
+      <th>Avec le Dr </th>
+      <td><strong>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$next_sejour->_ref_praticien}}</strong></td>
+    </tr>
+    <tr>
+      <td class="button" colspan="2">
+        <button class="tick" onclick="selectSejour('{{$next_sejour->_id}}'); modalWindow.close();">Associer au dossier d'anesthésie</button>
+  {{/if}}
       <button class="cancel" onclick="modalWindow.close();">Ne pas associer</button></td>
   </tr>
-  {{/if}}
 </table>
 
 <div id="dossiers_anesth_area">
@@ -85,7 +91,7 @@
 
 {{assign var=operation value=$consult_anesth->_ref_operation}}
 
-{{if $patient->_ref_sejours|@count}}
+{{if $patient->_ref_sejours|@count && !$conf.dPcabinet.CConsultAnesth.use_new_da}}
 
 <form name="addOpFrm" action="?m={{$m}}" method="post">
   <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
@@ -143,7 +149,7 @@
   </span>
   <br />
   {{/if}}
-  
+
   {{if $operation->_id}}
   <span onmouseover="ObjectTooltip.createEx(this, '{{$operation->_guid}}', null, { view_tarif: true })">
     <strong>Intervention :</strong>
@@ -162,13 +168,13 @@
 
 {{if $operation->_id}}
 <hr />
-  
+
 <form name="editOpFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitFormAjax(this);">
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="do_planning_aed" />
   {{mb_key object=$operation}}
-  
+
   <table class="layout main">
     {{if $conf.dPplanningOp.COperation.verif_cote && ($operation->cote == "droit" || $operation->cote == "gauche")}}
       <tr>
@@ -176,7 +182,7 @@
         <td>{{mb_field emptyLabel="Choose" object=$operation field="cote_consult_anesth" onchange="this.form.onsubmit();"}}</td>
       </tr>
     {{/if}}
-    
+
     <tr>
       <th>{{mb_label object=$operation field="depassement_anesth"}} :</th>
       <td>
@@ -186,30 +192,30 @@
     </tr>
   </table>
 </form>
-{{else}}
-<form name="opInfoFrm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this)">
-  <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="m" value="dPcabinet" />
-  {{mb_key object=$consult_anesth}}
-  <table class="form">
-    <tr>
-      <th>{{mb_label object=$consult_anesth field="date_interv"}}</th>
-      <td>{{mb_field object=$consult_anesth field="date_interv" form="opInfoFrm" register=true onchange="this.form.onsubmit()"}}</td>
-    </tr>
-    <tr>
-      <th>{{mb_label object=$consult_anesth field="chir_id"}}</th>
-      <td>
-        <select name="chir_id" class="{{$consult_anesth->_props.chir_id}}" style="width: 14em;" onchange="this.form.onsubmit();">
-          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-          {{mb_include module=mediusers template=inc_options_mediuser selected=$consult_anesth->chir_id list=$listChirs}}
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <th>{{mb_label object=$consult_anesth field="libelle_interv"}}</th>
-      <td>{{mb_field object=$consult_anesth field="libelle_interv" onchange="this.form.onsubmit()"}}</td>
-    </tr>
-  </table>
-</form>
+{{elseif !$conf.dPcabinet.CConsultAnesth.use_new_da}}
+  <form name="opInfoFrm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this)">
+    <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="m" value="dPcabinet" />
+    {{mb_key object=$consult_anesth}}
+    <table class="form">
+      <tr>
+        <th>{{mb_label object=$consult_anesth field="date_interv"}}</th>
+        <td>{{mb_field object=$consult_anesth field="date_interv" form="opInfoFrm" register=true onchange="this.form.onsubmit()"}}</td>
+      </tr>
+      <tr>
+        <th>{{mb_label object=$consult_anesth field="chir_id"}}</th>
+        <td>
+          <select name="chir_id" class="{{$consult_anesth->_props.chir_id}}" style="width: 14em;" onchange="this.form.onsubmit();">
+            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+            {{mb_include module=mediusers template=inc_options_mediuser selected=$consult_anesth->chir_id list=$listChirs}}
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th>{{mb_label object=$consult_anesth field="libelle_interv"}}</th>
+        <td>{{mb_field object=$consult_anesth field="libelle_interv" onchange="this.form.onsubmit()"}}</td>
+      </tr>
+    </table>
+  </form>
 {{/if}}
