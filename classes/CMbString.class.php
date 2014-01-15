@@ -759,4 +759,16 @@ abstract class CMbString {
 
     return $markdown;
   }
+
+  /**
+   * nl2br alternative for bull-separated one-line string
+   *
+   * @param $string
+   *
+   * @return string
+   */
+  static function nl2bull($string) {
+    return str_replace(array("\r\n", "\n", "\r"), " &bull; ", $string);
+
+  }
 }

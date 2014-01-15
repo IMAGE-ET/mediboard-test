@@ -635,6 +635,7 @@ class CSmartyMB extends Smarty {
     CAppUI::requireLibraryFile("smarty/libs/plugins/modifier.truncate");
     $string = html_entity_decode($string);
     $truncated = smarty_modifier_truncate($string, $length, $etc, $break_words, $middle);
+    $truncated = CMbString::nl2bull($truncated);
     $string = CMbString::htmlEntities($string);
     return strlen($string) > $length ? "<span title=\"$string\">$truncated</span>" : $truncated;
   }

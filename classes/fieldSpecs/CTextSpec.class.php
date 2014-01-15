@@ -41,15 +41,36 @@ class CTextSpec extends CMbFieldSpec {
    */
   function getHtmlValue($object, $smarty = null, $params = array()) {
     $value = $object->{$this->fieldName};
+
+    // Empty value: no paragraph
+    if (!$value) {
+      return "";
+    }
+
+    // Truncate case: no breakers but inline bullets instead
     if ($truncate = CValue::read($params, "truncate")) {
       $value = CMbString::truncate($value, $truncate === true ? null : $truncate);
+      $value = CMbString::nl2bull($value);
+      return CMbString::htmlSpecialChars($value);
     }
 
+    // Markdown case: full delegation
     if ($this->markdown) {
-      return $value ? "<div class='markdown'>".CMbString::markdown($value)."</div>" : "";
+      $content = CMbString::markdown($value);
+      return "<div class='markdown'>$content</div>";
     }
 
-    return $value ? '<p>'.nl2br(CMbString::htmlSpecialChars($value)).'</p>': "";
+    // Standard case: breakers and paragraph enhancers
+    $text = "";
+    $value = str_replace(array("\r\n", "\r"), "\n", $value);
+    $paragraphs = preg_split("/\n{2,}/", $value);
+    foreach($paragraphs as $_paragraph) {
+      if (!empty($_paragraph)) {
+        $_paragraph = nl2br(CMbString::htmlSpecialChars($_paragraph));
+        $text .= "<p>$_paragraph</p>";
+      }
+    }
+    return $text;
   }
 
   /**
