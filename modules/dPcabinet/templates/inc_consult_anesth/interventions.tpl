@@ -1,13 +1,11 @@
 <script>
   selectOperation = function(operation_id) {
     var oForm = getForm("addOpFrm");
-    $V(oForm.operation_id, operation_id, false);
-    submitOpConsult();
+    $V(oForm.operation_id, operation_id);
   }
   selectSejour = function(sejour_id) {
     var oForm = getForm("addOpFrm");
-    $V(oForm.sejour_id, sejour_id, false);
-    submitOpConsult();
+    $V(oForm.sejour_id, sejour_id);
   }
   newOperation = function(chir_id, pat_id) {
     var url = new Url;
@@ -109,12 +107,12 @@
   <!-- Choix de l'intervention -->
   {{mb_field object=$consult_anesth field="sejour_id" hidden=1}}
   {{/if}}
-  <select name="operation_id" style="width: 20em;" onchange="submitOpConsult()">
+  <select name="operation_id" style="width: 20em;" onchange="$V(this.form.sejour_id, $(this.options[this.selectedIndex]).get('sejour_id'), false); submitOpConsult()">
     <option value="">Pas d'Intervention</option>
     {{foreach from=$patient->_ref_sejours item=curr_sejour}}
     <optgroup label="{{if $curr_sejour->annule}}ANNULE - {{/if}}Séjour du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}} au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}">
       {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
-      <option value="{{$curr_op->_id}}"
+      <option value="{{$curr_op->_id}}" data-sejour_id="{{$curr_op->sejour_id}}"
         {{if $consult_anesth->operation_id==$curr_op->_id}}
           selected
         {{elseif $curr_op->_ref_consult_anesth->_id && $curr_op->_ref_consult_anesth->_id != $consult_anesth->_id}}

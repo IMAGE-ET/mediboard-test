@@ -1419,7 +1419,7 @@ class CConsultation extends CFacturable {
     $dossiers = $this->loadRefsDossiersAnesth();
 
     // Cas du choix initial du dossier à utiliser
-    if ($dossier_anesth_id !== null) {
+    if ($dossier_anesth_id !== null && isset($dossiers[$dossier_anesth_id])) {
       return $this->_ref_consult_anesth = $dossiers[$dossier_anesth_id];
     }
 
