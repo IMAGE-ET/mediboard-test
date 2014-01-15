@@ -9,6 +9,7 @@ var Thumb = {
   changed: false,
   contentChanged: false,
   instance: null,
+  doc_lock: false,
 
   choixAffiche: function() {
     $("thumbs").toggle();

@@ -133,6 +133,7 @@
 
       {{if $templateManager->printMode}}
         ck_instance.setReadOnly();
+        ck_instance.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_OFF);
         ck_instance.getCommand('usermessage').setState(CKEDITOR.TRISTATE_OFF);
       {{else}}
         ck_instance.document.getBody().on('keydown', autoCapHelper);

@@ -10,22 +10,29 @@
 CKEDITOR.plugins.add('mbprintPDF',{
   requires: ['dialog'],
   init: function(editor){
-   editor.addCommand('mbprintPDF', {exec: mbprintPDF_onclick});
-   editor.ui.addButton('mbprintPDF', {label:'Imprimer en PDF', command:'mbprintPDF',
-   	 icon:'../../modules/dPcompteRendu/fcke_plugins/mbprintPDF/images/mbprintPDF.png' });
+    editor.addCommand('mbprintPDF', {exec: mbprintPDF_onclick});
+    editor.ui.addButton('mbprintPDF', {label:'Imprimer en PDF', command:'mbprintPDF',
+    	 icon:'../../modules/dPcompteRendu/fcke_plugins/mbprintPDF/images/mbprintPDF.png' });
   }
 });
 
 function mbprintPDF_onclick(editor) {
-  editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_DISABLED);
+  if (!window.parent.Thumb.doc_lock) {
+    editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_DISABLED);
+  }
   window.parent.Url.ping({onComplete: function() {
     if (window.parent.Thumb.mode == "doc") {
-      // Mise à jour de la date d'impression
-      window.parent.$V(window.parent.getForm("editFrm").date_print, "now");
-      window.parent.submitCompteRendu(function() {
+      if (window.parent.Thumb.doc_lock) {
         streamPDF(editor);
-        editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_OFF);
-      });
+      }
+      else {
+        // Mise à jour de la date d'impression
+        window.parent.$V(window.parent.getForm("editFrm").date_print, "now");
+        window.parent.submitCompteRendu(function() {
+          streamPDF(editor);
+          editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_OFF);
+        });
+      }
     }
     else {
       streamPDF(editor);
