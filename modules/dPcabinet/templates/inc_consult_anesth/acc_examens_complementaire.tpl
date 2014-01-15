@@ -83,7 +83,9 @@ function saveDossierMedical() {
       {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
       <form name="dossier_medical_patient" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
         {{mb_key   object=$dossier_medical}}
-        {{mb_class object=$dossier_medical}}
+        <input type="hidden" name="m"     value="patients" />
+        <input type="hidden" name="del"     value="0" />
+        <input type="hidden" name="dosql"     value="do_dossierMedical_aed" />
         <input type="hidden" name="object_id"     value="{{$patient->_id}}" />
         <input type="hidden" name="object_class"  value="{{$patient->_class}}" />
         <input type="hidden" name="groupe_sanguin"  value="{{$dossier_medical->groupe_sanguin}}" />
