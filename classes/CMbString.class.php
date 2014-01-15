@@ -751,7 +751,7 @@ abstract class CMbString {
       require_once $file;
     }
 
-    $markdown = Parsedown::instance()->parse($text);
+    $markdown = Parsedown::instance()->set_breaks_enabled(true)->parse($text);
 
     if (isset($markdown[5])) {
       $cache[$text] = $markdown;
