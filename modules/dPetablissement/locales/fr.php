@@ -184,5 +184,6 @@ $locales['config-inherit-CGroups'] = 'Etablissement';
 $locales['mod-dPetablissement-tab-configure'] = 'Configuration';
 $locales['mod-dPetablissement-tab-vw_etab_externe'] = 'Etablissements externes';
 $locales['mod-dPetablissement-tab-vw_idx_groups'] = 'Gestion des établissements';
+$locales['mod-dPetablissement-tab-vw_structure'] = 'Structure de l\'établissement';
 $locales['module-dPetablissement-court'] = 'Etablissements';
 $locales['module-dPetablissement-long'] = 'Gestion des établissements';
