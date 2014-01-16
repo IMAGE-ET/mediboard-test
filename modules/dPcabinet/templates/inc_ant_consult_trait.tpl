@@ -38,7 +38,7 @@ Main.add(function () {
         <table class="layout main">
           <tr>
             {{if $app->user_prefs.showDatesAntecedents}}
-              <th style="height: 1%">{{mb_label object=$antecedent field=date}}</th>
+              <th style="height: 20px">{{mb_label object=$antecedent field=date}}</th>
               <td>{{mb_field object=$antecedent field=date form=editAntFrm$addform register=true}}</td>
             {{else}}
               <td colspan="2"></td>
@@ -49,7 +49,7 @@ Main.add(function () {
             </td>
           </tr>
           <tr>
-            <th style="height: 100%">{{mb_label object=$antecedent field="type"}}</th>
+            <th style="height: 20px">{{mb_label object=$antecedent field="type"}}</th>
             <td>{{mb_field object=$antecedent field="type" emptyLabel="None" alphabet="1" style="width: 9em;" onchange=""}}</td>
           </tr>
           <tr>
