@@ -25,8 +25,7 @@ class CInscTools {
    */
   static function formatString($string) {
     $String_no_accent = CMbString::removeAccents($string);
-    $string_char = preg_replace(array("/NBSP/","/\(c\)/","/\(r\)/"), " ", $String_no_accent);
-    $normalize   = preg_replace("/([^A-Za-z])/", " ", $string_char);
+    $normalize   = preg_replace("/([^A-Za-z])/", " ", $String_no_accent);
     return mb_strtoupper($normalize);
   }
 
