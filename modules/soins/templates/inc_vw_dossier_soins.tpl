@@ -162,6 +162,12 @@ submitSuivi = function(oForm, del) {
   } });
 }
 
+openSurveillanceTab = function() {
+  var elt = $$('a[href="#constantes-medicales"]')[0];
+  elt.click();
+  elt.up().onmousedown();
+}
+
 // Cette fonction est dupliquée
 function updateNbTrans(sejour_id) {
   var url = new Url("hospi", "ajax_count_transmissions");
@@ -414,7 +420,10 @@ Main.add(function () {
 
           <td style="width: 33%;">
             <fieldset>
-              <legend>Surveillance</legend>
+              <legend>
+                Surveillance
+                <button class="search notext compact" type="button" onclick="openSurveillanceTab();"></button>
+              </legend>
               <div id="constantes-medicales-widget" style="height: 140px;"></div>
             </fieldset>
           </td>

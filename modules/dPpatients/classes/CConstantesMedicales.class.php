@@ -1962,7 +1962,7 @@ class CConstantesMedicales extends CMbObject {
     $constants_by_rank = self::getRanksFor($type, $host);
     $list_constants = CConstantesMedicales::$list_constantes;
 
-      // Keep only valid constant names
+    // Keep only valid constant names
     $constants_by_rank = array_intersect_key($constants_by_rank, $list_constants);
 
     $constants_by_rank = CMbArray::flip($constants_by_rank);
@@ -2024,17 +2024,21 @@ class CConstantesMedicales extends CMbObject {
   /**
    * Format the datas for the Flot plotting library
    *
-   * @param CConstantesMedicales[] $constants_values The list of the constants
-   * @param CMbObject              $host             The host from which we'll get the configuration
+   * @param CConstantesMedicales[] $constants_values   The list of the constants
+   * @param CMbObject              $host               The host from which we'll get the configuration
+   * @param array                  $constants_by_graph The graphs structure.
+   * @param boolean                $widget             If true, some information won't be added (for exemple the span tag in the xaxis)
    *
    * @return array The graph datas
    */
-  static function formatGraphDatas($constants_values, $host) {
+  static function formatGraphDatas($constants_values, $host, $constants_by_graph = array(), $widget = false) {
     $datas = array();
 
-    $constants_by_graph = self::sortConstantsbyGraph($constants_values, $host);
+    if (empty($constants_by_graph)) {
+      $constants_by_graph = self::sortConstantsbyGraph($constants_values, $host);
+    }
 
-    $xaxis = self::createXaxis($constants_values);
+    $xaxis = self::createXaxis($constants_values, $widget);
 
     /** @var integer min_x_index The index of the first displayed xaxis tick */
     $min_x_index = $xaxis['min_x_index'];
@@ -2069,7 +2073,7 @@ class CConstantesMedicales extends CMbObject {
           }
           // The label of the yaxis and the title of the graph are formatted
           $label = CAppUI::tr("CConstantesMedicales-$_constant-court");
-          if (self::$list_constantes[$_constant]['unit']) {
+          if (self::$list_constantes[$_constant]['unit'] && !$widget) {
             $label .= ' (' . self::$list_constantes[$_constant]['unit'] . ')';
             $title .= ' (' . self::$list_constantes[$_constant]['unit'] . ')';
           }
@@ -2105,6 +2109,10 @@ class CConstantesMedicales extends CMbObject {
           );
           if ($axis_id != 1) {
             $yaxis['color'] = $colors[$_constant];
+          }
+          if ($widget) {
+            $yaxis['show'] = false;
+            $yaxis['reserveSpace'] = false;
           }
 
           /* Create the markings for the standard value */
@@ -2234,7 +2242,7 @@ class CConstantesMedicales extends CMbObject {
           'width'       => 700 - ((5 - count($yaxes)) * 40),
         );
 
-        if (sizeof($_graph_constants) > 1) {
+        if (sizeof($_graph_constants) > 1 && !$widget) {
           $graph['options']['grid']['borderColor'] = array(
             'top' => '#4B4B4B',
             'right' => '#4B4B4B',
@@ -2356,7 +2364,7 @@ class CConstantesMedicales extends CMbObject {
    *
    * @return array The xaxis
    */
-  static function createXaxis($constants) {
+  static function createXaxis($constants, $widget = false) {
     $ticks = array();
     $i = 1;
     foreach ($constants as $key => $_cst) {
@@ -2366,13 +2374,19 @@ class CConstantesMedicales extends CMbObject {
       if (isset($_cst->comment)) {
         $style .= 'color: red';
       }
+      if (!$widget) {
+        $str = "<span style=\"$style\" onclick=\"editConstants(" . $_cst->_id . ", '" .
+          $_cst->_ref_context->_guid . "')\"><strong>" . CMbDT::format($_cst->datetime, '%Hh%M') . '</strong><br/>'.
+          CMbDT::format($_cst->datetime, '%d/%m') . '</span>';
+      }
+      else {
+        $str = '<strong>' . CMbDT::format($_cst->datetime, '%Hh%M') . '</strong><br/>'.
+          CMbDT::format($_cst->datetime, '%d/%m');
+      }
+      $str =
       $ticks[] = array(
         $i,
-        utf8_encode(
-          "<span style=\"$style\" onclick=\"editConstants(" . $_cst->_id . ", '" .
-          $_cst->_ref_context->_guid . "')\"><strong>" . CMbDT::format($_cst->datetime, '%Hh%M') . '</strong><br/>'.
-          CMbDT::format($_cst->datetime, '%d/%m') . '</span>'
-        )
+        utf8_encode($str)
       );
       $i++;
     }
@@ -2384,13 +2398,23 @@ class CConstantesMedicales extends CMbObject {
       $min_x_value = $ticks[$min_x_index][0];
     }
 
-    return array(
+    $xaxis = array(
       'position'  => 'bottom',
       'min'       => $min_x_value - 0.5,
+      'max'       => count($ticks) + 0.5,
       'ticks'     => $ticks,
       'min_x_index' => $min_x_index,
       'min_x_value' => $min_x_value,
     );
+    if ($widget) {
+      $xaxis['font'] = array(
+        'size' => 8,
+        'color' => '#000000'
+      );
+      $xaxis['alignTickWithAxis'] = 1;
+    }
+
+    return $xaxis;
   }
 
   /**
