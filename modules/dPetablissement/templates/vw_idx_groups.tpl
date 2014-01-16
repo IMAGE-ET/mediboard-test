@@ -20,7 +20,12 @@ Group = {
     var row = $('row-CGroups-'+group_id);
     if (row) {
       row.addUniqueClassName('selected');
-    }  
+    }
+  },
+  viewStructure: function(group_id) {
+    var url = new Url('etablissement', 'vw_structure');
+    url.addParam('group_id', group_id);
+    url.popup(500, 500, 'structure_etab');
   }
 };
 
@@ -40,6 +45,7 @@ Main.add(Group.edit.curry('{{$group_id}}'));
         <tr>
           <th>Liste des établissements</th>
           <th>Fonctions associées</th>
+          <th>Structure</th>
         </tr>
         {{foreach from=$groups item=_group}}
         <tr id="row-{{$_group->_guid}}">
@@ -54,6 +60,11 @@ Main.add(Group.edit.curry('{{$group_id}}'));
           </td>
           <td>
             {{$_group->_ref_functions|@count}}
+          </td>
+          <td>
+            <button type="button" class="print" onclick="Group.viewStructure('{{$_group->_id}}');">
+              Voir la structure
+            </button>
           </td>
         </tr>
         {{/foreach}}
