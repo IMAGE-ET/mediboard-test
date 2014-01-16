@@ -12,6 +12,7 @@
 $object_guid = CValue::get("object_guid");
 $module      = CValue::get("module");
 $inherit     = CValue::get("inherit");
+$uid         = CValue::get("uid");
 
 $object = null;
 
@@ -41,4 +42,5 @@ $smarty->assign("ancestor_configs", $ancestor_configs);
 $smarty->assign("object_guid",      $object_guid);
 $smarty->assign("configs",          $configs);
 $smarty->assign("inherit",          $inherit);
+$smarty->assign("uid",              $uid);
 $smarty->display("inc_edit_object_config.tpl");

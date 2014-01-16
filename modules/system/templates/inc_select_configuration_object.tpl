@@ -1,4 +1,4 @@
-<select id="object_guid-selector" onchange="editObjectConfig($V(this))">
+<select id="object_guid-selector-{{$uid}}" onchange="editObjectConfig($V(this), '{{$uid}}')">
   {{if $object_tree|@count > 1}}
     <option value="" selected="selected" disabled="disabled"> &mdash; </option>
   {{/if}}
@@ -11,7 +11,7 @@
 {{if $object_tree|@count == 1}}
 <script type="text/javascript">
 Main.add(function(){
-  editObjectConfig($V($("object_guid-selector")));
+  editObjectConfig($V($("object_guid-selector-{{$uid}}")), '{{$uid}}');
 });
 </script>
 {{/if}}

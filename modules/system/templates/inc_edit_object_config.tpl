@@ -32,20 +32,20 @@ toggleCustomValue = function(button, b) {
 Main.add(function() {
   var browserHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
   if (document.body.getHeight() > browserHeight) {
-    $('div-submit-configs').setStyle({position: 'fixed', bottom: '0px'});
-    var row = $('table-edit-config').insertRow(-1);
+    $('div-submit-configs-{{$uid}}').setStyle({position: 'fixed', bottom: '0px'});
+    var row = $('table-edit-config-{{$uid}}').insertRow(-1);
     row.setStyle({height: '2.5em'});
     row.insertCell(-1);
   }
 });
 </script>
 
-<form name="edit-configuration" method="post" action="?" onsubmit="return onSubmitFormAjax(this, editObjectConfig.curry('{{$object_guid}}'))">
+<form name="edit-configuration" method="post" action="?" onsubmit="return onSubmitFormAjax(this, editObjectConfig.curry('{{$object_guid}}', '{{$uid}}'))">
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="dosql" value="do_configuration_aed" />
   <input type="hidden" name="object_guid" value="{{$object_guid}}" />
 
-  <table id="table-edit-config" class="main tbl">
+  <table id="table-edit-config-{{$uid}}" class="main tbl">
     {{assign var=cols value=$ancestor_configs|@count}}
 
     {{foreach from=$ancestor_configs item=_ancestor}}
@@ -69,7 +69,7 @@ Main.add(function() {
               <th>
                 {{if !$smarty.foreach.ancestor.last}} {{*  && $object_guid != $_ancestor.object->_guid *}}
                   {{if $_ancestor.object != "global" || $app->_ref_user->isAdmin()}}
-                    <button type="button" class="edit notext" onclick="$V($('object_guid-selector'), '{{if $_ancestor.object instanceof CMbObject}}{{$_ancestor.object->_guid}}{{else}}{{$_ancestor.object}}{{/if}}')"></button>
+                    <button type="button" class="edit notext" onclick="$V($('object_guid-selector-{{$uid}}'), '{{if $_ancestor.object instanceof CMbObject}}{{$_ancestor.object->_guid}}{{else}}{{$_ancestor.object}}{{/if}}')"></button>
                   {{/if}}
                 {{/if}}
                 {{if $_ancestor.object == "global"}}
@@ -145,7 +145,7 @@ Main.add(function() {
       </tr>
     {{/foreach}}
   </table>
-  <div id="div-submit-configs" style="background-color: #ffffff; width: 100%; height: 2.5em; text-align: center;">
+  <div id="div-submit-configs-{{$uid}}" style="background-color: #ffffff; width: 100%; height: 2.5em; text-align: center;">
     <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
   </div>
 </form>
