@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-
+<script>
 function popupImport() {
   var url = new Url("dPbloc", "salles_import_csv");
   url.popup(800, 600, "Import des Salles");
@@ -19,7 +18,6 @@ function popupImport() {
 Main.add(function () {
   Control.Tabs.create('tabs-bloc', true);
 });
-
 </script>
 
 {{assign var=use_poste value=$conf.dPplanningOp.COperation.use_poste}}
@@ -93,6 +91,10 @@ Main.add(function () {
             <tr>
               <th>{{mb_label object=$bloc field="days_locked"}}</th>
               <td>{{mb_field object=$bloc field="days_locked"}}</td>
+            </tr>
+            <tr>
+              <th>{{mb_label object=$bloc field="cheklist_man"}}</th>
+              <td>{{mb_field object=$bloc field="cheklist_man"}}</td>
             </tr>
             <tr>
               <td class="button" colspan="2">
