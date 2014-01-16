@@ -1,12 +1,28 @@
 <!-- $Id$ -->
 
-<script type="text/javascript">
+<script>
   Main.add(window.print);
 </script>
 
+{{assign var=main_colspan value="7"}}
+{{assign var=patient_colspan value="2"}}
+
+{{if $filter->_coordonnees}}
+  {{math equation="x+2" x=$main_colspan assign=main_colspan}}
+  {{math equation="x+2" x=$patient_colspan assign=patient_colspan}}
+{{elseif $filter->_telephone}}
+  {{math equation="x+1" x=$main_colspan assign=main_colspan}}
+  {{math equation="x+1" x=$patient_colspan assign=patient_colspan}}
+{{/if}}
+
+{{if $show_lit}}
+  {{math equation="x+1" x=$main_colspan assign=main_colspan}}
+  {{math equation="x+1" x=$patient_colspan assign=patient_colspan}}
+{{/if}}
+
 <table class="tbl">
   <tr class="clear">
-    <th colspan="10">
+    <th colspan="{{$main_colspan}}">
       <h1 class="no-break">
         <a href="#" onclick="window.print()">
           {{if $filter->plageconsult_id}}
@@ -25,7 +41,7 @@
   
   {{foreach from=$listPlage item=curr_plage}}
     <tr class="clear">
-      <td colspan="10" class="text">
+      <td colspan="{{$main_colspan}}" class="text">
         <h2>
           <span style="float: right">
             {{$curr_plage->_ref_consultations|@count}} consultation(s)
@@ -42,7 +58,7 @@
     
     <tr>
       <th rowspan="2" colspan="2"><b>Heure</b></th>
-      <th {{if $filter->_coordonnees}}colspan="5"{{elseif $filter->_telephone}}colspan="4"{{else}}colspan="3"{{/if}}><b>Patient</b></th>
+      <th colspan="{{$patient_colspan}}"><b>Patient</b></th>
       <th colspan="3"><b>Consultation</b></th>
     </tr>
     
@@ -51,8 +67,7 @@
       {{if $filter->_coordonnees}}
         <th style="width: 15%;">Adresse</th>
         <th class="narrow">Tel</th>
-      {{/if}}
-      {{if $filter->_telephone}}
+      {{elseif $filter->_telephone}}
         <th class="narrow">Tel</th>
       {{/if}}
       <th class="narrow">Age</th>
@@ -84,13 +99,13 @@
             <td colspan="2"style="text-align: center;">
               {{$_place.time|date_format:$conf.time}}
             </td>
-            <td colspan="7"></td>
+            <td colspan="{{math equation="x-2" x=$main_colspan}}"></td>
           </tr>
         </tbody>
       {{/if}}
     {{foreachelse}}
       <tr>
-        <td colspan="10" class="empty">
+        <td colspan="{{$main_colspan}}" class="empty">
           {{tr}}CConsultation.none{{/tr}}
         </td>
       </tr>
