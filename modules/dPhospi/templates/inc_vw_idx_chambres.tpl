@@ -1,3 +1,8 @@
+<script>
+  Main.add(function () {
+    PairEffect.initGroup("serviceEffect");
+  });
+</script>
 <table class="main">
   <tr>
     <td class="halfPane">
