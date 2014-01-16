@@ -715,9 +715,9 @@ class CPatient extends CPerson {
     parent::updateFormFields();
 
     // Noms
-    $this->nom = CMbString::upper($this->nom);
-    $this->nom_jeune_fille = CMbString::upper($this->nom_jeune_fille);
-    $this->prenom = CMbString::capitalize(CMbString::lower($this->prenom));
+    $this->nom = self::applyModeIdentitoVigilance($this->nom);
+    $this->nom_jeune_fille = self::applyModeIdentitoVigilance($this->nom_jeune_fille);
+    $this->prenom = self::applyModeIdentitoVigilance($this->prenom, true);
 
     $this->_nom_naissance = $this->nom_jeune_fille ? $this->nom_jeune_fille : $this->nom;
     $this->_prenoms = array($this->prenom, $this->prenom_2, $this->prenom_3, $this->prenom_4);
@@ -887,17 +887,17 @@ class CPatient extends CPerson {
 
     $soundex2 = new soundex2;
     if ($this->nom) {
-      $this->nom = CMbString::upper($this->nom);
+      $this->nom = self::applyModeIdentitoVigilance($this->nom);
       $this->nom_soundex2 = $soundex2->build($this->nom);
     }
 
     if ($this->nom_jeune_fille) {
-      $this->nom_jeune_fille = CMbString::upper($this->nom_jeune_fille);
+      $this->nom_jeune_fille = self::applyModeIdentitoVigilance($this->nom_jeune_fille);
       $this->nomjf_soundex2 = $soundex2->build($this->nom_jeune_fille);
     }
 
     if ($this->prenom) {
-      $this->prenom = CMbString::capitalize(CMbString::lower($this->prenom));
+      $this->prenom = self::applyModeIdentitoVigilance($this->prenom, true);
       $this->prenom_soundex2 = $soundex2->build($this->prenom);
     }
 
@@ -906,15 +906,15 @@ class CPatient extends CPerson {
     }
 
     if ($this->assure_nom) {
-      $this->assure_nom = CMbString::upper($this->assure_nom);
+      $this->assure_nom = self::applyModeIdentitoVigilance($this->assure_nom);
     }
 
     if ($this->assure_nom_jeune_fille) {
-      $this->assure_nom_jeune_fille = CMbString::upper($this->assure_nom_jeune_fille);
+      $this->assure_nom_jeune_fille = self::applyModeIdentitoVigilance($this->assure_nom_jeune_fille);
     }
 
     if ($this->assure_prenom) {
-      $this->assure_prenom = CMbString::capitalize(CMbString::lower($this->assure_prenom));
+      $this->assure_prenom = self::applyModeIdentitoVigilance($this->assure_prenom, true);
     }
 
     if ($this->assure_cp === "00000") {
@@ -2270,6 +2270,16 @@ class CPatient extends CPerson {
     }
   }
 
+  /**
+   * Calculation the INSC (Use the data of the vital card (clean the data before!!!))
+   *
+   * @param String $nir        nir certified
+   * @param String $nir_key    key nir
+   * @param String $first_name firstname
+   * @param String $birth_date birth date
+   *
+   * @return null|string
+   */
   static function calculInsc($nir, $nir_key, $first_name = " ", $birth_date = "000000") {
     $nir_complet = $nir.$nir_key;
 
@@ -2334,7 +2344,14 @@ class CPatient extends CPerson {
     return $insc.$insc_key;
   }
 
-  function bchexdec($hex) {
+  /**
+   * Transform the hexadecimal to decimal
+   *
+   * @param String $hex String
+   *
+   * @return int|string
+   */
+  static function bchexdec($hex) {
     $dec = 0;
     $len = strlen($hex);
     for ($i = 1; $i <= $len; $i++) {
@@ -2345,6 +2362,30 @@ class CPatient extends CPerson {
       $dec = $array[0];
     }
     return $dec;
+  }
+
+  /**
+   * Apply the mode of identito vigilance
+   *
+   * @param String $string    String
+   * @param Bool   $firstname Apply the lower and the capitalize
+   *
+   * @return string
+   */
+  static function applyModeIdentitoVigilance($string, $firstname = false) {
+    switch (CAppUI::conf("dPpatients CPatient mode_identito_vigilance", CGroups::loadCurrent())) {
+      case "medium":
+        $result = CMbString::removeBanCharacter($string);
+        $result = $firstname ? CMbString::capitalize(CMbString::lower($result)) : CMbString::upper($result);
+        break;
+      case "strict":
+        $result = CMbString::upper(CMbString::removeBanCharacter($string));
+        break;
+      default:
+        $result = $firstname ? CMbString::capitalize(CMbString::lower($string)) : CMbString::upper($string);
+    }
+
+    return $result;
   }
 
   function getIncrementVars() {

@@ -1,5 +1,13 @@
 <script type="text/javascript">
-Main.add(Control.Tabs.create.curry('tabs-configure', true));
+  Main.add(function () {
+    var tabs = Control.Tabs.create('tabs-configure', true, {
+      afterChange: function(container) {
+        if (container.id == "CConfigEtabPatient") {
+          Configuration.edit('dPpatients', ['CGroups'], $('CConfigEtabPatient'));
+        }
+      }
+    });
+  });
 </script>
 
 <ul id="tabs-configure" class="control_tabs">
@@ -11,9 +19,8 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
   <li><a href="#CCorrespondantPatient">{{tr}}CCorrespondantPatient{{/tr}}</a></li>
   <li><a href="#INSEE"                >{{tr}}INSEE{{/tr}}                </a></li>
   <li><a href="#Purge"                >{{tr}}Purge{{/tr}}                </a></li>
+  <li><a href="#CConfigEtabPatient">Config par établissement             </a></li>
 </ul>
-
-<hr class="control_tabs" />
 
 <div id="CPatient" style="display: none;">
   {{mb_include template=CPatient_configure}}
@@ -25,7 +32,7 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
 </div>
 
 <div id="CTraitement" style="display: none;">
-	{{mb_include template=CTraitement_configure}}
+  {{mb_include template=CTraitement_configure}}
 </div>
 
 <div id="CConstantesMedicales" style="display: none;">
@@ -48,3 +55,4 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
   {{mb_include template=inc_configure_purge_patients}}
 </div>
 
+<div id="CConfigEtabPatient" style="display: none;"></div>

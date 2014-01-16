@@ -42,6 +42,9 @@ CConfiguration::register(
   array(
     'CGroups' => array(
       'dPpatients' => array(
+        'CPatient' => array(
+          'mode_identito_vigilance' => "enum list|light|medium|strict localize default|light"
+        ),
         'CConstantesMedicales' => array(
           'unite_ta'        => 'enum list|cmHg|mmHg default|' . CAppUI::conf('dPpatients CConstantesMedicales unite_ta'),
           'unite_glycemie'  => 'enum list|g/l|mmol/l default|' . CAppUI::conf('dPpatients CConstantesMedicales unite_glycemie'),

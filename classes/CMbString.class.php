@@ -175,6 +175,19 @@ abstract class CMbString {
   }
 
   /**
+   * Replace the ban character with a escape
+   *
+   * @param String $string String to normalyze
+   *
+   * @return mixed
+   */
+  static function removeBanCharacter($string) {
+    $String_no_accent = self::removeAccents($string);
+    $string_char = preg_replace(array("/NBSP/","/\(c\)/","/\(r\)/"), " ", $String_no_accent);
+    return preg_replace("/([^A-Za-z0-9])/", " ", $string_char);
+  }
+
+  /**
    * Allow any kind of glyphs variants with diacritics in regular expression
    *
    * @param string $regexp The regexp string
