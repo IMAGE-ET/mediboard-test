@@ -79,6 +79,24 @@ if ($salle->_ref_urgences) {
   }
 }
 
+$date_last_checklist = null;
+if ($salle->_ref_bloc->cheklist_man) {
+  $checklist = new CDailyCheckList();
+  $checklist->object_class = $salle->_class;
+  $checklist->object_id = $salle->_id;
+  $checklist->loadMatchingObject("date DESC");
+  if ($checklist->_id) {
+    $log = new CUserLog();
+    $log->object_id     = $checklist->_id;
+    $log->object_class  = $checklist->_class;
+    $log->loadMatchingObject("date DESC");
+    $date_last_checklist = $log->date;
+  }
+  else {
+    $date_last_checklist = $checklist->date;
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -90,5 +108,6 @@ $smarty->assign("listBlocs"     , $listBlocs   );
 $smarty->assign("listAnesths"   , $listAnesths );
 $smarty->assign("date"          , $date        );
 $smarty->assign("operation_id"  , $operation_id);
+$smarty->assign("date_last_checklist"  , $date_last_checklist);
 
 $smarty->display("inc_liste_plages.tpl");

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Liste des accouchements à placer en salle de naissance
  *
@@ -7,7 +6,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  $Revision:$
  * @link     http://www.mediboard.org
  */
 
@@ -104,6 +103,25 @@ foreach ($urgences as &$urgence) {
 $anesth = new CMediusers();
 $anesths = $anesth->loadAnesthesistes(PERM_READ);
 
+$date_last_checklist = array();
+foreach ($listSalles as $salle) {
+  if ($salle->loadRefBloc()->cheklist_man) {
+    $checklist = new CDailyCheckList();
+    $checklist->object_class = $salle->_class;
+    $checklist->object_id = $salle->_id;
+    $checklist->loadMatchingObject("date DESC");
+    if ($checklist->_id) {
+      $log = new CUserLog();
+      $log->object_id     = $checklist->_id;
+      $log->object_class  = $checklist->_class;
+      $log->loadMatchingObject("date DESC");
+      $date_last_checklist[$salle->_id] = $log->date;
+    }
+    else {
+      $date_last_checklist[$salle->_id] = $checklist->date;
+    }
+  }
+}
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -114,5 +132,6 @@ $smarty->assign("listBlocs",  $listBlocs);
 $smarty->assign("listSalles", $listSalles);
 $smarty->assign("anesths",    $anesths);
 $smarty->assign("date", $date);
+$smarty->assign("date_last_checklist", $date_last_checklist);
 
 $smarty->display("vw_placement.tpl");

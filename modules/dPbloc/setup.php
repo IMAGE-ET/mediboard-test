@@ -1,14 +1,12 @@
 <?php
-
 /**
- * dPbloc
+ * $Id:$
  *
- * @category Bloc
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage Bloc
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 /**
@@ -411,7 +409,11 @@ class CSetupdPbloc extends CSetup {
     $this->makeEmptyRevision("0.41");
     $this->addPrefQuery("startAutoRefreshAtStartup", 0);
 
+    $this->makeRevision("0.42");
+    $query = "ALTER TABLE `bloc_operatoire`
+                ADD `cheklist_man` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
 
-    $this->mod_version = "0.42";
+    $this->mod_version = "0.43";
   }
 }

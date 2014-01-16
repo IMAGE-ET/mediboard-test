@@ -19,6 +19,7 @@ $salle_id        = CValue::getOrSession("salle");
 $bloc_id         = CValue::getOrSession("bloc_id");
 $op              = CValue::getOrSession("op");
 $date            = CValue::getOrSession("date", CMbDT::date());
+$load_checklist  = CValue::get("load_checklist", 0);
 $modif_operation = CCanDo::edit() || $date >= CMbDT::date();
 
 // Récupération de l'utilisateur courant
@@ -167,6 +168,9 @@ $require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active") && $date 
 if ($require_check_list) {
   list($check_list_not_validated, $daily_check_list_types, $daily_check_lists) = CDailyCheckList::getCheckLists($salle, $date);
 
+  if ($salle->loadRefBloc()->cheklist_man && !$load_checklist) {
+    $check_list_not_validated = 0;
+  }
   if ($check_list_not_validated == 0) {
     $require_check_list = false;
   }

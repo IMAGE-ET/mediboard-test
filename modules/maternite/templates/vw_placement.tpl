@@ -1,19 +1,32 @@
 {{*
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage Maternite
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  *}}
 
 {{mb_script module="dPplanningOp" script="operation"}}
 
-<script type="text/javascript">
+<script>
   Main.add(function () {
     Calendar.regField(getForm("changeDate").date, null, {noView: true});
   });
+
+  EditCheckList = {
+    url: null,
+    edit: function(salle_id) {
+      var url = new Url('salleOp', 'ajax_edit_checklist');
+      url.addParam('date', '{{$date}}');
+      url.addParam('salle_id', salle_id);
+      url.requestModal();
+      url.modalObject.observe("afterClose", function(){
+        location.reload();
+      });
+    }
+  };
 </script>
 
 {{assign var=systeme_materiel value=$conf.dPbloc.CPlageOp.systeme_materiel}}
@@ -96,7 +109,7 @@
               <input type="hidden" name="del" value="0" />
               <input type="hidden" name="dosql" value="do_planning_aed" />
               <input type="hidden" name="operation_id" value="{{$_op->_id}}" />
-              <select  style="width: 15em;" name="salle_id" onchange="onSubmitFormAjax(this.form)">
+              <select  style="width: 15em;" name="salle_id" onchange="submit(this.form)">
                 <option value="">&mdash; {{tr}}CSalle.select{{/tr}}</option>
                 {{foreach from=$listBlocs item=_bloc}}
                   <optgroup label="{{$_bloc}}">
@@ -111,6 +124,15 @@
                 {{/foreach}}
               </select>
             </form>
+            {{assign var=salle_id value=$_op->salle_id}}
+            {{if $_op->salle_id && isset($date_last_checklist.$salle_id|smarty:nodefaults)}}
+              <br/>
+              <div class="info">Dernière validation: {{$date_last_checklist.$salle_id|date_format:$conf.datetime}}</div>
+              {{if $date_last_checklist.$salle_id|date_format:$conf.date != $date|date_format:$conf.date}}
+                <button class="add" type="button" onclick="EditCheckList.edit('{{$salle_id}}');">Validation de checklist</button>
+              {{/if}}
+            {{/if}}
+
             {{if $_op->_alternate_plages|@count}}
               <form name="editPlageFrm{{$_op->_id}}" action="?m={{$m}}" method="post">
                 <input type="hidden" name="m" value="dPplanningOp" />
