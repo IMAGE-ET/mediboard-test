@@ -901,6 +901,23 @@ class CConfiguration extends CMbMetaObject {
   }
 
   /**
+   * Get a config's specs
+   *
+   * @param string $feature Space separated feature name
+   *
+   * @return null|array
+   */
+  static function getConfigSpec($feature) {
+    $specs = self::getConfigsSpecs();
+
+    if (!isset($specs[$feature])) {
+      return null;
+    }
+
+    return $specs[$feature];
+  }
+
+  /**
    * @see parent::store()
    */
   function store() {
