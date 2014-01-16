@@ -96,8 +96,8 @@ CKEDITOR.editorConfig = function(config) {
   config.removePlugins = 'elementspath,iframe,magicline,showblocks,templates,wsc{{if $templateManager->printMode}},save{{/if}}';
 
   {{if $templateManager->printMode}}
-    config.extraPlugins = 'usermessage';
-    config.toolbar = [['Preview', 'Print', '-','Find', 'usermessage']];
+    config.extraPlugins = '{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}mbprintPDF,{{/if}}usermessage';
+    config.toolbar = [['Preview', 'Print', {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}'mbprintPDF'{{/if}}, '-','Find', 'usermessage']];
 
   {{elseif $templateManager->simplifyMode}}
     config.toolbar = [
