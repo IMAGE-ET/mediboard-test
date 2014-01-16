@@ -43,7 +43,8 @@ CConfiguration::register(
     'CGroups' => array(
       'dPpatients' => array(
         'CPatient' => array(
-          'mode_identito_vigilance' => "enum list|light|medium|strict localize default|light"
+          'mode_identito_vigilance' => "enum list|light|medium|strict localize default|light",
+          'nom_jeune_fille_mandatory' => "bool default|0",
         ),
         'CConstantesMedicales' => array(
           'unite_ta'        => 'enum list|cmHg|mmHg default|' . CAppUI::conf('dPpatients CConstantesMedicales unite_ta'),

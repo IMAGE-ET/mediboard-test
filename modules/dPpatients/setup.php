@@ -2484,7 +2484,27 @@ class CSetupdPpatients extends CSetup {
     ADD `allow_sms_notification` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "2.00";
+    $this->makeRevision("2.00");
+
+    //Default's value
+    $query = "INSERT INTO configuration (feature, value)
+                SELECT 'dPpatients CPatient nom_jeune_fille_mandatory',
+                       dPpatients_CPatient_nom_jeune_fille_mandatory
+                FROM groups_config
+                WHERE object_id IS NULL;";
+    $this->addQuery($query);
+
+    $this->makeRevision("2.01");
+
+    $query = "INSERT INTO configuration (feature, value, object_id, object_class)
+                SELECT 'dPpatients CPatient nom_jeune_fille_mandatory',
+                       dPpatients_CPatient_nom_jeune_fille_mandatory,
+                       object_id, 'CGroups'
+                FROM groups_config
+                WHERE object_id IS NOT NULL;";
+    $this->addQuery($query);
+
+    $this->mod_version = "2.02";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
