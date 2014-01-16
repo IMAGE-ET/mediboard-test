@@ -30,7 +30,7 @@
         {{mb_value object=$patient field=cp}} 
         {{mb_value object=$patient field=ville}}
       </td>
-      
+
       <td rowspan="2" style="{{$consult_background}}">
         {{mb_value object=$patient field=tel}}
         <br />
@@ -57,7 +57,7 @@
     {{/if}}
     
     {{else}}
-    <td rowspan="2" colspan="{{$filter->_coordonnees|ternary:5:3}}" style="{{$consult_background}}">
+    <td colspan="{{math equation='x-5' x=$main_colspan}}" style="{{$consult_background}}">
       [PAUSE]
     </td>
     {{/if}}
@@ -79,7 +79,7 @@
       {{mb_value object=$curr_consult field=rques}}
     </td>
     
-    <td rowspan="2" style="{{$consult_background}}">
+    <td {{if $consult_anesth->operation_id}}rowspan="2"{{/if}} style="{{$consult_background}}">
       {{if $curr_consult->duree !=  1}}
       {{$curr_consult->duree}} x 
       {{/if}}
