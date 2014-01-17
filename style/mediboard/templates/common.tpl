@@ -56,7 +56,6 @@
         User = {{if $app->_ref_user}}{{"utf8_encode"|array_map_recursive:$app->_ref_user->_basic_info|@json}}{{else}}{}{{/if}},
         sessionLocked = {{$smarty.session.locked|@json}},
         App = {
-          timeline: [],
           m: "{{$m}}",
           a: "{{$a}}",
           tab: "{{$tab}}",

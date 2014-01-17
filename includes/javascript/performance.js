@@ -20,6 +20,7 @@ function MbPerformanceTimeEntry(type, name, time, duration, data, advanced){
 }
 
 MbPerformance = {
+  version: "0.1",
   timeline: [],
   timers: {},
   intervalTimer: null,
@@ -53,7 +54,10 @@ MbPerformance = {
   init: function(){
     // defer, but not with defer() because prototype is not here yet !
     setTimeout(function(){
-      MbPerformance.startPlotting();
+      try {
+        MbPerformance.startPlotting();
+      }
+      catch (e) {}
     }, 1);
   },
 
@@ -66,9 +70,13 @@ MbPerformance = {
     if (MbPerformance.profiling) {
       MbPerformance.plot();
 
-      MbPerformance.intervalTimer = setInterval(function() {
-        MbPerformance.plot();
-      }, 3000);
+      window.addEventListener("unload", function(){
+        var pages = store.get("profiling-pages") || [];
+
+        pages.push(MbPerformance.getCurrentPageData());
+
+        store.set("profiling-pages", pages);
+      }, false);
     }
   },
 
@@ -227,32 +235,44 @@ MbPerformance = {
       console.log(chrono);
     });*/
 
-    var container = jQuery("#performance-plot");
+    var container = jQuery("#profiling-plot");
 
     if (!container.size()) {
-      container = jQuery('<div id="performance-plot"></div>').css({
-        position: 'fixed',
-        width: '900px',
-        height: '300px',
-        bottom: '15px',
-        left: '10px',
-        background: 'white',
-        opacity: 0.80,
-        display: "none"
-      }).appendTo("body");
+      container = jQuery('<div id="profiling-plot"><div id="profiling-graph"></div><div id="profiling-data"></div></div>').hide().appendTo("body");
 
-      jQuery('<button id="profiler-toggle" class="gantt notext" title="Profilage de performances en cours"></button>').click(function(){
+      var profilingToolbar = jQuery('<div id="profiling-toolbar"></div>').hide().appendTo("body");
+
+      // Toggle plot
+      jQuery('<button class="stats notext" title="Afficher le graphique"></button>').click(function(){
+        MbPerformance.plot();
         container.toggle();
+      }).appendTo(profilingToolbar);
+
+      // Download report
+      jQuery('<button class="download notext" title="Télécharger le rapport"></button>').click(function(){
+        MbPerformance.download();
+      }).appendTo(profilingToolbar);
+
+      // Remove report
+      jQuery('<button class="trash notext" title="Supprimer le rapport courant"></button>').click(function(){
+        MbPerformance.removeProfiling();
+      }).appendTo(profilingToolbar);
+
+      // Show toolbar
+      jQuery('<button id="profiler-toggle" class="gantt notext" title="Profilage de performances en cours"></button>').click(function(){
+        profilingToolbar.toggle();
       }).appendTo("body");
     }
 
-    if (!container._plothoverbound) {
+    var graph = jQuery("#profiling-graph");
+
+    if (!graph._plothoverbound) {
       var previousPoint = null;
-      container.bind("plothover", function (event, pos, item){
+      graph.bind("plothover", function (event, pos, item){
         if(item){
           if (previousPoint != item.datapoint){
             previousPoint = item.datapoint;
-            jQuery("#tooltip").remove();
+            jQuery("#profiling-tooltip").remove();
 
             var point = item.series.data[item.dataIndex];
 
@@ -260,22 +280,28 @@ MbPerformance = {
           }
         }
         else {
-          jQuery("#tooltip").remove();
+          jQuery("#profiling-tooltip").remove();
           previousPoint = null;
         }
       });
 
-      container._plothoverbound = true;
+      graph._plothoverbound = true;
     }
 
     var markings = [];
-    this.addMarking("redirect",  markings, "redirectStart", "redirectEnd", 'rgba(255,255,0,0.2)');
-    this.addMarking("DNS",       markings, "domainLookupStart", "domainLookupEnd", 'rgba(0,255,0,0.2)');
+    this.addMarking("redirect",  markings, "redirectStart", "redirectEnd", 'rgba(255,0,255,0.2)');
+    this.addMarking("DNS",       markings, "domainLookupStart", "domainLookupEnd", 'rgba(255,255,0,0.2)');
     this.addMarking("connect",   markings, "connectStart", "connectEnd", 'rgba(0,255,255,0.2)');
     this.addMarking("request",   markings, "requestStart", "responseStart", 'rgba(0,0,255,0.2)');
     this.addMarking("DOMLoaded", markings, "domContentLoadedEventStart", "domContentLoadedEventEnd", 'rgba(255,0,0,0.2)');
 
-    jQuery.plot(container, series, {
+    var profilingData = jQuery("#profiling-data").text("");
+    markings.each(function(marking){
+      var line = jQuery('<div style="background: '+marking.color+'">'+marking.label+": <span style='float:right;'>"+marking.value+" ms</span></div>");
+      profilingData.append(line);
+    });
+
+    jQuery.plot(graph, series, {
       series: {
         gantt: {
           active: true,
@@ -304,7 +330,7 @@ MbPerformance = {
       return;
     }
 
-    var ref = timing.fetchStart;
+    var ref = timing.navigationStart;
 
     if (timing[from] == 0) {
       return;
@@ -314,6 +340,7 @@ MbPerformance = {
       label: label,
       color: color,
       lineWidth: 1,
+      value: timing[to] - timing[from],
       xaxis: {
         from: timing[from] - ref,
         to:   timing[to]   - ref
@@ -322,15 +349,10 @@ MbPerformance = {
   },
 
   showTooltip: function(x, y, contents){
-    jQuery('<div id="tooltip">' + contents + '</div>').css({
-      position: 'absolute',
+    jQuery('<div id="profiling-tooltip">' + contents + '</div>').css({
       display: 'none',
       top: y + 5,
-      left: x + 5,
-      border: '1px solid #fdd',
-      padding: '2px',
-      backgroundColor: '#fee',
-      opacity: 0.80
+      left: x + 5
     }).appendTo("body").fadeIn(200);
   },
 
@@ -363,6 +385,91 @@ MbPerformance = {
     MbPerformance.timeStart(label);
     callback();
     MbPerformance.timeEnd(label, data);
+  },
+
+  dump: function(){
+    var label = prompt("Libellé du profilage", "Profilage du "+(new Date()).toLocaleDateTime());
+
+    if (label == null) {
+      return;
+    }
+
+    var struct = {
+      version: MbPerformance.version,
+      date: (new Date()).toDATETIME(),
+      label: label,
+      userAgent: navigator.userAgent,
+      platform: navigator.platform,
+      screen: window.screen,
+      plugins: [],
+      pages: []
+    };
+
+    if (navigator.plugins) {
+      $A(navigator.plugins).each(function(plugin){
+        struct.plugins.push({
+          name: plugin.name,
+          filename: plugin.filename,
+          description: plugin.description
+        });
+      });
+    }
+
+    struct.pages = store.get("profiling-pages") || [];
+    struct.pages.push(MbPerformance.getCurrentPageData());
+
+    return struct;
+  },
+
+  removeProfiling: function(){
+    if (confirm("Supprimer le rapport de profilage courant ? Pensez à le télécharger auparavant si vous souhaitez le garder.")) {
+      store.remove("profiling-pages");
+    }
+  },
+
+  getCurrentPageData: function(){
+    return {
+      timeline: MbPerformance.timeline,
+      url: document.location.href,
+      time: Date.now(),
+      view: {
+        m: App.m,
+        a: App.tab || App.a
+      }
+    };
+  },
+
+  download: function() {
+    var data = MbPerformance.dump();
+
+    if (data == null) {
+      return;
+    }
+
+    var form = DOM.form({
+      target: "_blank",
+      action: "?m=system&a=download_data",
+      method: "post"
+    }, DOM.input({
+      type: "hidden",
+      name: "m",
+      value: "system"
+    }), DOM.input({
+      type: "hidden",
+      name: "a",
+      value: "download_data"
+    }), DOM.input({
+      type: "hidden",
+      name: "filename",
+      value: data.label+".json"
+    }), DOM.input({
+      type: "hidden",
+      name: "data",
+      value: Object.toJSON(data)
+    }));
+
+    $$("body")[0].insert(form);
+    form.submit();
   }
 };
 

@@ -1438,6 +1438,54 @@ div.bullet.error {
   }
 }
 
+/* Profiler */
+#profiling-toolbar {
+  position: fixed;
+  padding: 2px;
+  top: 0;
+  right: 0;
+  border: 1px solid #999;
+  border-width: 0 0 1px 1px;
+  background: white;
+  opacity: 0.80;
+  padding-right: 24px;
+  z-index: 1500;
+}
+
+#profiling-plot {
+  position: fixed;
+  bottom: 15px;
+  left: 10px;
+  background: white;
+}
+
+#profiling-graph {
+  width: 900px;
+  height: 300px;
+  display: inline-block;
+}
+
+#profiling-data {
+  vertical-align: top;
+  display: inline-block;
+  width: 100px;
+}
+
+#profiling-tooltip {
+  position: absolute;
+  border: 1px solid #fdd;
+  padding: 2px;
+  background-color: #fee;
+  opacity: 0.80;
+}
+
+#profiler-toggle {
+  position: fixed;
+  top: 2px;
+  right: 2px;
+  z-index: 1500;
+}
+
 /* To disable text selection */
 *[unselectable] {
   -moz-user-select: -moz-none;
