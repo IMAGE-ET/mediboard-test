@@ -2100,13 +2100,15 @@ class CConstantesMedicales extends CMbObject {
             'label'               => utf8_encode(CAppUI::tr("CConstantesMedicales-$_constant-court")),
             'position'            => 'left',
             'autoscaleMargin'     => 0.05,
-            'min'                 => self::getMin($_constant, $values['min']),
-            'max'                 => self::getMax($_constant, $values['max']),
             'tickDecimals'        => 1,
             'alignTicksWithAxis'  => 1,
             'labelWidth'          => 20,
             'reserveSpace'        => true
           );
+          if (array_key_exists('min', $values) && array_key_exists('max', $values)) {
+            $yaxis['min'] = self::getMin($_constant, $values['min']);
+            $yaxis['max'] = self::getMax($_constant, $values['max']);
+          }
           if ($axis_id != 1) {
             $yaxis['color'] = $colors[$_constant];
           }
@@ -2575,8 +2577,10 @@ class CConstantesMedicales extends CMbObject {
       }
       $datas['cumul'] = $cumul_datas;
     }
-    $datas['min'] = floor(min($values));
-    $datas['max'] = ceil(max($values));
+    if (!empty($values)) {
+      $datas['min'] = floor(min($values));
+      $datas['max'] = ceil(max($values));
+    }
 
     return $datas;
   }
