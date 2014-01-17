@@ -38,10 +38,11 @@ Ajax.Responders.register({
     if (MbPerformance.profiling) {
       var transport = e.transport;
       var timer = transport.getResponseHeader("X-Mb-Timing");
-      var req   = transport.getResponseHeader("X-Mb-Req");
       if (timer) {
+        var req = transport.getResponseHeader("X-Mb-Req");
+        var uid = transport.getResponseHeader("X-Mb-RequestUID");
         var now = performance.now();
-        MbPerformance.log.defer("ajax", req+"@"+transport.__uniqueID, timer.evalJSON(), e.__start, now-e.__start);
+        MbPerformance.log.defer("ajax", req+"@"+transport.__uniqueID+"@"+uid, timer.evalJSON(), e.__start, now-e.__start);
       }
     }
   },

@@ -130,5 +130,6 @@ class CMbPerformance {
 
     header("X-Mb-Timing: ".self::out());
     header("X-Mb-Req: $req");
+    header("X-Mb-RequestUID: ".CApp::getRequestUID());
   }
 }

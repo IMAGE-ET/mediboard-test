@@ -14,7 +14,7 @@
 
 /** 
 z-index ordering (foreground to background) :
- 1500 div#console, #profiler-toggle
+ 1500 div#console, #profiler-toolbar, #profiler-toggle
  1400 #waitingMsgText
  1300 #waitingMsgMask
  1200 #systemMsg
@@ -2096,11 +2096,4 @@ span.hatching {
 
 a.inline-url {
   display: inline !important;
-}
-
-#profiler-toggle {
-  position: fixed;
-  top: 2px;
-  right: 2px;
-  z-index: 1500;
 }
