@@ -136,6 +136,7 @@ foreach ($sejour->_ref_operations as $_operation) {
   $_operation->loadRefsFwd();
   $_operation->_ref_chir->loadRefFunction();
   $_operation->loadBrancardage();
+  $_operation->countAlertsNotHandled();
 }
 
 $smarty = new CSmartyDP;

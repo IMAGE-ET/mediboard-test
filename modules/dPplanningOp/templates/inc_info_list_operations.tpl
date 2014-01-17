@@ -1,4 +1,5 @@
 {{mb_default var=offline value=0}}
+{{mb_default var=alert   value=0}}
 
 {{foreach from=$sejour->_ref_operations item=_operation name=operation}}
 <tr>
@@ -12,6 +13,11 @@
   </th>
   {{else}}
   <td class="text">
+    {{if $alert}}
+      <span style="float: right">
+        {{mb_include module=planningOp template=inc_reload_infos_interv operation=$_operation just_alert=1}}
+      </span>
+    {{/if}}
     {{mb_include module=planningOp template=inc_vw_operation}}
   </td>
   {{/if}}

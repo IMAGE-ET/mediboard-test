@@ -30,6 +30,7 @@
 </script>
 
 {{mb_default var=offline value=0}}
+{{mb_default var=alert   value=0}}
 
 {{if $sejour->_canRead}}
   <table class="tbl">

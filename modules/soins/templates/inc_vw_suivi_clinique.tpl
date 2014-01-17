@@ -1,7 +1,8 @@
 {{assign var=patient value=$sejour->_ref_patient}}
 {{mb_script module=patients script=correspondant ajax=true}}
+{{mb_script module=system script=alert ajax=true}}
 
-<script type="text/javascript">
+<script>
   modalViewComplete = function(object_guid, title) {
     var url = new Url("system", "httpreq_vw_complete_object");
     url.addParam("object_guid", object_guid);
@@ -9,7 +10,7 @@
   }
 
   popEtatSejour = function(sejour_id) {
-    var url = new Url("dPhospi", "vw_parcours");
+    var url = new Url("hospi", "vw_parcours");
     url.addParam("sejour_id", '{{$sejour->_id}}');
     url.requestModal(700, 550);
   }
@@ -43,7 +44,7 @@
     {{mb_include module=system template=inc_object_notes object=$patient}}
       <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
         <span style="float: left;">
-          {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" mode="read" size=32}}
+          {{mb_include module="patients" template=inc_vw_photo_identite mode="read" size=32}}
         </span>
       </a>
       
@@ -73,7 +74,7 @@
       {{/if}}
       
       <form name="actionPat" action="?" method="get">
-        <input type="hidden" name="m" value="dPpatients" />
+        <input type="hidden" name="m" value="patients" />
         <input type="hidden" name="tab" value="vw_idx_patients" />
         <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
         <h2 style="color: #fff; font-weight: bold;">
@@ -285,7 +286,7 @@
         </table>
       </form>
       
-      {{mb_include module=planningOp template=inc_infos_operation}}
+      {{mb_include module=planningOp template=inc_infos_operation alert=1}}
       
       {{if $sejour->_ref_transmissions|@count}}
         <table class="tbl">
