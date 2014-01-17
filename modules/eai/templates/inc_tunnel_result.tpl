@@ -70,12 +70,12 @@
         </tr>
         <tr>
           <td>
-            {{tr}}CHTTPTunnelObject-Data-sent{{/tr}} : {{$_client.data_sent}}
+            {{tr}}CHTTPTunnelObject-Data-sent{{/tr}} : {{if "data_sent"|array_key_exists:$_client}}{{$_client.data_sent}}{{/if}}
           </td>
         </tr>
         <tr>
           <td>
-            {{tr}}CHTTPTunnelObject-Data-received{{/tr}} : {{$_client.data_received}}
+            {{tr}}CHTTPTunnelObject-Data-received{{/tr}} : {{if "data_received"|array_key_exists:$_client}}{{$_client.data_received}}{{/if}}
           </td>
         </tr>
       </table>
