@@ -130,27 +130,19 @@ class CSetupdPccam extends CSetup {
     $this->mod_version = "0.19";
 
     // Data source query
+
+    // Version 32 de la CCAM
+    $query = "SELECT *
+      FROM notes
+      WHERE TEXTE LIKE '%mai 2012'";
+    $this->addDatasource("ccamV2", $query);
+
+    // Tarifs de convergence
     $query = "SHOW TABLES LIKE 'convergence'";
     $this->addDatasource("ccamV2", $query);
 
-    /*
-    $query = "SELECT *
-              FROM modificateur
-              WHERE CODE = 'K'
-              AND LIBELLE = 'Majoration forfaits modulables accouchements gyneco. et chir sect. 1 ou 2 adherant,pour actes avec J'";
-
-    $query = "SELECT *
-              FROM `codes_ngap`
-              WHERE `code` LIKE 'MA'";
-    $query = "SHOW TABLES LIKE 'forfaits'";
-    */
-
-    $query = "SELECT * FROM `codes_ngap` WHERE `code`=  'F';";
-
-    $this->addDatasource("ccamV2", $query);
-
-    $query = "SELECT * FROM `codes_ngap` WHERE `code`=  'U';";
-
+    // Tarifs NGAP
+    $query = "SHOW TABLES LIKE 'tarif_ngap';";
     $this->addDatasource("ccamV2", $query);
   }
 }
