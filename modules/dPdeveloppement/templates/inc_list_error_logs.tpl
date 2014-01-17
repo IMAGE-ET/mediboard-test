@@ -239,7 +239,7 @@ Main.add(function(){
                 <tr>
                   <td class="text">{{$_output.function}}</td>
                   <td class="text">{{$_output.file|ide:$_output.line:$_output.file}}</td>
-                  <td style="text-align: right;">{{$_output.line|ide:$_output.line:$_output.line}}</td>
+                  <td style="text-align: right;">{{$_output.file|ide:$_output.line:$_output.line}}</td>
                 </tr>
               {{elseif $smarty.foreach.output.iteration == 4 }}
                 <tr><td colspan="3">...</td></tr>
