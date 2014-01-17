@@ -33,7 +33,7 @@
   {{/if}}
 
   <span class="basename" {{if is_array($files)}}style="font-weight: bold;"{{/if}}>
-    {{$basename}}
+    {{$fullpath|ide:"":$basename}}
   </span>
 </div>
 

@@ -115,6 +115,11 @@
   {{include file="../../mediboard/templates/ie.tpl" nodebug=true}}
 {{/if}}
 
+{{* if IDE is configured *}}
+{{if "MEDIBOARD_PATH"|getenv}}
+  <iframe name="ide-launch-iframe" id="ide-launch-iframe" style="display: none;"></iframe>
+{{/if}}
+
 {{if $conf.readonly}}
 <div class="big-info not-printable">
   <strong>{{tr}}Mode-readonly-title{{/tr}}</strong><br />

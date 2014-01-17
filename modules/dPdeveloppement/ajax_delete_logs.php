@@ -1,44 +1,50 @@
-<?php /* $Id: view_logs.php 6135 2009-04-21 10:49:02Z phenxdesign $ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPdeveloppement
-* @version $Revision: 6135 $
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @category Developpement
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision: 18997 $
+ * @link     http://www.mediboard.org
+ */
 
 CCanDo::checkEdit();
 
 $hash = CValue::get('hash');
 
 if ($hash == 'clean') {
-  unlink(LOG_PATH);
+  unlink(CError::LOG_PATH);
   build_error_log();
 }
 
 if ($hash) {
   $doc = new DOMDocument();
-  @$doc->loadHTMLFile(LOG_PATH);
+  @$doc->loadHTMLFile(CError::LOG_PATH);
   
   $xpath = new DOMXPath($doc);
   $elements = $xpath->query("//div[@title='$hash']");
   
-  foreach($elements as $element) {
+  foreach ($elements as $element) {
     $element->parentNode->removeChild($element);
   }
 
   $content = $doc->saveHTML();
-  file_put_contents(LOG_PATH, $content);
+  file_put_contents(CError::LOG_PATH, $content);
 }
 
-
-$log_size = filesize(LOG_PATH);
-$log_size_limit = 1024*1024*2;
+$log_size = filesize(CError::LOG_PATH);
+$log_size_limit = CError::LOG_SIZE_LIMIT;
 
 $offset = -1;
 if ($log_size > $log_size_limit) {
   $offset = $log_size - $log_size_limit;
 }
-$log_content = file_get_contents(LOG_PATH, false, null, $offset);
+$log_content = file_get_contents(CError::LOG_PATH, false, null, $offset);
+
+$log_size_deca = CMbString::toDecaBinary($log_size);
+CAppUI::js("Control.Tabs.setTabCount('error-file', '$log_size_deca')");
 
 echo $log_content;

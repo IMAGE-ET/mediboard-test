@@ -305,6 +305,8 @@ function errorHandler($code, $text, $file, $line, $context, $backtrace = null) {
       $log .= "\n<strong>User: </strong>$user_view ($user_id)";
     }
 
+    $file = CError::openInIDE($file, $line);
+
     $log .= <<<HTML
   <strong>Time: </strong>$time
   <strong>Type: </strong>$type
@@ -324,7 +326,7 @@ HTML;
       $log .= "\n<strong>Function: </strong> $function";
 
       if (isset($context["file"])) {
-        $log .= "\n<strong>File: </strong>" . $context["file"];
+        $log .= "\n<strong>File: </strong>" . CError::openInIDE($context["file"], isset($context["line"]) ? $context["line"] : null);
       }
 
       if (isset($context["line"])) {
@@ -444,6 +446,8 @@ function exceptionHandler($exception) {
       $log .= "\n<strong>User: </strong>$user_view ($user_id)";
     }
 
+    $file = CError::openInIDE($file, $line);
+
     $log .= <<<HTML
   <strong>Time: </strong>$time
   <strong>Type: </strong>$type
@@ -463,7 +467,7 @@ HTML;
       $log .= "\n<strong>Function: </strong> $function";
 
       if (isset($context["file"])) {
-        $log .= "\n<strong>File: </strong>" . $context["file"];
+        $log .= "\n<strong>File: </strong>" . CError::openInIDE($context["file"], isset($context["line"]) ? $context["line"] : null);
       }
 
       if (isset($context["line"])) {

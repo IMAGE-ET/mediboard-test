@@ -6,7 +6,7 @@
   Main.add(PairEffect.initGroup.curry('tree-content'));
 </script>
 
-<div id="sniff-run" style="display: none; width: 800px;">
+<div id="sniff-run" style="display: none; width: 900px; height: 800px;">
   <h1>
     Sniff reports status
     <br />

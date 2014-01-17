@@ -115,14 +115,14 @@ Main.add(function(){
       </tr>
       <tr>
         <td style="width: 20%;"></td>
-        <td>{{mb_value object=$_log field=file_name}}</td>
-        <td class="narrow" style="text-align: right;">{{mb_value object=$_log field=line_number}}</td>
+        <td>{{$_log->file_name|ide:$_log->line_number:$_log->file_name}}</td>
+        <td class="narrow" style="text-align: right;">{{$_log->line_number}}</td>
       </tr>
       {{foreach from=$_log->_stacktrace_output item=_output name=output}}
         <tr>
           <td class="text">{{$_output.function}}</td>
-          <td class="text">{{$_output.file}}</td>
-          <td style="text-align: right;">{{$_output.line}}</td>
+          <td class="text">{{$_output.file|ide:$_output.line:$_output.file}}</td>
+          <td style="text-align: right;">{{$_output.file|ide:$_output.line:$_output.line}}</td>
         </tr>
       {{/foreach}}
     </table>
@@ -230,16 +230,16 @@ Main.add(function(){
           <table class="main tbl">
             <tr>
               <td style="width: 20%;"></td>
-              <td>{{mb_value object=$_log field=file_name}}</td>
-              <td class="narrow" style="text-align: right;">{{mb_value object=$_log field=line_number}}</td>
+              <td>{{$_log->file_name|ide:$_log->line_number:$_log->file_name}}</td>
+              <td class="narrow" style="text-align: right;">{{$_log->line_number|ide:$_log->line_number:$_log->line_number}}</td>
             </tr>
             {{foreach from=$_log->_stacktrace_output item=_output name=output}}
               {{if $smarty.foreach.output.iteration < 4 ||
                 ($smarty.foreach.output.iteration == 4 && count($_log->_stacktrace_output) == 4)}}
                 <tr>
                   <td class="text">{{$_output.function}}</td>
-                  <td class="text">{{$_output.file}}</td>
-                  <td style="text-align: right;">{{$_output.line}}</td>
+                  <td class="text">{{$_output.file|ide:$_output.line:$_output.file}}</td>
+                  <td style="text-align: right;">{{$_output.line|ide:$_output.line:$_output.line}}</td>
                 </tr>
               {{elseif $smarty.foreach.output.iteration == 4 }}
                 <tr><td colspan="3">...</td></tr>

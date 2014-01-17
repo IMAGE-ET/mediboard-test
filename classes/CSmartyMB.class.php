@@ -1,11 +1,11 @@
-<?php 
+<?php
 /**
  * $Id$
- * 
+ *
  * @package    Mediboard
  * @subpackage classes
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -62,7 +62,7 @@ class CSmartyMB extends Smarty {
     // Register mediboard functions
     $this->register_block("tr"                , array($this,"tr"));
     $this->register_block("main"              , array($this,"main"));
-    
+
     $this->register_function("mb_default"        , array($this,"mb_default"));
     $this->register_function("mb_ditto"          , array($this,"mb_ditto"));
     $this->register_function("mb_class"          , array($this,"mb_class"));
@@ -72,7 +72,7 @@ class CSmartyMB extends Smarty {
     $this->register_function("thumb"             , array($this,"thumb"));
     $this->register_function("unique_id"         , array($this,"unique_id"));
     $this->register_function("mb_didacticiel"    , array($this,"mb_didacticiel"));
-    
+
     $this->register_modifier("idex"              , array($this,"idex"));
     $this->register_modifier("conf"              , array($this,"conf"));
 
@@ -102,6 +102,7 @@ class CSmartyMB extends Smarty {
     $this->register_modifier("module_active"     , array($this, "module_active"));
     $this->register_modifier("JSAttribute"       , array($this, "JSAttribute"));
     $this->register_modifier("nozero"            , array($this, "nozero"));
+    $this->register_modifier("ide"               , array($this, "ide"));
 
     $this->register_function("mb_token"          , array($this, "mb_token"));
 
@@ -115,7 +116,7 @@ class CSmartyMB extends Smarty {
     $this->assign("app", CAppUI::$instance);
     $this->assign("conf", CAppUI::conf());
     $this->assign("user", CAppUI::$instance->user_id); // shouldn't be necessary
-    $this->assign("version", $version); 
+    $this->assign("version", $version);
     $this->assign("suppressHeaders", $suppressHeaders);
     $this->assign("can", $can);
     $this->assign("m", $m);
@@ -217,7 +218,7 @@ class CSmartyMB extends Smarty {
 
     if (!$field) {
       return "<span onmouseover=\"ObjectTooltip.createEx(this, '$object->_guid')\">$object->_view</span>";
-    }  
+    }
 
     if (null !== $value = CMbArray::extract($params, "value")) {
 
@@ -225,7 +226,7 @@ class CSmartyMB extends Smarty {
 
       // Empties cache for forward references
       if (isset($object->_fwd[$field])) {
-        unset($object->_fwd[$field]);  
+        unset($object->_fwd[$field]);
       }
     }
 
@@ -546,7 +547,7 @@ class CSmartyMB extends Smarty {
 
   /**
    * Configuration accessor
-   * 
+   *
    * @param string $path    The configuration path
    * @param object $context The context
    *
@@ -558,10 +559,10 @@ class CSmartyMB extends Smarty {
 
   /**
    * Idex loader and accessor
-   * 
+   *
    * @param CStoredObject $object The configuration path
    * @param string        $tag    The context
-   * 
+   *
    * @return string The idex scalar value, empty string if undefined
    */
   function idex($object, $tag = null) {
@@ -603,7 +604,7 @@ class CSmartyMB extends Smarty {
 
     // Formatage et symbole monétaire
     $value = ($value !== null && $value !== "") ?
-      number_format($value, $decimals, ",", " ")." ".CAppUI::conf("currency_symbol") : 
+      number_format($value, $decimals, ",", " ")." ".CAppUI::conf("currency_symbol") :
       "-";
 
     // Negativité
@@ -612,7 +613,7 @@ class CSmartyMB extends Smarty {
       $value;
 
     // Nullité 
-    $html = $empty && abs($value) < 0.001 ? 
+    $html = $empty && abs($value) < 0.001 ?
       "<div class=\"empty\">$html</div>" :
       $html;
 
@@ -663,6 +664,25 @@ class CSmartyMB extends Smarty {
    */
   function nozero($value) {
     return $value ? $value : '' ;
+  }
+
+  /**
+   * Create a link to open the file in an IDE
+   *
+   * @param string $file File to open in the IDE
+   * @param int    $line Line number
+   * @param string $text Text in the link
+   *
+   * @return string
+   */
+  function ide($file, $line = null, $text = null) {
+    $text = isset($text) ? $text : $file;
+
+    if (!CAppUI::conf("dPdeveloppement ide_path")) {
+      return $text;
+    }
+
+    return "<a target=\"ide-launch-iframe\" href=\"ide:".urlencode($file).":$line\">$text</a>";
   }
 
   /**
@@ -835,7 +855,7 @@ class CSmartyMB extends Smarty {
     }
 
     $regexp = str_replace("/", "\\/", implode("|", $tokens));
-    return preg_replace("/($regexp)/i", "<$tag>$1</$tag>", $text);  
+    return preg_replace("/($regexp)/i", "<$tag>$1</$tag>", $text);
   }
 
   /**
@@ -1010,7 +1030,7 @@ class CSmartyMB extends Smarty {
   function display($resource_name, $cache_id = null, $compile_id = null) {
     // Only at debug time
     if (isset($this->_tpl_vars['nodebug']) ||
-        !CAppUI::pref("showTemplateSpans") || 
+        !CAppUI::pref("showTemplateSpans") ||
         in_array(basename($resource_name), array("login.tpl", "common.tpl", "header.tpl", "footer.tpl", "tabbox.tpl", "ajax_errors.tpl"))) {
       parent::display($resource_name, $cache_id, $compile_id);
       return;

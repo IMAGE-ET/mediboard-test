@@ -28,8 +28,11 @@ if (!defined("E_DEPRECATED")) {
  * Error manager
  */
 class CError {
+  const LOG_PATH = LOG_PATH;
+  const LOG_SIZE_LIMIT = 5242880; // 1024*1024*5
+
   static $_excluded = array(
-    E_STRICT,            // BCB
+    E_STRICT,
     E_DEPRECATED,        // BCB
     E_RECOVERABLE_ERROR, // Thrown by bad type hinting, to be removed
   );
@@ -114,5 +117,23 @@ class CError {
     }
 
     return $categories;
+  }
+
+  /**
+   * Create a link to open the file in an IDE
+   *
+   * @param string $file File to open in the IDE
+   * @param int    $line Line number
+   *
+   * @return string
+   */
+  static function openInIDE($file, $line = null) {
+    global $dPconfig;
+
+    if (empty($dPconfig["dPdeveloppement"]["ide_path"])) {
+      return $file;
+    }
+
+    return "<a target=\"ide-launch-iframe\" href=\"ide:".urlencode($file).":$line\">$file</a>";
   }
 }
