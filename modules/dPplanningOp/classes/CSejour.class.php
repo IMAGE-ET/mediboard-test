@@ -985,6 +985,15 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     $patient_modified = $this->fieldModified("patient_id");
 
+    // Si le patient est modifié et qu'il y a plus d'une consult dans le sejour, on empeche le store
+    if (!$this->_forwardRefMerging && $this->sejour_id && $patient_modified) {
+
+      $consultations = $this->countBackRefs("consultations");
+      if ($consultations > 1) {
+        return "D'autres consultations sont prévues dans ce séjour, impossible de changer le patient.";
+      }
+    }
+
     // Pour un séjour non annulé, mise à jour de la date de décès du patient
     // suivant le mode de sortie
     if (!$this->annule) {
@@ -1136,6 +1145,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         /** @var CConsultation $_consult */
         if ($_consult->patient_id != $this->patient_id) {
           $_consult->patient_id = $this->patient_id;
+          $_consult->_skip_count = true;
           if ($msg = $_consult->store()) {
             CAppUI::setMsg($msg, UI_MSG_WARNING);
           }
@@ -1160,15 +1170,15 @@ class CSejour extends CFacturable implements IPatientRelated {
       $lastAff =& $this->_ref_last_affectation;
 
       // Cas où on a une premiere affectation différente de l'heure d'admission
-      if ($firstAff->_id && ($firstAff->entree != $this->_entree)) {
-        $firstAff->entree = $this->_entree;
+      if ($firstAff->_id && ($firstAff->entree != $this->entree)) {
+        $firstAff->entree = $this->entree;
         $firstAff->_no_synchro = 1;
         $firstAff->store();
       }
 
       // Cas où on a une dernière affectation différente de l'heure de sortie
-      if ($lastAff->_id && ($lastAff->sortie != $this->_sortie)) {
-        $lastAff->sortie = $this->_sortie;
+      if ($lastAff->_id && ($lastAff->sortie != $this->sortie)) {
+        $lastAff->sortie = $this->sortie;
         $lastAff->_no_synchro = 1;
         $lastAff->store();
       }
@@ -1195,8 +1205,8 @@ class CSejour extends CFacturable implements IPatientRelated {
       $this->loadRefsAffectations();
       $unique = $this->_ref_first_affectation;
       $unique->sejour_id = $this->_id;
-      $unique->entree = $this->_entree;
-      $unique->sortie = $this->_sortie;
+      $unique->entree = $this->entree;
+      $unique->sortie = $this->sortie;
       $unique->lit_id = $this->_unique_lit_id;
       if ($msg = $unique->store()) {
         return "Impossible d'affecter un lit unique: $msg";
@@ -1325,8 +1335,8 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return void
    */
   function updateEntreeSortie() {
-    $this->_entree = CValue::first($this->entree_reelle, $this->entree_prevue);
-    $this->_sortie = CValue::first($this->sortie_reelle, $this->sortie_prevue);
+    $this->entree = CValue::first($this->entree_reelle, $this->entree_prevue);
+    $this->sortie = CValue::first($this->sortie_reelle, $this->sortie_prevue);
   }
 
   /**
@@ -1335,7 +1345,7 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return void
    */
   function updateIsolement() {
-    $this->_isolement_date = CValue::first($this->isolement_date, $this->_entree);
+    $this->_isolement_date = CValue::first($this->isolement_date, $this->entree);
   }
 
   /**
@@ -1360,7 +1370,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $this->_duree_prevue_heure = CMbDT::timeRelative(CMbDT::time($this->entree_prevue), CMbDT::time($this->sortie_prevue), "%02d");
     }
     $this->_duree_reelle       = CMbDT::daysRelative($this->entree_reelle, $this->sortie_reelle);
-    $this->_duree              = CMbDT::daysRelative($this->_entree, $this->_sortie);
+    $this->_duree              = CMbDT::daysRelative($this->entree, $this->sortie);
 
     // Dates
     $this->_date_entree_prevue = CMbDT::date(null, $this->entree_prevue);
@@ -1389,11 +1399,11 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->_at_midnight = ($this->_date_entree_prevue != $this->_date_sortie_prevue);
 
     if ($this->entree_prevue && $this->sortie_prevue) {
-      $this->_view      = "Séjour du " . CMbDT::format($this->_entree, CAppUI::conf("date"));
-      $this->_shortview = "Du "        . CMbDT::format($this->_entree, CAppUI::conf("date"));
-      if (CMbDT::format($this->_entree, CAppUI::conf("date")) != CMbDT::format($this->_sortie, CAppUI::conf("date"))) {
-        $this->_view      .= " au " . CMbDT::format($this->_sortie, CAppUI::conf("date"));
-        $this->_shortview .= " au " . CMbDT::format($this->_sortie, CAppUI::conf("date"));
+      $this->_view      = "Séjour du " . CMbDT::format($this->entree, CAppUI::conf("date"));
+      $this->_shortview = "Du "        . CMbDT::format($this->entree, CAppUI::conf("date"));
+      if (CMbDT::format($this->entree, CAppUI::conf("date")) != CMbDT::format($this->sortie, CAppUI::conf("date"))) {
+        $this->_view      .= " au " . CMbDT::format($this->sortie, CAppUI::conf("date"));
+        $this->_shortview .= " au " . CMbDT::format($this->sortie, CAppUI::conf("date"));
       }
     }
     $this->_acte_execution = CMbDT::dateTime($this->entree_prevue);
@@ -1450,9 +1460,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   function checkDaysRelative($date) {
-    if ($this->_entree && $this->_sortie) {
-      $this->_entree_relative = CMbDT::daysRelative($date, CMbDT::date($this->_entree));
-      $this->_sortie_relative = CMbDT::daysRelative($date, CMbDT::date($this->_sortie));
+    if ($this->entree && $this->sortie) {
+      $this->_entree_relative = CMbDT::daysRelative($date, CMbDT::date($this->entree));
+      $this->_sortie_relative = CMbDT::daysRelative($date, CMbDT::date($this->sortie));
     }
   }
 
@@ -2475,22 +2485,22 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
     $where["patient_id"] = " = '$this->patient_id'";
 
-    $this->_entree = CValue::first($this->entree_reelle, $this->entree_prevue);
+    $this->entree = CValue::first($this->entree_reelle, $this->entree_prevue);
     if ($useSortie) {
-      $this->_sortie = CValue::first($this->sortie_reelle, $this->sortie_prevue);
+      $this->sortie = CValue::first($this->sortie_reelle, $this->sortie_prevue);
     }
 
-    if (!$this->_entree) {
+    if (!$this->entree) {
       return null;
     }
 
-    if ($this->_entree) {
-      $date_entree = CMbDT::date($this->_entree);
+    if ($this->entree) {
+      $date_entree = CMbDT::date($this->entree);
       $where[] = "DATE(entree_prevue) = '$date_entree' OR DATE(entree_reelle) = '$date_entree'";
     }
     if ($useSortie) {
-      if ($this->_sortie) {
-        $date_sortie = CMbDT::date($this->_sortie);
+      if ($this->sortie) {
+        $date_sortie = CMbDT::date($this->sortie);
         $where[] = "DATE(sortie_prevue) = '$date_sortie' OR DATE(sortie_reelle) = '$date_sortie'";
       }
     }
