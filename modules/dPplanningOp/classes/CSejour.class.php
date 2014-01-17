@@ -109,7 +109,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $discipline_id;
   public $ald;
   public $type_pec;
-  
+
   public $date_accident;
   public $nature_accident;
 
@@ -183,7 +183,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_statut_pro;
   public $_dialyse;
   public $_cession_creance;
-  
+
   // References
   /** @var COperation */
   public $_ref_first_operation;
@@ -517,7 +517,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $props["_cession_creance"]          = "bool default|0";
     $props["_statut_pro"]               = "enum list|chomeur|etudiant|non_travailleur|independant|".
                                                     "invalide|militaire|retraite|salarie_fr|salarie_sw|sans_emploi";
-    
+
     $props["_time_entree_prevue"] = "time";
     $props["_time_sortie_prevue"] = "time";
 
@@ -1031,7 +1031,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         }
       }
     }
-    
+
     // On fixe la récusation si pas définie pour un nouveau séjour
     if (!$this->_id && ($this->recuse === "" || $this->recuse === null)) {
       $this->recuse = CAppUI::conf("dPplanningOp CSejour use_recuse") ? -1 : 0;
@@ -1051,7 +1051,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         $this->isolement_fin = "";
       }
     }
-    
+
     $facture = null;
     if (CModule::getActive("dPfacturation") && CAppUI::conf("dPplanningOp CFactureEtablissement use_facture_etab")) {
       // Création de la facture de sejour 
@@ -1073,13 +1073,13 @@ class CSejour extends CFacturable implements IPatientRelated {
       $facture->assurance_accident  = $this->_assurance_accident;
       $facture->rques_assurance_accident = $this->_rques_assurance_accident;
       $facture->rques_assurance_maladie  = $this->_rques_assurance_maladie;
-      
+
       //Store de la facture 
       if ($msg = $facture->store()) {
         return $msg;
       }
     }
-    
+
     $this->completeField("mode_entree_id");
     if ($this->mode_entree_id) {
       /** @var CModeEntreeSejour $mode */
@@ -1138,7 +1138,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         }
       }
     }
-    
+
     if ($patient_modified) {
       $consultations = $this->loadBackRefs("consultations");
       foreach ($consultations as $_consult) {
@@ -1170,15 +1170,15 @@ class CSejour extends CFacturable implements IPatientRelated {
       $lastAff =& $this->_ref_last_affectation;
 
       // Cas où on a une premiere affectation différente de l'heure d'admission
-      if ($firstAff->_id && ($firstAff->entree != $this->entree)) {
-        $firstAff->entree = $this->entree;
+      if ($firstAff->_id && ($firstAff->entree != $this->_entree)) {
+        $firstAff->entree = $this->_entree;
         $firstAff->_no_synchro = 1;
         $firstAff->store();
       }
 
       // Cas où on a une dernière affectation différente de l'heure de sortie
-      if ($lastAff->_id && ($lastAff->sortie != $this->sortie)) {
-        $lastAff->sortie = $this->sortie;
+      if ($lastAff->_id && ($lastAff->sortie != $this->_sortie)) {
+        $lastAff->sortie = $this->_sortie;
         $lastAff->_no_synchro = 1;
         $lastAff->store();
       }
@@ -1205,8 +1205,8 @@ class CSejour extends CFacturable implements IPatientRelated {
       $this->loadRefsAffectations();
       $unique = $this->_ref_first_affectation;
       $unique->sejour_id = $this->_id;
-      $unique->entree = $this->entree;
-      $unique->sortie = $this->sortie;
+      $unique->entree = $this->_entree;
+      $unique->sortie = $this->_sortie;
       $unique->lit_id = $this->_unique_lit_id;
       if ($msg = $unique->store()) {
         return "Impossible d'affecter un lit unique: $msg";
@@ -1242,7 +1242,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $where["facture_liaison.facture_class"]    = " = 'CFactureEtablissement'";
       $where["facture_liaison.object_class"] = " = 'CSejour'";
       $where["facture_liaison.object_id"]    = " = '$this->_id'";
-      
+
       $facture = new CFactureEtablissement();
       $this->_ref_factures = $facture->loadList($where, "ouverture ASC", null, "facture_id", $ljoin);
       if (count($this->_ref_factures) > 0) {
@@ -1335,8 +1335,8 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return void
    */
   function updateEntreeSortie() {
-    $this->entree = CValue::first($this->entree_reelle, $this->entree_prevue);
-    $this->sortie = CValue::first($this->sortie_reelle, $this->sortie_prevue);
+    $this->_entree = CValue::first($this->entree_reelle, $this->entree_prevue);
+    $this->_sortie = CValue::first($this->sortie_reelle, $this->sortie_prevue);
   }
 
   /**
@@ -1345,7 +1345,7 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return void
    */
   function updateIsolement() {
-    $this->_isolement_date = CValue::first($this->isolement_date, $this->entree);
+    $this->_isolement_date = CValue::first($this->isolement_date, $this->_entree);
   }
 
   /**
@@ -1370,7 +1370,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $this->_duree_prevue_heure = CMbDT::timeRelative(CMbDT::time($this->entree_prevue), CMbDT::time($this->sortie_prevue), "%02d");
     }
     $this->_duree_reelle       = CMbDT::daysRelative($this->entree_reelle, $this->sortie_reelle);
-    $this->_duree              = CMbDT::daysRelative($this->entree, $this->sortie);
+    $this->_duree              = CMbDT::daysRelative($this->_entree, $this->_sortie);
 
     // Dates
     $this->_date_entree_prevue = CMbDT::date(null, $this->entree_prevue);
@@ -1399,11 +1399,11 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->_at_midnight = ($this->_date_entree_prevue != $this->_date_sortie_prevue);
 
     if ($this->entree_prevue && $this->sortie_prevue) {
-      $this->_view      = "Séjour du " . CMbDT::format($this->entree, CAppUI::conf("date"));
-      $this->_shortview = "Du "        . CMbDT::format($this->entree, CAppUI::conf("date"));
-      if (CMbDT::format($this->entree, CAppUI::conf("date")) != CMbDT::format($this->sortie, CAppUI::conf("date"))) {
-        $this->_view      .= " au " . CMbDT::format($this->sortie, CAppUI::conf("date"));
-        $this->_shortview .= " au " . CMbDT::format($this->sortie, CAppUI::conf("date"));
+      $this->_view      = "Séjour du " . CMbDT::format($this->_entree, CAppUI::conf("date"));
+      $this->_shortview = "Du "        . CMbDT::format($this->_entree, CAppUI::conf("date"));
+      if (CMbDT::format($this->_entree, CAppUI::conf("date")) != CMbDT::format($this->_sortie, CAppUI::conf("date"))) {
+        $this->_view      .= " au " . CMbDT::format($this->_sortie, CAppUI::conf("date"));
+        $this->_shortview .= " au " . CMbDT::format($this->_sortie, CAppUI::conf("date"));
       }
     }
     $this->_acte_execution = CMbDT::dateTime($this->entree_prevue);
@@ -1442,7 +1442,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     if (!$this->annule && $this->recuse == -1) {
       $this->_view = "[Att] " . $this->_view;
     }
-    
+
     if (CModule::getActive("dPfacturation") && CAppUI::conf("dPplanningOp CFactureEtablissement use_facture_etab")) {
       $this->loadRefsFactureEtablissement();
       if ($this->_ref_last_facture) {
@@ -1460,9 +1460,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   function checkDaysRelative($date) {
-    if ($this->entree && $this->sortie) {
-      $this->_entree_relative = CMbDT::daysRelative($date, CMbDT::date($this->entree));
-      $this->_sortie_relative = CMbDT::daysRelative($date, CMbDT::date($this->sortie));
+    if ($this->_entree && $this->_sortie) {
+      $this->_entree_relative = CMbDT::daysRelative($date, CMbDT::date($this->_entree));
+      $this->_sortie_relative = CMbDT::daysRelative($date, CMbDT::date($this->_sortie));
     }
   }
 
@@ -2483,22 +2483,22 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
     $where["patient_id"] = " = '$this->patient_id'";
 
-    $this->entree = CValue::first($this->entree_reelle, $this->entree_prevue);
+    $this->_entree = CValue::first($this->entree_reelle, $this->entree_prevue);
     if ($useSortie) {
-      $this->sortie = CValue::first($this->sortie_reelle, $this->sortie_prevue);
+      $this->_sortie = CValue::first($this->sortie_reelle, $this->sortie_prevue);
     }
 
-    if (!$this->entree) {
+    if (!$this->_entree) {
       return null;
     }
 
-    if ($this->entree) {
-      $date_entree = CMbDT::date($this->entree);
+    if ($this->_entree) {
+      $date_entree = CMbDT::date($this->_entree);
       $where[] = "DATE(entree_prevue) = '$date_entree' OR DATE(entree_reelle) = '$date_entree'";
     }
     if ($useSortie) {
-      if ($this->sortie) {
-        $date_sortie = CMbDT::date($this->sortie);
+      if ($this->_sortie) {
+        $date_sortie = CMbDT::date($this->_sortie);
         $where[] = "DATE(sortie_prevue) = '$date_sortie' OR DATE(sortie_reelle) = '$date_sortie'";
       }
     }
@@ -2524,11 +2524,11 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return string|void
    */
   static function getTagNDA($group_id = null, $type_tag = "tag_dossier") {
-    $context = array(__METHOD__, func_get_args());    
+    $context = array(__METHOD__, func_get_args());
     if (CFunctionCache::exist($context)) {
       return CFunctionCache::get($context);
     }
-     
+
     // Gestion du tag NDA par son domaine d'identification
     if (CAppUI::conf("eai use_domain")) {
       $tag_NDA = CDomain::getTagMasterDomain("CSejour", $group_id);
@@ -3094,7 +3094,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $template->addLongDateProperty("Sejour - Consultation anesthésie - Date (longue)", $cpa_datetime);
     $template->addLongDateProperty("Sejour - Consultation anesthésie - Date (longue, minuscule)", $cpa_datetime);
     $template->addTimeProperty("Sejour - Consultation anesthésie - Heure", $cpa_datetime);
-    
+
     $this->loadRefsFiles();
     $list = CMbArray::pluck($this->_ref_files, "file_name");
     $template->addListProperty("Sejour - Liste des fichiers", $list);
