@@ -40,6 +40,7 @@ function popPlanning(form) {
   url.addRadio(form._materiel);
   url.addRadio(form._extra);
   url.addRadio(form._duree);
+  url.addRadio(form._hors_plage);
   url.addParam("_bloc_id[]", $V(form.elements["_bloc_id[]"]), true);
   
   if (form.planning_perso.checked){ // pour l'affichage du planning perso d'un anesthesiste
@@ -410,6 +411,17 @@ function showCheckboxAnesth(element){
             </label>
             <label>
               Non <input type="radio" name="_duree" value="0" {{if $conf.dPbloc.CPlageOp.view_duree == "0"}}checked="checked"{{/if}}/>
+            </label>
+          </td>
+        </tr>
+        <tr class="not-full">
+          <th><label for="_hors_plage_1" title="Afficher ou cacher la mention hors plage">Afficher ou cacher la mention hors plage</label></th>
+          <td>
+            <label>
+              Oui <input type="radio" name="_hors_plage" value="1" {{if $conf.dPbloc.CPlageOp.view_hors_plage == "1"}}checked="checked"{{/if}}/>
+            </label>
+            <label>
+              Non <input type="radio" name="_hors_plage" value="0" {{if $conf.dPbloc.CPlageOp.view_hors_plage == "0"}}checked="checked"{{/if}}/>
             </label>
           </td>
         </tr>

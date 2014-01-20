@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<form name="editConfig-CPlageOp" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+<form name="editConfig-CPlageOp" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
   
@@ -36,6 +36,7 @@
     {{mb_include module=system template=inc_config_bool var=view_materiel}}
     {{mb_include module=system template=inc_config_bool var=view_extra}}
     {{mb_include module=system template=inc_config_bool var=view_duree}}
+    {{mb_include module=system template=inc_config_bool var=view_hors_plage}}
 
     <tr>
       <td class="button" colspan="100">

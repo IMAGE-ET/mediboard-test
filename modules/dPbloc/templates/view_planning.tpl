@@ -21,7 +21,9 @@
           {{/if}}
           -
           {{$numOp}} intervention(s)
-          {{if $operations|@count}}(dont {{$operations|@count}} hors plage){{/if}}
+          {{if $operations|@count && $_hors_plage}}
+            (dont {{$operations|@count}} hors plage)
+          {{/if}}
         </a>
       </h1>
     </th>
@@ -32,7 +34,7 @@
     <td colspan="{{$_materiel+$_extra+$_duree+$_coordonnees+12}}" class="text">
       {{if $curr_plage_id == "hors_plage"}}
         <h2>
-          <strong>Interventions hors plage</strong>
+          <strong>Interventions {{if $_hors_plage}}hors plage{{/if}}</strong>
           du {{$curr_date|date_format:"%a %d/%m/%Y"}}
         </h2>
       {{else}}
