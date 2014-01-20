@@ -60,7 +60,7 @@ switch ($selAffichage) {
     $where["sejour.mode_sortie"] = " = 'mutation'";
 }
 
-if ($order_col != "_entree" && $order_col != "ccmu" && $order_col != "_patient_id") {
+if (!in_array($order_col, array("_entree", "ccmu", "_patient_id"))) {
   $order_col = "ccmu";
 }
 
@@ -78,12 +78,11 @@ switch ($order_col) {
 /** @var CSejour[] $listSejours */
 $listSejours = $sejour->loadList($where, $order, null, "`sejour`.sejour_id", $ljoin);
 
-foreach ($listSejours as $key => &$sejour) {
-  if ($service_id) {
+if ($service_id) {
+  foreach ($listSejours as $key => $sejour) {
     $curr_aff = $sejour->getCurrAffectation();
     if ((!$curr_aff->_id && (!$sejour->service_id || $sejour->service_id != $service_id)) || $curr_aff->service_id != $service_id) {
       unset($listSejours[$key]);
-      continue;
     }
   }
 }
@@ -100,24 +99,30 @@ CMbObject::massCountBackRefs($listSejours, "prescriptions");
 CMbObject::massCountBackRefs($listSejours, "documents");
 CMbObject::massCountBackRefs($listSejours, "files");
 
-foreach ($listSejours as $key => &$sejour) {
+foreach ($listSejours as $sejour) {
   // Chargement du numero de dossier
   $sejour->loadNDA();
   $sejour->loadRefsFwd();
-  $sejour->loadRefRPU();
-  $sejour->_ref_rpu->loadRefSejourMutation();
+  $sejour->loadRefRPU()->loadRefSejourMutation();
   $sejour->loadRefsConsultations();
   $sejour->loadRefsNotes();
   $sejour->countDocItems();
-  $sejour->loadRefPrescriptionSejour();
 
-  if ($sejour->_ref_prescription_sejour->_id) {
+  $prescription = $sejour->loadRefPrescriptionSejour();
+
+  if ($prescription->_id) {
     if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
-      $sejour->_ref_prescription_sejour->_count_fast_recent_modif = $sejour->_ref_prescription_sejour->countAlertsNotHandled("medium");
+      $prescription->_count_fast_recent_modif = $prescription->countAlertsNotHandled("medium");
     }
     else {
-      $sejour->_ref_prescription_sejour->countFastRecentModif();
+      $prescription->countFastRecentModif();
     }
+    // Ampoule rouge
+    CPrescription::$_load_lite = true;
+    $prescription->loadRefsLinesMedByCat();
+    CPrescription::$_load_lite = false;
+    $prescription->loadRefsLinesElementByCat();
+    $prescription->countUrgence($date);
   }
 
   // Chargement de l'IPP
@@ -134,7 +139,9 @@ foreach ($listSejours as $key => &$sejour) {
     $sejour->_nb_docs += $consult_atu->_nb_docs;
     $sejour->_nb_files_docs += $consult_atu->_nb_files + $consult_atu->_nb_docs;
 
+    CPrescription::$_load_lite = true;
     $consult_atu->loadRefsPrescriptions();
+    CPrescription::$_load_lite = false;
 
     if (isset($consult_atu->_ref_prescriptions["externe"])) {
       $sejour->_nb_docs++;
