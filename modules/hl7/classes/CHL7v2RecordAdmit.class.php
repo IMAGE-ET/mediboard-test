@@ -1449,11 +1449,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     // Affectation du lit
     $affectation->lit_id = $lit->_id;
-    
-    // Affectation du service
-    if (!$affectation->service_id && $lit->_id) {
-      $affectation->service_id = $lit->loadRefService()->_id;
-    }
 
     $code_uf = $this->queryTextNode("PL.1", $node);
 
