@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Bloc
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
@@ -414,6 +414,16 @@ class CSetupdPbloc extends CSetup {
                 ADD `cheklist_man` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.43";
+    $this->makeRevision("0.43");
+
+    $query = "ALTER TABLE `bloc_operatoire`
+                DROP `cheklist_man`;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `sallesbloc`
+                ADD `cheklist_man` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.44";
   }
 }

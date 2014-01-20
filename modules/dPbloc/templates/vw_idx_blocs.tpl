@@ -93,10 +93,6 @@ Main.add(function () {
               <td>{{mb_field object=$bloc field="days_locked"}}</td>
             </tr>
             <tr>
-              <th>{{mb_label object=$bloc field="cheklist_man"}}</th>
-              <td>{{mb_field object=$bloc field="cheklist_man"}}</td>
-            </tr>
-            <tr>
               <td class="button" colspan="2">
                 {{if $bloc->_id}}
                 <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
@@ -160,6 +156,10 @@ Main.add(function () {
             <tr>
               <th>{{mb_label object=$salle field="dh"}}</th>
               <td>{{mb_field object=$salle field="dh"}}</td>
+            </tr>
+            <tr>
+              <th>{{mb_label object=$salle field="cheklist_man"}}</th>
+              <td>{{mb_field object=$salle field="cheklist_man"}}</td>
             </tr>
             <tr>
               <td class="button" colspan="2">

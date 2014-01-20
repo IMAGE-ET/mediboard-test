@@ -105,7 +105,7 @@ $anesths = $anesth->loadAnesthesistes(PERM_READ);
 
 $date_last_checklist = array();
 foreach ($listSalles as $salle) {
-  if ($salle->loadRefBloc()->cheklist_man) {
+  if ($salle->cheklist_man) {
     $checklist = new CDailyCheckList();
     $checklist->object_class = $salle->_class;
     $checklist->object_id = $salle->_id;
@@ -117,11 +117,15 @@ foreach ($listSalles as $salle) {
       $log->loadMatchingObject("date DESC");
       $date_last_checklist[$salle->_id] = $log->date;
     }
-    else {
+    elseif ($checklist->date) {
       $date_last_checklist[$salle->_id] = $checklist->date;
+    }
+    else {
+      $date_last_checklist[$salle->_id] = "";
     }
   }
 }
+
 // Création du template
 $smarty = new CSmartyDP();
 

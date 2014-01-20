@@ -44,7 +44,7 @@ showLegend = function() {
         </label>
       </td>
     </tr>
-    {{if $salle->_ref_bloc->cheklist_man}}
+    {{if $salle->cheklist_man}}
       <tr>
         <td colspan="2" class="button">
           <input type="hidden" name="load_checklist" value="0"/>

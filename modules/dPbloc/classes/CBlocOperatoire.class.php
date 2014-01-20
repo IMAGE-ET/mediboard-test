@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Bloc
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
@@ -25,7 +25,6 @@ class CBlocOperatoire extends CMbObject {
   public $days_locked;
   public $tel;
   public $fax;
-  public $cheklist_man;
 
   /** @var CSalle[] */
   public $_ref_salles;
@@ -76,7 +75,6 @@ class CBlocOperatoire extends CMbObject {
     $props["days_locked"] = "num min|0 default|0";
     $props["tel"]         = "phone";
     $props["fax"]         = "phone";
-    $props["cheklist_man"]= "bool default|0";
     $props["_date_min"]   = "date";
     return $props;
   }
