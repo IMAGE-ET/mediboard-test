@@ -80,7 +80,7 @@ if ($salle->_ref_urgences) {
 }
 
 $date_last_checklist = null;
-if ($salle->loadRefBloc()->cheklist_man) {
+if ($salle->cheklist_man) {
   $checklist = new CDailyCheckList();
   $checklist->object_class = $salle->_class;
   $checklist->object_id = $salle->_id;

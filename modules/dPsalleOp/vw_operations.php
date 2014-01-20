@@ -168,7 +168,7 @@ $require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active") && $date 
 if ($require_check_list) {
   list($check_list_not_validated, $daily_check_list_types, $daily_check_lists) = CDailyCheckList::getCheckLists($salle, $date);
 
-  if ($salle->loadRefBloc()->cheklist_man && !$load_checklist) {
+  if ($salle->cheklist_man && !$load_checklist) {
     $check_list_not_validated = 0;
   }
   if ($check_list_not_validated == 0) {

@@ -25,6 +25,7 @@ class CSalle extends CMbObject {
   public $nom;
   public $stats;
   public $dh;
+  public $cheklist_man;
 
   /** @var CBlocOperatoire */
   public $_ref_bloc;
@@ -79,6 +80,7 @@ class CSalle extends CMbObject {
     $props["nom"]     = "str notNull seekable";
     $props["stats"]   = "bool notNull";
     $props["dh"]      = "bool notNull default|0";
+    $props["cheklist_man"]= "bool default|0";
     return $props;
   }
 
