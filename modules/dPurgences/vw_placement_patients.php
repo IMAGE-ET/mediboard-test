@@ -125,15 +125,25 @@ for ($num = 0; $num <= 1; $num++) {
     $sejours = $sejour->loadList($where, null, null, null, $ljoin);
     foreach ($sejours as $sejour) {
       $sejour->loadRefRPU();
-      $sejour->loadRefPrescriptionSejour();
-      if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
-        $countAlertsNotHandled = $sejour->_ref_prescription_sejour->countAlertsNotHandled("medium");
-        $sejour->_ref_prescription_sejour->_count_fast_recent_modif = $countAlertsNotHandled;
+      $prescription = $sejour->loadRefPrescriptionSejour();
+
+      if ($prescription->_id) {
+        if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
+          $countAlertsNotHandled = $prescription->countAlertsNotHandled("medium");
+          $prescription->_count_fast_recent_modif = $countAlertsNotHandled;
+        }
+        else {
+          $prescription->countFastRecentModif();
+        }
+
+        // Ampoule rouge
+        CPrescription::$_load_lite = true;
+        $prescription->loadRefsLinesMedByCat();
+        CPrescription::$_load_lite = false;
+        $prescription->loadRefsLinesElementByCat();
+        $prescription->countUrgence(CMbDT::date($date));
+        $sejour->countDocItems();
       }
-      else {
-        $sejour->_ref_prescription_sejour->countFastRecentModif();
-      }
-      $sejour->countDocItems();
     }
     $listSejours[$nom][$chambre->_id] = $sejours;
   }

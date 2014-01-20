@@ -72,6 +72,9 @@
                     {{else}}
                       <img src="images/icons/ampoule_grey.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
                     {{/if}}
+                    {{if $prescription->_count_urgence|@array_sum}}
+                      <img src="images/icons/ampoule_urgence.png" />
+                    {{/if}}
                   {{/if}}
                   
                   {{if $_sejour->UHCD}}
