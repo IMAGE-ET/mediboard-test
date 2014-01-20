@@ -28,7 +28,7 @@ abstract class CSQLDataSource {
    */
   static $dataSources = array();
   static $trace       = false;
-    
+
   public $dsn         = null;
   public $link        = null;
 
@@ -707,7 +707,9 @@ abstract class CSQLDataSource {
         $query .= implode(",", $queries);
         $query .= ";";
         
-        $this->exec($query);
+        if (!$this->exec($query)) {
+          throw new CMbException($this->error());
+        }
       }
     }
   }
