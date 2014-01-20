@@ -1140,13 +1140,22 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     if ($patient_modified) {
-      $consultations = $this->loadBackRefs("consultations");
-      foreach ($consultations as $_consult) {
-        /** @var CConsultation $_consult */
-        if ($_consult->patient_id != $this->patient_id) {
-          $_consult->patient_id = $this->patient_id;
-          $_consult->_skip_count = true;
-          if ($msg = $_consult->store()) {
+      $list_backrefs = array("contextes_constante", "deliveries", "consultations");
+      foreach ($list_backrefs as $_backname) {
+        /** @var CConstantesMedicales[]|CProductDelivery[]|CConsultation[] $backobjects */
+        $backobjects = $this->loadBackRefs($_backname);
+        if (!$backobjects) {
+          continue;
+        }
+        foreach ($backobjects as $_object) {
+          if ($_object->patient_id == $this->patient_id) {
+            continue;
+          }
+          $_object->patient_id = $this->patient_id;
+          if ($_object instanceof CConsultation) {
+            $_object->_skip_count = true;
+          }
+          if ($msg = $_object->store()) {
             CAppUI::setMsg($msg, UI_MSG_WARNING);
           }
         }
