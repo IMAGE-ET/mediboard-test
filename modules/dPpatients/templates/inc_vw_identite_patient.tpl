@@ -5,7 +5,7 @@
 {{/if}}
 
 <table class="form">
-  <tr>
+  <tr {{if $patient->deces}}class="hatching"{{/if}}>
     <th class="title text" colspan="5">
       {{if $patient->date_lecture_vitale}}
       <div style="float: right;">

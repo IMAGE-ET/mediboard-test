@@ -1496,7 +1496,9 @@ table.tbl td.arretee, table.tbl td.hatching,
 table.tbl tr.hatching th, 
 table.tbl tr.hatching td,
 table.planningBloc tr.hatching th, 
-table.planningBloc tr.hatching td {
+table.planningBloc tr.hatching td,
+table.form tr.hatching th,
+table.form tr.hatching td {
   background-image: url(images/icons/ray.gif);
 }
 

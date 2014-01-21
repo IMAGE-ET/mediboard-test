@@ -727,6 +727,12 @@ class CPatient extends CPerson {
     }
 
     $relative = CMbDate::relative($this->naissance);
+    if ($this->deces && preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/', $this->deces) &&
+        !preg_match('/^0000-[0-9]{2}-[0-9]{2}$/', $this->deces) &&
+        !preg_match('/^[0-9]{4}-00-[0-9]{2}$/', $this->deces) &&
+        !preg_match('/^[0-9]{4}-[0-9]{2}-00$/', $this->deces)) {
+      $relative = CMbDate::relative($this->naissance, $this->deces);
+    }
 
     if ($relative["count"] < 0) {
       $relative["count"] = 0;
