@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -58,7 +58,7 @@ foreach ($listBlocs as &$bloc) {
 
 $praticien = CMediusers::get();
 // Création du template
-$smarty = new CSmartyDP();
+$smarty = new CSmartyDP("modules/dPbloc");
 
 $smarty->assign("praticien"    , $praticien);
 $smarty->assign("chir"         , $praticien->user_id);

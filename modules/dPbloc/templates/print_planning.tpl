@@ -336,10 +336,10 @@ function showCheckboxAnesth(element){
           <td>  
             {{assign var="var" value="plage_vide"}}
             <label>
-              Oui <input type="radio" name="_plage" value="1" {{if $conf.$m.$class.$var == "1"}}checked="checked"{{/if}}/>
+              Oui <input type="radio" name="_plage" value="1" {{if $conf.dPbloc.$class.$var == "1"}}checked="checked"{{/if}}/>
             </label>
             <label>
-              Non <input type="radio" name="_plage" value="0" {{if $conf.$m.$class.$var == "0"}}checked="checked"{{/if}}/>
+              Non <input type="radio" name="_plage" value="0" {{if $conf.dPbloc.$class.$var == "0"}}checked="checked"{{/if}}/>
             </label>
           </td>
         </tr>
@@ -348,10 +348,10 @@ function showCheckboxAnesth(element){
           <td>  
             {{assign var="var" value="libelle_ccam"}}
             <label>
-              Oui <input type="radio" name="_ccam_libelle" value="1" {{if $conf.$m.$class.$var == "1"}}checked="checked"{{/if}}/>
+              Oui <input type="radio" name="_ccam_libelle" value="1" {{if $conf.dPbloc.$class.$var == "1"}}checked="checked"{{/if}}/>
             </label> 
             <label>
-              Non <input type="radio" name="_ccam_libelle" value="0" {{if $conf.$m.$class.$var == "0"}}checked="checked"{{/if}}/>
+              Non <input type="radio" name="_ccam_libelle" value="0" {{if $conf.dPbloc.$class.$var == "0"}}checked="checked"{{/if}}/>
             </label> 
           </td>
         </tr>
