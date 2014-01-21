@@ -17,6 +17,9 @@ class CRPU extends CMbObject {
   // DB Table key
   public $rpu_id;
 
+  static $orientation_value = array("HDT", "HO", "SC", "SI", "REA", "UHCD", "MED",
+                                    "CHIR", "OBST", "FUGUE", "SCAM", "PSA", "REO");
+
   // DB Fields
   public $sejour_id;
   public $motif_entree;
@@ -136,70 +139,56 @@ class CRPU extends CMbObject {
     $impose_motif          = CAppUI::conf("dPurgences CRPU impose_motif", CGroups::loadCurrent()) == 1;
     $impose_motif_sfmu     = CAppUI::conf("dPurgences gestion_motif_sfmu");
 
-    $specsParent = parent::getProps();
-    $specs = array (
-      "sejour_id"        => "ref notNull class|CSejour cascade",
-      "motif_entree"     => "text helped",
-      "diag_infirmier"   => "text ".($impose_diag_infirmier ? 'notNull ' : '')."helped",
-      "pec_douleur"      => "text helped",
-      "pec_transport"    => "enum list|med|paramed|aucun",
-      "motif"            => "text ".($impose_motif ? 'notNull ' : '')."helped",
-      "motif_sfmu"       => "ref ".($impose_motif_sfmu ? 'notNull ' : '')."class|CMotifSFMU autocomplete|libelle",
-      "ccmu"             => "enum ".($impose_degre_urgence ? 'notNull ' : '')."list|1|P|2|3|4|5|D",
-      "gemsa"            => "enum list|1|2|3|4|5|6",
-      "type_pathologie"  => "enum list|C|E|M|P|T",
-      "orientation"      => "enum list|HDT|HO|SC|SI|REA|UHCD|MED|CHIR|OBST|FUGUE|SCAM|PSA|REO",
-      "radio_debut"      => "dateTime",
-      "radio_fin"        => "dateTime",
-      "bio_depart"       => "dateTime",
-      "bio_retour"       => "dateTime",
-      "specia_att"       => "dateTime",
-      "specia_arr"       => "dateTime",
-      "mutation_sejour_id" => "ref class|CSejour",
-      "box_id"           => "ref class|CLit",
-      "sortie_autorisee" => "bool",
-      "date_at"          => "date",
-      "circonstance"     => "ref class|CCirconstance autocomplete|libelle dependsOn|actif",
-      "regule_par"       => "enum list|centre_15|medecin",
-      "code_diag"        => "num",
+    $props = parent::getProps();
+    $props["sejour_id"]                = "ref notNull class|CSejour cascade";
+    $props["motif_entree"]             = "text helped";
+    $props["diag_infirmier"]           = "text ".($impose_diag_infirmier ? 'notNull ' : '')."helped";
+    $props["pec_douleur"]              = "text helped";
+    $props["pec_transport"]            = "enum list|med|paramed|aucun";
+    $props["motif"]                    = "text ".($impose_motif ? 'notNull ' : '')."helped";
+    $props["motif_sfmu"]               = "ref ".($impose_motif_sfmu ? 'notNull ' : '')."class|CMotifSFMU autocomplete|libelle";
+    $props["ccmu"]                     = "enum ".($impose_degre_urgence ? 'notNull ' : '')."list|1|P|2|3|4|5|D";
+    $props["gemsa"]                    = "enum list|1|2|3|4|5|6";
+    $props["type_pathologie"]          = "enum list|C|E|M|P|T";
+    $props["orientation"]              = "enum list|".implode("|", self::$orientation_value);
+    $props["radio_debut"]              = "dateTime";
+    $props["radio_fin"]                = "dateTime";
+    $props["bio_depart"]               = "dateTime";
+    $props["bio_retour"]               = "dateTime";
+    $props["specia_att"]               = "dateTime";
+    $props["specia_arr"]               = "dateTime";
+    $props["mutation_sejour_id"]       = "ref class|CSejour";
+    $props["box_id"]                   = "ref class|CLit";
+    $props["sortie_autorisee"]         = "bool";
+    $props["date_at"]                  = "date";
+    $props["circonstance"]             = "ref class|CCirconstance autocomplete|libelle dependsOn|actif";
+    $props["regule_par"]               = "enum list|centre_15|medecin";
+    $props["code_diag"]                = "num";
 
-      "_DP"              => "code cim10 show|1",
-      "_provenance"      => "enum list|1|2|3|4|5|6|7|8",
-      "_destination"     => "enum list|1|2|3|4|6|7",
-      "_transport"       => "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo notNull",
-      "_mode_entree"     => "enum list|6|7|8 notNull",
-      "_mode_sortie"     => "enum list|6|7|8|9 default|8",
-      "_sortie"          => "dateTime",
-      "_patient_id"      => "ref notNull class|CPatient",
-      "_responsable_id"  => "ref notNull class|CMediusers",
-      "_service_id"      => "ref".(CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1 ? ' notNull' : '')." class|CService",
-      "_UHCD"            => "bool",
-      "_entree"          => "dateTime",
-      "_etablissement_sortie_id"        => "ref class|CEtabExterne autocomplete|nom",
-      "_etablissement_entree_id" => "ref class|CEtabExterne autocomplete|nom",
-      "_service_entree_id" => "ref class|CService autocomplete|nom dependsOn|group_id|cancelled",
-      "_service_sortie_id"        => "ref class|CService autocomplete|nom dependsOn|group_id|cancelled",
-      "_attente"           => "time",
-      "_presence"          => "time",
-      "_can_leave"         => "time",
-      "_can_leave_about"   => "bool",
-      "_can_leave_since"   => "bool",
-      "_can_leave_level"   => "enum list|ok|warning|error",
-     );
-     
-    $specs["urprov"] = "";
-    $specs["urmuta"] = "";
-    $specs["urtrau"] = "";
+    $props["_DP"]                      = "code cim10 show|1";
+    $props["_provenance"]              = "enum list|1|2|3|4|5|6|7|8";
+    $props["_destination"]             = "enum list|".implode("|", CSejour::$destination_values);
+    $props["_transport"]               = "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo notNull";
+    $props["_mode_entree"]             = "enum list|6|7|8 notNull";
+    $props["_mode_sortie"]             = "enum list|6|7|8|9 default|8";
+    $props["_sortie"]                  = "dateTime";
+    $props["_patient_id"]              = "ref notNull class|CPatient";
+    $props["_responsable_id"]          = "ref notNull class|CMediusers";
+    $props["_service_id"]              = "ref".(CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1 ? ' notNull' : '')." class|CService";
+    $props["_UHCD"]                    = "bool";
+    $props["_entree"]                  = "dateTime";
+    $props["_etablissement_sortie_id"] = "ref class|CEtabExterne autocomplete|nom";
+    $props["_etablissement_entree_id"] = "ref class|CEtabExterne autocomplete|nom";
+    $props["_service_entree_id"]       = "ref class|CService autocomplete|nom dependsOn|group_id|cancelled";
+    $props["_service_sortie_id"]       = "ref class|CService autocomplete|nom dependsOn|group_id|cancelled";
+    $props["_attente"]                 = "time";
+    $props["_presence"]                = "time";
+    $props["_can_leave"]               = "time";
+    $props["_can_leave_about"]         = "bool";
+    $props["_can_leave_since"]         = "bool";
+    $props["_can_leave_level"]         = "enum list|ok|warning|error";
 
-    // Legacy Sherpa fields
-    if (CModule::getActive("sherpa")) {
-      $urgDro = new CSpUrgDro();
-      $specs["urprov"] = $urgDro->_props["urprov"] . " notNull";
-      $specs["urmuta"] = $urgDro->_props["urmuta"];
-      $specs["urtrau"] = $urgDro->_props["urtrau"];
-    }
-
-    return array_merge($specsParent, $specs);
+    return $props;
   }
 
   /**

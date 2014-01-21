@@ -9,11 +9,15 @@
  *}}
 
 <script>
+  Main.add(function() {
+    changeOrientation(getForm("editSejour").elements.mode_sortie);
+  });
+
   updateModeSortie = function(select) {
     var selected = select.options[select.selectedIndex];
     var form = select.form;
     $V(form.elements.mode_sortie, selected.get("mode"));
-  }
+  };
   updateLitMutation = function(element) {
     {{if $conf.dPurgences.use_blocage_lit}}
       var form = getForm('editSejour');
@@ -24,7 +28,48 @@
         url.requestUpdate("lit_sortie_transfert");
       }
     {{/if}}
-  }
+  };
+  //Changement de l'orientation en fonction du mode sortie
+  changeOrientation = function(element) {
+    var orientation = getForm("editRPU").elements.orientation;
+    var option_orientation = $A(orientation.options);
+    var exclude = ["SCAM","PSA","REO"];
+    switch ($V(element)) {
+      case "normal":
+        option_orientation.each(function(option) {
+          //Si les options sont exclues on les désactive sinon on les réactive
+          if (exclude.indexOf(option.value) === -1 && option.value !== "") {
+            //Si l'option est sélectionnée et que dans ce cas, il n'est pas disponible, on met le sélectionne par défaut
+            if (option.selected) {
+              orientation.selectedIndex = 0;
+            }
+            option.disabled = true;
+          }
+          else {
+            option.disabled = false;
+          }
+        });
+        break;
+      case "mutation":
+      case "transfert":
+        option_orientation.each(function(option) {
+          if (exclude.indexOf(option.value) !== -1) {
+            if (option.selected) {
+              orientation.selectedIndex = 0;
+            }
+            option.disabled = true;
+          }
+          else {
+            option.disabled = false;
+          }
+        });
+      break;
+      default:
+        option_orientation.each(function(option) {
+          option.disabled = false;
+        });
+    }
+  };
 </script>
 
 <form name="editSejour" action="?" method="post"  onsubmit="return submitSejour()">
@@ -67,7 +112,7 @@
             {{/foreach}}
           </select>
         {{elseif "CAppUI::conf"|static_call:"dPurgences CRPU impose_create_sejour_mutation":"CGroups-$g"}}
-          <select name="mode_sortie" onchange="Fields.init(this.value); this.form.onsubmit();">
+          <select name="mode_sortie" onchange="changeOrientation(this);Fields.init(this.value); this.form.onsubmit();">
             {{foreach from=$sejour->_specs.mode_sortie->_list item=_mode}}
               <option value="{{$_mode}}" {{if $sejour->mode_sortie == $_mode}}selected{{/if}}
                 {{if $_mode == "mutation" && !$rpu->mutation_sejour_id}}disabled{{/if}}>
@@ -76,7 +121,7 @@
             {{/foreach}}
           </select>
         {{else}}
-          {{mb_field object=$sejour field="mode_sortie" onchange="Fields.init(this.value); this.form.onsubmit();"}}
+          {{mb_field object=$sejour field="mode_sortie" onchange="changeOrientation(this);Fields.init(this.value); this.form.onsubmit();"}}
         {{/if}}
         {{if !$rpu->mutation_sejour_id}}
           <input type="hidden" name="group_id" value="{{if $sejour->group_id}}{{$sejour->group_id}}{{else}}{{$g}}{{/if}}" />
@@ -92,7 +137,7 @@
 
     <tr id="etablissement_sortie_transfert" {{if $sejour->mode_sortie != "transfert"}} style="display:none;" {{/if}}>
       <th>{{mb_label object=$sejour field="etablissement_sortie_id"}}</th>
-      <td>{{mb_field object=$sejour field="etablissement_sortie_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}</td>
+      <td>{{mb_field object=$sejour field="etablissement_sortie_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="getObjectService(this);this.form.onsubmit();"}}</td>
     </tr>
 
     {{if $conf.dPurgences.use_blocage_lit}}
@@ -127,6 +172,14 @@
                dropdown: true,
               afterUpdateElement: function(field,selected){
                 $V(field.form["service_sortie_id"], selected.getAttribute("id").split("-")[2]);
+                var elementFormRPU = getForm("editRPU").elements;
+                var selectedData = selected.down(".data");
+                if (!elementFormRPU._destination.value) {
+                  $V(elementFormRPU._destination, selectedData.get("default_destination"));
+                }
+                if (!elementFormRPU.orientation.value) {
+                  $V(elementFormRPU.orientation, selectedData.get("default_orientation"));
+                }
               },
               callback: function(element, query){
                 query += "&where[group_id]={{if $sejour->group_id}}{{$sejour->group_id}}{{else}}{{$g}}{{/if}}";

@@ -21,6 +21,8 @@ class CSejour extends CFacturable implements IPatientRelated {
     "PRAT RESPONSABLE", "CODE BARRE NDOS", "CHAMBRE COURANTE"
   );
 
+  static $destination_values = array("1","2","3","4","6","7");
+
   // DB Table key
   public $sejour_id;
 
@@ -495,7 +497,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $props["ald"]                      = "bool default|0";
 
     $props["provenance"]               = "enum list|1|2|3|4|5|6|7|8";
-    $props["destination"]              = "enum list|1|2|3|4|6|7";
+    $props["destination"]              = "enum list|".implode("|", self::$destination_values);
     $props["transport"]                = "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo";
     $props["transport_sortie"]         = "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo";
     $props["rques_transport_sortie"]   = "text";
