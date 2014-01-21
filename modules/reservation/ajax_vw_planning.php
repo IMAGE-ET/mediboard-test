@@ -429,6 +429,7 @@ foreach ($plages_by_salle as $salle_id => $_plages) {
   $i = array_search($salle_id, $salles_ids);
   
   foreach ($_plages as $_plage) {
+    $_plage->loadRefsNotes();
 
     $validated = count($_plage->loadRefsOperations(false, null, true, true));
     $total = count($_plage->loadRefsOperations(false));
@@ -437,14 +438,15 @@ foreach ($plages_by_salle as $salle_id => $_plages) {
     $debut = "$i ".CMbDT::time($_plage->debut);
     
     $duree = CMbDT::minutesRelative(CMbDT::time($_plage->debut), CMbDT::time($_plage->fin));
-    
-    $libelle = CMbString::htmlEntities($_plage->chir_id ? $_plage->_ref_chir->_view : $_plage->_ref_spec->_view);
-    $libelle.= "\n ( $validated / $total)";
-    if ($_plage->_ref_anesth->_id) {
-      $libelle.= "<hr/> <img src='images/icons/anesth.png'/> $_plage->_ref_anesth";
-    }
 
-    $event = new CPlanningEvent($_plage->_guid, $debut, $duree, $libelle, "#efbf99", true, null, $_plage->_guid, false);
+    //fetch
+    $smarty = new CSmartyDP("modules/reservation");
+    $smarty->assign("plageop", $_plage);
+    $smarty->assign("validated", $validated);
+    $smarty->assign("total", $total);
+    $smarty_plageop = $smarty->fetch("inc_planning/libelle_plageop.tpl");
+
+    $event = new CPlanningEvent($_plage->_guid, $debut, $duree, $smarty_plageop, "#efbf99", true, null, $_plage->_guid, false);
 
     $event->below = true;
     $event->type = "plage_planning";
