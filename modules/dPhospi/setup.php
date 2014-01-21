@@ -762,6 +762,12 @@ class CSetupdPhospi extends CSetup {
                 ADD `type_sejour` ENUM ('comp','ambu','exte','seances','ssr','psy','urg','consult');";
     $this->addQuery($query);
 
-    $this->mod_version = "0.83";
+    $this->makeRevision("0.83");
+    $query = "ALTER TABLE `service`
+                ADD `default_orientation` ENUM ('HDT','HO','SC','SI','REA','UHCD','MED','CHIR','OBST','FUGUE','SCAM','PSA','REO'),
+                ADD `default_destination` ENUM ('1','2','3','4','6','7');";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.84";
   }
 }

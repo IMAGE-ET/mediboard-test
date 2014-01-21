@@ -32,6 +32,8 @@ class CService extends CMbObject {
   public $uhcd;
   public $externe;
   public $neonatalogie;
+  public $default_orientation;
+  public $default_destination;
 
   /** @var CChambre[] */
   public $_ref_chambres;
@@ -90,14 +92,16 @@ class CService extends CMbObject {
     $sejour = new CSejour;
     $props["type_sejour"] = CMbString::removeToken($sejour->_props["type"], " ", "notNull");
 
-    $props["nom"]          = "str notNull seekable";
-    $props["description"]  = "text seekable";
-    $props["urgence"]      = "bool default|0";
-    $props["uhcd"]         = "bool default|0";
-    $props["hospit_jour"]  = "bool default|0";
-    $props["externe"]      = "bool default|0";
-    $props["cancelled"  ]  = "bool default|0";
-    $props["neonatalogie"] = "bool default|0";
+    $props["nom"]                 = "str notNull seekable";
+    $props["description"]         = "text seekable";
+    $props["urgence"]             = "bool default|0";
+    $props["uhcd"]                = "bool default|0";
+    $props["hospit_jour"]         = "bool default|0";
+    $props["externe"]             = "bool default|0";
+    $props["cancelled"  ]         = "bool default|0";
+    $props["neonatalogie"]        = "bool default|0";
+    $props["default_orientation"] = "enum list|".implode("|", CRPU::$orientation_value);
+    $props["default_destination"] = "enum list|".implode("|", CSejour::$destination_values);
 
     return $props;
   }

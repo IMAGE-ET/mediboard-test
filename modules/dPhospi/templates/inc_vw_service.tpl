@@ -36,8 +36,18 @@
     <tr>
       <th>{{mb_label object=$service field=type_sejour}}</th>
       <td>{{mb_field object=$service field=type_sejour}}</td>
-    </tr> 
-    
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$service field=default_destination}}</th>
+      <td>{{mb_field object=$service field=default_destination emptyLabel="Choose"}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$service field=default_orientation}}</th>
+      <td>{{mb_field object=$service field=default_orientation emptyLabel="Choose"}}</td>
+    </tr>
+
     <tr>
       <th>{{mb_label object=$service field=urgence}}</th>
       <td>{{mb_field object=$service field=urgence}}</td>
@@ -66,8 +76,8 @@
     <tr>
       <th>{{mb_label object=$service field=description}}</th>
       <td>{{mb_field object=$service field=description}}</td>
-    </tr>    
-  
+    </tr>
+
     <tr>
       <td class="button" colspan="2">
         {{if $service->_id}}
