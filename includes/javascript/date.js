@@ -685,8 +685,8 @@ var Calendar = {
         //dynamic
         var easter = Date.fromDATE(Calendar.getEasterDate(year));
         datesH.push(easter.addDays(1).toDATE()); // lundi de paque
-        datesH.push(easter.addDays(39).toDATE()); // jeudi de l'ascension
-        datesH.push(easter.addDays(50).toDATE()); // lundi de pantecote
+        datesH.push(easter.addDays(38).toDATE()); // jeudi de l'ascension
+        datesH.push(easter.addDays(11).toDATE()); // lundi de pantecote
         break;
 
       case 2: //switzerland
@@ -721,9 +721,10 @@ var Calendar = {
 
       case 2: // Switzerland
         var canton = this.ref_cp+"";
+        var cal_year = Calendar.getEasterDate(year);
         canton = canton.substr(0,2);
 
-        var easter = Date.fromDATE(Calendar.getEasterDate(year));
+        var easter = Date.fromDATE(cal_year);
         var firstDaySeptember = Date.fromDATE(year+"-09-01");
         var firstSundaySeptember = firstDaySeptember;
         var fridayBeforeSeptember = firstDaySeptember;
@@ -746,6 +747,9 @@ var Calendar = {
           }
         }
 
+        // because of addDays
+        var firstDaySeptember = Date.fromDATE(year+"-09-01");
+
         //third sunday of september
         var thirdSundaySeptember = firstSundaySeptember.addDays(14);
 
@@ -756,8 +760,8 @@ var Calendar = {
 
             //dynamic
             datesH.push(easter.addDays(1).toDATE()); // lundi de paque
-            datesH.push(easter.addDays(39).toDATE()); // jeudi de l'ascension
-            datesH.push(easter.addDays(50).toDATE()); // lundi de pantecote
+            datesH.push(easter.addDays(38).toDATE()); // jeudi de l'ascension
+            datesH.push(easter.addDays(11).toDATE()); // lundi de pantecote
 
             datesH.push(thirdSundaySeptember.addDays(1).toDATE()); // Lundi du Jeûne fédéral
             break;
@@ -770,8 +774,8 @@ var Calendar = {
             datesH.push(firstDaySeptember.addDays(4).toDATE()); // Jeûne Genevois
             datesH.push(fridayBeforeSeptember.toDATE()); // Vendredi Saint
             datesH.push(easter.addDays(1).toDATE()); // lundi de paque
-            datesH.push(easter.addDays(39).toDATE()); // jeudi de l'ascension
-            datesH.push(easter.addDays(50).toDATE()); // lundi de pantecote
+            datesH.push(easter.addDays(38).toDATE()); // jeudi de l'ascension
+            datesH.push(easter.addDays(11).toDATE()); // lundi de pantecote
             break;
         }
         break;
