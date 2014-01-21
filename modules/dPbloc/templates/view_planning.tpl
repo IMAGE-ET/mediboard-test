@@ -106,7 +106,7 @@
         {{if $curr_plageop|is_array && $curr_op->salle_id}}
           {{$curr_op->_ref_salle->_view}} à
         {{/if}}
-        {{$curr_op->time_operation|date_format:$conf.time}}
+        {{$curr_op->time_operation|date_format:$conf.time}} <br/>({{$curr_op->temp_operation|date_format:$conf.time}})
       </td>
     {{else}}
       <td>NP</td>
