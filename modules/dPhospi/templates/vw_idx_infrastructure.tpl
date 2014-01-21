@@ -7,7 +7,6 @@ function popupImport() {
 }
 
 Main.add(function () {
-  PairEffect.initGroup("serviceEffect");
   Control.Tabs.create('tabs-chambres', true);
 });
 
