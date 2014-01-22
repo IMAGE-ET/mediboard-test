@@ -8,7 +8,7 @@
  * @version    $Revision:$
  *}}
 
-{{mb_script module="dPplanningOp" script="operation"}}
+{{mb_script module="planningOp" script="operation"}}
 
 <script>
   Main.add(function () {
@@ -30,6 +30,7 @@
 </script>
 
 {{assign var=systeme_materiel value=$conf.dPbloc.CPlageOp.systeme_materiel}}
+{{assign var=enable_surveillance_perop value=$conf.dPsalleOp.enable_surveillance_perop}}
 
 <table class="tbl main">
   <tr>
@@ -84,7 +85,7 @@
         </form>
       </td>
       {{if $_op->annulee}}
-        <td colspan="3" class="cancelled">
+        <td colspan="{{if $enable_surveillance_perop}}3{{else}}2{{/if}}" class="cancelled">
           Annulée
         </td>
       {{else}}
@@ -158,12 +159,11 @@
             {{mb_include module=dPbloc template=inc_button_besoins_ressources type=operation_id usage=1 object_id=$_op->_id}}
           {{/if}}
         </td>
-      {{/if}}
-
-      {{if $conf.dPsalleOp.enable_surveillance_perop}}
-      <td>
-        {{mb_value object=$sejour->_ref_grossesse field=datetime_debut_travail}}
-      </td>
+        {{if $enable_surveillance_perop}}
+          <td>
+            {{mb_value object=$sejour->_ref_grossesse field=datetime_debut_travail}}
+          </td>
+        {{/if}}
       {{/if}}
 
       <td class="text">
