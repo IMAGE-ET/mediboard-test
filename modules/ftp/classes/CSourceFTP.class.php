@@ -2,12 +2,12 @@
 
 /**
  * Source FTP
- *  
+ *
  * @category FTP
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
  * @link     http://www.mediboard.org
  */
 
@@ -46,18 +46,18 @@ class CSourceFTP extends CExchangeSource {
    * @see parent::getProps()
    */
   function getProps() {
-    $specs = parent::getProps();
-    $specs["ssl"]        = "bool default|0";
-    $specs["port"]       = "num default|21";
-    $specs["timeout"]    = "num default|5";
-    $specs["pasv"]       = "bool default|0";
-    $specs["mode"]       = "enum list|FTP_ASCII|FTP_BINARY default|FTP_ASCII";
-    $specs["counter"]    = "str protected loggable|0";
-    $specs["fileprefix"] = "str";
-    $specs["fileextension"] = "str";
-    $specs["filenbroll"]    = "enum list|1|2|3|4";
-    $specs["fileextension_write_end"] = "str";
 
+    $specs = parent::getProps();
+    $specs["ssl"]                     = "bool default|0";
+    $specs["port"]                    = "num default|21";
+    $specs["timeout"]                 = "num default|5";
+    $specs["pasv"]                    = "bool default|0";
+    $specs["mode"]                    = "enum list|FTP_ASCII|FTP_BINARY default|FTP_ASCII";
+    $specs["counter"]                 = "str protected loggable|0";
+    $specs["fileprefix"]              = "str";
+    $specs["fileextension"]           = "str";
+    $specs["filenbroll"]              = "enum list|1|2|3|4";
+    $specs["fileextension_write_end"] = "str";
 
     return $specs;
   }
@@ -127,6 +127,10 @@ class CSourceFTP extends CExchangeSource {
     try {
       $ftp->connect();
 
+      if ($ftp->fileprefix) {
+        $path = "$ftp->fileprefix/$path";
+      }
+
       $file = null;
       $temp = tempnam(sys_get_temp_dir(), "mb_");
 
@@ -152,6 +156,10 @@ class CSourceFTP extends CExchangeSource {
         $ftp->changeDirectory($current_directory);
       }
 
+      if (!$current_directory && $ftp->fileprefix) {
+        $path = "$ftp->fileprefix/$path";
+      }
+
       $ftp->delFile($path);
     } catch (CMbException $e) {
       $e->stepAjax();
@@ -160,15 +168,25 @@ class CSourceFTP extends CExchangeSource {
     $ftp->close();
   }
 
-  function renameFile($oldname, $newname, $current_directory) {
+  function renameFile($oldname, $newname, $current_directory = null) {
     $ftp = $this->init($this);
 
     try {
       $ftp->connect();
-      $ftp->changeDirectory($current_directory);
+
+      if ($current_directory) {
+        $ftp->changeDirectory($current_directory);
+      }
+
+      if (!$current_directory && $ftp->fileprefix) {
+        $oldname = "$ftp->fileprefix/$oldname";
+
+        $newname = "$ftp->fileprefix/$newname";
+      }
 
       $ftp->renameFile($oldname, $newname);
-    } catch (CMbException $e) {
+    }
+    catch (CMbException $e) {
       $e->stepAjax();
     }
 
@@ -182,7 +200,8 @@ class CSourceFTP extends CExchangeSource {
       $ftp->connect();
 
       $ftp->changeDirectory($directory_name);
-    } catch (CMbException $e) {
+    }
+    catch (CMbException $e) {
       $e->stepAjax();
     }
 
@@ -201,7 +220,8 @@ class CSourceFTP extends CExchangeSource {
         $ftp->changeDirectory($directory);
       }
       $curent_directory = $ftp->getCurrentDirectory();
-    } catch (CMbException $e) {
+    }
+    catch (CMbException $e) {
       $e->stepAjax();
     }
 
@@ -235,7 +255,8 @@ class CSourceFTP extends CExchangeSource {
       $ftp->changeDirectory($current_directory);
 
       $ftp->addFile($file, $file_name);
-    } catch (CMbException $e) {
+    }
+    catch (CMbException $e) {
       throw $e;
     }
 
@@ -254,7 +275,8 @@ class CSourceFTP extends CExchangeSource {
       $ftp->connect();
 
       $directories = $ftp->getListDirectory($current_directory);
-    } catch (CMbException $e) {
+    }
+    catch (CMbException $e) {
       $e->stepAjax();
     }
 
@@ -290,7 +312,7 @@ class CSourceFTP extends CExchangeSource {
 
     try {
       $ftp->testSocket();
-    } 
+    }
     catch (CMbException $e) {
       $this->_reachable = 0;
       $this->_message   = $e->getMessage();
@@ -305,7 +327,7 @@ class CSourceFTP extends CExchangeSource {
 
     try {
       $ftp->connect();
-    } 
+    }
     catch (CMbException $e) {
       $this->_reachable = 0;
       $this->_message   = $e->getMessage();
