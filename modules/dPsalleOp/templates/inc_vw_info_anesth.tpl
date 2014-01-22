@@ -3,73 +3,73 @@
   {{assign var="modeles_prat_id" value=$selOp->_ref_anesth->_id}}
 {{/if}}
 
-<script type="text/javascript">
-
-reloadDocumentsAnesth = function () {
-  var oForm = getForm("anesthInterv");
-  if(oForm) {
-    var sAnesth_id = $V(oForm.anesth_id);
-  } else {
-    var sAnesth_id = $V(getForm("visiteAnesth").prat_anesth_id);
-  }
-  $$('.documents-CConsultAnesth-{{$consult_anesth->_id}}').each(function(doc){
-    Document.refresh(doc, {praticien_id: sAnesth_id });
-  });
-}
-
-refreshAnesthPerops = function(operation_id){
-  var url = new Url("salleOp", "httpreq_vw_anesth_perop");
-  url.addParam("operation_id", operation_id);
-  url.requestUpdate("list_perops_"+operation_id);
-}
-
-refreshFicheAnesth = function() {
-  var url = new Url("cabinet", "print_fiche");
-
-  {{if $consult_anesth->_id}}
-    url.addParam("dossier_anesth_id", "{{$consult_anesth->_id}}");
-  {{else}}
-    url.addParam("operation_id", "{{$selOp->_id}}");
-  {{/if}}
-
-  url.addParam("offline", true);
-  url.addParam("display", true);
-  url.requestUpdate("fiche_anesth");
-}
-
-printIntervAnesth = function(){
-  var url = new Url("salleOp", "print_intervention_anesth");
-  url.addParam("operation_id", "{{$selOp->_id}}");
-  url.popup(800, 600, "Intervention anesthésiste");
-}
-
-refreshVisite = function(operation_id) {
-  var url = new Url("salleOp", "ajax_refresh_visite_pre_anesth");
-  url.addParam("operation_id", operation_id);
-  url.addParam("callback", "refreshVisite");
-  url.requestUpdate("visite_pre_anesth");
-}
-
-refreshFormsPerop = function(){
-  ExObject.loadExObjects("{{$selOp->_class}}", "{{$selOp->_id}}", "forms_perop", 0);
-}
-
-Main.add(function(){
-  if ($('anesth_tab_group')){
-    Control.Tabs.create('anesth_tab_group');
-  }
-
-  // Refresh tab perop
-  if($("tab_perop").visible()){
-    refreshAnesthPerops('{{$selOp->_id}}');
-  }
-
-  {{if "dPprescription"|module_active}}
-    if($('perop').visible()){
-      Prescription.updatePerop('{{$selOp->sejour_id}}');
+<script>
+  reloadDocumentsAnesth = function () {
+    var oForm = getForm("anesthInterv");
+    if(oForm) {
+      var sAnesth_id = $V(oForm.anesth_id);
+    } else {
+      var sAnesth_id = $V(getForm("visiteAnesth").prat_anesth_id);
     }
-  {{/if}}
-});
+    $$('.documents-CConsultAnesth-{{$consult_anesth->_id}}').each(function(doc){
+      Document.refresh(doc, {praticien_id: sAnesth_id });
+    });
+  }
+
+  refreshAnesthPerops = function(operation_id){
+    var url = new Url("salleOp", "httpreq_vw_anesth_perop");
+    url.addParam("operation_id", operation_id);
+    url.requestUpdate("list_perops_"+operation_id);
+  }
+
+  refreshFicheAnesth = function() {
+    var url = new Url("cabinet", "print_fiche");
+
+    {{if $consult_anesth->_id}}
+      url.addParam("dossier_anesth_id", "{{$consult_anesth->_id}}");
+    {{else}}
+      url.addParam("operation_id", "{{$selOp->_id}}");
+    {{/if}}
+
+    url.addParam("offline", true);
+    url.addParam("display", true);
+    url.addParam("pdf"    , 0);
+    url.requestUpdate("fiche_anesth");
+  }
+
+  printIntervAnesth = function(){
+    var url = new Url("salleOp", "print_intervention_anesth");
+    url.addParam("operation_id", "{{$selOp->_id}}");
+    url.popup(800, 600, "Intervention anesthésiste");
+  }
+
+  refreshVisite = function(operation_id) {
+    var url = new Url("salleOp", "ajax_refresh_visite_pre_anesth");
+    url.addParam("operation_id", operation_id);
+    url.addParam("callback", "refreshVisite");
+    url.requestUpdate("visite_pre_anesth");
+  }
+
+  refreshFormsPerop = function(){
+    ExObject.loadExObjects("{{$selOp->_class}}", "{{$selOp->_id}}", "forms_perop", 0);
+  }
+
+  Main.add(function(){
+    if ($('anesth_tab_group')){
+      Control.Tabs.create('anesth_tab_group');
+    }
+
+    // Refresh tab perop
+    if($("tab_perop").visible()){
+      refreshAnesthPerops('{{$selOp->_id}}');
+    }
+
+    {{if "dPprescription"|module_active}}
+      if($('perop').visible()){
+        Prescription.updatePerop('{{$selOp->sejour_id}}');
+      }
+    {{/if}}
+  });
 </script>
 
 {{if $dialog}}
@@ -89,7 +89,6 @@ Main.add(function(){
     <li onmousedown="refreshFormsPerop()"><a href="#forms_perop">Formulaires</a></li>
   {{/if}}
 </ul>
-<hr class="control_tabs" />
 
 <div id="anesth">
   {{mb_include module=salleOp template=inc_vw_anesth}}
@@ -106,7 +105,7 @@ Main.add(function(){
           {{mb_script module="cabinet" script="file"}}
           <legend>{{tr}}CFile{{/tr}} - {{tr}}CConsultAnesth{{/tr}}</legend>
           <div id="files-anesth">
-            <script type="text/javascript">
+            <script>
               File.register('{{$consult_anesth->consultation_id}}','CConsultation', 'files-anesth');
             </script>
           </div>
