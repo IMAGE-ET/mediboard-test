@@ -21,6 +21,7 @@ $sender->loadRefsExchangesSources();
 
 $delete_file = $sender->_delete_file;
 
+/** @var CSourceFTP $source */
 $source = reset($sender->_ref_exchanges_sources);
 
 $files = array();
@@ -49,7 +50,10 @@ foreach ($files as $_filepath) {
   }
 
   $path = rtrim($path_info["dirname"], "\\/");
-  $_filepath_no_ext = "$path/".$path_info["filename"];
+  $_filepath_no_ext = $path_info["filename"];
+  if ($path != ".") {
+    $_filepath_no_ext = "$path/".$path_info["filename"];
+  }
   
   // Cas où le suffix de l'acq OK est présent mais que je n'ai pas de fichier 
   // d'acquittement dans le dossier
