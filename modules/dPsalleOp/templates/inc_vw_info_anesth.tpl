@@ -34,6 +34,7 @@ refreshFicheAnesth = function() {
 
   url.addParam("offline", true);
   url.addParam("display", true);
+  url.addParam("pdf"    , 0);
   url.requestUpdate("fiche_anesth");
 }
 
