@@ -137,7 +137,7 @@ if ($consult->_id) {
     foreach ($_sejour->_ref_operations as $_key_op => $_operation) {
       $_operation->loadRefsFwd();
       $_operation->_ref_chir->loadRefFunction()->loadRefGroup();
-      if (!$_operation->_ref_consult_anesth->_id && !$op_sans_dossier_anesth) {
+      if (!$_operation->_ref_consult_anesth->_id) {
         $op_sans_dossier_anesth = $_operation->_id;
       }
     }
