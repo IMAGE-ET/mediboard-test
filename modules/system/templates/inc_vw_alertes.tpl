@@ -16,18 +16,20 @@
   <tr>
     <th class="title" colspan="2">
       {{$alerts|@count}} alertes
-      <form name="closeAlertes-{{$level}}-{{$object_guid}}" action="?" method="post"
-            onsubmit="return onSubmitFormAjax(this, function() {
-              $('tooltip-alerts-{{$level}}-{{$object_guid}}').up().hide();
-              Alert.callback();})">
-        <input type="hidden" name="m"         value="system" />
-        <input type="hidden" name="dosql"     value="do_alert_aed" />
-        <input type="hidden" name="alert_ids" value="{{$alert_ids|@join:"-"}}" />
-        <input type="hidden" name="handled"   value="1" />
-        <button type="submit" class="tick">
-          Traiter toutes les alertes
-        </button>
-      </form>
+      {{if $alerts|@count}}
+        <form name="closeAlertes-{{$level}}-{{$object_guid}}" action="?" method="post"
+              onsubmit="return onSubmitFormAjax(this, function() {
+                $('tooltip-alerts-{{$level}}-{{$object_guid}}').up().hide();
+                Alert.callback();})">
+          <input type="hidden" name="m"         value="system" />
+          <input type="hidden" name="dosql"     value="do_alert_aed" />
+          <input type="hidden" name="alert_ids" value="{{$alert_ids|@join:"-"}}" />
+          <input type="hidden" name="handled"   value="1" />
+          <button type="submit" class="tick">
+            Traiter toutes les alertes
+          </button>
+        </form>
+      {{/if}}
     </th>
   </tr>
   {{foreach from=$alerts item=_alert}}
