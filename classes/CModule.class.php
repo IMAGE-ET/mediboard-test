@@ -191,7 +191,7 @@ class CModule extends CMbObject {
     $this->_dependencies = $setup->dependencies;
     
     if (!$this->_id) {
-      $this->mod_ui_order = 100;
+      $this->mod_ui_order = 1000;
     }
   }
 

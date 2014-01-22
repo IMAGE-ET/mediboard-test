@@ -31,8 +31,9 @@ foreach ($setupClasses as $setupClass) {
   $mbmodule->compareToSetup($setup);
   $mbmodule->checkModuleFiles();
   $mbmodule->getUpdateMessages($setup, true);
-  
-  if ($mbmodule->mod_ui_order == 100) {
+  $mbmodule->updateFormFields();
+
+  if ($mbmodule->mod_ui_order == 1000) {
     $mbmodules["notInstalled"][$mbmodule->mod_name] = $mbmodule;
   }
   else {
@@ -70,7 +71,8 @@ if (count(CModule::$absent)) {
   $mbmodules["installed"] += CModule::$absent;
 }
 
-array_multisort(CMbArray::pluck($mbmodules["installed"], "mod_ui_order"), SORT_ASC, $mbmodules["installed"]);
+array_multisort(CMbArray::pluck($mbmodules["installed"   ], "mod_ui_order"), SORT_ASC, $mbmodules["installed"]);
+array_multisort(CMbArray::pluck($mbmodules["notInstalled"], "_view"       ), SORT_ASC, $mbmodules["notInstalled"]);
 
 $obsoleteLibs = array();
 foreach (CLibrary::$all as $library) {
