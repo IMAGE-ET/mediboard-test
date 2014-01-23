@@ -10,12 +10,11 @@ function changePage(page){
 </script>
 
 <form action="?" name="filter-users" method="get" >
-
-<input type="hidden" name="m" value="{{$m}}" />
-<input type="hidden" name="{{$actionType}}" value="{{$action}}" />
-<input type="hidden" name="dialog" value="{{$dialog}}" />
-<input type="hidden" name="current" value="{{$current}}" />
-
+  <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
+  <input type="hidden" name="dialog" value="{{$dialog}}" />
+  <input type="hidden" name="current" value="{{$current}}" />
+  <input type="hidden" name="interv" value="{{$interv}}"/>
 </form>
 
 {{mb_include module=system template=inc_pagination change_page=changePage}}

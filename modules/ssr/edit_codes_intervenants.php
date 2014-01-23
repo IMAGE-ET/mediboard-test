@@ -33,7 +33,7 @@ if ($interv) {
   $last_space = strrpos($interv, " ");
   $last_name = substr($interv, 0, $last_space);
 
-  $where[] = "users.user_last_name = '$last_name' 
+  $where[] = "users.user_last_name = '$last_name'
   OR users.user_last_name = '$last_name'";
 }
 
@@ -52,6 +52,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("mediuser"    , $mediuser);
 $smarty->assign("intervenants", $intervenants);
+$smarty->assign("interv"      , $interv);
 $smarty->assign("mediusers"   , $mediusers);
 $smarty->assign("current"     , $current);
 $smarty->assign("step"        , $step);
