@@ -1,4 +1,4 @@
-<h1>Occupation de salle par praticien</h1>
+<button type="button" class="print">{{tr}}Imprimer{{/tr}}</button>
 <ul>
   <li>Debut : <strong>{{$debut|date_format:$conf.date}}</strong></li>
   <li>Fin : <strong>{{$fin|date_format:$conf.date}}</strong></li>

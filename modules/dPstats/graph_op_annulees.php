@@ -114,6 +114,7 @@ function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
     'yaxis' => array('autoscaleMargin' => 1),
     'bars' => array('show' => true, 'stacked' => true, 'barWidth' => 0.8),
     'HtmlText' => false,
+    'legend' => array('show' => true, 'position' => 'nw'),
     'grid' => array('verticalLines' => false),
     'spreadsheet' => array(
       'show' => true,

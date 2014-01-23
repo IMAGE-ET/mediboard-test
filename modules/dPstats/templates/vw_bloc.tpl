@@ -9,122 +9,49 @@
 *}}
 
 {{mb_script module="dPplanningOp" script="ccam_selector"}}
+{{mb_script module="stats" script="display_graph"}}
 
 <script type="text/javascript">
 
-var printTabAllPrats = function() {
-  var oForm = getForm("filter-bloc");
-  var url = new Url("dPstats", "print_tab_occupation_salle");
-  url.addParam("date_debut"   , $V(oForm._date_min));
-  url.addParam("date_fin"     , $V(oForm._date_max));
-  url.addParam("CCAM"         , $V(oForm.codes_ccam));
-  url.addParam("type"         , $V(oForm.type_hospi));
-  url.addParam("discipline_id", $V(oForm.discipline_id));
-  url.addParam("bloc_id"      , $V(oForm.bloc_id));
-  url.addParam("salle_id"     , $V(oForm.salle_id));
-  url.addParam("hors_plage"   , $V(oForm.hors_plage));
-  url.popup(500, 500, "tableau");
-}
-  
-var Details = {
-  activite: function(date){
-    var form = getForm("filter-bloc");
-    
-    var url = new Url("dPstats", "vw_graph_activite_zoom");
-    url.addParam("date"      , date);
-    url.addParam("hors_plage", $V(form.hors_plage));
-    url.mergeParams(detailOptions);
-    url.popup(760, 500, "ZoomMonth");
-  },
-  occupation_total: function(date){
-    var form = getForm("filter-bloc");
-    
-    var url = new Url("dPstats", "vw_graph_occupation_zoom");
-    url.addParam("date"      , date);
-    url.addParam("hors_plage", $V(form.hors_plage));
-    url.addParam("type_hospi", $V(form.type_hospi));
-    url.mergeParams(detailOptions);
-    url.popup(760, 500, "ZoomMonth");
-  },
-  temps_salle: function(date){
-    var form = getForm("filter-bloc");
-    
-    var url = new Url("dPstats", "vw_graph_temps_salle_zoom");
-    url.mergeParams(detailOptions);
-    url.addParam("date"      , date);
-    url.addParam("hors_plage", $V(form.hors_plage));
-    url.addParam("type_hospi", $V(form.type_hospi));
-    url.popup(760, 500, "ZoomMonth");
-  }
-};
+  DisplayGraph.addFiltersParam = function(url) {
+    var oForm = DisplayGraph.filterForm;
+    url.addParam("date_debut"   , $V(oForm._date_min));
+    url.addParam("date_fin"     , $V(oForm._date_max));
+    url.addParam("codes_ccam"   , $V(oForm.codes_ccam));
+    url.addParam("type"         , $V(oForm.type));
+    url.addParam("discipline_id", $V(oForm.discipline_id));
+    url.addParam("bloc_id"      , $V(oForm.bloc_id));
+    url.addParam("salle_id"     , $V(oForm.salle_id));
+    url.addParam("hors_plage"   , $V(oForm.hors_plage));
+  };
 
-var detailOptions = {
-  salle_id     : "{{$filter->salle_id}}",
-  prat_id      : "{{$filter->_prat_id}}",
-  codes_ccam   : "{{$filter->codes_ccam|smarty:nodefaults|escape:'javascript'}}",
-  discipline_id: "{{$filter->_specialite}}",
-  size         : 2
-};
+  DisplayGraph.occupationSalleParPrat = function() {
+    var oForm = getForm("stats_params");
+    var url = new Url("dPstats", "print_tab_occupation_salle");
+    url.addParam("date_debut"   , $V(oForm._date_min));
+    url.addParam("date_fin"     , $V(oForm._date_max));
+    url.addParam("CCAM"         , $V(oForm.codes_ccam));
+    url.addParam("type"         , $V(oForm.type));
+    url.addParam("discipline_id", $V(oForm.discipline_id));
+    url.addParam("bloc_id"      , $V(oForm.bloc_id));
+    url.addParam("salle_id"     , $V(oForm.salle_id));
+    url.addParam("hors_plage"   , $V(oForm.hors_plage));
+    url.requestModal();
+  };
 
-var graphs = {{$graphs|@json}};
-
-Main.add(function(){
-  drawGraphs(true);
-});
-
-function drawGraphs(showLegend){
-  $H(graphs).each(function(pair){
-    var g = pair.value;
-    $("graph-"+pair.key).update();
-    $("legend-"+pair.key).update();
-    
-    g.options.legend = {
-      show: true,
-      container: (showLegend ? null : $("legend-"+pair.key))
-    };
-    Flotr.draw($('graph-'+pair.key), g.series, g.options);
-  });
-  
-  Object.keys(Details).each(function(d){
-    if (!$('graph-'+d)) return;
-    
-    var select = DOM.select({}, 
-      DOM.option({value: ""}, "&ndash; Vue sur un mois &ndash;")
-    );
-    
-    graphs[d].options.xaxis.ticks.each(function(tick){
-      select.insert(DOM.option({value: tick[1]}, tick[1]));
-    });
-    
-    select.observe("change", function(event){
-      Details[d]($V(Event.element(event)));
-    });
-    
-    $('graph-'+d).down('.flotr-tabs-group').insert(select);
-  });
-}
 </script>
 
-<form name="filter-bloc" action="?" method="get" onsubmit="return checkForm(this)">
+<form name="stats_params" action="?" method="get" onsubmit="return checkForm(this)">
 <input type="hidden" name="m" value="dPstats" />
 <input type="hidden" name="_chir" value="{{$app->user_id}}" />
 <input type="hidden" name="_class" value="" />
 <table class="main form">
   <tr>
-    <th colspan="6" class="category">
-      Activité du bloc opératoire
-      <select name="type_view_bloc" onchange="this.form.submit()">
-        <option value="nbInterv"    {{if $type_view_bloc == "nbInterv"}}    selected="selected" {{/if}}>Nombre d'interventions</option>
-        <option value="dureeInterv" {{if $type_view_bloc == "dureeInterv"}} selected="selected" {{/if}}>Occupation du bloc</option>
-      </select>
-    </th>
-  </tr>
-  <tr>
     <th>{{mb_label object=$filter field="_date_min"}}</th>
-    <td>{{mb_field object=$filter field="_date_min" form="filter-bloc" canNull="false" register=true}}</td>
+    <td>{{mb_field object=$filter field="_date_min" form="stats_params" canNull="false" register=true}}</td>
     <th>{{mb_label object=$filterSejour field="type"}}</th>
     <td>
-      <select name="type_hospi" style="width: 15em;">
+      <select name="type" style="width: 15em;">
         <option value="">&mdash; Tous les types d'hospi</option>
         {{foreach from=$filterSejour->_specs.type->_locales key=key_hospi item=curr_hospi}}
         <option value="{{$key_hospi}}" {{if $key_hospi == $filterSejour->type}}selected="selected"{{/if}}>
@@ -147,7 +74,7 @@ function drawGraphs(showLegend){
   </tr>
   <tr>
     <th>{{mb_label object=$filter field="_date_max"}}</th>
-    <td>{{mb_field object=$filter field="_date_max" form="filter-bloc" canNull="false" register=true}} </td>
+    <td>{{mb_field object=$filter field="_date_max" form="stats_params" canNull="false" register=true}} </td>
     <th>{{mb_label object=$filter field="_prat_id"}}</th>
     <td>
       <select name="prat_id" style="width: 15em;">
@@ -158,7 +85,6 @@ function drawGraphs(showLegend){
         </option>
         {{/foreach}}
       </select>
-      <button type="button" class="print notext" onclick="printTabAllPrats()">Tous les praticiens</button>
     </td>
     <th>{{mb_label object=$filter field="salle_id"}}</th>
     <td>
@@ -185,7 +111,7 @@ function drawGraphs(showLegend){
       <button class="search" type="button" onclick="CCAMSelector.init()">Rechercher</button>   
       <script type="text/javascript">
         CCAMSelector.init = function(){
-          this.sForm = "filter-bloc";
+          this.sForm = "stats_params";
           this.sView = "codes_ccam";
           this.sChir = "_chir";
           this.sClass = "_class";
@@ -194,7 +120,7 @@ function drawGraphs(showLegend){
       </script>
     </td>
     <th>{{mb_label object=$filter field="_specialite"}}</th>
-    <td colspan="3">
+    <td>
       <select name="discipline_id" style="width: 15em;">
         <option value="0">&mdash; Toutes les spécialités</option>
         {{foreach from=$listDisciplines item=curr_disc}}
@@ -204,24 +130,141 @@ function drawGraphs(showLegend){
         {{/foreach}}
       </select>
     </td>
-  </tr>
-  <tr>
-    <td colspan="6" class="button">
-      <button class="search" type="submit">Afficher</button>
-      <label><input type="checkbox" onclick="drawGraphs(this.checked)" checked="checked" /> Légende intégrée</label>
-      <label><input type="checkbox" name="hors_plage_view" {{if $hors_plage}}checked="true"{{/if}}
-        onchange="$V(this.form.hors_plage, this.checked ? 1 : 0)"/>Hors plage</label>
+    <th>
+      <label>Hors plage</label>
+    </th>
+    <td>
+      <input type="checkbox" name="hors_plage_view" {{if $hors_plage}}checked="true"{{/if}}
+               onchange="$V(this.form.hors_plage, this.checked ? 1 : 0)"/>
       <input type="hidden" name="hors_plage" value="{{$hors_plage}}" />
     </td>
   </tr>
 </table>
 </form>
 
-{{foreach from=$graphs item=graph key=key}}
-<table class="layout">
+
+
+<table class="layout" style="width: 100%">
   <tr>
-    <td><div style="width: 600px; height: 400px; float: left; margin: 1em;" id="graph-{{$key}}"></div></td>
-    <td style="vertical-align: top;" id="legend-{{$key}}"></td>
+    <th colspan="2">
+      <hr />
+      Salle d'intervention
+    </th>
+  </tr>
+  <tr>
+    <td class="button" style="width: 50%">
+      <div class="small-info" style="text-align: center">
+        Répartition du nombre d'interventions par salle
+        <br />
+        <button type="button" class="stats"
+                onclick="DisplayGraph.launchStats('intervparsalle')">
+          {{tr}}View{{/tr}}
+        </button>
+      </div>
+    </td>
+    <td class="button" style="width: 50%">
+      <div class="small-info" style="text-align: center">
+        Répartition du nombre d'annulation le jour même par salle
+        <br />
+        <button type="button" class="stats"
+                onclick="DisplayGraph.launchStats('opannulees')">
+          {{tr}}View{{/tr}}
+        </button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td class="button">
+      <div class="small-info" style="text-align: center">
+        Répartition du nombre d'interventions par praticien
+        <br />
+        <button type="button" class="stats"
+                onclick="DisplayGraph.launchStats('intervparprat')">
+          {{tr}}View{{/tr}}
+        </button>
+      </div>
+    </td>
+    <td>
+      <div class="small-info" style="text-align: center">
+        Tableau d'occupation de salle par praticien
+        <br />
+        <button type="button" class="list"
+                onclick="DisplayGraph.occupationSalleParPrat()">
+          {{tr}}View{{/tr}}
+        </button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td class="button" style="width: 50%">
+      <div class="small-info" style="text-align: center">
+        Durées totales d'occupation des blocs
+        <br />
+        <button type="button" class="stats"
+                onclick="DisplayGraph.launchStats('occupationsalletotal')">
+          {{tr}}View{{/tr}}
+        </button>
+      </div>
+    </td>
+    <td class="button" style="width: 50%">
+      <div class="small-info" style="text-align: center">
+        Durées moyennes d'occupation des blocs
+        <br />
+        <button type="button" class="stats"
+                onclick="DisplayGraph.launchStats('occupationsallemoy')">
+          {{tr}}View{{/tr}}
+        </button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td class="button" style="width: 50%">
+      <div class="small-info" style="text-align: center">
+        Utilisation des ressources du bloc opératoire
+        <br />
+        <button type="button" class="stats"
+                onclick="DisplayGraph.launchStats('ressourcesbloc')">
+          {{tr}}View{{/tr}}
+        </button>
+      </div>
+    </td>
+    <td class="button" style="width: 50%">
+      <div class="small-info" style="text-align: center">
+      Nombre de patients par jour et par salle
+      <br />
+      <button type="button" class="stats"
+              onclick="DisplayGraph.launchStats('patjoursalle')">
+        {{tr}}View{{/tr}}
+      </button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <th colspan="2">
+      <hr />
+      SSPI
+    </th>
+  </tr>
+  <tr>
+    <td class="button" style="width: 50%">
+      <div class="small-info" style="text-align: center">
+        Nombre moyen de patients par jour de la semaine en SSPI
+        <br />
+        <button type="button" class="stats"
+                onclick="DisplayGraph.launchStats('patparjoursspi')">
+          {{tr}}View{{/tr}}
+        </button>
+      </div>
+    </td>
+    <td class="button" style="width: 50%">
+      <div class="small-info" style="text-align: center">
+      Nombre moyen de patients par heure de la journée en SSPI
+      <br />
+      <button type="button" class="stats"
+              onclick="DisplayGraph.launchStats('patparheuresspi')">
+        {{tr}}View{{/tr}}
+      </button>
+      </div>
+    </td>
   </tr>
 </table>
-{{/foreach}}

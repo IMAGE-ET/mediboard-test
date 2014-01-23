@@ -12,11 +12,8 @@
 function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = 0, $codeCCAM = "", $type_hospi = "", $hors_plage) {
   if (!$debut) $debut = CMbDT::date("-1 YEAR");
   if (!$fin) $fin = CMbDT::date();
-  
-  $salle = new CSalle;
-  $salle->load($salle_id);
-  
-  $discipline = new CDiscipline;
+
+  $discipline = new CDiscipline();
   $discipline->load($discipline_id);
   
   $ticks = array();
@@ -26,16 +23,19 @@ function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $sal
     'markers' => array('show' => true),
     'bars' => array('show' => false)
   );
-  for($i = $debut; $i <= $fin; $i = CMbDT::date("+1 MONTH", $i)) {
+  for ($i = $debut; $i <= $fin; $i = CMbDT::date("+1 MONTH", $i)) {
     $ticks[] = array(count($ticks), CMbDT::transform("+0 DAY", $i, "%m/%Y"));
     $serie_total['data'][] = array(count($serie_total['data']), 0);
   }
   
-  $user = new CMediusers;
+  $user = new CMediusers();
   $ljoin = array("users" => "users.user_id = users_mediboard.user_id", "functions_mediboard" => "functions_mediboard.function_id = users_mediboard.function_id");
   $where = array("functions_mediboard.group_id" => "= '".CGroups::loadCurrent()->_id."'");
   if ($discipline_id) {
-    $where["discipline_id"] = " = '$discipline_id'";
+    $where["users_mediboard.discipline_id"] = " = '$discipline_id'";
+  }
+  if ($prat_id) {
+    $where["users_mediboard.user_id"] = " = '$prat_id";
   }
   
   $user_types = array("Chirurgien", "Anesthésiste", "Médecin");
@@ -142,6 +142,5 @@ function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $sal
       'toolbarSelectAll' => utf8_encode('Sélectionner tout le tableau')
     )
   );
-  
   return array('series' => $series, 'options' => $options);
 }

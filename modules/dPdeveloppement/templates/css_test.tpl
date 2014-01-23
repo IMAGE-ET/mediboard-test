@@ -463,6 +463,7 @@ TestModal = {
 <div class="small-warning">small-warning</div>
 <div class="small-info">small-info</div>
 <div class="small-success">small-success</div>
+<div class="small-mail">small-mail</div>
 
 <div class="big-error">big-error</div>
 <div class="big-warning">big-warning</div>

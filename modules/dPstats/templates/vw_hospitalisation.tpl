@@ -8,23 +8,35 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-var graphs = {{$graphs|@json}};
-Main.add(function(){
-  graphs.each(function(g, i){
-    g.options.legend.container = $("legend-"+i);
-    Flotr.draw($('graph-'+i), g.series, g.options);
-  });
-});
+{{mb_script module="stats" script="display_graph"}}
+
+<script>
+  DisplayGraph.addFiltersParam = function(url) {
+    var oForm = DisplayGraph.filterForm;
+    url.addElement(oForm._date_min);
+    url.addElement(oForm._date_max);
+    url.addElement(oForm._service);
+    url.addElement(oForm.type);
+    url.addElement(oForm.praticien_id);
+    url.addElement(oForm.specialite);
+    url.addElement(oForm.septique);
+    url.addElement(oForm.type_data);
+  };
+
+  DisplayGraph.qualiteHospi = function() {
+    var url = new Url("stats", "vw_hospi_qualite_donnees");
+    DisplayGraph.getFilterForm();
+    DisplayGraph.addFiltersParam(url);
+    url.modal();
+  };
 </script>
 
-<form name="hospitalisation" action="?" method="get" onsubmit="return checkForm(this)">
-<input type="hidden" name="m" value="dPstats" />
+<form name="stats_params" action="?" method="get" onsubmit="return false;">
 
 <table class="main form">
   <tr>
-    <th>{{mb_label object=$filter field="_date_min_stat"}}</th>
-    <td>{{mb_field object=$filter field="_date_min_stat" form="hospitalisation" canNull="false" register=true}} </td>
+    <th>{{mb_label object=$filter field="_date_min"}}</th>
+    <td>{{mb_field object=$filter field="_date_min" form="stats_params" canNull="false" register=true}} </td>
 
     <th>{{mb_label object=$filter field="_service"}}</th>
     <td>
@@ -40,8 +52,8 @@ Main.add(function(){
   </tr>
 
   <tr>
-    <th>{{mb_label object=$filter field="_date_max_stat"}}</th>
-    <td>{{mb_field object=$filter field="_date_max_stat" form="hospitalisation" canNull="false" register=true}} </td>
+    <th>{{mb_label object=$filter field="_date_max"}}</th>
+    <td>{{mb_field object=$filter field="_date_max" form="stats_params" canNull="false" register=true}} </td>
 
     <th>{{mb_label object=$filter field="praticien_id"}}</th>
     <td>
@@ -94,43 +106,59 @@ Main.add(function(){
     <th>Uniquement {{mb_label object=$filter field="septique"}}</th>
     <td>{{mb_field object=$filter field="septique"}}</td>
   </tr>
-
-  <tr>
-    <td colspan="4" class="button"><button type="submit" class="search">Afficher</button></td>
-  </tr>
 </table>
 
 </form>
 
-<table class="tbl">
+<table class="layout" style="width: 100%">
   <tr>
-    <th colspan="2">Qualité de l'information</th>
+    <th colspan="2">
+      <hr />
+      Sejours
+    </th>
   </tr>
   <tr>
-    <td style="text-align: right;">
-      <label title="Nombre total de séjours disponibles selon les filtres utilisés">Séjours disponibles</label>
+    <td class="button" style="width: 50%">
+      <div class="small-info" style="text-align: center">
+        Répartition par service du nombre de patient
+        <br />
+        <button type="button" class="stats"
+                onclick="DisplayGraph.launchStats('patparservice')">
+          {{tr}}View{{/tr}}
+        </button>
+      </div>
     </td>
-    <td style="width: 100%;">{{$qualite.total}} séjours</td>
+    <td class="button" style="width: 50%">
+      <div class="small-info" style="text-align: center">
+        Répartition du nombre d'admissions par type d'hospitalisation
+        <br />
+        <button type="button" class="stats"
+                onclick="DisplayGraph.launchStats('patpartypehospi')">
+          {{tr}}View{{/tr}}
+        </button>
+      </div>
+    </td>
   </tr>
   <tr>
-    <td style="text-align: right;">
-      <label title="Les séjours non placés n'apparaitront pas dans les graphiques 'par service'">Séjours comportant un placement dans un lit</label>
+    <td class="button">
+      <div class="small-info" style="text-align: center">
+        Répartition du nombre de nuits par service
+        <br />
+        <button type="button" class="stats"
+                onclick="DisplayGraph.launchStats('jourparservice')">
+          {{tr}}View{{/tr}}
+        </button>
+      </div>
     </td>
-    <td>{{$qualite.places.total}} séjours ({{$qualite.places.pct|string_format:"%.2f"}} %)</td>
-  </tr>
-  <tr>
-    <td style="text-align: right;">
-      <label title="Ce facteur sera pris en compte selon le type de données choisi">Séjours comportant une entrée et une sortie réelle</label>
+    <td>
+      <div class="small-info" style="text-align: center">
+        Qualité des données
+        <br />
+        <button type="button" class="list"
+                onclick="DisplayGraph.qualiteHospi()">
+          {{tr}}View{{/tr}}
+        </button>
+      </div>
     </td>
-    <td>{{$qualite.reels.total}} séjours ({{$qualite.reels.pct|string_format:"%.2f"}} %)</td>
   </tr>
 </table>
-
-{{foreach from=$graphs item=graph key=key}}
-<table class="layout">
-  <tr>
-    <td><div style="width: 600px; height: 400px; float: left; margin: 1em;" id="graph-{{$key}}"></div></td>
-    <td style="vertical-align: top;" id="legend-{{$key}}"></td>
-  </tr>
-</table>
-{{/foreach}}

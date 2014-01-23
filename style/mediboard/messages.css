@@ -95,11 +95,6 @@ div.small-mail {
   border-radius: 3px;
 }
 
-.small-mail {
-  background-image: url(images/icons/small-mail.png);
-  background-color: #ffe;
-  border-color: #dd0;
-}
 .small-success {
   background-image: url(images/icons/small-success.png);
   background-color: #efe;
@@ -122,6 +117,12 @@ div.small-mail {
   background-image: url(images/icons/small-error.png);
   background-color: #fee;
   border-color: #a55;
+}
+
+.small-mail {
+  background-image: url(images/icons/small-mail.png);
+  background-color: #ffe;
+  border-color: #dd0;
 }
 
 div.big-success,
