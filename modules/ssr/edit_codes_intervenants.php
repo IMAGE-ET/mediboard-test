@@ -52,6 +52,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("mediuser"    , $mediuser);
 $smarty->assign("intervenants", $intervenants);
+$smarty->assign("interv"      , $interv);
 $smarty->assign("mediusers"   , $mediusers);
 $smarty->assign("current"     , $current);
 $smarty->assign("step"        , $step);
