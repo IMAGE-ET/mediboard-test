@@ -16,11 +16,11 @@ CCanDo::checkRead();
 $mode = CValue::get("mode", "html");
 
 $deblist = CValue::getOrSession("deblistbloc", CMbDT::date("-1 DAY"));
-$finlist = $deblist;
 $finlist = max(CValue::get("finlistbloc", $deblist), $deblist);
 $bloc_id = CValue::getOrSession("bloc_id");
+$type    = CValue::get("type", "prevue");
 
-$user = new CMediusers;
+$user = new CMediusers();
 $listPrats = $user->loadPraticiens(PERM_READ);
 
 $listBlocs = CGroups::loadCurrent()->loadBlocs();
@@ -32,7 +32,7 @@ $where["stats"] = "= '1'";
 if ($bloc->_id) {
   $where["bloc_id"] = "= '$bloc->_id'";
 }
-$salle = new CSalle;
+$salle = new CSalle();
 $listSalles = $salle->loadGroupList($where);
 
 // Récupération des plages
@@ -41,24 +41,43 @@ $where = array(
   "salle_id" => CSQLDataSource::prepareIn(array_keys($listSalles)),
 );
 $order = "date, salle_id, debut, chir_id";
+$listPlages = array();
+$listInterv = array();
+$nb_interv = 1;
 
-$plage = new CPlageOp;
-$listPlages = $plage->loadList($where, $order);
-
+if ($type == "prevue") {
+  $plage = new CPlageOp();
+  $listPlages = $plage->loadList($where, $order);
 // Récupération des interventions
-foreach ($listPlages as $curr_plage) {
-  $curr_plage->loadRefsFwd(1);
-  $curr_plage->loadRefsBack(0, "entree_salle");
-  
-  $i = 1;
-  foreach ($curr_plage->_ref_operations as $curr_op) {
-    $curr_op->_rank_reel = $curr_op->entree_salle ? $i : "";
-    $i++;
-    $next = next($curr_plage->_ref_operations);
-    $curr_op->_pat_next = (($next !== false) ? $next->entree_salle : null);
-    $curr_op->loadRefsFwd(1);
-    $curr_op->loadLogs();
-    $curr_op->_ref_sejour->loadRefsFwd(1);
+  foreach ($listPlages as $curr_plage) {
+    $curr_plage->loadRefsFwd(1);
+    $curr_plage->loadRefsBack(0, "entree_salle");
+
+    $nb_interv = 1;
+    foreach ($curr_plage->_ref_operations as $curr_op) {
+      $curr_op->_rank_reel = $curr_op->entree_salle ? $nb_interv : "";
+      $nb_interv++;
+      $next = next($curr_plage->_ref_operations);
+      $curr_op->_pat_next = (($next !== false) ? $next->entree_salle : null);
+      $curr_op->loadRefsFwd(1);
+      $curr_op->loadLogs();
+      $curr_op->_ref_sejour->loadRefsFwd(1);
+    }
+  }
+}
+else {
+  // Récupération des interventions
+  $order = "date, salle_id, chir_id";
+  $interv = new COperation();
+  $listInterv = $interv->loadList($where, $order);
+
+  foreach ($listInterv as $op) {
+    $op->_rank_reel = $op->entree_salle ? $nb_interv : "";
+    $nb_interv++;
+    $op->_pat_next = null;
+    $op->loadRefsFwd(1);
+    $op->loadLogs();
+    $op->_ref_sejour->loadRefsFwd(1);
   }
 }
 
@@ -132,7 +151,10 @@ else {
   $smarty->assign("finlist",    $finlist);
   $smarty->assign("listBlocs",  $listBlocs);
   $smarty->assign("listPlages", $listPlages);
+  $smarty->assign("listInterv", $listInterv);
+  $smarty->assign("nb_interv" , $nb_interv);
   $smarty->assign("bloc",       $bloc);
+  $smarty->assign("type",       $type);
 
   $smarty->display("vw_bloc2.tpl");
 }
