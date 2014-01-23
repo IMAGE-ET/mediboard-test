@@ -46,7 +46,17 @@ $dossier_medical_patient->loadRefPrescription();
 $op_sans_dossier_anesth = 0;
 // Chargement du patient
 $patient->countBackRefs("sejours");
-$patient->loadRefsSejours();
+
+$sejour = new CSejour();
+$group_id = CGroups::loadCurrent()->_id;
+$where = array();
+$where["patient_id"] = "= '$patient->_id'";
+if (CAppUI::conf("dPpatients CPatient multi_group") == "hidden") {
+  $where["sejour.group_id"] = "= '$group_id'";
+}
+$order = "entree_prevue ASC";
+
+$patient->_ref_sejours = $sejour->loadList($where, $order);
 
 // Chargement de ses séjours
 foreach ($patient->_ref_sejours as $_key => $_sejour) {
@@ -55,7 +65,7 @@ foreach ($patient->_ref_sejours as $_key => $_sejour) {
     $_operation->loadRefsConsultAnesth();
     $_operation->loadRefPlageOp();
     $_operation->loadRefChir()->loadRefFunction()->loadRefGroup();
-    if (!$_operation->_ref_consult_anesth->_id && !$op_sans_dossier_anesth) {
+    if (!$_operation->_ref_consult_anesth->_id && $_sejour->entree_prevue > $_operation->_ref_plageop->date) {
       $op_sans_dossier_anesth = $_operation->_id;
     }
   }
