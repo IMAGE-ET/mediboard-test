@@ -122,10 +122,10 @@ class CDossierMedical extends CMbMetaObject {
   /**
    * @see parent::loadRefsBack()
    */
-    function loadRefsBack() {
-      parent::loadRefsBack();
-      $this->loadRefsAntecedents();
-      $this->loadRefsTraitements();
+  function loadRefsBack() {
+    parent::loadRefsBack();
+    $this->loadRefsAntecedents();
+    $this->loadRefsTraitements();
   }
 
   /**
@@ -180,7 +180,42 @@ class CDossierMedical extends CMbMetaObject {
     $codes_cim = implode('|', $codes_cim_array);
     $codes_cim_array = array_unique(explode('|', $codes_cim));
     CMbArray::removeValue('', $codes_cim_array);
-    
+
+    foreach ($objects as $objet) {
+      if ($this->risque_thrombo_patient == 'NR') {
+        $this->risque_thrombo_patient = $objet->risque_thrombo_patient;
+      }
+      if ($this->risque_MCJ_patient == 'NR') {
+        $this->risque_MCJ_patient = $objet->risque_MCJ_patient;
+      }
+      if ($this->risque_thrombo_chirurgie == 'NR') {
+        $this->risque_thrombo_chirurgie = $objet->risque_thrombo_chirurgie;
+      }
+      if ($this->risque_antibioprophylaxie == 'NR') {
+        $this->risque_antibioprophylaxie = $objet->risque_antibioprophylaxie;
+      }
+      if ($this->risque_prophylaxie == 'NR') {
+        $this->risque_prophylaxie = $objet->risque_prophylaxie;
+      }
+      if ($this->risque_MCJ_chirurgie == 'NR') {
+        $this->risque_MCJ_chirurgie = $objet->risque_MCJ_chirurgie;
+      }
+      if (!$this->facteurs_risque) {
+        $this->facteurs_risque = $objet->facteurs_risque;
+      }
+      if (!$this->absence_traitement) {
+        $this->absence_traitement = $objet->absence_traitement;
+      }
+      if ($this->groupe_sanguin == '?') {
+        $this->groupe_sanguin = $objet->groupe_sanguin;
+      }
+      if ($this->rhesus == '?') {
+        $this->rhesus = $objet->rhesus  ;
+      }
+      if (!$this->groupe_ok) {
+        $this->groupe_ok = $objet->groupe_ok;
+      }
+    }
     parent::mergePlainFields($objects);
     
     $this->codes_cim = implode('|', $codes_cim_array);

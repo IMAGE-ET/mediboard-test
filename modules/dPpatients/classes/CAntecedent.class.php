@@ -185,6 +185,17 @@ class CAntecedent extends CMbObject {
   }
 
   /**
+   * @see parent::check()
+   */
+  function check() {
+    //Si on merge le dossier médical et que le type n'existe pas
+    if ($this->_forwardRefMerging && (in_array($this->type, CAntecedent::$non_types) || !in_array($this->type, CAntecedent::$types))) {
+      return null;
+    }
+    return parent::check();
+  }
+
+  /**
    * @see parent::loadAides()
    */
   function loadAides(
