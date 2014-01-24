@@ -135,6 +135,7 @@
                 <input type="hidden" name="m" value="dPprescription" />
                 <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
                 <input type="hidden" name="del" value="0" />
+                <input type="hidden" name="_active" value="1" />
                 <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
                 <input type="hidden" name="praticien_id" value="{{$user_id}}" />
                 <input type="hidden" name="pack_protocole_id" value="" onchange="submitProtocoleSuiviSoins();" />
