@@ -13,25 +13,37 @@
  * The DICOM dictionnary
  */
 class CDicomDictionary {
-  
+
   /**
    * DICOM SOP classes
    *
    * @see DICOM Standard PS 3.6 Annex A
-   * 
+   *
    * @var array
    */
   protected static $sop_classes = array(
-    '1.2.840.10008.1.1' => 'Verification SOP Class',
-    '1.2.840.10008.3.1.1.1' => 'DICOM Application Context Name',
-    '1.2.840.10008.5.1.4.31' => 'Modality Worklist Information Model - FIND',
-    '1.2.840.10008.3.1.2.3.3' => 'Modality Performed Procedure Step SOP Class');
-  
+    '1.2.840.10008.1.1'             => 'Verification SOP Class',
+    '1.2.840.10008.1.20.1'          => 'Storage Commitment Push Model SOP Class',
+    '1.2.840.10008.3.1.1.1'         => 'DICOM Application Context Name',
+    '1.2.840.10008.3.1.2.3.3'       => 'Modality Performed Procedure Step SOP Class',
+    '1.2.840.10008.5.1.1.1'         => 'Basic Film Session SOP Class',
+    '1.2.840.10008.5.1.4.1.1.1'     => 'Computed Radiography Image Storage',
+    '1.2.840.10008.5.1.4.1.1.7'     => 'Secondary Capture Image Storage',
+    '1.2.840.10008.5.1.4.1.1.12.1'  => 'X-Ray Angiographic Image Storage',
+    '1.2.840.10008.5.1.4.1.1.12.2'  => 'X-Ray Radiofluoroscopic Image Storage',
+    '1.2.840.10008.5.1.4.1.1.481.1' => 'RT Image Storage',
+    '1.2.840.10008.5.1.4.1.2.1.1'   => 'Patient Root Query/Retrieve Information Model ? FIND',
+    '1.2.840.10008.5.1.4.1.2.1.2'   => 'Patient Root Query/Retrieve Information Model ? MOVE',
+    '1.2.840.10008.5.1.4.1.2.2.1'   => 'Study Root Query/Retrieve Information Model ? FIND',
+    '1.2.840.10008.5.1.4.1.2.2.2'   => 'Study Root Query/Retrieve Information Model ? MOVE',
+    '1.2.840.10008.5.1.4.31'        => 'Modality Worklist Information Model - FIND',
+  );
+
   /**
    * The DICOM Network transfer syntaxes
-   * 
+   *
    * @see DICOM Standard PS 3.6 Annex A
-   * 
+   *
    * @var array
    */
   protected static $transfer_syntaxes = array(
@@ -39,55 +51,55 @@ class CDicomDictionary {
     '1.2.840.10008.1.2.1' => 'Explicit VR Little Endian',
     '1.2.840.10008.1.2.2' => 'Explicit VR Big Endian',
   );
-  
+
   /**
    * The value representations
    * Each array contains the full name, the maximum length (in bytes), and if the length is fixed (1) or not (0)
-   * 
+   *
    * @see DICOM Standard PS 3.5 Section 6.2
-   * 
+   *
    * @var array
    */
   protected static $value_representations = array(
    'AE'=> array('Name'=>'Application Entity'              , 'Length' => 16        , 'Fixed' => 0),
-   'AS'=> array('Name'=>'Age String'                      , 'Length' => 4          , 'Fixed' => 1),
-   'AT'=> array('Name'=>'Attribute Tag'                    , 'Length' => 4          , 'Fixed' => 1),
-   'CS'=> array('Name'=>'Code String'                      , 'Length' => 16        , 'Fixed' => 0),
-   'DA'=> array('Name'=>'Date'                            , 'Length' => 8          , 'Fixed' => 1),
+   'AS'=> array('Name'=>'Age String'                      , 'Length' => 4         , 'Fixed' => 1),
+   'AT'=> array('Name'=>'Attribute Tag'                   , 'Length' => 4         , 'Fixed' => 1),
+   'CS'=> array('Name'=>'Code String'                     , 'Length' => 16        , 'Fixed' => 0),
+   'DA'=> array('Name'=>'Date'                            , 'Length' => 8         , 'Fixed' => 1),
    'DS'=> array('Name'=>'Decimal String'                  , 'Length' => 16        , 'Fixed' => 0),
-   'DT'=> array('Name'=>'Date Time'                        , 'Length' => 26        , 'Fixed' => 0),
-   'FL'=> array('Name'=>'Floating Point Single'            , 'Length' => 4          , 'Fixed' => 1),
-   'FD'=> array('Name'=>'Floating Point Double'            , 'Length' => 8          , 'Fixed' => 1),
+   'DT'=> array('Name'=>'Date Time'                       , 'Length' => 26        , 'Fixed' => 0),
+   'FL'=> array('Name'=>'Floating Point Single'           , 'Length' => 4         , 'Fixed' => 1),
+   'FD'=> array('Name'=>'Floating Point Double'           , 'Length' => 8         , 'Fixed' => 1),
    'IS'=> array('Name'=>'Integer String'                  , 'Length' => 12        , 'Fixed' => 0),
-   'LO'=> array('Name'=>'Long String'                      , 'Length' => 64        , 'Fixed' => 0),
-   'LT'=> array('Name'=>'Long Text'                        , 'Length' => 10240      , 'Fixed' => 0),
-   'OB'=> array('Name'=>'Other Byte String'                , 'Length' => 0          , 'Fixed' => 0),
+   'LO'=> array('Name'=>'Long String'                     , 'Length' => 64        , 'Fixed' => 0),
+   'LT'=> array('Name'=>'Long Text'                       , 'Length' => 10240     , 'Fixed' => 0),
+   'OB'=> array('Name'=>'Other Byte String'               , 'Length' => 0         , 'Fixed' => 0),
    'OF'=> array('Name'=>'Other Float String'              , 'Length' => 4294967292, 'Fixed' => 0),
-   'OX'=> array('Name'=>'Mixed. Other {Byte|Word} String'  , 'Length' => 0          , 'Fixed' => 0),
-   'OW'=> array('Name'=>'Other Word String'                , 'Length' => 0          , 'Fixed' => 0),
-   'PN'=> array('Name'=>'Person Name'                      , 'Length' => 64        , 'Fixed' => 0),
+   'OX'=> array('Name'=>'Mixed. Other {Byte|Word} String' , 'Length' => 0         , 'Fixed' => 0),
+   'OW'=> array('Name'=>'Other Word String'               , 'Length' => 0         , 'Fixed' => 0),
+   'PN'=> array('Name'=>'Person Name'                     , 'Length' => 64        , 'Fixed' => 0),
    'SH'=> array('Name'=>'Short String'                    , 'Length' => 16        , 'Fixed' => 0),
-   'SL'=> array('Name'=>'Signed Long'                      , 'Length' => 4          , 'Fixed' => 1),
-   'SQ'=> array('Name'=>'Sequence of Items'                , 'Length' => 0          , 'Fixed' => 0),
-   'SS'=> array('Name'=>'Signed Short'                    , 'Length' => 2          , 'Fixed' => 1),
+   'SL'=> array('Name'=>'Signed Long'                     , 'Length' => 4         , 'Fixed' => 1),
+   'SQ'=> array('Name'=>'Sequence of Items'               , 'Length' => 0         , 'Fixed' => 0),
+   'SS'=> array('Name'=>'Signed Short'                    , 'Length' => 2         , 'Fixed' => 1),
    'ST'=> array('Name'=>'Short Text'                      , 'Length' => 1024      , 'Fixed' => 0),
    'TM'=> array('Name'=>'Time'                            , 'Length' => 16        , 'Fixed' => 0),
-   'UI'=> array('Name'=>'Unique Identifier UID'            , 'Length' => 64        , 'Fixed' => 0),
-   'UL'=> array('Name'=>'Unsigned Long'                    , 'Length' => 4          , 'Fixed' => 1),
-   'UN'=> array('Name'=>'Unknown'                          , 'Length' => 0          , 'Fixed' => 0),
-   'US'=> array('Name'=>'Unsigned Short'                  , 'Length' => 2          , 'Fixed' => 1),
+   'UI'=> array('Name'=>'Unique Identifier UID'           , 'Length' => 64        , 'Fixed' => 0),
+   'UL'=> array('Name'=>'Unsigned Long'                   , 'Length' => 4         , 'Fixed' => 1),
+   'UN'=> array('Name'=>'Unknown'                         , 'Length' => 0         , 'Fixed' => 0),
+   'US'=> array('Name'=>'Unsigned Short'                  , 'Length' => 2         , 'Fixed' => 1),
    'UT'=> array('Name'=>'Unlimited Text'                  , 'Length' => 4294967294, 'Fixed' => 0)
   );
-  
+
   /**
    * DICOM data sets.
-   * 
+   *
    * The first key is the group number, the second the element number.
    * Foreach element, the first element is the value representation,
    * the second the value multiplicity, and the last is the name
-   * 
+   *
    * @see DICOM Standard PS 3.6 Section 6
-   * 
+   *
    * @var array
    */
   protected static $data_sets = array(
@@ -146,7 +158,7 @@ class CDicomDictionary {
        0x51A0 => array('CS', '1',    'Print'),
        0x51B0 => array('US', '1-n',  'Overlays'),
     ),
-    
+
      0x0008 => array(
        0x0000 => array('UL', '1',    'IdentifyingGroupLength', 'RET'),
        0x0001 => array('UL', '1',    'LengthToEnd', 'RET'),
@@ -321,7 +333,7 @@ class CDicomDictionary {
        0x9459 => array('FL', '1',    'RecommendedDisplayFrameRateInFloat'),
        0x9460 => array('CS', '1',    'SkipFrameRangeFlag'),
     ),
-    
+
      0x0010 => array(
        0x0000 => array('UL', '1',    'PatientGroupLength', 'RET'),
        0x0010 => array('PN', '1',    'PatientName'),
@@ -373,7 +385,7 @@ class CDicomDictionary {
        0x2298 => array('CS', '1',    'ResponsiblePersonRole'),
        0x2299 => array('LO', '1',    'ResponsibleOrganization'),
        0x4000 => array('LT', '1',    'PatientComments'),
-       0x9431 => array('FL', '1',    'ExaminedBodyThickness'),  
+       0x9431 => array('FL', '1',    'ExaminedBodyThickness'),
     ),
     0x0020 => array(
       0x0000 => array('UL', '1', 'ImageGroupLength', 'RET'),
@@ -491,7 +503,7 @@ class CDicomDictionary {
       0x9529 => array('SQ', '1', 'ContributingSOPInstancesReferenceSequence'),
       0x9536 => array('US', '1', 'ReconstructionIndex'),
     ),
-    
+
     0x0032 => array(
       0x0000 => array('UL', '1', 'StudyGroupLength', 'RET'),
       0x000A => array('CS', '1', 'StudyStatusID', 'RET'),
@@ -522,7 +534,7 @@ class CDicomDictionary {
       0x1070 => array('LO', '1', 'RequestedContrastAgent'),
       0x4000 => array('LT', '1', 'StudyComments', 'RET'),
     ),
-    
+
     0x0038 => array(
       0x0000 => array('UL', '1', 'VisitGroupLength', 'RET'),
       0x0004 => array('SQ', '1', 'ReferencedPatientAliasSequence'),
@@ -554,7 +566,7 @@ class CDicomDictionary {
       0x0502 => array('SQ', '1', 'PatientClinicalTrialParticipationSequence'),
       0x4000 => array('LT', '1', 'VisitComments'),
     ),
-    
+
     0x0040 => array(
       0x0000 => array('UL', '1', 'ScheduledProcedureGroupLength'),
       0x0001 =>  array('AE', '1-n', 'ScheduledStationAETitle'),
@@ -782,71 +794,73 @@ class CDicomDictionary {
       0xDB06 =>  array('DT', '1', 'TemplateVersion', 'RET'),
       0xDB07 =>  array('DT', '1', 'TemplateLocalVersion', 'RET'),
       0xDB0B =>  array('CS', '1', 'TemplateExtensionFlag', 'RET'),
-      0xDB0C =>  array('UI', '1', 'TemplateExtensionOrganizationUID', 'RET'),
-      0xDB0D =>  array('UI', '1', 'TemplateExtensionCreatorUID', 'RET'),
+      0xDB0C =>  array('UI', '1'  , 'TemplateExtensionOrganizationUID', 'RET'),
+      0xDB0D =>  array('UI', '1'  , 'TemplateExtensionCreatorUID', 'RET'),
       0xDB73 =>  array('UL', '1-n', 'ReferencedContentItemIdentifier'),
-      0xE001 =>  array('ST', '1', 'HL7InstanceIdentifier'),
-      0xE004 =>  array('DT', '1', 'HL7DocumentEffectiveTime'),
-      0xE006 =>  array('SQ', '1', 'HL7DocumentTypeCodeSequence'),
-      0xE010 =>  array('UT', '1', 'RetrieveURI'),
-      0xE011 =>  array('UI', '1', 'RetrieveLocationUID'),
+      0xE001 =>  array('ST', '1'  , 'HL7InstanceIdentifier'),
+      0xE004 =>  array('DT', '1'  , 'HL7DocumentEffectiveTime'),
+      0xE006 =>  array('SQ', '1'  , 'HL7DocumentTypeCodeSequence'),
+      0xE010 =>  array('UT', '1'  , 'RetrieveURI'),
+      0xE011 =>  array('UI', '1'  , 'RetrieveLocationUID'),
     ),
-    
+
     0xFFFE => array(
       0xE000 => array('LO', '1', 'ItemBeginDelimitation'),
       0xE00D => array('LO', '1', 'ItemEndDelimitation'),
       0xE0DD => array('LO', '1', 'SequenceEndDelimitation')
     )
   );
-  
+
   protected static $groups = array(
     0x000 => "Command",
     0x008 => "Study",
     0x010 => "Patient"
   );
-  
+
   /**
    * Get the name of the SOP class
-   * 
+   *
    * @param string $uid The UID of the SOP class
-   * 
+   *
    * @return string
    */
   static function getSOPClass($uid) {
     return self::$sop_classes[$uid];
   }
-  
+
   /**
    * Get the name of a transfer syntax
-   * 
+   *
    * @param string $uid The UID of the transfer syntax
-   * 
+   *
    * @return string
    */
   static function getTransferSyntaxName($uid) {
     return self::$transfer_syntaxes[$uid];
   }
-  
+
   /**
    * Get the characteristics of a value representations
-   * 
+   *
    * @param string $vr_name The name of the value representation
-   * 
+   *
    * @return array
    */
   static function getValueRepresentation($vr_name) {
     if (array_key_exists($vr_name, self::$value_representations)) {
       return self::$value_representations[$vr_name];
     }
+
+    return false;
   }
-  
+
   /**
    * Get the characteristics of the given data set, identified by is group and is element number
-   * 
+   *
    * @param integer $group   The group number
-   * 
+   *
    * @param integer $element The element number
-   * 
+   *
    * @return array
    */
   static function getDataSet($group, $element) {
@@ -855,43 +869,43 @@ class CDicomDictionary {
     }
     return self::$data_sets[$group][$element];
   }
-  
+
   /**
    * Get the group and all its datasets
-   * 
+   *
    * @param integer $group The group number
-   * 
+   *
    * @return array
    */
   static function getGroupsDataSet($group) {
     return self::$data_sets[$group];
   }
-  
+
   /**
    * Get the groups names
-   * 
+   *
    * @return array
    */
   static function getGroupsNames() {
     return self::$groups;
   }
-  
+
   /**
    * Check if the SOP class is supported by Mediboard
-   * 
+   *
    * @param string $uid The UID of the SOP class
-   * 
+   *
    * @return boolean
    */
   static function isSOPClassSupported($uid) {
     return array_key_exists($uid, self::$sop_classes);
   }
-  
+
   /**
    * Check if the transfer syntax is supported by Mediboard
-   * 
+   *
    * @param string $uid The UID of the transfer syntax
-   * 
+   *
    * @return boolean
    */
   static function isTransferSyntaxSupported($uid) {
