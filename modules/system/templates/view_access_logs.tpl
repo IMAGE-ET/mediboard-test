@@ -101,7 +101,7 @@ Main.add(function () {
         <option value="twenty-years" {{if $interval == "twenty-years"}} selected="selected" {{/if}}>20 ans     (par an)      </option>
       </select>
       
-      {{if $interval == "day"}}
+      {{if $interval == "one-day"}}
         <label for="hour_min" title="Heure minimale">{{tr}}From{{/tr}}</label>
         <select name="hour_min" onchange="this.form.submit()">
           {{foreach from=$hours item=_hour}}
