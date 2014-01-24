@@ -137,6 +137,7 @@
                 <input type="hidden" name="del" value="0" />
                 <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
                 <input type="hidden" name="praticien_id" value="{{$user_id}}" />
+                <input type="hidden" name="_active" value="1" />
                 <input type="hidden" name="pack_protocole_id" value="" onchange="submitProtocoleSuiviSoins();" />
                 <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" class="autocomplete" />
                 <div style="display:none; height: 120px;" class="autocomplete" id="protocole_auto_complete_suivi_soins"></div>
