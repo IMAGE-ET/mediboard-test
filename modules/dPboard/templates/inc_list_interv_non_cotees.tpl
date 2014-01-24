@@ -1,6 +1,6 @@
 {{if $board}}
 <script>
-  updateNbActes({{$interventions|@count}});
+  Control.Tabs.setTabCount('actes_non_cotes', {{$interventions|@count}} + {{$consultations|@count}});
 </script>
 {{/if}}
 

@@ -18,16 +18,12 @@ updatePrescriptions = function() {
   url.requestUpdate("prescriptions_non_signees");
 };
 
-updateNbPrescriptions = function(nb) {
-  $('nb_prescriptions').update('('+nb+')');
-};
-
 initUpdateActes = function() {
   var url = new Url("board", "ajax_list_interv_non_cotees");
   url.addParam("praticien_id", "{{$chirSel}}");
   url.addParam("fin", "{{$date}}");
   url.addParam("board"       , "1");
-  url.periodicalUpdate("actes_non_cotes", { frequency: 120 } );
+  url.periodicalUpdate("actes_non_cotes", { frequency: 300 } );
 };
 
 updateActes = function() {
@@ -36,10 +32,6 @@ updateActes = function() {
   url.addParam("fin", "{{$date}}");
   url.addParam("board"       , "1");
   url.requestUpdate("actes_non_cotes");
-};
-
-updateNbActes = function(nb) {
-  $('nb_actes').update('('+nb+')');
 };
 
 Main.add(function () {
@@ -55,9 +47,18 @@ Main.add(function () {
 
 <ul id="tab-worklist" class="control_tabs">
   {{if "dPprescription"|module_active}}
-  <li><a href="#prescriptions_non_signees">Prescriptions <span id="nb_prescriptions"></span></a></li>
+  <li>
+     <a href="#prescriptions_non_signees" class="empty">
+       Prescriptions non signées <small>(&ndash;)</small>
+     </a>
+  </li>
   {{/if}}
-  <li><a href="#actes_non_cotes">Actes <span id="nb_actes"></span></a></li>
+  <li>
+    <a href="#actes_non_cotes" class="empty">
+      Actes non cotés
+      <small>(&ndash;)</small>
+    </a>
+  </li>
 </ul>
 
 {{if "dPprescription"|module_active}}
