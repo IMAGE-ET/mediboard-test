@@ -10,30 +10,34 @@
 
 {{if $board}}
 <script>
-  updateNbPrescriptions({{$prescriptions|@count}});
+  Control.Tabs.setTabCount('prescriptions_non_signees', {{$prescriptions|@count}});
 </script>
 {{/if}}
 
 <table class="tbl">
   {{if $board}}
     <tr>
-      <th rowspan="2" class="title narrow">{{mb_title class=CLit field=chambre_id}}</th>
-      <th colspan="2" rowspan="2" class="title">{{mb_title class=CPatient field=nom}}<br />({{mb_title class=CPatient field=nom_jeune_fille}})</th>
+      <th rowspan="2" class="narrow">{{mb_title class=CLit field=chambre_id}}</th>
+      <th colspan="2" rowspan="2" class="">
+        {{mb_title class=CPatient field=nom}}
+        <br />
+        ({{mb_title class=CPatient field=nom_jeune_fille}})
+      </th>
       {{if "dPImeds"|module_active}}
-        <th rowspan="2" class="title">Labo</th>
+        <th rowspan="2" class="">Labo</th>
       {{/if}}
-      <th colspan="2" class="title">Alertes</th>
-      <th rowspan="2" class="narrow title">{{mb_title class=CSejour field=entree}}</th>
-      <th rowspan="2" class="title">{{mb_title class=CSejour field=libelle}}</th>
-      <th rowspan="2" class="title">Prat.</th>
+      <th colspan="2" class="">Alertes</th>
+      <th rowspan="2" class="narrow">{{mb_title class=CSejour field=entree}}</th>
+      <th rowspan="2" class="">{{mb_title class=CSejour field=libelle}}</th>
+      <th rowspan="2" class="">Prat.</th>
     </tr>
     <tr>
-      <th class="title">All.</th>
-      <th class="title"><label title="Antécédents">Atcd</label></th>
+      <th class="">All.</th>
+      <th class=""><label title="Antécédents">Atcd</label></th>
     </tr>
   {{else}}
   <tr>
-    <th class="title">Prescriptions ({{$prescriptions|@count}})</th>
+    <th class="">Prescriptions ({{$prescriptions|@count}})</th>
   </tr>
   {{/if}}
   {{foreach from=$prescriptions item=_prescription}}
@@ -52,6 +56,9 @@
     </td>
   </tr>  
   {{/if}}
+
+  {{foreachelse}}
+  <tr><td colspan="8" class="empty">{{tr}}CPrescription.none{{/tr}}</td></tr>
   
   {{/foreach}}
 </table>
