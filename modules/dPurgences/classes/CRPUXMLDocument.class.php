@@ -130,9 +130,31 @@ class CRPUXMLDocument extends CMbXMLDocument {
       }
     }
 
+    $sortie = null;
     if ($sejour->sortie_reelle) {
-      $this->addElement($elParent, "SORTIE", CMbDT::transform($sejour->sortie_reelle, null, "%d/%m/%Y %H:%M"));
+      $sortie = $sejour->sortie_reelle;
     }
+    else {
+      // on recherche la première affectation qui n'est pas dans un service d'urgences ou externe
+      $affectation = new CAffectation();
+      $ljoin["service"] = "`service`.`service_id` = `affectation`.`service_id`";
+      $where = array();
+      $where["sejour_id"]         = " = '$sejour->_id'";
+      $where["service.cancelled"] = " = '0'";
+      $where["service.uhcd"]      = " = '0'";
+      $where["service.urgence"]   = " = '0'";
+
+      $affectation->loadObject($where, "entree ASC", null, $ljoin);
+
+      if ($affectation->_id) {
+        $sortie = $affectation->entree;
+      }
+    }
+
+    if ($sortie) {
+      $this->addElement($elParent, "SORTIE", CMbDT::transform($sortie, null, "%d/%m/%Y %H:%M"));
+    }
+
     $this->addElement($elParent, "MODE_SORTIE", $mbObject->_mode_sortie);
     $this->addElement($elParent, "DESTINATION", $sejour->destination);
     $this->addElement($elParent, "ORIENT", strtoupper($mbObject->orientation));
