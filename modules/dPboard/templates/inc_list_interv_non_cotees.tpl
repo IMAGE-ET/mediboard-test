@@ -139,7 +139,7 @@
 
       <td>
         {{if !$consult->_count_actes && !$consult->_ext_codes_ccam}}
-          (Aucun prévu)
+          <div class="empty">Aucun prévu</div>
         {{else}}
           {{$consult->_actes_non_cotes}} acte(s)
         {{/if}}

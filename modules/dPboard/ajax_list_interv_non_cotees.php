@@ -153,18 +153,25 @@ CMbObject::massLoadFwdRef($consultations, "patient_id");
 $chirs = CMbObject::massLoadFwdRef($plages, "chir_id");
 CMbObject::massLoadFwdRef($chirs, "function_id");
 
-foreach ($consultations as $key => $consult) {
-  $consult->loadExtCodesCCAM(true);
-  $codes_ccam = $consult->_ext_codes_ccam;
+foreach ($consultations as $key => $_consult) {
+  // On ignore les consultation ayant des actes NGAP
+  if ($_consult->countBackRefs("actes_ngap")) {
+    unset($consultations[$key]);
+    continue;
+  }
+
+  // Chargemement des codes CCAM
+  $_consult->loadExtCodesCCAM(true);
+  $codes_ccam = $_consult->_ext_codes_ccam;
 
   // Nombre d'acte cotés par le praticien et réinitialisation du count pour le cache
-  $nb_actes_ccam = count($consult->loadRefsActesCCAM());
+  $nb_actes_ccam = count($_consult->loadRefsActesCCAM());
 
   // Aucun acte prévu ou coté
-  if (!count($codes_ccam) && !$consult->_count_actes) {
-    $consult->loadRefSejour();
-    $consult->loadRefPraticien()->loadRefFunction();
-    $consult->loadRefPatient();
+  if (!count($codes_ccam) && !$_consult->_count_actes) {
+    $_consult->loadRefSejour();
+    $_consult->loadRefPraticien()->loadRefFunction();
+    $_consult->loadRefPatient();
     continue;
   }
 
@@ -192,13 +199,13 @@ foreach ($consultations as $key => $consult) {
     continue;
   }
 
-  $consult->_actes_non_cotes = $nbCodes - $nb_actes_ccam;
-  $consult->loadRefsFwd();
-  $consult->loadRefSejour();
-  $consult->loadRefPraticien()->loadRefFunction();
+  $_consult->_actes_non_cotes = $nbCodes - $nb_actes_ccam;
+  $_consult->loadRefsFwd();
+  $_consult->loadRefSejour();
+  $_consult->loadRefPraticien()->loadRefFunction();
 
   // Liste des actes CCAM cotées
-  foreach ($consult->loadRefsActesCCAM() as $_acte) {
+  foreach ($_consult->loadRefsActesCCAM() as $_acte) {
     $_acte->loadRefExecutant();
   }
 }
