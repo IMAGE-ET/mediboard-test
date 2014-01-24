@@ -251,10 +251,14 @@ abstract class CMbPath {
     $extract = false;
     switch (self::getExtension($archivePath)) {
       case "gz"  :
-      case "tgz" : 
+      case "tgz" :
         $archive = new Archive_Tar($archivePath);
         $nbFiles = count($archive->listContent());
         $extract = $archive->extract($destinationDir);
+        if (!$extract) {
+          trigger_error($archive->error_object->message, E_USER_WARNING);
+        }
+
         break;
       
       case "zip" : 
