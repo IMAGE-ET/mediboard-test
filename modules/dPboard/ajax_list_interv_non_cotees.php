@@ -154,6 +154,12 @@ $chirs = CMbObject::massLoadFwdRef($plages, "chir_id");
 CMbObject::massLoadFwdRef($chirs, "function_id");
 
 foreach ($consultations as $key => $consult) {
+  // On ignore les consultation ayant des actes NGAP
+  if ($consult->countBackRefs("actes_ngap")) {
+    unset($consultations[$key]);
+    continue;
+  }
+
   $consult->loadExtCodesCCAM(true);
   $codes_ccam = $consult->_ext_codes_ccam;
 
