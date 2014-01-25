@@ -6,7 +6,7 @@ initUpdatePrescriptions = function() {
   url.addParam("_date_entree_prevue", "{{$date}}");
   url.addParam("_date_sortie_prevue", "{{$date}}");
   url.addParam("board" , "1");
-  url.periodicalUpdate("prescriptions_non_signees", { frequency: 120 } );
+  url.periodicalUpdate("prescriptions_non_signees", { frequency: 300 } );
 };
 
 updatePrescriptions = function() {
