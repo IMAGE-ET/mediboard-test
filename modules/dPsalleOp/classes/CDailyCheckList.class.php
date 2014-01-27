@@ -66,6 +66,11 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     "disp_vasc_avant"   => "disp-vasc",
     "disp_vasc_pendant" => "disp-vasc",
     "disp_vasc_apres"   => "disp-vasc",
+
+    // Césarienne
+    "avant_indu_cesar" => "cesarienne",
+    "cesarienne_avant" => "cesarienne",
+    "cesarienne_apres" => "cesarienne",
   );
 
   static $_HAS_classes = array(
@@ -78,6 +83,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     "endoscopie"            => "En endoscopie digestive (v. 2013-01)",
     "endoscopie-bronchique" => "En endoscopie bronchique (v. 2013)",
     "radio"                 => "En radiologie interv. (v. 2011-01)",
+    "cesarienne"            => "En césarienne (v. 2014-01)",
   );
 
   /**

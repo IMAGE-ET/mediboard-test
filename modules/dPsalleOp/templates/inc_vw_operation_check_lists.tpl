@@ -1,9 +1,9 @@
-{{* $Id$ *}}
+{{* $Id:$ *}}
 
 {{*
  * @package Mediboard
  * @subpackage dPsalleOp
- * @version $Revision$
+ * @version $Revision:$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
@@ -17,8 +17,8 @@
   {{/if}}
 {{/foreach}}
 
-<script type="text/javascript">
-var checkListTypes = ["normal", "endoscopie", "endoscopie-bronchique", "radio"];
+<script>
+var checkListTypes = ["normal", "endoscopie", "endoscopie-bronchique", "radio", "cesarienne"];
 
 function showCheckListType(element, type) {
   checkListTypes.each(function(t){
@@ -138,7 +138,28 @@ Main.add(function(){
       </h3>
     </td>
   </tr>
-  
+
+  <tr class="cesarienne" style="display: none;">
+    <td class="button" id="avant_indu_cesar-title">
+      <h3 style="margin: 2px;">
+        <img src="images/icons/{{$operation_check_lists.avant_indu_cesar->_readonly|ternary:"tick":"cross"}}.png" />
+        Avant induction anesthésique
+      </h3>
+    </td>
+    <td class="button" id="cesarienne_avant-title">
+      <h3 style="margin: 2px;">
+        <img src="images/icons/{{$operation_check_lists.cesarienne_avant->_readonly|ternary:"tick":"cross"}}.png" />
+        Avant césarienne
+      </h3>
+    </td>
+    <td class="button" id="cesarienne_apres-title">
+      <h3 style="margin: 2px;">
+        <img src="images/icons/{{$operation_check_lists.cesarienne_apres->_readonly|ternary:"tick":"cross"}}.png" />
+        Après intervention
+      </h3>
+    </td>
+  </tr>
+
   <tbody id="check-lists" style="display: none;">
     <tr class="normal" style="display: none;">
       <td style="padding:1px;">
@@ -204,7 +225,7 @@ Main.add(function(){
         </div>
       </td>
     </tr>
-    
+
     <tr class="radio" style="display: none;">
       <td style="padding:1px;">
         <div id="check_list_preanesth_radio_">
@@ -231,7 +252,34 @@ Main.add(function(){
         </div>
       </td>
     </tr>
-    
+
+    <tr class="cesarienne" style="display: none;">
+      <td style="padding:1px;">
+        <div id="check_list_avant_indu_cesar_">
+        {{assign var=check_list value=$operation_check_lists.avant_indu_cesar}}
+        {{mb_include module=salleOp template=inc_edit_check_list
+             check_item_categories=$operation_check_item_categories.avant_indu_cesar
+             personnel=$listValidateurs}}
+        </div>
+      </td>
+      <td style="padding:1px;">
+        <div id="check_list_cesarienne_avant_">
+        {{assign var=check_list value=$operation_check_lists.cesarienne_avant}}
+        {{mb_include module=salleOp template=inc_edit_check_list
+             check_item_categories=$operation_check_item_categories.cesarienne_avant
+             personnel=$listValidateurs}}
+        </div>
+      </td>
+      <td style="padding:1px;">
+        <div id="check_list_cesarienne_apres_">
+        {{assign var=check_list value=$operation_check_lists.cesarienne_apres}}
+        {{mb_include module=salleOp template=inc_edit_check_list
+             check_item_categories=$operation_check_item_categories.cesarienne_apres
+             personnel=$listValidateurs}}
+        </div>
+      </td>
+    </tr>
+
     <tr>
       <td colspan="3" class="button text">
         <hr />

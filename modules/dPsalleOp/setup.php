@@ -1333,7 +1333,112 @@ class CSetupdPsalleOp extends CSetup {
                 `type_validateur` = 'reveil'
                 WHERE `object_class` = 'CBlocOperatoire'";
     $this->addQuery($query);
+    $this->makeRevision("0.56");
 
-    $this->mod_version = "0.56";
+    $query = "ALTER TABLE `daily_check_item_category`
+                CHANGE `type` `type` ENUM ('preanesth','preop','postop','preendoscopie','postendoscopie','preendoscopie_bronchique','postendoscopie_bronchique','preanesth_radio','preop_radio','postop_radio','disp_vasc_avant','disp_vasc_pendant','disp_vasc_apres', 'avant_indu_cesar', 'cesarienne_avant', 'cesarienne_apres');";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `daily_check_list`
+                CHANGE `type` `type` ENUM ('preanesth','preop','postop','preendoscopie','postendoscopie','preendoscopie_bronchique','postendoscopie_bronchique','preanesth_radio','preop_radio','postop_radio','disp_vasc_avant','disp_vasc_pendant','disp_vasc_apres', 'avant_indu_cesar', 'cesarienne_avant', 'cesarienne_apres');";
+    $this->addQuery($query);
+
+    $check_list = array(
+      // AVANT
+      '01' => array('avant_indu_cesar', 'Identité patient',
+        array(
+          array('Identité de la patiente est correct', 'normal', 'yes'),
+        ),
+      ),
+      '02' => array('avant_indu_cesar', 'Les éléments essentiels à la prise en charge sont connus par l\'équipe',
+        array(
+          array('La localisation du placenta', 'normal', 'yes'),
+          array('La présentation de l\'enfant', 'normal', 'yes'),
+          array('Les bruits du coeur sont vérifiés', 'normal', 'yes'),
+          array('La documentation clinique et para clinique nécessaire est disponible en salle:'.
+            'Bilan sanguin, carte de groupe, ACI', 'normal', 'yes')
+        )
+      ),
+      '03' => array('avant_indu_cesar', null,
+        array(
+          array('Le pédiatre est prévenu', 'notapplicable', 'yes')
+        )
+      ),
+      '04' => array('avant_indu_cesar', null,
+        array(
+          array('La préparation cutanée de la patiente est documentée dans la fiche de liaison service / bloc opératoire (ou autre '.
+          'procédure en oeuvre dans l\'établissement)', 'notapplicable', 'yes')
+        )
+      ),
+      '05' => array('avant_indu_cesar', 'L\'équipe / matériel nécessaire pour l\'intervention est vérifié et fonctionnel:',
+        array(
+          array('Pour la partie obstétricale', 'normal', 'yes'),
+          array('Pour la partie anesthésique (mère)', 'normal', 'yes'),
+          array('Pour la partie réanimation (nouveau né)', 'normal', 'yes'),
+        )
+      ),
+      '06' => array('avant_indu_cesar', 'Vérification croisée par l\'équipe de points critiques et mise en oeuvre des mesures adéquats'
+          .'. La patiente présente-t-elle un?',
+        array(
+          array('risque alergique', 'normal', 'no'),
+          array('de la difficulté d\'intubation ou de ventilation au masque', 'normal', 'no'),
+          array('risque de saignement supérieur à 1000ml', 'normal', 'no'),
+          array('L\'administration d\'antiacide  a été effectuée', 'normal', 'yes'),
+        )
+      ),
+      '07' => array('cesarienne_avant', 'Vérification "ultime" croisée au sein de l\'équipe',
+        array(
+          array('identité patiente confirmée', 'normal', 'yes'),
+          array('installation correcte confirmée', 'normal', 'yes'),
+          array('sondage urinaire efficace', 'normal', 'yes'),
+          array('compte initial de textiles et d\'instruments confirmé', 'normal', 'yes'),
+          array('electrode de scalp otée', 'notapplicable', 'yes'),
+        )
+      ),
+      '08' => array('cesarienne_avant', null,
+        array(
+          array('Présence du pédiatre', 'notapplicable', 'yes'),
+        )
+      ),
+      '09' => array('cesarienne_avant', 'Partage des informations essentielles oralement au sein de l\'équipe sur les éléments à'.
+        ' risque / étapes critiques de l\'intervention',
+        array(
+          array('sur le plan obtétrical (temps opératoire difficile, localisation du placenta, points spécifiques de l\'intervention'.
+          ', prélèvements cordon placenta, identification des matériels nécessaires, confirmation de leur opérationnalité, etc.)',
+            'normal', 'yes'),
+          array('sur le plan anesthésique (risque potentiels liés au terrain ou à des traitements éventuellement maintenus, etc.)',
+            'normal', 'yes'),
+        )
+      ),
+      '10' => array('cesarienne_avant', null,
+        array(
+          array('La préparation du champ opératoire est réalisée selon le protocole en vigeur dans l\'établissement', 'normal', 'yes'),
+        )
+      ),
+      '11' => array('cesarienne_apres', 'Confirmation orale par le personnel auprès de l\'équipe',
+        array(
+          array('du compte final concordant des textiles, aiguilles, instruments, etc.', 'normal', 'yes'),
+          array('de l\'enregistrement des pertes sanguines totales', 'normal', 'yes'),
+          array('si des évènements indésirables ou porteurs de risques médicaux sont survenus: ont-ils fait l\'objet d\'un '.
+          'signalement / déclaration', 'notapplicable', 'yes'),
+        )
+      ),
+      '12' => array('cesarienne_apres', null,
+        array(
+          array('L\'antibioprophylaxie a été effectuée selon les recommandations et protocoles en vigueur dans l\'établissement',
+            'normal', 'yes'),
+          array('Les prescriptions pour les suites opératoires immédiates sont faites de manière conjointe entre les équipes '.
+          'obstétricale et anesthésiste', 'normal', 'yes'),
+        )
+      ),
+      '13' => array('cesarienne_apres', null,
+        array(
+          array('Le ou les nouveaux nés sont identifiés selon les protocoles en vigueur dans l\'établissement','normal', 'yes'),
+        )
+      ),
+    );
+    $this->addNewCheckList($check_list);
+
+    $this->mod_version = "0.57";
   }
 }
