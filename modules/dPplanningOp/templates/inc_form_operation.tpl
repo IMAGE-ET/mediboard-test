@@ -213,7 +213,7 @@ refreshFunction = function(chir_id) {
       </button>
       {{if @$modules.mvsante->_can->read && "mvsante"|module_active}}
         {{mb_script module="mvsante" script="libelle"}}
-        <button style="float:right;" class="edit notext" type="button" onclick="LiaisonOp.edit('{{$op->_id}}');"></button>
+        <button class="edit notext" type="button" onclick="LiaisonOp.edit('{{$op->_id}}');"></button>
       {{/if}}
       {{mb_include module=planningOp template=inc_search_protocole}}
     </td>

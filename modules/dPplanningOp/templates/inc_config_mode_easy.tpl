@@ -25,6 +25,7 @@
     {{mb_include module=system template=inc_config_bool var=easy_accident}}
     {{mb_include module=system template=inc_config_bool var=easy_assurances}}
     {{mb_include module=system template=inc_config_bool var=easy_type_anesth}}
+    {{mb_include module=system template=inc_config_str var=easy_length_input_label size=5 numeric=true spinner_min=40 spinner_max=88}}
     
     <tr>
       <td class="button" colspan="2">

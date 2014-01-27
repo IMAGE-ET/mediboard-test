@@ -18,6 +18,7 @@ $dPconfig["dPplanningOp"]= array(
     "easy_accident"      => "0",
     "easy_assurances"    => "0",
     "easy_type_anesth"   => "0",
+    "easy_length_input_label" => "50",
     "duree_deb"          => "0",
     "duree_fin"          => "10",
     "hour_urgence_deb"   => "0",
