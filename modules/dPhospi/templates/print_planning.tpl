@@ -80,7 +80,7 @@
         {{mb_include module=hospi template=inc_vw_liaisons_prestation liaisons=$curr_sejour->_liaisons_for_prestation}}
       </td>
     {{/if}}
-    <td class="text">{{$curr_sejour->rques}}</td>
+    <td class="text compact">{{$curr_sejour->rques|nl2br}}</td>
     <td class="text">
       {{foreach from=$curr_sejour->_ref_operations item=curr_operation}}
         {{$curr_operation->_datetime|date_format:"%d/%m/%Y"}}
@@ -124,7 +124,7 @@
         <br />
       {{/foreach}}
     </td>
-    <td class="text">
+    <td class="text compact">
       {{foreach from=$curr_sejour->_ref_operations item=curr_operation}}
         {{$curr_operation->rques|nl2br}}
         <br />
@@ -138,7 +138,8 @@
       </span>
     </td>
     <td class="text">
-      {{mb_value object=$patient field="naissance"}} ({{$patient->_age}})
+      {{mb_value object=$patient field="naissance"}}
+      <br />({{$patient->_age}})
     </td>
     
     {{if $filter->_coordonnees}}
@@ -155,8 +156,8 @@
     </td>
     {{/if}}
     
-    <td class="text">
-      {{$patient->rques}}
+    <td class="text compact">
+      {{$patient->rques|nl2br}}
     </td>
   </tr>
   {{/foreach}}
