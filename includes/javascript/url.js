@@ -70,6 +70,7 @@ var Url = Class.create({
     this.oWindow = null;
     this.sFragment = null;
     this.oPrefixed = {};
+    this.currentAjax = null;
 
     if (sModule && sAction) {
       switch (sMode) {
@@ -1052,6 +1053,7 @@ var Url = Class.create({
       getParameters: null,
       coverIE: true,
       onComplete: Prototype.emptyFunction,
+      abortPrevious: false,
       onFailure: function(){ element.update('<div class="error">Le serveur rencontre quelques problèmes.</div>');}
     }, oOptions);
 
@@ -1112,7 +1114,23 @@ var Url = Class.create({
     }
 
     var getParams = oOptions.getParameters ? "?" + $H(oOptions.getParameters).toQueryString() : '';
-    /*element.currentXHR = */new Ajax.Updater(element, oOptions.urlBase + "index.php" + getParams, oOptions);
+
+    // Abort previous request
+    if (oOptions.abortPrevious) {
+      var currentURL = element.retrieve("currentURL");
+      if (currentURL && currentURL.currentAjax) {
+        if (Preferences.INFOSYSTEM == 1) {
+          try {
+            console.info("Ajax aborted on '#"+targetId+"'", currentURL.currentAjax.url);
+          } catch (e) {}
+        }
+
+        currentURL.currentAjax.abort();
+      }
+    }
+
+    this.currentAjax = new Ajax.Updater(element, oOptions.urlBase + "index.php" + getParams, oOptions);
+    element.store("currentURL", this);
 
     return this;
   },
