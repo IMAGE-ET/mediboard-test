@@ -1,12 +1,12 @@
-{{* $Id$ *}}
-
 {{*
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage dPpmsi
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
+ * @author     SARL OpenXtrem
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
+ *}}
 
 {{mb_script module="dPfiles" script="files"}}
 {{mb_script module="dPpatients" script="pat_selector"}}
@@ -15,7 +15,7 @@
 {{mb_script module="hprim21" script="sejour_hprim_selector"}}
 {{mb_script module="dPplanningOp" script="cim10_selector"}}
 
-<script type="text/javascript">
+<script>
   CIM10Selector.initDP = function(sejour_id){
     this.sForm = "editDP";
     this.sView = "DP";
@@ -123,14 +123,14 @@ function reloadDiagnostic(sejour_id, modeDAS) {
   urlGHM.requestUpdate("GHM-"+sejour_id);
 }
 
-function reloadListActes(operation_id) {
+function reloadListActes(object_guid) {
   var urlActes = new Url("pmsi", "httpreq_list_actes");
-  urlActes.addParam("operation_id", operation_id);
-  urlActes.requestUpdate("modifActes-"+operation_id);
+  urlActes.addParam("object_guid", object_guid);
+  urlActes.requestUpdate("modifActes-"+object_guid);
 }
 
 function loadSejour(sejour_id) {
-	var url = new Url("pmsi", "ajax_vw_sejour");
+  var url = new Url("pmsi", "ajax_vw_sejour");
   url.addParam("sejour_id", sejour_id);
   url.requestUpdate("sejour");
 }
@@ -192,7 +192,7 @@ Main.add(function () {
               <input type="hidden" name="pat_id" value="{{$patient->patient_id}}" onchange="this.form.submit()" />
               <input type="text" readonly="readonly" name="patNom" value="{{$patient->_view}}" ondblclick="PatSelector.init()" />
               <button class="search" type="button" onclick="PatSelector.init()">Chercher</button>
-              <script type="text/javascript">
+              <script>
               PatSelector.init = function(){
                 this.sForm = "patFrm";
                 this.sId   = "pat_id";
@@ -210,7 +210,6 @@ Main.add(function () {
           </tr>
         </table>
       </form>
-
 
       {{if $patient->_id}}
       <div id="vwPatient">

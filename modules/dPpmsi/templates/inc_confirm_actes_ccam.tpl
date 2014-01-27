@@ -14,7 +14,7 @@
     <th class="category">{{mb_title class=CActeCCAM field=montant_depassement}}</th>
     <th class="category">{{mb_title class=CActeCCAM field=_rembex}}</th>
   </tr>
-  {{foreach from=$curr_op->_ref_actes_ccam item=curr_acte}}
+  {{foreach from=$objet->_ref_actes_ccam item=curr_acte}}
   <!-- Couleur de l'acte -->
   {{if $curr_acte->code_association == $curr_acte->_guess_association}}
     {{assign var=bg_color value=9f9}}
@@ -43,7 +43,7 @@
     <td class="button">{{mb_value object=$curr_acte field=code_phase}}</td>
     <td class="button">{{mb_value object=$curr_acte field=modificateurs}}</td>
     <td class="button" style="background-color: #{{$bg_color}};">
-      <form name="formAssoActe-{{$curr_acte->_id}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: function() {reloadListActes({{$curr_op->_id}});} })">
+      <form name="formAssoActe-{{$curr_acte->_id}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: function() {reloadListActes({{$objet->_guid}});} })">
       <input type="hidden" name="m" value="dPsalleOp" />
       <input type="hidden" name="dosql" value="do_acteccam_aed" />
       <input type="hidden" name="del" value="0" />
@@ -99,7 +99,7 @@
     <th class="category">{{mb_title class=CActeNGAP field=montant_base}}</th>
     <th class="category">{{mb_title class=CActeNGAP field=montant_depassement}}</th>
   </tr>
-  {{foreach from=$curr_op->_ref_actes_ngap item=acte_ngap}}
+  {{foreach from=$objet->_ref_actes_ngap item=acte_ngap}}
     <tr>
       <td class="button">
         <form name="deleteActe-{{$acte_ngap->_id}}" action="?m={{$m}}" method="post">

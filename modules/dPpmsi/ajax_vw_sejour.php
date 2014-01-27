@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage PMSI
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
@@ -36,11 +36,27 @@ $dossier_medical->loadRefsAntecedents();
 $dossier_medical->loadRefsTraitements();
 $sejour->loadRefsAffectations();
 $sejour->loadExtDiagnostics();
-$sejour->loadRefs();
 $sejour->countExchanges();
 $sejour->loadRefGHM();
 $sejour->loadNDA();
+$sejour->loadRefsConsultations();
+$sejour->loadRefsActes();
 $sejour->canDo();
+
+foreach ($sejour->_ref_consultations as $consult) {
+  $consult->loadRefPlageConsult();
+  $consult->loadExtCodesCCAM();
+  $consult->loadRefsActes();
+  $consult->loadRefConsultAnesth();
+  $consult->loadRefPatient()->loadRefConstantesMedicales();
+  foreach ($consult->_ref_actes as $_acte) {
+    $_acte->loadRefExecutant();
+  }
+}
+
+foreach ($sejour->_ref_actes as $_acte) {
+  $_acte->loadRefExecutant();
+}
 foreach ($sejour->_ref_operations as $_operation) {
   $_operation->loadRefsFwd();
   $_operation->countExchanges();
@@ -48,12 +64,12 @@ foreach ($sejour->_ref_operations as $_operation) {
   $_operation->loadRefsActes();
   $_operation->canDo();
   foreach ($_operation->_ref_actes_ccam as $_acte) {
-    $_acte->loadRefsFwd();
+    $_acte->loadRefExecutant();
+    $_acte->loadRefCodeCCAM();
     $_acte->guessAssociation();
   }
   if ($_operation->plageop_id) {
-    $plage = $_operation->_ref_plageop;
-    $plage->loadRefsFwd();
+    $_operation->_ref_plageop->loadRefsFwd();
   }
   
   $consult_anest = $_operation->_ref_consult_anesth;
@@ -72,7 +88,7 @@ $smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));
 $smarty->assign("canCabinet"   , CModule::getCanDo("dPcabinet"));
 
 $smarty->assign("hprim21installed", CModule::getActive("hprim21"));
-$smarty->assign("sejour" , $sejour );
+$smarty->assign("sejour"  , $sejour );
 $smarty->assign("listPrat", $listPrat);
 
 $smarty->display("inc_vw_sejour.tpl");

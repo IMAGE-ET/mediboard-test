@@ -10,20 +10,23 @@
  */
 
 CCanDo::checkEdit();
-
 $operation_id = CValue::getOrSession("operation_id", 0);
+
 if (!$operation_id) {
   CAppUI::setMsg("Vous devez selectionner une intervention", UI_MSG_ERROR);
   CAppUI::redirect("m=dPpmsi&tab=vw_dossier");
 }
 
-$selOp = new COperation;
+$selOp = new COperation();
 $selOp->load($operation_id);
-$selOp->loadRefs();
+$selOp->loadRefSejour();
+$selOp->loadRefsActes();
+$selOp->loadExtCodesCCAM();
 $selOp->countExchanges();
 $selOp->isCoded();
 $selOp->canDo();
 $selOp->_ref_sejour->loadRefsFwd();
+
 foreach ($selOp->_ext_codes_ccam as $key => $value) {
   $selOp->_ext_codes_ccam[$key] = CCodeCCAM::get($value->code, CCodeCCAM::FULL);
 }
