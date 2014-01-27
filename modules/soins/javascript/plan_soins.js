@@ -370,12 +370,17 @@ PlanSoins = {
         }
         var chap = $(chapitre);
         if (chap) {
-          url.requestUpdate(chapitre, { onComplete: function() { PlanSoins.moveDossierSoin(chap, false); } } );
+          url.requestUpdate(chapitre, {
+            onComplete: function() { PlanSoins.moveDossierSoin(chap, false); },
+            abortPrevious: true
+          } );
         }
         
       }
       else {
-        url.requestUpdate("dossier_traitement");
+        url.requestUpdate("dossier_traitement", {
+          abortPrevious: true
+        });
       }
     }
   },
