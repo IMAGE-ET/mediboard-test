@@ -212,10 +212,11 @@ class CSOAPClient {
       if (CAppUI::conf("webservices trace")) {
         $client->getTrace($echange_soap);
       }
-      
+      $chrono->stop();
       $echange_soap->date_echange = CMbDT::dateTime();
       $echange_soap->output       = $fault->faultstring;
       $echange_soap->soapfault    = 1;
+      $echange_soap->response_time = $chrono->total;
       $echange_soap->store();
       
       CApp::$chrono->start();
