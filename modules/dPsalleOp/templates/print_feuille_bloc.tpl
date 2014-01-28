@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-
+<script>
 Main.add(function(){
   var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
   url.addParam("patient_id", {{$operation->_ref_sejour->patient_id}});
@@ -24,7 +23,6 @@ Main.add(function(){
     ExObject.loadExObjects("{{$operation->_class}}", "{{$operation->_id}}", "ex_objects_list", 3, null, {print: 1});
   {{/if}}
 });
-
 </script>
 
 {{assign var=sejour value=$operation->_ref_sejour}}
@@ -160,6 +158,26 @@ Main.add(function(){
               {{mb_value object=$operation field=rques}}
             {{else}}
             &mdash;
+            {{/if}}
+          </td>
+        </tr>
+        <tr>
+          <th>{{mb_title object=$operation field=anapath}}</th>
+          <td class="text">
+            {{if $operation->anapath}}
+              {{if $operation->flacons_anapath}}{{mb_value object=$operation field=flacons_anapath}} flacons<br/>{{/if}}
+              {{if $operation->labo_anapath}}{{mb_value object=$operation field=labo_anapath}}<br/>{{/if}}
+              {{if $operation->description_anapath}}{{mb_value object=$operation field=description_anapath}}{{/if}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr>
+          <th>{{mb_title object=$operation field=labo}}</th>
+          <td class="text">
+            {{if $operation->labo}}
+              {{if $operation->flacons_bacterio}}{{mb_value object=$operation field=flacons_bacterio}} flacons<br/>{{/if}}
+              {{if $operation->labo_bacterio}}{{mb_value object=$operation field=labo_bacterio}}<br/>{{/if}}
+              {{if $operation->description_bacterio}}{{mb_value object=$operation field=description_bacterio}}{{/if}}
             {{/if}}
           </td>
         </tr>
