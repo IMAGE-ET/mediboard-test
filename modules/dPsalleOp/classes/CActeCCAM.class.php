@@ -256,10 +256,10 @@ class CActeCCAM extends CActe {
       if (count($details) > 6) {
         $this->rembourse = $details[6];
       }
-      
-      // Remboursement
-      if (count($details) > 6) {
-        $this->charges_sup = $details[6];
+
+      // Charges sup
+      if (count($details) > 7) {
+        $this->charges_sup = $details[7];
       }
       
       $this->updateFormFields();
