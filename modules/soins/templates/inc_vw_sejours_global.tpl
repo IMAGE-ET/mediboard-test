@@ -44,6 +44,7 @@
         {{foreach from=$services item=_service}}
           <option value="{{$_service->_id}}" {{if $_service->_id == $service_id}}selected{{/if}}>{{$_service->_view}}</option>
         {{/foreach}}
+        <option value="NP" {{if $service_id == "NP"}}selected{{/if}}>Non placés</option>
       </select>
 
       <select name="praticien_id" style="width: 200px;" onchange="this.form.service_id.value = ''; this.form.function_id.value = ''; this.form.submit();">
