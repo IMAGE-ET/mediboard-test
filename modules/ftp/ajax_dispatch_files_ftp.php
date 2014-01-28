@@ -88,6 +88,9 @@ foreach ($files as $_filepath) {
     catch (Exception $e) {
       if ($sender->_delete_file !== false) {
         $source->delFile($_filepath);
+        if ($fileextension_write_end) {
+          $source->delFile("$_filepath_no_ext.$fileextension_write_end");
+        }
       }
       else {
         CAppUI::stepAjax("CEAIDispatcher-error_deleting_file", UI_MSG_WARNING);
@@ -105,6 +108,9 @@ foreach ($files as $_filepath) {
     if ($sender->_delete_file !== false) {
       if ($acq) {
         $source->delFile($_filepath);
+        if ($fileextension_write_end) {
+          $source->delFile("$_filepath_no_ext.$fileextension_write_end");
+        }
       }
       else {
         $source->renameFile($_filepath, str_replace("checkedout", "read", $_filepath));
