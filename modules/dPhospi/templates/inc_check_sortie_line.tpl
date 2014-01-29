@@ -125,7 +125,8 @@
           {{mb_field object=$sejour field=sortie_prevue register=true form="editSortiePrevue-`$type`-`$aff_guid`" onchange="this.form.onsubmit()"}}
           {{if $conf.dPplanningOp.CSejour.use_custom_mode_sortie && $list_mode_sortie|@count}}
             {{mb_field object=$sejour field=mode_sortie onchange="\$V(this.form._modifier_sortie, 0); if (\$V(this) == 'deces') { showDateDeces('`$sejour->_id`'); } else { this.form.onsubmit(); }" hidden=true}}
-            <select name="mode_sortie_id" class="{{$sejour->_props.mode_sortie_id}}" onchange="updateModeSortie(this)">
+            <select name="mode_sortie_id" class="{{$sejour->_props.mode_sortie_id}}" style="width: 15em" onchange="updateModeSortie(this)">
+              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
               {{foreach from=$list_mode_sortie item=_mode}}
                 <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $sejour->mode_sortie_id == $_mode->_id}}selected{{/if}}>
                   {{$_mode}}
