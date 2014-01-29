@@ -31,4 +31,5 @@ CPreferences::$modules["dPcompteRendu"] = array(
   "auto_capitalize",
   "auto_replacehelper",
   "pass_lock",
+  'hprim_med_header',
 );

@@ -952,6 +952,10 @@ class CSetupdPcompteRendu extends CSetup {
     $this->makeRevision("0.96");
     $this->addPrefQuery("pass_lock", 0);
 
-    $this->mod_version = "0.97";
+    $this->makeRevision('0.97');
+
+    $this->addPrefQuery('hprim_med_header', 0);
+
+    $this->mod_version = '0.98';
   }
 }

@@ -25,10 +25,15 @@ $exchange_source = CExchangeSource::get("mediuser-" . CAppUI::$user->_id, "smtp"
 
 $exchange_source->init();
 
+$body = '';
+if (CAppUI::pref('hprim_med_header')) {
+  $body .= $object->makeHprimHeader($exchange_source->email, $email);
+}
+$body .= 'Ce document vous a été envoyé via l\'application Mediboard.';
 try {
   $exchange_source->setRecipient($email, $nom);
   $exchange_source->setSubject($subject);
-  $exchange_source->setBody("Ce document vous a été envoyé via l'application Mediboard.");
+  $exchange_source->setBody($body);
 
   switch ($object->_class) {
     case "CCompteRendu":

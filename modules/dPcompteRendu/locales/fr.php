@@ -703,3 +703,5 @@ $locales['pref-saveOnPrint-0'] = 'Non';
 $locales['pref-saveOnPrint-1'] = 'Oui';
 $locales['pref-saveOnPrint-2'] = 'Oui, sans confirmation';
 $locales['pref-saveOnPrint-desc'] = 'demande de sauvegarde lors de l\'impression';
+$locales['pref-hprim_med_header'] = 'En-tête HPrim lors de l\'envoi de documents par mail';
+$locales['pref-hprim_med_header-desc'] = 'Ajoute une en-tête en HPrim médecin dans les mails envoyés depuis Mediboard';
