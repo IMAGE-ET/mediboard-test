@@ -45,7 +45,14 @@ $_sejour  = new CSejour();
 foreach ($sejours as $_sejour) {
   if ($module == "dPurgences") {
     // Look for multiple RPU
-    $_sejour->loadBackRefs("rpu");
+    // Simulate loading as for now loading RPU are outrageously resource consuming
+    // @todo use loadBackRef() as soon as CRPU.updateFormFields() get sanitized
+    foreach ($_sejour->loadBackIds("rpu") as $_rpu_id) {
+      $rpu = new CRPU();
+      $rpu->_id = $_rpu_id;
+      $_sejour->_back["rpu"][$rpu->_id] = $rpu;
+
+    }
   }
   
   // Chargement du numero de dossier
