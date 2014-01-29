@@ -45,7 +45,7 @@ class CModeSortieSejour extends CMbObject {
 
     $props["group_id"] = "ref notNull class|CGroups";
     $props["libelle"]  = "str";
-    $props["actif"]    = "bool default|0";
+    $props["actif"]    = "bool default|1";
 
     return $props;
   }

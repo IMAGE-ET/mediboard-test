@@ -24,15 +24,6 @@ $where = array("entree" => ">= '$today 00:00:00'",
 $sejour = new CSejour();
 $nb_sejours = $sejour->countList($where);
 
-$cpi = new CChargePriceIndicator;
-$list_cpi = $cpi->loadGroupList();
-
-$mode_entree = new CModeEntreeSejour();
-$list_modes_entree = $mode_entree->loadGroupList();
-
-$mode_sortie = new CModeSortieSejour();
-$list_modes_sortie = $mode_sortie->loadGroupList();
-
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -42,9 +33,6 @@ $smarty->assign("today"      , $today);
 $smarty->assign("nb_sejours" , $nb_sejours);
 $smarty->assign("intervals"  , $intervals);
 $smarty->assign("patient_ids", $patient_ids);
-$smarty->assign("list_cpi", $list_cpi);
-$smarty->assign("list_modes_entree", $list_modes_entree);
-$smarty->assign("list_modes_sortie", $list_modes_sortie);
 $smarty->assign("group"            , $group);
 
 $smarty->display("configure.tpl");

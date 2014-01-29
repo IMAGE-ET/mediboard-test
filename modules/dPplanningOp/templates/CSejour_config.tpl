@@ -58,38 +58,10 @@
     </tr>
     <tr>
       <td colspan="2">
-        <script type="text/javascript">
-          Main.add(function(){
-            Control.Tabs.create("custom-cpi-mode-entre-sortie");
-          });
-        </script>
-        <ul class="control_tabs" id="custom-cpi-mode-entre-sortie">
-          <li><a href="#tab-CChargePriceIndicator">{{tr}}CChargePriceIndicator{{/tr}}</a></li>
-          <li><a href="#tab-CModeEntreeSejour">{{tr}}CModeEntreeSejour{{/tr}}</a></li>
-          <li><a href="#tab-CModeSortieSejour">{{tr}}CModeSortieSejour{{/tr}}</a></li>
-        </ul>
-
-        <div id="tab-CChargePriceIndicator" style="display: none;">
-          <table class="main form">
-            {{mb_include module=system template=inc_config_bool class=CSejour var=use_charge_price_indicator}}
-            {{mb_include module=system template=inc_config_bool class=CSejour var=show_only_charge_price_indicator}}
-          </table>
-          {{mb_include template=CChargePriceIndicator_config}}
-        </div>
-
-        <div id="tab-CModeEntreeSejour" style="display: none;">
-          <table class="main form">
-            {{mb_include module=system template=inc_config_bool class=CSejour var=use_custom_mode_entree}}
-          </table>
-          {{mb_include template=CModeEntreeSejour_config list_modes=$list_modes_entree}}
-        </div>
-
-        <div id="tab-CModeSortieSejour" style="display: none;">
-          <table class="main form">
-            {{mb_include module=system template=inc_config_bool class=CSejour var=use_custom_mode_sortie}}
-          </table>
-          {{mb_include template=CModeSortieSejour_config list_modes=$list_modes_sortie}}
-        </div>
+        {{mb_include module=system template=inc_config_bool class=CSejour var=use_charge_price_indicator}}
+        {{mb_include module=system template=inc_config_bool class=CSejour var=show_only_charge_price_indicator}}
+        {{mb_include module=system template=inc_config_bool class=CSejour var=use_custom_mode_entree}}
+        {{mb_include module=system template=inc_config_bool class=CSejour var=use_custom_mode_sortie}}
       </td>
     </tr>
 

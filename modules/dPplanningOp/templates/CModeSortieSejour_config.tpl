@@ -1,1 +1,0 @@
-{{mb_include module=planningOp template=CModeEntreeSejour_config mode_class=CModeSortieSejour}}

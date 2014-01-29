@@ -23,13 +23,20 @@ editModeEntreeSortie = function(mode_class, mode_id) {
   {{foreach from=$list_modes item=_mode}}
     <tr>
       <td>
-        <a href="#1" onclick="return editModeEntreeSortie('{{$mode_class}}', {{$_mode->_id}})">{{mb_value object=$_mode field=code}}</a>
+        <button type="button" class="edit notext" onclick="return editModeEntreeSortie('{{$mode_class}}', {{$_mode->_id}})">
+          {{tr}}Edit{{/tr}}
+        </button>
+        {{mb_value object=$_mode field=code}}
       </td>
-      <td>
-        <a href="#1" onclick="return editModeEntreeSortie('{{$mode_class}}', {{$_mode->_id}})">{{mb_value object=$_mode field=libelle}}</a>
-      </td>
+      <td>{{mb_value object=$_mode field=libelle}}</td>
       <td>{{mb_value object=$_mode field=mode}}</td>
-      <td>{{mb_value object=$_mode field=actif}}</td>
+      <td>
+        <form name="editActif{{$_mode->_guid}}"  method="post" onsubmit="return onSubmitFormAjax(this)">
+          {{mb_key object=$_mode}}
+          {{mb_class object=$_mode}}
+          {{mb_field object=$_mode field="actif" onchange=this.form.onsubmit()}}
+        </form>
+      </td>
     </tr>
   {{/foreach}}
 </table>

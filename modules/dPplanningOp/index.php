@@ -45,3 +45,5 @@ $module->registerTab("vw_sectorisations" , TAB_ADMIN);
 if (($user->isPraticien() || $user->isFromType(array("Administrator"))) && CAppUI::conf("dPsalleOp CActeCCAM tarif")) {
   $module->registerTab("vw_edit_compta", TAB_EDIT);
 }
+
+$module->registerTab("vw_parametrage", TAB_ADMIN);

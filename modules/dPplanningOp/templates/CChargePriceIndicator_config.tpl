@@ -21,14 +21,21 @@ editCharge = function(charge_id) {
   {{foreach from=$list_cpi item=_cpi}}
     <tr>
       <td>
-        <a href="#1" onclick="return editCharge({{$_cpi->_id}})">{{mb_value object=$_cpi field=code}}</a>
+        <button type="button" class="edit notext" onclick="return editCharge({{$_cpi->_id}})">
+          {{tr}}Edit{{/tr}}
+        </button>
+        {{mb_value object=$_cpi field=code}}
       </td>
-      <td>
-        <a href="#1" onclick="return editCharge({{$_cpi->_id}})">{{mb_value object=$_cpi field=libelle}}</a>
-      </td>
+      <td>{{mb_value object=$_cpi field=libelle}}</td>
       <td>{{mb_value object=$_cpi field=type}}</td>
       <td>{{mb_value object=$_cpi field=type_pec}}</td>
-      <td>{{mb_value object=$_cpi field=actif}}</td>
+      <td>
+        <form name="editActif{{$_cpi->_guid}}"  method="post" onsubmit="return onSubmitFormAjax(this)">
+          {{mb_key object=$_cpi}}
+          {{mb_class object=$_cpi}}
+          {{mb_field object=$_cpi field="actif" onchange=this.form.onsubmit()}}
+        </form>
+      </td>
     </tr>
   {{/foreach}}
 </table>
