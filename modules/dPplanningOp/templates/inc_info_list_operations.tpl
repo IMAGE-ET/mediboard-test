@@ -6,7 +6,10 @@
   <td>
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}
   </td>
-  <td>{{$_operation->_datetime|date_format:$conf.date}} 
+  <td>{{$_operation->_datetime|date_format:$conf.date}}
+  {{if $_operation->_datetime|date_format:$conf.time != "00h00"}}
+    {{$_operation->_datetime|date_format:$conf.time}}
+  {{/if}}
   {{if $_operation->annulee}}
   <th class="category cancelled">
     <strong onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}');">{{tr}}COperation-annulee{{/tr}}</strong>
