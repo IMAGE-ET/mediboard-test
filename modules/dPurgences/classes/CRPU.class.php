@@ -188,6 +188,18 @@ class CRPU extends CMbObject {
     $props["_can_leave_since"]         = "bool";
     $props["_can_leave_level"]         = "enum list|ok|warning|error";
 
+    $props["urprov"] = "";
+    $props["urmuta"] = "";
+    $props["urtrau"] = "";
+
+    // Legacy Sherpa fields
+    if (CModule::getActive("sherpa")) {
+      $urgDro = new CSpUrgDro();
+      $props["urprov"] = $urgDro->_props["urprov"] . " notNull";
+      $props["urmuta"] = $urgDro->_props["urmuta"];
+      $props["urtrau"] = $urgDro->_props["urtrau"];
+    }
+
     return $props;
   }
 
