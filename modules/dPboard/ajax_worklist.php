@@ -20,6 +20,12 @@ $date      = CValue::getOrSession("date", CMbDT::date());
 // Création du template
 $smarty = new CSmartyDP();
 
+$account = new CSourcePOP();
+$account->object_class = "CMediusers";
+$account->object_id = $chirSel;
+$account->loadMatchingObject();
+
+$smarty->assign("account", $account);
 $smarty->assign("date"   , $date);
 $smarty->assign("chirSel", $chirSel);
 

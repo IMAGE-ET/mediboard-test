@@ -23,6 +23,10 @@
   {{mb_script module="medicament" script="equivalent_selector"}}
 {{/if}}
 
+{{if "messagerie"|module_active}}
+  {{mb_script module="messagerie" script="UserEmail"}}
+{{/if}}
+
 <script type="text/javascript">
 
 Consultation.useModal();
