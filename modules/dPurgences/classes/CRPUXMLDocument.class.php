@@ -155,9 +155,45 @@ class CRPUXMLDocument extends CMbXMLDocument {
       $this->addElement($elParent, "SORTIE", CMbDT::transform($sortie, null, "%d/%m/%Y %H:%M"));
     }
 
-    $this->addElement($elParent, "MODE_SORTIE", $mbObject->_mode_sortie);
-    $this->addElement($elParent, "DESTINATION", $sejour->destination);
-    $this->addElement($elParent, "ORIENT", strtoupper($mbObject->orientation));
+    if (CModule::getActive("cerveau")) {
+      // on recherche la première affectation vers UHCD
+      $affectation = new CAffectation();
+      $ljoin["service"] = "`service`.`service_id` = `affectation`.`service_id`";
+      $where = array();
+      $where["sejour_id"]         = " = '$sejour->_id'";
+      $where["service.cancelled"] = " = '0'";
+      $where["service.uhcd"]      = " = '1'";
+
+      $affectation->loadObject($where, "entree ASC", null, $ljoin);
+
+      if (!$affectation->_id) {
+        $mode_sortie = $mbObject->_mode_sortie;
+        $destination = $sejour->destination;
+        $orientation = $mbObject->orientation;
+      }
+      else {
+        // Dans le cas où l'on a eu une mutation les données du RPU concerne la mut. UHCD
+        $mode_sortie = "6";
+        $destination = "1";
+        $orientation = "UHCD";
+      }
+
+      $this->addElement($elParent, "MODE_SORTIE", $mode_sortie);
+      $this->addElement($elParent, "DESTINATION", $destination);
+      $this->addElement($elParent, "ORIENT"     , strtoupper($orientation));
+
+      if ($affectation->_id) {
+        $this->addElement($elParent, "ENTREE_UHCD"     , $affectation->entree);
+        $this->addElement($elParent, "MODE_SORTIE_UHCD", $mbObject->_mode_sortie);
+        $this->addElement($elParent, "DESTINATION_UHCD", $sejour->destination);
+        $this->addElement($elParent, "ORIENT_UHCD"     , strtoupper($mbObject->orientation));
+      }
+    }
+    else {
+      $this->addElement($elParent, "MODE_SORTIE", $mbObject->_mode_sortie);
+      $this->addElement($elParent, "DESTINATION", $sejour->destination);
+      $this->addElement($elParent, "ORIENT", strtoupper($mbObject->orientation));
+    }
   }
   
   function addDiagAssocie($elParent, $elValue) {
