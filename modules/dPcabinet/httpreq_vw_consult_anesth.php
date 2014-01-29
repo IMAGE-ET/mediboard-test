@@ -73,7 +73,7 @@ if ($selConsult) {
       $_operation->loadRefsConsultAnesth();
       $_operation->loadRefPlageOp(true);
       $_operation->loadRefChir(true);
-      if (!$_operation->_ref_consult_anesth->_id) {
+      if (!$_operation->_ref_consult_anesth->_id && $_sejour->entree_prevue > $consult->_ref_plageconsult->date) {
         $op_sans_dossier_anesth = $_operation->_id;
       }
     }
