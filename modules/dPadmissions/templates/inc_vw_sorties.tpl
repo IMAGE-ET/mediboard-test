@@ -136,7 +136,8 @@
           <div style="white-space: nowrap;">
             {{if $conf.dPplanningOp.CSejour.use_custom_mode_sortie && $list_mode_sortie|@count}}
               {{mb_field object=$_sejour field=mode_sortie onchange="\$V(this.form._modifier_sortie, 0); submitSortie(this.form);" hidden=true}}
-              <select name="mode_sortie_id" class="{{$_sejour->_props.mode_sortie_id}}" onchange="updateModeSortie(this)">
+              <select name="mode_sortie_id" class="{{$_sejour->_props.mode_sortie_id}}" style="width: 15em" onchange="updateModeSortie(this)">
+                <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
                 {{foreach from=$list_mode_sortie item=_mode}}
                   <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $_sejour->mode_sortie_id == $_mode->_id}}selected{{/if}}>
                     {{$_mode}}

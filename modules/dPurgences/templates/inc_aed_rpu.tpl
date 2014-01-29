@@ -74,7 +74,8 @@
       <td>
         {{if $conf.dPplanningOp.CSejour.use_custom_mode_entree && $list_mode_entree|@count}}
           {{mb_field object=$sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 0); ContraintesRPU.updateProvenance(this.value, true); changeModeEntree(this.value)" hidden=true}}
-          <select name="mode_entree_id" class="{{$sejour->_props.mode_entree_id}}" onchange="updateModeEntree(this)">
+          <select name="mode_entree_id" class="{{$sejour->_props.mode_entree_id}}" style="width: 32em;" onchange="updateModeEntree(this)">
+            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
             {{foreach from=$list_mode_entree item=_mode}}
               <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $sejour->mode_entree_id == $_mode->_id}}selected{{/if}}>
                 {{$_mode}}
