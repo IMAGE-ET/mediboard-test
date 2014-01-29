@@ -517,7 +517,7 @@ class CUserMail extends CMbObject{
       return false;
     }
 
-    if (stripos($this->_text_plain->content, "****FIN****") !== false) {
+    if (stripos($this->_text_plain->content, "**FIN**") !== false) {
       $this->_is_apicrypt = true;
     }
     return $this->_is_apicrypt;

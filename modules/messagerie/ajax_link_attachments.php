@@ -20,9 +20,11 @@ $dossier = new CSejour();
 $mail= new CUserMail();
 $mail->load($mail_id);
 $mail->loadContentPlain();
+$mail->checkHprim();
+$mail->checkApicrypt();
 
 //apicrypt case
-if ((stripos($mail->_text_plain->content, "[apicrypt]") !== false) || (stripos($mail->_text_plain->content, "*FIN*") !== false)) {
+if ($mail->_is_apicrypt || $mail->_is_hprim) {
   $lines = explode("\n", $mail->_text_plain->content);
   $fl = ($lines[0] != "[apicrypt]") ? 0 : 1;  //first line
 
