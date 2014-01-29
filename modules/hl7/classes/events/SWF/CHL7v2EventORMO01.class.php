@@ -31,7 +31,18 @@ class CHL7v2EventORMO01 extends CHL7v2EventORM implements CHL7EventORMO01 {
    */
   function build($object) {
     parent::build($object);
+    /** @var CPrescriptionLineElement $object */
+    $prescription = $object->loadRefPrescription();
+    $sejour = $prescription->loadRefObject();
 
-
+    /** @var CSejour $sejour */
+    $patient = $sejour->loadRefPatient();
+    $this->addPID($patient, $sejour);
+    $this->addPV1($sejour);
+    $this->addORC($object);
+    $this->addOBR($object);
+    //@todo a voir
+    $this->addZDS();
+    //@todo voir ZFU
   }
 }

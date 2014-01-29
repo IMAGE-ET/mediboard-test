@@ -64,7 +64,7 @@ class CExchangeHL7v2 extends CExchangeTabular {
     $props["sender_class"]  = "enum list|CSenderFTP|CSenderSOAP|CSenderMLLP|CSenderFileSystem show|0";
     
     $props["receiver_id"]   = "ref class|CReceiverHL7v2";
-    $props["object_class"]  = "enum list|CPatient|CSejour|COperation|CAffectation|COperation|CConsultation show|0";
+    $props["object_class"]  = "enum list|CPatient|CSejour|COperation|CAffectation|COperation|CConsultation|CPrescriptionLineElement show|0";
     $props["code"]          = "str";
     
     $props["_message"]      = "er7";

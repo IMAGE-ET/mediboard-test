@@ -26,6 +26,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   // Version
   public $ITI30_HL7_version;
   public $ITI31_HL7_version;
+  public $RAD3_HL7_version;
   public $RAD48_HL7_version;
   public $ITI21_HL7_version;
   public $ITI22_HL7_version;
@@ -102,6 +103,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       "ITI31_HL7_version",
 
       // SWF
+      "RAD3_HL7_version",
       "RAD48_HL7_version",
 
       // PDQ
@@ -202,6 +204,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     // Version
     $props["ITI30_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5|FR_2.1|FR_2.2|FR_2.3 default|2.5";
     $props["ITI31_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5|FR_2.1|FR_2.2|FR_2.3 default|2.5";
+    $props["RAD3_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5 default|2.5";
     $props["RAD48_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5 default|2.5";
     $props["ITI21_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5 default|2.5";
     $props["ITI22_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5 default|2.5";

@@ -62,4 +62,76 @@ class CHL7v2EventORM extends CHL7v2Event implements CHL7EventORM {
     $MSH = CHL7v2Segment::create("MSH", $this->message);
     $MSH->build($this);
   }
+
+  /**
+   * Represents an HL7 PID message segment (Patient Identification)
+   *
+   * @param CPatient $patient Patient
+   * @param CSejour  $sejour  Admit
+   *
+   * @return void
+   */
+  function addPID(CPatient $patient, CSejour $sejour = null) {
+    $segment_name = $this->_is_i18n ? "PID_FR" : "PID";
+    $PID = CHL7v2Segment::create($segment_name, $this->message);
+    $PID->patient = $patient;
+    $PID->sejour = $sejour;
+    $PID->set_id  = 1;
+    $PID->build($this);
+  }
+
+  /**
+   * Represents an HL7 PV1 message segment (Patient Visit)
+   *
+   * @param CSejour $sejour Admit
+   * @param int     $set_id Set ID
+   *
+   * @return void
+   */
+  function addPV1(CSejour $sejour = null, $set_id = 1) {
+    $segment_name = $this->_is_i18n ? "PV1_FR" : "PV1";
+    $PV1          = CHL7v2Segment::create($segment_name, $this->message);
+    $PV1->sejour  = $sejour;
+    $PV1->set_id  = $set_id;
+    if ($sejour) {
+      $PV1->curr_affectation = $sejour->_ref_hl7_affectation;
+    }
+    $PV1->build($this);
+  }
+
+  /**
+   * Represents an HL7 ORC message segment (Common order)
+   *
+   * @param CMbObject $object object
+   *
+   * @return void
+   */
+  function addORC($object) {
+    $ORC = CHL7v2Segment::create("ORC", $this->message);
+    $ORC->object = $object;
+    $ORC->build($this);
+  }
+
+  /**
+   * Represents an HL7 OBR message segment (Observation Request)
+   *
+   * @param CMbObject $object object
+   *
+   * @return void
+   */
+  function addOBR($object) {
+    $OBR = CHL7v2Segment::create("OBR", $this->message);
+    $OBR->object = $object;
+    $OBR->build($this);
+  }
+
+  /**
+   * Represents an HL7 ZDS message segment ()
+   *
+   * @return void
+   */
+  function addZDS() {
+    $ZDS = CHL7v2Segment::create("ZDS", $this->message);
+    $ZDS->build($this);
+  }
 }

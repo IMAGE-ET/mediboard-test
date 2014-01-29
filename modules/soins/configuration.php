@@ -15,6 +15,9 @@ CConfiguration::register(
   array(
     "CGroups" => array(
       "soins" => array(
+        "bon_radio" => array(
+          "manage_orm" => "bool default|0",
+        ),
         "bilan"=> array(
           "hour_before" => "num min|0 default|12",
           "hour_after"  => "num min|0 default|24"
