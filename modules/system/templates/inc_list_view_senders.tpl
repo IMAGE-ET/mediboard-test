@@ -35,7 +35,7 @@
 
   {{foreach from=$senders item=_sender name=senders}}
     {{assign var=senders_source value=$_sender->_ref_senders_source}}
-    <tr>
+    <tr {{if !$_sender->active}} class="hatching" {{/if}}>
       <td class="narrow">
         <button class="edit notext" onclick="ViewSender.edit('{{$_sender->_id}}');">
           {{tr}}Edit{{/tr}}
