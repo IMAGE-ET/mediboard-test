@@ -22,10 +22,10 @@ updateMessagerie = function() {
   var url = new Url("messagerie", "ajax_list_mails");
   url.addParam('account_id', "{{$account->_id}}");
   url.addParam('mode', 'all');
-  url.requestUpdate("messagerie", {
+  url.periodicalUpdate("messagerie", {
+    frequency : 300,
     method: "get",
     onComplete: function() {
-      console.log($$('#messagerie tr').length);
       if ($$('#messagerie tr').length <= 2) {
         $('tab_messagerie').addClassName('empty');
       }
