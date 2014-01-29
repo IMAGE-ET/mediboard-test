@@ -19,4 +19,9 @@ if ($mail->_id) {
   $mail->checkInlineAttachments();  //inline attachment
 }
 
-echo $mail->_text_html->content;
+if (strpos($mail->_text_html->content, '<') === false) {
+  echo nl2br($mail->_text_html->content);
+}
+else {
+  echo $mail->_text_html->content;
+}
