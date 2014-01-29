@@ -32,7 +32,7 @@
       </div>
       {{if $bloc->_canEdit}}
       <strong title="{{$plage->_fill_rate}} % du temps occupé">
-      <a onclick="EditPlanning.order('{{$plage->_id}}');" href="#" title="Agencer les interventions">
+      <a onclick="EditPlanning.order('{{$plage->_id}}');" href="#">
         {{$plage->_view}}
       </a>
       ({{$plage->_nb_operations_placees}}/{{$plage->_nb_operations}})
@@ -46,7 +46,7 @@
       {{assign var=affectations value=$plage->_ref_affectations_personnel}}
 
       {{if ($affectations.op|@count) || ($affectations.op_panseuse|@count) || ($affectations.iade|@count) || ($affectations.manipulateur|@count) || ($affectations.sagefemme|@count)}}
-        <a onclick="EditPlanning.order('{{$plage->_id}}');" href="#" title="Agencer les interventions">
+        <a onclick="EditPlanning.order('{{$plage->_id}}');" href="#">
         <img src="images/icons/personnel.png" border="0" height="16" width="16" 
              onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-plage-{{$plage->_id}}")' />
          {{mb_include module=system template=inc_vw_counter_tip count=$plage->_count_affectations_personnel}}

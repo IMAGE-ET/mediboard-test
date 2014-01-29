@@ -75,8 +75,7 @@
   });
 </script>
 
-
-<table class="main">
+<table class="main not-printable">
   <tr>
     <td>
       <button id="autorefreshSuiviSalleButton" style="float: left;" class="play" onclick="togglePlayPause(this);">Rech. Auto</button>
