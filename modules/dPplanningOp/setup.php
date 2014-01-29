@@ -1684,16 +1684,16 @@ class CSetupdPplanningOp extends CSetup {
                 CHANGE `ASA` `ASA` ENUM ('1','2','3','4','5','6');";
     $this->addQuery($query);
 
-    $this->makeRevision("1.83");
+    $this->makeRevision("1.82");
     $query = "ALTER TABLE `mode_entree_sejour`
                 CHANGE `actif` `actif` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->makeRevision("1.84");
+    $this->makeRevision("1.83");
     $query = "ALTER TABLE `mode_sortie_sejour`
                 CHANGE `actif` `actif` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.85";
+    $this->mod_version = "1.84";
   }
 }
