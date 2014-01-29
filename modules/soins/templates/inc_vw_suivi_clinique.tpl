@@ -17,9 +17,11 @@
 
   toggleProgressBefore = function() {
     $$(".in_progress_before").invoke("toggleClassName", "show_important");
+    $$(".class_progress_before").invoke("toggleClassName", "selected");
   }
   toggleProgressAfter = function() {
     $$(".in_progress_after").invoke("toggleClassName", "show_important");
+    $$(".class_progress_after").invoke("toggleClassName", "selected");
   }
   
   afterEditCorrespondant = function() {
@@ -359,10 +361,10 @@
         <table class="tbl">
           <tr>
             <th class="title">
-              <button type="button" style="float: right;" class="right rtl" onclick="toggleProgressAfter();" title="{{tr}}CPrescription.in_progress_after{{/tr}}">
+              <button type="button" style="float: right;" class="search class_progress_after" onclick="toggleProgressAfter();" title="{{tr}}CPrescription.in_progress_after{{/tr}}">
                 +{{$days_config}}J
               </button>
-              <button type="button" style="float: right;" class="left" onclick="toggleProgressBefore();" title="{{tr}}CPrescription.in_progress_before{{/tr}}">
+              <button type="button" style="float: right;" class="search class_progress_before" onclick="toggleProgressBefore();" title="{{tr}}CPrescription.in_progress_before{{/tr}}">
                 -{{$days_config}}J
               </button>
               {{tr}}CPrescription.in_progress{{/tr}}
