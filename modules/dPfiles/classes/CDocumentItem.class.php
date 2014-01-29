@@ -279,4 +279,101 @@ class CDocumentItem extends CMbMetaObject {
   function getUsersStatsDetails($user_ids) {
     return array();
   }
+
+  /**
+   * @param string $sender   The sender's email address
+   * @param string $receiver The receiver's email address
+   *
+   * @return string
+   */
+  function makeHprimHeader($sender, $receiver) {
+    $object = $this->loadTargetObject();
+    $receiver = explode('@', $receiver);
+    $sender = explode('@', $sender);
+
+    $patient = null;
+    $record_id = null;
+    $record_date = null;
+    switch ($object->_class) {
+      case 'CConsultation' :
+        /** @var $object CConsultation  */
+        $patient = $object->loadRefPatient();
+        $object->loadRefSejour();
+        if ($object->_ref_sejour) {
+          $object->_ref_sejour->loadNDA();
+          $record_id = $object->_ref_sejour->_NDA;
+        }
+        $object->loadRefPlageConsult();
+        $record_date = $object->_ref_plageconsult->getFormattedValue('date');
+        break;
+      case 'CConsultAnesth' :
+        /** @var $object CConsultAnesth */
+        $patient = $object->loadRefPatient();
+        $object->loadRefSejour();
+        if ($object->_ref_sejour) {
+          $object->_ref_sejour->loadNDA();
+          $record_id = $object->_ref_sejour->_NDA;
+        }
+        $object->loadRefConsultation();
+        $object->_ref_consultation->loadRefPlageConsult();
+        $record_date = $object->_ref_consultation->_ref_plageconsult->getFormattedValue('date');
+        break;
+      case 'CSejour' :
+        /** @var $object CSejour  */
+        $patient = $object->loadRefPatient();
+        $object->loadNDA();
+        $record_id = $object->_NDA;
+        $object->updateFormFields();
+        $record_date = $object->getFormattedValue('_date_entree');
+        break;
+      case 'COperation' :
+        /** @var $object COperation  */
+        $patient = $object->loadRefPatient();
+        $object->loadRefSejour();
+        if ($object->_ref_sejour) {
+          $object->_ref_sejour->loadNDA();
+          $record_id = $object->_ref_sejour->_NDA;
+        }
+
+        /** Récupération de la date **/
+        if ($object->date) {
+          $record_date = $object->getFormattedValue('date');
+        }
+        else {
+          $object->loadRefPlageOp();
+          $record_date = $object->_ref_plageop->getFormattedValue('date');
+        }
+        break;
+      case 'CPatient' :
+        $patient = $object;
+        break;
+    }
+
+    $patient->loadIPP();
+    $adresse = explode("\n", $patient->adresse);
+
+    if (count($adresse) == 1) {
+      $adresse[1] = "";
+    }
+    elseif (count($adresse) > 2) {
+      $adr_tmp = $adresse;
+      $adresse = array($adr_tmp[0]);
+      unset($adr_tmp[0]);
+      $adr_tmp = implode(" ", $adr_tmp);
+      $adresse[] = str_replace(array("\n", "\r"), array("", ""), $adr_tmp);
+    }
+
+    return $patient->_IPP . "\n"
+    . strtoupper($patient->nom) . "\n"
+    . ucfirst($patient->prenom) . "\n"
+    . $adresse[0] . "\n"
+    . $adresse[1] . "\n"
+    . $patient->cp . " " . $patient->ville . "\n"
+    . $patient->getFormattedValue("naissance") . "\n"
+    . $patient->matricule . "\n"
+    . $record_id . "\n"
+    . $record_date . "\n"
+    . ".          $sender[0]\n"
+    . ".          $receiver[0]\n\n";
+  }
 }
