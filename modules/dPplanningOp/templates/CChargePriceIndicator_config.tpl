@@ -4,11 +4,16 @@ editCharge = function(charge_id) {
   url.addParam("charge_id", charge_id);
   url.requestModal(400, 400);
   return false;
+};
+importModeTraitement = function() {
+  new Url("planningOp", "import_mode_traitement_sejour")
+    .popup(800, 600);
+  return false;
 }
 </script>
 
 <button class="new" type="button" onclick="editCharge(0)">{{tr}}CChargePriceIndicator-title-create{{/tr}}</button>
-
+<button class="hslip" type="button" onclick="importModeTraitement()">{{tr}}CChargePriceIndicator-import{{/tr}}</button>
 <table class="main tbl">
   <tr>
     <th>{{mb_title class=CChargePriceIndicator field=code}}</th>
