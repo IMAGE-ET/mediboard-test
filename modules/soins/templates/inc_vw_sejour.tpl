@@ -80,14 +80,16 @@
 </td>
 <td style="text-align: center;">
   {{if $sejour->_count_tasks}}
-    <img src="images/icons/phone_orange.png" onclick="showTasks(this, 'tooltip-content-tasks-{{$sejour->_id}}', '{{$sejour->_id}}');"/>
+    <img src="images/icons/phone_orange.png" onclick="showTasks(this, 'tooltip-content-tasks-{{$sejour->_id}}', '{{$sejour->_id}}');"
+      onmouseover="this.style.cursor='pointer';"/>
     {{mb_include module=system template=inc_vw_counter_tip count=$sejour->_count_tasks}}
 
     <div id="tooltip-content-tasks-{{$sejour->_id}}" style="display: none; height: 400px; width: 400px:"></div>
   {{/if}}
 
   {{if $sejour->_count_tasks_not_created}}
-    <img src="images/icons/phone_red.png" onclick="showTasksNotCreated(this, 'tooltip-content-tasks-not-created-{{$sejour->_id}}', '{{$sejour->_id}}');"/>
+    <img src="images/icons/phone_red.png" onclick="showTasksNotCreated(this, 'tooltip-content-tasks-not-created-{{$sejour->_id}}', '{{$sejour->_id}}');"
+         onmouseover="this.style.cursor='pointer';"/>
     {{mb_include module=system template=inc_vw_counter_tip count=$sejour->_count_tasks_not_created}}
 
     <div id="tooltip-content-tasks-not-created-{{$sejour->_id}}" style="display: none; height: 400px; width: 400px:"></div>
