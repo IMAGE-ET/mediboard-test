@@ -246,6 +246,14 @@ var VitaleVision = {
                         getNodeValue("adresse ligne4", ident)).strip());
     }
 
+    if (getNodeValue("qualBenef", amo) == 0) {
+      var sexe, first = $V(form.assure_matricule).charAt(0);
+      if (first == '1' || first == '2') {
+        // Gestion des codes provisoires commencant par 3, 4, 7 ou 8
+        $V(form.sexe, first == '1' ? 'm' : 'f');
+      }
+    }
+
     var ville = getNodeValue("adresse ligne5", ident);
     if($V(form.cp) == "")    $V(form.cp, ville.substring(0, 5));
     if($V(form.ville) == "") $V(form.ville, ville.substring(6));
@@ -365,8 +373,10 @@ var VitaleVision = {
     
     if (getNodeValue("qualBenef", amo) == 0) {
       var sexe, first = $V(form.assure_matricule).charAt(0);
-      if (first == '1' || first == '2')  // Gestion des codes provisoires commencant par 3, 4, 7 ou 8
-        $V(form.sexe, first == '1' ? 'm' : 'f');
+      if (first == '1' || first == '2') {
+        // Gestion des codes provisoires commencant par 3, 4, 7 ou 8
+        $V(form.assure_sexe, first == '1' ? 'm' : 'f');
+      }
     }
     tabs.changeTabAndFocus('assure', form.assure_nom);
   
