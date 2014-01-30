@@ -555,15 +555,19 @@ class CExObject extends CMbMetaObject {
         /** @var CMbObject $_base */
         $_base = null;
         foreach ($latest_ex_objects as $_latest_ex_object) {
-          if ($_latest_ex_object->_ref_reference_object_1->_class == $_report_class) {
+          if (!$_latest_ex_object) {
+            continue;
+          }
+
+          if ($_latest_ex_object->_ref_reference_object_1 && $_latest_ex_object->_ref_reference_object_1->_class == $_report_class) {
             $_base = $_latest_ex_object->_ref_reference_object_1;
             break;
           }
-          elseif ($_latest_ex_object->_ref_reference_object_2->_class == $_report_class) {
+          elseif ($_latest_ex_object->_ref_reference_object_2 && $_latest_ex_object->_ref_reference_object_2->_class == $_report_class) {
             $_base = $_latest_ex_object->_ref_reference_object_2;
             break;
           }
-          elseif ($_latest_ex_object->_ref_object->_class == $_report_class) {
+          elseif ($_latest_ex_object->_ref_object && $_latest_ex_object->_ref_object->_class == $_report_class) {
             $_base = $_latest_ex_object->_ref_object;
             break;
           }
