@@ -21,8 +21,12 @@ $sort_by_date   = CValue::getOrSession("sort_by_date");
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
-$sejour->loadRefPrescriptionSejour();
-$sejour->_ref_prescription_sejour->countLinesTP();
+
+$prescription_sejour = $sejour->loadRefPrescriptionSejour();
+if ($prescription_sejour) {
+  $prescription_sejour->countLinesTP();
+}
+
 $patient = new CPatient();
 $patient->load($patient_id);
 
