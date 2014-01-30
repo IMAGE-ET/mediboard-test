@@ -39,8 +39,8 @@ class CHL7v2SegmentORC extends CHL7v2Segment {
     //@todo voir pour suppression
     $count = $object->countExchanges($event->profil);
     $orc1 = "NW";
-    if ($count > 0) {
-      $orc1 = "xo";
+    if ($count > 1) {
+      $orc1 = "XO";
     }
 
     $data[] = $orc1;
@@ -62,14 +62,20 @@ class CHL7v2SegmentORC extends CHL7v2Segment {
 
     // ORC-7: Quantity/Timing (TQ)
     //@todo a voir
-    $data[] = array(array("", "", $object->duree, $this->getDateTime(null, $object->_debut_reel), $this->getDateTime(null, $object->_fin)));
+    $data[] = array(
+      null,
+      null,
+      $object->duree,
+      $object->_debut_reel,
+      $object->_fin
+    );
 
     // ORC-8: Parent (CM) (optional)
     //shall be valued only if the current order is a child order (i.e., if the field ORC 1 Order Control has a value of CH).
     $data[] = null;
 
     // ORC-9: date/time od Transaction (TS)
-    $data[] = $this->getDateTime($object->debut);
+    $data[] = $object->debut;
 
     // ORC-10: Entered By (XCN) (optional)
     $data[] = null;

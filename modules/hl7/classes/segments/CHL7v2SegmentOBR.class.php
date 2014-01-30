@@ -45,7 +45,7 @@ class CHL7v2SegmentOBR extends CHL7v2Segment {
 
     // OBR-4: Universal Service ID (CE)
     //@todo a voir
-    $data[] = null;
+    $data[] = $object->_view;
 
     // OBR-5: Priority (ID) (optional)
     $data[] = null;
@@ -116,8 +116,12 @@ class CHL7v2SegmentOBR extends CHL7v2Segment {
     $data[] = null;
 
     // OBR-27: Quantity/Timing (TQ)
-    //@todo a voir
-    $data[] = array(array("", "", $object->duree, $this->getDateTime(null, $object->_debut_reel), $this->getDateTime(null, $object->_fin)));
+    $data[] = array(
+      null,
+      null,
+      $object->duree,
+      $object->_debut_reel,
+      $object->_fin);
 
     // OBR-28: Result Copies to (CN) (optional)
     $data[] = null;

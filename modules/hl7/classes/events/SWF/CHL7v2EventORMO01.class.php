@@ -42,7 +42,7 @@ class CHL7v2EventORMO01 extends CHL7v2EventORM implements CHL7EventORMO01 {
     $this->addORC($object);
     $this->addOBR($object);
     //@todo a voir
-    $this->addZDS();
+    //$this->addZDS();
     //@todo voir ZFU
   }
 }
