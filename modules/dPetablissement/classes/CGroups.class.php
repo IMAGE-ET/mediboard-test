@@ -37,6 +37,8 @@ class CGroups extends CMbObject {
   public $chambre_particuliere;
   public $ean;
   public $rcc;
+  public $lat;
+  public $lon;
 
   // Form fields
   public $_cp_court;
@@ -209,6 +211,8 @@ class CGroups extends CMbObject {
     $props["chambre_particuliere"]= "bool notNull default|0";
     $props["ean"]                 = "str";
     $props["rcc"]                 = "str";
+    $props["lat"]                 = "float";
+    $props["lon"]                 = "float";
 
     $props["_cp_court"]           = "numchar length|2";
 

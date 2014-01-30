@@ -122,6 +122,12 @@ class CSetupdPetablissement extends CSetup {
                 CHANGE `cp` `cp` VARCHAR( 10 ) NULL DEFAULT NULL;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.32";
+    $this->makeRevision("0.32");
+    $query = "ALTER TABLE `groups_mediboard`
+                ADD `lat` FLOAT,
+                ADD `lon` FLOAT;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.33";
   } 
 }

@@ -79,6 +79,16 @@ Main.add(function () {
     <td>{{mb_field object=$group field="ape"}}</td>
   </tr>
 
+  <tr>
+    <th>{{mb_label object=$group field="lat"}}</th>
+    <td>{{mb_field object=$group field="lat" style="width:150px;"}}</td>
+  </tr>
+
+  <tr>
+    <th>{{mb_label object=$group field="lon"}}</th>
+    <td>{{mb_field object=$group field="lon" style="width:150px;"}}</td>
+  </tr>
+
   {{if $group->_id}}
   <tr>
     <th>{{mb_label object=$group field="service_urgences_id"}}</th>
