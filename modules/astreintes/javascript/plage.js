@@ -32,7 +32,7 @@ PlageAstreinte = {
   },
 
   refreshList: function(target_id, user_id) {
-    if (this.lastList || target_id) {
+    if (this.lastList || target_id) {
       if (user_id != null) {this.user_id = user_id;}
       if (target_id != null) {this.lastList = target_id;}
       var url = new Url("astreintes", "vw_idx_plages_astreinte");
