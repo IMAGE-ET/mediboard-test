@@ -47,6 +47,7 @@ foreach ($sejours as $_sejour) {
     // Look for multiple RPU
     // Simulate loading as for now loading RPU are outrageously resource consuming
     // @todo use loadBackRef() as soon as CRPU.updateFormFields() get sanitized
+    $_sejour->_back["rpu"] = array();
     foreach ($_sejour->loadBackIds("rpu") as $_rpu_id) {
       $rpu = new CRPU();
       $rpu->_id = $_rpu_id;
