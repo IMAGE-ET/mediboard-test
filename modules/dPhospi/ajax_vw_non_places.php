@@ -49,7 +49,7 @@ switch ($triAdm) {
 
 switch ($_type_admission) {
   case "ambucomp":
-    $where[] = "sejour.type = 'ambu' OR sejour.type = 'comp'";
+    $where[] = "sejour.type = 'ambu' OR sejour.type = 'comp' OR sejour.type = 'ssr'";
     break;
   case "0":
     break;

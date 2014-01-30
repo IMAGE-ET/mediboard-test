@@ -73,7 +73,7 @@ $where["annule"]          = "= '0'";
 $where["sejour.entree"]   = "BETWEEN '$today' AND '$endWeek'";
 $where["sejour.group_id"] = "= '$g'";
 if ($_type_admission == "ambucomp") {
-  $where[] = "`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp'";
+  $where[] = "`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp' OR `sejour`.`type` = 'ssr'";
 }
 elseif ($_type_admission) {
   $where["sejour.type"] = " = '$_type_admission'";
@@ -122,7 +122,7 @@ if (CCanDo::edit()) {
   
   switch ($_type_admission) {
     case "ambucomp" :
-      $where[] = "sejour.type = 'ambu' OR sejour.type = 'comp'";
+      $where[] = "sejour.type = 'ambu' OR sejour.type = 'comp' OR sejour.type = 'ssr'";
       break;
     case "0" :
       break;
