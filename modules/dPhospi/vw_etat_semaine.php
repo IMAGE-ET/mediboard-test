@@ -49,7 +49,7 @@ for ($i = 1; $i <= 7; $i++) {
   $where["annule"] = "= '0'";
   switch ($type_admission) {
     case "ambucomp" :
-      $where[] = "sejour.type = 'ambu' OR sejour.type = 'comp'";
+      $where[] = "sejour.type = 'ambu' OR sejour.type = 'comp' OR sejour.type = 'ssr'";
       break;
     case "0" :
       break;
