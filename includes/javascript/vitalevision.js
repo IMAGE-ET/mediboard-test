@@ -169,7 +169,7 @@ var VitaleVision = {
     $V(form.Date_Month, mois);
     $V(form.Date_Year, annee);
     
-    form.submit();
+    form.onsubmit();
   },
   
   // Remplissage du formulaire en fonction du bénéficiaire sélectionné dans la fenetre modale
