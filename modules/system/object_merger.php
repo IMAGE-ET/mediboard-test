@@ -9,8 +9,6 @@
  * @version    $Revision$
  */
 
-CCanDo::checkEdit();
-
 $objects_class  = CValue::getOrSession('objects_class');
 $readonly_class = CValue::get('readonly_class');
 $objects_id     = CValue::get('objects_id');
