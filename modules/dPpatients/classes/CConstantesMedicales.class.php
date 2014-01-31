@@ -1025,9 +1025,12 @@ class CConstantesMedicales extends CMbObject {
         continue;
       }
 
-      if (isset($_params["unit_config"])) {
-        $form_field_unite = '_' . $_params["unit_config"];
-        $conv = self::getConv($_constant, $this->$form_field_unite);
+      if (isset($_params["formfields"])) {
+        $conv = 1.0;
+        if (isset($_params["unit_config"])) {
+          $form_field_unite = '_' . $_params["unit_config"];
+          $conv = self::getConv($_constant, $this->$form_field_unite);
+        }
 
         $_parts = explode("|", $this->$_constant);
 
@@ -1065,16 +1068,19 @@ class CConstantesMedicales extends CMbObject {
         continue;
       }
 
-      if (isset($_params["formfields"]) && isset($_params['conversion'])) {
-        $form_field_unite = '_' . $_params["unit_config"];
-        $_unite = $this->$form_field_unite;
+      if (isset($_params["formfields"])) {
+        $conv = 1.0;
+        if (isset($_params['conversion'])) {
+          $form_field_unite = '_' . $_params["unit_config"];
+          $_unite = $this->$form_field_unite;
 
-        // Si le champ n'a pas de valeur, on regarde en config
-        if (!$_unite) {
-          $_unite = CAppUI::conf('dPpatients CConstantesMedicales '.$_params["unit_config"], $group);
+          // Si le champ n'a pas de valeur, on regarde en config
+          if (!$_unite) {
+            $_unite = CAppUI::conf('dPpatients CConstantesMedicales '.$_params["unit_config"], $group);
+          }
+
+          $conv = self::getConv($_constant, $_unite);
         }
-
-        $conv = self::getConv($_constant, $_unite);
         $_parts = array();
         $_empty = true;
 
