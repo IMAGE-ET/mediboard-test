@@ -1,14 +1,12 @@
 <?php
-
 /**
- * dPboard
+ * $Id:$
  *
- * @category Board
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage Board
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 /**
@@ -54,60 +52,50 @@ $plagesOp       = array();
 $plagesPerDayOp = array();
 
 for ($i = 0; CMbDT::date("+$i day", $debut)!=$fin ; $i++) {
-  $where = array();
-  $where["chir_id"] = "= '$prat_id'";
   $date             = CMbDT::date("+$i day", $debut);
-  $where["date"]    = "= '$date'";
 
-  /** @var CPlageconsult[] $plagesPerDayConsult */
-  $plagesPerDayConsult = $plageConsult->loadList($where);
-  $nb_oper        = 0;
-  $where          = array();
-  $where[]        = "chir_id = '$prat_id' OR anesth_id = '$prat_id'";
-  $where["date"]  = "= '$date'";
-  
-  foreach ($listSalles as $salle) {
-    $where["salle_id"] = "= '$salle->_id'";
-    $plagesPerDayOp[$salle->_id] = $plageOp->loadList($where);
-    $nb_oper = $nb_oper + count($plagesPerDayOp[$salle->_id]);
-  }
-  
-  foreach ($plagesPerDayConsult as $plageConsult) {
-    $plageConsult->countPatients();
-  }
-  
-  if (in_array("consult", $export) && count($plagesPerDayConsult)) {
-    foreach ($plagesPerDayConsult as $plageConsult) {
+  if (in_array("consult", $export)) {
+    $where = array();
+    $where["chir_id"] = "= '$prat_id'";
+    $where["date"]    = "= '$date'";
+    /** @var CPlageconsult[] $plagesPerDayConsult */
+    $plagesPerDayConsult = $plageConsult->loadList($where);
+
+    if ($details) {
+      CMbObject::massLoadBackRefs($plagesPerDayConsult, "consultations");
+    }
+
+    foreach ($plagesPerDayConsult as $key => $plageConsult) {
+      $plageConsult->countPatients();
       $plageConsult->loadFillRate();
-      
+
       if ($details) {
         $plageConsult->loadRefsConsultations();
       }
     }
-    
     $plagesConsult[$date] = $plagesPerDayConsult;
   }
-  
-  if (in_array("interv", $export) && $nb_oper) {
-    foreach ($plagesPerDayOp as $key => $listPlages) {
-      /** @var CPlageOp[] $listPlages */
-      if (!count($listPlages)) {
-        unset($plagesPerDayOp[$key]);
-        continue;
-      }
 
-      foreach ($listPlages as $keyPlage => $plage) {
-        $plage->loadRefSalle();
-        $plage->_ref_salle->loadRefBloc();
-        $plage->_ref_salle->_ref_bloc->loadRefGroup();
-        if ($details) {
-          $plage->loadRefsOperations();
-        }
+  if (in_array("interv", $export)) {
+    $where          = array();
+    $where[]        = "chir_id = '$prat_id' OR anesth_id = '$prat_id'";
+    $where["date"]  = "= '$date'";
+    $where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
+    $plagesPerDayOp = $plageOp->loadList($where);
 
-        $plage->getNbOperations();
+    $salles = CMbObject::massLoadFwdRef($plagesPerDayOp, "salle_id");
+    CMbObject::massLoadFwdRef($salles, "bloc_id");
+    CMbObject::massLoadBackRefs($plagesPerDayOp, "operations");
+
+    foreach ($plagesPerDayOp as $key => $plage) {
+      $plage->loadRefSalle();
+      $plage->_ref_salle->loadRefBloc();
+      $plage->_ref_salle->_ref_bloc->loadRefGroup();
+      if ($details) {
+        $plage->loadRefsOperations();
       }
-        
-      $plagesOp[$key][$date] = $plagesPerDayOp[$key];
+      $plage->getNbOperations();
+      $plagesOp[$plage->salle_id][$date] = $plagesPerDayOp[$key];
     }
   }
 }
@@ -117,7 +105,7 @@ $v = new CMbCalendar("Planning");
 
 // Création des évènements plages de consultation
 if (in_array("consult", $export)) {
-  foreach ($plagesConsult as $curr_day => $plagesPerDay) {
+  foreach ($plagesConsult as $plagesPerDay) {
     foreach ($plagesPerDay as $rdv) {
       $description = "$rdv->_nb_patients patient(s)";
 
@@ -142,28 +130,26 @@ if (in_array("consult", $export)) {
 // Création des évènements plages d'interventions
 if (in_array("interv", $export)) {
   foreach ($plagesOp as $salle) {
-    foreach ($salle as $curr_day => $plagesPerDay) {
-      foreach ($plagesPerDay as $rdv) {
-        $description = "$rdv->_nb_operations intervention(s)";
-        
-        // Evènement détaillé
-        if ($details) {
-          foreach ($rdv->_ref_operations as $op) {
-            /** @var COperation $op */
-            $op->loadComplete();
-            $duration = ical_time($op->temp_operation);
-            $when     = ical_time(CMbDT::time($op->_datetime));
-            $patient = $op->_ref_patient->_view;
-            $description.= "\n$when: $patient (duree: $duration)";
-          }
+    foreach ($salle as $plagesPerDay => $rdv) {
+      $description = "$rdv->_nb_operations intervention(s)";
+      // Evènement détaillé
+      if ($details) {
+        foreach ($rdv->_ref_operations as $op) {
+          /** @var COperation $op */
+          $op->loadRefPatient();
+          $op->loadRefPlageOp();
+          $duration = ical_time($op->temp_operation);
+          $when     = ical_time(CMbDT::time($op->_datetime));
+          $patient = $op->_ref_patient->_view;
+          $description.= "\n$when: $patient (duree: $duration)";
         }
-      
-        $deb = "$rdv->date $rdv->debut";
-        $fin = "$rdv->date $rdv->fin";
-        
-        $location = $rdv->_ref_salle->_ref_bloc->_ref_group->_view;
-        $v->addEvent($location, $rdv->_ref_salle->_view, $description, null, $rdv->_guid, $deb, $fin);          
       }
+
+      $deb = "$rdv->date $rdv->debut";
+      $fin = "$rdv->date $rdv->fin";
+
+      $location = $rdv->_ref_salle->_ref_bloc->_ref_group->_view;
+      $v->addEvent($location, $rdv->_ref_salle->_view, $description, null, $rdv->_guid, $deb, $fin);
     }
   }
 }
