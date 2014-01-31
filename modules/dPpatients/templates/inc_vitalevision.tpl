@@ -10,6 +10,7 @@
     width="1" height="1" style="position: absolute;"
   {{/if}}>
   <param name="action" value="sleep" />
+  <param name="initial_focus" value="false"/>
   <param name="lineSeparator" value="" />
   <param name="debug" value="{{$debug}}" />
   <param name="codebase_lookup" value="false" />
