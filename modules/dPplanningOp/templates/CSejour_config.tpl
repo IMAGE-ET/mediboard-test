@@ -129,6 +129,15 @@
           <option value="240" {{if "240" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 10 jours</option>
           <option value="264" {{if "264" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 11 jours</option>
           <option value="288" {{if "288" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 12 jours</option>
+          <option value="312" {{if "312" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 13 jours</option>
+          <option value="336" {{if "336" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 14 jours</option>
+          <option value="360" {{if "360" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 15 jours</option>
+          <option value="384" {{if "384" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 16 jours</option>
+          <option value="408" {{if "408" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 17 jours</option>
+          <option value="432" {{if "432" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 18 jours</option>
+          <option value="456" {{if "456" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 19 jours</option>
+          <option value="480" {{if "480" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 20 jours</option>
+          <option value="504" {{if "504" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 21 jours</option>
         </select>
       </td>
     </tr>
