@@ -309,7 +309,7 @@ class CActeCCAM extends CActe {
     }
     $this->loadRefCodeCCAM();
     $this->_ref_code_ccam->getChaps();
-    $this->getLinkedActes(false);
+    $this->getLinkedActes(false, false);
     
     /**
     // Cas du nombre d'actes
@@ -497,18 +497,21 @@ class CActeCCAM extends CActe {
   /**
    * Charge les autre actes du même codable
    *
-   * @param bool $same_executant Seulement les actes du même exécutant si vrai
+   * @param bool $same_executant  Seulement les actes du même exécutant si vrai
+   * @param bool $only_facturable Seulement les actes facturables si vrai
    *
    * @return CActeCCAM[]
    */
-  function getLinkedActes($same_executant = true) {
+  function getLinkedActes($same_executant = true, $only_facturable = true) {
     $acte = new CActeCCAM();
     
     $where = array();
     $where["acte_id"]       = "<> '$this->_id'";
     $where["object_class"]  = "= '$this->object_class'";
     $where["object_id"]     = "= '$this->object_id'";
-    $where["facturable"]    = "= '1'";
+    if ($only_facturable) {
+      $where["facturable"]    = "= '1'";
+    }
     if ($same_executant) {
       $where["executant_id"]  = "= '$this->executant_id'";
     }
