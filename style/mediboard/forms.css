@@ -381,6 +381,10 @@ button.copy:before, a.button.copy:before {
   content: url(images/buttons/copy.png);
 }
 
+button.bug:before, a.button.bug:before {
+  content: url(images/buttons/bug.png);
+}
+
 button.cleanup:before, a.button.cleanup:before {
   content: url(images/buttons/cleanup.png);
 }
