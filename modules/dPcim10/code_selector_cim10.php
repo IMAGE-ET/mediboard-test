@@ -1,14 +1,12 @@
 <?php
-
 /**
- * dPcim10
+ * $Id:$
  *
- * @category Cim10
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage Cim10
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 $chir           = CValue::get("chir");
@@ -83,7 +81,7 @@ foreach ($profiles as $profile => $_user_id) {
   }
 
   /** @var CFavoriCIM10[] $codes_favoris */
-  $codes_favoris = $code->loadList($where, null, 100, null, $ljoin);
+  $codes_favoris = $code->loadList($where, null, 100, 'favoris_code', $ljoin);
   
   foreach ($codes_favoris as $key => $_code) {
     $codes_favoris[$_code->favoris_code] = $_code;
@@ -136,7 +134,7 @@ foreach ($profiles as $profile => $_user_id) {
 
 $tag_tree = CFavoriCIM10::getTree($user->_id);
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 
 $smarty->assign("listByProfile" , $listByProfile);
 $smarty->assign("users"         , $users);
