@@ -62,8 +62,8 @@ function storeObject($object) {
 
 // Cinq étapes pour la création de la naissance :
 //   1. Créer le nouveau patient (enfant)
-//   2. Créer le relevé de constantes
-//   3. Créer le séjour de l'enfant
+//   2. Créer le séjour de l'enfant
+//   3. Créer le relevé de constantes
 //   4. Créer l'affectation du séjour
 //   5. Créer la naissance
 
@@ -76,19 +76,8 @@ if (!$naissance_id) {
   $patient->sexe = $sexe;
   $patient->naissance = $date;
   storeObject($patient);
-  
-  // Etape 2 (constantes)
-  if ($poids || $taille || $perimetre_cranien) {
-    $constantes = new CConstantesMedicales();
-    $constantes->patient_id = $patient->_id;
-    $constantes->datetime = "now";
-    $constantes->poids = $poids;
-    $constantes->taille = $taille;
-    $constantes->perimetre_cranien = $perimetre_cranien;
-    storeObject($constantes);
-  }
-  
-  // Etape 3 (séjour)
+
+  // Etape 2 (séjour)
   $sejour_enfant = new CSejour();
   $sejour_enfant->entree_reelle = $datetime;
   $sejour_enfant->sortie_prevue = $curr_affect->sortie ? $curr_affect->sortie : $sejour->sortie;
@@ -97,7 +86,20 @@ if (!$naissance_id) {
   $sejour_enfant->group_id = $sejour->group_id;
   $sejour_enfant->_naissance = true;
   storeObject($sejour_enfant);
-  
+
+  // Etape 3 (constantes)
+  if ($poids || $taille || $perimetre_cranien) {
+    $constantes = new CConstantesMedicales();
+    $constantes->patient_id = $patient->_id;
+    $constantes->context_class = $sejour_enfant->_class;
+    $constantes->context_id = $sejour_enfant->_id;
+    $constantes->datetime = "now";
+    $constantes->poids = $poids;
+    $constantes->taille = $taille;
+    $constantes->perimetre_cranien = $perimetre_cranien;
+    storeObject($constantes);
+  }
+
   // Etape 4 (affectation)
   // Checker si l'affectation de la maman existe
   if ($heure && $curr_affect->_id) {
@@ -197,6 +199,8 @@ else {
     
     // Depuis un dossier provisoire, les constantes médicales ne sont pas créées.
     if (!$constantes->_id) {
+      $constantes->context_class = $sejour_enfant->_class;
+      $constantes->context_id = $sejour_enfant->_id;
       $constantes->patient_id = $patient->_id;
       $constantes->datetime = CMbDT::dateTime();
     }
