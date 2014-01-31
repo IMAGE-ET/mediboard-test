@@ -144,10 +144,19 @@
       </th>
       <td>
         <select class="num" name="{{$m}}[{{$class}}][{{$var}}][{{$type}}]">
-          <option value="04" {{if "04" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 04h</option>
-          <option value="24" {{if "24" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 24h</option>
-          <option value="48" {{if "48" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 48h</option>
-          <option value="72" {{if "72" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 72h</option>
+          <option value="04"  {{if "04"  == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 04h</option>
+          <option value="24"  {{if "24"  == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 24h (1 jour)</option>
+          <option value="48"  {{if "48"  == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 48h (2 jours)</option>
+          <option value="72"  {{if "72"  == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 72h (3 jours)</option>
+          <option value="96"  {{if "96"  == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 04 jours</option>
+          <option value="120" {{if "120" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 05 jours</option>
+          <option value="144" {{if "144" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 06 jours</option>
+          <option value="168" {{if "168" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 07 jours</option>
+          <option value="192" {{if "192" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 08 jours</option>
+          <option value="216" {{if "216" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 09 jours</option>
+          <option value="240" {{if "240" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 10 jours</option>
+          <option value="264" {{if "264" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 11 jours</option>
+          <option value="288" {{if "288" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 12 jours</option>
         </select>
       </td>
     </tr>
