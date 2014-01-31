@@ -1097,7 +1097,7 @@ class CConstantesMedicales extends CMbObject {
 
         // no value at all
         if ($_empty) {
-          $this->$_constant = "";
+          $this->$_constant = null;
         }
 
         // not enough values
