@@ -92,9 +92,10 @@ if ($bloc_id) {
   $where["sallesbloc.bloc_id"] = "= '$bloc_id'";
 }
 
-if ($praticien_id) {
-  $where["operations.chir_id"] = " = '$praticien_id'";
-}
+$praticien = new CMediusers();
+$praticiens = $praticien->loadChirurgiens();
+
+$where["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($praticiens), $praticien_id);
 
 $operations = $operation->loadList($where, null, null, null, $ljoin);
 $nbIntervHorsPlage = $operation->countList($where, null, $ljoin);

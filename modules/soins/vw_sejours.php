@@ -45,16 +45,16 @@ if ($select_view || (!$service_id && !$praticien_id && !$function_id && !$sejour
   }
 
   $select_view = true;
-
-  $service = new CService();
-  $services = $service->loadListWithPerms();
-
-  $praticien = new CMediusers;
-  $praticiens = $praticien->loadPraticiens();
-
-  $function = new CFunctions();
-  $functions = $function->loadSpecialites();
 }
+
+$service = new CService();
+$services = $service->loadListWithPerms();
+
+$praticien = new CMediusers();
+$praticiens = $praticien->loadPraticiens();
+
+$function = new CFunctions();
+$functions = $function->loadSpecialites();
 
 $date     = CMbDT::date();
 $date_max = CMbDT::date("+ 1 DAY", $date);
@@ -90,6 +90,7 @@ if (!isset($sejours)) {
     $where["sejour.sortie"] = ">= '$date'";
     $where["affectation.affectation_id"] = " IS NULL";
     $where["sejour.group_id"] = " = '$group_id'";
+    $where["sejour.praticien_id"] = CSQLDataSource::prepareIn(array_keys($praticiens), $praticien_id);
     $where["sejour.annule"] = " = '0'";
 
     if ($_type_admission) {
@@ -97,7 +98,8 @@ if (!isset($sejours)) {
     }
     $sejours = $sejour->loadList($where, null, null, null, $ljoin);
   
-  } else {
+  }
+  else {
     // Chargement du service
     $service->load($service_id);
     
@@ -109,8 +111,9 @@ if (!isset($sejours)) {
     $where = array();
     $where["affectation.sejour_id"] = "!= 0";
     $where["sejour.group_id"] = "= '$group_id'";
+    $where["sejour.praticien_id"] = CSQLDataSource::prepareIn(array_keys($praticiens), $praticien_id);
     if ($_type_admission) {
-      $where["sejour.type"] = $_type_admission == "ambucomp" ? "IN ('ambu', 'comp')" : "= '$_type_admission'";
+      $where["sejour.type"] = $_type_admission == "ambucomp" ? "IN ('ambu', 'comp', 'ssr')" : "= '$_type_admission'";
     }
 
     if ($service_id) {
@@ -126,7 +129,7 @@ if (!isset($sejours)) {
       $ljoin["sejour"] = "affectation.sejour_id = sejour.sejour_id";
       $where["sejour.annule"] = " = '0'";
       
-      $where["sejour.praticien_id"] = " = '$praticien_id'";
+      //$where["sejour.praticien_id"] = " = '$praticien_id'";
     }
     elseif ($function_id) {
       $where["affectation.entree"] = "<= '$date_max'";
@@ -157,7 +160,7 @@ if (!isset($sejours)) {
       $where_line["prescription_line_medicament.variante_active"] = " = '1'";
       
       // Lignes de médicament
-      $line = new CPrescriptionLineMedicament;
+      $line = new CPrescriptionLineMedicament();
       $lines = $line->loadList($where_line, null, null, null, $ljoin_line);
       
       foreach ($lines as $_line) {
@@ -378,15 +381,15 @@ $smarty->assign('ecap'            , $ecap);
 
 $smarty->assign("select_view"     , $select_view);
 if ($select_view) {
-  $smarty->assign("services"  , $services);
-  $smarty->assign("functions" , $functions);
-  $smarty->assign("praticiens", $praticiens);
-  $smarty->assign("function_id", $function_id);
+  $smarty->assign("services"    , $services);
+  $smarty->assign("functions"   , $functions);
+  $smarty->assign("praticiens"  , $praticiens);
+  $smarty->assign("function_id" , $function_id);
   $smarty->assign("praticien_id", $praticien_id);
 }
 
 if ($sejour_id) {
-  $smarty->assign("lite_view"         , $lite_view);
+  $smarty->assign("lite_view", $lite_view);
 
   // Rafraichissement d'un séjour  
   $sejour = reset($sejours);
