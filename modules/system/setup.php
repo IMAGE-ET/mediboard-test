@@ -1521,7 +1521,15 @@ class CSetupsystem extends CSetup {
     $this->makeRevision("1.1.51");
     $this->addPrefQuery("useEditAutocompleteUsers", 1);
 
-    $this->mod_version = "1.1.52";
+    // Meilleurs index pour les notes
+    $this->makeRevision("1.1.52");
+    $query = "ALTER TABLE `note`
+      DROP INDEX `user_id`,
+      ADD INDEX (`user_id`),
+      ADD INDEX  `object_guid` (`object_id`, `object_class`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.53";
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,
