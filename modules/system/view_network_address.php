@@ -14,20 +14,26 @@ CCanDo::checkRead();
 $start  = CValue::get("start", 0);
 
 $filter = new CUserLog();
-$filter->_date_min    = CValue::getOrSession("_date_min");
-$filter->_date_max    = CValue::getOrSession("_date_max");
-$filter->user_id      = CValue::getOrSession("user_id");
-$filter->ip_address   = CValue::getOrSession("ip_address", "255.255.255.255");
+$filter->date = CValue::get("date", CMbDT::dateTime());
+$filter->_date_max = CMbDT::dateTime($filter->date);
+$filter->_date_min = CMbDT::dateTime("-1 week", $filter->date);
+$filter->user_id      = CValue::get("user_id");
+$filter->ip_address   = CValue::get("ip_address", "255.255.255.255");
 
 $order_col = CValue::getOrSession("order_col", "date_max");
 $order_way = CValue::getOrSession("order_way", "DESC");
 $order_way_alt = $order_way == "ASC" ? "DESC" : "ASC";
 
 $user = new CMediusers();
+$listUsers = $user->loadUsers();
 $where = array();
 $order = "users.user_last_name, users.user_first_name";
 $ljoin = array();
 $ljoin["users"] = "users.user_id = users_mediboard.user_id";
+
+
+
+CMediusers::loadFonctions();
 
 $listUsers = $user->loadGroupList($where, $order, null, null, $ljoin);
 foreach ($listUsers as $_user) {
@@ -37,12 +43,9 @@ foreach ($listUsers as $_user) {
 $where = array(
   "ip_address IS NOT NULL AND ip_address != ''"
 );
-if ($filter->_date_min) {
-  $where[] = "date >= '$filter->_date_min'";
-}
-if ($filter->_date_max) {
-  $where[] = "date <= '$filter->_date_max'";
-}
+
+$where[] = "date >= '$filter->_date_min'";
+$where[] = "date <= '$filter->_date_max'";
 $where[] = "user_id ".CSQLDataSource::prepareIn(array_keys($listUsers), $filter->user_id);
 
 $order = "$order_col $order_way";
