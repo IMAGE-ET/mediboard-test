@@ -9,7 +9,7 @@
  * @version    $Revision$
  */
 
-CCanDo::checkEdit();
+CCanDo::check();
 
 $sejour_id = CValue::getOrSession("sejour_id", 0);
 
@@ -20,6 +20,7 @@ $sejour->load($sejour_id);
 // Chargement du dossier medical
 $sejour->loadRefDossierMedical();
 $dossier_medical =& $sejour->_ref_dossier_medical;
+$dossier_medical->needsRead();
 
 // Chargement des antecedents et traitements
 $dossier_medical->loadRefsAntecedents(true);
@@ -39,6 +40,7 @@ $dossier_medical->loadRefsTraitements(true);
 $prescription = $sejour->loadRefPrescriptionSejour();
 
 // Chargement des lignes de tp de la prescription
+/** @var CPrescriptionLineMedicament[]  $lines_tp */
 $lines_tp = array();
 if ($prescription && $prescription->_id) {
   $line_tp = new CPrescriptionLineMedicament();
