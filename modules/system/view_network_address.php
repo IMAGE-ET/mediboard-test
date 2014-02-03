@@ -26,19 +26,6 @@ $order_way_alt = $order_way == "ASC" ? "DESC" : "ASC";
 
 $user = new CMediusers();
 $listUsers = $user->loadUsers();
-$where = array();
-$order = "users.user_last_name, users.user_first_name";
-$ljoin = array();
-$ljoin["users"] = "users.user_id = users_mediboard.user_id";
-
-
-
-CMediusers::loadFonctions();
-
-$listUsers = $user->loadGroupList($where, $order, null, null, $ljoin);
-foreach ($listUsers as $_user) {
-  $_user->loadRefFunction();
-}
 
 $where = array(
   "ip_address IS NOT NULL AND ip_address != ''"
