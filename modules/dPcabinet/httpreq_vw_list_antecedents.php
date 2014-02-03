@@ -11,13 +11,18 @@
 
 CCanDo::check();
 
-$canPatient = CModule::getCanDo("dPpatients");
-$canPatient->needsEdit();
-
 $patient_id     = CValue::getOrSession("patient_id", 0);
 $_is_anesth     = CValue::getOrSession("_is_anesth", null);
 $sejour_id      = CValue::getOrSession("sejour_id");
 $sort_by_date   = CValue::getOrSession("sort_by_date");
+
+$patient = new CPatient();
+$patient->load($patient_id);
+
+// Chargement du dossier medical du patient
+$patient->loadRefDossierMedical();
+$dossier_medical =& $patient->_ref_dossier_medical;
+$dossier_medical->needsRead();
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
@@ -26,13 +31,6 @@ $prescription_sejour = $sejour->loadRefPrescriptionSejour();
 if ($prescription_sejour) {
   $prescription_sejour->countLinesTP();
 }
-
-$patient = new CPatient();
-$patient->load($patient_id);
-
-// Chargement du dossier medical du patient
-$patient->loadRefDossierMedical();
-$dossier_medical =& $patient->_ref_dossier_medical;
 
 // Chargements des antecedents et traitements du dossier_medical
 if ($dossier_medical->_id) {
