@@ -100,8 +100,12 @@ foreach ($sejours as $_sejour) {
     }
   }
 
-  if (!$comptabilise && !$rpu->loadRefConsult()->_id) {
-    $datas["ATTENTE"]++;
+  if (!$comptabilise) {
+    $consult = $rpu->loadRefConsult();
+
+    if (!$consult || !$consult->_id) {
+      $datas["ATTENTE"]++;
+    }
   }
 
   //mutation
