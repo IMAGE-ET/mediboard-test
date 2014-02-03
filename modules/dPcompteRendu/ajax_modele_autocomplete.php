@@ -50,11 +50,10 @@ $whereSecFunc["user_id"] = " = '$curr_user->_id'";
 if ($user->canEdit()) {
   $whereSecFunc["user_id"] = "IN ('$user->_id', '$curr_user->_id')";
 }
-$sec_functions = $sec_function->loadIds($whereSecFunc);
+$function_ids = $sec_function->loadIds($whereSecFunc);
 
-$functions_ids = CMbArray::pluck($sec_functions, "function_id");
-$functions_ids = array_merge($functions_ids, array($user->function_id, $curr_user->function_id));
-$where["function_id"] = CSQLDataSource::prepareIn($functions_ids);
+$function_ids = array_merge($function_ids, array($user->function_id, $curr_user->function_id));
+$where["function_id"] = CSQLDataSource::prepareIn($function_ids);
 $modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where, 100, false, null, "nom"));
 
 // Niveau établissement
