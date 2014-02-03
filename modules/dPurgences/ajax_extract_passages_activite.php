@@ -53,7 +53,7 @@ $where[] = "sejour.entree BETWEEN '$now' AND '$date_after'
 // RPUs
 $where[]                  = "rpu.rpu_id IS NOT NULL";
 $where["sejour.group_id"] = "= '$group_id'";
-$where["sejour.type"]     = "= 'urg'";
+//$where["sejour.type"]     = "= 'urg'";
 $order                    = "sejour.entree ASC";
 
 /** @var CSejour[] $sejours */
