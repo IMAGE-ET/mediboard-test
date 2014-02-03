@@ -116,17 +116,26 @@ if ($fileSel && $elementClass == "CFile" && !$acces_denied) {
 
       case "text/osoft":
         if (class_exists("COsoftHistorique")) {
-          $osoft_histo      = new COsoftHistorique;
+          $osoft_histo      = new COsoftHistorique();
           $includeInfosFile = $osoft_histo->toHTML($raw_content);
           $show_editor      = false;
           break;
+
         }
 
       case "application/osoft":
         if (class_exists("COsoftDossier")) {
-          $osoft_dossier    = new COsoftDossier;
+          $osoft_dossier    = new COsoftDossier();
           $includeInfosFile = $osoft_dossier->toHTML($raw_content);
           $show_editor      = false;
+          break;
+        }
+
+      case "text/medistory-form":
+        if (class_exists("CMedistoryImprime")) {
+          $includeInfosFile = CMedistoryImprime::toHTML($raw_content);
+          $show_editor      = false;
+          $display_as_is    = true;
           break;
         }
 
