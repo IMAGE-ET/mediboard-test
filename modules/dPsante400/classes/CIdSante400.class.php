@@ -122,7 +122,7 @@ class CIdSante400 extends CMbMetaObject {
     if (!$order) {
       $order = "`last_update` DESC";
     }
-    return parent::loadList($where, $order, $group, $ljoin, $index);
+    return parent::loadObject($where, $order, $group, $ljoin, $index);
   }
   
   /**
