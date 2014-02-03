@@ -83,6 +83,47 @@ class CIdSante400 extends CMbMetaObject {
 
     $this->_view = "[$this->id400] ($this->tag)";
   }
+
+  /**
+   * @see parent::loadMatchingObject
+   */
+  function loadMatchingObject($order = null, $group = null, $ljoin = null, $index = null) {
+    if (!$order) {
+      $order = "`last_update` DESC";
+    }
+
+     return parent::loadMatchingObject($order, $group, $ljoin, $index);
+  }
+
+  /**
+   * @see parent::loadMatchingList
+   */
+  function loadMatchingList($order = null, $limit = null, $group = null, $ljoin = null, $index = null) {
+    if (!$order) {
+      $order = "`last_update` DESC";
+    }
+    return parent::loadMatchingList($order, $limit, $group, $ljoin, $index);
+  }
+
+  /**
+   * @see parent::loadList
+   */
+  function loadList($where = null, $order = null, $limit = null, $group = null, $ljoin = null, $index = null) {
+    if (!$order) {
+      $order = "`last_update` DESC";
+    }
+    return parent::loadList($where, $order, $limit, $group, $ljoin, $index);
+  }
+
+  /**
+   * @see parent::loadObject
+   */
+  function loadObject($where = null, $order = null, $group = null, $ljoin = null, $index = null) {
+    if (!$order) {
+      $order = "`last_update` DESC";
+    }
+    return parent::loadList($where, $order, $group, $ljoin, $index);
+  }
   
   /**
    * Loads a specific id400 for a given object (and optionnaly tag)
@@ -105,7 +146,7 @@ class CIdSante400 extends CMbMetaObject {
     
     // Don't load if object is undefined
     if ($mbObject->_id) {
-      $this->loadMatchingObject("`last_update` DESC");
+      $this->loadMatchingObject();
     }
     
     return $mbObject->_id;
@@ -129,8 +170,7 @@ class CIdSante400 extends CMbMetaObject {
     $where["object_class"] = "= '$mbObject->_class'";
     $where["tag"] = "LIKE '$tag'";
     
-    $order = "last_update ASC";
-    return $this->loadList($where, $order);
+    return $this->loadList($where);
   }
   
   /**
@@ -150,9 +190,8 @@ class CIdSante400 extends CMbMetaObject {
     $where["object_id"   ] = "= '$mbObject->_id'";
     $where["object_class"] = "= '$mbObject->_class'";
     $where["tag"] = "LIKE '$tag'";
-    
-    $order = "last_update ASC";
-    $this->loadObject($where, $order);
+
+    $this->loadObject($where);
   }
   
   /**
@@ -170,7 +209,7 @@ class CIdSante400 extends CMbMetaObject {
     
     // Look for object
     $this->_id = null;
-    $this->loadMatchingObject("`last_update` DESC");
+    $this->loadMatchingObject();
     $this->loadRefsFwd();
 
     // Check against cache duration
@@ -189,7 +228,7 @@ class CIdSante400 extends CMbMetaObject {
   function getMbObject() {
     // Look for object
     $this->_id = null;
-    $this->loadMatchingObject("`last_update` DESC");
+    $this->loadMatchingObject();
     $this->loadRefsFwd();
 
     // Always instanciate
@@ -220,7 +259,7 @@ class CIdSante400 extends CMbMetaObject {
     $this->object_class = $object_class;
     $this->object_id = $mbObject->_id;
     $this->last_update = null; // In case already defined
-    $this->loadMatchingObject("`last_update` DESC");
+    $this->loadMatchingObject();
     $this->_ref_object = null; // Prevent optimisation errors
     $this->loadRefs();
     
@@ -265,8 +304,7 @@ class CIdSante400 extends CMbMetaObject {
     $idex->id400        = $value;
     $idex->object_id    = $object_id;
 
-    $order = "last_update DESC";
-    $idex->loadMatchingObject($order);
+    $idex->loadMatchingObject();
     
     return $idex;
   }

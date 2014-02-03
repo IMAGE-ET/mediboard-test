@@ -78,7 +78,7 @@ foreach ($listHprimPatients as $_patient) {
   $IPP->object_class = "CPatient";
   $IPP->tag          = $tag_ipp;
   $IPP->id400        = "$_patient->external_id";
-  $IPP->loadMatchingObject("last_update DESC");
+  $IPP->loadMatchingObject();
   if ($IPP->_id) {
     $_patient->patient_id = $IPP->object_id;
     $_patient->store();
@@ -150,7 +150,7 @@ foreach ($listHprimSejours as $_sejour) {
   $nda->object_class = "CSejour";
   $nda->tag = $tag_sejour;
   $nda->id400 = "$_sejour->external_id";
-  $nda->loadMatchingObject("last_update DESC");
+  $nda->loadMatchingObject();
   if ($nda->_id) {
     $_sejour->sejour_id = $nda->object_id;
     $_sejour->store();

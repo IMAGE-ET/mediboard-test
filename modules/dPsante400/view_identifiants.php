@@ -22,7 +22,7 @@ $filter->id400        = CValue::get("id400");
 $filter->nullifyEmptyFields();
 
 // Par défaut, édition du premier id400
-$list = $filter->loadMatchingList("last_update DESC", 1);
+$list = $filter->loadMatchingList(null, 1);
 $firstId400 = reset($list);
 
 // Récupération de la liste des classes disponibles

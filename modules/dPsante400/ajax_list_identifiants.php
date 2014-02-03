@@ -30,11 +30,10 @@ if ($filter->object_id && $filter->object_class) {
 }
 
 // Requête du filtre
-$order = "last_update DESC";
 $max   = CValue::get("max", 30);
 $limit = "0, $max";
 
-$idexs = $filter->loadMatchingList($order, $limit);
+$idexs = $filter->loadMatchingList(null, $limit);
 foreach ($idexs as $_idex) {
   $_idex->loadRefs();
   $_idex->getSpecialType();

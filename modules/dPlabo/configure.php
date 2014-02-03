@@ -26,9 +26,8 @@ $remote_name = CAppUI::conf("dPlabo CCatalogueLabo remote_name");
 $idex = new CIdSante400();
 $idex->object_class = "CMediusers";
 $idex->tag = $remote_name;
-$order = "last_update DESC";
 
-$idexs = $idex->loadMatchingList($order);
+$idexs = $idex->loadMatchingList();
 
 foreach ($idexs as $_idex) {
   $_idex->loadRefs();

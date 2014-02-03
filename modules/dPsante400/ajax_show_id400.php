@@ -20,7 +20,6 @@ $sip_active = $module->mod_active;
 
 $idex_value = CValue::get("id400");
 $object_id = CValue::get("object_id");
-$order = "last_update DESC";
 
 $idex = new CIdSante400;
 $idex->id400     = $idex_value;
@@ -37,16 +36,16 @@ if ($idex->_id) {
   $filter->object_id    = $idex->object_id;
   
   $filter->tag = CSejour::getTagNDA($group_id);
-  $idexs = $filter->loadMatchingList($order);
+  $idexs = $filter->loadMatchingList();
   
   $filter->tag = CSejour::getTagNDA($group_id, "tag_dossier_trash");
-  $idexs += $filter->loadMatchingList($order);
+  $idexs += $filter->loadMatchingList();
   
   $filter->tag = CSejour::getTagNDA($group_id, "tag_dossier_cancel");
-  $idexs += $filter->loadMatchingList($order);
+  $idexs += $filter->loadMatchingList();
   
   $filter->tag = CSejour::getTagNDA($group_id, "tag_dossier_pa");
-  $idexs += $filter->loadMatchingList($order);
+  $idexs += $filter->loadMatchingList();
   
   // Chargement de l'objet afin de récupérer l'id400 associé (le latest)
   $object = new $filter->object_class;

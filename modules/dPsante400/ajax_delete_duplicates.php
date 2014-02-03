@@ -22,10 +22,8 @@ $where = array(
   "id400"        => "= '$idex_value'",
 );
 
-$order = "last_update DESC";
-
 $idex  = new CIdSante400();
-$idexs = $idex->loadList($where, $order);
+$idexs = $idex->loadList($where);
 
 $survivor = reset($idexs)->_id;
 
