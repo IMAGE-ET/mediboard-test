@@ -518,7 +518,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $props["_dialyse"]                  = "bool default|0";
     $props["_cession_creance"]          = "bool default|0";
     $props["_statut_pro"]               = "enum list|chomeur|etudiant|non_travailleur|independant|".
-                                                    "invalide|militaire|retraite|salarie_fr|salarie_sw|sans_emploi";
+      "invalide|militaire|retraite|salarie_fr|salarie_sw|sans_emploi";
 
     $props["_time_entree_prevue"] = "time";
     $props["_time_sortie_prevue"] = "time";
@@ -619,7 +619,7 @@ class CSejour extends CFacturable implements IPatientRelated {
             }
 
             if (!CMbRange::in($date_operation, $entree, $sortie)) {
-               return "Intervention du '$date_operation' en dehors des nouvelles dates du séjour du '$entree' au '$sortie'";
+              return "Intervention du '$date_operation' en dehors des nouvelles dates du séjour du '$entree' au '$sortie'";
             }
           }
         }
@@ -639,7 +639,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       if ($this->fieldModified("annule", "1")) {
         $max_cancel_time = CAppUI::conf("dPplanningOp CSejour max_cancel_time");
         if ((CMbDT::dateTime("+ $max_cancel_time HOUR", $this->entree_reelle) < CMbDT::dateTime())) {
-           return "Impossible d'annuler un dossier ayant une entree réelle depuis plus de $max_cancel_time heures.<br />";
+          return "Impossible d'annuler un dossier ayant une entree réelle depuis plus de $max_cancel_time heures.<br />";
         }
       }
 
@@ -1018,10 +1018,10 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Si annulation possible que par le chef de bloc
     if (
-        CAppUI::conf("dPplanningOp COperation cancel_only_for_resp_bloc") &&
-        $this->fieldModified("annule", 1) &&
-        $this->entree_reelle &&
-        !CModule::getCanDo("dPbloc")->edit
+      CAppUI::conf("dPplanningOp COperation cancel_only_for_resp_bloc") &&
+      $this->fieldModified("annule", 1) &&
+      $this->entree_reelle &&
+      !CModule::getCanDo("dPbloc")->edit
     ) {
       foreach ($this->loadRefsOperations() as $_operation) {
         if ($_operation->rank) {
@@ -1048,7 +1048,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     if (CAppUI::conf("dPplanningOp CSejour systeme_isolement") == "expert") {
       $this->isolement_date =
         $this->_isolement_date !== $this->entree && $this->isolement ?
-        $this->_isolement_date : "";
+          $this->_isolement_date : "";
       if (!$this->isolement) {
         $this->isolement_fin = "";
       }
@@ -1401,7 +1401,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         $this->_guess_NDA = CMbDT::format($this->entree_prevue, "%y");
         $this->_guess_NDA .=
           $this->type == "exte" ? "5" :
-          $this->type == "ambu" ? "4" : "0";
+            $this->type == "ambu" ? "4" : "0";
         $this->_guess_NDA .="xxxxx";
         break;
       default:
@@ -2007,9 +2007,7 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return CSejourTask[]
    */
   function loadRefsTasks() {
-    $this->_ref_tasks = $this->loadBackRefs("tasks", 'sejour_id ASC');
-
-    return $this->_ref_tasks;
+    return $this->_ref_tasks = $this->loadBackRefs("tasks");
   }
 
   /**
@@ -2101,9 +2099,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     if (
-        CModule::getActive("dPprescription") &&
-        $this->type == "urg" &&
-        CAppUI::conf("dPprescription CPrescription prescription_suivi_soins", CGroups::loadCurrent())
+      CModule::getActive("dPprescription") &&
+      $this->type == "urg" &&
+      CAppUI::conf("dPprescription CPrescription prescription_suivi_soins", CGroups::loadCurrent())
     ) {
       $this->loadRefPrescriptionSejour();
       $prescription = $this->_ref_prescription_sejour;
@@ -2537,10 +2535,10 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return string|void
    */
   static function getTagNDA($group_id = null, $type_tag = "tag_dossier") {
-    $context = array(__METHOD__, func_get_args());
+    /*$context = array(__METHOD__, func_get_args());
     if (CFunctionCache::exist($context)) {
       return CFunctionCache::get($context);
-    }
+    }*/
 
     // Gestion du tag NDA par son domaine d'identification
     if (CAppUI::conf("eai use_domain")) {
@@ -2550,7 +2548,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         $tag_NDA = CAppUI::conf("dPplanningOp CSejour $type_tag") . $tag_NDA;
       }
 
-      return CFunctionCache::set($context, $tag_NDA);
+      return $tag_NDA;
     }
 
     $tag_NDA = CAppUI::conf("dPplanningOp CSejour tag_dossier");
@@ -2573,7 +2571,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Pas de tag Num dossier
     if (null == $tag_NDA) {
-      return CFunctionCache::set($context, null);
+      return null;
     }
 
     // Préférer un identifiant externe de l'établissement
@@ -2583,7 +2581,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $group_id = $idex->id400;
     }
 
-    return CFunctionCache::set($context, str_replace('$g', $group_id, $tag_NDA));
+    return str_replace('$g', $group_id, $tag_NDA);
   }
 
   /**
@@ -2749,7 +2747,7 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @see parent::getExecutantId()
    */
   function getExecutantId($code_activite) {
-      return $this->praticien_id;
+    return $this->praticien_id;
   }
 
   /**
@@ -2924,7 +2922,7 @@ class CSejour extends CFacturable implements IPatientRelated {
           $motif[] = $_op->libelle;
         }
         else {
-           $motif[] = implode("; ", $_op->_codes_ccam);
+          $motif[] = implode("; ", $_op->_codes_ccam);
         }
       }
       $this->_motif_complet .= implode("; ", $motif);
