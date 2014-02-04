@@ -33,14 +33,10 @@ class CGroupsConfig extends CMbObjectConfig {
   // SIP
   public $sip_notify_all_actors;
   public $sip_idex_generator;
-  public $ipp_range_min;
-  public $ipp_range_max;
   
   // SMP
   public $smp_notify_all_actors;
   public $smp_idex_generator;
-  public $nda_range_min;
-  public $nda_range_max;
   
   public $dPprescription_CPrescription_show_trash_24h;
 
@@ -75,14 +71,10 @@ class CGroupsConfig extends CMbObjectConfig {
     // SIP
     $props["sip_notify_all_actors"] = "bool default|0";
     $props["sip_idex_generator"]    = "bool default|0";
-    $props["ipp_range_min"]         = "num min|0";
-    $props["ipp_range_max"]         = "num moreThan|ipp_range_min";
     
     // SMP
     $props["smp_notify_all_actors"] = "bool default|0";
     $props["smp_idex_generator"]    = "bool default|0";
-    $props["nda_range_min"]         = "num min|0";
-    $props["nda_range_max"]         = "num moreThan|ipp_range_min";
     
     $props["dPprescription_CPrescription_show_trash_24h"] = "bool default|0";
     

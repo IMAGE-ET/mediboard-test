@@ -138,8 +138,8 @@ class CEAISejour extends CEAIMbObject {
         return null;
       }
       else {
-        /* @todo Gestion des plages d'identifiants */
-        if (($NDA->id400 < $group->_configs["nda_range_min"]) || ($NDA->id400 > $group->_configs["nda_range_max"])) {
+        $incrementer = $sender->loadRefGroup()->loadDomainSupplier("CSejour");
+        if ($incrementer && ($NDA->id400 < $incrementer->range_min) || ($NDA->id400 > $incrementer->range_max)) {
            return CAppUI::tr("CEAISejour-idex-not-in-the-range");
         }
         

@@ -66,7 +66,7 @@ class CGroupDomain extends CMbObject {
    */
   function loadRefDomain() {
     if ($this->_ref_domain) {
-      return;
+      return $this->_ref_domain;
     }
     
     return $this->_ref_domain = $this->loadFwdRef("domain_id", 1);

@@ -131,9 +131,9 @@ class CEAIPatient extends CEAIMbObject {
           $IPP_temp->tag = CAppUI::conf("dPpatients CPatient tag_ipp_trash").$IPP_temp->tag;
           $IPP_temp->store();
         }
-      
-        /* @todo Gestion des plages d'identifiants */
-        if (($IPP->id400 < $group->_configs["ipp_range_min"]) || ($IPP->id400 > $group->_configs["ipp_range_max"])) {
+
+        $incrementer = $sender->loadRefGroup()->loadDomainSupplier("CPatient");
+        if ($incrementer && ($IPP->id400 < $incrementer->range_min) || ($IPP->id400 > $incrementer->range_max)) {
            return CAppUI::tr("CEAIPatient-idex-not-in-the-range");
         }
         
@@ -142,7 +142,7 @@ class CEAIPatient extends CEAIMbObject {
       
         return $IPP->store();  
       }
-    }  
+    }
   }
 
   /**

@@ -471,15 +471,15 @@ class CGroups extends CMbObject {
   }
 
   /**
-   * Is the group a domain supplier ?
+   * Load the domain supplier
    *
    * @param string $domain_type Domain type (CSejour, CPatient, etc)
    *
-   * @return bool
+   * @return null|CIncrementer
    */
-  function isNumberSupplier($domain_type) {
+  function loadDomainSupplier($domain_type) {
     if (!$this->_id) {
-      return false;
+      return null;
     }
 
     $group_domain = new CGroupDomain();
@@ -489,12 +489,22 @@ class CGroups extends CMbObject {
     $group_domain->loadMatchingObject();
 
     if (!$group_domain->_id) {
-      return false;
+      return null;
     }
 
-    $domain = $group_domain->loadRefDomain();
+    return $group_domain->loadRefDomain()->loadRefIncrementer();
+  }
 
-    return $domain->loadRefIncrementer()->_id ? 1 : 0;
+  /**
+   * Is the group a domain supplier ?
+   *
+   * @param string $domain_type Domain type (CSejour, CPatient, etc)
+   *
+   * @return bool
+   */
+  function isNumberSupplier($domain_type) {
+    $incrementer = self::loadDomainSupplier($domain_type);
+    return !$incrementer || !$incrementer->_id ? 0 : 1;
   }
 
   /**
