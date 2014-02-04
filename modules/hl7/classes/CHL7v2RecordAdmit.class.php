@@ -948,6 +948,12 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       }
     }
 
+    // Dans le cas où l'on a pas de PV2, la sortie prévue peut-être nulle
+    if ($newVenue->entree_reelle && !$newVenue->sortie_prevue) {
+      $entree = $newVenue->entree_reelle ? $newVenue->entree_reelle : $newVenue->entree_prevue);
+      $newVenue->sortie_prevue = CMbDT::addDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$newVenue->type).":00:00", $entree;
+    }
+
     /* TODO Supprimer ceci après l'ajout des times picker */
     $newVenue->_hour_entree_prevue = null;
     $newVenue->_min_entree_prevue = null;
@@ -1861,6 +1867,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if ($event_code == "A13") {
       $newVenue->sortie_reelle = "";
     }
+
+    // Cas
   }
   
   function getAlternateVisitID(DOMNode $node, CSejour $newVenue) {
