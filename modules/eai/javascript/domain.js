@@ -22,6 +22,12 @@ Domain = {
     url.addParam("domain_id", domain_id);
     url.requestUpdate("vw_domain");
   },
+
+  showDetails : function(domain_id) {
+    new Url("eai", "ajax_show_domain_details")
+      .addParam("domain_id", domain_id)
+      .requestUpdate("domain_details-"+domain_id);
+  },
   
   createDomainWithIdexTag : function() {
     var url = new Url("eai", "ajax_add_domain_with_idex");

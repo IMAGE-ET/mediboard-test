@@ -20,9 +20,9 @@
   {{if count($domain->_ref_group_domains) > 0}}
   <table class="form">
     <tr>
-      <th class="category">{{mb_label object=$group_domain field="group_id"}}</th>
-      <th class="category">{{mb_label object=$group_domain field="object_class"}}</th>
-      <th class="category">{{mb_label object=$group_domain field="master"}}</th>
+      <th class="category">{{mb_label class="CGroupDomain" field="group_id"}}</th>
+      <th class="category">{{mb_label class="CGroupDomain" field="object_class"}}</th>
+      <th class="category">{{mb_label class="CGroupDomain" field="master"}}</th>
       <th class="category">{{tr}}Actions{{/tr}}</th>
     </tr>
     

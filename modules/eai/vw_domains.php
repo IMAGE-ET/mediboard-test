@@ -13,31 +13,38 @@
  
 CCanDo::checkAdmin();
 
-$domain_id = CValue::getOrSession("domain_id");
+$domain_id = CValue::getOrSession("domain_id", null);
 
 // Liste des domaines
 $domain  = new CDomain();
+/** @var CDomain[] $domains */
 $domains = $domain->loadList();
 foreach ($domains as $_domain) {
   $_domain->loadRefActor();
   $_domain->loadRefIncrementer()->loadView();  
   $_domain->loadRefsGroupDomains();
   foreach ($_domain->_ref_group_domains as $_group_domain) {
-    $_group_domain->loadRefGroup();  
+    $_group_domain->loadRefGroup();
   }
   $_domain->isMaster();
-  $_domain->countObjects();
+  if ($_domain->_id === $domain_id) {
+    $domain = $_domain;
+  }
 }
 
 // Liste des acteurs
 $actor  = new CInteropActor(); 
 $actors = $actor->getObjects();
 
-// Récupération due l'incrementeur à ajouter/editer 
-$domain      = new CDomain();
-$domain->_id = $domain_id;
-
-$group_domain = new CGroupDomain();
+// Récupération de l'incrementeur à ajouter/editer
+if (!$domain->_id) {
+  $domain->loadRefActor();
+  $domain->loadRefIncrementer()->loadView();
+  $domain->loadRefsGroupDomains();
+  foreach ($domain->_ref_group_domains as $_group_domain) {
+    $_group_domain->loadRefGroup();
+  }
+}
 
 $groups = CGroups::loadGroups();
 
@@ -46,7 +53,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("domains"     , $domains);
 $smarty->assign("domain"      , $domain);
 $smarty->assign("actors"      , $actors);
-$smarty->assign("group_domain", $group_domain);
 $smarty->assign("groups"      , $groups);
 $smarty->display("vw_domains.tpl");
 

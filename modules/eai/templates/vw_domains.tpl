@@ -23,11 +23,6 @@ checkOnlyTwoSelected = function(checkbox) {
   if (checkedMerge.length > 2)
     checkedMerge.shift().checked = false;
 }
-    
-Main.add(function () {
-  Domain.showDomain('{{$domain->_id}}');
-});
-
 </script>
 
 <table class="main">
@@ -47,9 +42,7 @@ Main.add(function () {
       {{mb_include template=inc_list_domains}}
     </td>
     <td style="width: 40%" id="vw_domain">
-      {{if $domain->_id}}
-        {{mb_include template=inc_edit_domain}}
-      {{/if}}
+      {{mb_include template=inc_edit_domain}}
     </td>
   </tr>
 </table>

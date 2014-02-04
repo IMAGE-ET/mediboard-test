@@ -31,10 +31,8 @@
         <td class="narrow">
           <input type="checkbox" name="domains_id[]" value="{{$_domain->_id}}" class="merge" style="float: left;" onclick="checkOnlyTwoSelected(this)" />
         </td>
-        <td>
-          <a href="#{{$_domain->_guid}}" onclick="Domain.showDomain('{{$_domain->_id}}', this)">
+        <td><button type="button" class="edit notext" onclick="Domain.showDomain('{{$_domain->_id}}', this)">{{tr}}Edit{{/tr}}</button>
             {{mb_value object=$_domain field=tag}}
-          </a>
         </td>
         <td>
           <a href="#{{$_domain->_guid}}" onclick="Domain.showDomain('{{$_domain->_id}}', this)">
@@ -65,13 +63,8 @@
         <td {{if $_domain->_is_master_ipp}}class="ok"{{/if}}></td>
         <td {{if $_domain->_is_master_nda}}class="ok"{{/if}}></td>
         <td>
-          {{if $_domain->_count_objects > 0}}
-            <ul>
-              {{foreach from=$_domain->_detail_objects item=_detail_object}}
-                <li><strong>{{tr}}{{$_detail_object.object_class}}{{/tr}}</strong> : {{$_detail_object.total}}</li>
-              {{/foreach}}
-            </ul> 
-          {{/if}}
+          <button type="button" class="lookup notext" onclick="Domain.showDetails('{{$_domain->_id}}')">{{tr}}Details{{/tr}}</button>
+          <div id="domain_details-{{$_domain->_id}}"></div>
         </td>
       </tr>
     {{foreachelse}}
