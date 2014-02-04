@@ -96,6 +96,7 @@ foreach ($listConsultations as $_consult) {
   foreach ($dossiers_anesth as $_dossier) {
     $_dossier->loadRefOperation();
     $_sejour = $_dossier->_ref_sejour;
+    $_sejour->loadRefsOperations();
     if ($_sejour->_id) {
       $sejours_total[$_sejour->_id] = $_sejour;
     }
