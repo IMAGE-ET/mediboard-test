@@ -437,10 +437,10 @@
         {{/if}}
         <tr>
           {{if $dossier_anesth->mallampati && $conf.dPcabinet.CConsultAnesth.show_mallampati}}
-          <td rowspan="4" class="button text">
-            <img src="images/pictures/{{$dossier_anesth->mallampati}}.png" alt="{{tr}}CConsultAnesth.mallampati.{{$dossier_anesth->mallampati}}{{/tr}}" />
-            <br />Mallampati<br />de {{tr}}CConsultAnesth.mallampati.{{$dossier_anesth->mallampati}}{{/tr}}
-          </td>
+            <td rowspan="5" class="button text">
+              <img src="images/pictures/{{$dossier_anesth->mallampati}}.png" alt="{{tr}}CConsultAnesth.mallampati.{{$dossier_anesth->mallampati}}{{/tr}}" />
+              <br />Mallampati<br />de {{tr}}CConsultAnesth.mallampati.{{$dossier_anesth->mallampati}}{{/tr}}
+            </td>
           {{/if}}
           <th style="font-weight: normal;">Ouverture de la bouche</th>
           <td style="font-weight: bold;">
@@ -450,6 +450,16 @@
         <tr>
           <th style="font-weight: normal;">Distance thyro-mentonnière</th>
           <td style="font-weight: bold;">{{tr}}CConsultAnesth.distThyro.{{$dossier_anesth->distThyro}}{{/tr}}</td>
+        </tr>
+        <tr>
+          <th style="font-weight: normal;">Critères de ventilation</th>
+          <td style="font-weight: bold;" class="text">
+            {{if $dossier_anesth->plus_de_55_ans}}{{mb_label object=$dossier_anesth field=plus_de_55_ans}}<br/>{{/if}}
+            {{if $dossier_anesth->imc_sup_26}}{{mb_label object=$dossier_anesth field=imc_sup_26}}<br/>{{/if}}
+            {{if $dossier_anesth->edentation}}{{mb_label object=$dossier_anesth field=edentation}}<br/>{{/if}}
+            {{if $dossier_anesth->ronflements}}{{mb_label object=$dossier_anesth field=ronflements}}<br/>{{/if}}
+            {{if $dossier_anesth->barbe}}{{mb_label object=$dossier_anesth field=barbe}}{{/if}}
+          </td>
         </tr>
         <tr>
           <th style="font-weight: normal;">Etat bucco-dentaire</th>
