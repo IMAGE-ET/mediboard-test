@@ -365,6 +365,8 @@ class CRPU extends CMbObject {
         }
       }
     }
+
+    return $this->_ref_consult;
   }
 
   /**

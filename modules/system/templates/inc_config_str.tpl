@@ -9,6 +9,7 @@
 *}}
 
 {{mb_default var=textarea value=0}}
+{{mb_default var=spinner_min  value=0}}
 
 {{if @$m}}
   {{if @$class}}
@@ -38,11 +39,11 @@
     {{assign var=uid value="uid-$uid"}}
     
     {{if @$numeric}}
-    <script type="text/javascript">
-      Main.add(function(){
-        $$(".{{$uid}}")[0].addSpinner({min: 0});
-      });
-    </script>
+      <script type="text/javascript">
+        Main.add(function(){
+          $$(".{{$uid}}")[0].addSpinner({min: {{$spinner_min}} {{if @$spinner_max}}, max: {{$spinner_max}}{{/if}}});
+        });
+      </script>
     {{/if}}
     
     {{if $textarea}}
