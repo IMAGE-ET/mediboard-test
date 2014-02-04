@@ -61,9 +61,17 @@
       {{/if}}
 
       <td class="text" style="{{$cell_style}}">
-        <a class="action" style="float: right;" title="Imprimer la DHE du séjour" href="#1" onclick="Admissions.printDHE('sejour_id', {{$_sejour->_id}}); return false;">
-          <img src="images/icons/print.png" />
-        </a>
+        {{foreach from=$_sejour->_ref_operations item=_op name=op_sejour}}
+          {{if $smarty.foreach.op_sejour.first}}
+            <a class="action" style="float: right;" title="Imprimer la DHE de l'intervention" href="#1" onclick="Admissions.printDHE('operation_id', {{$_op->_id}}); return false;">
+              <img src="images/icons/print.png" />
+            </a>
+          {{/if}}
+        {{foreachelse}}
+          <a class="action" style="float: right;" title="Imprimer la DHE du séjour" href="#1" onclick="Admissions.printDHE('sejour_id', {{$_sejour->_id}}); return false;">
+            <img src="images/icons/print.png" />
+          </a>
+        {{/foreach}}
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
       </td>
 
