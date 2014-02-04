@@ -223,7 +223,7 @@ class CSetupeai extends CSetup {
             $ds->query($query);
             
             // Update incrementer
-            if (!array_key_exists("nda_range_min", $group_configs) || !$range_max || !$range_min) {
+            if (!array_key_exists("nda_range_min", $group_configs) || !$range_max || $range_min === null) {
               continue;
             }
             $query = "UPDATE `incrementer` 
@@ -335,17 +335,19 @@ class CSetupeai extends CSetup {
 
           $incrementer_id = $incrementer["incrementer_id"];
 
-          if ($incrementer_id) {
-            // Update incrementer
-            if (!array_key_exists("nda_range_min", $group_configs) || !$range_max || !$range_min) {
-              continue;
-            }
-
-            $query = "UPDATE `incrementer`
-                      SET `range_min` = '$range_min', `range_max` = '$range_max'
-                      WHERE `incrementer_id` = '$incrementer_id';";
-            $ds->query($query);
+          if (!$incrementer_id) {
+            continue;
           }
+
+          // Update incrementer
+          if (!array_key_exists("nda_range_min", $group_configs) || !$range_max || $range_min === null) {
+            continue;
+          }
+
+          $query = "UPDATE `incrementer`
+                    SET `range_min` = '$range_min', `range_max` = '$range_max'
+                    WHERE `incrementer_id` = '$incrementer_id';";
+          $ds->query($query);
         }
       }
 
