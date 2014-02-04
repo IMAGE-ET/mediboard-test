@@ -992,7 +992,7 @@ class CPatient extends CPerson {
    *
    * @param string $dateTime Date de référence, maintenant si null
    *
-   * @return void
+   * @return CSejour[]
    */
   function getCurrSejour($dateTime = null) {
     if (!$dateTime) {
@@ -1000,7 +1000,7 @@ class CPatient extends CPerson {
     }
 
     $where[] = "'$dateTime' BETWEEN entree AND sortie";
-    $this->loadRefsSejours($where);
+    return $this->loadRefsSejours($where);
   }
 
   /**
