@@ -178,7 +178,7 @@ class CSetupeai extends CSetup {
         foreach ($tab as $object_class) {
           if ($object_class == "CPatient") {
             $tag_group = CPatient::getTagIPP($group_id);
-            if (!array_key_exists("ipp_range_min", $group_configs)) {
+            if (!$group_configs || !array_key_exists("ipp_range_min", $group_configs)) {
               continue;
             }
             $range_min = $group_configs["ipp_range_min"];
@@ -186,7 +186,7 @@ class CSetupeai extends CSetup {
           }
           else {
             $tag_group = CSejour::getTagNDA($group_id);
-            if (!array_key_exists("nda_range_min", $group_configs)) {
+            if (!$group_configs || !array_key_exists("nda_range_min", $group_configs)) {
               continue;
             }
             $range_min = $group_configs["nda_range_min"];
@@ -307,6 +307,10 @@ class CSetupeai extends CSetup {
         $group_id = $_group["group_id"];
 
         $group_configs = $ds->loadHash("SELECT * FROM groups_config WHERE object_id = '$group_id'");
+
+        if (!$group_configs) {
+          continue;
+        }
 
         foreach ($tab as $object_class) {
           if ($object_class == "CPatient") {
