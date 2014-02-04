@@ -183,7 +183,7 @@ class CRPUXMLDocument extends CMbXMLDocument {
       $this->addElement($elParent, "ORIENT"     , strtoupper($orientation));
 
       if ($affectation->_id) {
-        $this->addElement($elParent, "ENTREE_UHCD"     , $affectation->entree);
+        $this->addElement($elParent, "ENTREE_UHCD"     , CMbDT::transform($affectation->entree, null, "%d/%m/%Y %H:%M"));
         $this->addElement($elParent, "MODE_SORTIE_UHCD", $mbObject->_mode_sortie);
         $this->addElement($elParent, "DESTINATION_UHCD", $sejour->destination);
         $this->addElement($elParent, "ORIENT_UHCD"     , strtoupper($mbObject->orientation));
