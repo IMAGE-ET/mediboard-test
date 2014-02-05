@@ -321,13 +321,13 @@
                     <img src="images/icons/ampoule_grey.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')" />
                   {{/if}}
                 </a>
-                {{if $prescription->_count_urgences|@array_sum}}
+                {{*if $prescription->_count_urgences|@array_sum}}
                   <img src="images/icons/ampoule_urgence.png" />
-                {{/if}}
+                {{/if*}}
               {{else}}
                 <img src="images/icons/placeholder.png" />
               {{/if}}
-              
+
               {{if $_sejour->UHCD}}
                 <img src="images/icons/uhcd.png" />
               {{/if}}
