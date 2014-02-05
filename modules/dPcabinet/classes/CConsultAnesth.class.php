@@ -162,7 +162,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     // Données examens complementaires
     $props["rai"]              = "enum list|?|NEG|POS default|? show|0";
     $props["hb"]               = "float min|0 show|0";
-    $props["tp"]               = "float min|0 max|100 show|0";
+    $props["tp"]               = "float min|0 max|140 show|0";
     $props["tca"]              = "numchar maxLength|2 show|0";
     $props["tca_temoin"]       = "numchar maxLength|2 show|0";
     $props["creatinine"]       = "float show|0";
@@ -172,8 +172,8 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $props["tsivy"]            = "time show|0";
     $props["plaquettes"]       = "numchar maxLength|4 pos show|0";
     $props["ecbu"]             = "enum list|?|NEG|POS default|? show|0";
-    $props["ht"]               = "float min|0 max|100 show|0";
-    $props["ht_final"]         = "float min|0 max|100 show|0";
+    $props["ht"]               = "float min|0 max|140 show|0";
+    $props["ht_final"]         = "float min|0 max|140 show|0";
     $props["result_ecg"]       = "text helped";
     $props["result_rp"]        = "text helped";
     $props["result_autre"]     = "text helped";
@@ -459,8 +459,13 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     }
   }
 
+  /**
+   * Chargement des techniques complémentaires
+   *
+   * @return CTechniqueComp[]
+   */
   function loadRefsTechniques() {
-    $techniques = new CTechniqueComp;
+    $techniques = new CTechniqueComp();
     $where = array(
       "consultation_anesth_id" => "= '$this->consultation_anesth_id'"
     );
@@ -623,7 +628,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $consult = $this->loadRefConsultation();
     $consult->loadRefPlageConsult();
 
-    if ($consult->_ref_plageconsult->date < CMbDT::date() && !$this->_ref_module->_can->admin) {
+    if ($consult->_ref_plageconsult->date < CMbDT::date() && !$this->_ref_module->canDo()->admin) {
       return "Impossible de supprimer un dossier d'anesthésie d'une consultation passée";
     }
 
