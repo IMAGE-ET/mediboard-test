@@ -15,6 +15,7 @@ $consult_anesth  = CValue::getOrSession("consult_anesth_id");
 
 $consult = new CConsultation();
 $consult->load($conusultation_id);
+$consult->loadRefPlageConsult();
 $patient = $consult->loadRefPatient();
 $patient->loadRefsSejours();
 foreach ($patient->_ref_sejours as $_sejour) {
@@ -37,6 +38,7 @@ $sejour = new CSejour();
 $group_id = CGroups::loadCurrent()->_id;
 $where = array();
 $where["patient_id"] = "= '$patient->_id'";
+$where["entree_prevue"] = ">= '".$consult->_ref_plageconsult->date."'";
 if (CAppUI::conf("dPpatients CPatient multi_group") == "hidden") {
   $where["sejour.group_id"] = "= '$group_id'";
 }
@@ -50,7 +52,8 @@ foreach ($patient->_ref_sejours as $_key => $_sejour) {
   foreach ($_sejour->_ref_operations as $_key_op => $_operation) {
     $_operation->loadRefsFwd();
     $_operation->_ref_chir->loadRefFunction()->loadRefGroup();
-    if (!$_operation->_ref_consult_anesth->_id && $_sejour->entree_prevue > $_operation->_ref_plageop->date) {
+    $day = CMbDT::daysRelative($consult->_ref_plageconsult->date, $_operation->_ref_plageop->date);
+    if (!$_operation->_ref_consult_anesth->_id && $day >= 0) {
       $ops_sans_dossier_anesth[] = $_operation;
     }
   }
@@ -65,6 +68,7 @@ $tab_op = array();
 foreach ($consult->_refs_dossiers_anesth as $consultation_anesth) {
   $consultation_anesth->loadRelPatient();
   $consult->_ref_patient->loadRefConstantesMedicales(null, array("poids"), $consult);
+  $consultation_anesth->_ref_consultation = $consult;
 
   $consultation_anesth->loadRefOperation()->loadRefSejour();
   $consultation_anesth->_ref_operation->_ref_sejour->loadRefDossierMedical();
