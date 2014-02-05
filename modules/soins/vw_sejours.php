@@ -307,7 +307,7 @@ foreach ($sejours as $sejour) {
   }
   
   if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
-    $prescription->_count_alertes = $prescription->countAlertsNotHandled("medium");
+    $prescription->_count_alertes  = $prescription->countAlertsNotHandled("medium");
     $prescription->_count_urgences = $prescription->countAlertsNotHandled("high");
   }
   else {
