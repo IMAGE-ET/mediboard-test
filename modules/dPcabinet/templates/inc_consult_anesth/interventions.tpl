@@ -95,7 +95,7 @@
 
   {{if !$consult_anesth->operation_id}}
   <!-- Choix du séjour -->
-  <select name="sejour_id" style="width: 20em;" onchange="submitOpConsult()">
+  <select name="sejour_id" style="width: 20em;" onchange="this.form.submit();">
     <option value="">Pas de séjour</option>
     {{foreach from=$patient->_ref_sejours item=curr_sejour}}
     <option value="{{$curr_sejour->_id}}"{{if $consult_anesth->sejour_id==$curr_sejour->_id}} selected="selected"{{/if}}>
@@ -109,21 +109,21 @@
   <!-- Choix de l'intervention -->
   {{mb_field object=$consult_anesth field="sejour_id" hidden=1}}
   {{/if}}
-  <select name="operation_id" style="width: 20em;" onchange="$V(this.form.sejour_id, $(this.options[this.selectedIndex]).get('sejour_id'), false); submitOpConsult()">
+  <select name="operation_id" style="width: 20em;" onchange="$V(this.form.sejour_id, $(this.options[this.selectedIndex]).get('sejour_id'), false);this.form.submit();">
     <option value="">Pas d'Intervention</option>
     {{foreach from=$patient->_ref_sejours item=curr_sejour}}
-    <optgroup label="{{if $curr_sejour->annule}}ANNULE - {{/if}}Séjour du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}} au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}">
-      {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
-      <option value="{{$curr_op->_id}}" data-sejour_id="{{$curr_op->sejour_id}}"
-        {{if $consult_anesth->operation_id==$curr_op->_id}}
-              selected
-        {{elseif $curr_op->_ref_consult_anesth->_id && $curr_op->_ref_consult_anesth->_id != $consult_anesth->_id}}
-              disabled
-        {{/if}}>
-        {{if $curr_op->annulee}}ANNULEE - {{/if}}Le {{$curr_op->_datetime|date_format:"%d/%m/%Y"}} &mdash; Dr {{$curr_op->_ref_chir->_view}}
-      </option>
-      {{/foreach}}
-    </optgroup>
+        <optgroup label="{{if $curr_sejour->annule}}ANNULE - {{/if}}Séjour du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}} au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}">
+          {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
+          <option value="{{$curr_op->_id}}" data-sejour_id="{{$curr_op->sejour_id}}"
+            {{if $consult_anesth->operation_id==$curr_op->_id}}
+                  selected
+            {{elseif $curr_op->_ref_consult_anesth->_id && $curr_op->_ref_consult_anesth->_id != $consult_anesth->_id}}
+                  disabled
+            {{/if}}>
+            {{if $curr_op->annulee}}ANNULEE - {{/if}}Le {{$curr_op->_datetime|date_format:"%d/%m/%Y"}} &mdash; Dr {{$curr_op->_ref_chir->_view}}
+          </option>
+          {{/foreach}}
+        </optgroup>
     {{/foreach}}
   </select>
   {{if !$app->user_prefs.simpleCabinet && !@$modules.ecap->mod_active && !$operation->_id}}
