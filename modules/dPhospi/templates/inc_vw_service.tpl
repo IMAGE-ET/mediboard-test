@@ -72,6 +72,11 @@
       <th>{{mb_label object=$service field=neonatalogie}}</th>
       <td>{{mb_field object=$service field=neonatalogie}}</td>
     </tr>
+
+    <tr>
+      <th>{{mb_label object=$service field=radiologie}}</th>
+      <td>{{mb_field object=$service field=radiologie}}</td>
+    </tr>
         
     <tr>
       <th>{{mb_label object=$service field=description}}</th>

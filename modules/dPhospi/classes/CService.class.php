@@ -32,6 +32,7 @@ class CService extends CMbObject {
   public $uhcd;
   public $externe;
   public $neonatalogie;
+  public $radiologie;
   public $default_orientation;
   public $default_destination;
 
@@ -100,6 +101,7 @@ class CService extends CMbObject {
     $props["externe"]             = "bool default|0";
     $props["cancelled"  ]         = "bool default|0";
     $props["neonatalogie"]        = "bool default|0";
+    $props["radiologie"]          = "bool default|0";
     $props["default_orientation"] = "enum list|".implode("|", CRPU::$orientation_value);
     $props["default_destination"] = "enum list|".implode("|", CSejour::$destination_values);
 
@@ -362,6 +364,23 @@ class CService extends CMbObject {
     $service->group_id  = $group_id ? $group_id : CGroups::loadCurrent()->_id;
     $service->externe   = "1";
     $service->cancelled = "0";
+    $service->loadMatchingObject();
+
+    return $service;
+  }
+
+  /**
+   * Charge le service de radiologie de l'établissement
+   *
+   * @param string $group_id Group
+   *
+   * @return CService
+   */
+  static function loadServiceRadiologie($group_id = null) {
+    $service             = new CService();
+    $service->group_id   = $group_id ? $group_id : CGroups::loadCurrent()->_id;
+    $service->radiologie = "1";
+    $service->cancelled  = "0";
     $service->loadMatchingObject();
 
     return $service;

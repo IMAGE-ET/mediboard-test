@@ -768,6 +768,12 @@ class CSetupdPhospi extends CSetup {
                 ADD `default_destination` ENUM ('1','2','3','4','6','7');";
     $this->addQuery($query);
 
-    $this->mod_version = "0.84";
+    $this->makeRevision("0.84");
+
+    $query = "ALTER TABLE `service`
+                ADD `radiologie` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.85";
   }
 }
