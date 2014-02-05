@@ -52,7 +52,7 @@
     <td><strong>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$next_operation->_ref_chir}}</strong></td>
   </tr>
   <tr>
-    <td class="button" colspan="2"><button class="tick" onclick="selectOperation('{{$next_operation->_id}}');location.reload();">Associer au dossier d'anesthésie</button>
+    <td class="button" colspan="2"><button class="tick" onclick="selectOperation('{{$next_operation->_id}}');">Associer au dossier d'anesthésie</button>
       <button class="cancel" onclick="modalWindow.close();">Ne pas associer</button></td>
   </tr>
   {{elseif $next_sejour->_id}}
@@ -73,7 +73,7 @@
   </tr>
   <tr>
     <td class="button" colspan="2">
-      <button class="tick" onclick="selectSejour('{{$next_sejour->_id}}');location.reload();">Associer au dossier d'anesthésie</button>
+      <button class="tick" onclick="selectSejour('{{$next_sejour->_id}}');">Associer au dossier d'anesthésie</button>
       <button class="cancel" onclick="modalWindow.close();">Ne pas associer</button></td>
   </tr>
   {{/if}}
