@@ -52,7 +52,7 @@ $listSejours = array(
 $ljoin = array();
 $ljoin["rpu"] = "rpu.sejour_id = sejour.sejour_id";
 $temp = array();
-//$temp["sejour.type"]      = " = 'urg'";
+$temp[]  = "sejour.type != 'ambu' AND sejour.type != 'comp'";
 $temp["sejour.entree"]    = " BETWEEN '$date_before' AND '$date_after'";
 $temp["sejour.sortie_reelle"]    = "IS NULL";
 $temp["sejour.annule"]    = " = '0'";
