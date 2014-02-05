@@ -30,10 +30,6 @@ if (class_exists($objects_class) && count($objects_id)) {
   foreach ($objects_id as $object_id) {
     /** @var CMbObject $object */
     $object = new $objects_class;
-    if (!$object->canDo()->edit) {
-      CAppUI::stepAjax("Edit_right_required_for_this_class%s", UI_MSG_ERROR, CAppUI::tr($object->_class));
-    }
-
     $merge_type = $object->_spec->merge_type;
     if ($merge_type == 'none') {
       CAppUI::stepAjax("Merging_%sclass_is_forbidden_by_spec", UI_MSG_ERROR, CAppUI::tr($object->_class));
