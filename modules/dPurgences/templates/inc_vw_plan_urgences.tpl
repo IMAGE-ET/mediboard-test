@@ -29,7 +29,13 @@
                   {{mb_include template=inc_icone_attente rpu=$_sejour->_ref_rpu width=16}}
                   <div class="libelle compact" >
                     {{$rpu->motif|truncate:30|lower}}
-                    <div>({{$patient->_age}}) Arrivée: {{mb_value object=$_sejour field=_entree date=$date}}</div>
+                    <div>({{$patient->_age}})<br/>Arrivée: {{mb_value object=$_sejour field=_entree date=$date format=$conf.time}}
+                      <div class="mediuser" style="float:right;border-color:#{{$_sejour->_ref_praticien->_ref_function->color}}">
+                        <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_ref_praticien->_guid}}');">
+                          {{$_sejour->_ref_praticien->_shortview}}
+                        </span>
+                      </div>
+                    </div>
                     <div>{{$rpu->diag_infirmier|spancate:60:"..."|lower}}</div>
                   </div>
                  
