@@ -93,10 +93,15 @@ foreach ($listSejours as &$sejour) {
   $prescription = $sejour->_ref_prescription_sejour;
   if ($prescription) {
     $prescription->loadRefsPrescriptionLineMixes();
+
+    // Ampoule rouge
+    CPrescription::$_load_lite = true;
     $prescription->loadRefsLinesMedByCat();
+    CPrescription::$_load_lite = false;
     $prescription->loadRefsLinesElementByCat();
-        
-    $sejour->_ref_prescription_sejour->countRecentModif();
+    $prescription->countUrgence($date);
+
+    $prescription->countRecentModif();
   }
 
   // Chargement de l'IPP

@@ -554,7 +554,7 @@ Main.add(function () {
     
       {{assign var=transmissions value=$prescription->_transmissions}}    
       {{assign var=count_recent_modif value=$prescription->_count_recent_modif}}
-      {{assign var=count_urgence value=$prescription->_count_urgences}}
+      {{assign var=count_urgence value=$prescription->_count_urgence}}
       <table class="main">
         <tr>
           <td style="white-space: nowrap;" class="narrow">
