@@ -14,21 +14,21 @@
 
 <tr>
   {{if $object->_id}}
-  <th class="title modify {{$css_class}}" colspan="{{$colspan}}">
-    {{mb_include module=system template=inc_object_notes     }}
-    {{mb_include module=system template=inc_object_idsante400}}
-    {{mb_include module=system template=inc_object_history   }}
-    {{tr}}{{$object->_class}}-title-modify{{/tr}} 
-    <br />
-    '{{$object}}'
-  </th>
+    <th class="title modify {{$css_class}}" colspan="{{$colspan}}">
+      {{mb_include module=system template=inc_object_notes     }}
+      {{mb_include module=system template=inc_object_idsante400}}
+      {{mb_include module=system template=inc_object_history   }}
+      {{tr}}{{$object->_class}}-title-modify{{/tr}}
+      <br />
+      '{{$object}}'
+    </th>
   {{elseif $duplicate}}
-  <th class="title duplicate" colspan="{{$colspan}}">
-    {{tr}}{{$object->_class}}-title-duplicate{{/tr}}
-  </th>
+    <th class="title duplicate" colspan="{{$colspan}}">
+      {{tr}}{{$object->_class}}-title-duplicate{{/tr}}
+    </th>
   {{else}}
-  <th class="title" colspan="{{$colspan}}">
-    {{tr}}{{$object->_class}}-title-create{{/tr}} 
-  </th>
+    <th class="title" colspan="{{$colspan}}">
+      {{tr}}{{$object->_class}}-title-create{{/tr}}
+    </th>
   {{/if}}
 </tr>

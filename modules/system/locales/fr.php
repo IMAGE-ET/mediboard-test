@@ -2207,6 +2207,7 @@ $locales['module-system-libs'] = 'Bibliothèques externes';
 $locales['module-system-long'] = 'Administration système';
 $locales['module-templates-court'] = 'Modèle visuel';
 $locales['module-templates-long'] = 'Modèle visuel mediboard';
+$locales['Merging_%sclass_is_forbidden_by_spec'] = 'Interdiction de fusionner la class %s, les propriétés (spec) l\'interdisent';
 $locales['object_handlers'] = 'Handlers d\'objets';
 $locales['pref-notes_anonymous'] = 'Notes sans propriétaire par défaut';
 $locales['pref-notes_anonymous-desc'] = 'Notes sans propriétaire par défaut';
