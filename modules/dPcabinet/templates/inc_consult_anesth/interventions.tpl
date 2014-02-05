@@ -17,10 +17,10 @@
     url.redirect();
   }
   {{if !$consult_anesth->libelle_interv && !$consult_anesth->sejour_id && !$consult_anesth->operation_id && ($nextSejourAndOperation.COperation->_id || $nextSejourAndOperation.CSejour->_id)}}
-    modalWindow = null;
-    Main.add(function () {
-      modalWindow = Modal.open($('evenement-chooser-modal'));
-    });
+  modalWindow = null;
+  Main.add(function () {
+    modalWindow = Modal.open($('evenement-chooser-modal'));
+  });
   {{/if}}
 </script>
 
@@ -52,8 +52,10 @@
     <td><strong>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$next_operation->_ref_chir}}</strong></td>
   </tr>
   <tr>
-    <td class="button" colspan="2"><button class="tick" onclick="selectOperation('{{$next_operation->_id}}'); modalWindow.close();">Associer au dossier d'anesthésie</button>
-      {{elseif $next_sejour->_id}}
+    <td class="button" colspan="2"><button class="tick" onclick="selectOperation('{{$next_operation->_id}}');location.reload();">Associer au dossier d'anesthésie</button>
+      <button class="cancel" onclick="modalWindow.close();">Ne pas associer</button></td>
+  </tr>
+  {{elseif $next_sejour->_id}}
   <tr>
     <td colspan="2"> <div class="small-info">Un séjour à venir est présent dans le système pour ce patient</div></td>
   </tr>
@@ -71,7 +73,7 @@
   </tr>
   <tr>
     <td class="button" colspan="2">
-      <button class="tick" onclick="selectSejour('{{$next_sejour->_id}}'); modalWindow.close();">Associer au dossier d'anesthésie</button>
+      <button class="tick" onclick="selectSejour('{{$next_sejour->_id}}');location.reload();">Associer au dossier d'anesthésie</button>
       <button class="cancel" onclick="modalWindow.close();">Ne pas associer</button></td>
   </tr>
   {{/if}}
@@ -114,9 +116,9 @@
       {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
       <option value="{{$curr_op->_id}}" data-sejour_id="{{$curr_op->sejour_id}}"
         {{if $consult_anesth->operation_id==$curr_op->_id}}
-          selected
+              selected
         {{elseif $curr_op->_ref_consult_anesth->_id && $curr_op->_ref_consult_anesth->_id != $consult_anesth->_id}}
-          disabled
+              disabled
         {{/if}}>
         {{if $curr_op->annulee}}ANNULEE - {{/if}}Le {{$curr_op->_datetime|date_format:"%d/%m/%Y"}} &mdash; Dr {{$curr_op->_ref_chir->_view}}
       </option>
@@ -141,7 +143,7 @@
   </span>
   <br />
   {{/if}}
-  
+
   {{if $operation->_id}}
   <span onmouseover="ObjectTooltip.createEx(this, '{{$operation->_guid}}', null, { view_tarif: true })">
     <strong>Intervention :</strong>
@@ -160,21 +162,21 @@
 
 {{if $operation->_id}}
 <hr />
-  
+
 <form name="editOpFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitFormAjax(this);">
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="do_planning_aed" />
   {{mb_key object=$operation}}
-  
+
   <table class="layout main">
     {{if $conf.dPplanningOp.COperation.verif_cote && ($operation->cote == "droit" || $operation->cote == "gauche")}}
-      <tr>
-        <th>{{mb_label object=$operation field="cote_consult_anesth"}} :</th>
-        <td>{{mb_field emptyLabel="Choose" object=$operation field="cote_consult_anesth" onchange="this.form.onsubmit();"}}</td>
-      </tr>
+    <tr>
+      <th>{{mb_label object=$operation field="cote_consult_anesth"}} :</th>
+      <td>{{mb_field emptyLabel="Choose" object=$operation field="cote_consult_anesth" onchange="this.form.onsubmit();"}}</td>
+    </tr>
     {{/if}}
-    
+
     <tr>
       <th>{{mb_label object=$operation field="depassement_anesth"}} :</th>
       <td>
