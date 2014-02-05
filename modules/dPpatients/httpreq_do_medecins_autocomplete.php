@@ -30,15 +30,17 @@ $medecin_cps_prefs = CAppUI::pref("medecin_cps_pref");
 if ($medecin_cps_prefs != "") {
   $cps = preg_split("/\s*[\s\|,]\s*/", $medecin_cps_prefs);
   CMbArray::removeValue("", $cps);
-  
-  $where_cp = array();
-  foreach ($cps as $cp) {
-    $where_cp[] = "cp LIKE '".$cp."___'";
+
+  if (count($cps)) {
+    $where_cp = array();
+    foreach ($cps as $cp) {
+      $where_cp[] = "cp LIKE '".$cp."%'";
+    }
+    $where[] = "(".implode(" OR ", $where_cp).")";
   }
-  $where[] = "(".implode(" OR ", $where_cp).")";
 }
 else if ($indexGroup->_cp_court && !$all_departements) {
-  $where['cp'] = "LIKE '".$indexGroup->_cp_court."___'"; 
+  $where['cp'] = "LIKE '".$indexGroup->_cp_court."%'";
 }
 
 $matches = $medecin->seek($keywords, $where, 50, null, null, $order);
