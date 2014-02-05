@@ -58,7 +58,7 @@
       <td><strong>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$next_operation->_ref_chir}}</strong></td>
     </tr>
     <tr>
-      <td class="button" colspan="2"><button class="tick" onclick="selectOperation('{{$next_operation->_id}}'); modalWindow.close();">Associer au dossier d'anesthésie</button>
+      <td class="button" colspan="2"><button class="tick" onclick="selectOperation('{{$next_operation->_id}}');">Associer au dossier d'anesthésie</button>
         {{elseif $next_sejour->_id}}
     <tr>
       <td colspan="2"> <div class="small-info">Un séjour à venir est présent dans le système pour ce patient</div></td>
@@ -77,7 +77,7 @@
     </tr>
     <tr>
       <td class="button" colspan="2">
-        <button class="tick" onclick="selectSejour('{{$next_sejour->_id}}'); modalWindow.close();">Associer au dossier d'anesthésie</button>
+        <button class="tick" onclick="selectSejour('{{$next_sejour->_id}}');">Associer au dossier d'anesthésie</button>
       <button class="cancel" onclick="modalWindow.close();">Ne pas associer</button></td>
     </tr>
   {{/if}}
@@ -99,7 +99,7 @@
 
   {{if !$consult_anesth->operation_id}}
   <!-- Choix du séjour -->
-  <select name="sejour_id" style="width: 20em;" onchange="submitOpConsult()">
+  <select name="sejour_id" style="width: 20em;" onchange="this.form.submit();">
     <option value="">Pas de séjour</option>
     {{foreach from=$patient->_ref_sejours item=curr_sejour}}
     <option value="{{$curr_sejour->_id}}"{{if $consult_anesth->sejour_id==$curr_sejour->_id}} selected="selected"{{/if}}>
@@ -113,7 +113,7 @@
   <!-- Choix de l'intervention -->
   {{mb_field object=$consult_anesth field="sejour_id" hidden=1}}
   {{/if}}
-  <select name="operation_id" style="width: 20em;" onchange="$V(this.form.sejour_id, $(this.options[this.selectedIndex]).get('sejour_id'), false); submitOpConsult()">
+  <select name="operation_id" style="width: 20em;" onchange="$V(this.form.sejour_id, $(this.options[this.selectedIndex]).get('sejour_id'), false); this.form.submit();">
     <option value="">Pas d'Intervention</option>
     {{foreach from=$patient->_ref_sejours item=curr_sejour}}
     <optgroup label="{{if $curr_sejour->annule}}ANNULE - {{/if}}Séjour du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}} au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}">
