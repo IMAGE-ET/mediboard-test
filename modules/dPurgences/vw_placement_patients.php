@@ -119,6 +119,14 @@ for ($num = 0; $num <= 1; $num++) {
       $where["rpu.box_id"] = CSQLDataSource::prepareIn(array_keys($chambre->_ref_lits));
     }
 
+    if (CAppUI::conf("dPurgences create_sejour_hospit")) {
+      $where[] = "(rpu.mutation_sejour_id IS NULL AND EXISTS
+                    (SELECT * FROM rpu r
+                      WHERE r.rpu_id != rpu.rpu_id
+                      AND r.mutation_sejour_id IS NOT NULL))
+                  OR rpu.mutation_sejour_id IS NOT NULL";
+    }
+
     $sejour = new CSejour();
     /** @var CSejour[] $sejours */
     $sejours = $sejour->loadList($where, null, null, null, $ljoin);
