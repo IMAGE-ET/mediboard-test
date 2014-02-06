@@ -35,6 +35,18 @@
       <tr>
         <th class="category" colspan="10">{{tr}}config-dPurgences-chiffrement{{/tr}}</th>
       </tr>
+      {{assign var="var" value="gnupg_path"}}
+      <tr>
+        <th><label for="{{$m}}[{{$var}}]" title="{{tr}}config-dPurgences-{{$var}}{{/tr}}">
+            {{tr}}config-dPurgences-{{$var}}{{/tr}}
+          </label></th>
+        <td>
+          <input class="str" name="{{$m}}[{{$var}}]" value="{{$conf.$m.$var}}">
+          {{if $path !== "~"}}
+            {{tr}}Default{{/tr}} : {{$home}}
+          {{/if}}
+        </td>
+      </tr>
 
       {{assign var="var" value="pattern_keyinfo"}}
       <tr>
@@ -50,7 +62,7 @@
 
       <tr>
         <th class="button">
-          <button class="hslip" id="import-key" onclick="return RPU_Sender.popupImport();" type="submit">
+          <button class="hslip" id="import-key" onclick="return RPU_Sender.popupImport('{{$m}}');" type="submit">
             {{tr}}config-dPurgences-import-key{{/tr}}
           </button>
         </th>

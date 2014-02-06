@@ -13,9 +13,11 @@
 
 global $m;
 
-$home = exec('cd ~ && pwd').("/.gnupg");
-$user_apache = exec('whoami');
+$path = CAppUI::conf("$m gnupg_path");
+$path = $path ? $path : "~";
+$home = exec("cd $path && pwd")."/.gnupg";
 
+$user_apache = exec('whoami');
 // Check /root is writable
 $writable = is_writable($home);
 
@@ -29,6 +31,7 @@ $smarty = new CSmartyDP("modules/dPurgences");
 
 $smarty->assign("user_apache", $user_apache);
 $smarty->assign("home"       , $home);
+$smarty->assign("path"       , $path);
 $smarty->assign("writable"   , $writable);
 $smarty->assign("source"     , $source);
 

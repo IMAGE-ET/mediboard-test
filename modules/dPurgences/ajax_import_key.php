@@ -1,4 +1,6 @@
-<?php /* $Id$ */
+<?php
+
+/* $Id$ */
 
 /**
  * @package Mediboard
@@ -8,16 +10,29 @@
  * @license OXPL
  */
 
-CCanDo::checkAdmin();
+global $m;
 
+CCanDo::checkAdmin();
+$module = CValue::get("module");
 $file = isset($_FILES['import']) ? $_FILES['import'] : null;
 
 $fingerprint = $keydata = null;
 if ($file) {
   $keydata = file_get_contents($file['tmp_name']);
-
+  if ($module) {
+    $path = CAppUI::conf("$module gnupg_path");
+  }
   $gpg = new gnupg();
-  $info = $gpg->import($keydata);
+  if ($module && $path) {
+    putenv("GNUPGHOME=$path");
+  }
+  $gpg->seterrormode(gnupg::ERROR_EXCEPTION);
+  try{
+    $info = $gpg->import($keydata);
+  }
+  catch(Exception $e) {
+    mbTrace($e->getMessage());
+  }
 
   if (array_key_exists("fingerprint", $info)) {
     $fingerprint = $info['fingerprint'];
