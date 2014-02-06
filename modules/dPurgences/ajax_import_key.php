@@ -24,7 +24,7 @@ if ($file) {
   }
   $gpg = new gnupg();
   if ($module && $path) {
-    putenv("GNUPGHOME=$path");
+    putenv("HOME=$path");
   }
   $gpg->seterrormode(gnupg::ERROR_EXCEPTION);
   try{
