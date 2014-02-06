@@ -222,7 +222,7 @@ $library->description = "Composant Javascript d'effets spéciaux, accompagné du f
 $library->sourceDir = "scriptaculous-js-1.9.0";
 $library->targetDir = "scriptaculous";
 $library->versionFile = "lib/prototype.js";
-$library->versionString = "getUniqueElementID_IE(element, create)";
+$library->versionString = "(window.pageYOffset !== undefined)";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "scriptaculous";
