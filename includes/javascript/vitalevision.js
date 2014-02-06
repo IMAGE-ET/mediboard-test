@@ -114,7 +114,9 @@ var VitaleVision = {
           $$('#benef-nom span')[0].update(beneficiaireSelect.options[0].innerHTML);
         }
         VitaleVision.modalWindow = Modal.open($('modal-beneficiaire'), {
-          className: 'modal'
+          title : "Choix du bénéficiaire",
+          width: 400,
+          height: 200
         });
       }
     } 
@@ -168,8 +170,13 @@ var VitaleVision = {
     $V(form.Date_Day, parseInt(jour));
     $V(form.Date_Month, mois);
     $V(form.Date_Year, annee);
-    
-    form.onsubmit();
+    if (form.onsubmit) {
+      form.onsubmit();
+    }
+    else {
+      form.submit();
+    }
+
   },
   
   // Remplissage du formulaire en fonction du bénéficiaire sélectionné dans la fenetre modale
