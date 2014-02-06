@@ -44,7 +44,7 @@
 
     {{if $conf.dPplanningOp.CSejour.use_custom_mode_entree && $list_mode_entree|@count}}
       {{mb_field object=$_sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 0); submitAdmission(this.form);" hidden=true}}
-      <select name="mode_entree_id" class="{{$_sejour->_props.mode_entree_id}}" style="width: 15em;" onchange="updateModeEntree(this)">
+      <select name="mode_entree_id" class="{{$_sejour->_props.mode_entree_id}} notNull" style="width: 15em;" onchange="updateModeEntree(this)">
         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
         {{foreach from=$list_mode_entree item=_mode}}
           <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $_sejour->mode_entree_id == $_mode->_id}}selected{{/if}}>
