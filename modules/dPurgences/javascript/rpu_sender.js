@@ -1,6 +1,7 @@
 RPU_Sender = {
-  popupImport: function() {
+  popupImport: function(module) {
     new Url("dPurgences", "ajax_import_key")
+      .addParam("module", module)
     .pop(500, 400, "Import de la clé publique");
 
     return false;
