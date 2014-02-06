@@ -82,6 +82,18 @@ class DeploySwitchBranch extends MediboardCommand {
       $branch = "branches/$branch";
     }
 
+    // Switch externals
+    $paths = array(
+      ".",
+      "modules",
+    );
+
+    foreach ($paths as $_path) {
+      $this->switchExternal($wc, $branch, $_path, $output);
+    }
+
+    $this->out($output, "Externals switched successfuly");
+
     // Switch working copy ...
     $new_url = $wc->getRepository()->getURL()."/".$branch;
 
@@ -96,21 +108,6 @@ class DeploySwitchBranch extends MediboardCommand {
     }
 
     $this->out($output, "Working copy successfuly switched to '<b>$branch</b>'");
-
-    // Switch externals
-    $paths = array(
-      ".",
-      "modules",
-    );
-
-    foreach ($paths as $_path) {
-      $this->switchExternal($wc, $branch, $_path, $output);
-    }
-
-    $this->out($output, "Updating ...");
-    $wc->update();
-
-    $this->out($output, "Switch succeeded");
   }
 
   /**
@@ -171,8 +168,7 @@ class DeploySwitchBranch extends MediboardCommand {
     );
 
     foreach ($branches_detail as $_branch) {
-      $_date = strftime("%Y-%m-%d", strtotime($_branch['date']));
-      $_branch_name = "$_date - {$_branch['name']}";
+      $_branch_name = $_branch['name'];
 
       if ($_branch['name'] == $current_branch) {
         $_branch_name .= " (current)";

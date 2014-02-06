@@ -99,7 +99,7 @@ class WorkingCopy {
   }
 
   function sw($to) {
-    return Util::exec("switch", $to, array(), $this->path);
+    return Util::exec("switch", $to, array(), $this->path, true);
   }
 
   function commit($files, $message) {
