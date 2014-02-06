@@ -40,8 +40,6 @@ Main.add(function(){
 
 <table class="main form">
   <tr>
-    <th>{{mb_label object=$filter field="_date_min"}}</th>
-    <td>{{mb_field object=$filter field="_date_min" form="filterFrm" register=true}}</td>
     <th>{{mb_label object=$filter field=user_id}}</th>
     <td>
       <select name="user_id" class="ref">
@@ -53,15 +51,16 @@ Main.add(function(){
         {{/foreach}}
       </select>
     </td>
-  </tr>
-  <tr>
-    <th>{{mb_label object=$filter field="_date_max"}}</th>
-    <td>{{mb_field object=$filter field="_date_max" form="filterFrm" register=true}}</td>
+    <th>{{mb_label object=$filter field=date}}</th>
+    <td>{{mb_field object=$filter field=date form="filterFrm" register=true}}</td>
     <th><label for="ip_address">Sous-réseau</label></th>
-    <td><input type="text" name="ip_address" value="{{$filter->ip_address}}" /></td>
+    <td><input type="text" class="notNull" name="ip_address" value="{{$filter->ip_address}}" /></td>
   </tr>
   <tr>
-    <td class="button" colspan="4"><button type="submit" class="search">{{tr}}Filter{{/tr}}</button></td>
+    <td class="button" colspan="2"><button type="submit" class="search">{{tr}}Filter{{/tr}}</button></td>
+    <td class="button" colspan="4">
+      <div class="small-info">La recherche s'effectue sur entre l'horodatage de référence et la semaine qui précède</div>
+    </td>
   </tr>
 </table>
 
@@ -109,5 +108,7 @@ Main.add(function(){
     </td>
     <td style="text-align: right;">{{$_log.total}}</td>
   </tr>
+  {{foreachelse}}
+  <tr><td colspan="8" class="empty">{{tr}}CUserLog.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>
