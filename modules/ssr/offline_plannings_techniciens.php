@@ -11,8 +11,8 @@
 
 CCanDo::checkRead();
 
-CApp::setTimeLimit(120);
-CApp::setMemoryLimit("768M");
+CApp::setTimeLimit(240);
+CApp::setMemoryLimit("1024M");
 
 // Chargement de la liste des kines
 $mediuser = new CMediusers();
