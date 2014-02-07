@@ -43,7 +43,7 @@ if ($rpu->_id || $rpu->sejour_id) {
   if ($rpu->_ref_consult->_id) {
     CValue::setSession("selConsult", $rpu->_ref_consult->_id);
   }
-  
+  $rpu->loadFwdRef("_mode_entree_id");
   $sejour  = $rpu->_ref_sejour;
   $patient = $sejour->_ref_patient;
   

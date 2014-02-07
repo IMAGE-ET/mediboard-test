@@ -13,6 +13,7 @@
   <input type="hidden" name="m" value="urgences" />
   <input type="hidden" name="dosql" value="do_rpu_aed" />
   <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="actif" value="1"/>
   {{mb_key object=$rpu}}
   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
   <input type="hidden" name="_annule" value="{{$rpu->_annule|default:"0"}}" />
@@ -71,17 +72,47 @@
       </td>
 
       {{if $conf.dPplanningOp.CSejour.use_custom_mode_entree && $list_mode_entree|@count}}
-      <th>{{mb_label object=$sejour field=mode_entree_id prop="`$sejour->_props.mode_entree_id` notNull"}}</th>
-      <td>
+        <th>{{mb_label object=$rpu field=_mode_entree_id}}</th>
+        <td>
           {{mb_field object=$sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 0); ContraintesRPU.updateProvenance(this.value, true); changeModeEntree(this.value)" hidden=true}}
-          <select name="mode_entree_id" class="{{$sejour->_props.mode_entree_id}} notNull" style="width: 32em;" onchange="updateModeEntree(this)">
-            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-            {{foreach from=$list_mode_entree item=_mode}}
-              <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $sejour->mode_entree_id == $_mode->_id}}selected{{/if}}>
-                {{$_mode}}
-              </option>
-            {{/foreach}}
-          </select>
+
+          <input type="hidden" name="_mode_entree_id" value="{{$rpu->_mode_entree_id}}"
+                 class="autocomplete notNull" size="50"/>
+          <input type="text" name="_mode_entree_id_autocomplete_view" size="50" value="{{$rpu->_fwd._mode_entree_id}}"
+                 class="autocomplete" onchange='if(!this.value){this.form["_mode_entree_id"].value=""}' />
+
+          <script>
+            Main.add(function(){
+              var form = getForm("editRPU");
+              var input = form._mode_entree_id_autocomplete_view;
+              var url = new Url("system", "httpreq_field_autocomplete");
+              url.addParam("class", "CRPU");
+              url.addParam("field", "_mode_entree_id");
+              url.addParam("limit", 50);
+              url.addParam("view_field", "libelle");
+              url.addParam("show_view", false);
+              url.addParam("input_field", "_mode_entree_id_autocomplete_view");
+              url.addParam("wholeString", true);
+              url.addParam("min_occurences", 1);
+              url.autoComplete(input, "_mode_entree_id_autocomplete_view", {
+                minChars: 1,
+                method: "get",
+                select: "view",
+                dropdown: true,
+                afterUpdateElement: function(field, selected){
+                  $V(field.form["_mode_entree_id"], selected.getAttribute("id").split("-")[2]);
+                  var elementFormRPU = getForm("editRPU").elements;
+                  var selectedData = selected.down(".data");
+                  $V(elementFormRPU.mode_entree, selectedData.get("mode"));
+                },
+                callback: function(element, query){
+                  query += "&where[group_id]={{$g}}";
+                  query += "&where[actif]=1";
+                  return query;
+                }
+              });
+            });
+          </script>
         </td>
         {{else}}
         <th>{{mb_label object=$rpu field="_mode_entree"}}</th>
@@ -244,7 +275,6 @@
         <tr>
           <th>{{mb_label object=$rpu field="circonstance"}}</th>
           <td>
-            <input type="hidden" name="actif" value="1" />
             {{mb_field object=$rpu field="circonstance" autocomplete="true,1,10,true,true" form=editRPU}}
           </td>
           {{if $conf.dPurgences.display_motif_sfmu}}

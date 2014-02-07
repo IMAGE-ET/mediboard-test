@@ -76,6 +76,7 @@ class CRPU extends CMbObject {
   public $_DP;
   public $_ref_actes_ccam;
   public $_service_id;
+  public $_mode_entree_id;
   public $_UHCD;
   public $_etablissement_sortie_id;
   public $_etablissement_entree_id;
@@ -170,6 +171,7 @@ class CRPU extends CMbObject {
     $props["_destination"]             = "enum list|".implode("|", CSejour::$destination_values);
     $props["_transport"]               = "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo notNull";
     $props["_mode_entree"]             = "enum list|6|7|8 notNull";
+    $props["_mode_entree_id"]          = "ref class|CModeEntreeSejour autocomplete|libelle|true dependsOn|group_id|actif notNull";
     $props["_mode_sortie"]             = "enum list|6|7|8|9 default|8";
     $props["_sortie"]                  = "dateTime";
     $props["_patient_id"]              = "ref notNull class|CPatient";
@@ -254,6 +256,7 @@ class CRPU extends CMbObject {
     }
 
     $this->_mode_entree             = $sejour->mode_entree;
+    $this->_mode_entree_id          = $sejour->mode_entree_id;
     $this->_sortie                  = $sejour->sortie_reelle;
     $this->_provenance              = $sejour->provenance;
     $this->_transport               = $sejour->transport;
@@ -389,7 +392,7 @@ class CRPU extends CMbObject {
       return null;
     }
 
-    $this->completeField("sejour_id");
+    $this->completeField("sejour_id", "_mode_entree_id");
 
     $this->_bind_sejour = false;
 
@@ -409,6 +412,7 @@ class CRPU extends CMbObject {
     $sejour->etablissement_entree_id = $this->_etablissement_entree_id;
     $sejour->service_entree_id = $this->_service_entree_id;
     $sejour->mode_entree = $this->_mode_entree;
+    $sejour->mode_entree_id = $this->_mode_entree_id;
     $sejour->provenance  = $this->_provenance;
     $sejour->destination = $this->_destination;
     $sejour->transport   = $this->_transport;
@@ -469,6 +473,7 @@ class CRPU extends CMbObject {
         $sejour->etablissement_entree_id = $this->_etablissement_entree_id;
         $sejour->service_entree_id       = $this->_service_entree_id;
         $sejour->mode_entree             = $this->_mode_entree;
+        $sejour->mode_entree_id          = $this->_mode_entree_id;
         $sejour->provenance              = $this->_provenance;
         $sejour->destination             = $this->_destination;
         $sejour->transport               = $this->_transport;
