@@ -33,13 +33,13 @@
     <input type="radio" name="object" data-class="{{$patient->_class}}" data-id="{{$patient->_id}}" data-guid="{{$patient->_guid}}" onclick="File_Attach.setObject('{{$patient->_class}}','{{$patient->_id}}', this);" {{if $patient->_guid == $object_guid}}checked="checked"{{/if}} />
     <strong>{{$patient}}(Dossier Patient)</strong>
     <ul id="listCodables">
-      <li class="title"><strong>Sejours ({{$patient->_ref_sejours|@count}})</strong></li>
+      <li class="title"><strong>Sejours ({{$patient->_ref_sejours|@count}}) </strong></li>
         <!-- SEJOURS -->
         {{foreach from=$patient->_ref_sejours item=_sejour}}
           <li style="margin-left:10px;" {{if $_sejour->_guess_status == 0}}class="empty"{{/if}}>
             <input data-guess="{{$_sejour->_guess_status}}" type="radio" name="object" data-class="{{$_sejour->_class}}" data-id="{{$_sejour->_id}}" data-guid="{{$_sejour->_guid}}" onclick="File_Attach.setObject('{{$_sejour->_class}}','{{$_sejour->_id}}', this);" {{if $_sejour->_guid == $object_guid}}checked="checked"{{/if}}/>
             <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
-              {{$_sejour}}
+              {{$_sejour}} {{mb_include module=patients template=inc_nb_files_short nb_files=$_sejour->_ref_documents|@count nb_docs=$_sejour->_ref_files|@count}}
             </span>
 
             <!-- OP de SEJOUR -->
@@ -51,7 +51,7 @@
                   Inter. le {{mb_value object=$_op field=_datetime}}
                 </span>
                   avec le Dr {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_op->_ref_chir}}
-                  {{if $_op->annulee}}<span style="color: red;">[ANNULE]</span>{{/if}}
+                  {{if $_op->annulee}}<span style="color: red;">[ANNULE]</span>{{/if}} {{mb_include module=patients template=inc_nb_files_short nb_files=$_op->_ref_documents|@count nb_docs=$_op->_ref_files|@count}}
                 </li>
                 {{foreachelse}}
                 <li class="empty">{{tr}}COperation.none{{/tr}}</li>
@@ -67,7 +67,7 @@
                       Consultation le  {{mb_value object=$_consult field=_datetime}}
                       </span>
                   avec le Dr {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_consult->_ref_chir}}
-                  {{if $_consult->annule}}<span style="color: red;">[ANNULE]</span>{{/if}}
+                  {{if $_consult->annule}}<span style="color: red;">[ANNULE]</span>{{/if}} {{mb_include module=patients template=inc_nb_files_short nb_files=$_consult->_ref_documents|@count nb_docs=$_consult->_ref_files|@count}}
                 </li>
               {{/foreach}}
             </ul>
@@ -86,7 +86,7 @@
                   Consultation le  {{mb_value object=$_consult field=_datetime}}
                 </span>
                 avec le Dr {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_consult->_ref_chir}}
-                {{if $_consult->annule}}<span style="color: red;">[ANNULE]</span>{{/if}}
+                {{if $_consult->annule}}<span style="color: red;">[ANNULE]</span>{{/if}} {{mb_include module=patients template=inc_nb_files_short nb_files=$_consult->_ref_documents|@count nb_docs=$_consult->_ref_files|@count}}
             </li>
             {{foreachelse}}
             <li class="empty">{{tr}}CConsultation.none{{/tr}}</li>

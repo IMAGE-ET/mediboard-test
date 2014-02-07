@@ -40,6 +40,8 @@ $where = array(
 foreach ($patient->loadRefsSejours($where) as $_sejour) {
   $_sejour->loadRefPraticien();
   $_sejour->_guess_status = 0;
+  $_sejour->loadRefsFiles();
+  $_sejour->loadRefsDocs();
 
   if ($date_guess >= $_sejour->entree && $date_guess <= $_sejour->sortie) {
     //date matched
@@ -54,11 +56,14 @@ foreach ($patient->loadRefsSejours($where) as $_sejour) {
     }
   }
 
+
   //consult de sejour
   foreach ($_sejour->loadRefsConsultations() as $_consult) {
     $_consult->getType();
     $_consult->loadRefPlageConsult();
     $_consult->loadRefPraticien()->loadRefFunction();
+    $_consult->loadRefsFiles();
+    $_consult->loadRefsDocs();
     $_consult->_guess_status = 0;
 
     if ($date_guess >= $_sejour->entree && $date_guess <= $_sejour->sortie) {
@@ -78,6 +83,8 @@ foreach ($patient->loadRefsSejours($where) as $_sejour) {
   //interv du sejour
   foreach ($_sejour->loadRefsOperations(array("annulee" => "= '0'")) as $_operation) {
     $_operation->loadRefsFwd();
+    $_operation->loadRefsFiles();
+    $_operation->loadRefsDocs();
 
     if ($date_guess >= $_operation->debut_op && $date_guess <= $_operation->fin_op) {
       //date matched
@@ -118,6 +125,8 @@ foreach ($patient->loadRefsConsultations(array("annule" => "= '0'")) as $_consul
       }
     }
   }
+  $_consult->loadRefsFiles();
+  $_consult->loadRefsDocs();
 
   $_consult->getType();
   $_consult->loadRefPlageConsult();
