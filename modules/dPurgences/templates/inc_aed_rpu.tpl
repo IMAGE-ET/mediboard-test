@@ -13,6 +13,7 @@
   <input type="hidden" name="m" value="urgences" />
   <input type="hidden" name="dosql" value="do_rpu_aed" />
   <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="actif" value="1"/>
   {{mb_key object=$rpu}}
   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
   <input type="hidden" name="_annule" value="{{$rpu->_annule|default:"0"}}" />
@@ -71,17 +72,10 @@
       </td>
 
       {{if $conf.dPplanningOp.CSejour.use_custom_mode_entree && $list_mode_entree|@count}}
-      <th>{{mb_label object=$sejour field=mode_entree_id prop="`$sejour->_props.mode_entree_id` notNull"}}</th>
-      <td>
+        <th>{{mb_label object=$rpu field=_mode_entree_id}}</th>
+        <td>
           {{mb_field object=$sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 0); ContraintesRPU.updateProvenance(this.value, true); changeModeEntree(this.value)" hidden=true}}
-          <select name="mode_entree_id" class="{{$sejour->_props.mode_entree_id}} notNull" style="width: 32em;" onchange="updateModeEntree(this)">
-            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-            {{foreach from=$list_mode_entree item=_mode}}
-              <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $sejour->mode_entree_id == $_mode->_id}}selected{{/if}}>
-                {{$_mode}}
-              </option>
-            {{/foreach}}
-          </select>
+          {{mb_field object=$rpu field=_mode_entree_id size=50 onchange="updateModeEntree(this)" form="editRPU" autocomplete="true,1,50,true,true"}}
         </td>
         {{else}}
         <th>{{mb_label object=$rpu field="_mode_entree"}}</th>
@@ -244,7 +238,6 @@
         <tr>
           <th>{{mb_label object=$rpu field="circonstance"}}</th>
           <td>
-            <input type="hidden" name="actif" value="1" />
             {{mb_field object=$rpu field="circonstance" autocomplete="true,1,10,true,true" form=editRPU}}
           </td>
           {{if $conf.dPurgences.display_motif_sfmu}}
