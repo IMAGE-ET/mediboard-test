@@ -116,6 +116,7 @@ File_Attach = {
   file_id       : null,
   file_class    : null,
   file_guid     : null,
+  file_name     : null,
   patient_id    : null,
   is_valid      : false,
   button_Attach : null,
@@ -156,17 +157,23 @@ File_Attach = {
     this.checkLink();
   },
 
-  doMovefile : function(file_id, file_class, destination_id, destination_class) {
+  doMovefile : function(file_id, file_class, destination_id, destination_class, renamefile) {
     if (file_id && file_class) {
       this.setFile(file_id, file_class);
     }
     if (destination_id && destination_class) {
       this.setObject(destination_class, destination_id);
     }
+    if (renamefile) {
+      this.file_name = renamefile;
+    }
     var url = new Url("files", "controllers/do_move_file");
     url.addParam("object_id", this.file_id);
     url.addParam("object_class", this.file_class);
     url.addParam("destination_guid", this.object_guid);
+    if (this.file_name) {
+      url.addParam("file_name", this.file_name);
+    }
     url.requestUpdate("systemMsg", Control.Modal.close);
   },
 
