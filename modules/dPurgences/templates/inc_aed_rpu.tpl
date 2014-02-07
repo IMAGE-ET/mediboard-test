@@ -75,7 +75,44 @@
         <th>{{mb_label object=$rpu field=_mode_entree_id}}</th>
         <td>
           {{mb_field object=$sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 0); ContraintesRPU.updateProvenance(this.value, true); changeModeEntree(this.value)" hidden=true}}
-          {{mb_field object=$rpu field=_mode_entree_id size=50 onchange="updateModeEntree(this)" form="editRPU" autocomplete="true,1,50,true,true"}}
+
+          <input type="hidden" name="_mode_entree_id" value="{{$rpu->_mode_entree_id}}"
+                 class="autocomplete notNull" size="50"/>
+          <input type="text" name="_mode_entree_id_autocomplete_view" size="50" value="{{$rpu->_fwd._mode_entree_id}}"
+                 class="autocomplete" onchange='if(!this.value){this.form["_mode_entree_id"].value=""}' />
+
+          <script>
+            Main.add(function(){
+              var form = getForm("editRPU");
+              var input = form._mode_entree_id_autocomplete_view;
+              var url = new Url("system", "httpreq_field_autocomplete");
+              url.addParam("class", "CRPU");
+              url.addParam("field", "_mode_entree_id");
+              url.addParam("limit", 50);
+              url.addParam("view_field", "libelle");
+              url.addParam("show_view", false);
+              url.addParam("input_field", "_mode_entree_id_autocomplete_view");
+              url.addParam("wholeString", true);
+              url.addParam("min_occurences", 1);
+              url.autoComplete(input, "_mode_entree_id_autocomplete_view", {
+                minChars: 1,
+                method: "get",
+                select: "view",
+                dropdown: true,
+                afterUpdateElement: function(field, selected){
+                  $V(field.form["_mode_entree_id"], selected.getAttribute("id").split("-")[2]);
+                  var elementFormRPU = getForm("editRPU").elements;
+                  var selectedData = selected.down(".data");
+                  $V(elementFormRPU.mode_entree, selectedData.get("mode"));
+                },
+                callback: function(element, query){
+                  query += "&where[group_id]={{$g}}";
+                  query += "&where[actif]=1";
+                  return query;
+                }
+              });
+            });
+          </script>
         </td>
         {{else}}
         <th>{{mb_label object=$rpu field="_mode_entree"}}</th>
