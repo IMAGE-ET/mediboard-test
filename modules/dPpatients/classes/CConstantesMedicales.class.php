@@ -2444,7 +2444,7 @@ class CConstantesMedicales extends CMbObject {
     $values = array();
 
     /* Initializing the period for the cumul */
-    if ($constant_type == 'cumul' || $constant_type == 'formula') {
+    if (($constant_type == 'cumul' || $constant_type == 'formula') && !empty($constant_values)) {
       $reset_hour = self::getResetHour($constant_name);
       $last_value =  end($constant_values);
       $first_value = reset($constant_values);
@@ -2559,28 +2559,32 @@ class CConstantesMedicales extends CMbObject {
     }
 
     if ($constant_type == 'cumul' || $constant_type == 'formula') {
-      if ($current_value != 0) {
-        $periods[] = array(
-          'start' => $start_tick,
-          'end'   => $tick,
-          'start_time'  => $current_period['start'],
-          'end_time'    => $current_period['end'],
-          'value' => $current_value
-        );
-      }
-
       $cumul_datas = array();
-      foreach ($periods as $_period) {
-        $x = $_period['start'];
-        $cumul_datas[]  = array(
-          $x,
-          $_period['value'],
-          'date' => utf8_encode(
-            strftime('%d/%m/%y %H:%M', $_period['start_time']) . ' au ' . strftime('%d/%m/%y %H:%M', $_period['end_time'])
-          ),
-          'barWidth' => $_period['end'] - $_period['start']
-        );
-        $values[] = $_period['value'];
+
+      if (!empty($constant_values)) {
+        if ($current_value != 0) {
+          $periods[] = array(
+            'start' => $start_tick,
+            'end'   => $tick,
+            'start_time'  => $current_period['start'],
+            'end_time'    => $current_period['end'],
+            'value' => $current_value
+          );
+        }
+
+        $cumul_datas = array();
+        foreach ($periods as $_period) {
+          $x = $_period['start'];
+          $cumul_datas[]  = array(
+            $x,
+            $_period['value'],
+            'date' => utf8_encode(
+              strftime('%d/%m/%y %H:%M', $_period['start_time']) . ' au ' . strftime('%d/%m/%y %H:%M', $_period['end_time'])
+            ),
+            'barWidth' => $_period['end'] - $_period['start']
+          );
+          $values[] = $_period['value'];
+        }
       }
       $datas['cumul'] = $cumul_datas;
     }
