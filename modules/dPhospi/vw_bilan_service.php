@@ -11,8 +11,8 @@
  * @version    $Revision$
  */
 
-CApp::setMemoryLimit("512M");
-CApp::setTimeLimit(120);
+CApp::setMemoryLimit("1024M");
+CApp::setTimeLimit(240);
 
 function getCurrentLit($sejour, $date, $hour, $service_id, &$lits) {
   $affectations = $sejour->_ref_affectations;
