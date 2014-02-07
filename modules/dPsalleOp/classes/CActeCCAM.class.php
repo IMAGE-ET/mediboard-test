@@ -921,7 +921,7 @@ class CActeCCAM extends CActe {
       default :
         $this->_guess_association = "";
         $this->_guess_regle_asso  = "Z";
-        $this->_guess_facturable  = "0";
+        //$this->_guess_facturable  = "0";
     }
     
     return $this->_guess_association;
