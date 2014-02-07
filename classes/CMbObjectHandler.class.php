@@ -46,6 +46,16 @@ abstract class CMbObjectHandler {
   }
 
   /**
+   * Trigger when merge failed
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return bool
+   */
+  function onMergeFailure(CMbObject $mbObject) {
+  }
+
+  /**
    * Trigger after event merge
    *
    * @param CMbObject $mbObject Object

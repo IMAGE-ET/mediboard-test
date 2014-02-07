@@ -1167,6 +1167,7 @@ $locales['CSejour-libelle-desc'] = 'Motif du séjour';
 $locales['CSejour-lit_accompagnant'] = 'Lit accompagnant';
 $locales['CSejour-lit_accompagnant-court'] = 'Lit acc.';
 $locales['CSejour-lit_accompagnant-desc'] = 'Un lit pour un accompagnant est-il à prévoir';
+$locales['CSejour-merge-warning-affectation-conflict'] = 'Conflit de dates entre \'%s\' et  \'%s\'  (en annuler un pour permettre la fusion)';
 $locales['CSejour-modalite'] = 'Modalité d\'admission';
 $locales['CSejour-modalite-court'] = 'Modalité';
 $locales['CSejour-modalite-desc'] = 'Modalite d\'admission';

@@ -3571,6 +3571,8 @@ class CSejour extends CFacturable implements IPatientRelated {
     if ($msg = parent::checkMerge($sejours)) {
       return $msg;
     }
+
+    // Cas des prescriptions
     $count_prescription = 0;
     foreach ($sejours as $_sejour) {
       $_sejour->loadRefPrescriptionSejour();
@@ -3598,9 +3600,26 @@ class CSejour extends CFacturable implements IPatientRelated {
         if ($count_prescription == 1) {
           return "Impossible de fusionner des sejours qui comportent chacun des prescriptions de séjour";
         }
+
         $count_prescription++;
       }
     }
+
+    // Cas des affectations
+    $affectation = new CAffectation();
+    $where["sejour_id"] = CSQLDataSource::prepareIn(CMbArray::pluck($sejours, "_id"));
+
+    /** @var CAffectation[] $affectations */
+    $affectations = $affectation->loadList($where);
+
+    foreach ($affectations as $_affectation_1) {
+      foreach ($affectations as $_affectation_2) {
+        if ($_affectation_1->collide($_affectation_2)) {
+          return CAppUI::tr("CSejour-merge-warning-affectation-conflict", $_affectation_1->_view, $_affectation_2->_view);
+        }
+      }
+    }
+
     return null;
   }
 

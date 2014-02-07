@@ -115,7 +115,9 @@ class CSmpObjectHandler extends CEAIObjectHandler {
         $idexSejourElimine->object_id    = $sejour_elimine->_id;
         $idexsSejourElimine = $idexSejourElimine->loadMatchingList();
 
-        $idexs = array_merge($idexsSejour, $idexsSejourElimine);
+        /** @var CIdSante400[] $idexs */
+        $idexs         = array_merge($idexsSejour, $idexsSejourElimine);
+        $idexs_changed = array();
         if (count($idexs) > 1) {
           foreach ($idexs as $_idex) {
             // On continue pour ne pas mettre en trash le NDA du séjour que l'on garde
@@ -123,20 +125,27 @@ class CSmpObjectHandler extends CEAIObjectHandler {
               continue;
             }
 
-            $_idex->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$tag_NDA;
+            $old_tag = $_idex->tag;
+
+            $_idex->tag         = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$tag_NDA;
             $_idex->last_update = CMbDT::dateTime();
-            $_idex->store();
+            if (!$msg = $_idex->store()) {
+              if ($_idex->object_id == $sejour_elimine->_id) {
+                $idexs_changed[$_idex->_id] = $old_tag;
+              }
+            }
           }
         }
         
         if (!$sejour1_nda && !$sejour2_nda) {
           continue;  
         }
-        
+
         $mbObject->_fusion[$_group->_id] = array (
           "sejourElimine" => $sejour_elimine,
           "sejour1_nda"   => $sejour1_nda,
           "sejour2_nda"   => $sejour2_nda,
+          "idexs_changed" => $idexs_changed
         );
       }        
     }

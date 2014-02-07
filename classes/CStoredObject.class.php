@@ -1499,6 +1499,23 @@ class CStoredObject extends CModelObject {
       $this->_merging[$object->_id] = $object;
     }
     
+    foreach ($objects as &$object) {
+      $msg = $fast ? 
+        $this->fastTransferBackRefsFrom($object) :
+        $this->transferBackRefsFrom($object);
+        
+      if ($msg) {
+        $this->notify("MergeFailure");
+
+        return $msg;
+      }
+      
+      $object->_mergeDeletion = true;
+      if ($msg = $object->delete()) {
+        return $msg;
+      }
+    }
+
     // If external IDs are available, we save old objects' id as external IDs
     // This must not be done after the objects deletion !
     if (CModule::getInstalled("dPsante400")) {
@@ -1509,21 +1526,6 @@ class CStoredObject extends CModelObject {
         $idex->id400 = $object->_id;
         $idex->last_update = CMbDT::dateTime();
         $idex->store();
-      }
-    }
-    
-    foreach ($objects as &$object) {
-      $msg = $fast ? 
-        $this->fastTransferBackRefsFrom($object) :
-        $this->transferBackRefsFrom($object);
-        
-      if ($msg) {
-        return $msg;
-      }
-      
-      $object->_mergeDeletion = true;
-      if ($msg = $object->delete()) {
-        return $msg;
       }
     }
     

@@ -122,7 +122,15 @@ class CSipObjectHandler extends CEAIObjectHandler {
               continue;
             }
 
-            $patient_elimine->trashIPP($_idex);
+            $old_tag = $_idex->tag;
+
+            $_idex->tag         = CAppUI::conf('dPpatients CPatient tag_ipp_trash').$tap_IPP;
+            $_idex->last_update = CMbDT::dateTime();
+            if (!$msg = $_idex->store()) {
+              if ($_idex->object_id == $patient_elimine->_id) {
+                $idexs_changed[$_idex->_id] = $old_tag;
+              }
+            }
           }
         }
         
@@ -134,6 +142,7 @@ class CSipObjectHandler extends CEAIObjectHandler {
           "patientElimine" => $patient_elimine,
           "patient1_ipp"   => $patient1_ipp,
           "patient2_ipp"   => $patient2_ipp,
+          "idexs_changed" => $idexs_changed
         );
        
       }        

@@ -156,7 +156,6 @@ class CAffectation extends CMbObject {
     $sejour = $this->loadRefSejour();
     $sejour->loadRefPraticien();
     $sejour->loadRefPatient()->loadRefPhotoIdentite();
-    $affectations = $sejour->loadRefsAffectations();
 
     $this->loadRefParentAffectation();
 
@@ -533,6 +532,10 @@ class CAffectation extends CMbObject {
    * @return bool
    */
   function collide($aff) {
+    if ($this->_id && $aff->_id && $this->_id == $aff->_id) {
+      return false;
+    }
+
     return CMbRange::collides($this->entree, $this->sortie, $aff->entree, $aff->sortie);
   }
 
