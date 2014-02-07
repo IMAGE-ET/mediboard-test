@@ -376,7 +376,8 @@ refreshFiches = function(sejour_id){
       
   <table class="main" id="tab-constantes-medicales">
     <tr>
-      <td class="narrow" id="constantes-medicales-form" style="width: 30%;overflow-x: hidden;">
+      <td class="narrow" id="constantes-medicales-form" style="width: 30%;
+      ">
         {{include file="inc_form_edit_constantes_medicales.tpl" context_guid=$context_guid}}
       </td>
       <td id="constantes-medicales-graphs" style="width: 69%;">

@@ -250,7 +250,6 @@ unset($graphs_datas['drawn_constants']);
 
 // On récupère dans tous les cas le poids et la taille du patient
 $patient->loadRefConstantesMedicales(null, array("poids", "taille"), null, false);
-//mbTrace($data);
 
 // Création du template
 $smarty = new CSmartyDP();
