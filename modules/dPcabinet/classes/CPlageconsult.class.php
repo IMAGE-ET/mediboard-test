@@ -221,6 +221,7 @@ class CPlageconsult extends CPlageHoraire {
         if ($_consult->heure == $time) {
           $status = 0;
 
+          // pause
           if (!$_consult->patient_id) {
             $status = -1;
           }
@@ -232,9 +233,9 @@ class CPlageconsult extends CPlageHoraire {
           // repetition
           $temp_time = $time;
           for ($b=0; $b<$_consult->duree; $b++) {
-            $nb_plage_prise++;
             if ($status != 0) {
               $fill[$temp_time] = $status;
+              $nb_plage_prise++;
             }
 
             $temp_time = CMbDT::addTime($this->freq, $temp_time);
