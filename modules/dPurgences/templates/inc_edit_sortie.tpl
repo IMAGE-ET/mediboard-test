@@ -80,7 +80,7 @@
     }
   }
 </script>
-
+{{mb_script module=dPurgences script=contraintes_rpu ajax=true}}
 {{mb_include template=inc_form_sortie}}
 
 <form name="editRPU" method="post" action="?" onsubmit="return onSubmitFormAjax(this);">
@@ -108,7 +108,7 @@
         {{tr}}Cancel{{/tr}}
         {{mb_label object=$sejour field=sortie}}
       </button>
-      <button class="save singleclick" onclick="submitSejour(true);">
+      <button class="save singleclick" onclick="ContraintesRPU.checkObligatory({{$rpu->_id}}, submitSejour.curry(true));">
         {{tr}}Validate{{/tr}}
         {{mb_label object=$sejour field=sortie}}
       </button>
