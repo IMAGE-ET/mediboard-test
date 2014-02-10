@@ -156,7 +156,6 @@ class CAffectation extends CMbObject {
     $sejour = $this->loadRefSejour();
     $sejour->loadRefPraticien();
     $sejour->loadRefPatient()->loadRefPhotoIdentite();
-    $affectations = $sejour->loadRefsAffectations();
 
     $this->loadRefParentAffectation();
 
@@ -251,7 +250,7 @@ class CAffectation extends CMbObject {
     }
 
     if ($this->loadRefSejour()->type == "seances") {
-      return $this->deleteOne(); 
+      return $this->deleteOne();
     }
 
     $this->loadRefsAffectations();
@@ -318,9 +317,9 @@ class CAffectation extends CMbObject {
     // que le séjour est relié à une grossesse, et que le module maternité est actif,
     // alors il faut créer les affectations des bébés.
     if (CModule::getActive("maternite") &&
-        !is_numeric($sejour->_ref_patient->nom) &&
-        $sejour->grossesse_id &&
-        !$this->_id
+      !is_numeric($sejour->_ref_patient->nom) &&
+      $sejour->grossesse_id &&
+      !$this->_id
     ) {
       $this->loadRefsAffectations();
       if (!$this->_ref_prev->_id && !$this->_ref_next->_id) {
@@ -533,6 +532,10 @@ class CAffectation extends CMbObject {
    * @return bool
    */
   function collide($aff) {
+    if ($this->_id && $aff->_id && $this->_id == $aff->_id) {
+      return false;
+    }
+
     return CMbRange::collides($this->entree, $this->sortie, $aff->entree, $aff->sortie);
   }
 
@@ -610,7 +613,7 @@ class CAffectation extends CMbObject {
         }
       }
 
-      $this->uf_hebergement_id = $affectation_uf->uf_id;      
+      $this->uf_hebergement_id = $affectation_uf->uf_id;
     }
 
     if (!$this->uf_soins_id || $this->fieldModified("service_id")) {
