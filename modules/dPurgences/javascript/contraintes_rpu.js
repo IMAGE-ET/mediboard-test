@@ -37,6 +37,23 @@ ContraintesRPU = {
     });
   },
 
+  checkObligatory : function(rpu_id, callback) {
+    new Url("dPurgences", "ajax_check_obligatory")
+      .addParam("rpu_id", rpu_id)
+      .requestJSON(function (data) {
+        if (data.length == 1) {
+          callback();
+        }
+        else {
+          var miss_input = "";
+          for(var i=1;i<data.length;i++) {
+            miss_input += "\n"+$T(data[i]);
+          }
+          alert("Veuillez renseigner les champs suivants :"+miss_input);
+        }
+      });
+  },
+
   updateDestination: function(mode_sortie, clearField) {
     var oSelect = document.editRPUDest._destination;
 

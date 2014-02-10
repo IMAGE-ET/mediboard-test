@@ -10,7 +10,9 @@
 
 <script>
   Main.add(function() {
-    changeOrientation(getForm("editSejour").elements.mode_sortie);
+    {{if !$conf.dPplanningOp.CSejour.use_custom_mode_sortie}}
+      changeOrientation(getForm("editSejour").elements.mode_sortie);
+    {{/if}}
   });
 
   updateModeSortie = function(select) {
@@ -32,6 +34,9 @@
   //Changement de l'orientation en fonction du mode sortie
   changeOrientation = function(element) {
     var orientation = getForm("editRPU").elements.orientation;
+      if (!orientation) {
+      orientation = getForm("editRPUDest").elements.orientation;
+    }
     var option_orientation = $A(orientation.options);
     var exclude = ["SCAM","PSA","REO"];
     switch ($V(element)) {

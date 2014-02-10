@@ -310,7 +310,7 @@ class CRPU extends CMbObject {
   /**
    * Load ref consult
    *
-   * @return void
+   * @return CConsultation
    */
   function loadRefConsult() {
     // Chargement de la consultation ATU

@@ -315,7 +315,9 @@ function showEtabEntreeTransfert(mode) {
         {{if !$rpu->mutation_sejour_id}}
           {{if $conf.dPurgences.gerer_reconvoc == "1"}}
             <!-- Reconvocation => formulaire de creation de consultation avec champs pre-remplis -->
-            <button id="button_reconvoc" class="new" {{if ($conf.dPurgences.hide_reconvoc_sans_sortie == "1") && !$sejour->sortie_reelle}}disabled="disabled"{{/if}} type="button" onclick="newConsultation({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}},{{$consult->_id}})">
+            <button id="button_reconvoc"
+                    class="new singleclick" {{if ($conf.dPurgences.hide_reconvoc_sans_sortie == "1") && !$sejour->sortie_reelle}}disabled="disabled"{{/if}}
+                    type="button" onclick="ContraintesRPU.checkObligatory('{{$rpu->_id}}', newConsultation.curry({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}},{{$consult->_id}}));">
               Reconvoquer
             </button>
           {{/if}}
@@ -325,12 +327,12 @@ function showEtabEntreeTransfert(mode) {
             {{if $conf.dPurgences.gerer_hospi == "1" && ($conf.dPurgences.create_sejour_hospit == "0" || !$sejour->sortie_reelle)}} 
               {{assign var=label value=$conf.dPurgences.create_sejour_hospit|ternary:"simple":"transfert"}}
               <!-- Hospitalisation immediate, creation d'un sejour et transfert des actes dans le nouveau sejour -->
-              <form name="transfertHospi" method="post" action="?m={{$m}}" onsubmit="if (confirm($T('confirm-RPU-Hospitalisation-{{$label}}'))) { return onSubmitFormAjax(this)} return false;">
+              <form name="transfertHospi" method="post" action="?m={{$m}}" onsubmit="ContraintesRPU.checkObligatory('{{$rpu->_id}}', function() {if (confirm($T('confirm-RPU-Hospitalisation-{{$label}}'))) { return onSubmitFormAjax(this)} return false;});">
                 <input type="hidden" name="dosql" value="do_transfert_aed" />
                 <input type="hidden" name="m" value="dPurgences" /> 
                 <input type="hidden" name="del" value="0" />
                 <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
-                <button class="new" type="button" onclick="this.form.onsubmit()">Hospitaliser</button>
+                <button class="new singleclick" type="button" onclick="this.form.onsubmit()">Hospitaliser</button>
               </form>
             {{/if}}
           {{/if}}
