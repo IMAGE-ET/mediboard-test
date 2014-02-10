@@ -136,7 +136,7 @@ foreach ($prescriptions as $key => $_prescription) {
   }
 
   $bed = $_prescription->_ref_object->_ref_curr_affectation->_ref_lit;
-  $bedroom_name = $bed->_ref_chambre->nom . $bed->nom;
+  $bedroom_name = $bed->_ref_chambre->nom . $bed->nom . $_prescription->_ref_object->_ref_curr_affectation->_id;
   $prescriptions_order[$bedroom_name] = $key;
 }
 
