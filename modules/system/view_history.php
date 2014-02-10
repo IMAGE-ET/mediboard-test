@@ -15,7 +15,7 @@ $stats  = CValue::get("stats", 0);
 $period = CValue::get("period", "day");
 $csv = CValue::get("csv", 0);
 
-if (!CCanDo::edit() && !$dialog) {
+if (!CCanDo::read() && !$dialog) {
   global $can;
   $can->redirect();
 }
