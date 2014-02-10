@@ -19,6 +19,12 @@
         GestionDA.url.refreshModal();
       }});
   }
+  reloadDossierAnesth = function() {
+    var consultUrl = new Url("dPcabinet", "httpreq_vw_consult_anesth");
+    consultUrl.addParam("selConsult", '{{$consult->_id}}');
+    consultUrl.addParam("dossier_anesth_id", '{{$consult->_ref_consult_anesth->_id}}');
+    consultUrl.requestUpdate('consultAnesth');
+  }
 </script>
 <form name="createDossierAnesth" action="?m={{$m}}&tab=edit_consultation&selConsult={{$consult->_id}}" method="post">
   <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
@@ -99,6 +105,11 @@
                 <tr>
                   <td style="text-align: right"><strong>{{mb_label object=$consult_anesth field="libelle_interv"}}</strong></td>
                   <td>{{mb_field object=$consult_anesth field="libelle_interv" onchange="this.form.onsubmit()"}}</td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="button">
+                    <button type="button" class="save" onclick="reloadDossierAnesth();Control.Modal.close();">{{tr}}Validate{{/tr}}</button>
+                  </td>
                 </tr>
               </table>
             </form>
