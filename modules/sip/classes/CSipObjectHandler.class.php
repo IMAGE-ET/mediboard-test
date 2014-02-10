@@ -8,6 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version  SVN: $Id$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -46,7 +47,7 @@ class CSipObjectHandler extends CEAIObjectHandler {
     if (!parent::onAfterStore($mbObject)) {
       return;
     }
-    
+
     // Si pas de tag patient
     if (!CAppUI::conf("dPpatients CPatient tag_ipp")) {
       throw new CMbException("no_tag_defined");
@@ -56,7 +57,7 @@ class CSipObjectHandler extends CEAIObjectHandler {
     if ((isset($mbObject->_no_ipp) && ($mbObject->_no_ipp == 1)) && CAppUI::conf('sip server')) {
       return;
     }
-    
+
     $this->sendFormatAction("onAfterStore", $mbObject);
   }
 
@@ -73,12 +74,12 @@ class CSipObjectHandler extends CEAIObjectHandler {
     if (!parent::onBeforeMerge($mbObject)) {
       return;
     }
-    
+
     // Si pas en mode alternatif
     if (!CAppUI::conf("alternative_mode")) {
       throw new CMbException("no_alternative_mode");
     }
-    
+
     $patient = $mbObject;
 
     $patient_elimine = new CPatient();
@@ -101,13 +102,13 @@ class CSipObjectHandler extends CEAIObjectHandler {
 
         // Passage en trash des IPP des patients
         $tap_IPP = CPatient::getTagIPP($_group->_id);
-        
+
         $idexPatient = new CIdSante400();
         $idexPatient->tag          = $tap_IPP;
         $idexPatient->object_class = "CPatient";
         $idexPatient->object_id    = $patient->_id;
         $idexsPatient = $idexPatient->loadMatchingList();
-        
+
         $idexPatientElimine = new CIdSante400();
         $idexPatientElimine->tag          = $tap_IPP;
         $idexPatientElimine->object_class = "CPatient";
@@ -122,21 +123,30 @@ class CSipObjectHandler extends CEAIObjectHandler {
               continue;
             }
 
-            $patient_elimine->trashIPP($_idex);
+            $old_tag = $_idex->tag;
+
+            $_idex->tag         = CAppUI::conf('dPpatients CPatient tag_ipp_trash').$tap_IPP;
+            $_idex->last_update = CMbDT::dateTime();
+            if (!$msg = $_idex->store()) {
+              if ($_idex->object_id == $patient_elimine->_id) {
+                $idexs_changed[$_idex->_id] = $old_tag;
+              }
+            }
           }
         }
-        
+
         if (!$patient1_ipp && !$patient2_ipp) {
-          continue;  
+          continue;
         }
-        
+
         $mbObject->_fusion[$_group->_id] = array (
           "patientElimine" => $patient_elimine,
           "patient1_ipp"   => $patient1_ipp,
           "patient2_ipp"   => $patient2_ipp,
+          "idexs_changed" => $idexs_changed
         );
-       
-      }        
+
+      }
     }
 
     $this->sendFormatAction("onBeforeMerge", $mbObject);
@@ -153,7 +163,7 @@ class CSipObjectHandler extends CEAIObjectHandler {
     if (!parent::onAfterMerge($mbObject)) {
       return;
     }
-    
+
     $this->sendFormatAction("onAfterMerge", $mbObject);
   }
 
@@ -168,7 +178,7 @@ class CSipObjectHandler extends CEAIObjectHandler {
     if (!parent::onAfterDelete($mbObject)) {
       return;
     }
-    
+
     $this->sendFormatAction("onAfterDelete", $mbObject);
   }
 }

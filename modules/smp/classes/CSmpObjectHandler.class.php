@@ -73,12 +73,12 @@ class CSmpObjectHandler extends CEAIObjectHandler {
     if (!parent::onBeforeMerge($mbObject)) {
       return false;
     }
-    
+
     // Si pas en mode alternatif
     if (!CAppUI::conf("alternative_mode")) {
       throw new CMbException("no_alternative_mode");
     }
-    
+
     $sejour = $mbObject;
 
     $sejour_elimine = new CSejour();
@@ -91,7 +91,7 @@ class CSmpObjectHandler extends CEAIObjectHandler {
         if ($mbObject->_eai_initiateur_group_id == $_group->_id) {
           continue;
         }
-        
+
         $sejour->_NDA = null;
         $sejour->loadNDA($_group->_id);
         $sejour1_nda = $sejour->_NDA;
@@ -102,7 +102,7 @@ class CSmpObjectHandler extends CEAIObjectHandler {
 
         // Passage en trash des NDA des séjours
         $tag_NDA = CSejour::getTagNDA($_group->_id);
-        
+
         $idexSejour = new CIdSante400();
         $idexSejour->tag          = $tag_NDA;
         $idexSejour->object_class = "CSejour";
@@ -115,7 +115,9 @@ class CSmpObjectHandler extends CEAIObjectHandler {
         $idexSejourElimine->object_id    = $sejour_elimine->_id;
         $idexsSejourElimine = $idexSejourElimine->loadMatchingList();
 
-        $idexs = array_merge($idexsSejour, $idexsSejourElimine);
+        /** @var CIdSante400[] $idexs */
+        $idexs         = array_merge($idexsSejour, $idexsSejourElimine);
+        $idexs_changed = array();
         if (count($idexs) > 1) {
           foreach ($idexs as $_idex) {
             // On continue pour ne pas mettre en trash le NDA du séjour que l'on garde
@@ -123,24 +125,31 @@ class CSmpObjectHandler extends CEAIObjectHandler {
               continue;
             }
 
-            $_idex->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$tag_NDA;
+            $old_tag = $_idex->tag;
+
+            $_idex->tag         = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$tag_NDA;
             $_idex->last_update = CMbDT::dateTime();
-            $_idex->store();
+            if (!$msg = $_idex->store()) {
+              if ($_idex->object_id == $sejour_elimine->_id) {
+                $idexs_changed[$_idex->_id] = $old_tag;
+              }
+            }
           }
         }
-        
+
         if (!$sejour1_nda && !$sejour2_nda) {
-          continue;  
+          continue;
         }
-        
+
         $mbObject->_fusion[$_group->_id] = array (
           "sejourElimine" => $sejour_elimine,
           "sejour1_nda"   => $sejour1_nda,
           "sejour2_nda"   => $sejour2_nda,
+          "idexs_changed" => $idexs_changed
         );
-      }        
+      }
     }
-    
+
     $this->sendFormatAction("onBeforeMerge", $mbObject);
 
     return true;
@@ -159,8 +168,8 @@ class CSmpObjectHandler extends CEAIObjectHandler {
     if (!parent::onAfterMerge($mbObject)) {
       return false;
     }
-    
-     // Si pas en mode alternatif
+
+    // Si pas en mode alternatif
     if (!CAppUI::conf("alternative_mode")) {
       throw new CMbException("no_alternative_mode");
     }
@@ -181,7 +190,7 @@ class CSmpObjectHandler extends CEAIObjectHandler {
     if (!parent::onBeforeDelete($mbObject)) {
       return false;
     }
-    
+
     $this->sendFormatAction("onBeforeDelete", $mbObject);
 
     return true;
@@ -198,9 +207,9 @@ class CSmpObjectHandler extends CEAIObjectHandler {
     if (!parent::onAfterDelete($mbObject)) {
       return false;
     }
-    
+
     $this->sendFormatAction("onAfterDelete", $mbObject);
 
     return true;
-  }  
+  }
 }

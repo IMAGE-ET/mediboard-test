@@ -1,11 +1,12 @@
-<?php 
+<?php
 /**
  * $Id$
- * 
+ * $Id$
+ *
  * @package    Mediboard
  * @subpackage classes
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -43,6 +44,16 @@ abstract class CMbObjectHandler {
    * @return bool
    */
   function onBeforeMerge(CMbObject $mbObject) {
+  }
+
+  /**
+   * Trigger when merge failed
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return bool
+   */
+  function onMergeFailure(CMbObject $mbObject) {
   }
 
   /**

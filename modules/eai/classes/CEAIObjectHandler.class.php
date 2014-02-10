@@ -2,12 +2,12 @@
 
 /**
  * EAI Object handler
- *  
+ *
  * @category EAI
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
  * @link     http://www.mediboard.org
  */
 
@@ -33,13 +33,13 @@ class CEAIObjectHandler extends CMbObjectHandler {
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
   }
-  
+
   /**
    * Trigger action on the right handler
-   * 
+   *
    * @param string    $action   Action name
    * @param CMbObject $mbObject Object
-   * 
+   *
    * @return void
    */
   function sendFormatAction($action, CMbObject $mbObject) {
@@ -110,7 +110,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
-    
+
     if (isset($mbObject->_eai_initiateur_group_id)) {
       $this->_eai_initiateur_group_id = $mbObject->_eai_initiateur_group_id;
     }
@@ -129,23 +129,62 @@ class CEAIObjectHandler extends CMbObjectHandler {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
-    
+
     $mbObject->_eai_initiateur_group_id = $this->_eai_initiateur_group_id;
 
     if (!$mbObject->_ref_last_log && $mbObject->_class != "CIdSante400") {
       return false;
     }
-    
+
     // Cas d'une fusion
     if ($mbObject->_merging) {
       return false;
     }
-    
+
     if ($mbObject->_forwardRefMerging) {
       return false;
     }
 
     return true;
+  }
+
+  /**
+   * Trigger when merge failed
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return bool
+   */
+  function onMergeFailure(CMbObject $mbObject) {
+    if (!$this->isHandled($mbObject)) {
+      return false;
+    }
+
+    // On va réatribuer les idexs en cas de problème dans la fusion
+    foreach ($mbObject->_fusion as $group_id => $infos_fus) {
+      if (!$infos_fus || !array_key_exists("idexs_changed", $infos_fus)) {
+        return;
+      }
+
+      foreach ($infos_fus["idexs_changed"] as $idex_id => $tag_name) {
+        $idex = new CIdSante400();
+        $idex->load($idex_id);
+
+        if (!$idex->_id) {
+          continue;
+        }
+
+        // Réattribution sur l'objet non supprimé
+        $sejour_eliminee = $infos_fus["sejourElimine"];
+        $idex->object_id = $sejour_eliminee->_id;
+
+        $idex->tag = $tag_name;
+        $idex->last_update = CMbDT::dateTime();
+        $idex->store();
+      }
+    }
+
+    /**/
   }
 
   /**
@@ -159,7 +198,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
-    
+
     if (!$mbObject->_merging) {
       return false;
     }
@@ -178,7 +217,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
-    
+
     if (!$mbObject->_merging) {
       return false;
     }
