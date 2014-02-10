@@ -1438,7 +1438,30 @@ class CSetupdPsalleOp extends CSetup {
       ),
     );
     $this->addNewCheckList($check_list);
+    $this->makeRevision("0.57");
 
-    $this->mod_version = "0.57";
+    $query = "UPDATE `daily_check_item_type` SET `title` = 'Identité de la patiente est correcte'
+            WHERE `title` = 'Identité de la patiente est correct'";
+    $this->addQuery($query);
+
+    $query = "UPDATE `daily_check_item_type` SET `title` = 'un risque alergique'
+            WHERE `title` = 'risque alergique'";
+    $this->addQuery($query);
+
+    $query = "UPDATE `daily_check_item_type` SET `title` = 'un risque de saignement supérieur à 1000ml'
+            WHERE `title` = 'risque de saignement supérieur à 1000ml'";
+    $this->addQuery($query);
+
+    $query = "UPDATE `daily_check_item_type` SET `title` = 'électrode de scalp ôtée'
+            WHERE `title` = 'electrode de scalp otée'";
+    $this->addQuery($query);
+
+    $query = "UPDATE `daily_check_item_category`
+      SET `desc` = 'Vérification croisée par l''équipe de points critiques et mise en oeuvre des mesures adéquates. La patiente présente-t-elle  ? '
+      WHERE `target_class` = 'COperation'
+      AND `type` = 'avant_indu_cesar'
+      AND `title` =  '06'";
+    $this->addQuery($query);
+    $this->mod_version = "0.58";
   }
 }
