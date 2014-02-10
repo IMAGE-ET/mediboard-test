@@ -52,7 +52,6 @@ $listSejours = array(
 $ljoin = array();
 $ljoin["rpu"] = "rpu.sejour_id = sejour.sejour_id";
 $temp = array();
-$temp[]  = "sejour.type != 'ambu' AND sejour.type != 'comp'";
 $temp["sejour.entree"]    = " BETWEEN '$date_before' AND '$date_after'";
 $temp["sejour.sortie_reelle"]    = "IS NULL";
 $temp["sejour.annule"]    = " = '0'";
@@ -120,11 +119,19 @@ for ($num = 0; $num <= 1; $num++) {
       $where["rpu.box_id"] = CSQLDataSource::prepareIn(array_keys($chambre->_ref_lits));
     }
 
+    if (!CAppUI::conf("dPurgences create_sejour_hospit")) {
+      $where[] = "rpu.mutation_sejour_id IS NULL";
+    }
+
     $sejour = new CSejour();
     /** @var CSejour[] $sejours */
     $sejours = $sejour->loadList($where, null, null, null, $ljoin);
     foreach ($sejours as $sejour) {
-      $sejour->loadRefRPU();
+      $sejour->loadRefPatient();
+      $sejour->loadRefPraticien();
+      if (!$sejour->loadRefRPU()->_id) {
+        $sejour->_ref_rpu = $sejour->loadUniqueBackRef("rpu_mute");
+      }
       $prescription = $sejour->loadRefPrescriptionSejour();
 
       if ($prescription->_id) {

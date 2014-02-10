@@ -79,7 +79,7 @@
     </tr>
     <tr>
       <td class="button" colspan="2">
-        <button class="tick" onclick="selectSejour('{{$next_sejour->_id}}'); location.reload();">Associer au dossier d'anesthésie</button>
+        <button class="tick" onclick="selectSejour('{{$next_sejour->_id}}');">Associer au dossier d'anesthésie</button>
       <button class="cancel" onclick="modalWindow.close();">Ne pas associer</button></td>
     </tr>
   {{/if}}

@@ -1,20 +1,18 @@
 <?php
-
 /**
- * $Id$
+ * $Id:$
  *
  * @category Admissions
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision$
+ * @version  $Revision:$
  * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
 
 // Initialisation de variables
-
 $order_col_pre = CValue::getOrSession("order_col_pre", "heure");
 $order_way_pre = CValue::getOrSession("order_way_pre", "ASC");
 $date          = CValue::getOrSession("date", CMbDT::date());
@@ -96,6 +94,7 @@ foreach ($listConsultations as $_consult) {
   foreach ($dossiers_anesth as $_dossier) {
     $_dossier->loadRefOperation();
     $_sejour = $_dossier->_ref_sejour;
+    $_sejour->loadRefsOperations();
     if ($_sejour->_id) {
       $sejours_total[$_sejour->_id] = $_sejour;
     }
