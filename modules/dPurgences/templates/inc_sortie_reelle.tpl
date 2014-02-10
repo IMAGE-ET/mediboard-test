@@ -50,14 +50,16 @@ autoriserEffectuerSortie = function() {
         Annuler l'autorisation de sortie
       </button>
     {{else}}       
-      <button class="tick" type="button" onclick="autoriserSortie(1)">
+      <button class="tick singleclick" type="button" onclick="ContraintesRPU.checkObligatory('{{$rpu->_id}}', autoriserSortie.curry(1));">
         {{mb_label object=$rpu field="sortie_autorisee"}}
       </button>
       
       {{if !$sejour->sortie_reelle}}
         {{if $rpu->sejour_id != $rpu->mutation_sejour_id}}
           <input type="hidden" name="sortie_reelle" value="{{$now}}" />
-          <button class="tick" type="button" onclick="autoriserEffectuerSortie()">Autoriser et effectuer la sortie</button>
+          <button class="tick singleclick" type="button" onclick="ContraintesRPU.checkObligatory('{{$rpu->_id}}', autoriserEffectuerSortie.curry());">
+            Autoriser et effectuer la sortie
+          </button>
         {{/if}}
       {{else}}
         Sortie à 

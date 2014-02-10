@@ -35,6 +35,8 @@ function changePratPec(prat_id) {
 }
 </script>
 
+{{mb_script module=dPurgences script=contrainte_rpu}}
+
 <!-- Formulaire de changement de praticien pour la pec -->
 <form name="editPratPec" method="post" action="?">
   <input type="hidden" name="m" value="dPcabinet" />
@@ -112,7 +114,8 @@ function changePratPec(prat_id) {
         {{if $consult_anesth && $consult_anesth->_id}}
           <button class="tick" type="button" onclick="checkConsult();">
         {{else}}
-          <button class="tick" type="button" onclick="submitAll(); submitConsultWithChrono({{$consult|const:'TERMINE'}});">
+          <button class="tick" type="button"
+                  onclick="{{if $sejour->_ref_rpu->_id}}ContraintesRPU.checkObligatory('{{$sejour->_ref_rpu->_id}}', function() {submitAll(); submitConsultWithChrono({{$consult|const:'TERMINE'}});});{{else}}submitAll(); submitConsultWithChrono({{$consult|const:'TERMINE'}});{{/if}}">
         {{/if}}
         Terminer
         </button>

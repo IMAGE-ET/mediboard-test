@@ -401,6 +401,14 @@ class CSetupdPurgences extends CSetup {
                 CHANGE `type` `type` ENUM ('rpu','urg','activite') DEFAULT 'rpu';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.47";
+    $this->makeRevision("0.47");
+
+    $this->addDefaultConfig("dPurgences Display check_cotation" , "dPurgences check_cotation");
+    $this->addDefaultConfig("dPurgences Display check_gemsa"    , "dPurgences check_gemsa");
+    $this->addDefaultConfig("dPurgences Display check_ccmu"     , "dPurgences check_ccmu");
+    $this->addDefaultConfig("dPurgences Display check_dp"       , "dPurgences check_dp");
+    $this->addDefaultConfig("dPurgences Display check_can_leave", "dPurgences check_can_leave");
+
+    $this->mod_version = "0.48";
   }  
 }

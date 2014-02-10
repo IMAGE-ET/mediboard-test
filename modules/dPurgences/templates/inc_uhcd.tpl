@@ -8,11 +8,15 @@
   {{if !$sejour->UHCD}}
     <input type="hidden" name="UHCD" value="1" />
     <input type="hidden" name="type" value="comp" />
-    <button class="hslip oneclick" type="submit"> Passer en dossier UHCD </button>
+    <button class="hslip singleclick" type="button" onclick="ContraintesRPU.checkObligatory('{{$rpu->_id}}', (function () {this.form.submit();}).bind(this));">
+      Passer en dossier UHCD
+    </button>
   {{else}}
     <input type="hidden" name="UHCD" value="0" />
     <input type="hidden" name="type" value="urg" />
-    <button class="hslip oneclick" type="submit"> Revenir en dossier ATU </button>
+    <button class="hslip singleclick" type="button" onclick="ContraintesRPU.checkObligatory('{{$rpu->_id}}', (function () {this.form.submit();}).bind(this));">
+      Revenir en dossier ATU
+    </button>
   {{/if}}
 </form>
 
