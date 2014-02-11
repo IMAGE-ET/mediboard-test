@@ -686,7 +686,7 @@ function guid_log(guid) {
 
 function guid_ids(guid) {
   var parts = guid.split("-");
-  var url = new Url("dPsante400", "view_identifiants");
+  var url = new Url("dPsante400", "ajax_list_identifiants");
   url.addParam("object_class", parts[0]);
   url.addParam("object_id", parts[1]);
   url.addParam("dialog", 1);
