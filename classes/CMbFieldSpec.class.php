@@ -652,14 +652,15 @@ class CMbFieldSpec {
     $defaultFor = CMbArray::extract($params, "defaultFor");
     $forName = $defaultFor ? $defaultFor : $this->getLabelForAttribute($object, $params);
     $className = $object->_specs[$this->fieldName]->notNull ? "checkNull" : "";
-    
+
+    $text = CAppUI::tr(CMbArray::extract($params, 'text', "$object->_class-$this->fieldName"));
+    $text = CMbString::htmlEntities($text);
+    $desc = CAppUI::tr(CMbArray::extract($params, 'title', "$object->_class-$this->fieldName-desc"));
+    $desc = CMbString::htmlEntities($desc);
+
     $extra  = CMbArray::makeXmlAttributes($params);
 
-    $desc  = CAppUI::tr("$object->_class-$this->fieldName-desc");
-    $desc = CMbString::htmlEntities($desc);
-    $sHtml  = "<label for=\"$forName\" class=\"$className\" title=\"$desc\" $extra>";
-    $sHtml .= CAppUI::tr("$object->_class-$this->fieldName");
-    $sHtml .= "</label>";
+    $sHtml  = "<label for=\"$forName\" class=\"$className\" title=\"$desc\" $extra>$text</label>";
 
     return $sHtml;
   }
