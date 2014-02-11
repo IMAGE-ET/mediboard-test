@@ -55,6 +55,7 @@ input[type=image] {
 }
 
 input[type=text],
+input[type=search],
 input[type=tel],
 input[type=number],
 input[type=email],
@@ -73,6 +74,7 @@ textarea {
 }
 
 input[type=text],
+input[type=search],
 input[type=tel],
 input[type=number],
 input[type=email],
@@ -105,6 +107,7 @@ textarea {
 }
 
 input[type=text]:focus,
+input[type=search]:focus,
 input[type=tel]:focus,
 input[type=number]:focus,
 input[type=email]:focus,
