@@ -1,16 +1,17 @@
 <?php
-
 /**
- * dPccam
+ * $Id:$
  *
- * @category Ccam
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage ccam
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
+/**
+ * Favoris CCAM
+ */
 class CFavoriCCAM extends CMbObject {
   public $favoris_id;
 
@@ -53,6 +54,16 @@ class CFavoriCCAM extends CMbObject {
     $this->_ref_code->getChaps();
   }
 
+  /**
+   * Fill the order
+   *
+   * @param int    $user_id    User id
+   * @param string $class      Favori class name (CFavoriCCAM or CFavoriCIM10)
+   * @param bool   $ref_favori boolean
+   * @param in     $tag_id     Tag id
+   *
+   * @return void
+   */
   static function getOrdered($user_id = 0, $class = null, $ref_favori = false, $tag_id = null) {
     $listOrdered = array();
     if ($user_id) {
@@ -94,6 +105,13 @@ class CFavoriCCAM extends CMbObject {
     return $listOrdered;
   }
 
+  /**
+   * Returns the tree
+   *
+   * @param int $user_id User id
+   *
+   * @return array
+   */
   static function getTree($user_id) {
     return self::getTreeGeneric($user_id, "CFavoriCCAM");
   }

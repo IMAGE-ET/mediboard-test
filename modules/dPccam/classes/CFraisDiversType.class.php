@@ -1,16 +1,17 @@
 <?php
-
 /**
- * dPccam
+ * $Id:$
  *
- * @category Ccam
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage ccam
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
+/**
+ * Type de frais divers
+ */
 class CFraisDiversType extends CMbObject {
   public $frais_divers_type_id;
 
