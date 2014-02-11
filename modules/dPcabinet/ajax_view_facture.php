@@ -36,6 +36,7 @@ $facture->loadRefAssurance();
 $facture->loadRefsObjects();
 $facture->loadRefsReglements();
 $facture->loadRefsRelances();
+$facture->loadRefsItems();
 $facture->loadRefsNotes();
 if ($facture->_ref_consults) {
   $derconsult_id = $facture->_ref_last_consult->_id;

@@ -16,7 +16,7 @@ pursueTarif = function() {
   $V(form.valide, 0);
   Reglement.submit(form, false);
 };
-  
+
 cancelTarif = function(action, callback) {
   var form = document.tarifFrm;
   
@@ -124,6 +124,11 @@ tiersPayant = function() {
   $V(form.du_patient, du_patient);
 }
 
+createSecondFacture = function() {
+  var form = getForm('addFactureDivers');
+  return onSubmitFormAjax(form, Reglement.reload.curry(true));
+};
+
 Main.add(function() {
   prepareForm(document.accidentTravail);
   
@@ -142,6 +147,18 @@ Main.add(function() {
 });
 </script>
 
+{{if $frais_divers|@count}}
+  <form name="addFactureDivers" action="" method="post" onsubmit="return onSubmitFormAjax(this, Reglement.reload.curry(true));">
+    {{math equation="x+1" x=$consult->_ref_factures|@count assign=numero_fact}}
+    {{mb_class  object=$consult->_ref_facture}}
+    <input type="hidden" name="facture_id"    value=""/>
+    <input type="hidden" name="patient_id"    value="{{$consult->_ref_facture->patient_id}}"/>
+    <input type="hidden" name="praticien_id"  value="{{$consult->_ref_facture->praticien_id}}"/>
+    <input type="hidden" name="_consult_id"    value="{{$consult->_id}}"/>
+    <input type="hidden" name="ouverture"     value="{{$consult->_ref_facture->ouverture}}"/>
+    <input type="hidden" name="numero"        value="{{$numero_fact}}"/>
+  </form>
+{{/if}}
 {{assign var=modFSE value="fse"|module_active}}
 
 {{mb_ternary var=gestionFSE test=$consult->sejour_id value=0 other=$modFSE}}
@@ -321,6 +338,18 @@ Main.add(function() {
                   {{/foreach}}
                 </td>
               </tr>
+
+              {{if $conf.dPccam.CCodable.use_frais_divers.CConsultation}}
+                <tr>
+                  <th>Frais divers</th>
+                  <td>
+                    {{foreach from=$consult->_ref_frais_divers item=frais}}
+                      <span onmouseover="ObjectTooltip.createEx(this, '{{$frais->_guid}}');">{{$frais->_shortview}}</span>
+                    {{/foreach}}
+                  </td>
+                </tr>
+                </div>
+              {{/if}}
             {{/if}}
 
             {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
@@ -446,12 +475,14 @@ Main.add(function() {
                 {{/if}}
                 
                 {{if !$consult->_current_fse && !count($consult->_ref_reglements)}}
-                <button class="cancel" type="button" id="buttonCheckActe" onclick="checkActe(this);">
-                  Rouvrir la cotation
-                </button>
+                  <button class="cancel" type="button" id="buttonCheckActe" onclick="checkActe(this);">
+                    Rouvrir la cotation
+                  </button>
                 {{/if}}
                 <button class="print" type="button" onclick="printActes()">Imprimer les actes</button>
-                {{*<button class="submit" type="button" onclick="loadFacture();">Créer facture</button>*}}
+                {{if $frais_divers|@count}}
+                  <button class="add" type="button" onclick="createSecondFacture();">Ajout facture</button>
+                {{/if}}
               </td>
             </tr>
             {{elseif !$consult->patient_date_reglement}}
@@ -481,6 +512,17 @@ Main.add(function() {
       {{/if}}
     </td>
   </tr>
+  {{if $consult->_ref_factures|@count > 1}}
+    <tr>
+      <td colspan="2">
+        {{foreach from=$consult->_ref_factures item=_facture}}
+          {{if $_facture->numero != 1}}
+            <button type="button" class="search" onclick="Facture.edit('{{$_facture->_id}}', '{{$_facture->_class}}');">Facture n°{{$_facture->numero}}</button>
+          {{/if}}
+        {{/foreach}}
+      </td>
+    </tr>
+  {{/if}}
   {{if array_key_exists("sigems", $modules)}}
     <!-- Inclusion de la gestion du système de facturation -->
     {{mb_include module=sigems template=check_actes_reels}}

@@ -113,7 +113,12 @@ if (!$consult->tarif || $consult->tarif == "pursue") {
 
 //Recherche de la facture pour cette consultation
 $facture = $consult->_ref_facture;
-//Si on a pas de facture on recherche d'une facture ouverte 
+$divers = array();
+if (CAppui::conf("dPccam CCodable use_frais_divers CConsultation")) {
+  $divers = $consult->loadRefsFraisDivers(count($consult->_ref_factures)+1);
+  $consult->loadRefsFraisDivers();
+}
+//Si on a pas de facture on recherche d'une facture ouverte
 if (!$facture->_id && CAppUI::conf("ref_pays") == 2) {
   $where    = array();
   $where["patient_id"] = "= '$consult->patient_id'";
@@ -131,6 +136,7 @@ if ($facture->_id) {
   $facture->loadRefAssurance();
   $facture->loadRefsObjects();
   $facture->loadRefsReglements();
+  $facture->loadRefsItems();
   $facture->loadRefsNotes();
 }
 
@@ -147,6 +153,7 @@ if ($consult->_du_restant_patient) {
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("frais_divers"  , $divers);
 $smarty->assign("banques"  , $banques);
 $smarty->assign("facture"  , $facture);
 $smarty->assign("consult"  , $consult);

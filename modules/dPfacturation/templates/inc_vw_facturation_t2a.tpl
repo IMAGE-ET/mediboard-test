@@ -101,6 +101,16 @@
       <td style="text-align: right;">{{mb_value object=$_acte_ngap field=_montant_facture}}</td>
     </tr>
   {{/foreach}}
+  {{foreach from=$facture->_ref_actes_divers item=_acte_divers}}
+    <tr>
+      <td></td>
+      <td class="acte-{{$_acte_divers->_class}}">{{$_acte_divers->_ref_type->code}}</td>
+      <td>{{$_acte_divers->_ref_type->libelle}}</td>
+      <td style="text-align: right;">{{mb_value object=$_acte_divers field="montant_base"}}</td>
+      <td style="text-align: right;">{{mb_value object=$_acte_divers field="montant_depassement"}}</td>
+      <td style="text-align: right;">{{mb_value object=$_acte_divers field=_montant_facture}}</td>
+    </tr>
+  {{/foreach}}
 {{/if}}
 
 <tbody class="hoverable">
@@ -143,5 +153,4 @@
       </td>
     </tr>
   {{/if}}
-
 </tbody>

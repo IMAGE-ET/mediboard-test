@@ -118,6 +118,8 @@ class CConsultation extends CFacturable {
   public $_ref_grossesse;
   /** @var CFactureCabinet */
   public $_ref_facture;
+  /** @var CFactureCabinet[] */
+  public $_ref_factures = array();
   /** @var CPrescription */
   public $_ref_prescription;
   /** @var CConsultationCategorie */
@@ -619,6 +621,7 @@ class CConsultation extends CFacturable {
     $secteur2_CCAM    = 0;
     $secteur2_TARMED  = 0;
     $secteur2_CAISSE  = 0;
+    $secteur2_divers  = 0;
     $count_actes = 0;
 
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
@@ -650,9 +653,17 @@ class CConsultation extends CFacturable {
       $secteur2_CCAM += $acteCCAM->montant_depassement;
     }
 
+    // Chargement des actes CCAM
+    $this->loadRefsFraisDivers();
+    foreach ($this->_ref_frais_divers as $frais) {
+      $count_actes++;
+      $secteur2_divers += $frais->montant_base;
+      $secteur2_divers += $frais->montant_depassement;
+    }
+
     // Remplissage des montant de la consultation
     $this->secteur1 = $secteur1_NGAP + $secteur1_CCAM + $secteur1_TARMED + $secteur1_CAISSE;
-    $this->secteur2 = $secteur2_NGAP + $secteur2_CCAM + $secteur2_TARMED + $secteur2_CAISSE;
+    $this->secteur2 = $secteur2_NGAP + $secteur2_CCAM + $secteur2_TARMED + $secteur2_CAISSE + $secteur2_divers;
 
     if ($secteur1_NGAP == 0 && $secteur1_CCAM == 0 && $secteur2_NGAP==0 && $secteur2_CCAM ==0) {
       $this->du_patient = $this->secteur1 + $this->secteur2 +  $this->secteur3 + $this->du_tva;
@@ -1176,12 +1187,20 @@ class CConsultation extends CFacturable {
     }
 
     if (CModule::getActive("dPfacturation")) {
-      $liaison = new CFactureLiaison();
-      $liaison->setObject($this);
-      $liaison->facture_class = $this->sejour_id ? "CFactureEtablissement" : "CFactureCabinet";
-      if ($liaison->loadMatchingObject()) {
-        return $this->_ref_facture = $liaison->loadRefFacture();
-      }
+      $facture_class = $this->sejour_id ? "CFactureEtablissement" : "CFactureCabinet";
+      $facture_sql = $this->sejour_id ? "facture_etablissement" : "facture_cabinet";
+
+      $ljoin = array();
+      $ljoin["facture_liaison"] = "facture_liaison.facture_id = $facture_sql.facture_id";
+      $where = array();
+      $where["facture_liaison.facture_class"] = " = '$facture_class'";
+      $where["facture_liaison.object_id"]     = " = '$this->_id'";
+      $where["facture_liaison.object_class"]  = " = '$this->_class'";
+      $where["patient_id"]  = " = '$this->patient_id'";
+      /* @var CFactureCabinet $facture*/
+      $facture = new $facture_class;
+      $this->_ref_factures = $facture->loadList($where, null, null, null, $ljoin);
+      $this->_ref_facture = reset($this->_ref_factures);
     }
     if (!$this->_ref_facture) {
       $this->_ref_facture = new CFactureCabinet();

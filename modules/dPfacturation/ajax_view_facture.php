@@ -26,6 +26,7 @@ if ($facture_id) {
   $facture->loadRefsObjects();
   $facture->loadRefsReglements();
   $facture->loadRefsRelances();
+  $facture->loadRefsItems();
   $facture->loadRefsNotes();
 }
 

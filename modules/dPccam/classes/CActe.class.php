@@ -220,13 +220,14 @@ class CActe extends CMbMetaObject {
     if ($this->_preserve_montant || $this->_forwardRefMerging) {
       return null;
     }
+    if ($this->_class != "CFraisDivers" || $this->num_facture == 1) {
+      /** @var CCodable $object */
+      $object = new $this->object_class;
+      $object->load($this->object_id);
 
-    /** @var CCodable $object */
-    $object = new $this->object_class;
-    $object->load($this->object_id);
-    
-    // Permet de mettre a jour le montant dans le cas d'une consultation
-    return $object->doUpdateMontants();
+      // Permet de mettre a jour le montant dans le cas d'une consultation
+      return $object->doUpdateMontants();
+    }
   }
 
   /**

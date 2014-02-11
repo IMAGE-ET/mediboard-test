@@ -120,6 +120,8 @@ class CFacture extends CMbObject {
   public $_ref_actes_ngap   = array();
   /** @var CActeCCAM[] */
   public $_ref_actes_ccam   = array();
+  /** @var CFraisDivers[] */
+  public $_ref_actes_divers   = array();
   /** @var CDebiteur[] */
   public $_ref_debiteurs;
   /** @var CEcheance[] */
@@ -179,8 +181,8 @@ class CFacture extends CMbObject {
     $props["_secteur2"]                 = "currency";
     $props["_secteur3"]                 = "currency";
     $props["_montant_total"]            = "currency";
-    $specs["_total"]                    = "currency";
-    $specs["_montant_retrocession"]     = "currency";
+    $props["_total"]                    = "currency";
+    $props["_montant_retrocession"]     = "currency";
     return $props;
   }
 
@@ -255,6 +257,7 @@ class CFacture extends CMbObject {
    * @return void|string
    **/
   function store() {
+    $this->completeField("numero");
     if ($this->_id && $this->_duplicate) {
       $this->_duplicate = null;
       if ($msg = $this->duplicate()) {
@@ -331,6 +334,7 @@ class CFacture extends CMbObject {
         $where["facture_liaison.object_id"]     = " = '$this->_consult_id'";
         $where["facture_liaison.object_class"]  = " = 'CConsultation'";
         $where["facture_liaison.facture_class"] = " = '$this->_class'";
+        $where["numero"]       = " = '$this->numero'";
       }
 
       //Si la facture existe déjà
@@ -480,11 +484,19 @@ class CFacture extends CMbObject {
         }
         if (count($this->_ref_consults)) {
           foreach ($this->_ref_consults as $_consult) {
-            $this->_secteur1 += $_consult->secteur1;
-            $this->_secteur2 += $_consult->secteur2;
-            $this->_secteur3 += $_consult->secteur3;
-            $this->du_patient += $_consult->du_patient;
-            $this->du_tiers   += $_consult->du_tiers;
+            $_consult->loadRefsFraisDivers($this->numero);
+            if (count($_consult->_ref_frais_divers)) {
+              foreach ($_consult->_ref_frais_divers as $_frais) {
+                $this->du_patient += $_frais->montant_base;
+              }
+            }
+            else {
+              $this->_secteur1 += $_consult->secteur1;
+              $this->_secteur2 += $_consult->secteur2;
+              $this->_secteur3 += $_consult->secteur3;
+              $this->du_patient += $_consult->du_patient;
+              $this->du_tiers   += $_consult->du_tiers;
+            }
           }
         }
         $this->_secteur1 *= $this->_coeff;
@@ -754,6 +766,7 @@ class CFacture extends CMbObject {
       $this->_ref_actes_caisse = array();
       $this->_ref_actes_ngap = array();
       $this->_ref_actes_ccam = array();
+      $this->_ref_actes_divers = array();
       $this->rangeActes($this, false);
     }
     return $this->_ref_items;
@@ -941,7 +954,7 @@ class CFacture extends CMbObject {
     $objets = $val ? $object->_ref_actes : $object->_ref_items;
     $type = $val ? "_class" : "type";
     if (count($objets)) {
-      foreach ($objets as $key => $acte) {
+      foreach ($objets as $acte) {
         switch ($acte->$type) {
           case "CActeTarmed" :
             $this->_ref_actes_tarmed[] = $acte;
@@ -959,6 +972,9 @@ class CFacture extends CMbObject {
             }
             $this->_ref_actes_ccam[] = $acte;
             break;
+          case "CFraisDivers" :
+            $this->_ref_actes_divers[] = $acte;
+            break;
         }
       }
     }
@@ -973,6 +989,11 @@ class CFacture extends CMbObject {
     $this->loadRefCoeffFacture();
     $this->loadRefsConsultation();
     foreach ($this->_ref_consults as $consult) {
+      $consult->loadRefsFraisDivers($this->numero);
+      $consult->loadRefsActes($this->numero);
+      foreach ($consult->_ref_frais_divers as $_frais) {
+        $consult->_ref_actes[] = $_frais;
+      }
       foreach ($consult->_ref_actes as $acte) {
         /* @var CActeTarmed $acte */
         $acte->creationItemsFacture($this, $consult->_date);
