@@ -69,8 +69,7 @@ if ($num_facture) {
 
 $facture = new CFactureCabinet();
 $factures = $facture->loadList($where , "ouverture ASC", "$page, 25", null, $ljoin);
-$total_factures = $facture->countMultipleList($where, "facture_id", null, $ljoin);
-$total_factures = $total_factures[0]['total'];
+$total_factures = $facture->countList($where, "facture_id", null, $ljoin);
 
 foreach ($factures as $key => $_facture) {
   /* @var CFactureCabinet $_facture*/
@@ -102,6 +101,7 @@ if ($facture_id && isset($factures[$facture_id])) {
   $facture->loadRefsObjects();
   $facture->loadRefsReglements();
   $facture->loadRefsRelances();
+  $facture->loadRefsItems();
   $facture->loadRefsNotes();
   if ($facture->_ref_consults) {
     $derconsult_id = $facture->_ref_last_consult->_id;

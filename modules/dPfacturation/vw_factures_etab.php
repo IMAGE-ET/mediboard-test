@@ -72,8 +72,7 @@ if ($search_easy == 1) {
   $where["definitive"] =" = '1'";
 }
 $facture = new CFactureEtablissement();
-$total_factures = $facture->countMultipleList($where, "facture_id", null, $ljoin);
-$total_factures = $total_factures[0]['total'];
+$total_factures = $facture->countList($where, "facture_id", null, $ljoin);
 $factures = $facture->loadList($where , "ouverture ASC, numero", "$page, 25", "facture_id", $ljoin);
 
 //Affichage uniquement des factures qui contiennent des séjours
@@ -106,6 +105,7 @@ if ($facture_id && isset($factures[$facture_id])) {
   $facture->loadRefsObjects();
   $facture->loadRefsReglements();
   $facture->loadRefsRelances();
+  $facture->loadRefsItems();
   $facture->loadRefsNotes();
 }
 
