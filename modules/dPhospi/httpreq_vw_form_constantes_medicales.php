@@ -77,7 +77,9 @@ if (
   $readonly = 1;
   $msg_modif_timeout = "Impossible de modifier cette saisie de constantes car elle a été saisie il y a plus de $modif_timeout heures.";
 }
-
+if (!$constantes->_id && !$constantes->datetime) {
+  $constantes->datetime = CMbDT::dateTime();
+}
 $patient_id = $constantes->patient_id ? $constantes->patient_id : $patient_id;
 $latest_constantes = CConstantesMedicales::getLatestFor($patient_id, null, array(), $context, false);
 // Création du template

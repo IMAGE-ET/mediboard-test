@@ -102,8 +102,8 @@ Main.add(function () {
     <input type="hidden" name="m" value="dPpatients" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="dosql" value="do_constantes_medicales_aed" />
-    {{if !$constantes->datetime}}
-    <input type="hidden" name="datetime" value="now" />
+    {{if !$constantes->_id}}
+    {{*<input type="hidden" name="datetime" value="now" />*}}
     <input type="hidden" name="_new_constantes_medicales" value="1" />
     {{else}}
     <input type="hidden" name="constantes_medicales_id" value="{{$constantes->_id}}" />
@@ -262,8 +262,8 @@ Main.add(function () {
 
     <div style="position: absolute; bottom:0; text-align:center; height:25%; width: 100%;" id="buttons_form_const">
       {{if $real_context}}
+        {{mb_field object=$constantes field=datetime form="edit-constantes-medicales" register=true}}
         {{if $constantes->datetime}}
-          {{mb_field object=$constantes field=datetime form="edit-constantes-medicales" register=true}}
           <button style="display:inline-block;" class="trash notext" type="button" onclick="if (confirm('Etes-vous sûr de vouloir supprimer ce relevé ?')) {$V(this.form.del, 1); return submitConstantesMedicales(this.form);}">
             {{tr}}CConstantesMedicales.delete_all{{/tr}}
           </button>

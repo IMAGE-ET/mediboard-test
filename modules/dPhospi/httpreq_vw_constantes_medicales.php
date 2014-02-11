@@ -248,6 +248,10 @@ unset($graphs_datas['min_x_index']);
 unset($graphs_datas['min_x_value']);
 unset($graphs_datas['drawn_constants']);
 
+if (!$constantes->_id && !$constantes->datetime) {
+  $constantes->datetime = CMbDT::dateTime();
+}
+
 // On récupère dans tous les cas le poids et la taille du patient
 $patient->loadRefConstantesMedicales(null, array("poids", "taille"), null, false);
 
