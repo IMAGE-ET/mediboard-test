@@ -1380,7 +1380,7 @@ class CStoredObject extends CModelObject {
    * @return CUserLog
    */
   function loadLastLog() {
-    return $this->_ref_last_log = $this->loadFirstBackRef("logs", "user_log_id ASC", null, null, "object_id");
+    return $this->_ref_last_log = $this->loadFirstBackRef("logs", "user_log_id DESC", null, null, "object_id");
   }
   
   /**
