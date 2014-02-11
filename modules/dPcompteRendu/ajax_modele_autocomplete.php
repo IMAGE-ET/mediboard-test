@@ -50,9 +50,9 @@ $whereSecFunc["user_id"] = " = '$curr_user->_id'";
 if ($user->canEdit()) {
   $whereSecFunc["user_id"] = "IN ('$user->_id', '$curr_user->_id')";
 }
-$function_ids = $sec_function->loadIds($whereSecFunc);
 
-$function_ids = array_merge($function_ids, array($user->function_id, $curr_user->function_id));
+$function_sec = $sec_function->loadList($whereSecFunc);
+$function_ids = array_merge(CMbArray::pluck($function_sec, "function_id"), array($user->function_id, $curr_user->function_id));
 $where["function_id"] = CSQLDataSource::prepareIn($function_ids);
 $modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where, 100, false, null, "nom"));
 
