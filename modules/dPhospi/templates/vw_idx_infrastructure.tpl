@@ -1,5 +1,4 @@
-<script type="text/javascript">
-
+<script>
 function popupImport() {
   var url = new Url("dPhospi", "lits_import_csv");
   url.popup(800, 600, "Import des Lits");
@@ -35,11 +34,11 @@ function submit_Ajax(form, update_name){
 {{mb_script module=hospi script=affectation_uf}}
 
 <ul id="tabs-chambres" class="control_tabs">
-  <li><a href="#secteurs">{{tr}}CSecteur{{/tr}}</a></li>
-  <li><a href="#services">{{tr}}CService{{/tr}}</a></li>
-  <li><a href="#chambres">{{tr}}CChambre{{/tr}}</a></li>
+  <li><a href="#secteurs">{{tr}}CSecteur{{/tr}} {{if $secteurs|@count}}({{$secteurs|@count}}){{/if}}</a></li>
+  <li><a href="#services">{{tr}}CService{{/tr}} {{if $services|@count}}({{$services|@count}}){{/if}}</a></li>
+  <li><a href="#chambres">{{tr}}CChambre{{/tr}} {{if $nb_chambre}}({{$nb_chambre}}){{/if}}</a></li>
   <li><a href="#UF">{{tr}}CUniteFonctionnelle{{/tr}}</a></li>
-  <li><a href="#prestations">{{tr}}CPrestation{{/tr}}</a></li>
+  <li><a href="#prestations">{{tr}}CPrestation{{/tr}} {{if $prestations|@count}}({{$prestations|@count}}){{/if}}</a></li>
   <li><button type="button" style="float:right;" onclick="return popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button></li>
 </ul>
 <hr class="control_tabs" />

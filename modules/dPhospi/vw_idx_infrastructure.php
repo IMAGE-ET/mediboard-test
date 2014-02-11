@@ -59,11 +59,13 @@ $where = array();
 $where["group_id"] = "= '$group->_id'";
 $order = "nom";
 
+$nb_chambre = 0;
 /** @var CService[] $services */
 $services = $service->loadListWithPerms(PERM_READ, $where, $order);
 foreach ($services as $_service) {
   foreach ($_service->loadRefsChambres() as $_chambre) {
-    $_chambre->loadRefs();
+    $_chambre->loadRefsLits();
+    $nb_chambre++;
   }
 }
 
@@ -105,6 +107,7 @@ $smarty->assign("tag_service"   , CService::getTagService($group->_id));
 $smarty->assign("secteurs"      , $secteurs);
 $smarty->assign("secteur"       , $secteur);
 $smarty->assign("chambre"       , $chambre);
+$smarty->assign("nb_chambre"    , $nb_chambre);
 $smarty->assign("tag_chambre"   , CChambre::getTagChambre($group->_id));
 $smarty->assign("lit"           , $lit);
 $smarty->assign("tag_lit"       , CLit::getTagLit($group->_id));
