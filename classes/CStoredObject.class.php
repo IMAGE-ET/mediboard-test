@@ -1348,6 +1348,7 @@ class CStoredObject extends CModelObject {
   function loadFirstLogForField($fieldName = null, $strict = false){
     $log = new CUserLog;
     $logs = $this->loadLogsForField($fieldName, $strict);
+    /** @var CUserLog $first_log */
     $first_log = end($logs);
 
     if ($first_log) {
@@ -1380,10 +1381,7 @@ class CStoredObject extends CModelObject {
    * @return CUserLog
    */
   function loadLastLog() {
-    $log = new CUserLog;
-    $log->setObject($this);
-    $log->loadMatchingObject("user_log_id DESC", null, null, "object_id");
-    return $this->_ref_last_log = $log;
+    return $this->_ref_last_log = $this->loadFirstBackRef("logs", "user_log_id DESC", null, null, "object_id");
   }
 
   /**
@@ -1392,10 +1390,19 @@ class CStoredObject extends CModelObject {
    * @return CUserLog
    */
   function loadFirstLog() {
-    $log = new CUserLog;
-    $log->setObject($this);
-    $log->loadMatchingObject("user_log_id ASC", null, null, "object_id");
-    return $this->_ref_first_log = $log;
+    return $this->_ref_first_log = $this->loadFirstBackRef("logs", "user_log_id ASC", null, null, "object_id");
+  }
+
+  /**
+   * Return the object's (first) creation log
+   * Former instances have legacy data with no creation log but later modification log
+   * In that case we explicitely don't want it
+   *
+   * @return CUserLog
+   */
+  function loadCreationLog() {
+    $log = $this->loadFirstLog();
+    return $log->type == "create" || ($log->type == "store" && !$log->fields) ? $log : new CUserLog();
   }
 
   /**
@@ -1969,8 +1976,8 @@ class CStoredObject extends CModelObject {
    *
    * @return CMbObject Unique back reference if exist, concrete type empty object otherwise, null if unavailable
    */
-  function loadFirstBackRef($backName, $order = null, $limit = null, $group = null, $ljoin = null) {
-    if (null === $backRefs = $this->loadBackRefs($backName, $order, $limit, $group, $ljoin)) {
+  function loadFirstBackRef($backName, $order = null, $group = null, $ljoin = null, $index = null) {
+    if (null === $backRefs = $this->loadBackRefs($backName, $order, "1", $group, $ljoin, $index)) {
       return null;
     }
 
@@ -1987,9 +1994,9 @@ class CStoredObject extends CModelObject {
    *
    * @param string       $backName The collection name
    * @param array|string $order    Order SQL statement
-   * @param string       $limit    MySQL limit clause
    * @param array|string $group    Group by SQL statement
    * @param array        $ljoin    Array of left join clauses
+   * @param array        $index    Force index
    *
    * @return CMbObject Unique back reference if exist, concrete type empty object otherwise, null if unavailable
    */
