@@ -287,8 +287,8 @@
           </tr>
           <tr>
             <td colspan="2">
-              <strong><label id="labelFor_edit-sejour-frm_rques" class="" title="Remarques sur le séjour" for="edit-sejour-frm_rques">{{tr}}CSejour-rques-court{{/tr}}</label></strong>
-              <span class="text compact" style="white-space: normal;">{{$sejour->rques}}</span>
+              <strong>{{mb_label object=$sejour field=rques text="CSejour-rques-court"}}</strong>
+              <span id="CSejour-rques" class="text compact" style="white-space: normal;">{{$sejour->rques}}</span>
             </td>
           </tr>
         </table>
