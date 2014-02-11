@@ -368,6 +368,7 @@ class CCompteRendu extends CDocumentItem {
     $this->_ref_content = $content;
 
     $this->_ref_content->content = preg_replace("/#body\s*{\s*padding/", "body { margin", $this->_ref_content->content);
+    $this->_ref_content->content = preg_replace("/#39/", "#039", $this->_ref_content->content);
 
     // Supprimer les sauts de pages dans les entêtes et pieds de pages
     if (in_array($this->type, array('header', 'footer'))) {

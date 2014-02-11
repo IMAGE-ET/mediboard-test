@@ -194,7 +194,7 @@ class CTemplateManager {
         "view"      => CMbString::htmlEntities($item),
         "field"     => $field,
         "value"     => $value,
-        "fieldHTML" => CMbString::htmlEntities("[{$field}]"),
+        "fieldHTML" => CMbString::htmlEntities("[{$field}]", ENT_QUOTES),
         "valueHTML" => $value,
         "shortview" => $section . " - " . $item,
         "options"   => $options
@@ -205,7 +205,7 @@ class CTemplateManager {
         "view"      => CMbString::htmlEntities($sub_item),
         "field"     => $field,
         "value"     => $value,
-        "fieldHTML" => CMbString::htmlEntities("[{$field}]"),
+        "fieldHTML" => CMbString::htmlEntities("[{$field}]", ENT_QUOTES),
         "valueHTML" => $value,
         "shortview" => $section . " - " . $item . " - " . $sub_item,
         "options"   => $options
@@ -747,7 +747,7 @@ class CTemplateManager {
           $values[] = "src=\"$src\"";
         }
         else {
-          $property["fieldHTML"] = preg_replace("/'/", '&#39;', $property["fieldHTML"]);
+          $property["fieldHTML"] = preg_replace("/'/", '&#039;', $property["fieldHTML"]);
           $fields[] = $property["fieldHTML"];
           $values[] =  nl2br($property["valueHTML"]);
         }
@@ -778,8 +778,7 @@ class CTemplateManager {
     $this->usedLists = array();
 
     foreach ($lists as $value) {
-      // Remplacer 039 par 39 car ckeditor remplace ' par &#39;
-      $nom = str_replace("#039;", "#39;", CMbString::htmlEntities(stripslashes("[Liste - $value->nom]"), ENT_QUOTES));
+      $nom = CMbString::htmlEntities(stripslashes("[Liste - $value->nom]"), ENT_QUOTES);
       $pos = strpos($this->document, $nom);
       if ($pos !== false) {
         $this->usedLists[$pos] = $value;
