@@ -76,7 +76,7 @@ class CCorrespondantPatient extends CPerson {
     $props["patient_id"]          = "ref class|CPatient cascade";
     $props["relation"]            = "enum list|assurance|autre|confiance|employeur|inconnu|prevenir default|prevenir";
     $props["relation_autre"]      = "str";
-    $props["nom"]                 = "str seekable confidential";
+    $props["nom"]                 = "str notNull seekable confidential";
     $props["surnom"]              = "str seekable";
     $props["nom_jeune_fille"]     = "str";
     $props["prenom"]              = "str";

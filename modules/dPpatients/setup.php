@@ -2504,7 +2504,12 @@ class CSetupdPpatients extends CSetup {
                 WHERE object_id IS NOT NULL;";
     $this->addQuery($query);
 
-    $this->mod_version = "2.02";
+    $this->makeRevision("2.02");
+
+    $query = "ALTER TABLE `correspondant_patient`
+                CHANGE `nom` `nom` VARCHAR (255) NOT NULL;";
+
+    $this->mod_version = "2.03";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
