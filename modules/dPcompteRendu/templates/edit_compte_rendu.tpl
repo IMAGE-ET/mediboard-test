@@ -369,6 +369,10 @@ function afterDuplicate(cr_id) {
 Main.add(function() {
   Thumb.instance = CKEDITOR.instances.htmlarea;
 
+  {{if $compte_rendu->valide}}
+    Thumb.doc_lock = true;
+  {{/if}}
+
   if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
     PageFormat.init(getForm("editFrm"));
     Thumb.compte_rendu_id = '{{$compte_rendu->_id}}';
