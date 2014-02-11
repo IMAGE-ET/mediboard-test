@@ -64,6 +64,7 @@ CKEDITOR.editorConfig = function(config) {
   config.disableNativeSpellChecker = false;
   config.resize_maxWidth = "100%";
   config.resize_minWidth = "100%";
+  config.entities_additional="#039";
 
   {{if $templateManager->font != ""}}
     config.font_defaultLabel = '{{$templateManager->font}}';
