@@ -1529,7 +1529,54 @@ class CSetupsystem extends CSetup {
       ADD INDEX  `object_guid` (`object_id`, `object_class`);";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.53";
+    $this->makeRevision("1.1.53");
+    $query = "CREATE TABLE `ex_link` (
+                `ex_link_id`   INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `ex_class_id`  INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `ex_object_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `level` ENUM('object', 'ref1', 'ref2', 'add') NOT NULL DEFAULT 'object',
+                `object_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `object_class` VARCHAR (80) NOT NULL,
+                `group_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                INDEX (`ex_class_id`),
+                INDEX (`ex_object_id`),
+                INDEX (`group_id`),
+                INDEX `object` (`object_class`, `object_id`)
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    function setup_system_buildExLink($setup) {
+      /** @var CSQLDataSource $ds */
+      $ds = $setup->ds;
+
+      // Changement des ExClasses
+      $query = "SELECT ex_class_id FROM ex_class";
+      $list_ex_class = $ds->loadColumn($query);
+
+      foreach ($list_ex_class as $ex_class_id) {
+        $query = "INSERT INTO `ex_link` (`ex_class_id`, `ex_object_id`, `object_id`, `object_class`, `group_id`, `level`)
+                     SELECT '$ex_class_id', `ex_object_id`, `object_id`, `object_class`, `group_id`, 'object' FROM `ex_object_$ex_class_id`";
+        $ds->exec($query);
+
+        $query = "INSERT INTO `ex_link` (`ex_class_id`, `ex_object_id`, `object_id`, `object_class`, `group_id`, `level`)
+                     SELECT '$ex_class_id', `ex_object_id`, `reference_id`, `reference_class`, `group_id`, 'ref1' FROM `ex_object_$ex_class_id`";
+        $ds->exec($query);
+
+        $query = "INSERT INTO `ex_link` (`ex_class_id`, `ex_object_id`, `object_id`, `object_class`, `group_id`, `level`)
+                     SELECT '$ex_class_id', `ex_object_id`, `reference2_id`, `reference2_class`, `group_id`, 'ref2' FROM `ex_object_$ex_class_id`";
+        $ds->exec($query);
+
+        $query = "INSERT INTO `ex_link` (`ex_class_id`, `ex_object_id`, `object_id`, `object_class`, `group_id`, `level`)
+                     SELECT '$ex_class_id', `ex_object_id`, `additional_id`, `additional_class`, `group_id`, 'add' FROM `ex_object_$ex_class_id`
+                     WHERE `additional_id` IS NOT NULL AND `additional_class` IS NOT NULL";
+        $ds->exec($query);
+      }
+
+      return true;
+    }
+    $this->addFunction("setup_system_buildExLink");
+
+    $this->mod_version = "1.1.54";
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,

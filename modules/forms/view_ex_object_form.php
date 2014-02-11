@@ -86,21 +86,6 @@ if (count($printers)) {
 
 $ex_object->_event_name = $event_name;
 
-// Host and reference objects
-$ex_object->setObject($object);
-
-if (!$ex_object->_id) {
-  if (!$ex_object->reference_id && !$ex_object->reference_class) {
-    $reference = $ex_class_event->resolveReferenceObject($object, 1);
-    $ex_object->setReferenceObject_1($reference);
-  }
-
-  if (!$ex_object->reference2_id && !$ex_object->reference2_class) {
-    $reference = $ex_class_event->resolveReferenceObject($object, 2);
-    $ex_object->setReferenceObject_2($reference);
-  }
-}
-
 // Layout grid
 if ($ex_object->_ref_ex_class->pixel_positionning && !$readonly) {
   $grid = null;
@@ -122,6 +107,21 @@ if ($ex_object_id || $ex_object->_id) {
 }
 else {
   $ex_object->group_id = CGroups::loadCurrent()->_id;
+}
+
+// Host and reference objects
+$ex_object->setObject($object);
+
+if (!$ex_object->_id) {
+  if (!$ex_object->reference_id && !$ex_object->reference_class) {
+    $reference = $ex_class_event->resolveReferenceObject($object, 1);
+    $ex_object->setReferenceObject_1($reference);
+  }
+
+  if (!$ex_object->reference2_id && !$ex_object->reference2_class) {
+    $reference = $ex_class_event->resolveReferenceObject($object, 2);
+    $ex_object->setReferenceObject_2($reference);
+  }
 }
 
 $ex_object->loadRefGroup();
@@ -146,19 +146,6 @@ $ex_object->getReportedValues($ex_class_event);
 $ex_object->setFieldsDisplay();
 $ex_object->loadRefAdditionalObject();
 
-// C'est fait deux fois ??? FIXME
-if (!$ex_object->_id) {
-  if (!$ex_object->reference_id && !$ex_object->reference_class) {
-    $reference = $ex_class_event->resolveReferenceObject($object, 1);
-    $ex_object->setReferenceObject_1($reference);
-  }
-
-  if (!$ex_object->reference2_id && !$ex_object->reference2_class) {
-    $reference = $ex_class_event->resolveReferenceObject($object, 2);
-    $ex_object->setReferenceObject_2($reference);
-  }
-}
-
 // depends on setReferenceObject_1 and setReferenceObject_2
 $ex_object->loadNativeViews($ex_class_event);
 
@@ -173,6 +160,9 @@ foreach ($groups as $_group) {
     }
   }
 }
+
+CStoredObject::massLoadFwdRef($fields, "concept_id");
+CStoredObject::massCountBackRefs($fields, "ex_triggers");
 
 foreach ($fields as $_field) {
   $_field->loadTriggeredData();
@@ -197,12 +187,22 @@ if (in_array("IPatientRelated", class_implements($ex_object->object_class))) {
   $ex_object->_rel_patient = $rel_patient;
 }
 
-if ($ex_object->_ref_reference_object_1 instanceof CPatient) {
-  $ex_object->_ref_reference_object_1->loadIPP();
-}
+// Load IPP and NDA
+$ref_objects = array(
+  $ex_object->_ref_object,
+  $ex_object->_ref_reference_object_1,
+  $ex_object->_ref_reference_object_2,
+);
+foreach ($ref_objects as $_object) {
+  if ($_object instanceof CPatient) {
+    $_object->loadIPP();
+    continue;
+  }
 
-if ($ex_object->_ref_reference_object_2 instanceof CPatient) {
-  $ex_object->_ref_reference_object_2->loadIPP();
+  if ($_object instanceof CSejour) {
+    $_object->loadNDA();
+    continue;
+  }
 }
 
 $formula_token_values = array();

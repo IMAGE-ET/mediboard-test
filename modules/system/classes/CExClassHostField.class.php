@@ -74,7 +74,14 @@ class CExClassHostField extends CMbObject {
     
     $this->_view = $this->field; // FIXME
   }
-  
+
+  /**
+   * Load ExGroup
+   *
+   * @param bool $cache Use cache
+   *
+   * @return CExClassFieldGroup
+   */
   function loadRefExGroup($cache = true){
     return $this->_ref_ex_group = $this->loadFwdRef("ex_group_id", $cache);
   }
@@ -87,38 +94,45 @@ class CExClassHostField extends CMbObject {
    * @return CMbObject|null
    */
   function getHostObject(CExObject $ex_object) {
-    // Direct references
-    if ($this->host_class == $ex_object->object_class) {
-      return $this->_ref_host_object = $ex_object->_ref_object;
+    // Load the list of objects
+    /** @var CMbObject[] $objects */
+    $objects = array();
+
+    // Links are stored
+    if ($ex_object->_id) {
+      $links = $ex_object->loadRefsLinks();
+
+      // Direct reference
+      foreach ($links as $_link) {
+        $objects[] = $_link->loadTargetObject();
+      }
     }
-    
-    if ($this->host_class == $ex_object->reference_class) {
-      return $this->_ref_host_object = $ex_object->_ref_reference_object_1;
+
+    // Or not
+    else {
+      $objects = array(
+        $ex_object->_ref_object,
+        $ex_object->_ref_reference_object_1,
+        $ex_object->_ref_reference_object_2,
+      );
     }
-    
-    if ($this->host_class == $ex_object->reference2_class) {
-      return $this->_ref_host_object = $ex_object->_ref_reference_object_2;
+
+    // Direct reference
+    foreach ($objects as $_object) {
+      if ($this->host_class == $_object->_class) {
+        return $this->_ref_host_object = $_object;
+      }
     }
 
     // Indirect references
-    /** @var CMbObject[] $objects */
-    $objects = array(
-      $ex_object->_ref_object,
-      $ex_object->_ref_reference_object_1,
-      $ex_object->_ref_reference_object_2,
-    );
-
     foreach ($objects as $_object) {
-      if (!$_object) {
-        continue;
-      }
-
       $_obj = $_object->getRelatedObjectOfClass($this->host_class);
+
       if ($_obj && $_obj->_id) {
         return $this->_ref_host_object = $_obj;
       }
     }
-    
-    return $this->_ref_host_object = new $this->host_class;
+
+    return null;
   }
 }

@@ -296,6 +296,10 @@ function switchMode(){
   </div>
 {{/if}}
 
+{{if $print}}
+  {{mb_include style=mediboard template=open_printable}}
+{{/if}}
+
 <table class="main {{if $print}} print {{else}} form {{/if}}">
   {{if !$noheader}}
   <thead>
@@ -511,5 +515,8 @@ function switchMode(){
 
 </table>
 
+{{if $print}}
+  {{mb_include style=mediboard template=close_printable}}
+{{/if}}
 
 {{/if}}
