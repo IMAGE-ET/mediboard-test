@@ -1,16 +1,17 @@
 <?php
-
 /**
- * dPccam
+ * $Id:$
  *
- * @category Ccam
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage ccam
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
+/**
+ * Frais divers
+ */
 class CFraisDivers extends CActe {
   public $frais_divers_id;
 
@@ -46,6 +47,11 @@ class CFraisDivers extends CActe {
     return $spec;
   }
 
+  /**
+   * Chargement du type de frais
+   *
+   * @return CFraisDiversType
+   */
   function loadRefType(){
     return $this->_ref_type = $this->loadFwdRef("type_id", true);
   }
@@ -71,5 +77,30 @@ class CFraisDivers extends CActe {
     if ($this->object_class && $this->object_id) {
       $this->_view .= " de $this->object_class-$this->object_id";
     }
+  }
+
+  /**
+   * Création d'un item de facture pour un frais divers
+   *
+   * @param CFacture $facture la facture
+   * @param string   $date    date à défaut
+   *
+   * @return string|null
+   */
+  function creationItemsFacture($facture, $date) {
+    $this->loadRefType();
+    $ligne = new CFactureItem();
+    $ligne->libelle       = $this->_ref_type->libelle;
+    $ligne->code          = $this->_ref_type->code;
+    $ligne->type          = $this->_class;
+    $ligne->object_id     = $facture->_id;
+    $ligne->object_class  = $facture->_class;
+    $ligne->date          = $date;
+    $ligne->montant_base  = $this->montant_base;
+    $ligne->montant_depassement = $this->montant_depassement;
+    $ligne->quantite      = $this->quantite;
+    $ligne->coeff         = $this->coefficient;
+    $msg = $ligne->store();
+    return $msg;
   }
 }

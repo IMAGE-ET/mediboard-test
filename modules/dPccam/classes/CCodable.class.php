@@ -416,6 +416,11 @@ class CCodable extends CMbObject {
     $this->_count_actes += $this->countBackRefs("actes_caisse", $where);
   }
 
+  /**
+   * Correction des actes
+   *
+   * @return void
+   */
   function correctActes() {
     $this->loadRefsActes();
 
@@ -445,12 +450,13 @@ class CCodable extends CMbObject {
     $this->loadRefsActesTarmed($num_facture);
     $this->loadRefsActesCaisse($num_facture);
 
-    foreach ($this->_ref_actes_ccam as $acte_ccam) {
-      $this->_ref_actes[] = $acte_ccam;
-    }
-
-    foreach ($this->_ref_actes_ngap as $acte_ngap) {
-      $this->_ref_actes[] = $acte_ngap;
+    if ($num_facture == 1 || !$num_facture) {
+      foreach ($this->_ref_actes_ccam as $acte_ccam) {
+        $this->_ref_actes[] = $acte_ccam;
+      }
+      foreach ($this->_ref_actes_ngap as $acte_ngap) {
+        $this->_ref_actes[] = $acte_ngap;
+      }
     }
 
     if ($this->_ref_actes_tarmed) {
@@ -652,14 +658,31 @@ class CCodable extends CMbObject {
     }
   }
 
-  function loadRefsFraisDivers(){
+  /**
+   * Charge les actes frais divers
+   *
+   * @param int $num_facture numéro de la facture concernée
+   *
+   * @return array
+   */
+  function loadRefsFraisDivers($num_facture = 1){
     $this->_ref_frais_divers = $this->loadBackRefs("frais_divers");
     foreach ($this->_ref_frais_divers as $_frais) {
-      $_frais->loadRefType();
+      if ($num_facture && $_frais->num_facture != $num_facture) {
+        unset($this->_ref_frais_divers[$_frais->_id]);
+      }
+      else {
+        $_frais->loadRefType();
+      }
     }
     return $this->_ref_frais_divers;
   }
 
+  /**
+   * Vérification du codage des actes ccam
+   *
+   * @return array
+   */
   function getMaxCodagesActes() {
     if (!$this->_id || $this->codes_ccam === null) {
       return null;
@@ -698,6 +721,11 @@ class CCodable extends CMbObject {
     return null;
   }
 
+  /**
+   * Vérification du code ccam
+   *
+   * @return string|null
+   */
   function checkCodeCcam() {
     $codes_ccam = explode("|", $this->codes_ccam);
     CMbArray::removeValue("", $codes_ccam);
@@ -734,6 +762,11 @@ class CCodable extends CMbObject {
     return parent::check();
   }
 
+  /**
+   * Test de la cloture
+   *
+   * @return null
+   */
   function testCloture() {
     $actes_ccam = $this->loadRefsActesCCAM();
 
@@ -753,6 +786,14 @@ class CCodable extends CMbObject {
            ($count_activite_4 == 0 || $this->cloture_activite_4);
   }
 
+  /**
+   * Vérification du modificateur
+   *
+   * @param int    $code  code de l'acte
+   * @param string $heure heure d'exécution
+   *
+   * @return array|void
+   */
   function checkModificateur($code, $heure) {
     $keys = array("A", "E",  "P", "S", "U", "7");
 

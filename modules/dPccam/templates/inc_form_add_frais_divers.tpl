@@ -1,35 +1,25 @@
-{{* $Id$ *}}
-
-{{*
- * @package Mediboard
- * @subpackage CCAM
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
-
-<script type="text/javascript">
+<script>
 Main.add(function(){
-  var form = getForm("formAddFraisDivers");
+  var form = getForm('formAddFraisDivers');
   
-  var url = new Url("system", "httpreq_field_autocomplete");
-  url.addParam("class", "CFraisDivers");
-  url.addParam("field", "type_id");
-  url.addParam("limit", 30);
-  url.addParam("view_field", "code");
-  url.addParam("show_view", true);
-  url.addParam("input_field", "type_id_autocomplete_view");
-  url.addParam("wholeString", false);
+  var url = new Url('system', 'httpreq_field_autocomplete');
+  url.addParam('class', 'CFraisDivers');
+  url.addParam('field', 'type_id');
+  url.addParam('limit', 30);
+  url.addParam('view_field', 'code');
+  url.addParam('show_view', true);
+  url.addParam('input_field', 'type_id_autocomplete_view');
+  url.addParam('wholeString', false);
   url.autoComplete(form.type_id_autocomplete_view, null, {
     minChars: 1,
-    method: "get",
-    select: "view",
+    method: 'get',
+    select: 'view',
     dropdown: true,
     afterUpdateElement: function(field,selected){
       var form = field.form;
-      $V(form.type_id, selected.getAttribute("id").split("-")[2]);
-      $V(form.montant_base, selected.down(".tarif").innerHTML.strip());
-      $V(form.facturable, selected.down(".facturable").innerHTML.strip());
+      $V(form.type_id, selected.getAttribute('id').split('-')[2]);
+      $V(form.montant_base, selected.down('.tarif').innerHTML.strip());
+      $V(form.facturable, selected.down('.facturable').innerHTML.strip());
     }
   });
 });
@@ -45,7 +35,7 @@ updateMontant = function(form){
 };
 
 removeFraisDivers = function(id, form) {
-  if (!confirm("Voulez vous réelement supprimer de frais divers ?")) {
+  if (!confirm('Voulez vous réelement supprimer de frais divers ?')) {
     return false;
   }
   
@@ -54,7 +44,6 @@ removeFraisDivers = function(id, form) {
   
   return onSubmitFormAjax(form, {check: function(){return true}, onComplete: refreshFraisDivers});
 };
-
 </script>
 
 <form name="formAddFraisDivers" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshFraisDivers})">
@@ -75,6 +64,7 @@ removeFraisDivers = function(id, form) {
       <th class="category">{{mb_label class=CFraisDivers field=facturable}}</th>
       <th class="category">{{mb_label class=CFraisDivers field=montant_base}}</th>
       <th class="category">{{mb_label class=CFraisDivers field=execution}}</th>
+      <th class="category">{{mb_label class=CFraisDivers field=num_facture}}</th>
       <th class="category">{{mb_label class=CFraisDivers field=executant_id}}</th>
       <th class="category narrow"></th>
     </tr>
@@ -89,6 +79,7 @@ removeFraisDivers = function(id, form) {
       <td>{{mb_field object=$frais_divers field=facturable typeEnum=select}}</td>
       <td>{{mb_field object=$frais_divers field=montant_base}}</td>
       <td>{{mb_field object=$frais_divers field=execution form="formAddFraisDivers" register=true}}</td>
+      <td>{{mb_field object=$frais_divers field=num_facture form=formAddFraisDivers increment=1 style="width:15px;"}}</td>
       <td>
         <select name="executant_id" style="width: 120px;" class="{{$frais_divers->_props.executant_id}}">
           <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
@@ -108,6 +99,7 @@ removeFraisDivers = function(id, form) {
         <td>{{mb_value object=$_frais field=facturable}}</td>
         <td>{{mb_value object=$_frais field=montant_base}}</td>
         <td>{{mb_value object=$_frais field=execution}}</td>
+        <td>{{mb_value object=$_frais field=num_facture}}</td>
         <td>{{mb_value object=$_frais field=executant_id}}</td>
         <td>
           <button type="button" class="trash notext" onclick="removeFraisDivers({{$_frais->_id}}, this.form)">

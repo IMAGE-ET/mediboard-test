@@ -1,18 +1,22 @@
 <?php
-
 /**
- * dPccam
+ * $Id:$
  *
- * @category Ccam
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage ccam
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
+/**
+ * Setup du module
+ **/
 class CSetupdPccam extends CSetup {
 
+  /**
+   * Construct
+   **/
   function __construct() {
     parent::__construct();
 
@@ -126,9 +130,18 @@ class CSetupdPccam extends CSetup {
                 SET `frais_divers`.`execution` = `sejour`.`entree`
                 WHERE `frais_divers`.`object_class` = 'CSejour';";
     $this->addQuery($query);
+    $this->makeRevision("0.19");
 
-    $this->mod_version = "0.19";
+    $query = "ALTER TABLE `frais_divers`
+                ADD `num_facture` INT (11) UNSIGNED NOT NULL DEFAULT '1'";
+    $this->addQuery($query);
 
+    $query = "ALTER TABLE `frais_divers`
+                ADD INDEX (`execution`),
+                ADD INDEX (`object_class`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.20";
     // Data source query
 
     // Version 32 de la CCAM
