@@ -102,7 +102,7 @@ CJSLoader::$files = array(
   "includes/javascript/browserDetect.js",
   "includes/javascript/configuration.js",
   "includes/javascript/plugin.js",
-
+  "includes/javascript/xdr.js",
   "includes/javascript/usermessage.js",
 
   //Flot
