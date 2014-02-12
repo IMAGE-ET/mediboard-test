@@ -78,7 +78,7 @@
 
           <input type="hidden" name="_mode_entree_id" value="{{$rpu->_mode_entree_id}}"
                  class="autocomplete notNull" size="50"/>
-          <input type="text" name="_mode_entree_id_autocomplete_view" size="50" value="{{$rpu->_fwd._mode_entree_id}}"
+          <input type="text" name="_mode_entree_id_autocomplete_view" size="50" value="{{if $rpu->_mode_entree_id}}{{$rpu->_fwd._mode_entree_id}}{{/if}}"
                  class="autocomplete" onchange='if(!this.value){this.form["_mode_entree_id"].value=""}' />
 
           <script>
