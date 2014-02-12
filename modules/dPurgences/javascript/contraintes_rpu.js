@@ -41,15 +41,19 @@ ContraintesRPU = {
     new Url("dPurgences", "ajax_check_obligatory")
       .addParam("rpu_id", rpu_id)
       .requestJSON(function (data) {
-        if (data.length == 1) {
+        if (data.length == 0) {
           callback();
         }
         else {
-          var miss_input = "";
-          for(var i=1;i<data.length;i++) {
-            miss_input += "\n"+$T(data[i]);
+          var miss_input = [];
+          for(var i=0;i<data.length;i++) {
+            miss_input[i] = DOM.li(null, $T(data[i]));
           }
-          alert("Veuillez renseigner les champs suivants :"+miss_input);
+          Modal.alert(
+            DOM.div(null,
+              DOM.p(null, "Le paramétrage de votre établissement impose la saisie d'un certain nombre de champs."),
+              DOM.p(null, "Veuillez renseigner les champs suivants :"),
+            DOM.ul(null, miss_input)), {className: "modal alert big-info"});
         }
       });
   },

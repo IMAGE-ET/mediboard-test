@@ -280,7 +280,7 @@
           {{if $conf.dPurgences.display_motif_sfmu}}
             <th>{{mb_label object=$rpu field="motif_sfmu"}}</th>
             <td>{{mb_field object=$rpu field="motif_sfmu" autocomplete="true,1,10,true,true" form=editRPU size=50}}
-                <button type="button" class="search notext" onclick="CCirconstance.searchMotifSFMU()">
+                <button type="button" class="search notext" onclick="CCirconstance.searchMotifSFMU(this.form)">
                   {{tr}}Search{{/tr}}
                 </button>
             </td>
@@ -297,7 +297,7 @@
           <td></td>
           <th>{{mb_label object=$rpu field="motif_sfmu"}}</th>
           <td>{{mb_field object=$rpu field="motif_sfmu" autocomplete="true,1,10,true,true" form=editRPU size=50}}
-              <button type="button" class="search notext" onclick="CCirconstance.searchMotifSFMU()">
+              <button type="button" class="search notext" onclick="CCirconstance.searchMotifSFMU(this.form)">
                 {{tr}}Search{{/tr}}
               </button>
           </td>

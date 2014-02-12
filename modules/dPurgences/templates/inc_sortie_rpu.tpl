@@ -61,24 +61,28 @@
   {{/if}}
 
   <!-- Vérification des champs semi obligatoires -->
-  {{if $conf.dPurgences.check_ccmu}}
+  {{if "CAppUI::conf"|static_call:"dPurgences Display check_ccmu":"CGroups-$g" !== "0"}}
     {{if !$rpu->ccmu           }}<div class="warning">Champ manquant {{mb_label object=$rpu field=ccmu           }}</div>{{/if}}
   {{/if}}
 
-  {{if $conf.dPurgences.check_dp}}
-    {{if !$sejour->DP          }}<div class="warning">Champ manquant {{mb_label object=$sejour field=DP          }}</div>{{/if}}	
+  {{if "CAppUI::conf"|static_call:"dPurgences Display check_dp":"CGroups-$g" !== "0"}}
+    {{if !$sejour->DP          }}<div class="warning">Champ manquant {{mb_label object=$sejour field=DP          }}</div>{{/if}}
   {{/if}}
 
-  {{if $conf.dPurgences.check_gemsa}}
+  {{if "CAppUI::conf"|static_call:"dPurgences Display check_gemsa":"CGroups-$g" !== "0"}}
     {{if !$rpu->gemsa          }}<div class="warning">Champ manquant {{mb_label object=$rpu field=gemsa          }}</div>{{/if}}
   {{/if}}
 
-  {{if $conf.dPurgences.check_cotation}}
+  {{if "CAppUI::conf"|static_call:"dPurgences Display check_cotation":"CGroups-$g" !== "0"}}
     {{if (!$rpu->_ref_consult->_ref_actes && !$rpu->mutation_sejour_id) ||
       ($rpu->mutation_sejour_id && !$rpu->_ref_sejour_mutation->_count_actes)}}
       <div class="warning">Codage des actes manquant</div>
     {{/if}}
     {{if $sejour->sortie_reelle && !$rpu->_ref_consult->valide}}<div class="warning">La cotation n'est pas validée</div>{{/if}}
+  {{/if}}
+
+  {{if $conf.dPurgences.display_motif_sfmu && "CAppUI::conf"|static_call:"dPurgences Display check_gemsa":"CGroups-$g" !== "0"}}
+    {{if !$rpu->motif_sfmu    }}<div class="warning">Champ manquant {{mb_label object=$rpu field=motif_sfmu      }}</div>{{/if}}
   {{/if}}
 
   {{if $conf.dPurgences.old_rpu == "1"}}
@@ -177,7 +181,7 @@
   {{/if}}
   </td>
 
-  {{if $conf.dPurgences.check_can_leave}}
+  {{if "CAppUI::conf"|static_call:"dPurgences Display check_can_leave":"CGroups-$g" !== "0"}}
     {{if $sejour->mode_sortie == "mutation"}}
       <td></td>
     {{else}}
