@@ -22,10 +22,47 @@ class CDicomDictionary {
    * @var array
    */
   protected static $sop_classes = array(
-    '1.2.840.10008.1.1' => 'Verification SOP Class',
-    '1.2.840.10008.3.1.1.1' => 'DICOM Application Context Name',
-    '1.2.840.10008.5.1.4.31' => 'Modality Worklist Information Model - FIND',
-    '1.2.840.10008.3.1.2.3.3' => 'Modality Performed Procedure Step SOP Class');
+    '1.2.840.10008.1.1'               => 'Verification SOP Class',
+    '1.2.840.10008.1.3.10'            => 'Media Storage Directory Storage',
+    '1.2.840.10008.1.20.1'            => 'Storage Commitment Push Model SOP Class',
+    '1.2.840.10008.3.1.1.1'           => 'DICOM Application Context Name',
+    '1.2.840.10008.3.1.2.3.3'         => 'Modality Performed Procedure Step SOP Class',
+    '1.2.840.10008.5.1.1.1'           => 'Basic Film Session SOP Class',
+    '1.2.840.10008.5.1.1.2'           => 'Basic Film Box',
+    '1.2.840.10008.5.1.1.4'           => 'Basic Grayscale Image Box',
+    '1.2.840.10008.5.1.1.9'           => 'Basic Grayscale Print Management Meta',
+    '1.2.840.10008.5.1.1.16'          => 'Printer',
+    '1.2.840.10008.5.1.1.23'          => 'Presentation LUT',
+    '1.2.840.10008.5.1.4.1.1.1'       => 'Computed Radiography Image Storage',
+    '1.2.840.10008.5.1.4.1.1.1.1'     => 'Digital X-Ray Image Storage for Presentation',
+    '1.2.840.10008.5.1.4.1.1.1.1.1'   => 'Digital X-Ray Image Storage for Processing',
+    '1.2.840.10008.5.1.4.1.1.1.2'     => 'Mammography Image Storage- For Presentation',
+    '1.2.840.10008.5.1.4.1.1.1.2.1'   => 'Mammography Image Storage- For Processing',
+    '1.2.840.10008.5.1.4.1.1.1.3'     => 'Digital Intra-oral X-Ray Image Storage for Presentation',
+    '1.2.840.10008.5.1.4.1.1.1.3.1'   => 'Digital Intra-oral X-Ray Image Storage for Processing',
+    '1.2.840.10008.5.1.4.1.1.2'       => 'CT Image Storage',
+    '1.2.840.10008.5.1.4.1.1.3.1'     => 'Ultrasound Multi-Frame Image Storage',
+    '1.2.840.10008.5.1.4.1.1.4'       => 'MR Image Storage',
+    '1.2.840.10008.5.1.4.1.1.6.1'     => 'Ultrasound Image Storage',
+    '1.2.840.10008.5.1.4.1.1.7'       => 'Secondary Capture Image Storage',
+    '1.2.840.10008.5.1.4.1.1.11.1'    => 'Grayscale Softcopy Presentation State Storage',
+    '1.2.840.10008.5.1.4.1.1.12.1'    => 'X-Ray Angiographic Image Storage',
+    '1.2.840.10008.5.1.4.1.1.12.2'    => 'X-Ray Radiofluoroscopic Image Storage',
+    '1.2.840.10008.5.1.4.1.1.12.3'    => 'X-Ray Angiographic Bi-Plane Image Storage',
+    '1.2.840.10008.5.1.4.1.1.20'      => 'Nuclear Medicine Image Storage',
+    '1.2.840.10008.5.1.4.1.1.77.1.1'  => 'VL Endoscopic Image Storage',
+    '1.2.840.10008.5.1.4.1.1.77.1.2'  => 'VL Microscopic Image Storage',
+    '1.2.840.10008.5.1.4.1.1.77.1.3'  => 'VL Slide-Coordinates Microscopic Image Storage',
+    '1.2.840.10008.5.1.4.1.1.77.1.4'  => 'VL Photographic Image Storage',
+    '1.2.840.10008.5.1.4.1.1.88.67'   => 'X-Ray Radiation Dose Storage',
+    '1.2.840.10008.5.1.4.1.1.128'     => 'Positron Emission Tomography Image Storage',
+    '1.2.840.10008.5.1.4.1.1.481.1'   => 'RT Image Storage',
+    '1.2.840.10008.5.1.4.1.2.1.1'     => 'Patient Root Query/Retrieve Information Model - FIND',
+    '1.2.840.10008.5.1.4.1.2.1.2'     => 'Patient Root Query/Retrieve Information Model - MOVE',
+    '1.2.840.10008.5.1.4.1.2.2.1'     => 'Study Root Query/Retrieve Information Model - FIND',
+    '1.2.840.10008.5.1.4.1.2.2.2'     => 'Study Root Query/Retrieve Information Model - MOVE',
+    '1.2.840.10008.5.1.4.31'          => 'Modality Worklist Information Model - FIND'
+  );
   
   /**
    * The DICOM Network transfer syntaxes
