@@ -43,6 +43,8 @@ showHeader();
   <input type="hidden" name="install[<?php echo $library->name; ?>]" value="true" />
   <?php } ?>
   <button type="submit" class="edit">Installer tout</button>
+  <br />
+  <progress max="<?php echo count(CLibrary::$all); ?>" value="0" style="width: 200px; display: none;" id="progress-bar"></progress>
 </form>
 
 <form action="03_install.php" name="InstallLibs" method="post">  
@@ -105,6 +107,14 @@ showHeader();
           </tr>
           <?php } ?>
         </table>
+
+        <?php if (count($install) > 1) { ?>
+        <script>
+          var progressBar = document.getElementById("progress-bar");
+          progressBar.style.display = "";
+          progressBar.value = progressBar.value + 1;
+        </script>
+        <?php } ?>
       </td>
     </tr>
     <?php } ?>
