@@ -159,10 +159,12 @@ class CRPUXMLDocument extends CMbXMLDocument {
       // on recherche la première affectation vers UHCD
       $affectation = new CAffectation();
       $ljoin["service"] = "`service`.`service_id` = `affectation`.`service_id`";
+      $ljoin["sejour"]  = "`affectation`.`sejour_id` = `sejour`.`sejour_id`";
       $where = array();
-      $where["sejour_id"]         = " = '$sejour->_id'";
-      $where["service.cancelled"] = " = '0'";
-      $where["service.uhcd"]      = " = '1'";
+      $where["affectation.sejour_id"] = " = '$sejour->_id'";
+      $where["service.cancelled"]     = " = '0'";
+      $where["service.uhcd"]          = " = '1'";
+      $where["sejour.uhcd"]           = " = '1'";
 
       $affectation->loadObject($where, "entree ASC", null, $ljoin);
 
