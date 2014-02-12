@@ -2383,8 +2383,11 @@ class CConstantesMedicales extends CMbObject {
         $style .= 'color: red';
       }
       if (!$widget) {
-        $str = "<span style=\"$style\" onclick=\"editConstants(" . $_cst->_id . ", '" .
-          $_cst->_ref_context->_guid . "')\"><strong>" . CMbDT::format($_cst->datetime, '%Hh%M') . '</strong><br/>'.
+        $str = "<span style=\"$style\" onclick=\"editConstants(" . $_cst->_id . ", '";
+        if ($_cst->_ref_context && $_cst->_ref_context->_guid) {
+          $str .= $_cst->_ref_context->_guid;
+        }
+        $str .= "')\"><strong>" . CMbDT::format($_cst->datetime, '%Hh%M') . '</strong><br/>'.
           CMbDT::format($_cst->datetime, '%d/%m') . '</span>';
       }
       else {
