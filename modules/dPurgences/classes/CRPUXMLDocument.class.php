@@ -17,7 +17,7 @@ class CRPUXMLDocument extends CMbXMLDocument {
   public $documentfinalprefix;
   public $documentfinalfilename;
   public $now;
-  
+
   public $datedebut;
   public $datefin;
 
@@ -26,15 +26,15 @@ class CRPUXMLDocument extends CMbXMLDocument {
    */
   function __construct($sender = null) {
     parent::__construct();
-    
+
     $this->schemapath = "modules/$sender/xsd";
     $this->schemafilename = "$this->schemapath/$sender.xsd";
     $this->documentfilename = "tmp/document.xml";
     $this->finalpath = CFile::$directory . "/rpuxml/$sender";
-    
+
     $this->now = time();
   }
-  
+
   function schemaValidate($filename = null, $returnErrors = false) {
     if (!CAppUI::conf("dPurgences rpu_xml_validation")) {
       return true;
@@ -42,13 +42,13 @@ class CRPUXMLDocument extends CMbXMLDocument {
 
     return parent::schemaValidate($filename, $returnErrors);
   }
-  
+
   function checkSchema() {
     if (!is_dir($this->schemapath)) {
       trigger_error("RPU XML schemas are missing. Please extract them from archive in '$this->schemapath/' directory", E_USER_WARNING);
       return false;
     }
-    
+
     if (!is_file($this->schemafilename)) {
       $schema = new CRPUXMLSchema();
       $schema->importSchemaPackage($this->schemapath);
@@ -56,24 +56,24 @@ class CRPUXMLDocument extends CMbXMLDocument {
       $schema->purgeImportedNamespaces();
       $schema->save($this->schemafilename);
     }
-    
+
     return true;
   }
-  
+
   function addElement($elParent, $elName, $elValue = null, $elNS = null) {
     return parent::addElement($elParent, $elName, $elValue, $elNS);
   }
- 
+
   function saveTempFile() {
     parent::save(utf8_encode($this->documentfilename));
   }
-  
+
   function saveFinalFile() {
     $this->documentfinalfilename = "$this->finalpath/$this->documentfinalprefix-$this->now.xml";
     CMbPath::forceDir(dirname($this->documentfinalfilename));
     parent::save($this->documentfinalfilename);
   }
-  
+
   function addRPU($elParent, CRPU $mbObject) {
     $sejour = $mbObject->loadRefSejour();
 
@@ -81,7 +81,7 @@ class CRPUXMLDocument extends CMbXMLDocument {
     $this->addElement($elParent, "COMMUNE", $mbObject->_ville);
     $this->addElement($elParent, "NAISSANCE", CMbDT::transform($mbObject->_naissance, null, "%d/%m/%Y"));
     $this->addElement($elParent, "SEXE", strtoupper($mbObject->_sexe));
-    
+
     $this->addElement($elParent, "ENTREE", CMbDT::transform($sejour->entree, null, "%d/%m/%Y %H:%M"));
     $this->addElement($elParent, "MODE_ENTREE", $mbObject->_ref_sejour->mode_entree);
     $this->addElement($elParent, "PROVENANCE", $mbObject->_ref_sejour->provenance);
@@ -93,13 +93,13 @@ class CRPUXMLDocument extends CMbXMLDocument {
     }
     $this->addElement($elParent, "TRANSPORT", strtoupper($mbObject->_ref_sejour->transport));
     $this->addElement($elParent, "TRANSPORT_PEC", strtoupper($mbObject->pec_transport));
-    
+
     $motif = CMbString::htmlSpecialChars($mbObject->motif);
     if ($mbObject->motif_sfmu) {
       $motif_sfmu = $mbObject->loadRefMotifSFMU();
       $motif = $motif_sfmu->code;
     }
-    
+
     $this->addElement($elParent, "MOTIF", $motif);
 
     if (CModule::getActive("oscour") && CAppUI::conf("dPurgences gerer_circonstance") && CAppUI::conf("oscour version_complete")) {
@@ -109,7 +109,7 @@ class CRPUXMLDocument extends CMbXMLDocument {
     $this->addElement($elParent, "GRAVITE", strtoupper($mbObject->ccmu));
 
     $this->addElement($elParent, "DP", $mbObject->_DP[0].preg_replace("/[^\d]/", "", substr($mbObject->_DP, 1)));
-        
+
     $liste_da = $this->addElement($elParent, "LISTE_DA");
     if ($dr = $mbObject->_ref_sejour->_ext_diagnostic_relie) {
       $this->addDiagAssocie($liste_da, $dr->code[0].preg_replace("/[^\d]/", "", substr($dr->code, 1)));
@@ -121,7 +121,7 @@ class CRPUXMLDocument extends CMbXMLDocument {
         $this->addDiagAssocie($liste_da, $_da);
       }
     }
-    
+
     $liste_actes = $this->addElement($elParent, "LISTE_ACTES");
     $codes_ccam = $mbObject->_ref_sejour->_ref_consult_atu->_codes_ccam;
     if (is_array($codes_ccam)) {
@@ -159,10 +159,12 @@ class CRPUXMLDocument extends CMbXMLDocument {
       // on recherche la première affectation vers UHCD
       $affectation = new CAffectation();
       $ljoin["service"] = "`service`.`service_id` = `affectation`.`service_id`";
+      $ljoin["sejour"]  = "`affectation`.`sejour_id` = `sejour`.`sejour_id`";
       $where = array();
-      $where["sejour_id"]         = " = '$sejour->_id'";
-      $where["service.cancelled"] = " = '0'";
-      $where["service.uhcd"]      = " = '1'";
+      $where["affectation.sejour_id"] = " = '$sejour->_id'";
+      $where["service.cancelled"]     = " = '0'";
+      $where["service.uhcd"]          = " = '1'";
+      $where["sejour.uhcd"]           = " = '1'";
 
       $affectation->loadObject($where, "entree ASC", null, $ljoin);
 
@@ -195,11 +197,11 @@ class CRPUXMLDocument extends CMbXMLDocument {
       $this->addElement($elParent, "ORIENT", strtoupper($mbObject->orientation));
     }
   }
-  
+
   function addDiagAssocie($elParent, $elValue) {
     $this->addElement($elParent, "DA", $elValue);
   }
-  
+
   function addActeCCAM($elParent, $elValue) {
     $this->addElement($elParent, "ACTE", str_replace(" ", "", $elValue));
   }
