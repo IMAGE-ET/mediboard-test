@@ -788,7 +788,7 @@ class CExObject extends CMbMetaObject {
     }
 
     $new_object = !$this->_id;
-    
+
     if ($msg = parent::store()) {
       return $msg;
     }
@@ -885,12 +885,17 @@ class CExObject extends CMbMetaObject {
    *
    * needed or will throw errors in the field specs
    */
-  function checkProperty($propName) {
+  function checkProperty($name) {
     $class = $this->_class;
     $this->_class = get_class($this);
+
+    // Sauvegarde se props car elles sont réinitialisées
+    $props = $this->_props;
     
-    $spec = $this->_specs[$propName];
+    $spec = $this->_specs[$name];
     $ret = $spec->checkPropertyValue($this);
+
+    $this->_props = $props;
     
     $this->_class = $class;
     return $ret;
@@ -957,7 +962,7 @@ class CExObject extends CMbMetaObject {
     foreach ($fields as $_field) {
       // don't redeclare them more than once
       if (isset($this->{$_field->name})) {
-        break; 
+        break;
       }
       
       $this->{$_field->name} = null; // declaration of the field
@@ -988,8 +993,12 @@ class CExObject extends CMbMetaObject {
         }
       }
     }
-    
-    return self::$_ex_specs[$ex_class_id] = $specs;
+
+    if ($ex_class_id) {
+      self::$_ex_specs[$ex_class_id] = $specs;
+    }
+
+    return $specs;
   }
 
   /**
