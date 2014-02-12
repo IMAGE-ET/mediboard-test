@@ -701,13 +701,15 @@ class CDicomDataSet {
             <td>$this->length</td>";
     if ($this->vr == "SQ") {
       $str .= "<td><ul>";
-      foreach ($this->value as $_sequence) {
-        $str .= "<li><table>";
-        
-        foreach ($_sequence as $_dataset) {
-          $str .= "<tr>" . $_dataset->__toString() . "</tr>";
+      if ($this->value) {
+        foreach ($this->value as $_sequence) {
+          $str .= "<li><table>";
+
+          foreach ($_sequence as $_dataset) {
+            $str .= "<tr>" . $_dataset->__toString() . "</tr>";
+          }
+          $str .= "</table></li>";
         }
-        $str .= "</table></li>";
       }
       $str .= "</td></ul>";
     }
