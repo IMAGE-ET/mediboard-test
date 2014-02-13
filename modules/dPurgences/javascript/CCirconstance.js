@@ -10,13 +10,15 @@
  */
 
 CCirconstance = {
+  form: null,
   edit : function(id) {
     new Url("dPurgences", "ajax_edit_circonstance")
       .addParam("id", id)
       .requestModal();
   },
 
-  searchMotifSFMU : function() {
+  searchMotifSFMU : function(form) {
+    CCirconstance.form = form;
     new Url("dPurgences", "ajax_search_motif_sfmu")
       .requestModal(600, 500);
   },
@@ -28,7 +30,7 @@ CCirconstance = {
   },
 
   selectMotifSFMU : function(libelle, id) {
-    var form = getForm("editRPU");
+    var form = CCirconstance.form;
     $V(form["motif_sfmu"], id);
     $V(form["motif_sfmu_autocomplete_view"], libelle);
     Control.Modal.close();

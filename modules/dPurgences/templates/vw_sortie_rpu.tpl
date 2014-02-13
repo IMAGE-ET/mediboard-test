@@ -92,7 +92,7 @@
     <td style="text-align: left;">
       {{mb_include template=inc_hide_previous_rpus}}
     </td>
-		
+
     <th style="text-align: center;">
       <big>{{$date|date_format:$conf.longdate}}</big>
       <form action="?" name="changeDate" method="get">
@@ -148,10 +148,10 @@
     <th>
       {{mb_title class=CSejour field=_entree}} /
       {{mb_title class=CSejour field=_sortie}}
-		</th>
-    {{if $conf.dPurgences.check_can_leave}}
+    </th>
+    {{if "CAppUI::conf"|static_call:"dPurgences Display check_can_leave":"CGroups-$g" !== "0"}}
     <th>{{mb_title class=CRPU field="_can_leave"}}</th>
-		{{/if}}
+    {{/if}}
   </tr>
   {{foreach from=$listSejours item=sejour}}
     {{assign var=rpu value=$sejour->_ref_rpu}}
@@ -160,6 +160,6 @@
       {{mb_include module=urgences template=inc_sortie_rpu}}
     </tr>
   {{foreachelse}}
-	  <tr><td colspan="{{$conf.dPurgences.responsable_rpu_view|ternary:7:6}}" class="empty">Aucune sortie à effectuer</td></tr>
+    <tr><td colspan="{{$conf.dPurgences.responsable_rpu_view|ternary:7:6}}" class="empty">Aucune sortie à effectuer</td></tr>
   {{/foreach}}
 </table>

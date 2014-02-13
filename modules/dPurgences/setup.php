@@ -409,6 +409,19 @@ class CSetupdPurgences extends CSetup {
     $this->addDefaultConfig("dPurgences Display check_dp"       , "dPurgences check_dp");
     $this->addDefaultConfig("dPurgences Display check_can_leave", "dPurgences check_can_leave");
 
-    $this->mod_version = "0.48";
+    $this->makeRevision("0.48");
+
+    $config_value = @CAppUI::conf("dPurgences gestion_motif_sfmu");
+
+    if ($config_value !== null) {
+      if ($config_value == "1") {
+        $config_value = "2";
+      }
+      $query = "INSERT INTO `configuration` (`feature`, `value`) VALUES (%1, %2)";
+      $query = $this->ds->prepare($query, "dPurgences CRPU gestion_motif_sfmu", $config_value);
+      $this->addQuery($query);
+    }
+
+    $this->mod_version = "0.49";
   }  
 }

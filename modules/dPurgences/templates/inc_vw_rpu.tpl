@@ -228,6 +228,33 @@ function showEtabEntreeTransfert(mode) {
           </table>
         </form>
       </fieldset>
+      {{if $conf.dPurgences.display_motif_sfmu}}
+        <fieldset>
+          <legend>Précisions sur l'entrée</legend>
+          <form name="editRPUMotifsfmu" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
+            <input type="hidden" name="dosql" value="do_rpu_aed" />
+            <input type="hidden" name="m" value="dPurgences" />
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
+            <table class="layout" style="width: 100%">
+              <tr>
+                {{assign var=notnull value=""}}
+                {{if "CAppUI::conf"|static_call:"dPurgences CRPU gestion_motif_sfmu":"CGroups-$g" == "2"}}
+                  {{assign var=notnull value="notNull"}}
+                {{/if}}
+                <th>{{mb_label object=$rpu field="motif_sfmu" class=$notnull}}</th>
+                <td>{{mb_field object=$rpu field="motif_sfmu" class=$notnull
+                  autocomplete="true,1,10,true,true" form="editRPUMotifsfmu" size=50 onchange="this.form.onsubmit();"}}
+                  {{mb_script module=dPurgences script=CCirconstance}}
+                  <button type="button" class="search notext" onclick="CCirconstance.searchMotifSFMU(this.form)">
+                    {{tr}}Search{{/tr}}
+                  </button>
+                </td>
+              </tr>
+            </table>
+          </form>
+        </fieldset>
+      {{/if}}
     </td>
     
     <td>
