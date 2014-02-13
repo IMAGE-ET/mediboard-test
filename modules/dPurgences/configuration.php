@@ -19,7 +19,8 @@ CConfiguration::register(
           "impose_motif" => "bool default|0",
           "impose_create_sejour_mutation" => "bool default|0",
           "provenance_domicile_pec_non_org" => "bool default|0",
-          "gestion_motif_sfmu" => "enum list|0|1|2 default|1 localize"
+          "gestion_motif_sfmu" => "enum list|0|1|2 default|1 localize",
+          "motif_sfmu_accueil" => "bool default|0"
         ),
         "Display" => array(
           "check_cotation" => "enum list|0|1 default|1 localize",
