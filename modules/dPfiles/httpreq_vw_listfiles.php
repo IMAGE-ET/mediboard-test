@@ -49,9 +49,11 @@ $canDoc  = $cr->canCreate($object);
 
 // To add the modele selector in the toolbar
 if ($object_class == 'CConsultation') {
+  $object->loadRefPlageConsult();
   $praticienId = $object->_praticien_id;
 }
 else if ($object_class == 'CConsultAnesth') {
+  $object->_ref_consultation->loadRefPlageConsult();
   $praticienId = $object->_ref_consultation->_praticien_id;
 }
 else if ($object_class == 'CSejour') {
