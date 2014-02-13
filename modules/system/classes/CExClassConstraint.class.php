@@ -281,40 +281,33 @@ class CExClassConstraint extends CMbObject {
   function checkConstraint(CMbObject $object) {
     $this->completeField("field", "value");
 
+    $this->loadObjectRefs($object);
+
     $object_field = $this->resolveObjectField($object);
 
     if (!$object_field) {
       return false;
     }
 
-    /** @var CMbObject $object */
-    $object = $object_field["object"];
-    $field  = $object_field["field"];
+    /** @var CMbObject $object_fwd */
+    $object_fwd = $object_field["object"];
+    $field      = $object_field["field"];
 
     // cas ou l'objet retrouvé n'a pas le champ (meta objet avec classe differente)
-    if (!isset($object->_specs[$field]) && $field != "CONNECTED_USER") {
+    if (!isset($object_fwd->_specs[$field]) && $field != "CONNECTED_USER") {
       return false;
     }
 
-    // ----- FIXME
-    if (!$object instanceof CPrescriptionLine && !$object instanceof CPrescription) {
-      $object->loadView();
-    }
-
-    if ($object instanceof CPrescriptionLineMedicament) {
-      $object->isHorsT2A();
-      $object->loadClasseATC();
-    }
-    // -----
+    $this->loadObjectRefs($object_fwd);
 
     if ($field == "CONNECTED_USER") {
-      $value = $object->_guid;
+      $value = $object_fwd->_guid;
     }
     else {
-      $value = $object->$field;
+      $value = $object_fwd->$field;
 
-      if ($object->_specs[$field] instanceof CRefSpec) {
-        $_obj = $object->loadFwdRef($field);
+      if ($object_fwd->_specs[$field] instanceof CRefSpec) {
+        $_obj = $object_fwd->loadFwdRef($field);
         $value = $_obj->_guid;
       }
     }
@@ -323,7 +316,27 @@ class CExClassConstraint extends CMbObject {
   }
 
   /**
+   * Load object useful references
+   *
+   * @param CMbObject $object Object to load the references of
+   *
+   * @return void
+   */
+  function loadObjectRefs(CMbObject $object) {
+    if (!$object instanceof CPrescriptionLine && !$object instanceof CPrescription) {
+      $object->loadView();
+    }
+
+    if ($object instanceof CPrescriptionLineMedicament) {
+      $object->isHorsT2A();
+      $object->loadClasseATC();
+    }
+  }
+
+  /**
    * Load class event object
+   *
+   * @param bool $cache Use object cache
    *
    * @return CExClassEvent
    */
