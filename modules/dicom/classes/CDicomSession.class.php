@@ -543,7 +543,7 @@ class CDicomSession extends CMbObject {
       foreach ($pres_contexts_array as $_pres_context) {
         $_pres_context = explode('/', $_pres_context);
 
-        if (array_key_exists(0, $_pres_context) && !array_key_exists(1, $_pres_context) && array_key_exists(2, $_pres_context)) {
+        if (array_key_exists(0, $_pres_context) && array_key_exists(1, $_pres_context) && array_key_exists(2, $_pres_context)) {
           $this->_presentation_contexts[] = new CDicomPresentationContext($_pres_context[0], $_pres_context[1], $_pres_context[2]);
         }
       }
