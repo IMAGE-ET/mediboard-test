@@ -20,9 +20,18 @@ foreach ($objet->_ref_actes_ccam as &$acte) {
   $acte->guessAssociation();
 }
 
+$sejour = new CSejour();
+if ($objet->_class == "CSejour") {
+  $sejour = $objet;
+}
+else {
+  $sejour->_id = $objet->sejour_id;
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("objet", $objet);
+$smarty->assign("objet" , $objet);
+$smarty->assign("sejour", $sejour);
 
 $smarty->display("inc_confirm_actes_ccam.tpl");
