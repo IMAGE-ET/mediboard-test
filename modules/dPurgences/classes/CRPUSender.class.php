@@ -53,4 +53,12 @@ abstract class CRPUSender {
    */
   function transmit(CExtractPassages $extractPassages) {
   }
+
+  /**
+   * Show encrypt key
+   *
+   * @return string
+   */
+  function showEncryptKey() {
+  }
 }

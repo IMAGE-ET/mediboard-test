@@ -12,5 +12,10 @@ RPU_Sender = {
       '<div class="error">Impossible d\'importer la clé publique.<\/div>';
 
     $("import_key").update(message);
+  },
+
+  showEncryptKey: function() {
+    var url = new Url("dPurgences", "ajax_show_encrypt_key");
+    url.requestUpdate('show_encrypt_key');
   }
 };

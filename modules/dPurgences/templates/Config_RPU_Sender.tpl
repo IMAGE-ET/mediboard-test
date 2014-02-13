@@ -76,6 +76,16 @@
           {{/if}}
         </td>
       </tr>
+      <tr>
+        <th class="button">
+          <button class="lookup" onclick="return RPU_Sender.showEncryptKey();" type="button">
+            {{tr}}config-dPurgences-show-encrypt-key{{/tr}}
+          </button>
+        </td>
+        <td id="show_encrypt_key">
+
+        </td>
+      </tr>
 
       <tr>
         <th class="category" colspan="10">{{tr}}config-dPurgences-extraction{{/tr}}</th>
