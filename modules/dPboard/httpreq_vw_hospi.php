@@ -42,6 +42,7 @@ $listSejours = $sejour->loadList($where, null, null, null, $ljoin);
 
 CStoredObject::massLoadFwdRef($listSejours, "patient_id");
 foreach ($listSejours as $_sejour) {
+  $_sejour->loadRefPraticien();
   $_sejour->loadRefPatient();
   $_sejour->loadRefsOperations();
   $_sejour->loadRefCurrAffectation($date);
