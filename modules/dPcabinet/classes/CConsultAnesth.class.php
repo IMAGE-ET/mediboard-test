@@ -406,6 +406,12 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $dossier_medical = $this->_ref_sejour->loadRefDossierMedical();
     $dossier_medical->loadRefsAntecedents();
     $dossier_medical->loadRefstraitements();
+
+    $patient = $this->loadRefPatient();
+    $dossier_medical = $patient->loadRefDossierMedical();
+    $dossier_medical->loadRefsAntecedents();
+    $dossier_medical->loadRefstraitements();
+
     
     // Chargement des actes CCAM
     foreach ($this->_ref_consultation->loadRefsActesCCAM() as $_acte) {
