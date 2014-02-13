@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 /**
  * $Id$
- *  
+ *
  * @category dPurgences
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -17,7 +17,11 @@ $rpu_id = CValue::get("rpu_id");
 $rpu = new CRPU();
 $rpu->load($rpu_id);
 $consult = $rpu->loadRefConsult();
-$consult->loadRefsActes();
+
+if ($consult && $consult->_id) {
+  $consult->loadRefsActes();
+}
+
 if ($rpu->mutation_sejour_id) {
   $rpu->loadRefSejourMutation()->loadRefsActes();
 }
@@ -34,8 +38,8 @@ $sfmu         = CAppUI::conf("dPurgences CRPU gestion_motif_sfmu" , $group);
 $value = array();
 
 if ($cotation > 1) {
-  if ((!$rpu->_ref_consult->_ref_actes && !$rpu->mutation_sejour_id) ||
-      ($rpu->mutation_sejour_id && !$rpu->_ref_sejour_mutation->_count_actes)
+  if (($rpu->_ref_consult && !$rpu->_ref_consult->_ref_actes && !$rpu->mutation_sejour_id) ||
+    ($rpu->mutation_sejour_id && !$rpu->_ref_sejour_mutation->_count_actes)
   ) {
     $value[] = "Cotation";
   }
