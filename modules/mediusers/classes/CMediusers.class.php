@@ -1344,7 +1344,7 @@ class CMediusers extends CPerson {
     CMbObject::massCountBackRefs($this->_ref_plages, "notes");
     CMbObject::massCountBackRefs($this->_ref_plages, "affectations_personnel");
 
-    foreach ($this->_ref_plages as $_plage) {
+    foreach ($this->_ref_plages as $key_plage => $_plage) {
       /** @var CPlageOp $_plage */
       $_plage->loadRefChir();
       $_plage->loadRefAnesth();
@@ -1354,7 +1354,7 @@ class CMediusers extends CPerson {
       $_plage->loadRefsOperations();
       $_plage->loadRefsNotes();
       $_plage->loadAffectationsPersonnel();
-      $plage->_unordered_operations = array();
+      $_plage->_unordered_operations = array();
 
       // Chargement d'optimisation
 
@@ -1364,7 +1364,7 @@ class CMediusers extends CPerson {
 
       foreach ($_plage->_ref_operations as $key_op => $_operation) {
         if ($_operation->chir_id != $this->_id) {
-          unset($plage->_ref_operations[$key_op]);
+          unset($_plage->_ref_operations[$key_op]);
         }
         else {
           $_operation->_ref_chir = $this;
@@ -1374,10 +1374,13 @@ class CMediusers extends CPerson {
 
           // Extraire les interventions non placées
           if ($_operation->rank == 0) {
-            $plage->_unordered_operations[$_operation->_id] = $_operation;
-            unset($plage->_ref_operations[$_operation->_id]);
+            $_plage->_unordered_operations[$_operation->_id] = $_operation;
+            unset($_plage->_ref_operations[$_operation->_id]);
           }
         }
+      }
+      if (count($_plage->_ref_operations) < 1) {
+        unset($this->_ref_plages[$key_plage]);
       }
     }
 
