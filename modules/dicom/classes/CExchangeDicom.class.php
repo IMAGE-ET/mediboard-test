@@ -125,7 +125,9 @@ class CExchangeDicom extends CExchangeBinary {
       foreach ($pres_contexts_array as $_pres_context) {
         $_pres_context = explode('/', $_pres_context);
 
-        $this->_presentation_contexts[] = new CDicomPresentationContext($_pres_context[0], $_pres_context[1], $_pres_context[2]);
+        if (array_key_exists(0, $_pres_context) && array_key_exists(1, $_pres_context) && array_key_exists(2, $_pres_context)) {
+          $this->_presentation_contexts[] = new CDicomPresentationContext($_pres_context[0], $_pres_context[1], $_pres_context[2]);
+        }
       }
     }
 
@@ -162,12 +164,10 @@ class CExchangeDicom extends CExchangeBinary {
     if ($this->_presentation_contexts && !$this->presentation_contexts) {
       foreach ($this->_presentation_contexts as $_pres_context) {
         if (!$this->presentation_contexts) {
-          $this->presentation_contexts = "$_pres_context->id/
-            $_pres_context->abstract_syntax/$_pres_context->transfer_syntax";
+          $this->presentation_contexts = "$_pres_context->id/$_pres_context->abstract_syntax/$_pres_context->transfer_syntax";
         }
         else {
-          $this->presentation_contexts .= "|$_pres_context->id/
-            $_pres_context->abstract_syntax/$_pres_context->transfer_syntax";
+          $this->presentation_contexts .= "|$_pres_context->id/$_pres_context->abstract_syntax/$_pres_context->transfer_syntax";
         }
       }
     }
