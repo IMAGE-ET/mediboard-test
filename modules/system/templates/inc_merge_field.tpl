@@ -32,31 +32,31 @@
 
   <!-- All options -->
   {{foreach from=$objects item=object name=object}}
-  <td class="{{$prop}} {{$object->_guid}}">
-  	{{assign var=iteration value=$smarty.foreach.object.iteration}}
-    <label for="_choix_{{$iteration}}_{{$field}}">
-      <input type="radio" name="_choix_{{$field}}" id="form-merge__choix_{{$iteration}}_{{$field}}"
-         value="{{$object->$field}}"
-         {{if $result->$field == $object->$field}}checked="checked"{{/if}}
-         onclick="ObjectMerger.setField('{{$field}}', this);" />
-      {{if $object->$field !== ""}}
-        {{if $spec instanceof CTextSpec}}
-  				{{$object->$field|nl2br}}
-        {{elseif $spec instanceof CRefSpec}}
-				  {{assign var=ref value=$object->_fwd.$field}}
-				  {{if $ref->_id}} 
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$ref->_guid}}')">
-            {{$ref}}
-          </span>
+    <td class="{{$prop}} {{$object->_guid}}">
+      {{assign var=iteration value=$smarty.foreach.object.iteration}}
+      <label for="_choix_{{$iteration}}_{{$field}}">
+        <input type="radio" name="_choix_{{$field}}" id="form-merge__choix_{{$iteration}}_{{$field}}"
+           value="{{$object->$field}}"
+           {{if $result->$field == $object->$field}}checked="checked"{{/if}}
+           onclick="ObjectMerger.setField('{{$field}}', this);" />
+        {{if $object->$field !== ""}}
+          {{if $spec instanceof CTextSpec}}
+            {{$object->$field|nl2br}}
+          {{elseif $spec instanceof CRefSpec}}
+            {{assign var=ref value=$object->_fwd.$field}}
+            {{if $ref && $ref->_id}}
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$ref->_guid}}')">
+              {{$ref}}
+              </span>
+            {{/if}}
+          {{else}}
+            {{mb_value object=$object field=$field}}
           {{/if}}
-				{{else}}
-          {{mb_value object=$object field=$field}}
-				{{/if}}
-      {{else}}
-        Non spécifié
-      {{/if}}
-    </label>
-  </td>
+        {{else}}
+          Non spécifié
+        {{/if}}
+      </label>
+    </td>
   {{/foreach}}
   
 </tr>
