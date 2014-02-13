@@ -369,7 +369,46 @@ class CExObject extends CMbMetaObject {
     return implode("|", $values);
   }
 
-  /*
+  /**
+   * Load ExLinks
+   *
+   * @return CExLink[]
+   */
+  function loadRefsLinks(){
+    $where = array(
+      "ex_class_id"  => "= '$this->_ex_class_id'",
+      "ex_object_id" => "= '$this->ex_object_id'",
+    );
+
+    $ex_link = new CExLink();
+
+    /** @var CExLink[] $list */
+    $list = $ex_link->loadList($where);
+
+    foreach ($list as $_link) {
+      switch ($_link->level) {
+        case "object":
+          $this->_ref_object = $_link->loadTargetObject();
+          break;
+
+        case "ref1":
+          $this->_ref_reference_object_1 = $_link->loadTargetObject();
+          break;
+
+        case "ref2":
+          $this->_ref_reference_object_2 = $_link->loadTargetObject();
+          break;
+
+        case "add":
+          $this->_ref_additional_object = $_link->loadTargetObject();
+          break;
+      }
+    }
+
+    return $list;
+  }
+
+  /**
    * attention aux dates, il faut surement checker le log de derniere modif des champs du concept
    *
    * @fixme pas trop optimisé
@@ -382,8 +421,7 @@ class CExObject extends CMbMetaObject {
     self::$_multiple_load = true;
     CExClassField::$_load_lite = true;
 
-    $this->loadTargetObject();
-    $this->loadRefReferenceObjects();
+    $this->loadRefsLinks();
 
     $ex_class = $this->_ref_ex_class;
     $latest_ex_objects = array(
@@ -553,17 +591,24 @@ class CExObject extends CMbMetaObject {
         }
 
         /** @var CMbObject $_base */
+        /*
+         * Comprendre pourquoi parfois il n'y a pas de $_latest_ex_object
+         */
         $_base = null;
         foreach ($latest_ex_objects as $_latest_ex_object) {
-          if ($_latest_ex_object->_ref_reference_object_1->_class == $_report_class) {
+          if (!$_latest_ex_object) {
+            continue;
+          }
+
+          if ($_latest_ex_object->_ref_reference_object_1 && $_latest_ex_object->_ref_reference_object_1->_class == $_report_class) {
             $_base = $_latest_ex_object->_ref_reference_object_1;
             break;
           }
-          elseif ($_latest_ex_object->_ref_reference_object_2->_class == $_report_class) {
+          elseif ($_latest_ex_object->_ref_reference_object_2 && $_latest_ex_object->_ref_reference_object_2->_class == $_report_class) {
             $_base = $_latest_ex_object->_ref_reference_object_2;
             break;
           }
-          elseif ($_latest_ex_object->_ref_object->_class == $_report_class) {
+          elseif ($_latest_ex_object->_ref_object && $_latest_ex_object->_ref_object->_class == $_report_class) {
             $_base = $_latest_ex_object->_ref_object;
             break;
           }
@@ -607,7 +652,10 @@ class CExObject extends CMbMetaObject {
   }
 
   function setFieldsDisplay(){
+    /** @var CExClassField[] $fields */
     $fields = $this->_ref_ex_class->loadRefsAllFields(true);
+
+    CStoredObject::massCountBackRefs($fields, "predicates");
 
     $default = array();
     $this->_fields_display_struct = array();
@@ -618,7 +666,16 @@ class CExObject extends CMbMetaObject {
       }
 
       $_affected = array();
-      $_predicates = $_field->loadRefPredicates();
+      $_predicates = array();
+
+      if ($_field->_count["predicates"] > 0) {
+        $_predicates = $_field->loadRefPredicates();
+
+        CStoredObject::massCountBackRefs($_predicates, "properties");
+        CStoredObject::massCountBackRefs($_predicates, "display_fields");
+        CStoredObject::massCountBackRefs($_predicates, "display_messages");
+        CStoredObject::massCountBackRefs($_predicates, "display_subgroups");
+      }
 
       foreach ($_predicates as $_predicate) {
         $_struct = array(
@@ -726,35 +783,82 @@ class CExObject extends CMbMetaObject {
       return $msg;
     }
     
-    if (!$this->_id && !$this->group_id) {
+    if (!$this->_id) {
       $this->group_id = CGroups::loadCurrent()->_id;
     }
+
+    $new_object = !$this->_id;
     
-    return parent::store();
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+
+    // Links
+    if ($new_object) {
+      $fields = array(
+        "object" => array("object_class",     "object_id"),
+        "ref1"   => array("reference_class",  "reference_id"),
+        "ref2"   => array("reference2_class", "reference2_id"),
+        "add"    => array("additional_class", "additional_id"),
+      );
+
+      foreach ($fields as $_level => $_field) {
+        if ($this->{$_field[0]} && $this->{$_field[1]}) {
+          $link = new CExLink();
+          $link->object_class = $this->{$_field[0]};
+          $link->object_id    = $this->{$_field[1]};
+          $link->group_id     = $this->group_id;
+          $link->ex_object_id = $this->_id;
+          $link->ex_class_id  = $this->_ex_class_id;
+          $link->level        = $_level;
+          if ($msg = $link->store()) {
+            return $msg;
+          }
+        }
+      }
+    }
+
+    return null;
   }
   
   /// Low level methods ///////////
+  /**
+   * @see parent::bind()
+   */
   function bind($hash, $doStripSlashes = true) {
     $this->setExClass();
     return parent::bind($hash, $doStripSlashes);
   }
-  
+
+  /**
+   * @see parent::load()
+   */
   function load($id = null) {
     $this->setExClass();
     return parent::load($id);
   }
-  
-  // Used in updatePlainFields
+
+  /**
+   * @see parent::getPlainFields()
+   *
+   * Used in updatePlainFields
+   */
   function getPlainFields() {
     $this->setExClass();
     return parent::getPlainFields();
   }
-  
+
+  /**
+   * @see parent::fieldModified()
+   */
   function fieldModified($field, $value = null) {
     $this->setExClass();
     return parent::fieldModified($field, $value);
   }
 
+  /**
+   * @see parent::loadQueryList()
+   */
   function loadQueryList($sql) {
     $ds = $this->_spec->ds;
     $cur = $ds->exec($sql);
@@ -775,8 +879,12 @@ class CExObject extends CMbMetaObject {
     $ds->freeResult($cur);
     return $list;
   }
-  
-  // needed or will throw errors in the field specs
+
+  /**
+   * @see parent::checkProperty()
+   *
+   * needed or will throw errors in the field specs
+   */
   function checkProperty($propName) {
     $class = $this->_class;
     $this->_class = get_class($this);
@@ -797,11 +905,21 @@ class CExObject extends CMbMetaObject {
     $spec->key = "ex_object_id";
     return $spec;
   }
-  
+
+  /**
+   * Get ExClass id
+   *
+   * @return int
+   */
   function getClassId(){
     return ($this->_ex_class_id ? $this->_ex_class_id : $this->_own_ex_class_id);
   }
-  
+
+  /**
+   * Get database table name
+   *
+   * @return string
+   */
   function getTableName(){
     return "ex_object_".$this->getClassId();
   }
@@ -873,7 +991,10 @@ class CExObject extends CMbMetaObject {
     
     return self::$_ex_specs[$ex_class_id] = $specs;
   }
-  
+
+  /**
+   * @see parent::loadLogs()
+   */
   function loadLogs(){
     $this->setExClass();
     $ds = $this->_spec->ds;
@@ -895,7 +1016,14 @@ class CExObject extends CMbMetaObject {
     $this->_ref_first_log = end($this->_ref_logs);
     $this->_ref_last_log  = reset($this->_ref_logs);
   }
-  
+
+  /**
+   * Get the reference object of the right class
+   *
+   * @param string $class The class name
+   *
+   * @return CMbObject|null
+   */
   function getReferenceObject($class) {
     $fields = array(
       "object_class"     => "object_id", 
@@ -950,6 +1078,11 @@ class CExObject extends CMbMetaObject {
 
     foreach ($ex_class_ids as $_ex_class_id) {
       $_ex_object = new CExObject($_ex_class_id);
+
+      if ($_ex_object->countList($where) == 0) {
+        continue;
+      }
+
       $_list = $_ex_object->loadList($where);
 
       if (count($_list) > 0) {
@@ -975,6 +1108,8 @@ class CExObject extends CMbMetaObject {
    * @return void
    */
   static function addFormsToTemplate(CTemplateManager $template, CMbObject $object, $name) {
+    static $ex_classes = null;
+
     if (!CAppUI::conf("forms CExClassField doc_template_integration")) {
       return;
     }
@@ -1016,23 +1151,31 @@ class CExObject extends CMbMetaObject {
 
     CExObject::initLocales();
 
-    $group_id = CGroups::loadCurrent()->_id;
-    $where = array(
-      "ex_class.group_id = '$group_id' OR group_id IS NULL",
-      "ex_class_field.in_doc_template" => "= '1'"
-    );
+    if ($ex_classes === null) {
+      $group_id = CGroups::loadCurrent()->_id;
+      $where = array(
+        "ex_class.group_id = '$group_id' OR group_id IS NULL",
+        "ex_class_field.in_doc_template" => "= '1'"
+      );
 
-    $ljoin = array(
-      "ex_class_field_group" => "ex_class_field_group.ex_class_id = ex_class.ex_class_id",
-      "ex_class_field"       => "ex_class_field.ex_group_id = ex_class_field_group.ex_class_field_group_id",
-    );
+      $ljoin = array(
+        "ex_class_field_group" => "ex_class_field_group.ex_class_id = ex_class.ex_class_id",
+        "ex_class_field"       => "ex_class_field.ex_group_id = ex_class_field_group.ex_class_field_group_id",
+      );
 
-    $ex_class = new CExClass();
-    /** @var CExClass[] $ex_classes */
-    $ex_classes = $ex_class->loadList($where, "name", null, "ex_class.ex_class_id", $ljoin);
+      $ex_class = new CExClass();
+      /** @var CExClass[] $ex_classes */
+      $ex_classes = $ex_class->loadList($where, "name", null, "ex_class.ex_class_id", $ljoin);
+
+
+      foreach ($ex_classes as $_ex_class) {
+        $_ex_class->_all_fields = $_ex_class->loadRefsAllFields();
+      }
+    }
+
     foreach ($ex_classes as $_ex_class) {
       $_name = "Form. ".str_replace(" - ", " ", $_ex_class->name);
-      $fields = $_ex_class->loadRefsAllFields();
+      $fields = $_ex_class->_all_fields;
       $_class_name = $_ex_class->getExClassName();
 
       $_ex_object = null;

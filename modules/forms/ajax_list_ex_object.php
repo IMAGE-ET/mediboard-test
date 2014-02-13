@@ -32,6 +32,7 @@ CValue::setSession('reference_class', $reference_class);
 CValue::setSession('reference_id',    $reference_id);
 
 if ($reference_class) {
+  /** @var CMbObject $reference */
   $reference = new $reference_class;
 
   if ($reference_id) {
@@ -116,112 +117,106 @@ if ($concept_search) {
 }
 
 $ex_class_event = new CExClassEvent();
+$ex_class_events = null;
 
-foreach (CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
-  $_ex_object = new CExObject($_ex_class_id);
+$ex_link = new CExLink();
 
-  if ($search_mode) {
-    $where = array(
-      "group_id" => "= '$group_id'",
-      "DATE(user_log.date) BETWEEN '$date_min' AND '$date_max'",
-      "user_log.type" => "= 'create'",
-    );
+$group_id = ($group_id ? $group_id : CGroups::loadCurrent()->_id);
+$where = array(
+  "ex_link.group_id" => "= '$group_id'",
+);
 
-    $ljoin = array(
-      "user_log" => "user_log.object_id = {$_ex_object->_spec->table}.ex_object_id AND user_log.object_class = '$_ex_object->_class'"
-    );
+if ($ex_class_id) {
+  $where['ex_link.ex_class_id'] = "= '$ex_class_id'";
+}
 
-    if (!empty($search)) {
-      $where = array_merge($where, $_ex_class->getWhereConceptSearch($search));
-    }
+$ljoin = array();
+
+if ($search_mode) {
+  $where["ex_link.level"]    = "= 'object'";
+  $where["user_log.date"]    = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
+  $where["user_log.type"]    = "= 'create'";
+
+  if (!$ex_class_id) {
+    $where["user_log.object_class"] = "LIKE 'CExObject%'";
+
+    $ljoin["user_log"] =
+      "user_log.object_id = ex_link.ex_object_id AND user_log.object_class = CONCAT('CExObject_',ex_link.ex_object_id)";
   }
   else {
-    if ($only_host) {
-      $where = array(
-        "object_class" => " = '$reference_class'",
-        "object_id"    => " = '$reference_id'",
-      );
-    }
-    else {
-      $where = array(
-        "(reference_class  = '$reference_class' AND reference_id  = '$reference_id') OR
-         (reference2_class = '$reference_class' AND reference2_id = '$reference_id') OR
-         (object_class     = '$reference_class' AND object_id     = '$reference_id')"
-      );
-    }
-
-    $ljoin = array();
+    $ljoin["user_log"] = "user_log.object_id = ex_link.ex_object_id AND user_log.object_class = 'CExObject_$ex_class_id'";
   }
 
-  /** @var CExObject[] $_ex_objects */
-  $_ex_objects = array();
+  if (!empty($search)) {
+    $_ex_class = new CExClass();
+    $_ex_class->load($ex_class_id);
 
-  if ($detail >= 1) {
-    $_ex_objects = $_ex_object->loadList($where, "{$_ex_object->_spec->key} DESC", $limit, null, $ljoin);
+    $ljoin["ex_object_$ex_class_id"] = "ex_object_$ex_class_id.ex_object_id = ex_link.ex_object_id";
+
+    $where = array_merge($where, $_ex_class->getWhereConceptSearch($search));
   }
+}
+else {
+  $where["ex_link.object_class"] = "= '$reference_class'";
+  $where["ex_link.object_id"]    = "= '$reference_id'";
 
-  $_ex_objects_count = $_ex_object->countList($where, null, $ljoin);
-
-  $total = max($_ex_objects_count, $total);
-
-  if ($_ex_objects_count) {
-    $ex_objects_counts[$_ex_class_id] = $_ex_objects_count;
+  if ($only_host) {
+    $where["ex_link.level"] = " = 'object'";
   }
+}
 
-  // Loas latest formula result for this ExClass
+$order = "ex_class.name ASC, ex_link.ex_object_id DESC";
+
+$ljoin["ex_class"] = "ex_class.ex_class_id = ex_link.ex_class_id";
+
+/** @var CExObject[] $_ex_objects */
+$_ex_objects = array();
+
+if ($detail >= 1) {
+  /** @var CExLink[] $links */
+  $links = $ex_link->loadList($where, $order, $limit, null, $ljoin);
+
+  CExLink::massLoadExObjects($links);
+
+  foreach ($links as $_link) {
+    $_ex = $_link->loadRefExObject();
+    $_ex->_ex_class_id = $_link->ex_class_id;
+    $_ex->load();
+
+    $_ex_objects[$_link->ex_object_id] = $_ex;
+  }
+}
+
+$fields = array(
+  "ex_link.ex_class_id",
+  "ex_link.ex_object_id",
+);
+$counts = $ex_link->countMultipleList($where, $order, "ex_class_id", $ljoin, $fields);
+
+foreach ($counts as $_count) {
+  $_total       = $_count["total"];
+  $_ex_class_id = $_count["ex_class_id"];
+
+  $_ex_class = CExClass::$_list_cache[$_ex_class_id];
+
+  // Counts
+  $total = max($_total, $total);
+  $ex_objects_counts[$_ex_class_id] = $_total;
+
+  // Formula results
   $ex_objects_results[$_ex_class_id] = null;
   if ($_ex_class->_formula_field) {
     $ex_objects_results[$_ex_class_id] = $_ex_class->getFormulaResult($_ex_class->_formula_field, $where);
-  }
-
-  if ($detail <= 0.5 && !$_ex_class->conditional) {
-    $where = array(
-      "ex_class.ex_class_id"      => "= '$_ex_class_id'",
-      "ex_class_event.host_class" => "= '$reference_class'",
-      "ex_class_event.disabled"   => "= '0'",
-    );
-
-    $ljoin = array(
-      "ex_class" => "ex_class.ex_class_id = ex_class_event.ex_class_id",
-    );
-
-    /** @var CExClassEvent[] $_ex_class_events */
-    $_ex_class_events = $ex_class_event->loadList($where, null, null, null, $ljoin);
-
-    // TODO canCreateNew
-    foreach ($_ex_class_events as $_id => $_ex_class_event) {
-      if ($reference && (!$_ex_class_event->checkConstraints($reference)/* || !$_ex_class_event->canCreateNew($reference)*/)) {
-        unset($_ex_class_events[$_id]);
-      }
-    }
-
-    if (count($_ex_class_events)) {
-      $ex_classes_creation[$_ex_class_id] = $_ex_class_events;
-    }
   }
 
   if ($detail == 0) {
     continue;
   }
 
-  /*
-  if ( $_ex_class->host_class == $reference_class && // Possible context
-      !$_ex_class->disabled && // Not disabled
-       $_ex_class->checkConstraints($reference) && // Passes constraints
-       $_ex_class->canCreateNew($reference) // Check unicity
-  ) {
-    if ($detail > 0 || !$_ex_class->conditional) {
-      $ex_classes_creation[$ex_class_key][$_ex_class_id] = $_ex_class;
-    }
-
-    if (count($_ex_objects) == 0){
-      $ex_objects[$_ex_class_id] = array();
-    }
-  }*/
-
   foreach ($_ex_objects as $_ex) {
-    $_ex->_ex_class_id = $_ex_class_id;
-    $_ex->load();
+    if (!$_ex->_id) {
+      continue;
+    }
 
     $guid = "$_ex->object_class-$_ex->object_id";
 
@@ -237,8 +232,7 @@ foreach (CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
       $_ex->loadRefAdditionalObject();
     }
 
-    $_ex->loadLogs();
-    $_log = $_ex->_ref_first_log;
+    $_log = $_ex->loadFirstLog();
 
     // Cas tres etrange de formulaire sans aucun log
     // Plutot que de tout planter, on ne l'affiche pas
@@ -252,6 +246,64 @@ foreach (CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
 
   if (isset($ex_objects[$_ex_class_id])) {
     krsort($ex_objects[$_ex_class_id]);
+  }
+}
+
+// Can create new
+if ($detail <= 0.5) {
+
+  // Loading the events
+  if ($ex_class_events === null) {
+    $_ex_class_creation = array();
+    $ex_class_events = array();
+
+    foreach (CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
+      if (!$_ex_class->conditional) {
+        $_ex_class_creation[] = $_ex_class_id;
+      }
+    }
+
+    $where = array(
+      "ex_class_event.ex_class_id" => $ex_class_event->getDS()->prepareIn($_ex_class_creation),
+      "ex_class_event.disabled"    => "= '0'",
+    );
+
+    /** @var CExClassEvent[] $ex_class_events_by_ref */
+    $ex_class_events_by_ref = $ex_class_event->loadList($where);
+
+    CStoredObject::massLoadBackRefs($ex_class_events_by_ref, "constraints");
+
+    foreach ($ex_class_events_by_ref as $_ex_class_event) {
+      $_key = "$_ex_class_event->host_class/$_ex_class_event->ex_class_id";
+
+      /** @var CExClassEvent[] $_ex_class_events */
+      if (!array_key_exists($_key, $ex_class_events)) {
+        $ex_class_events[$_key] = array();
+      }
+
+      $ex_class_events[$_key][] = $_ex_class_event;
+    }
+  }
+
+  foreach ($_ex_class_creation as $_ex_class_id) {
+    if (!isset($ex_class_events["$reference_class/$_ex_class_id"])) {
+      continue;
+    }
+
+    $_ex_class_events = $ex_class_events["$reference_class/$_ex_class_id"];
+
+    // TODO canCreateNew
+    if ($reference) {
+      foreach ($_ex_class_events as $_id => $_ex_class_event) {
+        if (!$_ex_class_event->checkConstraints($reference)) {
+          unset($_ex_class_events[$_id]);
+        }
+      }
+    }
+
+    if (count($_ex_class_events)) {
+      $ex_classes_creation[$_ex_class_id] = $_ex_class_events;
+    }
   }
 }
 

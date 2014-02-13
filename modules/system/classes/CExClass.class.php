@@ -199,6 +199,7 @@ class CExClass extends CMbObject {
     $backProps["events"]       = "CExClassEvent ex_class_id";
     $backProps["ex_triggers"]  = "CExClassFieldTrigger ex_class_triggered_id";
     $backProps["identifiants"] = "CIdSante400 object_id cascade";
+    $backProps["ex_links"]     = "CExLink ex_class_id";
     return $backProps;
   }
 
@@ -307,16 +308,16 @@ class CExClass extends CMbObject {
       return $this->_latest_ex_object_cache[$object->_class][$object->_id];
     }
 
-    $whereOr = array(
-      "(object_class     = '$object->_class' AND object_id     = '$object->_id')",
-      "(reference_class  = '$object->_class' AND reference_id  = '$object->_id')",
-      "(reference2_class = '$object->_class' AND reference2_id = '$object->_id')",
+    $ex_link = new CExLink();
+    $where = array(
+      "object_class" => " = '$object->_class'",
+      "object_id"    => " = '$object->_id'",
+      "ex_class_id"  => " = '$this->_id'",
+      "level"        => $ex_link->getDS()->prepareIn(array("object", "ref1", "ref2")),
     );
-    $where = implode(" OR ", $whereOr);
-    
-    $ex_object = new CExObject($this->_id); // NE PAS UTILISER this->getExObjectInstance(true);
-    $ex_object->loadObject($where, "ex_object_id DESC");
-    $ex_object->load(); // needed !!!!!!!
+    $ex_link->loadObject($where, "ex_object_id DESC");
+
+    $ex_object = $ex_link->loadRefExObject();
 
     return $this->_latest_ex_object_cache[$object->_class][$object->_id] = $ex_object;
   }
@@ -379,11 +380,20 @@ class CExClass extends CMbObject {
    */
   function getFormulaResult($field_name, $where) {
     $ds = $this->getDS();
+    $table = $this->getTableName();
+
+    $where["ex_link.ex_class_id"] = "= '$this->_id'";
+
+    $ljoin = array(
+      "ex_link" => "ex_link.ex_object_id = $table.ex_object_id"
+    );
 
     $request = new CRequest();
     $request->addSelect($field_name);
-    $request->addTable($this->getTableName());
+    $request->addTable($table);
     $request->addWhere($where);
+    $request->addLJoin($ljoin);
+    $request->addOrder("ex_link.ex_object_id DESC");
 
     return $ds->loadResult($request->getRequest());
   }
@@ -480,12 +490,15 @@ class CExClass extends CMbObject {
     foreach ($groups as $_ex_group) {
       // Subgroups
       $_ex_group->loadRefsSubgroups(true);
+      CStoredObject::massCountBackRefs($_ex_group->_ref_subgroups, "properties");
+
       foreach ($_ex_group->_ref_subgroups as $_ex_subgroup) {
         $_ex_subgroup->getDefaultProperties();
       }
 
       // Fields
       $_ex_group->loadRefsRootFields();
+      CStoredObject::massCountBackRefs($_ex_group->_ref_fields, "properties");
 
       foreach ($_ex_group->_ref_fields as $_ex_field) {
         $_ex_field->getSpecObject();
@@ -494,6 +507,8 @@ class CExClass extends CMbObject {
 
       // Messages
       $_ex_group->loadRefsRootMessages();
+      CStoredObject::massCountBackRefs($_ex_group->_ref_messages, "properties");
+
       foreach ($_ex_group->_ref_messages as $_ex_message) {
         $_ex_message->getDefaultProperties();
       }
@@ -528,6 +543,7 @@ class CExClass extends CMbObject {
       );
 
       $_fields = $_ex_group->loadRefsFields();
+      CStoredObject::massCountBackRefs($_fields, "properties");
       
       foreach ($_fields as $_ex_field) {
         $_ex_field->getSpecObject();
@@ -590,6 +606,8 @@ class CExClass extends CMbObject {
     
       // Messages
       $_ex_messages = $_ex_group->loadRefsMessages();
+      CStoredObject::massCountBackRefs($_ex_messages, "properties");
+
       foreach ($_ex_messages as $_message) {
         $_message->getDefaultProperties();
 
