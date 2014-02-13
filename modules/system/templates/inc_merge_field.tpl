@@ -44,7 +44,7 @@
   				{{$object->$field|nl2br}}
         {{elseif $spec instanceof CRefSpec}}
 				  {{assign var=ref value=$object->_fwd.$field}}
-				  {{if $ref->_id}} 
+				  {{if $ref && $ref->_id}}
           <span onmouseover="ObjectTooltip.createEx(this, '{{$ref->_guid}}')">
             {{$ref}}
           </span>
