@@ -1344,7 +1344,7 @@ class CMediusers extends CPerson {
     CMbObject::massCountBackRefs($this->_ref_plages, "notes");
     CMbObject::massCountBackRefs($this->_ref_plages, "affectations_personnel");
 
-    foreach ($this->_ref_plages as $key_plage => $_plage) {
+    foreach ($this->_ref_plages as $_plage) {
       /** @var CPlageOp $_plage */
       $_plage->loadRefChir();
       $_plage->loadRefAnesth();
@@ -1362,9 +1362,9 @@ class CMediusers extends CPerson {
       $sejours = CMbObject::massLoadFwdRef($_plage->_ref_operations, "sejour_id");
       CMbObject::massLoadFwdRef($sejours, "patient_id");
 
-      foreach ($_plage->_ref_operations as $key_op => $_operation) {
+      foreach ($_plage->_ref_operations as $_operation) {
         if ($_operation->chir_id != $this->_id) {
-          unset($_plage->_ref_operations[$key_op]);
+          unset($_plage->_ref_operations[$_operation->_id]);
         }
         else {
           $_operation->_ref_chir = $this;
@@ -1380,7 +1380,7 @@ class CMediusers extends CPerson {
         }
       }
       if (count($_plage->_ref_operations) < 1) {
-        unset($this->_ref_plages[$key_plage]);
+        unset($this->_ref_plages[$_plage->_id]);
       }
     }
 

@@ -694,3 +694,4 @@ $locales['pref-defaultRPUSort-ccmu'] = 'CCMU';
 $locales['pref-defaultRPUSort-desc'] = 'Trai par défaut dans la main courante';
 $locales['pref-showMissingRPU'] = 'Afficher les RPU manquants';
 $locales['pref-showMissingRPU-desc'] = 'Afficher les séjour de type Urgence n\'ayant pas de RPU';
+$locales['module-dPurgences-court'] = 'Urgences';
