@@ -10,19 +10,28 @@
  */
 
 CCanDo::checkEdit();
-$operation_id = CValue::getOrSession("operation_id");
+$object_guid = CValue::getOrSession("object_guid");
 
-$operation = new COperation;
-$operation->load($operation_id);
-$operation->loadRefsActes();
-foreach ($operation->_ref_actes_ccam as &$acte) {
+/** @var CCodable $objet */
+$objet = CMbObject::loadFromGuid($object_guid);
+$objet->loadRefsActes();
+foreach ($objet->_ref_actes_ccam as &$acte) {
   $acte->loadRefsFwd();
   $acte->guessAssociation();
+}
+
+$sejour = new CSejour();
+if ($objet->_class == "CSejour") {
+  $sejour = $objet;
+}
+else {
+  $sejour->_id = $objet->sejour_id;
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("curr_op", $operation);
+$smarty->assign("objet" , $objet);
+$smarty->assign("sejour", $sejour);
 
 $smarty->display("inc_confirm_actes_ccam.tpl");
