@@ -24,9 +24,9 @@
       {{mb_title class=CSejour field=_entree}} /
       {{mb_title class=CSejour field=_sortie}}
     </th>
-    {{if $conf.dPurgences.check_can_leave}}
+    {{if "CAppUI::conf"|static_call:"dPurgences Display check_can_leave":"CGroups-$g" !== "0"}}
     <th>{{mb_title class=CRPU field="_can_leave"}}</th>
-		{{/if}}
+    {{/if}}
   </tr>
   {{foreach from=$listSejours item=sejour}}
       {{assign var=rpu value=$sejour->_ref_rpu}}
@@ -73,20 +73,20 @@
     </td>
     
     <td class="text">
-		  <button class="search notext not-printable" style="float: right;" onclick="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
-			  {{tr}}Info{{/tr}}
-		  </button>
+      <button class="search notext not-printable" style="float: right;" onclick="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
+        {{tr}}Info{{/tr}}
+      </button>
 
       <!-- Vérification des champs semi obligatoires -->
-      {{if $conf.dPurgences.check_ccmu}}
+      {{if "CAppUI::conf"|static_call:"dPurgences Display check_ccmu":"CGroups-$g" !== "0"}}
         {{if !$rpu->ccmu           }}<div class="warning" style="display: block;">Champ manquant {{mb_label object=$rpu field=ccmu           }}</div>{{/if}}
       {{/if}}
 
-      {{if $conf.dPurgences.check_gemsa}}
+      {{if "CAppUI::conf"|static_call:"dPurgences Display check_gemsa":"CGroups-$g" !== "0"}}
         {{if !$rpu->gemsa          }}<div class="warning" style="display: block;">Champ manquant {{mb_label object=$rpu field=gemsa          }}</div>{{/if}}
       {{/if}}
       
-      {{if $conf.dPurgences.check_cotation}}
+      {{if "CAppUI::conf"|static_call:"dPurgences Display check_cotation":"CGroups-$g" !== "0"}}
         {{if !$rpu->_ref_consult->_ref_actes}}<div class="warning" style="display: block;">Codage des actes manquant</div>{{/if}}
         {{if $sejour->sortie_reelle && !$rpu->_ref_consult->valide}}<div class="warning" style="display: block;">La cotation n'est pas validée</div>{{/if}}
       {{/if}}
@@ -108,39 +108,39 @@
     </td>
     
     <td class="text sortie {{$sejour->mode_sortie}}">
-		  <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
-		    {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
-		    {{if !$sejour->sortie_reelle}} 
-		    {{mb_title object=$sejour field=_entree}}
-		    {{/if}}
-		    <strong>
-		      {{mb_value object=$sejour field=entree date=$date}}
-		      {{if $sejour->sortie_reelle}} 
-		      &gt; {{mb_value object=$sejour field=sortie date=$date}}
-		      {{/if}}
-		    </strong>
-		    
-		  </span>
-		  
-		   <br />
-		  {{if $sejour->sortie_reelle}} 
-		    {{mb_title object=$sejour field=sortie}} :
-		    {{mb_value object=$sejour field=mode_sortie}}
-		  
-		    {{if $sejour->mode_sortie == "transfert" && $sejour->etablissement_sortie_id}}
-		      <br />&gt; <strong>{{mb_value object=$sejour field=etablissement_sortie_id}}</strong>
-		    {{/if}}
-		  
-		    {{if $sejour->mode_sortie == "mutation" && $sejour->service_sortie_id}}
-		      {{assign var=service_id value=$sejour->service_sortie_id}}
-		      {{assign var=service value=$services.$service_id}}
-		      <br />&gt; <strong>{{$service}}</strong>
-		    {{/if}}
-				<em>{{mb_value object=$sejour field=commentaires_sortie}}</em>
-		  {{/if}}
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
+        {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
+        {{if !$sejour->sortie_reelle}}
+        {{mb_title object=$sejour field=_entree}}
+        {{/if}}
+        <strong>
+          {{mb_value object=$sejour field=entree date=$date}}
+          {{if $sejour->sortie_reelle}}
+          &gt; {{mb_value object=$sejour field=sortie date=$date}}
+          {{/if}}
+        </strong>
+
+      </span>
+
+       <br />
+      {{if $sejour->sortie_reelle}}
+        {{mb_title object=$sejour field=sortie}} :
+        {{mb_value object=$sejour field=mode_sortie}}
+
+        {{if $sejour->mode_sortie == "transfert" && $sejour->etablissement_sortie_id}}
+          <br />&gt; <strong>{{mb_value object=$sejour field=etablissement_sortie_id}}</strong>
+        {{/if}}
+
+        {{if $sejour->mode_sortie == "mutation" && $sejour->service_sortie_id}}
+          {{assign var=service_id value=$sejour->service_sortie_id}}
+          {{assign var=service value=$services.$service_id}}
+          <br />&gt; <strong>{{$service}}</strong>
+        {{/if}}
+        <em>{{mb_value object=$sejour field=commentaires_sortie}}</em>
+      {{/if}}
     </td>
       
-    {{if $conf.dPurgences.check_can_leave}}
+    {{if "CAppUI::conf"|static_call:"dPurgences Display check_can_leave":"CGroups-$g" !== "0"}}
     <td id="rpu-{{$rpu->_id}}" style="font-weight: bold" class="text {{if !$rpu->sortie_autorisee}}arretee{{/if}} {{$rpu->_can_leave_level}}">
       {{if $sejour->sortie_reelle}}
         {{if !$rpu->sortie_autorisee}}
@@ -169,8 +169,8 @@
         {{tr}}CRPU-sortie_assuree.{{$rpu->sortie_autorisee}}{{/tr}}
       {{/if}}
     </td>
-		{{/if}}
-		
+    {{/if}}
+
     {{/if}}
       </tr>
   {{foreachelse}}
