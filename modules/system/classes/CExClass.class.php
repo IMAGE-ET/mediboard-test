@@ -380,11 +380,20 @@ class CExClass extends CMbObject {
    */
   function getFormulaResult($field_name, $where) {
     $ds = $this->getDS();
+    $table = $this->getTableName();
+
+    $where["ex_link.ex_class_id"] = "= '$this->_id'";
+
+    $ljoin = array(
+      "ex_link" => "ex_link.ex_object_id = $table.ex_object_id"
+    );
 
     $request = new CRequest();
     $request->addSelect($field_name);
-    $request->addTable($this->getTableName());
+    $request->addTable($table);
     $request->addWhere($where);
+    $request->addLJoin($ljoin);
+    $request->addOrder("ex_link.ex_object_id DESC");
 
     return $ds->loadResult($request->getRequest());
   }
