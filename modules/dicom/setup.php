@@ -121,6 +121,12 @@ class CSetupdicom extends CSetup {
                 MODIFY `presentation_contexts` TEXT;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.3";
+    $this->makeRevision('0.3');
+
+    $query = "ALTER TABLE `dicom_exchange`
+                MODIFY `presentation_contexts` TEXT;";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.4';
   }
 }
