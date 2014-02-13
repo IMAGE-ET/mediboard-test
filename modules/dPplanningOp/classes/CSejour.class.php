@@ -3039,10 +3039,12 @@ class CSejour extends CFacturable implements IPatientRelated {
    */
   function loadRefObsEntree() {
     $consult = new CConsultation();
-    $consult->sejour_id = $this->_id;
-    $consult->type = "entree";
-    $consult->annule = 0;
-    $consult->loadMatchingObject();
+    if ($this->_id) {
+      $consult->sejour_id = $this->_id;
+      $consult->type = "entree";
+      $consult->annule = 0;
+      $consult->loadMatchingObject();
+    }
 
     return $this->_ref_obs_entree = $consult;
   }
