@@ -1,5 +1,6 @@
 {{mb_script module="bloodSalvage" script="bloodSalvage"}}
 {{mb_script module="soins" script="plan_soins"}}
+{{mb_script module="dPplanningOp" script="operation"}}
 
 {{if @$modules.brancardage->_can->read}}
   {{mb_script module=brancardage script=creation_brancardage ajax=true}}
@@ -25,8 +26,7 @@
 {{/if}}
 
 {{if !$require_check_list}}
-<script type="text/javascript">
-
+<script>
 Main.add(function () {
   Control.Tabs.create('reveil_tabs', true);
   
@@ -95,7 +95,6 @@ printDossier = function(sejour_id, operation_id) {
   url.addParam("operation_id", operation_id);
   url.requestModal(700, 400);
 }
-
 </script>
 
 <ul id="reveil_tabs" class="control_tabs">

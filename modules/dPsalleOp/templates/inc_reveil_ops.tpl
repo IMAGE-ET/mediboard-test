@@ -1,4 +1,4 @@
-<script type="text/javascript">  
+<script>
   Main.add(function () {    
     Control.Tabs.setTabCount("ops", "{{$listOperations|@count}}");
     
@@ -68,6 +68,7 @@
       <button class="button soins notext" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">
         Dossier de soin
       </button>
+      <button type="button" class="injection notext" onclick="Operation.dossierBloc('{{$_operation->_id}}', true)">Dossier de bloc</button>
     </td>
     {{if $use_poste}}
       <td>
@@ -186,6 +187,6 @@
   {{/foreach}}
 </table>
 
-<script type="text/javascript">
+<script>
   $('heure').innerHTML = "{{$hour|date_format:$conf.time}}";
 </script>

@@ -65,7 +65,8 @@
     </td>
     <td>
       <button class="soins button notext" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">Dossier de soins</button>
-      <button class="injection notext button" onclick="codageCCAM('{{$_operation->_id}}');">Dossier de bloc</button>
+      <button class="edit notext button" onclick="codageCCAM('{{$_operation->_id}}');">Codage</button>
+      <button type="button" class="injection notext" onclick="Operation.dossierBloc('{{$_operation->_id}}', true)">Dossier de bloc</button>
     </td>
     {{if $use_poste}}
       <td>

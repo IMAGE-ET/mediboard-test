@@ -1,4 +1,4 @@
-<script type="text/javascript">  
+<script>
   Main.add(function () { 
     Control.Tabs.setTabCount("encours", "{{$listOperations|@count}}");
        
@@ -42,6 +42,7 @@
         <button class="button soins notext" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">
           Dossier de soin
         </button>
+        <button type="button" class="injection notext" onclick="Operation.dossierBloc('{{$_operation->_id}}', true)">Dossier de bloc</button>
       </td>
 
       <td>{{mb_value object=$_operation field=entree_salle}}</td>
