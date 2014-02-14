@@ -1,12 +1,21 @@
-<?php /* $Id$ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage system
-* @version $Revision$
-* @author Poiron Yohann
-*/
+ * $Id$
+ *
+ * @category Developpement
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
+ */
 
+/**
+ * Redirect to the last page
+ *
+ * @return void
+ */
 function redirect() {
   if (CValue::post("ajax")) {
     echo CAppUI::getMsg();
@@ -31,7 +40,7 @@ $strings     = CValue::post("s");
 $language    = CValue::post("language");
 
 if (!$module_name || !$strings || !is_array($strings)) {
-  CAppUI::setMsg( "Certaines informations sont manquantes au traitement de la traduction.", UI_MSG_ERROR );
+  CAppUI::setMsg("Certaines informations sont manquantes au traitement de la traduction.", UI_MSG_ERROR);
   redirect();
 
   return;
@@ -49,6 +58,8 @@ if ($module_name != "common") {
 else {
   $translateModule->targetPath = "locales/$language/common.php";
 }
+
+$translateModule->sourcePath = $translateModule->targetPath;
 
 if (!is_file($translateModule->targetPath)) {
   CMbPath::forceDir(dirname($translateModule->targetPath));
