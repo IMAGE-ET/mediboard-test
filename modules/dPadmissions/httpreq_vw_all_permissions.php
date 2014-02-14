@@ -18,22 +18,9 @@ $ds = CSQLDataSource::get("std");
 // Initialisation de variables
 $date = CValue::getOrSession("date", CMbDT::date());
 
-if (phpversion() >= "5.3") {
-  $month_min     = CMbDT::date("first day of +0 month", $date);
-  $lastmonth     = CMbDT::date("last day of -1 month" , $date);
-  $nextmonth     = CMbDT::date("first day of +1 month", $date);
-}
-else {
-  $month_min     = CMbDT::transform("+ 0 month", $date, "%Y-%m-01");
-  $lastmonth     = CMbDT::date("-1 month", $date);
-  $nextmonth     = CMbDT::date("+1 month", $date);
-  if (CMbDT::format($date, "%m-%d") == "08-31") {
-    $nextmonth = CMbDT::transform("+0 month", $nextmonth, "%Y-09-%d");
-  }
-  else {
-    $nextmonth     = CMbDT::transform("+0 month", $nextmonth, "%Y-%m-01");
-  }
-}
+$month_min     = CMbDT::date("first day of +0 month", $date);
+$lastmonth     = CMbDT::date("last day of -1 month" , $date);
+$nextmonth     = CMbDT::date("first day of +1 month", $date);
 
 $type          = CValue::getOrSession("type");
 $type_externe  = CValue::getOrSession("type_externe", "depart");

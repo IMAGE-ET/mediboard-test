@@ -37,19 +37,9 @@ if ($period == "weekly") {
   $unit = "week";
 }
 
-/* WARNING when using "next month", "last month", "+1 month", 
-"-1 month" or any combination of +/-X months. It will give non-intuitive results on Jan 30th and 31st 
- * http://www.php.net/manual/fr/function.strtotime.php#107331
- * */
-
-if ($period == "month" && phpversion() >= "5.3") {
+if ($period == "month") {
   $ndate = CMbDT::date("first day of next month"   , $date);
   $pdate = CMbDT::date("last day of previous month", $date);
-}
-//5.1, 5.2 Case @TODO : toDelete if all MB instance are 5.3 compatible
-elseif ($period == 'month') {
-    $ndate = CMbDT::date("+1 month"   , CMbDT::format($date, "%Y-%m-01" ));
-    $pdate = CMbDT::date("-1 month"   , CMbDT::format($date, "%Y-%m-01" ));
 }
 else {
   $ndate = CMbDT::date("+1 $unit", $date);

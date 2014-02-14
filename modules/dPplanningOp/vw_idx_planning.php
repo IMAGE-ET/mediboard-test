@@ -15,15 +15,9 @@ $ds = CSQLDataSource::get("std");
 $date           = CValue::getOrSession("date", CMbDT::date());
 $canceled       = CValue::getOrSession("canceled", 0);
 
-//5.1 / 5.2 hack @TODO : remove this if all phpversion are > 5.3
-if (phpversion() >= "5.3") {
-    $nextmonth = CMbDT::date("first day of next month"   , $date);
-    $lastmonth = CMbDT::date("first day of previous month", $date);
-}
-else {
-    $nextmonth = CMbDT::date("+1 month"   , CMbDT::format($date, "%Y-%m-01" ));
-    $lastmonth = CMbDT::date("-1 month"   , CMbDT::format($date, "%Y-%m-01" ));
-}
+$nextmonth = CMbDT::date("first day of next month"   , $date);
+$lastmonth = CMbDT::date("first day of previous month", $date);
+
 $sans_anesth    = CValue::getOrSession("sans_anesth", 0);
 
 // Sélection du praticien

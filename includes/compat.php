@@ -2,7 +2,7 @@
 /**
  * Compat functions emulations
  *
- * PHP version 5.1.x+
+ * PHP version 5.3.x+
  *  
  * @category   Dispatcher
  * @package    Mediboard
@@ -12,43 +12,6 @@
  * @version    SVN: $Id$ 
  * @link       http://www.mediboard.org
  */
-
-
-if (!function_exists('array_diff_key')) {
-  /**
-   * Computes the difference of arrays using keys for comparison 
-   * (PHP 5 >= 5.1.0)
-   * 
-   * @return array The difference array, false on error
-   * @link http://php.net/array_diff_key
-   */
-  function array_diff_key() {
-    $argCount  = func_num_args();
-
-    if ($argCount < 2) {
-      return false;
-    }
-    
-    $argValues  = func_get_args();
-    foreach ($argValues as $argParam) {
-      if (!is_array($argParam)) {
-        return false;
-      }
-    }
-    
-    $valuesDiff = array();
-    foreach ($argValues[0] as $valueKey => $valueData) {
-      for ($i = 1; $i < $argCount; $i++) {
-        if (isset($argValues[$i][$valueKey])) {
-          continue 2;
-        }
-      }
-      $valuesDiff[$valueKey] = $valueData;
-    }
-    
-    return $valuesDiff;
-  }
-}
 
 /**
  * Recursively applies a function to values of an array
@@ -96,123 +59,6 @@ function in_array_recursive($needle, $haystack, $strict = false) {
   return false;
 }
 
-if (!function_exists('array_replace_recursive')) {
-  /**
-   * Array recursive replace recurse closure
-   * 
-   * @param array $array  Merge host array
-   * @param array $array1 Merged array
-   * 
-   * @return array
-   * @link  http://php.net/array_replace_recursive
-   */
-  function array_replace_recursive__recurse($array, $array1) {
-    foreach ($array1 as $key => $value) {
-      // create new key in $array, if it is empty or not an array
-      if (!isset($array[$key]) || (isset($array[$key]) && !is_array($array[$key]))) {
-        $array[$key] = array();
-      }
-
-      // overwrite the value in the base array
-      if (is_array($value)) {
-        $value = array_replace_recursive__recurse($array[$key], $value);
-      }
-      $array[$key] = $value;
-    }
-    return $array;
-  }
-  
-  /**
-   * Replaces elements from passed arrays into the first array recursively
-   * (PHP 5 >= 5.3.0)
-   * 
-   * @param object $array Merge host array
-   * 
-   * @return array
-   * @link   http://php.net/array_replace_recursive
-   */
-  function array_replace_recursive($array) {
-    // handle the arguments, merge one by one
-    $args = func_get_args();
-    $array = $args[0];
-    if (!is_array($array)) {
-      return $array;
-    }
-    for ($i = 1; $i < count($args); $i++) {
-      if (is_array($args[$i])) {
-        $array = array_replace_recursive__recurse($array, $args[$i]);
-      }
-    }
-    return $array;
-  }
-}
-
-if (!function_exists('array_fill_keys')) {
-  /**
-   * Fill an array with values, specifying keys
-   * 
-   * @param array $keys  Keys to fill values
-   * @param mixed $value Filling value
-   * 
-   * @return array Filled array
-   * @link   http://php.net/array_fill_keys
-   */
-  function array_fill_keys($keys, $value) {
-    return array_combine($keys, array_fill(0, count($keys), $value));
-  }
-}
-
-if (!function_exists('property_exists')) {
-  /**
-   * property_exists Computes the difference of arrays using keys for comparison 
-   * (PHP 5 >= 5.1.0)
-   * 
-   * @param mixed  $context  Object or class name to inspect
-   * @param string $property Name of property
-   * 
-   * @return boolean
-   * @link http://php.net/property_exists
-   */
-  function property_exists($context, $property) {
-    $vars = is_object($context) ? 
-      get_object_vars($context) : 
-      get_class_vars($context);
-    return array_key_exists($property, $vars);
-  }
-} 
-
-if (!function_exists('memory_get_usage')) {
-  /**
-   * Returns the amount of memory allocated to PHP, 
-   * (PHP 4 >= 4.3.2, PHP 5)
-   * requires compiling with --enable-memory-limit before 5.2.1
-   * 
-   * @param bool $real_usage Real memory if true, emalloc() if false
-   * 
-   * @return int Number of bytes
-   * @link http://php.net/memory_get_usage
-   */
-  function memory_get_usage($real_usage = false) {
-    return -1;
-  }
-}
-
-if (!function_exists('memory_get_peak_usage')) {
-  /**
-   * Returns the peak of memory allocated by PHP
-   * (PHP 5 >= 5.2.0)
-   * requires compiling with --enable-memory-limit before 5.2.1
-   * 
-   * @param bool $real_usage Real memory if true, emalloc() if false
-   * 
-   * @return int Number of bytes
-   * @link http://php.net/memory_get_peak_usage
-   */
-  function memory_get_peak_usage($real_usage = false) {
-    return memory_get_usage($real_usage);
-  }
-}
-
 if (!function_exists('getrusage')) {
   /**
    * Gets the current resource usages
@@ -229,21 +75,6 @@ if (!function_exists('getrusage')) {
       "ru_stime.tv_usec" => -1,
       "ru_stime.tv_sec"  => -1,
     );
-  }
-}
-
-if (!function_exists('timezone_identifiers_list')) {
-  /**
-   * Returns numerically index array with all timezone identifiers
-   * (PHP 5 >= 5.1.0)
-   * 
-   * @param int    $what    One of DateTimeZone class constants
-   * @param string $country A two-letter ISO 3166-1 compatible country code. 
-   * 
-   * @return array The identifiers
-   */
-  function timezone_identifiers_list($what = null, $country = null) {
-    return include "timezones.php";
   }
 }
 
@@ -306,10 +137,6 @@ else {
   }
 }
 
-if (!defined('PHP_INT_MAX')) {
-  define('PHP_INT_MAX', pow(2, 31)-1);
-}
-
 if (!function_exists('bcmod')) {
   /**
    * (PHP 4, PHP 5)
@@ -334,49 +161,6 @@ if (!function_exists('bcmod')) {
   }
 }
 
-if (!function_exists("date_default_timezone_set")) {
-  /**
-   * (PHP 5 >= 5.1.0)
-   * Sets the default timezone used by all date/time functions in a script 
-   * Void fallback
-   * 
-   * @param object $timezone_identifier Timezone identifier
-   * 
-   * @return void
-   */
-  function date_default_timezone_set($timezone_identifier) {
-    // void
-  }
-}
-
-if (!function_exists("inet_pton")) {
-  /**
-   * (PHP 5 >= 5.1.0)
-   * Converts a human readable IP address to its packed in_addr representation
-   * 
-   * @param string $address Readable IP address
-   * 
-   * @return string Packed IP address
-   */
-  function inet_pton($address) {
-    // void
-  }
-}
-
-if (!function_exists("inet_ntop")) {
-  /**
-   * (PHP 5 >= 5.1.0)
-   * Converts a packed in_addr IP address to a human readable IP address
-   * 
-   * @param string $in_addr Packed IP address
-   * 
-   * @return string Readable IP address
-   */
-  function inet_ntop($in_addr) {
-    return "";
-  }
-}
-
 if (!function_exists('mime_content_type')) {
   /**
    * (PHP 5 > 5.2)
@@ -390,83 +174,3 @@ if (!function_exists('mime_content_type')) {
     return trim(exec('file -bi '.escapeshellarg($f)));
   }
 }
-
-if (!defined('INI_SCANNER_RAW')) {
-  define('INI_SCANNER_RAW', 1);
-}
-
-if (!function_exists('parse_ini_string')) {
-  /**
-   * (PHP 5 > 5.2)
-   * Analyse une chaîne de configuration
-   *
-   * @param string $ini_string       The config string
-   * @param bool   $process_sections Just for the compatibility with the php function
-   * @param int    $scanner_mode     Just for the compatibility with the php function
-   *
-   * @return array le tableau
-   */
-  function parse_ini_string($ini_string, $process_sections, $scanner_mode = INI_SCANNER_RAW) {
-
-    if (empty($ini_string)) {
-      return false;
-    }
-
-    $lines = explode("\n", $ini_string);
-    $ret = array();
-    $inside_section = false;
-
-    foreach ($lines as $line) {
-      $line = trim($line);
-
-      if (!$line || $line[0] == "#" || $line[0] == ";") {
-        continue;
-      }
-
-      if ($line[0] == "[" && $endIdx = strpos($line, "]")) {
-        $inside_section = substr($line, 1, $endIdx-1);
-        continue;
-      }
-
-      if (!strpos($line, '=')) {
-        continue;
-      }
-
-      $tmp = explode("=", $line, 2);
-
-      if ($inside_section) {
-        $key = rtrim($tmp[0]);
-        $value = ltrim($tmp[1]);
-
-        if (preg_match("/^\".*\"$/", $value) || preg_match("/^'.*'$/", $value)) {
-          $value = mb_substr($value, 1, mb_strlen($value) - 2);
-        }
-
-        preg_match("^\[(.*?)\]^", $key, $matches);
-        if (!empty($matches) && isset($matches[0])) {
-          $arr_name = preg_replace('#\[(.*?)\]#is', '', $key);
-
-          if (!isset($ret[$inside_section][$arr_name]) || !is_array($ret[$inside_section][$arr_name])) {
-            $ret[$inside_section][$arr_name] = array();
-          }
-
-          if (isset($matches[1]) && !empty($matches[1])) {
-            $ret[$inside_section][$arr_name][$matches[1]] = $value;
-          }
-          else {
-            $ret[$inside_section][$arr_name][] = $value;
-          }
-        }
-        else {
-          $ret[$inside_section][trim($tmp[0])] = $value;
-        }
-      }
-      else {
-        $ret[trim($tmp[0])] = ltrim($tmp[1]);
-      }
-    }
-    return $ret;
-  }
-}
-
-

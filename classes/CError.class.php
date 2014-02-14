@@ -13,17 +13,6 @@
 
 define("E_JS_ERROR", 0);
 
-// Since PHP 5.2.0
-if (!defined("E_RECOVERABLE_ERROR")) {
-  define("E_RECOVERABLE_ERROR", 4096);
-}
-
-// Since PHP 5.3.0
-if (!defined("E_DEPRECATED")) {
-  define("E_DEPRECATED", 8192);
-  define("E_USER_DEPRECATED", 16384);
-}
-
 /**
  * Error manager
  */
