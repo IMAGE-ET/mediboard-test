@@ -31,7 +31,7 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
 
   foreach ($lits as $_lit) {
     $_lit->_ref_affectations = array();
-    $_lit->checkDispo();
+    $_lit->checkDispo($date);
   }
 
   $affectations = $service->loadRefsAffectations($date, $mode, false);
