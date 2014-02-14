@@ -154,7 +154,7 @@
             </tr>
           </table>
           {{if $smarty.foreach.consults_anesth.last && $ops_sans_dossier_anesth|@count != 0}}
-            <button class="down" onclick="createDA('{{$first_operation->_id}}','{{$consult_anesth->_id}}', 1);" style="position:relative;top:15px;">Dupliquer</button>
+            <button class="down" id="didac_button_duplicate" onclick="createDA('{{$first_operation->_id}}','{{$consult_anesth->_id}}', 1);" style="position:relative;top:15px;">Dupliquer</button>
           {{/if}}
         </td>
         <td>
