@@ -288,7 +288,8 @@ table.tabmenu td.selected.right {
 }
 
 /* Inputs */
-input[type=text], 
+input[type=text],
+input[type=search],
 input[type=tel], 
 input[type=email], 
 input[type=number], 
@@ -297,7 +298,8 @@ input[type=password],
   border: 1px #a5acb2 solid;
 }
 
-input[type=text], 
+input[type=text],
+input[type=search],
 input[type=tel], 
 input[type=email], 
 input[type=number], 
@@ -308,7 +310,8 @@ textarea {
   background-color: #fff;
 }
 
-input[type=text]:focus, 
+input[type=text]:focus,
+input[type=search]:focus,
 input[type=tel]:focus, 
 input[type=email]:focus, 
 input[type=number]:focus, 
