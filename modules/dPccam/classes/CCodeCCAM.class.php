@@ -13,7 +13,6 @@
 
 /**
  * Classe pour gérer le mapping avec la base de données CCAM
- * Class CCodeCCAM
  */
 class CCodeCCAM {
   public $code;          // Code de l'acte
@@ -46,9 +45,7 @@ class CCodeCCAM {
   public $_activite;
   public $_phase;
 
-  /**
-   * @var CMbObjectSpec
-   */
+  /** @var CMbObjectSpec */
   public $_spec;
 
   public $_couleursChap = array(
@@ -80,33 +77,47 @@ class CCodeCCAM {
 
   // table de chargement
   static $loadLevel = array();
-  /** @var array CCodeCCAM[] */
+
+  /** @var self[] */
   static $loadedCodes = array();
+
   static $cacheCount = 0;
+
   static $useCount = array(
-    CCodeCCAM::LITE   => 0,
-    CCodeCCAM::MEDIUM => 0,
-    CCodeCCAM::FULL   => 0,
+    self::LITE   => 0,
+    self::MEDIUM => 0,
+    self::FULL   => 0,
   );
 
+  /** @var CMbObjectSpec */
   static $spec = null;
+
+  /**
+   * Get object spec
+   *
+   * @return CMbObjectSpec
+   */
+  static function getSpec(){
+    if (self::$spec) {
+      return self::$spec;
+    }
+
+    $spec = new CMbObjectSpec();
+    $spec->dsn = "ccamV2";
+    $spec->init();
+
+    return self::$spec = $spec;
+  }
 
   /**
    * Constructeur à partir du code CCAM
    *
    * @param string $code Le code CCAM
    *
-   * @return \CCodeCCAM
+   * @return self
    */
   function __construct($code = null) {
-    // Static initialisation
-    if (!self::$spec) {
-      self::$spec = new CMbObjectSpec();
-      self::$spec->dsn = "ccamV2";
-      self::$spec->init();
-    }
-
-    $this->_spec = self::$spec;
+    $this->_spec = self::getSpec();
 
     if (strlen($code) > 7) {
       if (!preg_match("/^[A-Z]{4}[0-9]{3}(-[0-9](-[0-9])?)?$/i", $code)) {
@@ -127,11 +138,25 @@ class CCodeCCAM {
     return null;
   }
 
-  /*function __sleep(){
+  /**
+   * Methode de pré-serialisation
+   *
+   * @return array
+   */
+  function __sleep(){
     $fields = get_object_vars($this);
     unset($fields["_spec"]);
     return array_keys($fields);
-  }*/
+  }
+
+  /**
+   * Méthode de "reveil" après serialisation
+   *
+   * @return void
+   */
+  function __wakeup() {
+    $this->_spec = self::getSpec();
+  }
 
   /**
    * Chargement optimisé des codes CCAM
@@ -174,9 +199,7 @@ class CCodeCCAM {
    * @return CCodeCCAM
    */
   function copy() {
-    $obj = unserialize(serialize($this));
-    $obj->_spec = self::$spec;
-    return $obj;
+    return unserialize(serialize($this));
   }
 
   /**

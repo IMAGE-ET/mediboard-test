@@ -11,6 +11,9 @@
  * @link     http://www.mediboard.org
  */
 
+/**
+ * Classe pour gérer le mapping avec la base de données CIM
+ */
 class CCodeCIM10 {
   const LANG_FR = "FR_OMS";
   const LANG_EN = "EN_OMS";
@@ -33,8 +36,10 @@ class CCodeCIM10 {
   // Références
   /** @var  CCodeCIM10[] */
   public $_exclude;
+
   /** @var  CCodeCIM10[] */
   public $_levelsSup;
+
   /** @var  CCodeCIM10[] */
   public $_levelsInf;
 
@@ -60,36 +65,82 @@ class CCodeCIM10 {
   // table de chargement
   static $loadLevel = array();
 
+  /** @var self[] */
   static $loadedCodes = array();
+
   static $cacheCount = 0;
+
   static $useCount = array(
-    CCodeCIM10::LITE   => 0,
-    CCodeCIM10::MEDIUM  => 0,
-    CCodeCIM10::FULL   => 0,
+    self::LITE   => 0,
+    self::MEDIUM => 0,
+    self::FULL   => 0,
   );
 
+  /** @var CMbObjectSpec */
   static $spec = null;
 
-  function __construct($code = "(A00-B99)", $loadlite = 0) {
-    // Static initialisation
-    if (!self::$spec) {
-      $spec = new CMbObjectSpec();
-      $spec->dsn = "cim10";
-      $spec->init();
-      self::$spec = $spec;
+  /**
+   * Get object spec
+   *
+   * @return CMbObjectSpec
+   */
+  static function getSpec(){
+    if (self::$spec) {
+      return self::$spec;
     }
 
-    $this->_spec = self::$spec;
+    $spec = new CMbObjectSpec();
+    $spec->dsn = "cim10";
+    $spec->init();
+
+    return self::$spec = $spec;
+  }
+
+  /**
+   * Constructeur à partir du code CIM
+   *
+   * @param string $code     Le code CIM
+   * @param bool   $loadlite Chargement
+   *
+   * @return self
+   */
+  function __construct($code = "(A00-B99)", $loadlite = false) {
+    $this->_spec = self::getSpec();
 
     $this->code = strtoupper($code);
     
     if ($loadlite) {
       $this->loadLite();
     }
-
   }
-  
-  // Chargement des données Lite
+
+  /**
+   * Methode de pré-serialisation
+   *
+   * @return array
+   */
+  function __sleep(){
+    $fields = get_object_vars($this);
+    unset($fields["_spec"]);
+    return array_keys($fields);
+  }
+
+  /**
+   * Méthode de "reveil" après serialisation
+   *
+   * @return void
+   */
+  function __wakeup() {
+    $this->_spec = self::getSpec();
+  }
+
+  /**
+   * Chargement des données Lite
+   *
+   * @param string $lang Langue
+   *
+   * @return bool
+   */
   function loadLite($lang = self::LANG_FR) {
     $this->exist = true;
     $ds =& $this->_spec->ds;
@@ -134,8 +185,14 @@ class CCodeCIM10 {
     $this->libelle = $row[$this->_lang];
     return true;
   }
-  
-  // Chargement des données
+
+  /**
+   * Chargement des données
+   *
+   * @param string $lang Langue
+   *
+   * @return bool
+   */
   function load($lang = self::LANG_FR) {
     if (!$this->loadLite($lang)) {
       return false;
@@ -241,13 +298,15 @@ class CCodeCIM10 {
     return true;
   }
 
-  // Chargement optimisé des codes
+  /**
+   * Chargement optimisé des codes
+   */
   static function get($code, $niv = self::LITE, $lang = self::LANG_FR) {
     self::$useCount[$niv]++;
 
     // Si le code n'a encore jamais été chargé, on instancie et on met son niveau de chargement à zéro
     if (!isset(self::$loadedCodes[$code])) {
-      self::$loadedCodes[$code] = new CCodeCIM10($code, $niv === self::LITE ? 1 : 0);
+      self::$loadedCodes[$code] = new CCodeCIM10($code, $niv === self::LITE);
       self::$loadLevel[$code] = null;
     }
 
