@@ -141,7 +141,7 @@
   </button>
 
   <input type="hidden" name="_modele_id" value="" />
-  <input type="hidden" name="_object_id" value="" onchange="Document.create(this.form._modele_id.value, this.value,'{{$object_id}}','{{$object_class}}'); $V(this, ''); $V(this.form._modele_id, ''); "/>
+  <input type="hidden" name="_object_id" value="" onchange="Document.create(this.form._modele_id.value, this.value,'{{$object_id}}','{{$object_class}}'); $V(this, '', false); $V(this.form._modele_id, ''); "/>
 
   </form>
 
