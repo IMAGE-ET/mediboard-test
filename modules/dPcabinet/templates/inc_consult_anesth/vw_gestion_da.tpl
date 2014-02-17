@@ -37,7 +37,7 @@
 </form>
 
 <table class="tbl">
-  <tr>
+  <tr id="didac_tr_associer_dossier">
     <th>Dossier d'anesthésie</th>
     <th style="width:45%">Intervention</th>
   </tr>
