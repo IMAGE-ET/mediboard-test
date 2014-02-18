@@ -115,7 +115,7 @@ function changePratPec(prat_id) {
           <button id="didac_consult_button_terminer" class="tick" type="button" onclick="checkConsult();">
         {{else}}
           <button class="tick" type="button"
-                  onclick="{{if $sejour->_ref_rpu->_id}}ContraintesRPU.checkObligatory('{{$sejour->_ref_rpu->_id}}', function() {submitAll(); submitConsultWithChrono({{$consult|const:'TERMINE'}});});{{else}}submitAll(); submitConsultWithChrono({{$consult|const:'TERMINE'}});{{/if}}">
+                  onclick="{{if $sejour && isset($sejour->_ref_rpu) && $sejour->_ref_rpu->_id}}ContraintesRPU.checkObligatory('{{$sejour->_ref_rpu->_id}}', function() {submitAll(); submitConsultWithChrono({{$consult|const:'TERMINE'}});});{{else}}submitAll(); submitConsultWithChrono({{$consult|const:'TERMINE'}});{{/if}}">
         {{/if}}
         Terminer
         </button>
