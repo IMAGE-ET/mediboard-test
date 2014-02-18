@@ -150,7 +150,7 @@ class CDestinataire {
       self::makeAllFor($sejour->_ref_patient);
 
       $chir = $sejour->loadRefPraticien();
-      $dest = new CDestinataire("Praticien");
+      $dest = new CDestinataire("praticien");
       $dest->nom = "Dr " . $chir->_user_last_name . " " . $chir->_user_first_name;
       $dest->email = $chir->_user_email;
       self::$destByClass[$sejour->_class][] = $dest;
