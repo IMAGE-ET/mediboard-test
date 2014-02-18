@@ -28,6 +28,12 @@
   function changePage(page) {
     $V(getForm('listFilter').page,page);
   }
+
+  function sendPassage(passage_id) {
+    new Url("dPurgences", "ajax_transmit_activite")
+      .addParam("extract_passages_id", passage_id)
+      .requestUpdate("result_send_passage-"+passage_id);
+  }
 </script>
 
 <form name="listFilter" action="?m={{$m}}" method="get">
@@ -79,7 +85,7 @@
     <th>{{mb_title object=$extractPassages field="nb_tentatives"}}</th>
     <th>{{mb_title object=$extractPassages field="message_valide"}}</th>
     <th>Fichiers</th>
-    <th colspan="3">{{tr}}Actions{{/tr}}</th>
+    <th colspan="4">{{tr}}Actions{{/tr}}</th>
   </tr>
   {{foreach from=$listPassages item=_passage}}
   <tr>
@@ -153,6 +159,10 @@
            </button>
         </form>
       {{/if}}
+    </td>
+    <td class="narrow">
+      <button type="button" class="send" onclick="sendPassage('{{$_passage->_id}}')"></button>
+      <div id="result_send_passage-{{$_passage->_id}}"></div>
     </td>
   </tr>
   {{foreachelse}}
