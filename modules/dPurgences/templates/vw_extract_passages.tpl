@@ -30,20 +30,40 @@
   }
 </script>
 
-<div>
-  <strong>Total des RPUs extrait : {{$total_rpus}}</strong> 
-</div>
-
 <form name="listFilter" action="?m={{$m}}" method="get">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
   <input type="hidden" name="page" value="{{$page}}" onchange="this.form.submit()"/>
-        
+
+  <table class="form">
+    <tr>
+      <th class="title" colspan="2">{{tr}}Filter{{/tr}}</th>
+    </tr>
+    <tr>
+      <th>{{mb_label class=CExtractPassages field="debut_selection"}}</th>
+      <td>{{mb_field class=CExtractPassages field="debut_selection" canNull=true form="listFilter" register=true onchange="this.form.submit()" value=$debut_selection}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label class=CExtractPassages field="fin_selection"}}</th>
+      <td>{{mb_field class=CExtractPassages field="fin_selection" canNull=true form="listFilter" register=true onchange="this.form.submit()" value=$fin_selection}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label class=CExtractPassages field="type"}}</th>
+      <td>{{mb_field class=CExtractPassages field="type" emptyLabel=Choose onchange="this.form.submit()" value=$type}}</td>
+    </tr>
+  </table>
+  <br/>
+
+  <div>
+    <strong>Total des RPUs extrait : {{$total_rpus}}</strong>
+  </div>
+
   {{if $total_passages != 0}}
     {{mb_include module=system template=inc_pagination total=$total_passages current=$page change_page='changePage'}}
   {{/if}}
 </form>
-      
+
+
 <table class="tbl">
   <tr>
     <th class="title" colspan="18">PASSAGES</th>

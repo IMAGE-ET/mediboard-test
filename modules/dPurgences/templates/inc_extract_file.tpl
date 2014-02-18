@@ -2,6 +2,7 @@
   {{foreach from=$_passage->_ref_files item=_file}}
   <tr>
     <td>
+      <a target="blank" href="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id={{$_file->_id}}&phpThumb=1&w=700" class="button modify notext"></a>
       <a href="#" class="action" 
          onclick="File.popup('{{$_passage->_class}}','{{$_passage->_id}}','{{$_file->_class}}','{{$_file->_id}}');"
          onmouseover="ObjectTooltip.createEx(this, '{{$_file->_guid}}', 'objectViewHistory')">
