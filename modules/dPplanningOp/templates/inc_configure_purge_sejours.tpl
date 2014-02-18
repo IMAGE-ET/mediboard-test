@@ -20,15 +20,13 @@ function repeatPurge() {
   une partie des séjours de la base de données et toutes les données
   qui y sont associées.
   <strong>
-    N'utilisez cette fonctionnalité que si vous savez parfaitement ce que vous faites
+  <br />  N'utilisez cette fonctionnalité que si vous savez PARFAITEMENT ce que vous faites !!
   </strong>
 </div>
 
 <div class="small-warning">
-  Vous allez supprimé les séjours de l'établissement
-  <strong>
-    {{$group}}
-  </strong>
+  Vous allez supprimer les séjours de l'établissement
+  <strong>{{$group}}</strong>.
 </div>
 <table class="tbl">
   <tr>
