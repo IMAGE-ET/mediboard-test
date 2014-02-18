@@ -35,7 +35,7 @@ function changePratPec(prat_id) {
 }
 </script>
 
-{{mb_script module=dPurgences script=contrainte_rpu}}
+{{mb_script module=dPurgences script=contraintes_rpu}}
 
 <!-- Formulaire de changement de praticien pour la pec -->
 <form name="editPratPec" method="post" action="?">
