@@ -1694,6 +1694,27 @@ class CSetupdPplanningOp extends CSetup {
                 CHANGE `actif` `actif` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.84";
+    $this->makeRevision("1.84");
+    $query = "CREATE TABLE `operation_workflow` (
+      `miner_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `operation_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+      `date` DATE NOT NULL,
+      `remined` ENUM ('0','1') NOT NULL DEFAULT '0',
+      `date_operation` DATETIME NOT NULL,
+      `date_creation` DATETIME,
+      `date_cancellation` DATETIME,
+      `date_consult_chir` DATETIME,
+      `date_consult_anesth` DATETIME,
+      `date_creation_consult_chir` DATETIME,
+      `date_creation_consult_anesth` DATETIME,
+      `date_visite_anesth` DATE
+    )/*! ENGINE=MyISAM */";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `operation_workflow`
+      ADD INDEX (`operation_id`),
+      ADD INDEX (`date`)";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.85";
   }
 }
