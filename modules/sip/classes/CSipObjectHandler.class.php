@@ -101,7 +101,10 @@ class CSipObjectHandler extends CEAIObjectHandler {
 
         // Passage en trash des IPP des patients
         $tap_IPP = CPatient::getTagIPP($_group->_id);
-        
+        if (!$tap_IPP) {
+          continue;
+        }
+
         $idexPatient = new CIdSante400();
         $idexPatient->tag          = $tap_IPP;
         $idexPatient->object_class = "CPatient";

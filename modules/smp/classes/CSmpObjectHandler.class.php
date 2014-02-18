@@ -102,6 +102,9 @@ class CSmpObjectHandler extends CEAIObjectHandler {
 
         // Passage en trash des NDA des séjours
         $tag_NDA = CSejour::getTagNDA($_group->_id);
+        if (!$tag_NDA) {
+          continue;
+        }
         
         $idexSejour = new CIdSante400();
         $idexSejour->tag          = $tag_NDA;
