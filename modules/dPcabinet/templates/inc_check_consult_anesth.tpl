@@ -7,7 +7,7 @@
 </style>
 <table class="tbl">
   <tr>
-    <th>Critère</th>
+    <th id="didac_th_Critere">Critère</th>
     {{foreach from=$consult->_refs_dossiers_anesth item=consult_anesth}}
       {{if $consult_anesth->_ref_operation->_id}}
         <th class="text" style="width:13em;">{{$consult_anesth->_ref_operation->_view}}</th>

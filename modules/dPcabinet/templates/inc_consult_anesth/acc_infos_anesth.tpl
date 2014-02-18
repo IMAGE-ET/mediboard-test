@@ -59,7 +59,7 @@ checkUSCPO = function() {
   <tr>
     <td colspan="2">
       <fieldset>
-        <legend>Intervention</legend>
+        <legend id="didac_legend_intervention">Intervention</legend>
         <table class="layout main">
           <tr>
             <td class="halfPane">

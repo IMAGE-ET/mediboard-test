@@ -66,7 +66,7 @@ Main.add(function () {
   <li><a href="#Exams">Exam. Clinique</a></li>
   <li><a href="#Intub">Intubation</a></li>
   <li><a href="#ExamsComp">Exam. Comp.</a></li>
-  <li><a href="#InfoAnesth">Infos. Anesth.</a></li>
+  <li><a href="#InfoAnesth" id="didac_a_infos_anesth">Infos. Anesth.</a></li>
 	{{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription}}
 	  <li>
 	    <a href="#prescription_sejour">Prescription</a>
