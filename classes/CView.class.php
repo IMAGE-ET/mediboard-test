@@ -34,6 +34,32 @@ class CView {
   }
 
   /**
+   * Get a GET parameter
+   *
+   * @param string $name    Name of the parameter
+   * @param string $prop    Property specification of the parameter
+   * @param bool   $session Use session for retrieval if undefined
+   *
+   * @return object
+   */
+  static public function get($name, $prop, $session = false) {
+    return self::checkParam($name, $prop, $session ? CValue::getOrSession($name) : CValue::get($name));
+  }
+
+  /**
+   * Get a POST parameter
+   *
+   * @param string $name    Name of the parameter
+   * @param string $prop    Property specification of the parameter
+   * @param bool   $session Use session for retrieval if undefined
+   *
+   * @return object
+   */
+  static public function post($name, $prop, $session = false) {
+    return self::checkParam($name, $prop, $session ? CValue::postOrSession($name) : CValue::post($name));
+  }
+
+  /**
    * Check a parameter
    *
    * @param string $name  Name of the parameter
