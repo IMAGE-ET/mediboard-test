@@ -43,7 +43,7 @@ XDR = Class.create({
     var xhr;
 
     // XMLHttpRequest
-    if (window.XMLHttpRequest){
+    if (window.XMLHttpRequest && !window.XDomainRequest) {
       xhr = new XMLHttpRequest();
       xhr.open(this.method, this.url, true);
 
@@ -55,10 +55,10 @@ XDR = Class.create({
       xhr.onreadystatechange = function() {
         if (xhr.readyState == xhr.DONE) {
           if (xhr.status == 200) {
-            options.onload.bind(xhr)();
+            options.onload.bind(xhr)(xhr);
           }
           else {
-            options.onerror.bind(xhr)();
+            options.onerror.bind(xhr)(xhr);
           }
         }
       };
@@ -68,14 +68,13 @@ XDR = Class.create({
     else {
       xhr = new XDomainRequest();
       xhr.open(this.method, this.url);
-
-      xhr.onerror = options.onerror.bind(xhr);
-      xhr.onload  = options.onload.bind(xhr);
+      xhr.onerror = options.onerror.bind(xhr).curry(xhr);
+      xhr.onload  = options.onload.bind(xhr).curry(xhr);
     }
 
     // Event handlers
-    xhr.onprogress = options.onprogress.bind(xhr);
-    xhr.ontimeout  = options.ontimeout.bind(xhr);
+    xhr.onprogress = options.onprogress.bind(xhr).curry(xhr);
+    xhr.ontimeout  = options.ontimeout.bind(xhr).curry(xhr);
 
     xhr.timeout = options.timeout;
 
