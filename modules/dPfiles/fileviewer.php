@@ -52,6 +52,8 @@ if ($file_path) {
 }
 
 if ($file_id = CValue::get("file_id")) {
+  $disposition = CValue::get("force_dl", 0);
+  $disposition = $disposition ? "attachement" : "inline";
   $file = new CFile();
   $file->load($file_id);
   $file->loadRefsFwd();
@@ -198,7 +200,7 @@ if ($file_id = CValue::get("file_id")) {
     header("Content-length: {$file->file_size}");
     header("Content-type: {$file->file_type}");
 
-    header('Content-disposition: inline; filename="'.$file->file_name.'"');
+    header('Content-disposition: '.$disposition.'; filename="'.$file->file_name.'"');
     readfile($file->_file_path);
   }
 }
