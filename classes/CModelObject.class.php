@@ -666,7 +666,19 @@ class CModelObject {
       }
     }
   }
-    
+
+  /**
+   * Nullify object all properties
+   *
+   * @return void
+   */
+  function nullifyProperties() {
+    foreach ($this->getProperties() as $name => $value) {
+      $this->$name = null;
+    }
+  }
+
+
   /**
    * Extends object properties with target object (of the same class) properties
    *

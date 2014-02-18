@@ -140,6 +140,7 @@ class CUserLog extends CMbMetaObject {
 
   /**
    * @see parent::loadRefsFwd()
+   * @deprecated
    */
   function loadRefsFwd() {
     parent::loadRefsFwd();

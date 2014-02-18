@@ -60,6 +60,28 @@
       window[func]();
     }
   }
+
+  Datamining = {
+    board: function() {
+      this.url = new Url('planningOp', 'datamining_board');
+      this.url.requestModal('800', '600');
+    },
+
+    mine: function(miner_class, remine) {
+      var url = new Url('planningOp', 'ajax_datamine_operation');
+      url.addNotNullParam('miner_class', miner_class);
+      url.addNotNullParam('remine', remine);
+      url.addParam('automine', $('automine').checked ? 1 : 0);
+      url.addParam('limit', $V('limit'));
+      url.requestUpdate(SystemMessage.id, this.url.refreshModal.bind(this.url));
+    },
+
+    auto: function() {
+      if ($('automine').checked) {
+        Datamining.mine();
+      }
+    }
+  }
 </script>
 
 <h2>Actions de maintenances</h2>
@@ -142,4 +164,10 @@
     </td>
     <td id="resultScoreASA"></td>
   </tr>
+  
+  <tr>
+    <td colspan="2">
+      <button class="search" onclick="Datamining.board()">{{tr}}Datamining{{/tr}}</button>
+    </td>
+  </tr>  
 </table>

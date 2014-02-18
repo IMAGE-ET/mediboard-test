@@ -130,6 +130,7 @@ class CSalle extends CMbObject {
 
   /**
    * @see parent::loadRefsFwd()
+   * @deprecated
    */
   function loadRefsFwd(){
     $this->loadRefBloc();

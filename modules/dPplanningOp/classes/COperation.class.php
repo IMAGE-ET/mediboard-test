@@ -180,14 +180,21 @@ class COperation extends CCodable implements IPatientRelated {
   public $_ref_anesth;
   /** @var CTypeAnesth */
   public $_ref_type_anesth;
-  /** @var  CConsultAnesth */
+  /** @var CConsultAnesth */
   public $_ref_consult_anesth;
+  /** @var CMediusers */
   public $_ref_anesth_visite;
+  /** @var CConsultation */
+  public $_ref_consult_chir;
   /** @var CActeCCAM[] */
   public $_ref_actes_ccam = array();
+  /** @var CEchangeHprim */
   public $_ref_echange_hprim;
+  /** @var CAnesthPerop[] */
   public $_ref_anesth_perops;
+  /** @var CNaissance[] */
   public $_ref_naissances;
+  /** @var CPoseDispositifVasculaire[] */
   public $_ref_poses_disp_vasc;
   /** @var  CBloodSalvage */
   public $_ref_blood_salvage;
@@ -213,9 +220,14 @@ class COperation extends CCodable implements IPatientRelated {
   public $_libelle_interv;
   public $_rques_interv;
 
-  function COperation() {
+  function __construct() {
     parent::__construct();
-    $this->_locked = CAppUI::conf("dPplanningOp COperation locked");
+
+    static $locked = null;
+    if ($locked === null) {
+      $locked = CAppUI::conf("planningOp COperation locked");
+    }
+    $this->_locked = $locked;
   }
 
   /**
@@ -403,8 +415,10 @@ class COperation extends CCodable implements IPatientRelated {
    * @see parent::getExtensionDocumentaire()
    */
   function getExtensionDocumentaire() {
-    $this->_ref_type_anesth = $this->loadFwdRef("type_anesth", true);
-    return $this->_ref_type_anesth->ext_doc;
+    /** @var CTypeAnesth $type_anesth */
+    $type_anesth = $this->loadFwdRef("type_anesth", true);
+    $this->_ref_type_anesth = $type_anesth;
+    return $type_anesth->ext_doc;
   }
 
   /**
@@ -433,7 +447,8 @@ class COperation extends CCodable implements IPatientRelated {
     $backProps["poses_disp_vasc"]          = "CPoseDispositifVasculaire operation_id";
     $backProps["check_list_categories"]    = "CDailyCheckItemCategory target_id";
     $backProps["liaison_libelle"]          = "CLiaisonLibelleInterv operation_id";
-    $backProps["affectations_personnel"] = "CAffectationPersonnel object_id";
+    $backProps["affectations_personnel"]   = "CAffectationPersonnel object_id";
+    $backProps["workflow"]                 = "COperationWorkflow operation_id";
     return $backProps;
   }
 
@@ -511,6 +526,7 @@ class COperation extends CCodable implements IPatientRelated {
     $this->_time_op = $this->temp_operation;
     $this->_time_urgence = $this->time_operation;
 
+    /** @var CTypeAnesth $_ref_type_anesth */
     $this->_ref_type_anesth = $this->loadFwdRef("type_anesth", true);
     $this->_lu_type_anesth = $this->_ref_type_anesth->name;
 
@@ -1091,6 +1107,8 @@ class COperation extends CCodable implements IPatientRelated {
     if (!$this->_ref_plageop) {
       $this->_ref_plageop = $this->loadFwdRef("plageop_id", $cache);
     }
+
+    /** @var CPlageOp $plage */
     $plage = $this->_ref_plageop;
 
     if ($plage->_id) {
@@ -1185,7 +1203,26 @@ class COperation extends CCodable implements IPatientRelated {
       "consultation" => "consultation.consultation_id = consultation_anesth.consultation_id",
       "plageconsult" => "consultation.plageconsult_id = plageconsult.plageconsult_id"
     );
-    return $this->_ref_consult_anesth = @$this->loadUniqueBackRef("dossiers_anesthesie", $order, null, null, $ljoin);
+    return $this->_ref_consult_anesth = $this->loadFirstBackRef("dossiers_anesthesie", $order, null, $ljoin);
+  }
+
+  /**
+   * Chargement de la consult de chirurgie avant l'intervention,
+   * cad la dernière consultation pour le patient par le chirurgien avant l'internvention et hors du séjour
+   *
+   * @return CConsultation
+   */
+  public function loadRefConsultChir() {
+    $sejour = $this->loadRefSejour();
+    $ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id";
+    $where["patient_id"] = "= '$sejour->patient_id'";
+    $where["chir_id"]    = "= '$this->chir_id'";
+    $where["date"]       = "< '$sejour->entree'";
+    $where[] = "sejour_id IS NULL OR sejour_id != '$this->sejour_id'";
+    $order = "date DESC";
+    $consult = new CConsultation;
+    $consult->loadObject($where, $order, null, $ljoin);
+    return $this->_ref_consult_chir = $consult;
   }
 
   /**
