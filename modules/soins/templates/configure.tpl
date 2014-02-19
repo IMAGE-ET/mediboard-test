@@ -11,11 +11,14 @@
 <script>
   redirectOffline = function(type, embed) {
     switch(type) {
-      case 'sejour':
-        var url = new Url("soins", "offline_sejours");
-        break;
       case 'bilan':
         var url = new Url("soins", "offline_bilan_service");
+        break;
+      case 'plan':
+        var url = new Url("soins", "offline_plan_soins");
+        break;
+      case 'sejour':
+        var url = new Url("soins", "offline_sejours");
     }
     
     url.addParam("service_id", $("service_id").value);

@@ -650,6 +650,7 @@ $locales['CService.default_orientation.SI'] = 'Unité de Soins Intensifs';
 $locales['CService.default_orientation.UHCD'] = 'Unité d\'hospi. de courte durée';
 $locales['CService.none'] = 'Aucun service';
 $locales['CService.one'] = 'Un service';
+$locales['CService.plan_soins'] = 'Plan de soins';
 $locales['CService.select'] = 'Choisir un service';
 $locales['CService.type_sejour.'] = 'Indéfini';
 $locales['CService.type_sejour.ambu'] = 'Ambulatoire';
