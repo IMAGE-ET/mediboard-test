@@ -142,8 +142,8 @@
         <div id="er7-query-result"></div>
       </div>
     </div>
-    
-    
+
+
     <div id="ack" style="display: none;">
       {{if $ack_segment_group}}
       <script>
@@ -153,40 +153,67 @@
           tree.collapseAll();
         });
       </script>
-      
+
       <h1>{{$ack_segment_group->description}} ({{$ack_segment_group->version}} {{if $ack_segment_group->extension}}{{$ack_segment_group->extension}}{{/if}}) <span class="type">{{$ack_segment_group->name}}</span></h1>
-      
-      <ul class="control_tabs" id="ack-message-tab">
-        <li><a href="#ack-message-tree">Arbre</a></li>
-        <li><a href="#ack-message-er7">ER7</a></li>
-        <li><a href="#ack-message-xml">XML</a></li>
-        <li><a href="#ack-message-warnings" class="{{if $exchange->_doc_warnings_ack}}wrong{{else}}empty{{/if}}">Avertissements</a></li>
-        <li><a href="#ack-message-errors" class="{{if $exchange->_doc_errors_ack}}wrong{{else}}empty{{/if}}">Erreurs</a></li>
-      </ul>
-      
-      <hr class="control_tabs" />
-          
-      <ul id="ack-message-tree" style="display: none;" class="hl7-tree">
-        {{mb_include module=hl7 template=inc_segment_group_children segment_group=$ack_segment_group}}
-      </ul>
-      
-      <div id="ack-message-er7" style="display: none;">
-        {{$ack_segment_group->flatten(true)|smarty:nodefaults}}
-      </div>
-      
-      <div id="ack-message-xml" style="display: none;">
-        {{if $ack_segment_group->_xml}}
-          {{$ack_segment_group->_xml|smarty:nodefaults}}
-        {{/if}}
-      </div>
-      
-      <div id="ack-message-warnings" style="display: none;">
-        {{mb_include module=hl7 template=inc_hl7v2_errors errors=$ack_segment_group->errors level=1}}
-      </div>
-      
-      <div id="ack-message-errors" style="display: none;">
-        {{mb_include module=hl7 template=inc_hl7v2_errors errors=$ack_segment_group->errors level=2}}
-      </div>
+
+        <ul class="control_tabs" id="ack-message-tab">
+          <li><a href="#ack-message-tree">Arbre</a></li>
+          <li><a href="#ack-message-er7-input">ER7 input</a></li>
+          <li><a href="#ack-message-er7-parsed">ER7 parsed</a></li>
+          <li><a href="#ack-message-xml">XML</a></li>
+          <li><a href="#ack-message-warnings" class="{{if $exchange->_doc_warnings_ack}}wrong{{else}}empty{{/if}}">Avertissements</a></li>
+          <li><a href="#ack-message-errors" class="{{if $exchange->_doc_errors_ack}}wrong{{else}}empty{{/if}}">Erreurs</a></li>
+        </ul>
+
+        <hr class="control_tabs" />
+
+        <ul id="ack-message-tree" style="display: none;" class="hl7-tree">
+          {{mb_include module=hl7 template=inc_segment_group_children segment_group=$ack_segment_group}}
+        </ul>
+
+        <div id="ack-message-er7-input" style="display: none;">
+          <div id="ack-message-er7-input-view">
+            {{$msg_segment_group->highlight($ack_segment_group->data)|smarty:nodefaults}}
+            <button type="button" class="edit" onclick="$('msg-message-er7-input-view').toggle(); $('msg-message-er7-edit').toggle();">{{tr}}Edit{{/tr}}</button>
+          </div>
+
+          <div id="ack-message-er7-edit" style="display: none;">
+            <form name="edit-er7" method="post" onsubmit="return onSubmitFormAjax(this, function(){ Control.Modal.close(); ExchangeDataFormat.viewExchange('{{$exchange->_guid}}'); })">
+              <input type="hidden" name="m" value="eai" />
+              <input type="hidden" name="dosql" value="do_exchange_content_edit" />
+              <input type="hidden" name="exchange_guid" value="{{$exchange->_guid}}" />
+              <textarea name="_acquittement" rows="15" style="white-space: pre; word-wrap: normal; font-family: 'lucida console', 'courier new', courier, monospace; font-size: 10px; line-height: 1.3; overflow-x: auto; resize: vertical;">{{$ack_segment_group->data}}</textarea>
+
+              {{*
+              <label><input type="radio" name="segment_terminator" value="CR"   {{if strpos($msg_segment_group->data,"\r")}} checked {{/if}} /> CR (\r)</label>
+              <label><input type="radio" name="segment_terminator" value="LF"   {{if strpos($msg_segment_group->data,"\n")}} checked {{/if}} /> LF (\n)</label>
+              <label><input type="radio" name="segment_terminator" value="CRLF" {{if strpos($msg_segment_group->data,"\r\n")}} checked {{/if}} /> CRLF (\r\n)</label>
+              *}}
+              <input type="hidden" name="segment_terminator" value="CR" />
+
+              <button type="submit" class="save">{{tr}}Save{{/tr}}</button>
+              <button type="button" class="cancel" onclick="$('ack-message-er7-input-view').toggle(); $('ack-message-er7-edit').toggle();">{{tr}}Cancel{{/tr}}</button>
+            </form>
+          </div>
+        </div>
+
+        <div id="ack-message-er7-parsed" style="display: none;">
+          {{$ack_segment_group->flatten(true)|smarty:nodefaults}}
+        </div>
+
+        <div id="ack-message-xml" style="display: none;">
+          {{if $ack_segment_group->_xml}}
+            {{$ack_segment_group->_xml|smarty:nodefaults}}
+          {{/if}}
+        </div>
+
+        <div id="ack-message-warnings" style="display: none;">
+          {{mb_include module=hl7 template=inc_hl7v2_errors errors=$ack_segment_group->errors level=1}}
+        </div>
+
+        <div id="ack-message-errors" style="display: none;">
+          {{mb_include module=hl7 template=inc_hl7v2_errors errors=$ack_segment_group->errors level=2}}
+        </div>
       {{else}}
         <div class="big-info">{{tr}}CExchange-no-acquittement{{/tr}}</div>
       {{/if}}

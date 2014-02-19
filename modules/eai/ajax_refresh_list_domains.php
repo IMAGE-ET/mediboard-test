@@ -24,7 +24,6 @@ foreach ($domains as $_domain) {
     $_group_domain->loadRefGroup();  
   }
   $_domain->isMaster();
-  $_domain->countObjects();
 }
 
 // Récupération due l'incrementeur à ajouter/editer 

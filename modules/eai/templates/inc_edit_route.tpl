@@ -35,43 +35,47 @@
       </th>
     </tr>
     <tr>
-      <th>{{mb_title object=$route field="sender_class"}}</th>
+      <th>{{mb_label object=$route field="sender_class"}}</th>
       <td>
-        <select name="sender_class">
+        <select class="{{$route->_props.sender_class}}" name="sender_class">
           {{foreach from=$list_sender item=_sender}}
-            <option value="{{$_sender}}">{{tr}}{{$_sender}}{{/tr}}</option>
+            <option value="{{$_sender}}" {{if $route->sender_class == $_sender}}selected{{/if}}>
+              {{tr}}{{$_sender}}{{/tr}}
+            </option>
           {{/foreach}}
         </select>
       </td>
     </tr>
     <tr>
-      <th>{{mb_title class=CInteropSender field="nom"}} {{tr}}CInteropSender{{/tr}}</th>
+      <th>{{mb_label class=$route field="sender_id"}}</th>
       <td>
-        <input type="hidden" name="sender_id" value="{{if $route->_ref_sender}}{{$route->_ref_sender->_id}}{{/if}}">
+        <input class="{{$route->_props.sender_id}}" type="hidden" name="sender_id" value="{{if $route->_ref_sender}}{{$route->_ref_sender->_id}}{{/if}}">
         <input type="text" class="autocomplete" name="sender_id_autocomplete"
-               value="{{if $route->_ref_sender}}{{$route->_ref_sender->nom}}{{/if}}">
+               value="{{if $route->_ref_sender}}{{$route->_ref_sender->_view}}{{/if}}">
       </td>
     </tr>
     <tr>
-      <th>{{mb_title object=$route field="receiver_class"}}</th>
+      <th>{{mb_label object=$route field="receiver_class"}}</th>
       <td>
-        <select name="receiver_class">
+        <select class=" {{$route->_props.receiver_class}}" name="receiver_class">
           {{foreach from=$list_receiver item=_receiver}}
-            <option value="{{$_receiver}}">{{tr}}{{$_receiver}}{{/tr}}</option>
+            <option value="{{$_receiver}}" {{if $route->receiver_class == $_receiver}}selected{{/if}}>
+              {{tr}}{{$_receiver}}{{/tr}}
+            </option>
           {{/foreach}}
         </select>
       </td>
     </tr>
     <tr>
-      <th>{{mb_title class=CInteropReceiver field="nom"}} {{tr}}CInteropReceiver{{/tr}}</th>
+      <th>{{mb_label class=$route field="receiver_id"}}</th>
       <td>
-        <input type="hidden" name="receiver_id" value="{{if $route->_ref_receiver}}{{$route->_ref_receiver->_id}}{{/if}}">
+        <input class="{{$route->_props.receiver_id}}" type="hidden" name="receiver_id" value="{{if $route->_ref_receiver}}{{$route->_ref_receiver->_id}}{{/if}}">
         <input type="text" class="autocomplete" name="receiver_id_autocomplete"
-               value="{{if $route->_ref_receiver}}{{$route->_ref_receiver->nom}}{{/if}}">
+               value="{{if $route->_ref_receiver}}{{$route->_ref_receiver->_view}}{{/if}}">
       </td>
     </tr>
     <tr>
-      <th>{{mb_title object=$route field="active"}}</th>
+      <th>{{mb_label object=$route field="active"}}</th>
       <td>{{mb_field object=$route field="active"}}</td>
     </tr>
     <tr>

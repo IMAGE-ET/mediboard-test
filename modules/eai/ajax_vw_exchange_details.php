@@ -44,7 +44,7 @@ $limit_size = 100;
 $smarty = new CSmartyDP();
 $smarty->assign("exchange", $exchange);
 
-switch(true) {
+switch (true) {
   case $exchange instanceof CExchangeTabular:
     CMbObject::$useObjectCache = false;
 
