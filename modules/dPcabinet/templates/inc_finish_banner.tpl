@@ -137,7 +137,7 @@ function changePratPec(prat_id) {
           <button class="tick" type="button" onclick="duplicateDossier(false);">
         {{else}}
           <button class="tick singleclick" type="button"
-                  onclick="{{if $sejour->_ref_rpu->_id}}ContraintesRPU.checkObligatory('{{$sejour->_ref_rpu->_id}}', function() {duplicateDossier(true);});{{else}}duplicateDossier(true);{{/if}}">
+                  onclick="{{if $sejour && $sejour->_ref_rpu && $sejour->_ref_rpu->_id}}ContraintesRPU.checkObligatory('{{$sejour->_ref_rpu->_id}}', function() {duplicateDossier(true);});{{else}}duplicateDossier(true);{{/if}}">
         {{/if}}
         Terminer
         </button>
