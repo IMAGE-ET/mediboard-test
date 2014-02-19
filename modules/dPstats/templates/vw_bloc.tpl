@@ -15,8 +15,8 @@
 
   DisplayGraph.addFiltersParam = function(url) {
     var oForm = DisplayGraph.filterForm;
-    url.addParam("date_debut"   , $V(oForm._date_min));
-    url.addParam("date_fin"     , $V(oForm._date_max));
+    url.addParam("_date_min"   , $V(oForm._date_min));
+    url.addParam("_date_max"     , $V(oForm._date_max));
     url.addParam("codes_ccam"   , $V(oForm.codes_ccam));
     url.addParam("type"         , $V(oForm.type));
     url.addParam("discipline_id", $V(oForm.discipline_id));
@@ -42,104 +42,104 @@
 </script>
 
 <form name="stats_params" action="?" method="get" onsubmit="return checkForm(this)">
-<input type="hidden" name="m" value="dPstats" />
-<input type="hidden" name="_chir" value="{{$app->user_id}}" />
-<input type="hidden" name="_class" value="" />
-<table class="main form">
-  <tr>
-    <th>{{mb_label object=$filter field="_date_min"}}</th>
-    <td>{{mb_field object=$filter field="_date_min" form="stats_params" canNull="false" register=true}}</td>
-    <th>{{mb_label object=$filterSejour field="type"}}</th>
-    <td>
-      <select name="type" style="width: 15em;">
-        <option value="">&mdash; Tous les types d'hospi</option>
-        {{foreach from=$filterSejour->_specs.type->_locales key=key_hospi item=curr_hospi}}
-        <option value="{{$key_hospi}}" {{if $key_hospi == $filterSejour->type}}selected="selected"{{/if}}>
-          {{$curr_hospi}}
-        </option>
-        {{/foreach}}
-      </select>
-    </td>
-    <th>{{mb_label class=CSalle field="bloc_id"}}</th>
-    <td>
-      <select name="bloc_id" style="width: 15em;">
-        <option value="">&mdash; {{tr}}CBlocOperatoire.all{{/tr}}</option>
-        {{foreach from=$listBlocs item=curr_bloc}}
-        <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $bloc->_id }}selected="selected"{{/if}}>
-          {{$curr_bloc->nom}}
-        </option>
-        {{/foreach}}
-      </select>
-    </td>
-  </tr>
-  <tr>
-    <th>{{mb_label object=$filter field="_date_max"}}</th>
-    <td>{{mb_field object=$filter field="_date_max" form="stats_params" canNull="false" register=true}} </td>
-    <th>{{mb_label object=$filter field="_prat_id"}}</th>
-    <td>
-      <select name="prat_id" style="width: 15em;">
-        <option value="0">&mdash; Tous les praticiens</option>
-        {{foreach from=$listPrats item=curr_prat}}
-        <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $filter->_prat_id}}selected="selected"{{/if}}>
-          {{$curr_prat->_view}}
-        </option>
-        {{/foreach}}
-      </select>
-    </td>
-    <th>{{mb_label object=$filter field="salle_id"}}</th>
-    <td>
-      <select name="salle_id" style="width: 15em;">
-        <option value="">&mdash; {{tr}}CSalle.all{{/tr}}</option>
-        {{foreach from=$listBlocsForSalles item=curr_bloc}}
-        <optgroup label="{{$curr_bloc->nom}}">
-          {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
-          <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $filter->salle_id}}selected="selected"{{/if}}>
-            {{$curr_salle->nom}}
+  <input type="hidden" name="m" value="dPstats" />
+  <input type="hidden" name="_chir" value="{{$app->user_id}}" />
+  <input type="hidden" name="_class" value="" />
+  <table class="main form">
+    <tr>
+      <th>{{mb_label object=$filter field="_date_min"}}</th>
+      <td>{{mb_field object=$filter field="_date_min" form="stats_params" canNull="false" register=true}}</td>
+      <th>{{mb_label object=$filterSejour field="type"}}</th>
+      <td>
+        <select name="type" style="width: 15em;">
+          <option value="">&mdash; Tous les types d'hospi</option>
+          {{foreach from=$filterSejour->_specs.type->_locales key=key_hospi item=curr_hospi}}
+          <option value="{{$key_hospi}}" {{if $key_hospi == $filterSejour->type}}selected="selected"{{/if}}>
+            {{$curr_hospi}}
           </option>
-          {{foreachelse}}
-          <option value="" disabled="disabled">{{tr}}CSalle.none{{/tr}}</option>
           {{/foreach}}
-        </optgroup>
-        {{/foreach}}
-      </select>
-    </td>
-  </tr>
-  <tr>
-    <th>{{mb_label object=$filter field="codes_ccam"}}</th>
-    <td>
-      {{mb_field object=$filter field="codes_ccam" canNull="true" size="20"}}
-      <button class="search" type="button" onclick="CCAMSelector.init()">Rechercher</button>   
-      <script type="text/javascript">
-        CCAMSelector.init = function(){
-          this.sForm = "stats_params";
-          this.sView = "codes_ccam";
-          this.sChir = "_chir";
-          this.sClass = "_class";
-          this.pop();
-        }
-      </script>
-    </td>
-    <th>{{mb_label object=$filter field="_specialite"}}</th>
-    <td>
-      <select name="discipline_id" style="width: 15em;">
-        <option value="0">&mdash; Toutes les spécialités</option>
-        {{foreach from=$listDisciplines item=curr_disc}}
-        <option value="{{$curr_disc->discipline_id}}" {{if $curr_disc->discipline_id == $filter->_specialite }}selected="selected"{{/if}}>
-          {{$curr_disc->_view}}
-        </option>
-        {{/foreach}}
-      </select>
-    </td>
-    <th>
-      <label>Hors plage</label>
-    </th>
-    <td>
-      <input type="checkbox" name="hors_plage_view" {{if $hors_plage}}checked="true"{{/if}}
+        </select>
+      </td>
+      <th>{{mb_label class=CSalle field="bloc_id"}}</th>
+      <td>
+        <select name="bloc_id" style="width: 15em;">
+          <option value="">&mdash; {{tr}}CBlocOperatoire.all{{/tr}}</option>
+          {{foreach from=$listBlocs item=curr_bloc}}
+          <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $bloc->_id }}selected="selected"{{/if}}>
+            {{$curr_bloc->nom}}
+          </option>
+          {{/foreach}}
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$filter field="_date_max"}}</th>
+      <td>{{mb_field object=$filter field="_date_max" form="stats_params" canNull="false" register=true}} </td>
+      <th>{{mb_label object=$filter field="_prat_id"}}</th>
+      <td>
+        <select name="prat_id" style="width: 15em;">
+          <option value="0">&mdash; Tous les praticiens</option>
+          {{foreach from=$listPrats item=curr_prat}}
+          <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $filter->_prat_id}}selected="selected"{{/if}}>
+            {{$curr_prat->_view}}
+          </option>
+          {{/foreach}}
+        </select>
+      </td>
+      <th>{{mb_label object=$filter field="salle_id"}}</th>
+      <td>
+        <select name="salle_id" style="width: 15em;">
+          <option value="">&mdash; {{tr}}CSalle.all{{/tr}}</option>
+          {{foreach from=$listBlocsForSalles item=curr_bloc}}
+          <optgroup label="{{$curr_bloc->nom}}">
+            {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
+            <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $filter->salle_id}}selected="selected"{{/if}}>
+              {{$curr_salle->nom}}
+            </option>
+            {{foreachelse}}
+            <option value="" disabled="disabled">{{tr}}CSalle.none{{/tr}}</option>
+            {{/foreach}}
+          </optgroup>
+          {{/foreach}}
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$filter field="codes_ccam"}}</th>
+      <td>
+        {{mb_field object=$filter field="codes_ccam" canNull="true" size="20"}}
+        <button class="search" type="button" onclick="CCAMSelector.init()">Rechercher</button>
+        <script type="text/javascript">
+          CCAMSelector.init = function(){
+            this.sForm = "stats_params";
+            this.sView = "codes_ccam";
+            this.sChir = "_chir";
+            this.sClass = "_class";
+            this.pop();
+          }
+        </script>
+      </td>
+      <th>{{mb_label object=$filter field="_specialite"}}</th>
+      <td>
+        <select name="discipline_id" style="width: 15em;">
+          <option value="0">&mdash; Toutes les spécialités</option>
+          {{foreach from=$listDisciplines item=curr_disc}}
+          <option value="{{$curr_disc->discipline_id}}" {{if $curr_disc->discipline_id == $filter->_specialite }}selected="selected"{{/if}}>
+            {{$curr_disc->_view}}
+          </option>
+          {{/foreach}}
+        </select>
+      </td>
+      <th>
+        <label>Hors plage</label>
+      </th>
+      <td>
+        <input type="checkbox" name="hors_plage_view" {{if $hors_plage}}checked="true"{{/if}}
                onchange="$V(this.form.hors_plage, this.checked ? 1 : 0)"/>
-      <input type="hidden" name="hors_plage" value="{{$hors_plage}}" />
-    </td>
-  </tr>
-</table>
+        <input type="hidden" name="hors_plage" value="{{$hors_plage}}" />
+      </td>
+    </tr>
+  </table>
 </form>
 
 
@@ -230,12 +230,12 @@
     </td>
     <td class="button" style="width: 50%">
       <div class="small-info" style="text-align: center">
-      Nombre de patients par jour et par salle
-      <br />
-      <button type="button" class="stats"
-              onclick="DisplayGraph.launchStats('patjoursalle')">
-        {{tr}}View{{/tr}}
-      </button>
+        Nombre de patients par jour et par salle
+        <br />
+        <button type="button" class="stats"
+                onclick="DisplayGraph.launchStats('patjoursalle')">
+          {{tr}}View{{/tr}}
+        </button>
       </div>
     </td>
   </tr>
@@ -258,12 +258,12 @@
     </td>
     <td class="button" style="width: 50%">
       <div class="small-info" style="text-align: center">
-      Nombre moyen de patients par heure de la journée en SSPI
-      <br />
-      <button type="button" class="stats"
-              onclick="DisplayGraph.launchStats('patparheuresspi')">
-        {{tr}}View{{/tr}}
-      </button>
+        Nombre moyen de patients par heure de la journée en SSPI
+        <br />
+        <button type="button" class="stats"
+                onclick="DisplayGraph.launchStats('patparheuresspi')">
+          {{tr}}View{{/tr}}
+        </button>
       </div>
     </td>
   </tr>
