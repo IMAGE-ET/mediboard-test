@@ -195,6 +195,7 @@ $locales['config-interop-mode_compat-default'] = 'Aucun';
 $locales['config-interop-mode_compat-medicap'] = 'Medicap';
 $locales['config-interop-mode_compat-sample'] = 'Exemple';
 $locales['mod-dPsante400-tab-ajax_list_hypertext_links'] = 'Liste des liens hypertextes';
+$locales['mod-dPsante400-tab-ajax_list_identifiants'] = 'Liste des identifiants';
 $locales['mod-dPsante400-tab-configure'] = 'Configuration';
 $locales['mod-dPsante400-tab-delete_duplicates'] = 'Suppr. doublons';
 $locales['mod-dPsante400-tab-easycom'] = 'Tests EasyCom';
