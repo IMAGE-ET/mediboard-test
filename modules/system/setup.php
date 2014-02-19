@@ -1576,7 +1576,13 @@ class CSetupsystem extends CSetup {
     }
     $this->addFunction("setup_system_buildExLink");
 
-    $this->mod_version = "1.1.54";
+    $this->makeRevision("1.1.54");
+    $query = "ALTER TABLE `ex_class_constraint`
+      CHANGE `operator` `operator` ENUM ('=','!=','>','>=','<','<=','startsWith','endsWith','contains','in') NOT NULL DEFAULT '=',
+      CHANGE `value` `value` TEXT NOT NULL;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.55";
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,

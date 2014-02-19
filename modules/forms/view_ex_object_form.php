@@ -221,8 +221,9 @@ foreach ($fields as $_field) {
 $can_delete = false;
 
 if ($ex_object->_id) {
-  $ex_object->loadLastLog()->loadRefUser();
-  $can_delete = ($ex_object->loadFirstLog()->user_id == CUser::get()->_id);
+  $ex_object->loadLogs();
+  $ex_object->_ref_last_log->loadRefUser();
+  $can_delete = ($ex_object->_ref_first_log->user_id == CUser::get()->_id);
 }
 else {
   $log = new CUserLog;

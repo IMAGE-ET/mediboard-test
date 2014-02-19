@@ -48,7 +48,7 @@ class CExClassConstraint extends CMbObject {
     $props = parent::getProps();
     $props["ex_class_event_id"] = "ref notNull class|CExClassEvent";
     $props["field"]       = "str notNull";
-    $props["operator"]    = "enum notNull list|=|!=|>|>=|<|<=|startsWith|endsWith|contains default|=";
+    $props["operator"]    = "enum notNull list|=|!=|>|>=|<|<=|startsWith|endsWith|contains|in default|=";
     $props["value"]       = "str notNull";
     return $props;
   }
@@ -312,7 +312,12 @@ class CExClassConstraint extends CMbObject {
       }
     }
 
-    return CExClass::compareValues($value, $this->operator, $this->value);
+    $value_comp = $this->value;
+    if ($this->operator == "in") {
+      $value_comp = $this->getInValues();
+    }
+
+    return CExClass::compareValues($value, $this->operator, $value_comp);
   }
 
   /**
@@ -331,6 +336,15 @@ class CExClassConstraint extends CMbObject {
       $object->isHorsT2A();
       $object->loadClasseATC();
     }
+  }
+
+  /**
+   * Get values for the "in" operator
+   *
+   * @return string[]
+   */
+  function getInValues(){
+    return array_map("trim", preg_split("/[\r\n]+/", $this->value));
   }
 
   /**

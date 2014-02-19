@@ -110,6 +110,9 @@ class CExClass extends CMbObject {
 
       case "hasNoValue":
         return $a == "";
+
+      case "in":
+        return in_array($a, $b);
     }
   }
 

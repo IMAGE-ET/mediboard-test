@@ -36,6 +36,11 @@
                 {{$_constraint->_ref_target_object}}
               </span>
             {{/if}}
+          {{elseif $_constraint->operator == "in"}}
+            {{assign var=_values value=$_constraint->getInValues()}}
+            {{foreach from=$_values item=_value name=_in}}
+              <span style="background: #ddd; padding: 0 2px; white-space: nowrap;">{{$_value}}</span>{{if !$smarty.foreach._in.last}},{{/if}}
+            {{/foreach}}
           {{else}}
             {{mb_value object=$_constraint field=value}}
           {{/if}}

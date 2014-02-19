@@ -156,7 +156,7 @@ ExConstraint = {
     var url = new Url("forms", "ajax_edit_ex_constraint");
     url.addParam("ex_constraint_id", id);
     url.addParam("ex_class_event_id", ex_class_event_id);
-    url.requestModal(600, 400);
+    url.requestModal(600, 600);
   },
   create: function(ex_class_event_id) {
     this.edit("0", ex_class_event_id);

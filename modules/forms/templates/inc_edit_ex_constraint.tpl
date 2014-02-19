@@ -11,6 +11,8 @@
 <script type="text/javascript">
 Main.add(function(){
   var form = getForm("editConstraint");
+
+  adaptValueField(form.elements.operator);
   
   toggleObjectSelector(form.elements.field, form.elements.field);
   
@@ -33,11 +35,26 @@ Main.add(function(){
   });
 });
 
+adaptValueField = function(select) {
+  var op = $V(select);
+  var form = select.form;
+  var valueElement = form.elements.value;
+
+  if (op == "in") {
+    valueElement.rows = 15;
+  }
+  else {
+    valueElement.rows = 1;
+  }
+};
+
 toggleObjectSelector = function(input, selected) {
   var prop = $(selected).get("prop");
   var specType = prop.split(" ")[0];
   var dummy = DOM.input({className: prop});
   var spec = dummy.getProperties();
+  var operator = input.form.elements.operator;
+  var inOption = operator.down("option[value='in']");
   
   var reset = selected.name !== "field";
   
@@ -59,11 +76,13 @@ toggleObjectSelector = function(input, selected) {
   specElements.invoke("enableInputs");
   
   switch (specType) {
-    default: 
+    default:
+      inOption.disabled = false;
       break;
     
     case "ref":
-      $V(input.form._object_class, spec["class"]); // "class" is a reserved word !!! 
+      $V(input.form._object_class, spec["class"]); // "class" is a reserved word !!!
+      inOption.disabled = true;
       break;
       
     case "enum":
@@ -78,6 +97,7 @@ toggleObjectSelector = function(input, selected) {
       $V(select, input.form.elements.value.value);
       select.observe("change", function(){ $V(this.form.elements.value, this.value); }.bind(select));
       container.update().insert(select);
+      inOption.disabled = true;
       break;
   }
 };
@@ -137,7 +157,7 @@ selectSugg = function(button) {
     </tr>
     <tr>
       <th>{{mb_label object=$ex_constraint field=operator}}</th>
-      <td>{{mb_field object=$ex_constraint field=operator tabIndex="2"}}</td>
+      <td>{{mb_field object=$ex_constraint field=operator tabIndex="2" onchange="adaptValueField(this)"}}</td>
       
       {{* 
       <th>{{mb_label object=$ex_constraint field=_locale_court}}</th>
@@ -148,7 +168,7 @@ selectSugg = function(button) {
       <th>{{mb_label object=$ex_constraint field=value}}</th>
       <td>
         <div class="specfield spectype-all">
-          {{mb_field object=$ex_constraint field=value tabIndex="3"}}
+          {{mb_field object=$ex_constraint field=value tabIndex="3" prop="text" class="noresize" style="resize: none;" rows=1}}
         </div>
         
         <div class="specfield spectype-bool">
@@ -193,11 +213,6 @@ selectSugg = function(button) {
           
         </div>
       </td>
-      
-      {{* 
-      <th>{{mb_label object=$ex_constraint field=_locale_desc}}</th>
-      <td>{{mb_field object=$ex_constraint field=_locale_desc tabIndex="6"}}</td>
-      *}}
     </tr>
       
     <tr>
