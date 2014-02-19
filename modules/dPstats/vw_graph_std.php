@@ -12,9 +12,9 @@
 CCanDo::checkRead();
 
 // map Graph Hospi
-CAppUI::requireModuleFile('dPstats', 'graph_patparservice');
-CAppUI::requireModuleFile('dPstats', 'graph_patpartypehospi');
-CAppUI::requireModuleFile('dPstats', 'graph_joursparservice');
+CAppUI::requireModuleFile("dPstats", "graph_patparservice");
+CAppUI::requireModuleFile("dPstats", "graph_patpartypehospi");
+CAppUI::requireModuleFile("dPstats", "graph_joursparservice");
 
 // map Graph Bloc
 CAppUI::requireModuleFile("dPstats", "graph_activite");

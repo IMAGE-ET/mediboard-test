@@ -15,8 +15,8 @@
 
   DisplayGraph.addFiltersParam = function(url) {
     var oForm = DisplayGraph.filterForm;
-    url.addParam("date_debut"   , $V(oForm._date_min));
-    url.addParam("date_fin"     , $V(oForm._date_max));
+    url.addParam("_date_min"   , $V(oForm._date_min));
+    url.addParam("_date_max"     , $V(oForm._date_max));
     url.addParam("codes_ccam"   , $V(oForm.codes_ccam));
     url.addParam("type"         , $V(oForm.type));
     url.addParam("discipline_id", $V(oForm.discipline_id));
