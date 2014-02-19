@@ -72,7 +72,7 @@ if ($search_easy == 1) {
   $where["definitive"] =" = '1'";
 }
 $facture = new CFactureEtablissement();
-$total_factures = $facture->countList($where, "facture_id", null, $ljoin);
+$total_factures = $facture->countList($where, null, $ljoin);
 $factures = $facture->loadList($where , "ouverture ASC, numero", "$page, 25", "facture_id", $ljoin);
 
 //Affichage uniquement des factures qui contiennent des séjours

@@ -69,7 +69,7 @@ if ($num_facture) {
 
 $facture = new CFactureCabinet();
 $factures = $facture->loadList($where , "ouverture ASC", "$page, 25", null, $ljoin);
-$total_factures = $facture->countList($where, "facture_id", null, $ljoin);
+$total_factures = $facture->countList($where, null, $ljoin);
 
 foreach ($factures as $key => $_facture) {
   /* @var CFactureCabinet $_facture*/
