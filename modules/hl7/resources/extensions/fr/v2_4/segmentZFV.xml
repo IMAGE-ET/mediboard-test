@@ -37,6 +37,16 @@
             <name>ZFV.7</name>
             <description>NDA de l'etablissement de provenance</description>
             <datatype>CX</datatype>
-        </field> 
+        </field>
+        <field minOccurs="0" maxOccurs="0" length="250">
+          <name>ZFV.8</name>
+          <description>Numéros d’archives</description>
+          <datatype>CX</datatype>
+        </field>
+        <field minOccurs="0" maxOccurs="1" length="6">
+          <name>ZFV.9</name>
+          <description>Mode de sortie personnalisé</description>
+          <datatype>IS</datatype>
+        </field>
     </elements>
 </segment>

@@ -13,6 +13,7 @@
         <segment>PV1</segment>
         <segment minOccurs="0">PV2</segment>
         <segment>ZBE</segment>
+        <segment>ZFA</segment>
         <segment>ZFP</segment>
         <segment>ZFV</segment>
         <segment>ZFM</segment>
