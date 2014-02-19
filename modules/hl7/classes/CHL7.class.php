@@ -13,35 +13,40 @@
  * Class CHL7 
  * Tools
  */
-class CHL7 extends CMbObject {
+class CHL7 {
   static $versions = array ();
 
   /**
-   * Get default tag
+   * Get object tag
    *
-   * @param int $group_id Group
+   * @param string $group_id Group
    *
-   * @return null|string
+   * @return string|null
    */
-  static function getDefaultTag($group_id = null) {
-    // Pas de tag hl7
-    if (null == $tag_hl7 = CAppUI::conf("hl7 tag_default")) {
-      return null;
+  static function getObjectTag($group_id = null) {
+    $context = array(get_called_class().":".__FUNCTION__, func_get_args());
+
+    if (CFunctionCache::exist($context)) {
+      return CFunctionCache::get($context);
     }
+
+    $tag = self::getDynamicTag();
 
     // Permettre des id externes en fonction de l'établissement
     $group = CGroups::loadCurrent();
     if (!$group_id) {
       $group_id = $group->_id;
     }
-    
-    return str_replace('$g', $group_id, $tag_hl7);
+
+    return CFunctionCache::set($context, str_replace('$g', $group_id, $tag));
   }
 
   /**
-   * @see parent::getDynamicTag
+   * Get object dynamic tag
+   *
+   * @return string
    */
-  function getDynamicTag() {
+  static function getDynamicTag() {
     return CAppUI::conf("hl7 tag_default");
   }
 }

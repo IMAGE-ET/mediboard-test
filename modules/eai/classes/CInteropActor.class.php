@@ -74,10 +74,7 @@ class CInteropActor extends CMbObject {
   public $_tag_consultation;
 
   /** @var string */
-  public $_self_tag_patient;
-
-  /** @var string */
-  public $_self_tag_sejour;
+  public $_self_tag;
 
   /** @var array */
   public $_tags = array(); // All tags
@@ -86,7 +83,7 @@ class CInteropActor extends CMbObject {
   /** @var CGroups */
   public $_ref_group;
 
-  /** @var null */
+  /** @var CExchangeSource[] */
   public $_ref_exchanges_sources;
 
   /** @var CExchangeDataFormat */
@@ -127,8 +124,7 @@ class CInteropActor extends CMbObject {
     $props["_tag_visit_number"] = "str";
     $props["_tag_hprimxml"]     = "str";
     $props["_tag_hl7"]          = "str";
-    $props["_self_tag_patient"] = "str";
-    $props["_self_tag_sejour"]  = "str";
+    $props["_self_tag"]         = "str";
 
     if (CModule::getActive("phast")) {
       $props["_tag_phast"]        = "str";
@@ -150,20 +146,20 @@ class CInteropActor extends CMbObject {
 
     $this->_tag_patient       = CPatient::getTagIPP($this->group_id);  
     $this->_tag_sejour        = CSejour::getTagNDA($this->group_id);
-    $this->_tag_consultation  = CConsultation::getTagConsultation($this->group_id);
-    $this->_tag_mediuser      = CMediusers::getTagMediusers($this->group_id);
-    $this->_tag_service       = CService::getTagService($this->group_id);
-    $this->_tag_chambre       = CChambre::getTagChambre($this->group_id);
-    $this->_tag_lit           = CLit::getTagLit($this->group_id);
-    $this->_tag_movement      = CMovement::getTagMovement($this->group_id);
-    $this->_tag_visit_number  = CSmp::getTagVisitNumber($this->group_id);
 
-    $this->_tag_hprimxml      = CHprimXML::getDefaultTag($this->group_id);
-    $this->_tag_hl7           = CHL7::getDefaultTag($this->group_id);
+    $this->_tag_consultation = CConsultation::getObjectTag($this->group_id);
+    $this->_tag_mediuser     = CMediusers::getObjectTag($this->group_id);
+    $this->_tag_service      = CService::getObjectTag($this->group_id);
+    $this->_tag_chambre      = CChambre::getObjectTag($this->group_id);
+    $this->_tag_lit          = CLit::getObjectTag($this->group_id);
+    $this->_tag_movement     = CMovement::getObjectTag($this->group_id);
+    $this->_tag_visit_number = CSmp::getObjectTag($this->group_id);
 
-    $this->_self_tag_patient  = $this->getTag($this->group_id, "CPatient");
-    $this->_self_tag_sejour   = $this->getTag($this->group_id, "Sejour");
-    
+    $this->_tag_hprimxml      = CHprimXML::getObjectTag($this->group_id);
+    $this->_tag_hl7           = CHL7::getObjectTag($this->group_id);
+
+    $this->_self_tag          = $this->getTag($this->group_id);
+
     if (CModule::getActive("phast")) {
       $this->_tag_phast  = CPhast::getTagPhast($this->group_id);
     }
@@ -180,7 +176,7 @@ class CInteropActor extends CMbObject {
     $backProps["messages_supported"] = "CMessageSupported object_id";
     $backProps["domains"]            = "CDomain actor_id";
     $backProps["dicom_exchanges"]    = "CExchangeDicom receiver_id";
-    $backProps["route"]              = "CEAIRoute receiver_id";
+    $backProps["routes"]             = "CEAIRoute receiver_id";
 
     return $backProps;
   }
@@ -207,12 +203,11 @@ class CInteropActor extends CMbObject {
   /**
    * Get actor tag
    *
-   * @param int    $group_id    Group
-   * @param string $domain_type Domain type
+   * @param int $group_id Group
    *
    * @return string
    */
-  function getTag($group_id, $domain_type) {
+  function getTag($group_id) {
     $context = array(__METHOD__, func_get_args());
     if (CFunctionCache::exist($context)) {
       return CFunctionCache::get($context);
@@ -226,11 +221,10 @@ class CInteropActor extends CMbObject {
     $ljoin["group_domain"] = "`group_domain`.`domain_id` = `domain`.`domain_id`";
 
     $where = array();
-    $where["group_domain.object_class"] = " = '$domain_type'";
-    $where["group_domain.group_id"]     = " = '$group_id'";
+    $where["group_domain.group_id"] = " = '$group_id'";
 
-    $where["domain.actor_class"]        = " = '$this->_class'";
-    $where["domain.actor_id"]           = " = '$this->_id'";
+    $where["domain.actor_class"]    = " = '$this->_class'";
+    $where["domain.actor_id"]       = " = '$this->_id'";
 
     $domain = new CDomain();
     $domain->loadObject($where, null, null, $ljoin);

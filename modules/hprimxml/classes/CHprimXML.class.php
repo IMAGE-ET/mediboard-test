@@ -13,7 +13,7 @@
 /**
  * Class CHprimXML
  */
-class CHprimXML extends CMbObject {
+class CHprimXML {
   static $object_handlers = array(
     "CSipObjectHandler"     => "CSipHprimXMLObjectHandler",
     "CSmpObjectHandler"     => "CSmpHprimXMLObjectHandler",
@@ -31,31 +31,36 @@ class CHprimXML extends CMbObject {
   }
 
   /**
-   * Get H'XML tag
+   * Get object tag
    *
    * @param string $group_id Group
    *
-   * @return mixed
+   * @return string|null
    */
-  static function getDefaultTag($group_id = null) {
-    // Pas de tag hprimxml
-    if (null == $tag_hprimxml = CAppUI::conf("hprimxml tag_default")) {
-      return null;
+  static function getObjectTag($group_id = null) {
+    $context = array(get_called_class().":".__FUNCTION__, func_get_args());
+
+    if (CFunctionCache::exist($context)) {
+      return CFunctionCache::get($context);
     }
+
+    $tag = self::getDynamicTag();
 
     // Permettre des id externes en fonction de l'établissement
     $group = CGroups::loadCurrent();
     if (!$group_id) {
       $group_id = $group->_id;
     }
-    
-    return str_replace('$g', $group_id, $tag_hprimxml);
+
+    return CFunctionCache::set($context, str_replace('$g', $group_id, $tag));
   }
 
   /**
-   * @see parent::getDynamicTag
+   * Get object dynamic tag
+   *
+   * @return string
    */
-  function getDynamicTag() {
+  static function getDynamicTag() {
     return CAppUI::conf("hprimxml tag_default");
   }
 }
