@@ -189,12 +189,11 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
 
     // PV1-19: Visit Number (CX) (optional)
     $sejour->loadNDA($group->_id);
+    $identifiers = array();
     if ($receiver->_configs["build_PV1_19"] == "simple") {
-      $identifiers = $sejour->_NDA;
+      $identifiers[] = $sejour->_NDA;
     }
     else {
-      $identifiers = array();
-
       if ($receiver->_configs["build_NDA"] == "PV1_19") {
         $identifiers[] = $sejour->_NDA ? array(
           $sejour->_NDA,
