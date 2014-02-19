@@ -74,6 +74,8 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   
   // PID
   public $build_PID_6;
+  public $build_PID_11;
+  public $build_PID_13;
   public $build_PID_19;
   public $build_PID_31;
   public $build_PID_34;
@@ -82,10 +84,13 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   public $build_PV1_3_2;
   public $build_PV1_3_3;
   public $build_PV1_3_5;
+  public $build_PV1_5;
   public $build_PV1_7;
   public $build_PV1_10;
   public $build_PV1_11;
   public $build_PV1_14;
+  public $build_PV1_17;
+  public $build_PV1_19;
   public $build_PV1_26;
   public $build_PV1_36;
   
@@ -153,6 +158,8 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     ),
     "PID" => array(
       "build_PID_6",
+      "build_PID_11",
+      "build_PID_13",
       "build_PID_19",
       "build_PID_31",
       "build_PID_34"
@@ -161,10 +168,13 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       "build_PV1_3_2",
       "build_PV1_3_3",
       "build_PV1_3_5",
+      "build_PV1_5",
       "build_PV1_7",
       "build_PV1_10",
       "build_PV1_11",
       "build_PV1_14",
+      "build_PV1_17",
+      "build_PV1_19",
       "build_PV1_26",
       "build_PV1_36",
     ),
@@ -252,6 +262,8 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     
     // PID
     $props["build_PID_6"]   = "enum list|nom_naissance|none default|none";
+    $props["build_PID_11"]  = "enum list|simple|multiple default|multiple";
+    $props["build_PID_13"]  = "enum list|simple|multiple default|multiple";
     $props["build_PID_19"]  = "enum list|matricule|none default|none";
     $props["build_PID_31"]  = "enum list|avs|none default|none";
     $props["build_PID_34"]  = "enum list|finess|actor|domain default|finess";
@@ -260,10 +272,13 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["build_PV1_3_2"] = "enum list|name|config_value|idex default|name";
     $props["build_PV1_3_3"] = "enum list|name|config_value|idex default|name";
     $props["build_PV1_3_5"] = "enum list|bed_status|null default|bed_status";
+    $props["build_PV1_5"]   = "enum list|NPA|None default|NPA";
     $props["build_PV1_7"]   = "enum list|unique|repeatable default|unique";
     $props["build_PV1_10"]  = "enum list|discipline|service default|discipline";
     $props["build_PV1_11"]  = "enum list|uf_medicale|none default|none";
     $props["build_PV1_14"]  = "enum list|admit_source|ZFM default|admit_source";
+    $props["build_PV1_17"]  = "enum list|praticien|None default|praticien";
+    $props["build_PV1_19"]  = "enum list|normal|simple default|normal";
     $props["build_PV1_26"]  = "enum list|movement_id|none default|none";
     $props["build_PV1_36"]  = "enum list|discharge_disposition|ZFM default|discharge_disposition";
     

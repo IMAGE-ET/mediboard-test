@@ -1235,7 +1235,16 @@ class CSetuphl7 extends CSetup {
                 CHANGE `object_class` `object_class` ENUM ('CPatient','CSejour','COperation','CAffectation','COperation','CConsultation','CPrescriptionLineElement');";
     $this->addQuery($query);
 
-    $this->mod_version = "0.85";
+    $this->makeRevision("0.85");
+    $query = "ALTER TABLE `receiver_hl7v2_config`
+                ADD `build_PID_11` ENUM ('simple','multiple') DEFAULT 'multiple',
+                ADD `build_PID_13` ENUM ('simple','multiple') DEFAULT 'multiple',
+                ADD `build_PV1_5` ENUM ('NPA','None') DEFAULT 'NPA',
+                ADD `build_PV1_17` ENUM ('praticien','None') DEFAULT 'praticien',
+                ADD `build_PV1_19` ENUM ('normal','simple') DEFAULT 'normal';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.86";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

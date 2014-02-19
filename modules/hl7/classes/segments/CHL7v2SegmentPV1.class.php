@@ -96,24 +96,30 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     }    
     
     // PV1-5: Preadmit Number (CX) (optional)
-    if (CHL7v2Message::$build_mode == "simple") {
-      $data[] = array (
-        $sejour->_id,
-      );
+    if ($receiver->_configs["build_PV1_5"] == "None") {
+      $data[] = null;
     }
     else {
-      $sejour->loadNPA($group->_id);
-      $data[] = $sejour->_NPA ? array(
-                  array(
-                    $sejour->_NPA,
-                    null,
-                    null,
-                    // PID-3-4 Autorité d'affectation
-                    $this->getAssigningAuthority("FINESS", $group->finess),
-                    "RI"
-                  )
-                ) : null;
+      if (CHL7v2Message::$build_mode == "simple") {
+        $data[] = array (
+          $sejour->_id,
+        );
+      }
+      else {
+        $sejour->loadNPA($group->_id);
+        $data[] = $sejour->_NPA ? array(
+          array(
+            $sejour->_NPA,
+            null,
+            null,
+            // PID-3-4 Autorité d'affectation
+            $this->getAssigningAuthority("FINESS", $group->finess),
+            "RI"
+          )
+        ) : null;
+      }
     }
+
     
     // PV1-6: Prior Patient Location (PL) (optional)
     $data[] = $this->getPreviousPL($receiver, $sejour);
@@ -163,47 +169,57 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     
     // PV1-15: Ambulatory Status (IS) (optional repeating)
     $data[] = null;
-    
+
     // PV1-16: VIP Indicator (IS) (optional)
     // Table - 0099
     // P - Public
     // I - Incognito
     $data[] = $sejour->loadRefPatient()->vip ? "I" : "P";
-    
-    // PV1-17: Admitting Doctor (XCN) (optional repeating)
-    $data[] = $this->getXCN($sejour->_ref_praticien, $receiver);
-    
-    // PV1-18: Patient Type (IS) (optional)
-    $data[] = null;
-    
-    // PV1-19: Visit Number (CX) (optional)
-    $identifiers = array();
 
-    if ($receiver->_configs["build_NDA"] == "PV1_19") {
-      $sejour->loadNDA($group->_id);
-      $identifiers[] = $sejour->_NDA ? array(
-                          $sejour->_NDA,
-                          null,
-                          null,
-                          // PID-3-4 Autorité d'affectation
-                          $this->getAssigningAuthority("FINESS", $group->finess),
-                          "AN"
-                      ) : array();
+    // PV1-17: Admitting Doctor (XCN) (optional repeating)
+    if ($receiver->_configs["build_PV1_17"] == "None") {
+      $data[] = null;
     }
     else {
-      /* @todo Gestion des séances */
-      $identifiers[] = array(
-        $sejour->_id,
-        null,
-        null,
-        // PID-3-4 Autorité d'affectation
-        $this->getAssigningAuthority("mediboard"),
-        "RI"
-      );
+      $data[] = $this->getXCN($sejour->_ref_praticien, $receiver);
     }
 
-    // Ajout des identifiants des acteurs d'intégration
-    $this->fillActorsIdentifiers($identifiers, $sejour, $receiver);
+    // PV1-18: Patient Type (IS) (optional)
+    $data[] = null;
+
+    // PV1-19: Visit Number (CX) (optional)
+    $sejour->loadNDA($group->_id);
+    if ($receiver->_configs["build_PV1_19"] == "simple") {
+      $identifiers = $sejour->_NDA;
+    }
+    else {
+      $identifiers = array();
+
+      if ($receiver->_configs["build_NDA"] == "PV1_19") {
+        $identifiers[] = $sejour->_NDA ? array(
+          $sejour->_NDA,
+          null,
+          null,
+          // PID-3-4 Autorité d'affectation
+          $this->getAssigningAuthority("FINESS", $group->finess),
+          "AN"
+        ) : array();
+      }
+      else {
+        /* @todo Gestion des séances */
+        $identifiers[] = array(
+          $sejour->_id,
+          null,
+          null,
+          // PID-3-4 Autorité d'affectation
+          $this->getAssigningAuthority("mediboard"),
+          "RI"
+        );
+      }
+
+      // Ajout des identifiants des acteurs d'intégration
+      $this->fillActorsIdentifiers($identifiers, $sejour, $receiver);
+    }
 
     $data[] = $identifiers;
         

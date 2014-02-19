@@ -137,33 +137,38 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
         "H",
       );
     }
-    
-    if ($patient->lieu_naissance || $patient->cp_naissance || $patient->pays_naissance_insee) {
-      $address[] = array(
-        null,
-        null,
-        $patient->lieu_naissance,
-        null,
-        $patient->cp_naissance,
-        // Pays INSEE, récupération de l'alpha 3
-        CPaysInsee::getAlpha3($patient->pays_naissance_insee),
-        // Table - 0190
-        // B   - Firm/Business 
-        // BA  - Bad address 
-        // BDL - Birth delivery location (address where birth occurred)  
-        // BR  - Residence at birth (home address at time of birth)  
-        // C   - Current Or Temporary
-        // F   - Country Of Origin 
-        // H   - Home 
-        // L   - Legal Address 
-        // M   - Mailing
-        // N   - Birth (nee) (birth address, not otherwise specified)  
-        // O   - Office
-        // P   - Permanent 
-        // RH  - Registry home
-        "BDL",
-      );
+    if ($receiver->_configs["build_PID_11"] == "simple") {
+      $address = reset($address);
     }
+    else {
+      if ($patient->lieu_naissance || $patient->cp_naissance || $patient->pays_naissance_insee) {
+        $address[] = array(
+          null,
+          null,
+          $patient->lieu_naissance,
+          null,
+          $patient->cp_naissance,
+          // Pays INSEE, récupération de l'alpha 3
+          CPaysInsee::getAlpha3($patient->pays_naissance_insee),
+          // Table - 0190
+          // B   - Firm/Business
+          // BA  - Bad address
+          // BDL - Birth delivery location (address where birth occurred)
+          // BR  - Residence at birth (home address at time of birth)
+          // C   - Current Or Temporary
+          // F   - Country Of Origin
+          // H   - Home
+          // L   - Legal Address
+          // M   - Mailing
+          // N   - Birth (nee) (birth address, not otherwise specified)
+          // O   - Office
+          // P   - Permanent
+          // RH  - Registry home
+          "BDL",
+        );
+      }
+    }
+
     $data[] = $address;
     
     // PID-12: County Code (IS) (optional)
@@ -209,6 +214,9 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
         "Internet",
         $patient->email,
       );
+    }
+    if ($receiver->_configs["build_PID_13"] === "simple") {
+      $phones = reset($phones);
     }
     $data[] =  $phones;
     
