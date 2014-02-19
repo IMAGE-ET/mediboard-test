@@ -51,10 +51,10 @@ class CEAIRoute extends CMbObject {
   function getProps() {
     $props = parent::getProps();
 
-    $props["sender_class"]   = "str class maxLength|80";
-    $props["sender_id"]      = "ref class|CInteropSender meta|sender_class";
-    $props["receiver_class"] = "str class maxLength|80";
-    $props["receiver_id"]    = "ref class|CInteropActor meta|receiver_class";
+    $props["sender_class"]   = "str notNull class maxLength|80";
+    $props["sender_id"]      = "ref notNull class|CInteropSender meta|sender_class";
+    $props["receiver_class"] = "str notNull class maxLength|80";
+    $props["receiver_id"]    = "ref notNull class|CInteropActor meta|receiver_class";
     $props["active"]         = "bool default|1";
 
     return $props;

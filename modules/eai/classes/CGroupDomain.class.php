@@ -42,7 +42,7 @@ class CGroupDomain extends CMbObject {
   function getProps() {
     $props = parent::getProps();
     
-    $props["object_class"] = "enum notNull list|CPatient|CSejour";
+    $props["object_class"] = "enum notNull list|CPatient|CSejour|CMbObject";
     $props["group_id"]     = "ref notNull class|CGroups autocomplete|text";
     $props["domain_id"]    = "ref notNull class|CDomain";
     $props["master"]       = "bool notNull";

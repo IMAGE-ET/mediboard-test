@@ -33,6 +33,9 @@ class CStoredObject extends CModelObject {
   public $_locked; // true if object is locked
   public $_totalSeek;
   public $_totalWithPerms;
+
+  // Object recorded by sender
+  public $_eai_sender_guid;
   
   /**
    * References

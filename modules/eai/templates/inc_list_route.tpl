@@ -16,38 +16,40 @@
     </th>
   </tr>
   <tr>
-    <th>
-      {{mb_title class=CEAIRoute field=sender_class}}
-    </th>
-    <th>
-      {{mb_title class=CInteropSender field=nom}} {{tr}}CInteropSender{{/tr}}
-    </th>
-    <th>
-      {{mb_title class=CEAIRoute field=receiver_class}}
-    </th>
-    <th>
-      {{mb_title class=CInteropReceiver field=nom}} {{tr}}CInteropReceiver{{/tr}}
-    </th>
-    <th>
-      {{mb_title class=CEAIRoute field=active}}
-    </th>
+    <th class="section" colspan="2">{{tr}}CInteropSender{{/tr}}</th>
+    <th class="section" colspan="2">{{tr}}CInteropReceiver{{/tr}}</th>
+    <th class="section"></th>
+  </tr>
+  <tr>
+    <th> {{mb_title class=CEAIRoute field=sender_class}} </th>
+    <th> {{mb_title class=CEAIRoute field=sender_id}} </th>
+    <th> {{mb_title class=CEAIRoute field=receiver_class}} </th>
+    <th> {{mb_title class=CEAIRoute field=receiver_id}} </th>
+    <th> {{mb_title class=CEAIRoute field=active}} </th>
   </tr>
   {{foreach from=$routes item=_route}}
+    {{assign var=sender value=$_route->_ref_sender}}
     <tr>
       <td>
         <button type="button" class="edit notext" onclick="Route.edit('{{$_route->_id}}')">
           {{tr}}Edit{{/tr}}
         </button>
-        {{$_route->sender_class}}
+        {{$sender->_class}}
       </td>
       <td>
-        {{$_route->_ref_sender->nom}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$sender->_guid}}');">
+           {{$sender->_view}}
+         </span>
+      </td>
+
+      {{assign var=receiver value=$_route->_ref_receiver}}
+      <td>
+        {{$receiver->_class}}
       </td>
       <td>
-        {{$_route->receiver_class}}
-      </td>
-      <td>
-        {{$_route->_ref_receiver->nom}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$receiver->_guid}}');">
+           {{$receiver->_view}}
+         </span>
       </td>
       <td>
         <form name="editActiveRoute{{$_route->_id}}" method="post" onsubmit="return onSubmitFormAjax(this)">

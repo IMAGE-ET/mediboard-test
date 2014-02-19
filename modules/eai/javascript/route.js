@@ -38,9 +38,9 @@ Route = {
     var classe_id_auto = classe+"_id_autocomplete";
     var classe_id_autocomplete = form.elements[classe_id_auto];
     var url = new Url("system", "ajax_seek_autocomplete");
-    url.addParam("field", "nom");
+    url.addParam("field", "libelle");
     url.addParam("input_field", classe_id_autocomplete.name);
-    url.addParam("whereComplex[nom]", "IS NOT NULL");
+    url.addParam("whereComplex[libelle]", "IS NOT NULL");
 
     var autocompleter = url.autoComplete(classe_id_autocomplete, null, {
       minChars: 2,
