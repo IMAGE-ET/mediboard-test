@@ -35,7 +35,7 @@ class CDoPatientAddEdit extends CDoObjectAddEdit {
         "&useVitale=".$this->_obj->_bind_vitale;
     }
     else {
-      $this->redirectStore .= "m=dPpatients&tab=vw_idx_patients&id=".$this->_obj->patient_id."&nom=&prenom=";
+      $this->redirectStore .= "&m=dPpatients&tab=vw_idx_patients&id=".$this->_obj->patient_id;
     }
   }
 
