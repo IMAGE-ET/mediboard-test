@@ -48,6 +48,8 @@
         {{if "dPprescription"|module_active}}
           <br/>
           <a class="button search" onclick="redirectOffline('bilan');">{{tr}}CService.bilan{{/tr}}</a>
+          <br />
+          <a class="button search" onclick="redirectOffline('plan');">{{tr}}CService.plan_soins{{/tr}}</a>
         {{/if}}
       </td>
     </tr>

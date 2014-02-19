@@ -18,12 +18,15 @@ CConfiguration::register(
         "bon_radio" => array(
           "manage_orm" => "bool default|0",
         ),
-        "bilan"=> array(
+        "bilan" => array(
           "hour_before" => "num min|0 default|12",
           "hour_after"  => "num min|0 default|24"
         ),
         "offline_sejour" => array(
           "period" => "num min|0 default|72"
+        ),
+        "plan_soins" => array(
+          "period" => "num min|1 default|7"
         ),
       )
     )
