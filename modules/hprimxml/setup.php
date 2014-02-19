@@ -470,6 +470,12 @@ class CSetuphprimxml extends CSetup {
                 ADD `synchronous` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.53";
+    $this->makeRevision("0.53");
+
+    $query = "ALTER TABLE `hprimxml_config`
+                ADD `check_similar` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.54";
   }
 }
