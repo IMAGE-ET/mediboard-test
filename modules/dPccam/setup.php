@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage ccam
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
@@ -144,10 +144,10 @@ class CSetupdPccam extends CSetup {
     $this->mod_version = "0.20";
     // Data source query
 
-    // Version 32 de la CCAM
+    // Version 33 de la CCAM
     $query = "SELECT *
-      FROM notes
-      WHERE TEXTE LIKE '%mai 2012%'";
+      FROM actes
+      WHERE CODE = 'BGQP140'";
     $this->addDatasource("ccamV2", $query);
 
     // Tarifs de convergence
