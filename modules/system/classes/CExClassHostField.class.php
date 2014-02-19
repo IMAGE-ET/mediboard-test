@@ -133,6 +133,6 @@ class CExClassHostField extends CMbObject {
       }
     }
 
-    return null;
+    return $this->_ref_host_object = new $this->host_class;
   }
 }
