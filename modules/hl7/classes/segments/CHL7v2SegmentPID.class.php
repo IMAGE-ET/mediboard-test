@@ -138,7 +138,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
       );
     }
     if ($receiver->_configs["build_PID_11"] == "simple") {
-      $address[] = reset($address);
+      $address = array(reset($address));
     }
     else {
       if ($patient->lieu_naissance || $patient->cp_naissance || $patient->pays_naissance_insee) {
@@ -216,7 +216,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
       );
     }
     if ($receiver->_configs["build_PID_13"] === "simple") {
-      $phones[] = reset($phones);
+      $phones = array(reset($phones));
     }
     $data[] =  $phones;
     
