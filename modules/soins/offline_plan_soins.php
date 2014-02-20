@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 /**
  * $Id$
- *  
+ *
  * @category Soins
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -118,8 +118,8 @@ foreach ($sejours as $_sejour) {
 
   // Si aucune ligne, on retire le séjour
   if (!count($prescription->_ref_prescription_lines) &&
-      !count($prescription->_ref_prescription_line_mixes) &&
-      !count($prescription->_ref_prescription_lines_element)) {
+    !count($prescription->_ref_prescription_line_mixes) &&
+    !count($prescription->_ref_prescription_lines_element)) {
     unset($sejours[$_sejour->_id]);
     continue;
   }
@@ -150,6 +150,9 @@ foreach ($sejours as $_sejour) {
             continue;
           }
           foreach ($_quantites_by_hour["quantites"] as $_hour => $_quantite) {
+            if (!isset($postes_by_date[$_date][$_hour])) {
+              continue;
+            }
             $key = $postes_by_date[$_date][$_hour];
             @$line->_quantity_by_date_moment[$_unite][$key["day"]][$key["moment"]]["total"] += $_quantite["total"];
           }
@@ -207,6 +210,9 @@ foreach ($sejours as $_sejour) {
             continue;
           }
           foreach ($_quantites_by_hour["quantites"] as $_hour => $_quantite) {
+            if (!isset($postes_by_date[$_date][$_hour])) {
+              continue;
+            }
             $key = $postes_by_date[$_date][$_hour];
             @$line->_quantity_by_date_moment[$_unite][$key["day"]][$key["moment"]]["total"] += $_quantite["total"];
           }
