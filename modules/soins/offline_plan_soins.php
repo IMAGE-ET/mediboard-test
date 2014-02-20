@@ -150,6 +150,9 @@ foreach ($sejours as $_sejour) {
             continue;
           }
           foreach ($_quantites_by_hour["quantites"] as $_hour => $_quantite) {
+            if (!isset($postes_by_date[$_date][$_hour])) {
+              continue;
+            }
             $key = $postes_by_date[$_date][$_hour];
             @$line->_quantity_by_date_moment[$_unite][$key["day"]][$key["moment"]]["total"] += $_quantite["total"];
           }
@@ -207,6 +210,9 @@ foreach ($sejours as $_sejour) {
             continue;
           }
           foreach ($_quantites_by_hour["quantites"] as $_hour => $_quantite) {
+            if (!isset($postes_by_date[$_date][$_hour])) {
+              continue;
+            }
             $key = $postes_by_date[$_date][$_hour];
             @$line->_quantity_by_date_moment[$_unite][$key["day"]][$key["moment"]]["total"] += $_quantite["total"];
           }
