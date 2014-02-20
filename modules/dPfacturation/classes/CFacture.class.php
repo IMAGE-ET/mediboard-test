@@ -15,6 +15,7 @@
 class CFacture extends CMbObject {
 
   // DB Fields
+  public $group_id;
   public $patient_id;
   public $praticien_id;
   public $numero;
@@ -141,6 +142,7 @@ class CFacture extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
+    $props["group_id"]      = "ref notNull class|CGroups";
     $props["patient_id"]    = "ref class|CPatient purgeable seekable notNull show|1";
     $props["praticien_id"]  = "ref class|CMediusers";
     $props["numero"]        = "num notNull min|1 default|1";
@@ -257,7 +259,11 @@ class CFacture extends CMbObject {
    * @return void|string
    **/
   function store() {
-    $this->completeField("numero");
+    $this->completeField("numero", "group_id");
+    if (!$this->group_id) {
+      $this->group_id = CGroups::loadCurrent()->_id;
+    }
+
     if ($this->_id && $this->_duplicate) {
       $this->_duplicate = null;
       if ($msg = $this->duplicate()) {

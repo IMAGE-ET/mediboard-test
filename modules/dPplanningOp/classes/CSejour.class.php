@@ -1065,6 +1065,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       if (CAppUI::conf("dPfacturation CFactureEtablissement use_temporary_bill")) {
         $facture->temporaire = 1;
       }
+      $facture->group_id            = $this->group_id;
       $facture->patient_id          = $this->patient_id;
       $facture->praticien_id        = $this->praticien_id;
       $facture->type_facture        = $this->_type_sejour;

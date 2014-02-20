@@ -389,6 +389,41 @@ class CSetupdPfacturation extends CSetup {
     $query = "ALTER TABLE `facture_etablissement`
                 CHANGE `taux_tva` `taux_tva` FLOAT DEFAULT '0';";
     $this->addQuery($query);
-    $this->mod_version = "0.41";
+    $this->makeRevision("0.41");
+
+    $query = "ALTER TABLE `facture_etablissement`
+                ADD `group_id` INT (11) UNSIGNED NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `facture_etablissement`
+                ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+    $this->makeRevision("0.42");
+
+    //Facture d'établissement de séjour
+    $query = "UPDATE facture_etablissement, facture_liaison, sejour
+          SET facture_etablissement.group_id = sejour.group_id
+          WHERE facture_liaison.object_class = 'CSejour'
+          AND facture_liaison.object_id = sejour.sejour_id
+          AND facture_liaison.facture_id = facture_etablissement.facture_id
+          AND facture_liaison.facture_class = 'CFactureEtablissement'";
+    $this->addQuery($query);
+
+    //Facture d'établissement de consultation de séjour
+    $query = "UPDATE facture_etablissement, facture_liaison, sejour, consultation
+          SET facture_etablissement.group_id = sejour.group_id
+          WHERE facture_liaison.object_class = 'CConsultation'
+          AND facture_liaison.object_id = consultation.consultation_id
+          AND facture_liaison.facture_id = facture_etablissement.facture_id
+          AND facture_liaison.facture_class = 'CFactureEtablissement'
+          AND consultation.sejour_id = sejour.sejour_id";
+    $this->addQuery($query);
+
+    $query = "UPDATE facture_etablissement,users_mediboard, functions_mediboard
+          SET facture_etablissement.group_id = functions_mediboard.group_id
+          WHERE facture_etablissement.group_id = '0'
+          AND facture_etablissement.praticien_id = users_mediboard.user_id
+          AND functions_mediboard.function_id = users_mediboard.function_id";
+    $this->addQuery($query);
+    $this->mod_version = "0.43";
   }
 }

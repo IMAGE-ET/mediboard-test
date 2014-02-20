@@ -107,7 +107,7 @@ $where["patient_id"] = "IS NOT NULL";
 $order = "ouverture, praticien_id";
 
 $facture = new CFactureCabinet();
-$listFactures = $facture->loadList($where, $order, null, null, $ljoin);
+$listFactures = $facture->loadGroupList($where, $order, null, null, $ljoin);
 
 $listPlages = array();
 CMbObject::massLoadFwdRef($listFactures, "praticien_id");
@@ -226,5 +226,3 @@ $smarty->assign("reglement"     , $reglement);
 $smarty->assign("banques"       , $banques);
 
 $smarty->display("print_rapport.tpl");
-
-?>

@@ -182,6 +182,8 @@ class CGroups extends CMbObject {
     $backProps["cn_test"]                   = "CCnTest group_id";
     $backProps["digital_pen_printer"]       = "CDigitalPenPrinter group_id";
     $backProps["ex_links"]                  = "CExLink group_id";
+    $backProps["group_fact_cab"]            = "CFactureCabinet group_id";
+    $backProps["group_fact_etab"]           = "CFactureEtablissement group_id";
     return $backProps;
   }
 

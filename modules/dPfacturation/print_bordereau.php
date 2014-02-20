@@ -41,6 +41,7 @@ $ljoin = array();
 $ljoin["facture_cabinet"] = "facture_cabinet.facture_id = reglement.object_id";
 $where["object_class"] = " = 'CFactureCabinet'";
 $where['facture_cabinet.praticien_id'] = "= '$praticien->_id'";
+$where["facture_cabinet.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $where['reglement.mode'] = "= 'cheque' ";
 $where['reglement.date'] = "BETWEEN '$date_min' AND '$date_max 23:59:59' ";
 $order = "reglement.date ASC";

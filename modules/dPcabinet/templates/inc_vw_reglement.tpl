@@ -152,9 +152,10 @@ Main.add(function() {
     {{math equation="x+1" x=$consult->_ref_factures|@count assign=numero_fact}}
     {{mb_class  object=$consult->_ref_facture}}
     <input type="hidden" name="facture_id"    value=""/>
+    <input type="hidden" name="group_id"      value="{{$g}}"/>
     <input type="hidden" name="patient_id"    value="{{$consult->_ref_facture->patient_id}}"/>
     <input type="hidden" name="praticien_id"  value="{{$consult->_ref_facture->praticien_id}}"/>
-    <input type="hidden" name="_consult_id"    value="{{$consult->_id}}"/>
+    <input type="hidden" name="_consult_id"   value="{{$consult->_id}}"/>
     <input type="hidden" name="ouverture"     value="{{$consult->_ref_facture->ouverture}}"/>
     <input type="hidden" name="numero"        value="{{$numero_fact}}"/>
   </form>
@@ -164,7 +165,6 @@ Main.add(function() {
 {{mb_ternary var=gestionFSE test=$consult->sejour_id value=0 other=$modFSE}}
 
 <table class="form">
-
   <tr>
     <td colspan="2">
       {{mb_include module="cabinet" template="inc_type_assurance_reglement/accident_travail"}}
@@ -428,7 +428,7 @@ Main.add(function() {
                   {{mb_field object=$consult field="secteur3" onchange="modifTVA()"}}
                   {{mb_label object=$consult field="taux_tva"}}
                   {{assign var=taux_tva value="|"|explode:$conf.dPcabinet.CConsultation.default_taux_tva}}
-                  <select name="taux_tva"onchange="modifTVA()">
+                  <select name="taux_tva" onchange="modifTVA()">
                     {{foreach from=$taux_tva item=taux}}
                       <option value="{{$taux}}" {{if $consult->taux_tva == $taux}}selected="selected"{{/if}}>{{tr}}CConsultation.taux_tva.{{$taux}}{{/tr}}</option>
                     {{/foreach}}
@@ -449,7 +449,6 @@ Main.add(function() {
                 </td>
               </tr>
             {{/if}}
-
 
             {{if $consult->patient_date_reglement}}
               <tr style="display: none;">

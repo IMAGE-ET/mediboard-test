@@ -964,6 +964,7 @@ class CConsultation extends CFacturable {
       }
 
       $facture = $this->sejour_id ? new CFactureEtablissement() : new CFactureCabinet();
+      $facture->group_id    = CGroups::loadCurrent()->_id;
       $facture->_consult_id = $this->_id;
       $facture->du_patient  = $this->du_patient;
       $facture->du_tiers    = $this->du_tiers;

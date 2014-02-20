@@ -30,7 +30,7 @@ $facture = new CFactureCabinet();
 $list_taux = explode("|", CAppUI::conf("dPcabinet CConsultation default_taux_tva"));
 foreach ($list_taux as $taux) {
   $where["taux_tva"] = " = '$taux'";
-  $factures = $facture->loadList($where, "ouverture, praticien_id");
+  $factures = $facture->loadGroupList($where, "ouverture, praticien_id");
   $taux_factures[$taux] = $factures;
 }
 

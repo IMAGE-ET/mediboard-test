@@ -41,6 +41,7 @@ $listPrat = CConsultation::loadPraticiensCompta($chir_id);
 
 // Chargement des règlements via les factures
 $ljoin["facture_cabinet"] = "reglement.object_id = facture_cabinet.facture_id";
+$where["facture_cabinet.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $where["facture_cabinet.praticien_id"] = CSQLDataSource::prepareIn(array_keys($listPrat));
 $where["reglement.object_class"] = " = 'CFactureCabinet'";
 

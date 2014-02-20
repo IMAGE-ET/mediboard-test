@@ -81,7 +81,7 @@ $order = "ouverture, praticien_id";
 
 //mbTrace(count($where));
 $facture = new CFactureEtablissement();
-$listFactures = $facture->loadList($where, $order, null, "facture_id", $ljoin);
+$listFactures = $facture->loadGroupList($where, $order, null, "facture_id", $ljoin);
 
 $listPlages = array();
 foreach ($listFactures as $_facture) {

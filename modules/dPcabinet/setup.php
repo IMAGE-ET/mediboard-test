@@ -2053,7 +2053,22 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `consultation`
                 CHANGE `taux_tva` `taux_tva` FLOAT DEFAULT '0';";
     $this->addQuery($query);
+    $this->makeRevision("2.25");
 
-    $this->mod_version = "2.25";
+    $query = "ALTER TABLE `facture_cabinet`
+                ADD `group_id` INT (11) UNSIGNED NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `facture_cabinet`
+                ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+
+    //Facture de cabinet de consultation
+    $query = "UPDATE facture_cabinet, users_mediboard, functions_mediboard
+          SET facture_cabinet.group_id = functions_mediboard.group_id
+          WHERE facture_cabinet.praticien_id = users_mediboard.user_id
+          AND functions_mediboard.function_id = users_mediboard.function_id";
+    $this->addQuery($query);
+
+    $this->mod_version = "2.26";
   }
 }
