@@ -22,7 +22,7 @@
 {{unique_id var=uid_autocomplete_asso}}
 <fieldset>
   <legend class="text" style="width: 95%; height: 20px; line-height: 100%;
-  {{if $_code->type == 0}}border: 2px solid black; background-color: #dde;{{/if}}">
+  {{if $_code->type != 0}}border: 2px solid black; background-color: #dde;{{/if}}">
     {{assign var=can_delete value=1}}
     {{foreach from=$_code->activites item=_activite}}
       {{foreach from=$_activite->phases item=_phase}}
