@@ -44,6 +44,7 @@
     fournitures      : "{{$match->fournitures}}",
     type             : "{{$match->type}}",
     type_pec         : "{{$match->type_pec}}",
+    facturable       : "{{$match->facturable}}",
     type_anesth      : "{{$match->type_anesth}}",
     duree_hospi      : {{$match->duree_hospi}},
     duree_heure_hospi : {{$match->duree_heure_hospi}},

@@ -468,6 +468,12 @@ editHour = function () {
             <td>{{mb_field object=$protocole field="type_pec" typeEnum="radio"}}</td>
           </tr>
         {{/if}}
+        {{if $conf.dPplanningOp.CSejour.show_facturable}}
+          <tr>
+            <th>{{mb_label object=$protocole field="facturable"}}</th>
+            <td>{{mb_field object=$protocole field="facturable" typeEnum="radio"}}</td>
+          </tr>
+        {{/if}}
         <tr>
           <td colspan="2"><hr /></td>
         </tr>

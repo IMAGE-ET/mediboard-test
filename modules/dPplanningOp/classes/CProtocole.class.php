@@ -35,6 +35,7 @@ class CProtocole extends CMbObject {
   public $pathologie;
   public $septique;
   public $type_pec;
+  public $facturable;
 
   // DB Fields Operation
   public $codes_ccam;
@@ -142,6 +143,7 @@ class CProtocole extends CMbObject {
     $props["codes_ccam"]      = "str seekable";
     $props["temp_operation"]  = "time";
     $props["type_pec"]        = "enum list|M|C|O";
+    $props["facturable"]      = "bool notNull default|1 show|0";
     $props["duree_uscpo"]     = "num min|0 default|0";
     $props["duree_preop"]     = "time show|0";
     $props["presence_preop"]  = "time show|0";

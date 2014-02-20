@@ -1715,6 +1715,11 @@ class CSetupdPplanningOp extends CSetup {
       ADD INDEX (`date`)";
     $this->addQuery($query);
 
-    $this->mod_version = "1.85";
+    $this->makeRevision("1.85");
+    $query = "ALTER TABLE `protocole`
+                ADD `facturable` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.86";
   }
 }

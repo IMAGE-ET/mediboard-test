@@ -42,6 +42,7 @@
     fournitures      : "{{$protocole->fournitures}}",
     type             : "{{$protocole->type}}",
     type_pec         : "{{$protocole->type_pec}}",
+    facturable       : "{{$protocole->facturable}}",
     type_anesth      : "{{$protocole->type_anesth}}",
     duree_uscpo      : "{{$protocole->duree_uscpo}}",
     duree_preop      : "{{$protocole->duree_preop}}",

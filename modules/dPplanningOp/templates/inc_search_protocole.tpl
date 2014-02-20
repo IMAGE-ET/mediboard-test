@@ -30,8 +30,11 @@
     this.sUf_medicale_id = "uf_medicale_id";
     this.sUf_soins_id = "uf_soins_id";
     this.sTypesRessourcesIds = "_types_ressources_ids";
-    {{if $conf.dPplanningOp.CSejour.show_type_pec == 1}}
-    this.sTypePec     = "type_pec";
+    {{if $conf.dPplanningOp.CSejour.show_type_pec}}
+      this.sTypePec     = "type_pec";
+    {{/if}}
+    {{if $conf.dPplanningOp.CSejour.show_facturable}}
+      this.sFacturable   = "facturable";
     {{/if}}
     this.sDuree_uscpo   = "duree_uscpo";
     this.sDuree_preop   = "duree_preop";

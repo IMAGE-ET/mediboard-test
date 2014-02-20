@@ -17,7 +17,10 @@
     this.sRques_sej      = "rques";
 
     {{if $conf.dPplanningOp.CSejour.show_type_pec}}
-      this.sTypePec       = "type_pec";
+      this.sTypePec      = "type_pec";
+    {{/if}}
+    {{if $conf.dPplanningOp.CSejour.show_facturable}}
+      this.sFacturable   = "facturable";
     {{/if}}
 
     this.sProtoPrescAnesth = "_protocole_prescription_anesth_id";

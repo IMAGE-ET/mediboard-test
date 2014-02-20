@@ -23,6 +23,7 @@ ProtocoleSelector = {
   sLibelle_sejour  : null,
   sType            : null,
   sTypePec         : null,
+  sFacturable      : null,
   sTypeAnesth      : null,
   sDuree_uscpo     : null,
   sDuree_preop     : null,
@@ -145,7 +146,10 @@ ProtocoleSelector = {
       oSejourForm[this.sUf_soins_id].value = protocole.uf_soins_id;
     }
     if (this.sTypePec) {
-      $V(oSejourForm[this.sTypePec], protocole.type_pec); 
+      $V(oSejourForm[this.sTypePec], protocole.type_pec);
+    }
+    if (this.sFacturable) {
+      $V(oSejourForm[this.sFacturable], protocole.facturable);
     }
     if(this.sServiceId && (!oSejourForm.sejour_id.value || !oSejourForm[this.sServiceId].value)) {
       $V(oSejourForm[this.sServiceId], protocole.service_id);
