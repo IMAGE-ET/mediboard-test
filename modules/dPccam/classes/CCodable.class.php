@@ -650,7 +650,7 @@ class CCodable extends CMbObject {
       foreach ($this->_codes_ccam as $code) {
         $code = CCodeCCAM::get($code, $full ? CCodeCCAM::FULL : CCodeCCAM::LITE);
         $this->_ext_codes_ccam[] = $code;
-        if ($code->type == 0) {
+        if ($code->type != 2) {
           $this->_ext_codes_ccam_princ[] = $code;
         }
       }
