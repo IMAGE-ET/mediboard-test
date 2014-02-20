@@ -15,6 +15,12 @@
 {{math equation="4*x" x=$period assign=colspan}}
 {{math equation="75/x" x=$colspan assign=width_th}}
 
+{{if $mode_dupa}}
+  {{math equation="4+x" x=$colspan assign=th_chap_colspan}}
+{{else}}
+  {{math equation="3+x" x=$colspan assign=th_chap_colspan}}
+{{/if}}
+
 <table class="main">
   {{* Entête *}}
   <thead>
@@ -48,38 +54,42 @@
       <td colspan="2">
         <table class="tbl">
           <tr>
-            <th class="title" style="width: 20%" colspan="3">
-              PRESCRIPTION
+            <th class="title" style="width: 20%" colspan="{{if $mode_dupa}}2{{else}}3{{/if}}">
+              PRESCRIPTION {{if $mode_dupa}}Pré Op{{/if}}
             </th>
-            {{*
-            <th class="title" style="width: 10%" colspan="2">
-              PRES. Post Op
-            </th>
-            *}}
+            {{if $mode_dupa}}
+              <th class="title" style="width: 10%" colspan="2">
+                PRES. Post Op
+              </th>
+            {{/if}}
+
             <th class="title" colspan="{{$colspan}}">
               ADMINISTRATION
             </th>
           </tr>
           <tr>
             <th class="text" style="width: 3%" rowspan="2">
-              Presc.
+              Date / Presc.
             </th>
             <th class="text" rowspan="2" style="width: 12%">
               Libellé médicament <br />
               Posologie <br />
               Commentaires <br />
             </th>
-            <th style="width: 10%" rowspan="2">
-              Remarques
-            </th>
-            {{*<th class="text" rowspan="2">
-              Poursuite du traitement personnel ou arrêt
-            </th>
-            <th class="text" rowspan="2">
-              Date/heure <br />
-              Nom <br />
-              Signature médecin
-            </th>*}}
+            {{if $mode_dupa}}
+              <th class="text" rowspan="2">
+                Poursuite du traitement personnel ou arrêt
+              </th>
+              <th class="text" rowspan="2">
+                Date/heure <br />
+                Nom <br />
+                Signature médecin
+              </th>
+            {{else}}
+              <th style="width: 10%" rowspan="2">
+                Remarques
+              </th>
+            {{/if}}
             {{foreach from=$dates item=_date}}
               <th colspan="4">
                 {{$_date|date_format:"%a"|substr:0:1|strtoupper}} <br />
@@ -97,7 +107,9 @@
           </tr>
 
           {{* Parcours des lignes *}}
-
+          <tr>
+            <th colspan="{{$th_chap_colspan}}" class="section">Médicaments</th>
+          </tr>
           {{* Lignes de médicament *}}
           {{foreach from=$prescription->_ref_lines_med_for_plan item=_cat_ATC key=_key_cat_ATC}}
             {{foreach from=$_cat_ATC item=lines}}
@@ -108,11 +120,17 @@
           {{/foreach}}
 
           {{* Lignes de perfusion *}}
+          <tr>
+            <th colspan="{{$th_chap_colspan}}" class="section">Perfusions</th>
+          </tr>
           {{foreach from=$prescription->_ref_prescription_line_mixes_for_plan item=line}}
             {{mb_include module=soins template=inc_offline_vw_line}}
           {{/foreach}}
 
           {{* Lignes d'éléments *}}
+          <tr>
+            <th colspan="{{$th_chap_colspan}}" class="section">Elements</th>
+          </tr>
           {{foreach from=$prescription->_ref_lines_elt_for_plan item=elements_chap}}
             {{foreach from=$elements_chap item=elements_cat}}
               {{foreach from=$elements_cat item=_element}}
