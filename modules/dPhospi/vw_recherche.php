@@ -80,6 +80,7 @@ if ($typeVue == 0) {
           LEFT JOIN chambre ON lit.chambre_id = chambre.chambre_id
           WHERE '$date_recherche' BETWEEN affectation.entree AND affectation.sortie
           AND chambre.annule = '0'
+          AND lit.annule = '0'
           AND affectation.effectue = '0'
           GROUP BY lit.lit_id";
 
@@ -100,6 +101,7 @@ if ($typeVue == 0) {
             LEFT JOIN service ON service.service_id = chambre.service_id
             WHERE lit.lit_id NOT IN($notIn)
             AND chambre.annule = '0'
+            AND lit.annule = '0'
             AND service.group_id = '$group->_id'
             AND service.service_id ".CSQLDataSource::prepareIn($services_ids)."
             GROUP BY lit.lit_id
@@ -154,11 +156,12 @@ else if ($typeVue == 1) {
     );
     $order = "service.nom, chambre.nom, lit.nom";
     $listAff["Aff"] = $affectation->loadList($where, $order, null, null, $ljoin);
-    foreach ($listAff["Aff"] as &$_aff) {
+    foreach ($listAff["Aff"] as $_aff) {
+      /** @var CAffectation $_aff */
       $_aff->loadView();
       $_aff->loadRefSejour();
       $_aff->_ref_sejour->loadRefPatient();
-      $_aff->_ref_sejour->_ref_praticien =& $listPrat[$_aff->_ref_sejour->praticien_id];
+      $_aff->_ref_sejour->_ref_praticien = $listPrat[$_aff->_ref_sejour->praticien_id];
       $_aff->_ref_sejour->loadRefGHM();
 
       $_aff->loadRefLit();
@@ -179,9 +182,10 @@ else if ($typeVue == 1) {
     );
     $order = "sejour.entree, sejour.sortie, sejour.praticien_id";
     $listAff["NotAff"] = $sejour->loadList($where, $order);
-    foreach ($listAff["NotAff"] as &$_sejour) {
+    foreach ($listAff["NotAff"] as $_sejour) {
+      /** @var CSejour $_sejour */
       $_sejour->loadRefPatient();
-      $_sejour->_ref_praticien =& $listPrat[$_sejour->praticien_id];
+      $_sejour->_ref_praticien = $listPrat[$_sejour->praticien_id];
       $_sejour->loadRefGHM();
     }
   }
