@@ -51,7 +51,7 @@ $where[] = "sejour.entree BETWEEN '$now' AND '$date_after'
   OR (sejour.sortie_reelle IS NULL AND sejour.entree BETWEEN '$date_before' AND '$date_after' AND sejour.annule = '0')";
 
 // RPUs
-$where[]                  = "rpu.rpu_id IS NOT NULL";
+$where["rpu.rpu_id"]      = "IS NOT NULL";
 $where["sejour.group_id"] = "= '$group_id'";
 //$where["sejour.type"]     = "= 'urg'";
 $order                    = "sejour.entree ASC";
@@ -62,32 +62,47 @@ $sejours = $sejour->loadList($where, $order, null, "sejour.sejour_id", $ljoin);
 $count_sejour = 0;
 //work
 foreach ($sejours as $_sejour) {
+  // Dans le cas où le patient est déjà sorti
   if ($_sejour->sortie_reelle) {
     continue;
   }
 
-  $count_sejour++;
+  $comptabilise = false;
 
   $affectation = $_sejour->getCurrAffectation($now);
-
-  //total
-  $datas['PRESENTS']++;
+  $service     = $affectation->loadRefService();
 
   $rpu = $_sejour->loadRefRPU();
 
-  $comptabilise = false;
-  //placé
+  // Dans le cas d'une mutation utation
+  if ($rpu->mutation_sejour_id) {
+    // Il est déjà muté dans un service
+    if ($service->_id && (!$service->urgence || !$service->uhcd)) {
+      continue;
+    }
+
+    $datas["AVAL"]++;
+    $comptabilise = true;
+  }
+
+  $count_sejour++;
+
+  // Présents
+  $datas['PRESENTS']++;
+
+  // Placé : salle d'attente, box d'examen ou salle dechoc
   if ($affectation->_id) {
-    $lit = $affectation->loadRefLit();
-    $chambre = $lit->loadRefChambre();
+    $lit         = $affectation->loadRefLit();
+    $chambre     = $lit->loadRefChambre();
+
     if ($chambre->_id) {
-      // salle d'attente
+      // Salle d'attente
       if ($chambre->is_waiting_room) {
         $datas["ATTENTE"]++;
         $comptabilise = true;
       }
 
-      //salle d'examen
+      // Salle d'examen
       if ($chambre->is_examination_room) {
         $datas["BOX"]++;
         $comptabilise = true;
@@ -100,27 +115,28 @@ foreach ($sejours as $_sejour) {
     }
   }
 
+  // Service lit-porte
+  if ($_sejour->UHCD) {
+    $datas["PORTE"]++;
+    $comptabilise = true;
+  }
+
+  // Plateaux techniques
+  if ($rpu->radio_debut && !$rpu->radio_fin) {
+    $datas['RADIO']++;
+    $comptabilise = true;
+  }
+
   if (!$comptabilise) {
     $consult = $rpu->loadRefConsult();
 
+    // Si on a pas de consult on considère qu'il est en salle d'attente
     if (!$consult || !$consult->_id) {
       $datas["ATTENTE"]++;
     }
-  }
 
-  //mutation
-  if ($rpu->mutation_sejour_id) {
-    $datas["AVAL"]++;
-  }
-
-  //porte
-  if ($_sejour->UHCD) {
-    $datas["PORTE"]++;
-  }
-
-  //radio
-  if ($rpu->radio_debut && !$rpu->radio_fin) {
-    $datas['RADIO']++;
+    // S'il y a une consult et pas placé, il est au moins dans un box ?
+    // $datas["BOX"]++;
   }
 }
 
