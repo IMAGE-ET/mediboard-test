@@ -80,6 +80,7 @@ if ($typeVue == 0) {
           LEFT JOIN chambre ON lit.chambre_id = chambre.chambre_id
           WHERE '$date_recherche' BETWEEN affectation.entree AND affectation.sortie
           AND chambre.annule = '0'
+          AND lit.annule = '0'
           AND affectation.effectue = '0'
           GROUP BY lit.lit_id";
 
@@ -100,6 +101,7 @@ if ($typeVue == 0) {
             LEFT JOIN service ON service.service_id = chambre.service_id
             WHERE lit.lit_id NOT IN($notIn)
             AND chambre.annule = '0'
+            AND lit.annule = '0'
             AND service.group_id = '$group->_id'
             AND service.service_id ".CSQLDataSource::prepareIn($services_ids)."
             GROUP BY lit.lit_id
