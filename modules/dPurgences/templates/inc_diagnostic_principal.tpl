@@ -17,7 +17,21 @@
     if ($("dp_"+sejour_id)) {
       var url = new Url("dPurgences", "ajax_diagnostic_principal");
       url.addParam("sejour_id", sejour_id);
-      url.requestUpdate("dp_"+sejour_id);
+      url.requestUpdate("dp_"+sejour_id, function(){
+        /* FIXME: VIRER CE CODE */
+        var formName = "editSejour";
+        var form = getForm(formName);
+        var label = form.down("label[for=DP]");
+        label.className = form.DP.className;
+        label.id = "labelFor_"+formName+"_DP";
+        label.htmlFor = formName+"_DP";
+
+        var oElement = form.DP;
+        oElement.id = formName+"_DP";
+        oElement.observe("change", notNullOK)
+                .observe("ui:change", notNullOK);
+        oElement.fire("ui:change");
+      });
     }
     if ($("cim")) {
       var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
@@ -49,17 +63,22 @@
  
   <input type="hidden" name="praticien_id" value="{{$sejour->praticien_id}}"/>
 
+  {{assign var=notnull value=""}}
+  {{if "CAppUI::conf"|static_call:"dPurgences Display check_dp":"CGroups-$g" == "2"}}
+    {{assign var=notnull value="notNull"}}
+  {{/if}}
+
   <input type="text" name="keywords_code" id="editSejour_keywords_code" class="autocomplete str" value="{{$sejour->DP}}" size="10"/>
-  <input type="hidden" name="DP" onchange="$V(this.form.keywords_code, this.value); submitSejour('{{$sejour->_id}}');"/>
+  <input type="hidden" name="DP" class="{{$notnull}}" value="{{$sejour->DP}}" onchange="$V(this.form.keywords_code, this.value); submitSejour('{{$sejour->_id}}');"/>
   <script type="text/javascript">
-    CIM10Selector.initDP = function() {
+    CIM10Selector.initDPUrgences = function() {
       this.sForm     = "editSejour";
       this.sView     = "DP";
       this.sChir     = "praticien_id";
       this.pop();
     }
   </script>
-  <button type="button" class="search notext" onclick="CIM10Selector.initDP()">
+  <button type="button" class="search notext" onclick="CIM10Selector.initDPUrgences()">
     {{tr}}button-CCodeCIM10-choix{{/tr}}
   </button>
   <button type="button" class="cancel notext" onclick="deleteCodeCim10();">
