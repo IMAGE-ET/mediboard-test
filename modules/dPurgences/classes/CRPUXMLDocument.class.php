@@ -172,6 +172,28 @@ class CRPUXMLDocument extends CMbXMLDocument {
         $mode_sortie = $mbObject->_mode_sortie;
         $destination = $sejour->destination;
         $orientation = $mbObject->orientation;
+
+        // Dans le cas où l'on ne créé pas un relicat, on va aller chercher les valeurs sur l'affectation de médecine
+        if ($mbObject->mutation_sejour_id && CAppUI::conf("dPurgences create_sejour_hospit")) {
+          // on recherche la première affectation qui ni UHCD, ni URG
+          $affectation_medecine = new CAffectation();
+          $ljoin["service"] = "`service`.`service_id` = `affectation`.`service_id`";
+          $ljoin["sejour"]  = "`affectation`.`sejour_id` = `sejour`.`sejour_id`";
+          $where = array();
+          $where["affectation.sejour_id"] = " = '$sejour->_id'";
+          $where["service.cancelled"]     = " = '0'";
+          $where["service.uhcd"]          = " != '1'";
+          $where["service.urgence"]       = " != '1'";
+
+          $affectation_medecine->loadObject($where, "entree ASC", null, $ljoin);
+          if ($affectation_medecine) {
+            $service = $affectation_medecine->loadRefService();
+
+            $mode_sortie = "6";
+            $destination = $service->default_destination;
+            $orientation = $service->default_orientation;
+          }
+        }
       }
       else {
         // Dans le cas où l'on a eu une mutation les données du RPU concerne la mut. UHCD
