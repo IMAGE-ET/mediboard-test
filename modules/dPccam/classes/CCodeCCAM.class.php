@@ -22,7 +22,7 @@ class CCodeCCAM {
   public $libelleLong;
   public $place;         // Place dans la CCAM
   public $remarques;     // Remarques sur le code
-  public $type;          // Type d'acte (isolé, complément ou procédure)
+  public $type;          // Type d'acte (isolé, procédure ou complément)
   public $activites = array(); // Activites correspondantes
   public $phases    = array(); // Nombre de phases par activités
   public $incomps   = array(); // Incompatibilite
@@ -560,7 +560,7 @@ class CCodeCCAM {
    * @return void
    */
   function getActesAsso($code = null, $limit = null) {
-    if ($this->type != 0) {
+    if ($this->type == 2) {
       return;
     }
     $ds =& $this->_spec->ds;
