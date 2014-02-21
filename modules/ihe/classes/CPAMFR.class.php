@@ -20,7 +20,7 @@ class CPAMFR extends CPAM {
    * @var array
    */
   static $transaction_iti30 = array(
-    "A24", "A37", "A28", "A28", "A31", "A40", "A47"
+    "A24", "A37", "A28", "A31", "A40", "A47"
   );
 
   /**
