@@ -856,7 +856,9 @@ table.form th.category label.error {
 textarea[readonly],
 textarea[readonly]:focus,
 input[type=text][readonly],
-input[type=text][readonly]:focus {
+input[type=text][readonly]:focus,
+input[type=number][readonly],
+input[type=number][readonly]:focus {
   border: 1px dotted #666;
   background: none;
   background: rgba(255,255,255,0.4);

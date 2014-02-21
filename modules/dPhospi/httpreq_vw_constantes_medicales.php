@@ -20,23 +20,17 @@ function getValue($v) {
   return ($v === null) ? null : floatval($v);
 }
 
-global $m;
-
-$user = CMediusers::get();
-
-if (
-  !$user->isMedical() &&
-  !CModule::getCanDo('soins')->read &&
-  !CModule::getCanDo('dPurgences')->read &&
-  !CModule::getCanDo('dPcabinet')->edit
-) {
-  CModule::getCanDo($m)->redirect();
+$constantes = new CConstantesMedicales();
+$perms = $constantes->canDo();
+if (!$perms->read) {
+  $perms->redirect();
 }
 
 $context_guid          = CValue::get('context_guid');
 $selected_context_guid = CValue::get('selected_context_guid', $context_guid);
 $patient_id            = CValue::get('patient_id');
-$readonly              = CValue::get('readonly');
+$can_edit              = CValue::get('can_edit');
+$can_select_context    = CValue::get('can_select_context', 1);
 $selection             = CValue::get('selection');
 $date_min              = CValue::get('date_min');
 $date_max              = CValue::get('date_max');
@@ -46,6 +40,15 @@ $start                 = CValue::get('start', 0);
 $count                 = CValue::get('count', 50);
 $simple_view           = CValue::get('simple_view', 0);
 $host_guid             = CValue::get('host_guid');
+
+if (is_null($can_edit)) {
+  if ($context_guid != $selected_context_guid) {
+    $can_edit = 0;
+  }
+  else {
+    $can_edit = $perms->edit;
+  }
+}
 
 if (!$start) {
   $start = 0;
@@ -133,7 +136,6 @@ $where = array(
 );
 
 // Construction d'une constante médicale
-$constantes = new CConstantesMedicales();
 $constantes->patient_id = $patient->_id;
 $constantes->loadRefPatient();
 
@@ -239,7 +241,7 @@ foreach ($list_constantes as $_cst) {
 $list_constantes = array_reverse($list_constantes, true);
 
 $graphs_structure = CConstantesMedicales::sortConstantsbyGraph($list_constantes, $host);
-$graphs_datas = CConstantesMedicales::formatGraphDatas($list_constantes, $host);
+$graphs_datas = CConstantesMedicales::formatGraphDatas($list_constantes, $host, $context_guid);
 
 $min_x_index = $graphs_datas['min_x_index'];
 $min_x_value = $graphs_datas['min_x_value'];
@@ -257,7 +259,6 @@ $patient->loadRefConstantesMedicales(null, array("poids", "taille"), null, false
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign('readonly',                   $readonly);
 $smarty->assign('constantes',                 $constantes);
 $smarty->assign('context',                    $context);
 $smarty->assign('context_guid',               $context_guid);
@@ -282,4 +283,6 @@ $smarty->assign('constantes_medicales_grid',  $constantes_medicales_grid);
 $smarty->assign('simple_view',                $simple_view);
 $smarty->assign('show_cat_tabs',              $show_cat_tabs);
 $smarty->assign('show_enable_all_button',     $show_enable_all_button);
+$smarty->assign('can_edit',                   $can_edit);
+$smarty->assign('can_select_context',         $can_select_context);
 $smarty->display('inc_vw_constantes_medicales.tpl');

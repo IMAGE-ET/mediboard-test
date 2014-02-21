@@ -23,7 +23,6 @@ editConstants = function(const_id, context_guid, start){
   var url = new Url('dPhospi', 'httpreq_vw_form_constantes_medicales');
   url.addParam("const_id", const_id);
   url.addParam("context_guid", context_guid);
-  url.addParam("readonly", '{{$readonly}}');
   url.addParam("start", start || 0);
   url.addParam("selection[]", keys_selection);
   url.addParam("patient_id", '{{$patient->_id}}');
@@ -281,7 +280,6 @@ loadConstantesMedicales  = function(context_guid) {
 
   url.addParam("context_guid", '{{$context_guid}}');
   url.addParam("patient_id", '{{$patient->_id}}');
-  url.addParam("readonly", '{{$readonly}}');
   url.addParam("selection[]", keys_selection);
   url.addParam("selected_context_guid", context_guid);
   url.addParam("paginate", window.paginate || 0);
@@ -303,7 +301,7 @@ refreshFiches = function(sejour_id){
       </a>
       Constantes médicales dans le cadre de: 
       <br />
-      {{if $readonly}}
+      {{if !$can_select_context}}
         {{$context}}
       {{else}}
         <select name="context" onchange="loadConstantesMedicales($V(this));">

@@ -2333,3 +2333,4 @@ $locales['pref-sort_atc_by_date'] = 'Classer les antécédents par date';
 $locales['pref-sort_atc_by_date-desc'] = 'Lister les antécédents du patient par date dans le dossier médical';
 $locales['pref-vCardExport'] = 'Afficher les boutons d\'export vCard';
 $locales['pref-vCardExport-desc'] = 'Afficher les boutons d\'export vCard';
+$locales['CConstantes-Medicales-msg-modif-timeout-%s'] = 'Impossible de modifier cette saisie de constantes car elle a été saisie il y a plus de %d heures.';

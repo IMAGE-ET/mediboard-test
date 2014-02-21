@@ -9,7 +9,11 @@
  * @version    $Revision$
  */
 
-CCanDo::checkRead();
+$const = new CConstantesMedicales();
+$perms = $const->canDo();
+if (!$perms->read) {
+  $perms->redirect();
+}
 
 $context_guid = CValue::get('context_guid');
 $context = CStoredObject::loadFromGuid($context_guid);
@@ -68,10 +72,9 @@ foreach ($graphs_struct as $_name => $_fields) {
 }
 
 $where[]  = implode(' OR ', $whereOr);
-$const = new CConstantesMedicales();
 $constants = array_reverse($const->loadList($where, 'datetime DESC', 10), true);
 
-$graph = CConstantesMedicales::formatGraphDatas($constants, CConstantesMedicales::guessHost($context), $constants_by_graph, true);
+$graph = CConstantesMedicales::formatGraphDatas($constants, CConstantesMedicales::guessHost($context), $context_guid, $constants_by_graph, true);
 unset($graph['min_x_index']);
 unset($graph['min_x_value']);
 unset($graph['drawn_constants']);

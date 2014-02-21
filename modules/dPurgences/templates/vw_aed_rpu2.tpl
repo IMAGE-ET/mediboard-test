@@ -19,11 +19,10 @@
       var url = new Url('dPhospi' , 'httpreq_vw_form_constantes_medicales');
       url.addParam("context_guid", context_guid);
       url.addParam("patient_id"   , iPatient_id);
-      url.addParam("readonly"     , '0');
-      url.addParam("tri"          , "tri");
-      url.addParam("real_context" , 1);
+      url.addParam('display_graph', 0);
+      url.addParam('tri_rpu', '-tri_rpu');
       url.requestUpdate('constantes-tri');
-      if (getForm("edit-constantes-medicales")) {
+      if (getForm("edit-constantes-medicales-tri_rpu")) {
         toggleAllGraphs();
       }
     }

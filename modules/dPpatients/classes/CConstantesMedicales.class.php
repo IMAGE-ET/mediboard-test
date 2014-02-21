@@ -2033,19 +2033,20 @@ class CConstantesMedicales extends CMbObject {
    *
    * @param CConstantesMedicales[] $constants_values   The list of the constants
    * @param CMbObject              $host               The host from which we'll get the configuration
+   * @param string                 $context_guid       The real context
    * @param array                  $constants_by_graph The graphs structure.
    * @param boolean                $widget             If true, some information won't be added (for exemple the span tag in the xaxis)
    *
    * @return array The graph datas
    */
-  static function formatGraphDatas($constants_values, $host, $constants_by_graph = array(), $widget = false) {
+  static function formatGraphDatas($constants_values, $host, $context_guid, $constants_by_graph = array(), $widget = false) {
     $datas = array();
 
     if (empty($constants_by_graph)) {
       $constants_by_graph = self::sortConstantsbyGraph($constants_values, $host);
     }
 
-    $xaxis = self::createXaxis($constants_values, $widget);
+    $xaxis = self::createXaxis($constants_values, $context_guid, $widget);
 
     /** @var integer min_x_index The index of the first displayed xaxis tick */
     $min_x_index = $xaxis['min_x_index'];
@@ -2369,11 +2370,13 @@ class CConstantesMedicales extends CMbObject {
   /**
    * Create the xaxis for Flot
    *
-   * @param CConstantesMedicales[] $constants The CConstantesMedicales objects
+   * @param CConstantesMedicales[] $constants    The CConstantesMedicales objects
+   * @param string                 $context_guid The guid of the real context
+   * @param boolean                $widget       If widget, we can't edit the constant by clicking the labels of the xaxis
    *
    * @return array The xaxis
    */
-  static function createXaxis($constants, $widget = false) {
+  static function createXaxis($constants, $context_guid, $widget = false) {
     $ticks = array();
     $i = 1;
     foreach ($constants as $key => $_cst) {
@@ -2384,11 +2387,8 @@ class CConstantesMedicales extends CMbObject {
         $style .= 'color: red';
       }
       if (!$widget) {
-        $str = "<span style=\"$style\" onclick=\"editConstants(" . $_cst->_id . ", '";
-        if ($_cst->_ref_context && $_cst->_ref_context->_guid) {
-          $str .= $_cst->_ref_context->_guid;
-        }
-        $str .= "')\"><strong>" . CMbDT::format($_cst->datetime, '%Hh%M') . '</strong><br/>'.
+        $str = '<span style="$style" onclick="editConstants(' . $_cst->_id . ', \'' . $context_guid . '\')">';
+        $str .= '<strong>' . CMbDT::format($_cst->datetime, '%Hh%M') . '</strong><br/>'.
           CMbDT::format($_cst->datetime, '%d/%m') . '</span>';
       }
       else {
