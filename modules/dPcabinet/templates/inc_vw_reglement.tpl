@@ -226,7 +226,7 @@ Main.add(function() {
             {{/if}}
            
             <table class="form">
-              {{if !$consult->tarif || $consult->tarif == "pursue"}}
+              {{if (!$consult->tarif || $consult->tarif == "pursue") && !$consult->valide}}
                 {{if $consult->_ref_patient->ald}}
                 <tr>
                   <th>{{mb_label object=$consult field=concerne_ALD}}</th>
