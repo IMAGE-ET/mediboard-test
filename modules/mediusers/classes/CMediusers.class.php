@@ -1379,7 +1379,7 @@ class CMediusers extends CPerson {
           }
         }
       }
-      if (count($_plage->_ref_operations) < 1) {
+      if (count($_plage->_ref_operations) + count($_plage->_unordered_operations) < 1) {
         unset($this->_ref_plages[$key_plage]);
       }
     }
