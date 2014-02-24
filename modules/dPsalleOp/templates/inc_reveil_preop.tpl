@@ -55,7 +55,7 @@
         {{mb_include module=Imeds template=inc_sejour_labo link="#1" sejour=$_operation->_ref_sejour float="none"}}
       {{/if}}
 
-      <button class="button edit notext" onclick="codageCCAM('{{$_operation->_id}}');"> Codage </button>
+      <button class="button new notext" onclick="codageCCAM('{{$_operation->_id}}');"> Codage </button>
       <button type="button" class="injection notext" onclick="Operation.dossierBloc('{{$_operation->_id}}', true);">Dossier de bloc</button>
     </td>
     <td class="text">
