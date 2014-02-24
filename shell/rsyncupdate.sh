@@ -20,6 +20,7 @@ then
   echo "  -c </path/to/another/config> Another config file to parse"
   echo "  -u Force the update without asking"
   echo "  -o Force the clear cache without asking"
+  echo "  -n Force the non clearing cache without asking"
   echo "  -d Dry run : simulation of the rsync"
   exit 1
 fi
@@ -29,8 +30,9 @@ dry_run=""
 revision=""
 force_update=""
 force_clear=""
+force_non_clear=""
 
-args=$(getopt r:c:duo $*)
+args=$(getopt r:c:duon $*)
 if [ $? != 0 ] ; then
   echo "Invalid argument. Check your command line"; exit 0;
 fi
@@ -43,6 +45,7 @@ for i; do
     -d) dry_run="-n"; shift;;
     -u) force_update="1"; shift;;
     -o) force_clear="1"; shift;;
+    -n) force_non_clear="1"; shift;;
     --) shift; break ;;
   esac
 done
@@ -95,7 +98,7 @@ then
 
       # Call clear apc cache
       REPLY="n"
-      if [ "$force_clear" = "" ] ; then
+      if [ "$force_clear" = "" ] && [ "$force_non_clear" = "" ] ; then
         echo "Do you want to clear cache for $line (y or n) [default n] ? \c" ; read REPLY < /dev/tty
       fi
       if [ "$force_clear" = "1" ] || [ "$REPLY" = "y" ] ; then
