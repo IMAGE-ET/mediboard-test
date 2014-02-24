@@ -111,7 +111,9 @@
     form.montant.value = eclat.substring(2, 12)/100;
   }
   Main.add(function(){
+    {{if ($object->_du_restant_patient) > 0 || $conf.dPfacturation.CReglement.use_lock_acquittement}}
     updateBanque('{{$conf.dPfacturation.CReglement.use_mode_default}}');
+    {{/if}}
   });
 </script>
     
