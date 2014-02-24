@@ -66,12 +66,16 @@ class CMbPerformance {
       return;
     }
 
+    if (isset(self::$steps[$label])) {
+      return;
+    }
+
     $time = microtime(true);
 
     $duration = $time - self::$previous;
     $duration = (float)number_format($duration*1000, 5, ".", "");
 
-    self::$steps[] = array(
+    self::$steps[$label] = array(
       "label" => $label,
       "time"  => self::$previous*1000,
       "dur"   => $duration,
@@ -92,22 +96,22 @@ class CMbPerformance {
     $data = array(
       "start" => self::$startTime * 1000,
       "end"   => self::$endTime * 1000,
-      "steps" => self::$steps,
+      "steps" => array_values(self::$steps),
       "db"    => self::$dbTime,
+      "size"  => ob_get_length(),
     );
 
-    return json_encode($data);
+    return $data;
   }
 
   /**
-   * Save database time
-   *
-   * @param float $dbTime Total database time
+   * Final call
    *
    * @return void
    */
-  static function setDBTime($dbTime) {
-    self::$dbTime = $dbTime;
+  static function end(){
+    CMbPerformance::mark("app");
+    self::$dbTime = CApp::$performance["dataSourceTime"];
   }
 
   /**
@@ -128,7 +132,7 @@ class CMbPerformance {
 
     $req = "$m|".(empty($dosql) ? $a : $dosql);
 
-    header("X-Mb-Timing: ".self::out());
+    header("X-Mb-Timing: ".json_encode(self::out()));
     header("X-Mb-Req: $req");
     header("X-Mb-RequestUID: ".CApp::getRequestUID());
   }

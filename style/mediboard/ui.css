@@ -1465,12 +1465,6 @@ div.bullet.error {
   display: inline-block;
 }
 
-#profiling-data {
-  vertical-align: top;
-  display: inline-block;
-  width: 100px;
-}
-
 #profiling-tooltip {
   position: absolute;
   border: 1px solid #fdd;
@@ -1484,6 +1478,54 @@ div.bullet.error {
   top: 2px;
   right: 2px;
   z-index: 1500;
+}
+
+#profiler-overview {
+  position: fixed;
+  bottom: 20px;
+  right: 2px;
+  z-index: 1500;
+  background: white;
+  vertical-align: top;
+  display: inline-block;
+  width: 90px;
+  opacity: 0.6;
+  font-size: 0.9em;
+  line-height: 1;
+}
+
+#profiler-overview .marking {
+  /*border-right: 4px solid #999;*/
+  border: none;
+}
+
+#profiler-overview .marking.sub {
+  color: #666;
+  display: none;
+}
+
+#profiler-overview:hover {
+  opacity: 1.0;
+  width: 120px;
+}
+
+#profiler-overview:hover .marking {
+  font-weight: bold;
+}
+
+#profiler-overview:hover .marking.sub {
+  display: block;
+  font-weight: normal;
+}
+
+#profiler-timebar {
+  font-size: 0;
+  height: 3px;
+}
+
+#profiler-timebar div {
+  display: inline-block;
+  height: 100%;
 }
 
 /* To disable text selection */
