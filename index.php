@@ -12,23 +12,23 @@
  * @link     http://www.mediboard.org
  */
 
-require "./classes/CMbPerformance.class.php";
+require __DIR__."/classes/CMbPerformance.class.php";
 
 CMbPerformance::start();
 
-require "./includes/compat.php";
-require "./includes/magic_quotes_gpc.php";
+require __DIR__."/includes/compat.php";
+require __DIR__."/includes/magic_quotes_gpc.php";
 
-if (!is_file("./includes/config.php")) {
+if (!is_file(__DIR__."/includes/config.php")) {
   header("Location: install/");
   die("Redirection vers l'assistant d'installation");
 }
 
-require "./includes/config_all.php";
+require __DIR__."/includes/config_all.php";
 
 $rootName = basename($dPconfig["root_dir"]);
 
-require "./includes/version.php";
+require __DIR__."/includes/version.php";
 
 // PHP Configuration
 foreach ($dPconfig["php"] as $key => $value) {
@@ -84,12 +84,12 @@ if (!is_file($dPconfig["root_dir"]."/includes/config.php")) {
 date_default_timezone_set($dPconfig["timezone"]);
 
 // Core classes and functions
-require "./includes/mb_functions.php";
-require "./includes/errors.php";
-require "./classes/SHM.class.php";
-require "./classes/CApp.class.php";
-require "./classes/CAppUI.class.php";
-require "./includes/autoload.php";
+require __DIR__."/includes/mb_functions.php";
+require __DIR__."/includes/errors.php";
+require __DIR__."/classes/SHM.class.php";
+require __DIR__."/classes/CApp.class.php";
+require __DIR__."/classes/CAppUI.class.php";
+require __DIR__."/includes/autoload.php";
 
 // Include config in DB
 if (CAppUI::conf("config_db")) {
@@ -106,7 +106,7 @@ if (!@CSQLDataSource::get("std")) {
 
 CMbPerformance::mark("init");
 
-require "./includes/session.php";
+require __DIR__."/includes/session.php";
 
 CMbPerformance::mark("session");
 
@@ -125,7 +125,7 @@ CSessionHandler::setUserDefinedLifetime();
 
 /*
 try {
-  include "./classes/CAuth.class.php";
+  include __DIR__."/classes/CAuth.class.php";
   //CAuth::login();
 }
 catch (AuthenticationFailedException $e) {
@@ -170,7 +170,7 @@ if (isset($_REQUEST["login"])) {
     list($_REQUEST["username"], $_REQUEST["password"]) = explode(":", $login_action, 2);
   }
 
-  include "./locales/core.php";
+  include __DIR__."/locales/core.php";
   if (null == $ok = CAppUI::login()) {
     CAppUI::$instance->user_id = null;
 
@@ -254,7 +254,7 @@ $m = $a = $u = $g = "";
 CMbPerformance::mark("input");
 
 // Locale
-require "./locales/core.php";
+require __DIR__."/locales/core.php";
 
 if (empty($locale_info["names"])) {
   $locale_info["names"] = array();
@@ -312,7 +312,7 @@ if ($user->isInstalled()) {
 CMbPerformance::mark("user");
 
 // Load DB-stored configuration schema
-$configurations = glob("./modules/*/configuration.php");
+$configurations = glob(__DIR__."/modules/*/configuration.php");
 foreach ($configurations as $_configuration) {
   include $_configuration;
 }
@@ -326,12 +326,12 @@ CApp::notify("BeforeMain");
 
 // Check if the mobile feature is available and if the user agent is a mobile
 $enable_mobile_ui = CAppUI::pref("MobileUI") || !CAppUI::$user->_id;
-if (is_file("./mobile/main.php") && !empty($_SESSION["browser"]["mobile"]) && $enable_mobile_ui) {
+if (is_file(__DIR__."/mobile/main.php") && !empty($_SESSION["browser"]["mobile"]) && $enable_mobile_ui) {
   CAppUI::$mobile = true;
-  include "./mobile/main.php";
+  include __DIR__."/mobile/main.php";
 }
 else {
-  include "./includes/main.php";
+  include __DIR__."/includes/main.php";
 }
 
 CApp::notify("AfterMain");
