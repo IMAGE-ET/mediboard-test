@@ -45,6 +45,11 @@ function saveDossierMedical() {
   $V(formDossier.rhesus, formExam.rhesus.value);
   return onSubmitFormAjax(formDossier);
 }
+
+Main.add(function () {
+  ExamComp.refresh();
+});
+
 </script>
 
 <table class="form" style="width: 100%">
