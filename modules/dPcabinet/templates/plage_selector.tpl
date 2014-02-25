@@ -296,7 +296,7 @@ Main.add(function () {
 </div>
 
 <!-- liste des plages -->
-<div style="float: left; width: {{if $multipleMode}}28{{else}}50{{/if}}%" id="listePlages"></div>
+<div style="float: left; width: {{if $multipleMode}}28{{else}}48{{/if}}%" id="listePlages"></div>
 
 
 <!-- liste du contenu des plages -->
