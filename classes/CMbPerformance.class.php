@@ -128,9 +128,9 @@ class CMbPerformance {
       return;
     }
 
-    global $m, $a, $dosql;
+    global $m, $action, $dosql;
 
-    $req = "$m|".(empty($dosql) ? $a : $dosql);
+    $req = "$m|".(empty($dosql) ? $action : $dosql);
 
     header("X-Mb-Timing: ".json_encode(self::out()));
     header("X-Mb-Req: $req");

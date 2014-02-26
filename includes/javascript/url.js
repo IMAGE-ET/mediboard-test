@@ -39,10 +39,16 @@ Ajax.Responders.register({
       var transport = e.transport;
       var timer = transport.getResponseHeader("X-Mb-Timing");
       if (timer) {
-        var req = transport.getResponseHeader("X-Mb-Req");
-        var uid = transport.getResponseHeader("X-Mb-RequestUID");
         var now = performance.now();
-        MbPerformance.log.defer("ajax", req+"@"+transport.__uniqueID+"@"+uid, timer.evalJSON(), e.__start, now-e.__start);
+        var req = transport.getResponseHeader("X-Mb-Req").split("|");
+        var uid = transport.getResponseHeader("X-Mb-RequestUID");
+        var page = {
+          m: req[0],
+          a: req[1],
+          id: transport.__uniqueID,
+          guid: uid
+        };
+        MbPerformance.logScriptEvent.delay(1, "ajax", page, timer.evalJSON(), e.__start, now-e.__start);
       }
     }
   },

@@ -6,7 +6,9 @@
   }
   
   .not-printable, 
-  #user, #menubar, .titleblock, .tabmenu, #systemMsg, #performance, .smarty-include, #waitingMsgMask, #waitingMsgText {
+  #user, #menubar, .titleblock, .tabmenu,
+  #systemMsg, #performance, .smarty-include, #waitingMsgMask, #waitingMsgText,
+  #profiling-toolbar, #profiler-overview {
     display: none;
   }
   

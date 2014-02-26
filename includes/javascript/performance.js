@@ -1,37 +1,41 @@
 /**
  *
- * @param {String}  type
- * @param {String}  name
- * @param {Number}  time
- * @param {Number=} duration
- * @param {Object=} data
- * @param {Object=} advanced
+ * @param {String} type
+ * @param {Object} pageInfo
+ * @param {Number} time
+ * @param {Number} duration
+ * @param {PerformanceResourceTiming,PerformanceTiming} perfTiming
+ * @param {Object} serverTiming
  *
  * @constructor
  */
-function MbPerformanceTimeEntry(type, name, time, duration, data, advanced){
+function MbPerformanceTimeEntry(type, pageInfo, time, duration, perfTiming, serverTiming){
   this.type = type;
-  this.name = name;
-  this.time = time;
+  this.pageInfo = pageInfo;
 
+  this.time = time;
   this.duration = duration;
-  this.data     = data;
-  this.advanced = advanced;
+
+  this.perfTiming = perfTiming;
+  this.serverTiming = serverTiming;
 }
 
 MbPerformance = {
-  version: "0.1",
+  version: "0.2",
+
+  /** {MbPerformanceTimeEntry[]} timeline */
   timeline: [],
   timers: {},
   intervalTimer: null,
   profiling: false,
   pageDetail: null,
   timingSupport: window.performance && window.performance.timing,
+  timeScale: 5,
   types: {
     page:   1,
-    mark:   2,
-    chrono: 3,
-    ajax:   4
+    ajax:   2,
+    mark:   3,
+    chrono: 4
   },
   responsabilityColors: {
     network: "#0000FF",
@@ -110,14 +114,23 @@ MbPerformance = {
       resp:  "server",
       label: "Fx init",
       desc:  "Initalisation du framework",
-      getValue: function(){
+      getValue: function(serverTiming, perfTiming){
         var total = 0;
-        MbPerformance.pageDetail.steps.each(function(step){
+        serverTiming.steps.each(function(step){
           if (step.label == "init") {
             total += step.dur;
           }
         });
-        return Math.round(total);
+        return total;
+      },
+      getStart: function(serverTiming, perfTiming){
+        var start = 0;
+        serverTiming.steps.each(function(step){
+          if (step.label == "init") {
+            start = step.time;
+          }
+        });
+        return start;
       }
     },
     session: {
@@ -126,14 +139,23 @@ MbPerformance = {
       resp:  "server",
       label: "Session",
       desc:  "Ouverture de la session",
-      getValue: function(){
+      getValue: function(serverTiming, perfTiming){
         var total = 0;
-        MbPerformance.pageDetail.steps.each(function(step){
+        serverTiming.steps.each(function(step){
           if (step.label == "session") {
             total += step.dur;
           }
         });
         return Math.round(total);
+      },
+      getStart: function(serverTiming, perfTiming){
+        var start = 0;
+        serverTiming.steps.each(function(step){
+          if (step.label == "session") {
+            start = step.time;
+          }
+        });
+        return start;
       }
     },
     framework: {
@@ -142,14 +164,23 @@ MbPerformance = {
       resp:  "server",
       label: "Framework",
       desc:  "Suite du chargement du framework",
-      getValue: function(){
+      getValue: function(serverTiming, perfTiming){
         var total = 0;
-        MbPerformance.pageDetail.steps.each(function(step){
+        serverTiming.steps.each(function(step){
           if (["init", "session", "app"].indexOf(step.label) == -1) {
             total += step.dur;
           }
         });
-        return Math.round(total);
+        return total;
+      },
+      getStart: function(serverTiming, perfTiming){
+        var start = 0;
+        serverTiming.steps.each(function(step){
+          if (step.label == "session") {
+            start = step.time + step.dur;
+          }
+        });
+        return start;
       }
     },
     app: {
@@ -158,14 +189,23 @@ MbPerformance = {
       resp:  "server",
       label: "App.",
       desc:  "Code applicatif (dépend de la page affichée) et construction de la page",
-      getValue: function(){
+      getValue: function(serverTiming, perfTiming){
         var total = 0;
-        MbPerformance.pageDetail.steps.each(function(step){
+        serverTiming.steps.each(function(step){
           if (step.label == "app") {
             total += step.dur;
           }
         });
-        return Math.round(total);
+        return total;
+      },
+      getStart: function(serverTiming, perfTiming){
+        var start = 0;
+        serverTiming.steps.each(function(step){
+          if (step.label == "app") {
+            start = step.time;
+          }
+        });
+        return start;
       }
     },
     other: {
@@ -174,9 +214,20 @@ MbPerformance = {
       resp:  "server",
       label: "Autre",
       desc:  "Autre temps, passé dans le serveur",
-      getValue: function(){
-        var serverTime = performance.timing.responseStart - performance.timing.requestStart;
-        return serverTime - Math.round(MbPerformance.pageDetail.end - MbPerformance.pageDetail.start);
+      getValue: function(serverTiming, perfTiming){
+        if (!perfTiming.responseStart || !perfTiming.requestStart) {
+          return null;
+        }
+
+        var serverTime = perfTiming.responseStart - perfTiming.requestStart;
+        return serverTime - (serverTiming.end - serverTiming.start);
+      },
+      getStart: function(serverTiming, perfTiming){
+        if (!perfTiming.responseStart || !perfTiming.requestStart) {
+          return null;
+        }
+
+        return perfTiming.responseStart - (perfTiming.responseStart - perfTiming.requestStart) + (serverTiming.end - serverTiming.start);
       }
     },
 
@@ -199,11 +250,20 @@ MbPerformance = {
       start: "domLoading",
       end:   "domComplete"
     },
-    domLoading: {
+    domInit: {
       sub: true,
       color: "rgba(255,41,41,0.2)",
       resp:  "client",
       label: "Init. DOM",
+      desc:  "Temps d'init arbre DOM",
+      start: "responseEnd",
+      end:   "domLoading"
+    },
+    domLoading: {
+      sub: true,
+      color: "rgba(255,41,41,0.2)",
+      resp:  "client",
+      label: "Constr. DOM",
       desc:  "Temps de construction de l'arbre DOM",
       start: "domLoading",
       end:   "domContentLoadedEventStart"
@@ -261,6 +321,20 @@ MbPerformance = {
     }
   },
 
+  /**
+   * Don't use cookiejar as it may not be ready yet
+   *
+   * @returns {String,null}
+   */
+  readCookie: function() {
+    var value = /mediboard-profiling=([^;]+)/.exec(document.cookie);
+    if (!value) {
+      return null;
+    }
+
+    return decodeURI(value[1]);
+  },
+
   init: function(){
     if (!MbPerformance.timingSupport) {
       return;
@@ -268,6 +342,7 @@ MbPerformance = {
 
     // defer, but not with defer() because prototype is not here yet !
     try {
+      MbPerformance.profiling = MbPerformance.readCookie() == '"1"';
       MbPerformance.addEvent("load", function(){
         setTimeout(function(){
           MbPerformance.startPlotting();
@@ -278,11 +353,6 @@ MbPerformance = {
   },
 
   startPlotting: function(){
-    var cookie =  new CookieJar();
-    var profiling = cookie.get("profiling");
-
-    MbPerformance.profiling = profiling == 1;
-
     if (MbPerformance.profiling) {
       MbPerformance.plot();
 
@@ -299,35 +369,60 @@ MbPerformance = {
   append: function(entry){
     this.timeline.push(entry);
   },
-  log: function(type, name, data, time, duration) {
-    var adv = null;
+
+  logScriptEvent: function(type, pageInfo, serverTiming, time, duration) {
+    var perfTiming;
 
     switch (type) {
       case "page":
-        adv = performance.timing;
+        perfTiming = performance.timing;
         break;
 
       case "ajax":
-        adv = MbPerformance.searchEntry(name);
+        perfTiming = MbPerformance.searchEntry(pageInfo.id);
 
-        if (adv) {
-          duration = adv.responseEnd - adv.startTime;
+        if (perfTiming) {
+          duration = perfTiming.responseEnd - perfTiming.startTime;
         }
+        break;
     }
 
-    var timeEntry = new MbPerformanceTimeEntry(type, name, time, duration, data, adv);
+    var timeEntry = new MbPerformanceTimeEntry(type, pageInfo, time, duration, perfTiming, serverTiming);
 
     MbPerformance.append(timeEntry);
   },
+  log: function(type, name, data, time, duration) {
+    /*var entryData;
 
-  searchEntry: function(name) {
+    switch (type) {
+      case "page":
+        entryData = performance.timing;
+        break;
+
+      case "ajax":
+        entryData = MbPerformance.searchEntry(name);
+
+        if (entryData) {
+          duration = entryData.responseEnd - entryData.startTime;
+        }
+
+      default: // find previous entry
+    }
+
+    if (entryData)
+
+    var timeEntry = new MbPerformanceTimeEntry(type, name, time, duration, data, adv);
+
+    MbPerformance.append(timeEntry);*/
+  },
+
+  searchEntry: function(id) {
     var entries = performance.getEntries();
-    var id = name.split(/\|/)[2];
 
     if (entries && entries.length) {
       for (var i = 0, l = entries.length; i < l; i++) {
         var entry = entries[i];
-        if (entry.name.indexOf("__uniqueID=|"+id+"|") > -1) {
+        if (entry.initiatorType === "xmlhttprequest" && entry.name.indexOf("__uniqueID=|"+id+"|") > -1) {
           return entry;
         }
       }
@@ -337,27 +432,200 @@ MbPerformance = {
   },
 
   mark: function(label){
-    this.append(new MbPerformanceTimeEntry("mark", label, performance.now()));
+    //this.append(new MbPerformanceTimeEntry("mark", label, performance.now()));
+  },
+
+  /**
+   *
+   * @param {HTMLSelectElement} select
+   * @param {String=}           way
+   */
+  zoom: function (select, way) {
+    var index = select.selectedIndex;
+    switch (way) {
+      case "+":
+        if (index == 0) {
+          return;
+        }
+
+        select.selectedIndex--;
+        break;
+
+      case "-":
+        if (index == select.options.length-1) {
+          return;
+        }
+
+        select.selectedIndex++;
+        break;
+    }
+
+    MbPerformance.timeScale = select.value;
+    MbPerformance.buildTimingDetails();
+  },
+
+  buildTimingDetails: function(){
+    var left, right, table;
+
+    if (MbPerformance.timingDetailsTable) {
+      table = MbPerformance.timingDetailsTable;
+      left  = table.down(".left-col").update("");
+      right = table.down(".right-col").update("");
+    }
+    else {
+      var zoom = DOM.div({className: "zoom"},
+        "<button class='zoom-out notext' onclick='MbPerformance.zoom(this.next(), \"-\")'></button>",
+        "<select style='display: none;' onchange='MbPerformance.zoom(this)'>" +
+          "<option>0.125</option>" +
+          "<option>0.25</option>" +
+          "<option>0.5</option>" +
+          "<option>1</option>" +
+          "<option>2</option>" +
+          "<option selected>5</option>" +
+          "<option>10</option>" +
+          "<option>20</option>" +
+          "<option>50</option>" +
+          "<option>100</option>" +
+          "<option>200</option>" +
+          "<option>400</option>" +
+        "</select>",
+        "<button class='zoom-in notext' onclick='MbPerformance.zoom(this.previous(), \"+\")'></button>"
+      );
+      table = DOM.table({className: "main layout timeline"},
+        DOM.tr({},
+          left  = DOM.td({className: "left-col"}),
+          DOM.td({className: "right-col-cell"},
+            right = DOM.div({className: "right-col"})
+          )
+        ),
+        DOM.tr({},
+          DOM.td({}, zoom),
+          DOM.td({})
+        )
+      );
+    }
+
+    var addBar = function(type, container, perfTiming, perfOffset, serverTiming, serverOffset){
+      var t = MbPerformance.markingTypes[type];
+
+      if (perfTiming && (perfTiming[t.end] && perfTiming[t.start] || t.getValue && t.getStart)) {
+        var start, length;
+
+        if (t.getValue) {
+          start  = t.getStart(serverTiming, perfTiming) - serverOffset;
+          length = t.getValue(serverTiming, perfTiming);
+        }
+        else {
+          start  = perfTiming[t.start] - perfOffset;
+          length = perfTiming[t.end]   - perfTiming[t.start];
+        }
+
+        var title = t.label+"\n"+t.desc+"\nDuration: "+length+"ms\nStart: "+start+"ms";
+        var bar = DOM.div({
+          title: title,
+          className: "bar bar-"+t.resp+" bar-type-"+type+(t.sub ? " sub" : "")
+        });
+
+        bar.setStyle({
+          left:  (start  / MbPerformance.timeScale)+"px",
+          width: (length / MbPerformance.timeScale)+"px"
+        });
+
+        container.insert(bar);
+      }
+    };
+
+    var ruler = DOM.div({className: "ruler"});
+
+    for (var i = 0; i < 100; i++) {
+      var ms = i*1000;
+      var tick = DOM.span({}, ms);
+      tick.style.left = (ms / MbPerformance.timeScale)+"px";
+      ruler.insert(tick);
+    }
+
+    left.insert(DOM.div({className: "ruler"}));
+    right.insert(ruler);
+
+    MbPerformance.timeline.each(function(d){
+      var title = DOM.div({title: d.pageInfo.a},
+          $T("module-"+d.pageInfo.m+"-court")+"<br />"+
+          $T("mod-"+d.pageInfo.m+"-tab-"+d.pageInfo.a));
+
+      var container = DOM.div({});
+      var perfTiming = d.perfTiming;
+      var perfOffset;
+      var serverTiming = d.serverTiming;
+      var serverOffset;
+
+      if (d.type == "page") {
+        perfOffset = perfTiming.navigationStart;
+        serverOffset = perfTiming.navigationStart;
+      }
+      else {
+        perfOffset = 0;
+        serverOffset = performance.timing.navigationStart;
+      }
+
+      Object.keys(MbPerformance.markingTypes).each(function(type) {
+        addBar(type, container, perfTiming, perfOffset, serverTiming, serverOffset);
+      });
+
+      left.insert(title);
+      right.insert(container);
+    });
+
+    if (!MbPerformance.timingDetailsTable) {
+      document.body.insert(table);
+      MbPerformance.timingDetailsTable = table;
+    }
+  },
+
+  showTimingDetails: function() {
+    MbPerformance.buildTimingDetails();
+
+    Modal.open(MbPerformance.timingDetailsTable, {
+      showClose: true,
+      width: -10,
+      height: -10
+    });
   },
 
   plot: function(){
     var series = [
       {data: [], label: "Page"},
+      {data: [], label: "Ajax"},
       {data: [], label: "Mark"},
-      {data: [], label: "Chrono"},
-      {data: [], label: "Ajax"}
+      {data: [], label: "Chrono"}
     ];
 
-    var timeline = this.timeline;/*.sort(function(a, b){
-      return a.time - b.time;
-    });*/
+    var timeline = this.timeline;
 
     var g = 24;
     var y = 0;
+    var xmax = 0;
 
     var chronos = [];
 
     timeline.each(function(d){
+      var s = MbPerformance.types[d.type]-1;
+      var ord = 0;
+
+      xmax = Math.max(xmax, d.time+d.duration);
+
+      series[s].data.push([
+        d.time,
+        (ord*s)+0.8,
+        d.time+d.duration,
+
+        $T("module-"+d.pageInfo.m+"-court")+"<br />"+
+        $T("mod-"+d.pageInfo.m+"-"+d.pageInfo.a)+"<br />"+
+          "Time: "+d.time+" ms<br />"+
+          "Duration: "+d.duration+ " ms"
+      ]);
+    });
+
+    /*[].each(function(d){
       var s = MbPerformance.types[d.type];
       var ord;
 
@@ -399,6 +667,8 @@ MbPerformance = {
 
           var time = serverTime - refTime;
 
+          xmax = Math.max(xmax, time+serverEvent.dur);
+
           series[1].data.push([
             time,
             ord+0.8,
@@ -438,6 +708,8 @@ MbPerformance = {
       text += "Time: "+d.time + " ms<br />"+
               "Duration: "+d.duration+" ms";
 
+      xmax = Math.max(xmax, d.time + d.duration);
+
       series[s-1].data.push([
         d.time,
         ord,
@@ -445,10 +717,6 @@ MbPerformance = {
         text,
         uid
       ]);
-    });
-
-    /*chronos.each(function(chrono){
-      console.log(chrono);
     });*/
 
     var container = jQuery("#profiling-plot");
@@ -460,8 +728,9 @@ MbPerformance = {
 
       // Toggle plot
       jQuery('<button class="stats notext" title="Afficher le graphique"></button>').click(function(){
-        MbPerformance.plot();
-        container.toggle();
+        MbPerformance.showTimingDetails();
+        //MbPerformance.plot();
+        //container.toggle();
       }).appendTo(profilingToolbar);
 
       // Download report
@@ -480,7 +749,7 @@ MbPerformance = {
       }).appendTo("body");
 
       // Show toolbar
-      jQuery('<div id="profiler-overview" class="not-printable"><div id="profiler-timebar"></div></div>').appendTo("body");
+      jQuery('<div id="profiler-overview"><div class="profiler-buttons"><!--<button class="lookup notext"></button>--></div><div id="profiler-timebar"></div></div>').appendTo("body");
     }
 
     var graph = jQuery("#profiling-graph");
@@ -522,7 +791,7 @@ MbPerformance = {
     if (!MbPerformance.markingsDrawn) {
       markings.each(function(marking){
         var resp = MbPerformance.responsabilityColors[marking.resp];
-        var line = jQuery('<div title="'+marking.desc+'" class="marking '+(marking.sub ? 'sub' : '')+'" style="background: '+marking.color+'; border-color: '+resp+';">'+(marking.sub ? '&nbsp;- ' : '')+marking.label+"<span style='float:right;'>"+marking.value+" ms</span></div>");
+        var line = jQuery('<div title="'+marking.desc+'" class="marking '+(marking.sub ? 'sub' : '')+'" style="background: '+marking.color+'; border-color: '+resp+';">'+(marking.sub ? '&nbsp;- ' : '')+marking.label+"<span style='float:right;'>"+Math.round(marking.value)+" ms</span></div>");
         overview.append(line);
 
         if (!marking.sub) {
@@ -537,6 +806,8 @@ MbPerformance = {
       timeBar.each(function(time){
         timeBarContainer.append("<div style='width: "+(100 * (time.value / timeBarTotal))+"%; background-color: "+MbPerformance.responsabilityColors[time.type]+";'></div>");
       });
+
+      //overview.find("button.lookup").click(MbPerformance.showTimingDetails);
     }
 
     MbPerformance.markingsDrawn = true;
@@ -550,6 +821,10 @@ MbPerformance = {
         }
       },
       xaxis: {
+        min: 0,
+        max: xmax
+      },
+      yaxis: {
         min: 0
       },
       grid: {
@@ -588,7 +863,7 @@ MbPerformance = {
     };
 
     if (type.getValue) {
-      marking.value = type.getValue();
+      marking.value = type.getValue(MbPerformance.pageDetail, timing);
       marking.xaxis = {
         from: 0,
         to:   0
@@ -621,7 +896,7 @@ MbPerformance = {
     this.timers[label] = performance.now();
   },
 
-  timeEnd: function(label, data) {
+  timeEnd: function(label, ajaxId) {
     if (!this.profiling) {
       return;
     }
@@ -630,18 +905,33 @@ MbPerformance = {
       return;
     }
 
+    var now = performance.now();
     var time = this.timers[label];
+    var timeEntry;
+
     delete this.timers[label];
 
-    var entry = new MbPerformanceTimeEntry("chrono", label, time, performance.now() - time, data);
+    (function(timeEntry, ajaxId){
+      if (!ajaxId) {
+        timeEntry = MbPerformance.timeline[0];
+      }
+      else {
+        timeEntry = MbPerformance.timeline.find(function(t){
+          return t.pageInfo.id == ajaxId;
+        });
+      }
 
-    this.append(entry);
-  },
+      if (timeEntry) {
+        timeEntry.perfTiming = timeEntry.perfTiming || {};
 
-  timeIt: function(label, callback, data) {
-    MbPerformance.timeStart(label);
-    callback();
-    MbPerformance.timeEnd(label, data);
+        if (label == "eval") {
+          timeEntry.perfTiming.domLoading = time;
+          timeEntry.perfTiming.domContentLoadedEventStart = time;
+          timeEntry.perfTiming.domContentLoadedEventEnd = now;
+          timeEntry.perfTiming.domComplete = now;
+        }
+      }
+    }).delay(2, timeEntry, ajaxId);
   },
 
   dump: function(){
@@ -729,5 +1019,14 @@ MbPerformance = {
     form.submit();
   }
 };
+
+if (window.performance && performance.setResourceTimingBufferSize) {
+  performance.onresourcetimingbufferfull = function(){
+    console.error("Resource timing buffer full");
+  }
+
+  performance.setResourceTimingBufferSize(500);
+  performance.clearResourceTimings();
+}
 
 MbPerformance.init();
