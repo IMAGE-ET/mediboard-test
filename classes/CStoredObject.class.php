@@ -2138,7 +2138,7 @@ class CStoredObject extends CModelObject {
    */
   function loadFwdRef($field, $cached = false) {
     // Object scope cache
-    if (isset($this->_fwd[$field]) && $this->_fwd[$field]->_id) {
+    if ($cached && isset($this->_fwd[$field]) && $this->_fwd[$field]->_id) {
       return $this->_fwd[$field];
     }
 
