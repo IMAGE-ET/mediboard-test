@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPfacturation
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
@@ -27,7 +27,8 @@ $where["facture_cabinet.praticien_id"] = CSQLDataSource::prepareIn(array_keys($l
 
 $facture = new CFactureCabinet();
 
-foreach ($facture->_specs["taux_tva"]->_list as $taux) {
+$list_taux = explode("|", CAppUI::conf("dPcabinet CConsultation default_taux_tva"));
+foreach ($list_taux as $taux) {
   $list_taux[] = $taux;
   $where["taux_tva"] = " = '$taux'";
   $factures = $facture->loadList($where, "ouverture, praticien_id");
