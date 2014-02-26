@@ -144,11 +144,18 @@
           {{* Dernière ligne avec les initiales *}}
           <tr>
             <td colspan="3" style="text-align: right;">Initiales :</td>
+            {{assign var=prescription_id value=$prescription->_id}}
             {{foreach from=$dates item=_date}}
-              <td>&nbsp;</td>
-              <td></td>
-              <td></td>
-              <td></td>
+              {{foreach from=$moments item=_moment}}
+                <td>
+                  {{if @isset($initiales.$prescription_id.$_date.$_moment|smarty:nodefaults)}}
+                    {{foreach from=$initiales.$prescription_id.$_date.$_moment item=_initiales name=initiales}}
+                      {{$_initiales}}
+                      {{if !$smarty.foreach.initiales.last}} - {{/if}}
+                    {{/foreach}}
+                  {{/if}}
+                </td>
+              {{/foreach}}
             {{/foreach}}
           </tr>
         </table>

@@ -26,7 +26,7 @@ Admissions = {
   },
   
   printDHE: function(type, object_id) {
-    var url = new Url("dPplanningOp", "view_planning");
+    var url = new Url("planningOp", "view_planning");
     url.addParam(type, object_id);
     url.popup(700, 550, "DHE");
   },
@@ -77,8 +77,21 @@ Admissions = {
     url.addParam("sejours_ids", sejours_ids.join(","));
     url.addParam("pdf", 0);
     url.popup(700, 500);
-  }
-  ,
+  },
+  printPlanSoins: function(table_id) {
+    var url = new Url("soins", "offline_plan_soins");
+    var table = $(table_id);
+    var sejours_ids = table.select("input[name=print_doc]:checked").pluck("value");
+
+    if (sejours_ids == "") {
+      alert("Veuillez sélectionner au minimum un patient pour l'impression");
+      return false;
+    }
+
+    url.addParam("sejours_ids", sejours_ids.join(","));
+    url.addParam("mode_dupa", 1);
+    url.popup(700, 500);
+  },
   beforePrint: function() {
     Admissions.totalUpdater.stop();
     Admissions.listUpdater.stop();
@@ -99,13 +112,13 @@ Admissions = {
   },
   
   showLegend: function() {
-    new Url("dPadmissions", "vw_legende").requestModal();
+    new Url("admissions", "vw_legende").requestModal();
   },
 
   showDocs: function(sejour_id) {
     Admissions.totalUpdater.stop();
     Admissions.listUpdater.stop();
-    var url = new Url("dPhospi", "httpreq_documents_sejour");
+    var url = new Url("hospi", "httpreq_documents_sejour");
     url.addParam("sejour_id", sejour_id);
     url.addParam("only_sejour", 1);
     url.addParam("with_patient", 1);
@@ -148,7 +161,7 @@ Admissions = {
   },
 
   updatePeriodicalPreAdmissions : function() {
-    setInterval(function(){
+    setInterval(function() {
       Admissions.updateListPreAdmissions();
     }, 120000);
   }
