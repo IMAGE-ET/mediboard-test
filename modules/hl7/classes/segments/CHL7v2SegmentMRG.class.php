@@ -60,7 +60,7 @@ class CHL7v2SegmentMRG extends CHL7v2Segment {
     $data[] = null;
     
     // MRG-7: Prior Patient Name (XPN) (optional repeating)
-    $data[] = $this->getXPN($patient_eliminee);;
+    $data[] = $this->getXPN($patient_eliminee, $receiver);
     
     $this->fill($data);
   }
