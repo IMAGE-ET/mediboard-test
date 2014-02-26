@@ -569,8 +569,10 @@ MbPerformance = {
       }
       else {
         perfOffset = 0;
-        serverOffset = performance.timing.navigationStart - MbPerformance.timeOffset;
+        serverOffset = performance.timing.navigationStart;
       }
+
+      serverOffset -= MbPerformance.timeOffset;
 
       Object.keys(MbPerformance.markingTypes).each(function(type) {
         addBar(type, container, perfTiming, perfOffset, serverTiming, serverOffset);
