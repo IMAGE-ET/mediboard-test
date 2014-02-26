@@ -33,14 +33,16 @@
       </th>
       <td>
         <input type="text" name="modele_keywords"  value="" class="autocomplete str" autocomplete="off" />
+        <button type="button" class="print"
+                onclick="if (Admissions.printForSelection($V(this.form.modele_id), '{{$type}}')) { Admissions.afterPrint(); }">{{tr}}Print{{/tr}}</button>
         <input type="hidden" name="modele_id" value="" />
       </td>
     </tr>
     <tr>
       <td colspan="2" class="button">
         <button type="button" class="print" onclick="Admissions.printFichesAnesth('{{$type}}')">Imprimer les fiches d'anesthésie</button>
-        <button type="button" class="print"
-          onclick="if (Admissions.printForSelection($V(this.form.modele_id), '{{$type}}')) { Admissions.afterPrint(); }">{{tr}}Print{{/tr}}</button>
+        <button type="button" class="print" onclick="Admissions.printPlanSoins('{{$type}}')">Imprimer les plan de soins</button>
+        <br />
         <button type="button" class="close" onclick="Admissions.afterPrint();">{{tr}}Close{{/tr}}</button>
       </td>
     </tr>

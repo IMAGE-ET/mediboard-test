@@ -47,6 +47,14 @@
     {{/if}}
 
     {{foreach from=$dates item=_date}}
+
+      {{assign var="text_align" value="left"}}
+      {{if $_date == $now_date}}
+        {{assign var="text_align" value="center"}}
+      {{elseif $_date >= $now_date}}
+        {{assign var="text_align" value="right"}}
+      {{/if}}
+
       {{foreach from=$moments item=_moment}}
         {{assign var=administrations_in_hour value=""}}
         {{if isset($line->_administrations_moment.$unite_prise.$_date.$_moment|smarty:nodefaults)}}
@@ -65,30 +73,44 @@
           {{assign var=quantite value=$line->_quantity_by_date_moment.$unite_prise.$_date.$_moment.total}}
         {{/if}}
 
-        <td style="vertical-align: top; text-align: right">
+        <td style="vertical-align: top; text-align: {{$text_align}};">
           <div class="compact">
             {{if $quantite!="-" || @array_key_exists($_moment, $line->_administrations_moment.$unite_prise.$_date)}}
               {{if !$quantite}}
                 {{assign var=quantite value="0"}}
               {{/if}}
 
-              {{if @$administrations_in_hour.quantite_planifiee}}
+              {{if $text_align == "center"}}
+                {{if @$administrations_in_hour.quantite_planifiee}}
+                  {{if @$administrations_in_hour.quantite}}
+                    {{$administrations_in_hour.quantite}}
+                  {{else}}
+                    0
+                  {{/if}}
+                  {{if @$administrations_in_hour.quantite != $administrations_in_hour.quantite_planifiee}}
+                    /{{$administrations_in_hour.quantite_planifiee}}
+                  {{/if}}
+                {{else}}
+                  {{if @$administrations_in_hour.quantite}}
+                    {{$administrations_in_hour.quantite}}
+                    {{if $administrations_in_hour.quantite != $quantite}}
+                      {{if !$line->sans_planif}}/{{$quantite}}{{/if}}
+                    {{/if}}
+                  {{elseif $line->_active && !$line->sans_planif}}
+                    {{if $quantite}}0/{{$quantite}}{{/if}}
+                  {{/if}}
+                {{/if}}
+              {{elseif $text_align == "left"}}
+                {{* Que les administrations *}}
                 {{if @$administrations_in_hour.quantite}}
                   {{$administrations_in_hour.quantite}}
-                {{else}}
-                  0
-                {{/if}}
-                {{if @$administrations_in_hour.quantite != $administrations_in_hour.quantite_planifiee}}
-                  /{{$administrations_in_hour.quantite_planifiee}}
                 {{/if}}
               {{else}}
-                {{if @$administrations_in_hour.quantite}}
-                  {{$administrations_in_hour.quantite}}
-                  {{if $administrations_in_hour.quantite != $quantite}}
-                    {{if !$line->sans_planif}}/{{$quantite}}{{/if}}
-                  {{/if}}
-                {{elseif $line->_active && !$line->sans_planif}}
-                  {{if $quantite}}0/{{$quantite}}{{/if}}
+                {{* Que les planifications *}}
+                {{if @$administrations_in_hour.quantite_planifiee}}
+                  {{$administrations_in_hour.quantite_planifiee}}
+                {{elseif $quantite}}
+                  {{$quantite}}
                 {{/if}}
               {{/if}}
             {{/if}}
@@ -146,8 +168,17 @@
     {{/if}}
     {{foreach from=$line->_ref_lines item=_line}}
       {{foreach from=$dates item=_date}}
+
+        {{assign var="text_align" value="left"}}
+        {{if $_date == $now_date}}
+          {{assign var="text_align" value="center"}}
+        {{elseif $_date >= $now_date}}
+          {{assign var="text_align" value="right"}}
+        {{/if}}
+
+
         {{foreach from=$moments item=_moment}}
-          <td style="vertical-align: top; text-align: right">
+          <td style="vertical-align: top; text-align: {{$text_align}}">
             {{if isset($_line->_administrations_moment.$_date.$_moment|smarty:nodefaults)}}
               {{assign var=nb_adm value=$_line->_administrations_moment.$_date.$_moment}}
             {{else}}
@@ -176,13 +207,23 @@
             {{/if}}
 
             <div class="compact">
-              {{if $nb_adm}}
-                {{$nb_adm}}
-              {{elseif $nb_prevue && $line->_active}}
-                0
-              {{/if}}
+              {{if $text_align == "left"}}
+                {{* Que les administrations *}}
+                {{if $nb_adm}}
+                  {{$nb_adm}}
+                {{/if}}
+              {{elseif $text_align == "center"}}
+                {{if $nb_adm}}
+                  {{$nb_adm}}
+                {{elseif $nb_prevue && $line->_active}}
+                  0
+                {{/if}}
 
-              {{if $nb_prevue && $line->_active && ($nb_prevue != $nb_adm)}}/{{$nb_prevue}}{{/if}}
+                {{if $nb_prevue && $line->_active && ($nb_prevue != $nb_adm)}}/{{$nb_prevue}}{{/if}}
+              {{else}}
+                {{* Que les planifications *}}
+                {{if $nb_prevue && $line->_active && ($nb_prevue != $nb_adm)}}{{$nb_prevue}}{{/if}}
+              {{/if}}
             </div>
           </td>
         {{/foreach}}
