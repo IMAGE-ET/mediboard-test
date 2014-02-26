@@ -75,6 +75,10 @@ Main.add(function () {
       var tabsActes = Control.Tabs.create('tab-actes', false);
     {{/if}}
   {{/if}}
+
+  if (tabsConsult.activeLink.key) {
+    Reglement.reload(true);
+  }
     
   {{if $consult->sejour_id && $rpu && !$mutation_id}}
   loadSuivi({{$rpu->sejour_id}});
