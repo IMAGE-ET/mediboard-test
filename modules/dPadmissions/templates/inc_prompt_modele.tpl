@@ -41,7 +41,7 @@
     <tr>
       <td colspan="2" class="button">
         <button type="button" class="print" onclick="Admissions.printFichesAnesth('{{$type}}')">Imprimer les fiches d'anesthésie</button>
-        <button type="button" class="print" onclick="Admissions.printPlanSoins('{{$type}}')">Imprimer les plan de soins</button>
+        <button type="button" class="print" onclick="Admissions.printPlanSoins('{{$type}}')">Imprimer les plans de soins</button>
         <br />
         <button type="button" class="close" onclick="Admissions.afterPrint();">{{tr}}Close{{/tr}}</button>
       </td>

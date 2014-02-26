@@ -45,7 +45,14 @@
     </tr>
     <tr>
       <td colspan="2">
-        <h2><strong>SERVICE :</strong> {{mb_value object=$service field=nom}}</h2>
+        <h2>
+          <strong>SERVICE :</strong>
+          {{if isset($service|smarty:nodefaults)}}
+            {{mb_value object=$service field=nom}}
+          {{elseif $sejour->_ref_curr_affectation->_id}}
+            {{mb_value object=$sejour->_ref_curr_affectation->_ref_service field=nom}}
+          {{/if}}
+        </h2>
       </td>
     </tr>
   </thead>
