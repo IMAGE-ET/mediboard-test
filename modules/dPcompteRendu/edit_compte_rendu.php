@@ -172,8 +172,8 @@ $nb_printers   = $curr_user->loadRefFunction()->countBackRefs("printers");
 // Gestion du template
 $templateManager = new CTemplateManager($_GET);
 $templateManager->isModele = false;
-$object->fillTemplate($templateManager);
 $templateManager->document = $compte_rendu->_source;
+$object->fillTemplate($templateManager);
 $templateManager->loadHelpers($user->_id, $compte_rendu->object_class, $curr_user->function_id);
 $templateManager->loadLists($user->_id, $modele_id ? $modele_id : $compte_rendu->modele_id);
 $templateManager->applyTemplate($compte_rendu);
