@@ -569,7 +569,7 @@ MbPerformance = {
         serverOffset = perfTiming.navigationStart;
 
         if (MbPerformance.timeOffset === null) {
-          MbPerformance.timeOffset = perfTiming.navigationStart - serverTiming.start;
+          MbPerformance.timeOffset = perfTiming.requestStart - serverTiming.start;
         }
       }
       else {
