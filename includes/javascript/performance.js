@@ -569,7 +569,7 @@ MbPerformance = {
       }
       else {
         perfOffset = 0;
-        serverOffset = performance.timing.navigationStart + MbPerformance.timeOffset;
+        serverOffset = performance.timing.navigationStart - MbPerformance.timeOffset;
       }
 
       Object.keys(MbPerformance.markingTypes).each(function(type) {
