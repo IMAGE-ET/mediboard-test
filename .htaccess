@@ -15,6 +15,13 @@ Options -Indexes
   # Apache request duration and start time, in microseconds : D=187183 t=1392367646740874
   Header set X-Mb-RequestInfo '%D %t'
 
+  <IfModule mod_setenvif.c>
+    <FilesMatch "\.php$">
+      SetEnvIf X-Requested-With "XMLHttpRequest" IS_AJAX
+      Header set Set-Cookie "timing=%D %t" env=!IS_AJAX
+    </FilesMatch>
+  </IfModule>
+
   # P3P header fixing logout issues in IE 
   Header set P3P 'CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"'
 

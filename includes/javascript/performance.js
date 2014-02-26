@@ -101,13 +101,33 @@ MbPerformance = {
     },
 
     // Server
-    server: {
+    /*server: {
       color: "rgba(14,168,0,0.2)",
       resp:  "server",
       label: "Serveur",
       desc:  "Temps passé sur le serveur",
       start: "requestStart",
       end:   "responseStart"
+    },*/
+    handler: {
+      color: "rgba(14,168,0,0.2)",
+      resp:  "server",
+      label: "Apache",
+      desc:  "Temps de la requête Apache",
+      getValue: function(serverTiming, perfTiming){
+        if (!serverTiming.handlerEnd || !serverTiming.handlerStart) {
+          return null;
+        }
+
+        return (serverTiming.handlerEnd - serverTiming.handlerStart);
+      },
+      getStart: function(serverTiming, perfTiming){
+        if (!serverTiming.handlerStart) {
+          return null;
+        }
+
+        return serverTiming.handlerStart;
+      }
     },
     frameworkInit: {
       sub: true,
@@ -209,39 +229,38 @@ MbPerformance = {
         return start;
       }
     },
-    other: {
-      sub: true,
-      color: "rgba(14,168,0,0.2)",
-      resp:  "server",
-      label: "Autre",
-      desc:  "Autre temps, passé dans le serveur",
-      getValue: function(serverTiming, perfTiming){
-        if (!perfTiming.responseStart || !perfTiming.requestStart) {
-          return null;
-        }
-
-        var serverTime = perfTiming.responseStart - perfTiming.requestStart;
-        return serverTime - (serverTiming.end - serverTiming.start);
-      },
-      getStart: function(serverTiming, perfTiming){
-        if (!perfTiming.responseStart || !perfTiming.requestStart) {
-          return null;
-        }
-
-        var offset = 0;
-        if (!perfTiming.navigationStart) {
-          offset = performance.timing.navigationStart;
-        }
-
-        return offset + perfTiming.requestStart + (serverTiming.end - serverTiming.start);
-      }
-    },
 
     // response
     response: {
       color: "rgba(41,144,255,0.2)",
       resp:  "network",
       label: "Réponse",
+      desc:  "Temps de réponse",
+      getValue: function(serverTiming, perfTiming){
+        return perfTiming.responseEnd - serverTiming.handlerEnd;
+      },
+      getStart: function(serverTiming, perfTiming){
+        return serverTiming.handlerEnd;
+      }
+    },
+    otherInfra: {
+      sub: true,
+      color: "rgba(41,144,255,0.2)",
+      resp:  "network",
+      label: "Autre infra",
+      desc:  "Autre temps, acheminement de la requête et de la page",
+      getValue: function(serverTiming, perfTiming){
+        return perfTiming.responseStart - serverTiming.handlerEnd;
+      },
+      getStart: function(serverTiming, perfTiming){
+        return serverTiming.handlerEnd;
+      }
+    },
+    download: {
+      sub: true,
+      color: "rgba(41,144,255,0.2)",
+      resp:  "network",
+      label: "Téléchargemebt",
       desc:  "Temps de téléchargement de la réponse",
       start: "responseStart",
       end:   "responseEnd"
@@ -303,6 +322,18 @@ MbPerformance = {
     }
   },
 
+  parseServerTiming: function(str) {
+    var timing = /D=(\d+) t=(\d+)/.exec(str);
+    if (!timing) {
+      return null;
+    }
+
+    return {
+      duration: timing[1] / 1000,
+      start:    timing[2] / 1000
+    };
+  },
+
   toggleProfiling: function(){
     var cookie =  new CookieJar();
     var profiling = cookie.get("profiling");
@@ -332,8 +363,9 @@ MbPerformance = {
    *
    * @returns {String,null}
    */
-  readCookie: function() {
-    var value = /mediboard-profiling=([^;]+)/.exec(document.cookie);
+  readCookie: function(cookieName) {
+    cookieName = cookieName || "mediboard-profiling";
+    var value = new RegExp(cookieName+"=([^;]+)").exec(document.cookie);
     if (!value) {
       return null;
     }

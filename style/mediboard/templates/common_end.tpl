@@ -7,8 +7,8 @@
   {{mb_default var=dosql value=''}}
 
   // Perfomance log
-  (function(){
-    if (MbPerformance.timingSupport) {
+  if (MbPerformance.timingSupport) {
+    (function(){
       var offset = (performance.timing.responseEnd - performance.timing.fetchStart);
       var serverTiming = {{$timer|@json}};
       var page = {
@@ -17,10 +17,18 @@
         id: 0,
         guid: "{{$request_uid}}"
       };
+
+      var timing = MbPerformance.parseServerTiming(MbPerformance.readCookie("timing"));
+
+      if (timing) {
+        serverTiming.handlerStart = timing.start;
+        serverTiming.handlerEnd   = timing.duration+timing.start;
+      }
+
       MbPerformance.pageDetail = serverTiming;
       MbPerformance.logScriptEvent.defer("page", page, serverTiming, 0, offset);
-    }
-  })();
+    })();
+  }
 </script>
 
 </body>

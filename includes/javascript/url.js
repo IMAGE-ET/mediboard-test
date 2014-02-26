@@ -39,22 +39,26 @@ Ajax.Responders.register({
       var transport = e.transport;
       var timer = transport.getResponseHeader("X-Mb-Timing");
       if (timer) {
-        var now = performance.now();
-        var req     = transport.getResponseHeader("X-Mb-Req").split("|");
-        var uid     = transport.getResponseHeader("X-Mb-RequestUID");
-        var reqInfo = transport.getResponseHeader("X-Mb-RequestInfo");
-        var timing = /D=(\d+) t=(\d+)/.exec(reqInfo);
-        var page = {
-          m: req[0],
-          a: req[1],
-          id: transport.__uniqueID,
-          guid: uid
-        };
+        var now   = performance.now(),
+          req     = transport.getResponseHeader("X-Mb-Req").split("|"),
+          uid     = transport.getResponseHeader("X-Mb-RequestUID"),
+          reqInfo = transport.getResponseHeader("X-Mb-RequestInfo"),
+          timing  = MbPerformance.parseServerTiming(reqInfo),
+          page    = {
+            m: req[0],
+            a: req[1],
+            id: transport.__uniqueID,
+            guid: uid
+          };
+
+        var serverTiming = timer.evalJSON();
+
         if (timing) {
-          page.duration = parseInt(timing[1], 10);
-          page.start    = parseInt(timing[2], 10);
+          serverTiming.handlerStart = timing.start;
+          serverTiming.handlerEnd   = timing.duration+timing.start;
         }
-        MbPerformance.logScriptEvent.delay(1, "ajax", page, timer.evalJSON(), e.__start, now-e.__start);
+
+        MbPerformance.logScriptEvent.delay(1, "ajax", page, serverTiming, e.__start, now-e.__start);
       }
     }
   },
