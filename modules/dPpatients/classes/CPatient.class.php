@@ -1341,6 +1341,7 @@ class CPatient extends CPerson {
     if ($docs_valid) {
       $this->_nb_docs .= "$docs_valid";
     }
+    return $docs_valid;
   }
 
   function loadRefsPrescriptions($perm = null) {
