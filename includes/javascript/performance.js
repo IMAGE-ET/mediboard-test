@@ -228,7 +228,12 @@ MbPerformance = {
           return null;
         }
 
-        return perfTiming.responseStart - (perfTiming.responseStart - perfTiming.requestStart) + (serverTiming.end - serverTiming.start);
+        var offset = 0;
+        if (!perfTiming.navigationStart) {
+          offset = performance.timing.navigationStart;
+        }
+
+        return offset + perfTiming.requestStart + (serverTiming.end - serverTiming.start);
       }
     },
 
