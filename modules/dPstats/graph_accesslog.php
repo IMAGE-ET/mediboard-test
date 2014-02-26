@@ -34,7 +34,7 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
 
     case "one-year":
       $step          = "+1 WEEK";
-      $period_format = "%U";
+      $period_format = "%Y S%U";
       $hours         = 24 * 7;
       $ticks_modulo  = 2;
       break;

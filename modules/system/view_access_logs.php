@@ -43,7 +43,7 @@ switch ($interval = CValue::getOrSession("interval", "one-day")) {
     $today = CMbDT::date("-1 DAY", $to);
     // Hours limitation
     $from = CMbDT::dateTime("+$hour_min HOUR", $today);
-    $to   = CMbDT::dateTime("+$hour_max HOUR", $today);
+    $to   = CMbDT::dateTime("+$hour_max HOUR -1 MINUTE", $today);
     break;
 
   case "one-week":
