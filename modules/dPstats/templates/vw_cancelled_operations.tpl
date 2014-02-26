@@ -5,14 +5,14 @@ Main.add(function(){
 </script>
 
 <ul class="control_tabs" id="cancelled-operations">
-{{foreach from=$list item=month key=month_label}}
-  <li><a href="#month-{{$month_label}}">
-    {{$month_label}} ({{$month.total}})
+{{foreach from=$counts item=_count key=_month}}
+  <li><a href="#month-{{$_month}}">
+    {{$_month}} <small>({{$_count}})</small>
   </a></li>
 {{/foreach}}
 </ul>
 <span style="float: right">
-  <form name="intervs" action="?" method="get" onsubmit="alert('toto'); return checkForm(this)">
+  <form name="intervs" action="?" method="get" onsubmit="return checkForm(this)">
     <input type="hidden" name="m" value="stats" />
     <input type="hidden" name="tab" value="vw_cancelled_operations" />
     <select name="type_modif" onchange="this.form.submit()">
@@ -36,55 +36,45 @@ Main.add(function(){
       <th>{{mb_title class=COperation field=rques}}</th>
       <th>{{mb_title class=COperation field=codes_ccam}}</th>
     </tr>
-    
+
+    {{foreach from=$month key=plage_status item=_operations}}
     <tr>
-      <th colspan="100" class="section">Interventions dans une vacation</th>
+      <th colspan="100" class="section">{{tr}}COperation-title-{{$plage_status}}{{/tr}}</th>
     </tr>
-    {{foreach from=$month.inPlage item=op}}
+    {{foreach from=$_operations item=op}}
       <tr>
         <td>
           <span onmouseover="ObjectTooltip.createEx(this, '{{$op->_guid}}')">
             {{mb_value object=$op field=_datetime}}
           </span>
         </td>
-        <td class="text">{{mb_value object=$op field=salle_id}}</td>
-        <td>{{mb_value object=$op field=chir_id}}</td>
+        <td class="text">{{mb_value object=$op field=salle_id tooltip=true}}</td>
+        <td>
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$op->_ref_praticien}}
+        </td>
         <td class="text">{{mb_value object=$op->_ref_sejour field=patient_id}}</td>
         <td>{{mb_value object=$op->_ref_sejour field=type}}</td>
         <td class="text">{{mb_value object=$op field=libelle}}</td>
-        <td class="text">{{mb_value object=$op field=rques}}</td>
-        <td>{{mb_value object=$op field=codes_ccam}}</td>
-      </tr>
-    {{foreachelse}}
-      <tr>
-        <td colspan="100" class="empty">{{tr}}COperation.none{{/tr}}</td>
-      </tr>
-    {{/foreach}}
-      
-    
-    <tr>
-      <th colspan="100" class="section">Interventions hors plage</th>
-    </tr>
-    {{foreach from=$month.horsPlage item=op}}
-      <tr>
+        <td class="text compact">{{mb_value object=$op field=rques}}</td>
         <td>
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$op->_guid}}')">
-            {{mb_value object=$op field=_datetime}}
-          </span>
+          {{foreach from=$op->_codes_ccam item=_code}}
+            {{$_code}}
+          {{foreachelse}}
+            <div class="empty">{{tr}}CActeCCAM.none{{/tr}}</div>
+          {{/foreach}}
         </td>
-        <td>{{mb_value object=$op field=salle_id}}</td>
-        <td>{{mb_value object=$op field=chir_id}}</td>
-        <td>{{mb_value object=$op->_ref_sejour field=patient_id}}</td>
-        <td>{{mb_value object=$op->_ref_sejour field=type}}</td>
-        <td class="text">{{mb_value object=$op field=libelle}}</td>
-        <td class="text">{{mb_value object=$op field=rques}}</td>
-        <td>{{mb_value object=$op field=codes_ccam}}</td>
       </tr>
     {{foreachelse}}
       <tr>
         <td colspan="100" class="empty">{{tr}}COperation.none{{/tr}}</td>
       </tr>
     {{/foreach}}
-  
+
+    {{foreachelse}}
+    <tr>
+      <td colspan="100" class="empty">{{tr}}COperation.none{{/tr}}</td>
+    </tr>
+    {{/foreach}}
+
   </table>
 {{/foreach}}

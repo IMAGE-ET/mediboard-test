@@ -31,7 +31,6 @@ function graphOpAnnulees(
   $type_sejour = null,
   $hors_plage = false
 ) {
-
   $miner = new COperationWorkflow();
   $miner->warnUsage();
 
@@ -48,9 +47,6 @@ function graphOpAnnulees(
 
   $prat = new CMediusers;
   $prat->load($prat_id);
-
-  $salle = new CSalle;
-  $salle->load($salle_id);
 
   $serie_total = array(
     'label' => 'Total',
@@ -69,7 +65,7 @@ function graphOpAnnulees(
   $query->addLJoinClause("operation_workflow", "operation_workflow.operation_id = operations.operation_id");
   $query->addWhere("DATE(date_cancellation) = DATE(date_operation)");
   $query->addWhereClause("date_operation", "BETWEEN '$date_min' AND '$date_max'");
-  $query->addWhereClause("salle_id", CSQLDataSource::prepareIn(array_keys($salles), $salle_id));
+  $query->addWhereClause("salle_id", CSQLDataSource::prepareIn(array_keys($salles)));
   $query->addGroup("mois, salle_id");
   $query->addOrder("mois, salle_id");
 
@@ -138,7 +134,8 @@ function graphOpAnnulees(
     $subtitle   .= " - Dr $prat->_view";
   }
   if ($salle_id) {
-    $subtitle   .= " - $salle->nom";
+    $salle = reset($salles);
+    $subtitle   .= " - $salle->_view";
   }
   if ($code_ccam) {
     $subtitle   .= " - CCAM : $code_ccam";
