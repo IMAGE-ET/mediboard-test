@@ -25,6 +25,9 @@ $sejours = array();
 
 $period = CAppUI::conf("soins plan_soins period" , CGroups::loadCurrent()->_guid);
 
+$now = CMbDT::dateTime();
+$now_date = CMbDT::date();
+
 $datetime_min = "$date 00:00:00";
 $datetime_max = CMbDT::date("+ $period days", $date) . " 23:59:59";
 
@@ -133,6 +136,10 @@ foreach ($sejours as $_sejour) {
   if (array_sum($prescription->_nb_lines_plan_soins) == 0) {
     unset ($sejours[$_sejour->_id]);
     continue;
+  }
+
+  if (!$service_id) {
+    $_sejour->loadRefCurrAffectation($now)->loadRefService();
   }
 
   $_sejour->loadRefPatient();
@@ -291,8 +298,8 @@ foreach ($initiales as $prescription_id => $_initiales) {
 
 $smarty = new CSmartyDP();
 
-$smarty->assign("now"      , CMbDT::dateTime());
-$smarty->assign("now_date" , CMbDT::date());
+$smarty->assign("now"      , $now);
+$smarty->assign("now_date" , $now_date);
 $smarty->assign("sejours"  , $sejours);
 if ($service_id) {
   $smarty->assign("service"  , $service);
