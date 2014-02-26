@@ -31,6 +31,7 @@ MbPerformance = {
   pageDetail: null,
   timingSupport: window.performance && window.performance.timing,
   timeScale: 5,
+  timeOffset: null,
   types: {
     page:   1,
     ajax:   2,
@@ -227,7 +228,12 @@ MbPerformance = {
           return null;
         }
 
-        return perfTiming.responseStart - (perfTiming.responseStart - perfTiming.requestStart) + (serverTiming.end - serverTiming.start);
+        var offset = 0;
+        if (!perfTiming.navigationStart) {
+          offset = performance.timing.navigationStart;
+        }
+
+        return offset + perfTiming.requestStart + (serverTiming.end - serverTiming.start);
       }
     },
 
@@ -394,26 +400,26 @@ MbPerformance = {
   log: function(type, name, data, time, duration) {
     /*var entryData;
 
-    switch (type) {
-      case "page":
-        entryData = performance.timing;
-        break;
+     switch (type) {
+     case "page":
+     entryData = performance.timing;
+     break;
 
-      case "ajax":
-        entryData = MbPerformance.searchEntry(name);
+     case "ajax":
+     entryData = MbPerformance.searchEntry(name);
 
-        if (entryData) {
-          duration = entryData.responseEnd - entryData.startTime;
-        }
+     if (entryData) {
+     duration = entryData.responseEnd - entryData.startTime;
+     }
 
-      default: // find previous entry
-    }
+     default: // find previous entry
+     }
 
-    if (entryData)
+     if (entryData)
 
-    var timeEntry = new MbPerformanceTimeEntry(type, name, time, duration, data, adv);
+     var timeEntry = new MbPerformanceTimeEntry(type, name, time, duration, data, adv);
 
-    MbPerformance.append(timeEntry);*/
+     MbPerformance.append(timeEntry);*/
   },
 
   searchEntry: function(id) {
@@ -488,7 +494,7 @@ MbPerformance = {
           "<option>100</option>" +
           "<option>200</option>" +
           "<option>400</option>" +
-        "</select>",
+          "</select>",
         "<button class='zoom-in notext' onclick='MbPerformance.zoom(this.previous(), \"+\")'></button>"
       );
       table = DOM.table({className: "main layout timeline"},
@@ -520,7 +526,7 @@ MbPerformance = {
           length = perfTiming[t.end]   - perfTiming[t.start];
         }
 
-        var title = t.label+"\n"+t.desc+"\nDuration: "+length+"ms\nStart: "+start+"ms";
+        var title = t.label+"\n"+t.desc+"\nDébut: "+Math.round(start)+"ms\nDurée: "+Math.round(length)+"ms";
         var bar = DOM.div({
           title: title,
           className: "bar bar-"+t.resp+" bar-type-"+type+(t.sub ? " sub" : "")
@@ -549,7 +555,7 @@ MbPerformance = {
 
     MbPerformance.timeline.each(function(d){
       var title = DOM.div({title: d.pageInfo.a},
-          $T("module-"+d.pageInfo.m+"-court")+"<br />"+
+        $T("module-"+d.pageInfo.m+"-court")+"<br />"+
           $T("mod-"+d.pageInfo.m+"-tab-"+d.pageInfo.a));
 
       var container = DOM.div({});
@@ -561,11 +567,17 @@ MbPerformance = {
       if (d.type == "page") {
         perfOffset = perfTiming.navigationStart;
         serverOffset = perfTiming.navigationStart;
+
+        if (MbPerformance.timeOffset === null) {
+          MbPerformance.timeOffset = perfTiming.navigationStart - serverTiming.start;
+        }
       }
       else {
         perfOffset = 0;
         serverOffset = performance.timing.navigationStart;
       }
+
+      serverOffset -= MbPerformance.timeOffset;
 
       Object.keys(MbPerformance.markingTypes).each(function(type) {
         addBar(type, container, perfTiming, perfOffset, serverTiming, serverOffset);
@@ -619,105 +631,105 @@ MbPerformance = {
         d.time+d.duration,
 
         $T("module-"+d.pageInfo.m+"-court")+"<br />"+
-        $T("mod-"+d.pageInfo.m+"-"+d.pageInfo.a)+"<br />"+
+          $T("mod-"+d.pageInfo.m+"-"+d.pageInfo.a)+"<br />"+
           "Time: "+d.time+" ms<br />"+
           "Duration: "+d.duration+ " ms"
       ]);
     });
 
     /*[].each(function(d){
-      var s = MbPerformance.types[d.type];
-      var ord;
+     var s = MbPerformance.types[d.type];
+     var ord;
 
-      switch (d.type) {
-        case "page":
-          ord = 0;
-          break;
+     switch (d.type) {
+     case "page":
+     ord = 0;
+     break;
 
-        case "ajax":
-          ord = 3 + (y*2)%g;
-          y++;
-          break;
+     case "ajax":
+     ord = 3 + (y*2)%g;
+     y++;
+     break;
 
-        case "chrono":
-          ord = 2;
-          if (d.data) {
-            chronos.push(d);
-            //return;
-          }
-          break;
+     case "chrono":
+     ord = 2;
+     if (d.data) {
+     chronos.push(d);
+     //return;
+     }
+     break;
 
-        default:
-          ord = 3;
-          break;
-      }
+     default:
+     ord = 3;
+     break;
+     }
 
-      ord += 0.5;
+     ord += 0.5;
 
-      // Display server data for page and ajax
-      if (d.type === "ajax" || d.type === "page") {
-        var refTime = null;
-        var steps = d.data.steps;
+     // Display server data for page and ajax
+     if (d.type === "ajax" || d.type === "page") {
+     var refTime = null;
+     var steps = d.data.steps;
 
-        steps.each(function(serverEvent){
-          var serverTime = serverEvent.time;
-          if (refTime === null) {
-            refTime = serverTime - d.time;
-          }
+     steps.each(function(serverEvent){
+     var serverTime = serverEvent.time;
+     if (refTime === null) {
+     refTime = serverTime - d.time;
+     }
 
-          var time = serverTime - refTime;
+     var time = serverTime - refTime;
 
-          xmax = Math.max(xmax, time+serverEvent.dur);
+     xmax = Math.max(xmax, time+serverEvent.dur);
 
-          series[1].data.push([
-            time,
-            ord+0.8,
-            time+serverEvent.dur,
+     series[1].data.push([
+     time,
+     ord+0.8,
+     time+serverEvent.dur,
 
-            serverEvent.label + "<br />" +
-              d.name + "<br />" +
-              "Time: "+time + " ms<br />"+
-              "Duration: "+serverEvent.dur + " ms"
-          ]);
-        });
-      }
+     serverEvent.label + "<br />" +
+     d.name + "<br />" +
+     "Time: "+time + " ms<br />"+
+     "Duration: "+serverEvent.dur + " ms"
+     ]);
+     });
+     }
 
-      var name = d.name;
-      var text = "";
-      var uid = null;
-      var parts;
+     var name = d.name;
+     var text = "";
+     var uid = null;
+     var parts;
 
-      if (parts = name.match(/(\w+)\|(\w+)((?:@)\d+)?/i)) {
-        var m = parts[1];
-        var a = parts[2];
-        if (parts[3]) {
-          uid = parts[3].match(/@(\d+)/)[1];
-        }
+     if (parts = name.match(/(\w+)\|(\w+)((?:@)\d+)?/i)) {
+     var m = parts[1];
+     var a = parts[2];
+     if (parts[3]) {
+     uid = parts[3].match(/@(\d+)/)[1];
+     }
 
-        text = "m = "+m+"<br />a = "+a+"<br />";
-        text += $T("mod-"+m+"-tab-"+a)+"<br />";
-      }
-      else {
-        text = name + "<br />";
+     text = "m = "+m+"<br />a = "+a+"<br />";
+     text += $T("mod-"+m+"-tab-"+a)+"<br />";
+     }
+     else {
+     text = name + "<br />";
 
-        if (d.data) {
-          text += d.data+"<br />";
-        }
-      }
+     if (d.data) {
+     text += d.data+"<br />";
+     }
+     }
 
-      text += "Time: "+d.time + " ms<br />"+
-              "Duration: "+d.duration+" ms";
+     text += "Time: "+d.time + " ms<br />"+
+     "Duration: "+d.duration+" ms";
 
-      xmax = Math.max(xmax, d.time + d.duration);
+     xmax = Math.max(xmax, d.time + d.duration);
 
-      series[s-1].data.push([
-        d.time,
-        ord,
-        d.time + d.duration,
-        text,
-        uid
-      ]);
-    });*/
+     series[s-1].data.push([
+     d.time,
+     ord,
+     d.time + d.duration,
+     text,
+     uid
+     ]);
+     });*/
 
     var container = jQuery("#profiling-plot");
 
