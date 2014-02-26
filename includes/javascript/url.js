@@ -40,14 +40,20 @@ Ajax.Responders.register({
       var timer = transport.getResponseHeader("X-Mb-Timing");
       if (timer) {
         var now = performance.now();
-        var req = transport.getResponseHeader("X-Mb-Req").split("|");
-        var uid = transport.getResponseHeader("X-Mb-RequestUID");
+        var req     = transport.getResponseHeader("X-Mb-Req").split("|");
+        var uid     = transport.getResponseHeader("X-Mb-RequestUID");
+        var reqInfo = transport.getResponseHeader("X-Mb-RequestInfo");
+        var timing = /D=(\d+) t=(\d+)/.exec(reqInfo);
         var page = {
           m: req[0],
           a: req[1],
           id: transport.__uniqueID,
           guid: uid
         };
+        if (timing) {
+          page.duration = parseInt(timing[1], 10);
+          page.start    = parseInt(timing[2], 10);
+        }
         MbPerformance.logScriptEvent.delay(1, "ajax", page, timer.evalJSON(), e.__start, now-e.__start);
       }
     }

@@ -31,6 +31,7 @@ MbPerformance = {
   pageDetail: null,
   timingSupport: window.performance && window.performance.timing,
   timeScale: 5,
+  timeOffset: null,
   types: {
     page:   1,
     ajax:   2,
@@ -520,7 +521,7 @@ MbPerformance = {
           length = perfTiming[t.end]   - perfTiming[t.start];
         }
 
-        var title = t.label+"\n"+t.desc+"\nDuration: "+length+"ms\nStart: "+start+"ms";
+        var title = t.label+"\n"+t.desc+"\nDébut: "+Math.round(start)+"ms\nDurée: "+Math.round(length)+"ms";
         var bar = DOM.div({
           title: title,
           className: "bar bar-"+t.resp+" bar-type-"+type+(t.sub ? " sub" : "")
@@ -561,10 +562,14 @@ MbPerformance = {
       if (d.type == "page") {
         perfOffset = perfTiming.navigationStart;
         serverOffset = perfTiming.navigationStart;
+
+        if (MbPerformance.timeOffset === null) {
+          MbPerformance.timeOffset = perfTiming.navigationStart - serverTiming.start;
+        }
       }
       else {
         perfOffset = 0;
-        serverOffset = performance.timing.navigationStart;
+        serverOffset = performance.timing.navigationStart + MbPerformance.timeOffset;
       }
 
       Object.keys(MbPerformance.markingTypes).each(function(type) {
