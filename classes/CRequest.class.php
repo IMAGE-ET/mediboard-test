@@ -98,13 +98,13 @@ class CRequest {
   /**
    * LEFT JOIN [...] ON [...]
    * 
-   * @param string $key   The table name of the LEFT JOIN clause
-   * @param string $value The conditional expression of the LEFT JOIN clause 
+   * @param string $table The table name of the LEFT JOIN clause
+   * @param string $on    The conditional expression of the LEFT JOIN clause
    * 
    * @return CRequest Current request
    */
-  function addLJoinClause($key, $value) {
-    $this->ljoin[$key] = $value;
+  function addLJoinClause($table, $on) {
+    $this->ljoin[$table] = $on;
     
     return $this;
   }
@@ -126,15 +126,15 @@ class CRequest {
   
   /**
    * RIGHT JOIN [...] ON [...]
-   * 
-   * @param string $key   The table name of the RIGHT JOIN clause
-   * @param string $value The conditional expression of the RIGHT JOIN clause 
+   *
+   * @param string $table The table name of the LEFT JOIN clause
+   * @param string $on    The conditional expression of the LEFT JOIN clause
    * 
    * @return CRequest Current request
    */
-  function addRJoinClause($key, $value) {
-    $this->rjoin[$key] = $value;
-    
+  function addRJoinClause($table, $on) {
+    $this->rjoin[$table] = $on;
+
     return $this;
   }
   

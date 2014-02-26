@@ -493,7 +493,39 @@ abstract class CSQLDataSource {
     $this->freeResult($cur);
     return $hashlist;
   }
-  
+
+  /**
+   * Returns a recursive array tree as result of query where successive columns are branches of the tree
+   *
+   * @param string $query The SQL query
+   *
+   * @return array
+   */
+  function loadTree($query) {
+    $cur = $this->exec($query);
+    $cur or CApp::rip();
+
+    $this->chronoFetch->start();
+
+    $tree = array();
+    while ($columns = $this->fetchRow($cur)) {
+      $branch =& $tree;
+      $leaf = array_pop($columns);
+      foreach ($columns as $_column) {
+        if (!isset($branch[$_column])) {
+          $branch[$_column] = array();
+        }
+        $branch =& $branch[$_column];
+      }
+      $branch = $leaf;
+    }
+
+    $this->chronoFetch->stop();
+
+    $this->freeResult($cur);
+    return $tree;
+  }
+
   /**
    * Returns a array as result of query where column 0 is key and all columns are values
    * 
