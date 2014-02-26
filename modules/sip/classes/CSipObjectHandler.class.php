@@ -119,6 +119,7 @@ class CSipObjectHandler extends CEAIObjectHandler {
         $idexsPatientElimine = $idexPatientElimine->loadMatchingList();
 
         $idexs = array_merge($idexsPatient, $idexsPatientElimine);
+        $idexs_changed = array();
         if (count($idexs) > 1) {
           foreach ($idexs as $_idex) {
             // On continue pour ne pas mettre en trash l'IPP du patient que l'on garde
