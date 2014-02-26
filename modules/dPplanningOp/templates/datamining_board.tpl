@@ -42,12 +42,13 @@ Main.add(function() {
         par
         <input type="text" id="limit" size="4" value="{{$limit}}">
       </span>
-      Statut des mineurs d'opération
+      Statut des explorateurs d'opération
     </th>
   </tr>
   <tr>
     <th>Mineur</th>
-    <th colspan="2">Non encore minées</th>
+    <th>Dernière exploration</th>
+    <th colspan="2">Non encore explorées</th>
     <th colspan="2">Non encore consolidées</th>
   </tr>
 
@@ -55,6 +56,9 @@ Main.add(function() {
   <tr>
     <td>
       <strong>{{tr}}{{$_miner->_class}}{{/tr}}</strong>
+    </td>
+    <td>
+      {{mb_value object=$_miner field=date}}
     </td>
     <td>
       {{$_miner->_count_unmined}}

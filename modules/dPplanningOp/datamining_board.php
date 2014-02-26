@@ -24,6 +24,7 @@ $miners = array();
 foreach ($miner_classes as $_class) {
   /** @var COperationMiner $miner */
   $miner = new $_class;
+  $miner->loadMatchingObject("date DESC");
   $miner->makeMineCounts();
   $miners[] = $miner;
 }
