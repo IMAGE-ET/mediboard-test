@@ -1,4 +1,6 @@
 <?php
+$locales['COperationMiner-warnusage-0'] = 'L\'explorateur de données utilisé \'%s\' datant du \'%s\' n\'est pas à jour.';
+$locales['COperationMiner-warnusage-1'] = 'L\'explorateur de données utilisé \'%s\' est à jour !';
 $locales['CTempsHospi'] = 'Temps d\'hospitalisation';
 $locales['CTempsHospi.type.ambu'] = 'Ambulatoire';
 $locales['CTempsHospi.type.comp'] = 'Hospi. complète';

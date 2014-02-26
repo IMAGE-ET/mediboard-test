@@ -188,4 +188,17 @@ class COperationMiner extends CStoredObject {
      $this->remined = 1;
     };
   }
+
+  function warnUsage() {
+    /** @var self $that */
+    $that = new $this->_class;
+    $that->loadMatchingObject("date DESC");
+    $warn = $that->date >= CMbDT::date("-1 DAY") ? 1 : 0;
+    CAppUI::stepMessage(
+      $warn ? UI_MSG_OK : UI_MSG_WARNING,
+      "COperationMiner-warnusage-$warn",
+      CAppUI::tr("$that->_class"),
+      $that->date)
+    ;
+  }
 }

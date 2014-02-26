@@ -9,103 +9,143 @@
  * @version    $Revision$
  */
 
-function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $codeCCAM = "", $type_hospi = "", $hors_plage) {
-  if (!$debut) $debut = CMbDT::date("-1 YEAR");
-  if (!$fin) $fin = CMbDT::date();
-  
+/**
+ * @param null $date_min
+ * @param null $date_max
+ * @param null $prat_id
+ * @param null $salle_id
+ * @param null $bloc_id
+ * @param null $code_ccam
+ * @param null $type_sejour
+ * @param bool $hors_plage
+ *
+ * @return array
+ */
+function graphOpAnnulees(
+  $date_min = null,
+  $date_max = null,
+  $prat_id = null,
+  $salle_id = null,
+  $bloc_id = null,
+  $code_ccam = null,
+  $type_sejour = null,
+  $hors_plage = false
+) {
+
+  $miner = new COperationWorkflow();
+  $miner->warnUsage();
+
+  if (!$date_min) {
+    $date_min = CMbDT::date("-1 YEAR");
+  }
+
+  if (!$date_max) {
+    $date_max = CMbDT::date();
+  }
+
+  $date_min = CMbDT::format($date_min, "%Y-%m-01");
+  $date_max = CMbDT::transform("+1 MONTH", $date_max, "%Y-%m-01");
+
   $prat = new CMediusers;
   $prat->load($prat_id);
-  
+
   $salle = new CSalle;
   $salle->load($salle_id);
 
-  $ticks = array();
   $serie_total = array(
     'label' => 'Total',
     'data' => array(),
     'markers' => array('show' => true),
     'bars' => array('show' => false)
   );
-  for ($i = $debut; $i <= $fin; $i = CMbDT::date("+1 MONTH", $i)) {
-    $ticks[] = array(count($ticks), CMbDT::transform("+0 DAY", $i, "%m/%Y"));
+
+  $salles = CSalle::getSallesStats($salle_id, $bloc_id);
+
+  $query = new CRequest();
+  $query->addColumn("salle_id");
+  $query->addColumn("DATE_FORMAT(date_operation, '%Y-%m')", "mois");
+  $query->addColumn("COUNT(DISTINCT(operations.operation_id))", "total");
+  $query->addTable("operations");
+  $query->addLJoinClause("operation_workflow", "operation_workflow.operation_id = operations.operation_id");
+  $query->addWhere("DATE(date_cancellation) = DATE(date_operation)");
+  $query->addWhereClause("date_operation", "BETWEEN '$date_min' AND '$date_max'");
+  $query->addWhereClause("salle_id", CSQLDataSource::prepareIn(array_keys($salles), $salle_id));
+  $query->addGroup("mois, salle_id");
+  $query->addOrder("mois, salle_id");
+
+  // Filtre sur hors plage
+  if ($hors_plage) {
+    $query->addWhereClause("plageop_id", "IS NOT NULL");
+  }
+
+  // Filtre sur le praticien
+  if ($prat_id) {
+    $query->addWhereClause("operations.chir_id", "= '$prat_id'");
+  }
+
+  // Filtre sur les codes CCAM
+  if ($code_ccam) {
+    $query->addWhereClause("operations.codes_ccam", "LIKE '%$code_ccam%'");
+  }
+
+  // Filtre sur le type d'hospitalisation
+  if ($type_sejour) {
+    $query->addLJoinClause("sejour", "sejour.sejour_id = operations.sejour_id");
+    $query->addWhereClause("sejour.type", "= '$type_sejour'");
+  }
+
+  // Query result
+  $ds = CSQLDataSource::get("std");
+  $tree = $ds->loadTree($query->getRequest());
+
+  // Build horizontal ticks
+  $months = array();
+  $ticks = array();
+  for ($_date = $date_min; $_date < $date_max; $_date = CMbDT::date("+1 MONTH", $_date)) {
+    $count_ticks = count($ticks);
+    $ticks[] = array($count_ticks, CMbDT::format($_date, "%m/%Y"));
+    $months[CMbDT::format($_date, "%Y-%m")] = $count_ticks;
     $serie_total['data'][] = array(count($serie_total['data']), 0);
   }
 
-  $salles = CSalle::getSallesStats($salle_id, $bloc_id);
+  // Build series
   $series = array();
   $total = 0;
 
-  // Gestion du hors plage
-  if ($hors_plage) {
-    $where_hors_plage = "AND (plagesop.date BETWEEN '$debut' AND '$fin'
-                              OR operations.date BETWEEN '$debut' AND '$fin')";
-  }
-  else {
-    $where_hors_plage = "AND plagesop.date BETWEEN '$debut' AND '$fin'
-                         AND operations.date IS NULL
-                         AND operations.plageop_id IS NOT NULL";
-  }
-
-  foreach ($salles as $salle) {
-    $serie = array(
-      'label' => utf8_encode($bloc_id ? $salle->nom : $salle->_view),
-      'data' => array()
+  foreach ($salles as $_salle) {
+    $_serie = array(
+      "label" => utf8_encode($bloc_id ? $_salle->nom : $_salle->_view),
     );
-    $query = "SELECT COUNT(DISTINCT(operations.operation_id)) AS total,
-                DATE_FORMAT(COALESCE(operations.date, plagesop.date), '%m/%Y') AS mois,
-                DATE_FORMAT(COALESCE(operations.date, plagesop.date), '%Y-%m-01') AS orderitem
-              FROM operations
-              LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
-              LEFT JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
-              LEFT JOIN plagesop ON plagesop.plageop_id = operations.plageop_id
-              LEFT JOIN user_log ON user_log.object_id = operations.operation_id
-                AND user_log.object_class = 'COperation'
-              WHERE operations.annulee = '1'
-                $where_hors_plage
-                AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
-                AND user_log.type = 'store'
-                AND DATE(user_log.date) = plagesop.date
-                AND user_log.fields LIKE '%annulee%'";
-  
-    if ($type_hospi) $query .= "\nAND sejour.type = '$type_hospi'";
-    if ($prat_id)    $query .= "\nAND operations.chir_id = '$prat_id'";
-    if ($codeCCAM)   $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
 
-    $query .= "\nAND sallesbloc.salle_id = '$salle->_id'";
-  
-    $query .= "GROUP BY mois
-               ORDER BY orderitem";
-
-    $result = $prat->_spec->ds->loadlist($query);
-    
-    foreach ($ticks as $i => $tick) {
-      $f = true;
-      foreach ($result as $r) {
-        if ($tick[1] == $r["mois"]) {
-          $serie["data"][] = array($i, $r["total"]);
-          $serie_total["data"][$i][1] += $r["total"];
-          $total += $r["total"];
-          $f = false;
-          break;
-        }
-      }
-      if ($f) {
-        $serie["data"][] = array(count($serie["data"]), 0);
-      }
+    $data = array();
+    foreach ($months as $_month => $_tick) {
+      $value =  isset($tree[$_salle->_id][$_month]) ? $tree[$_salle->_id][$_month] : 0;
+      $data[] = array($_tick, $value);
+      $serie_total["data"][$_tick][1] += $value;
+      $total += $value;
     }
 
-    $series[] = $serie;
+    $_serie["data"] = $data;
+    $series[] = $_serie;
   }
-  
+
   $series[] = $serie_total;
-  
+
   // Set up the title for the graph
   $title = "Interventions annulées le jour même";
   $subtitle = "$total interventions";
-  if ($prat_id)  $subtitle   .= " - Dr $prat->_view";
-  if ($salle_id) $subtitle   .= " - $salle->nom";
-  if ($codeCCAM) $subtitle   .= " - CCAM : $codeCCAM";
-  if ($type_hospi) $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_hospi");
+  if ($prat_id) {
+    $subtitle   .= " - Dr $prat->_view";
+  }
+  if ($salle_id) {
+    $subtitle   .= " - $salle->nom";
+  }
+  if ($code_ccam) {
+    $subtitle   .= " - CCAM : $code_ccam";
+  }
+  if ($type_sejour) {
+    $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_sejour");
+  }
 
   $options = array(
     'title' => utf8_encode($title),
@@ -126,6 +166,8 @@ function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
       'toolbarSelectAll' => utf8_encode('Sélectionner tout le tableau')
     )
   );
-  
+
   return array('series' => $series, 'options' => $options);
 }
+
+

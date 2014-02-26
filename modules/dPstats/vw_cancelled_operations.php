@@ -18,7 +18,6 @@ $date_min   = CMbDT::date("first day of -0 months", $date_max);
 
 $prat_id    = CValue::get("prat_id");
 $salle_id   = CValue::get("salle_id");
-$bloc_id    = CValue::get("bloc_id");
 $codeCCAM   = CValue::get("codeCCAM");
 
 $prat = new CMediusers;
