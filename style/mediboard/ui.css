@@ -1518,6 +1518,15 @@ div.bullet.error {
   font-weight: normal;
 }
 
+#profiler-overview .profiler-buttons {
+  text-align: right;
+  display: none;
+}
+
+#profiler-overview:hover .profiler-buttons {
+  display: block;
+}
+
 #profiler-timebar {
   font-size: 0;
   height: 3px;
@@ -1526,6 +1535,91 @@ div.bullet.error {
 #profiler-timebar div {
   display: inline-block;
   height: 100%;
+}
+
+.timeline {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+}
+.timeline td {
+  border: 1px solid #999;
+}
+.timeline .left-col {
+  width: 200px;
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+.timeline .right-col {
+  overflow-x: scroll;
+}
+
+/** Ruler **/
+.timeline .left-col  > div.ruler,
+.timeline .right-col > div.ruler {
+  height: 10px;
+  position: relative;
+  font-size: 10px;
+  color: #999;
+  line-height: 1;
+  overflow: hidden;
+  /*max-width: 100%;*/
+}
+
+.timeline div.ruler span {
+  position: absolute;
+  border-left: 1px solid #ccc;
+  padding-left: 3px;
+}
+
+.timeline .left-col  > div,
+.timeline .right-col > div {
+  position: relative;
+  height: 30px;
+  border-bottom: 1px solid #999;
+}
+
+/** Bars **/
+.timeline .bar {
+  position: absolute;
+  height: 45%;
+  top: 2.5%;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+}
+
+.timeline .bar.sub {
+  top: 52.5%;
+  opacity: 0.7;
+}
+
+.timeline .bar:hover {
+  border: 1px solid #333;
+}
+
+.timeline .bar-client {
+  background: #C94C4C;
+  border-color: #C61F1F;
+}
+
+.timeline .bar-network {
+  background: #4C80C9;
+  border-color: #155FC6;
+}
+
+.timeline .bar-server {
+  background: #66B230;
+  border-color: #449B06;
+}
+
+.timeline .bar-type-session {
+  background: #66B230;
+  border-color: #449B06;
+}
+
+.timeline .zoom {
+  text-align: right;
 }
 
 /* To disable text selection */
