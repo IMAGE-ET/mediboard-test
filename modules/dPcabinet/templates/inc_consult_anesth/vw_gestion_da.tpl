@@ -140,6 +140,11 @@
               {{if $conf.dPcabinet.CConsultAnesth.check_close}}
                 <td><strong>IPAQSS:</strong>{{mb_include module=cabinet template=inc_check_ipaqss}}</td>
               {{/if}}
+              <td>
+                <span style="float:right;">
+                  {{mb_include module=system template=inc_object_history object=$consult_anesth}}
+                </span>
+              </td>
             </tr>
           </table>
           {{if $smarty.foreach.consults_anesth.last && $ops_sans_dossier_anesth|@count != 0}}
