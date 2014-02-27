@@ -245,8 +245,8 @@ $headers = array();
 $footers = array();
 
 if (CAppUI::conf("dPcompteRendu CCompteRendu header_footer_fly")) {
-  $headers = CCompteRendu::loadAllModelesFor($curr_user->_id, "prat", $compte_rendu->object_class, "header");
-  $footers = CCompteRendu::loadAllModelesFor($curr_user->_id, "prat", $compte_rendu->object_class, "footer");
+  $headers = CCompteRendu::loadAllModelesFor($user->_id, "prat", $compte_rendu->object_class, "header");
+  $footers = CCompteRendu::loadAllModelesFor($user->_id, "prat", $compte_rendu->object_class, "footer");
 }
 
 $smarty->assign("headers", $headers);
