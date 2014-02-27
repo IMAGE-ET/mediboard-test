@@ -1,23 +1,20 @@
 {{if $popup}}
-  {{mb_script module="patients" script="patient" ajax=true}}
+  {{mb_script module="patients"    script="patient"         ajax=true}}
+  {{mb_script module="soins"       script="plan_soins"      ajax=true}}
+  {{mb_script module="planningOp"  script="cim10_selector"  ajax=true}}
+  {{mb_script module="compteRendu" script="document"        ajax=true}}
+  {{mb_script module="compteRendu" script="modele_selector" ajax=true}}
+  {{mb_script module="cabinet"     script="file"            ajax=true}}
 
   {{if "dPmedicament"|module_active}}
     {{mb_script module="medicament" script="medicament_selector" ajax=true}}
     {{mb_script module="medicament" script="equivalent_selector" ajax=true}}
   {{/if}}
 
-  {{mb_script module="soins" script="plan_soins" ajax=true}}
-
   {{if "dPprescription"|module_active}}
     {{mb_script module="prescription" script="element_selector" ajax=true}}
-    {{mb_script module="prescription" script="prescription" ajax=true}}
+    {{mb_script module="prescription" script="prescription"     ajax=true}}
   {{/if}}
-
-  {{mb_script module="planningOp" script="cim10_selector" ajax=true}}
-
-  {{mb_script module="compteRendu" script="document" ajax=true}}
-  {{mb_script module="compteRendu" script="modele_selector" ajax=true}}
-  {{mb_script module="cabinet"     script="file" ajax=true}}
 {{/if}}
 
 {{if $isImedsInstalled}}
@@ -26,10 +23,9 @@
 
 {{assign var=prescription_id value=$sejour->_ref_prescription_sejour->_id}}
 
-<script type="text/javascript">
-  
+<script>
   loadResultLabo = function(sejour_id) {
-    var url = new Url("dPImeds", "httpreq_vw_sejour_results");
+    var url = new Url("Imeds", "httpreq_vw_sejour_results");
     url.addParam("sejour_id", sejour_id);
     url.requestUpdate('Imeds');
   }
@@ -54,20 +50,20 @@
   }
   
   loadConstantes = function() {
-    var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
+    var url = new Url("hospi", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", '{{$sejour->_guid}}');
     url.addParam("paginate", 1);
     url.requestUpdate("constantes");
   }
 
   loadDocuments = function() {
-    var url = new Url("dPhospi", "httpreq_documents_sejour");
+    var url = new Url("hospi", "httpreq_documents_sejour");
     url.addParam("sejour_id" , '{{$sejour->_id}}');
     url.requestUpdate("docs");
   }
 
   loadAntecedents = function() {
-    var url = new Url("dPcabinet","httpreq_vw_antecedents");
+    var url = new Url("cabinet","httpreq_vw_antecedents");
     url.addParam("sejour_id", '{{$sejour->_id}}');
     url.addParam("show_header", 1);
     url.requestUpdate('antecedents')
@@ -85,7 +81,7 @@
 
   refreshConstantesMedicales = function(context_guid, paginate, count) {
     if(context_guid) {
-      var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
+      var url = new Url("hospi", "httpreq_vw_constantes_medicales");
       url.addParam("context_guid", context_guid);
       url.addParam("paginate", paginate || 0);
       if (count) {
@@ -151,6 +147,7 @@
 
 <ul id="tab-sejour" class="control_tabs">
   <li><a href="#suivi_clinique" onmousedown="loadSuiviClinique();">{{tr}}CSejour.suivi_clinique{{/tr}}</a></li>
+  <li><a href="#constantes" onmousedown="loadConstantes();">{{tr}}CPatient.surveillance{{/tr}}</a></li>
   <li><a href="#dossier_traitement" onmousedown="loadSuiviSoins();">{{tr}}CSejour.suivi_soins{{/tr}}</a></li>
   {{if $isPrescriptionInstalled}}
     <li><a href="#prescription_sejour" onmousedown="loadPrescription();">Prescription</a></li>
@@ -158,7 +155,6 @@
   {{if $isImedsInstalled}}
     <li><a href="#Imeds" onmousedown="loadResultLabo('{{$sejour->_id}}');">Labo</a></li>
   {{/if}}
-  <li><a href="#constantes" onmousedown="loadConstantes();">{{tr}}CPatient.surveillance{{/tr}}</a></li>
   <li><a href="#docs" onmousedown="loadDocuments();">{{tr}}CMbObject-back-documents{{/tr}}</a></li>
   <li><a href="#antecedents" onmousedown="loadAntecedents();">{{tr}}IDossierMedical-back-antecedents{{/tr}}</a></li>
   <li style="float: right">
@@ -169,9 +165,8 @@
   </li>
 </ul>
 
-<hr class="control_tabs" />
-
 <div id="suivi_clinique" style="display: none;"></div>
+<div id="constantes" style="display: none;"></div>
 <div id="dossier_traitement" style="display: none;"></div>
 {{if $isPrescriptionInstalled}}
   <div id="prescription_sejour" style="text-align: left; display: none;"></div>
@@ -179,6 +174,5 @@
 {{if $isImedsInstalled}}
   <div id="Imeds" style="display: none;"></div>
 {{/if}}
-<div id="constantes" style="display: none; text-align: left;"></div>
 <div id="docs" style="display: none;"></div>
 <div id="antecedents" style="display: none;"></div>

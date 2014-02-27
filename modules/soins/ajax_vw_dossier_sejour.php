@@ -17,7 +17,9 @@ $mode_pharma  = CValue::get("mode_pharma", 0);
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
+CPrescription::$_load_lite = true;
 $sejour->loadRefPrescriptionSejour();
+CPrescription::$_load_lite = false;
 
 $smarty = new CSmartyDP();
 
