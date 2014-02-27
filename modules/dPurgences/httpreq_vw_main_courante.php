@@ -113,16 +113,15 @@ foreach ($listSejours as $sejour) {
   if ($prescription->_id) {
     if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
       $prescription->_count_fast_recent_modif = $prescription->countAlertsNotHandled("medium");
+      $prescription->_count_urgence["all"] = $prescription->countAlertsNotHandled("high");
     }
     else {
       $prescription->countFastRecentModif();
+      $prescription->loadRefsLinesMedByCat();
+      $prescription->loadRefsLinesElementByCat();
+      $prescription->countUrgence($date);
     }
-    // Ampoule rouge
-    CPrescription::$_load_lite = true;
-    $prescription->loadRefsLinesMedByCat();
-    CPrescription::$_load_lite = false;
-    $prescription->loadRefsLinesElementByCat();
-    $prescription->countUrgence($date);
+
   }
 
   // Chargement de l'IPP
