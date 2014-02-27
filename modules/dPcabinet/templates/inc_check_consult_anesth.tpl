@@ -133,13 +133,13 @@
 
       {{if $consult->chrono <= $consult|const:'EN_COURS'}}
         <button type="button" class="tick" onclick="document.formCheckConsultAnesth.submit();">Terminer la consultation</button>
-        {{if $consult->_refs_dossiers_anesth|@count > 1 || $op_sans_dossier_anesth && $conf.dPcabinet.CConsultAnesth.use_new_da}}
+        {{if $consult->_refs_dossiers_anesth|@count > 1 || $op_sans_dossier_anesth}}
           <br/>
           <button type="button" id="didac_button_terminer_gerer_suivants" class="edit" onclick="onSubmitFormAjax(document.formCheckConsultAnesth, { onComplete : function () {Control.Modal.close();GestionDA.edit();} } );">
             Terminer la consultation et gérer les dossiers suivants
           </button>
         {{/if}}
-      {{elseif ($consult->_refs_dossiers_anesth|@count > 1 || $op_sans_dossier_anesth) && $conf.dPcabinet.CConsultAnesth.use_new_da}}
+      {{elseif $consult->_refs_dossiers_anesth|@count > 1 || $op_sans_dossier_anesth}}
         <button type="button" class="edit" onclick="Control.Modal.close();GestionDA.edit();">
           Gérer les dossiers suivants
         </button>

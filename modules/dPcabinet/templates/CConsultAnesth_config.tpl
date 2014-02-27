@@ -44,7 +44,6 @@
     {{mb_include module=system template=inc_config_bool var=view_premedication}}
     {{mb_include module=system template=inc_config_bool var=show_facteurs_risque}}
     {{mb_include module=system template=inc_config_bool var=check_close}}
-    {{mb_include module=system template=inc_config_bool var=use_new_da}}
 
     <tr>
       <td class="button" colspan="2">
