@@ -40,7 +40,15 @@
           <tr>
             <th class="category">Praticien</th>
             <th style="text-align: left;">{{$facture->_ref_praticien}}</th>
-            <th colspan="2"></th>
+            {{if $facture->_ref_praticien->rpps}}
+              <th>{{mb_title object=$facture->_ref_praticien field=rpps}}</th>
+              <th>{{mb_value object=$facture->_ref_praticien field=rpps}}</th>
+             {{elseif $facture->_ref_praticien->adeli}}
+              <th>{{mb_title object=$facture->_ref_praticien field=adeli}}</th>
+              <th>{{mb_value object=$facture->_ref_praticien field=adeli}}</th>
+            {{else}}
+              <th colspan="2"></th>
+            {{/if}}
           </tr>
           <tr>
             <th class="category">Patient</th>
