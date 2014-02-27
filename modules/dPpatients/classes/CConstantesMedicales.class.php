@@ -1318,6 +1318,15 @@ class CConstantesMedicales extends CMbObject {
       $where["datetime"] = "<= '$datetime'";
     }
 
+    $count = $constante->countList($where);
+
+    // Load all constants instead of checking every type to reduce number of SQL queries
+    /** @var self[] $all_list */
+    $all_list = array();
+    if ($count <= 30) {
+      $all_list = $constante->loadList($where, "datetime DESC");
+    }
+
     $list_datetimes = array();
     foreach ($list_constantes as $type => $params) {
       $list_datetimes[$type] = null;
@@ -1326,14 +1335,32 @@ class CConstantesMedicales extends CMbObject {
         continue;
       }
 
-      $_where = $where;
-      $_where[$type] = "IS NOT NULL";
-      $_list = $constante->loadList($_where, "datetime DESC", 1);
+      // Load them, if any ...
+      if ($count > 0) {
+        // Load them all and dispatch
+        if ($count <= 30) {
+          foreach ($all_list as $_const) {
+            $_value = $_const->$type;
+            if ($_value != null) {
+              $constante->$type = $_value;
+              $list_datetimes[$type] = $_const->datetime;
+              break;
+            }
+          }
+        }
 
-      if (count($_list)) {
-        $_const = reset($_list);
-        $constante->$type = $_const->$type;
-        $list_datetimes[$type] = $_const->datetime;
+        // Or pick them one by one
+        else {
+          $_where = $where;
+          $_where[$type] = "IS NOT NULL";
+          $_list = $constante->loadList($_where, "datetime DESC", 1);
+
+          if (count($_list)) {
+            $_const = reset($_list);
+            $constante->$type = $_const->$type;
+            $list_datetimes[$type] = $_const->datetime;
+          }
+        }
       }
     }
 
