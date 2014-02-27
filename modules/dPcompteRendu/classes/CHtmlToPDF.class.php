@@ -107,7 +107,7 @@ class CHtmlToPDF {
     }
 
     $this->content = str_replace("[Meta Données - Date de verrouillage - Date]" , $compte_rendu->valide ? CMbDT::format($date_lock, "%d/%m/%Y") : "", $this->content);
-    $this->content = str_replace("[Meta Données - Date de verrouillage - Heure]", $compte_rendu->valide ? CMbDT::format($date_lock, "%Hh%m") : "", $this->content);
+    $this->content = str_replace("[Meta Données - Date de verrouillage - Heure]", $compte_rendu->valide ? CMbDT::format($date_lock, "%Hh%M") : "", $this->content);
     $this->content = str_replace("[Meta Données - Verrouilleur - Nom]"      , $locker->_user_last_name, $this->content);
     $this->content = str_replace("[Meta Données - Verrouilleur - Prénom]"   , $locker->_user_first_name, $this->content);
     $this->content = str_replace("[Meta Données - Verrouilleur - Initiales]", $locker->_shortview, $this->content);
