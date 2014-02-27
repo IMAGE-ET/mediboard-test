@@ -46,7 +46,7 @@
       </form>
     {{/if}}
     {{if $facture->cloture}}
-      <button type="button" class="pdf" onclick="printFactureFR();" style="float:left;">Editer facture</button>
+      <button type="button" class="pdf" onclick="printFactureFR();" style="float:left;">Facture pdf</button>
     {{/if}}
   </td>
 </tr>
