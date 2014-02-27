@@ -765,7 +765,7 @@ class CMbFieldSpec {
         $dropdown = false;
       }
       if ($minOccurences === null || $minOccurences === "") {
-        $minOccurences = 1;
+        $minOccurences = 3;
       }
       
       $options = explode('|', $this->autocomplete);
