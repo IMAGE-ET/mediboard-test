@@ -32,7 +32,7 @@
     var url = new Url("dPbloc", "ajax_vw_suivi_salle");
     url.addParam('bloc_id', bloc_id);
     url.addParam('date', date);
-    var str = DateFormat.format(new Date(date), " d/M/yyyy");
+    var str = DateFormat.format(Date.fromDATE(date), " dd/MM/yyyy");
     if (date == '{{$date}}') {
       str= str+" (Aujourd'hui)";
     }
