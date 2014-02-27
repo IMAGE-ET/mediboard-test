@@ -49,6 +49,7 @@ class CCodeCCAM {
   public $_spec;
 
   public $_couleursChap = array(
+    0  => "ffffff",
     1  => "669966",
     2  => "6666cc",
     3  => "6699ee",
