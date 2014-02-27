@@ -2168,4 +2168,19 @@ class CConsultation extends CFacturable {
     $facture->store();
     return $facture;
   }
+
+  /**
+   * Charge le dossier d'anesthésie de la plage d'op la plus ancienne
+   *
+   * @return CConsultAnesth
+   */
+  function loadRefFirstDossierAnesth() {
+    // Chargement des plages de chaques dossiers
+    foreach ($this->_refs_dossiers_anesth as $_dossier) {
+      $_dossier->loadRefOperation()->loadRefPlageOp();
+    }
+    $plages = CMbArray::pluck($this->_refs_dossiers_anesth, "_ref_operation", "_ref_plageop", "date");
+    array_multisort($plages, SORT_ASC, $this->_refs_dossiers_anesth);
+    return $this->_ref_consult_anesth = reset($this->_refs_dossiers_anesth);
+  }
 }

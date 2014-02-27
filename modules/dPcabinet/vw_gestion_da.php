@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -62,7 +62,7 @@ foreach ($patient->_ref_sejours as $_key => $_sejour) {
 
 $consult->loadRefPraticien();
 $consult->loadRefsDossiersAnesth();
-$consult->loadRefConsultAnesth();
+$consult->loadRefFirstDossierAnesth();
 
 $tab_op = array();
 foreach ($consult->_refs_dossiers_anesth as $consultation_anesth) {
