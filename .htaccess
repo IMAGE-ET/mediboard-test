@@ -18,7 +18,7 @@ Options -Indexes
   <IfModule mod_setenvif.c>
     <FilesMatch "\.php$">
       SetEnvIf X-Requested-With "XMLHttpRequest" IS_AJAX
-      Header set Set-Cookie "timing=%D %t" env=!IS_AJAX
+      Header add Set-Cookie "timing=%D %t" env=!IS_AJAX
     </FilesMatch>
   </IfModule>
 
