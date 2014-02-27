@@ -130,64 +130,7 @@ Main.add(function(){
 
   {{if !$noheader}}
   <h2 style="font-weight: bold;">
-    {{if $ex_object->_ref_reference_object_2 && $ex_object->_ref_reference_object_2->_id}}
-      <span style="color: #006600;"
-           onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_ref_reference_object_2->_guid}}');">
-        {{$ex_object->_ref_reference_object_2}}
-
-        {{if $ex_object->_ref_reference_object_2 instanceof CPatient}}
-          {{mb_include module=patients template=inc_vw_ipp ipp=$ex_object->_ref_reference_object_2->_IPP}}
-        {{/if}}
-      </span>
-    {{else}}
-      {{if $ex_object->_rel_patient}}
-        {{assign var=_patient value=$ex_object->_rel_patient}}
-        <span style="color: #006600;"
-             onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}');">
-          {{$_patient}}
-          {{mb_include module=patients template=inc_vw_ipp ipp=$_patient->_IPP}}
-        </span>
-      {{/if}}
-    {{/if}}
-
-    {{if $ex_object->_ref_reference_object_1 && $ex_object->_ref_reference_object_1->_id}}
-      &ndash;
-      <span onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_ref_reference_object_1->_guid}}');">
-        {{$ex_object->_ref_reference_object_1}}
-      </span>
-    {{/if}}
-
-    &ndash;
-    <span style="color: #0000AA;" {{if $ex_object->_id}} onmouseover="ObjectTooltip.createEx(this, 'CExObject_{{$ex_object->_ex_class_id}}-{{$ex_object->_id}}', 'objectViewHistory')" {{/if}}>
-      {{if $ex_object->_id}}
-        <img src="images/icons/history.gif" width="16" height="16"/>
-      {{else}}
-        <img src="images/icons/new.png" width="16" height="16"/>
-      {{/if}}
-      {{$ex_object->_ref_last_log->_ref_user}}
-    </span>
-
-    <hr style="border-color: #333; margin: 4px 0;" />
-    {{*<span style="float: right;">{{$ex_object->_ref_group}}</span>*}}
-
-    {{$ex_object->_ref_ex_class->name}} -
-
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
-      {{$object}}
-    </span>
-
-    {{if $ex_object->additional_id}}
-      <hr />
-      <span style="color: #AA0000;" onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_ref_additional_object->_guid}}')">
-        {{$ex_object->_ref_additional_object}}
-      </span>
-    {{/if}}
-
-    {{if $parent_view}}
-      <span style="float: right; color: #666;">
-        Formulaire parent: {{$parent_view|smarty:nodefaults}}
-      </span>
-    {{/if}}
+    {{mb_include module=forms template=inc_ex_form_header}}
   </h2>
   {{/if}}
 
@@ -306,55 +249,7 @@ function switchMode(){
     <tr>
       <td colspan="4">
         <p style="font-weight: bold; font-size: 1.1em;">
-          {{*<span style="float: right;">{{$ex_object->_ref_group}}</span>*}}
-
-          {{if $ex_object->_ref_reference_object_2 && $ex_object->_ref_reference_object_2->_id}}
-            <span style="color: #006600;">
-              {{$ex_object->_ref_reference_object_2}}
-              {{if $ex_object->_ref_reference_object_2 instanceof CPatient}}
-                {{mb_include module=patients template=inc_vw_ipp ipp=$ex_object->_ref_reference_object_2->_IPP}}
-              {{/if}}
-            </span>
-          {{else}}
-            {{if $ex_object->_rel_patient}}
-              {{assign var=_patient value=$ex_object->_rel_patient}}
-              <span style="color: #006600;">
-                {{$_patient}}
-                {{mb_include module=patients template=inc_vw_ipp ipp=$_patient->_IPP}}
-              </span>
-            {{/if}}
-          {{/if}}
-
-          {{if $ex_object->_ref_reference_object_1 && $ex_object->_ref_reference_object_1->_id}}
-            &ndash;
-            <span>
-              {{$ex_object->_ref_reference_object_1}}
-            </span>
-          {{/if}}
-
-          &ndash;
-          <span style="color: #0000AA;" {{if $ex_object->_id}} onmouseover="ObjectTooltip.createEx(this, 'CExObject_{{$ex_object->_ex_class_id}}-{{$ex_object->_id}}', 'objectViewHistory')" {{/if}}>
-            {{if $ex_object->_id}}
-              <img src="images/icons/history.gif" width="16" height="16"/>
-            {{else}}
-              <img src="images/icons/new.png" width="16" height="16"/>
-            {{/if}}
-            {{$ex_object->_ref_last_log->_ref_user}}
-          </span>
-
-          <br />
-          {{$ex_object->_ref_ex_class->name}} -
-
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
-            {{$object}}
-          </span>
-
-          {{if $ex_object->additional_id}}
-            <hr />
-            <span style="color: #AA0000;" onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_ref_additional_object->_guid}}')">
-              {{$ex_object->_ref_additional_object}}
-            </span>
-          {{/if}}
+          {{mb_include module=forms template=inc_ex_form_header readonly=true}}
         </p>
         <hr style="border-color: #333; margin: 4px 0;" />
       </td>
