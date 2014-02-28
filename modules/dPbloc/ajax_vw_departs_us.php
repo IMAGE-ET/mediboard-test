@@ -11,12 +11,13 @@
  * @link     http://www.mediboard.org
  */
 
-$date_depart = CValue::get("date_depart");
 $bloc_id     = CValue::get("bloc_id");
 $order_way   = CValue::get("order_way");
 $order_col   = CValue::get("order_col");
 
-$operation = new COperation;
+$date_depart = CMbDT::date();
+
+$operation = new COperation();
 
 $ljoin = array();
 $where = array();
@@ -57,7 +58,7 @@ foreach ($operations as $_operation) {
   $_operation->updateSalle();
   $_operation->updateHeureUS();
   $sejour = $_operation->loadRefSejour();
-  $affectation = $sejour->loadRefCurrAffectation($date_depart);
+  $affectation = $sejour->loadRefCurrAffectation();
   $affectation->loadView();
   $sejour->loadRefPatient();
 }
