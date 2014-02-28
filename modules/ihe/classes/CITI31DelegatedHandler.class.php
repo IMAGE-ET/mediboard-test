@@ -485,6 +485,10 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if ($sejour->_old->entree_reelle && !$sejour->entree_reelle) {
         return "A11";
       }
+
+      if (!$configs["modification_before_admit"] && !$sejour->entree_reelle) {
+        return;
+      }
       
       // Simple modification ? 
       return $this->getModificationAdmitCode($sejour->_receiver);

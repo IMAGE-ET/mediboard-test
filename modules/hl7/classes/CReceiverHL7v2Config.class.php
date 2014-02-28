@@ -50,6 +50,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   
   // Send
   public $modification_admit_code;
+  public $modification_before_admit;
   public $send_assigning_authority;
   public $send_all_patients;
   public $send_default_affectation;
@@ -141,6 +142,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     ),
     "send" => array(
       "modification_admit_code",
+      "modification_before_admit",
       "send_assigning_authority",
       "send_change_medical_responsibility",
       "send_change_nursing_ward",
@@ -238,6 +240,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     
     // Send
     $props["modification_admit_code"]            = "enum list|A08|Z99 default|A08";
+    $props["modification_before_admit"]          = "bool default|1";
     $props["send_assigning_authority"]           = "bool default|1";
     $props["send_change_medical_responsibility"] = "enum list|A02|Z80|Z99 default|Z80";
     $props["send_change_nursing_ward"]           = "enum list|A02|Z84|Z99 default|Z84";
