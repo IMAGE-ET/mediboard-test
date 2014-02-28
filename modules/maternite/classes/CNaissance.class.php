@@ -170,7 +170,8 @@ class CNaissance extends CMbObject {
   static function countNaissances() {
     $where = array(
       "fausse_couche IS NULL OR fausse_couche = 'sup_15'",
-      "DATE_FORMAT(naissance, '%Y') = " . CMbDT::transform(CMbDT::date(), null, "%Y")
+      "DATE_FORMAT(naissance, '%Y') = " . CMbDT::transform(CMbDT::date(), null, "%Y"),
+      "num_naissance IS NOT NULL"
     );
     $ljoin = array(
       "sejour"  => "naissance.sejour_enfant_id = sejour.sejour_id",
