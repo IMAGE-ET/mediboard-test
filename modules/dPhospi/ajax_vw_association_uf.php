@@ -23,6 +23,7 @@ $lit = CMbObject::loadFromGuid($lit_guid);
 $chambre = $lit->loadRefChambre();
 $service = $chambre->loadRefService();
 
+/** @var CAffectation $affectation */
 $affectation = CMbObject::loadFromGuid($curr_affectation_guid);
 $affectation->loadRefUfs();
 $sejour         = $affectation->loadRefSejour();
@@ -114,11 +115,38 @@ else {
 }
 
 $user = new CMediusers();
-$praticiens = $user->loadPraticiens(PERM_EDIT, $function->_id);
+$praticiens = array();
+if ($affectation->_ref_uf_medicale->_id) {
+  $users = array();
+  $function_med = array();
+
+  $where = array();
+  $where["affectation_uf.uf_id"] = "= '".$affectation->_ref_uf_medicale->_id."'";
+  $where[] = "object_class = 'CMediusers' OR object_class = 'CFunctions'";
+  $aff_ufs = new CAffectationUniteFonctionnelle();
+  $affs = $aff_ufs->loadList($where);
+  foreach ($affs as $_aff) {
+    if ($_aff->object_class == "CMediusers") {
+      $users[$_aff->object_id] = $_aff->object_id;
+    }
+    else {
+      $function_med[$_aff->object_id] = $_aff->object_id;
+    }
+  }
+
+  $where = array();
+  $where["actif"] = "= '1'";
+  $where[] = "user_id ".CSQLDataSource::prepareIn(array_keys($users))."OR function_id ".CSQLDataSource::prepareIn(array_keys($function_med));
+  $praticiens = $user->loadList($where);
+}
+else {
+  $praticiens = $user->loadPraticiens(PERM_EDIT, $function->_id);
+}
+
 foreach ($praticiens as $prat) {
   foreach ($auf->loadListFor($prat) as $_auf) {
     $uf = $_auf->loadRefUniteFonctionnelle();
-    $ufs_medicale  [$uf->_id] = $uf;
+    $ufs_medicale[$uf->_id] = $uf;
   }
 }
 
