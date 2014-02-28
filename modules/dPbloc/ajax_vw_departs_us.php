@@ -11,20 +11,19 @@
  * @link     http://www.mediboard.org
  */
 
+$date_depart = CValue::get("date_depart");
 $bloc_id     = CValue::get("bloc_id");
 $order_way   = CValue::get("order_way");
 $order_col   = CValue::get("order_col");
 
-$date_depart = CMbDT::date();
-
-$operation = new COperation();
+$operation = new COperation;
 
 $ljoin = array();
 $where = array();
 
 $ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
 
-$where["plagesop.date"] = " = '$date_depart'";
+$where["plagesop.date"] = " = '".CMbDT::date($date_depart)."'";
 
 if ($bloc_id) {
   $ljoin["sallesbloc"] = "sallesbloc.salle_id = operations.salle_id";
@@ -39,7 +38,7 @@ $where = array();
 $ljoin = array();
 
 $where["plageop_id"] = "IS NULL";
-$where["date"] = " = '$date_depart'";
+$where["date"] = " = '".CMbDT::date($date_depart)."'";
 
 if ($bloc_id) {
   $ljoin["sallesbloc"] = "sallesbloc.salle_id = operations.salle_id";
@@ -58,7 +57,7 @@ foreach ($operations as $_operation) {
   $_operation->updateSalle();
   $_operation->updateHeureUS();
   $sejour = $_operation->loadRefSejour();
-  $affectation = $sejour->loadRefCurrAffectation();
+  $affectation = $sejour->loadRefCurrAffectation($date_depart);
   $affectation->loadView();
   $sejour->loadRefPatient();
 }
