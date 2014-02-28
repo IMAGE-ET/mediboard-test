@@ -29,7 +29,7 @@
     </div>
     
     
-    <script type="text/javascript">
+    <script>
       Main.add(function() {
         var form = getForm("affect_uf");
         var url = new Url("system", "httpreq_field_autocomplete");
@@ -49,6 +49,9 @@
           afterUpdateElement: function(field, selected) {
             var form = field.form;
             $V(form.{{$field}}, selected.getAttribute("id").split("-")[2]);
+            {{if $context == "medicale"}}
+            AffectationUf.onSubmitRefresh(form, '{{$affectation->_guid}}', '{{$lit->_guid}}', '{{$see_validate}}');
+            {{/if}}
             if (form.{{$field}}_radio_view.length) {
               $A(form.{{$field}}_radio_view).each(function(elt) {
                 elt.checked = "";
