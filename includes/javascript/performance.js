@@ -129,6 +129,19 @@ MbPerformance = {
         return serverTiming.handlerStart;
       }
     },
+    handlerInit: {
+      sub: true,
+      color: "rgba(14,168,0,0.2)",
+      resp:  "server",
+      label: "Apache init.",
+      desc:  "Initalisation d'Apache",
+      getValue: function(serverTiming, perfTiming){
+        return serverTiming.start - serverTiming.handlerStart;
+      },
+      getStart: function(serverTiming, perfTiming){
+        return serverTiming.handlerStart;
+      }
+    },
     frameworkInit: {
       sub: true,
       color: "rgba(14,168,0,0.2)",
@@ -136,22 +149,13 @@ MbPerformance = {
       label: "Fx init",
       desc:  "Initalisation du framework",
       getValue: function(serverTiming, perfTiming){
-        var total = 0;
-        serverTiming.steps.each(function(step){
-          if (step.label == "init") {
-            total += step.dur;
-          }
-        });
-        return total;
+        return serverTiming.steps.find(function(step){ return step.label === "init"; }).dur;
       },
       getStart: function(serverTiming, perfTiming){
-        var start = 0;
-        serverTiming.steps.each(function(step){
-          if (step.label == "init") {
-            start = step.time;
-          }
-        });
-        return start;
+        return serverTiming.steps.find(function(step){ return step.label === "init"; }).time;
+      },
+      getMemory: function(serverTiming, perfTiming){
+        return serverTiming.steps.find(function(step){ return step.label === "init"; }).mem;
       }
     },
     session: {
@@ -161,22 +165,13 @@ MbPerformance = {
       label: "Session",
       desc:  "Ouverture de la session",
       getValue: function(serverTiming, perfTiming){
-        var total = 0;
-        serverTiming.steps.each(function(step){
-          if (step.label == "session") {
-            total += step.dur;
-          }
-        });
-        return Math.round(total);
+        return serverTiming.steps.find(function(step){ return step.label === "session"; }).dur;
       },
       getStart: function(serverTiming, perfTiming){
-        var start = 0;
-        serverTiming.steps.each(function(step){
-          if (step.label == "session") {
-            start = step.time;
-          }
-        });
-        return start;
+        return serverTiming.steps.find(function(step){ return step.label === "session"; }).time;
+      },
+      getMemory: function(serverTiming, perfTiming){
+        return serverTiming.steps.find(function(step){ return step.label === "session"; }).mem;
       }
     },
     framework: {
@@ -202,6 +197,15 @@ MbPerformance = {
           }
         });
         return start;
+      },
+      getMemory: function(serverTiming, perfTiming){
+        var mem = 0;
+        serverTiming.steps.each(function(step){
+          if (["init", "session", "app"].indexOf(step.label) == -1) {
+            mem = Math.max(mem, step.mem);
+          }
+        });
+        return mem;
       }
     },
     app: {
@@ -211,19 +215,39 @@ MbPerformance = {
       label: "App.",
       desc:  "Code applicatif (dépend de la page affichée) et construction de la page",
       getValue: function(serverTiming, perfTiming){
+        return serverTiming.steps.find(function(step){ return step.label === "app"; }).dur;
+      },
+      getStart: function(serverTiming, perfTiming){
+        return serverTiming.steps.find(function(step){ return step.label === "app"; }).time;
+      },
+      getMemory: function(serverTiming, perfTiming){
+        return serverTiming.steps.find(function(step){ return step.label === "app"; }).mem;
+      }
+    },
+    output: {
+      sub: true,
+      color: "rgba(14,168,0,0.2)",
+      resp:  "server",
+      label: "Sortie",
+      desc:  "Sortie texte (output buffer)",
+      getValue: function(serverTiming, perfTiming){
+        if (!serverTiming.handlerEnd || !serverTiming.handlerStart) {
+          return null;
+        }
+
+        var apacheTime = serverTiming.handlerEnd - serverTiming.handlerStart;
         var total = 0;
         serverTiming.steps.each(function(step){
-          if (step.label == "app") {
-            total += step.dur;
-          }
+          total += step.dur;
         });
-        return total;
+
+        return apacheTime - total - (serverTiming.start - serverTiming.handlerStart); // (- apache init)
       },
       getStart: function(serverTiming, perfTiming){
         var start = 0;
         serverTiming.steps.each(function(step){
           if (step.label == "app") {
-            start = step.time;
+            start = step.time + step.dur;
           }
         });
         return start;
@@ -260,7 +284,7 @@ MbPerformance = {
       sub: true,
       color: "rgba(41,144,255,0.2)",
       resp:  "network",
-      label: "Téléchargemebt",
+      label: "Téléchargement",
       desc:  "Temps de téléchargement de la réponse",
       start: "responseStart",
       end:   "responseEnd"
@@ -298,7 +322,7 @@ MbPerformance = {
       color: "rgba(255,41,41,0.2)",
       resp:  "client",
       label: "Charg. DOM",
-      desc:  "Temps de l'évènement d'éxecution des scripts suivant le chargement de l'arbe DOM",
+      desc:  "Temps de l'évènement d'exécution des scripts suivant le chargement de l'arbe DOM",
       start: "domContentLoadedEventStart",
       end:   "domComplete"
     },
@@ -384,7 +408,7 @@ MbPerformance = {
       MbPerformance.addEvent("load", function(){
         setTimeout(function(){
           MbPerformance.startPlotting();
-        }, 1);
+        }, 1000);
       });
     }
     catch (e) {}
@@ -409,18 +433,28 @@ MbPerformance = {
   },
 
   logScriptEvent: function(type, pageInfo, serverTiming, time, duration) {
-    var perfTiming;
+    var perfTiming, offset = MbPerformance.timeOffset;
 
     switch (type) {
       case "page":
-        perfTiming = performance.timing;
+        perfTiming = {};
+
+        $H(performance.timing).each(function(pair){
+          var value = pair.value;
+          if (value === 0 || Object.isString(value) || pair.key === "duration") {
+            perfTiming[pair.key] = value;
+          }
+          else {
+            perfTiming[pair.key] = value - offset;
+          }
+        });
         break;
 
       case "ajax":
         perfTiming = MbPerformance.searchEntry(pageInfo.id);
 
         if (perfTiming) {
-          duration = perfTiming.responseEnd - perfTiming.startTime;
+          duration = perfTiming.duration;
         }
         break;
     }
@@ -428,30 +462,6 @@ MbPerformance = {
     var timeEntry = new MbPerformanceTimeEntry(type, pageInfo, time, duration, perfTiming, serverTiming);
 
     MbPerformance.append(timeEntry);
-  },
-  log: function(type, name, data, time, duration) {
-    /*var entryData;
-
-    switch (type) {
-      case "page":
-        entryData = performance.timing;
-        break;
-
-      case "ajax":
-        entryData = MbPerformance.searchEntry(name);
-
-        if (entryData) {
-          duration = entryData.responseEnd - entryData.startTime;
-        }
-
-      default: // find previous entry
-    }
-
-    if (entryData)
-
-    var timeEntry = new MbPerformanceTimeEntry(type, name, time, duration, data, adv);
-
-    MbPerformance.append(timeEntry);*/
   },
 
   searchEntry: function(id) {
@@ -529,7 +539,24 @@ MbPerformance = {
         "</select>",
         "<button class='zoom-in notext' onclick='MbPerformance.zoom(this.previous(), \"+\")'></button>"
       );
+
+      var legendTitles = {
+        "bar-network": "Réseau",
+        "bar-server": "Serveur",
+        "bar-client": "Navigateur",
+        "bar-type-session": "Session",
+        "bar-mem": "Mémoire serveur"
+      };
+      var legend = "";
+      $H(legendTitles).each(function(pair){
+        legend += "<div class='legend-item'><div class='bar "+pair.key+"'></div> "+pair.value+"</div> ";
+      });
+
       table = DOM.table({className: "main layout timeline"},
+        DOM.tr({},
+          DOM.td({}),
+          DOM.td({className: "legend"}, legend)
+        ),
         DOM.tr({},
           left  = DOM.td({className: "left-col"}),
           DOM.td({className: "right-col-cell"},
@@ -543,36 +570,6 @@ MbPerformance = {
       );
     }
 
-    var addBar = function(type, container, perfTiming, perfOffset, serverTiming, serverOffset){
-      var t = MbPerformance.markingTypes[type];
-
-      if (perfTiming && (perfTiming[t.end] && perfTiming[t.start] || t.getValue && t.getStart)) {
-        var start, length;
-
-        if (t.getValue) {
-          start  = t.getStart(serverTiming, perfTiming) - serverOffset;
-          length = t.getValue(serverTiming, perfTiming);
-        }
-        else {
-          start  = perfTiming[t.start] - perfOffset;
-          length = perfTiming[t.end]   - perfTiming[t.start];
-        }
-
-        var title = t.label+"\n"+t.desc+"\nDébut: "+Math.round(start)+"ms\nDurée: "+Math.round(length)+"ms";
-        var bar = DOM.div({
-          title: title,
-          className: "bar bar-"+t.resp+" bar-type-"+type+(t.sub ? " sub" : "")
-        });
-
-        bar.setStyle({
-          left:  (start  / MbPerformance.timeScale)+"px",
-          width: (length / MbPerformance.timeScale)+"px"
-        });
-
-        container.insert(bar);
-      }
-    };
-
     var ruler = DOM.div({className: "ruler"});
 
     for (var i = 0; i < 100; i++) {
@@ -585,34 +582,37 @@ MbPerformance = {
     left.insert(DOM.div({className: "ruler"}));
     right.insert(ruler);
 
-    MbPerformance.timeline.each(function(d){
-      var title = DOM.div({title: d.pageInfo.a},
-          $T("module-"+d.pageInfo.m+"-court")+"<br />"+
-          $T("mod-"+d.pageInfo.m+"-tab-"+d.pageInfo.a));
+    var navStart;
 
+    // Draw each bar
+    MbPerformance.timeline.each(function(d){
       var container = DOM.div({});
       var perfTiming = d.perfTiming;
       var perfOffset;
       var serverTiming = d.serverTiming;
       var serverOffset;
 
-      if (d.type == "page") {
-        perfOffset = perfTiming.navigationStart;
-        serverOffset = perfTiming.navigationStart;
+      var title = DOM.div({title: d.pageInfo.a},
+          "<span style='float: right; color: #999; font-size: 0.9em;'>#{size} Kio, DB: #{db} ms</span><strong>#{m}</strong><br />#{a}".interpolate({
+            size: (serverTiming.size / 1024).toFixed(2),
+            db:   (serverTiming.db * 1000).toFixed(2),
+            m:    $T("module-"+d.pageInfo.m+"-court"),
+            a:    $T("mod-"+d.pageInfo.m+"-tab-"+d.pageInfo.a)
+          })
+      );
 
-        if (MbPerformance.timeOffset === null) {
-          MbPerformance.timeOffset = perfTiming.requestStart - serverTiming.start;
-        }
+      if (d.type == "page") {
+        perfOffset   = perfTiming.navigationStart;
+        serverOffset = perfTiming.navigationStart;
+        navStart     = perfTiming.navigationStart;
       }
       else {
         perfOffset = 0;
-        serverOffset = performance.timing.navigationStart;
+        serverOffset = navStart;
       }
 
-      serverOffset -= MbPerformance.timeOffset;
-
       Object.keys(MbPerformance.markingTypes).each(function(type) {
-        addBar(type, container, perfTiming, perfOffset, serverTiming, serverOffset);
+        MbPerformance.drawBar(type, container, perfTiming, perfOffset, serverTiming, serverOffset);
       });
 
       left.insert(title);
@@ -622,6 +622,52 @@ MbPerformance = {
     if (!MbPerformance.timingDetailsTable) {
       document.body.insert(table);
       MbPerformance.timingDetailsTable = table;
+    }
+  },
+
+  drawBar: function(type, container, perfTiming, perfOffset, serverTiming, serverOffset){
+    var t = MbPerformance.markingTypes[type];
+
+    if (t.sub && perfTiming && (perfTiming[t.end] && perfTiming[t.start] || t.getValue && t.getStart)) {
+      var start, length;
+
+      if (t.getValue) {
+        start  = t.getStart(serverTiming, perfTiming) - serverOffset;
+        length = t.getValue(serverTiming, perfTiming);
+      }
+      else {
+        start  = perfTiming[t.start] - perfOffset;
+        length = perfTiming[t.end]   - perfTiming[t.start];
+      }
+
+      var title = t.label+"\n"+t.desc+"\nDébut: "+Math.round(start)+"ms\nDurée: "+Math.round(length)+"ms";
+      var bar = DOM.div({
+        title: title,
+        className: "bar bar-"+t.resp+" bar-type-"+type+(t.sub ? " sub" : "")
+      });
+
+      bar.setStyle({
+        left:  (start  / MbPerformance.timeScale)+"px",
+        width: (length / MbPerformance.timeScale)+"px"
+      });
+
+      container.insert(bar);
+
+      if (t.getMemory) {
+        var mem = t.getMemory(serverTiming, perfTiming);
+        var memBar = DOM.div({
+          title: t.label+"\n"+t.desc+"\n"+Number(mem/1024).toLocaleString()+" Kio",
+          className: "bar bar-mem"
+        });
+
+        memBar.setStyle({
+          left:  (start  / MbPerformance.timeScale)+"px",
+          width: (length / MbPerformance.timeScale)+"px",
+          height: mem/(1024*1024*4)+"px"
+        });
+
+        container.insert(memBar);
+      }
     }
   },
 
@@ -636,145 +682,14 @@ MbPerformance = {
   },
 
   plot: function(){
-    var series = [
-      {data: [], label: "Page"},
-      {data: [], label: "Ajax"},
-      {data: [], label: "Mark"},
-      {data: [], label: "Chrono"}
-    ];
+    var profilingToolbar = jQuery("#profiling-toolbar");
 
-    var timeline = this.timeline;
-
-    var g = 24;
-    var y = 0;
-    var xmax = 0;
-
-    var chronos = [];
-
-    timeline.each(function(d){
-      var s = MbPerformance.types[d.type]-1;
-      var ord = 0;
-
-      xmax = Math.max(xmax, d.time+d.duration);
-
-      series[s].data.push([
-        d.time,
-        (ord*s)+0.8,
-        d.time+d.duration,
-
-        $T("module-"+d.pageInfo.m+"-court")+"<br />"+
-        $T("mod-"+d.pageInfo.m+"-"+d.pageInfo.a)+"<br />"+
-          "Time: "+d.time+" ms<br />"+
-          "Duration: "+d.duration+ " ms"
-      ]);
-    });
-
-    /*[].each(function(d){
-      var s = MbPerformance.types[d.type];
-      var ord;
-
-      switch (d.type) {
-        case "page":
-          ord = 0;
-          break;
-
-        case "ajax":
-          ord = 3 + (y*2)%g;
-          y++;
-          break;
-
-        case "chrono":
-          ord = 2;
-          if (d.data) {
-            chronos.push(d);
-            //return;
-          }
-          break;
-
-        default:
-          ord = 3;
-          break;
-      }
-
-      ord += 0.5;
-
-      // Display server data for page and ajax
-      if (d.type === "ajax" || d.type === "page") {
-        var refTime = null;
-        var steps = d.data.steps;
-
-        steps.each(function(serverEvent){
-          var serverTime = serverEvent.time;
-          if (refTime === null) {
-            refTime = serverTime - d.time;
-          }
-
-          var time = serverTime - refTime;
-
-          xmax = Math.max(xmax, time+serverEvent.dur);
-
-          series[1].data.push([
-            time,
-            ord+0.8,
-            time+serverEvent.dur,
-
-            serverEvent.label + "<br />" +
-              d.name + "<br />" +
-              "Time: "+time + " ms<br />"+
-              "Duration: "+serverEvent.dur + " ms"
-          ]);
-        });
-      }
-
-      var name = d.name;
-      var text = "";
-      var uid = null;
-      var parts;
-
-      if (parts = name.match(/(\w+)\|(\w+)((?:@)\d+)?/i)) {
-        var m = parts[1];
-        var a = parts[2];
-        if (parts[3]) {
-          uid = parts[3].match(/@(\d+)/)[1];
-        }
-
-        text = "m = "+m+"<br />a = "+a+"<br />";
-        text += $T("mod-"+m+"-tab-"+a)+"<br />";
-      }
-      else {
-        text = name + "<br />";
-
-        if (d.data) {
-          text += d.data+"<br />";
-        }
-      }
-
-      text += "Time: "+d.time + " ms<br />"+
-              "Duration: "+d.duration+" ms";
-
-      xmax = Math.max(xmax, d.time + d.duration);
-
-      series[s-1].data.push([
-        d.time,
-        ord,
-        d.time + d.duration,
-        text,
-        uid
-      ]);
-    });*/
-
-    var container = jQuery("#profiling-plot");
-
-    if (!container.size()) {
-      container = jQuery('<div id="profiling-plot"><div id="profiling-graph"></div></div>').hide().appendTo("body");
-
-      var profilingToolbar = jQuery('<div id="profiling-toolbar"></div>').hide().appendTo("body");
+    if (!profilingToolbar.size()) {
+      profilingToolbar = jQuery('<div id="profiling-toolbar"></div>').hide().appendTo("body");
 
       // Toggle plot
       jQuery('<button class="stats notext" title="Afficher le graphique"></button>').click(function(){
         MbPerformance.showTimingDetails();
-        //MbPerformance.plot();
-        //container.toggle();
       }).appendTo(profilingToolbar);
 
       // Download report
@@ -793,31 +708,7 @@ MbPerformance = {
       }).appendTo("body");
 
       // Show toolbar
-      jQuery('<div id="profiler-overview"><div class="profiler-buttons"><!--<button class="lookup notext"></button>--></div><div id="profiler-timebar"></div></div>').appendTo("body");
-    }
-
-    var graph = jQuery("#profiling-graph");
-
-    if (!graph._plothoverbound) {
-      var previousPoint = null;
-      graph.bind("plothover", function (event, pos, item){
-        if(item){
-          if (previousPoint != item.datapoint){
-            previousPoint = item.datapoint;
-            jQuery("#profiling-tooltip").remove();
-
-            var point = item.series.data[item.dataIndex];
-
-            MbPerformance.showTooltip(pos.pageX, pos.pageY, point[3]);
-          }
-        }
-        else {
-          jQuery("#profiling-tooltip").remove();
-          previousPoint = null;
-        }
-      });
-
-      graph._plothoverbound = true;
+      jQuery('<div id="profiler-overview"><div class="profiler-buttons"></div><div id="profiler-timebar"></div></div>').appendTo("body");
     }
 
     var markings = [];
@@ -850,40 +741,13 @@ MbPerformance = {
       timeBar.each(function(time){
         timeBarContainer.append("<div style='width: "+(100 * (time.value / timeBarTotal))+"%; background-color: "+MbPerformance.responsabilityColors[time.type]+";'></div>");
       });
-
-      //overview.find("button.lookup").click(MbPerformance.showTimingDetails);
     }
 
     MbPerformance.markingsDrawn = true;
-
-    jQuery.plot(graph, series, {
-      series: {
-        gantt: {
-          active: true,
-          show: true,
-          barHeight: 1.0
-        }
-      },
-      xaxis: {
-        min: 0,
-        max: xmax
-      },
-      yaxis: {
-        min: 0
-      },
-      grid: {
-        hoverable: true,
-        clickable: true,
-        markings: markings
-      },
-      legend: {
-        show: false
-      }
-    });
   },
 
   addMarking: function(key, markings){
-    var timing = performance.timing;
+    var timing = MbPerformance.timeline[0].perfTiming;
 
     if (!timing) {
       return;
@@ -924,20 +788,12 @@ MbPerformance = {
     markings.push(marking);
   },
 
-  showTooltip: function(x, y, contents){
-    jQuery('<div id="profiling-tooltip">' + contents + '</div>').css({
-      display: 'none',
-      top: y + 5,
-      left: x + 5
-    }).appendTo("body").fadeIn(200);
-  },
-
   timeStart: function(label) {
     if (!this.profiling) {
       return;
     }
 
-    this.timers[label] = performance.now();
+    this.timers[label] = performance.now()/* - MbPerformance.timeOffset*/;
   },
 
   timeEnd: function(label, ajaxId) {
@@ -949,7 +805,7 @@ MbPerformance = {
       return;
     }
 
-    var now = performance.now();
+    var now = performance.now()/* - MbPerformance.timeOffset*/;
     var time = this.timers[label];
     var timeEntry;
 

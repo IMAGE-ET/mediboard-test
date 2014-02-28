@@ -1576,21 +1576,24 @@ div.bullet.error {
 .timeline .left-col  > div,
 .timeline .right-col > div {
   position: relative;
-  height: 30px;
+  height: 25px;
   border-bottom: 1px solid #999;
 }
 
 /** Bars **/
 .timeline .bar {
   position: absolute;
-  height: 45%;
-  top: 2.5%;
+  /*height: 45%;
+  top: 2.5%;*/
   box-sizing: border-box;
   border: 1px solid #ccc;
+  border-width: 0 1px;
 }
 
 .timeline .bar.sub {
-  top: 52.5%;
+  /*top: 52.5%;*/
+  top: 0%;
+  height: 100%;
   opacity: 0.7;
 }
 
@@ -1614,12 +1617,43 @@ div.bullet.error {
 }
 
 .timeline .bar-type-session {
-  background: #66B230;
-  border-color: #449B06;
+  background: #e9e146;
+  border-color: #b0ae00;
+}
+
+.timeline .bar-mem {
+  bottom: 0;
+  background: #000;
+  border: none;
+  opacity: 0.1;
+}
+
+.timeline .bar-mem:hover {
+  border: none;
+  opacity: 0.7;
 }
 
 .timeline .zoom {
   text-align: right;
+}
+
+.timeline .legend {
+  line-height: 1;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.timeline .legend .bar {
+  position: relative;
+  border-width: 1px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 12px;
+  height: 12px;
+}
+
+.timeline .legend-item {
+  display: inline-block;
 }
 
 /* To disable text selection */

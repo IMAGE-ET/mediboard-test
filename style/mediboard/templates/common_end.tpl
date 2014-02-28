@@ -19,14 +19,21 @@
       };
 
       var timing = MbPerformance.parseServerTiming(MbPerformance.readCookie("timing"));
+      var serverTime = serverTiming.start;
 
       if (timing) {
-        serverTiming.handlerStart = timing.start;
-        serverTiming.handlerEnd   = timing.duration+timing.start;
+        serverTime = timing.start;
+
+        serverTiming.handlerStart = timing.start + MbPerformance.timeOffset;
+        serverTiming.handlerEnd   = serverTiming.handlerStart + timing.duration;
       }
 
+      MbPerformance.timeOffset = Math.round(performance.timing.requestStart - serverTime);
+
       MbPerformance.pageDetail = serverTiming;
-      MbPerformance.logScriptEvent.defer("page", page, serverTiming, 0, offset);
+      MbPerformance.addEvent("load", function(){
+        MbPerformance.logScriptEvent.defer("page", page, serverTiming, 0, offset);
+      });
     })();
   }
 </script>

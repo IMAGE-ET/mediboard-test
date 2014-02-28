@@ -337,9 +337,8 @@ else {
 CApp::notify("AfterMain");
 
 // Send timing data in HTTP header
-CMbPerformance::mark("app");
+CMbPerformance::end();
 
-//CMbPerformance::setDBTime(CApp::$performance["dataSourceTime"]);
 CMbPerformance::writeHeader();
 
 // Output HTML
