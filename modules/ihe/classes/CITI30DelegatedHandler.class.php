@@ -133,7 +133,16 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
             $code = "A37";
             break;
           }
-          
+
+          if ($receiver->_configs["send_patient_with_visit"]) {
+            /** @var CPatient $mbObject */
+            $sejour = $mbObject->loadRefsSejours(array("entree_reelle" => "IS NOT NULL"));
+            if (count($sejour) < 1) {
+              $code = null;
+              break;
+            }
+          }
+
           // Dans tous les autres cas il s'agit d'une modification
           $code = ($receiver->_configs["send_update_patient_information"] == "A08") ? "A08" : "A31";
           break;

@@ -226,7 +226,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     // PID-15: Primary Language (CE) (optional)
     $data[] = null;
     
-    // PID-16: Marital Status (CE) (optional)
+    // PID-16: Marital Status (CE) (table 0002)(optional)
     $data[] = null;
     
     // PID-17: Religion (CE) (optional)
@@ -234,29 +234,35 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     
     // PID-18: Patient Account Number (CX) (optional)
     if ($this->sejour && ($receiver->_configs["build_NDA"] == "PID_18")) {
-      // Même traitement que pour l'IPP
-      switch ($receiver->_configs["build_PID_34"]) {
-        case 'actor':
-          $assigning_authority = $this->getAssigningAuthority("actor", null, $receiver);
-          break;
-        
-        default:
-          $assigning_authority = $this->getAssigningAuthority("FINESS", $group->finess);
-          break;
-      } 
-      
       $sejour = $this->sejour;
       $sejour->loadNDA($group->_id);
-      $data[] = $sejour->_NDA ? array( 
-                  array(
-                    $sejour->_NDA,
-                    null,
-                    null,
-                    // PID-3-4 Autorité d'affectation
-                    $assigning_authority,
-                    "AN"
-                  )
-                ) : null;
+
+      if ($receiver->_configs["build_PID_18"] == "simple") {
+        $data[] = $sejour->_NDA;
+      }
+      else {
+        // Même traitement que pour l'IPP
+        switch ($receiver->_configs["build_PID_34"]) {
+          case 'actor':
+            $assigning_authority = $this->getAssigningAuthority("actor", null, $receiver);
+            break;
+
+          default:
+            $assigning_authority = $this->getAssigningAuthority("FINESS", $group->finess);
+            break;
+        }
+
+        $data[] = $sejour->_NDA ? array(
+          array(
+            $sejour->_NDA,
+            null,
+            null,
+            // PID-3-4 Autorité d'affectation
+            $assigning_authority,
+            "AN"
+          )
+        ) : null;
+      }
     }
     else {
       $data[] = null;

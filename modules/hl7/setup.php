@@ -1250,7 +1250,14 @@ class CSetuphl7 extends CSetup {
                 ADD `modification_before_admit` ENUM ('0','1') DEFAULT '1'";
     $this->addQuery($query);
 
-    $this->mod_version = "0.87";
+    $this->makeRevision("0.87");
+
+    $query = "ALTER TABLE `receiver_hl7v2_config`
+                ADD `build_PID_18` ENUM ('normal','simple') DEFAULT 'normal',
+                ADD `send_patient_with_visit` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.88";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
