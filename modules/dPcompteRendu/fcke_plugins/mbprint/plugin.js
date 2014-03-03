@@ -27,10 +27,7 @@ function mbprint_onclick(editor) {
   // Mise à jour de la date d'impression
   window.parent.$V(window.parent.getForm("editFrm").date_print, "now");
   if (window.parent.same_print == 1) {
-    var content = editor.getData();
-    var form = window.parent.document.forms["download-pdf-form"];
-    form.elements.content.value = encodeURIComponent(content);
-    form.onsubmit();
+    editor.getCommand('mbprintPDF').exec();
   }
   else {
     window.parent.submitCompteRendu(printDoc);
