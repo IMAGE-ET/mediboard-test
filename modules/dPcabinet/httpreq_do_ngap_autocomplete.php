@@ -22,9 +22,16 @@ $code = CValue::post("code");
 $object = new $object_class;
 $object->load($object_id);
 
-// Chargement de ces actes NGAP
+// Chargement de ses actes NGAP
 $object->countActes();
-$praticien = $object->loadRefPraticien();
+
+$user = CMediusers::get();
+if ($user->isMedical()) {
+  $praticien = $user;
+}
+else {
+  $praticien = $object->loadRefPraticien();
+}
 $praticien->loadRefFunction();
 
 $praticien->spec_cpam_id ? $spe_undefined = false : $spe_undefined = true;
