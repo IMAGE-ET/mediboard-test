@@ -91,14 +91,14 @@
 
   <table class="tbl">
     {{if $_plage->_ref_operations}}
-    {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=0 operations=$_plage->_ref_operations}}
+      {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=0 operations=$_plage->_ref_operations}}
     {{/if}}
 
     {{if $_plage->_unordered_operations}}
-    <tr>
-      <th colspan="10">Non placées</th>
-    </tr>
-    {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=0 operations=$_plage->_unordered_operations}}
+      <tr>
+        <th colspan="10">Non placées</th>
+      </tr>
+      {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=0 operations=$_plage->_unordered_operations}}
     {{/if}}
   </table>
 {{/foreach}}
