@@ -96,6 +96,8 @@ $moments = array(
   "poste-4" => "nuit"
 );
 
+$moments_reverse = array_flip($moments);
+
 foreach ($dates_postes as $_dates_postes) {
   foreach ($_dates_postes as $day => $__dates_postes) {
     foreach ($__dates_postes as $poste => $_dates) {
@@ -296,6 +298,8 @@ foreach ($initiales as $prescription_id => $_initiales) {
   }
 }
 
+$current_moment = $postes_by_date[$now_date][CMbDT::transform(null, CMbDT::time(), "%H")]["moment"];
+
 $smarty = new CSmartyDP();
 
 $smarty->assign("now"      , $now);
@@ -309,5 +313,7 @@ $smarty->assign("dates"    , $dates);
 $smarty->assign("moments"  , $moments);
 $smarty->assign("mode_dupa", $mode_dupa);
 $smarty->assign("initiales", $initiales);
+$smarty->assign("current_moment", $current_moment);
+$smarty->assign("moments_reverse", $moments_reverse);
 
 $smarty->display("offline_plan_soins.tpl");

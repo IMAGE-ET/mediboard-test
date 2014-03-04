@@ -47,15 +47,19 @@
     {{/if}}
 
     {{foreach from=$dates item=_date}}
-
-      {{assign var="text_align" value="left"}}
-      {{if $_date == $now_date}}
-        {{assign var="text_align" value="center"}}
-      {{elseif $_date >= $now_date}}
-        {{assign var="text_align" value="right"}}
-      {{/if}}
-
       {{foreach from=$moments item=_moment}}
+
+        {{assign var="text_align" value="left"}}
+        {{if $_date == $now_date}}
+          {{if $moments_reverse.$_moment == $moments_reverse.$current_moment}}
+            {{assign var="text_align" value="center"}}
+          {{elseif $moments_reverse.$_moment > $moments_reverse.$current_moment}}
+            {{assign var="text_align" value="right"}}
+          {{/if}}
+        {{elseif $_date >= $now_date}}
+          {{assign var="text_align" value="right"}}
+        {{/if}}
+
         {{assign var=administrations_in_hour value=""}}
         {{if isset($line->_administrations_moment.$unite_prise.$_date.$_moment|smarty:nodefaults)}}
           {{assign var=administrations_in_hour value=$line->_administrations_moment.$unite_prise.$_date.$_moment}}
@@ -73,7 +77,7 @@
           {{assign var=quantite value=$line->_quantity_by_date_moment.$unite_prise.$_date.$_moment.total}}
         {{/if}}
 
-        <td style="vertical-align: top; text-align: {{$text_align}};">
+        <td style="vertical-align: top; text-align: {{$text_align}};" {{if $text_align == "left"}}class="hatching"{{/if}}>
           <div class="compact">
             {{if $quantite!="-" || @array_key_exists($_moment, $line->_administrations_moment.$unite_prise.$_date)}}
               {{if !$quantite}}
@@ -169,16 +173,20 @@
     {{foreach from=$line->_ref_lines item=_line}}
       {{foreach from=$dates item=_date}}
 
-        {{assign var="text_align" value="left"}}
-        {{if $_date == $now_date}}
-          {{assign var="text_align" value="center"}}
-        {{elseif $_date >= $now_date}}
-          {{assign var="text_align" value="right"}}
-        {{/if}}
-
-
         {{foreach from=$moments item=_moment}}
-          <td style="vertical-align: top; text-align: {{$text_align}}">
+
+          {{assign var="text_align" value="left"}}
+          {{if $_date == $now_date}}
+            {{if $moments_reverse.$_moment == $moments_reverse.$current_moment}}
+              {{assign var="text_align" value="center"}}
+            {{elseif $moments_reverse.$_moment > $moments_reverse.$current_moment}}
+              {{assign var="text_align" value="right"}}
+            {{/if}}
+          {{elseif $_date >= $now_date}}
+            {{assign var="text_align" value="right"}}
+          {{/if}}
+
+          <td style="vertical-align: top; text-align: {{$text_align}}" {{if $text_align == "left"}}class="hatching"{{/if}}>
             {{if isset($_line->_administrations_moment.$_date.$_moment|smarty:nodefaults)}}
               {{assign var=nb_adm value=$_line->_administrations_moment.$_date.$_moment}}
             {{else}}
