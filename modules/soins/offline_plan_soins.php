@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 /**
  * $Id$
- *  
+ *
  * @category Soins
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -96,6 +96,8 @@ $moments = array(
   "poste-4" => "nuit"
 );
 
+$moments_reverse = array_flip($moments);
+
 foreach ($dates_postes as $_dates_postes) {
   foreach ($_dates_postes as $day => $__dates_postes) {
     foreach ($__dates_postes as $poste => $_dates) {
@@ -123,8 +125,8 @@ foreach ($sejours as $_sejour) {
 
   // Si aucune ligne, on retire le séjour
   if (!count($prescription->_ref_prescription_lines) &&
-      !count($prescription->_ref_prescription_line_mixes) &&
-      !count($prescription->_ref_prescription_lines_element)) {
+    !count($prescription->_ref_prescription_line_mixes) &&
+    !count($prescription->_ref_prescription_lines_element)) {
     unset($sejours[$_sejour->_id]);
     continue;
   }
@@ -296,6 +298,8 @@ foreach ($initiales as $prescription_id => $_initiales) {
   }
 }
 
+$current_moment = $postes_by_date[$now_date][CMbDT::transform(null, CMbDT::time(), "%H")]["moment"];
+
 $smarty = new CSmartyDP();
 
 $smarty->assign("now"      , $now);
@@ -309,5 +313,7 @@ $smarty->assign("dates"    , $dates);
 $smarty->assign("moments"  , $moments);
 $smarty->assign("mode_dupa", $mode_dupa);
 $smarty->assign("initiales", $initiales);
+$smarty->assign("current_moment", $current_moment);
+$smarty->assign("moments_reverse", $moments_reverse);
 
 $smarty->display("offline_plan_soins.tpl");
