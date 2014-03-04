@@ -18,9 +18,9 @@
           {{mb_include module=system template=inc_object_notes object=$_plage}}
           <a onclick="EditPlanning.order('{{$_plage->_id}}');" href="#" title="Agencer les interventions">
             {{if $_plage->chir_id}}
-            Chir : Dr {{$_plage->_ref_chir->_view}}
+              Chir : Dr {{$_plage->_ref_chir->_view}}
             {{else}}
-            {{$_plage->_ref_spec->_view}}
+              {{$_plage->_ref_spec->_view}}
             {{/if}}
             <br />
             {{$_plage->debut|date_format:$conf.time}} à {{$_plage->fin|date_format:$conf.time}}
@@ -66,9 +66,9 @@
             <select name="anesth_id" onchange="this.form.submit()">
               <option value="">&mdash; Choisir un anesthésiste</option>
               {{foreach from=$listAnesths item=curr_anesth}}
-              <option value="{{$curr_anesth->user_id}}" {{if $_plage->anesth_id == $curr_anesth->user_id}} selected="selected" {{/if}}>
-                {{$curr_anesth->_view}}
-              </option>
+                <option value="{{$curr_anesth->user_id}}" {{if $_plage->anesth_id == $curr_anesth->user_id}} selected="selected" {{/if}}>
+                  {{$curr_anesth->_view}}
+                </option>
               {{/foreach}}
             </select>
           </td>
