@@ -126,6 +126,15 @@
             {{/foreach}}
           {{/foreach}}
 
+          {{* Lignes de médicament (injectables) *}}
+          {{foreach from=$prescription->_ref_injections_for_plan item=_cat_ATC key=_key_cat_ATC}}
+            {{foreach from=$_cat_ATC item=lines}}
+              {{foreach from=$lines key=unite_prise item=line}}
+                {{mb_include module=soins template=inc_offline_vw_line}}
+              {{/foreach}}
+            {{/foreach}}
+          {{/foreach}}
+
           {{* Lignes de perfusion *}}
           <tr>
             <th colspan="{{$th_chap_colspan}}" class="section">Perfusions</th>
