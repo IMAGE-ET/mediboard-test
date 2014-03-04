@@ -48,6 +48,7 @@ $dPconfig["dPurgences"] = array (
   "create_affectation"        => "1",
   "main_courante_refresh_frequency"      => "90",
   "uhcd_refresh_frequency"               => "180",
+  "imagerie_refresh_frequency"           => "180",
   "identito_vigilance_refresh_frequency" => "300",
   "gestion_motif_sfmu"                   => "0",
   "display_motif_sfmu"                   => "0",

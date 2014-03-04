@@ -19,6 +19,7 @@ $rpu->load($rpu_id);
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("rpu", $rpu);
+$smarty->assign("imagerie_etendue", CAppUI::conf("dPurgences CRPU imagerie_etendue", CGroups::loadCurrent()));
 if (!$attente) {
   $smarty->display("inc_vw_rpu_attente.tpl");
 }

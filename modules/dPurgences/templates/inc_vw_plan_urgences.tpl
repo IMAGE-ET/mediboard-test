@@ -84,7 +84,13 @@
                   {{/if}}
                   
                   {{if $_sejour->UHCD}}
-                    <img src="images/icons/uhcd.png" />
+                    <span class="encart encart-uhcd">UHCD</span>
+                  {{/if}}
+
+                  {{if $_sejour->_ref_curr_affectation &&
+                       $_sejour->_ref_curr_affectation->_ref_service &&
+                       $_sejour->_ref_curr_affectation->_ref_service->radiologie}}
+                    <span class="encart encart-imagerie">IMG</span>
                   {{/if}}
 
                   {{if $rpu->mutation_sejour_id}}

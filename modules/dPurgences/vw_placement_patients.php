@@ -129,6 +129,7 @@ for ($num = 0; $num <= 1; $num++) {
     foreach ($sejours as $sejour) {
       $sejour->loadRefPatient();
       $sejour->loadRefPraticien();
+      $sejour->loadRefCurrAffectation()->loadRefService();
       if (!$sejour->loadRefRPU()->_id) {
         $sejour->_ref_rpu = $sejour->loadUniqueBackRef("rpu_mute");
       }

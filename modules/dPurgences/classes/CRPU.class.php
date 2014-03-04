@@ -113,6 +113,7 @@ class CRPU extends CMbObject {
   public $_provenance;
   public $_destination;
   public $_transport;
+  public $_old_service_id;
 
   /**
    * @see parent::getSpec()
@@ -254,6 +255,7 @@ class CRPU extends CMbObject {
       $this->_mode_sortie = 9;
     }
 
+    $this->_service_id              = $sejour->service_id;
     $this->_mode_entree             = $sejour->mode_entree;
     $this->_mode_entree_id          = $sejour->mode_entree_id;
     $this->_sortie                  = $sejour->sortie_reelle;
@@ -436,6 +438,9 @@ class CRPU extends CMbObject {
    * @see parent::store()
    */
   function store() {
+    $sejour = $this->loadRefSejour();
+    $this->_old_service_id = $sejour->service_id;
+
     // Création du RPU en l'associant à un séjour existant
     if (!$this->_id && $this->sejour_id) {
       $sejour = $this->loadRefSejour();
@@ -521,7 +526,7 @@ class CRPU extends CMbObject {
 
     // Bind affectation
     if (CAppUI::conf("dPurgences create_affectation")) {
-      if ($msg = $this->storeAffectation()) {
+      if ($msg = $this->storeAffectation($this->_old_service_id)) {
         return $msg;
       }
     }
@@ -679,18 +684,19 @@ class CRPU extends CMbObject {
   /**
    * Store affectation
    *
+   * @param String $old_service_id Old value for the service => bindSejour before
+   *
    * @return null|string
    */
-  function storeAffectation() {
+  function storeAffectation($old_service_id = null) {
     $this->completeField("box_id", "sejour_id");
     $sejour = $this->loadRefSejour();
-    $sejour->completeField("service_id");
 
-    if (!$this->_id && (!$this->box_id || !$this->_service_id)) {
+    if (!$this->_id && !$this->_service_id) {
       return null;
     }
 
-    if ($this->_id && (!$this->fieldModified("box_id") && !$sejour->fieldModified("service_id"))) {
+    if ($this->_id && (!$this->fieldModified("box_id") && $sejour->service_id == $old_service_id)) {
       return null;
     }
 

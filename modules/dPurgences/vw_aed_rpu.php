@@ -18,6 +18,7 @@ $listResponsables = CAppUI::conf("dPurgences only_prat_responsable") ?
   $user->loadUsers(PERM_READ, $group->service_urgences_id);
 
 $listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
+$imagerie_etendue = CAppUI::conf("dPurgences CRPU imagerie_etendue", $group);
 
 $rpu    = new CRPU();
 $rpu_id = CValue::getOrSession("rpu_id");
@@ -72,6 +73,8 @@ $contrainteProvenance[6] = array("", 1, 2, 3, 4);
 $contrainteProvenance[7] = array("", 1, 2, 3, 4);
 $contrainteProvenance[8] = array("", 5, 8);
 
+
+
 // Chargement des boxes 
 $services = array();
 $services_type = array(
@@ -91,6 +94,12 @@ else {
   // Urgences pour un séjour "urg"
   $services = $services_type["Urgences"];
   unset($services_type["UHCD"]);
+}
+
+if ($imagerie_etendue) {
+  $service_imagerie = CService::loadServicesImagerie();
+  $services_type["Imagerie"] = $service_imagerie;
+  $services = array_merge($services, $services_type["Imagerie"]);
 }
 
 $module_orumip = CModule::getActive("orumip");
@@ -125,6 +134,8 @@ if (CAppUI::conf("ref_pays") == 2) {
   $motifs = $motif->loadMatchingList();
 }
 
+$sejour->loadRefCurrAffectation();
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -140,6 +151,7 @@ if (CModule::getActive("dPprescription")) {
   $smarty->assign("line"              , new CPrescriptionLineMedicament());
 }
 
+$smarty->assign("imagerie_etendue"    , $imagerie_etendue);
 $smarty->assign("services"            , $services);
 $smarty->assign("services_type"       , $services_type);
 $smarty->assign("contrainteProvenance", $contrainteProvenance);

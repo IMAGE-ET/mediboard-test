@@ -107,11 +107,17 @@
 <td class="text sortie {{$sejour->mode_sortie}}">
   <span style="float: right">
     {{if $sejour->UHCD}}
-      <img src="images/icons/uhcd.png" />
+      <span class="encart encart-uhcd">UHCD</span>
     {{/if}}
 
     {{if $rpu->mutation_sejour_id}}
       <img src="images/icons/mutation.png" />
+    {{/if}}
+
+    {{if $sejour->_ref_curr_affectation &&
+         $sejour->_ref_curr_affectation->_ref_service &&
+         $sejour->_ref_curr_affectation->_ref_service->radiologie}}
+      <span class="encart encart-imagerie">IMG</span>
     {{/if}}
   </span>
   <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">

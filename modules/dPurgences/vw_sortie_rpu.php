@@ -59,8 +59,9 @@ $prats = CMbObject::massLoadFwdRef($listSejours, "praticien_id");
 CMbObject::massLoadFwdRef($prats, "function_id");
 
 foreach ($listSejours as $key=> $_sejour) {
+  $_sejour->loadRefCurrAffectation()->loadRefService();
   if ($service_id) {
-    $curr_aff = $_sejour->getCurrAffectation();
+    $curr_aff = $_sejour->_ref_curr_affectation;
     if ((!$curr_aff->_id && (!$_sejour->service_id || $_sejour->service_id != $service_id)) || $curr_aff->service_id != $service_id) {
       unset($listSejours[$key]);
       continue;

@@ -50,6 +50,7 @@ $sejour->loadRefsConsultations();
 $sejour->_ref_rpu->_ref_consult->loadRefsActes();
 // Chargement de l'IPP
 $sejour->_ref_patient->loadIPP();
+$sejour->loadRefCurrAffectation()->loadRefService();
 
 // Chargement des services
 $where = array();

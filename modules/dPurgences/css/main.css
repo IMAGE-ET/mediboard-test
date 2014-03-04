@@ -70,3 +70,22 @@ table.tbl td.ccmu-23, table.tbl tr:hover td.ccmu-23{
 table.tbl td.ccmu-24, table.tbl tr:hover td.ccmu-24{
   background-color: #0F0;
 }
+
+.encart {
+  font-size: 0.8em;
+  padding: 2px;
+  border-radius: 3px;
+  background: white;
+  line-height: 1;
+  text-align: center;
+}
+
+.encart-uhcd {
+  border: 1px solid #006600;
+  color: #006600;
+}
+
+.encart-imagerie {
+  border: 1px solid #e3dc26;
+  color: #e3b009;
+}

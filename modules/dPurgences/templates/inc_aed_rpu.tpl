@@ -176,8 +176,12 @@
         <th>{{mb_label object=$rpu field="urprov"}}</th>
         <td>{{mb_field object=$rpu field="urprov" emptyLabel="Choose" style="width: 15em;"}}</td>
       {{else}}
-        <th>{{mb_label object=$rpu field="_provenance"}}</th>
-        <td>{{mb_field object=$rpu field="_provenance" emptyLabel="Choose" style="width: 15em;"}}</td>
+        {{assign var="provenance" value=""}}
+        {{if "CAppUI::conf"|static_call:"dPurgences CRPU provenance_necessary":"CGroups-$g"}}
+          {{assign var="provenance" value="notNull"}}
+        {{/if}}
+        <th>{{mb_label object=$rpu field="_provenance" class=$provenance}}</th>
+        <td>{{mb_field object=$rpu field="_provenance" class=$provenance emptyLabel="Choose" style="width: 15em;"}}</td>
       {{/if}}
     </tr>
 

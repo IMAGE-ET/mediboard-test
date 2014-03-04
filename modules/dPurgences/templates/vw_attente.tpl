@@ -18,12 +18,12 @@ var refreshExecuter;
 function refreshAttente(debut, fin, rpu_id) {
   var url = new Url("dPurgences", "ajax_vw_attente");
   url.addParam("rpu_id", rpu_id);
-	url.addParam("debut", debut);
-	url.addParam("fin", fin);
+  url.addParam("debut", debut);
+  url.addParam("fin", fin);
   url.addParam("attente", 1);
   url.requestUpdate(fin+'-'+rpu_id);
 }
-	
+
 Main.add(function () {
   Calendar.regField(getForm("changeDate").date, null, {noView: true});
 
@@ -31,7 +31,7 @@ Main.add(function () {
     getForm("changeDate").submit();
   }, 60);
 
-	{{if $isImedsInstalled}}
+  {{if $isImedsInstalled}}
     ImedsResultsWatcher.loadResults();
   {{/if}}
 });
@@ -52,51 +52,55 @@ Main.add(function () {
 </table>
 
 <table class="tbl">
-	<tr>
-		<th class="title" rowspan="2">{{mb_title class=CRPU field="_patient_id"}}</th>
-		<th class="title" rowspan="2">{{mb_title class=CRPU field="_responsable_id"}}</th>
-		<th class="title" colspan="2">{{tr}}CRPU-radio{{/tr}}</th>
-		<th class="title" colspan="2">{{tr}}CRPU-bio{{/tr}}</th>
-		<th class="title" colspan="2">{{tr}}CRPU-specia{{/tr}}</th>
+  <tr>
+    <th class="title" rowspan="2">{{mb_title class=CRPU field="_patient_id"}}</th>
+    <th class="title" rowspan="2">{{mb_title class=CRPU field="_responsable_id"}}</th>
+    <th class="title" colspan="2">{{tr}}CRPU-radio{{/tr}}</th>
+    <th class="title" colspan="2">{{tr}}CRPU-bio{{/tr}}</th>
+    <th class="title" colspan="2">{{tr}}CRPU-specia{{/tr}}</th>
   </tr>
   <tr>
     <th>{{mb_title class=CRPU field="radio_debut"}}</th>
     <th>{{mb_title class=CRPU field="radio_fin"}}</th>
     <th>{{mb_title class=CRPU field="bio_depart"}}</th>
     <th>{{mb_title class=CRPU field="bio_retour"}}</th>
-		<th>{{mb_title class=CRPU field="specia_att"}}</th>
+    <th>{{mb_title class=CRPU field="specia_att"}}</th>
     <th>{{mb_title class=CRPU field="specia_arr"}}</th>
   </tr>
   {{foreach from=$listSejours item=_sejour}}
     {{assign var=rpu value=$_sejour->_ref_rpu}}
-		{{assign var=rpu_id value=$rpu->_id}}
+    {{assign var=rpu_id value=$rpu->_id}}
     {{assign var=patient value=$_sejour->_ref_patient}}
-		{{assign var=rpu_link value="?m=dPurgences&tab=vw_aed_rpu&rpu_id=$rpu_id"}}
-			
-		<tr style="text-align: center;">			
-			<td {{if $_sejour->sortie_reelle}}class="opacity-60"{{/if}}>
-			  <a style="float: right;" title="Voir le dossier" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;sejour_id={{$_sejour->_id}}">
-			    <img src="images/icons/search.png" alt="Dossier patient"/>
-			  </a>
-			  <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}">
-			    <strong>
-			    {{$patient->_view}}
-			    </strong>
-			    <br />{{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}
-			  </a>
-			</td>
-			
-			<td {{if $_sejour->sortie_reelle}}class="opacity-60"{{/if}}>
-			  <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}">
-			    {{$_sejour->_ref_praticien->_view}}
-			  </a>
-			</td>
-			
-			{{mb_include module=urgences template=inc_vw_attente debut=radio_debut fin=radio_fin}}
-			
-			{{mb_include module=urgences template=inc_vw_attente debut=bio_depart fin=bio_retour}}
-			
-			{{mb_include module=urgences template=inc_vw_attente debut=specia_att fin=specia_arr}}
-		</tr>
+    {{assign var=rpu_link value="?m=dPurgences&tab=vw_aed_rpu&rpu_id=$rpu_id"}}
+
+    <tr style="text-align: center;">
+      <td {{if $_sejour->sortie_reelle}}class="opacity-60"{{/if}}>
+        <a style="float: right;" title="Voir le dossier" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;sejour_id={{$_sejour->_id}}">
+          <img src="images/icons/search.png" alt="Dossier patient"/>
+        </a>
+        <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}">
+          <strong>
+          {{$patient->_view}}
+          </strong>
+          <br />{{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}
+        </a>
+      </td>
+
+      <td {{if $_sejour->sortie_reelle}}class="opacity-60"{{/if}}>
+        <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}">
+          {{$_sejour->_ref_praticien->_view}}
+        </a>
+      </td>
+
+      {{if $imagerie_etendue}}
+        {{mb_include module=urgences template=inc_vw_attente_imagerie affectations=$_sejour->_ref_affectations sortie=$_sejour->sortie}}
+      {{else}}
+        {{mb_include module=urgences template=inc_vw_attente debut=radio_debut fin=radio_fin}}
+      {{/if}}
+
+      {{mb_include module=urgences template=inc_vw_attente debut=bio_depart fin=bio_retour}}
+
+      {{mb_include module=urgences template=inc_vw_attente debut=specia_att fin=specia_arr}}
+    </tr>
   {{/foreach}}
 </table>

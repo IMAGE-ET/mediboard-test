@@ -26,6 +26,14 @@
       {{else}}
         tab.removeClassName('empty');
       {{/if}}
+    {{elseif $type == "imagerie"}}
+      var tab = $$("a[href=#holder_imagerie]")[0];
+      tab.down("small").update("({{$listSejours|@count}})");
+      {{if $listSejours|@count == '0'}}
+      tab.addClassName('empty');
+      {{else}}
+      tab.removeClassName('empty');
+      {{/if}}
     {{/if}}
     
     {{if $isImedsInstalled}}
@@ -44,6 +52,8 @@
       MainCourante.stop();
     {{elseif $type == "UHCD"}}
       UHCD.stop();
+    {{elseif $type == "imagerie"}}
+    Imagerie.stop();
     {{/if}}
     var url = new Url("dPurgences", "ajax_edit_diag");
     url.addParam("rpu_id", rpu_id);
@@ -53,6 +63,8 @@
         MainCourante.start();
       {{elseif $type == "UHCD"}}
         UHCD.start();
+      {{elseif $type == "imagerie"}}
+        Imagerie.start();
       {{/if}}
     });
   }
@@ -66,6 +78,8 @@
     <button class="change" onclick="MainCourante.start()">Relancer</button>
   {{elseif $type == "UHCD"}}
     <button class="change" onclick="UHCD.start()">Relancer</button>
+  {{elseif $type == "imagerie"}}
+    <button class="change" onclick="Imagerie.start()">Relancer</button>
   {{/if}}
 </div>
 
@@ -83,6 +97,8 @@
         <input type="text" size="6" onkeyup="MainCourante.filter(this, 'filter-indicator')" id="filter-patient-name-{{$type}}" />
       {{elseif $type == "UHCD"}}
         <input type="text" size="6" onkeyup="UHCD.filter(this, 'filter-indicator')" id="filter-patient-name-{{$type}}" />
+      {{elseif $type == "imagerie"}}
+        <input type="text" size="6" onkeyup="Imagerie.filter(this, 'filter-indicator')" id="filter-patient-name-{{$type}}" />
       {{/if}}
     </th>
     
@@ -243,6 +259,9 @@
             {{elseif $type == "UHCD"}}
               <form name="editRPU-{{$rpu->_id}}"
                 onsubmit="return onSubmitFormAjax(this, {onComplete: function() { UHCD.start() }});" method="post" action="?">
+                {{elseif $type == "imagerie"}}
+                <form name="editRPU-{{$rpu->_id}}"
+                      onsubmit="return onSubmitFormAjax(this, {onComplete: function() { Imagerie.start() }});" method="post" action="?">
             {{/if}}
       
               <input type="hidden" name="m" value="dPurgences" />
@@ -329,7 +348,13 @@
               {{/if}}
               
               {{if $_sejour->UHCD}}
-                <img src="images/icons/uhcd.png" />
+                <span class="encart encart-uhcd">UHCD</span>
+              {{/if}}
+
+              {{if $_sejour->_ref_curr_affectation &&
+                   $_sejour->_ref_curr_affectation->_ref_service &&
+                   $_sejour->_ref_curr_affectation->_ref_service->radiologie}}
+                <span class="encart encart-imagerie">IMG</span
               {{/if}}
 
               {{if $rpu->mutation_sejour_id}}

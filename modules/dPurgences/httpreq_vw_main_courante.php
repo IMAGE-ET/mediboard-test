@@ -107,6 +107,7 @@ foreach ($listSejours as $sejour) {
   $sejour->loadRefsConsultations();
   $sejour->loadRefsNotes();
   $sejour->countDocItems();
+  $sejour->loadRefCurrAffectation()->loadRefService();
 
   $prescription = $sejour->loadRefPrescriptionSejour();
 

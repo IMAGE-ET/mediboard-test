@@ -331,13 +331,35 @@ class CService extends CMbObject {
   }
 
   /**
+   * Charge les services d'UHCD de l'établissement courant
+   *
+   * @return CService[]
+   */
+  static function loadServicesImagerie() {
+    $service = new CService();
+    $service->group_id   = CGroups::loadCurrent()->_id;
+    $service->radiologie = "1";
+    $service->cancelled  = "0";
+    /** @var CService[] $services */
+    $services = $service->loadMatchingList();
+    $chambres = CMbObject::massLoadBackRefs($services, "chambres");
+    CMbObject::massLoadBackRefs($chambres, "lits");
+
+    return $services;
+  }
+
+  /**
    * Charge les services d'UHCD et d'urgence de l'établissement courant
    *
    * @return CService[]
    */
   static function loadServicesUHCDRPU() {
     $where = array();
-    $where[]            = "uhcd = '1' OR urgence = '1'";
+    $clause = "uhcd = '1' OR urgence = '1'";
+    if (CAppUI::conf("dPurgences CRPU imagerie_etendue", CGroups::loadCurrent())) {
+      $clause .= " OR radiologie = '1'";
+    }
+    $where[]            = $clause;
     $where["cancelled"] = " = '0'";
     $service = new CService();
     /** @var CService[] $services */
