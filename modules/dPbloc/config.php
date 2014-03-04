@@ -20,7 +20,13 @@ $dPconfig["dPbloc"]["CPlageOp"] = array (
   "chambre_operation"    => "0",
   "impression_suivi"     => "0",
   "id_salles_impression" => "",
+
+  // suivi salle
   "hour_midi_fullprint"  => "12",
   "view_prepost_suivi"   => false,
   "time_autorefresh"     => "120",
+  "view_required_tools"  => false,
+  "view_tools"           => false,
+  "view_rques"           => false,
+  "view_anesth_type"     => false
 );

@@ -72,13 +72,16 @@
     </tr>
 
     <tr>
-      <th colspan="2" class="title">Affichage</th>
+      <th colspan="2" class="title">Affichages</th>
     </tr>
     {{mb_include module=system template=inc_config_bool var=view_prepost_suivi}}
     {{mb_include module=system template=inc_config_bool var=chambre_operation}}
     {{mb_include module=system template=inc_config_enum var=time_autorefresh values="120|300|600"}}
 
-
+    {{mb_include module=system template=inc_config_bool var=view_tools}}
+    {{mb_include module=system template=inc_config_bool var=view_required_tools}}
+    {{mb_include module=system template=inc_config_bool var=view_anesth_type}}
+    {{mb_include module=system template=inc_config_bool var=view_rques}}
 
     <tr>
       <td class="button" colspan="100">
