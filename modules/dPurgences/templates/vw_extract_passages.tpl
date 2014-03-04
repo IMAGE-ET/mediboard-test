@@ -14,7 +14,10 @@
   function popupEchangeViewer(extract_passages_id) {
     var url = new Url("dPurgences", "extract_viewer");
     url.addParam("extract_passages_id", extract_passages_id);
-    url.popup(700, 550, "Message Passage");
+    url.modal({
+      width     : "80%",
+      height    : "80%"
+    });
     return false;
   }
 
@@ -47,28 +50,31 @@
     </tr>
     <tr>
       <th>{{mb_label class=CExtractPassages field="debut_selection"}}</th>
-      <td>{{mb_field class=CExtractPassages field="debut_selection" canNull=true form="listFilter" register=true onchange="this.form.submit()" value=$debut_selection}}</td>
+      <td>{{mb_field class=CExtractPassages field="debut_selection" canNull=true form="listFilter" register=true
+            onchange="this.form.submit()" value=$debut_selection}}</td>
     </tr>
     <tr>
       <th>{{mb_label class=CExtractPassages field="fin_selection"}}</th>
-      <td>{{mb_field class=CExtractPassages field="fin_selection" canNull=true form="listFilter" register=true onchange="this.form.submit()" value=$fin_selection}}</td>
+      <td>{{mb_field class=CExtractPassages field="fin_selection" canNull=true form="listFilter" register=true
+            onchange="this.form.submit()" value=$fin_selection}}</td>
     </tr>
     <tr>
       <th>{{mb_label class=CExtractPassages field="type"}}</th>
       <td>{{mb_field class=CExtractPassages field="type" emptyLabel=Choose onchange="this.form.submit()" value=$type}}</td>
     </tr>
+
+    <tr>
+      <td colspan="2" class="button">
+        <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
+      </td>
+    </tr>
   </table>
   <br/>
-
-  <div>
-    <strong>Total des RPUs extrait : {{$total_rpus}}</strong>
-  </div>
 
   {{if $total_passages != 0}}
     {{mb_include module=system template=inc_pagination total=$total_passages current=$page change_page='changePage'}}
   {{/if}}
 </form>
-
 
 <table class="tbl">
   <tr>
@@ -93,7 +99,8 @@
       <a href="#1" onclick="return popupEchangeViewer('{{$_passage->_id}}')" class="button search">
        {{$_passage->_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
       </a>
-      <a target="blank" href="?m=dPurgences&a=download_echange&extract_passages_id={{$_passage->_id}}&dialog=1&suppressHeaders=1" class="button modify notext"></a>
+      <a target="blank" href="?m=dPurgences&a=download_echange&extract_passages_id={{$_passage->_id}}&dialog=1&suppressHeaders=1"
+         class="button modify notext"></a>
     </td>
     <td class="narrow">
       {{mb_value object=$_passage field="type"}}
@@ -129,10 +136,12 @@
       {{mb_include template=inc_extract_file}}       
     </td>
     <td class="narrow compact">
-      <button class="lock notext" type="button" id="encrypt_rpu" onclick="encrypt({{$_passage->_id}})" title="Chiffrer">Chiffrer</button>
+      <button {{if !$_passage->message_valide}}disabled{{/if}} class="lock notext" type="button" id="encrypt_rpu"
+              onclick="encrypt({{$_passage->_id}})" title="Chiffrer">Chiffrer</button>
 
       {{if $can->admin}} 
-        <form name="Purge-{{$_passage->_guid}}" action="?m={{$m}}&amp;tab=vw_extract_passages" method="post" onsubmit="return confirmCreation(this)">
+        <form name="Purge-{{$_passage->_guid}}" action="?m={{$m}}&amp;tab=vw_extract_passages" method="post"
+              onsubmit="return confirmCreation(this)">
           <input type="hidden" name="dosql" value="do_extract_passages_aed" />
           <input type="hidden" name="m" value="dPurgences" />
           <input type="hidden" name="tab" value="vw_extract_passages" />
@@ -151,12 +160,14 @@
                }
              }
            </script>
-           <button type="button" class="cancel notext" onclick="confirmPurge{{$_passage->_id}}(this.form);">
+           <button {{if !$_passage->message_valide}}disabled{{/if}} type="button" class="cancel notext"
+                   onclick="confirmPurge{{$_passage->_id}}(this.form);">
              {{tr}}Purge{{/tr}}
            </button>
         </form>
       {{/if}}
-      <button type="button" class="send notext" onclick="sendPassage('{{$_passage->_id}}')">Transmettre</button>
+      <button {{if !$_passage->message_valide}}disabled{{/if}} type="button" class="send notext"
+              onclick="sendPassage('{{$_passage->_id}}')">Transmettre</button>
       <div id="result_send_passage-{{$_passage->_id}}"></div>
     </td>
   </tr>

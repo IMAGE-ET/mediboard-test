@@ -410,19 +410,23 @@ class CRPU extends CMbObject {
     $sejour->entree_reelle = $this->_entree;
     $sejour->sortie_prevue = (CAppUI::conf("dPurgences sortie_prevue") == "h24") ?
       CMbDT::dateTime("+1 DAY", $this->_entree) : CMbDT::date(null, $this->_entree)." 23:59:59";
-    $sejour->annule        = $this->_annule;
-    $sejour->service_id    = $this->_service_id;
+    $sejour->annule                  = $this->_annule;
+    $sejour->service_id              = $this->_service_id;
     $sejour->etablissement_entree_id = $this->_etablissement_entree_id;
-    $sejour->service_entree_id = $this->_service_entree_id;
-    $sejour->mode_entree = $this->_mode_entree;
-    $sejour->mode_entree_id = $this->_mode_entree_id;
-    $sejour->provenance  = $this->_provenance;
-    $sejour->destination = $this->_destination;
-    $sejour->transport   = $this->_transport;
-    $sejour->UHCD        = $this->_UHCD;
+    $sejour->service_entree_id       = $this->_service_entree_id;
+    $sejour->mode_entree             = $this->_mode_entree;
+    $sejour->mode_entree_id          = $this->_mode_entree_id;
+    $sejour->provenance              = $this->_provenance;
+    $sejour->destination             = $this->_destination;
+    $sejour->transport               = $this->_transport;
+    $sejour->UHCD                    = $this->_UHCD;
     // Le patient est souvent chargé à vide ce qui pose problème
     // dans le onAfterStore(). Ne pas supprimer.
     $sejour->_ref_patient = null;
+
+    // on garde une trace du service du séjour
+    $sejour->loadOldObject();
+    $this->_old_service_id = $sejour->_old->service_id;
 
     if ($msg = $sejour->store()) {
       return $msg;
@@ -438,9 +442,6 @@ class CRPU extends CMbObject {
    * @see parent::store()
    */
   function store() {
-    $sejour = $this->loadRefSejour();
-    $this->_old_service_id = $sejour->service_id;
-
     // Création du RPU en l'associant à un séjour existant
     if (!$this->_id && $this->sejour_id) {
       $sejour = $this->loadRefSejour();
@@ -526,7 +527,7 @@ class CRPU extends CMbObject {
 
     // Bind affectation
     if (CAppUI::conf("dPurgences create_affectation")) {
-      if ($msg = $this->storeAffectation($this->_old_service_id)) {
+      if ($msg = $this->storeAffectation()) {
         return $msg;
       }
     }
@@ -684,19 +685,23 @@ class CRPU extends CMbObject {
   /**
    * Store affectation
    *
-   * @param String $old_service_id Old value for the service => bindSejour before
-   *
    * @return null|string
    */
-  function storeAffectation($old_service_id = null) {
+  function storeAffectation() {
     $this->completeField("box_id", "sejour_id");
     $sejour = $this->loadRefSejour();
 
-    if (!$this->_id && !$this->_service_id) {
+    $sejour->completeField("service_id");
+
+    if (!$this->_id && !$sejour->service_id) {
       return null;
     }
 
-    if ($this->_id && (!$this->fieldModified("box_id") && $sejour->service_id == $old_service_id)) {
+    if ($this->_bind_sejour !== false) {
+      return null;
+    }
+
+    if ($this->_id && (!$this->fieldModified("box_id") && $sejour->service_id == $this->_old_service_id)) {
       return null;
     }
 

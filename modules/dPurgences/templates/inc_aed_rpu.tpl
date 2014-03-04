@@ -239,7 +239,7 @@
           var box = form.elements.box_id;
           box.observe("change", function(event){
             var service_id = box.options[box.selectedIndex].up("optgroup").get("service_id");
-            $V(form.elements._service_id, service_id);
+            $V(form.elements._service_id, service_id, false);
           });
         }
       });
@@ -256,7 +256,7 @@
           <input type="hidden" name="_service_id" value="{{$first_service->_id}}" />
           {{$first_service->_view}}
         {{else}}
-          <select name="_service_id" class="{{$sejour->_props.service_id}}">
+          <select name="_service_id" class="{{$sejour->_props.service_id}}" onchange="$V(this.form.box_id, '', false)">
             <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
             {{foreach from=$services_type item=_services key=nom_serv}}
               <optgroup label="{{$nom_serv}}">
