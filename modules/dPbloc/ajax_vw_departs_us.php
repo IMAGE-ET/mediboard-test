@@ -2,12 +2,12 @@
 
 /**
  * dPbloc
- *  
+ *
  * @category Bloc
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
  * @link     http://www.mediboard.org
  */
 
@@ -16,7 +16,7 @@ $bloc_id     = CValue::get("bloc_id");
 $order_way   = CValue::get("order_way");
 $order_col   = CValue::get("order_col");
 
-$operation = new COperation;
+$operation = new COperation();
 
 $ljoin = array();
 $where = array();
@@ -24,6 +24,7 @@ $where = array();
 $ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
 
 $where["plagesop.date"] = " = '".CMbDT::date($date_depart)."'";
+$where["annulee"] = " = '0'";
 
 if ($bloc_id) {
   $ljoin["sallesbloc"] = "sallesbloc.salle_id = operations.salle_id";
@@ -38,6 +39,7 @@ $where = array();
 $ljoin = array();
 
 $where["plageop_id"] = "IS NULL";
+$where["annulee"] = "= '0'";
 $where["date"] = " = '".CMbDT::date($date_depart)."'";
 
 if ($bloc_id) {
@@ -79,7 +81,8 @@ switch ($order_col) {
 }
 
 array_multisort($sorter, $order_way == "ASC" ? SORT_ASC : SORT_DESC, $operations);
-$smarty = new CSmartyDP;
+
+$smarty = new CSmartyDP();
 
 $smarty->assign("operations", $operations);
 $smarty->assign("order_way" , $order_way);
