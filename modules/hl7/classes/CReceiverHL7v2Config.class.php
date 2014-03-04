@@ -73,6 +73,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   public $build_telephone_number;
   public $build_cellular_phone;
   public $build_other_residence_number;
+  public $build_identifier_authority;
   
   // PID
   public $build_PID_6;
@@ -140,7 +141,8 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       "build_NDA",
       "build_telephone_number",
       "build_cellular_phone",
-      "build_other_residence_number"
+      "build_other_residence_number",
+      "build_identifier_authority"
     ),
     "send" => array(
       "modification_admit_code",
@@ -267,6 +269,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["build_telephone_number"]       = "enum list|XTN_1|XTN_12 default|XTN_12";
     $props["build_cellular_phone"]         = "enum list|PRN|ORN default|PRN";
     $props["build_other_residence_number"] = "enum list|ORN|WPN default|ORN";
+    $props["build_identifier_authority"]   = "enum list|normal|PI_AN default|normal";
     
     // PID
     $props["build_PID_6"]   = "enum list|nom_naissance|none default|none";
@@ -281,12 +284,12 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["build_PV1_3_2"] = "enum list|name|config_value|idex default|name";
     $props["build_PV1_3_3"] = "enum list|name|config_value|idex default|name";
     $props["build_PV1_3_5"] = "enum list|bed_status|null default|bed_status";
-    $props["build_PV1_5"]   = "enum list|NPA|None default|NPA";
+    $props["build_PV1_5"]   = "enum list|NPA|none default|NPA";
     $props["build_PV1_7"]   = "enum list|unique|repeatable default|unique";
     $props["build_PV1_10"]  = "enum list|discipline|service default|discipline";
     $props["build_PV1_11"]  = "enum list|uf_medicale|none default|none";
     $props["build_PV1_14"]  = "enum list|admit_source|ZFM default|admit_source";
-    $props["build_PV1_17"]  = "enum list|praticien|None default|praticien";
+    $props["build_PV1_17"]  = "enum list|praticien|none default|praticien";
     $props["build_PV1_19"]  = "enum list|normal|simple default|normal";
     $props["build_PV1_26"]  = "enum list|movement_id|none default|none";
     $props["build_PV1_36"]  = "enum list|discharge_disposition|ZFM default|discharge_disposition";

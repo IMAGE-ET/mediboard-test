@@ -165,7 +165,7 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
       null,
       // PID-3-4 Autorité d'affectation
       $this->getAssigningAuthority("mediboard"),
-      "RI"
+      $receiver->_configs["build_identifier_authority"] == "PI_AN" ? "AN": "RI"
     );
     // Ajout des identifiants des acteurs d'intégration
     $this->fillActorsIdentifiers($identifiers, $sejour, $receiver);

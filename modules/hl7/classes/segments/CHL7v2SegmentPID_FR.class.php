@@ -48,7 +48,7 @@ class CHL7v2SegmentPID_FR extends CHL7v2SegmentPID {
         null,
         // PID-3-4 Autorité d'affectation
         $this->getAssigningAuthority("mediboard"),
-        "RI"
+        $actor->_configs["build_identifier_authority"] == "PI_AN" ? "PI": "RI"
       );
     }
   }

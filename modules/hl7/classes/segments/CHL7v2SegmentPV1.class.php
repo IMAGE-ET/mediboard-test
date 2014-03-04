@@ -96,7 +96,7 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     }    
     
     // PV1-5: Preadmit Number (CX) (optional)
-    if ($receiver->_configs["build_PV1_5"] == "None") {
+    if ($receiver->_configs["build_PV1_5"] == "none") {
       $data[] = null;
     }
     else {
@@ -177,7 +177,7 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     $data[] = $sejour->loadRefPatient()->vip ? "I" : "P";
 
     // PV1-17: Admitting Doctor (XCN) (optional repeating)
-    if ($receiver->_configs["build_PV1_17"] == "None") {
+    if ($receiver->_configs["build_PV1_17"] == "none") {
       $data[] = null;
     }
     else {
