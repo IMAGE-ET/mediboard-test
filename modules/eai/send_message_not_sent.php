@@ -77,6 +77,13 @@ foreach ($exchanges as $_exchange) {
         continue;
     }
 
+    $patient->loadIPP();
+    if (!$patient->_IPP) {
+      $_exchange->date_echange = "";
+      $_exchange->store();
+      continue;
+    }
+
     if ($_exchange->sous_type == "ITI30" && $_exchange->code != "A08") {
       $present_sejour = true;
       $present_patient = $patient && !$patient->_id;
@@ -84,6 +91,13 @@ foreach ($exchanges as $_exchange) {
     else {
       $present_patient = $patient && !$patient->_id;
       $present_sejour = $sejour && !$sejour->_id;
+
+      $sejour->loadNDA();
+      if (!$sejour->_NDA) {
+        $_exchange->date_echange = "";
+        $_exchange->store();
+        continue;
+      }
     }
 
     //S'il n'y a pas de séjour ou de patient en focntion de la transaction, on passe au prochaine échange
@@ -99,6 +113,7 @@ foreach ($exchanges as $_exchange) {
     $data_format = CIHE::getEvent($_exchange);
     $data_format->handle($_exchange->_message);
     $data_format->_exchange_hl7v2 = $_exchange;
+    $data_format->_receiver = $receiver;
     /** @var CHL7v2MessageXML $xml */
     $xml = $data_format->message->toXML();
 
@@ -109,32 +124,14 @@ foreach ($exchanges as $_exchange) {
     $nda = $xml->queryNode("PV1.19", $PV1);
 
     if (
-        (!$ipp && !$ipp->nodeValue) ||
+        ((!$ipp && !$ipp->nodeValue) || $ipp->nodeValue == "0") ||
         (($_exchange->sous_type != "ITI30" ||
         ($_exchange->sous_type == "ITI30" && $_exchange->code == "A08"))  && !$nda && empty($nda->nodeValue))
     ) {
-      if (
-          ($_exchange->sous_type != "ITI30" || ($_exchange->sous_type == "ITI30" && $_exchange->code == "A08")) &&
-          (!$nda || !$nda->nodeValue)
-      ) {
-        $sejour->loadNDA();
-        if (!$sejour->_NDA) {
-          $_exchange->date_echange = "";
-          $_exchange->store();
-          continue;
-        }
-        $nda->nodeValue = $sejour->_NDA;
-      }
 
-      if (!$ipp || !$ipp->nodeValue) {
-        $patient->loadIPP();
-        if (!$patient->_IPP) {
-          $_exchange->date_echange = "";
-          $_exchange->store();
-          continue;
-        }
-        $ipp->nodeValue = $patient->_IPP;
-      }
+      CHL7v2Message::setBuildMode($receiver->_configs["build_mode"]);
+      $data_format->build($object);
+      CHL7v2Message::resetBuildMode();
 
       $data_format->flatten();
       if (!$data_format->message->isOK(CHL7v2Error::E_ERROR)) {
