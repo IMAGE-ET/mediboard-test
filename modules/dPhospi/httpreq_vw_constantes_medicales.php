@@ -123,9 +123,6 @@ if ($selected_context_guid == "all") {
   $context = null;
 }
 
-//CConstantesMedicales::$_latest_values = array();
-$latest_constantes = $patient->loadRefConstantesMedicales(null, array(), $context, false);
-
 $patient->loadRefPhotoIdentite();
 
 $where = array(
@@ -198,6 +195,8 @@ if ($context && $selected_context_guid !== 'all') {
   $constantes->loadRefContext();
 }
 
+//CConstantesMedicales::$_latest_values = array();
+$latest_constantes = $patient->loadRefConstantesMedicales(null, array(), $context, false);
 $constantes->updateFormFields(); // Pour forcer le chargement des unités lors de la saisie d'une nouvelle constante
 
 $whereOr = array();
@@ -239,7 +238,7 @@ foreach ($list_constantes as $_cst) {
 $list_constantes = array_reverse($list_constantes, true);
 
 $graphs_structure = CConstantesMedicales::sortConstantsbyGraph($list_constantes, $host);
-$graphs_datas = CConstantesMedicales::formatGraphDatas($list_constantes, $host);
+$graphs_datas = CConstantesMedicales::formatGraphDatas($list_constantes, $host, $context_guid);
 
 $min_x_index = $graphs_datas['min_x_index'];
 $min_x_value = $graphs_datas['min_x_value'];
