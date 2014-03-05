@@ -55,6 +55,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "handle_PV1_14",
     "handle_PV1_20",
     "handle_PV1_36",
+    "handle_PV1_50",
     "handle_PV2_12",
     "handle_NSS",
     "create_grossesse",
@@ -111,6 +112,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
   public $handle_PV1_14;
   public $handle_PV1_20;
   public $handle_PV1_36;
+  public $handle_PV1_50;
   public $handle_PV2_12;
   public $handle_NSS;
   public $create_grossesse;
@@ -170,6 +172,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
       "handle_PV1_14",
       "handle_PV1_20",
       "handle_PV1_36",
+      "handle_PV1_50",
       "handle_PV2_12",
       "handle_NSS",
       "ignore_fields",
@@ -261,6 +264,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["handle_PV1_14"] = "enum list|admit_source|ZFM default|admit_source";
     $props["handle_PV1_20"] = "enum list|old_presta|none default|none";
     $props["handle_PV1_36"] = "enum list|discharge_disposition|ZFM default|discharge_disposition";
+    $props["handle_PV1_50"] = "enum list|sejour_id|none default|none";
 
     // => PV2
     $props["handle_PV2_12"] = "enum list|libelle|none default|libelle";

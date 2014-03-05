@@ -496,8 +496,21 @@ class CHL7v2MessageXML extends CMbXMLDocument {
       }
     }
 
+    switch ($sender->_configs["handle_PV1_50"]) {
+      // Il s'agit-là du sejour_id qui fait office de "NDA temporaire"
+      case 'sejour_id':
+        foreach ($this->query("PV1.50", $contextNode) as $_node) {
+          if (($this->queryTextNode("CX.5", $_node) == "AN")) {
+            $data["RI"] = $this->queryTextNode("CX.1", $_node);
+          }
+        }
 
-      
+        break;
+
+      default:
+        break;
+    }
+
     // PA - Preadmit Number
     if ($PV1_5 = $this->queryNode("PV1.5", $contextNode)) {
       $this->getNPAIdentifiers($PV1_5, $data);

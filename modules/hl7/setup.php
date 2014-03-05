@@ -1272,7 +1272,13 @@ class CSetuphl7 extends CSetup {
                 ADD `search_master_NDA` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.90";
+    $this->makeRevision("0.90");
+
+    $query = "ALTER TABLE `hl7_config`
+                ADD `handle_PV1_50` ENUM ('sejour_id','none') DEFAULT 'none';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.91";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
