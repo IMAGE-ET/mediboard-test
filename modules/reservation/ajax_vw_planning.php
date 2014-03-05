@@ -392,35 +392,37 @@ if ($show_operations) {
 // Ajout des événements (commentaires)
 foreach ($commentaires_by_salle as $salle_id => $_commentaires) {
   $i = array_search($salle_id, $salles_ids);
-  
+
   foreach ($_commentaires as $_commentaire) {
     $debut = "$i ".CMbDT::time($_commentaire->debut);
-    
+
     $duree = CMbDT::minutesRelative(CMbDT::time($_commentaire->debut), CMbDT::time($_commentaire->fin));
-    
+    $com_comm = CMbString::htmlEntities($_commentaire->commentaire);
+    $com_libelle = CMbString::htmlEntities($_commentaire->libelle);
+
     $libelle = "<span
     style='display: none;'
     data-entree_prevue='$_commentaire->debut'
     data-sortie_prevue='$_commentaire->fin'
-    data-libelle='$_commentaire->libelle'
-    data-commentaire='$_commentaire->commentaire'
+    data-libelle='$com_libelle'
+    data-commentaire='$com_comm'
     data-duree='$duree'
     data-color='$_commentaire->color'></span>".
-    "<span style='font-size: 11px; font-weight: bold;'>".CMbString::htmlEntities($_commentaire->libelle)."</span>".
-    "\n<span class='compact'>".CMbString::htmlEntities($_commentaire->commentaire)."</span>";
+      "<span style='font-size: 11px; font-weight: bold;'>".$com_libelle."</span>".
+      "\n<span class='compact'>".$com_comm."</span>";
 
     $event = new CPlanningEvent($_commentaire->_guid, $debut, $duree, $libelle, "#$_commentaire->color", true, null, $_commentaire->_guid, false);
-    
+
     $event->type = "commentaire_planning";
     $event->draggable = $event->resizable = CCanDo::edit();
     $event->plage["id"] = $_commentaire->_id;
-    
+
     if ($can_edit) {
       $event->addMenuItem("edit"    , "Modifier ce commentaire");
       $event->addMenuItem("copy"    , "Copier ce commentaire");
       $event->addMenuItem("cancel"  , "Supprimer ce commentaire");
     }
-    
+
     $planning->addEvent($event);
   }
 }
