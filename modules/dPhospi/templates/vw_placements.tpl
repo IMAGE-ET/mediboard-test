@@ -375,21 +375,24 @@
     }
   }
 
-  changeAffService = function(object_id, object_class) {
-    var form = getForm("changeService");
+  changeAffService = function(object_id, object_class, sejour_id, lit_id) {
+    var form = getForm("changeServiceForm");
     switch (object_class) {
       case "CSejour":
         $V(form.m ,"planningOp");
         $V(form.dosql ,"do_sejour_aed");
+        $V(form.affectation_id, "");
         $V(form.sejour_id ,object_id);
         break;
       case "CAffectation":
         $V(form.m ,"hospi");
-        $V(form.affectation_id, object_id);
         $V(form.dosql ,"do_affectation_aed");
+        $V(form.affectation_id, object_id);
+        $V(form.sejour_id, sejour_id);
     }
     var url = new Url("hospi", "ajax_select_service");
     url.addParam("action", "changeService");
+    url.addParam("lit_id", lit_id);
     url.requestModal(null, null, {maxHeight: '600'});
   }
 
@@ -413,12 +416,13 @@
 </form>
 
 <!-- Formulaire de changement de service d'une affectation dans un couloir (pas de lit_id) -->
-<form name="changeService" method="post">
+<form name="changeServiceForm" method="post">
   <input type="hidden" name="m" />
   <input type="hidden" name="dosql" />
   <input type="hidden" name="affectation_id" />
   <input type="hidden" name="sejour_id" />
   <input type="hidden" name="service_id" />
+  <input type="hidden" name="lit_id" />
 </form>
 
 <!-- Légendes -->
@@ -455,8 +459,6 @@
     <button type="button" onclick="Placement.showLegend();" class="search">Légende</button>
   </li>
 </ul>
-
-<hr class="control_tabs" />
 
 <div id="tableau" style="display: none;"></div>
 <div id="temporel" style="display: none;"></div>

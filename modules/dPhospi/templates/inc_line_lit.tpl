@@ -248,10 +248,8 @@
                       </a>
                     {{/if}}
                     <span class="toolbar_affectation">
-                      {{if $in_corridor}}
-                        <button type="button" onclick="changeAffService('{{$object->_id}}', '{{$object->_class}}')" class="opacity-40 door-out notext"
-                                onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"></button>
-                      {{/if}}
+                      <button type="button" onclick="changeAffService('{{$object->_id}}', '{{$object->_class}}' {{if $is_aff}},'{{$object->sejour_id}}', '{{$object->lit_id}}'{{/if}})"
+                              class="opacity-40 door-out notext" onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"></button>
                       {{if $is_aff && $object->sejour_id}}
                         {{if $conf.dPadmissions.show_deficience}}
                           <span style="margin-top: 3px; margin-right: 3px;">
@@ -264,12 +262,6 @@
                             <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF" class="opacity-40"
                               onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"/></a>
                         {{/if}}
-                      {{/if}}
-                      {{if !$in_corridor && $is_aff && $object->sejour_id != 0}}
-                        <button type="button" class="door-out notext opacity-40"
-                          title="Placer dans le couloir"
-                          onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"
-                          onclick="moveAffectation('{{$object->_id}}', '', '', '{{$object->lit_id}}'); loadNonPlaces()"></button>
                       {{/if}}
                       {{if $is_aff}}
                         <button type="button" class="edit notext opacity-40"

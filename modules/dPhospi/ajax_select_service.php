@@ -14,6 +14,7 @@
 CCAnDo::checkRead();
 
 $action = CValue::get("action", "mapService");
+$lit_id = CValue::get("lit_id");
 
 $group_id = CGroups::loadCurrent()->_id;
 
@@ -33,6 +34,8 @@ $where["group_id"] = "= '$group_id'";
 $secteur = new CSecteur();
 $secteurs = $secteur->loadList($where, "nom");
 
+CMbObject::massLoadBackRefs($secteurs, "services");
+
 foreach ($secteurs as $_secteur) {
   $_secteur->loadRefsServices();
 }
@@ -43,5 +46,6 @@ $smarty->assign("all_services"    , $all_services);
 $smarty->assign("services_allowed", $services_allowed);
 $smarty->assign("secteurs"        , $secteurs);
 $smarty->assign("action"          , $action);
+$smarty->assign("lit_id"          , $lit_id);
 
 $smarty->display("inc_select_service.tpl");

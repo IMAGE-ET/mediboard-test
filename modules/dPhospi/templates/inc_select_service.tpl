@@ -11,7 +11,7 @@
 
 {{math equation=x+1 x=$secteurs|@count assign=colspan}}
 
-<script type="text/javascript">
+<script>
   mapService = function(service_id) {
     var form = getForm("cutAffectation");
     $V(form.service_id, service_id);
@@ -19,9 +19,12 @@
     loadNonPlaces();
   }
   changeService = function(service_id) {
-    var form = getForm("changeService");
+    var form = getForm("changeServiceForm");
     $V(form.service_id, service_id);
     onSubmitFormAjax(form, function(){
+      {{if $lit_id}}
+        refreshMouvements(null, "{{$lit_id}}");
+      {{/if}}
       loadNonPlaces();
     });
   }
@@ -54,7 +57,7 @@
             <p class="secteur_{{$_secteur->_id}}">
               <label>
                 <input style="margin-left: 1em;" type="radio" name="service_id" value="{{$_service->_id}}"
-                       {{if !in_array($_service->_id, array_keys($services_allowed))}}disabled="disabled"{{/if}} class="service"/> {{$_service}}
+                       {{if !in_array($_service->_id, array_keys($services_allowed))}}disabled{{/if}} class="service"/> {{$_service}}
               </label>
             </p>
           {{/foreach}}
@@ -67,7 +70,7 @@
             <p>
               <label>
                 <input type="radio" name="service_id" value="{{$_service->_id}}" class="service"
-                       {{if !in_array($_service->_id, array_keys($services_allowed))}}disabled="disabled"{{/if}} /> {{$_service}}
+                       {{if !in_array($_service->_id, array_keys($services_allowed))}}disabled{{/if}} /> {{$_service}}
               </label>
             </p>
           {{/foreach}}
