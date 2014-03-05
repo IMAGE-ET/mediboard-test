@@ -59,7 +59,9 @@
     </tr>
     <tr>
       <td class="button" colspan="2"><button class="tick" onclick="selectOperation('{{$next_operation->_id}}');">Associer au dossier d'anesthésie</button>
-        {{elseif $next_sejour->_id}}
+        <button class="cancel" onclick="modalWindow.close();">Ne pas associer</button></td>
+    </tr>
+  {{elseif $next_sejour->_id}}
     <tr>
       <td colspan="2"> <div class="small-info">Un séjour à venir est présent dans le système pour ce patient</div></td>
     </tr>
