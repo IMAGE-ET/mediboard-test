@@ -277,9 +277,9 @@ class CMbDate {
       case '1':  // France
         $paques = CMbDT::getEasterDate($date);
         $calendar["$year-01-01"] = "Jour de l'an";                            // Jour de l'an
-        $calendar[CMbDT::date("+1 DAY", $paques)] = "Lundi de paques";        // Lundi de paques
         $calendar["$year-05-01"] = "Fête du travail";                         // Fête du travail
         $calendar["$year-05-08"] = "Victoire de 1945";                        // Victoire de 1945
+        $calendar[CMbDT::date("+1 DAY", $paques)] = "Lundi de paques";        // Lundi de paques
         $calendar[CMbDT::date("+39 DAYS", $paques)] = "Jeudi de l'ascension"; // Jeudi de l'ascension
         $calendar[CMbDT::date("+50 DAYS", $paques)] = "Lundi de pentecôte";   // Lundi de pentecôte
         $calendar["$year-07-14"] = "Fête Nationnale";                         // Fête nationnale

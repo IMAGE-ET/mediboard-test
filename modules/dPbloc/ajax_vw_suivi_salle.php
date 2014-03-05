@@ -46,7 +46,18 @@ $systeme_materiel_expert = CAppUI::conf("dPbloc CPlageOp systeme_materiel") == "
 foreach ($bloc->_ref_salles as &$salle) {
   /** @var CSalle $salle */
   $salle->loadRefsForDay($date_suivi);
+
   if ($systeme_materiel_expert) {
+    foreach ($salle->_ref_plages as $_plage) {
+      foreach ($_plage->_ref_operations as $_operation) {
+        $besoins = $_operation->loadRefsBesoins();
+        CMbObject::massLoadFwdRef($besoins, "type_ressource_id");
+        foreach ($besoins as $_besoin) {
+          $_besoin->loadRefTypeRessource();
+        }
+      }
+    }
+
     foreach ($salle->_ref_urgences as $_operation) {
       $besoins = $_operation->loadRefsBesoins();
       CMbObject::massLoadFwdRef($besoins, "type_ressource_id");
@@ -72,6 +83,7 @@ $where["sejour.group_id"]       = "= '".CGroups::loadCurrent()->_id."'";
 $non_traitees = $op->loadList($where, null, null, null, $ljoin);
 
 foreach ($non_traitees as $_operation) {
+  mbTrace("toto2");
   $_operation->loadRefChir();
   $_operation->loadRefPatient();
   $_operation->loadExtCodesCCAM();

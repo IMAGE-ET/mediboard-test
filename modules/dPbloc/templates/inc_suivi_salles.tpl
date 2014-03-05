@@ -35,7 +35,7 @@
         </table>
         {{mb_include module=salleOp template=inc_details_plages salle=$_salle}}
       </td>
-      {{foreachelse}}
+    {{foreachelse}}
       <td class="empty">{{tr}}CSalle.none{{/tr}}</td>
     {{/foreach}}
     {{if $non_traitees|@count}}
