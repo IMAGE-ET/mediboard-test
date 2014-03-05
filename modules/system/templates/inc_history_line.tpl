@@ -10,7 +10,6 @@
 
 {{foreach from=$logs item=_log}}
 <tbody class="hoverable">
-  
   <tr {{if $_log->type != "store"}} style="font-weight: bold" {{/if}}>
     {{assign var=field_count value=$_log->_fields|@count}}
     {{if !$dialog}}
@@ -71,21 +70,27 @@
         {{if array_key_exists($_field,$_log->_old_values)}}
           <td class="text" style="font-weight: normal;">
             {{assign var=old_value value=$_log->_old_values.$_field}}
-            {{mb_value object=$object field=$_field value=$old_value tooltip=1}}
+            {{if property_exists($object, $_field)}}
+              {{mb_value object=$object field=$_field value=$old_value tooltip=1}}
+            {{/if}}
           </td>
           <td class="text" style="font-weight: normal;">
             {{assign var=log_id value=$_log->_id}}
-            {{assign var=new_value value=$object->_history.$log_id.$_field}}
-            <strong>
-              {{*
-                Pour le log le plus récent, si c'est un champ qui a été supprimé (donc qui vaut null) :
-                dans la fonction mb_value le champ value est utilisé seulement s'il est différent de null.
-                Donc affectation d'une chaîne vide au lieu de null
-              *}}
-              {{if $new_value === null}}
-                {{assign var=new_value value=""}}
+            {{if isset($object->_history.$log_id.$_field|smarty:nodefaults)}}
+              {{assign var=new_value value=$object->_history.$log_id.$_field}}
+              <strong>
+                {{*
+                  Pour le log le plus récent, si c'est un champ qui a été supprimé (donc qui vaut null) :
+                  dans la fonction mb_value le champ value est utilisé seulement s'il est différent de null.
+                  Donc affectation d'une chaîne vide au lieu de null
+                *}}
+                {{if $new_value === null}}
+                  {{assign var=new_value value=""}}
+                {{/if}}
+                {{if property_exists($object, $_field)}}
+                  {{mb_value object=$object field=$_field value=$new_value tooltip=1}}
+                {{/if}}
               {{/if}}
-              {{mb_value object=$object field=$_field value=$new_value tooltip=1}}
             </strong>
           </td>
         {{else}}
@@ -106,9 +111,7 @@
         {{/foreach}}
       {{/if}}
       </td>
-
     {{/if}}
-
   </tr>
 </tbody>
 {{foreachelse}}
