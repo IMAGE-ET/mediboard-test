@@ -376,7 +376,13 @@ class CSetupeai extends CSetup {
                 DROP `group_id`;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.20";
+    $this->makeRevision("0.20");
+
+    $query = "ALTER TABLE `domain`
+                ADD `namespace_id` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.21";
 
     $query = "SELECT * FROM `authorspecialty_20121112` WHERE `code` = 'G15_10/PAC00';";
 

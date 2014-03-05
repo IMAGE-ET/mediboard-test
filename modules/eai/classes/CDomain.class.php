@@ -26,6 +26,7 @@ class CDomain extends CMbObject {
   public $actor_class;
   public $tag;
   public $libelle;
+  public $namespace_id;
   public $derived_from_idex;
   public $OID;
   
@@ -72,6 +73,7 @@ class CDomain extends CMbObject {
     $props["actor_class"]       = "str maxLength|80";
     $props["tag"]               = "str notNull";
     $props["libelle"]           = "str";
+    $props["namespace_id"]      = "str";
     $props["derived_from_idex"] = "bool";
     $props["OID"]               = "str";
     
@@ -203,9 +205,9 @@ class CDomain extends CMbObject {
    * @param string $domain_type Object class
    * @param string $group_id    Group
    *
-   * @return string
+   * @return CDomain
    */
-  static function getTagMasterDomain($domain_type, $group_id = null) {
+  static function getMasterDomain($domain_type, $group_id = null) {
     $group = CGroups::loadCurrent();
     if (!$group_id) {
       $group_id = $group->_id;
@@ -220,6 +222,6 @@ class CDomain extends CMbObject {
     $domain = new CDomain();
     $domain->load($group_domain->domain_id);
     
-    return $domain->tag;
+    return $domain;
   }
 } 

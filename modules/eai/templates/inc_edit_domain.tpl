@@ -55,6 +55,11 @@
     </tr>
 
     <tr>
+      <th>{{mb_label object=$domain field="namespace_id"}}</th>
+      <td>{{mb_field object=$domain field="namespace_id"}}</td>
+    </tr>
+
+    <tr>
       <th>{{mb_label object=$domain field="OID"}}</th>
       <td>{{mb_field object=$domain field="OID" size=50}}</td>
     </tr>
