@@ -397,17 +397,19 @@ foreach ($commentaires_by_salle as $salle_id => $_commentaires) {
     $debut = "$i ".CMbDT::time($_commentaire->debut);
     
     $duree = CMbDT::minutesRelative(CMbDT::time($_commentaire->debut), CMbDT::time($_commentaire->fin));
-    
+    $com_comm = CMbString::htmlEntities($_commentaire->commentaire);
+    $com_libelle = CMbString::htmlEntities($_commentaire->libelle);
+
     $libelle = "<span
     style='display: none;'
     data-entree_prevue='$_commentaire->debut'
     data-sortie_prevue='$_commentaire->fin'
-    data-libelle='$_commentaire->libelle'
-    data-commentaire='$_commentaire->commentaire'
+    data-libelle='$com_libelle'
+    data-commentaire='$com_comm'
     data-duree='$duree'
     data-color='$_commentaire->color'></span>".
-    "<span style='font-size: 11px; font-weight: bold;'>".CMbString::htmlEntities($_commentaire->libelle)."</span>".
-    "\n<span class='compact'>".CMbString::htmlEntities($_commentaire->commentaire)."</span>";
+    "<span style='font-size: 11px; font-weight: bold;'>".$com_libelle."</span>".
+    "\n<span class='compact'>".$com_comm."</span>";
 
     $event = new CPlanningEvent($_commentaire->_guid, $debut, $duree, $libelle, "#$_commentaire->color", true, null, $_commentaire->_guid, false);
     
