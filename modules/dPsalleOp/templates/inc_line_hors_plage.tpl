@@ -8,19 +8,18 @@
  * @version  $Revision$
  * @link     http://www.mediboard.org
 *}}
-{{assign var=sejour           value=$op->_ref_sejour}}
-{{assign var=consult_anesth   value=$op->_ref_consult_anesth}}
-{{assign var=anesth           value=$op->_ref_anesth}}
-{{assign var=patient          value=$sejour->_ref_patient}}
-{{assign var=systeme_materiel value=$conf.dPbloc.CPlageOp.systeme_materiel}}
-{{mb_default var=to_remove value=false}}
-
+{{mb_default  var=to_remove         value=false}}
 
 {{if $to_remove}}
   <script>
     removeLine('{{$op->_id}}');
   </script>
 {{else}}
+  {{assign      var=sejour            value=$op->_ref_sejour}}
+  {{assign      var=consult_anesth    value=$op->_ref_consult_anesth}}
+  {{assign      var=anesth            value=$op->_ref_anesth}}
+  {{assign      var=patient           value=$sejour->_ref_patient}}
+  {{assign      var=systeme_materiel  value=$conf.dPbloc.CPlageOp.systeme_materiel}}
 
   <td>
     <span class="{{if !$sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $sejour->septique}}septique{{/if}}"
