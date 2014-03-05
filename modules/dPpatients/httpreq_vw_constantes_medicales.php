@@ -126,9 +126,6 @@ if ($selected_context_guid == "all") {
   $context = null;
 }
 
-//CConstantesMedicales::$_latest_values = array();
-$latest_constantes = $patient->loadRefConstantesMedicales(null, array(), $context, false);
-
 $patient->loadRefPhotoIdentite();
 
 $where = array(
@@ -199,6 +196,9 @@ if ($context && $selected_context_guid !== 'all') {
   $constantes->context_id = $context->_id;
   $constantes->loadRefContext();
 }
+
+//CConstantesMedicales::$_latest_values = array();
+$latest_constantes = $patient->loadRefConstantesMedicales(null, array(), $context, false);
 
 $constantes->updateFormFields(); // Pour forcer le chargement des unités lors de la saisie d'une nouvelle constante
 
