@@ -16,6 +16,7 @@ submitConstantesMedicales = function(oForm) {
       {{/if}}
       {{if $conf.ref_pays == 2}}
         refreshConstantesMedicalesTri($V(oForm.context_class)+'-'+$V(oForm.context_id), 1);
+        refreshConstantesMedicales($V(oForm.context_class)+'-'+$V(oForm.context_id), 1);
       {{/if}}
     }
   });
