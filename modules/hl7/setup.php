@@ -1265,7 +1265,14 @@ class CSetuphl7 extends CSetup {
                 CHANGE `build_PV1_17` `build_PV1_17` ENUM ('praticien','none') DEFAULT 'praticien';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.89";
+    $this->makeRevision("0.89");
+
+    $query = "ALTER TABLE `hl7_config`
+                ADD `search_master_IPP` ENUM ('0','1') DEFAULT '0',
+                ADD `search_master_NDA` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.90";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

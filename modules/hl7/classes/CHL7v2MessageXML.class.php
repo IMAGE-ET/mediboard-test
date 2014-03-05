@@ -265,38 +265,60 @@ class CHL7v2MessageXML extends CMbXMLDocument {
   /**
    * Get PI identifier
    *
-   * @param DOMNode $node  Node
-   * @param array   &$data Data
+   * @param DOMNode        $node   Node
+   * @param array          &$data  Data
+   * @param CInteropSender $sender Sender
    *
    * @return void
    */
-  function getPIIdentifier(DOMNode $node, &$data) {
+  function getPIIdentifier(DOMNode $node, &$data, CInteropSender $sender) {
     if (CHL7v2Message::$handle_mode == "simple") {
       $data["PI"] = $this->queryTextNode("CX.1", $node);
+
+      return;
     }
-    else {
-      if ($this->queryTextNode("CX.5", $node) == "PI") {
+
+    if ($sender->_config["search_master_IPP"]) {
+      $domain = CDomain::getMasterDomain("CPatient", $sender->group_id);
+
+      if (($this->queryTextNode("CX.5", $node) == "PI") && ($domain->namespace_id == $this->queryTextNode("CX.4/HD.1", $node))) {
         $data["PI"] = $this->queryTextNode("CX.1", $node);
+        return;
       }
+    }
+
+    if ($this->queryTextNode("CX.5", $node) == "PI") {
+      $data["PI"] = $this->queryTextNode("CX.1", $node);
     }
   }
 
   /**
    * Get AN identifier
    *
-   * @param DOMNode $node  Node
-   * @param array   &$data Data
+   * @param DOMNode        $node   Node
+   * @param array          &$data  Data
+   * @param CInteropSender $sender Sender
    *
    * @return void
    */
-  function getANIdentifier(DOMNode $node, &$data) {
+  function getANIdentifier(DOMNode $node, &$data, CInteropSender $sender) {
     if (CHL7v2Message::$handle_mode == "simple") {
       $data["AN"] = $this->queryTextNode("CX.1", $node);
+
+      return;
     }
-    else {
-      if ($this->queryTextNode("CX.5", $node) == "AN") {
+
+    if ($sender->_config["search_master_NDA"]) {
+      $domain = CDomain::getMasterDomain("CSejour", $sender->group_id);
+
+      if (($this->queryTextNode("CX.5", $node) == "AN") && ($domain->namespace_id == $this->queryTextNode("CX.4/HD.1", $node))) {
         $data["AN"] = $this->queryTextNode("CX.1", $node);
+        return;
       }
+    }
+
+    if ($this->queryTextNode("CX.5", $node) == "AN") {
+      $data["AN"] = $this->queryTextNode("CX.1", $node);
     }
   }
 
@@ -422,7 +444,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
       $this->getRIIdentifiers($_node, $data, $sender);
       
       // PI - Patient internal identifier
-      $this->getPIIdentifier($_node, $data);
+      $this->getPIIdentifier($_node, $data, $sender);
       
       // INS-C - Identifiant national de santé calculé
       if ($this->queryTextNode("CX.5", $_node) == "INS-C") {
@@ -437,7 +459,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     
     // AN - Patient Account Number (NDA)
     foreach ($this->query("PID.18", $contextNode) as $_node) {  
-      $this->getANIdentifier($_node, $data);
+      $this->getANIdentifier($_node, $data, $sender);
     }    
  
     return $data;
@@ -460,7 +482,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     foreach ($this->query("PV1.19", $contextNode) as $_node) {
       switch ($sender->_configs["handle_NDA"]) {
         case 'PV1_19':
-          $this->getANIdentifier($_node, $data);
+          $this->getANIdentifier($_node, $data, $sender);
           break;
           
         default:
@@ -473,6 +495,8 @@ class CHL7v2MessageXML extends CMbXMLDocument {
           break;
       }
     }
+
+
       
     // PA - Preadmit Number
     if ($PV1_5 = $this->queryNode("PV1.5", $contextNode)) {

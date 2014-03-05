@@ -58,6 +58,8 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "handle_PV2_12",
     "handle_NSS",
     "create_grossesse",
+    "search_master_IPP",
+    "search_master_NDA",
 
     // Send
     "send_assigning_authority",
@@ -112,6 +114,8 @@ class CHL7Config extends CExchangeDataFormatConfig {
   public $handle_PV2_12;
   public $handle_NSS;
   public $create_grossesse;
+  public $search_master_IPP;
+  public $search_master_NDA;
 
   // Send
   public $send_assigning_authority;
@@ -170,6 +174,8 @@ class CHL7Config extends CExchangeDataFormatConfig {
       "handle_NSS",
       "ignore_fields",
       "create_grossesse",
+      "search_master_IPP",
+      "search_master_NDA",
     ),
 
     "send" => array(
@@ -240,6 +246,8 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["handle_telephone_number"] = "enum list|XTN_1|XTN_12 default|XTN_12";
     $props["ignore_fields"]           = "str";
     $props["create_grossesse"]        = "bool default|1";
+    $props["search_master_IPP"]       = "bool default|0";
+    $props["search_master_NDA"]       = "bool default|0";
     
     // => PID
     $props["handle_NDA"]    = "enum list|PID_18|PV1_19 default|PID_18";
