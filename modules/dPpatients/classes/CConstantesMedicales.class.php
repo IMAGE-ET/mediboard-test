@@ -711,7 +711,7 @@ class CConstantesMedicales extends CMbObject {
 
     $group = CGroups::loadCurrent();
 
-    foreach (self::$list_constantes as $_constant => &$_params) {
+    foreach (self::$list_constantes as $_params) {
       if (empty($_params["unit_config"])) {
         continue;
       }
@@ -923,6 +923,7 @@ class CConstantesMedicales extends CMbObject {
    * Get conversion ratio for a constant
    *
    * @param string $field Constante name
+   * @param string $unit  Constante target unit
    *
    * @return float
    */

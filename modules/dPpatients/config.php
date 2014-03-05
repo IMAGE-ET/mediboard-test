@@ -17,6 +17,7 @@ $dPconfig["dPpatients"] = array (
     "tag_conflict_ipp"  => "conflict_",
     "identitovigilence" => "doublons",
     "multi_group"       => "limited",
+    "function_distinct" => "0",
     "merge_only_admin"  => "0",
     "extended_print"    => "0",
     "adult_age"         => "15",

@@ -82,6 +82,9 @@ class CPatient extends CPerson {
   // DB Table key
   public $patient_id;
 
+  // Owner
+  public $function_id;
+
   // DB Fields
   public $nom;
   public $nom_jeune_fille;
@@ -260,14 +263,10 @@ class CPatient extends CPerson {
   public $_nb_docs;
   public $_total_docs;
 
-  /**
-   * @var CSejour[]
-   */
+  /** @var CSejour[] */
   public $_ref_sejours;
 
-  /**
-   * @var CConsultation[]
-   */
+  /** @var CConsultation[] */
   public $_ref_consultations;
   public $_ref_prescriptions;
   public $_ref_grossesses;
@@ -275,32 +274,25 @@ class CPatient extends CPerson {
   public $_ref_first_constantes;
   public $_ref_patient_links;
 
-  /**
-   * @var CAffectation
-   */
+  /** @var CAffectation */
   public $_ref_curr_affectation;
 
-  /**
-   * @var CAffectation
-   */
+  /** @var CAffectation */
   public $_ref_next_affectation;
 
-  /**
-   * @var CMedecin
-   */
+  /** @var CMedecin */
   public $_ref_medecin_traitant;
 
-  /**
-   * @var CCorrespondant[]
-   */
+  /** @var CCorrespondant[] */
   public $_ref_medecins_correspondants;
 
-  /**
-   * @var CCorrespondantPatient[]
-   */
+  /** @var CCorrespondantPatient[] */
   public $_ref_correspondants_patient;
   public $_ref_cp_by_relation;
 
+
+  /** @var CFunctions */
+  public $_ref_function;
   /** @var CDossierMedical */
   public $_ref_dossier_medical;
   /** @var CIdSante400 */
@@ -372,6 +364,7 @@ class CPatient extends CPerson {
   function getProps() {
     $props = parent::getProps();
 
+    $props["function_id"]       = "ref class|CFunctions";
     $props["nom"]               = "str notNull confidential seekable|begin index";
     $props["prenom"]            = "str notNull seekable|begin index";
     $props["prenom_2"]          = "str";
@@ -529,7 +522,7 @@ class CPatient extends CPerson {
       return $msg;
     }
 
-    $sejour = new CSejour;
+    $sejour = new CSejour();
     $where["patient_id"] = CSQLDataSource::prepareIn(CMbArray::pluck($patients, "_id"));
     /** @var CSejour[] $sejours */
     $sejours = $sejour->loadList($where);
@@ -614,6 +607,11 @@ class CPatient extends CPerson {
     $this->completeField("patient_link_id");
     if ($this->_id && $this->_id == $this->patient_link_id) {
       $this->patient_link_id = "";
+    }
+
+    // Création d'un patient en mode cabinets distincts
+    if (CAppUI::conf('dPpatients CPatient function_distinct') && !$this->_id) {
+      $this->function_id = CMediusers::get()->function_id;
     }
 
     if ($this->fieldModified("naissance") || $this->fieldModified("sexe")) {
@@ -964,6 +962,16 @@ class CPatient extends CPerson {
   }
 
   /**
+   * Chargement de la fonction reliée
+   *
+   * @return CFunctions
+   */
+  function loadRefFunction() {
+    /** @var CFunctions $function */
+    return $this->_ref_function = $this->loadFwdRef("function_id", true);
+  }
+
+  /**
    * Charge les séjours du patient
    *
    * @param array $where SQL where clauses
@@ -1110,6 +1118,11 @@ class CPatient extends CPerson {
   function loadMatchingPatient($other = false, $loadObject = true) {
     $ds = $this->_spec->ds;
 
+    if (CAppUI::conf('dPpatients CPatient function_distinct')) {
+      $function_id = CMediusers::get()->function_id;
+      $where["function_id"] = "= '$function_id'";
+    }
+
     if ($other && $this->_id) {
       $where["patient_id"] = " != '$this->_id'";
     }
@@ -1165,6 +1178,11 @@ class CPatient extends CPerson {
       "patient_id" => "!= '$this->_id'",
     );
 
+    if (CAppUI::conf('dPpatients CPatient function_distinct')) {
+      $function_id = CMediusers::get()->function_id;
+      $where["function_id"] = "= '$function_id'";
+    }
+
     $siblings = $this->loadList($where);
 
     if ($this->naissance !== "0000-00-00") {
@@ -1173,6 +1191,10 @@ class CPatient extends CPerson {
         "naissance" => $ds->prepare(" = %", $this->naissance),
         "patient_id" => "!= '$this->_id'",
       );
+      if (CAppUI::conf('dPpatients CPatient function_distinct')) {
+        $function_id = CMediusers::get()->function_id;
+        $where["function_id"] = "= '$function_id'";
+      }
       $siblings = CMbArray::mergeKeys($siblings, $this->loadList($where, null, null, "patients.patient_id"));
 
       $where = array (
@@ -1180,6 +1202,10 @@ class CPatient extends CPerson {
         "naissance" => $ds->prepare(" = %", $this->naissance),
         "patient_id" => "!= '$this->_id'",
       );
+      if (CAppUI::conf('dPpatients CPatient function_distinct')) {
+        $function_id = CMediusers::get()->function_id;
+        $where["function_id"] = "= '$function_id'";
+      }
       $siblings = CMbArray::mergeKeys($siblings, $this->loadList($where, null, null, "patients.patient_id"));
     }
 
@@ -1213,6 +1239,11 @@ class CPatient extends CPerson {
       $max = CMbDT::dateTime("+1 DAY", $date);
       // Ne pas utiliser de OR entree_prevue / entree_reelle ici: problèmes de performance
       $where["sejour.entree"] = "BETWEEN '$min' AND '$max'";
+    }
+
+    if (CAppUI::conf('dPpatients CPatient function_distinct')) {
+      $function_id = CMediusers::get()->function_id;
+      $where["function_id"] = "= '$function_id'";
     }
 
     return $this->loadList($where, null, null, "patients.patient_id", $join);
@@ -1294,12 +1325,21 @@ class CPatient extends CPerson {
   }
 
   /**
+   * Chargement des devenirs dentaires du patient
+   *
    * @return CDevenirDentaire[]
    */
   function loadRefsDevenirDentaire() {
     return $this->_refs_devenirs_dentaires = $this->loadBackRefs("devenirs_dentaires");
   }
 
+  /**
+   * Chargement des affectations courantes et à venir du patient
+   *
+   * @param date $date Date de référence
+   *
+   * @return void
+   */
   function loadRefsAffectations($date = null) {
     $affectation = new CAffectation();
 
@@ -1403,6 +1443,8 @@ class CPatient extends CPerson {
    * @see parent::loadRefsFwd()
    */
   function loadRefsFwd() {
+    parent::loadRefsFwd();
+    $this->loadRefFunction();
     $this->loadIdVitale();
   }
 
@@ -1415,7 +1457,7 @@ class CPatient extends CPerson {
     $this->loadRefPhotoIdentite();
     $this->loadRefsCorrespondantsPatient();
     $this->loadRefDossierMedical();
-    $this->_ref_dossier_medical->canRead();
+    $this->_ref_dossier_medical->canDo();
     $this->_ref_dossier_medical->loadRefsAntecedents();
     $this->_ref_dossier_medical->loadRefsTraitements();
     $prescription = $this->_ref_dossier_medical->loadRefPrescription();
@@ -1631,7 +1673,6 @@ class CPatient extends CPerson {
     }
 
     foreach ($this->_ref_correspondants_patient as $_correspondant) {
-
       $this->_ref_cp_by_relation[$_correspondant->relation][$_correspondant->_id] = $_correspondant;
     }
 

@@ -16,6 +16,7 @@
 
   {{mb_include module=system template=inc_config_enum var=identitovigilence values="nodate|date|doublons"}}
   {{mb_include module=system template=inc_config_enum var=multi_group       values="full|limited|hidden"}}
+  {{mb_include module=system template=inc_config_bool var=function_distinct}}
   {{mb_include module=system template=inc_config_enum var=limit_char_search values="0|3|4|5|6|8|10"}}
   
 	{{mb_include module=system template=inc_config_bool var=check_code_insee}}

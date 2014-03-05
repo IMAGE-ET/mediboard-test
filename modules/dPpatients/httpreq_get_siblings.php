@@ -33,6 +33,10 @@ if ($patient_id) {
 
 $patientMatch = new CPatient();
 $patientMatch->patient_id = $patient_id;
+if (CAppUI::conf('dPpatients CPatient function_distinct')) {
+  $function_id = CMediusers::get()->function_id;
+  $patientMatch->function_id = $function_id;
+}
 $patientMatch->nom        = $nom;
 $patientMatch->nom_jeune_fille = $nom_jeune_fille;
 $patientMatch->prenom     = $prenom; 

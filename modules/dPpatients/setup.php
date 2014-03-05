@@ -1092,9 +1092,6 @@ class CSetupdPpatients extends CSetup {
 
     $this->makeRevision("0.86");
 
-    $query = "ALTER TABLE `medecin`
-            ADD `adeli` INT (9) UNSIGNED ZEROFILL;";
-
     $this->makeRevision("0.87");
 
     $query = "ALTER TABLE `medecin`
@@ -2506,10 +2503,21 @@ class CSetupdPpatients extends CSetup {
 
     $this->makeRevision("2.02");
 
+    $this->makeRevision("2.03");
+
     $query = "ALTER TABLE `correspondant_patient`
                 CHANGE `nom` `nom` VARCHAR (255) NOT NULL;";
+    $this->addQuery($query);
 
-    $this->mod_version = "2.03";
+    $query = "ALTER TABLE `patients`
+                ADD `function_id` INT (11) UNSIGNED AFTER `patient_id`;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `patients`
+                ADD INDEX (`function_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "2.04";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

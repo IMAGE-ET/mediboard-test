@@ -10,7 +10,7 @@ var Actions = {
     url.addParam("mode", mode);
     url.requestUpdate("ajax_civilite");
   }
-}
+};
 editAntecedent = function(mode) {
   if (mode == "repair") {
     if (!confirm("Etes-vous sur de vouloir réparer les dossier médicaux ?")) {

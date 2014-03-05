@@ -46,13 +46,13 @@
     if (element.type != 'radio') {
       eOther.fire("mask:check");
     }
-  }
+  };
 
   copyIdentiteAssureValues = function(element) {
     if (element.form.qual_beneficiaire.value == "0") {
       copyAssureValues(element);
     }
-  }
+  };
 
   delAssureValues = function() {
     var form = getForm("editFrm");
@@ -68,7 +68,7 @@
     $V(form._assure_pays_naissance_insee, "");
     $V(form.assure_lieu_naissance, "");
     $V(form.assure_profession    , "");
-  }
+  };
 
   copieAssureValues = function() {
     var form = getForm("editFrm");
@@ -84,7 +84,7 @@
     $V(form._assure_pays_naissance_insee, $V(form._pays_naissance_insee));
     $V(form.assure_lieu_naissance, $V(form.lieu_naissance));
     $V(form.assure_profession    , $V(form.profession));
-  }
+  };
 
   confirmCreation = function(oForm) {
     if (!checkForm(oForm)) {
@@ -94,7 +94,7 @@
     SiblingsChecker.submit = true;
     SiblingsChecker.request(oForm);
     return false;
-  }
+  };
 
   reloadListFileEditPatient = function(sAction, category_id) {
     if(sAction == "delete" && file_preview == file_deleted){
@@ -113,14 +113,14 @@
     else {
       url.requestUpdate('listView');
     }
-  }
+  };
 
   mapIdCorres = function(id, object) {
     var oForm = getForm("editCorrespondant_"+object.relation);
     if (!$V(oForm.correspondant_patient_id)) {
       $V(oForm.correspondant_patient_id, id);
     }
-  }
+  };
 
   var tabs;
   Main.add(function () {

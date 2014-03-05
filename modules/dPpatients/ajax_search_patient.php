@@ -107,11 +107,19 @@ else {
     $patient_prenom_search_limited  = substr($patient_prenom_search, 0, $limit_char_search);
   }
 
+  if (CAppUI::conf('dPpatients CPatient function_distinct') && !CMediusers::get()->isAdmin()) {
+    $function_id = CMediusers::get()->function_id;
+    $where["function_id"] = $whereLimited["function_id"] = $whereSoundex["function_id"] = "= '$function_id'";
+  }
+
   if ($patient_nom_search) {
     $patient_nom_soundex = $soundexObj->build($patient_nom_search);
-    $where[]        = "`nom` LIKE '$patient_nom_search%' OR `nom_jeune_fille` LIKE '$patient_nom_search%'";
-    $whereLimited[] = "`nom` LIKE '$patient_nom_search_limited%' OR `nom_jeune_fille` LIKE '$patient_nom_search_limited%'";
-    $whereSoundex[] = "`nom_soundex2` LIKE '$patient_nom_soundex%' OR `nomjf_soundex2` LIKE '$patient_nom_soundex%'";
+    $where[]        = "`nom` LIKE '$patient_nom_search%'
+      OR `nom_jeune_fille` LIKE '$patient_nom_search%'";
+    $whereLimited[] = "`nom` LIKE '$patient_nom_search_limited%'
+      OR `nom_jeune_fille` LIKE '$patient_nom_search_limited%'";
+    $whereSoundex[] = "`nom_soundex2` LIKE '$patient_nom_soundex%'
+      OR `nomjf_soundex2` LIKE '$patient_nom_soundex%'";
   }
 
   if ($patient_prenom_search) {
