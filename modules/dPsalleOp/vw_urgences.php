@@ -47,14 +47,14 @@ foreach ($urgences as &$urgence) {
   $dossier_medical->countAntecedents();
   $dossier_medical->countAllergies();
   $urgence->_ref_chir->loadRefsFwd();
-  
+
   if ($reservation_installed) {
     $first_log = $urgence->loadFirstLog();
     if (abs(CMbDT::hoursRelative($urgence->_datetime_best, $first_log->date)) <= $diff_hour_urgence) {
       $urgence->_is_urgence = true;
     }
   }
-  
+
   // Chargement des plages disponibles pour cette intervention
   $urgence->_ref_chir->loadBackRefs("secondary_functions");
   $secondary_functions = array();
