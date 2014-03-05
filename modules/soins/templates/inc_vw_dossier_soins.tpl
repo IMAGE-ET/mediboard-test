@@ -254,7 +254,7 @@
     {{/if}}
 
     {{if $conf.soins.vue_condensee_dossier_soins}}
-      var url = new Url("hospi", "httpreq_vw_constantes_medicales_widget");
+      var url = new Url("patients", "httpreq_vw_constantes_medicales_widget");
       url.addParam("context_guid", "{{$sejour->_guid}}");
       url.requestUpdate("constantes-medicales-widget");
     {{/if}}

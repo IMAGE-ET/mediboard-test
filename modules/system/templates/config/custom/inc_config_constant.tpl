@@ -23,7 +23,7 @@
       this.pop();
     }
 
-    changeValues = function(feature) {
+    changeValuesConstants = function(feature) {
       var oForm = getForm("edit-configuration");
       var value = $V(oForm[feature + "-form"]) + '|' + $V(oForm[feature + "-graph"]) + '|'  + $V(oForm[feature + "-color"]);
       var input = $A(oForm.elements['c[' + feature + ']']).filter(function(element) {
@@ -42,13 +42,13 @@
   <input type="hidden" name="c[{{$_feature}}]" value="{{'|'|implode:$value}}" {{if $is_inherited}} disabled {{/if}} />
 
   <label title="{{tr}}config-dPpatient-CConstantesMedicales-selection-form-desc{{/tr}}">{{tr}}config-dPpatient-CConstantesMedicales-selection-form{{/tr}} :</label>
-  <input type="text" class="num" name="{{$_feature}}-{{$components[0]}}" value="{{$value[0]}}" {{if $is_inherited}} disabled {{/if}} size="2" onchange="changeValues('{{$_feature}}')"/>
+  <input type="text" class="num" name="{{$_feature}}-{{$components[0]}}" value="{{$value[0]}}" {{if $is_inherited}} disabled {{/if}} size="2" onchange="changeValuesConstants('{{$_feature}}')"/>
 
   <label title="{{tr}}config-dPpatient-CConstantesMedicales-selection-graph-desc{{/tr}}">{{tr}}config-dPpatient-CConstantesMedicales-selection-graph{{/tr}} :</label>
-  <input type="text" class="num" name="{{$_feature}}-{{$components[1]}}" value="{{$value[1]}}" {{if $is_inherited}} disabled {{/if}} size="2" onchange="changeValues('{{$_feature}}')"/>
+  <input type="text" class="num" name="{{$_feature}}-{{$components[1]}}" value="{{$value[1]}}" {{if $is_inherited}} disabled {{/if}} size="2" onchange="changeValuesConstants('{{$_feature}}')"/>
 
   <label title="{{tr}}config-dPpatient-CConstantesMedicales-selection-color-desc{{/tr}}">{{tr}}config-dPpatient-CConstantesMedicales-selection-color{{/tr}} :</label>
-  <input type="hidden" name="{{$_feature}}-{{$components[2]}}" value="{{$value[2]}}" onchange="changeValues('{{$_feature}}')"/>
+  <input type="hidden" name="{{$_feature}}-{{$components[2]}}" value="{{$value[2]}}" onchange="changeValuesConstants('{{$_feature}}')"/>
   <button type="button" class="search" onclick="ColorSelector.init('{{$_feature}}')" {{if $is_inherited}} disabled {{/if}}>
     <span id="{{$_feature}}-{{$components[2]}}"
           style="display: inline-block; vertical-align: top; padding: 0; margin: 0; border: none; width: 16px; height: 16px; background-color: {{if $value[2]}}#{{$value[2]}}{{else}}transparent{{/if}}; ">

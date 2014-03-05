@@ -49,7 +49,7 @@ var constantesMedicalesDrawn = false;
 function refreshConstantesMedicales (force) {
   if (!constantesMedicalesDrawn || force) {
     var url = new Url();
-    url.setModuleAction("dPhospi", "httpreq_vw_constantes_medicales");
+    url.setModuleAction("patients", "httpreq_vw_constantes_medicales");
     url.addParam("patient_id", {{$consult->_ref_patient->_id}});
     url.addParam("context_guid", "{{$consult->_guid}}");
     //url.addParam("selection[]", ["poids", "ta", "temperature", "pouls"]);

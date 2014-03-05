@@ -234,7 +234,7 @@ Main.add(function () {
                   {{if $display_graph}}
                     <td class="narrow">
                       {{if $_constant.0 != "_" || !empty($_params.plot|smarty:nodefaults)}}
-                        <input type="checkbox" class="checkbox-constant" name="checkbox-constantes-medicales-{{$_constant}}" onclick="toggleGraph(this)" tabIndex="100" />
+                        <input type="checkbox" class="checkbox-constant" name="checkbox-constantes-medicales-{{$_constant}}" onclick="window.oGraphs.toggle(this)" tabIndex="100" />
                       {{/if}}
                     </td>
                   {{/if}}

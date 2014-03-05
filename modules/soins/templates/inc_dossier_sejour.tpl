@@ -50,7 +50,7 @@
   }
   
   loadConstantes = function() {
-    var url = new Url("hospi", "httpreq_vw_constantes_medicales");
+    var url = new Url("patients", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", '{{$sejour->_guid}}');
     url.addParam("paginate", 1);
     url.requestUpdate("constantes");
@@ -81,7 +81,7 @@
 
   refreshConstantesMedicales = function(context_guid, paginate, count) {
     if(context_guid) {
-      var url = new Url("hospi", "httpreq_vw_constantes_medicales");
+      var url = new Url("patients", "httpreq_vw_constantes_medicales");
       url.addParam("context_guid", context_guid);
       url.addParam("paginate", paginate || 0);
       if (count) {

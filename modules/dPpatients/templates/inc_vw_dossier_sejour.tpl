@@ -2,7 +2,7 @@
 
 refreshConstantesMedicales = function(context_guid) {
   if(context_guid) {
-    var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
+    var url = new Url("patients", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", context_guid);
     url.addParam("can_edit", 0);
     url.addParam("can_select_context", 0);

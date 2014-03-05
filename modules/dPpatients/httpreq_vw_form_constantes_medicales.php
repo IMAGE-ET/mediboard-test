@@ -3,7 +3,7 @@
  * $Id$
  *
  * @package    Mediboard
- * @subpackage Hospi
+ * @subpackage dPpatients
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
@@ -91,7 +91,7 @@ if (!$constantes->_id && !$constantes->datetime) {
 $patient_id = $constantes->patient_id ? $constantes->patient_id : $patient_id;
 $latest_constantes = CConstantesMedicales::getLatestFor($patient_id, null, array(), $context, false);
 // Création du template
-$smarty = new CSmartyDP("modules/dPhospi");
+$smarty = new CSmartyDP();
 
 $smarty->assign('constantes'            , $constantes);
 $smarty->assign('latest_constantes'     , $latest_constantes);

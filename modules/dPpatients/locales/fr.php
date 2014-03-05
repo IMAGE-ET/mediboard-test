@@ -1899,6 +1899,16 @@ $locales['config-dPpatients-CConstantesMedicales-drain_sinus_cumul_reset_hour'] 
 $locales['config-dPpatients-CConstantesMedicales-drain_sinus_cumul_reset_hour-desc'] = 'Heure RAZ Drain sinus';
 $locales['config-dPpatients-CConstantesMedicales-drain_thoracique_cumul_reset_hour'] = 'Heure RAZ Drain thoracique';
 $locales['config-dPpatients-CConstantesMedicales-drain_thoracique_cumul_reset_hour-desc'] = 'Heure RAZ Drain thoracique';
+$locales['config-dPpatients-CConstantesMedicales-graphs_display_mode'] = 'Mode d\'affichage des graphiques de constantes';
+$locales['config-dPpatients-CConstantesMedicales-graphs_display_mode-desc'] = 'Choix du mode d\'affichage des graphiques de constantes';
+$locales['config-dPpatients-CConstantesMedicales-graphs_display_mode-mode'] = 'Mode d\'affichage';
+$locales['config-dPpatients-CConstantesMedicales-graphs_display_mode-mode-desc'] = 'Classique : affiche les 15 dernières saisies de constantes, Temporel : affiche les saisies sur les X dernières heures (X étant l\'intervalle de temps choisi)';
+$locales['config-dPpatients-CConstantesMedicales-graphs_display_mode-mode-court'] = 'Mode';
+$locales['config-dPpatients-CConstantesMedicales-graphs_display_mode-mode-classic'] = 'Classique';
+$locales['config-dPpatients-CConstantesMedicales-graphs_display_mode-mode-time'] = 'Temporel';
+$locales['config-dPpatients-CConstantesMedicales-graphs_display_mode-time'] = 'Intervalle de temps';
+$locales['config-dPpatients-CConstantesMedicales-graphs_display_mode-time-desc'] = 'Intervalle de temps affiché dans les graphiques en mode temporel, en heure';
+$locales['config-dPpatients-CConstantesMedicales-graphs_display_mode-time-court'] = 'Temps';
 $locales['config-dPpatients-CConstantesMedicales-important_constantes'] = 'Paramètres par défaut';
 $locales['config-dPpatients-CConstantesMedicales-important_constantes-desc'] = 'Paramètres par défaut';
 $locales['config-dPpatients-CConstantesMedicales-lame_cumul_reset_hour'] = 'Heure RAZ Lame';

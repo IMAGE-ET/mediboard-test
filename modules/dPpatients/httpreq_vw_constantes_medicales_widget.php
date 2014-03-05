@@ -3,7 +3,7 @@
  * $Id$
  *
  * @package    Mediboard
- * @subpackage Hospi
+ * @subpackage dPpatients
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
@@ -74,19 +74,25 @@ foreach ($graphs_struct as $_name => $_fields) {
 $where[]  = implode(' OR ', $whereOr);
 $constants = array_reverse($const->loadList($where, 'datetime DESC', 10), true);
 
-$graph = CConstantesMedicales::formatGraphDatas($constants, CConstantesMedicales::guessHost($context), $context_guid, $constants_by_graph, true);
-unset($graph['min_x_index']);
-unset($graph['min_x_value']);
-unset($graph['drawn_constants']);
+$graph = new CConstantGraph(CConstantesMedicales::guessHost($context), $context_guid, true);
+$graph->formatGraphDatas($constants, $constants_by_graph);
+
 $graphs = array();
 /* Sorting the graphs data by tab name */
-foreach ($graph as $_key => $_graph) {
+foreach ($graph->graphs as $_key => $_graph) {
   if (($name = array_search($constants_by_graph[$_key][0], $graphs_struct)) !== false) {
-    $graphs[$name] = $_graph[0];
+    $graphs[md5($name)] = $_graph[0];
   }
+}
+$titles = array();
+foreach ($graphs_struct as $title => $consts) {
+  $titles[md5($title)] = $title;
 }
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("graphs", $graphs);
+$smarty->assign('graphs',        $graphs);
+$smarty->assign('min_x_index',   $graph->min_x_index);
+$smarty->assign('min_x_value',   $graph->min_x_value);
+$smarty->assign('graphs_titles', $titles);
 $smarty->display('inc_vw_constantes_medicales_widget.tpl');

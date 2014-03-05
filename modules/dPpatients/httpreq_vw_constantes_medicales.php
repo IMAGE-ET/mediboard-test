@@ -3,7 +3,7 @@
  * $Id$
  *
  * @package    Mediboard
- * @subpackage Hospi
+ * @subpackage dPpatients
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
@@ -240,15 +240,8 @@ foreach ($list_constantes as $_cst) {
 
 $list_constantes = array_reverse($list_constantes, true);
 
-$graphs_structure = CConstantesMedicales::sortConstantsbyGraph($list_constantes, $host);
-$graphs_datas = CConstantesMedicales::formatGraphDatas($list_constantes, $host, $context_guid);
-
-$min_x_index = $graphs_datas['min_x_index'];
-$min_x_value = $graphs_datas['min_x_value'];
-$drawn_constants = $graphs_datas['drawn_constants'];
-unset($graphs_datas['min_x_index']);
-unset($graphs_datas['min_x_value']);
-unset($graphs_datas['drawn_constants']);
+$graph = new CConstantGraph($host, $context_guid);
+$graph->formatGraphDatas($list_constantes);
 
 if (!$constantes->_id && !$constantes->datetime) {
   $constantes->datetime = CMbDT::dateTime();
@@ -270,11 +263,12 @@ $smarty->assign('latest_constantes',          $latest_constantes);
 $smarty->assign('selection',                  $selection);
 $smarty->assign('custom_selection',           $custom_selection);
 $smarty->assign('print',                      $print);
-$smarty->assign('graphs_datas',               $graphs_datas);
-$smarty->assign('graphs_structure',            $graphs_structure);
-$smarty->assign('min_x_index',                $min_x_index);
-$smarty->assign('min_x_value',                $min_x_value);
-$smarty->assign('drawn_constants',            $drawn_constants);
+$smarty->assign('graphs_data',                $graph->graphs);
+$smarty->assign('graphs_structure',           $graph->structure);
+$smarty->assign('min_x_index',                $graph->min_x_index);
+$smarty->assign('min_x_value',                $graph->min_x_value);
+$smarty->assign('drawn_constants',            $graph->drawn_constants);
+$smarty->assign('display',                    $graph->display);
 $smarty->assign('start',                      $start);
 $smarty->assign('count',                      $count);
 $smarty->assign('total_constantes',           $total_constantes);

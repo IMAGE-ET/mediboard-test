@@ -16,7 +16,7 @@
     if (context_guid) {
       var oForm = getForm("editRPUtri");
       var iPatient_id = $V(oForm._patient_id);
-      var url = new Url('dPhospi' , 'httpreq_vw_form_constantes_medicales');
+      var url = new Url('patients' , 'httpreq_vw_form_constantes_medicales');
       url.addParam("context_guid", context_guid);
       url.addParam("patient_id"   , iPatient_id);
       url.addParam('display_graph', 0);

@@ -37,7 +37,7 @@
   var constantesMedicalesDrawn = false;
   function refreshConstantesMedicales(force) {
     if (!constantesMedicalesDrawn || force) {
-      var url = new Url("hospi", "httpreq_vw_constantes_medicales");
+      var url = new Url("patients", "httpreq_vw_constantes_medicales");
       url.addParam("patient_id", {{$consult->_ref_patient->_id}});
       url.addParam("context_guid", "{{$consult->_guid}}");
       url.requestUpdate("Constantes");

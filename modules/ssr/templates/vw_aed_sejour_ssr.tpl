@@ -36,7 +36,7 @@ Main.add(function() {
 var constantesMedicalesDrawn = false;
 refreshConstantesMedicales = function (force) {
   if (!constantesMedicalesDrawn || force) {
-    var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
+    var url = new Url("patients", "httpreq_vw_constantes_medicales");
     url.addParam("patient_id", {{$sejour->_ref_patient->_id}});
     url.addParam("context_guid", "{{$sejour->_guid}}");
     url.addParam("selection[]", ["poids", "taille"]);
