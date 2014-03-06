@@ -62,10 +62,15 @@ if ($sejour && $sejour->_id) {
   $rpu = $sejour->loadRefRPU();
   if ($rpu && $rpu->_id) {
     $rpu->loadRefSejourMutation();
+    $sejour->loadRefCurrAffectation()->loadRefService();
 
     // Urgences pour un séjour "urg"
     if ($sejour->type == "urg") {
       $services = CService::loadServicesUrgence();
+    }
+
+    if ($sejour->_ref_curr_affectation->_ref_service->radiologie == "1") {
+      $services = array_merge($services, CService::loadServicesImagerie());
     }
 
     // UHCD pour un séjour "comp" et en UHCD
