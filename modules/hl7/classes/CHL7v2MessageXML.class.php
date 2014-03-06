@@ -278,7 +278,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
       return;
     }
 
-    if ($sender->_config["search_master_IPP"]) {
+    if ($sender->_configs["search_master_IPP"]) {
       $domain = CDomain::getMasterDomain("CPatient", $sender->group_id);
 
       if (($this->queryTextNode("CX.5", $node) == "PI") && ($domain->namespace_id == $this->queryTextNode("CX.4/HD.1", $node))) {
@@ -308,7 +308,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
       return;
     }
 
-    if ($sender->_config["search_master_NDA"]) {
+    if ($sender->_configs["search_master_NDA"]) {
       $domain = CDomain::getMasterDomain("CSejour", $sender->group_id);
 
       if (($this->queryTextNode("CX.5", $node) == "AN") && ($domain->namespace_id == $this->queryTextNode("CX.4/HD.1", $node))) {

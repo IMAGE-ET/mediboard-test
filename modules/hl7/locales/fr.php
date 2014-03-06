@@ -1312,6 +1312,7 @@ $locales['mod-hl7-tab-vw_hl7v2_schemas'] = 'Schémas HL7v2';
 $locales['mod-hl7-tab-vw_hl7v2_tables'] = 'Tables HL7v2';
 $locales['mod-hl7-tab-vw_read_hl7v2_files'] = 'Lecture fichier HL7';
 $locales['mod-hl7-tab-vw_test_hl7v2_data_type'] = 'Test types de données';
+$locales['module-hl7-court'] = 'HL7';
 $locales['module-hl7-long'] = 'Health Level 7';
 $locales['utilities-source-mllp'] = 'Utilitaires MLLP';
 $locales['utilities-source-mllp-connexion'] = 'Test de la connexion';
