@@ -13,7 +13,7 @@
             <description>Insurance Plan ID</description>
             <datatype>CE</datatype>
         </field>
-        <field minOccurs="1" maxOccurs="unbounded" length="250">
+        <field minOccurs="0" maxOccurs="unbounded" length="250">
             <name>IN1.3</name>
             <description>Insurance Company ID</description>
             <datatype>CX</datatype>

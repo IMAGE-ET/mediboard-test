@@ -283,9 +283,11 @@ class CHL7v2MessageXML extends CMbXMLDocument {
 
       if (($this->queryTextNode("CX.5", $node) == "PI") && ($domain->namespace_id == $this->queryTextNode("CX.4/HD.1", $node))) {
         $data["PI"] = $this->queryTextNode("CX.1", $node);
-        return;
       }
+
+      return;
     }
+
 
     if ($this->queryTextNode("CX.5", $node) == "PI") {
       $data["PI"] = $this->queryTextNode("CX.1", $node);
@@ -313,8 +315,9 @@ class CHL7v2MessageXML extends CMbXMLDocument {
 
       if (($this->queryTextNode("CX.5", $node) == "AN") && ($domain->namespace_id == $this->queryTextNode("CX.4/HD.1", $node))) {
         $data["AN"] = $this->queryTextNode("CX.1", $node);
-        return;
       }
+
+      return;
     }
 
     if ($this->queryTextNode("CX.5", $node) == "AN") {
