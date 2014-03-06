@@ -307,7 +307,7 @@ function saveAndMerge() {
 function checkLock(oCheckbox) {
   if($V(oCheckbox) == 1) {
     Modal.open('lock_area', {width: '400px', height: '330px'});
-    getForm('LockDoc').user_password.focus()
+    getForm('LockDocOther').user_password.focus()
   }
   else {
     var form = oCheckbox.form;
@@ -536,56 +536,63 @@ Main.add(function() {
 
 <!-- Zone de confirmation de verrouillage du document -->
 <div id="lock_area" style="display: none;">
-  <form name="LockDocOwner" method="post" action="?m=compteRendu&a=ajax_lock_doc"
+  {{if !$conf.dPcompteRendu.CCompteRendu.pass_lock && !$app->user_prefs.pass_lock}}
+    <form name="LockDocOwner" method="post" action="?m=compteRendu&a=ajax_lock_doc"
+          onsubmit="return onSubmitFormAjax(this, {useFormAction: true})">
+      <input type="hidden" name="user_id" class="notNull" value="{{$app->user_id}}" />
+      <table class="form">
+        <tr>
+          <th class="title" colspan="2" >
+            Verrouillage du document
+          </th>
+        </tr>
+        <tr>
+          <td class="text button" colspan="2">
+            <strong>Souhaitez-vous réellement verrouiller ce document sous votre nom ?</strong>
+          </td>
+        </tr>
+        <tr>
+          <td class="button" colspan="2">
+            <button type="button" class="tick" onclick="this.form.onsubmit();">Ok</button>
+            <button type="button" class="cancel"
+                    onclick="$V(getForm('editFrm')._is_locked, 0, false);
+                      $V(getForm('editFrm').___is_locked, 0, false);
+                      Control.Modal.close();">
+              Annuler
+            </button>
+          </td>
+        </tr>
+      </table>
+    </form>
+  {{/if}}
+  <form name="LockDocOther" method="post" action="?m=compteRendu&a=ajax_lock_doc"
         onsubmit="return onSubmitFormAjax(this, {useFormAction: true})">
-    <input type="hidden" name="user_id" class="notNull" value="{{$app->user_id}}" />
+    <input type="hidden" name="user_id" class="notNull"
+           {{if $conf.dPcompteRendu.CCompteRendu.pass_lock || $app->user_prefs.pass_lock}}value="{{$curr_user->_id}}"{{/if}} />
     <table class="form">
-      <tr>
-        <th class="title" colspan="2" >
-          Verrouillage du document
-        </th>
-      </tr>
-      <tr>
-        <td class="text button" colspan="2">
-          <strong>Souhaitez-vous réellement verrouiller ce document sous votre nom ?</strong>
-        </td>
-      </tr>
       {{if $conf.dPcompteRendu.CCompteRendu.pass_lock || $app->user_prefs.pass_lock}}
         <tr>
-          <th>
-            <label for="user_password">Mot de passe</label>
+          <th class="title" colspan="2" >
+            Verrouillage du document
           </th>
-          <td>
-            <input type="password" name="user_password" class="notNull password str" />
-          </td>
         </tr>
       {{/if}}
       <tr>
-        <td class="button" colspan="2">
-          <button type="button" class="tick" onclick="this.form.onsubmit();">Ok</button>
-          <button type="button" class="cancel"
-                  onclick="$V(getForm('editFrm')._is_locked, 0, false);
-                    $V(getForm('editFrm').___is_locked, 0, false);
-                    Control.Modal.close();">
-            Annuler
-          </button>
-        </td>
-      </tr>
-    </table>
-  </form>
-  <form name="LockDocOther" method="post" action="?m=compteRendu&a=ajax_lock_doc"
-        onsubmit="return onSubmitFormAjax(this, {useFormAction: true})">
-    <input type="hidden" name="user_id" class="notNull" value="" />
-    <table class="form">
-      <tr>
         <td class="text button" colspan="2">
-          <strong>Souhaitez-vous verrouiller ce document pour un autre utilisateur ?</strong>
+          <strong>
+            {{if $conf.dPcompteRendu.CCompteRendu.pass_lock || $app->user_prefs.pass_lock}}
+              Pour verrouiller ce document sous votre nom, saisissez votre mot de passe ou choisissez un autre nom dans la liste.
+            {{else}}
+              Souhaitez-vous verrouiller ce document pour un autre utilisateur ?
+            {{/if}}
+          </strong>
         </td>
       </tr>
       <tr>
         <th>Utilisateur</th>
         <td>
-          <input type="text" name="_user_view" class="autocomplete" value="" />
+          <input type="text" name="_user_view" class="autocomplete"
+                 {{if $conf.dPcompteRendu.CCompteRendu.pass_lock || $app->user_prefs.pass_lock}}value="{{$curr_user}}"{{/if}} />
         </td>
       </tr>
       <tr>
@@ -599,6 +606,14 @@ Main.add(function() {
       <tr>
         <td class="button" colspan="2">
           <button class="tick singleclick" onclick="return this.form.onsubmit();">Ok</button>
+          {{if $conf.dPcompteRendu.CCompteRendu.pass_lock || $app->user_prefs.pass_lock}}
+            <button type="button" class="cancel"
+                    onclick="$V(getForm('editFrm')._is_locked, 0, false);
+                        $V(getForm('editFrm').___is_locked, 0, false);
+                        Control.Modal.close();">
+              Annuler
+            </button>
+          {{/if}}
         </td>
       </tr>
     </table>
