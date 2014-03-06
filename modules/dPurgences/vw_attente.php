@@ -29,8 +29,7 @@ if ($imagerie_etendue) {
   $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
   $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
   $ljoin["service"] = "affectation.service_id = service.service_id";
-  $where[] = "affectation.sortie = sejour.sortie";
-  $where["service.radiologie"] = "= '1'";
+  $where[] = "(service.radiologie = '1') OR (rpu.bio_depart IS NOT NULL) OR (rpu.specia_att IS NOT NULL)";
 }
 else {
   $where[] = "(rpu.radio_debut IS NOT NULL) OR (rpu.bio_depart IS NOT NULL) OR (rpu.specia_att IS NOT NULL)";
@@ -47,6 +46,9 @@ foreach ($listSejours as &$_sejour) {
   $_sejour->_ref_rpu->loadRefSejourMutation();
   $_sejour->loadNDA();
   CMbObject::massLoadFwdRef($_sejour->loadRefsAffectations("sortie ASC"), "service_id");
+  foreach ($_sejour->_ref_affectations as $_affectation) {
+    $_affectation->loadRefService();
+  }
   
   // Chargement de l'IPP
   $_sejour->_ref_patient->loadIPP();

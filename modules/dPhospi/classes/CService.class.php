@@ -342,8 +342,13 @@ class CService extends CMbObject {
     $service->cancelled  = "0";
     /** @var CService[] $services */
     $services = $service->loadMatchingList();
-    $chambres = CMbObject::massLoadBackRefs($services, "chambres");
-    CMbObject::massLoadBackRefs($chambres, "lits");
+
+    foreach ($services as $_service) {
+      $chambres = $_service->loadRefsChambres();
+      foreach ($chambres as $_chambre) {
+        $_chambre->loadRefsLits();
+      }
+    }
 
     return $services;
   }

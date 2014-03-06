@@ -155,7 +155,7 @@ class CIncrementer extends CMbObject {
       $idex = new CIdSante400();
       $idex->object_class = $object->_class;
       $idex->tag          = $tag;
-      $idex->id400 = self::formatValue($object, $incrementer->pattern, $value);
+      $idex->id400        = self::formatValue($object, $incrementer->pattern, $value);
       $idex->loadMatchingObject();
     } while ($idex->_id && ($value += $cluster_count));
 
