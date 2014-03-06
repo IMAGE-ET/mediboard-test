@@ -361,9 +361,6 @@ class CService extends CMbObject {
   static function loadServicesUHCDRPU() {
     $where = array();
     $clause = "uhcd = '1' OR urgence = '1'";
-    if (CAppUI::conf("dPurgences CRPU imagerie_etendue", CGroups::loadCurrent())) {
-      $clause .= " OR radiologie = '1'";
-    }
     $where[]            = $clause;
     $where["cancelled"] = " = '0'";
     $service = new CService();
