@@ -17,7 +17,8 @@
                   <form name="{{$rpu->_guid}}" action="" method="post">
                     <input type="hidden" name="dosql" value="do_rpu_aed" />
                     <input type="hidden" name="del" value="0" />
-                    <input type="hidden" name="m" value="dPurgences" />                          
+                    <input type="hidden" name="m" value="dPurgences" />
+                    <input type="hidden" name="_bind_sejour" value="1" />
                     {{mb_key object=$rpu}}
                     <input type="hidden" name="box_id"      value="{{$rpu->box_id}}"/>
                   </form>
