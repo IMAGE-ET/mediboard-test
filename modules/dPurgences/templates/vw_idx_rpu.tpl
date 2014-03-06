@@ -127,7 +127,7 @@
   });
 
 </script>
-
+{{assign var=imagerie value="CAppUI::conf"|static_call:"dPurgences CRPU imagerie_etendue":"CGroups-$g"}}
 <ul id="tab_main_courante" class="control_tabs">
   <li style="float: right">
     <form action="?" name="FindSejour" method="get">
@@ -143,7 +143,9 @@
     </form>
   </li>
   <li><a href="#holder_main_courante">Main courante <small>(&ndash;)</small></a></li>
-  <li><a href="#holder_imagerie" class="empty">Imagerie <small>(&ndash;)</small></a></li>
+  {{if $imagerie}}
+    <li><a href="#holder_imagerie" class="empty">Imagerie <small>(&ndash;)</small></a></li>
+  {{/if}}
   <li><a href="#holder_uhcd" class="empty">UHCD <small>(&ndash;)</small></a></li>
   {{if $conf.dPurgences.gerer_reconvoc == "1"}}
   <li><a href="#consultations" class="empty">Reconvocations <small>(&ndash; / &ndash;)</small></a></li>
@@ -204,30 +206,30 @@
   
   <div id="main_courante"></div>
 </div>
+{{if $imagerie}}
+  <div id="holder_imagerie" style="display: none;">
+    <table style="width: 100%;" style="display: none;">
+      <tr>
+        <td style="text-align: right">
+          Affichage
+          <form name="imagerie-view" action="" method="post">
+            <select name="imagerie_affichage" onChange="Imagerie.refreshImagerie()">
+              <option value="tous"              {{if $imagerie_affichage == "tous"             }}selected{{/if}}>Tous</option>
+              <option value="presents"          {{if $imagerie_affichage == "presents"         }}selected{{/if}}>Présents</option>
+              <option value="prendre_en_charge" {{if $imagerie_affichage == "prendre_en_charge"}}selected{{/if}}>A PeC</option>
+              <option value="annule"            {{if $imagerie_affichage == "annule"           }}selected{{/if}}>Annulé</option>
+            </select>
+          </form>
+          <a href="#" onclick="MainCourante.legend()" class="button search">Légende</a>
+        </td>
+      </tr>
+    </table>
 
-<div id="holder_imagerie" style="display: none;">
-  <table style="width: 100%;" style="display: none;">
-    <tr>
-      <td style="text-align: right">
-        Affichage
-        <form name="imagerie-view" action="" method="post">
-          <select name="imagerie_affichage" onChange="Imagerie.refreshImagerie()">
-            <option value="tous"              {{if $imagerie_affichage == "tous"             }}selected{{/if}}>Tous</option>
-            <option value="presents"          {{if $imagerie_affichage == "presents"         }}selected{{/if}}>Présents</option>
-            <option value="prendre_en_charge" {{if $imagerie_affichage == "prendre_en_charge"}}selected{{/if}}>A PeC</option>
-            <option value="annule"            {{if $imagerie_affichage == "annule"           }}selected{{/if}}>Annulé</option>
-          </select>
-        </form>
-        <a href="#" onclick="MainCourante.legend()" class="button search">Légende</a>
-      </td>
-    </tr>
-  </table>
-
-  <div id="imagerie">
-    <div class="small-info">{{tr}}msg-common-loading-soon{{/tr}}</div>
+    <div id="imagerie">
+      <div class="small-info">{{tr}}msg-common-loading-soon{{/tr}}</div>
+    </div>
   </div>
-</div>
-
+{{/if}}
 <div id="holder_uhcd" style="display: none;">
   <table style="width: 100%;" style="display: none;">
     <tr>

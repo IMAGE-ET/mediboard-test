@@ -68,6 +68,15 @@
       {{/if}}
     });
   }
+
+  checkPraticien = function(oForm){
+    var prat = oForm.prat_id.value;
+    if (prat == ""){
+      alert("Veuillez sélectionner un praticien");
+      return false;
+    }
+    return true;
+  }
 </script>
 
 <div class="small-info" style="display: none;" id="filter-indicator">
@@ -259,7 +268,7 @@
             {{elseif $type == "UHCD"}}
               <form name="editRPU-{{$rpu->_id}}"
                 onsubmit="return onSubmitFormAjax(this, {onComplete: function() { UHCD.start() }});" method="post" action="?">
-                {{elseif $type == "imagerie"}}
+            {{elseif $type == "imagerie"}}
                 <form name="editRPU-{{$rpu->_id}}"
                       onsubmit="return onSubmitFormAjax(this, {onComplete: function() { Imagerie.start() }});" method="post" action="?">
             {{/if}}
@@ -354,7 +363,7 @@
               {{if $_sejour->_ref_curr_affectation &&
                    $_sejour->_ref_curr_affectation->_ref_service &&
                    $_sejour->_ref_curr_affectation->_ref_service->radiologie}}
-                <span class="encart encart-imagerie">IMG</span
+                <span class="encart encart-imagerie">IMG</span>
               {{/if}}
 
               {{if $rpu->mutation_sejour_id}}
@@ -433,7 +442,7 @@
         {{/if}}
     
         <td class="narrow button {{if $_sejour->type != "urg" && !$_sejour->UHCD}}arretee{{/if}}" style="background-color: {{$background}};">
-          {{mb_include template="inc_pec_praticien"}}
+          {{mb_include template="inc_pec_praticien" type=$type}}
         </td>
   
       {{else}}

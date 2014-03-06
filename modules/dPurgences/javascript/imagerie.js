@@ -30,7 +30,7 @@ Imagerie = {
   
   refreshImagerie: function() {
     var form = getForm("imagerie-view");
-    var url = new Url();
+    var url = new Url("dPurgences", "ajax_refresh_imagerie");
     url.addParam("imagerie_affichage", $V(form.imagerie_affichage));
     url.requestUpdate('imagerie', {method: "post", getParameters: {m: "dPurgences", a: "ajax_refresh_imagerie"}});
   },

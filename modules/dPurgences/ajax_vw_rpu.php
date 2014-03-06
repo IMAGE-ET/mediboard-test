@@ -28,7 +28,9 @@ if ($rpu && $rpu->_id) {
   // Mise en session du rpu_id
   $_SESSION["dPurgences"]["rpu_id"] = $rpu->_id;
   $rpu->loadRefSejourMutation();
+  $affectation = $sejour->loadRefCurrAffectation();
 
+  $affectation->loadRefService();
   // Urgences pour un séjour "urg"
   if ($sejour->type == "urg") {
     $services = CService::loadServicesUrgence();
@@ -37,6 +39,10 @@ if ($rpu && $rpu->_id) {
   // UHCD pour un séjour "comp" et en UHCD
   if ($sejour->type == "comp" && $sejour->UHCD) {
     $services = CService::loadServicesUHCD();
+  }
+
+  if ($affectation->_ref_service && $affectation->_ref_service->radiologie == "1") {
+    $services = CService::loadServicesImagerie();
   }
 
   if (CAppUI::conf("dPplanningOp CSejour use_custom_mode_sortie")) {
