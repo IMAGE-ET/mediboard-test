@@ -226,7 +226,7 @@ class CExchangeHL7v2 extends CExchangeTabular {
     }
 
     $hl7_ack = new CHL7v2Message();
-    $hl7_ack->parse($this->_acquittement, null, $actor);
+    $hl7_ack->parse($this->_acquittement, true, $actor);
 
     $this->_doc_errors_ack   = !$hl7_ack->isOK(CHL7v2Error::E_ERROR);
     $this->_doc_warnings_ack = !$hl7_ack->isOK(CHL7v2Error::E_WARNING);
