@@ -117,6 +117,7 @@ $locales['Change'] = 'Changer';
 $locales['Charge'] = 'Facturer';
 $locales['Choose'] = 'Choisir';
 $locales['Chose'] = 'Choisir';
+$locales['Classname'] = 'Type d\'objets';
 $locales['Clean'] = 'Nettoyer';
 $locales['Clean up'] = 'Nettoyer';
 $locales['Clear'] = 'Vider';

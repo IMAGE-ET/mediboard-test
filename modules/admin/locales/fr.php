@@ -166,6 +166,7 @@ $locales['CUser-dont_log_connection-desc'] = 'Ne pas journaliser les connexions 
 $locales['CUser-failed-purge_connections'] = 'Purge de connexions impossible: ';
 $locales['CUser-failed-username'] = 'Nom d\'utilisateur déjà existant';
 $locales['CUser-identity'] = 'Identité';
+$locales['CUser-message-nosiblings'] = 'Aucun doublon trouvé';
 $locales['CUser-msg-create'] = 'Utilisateur créé';
 $locales['CUser-msg-delete'] = 'Utilisateur supprimé';
 $locales['CUser-msg-modify'] = 'Utilisateur modifié';
@@ -356,4 +357,3 @@ $locales['user-updated-from-ldap'] = 'L\'utilisateur a été mis à jour à partir d
 $locales['utilities-source-ldap'] = 'Utilitaires LDAP';
 $locales['utilities-source-ldap-bind'] = 'Authentification au serveur LDAP';
 $locales['utilities-source-ldap-search'] = 'Recherche sur le serveur LDAP';
-?>

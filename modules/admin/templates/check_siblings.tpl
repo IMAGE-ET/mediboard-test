@@ -23,6 +23,10 @@
 			{{/foreach}}
     </td>
   </tr>
+  {{foreachelse}}
+  <tr>
+    <td class="empty" colspan="2">{{tr}}CUser-message-nosiblings{{/tr}}</td>
+  </tr>
 	{{/foreach}}
 
 </table>

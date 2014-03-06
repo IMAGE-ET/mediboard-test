@@ -15,7 +15,7 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#config-permissions">{{tr}}config-permissions{{/tr}}</a></li>
   <li><a href="#config-ldap">{{tr}}config-ldap{{/tr}}</a></li>
-  <li><a href="#actions">Actions</a></li>
+  <li><a href="#actions">{{tr}}Maintenance{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
