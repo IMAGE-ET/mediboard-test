@@ -1704,7 +1704,7 @@ class COperation extends CCodable implements IPatientRelated {
     $brancardage = new CBrancardage();
     $brancardage->operation_id              = $this->_id;
     $brancardage->destinationBrancardage_id = $destination->_id;
-    $brancardage->loadMatchingObject();
+    $brancardage->loadMatchingObject("brancardage_id DESC");
 
     return $this->_ref_brancardage = $brancardage;
   }
