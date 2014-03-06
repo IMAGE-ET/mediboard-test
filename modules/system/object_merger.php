@@ -17,6 +17,8 @@ if (!is_array($objects_id)) {
   $objects_id = explode("-", $objects_id);
 }
 
+$user = CMediusers::get();
+
 CMbArray::removeValue("", $objects_id);
 
 $objects = array();
@@ -140,6 +142,7 @@ $smarty->assign("objects_id", $objects_id);
 $smarty->assign("merge_type", $merge_type);
 $smarty->assign("result",  $result);
 $smarty->assign("statuses",  $statuses);
+$smarty->assign("user",  $user);
 $smarty->assign("counts",  $counts);
 $smarty->assign("checkMerge", $checkMerge);
 $smarty->assign("mode", $mode);

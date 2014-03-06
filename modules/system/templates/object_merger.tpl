@@ -186,7 +186,7 @@ function toggleColumn(className) {
             {{tr}}Merge{{/tr}}
           </button>
         {{/if}}
-				{{if !$merge_type || $merge_type == 'fast' }}
+				{{if (!$merge_type || $merge_type == 'fast') && $user->isAdmin() }}
           <button type="submit" class="merge" onclick="return ObjectMerger.confirm('1');" {{if $mode == 'check'}}disabled="disabled" {{/if}}>
             {{tr}}Merge{{/tr}} {{tr}}massively{{/tr}}
           </button>
