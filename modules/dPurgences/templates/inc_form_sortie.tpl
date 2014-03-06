@@ -127,7 +127,12 @@
             {{/foreach}}
           </select>
         {{else}}
-          {{mb_field object=$sejour field="mode_sortie" onchange="changeOrientation(this);Fields.init(this.value); this.form.onsubmit();"}}
+          {{assign var=mode_sortie value="normal"}}
+          {{if $rpu->mutation_sejour_id}}
+            {{assign var=mode_sortie value="mutation"}}
+           {{/if}}
+          {{mb_field object=$sejour field="mode_sortie"
+            onchange="changeOrientation(this);Fields.init(this.value); this.form.onsubmit();" value=$mode_sortie}}
         {{/if}}
         {{if !$rpu->mutation_sejour_id}}
           <input type="hidden" name="group_id" value="{{if $sejour->group_id}}{{$sejour->group_id}}{{else}}{{$g}}{{/if}}" />

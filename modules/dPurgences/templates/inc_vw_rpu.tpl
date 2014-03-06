@@ -220,7 +220,7 @@ function showEtabEntreeTransfert(mode) {
             <tr>
               <th>{{mb_label object=$rpu field="box_id"}}</th>
               <td>
-                <input type="hidden" name="_service_id" value="" />
+                <input type="hidden" name="_service_id" value="{{$rpu->_service_id}}" />
                 {{mb_include module=dPhospi template="inc_select_lit" field=box_id selected_id=$rpu->box_id ajaxSubmit=true listService=$services}}
               </td>
             </tr>
