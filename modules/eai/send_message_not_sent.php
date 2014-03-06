@@ -123,10 +123,10 @@ foreach ($exchanges as $_exchange) {
     $PV1 = $xml->queryNode("PV1");
     $nda = $xml->queryNode("PV1.19", $PV1);
 
-    if (
-        ((!$ipp && !$ipp->nodeValue) || $ipp->nodeValue == "0") ||
+    if ($_exchange->code != "A40" &&
+        (((!$ipp && !$ipp->nodeValue) || $ipp->nodeValue == "0") ||
         (($_exchange->sous_type != "ITI30" ||
-        ($_exchange->sous_type == "ITI30" && $_exchange->code == "A08"))  && !$nda && empty($nda->nodeValue))
+        ($_exchange->sous_type == "ITI30" && $_exchange->code == "A08"))  && !$nda && empty($nda->nodeValue)))
     ) {
 
       CHL7v2Message::setBuildMode($receiver->_configs["build_mode"]);
