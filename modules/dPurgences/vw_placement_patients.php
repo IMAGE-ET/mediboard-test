@@ -13,7 +13,7 @@ CCanDo::checkRead();
 
 // Récupération des paramètres
 //$date           = CValue::getOrSession("date", CMbDT::date());
-$date  = CMbDT::dateTime();
+$date           = CMbDT::dateTime();
 $date_tolerance = CAppUI::conf("dPurgences date_tolerance");
 $date_before    = CMbDT::date("-$date_tolerance DAY", $date);
 $date_after     = CMbDT::date("+1 DAY", $date);
@@ -23,17 +23,18 @@ $chambre = new CChambre();
 $ljoin = array();
 $ljoin["service"]     = "service.service_id = chambre.service_id";
 $ljoin["emplacement"] = "emplacement.chambre_id = chambre.chambre_id";
+
 $where = array();
-$where["annule"]    = "= '0'";
-$where["service.urgence"]    = "= '1'";
-$where["service.group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
+$where["annule"]             = "= '0'";
+$where[]                     = "service.urgence = '1' OR service.radiologie = '1'";
+$where["service.group_id"]   = "= '".CGroups::loadCurrent()->_id."'";
 $where["emplacement.plan_x"] = "IS NOT NULL";
 $chambres_urgences = $chambre->loadList($where, null, null, "chambre_id", $ljoin);
 
 $where = array();
-$where["annule"]    = "= '0'";
+$where["annule"]             = "= '0'";
 $where["service.uhcd"]       = "= '1'";
-$where["service.group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
+$where["service.group_id"]   = "= '".CGroups::loadCurrent()->_id."'";
 $where["emplacement.plan_x"] = "IS NOT NULL";
 $chambres_uhcd = $chambre->loadList($where, null, null, "chambre_id", $ljoin);
 
@@ -52,10 +53,10 @@ $listSejours = array(
 $ljoin = array();
 $ljoin["rpu"] = "rpu.sejour_id = sejour.sejour_id";
 $temp = array();
-$temp["sejour.entree"]    = " BETWEEN '$date_before' AND '$date_after'";
-$temp["sejour.sortie_reelle"]    = "IS NULL";
-$temp["sejour.annule"]    = " = '0'";
-$temp["sejour.group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
+$temp["sejour.entree"]        = " BETWEEN '$date_before' AND '$date_after'";
+$temp["sejour.sortie_reelle"] = "IS NULL";
+$temp["sejour.annule"]        = " = '0'";
+$temp["sejour.group_id"]      = "= '".CGroups::loadCurrent()->_id."'";
 
 for ($num = 0; $num <= 1; $num++) {
   /** @var CChambre[] $chambres */
