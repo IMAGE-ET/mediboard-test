@@ -343,7 +343,7 @@ class CConstantGraph {
         $style .= 'color: red';
       }
       if (!$this->widget) {
-        $str = '<span style="$style" onclick="editConstants(' . $_cst->_id . ', \'' . $this->context_guid . '\')">';
+        $str = '<span style="' . $style . '" onclick="editConstants(' . $_cst->_id . ', \'' . $this->context_guid . '\')">';
         $str .= '<strong>' . CMbDT::format($_cst->datetime, '%Hh%M') . '</strong><br/>'.
           CMbDT::format($_cst->datetime, '%d/%m') . '</span>';
       }
