@@ -1,0 +1,113 @@
+{{*
+ * $Id$
+ *  
+ * @category Patients
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
+*}}
+
+<form method="post" name="editMedecin_{{$object->_id}}" onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close})">
+  <input type="hidden" name="m" value="patients"/>
+  <input type="hidden" name="dosql" value="do_medecins_aed"/>
+  <input type="hidden" name="del" value="0"/>
+  {{mb_key object=$object}}
+
+  <table class="form">
+    {{mb_include module=system template=inc_form_table_header}}
+
+    <tr>
+      <th>{{mb_label object=$object field=nom}}</th>
+      <td>{{mb_field object=$object field=nom}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$object field=prenom}}</th>
+      <td>{{mb_field object=$object field=prenom}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$object field=jeunefille}}</th>
+      <td>{{mb_field object=$object field=jeunefille}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$object field=adresse}}</th>
+      <td>{{mb_field object=$object field=adresse}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$object field=cp}} {{mb_label object=$object field=ville}}</th>
+      <td>{{mb_field object=$object field=cp}} {{mb_field object=$object field=ville}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$object field=tel}}</th>
+      <td>{{mb_field object=$object field=tel}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$object field=fax}}</th>
+      <td>{{mb_field object=$object field=fax}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$object field=portable}}</th>
+      <td>{{mb_field object=$object field=portable}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$object field=email}}</th>
+      <td>{{mb_field object=$object field=email}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$object field=email_apicrypt}}</th>
+      <td>{{mb_field object=$object field=email_apicrypt}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$object field=type}}</th>
+      <td>{{mb_field object=$object field=type}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$object field=disciplines}}</th>
+      <td>{{mb_field object=$object field=disciplines}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$object field=orientations}}</th>
+      <td>{{mb_field object=$object field=orientations}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$object field=complementaires}}</th>
+      <td>{{mb_field object=$object field=complementaires}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$object field=rpps}}</th>
+      <td>{{mb_field object=$object field=rpps}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$object field=adeli}}</th>
+      <td>{{mb_field object=$object field=adeli}}</td>
+    </tr>
+
+    <tr>
+      <td class="button" colspan="2">
+        {{if $object->_id}}
+          <button class="save">{{tr}}Edit{{/tr}}</button>
+            <button class="trash" type="button" onclick="confirmDeletion(this.form,{ajax:true},{onComplete: Control.Modal.close})">{{tr}}Delete{{/tr}}</button>
+        {{else}}
+          <button class="save">{{tr}}Add{{/tr}}</button>
+        {{/if}}
+      </td>
+    </tr>
+
+  </table>
+</form>

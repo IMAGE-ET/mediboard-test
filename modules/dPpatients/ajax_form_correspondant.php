@@ -13,21 +13,27 @@ $correspondant_id = CValue::get("correspondant_id");
 $patient_id       = CValue::get("patient_id");
 $duplicate        = CValue::get("duplicate");
 
+$correspondant = new CCorrespondantPatient();
 $patient = new CPatient();
-$patient->load($patient_id);
-
-$correspondant             = new CCorrespondantPatient;
-$correspondant->patient_id = $patient_id;
-$correspondant->_duplicate = $duplicate;
-$correspondant->updatePlainFields();
 
 if ($correspondant_id) {
   $correspondant->load($correspondant_id);
   $patient->load($correspondant->patient_id);
 }
-if (CAppUI::conf("ref_pays") == 2) {
-  $correspondant->relation = "assurance";
+else {
+  if ($patient_id) {
+    $patient->load($patient_id);
+    $correspondant->patient_id = $patient_id;
+    $correspondant->_duplicate = $duplicate;
+    $correspondant->updatePlainFields();
+  }
+
+  if (CAppUI::conf("ref_pays") == 2) {
+    $correspondant->relation = "assurance";
+  }
 }
+
+
 
 $patient->loadRefsCorrespondantsPatient();
 

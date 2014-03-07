@@ -13,49 +13,55 @@ CCanDo::checkRead();
 
 $dialog     = CValue::get("dialog");
 $medecin_id = CValue::getOrSession("medecin_id");
+$g = CValue::getOrSessionAbs("g", CAppUI::$instance->user_group);
 
 // Parametre de tri
 $order_way = CValue::getOrSession("order_way", "DESC");
 $order_col = CValue::getOrSession("order_col", "ccmu");
 
-// Récuperation du medecin sélectionné
-$medecin = new CMedecin();
-if (CValue::get("new", 0) || $dialog) {
-  $medecin->load(null);
-  CValue::setSession("medecin_id", null);
-}
-else if ($medecin->load($medecin_id)) {
-  $medecin->countPatients();
-}
+// pagination
+$start_med          = CValue::get("start_med", 0);
+$step_med           = CValue::get("step_med", 20);
 
-$g = CValue::getOrSessionAbs("g", CAppUI::$instance->user_group);
+$medecin = new CMedecin();
+$ds = $medecin->getDS();
+
 $indexGroup = new CGroups;
 $indexGroup->load($g);
 
 
 // Récuperation des médecins recherchés
 if ($dialog) {
-  $medecin_nom    = CValue::get("medecin_nom"   , ""  );
-  $medecin_prenom = CValue::get("medecin_prenom", ""  );
-  $medecin_cp     = CValue::get("medecin_cp"    , $indexGroup->_cp_court);
-  $medecin_type   = CValue::get("medecin_type"  , "medecin");
+  $medecin_nom    = CValue::get("nom"     , "");
+  $medecin_prenom = CValue::get("prenom"  , "");
+  $medecin_cp     = CValue::get("cp");
+  $medecin_ville  = CValue::get("ville");
+  $medecin_type   = CValue::get("type"    , "medecin");
+  $medecin_disciplines   = CValue::get("disciplines");
 }
 else {
-  $medecin_nom    = CValue::getOrSession("medecin_nom");
-  $medecin_prenom = CValue::getOrSession("medecin_prenom");
-  $medecin_cp     = CValue::getOrSession("medecin_cp", $indexGroup->_cp_court);
-  $medecin_type   = CValue::getOrSession("medecin_type", "medecin");
+  $medecin_nom    = CValue::getOrSession("nom");
+  $medecin_prenom = CValue::getOrSession("prenom");
+  $medecin_cp     = CValue::getOrSession("cp");
+  $medecin_ville  = CValue::getOrSession("ville");
+  $medecin_type   = CValue::getOrSession("type", "medecin");
+  $medecin_disciplines   = CValue::getOrSession("disciplines");
 }
 
 $where = array();
 
 if ($medecin_nom) {
-  $where["nom"]      = "LIKE '".addslashes($medecin_nom)."%'";
+  $where["nom"]      = $ds->prepareLike("%$medecin_nom%");
 }
 
 if ($medecin_prenom) {
-  $where["prenom"]   = "LIKE '".addslashes($medecin_prenom)."%'";
+  $where["prenom"]   = $ds->prepareLike("%$medecin_prenom%");
 }
+
+if ($medecin_disciplines) {
+  $where["disciplines"]   = $ds->prepareLike("%$medecin_disciplines%");
+}
+
 
 if ($medecin_cp && $medecin_cp != "00") {
   $cps = preg_split("/\s*[\s\|,]\s*/", $medecin_cp);
@@ -67,6 +73,10 @@ if ($medecin_cp && $medecin_cp != "00") {
   }
   
   $where[] = implode(" OR ", $where_cp);
+}
+
+if ($medecin_ville) {
+  $where["ville"]   = $ds->prepareLike("%$medecin_ville%");
 }
 
 if ($medecin_type) {
@@ -85,7 +95,7 @@ else if ($order_col == "ville") {
 $medecins = new CMedecin();
 
 $count_medecins = $medecins->countList($where);
-$medecins = $medecins->loadList($where, $order, "0, 50");
+$medecins = $medecins->loadList($where, $order, "$start_med, $step_med");
 
 $list_types = $medecin->_specs['type']->_locales;
 
@@ -103,5 +113,7 @@ $smarty->assign("list_types" , $list_types);
 $smarty->assign("count_medecins", $count_medecins);
 $smarty->assign("order_col"   , $order_col);
 $smarty->assign("order_way"   , $order_way);
+$smarty->assign("start_med", $start_med);
+$smarty->assign("step_med", $step_med);
 
 $smarty->display("vw_medecins.tpl");

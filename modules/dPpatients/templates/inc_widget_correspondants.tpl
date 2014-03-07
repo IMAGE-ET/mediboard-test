@@ -5,13 +5,13 @@ Medecin = {
   form: null,
   edit : function(form) {
     this.form = form;
-    var url = new Url("dPpatients", "vw_medecins");
+    var url = new Url("dPpatients", "vw_correspondants");
     url.addParam("dialog","1");
-    url.modal({height: "80%", width: "90%", title: "Medecins"});
+    url.requestModal("800","600");
   },
   
   del: function(form) {
-    if (confirm("Voulez vous vraiment supprimer ce médecin ?")) {
+    if (confirm("Voulez vous vraiment supprimer ce médecin du dossier patient ?")) {
       $V(form._view, '');
       if (form.medecin_traitant) {
         if ($V(form.medecin_traitant)) {
