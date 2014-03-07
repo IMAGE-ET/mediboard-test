@@ -47,8 +47,11 @@ if ($select_view || (!$service_id && !$praticien_id && !$function_id && !$sejour
   $select_view = true;
 }
 
+$where = array();
+$where["externe"]   = "= '0'";
+$where["cancelled"] = "= '0'";
 $service = new CService();
-$services = $service->loadListWithPerms();
+$services = $service->loadListWithPerms(PERM_READ, $where);
 
 $praticien = new CMediusers();
 $praticiens = $praticien->loadPraticiens();
