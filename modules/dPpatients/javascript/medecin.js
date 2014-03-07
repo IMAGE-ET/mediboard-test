@@ -3,10 +3,11 @@
 Medecin = {
   form: null,
   sFormName: "editSejour",
-  edit : function(form) {
+  edit : function(form, nom) {
     this.form = form;
     var url = new Url("patients", "vw_correspondants");
     url.addParam("dialog","1");
+    url.addParam("medecin_nom", nom);
     url.requestModal("1000", "760");
   },
   

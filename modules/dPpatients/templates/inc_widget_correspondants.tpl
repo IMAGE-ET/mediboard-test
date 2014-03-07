@@ -79,7 +79,7 @@
         <input type="hidden" name="medecin_traitant" value="{{$medecin_traitant_id}}" onchange="updateMedTraitant(this.form);"/>
         <input type="text" name="_view" size="50" value="{{$medecin_traitant_view|smarty:nodefaults}}" ondblclick="Medecin.edit(this.form)" class="autocomplete"/>
         <div id="traitant-edit-{{$patient->_id}}__view_autocomplete" style="display: none; width: 300px;" class="autocomplete"></div>
-        <button class="search" type="button" onclick="Medecin.edit(this.form)">{{tr}}Choose{{/tr}}</button>
+        <button class="search" type="button" onclick="Medecin.edit(this.form, $V(this.form._view))">{{tr}}Choose{{/tr}}</button>
         <button class="cancel notext" type="button" onclick="Medecin.del(this.form)">{{tr}}Delete{{/tr}}</button>
       </form>
     </td>
