@@ -16,7 +16,7 @@
     Control.Tabs.create("tabs_correspondants", true);
 
     {{if $medecin_id}}
-      Medecin.editMedecin('{{$medecin_id}}', refreshPageMedecin);
+      Medecin.editMedecin('{{$medecin_id}}', refreshPageMedecin.curry('0'));
     {{else}}
       refreshPageMedecin();
     {{/if}}
@@ -74,20 +74,20 @@
 
       <tr>
         <th>{{mb_label object=$medecin field=nom}}</th>
-        <td>{{mb_field object=$medecin field=nom prop=str onchange="\$V(this.form.start, 0)"}}</td>
+        <td>{{mb_field object=$medecin field=nom prop=str onchange="\$V(this.form.start_med, 0)"}}</td>
         <th>{{mb_label object=$medecin field=cp}}</th>
-        <td>{{mb_field object=$medecin field=cp prop=str onchange="\$V(this.form.start, 0)"}}</td>
+        <td>{{mb_field object=$medecin field=cp prop=str onchange="\$V(this.form.start_med, 0)"}}</td>
         <th>{{mb_label object=$medecin field=type}}</th>
-        <td>{{mb_field object=$medecin field=type emptyLabel="All" onchange="\$V(this.form.start, 0)"}}</td>
+        <td>{{mb_field object=$medecin field=type emptyLabel="All" onchange="\$V(this.form.start_med, 0)"}}</td>
       </tr>
 
       <tr>
         <th>{{mb_label object=$medecin field=prenom}}</th>
-        <td>{{mb_field object=$medecin field=prenom prop=str onchange="\$V(this.form.start, 0)"}}</td>
+        <td>{{mb_field object=$medecin field=prenom prop=str onchange="\$V(this.form.start_med, 0)"}}</td>
         <th>{{mb_label object=$medecin field=ville}}</th>
-        <td>{{mb_field object=$medecin field=ville prop=str onchange="\$V(this.form.start, 0)"}}</td>
+        <td>{{mb_field object=$medecin field=ville prop=str onchange="\$V(this.form.start_med, 0)"}}</td>
         <th>{{mb_label object=$medecin field=disciplines}}</th>
-        <td>{{mb_field object=$medecin field=disciplines prop=str placeholder=discipline onchange="\$V(this.form.start, 0)"}}</td>
+        <td>{{mb_field object=$medecin field=disciplines prop=str placeholder=discipline onchange="\$V(this.form.start_med, 0)"}}</td>
       </tr>
 
       <tr>
@@ -97,7 +97,7 @@
           {{else}}
               <button id="vw_medecins_button_dialog_search" class="search" type="submit" onclick="formVisible=false;">{{tr}}Search{{/tr}}</button>
           {{/if}}
-          <button class="new" type="button" onclick="Medecin.editMedecin('0', refreshPageMedecin);">{{tr}}Create{{/tr}}</button>
+          <button class="new" type="button" onclick="Medecin.editMedecin('0', refreshPageMedecin.curry('0'));">{{tr}}Create{{/tr}}</button>
         </td>
       </tr>
     </table>
@@ -122,18 +122,18 @@
 
         <tr>
           <th>{{mb_label object=$correspondant field=nom}}</th>
-          <td>{{mb_field object=$correspondant field=nom prop=str onchange="\$V(this.form.start, 0)"}}</td>
+          <td>{{mb_field object=$correspondant field=nom prop=str onchange="\$V(this.form.start_corres, 0)"}}</td>
           <th>{{mb_label object=$correspondant field=cp}}</th>
-          <td>{{mb_field object=$correspondant field=cp prop=str onchange="\$V(this.form.start, 0)"}}</td>
+          <td>{{mb_field object=$correspondant field=cp prop=str onchange="\$V(this.form.start_corres, 0)"}}</td>
           <th>{{mb_label object=$correspondant field=relation}}</th>
-          <td>{{mb_field object=$correspondant field=relation emptyLabel="All" onchange="\$V(this.form.start, 0)"}}</td>
+          <td>{{mb_field object=$correspondant field=relation emptyLabel="All" onchange="\$V(this.form.start_corres, 0)"}}</td>
         </tr>
 
         <tr>
           <th>{{mb_label object=$correspondant field=surnom}}</th>
-          <td>{{mb_field object=$correspondant field=surnom prop=str onchange="\$V(this.form.start, 0)"}}</td>
+          <td>{{mb_field object=$correspondant field=surnom prop=str onchange="\$V(this.form.start_corres, 0)"}}</td>
           <th>{{mb_label object=$correspondant field=ville}}</th>
-          <td>{{mb_field object=$correspondant field=ville prop=str onchange="\$V(this.form.start, 0)"}}</td>
+          <td>{{mb_field object=$correspondant field=ville prop=str onchange="\$V(this.form.start_corres, 0)"}}</td>
           <th></th>
           <td></td>
         </tr>
