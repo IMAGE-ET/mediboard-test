@@ -56,8 +56,8 @@
   <div class="adresse_par" {{if !$consult->adresse}}style="visibility:hidden"{{/if}}>
     <input type="radio" name="adresse_par_prat_id" value="{{if !$medecin_found}}{{$consult->adresse_par_prat_id}}{{/if}}" class="adresse_par"
            {{if !$medecin_found && $consult->adresse_par_prat_id}}checked="checked"{{/if}}
-           onclick="Medecin.edit()" />
-    <button id="inc_list_patient_medecins_button_other" type="button" class="search" onclick="$(this).previous('input').checked=true;Medecin.edit()">{{tr}}Other{{/tr}}</button>
+           onclick="Medecin.edit(this.form)" />
+    <button id="inc_list_patient_medecins_button_other" type="button" class="search" onclick="$(this).previous('input').checked=true;Medecin.edit(this.form)">{{tr}}Other{{/tr}}</button>
     <span id="inc_list_patient_medecins_span">
       {{if !$medecin_found && $consult->adresse_par_prat_id}}
         {{$consult->_ref_adresse_par_prat}}

@@ -26,9 +26,9 @@ Medecin = {
   form: null,
   edit : function() {
     this.form = getForm("editAdresseParPrat");
-    var url = new Url("dPpatients", "vw_medecins");
+    var url = new Url("dPpatients", "vw_correspondants");
     url.addParam("dialog", "1");
-    url.modal({height:"80%", width:"90%", title: "Medecins"});
+    url.requestModal("1000", "760");
   },
   
   set: function(id, view) {

@@ -1,6 +1,7 @@
 <!-- $Id$ -->
 
 {{mb_script module=patients    script=pat_selector    ajax=true}}
+{{mb_script module=patients    script=medecin         ajax=true}}
 {{mb_script module=cabinet     script=plage_selector  ajax=true}}
 {{mb_script module=cabinet     script=file            ajax=true}}
 {{mb_script module=compteRendu script=document        ajax=true}}
@@ -20,21 +21,11 @@
 {{/if}}
 
 <script>
-  Medecin = {
-    form: null,
-    edit : function() {
-      this.form = getForm("editFrm");
-      var url = new Url("dPpatients", "vw_medecins");
-      url.addParam("dialog","1");
-      url.modal({height: "80%", width: "90%", title: "Medecins"});
-    },
-
-    set: function(id, view) {
-      $('_adresse_par_prat').show().update('Autres : '+view);
-      $V(this.form.adresse_par_prat_id, id);
-      $V(this.form._correspondants_medicaux, '', false);
-    }
-  };
+  Medecin.set = function(id, view) {
+    $('_adresse_par_prat').show().update('Autres : '+view);
+    $V(this.form.adresse_par_prat_id, id);
+    $V(this.form._correspondants_medicaux, '', false);
+  }
 
   /**
    * used to edit multiple plages
