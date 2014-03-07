@@ -820,6 +820,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
 
     if ($newVenue->load($venueRI)) {
+      // Si on retrouve le séjour par notre identifiant mais qu'on reçoit un NDA
+      CEAISejour::storeNDA($NDA, $newVenue, $sender);
+
       return true;
     }
     
