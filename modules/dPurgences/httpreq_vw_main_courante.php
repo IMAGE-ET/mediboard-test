@@ -108,6 +108,7 @@ foreach ($listSejours as $sejour) {
   $sejour->loadRefsNotes();
   $sejour->countDocItems();
   $sejour->loadRefCurrAffectation()->loadRefService();
+  $sejour->_ref_curr_affectation->loadRefLit()->loadRefChambre();
 
   $prescription = $sejour->loadRefPrescriptionSejour();
 
@@ -181,6 +182,15 @@ if (CAppUI::conf("dPurgences view_rpu_uhcd")) {
     foreach ($service->_ref_chambres as $chambre) {
       foreach ($chambre->_ref_lits as $lit) {
         $boxes[$lit->_id] = $lit;
+      }
+    }
+  }
+}
+if (CAppUI::conf("dPurgences CRPU imagerie_etendue", $group)) {
+  foreach (CService::loadServicesImagerie() as $_service) {
+    foreach ($_service->_ref_chambres as $_chambre) {
+      foreach ($_chambre->_ref_lits as $_lit) {
+        $boxes[$_lit->_id] = $_lit;
       }
     }
   }

@@ -20,6 +20,9 @@ $order_col = CValue::getOrSession("order_col", CAppUI::pref("defaultRPUSort"));
 
 // Selection de la date
 $date      = CValue::getOrSession("date", CMbDT::date());
+$date_tolerance = CAppUI::conf("dPurgences date_tolerance");
+$date_before = CMbDT::date("-$date_tolerance DAY", $date);
+$date_after  = CMbDT::date("+1 DAY", $date);
 
 // L'utilisateur doit-il voir les informations médicales
 $user = CMediusers::get();
@@ -34,8 +37,8 @@ $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
 $ljoin["service"] = "affectation.service_id = service.service_id";
-$where[] = "(sejour.entree BETWEEN '$date 00:00:00' AND '$date 23:59:59')
-  OR (sejour.sortie_reelle IS NULL AND sejour.entree BETWEEN '$date 00:00:00' AND '$date 23:59:59' AND sejour.annule = '0')";
+$where[] = "(sejour.entree BETWEEN '$date' AND '$date_after')
+  OR (sejour.sortie_reelle IS NULL AND sejour.entree BETWEEN '$date_before' AND '$date_after' AND sejour.annule = '0')";
 $where[] = CAppUI::pref("showMissingRPU") ? 
   "sejour.type = 'comp' OR rpu.rpu_id IS NOT NULL" :
   "rpu.rpu_id IS NOT NULL";
