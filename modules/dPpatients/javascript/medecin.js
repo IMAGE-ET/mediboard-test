@@ -33,7 +33,7 @@ Medecin = {
   },
   
   modify : function(medecin_id) {
-    var url = new Url("dPpatients", "vw_medecins");
+    var url = new Url("dPpatients", "vw_correspondants");
     url.addParam("medecin_id", medecin_id);
     url.redirect();
   },

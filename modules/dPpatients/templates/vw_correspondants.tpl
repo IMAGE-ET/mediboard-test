@@ -14,7 +14,12 @@
 <script>
   Main.add(function() {
     Control.Tabs.create("tabs_correspondants", true);
-    refreshPageMedecin();
+
+    {{if $medecin_id}}
+      Medecin.editMedecin('{{$medecin_id}}', refreshPageMedecin);
+    {{else}}
+      refreshPageMedecin();
+    {{/if}}
 
     {{if $correspondant_id}}
       Correspondant.edit('{{$correspondant_id}}', null, refreshPageCorrespondant);

@@ -13,6 +13,8 @@ $group = CGroups::loadCurrent();
 
 $default_cp = (CAppUI::pref("medecin_cps_pref")) ? CAppUI::pref("medecin_cps_pref") : $group->_cp_court;
 $correspondant_id   = CValue::get("correspondant_id");
+$medecin_id   = CValue::get("medecin_id");
+
 
 $dialog             = CValue::get("dialog", 0);
 
@@ -78,6 +80,7 @@ ksort($types);
 // smarty
 $smarty = new CSmartyDP();
 $smarty->assign("medecin", $medecin);
+$smarty->assign("medecin_id", $medecin_id);
 $smarty->assign("correspondant", $correspondant);
 $smarty->assign("correspondant_id", $correspondant_id);
 $smarty->assign("dialog", $dialog);
