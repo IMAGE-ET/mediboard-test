@@ -26,5 +26,5 @@
       {{/if}}
     {{/foreach}}
   </select>
-  <button class="search" type="button" onclick="Medecin.edit()">Autres</button>
+  <button class="search" type="button" onclick="Medecin.edit(this.form)">Autres</button>
 </td>

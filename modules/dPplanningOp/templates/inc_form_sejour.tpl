@@ -1093,22 +1093,22 @@ Main.add( function(){
 </tr>
 
 {{if $count_etab_externe}}
-<tr>
-  <th>{{mb_label object=$sejour field=etablissement_entree_id}}</th>
-  <td colspan="3">
-    {{mb_field object=$sejour field=etablissement_entree_id form="editSejour" autocomplete="true,1,50,true,true"}}
-  </td>
-</tr>
+  <tr>
+    <th>{{mb_label object=$sejour field=etablissement_entree_id}}</th>
+    <td colspan="3">
+      {{mb_field object=$sejour field=etablissement_entree_id form="editSejour" autocomplete="true,1,50,true,true"}}
+    </td>
+  </tr>
 {{/if}}
 
 
 {{if $conf.dPplanningOp.CSejour.show_discipline_tarifaire}}
-<tr>
-  <th>{{mb_label object=$sejour field=discipline_id}}</th>
-  <td colspan="3">
-    {{mb_field object=$sejour field=discipline_id form="editSejour" autocomplete="true,1,50,true,true"}}
-  </td>
-</tr>
+  <tr>
+    <th>{{mb_label object=$sejour field=discipline_id}}</th>
+    <td colspan="3">
+      {{mb_field object=$sejour field=discipline_id form="editSejour" autocomplete="true,1,50,true,true"}}
+    </td>
+  </tr>
 {{/if}}
 
 
@@ -1138,7 +1138,7 @@ Main.add( function(){
 </tbody>
 
 <tr {{if !$conf.dPplanningOp.CSejour.easy_atnc}} class="modeExpert" {{/if}}
-{{if !$conf.dPplanningOp.CSejour.show_atnc}}style="display:none;"{{/if}}>
+  {{if !$conf.dPplanningOp.CSejour.show_atnc}}style="display:none;"{{/if}}>
   <th>{{mb_label object=$sejour field="ATNC"}}</th>
   <td colspan="3">{{mb_field object=$sejour field="ATNC" typeEnum="select" emptyLabel="Non renseigné" onchange="checkATNC()"}}</td>
 </tr>
@@ -1215,33 +1215,32 @@ Main.add( function(){
   </tr>
 
   {{if !$mode_operation}}
-  <tr class="modeExpert">
-    <th>{{mb_label object=$sejour field="lit_accompagnant"}}</th>
-    <td>{{mb_field object=$sejour field="lit_accompagnant"}}</td>
-    <th>{{mb_label object=$sejour field="television"}}</th>
-    <td>{{mb_field object=$sejour field="television"}}</td>
-  </tr>
+    <tr class="modeExpert">
+      <th>{{mb_label object=$sejour field="lit_accompagnant"}}</th>
+      <td>{{mb_field object=$sejour field="lit_accompagnant"}}</td>
+      <th>{{mb_label object=$sejour field="television"}}</th>
+      <td>{{mb_field object=$sejour field="television"}}</td>
+    </tr>
   {{/if}}
 {{/if}}
 
 {{if $conf.dPhospi.systeme_prestations == "expert"}}
-<tr>
-  <td></td>
-  <td class="button">
-    <div {{if !$conf.dPplanningOp.CSejour.easy_chambre_simple}} class="modeExpert" {{/if}}>
-      {{if $sejour->_id}}
-      <button type="button" class="search" onclick="Prestations.edit('{{$sejour->_id}}', 'sejour')">Prestations</button>
-      {{/if}}
-    </div>
-  </td>
+  <tr>
+    <td></td>
+    <td class="button">
+      <div {{if !$conf.dPplanningOp.CSejour.easy_chambre_simple}} class="modeExpert" {{/if}}>
+        {{if $sejour->_id}}
+        <button type="button" class="search" onclick="Prestations.edit('{{$sejour->_id}}', 'sejour')">Prestations</button>
+        {{/if}}
+      </div>
+    </td>
 
-  <td colspan="2" class="button">
-    <div {{if !$conf.dPplanningOp.COperation.easy_regime}} class="modeExpert" {{/if}}>
-      {{mb_include module=planningOp template=regimes_alimentaires prefix=expert}}
-    </div>
-  </td>
-</tr>
-
+    <td colspan="2" class="button">
+      <div {{if !$conf.dPplanningOp.COperation.easy_regime}} class="modeExpert" {{/if}}>
+        {{mb_include module=planningOp template=regimes_alimentaires prefix=expert}}
+      </div>
+    </td>
+  </tr>
 {{/if}}
 
 <tr>
@@ -1273,84 +1272,84 @@ Main.add( function(){
 {{/if}}
 
 <tbody class="modeExpert">
-{{if !$sejour->_id && array_key_exists("dPprescription", $modules)}}
-<tr>
-  <th>{{tr}}CProtocole-protocole_prescription_chir_id{{/tr}}</th>
-  <td colspan="3">
-    <script>
-    Main.add(function(){
-      var form = getForm("editSejour");
-      var url = new Url("dPprescription", "httpreq_vw_select_protocole");
-      var autocompleter = url.autoComplete(form.libelle_protocole, 'protocole_auto_complete', {
-        minChars: 2,
-        dropdown: true,
-        width: "250px",
-        updateElement: function(selectedElement) {
-          var node = $(selectedElement).down('.view');
-          $V(form.libelle_protocole, node.innerHTML.replace("&lt;", "<").replace("&gt;",">"));
-          if (autocompleter.options.afterUpdateElement)
-            autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
-        },
-        callback: function(input, queryString){
-          return (queryString + "&praticien_id=" + $V(form.praticien_id));
-        },
-        valueElement: form.elements._protocole_prescription_chir_id
-      });
-    });
-    </script>
+  {{if !$sejour->_id && array_key_exists("dPprescription", $modules)}}
+    <tr>
+      <th>{{tr}}CProtocole-protocole_prescription_chir_id{{/tr}}</th>
+      <td colspan="3">
+        <script>
+        Main.add(function(){
+          var form = getForm("editSejour");
+          var url = new Url("dPprescription", "httpreq_vw_select_protocole");
+          var autocompleter = url.autoComplete(form.libelle_protocole, 'protocole_auto_complete', {
+            minChars: 2,
+            dropdown: true,
+            width: "250px",
+            updateElement: function(selectedElement) {
+              var node = $(selectedElement).down('.view');
+              $V(form.libelle_protocole, node.innerHTML.replace("&lt;", "<").replace("&gt;",">"));
+              if (autocompleter.options.afterUpdateElement)
+                autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
+            },
+            callback: function(input, queryString){
+              return (queryString + "&praticien_id=" + $V(form.praticien_id));
+            },
+            valueElement: form.elements._protocole_prescription_chir_id
+          });
+        });
+        </script>
 
-    <input type="text" name="libelle_protocole" class="autocomplete str" value=""/>
-    <div style="display:none; width: 150px;" class="autocomplete" id="protocole_auto_complete"></div>
-    <input type="hidden" name="_protocole_prescription_chir_id" />
-  </td>
-</tr>
-{{/if}}
+        <input type="text" name="libelle_protocole" class="autocomplete str" value=""/>
+        <div style="display:none; width: 150px;" class="autocomplete" id="protocole_auto_complete"></div>
+        <input type="hidden" name="_protocole_prescription_chir_id" />
+      </td>
+    </tr>
+  {{/if}}
 </tbody>
 
 
 {{if !$mode_operation}}
-<tr>
-  <td class="button text" colspan="4">
-  {{if $sejour->sejour_id}}
-  {{if !$sejour->sortie_reelle || $can->admin}}
-    <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
-    {{mb_ternary var=annule_text test=$sejour->annule value="Restore" other="Cancel"}}
-    {{mb_ternary var=annule_class test=$sejour->annule value="change" other="cancel"}}
-    <button class="{{$annule_class}}" type="button" onclick="cancelSejour();">
-      {{tr}}{{$annule_text}}{{/tr}}
-    </button>
-    {{if !$conf.dPplanningOp.CSejour.delete_only_admin || $can->admin}}
-      <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$sejour->_view|smarty:nodefaults|JSAttribute}}'});">
-        {{tr}}Delete{{/tr}}
-      </button>
-    {{/if}}
+  <tr>
+    <td class="button text" colspan="4">
+    {{if $sejour->sejour_id}}
+      {{if !$sejour->sortie_reelle || $can->admin}}
+        <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
+        {{mb_ternary var=annule_text test=$sejour->annule value="Restore" other="Cancel"}}
+        {{mb_ternary var=annule_class test=$sejour->annule value="change" other="cancel"}}
+        <button class="{{$annule_class}}" type="button" onclick="cancelSejour();">
+          {{tr}}{{$annule_text}}{{/tr}}
+        </button>
+        {{if !$conf.dPplanningOp.CSejour.delete_only_admin || $can->admin}}
+          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$sejour->_view|smarty:nodefaults|JSAttribute}}'});">
+            {{tr}}Delete{{/tr}}
+          </button>
+        {{/if}}
 
-    <button class="print" type="button" onclick="printFormSejour();">{{tr}}Print{{/tr}}</button>
-  {{else}}
-    <div class="big-info">
-      Les informations sur le séjour ne peuvent plus être modifiées car <strong>le patient est déjà sorti de l'établissement</strong>.
-      Veuillez contacter le <strong>responsable du service d'hospitalisation</strong> pour annuler la sortie ou
-      <strong>un administrateur</strong> si vous devez tout de même modifier certaines informations.
-    </div>
-  {{/if}}
-  {{else}}
-    <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
-  {{/if}}
-  </td>
-</tr>
+        <button class="print" type="button" onclick="printFormSejour();">{{tr}}Print{{/tr}}</button>
+      {{else}}
+        <div class="big-info">
+          Les informations sur le séjour ne peuvent plus être modifiées car <strong>le patient est déjà sorti de l'établissement</strong>.
+          Veuillez contacter le <strong>responsable du service d'hospitalisation</strong> pour annuler la sortie ou
+          <strong>un administrateur</strong> si vous devez tout de même modifier certaines informations.
+        </div>
+      {{/if}}
+    {{else}}
+      <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+    {{/if}}
+    </td>
+  </tr>
 {{/if}}
 </table>
 
 </form>
 
 {{if $mode_operation && $isPrescriptionInstalled}}
-<table style="width:100%" class="form"> 
-  <tr>
-    <td id="prescription_register">
-      <script>
-        PrescriptionEditor.register('{{$sejour->_id}}','{{$sejour->_class}}','dhe','{{$sejour->praticien_id}}');
-      </script>
-    </td>
-  </tr>  
-</table>
+  <table style="width:100%" class="form">
+    <tr>
+      <td id="prescription_register">
+        <script>
+          PrescriptionEditor.register('{{$sejour->_id}}','{{$sejour->_class}}','dhe','{{$sejour->praticien_id}}');
+        </script>
+      </td>
+    </tr>
+  </table>
 {{/if}}
