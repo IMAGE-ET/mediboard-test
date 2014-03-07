@@ -85,6 +85,9 @@ if ($sejour_id && !$operation_id) {
 $op = new COperation();
 $op->load($operation_id);
 if ($op->_id) {
+  if (CAppUI::conf("dPplanningOp COperation use_session_praticien")) {
+    CValue::setSession("chir_id", $op->chir_id);
+  }
 
   // On vérifie que l'utilisateur a les droits sur l'intervention
   if (!$op->canDo()->read) {
