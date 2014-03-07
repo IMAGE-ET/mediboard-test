@@ -84,8 +84,11 @@ if ($sejour_id && !$operation_id) {
 // On récupère l'opération
 $op = new COperation();
 $op->load($operation_id);
-if ($op->_id) {
 
+if ($op->_id) {
+  if (CAppUI::conf("dPplanningOp COperation use_session_praticien")) {
+    CValue::setSession("chir_id", $op->chir_id);
+  }
   // On vérifie que l'utilisateur a les droits sur l'intervention
   if (!$op->canDo()->read) {
     global $m, $tab;
@@ -207,7 +210,8 @@ foreach ($blocages_lit as $key => $blocage) {
   if (!$sejour->_id && $affectatione->loadObject($where)) {
     $affectatione->loadRefSejour();
     $affectatione->_ref_sejour->loadRefPatient();
-    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".CMbDT::transform($affectatione->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectatione->_ref_sejour->_ref_patient->_view.")";
+    $jusqua = CMbDT::transform($affectatione->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectatione->_ref_sejour->_ref_patient->_view;
+    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".$jusqua.")";
   }
 }
 
