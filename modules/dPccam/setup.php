@@ -157,5 +157,9 @@ class CSetupdPccam extends CSetup {
     // Tarifs NGAP
     $query = "SHOW TABLES LIKE 'tarif_ngap';";
     $this->addDatasource("ccamV2", $query);
+
+    // Suppression des actes CNP et VNP (codes exacts CNPSY et VNPSY)
+    $query = "SELECT * FROM `tarif_ngap` WHERE `code` = 'CNPSY';";
+    $this->addDatasource("ccamV2", $query);
   }
 }
