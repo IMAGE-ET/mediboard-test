@@ -26,7 +26,7 @@ $object->load($object_id);
 $object->countActes();
 
 $user = CMediusers::get();
-if ($user->isMedical()) {
+if ($user->isMedical() && !$user->isAdmin()) {
   $praticien = $user;
 }
 else {
