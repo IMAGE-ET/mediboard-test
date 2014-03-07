@@ -3,8 +3,8 @@
 Medecin = {
   form: null,
   sFormName: "editSejour",
-  edit : function() {
-    this.form = getForm(this.sFormName);
+  edit : function(form) {
+    this.form = form;
     var url = new Url("patients", "vw_correspondants");
     url.addParam("dialog","1");
     url.requestModal("1000", "760");
@@ -14,6 +14,22 @@ Medecin = {
     $('_adresse_par_prat').show().update('Autres : '+view);
     $V(this.form.adresse_par_prat_id, id);
     $V(this.form._correspondants_medicaux, '', false);
+  },
+
+  del: function(form) {
+    if (confirm("Voulez vous vraiment supprimer ce médecin du dossier patient ?")) {
+      if (form._view) {$V(form._view, '');}
+      if (form.medecin_traitant) {
+        if ($V(form.medecin_traitant)) {
+          Control.Tabs.setTabCount("medecins", "-1");
+          $V(form.medecin_traitant, '');
+        }
+      }
+      else {
+        Control.Tabs.setTabCount("medecins", "-1");
+        $V(form.del, 1);
+      }
+    }
   },
   
   modify : function(medecin_id) {

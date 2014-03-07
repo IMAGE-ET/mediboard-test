@@ -1,84 +1,60 @@
 {{* $Id$ *}}
 
-<script type="text/javascript">
-Medecin = {
-  form: null,
-  edit : function(form) {
-    this.form = form;
-    var url = new Url("dPpatients", "vw_correspondants");
-    url.addParam("dialog","1");
-    url.requestModal("800","600");
-  },
-  
-  del: function(form) {
-    if (confirm("Voulez vous vraiment supprimer ce médecin du dossier patient ?")) {
-      $V(form._view, '');
-      if (form.medecin_traitant) {
-        if ($V(form.medecin_traitant)) {
-          Control.Tabs.setTabCount("medecins", "-1");
-          $V(form.medecin_traitant, '');
-        }
-      }
-      else {
-        Control.Tabs.setTabCount("medecins", "-1");
-        $V(form.del, 1);
-      }
-    }
-  },
-  
-  set: function(id, view) {
+{{mb_script module=dPpatients script=medecin ajax=1}}
+
+<script>
+  Medecin.set = function(id, view) {
     $V(this.form.medecin_traitant ? this.form.medecin_traitant : this.form.medecin_id, id);
     $V(this.form._view, view);
-  }
-};
+  };
 
-submitMedecin = function(form) {
-  if (!$V(form.del) && ($V(form.dosql) != "do_patients_aed") && $V(form.medecin_id)) {
-    Control.Tabs.setTabCount("medecins", "+1");
-  }
-	// Update main form for unexisting patient 
-	if (!$V(form.patient_id)) {
-		$V(document.editFrm.medecin_traitant, $V(form.medecin_traitant));
-		return;
-	}
-
-	// Submit for existing patient
-  return onSubmitFormAjax(form, {
-    onComplete: function() {$('{{$widget_id}}').widget.refresh()} 
-  });
-};
-
-updateMedTraitant = function(form) {
-  if ($V(form.medecin_traitant)) {
-    Control.Tabs.setTabCount('medecins', '+1');
-  }  
-  return submitMedecin(form);
-};
-
-Main.add(function () { 
-  var formTraitant = getForm("traitant-edit-{{$patient->_id}}");
-  var urlTraitant = new Url("dPpatients", "httpreq_do_medecins_autocomplete");
-  urlTraitant.autoComplete(formTraitant._view, formTraitant._view.id+'_autocomplete', {
-    minChars: 3,
-    updateElement : function(element) {
-      $V(formTraitant.medecin_traitant, element.id.split('-')[1]);
-      $V(formTraitant._view, element.select(".view")[0].innerHTML.stripTags());
+  submitMedecin = function(form) {
+    if (!$V(form.del) && ($V(form.dosql) != "do_patients_aed") && $V(form.medecin_id)) {
+      Control.Tabs.setTabCount("medecins", "+1");
     }
-  });
-	
-	{{if $patient && $patient->_id}}
-  var formCorresp = getForm("correspondant-new-{{$patient->_id}}");
-  var urlCorresp = new Url("dPpatients", "httpreq_do_medecins_autocomplete");
-  urlCorresp.autoComplete(formCorresp._view, formCorresp._view.id+'_autocomplete', {
-    minChars: 3,
-    updateElement : function(element) {
-      $V(formCorresp.medecin_id, element.id.split('-')[1]);
-      $V(formCorresp._view, element.select(".view")[0].innerHTML.stripTags());
+    // Update main form for unexisting patient
+    if (!$V(form.patient_id)) {
+      $V(document.editFrm.medecin_traitant, $V(form.medecin_traitant));
+      return;
     }
-  });
-	{{/if}}
 
-});
+    // Submit for existing patient
+    return onSubmitFormAjax(form, {
+      onComplete: function() {$('{{$widget_id}}').widget.refresh()}
+    });
+  };
+
+  updateMedTraitant = function(form) {
+    if ($V(form.medecin_traitant)) {
+      Control.Tabs.setTabCount('medecins', '+1');
+    }
+    return submitMedecin(form);
+  };
+
+  Main.add(function () {
+    var formTraitant = getForm("traitant-edit-{{$patient->_id}}");
+    var urlTraitant = new Url("dPpatients", "httpreq_do_medecins_autocomplete");
+    urlTraitant.autoComplete(formTraitant._view, formTraitant._view.id+'_autocomplete', {
+      minChars: 3,
+      updateElement : function(element) {
+        $V(formTraitant.medecin_traitant, element.id.split('-')[1]);
+        $V(formTraitant._view, element.select(".view")[0].innerHTML.stripTags());
+      }
+    });
+
+    {{if $patient && $patient->_id}}
+      var formCorresp = getForm("correspondant-new-{{$patient->_id}}");
+      var urlCorresp = new Url("dPpatients", "httpreq_do_medecins_autocomplete");
+      urlCorresp.autoComplete(formCorresp._view, formCorresp._view.id+'_autocomplete', {
+        minChars: 3,
+        updateElement : function(element) {
+          $V(formCorresp.medecin_id, element.id.split('-')[1]);
+          $V(formCorresp._view, element.select(".view")[0].innerHTML.stripTags());
+        }
+      });
+    {{/if}}
+
+  });
 </script>
 
 <table class="form">

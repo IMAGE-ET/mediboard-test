@@ -21,7 +21,6 @@
     {{else}}
       refreshPageCorrespondant();
     {{/if}}
-
   });
 
   refreshPageMedecin = function(page) {
