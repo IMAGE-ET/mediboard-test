@@ -78,6 +78,10 @@ for ($num = 0; $num <= 1; $num++) {
   foreach ($chambres as $chambre) {
     $chambre->loadRefService();
     $chambre->loadRefsLits();
+    if (!count($chambre->_ref_lits)) {
+      unset($chambres[$chambre->_id]);
+      continue;
+    }
     $chambre->loadRefEmplacement();
     $grille[$nom][$chambre->_ref_emplacement->plan_y][$chambre->_ref_emplacement->plan_x] = $chambre;
     $emplacement = $chambre->_ref_emplacement;
