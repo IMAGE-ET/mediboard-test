@@ -76,7 +76,7 @@
         <th>{{mb_label object=$medecin field=nom}}</th>
         <td>{{mb_field object=$medecin field=nom prop=str onchange="\$V(this.form.start, 0)"}}</td>
         <th>{{mb_label object=$medecin field=cp}}</th>
-        <td>{{mb_field object=$medecin field=cp prop=str placeholder="code postal" onchange="\$V(this.form.start, 0)"}}</td>
+        <td>{{mb_field object=$medecin field=cp prop=str onchange="\$V(this.form.start, 0)"}}</td>
         <th>{{mb_label object=$medecin field=type}}</th>
         <td>{{mb_field object=$medecin field=type emptyLabel="All" onchange="\$V(this.form.start, 0)"}}</td>
       </tr>
@@ -85,7 +85,7 @@
         <th>{{mb_label object=$medecin field=prenom}}</th>
         <td>{{mb_field object=$medecin field=prenom prop=str onchange="\$V(this.form.start, 0)"}}</td>
         <th>{{mb_label object=$medecin field=ville}}</th>
-        <td>{{mb_field object=$medecin field=ville prop=str placeholder=ville onchange="\$V(this.form.start, 0)"}}</td>
+        <td>{{mb_field object=$medecin field=ville prop=str onchange="\$V(this.form.start, 0)"}}</td>
         <th>{{mb_label object=$medecin field=disciplines}}</th>
         <td>{{mb_field object=$medecin field=disciplines prop=str placeholder=discipline onchange="\$V(this.form.start, 0)"}}</td>
       </tr>
@@ -124,7 +124,7 @@
           <th>{{mb_label object=$correspondant field=nom}}</th>
           <td>{{mb_field object=$correspondant field=nom prop=str onchange="\$V(this.form.start, 0)"}}</td>
           <th>{{mb_label object=$correspondant field=cp}}</th>
-          <td>{{mb_field object=$correspondant field=cp prop=str placeholder="code postal" onchange="\$V(this.form.start, 0)"}}</td>
+          <td>{{mb_field object=$correspondant field=cp prop=str onchange="\$V(this.form.start, 0)"}}</td>
           <th>{{mb_label object=$correspondant field=relation}}</th>
           <td>{{mb_field object=$correspondant field=relation emptyLabel="All" onchange="\$V(this.form.start, 0)"}}</td>
         </tr>
@@ -133,7 +133,7 @@
           <th>{{mb_label object=$correspondant field=surnom}}</th>
           <td>{{mb_field object=$correspondant field=surnom prop=str onchange="\$V(this.form.start, 0)"}}</td>
           <th>{{mb_label object=$correspondant field=ville}}</th>
-          <td>{{mb_field object=$correspondant field=ville prop=str placeholder=ville onchange="\$V(this.form.start, 0)"}}</td>
+          <td>{{mb_field object=$correspondant field=ville prop=str onchange="\$V(this.form.start, 0)"}}</td>
           <th></th>
           <td></td>
         </tr>
