@@ -31,4 +31,44 @@
     </td>
   </tr>
 
+
+  <tr>
+    <td>
+      {{tr}}CUserLog{{/tr}}
+    </td>
+    <td>
+      <script type="text/javascript">
+        CUserLog = {
+          sanitize: function(form) {
+            var url = new Url('admin', 'sanitize_userlogs');
+
+            if (form) {
+              url.addNotNullElement(form.purge );
+              url.addNotNullElement(form.offset);
+              url.addNotNullElement(form.step  );
+              url.addElement(form.auto);
+            }
+
+            var modal = Control.Modal.stack.last();
+            if (modal) {
+              url.requestUpdate(modal.container.down('.content'));
+            }
+            else {
+              url.requestModal();
+            }
+
+            return false;
+          },
+
+          auto: function() {
+            if ($('Sanitize_auto').checked) {
+              CUserLog.sanitize(document.Sanitize);
+            }
+          }
+        }
+      </script>
+      <button class="tick" onclick="CUserLog.sanitize()">{{tr}}mod-admin-action-sanitize_logs{{/tr}}</button>
+    </td>
+  </tr>
+
 </table>
