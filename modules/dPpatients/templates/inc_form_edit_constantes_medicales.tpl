@@ -87,8 +87,8 @@ Main.add(function () {
   {{if $show_cat_tabs}}
     Control.Tabs.create("constantes-by-type{{$tri_rpu}}");
   {{/if}}
-  {{if $tri_rpu == '' && !$callback_administration}}
-  ViewPort.SetAvlHeight('constant_form',1);
+  {{if $tri_rpu == ''}}
+    ViewPort.SetAvlHeight('constant_form', 0.98);
   {{/if}}
   ViewPort.SetAvlHeight('graphs', 1);
 });
@@ -256,7 +256,7 @@ Main.add(function () {
       </table>
     </div>
 
-    <div style="{{if $tri_rpu == ''}}position: absolute; bottom:0;{{/if}} text-align:center; height:27%; width: 100%;" id="buttons_form_const{{$tri_rpu}}">
+    <div style="{{if $tri_rpu == ''}}position: absolute; bottom:0;{{/if}} text-align:center; height:20%; width: 100%;" id="buttons_form_const{{$tri_rpu}}">
       {{if $can_edit && !$modif_timeout}}
         {{mb_field object=$constantes field=datetime form="edit-constantes-medicales$tri_rpu" register=true}}
         {{if $constantes->_id}}
