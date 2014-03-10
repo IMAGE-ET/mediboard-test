@@ -47,7 +47,7 @@ class CActeNGAP extends CActe {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["code"]                = "str notNull maxLength|3";
+    $props["code"]                = "str notNull maxLength|5";
     $props["quantite"]            = "num notNull maxLength|2";
     $props["coefficient"]         = "float notNull";
     $props["demi"]                = "enum list|0|1 default|0";
