@@ -99,7 +99,8 @@ function changeUser(user_id) {
         </label>
       </td>
     </tr>
-    
+
+    {{if $access_function}}
     <tr>
       <th><label title="{{tr}}CAideSaisie-function_id-desc{{/tr}}" for="function_id">{{tr}}CAideSaisie._owner.func{{/tr}}</label></th>
       <td>
@@ -112,7 +113,9 @@ function changeUser(user_id) {
         </label>
       </td>
     </tr>
-    
+    {{/if}}
+
+    {{if $access_group}}
     <tr>
       <th><label title="{{tr}}CAideSaisie-group_id-desc{{/tr}}" for="group_id">{{tr}}CAideSaisie-group_id{{/tr}}</label></th>
       <td>
@@ -125,6 +128,7 @@ function changeUser(user_id) {
         </label>
       </td>
     </tr>
+    {{/if}}
 
     <tr>
       <th>{{mb_label object=$aide field="class"}}</th>

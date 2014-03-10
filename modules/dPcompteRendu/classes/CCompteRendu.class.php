@@ -634,7 +634,7 @@ class CCompteRendu extends CDocumentItem {
    *
    * @param integer $id           Identifiant du propriétaire
    * @param string  $owner        Type de propriétaire du modèle: prat, func ou etab
-   * @param string  $object_class string  Nom de la classe d'objet, optionnel. Doit être un CMbObject
+   * @param string  $object_class Nom de la classe d'objet, optionnel. Doit être un CMbObject
    * @param string  $type         Type de composant, optionnel
    * @param bool    $fast_edit    Inclue les modèles en édition rapide
    * @param string  $order        Ordre de tri de la liste
@@ -642,11 +642,19 @@ class CCompteRendu extends CDocumentItem {
    * @return CCompteRendu[][] Par propriétaire: prat => CCompteRendu[], func => CCompteRendu[], etab => CCompteRendu[]
    */
   static function loadAllModelesFor($id, $owner = 'prat', $object_class = null, $type = null, $fast_edit = true, $order = "") {
-    $modeles = array(
-      "prat" => array(),
-      "func" => array(),
-      "etab" => array(),
-    );
+    // Accès aux modèles de la fonction et de l'établissement
+    $module = CModule::getActive("dPcompteRendu");
+    $is_admin = $module && $module->canAdmin();
+    $access_function = $is_admin || CAppUI::conf("compteRendu CCompteRendu access_function");
+    $access_group    = $is_admin || CAppUI::conf("compteRendu CCompteRendu access_group");
+    $modeles = array();
+    $modeles["prat"] = array();
+    if ($access_function) {
+      $modeles["func"] = array();
+    }
+    if ($access_group) {
+      $modeles["etab"] = array();
+    }
 
     if (!$id) {
       return $modeles;
@@ -660,16 +668,13 @@ class CCompteRendu extends CDocumentItem {
     if ($object_class) {  
       $where["object_class"] = "= '$object_class'";
     }
-
     if ($type) {
       $where["type"] = "= '$type'";
     }
-
     if (!$fast_edit) {
       $where["fast_edit"]     = " = '0'";
       $where["fast_edit_pdf"] = " = '0'";
     }
-
     if (!$order) {
       $order = "object_class, type, nom";
     }
@@ -688,45 +693,49 @@ class CCompteRendu extends CDocumentItem {
         $modeles["prat"] = $modele->loadListWithPerms(PERM_READ, $where, $order);
 
       case 'func': // Modèle de la fonction
-        if (isset($prat)) {
-          $func_id = $prat->function_id;
-        }
-        else {
-          $func = new CFunctions();
-          if (!$func->load($id)) {
-            return $modeles;
+        if (isset($modeles["func"])) {
+          if (isset($prat)) {
+            $func_id = $prat->function_id;
           }
-          $func_id = $func->_id;
-        }
+          else {
+            $func = new CFunctions();
+            if (!$func->load($id)) {
+              return $modeles;
+            }
+            $func_id = $func->_id;
+          }
 
-        $where["user_id"]     = "IS NULL";
-        $where["function_id"] = "= '$func_id'";
-        $where["group_id"]    = "IS NULL";
-        $modeles["func"] = $modele->loadListWithPerms(PERM_READ, $where, $order);
+          $where["user_id"]     = "IS NULL";
+          $where["function_id"] = "= '$func_id'";
+          $where["group_id"]    = "IS NULL";
+          $modeles["func"] = $modele->loadListWithPerms(PERM_READ, $where, $order);
+        }
 
       case 'etab': // Modèle de l'établissement
-        $etab_id = CGroups::loadCurrent()->_id;
-        if ($owner == 'etab') {
-          $etab = new CGroups();
-          if (!$etab->load($id)) {
-            return $modeles;
+        if (isset($modeles["etab"])) {
+          $etab_id = CGroups::loadCurrent()->_id;
+          if ($owner == 'etab') {
+            $etab = new CGroups();
+            if (!$etab->load($id)) {
+              return $modeles;
+            }
+            $etab_id = $etab->_id;
           }
-          $etab_id = $etab->_id;
-        }
-        elseif (isset($func)) {
-          $etab_id = $func->group_id;
-        }
-        elseif (isset($func_id)) {
-          $func = new CFunctions();
-          $func->load($func_id);
+          elseif (isset($func)) {
+            $etab_id = $func->group_id;
+          }
+          elseif (isset($func_id)) {
+            $func = new CFunctions();
+            $func->load($func_id);
 
-          $etab_id = $func->group_id;
-        }
+            $etab_id = $func->group_id;
+          }
 
-        $where["user_id"]     = "IS NULL";
-        $where["function_id"] = "IS NULL";
-        $where["group_id"]    = " = '$etab_id'";
-        $modeles["etab"] = $modele->loadListWithPerms(PERM_READ, $where, $order);
+          $where["user_id"]     = "IS NULL";
+          $where["function_id"] = "IS NULL";
+          $where["group_id"]    = " = '$etab_id'";
+          $modeles["etab"] = $modele->loadListWithPerms(PERM_READ, $where, $order);
+        }
         break;
 
       default: 

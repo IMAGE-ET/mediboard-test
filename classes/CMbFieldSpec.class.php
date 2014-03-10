@@ -208,7 +208,7 @@ class CMbFieldSpec {
    * 
    * @param object $object Object holding the field value
    * 
-   * @return unknown_type
+   * @return string Error-like message
    */
   function checkParams($object){
     $fieldName = $this->fieldName;
@@ -314,6 +314,7 @@ class CMbFieldSpec {
     if ($this->pattern && !preg_match('/^(?:'.$this->pattern.')$/', $propValue)) {
       return 'Ne correspond pas au format attendu';
     }
+    return null;
   }
 
   /**
@@ -514,6 +515,7 @@ class CMbFieldSpec {
       CModelObject::warning("Element-cible-field%s-invalide-ou-inexistant-dans-la-classe%s", $field, $class);
       return "Erreur système";
     }
+    return null;
   }
 
   /**
@@ -532,12 +534,13 @@ class CMbFieldSpec {
     }
 
     if ($propValue === null || $propValue === "") {
-      return;
+      return null;
     }
 
     if ($msg = $this->checkProperty($object)) {
       return $msg;
     }
+    return null;
   }
 
   /**
@@ -586,11 +589,11 @@ class CMbFieldSpec {
    */
   static function checkLengthValue($length){
     if (!$length = CMbFieldSpec::checkNumeric($length)) {
-      return;
+      return null;
     }
     
     if ($length < 1 || $length > 255) {
-      return;
+      return null;
     }
     
     return $length;
@@ -894,6 +897,13 @@ class CMbFieldSpec {
     if ($form && $this->helped) {
       $params_aidesaisie = array();
       $params_aidesaisie[] = "objectClass: '".get_class($object) . "'";
+      if (!CAppUI::conf("compteRendu CAideSaisie access_group")) {
+        $params_aidesaisie[] = "show_group: false";
+      }
+      if (!CAppUI::conf("compteRendu CAideSaisie access_function")) {
+        $params_aidesaisie[] = "show_function: false";
+      }
+
       $depend_fields = $object->_specs[$field]->helped;
       
       if (!isset($params["dependField1"])) {

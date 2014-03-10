@@ -87,13 +87,25 @@ $user->loadRefFunction();
 
 $group = $user->_ref_function->loadRefGroup();
 
+// Accès aux aides à la saisie de la fonction et de l'établissement
+$module = CModule::getActive("dPcompteRendu");
+$is_admin = $module && $module->canAdmin();
+$access_function = $is_admin || CAppUI::conf("compteRendu CAideSaisie access_function");
+$access_group    = $is_admin || CAppUI::conf("compteRendu CAideSaisie access_group");
+
 $aidebis = new CAideSaisie();
-$where[] = "`class` = '".$class."' AND
+$whereClause = "`class` = '".$class."' AND
 `field` = '".$field."' AND (
-  user_id     = " . $user_id . " OR 
-  function_id = " . $user->function_id . " OR 
-  group_id    = " . $group->_id . "
-)";
+  user_id     = " . $user_id;
+if ($access_function) {
+  $whereClause .= " OR function_id = " . $user->function_id;
+}
+if ($access_group) {
+  $whereClause .= " OR group_id    = " . $group->_id;
+}
+$whereClause .= ")";
+
+$where[] = $whereClause;
 
 $orderby = "name";
 $aides = $aidebis->loadList($where, $orderby);
@@ -101,7 +113,18 @@ $aides = $aidebis->loadList($where, $orderby);
 $aide = new CAideSaisie();
 $aide->load($aide_id);
 
-if (!$aide->_id) {
+if ($aide->_id) {
+  if ($aide->function_id && !$access_function) {
+    CAppUI::redirect("m=system&a=access_denied");
+  }
+  if ($aide->group_id && !$access_group) {
+    CAppUI::redirect("m=system&a=access_denied");
+  }
+  $aide->loadRefUser();
+  $aide->loadRefFunction();
+  $aide->loadRefGroup();
+}
+else {
   // Nouvelle Aide à la saisie
   $aide->class        = $class;
   $aide->field        = $field;
@@ -140,19 +163,21 @@ $fields = array(
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("aide"         , $aide);
-$smarty->assign("aide_id"      , $aide_id);
-$smarty->assign("dependValues" , $dependValues);
-$smarty->assign("listFunc"     , $listFunc);
-$smarty->assign("listPrat"     , $listPrat);
-$smarty->assign("listEtab"     , $listEtab);
-$smarty->assign("aides"        , $aides);
-$smarty->assign("user"         , $user);
-$smarty->assign("group"        , $group);
-$smarty->assign("choicepratcab", $choicepratcab);
-$smarty->assign("fields"       , $fields);
-$smarty->assign("depend_value_1", $depend_value_1);
-$smarty->assign("depend_value_2", $depend_value_2);
+$smarty->assign("aide"                , $aide);
+$smarty->assign("aide_id"             , $aide_id);
+$smarty->assign("dependValues"        , $dependValues);
+$smarty->assign("listFunc"            , $listFunc);
+$smarty->assign("listPrat"            , $listPrat);
+$smarty->assign("listEtab"            , $listEtab);
+$smarty->assign("aides"               , $aides);
+$smarty->assign("user"                , $user);
+$smarty->assign("group"               , $group);
+$smarty->assign("access_function"     , $access_function);
+$smarty->assign("access_group"        , $access_group);
+$smarty->assign("choicepratcab"       , $choicepratcab);
+$smarty->assign("fields"              , $fields);
+$smarty->assign("depend_value_1"      , $depend_value_1);
+$smarty->assign("depend_value_2"      , $depend_value_2);
 $smarty->assign("class_depend_value_1", $class_depend_value_1);
 $smarty->assign("class_depend_value_2", $class_depend_value_2);
 

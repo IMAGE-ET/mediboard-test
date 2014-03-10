@@ -34,20 +34,37 @@ $groups = array(CGroups::loadCurrent());
 // Chargement du pack
 $pack = new CPack;
 $pack->load($pack_id);
-$pack->loadRefsNotes();
-$pack->loadRefOwner();
-$pack->loadBackRefs("modele_links", "modele_to_pack_id");
-if (!$pack->_id) {
+
+// Accès aux packs de modèle de la fonction et de l'établissement
+$module = CModule::getActive("dPcompteRendu");
+$is_admin = $module && $module->canAdmin();
+$access_function = $is_admin || CAppUI::conf("compteRendu CCompteRendu access_function");
+$access_group    = $is_admin || CAppUI::conf("compteRendu CCompteRendu access_group");
+
+if ($pack->_id) {
+  if ($pack->function_id && !$access_function) {
+    CAppUI::redirect("m=system&a=access_denied");
+  }
+  if ($pack->group_id && !$access_group) {
+    CAppUI::redirect("m=system&a=access_denied");
+  }
+  $pack->loadRefsNotes();
+  $pack->loadRefOwner();
+  $pack->loadBackRefs("modele_links", "modele_to_pack_id");
+}
+else {
   $pack->user_id = $user->_id;
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("pack"     , $pack);
-$smarty->assign("user_id"  , $user_id);
-$smarty->assign("users"    , $users);
-$smarty->assign("functions", $functions);
-$smarty->assign("groups"   , $groups);
+$smarty->assign("pack"            , $pack);
+$smarty->assign("user_id"         , $user_id);
+$smarty->assign("users"           , $users);
+$smarty->assign("functions"       , $functions);
+$smarty->assign("groups"          , $groups);
+$smarty->assign("access_function" , $access_function);
+$smarty->assign("access_group"    , $access_group);
 
 $smarty->display("inc_edit_pack.tpl"); 

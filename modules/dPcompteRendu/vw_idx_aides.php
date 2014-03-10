@@ -77,8 +77,22 @@ $listEtab = CGroups::loadGroups(PERM_EDIT);
 $aide = new CAideSaisie();
 $aide->load($aide_id);
 
+// Accès aux aides à la saisie de la fonction et de l'établissement
+$module = CModule::getActive("dPcompteRendu");
+$is_admin = $module && $module->canAdmin();
+$access_function = $is_admin || CAppUI::conf("compteRendu CAideSaisie access_function");
+$access_group    = $is_admin || CAppUI::conf("compteRendu CAideSaisie access_group");
+
 if ($aide->_id) {
-  $aide->loadRefs();
+  if ($aide->function_id && !$access_function) {
+    CAppUI::redirect("m=system&a=access_denied");
+  }
+  if ($aide->group_id && !$access_group) {
+    CAppUI::redirect("m=system&a=access_denied");
+  }
+  $aide->loadRefUser();
+  $aide->loadRefFunction();
+  $aide->loadRefGroup();
 }
 else {
   $aide->user_id = $userSel->user_id;
@@ -91,6 +105,8 @@ $smarty->assign("userSel"         , $userSel);
 $smarty->assign("listPrat"        , $listPrat);
 $smarty->assign("listFunc"        , $listFunc);
 $smarty->assign("listEtab"        , $listEtab);
+$smarty->assign("access_function" , $access_function);
+$smarty->assign("access_group"    , $access_group);
 $smarty->assign("classes"         , $classes);
 $smarty->assign("aide"            , $aide);
 $smarty->assign("start"           , $start);

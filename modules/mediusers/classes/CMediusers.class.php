@@ -672,6 +672,8 @@ class CMediusers extends CPerson {
   }
 
   /**
+   * Tableau comprenant l'utilisateur et son organigramme
+   *
    * @return CMbObject[]
    */
   function getOwners() {

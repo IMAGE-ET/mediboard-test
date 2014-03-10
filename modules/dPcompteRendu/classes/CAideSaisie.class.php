@@ -210,9 +210,9 @@ class CAideSaisie extends CMbObject {
    * @see parent::loadRefsFwd()
    */
   function loadRefsFwd() {
-    $this->loadRefUser(true);
-    $this->loadRefFunction(true);
-    $this->loadRefGroup(true);
+    $this->loadRefUser();
+    $this->loadRefFunction();
+    $this->loadRefGroup();
   }
 
   /**

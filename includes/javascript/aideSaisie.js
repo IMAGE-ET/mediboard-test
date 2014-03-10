@@ -30,6 +30,8 @@ var AideSaisie = {
         filterWithDependFields: true,
         defaultUserId: null,
         defaultUserView: null,
+        show_group: true,
+        show_function: true,
         updateDF: true,
         property: '',
         strict: true,
@@ -130,8 +132,14 @@ var AideSaisie = {
           buttons.down   = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/down.png", title: "Voir tous les choix"})),
           buttons.create = DOM.a({href: "#1"},
             DOM.span({style: "display: none;", className: "sub-toolbar"},
-              buttons.newGroup    = DOM.img({style: "", src: "images/icons/group.png"        , title: "Nouvelle aide pour "+User["group"].view}), DOM.br({}),
-              buttons.newFunction = DOM.img({style: "", src: "images/icons/user-function.png", title: "Nouvelle aide pour "+User["function"].view}), DOM.br({}),
+              !options.show_group ? null : DOM.span ({},
+                buttons.newGroup    = DOM.img({style: "", src: "images/icons/group.png"        , title: "Nouvelle aide pour "+User["group"].view}),
+                DOM.br({})
+              ),
+              !options.show_function ? null : DOM.span ({},
+                buttons.newFunction = DOM.img({style: "", src: "images/icons/user-function.png", title: "Nouvelle aide pour "+User["function"].view}),
+                DOM.br({})
+              ),
               buttons.newUser     = DOM.img({style: "", src: "images/icons/user.png"         , title: "Nouvelle aide pour "+User.view})
             ),
             buttons.createIcon = DOM.img({src: "images/icons/new.png", title: "Nouvelle aide"})
@@ -301,8 +309,12 @@ var AideSaisie = {
       }.bind(this);
       
       buttons.newUser    .observe('click', createQuick.curry("user_id", User.id));
-      buttons.newFunction.observe('click', createQuick.curry("function_id", User["function"].id));
-      buttons.newGroup   .observe('click', createQuick.curry("group_id", User["group"].id));
+      if(options.show_function) {
+        buttons.newFunction.observe('click', createQuick.curry("function_id", User["function"].id));
+      }
+      if(options.show_group) {
+        buttons.newGroup   .observe('click', createQuick.curry("group_id", User["group"].id));
+      }
       
       // Toolbar buttons actions
       if (!this.isContextOwner) {

@@ -42,6 +42,22 @@ if (!$prat_id) {
 // Compte-rendu selectionné
 $compte_rendu = new CCompteRendu();
 $compte_rendu->load($compte_rendu_id);
+
+// Accès aux modèles de la fonction et de l'établissement
+$module = CModule::getActive("dPcompteRendu");
+$is_admin = $module && $module->canAdmin();
+$access_function = $is_admin || CAppUI::conf("compteRendu CCompteRendu access_function");
+$access_group    = $is_admin || CAppUI::conf("compteRendu CCompteRendu access_group");
+
+if ($compte_rendu->_id) {
+  if ($compte_rendu->function_id && !$access_function) {
+    CAppUI::redirect("m=system&a=access_denied");
+  }
+  if ($compte_rendu->group_id && !$access_group) {
+    CAppUI::redirect("m=system&a=access_denied");
+  }
+}
+
 $compte_rendu->loadContent();
 $compte_rendu->loadRefsNotes();
 
@@ -173,6 +189,8 @@ $smarty->assign("prat_id"             , $prat_id);
 $smarty->assign("listPrat"            , $listUser);
 $smarty->assign("listEtab"            , $listEtab);
 $smarty->assign("listFunc"            , $listFunc);
+$smarty->assign("access_function"     , $access_function);
+$smarty->assign("access_group"        , $access_group);
 $smarty->assign("listObjectClass"     , $listObjectClass);
 $smarty->assign("compte_rendu"        , $compte_rendu);
 $smarty->assign("listObjectAffichage" , $listObjectAffichage);

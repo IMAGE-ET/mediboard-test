@@ -21,7 +21,8 @@
       </select>
     </td>
   </tr>
-  
+
+  {{if $access_function}}
   <tr>
     <th>{{mb_label object=$pack field=function_id}}</th>
     <td>
@@ -31,7 +32,9 @@
       </select>
     </td>
   </tr>
+  {{/if}}
 
+  {{if $access_group}}
   <tr>
     <th>{{mb_label object=$pack field=group_id}}</th>
     <td>
@@ -45,6 +48,7 @@
       </select>
     </td>
   </tr>
+  {{/if}}
   
   <tr>
     <th>{{mb_label object=$pack field=nom}}</th>

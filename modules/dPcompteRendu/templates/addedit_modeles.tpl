@@ -298,7 +298,8 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
           {{/if}}
           </td>
         </tr>
-        
+
+        {{if $access_group}}
         <tr>
           <th>{{mb_label object=$compte_rendu field="group_id"}}</th>
           <td>
@@ -315,7 +316,9 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
             </select>
           </td>
         </tr>
+        {{/if}}
 
+        {{if $access_function}}
         <tr>
           <th>{{mb_label object=$compte_rendu field="function_id"}}</th>
           <td>
@@ -336,6 +339,7 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
             </select>
           </td>
         </tr>
+        {{/if}}
                 
         <tr>
           <th>{{mb_label object=$compte_rendu field="user_id"}}</th>

@@ -194,14 +194,18 @@ class CPack extends CMbObject {
    * @return array
    */
   static function loadAllPacksFor($id, $owner = 'user', $object_class = null) {
-    $packs = array(
-      "prat" => array(), // warning: it's not prat like in CCompteRendu
-      "func" => array(),
-      "etab" => array(),
-    );
-    
-    if (!$id) {
-      return $packs;
+    // Accès aux packs de modèles de la fonction et de l'établissement
+    $module = CModule::getActive("dPcompteRendu");
+    $is_admin = $module && $module->canAdmin();
+    $access_function = $is_admin || CAppUI::conf("compteRendu CCompteRendu access_function");
+    $access_group    = $is_admin || CAppUI::conf("compteRendu CCompteRendu access_group");
+    $packs = array();
+    $packs["prat"] = array();
+    if ($access_function) {
+      $packs["func"] = array();
+    }
+    if ($access_group) {
+      $packs["etab"] = array();
     }
 
     // Clauses de recherche
@@ -228,46 +232,54 @@ class CPack extends CMbObject {
         $packs["prat"] = $pack->loadlist($where, $order);
         
       case 'func': // Modèle de la fonction
-        if (isset($user)) {
-          $func_id = $user->function_id;
-        }
-        else {
-          $func = new CFunctions();
-          if (!$func->load($id)) {
-            return $packs;
+        if (isset($packs["func"])) {
+          if (isset($user)) {
+            $func_id = $user->function_id;
           }
-          
-          $func_id = $func->_id;
+          else {
+            $func = new CFunctions();
+            if (!$func->load($id)) {
+              return $packs;
+            }
+
+            $func_id = $func->_id;
+          }
+
+          $where["user_id"]     = "IS NULL";
+          $where["function_id"] = "= '$func_id'";
+          $where["group_id"]    = "IS NULL";
+          $packs["func"] = $pack->loadlist($where, $order);
         }
-        
-        $where["user_id"]     = "IS NULL";
-        $where["function_id"] = "= '$func_id'";
-        $where["group_id"]    = "IS NULL";
-        $packs["func"] = $pack->loadlist($where, $order);
         
       case 'etab': // Modèle de l'établissement
-        $etab_id = CGroups::loadCurrent()->_id;
-        if ($owner == 'etab') {
-          $etab = new CGroups();
-          if (!$etab->load($id)) {
-            return $packs;
+        if (isset($packs["etab"])) {
+          $etab_id = CGroups::loadCurrent()->_id;
+          if ($owner == 'etab') {
+            $etab = new CGroups();
+            if (!$etab->load($id)) {
+              return $packs;
+            }
+            $etab_id = $etab->_id;
           }
-          $etab_id = $etab->_id;
+          else if (isset($func)) {
+            $etab_id = $func->group_id;
+          }
+          else if (isset($func_id)) {
+            $func = new CFunctions();
+            $func->load($func_id);
+
+            $etab_id = $func->group_id;
+          }
+
+          $where["user_id"]     = "IS NULL";
+          $where["function_id"] = "IS NULL";
+          $where["group_id"]    = " = '$etab_id'";
+          $packs["etab"] = $pack->loadlist($where, $order);
         }
-        else if (isset($func)) {
-          $etab_id = $func->group_id;
-        }
-        else if (isset($func_id)) {
-          $func = new CFunctions();
-          $func->load($func_id);
-          
-          $etab_id = $func->group_id;
-        }
-        
-        $where["user_id"]     = "IS NULL";
-        $where["function_id"] = "IS NULL";
-        $where["group_id"]    = " = '$etab_id'";
-        $packs["etab"] = $pack->loadlist($where, $order);
+        break;
+
+      default:
+        trigger_error("Wrong type '$owner'", E_WARNING);
     }
     
     return $packs;

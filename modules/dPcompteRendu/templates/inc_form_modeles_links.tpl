@@ -1,4 +1,4 @@
-{{if ($modeles.prat|@count + $modeles.func|@count + $modeles.etab|@count == 0)}}
+{{if $nb_modeles == 0}}
   <div class="small-info">Aucun modèle disponible</div>
   {{mb_return}}
 {{/if}}
@@ -21,6 +21,7 @@
               {{/foreach}}
             </optgroup>
           {{/if}}
+          {{if $access_function}}
           {{if $modeles.func|@count}}
             <optgroup label="{{tr}}CCompteRendu-owned-by-function{{/tr}}">
               {{foreach from=$modeles.func item=_modele}}
@@ -28,12 +29,15 @@
               {{/foreach}}
             </optgroup>
           {{/if}}
+          {{/if}}
+          {{if $access_group}}
           {{if $modeles.etab|@count}}
             <optgroup label="{{tr}}CCompteRendu-owned-by-etablissment{{/tr}}">
               {{foreach from=$modeles.etab item=_modele}}
               <option value="{{$_modele->_id}}">{{$_modele->nom}}</option>
               {{/foreach}}
             </optgroup>
+          {{/if}}
           {{/if}}
         </select>        
       </td>

@@ -39,6 +39,16 @@ $dPconfig["dPcompteRendu"] = array (
       "Times New Roman/Times New Roman, Times, serif;".
       "Trebuchet MS/Trebuchet MS, Helvetica, sans-serif;".
       "Verdana/Verdana, Geneva, sans-serif;".
-      "ZapfDingBats/ZapfDingBats;"
+      "ZapfDingBats/ZapfDingBats;",
+    "access_group" => "1",
+    "access_function" => "1",
+  ),
+  "CAideSaisie" => array(
+    "access_group" => "1",
+    "access_function" => "1",
+  ),
+  "CListeChoix" => array(
+    "access_group" => "1",
+    "access_function" => "1",
   ),
 );

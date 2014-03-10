@@ -181,10 +181,23 @@ class CListeChoix extends CMbObject {
    */
   static function loadAllFor($user_id) {
     $user = CMediusers::get($user_id);
-
+    // Accès aux listes de choix de la fonction et de l'établissement
+    $module = CModule::getActive("dPcompteRendu");
+    $is_admin = $module && $module->canAdmin();
+    $access_function = $is_admin || CAppUI::conf("compteRendu CListeChoix access_function");
+    $access_group    = $is_admin || CAppUI::conf("compteRendu CListeChoix access_group");
     $listes = array();
+    $listes["prat"] = array();
+    if ($access_function) {
+      $listes["func"] = array();
+    }
+    if ($access_group) {
+      $listes["etab"] = array();
+    }
     foreach ($user->getOwners() as $type => $owner) {
-      $listes[$type] = $owner->loadBackRefs("listes_choix", "nom");
+     if (isset($listes[$type])) {
+        $listes[$type] = $owner->loadBackRefs("listes_choix", "nom");
+     }
     }
     return $listes;
   }
