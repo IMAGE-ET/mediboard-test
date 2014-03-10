@@ -28,7 +28,7 @@ function TraiterDrop(element, zoneDrop) {
     }
     else{
       element.style.width = "92%";
-      ChoiceLit.submitRPU(zoneDrop.get("lit-id"));
+      ChoiceLit.submitRPU(zoneDrop.get("lit-id"), zoneDrop.get("service-id"));
     }
   }  
 }
@@ -48,11 +48,12 @@ ChoiceLit  = {
     return ChoiceLit.modal.close();
   },
 
-  submitRPU: function(lit_id) {
+  submitRPU: function(lit_id, service_id) {
     zone_select.appendChild(element_select);
     var guid = element_select.get("rpu-guid");
     var form = getForm(guid);
-    form.box_id.value = lit_id;
+    form.box_id.value      = lit_id;
+    form._service_id.value = service_id;
     return onSubmitFormAjax(form);
   }
 };

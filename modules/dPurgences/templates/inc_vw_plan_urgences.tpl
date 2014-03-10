@@ -6,7 +6,7 @@
         {{if $_zone!="0"}}
             <td data-lit-id="{{foreach from=$_zone->_ref_lits item=i name=foo}}{{if $smarty.foreach.foo.first}}{{$i->_id}} {{/if}}{{/foreach}}"
             data-nb-lits="{{$_zone->_ref_lits|@count}}"  rowspan="{{$_zone->_ref_emplacement->hauteur}}" colspan="{{$_zone->_ref_emplacement->largeur}}"  class="chambre"
-            data-chambre-id="{{$_zone->chambre_id}}"  style="background-color:#{{$_zone->_ref_emplacement->color}};" >
+            data-chambre-id="{{$_zone->chambre_id}}" data-service-id="{{$_zone->service_id}}" style="background-color:#{{$_zone->_ref_emplacement->color}};" >
             <small class="shadow" style="background-color:#{{$_zone->_ref_emplacement->color}};">{{$_zone}}</small>
             {{assign var=chambre   value=$_zone->chambre_id}}
             {{if isset($listSejours.$name_grille.$chambre|smarty:nodefaults)}}
