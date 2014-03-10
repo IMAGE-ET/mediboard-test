@@ -17,9 +17,6 @@
   {{/if}}
   
   {{if $total > $step}}
-
-
-      <a href="#1" {{if $current >= $step}}onclick="{{$change_page}}(0); return false;"{{/if}} class="page{{if $current < $step}} disabled{{/if}}" title="{{tr}}FirstPage{{/tr}} (de 0 à {{$step}})">&lt;&lt;</a>
       <a href="#1" {{if $current >= $step}}onclick="{{$change_page}}({{$current-$step}}); return false;"{{/if}} class="page{{if $current < $step}} disabled{{/if}}" title="{{tr}}PreviousPage{{/tr}} (de {{$current-$step}} à {{$current}})">&lt;</a>
 
     {{if $pagination|count > 12}}
@@ -60,11 +57,6 @@
 
     {{math assign=rest equation="a%b" a=$total b=$step}}
       <a href="#1" {{if $current < $last_page*$step}}onclick="{{$change_page}}({{$current+$step}}); return false;"{{/if}} class="page{{if $current >= $last_page*$step}} disabled{{/if}}" title="{{tr}}NextPage{{/tr}} (de {{$current+$step}} à {{$current+$step+$step}})">&gt;</a>
-      {{if $rest != 0}}
-        <a href="#1" {{if $current < $last_page*$step}}onclick="{{$change_page}}({{$total-$rest}}); return false;"{{/if}} class="page{{if $current >= $last_page*$step}} disabled{{/if}}" title="{{tr}}LastPage{{/tr}} (de {{$total-$rest}} à {{$total}})" >&gt;&gt;</a>
-      {{else}}
-        <a href="#1" {{if $current < $last_page*$step}}onclick="{{$change_page}}({{$total-$step}}); return false;"{{/if}} class="page{{if $current >= $last_page*$step}} disabled{{/if}}" title="{{tr}}LastPage{{/tr}} (de {{$total-$step}} à {{$total}})" >&gt;&gt;</a>
-      {{/if}}
 
   {{/if}}
 
