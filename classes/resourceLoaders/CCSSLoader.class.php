@@ -132,7 +132,7 @@ abstract class CCSSLoader extends CHTMLResourceLoader {
           },
           $content
         );
-        // @todo: remove this is function behind is stable
+        // @todo: remove this commented call if function behind is stable
         // $content = preg_replace("/(url\s*\(\s*[\"\']?)/", "$1../$_path/", $content); // relative paths
 
 
