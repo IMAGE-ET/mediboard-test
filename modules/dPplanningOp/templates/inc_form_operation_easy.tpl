@@ -33,7 +33,7 @@
              value="{{if $chir->_id}}{{$chir->_view}}{{/if}}" placeholder="&mdash; Choisir un praticien"/>
       <button type="button" onclick="toggleOtherPrats()" title="{{tr}}Add{{/tr}}"
         class="notext {{if $op->chir_2_id || $op->chir_3_id || $op->chir_4_id}}up{{else}}down{{/if}}"></button>
-      <input name="_limit_search_eaysy_op" class="changePrefListUsers" type="checkbox"
+      <input name="_limit_search_easy_op" class="changePrefListUsers" type="checkbox"
              {{if $app->user_prefs.useEditAutocompleteUsers}}checked{{/if}}
              onchange="changePrefListUsers(this);"
              title="Limiter la recherche des praticiens" />

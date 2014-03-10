@@ -4,6 +4,7 @@
 
 <br />
 <input type="text" name="search_protocole" style="width: 13em;" placeholder="{{tr}}fast-search{{/tr}}" onblur="$V(this, '')"/>
+<input type="checkbox" name="search_all_chir" title="Étendre la recherche à tous les praticiens" />
 <div style="display:none;" id="{{$id_protocole}}"></div>
 
 <script>
@@ -76,12 +77,13 @@
       method: 'get',
       select: 'view',
       dropdown: true,
-      afterUpdateElement: function(field, selected){
+      afterUpdateElement: function(field, selected) {
         ajoutProtocole(selected.get('id'));
         $V(field.form.elements.search_protocole, "")
       },
-      callback: function(input, queryString){
-        return queryString + "&chir_id=" + $V(input.form.chir_id);
+      callback: function(input, queryString) {
+        return queryString +
+          (input.form.search_all_chir.checked ? "" : "&chir_id=" + $V(input.form.chir_id));
       }
     });
   });

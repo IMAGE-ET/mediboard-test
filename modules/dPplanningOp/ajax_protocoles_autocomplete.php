@@ -34,6 +34,12 @@ if ($chir_id) {
   }
   $where[] = "(protocole.chir_id = '$chir->_id' OR protocole.function_id ". CSQLDataSource::prepareIn($functions_ids).")";
 }
+else {
+  $curr_user = CMediusers::get();
+  $use_edit = CAppUI::pref("useEditAutocompleteUsers");
+  $prats = $curr_user->loadPraticiens($use_edit ? PERM_EDIT : PERM_READ);
+  $where["protocole.chir_id"] = CSQLDataSource::prepareIn(CMbArray::pluck($prats, "user_id"));
+}
 
 if ($for_sejour !== null) {
   $where["for_sejour"] = "= '$for_sejour'";
