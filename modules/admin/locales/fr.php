@@ -348,6 +348,7 @@ $locales['mod-admin-tab-report_prefs'] = 'Rapport de préférence';
 $locales['mod-admin-tab-vw_all_perms'] = 'Grille des droits';
 $locales['mod-admin-tab-vw_edit_tokens'] = 'Jetons d\'accès';
 $locales['mod-admin-tab-vw_edit_users'] = 'Utilisateurs';
+$locales['module-admin-court'] = 'Permissions';
 $locales['module-admin-long'] = 'Permissions utilisateurs';
 $locales['module-common-court'] = 'Tous modules';
 $locales['null'] = 'null';
