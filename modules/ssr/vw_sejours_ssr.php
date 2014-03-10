@@ -64,7 +64,7 @@ if (!$show_cancelled_services) {
   $service->group_id = $group->_id;
   $service->cancelled = "1";
   $services = $service->loadMatchingList();
-  $where["sejour.service_id"] = CSQLDataSource::prepareNotIn(array_keys($services));
+  $where[] = " sejour.service_id IS NULL OR sejour.service_id " . CSQLDataSource::prepareNotIn(array_keys($services));
 }
 
 $sejours = CSejour::loadListForDate($date, $where, $order, null, null, $ljoin);

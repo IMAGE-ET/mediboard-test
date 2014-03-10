@@ -294,7 +294,7 @@ class CBilanSSR extends CMbObject {
       $service->group_id = $group->_id;
       $service->cancelled = "1";
       $services = $service->loadMatchingList();
-      $where["service_id"] = CSQLDataSource::prepareNotIn(array_keys($services));
+      $where[] = "sejour.service_id IS NULL OR sejour.service_id " . CSQLDataSource::prepareNotIn(array_keys($services));
     }
 
     $where["type"] = "= 'ssr'";
