@@ -223,7 +223,7 @@ showModalTP = function(dossier_medical_id, sejour_id, prescription_sejour_id) {
         </button>
         {{/if}}
         
-        {{if $sejour->_id && $user->_is_praticien}}
+        {{if $sejour->_id && "dPprescription CPrescription show_plus_ttt"|conf:"CGroups-$g" && $user->_is_praticien}}
           <button class="add notext" type="button" onclick="Traitement.copyTraitement('{{$_line->_id}}')">
             {{tr}}Add{{/tr}}
           </button>
