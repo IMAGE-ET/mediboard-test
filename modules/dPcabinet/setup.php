@@ -2069,6 +2069,12 @@ class CSetupdPcabinet extends CSetup {
           AND functions_mediboard.function_id = users_mediboard.function_id";
     $this->addQuery($query);
 
-    $this->mod_version = "2.26";
+    $this->makeRevision("2.26");
+
+    $query = "ALTER TABLE `acte_ngap`
+                MODIFY `code` VARCHAR(5) NOT NULL;";
+    $this->addQuery($query);
+
+    $this->mod_version = "2.27";
   }
 }
