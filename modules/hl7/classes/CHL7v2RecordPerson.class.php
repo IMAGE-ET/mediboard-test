@@ -27,9 +27,9 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $data = parent::getContentNodes();
     
     $this->queryNodes("NK1", null, $data, true);
-    
+
     $this->queryNodes("ROL", null, $data, true);
-    
+
     $this->queryNodes("OBX", null, $data, true);
 
     return $data;
@@ -506,8 +506,13 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     if (array_key_exists("BDL", $addresses)) {
       $newPatient->lieu_naissance       = CValue::read($addresses["BDL"], "ville");
       $newPatient->cp_naissance         = CValue::read($addresses["BDL"], "cp");
-      $newPatient->pays_naissance_insee = CValue::read($addresses["BDL"], "pays_insee");
-      
+
+      if ($alpha_3 = CValue::read($addresses["BDL"], "pays_insee")) {
+        $pays = CPaysInsee::getPaysByAlpha($alpha_3);
+
+        $newPatient->pays_naissance_insee = $pays->numerique;
+      }
+
       unset($addresses["BDL"]);
     }
     // Adresse
@@ -538,7 +543,9 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $newPatient->ville      = $adress["ville"];
     $newPatient->cp         = $adress["cp"];
     if ($adress["pays_insee"]) {
-      $newPatient->pays_insee = $adress["pays_insee"];
+      $pays = CPaysInsee::getPaysByAlpha($adress["pays_insee"]);
+
+      $newPatient->pays_insee = $pays->numerique;
     }
   }
 
