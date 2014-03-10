@@ -119,8 +119,23 @@ abstract class CCSSLoader extends CHTMLResourceLoader {
           $content = preg_replace("/\@import\s+(?:url\()?[\"']?([^\"\'\)]+)[\"']?\)?;/i", "", $content); // remove @imports
         }
 
-        $content = preg_replace("/(url\s*\(\s*[\"\']?)/", "$1../$_path/", $content); // relative paths
-        
+        // relative paths
+        $content = preg_replace_callback(
+          "/(url\s*\(\s*[\"\']?)(.*\))/",
+          function ($matches) use ($_path) {
+            if (strpos($matches[2], "data:") === false) {
+              return $matches[1]."../$_path/".$matches[2];
+            }
+            else {
+              return $matches[1].$matches[2];
+            }
+          },
+          $content
+        );
+        // @todo: remove this is function behind is stable
+        // $content = preg_replace("/(url\s*\(\s*[\"\']?)/", "$1../$_path/", $content); // relative paths
+
+
         $all .= $content."\n";
       }
         
