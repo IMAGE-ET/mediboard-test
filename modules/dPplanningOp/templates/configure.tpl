@@ -55,10 +55,6 @@
   {{mb_include template=inc_config_actions}}
 </div>
 
-<div id="configure-mining" style="display:none">
-  {{mb_include template=inc_config_mining}}
-</div>
-
 <div id="config-sae-base" style="display: none;">
   {{mb_include template=inc_config_base_sae}}
 </div>

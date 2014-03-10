@@ -1,6 +1,6 @@
 <script>
 Main.add(function() {
-  Datamining.auto.delay(5);
+  Datamining.auto.delay(2);
 });
 </script>
 
