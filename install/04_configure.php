@@ -60,7 +60,7 @@ showHeader();
   };
 
   window.onload = function(){
-    toggleMemoryParams($$('#shared_memory')[0].value);
+    toggleMemoryParams($$('#shared_memory_distributed')[0].value);
     toggleSessionMutex($$('#session_handler')[0].value);
   };
 </script>
@@ -197,15 +197,13 @@ showHeader();
       <tr>
         <th>
           <label for="shared_memory" title="Choisir quelle extension doit gérer la mémoire partagée (celle-ci doit être installée)">
-            Mémoire partagée
+            Mémoire partagée locale
           </label>
         </th>
         <td>
-          <select id="shared_memory" name="shared_memory" onchange="toggleMemoryParams(this.value)">
+          <select id="shared_memory" name="shared_memory">
             <option value="none"      <?php if ($dPconfig['shared_memory'] == 'none'      ) { echo 'selected'; } ?> >Disque</option>
             <option value="apc"       <?php if ($dPconfig['shared_memory'] == 'apc'       ) { echo 'selected'; } ?> >APC</option>
-            <option value="redis"     <?php if ($dPconfig['shared_memory'] == 'redis'     ) { echo 'selected'; } ?> >Redis (Expérimental)</option>
-            <option value="memcached" <?php if ($dPconfig['shared_memory'] == 'memcached' ) { echo 'selected'; } ?> >Memcached (Expérimental)</option>
           </select>
         </td>
         <td>
@@ -215,25 +213,36 @@ showHeader();
         </td>
       </tr>
 
+      <tr>
+        <th>
+          <label for="shared_memory_distributed" title="Choisir quelle extension doit gérer la mémoire partagée distribuée">
+            Mémoire partagée distribuée
+          </label>
+        </th>
+        <td>
+          <select id="shared_memory_distributed" name="shared_memory_distributed" onchange="toggleMemoryParams(this.value)">
+            <option value=""      <?php if ($dPconfig['shared_memory_distributed'] == ''     ) { echo 'selected'; } ?> >
+              Aucune (utilise la mémoire partagée locale)
+            </option>
+            <option value="redis" <?php if ($dPconfig['shared_memory_distributed'] == 'redis') { echo 'selected'; } ?> >
+              Redis
+            </option>
+          </select>
+        </td>
+        <td>
+        </td>
+      </tr>
+
       <tr class="shared-memory-params params-redis">
         <td colspan="3">
           <div class="small-info">
-            Spécifiez les adresses IP+port des serveurs du cluster Memcached, séparés par des virgules.
+            Spécifiez les adresses IP+port des serveurs du cluster Redis, séparés par des virgules.
             Par exemple <em>192.168.1.39:6379, 192.168.1.40:6379</em>
           </div>
         </td>
       </tr>
 
-      <tr class="shared-memory-params params-memcached">
-        <td colspan="3">
-          <div class="small-info">
-            Spécifiez les adresses IP+port des serveurs du cluster Memcached, séparés par des virgules.
-            Par exemple <em>192.168.1.39:11211, 192.168.1.40:11211</em>
-          </div>
-        </td>
-      </tr>
-
-      <tr class="shared-memory-params params-memcached params-redis">
+      <tr class="shared-memory-params params-redis">
         <th>
           <label for="shared_memory_params" title="Paramètres du gestionnaire de mémoire partagée">
             Paramètres
@@ -261,10 +270,12 @@ showHeader();
         </th>
         <td>
           <select id="session_handler" name="session_handler" onchange="toggleSessionMutex(this.value)">
-            <option value="files"    <?php if ($dPconfig['session_handler'] == 'files'   ) { echo 'selected'; } ?> >Fichiers</option>
-            <option value="memcache" <?php if ($dPconfig['session_handler'] == 'memcache') { echo 'selected'; } ?> >Memcache (Obsolète)</option>
-            <option value="mysql"    <?php if ($dPconfig['session_handler'] == 'mysql'   ) { echo 'selected'; } ?> >MySQL (Utile pour les environnements répliqués)</option>
-            <option value="zebra"    <?php if ($dPconfig['session_handler'] == 'zebra'   ) { echo 'selected'; } ?> >Zebra (Obsolète)</option>
+            <option value="files" <?php if ($dPconfig['session_handler'] == 'files') { echo 'selected'; } ?>>
+              Fichiers
+            </option>
+            <option value="mysql"  <?php if ($dPconfig['session_handler'] == 'mysql' || $dPconfig['session_handler'] == 'zebra') { echo 'selected'; } ?>>
+              MySQL (Utile pour les environnements répliqués)
+            </option>
           </select>
         </td>
         <td class="text">

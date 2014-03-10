@@ -101,6 +101,12 @@ function showHeader() {
 </head>
 
 <body class="wizard">
+  <div class="toc" style="left: 20px; font-weight: bold;">
+    <a href="../">
+      <img src="../images/icons/apple-touch-icon.png" style="width: auto; height: 18px;" />
+      Retour à Mediboard
+    </a>
+  </div>
 
 <h1>Installation de Mediboard <?php echo $version["string"]; ?> &mdash; Etape <?php echo $currentStepKey+1; ?>/<?php echo count($steps); ?></h1>
 <?php

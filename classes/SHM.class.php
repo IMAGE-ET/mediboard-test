@@ -21,6 +21,9 @@ abstract class SHM {
   /** @var ISharedMemory */
   static private $engine;
 
+  /** @var ISharedMemory */
+  static private $engineDistributed;
+
   /** @var string */
   static private $prefix;
 
@@ -44,13 +47,14 @@ abstract class SHM {
   static function init() {
     global $dPconfig;
 
-    $engine_name = $dPconfig['shared_memory'];
-
     // Must be the same here and in CApp
     // We don't use CApp because it can be called in /install
     $root_dir = $dPconfig['root_dir'];
     $prefix = preg_replace("/[^\w]+/", "_", $root_dir);
+    self::$prefix = "$prefix-";
 
+    /* ----- Local shared memory ----- */
+    $engine_name = $dPconfig['shared_memory'];
     if (!isset(self::$availableEngines[$engine_name])) {
       $engine_name = "disk";
     }
@@ -69,19 +73,42 @@ abstract class SHM {
       $engine->init();
     }
 
-    self::$prefix = "$prefix-";
     self::$engine = $engine;
+
+    /* ----- Multi server shared memory ----- */
+    $engine_name_distributed = $dPconfig['shared_memory_distributed'];
+    if (!$engine_name_distributed || !isset(self::$availableEngines[$engine_name_distributed])) {
+      $engine_name_distributed = $engine_name;
+    }
+
+    $class_name = self::$availableEngines[$engine_name_distributed];
+    include_once __DIR__."/shm/$class_name.class.php";
+
+    /** @var ISharedMemory $engine_distributed */
+    $engine_distributed = new $class_name;
+
+    if (!$engine_distributed->init()) {
+      $class_name = self::$availableEngines["disk"];
+      include_once __DIR__."/shm/$class_name.class.php";
+
+      $engine_distributed = new $class_name;
+      $engine_distributed->init();
+    }
+
+    self::$engineDistributed = $engine_distributed;
   }
 
   /**
    * Get a value from the shared memory
    *
-   * @param string $key The key of the value to get
+   * @param bool   $distributed Distributed
+   * @param string $key         Key to get
    *
    * @return mixed
    */
-  static function get($key) {
-    $value = self::$engine->get(self::$prefix.$key);
+  protected static function _get($distributed, $key) {
+    $engine = $distributed ? self::$engineDistributed : self::$engine;
+    $value = $engine->get(self::$prefix.$key);
 
     // If data is compressed
     if (is_array($value) && isset($value[self::GZ])) {
@@ -92,7 +119,40 @@ abstract class SHM {
   }
 
   /**
+   * Get a value from the shared memory, locally
+   *
+   * @param string $key The key of the value to get
+   *
+   * @return mixed
+   */
+  static function get($key) {
+    return self::_get(false, $key);
+  }
+
+  /**
    * Save a value in the shared memory
+   *
+   * @param bool   $distributed Distributed
+   * @param string $key         The key to pu the value in
+   * @param mixed  $value       The value to put in the shared memory
+   * @param bool   $compress    Compress data
+   *
+   * @return bool
+   */
+  protected static function _put($distributed, $key, $value, $compress = false) {
+    $engine = $distributed ? self::$engineDistributed : self::$engine;
+
+    if ($compress) {
+      $value = array(
+        self::GZ => gzcompress(serialize($value))
+      );
+    }
+
+    return $engine->put(self::$prefix.$key, $value);
+  }
+
+  /**
+   * Save a value in the shared memory, locally
    *
    * @param string $key      The key to pu the value in
    * @param mixed  $value    The value to put in the shared memory
@@ -101,24 +161,43 @@ abstract class SHM {
    * @return bool
    */
   static function put($key, $value, $compress = false) {
-    if ($compress) {
-      $value = array(
-        self::GZ => gzcompress(serialize($value))
-      );
-    }
-
-    return self::$engine->put(self::$prefix.$key, $value);
+    return self::_put(false, $key, $value, $compress);
   }
 
   /**
-   * Remove a valur from the shared memory
+   * Remove a value from the shared memory
+   *
+   * @param bool   $distributed Distributed
+   * @param string $key         The key to remove
+   *
+   * @return bool
+   */
+  protected static function _rem($distributed, $key) {
+    $engine = $distributed ? self::$engineDistributed : self::$engine;
+    return $engine->rem(self::$prefix.$key);
+  }
+
+  /**
+   * Remove a value from the local shared memory
    *
    * @param string $key The key to remove
    *
    * @return bool
    */
   static function rem($key) {
-    return self::$engine->rem(self::$prefix.$key);
+    return self::_rem(false, $key);
+  }
+
+  /**
+   * List all the keys in the shared memory
+   *
+   * @param bool $distributed Distributed
+   *
+   * @return array
+   */
+  protected static function _listKeys($distributed) {
+    $engine = $distributed ? self::$engineDistributed : self::$engine;
+    return $engine->listKeys(self::$prefix);
   }
 
   /**
@@ -127,18 +206,20 @@ abstract class SHM {
    * @return array
    */
   static function listKeys() {
-    return self::$engine->listKeys(self::$prefix);
+    return self::_listKeys(false);
   }
 
   /**
    * Remove a list of keys corresponding to a pattern (* is a wildcard)
    *
-   * @param string $pattern Pattern with "*" wildcards
+   * @param bool   $distributed Distributed
+   * @param string $pattern     Pattern with "*" wildcards
    *
    * @return int The number of removed key/value pairs
    */
-  static function remKeys($pattern) {
-    $list = self::listKeys();
+  protected static function _remKeys($distributed, $pattern) {
+    $engine = $distributed ? self::$engineDistributed : self::$engine;
+    $list = $engine->listKeys(self::$prefix);
 
     $char = chr(255);
     $pattern = str_replace("*", $char, $pattern);
@@ -149,7 +230,7 @@ abstract class SHM {
     $n = 0;
     foreach ($list as $_key) {
       if (preg_match($pattern, $_key)) {
-        self::rem($_key);
+        $engine->rem(self::$prefix.$_key);
         $n++;
       }
     }
@@ -158,10 +239,38 @@ abstract class SHM {
   }
 
   /**
-   * @see parent::modDate()
+   * Remove a list of keys corresponding to a pattern (* is a wildcard)
+   *
+   * @param string $pattern Pattern with "*" wildcards
+   *
+   * @return int The number of removed key/value pairs
+   */
+  static function remKeys($pattern) {
+    return self::_remKeys(false, $pattern);
+  }
+
+  /**
+   * Get modification date
+   *
+   * @param bool   $distributed Distributed
+   * @param string $key         The key to get the modification date of
+   *
+   * @return string
+   */
+  protected static function _modDate($distributed, $key) {
+    $engine = $distributed ? self::$engineDistributed : self::$engine;
+    return $engine->modDate(self::$prefix.$key);
+  }
+
+  /**
+   * Get modification date of a local key
+   *
+   * @param string $key The key to get the modification date of
+   *
+   * @return string
    */
   static function modDate($key) {
-    return self::$engine->modDate(self::$prefix.$key);
+    return self::_modDate(false, $key);
   }
 
   /**

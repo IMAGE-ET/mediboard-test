@@ -25,9 +25,6 @@ abstract class CSessionHandler {
     "mysql"    => "CMySQLSessionHandler",
   );
 
-  /** @var Zebra_Session */
-  static protected $session;
-
   /**
    * Init the correct session handler
    *
@@ -38,38 +35,7 @@ abstract class CSessionHandler {
   static function setHandler($engine_name = "files") {
     // TODO remove Zebra
     if ($engine_name == "zebra") {
-      CAppUI::requireLibraryFile("zebra_session/Zebra_Session");
-
-      // Must use the MySQL connector (not MySQLi)
-      $dataSource = new CMySQLDataSource();
-      $dataSource->init("std");
-      $link = $dataSource->link;
-
-      // Auto add session_data table
-      $query = <<<SQL
-CREATE TABLE IF NOT EXISTS `session_data` (
-  `session_id` VARCHAR(32) NOT NULL DEFAULT '',
-  `http_user_agent` VARCHAR(32) NOT NULL DEFAULT '',
-  `session_data` LONGBLOB NOT NULL,
-  `session_expire` INT(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`session_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-SQL;
-      $dataSource->exec($query);
-
-      self::$session = new Zebra_Session(
-        null, // $session_lifetime
-        null, // $gc_probability
-        null, // $gc_divisor
-        'mb', // $security_code, should be changed for UA spoofing
-        'session_data',  // $table_name
-        300,  // $lock_timeout
-        $link // $link
-      );
-
-      self::$started = true;
-
-      return;
+      $engine_name = "mysql";
     }
 
     if (!isset(self::$availableEngines[$engine_name])) {
@@ -99,18 +65,13 @@ SQL;
   }
 
   /**
-   * Update the ZebraSession lifetime
+   * Update the session lifetime
    *
    * @param int $lifetime Session lifetime in seconds
    *
    * @return void
    */
   static function updateLifetime($lifetime) {
-    if (CAppUI::conf("session_handler") == "zebra") {
-      self::$session->session_lifetime = intval($lifetime);
-      return;
-    }
-
     self::$engine->setLifeTime($lifetime);
   }
 
@@ -120,7 +81,7 @@ SQL;
    * @return void
    */
   static function setUserDefinedLifetime() {
-    // Update ZebraSession lifetime
+    // Update session lifetime
     $prefSessionLifetime = intval(CAppUI::pref("sessionLifetime")) * 60;
 
     // If default pref, we use session.gc_maxlifetime php.ini value
