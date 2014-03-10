@@ -29,6 +29,7 @@ $services = array();
 $functions = array();
 $praticiens = array();
 $dossiers = array();
+$group_id = CGroups::loadCurrent()->_id;
 
 if ($select_view || (!$service_id && !$praticien_id && !$function_id && !$sejour_id)) {
   // Redirection pour gérer le cas ou le volet par defaut est l'autre affichage des sejours
@@ -38,10 +39,19 @@ if ($select_view || (!$service_id && !$praticien_id && !$function_id && !$sejour
 
   // Récupération d'un éventuel service_id en session
   $service_id = CValue::getOrSession("service_id");
+  $default_service_id = null;
+  $default_services = json_decode(CAppUI::pref("services_ids_hospi"));
+  if (isset($default_services->{"g$group_id"})) {
+    $default_service_id = reset(explode("|", $default_services->{"g$group_id"}));
+  }
 
   // Récupération d'un éventuel praticien_id en session
   if (!$service_id) {
     $praticien_id = CValue::getOrSession("praticien_id");
+  }
+
+  if (!$service_id && $default_service_id && !$praticien_id) {
+    $service_id = $default_service_id;
   }
 
   $select_view = true;
@@ -63,7 +73,6 @@ $date     = CMbDT::date();
 $date_max = CMbDT::date("+ 1 DAY", $date);
 $service  = new CService();
 $user_id  = CAppUI::$user->_id;
-$group_id = CGroups::loadCurrent()->_id;
 
 if ($service_id) {
   CValue::setSession("service_id"  , $service_id);
