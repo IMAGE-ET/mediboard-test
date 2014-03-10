@@ -58,4 +58,19 @@ class CPaysInsee extends CMbObject {
     
     return $pays->alpha_3;
   }
+
+  /**
+   * Retourne le code Alpha-3 du pays
+   *
+   * @param string $alpha_3 Valeur du pays en alpha-3
+   *
+   * @return string
+   */
+  static function getPaysByAlpha($alpha_3) {
+    $pays = new self;
+    $pays->alpha_3 = $alpha_3;
+    $pays->loadMatchingObject();
+
+    return $pays;
+  }
 }
