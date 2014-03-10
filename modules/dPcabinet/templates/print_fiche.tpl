@@ -327,7 +327,9 @@
               {{if $dossier_medical->_ref_prescription}}
                 {{foreach from=$dossier_medical->_ref_prescription->_ref_prescription_lines item=_line_med}}
                   <li>
-                    {{$_line_med->_view}}
+                    <a href="#1" onclick="Prescription.showMonographyMedicament(null,'{{$_line_med->code_ucd}}','{{$_line_med->code_cis}}');">
+                      {{$_line_med->_view}}
+                    </a>
                     {{if $_line_med->_ref_prises|@count}}
                       ({{foreach from=$_line_med->_ref_prises item=_prise name=foreach_prise}}
                         {{$_prise->_view}}{{if !$smarty.foreach.foreach_prise.last}},{{/if}}
