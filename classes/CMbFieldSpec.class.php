@@ -895,12 +895,14 @@ class CMbFieldSpec {
     $sHtml = "<textarea name=\"$field\" rows=\"$rows\" class=\"$prop styled-element\" $extra>$value</textarea>";
     
     if ($form && $this->helped) {
+      $module = CModule::getActive("dPcompteRendu");
+      $is_admin = $module && $module->canAdmin();
       $params_aidesaisie = array();
       $params_aidesaisie[] = "objectClass: '".get_class($object) . "'";
-      if (!CAppUI::conf("compteRendu CAideSaisie access_group")) {
+      if (!CAppUI::conf("compteRendu CAideSaisie access_group") && !$is_admin) {
         $params_aidesaisie[] = "show_group: false";
       }
-      if (!CAppUI::conf("compteRendu CAideSaisie access_function")) {
+      if (!CAppUI::conf("compteRendu CAideSaisie access_function") && !$is_admin) {
         $params_aidesaisie[] = "show_function: false";
       }
 
