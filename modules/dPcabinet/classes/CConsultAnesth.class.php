@@ -597,6 +597,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $template->addProperty("Anesthésie - Examen autre"              , $this->examenAutre);
 
     $template->addProperty("Anesthésie - Ouverture de la bouche"    , $this->getFormattedValue('bouche'), null, false);
+    $template->addProperty("Anesthésie - Intubation"                , CAppUI::tr("CConsultAnesth-_intub_" . ($this->_intub_difficile ? "difficile" : "pas_difficile")));
 
     $ventilation = $this->plus_de_55_ans ? "Plus de 55 ans, ": "";
     $ventilation.= $this->imc_sup_26 ? "IMC > 26Kg/m², ":"";
