@@ -31,7 +31,7 @@
 
 <script>
   Main.add(function(){
-    //drawGraphs();
+
     var graphs_data = {{$graphs|@json}};
     window.oGraphs = new ConstantsGraph(graphs_data, {{$min_x_index}}, {{$min_x_value}}, true);
     window.oGraphs.draw();

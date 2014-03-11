@@ -228,7 +228,9 @@ ConstantsGraph = Class.create({
         }
       }
       else {
-        this.drawGraph(graphs, rank);
+        if (graphs.data) {
+          this.drawGraph(graphs, rank);
+        }
       }
     }
   },
