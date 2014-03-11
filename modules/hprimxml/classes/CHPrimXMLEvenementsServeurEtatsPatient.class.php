@@ -57,7 +57,7 @@ class CHPrimXMLEvenementsServeurEtatsPatient extends CHPrimXMLEvenementsServeurA
     $evenementsServeurEtatsPatient = $this->documentElement;
 
     // Ajout du patient
-    $mbPatient = $sejour->_ref_patient;
+    $mbPatient = $sejour->loadRefPatient();
     $patient   = $this->addElement($evenementsServeurEtatsPatient, "patient");
     $this->addPatient($patient, $mbPatient, false, true);
     
