@@ -20,22 +20,24 @@ $list_cumul = array();
 $cste_nb = 0;
 $cumul_nb = 0;
 /* We only display constants with rank 1 */
-foreach ($ranks['all'][1] as $_cste) {
-  if (substr($_cste, 0, 1) === "_") {
-    continue;
-  }
-  /* We display at most 4 graph with cumuled constants */
-  if (isset(CConstantesMedicales::$list_constantes[$_cste]['cumul_reset_config'])) {
-    if ($cumul_nb < 4) {
-      $list_cumul[] = $_cste;
-      $cumul_nb++;
+if (array_key_exists(1, $ranks['all'])) {
+  foreach ($ranks['all'][1] as $_cste) {
+    if (substr($_cste, 0, 1) === "_") {
+      continue;
     }
-    continue;
-  }
-  /* A most, we display only one graph with at most 5 constants */
-  if ($cste_nb < 5) {
-    $list_cste[] = $_cste;
-    $cste_nb++;
+    /* We display at most 4 graph with cumuled constants */
+    if (isset(CConstantesMedicales::$list_constantes[$_cste]['cumul_reset_config'])) {
+      if ($cumul_nb < 4) {
+        $list_cumul[] = $_cste;
+        $cumul_nb++;
+      }
+      continue;
+    }
+    /* A most, we display only one graph with at most 5 constants */
+    if ($cste_nb < 5) {
+      $list_cste[] = $_cste;
+      $cste_nb++;
+    }
   }
 }
 
@@ -66,20 +68,23 @@ foreach ($graphs_struct as $_name => $_fields) {
   $constants_by_graph[$i] = array($_fields);
   $i++;
 }
-
-$where[]  = implode(' OR ', $whereOr);
-$const = new CConstantesMedicales();
-$constants = array_reverse($const->loadList($where, 'datetime DESC', 10), true);
-
-$graph = CConstantesMedicales::formatGraphDatas($constants, CConstantesMedicales::guessHost($context), $constants_by_graph, true);
-unset($graph['min_x_index']);
-unset($graph['min_x_value']);
-unset($graph['drawn_constants']);
 $graphs = array();
-/* Sorting the graphs data by tab name */
-foreach ($graph as $_key => $_graph) {
-  if (($name = array_search($constants_by_graph[$_key][0], $graphs_struct)) !== false) {
-    $graphs[$name] = $_graph[0];
+
+if (!empty($whereOr)) {
+  $where[]  = implode(' OR ', $whereOr);
+  $const = new CConstantesMedicales();
+  $constants = array_reverse($const->loadList($where, 'datetime DESC', 10), true);
+
+  $graph = CConstantesMedicales::formatGraphDatas($constants, CConstantesMedicales::guessHost($context), $constants_by_graph, true);
+  unset($graph['min_x_index']);
+  unset($graph['min_x_value']);
+  unset($graph['drawn_constants']);
+
+  /* Sorting the graphs data by tab name */
+  foreach ($graph as $_key => $_graph) {
+    if (($name = array_search($constants_by_graph[$_key][0], $graphs_struct)) !== false) {
+      $graphs[$name] = $_graph[0];
+    }
   }
 }
 
