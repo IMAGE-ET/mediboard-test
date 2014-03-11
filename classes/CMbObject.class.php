@@ -145,6 +145,8 @@ class CMbObject extends CStoredObject {
     if (null == $this->_ref_files = $this->loadBackRefs("files", "file_name")) {
       return null;
     }
+
+    $this->_nb_cancelled_files = 0;
     // Read permission
     foreach ($this->_ref_files as $_file) {
       /** @var CFile $_file */

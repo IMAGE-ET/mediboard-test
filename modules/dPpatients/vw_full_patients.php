@@ -34,6 +34,8 @@ if (!$patient->_id || $patient->_vip) {
 }
 $patient->loadDossierComplet(PERM_READ);
 
+$patient->_nb_files_docs -= $patient->_nb_cancelled_files;
+
 // Chargement de l'IPP
 $patient->loadIPP();
 
