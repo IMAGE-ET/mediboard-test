@@ -238,7 +238,7 @@ foreach ($list_constantes as $_cst) {
 $list_constantes = array_reverse($list_constantes, true);
 
 $graphs_structure = CConstantesMedicales::sortConstantsbyGraph($list_constantes, $host);
-$graphs_datas = CConstantesMedicales::formatGraphDatas($list_constantes, $host, $context_guid);
+$graphs_datas = CConstantesMedicales::formatGraphDatas($list_constantes, $host);
 
 $min_x_index = $graphs_datas['min_x_index'];
 $min_x_value = $graphs_datas['min_x_value'];
