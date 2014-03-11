@@ -128,7 +128,7 @@ class CHL7v2Event extends CHL7Event {
    * @return CExchangeHL7v2
    */
   function generateExchange() {
-    $exchange_hl7v2                  = new CExchangeHL7v2();
+    $exchange_hl7v2                  = $this->_exchange_hl7v2 ? $this->_exchange_hl7v2 : new CExchangeHL7v2();
     $exchange_hl7v2->date_production = CMbDT::dateTime();
     $exchange_hl7v2->receiver_id     = $this->_receiver->_id;
     $exchange_hl7v2->group_id        = $this->_receiver->group_id;
