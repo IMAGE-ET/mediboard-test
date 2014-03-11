@@ -192,7 +192,8 @@ table.tbl th {
 table.tbl td.empty,
 table.form td.empty,
 div.empty,
-li.empty {
+li.empty,
+span.empty {
   font-style: italic;
   color: #999;
 }

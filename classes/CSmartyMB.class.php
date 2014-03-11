@@ -614,7 +614,7 @@ class CSmartyMB extends Smarty {
 
     // Nullité 
     $html = $empty && abs($value) < 0.001 ?
-      "<div class=\"empty\">$html</div>" :
+      "<span class=\"empty\">$html</span>" :
       $html;
 
     return $html;

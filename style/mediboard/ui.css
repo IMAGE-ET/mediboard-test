@@ -398,8 +398,7 @@ ul.control_tabs_vertical li a.active {
 
 /** EMPTY **/
 ul.control_tabs li a.empty, 
-ul.control_tabs_vertical li a.empty,
-span.empty {
+ul.control_tabs_vertical li a.empty{
   background-color: #bbb;
 }
 
