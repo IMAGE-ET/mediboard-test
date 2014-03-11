@@ -116,7 +116,7 @@ if ($fileSel && $elementClass == "CFile" && !$acces_denied) {
 
       case "text/osoft":
         if (class_exists("COsoftHistorique")) {
-          $osoft_histo      = new COsoftHistorique();
+          $osoft_histo      = new COsoftHistorique(false);
           $includeInfosFile = $osoft_histo->toHTML($raw_content);
           $show_editor      = false;
           break;
@@ -125,7 +125,7 @@ if ($fileSel && $elementClass == "CFile" && !$acces_denied) {
 
       case "application/osoft":
         if (class_exists("COsoftDossier")) {
-          $osoft_dossier    = new COsoftDossier();
+          $osoft_dossier    = new COsoftDossier(false);
           $includeInfosFile = $osoft_dossier->toHTML($raw_content);
           $show_editor      = false;
           break;
