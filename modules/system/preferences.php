@@ -17,8 +17,6 @@ CPreferences::$modules["common"] = array (
   "DEFMODULE",
   "touchscreen",
   "accessibility_dyslexic",
-  "MobileUI",
-  "MobileDefaultModuleView",
   "tooltipAppearenceTimeout",
   "showLastUpdate",
   "useEditAutocompleteUsers",
@@ -32,6 +30,12 @@ CPreferences::$modules["common"] = array (
   "planning_dragndrop",
   "planning_hour_division",
   "notes_anonymous",
+
+  //mobile
+  "MobileUI",
+  "MobileDefaultModuleView",
+  "useMobileSwipe",
+  "MobileDefaultTheme"
 );
   
 CPreferences::$modules["system"] = array (

@@ -1582,7 +1582,13 @@ class CSetupsystem extends CSetup {
       CHANGE `value` `value` TEXT NOT NULL;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.55";
+
+    $this->makeRevision("1.1.55");
+    $this->addPrefQuery("useMobileSwipe", "0");
+    $this->addPrefQuery("MobileDefaultTheme", "a");
+
+    $this->mod_version = "1.1.56";
+
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,
