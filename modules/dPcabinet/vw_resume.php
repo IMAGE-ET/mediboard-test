@@ -20,6 +20,14 @@ $listPrat = CConsultation::loadPraticiens(PERM_EDIT, null, null, null, false);
 
 $patient->loadRefsDocItems();
 
+foreach ($patient->_ref_files_by_cat as $cat => $files_by_cat) {
+  foreach ($files_by_cat as $key => $_file) {
+    if ($_file->annule) {
+      unset($patient->_ref_files_by_cat[$cat][$key]);
+    }
+  }
+}
+
 $where = array();
 $where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat));
 $patient->loadRefsConsultations($where);
