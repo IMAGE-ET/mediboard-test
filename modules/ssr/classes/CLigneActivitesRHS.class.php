@@ -186,15 +186,15 @@ class CLigneActivitesRHS extends CMbObject {
    * @return void
    */
   function crementDay($datetime, $action) {
-    $day = CMbDT::transform($datetime, null, "%u");
+    $day = CMbDT::transform($datetime, null, "%w");
     $days = array(
+      "0" => "qty_sun",
       "1" => "qty_mon",
       "2" => "qty_tue",
       "3" => "qty_wed",
       "4" => "qty_thu",
       "5" => "qty_fri",
       "6" => "qty_sat",
-      "7" => "qty_sun",
     );
     $day = $days[$day];
     $crement = $action == "inc" ? 1 : -1;
