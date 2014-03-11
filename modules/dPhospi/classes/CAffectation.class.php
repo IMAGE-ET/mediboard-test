@@ -307,7 +307,7 @@ class CAffectation extends CMbObject {
 
     // Gestion du service_id
     if ($this->lit_id) {
-      $this->service_id = $this->loadRefLit()->loadRefChambre()->service_id;
+      $this->service_id = $this->loadRefLit(false)->loadRefChambre(false)->service_id;
     }
 
     // Gestion des UFs
