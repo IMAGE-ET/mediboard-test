@@ -16,17 +16,20 @@ CApp::setMemoryLimit("512M");
 $now = CValue::get("debut_selection", CMbDT::dateTime());
 
 $date_tolerance = CAppUI::conf("dPurgences date_tolerance");
-$date_before = CMbDT::date("-$date_tolerance DAY", $now);
-$date_after  = CMbDT::date("+1 DAY", $now);
-
-$group_id = CGroups::loadCurrent()->_id;
+$date_before    = CMbDT::date("-$date_tolerance DAY", $now);
+$date_after     = CMbDT::date("+1 DAY", $now);
+$group          = CGroups::loadCurrent();
 
 $extractPassages = new CExtractPassages();
 $extractPassages->debut_selection = $now;
 $extractPassages->fin_selection   = $now;
 $extractPassages->type            = "activite";
-$extractPassages->group_id        = CGroups::loadCurrent()->_id;
+$extractPassages->group_id        = $group->_id;
 $extractPassages->date_extract    = $now;
+
+if (!$max_patient = CAppUI::conf("dPurgences send_RPU max_patient", $group)) {
+  $max_patient = CAppUI::conf("cerveau max_patient");
+}
 
 $datas = array(
   "PRESENTS"    => 0,
@@ -36,7 +39,7 @@ $datas = array(
   "DECHOC"      => 0,
   "PORTE"       => 0,
   "RADIO"       => 0,
-  "MAXPATIENTS" => CAppUI::conf("cerveau max_patient"),
+  "MAXPATIENTS" => $max_patient ? $max_patient : 0,
   "TOTBOX"      => 0,
   "TOTDECHOC"   => 0,
   "TOTPORTE"    => 0
@@ -52,7 +55,7 @@ $where[] = "sejour.entree BETWEEN '$now' AND '$date_after'
 
 // RPUs
 $where["rpu.rpu_id"]      = "IS NOT NULL";
-$where["sejour.group_id"] = "= '$group_id'";
+$where["sejour.group_id"] = "= '$group->_id'";
 //$where["sejour.type"]     = "= 'urg'";
 $order                    = "sejour.entree ASC";
 
@@ -149,7 +152,7 @@ $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
 $ljoin["service"] = "service.service_id = chambre.service_id";
 $where["service.externe"] = "= '0'";
 $where["service.uhcd"] = "= '1'";
-$where["service.group_id"] = " = '$group_id'";
+$where["service.group_id"] = " = '$group->_id'";
 $where["lit.annule"] = " = '0'";
 
 //uhcd
