@@ -30,6 +30,9 @@ CConfiguration::register(
           "check_ccmu" => "enum list|0|1|2  default|1 localize",
           "check_dp" => "enum list|0|1|2  default|1 localize",
           "check_can_leave" => "enum list|0|1  default|1 localize",
+        ),
+        "send_RPU" => array(
+          "max_patient" => "num",
         )
       ),
     ),
