@@ -49,15 +49,21 @@ $ops_sans_dossier_anesth = array();
 // Chargement de ses séjours
 foreach ($patient->_ref_sejours as $_key => $_sejour) {
   $_sejour->loadRefsOperations();
-  foreach ($_sejour->_ref_operations as $_key_op => $_operation) {
+  $_sejour->loadRefsFwd();
+  foreach ($_sejour->_ref_operations as $_operation) {
     $_operation->loadRefsFwd();
     $_operation->_ref_chir->loadRefFunction()->loadRefGroup();
     $day = CMbDT::daysRelative($consult->_ref_plageconsult->date, $_operation->_ref_plageop->date);
     if (!$_operation->_ref_consult_anesth->_id && $day >= 0) {
       $ops_sans_dossier_anesth[] = $_operation;
     }
+    else {
+      unset($_sejour->_ref_operations[$_operation->_id]);
+      if (!count($_sejour->_ref_operations)) {
+        unset($patient->_ref_sejours[$_sejour->_id]);
+      }
+    }
   }
-  $_sejour->loadRefsFwd();
 }
 
 $consult->loadRefPraticien();
