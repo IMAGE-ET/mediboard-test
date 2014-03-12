@@ -31,14 +31,19 @@
       }
     {{/if}}
   };
+  //@todo a factoriser avec contraintes_RPU
   //Changement de l'orientation en fonction du mode sortie
   changeOrientation = function(element) {
     var orientation = getForm("editRPU").elements.orientation;
+    var destination = getForm("editRPU").elements._destination;
       if (!orientation) {
       orientation = getForm("editRPUDest").elements.orientation;
+      destination = getForm("editRPUDest").elements._destination;
     }
     var option_orientation = $A(orientation.options);
+    var option_destination = $A(destination.options);
     var exclude = ["SCAM","PSA","REO"];
+    var exclude_destination = ["6", "7"];
     switch ($V(element)) {
       case "normal":
         option_orientation.each(function(option) {
@@ -47,6 +52,19 @@
             //Si l'option est sélectionnée et que dans ce cas, il n'est pas disponible, on met le sélectionne par défaut
             if (option.selected) {
               orientation.selectedIndex = 0;
+            }
+            option.disabled = true;
+          }
+          else {
+            option.disabled = false;
+          }
+        });
+        option_destination.each(function(option) {
+          //Si les options sont exclues on les désactive sinon on les réactive
+          if (exclude_destination.indexOf(option.value) === -1 && option.value !== "") {
+            //Si l'option est sélectionnée et que dans ce cas, il n'est pas disponible, on met le sélectionne par défaut
+            if (option.selected) {
+              destination.selectedIndex = 0;
             }
             option.disabled = true;
           }
@@ -68,9 +86,31 @@
             option.disabled = false;
           }
         });
+        option_destination.each(function(option) {
+          if (exclude_destination.indexOf(option.value) !== -1) {
+            if (option.selected) {
+              destination.selectedIndex = 0;
+            }
+            option.disabled = true;
+          }
+          else {
+            option.disabled = false;
+          }
+        });
+        break;
+      case "deces":
+        option_orientation.each(function(option) {
+          option.disabled = true;
+        });
+        option_destination.each(function(option) {
+          option.disabled = true;
+        });
       break;
       default:
         option_orientation.each(function(option) {
+          option.disabled = false;
+        });
+        option_destination.each(function(option) {
           option.disabled = false;
         });
     }
@@ -179,6 +219,9 @@
               afterUpdateElement: function(field,selected){
                 $V(field.form["service_sortie_id"], selected.getAttribute("id").split("-")[2]);
                 var elementFormRPU = getForm("editRPU").elements;
+                if (!elementFormRPU) {
+                  elementFormRPU = getForm("editRPUDest").elements;
+                }
                 var selectedData = selected.down(".data");
                 if (!elementFormRPU._destination.value) {
                   $V(elementFormRPU._destination, selectedData.get("default_destination"));
