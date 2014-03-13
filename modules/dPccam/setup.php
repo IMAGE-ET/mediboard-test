@@ -131,10 +131,10 @@ class CSetupdPccam extends CSetup {
 
     // Data source query
 
-    // Version 32 de la CCAM
+    // Version 33 de la CCAM
     $query = "SELECT *
-      FROM notes
-      WHERE TEXTE LIKE '%mai 2012%'";
+      FROM actes
+      WHERE CODE = 'BGQP140'";
     $this->addDatasource("ccamV2", $query);
 
     // Tarifs de convergence
