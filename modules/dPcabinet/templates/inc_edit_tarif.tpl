@@ -212,12 +212,12 @@
       <td class="button" colspan="2">
         <button id="vw_edit_tarif_button_save" class="save" type="button" onclick="this.form.submit();">{{tr}}Save{{/tr}}</button>
         {{if $tarif->_id}}
-          {{if count($tarif->_new_actes) && !$tarif->_has_mto && $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
+          {{*{{if count($tarif->_new_actes) && !$tarif->_has_mto && $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
             <input type="hidden" name="_add_mto" value="0" />
             <button class="add" type="button" onclick="$V(this.form._add_mto, '1');Tarif.recalcul(this.form);">
               {{tr}}Add{{/tr}} MTO
             </button>
-          {{/if}}
+          {{/if}}*}}
 
           {{if count($tarif->_new_actes)}}
             <input type="hidden" name="_update_montants" value="0" />
