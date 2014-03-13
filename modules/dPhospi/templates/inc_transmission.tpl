@@ -97,7 +97,7 @@ submitTrans = function(form) {
       {{if $refreshTrans}}
       loadSuivi('{{$transmission->sejour_id}}');
       Control.Modal.close();
-      updateNbTrans('{{$transmission->sejour_id}}')
+      updateNbTrans('{{$transmission->sejour_id}}');
       {{else}}
         Control.Modal.close();
         updatePlanSoinsPatients();
@@ -109,6 +109,9 @@ submitTrans = function(form) {
     }
     else if (window.submitTransmissions) {
       submitTransmissions();
+    }
+    if (window.closeModalSuivi) {
+      closeModalSuivi();
     }
   {{/if}}
 }

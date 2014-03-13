@@ -229,6 +229,10 @@ showTrans = function(transmission_id, from_compact) {
   url.requestModal(850, null, {maxHeight: '550'});
 }
 
+closeModalSuivi = function() {
+  Control.Modal.close();
+}
+
 {{if $count_trans > 0}}
   Main.add(showListTransmissions.curry(0, {{$count_trans}}));
 {{/if}}
