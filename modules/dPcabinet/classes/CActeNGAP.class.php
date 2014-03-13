@@ -193,7 +193,7 @@ class CActeNGAP extends CActe {
       $query = $ds->prepare($query, $this->code);
       $res = $ds->loadResult($query);
       if ($res == 0) {
-        CAppUI::setMsg('CActeNGAP-deprecated', UI_MSG_WARNING);
+        CAppUI::setMsg('CActeNGAP-deprecated', UI_MSG_WARNING, $this->code);
       }
     }
 
