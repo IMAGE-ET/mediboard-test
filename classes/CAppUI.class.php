@@ -957,6 +957,7 @@ class CAppUI {
     $paths = array_merge(
       glob("$root_dir/locales/$locale/*.php"),
       glob("$root_dir/modules/*/locales/$locale.php"),
+      glob("$root_dir/mobile/modules/*/locales/$locale.php"),
       $overload
     );
 

@@ -130,7 +130,8 @@ abstract class CJSLoader extends CHTMLResourceLoader {
     if (!$locales) {
       $localeFiles = array_merge(
         glob("./locales/$language/*.php"),
-        glob("./modules/*/locales/$language.php")
+        glob("./modules/*/locales/$language.php"),
+        glob("./mobile/modules/*/locales/$language.php")
       );
       
       foreach ($localeFiles as $localeFile) {
