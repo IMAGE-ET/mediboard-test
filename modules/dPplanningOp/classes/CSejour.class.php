@@ -1114,6 +1114,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $naissances = $old->loadRefGrossesse()->loadRefsNaissances();
     }
 
+    $this->getUFs();
     // On fait le store du séjour
     if ($msg = parent::store()) {
       return $msg;
@@ -3676,37 +3677,75 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     if ($affectation->_id) {
-      return $affectation->getUFs();
+      $ufs = $affectation->getUFs();
+      $this->uf_hebergement_id = $affectation->uf_hebergement_id;
+      $this->uf_soins_id = $affectation->uf_soins_id;
+      $this->uf_medicale_id = $affectation->uf_medicale_id;
+      return $ufs;
     }
-
-    if ($this->uf_hebergement_id) {
-      return array(
-        "hebergement" => $this->loadRefUFHebergement(),
-        "medicale"    => $this->loadRefUFMedicale(),
-        "soins"       => $this->loadRefUFSoins(),
-      );
-    }
-
-    $affectation_uf = new CAffectationUniteFonctionnelle();
-
-    // Service
-    if ($this->service_id) {
-      $affectation_uf->object_id    = $this->service_id;
-      $affectation_uf->object_class = "CService";
-    }
-    // Praticien
     else {
-      $affectation_uf->object_id    = $this->loadRefPraticien()->_id;
-      $affectation_uf->object_class = "CMediusers";
+      $this->makeUF();
     }
-
-    $affectation_uf->loadMatchingObject();
 
     return array(
-      "hebergement" => $affectation_uf->loadRefUniteFonctionnelle(),
+      "hebergement" => $this->loadRefUFHebergement(),
       "medicale"    => $this->loadRefUFMedicale(),
       "soins"       => $this->loadRefUFSoins(),
     );
+  }
+
+  function makeUF() {
+    $this->completeField("uf_hebergement_id", "uf_soins_id", "uf_medicale_id");
+    $ljoin = array("uf" => "uf.uf_id = affectation_uf.uf_id");
+
+    if (!$this->uf_hebergement_id || $this->fieldModified("service_id")) {
+      $affectation_uf = new CAffectationUniteFonctionnelle();
+      $where = array("uf.type" => "= 'hebergement'");
+
+      if (!$affectation_uf->uf_id) {
+        $where["object_id"]    = "= '$this->service_id'";
+        $where["object_class"] = "= 'CService'";
+        $affectation_uf->loadObject($where, null, null, $ljoin);
+      }
+
+      $this->uf_hebergement_id = $affectation_uf->uf_id;
+    }
+
+    if (!$this->uf_soins_id || $this->fieldModified("service_id")) {
+      $affectation_uf = new CAffectationUniteFonctionnelle();
+      $where = array("uf.type" => "= 'soins'");
+
+      if (!$affectation_uf->uf_id) {
+        $where["object_id"]    = "= '$this->service_id'";
+        $where["object_class"] = "= 'CService'";
+        $affectation_uf->loadObject($where, null, null, $ljoin);
+      }
+
+      $this->uf_soins_id = $affectation_uf->uf_id;
+    }
+
+    if (!$this->uf_medicale_id) {
+      $affectation_uf = new CAffectationUniteFonctionnelle();
+      $where = array("uf.type" => "= 'medicale'");
+
+      if (!$affectation_uf->uf_id) {
+        $praticien = $this->loadRefPraticien();
+        $praticien->loadRefFunction();
+
+        $where["object_id"]    = "= '$praticien->_id'";
+        $where["object_class"] = "= 'CMediusers'";
+        $affectation_uf->loadObject($where, null, null, $ljoin);
+
+        if (!$affectation_uf->_id) {
+          $function = $praticien->_ref_function;
+          $where["object_id"]    = "= '$function->_id'";
+          $where["object_class"] = "= 'CFunctions'";
+          $affectation_uf->loadObject($where, null, null, $ljoin);
+        }
+      }
+
+      $this->uf_medicale_id = $affectation_uf->uf_id;
+    }
   }
 
   /**
