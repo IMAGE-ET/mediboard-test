@@ -110,6 +110,9 @@ submitTrans = function(form) {
     else if (window.submitTransmissions) {
       submitTransmissions();
     }
+    if (window.closeModalSuivi) {
+      closeModalSuivi();
+    }
   {{/if}}
 }
 
