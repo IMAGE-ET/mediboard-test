@@ -1105,12 +1105,12 @@ class CConstantesMedicales extends CMbObject {
 
         // no value at all
         if ($_empty) {
-          $this->$_constant = null;
+          $this->$_constant = "";
         }
 
         // not enough values
         elseif (count($_parts) != count($_params["formfields"])) {
-          $this->$_constant = null;
+          $this->$_constant = "";
         }
 
         // it's ok
@@ -1208,7 +1208,15 @@ class CConstantesMedicales extends CMbObject {
       $ok = false;
       foreach (CConstantesMedicales::$list_constantes as $const => $params) {
         $this->completeField($const);
-        if ($this->$const !== "" && $this->$const !== null) {
+        if (array_key_exists('formfields', $params)) {
+          foreach ($params['formfields'] as $_formfield) {
+            if ($this->$_formfield !== "" && $this->$_formfield !== null) {
+              $ok = true;
+              break 2;
+            }
+          }
+        }
+        elseif ($this->$const !== "" && $this->$const !== null) {
           $ok = true;
           break;
         }
