@@ -213,7 +213,7 @@ class COperatorHprimXML extends CEAIOperator {
       CEchangeHprim $echg_hprim, $data = array()
   ) {
     $data   = array_merge($data, $dom_evt->getContentsXML());
-    if ($msgAcq = $dom_evt->isActionValide($data['action'], $dom_acq, $echg_hprim)) {
+    if (CMbArray::get($data, "action") && $msgAcq = $dom_evt->isActionValide($data['action'], $dom_acq, $echg_hprim)) {
       return $msgAcq;
     } 
     

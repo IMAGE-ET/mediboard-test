@@ -141,7 +141,16 @@ class CSetupdPccam extends CSetup {
                 ADD INDEX (`object_class`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.20";
+    $this->makeRevision("0.20");
+
+    $query = "ALTER TABLE `acte_ccam`
+                ADD `position_dentaire` VARCHAR (255),
+                ADD `numero_forfait_technique` INT (11) UNSIGNED,
+                ADD `numero_agrement` BIGINT (20) UNSIGNED,
+                ADD `rapport_exoneration` ENUM ('4','7','C','R');";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.21";
     // Data source query
 
     // Version 33 de la CCAM

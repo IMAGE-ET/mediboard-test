@@ -2080,6 +2080,19 @@ class CSetupdPcabinet extends CSetup {
       CHANGE `duree` `duree` INT (4) UNSIGNED NOT NULL DEFAULT '1'";
     $this->addQuery($query);
 
-    $this->mod_version = "2.28";
+    $this->makeRevision("2.28");
+
+    $query = "ALTER TABLE `acte_ngap`
+                ADD `major_pct` INT (11),
+                ADD `major_coef` FLOAT,
+                ADD `minor_pct` INT (11),
+                ADD `minor_coef` FLOAT,
+                ADD `numero_forfait_technique` INT (11) UNSIGNED,
+                ADD `numero_agrement` BIGINT (20) UNSIGNED,
+                ADD `rapport_exoneration` ENUM ('4','7','C','R');";
+
+    $this->addQuery($query);
+
+    $this->mod_version = "2.29";
   }
 }

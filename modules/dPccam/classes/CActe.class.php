@@ -20,6 +20,9 @@ class CActe extends CMbMetaObject {
   public $montant_depassement;
   public $montant_base;
   public $execution;
+  public $numero_forfait_technique;
+  public $numero_agrement;
+  public $rapport_exoneration;
   
   // DB References
   public $executant_id;
@@ -148,15 +151,18 @@ class CActe extends CMbMetaObject {
   function getProps() {
     $props = parent::getProps();
 
-    $props["object_id"]           = "ref notNull class|CCodable meta|object_class";
-    $props["executant_id"]        = "ref notNull class|CMediusers";
-    $props["montant_base"]        = "currency";
-    $props["montant_depassement"] = "currency";
-    $props["execution"]           = "dateTime notNull";
-    $props["facturable"]          = "bool notNull default|1 show|0";
-    $props["num_facture"]         = "num notNull min|1 default|1";
+    $props["object_id"]                = "ref notNull class|CCodable meta|object_class";
+    $props["executant_id"]             = "ref notNull class|CMediusers";
+    $props["montant_base"]             = "currency";
+    $props["montant_depassement"]      = "currency";
+    $props["execution"]                = "dateTime notNull";
+    $props["facturable"]               = "bool notNull default|1 show|0";
+    $props["num_facture"]              = "num notNull min|1 default|1";
+    $props["numero_forfait_technique"] = "num min|1 max|99999";
+    $props["numero_agrement"]          = "num min|1 max|99999999999999";
+    $props["rapport_exoneration"]      = "enum list|4|7|C|R";
 
-    $props["_montant_facture"]    = "currency";
+    $props["_montant_facture"]         = "currency";
 
     return $props;
   }

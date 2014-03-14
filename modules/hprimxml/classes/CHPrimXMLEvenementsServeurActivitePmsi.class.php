@@ -373,14 +373,31 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
    */
   function mappingActesCCAM($data) {
     $node = $data['actesCCAM'];
-    $xpath = new CHPrimXPath($node->ownerDocument);
-    
+
     $actesCCAM = array();
     foreach ($node->childNodes as $_acteCCAM) {
       $actesCCAM[] = $this->mappingActeCCAM($_acteCCAM, $data);
     }
 
     return $actesCCAM;
+  }
+
+  /**
+   * Mapping des actes CCAM
+   *
+   * @param array $data Datas
+   *
+   * @return array
+   */
+  function mappingActesNGAP($data) {
+    $node = $data['actesNGAP'];
+
+    $actesNGAP = array();
+    foreach ($node->childNodes as $_acteNGAP) {
+      $actesNGAP[] = $this->mappingActeNGAP($_acteNGAP, $data);
+    }
+
+    return $actesNGAP;
   }
 
   /**
@@ -393,22 +410,131 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
    */
   function mappingActeCCAM(DOMNode $node, $data) {
     $xpath = new CHPrimXPath($node->ownerDocument);
-            
-    $acteCCAM = new CActeCCAM();
-    $acteCCAM->code_acte     = $xpath->queryTextNode("hprim:codeActe", $node);
-    $acteCCAM->code_activite = $xpath->queryTextNode("hprim:codeActivite", $node);
-    $acteCCAM->code_phase    = $xpath->queryTextNode("hprim:codePhase", $node);
-    $date  = $xpath->queryTextNode("hprim:execute/hprim:date", $node);
-    $heure = CMbDT::transform($xpath->queryTextNode("hprim:execute/hprim:heure", $node), null , "%H:%M:%S");
-    $acteCCAM->execution     = "$date $heure";
-        
+
+    $acteCCAM = array();
+    $acteCCAM["code_acte"]     = $xpath->queryTextNode("hprim:codeActe"           , $node);
+    $acteCCAM["code_activite"] = $xpath->queryTextNode("hprim:codeActivite"       , $node);
+    $acteCCAM["code_phase"]    = $xpath->queryTextNode("hprim:codePhase"          , $node);
+    $acteCCAM["date"]          = $xpath->queryTextNode("hprim:execute/hprim:date" , $node);
+    $acteCCAM["heure"]         = $xpath->queryTextNode("hprim:execute/hprim:heure", $node);
+
+    $acteCCAM["modificateur"] = array();
+    $modificateurs = $xpath->query("hprim:modificateurs/hprim:modificateur", $node);
+    foreach ($modificateurs as $_modificateur) {
+      if ($modificateur = $xpath->queryTextNode(".", $_modificateur)) {
+        $acteCCAM["modificateur"][] = $modificateur;
+      }
+    }
+
+    $acteCCAM["commentaire"]              = $xpath->queryTextNode("hprim:commentaire", $node);
+    $acteCCAM["signe"]                    = $xpath->queryAttributNode(".", $node, "signe");
+    $acteCCAM["facturable"]               = $xpath->queryAttributNode(".", $node, "facturable");
+    $acteCCAM["rembourse"]                = $xpath->queryAttributNode(".", $node, "remboursementExceptionnel");
+    $acteCCAM["charges_sup"]              = $xpath->queryAttributNode(".", $node, "supplementCharges");
+    $acteCCAM                             = array_merge($acteCCAM, $this->getMontant($node));
+
+    $position_dentaire                    = $xpath->query("hprim:positionsDentaires/hprim:positionDentaire");
+    $acteCCAM["position_dentaire"] = array();
+    foreach ($position_dentaire as $_position_dentaire) {
+      if ($dent = $xpath->queryTextNode(".", $_position_dentaire)) {
+        $acteCCAM["position_dentaire"][] = $dent;
+      }
+    }
+
+    $acteCCAM["code_association"]    = $xpath->queryTextNode("hprim:codeAssociationNonPrevue", $node);
+    $acteCCAM["code_extension"]      = $xpath->queryTextNode("hprim:codeExtensionDocumentaire", $node);
+    $acteCCAM["rapport_exoneration"] = $xpath->queryAttributNode(".", $node, "rapportExoneration");
+
+    $idSourceActesCCAM = $this->getIdSource($node, false);
+    $idCibleActesCCAM  = $this->getIdCible($node , false);
+
+    $medecin = $xpath->queryUniqueNode("hprim:executant/hprim:medecins/hprim:medecinExecutant[@principal='oui']/hprim:medecin", $node);
+    //si pas de medecin principal, on recherche le premier médecin exécutant
+    if (!$medecin) {
+      $medecin = $xpath->getNode("hprim:executant/hprim:medecins/hprim:medecinExecutant/hprim:medecin", $node);
+    }
+    $mediuser_id = $this->getMedecin($medecin);
+    $action = $xpath->queryAttributNode(".", $node, "action");
+
     return array (
       "idSourceIntervention" => $data['idSourceIntervention'],
       "idCibleIntervention"  => $data['idCibleIntervention'],
-      "idSourceActeCCAM"     => $data['idSourceActeCCAM'],
-      "idCibleActeCCAM"      => $data['idCibleActeCCAM'],
-      "acteCCAM"             => $acteCCAM
+      "idSourceActeCCAM"     => $idSourceActesCCAM,
+      "idCibleActeCCAM"      => $idCibleActesCCAM,
+      "action"               => $action,
+      "acteCCAM"             => $acteCCAM,
+      "executant_id"         => $mediuser_id,
     );
+  }
+
+  /**
+   * Mapping des actes NGAP
+   *
+   * @param DOMNode $node Node
+   * @param array   $data Datas
+   *
+   * @return array
+   */
+  function mappingActeNGAP(DOMNode $node, $data) {
+    $xpath = new CHPrimXPath($node->ownerDocument);
+
+    $acteNGAP = array();
+    $acteNGAP["code"]                       = $xpath->queryTextNode("hprim:lettreCle"          , $node);
+    $acteNGAP["coefficient"]                = $xpath->queryTextNode("hprim:coefficient"        , $node);
+    $acteNGAP["quantite"]                   = $xpath->queryTextNode("hprim:quantite"           , $node);
+    $acteNGAP["date"]                       = $xpath->queryTextNode("hprim:execute/hprim:date" , $node);
+    $acteNGAP["heure"]                      = $xpath->queryTextNode("hprim:execute/hprim:heure", $node);
+    $acteNGAP["numero_dent"]                = $xpath->queryTextNode("hprim:positionDentaire"   , $node);
+    $acteNGAP["comment"]                    = $xpath->queryTextNode("hprim:commentaire"        , $node);
+    $acteNGAP                               = array_merge($acteNGAP, $this->getMontant($node));
+
+    $minoration                             = $xpath->queryUniqueNode("hprim:minorMajor/hprim:minoration", $node);
+    $acteNGAP["minor_pct"]                  = $xpath->queryTextNode("hprim:pourcentage", $minoration);
+    $acteNGAP["minor_coef"]                 = $xpath->queryTextNode("hprim:coefficient", $minoration);
+    $majoration                             = $xpath->queryUniqueNode("hprim:minorMajor/hprim:majoration", $node);
+    $acteNGAP["major_pct"]                  = $xpath->queryTextNode("hprim:pourcentage", $majoration);
+    $acteNGAP["major_coef"]                 = $xpath->queryTextNode("hprim:coefficient", $majoration);
+
+    $acteNGAP["facturable"]                 = $xpath->queryAttributNode(".", $node, "facturable");
+    $acteNGAP["rapportExoneration"]         = $xpath->queryAttributNode(".", $node, "rapportExoneration");
+    $acteNGAP["executionNuit"]              = $xpath->queryAttributNode(".", $node, "executionNuit");
+    $acteNGAP["executionDimancheJourFerie"] = $xpath->queryAttributNode(".", $node, "executionDimancheJourFerie");
+
+    $medecin  = $xpath->query("hprim:prestataire/hprim:medecins/hprim:medecin", $node);
+    $mediuser_id = $this->getMedecin($medecin->item(0));
+
+    $idSourceActeNGAP = $this->getIdSource($node, false);
+    $idCibleActeNGAP  = $this->getIdCible($node, false);
+    $action = $xpath->queryAttributNode(".", $node, "action");
+
+    return array (
+      "idSourceIntervention" => $data['idSourceIntervention'],
+      "idCibleIntervention"  => $data['idCibleIntervention'],
+      "idSourceActeNGAP"     => $idSourceActeNGAP,
+      "idCibleActeNGAP"      => $idCibleActeNGAP,
+      "action"               => $action,
+      "acteNGAP"             => $acteNGAP,
+      "executant_id"         => $mediuser_id,
+    );
+  }
+
+  /**
+   * Mapp the montant node
+   *
+   * @param DOMNode $node Node
+   *
+   * @return array
+   */
+  function getMontant($node) {
+    $xpath = new CHPrimXPath($node->ownerDocument);
+    $data = array();
+    $montant = $xpath->queryUniqueNode("hprim:montant", $node);
+    $data["montantTotal"]           = $xpath->queryTextNode("montantTotal"          , $montant);
+    $data["numeroForfaitTechnique"] = $xpath->queryTextNode("numeroForfaitTechnique", $montant);
+    $data["numeroAgrementAppareil"] = $xpath->queryTextNode("numeroAgrementAppareil", $montant);
+    $data["montantDepassement"]     = $xpath->queryTextNode("montantDepassement"    , $montant);
+
+    return $data;
   }
 
   /**

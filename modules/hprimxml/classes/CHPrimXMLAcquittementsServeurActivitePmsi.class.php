@@ -135,11 +135,21 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
     // Génération des réponses en fonction du type de l'acquittement
     switch (get_class($this)) {
       case "CHPrimXMLAcquittementsServeurActes" :
-        $actesCCAM = $data;
-        
+        if (!$data && !CMbArray::get($data, "CCAM") && !CMbArray::get($data, "NGAP")) {
+          break;
+        }
+        $actesCCAM = $data["CCAM"];
+        $actesNGAP = $data["NGAP"];
+
         foreach ($actesCCAM as $_acteCCAM) {
-          $this->addReponseCCAM($reponses, $statut, $codes, $_acteCCAM, $mbObject, $commentaires);
-        } 
+          $code_ccam = $codes[$_acteCCAM["idSourceActeCCAM"]];
+          $this->addReponseCCAM($reponses, $_acteCCAM["statut"], $code_ccam["code"], $_acteCCAM, $mbObject, $code_ccam["commentaires"]);
+        }
+
+        foreach ($actesNGAP as $_acteNGAP) {
+          $code_ngap = $codes[$_acteNGAP["idSourceActeNGAP"]];
+          $this->addReponseNGAP($reponses, $_acteNGAP["statut"], $code_ngap["code"], $_acteNGAP, $mbObject, $code_ngap["commentaires"]);
+        }
         
         break;
       case "CHPrimXMLAcquittementsServeurIntervention" :

@@ -28,6 +28,10 @@ class CActeNGAP extends CActe {
   public $ald;
   public $numero_dent;
   public $comment;
+  public $major_pct;
+  public $major_coef;
+  public $minor_pct;
+  public $minor_coef;
 
   // Distant fields
   public $_libelle;
@@ -47,17 +51,21 @@ class CActeNGAP extends CActe {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["code"]                = "str notNull maxLength|5";
-    $props["quantite"]            = "num notNull maxLength|2";
-    $props["coefficient"]         = "float notNull";
-    $props["demi"]                = "enum list|0|1 default|0";
-    $props["complement"]          = "enum list|N|F|U";
-    $props["lettre_cle"]          = "enum list|0|1 default|0";
-    $props["lieu"]                = "enum list|C|D default|C";
-    $props["exoneration"]         = "enum list|N|13|17 default|N";
-    $props["ald"]                 = "enum list|0|1 default|0";
-    $props["numero_dent"]         = "num min|11 max|85";
-    $props["comment"]             = "str";
+    $props["code"]        = "str notNull maxLength|5";
+    $props["quantite"]    = "num notNull maxLength|2";
+    $props["coefficient"] = "float notNull";
+    $props["demi"]        = "enum list|0|1 default|0";
+    $props["complement"]  = "enum list|N|F|U";
+    $props["lettre_cle"]  = "enum list|0|1 default|0";
+    $props["lieu"]        = "enum list|C|D default|C";
+    $props["exoneration"] = "enum list|N|13|17 default|N";
+    $props["ald"]         = "enum list|0|1 default|0";
+    $props["numero_dent"] = "num min|11 max|85";
+    $props["comment"]     = "str";
+    $props["major_pct"]   = "num";
+    $props["major_coef"]  = "float";
+    $props["minor_pct"]   = "num";
+    $props["minor_coef"]  = "float";
 
     return $props;
   }

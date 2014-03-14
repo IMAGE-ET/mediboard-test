@@ -237,16 +237,17 @@ class CEchangeHprim extends CEchangeXML {
    * @param array                  $avertissement Warning
    * @param null                   $commentaires  Comments
    * @param CMbObject              $mbObject      Object
+   * @param array                  $data          Objects
    *
    * @return string
    */
-  function setAck(CHPrimXMLAcquittements $dom_acq, $codes, $avertissement = null, $commentaires = null, CMbObject $mbObject = null) {
+  function setAck(CHPrimXMLAcquittements $dom_acq, $codes, $avertissement = null, $commentaires = null, CMbObject $mbObject = null, $data = array()) {
     $commentaire = $avertissement ? $avertissement : $commentaires;                    
     $statut      = $avertissement ? $dom_acq->_codes_erreurs["avt"] : $dom_acq->_codes_erreurs["ok"];
 
-    $msgAcq    = $dom_acq->generateAcquittements($statut, $codes, $commentaire, $mbObject);
+    $msgAcq    = $dom_acq->generateAcquittements($statut, $codes, $commentaire, $mbObject, $data);
     $doc_valid = $dom_acq->schemaValidate(null, false, $this->_ref_receiver ? $this->_ref_receiver->display_errors : true);
-    
+
     $this->acquittement_valide = $doc_valid ? 1 : 0;
     $this->statut_acquittement = $statut;
         

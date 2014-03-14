@@ -45,9 +45,10 @@ class CHPrimXMLAcquittements extends CHPrimXMLDocument {
    * @param array  $codes        Codes
    * @param string $commentaires Comments
    * @param string $mbObject     Object
+   * @param array  $data         Objects
    *
    * @return string
    */
-  function generateAcquittements($statut, $codes, $commentaires = null, $mbObject = null) {
+  function generateAcquittements($statut, $codes, $commentaires = null, $mbObject = null, $data = array()) {
   }
 }
