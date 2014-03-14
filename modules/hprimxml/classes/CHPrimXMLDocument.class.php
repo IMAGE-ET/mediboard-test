@@ -604,7 +604,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
     
   function addActeCCAMAcquittement(DOMNode $elParent, $acteCCAM) {
-    $mbActeCCAM = $acteCCAM["codeActe"];
+    $mbActeCCAM = $acteCCAM["acteCCAM"];
     
     $this->addAttribute($elParent, "valide", "oui");
     
@@ -616,15 +616,36 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $identifiant = $this->addElement($elParent, "identifiant");
     $this->addElement($identifiant, "emetteur",  $acteCCAM["idSourceActeCCAM"]);
     $this->addElement($identifiant, "recepteur", $acteCCAM["idCibleActeCCAM"]);
-    
-    
-    $this->addElement($elParent, "codeActe",     $mbActeCCAM->code_acte);
-    $this->addElement($elParent, "codeActivite", $mbActeCCAM->code_activite);
-    $this->addElement($elParent, "codePhase",    $mbActeCCAM->code_phase);
+
+    $this->addElement($elParent, "codeActe",     $mbActeCCAM["code_acte"]);
+    $this->addElement($elParent, "codeActivite", $mbActeCCAM["code_activite"]);
+    $this->addElement($elParent, "codePhase",    $mbActeCCAM["code_phase"]);
     
     $execute = $this->addElement($elParent, "execute");
-    $this->addElement($execute, "date",  CMbDT::date($mbActeCCAM->execution));
-    $this->addElement($execute, "heure", CMbDT::time($mbActeCCAM->execution));
+    $this->addElement($execute, "date",  CMbDT::date($mbActeCCAM["date"]));
+    $this->addElement($execute, "heure", CMbDT::time($mbActeCCAM["heure"]));
+  }
+
+  function addActeNGAPAcquittement(DOMNode $elParent, $acteNGAP) {
+    $mbActeNGAP = $acteNGAP["acteNGAP"];
+
+    $this->addAttribute($elParent, "valide", "oui");
+
+    $intervention = $this->addElement($elParent,     "intervention");
+    $identifiant  = $this->addElement($intervention, "identifiant");
+    $this->addElement($identifiant, "emetteur",  $acteNGAP["idCibleIntervention"]);
+    $this->addElement($identifiant, "recepteur", $acteNGAP["idSourceIntervention"]);
+
+    $identifiant = $this->addElement($elParent, "identifiant");
+    $this->addElement($identifiant, "emetteur",  $acteNGAP["idSourceActeNGAP"]);
+    $this->addElement($identifiant, "recepteur", $acteNGAP["idCibleActeNGAP"]);
+
+    $this->addElement($elParent, "lettreCle",    $mbActeNGAP["code"]);
+    $this->addElement($elParent, "coefficient",  $mbActeNGAP["coefficient"]);
+
+    $execute = $this->addElement($elParent, "execute");
+    $this->addElement($execute, "date",  CMbDT::date($mbActeNGAP["date"]));
+    $this->addElement($execute, "heure", CMbDT::time($mbActeNGAP["heure"]));
   }
   
   function addPatient(DOMNode $elParent, CPatient $mbPatient, $referent = false, $light = false) {
@@ -859,7 +880,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
     $this->addElement($erreur, "code"       , substr($code, 0, 17));
     $this->addElement($erreur, "libelle"    , substr($libelle, 0, 80));
-    $this->addElement($erreur, "commentaire", substr("$libelle : \"$commentaires\"", 0, 4000)); 
+    if ($commentaires) {
+      $this->addElement($erreur, "commentaire", substr("$libelle : \"$commentaires\"", 0, 4000));
+    }
   }
   
   function addReponseCCAM($elParent, $statut, $codes, $acteCCAM, $mbObject = null, $commentaires = null) {
@@ -869,7 +892,17 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $elActeCCAM = $this->addElement($reponse, "acteCCAM");
     $this->addActeCCAMAcquittement($elActeCCAM, $acteCCAM);
     
-    $this->addReponse($reponse, $statut, $codes);
+    $this->addReponse($reponse, $statut, $codes, $mbObject, $commentaires);
+  }
+
+  function addReponseNGAP($elParent, $statut, $codes, $acteNGAP, $mbObject = null, $commentaires = null) {
+    $reponse = $this->addElement($elParent, "reponse");
+    $this->addAttribute($reponse, "statut", $statut);
+
+    $elActeNGAP = $this->addElement($reponse, "acteNGAP");
+    $this->addActeNGAPAcquittement($elActeNGAP, $acteNGAP);
+
+    $this->addReponse($reponse, $statut, $codes, $mbObject, $commentaires);
   }
   
   function addReponseIntervention($elParent, $statut, $codes, $acteCCAM, $mbObject = null, $commentaires = null) {
@@ -963,17 +996,21 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
     
     $natureVenueHprim = $this->addElement($elParent, "natureVenueHprim");
-    
+
     $attrNatureVenueHprim = array (
       "comp"    => "hsp",
-      "ambu"    => ((CAppUI::conf("hprimxml evt_patients version") == "1.053") || 
-                    (CAppUI::conf("hprimxml evt_patients version") == "1.07")) ? 
+      "ambu"    => ((CAppUI::conf("hprimxml $this->evenement version") == "1.053") ||
+                    (CAppUI::conf("hprimxml $this->evenement version") == "1.07") ||
+                    (CAppUI::conf("hprimxml $this->evenement version") == "1.07") ||
+                    (CAppUI::conf("hprimxml $this->evenement version") == "1.072")) ?
                       "ambu" : "hsp",
       "urg"     => "hsp",
       "psy"     => "hsp",
       "ssr"     => "hsp",
-      "exte"    => ((CAppUI::conf("hprimxml evt_patients version") == "1.053") || 
-                    (CAppUI::conf("hprimxml evt_patients version") == "1.07")) ?
+      "exte"    => ((CAppUI::conf("hprimxml $this->evenement version") == "1.053") ||
+                    (CAppUI::conf("hprimxml $this->evenement version") == "1.07") ||
+                    (CAppUI::conf("hprimxml $this->evenement version") == "1.07") ||
+                    (CAppUI::conf("hprimxml $this->evenement version") == "1.072")) ?
                       "exte" : "hsp",
       "consult" => "cslt",
       "seances" => "sc"

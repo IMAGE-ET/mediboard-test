@@ -142,20 +142,21 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     $evenementServeurActe = $xpath->queryUniqueNode("/hprim:evenementsServeurActes/hprim:evenementServeurActe");
     
     $data['patient']         = $xpath->queryUniqueNode("hprim:patient", $evenementServeurActe);
-    $data['idSourcePatient'] = $this->getIdSource($data['patient']);
-    $data['idCiblePatient']  = $this->getIdCible($data['patient']);
+    //@todo ajouter une configuration pour intervertir le source et le cible
+    $data['idSourcePatient'] = $this->getIdCible($data['patient']);
+    $data['idCiblePatient']  = $this->getIdSource($data['patient']);
     
     $data['venue']           = $xpath->queryUniqueNode("hprim:venue", $evenementServeurActe);
-    $data['idSourceVenue']   = $this->getIdSource($data['venue']);
-    $data['idCibleVenue']    = $this->getIdCible($data['venue']);
+    //@todo ajouter une configuration pour intervertir le source et le cible
+    $data['idSourceVenue']   = $this->getIdCible($data['venue']);
+    $data['idCibleVenue']    = $this->getIdSource($data['venue']);
     
     $data['intervention']         = $xpath->queryUniqueNode("hprim:intervention", $evenementServeurActe);
     $data['idSourceIntervention'] = $this->getIdSource($data['intervention'], false);
-    $data['idCibleIntervention']  = $this->getIdCible($data['intervention'], false);
+    $data['idCibleIntervention']  = $this->getIdCible($data['intervention'] , false);
     
-    $data['actesCCAM']         = $xpath->queryUniqueNode("hprim:actesCCAM", $evenementServeurActe);  
-    $data['idSourceActesCCAM'] = $this->getIdSource($data['actesCCAM'], false);
-    $data['idCibleActesCCAM']  = $this->getIdCible($data['actesCCAM'], false);
+    $data['actesCCAM']            = $xpath->queryUniqueNode("hprim:actesCCAM", $evenementServeurActe);
+    $data['actesNGAP']            = $xpath->queryUniqueNode("hprim:actesNGAP", $evenementServeurActe);
     
     return $data; 
   }
@@ -170,116 +171,381 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
    * @return string Acquittement 
    **/
   function handle(CHPrimXMLAcquittementsServeurActivitePmsi $dom_acq, CMbObject $mbObject, $data) {
-    /*
-    $messageAcquittement = null;
-    
-     // Si pas Serveur d'Actes
-    if (!CAppUI::conf('dPpmsi server')) { 
-      $dest_hprim = new CDestinataireHprim();
-      $dest_hprim->nom = $data['idClient'];
-      $dest_hprim->loadMatchingObject();
-      
-      $avertissement = null;
-      
-      // Récupération de l'élément patient du message
-      $elPatient  = $data['patient'];
-      
-      // Mapping actes CCAM
-      $actesCCAM = $this->mappingActesCCAM($data);
-          
-      // Acquittement d'erreur : identifiants source du patient / séjour non fournis
-      if (!$data['idSourcePatient'] || !$data['idSourceVenue']) {
-        $messageAcquittement = $domAcquittement->generateAcquittements("err", "E206", null, null, $actesCCAM, $elPatient);
-        $doc_valid = $domAcquittement->schemaValidate();
-        
-        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");
-        return $messageAcquittement;
-      }
-      
-      // IPP non connu => message d'erreur
-      $IPP = new CIdSante400();
-      $IPP->object_class = "CPatient";
-      $IPP->tag = $dest_hprim->_tag_patient;
-      $IPP->id400 = $data['idSourcePatient'];
+    /** @var COperation $mbObject */
+    $exchange_hprim = $this->_ref_echange_hprim;
+    $sender         = $exchange_hprim->_ref_sender;
+    $sender->loadConfigValues();
 
-      if (!$IPP->loadMatchingObject()) {
-        $messageAcquittement = $domAcquittement->generateAcquittements("err", "E013", null, null, $actesCCAM, $elPatient);
-        $doc_valid = $domAcquittement->schemaValidate();
-        
-        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");
-        return $messageAcquittement;    
+    $this->_ref_sender = $sender;
+
+    // Acquittement d'erreur : identifiants source du patient / séjour non fournis
+    if (!$data['idSourcePatient'] || !$data['idSourceVenue']) {
+      return $exchange_hprim->setAckError($dom_acq, "E206", null, $mbObject);
+    }
+
+    // IPP non connu => message d'erreur
+    $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $data['idSourcePatient']);
+    if (!$IPP->_id) {
+      return $exchange_hprim->setAckError($dom_acq, "E013", null, $mbObject);
+    }
+
+    // Chargement du patient
+    $patient = new CPatient();
+    $patient->load($IPP->object_id);
+
+    // Num dossier non connu => message d'erreur
+    $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $data['idSourceVenue']);
+    if (!$NDA->_id) {
+      return $exchange_hprim->setAckError($dom_acq, "E014", null, $mbObject);
+    }
+
+    // Chargement du séjour
+    $sejour = new CSejour();
+    $sejour->load($NDA->object_id);
+
+    // Si patient H'XML est différent du séjour
+    if ($sejour->patient_id != $patient->_id) {
+      return $exchange_hprim->setAckError($dom_acq, "E015", null, $mbObject);
+    }
+
+    // Chargement du patient du séjour
+    $sejour->loadRefPatient();
+
+    //Mapping actes CCAM
+    $actes = array(
+      "CCAM" => $this->mappingActesCCAM($data),
+      "NGAP" => $this->mappingActesNGAP($data),
+    );
+    $codes   = array();
+    $warning = array();
+    foreach ($actes as $type => $_actes) {
+      foreach ($_actes as $_key => $_acte) {
+        $return = $this->storeActe($_acte, $type, $sejour, $patient, $sender->_tag_hprimxml);
+        $number = $type == "CCAM" ? "0" : "1";
+        //Cas d'une erreur lors de l'ajoutement
+        if (!is_object($return)) {
+          $warning["A401"][] = $return;
+          $codes[$_acte["idSourceActe$type"]] = array("code" => "A4{$number}1", "commentaires" => $return);
+          $actes[$type][$_key]["statut"] = "avt";
+          continue;
+        }
+        $actes[$type][$_key]["statut"] = "ok";
+        //Cas d'une modification ou d'un ajout
+        if ($return->_id) {
+          $codes[$_acte["idSourceActe$type"]] = array("code" => "I4{$number}1", "commentaires" => null);
+          continue;
+        }
+        //Cas de la suppression
+        $codes[$_acte["idSourceActe$type"]] = array("code" => "I4{$number}2", "commentaires" => null);
       }
-      
-      // Chargement du patient
-      $patient = new CPatient();   
-      $patient->load($IPP->object_id);
-      
-      // Num dossier non connu => message d'erreur
-      $num_dos = new CIdSante400();
-      $num_dos->object_class = "CSejour";
-      $num_dos->tag = $dest_hprim->_tag_sejour;
-      $num_dos->id400 = $data['idSourceVenue'];
-      
-      if (!$num_dos->loadMatchingObject()) {
-        $messageAcquittement = $domAcquittement->generateAcquittements("err", "E014", null, null, $actesCCAM, $elPatient);
-        $doc_valid = $domAcquittement->schemaValidate();
-        
-        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");
-        return $messageAcquittement;    
+    }
+
+    return $exchange_hprim->setAck($dom_acq, $codes, $warning, null, $sejour, $actes);
+  }
+
+  /**
+   * Store Acte
+   *
+   * @param String[] $data    Value
+   * @param String   $type    CCAM or NGAP
+   * @param CSejour  $sejour  Sejour
+   * @param CPatient $patient Patient
+   * @param String   $tag     Tag
+   *
+   * @return String|CActe;
+   */
+  function storeActe($data, $type, $sejour, $patient, $tag) {
+    $code_acte = "code";
+    if ($type == "CCAM") {
+      $field_object = "codes_ccam";
+      $code_acte = "code_acte";
+    }
+    $action = $data["action"];
+
+    $idex = CIdSante400::getMatch("CActe$type", $tag, $data["idSourceActe$type"]);
+    $executant_id = $data["executant_id"];
+    if ($idex->_id) {
+      $class = "CActe$type";
+      /** @var CActeCCAM|CActeNGAP $acte */
+      $acte = new $class;
+      $acte->load($idex->object_id);
+
+      $object = $acte->loadTargetObject();
+
+      if ($action === "suppression") {
+        if ($type == "CCAM") {
+          $code = $acte->$code_acte;
+          $replace = explode("|", $object->$field_object);
+          CMbArray::removeValue($code, $replace);
+          $object->$field_object = $replace ? implode("|", $replace) : "";
+        }
+
+        if ($msg = $this->deleteActe($acte, $object, $idex)) {
+           return $msg;
+        }
+
+        return $acte;
       }
-      
-      // Chargement du séjour
-      $sejour = new CSejour();
-      $sejour->load($num_dos->object_id);
-      
-      // Si patient H'XML est différent du séjour
-      if ($sejour->patient_id != $patient->_id) {
-        $messageAcquittement = $domAcquittement->generateAcquittements("err", "E015", null, null, $actesCCAM, $elPatient);
-        $doc_valid = $domAcquittement->schemaValidate();
-        
-        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");
-        return $messageAcquittement;    
+      /** @var CActeCCAM|CActeNGAP $new_acte */
+      $new_acte = $this->{"createActe$type"}($data["acte$type"], $object, $executant_id);
+      $modification = $new_acte->$code_acte != $acte->$code_acte;
+      if ($modification) {
+        if ($type == "CCAM") {
+          $new_code = preg_replace("#$acte->$code_acte#", $new_acte->$code_acte, $object->$field_object, 1);
+          $object->$field_object = $new_code;
+        }
+
+        if ($msg = $this->deleteActe($acte, $object, $idex)) {
+          return $msg;
+        }
+
+        $acte = new $class;
       }
 
-      // Chargement du patient du séjour
-      $sejour->loadRefPatient();
-      
-      // Récupération de la date de l'intervention
-      $dateInterv = $this->getDateInterv($data['intervention']);
-      
-      // Chargement des interventions du séjour
-      $sejour->loadRefsOperations();  
-      $operation = null;
-      foreach ($sejour->_ref_operations as $_operation) {
-        if (CMbDT::date($_operation->_datetime)) {
-          $operation = $_operation;
+      $acte->extendsWith($new_acte, true);
+      if ($msg = $acte->store()) {
+        return $msg;
+      }
+
+      if ($modification) {
+        $idex->setObject($acte);
+        if ($msg = $idex->store()) {
+          return $msg;
         }
       }
-      
-      // @FIXME Penser à virer par la suite pour rattacher des actes à un séjour...
-      if (!$operation) {
-        $messageAcquittement = $domAcquittement->generateAcquittements("err", "E201", null, null, $actesCCAM, $elPatient);
-        $doc_valid = $domAcquittement->schemaValidate();
-        
-        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");
-        return $messageAcquittement; 
-      }     
 
-      $operation->loadRefsActesCCAM();
-      $mbActesCCAM = $operation->_ref_actes_ccam;
-      
-      mbTrace($actesCCAM, "actesCCAM", true);
-      mbTrace($mbActesCCAM, "mbActesCCAM", true);
-      foreach () {
-      
-      $messageAcquittement = $domAcquittement->generateAcquittements("ok", "I201", null, null, $actesCCAM, $elPatient);
+      return $acte;
     }
-    
-    $echange_hprim->_acquittement = $messageAcquittement;
-    $echange_hprim->date_echange = CMbDT::dateTime();
-    $echange_hprim->setObjectIdClass("CSejour", $data['idCibleVenue']);
-    $echange_hprim->store();
 
-    return $messageAcquittement;*/
+    if ($action !== "création") {
+      return "$action impossible car l'acte n'a pas été trouvé";
+    }
+
+    $date = CMbDT::date($data["acte$type"]["date"]);
+
+    $object = $this->getObject($date, $executant_id, $patient->_id);
+    $object = $object ? $object : $sejour;
+
+    /** @var CActe $acte */
+    $acte = $this->{"createActe$type"}($data["acte$type"], $object, $executant_id);
+    if ($type == "CCAM") {
+      $object->$field_object .= $object->$field_object ? "|{$acte->$code_acte}" : $acte->$code_acte;
+    }
+    if ($msg = $object->store()) {
+      return $msg;
+    }
+    if ($msg = $acte->store()) {
+      return $msg;
+    }
+
+    $idex = new CIdSante400();
+    $idex->id400 = $data["idSourceActe$type"];
+    $idex->tag = $tag;
+    $idex->setObject($acte);
+    if ($msg = $idex->store()) {
+      return $msg;
+    }
+
+    return $acte;
+  }
+
+  /**
+   * Delete acte
+   *
+   * @param CActe       $acte   Acte
+   * @param CMbObject   $object Object
+   * @param CIdSante400 $idex   Idex
+   *
+   * @return String|null
+   */
+  function deleteActe($acte, $object, $idex) {
+    if ($msg = $idex->delete()) {
+      return $msg;
+    }
+    if ($msg = $acte->delete()) {
+      return $msg;
+    }
+    if ($msg = $object->store()) {
+      return $msg;
+    }
+
+    return null;
+  }
+
+  /**
+   * Return a object concern praticien and a patient in date
+   *
+   * @param Date   $date         Date
+   * @param String $praticien_id Praticien id
+   * @param String $patient_id   Patient id
+   *
+   * @return CConsultation|COperation|null
+   */
+  function getObject($date, $praticien_id, $patient_id) {
+    $intervention = new COperation();
+    $where = array(
+      "plagesop.date" => "= '$date'",
+      "operations.chir_id" => "= '$praticien_id'",
+      "sejour.patient_id" => "= '$patient_id'",
+    );
+    $leftjoin = array(
+      "plagesop" => "operations.plageop_id = plagesop.plageop_id",
+      "sejour" => "operations.sejour_id = sejour.sejour_id",
+    );
+    $intervention->loadObject($where, "plagesop.debut DESC", null, $leftjoin);
+    $object = $intervention;
+
+    if (!$object->_id) {
+      $consultation = new CConsultation();
+      $where = array(
+        "plageconsult.date" => "= '$date'",
+        "plageconsult.chir_id" => "= '$praticien_id'",
+        "consultation.patient_id" => "= '$patient_id'",
+      );
+      $leftjoin = array(
+        "plageconsult" => "consultation.plageconsult_id = plageconsult.plageconsult_id",
+      );
+      $consultation->loadObject($where, "consultation.heure DESC", null, $leftjoin);
+      $object = $consultation;
+
+      if (!$object->_id) {
+        return null;
+      }
+    }
+
+    return $object;
+  }
+
+  /**
+   * Create a CCAM
+   *
+   * @param String[]  $data         CCAM field with value
+   * @param CMbObject $object       Reference Obect
+   * @param String    $praticien_id Practicien id
+   *
+   * @return CActeCCAM
+   */
+  function createActeCCAM($data, $object, $praticien_id) {
+    $ccam = new CActeCCAM();
+
+    $ccam->code_acte     = $data["code_acte"];
+    $ccam->code_activite = $data["code_activite"];
+    $ccam->code_phase    = $data["code_phase"];
+
+    $heure = $data["heure"];
+
+    if (!$heure) {
+      $heure = $this->getHourWithObject($object);
+    }
+    else {
+      $heure =  CMbDT::transform(null, $heure, "%H:%M:%S");
+    }
+
+    $ccam->execution                = $data["date"]." $heure";
+    $ccam->modificateurs            = implode($data["modificateur"]);
+    $ccam->commentaire              = $data["commentaire"];
+    $ccam->signe                    = $data["signe"]       ? $data["signe"]       == "oui" ? "1" : "0" : null;
+    $ccam->facturable               = $data["facturable"]  ? $data["facturable"]  == "oui" ? "1" : "0" : null;
+    $ccam->rembourse                = $data["rembourse"]   ? $data["rembourse"]   == "oui" ? "1" : "0" : null;
+    $ccam->charges_sup              = $data["charges_sup"] ? $data["charges_sup"] == "c"   ? "1" : "0" : null;
+    $ccam->montant_depassement      = $data["montantDepassement"];
+    $ccam->numero_forfait_technique = $data["numeroForfaitTechnique"];
+    $ccam->numero_agrement          = $data["numeroAgrementAppareil"];
+    $ccam->position_dentaire        = implode("|", $data["position_dentaire"]);
+    if ($data["code_association"] && $data["code_association"] > 0 && $data["code_association"] < 6) {
+      $ccam->code_association = $data["code_association"];
+    }
+    if ($data["code_extension"] && $data["code_extension"] > 0 && $data["code_extension"] < 7) {
+      $ccam->extension_documentaire = $data["code_extension"];
+    }
+    $ccam->rapport_exoneration = $data["rapport_exoneration"];
+
+    $ccam->executant_id = $praticien_id;
+    $ccam->setObject($object);
+
+    return $ccam;
+  }
+
+  /**
+   * Create a NGAP acte
+   *
+   * @param String[]  $data         Data with fiel and value
+   * @param CMbObject $object       Reference object
+   * @param String    $praticien_id Praticen id
+   *
+   * @return CActeNGAP
+   */
+  function createActeNGAP($data, $object, $praticien_id) {
+    $ngap = new CActeNGAP();
+    $ngap->code                     = $data["code"];
+    $ngap->coefficient              = $data["coefficient"];
+    $ngap->quantite                 = $data["quantite"] ? $data["quantite"] : 1;
+    $ngap->numero_dent              = $data["numero_dent"];
+    $ngap->comment                  = $data["comment"];
+    $ngap->montant_depassement      = $data["montantDepassement"];
+    $ngap->numero_forfait_technique = $data["numeroForfaitTechnique"];
+    $ngap->numero_agrement          = $data["numeroAgrementAppareil"];
+    $ngap->minor_coef               = $data["minor_coef"];
+    $ngap->minor_pct                = $data["minor_pct"];
+    $ngap->major_coef               = $data["major_coef"];
+    $ngap->major_pct                = $data["major_pct"];
+    $ngap->facturable               = $data["facturable"] ? $data["facturable"] == "non" ? "0" : "1" : null ;
+    $ngap->rapport_exoneration      = $data["rapportExoneration"];
+
+    $date  = $data["date"];
+    $heure = $data["heure"];
+
+    if (!$heure) {
+      $heure = $this->getHourWithObject($object);
+    }
+    else {
+      $heure =  CMbDT::transform(null, $heure, "%H:%M:%S");
+    }
+    $ngap->execution = "$date $heure";
+    $complement = null;
+    if ($data["executionNuit"] && $data["executionNuit"] !== "non") {
+      $complement = "N";
+    }
+    if ($data["executionDimancheJourFerie"] && $data["executionDimancheJourFerie"] !== "non") {
+      $complement = "F";
+    }
+    $ngap->complement = $complement;
+    $ngap->setObject($object);
+    $ngap->executant_id = $praticien_id;
+
+    return $ngap;
+  }
+
+  /**
+   * Return the time of the object
+   *
+   * @param CMbObject $object Reference Object
+   *
+   * @return null|time
+   */
+  function getHourWithObject($object) {
+    $heure = null;
+    switch (get_class($object)) {
+      case "COperation":
+        /** @var COperation $object */
+        $time_operation = ($object->time_operation == "00:00:00") ? null : $object->time_operation;
+        $heure = CValue::first(
+          $object->debut_op,
+          $object->entree_salle,
+          $time_operation,
+          $object->horaire_voulu
+        );
+        break;
+      case "CConsultation":
+        /** @var CConsultation $object */
+        $heure = $object->heure;
+        break;
+      case "CSejour":
+        /** @var CSejour $object */
+        $heure = CMbDT::time($object->entree);
+        break;
+    }
+
+    return $heure;
   }
 }
