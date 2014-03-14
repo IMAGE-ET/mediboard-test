@@ -68,12 +68,6 @@ function refreshTabReveil(type) {
   url.requestUpdate(type);
 }
 
-codageCCAM = function(operation_id){
-  var url = new Url("dPsalleOp", "httpreq_codage_actes_reveil");
-  url.addParam("operation_id", operation_id);
-  url.popup(700,500,"Actes CCAM");
-}
-
 showDossierSoins = function(sejour_id, operation_id, default_tab){
   {{if "dPprescription"|module_active}}
     var url = new Url("soins", "ajax_vw_dossier_sejour");
