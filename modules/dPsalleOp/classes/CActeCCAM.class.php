@@ -43,6 +43,7 @@ class CActeCCAM extends CActe {
   public $exoneration;
   public $lieu;
   public $ald;
+  public $position_dentaire;
 
   // Derived fields
   public $_modificateurs = array();
@@ -109,6 +110,7 @@ class CActeCCAM extends CActe {
     $props["lieu"]                   = "enum list|C|D default|C";
     $props["exoneration"]            = "enum list|N|13|17 default|N";
     $props["ald"]                    = "bool";
+    $props["position_dentaire"]      = "str";
 
     // Derived fields
     $props["_rembex"]             = "bool";
