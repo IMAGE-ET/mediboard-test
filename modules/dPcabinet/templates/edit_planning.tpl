@@ -575,6 +575,17 @@
                       <option value="{{$i}}" {{if $consult->duree == $i}}selected{{/if}}>
                         x{{$i}} {{if $plageConsult->_id}}({{if $duree_hour}}{{$duree_hour}}h{{/if}}{{if $duree_min}}{{$duree_min}}min{{/if}}){{/if}}</option>
                     {{/foreach}}
+
+                    {{if $consult->duree > 15}}
+                      {{assign var=i value=$consult->duree}}
+                      {{if $plageConsult->_id}}
+                        {{assign var=freq value=$plageConsult->_freq}}
+                        {{math equation=x*y x=$i y=$freq assign=duree_min}}
+                        {{math equation=floor(x/60) x=$duree_min assign=duree_hour}}
+                        {{math equation=(x-y*60) x=$duree_min y=$duree_hour assign=duree_min}}
+                      {{/if}}
+                      <option value="{{$i}}" selected="selected">x{{$i}} {{if $plageConsult->_id}}({{if $duree_hour}}{{$duree_hour}}h{{/if}}{{if $duree_min}}{{$duree_min}}min{{/if}}){{/if}}</option>
+                    {{/if}}
                   </select>
                 </td>
               </tr>

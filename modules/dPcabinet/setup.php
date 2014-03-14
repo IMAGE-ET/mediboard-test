@@ -2075,6 +2075,11 @@ class CSetupdPcabinet extends CSetup {
                 MODIFY `code` VARCHAR(5) NOT NULL;";
     $this->addQuery($query);
 
-    $this->mod_version = "2.27";
+    $this->makeRevision("2.27");
+    $query = "ALTER TABLE `consultation`
+      CHANGE `duree` `duree` INT (4) UNSIGNED NOT NULL DEFAULT '1'";
+    $this->addQuery($query);
+
+    $this->mod_version = "2.28";
   }
 }

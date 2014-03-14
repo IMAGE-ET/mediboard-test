@@ -42,7 +42,7 @@ class CConsultationCategorie extends CMbObject {
     $props["function_id"]   = "ref notNull class|CFunctions";
     $props["nom_categorie"] = "str notNull";
     $props["nom_icone"]     = "str notNull";
-    $props["duree"]         = "num min|1 max|15 notNull default|1 show|0";
+    $props["duree"]         = "num min|1 max|255 notNull default|1 show|0";
     $props["commentaire"]   = "text helped seekable";
     return $props;
   }

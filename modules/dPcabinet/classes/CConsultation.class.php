@@ -250,7 +250,7 @@ class CConsultation extends CFacturable {
     $props["motif"]             = "text helped seekable";
     $props["type"]              = "enum list|classique|entree|chimio default|classique";
     $props["heure"]             = "time notNull show|0";
-    $props["duree"]             = "num min|1 max|15 notNull default|1 show|0";
+    $props["duree"]             = "num min|1 max|255 notNull default|1 show|0";
     $props["secteur1"]          = "currency min|0 show|0";
     $props["secteur2"]          = "currency show|0";
     $props["secteur3"]          = "currency show|0";
