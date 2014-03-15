@@ -65,20 +65,18 @@ $userCol = "user_username";
 $passCol = "user_password";
 $saltCol = "user_salt";
 
-$db = new CMbDb($host, $user, $pass, $name);
-
-if (!$db->connect()) {
-  // DB not configured yet, don't need to auth
+try {
+  $db = new CMbDb($host, $user, $pass, $name);
+}
+catch (PDOException $e) {
   return;
 }
 
-$list = $db->getAssoc("SELECT * FROM $table");
+$admin_user = $db->getAssoc("SELECT * FROM $table WHERE $userCol = 'admin'");
 
-if (!$list || !isset($list[1])) {
+if (!$admin_user) {
   return; 
 }
-
-$admin_user = $list[1];
 
 // Abandon if only user is still admin/admin
 if ($admin_user[$userCol] == "admin" && $admin_user[$passCol] == md5("admin")) {

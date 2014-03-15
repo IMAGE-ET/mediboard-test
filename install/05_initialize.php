@@ -48,21 +48,21 @@ showHeader();
   <col style="width: 25%;" />
 
   <tr>
-    <th class="title" colspan="2">Avec des droits d'aministrateurs</th>
+    <th class="title" colspan="2">Avec des droits d'administrateurs</th>
   </tr>
 
   <tr>
-    <th><label for="adminhost" title="Nom de l'hôte">Nom de l'hôte</label></th>
+    <th><label for="adminhost">Nom de l'hôte</label></th>
     <td><input type="text" size="40" name="adminhost" value="<?php echo $dbConfigs["std"]["dbhost"]; ?>" /></td>
   </tr>
 
   <tr>
-    <th><label for="adminuser" title="Nom de l'utilisateur">Nom de l'administrateur</label></th>
+    <th><label for="adminuser">Nom de l'administrateur</label></th>
     <td><input type="text" size="40" name="adminuser" value="root" /></td>
   </tr>
 
   <tr>
-    <th><label for="adminpass" title="Mot de passe de l'utililisateur'">Mot de passe de l'administrateur</label></th>
+    <th><label for="adminpass">Mot de passe de l'administrateur</label></th>
     <td><input type="password" size="40" name="adminpass" value="" /></td>
   </tr>
 
@@ -77,12 +77,11 @@ if (@$_POST["adminhost"]) {
   $dbConnection = new CMbDb(
     $_POST["adminhost"],
     $_POST["adminuser"],
-    $_POST["adminpass"]);
-    
-  if ($dbConnection->connect()) {
-    foreach ($queries as $query) {
-      $dbConnection->query($query);
-    }
+    $_POST["adminpass"]
+  );
+
+  foreach ($queries as $query) {
+    $dbConnection->query($query);
   }
 ?>
 
@@ -92,7 +91,7 @@ if (@$_POST["adminhost"]) {
 </tr>
 
 <tr>
-  <td>Créations des bases et des utilisateurs</td>
+  <td>Création des bases et des utilisateurs</td>
   <td>
     <?php if (!count($dbConnection->_errors)) { ?>
     <div class="info">Créations réussies</div>
@@ -153,35 +152,35 @@ if (@$_POST["adminhost"]) {
     <th>Configuration</th>
     <th>Test de connectivité</th>
   </tr>
-  <?php 
-  foreach ($dbConfigs as $dbConfigName => $dbConfig) {
+<?php foreach ($dbConfigs as $dbConfigName => $dbConfig) { ?>
+  <tr>
+    <td><?php echo $dbConfigName; ?></td>
+  <td>
+  <?php
+  try {
     $dbConnection = new CMbDb(
-      $dbConfig["dbhost"], 
-      $dbConfig["dbuser"], 
-      $dbConfig["dbpass"], 
+      $dbConfig["dbhost"],
+      $dbConfig["dbuser"],
+      $dbConfig["dbpass"],
       $dbConfig["dbname"]
     );
-    $dbConnection->connect();
-  ?>
-  <tr>
-    <td><?php echo $dbConfigName; ?>
-    </td>
-    <td>
-    
-    <?php if (!count($dbConnection->_errors)) { ?>
-      <div class="info">Connexion réussie</div>
-    <?php } else { ?>
-      <div class="error">
-        Echec de connexion
-        <br />
-        <?php echo nl2br(join($dbConnection->_errors, "\n")); ?>
-      </div>
-    <?php } ?>
 
+    ?><div class="info">Connexion réussie</div><?php
+  }
+  catch (PDOException $e) { ?>
+    <div class="error">
+      Echec de connexion
+      <br />
+      <?php echo $e->getMessage(); ?>
+    </div>
+  <?php
+  }
+  ?>
     </td>
   </tr>
-  <?php } ?>
-  
+  <?php
+}
+?>
 </table>
 
 <?php showFooter(); ?>

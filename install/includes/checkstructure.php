@@ -12,16 +12,9 @@
 
 require_once "header.php";
 
-$dbConfig = $dPconfig["db"]["std"];
-$db = new CMbDb(
-  $dbConfig["dbhost"], 
-  $dbConfig["dbuser"], 
-  $dbConfig["dbpass"], 
-  $dbConfig["dbname"]
-);
+$db = CMbDb::getStd();
 
-$db->connect();
-if (!$db->getOne("SELECT * FROM `users`")) {
+if (!$db->getOne("SELECT * FROM users")) {
   showHeader();
 ?>
 
@@ -34,4 +27,3 @@ if (!$db->getOne("SELECT * FROM `users`")) {
 <?php
 showFooter();
 }
-?>

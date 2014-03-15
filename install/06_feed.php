@@ -20,7 +20,7 @@ showHeader();
 
 ?>
 
-<h2>Test et construction initial de la base de données</h2>
+<h2>Test et construction initiale de la base de données</h2>
 
 <h3>Construction de la base principale</h3>
 
@@ -47,15 +47,8 @@ showHeader();
 
 <?php 
 if (@$_POST["do"]) {
-  $dbConnection = new CMbDb(
-    $dbConfig["dbhost"], 
-    $dbConfig["dbuser"], 
-    $dbConfig["dbpass"], 
-    $dbConfig["dbname"]
-  );
-  if ($dbConnection->connect()) {
-    $dbConnection->queryDump("includes/mediboard.sql");
-  }
+  $db = CMbDb::getStd();
+  $db->queryDump("includes/mediboard.sql");
 ?>
 
 <table class="tbl">
@@ -74,7 +67,7 @@ if (@$_POST["do"]) {
     <div class="error">
       Erreurs lors de la construction
       <br />
-      <?php echo nl2br(join($dbConnection->_errors, "\n")); ?>
+      <?php echo nl2br(implode("\n", $dbConnection->_errors)); ?>
     </div>
     <?php } ?>
   </td>
@@ -84,18 +77,8 @@ if (@$_POST["do"]) {
 
 <?php } ?>
 
-<?php 
-
-$dbConfig = $dbConfigs["std"];
-$db = new CMbDb(
-  $dbConfig["dbhost"], 
-  $dbConfig["dbuser"], 
-  $dbConfig["dbpass"], 
-  $dbConfig["dbname"]
-);
-
-$db->connect();
-if ($db->getOne("SELECT * FROM `users`")) {
+<?php
+if ($db->getOne("SELECT * FROM users")) {
 ?>
 
 <div class="small-warning">

@@ -83,7 +83,7 @@ showHeader();
 <p>
   PECL est une bibliothèque d'extensions binaires de PHP. 
   <br />
-  La plupart des  extensions de base de PHP est fournie avec votre 
+  La plupart des extensions de base de PHP est fournie avec votre
   distribution de PHP. Si toutefois certaines extensions sont manquantes,
   vérifiez que :
 </p>
@@ -147,7 +147,7 @@ showHeader();
 <h3>Packages PEAR</h3>
 
 <p>
-  PEAR est un framework de distributions de bibliothèques écrites en PHP.
+  PEAR est un framework de distribution de bibliothèques écrites en PHP.
   <br />
   Si plusieurs ou tous les packages sont manquants, n'hésitez pas à vous rendre 
   sur le site officiel <a href="http://pear.php.net/">http://pear.php.net/</a>
@@ -202,15 +202,6 @@ showHeader();
 <?php } ?>
 
 </table>
-
-<div class="big-info">
-  Certains packages Pear ne sont pas publiés dans un statut <strong>stable</strong>, 
-  bien que suffisemment fonctionnels pour Mediboard. 
-  <br />Pour pouvoir installer les packages en statut <strong>beta</strong>, il peut être
-  néccessaire de configurer PEAR avec la commande :
-  
-  <pre>pear config-set preferred_state beta</pre>
-</div>
 
 <h3>Droits d'accès distants</h3>
 

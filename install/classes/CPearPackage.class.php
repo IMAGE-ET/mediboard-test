@@ -39,7 +39,7 @@ class CPearPackage extends CPrerequisite {
   function getAll(){
     $packages = array();
     
-    $package = new CPearPackage;
+    $package = new CPearPackage();
     $package->name = "Archive/Tar";
     $package->description = "Package de manipulation d'archives au format GNU TAR";
     $package->mandatory = true;
@@ -47,21 +47,14 @@ class CPearPackage extends CPrerequisite {
     $package->reasons[] = "Import des fonctions de GHM";
     $packages[] = $package;
     
-    $package = new CPearPackage;
+    $package = new CPearPackage();
     $package->name = "Config";
     $package->description = "Package de manipulation de fichiers de configuration";
     $package->mandatory = true;
     $package->reasons[] = "Configuration générale de Mediboard";
     $packages[] = $package;
     
-    $package = new CPearPackage;
-    $package->name = "DB";
-    $package->description = "Package de manipulation de base de données";
-    $package->mandatory = true;
-    $package->reasons[] = "Assistant d'installation de Mediboard";
-    $packages[] = $package;
-    
-    $package = new CPearPackage;
+    $package = new CPearPackage();
     $package->name = "PHP/CodeSniffer";
     $package->description = "Analyseur syntaxique de code source";
     $package->status = "beta";
