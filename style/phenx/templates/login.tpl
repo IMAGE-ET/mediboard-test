@@ -38,7 +38,12 @@
 </div>
 
 {{if !$dialog}}
-  <div id="version" title="Plateforme Open Source pour les Etablissements de Santé">Version {{$version.version}} - Révision {{$version.build}}</div>
+  <div id="version" title="Plateforme Open Source pour les Etablissements de Santé">
+    Version {{$version.version}}
+    {{if $applicationVersion.releaseCode}}
+      - Branche : {{$applicationVersion.releaseTitle|capitalize}}
+    {{/if}}
+  </div>
 {{/if}}
 
 {{include file="../../mediboard/templates/common_end.tpl" nodebug=true}}

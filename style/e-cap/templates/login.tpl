@@ -20,7 +20,10 @@
         </a>
         <p>
           Plateforme Open Source pour les Etablissements de Santé<br/>
-          Version {{$version.version}} - Révision {{$version.build}}
+          Version {{$version.version}}
+          {{if $applicationVersion.releaseCode}}
+            - Branche : {{$applicationVersion.releaseTitle|capitalize}}
+          {{/if}}
         </p>
       </td>
     </tr>

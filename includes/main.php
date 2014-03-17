@@ -126,6 +126,8 @@ if (file_exists($support) && CModule::getActive("support")) {
   CJSLoader::$files[] = $support;
 }
 
+$applicationVersion = CApp::getReleaseInfo();
+
 // Check if we are logged in
 if (!CAppUI::$instance->user_id) {
   $redirect = CValue::get("logout") ?  "" : CValue::read($_SERVER, "QUERY_STRING"); 
@@ -169,6 +171,7 @@ if (!CAppUI::$instance->user_id) {
     $tplLogin->assign("nodebug"              , true);
     $tplLogin->assign("offline"              , false);
     $tplLogin->assign("allInOne"             , CValue::get("_aio"));
+    $tplLogin->assign("applicationVersion"   , $applicationVersion);
     $tplLogin->display("login.tpl");
   }
   
@@ -309,20 +312,6 @@ if (!$suppressHeaders) {
   $mail = new CUserMessage();
   $mails = $mail->loadVisibleList();
   
-  // Load the SVN latest update info
-  $svnStatus = null;
-  if (CAppUI::pref("showLastUpdate") && is_readable("./tmp/svnstatus.txt")) {
-    $svnInfo = file("./tmp/svnstatus.txt");
-    $svnStatus = array( 
-      "revision" => explode(": ", $svnInfo[0]),
-      "date"     => explode(": ", $svnInfo[1]),
-    );
-
-    $svnStatus["revision"] = $svnStatus["revision"][1];
-    $svnStatus["date"]     = $svnStatus["date"][1];
-    $svnStatus["relative"] = CMbDate::relative($svnStatus["date"]);
-  }
-  
   // Creation du Template
   $tplHeader = new CSmartyDP("style/$uistyle");
   
@@ -353,7 +342,7 @@ if (!$suppressHeaders) {
   $tplHeader->assign("browser"              , $browser);
   $tplHeader->assign("errorMessage"         , CAppUI::getMsg());
   $tplHeader->assign("Etablissements"       , $etablissements);
-  $tplHeader->assign("svnStatus"            , $svnStatus);
+  $tplHeader->assign("applicationVersion"   , $applicationVersion);
   $tplHeader->assign("allInOne"             , CValue::get("_aio"));
   $tplHeader->assign(
     "portal", 

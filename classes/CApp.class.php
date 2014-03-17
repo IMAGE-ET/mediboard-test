@@ -627,4 +627,58 @@ class CApp {
 
     return $result;
   }
+
+  static function getReleaseInfo() {
+    $svn_status_file       = __DIR__."/../tmp/svnstatus.txt";
+    $root_release_file     = __DIR__."/../release.xml";
+
+    $applicationVersion = array(
+      "releaseTitle" => null,
+      "releaseDate"  => null,
+      "releaseCode"  => null,
+      "releaseRev"   => null,
+
+      "revision"     => null,
+      "date"         => null,
+      "relative"     => null,
+      "title"        => "",
+    );
+
+    // Release information
+    if (is_readable($root_release_file)) {
+      $releaseInfoDOM = new DOMDocument();
+      $releaseInfoDOM->load($root_release_file);
+      $releaseElement = $releaseInfoDOM->documentElement;
+
+      $releaseCode = $releaseElement->getAttribute("code");
+      list($year, $month) = explode("_", $releaseCode);
+      $title = CMbDT::transform(null, $month, "%B") . " " . $year;
+
+      $applicationVersion["releaseTitle"] = $title;
+      $applicationVersion["releaseDate"]  = CMbDT::dateTimeFromXMLDuration($releaseElement->getAttribute("date"));
+      $applicationVersion["releaseCode"]  = $releaseCode;
+      $applicationVersion["releaseRev"]   = $releaseElement->getAttribute("rev");
+
+      $applicationVersion["title"] = "Branche de ".$applicationVersion["releaseTitle"];
+    }
+
+    // Revision information
+    if (is_readable($svn_status_file)) {
+      $svnInfo = file($svn_status_file);
+      $revision = array(
+        "revision" => explode(": ", $svnInfo[0]),
+        "date"     => explode(": ", $svnInfo[1]),
+      );
+
+      $applicationVersion["revision"] = trim($revision["revision"][1]);
+      $applicationVersion["date"]     = CMbDT::dateTime(trim($revision["date"][1]));
+      $applicationVersion["relative"] = CMbDate::relative($applicationVersion["date"]);
+
+      $applicationVersion["title"] .= "\n".
+        "Mise à jour le ".CMbDT::dateToLocale($applicationVersion["date"])."\n".
+        "Révision : ".$applicationVersion["revision"];
+    }
+
+    return $applicationVersion;
+  }
 }

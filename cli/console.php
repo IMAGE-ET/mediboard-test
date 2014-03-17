@@ -27,4 +27,5 @@ if (defined("PHP_WINDOWS_VERSION_MAJOR")) {
 
 $application = new Application();
 $application->add(new DeploySwitchBranch());
+$application->add(new ReleaseMakeXML());
 $application->run();

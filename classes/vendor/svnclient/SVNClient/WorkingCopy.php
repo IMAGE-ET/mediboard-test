@@ -90,11 +90,11 @@ class WorkingCopy {
 
   }
 
-  function add($files, $message) {
-
+  function add($files) {
+    return Util::exec("add", $files, array(), $this->path, true);
   }
 
-  function revert($files, $message) {
+  function revert($files) {
 
   }
 
@@ -118,8 +118,15 @@ class WorkingCopy {
 
   }
 
-  function log($path) {
+  function log($path = "", $limit = null, $verbose = false, $stopOnCopy = true) {
+    $options = array(
+      "--xml"     => true,
+      "--verbose" => $verbose,
+      "--limit"   => (int)$limit,
+      "--stop-on-copy" => $stopOnCopy,
+    );
 
+    return Util::exec("log", $path, $options, $this->path);
   }
 
   function blame($file) {

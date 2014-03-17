@@ -104,7 +104,7 @@
       </span>
       - 
       {{mb_include style=mediboard template=svnstatus}}
-      {{if $svnStatus}}-{{/if}}
+      {{if $applicationVersion}}-{{/if}}
       {{mb_include style=mediboard template=change_group}}
     </td>
   </tr>

@@ -38,17 +38,18 @@ var Menu = {
   {{mb_include style="mediboard" template="logo" id="mediboard-logo" alt="MediBoard logo" width="140"}}
   
   {{if !$offline}}
-  {{assign var=style value="width: 130px;"}}
-  {{mb_include style=mediboard template=change_group}}
-  
-  <!-- Welcome -->
-  <div>
-    <label title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$conf.datetime}}">
-      {{$app->user_first_name}} {{$app->user_last_name}}
-    </label>
     <br />
     {{mb_include style=mediboard template=svnstatus}}
-  </div>
+
+    {{assign var=style value="width: 130px;"}}
+    {{mb_include style=mediboard template=change_group}}
+
+    <!-- Welcome -->
+    <div>
+      <label title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$conf.datetime}}">
+        {{$app->user_first_name}} {{$app->user_last_name}}
+      </label>
+    </div>
   {{/if}}
 
   <div id="menubar" class="iconed">

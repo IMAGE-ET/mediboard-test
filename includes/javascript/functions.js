@@ -1861,6 +1861,11 @@ App.deferClose = function(){
   }).defer();
 };
 
+App.showReleaseInfo = function(){
+  var url = new Url("system", "ajax_show_release_info");
+  url.requestModal();
+};
+
 /**
  * Adds column highlighting to a table
  * @param {Element} table The table

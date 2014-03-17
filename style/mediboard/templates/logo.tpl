@@ -26,8 +26,7 @@
 {{/if}}
 
 <a href="{{$href}}" title="{{tr}}Home{{/tr}}">
-<img src="{{$logo}}" 
-  title="Version {{$version.version}} - Révision {{$version.build}}"
+<img src="{{$logo}}"
   {{if @$width}}width="{{$width}}"{{/if}} 
   {{if @$height}}height="{{$height}}"{{/if}}
   {{if @$alt}}alt="{{$alt}}"{{/if}}

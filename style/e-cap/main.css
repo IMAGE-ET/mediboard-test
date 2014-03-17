@@ -152,6 +152,7 @@ td#mainHeader td.welcome {
   vertical-align: top;
   width: 140px;
   overflow: hidden;
+  text-align: center;
 }
 
 #leftMenu #menubar {
