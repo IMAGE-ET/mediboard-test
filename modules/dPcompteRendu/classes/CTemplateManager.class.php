@@ -565,7 +565,7 @@ class CTemplateManager {
     }
 
     $where[] = $user->getDS()->prepare("`compte_rendu_id` IS NULL OR compte_rendu_id = %", $compte_rendu_id);
-    $order = "nom ASC";
+    $order = "user_id, function_id, group_id, nom ASC";
     $lists = new CListeChoix();
     $this->allLists = $lists->loadList($where, $order);
 
