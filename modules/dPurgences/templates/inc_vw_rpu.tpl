@@ -366,7 +366,7 @@ function showEtabEntreeTransfert(mode) {
                 <input type="hidden" name="m" value="dPurgences" /> 
                 <input type="hidden" name="del" value="0" />
                 <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
-                <button class="new singleclick" type="button" onclick="this.form.onsubmit()">Hospitaliser</button>
+                <button class="new oneclick" type="button" onclick="this.form.onsubmit()">Hospitaliser</button>
               </form>
             {{/if}}
           {{/if}}
