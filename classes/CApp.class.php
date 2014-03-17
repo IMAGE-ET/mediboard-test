@@ -652,7 +652,7 @@ class CApp {
 
       $releaseCode = $releaseElement->getAttribute("code");
       list($year, $month) = explode("_", $releaseCode);
-      $title = CMbDT::transform(null, $month, "%B") . " " . $year;
+      $title = strftime("%B", mktime(0, 0, 0, $month, 10)) . " " . $year;
 
       $applicationVersion["releaseTitle"] = $title;
       $applicationVersion["releaseDate"]  = CMbDT::dateTimeFromXMLDuration($releaseElement->getAttribute("date"));
