@@ -33,5 +33,5 @@ $locales['mod-dPpmsi-tab-vw_last_docs'] = 'Derniers documents';
 $locales['mod-dPpmsi-tab-vw_list_hospi'] = 'Liste des hospitalisations';
 $locales['mod-dPpmsi-tab-vw_list_interv'] = 'Liste des interventions';
 $locales['module-dPpmsi-court'] = 'PMSI';
-$locales['module-dPpmsi-long'] = 'Reccueil des actes PMSI';
+$locales['module-dPpmsi-long'] = 'Recueil des actes PMSI';
 ?>
