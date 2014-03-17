@@ -409,6 +409,20 @@ MbPerformance = {
         setTimeout(function(){
           MbPerformance.startPlotting();
         }, 1000);
+
+        /*
+        // Display fields description
+        var info = [];
+        $H(MbPerformance.markingTypes).each(function(pair){
+          var value = pair.value;
+          if (!value.sub) {
+            return;
+          }
+
+          info.push(pair.key + " : " + value.resp + " / " + value.label + " ("+value.desc+")");
+        });
+
+        console.log(info.join("\n"));*/
       });
     }
     catch (e) {}
@@ -625,6 +639,124 @@ MbPerformance = {
     }
   },
 
+  getTimelineCSV:  function(timeline){
+    var navStart;
+    var datum = [];
+    var columns = [];
+
+    // Draw each bar
+    (timeline || MbPerformance.timeline).each(function(d, key){
+      var perfTiming = d.perfTiming;
+      var perfOffset;
+      var serverTiming = d.serverTiming;
+      var serverOffset;
+      var data = {
+        i: key,
+        m: d.pageInfo.m,
+        mView: $T("module-"+d.pageInfo.m+"-court"),
+        a: d.pageInfo.a,
+        aView: $T("mod-"+d.pageInfo.m+"-tab-"+d.pageInfo.a),
+        pageSize: (serverTiming.size / 1024).toFixed(2),
+        dbTime: (serverTiming.db * 1000).toFixed(2)
+      };
+
+      if (columns.length == 0) {
+        columns = Object.keys(data);
+        Object.keys(MbPerformance.markingTypes).each(function(type) {
+          columns.push(type+"_start");
+          columns.push(type+"_duration");
+
+          var t = MbPerformance.markingTypes[type];
+          if (t.getMemory) {
+            columns.push(type+"_memory");
+          }
+        });
+      }
+
+      if (d.type == "page") {
+        perfOffset   = perfTiming.navigationStart;
+        serverOffset = perfTiming.navigationStart;
+        navStart     = perfTiming.navigationStart;
+      }
+      else {
+        perfOffset = 0;
+        serverOffset = navStart;
+      }
+
+      Object.keys(MbPerformance.markingTypes).each(function(type) {
+        MbPerformance.getCSVtiming(type, data, perfTiming, perfOffset, serverTiming, serverOffset);
+      });
+
+      datum.push(data);
+    });
+
+    return {
+      columns: columns,
+      data: datum
+    };
+  },
+
+  getCSV: function(){
+    var allPages = MbPerformance.getPagesData();
+    var allData = [];
+    var columns = null;
+
+    allPages.each(function(page, pageKey){
+      var data = MbPerformance.getTimelineCSV(page.timeline);
+
+      if (!columns) {
+        columns = data.columns;
+        columns.unshift("t");
+        columns.unshift("page");
+      }
+
+      data.data.each(function(d){
+        d.page = pageKey;
+        d.t = page.time;
+
+        allData.push(d);
+      });
+    });
+
+    var finalData = [];
+    allData.each(function(row){
+      var data = [];
+      columns.each(function(colName){
+        data.push(row[colName]);
+      });
+
+      finalData.push(data.join(";"));
+    });
+
+    finalData.unshift(columns.join(";"));
+
+    return finalData.join("\n");
+  },
+
+  getCSVtiming: function(type, data, perfTiming, perfOffset, serverTiming, serverOffset){
+    var t = MbPerformance.markingTypes[type];
+
+    if (t.sub && perfTiming && (perfTiming[t.end] && perfTiming[t.start] || t.getValue && t.getStart)) {
+      var start, length;
+
+      if (t.getValue) {
+        start  = t.getStart(serverTiming, perfTiming) - serverOffset;
+        length = t.getValue(serverTiming, perfTiming);
+      }
+      else {
+        start  = perfTiming[t.start] - perfOffset;
+        length = perfTiming[t.end]   - perfTiming[t.start];
+      }
+
+      data[type+"_start"] = start;
+      data[type+"_duration"] = length;
+
+      if (t.getMemory) {
+        data[type+"_memory"] = t.getMemory(serverTiming, perfTiming);
+      }
+    }
+  },
+
   drawBar: function(type, container, perfTiming, perfOffset, serverTiming, serverOffset){
     var t = MbPerformance.markingTypes[type];
 
@@ -693,8 +825,23 @@ MbPerformance = {
       }).appendTo(profilingToolbar);
 
       // Download report
-      jQuery('<button class="download notext" title="Télécharger le rapport"></button>').click(function(){
-        MbPerformance.download();
+      jQuery('<button class="download" title="Télécharger le rapport au format JSON">JSON</button>').click(function(){
+        var data = MbPerformance.dump();
+        if (data) {
+          MbPerformance.download(Object.toJSON(data), data.label+".json");
+        }
+      }).appendTo(profilingToolbar);
+
+      // Download CSV
+      jQuery('<button class="download" title="Télécharger le rapport au format CSV">CSV</button>').click(function(){
+        var label = MbPerformance.getProfilingName();
+        if (label) {
+          var data = MbPerformance.getCSV();
+
+          if (data) {
+            MbPerformance.download(data, label+".csv");
+          }
+        }
       }).appendTo(profilingToolbar);
 
       // Remove report
@@ -834,8 +981,12 @@ MbPerformance = {
     }).delay(2, timeEntry, ajaxId);
   },
 
+  getProfilingName: function(){
+    return prompt("Libellé du profilage", "Profilage du "+(new Date()).toLocaleDateTime());
+  },
+
   dump: function(){
-    var label = prompt("Libellé du profilage", "Profilage du "+(new Date()).toLocaleDateTime());
+    var label = MbPerformance.getProfilingName();
 
     if (label == null) {
       return;
@@ -862,10 +1013,16 @@ MbPerformance = {
       });
     }
 
-    struct.pages = store.get("profiling-pages") || [];
-    struct.pages.push(MbPerformance.getCurrentPageData());
+    struct.pages = MbPerformance.getPagesData()
 
     return struct;
+  },
+
+  getPagesData: function(){
+    var pages = store.get("profiling-pages") || [];
+    pages.push(MbPerformance.getCurrentPageData());
+
+    return pages;
   },
 
   removeProfiling: function(){
@@ -886,9 +1043,7 @@ MbPerformance = {
     };
   },
 
-  download: function() {
-    var data = MbPerformance.dump();
-
+  download: function(data, fileName) {
     if (data == null) {
       return;
     }
@@ -908,11 +1063,11 @@ MbPerformance = {
     }), DOM.input({
       type: "hidden",
       name: "filename",
-      value: data.label+".json"
+      value: fileName
     }), DOM.input({
       type: "hidden",
       name: "data",
-      value: Object.toJSON(data)
+      value: data
     }));
 
     $$("body")[0].insert(form);
