@@ -2408,7 +2408,7 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision('1.96');
-
+    $this->addDependency("dPcabinet", "1.23");
     //Création des dossiers médicaux manquants correspondant aux consultations d'anesthésie
     $query = "INSERT INTO `dossier_medical` (`object_class`, `object_id`)
                 SELECT 'CPatient', c.patient_id

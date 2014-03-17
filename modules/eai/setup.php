@@ -294,6 +294,8 @@ class CSetupeai extends CSetup {
 
     $this->makeRevision("0.17");
 
+    $this->addDependency("dPsante400", "0.26");
+
     function updateRangeDomain($setup) {
       $ds = $setup->ds;
 

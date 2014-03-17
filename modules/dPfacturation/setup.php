@@ -352,6 +352,7 @@ class CSetupdPfacturation extends CSetup {
                 ADD INDEX (`journal_id`);";
     $this->addQuery($query);
     $this->makeRevision("0.38");
+    $this->addDependency("dPcabinet", "1.87");
 
     $query = "INSERT INTO `facture_liaison` (`facture_id`, `facture_class`, `object_id`, `object_class`)
                 SELECT f.facture_id, 'CFactureCabinet', c.consultation_id, 'CConsultation'
