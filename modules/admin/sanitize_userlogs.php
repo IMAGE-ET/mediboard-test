@@ -55,9 +55,17 @@ $offset = $max+1;
 
 // Actual query
 $log = new CUserLog();
-$query = $request->getCountRequest($log);
 $ds = $log->_spec->ds;
-$count = $ds->loadResult($query);
+
+if ($purge) {
+  $query = $request->makeDelete($log);
+  $ds->exec($query);
+  $count = $ds->affectedRows();
+}
+else {
+  $query = $request->makeSelectCount($log);
+  $count = $ds->loadResult($query);
+}
 
 // Stop auto if end is reached
 $log->loadMatchingObject("user_log_id DESC");

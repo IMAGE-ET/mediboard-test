@@ -23,11 +23,11 @@
       <script type="text/javascript">
         CUser = {
           checkSiblings: function () {
-            new Url('admin', 'check_siblings').requestModal();
+            new Url('admin', 'check_siblings').requestModal(400);
           }
         }
       </script>
-      <button class="tick" onclick="CUser.checkSiblings()">{{tr}}mod-admin-action-check_siblings{{/tr}}</button>
+      <button class="tick" onclick="CUser.checkSiblings()">{{tr}}mod-admin-tab-check_siblings{{/tr}}</button>
     </td>
   </tr>
 
@@ -67,7 +67,7 @@
           }
         }
       </script>
-      <button class="tick" onclick="CUserLog.sanitize()">{{tr}}mod-admin-action-sanitize_logs{{/tr}}</button>
+      <button class="tick" onclick="CUserLog.sanitize()">{{tr}}mod-admin-tab-sanitize_userlogs{{/tr}}</button>
     </td>
   </tr>
 
