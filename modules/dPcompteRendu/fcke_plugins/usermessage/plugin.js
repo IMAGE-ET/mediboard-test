@@ -8,5 +8,5 @@ CKEDITOR.plugins.add('usermessage',{
 });
 
 function usermessage_onclick(editor){
-  window.parent.openWindowMail();
+  openWindowMail();
 }

@@ -407,14 +407,14 @@ if ($do->ajax) {
 else {
   // Si c'est un compte rendu
   if ($do->_obj->object_id && !intval(CValue::post("del"))) {
-    $do->redirect = "m=dPcompteRendu&a=edit_compte_rendu&dialog=1&compte_rendu_id=".$do->_obj->_id;
+    $do->redirect = "m=compteRendu&a=edit_compte_rendu&dialog=1&compte_rendu_id=".$do->_obj->_id;
   }
   else if (intval(CValue::post("del") && isset($_POST["_tab"]))) {
-    $do->redirect = "m=dPcompteRendu&a=vw_modeles";
+    $do->redirect = "m=compteRendu&a=vw_modeles";
   }
   else {
     // Si c'est un modèle de compte rendu
-    $do->redirect = "m=dPcompteRendu&tab=addedit_modeles&compte_rendu_id=".$do->_obj->_id;
+    $do->redirect = "m=compteRendu&a=addedit_modeles&dialog=1&compte_rendu_id=".$do->_obj->_id;
   }
   $do->doRedirect();
 }

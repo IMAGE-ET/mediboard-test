@@ -12,5 +12,5 @@ CKEDITOR.plugins.add('apicrypt', {
 });
 
 function apicrypt_onclick(editor) {
-  window.parent.openWindowApicrypt();
+  openWindowApicrypt();
 }

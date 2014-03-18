@@ -17,7 +17,8 @@ CKEDITOR.plugins.add('mbheader',{
     editor.on("instanceReady", function() {
       // On regarde la présence d'un entête dans la source une fois que l'éditeur est prêt.
       // S'il y a un entête, alors on coche le bouton, sinon on le désactive.
-      if (window.parent.document.getElementById('htmlarea').innerHTML.indexOf("header") != -1) {
+
+      if (window.document.getElementById('htmlarea').innerHTML.indexOf("header") != -1) {
         editor.getCommand('mbheader').setState(CKEDITOR.TRISTATE_ON);
         return;
       }

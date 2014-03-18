@@ -17,18 +17,18 @@ CKEDITOR.plugins.add('mbprintPDF',{
 });
 
 function mbprintPDF_onclick(editor) {
-  if (!window.parent.Thumb.doc_lock) {
+  if (!Thumb.doc_lock) {
     editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_DISABLED);
   }
   window.parent.Url.ping({onComplete: function() {
-    if (window.parent.Thumb.mode == "doc") {
-      if (window.parent.Thumb.doc_lock) {
+    if (Thumb.mode == "doc") {
+      if (Thumb.doc_lock) {
         streamPDF(editor);
       }
       else {
         // Mise à jour de la date d'impression
-        window.parent.$V(window.parent.getForm("editFrm").date_print, "now");
-        window.parent.submitCompteRendu(function() {
+        $V(getForm("editFrm").date_print, "now");
+        submitCompteRendu(function() {
           streamPDF(editor);
           editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_OFF);
         });
@@ -42,14 +42,14 @@ function mbprintPDF_onclick(editor) {
 }
 
 function streamPDF(editor) {
-  if (window.parent.pdf_thumbnails && window.parent.Prototype.Browser.IE) {
-    window.parent.restoreStyle();
+  if (pdf_thumbnails && window.parent.Prototype.Browser.IE) {
+    restoreStyle();
   }
   var content = editor.getData();
-  if (window.parent.pdf_thumbnails && window.parent.Prototype.Browser.IE) {
-    window.parent.save_style = window.parent.deleteStyle();
+  if (pdf_thumbnails && Prototype.Browser.IE) {
+    save_style = deleteStyle();
   }
-  var form = window.parent.document.forms["download-pdf-form"];
+  var form = getForm("download-pdf-form");
   form.elements.content.value = encodeURIComponent(content);
   form.onsubmit();
 }

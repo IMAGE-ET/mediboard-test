@@ -17,8 +17,8 @@ CKEDITOR.plugins.add('mbprinting',{
 });
 
 function mbprinting_onclick(editor) {
-  if (window.parent.nb_printers == 0) {
-    if (window.parent.pdf_thumbnails && window.parent.Preferences.pdf_and_thumbs == 1) {
+  if (nb_printers == 0) {
+    if (window.pdf_thumbnails && Preferences.pdf_and_thumbs == 1) {
       editor.execCommand("mbprintPDF");
     }
     else {
@@ -26,8 +26,8 @@ function mbprinting_onclick(editor) {
     }
     return;
   }
-  window.parent.Thumb.print = 1;
-  window.parent.openModalPrinters();
-  window.parent.submitCompteRendu();
+  Thumb.print = 1;
+  openModalPrinters();
+  submitCompteRendu();
 }
 

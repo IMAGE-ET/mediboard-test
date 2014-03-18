@@ -15,7 +15,7 @@ CKEDITOR.plugins.add('mbcap', {
          icon:'../../modules/dPcompteRendu/fcke_plugins/mbcap/images/icon.png' });
     editor.on("instanceReady", function() {
       // On regarde la préférence
-      if (window.parent.Preferences.auto_capitalize == "1") {
+      if (Preferences.auto_capitalize == "1") {
         mbcap_onclick(editor);
       }
     });

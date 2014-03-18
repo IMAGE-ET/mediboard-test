@@ -14,7 +14,7 @@ CKEDITOR.plugins.add('mbfooter',{
     editor.ui.addButton('mbfooter', {label:'Pied de page', command:'mbfooter',
       icon:'../../modules/dPcompteRendu/fcke_plugins/mbfooter/images/icon.gif' });
     editor.on("instanceReady", function() {
-	    if (window.parent.document.getElementById('htmlarea').innerHTML.indexOf("footer") == -1) {
+	    if (window.document.getElementById('htmlarea').innerHTML.indexOf("footer") == -1) {
 	      editor.getCommand('mbfooter').setState(CKEDITOR.TRISTATE_DISABLED);
 	    }
     });

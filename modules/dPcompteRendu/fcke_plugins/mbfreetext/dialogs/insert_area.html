@@ -11,7 +11,7 @@
       }
     </style>
     <script>
-      var CKEDITOR = window.parent.parent.CKEDITOR;
+      var CKEDITOR = window.parent.CKEDITOR;
 
       function Ok(e) {
         var editor = CKEDITOR.instances.htmlarea;
@@ -28,7 +28,7 @@
         return true;
       }
 
-      window.parent.parent.CKEDITOR.dialog.getCurrent().on("ok", Ok);
+      CKEDITOR.dialog.getCurrent().on("ok", Ok);
     </script>
   </head>
   <body style="overflow: hidden">

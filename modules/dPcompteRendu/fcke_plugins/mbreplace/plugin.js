@@ -15,7 +15,7 @@ CKEDITOR.plugins.add('mbreplace', {
          icon:'../../modules/dPcompteRendu/fcke_plugins/mbreplace/images/mbreplace.png' });
     editor.on("instanceReady", function() {
       // On regarde la préférence
-      if (window.parent.Preferences.auto_replacehelper == "1") {
+      if (Preferences.auto_replacehelper == "1") {
         mbreplace_onclick(editor);
       }
     });

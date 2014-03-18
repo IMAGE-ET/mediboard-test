@@ -21,7 +21,7 @@ CKEDITOR.plugins.add('mbthumbs', {
 
 function mbthumbs_onclick(editor) {
   editor.on("key", loadOld);
-  window.parent.Thumb.refreshThumbs();
+  Thumb.refreshThumbs();
 }
 
 function mbhidethumbs_onclick(editor) {
@@ -33,5 +33,5 @@ function mbhidethumbs_onclick(editor) {
     command.setState(CKEDITOR.TRISTATE_ON);
   }
 
-  window.parent.Thumb.choixAffiche();
+  Thumb.choixAffiche();
 }

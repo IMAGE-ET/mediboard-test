@@ -2,190 +2,168 @@
 {{assign var=pdf_and_thumbs value=$app->user_prefs.pdf_and_thumbs}}
 
 <script>
-window.same_print = {{$conf.dPcompteRendu.CCompteRendu.same_print}};
-window.pdf_thumbnails = {{$pdf_thumbnails|@json}} == 1;
+  window.same_print = {{$conf.dPcompteRendu.CCompteRendu.same_print}};
+  window.pdf_thumbnails = {{$pdf_thumbnails|@json}} == 1;
 
-function popFile(objectClass, objectId, elementClass, elementId, sfn){
-  var url = new Url;
-  url.ViewFilePopup(objectClass, objectId, elementClass, elementId, sfn);
-}
+  var Modele = {
+    copy: function (oForm) {
+      oForm = oForm || document.editFrm;
 
-var Modele = {
-  copy: function (oForm) {
-    oForm = oForm || document.editFrm;
-    
-    {{if $droit}}
-      if(confirm('{{tr}}CCompteRendu-already-access{{/tr}}')){
+      {{if $droit}}
+        if(confirm('{{tr}}CCompteRendu-already-access{{/tr}}')){
+          $V(oForm.compte_rendu_id, "");
+
+          {{if $isPraticien}}
+          $V(oForm.user_id, "{{$user_id}}");
+          $V(oForm.function_id, "");
+          {{/if}}
+
+          $V(oForm.nom, "Copie de "+ $V(oForm.nom));
+          oForm.onsubmit();
+        }
+      {{else}}
         $V(oForm.compte_rendu_id, "");
-        
-        {{if $isPraticien}}
         $V(oForm.user_id, "{{$user_id}}");
-        $V(oForm.function_id, "");
-        {{/if}}
-        
         $V(oForm.nom, "Copie de "+ $V(oForm.nom));
-        oForm.onsubmit(); 
+        oForm.onsubmit();
+      {{/if}}
+    },
+
+    preview: function(id) {
+      var url = new Url("compteRendu", "print_cr");
+      url.addParam("compte_rendu_id", id);
+      url.popup(800, 800);
+    },
+
+    preview_layout: function() {
+      var header_size = parseInt($V(getForm("editFrm").elements.height));
+      if (!isNaN(header_size)) {
+        $("header_footer_content").style["height"] = ((header_size / 728.5)*80).round() + "px";
       }
-    {{else}}
-      $V(oForm.compte_rendu_id, "");
-      $V(oForm.user_id, "{{$user_id}}");
-      $V(oForm.nom, "Copie de "+ $V(oForm.nom));
-      oForm.onsubmit();
-    {{/if}}
-  },
-  
-  create: function() {
-    var url = new Url;
-    url.setModuleTab("compteRendu", "addedit_modeles");
-    url.addParam("compte_rendu_id", "0");
-    url.redirect();
-  },
-  
-  preview: function(id) {
-    var url = new Url("compteRendu", "print_cr");
-    url.addParam("compte_rendu_id", id);
-    url.popup(800, 800);
-  },
+      $("body_content").style["height"] =  "80px";
+    },
 
-  preview_layout: function() {
-    var header_size = parseInt($V(getForm("editFrm").elements.height));
-    if (!isNaN(header_size)) {
-      $("header_footer_content").style["height"] = ((header_size / 728.5)*80).round() + "px";
+    generate_auto_height: function() {
+      var content = window.CKEDITOR.instances.htmlarea ? CKEDITOR.instances.htmlarea.getData() : $V(form.source);
+      var container = new Element("div", {style: "width: 17cm; padding: 0; margin: 0; position: absolute; left: -1500px; bottom: 200px;"}).insert(content);
+      $$('body')[0].insert(container);
+      // Calcul approximatif de la hauteur
+      $V(getForm("editFrm").height, (container.getHeight()).round());
+    },
+    showUtilisation: function() {
+      var url = new Url("compteRendu", "ajax_show_utilisation");
+      url.addParam("compte_rendu_id", "{{$compte_rendu->_id}}");
+      url.requestModal(640, 480);
     }
-    $("body_content").style["height"] =  "80px";
-  },
+  };
 
-  generate_auto_height: function() {
-    var content = window.CKEDITOR.instances.htmlarea ? CKEDITOR.instances.htmlarea.getData() : $V(form.source);
-    var container = new Element("div", {style: "width: 17cm; padding: 0; margin: 0; position: absolute; left: -1500px; bottom: 200px;"}).insert(content);
-    $$('body')[0].insert(container);
-    // Calcul approximatif de la hauteur
-    $V(getForm("editFrm").height, (container.getHeight()).round());
-  },
-  showUtilisation: function() {
-    var url = new Url("compteRendu", "ajax_show_utilisation");
-    url.addParam("compte_rendu_id", "{{$compte_rendu->_id}}");
-    url.requestModal(640, 480);
+  // Taleau des categories en fonction de la classe du compte rendu
+  var listObjectClass = {{$listObjectClass|@json}};
+  var aTraducClass = {{$listObjectAffichage|@json}};
+
+  loadObjectClass = function(value) {
+    var form = document.editFrm;
+    var select = $(form.elements.object_class);
+    var children = select.childElements();
+
+    if (children.length > 0)
+      children[0].nextSiblings().invoke('remove');
+
+    // Insert new ones
+    $H(listObjectClass).each(function(pair){
+      select.insert(new Element('option', {value: pair.key, selected: pair.key == value}).update(aTraducClass[pair.key]));
+    });
+
+    // Check null position
+    select.fire("ui:change");
+
+    loadCategory();
   }
-};
 
-// Taleau des categories en fonction de la classe du compte rendu
-var listObjectClass = {{$listObjectClass|@json}};
-var aTraducClass = {{$listObjectAffichage|@json}};
+  loadCategory = function(value) {
+    var form = document.editFrm;
+    var select = $(form.elements.file_category_id);
+    var children = select.childElements();
 
-function loadObjectClass(value) {
-  var form = document.editFrm;
-  var select = $(form.elements.object_class);
-  var children = select.childElements();
-  
-  if (children.length > 0)
-    children[0].nextSiblings().invoke('remove');
-  
-  // Insert new ones
-  $H(listObjectClass).each(function(pair){
-    select.insert(new Element('option', {value: pair.key, selected: pair.key == value}).update(aTraducClass[pair.key]));
-  });
-  
-  // Check null position
-  select.fire("ui:change");
- 
-  loadCategory();
-}
+    if (children.length > 0)
+      children[0].nextSiblings().invoke('remove');
 
-function loadCategory(value) {
-  var form = document.editFrm;
-  var select = $(form.elements.file_category_id);
-  var children = select.childElements();
-  
-  if (children.length > 0)
-    children[0].nextSiblings().invoke('remove');
-  
-  // Insert new ones
-  $H(listObjectClass[form.elements.object_class.value]).each(function(pair){
-    select.insert(new Element('option', {value: pair.key, selected: pair.key == value}).update(pair.value));
-  });
-}
+    // Insert new ones
+    $H(listObjectClass[form.elements.object_class.value]).each(function(pair){
+      select.insert(new Element('option', {value: pair.key, selected: pair.key == value}).update(pair.value));
+    });
+  }
 
-function submitCompteRendu(callback){
-  // Do not store the content editable of the class field spans.
-  {{if $compte_rendu->_id}}
-    window.toggleContentEditable(true);
-  {{/if}}
-  
-  (function(){
+  submitCompteRendu = function(callback) {
+    // Do not store the content editable of the class field spans.
+    {{if $compte_rendu->_id}}
+      window.toggleContentEditable(true);
+    {{/if}}
+
+    (function(){
+      var form = getForm("editFrm");
+      if(checkForm(form) && User.id) {
+        if (callback)
+          callback();
+        form.submit();
+      }
+    }).defer();
+  }
+
+  reloadHeadersFooters = function() {
+    {{if $compte_rendu->_id}}
+      if ($("headers") && $("footers") && $("prefaces") && $("endings")) {
+        var oForm = getForm("editFrm");
+        var compte_rendu_id = $V(oForm.compte_rendu_id);
+        var object_class = $V(oForm.object_class);
+
+        var url = new Url("compteRendu", "ajax_headers_footers");
+        url.addParam("compte_rendu_id", compte_rendu_id);
+        url.addParam("object_class", object_class);
+        url.addParam("type", "header");
+        url.requestUpdate(oForm.header_id);
+
+        url.addParam("type", "preface");
+        url.requestUpdate(oForm.preface_id);
+
+        url.addParam("type", "ending");
+        url.requestUpdate(oForm.ending_id);
+
+        url.addParam("type", "footer");
+        url.requestUpdate(oForm.footer_id);
+      }
+    {{/if}}
+  }
+
+  setTemplateName = function(object_class, name, type) {
     var form = getForm("editFrm");
-    if(checkForm(form) && User.id) {
-      if (callback)
-        callback();
-      form.submit();
-    }
-  }).defer();
-}
-
-function reloadHeadersFooters() {
-  {{if $compte_rendu->_id}}
-    if ($("headers") && $("footers") && $("prefaces") && $("endings")) {
-      var oForm = getForm("editFrm");
-      var compte_rendu_id = $V(oForm.compte_rendu_id);
-      var object_class = $V(oForm.object_class);
-      
-      var url = new Url("compteRendu", "ajax_headers_footers");
-      url.addParam("compte_rendu_id", compte_rendu_id);
-      url.addParam("object_class", object_class);
-      url.addParam("type", "header");
-      url.requestUpdate(oForm.header_id);
-      
-      url = new Url("compteRendu", "ajax_headers_footers");
-      url.addParam("compte_rendu_id", compte_rendu_id);
-      url.addParam("object_class", object_class);
-      url.addParam("type", "preface");
-      url.requestUpdate(oForm.preface_id);
-      
-      url = new Url("compteRendu", "ajax_headers_footers");
-      url.addParam("compte_rendu_id", compte_rendu_id);
-      url.addParam("object_class", object_class);
-      url.addParam("type", "ending");
-      url.requestUpdate(oForm.ending_id);
-      
-      url = new Url("compteRendu", "ajax_headers_footers");
-      url.addParam("compte_rendu_id", compte_rendu_id);
-      url.addParam("object_class", object_class);
-      url.addParam("type", "footer");
-      url.requestUpdate(oForm.footer_id);
-    } 
-  {{/if}}
-}
-
-function setTemplateName(object_class, name, type) {
-  var form = getForm("editFrm");
-  $V(form.object_class, object_class);
-  $V(form.nom, name);
-  $V(form.type, type);
-  Control.Modal.close();
-}
+    $V(form.object_class, object_class);
+    $V(form.nom, name);
+    $V(form.type, type);
+    Control.Modal.close();
+  }
 
 </script>
 
 {{mb_script module=compteRendu script=thumb}}
 
 <script>
+  Main.add(function () {
+    loadObjectClass('{{$compte_rendu->object_class}}');
+    loadCategory('{{$compte_rendu->file_category_id}}');
 
-Main.add(function () {
-  loadObjectClass('{{$compte_rendu->object_class}}');
-  loadCategory('{{$compte_rendu->file_category_id}}');
-
-  {{if $compte_rendu->_id}}
-    Thumb.instance = CKEDITOR.instances.htmlarea;
-    {{if $droit && $pdf_thumbnails && $pdf_and_thumbs}}
-      Thumb.modele_id = '{{$compte_rendu->_id}}';
-      Thumb.user_id = '{{$user_id}}';
-      Thumb.mode = "modele";
-      PageFormat.init(getForm("editFrm"));
+    {{if $compte_rendu->_id}}
+      Thumb.instance = CKEDITOR.instances.htmlarea;
+      {{if $droit && $pdf_thumbnails && $pdf_and_thumbs}}
+        Thumb.modele_id = '{{$compte_rendu->_id}}';
+        Thumb.user_id = '{{$user_id}}';
+        Thumb.mode = "modele";
+        PageFormat.init(getForm("editFrm"));
+      {{/if}}
     {{/if}}
-  {{/if}}
-});
+  });
 
-Main.add(Control.Tabs.create.curry('tabs-edit'));
+  Main.add(Control.Tabs.create.curry('tabs-edit'));
 
 </script>
 
@@ -262,12 +240,6 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
 <table class="main">
   <tr>
     <td style="width: 300px;">
-      {{if $compte_rendu->_id}}
-        <button class="new" type="button" onclick="Modele.create()">
-          {{tr}}CCompteRendu-title-create{{/tr}}
-        </button>
-      {{/if}}
-      
       <table class="form">
         <tr>
           <th class="category" colspan="2">

@@ -1,4 +1,4 @@
-{{if $templateManager->editor != "ckeditor" }}
+{{if $templateManager->editor != "ckeditor"}}
   {{mb_return}}
 {{/if}}
 
@@ -27,7 +27,7 @@
   window.nb_lists = {{$templateManager->usedLists|@count}};
   window.nb_textes_libres = {{$templateManager->textes_libres|@count}};
 
-  function initCKEditor() {
+  initCKEditor = function() {
     window.old_source = $("htmlarea").value;
     var editor = CKEDITOR.replace("htmlarea", {customConfig: "../../?m=compteRendu&raw=mb_fckeditor"});
 
@@ -127,14 +127,20 @@
       window.resizeEditor();
 
       // Redimensionnement automatique de l'éditeur en même temps que celui de la fenêtre.
-      Event.observe(window, "resize", function(e){
+      Event.observe(window, "resize", function(e) {
         window.resizeEditor();
       });
 
       {{if $templateManager->printMode}}
         ck_instance.setReadOnly();
-        ck_instance.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_OFF);
-        ck_instance.getCommand('usermessage').setState(CKEDITOR.TRISTATE_OFF);
+        var mbprintpdf  = ck_instance.getCommand('mbprintPDF');
+        var usermessage = ck_instance.getCommand('usermessage');
+        if (mbprintpdf) {
+          mbprintpdf.setState(CKEDITOR.TRISTATE_OFF);
+        }
+        if (usermessage) {
+          usermessage.setState(CKEDITOR.TRISTATE_OFF);
+        }
       {{else}}
         ck_instance.document.getBody().on('keydown', autoCapHelper);
         {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
@@ -167,7 +173,7 @@
 
   Main.add(initCKEditor);
 
-  function autoCapHelper(event) {
+  autoCapHelper = function(event) {
     var editor = CKEDITOR.instances.htmlarea;
 
     var mbcap     = editor.getCommand('mbcap');
@@ -224,7 +230,7 @@
         elt.nodeName === "BR" ||
           data == ""       ||
           (data && data.length == 0) ||
-          (window.parent.Prototype.Browser.IE && !Object.isUndefined(data) && /[\.\?!]\s/.test(data.substr(-2))) ||
+          (Prototype.Browser.IE && !Object.isUndefined(data) && /[\.\?!]\s/.test(data.substr(-2))) ||
           /(<br|<hr)/.test(data) ||
           (native.focusNode && native.focusNode.length == 0) ||
           /* Les 2 derniers caractères sont :

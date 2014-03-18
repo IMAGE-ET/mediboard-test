@@ -28,7 +28,7 @@ function mbspace_onclick(editor) {
 }
 
 function insertSpecialChar(editor, specialChar) {
-  var selection = CKEDITOR.instances.htmlarea.getSelection(),
+  var selection = editor.getSelection(),
     ranges    = selection.getRanges(),
     range, textNode;
 
