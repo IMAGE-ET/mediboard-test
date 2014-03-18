@@ -156,18 +156,22 @@ $where["service.group_id"] = " = '$group->_id'";
 $where["lit.annule"] = " = '0'";
 
 //uhcd
-$datas["TOTPORTE"] = $lit->countList($where, null, $ljoin);
+$totporte = CAppUI::conf("dPurgences send_RPU totporte", $group);
+$datas["TOTPORTE"] = $totporte ? $totporte : $lit->countList($where, null, $ljoin);
 
 //urgences
 $where["service.uhcd"] = " IS NOT NULL";
 $where["service.urgence"] = "= '1'";
-
 $where["chambre.is_examination_room"] = " = '1'";
-$datas["TOTBOX"] = $lit->countList($where, null, $ljoin);
+
+$totbox = CAppUI::conf("dPurgences send_RPU totbox", $group);
+$datas["TOTBOX"] = $totbox ? $totbox : $lit->countList($where, null, $ljoin);
 
 $where["chambre.is_examination_room"] = " IS NOT NULL";
 $where["chambre.is_sas_dechoc"] = " = '1'";
-$datas["TOTDECHOC"] = $lit->countList($where, null, $ljoin);
+
+$totdechoc = CAppUI::conf("dPurgences send_RPU totdechoc", $group);
+$datas["TOTDECHOC"] = $totdechoc ? $totdechoc : $lit->countList($where, null, $ljoin);
 
 // Appel de la fonction d'extraction du RPUSender
 $rpuSender = $extractPassages->getRPUSender();

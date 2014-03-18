@@ -1,6 +1,7 @@
 <?php
 /**
  * $Id$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Urgences
@@ -31,6 +32,9 @@ CConfiguration::register(
         ),
         "send_RPU" => array(
           "max_patient" => "num",
+          "totbox"      => "num min|0",
+          "totdechoc"   => "num min|0",
+          "totporte"    => "num min|0",
         )
       ),
     ),
