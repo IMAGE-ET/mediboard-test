@@ -999,16 +999,19 @@ class CPatient extends CPerson {
    * Chargement du séjour courant du patient
    *
    * @param string $dateTime Date de référence, maintenant si null
+   * @param String $group_id group_id, groupe courant si null
    *
    * @return CSejour[]
    */
-  function getCurrSejour($dateTime = null) {
+  function getCurrSejour($dateTime = null, $group_id = null) {
     if (!$dateTime) {
       $dateTime = CMbDT::dateTime();
     }
-    $group = CGroups::loadCurrent();
+    if (!$group_id) {
+      $group_id = CGroups::loadCurrent()->_id;
+    }
 
-    $where["group_id"] = "= '$group->_id'";
+    $where["group_id"] = "= '$group_id'";
     $where[] = "'$dateTime' BETWEEN entree AND sortie";
     return $this->loadRefsSejours($where);
   }

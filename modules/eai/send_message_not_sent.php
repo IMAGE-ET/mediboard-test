@@ -60,7 +60,7 @@ foreach ($exchanges as $_exchange) {
         /** @var CPatient $patient */
         $patient = $object;
         //Recherche du séjour en cours
-        $sejour = reset($patient->getCurrSejour());
+        $sejour = reset($patient->getCurrSejour(null, $receiver->group_id));
         //Récupération du dernier séjour
         if (!$sejour) {
           $sejour = reset($patient->loadRefsSejours());
