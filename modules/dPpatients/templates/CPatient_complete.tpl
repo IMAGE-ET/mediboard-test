@@ -9,7 +9,7 @@
         <div style="float: right;">
           <img src="images/icons/carte_vitale.png"
                title="{{tr}}CPatient-date-lecture-vitale{{/tr}} : {{mb_value object=$object field="date_lecture_vitale" format=relative}}"
-               onclick="Patient.openINS({{$patient->_id}})"/>
+               onclick="Patient.openINS({{$object->_id}})"/>
         </div>
       {{/if}}
 
