@@ -20,5 +20,5 @@
   </select>   
 </form>
 {{else}}
-  <strong>{{$Etablissements|@reset}}</strong>
+  <div><strong>{{$Etablissements|@reset}}</strong></div>
 {{/if}}
