@@ -53,9 +53,11 @@ class CHL7v2EventADTA03 extends CHL7v2EventADT implements CHL7EventADTA03 {
     
     // Patient Additional Demographic
     $this->addPD1($patient);
-    
-    // Doctors
-    $this->addROLs($patient);
+
+    if ($this->version > "2.3.1") {
+      // Doctors
+      $this->addROLs($patient);
+    }
     
     // Next of Kin / Associated Parties
     $this->addNK1s($patient);

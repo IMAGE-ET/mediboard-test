@@ -40,9 +40,11 @@ class CHL7v2EventADTA28 extends CHL7v2EventADT implements CHL7EventADTA05 {
     
     // Patient Additional Demographic
     $this->addPD1($patient);
-    
-    // Doctors
-    $this->addROLs($patient);
+
+    if ($this->version > "2.3.1") {
+      // Doctors
+      $this->addROLs($patient);
+    }
     
     // Next of Kin / Associated Parties
     $this->addNK1s($patient);
