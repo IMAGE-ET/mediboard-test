@@ -22,7 +22,7 @@ $req->addColumn("object_class");
 $req->addGroup("object_class");
 
 $ds = CSQLDataSource::get("std");
-$idexs_class = CMbArray::pluck($ds->loadList($req->getRequest()), "object_class");
+$idexs_class = CMbArray::pluck($ds->loadList($req->makeSelect()), "object_class");
 
 // Création du template
 $smarty = new CSmartyDP();

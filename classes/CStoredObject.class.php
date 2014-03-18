@@ -789,7 +789,7 @@ class CStoredObject extends CModelObject {
     $request->setLimit($limit);
     $request->addForceIndex($index);
 
-    return $this->loadQueryList($request->getRequest($this));
+    return $this->loadQueryList($request->makeSelect($this));
   }
   
   /**
@@ -836,7 +836,7 @@ class CStoredObject extends CModelObject {
     $request->setLimit($limit);
 
     $ds = $this->_spec->ds;
-    return $ds->loadColumn($request->getIdsRequest($this));
+    return $ds->loadColumn($request->makeSelectIds($this));
   }
   
   /**
@@ -861,7 +861,7 @@ class CStoredObject extends CModelObject {
     $request->addGroup($group);
 
     $ds = $this->_spec->ds;
-    return $ds->loadResult($request->getCountRequest($this));
+    return $ds->loadResult($request->makeSelectCount($this));
   }
   
   /**
@@ -889,7 +889,7 @@ class CStoredObject extends CModelObject {
     $request->addForceIndex($index);
     
     $ds = $this->_spec->ds;
-    return $ds->loadList($request->getCountRequest($this, $fields));
+    return $ds->loadList($request->makeSelectCount($this, $fields));
   }
   
   /**
@@ -904,7 +904,7 @@ class CStoredObject extends CModelObject {
       return null;
     }
     
-    return $this->loadQueryList($request->getRequest($this));
+    return $this->loadQueryList($request->makeSelect($this));
   }  
   
   /**

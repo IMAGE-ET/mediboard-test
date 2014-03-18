@@ -92,7 +92,7 @@ function graphOpAnnulees(
 
   // Query result
   $ds = CSQLDataSource::get("std");
-  $tree = $ds->loadTree($query->getRequest());
+  $tree = $ds->loadTree($query->makeSelect());
 
   // Build horizontal ticks
   $months = array();

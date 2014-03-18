@@ -35,7 +35,7 @@ $query->addGroup("sejour.sejour_id");
 $sejour = new CSejour;
 $ds = $sejour->_spec->ds;
 $evenements_counts = array();
-foreach ($ds->loadList($query->getRequest()) as $row) {
+foreach ($ds->loadList($query->makeSelect()) as $row) {
   $evenements_counts[$row["sejour_id"]] = $row["evenements_count"];
 }
 

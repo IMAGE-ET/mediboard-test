@@ -123,7 +123,7 @@ class CTranslationOverwrite extends CMbObject {
     $query->addSelect("source, translation");
     $query->addTable("translation");
     $query->addWhere($where);
-    $overwrites = $ds->loadList($query->getRequest());
+    $overwrites = $ds->loadList($query->makeSelect());
 
     foreach ($overwrites as $_overwrite) {
       $locales[$_overwrite["source"]] = $_overwrite["translation"];

@@ -147,10 +147,10 @@ if ($group_similar && $group_similar !== 'no') {
     "MAX(datetime) AS datetime_max",
   );
 
-  $error_logs_similar = $ds->loadList($request->getCountRequest($error_log, $fields));
+  $error_logs_similar = $ds->loadList($request->makeSelectCount($error_log, $fields));
 
   $request->setLimit(null);
-  $total = count($ds->loadList($request->getCountRequest($error_log, $fields)));
+  $total = count($ds->loadList($request->makeSelectCount($error_log, $fields)));
 
   $user_ids = array();
   foreach ($error_logs_similar as $_info) {

@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPhospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -39,7 +39,7 @@ if ($do_it) {
 }
   
 $mov = new CMovement;
-$query = $request->getRequest();
+$query = $request->makeSelect();
 $list = $mov->_spec->ds->loadList($query);
 
 if (!$do_it) {

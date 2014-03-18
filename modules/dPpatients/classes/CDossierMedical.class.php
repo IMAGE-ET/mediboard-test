@@ -338,7 +338,7 @@ class CDossierMedical extends CMbMetaObject {
     $request->addColumn("count(*)", "c");
     $request->addWhere($where);
     $request->addGroup("dossier_medical_id");
-    return $antecedent->getDS()->loadHashList($request->getRequest());
+    return $antecedent->getDS()->loadHashList($request->makeSelect());
   }
 
   /**
@@ -400,7 +400,7 @@ class CDossierMedical extends CMbMetaObject {
     $request->addGroup("dossier_medical_id");
     $request->addTable("antecedent");
 
-    return $antecedent->getDS()->loadHashList($request->getRequest());
+    return $antecedent->getDS()->loadHashList($request->makeSelect());
   }
 
 

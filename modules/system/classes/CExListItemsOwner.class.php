@@ -72,7 +72,7 @@ class CExListItemsOwner extends CMbObject {
     ));
 
     $ds = $item->_spec->ds;
-    return $ds->loadHashList($request->getRequest());
+    return $ds->loadHashList($request->makeSelect());
   }
 
   /**

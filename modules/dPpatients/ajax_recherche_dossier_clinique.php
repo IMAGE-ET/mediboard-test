@@ -456,7 +456,7 @@ if ($one_field) {
     $request->setLimit("$start,30");
   }
 
-  $results = $ds->loadList($request->getRequest());
+  $results = $ds->loadList($request->makeSelect());
 
   // Eventuelle deuxième requête (pour les lines mixes)
   if (!$commentaire && $one_field_presc) {
@@ -504,7 +504,7 @@ if ($one_field) {
       $request_b->setLimit("$start,30");
     }
     
-    $results = array_merge($results, $ds->loadList($request_b->getRequest()));
+    $results = array_merge($results, $ds->loadList($request_b->makeSelect()));
   }
   
   
@@ -561,12 +561,12 @@ if ($one_field) {
   // Le count total
   $request->select = array("count(*)");
   $request->limit = null;
-  $count_patient = $ds->loadResult($request->getRequest());
+  $count_patient = $ds->loadResult($request->makeSelect());
   
   if (!$commentaire && $one_field_presc) {
     $request_b->select = array("count(*)");
     $request_b->limit = null;
-    $count_patient += $ds->loadResult($request_b->getRequest());
+    $count_patient += $ds->loadResult($request_b->makeSelect());
   }
 }
 

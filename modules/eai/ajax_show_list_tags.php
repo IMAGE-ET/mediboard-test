@@ -28,7 +28,7 @@ $req->addColumn("tag");
 $req->addWhere($where);
 $req->addGroup("tag");
 
-$tags = CMbArray::pluck($ds->loadList($req->getRequest()), "tag");
+$tags = CMbArray::pluck($ds->loadList($req->makeSelect()), "tag");
 
 // Création du template
 $smarty = new CSmartyDP();

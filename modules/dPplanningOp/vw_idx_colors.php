@@ -23,7 +23,7 @@ $query->addGroup("libelle");
 $sejour = new CSejour;
 $ds = $sejour->_spec->ds;
 $libelle_counts = array();
-foreach ($ds->loadList($query->getRequest()) as $row) {
+foreach ($ds->loadList($query->makeSelect()) as $row) {
   $libelle_counts[$row["libelle"]] = $row["libelle_count"];
 }
 unset($libelle_counts[""]);

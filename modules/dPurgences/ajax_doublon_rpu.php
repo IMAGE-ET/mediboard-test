@@ -25,7 +25,7 @@ $crequest->addHaving(array("COUNT(`sejour`.`sejour_id`)>1"));
 
 $sejour = new CSejour();
 $ds = $sejour->getDS();
-$list_id_sejour = $ds->loadList($crequest->getRequest());
+$list_id_sejour = $ds->loadList($crequest->makeSelect());
 
 usort($list_id_sejour, function ($a, $b) {
   return -strnatcmp($a["sortie"], $b["sortie"]);

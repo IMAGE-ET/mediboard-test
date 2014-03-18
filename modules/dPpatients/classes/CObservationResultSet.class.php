@@ -122,7 +122,7 @@ class CObservationResultSet extends CMbObject {
     $request->addOrder("observation_result_set.datetime");
     $request->addOrder("observation_result.observation_result_id");
     
-    $results = $object->_spec->ds->loadList($request->getRequest());
+    $results = $object->_spec->ds->loadList($request->makeSelect());
     
     $times = array();
     $data = array();

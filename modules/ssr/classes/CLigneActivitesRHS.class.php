@@ -12,7 +12,7 @@
 /**
  * Ligne d'activités RHS
  */
-class CLigneActivitesRHS extends CMbObject {  
+class CLigneActivitesRHS extends CMbObject {
   // DB Table key
   public $ligne_id;
 

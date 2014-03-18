@@ -293,7 +293,7 @@ class CPermObject extends CMbObject {
       $query->addTable("perm_object");
       $query->addWhere($where);
       
-      $nb_result = $ds->loadResult($query->getRequest());
+      $nb_result = $ds->loadResult($query->makeSelect());
       
       if ($nb_result) {
         $msg.= "Une permission sur cet objet existe déjà.<br />";

@@ -450,7 +450,7 @@ class CExClassField extends CExListItemsOwner {
     }
     $req->addWhere($where);
 
-    $results = $ds->loadList($req->getRequest());
+    $results = $ds->loadList($req->makeSelect());
 
     if ($name_as_key) {
       return array_combine(CMbArray::pluck($results, "name"), CMbArray::pluck($results, "locale"));

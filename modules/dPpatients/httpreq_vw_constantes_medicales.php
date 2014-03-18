@@ -148,7 +148,7 @@ $query->addColumn("context_id");
 $query->addWhere($where_context);
 $query->addGroup(array("context_class", "context_id"));
 
-$query = $query->getRequest();
+$query = $query->makeSelect();
 $list = $constantes->_spec->ds->loadList($query);
 $list_contexts = array();
 

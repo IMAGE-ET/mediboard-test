@@ -502,7 +502,7 @@ class CSetupdPcabinet extends CSetup {
       $query->addSelect("consultation_anesth_id");
       $query->addTable("consultation_anesth");
       $query->addWhere($where);
-      $aKeyxAnesth = $ds->loadColumn($query->getRequest());
+      $aKeyxAnesth = $ds->loadColumn($query->makeSelect());
       if ($aKeyxAnesth === false) {
         return false;
       }

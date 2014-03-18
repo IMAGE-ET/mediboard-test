@@ -808,7 +808,7 @@ class CMbObject extends CStoredObject {
     $query->addOrder("RAND()");
     $query->setLimit(1);
 
-    return $ds->loadResult($query->getRequest());
+    return $ds->loadResult($query->makeSelect());
   }
 
   /**

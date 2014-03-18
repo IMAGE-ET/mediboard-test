@@ -392,7 +392,7 @@ switch ($axe) {
       "sejour.entree" => "BETWEEN '$start' AND '$end'",
       "sejour.etablissement_sortie_id" => "IS NOT NULL",
     ));
-    $etab_externe_ids = $sejour->_spec->ds->loadColumn($query->getRequest());
+    $etab_externe_ids = $sejour->_spec->ds->loadColumn($query->makeSelect());
     
     $etab_externe = new CEtabExterne;
     $etabs = $etab_externe->loadList(array(

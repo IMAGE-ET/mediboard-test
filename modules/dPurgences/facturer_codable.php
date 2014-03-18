@@ -33,7 +33,7 @@ $request->addGroup("sejour.sejour_id");
 $request->addHaving("count(*) = 1");
 $request->setLimit($limit);
 
-$list_sejour = $ds->loadList($request->getRequest());
+$list_sejour = $ds->loadList($request->makeSelect());
 
 foreach ($list_sejour as $_sejour_id) {
   $sejour = new CSejour();

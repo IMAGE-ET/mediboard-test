@@ -339,6 +339,6 @@ class CPack extends CMbObject {
     $request->addSelect("modele_id");
     $request->addTable("modele_to_pack");
     $request->addWhere("pack_id = '$this->_id'");
-    $this->_modeles_ids = $ds->loadColumn($request->getRequest());
+    $this->_modeles_ids = $ds->loadColumn($request->makeSelect());
   }
 }

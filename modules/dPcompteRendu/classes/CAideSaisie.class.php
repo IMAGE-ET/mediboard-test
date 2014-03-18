@@ -123,7 +123,7 @@ class CAideSaisie extends CMbObject {
     $sql->addTable("aide_saisie");
     $sql->addWhere($where);
 
-    $nb_result = $ds->loadResult($sql->getRequest());
+    $nb_result = $ds->loadResult($sql->makeSelect());
 
     if ($nb_result) {
       $msg .= "Cette aide existe déjà<br />";

@@ -40,7 +40,7 @@ $sql->addWhere("
     product_reference.price > product_order_item.unit_price*$ratio
   )");
 $sql->addOrder("product_reference.code");
-$changes = $this->_spec->ds->loadList($sql->getRequest());
+$changes = $this->_spec->ds->loadList($sql->makeSelect());
 
 $changes_struct = array();
 $references = array();

@@ -367,7 +367,7 @@ class CExClass extends CMbObject {
       );
       $request->addLJoin($ljoin);
 
-      $list = $ds->loadHashList($request->getRequest());
+      $list = $ds->loadHashList($request->makeSelect());
     }
 
     return $this->_formula_field = CValue::read($list, $this->_id, null);
@@ -398,7 +398,7 @@ class CExClass extends CMbObject {
     $request->addLJoin($ljoin);
     $request->addOrder("ex_link.ex_object_id DESC");
 
-    return $ds->loadResult($request->getRequest());
+    return $ds->loadResult($request->makeSelect());
   }
 
   /**

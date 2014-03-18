@@ -195,7 +195,7 @@ class CExObject extends CMbMetaObject {
     ));
 
     $ds = CSQLDataSource::get("std");
-    $list = $ds->loadList($request->getRequest());
+    $list = $ds->loadList($request->makeSelect());
 
     // Chargement des list_items par concept, field ou list
     $request = new CRequest();
@@ -209,7 +209,7 @@ class CExObject extends CMbMetaObject {
 
       "name",
     ));
-    $list_items = $ds->loadList($request->getRequest());
+    $list_items = $ds->loadList($request->makeSelect());
 
     // Chargement en une seule requete de toutes les traductions de champs
     $enum_list_cache = array(

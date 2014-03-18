@@ -17,12 +17,12 @@ $req->addColumn("COUNT(DISTINCT object_id)", "nbObjects");
 $req->addColumn("COUNT(id_sante400_id)", "nbID400s");
 
 $ds = CSQLDataSource::get("std");
-$statTotal = $ds->loadList($req->getRequest());
+$statTotal = $ds->loadList($req->makeSelect());
 $statTotal = $statTotal[0];
 
 $req->addSelect("object_class");
 $req->addGroup("object_class");
-$stats = $ds->loadList($req->getRequest());
+$stats = $ds->loadList($req->makeSelect());
 
 // Computes average ID400 count per object
 foreach ($stats as &$stat) {

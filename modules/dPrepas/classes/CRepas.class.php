@@ -86,7 +86,7 @@ class CRepas extends CMbObject {
       $sql->addSelect($select);
       $sql->addWhere($where);
       
-      $nbRepas = $this->_spec->ds->loadResult($sql->getRequest());
+      $nbRepas = $this->_spec->ds->loadResult($sql->makeSelect());
       
       if($nbRepas){
         $msg .= "Un repas a déjà été créé, vous ne pouvez pas en créer un nouveau.";

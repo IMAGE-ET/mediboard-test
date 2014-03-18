@@ -680,7 +680,7 @@ class CConfiguration extends CMbMetaObject {
     $request->addTable($spec->table);
     $request->addSelect(array("feature", "value"));
 
-    return $spec->ds->loadHashList($request->getRequest());
+    return $spec->ds->loadHashList($request->makeSelect());
   }
 
   /**

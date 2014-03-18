@@ -22,7 +22,7 @@ $req->addWhereClause("rhs.facture", " = '0'");
 $req->addWhereClause("sejour.annule", " = '0'");
 $req->addGroup("date_monday");
 $ds = $rhs->_spec->ds;
-$rhs_counts = $ds->loadList($req->getRequest());
+$rhs_counts = $ds->loadList($req->makeSelect());
 foreach ($rhs_counts as &$_rhs_count) {
   $_rhs_count["sundate"] = CMbDT::date("+6 DAYS", $_rhs_count["mondate"]);
 }

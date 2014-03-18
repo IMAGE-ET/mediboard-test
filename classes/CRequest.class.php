@@ -277,7 +277,7 @@ class CRequest {
   }
   
   /**
-   * Returns the SQL query fragment containing everything after the SELECT *
+   * Returns the SQL query fragment containing everything after the action clause (INSERT, SELECT, UPDATE, DELETE)
    * 
    * @param string $from The table names
    * 
@@ -315,6 +315,7 @@ class CRequest {
     }
     
     // Where clauses
+    $where = array();
     if (is_array($this->where)) {
       $where = $this->where;
       foreach ($where as $field => $eq) {
@@ -339,6 +340,7 @@ class CRequest {
     }
     
     // Having
+    $having = array();
     if (is_array($this->having)) {
       $having = $this->having;
       foreach ($having as $field => $eq) {
@@ -371,48 +373,37 @@ class CRequest {
   }
   
   /**
-   * Returns the SQL string
+   * Make the SQL general SELECT query string
    * 
-   * @param CStoredObject $obj        Object on which table we prefix selects, ne prefix if null
-   * @param bool          $found_rows Return the found rows count
+   * @param CStoredObject $object     Object on which table we look up rows, already added tables if null
+   * @param bool          $found_rows Found rows count alternative
    * 
    * @return string
    */
-  function getRequest(CStoredObject $obj = null, $found_rows = false) {
-    $arraySelect = array();
-    $arrayTable = array();
-    
-    // MbObject binding
-    if ($obj) {
-      if (count($this->select)) {
-        CModelObject::error("You-have-to-choose-either-an-object-or-selects");
-      }
-
-      // Restrain loading to a column collection
-      if (is_array($obj->_spec->columns)) {
-        $arraySelect[] = "`{$obj->_spec->table}`.`{$obj->_spec->key}`";
-        foreach ($obj->_spec->columns as $_column) {
-          $arraySelect[] = "`{$obj->_spec->table}`.`$_column`";
+  function makeSelect(CStoredObject $object = null, $found_rows = false) {
+    // Stored object binding
+    if ($object) {
+      // Get the columns
+      if (!count($this->select)) {
+        // Restrain loading to a column collection
+        if (is_array($object->_spec->columns)) {
+          $this->select[] = "`{$object->_spec->table}`.`{$object->_spec->key}`";
+          foreach ($object->_spec->columns as $_column) {
+            $this->select[] = "`{$object->_spec->table}`.`$_column`";
+          }
+        }
+        else {
+          $this->select[] = "`{$object->_spec->table}`.*";
         }
       }
-      else {
-        $arraySelect[] = "`{$obj->_spec->table}`.*";
-      }
-      
-      if (count($this->table)) {
-        CModelObject::notice("You-have-to-choose-either-an-object-or-tables");
-      }
-      
-      $arrayTable[] = $obj->_spec->table;
+
+      // Get the table
+      $this->table = array($object->_spec->table);
     }
-    else {
-      $arraySelect = $this->select;
-      $arrayTable = $this->table;
-    }
-    
+
     // Select clauses
     $select = array();
-    foreach ($arraySelect as $as => $column) {
+    foreach ($this->select as $as => $column) {
       $select[$as] = is_string($as) ? "$column AS `$as`" : $column;
     }
     
@@ -421,51 +412,62 @@ class CRequest {
     $sql = $found_rows ? "SELECT SQL_CALC_FOUND_ROWS $select" : "SELECT $select";
     
     // Table clauses
-    $table = implode(', ', $arrayTable);
-    return $sql . $this->getRequestFrom($table);
-  }
-  
-  /**
-   * Returns the SQL string that count the number of rows
-   * 
-   * @param CStoredObject $obj    Object on which table we prefix selects, one prefix if null
-   * @param array         $fields The fields to include in the SELECT clause
-   * 
-   * @return string A COUNT request
-   */
-  function getCountRequest(CStoredObject $obj = null, $fields = array()) {
-    // MbObject binding
-    $sql = "SELECT COUNT(*) as total";
-    
-    if (is_array($fields) && count($fields)) {
-      $sql .= ", ".implode(", ", $fields);
-    }
-    
-    $arrayTable = array();
-    if ($obj) {
-      if (count($this->table)) {
-        CModelObject::notice("You-have-to-choose-either-an-object-or-tables");
-      }
-      $arrayTable[] = $obj->_spec->table;
-    }
-    else {
-      $arrayTable = $this->table;
-    }
-    
-    // Table clauses
-    $table = implode(', ', $arrayTable);
+    $table = implode(', ', $this->table);
+
     return $sql . $this->getRequestFrom($table);
   }
 
   /**
-   * Returns the SQL string that count the number of rows
+   * Returns the SQL query string that count the number of rows
    * 
+   * @param CStoredObject $object  Object on which table we prefix selects, one prefix if null
+   * @param array         $columns The columns to include in the SELECT clause
+   * 
+   * @return string A COUNT request
+   */
+  function makeSelectCount(CStoredObject $object = null, $columns = array()) {
+    $this->select = array();
+    $this->addSelect("COUNT(*) AS `total`");
+    $this->addSelect($columns);
+
+    return $this->makeSelect($object);
+  }
+
+  /**
+   * Returns the SQL string that get ids for concerned object
+   *
    * @param CStoredObject $object Object concerned
-   * 
+   *
    * @return string
    */
-  function getIdsRequest(CStoredObject $object) {
-    $query = "SELECT `{$object->_spec->table}`.`{$object->_spec->key}`";
-    return $query . $this->getRequestFrom($object->_spec->table);
+  function makeSelectIds(CStoredObject $object) {
+    $spec = $object->_spec;
+    $this->addSelect("`$spec->table`.`$spec->key`");
+    return $this->makeSelect($object);
+  }
+
+
+  /**
+   * Make the SQL general DELETE query string
+   *
+   * @param CStoredObject $object Object on which table we look up rows, already added tables if null
+   *
+   *
+   * @return string
+   */
+  function makeDelete(CStoredObject $object = null) {
+    // Stored object binding
+    if ($object) {
+      // Get the table
+      $this->table = array($object->_spec->table);
+    }
+
+    // Table clauses
+    $table = implode(', ', $this->table);
+
+    // Force Index incompatible with DELETEs
+    $this->forceindex = array();
+
+    return "DELETE " . $this->getRequestFrom($table);
   }
 }

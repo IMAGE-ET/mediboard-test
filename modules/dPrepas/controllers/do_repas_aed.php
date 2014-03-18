@@ -105,7 +105,7 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
          $sql->addSelect($select);
          $sql->addWhere($where);
          
-         $nbLogs = $this->ds->loadResult($sql->getRequest());
+         $nbLogs = $this->ds->loadResult($sql->makeSelect());
          
          if($nbLogs){
            CAppUI::setMsg("Le repas a été modifié depuis la dernière synchronisation. Voulez-vous tout de même l'enregistrer ?", UI_MSG_WARNING);

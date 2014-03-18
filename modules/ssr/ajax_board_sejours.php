@@ -143,14 +143,14 @@ if ($mode == "count" || $mode == "plannable") {
     $query->addSelect("DISTINCT prescription_id");
     $query->addTable("prescription_line_element");
     $query->addWhereClause("prescription_line_element_id", $ds->prepareIn($line_ids));
-    $prescription_ids = $ds->loadColumn($query->getRequest());
+    $prescription_ids = $ds->loadColumn($query->makeSelect());
     
     // Séjours planifiables
     $query = new CRequest;
     $query->addSelect("DISTINCT object_id");
     $query->addTable("prescription");
     $query->addWhereClause("prescription_id", $ds->prepareIn($prescription_ids));
-    $sejour_ids = $ds->loadColumn($query->getRequest());
+    $sejour_ids = $ds->loadColumn($query->makeSelect());
     
     $where = array();
     $where["sejour_id"] = $ds->prepareIn($sejour_ids);

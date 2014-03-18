@@ -105,7 +105,7 @@ abstract class CHL7v2 {
     $req->addTable("table_entry");
     $req->addWhere($where);
 
-    $result = self::$ds->loadHashList($req->getRequest());
+    $result = self::$ds->loadHashList($req->makeSelect());
 
     if (!$get_description) {
       $tables[$table][$from_mb] = $result;

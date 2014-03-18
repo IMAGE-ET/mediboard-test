@@ -43,14 +43,14 @@ switch ($type) {
     // Réalisés
     $query1 = clone($query);
     $query1->addWhereClause("evenement_ssr.realise", "= '1'");
-    foreach ($ds->loadList($query1->getRequest()) as $_row) {
+    foreach ($ds->loadList($query1->makeSelect()) as $_row) {
       $stats->addTotal($_row["user_id"], $_row["refdate"], $_row["total"], "realises");
     }
 
     // Annulés
     $query1 = clone($query);
     $query1->addWhereClause("evenement_ssr.annule", "= '1'");
-    foreach ($ds->loadList($query1->getRequest()) as $_row) {
+    foreach ($ds->loadList($query1->makeSelect()) as $_row) {
       $stats->addTotal($_row["user_id"], $_row["refdate"], $_row["total"], "annules");
     }
 
@@ -58,7 +58,7 @@ switch ($type) {
     $query1 = clone($query);
     $query1->addWhereClause("evenement_ssr.annule" , "= '0'");
     $query1->addWhereClause("evenement_ssr.realise", "= '0'");
-    foreach ($ds->loadList($query1->getRequest()) as $_row) {
+    foreach ($ds->loadList($query1->makeSelect()) as $_row) {
       $stats->addTotal($_row["user_id"], $_row["refdate"], $_row["total"], "planifies");
     }
 
@@ -72,7 +72,7 @@ switch ($type) {
     $query1->addLJoinClause("sejour", "sejour.sejour_id = evenement_ssr.sejour_id");
     $query1->addLJoinClause("users_mediboard", "users_mediboard.user_id = evenement_ssr.therapeute_id");
     $query1->addLJoinClause("functions_mediboard", "functions_mediboard.function_id = users_mediboard.function_id");
-    foreach ($ds->loadList($query1->getRequest()) as $_row) {
+    foreach ($ds->loadList($query1->makeSelect()) as $_row) {
       $stats->addTotal($_row["user_id"], $_row["refdate"], $_row["total"], "csarr");
     }
 
@@ -83,7 +83,7 @@ switch ($type) {
     $query1->addLJoinClause("sejour", "sejour.sejour_id = evenement_ssr.sejour_id");
     $query1->addLJoinClause("users_mediboard", "users_mediboard.user_id = evenement_ssr.therapeute_id");
     $query1->addLJoinClause("functions_mediboard", "functions_mediboard.function_id = users_mediboard.function_id");
-    foreach ($ds->loadList($query1->getRequest()) as $_row) {
+    foreach ($ds->loadList($query1->makeSelect()) as $_row) {
       $stats->addTotal($_row["user_id"], $_row["refdate"], $_row["total"], "cdarr");
     }
 

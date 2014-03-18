@@ -61,7 +61,7 @@ $request->addWhere($where);
 $request->addOrder($orderby);
 $request->addHaving($having);
 
-$list = $spec->ds->loadList($request->getRequest());
+$list = $spec->ds->loadList($request->makeSelect());
 
 $count_total = 0;
 

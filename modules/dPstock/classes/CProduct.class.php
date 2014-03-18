@@ -334,7 +334,7 @@ class CProduct extends CMbObject {
     $sql->addSelect("SUM(product_delivery_trace.quantity)");
     $sql->addLJoin($ljoin);
     $sql->addWhere($where);
-    $total = $this->_spec->ds->loadResult($sql->getRequest());
+    $total = $this->_spec->ds->loadResult($sql->makeSelect());
     
     return $this->_consumption = $total;
   }
@@ -391,12 +391,12 @@ class CProduct extends CMbObject {
     $sql->addWhere($where);
     
     if (empty($services)) {
-      $total = $ds->loadHashList($sql->getRequest());
+      $total = $ds->loadHashList($sql->makeSelect());
     }
     else {
       $sql->addGroup("product_delivery.service_id");
       $sql->addSelect(array("product_delivery.service_id"));
-      $total = $ds->loadList($sql->getRequest());
+      $total = $ds->loadList($sql->makeSelect());
     }
     
     return $total;
@@ -432,7 +432,7 @@ class CProduct extends CMbObject {
     $sql->addLJoin($ljoin);
     $sql->addWhere($where);
     
-    return $this->_supply = $this->_spec->ds->loadResult($sql->getRequest());
+    return $this->_supply = $this->_spec->ds->loadResult($sql->makeSelect());
   }
 
   /**
@@ -469,7 +469,7 @@ class CProduct extends CMbObject {
     $sql->addGroup("product.product_id");
     $sql->addWhere($where);
     
-    return $ds->loadHashList($sql->getRequest());
+    return $ds->loadHashList($sql->makeSelect());
   }
 
   /**
@@ -515,7 +515,7 @@ class CProduct extends CMbObject {
     $sql->addLJoin($ljoin);
     $sql->addWhere($where);
     
-    $total = $this->_spec->ds->loadResult($sql->getRequest());
+    $total = $this->_spec->ds->loadResult($sql->makeSelect());
     
     return $total / $qty;
   }

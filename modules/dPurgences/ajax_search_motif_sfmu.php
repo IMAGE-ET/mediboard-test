@@ -15,7 +15,7 @@ $request = new CRequest();
 $request->addSelect("categorie");
 $request->addTable("motif_sfmu");
 $request->addGroup("categorie");
-$query = $request->getRequest();
+$query = $request->makeSelect();
 
 $motif_sfmu = new CMotifSFMU();
 $ds = $motif_sfmu->getDS();
