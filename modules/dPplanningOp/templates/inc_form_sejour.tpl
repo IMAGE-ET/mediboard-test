@@ -677,17 +677,19 @@ Main.add( function(){
     {{mb_label object=$sejour field="patient_id"}}
   </th>
   <td colspan="3">
+    {{assign var=patient_id_config value=$conf.dPplanningOp.CSejour.patient_id}}
+
     <input type="text" name="_patient_view" style="width: 15em" value="{{$patient->_view}}" readonly="readonly"
            onfocus="
       {{if !$sejour->_id}}
         PatSelector.init();
-      {{else}}
+      {{elseif !($patient_id_config == 0 && $sejour->_id) && !($patient_id_config == 2 && $sejour->entree_reelle)}}
         confirmChangePatient();
       {{/if}}"/>
     <button type="button" class="search notext" onclick="
       {{if !$sejour->_id}}
         PatSelector.init();
-      {{else}}
+      {{elseif !($patient_id_config == 0 && $sejour->_id) && !($patient_id_config == 2 && $sejour->entree_reelle)}}
         confirmChangePatient();
     {{/if}}">
       Choisir un patient
@@ -709,7 +711,6 @@ Main.add( function(){
     {{/if}}
     <br />
     <input type="text" name="_seek_patient" style="width: 13em;" placeholder="{{tr}}fast-search{{/tr}}" "autocomplete" onblur="$V(this, '')"/>
-    {{assign var=patient_id_config value=$conf.dPplanningOp.CSejour.patient_id}}
     {{if !($patient_id_config == 0 && $sejour->_id) && !($patient_id_config == 2 && $sejour->entree_reelle)}}
       <script>
         Main.add(function () {
