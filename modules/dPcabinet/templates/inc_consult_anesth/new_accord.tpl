@@ -28,7 +28,7 @@
 {{mb_script module="cabinet" script="reglement"}}
 
 <script>
-  {{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription}}
+  {{if $isPrescriptionInstalled && "dPcabinet CPrescription view_prescription"|conf:"CGroups-$g"}}
     function reloadPrescription(prescription_id) {
       Prescription.reloadPrescSejour(prescription_id, '', '1', null, null, null,'', null, false);
     }
@@ -132,7 +132,7 @@
       Infos. Anesth. <small>({{$tabs_count.InfoAnesth}})</small>
     </a>
   </li>
-  {{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription}}
+  {{if $isPrescriptionInstalled && "dPcabinet CPrescription view_prescription"|conf:"CGroups-$g"}}
     <li onmousedown="this.onmousedown = ''; Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null,'', null, false);">
       <a href="#prescription_sejour" {{if $tabs_count.prescription_sejour == 0}}class="empty"{{/if}}>
         Prescription <small>({{$tabs_count.prescription_sejour}})</small>
@@ -186,7 +186,7 @@
 </div>
 <div id="InfoAnesth" style="display: none;"></div>
 
-{{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription}}
+{{if $isPrescriptionInstalled && "dPcabinet CPrescription view_prescription"|conf:"CGroups-$g"}}
   <div id="prescription_sejour" style="display: none"></div>
 {{/if}}
 

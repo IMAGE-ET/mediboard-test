@@ -2,61 +2,60 @@
 {{mb_default var=view_prescription value=1}}
 
 <script>
-function calculClairance () {
-  var oFormExam  = document.forms["editExamCompFrm"];
-  var oFormConst = document.forms["edit-constantes-medicales"];
+  function calculClairance () {
+    var oFormExam  = document.forms["editExamCompFrm"];
+    var oFormConst = document.forms["edit-constantes-medicales"];
 
-  var poids      = parseFloat($V(oFormConst._last_poids));
-  var creatinine = parseFloat($V(oFormExam.creatinine));
+    var poids      = parseFloat($V(oFormConst._last_poids));
+    var creatinine = parseFloat($V(oFormExam.creatinine));
 
-  if({{if $patient->_annees && $patient->_annees!="??" && $patient->_annees>=18 && $patient->_annees<=110}}1{{else}}0{{/if}} &&
-    poids && !isNaN(poids) && poids >= 35 && poids <= 120 &&
-    creatinine && !isNaN(creatinine) && creatinine >= 6 && creatinine <= 70) {
-    $V(oFormExam._clairance, Math.round(({{if $patient->sexe=="m"}}1.04{{else}}0.85{{/if}}*poids*(140-{{if $patient->_annees!="??"}}{{$patient->_annees}}{{else}}0{{/if}})/(creatinine*7.2))*100)/100);
+    if({{if $patient->_annees && $patient->_annees!="??" && $patient->_annees>=18 && $patient->_annees<=110}}1{{else}}0{{/if}} &&
+      poids && !isNaN(poids) && poids >= 35 && poids <= 120 &&
+      creatinine && !isNaN(creatinine) && creatinine >= 6 && creatinine <= 70) {
+      $V(oFormExam._clairance, Math.round(({{if $patient->sexe=="m"}}1.04{{else}}0.85{{/if}}*poids*(140-{{if $patient->_annees!="??"}}{{$patient->_annees}}{{else}}0{{/if}})/(creatinine*7.2))*100)/100);
+    }
+    else {
+      $V(oFormExam._clairance, "");
+    }
   }
-  else {
-    $V(oFormExam._clairance, "");
+
+  function calculPSA () {
+    var oFormExam     = getForm("editExamCompFrm");
+    var oFormConst    = getForm("edit-constantes-medicales");
+
+    var vst      = parseFloat($V(oFormConst._last__vst));
+    var ht       = parseFloat($V(oFormExam.ht));
+    var ht_final = parseFloat($V(oFormExam.ht_final));
+
+    if (vst && !isNaN(vst) &&
+      ht && !isNaN(ht) && ht > 0 &&
+      ht_final && !isNaN(ht_final) && ht_final > 0) {
+      $V(oFormExam._psa, Math.round(vst * (ht - ht_final))/100);
+    }
+    else {
+      $V(oFormExam._psa, "");
+    }
   }
-}
 
-function calculPSA () {
-  var oFormExam     = getForm("editExamCompFrm");
-  var oFormConst    = getForm("edit-constantes-medicales");
-
-  var vst      = parseFloat($V(oFormConst._last__vst));
-  var ht       = parseFloat($V(oFormExam.ht));
-  var ht_final = parseFloat($V(oFormExam.ht_final));
-
-  if (vst && !isNaN(vst) &&
-    ht && !isNaN(ht) && ht > 0 &&
-    ht_final && !isNaN(ht_final) && ht_final > 0) {
-    $V(oFormExam._psa, Math.round(vst * (ht - ht_final))/100);
+  function saveDossierMedical() {
+    var formDossier = getForm("dossier_medical_patient");
+    var formExam    = getForm("editExamCompFrm");
+    $V(formDossier.groupe_sanguin, formExam.groupe_sanguin.value);
+    $V(formDossier.groupe_ok, formExam.groupe_ok.value);
+    $V(formDossier.rhesus, formExam.rhesus.value);
+    return onSubmitFormAjax(formDossier);
   }
-  else {
-    $V(oFormExam._psa, "");
-  }
-}
 
-function saveDossierMedical() {
-  var formDossier = getForm("dossier_medical_patient");
-  var formExam    = getForm("editExamCompFrm");
-  $V(formDossier.groupe_sanguin, formExam.groupe_sanguin.value);
-  $V(formDossier.groupe_ok, formExam.groupe_ok.value);
-  $V(formDossier.rhesus, formExam.rhesus.value);
-  return onSubmitFormAjax(formDossier);
-}
-
-Main.add(function () {
-  ExamComp.refresh();
-});
-
+  Main.add(function () {
+    ExamComp.refresh();
+  });
 </script>
 
 <table class="form" style="width: 100%">
   <tr>
     <td class="text">
       <form name="addExamCompFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
-      <input type="hidden" name="m" value="dPcabinet" />
+      <input type="hidden" name="m" value="cabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_examcomp_aed" />
       {{mb_field object=$consult field="consultation_id" hidden=1}}
@@ -99,7 +98,7 @@ Main.add(function () {
       </form>
 
       <form name="editExamCompFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
-      <input type="hidden" name="m" value="dPcabinet" />
+      <input type="hidden" name="m" value="cabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
       {{mb_key object=$consult_anesth}}
@@ -251,10 +250,10 @@ Main.add(function () {
     </td>
     <td class="text">
       <div id="listExamComp">
-        {{include file="../../dPcabinet/templates/exam_comp.tpl"}}
+        {{mb_include module="cabinet" template="exam_comp"}}
       </div>
 
-      {{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription && $view_prescription}}
+      {{if $isPrescriptionInstalled && "dPcabinet CPrescription view_prescription"|conf:"CGroups-$g" && $view_prescription}}
         <button class="tick" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour');">Accéder à la prescription</button>
       {{/if}}
 

@@ -18,7 +18,7 @@
 
 <script type="text/javascript">
 
-{{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription}}
+{{if $isPrescriptionInstalled && "dPcabinet CPrescription view_prescription"|conf:"CGroups-$g"}}
 function reloadPrescription(prescription_id){
   Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null,'', null, false);
 }
@@ -67,7 +67,7 @@ Main.add(function () {
   <li><a href="#Intub">Intubation</a></li>
   <li><a href="#ExamsComp">Exam. Comp.</a></li>
   <li><a href="#InfoAnesth" id="didac_a_infos_anesth">Infos. Anesth.</a></li>
-	{{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription}}
+	{{if $isPrescriptionInstalled && "dPcabinet CPrescription view_prescription"|conf:"CGroups-$g"}}
 	  <li>
 	    <a href="#prescription_sejour">Prescription</a>
 	  </li>
@@ -111,7 +111,7 @@ Main.add(function () {
   {{mb_include module=cabinet template=inc_consult_anesth/acc_infos_anesth}}
 </div>
 
-{{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription}}
+{{if $isPrescriptionInstalled && "dPcabinet CPrescription view_prescription"|conf:"CGroups-$g"}}
 <div id="prescription_sejour" style="display: none"></div>
 {{/if}}
 

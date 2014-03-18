@@ -142,7 +142,7 @@ checkUSCPO = function() {
                   {{mb_field object=$consult_anesth field="premedication" rows="4" onchange="this.form.onsubmit()" form="editInfosAnesthFrm"
                   aidesaisie="validateOnBlur: 0"}}
                 {{else}}
-                  {{if $conf.dPcabinet.CPrescription.view_prescription}}
+                  {{if "dPcabinet CPrescription view_prescription"|conf:"CGroups-$g"}}
                     {{if $view_prescription}}
                       {{mb_label object=$consult_anesth field="premedication"}}
                       <br />

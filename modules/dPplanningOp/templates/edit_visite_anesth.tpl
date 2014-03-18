@@ -11,83 +11,81 @@
 {{mb_script module="planningOp" script="cim10_selector"}}
 {{mb_script module="compteRendu" script="modele_selector"}}
 
-<script type="text/javascript">
+<script>
+  printFicheAnesth = function(dossier_anesth_id) {
+    var url = new Url("cabinet", "print_fiche");
+    url.addParam("dossier_anesth_id", dossier_anesth_id);
+    url.popup(700, 500, "printFiche");
+  }
 
-printFicheAnesth = function(dossier_anesth_id) {
-  var url = new Url("cabinet", "print_fiche");
-  url.addParam("dossier_anesth_id", dossier_anesth_id);
-  url.popup(700, 500, "printFiche");
-}
+  submitAnesth = function(oForm) {
+    submitFormAjax(oForm, 'systemMsg', {
+      onComplete: function() {
+        reloadAnesth(oForm.operation_id.value)
+      }
+    });
+  }
 
-submitAnesth = function(oForm) {
-  submitFormAjax(oForm, 'systemMsg', { 
-    onComplete: function() { 
-      reloadAnesth(oForm.operation_id.value) 
+  reloadPrescription = function(prescription_id){
+    Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null);
+  }
+
+  signVisiteAnesth = function(anesth_id) {
+    alert('anesth numéro ' + anesth_id);
+  }
+
+  reloadAnesth = function(operation_id){
+    window.opener.location.reload(true);
+    window.location.reload(true);
+  }
+
+  var constantesMedicalesDrawn = false;
+  refreshConstantesHack = function(sejour_id) {
+    (function(){
+      if (constantesMedicalesDrawn == false && $('constantes-medicales').visible() && sejour_id) {
+        refreshConstantesMedicales('CSejour-'+sejour_id);
+        constantesMedicalesDrawn = true;
+      }
+    }).delay(0.5);
+  }
+
+  refreshConstantesMedicales = function(context_guid) {
+    if(context_guid) {
+      var url = new Url("patients", "httpreq_vw_constantes_medicales");
+      url.addParam("context_guid", context_guid);
+      url.requestUpdate("constantes-medicales");
+    }
+  }
+
+  Main.add(function () {
+    // Initialisation des onglets
+    if ($('main_tab_group')){
+      Control.Tabs.create('main_tab_group', true);
+    }
+
+    if($('antecedents')){
+      var url = new Url("cabinet", "httpreq_vw_antecedents");
+      url.addParam("sejour_id","{{$operation->sejour_id}}");
+      url.requestUpdate("antecedents");
+    }
+
+    if($('constantes-medicales')){
+      constantesMedicalesDrawn = false;
+      refreshConstantesHack('{{$operation->sejour_id}}');
+    }
+
+    {{if $isPrescriptionInstalled}}
+    if($('prescription_sejour')){
+      Prescription.reloadPrescSejour('','{{$operation->_ref_sejour->_id}}', null, null, '{{$operation->_id}}', null, null);
+    }
+    {{/if}}
+
+    if($('Imeds_tab')){
+      var url = new Url("Imeds", "httpreq_vw_sejour_results");
+      url.addParam("sejour_id", {{$operation->_ref_sejour->_id}});
+      url.requestUpdate('Imeds_tab');
     }
   });
-}
-
-reloadPrescription = function(prescription_id){
-  Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null);
-}
-
-signVisiteAnesth = function(anesth_id) {
-  alert('anesth numéro ' + anesth_id);
-}
-
-reloadAnesth = function(operation_id){
-  window.opener.location.reload(true);
-  window.location.reload(true);
-}
-
-var constantesMedicalesDrawn = false;
-refreshConstantesHack = function(sejour_id) {
-  (function(){
-    if (constantesMedicalesDrawn == false && $('constantes-medicales').visible() && sejour_id) {
-      refreshConstantesMedicales('CSejour-'+sejour_id);
-      constantesMedicalesDrawn = true;
-    }
-  }).delay(0.5);
-}
-
-refreshConstantesMedicales = function(context_guid) {
-  if(context_guid) {
-    var url = new Url("patients", "httpreq_vw_constantes_medicales");
-    url.addParam("context_guid", context_guid);
-    url.requestUpdate("constantes-medicales");
-  }
-}
-Main.add(function () {
-  // Initialisation des onglets
-  if ($('main_tab_group')){
-    Control.Tabs.create('main_tab_group', true);
-  }
-  
-  if($('antecedents')){
-    var url = new Url("cabinet", "httpreq_vw_antecedents");
-    url.addParam("sejour_id","{{$operation->sejour_id}}");
-    url.requestUpdate("antecedents");
-  }
-
-  if($('constantes-medicales')){
-    constantesMedicalesDrawn = false;
-    refreshConstantesHack('{{$operation->sejour_id}}');
-  }
-
-  {{if $isPrescriptionInstalled}}
-  if($('prescription_sejour')){
-    Prescription.reloadPrescSejour('','{{$operation->_ref_sejour->_id}}', null, null, '{{$operation->_id}}', null, null);
-  }
-  {{/if}}
-
-  if($('Imeds_tab')){
-    var url = new Url("Imeds", "httpreq_vw_sejour_results");
-    url.addParam("sejour_id", {{$operation->_ref_sejour->_id}});
-    url.requestUpdate('Imeds_tab');
-  }
-});
-
-
 </script>
 
 {{assign var="selOp" value=$operation}}
@@ -110,15 +108,13 @@ Main.add(function () {
   <li><a href="#anesth_tab">Anesth.</a></li>
   <li><a href="#antecedents">Atcd.</a></li>
   <li onmousedown="refreshConstantesHack('{{$operation->sejour_id}}');"><a href="#constantes-medicales">Constantes</a></li>
-  {{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription}}
+  {{if $isPrescriptionInstalled && "dPcabinet CPrescription view_prescription"|conf:"CGroups-$g"}}
     <li><a href="#prescription_sejour_tab">Prescription</a></li>
   {{/if}}
   {{if $isImedsInstalled}}
     <li><a href="#Imeds_tab">Labo</a></li>
   {{/if}}
 </ul>
-  
-<hr class="control_tabs" />
 
 {{assign var=onSubmit value="return onSubmitFormAjax(this, {onComplete: function(){ reloadAnesth(); } })"}}
 

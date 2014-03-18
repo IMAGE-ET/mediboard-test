@@ -57,9 +57,6 @@ $dPconfig["dPcabinet"] = array(
     "show_mallampati"       => "0",
     "check_close"           => "0",
   ),
-  "CPrescription" => array (
-    "view_prescription" => "0"
-  ),
   "Comptabilite" => array(
     "show_compta_tiers" => 1
   ),

@@ -11,34 +11,40 @@
 {{mb_script module="cabinet" script="consultation"}}
 
 <script>
-configCabinet = function() {
-  var url = new Url("cabinet", "ajax_config_cabinet");
-  url.requestUpdate("cabinet_config");
-};
+  configCabinet = function() {
+    new Url("cabinet", "ajax_config_cabinet").requestUpdate("cabinet_config");
+  };
 
-Main.add(function () {
-  var tabs = Control.Tabs.create('tabs-configure', true);
-  configCabinet();
-});
+  Main.add(function() {
+    var tabs = Control.Tabs.create('tabs-configure', true,
+      { afterChange: function(container) {
+          if (container.id == "CConfigEtab") {
+            Configuration.edit('dPcabinet', ['CGroups'], $('CConfigEtab'));
+          }
+          else if (container.id == "cabinet_config") {
+            configCabinet();
+          }
+        }
+      }
+    );
+  });
 </script>
 
 <ul id="tabs-configure" class="control_tabs">
-  <li><a href="#RDV">{{tr}}RDV-config{{/tr}}</a></li>
-  <li><a href="#CConsultation">{{tr}}CConsultation{{/tr}}</a></li>
-  <li><a href="#CConsultAnesth">{{tr}}CConsultAnesth{{/tr}}</a></li>
-  <li><a href="#CPlageconsult">{{tr}}CPlageconsult{{/tr}}</a></li>
-  <li><a href="#CPrescription">{{tr}}CPrescription{{/tr}}</a></li>
+  <li><a href="#RDV"            >{{tr}}RDV-config{{/tr}}    </a></li>
+  <li><a href="#CConsultation"  >{{tr}}CConsultation{{/tr}} </a></li>
+  <li><a href="#CConsultAnesth" >{{tr}}CConsultAnesth{{/tr}}</a></li>
+  <li><a href="#CPlageconsult"  >{{tr}}CPlageconsult{{/tr}} </a></li>
   {{if $user->user_username == "admin"}}
-    <li><a href="#compta">{{tr}}compta-config{{/tr}}</a></li>
+    <li><a href="#compta"       >{{tr}}compta-config{{/tr}} </a></li>
   {{/if}}
-  <li><a href="#tarifs">{{tr}}CTarif{{/tr}}</a></li>
-  <li><a href="#tag">{{tr}}tag-config{{/tr}}</a></li>
-  <li><a href="#actions">Autres actions</a></li>
-  <li><a href="#offline">Mode offline</a></li>
+  <li><a href="#tarifs"         >{{tr}}CTarif{{/tr}}        </a></li>
+  <li><a href="#tag"            >{{tr}}tag-config{{/tr}}    </a></li>
+  <li><a href="#actions"        >Autres actions             </a></li>
+  <li><a href="#offline"        >Mode offline               </a></li>
   <li><a href="#cabinet_config" onmousedown="configCabinet();">{{tr}}cabinet-creator{{/tr}}</a></li>
+  <li><a href="#CConfigEtab"    >Config par établissement   </a></li>
 </ul>
-
-<hr class="control_tabs" />
 
 <!-- Prise de rendez-vous --> 
 <div id="RDV" style="display: none;">
@@ -58,11 +64,6 @@ Main.add(function () {
 <!-- CPlageconsult -->  
 <div id="CPlageconsult" style="display: none;">
   {{mb_include template=CPlageconsult_config}}
-</div>
-
-<!-- CPrescription -->  
-<div id="CPrescription" style="display: none;">
-  {{mb_include template=CPrescription_config}}
 </div>
 
 {{if $user->user_username == "admin"}}
@@ -107,6 +108,6 @@ Main.add(function () {
   </form>
 </div>
 
-<div id="cabinet_config" style="display: none;">
-  test
-</div>
+<div id="cabinet_config" style="display: none;"></div>
+
+<div id="CConfigEtab" style="display: none"></div>
