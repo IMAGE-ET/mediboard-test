@@ -27,7 +27,7 @@ $date_after  = CMbDT::date("+1 DAY", $date);
 
 // L'utilisateur doit-il voir les informations médicales
 $user = CMediusers::get();
-$medicalView = $user->isMedical();
+$medicalView = $user->isMedical() || $user->isFromType(array("Aide soignant"));
 
 $group = CGroups::loadCurrent();
 $listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
