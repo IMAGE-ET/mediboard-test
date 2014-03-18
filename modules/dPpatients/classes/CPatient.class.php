@@ -1006,7 +1006,9 @@ class CPatient extends CPerson {
     if (!$dateTime) {
       $dateTime = CMbDT::dateTime();
     }
+    $group = CGroups::loadCurrent();
 
+    $where["group_id"] = "= '$group->_id'";
     $where[] = "'$dateTime' BETWEEN entree AND sortie";
     return $this->loadRefsSejours($where);
   }
