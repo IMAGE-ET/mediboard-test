@@ -48,7 +48,7 @@ class CHL7v2EventADTA08 extends CHL7v2EventADT implements CHL7EventADTA01 {
     if ($object instanceof CPatient) {
       $patient = $object;
       //Recherche du séjour en cours
-      $object = reset($patient->getCurrSejour());
+      $object = reset($patient->getCurrSejour(null, $this->_receiver->group_id));
       //Récupération du dernier séjour
       if (!$object) {
         $object = reset($patient->loadRefsSejours());
