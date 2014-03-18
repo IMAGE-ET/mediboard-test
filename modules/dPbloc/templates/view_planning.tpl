@@ -13,7 +13,7 @@
 <table class="tbl">
   <tr class="clear">
     <th colspan="{{$_materiel+$_extra+$_duree+$_coordonnees+12}}">
-      <h1 class="no-break">
+      <h1 style="margin: auto;">
         <a href="#" onclick="window.print()">
           Planning du {{$filter->_date_min|date_format:$conf.date}}
           {{if $filter->_date_min != $filter->_date_max}}
