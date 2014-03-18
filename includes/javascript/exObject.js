@@ -741,7 +741,7 @@ function showExClassForm(ex_class_id, object_guid, title, ex_object_id, event_na
     });
   }*/
 
-  var _popup = true;//Control.Overlay.container && Control.Overlay.container.visible();
+  var _popup = true; //Control.Overlay.container && Control.Overlay.container.visible();
 
   ajax_container = null;
 
@@ -750,8 +750,12 @@ function showExClassForm(ex_class_id, object_guid, title, ex_object_id, event_na
     return;
   }
 
+  //@todo for ipad, maybe use the timeout in url.popup
+
   if (_popup) {
-    url.popup("100%", "100%", title);
+    setTimeout(function() {
+      url.popup("100%", "100%", title);
+    }, 100);
   }
   else {
     url.modal();
