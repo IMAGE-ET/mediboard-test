@@ -78,7 +78,7 @@ class CPlanningEvent  {
     $this->guid = $guid;
     $this->draggable_guid = $draggable_guid;
     
-    $this->internal_id = "CPlanningEvent-".uniqid();
+    $this->internal_id = "CPlanningEvent-".md5(uniqid(null, true));
     
     $this->start = $date;
     $this->length = $length;
