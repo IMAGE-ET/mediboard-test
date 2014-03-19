@@ -46,7 +46,7 @@ ChoiceLit  = {
           return a;
         }
         else {
-          return moveAffectation(form.affectation_id.value, lit_id, form.sejour_id.value, form.lit_id.value, zone_select.get("service-id"));
+          return moveAffectationlit(form.affectation_id.value, lit_id, form.sejour_id.value, form.lit_id.value, zone_select.get("service-id"), form.service_id.value);
         }
       }
     }
@@ -93,7 +93,7 @@ delAffectation = function(affectation_id, lit_id, sejour_guid) {
   }});
 }
 
-moveAffectation = function(affectation_id, lit_id, sejour_id, lit_id_origine, service_id) {
+moveAffectationlit = function(affectation_id, lit_id, sejour_id, lit_id_origine, service_id, service_id_origine) {
   var url = new Url("dPhospi", "ajax_move_affectation");
   if (!Object.isUndefined(affectation_id)) {
     url.addParam("affectation_id", affectation_id);
@@ -110,7 +110,35 @@ moveAffectation = function(affectation_id, lit_id, sejour_id, lit_id_origine, se
     if(service_id){
       refreshService(service_id);
     }
+    if(service_id_origine){
+      refreshService(service_id_origine);
+    }
   }});
+}
+
+saveChoiceService = function(service_id) {
+  var form = getForm("changeServiceForm");
+  $V(form.service_id, service_id);
+  onSubmitFormAjax(form, function(){
+    refreshNonPlaces();
+    refreshService(service_id);
+  });
+}
+choiceAffService = function(object_id, sejour_id, lit_id, service_id) {
+  var form = getForm("changeServiceForm");
+  $V(form.m ,"hospi");
+  $V(form.dosql ,"do_affectation_aed");
+  $V(form.affectation_id, object_id);
+  $V(form.sejour_id, sejour_id);
+  var url = new Url("hospi", "ajax_select_service");
+  url.addParam("action", "changeService");
+  url.addParam("lit_id", lit_id);
+  url.addParam("action", 'saveChoiceService');
+  url.requestModal(null, null, {maxHeight: '600',
+    onClose: function() {
+      refreshService(service_id);
+    }}
+  );
 }
 
 Main.add(function() {

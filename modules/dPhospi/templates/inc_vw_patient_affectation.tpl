@@ -16,6 +16,7 @@
     <input type="hidden" name="affectation_id" value="{{$_affectation->_id}}" />
     <input type="hidden" name="sejour_id" value="{{$_affectation->sejour_id}}" />
     <input type="hidden" name="lit_id" value="{{$_affectation->lit_id}}" />
+    <input type="hidden" name="service_id" value="{{$_affectation->service_id}}" />
   </form>
   {{if $_affectation->_ref_sejour->_id}}
     {{assign var=_sejour value=$_affectation->_ref_sejour}}
@@ -62,7 +63,7 @@
             <button type="button" class="door-out notext opacity-40"
               title="Placer dans le couloir"
               onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"
-              onclick="moveAffectation('{{$_affectation->_id}}', '', '', '{{$_affectation->lit_id}}', '{{$_zone->service_id}}');"></button>
+              onclick="choiceAffService('{{$_affectation->_id}}', '{{$_affectation->sejour_id}}', '{{$_affectation->lit_id}}', '{{$_zone->service_id}}');"></button>
           {{/if}}
           <button type="button" class="edit notext opacity-40"
             onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"
