@@ -465,7 +465,7 @@ class CConsultation extends CFacturable {
     // Dévalidation avec règlement déjà effectué
     if ($this->fieldModified("valide", "0")) {
       // Bien tester sur _old car valide = 0 s'accompagne systématiquement d'un facture_id = 0
-      if ($old->loadRefFacture()->countBackRefs("reglements")) {
+      if (count($old->loadRefFacture()->loadRefsReglements())) {
         $msg .= "Vous ne pouvez plus dévalider le tarif, des règlements de factures ont déjà été effectués";
       }
     }
