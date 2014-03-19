@@ -9,31 +9,31 @@
  * @version    $Revision$
  */
 
+CCanDo::checkEdit();
+
 $patient_id = CValue::get("patient_id");
 $type       = CValue::get("type");
 $antecedent_id = CValue::get("antecedent_id");
 
-$patient = new CPatient;
+$patient = new CPatient();
 $patient->load($patient_id);
 
-$dossier_medical = $patient->loadRefDossierMedical();
-$dossier_medical->loadRefsAntecedents();
-
-/** @var CAntecedent[] $antecedents */
-$antecedents = $dossier_medical->_all_antecedents;
-
-foreach ($antecedents as &$_antecedent) {
-  $_antecedent->loadFirstLog();
-}
+$antecedents = array();
 
 if ($type) {
-  $antecedents = $dossier_medical->_ref_antecedents_by_type[$type];
+  $dossier_medical = $patient->loadRefDossierMedical();
+  /** @var CAntecedent[] $antecedents */
+  $antecedents = $dossier_medical->loadRefsAntecedentsOfType($type);
+
+  foreach ($antecedents as $_antecedent) {
+    $_antecedent->loadFirstLog();
+  }
 }
 
-$antecedent = new CAntecedent;
+$antecedent = new CAntecedent();
 $antecedent->load($antecedent_id);
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 
 $smarty->assign("patient"    , $patient);
 $smarty->assign("antecedents", $antecedents);
