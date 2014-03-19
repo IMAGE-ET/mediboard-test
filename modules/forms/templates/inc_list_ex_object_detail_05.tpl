@@ -49,7 +49,7 @@ filterExClasses = function(input){
   <tr>
     <td colspan="3">
       {{if $ex_classes_creation|@count}}
-        <select onchange="ExObject.showExClassFormSelect(this, '{{$self_guid}}')" style="width: 20em; max-width: 35em; float: left;">
+        <select onchange="ExObject.showExClassFormSelect.defer(this, '{{$self_guid}}')" style="width: 20em; max-width: 35em; float: left;">
           <option value=""> &ndash; Remplir nouveau formulaire </option>
           {{foreach from=$ex_classes_creation item=_ex_class_events key=_ex_class_id}}
             {{if $_ex_class_events|@count > 1}}
