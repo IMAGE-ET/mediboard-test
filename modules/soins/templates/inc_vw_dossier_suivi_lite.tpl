@@ -9,6 +9,12 @@
  * @link     http://www.mediboard.org
 *}}
 
+<script type="text/javascript">
+  closeModalSuivi = function() {
+    Control.Modal.close();
+  }
+</script>
+
 <table class="tbl">
   <tr>
     <th>Type</th>
