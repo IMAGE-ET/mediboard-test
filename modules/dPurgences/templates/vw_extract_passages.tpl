@@ -32,8 +32,12 @@
     $V(getForm('listFilter').page,page);
   }
 
-  function sendPassage(passage_id) {
-    new Url("dPurgences", "ajax_transmit_activite")
+  function sendPassage(passage_id, type) {
+    var ajax = "ajax_transmit_passages";
+    if (type == "activite") {
+      ajax = "ajax_transmit_activite";
+    }
+    new Url("dPurgences", ajax)
       .addParam("extract_passages_id", passage_id)
       .requestUpdate("result_send_passage-"+passage_id);
   }
@@ -167,7 +171,7 @@
         </form>
       {{/if}}
       <button {{if !$_passage->message_valide}}disabled{{/if}} type="button" class="send notext"
-              onclick="sendPassage('{{$_passage->_id}}')">Transmettre</button>
+              onclick="sendPassage('{{$_passage->_id}}', '{{$_passage->type}}')">Transmettre</button>
       <div id="result_send_passage-{{$_passage->_id}}"></div>
     </td>
   </tr>
