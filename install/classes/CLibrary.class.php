@@ -363,12 +363,12 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "dompdf";
 $library->url = "http://code.google.com/p/dompdf";
-$library->fileName = "dompdf-14-10-13.tar.gz";
+$library->fileName = "dompdf-19-03-14.tar.gz";
 $library->description ="HTML to PDF Converter";
 $library->sourceDir = "dompdf";
 $library->targetDir = "dompdf";
-$library->versionFile = "lib/fonts/DejaVuSans-Bold.ufm";
-$library->versionString = 'StartFontMetrics 4.1';
+$library->versionFile = "include/style.cls.php";
+$library->versionString = 'dispose() {}';
 CLibrary::$all[$library->name] = $library;
 
 CLibrary::$all[$library->name] = $library;

@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
+<script>
   Main.add(function() {
     Control.Tabs.create("tabs_modeles", true);
   });
@@ -42,7 +42,7 @@
   }
 </script>
 
-<form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+<form name="editConfig" action="?m={{$m}}&{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
 
@@ -57,9 +57,7 @@
       <a href="#tools">Outils</a>
     </li>
   </ul>
-  
-  <hr class="control_tabs" />
-  
+
   <div id="modeles">
     {{mb_include template=CCompteRendu_config}}
   </div>

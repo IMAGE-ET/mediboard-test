@@ -91,6 +91,10 @@
     {{mb_include module=system template=inc_config_str}}
   </tr>
   <tr>
+    {{assign var="var" value="font_dir"}}
+    {{mb_include module=system template=inc_config_str}}
+  </tr>
+  <tr>
     <th class="category" colspan="2">
       Horodatage pour les aides à la saisie
     </th>
@@ -101,7 +105,7 @@
     <td></td>
     <td>
       <div>
-        <script type="text/javascript">
+        <script>
           var timestamp = getForm("editConfig")["dPcompteRendu[CCompteRendu][timestamp]"];
           var reloadfield = function() {
             var field = DateFormat.format(new Date(), timestamp.value).replace(/%p/g, User.view.split(" ")[1]);

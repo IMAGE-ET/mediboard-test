@@ -31,3 +31,10 @@ define("DOMPDF_ENABLE_PHP", false);
 
 // Hauteur de ligne
 define("DOMPDF_FONT_HEIGHT_RATIO", 1.0);
+
+// Répertoire des fonts
+$font_dir = CAppUI::conf("dPcompteRendu CCompteRendu font_dir");
+if ($font_dir) {
+  define("DOMPDF_FONT_DIR"  , $font_dir);
+  define("DOMPDF_FONT_CACHE", $font_dir);
+}

@@ -10,8 +10,9 @@
  * @version  SVN: $Id:\$
  * @link     http://www.mediboard.org
  */
-$dPconfig["dPcompteRendu"] = array (
-  "CCompteRendu" => array (
+
+$dPconfig["dPcompteRendu"] = array(
+  "CCompteRendu" => array(
     "pdf_thumbnails" => '0',
     "same_print" => '0',
     "timestamp" => '-- %n %p - dd/MM/y HH:mm',
@@ -42,6 +43,7 @@ $dPconfig["dPcompteRendu"] = array (
       "ZapfDingBats/ZapfDingBats;",
     "access_group" => "1",
     "access_function" => "1",
+    "font_dir" => "",
   ),
   "CAideSaisie" => array(
     "access_group" => "1",
