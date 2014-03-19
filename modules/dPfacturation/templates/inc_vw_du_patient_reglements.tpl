@@ -3,22 +3,26 @@
     var form = getForm('reglement-add');
     var banque_id = form.banque_id;
     var reference = form.reference;
-    var tireur    = form.tireur;
     var BVR       = form.num_bvr;
     var mode      = form.mode.value;
     
     banque_id.hide();
     reference.hide();
     BVR.hide();
-    tireur.hide();
+
+    {{if !$conf.dPfacturation.CReglement.use_debiteur}}
+      var tireur    = form.tireur;
+      tireur.hide();
+      if (mode == "cheque") {
+        tireur.show();
+      }
+    {{/if}}
     
     switch(mode) {
       case "cheque":
         banque_id.show();
         reference.show();
-        tireur.show();
         break;
-        
       case "virement":
         reference.show();
         $V(banque_id, "");

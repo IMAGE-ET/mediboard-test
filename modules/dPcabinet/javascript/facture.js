@@ -32,5 +32,11 @@ window.Facture = {
         }
       }
     });
+  },
+  reloadReglement: function(facture_id, facture_class) {
+    var url = new Url('facturation', 'ajax_refresh_reglement');
+    url.addParam('facture_id'    , facture_id);
+    url.addParam('facture_class' , facture_class);
+    url.requestUpdate('reglements_facture');
   }
 };
