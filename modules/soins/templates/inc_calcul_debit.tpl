@@ -17,7 +17,8 @@
   </div>
   {{mb_return}}
 {{/if}}
-<script type="text/javascript">
+
+<script>
   Main.add(function() {
     var form = getForm("calculPerf");
     form.quantite_debit.addSpinner({min: 0});
@@ -25,6 +26,7 @@
     limitSelect(form.temps_debit);
     
     poids = $$(".poids_patient");
+    taille = $$(".taille_patient");
     volume = {{$line->_quantite_totale}};
     
     if (poids.length) {
@@ -42,7 +44,15 @@
         }
       });*/
     }
-    
+
+    if (taille.length) {
+      taille = parseInt(taille[0].innerHTML);
+    }
+    else {
+      $("calcul_perf_poids").hide();
+      taille = 0;
+    }
+
     updateData();
   });
   
@@ -56,7 +66,7 @@
     // Si le poids n'est pas renseigné et que l'on choisit une unité/kg, alors on cache
     // les infos de calcul
     
-    if (!poids && /\/kg/.test(unite_choisie)) {
+    if ((!poids && /\/kg/.test(unite_choisie)) || (!taille && !poids && /\/m2/.test(unite_choisie))) {
       $("calcul_debit_area").hide();
       {{if !$mode_protocole}}
         $("alert_poids").show();
@@ -72,10 +82,10 @@
     var temps_debit = $V(form.temps_debit);
     
     // rapport_debit_choisi_ua
-    var rapport_debit_choisi_ua = rapport_unite_prise[unite_choisie.replace(/\/kg/g, "")][unite_administration.replace(/\/kg/g, "")];
+    var rapport_debit_choisi_ua = rapport_unite_prise[unite_choisie.replace(/\/(kg|m2)/g, "")][unite_administration.replace(/\/(kg|m2)/g, "")];
 
     // rapport_conditionnement_ua
-    var rapport_conditionnement_ua = rapport_unite_prise["{{$line_item->unite}}".replace(/\/kg/g, "")][unite_administration.replace(/\/kg/g, "")];
+    var rapport_conditionnement_ua = rapport_unite_prise["{{$line_item->unite}}".replace(/\/(kg|m2)/g, "")][unite_administration.replace(/\/(kg|m2)/g, "")];
 
     // Rapport resultant des calculs précédents
     var rapport_quantite_necessaire = rapport_debit_choisi_ua / rapport_conditionnement_ua;
@@ -93,7 +103,7 @@
       debit_necessaire *= poids;
     }
     
-    $("debit_necessaire").update((Math.round(debit_necessaire * 100) / 100) + " " + unite_choisie.replace(/\/kg \(.*\)/, ""));
+    $("debit_necessaire").update((Math.round(debit_necessaire * 100) / 100) + " " + unite_choisie.replace(/\/(kg|m2) \(.*\)/, ""));
     
     {{if $line->type == "classique"}}
       var duree = parseFloat($("result_duree").innerHTML);
@@ -153,11 +163,9 @@
 
       // Si on a choisi une unité/kg et que le poids du patient n'est pas dispo,
       // on ne peut que vider la quantité de produit et tagger la perfusion en sans poids
-      if (/\/kg/.test(unite_choisie) && !poids) {
+      if ((/\/kg/.test(unite_choisie) && !poids) || (/\/m2/.test(unite_choisie) && !taille && !poids)) {
         formLineItem.quantite.onchange();
-        onSubmitFormAjax(getForm("tagSansPoids"), function() {
-          Control.Modal.close();
-        });
+        tagLineSansTaillePoids(taille);
         return;
       }
       
@@ -181,16 +189,13 @@
   setValuesOther = function() {
     var form = getForm("calculPerf");
     var unite_choisie = $V(form.unite_debit);
-    
+
     onSubmitFormAjax(form, function() {
       // Si on a choisi une unité/kg et que l'on n'a pas de poids
       // on déclenche le onchange de la quantité et on enregistre la perfusion avec le flag sans poids
-      if (/\/kg/.test(unite_choisie) && !poids) {
-        var formLineItem = getForm("editLinePerf-{{$line_item->_id}}")
-        formLineItem.quantite.onchange();
-        onSubmitFormAjax(getForm("tagSansPoids"), function() {
-          Control.Modal.close();
-        });
+      if ((/\/kg/.test(unite_choisie) && !poids) || (/\/m2/.test(unite_choisie) && !taille && !poids)) {
+        getForm("editLinePerf-{{$line_item->_id}}").quantite.onchange();
+        tagLineSansTaillePoids(taille);
         return;
       }
       
@@ -227,6 +232,16 @@
       temps.selectedIndex = 0;
     }
   }
+
+  tagLineSansTaillePoids = function(taille) {
+    var formTag = getForm("tagSansPoidsTaille");
+    if (!taille) {
+      $V(formTag.sans_taille, 1);
+    }
+    onSubmitFormAjax(formTag, function() {
+      Control.Modal.close();
+    });
+  }
 </script>
 
 <div class="small-info">
@@ -239,18 +254,19 @@
 </div>
 
 <div class="small-warning" style="display: none;" id="alert_poids">
-  Le poids du patient n'est pas renseigné. Veuillez le renseigner pour générer le plan de soins. 
+  Le poids et/ou la taille du patient ne sont pas renseignés. Veuillez les renseigner pour générer le plan de soins.
 </div>
 
-<form name="tagSansPoids" method="post">
-  <input type="hidden" name="m" value="dPprescription" />
+<form name="tagSansPoidsTaille" method="post">
+  <input type="hidden" name="m" value="prescription" />
   <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
   {{mb_key object=$line}}
   <input type="hidden" name="sans_poids" value="1" />
+  <input type="hidden" name="sans_taille" value="" />
 </form>
 
 <form name="calculPerf" method="post">
-  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="m" value="prescription" />
   <input type="hidden" name="dosql" value="do_prescription_line_mix_item_aed" />
   <input type="hidden" name="_poids" />
   {{mb_key object=$line_item}}

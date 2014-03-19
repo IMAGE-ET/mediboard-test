@@ -1,4 +1,5 @@
 {{mb_default var=add_class_poids value=0}}
+{{mb_default var=add_class_taille value=0}}
 
 <tr>
   <td style="width: 25%;">
@@ -16,7 +17,7 @@
   <td style="width: 25%;">
     <strong>{{mb_title object=$patient->_ref_constantes_medicales field=taille}}:</strong>
     {{if $patient->_ref_constantes_medicales->taille}}
-      {{mb_value object=$patient->_ref_constantes_medicales field=taille}} cm
+      <span {{if $add_class_taille}}class="taille_patient"{{/if}}>{{mb_value object=$patient->_ref_constantes_medicales field=taille}}</span> cm
     {{else}}
     &mdash;
     {{/if}}
