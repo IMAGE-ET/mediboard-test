@@ -38,17 +38,20 @@ $sejour = new CSejour();
 $group_id = CGroups::loadCurrent()->_id;
 $where = array();
 $where["patient_id"] = "= '$patient->_id'";
-$where["entree_prevue"] = "<= '".$consult->_ref_plageconsult->date."'";
-$where["sortie_prevue"] = ">= '".$consult->_ref_plageconsult->date."'";
 if (CAppUI::conf("dPpatients CPatient multi_group") == "hidden") {
   $where["sejour.group_id"] = "= '$group_id'";
 }
 $order = "entree ASC";
 $patient->_ref_sejours = $sejour->loadList($where, $order);
 
+$date_consult = $consult->_ref_plageconsult->date;
 $ops_sans_dossier_anesth = array();
 // Chargement de ses séjours
 foreach ($patient->_ref_sejours as $_key => $_sejour) {
+  if ($date_consult > $_sejour->entree_prevue && $date_consult > $_sejour->sortie_prevue) {
+    unset($patient->_ref_sejours[$_sejour->_id]);
+    continue;
+  }
   $_sejour->loadRefsOperations();
   $_sejour->loadRefsFwd();
   foreach ($_sejour->_ref_operations as $_key_op => $_operation) {
