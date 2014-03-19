@@ -38,7 +38,8 @@ $sejour = new CSejour();
 $group_id = CGroups::loadCurrent()->_id;
 $where = array();
 $where["patient_id"] = "= '$patient->_id'";
-$where["entree_prevue"] = ">= '".$consult->_ref_plageconsult->date."'";
+$where["entree_prevue"] = "<= '".$consult->_ref_plageconsult->date."'";
+$where["sortie_prevue"] = ">= '".$consult->_ref_plageconsult->date."'";
 if (CAppUI::conf("dPpatients CPatient multi_group") == "hidden") {
   $where["sejour.group_id"] = "= '$group_id'";
 }
