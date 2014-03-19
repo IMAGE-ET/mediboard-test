@@ -12,11 +12,12 @@
 
 <table class="tbl">
   <tr>
-    {{if $conf.ref_pays == 2}}
-      <th>{{mb_title class=CCorrespondantPatient field=surnom}}</th>
+    {{if $is_admin}}
+      <th>{{mb_title class=CCorrespondantPatient field=function_id}}</th>
     {{/if}}
     <th>{{mb_title class=CCorrespondantPatient field=nom}}</th>
     <th>{{mb_title class=CCorrespondantPatient field=prenom}}</th>
+    <th>{{mb_title class=CCorrespondantPatient field=surnom}}</th>
     <th>{{mb_title class=CCorrespondantPatient field=naissance}}</th>
     <th>{{mb_title class=CCorrespondantPatient field=adresse}}</th>
     <th>{{mb_title class=CCorrespondantPatient field=cp}}/{{mb_title class=CCorrespondantPatient field=ville}}</th>
@@ -38,9 +39,11 @@
   {{foreach from=$correspondants item=_correspondant}}
 
     <tr>
-      {{if $conf.ref_pays == 2}}
+      {{if $is_admin}}
         <td>
-          {{mb_value object=$_correspondant field=surnom}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$_correspondant->_ref_function->_guid}}')">
+            {{mb_value object=$_correspondant field=function_id}}
+          </span>
         </td>
       {{/if}}
       <td>
@@ -51,13 +54,14 @@
       <td>
         {{mb_value object=$_correspondant field=prenom}}
       </td>
+      <td>{{mb_value object=$_correspondant field=surnom}}</td>
       <td>
         {{mb_value object=$_correspondant field=naissance}}
       </td>
-      <td>
+      <td class="compact">
         {{mb_value object=$_correspondant field=adresse}}
       </td>
-      <td>
+      <td class="compact">
         {{mb_value object=$_correspondant field=cp}}
         {{mb_value object=$_correspondant field=ville}}
       </td>
@@ -71,11 +75,12 @@
         {{mb_value object=$_correspondant field=fax}}
       </td>
       <td>
+        {{mb_value object=$_correspondant field=relation}}
         {{if $_correspondant->relation != "employeur"}}
           {{if $_correspondant->parente == "autre"}}
-            {{mb_value object=$_correspondant field=parente_autre}}
-          {{else}}
-            {{mb_value object=$_correspondant field=parente}}
+            &mdash; {{mb_value object=$_correspondant field=parente_autre}}
+          {{elseif $_correspondant->parente}}
+            &mdash; {{mb_value object=$_correspondant field=parente}}
           {{/if}}
         {{/if}}
       </td>
@@ -97,7 +102,7 @@
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="12">{{tr}}CCorrespondantPatient.none{{/tr}}</td>
+      <td colspan="20">{{tr}}CCorrespondantPatient.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

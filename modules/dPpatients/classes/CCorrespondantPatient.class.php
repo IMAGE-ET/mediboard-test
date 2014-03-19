@@ -16,6 +16,9 @@ class CCorrespondantPatient extends CPerson {
   // DB Table key
   public $correspondant_patient_id;
 
+  // Owner
+  public $function_id;
+
   // DB Fields
   public $patient_id;
   public $relation;
@@ -52,6 +55,9 @@ class CCorrespondantPatient extends CPerson {
   public $_duplicate;
   public $_is_obsolete = false;
 
+
+  /** @var CFunctions */
+  public $_ref_function;
   /** @var CPatient */
   public $_ref_patient;
 
@@ -73,6 +79,7 @@ class CCorrespondantPatient extends CPerson {
   function getProps() {
     $props = parent::getProps();
 
+    $props["function_id"]         = "ref class|CFunctions";
     $props["patient_id"]          = "ref class|CPatient cascade";
     $props["relation"]            = "enum list|assurance|autre|confiance|employeur|inconnu|prevenir default|prevenir";
     $props["relation_autre"]      = "str";
@@ -152,6 +159,11 @@ class CCorrespondantPatient extends CPerson {
       $this->date_debut = CMbDT::date();
     }
 
+    // Création d'un correspondant en mode cabinets distincts
+    if (CAppUI::conf('dPpatients CPatient function_distinct') && !$this->_id) {
+      $this->function_id = CMediusers::get()->function_id;
+    }
+
     if ($this->_duplicate) {
       $this->nom .= " (Copy)";
 
@@ -188,6 +200,15 @@ class CCorrespondantPatient extends CPerson {
    */
   function loadRefPatient() {
     return $this->_ref_patient = $this->loadFwdRef("patient_id");
+  }
+
+  /**
+   * Chargement de la fonction reliée
+   *
+   * @return CFunctions
+   */
+  function loadRefFunction() {
+    return $this->_ref_function = $this->loadFwdRef("function_id", true);
   }
 
   /**

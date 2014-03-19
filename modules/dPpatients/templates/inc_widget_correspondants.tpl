@@ -34,6 +34,9 @@
   Main.add(function () {
     var formTraitant = getForm("traitant-edit-{{$patient->_id}}");
     var urlTraitant = new Url("dPpatients", "httpreq_do_medecins_autocomplete");
+    {{if $patient && $patient->function_id}}
+      urlTraitant.addParam("function_id", '{{$patient->function_id}}');
+    {{/if}}
     urlTraitant.autoComplete(formTraitant._view, formTraitant._view.id+'_autocomplete', {
       minChars: 3,
       updateElement : function(element) {
@@ -64,28 +67,28 @@
       {{mb_field object=$patient field="medecin_traitant" hidden=1}}
     </th>
     <td>
-    	{{mb_ternary var=medecin_traitant_id   test=$patient->_id value=$patient->medecin_traitant other=""}}
+      {{mb_ternary var=medecin_traitant_id   test=$patient->_id value=$patient->medecin_traitant other=""}}
 
-			{{* mb_ternary won't work : will throw a warning *}}    	
-    	{{assign var=medecin_traitant_view value=""}}
-    	{{if $patient->_id}}
-    	{{assign var=medecin_traitant_view value=$patient->_ref_medecin_traitant->_view}}
-			{{/if}}
+      {{* mb_ternary won't work : will throw a warning *}}
+      {{assign var=medecin_traitant_view value=""}}
+      {{if $patient->_id}}
+      {{assign var=medecin_traitant_view value=$patient->_ref_medecin_traitant->_view}}
+      {{/if}}
 
       <form name="traitant-edit-{{$patient->_id}}" action="?" method="post" onsubmit="return false">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dosql" value="do_patients_aed" />
         <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
         <input type="hidden" name="medecin_traitant" value="{{$medecin_traitant_id}}" onchange="updateMedTraitant(this.form);"/>
-        <input type="text" name="_view" size="50" value="{{$medecin_traitant_view|smarty:nodefaults}}" ondblclick="Medecin.edit(this.form)" class="autocomplete"/>
+        <input type="text" name="_view" size="50" value="{{$medecin_traitant_view|smarty:nodefaults}}" ondblclick="Medecin.edit(this.form, $V(this.form._view), '{{$patient->function_id}}')" class="autocomplete"/>
         <div id="traitant-edit-{{$patient->_id}}__view_autocomplete" style="display: none; width: 300px;" class="autocomplete"></div>
-        <button class="search" type="button" onclick="Medecin.edit(this.form, $V(this.form._view))">{{tr}}Choose{{/tr}}</button>
+        <button class="search" type="button" onclick="Medecin.edit(this.form, $V(this.form._view), '{{$patient->function_id}}')">{{tr}}Choose{{/tr}}</button>
         <button class="cancel notext" type="button" onclick="Medecin.del(this.form)">{{tr}}Delete{{/tr}}</button>
       </form>
     </td>
   </tr>
   
-	{{if $patient && $patient->_id}}
+  {{if $patient && $patient->_id}}
     {{foreach from=$patient->_ref_medecins_correspondants item=curr_corresp name=corresp}}
     <tr>
       {{if $smarty.foreach.corresp.first}}
@@ -99,8 +102,8 @@
           <input type="hidden" name="correspondant_id" value="{{$curr_corresp->_id}}" />
           <input type="hidden" name="patient_id" value="{{$curr_corresp->_ref_patient->_id}}" />
           <input type="hidden" name="medecin_id" value="{{$curr_corresp->_ref_medecin->_id}}" onchange="submitMedecin(this.form)" />
-          <input type="text" name="_view" size="50" value="{{$curr_corresp->_ref_medecin->_view}}" ondblclick="Medecin.edit(this.form)" readonly="readonly" />
-          <button class="search" type="button" onclick="Medecin.edit(this.form, $V(this.form._view))">{{tr}}Change{{/tr}}</button>
+          <input type="text" name="_view" size="50" value="{{$curr_corresp->_ref_medecin->_view}}" ondblclick="Medecin.edit(this.form, $V(this.form._view), '{{$patient->function_id}}')" readonly="readonly" />
+          <button class="search" type="button" onclick="Medecin.edit(this.form, $V(this.form._view), '{{$patient->function_id}}')">{{tr}}Change{{/tr}}</button>
           <button class="cancel notext" type="button" onclick="Medecin.del(this.form)">{{tr}}Delete{{/tr}}</button>
         </form>
       </td>
@@ -115,20 +118,20 @@
           <input type="hidden" name="dosql" value="do_correspondant_aed" />
           <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
           <input type="hidden" name="medecin_id" value="" onchange="this.form.onsubmit()" />
-          <input type="text" name="_view" size="50" value="" ondblclick="Medecin.edit(this.form)" class="autocomplete" />
+          <input type="text" name="_view" size="50" value="" ondblclick="Medecin.edit(this.form, $V(this.form._view), '{{$patient->function_id}}')" class="autocomplete" />
           <div id="correspondant-new-{{$patient->_id}}__view_autocomplete" style="display: none; width: 300px;" class="autocomplete"></div>
-          <button class="search" type="button" onclick="Medecin.edit(this.form)">{{tr}}Choose{{/tr}}</button>
+          <button class="search" type="button" onclick="Medecin.edit(this.form, $V(this.form._view), '{{$patient->function_id}}')">{{tr}}Choose{{/tr}}</button>
         </form>
       </td>
     </tr>
  
- 	{{else}}
-   	<tr>
-   	  <td colspan="2" class="text">
-  		  <div class="small-info">
-  		    Veuillez créer la fiche patient avant de pouvoir ajouter ou supprimer ses médecins correspondants.
-  		  </div>
-   	  </td>
-   	</tr>
-	{{/if}}
+   {{else}}
+     <tr>
+       <td colspan="2" class="text">
+        <div class="small-info">
+          Veuillez créer la fiche patient avant de pouvoir ajouter ou supprimer ses médecins correspondants.
+        </div>
+       </td>
+     </tr>
+  {{/if}}
 </table>

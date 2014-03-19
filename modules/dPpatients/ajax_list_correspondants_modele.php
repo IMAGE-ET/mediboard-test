@@ -9,20 +9,25 @@
  * @version    $Revision$
  */
 
-$dialog           = CValue::get("dialog");
-$start_corres     = CValue::get("start_corres", 0);
-$step_corres      = CValue::get("step_corres", 20);
+CCanDo::checkRead();
+
+$dialog             = CValue::get("dialog");
+$start_corres       = CValue::get("start_corres", 0);
+$step_corres        = CValue::get("step_corres", 20);
 
 // Récuperation des correspondants recherchés
-$corres_nom       = CValue::get("nom"     , "");
-$corres_surnom    = CValue::get("surnom"  , "");
-$corres_cp        = CValue::get("cp");
-$corres_ville     = CValue::get("ville");
-$corres_relation  = CValue::get("relation");
+$corres_nom         = CValue::get("nom", "");
+$corres_prenom      = CValue::get("prenom", "");
+$corres_surnom      = CValue::get("surnom", "");
+$corres_function_id = CValue::get("function_id");
+$corres_cp          = CValue::get("cp");
+$corres_ville       = CValue::get("ville");
+$corres_relation    = CValue::get("relation");
 
 if (!$dialog) {
   CValue::setSession("correspondant_nom", $corres_nom);
-  CValue::setSession("correspondant_surnom", $corres_surnom);
+  CValue::setSession("correspondant_prenom", $corres_prenom);
+  CValue::setSession("correspondant_prenom", $corres_surnom);
   CValue::setSession("correspondant_cp", $corres_cp);
   CValue::setSession("correspondant_ville", $corres_ville);
   CValue::setSession("correspondant_relation", $corres_relation);
@@ -34,12 +39,22 @@ $ds = $correspondant->getDS();
 $where = array();
 $where["patient_id"] = "IS NULL";
 
+$current_user = CMediusers::get();
+$is_admin = $current_user->isAdmin();
+
+if ($corres_function_id && $is_admin) {
+  $where["function_id"] = "= '$corres_function_id'";
+}
+elseif (CAppUI::conf('dPpatients CPatient function_distinct') && $dialog && !$is_admin) {
+  $where["function_id"] = "= '$current_user->function_id'";
+}
+
 if ($corres_nom) {
   $where["nom"] = $ds->prepareLike("%$corres_nom%");
 }
 
-if ($corres_surnom) {
-  $where["surnom"] = $ds->prepareLike("%$corres_surnom%");
+if ($corres_prenom) {
+  $where["prenom"] = $ds->prepareLike("%$corres_prenom%");
 }
 
 if ($corres_relation) {
@@ -65,12 +80,19 @@ if ($corres_ville) {
 $order = "surnom, nom";
 
 $nb_correspondants = $correspondant->countList($where);
+/** @var CCorrespondantPatient[] $correspondants */
 $correspondants = $correspondant->loadList($where, $order, "$start_corres, $step_corres");
-//$correspondants = $correspondant->loadMatchingList("nom");
+foreach($correspondants as $_corresp) {
+  $_corresp->loadRefFunction();
+}
+
 
 $smarty = new CSmartyDP();
+
+$smarty->assign("is_admin"         , $is_admin);
 $smarty->assign("nb_correspondants", $nb_correspondants);
-$smarty->assign("correspondants"  , $correspondants);
-$smarty->assign("start_corres", $start_corres);
-$smarty->assign("step_corres", $step_corres);
+$smarty->assign("correspondants"   , $correspondants);
+$smarty->assign("start_corres"     , $start_corres);
+$smarty->assign("step_corres"      , $step_corres);
+
 $smarty->display("inc_list_correspondants_modele.tpl");

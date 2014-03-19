@@ -20,17 +20,17 @@
 
     <tr>
       <th>{{mb_label object=$object field=nom}}</th>
-      <td>{{mb_field object=$object field=nom}}</td>
+      <td>{{mb_field object=$object field=nom style="width: 13em;"}}</td>
     </tr>
 
     <tr>
       <th>{{mb_label object=$object field=prenom}}</th>
-      <td>{{mb_field object=$object field=prenom}}</td>
+      <td>{{mb_field object=$object field=prenom style="width: 13em;"}}</td>
     </tr>
 
     <tr>
       <th>{{mb_label object=$object field=jeunefille}}</th>
-      <td>{{mb_field object=$object field=jeunefille}}</td>
+      <td>{{mb_field object=$object field=jeunefille style="width: 13em;"}}</td>
     </tr>
 
     <tr>
@@ -45,32 +45,32 @@
 
     <tr>
       <th>{{mb_label object=$object field=tel}}</th>
-      <td>{{mb_field object=$object field=tel}}</td>
+      <td>{{mb_field object=$object field=tel style="width: 13em;"}}</td>
     </tr>
 
     <tr>
       <th>{{mb_label object=$object field=fax}}</th>
-      <td>{{mb_field object=$object field=fax}}</td>
+      <td>{{mb_field object=$object field=fax style="width: 13em;"}}</td>
     </tr>
 
     <tr>
       <th>{{mb_label object=$object field=portable}}</th>
-      <td>{{mb_field object=$object field=portable}}</td>
+      <td>{{mb_field object=$object field=portable style="width: 13em;"}}</td>
     </tr>
 
     <tr>
       <th>{{mb_label object=$object field=email}}</th>
-      <td>{{mb_field object=$object field=email}}</td>
+      <td>{{mb_field object=$object field=email style="width: 13em;"}}</td>
     </tr>
 
     <tr>
       <th>{{mb_label object=$object field=email_apicrypt}}</th>
-      <td>{{mb_field object=$object field=email_apicrypt}}</td>
+      <td>{{mb_field object=$object field=email_apicrypt style="width: 13em;"}}</td>
     </tr>
 
     <tr>
       <th>{{mb_label object=$object field=type}}</th>
-      <td>{{mb_field object=$object field=type}}</td>
+      <td>{{mb_field object=$object field=type style="width: 13em;"}}</td>
     </tr>
 
     <tr>
@@ -90,12 +90,12 @@
 
     <tr>
       <th>{{mb_label object=$object field=rpps}}</th>
-      <td>{{mb_field object=$object field=rpps}}</td>
+      <td>{{mb_field object=$object field=rpps style="width: 13em;"}}</td>
     </tr>
 
     <tr>
       <th>{{mb_label object=$object field=adeli}}</th>
-      <td>{{mb_field object=$object field=adeli}}</td>
+      <td>{{mb_field object=$object field=adeli style="width: 13em;"}}</td>
     </tr>
 
     <tr>
@@ -104,7 +104,7 @@
           <button class="save">{{tr}}Edit{{/tr}}</button>
             <button class="trash" type="button" onclick="confirmDeletion(this.form,{ajax:true},{onComplete: Control.Modal.close})">{{tr}}Delete{{/tr}}</button>
         {{else}}
-          <button class="save">{{tr}}Add{{/tr}}</button>
+          <button class="save">{{tr}}Create{{/tr}}</button>
         {{/if}}
       </td>
     </tr>

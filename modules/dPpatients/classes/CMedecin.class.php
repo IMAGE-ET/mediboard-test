@@ -16,6 +16,9 @@ class CMedecin extends CPerson {
   // DB Table key
   public $medecin_id;
 
+  // Owner
+  public $function_id;
+
   // DB Fields
   public $nom;
   public $prenom;
@@ -43,6 +46,9 @@ class CMedecin extends CPerson {
   public $_count_patients_traites;
   public $_count_patients_correspondants;
   public $_has_siblings;
+
+  /** @var CFunctions */
+  public $_ref_function;
 
   /**
    * @see parent::getSpec()
@@ -75,7 +81,8 @@ class CMedecin extends CPerson {
     $props = parent::getProps();
     
     $medecin_strict = (CAppUI::conf("dPpatients CMedecin medecin_strict") == 1 ? ' notNull' : '');
-    
+
+    $props["function_id"]         = "ref class|CFunctions";
     $props["nom"]                 = "str notNull confidential seekable";
     $props["prenom"]              = "str seekable";
     $props["jeunefille"]          = "str confidential";
@@ -97,6 +104,18 @@ class CMedecin extends CPerson {
     $props["last_ldap_checkout"]  = "date";
     
     return $props;
+  }
+
+  /**
+   * @see parent::store()
+   */
+  function store() {
+    // Création d'un correspondant en mode cabinets distincts
+    if (CAppUI::conf('dPpatients CPatient function_distinct') && !$this->_id) {
+      $this->function_id = CMediusers::get()->function_id;
+    }
+
+    return parent::store();
   }
 
   /**
@@ -152,6 +171,15 @@ class CMedecin extends CPerson {
     // Backward references
     $obj = new CPatient();
     $this->_ref_patients = $obj->loadList("medecin_traitant = '$this->medecin_id'");
+  }
+
+  /**
+   * Chargement de la fonction reliée
+   *
+   * @return CFunctions
+   */
+  function loadRefFunction() {
+    return $this->_ref_function = $this->loadFwdRef("function_id", true);
   }
 
   /**

@@ -13,11 +13,13 @@ CCanDo::checkRead();
 
 $dialog     = CValue::get("dialog");
 $medecin_id = CValue::getOrSession("medecin_id");
-$g = CValue::getOrSessionAbs("g", CAppUI::$instance->user_group);
 
 // Parametre de tri
 $order_way = CValue::getOrSession("order_way", "DESC");
 $order_col = CValue::getOrSession("order_col", "ccmu");
+
+// Mode annuaire
+$annuaire = CValue::get("annuaire", 0);
 
 // pagination
 $start_med          = CValue::get("start_med", 0);
@@ -26,40 +28,55 @@ $step_med           = CValue::get("step_med", 20);
 $medecin = new CMedecin();
 $ds = $medecin->getDS();
 
-$indexGroup = new CGroups;
-$indexGroup->load($g);
-
 
 // Récuperation des médecins recherchés
 if ($dialog) {
-  $medecin_nom    = CValue::get("nom"     , "");
-  $medecin_prenom = CValue::get("prenom"  , "");
-  $medecin_cp     = CValue::get("cp");
-  $medecin_ville  = CValue::get("ville");
-  $medecin_type   = CValue::get("type"    , "medecin");
-  $medecin_disciplines   = CValue::get("disciplines");
+  $medecin_nom         = CValue::get("nom", "");
+  $medecin_prenom      = CValue::get("prenom", "");
+  $medecin_function_id = CValue::get("function_id");
+  $medecin_cp          = CValue::get("cp");
+  $medecin_ville       = CValue::get("ville");
+  $medecin_type        = CValue::get("type", "medecin");
+  $medecin_disciplines = CValue::get("disciplines");
 }
 else {
-  $medecin_nom    = CValue::getOrSession("nom");
-  $medecin_prenom = CValue::getOrSession("prenom");
-  $medecin_cp     = CValue::getOrSession("cp");
-  $medecin_ville  = CValue::getOrSession("ville");
-  $medecin_type   = CValue::getOrSession("type", "medecin");
-  $medecin_disciplines   = CValue::getOrSession("disciplines");
+  $medecin_nom         = CValue::getOrSession("nom");
+  $medecin_prenom      = CValue::getOrSession("prenom");
+  $medecin_function_id = CValue::getOrSession("function_id");
+  $medecin_cp          = CValue::getOrSession("cp");
+  $medecin_ville       = CValue::getOrSession("ville");
+  $medecin_type        = CValue::getOrSession("type", "medecin");
+  $medecin_disciplines = CValue::getOrSession("disciplines");
 }
 
 $where = array();
 
+$current_user = CMediusers::get();
+$is_admin = $current_user->isAdmin();
+
+if ($annuaire) {
+  // Cas de la consultation en annuaire
+  $where["function_id"] = "IS NULL";
+}
+elseif ($medecin_function_id && $is_admin) {
+  // Cas de la consultation en administrateur, filtré sur une fonction
+  $where["function_id"] = "= '$medecin_function_id'";
+}
+elseif (CAppUI::conf('dPpatients CPatient function_distinct') && !$is_admin) {
+  // Cas du cloisonnement en non administrateur
+  $where["function_id"] = "= '$current_user->function_id'";
+}
+
 if ($medecin_nom) {
-  $where["nom"]      = $ds->prepareLike("%$medecin_nom%");
+  $where["nom"] = $ds->prepareLike("%$medecin_nom%");
 }
 
 if ($medecin_prenom) {
-  $where["prenom"]   = $ds->prepareLike("%$medecin_prenom%");
+  $where["prenom"] = $ds->prepareLike("%$medecin_prenom%");
 }
 
 if ($medecin_disciplines) {
-  $where["disciplines"]   = $ds->prepareLike("%$medecin_disciplines%");
+  $where["disciplines"] = $ds->prepareLike("%$medecin_disciplines%");
 }
 
 
@@ -92,28 +109,34 @@ else if ($order_col == "ville") {
   $order = "ville $order_way, nom, prenom";
 }
 
-$medecins = new CMedecin();
+$medecin = new CMedecin();
 
-$count_medecins = $medecins->countList($where);
-$medecins = $medecins->loadList($where, $order, "$start_med, $step_med");
+$count_medecins = $medecin->countList($where);
+/** @var CMedecin[] $medecins */
+$medecins = $medecin->loadList($where, $order, "$start_med, $step_med");
+foreach ($medecins as $_medecin) {
+  $_medecin->loadRefFunction();
+}
 
 $list_types = $medecin->_specs['type']->_locales;
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("dialog"     , $dialog);
-$smarty->assign("nom"        , $medecin_nom);
-$smarty->assign("prenom"     , $medecin_prenom);
-$smarty->assign("cp"         , $medecin_cp);
-$smarty->assign("type"       , $medecin_type);
-$smarty->assign("medecins"   , $medecins);
-$smarty->assign("medecin"    , $medecin);
-$smarty->assign("list_types" , $list_types);
+$smarty->assign("is_admin"      , $is_admin);
+$smarty->assign("dialog"        , $dialog);
+$smarty->assign("annuaire"      , $annuaire);
+$smarty->assign("nom"           , $medecin_nom);
+$smarty->assign("prenom"        , $medecin_prenom);
+$smarty->assign("cp"            , $medecin_cp);
+$smarty->assign("type"          , $medecin_type);
+$smarty->assign("medecins"      , $medecins);
+$smarty->assign("medecin"       , $medecin);
+$smarty->assign("list_types"    , $list_types);
 $smarty->assign("count_medecins", $count_medecins);
-$smarty->assign("order_col"   , $order_col);
-$smarty->assign("order_way"   , $order_way);
-$smarty->assign("start_med", $start_med);
-$smarty->assign("step_med", $step_med);
+$smarty->assign("order_col"     , $order_col);
+$smarty->assign("order_way"     , $order_way);
+$smarty->assign("start_med"     , $start_med);
+$smarty->assign("step_med"      , $step_med);
 
 $smarty->display("vw_medecins.tpl");

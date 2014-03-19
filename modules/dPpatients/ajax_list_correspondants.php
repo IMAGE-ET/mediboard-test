@@ -11,7 +11,7 @@
 
 $patient_id = CValue::get("patient_id");
 
-$patient = new CPatient;
+$patient = new CPatient();
 $patient->load($patient_id);
 $patient->loadRefsCorrespondantsPatient();
 

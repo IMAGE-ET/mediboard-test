@@ -11,18 +11,19 @@
 
 CCanDo::checkRead();
 
-$keywords = CValue::post("_view");
+$current_user = CMediusers::get();
+
+$keywords         = CValue::post("_view");
 $all_departements = CValue::post("all_departements", 0);
+$function_id      = CValue::get("function_id", $current_user->function_id);
 
 if ($keywords == "") {
   $keywords = "%%";
 }
 
 $medecin = new CMedecin();
-$g = CValue::getOrSessionAbs("g", CAppUI::$instance->user_group);
-$indexGroup = new CGroups;
-$indexGroup->load($g);
-$order = 'nom';
+$order   = 'nom';
+$group   = CGroups::loadCurrent();
 
 $where = array();
 $medecin_cps_prefs = CAppUI::pref("medecin_cps_pref");
@@ -39,8 +40,13 @@ if ($medecin_cps_prefs != "") {
     $where[] = "(".implode(" OR ", $where_cp).")";
   }
 }
-else if ($indexGroup->_cp_court && !$all_departements) {
-  $where['cp'] = "LIKE '".$indexGroup->_cp_court."%'";
+else if ($group->_cp_court && !$all_departements) {
+  $where['cp'] = "LIKE '".$group->_cp_court."%'";
+}
+
+$is_admin = $current_user->isAdmin();
+if (CAppUI::conf('dPpatients CPatient function_distinct')) {
+  $where["function_id"] = "= '$function_id'";
 }
 
 $matches = $medecin->seek($keywords, $where, 50, null, null, $order);

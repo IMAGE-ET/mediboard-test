@@ -53,6 +53,9 @@
       // Autocomplete sur le nom du correspondant
       var url = new Url("system", "ajax_seek_autocomplete");
       url.addParam("object_class", "CCorrespondantPatient");
+      {{if $conf.dPpatients.CPatient.function_distinct}}
+        url.addParam("where[function_id]", "{{$app->_ref_user->function_id}}");
+      {{/if}}
       url.addParam("whereComplex[patient_id]", "IS NULL");
       url.addParam("input_field", "nom");
       url.addParam("view_field", "nom");
@@ -77,6 +80,9 @@
       // Autocomplete sur le surnom du correspondant
       var url_surnom = new Url("system", "ajax_seek_autocomplete");
       url_surnom.addParam("object_class", "CCorrespondantPatient");
+      {{if $conf.dPpatients.CPatient.function_distinct}}
+        url_surnom.addParam("where[function_id]", "{{$app->_ref_user->function_id}}");
+      {{/if}}
       url_surnom.addParam("whereComplex[patient_id]", "IS NULL");
       url_surnom.addParam("input_field", "surnom");
       url_surnom.addParam("view_field", "nom");

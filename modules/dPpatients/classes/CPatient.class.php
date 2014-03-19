@@ -255,9 +255,7 @@ class CPatient extends CPerson {
   public $_dmp_vitale_prenom_usuel;
   public $_dmp_vitale_date;
 
-  /**
-   * @var CPatient
-   */
+  /** @var CPatient */
   public $_patient_elimine; // fusion
 
   public $_nb_docs;
@@ -967,7 +965,6 @@ class CPatient extends CPerson {
    * @return CFunctions
    */
   function loadRefFunction() {
-    /** @var CFunctions $function */
     return $this->_ref_function = $this->loadFwdRef("function_id", true);
   }
 

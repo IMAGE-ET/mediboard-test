@@ -3,11 +3,12 @@
 Medecin = {
   form: null,
   sFormName: "editSejour",
-  edit : function(form, nom) {
+  edit : function(form, nom, function_id) {
     this.form = form;
     var url = new Url("patients", "vw_correspondants");
     url.addParam("dialog","1");
     url.addParam("medecin_nom", nom);
+    url.addParam("medecin_function_id", function_id);
     url.requestModal("1000", "760");
   },
   
@@ -58,6 +59,19 @@ Medecin = {
         callback();
       });
     }
+  },
+
+  duplicate : function(medecin_id, callback) {
+    var url = new Url('dPpatients', 'ajax_edit_medecin');
+    url.addParam('medecin_id', medecin_id);
+    url.addParam('duplicate', 1);
+    url.requestModal('500');
+    if (!Object.isUndefined(callback)) {
+      url.modalObject.observe('afterClose', function(){
+        callback();
+      });
+    }
+
   }
 
 };

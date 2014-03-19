@@ -2517,7 +2517,25 @@ class CSetupdPpatients extends CSetup {
                 ADD INDEX (`function_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "2.04";
+    $this->makeRevision("2.04");
+
+    $query = "ALTER TABLE `medecin`
+                ADD `function_id` INT (11) UNSIGNED AFTER `medecin_id`;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `medecin`
+                ADD INDEX (`function_id`);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `correspondant_patient`
+                ADD `function_id` INT (11) UNSIGNED AFTER `correspondant_patient_id`;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `correspondant_patient`
+                ADD INDEX (`function_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "2.05";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

@@ -36,7 +36,7 @@
 </script>
 
 
-{{if !$dialog}}
+{{if !$dialog && !$annuaire}}
   <form name="fusion" action="?" method="get">
     <input type="hidden" name="m" value="system" />
     <input type="hidden" name="a" value="object_merger" />
@@ -47,13 +47,25 @@
 {{mb_include module=system template=inc_pagination current=$start_med step=$step_med total=$count_medecins change_page=refreshPageMedecin}}
 
 <table class="tbl">
+  {{if $annuaire}}
   <tr>
+    <th class="title" colspan="20">Annuaire interne</th>
+  </tr>
+  {{/if}}
+  <tr>
+    {{if !$annuaire}}
     {{if !$dialog}}
       <th class="narrow">
         <button type="button" onclick="Medecin.doMerge('fusion');" class="merge notext compact" title="{{tr}}Merge{{/tr}}">
           {{tr}}Merge{{/tr}}
         </button>
       </th>
+    {{/if}}
+    {{if $is_admin}}
+      <th>{{mb_title class=CMedecin field=function_id}}</th>
+    {{/if}}
+    {{else}}
+      <th>{{tr}}Import{{/tr}}</th>
     {{/if}}
     <th>{{mb_title class=CMedecin field=nom}}</th>
     <th>{{mb_title class=CMedecin field=adresse}}</th>
@@ -71,18 +83,34 @@
     <tr>
       {{mb_ternary var=href test=$dialog value="#choose" other="?m=$m&tab=vw_correspondants&medecin_id=$medecin_id"}}
 
+      {{if !$annuaire}}
       {{if !$dialog}}
         <td>
           <input type="checkbox" name="objects_id[]" value="{{$_medecin->_id}}" />
         </td>
       {{/if}}
 
+      {{if $is_admin}}
+        <td>
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$_medecin->_ref_function->_guid}}')">
+            {{mb_value object=$_medecin field=function_id}}
+          </span>
+        </td>
+      {{/if}}
+      {{else}}
+        <td class="button">
+          <button type="button" class="duplicate notext" onclick="$V(getForm('find_medecin').annuaire, 0); Medecin.duplicate('{{$_medecin->_id}}', refreshPageMedecin)">
+            {{tr}}Duplicate{{/tr}}
+          </button>
+        </td>
+      {{/if}}
+
       <td class="text">
-        {{if !$dialog}}
+        {{if !$dialog && !$annuaire}}
             <a href="#" onclick="Medecin.editMedecin('{{$_medecin->_id}}', refreshPageMedecin);">
         {{/if}}
           {{$_medecin->nom}} {{$_medecin->prenom|strtolower|ucfirst}}
-        {{if !$dialog}}
+        {{if !$dialog && !$annuaire}}
             </a>
         {{/if}}
       </td>
@@ -102,12 +130,12 @@
       {{/if}}
     </tr>
   {{foreachelse}}
-    <tr><td colspan="9" class="empty">{{tr}}CMedecin.none{{/tr}}</td></tr>
+    <tr><td colspan="20" class="empty">{{tr}}CMedecin.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>
 
 {{mb_include module=system template=inc_pagination current=$start_med step=$step_med total=$count_medecins change_page=refreshPageMedecin}}
 
-{{if !$dialog}}
+{{if !$dialog && !$annuaire}}
   </form>
 {{/if}}
