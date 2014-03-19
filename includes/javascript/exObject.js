@@ -751,9 +751,9 @@ function showExClassForm(ex_class_id, object_guid, title, ex_object_id, event_na
   }
 
   if (_popup) {
-    setTimeout(function() {
+    //setTimeout(function() {
       url.popup("100%", "100%", title);
-    }, 100);
+    //}, 100);
 
   }
   else {
