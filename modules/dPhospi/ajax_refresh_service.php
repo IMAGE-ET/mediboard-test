@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage Hospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
@@ -37,6 +37,10 @@ foreach ($chambres as $ch) {
   $ch->loadRefEmplacement();
   if ($ch->_ref_emplacement->_id) {
     $ch->loadRefsLits();
+    if (!count($ch->_ref_lits)) {
+      unset($chambres[$ch->_id]);
+      continue;
+    }
     foreach ($ch->_ref_lits as $lit) {
       $ensemble_lits_charges[$lit->_id] =0;
     }

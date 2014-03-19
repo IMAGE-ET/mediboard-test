@@ -51,6 +51,7 @@ foreach ($services as $serv) {
   /* @var CService $serv*/
   $services_noms[$serv->_id] = $serv->nom;
 }
+
 $chambres = array();
 $grilles = array();
 $ensemble_lits_charges = array();
@@ -67,6 +68,10 @@ foreach ($services as $serv) {
     $ch->loadRefEmplacement();
     if ($ch->_ref_emplacement->_id) {
       $ch->loadRefsLits();
+      if (!count($ch->_ref_lits)) {
+        unset($chambres[$ch->_id]);
+        continue;
+      }
       foreach ($ch->_ref_lits as $lit) {
         $ensemble_lits_charges[$lit->_id] = 0;
       }
