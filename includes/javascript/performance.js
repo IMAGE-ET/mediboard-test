@@ -68,7 +68,7 @@ MbPerformance = {
       color: "rgba(41,144,255,0.2)",
       resp:  "network",
       label: "Requête",
-      desc:  "Temps d'initalisation de la connexion en envoi de la requête",
+      desc:  "Temps d'initialisation de la connexion en envoi de la requête",
       start: "domainLookupStart",
       end:   "requestStart"
     },
@@ -86,7 +86,7 @@ MbPerformance = {
       color: "rgba(41,144,255,0.2)",
       resp:  "network",
       label: "Connexion",
-      desc:  "Initalisation de la connexion",
+      desc:  "Initialisation de la connexion",
       start: "connectStart",
       end:   "connectEnd"
     },
@@ -112,8 +112,8 @@ MbPerformance = {
     handler: {
       color: "rgba(14,168,0,0.2)",
       resp:  "server",
-      label: "Apache",
-      desc:  "Temps de la requête Apache",
+      label: "Serveur",
+      desc:  "Temps de la requête serveur",
       getValue: function(serverTiming, perfTiming){
         if (!serverTiming.handlerEnd || !serverTiming.handlerStart) {
           return null;
@@ -133,8 +133,8 @@ MbPerformance = {
       sub: true,
       color: "rgba(14,168,0,0.2)",
       resp:  "server",
-      label: "Apache init.",
-      desc:  "Initalisation d'Apache",
+      label: "Serveur init.",
+      desc:  "Initialisation du serveur web",
       getValue: function(serverTiming, perfTiming){
         return serverTiming.start - serverTiming.handlerStart;
       },
@@ -146,8 +146,8 @@ MbPerformance = {
       sub: true,
       color: "rgba(14,168,0,0.2)",
       resp:  "server",
-      label: "Fx init",
-      desc:  "Initalisation du framework",
+      label: "Fx init.",
+      desc:  "Initialisation du framework",
       getValue: function(serverTiming, perfTiming){
         return serverTiming.steps.find(function(step){ return step.label === "init"; }).dur;
       },
@@ -163,7 +163,7 @@ MbPerformance = {
       color: "rgba(14,168,0,0.2)",
       resp:  "server",
       label: "Session",
-      desc:  "Ouverture de la session",
+      desc:  "Ouverture et verrou de la session",
       getValue: function(serverTiming, perfTiming){
         return serverTiming.steps.find(function(step){ return step.label === "session"; }).dur;
       },
@@ -235,13 +235,13 @@ MbPerformance = {
           return null;
         }
 
-        var apacheTime = serverTiming.handlerEnd - serverTiming.handlerStart;
+        var serverTime = serverTiming.handlerEnd - serverTiming.handlerStart;
         var total = 0;
         serverTiming.steps.each(function(step){
           total += step.dur;
         });
 
-        return apacheTime - total - (serverTiming.start - serverTiming.handlerStart); // (- apache init)
+        return serverTime - total - (serverTiming.start - serverTiming.handlerStart); // (- server init)
       },
       getStart: function(serverTiming, perfTiming){
         var start = 0;
@@ -304,7 +304,7 @@ MbPerformance = {
       color: "rgba(255,41,41,0.2)",
       resp:  "client",
       label: "Init. DOM",
-      desc:  "Temps d'init arbre DOM",
+      desc:  "Temps d'initialisation de l'arbre DOM",
       start: "responseEnd",
       end:   "domLoading"
     },
@@ -322,7 +322,7 @@ MbPerformance = {
       color: "rgba(255,41,41,0.2)",
       resp:  "client",
       label: "Charg. DOM",
-      desc:  "Temps de l'évènement d'exécution des scripts suivant le chargement de l'arbe DOM",
+      desc:  "Temps de l'évènement d'exécution des scripts suivant le chargement de l'arbre DOM",
       start: "domContentLoadedEventStart",
       end:   "domComplete"
     },
@@ -849,6 +849,11 @@ MbPerformance = {
         MbPerformance.removeProfiling();
       }).appendTo(profilingToolbar);
 
+      // Show help
+      jQuery('<button class="help notext" title="Aide"></button>').click(function(){
+        MbPerformance.showHelp();
+      }).appendTo(profilingToolbar);
+
       // Show toolbar
       jQuery('<button id="profiler-toggle" class="gantt notext" title="Profilage de performances en cours"></button>').click(function(){
         profilingToolbar.toggle();
@@ -1029,6 +1034,11 @@ MbPerformance = {
     if (confirm("Supprimer le rapport de profilage courant ? Pensez à le télécharger auparavant si vous souhaitez le garder.")) {
       store.remove("profiling-pages");
     }
+  },
+
+  showHelp: function(){
+    var url = new Url("system", "vw_performance_profiling_help");
+    url.popup(900, 600, "Aide du profilage de performances");
   },
 
   getCurrentPageData: function(){
