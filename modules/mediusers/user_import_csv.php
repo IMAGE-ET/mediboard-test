@@ -13,7 +13,7 @@
 
 CCanDo::checkAdmin();
 
-$file = CValue::files("import");
+$file   = CValue::files("import");
 $dryrun = CValue::post("dryrun");
 
 $results = array();
@@ -44,19 +44,23 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $results[$i]["function_name"]   = CMbArray::get($line,  5);
     $results[$i]["profil_name"]     = CMbArray::get($line,  6);
     if (CAppUI::conf("ref_pays") == 1) {
-      $results[$i]["adeli"]           = CMbArray::get($line,  7);
-      $results[$i]["rpps"]            = CMbArray::get($line,  8);
+      $results[$i]["adeli"]         = CMbArray::get($line,  7);
+      $results[$i]["rpps"]          = CMbArray::get($line,  8);
     }
     else {
-      $results[$i]["ean"]            = CMbArray::get($line,  7);
-      $results[$i]["rcc"]            = CMbArray::get($line,  8);
+      $results[$i]["ean"]           = CMbArray::get($line,  7);
+      $results[$i]["rcc"]           = CMbArray::get($line,  8);
     }
     $results[$i]["spec_cpam_code"]  = CMbArray::get($line,  9);
     $results[$i]["discipline_name"] = CMbArray::get($line, 10);
     $results[$i]["idex"]            = CMbArray::get($line, 11);
-    
-    $results[$i]["error"] = 0;
-        
+    $results[$i]["remote"]          = CMbArray::get($line, 12);
+    $results[$i]["error"]           = 0;
+
+    if ($results[$i]["remote"] == "") {
+      $results[$i]["remote"] = "1";
+    }
+
     // User
     $user = new CMediusers();
     $user->_user_last_name  = $results[$i]["lastname"];
@@ -71,7 +75,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $user->rcc              = $results[$i]["rcc"];
     }
     $user->actif  = 1;
-    $user->remote = 0;
+    $user->remote = $results[$i]["remote"];
 
     // Password
     $user->makeUsernamePassword($results[$i]["firstname"], $results[$i]["lastname"]);
