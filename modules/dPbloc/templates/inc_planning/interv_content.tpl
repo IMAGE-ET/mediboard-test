@@ -38,9 +38,7 @@
 <td class="button">{{$curr_op->cote|truncate:1:""|capitalize}}</td>
 <td class="{{if $curr_op->type_anesth != null}}text{{else}}button{{/if}}">
   {{if $curr_op->type_anesth != null}}
-  {{$curr_op->_lu_type_anesth}}
-  {{else}}
-  &mdash;
+    {{$curr_op->_lu_type_anesth}}
   {{/if}}
   {{if $curr_op->anesth_id}}
     <br /> {{$curr_op->_ref_anesth->_view}}
