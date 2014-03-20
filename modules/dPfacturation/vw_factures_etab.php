@@ -20,9 +20,9 @@ $patient_id         = CValue::getOrSession("patient_id");
 $no_finish_reglement= CValue::getOrSession("no_finish_reglement", 0);
 $type_date_search   = CValue::getOrSession("type_date_search", "ouverture");
 $chirSel            = CValue::getOrSession("chirSel", "-1");
-$num_facture        = CValue::getOrSession("num_facture", "");
-$numero             = CValue::getOrSession("numero", "1");
-$search_easy        = CValue::getOrSession("search_easy", "0");
+$num_facture        = CValue::getOrSession("num_facture");
+$numero             = CValue::getOrSession("numero", 1);
+$search_easy        = CValue::getOrSession("search_easy", 0);
 $page               = CValue::get("page", "0");
 
 // Liste des chirurgiens
@@ -63,7 +63,7 @@ if ($num_facture) {
   $where["facture_id"] =" = '$num_facture' ";
 }
 if ($numero && !CAppUI::conf("dPfacturation Other use_search_easy")) {
-  $where["numero"] =" = '$numero'";
+  $where["facture_relance.numero"] =" = '$numero'";
 }
 if ($search_easy == 5) {
   $where["annule"] =" = '1'";

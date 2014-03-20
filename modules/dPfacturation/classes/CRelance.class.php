@@ -94,8 +94,8 @@ class CRelance extends CMbMetaObject {
       $this->_ref_object->loadRefsRelances();
   
       $this->date       = CMbDT::date();
-      $this->du_patient = $this->_ref_object->_du_restant_patient;
-      $this->du_tiers   = $this->_ref_object->_du_restant_tiers;
+      $this->du_patient = $this->_ref_object->_du_restant_patient + $this->_ref_object->_reglements_total_patient;
+      $this->du_tiers   = $this->_ref_object->_du_restant_tiers + $this->_ref_object->_reglements_total_tiers;
       $der_relance      = $this->_ref_object->_ref_last_relance;
       if ($der_relance->_id) {
         if ($der_relance->statut == "inactive") {

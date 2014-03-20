@@ -582,6 +582,12 @@ class CFacture extends CMbObject {
       $this->_montant_avec_remise = $this->_montant_sans_remise - $this->remise;
     }
 
+    $this->loadRefsRelances();
+    if ($this->_ref_last_relance && $this->_ref_last_relance->_id) {
+      $this->_montant_sans_remise = $this->_ref_last_relance->du_patient + $this->_ref_last_relance->du_tiers;
+      $this->_montant_avec_remise = $this->_montant_sans_remise - $this->remise;
+    }
+
     if (!$this->_montant_sans_remise) {
       $this->_montant_sans_remise = $this->du_patient  + $this->du_tiers;
       $this->_montant_avec_remise = $this->_montant_sans_remise - $this->remise;
@@ -1039,7 +1045,7 @@ class CFacture extends CMbObject {
     $nb_second_relance = CAppUI::conf("dPfacturation CRelance nb_days_second_relance");
     $nb_third_relance  = CAppUI::conf("dPfacturation CRelance nb_days_third_relance");
 
-    $this->_ref_last_relance = !count($this->_ref_relances) ? new CRelance() : end($this->_ref_relances);
+    $this->_ref_last_relance = count($this->_ref_relances) == 0 ? new CRelance() : end($this->_ref_relances);
     if ($this->_ref_last_relance->statut == "inactive") {
       return $this->_is_relancable;
     }
