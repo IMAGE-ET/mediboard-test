@@ -215,6 +215,7 @@ if ($nb_days_prolongation) {
 
 $sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
 $patients = CMbObject::massLoadFwdRef($sejours, "patient_id");
+CMbObject::massLoadBackRefs($patients, "dossier_medical");
 
 // Préchargement des users
 $user = new CUser();
