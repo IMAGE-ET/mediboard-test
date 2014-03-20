@@ -8,47 +8,29 @@
  * @version SVN: $Id$
  */
 
-require "includes/config_all.php";
-
-header('HTTP/1.1 503 Service Unavailable');
-
-$reason = isset($_GET["reason"]) ? $_GET["reason"] : null;
-
-switch ($reason) {
-  case "maintenance":
-    $msg = "Le système est désactivé pour cause de maintenance.";
-    break;
-
-  case "bdd":
-    $msg = "La base de données n'est pas accessible.";
-    break;
-
-  case "backup":
-    $msg = "La base de données est en cours de sauvegarde.";
-    break;
-
-  default :
-    if (!($dPconfig["offline"] || $dPconfig["offline_non_admin"])) {
-      header("Location: index.php");
-    }
-
-    $msg = "Le système est désactivé pour cause de maintenance.";
+// If CApp doesn't exist, go back to the index
+if (!class_exists("CApp")) {
+  header("Location: index.php");
+  die;
 }
 
-$path = "images/pictures";
-$logo = (file_exists("$path/logo_custom.png") ? "$path/logo_custom.png" : "$path/logo.png");
+header("HTTP/1.1 503 Service Temporarily Unavailable");
+header("Status: 503 Service Temporarily Unavailable");
+header("Retry-After: 300");
+header("Content-Type: text/html; charset=iso-8859-1");
 
-header("Content-type: text/html; charset=iso-8859-1");
+$path = "images/pictures";
+$logo = (file_exists(__DIR__."/$path/logo_custom.png") ? "$path/logo_custom.png" : "$path/logo.png");
 
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
+  <meta charset=iso-8859-1" />
+  <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissements de Santé" />
+
   <title>Mediboard SIH &mdash; Service inaccessible</title>
-  <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
-  <meta name="Description"
-    content="Mediboard: Plateforme Open Source pour les Etablissements de Santé" />
 
   <link rel="shortcut icon" type="image/ico" href="style/mediboard/images/icons/favicon.ico" />
   <link rel="stylesheet" type="text/css" href="style/mediboard/main.css" media="all" />
@@ -56,15 +38,16 @@ header("Content-type: text/html; charset=iso-8859-1");
 </head>
 
 <body style="padding-top: 3em; text-align: center;">
-  <h1>MEDIBOARD EST INACCESSIBLE POUR LE MOMENT</h1>
+  <h1>Mediboard est momentanément indisponible</h1>
   <img src="<?php echo $logo; ?>" width="350" />
   <h2>
-    <?php echo $msg; ?>
+    <?php echo htmlentities(CApp::$message); ?>
+    <br />
     <br />
     Merci de réessayer ultérieurement.
   </h2>
   <br />
-  <a class="button change" href="index.php">Accéder à Mediboard</a>
+  <button class="change" onclick="document.location.reload(); return false;">Accéder à Mediboard</button>
 </body>
 
 </html>

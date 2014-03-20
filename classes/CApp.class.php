@@ -22,6 +22,7 @@ class CApp {
   static $encoding   = "utf-8";
   static $classPaths = array();
   static $is_robot   = false;
+  static $message    = null;
 
   /** @var string Current request unique identifier */
   private static $requestUID = null;
@@ -101,6 +102,34 @@ class CApp {
 
     self::$inPeace = true;
     die;
+  }
+
+  /**
+   * Go to the "offline" page, specifying a a reason
+   *
+   * @param string $reason The reason: maintenance, db-access, db-backup
+   *
+   * @return void
+   */
+  static function goOffline($reason = null){
+    switch ($reason) {
+      default:
+      case "maintenance":
+        self::$message = "Le système est désactivé pour cause de maintenance.";
+        break;
+
+      case "db-access":
+        self::$message = "La base de données n'est pas accessible.";
+        break;
+
+      case "db-backup":
+        self::$message = "La base de données est en cours de sauvegarde.";
+        break;
+    }
+
+    include __DIR__."/../offline.php";
+
+    self::rip();
   }
   
   /**

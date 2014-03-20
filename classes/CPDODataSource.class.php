@@ -23,48 +23,58 @@ abstract class CPDODataSource extends CSQLDataSource {
    */
   protected $pretending = false;
 
-  /**
-   * @var PDO
-   */
+  /** @var PDO */
   public $link;
 
   /**
-   * Connection
-   *
-   * @param string $host
-   * @param string $name
-   * @param string $user
-   * @param string $pass
-   *
-   * @return PDO|resource
+   * @see parent::connect()
    */
   function connect($host, $name, $user, $pass) {
     if (!class_exists("PDO")) {
       trigger_error("FATAL ERROR: PDO support not available. Please check your configuration.", E_USER_ERROR);
-      return;
+      return null;
     }
 
     $dsn = "$this->driver_name:dbname=$name;host=$host";
 
-    $link = new PDO($dsn, $user, $pass);
+    try {
+      $link = new PDO($dsn, $user, $pass);
+    }
+    catch (PDOException $e) {
+      trigger_error($e->getMessage(), E_USER_ERROR);
+      return null;
+    }
+
     $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 
     return $this->link = $link;
   }
 
+  /**
+   * @see parent::error()
+   */
   function error() {
     $errorInfo = $this->link->errorInfo();
     return $errorInfo[2];
   }
 
+  /**
+   * @see parent::errno()
+   */
   function errno() {
     return $this->link->errorCode();
   }
 
+  /**
+   * @see parent::insertId()
+   */
   function insertId() {
     return $this->link->lastInsertId();
   }
 
+  /**
+   * @see parent::query()
+   */
   function query($query) {
     $stmt = $this->link->query($query);
 
@@ -84,14 +94,23 @@ abstract class CPDODataSource extends CSQLDataSource {
     $result->closeCursor();
   }
 
+  /**
+   * @see parent::numRows()
+   */
   function numRows($result) {
     return $result->rowCount();
   }
 
+  /**
+   * @see parent::affectedRows()
+   */
   function affectedRows() {
     return $this->affected_rows;
   }
 
+  /**
+   * @see parent::foundRows()
+   */
   function foundRows() {
     // No such implementation
     return;
@@ -141,7 +160,7 @@ abstract class CPDODataSource extends CSQLDataSource {
   }
 
   function version() {
-    return $this->link->server_info;
+    return null;
   }
 
   function renameTable($old, $new) {

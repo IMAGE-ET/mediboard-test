@@ -23,4 +23,11 @@ class CPDOMySQLDataSource extends CPDODataSource {
   function getQueryGrammar() {
     return new CSQLGrammarMySQL();
   }
+
+  /**
+   * @see parent::version()
+   */
+  function version() {
+    return $this->loadResult("SELECT VERSION()");
+  }
 }

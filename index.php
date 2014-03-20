@@ -28,7 +28,10 @@ require __DIR__."/includes/config_all.php";
 
 $rootName = basename($dPconfig["root_dir"]);
 
-require __DIR__."/includes/version.php";
+// Check that the user has correctly set the root directory
+if (!is_file($dPconfig["root_dir"]."/includes/config.php")) {
+  die("ERREUR FATALE: Le répertoire racine est probablement mal configuré");
+}
 
 // PHP Configuration
 foreach ($dPconfig["php"] as $key => $value) {
@@ -37,15 +40,36 @@ foreach ($dPconfig["php"] as $key => $value) {
   }
 }
 
+date_default_timezone_set($dPconfig["timezone"]);
+
+// Core classes and functions
+require __DIR__."/includes/version.php";
+require __DIR__."/includes/mb_functions.php";
+require __DIR__."/includes/errors.php";
+require __DIR__."/classes/SHM.class.php";
+require __DIR__."/classes/CApp.class.php";
+require __DIR__."/classes/CAppUI.class.php";
+require __DIR__."/includes/autoload.php";
+
+// Offline mode
+if ($dPconfig["offline"]) {
+  CApp::goOffline("maintenance");
+}
+
+// Migration mode
+if ($dPconfig["migration"]["active"]) {
+  header("Location: migration.php");
+  exit;
+}
+
 // If offline period
 if ($dPconfig["offline_time_start"] && $dPconfig["offline_time_end"]) {
   $time               = time();
   $offline_time_start = strtotime($dPconfig["offline_time_start"]);
   $offline_time_end   = strtotime($dPconfig["offline_time_end"]);
 
-  if ( ($time >= $offline_time_start) && ($time <= $offline_time_end) ) {
-    header("Location: offline.php?reason=maintenance");
-    die("Le système est actuellement en cours de maintenance");
+  if (($time >= $offline_time_start) && ($time <= $offline_time_end)) {
+    CApp::goOffline("maintenance");
   }
 }
 
@@ -57,39 +81,13 @@ if (!empty($dPconfig["base_backup_lockfile_path"])) {
     $lock_mtime = filemtime($backup_lockfile);
 
     // Lock file is not dead
-    if ( (microtime(true) - $lock_mtime) <= 1800 ) {
-      header("Location: offline.php?reason=backup");
-      die("Le système est actuellement en cours de maintenance");
+    if ((microtime(true) - $lock_mtime) <= 1800) {
+      CApp::goOffline("db-backup");
     }
 
     unlink($backup_lockfile);
   }
 }
-
-if ($dPconfig["offline"]) {
-  header("Location: offline.php");
-  die("Le système est actuellement en cours de maintenance");
-}
-
-if ($dPconfig["migration"]["active"]) {
-  header("Location: migration.php");
-  exit;
-}
-
-// Check that the user has correctly set the root directory
-if (!is_file($dPconfig["root_dir"]."/includes/config.php")) {
-  die("ERREUR FATALE: Le répertoire racine est probablement mal configuré");
-}
-
-date_default_timezone_set($dPconfig["timezone"]);
-
-// Core classes and functions
-require __DIR__."/includes/mb_functions.php";
-require __DIR__."/includes/errors.php";
-require __DIR__."/classes/SHM.class.php";
-require __DIR__."/classes/CApp.class.php";
-require __DIR__."/classes/CAppUI.class.php";
-require __DIR__."/includes/autoload.php";
 
 // Include config in DB
 if (CAppUI::conf("config_db")) {
@@ -100,8 +98,7 @@ if (CAppUI::conf("config_db")) {
 register_shutdown_function(array("CApp", "checkPeace"));
 
 if (!@CSQLDataSource::get("std")) {
-  header("Location: offline.php?reason=bdd");
-  die("La base de données n'est pas connectée");
+  CApp::goOffline("db-access");
 }
 
 CMbPerformance::mark("init");
@@ -304,8 +301,7 @@ if ($user->isInstalled()) {
 
   // Offline mode for non-admins
   if ($dPconfig["offline_non_admin"] && CAppUI::$user->_id != 0 && !CAppUI::$user->isAdmin()) {
-    header("Location: offline.php");
-    CApp::rip();
+    CApp::goOffline("maintenance");
   }
 }
 

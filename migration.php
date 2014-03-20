@@ -8,8 +8,8 @@
  * @version SVN: $Id: $
  */
 
-require "includes/mb_functions.php";
-require "includes/config_all.php";
+require __DIR__."/includes/mb_functions.php";
+require __DIR__."/includes/config_all.php";
 
 $config = $dPconfig["migration"];
 
@@ -25,10 +25,10 @@ header("Content-type: text/html; charset=iso-8859-1");
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="iso-8859-1" />
+  <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissements de Santé" />
+
   <title>Mediboard a changé d'adresse</title>
-  <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
-  <meta name="Description"
-    content="Mediboard: Plateforme Open Source pour les Etablissements de Santé" />
 
   <link rel="shortcut icon" type="image/ico" href="style/mediboard/images/icons/favicon.ico" />
   <link rel="stylesheet" type="text/css" href="style/mediboard/main.css" media="all" />
