@@ -1845,12 +1845,7 @@ class CPatient extends CPerson {
   }
 
   function getFirstConstantes() {
-    $constantes = new CConstantesMedicales;
-    if ($this->_id) {
-      $constantes->patient_id = $this->_id;
-      $constantes->loadMatchingObject("datetime ASC");
-    }
-    return $this->_ref_first_constantes = $constantes;
+    return $this->_ref_first_constantes = $this->loadFirstBackRef("constantes", "datetime ASC");
   }
 
   function fillLimitedTemplate(&$template) {

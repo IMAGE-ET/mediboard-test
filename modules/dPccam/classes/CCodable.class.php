@@ -228,7 +228,7 @@ class CCodable extends CMbObject {
   function loadView() {
     parent::loadView();
     $this->loadRefsActesCCAM();
-    $this->loadExtCodesCCAM(true);
+    $this->loadExtCodesCCAM(CCodeCCAM::FULL);
   }
 
   /**
@@ -478,7 +478,7 @@ class CCodable extends CMbObject {
 
   /**
    * Charge les actes CCAM codés
-   * 
+   *
    * @return CActeCCAM[]
    */
   function loadRefsActesCCAM() {
@@ -508,7 +508,7 @@ class CCodable extends CMbObject {
 
   /**
    * Charge les actes NGAP codés
-   * 
+   *
    * @return CActeNGAP[]
    */
   function loadRefsActesNGAP() {
@@ -638,17 +638,17 @@ class CCodable extends CMbObject {
 
   /**
    * Charge les codes CCAM en tant qu'objets externes
-   * 
-   * @param bool $full niveau de chargement
-   * 
+   *
+   * @param int $niv niveau de chargement
+   *
    * @return void
    */
-  function loadExtCodesCCAM($full = false) {
+  function loadExtCodesCCAM($niv = CCodeCCAM::LITE) {
     $this->_ext_codes_ccam       = array();
     $this->_ext_codes_ccam_princ = array();
     if ($this->_codes_ccam !== null) {
       foreach ($this->_codes_ccam as $code) {
-        $code = CCodeCCAM::get($code, $full ? CCodeCCAM::FULL : CCodeCCAM::LITE);
+        $code = CCodeCCAM::get($code, $niv);
         $this->_ext_codes_ccam[] = $code;
         if ($code->type != 2) {
           $this->_ext_codes_ccam_princ[] = $code;
@@ -894,7 +894,7 @@ class CCodable extends CMbObject {
 
   /**
    * Charge les actes CCAM codables en fonction des code CCAM fournis
-   * 
+   *
    * @return void
    */
   function loadPossibleActes () {
@@ -907,7 +907,7 @@ class CCodable extends CMbObject {
     $this->loadRefPatient()->evalAge();
     $this->loadRefPraticien()->loadRefDiscipline();
 
-    $this->loadExtCodesCCAM(true);
+    $this->loadExtCodesCCAM(CCodeCCAM::FULL);
     foreach ($this->_ext_codes_ccam as $code_ccam) {
       foreach ($code_ccam->activites as $activite) {
         foreach ($activite->phases as $phase) {

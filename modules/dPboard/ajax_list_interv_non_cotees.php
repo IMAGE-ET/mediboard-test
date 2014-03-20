@@ -24,24 +24,21 @@ if ($mediuser->isPraticien()) {
 $user = new CMediusers();
 $user->load($chirSel);
 
-$ljoin = array();
-$ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
+
 
 $where = array();
-$where[] = "operations.date BETWEEN '$debut' AND '$fin' OR plagesop.date BETWEEN '$debut' AND '$fin'";
+$where["operations.date"] = "BETWEEN '$debut' AND '$fin'";
 $where["operations.annulee"] = "= '0'";
 
 if ($all_prats) {
   $prats = $user->loadPraticiens(PERM_READ);
-  
+
   $where["operations.chir_id"]   = CSQLDataSource::prepareIn(array_keys($prats));
   $where[] = "operations.anesth_id IS NULL OR operations.anesth_id ".CSQLDataSource::prepareIn(array_keys($prats));
 }
 else {
   if ($user->isAnesth()) {
-    $where[] = "operations.chir_id = '$user->_id' 
-      OR operations.anesth_id = '$user->_id' 
-      OR (operations.anesth_id IS NULL && plagesop.anesth_id = '$user->_id')";
+    $where[100] = "'$user->_id'  IN (operations.chir_id, operations.anesth_id)";
   }
   else {
     $where["operations.chir_id"] = "= '$user->_id'";
@@ -50,11 +47,27 @@ else {
 
 /** @var COperation[] $interventions */
 $operation = new COperation();
-$interventions = $operation->loadList($where, null, null, null, $ljoin);
+$interventions = $operation->loadList($where);
+
+$ljoin = array();
+$ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
+unset($where["operations.date"]);
+$where["plagesop.date"] = "BETWEEN '$debut' AND '$fin'";
+
+if (!$all_prats && $user->isAnesth()) {
+  $where[100] = "operations.anesth_id IS NULL && plagesop.anesth_id = '$user->_id'";
+}
+$interventions += $operation->loadList($where, null, null, null, $ljoin);
+
 CMbObject::massLoadFwdRef($interventions, "plageop_id");
 /** @var CSejour[] $sejours */
 $sejours = CMbObject::massLoadFwdRef($interventions, "sejour_id");
 CMbObject::massLoadFwdRef($sejours, "patient_id");
+
+// Pré-chargement des users
+$where = array("user_id" => CSQLDataSource::prepareIn(CMbArray::pluck($interventions, "chir_id")));
+$user->loadList($where);
+
 /** @var CMediusers[] $chirs */
 $chirs = CMbObject::massLoadFwdRef($interventions, "chir_id");
 CMbObject::massLoadFwdRef($chirs, "function_id");
@@ -65,12 +78,12 @@ if (!$all_prats) {
   $where["code_activite"] = $user->_is_anesth ? "= '4'" : "!= '4'";
 }
 
-CMbObject::massCountBackRefs($interventions, "actes_ccam", $where);
+CMbObject::massLoadBackRefs($interventions, "actes_ccam", null, $where);
 
 foreach ($interventions as $key => $_interv) {
   $_plage = $_interv->loadRefPlageOp();
-  
-  $_interv->loadExtCodesCCAM(true);
+
+  $_interv->loadExtCodesCCAM(CCodeCCAM::MEDIUM);
   $codes_ccam = $_interv->_ext_codes_ccam;
 
   // Nombre d'acte cotés par le praticien et réinitialisation du count pour le cache
@@ -85,7 +98,7 @@ foreach ($interventions as $key => $_interv) {
     $_interv->loadRefPatient();
     continue;
   }
-  
+
   // Actes prévus restant en suspend
   $activites = CMbArray::pluck($codes_ccam, "activites");
 
@@ -117,7 +130,7 @@ foreach ($interventions as $key => $_interv) {
   $_interv->loadRefAnesth()->loadRefFunction();
   $_interv->loadRefPatient();
 
-  // Liste des actes CCAM cotées
+  // Liste des actes CCAM cotés
   foreach ($_interv->loadRefsActesCCAM() as $_acte) {
     $_acte->loadRefExecutant();
   }
@@ -145,13 +158,18 @@ else {
 /* @var CConsultation[] $consultations*/
 $consultation = new CConsultation();
 $consultations = $consultation->loadList($where, null, null, null, $ljoin);
+
 /** @var CPlageConsult[] $plages */
 $plages = CMbObject::massLoadFwdRef($consultations, "plageconsult_id");
 CMbObject::massLoadFwdRef($consultations, "sejour_id");
 CMbObject::massLoadFwdRef($consultations, "patient_id");
+// Pré-chargement des users
+$where = array("user_id" => CSQLDataSource::prepareIn(CMbArray::pluck($plages, "chir_id")));
+$user->loadList($where);
 /** @var CMediusers[] $chirs */
 $chirs = CMbObject::massLoadFwdRef($plages, "chir_id");
 CMbObject::massLoadFwdRef($chirs, "function_id");
+CMbObject::massLoadBackRefs($consultations, "actes_ccam");
 
 foreach ($consultations as $key => $_consult) {
   // On ignore les consultation ayant des actes NGAP
@@ -161,7 +179,7 @@ foreach ($consultations as $key => $_consult) {
   }
 
   // Chargemement des codes CCAM
-  $_consult->loadExtCodesCCAM(true);
+  $_consult->loadExtCodesCCAM(CCodeCCAM::MEDIUM);
   $codes_ccam = $_consult->_ext_codes_ccam;
 
   // Nombre d'acte cotés par le praticien et réinitialisation du count pour le cache
