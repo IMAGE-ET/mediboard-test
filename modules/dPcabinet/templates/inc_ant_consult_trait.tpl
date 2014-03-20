@@ -11,17 +11,43 @@ updateTokenCim10Anesth = function(){
   var oForm = getForm("editDiagAnesthFrm");
   onSubmitFormAjax(oForm, { onComplete : DossierMedical.reloadDossierSejour });
 };
+
+updateFieldsComposant = function(selected) {
+  var composant = selected.down('.view').getText();
+  var code_composant = selected.get("code");
+
+  var oFormAllergie = getForm("editAntFrm{{$addform}}");
+  $V(oFormAllergie.type, "alle");
+  $V(oFormAllergie.appareil, "");
+  $V(oFormAllergie.rques, composant);
+
+  $V(oFormAllergie._idex_code, code_composant);
+  $V(oFormAllergie._idex_tag, "BCB");
+
+  return onSubmitAnt(oFormAllergie);
+}
+
 Main.add(function () {
   if($('tab_traitements_perso{{$addform}}')){
     Control.Tabs.create('tab_traitements_perso{{$addform}}', false);
   }
+
+  if($('tab_atcd{{$addform}}')){
+    Control.Tabs.create('tab_atcd{{$addform}}', false);
+  }
+
+  // Autocomplete des composants
+  var urlAuto = new Url("medicament", "ajax_composant_autocomplete");
+  urlAuto.autoComplete(getForm('editAntFrm{{$addform}}').keywords_composant, "composant_autocomplete{{$addform}}", {
+    minChars: 3,
+    updateElement: updateFieldsComposant
+  } );
 });
 </script>
 <tr>
   <td>
     <fieldset>
       <legend>Antécédents et allergies</legend>
-
       <form name="editAntFrm{{$addform}}" action="?m=dPcabinet" method="post" onsubmit="return onSubmitAnt(this);">
         <input type="hidden" name="m" value="patients" />
         <input type="hidden" name="del" value="0" />
@@ -29,13 +55,20 @@ Main.add(function () {
         <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
 
         <!-- dossier_medical_id du sejour si c'est une consultation_anesth -->
-
         {{if $sejour_id}}
         <!-- On passe _sejour_id seulement s'il y a un sejour_id -->
         <input type="hidden" name="_sejour_id" value="{{$sejour_id}}" />
         {{/if}}
 
-        <table class="layout main">
+        <ul id="tab_atcd{{$addform}}" class="control_tabs small">
+          <li><a href="#atcd_texte_simple{{$addform}}">Texte libre</a></li>
+          {{if $isPrescriptionInstalled && "CAppUI::conf"|static_call:"dPprescription show_chapters med":$groups->_guid && $conf.dPmedicament.base == "bcb"}}
+            <li><a href="#atcd_base_med{{$addform}}">Allergie à un composant</a></li>
+          {{/if}}
+        </ul>
+        <hr class="control_tabs" />
+
+        <table class="layout main" id="atcd_texte_simple{{$addform}}">
           <tr>
             {{if $app->user_prefs.showDatesAntecedents}}
               <th style="height: 20px">{{mb_label object=$antecedent field=date}}</th>
@@ -64,6 +97,20 @@ Main.add(function () {
             </td>
           </tr>
         </table>
+
+        <table class="layout" id="atcd_base_med{{$addform}}">
+          <tr>
+            <th>
+              Composant
+            </th>
+            <td>
+              <input type="text" name="keywords_composant" value="" size="50" class="autocomplete" />
+              <div style="display:none; width: 350px;" class="autocomplete" id="composant_autocomplete{{$addform}}"></div>
+              <input type="hidden" name="_idex_code" value="" />
+              <input type="hidden" name="_idex_tag" value="" />
+            </td>
+          </tr>
+        </table>
       </form>
     </fieldset>
     
@@ -78,7 +125,7 @@ Main.add(function () {
                 <li><a href="#tp_base_med{{$addform}}">Base de données de médicaments</a></li>
               {{/if}}
               {{if $conf.dPpatients.CTraitement.enabled}}
-                <li><a href="#tp_texte_simple{{$addform}}">Texte simple</a></li>
+                <li><a href="#tp_texte_simple{{$addform}}">Texte libre</a></li>
               {{/if}}
             </ul>
             <hr class="control_tabs" /> 

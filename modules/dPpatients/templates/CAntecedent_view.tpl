@@ -9,7 +9,9 @@
 
 <table class="tbl">
   <tr>
-    <th class="category">{{tr}}CAntecedent{{/tr}}</th>
+    <th class="category">{{tr}}CAntecedent{{/tr}}
+      {{mb_include module=system template=inc_object_idsante400 object=$object}}
+    </th>
   </tr>
   
   {{if $object->type}}

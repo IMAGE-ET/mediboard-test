@@ -27,7 +27,9 @@ class CAntecedent extends CMbObject {
   // Form Fields
   public $_search;
   public $_aides_all_depends;
-  
+  public $_idex_code;
+  public $_idex_tag;
+
   // Distant fields
   public $_count_rques_aides;
 
@@ -82,6 +84,15 @@ class CAntecedent extends CMbObject {
   }
 
   /**
+   * @see parent::getBackProps()
+   */
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["identifiants"] = "CIdSante400 object_id cascade";
+    return $backProps;
+  }
+
+  /**
    * @see parent::updateFormFields()
    */
   function updateFormFields() {
@@ -128,6 +139,15 @@ class CAntecedent extends CMbObject {
 
     // DossierMedical store
     $this->checkCodeCim10();
+
+    // Sauvegarde de l'identifiant externe (code composant de la BDM pour le cas des allergies)
+    if ($this->_idex_code && $this->_idex_tag) {
+      $idex = new CIdSante400();
+      $idex->setObject($this);
+      $idex->id400 = $this->_idex_code;
+      $idex->tag   = $this->_idex_tag;
+      $idex->store();
+    }
 
     return null;
   }

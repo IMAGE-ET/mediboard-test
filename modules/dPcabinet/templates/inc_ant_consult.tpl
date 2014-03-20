@@ -37,7 +37,11 @@ onSubmitAnt = function (form) {
     $V(form.type    , "");
     $V(form.appareil, "");
   }
-  
+
+  $V(form.keywords_composant, "");
+  $V(form._idex_code, "");
+  $V(form._idex_tag, "");
+
   rques.clear().focus();
 
   return false;
