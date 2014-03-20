@@ -19,8 +19,8 @@ $mail_id = CValue::get("mail_id");
 $mail = new CUserMail();
 $mail->load($mail_id);
 $mail->loadRefsFwd();
-$mail->checkHprim();//HprimMedecin
-//$mail->checkApicrypt();//HprimMedecin
+$mail->checkHprim(); //HprimMedecin
+$mail->checkApicrypt(); //HprimMedecin
 
 //pop account
 $log_pop = new CSourcePOP();
@@ -47,11 +47,6 @@ foreach ($mail->_attachments as $_att) {
 }
 
 $mail->checkInlineAttachments();
-
-//apicrypt
-if (stripos($mail->_text_plain->content, "****FIN****") !== false) {
-  $mail->_is_apicrypt = 1;
-}
 
 $headers = preg_split("/(\r\n|\n)/", $mail->_text_plain->content);
 //hprim

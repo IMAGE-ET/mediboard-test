@@ -20,8 +20,8 @@
 </script>
 
 <div>
-  <button class="button change" onclick="messagerie.getLastMessages('{{$account->_id}}');">{{tr}}CUserMAil-button-getNewMails{{/tr}}</button>
-  <button class="button tick" onclick="messagerie.markallAsRead('{{$account->_id}}')">{{tr}}CUserMail-option-allmarkasread{{/tr}}</button>
+  <button class="button change oneclick" onclick="messagerie.getLastMessages('{{$account->_id}}');">{{tr}}CUserMAil-button-getNewMails{{/tr}}</button>
+  <button class="button tick singleclick" onclick="messagerie.markallAsRead('{{$account->_id}}')">{{tr}}CUserMail-option-allmarkasread{{/tr}}</button>
 </div>
 {{tr}}CUserMail-last-check{{/tr}} : {{$account->last_update|date_format:"%A %d %B %Y %H:%M"}}
 
