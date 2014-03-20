@@ -23,7 +23,7 @@
 {{assign var="operation" value=$dossier_anesth->_ref_operation}}
 {{assign var="sejour"    value=$operation->_ref_sejour}}
 
-{{if $operation->_id}}
+{{if $operation->_id && $display}}
   <script>
     refreshFicheAnesthOp = function(form) {
       return onSubmitFormAjax(form, {onComplete: function() {
