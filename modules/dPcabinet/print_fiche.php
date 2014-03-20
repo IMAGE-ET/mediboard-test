@@ -20,7 +20,7 @@ $print = CValue::getOrSession("print", false);
 $today = CMbDT::date();
 
 $dossier_anesth_id     = CValue::get("dossier_anesth_id");
-$operation_id          = CValue::get("operation_id");
+$operation_id          = CValue::getOrSession("operation_id");
 $create_dossier_anesth = CValue::get("create_dossier_anesth", 0);
 $multi                 = CValue::get("multi");
 $offline               = CValue::get("offline");
@@ -30,8 +30,16 @@ $lines = array();
 
 // Consultation courante
 $dossier_anesth = new CConsultAnesth();
-
 if (!$dossier_anesth_id) {
+  $where = array();
+  $where["operation_id"] = " = '$operation_id'";
+  $dossier_anesth->loadObject($where);
+}
+else {
+  $dossier_anesth->load($dossier_anesth_id);
+}
+
+if (!$dossier_anesth->_id) {
   $selOp = new COperation();
   $selOp->load($operation_id);
   $selOp->loadRefsFwd();
@@ -78,7 +86,6 @@ if (!$dossier_anesth_id) {
   return;
 }
 
-$dossier_anesth->load($dossier_anesth_id);
 $dossier_anesth->loadRefsDocs();
 $consult = $dossier_anesth->loadRefConsultation();
 $consult->loadRefPlageConsult();
@@ -93,6 +100,7 @@ if ($pdf) {
 }
 
 $consult->loadRefsFwd();
+$consult->loadRefsDossiersAnesth();
 $consult->loadRefsExamsComp();
 $consult->loadRefsExamNyha();
 $consult->loadRefsExamPossum();
@@ -132,7 +140,6 @@ if (CModule::getActive("dPprescription")) {
     $lines[] = $_line_mix;
   }
 }
-
 
 $praticien =& $consult->_ref_chir;
 $patient   =& $consult->_ref_patient;

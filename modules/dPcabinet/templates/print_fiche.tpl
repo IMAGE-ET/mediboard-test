@@ -23,6 +23,31 @@
 {{assign var="operation" value=$dossier_anesth->_ref_operation}}
 {{assign var="sejour"    value=$operation->_ref_sejour}}
 
+{{if $operation->_id}}
+  <script>
+    refreshFicheAnesthOp = function(form) {
+      return onSubmitFormAjax(form, {onComplete: function() {
+        var url = new Url("cabinet", "print_fiche");
+        url.addParam("operation_id", "{{$operation->_id}}");
+        url.addParam("offline", true);
+        url.addParam("display", true);
+        url.addParam("pdf"    , 0);
+        url.requestUpdate("fiche_anesth");
+      }});
+    }
+  </script>
+  <form name="addInterv-{{$operation->_id}}" action="?m={{$m}}" method="post" onsubmit="return refreshFicheAnesthOp(this);">
+    <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+    <input type="hidden" name="del" value="{{if $consult->_refs_dossiers_anesth|@count == 1}}0{{else}}1{{/if}}" />
+    <input type="hidden" name="m" value="dPcabinet" />
+    <input type="hidden" name="operation_id" value=""/>
+    {{mb_key object=$dossier_anesth}}
+    <button type="button" class="unlink" onclick="return refreshFicheAnesthOp(this.form);">
+      Supprimer le {{if $consult->_refs_dossiers_anesth|@count == 1}}lien à l'intervention{{else}}dossier d'anesthésie{{/if}}
+    </button>
+  </form>
+{{/if}}
+
 {{mb_include module=cabinet template=inc_header_fiche_anesth}}
 
 <table class="{{$tbl_class}}" style="page-break-after: always">

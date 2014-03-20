@@ -63,6 +63,15 @@
               {{if $_dossier_anesth->_ref_operation->_id}}
                 Déjà associé :
                 <strong>{{$_dossier_anesth->_ref_operation->_view}}</strong>
+                <form name="duplicateOpFrm" action="?m={{$m}}" method="post" onsubmit="{{$onSubmit}}">
+                  <input type="hidden" name="dosql" value="do_duplicate_dossier_anesth_aed" />
+                  <input type="hidden" name="redirect" value="0" />
+                  <input type="hidden" name="del" value="0" />
+                  <input type="hidden" name="m" value="dPcabinet" />
+                  <input type="hidden" name="_consult_anesth_id" value="{{$_dossier_anesth->_id}}" />
+                  <input type="hidden" name="operation_id" value="{{$selOp->_id}}" />
+                  <button class="link">Dupliquer et associer</button>
+                </form>
               {{elseif $_dossier_anesth->_ref_sejour->_id}}
                 Déjà associé :
                 <strong>{{$_dossier_anesth->_ref_sejour->_view}}</strong>
