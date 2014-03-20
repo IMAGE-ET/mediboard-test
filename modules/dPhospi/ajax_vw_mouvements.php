@@ -139,6 +139,8 @@ $lit = new CLit();
 $lits     = $lit->loadList($where, "chambre.nom", null, null, $ljoin);
 $chambres = CMbObject::massLoadFwdRef($lits, "chambre_id");
 $services = CMbObject::massLoadFwdRef($chambres, "service_id");
+$liaisons = CMbObject::massLoadBackRefs($lits, "liaisons_items");
+CMbObject::massLoadFwdRef($liaisons, "item_prestation_id");
 
 foreach ($lits as $_lit) {
   $_lit->_ref_affectations = array();
@@ -146,8 +148,11 @@ foreach ($lits as $_lit) {
   $chambre->_ref_lits[$_lit->_id] = $_lit;
   $service = $chambre->loadRefService();
   $service->_ref_chambres[$chambre->_id] = $chambre;
-  $liaisons_items = $_lit->loadBackRefs("liaisons_items");
-  $items_prestations = CMbObject::massLoadFwdRef($liaisons_items, "item_prestation_id");
+  $liaisons_items = $_lit->_back["liaisons_items"];
+  foreach ($liaisons_items as $_liaison) {
+    $_liaison->loadRefItemPrestation();
+  }
+  $items_prestations = CMbArray::pluck($liaisons_items, "_ref_item_prestation");
   $prestations_ids = CMbArray::pluck($items_prestations, "object_id");
 
   $_lit->_selected_item = new CItemPrestation();
@@ -210,12 +215,17 @@ if ($nb_days_prolongation) {
 
 $sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
 $patients = CMbObject::massLoadFwdRef($sejours, "patient_id");
+
+// Préchargement des users
+$user = new CUser();
+$where = array("user_id" => CSQLDataSource::prepareIn(CMbArray::pluck($sejours, "praticien_id")));
+$users = $user->loadList($where);
+
 $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
 CMbObject::massLoadFwdRef($praticiens, "function_id");
 $operations = array();
 
 $suivi_affectation = false;
-
 loadVueTempo($affectations, $suivi_affectation, $lits, $operations, $date_min, $date_max, $period, $prestation_id);
 
 $dossiers = CMbArray::pluck($affectations, "_ref_sejour", "_ref_patient", "_ref_dossier_medical");

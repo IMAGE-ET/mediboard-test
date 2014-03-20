@@ -774,6 +774,11 @@ class CSetupdPhospi extends CSetup {
                 ADD `radiologie` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.85";
+    $this->makeRevision("0.85");
+    $query = "ALTER TABLE `affectation`
+      ADD INDEX (`parent_affectation_id`)";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.86";
   }
 }
