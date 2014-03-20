@@ -12,7 +12,7 @@
         Branche : {{$applicationVersion.releaseTitle|capitalize}}
       </label>
     {{/if}}
-  {{else}}
+  {{elseif $applicationVersion.title}}
     {{tr}}Latest update{{/tr}}
     <label title="{{$applicationVersion.title}}" {{if in_array($applicationVersion.relative.unit, array("second", "minute", "hour"))}}style="font-weight: bold"{{/if}}>
      {{$applicationVersion.relative.count}} {{tr}}{{$applicationVersion.relative.unit}}{{if $applicationVersion.relative.count > 1}}s{{/if}}{{/tr}}
