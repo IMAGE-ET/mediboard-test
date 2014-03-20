@@ -381,6 +381,10 @@ function changePrefListUsers(oElement) {
   return onSubmitFormAjax(oForm);
 }
 
+afterModifPatient = function(patient_id, patient) {
+  $V(getForm('editSejour')._patient_view, patient._view);
+}
+
 {{if $mode_operation}}
   // Declaration d'un objet Sejour
   var Sejour = {
@@ -695,7 +699,7 @@ Main.add( function(){
       Choisir un patient
     </button>
     <button id="button-edit-patient" type="button" 
-        onclick="Patient.editModal(this.form.patient_id.value)"
+        onclick="Patient.editModal(this.form.patient_id.value, 0, 'window.parent.afterModifPatient')"
             class="edit notext" {{if !$patient->_id}}style="display: none;"{{/if}}>
       {{tr}}Edit{{/tr}}
     </button>

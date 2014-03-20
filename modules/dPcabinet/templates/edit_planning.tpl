@@ -181,6 +181,10 @@
     }
   };
 
+  afterEditPatient = function(patient_id, patient) {
+    $V(getForm('editFrm')._pat_name, patient._view);
+  }
+
   Main.add(function () {
     var form = getForm("editFrm");
     var url = new Url("system", "ajax_seek_autocomplete");
@@ -400,7 +404,7 @@
                 {{mb_field object=$pat field="patient_id" hidden=1 ondblclick="PatSelector.init()" onchange="requestInfoPat(); $('button-edit-patient').setVisible(this.value);"}}
                 <input type="text" name="_pat_name" style="width: 15em;" value="{{$pat->_view}}" readonly="readonly" onfocus="PatSelector.init()" onchange="checkCorrespondantMedical()"/>
                 <button class="search notext" id="add_edit_button_pat_selector" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
-                <button id="button-edit-patient" type="button" onclick="Patient.editModal(this.form.patient_id.value)"
+                <button id="button-edit-patient" type="button" onclick="Patient.editModal(this.form.patient_id.value, 0, 'window.parent.afterEditPatient')"
                         class="edit notext" {{if !$pat->_id}}style="display: none;"{{/if}}>
                   {{tr}}Edit{{/tr}}
                 </button>

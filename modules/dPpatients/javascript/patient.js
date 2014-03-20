@@ -26,11 +26,12 @@ Patient = Object.extend({
       addParam("use_vitale", use_vitale).
       redirectOpener();
   },
-  editModal: function(patient_id, use_vitale) {
+  editModal: function(patient_id, use_vitale, callback) {
     new Url("patients", "vw_edit_patients").
       addParam("patient_id", patient_id).
       addParam("use_vitale", use_vitale).
-      addParam("modal", 1).
+      addParam("callback"  , callback).
+      addParam("modal"     , 1).
       modal({width: "90%", height: "90%"});
   },
   
