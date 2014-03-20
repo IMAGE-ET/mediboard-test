@@ -1,13 +1,3 @@
-{{*
- * $Id$
- * 
- * @package    Mediboard
- * @subpackage dPbloc
- * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
- *}}
-
 {{assign var=sejour value=$operation->_ref_sejour}}
 
 {{if $operation->rques || ($sejour && $sejour->_id && $sejour->ATNC != "") || ($consult_anesth && $consult_anesth->_intub_difficile)}}
@@ -18,11 +8,11 @@
         {{tr}}CConsultAnesth-_intub_difficile{{/tr}}
       </div>
     {{/if}}
-
-    {{if $sejour && $sejour->_id && $sejour->ATNC != ""}}
-      <div style="font-weight: bold; {{if $sejour->ATNC}}color: #f00;{{/if}}">
-        Risque ATNC: {{tr}}{{if $sejour->ATNC}}Yes{{else}}No{{/if}}{{/tr}}
-      </div>
-    {{/if}}
   </div>
+  {{if $sejour && $sejour->_id && $sejour->ATNC != ""}}
+    <div style="font-weight: bold; {{if $sejour->ATNC == 1}}color: #f00;{{/if}}"
+         class="{{if $sejour->ATNC == 1}}small-warning{{else}}small-info{{/if}}">
+      {{if $sejour->ATNC}}Risque ATNC{{else}}Aucun risque ATNC{{/if}}
+    </div>
+  {{/if}}
 {{/if}}
