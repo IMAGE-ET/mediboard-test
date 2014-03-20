@@ -320,6 +320,13 @@ printDossierComplet = function(){
   url.popup(850, 600, "Dossier complet");
 }
 
+printPlanSoins = function() {
+  var url = new Url("soins", "offline_plan_soins");
+  url.addParam("sejours_ids", $V(document.form_prescription.sejour_id));
+  url.addParam("mode_dupa", 1);
+  url.pop(1000, 600);
+}
+
 checkAnesth = function(oField){
   // Recuperation de la liste des anesthésistes
   var anesthesistes = {{$anesthesistes|@json}};
@@ -671,6 +678,7 @@ savePref = function(form) {
         <li onmousedown="DossierMedical.reloadDossierSejour();"><a href="#antecedents">{{tr}}soins.tab.antecedent_and_treatment{{/tr}}</a></li>
         {{/if}} 
         <li style="float: right">
+          <button type="button" class="print" style="float: left" onclick="printPlanSoins()">Plan de soins</button>
           <button type="button" class="button print" onclick="printDossierComplet();">{{tr}}soins.button.Dossier-soins{{/tr}}</button>
         </li>
       </ul>
