@@ -206,6 +206,13 @@ $affectations = $affectation->loadList($where, "entree ASC", null, null, $ljoin)
 $_sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
 $services = $services + CMbObject::massLoadFwdRef($affectations, "service_id");
 $patients = CMbObject::massLoadFwdRef($_sejours, "patient_id");
+CMbObject::massLoadBackRefs($patients, "dossier_medical");
+
+// Préchargement des users
+$user = new CUser();
+$where = array("user_id" => CSQLDataSource::prepareIn(CMbArray::pluck($_sejours, "praticien_id")));
+$users = $user->loadList($where);
+
 $praticiens = CMbObject::massLoadFwdRef($_sejours, "praticien_id");
 CMbObject::massLoadFwdRef($praticiens, "function_id");
 CMbObject::massCountBackRefs($affectations, "affectations_enfant");
@@ -227,28 +234,28 @@ $_sejour->_type_admission = $_type_admission;
 $smarty = new CSmartyDP();
 
 $smarty->assign("sejours_non_affectes", $sejours_non_affectes);
-$smarty->assign("_sejour", $_sejour);
-$smarty->assign("triAdm", $triAdm);
-$smarty->assign("functions_filter", $functions_filter);
-$smarty->assign("filter_function", $filter_function);
-$smarty->assign("granularite", $granularite);
-$smarty->assign("date"     , $date);
-$smarty->assign("date_min", $date_min);
-$smarty->assign("date_max", $date_max);
-$smarty->assign("nb_ticks", $nb_ticks);
-$smarty->assign("days"    , $days);
-$smarty->assign("datetimes", $datetimes);
-$smarty->assign("readonly", $readonly);
-$smarty->assign("duree_uscpo", $duree_uscpo);
-$smarty->assign("isolement", $isolement);
-$smarty->assign("current", $current);
-$smarty->assign("items_prestation", $items_prestation);
-$smarty->assign("item_prestation_id", $item_prestation_id);
-$smarty->assign("prestation_id", $prestation_id);
-$smarty->assign("td_width", 84.2 / $nb_ticks);
-$smarty->assign("mode_vue_tempo", "classique");
-$smarty->assign("affectations", $affectations);
-$smarty->assign("sejours" , $sejours);
-$smarty->assign("services", $services);
+$smarty->assign("_sejour"             , $_sejour);
+$smarty->assign("triAdm"              , $triAdm);
+$smarty->assign("functions_filter"    , $functions_filter);
+$smarty->assign("filter_function"     , $filter_function);
+$smarty->assign("granularite"         , $granularite);
+$smarty->assign("date"                , $date);
+$smarty->assign("date_min"            , $date_min);
+$smarty->assign("date_max"            , $date_max);
+$smarty->assign("nb_ticks"            , $nb_ticks);
+$smarty->assign("days"                , $days);
+$smarty->assign("datetimes"           , $datetimes);
+$smarty->assign("readonly"            , $readonly);
+$smarty->assign("duree_uscpo"         , $duree_uscpo);
+$smarty->assign("isolement"           , $isolement);
+$smarty->assign("current"             , $current);
+$smarty->assign("items_prestation"    , $items_prestation);
+$smarty->assign("item_prestation_id"  , $item_prestation_id);
+$smarty->assign("prestation_id"       , $prestation_id);
+$smarty->assign("td_width"            , 84.2 / $nb_ticks);
+$smarty->assign("mode_vue_tempo"      , "classique");
+$smarty->assign("affectations"        , $affectations);
+$smarty->assign("sejours"             , $sejours);
+$smarty->assign("services"            , $services);
 
 $smarty->display("inc_vw_non_places.tpl");
