@@ -22,7 +22,7 @@ updateFieldsComposant = function(selected) {
   $V(oFormAllergie.rques, composant);
 
   $V(oFormAllergie._idex_code, code_composant);
-  $V(oFormAllergie._idex_tag, "BCB");
+  $V(oFormAllergie._idex_tag, "BCB_COMPOSANT");
 
   return onSubmitAnt(oFormAllergie);
 }
