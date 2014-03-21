@@ -33,7 +33,7 @@ $where['date_echange']            = "IS NULL";
 $where['date_production']         = "BETWEEN '".CMbDT::dateTime("-3 DAYS")."' AND '".CMbDT::dateTime("+1 DAYS")."'";
 
 /** @var CExchangeHL7v2[] $exchanges */
-$exchanges = $echange_hl7v2->loadList($where, null);
+$exchanges = $echange_hl7v2->loadList($where, "date_production DESC");
 
 // Effectue le traitement d'enregistrement des notifications sur lequel le cron vient de passer
 // ce qui permet la gestion des doublons
