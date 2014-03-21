@@ -189,6 +189,30 @@ abstract class SHM {
   }
 
   /**
+   * Check if given key exists
+   *
+   * @param bool   $distributed Is distributed?
+   * @param string $key         Key to check
+   *
+   * @return bool
+   */
+  protected static function _exists($distributed, $key) {
+    $engine = $distributed ? self::$engineDistributed : self::$engine;
+    return $engine->exists(self::$prefix.$key);
+  }
+
+  /**
+   * Check if given key exists in shared memory
+   *
+   * @param string $key Key to check
+   *
+   * @return bool
+   */
+  static function exists($key) {
+    return self::_exists(false, $key);
+  }
+
+  /**
    * List all the keys in the shared memory
    *
    * @param bool $distributed Distributed

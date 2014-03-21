@@ -51,6 +51,17 @@ abstract class DSHM extends SHM {
   }
 
   /**
+   * Check if given key exists in distributed shared memory
+   *
+   * @param string $key Key to check
+   *
+   * @return bool
+   */
+  static function exists($key) {
+    return self::_exists(true, $key);
+  }
+
+  /**
    * List all the keys in the shared memory
    *
    * @return array
