@@ -42,10 +42,38 @@
     <input type="hidden" name="m" value="dPcabinet" />
     <input type="hidden" name="operation_id" value=""/>
     {{mb_key object=$dossier_anesth}}
-    <button type="button" class="unlink" onclick="return refreshFicheAnesthOp(this.form);">
+    <button type="button" class="unlink" onclick="return refreshFicheAnesthOp(this.form);" style="float:left;">
       Supprimer le {{if $consult->_refs_dossiers_anesth|@count == 1}}lien à l'intervention{{else}}dossier d'anesthésie{{/if}}
     </button>
   </form>
+{{/if}}
+{{if $display && $dossiers|@count != 0}}
+  <script>
+    printFiche = function(dossier_anesth_id) {
+      var url = new Url("dPcabinet", "print_fiche");
+      url.addParam("dossier_anesth_id", dossier_anesth_id);
+      url.addParam("print", true);
+      url.popup(700, 500, "printFiche");
+    };
+  </script>
+  <span style="display:inline-block;float:right;" onmouseover="ObjectTooltip.createDOM(this, 'DetailDossiers');">
+    {{$dossiers|@count}} Dossiers d'anesthésie
+  </span>
+  <div  style="display: none;">
+    <table class="tbl" id="DetailDossiers">
+      <tr>
+        <th class="title" colspan="4">Dossiers d'anesthésie</th>
+      </tr>
+      {{foreach from=$dossiers item=_dossier}}
+        <tr>
+          <td>{{tr}}CConsultation{{/tr}} du {{$_dossier->_ref_consultation->_date|date_format:$conf.date}}</td>
+          <td>Dr {{$_dossier->_ref_consultation->_ref_chir->_view}}</td>
+          <td>{{if $_dossier->operation_id}} <strong>{{$_dossier->_ref_operation->_view}}</strong>{{/if}}</td>
+          <td><button type="button" class="print notext" onclick="printFiche('{{$_dossier->_id}}');"></button></td>
+        </tr>
+      {{/foreach}}
+    </table>
+  </div>
 {{/if}}
 
 {{mb_include module=cabinet template=inc_header_fiche_anesth}}

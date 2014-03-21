@@ -146,6 +146,18 @@ $patient   =& $consult->_ref_patient;
 $patient->loadRefDossierMedical();
 $dossier_medical =& $patient->_ref_dossier_medical;
 
+$patient->loadRefsConsultations();
+$dossiers = array();
+foreach ($patient->_ref_consultations as $consultation) {
+  $consultation->loadRefConsultAnesth();
+  $consultation->loadRefPlageConsult();
+  foreach ($consultation->_refs_dossiers_anesth as $_dossier_anesth) {
+    $_dossier_anesth->_ref_consultation = $consultation;
+    $_dossier_anesth->loadRefOperation();
+    $dossiers[$_dossier_anesth->_id] = $_dossier_anesth;
+  }
+}
+
 // Chargement des elements du dossier medical
 $dossier_medical->loadRefsAntecedents();
 $dossier_medical->countAllergies();
@@ -236,6 +248,7 @@ $unites["date_analyse"] = array("nom" => "Date", "unit" => "");
 // Création du template
 $smarty = new CSmartyDP("modules/dPcabinet");
 
+$smarty->assign("dossiers"  , $dossiers);
 $smarty->assign("display"   , $display);
 $smarty->assign("offline"   , $offline);
 $smarty->assign("unites"    , $unites);

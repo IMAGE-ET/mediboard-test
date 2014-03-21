@@ -29,6 +29,15 @@
   {{mb_return}}
 {{/if}}
 
+<script>
+  printFiche = function(dossier_anesth_id) {
+    var url = new Url("dPcabinet", "print_fiche");
+    url.addParam("dossier_anesth_id", dossier_anesth_id);
+    url.addParam("print", true);
+    url.popup(700, 500, "printFiche");
+  };
+</script>
+
 <div class="big-info">
   Aucun dossier d'anesthésie n'a été associé à cette intervention ou ce séjour
   <br />
@@ -38,7 +47,6 @@
     <li>Soit <strong>créer un nouveau dossier d'anesthésie</strong>.</li>
   </ul>
 </div>
-
 
 <table class="form">
   <tr>
@@ -86,6 +94,7 @@
                   <button class="tick">{{tr}}Associate{{/tr}}</button>
                 </form>
               {{/if}}
+              <button style="float:right;" type="button" class="print notext" onclick="printFiche('{{$_dossier_anesth->_id}}');"></button>
             </td>
             {{if !$smarty.foreach.foreach_anesth.last}}
               </tr>
