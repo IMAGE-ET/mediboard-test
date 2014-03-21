@@ -13,7 +13,7 @@ var Process = {
   },
       
   doStep: function() {
-    var form = document.import;
+    var form = getForm("importMedecinForm");
     
     this.step =  $V(form.step);
         
@@ -28,8 +28,16 @@ var Process = {
   
   updateScrewed: function(medecins, time, updates, errors) {
     var tr = document.createElement("tr");
-    td = document.createElement("td"); td.textContent = this.step; tr.appendChild(td);
-    td = document.createElement("td"); td.textContent = "XPAth Screwed, try again"; tr.appendChild(td);
+    var td;
+
+    td = document.createElement("td");
+    td.textContent = this.step;
+    tr.appendChild(td);
+
+    td = document.createElement("td");
+    td.textContent = "XPAth Screwed, try again";
+    tr.appendChild(td);
+
     $("results").appendChild(tr);
   },
   
@@ -40,6 +48,7 @@ var Process = {
     this.total.errors   += errors;    
 
     var tr = document.createElement("tr");
+    var td;
     td = document.createElement("td"); td.textContent = this.step; tr.appendChild(td);
     td = document.createElement("td"); td.textContent = medecins ; tr.appendChild(td);
     td = document.createElement("td"); td.textContent = time.toFixed(2)     ; tr.appendChild(td);
@@ -81,8 +90,8 @@ function importSF(form) {
   var url = new Url("patients", "import_sages_femmes");
   url.addParam("pass", Process.pass);
   url.addElement(form.departement);
-  url.requestUpdate("resultSF", {onComplete:
-    function() {
+  url.requestUpdate("resultSF", {
+    onComplete: function() {
       if (form.auto.checked) {
         var select = form.departement;
         if ((select.length -1) != select.selectedIndex) {
@@ -94,33 +103,37 @@ function importSF(form) {
     insertion: function(element, content){
       element.innerHTML += content;
     }
-  } );
+  });
 }
 
 function importKine(form) {
   var url = new Url("patients", "import_kines");
   url.addParam("pass", Process.pass);
   url.addElement(form.departement);
-  url.requestUpdate("resultKine", {onComplete:
-               function() {
-                 if (form.auto.checked) {
-                   var select = form.departement;
-                   if ((select.length -1) != select.selectedIndex) {
-                     select.selectedIndex += 1;
-                     importKine(form);
-                   }
-                 }
-               },
+  url.requestUpdate("resultKine", {
+    onComplete: function() {
+      if (form.auto.checked) {
+        var select = form.departement;
+        if ((select.length -1) != select.selectedIndex) {
+          select.selectedIndex += 1;
+          importKine(form);
+        }
+      }
+    },
     insertion: function(element, content){
       element.innerHTML += content;
     }
-  } );
+  });
 }
 
 function installMouvMedecinPatient() {
   var url = new Url('patients', 'install_mouv_medecin_patient');
   url.requestUpdate('installMouvMedecinPatient');
 }
+
+Main.add(function(){
+  Control.Tabs.create("CMedecin-tab");
+})
 </script>
 
 {{assign var=class value=CMedecin}}
@@ -142,59 +155,63 @@ function installMouvMedecinPatient() {
 
 </form>
 
-<h2>Import de la base de données de médecins</h2>
+<ul class="control_tabs small" id="CMedecin-tab">
+  <li><a href="#CMedecin-import">Importation de base</a></li>
+  <li><a href="#CMedecin-install_trigger">Trigger medecin-patient</a></li>
+  <li><a href="#CMedecin-maintenance">Maintenance</a></li>
+</ul>
 
-<table class="tbl">
-  <tr>
-    <th colspan="3" style="width: 50%">{{tr}}Action{{/tr}}</th>
-    <th colspan="2" style="width: 50%">{{tr}}Status{{/tr}}</th>
-  </tr>
-    
-  <tr>
-    <td colspan="3">
-      <form name="import" action="#" method="get" onsubmit="return false">
-      
-      <label>
-        <input type="radio" name="mode" value="get" />Import distant
-      </label>
-      <label>
-        <input type="radio" name="mode" value="xml" />Fichiers XML
-      </label>
-      <label>
-        <input type="radio" name="mode" value="csv" checked="checked" />Fichiers CSV
-      </label>
-      
-      <input type="checkbox" name="auto" />
-      <label for="auto">Automatique</label>
-      &mdash;
-      Département :
-      <select name="departement">
-        {{foreach from=$departements item=_departement}}
-          <option value="{{$_departement}}">{{$_departement}}</option>
-        {{/foreach}}
-      </select>
-      
-      Mode d'import :
-      <select name="mode_import">
-        <option value="comp">Import complet</option>
-        <option value="rpps">Mise à jour RPPS</option>
-      </select>
-      <br/>
+<div id="CMedecin-import" style="display: none;">
+  <h2>Import de la base de données de médecins</h2>
 
-      <label for="step">Etape</label>
-      <input type="text" name="step" value="1" size="2" />
+  <table class="tbl">
+    <tr>
+      <th colspan="3" style="width: 50%">{{tr}}Action{{/tr}}</th>
+      <th colspan="2" style="width: 50%">{{tr}}Status{{/tr}}</th>
+    </tr>
 
-      <button class="tick" id="start-process" onclick="Process.doStep()">
-        Traiter étape
-      </button>
-      
-      </form>
-    </td>
-    <td id="process" colspan="3">
-    </td>
-  </tr>
+    <tr>
+      <td colspan="3">
+        <form name="importMedecinForm" action="#" method="get" onsubmit="return false">
+          <label>
+            <input type="radio" name="mode" value="get" />Import distant
+          </label>
+          <label>
+            <input type="radio" name="mode" value="xml" />Fichiers XML
+          </label>
+          <label>
+            <input type="radio" name="mode" value="csv" checked="checked" />Fichiers CSV
+          </label>
 
-  <tbody id="results" style="text-align: right">
+          <input type="checkbox" name="auto" />
+          <label for="auto">Automatique</label>
+          &mdash;
+          Département :
+          <select name="departement">
+            {{foreach from=$departements item=_departement}}
+              <option value="{{$_departement}}">{{$_departement}}</option>
+            {{/foreach}}
+          </select>
+
+          Mode d'import :
+          <select name="mode_import">
+            <option value="comp">Import complet</option>
+            <option value="rpps">Mise à jour RPPS</option>
+          </select>
+          <br/>
+
+          <label for="step">Etape</label>
+          <input type="text" name="step" value="1" size="2" />
+
+          <button class="tick" id="start-process" onclick="Process.doStep()">
+            Traiter étape
+          </button>
+        </form>
+      </td>
+      <td id="process" colspan="3"></td>
+    </tr>
+
+    <tbody id="results" style="text-align: right">
     <tr>
       <th>Etape #</th>
       <th>Nombre de médecins</th>
@@ -202,93 +219,142 @@ function installMouvMedecinPatient() {
       <th>Mises à jour</th>
       <th>Erreurs</th>
     </tr>
-  </tbody>
+    </tbody>
 
-  <tr id="total" style="text-align: right">
-    <th>Total</th>
-    <td id="total-medecins"></td>
-    <td id="total-time"></td>
-    <td id="total-updates"></td>
-    <td id="total-errors"></td>
-  </tr>
-</table>
+    <tr id="total" style="text-align: right">
+      <th>Total</th>
+      <td id="total-medecins"></td>
+      <td id="total-time"></td>
+      <td id="total-updates"></td>
+      <td id="total-errors"></td>
+    </tr>
+  </table>
 
-<h2>
-  Import de la base de données des sages-femmes
-</h2>
+  <h2>
+    Import de la base de données des sages-femmes
+  </h2>
 
-<table class="tbl">
-  <tr>
-    <th colspan="3" style="width: 50%">{{tr}}Action{{/tr}}</th>
-    <th colspan="2" style="width: 50%">{{tr}}Status{{/tr}}</th>
-  </tr>
-  <tr>
-    <td colspan="3" style="vertical-align: top">
-      <form name="importSFForm" action="#" method="get" onsubmit="return false">
-        <input type="checkbox" name="auto" />
-        <label for="auto">Automatique</label>
-        &mdash;
-        Département :
-        <select name="departement">
-          {{foreach from=$departements item=_departement}}
-            {{if is_numeric($_departement)}}
-              <option value="{{$_departement}}">{{$_departement}}</option>
-            {{/if}}
-          {{/foreach}}
-        </select>
-        <button type="button" class="tick" onclick="importSF(this.form)">Traiter</button>
-        <button type="button" class="cancel" onclick="$('resultSF').update()">Vider</button>
-      </form>
-    </td>
-    <td id="resultSF"></td>
-  </tr>
-</table>
+  <table class="tbl">
+    <tr>
+      <th colspan="3" style="width: 50%">{{tr}}Action{{/tr}}</th>
+      <th colspan="2" style="width: 50%">{{tr}}Status{{/tr}}</th>
+    </tr>
+    <tr>
+      <td colspan="3" style="vertical-align: top">
+        <form name="importSFForm" action="#" method="get" onsubmit="return false">
+          <input type="checkbox" name="auto" />
+          <label for="auto">Automatique</label>
+          &mdash;
+          Département :
+          <select name="departement">
+            {{foreach from=$departements item=_departement}}
+              {{if is_numeric($_departement)}}
+                <option value="{{$_departement}}">{{$_departement}}</option>
+              {{/if}}
+            {{/foreach}}
+          </select>
+          <button type="button" class="tick" onclick="importSF(this.form)">Traiter</button>
+          <button type="button" class="cancel" onclick="$('resultSF').update()">Vider</button>
+        </form>
+      </td>
+      <td id="resultSF"></td>
+    </tr>
+  </table>
 
-<h2>
-  Import de la base de données des kinésithérapeutes
-</h2>
+  <h2>
+    Import de la base de données des kinésithérapeutes
+  </h2>
 
-<table class="tbl">
-  <tr>
-    <th colspan="3" style="width: 50%">{{tr}}Action{{/tr}}</th>
-    <th colspan="2" style="width: 50%">{{tr}}Status{{/tr}}</th>
-  </tr>
-  <tr>
-    <td colspan="3" style="vertical-align: top">
-      <form name="importKineForm" action="#" method="get" onsubmit="return false">
-        <input type="checkbox" name="auto" />
-        <label for="auto">Automatique</label>
-        &mdash;
-        Département :
-        <select name="departement">
-          {{foreach from=$departements item=_departement}}
-            {{if is_numeric($_departement)}}
-              <option value="{{$_departement}}">{{$_departement}}</option>
-            {{/if}}
-          {{/foreach}}
-        </select>
-        <button type="button" class="tick" onclick="importKine(this.form)">Traiter</button>
-        <button type="button" class="cancel" onclick="$('resultKine').update()">Vider</button>
-      </form>
-    </td>
-    <td id="resultKine"></td>
-  </tr>
-</table>
+  <table class="tbl">
+    <tr>
+      <th colspan="3" style="width: 50%">{{tr}}Action{{/tr}}</th>
+      <th colspan="2" style="width: 50%">{{tr}}Status{{/tr}}</th>
+    </tr>
+    <tr>
+      <td colspan="3" style="vertical-align: top">
+        <form name="importKineForm" action="#" method="get" onsubmit="return false">
+          <input type="checkbox" name="auto" />
+          <label for="auto">Automatique</label>
+          &mdash;
+          Département :
+          <select name="departement">
+            {{foreach from=$departements item=_departement}}
+              {{if is_numeric($_departement)}}
+                <option value="{{$_departement}}">{{$_departement}}</option>
+              {{/if}}
+            {{/foreach}}
+          </select>
+          <button type="button" class="tick" onclick="importKine(this.form)">Traiter</button>
+          <button type="button" class="cancel" onclick="$('resultKine').update()">Vider</button>
+        </form>
+      </td>
+      <td id="resultKine"></td>
+    </tr>
+  </table>
+</div>
 
-<h2>
-  Mouvement (trigger) medecin-patient
-</h2>
+<div id="CMedecin-install_trigger" style="display: none;">
+  <h2>Mouvement (trigger) medecin-patient</h2>
 
-<table class="tbl">
-  <tr>
-    <th style="width: 50%">{{tr}}Action{{/tr}}</th>
-    <th style="width: 50%">{{tr}}Status{{/tr}}</th>
-  </tr>
-  <tr>
-    <td>
-      <button type="button" class="tick" onclick="installMouvMedecinPatient()">Installer le trigger</button>
-    </td>
-    <td class="text" id="installMouvMedecinPatient"></td>
-  </tr>
-</table>
+  <table class="tbl">
+    <tr>
+      <th style="width: 50%">{{tr}}Action{{/tr}}</th>
+      <th style="width: 50%">{{tr}}Status{{/tr}}</th>
+    </tr>
+    <tr>
+      <td>
+        <button type="button" class="tick" onclick="installMouvMedecinPatient()">Installer le trigger</button>
+      </td>
+      <td class="text" id="installMouvMedecinPatient"></td>
+    </tr>
+  </table>
+</div>
 
+<div id="CMedecin-maintenance" style="display: none;">
+  <h2>Nettoyage des correspondants médicaux</h2>
+
+  <table class="main layout" style="table-layout: fixed;">
+    <tr>
+      <td>
+        <div class="small-info">
+          Cet outil permet d'effectuer une épuration des doublons de correspondants médicaux dûs à des importations en supprimant les doublons.
+        </div>
+
+        <form name="cleanup-correspondant" method="post" onsubmit="return onSubmitFormAjax(this, {}, 'cleanup-correspondant-log')">
+          <input type="hidden" name="m" value="patients" />
+          <input type="hidden" name="dosql" value="do_cleanup_correspondant" />
+
+          <table class="main form">
+            <tr>
+              <th>
+                <label for="count_min">
+                  Traiter les doublons qui sont plus de
+                </label>
+              </th>
+
+              <td>
+                <input type="number" name="count_min" value="50" size="5" />
+              </td>
+
+              <td rowspan="3">
+                <button type="submit" class="tick">{{tr}}Clean up{{/tr}}</button>
+              </td>
+            </tr>
+
+            <tr>
+              <th>
+                <label for="dry_run">
+                  Dry run (n'effectue pas de suppression)
+                </label>
+              </th>
+              <td>
+                <input type="checkbox" name="dry_run" value="1" checked />
+              </td>
+            </tr>
+          </table>
+        </form>
+      </td>
+      <td id="cleanup-correspondant-log"></td>
+    </tr>
+  </table>
+</div>
