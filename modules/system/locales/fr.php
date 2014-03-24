@@ -2251,3 +2251,5 @@ $locales['utilities-source-file_system-connexion'] = 'Test d\'accessibilité';
 $locales['utilities-source-file_system-getFiles'] = 'Liste des fichiers';
 $locales['utilities-source-file_system-sendFile'] = 'Dépôt d\'un fichier';
 $locales['utilities-source-http'] = 'Utilitaires de la source HTTP';
+$locales['utilities-source-file_system'] = 'Utilitaires de la source FS';
+

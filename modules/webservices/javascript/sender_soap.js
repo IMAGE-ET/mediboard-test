@@ -11,9 +11,9 @@
 
 SenderSOAP = {  
   dispatch : function(sender_soap_id, message) {
-    var url = new Url("webservices", "ajax_dispatch_event");
-	url.addParam("sender_soap_id", sender_soap_id);
-	url.addParam("message", message);
-	url.requestUpdate("CSenderSOAP-utilities_dispatch");
+    new Url("webservices", "ajax_dispatch_event")
+      .addParam("sender_soap_id", sender_soap_id)
+      .addParam("message", message)
+      .requestUpdate("CSenderSOAP-utilities_dispatch");
   }
 };

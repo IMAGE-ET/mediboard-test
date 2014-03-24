@@ -89,7 +89,7 @@
         </table>
 
         <fieldset>
-          <legend>{{tr}}utilities-source-soap{{/tr}}</legend>
+          <legend>{{tr}}utilities-source-file_system{{/tr}}</legend>
 
           <table class="main form">
             <tr>

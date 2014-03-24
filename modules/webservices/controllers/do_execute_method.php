@@ -19,7 +19,7 @@ $parameters           = CValue::post("parameters");
 /** @var $exchange_source CExchangeSource */
 $exchange_source = CMbObject::loadFromGuid($exchange_source_guid);
 $exchange_source->setData($parameters);
-$exchange_source->send($method, true);
+$exchange_source->send($method);
 
 echo $exchange_source->getACQ();
 

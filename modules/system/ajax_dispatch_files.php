@@ -116,7 +116,7 @@ foreach ($files as $_filepath) {
   //$source->renameFile($_old_filepath, $_filepath);
 
   try {
-    $message  = $source->getData($_filepath); 
+    $message  = $source->getData($_filepath);
     if (!$message) {
       continue;
     }

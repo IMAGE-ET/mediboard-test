@@ -11,16 +11,16 @@
 <script type="text/javascript">
   SOAP = {
     connexion: function (exchange_source_name) {
-      var url = new Url("webservices", "ajax_connexion_soap");
-      url.addParam("exchange_source_name", exchange_source_name);
-      url.requestModal(500, 400);
+      new Url("webservices", "ajax_connexion_soap")
+        .addParam("exchange_source_name", exchange_source_name)
+        .requestModal(500, 400);
     },
 
     getFunctions: function (exchange_source_name, form) {
-      var url = new Url("webservices", "ajax_getFunctions_soap");
-      url.addParam("form_name", form.getAttribute("name"));
-      url.addParam("exchange_source_name", exchange_source_name);
-      url.requestModal(500, 400);
+      new Url("webservices", "ajax_getFunctions_soap")
+        .addParam("form_name", form.getAttribute("name"))
+        .addParam("exchange_source_name", exchange_source_name)
+        .requestModal(500, 400);
     }
   }
 </script>
@@ -93,6 +93,10 @@
             <tr>
               <th>{{mb_label object=$source field="use_tunnel"}}</th>
               <td>{{mb_field object=$source field="use_tunnel"}}</td>
+            </tr>
+            <tr>
+              <th>{{mb_label object=$source field="socket_timeout"}}</th>
+              <td>{{mb_field object=$source field="socket_timeout" increment=true form="editSourceSOAP-`$source->name`"}}</td>
             </tr>
           </table>
         </fieldset>

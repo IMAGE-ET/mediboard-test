@@ -116,7 +116,8 @@ class CWSDL extends CMbXMLDocument {
     $soapaddress = $this->addElement($port, "soap:address", null, "http://schemas.xmlsoap.org/wsdl/soap/");
 
     $url = "/?login=1&username=$username&password=$password&m=$module&a=$tab&class=$classname&suppressHeaders=1";
-    $this->addAttribute($soapaddress, "location", CApp::getBaseUrl().$url);
+    $base_url = CAppUI::conf("webservices wsdl_root_url");
+    $this->addAttribute($soapaddress, "location", $base_url ? $base_url : CApp::getBaseUrl().$url);
   }
 
   /**

@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -51,7 +51,7 @@ class CSoapHandler {
    */
   function calculatorAuth($operation, $entier1, $entier2) {
     $result = 0;
-    
+
     if (($operation != "add") && ($operation != "substract")) {
       return "Veuillez utiliser une methode d'operation valable (add/substract).";
     } 

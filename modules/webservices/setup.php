@@ -233,6 +233,12 @@ class CSetupwebservices extends CSetup {
                 ADD `use_tunnel` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.38";
+    $this->makeRevision("0.38");
+
+    $query = "ALTER TABLE `source_soap`
+                ADD `socket_timeout` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.39";
   }
 }

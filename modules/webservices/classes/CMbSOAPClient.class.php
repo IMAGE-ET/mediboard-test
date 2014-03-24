@@ -39,16 +39,17 @@ class CMbSOAPClient extends SoapClient {
   /**
    * The constructor
    *
-   * @param string  $rooturl       The URL of the wsdl file
-   * @param string  $type          The type of exchange
-   * @param array   $options       An array of options
-   * @param boolean $loggable      True if you want to log all the exchanges with the web service
-   * @param string  $local_cert    Path of the certifacte
-   * @param string  $passphrase    Pass phrase for the certificate
-   * @param bool    $safe_mode     Safe mode
-   * @param boolean $verify_peer   Require verification of SSL certificate used
-   * @param string  $cafile        Location of Certificate Authority file on local filesystem
-   * @param String  $wsdl_external Location of external wsdl
+   * @param string  $rooturl        The URL of the wsdl file
+   * @param string  $type           The type of exchange
+   * @param array   $options        An array of options
+   * @param boolean $loggable       True if you want to log all the exchanges with the web service
+   * @param string  $local_cert     Path of the certifacte
+   * @param string  $passphrase     Pass phrase for the certificate
+   * @param bool    $safe_mode      Safe mode
+   * @param boolean $verify_peer    Require verification of SSL certificate used
+   * @param string  $cafile         Location of Certificate Authority file on local filesystem
+   * @param String  $wsdl_external  Location of external wsdl
+   * @param int     $socket_timeout Default timeout (in seconds) for socket based streams
    *
    * @throws CMbException
    *
@@ -56,7 +57,7 @@ class CMbSOAPClient extends SoapClient {
    */
   function __construct(
       $rooturl, $type = null, $options = array(), $loggable = null, $local_cert = null, $passphrase = null, $safe_mode = false,
-      $verify_peer = false, $cafile = null, $wsdl_external = null
+      $verify_peer = false, $cafile = null, $wsdl_external = null, $socket_timeout = null
   ) {
 
     $this->return_raw    = CMbArray::extract($options, "return_raw", false);
@@ -110,18 +111,21 @@ class CMbSOAPClient extends SoapClient {
       $options = array_merge($options, array("passphrase" => $passphrase));
     }
 
+    $context = stream_context_create();
     // Authentification SSL
     if ($verify_peer && $cafile) {
       $this->ca_info = $cafile;
-      $context = stream_context_create(
-        array("ssl" =>
-          array("verify_peer" => $verify_peer,
-                "cafile"      => $cafile)
-        )
-      );
 
-      $options = array_merge($options, array("stream_context" => $context));
+      stream_context_set_option($context, "ssl", "verify_peer", $verify_peer);
+      stream_context_set_option($context, "ssl", "cafile", $cafile);
     }
+
+    // Délai maximal d'attente pour la lecture
+    if ($socket_timeout) {
+      ini_set("default_socket_timeout", $socket_timeout);
+    }
+
+    $options = array_merge($options, array("stream_context" => $context));
 
     $this->options = $options;
 

@@ -55,6 +55,7 @@ class CSOAPClient {
    * @param boolean $verify_peer    Require verification of SSL certificate used
    * @param string  $cafile         Location of Certificate Authority file on local filesystem
    * @param String  $wsdl_external  Location of external wsdl
+   * @param int     $socket_timeout Default timeout (in seconds) for socket based streams
    *
    * @throws CMbException
    *
@@ -73,7 +74,8 @@ class CSOAPClient {
       $safe_mode = false,
       $verify_peer = false,
       $cafile = null,
-      $wsdl_external = null
+      $wsdl_external = null,
+      $socket_timeout = null
   ) {
     if (($login && $password) || (array_key_exists('login', $options) && array_key_exists('password', $options))) {
       $login = $login ? $login : $options['login'];
@@ -114,7 +116,8 @@ class CSOAPClient {
         
       default :
         $this->client = new CMbSOAPClient(
-          $rooturl, $type, $options, $loggable, $local_cert, $passphrase, $safe_mode, $verify_peer, $cafile, $wsdl_external
+          $rooturl, $type, $options, $loggable, $local_cert, $passphrase, $safe_mode, $verify_peer, $cafile, $wsdl_external,
+          $socket_timeout
         );
         break;
     }
@@ -156,7 +159,7 @@ class CSOAPClient {
    */
   public function call($function_name, $arguments, $options = null, $input_headers = null, &$output_headers = null) {
     $client = $this->client;
-    
+
     if (!is_array($arguments)) {
       $arguments = array($arguments);
     }
@@ -170,7 +173,7 @@ class CSOAPClient {
     if ($client->flatten && isset($arguments[0]) && !empty($arguments[0])) {
       $arguments = $arguments[0];
     }
-    
+
     $output = null;
     
     $echange_soap = new CEchangeSOAP();
