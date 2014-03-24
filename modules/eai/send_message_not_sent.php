@@ -74,7 +74,7 @@ foreach ($exchanges as $_exchange) {
       default:
         $_exchange->date_echange = "";
         $_exchange->store();
-        continue;
+        continue 2;
     }
 
     $patient->loadIPP();
