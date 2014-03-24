@@ -10,7 +10,6 @@
  */
 
 CCanDo::checkAdmin();
-
 $item_type_id     = CValue::get('item_type_id');
 $item_category_id = CValue::get('item_category_id');
 
@@ -21,10 +20,11 @@ if ($item_type->load($item_type_id)) {
   $item_type->loadRefsNotes();
 }
 else {
-  $item_type->index = 1;
+  $item_type->index       = 1;
   $item_type->category_id = $item_category_id;
-  $item_type->active = "1";
+  $item_type->active      = "1";
 }
+$item_type->loadRefCategory()->loadRefListType();
 
 $item_category = new CDailyCheckItemCategory();
 
@@ -54,8 +54,8 @@ foreach ($item_categories_by_class as $_class => $item_categories_by_target) {
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("item_type", $item_type);
-$smarty->assign("item_category", $item_category);
+$smarty->assign("item_type",                $item_type);
+$smarty->assign("item_category",            $item_category);
 $smarty->assign("item_categories_by_class", $item_categories_by_class);
-$smarty->assign("targets", $targets);
+$smarty->assign("targets",                  $targets);
 $smarty->display("vw_daily_check_item_type.tpl");

@@ -14,6 +14,10 @@
       <td>{{mb_field object=$item_type field="desc"}}</td>
     </tr>
     <tr>
+      <th>{{mb_label object=$item_category field="list_type_id"}}</th>
+      <td>{{$item_type->_ref_category->_ref_list_type->_view}}</td>
+    </tr>
+    <tr>
       <th>{{mb_label object=$item_type field="category_id"}}</th>
       <td>
         <select name="category_id" class="ref notNull">
@@ -59,7 +63,6 @@
     <tr>
       <td class="button" colspan="2">
         <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
-
         {{if $item_type->_id}}
           <button type="button" class="trash" onclick="confirmDeletion(
             this.form,
