@@ -83,7 +83,6 @@ $where["sejour.group_id"]       = "= '".CGroups::loadCurrent()->_id."'";
 $non_traitees = $op->loadList($where, null, null, null, $ljoin);
 
 foreach ($non_traitees as $_operation) {
-  mbTrace("toto2");
   $_operation->loadRefChir();
   $_operation->loadRefPatient();
   $_operation->loadExtCodesCCAM();
