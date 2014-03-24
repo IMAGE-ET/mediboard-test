@@ -15,7 +15,9 @@
   {{* NDA, etc *}}
   {{if $ex_object->_ref_reference_object_2 instanceof CSejour}}
     {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$ex_object->_ref_reference_object_2}}
-    {{$ex_object->_ref_reference_object_2->_ref_curr_affectation->_ref_lit}}
+    {{if $ex_object->_ref_reference_object_2->_ref_curr_affectation}}
+      {{$ex_object->_ref_reference_object_2->_ref_curr_affectation->_ref_lit}}
+    {{/if}}
   {{/if}}
 {{else}}
   {{if $ex_object->_rel_patient}}
@@ -37,7 +39,9 @@
       onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_ref_reference_object_1->_guid}}');"
     {{/if}}>
     {{if $ex_object->_ref_reference_object_1 instanceof CSejour}}
-      {{$ex_object->_ref_reference_object_1->_ref_curr_affectation->_ref_lit}}
+      {{if $ex_object->_ref_reference_object_1->_ref_curr_affectation}}
+        {{$ex_object->_ref_reference_object_1->_ref_curr_affectation->_ref_lit}}
+      {{/if}}
       {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$ex_object->_ref_reference_object_1}}
     {{else}}
       {{$ex_object->_ref_reference_object_1}}
@@ -77,7 +81,9 @@
   {{$object}}
 </span>
 {{if $object instanceof CSejour}}
-  {{$object->_ref_curr_affectation->_ref_lit}}
+  {{if $object->_ref_curr_affectation}}
+    {{$object->_ref_curr_affectation->_ref_lit}}
+  {{/if}}
   {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$object}}
 {{/if}}
 
