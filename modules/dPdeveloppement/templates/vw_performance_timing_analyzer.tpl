@@ -1,7 +1,6 @@
 <script>
 analyze = function(form){
   var input = form.elements.export;
-
   var file = input.files[0];
 
   if (file.name.indexOf(".json") == -1) {
@@ -48,11 +47,17 @@ loadReport = function(report) {
     DOM.th({}, "Script")
   ));
   report.pages.each(function(page){
+    if (!page.timeline.length) {
+      return;
+    }
+
     var date = new Date();
     date.setTime(page.time);
 
     var item = DOM.tr({},
       DOM.td({}, date.toLocaleDateTime()),
+      DOM.td({style: "text-align: right;"}, DOM.strong({title: page.view.m}, $T("module-"+page.view.m+"-court"))),
+      DOM.td({}, DOM.strong({title: page.view.a}, $T("mod-"+page.view.m+"-tab-"+page.view.a))),
       DOM.td({},
         DOM.a({href: "#0"},
           page.url
@@ -60,9 +65,7 @@ loadReport = function(report) {
           Event.stop(event);
           MbPerformance.showTimingDetails(page.timeline);
         })
-      ),
-      DOM.td({}, DOM.span({title: page.view.m}, $T("module-"+page.view.m+"-court"))),
-      DOM.td({}, DOM.span({title: page.view.a}, $T("mod-"+page.view.m+"-tab-"+page.view.a)))
+      )
     );
 
     table.insert(item);
@@ -79,7 +82,7 @@ Main.add(function(){
 </script>
 
 <form name="profiling" method="get" onsubmit="return analyze(this)">
-  <input type="file" accept="application/json,text/json" name="export" onchange="this.form.onsubmit()" />
+  <input type="file" accept="application/json,text/json" name="export" onchange="this.form.onsubmit()" style="width: 30em;" />
   <button class="gantt notext"></button>
 </form>
 
