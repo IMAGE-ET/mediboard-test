@@ -3,7 +3,7 @@
 {{if $ex_object->_ref_reference_object_2 && $ex_object->_ref_reference_object_2->_id}}
   <span style="color: #006600;"
     {{if !$readonly}}
-      onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_ref_reference_object_2->_guid}}');"
+    onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_ref_reference_object_2->_guid}}');"
     {{/if}}>
     {{$ex_object->_ref_reference_object_2}}
 
@@ -15,14 +15,16 @@
   {{* NDA, etc *}}
   {{if $ex_object->_ref_reference_object_2 instanceof CSejour}}
     {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$ex_object->_ref_reference_object_2}}
-    {{$ex_object->_ref_reference_object_2->_ref_curr_affectation->_ref_lit}}
+    {{if $ex_object->_ref_reference_object_2->_ref_curr_affectation}}
+      {{$ex_object->_ref_reference_object_2->_ref_curr_affectation->_ref_lit}}
+    {{/if}}
   {{/if}}
 {{else}}
   {{if $ex_object->_rel_patient}}
     {{assign var=_patient value=$ex_object->_rel_patient}}
     <span style="color: #006600;"
       {{if !$readonly}}
-        onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}');"
+      onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}');"
       {{/if}}>
       {{$_patient}}
       {{mb_include module=patients template=inc_vw_ipp ipp=$_patient->_IPP}}
@@ -34,10 +36,12 @@
   &ndash;
   <span
     {{if !$readonly}}
-      onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_ref_reference_object_1->_guid}}');"
+    onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_ref_reference_object_1->_guid}}');"
     {{/if}}>
     {{if $ex_object->_ref_reference_object_1 instanceof CSejour}}
-      {{$ex_object->_ref_reference_object_1->_ref_curr_affectation->_ref_lit}}
+      {{if $ex_object->_ref_reference_object_1->_ref_curr_affectation}}
+        {{$ex_object->_ref_reference_object_1->_ref_curr_affectation->_ref_lit}}
+      {{/if}}
       {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$ex_object->_ref_reference_object_1}}
     {{else}}
       {{$ex_object->_ref_reference_object_1}}
@@ -48,7 +52,7 @@
 &ndash;
 <span style="color: #0000AA;"
   {{if !$readonly && $ex_object->_id}}
-    onmouseover="ObjectTooltip.createEx(this, 'CExObject_{{$ex_object->_ex_class_id}}-{{$ex_object->_id}}', 'objectViewHistory')"
+  onmouseover="ObjectTooltip.createEx(this, 'CExObject_{{$ex_object->_ex_class_id}}-{{$ex_object->_id}}', 'objectViewHistory')"
   {{/if}}>
 
   {{if !$readonly}}
@@ -72,12 +76,14 @@
 
 <span
   {{if !$readonly}}
-    onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')"
+  onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')"
   {{/if}}>
   {{$object}}
 </span>
 {{if $object instanceof CSejour}}
-  {{$object->_ref_curr_affectation->_ref_lit}}
+  {{if $object->_ref_curr_affectation}}
+    {{$object->_ref_curr_affectation->_ref_lit}}
+  {{/if}}
   {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$object}}
 {{/if}}
 
@@ -85,7 +91,7 @@
   <hr />
   <span style="color: #AA0000;"
     {{if !$readonly}}
-      onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_ref_additional_object->_guid}}')"
+    onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_ref_additional_object->_guid}}')"
     {{/if}}>
     {{$ex_object->_ref_additional_object}}
   </span>
