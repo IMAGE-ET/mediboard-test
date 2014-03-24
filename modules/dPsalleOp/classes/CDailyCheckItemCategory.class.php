@@ -18,6 +18,7 @@ class CDailyCheckItemCategory extends CMbObject {
   // DB Fields
   public $title;
   public $desc;
+  public $index;
 
   ////////
   public $target_class;
@@ -55,6 +56,7 @@ class CDailyCheckItemCategory extends CMbObject {
     $props = parent::getProps();
     $props['title'] = 'str notNull';
     $props['desc']  = 'text';
+    $props['index'] = 'num notNull min|1 default|1';
 
     $props['target_class'] = 'enum list|CSalle|CBlocOperatoire|COperation|CPoseDispositifVasculaire notNull default|CSalle';
     $props['target_id']    = 'ref class|CMbObject meta|target_class';

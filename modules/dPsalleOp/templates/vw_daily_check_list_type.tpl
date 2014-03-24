@@ -145,16 +145,18 @@ Main.add(Control.Tabs.create.curry("list_type_tabs", true));
       {{if $list_type->_id}}
         <table class="main tbl">
           <tr>
-            <th colspan="2" class="title">Catégories</th>
+            <th colspan="3" class="title">Catégories</th>
           </tr>
 
           <tr>
+            <th class="narrow">{{mb_title class=CDailyCheckItemCategory field=index}}</th>
             <th>{{mb_title class=CDailyCheckItemCategory field=title}}</th>
             <th>{{mb_title class=CDailyCheckItemCategory field=desc}}</th>
           </tr>
 
           {{foreach from=$list_type->_ref_categories item=_category}}
             <tr>
+              <td>{{mb_value object=$_category field=index}}</td>
               <td>
                 <a href="#1" onclick="CheckList.editItemCategory('{{$list_type->_id}}', '{{$_category->_id}}')" >
                   {{mb_value object=$_category field=title}}
@@ -164,11 +166,11 @@ Main.add(Control.Tabs.create.curry("list_type_tabs", true));
             </tr>
           {{foreachelse}}
             <tr>
-              <td colspan="2" class="empty">{{tr}}CDailyCheckItemCategory.none{{/tr}}</td>
+              <td colspan="3" class="empty">{{tr}}CDailyCheckItemCategory.none{{/tr}}</td>
             </tr>
           {{/foreach}}
           <tr>
-            <td colspan="2">
+            <td colspan="3">
               <button class="new compact" onclick="CheckList.editItemCategory('{{$list_type->_id}}', 0)" >
                 {{tr}}CDailyCheckItemCategory-title-create{{/tr}}
               </button>

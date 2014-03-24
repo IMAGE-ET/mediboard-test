@@ -99,7 +99,7 @@ class CDailyCheckListType extends CMbObject {
    * @return CDailyCheckItemCategory[]
    */
   function loadRefsCategories(){
-    return $this->_ref_categories = $this->loadBackRefs("daily_check_list_categories", "title");
+    return $this->_ref_categories = $this->loadBackRefs("daily_check_list_categories", "`index`, title");
   }
 
   /**

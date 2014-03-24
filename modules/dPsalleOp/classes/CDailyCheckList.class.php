@@ -354,7 +354,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
       $where[] = $ds->prepare("daily_check_item_category.target_id IS NULL OR daily_check_item_category.target_id = %", $this->object_id);
     }
 
-    $orderby = 'daily_check_item_category.title, ';
+    $orderby = 'daily_check_item_category.`index`, daily_check_item_category.title, ';
 
     // Si liste des points de la HAS
     if (in_array($this->object_class, self::$_HAS_classes)) {

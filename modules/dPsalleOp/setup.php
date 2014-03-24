@@ -1462,6 +1462,17 @@ class CSetupdPsalleOp extends CSetup {
       AND `type` = 'avant_indu_cesar'
       AND `title` =  '06'";
     $this->addQuery($query);
-    $this->mod_version = "0.58";
+
+    $this->makeRevision("0.58");
+
+    $query = "ALTER TABLE `daily_check_item_category`
+                ADD `index` INT (11) UNSIGNED NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `daily_check_item_category`
+                ADD INDEX (`list_type_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.59";
   }
 }

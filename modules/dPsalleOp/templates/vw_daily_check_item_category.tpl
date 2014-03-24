@@ -18,6 +18,10 @@
       <td>{{mb_field object=$item_category field="title"}}</td>
     </tr>
     <tr>
+      <th>{{mb_label object=$item_category field="index"}}</th>
+      <td>{{mb_field object=$item_category field="index" tooltip=true form="edit-CDailyCheckItemCategory" increment=true size=1}}</td>
+    </tr>
+    <tr>
       <th>{{mb_label object=$item_category field="desc"}}</th>
       <td>{{mb_field object=$item_category field="desc"}}</td>
     </tr>
