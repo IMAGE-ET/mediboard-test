@@ -144,6 +144,7 @@ else {
 }
 
 foreach ($praticiens as $prat) {
+  $prat->loadRefFunction();
   foreach ($auf->loadListFor($prat) as $_auf) {
     $uf = $_auf->loadRefUniteFonctionnelle();
     $ufs_medicale[$uf->_id] = $uf;
