@@ -14,7 +14,7 @@ $module = CModule::getInstalled(basename(dirname(__FILE__)));
 $module->registerTab("vw_idx_rpu"       , TAB_READ);
 $module->registerTab("vw_aed_rpu"       , TAB_READ);
 
-if (CAppUI::conf("dPhospi use_vue_topologique")) {
+if (CAppUI::conf("dPurgences use_vue_topologique") && CAppUI::conf("dPhospi use_vue_topologique")) {
   $module->registerTab("vw_placement_patients"    , TAB_READ);
 }
 $module->registerTab("edit_consultation", TAB_EDIT);

@@ -421,7 +421,9 @@ class CSetupdPurgences extends CSetup {
       $query = $this->ds->prepare($query, "dPurgences CRPU gestion_motif_sfmu", $config_value);
       $this->addQuery($query);
     }
+    $this->makeRevision("0.49");
 
-    $this->mod_version = "0.49";
+    $this->addDefaultConfig("dPurgences use_vue_topologique", "dPhospi use_vue_topologique");
+    $this->mod_version = "0.50";
   }  
 }

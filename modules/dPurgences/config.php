@@ -52,4 +52,5 @@ $dPconfig["dPurgences"] = array (
   "identito_vigilance_refresh_frequency" => "300",
   "gestion_motif_sfmu"                   => "0",
   "display_motif_sfmu"                   => "0",
+  "use_vue_topologique"                  => "1",
 );

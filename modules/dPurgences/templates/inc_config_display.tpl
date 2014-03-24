@@ -30,6 +30,7 @@
     {{mb_include module=system template=inc_config_enum var=uhcd_refresh_frequency               values="90|180|300|600"}}
     {{mb_include module=system template=inc_config_enum var=imagerie_refresh_frequency           values="90|180|300|600"}}
     {{mb_include module=system template=inc_config_enum var=identito_vigilance_refresh_frequency values="90|180|300|600"}}
+    {{mb_include module=system template=inc_config_bool var=use_vue_topologique}}
 
     <tr>
       <td class="button" colspan="2">
