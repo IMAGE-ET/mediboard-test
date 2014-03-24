@@ -63,13 +63,23 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
     $_affectation->checkDaysRelative($date);
 
     $aff_prev = $_affectation->_ref_prev;
-    if ($aff_prev->affectation_id) {
-      $aff_prev->loadRefLit();
+    if ($aff_prev->_id) {
+      if ($aff_prev->lit_id) {
+        $aff_prev->loadRefLit();
+      }
+      else {
+        $aff_prev->loadRefService();
+      }
     }
 
     $aff_next = $_affectation->_ref_next;
-    if ($aff_next->affectation_id) {
-      $aff_next->loadRefLit();
+    if ($aff_next->_id) {
+      if ($aff_next->lit_id) {
+        $aff_prev->loadRefLit();
+      }
+      else {
+        $aff_prev->loadRefService();
+      }
     }
 
     $sejour->loadRefPrestation();

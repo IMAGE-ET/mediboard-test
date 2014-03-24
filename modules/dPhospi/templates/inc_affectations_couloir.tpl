@@ -181,7 +181,7 @@
                       ({{$aff_prev->_ref_lit->_ref_chambre->_shortview}})
                     {{/if}}
                   {{elseif $aff_prev->_id}}
-                    <strong>Déplacé</strong> ({{$aff_prev->_ref_lit->_ref_chambre->_shortview}})
+                    <strong>Déplacé</strong> ({{if $aff_prev->lit_id}}{{$aff_prev->_ref_lit->_ref_chambre->_shortview}}{{else}}{{$aff_prev->_ref_service}}{{/if}})
                   {{else}}
                     <strong>Entrée</strong>
                   {{/if}}
