@@ -377,13 +377,13 @@ var Url = Class.create({
   /**
    * Open a popup window
    *
-   * @param {Number}            iWidth
-   * @param {Number}            iHeight
-   * @param {String=}           sWindowName
-   * @param {String=}           sBaseUrl
-   * @param {String=}           sPrefix
-   * @param {Object=}           oPostParameters
-   * @param {HTMLIFrameElement} iFrame
+   * @param {Number,String}      iWidth
+   * @param {Number,String}      iHeight
+   * @param {String=}            sWindowName
+   * @param {String=}            sBaseUrl
+   * @param {String=}            sPrefix
+   * @param {Object=}            oPostParameters
+   * @param {HTMLIFrameElement=} iFrame
    *
    * @return {Url}
    */

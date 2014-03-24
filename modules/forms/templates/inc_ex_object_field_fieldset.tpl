@@ -11,6 +11,7 @@
               field=$_field_name
               form=$form
               emptyLabel=" "
+              readonly=$ex_field->readonly
               tabindex=$ex_field->tab_index
             }}
             {{$ex_field->suffix}}
@@ -19,7 +20,13 @@
       </table>
     {{else}}
       {{$ex_field->prefix}}
-      {{mb_field object=$ex_object field=$_field_name form=$form emptyLabel=" " tabindex=$ex_field->tab_index}}
+      {{mb_field
+        object=$ex_object
+        field=$_field_name
+        form=$form
+        emptyLabel=" "
+        readonly=$ex_field->readonly
+        tabindex=$ex_field->tab_index}}
       {{$ex_field->suffix}}
     {{/if}}
   </div>
@@ -35,7 +42,12 @@
     {{/if}}
     <div class="wrapper {{if $_spec instanceof CEnumSpec && $_spec->columns > 1}} columns-{{$_spec->columns}} {{/if}}" >
       {{$ex_field->prefix}}
-      {{mb_field object=$ex_object field=$_field_name form=$form tabindex=$ex_field->tab_index}}
+      {{mb_field
+        object=$ex_object
+        field=$_field_name
+        form=$form
+        readonly=$ex_field->readonly
+        tabindex=$ex_field->tab_index}}
       {{$ex_field->suffix}}
     </div>
   </fieldset>

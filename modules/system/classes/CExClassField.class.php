@@ -29,6 +29,7 @@ class CExClassField extends CExListItemsOwner {
   public $suffix;
   public $show_label;
   public $tab_index;
+  public $readonly;
   public $in_doc_template;
 
   public $formula;
@@ -115,6 +116,7 @@ class CExClassField extends CExListItemsOwner {
     "prefix",
     "suffix",
     "tab_index",
+    "readonly",
     "show_label",
     "coord_left",
     "coord_top",
@@ -126,6 +128,7 @@ class CExClassField extends CExListItemsOwner {
     "prefix",
     "suffix",
     "tab_index",
+    "readonly",
   );
 
   static $_formula_token_re = "/\[([^\]]+)\]/";
@@ -306,6 +309,7 @@ class CExClassField extends CExListItemsOwner {
     $props["suffix"]      = "str";
     $props["show_label"]  = "bool notNull default|1";
     $props["tab_index"]   = "num";
+    $props["readonly"]    = "bool notNull default|0";
     $props["in_doc_template"] = "bool notNull default|0";
 
     $props["formula"]     = "text"; // canonical tokens

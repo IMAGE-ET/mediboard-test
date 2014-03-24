@@ -17,12 +17,11 @@
             object=$ex_object
             field=$_field_name
             register=true
-            increment=true
             form=$form
-            emptyLabel=" "
             style=$_style
             defaultstyle=1
             tabindex=$ex_field->tab_index
+            readonly=$ex_field->readonly
           }}
         </div>
         {{$ex_field->suffix}}
@@ -37,12 +36,11 @@
       object=$ex_object
       field=$_field_name
       register=true
-      increment=true
       form=$form
-      emptyLabel=" "
       style=$_style
       defaultstyle=1
       tabindex=$ex_field->tab_index
+      readonly=$ex_field->readonly
     }}
   </div>
   {{$ex_field->suffix}}

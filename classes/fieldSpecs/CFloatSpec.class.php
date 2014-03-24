@@ -144,6 +144,7 @@ class CFloatSpec extends CMbFieldSpec {
     $showFraction = CMbArray::extract($params, "showFraction");
     $deferEvent   = CMbArray::extract($params, "deferEvent");
     $bigButtons   = CMbArray::extract($params, "bigButtons");
+    $readonly     = CMbArray::get($params,     "readonly");
 
     $field = CMbString::htmlSpecialChars($this->fieldName);
     
@@ -172,7 +173,7 @@ class CFloatSpec extends CMbFieldSpec {
     
     CMbArray::defaultValue($params, "size", 4);
 
-    if ($form && $increment) {
+    if ($form && $increment && !$readonly) {
       $sHtml  = $this->getFormElementText($object, $params, (($value>=0 && $showPlus)?'+':'').(($value==0&&$showPlus)?'0':$value), $className, "number");
       $sHtml .= '
     <script type="text/javascript">

@@ -946,7 +946,7 @@ class CMbFieldSpec {
    * @param string $className Extra CSS class name
    * @param string $format    Optional datetime format
    *  
-   * @return html HTML form datetime string
+   * @return string HTML form datetime string
    */
   function getFormElementDateTime($object, $params, $value, $className, $format = "%d/%m/%Y %H:%M") {
     if ($object->_locked) {
@@ -967,17 +967,16 @@ class CMbFieldSpec {
     $form     = CMbArray::extract($params, "form");
     $register = CMbArray::extract($params, "register");
     $style    = CMbArray::extract($params, "style");
-    
-    // Tab index in display input
     $tabindex = CMbArray::extract($params, "tabindex");
-  
+    $readonly = CMbArray::get($params, "readonly");
+
     $extra = CMbArray::makeXmlAttributes($params);
     $html = array();
     $html[] = '<input name="'.$field.'_da" type="text" value="'.$date.'" class="'.$class.' styled-element" 
                       readonly="readonly" '.(isset($tabindex) ? 'tabindex="'.$tabindex.'" ' : '').' style="'.$style.'" />';
     $html[] = '<input name="'.$field.'" type="hidden" value="'.$value.'" class="'.$class.'" '.$extra.' data-visual-element="'.$field.'_da"  />';
 
-    if ($form && ($register || $this instanceof CTimeSpec)) {
+    if ($form && !$readonly && ($register || $this instanceof CTimeSpec)) {
       $register = $this instanceof CDateSpec && $this->progressive ? 'regProgressiveField' : 'regField';
       $html[] = '<script type="text/javascript">
         Main.add(function(){Calendar.'.$register.'(getForm("'.$form.'").elements["'.$field.'"])})
@@ -995,7 +994,7 @@ class CMbFieldSpec {
    * @param string $value     The actual value
    * @param string $className Extra CSS class name
    *  
-   * @return html HTML form element string
+   * @return string HTML form element string
    */
   function getFormHtmlElement($object, $params, $value, $className){
     return $this->getFormElementText($object, $params, $value, $className);
