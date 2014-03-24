@@ -22,6 +22,7 @@ $locales['mod-dPdeveloppement-tab-mnt_table_classes'] = 'Tables';
 $locales['mod-dPdeveloppement-tab-mnt_traduction_classes'] = 'Traduction';
 $locales['mod-dPdeveloppement-tab-multiple_server_call'] = 'script multi-server';
 $locales['mod-dPdeveloppement-tab-mutex_tester'] = 'Test Mutex';
+$locales['mod-dPdeveloppement-tab-vw_performance_profiling_analyzer'] = 'Analyse de fichiers de profilage';
 $locales['mod-dPdeveloppement-tab-regression_checker'] = 'Non-regression';
 $locales['mod-dPdeveloppement-tab-sniff_code'] = 'Inspection du code';
 $locales['mod-dPdeveloppement-tab-sniff_file'] = 'Inspection du code d\'un fichier';

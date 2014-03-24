@@ -409,20 +409,6 @@ MbPerformance = {
         setTimeout(function(){
           MbPerformance.startPlotting();
         }, 1000);
-
-        /*
-        // Display fields description
-        var info = [];
-        $H(MbPerformance.markingTypes).each(function(pair){
-          var value = pair.value;
-          if (!value.sub) {
-            return;
-          }
-
-          info.push(pair.key + " : " + value.resp + " / " + value.label + " ("+value.desc+")");
-        });
-
-        console.log(info.join("\n"));*/
       });
     }
     catch (e) {}
@@ -526,7 +512,7 @@ MbPerformance = {
     MbPerformance.buildTimingDetails();
   },
 
-  buildTimingDetails: function(){
+  buildTimingDetails: function(timeline){
     var left, right, table;
 
     if (MbPerformance.timingDetailsTable) {
@@ -599,7 +585,7 @@ MbPerformance = {
     var navStart;
 
     // Draw each bar
-    MbPerformance.timeline.each(function(d){
+    timeline.each(function(d){
       var container = DOM.div({});
       var perfTiming = d.perfTiming;
       var perfOffset;
@@ -803,8 +789,10 @@ MbPerformance = {
     }
   },
 
-  showTimingDetails: function() {
-    MbPerformance.buildTimingDetails();
+  showTimingDetails: function(timeline, page) {
+    timeline = timeline || MbPerformance.timeline;
+
+    MbPerformance.buildTimingDetails(timeline, page);
 
     Modal.open(MbPerformance.timingDetailsTable, {
       showClose: true,
@@ -826,9 +814,12 @@ MbPerformance = {
 
       // Download report
       jQuery('<button class="download" title="Télécharger le rapport au format JSON">JSON</button>').click(function(){
-        var data = MbPerformance.dump();
-        if (data) {
-          MbPerformance.download(Object.toJSON(data), data.label+".json");
+        var label = MbPerformance.getProfilingName();
+        if (label) {
+          var data = MbPerformance.dump(label);
+          if (data) {
+            MbPerformance.download(Object.toJSON(data), data.label+".json");
+          }
         }
       }).appendTo(profilingToolbar);
 
@@ -871,8 +862,8 @@ MbPerformance = {
     var timeBarContainer = jQuery("#profiler-timebar");
 
     $H(MbPerformance.markingTypes).each(function(pair){
-      this.addMarking(pair.key, markings);
-    }, this);
+      MbPerformance.addMarking(pair.key, markings);
+    });
 
     // Don't redraw markings bar
     if (!MbPerformance.markingsDrawn) {
@@ -990,13 +981,7 @@ MbPerformance = {
     return prompt("Libellé du profilage", "Profilage du "+(new Date()).toLocaleDateTime());
   },
 
-  dump: function(){
-    var label = MbPerformance.getProfilingName();
-
-    if (label == null) {
-      return;
-    }
-
+  dump: function(label){
     var struct = {
       version: MbPerformance.version,
       date: (new Date()).toDATETIME(),
