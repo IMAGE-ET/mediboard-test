@@ -1201,7 +1201,7 @@ class CConsultation extends CFacturable {
       $where["$facture_sql.patient_id"]       = " = '$this->patient_id'";
       /* @var CFactureCabinet $facture*/
       $facture = new $facture_class;
-      $this->_ref_factures = $facture->loadList($where, null, null, null, $ljoin);
+      $this->_ref_factures = $facture->loadList($where, null, null, "facture_id", $ljoin);
       $this->_ref_facture = reset($this->_ref_factures);
     }
     if (!$this->_ref_facture) {
