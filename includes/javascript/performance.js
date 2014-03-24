@@ -44,6 +44,11 @@ MbPerformance = {
     client:  "#FF0000",
     other:   "#999999"
   },
+  navigationMap: {
+    0: "navigate",
+    1: "reload",
+    2: "back_forward"
+  },
   markingTypes: {
     redirect: {
       color: "rgba(184,125,0,0.2)",
@@ -448,6 +453,10 @@ MbPerformance = {
             perfTiming[pair.key] = value - offset;
           }
         });
+
+        if (performance.navigation) {
+          pageInfo.navigation = MbPerformance.navigationMap[performance.navigation.type];
+        }
         break;
 
       case "ajax":

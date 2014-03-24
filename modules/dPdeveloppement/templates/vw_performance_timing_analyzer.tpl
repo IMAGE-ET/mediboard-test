@@ -41,6 +41,7 @@ loadReport = function(report) {
     className: "main tbl"
   });
   table.insert(DOM.tr({},
+    DOM.th({className: "narrow"}, "Navigation"),
     DOM.th({className: "narrow"}, "Date"),
     DOM.th({}, "Page"),
     DOM.th({}, "Module"),
@@ -51,11 +52,18 @@ loadReport = function(report) {
       return;
     }
 
+    var navigation = {
+      navigate:     "Navigation",
+      reload:       "Rafraîchissement",
+      back_forward: "Retour/avanc."
+    };
+
     var date = new Date();
     date.setTime(page.time);
 
     var item = DOM.tr({},
       DOM.td({}, date.toLocaleDateTime()),
+      DOM.td({}, navigation[page.timeline[0].pageInfo.navigation]),
       DOM.td({style: "text-align: right;"}, DOM.strong({title: page.view.m}, $T("module-"+page.view.m+"-court"))),
       DOM.td({}, DOM.strong({title: page.view.a}, $T("mod-"+page.view.m+"-tab-"+page.view.a))),
       DOM.td({},
