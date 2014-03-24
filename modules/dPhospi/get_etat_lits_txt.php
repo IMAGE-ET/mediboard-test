@@ -18,7 +18,7 @@
 */
 
 // Date actuelle
-$date = CMbDT::dateTime();
+$date = CValue::get("date", CMbDT::dateTime());
 
 // Affectation a la date $date
 $affectation = new CAffectation();
@@ -35,31 +35,42 @@ $whereAffect["sejour.annule"]         = "= '0'";
 
 $groupAffect = "sejour_id";
 
+/** @var CAffectation[] $affectations */
 $affectations = $affectation->loadList($whereAffect, null, null, $groupAffect, $ljoinAffect);
+
+// Chargements de masse
+$lits       = CMbObject::massLoadFwdRef($affectations, "lit_id");
+$sejours    = CMbObject::massLoadFwdRef($affectations, "sejour_id");
+
+$chambres   = CMbObject::massLoadFwdRef($lits    , "chambre_id");
+$services   = CMbObject::massLoadFwdRef($chambres, "service_id");
+
+$praticiens = CMbObject::massLoadFwdRef($sejours , "praticien_id");
+$patients   = CMbObject::massLoadFwdRef($sejours , "patient_id");
 
 $list_affectations = array();
 
 foreach ($affectations as $key => $_affectation) {
-   $_affectation->loadRefLit();
-   $_affectation->_ref_lit->loadRefChambre();
-   $_affectation->_ref_lit->_ref_chambre->loadRefsFwd();
-   $_affectation->loadRefSejour();
-   $_affectation->_ref_sejour->loadRefPraticien();
-   $_affectation->_ref_sejour->loadRefPatient();
-   
-   $list_affectations[$key]["nom"]          = $_affectation->_ref_sejour->_ref_patient->nom;
-   $list_affectations[$key]["prenom"]       = $_affectation->_ref_sejour->_ref_patient->prenom;
-   $list_affectations[$key]["id"]           = $_affectation->_ref_sejour->_ref_patient->_id;
-   $list_affectations[$key]["service"]      = $_affectation->_ref_lit->_ref_chambre->_ref_service->_id;
-   $list_affectations[$key]["chambre"]      = $_affectation->_ref_lit->_ref_chambre->_id;
-   $list_affectations[$key]["lit"]          = $_affectation->_ref_lit->_id;
-   $list_affectations[$key]["sexe"]         = $_affectation->_ref_sejour->_ref_patient->sexe;
-   $list_affectations[$key]["naissance"]    = CMbDT::format($_affectation->_ref_sejour->_ref_patient->naissance, "%Y%m%d");
-   $list_affectations[$key]["date_entree"]  = CMbDT::format(CMbDT::date($_affectation->_ref_sejour->entree), "%Y%m%d");
-   $list_affectations[$key]["heure_entree"] = CMbDT::format(CMbDT::time($_affectation->_ref_sejour->entree), "%H%M");
-   $list_affectations[$key]["date_sortie"]  = CMbDT::format(CMbDT::date($_affectation->_ref_sejour->sortie), "%Y%m%d");
-   $list_affectations[$key]["heure_sortie"] = CMbDT::format(CMbDT::time($_affectation->_ref_sejour->sortie), "%H%M");
-   $list_affectations[$key]["type"]         = $_affectation->_ref_sejour->type;
+  $_affectation->loadRefLit();
+  $_affectation->_ref_lit->loadRefChambre();
+  $_affectation->_ref_lit->_ref_chambre->loadRefService();
+  $_affectation->loadRefSejour();
+  $_affectation->_ref_sejour->loadRefPraticien();
+  $_affectation->_ref_sejour->loadRefPatient();
+
+  $list_affectations[$key]["nom"]          = $_affectation->_ref_sejour->_ref_patient->nom;
+  $list_affectations[$key]["prenom"]       = $_affectation->_ref_sejour->_ref_patient->prenom;
+  $list_affectations[$key]["id"]           = $_affectation->_ref_sejour->_ref_patient->_id;
+  $list_affectations[$key]["service"]      = $_affectation->_ref_lit->_ref_chambre->_ref_service->_id;
+  $list_affectations[$key]["chambre"]      = $_affectation->_ref_lit->_ref_chambre->_id;
+  $list_affectations[$key]["lit"]          = $_affectation->_ref_lit->_id;
+  $list_affectations[$key]["sexe"]         = $_affectation->_ref_sejour->_ref_patient->sexe;
+  $list_affectations[$key]["naissance"]    = CMbDT::format($_affectation->_ref_sejour->_ref_patient->naissance, "%Y%m%d");
+  $list_affectations[$key]["date_entree"]  = CMbDT::format(CMbDT::date($_affectation->_ref_sejour->entree), "%Y%m%d");
+  $list_affectations[$key]["heure_entree"] = CMbDT::format(CMbDT::time($_affectation->_ref_sejour->entree), "%H%M");
+  $list_affectations[$key]["date_sortie"]  = CMbDT::format(CMbDT::date($_affectation->_ref_sejour->sortie), "%Y%m%d");
+  $list_affectations[$key]["heure_sortie"] = CMbDT::format(CMbDT::time($_affectation->_ref_sejour->sortie), "%H%M");
+  $list_affectations[$key]["type"]         = $_affectation->_ref_sejour->type;
 }
 
 
