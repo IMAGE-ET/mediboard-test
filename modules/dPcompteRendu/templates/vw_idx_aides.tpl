@@ -1,173 +1,172 @@
 <!--  $Id$ -->
 
-{{mb_script module=sante400 script=hyperTextLink ajax=true}}
+{{mb_script module=sante400 script=hyperTextLink}}
 
 <script>
+  var aTraduction = {};
+  {{foreach from=$listTraductions key=key item=currClass}}
+    aTraduction["{{$key}}"] = "{{$currClass|smarty:nodefaults}}";
+  {{/foreach}}
 
-var aTraduction = {};
-{{foreach from=$listTraductions key=key item=currClass}}
-  aTraduction["{{$key}}"] = "{{$currClass|smarty:nodefaults}}";
-{{/foreach}}
+  var classes = {{$classes|@json}};
 
-var classes = {{$classes|@json}};
+  function loadClasses(value) {
+    var form = document.editFrm;
+    var select = form.elements['class'];
+    var options = classes;
 
-function loadClasses(value) {
-  var form = document.editFrm;
-  var select = form.elements['class'];
-  var options = classes;
-
-  // delete all former options except first
-  while (select.length > 1) {
-    select.options[1] = null;
-  }
-
-  // insert new ones
-  for (var elm in options) {
-    var option = elm;
-    if (typeof(options[option]) != "function") { // to filter prototype functions
-      select.options[select.length] = new Option(aTraduction[option], option);
+    // delete all former options except first
+    while (select.length > 1) {
+      select.options[1] = null;
     }
-  }
 
-  $V(select, value);
-  loadFields();
-}
-
-function loadFields(value) {
-  var form = document.editFrm;
-  var select = form.elements['field'];
-  var className  = form.elements['class'].value;
-  var options = classes[className];
-
-  // delete all former options except first
-  while (select.length > 1) {
-    select.options[1] = null;
-  }
-
-  // insert new ones
-  for (var elm in options) {
-    var option = elm;
-    if (typeof(options[option]) != "function") { // to filter prototype functions
-      select.options[select.length] = new Option($T(className+"-"+option), option);
-    }
-  }
-
-  $V(select, value);
-  loadDependances();
-}
-
-function loadDependances(depend_value_1, depend_value_2){
-  var form = document.editFrm;
-  var select_depend_1 = form.elements['depend_value_1'];
-  var select_depend_2 = form.elements['depend_value_2'];
-  var className  = form.elements['class'].value;
-  var fieldName  = form.elements['field'].value;
-  var options = classes[className];
-
-  // delete all former options except first
-  {{if !$aide->_is_ref_dp_1}}
-    while (select_depend_1.length > 1) {
-      select_depend_1.options[1] = null;
-    }
-  {{/if}}
-  {{if !$aide->_is_ref_dp_2}}
-    while (select_depend_2.length > 1) {
-      select_depend_2.options[1] = null;
-    }
-  {{/if}}
-
-  if(!options){
-    return;
-  }
-
-  if(!classes[className][fieldName]){
-    return;
-  }
-
-  {{if !$aide->_is_ref_dp_1}}
-    // Depend value 1
-    options_depend_1 = classes[className][fieldName]['depend_value_1'];
-    for (var elm in options_depend_1) {
-      var option = options_depend_1[elm];
-      if (typeof(option) != "function") { // to filter prototype functions
-        select_depend_1.options[select_depend_1.length] = new Option(aTraduction[option], elm, elm == depend_value_1);
+    // insert new ones
+    for (var elm in options) {
+      var option = elm;
+      if (typeof(options[option]) != "function") { // to filter prototype functions
+        select.options[select.length] = new Option(aTraduction[option], option);
       }
     }
-    $V(select_depend_1, '{{$aide->depend_value_1}}');
-  {{/if}}
 
-  {{if !$aide->_is_ref_dp_2}}
-    // Depend value 2
-    options_depend_2 = classes[className][fieldName]['depend_value_2'];
-    for (var elm in options_depend_2) {
-      var option = options_depend_2[elm];
-      if (typeof(option) != "function") { // to filter prototype functions
-        select_depend_2.options[select_depend_2.length] = new Option(aTraduction[option], elm, elm == depend_value_2);
+    $V(select, value);
+    loadFields();
+  }
+
+  function loadFields(value) {
+    var form = document.editFrm;
+    var select = form.elements['field'];
+    var className  = form.elements['class'].value;
+    var options = classes[className];
+
+    // delete all former options except first
+    while (select.length > 1) {
+      select.options[1] = null;
+    }
+
+    // insert new ones
+    for (var elm in options) {
+      var option = elm;
+      if (typeof(options[option]) != "function") { // to filter prototype functions
+        select.options[select.length] = new Option($T(className+"-"+option), option);
       }
     }
-    $V(select_depend_2, '{{$aide->depend_value_2}}');
-  {{/if}}
-}
 
-function popupImport(owner_guid){
-  var url = new Url("dPcompteRendu", "aides_import_csv");
-  url.addParam("owner_guid", owner_guid);
-  url.pop(500, 400, "Import d'aides à la saisie");
-  return false;
-}
+    $V(select, value);
+    loadDependances();
+  }
 
-function loadTabsAides(form){
-  var url = new Url("dPcompteRendu", "httpreq_vw_list_aides");
-  url.addFormData(form);
-  url.requestUpdate("tabs_aides");
-  return false;
-}
+  function loadDependances(depend_value_1, depend_value_2){
+    var form = document.editFrm;
+    var select_depend_1 = form.elements['depend_value_1'];
+    var select_depend_2 = form.elements['depend_value_2'];
+    var className  = form.elements['class'].value;
+    var fieldName  = form.elements['field'].value;
+    var options = classes[className];
 
-function resetStart(form){
-  ["user", "func", "etab"].each(function(type){
-    form["start["+type+"]"].value = 0;
-  });
-  form.onsubmit();
-}
+    // delete all former options except first
+    {{if !$aide->_is_ref_dp_1}}
+      while (select_depend_1.length > 1) {
+        select_depend_1.options[1] = null;
+      }
+    {{/if}}
+    {{if !$aide->_is_ref_dp_2}}
+      while (select_depend_2.length > 1) {
+        select_depend_2.options[1] = null;
+      }
+    {{/if}}
 
-function getListDependValues(select, object_class, field) {
-  if (select.hasClassName("loaded")) return;
-
-  var oldValue = $V(select);
-  var url = new Url("dPcompteRendu", "httpreq_select_enum_values");
-  url.addParam("object_class", object_class);
-  url.addParam("field", field);
-  url.requestUpdate(select, {onComplete: function(){
-    select.addClassName("loaded");
-    $V(select, oldValue);
-  }});
-}
-
-function sortBy(order_col, order_way) {
-  var oForm = getForm("filterFrm");
-  $V(oForm.order_col, order_col);
-  $V(oForm.order_way, order_way);
-  oForm.onsubmit();
-}
-
-var changePage = {};
-
-Main.add(function () {
-  var form = getForm("filterFrm");
-
-  loadClasses('{{$aide->class}}');
-  loadFields('{{$aide->field}}');
-  loadDependances('{{$aide->depend_value_1}}', '{{$aide->depend_value_2}}');
-
-  loadTabsAides(form);
-  HyperTextLink.getListFor('{{$aide->_id}}', '{{$aide->_class}}');
-  ["user", "func", "etab"].each(function(type){
-    changePage[type] = function(page) {
-      $V(form["start["+type+"]"], page);
+    if (!options || !classes[className][fieldName]) {
+      return;
     }
-  });
-});
 
+    {{if !$aide->_is_ref_dp_1}}
+      // Depend value 1
+      options_depend_1 = classes[className][fieldName]['depend_value_1'];
+      for (var elm in options_depend_1) {
+        var option = options_depend_1[elm];
+        if (typeof(option) != "function") { // to filter prototype functions
+          select_depend_1.options[select_depend_1.length] = new Option(aTraduction[option], elm, elm == depend_value_1);
+        }
+      }
+      $V(select_depend_1, '{{$aide->depend_value_1}}');
+    {{/if}}
+
+    {{if !$aide->_is_ref_dp_2}}
+      // Depend value 2
+      options_depend_2 = classes[className][fieldName]['depend_value_2'];
+      for (var elm in options_depend_2) {
+        var option = options_depend_2[elm];
+        if (typeof(option) != "function") { // to filter prototype functions
+          select_depend_2.options[select_depend_2.length] = new Option(aTraduction[option], elm, elm == depend_value_2);
+        }
+      }
+      $V(select_depend_2, '{{$aide->depend_value_2}}');
+    {{/if}}
+}
+
+  function popupImport(owner_guid) {
+    var url = new Url("compteRendu", "aides_import_csv");
+    url.addParam("owner_guid", owner_guid);
+    url.pop(500, 400, "Import d'aides à la saisie");
+    return false;
+  }
+
+  function loadTabsAides(form) {
+    var url = new Url("compteRendu", "httpreq_vw_list_aides");
+    url.addFormData(form);
+    url.requestUpdate("tabs_aides");
+    return false;
+  }
+
+  function resetStart(form) {
+    ["user", "func", "etab"].each(function(type){
+      form["start["+type+"]"].value = 0;
+    });
+    form.onsubmit();
+  }
+
+  function getListDependValues(select, object_class, field) {
+    if (select.hasClassName("loaded")) return;
+
+    var oldValue = $V(select);
+    var oldValueHTML = select.selectedOptions[0].innerHTML;
+    var url = new Url("compteRendu", "httpreq_select_enum_values");
+    url.addParam("object_class", object_class);
+    url.addParam("field", field);
+    url.requestUpdate(select, function() {
+      select.addClassName("loaded");
+      // Si la valeur n'est plus présente dans le select, on l'ajoute
+      if ($A(select.options).pluck("value").indexOf(oldValue) == -1) {
+        select.insert(DOM.option({value: oldValue}, oldValueHTML));
+      }
+      $V(select, oldValue);
+    });
+  }
+
+  function sortBy(order_col, order_way) {
+    var form = getForm("filterFrm");
+    $V(form.order_col, order_col);
+    $V(form.order_way, order_way);
+    form.onsubmit();
+  }
+
+  var changePage = {};
+
+  Main.add(function() {
+    var form = getForm("filterFrm");
+
+    loadClasses('{{$aide->class}}');
+    loadFields('{{$aide->field}}');
+    loadDependances('{{$aide->depend_value_1}}', '{{$aide->depend_value_2}}');
+
+    loadTabsAides(form);
+    HyperTextLink.getListFor('{{$aide->_id}}', '{{$aide->_class}}');
+    ["user", "func", "etab"].each(function(type){
+      changePage[type] = function(page) {
+        $V(form["start["+type+"]"], page);
+      }
+    });
+  });
 </script>
 
 <table class="main">
@@ -175,7 +174,7 @@ Main.add(function () {
 <tr>
   <td class="greedyPane">
 
-    <a href="?m={{$m}}&amp;tab={{$tab}}&amp;aide_id=" class="button new">{{tr}}CAideSaisie-title-create{{/tr}}</a>
+    <a href="?m={{$m}}&tab={{$tab}}&aide_id=" class="button new">{{tr}}CAideSaisie-title-create{{/tr}}</a>
 
     <form name="filterFrm" action="?" method="get" onsubmit="return loadTabsAides(this)">
       <input type="hidden" name="m" value="{{$m}}" />
