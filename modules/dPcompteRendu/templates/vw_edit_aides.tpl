@@ -1,49 +1,54 @@
 {{mb_script module=system script=object_selector}}
 
-<script type="text/javascript">
-Main.add(function () {
-  Control.Tabs.create('tab-modules', false);
-});
+<script>
+  Main.add(function() {
+    Control.Tabs.create('tab-modules', false);
+  });
 
-function editAide(aide_id, classname, field, user_id, class_depend_value_1, class_depend_value_2) {
-  var url = new Url("dPcompteRendu","edit_aide");
-  url.addParam("dialog", 1);
-  url.addParam("aide_id", aide_id);
-  url.addParam("class", classname);
-  url.addParam("field", field);
-  url.addParam("user_id", user_id);
-  url.addParam("class_depend_value_1", class_depend_value_1);
-  url.addParam("class_depend_value_2", class_depend_value_2);
-  url.redirect();
-}
-
-function editAideCallback(id) {
-  editAide(id, {{$aide->class|@json}}, {{$aide->field|@json}}, {{$user->_id|@json}});
-}
-
-function changeUser(user_id) {
-  var oFormc = getForm("change_user");
-  var oForm = getForm("editAides");
-  
-  if(oForm.elements.aide_id.value == '') {
-    oFormc.text.value = unescape(encodeURIComponent(oForm.text.value));
+  editAide = function(aide_id, classname, field, user_id, class_depend_value_1, class_depend_value_2, text) {
+    Control.Modal.close();
+    var url = new Url("compteRendu", "edit_aide");
+    url.addParam("text", text);
+    url.requestModal("80%", "60%", {
+      title:"Création d'aide à la saisie",
+      method: "post",
+      getParameters: {
+        m      : "compteRendu",
+        a      : "edit_aide",
+        user_id: user_id,
+        aide_id: aide_id,
+        class  : classname,
+        field  : field,
+        class_depend_value_1: class_depend_value_1,
+        class_depend_value_2: class_depend_value_2,
+        dialog : "1"
+      }
+    });
   }
-  
-  oFormc.user_id.value = user_id;
-  oFormc.action+="&user_id="+user_id+"&class="+{{$aide->class|@json}}+"&field="+{{$aide->field|@json}};
-  oFormc.submit();
-}
 
+  editAideCallback = function(id) {
+    Control.Modal.close();
+    editAide(id, {{$aide->class|@json}}, {{$aide->field|@json}}, {{$user->_id|@json}});
+  }
+
+  changeUser = function(user_id) {
+    var form = getForm("editAides");
+    var text = '';
+    if ($V(form.aide_id) == '') {
+      text = $V(form.text);
+    }
+    editAide('','{{$aide->class}}','{{$aide->field}}', user_id, '{{$class_depend_value_1}}', '{{$class_depend_value_2}}', text);
+  }
 </script>
 
 {{mb_label object=$aide field="user_id"}}
-<form name="change_user" action="?m=dPcompteRendu&a=edit_aide&dialog=1" method="post">
+<form name="change_user" action="?" method="get">
   <input type="hidden" name="text" value="" />
   <select name="user_id" class="{{$aide->_props.user_id}}" onchange="changeUser(this.value);">
     <option value="">&mdash; {{tr}}CAideSaisie.select-user{{/tr}} &mdash;</option>
     {{foreach from=$listPrat item=curr_prat}}
       <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}"
-        {{if $curr_prat->user_id == $user->_id}} selected="selected" {{/if}}>
+        {{if $curr_prat->user_id == $user->_id}}selected{{/if}}>
         {{$curr_prat}}
       </option>
     {{/foreach}}
@@ -64,12 +69,10 @@ function changeUser(user_id) {
   </li>
 </ul>
 
-<hr class="control_tabs" />
-
 <div id="edit" style="display: none;">
   <form name="editAides" action="?" method="post" class="{{$aide->_spec}}" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="dosql" value="do_aide_aed" />
-  <input type="hidden" name="m" value="dPcompteRendu" />
+  <input type="hidden" name="m" value="compteRendu" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="callback" value="editAideCallback" />
   
@@ -94,7 +97,7 @@ function changeUser(user_id) {
         {{if (!$aide->_id && $choicepratcab == "prat" && $aide->user_id) || ($aide->_id && $aide->user_id)}}value="{{$fields.user_id}}"{{/if}} />
         <label>
           <input type="radio" name="_owner_id" value="{{$fields.user_id}}" onclick="$V(this.form.user_id, this.value); $(this.form.user_id).fire('ui:change')"
-          {{if (!$aide->_id && $choicepratcab == "prat" && $aide->user_id) || ($aide->_id && $aide->user_id)}}checked="checked"{{/if}} />
+          {{if (!$aide->_id && $choicepratcab == "prat" && $aide->user_id) || ($aide->_id && $aide->user_id)}}checked{{/if}} />
           {{$user->_ref_user}}
         </label>
       </td>
@@ -108,7 +111,7 @@ function changeUser(user_id) {
           {{if (!$aide->_id && $choicepratcab == "cab" && $aide->function_id) || ($aide->_id && $aide->function_id)}}value="{{$fields.function_id}}"{{/if}} />
         <label>
           <input type="radio" name="_owner_id" value="{{$fields.function_id}}" onclick="$V(this.form.function_id, this.value); $(this.form.function_id).fire('ui:change')"
-          {{if (!$aide->_id && $choicepratcab == "cab" && $aide->function_id) || ($aide->_id && $aide->function_id)}}checked="checked"{{/if}} />
+          {{if (!$aide->_id && $choicepratcab == "cab" && $aide->function_id) || ($aide->_id && $aide->function_id)}}checked{{/if}} />
           {{$user->_ref_function}}
         </label>
       </td>
@@ -123,7 +126,7 @@ function changeUser(user_id) {
           {{if (!$aide->_id && $choicepratcab == "group" && $aide->group_id) || ($aide->_id && $aide->group_id)}}value="{{$fields.group_id}}"{{/if}} />
         <label>
           <input type="radio" name="_owner_id" value="{{$fields.group_id}}" onclick="$V(this.form.group_id, this.value); $(this.form.group_id).fire('ui:change')"
-          {{if (!$aide->_id && $choicepratcab == "group" && $aide->group_id) || ($aide->_id && $aide->group_id)}}checked="checked"{{/if}} />
+          {{if (!$aide->_id && $choicepratcab == "group" && $aide->group_id) || ($aide->_id && $aide->group_id)}}checked{{/if}} />
           {{$group}}
         </label>
       </td>
@@ -156,8 +159,8 @@ function changeUser(user_id) {
               <input type="hidden" name="_ref_class_depend_value_{{$i}}" value="{{$obj_class_dp}}" />
               <input type="text" name="_depend_value_{{$i}}_view" value="{{$aide->$key_view}}" />
               <button type="button" class="search notext" onclick="ObjectSelector.init{{$i}}()"></button>
-              <script type="text/javascript">
-                Main.add(function(){
+              <script>
+                Main.add(function() {
                   var form = getForm("editAides");
                   
                   var url = new Url("system", "ajax_seek_autocomplete");
@@ -170,12 +173,12 @@ function changeUser(user_id) {
                     method: "get",
                     select: "view",
                     dropdown: true,
-                    afterUpdateElement: function(field,selected){
+                    afterUpdateElement: function(field,selected) {
                       $V(field.form.elements.depend_value_{{$i}}, selected.get("id"));
                     }
                   });
                 });
-                ObjectSelector.init{{$i}} = function(){
+                ObjectSelector.init{{$i}} = function() {
                   this.sForm     = "editAides";
                   this.sView     = "keywords_dp{{$i}}";
                   this.sClass    = "_ref_class_depend_value_{{$i}}";
@@ -187,7 +190,7 @@ function changeUser(user_id) {
               <select name="{{$key}}" class="{{$aide->_props.$key}}">
                 <option value="">&mdash; Tous</option>
                 {{foreach from=$dependValues.$key key=_value item=_translation}}
-                <option value="{{$_value}}" {{if $_value == $aide->$key}}selected="selected"{{/if}}>{{$_translation}}</option>
+                <option value="{{$_value}}" {{if $_value == $aide->$key}}selected{{/if}}>{{$_translation}}</option>
                 {{/foreach}}
               </select>
             {{/if}}
@@ -232,13 +235,13 @@ function changeUser(user_id) {
       <tr>
         <td class="text">
           {{if $_aide->user_id}}
-            <img src="images/icons/user.png" title="{{$user->_view}}"/>
+            <img src="images/icons/user.png" title="{{$user}}"/>
           {{/if}}
           {{if $_aide->function_id}}
-            <img src="images/icons/user-function.png" title="{{$user->_ref_function->_view}}"/>
+            <img src="images/icons/user-function.png" title="{{$user->_ref_function}}"/>
           {{/if}}
           {{if $_aide->group_id}}
-            <img src="images/icons/group.png" title="{{$group->_view}}"/>
+            <img src="images/icons/group.png" title="{{$group}}"/>
           {{/if}}
         </td>
         <td class="text">
