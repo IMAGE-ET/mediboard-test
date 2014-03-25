@@ -28,9 +28,9 @@ var Tag = {
     url.requestUpdate("systemMsg", {method: "post"});
   },
   manage: function(object_class) {
-    var url = new Url('system', 'vw_object_tag_manager');
+    var url = new Url('system', 'ajax_tag_manager');
     url.addParam('object_class', object_class);
-    url.modal({width: "75%", height: "75%"});
+    url.requestModal("680", "470");
   },
   setNodeVisibility: function(node) {
     node = $(node);

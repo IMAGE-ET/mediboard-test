@@ -80,6 +80,7 @@ $locales['CEchangeSOAP-web_service_name-desc'] = 'Nom du web service';
 $locales['CEchangeSOAP.all'] = 'Tous les échanges SOAP';
 $locales['CEchangeSOAP.none'] = 'Aucun échange SOAP';
 $locales['CEchangeSOAP.one'] = 'echange SOAP';
+$locales['CExchangeSOAP.add'] = 'Ajout d\'un échange SOAP';
 $locales['CMediusers-back-'] = 'Utilisateurs';
 $locales['CMediusers-back-.empty'] = 'Aucun utilisateur';
 $locales['CSenderSOAP'] = 'Expéditeur SOAP';

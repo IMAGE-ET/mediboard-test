@@ -22,9 +22,11 @@ class CTag extends CMbObject {
 
   /** @var CTagItem[] */
   public $_ref_items;
+  public $_nb_items;
 
   /** @var CTag[] */
   public $_ref_children;
+  public $_nb_children;
   
   public $_deepness;
 
@@ -48,6 +50,7 @@ class CTag extends CMbObject {
     $props["object_class"] = "str class";
     $props["name"]         = "str notNull seekable";
     $props["color"]        = "str maxLength|20";
+    $props["_nb_items"]    = "num";
     return $props;
   }
 
@@ -80,6 +83,15 @@ class CTag extends CMbObject {
   }
 
   /**
+   * count items related to this
+   *
+   * @return int
+   */
+  function countRefItems() {
+    return $this->_nb_items = $this->countBackRefs("items");
+  }
+
+  /**
    * Load children
    *
    * @return self[]
@@ -94,7 +106,7 @@ class CTag extends CMbObject {
    * @return int
    */
   function countChildren(){
-    return $this->countBackRefs("children");
+    return $this->_nb_children = $this->countBackRefs("children");
   }
 
   /**
