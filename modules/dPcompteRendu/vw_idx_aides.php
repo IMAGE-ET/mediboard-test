@@ -24,6 +24,12 @@ $start          = CValue::getOrSession("start", array("user" => 0, "func" => 0, 
 $order_col      = CValue::getOrSession("order_col", "class");
 $order_way      = CValue::getOrSession("order_way", "ASC");
 
+$listOrderCols = array("class", "field", "depend_value_1", "depend_value_2", "name");
+
+if (!in_array($order_col, $listOrderCols)) {
+  $order_col = "class";
+}
+
 $classes = array_flip(CApp::getInstalledClasses());
 $listTraductions = array();
 

@@ -22,6 +22,12 @@ $filtre->type         = CValue::getOrSession("type");
 $order_col = CValue::getOrSession("order_col", "object_class");
 $order_way = CValue::getOrSession("order_way", "ASC");
 
+$listOrderCols = array("nom", "object_class", "file_category_id", "type");
+
+if (!in_array($order_col, $listOrderCols)) {
+  $order_col = "object_class";
+}
+
 // Praticien
 // Liste des praticiens et cabinets accessibles
 $user = CMediusers::get($filtre->user_id);

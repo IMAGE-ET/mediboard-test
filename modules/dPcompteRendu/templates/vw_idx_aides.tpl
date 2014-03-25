@@ -139,7 +139,7 @@
       if ($A(select.options).pluck("value").indexOf(oldValue) == -1) {
         select.insert(DOM.option({value: oldValue}, oldValueHTML));
       }
-      $V(select, oldValue);
+      $V(select, oldValue, false);
     });
   }
 

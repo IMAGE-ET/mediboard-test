@@ -22,7 +22,7 @@ $order_col      = CValue::getOrSession("order_col");
 $order_way      = CValue::getOrSession("order_way");
 $aide_id        = CValue::getOrSession("aide_id", "0");
 
-$order_by = $order_col . " " . $order_way;
+$order_by = $order_col ? $order_col . " " . $order_way : null;
 
 $userSel = CMediusers::get($filter_user_id);
 $userSel->loadRefFunction()->loadRefGroup();
