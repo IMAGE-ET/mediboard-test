@@ -9,7 +9,7 @@
  * @version    $Revision$
  */
 
-CCanDo::checkEdit();
+CCanDo::checkRead();
 
 // Utilisateur sélectionné ou utilisateur courant
 $prat_id = CValue::getOrSession("chirSel", 0);
