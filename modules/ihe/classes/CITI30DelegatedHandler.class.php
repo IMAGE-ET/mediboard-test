@@ -56,6 +56,7 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
       return false;
     }
 
+    /** @var CInteropReceiver $receiver */
     $receiver = $mbObject->_receiver;
     $receiver->getInternationalizationCode($this->transaction);
     
@@ -115,7 +116,8 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
       
       return;
     }
-    // Création/MAJ d'un patient
+
+    // Création/MAJ d'un patient - CPatient
     else {
       switch ($mbObject->_ref_current_log->type) {
         case "create":
@@ -143,8 +145,20 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
             }
           }
 
+          if ($receiver->_configs["send_patient_with_current_admit"]) {
+            // On charge seulement le séjour courant pour le patient
+            $sejour = $mbObject->getCurrSejour(null, $receiver->group_id);
+            if (!$sejour->_id) {
+              $code = null;
+              break;
+            }
+
+            $mbObject->_ref_sejour = $sejour;
+          }
+
           // Dans tous les autres cas il s'agit d'une modification
           $code = ($receiver->_configs["send_update_patient_information"] == "A08") ? "A08" : "A31";
+
           break;
         default:
           $code = null;

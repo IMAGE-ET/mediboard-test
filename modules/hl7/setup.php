@@ -1278,7 +1278,13 @@ class CSetuphl7 extends CSetup {
                 ADD `handle_PV1_50` ENUM ('sejour_id','none') DEFAULT 'none';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.91";
+    $this->makeRevision("0.91");
+
+    $query = "ALTER TABLE `receiver_hl7v2_config`
+               ADD `send_patient_with_current_admit` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.92";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

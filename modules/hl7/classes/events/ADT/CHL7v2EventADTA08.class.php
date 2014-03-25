@@ -47,14 +47,11 @@ class CHL7v2EventADTA08 extends CHL7v2EventADT implements CHL7EventADTA01 {
     // Dans le cas où le A08 est dédié à la mise à jour des données du patient
     if ($object instanceof CPatient) {
       $patient = $object;
-      //Recherche du séjour en cours
-      $object = reset($patient->getCurrSejour(null, $this->_receiver->group_id));
-      //Récupération du dernier séjour
-      if (!$object) {
-        $object = reset($patient->loadRefsSejours());
-      }
 
-      if (!$object) {
+      /** @var CSejour $sejour */
+      $sejour = $patient->_ref_sejour;
+
+      if (!$sejour || !$sejour->_id) {
         parent::build($patient);
 
         // Patient Identification
@@ -77,6 +74,7 @@ class CHL7v2EventADTA08 extends CHL7v2EventADT implements CHL7EventADTA01 {
         return;
       }
       else {
+        $object = $sejour;
         $object->loadRefPatient();
       }
     }
