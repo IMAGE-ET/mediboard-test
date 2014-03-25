@@ -9,41 +9,47 @@
  * @version    $Revision$
  */
 
-$date       = CValue::getOrSession("date", CMbDT::date());
 $plageop_id = CValue::getOrSession("plageop_id");
+$date       = CValue::getOrSession("date", CMbDT::date());
+$bloc_id    = CValue::get("bloc_id");
 
 // Informations sur la plage demandée
 $plagesel = new CPlageOp;
 $plagesel->load($plageop_id);
 $plagesel->loadRefSalle();
 
-$listBlocs       = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
-$default_bloc_id = $plagesel->_ref_salle->bloc_id ? $plagesel->_ref_salle->bloc_id : reset($listBlocs)->_id;
-$bloc_id         = CValue::getOrSession("bloc_id", $default_bloc_id);
+$listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
 
-if (!array_key_exists($bloc_id, $listBlocs)) {
-  $bloc_id = reset($listBlocs)->_id;
-}
-
-$listSalles = array();
-
-foreach ($listBlocs as &$curr_bloc) {
-  $curr_bloc->loadRefsSalles();
-}
-
+//curent bloc if $bloc_id
 $bloc = new CBlocOperatoire();
 $bloc->load($bloc_id);
-$bloc->loadRefsSalles();
+$listSalles = $bloc->loadRefsSalles();
+$arrKeySalle = array_keys($listSalles);
 
-$listSalles = $bloc->_ref_salles;
-  
+// cleanup listBlocs
+foreach ($listBlocs as $key => $curr_bloc) {
+  $salles = $curr_bloc->loadRefsSalles();
+  foreach ($salles as $id => $_salle) {
+    if (count($arrKeySalle) && !in_array($id, $arrKeySalle)) {
+      unset($salles[$id]);
+      continue;
+    }
+  }
+
+  if (!count($salles)) {
+    unset($listBlocs[$key]);
+    continue;
+  }
+}
+
+
 
 if (!$plagesel->temps_inter_op) {
   $plagesel->temps_inter_op = "00:00:00";
 }
+
 if ($plagesel->_id) {
-  $arrKeySalle = array_keys($listSalles);
-  if (!in_array($plagesel->salle_id, $arrKeySalle) || $plagesel->date != $date) {
+  if ((count($arrKeySalle) && !in_array($plagesel->salle_id, $arrKeySalle)) || $plagesel->date != $date) {
     $plageop_id = 0;
     $plagesel = new CPlageOp;
   }

@@ -1,23 +1,35 @@
 
-EditPlanning  = {
+EditPlanning = window.EditPlanning || {
   status_images : ["images/icons/status_red.png", "images/icons/status_orange.png", "images/icons/status_green.png"],
   modal: null,
+  modal_edit : null,
+  modal_gestion : null,
   
-  edit: function(plageop_id, date) {
+  edit: function(plageop_id, date, bloc_id) {
     var url = new Url('dPbloc', 'inc_edit_planning');
     url.addParam('plageop_id', plageop_id);
     url.addParam('date', date);
+    url.addParam('bloc_id', bloc_id);
+    EditPlanning.modal_edit = url;
     url.requestModal(800);
     this.modal = url.modalObject;
+    url.modalObject.observe("afterClose", function() {
+      if (EditPlanning.modal_gestion) {
+        EditPlanning.modal_gestion.refreshModal();
+      }
+      else {
+        document.location.reload();
+      }
+    });
   },
 
   order: function(plageop_id) {
     var url = new Url('dPbloc', 'vw_edit_interventions');
     url.addParam('plageop_id', plageop_id);
-    url.requestModal("100%", "90%", {
-      onClose: function(){
-        document.location.reload();
-      }
+    EditPlanning.modal_gestion = url;
+    url.requestModal("100%", "90%");
+    url.modalObject.observe("afterClose", function() {
+      document.location.reload();
     });
     window.url_edit_planning = url;
     this.modal = url.modalObject;

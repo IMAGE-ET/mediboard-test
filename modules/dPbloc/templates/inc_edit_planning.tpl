@@ -1,60 +1,57 @@
 <script>
-checkPlage = function() {
-  var form = getForm('editFrm');
-  
-  if (!checkForm(form)) {
-    return false;
-  }
-    
-  if (form.chir_id.value == "" && form.spec_id.value == "") {
-    alert("Merci de choisir un chirurgien ou une spécialité");
-    form.chir_id.focus();
-    return false;
-  }
-  
-  return true;
-};
+  checkPlage = function(oform) {
 
-toggleDel = function(input) {
-  if (input.disabled) {
-    input.enable();
-  }
-  else {
-    input.disable();
-  }
-  input.up('span').toggleClassName('opacity-40');
-};
+    if (oform.chir_id.value == "" && oform.spec_id.value == "") {
+      alert("Merci de choisir un chirurgien ou une spécialité");
+      oform.chir_id.focus();
+      return false;
+    }
 
-refreshFunction = function(chir_id) {
-  var url = new Url("dPcabinet", "ajax_refresh_secondary_functions");
-  url.addParam("chir_id"   , chir_id);
-  url.addParam("field_name", "secondary_function_id");
-  url.addParam("empty_function_principale", 1);
-  url.addParam("change_active", 0);
-  url.requestUpdate("secondary_functions");
-};
-
-Main.add(function(){
-  var oForm = getForm('editFrm');
-  Calendar.regField(oForm.date);
-  Calendar.regField(oForm.temps_inter_op);
-  var options = {
-    exactMinutes: false, 
-    minInterval: {{"CPlageOp"|static:minutes_interval}},
-    minHours: {{"CPlageOp"|static:hours_start|intval}},
-    maxHours: {{"CPlageOp"|static:hours_stop|intval}}
+    return onSubmitFormAjax(oform, {onComplete: Control.Modal.close});
   };
-  Calendar.regField(oForm.debut, null, options);
-  Calendar.regField(oForm.fin  , null, options);
-});
+
+  toggleDel = function(input) {
+    if (input.disabled) {
+      input.enable();
+    }
+    else {
+      input.disable();
+    }
+    input.up('span').toggleClassName('opacity-40');
+  };
+
+  refreshFunction = function(chir_id) {
+    var url = new Url("dPcabinet", "ajax_refresh_secondary_functions");
+    url.addParam("chir_id"   , chir_id);
+    url.addParam("field_name", "secondary_function_id");
+    url.addParam("empty_function_principale", 1);
+    url.addParam("change_active", 0);
+    url.requestUpdate("secondary_functions");
+  };
+
+  Main.add(function(){
+    var oForm = getForm('editFrm');
+    Calendar.regField(oForm.date);
+    Calendar.regField(oForm.temps_inter_op);
+    var options = {
+      exactMinutes: false,
+      minInterval: {{"CPlageOp"|static:minutes_interval}},
+      minHours: {{"CPlageOp"|static:hours_start|intval}},
+      maxHours: {{"CPlageOp"|static:hours_stop|intval}}
+    };
+    Calendar.regField(oForm.debut, null, options);
+    Calendar.regField(oForm.fin  , null, options);
+  });
 </script>
 
 {{mb_script module=bloc script=edit_planning}}
 
-<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkPlage()" class="{{$plagesel->_spec}}">
+<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkPlage(this)" class="{{$plagesel->_spec}}">
+<input type="hidden" name="m" value="dPbloc"/>
 <input type="hidden" name="dosql" value="do_plagesop_aed" />
 <input type="hidden" name="del" value="0" />
-<input type="hidden" name="plageop_id" value="{{$plagesel->plageop_id}}" />
+{{mb_key object=$plagesel}}
+{{*<input type="hidden" name="plageop_id" value="{{$plagesel->plageop_id}}" />*}}
 
 <table class="form">
   <tr>
@@ -95,7 +92,6 @@ Main.add(function(){
             <td>
               <select name="salle_id" class="{{$plagesel->_props.salle_id}}" style="width: 15em;">
                 <option value="">&mdash; {{tr}}CSalle.select{{/tr}}</option>
-                {{if $plagesel->_id}}
                   {{foreach from=$listBlocs item=curr_bloc}}
                     <optgroup label="{{$curr_bloc->_view}}">
                     {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
@@ -107,15 +103,6 @@ Main.add(function(){
                     {{/foreach}}
                     </optgroup>
                   {{/foreach}}
-                {{else}}
-                  {{foreach from=$bloc->_ref_salles item=curr_salle}}
-                    <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $plagesel->salle_id}}selected="selected"{{/if}}>
-                      {{$curr_salle}}
-                    </option>
-                  {{foreachelse}}
-                    <option value="" disabled="disabled">{{tr}}CSalle.none{{/tr}}</option>
-                  {{/foreach}}
-                {{/if}}
               </select>
             </td>
           </tr>
@@ -265,8 +252,8 @@ Main.add(function(){
   <tr>
     <td class="button">
       <button type="submit" class="save">{{tr}}Save{{/tr}}</button>
-      {{if $plagesel->plageop_id}}
-        <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'la plage opératoire',objName:'{{$plagesel->_view|smarty:nodefaults|JSAttribute}}'})">
+      {{if $plagesel->_id}}
+        <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'la plage opératoire',objName:'{{$plagesel->_view|smarty:nodefaults|JSAttribute}}', ajax:1}, {onComplete:Control.Modal.close})">
           {{tr}}Delete{{/tr}}
         </button>
       {{/if}}
