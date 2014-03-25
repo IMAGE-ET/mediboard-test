@@ -439,25 +439,30 @@ class CFacture extends CMbObject {
    *
    * @return void
    **/
+
   function cancelConsult() {
     if ($this->_consult_id) {
-      $this->loadRefPatient();
-      $this->loadRefPraticien();
       $this->loadRefsObjects();
-      if (count($this->_ref_consults) == 1 && count($this->_ref_sejours) == 0 && $this->_ref_last_consult->_id == $this->_consult_id) {
-        $this->delete();
+      $nb_objets = count($this->_ref_consults) + count($this->_ref_sejours);
+      if ($nb_objets == 1) {
+        if ($msg = $this->delete()) {
+          return $msg;
+        }
       }
-      elseif (CModule::getActive("dPfacturation")) {
+      else {
         $liaison = new CFactureLiaison();
         $liaison->facture_id    = $this->_id;
         $liaison->facture_class = $this->_class;
         $liaison->object_class  = "CConsultation";
         $liaison->object_id     = $this->_consult_id;
         $liaison->loadMatchingObject();
-        $liaison->delete();
+        if ($msg = $liaison->delete()) {
+          return $msg;
+        }
       }
     }
   }
+
 
   /**
    * Mise à jour des montant secteur 1, 2 et totaux, utilisés pour la compta

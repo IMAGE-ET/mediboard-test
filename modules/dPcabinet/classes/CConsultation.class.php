@@ -1183,11 +1183,12 @@ class CConsultation extends CFacturable {
    * @return CFactureCabinet
    */
   function loadRefFacture() {
-    if ($this->_ref_facture) {
+    if (count($this->_ref_factures)) {
       return $this->_ref_facture;
     }
 
     if (CModule::getActive("dPfacturation")) {
+      $this->completeField('patient_id');
       $facture_class = $this->sejour_id ? "CFactureEtablissement" : "CFactureCabinet";
       $facture_sql = $this->sejour_id ? "facture_etablissement" : "facture_cabinet";
 
@@ -1197,7 +1198,7 @@ class CConsultation extends CFacturable {
       $where["facture_liaison.facture_class"] = " = '$facture_class'";
       $where["facture_liaison.object_id"]     = " = '$this->_id'";
       $where["facture_liaison.object_class"]  = " = '$this->_class'";
-      $where["patient_id"]  = " = '$this->patient_id'";
+      $where["$facture_sql.patient_id"]       = " = '$this->patient_id'";
       /* @var CFactureCabinet $facture*/
       $facture = new $facture_class;
       $this->_ref_factures = $facture->loadList($where, null, null, "facture_id", $ljoin);
