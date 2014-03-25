@@ -17,7 +17,7 @@
         a      : "edit_aide",
         user_id: user_id,
         aide_id: aide_id,
-        class  : classname,
+        'class'  : classname,
         field  : field,
         class_depend_value_1: class_depend_value_1,
         class_depend_value_2: class_depend_value_2,
