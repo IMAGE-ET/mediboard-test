@@ -429,7 +429,7 @@ var AideSaisie = {
         m      : "compteRendu",
         a      : "edit_aide",
         user_id: userId,
-        class  : objectClass,
+        'class'  : objectClass,
         field  : name || field.name,
         depend_value_1: dependValue1 || null,
         depend_value_2: dependValue2 || null,
