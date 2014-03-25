@@ -4,6 +4,7 @@ loadExObjectsList = function(element, reference_class, reference_id, ex_class_id
   
   var row  = element.up('tr');
   var body = element.up('tbody');
+  var otherContainer = body.down("tr:first");
   
   var listContainer = body.down('.list-container');
   if (listContainer.visible()) {
@@ -21,7 +22,9 @@ loadExObjectsList = function(element, reference_class, reference_id, ex_class_id
   
   row.addClassName('selected');
   body.addClassName('opened');
-  ExObject.loadExObjects(reference_class, reference_id, listContainer.down('td'), 1, ex_class_id);
+  ExObject.loadExObjects(reference_class, reference_id, listContainer.down('td'), 1, ex_class_id, {
+    other_container: otherContainer
+  });
 };
 
 filterExClasses = function(input){
@@ -95,9 +98,11 @@ filterExClasses = function(input){
     <tbody data-name="{{$ex_classes.$_ex_class_id->name}}">
       <tr>
         <td class="text">
-          {{if $ex_objects_results.$_ex_class_id !== null}}
-            <strong style="float: right;">= {{$ex_objects_results.$_ex_class_id}}</strong>
-          {{/if}}
+          <strong style="float: right;" class="ex-object-result">
+            {{if $ex_objects_results.$_ex_class_id !== null}}
+              = {{$ex_objects_results.$_ex_class_id}}
+            {{/if}}
+          </strong>
 
           <a href="#1" class="tree-folding" onclick="loadExObjectsList(this, '{{$reference_class}}', '{{$reference_id}}', '{{$_ex_class_id}}'); return false;">
             {{$ex_classes.$_ex_class_id->name}}
@@ -114,7 +119,7 @@ filterExClasses = function(input){
           {{/if}}
         </td>
 
-        <td class="narrow" style="text-align: right;">
+        <td class="narrow ex-object-count" style="text-align: right;">
           {{$_ex_objects_count}}
         </td>
       </tr>

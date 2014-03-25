@@ -1591,7 +1591,27 @@ class CSetupsystem extends CSetup {
                 ADD `readonly` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.57";
+    $this->makeRevision("1.1.57");
+    function setup_system_removeZombieExLinks($setup) {
+      /** @var CSQLDataSource $ds */
+      $ds = $setup->ds;
+
+      // Changement des ExClasses
+      $query = "SELECT ex_class_id FROM ex_class";
+      $list_ex_class = $ds->loadColumn($query);
+
+      foreach ($list_ex_class as $ex_class_id) {
+        $query = "DELETE FROM `ex_link` WHERE
+                    `ex_object_id` NOT IN(SELECT `ex_object_id` FROM `ex_object_$ex_class_id`) AND
+                    `ex_class_id` = '$ex_class_id';";
+        $ds->exec($query);
+      }
+
+      return true;
+    }
+    $this->addFunction("setup_system_removeZombieExLinks");
+
+    $this->mod_version = "1.1.58";
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,

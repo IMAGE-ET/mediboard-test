@@ -170,7 +170,8 @@ var ExObject = {
       print: 0,
       start: 0,
       search_mode: null,
-      onComplete: function(){}
+      onComplete: function(){},
+      other_container: null
     }, options);
 
     target = $(target);
@@ -187,6 +188,11 @@ var ExObject = {
     url.addParam("ex_class_id",     ex_class_id);
     url.addParam("target_element",  target.identify());
     url.mergeParams(options);
+
+    if (options.other_container) {
+      url.addParam("other_container", options.other_container.identify());
+    }
+
     url.requestUpdate(target, {onComplete: options.onComplete});
   },
 

@@ -86,6 +86,7 @@ class CExObject extends CMbMetaObject {
 
   /**
    * Sets the CExClass ID of $this
+   * The CExLinks are not declared as backrefs as it's not compatible with CExObject
    *
    * @param ref $ex_class_id CExClass ID
    *
@@ -1306,5 +1307,34 @@ class CExObject extends CMbMetaObject {
     ksort($ex_objects);
 
     return $ex_objects;
+  }
+
+  /**
+   * Custom delete, will delete any link
+   *
+   * @see parent::delete()
+   */
+  function delete(){
+    $ex_object_id = $this->_id;
+    $ex_class_id = $this->_ex_class_id;
+
+    if ($msg = parent::delete()) {
+      return $msg;
+    }
+
+    // Remove CExLinks
+    $where = array(
+      "ex_class_id"  => " = '$ex_class_id'",
+      "ex_object_id" => " = '$ex_object_id'",
+    );
+
+    $ex_link = new CExLink();
+    $ex_links = $ex_link->loadList($where);
+
+    foreach ($ex_links as $_ex_link) {
+      $_ex_link->delete();
+    }
+
+    return null;
   }
 }

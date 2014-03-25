@@ -18,7 +18,26 @@ ExObject.refreshSelf['{{$self_guid}}'] = function(start){
   }
   
   ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', '{{$target_element}}', '{{$detail}}', '{{$ex_class_id}}', options);
-}
+};
+
+{{if $other_container}}
+  Main.add(function(){
+    var element = $("{{$other_container}}");
+    if (element) {
+      var count = element.down(".ex-object-count");
+      if (count) {
+        count.update("{{$ex_objects_counts.$ex_class_id}}");
+      }
+
+      {{if $ex_objects_results.$ex_class_id != null}}
+        var result = element.down(".ex-object-result");
+        if (result) {
+          result.update("= {{$ex_objects_results.$ex_class_id}}");
+        }
+      {{/if}}
+    }
+  });
+{{/if}}
 
 </script>
 
