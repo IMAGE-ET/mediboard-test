@@ -94,6 +94,7 @@ class CSetSpec extends CEnumSpec {
     $size          = CMbArray::extract($params, "size", 0);
     $onchange      = CMbArray::get($params, "onchange");
     $form          = CMbArray::extract($params, "form"); // needs to be extracted
+    $readonly      = CMbArray::extract($params, "readonly") == 1;
 
     $extra         = CMbArray::makeXmlAttributes($params);
     $className     = CMbString::htmlSpecialChars(trim("$className $this->prop"));
@@ -107,6 +108,10 @@ class CSetSpec extends CEnumSpec {
     
     switch ($typeEnum) {
       case "select":
+        if ($readonly) {
+          $readonly = "readonly";
+        }
+
         $sHtml     = "<script type=\"text/javascript\">
           Main.add(function(){
             var select = \$\$('select[data-select_set=$uid]')[0],
@@ -121,7 +126,7 @@ class CSetSpec extends CEnumSpec {
           });
         </script>";
         $sHtml      .= "<input type=\"hidden\" name=\"$field\" value=\"$value\" class=\"$className\" $extra />\n";
-        $sHtml      .= "<select class=\"$className\" multiple=\"multiple\" size=\"$size\" data-select_set=\"$uid\" $extra>";
+        $sHtml      .= "<select class=\"$className\" multiple=\"multiple\" size=\"$size\" data-select_set=\"$uid\" $extra $readonly>";
         
         foreach ($locales as $key => $item) {
           if (!empty($value_array) && in_array($key, $value_array)) {
@@ -138,7 +143,6 @@ class CSetSpec extends CEnumSpec {
 
       default:
       case "checkbox":
-        $readonly = CMbArray::extract($params, "readonly");
         $sHtml  = "<span id=\"set-container-$uid\">\n";
         $sHtml .= "<input type=\"hidden\" name=\"$field\" value=\"$value\" class=\"$className\" $extra />\n";
 

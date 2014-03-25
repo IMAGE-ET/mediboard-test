@@ -885,14 +885,18 @@ class CMbFieldSpec {
    * @return html HTML form textarea string
    */
   function getFormElementTextarea($object, $params, $value, $className){
-    $field = CMbString::htmlSpecialChars($this->fieldName);
-    $rows  = CMbArray::extract($params, "rows", "3");
-    $form  = CMbArray::extract($params, "form"); // needs to be extracted
+    $field      = CMbString::htmlSpecialChars($this->fieldName);
+    $rows       = CMbArray::extract($params, "rows", "3");
+    $form       = CMbArray::extract($params, "form"); // needs to be extracted
     $aidesaisie = CMbArray::extract($params, "aidesaisie");
+    $readonly   = CMbArray::extract($params, "readonly");
+    $readonly   = ($readonly == 1 ? "readonly" : "");
+
     $extra = CMbArray::makeXmlAttributes($params);
-    $prop = CMbString::htmlSpecialChars(trim("$className $this->prop"));
+    $prop  = CMbString::htmlSpecialChars(trim("$className $this->prop"));
     $value = CMbString::htmlSpecialChars($value);
-    $sHtml = "<textarea name=\"$field\" rows=\"$rows\" class=\"$prop styled-element\" $extra>$value</textarea>";
+
+    $sHtml = "<textarea name=\"$field\" rows=\"$rows\" class=\"$prop styled-element\" $readonly $extra>$value</textarea>";
     
     if ($form && $this->helped) {
       $module = CModule::getActive("dPcompteRendu");

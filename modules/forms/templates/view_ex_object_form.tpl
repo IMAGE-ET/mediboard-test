@@ -91,7 +91,7 @@ Main.add(function(){
   ExObject.current = {object_guid: "{{$object_guid}}", event_name: "{{$event_name}}"};
   ExObject.pixelPositionning = {{$ex_object->_ref_ex_class->pixel_positionning}} == 1;
   new ExObjectFormula({{$formula_token_values|@json}}, form);
-  ExObject.initPredicates({{$ex_object->_fields_default_properties|@json}}, {{$ex_object->_fields_display_struct|@json}}, form);
+  ExObject.initPredicates({{$ex_object->_fields_default_properties|@json:true}}, {{$ex_object->_fields_display_struct|@json:true}}, form);
 });
 </script>
 

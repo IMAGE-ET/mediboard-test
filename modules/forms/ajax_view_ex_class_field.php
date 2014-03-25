@@ -28,6 +28,8 @@ if ($spec instanceof CEnumSpec) {
   $ex_class_field->updateEnumSpec($spec);
 }
 
+$ex_class_field->readonly = "0";
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("ex_field", $ex_class_field);
