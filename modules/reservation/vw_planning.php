@@ -34,7 +34,6 @@ foreach ($praticiens as $_prat) {
 
 $plageOp = new CPlageOp();
 $plageOp->canDo();
-mbTrace($plageOp->_can);
 
 $bloc = new CBlocOperatoire();
 $blocs = $bloc->loadGroupList();
