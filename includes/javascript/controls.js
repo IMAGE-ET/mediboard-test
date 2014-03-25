@@ -609,7 +609,7 @@ Element.addMethods('input', {
       fraction: false,
       deferEvent: false,
       showFraction: false,
-      deferDelay: Prototype.Browser.IE ? 300 : 200,
+      deferDelay: 500,
       bigButtons: App.touchDevice
     }, options);
     
