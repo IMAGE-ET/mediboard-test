@@ -79,7 +79,7 @@ var Thumb = {
     url.requestUpdate("thumbs", {
       method: "post",
       getParameters: {
-        m: "dPcompteRendu", 
+        m: "compteRendu",
         a: "ajax_pdf"
       },
       onComplete: function() {
@@ -118,12 +118,16 @@ var Thumb = {
       
       if ((scroll_lower >= thumbs_lower && scroll_lower <= thumbs_higher) ||
           (scroll_higher >= thumbs_lower && scroll_higher <= thumbs_higher)) {
-        var url = new Url("dPcompteRendu", "ajax_thumbs");
+        var url = new Url("compteRendu", "ajax_thumbs");
         url.addParam("index", index);
         url.addParam("file_id", Thumb.file_id);
         thumb.removeClassName("thumb_empty").addClassName("thumb_full");
         url.requestJSON(function(thumbnail) {
-          thumb.observe("click", function(){
+          thumb.observe("click", function() {
+            // Sauvegarde du document à l'agrandissement de la vignette
+            if (Thumb.mode != "modele") {
+              getForm("editFrm").onsubmit();
+            }
             (new Url).ViewFilePopup('CCompteRendu', Thumb.compte_rendu_id || Thumb.modele_id, 'CFile', Thumb.file_id, index)});
           thumb.src = "data:image/png;base64,"+thumbnail; Thumb.refreshThumb();
         });
@@ -137,7 +141,7 @@ var Thumb = {
         this.thumb_up2date = false;
         return;
       }
-      var on_click = function(){
+      var on_click = function() {
         Thumb.instance.on("key", loadOld);
         Thumb.changed = true;
         Thumb.first_time = 0;
@@ -179,7 +183,6 @@ function restoreStyle() {
   if (tag.$.tagName == "STYLE") return;
   window.save_style.insertBefore(tag);
   //tag.insertBeforeMe(window.save_style);
-  
 }
 
 function deleteStyle() {
@@ -196,5 +199,5 @@ function pdfAndPrintServer(compte_rendu_id) {
   url.addParam("compte_rendu_id", compte_rendu_id);
   url.addParam("write_page", 1);
   url.addParam("print", 1);
-  url.requestUpdate("pdf_area", {method: "post", getParameters: {m: "dPcompteRendu", a: "ajax_pdf"}});
+  url.requestUpdate("pdf_area", {method: "post", getParameters: {m: "compteRendu", a: "ajax_pdf"}});
 }
