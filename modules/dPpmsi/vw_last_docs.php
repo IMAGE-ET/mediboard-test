@@ -40,22 +40,22 @@ if ($type) {
 
 $smarty = new CSmartyDP;
 
-$smarty->assign("categories" , $categories);
-$smarty->assign("specialites", $specialites);
-$smarty->assign("prats"      , $prats);
-$smarty->assign("cat_docs"   , $cat_docs);
-$smarty->assign("specialite_docs", $specialite_docs);
-$smarty->assign("prat_docs"   , $prat_docs);
-$smarty->assign("date_docs_min", $date_docs_min);
-$smarty->assign("date_docs_max", $date_docs_max);
-$smarty->assign("page"       , $page);
-$smarty->assign("sejour"     , $sejour);
-$smarty->assign("entree_min", $entree_min);
-$smarty->assign("entree_max", $entree_max);
-$smarty->assign("sortie_min", $sortie_min);
-$smarty->assign("sortie_max", $sortie_max);
+$smarty->assign("categories"      , $categories);
+$smarty->assign("specialites"     , $specialites);
+$smarty->assign("prats"           , $prats);
+$smarty->assign("cat_docs"        , $cat_docs);
+$smarty->assign("specialite_docs" , $specialite_docs);
+$smarty->assign("prat_docs"       , $prat_docs);
+$smarty->assign("date_docs_min"   , $date_docs_min);
+$smarty->assign("date_docs_max"   , $date_docs_max);
+$smarty->assign("page"            , $page);
+$smarty->assign("sejour"          , $sejour);
+$smarty->assign("entree_min"      , $entree_min);
+$smarty->assign("entree_max"      , $entree_max);
+$smarty->assign("sortie_min"      , $sortie_min);
+$smarty->assign("sortie_max"      , $sortie_max);
 $smarty->assign("intervention_min", $intervention_min);
 $smarty->assign("intervention_max", $intervention_max);
-$smarty->assign("section_search", $section_search);
+$smarty->assign("section_search"  , $section_search);
 
 $smarty->display("vw_last_docs.tpl");
