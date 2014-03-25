@@ -29,8 +29,13 @@ function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $sal
   }
   
   $user = new CMediusers();
-  $ljoin = array("users" => "users.user_id = users_mediboard.user_id", "functions_mediboard" => "functions_mediboard.function_id = users_mediboard.function_id");
-  $where = array("functions_mediboard.group_id" => "= '".CGroups::loadCurrent()->_id."'");
+  $ljoin = array(
+    "users" => "users.user_id = users_mediboard.user_id",
+    "functions_mediboard" => "functions_mediboard.function_id = users_mediboard.function_id"
+  );
+  $where = array(
+    "functions_mediboard.group_id" => "= '".CGroups::loadCurrent()->_id."'"
+  );
   if ($discipline_id) {
     $where["users_mediboard.discipline_id"] = " = '$discipline_id'";
   }

@@ -15,10 +15,11 @@
 
   DisplayGraph.addFiltersParam = function(url) {
     var oForm = DisplayGraph.filterForm;
-    url.addParam("_date_min"   , $V(oForm._date_min));
-    url.addParam("_date_max"     , $V(oForm._date_max));
+    url.addParam("_date_min"    , $V(oForm._date_min));
+    url.addParam("_date_max"    , $V(oForm._date_max));
     url.addParam("codes_ccam"   , $V(oForm.codes_ccam));
     url.addParam("type"         , $V(oForm.type));
+    url.addParam("prat_id"      , $V(oForm.prat_id));
     url.addParam("discipline_id", $V(oForm.discipline_id));
     url.addParam("bloc_id"      , $V(oForm.bloc_id));
     url.addParam("salle_id"     , $V(oForm.salle_id));
