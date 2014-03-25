@@ -407,16 +407,24 @@ var AideSaisie = {
   }),
   
   create: function (objectClass, field, name, dependValue1, dependValue2, text, userId, class_depend_value_1, class_depend_value_2) {
-    var url = new Url("dPcompteRendu", "edit_aide");
-    url.addParam("user_id"     , userId);
-    url.addParam("class"       , objectClass);
-    url.addParam("field"       , name || field.name);
-    url.addParam("text"        , text || field.value);
-    url.addParam("depend_value_1", dependValue1 || null);
-    url.addParam("depend_value_2", dependValue2 || null);
-    url.addParam("class_depend_value_1", class_depend_value_1 || null);
-    url.addParam("class_depend_value_2", class_depend_value_2 || null);
-    url.addParam("dialog","1");
-    url.modal({height:"80%", width:"60%", title:"Création d'aide à la saisie"});
+    var url = new Url("compteRendu", "edit_aide");
+    url.addParam("text", text || field.value);
+
+    url.requestModal("80%", "60%", {
+      title:"Création d'aide à la saisie",
+      method: "post",
+      getParameters: {
+        m      : "compteRendu",
+        a      : "edit_aide",
+        user_id: userId,
+        class  : objectClass,
+        field  : name || field.name,
+        depend_value_1: dependValue1 || null,
+        depend_value_2: dependValue2 || null,
+        class_depend_value_1: class_depend_value_1 || null,
+        class_depend_value_2: class_depend_value_2 || null,
+        dialog : "1"
+      }
+    });
   }
 };
