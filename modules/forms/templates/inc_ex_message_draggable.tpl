@@ -2,7 +2,7 @@
      data-type="{{$_type}}"
      data-message_id="{{$_field->_id}}"
      ondblclick="ExMessage.edit({{$_field->_id}}); Event.stop(event);"
-     onclick="this.up('.resizable').focus(); Event.stop(event);"
+     onclick="ExClass.focusResizable(event, this)"
      unselectable="on"
      onselectstart="return false;"
   >

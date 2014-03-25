@@ -8,10 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if !@$readonly}}
-
 {{unique_id var=ex_form_hash}}
 {{assign var=ex_form_hash value="ex_$ex_form_hash"}}
+
+{{if !@$readonly}}
 
 <script type="text/javascript">
 ExObjectForms = window.ExObjectForms || {};
@@ -222,6 +222,9 @@ Main.add(function(){
       window.print();
     }
   {{/if}}
+
+  var form = getForm("editExObject_{{$ex_form_hash}}");
+  ExObject.initPredicates({{$ex_object->_fields_default_properties|@json:true}}, {{$ex_object->_fields_display_struct|@json:true}}, form);
 });
 
 function switchMode(){
@@ -229,6 +232,15 @@ function switchMode(){
   location.href = location.href.replace('only_filled='+only_filled, 'only_filled='+(only_filled == 1 ? 0 : 1));
 }
 </script>
+
+{{* form used for predicates *}}
+<form name="editExObject_{{$ex_form_hash}}" onsubmit="return false" method="get" style="display: none;">
+  {{foreach from=$grid key=_group_id item=_grid}}
+    {{foreach from=$groups.$_group_id->_ref_fields item=_field}}
+      {{mb_field object=$ex_object field=$_field->name hidden=true}}
+    {{/foreach}}
+  {{/foreach}}
+</form>
 
 {{if $print}}
   <div style="float: right;" class="not-printable">
@@ -297,16 +309,20 @@ function switchMode(){
               {{if $_group.type == "label"}}
                 {{if $_field->coord_field_x == $_field->coord_label_x+1}}
                   <th style="font-weight: bold; vertical-align: middle; white-space: normal;">
-                    {{mb_label object=$ex_object field=$_field_name}}
+                    <div class="field-{{$_field->name}} field-label">
+                      {{mb_label object=$ex_object field=$_field_name}}
+                    </div>
                   </th>
                 {{else}}
                   <td style="font-weight: bold; text-align: left;">
-                    {{mb_label object=$ex_object field=$_field_name}}
+                    <div class="field-{{$_field->name}} field-label">
+                      {{mb_label object=$ex_object field=$_field_name}}
+                    </div>
                   </td>
                 {{/if}}
               {{elseif $_group.type == "field"}}
                 <td>
-                  <div {{if $ex_object->_specs.$_field_name instanceof CTextSpec}} style="text-block" {{/if}}>
+                  <div class="field-{{$_field->name}} field-input" {{if $ex_object->_specs.$_field_name instanceof CTextSpec}} style="text-block" {{/if}}>
                     {{$_field->prefix}}
                     {{mb_value object=$ex_object field=$_field_name}}
                     {{$_field->suffix}}
@@ -357,7 +373,9 @@ function switchMode(){
                 {{/if}}
               {{else}}
                 <td class="text">
-                  {{mb_include module=forms template=inc_ex_message}}
+                  <div id="message-{{$_message->_guid}}">
+                    {{mb_include module=forms template=inc_ex_message}}
+                  </div>
                 </td>
               {{/if}}
           {{/if}}
@@ -375,10 +393,12 @@ function switchMode(){
       {{if isset($out_of_grid.$_group_id.field.$_field_name|smarty:nodefaults) && (!$_field->disabled || $ex_object->_id && $ex_object->$_field_name !== null)}}
         <tr>
           <th style="font-weight: bold; width: 50%; vertical-align: middle; white-space: normal;" colspan="2">
-            {{mb_label object=$ex_object field=$_field_name}}
+            <div class="field-{{$_field->name}} field-label">
+              {{mb_label object=$ex_object field=$_field_name}}
+            </div>
           </th>
           <td colspan="2">
-            <div {{if $ex_object->_specs.$_field_name instanceof CTextSpec}} class="text-block" {{/if}}>
+            <div class="field-{{$_field->name}} field-label" {{if $ex_object->_specs.$_field_name instanceof CTextSpec}} class="text-block" {{/if}}>
               {{$_field->prefix}}
               {{mb_value object=$ex_object field=$_field_name}}
               {{$_field->suffix}}

@@ -116,6 +116,7 @@ div.ex-message-title {
   padding-top: 3px;
   position: absolute;
   white-space: nowrap;
+  pointer-events: none;
 }
 
 .pixel-positionning .ex-message {
@@ -243,6 +244,10 @@ form[name="form-grid-layout"].pickmode .drop-grid .droppable:hover {
 
 .pixel-positionning .input-label {
   white-space: nowrap;
+}
+
+.pixel-positionning .no-size .input-label + div {
+  position: static !important;
 }
 
 .pixel-positionning .resizable textarea.noresize {

@@ -20,6 +20,8 @@ ExClass.initPixelLayoutEditor = function(){
       
       var drag = new Draggable(element, {
         handle: element.down(".overlayed"),
+        starteffect: function(){},
+        endeffect: function(){},
         onStart: function(draggable) {
           var element = draggable.element;
           if (element.hasClassName("field-input") ||
@@ -286,4 +288,12 @@ ExClass.initPixelLayoutEditor = function(){
       });
     });
   });
+};
+
+ExClass.focusResizable = function(event, element) {
+  var resizable = element.up('.resizable');
+  if (resizable) {
+    resizable.focus();
+    Event.stop(event);
+  }
 };
