@@ -748,6 +748,10 @@ class CPlageOp extends CMbObject {
    * @see parent::getPerm()
    */
   function getPerm($permType) {
+    if (!$this->_id) {
+      return parent::getPerm($permType);
+    }
+
     if (!$this->_ref_salle) {
       $this->loadRefSalle();
     }
