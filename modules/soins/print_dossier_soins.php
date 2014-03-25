@@ -37,7 +37,6 @@ $sejour->loadNDA();
 $sejour->loadExtDiagnostics();
 $sejour->loadRefsConsultAnesth();
 $sejour->_ref_consult_anesth->loadRefConsultation();
-$sejour->loadSuiviMedical($datetime_min);
 
 $sejour->canRead();
 
@@ -100,6 +99,10 @@ if ($offline && CModule::getActive("forms")) {
 
   $formulaires = CApp::fetch("forms", "ajax_list_ex_object", $params);
 }
+
+// L'appel à print_fiche écrase les interventions du dossier d'anesthésie.
+// Il faut charger le suivi médical à posteriori
+$sejour->loadSuiviMedical($datetime_min);
 
 if ($embed) {
   // Fichiers et documents du sejour
@@ -233,6 +236,7 @@ if ($datetime_min) {
   $where["datetime"] = " >= '$datetime_min'";
 }
 $sejour->loadListConstantesMedicales($where);
+
 
 $constantes_grid = CConstantesMedicales::buildGrid($sejour->_list_constantes_medicales, false);
 
