@@ -279,7 +279,7 @@ header("Cache-Control: no-cache, no-store, must-revalidate");  // HTTP/1.1
 header("Pragma: no-cache");  // HTTP/1.0
 $ie_mode = CAppUI::conf("browser_enable_ie9");
 $map = array(
-  0 => 8,
+  0 => 9, // Force IE9 min
   1 => 9,
   2 => "edge",
 );
