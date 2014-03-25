@@ -471,6 +471,9 @@ class CFacture extends CMbObject {
     $this->_secteur1  = 0;
     $this->_secteur2  = 0;
     $this->_secteur3  = 0;
+    if (!count($this->_ref_items)) {
+      $this->loadRefsItems();
+    }
     if (count($this->_ref_sejours) != 0 || count($this->_ref_consults) != 0) {
       if (!count($this->_ref_items)) {
         $this->du_patient = 0;
@@ -772,6 +775,9 @@ class CFacture extends CMbObject {
    * @return object
    **/
   function loadRefsItems(){
+    if (count($this->_ref_items)) {
+      return $this->_ref_items;
+    }
     $item =  new CFactureItem();
     $item->object_id   = $this->_id;
     $item->object_class = $this->_class;
