@@ -54,7 +54,7 @@
   <input type="hidden" name="parent_id" value=""/>
   <input type="text" name="name" value="" placeholder="{{tr}}Search{{/tr}}" onkeyup="$V(this.form.page, 0)"/>
   <!--<label>Utilisés au moins 1 fois<input type="checkbox" name="no_item" onchange="$V(this.form.page, 0)"/></label>-->
-  <label><input type="checkbox" name="is_child" onchange="$V(this.form.page, 0)"/>Sont des fils</label>
+  <label><input type="checkbox" name="is_child" onchange="$V(this.form.page, 0)"/>Ayant un parent</label>
   <input type="hidden" name="page" value="0"/>
   <button class="search notext">{{tr}}Search{{/tr}}</button>
 </form>
