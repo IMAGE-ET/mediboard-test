@@ -32,6 +32,10 @@ foreach ($praticiens as $_prat) {
   $_prat->loadRefFunction();
 }
 
+$plageOp = new CPlageOp();
+$plageOp->canDo();
+mbTrace($plageOp->_can);
+
 $bloc = new CBlocOperatoire();
 $blocs = $bloc->loadGroupList();
 
@@ -41,6 +45,7 @@ $smarty->assign("date_planning", $date_planning);
 $smarty->assign("praticien_id" , $praticien_id);
 $smarty->assign("praticiens"   , $praticiens);
 $smarty->assign("blocs"        , $blocs);
+$smarty->assign("plageop"      , $plageOp);
 $smarty->assign("bloc_id"      , $bloc_id);
 $smarty->assign("show_cancelled", $show_cancelled);
 $smarty->assign("show_operations", $show_operations);

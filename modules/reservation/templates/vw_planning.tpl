@@ -370,7 +370,9 @@
     <tr>
       <th class="category" colspan="5">
         <span style="float:left;"><button id="autorefreshPlanningButton" class="play" title="Arrêter / Relancer le rafraîchissement automatique" onclick="togglePlayPause(this);" type="button">Rech. auto</button></span>
-        <span style="float:left;"><button id="autorefreshPlanningButton" class="new" onclick="modifPlage();" type="button">Ajouter une plage</button></span>
+        {{if $plageop->_can->edit}}
+          <span style="float:left;"><button id="autorefreshPlanningButton" class="new" onclick="modifPlage();" type="button">Ajouter une plage</button></span>
+        {{/if}}
         Filtre
       </th>
       <th class="category">
