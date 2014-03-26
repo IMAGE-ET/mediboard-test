@@ -8,11 +8,11 @@ ExClass = window.ExClass || {
     this.pickMode = active;
     getForm('form-grid-layout').setClassName("pickmode", active);
   },
-  edit: function(id) {
+  edit: function(id, callback) {
     this.id = id || this.id;
 
     MbObject.edit("CExClass-"+id, {
-      onComplete:function(){
+      onComplete: callback || function(){
         if (ExField.latest._id && ExField.latest._ex_class_id == id) {
           ExField.edit(ExField.latest._id);
         }
@@ -23,7 +23,7 @@ ExClass = window.ExClass || {
 
 ExField = window.ExField || {
   latest: {},
-  saveCallback: function(id, obj) {
+  editCallback: function(id, obj) {
     ExField.latest = obj;
     ExField.latest._id = id;
 
@@ -42,9 +42,6 @@ ExField = window.ExField || {
     url.addParam("ex_class_id", ex_class_id);
     url.addParam("ex_group_id", ex_group_id);
     url.requestUpdate(target || "exFieldEditor");
-  },
-  editCallback: function(id, obj) {
-    // void
   },
   create: function(ex_class_id, ex_group_id) {
     this.edit("0", ex_class_id, null, ex_group_id);
@@ -73,7 +70,11 @@ ExMessage = {
     });
   },
   editCallback: function(id, obj) {
-    // void
+    if (ExClass.id) {
+      ExClass.edit(ExClass.id, function(){
+        ExMessage.edit(id, obj.ex_group_id);
+      });
+    }
   },
   create: function(ex_group_id) {
     this.edit("0", ex_group_id);

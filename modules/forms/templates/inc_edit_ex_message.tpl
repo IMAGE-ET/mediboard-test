@@ -53,10 +53,11 @@ Main.add(function(){
 </div>
 {{/if}}
 
-<form name="editMessage" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {onComplete: ExClass.edit.curry({{$ex_message->_ref_ex_group->ex_class_id}})})">
+<form name="editMessage" method="post" action="?" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="dosql" value="do_ex_class_message_aed" />
   <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="callback" value="ExMessage.editCallback" />
   {{mb_key object=$ex_message}}
   {{mb_field object=$ex_message field=ex_group_id hidden=true}}
   

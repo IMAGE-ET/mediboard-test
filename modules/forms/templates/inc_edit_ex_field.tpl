@@ -124,7 +124,7 @@ Main.add(function(){
 <form name="editField" method="post" action="?" data-object_guid="{{$ex_field->_guid}}" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="dosql" value="do_ex_class_field_aed" />
-  <input type="hidden" name="callback" value="ExField.saveCallback" />
+  <input type="hidden" name="callback" value="ExField.editCallback" />
   
   <input type="hidden" name="_triggered_data" value="{{$ex_field->_triggered_data|@json|smarty:nodefaults|JSAttribute}}" />
   
