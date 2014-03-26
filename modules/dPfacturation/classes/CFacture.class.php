@@ -415,6 +415,17 @@ class CFacture extends CMbObject {
 
     if (CModule::getActive("dPfacturation")) {
       $where = array();
+      $where["object_id"]    = " = '$this->_id'";
+      $where["object_class"] = " = '$this->_class'";
+      $item = new CFactureItem();
+      $items = $item->loadList($where);
+      foreach ($items as $_item) {
+        if ($msg = $_item->delete()) {
+          return $msg;
+        }
+      }
+
+      $where = array();
       $where["facture_id"]    = " = '$this->_id'";
       $where["facture_class"] = " = '$this->_class'";
       $where[] = "object_class = 'Sejour' OR object_class = 'CConsultation'";
