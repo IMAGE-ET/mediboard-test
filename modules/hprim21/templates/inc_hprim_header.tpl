@@ -15,10 +15,25 @@
   </tr>
   <tr>
     <th>Expéditeur</th>
-    <td><small>[{{$header.10.0}}]</small> {{$header.10.1}} {{if $header.10.11}}{{$header.10|substr:11}}{{/if}}</td>
+    <td>
+      {{if $header.10}}
+        <small>
+          [{{$header.10.0}}]
+        </small>
+        {{$header.10.1}} {{if $header.10.11}}{{$header.10|substr:11}}{{/if}}
+      {{/if}}
+    </td>
 
     <th>Destinataire</th>
-    <td><small>[{{$header.11.0}}]</small> {{$header.11.1}} {{if $header.11.11}}{{$header.11|substr:11}}{{/if}}</td>
+
+    <td>
+      {{if $header.11}}
+        <small>
+          [{{$header.11.0}}]
+        </small>
+        {{$header.11.1}} {{if $header.11.11}}{{$header.11|substr:11}}{{/if}}
+      {{/if}}
+    </td>
   </tr>
   <tr>
     <td colspan="4"><hr /></td>
