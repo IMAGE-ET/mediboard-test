@@ -175,7 +175,7 @@ function toggleList(list, button) {
   {{foreach from=$patient->_ref_consultations item=curr_consult}}
   <tr class="consultation">
     <th class="text">{{$curr_consult->_ref_plageconsult->_ref_chir->_view}}</th>
-    <td colspan="3">le {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}</td>
+    <td colspan="3">le {{mb_value object=$curr_consult->_ref_plageconsult field=date}} à {{mb_value object=$curr_consult field=heure}}</td>
   </tr>
   {{/foreach}}
   {{/if}}
