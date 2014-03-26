@@ -19,6 +19,7 @@
   <li><a href="#CCorrespondantPatient">{{tr}}CCorrespondantPatient{{/tr}}</a></li>
   <li><a href="#INSEE"                >{{tr}}INSEE{{/tr}}                </a></li>
   <li><a href="#Purge"                >{{tr}}Purge{{/tr}}                </a></li>
+  <li><a href="#import"               >{{tr}}Import{{/tr}}                </a></li>
   <li><a href="#CConfigEtabPatient">Config par établissement             </a></li>
 </ul>
 
@@ -49,6 +50,10 @@
 
 <div id="INSEE" style="display: none;">
   {{mb_include template=inc_configure_insee}}
+</div>
+
+<div id="import" style="display: none;">
+  {{mb_include template=inc_vw_import}}
 </div>
 
 <div id="Purge" style="display: none;">

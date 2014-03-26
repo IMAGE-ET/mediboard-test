@@ -40,6 +40,11 @@ $departements[] = "WF"; // Wallis et Futuna
 $patient = new CPatient();
 $nb_patients = $patient->countList();
 
+// import
+$patient = new CPatient();
+$patient_specs = CModelObjectFieldDescription::getSpecList($patient);
+CModelObjectFieldDescription::addBefore($patient->_specs["_IPP"], $patient_specs);
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -50,6 +55,8 @@ $smarty->assign("all_appareils"   , $all_appareils);
 
 $smarty->assign("pass"        , CValue::get("pass"));
 $smarty->assign("departements", $departements);
+
+$smarty->assign("patient_specs"       , $patient_specs );
 
 $smarty->assign("nb_patients", $nb_patients);
 

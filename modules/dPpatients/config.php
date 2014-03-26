@@ -48,6 +48,12 @@ $dPconfig["dPpatients"] = array (
    "medecin_strict" => "0",
   ),
 
+  "imports" => array(
+    "pat_csv_path" => "",
+    "pat_start" => 0,
+    "pat_count" => 20,
+  ),
+
   "INSEE" => array(
    "france" => "1",
    "suisse" => "0",
