@@ -10,18 +10,19 @@
 
 CCanDo::checkEdit();
 
-$user = CMediusers::get();
+
 $plage_id = CValue::get("plage_id");
 $plage_date = CValue::get("date");
 $plage_hour = CValue::get("hour");
 $plage_minutes = CValue::get("minutes");
-$user_id = CValue::get("user_id", $user->_id);
+$user_id = CValue::get("user_id");
+$user = CMediusers::get($user_id);
 
 $users = array($user);
 
 if ($user->isAdmin()) {
   $where = array("actif" => "= '1'");
-  $users = $user->loadUsers();
+  $users = $user->loadListWithPerms(PERM_EDIT);
 }
 
 $plageastreinte = new CPlageAstreinte();
@@ -30,6 +31,9 @@ $plageastreinte = new CPlageAstreinte();
 if ($plage_id) {
   $plageastreinte->load($plage_id);
   $plageastreinte->loadRefsNotes();
+}
+else {
+  $plageastreinte->phone_astreinte = $user->_user_astreinte;
 }
 
 //creation
