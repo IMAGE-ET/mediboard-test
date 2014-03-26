@@ -654,6 +654,12 @@ $locales['config-dPurgences-validation'] = 'Validation du document XML';
 $locales['config-dPurgences-validation-desc'] = 'Validation du document XML';
 $locales['config-dPurgences-view_rpu_uhcd'] = 'Afficher les services d\'urgence et UHCD';
 $locales['config-dPurgences-view_rpu_uhcd-desc'] = 'Afficher les services d\'urgence et UHCD dans la main courante';
+$locales['config-dPurgences-vue_topo_refresh_frequency'] = 'Rafraîchissement du placement patients';
+$locales['config-dPurgences-vue_topo_refresh_frequency-desc'] = 'Rafraîchissement du placement patients';
+$locales['config-dPurgences-vue_topo_refresh_frequency-90'] = '90 secondes';
+$locales['config-dPurgences-vue_topo_refresh_frequency-180'] = '3 minutes';
+$locales['config-dPurgences-vue_topo_refresh_frequency-300'] = '5 minutes';
+$locales['config-dPurgences-vue_topo_refresh_frequency-600'] = '10 minutes';
 $locales['confirm-RPU-Hospitalisation-simple'] = 'Vous êtes sur le point de tranformer un passage aux urgences en hospitalisation.
 
 Cette action modifiera le type d\'hospitalisation de séjour pour permettre son traitement dans les unités de soins.

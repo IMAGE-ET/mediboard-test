@@ -1,17 +1,7 @@
-{{* $Id: vw_placement_patients.tpl $ *}}
-
-{{*
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision: 11962 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
-
 {{mb_script module=urgences script=drag_patient}}
 <script>
   Main.add(function () {
-    Rafraichissement.start(60);//rafraichissement toutes les minutes
+    Rafraichissement.start({{$conf.dPurgences.vue_topo_refresh_frequency}});
     PairEffect.initGroup("serviceEffect");
     Control.Tabs.create('tabs-urgences', true);
   });
@@ -32,12 +22,6 @@
   <li><a href="#urgences">Urgence</a></li>
   <li><a href="#uhcds">   UHCD   </a></li>
   <li style="width: 20em; text-align: center">
-    {{*<script>
-      Main.add(function() {
-        Calendar.regField(getForm("changeDate").date, null, { noView: true } );
-      } );
-    </script>
-     *}}
     <strong><big>{{$date|date_format:$conf.longdate}}</big></strong>
 
     <form action="#" name="changeDate" method="get">

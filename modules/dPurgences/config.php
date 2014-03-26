@@ -53,4 +53,5 @@ $dPconfig["dPurgences"] = array (
   "gestion_motif_sfmu"                   => "0",
   "display_motif_sfmu"                   => "0",
   "use_vue_topologique"                  => "1",
+  "vue_topo_refresh_frequency"           => "90",
 );
