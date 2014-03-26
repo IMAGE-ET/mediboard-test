@@ -27,10 +27,15 @@ var Tag = {
     
     url.requestUpdate("systemMsg", {method: "post"});
   },
-  manage: function(object_class) {
+  manage: function(object_class, onCloseCallback) {
     var url = new Url('system', 'ajax_tag_manager');
     url.addParam('object_class', object_class);
     url.requestModal("680", "470");
+    if (onCloseCallback) {
+      url.modalObject.observe("afterClose", function() {
+        onCloseCallback();
+      });
+    }
   },
   setNodeVisibility: function(node) {
     node = $(node);
