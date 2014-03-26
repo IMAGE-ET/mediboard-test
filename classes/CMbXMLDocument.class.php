@@ -90,7 +90,7 @@ class CMbXMLDocument extends DOMDocument {
       $return .=    " in <b>$error->file</b>";
     }
     $return .= " on line <b>$error->line</b>\n";
-  
+
     return $return;
   }
   
@@ -123,13 +123,13 @@ class CMbXMLDocument extends DOMDocument {
     if (!$filename) {
       $filename = $this->schemafilename;
     }
-    
+
     // Enable user error handling
     libxml_use_internal_errors(true);
-    
+
     if (!parent::schemaValidate($filename)) {
       $errors = $this->libxml_display_errors($display_errors);
-      
+
       return $returnErrors ? $errors : false;
     }
 
@@ -137,7 +137,7 @@ class CMbXMLDocument extends DOMDocument {
   }
   
   function libxml_tabs_erros() {
-    
+
   }
   
   function loadXMLSafe($source, $options = null, $returnErrors = false) {
@@ -172,6 +172,9 @@ class CMbXMLDocument extends DOMDocument {
   
   function loadXML($source, $options = null, $returnErrors = false) {
     $source = $this->getUTF8($source);
+    if (CModule::getActive("eai") && CAppUI::conf("eai convert_encoding")) {
+      $source = preg_replace("/ encoding=[\"']utf-?8[\"']/i", ' encoding="iso-8859-1"', $source);
+    }
 
     if (!$returnErrors) {
       return parent::loadXML($source, $options);
