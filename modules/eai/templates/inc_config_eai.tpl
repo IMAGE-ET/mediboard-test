@@ -26,6 +26,8 @@
     
     {{mb_include module=system template=inc_config_bool var=use_domain}}
 
+    {{mb_include module=system template=inc_config_bool var=convert_encoding}}
+
     <tr>
       <td class="button" colspan="10">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

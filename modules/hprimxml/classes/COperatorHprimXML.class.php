@@ -116,9 +116,9 @@ class COperatorHprimXML extends CEAIOperator {
       $dom_acq->_ref_echange_hprim    = $echg_hprim;
 
       $msgAcq = $dom_acq->generateAcquittements(
-        $dom_acq instanceof CHPrimXMLAcquittementsServeurActivitePmsi ? "err" : "erreur", "E009", $e->getMessage()
+        $dom_acq instanceof CHPrimXMLAcquittementsServeurActivitePmsi ? "err" : "erreur", "E009", $e->getMessage(), null, $data
       );
-    
+
       $doc_valid = $dom_acq->schemaValidate(null, false, false);
       $echg_hprim->populateErrorEchange($msgAcq, $doc_valid, "erreur");
       
@@ -135,12 +135,12 @@ class COperatorHprimXML extends CEAIOperator {
    * @param CHPrimXMLEvenementsPatients    $dom_evt    DOM event PMSI
    * @param CHPrimXMLAcquittementsPatients $dom_acq    DOM acquittement PMSI
    * @param CEchangeHprim                  $echg_hprim Exchange H'XML
-   * @param array                          $data       Data
+   * @param array                          &$data      Data
    * 
    * @return string Acquittement
    **/
   static function eventPatient(CHPrimXMLEvenementsPatients $dom_evt, CHPrimXMLAcquittementsPatients $dom_acq,
-      CEchangeHprim $echg_hprim, $data = array()
+      CEchangeHprim $echg_hprim, &$data = array()
   ) {
     $newPatient = new CPatient();
     $newPatient->_eai_exchange_initiator_id = $echg_hprim->_id;
@@ -205,12 +205,12 @@ class COperatorHprimXML extends CEAIOperator {
    * @param CHPrimXMLEvenementsServeurActivitePmsi    $dom_evt    DOM event PMSI
    * @param CHPrimXMLAcquittementsServeurActivitePmsi $dom_acq    DOM acquittement PMSI
    * @param CEchangeHprim                             $echg_hprim Exchange H'XML
-   * @param array                                     $data       Data
+   * @param array                                     &$data      Data
    * 
    * @return string Acquittement 
    **/
   static function eventPMSI(CHPrimXMLEvenementsServeurActivitePmsi $dom_evt, CHPrimXMLAcquittementsServeurActivitePmsi $dom_acq,
-      CEchangeHprim $echg_hprim, $data = array()
+      CEchangeHprim $echg_hprim, &$data = array()
   ) {
     $data   = array_merge($data, $dom_evt->getContentsXML());
     if (CMbArray::get($data, "action") && $msgAcq = $dom_evt->isActionValide($data['action'], $dom_acq, $echg_hprim)) {

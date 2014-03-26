@@ -118,8 +118,7 @@ class CEchangeHprim extends CEchangeXML {
         $errors = explode("\n", utf8_decode($validate));
         $this->_doc_errors_ack = array_filter($errors);
       }
-      
-          
+
       $this->_acquittement = utf8_encode($domGetAcquittement->saveXML());
     }
   }
@@ -271,12 +270,12 @@ class CEchangeHprim extends CEchangeXML {
    *
    * @return string
    */
-  function setAckError(CHPrimXMLAcquittements $dom_acq, $code_erreur, $commentaires = null, CMbObject $mbObject = null) {
+  function setAckError(CHPrimXMLAcquittements $dom_acq, $code_erreur, $commentaires = null, CMbObject $mbObject = null, $data = null) {
     $statut = $dom_acq->_codes_erreurs["err"];
     
-    $msgAcq    = $dom_acq->generateAcquittements($dom_acq->_codes_erreurs["err"], $code_erreur, $commentaires, $mbObject);
+    $msgAcq    = $dom_acq->generateAcquittements($dom_acq->_codes_erreurs["err"], $code_erreur, $commentaires, $mbObject, $data);
     $doc_valid = $dom_acq->schemaValidate(null, false, $this->_ref_receiver ? $this->_ref_receiver->display_errors : true);
-    
+
     $this->acquittement_valide = $doc_valid ? 1 : 0;
     $this->statut_acquittement = $statut;
     
@@ -286,7 +285,7 @@ class CEchangeHprim extends CEchangeXML {
     $this->_acquittement = $msgAcq;
     $this->date_echange = CMbDT::dateTime();
     $this->store();
-    
+
     return $msgAcq;
   }
 

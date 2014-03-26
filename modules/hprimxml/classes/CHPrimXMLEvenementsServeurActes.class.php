@@ -180,13 +180,13 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
 
     // Acquittement d'erreur : identifiants source du patient / séjour non fournis
     if (!$data['idSourcePatient'] || !$data['idSourceVenue']) {
-      return $exchange_hprim->setAckError($dom_acq, "E206", null, $mbObject);
+      return $exchange_hprim->setAckError($dom_acq, "E206", null, $mbObject, $data);
     }
 
     // IPP non connu => message d'erreur
     $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $data['idSourcePatient']);
     if (!$IPP->_id) {
-      return $exchange_hprim->setAckError($dom_acq, "E013", null, $mbObject);
+      return $exchange_hprim->setAckError($dom_acq, "E013", null, $mbObject, $data);
     }
 
     // Chargement du patient
@@ -196,7 +196,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     // Num dossier non connu => message d'erreur
     $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $data['idSourceVenue']);
     if (!$NDA->_id) {
-      return $exchange_hprim->setAckError($dom_acq, "E014", null, $mbObject);
+      return $exchange_hprim->setAckError($dom_acq, "E014", null, $mbObject, $data);
     }
 
     // Chargement du séjour
@@ -205,7 +205,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
 
     // Si patient H'XML est différent du séjour
     if ($sejour->patient_id != $patient->_id) {
-      return $exchange_hprim->setAckError($dom_acq, "E015", null, $mbObject);
+      return $exchange_hprim->setAckError($dom_acq, "E015", null, $mbObject, $data);
     }
 
     // Chargement du patient du séjour

@@ -647,7 +647,25 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($execute, "date",  CMbDT::date($mbActeNGAP["date"]));
     $this->addElement($execute, "heure", CMbDT::time($mbActeNGAP["heure"]));
   }
-  
+
+  function addPatientError(DOMNode $elParent, $data) {
+    if (!$data) {
+      return;
+    }
+    $patient = $this->importNode($data["patient"], true);
+    $elParent->appendChild($patient);
+  }
+
+  function addInterventionError(DOMNode $elParent, $data) {
+    if (!$data) {
+      return;
+    }
+    $intervention = $this->addElement($elParent, "intervention");
+    $identifiant  = $this->addElement($intervention, "identifiant");
+    $this->addElement($identifiant, "emetteur", $data["idCibleIntervention"]);
+    $this->addElement($identifiant, "recepteur", $data["idSourceIntervention"]);
+  }
+
   function addPatient(DOMNode $elParent, CPatient $mbPatient, $referent = false, $light = false) {
     $identifiant = $this->addElement($elParent, "identifiant");
     
@@ -663,7 +681,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       if (isset($mbPatient->_id400)) {
         $this->addIdentifiantPart($identifiant, "recepteur", $mbPatient->_id400, $referent);
       }
-    }  
+    }
     
     // Ajout typePersonnePhysique
     $this->addPersonnePhysique($elParent, $mbPatient, $light);
@@ -902,6 +920,16 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $elActeNGAP = $this->addElement($reponse, "acteNGAP");
     $this->addActeNGAPAcquittement($elActeNGAP, $acteNGAP);
 
+    $this->addReponse($reponse, $statut, $codes, $mbObject, $commentaires);
+  }
+
+  function addReponseGeneral($elParent, $statut, $codes, $codeErr = null, $mbObject = null, $commentaires = null, $data = null) {
+    $reponse = $this->addElement($elParent, "reponse");
+    $this->addAttribute($reponse, "statut", $statut);
+    if ($codeErr) {
+      $this->addAttribute($reponse, "codeErreur", $codeErr);
+    }
+    $this->addInterventionError($reponse, $data);
     $this->addReponse($reponse, $statut, $codes, $mbObject, $commentaires);
   }
   

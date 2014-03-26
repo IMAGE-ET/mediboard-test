@@ -375,6 +375,11 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     $node = $data['actesCCAM'];
 
     $actesCCAM = array();
+
+    if (!$node) {
+      return $actesCCAM;
+    }
+
     foreach ($node->childNodes as $_acteCCAM) {
       $actesCCAM[] = $this->mappingActeCCAM($_acteCCAM, $data);
     }
@@ -391,8 +396,12 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
    */
   function mappingActesNGAP($data) {
     $node = $data['actesNGAP'];
-
     $actesNGAP = array();
+
+    if (!$node) {
+      return $actesNGAP;
+    }
+
     foreach ($node->childNodes as $_acteNGAP) {
       $actesNGAP[] = $this->mappingActeNGAP($_acteNGAP, $data);
     }

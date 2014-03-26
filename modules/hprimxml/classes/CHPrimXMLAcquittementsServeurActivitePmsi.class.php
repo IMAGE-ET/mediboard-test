@@ -107,8 +107,8 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
    */
   function addReponses($statut, $codes, $commentaires = null, $mbObject = null, $data = array()) {
     $acquittementsServeurActivitePmsi = $this->documentElement;
-    
-    $mbPatient = $mbSejour = null;    
+
+    $mbPatient = $mbSejour = null;
     if ($mbObject instanceof CSejour) {
       $mbPatient = $mbObject->loadRefPatient();
       $mbSejour  = $mbObject;
@@ -116,7 +116,7 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
     if ($mbObject instanceof COperation) {
       $mbPatient = $mbObject->loadRefSejour()->loadRefPatient();
       $mbSejour  = $mbObject->_ref_sejour;
-    } 
+    }
 
     // Ajout des réponses
     $reponses = $this->addElement($acquittementsServeurActivitePmsi, "reponses");
@@ -126,10 +126,18 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
     if (isset($mbPatient->_id)) {
       $this->addPatient($patient, $mbPatient, false, true);
     }
-    
+
     $venue = $this->addElement($reponses, "venue");
     if (isset($mbSejour->_id)) {
       $this->addVenue($venue, $mbSejour, false, true);
+    }
+
+    if (!is_array($codes)) {
+      if (!isset($mbPatient->_id)) {
+        $this->addPatientError($reponses, $data);
+      }
+      $this->addReponseGeneral($reponses, $statut, $codes, null, $mbObject, $commentaires, $data);
+      return;
     }
     
     // Génération des réponses en fonction du type de l'acquittement
