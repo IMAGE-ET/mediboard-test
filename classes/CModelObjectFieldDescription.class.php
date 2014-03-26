@@ -16,7 +16,7 @@
  */
 class CModelObjectFieldDescription {
   /**
-   * Patient Import for cegi
+   * Patient Import
    *
    * @param $object CPatient|CSejour
    *

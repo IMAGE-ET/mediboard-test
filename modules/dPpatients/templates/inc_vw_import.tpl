@@ -1,6 +1,6 @@
 <script type="text/javascript">
   function updateCountsPat(start, count) {
-    var form = getForm("do-import-cegi-pat");
+    var form = getForm("do-import-patient-pat");
     $V(form.elements.start, start);
     $V(form.elements.count, count);
 
@@ -10,7 +10,7 @@
   }
 
   function updateCountsSejour(start, count) {
-    var form = getForm("do-import-cegi-sejour");
+    var form = getForm("do-import-patient-sejour");
     $V(form.elements.start, start);
     $V(form.elements.count, count);
 
@@ -51,7 +51,7 @@
           </strong>
         </div>
       {{else}}
-        <form name="do-import-cegi-pat" method="post" onsubmit="return onSubmitFormAjax(this, null, 'do-import-cegi-pat-log')">
+        <form name="do-import-patient-pat" method="post" onsubmit="return onSubmitFormAjax(this, null, 'do-import-patient-pat-log')">
           <input type="hidden" name="m" value="patients" />
           <input type="hidden" name="dosql" value="do_import_patient" />
           <input type="hidden" name="callback" value="updateCountsPat" />
@@ -65,7 +65,7 @@
             <tr>
               <td colspan="2">
                 <div class="small-info">Import du fichier <code>{{$conf.dPpatients.imports.pat_csv_path}}</code></div>
-                <div class="small-warning">Attention à l'établissement selectionné !</div>
+                <div class="small-warning">Attention ào l'établissement selectionné !</div>
               </td>
             </tr>
             <tr>
@@ -101,7 +101,7 @@
           <tr>
             <th>Ligne</th><th>Résultat</th>
           </tr>
-          <tbody id="do-import-cegi-pat-log">
+          <tbody id="do-import-patient-pat-log">
           </tbody>
         </table>
       {{/if}}
