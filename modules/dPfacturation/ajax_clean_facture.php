@@ -10,14 +10,17 @@
  */
 
 CCanDo::checkAdmin();
+$ljoin = array();
+$ljoin["facture_cabinet"] = "facture_cabinet.facture_id = facture_liaison.facture_id";
 $where = array();
 $where["object_class"]  = " = 'CConsultation'";
 $where["facture_class"] = " = 'CFactureCabinet'";
+$where["facture_cabinet.annule"] = " = '0'";
 
 $group = "object_id HAVING COUNT(object_id) >= 2";
 
 $liaison = new CFactureLiaison();
-$liaisons = $liaison->loadList($where, null, null, $group);
+$liaisons = $liaison->loadList($where, null, null, $group, $ljoin);
 foreach ($liaisons as $lien) {
   $fact = $lien->loadRefFacture();
   $fact->loadRefPatient();
