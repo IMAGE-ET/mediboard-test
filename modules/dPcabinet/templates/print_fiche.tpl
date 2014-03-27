@@ -29,7 +29,7 @@
       return onSubmitFormAjax(form, {onComplete: function() {
         var url = new Url("cabinet", "print_fiche");
         url.addParam("operation_id", "{{$operation->_id}}");
-        url.addParam("offline", true);
+        url.addParam("offline", false);
         url.addParam("display", true);
         url.addParam("pdf"    , 0);
         url.requestUpdate("fiche_anesth");
