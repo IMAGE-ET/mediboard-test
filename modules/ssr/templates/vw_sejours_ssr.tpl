@@ -12,29 +12,31 @@
   {{mb_script module="soins" script="plan_soins"}}
 
   {{if "dPprescription"|module_active}}
-    {{mb_script module="dPprescription" script="prescription"}}
-    {{mb_script module="dPprescription" script="element_selector"}}
+    {{mb_script module="prescription" script="prescription"}}
+    {{mb_script module="prescription" script="element_selector"}}
   {{/if}}
 
   {{if "dPmedicament"|module_active}}
-    {{mb_script module="dPmedicament" script="medicament_selector"}}
-    {{mb_script module="dPmedicament" script="equivalent_selector"}}
+    {{mb_script module="medicament" script="medicament_selector"}}
+    {{mb_script module="medicament" script="equivalent_selector"}}
   {{/if}}
 
-  <script type="text/javascript">
+  {{mb_script module="compteRendu" script="document"}}
+  {{mb_script module="compteRendu" script="modele_selector"}}
+  {{mb_script module="cabinet"     script="file"}}
 
-  showDossierSoins = function(sejour_id, date, default_tab){
-    var url = new Url("soins", "ajax_vw_dossier_sejour");
-    url.addParam("sejour_id", sejour_id);
-    if(default_tab){
-      url.addParam("default_tab", default_tab);
+  <script>
+    showDossierSoins = function(sejour_id, date, default_tab){
+      var url = new Url("soins", "ajax_vw_dossier_sejour");
+      url.addParam("sejour_id", sejour_id);
+      if(default_tab){
+        url.addParam("default_tab", default_tab);
+      }
+      url.requestModal("95%", "90%", {
+        showClose: false
+      });
+      modalWindow = url.modalObject;
     }
-    url.requestModal("95%", "90%", {
-      showClose: false
-    });
-    modalWindow = url.modalObject;
-  }
-
   </script>
 {{/if}}
 
