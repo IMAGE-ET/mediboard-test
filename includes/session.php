@@ -108,7 +108,7 @@ if (!isset($_SESSION['browser'])) {
 
     //detect if the browser is host on mobile device
     $mobile = new Mobile_Detect();
-    $browser['mobile'] = ($mobile->isMobile() || $mobile->isTablet());
+    $browser['mobile'] = $mobile->isMobile() && !$mobile->isTablet();
     $browser['tablet'] = $mobile->isTablet();
     CAppUI::$instance->touch_device = $browser['tablet'];
   }
