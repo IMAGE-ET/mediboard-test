@@ -38,6 +38,12 @@ $where["service.group_id"]   = "= '".CGroups::loadCurrent()->_id."'";
 $where["emplacement.plan_x"] = "IS NOT NULL";
 $chambres_uhcd = $chambre->loadList($where, null, null, "chambre_id", $ljoin);
 
+$_chambres = $chambres_urgences;
+foreach ($chambres_uhcd as $_chambre_uhcd) {
+  $_chambres[$_chambre_uhcd->_id] = $_chambre_uhcd;
+}
+$lits = CMbObject::massLoadBackRefs($_chambres, "lits");
+
 $conf_nb_colonnes = CAppUI::conf("dPhospi nb_colonnes_vue_topologique");
 
 $grille = array(
@@ -52,29 +58,85 @@ $listSejours = array(
 
 $ljoin = array();
 $ljoin["rpu"] = "rpu.sejour_id = sejour.sejour_id";
-$temp = array();
-$temp["sejour.entree"]        = " BETWEEN '$date_before' AND '$date_after'";
-$temp["sejour.sortie_reelle"] = "IS NULL";
-$temp["sejour.annule"]        = " = '0'";
-$temp["sejour.group_id"]      = "= '".CGroups::loadCurrent()->_id."'";
+$where = array();
+$where["sejour.entree"]        = " BETWEEN '$date_before' AND '$date_after'";
+$where["sejour.sortie_reelle"] = "IS NULL";
+$where["sejour.annule"]        = " = '0'";
+$where["sejour.group_id"]      = "= '".CGroups::loadCurrent()->_id."'";
+
+if (CAppUI::conf("dPurgences create_affectation")) {
+  $ljoin["affectation"] = "affectation.sejour_id = sejour.sejour_id";
+  $ljoin["service"]     = "service.service_id = affectation.service_id";
+  $ljoin["lit"]         = "lit.lit_id = affectation.lit_id";
+  $ljoin["chambre"]     = "chambre.chambre_id = lit.chambre_id";
+
+  $where[]                     = "'$date' BETWEEN affectation.entree AND affectation.sortie";
+  $where[]                     = "service.urgence = '1' OR service.radiologie = '1'";
+  $where["chambre.chambre_id"] = CSQLDataSource::prepareIn(array_keys($_chambres));
+}
+else {
+  $where["rpu.box_id"] = CSQLDataSource::prepareIn(array_keys($lits));
+}
+
+if (!CAppUI::conf("dPurgences create_sejour_hospit")) {
+  $where[] = "rpu.mutation_sejour_id IS NULL";
+}
+
+if (!CAppUI::conf("dPurgences view_rpu_uhcd")) {
+  $where["sejour.uhcd"] = " = '0'";
+}
+
+$sejours_chambre = array ();
+$sejour = new CSejour();
+/** @var CSejour[] $sejours */
+$sejours = $sejour->loadList($where, null, null, null, $ljoin, "entree");
+
+if (!CAppUI::conf("dPurgences view_rpu_uhcd")) {
+  $where["sejour.uhcd"] = " = '1'";
+  $sejours_uhcd = $sejour->loadList($where, null, null, null, $ljoin, "entree");
+  foreach ($sejours_uhcd as $sejour_uhcd) {
+    $sejours[$sejour_uhcd->_id] = $sejour_uhcd;
+  }
+}
+
+foreach ($sejours as $sejour) {
+  $sejour->loadRefPatient();
+  $sejour->loadRefPraticien();
+  $sejour->loadRefCurrAffectation()->loadRefService();
+  if (!$sejour->loadRefRPU()->_id) {
+    $sejour->_ref_rpu = $sejour->loadUniqueBackRef("rpu_mute");
+  }
+  $prescription = $sejour->loadRefPrescriptionSejour();
+
+  if ($prescription->_id) {
+    if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
+      $prescription->_count_fast_recent_modif = $prescription->countAlertsNotHandled("medium");
+      $prescription->_count_urgence["all"]    = $prescription->countAlertsNotHandled("high");
+    }
+    else {
+      $prescription->countFastRecentModif();
+      $prescription->loadRefsLinesMedByCat();
+      $prescription->loadRefsLinesElementByCat();
+      $prescription->countUrgence(CMbDT::date($date));
+    }
+
+    $sejour->countDocItems();
+  }
+  $chambre_id = $sejour->_ref_curr_affectation->loadRefLit()->loadRefChambre()->_id;
+  $sejours_chambre[$chambre_id][] = $sejour;
+}
 
 for ($num = 0; $num <= 1; $num++) {
   /** @var CChambre[] $chambres */
   if ($num == 0) {
     $chambres = $chambres_uhcd;
-    if (!CAppUI::conf("dPurgences view_rpu_uhcd")) {
-      $temp["sejour.uhcd"] = " = '1'";
-    }
     $nom = "uhcd";
   }
   else {
     $chambres = $chambres_urgences;
-    if (!CAppUI::conf("dPurgences view_rpu_uhcd")) {
-      $temp["sejour.uhcd"] = " = '0'";
-    }
     $nom = "urgence";
   }
-  
+
   foreach ($chambres as $chambre) {
     $chambre->loadRefService();
     $chambre->loadRefsLits();
@@ -108,56 +170,14 @@ for ($num = 0; $num <= 1; $num++) {
         unset($grille[$nom][$emplacement->plan_y][$emplacement->plan_x+$b]);
       }
     }
-
-    $where = $temp;
-    if (CAppUI::conf("dPurgences create_affectation")) {
-      $ljoin["affectation"] = "affectation.sejour_id = sejour.sejour_id";
-      $ljoin["service"]     = "service.service_id = affectation.service_id";
-      $ljoin["lit"]         = "lit.lit_id = affectation.lit_id";
-      $ljoin["chambre"]     = "chambre.chambre_id = lit.chambre_id";
-
-      $where[]                     = "'$date' BETWEEN affectation.entree AND affectation.sortie";
-      $where[]                     = "service.urgence = '1' OR service.radiologie = '1'";
-      $where["chambre.chambre_id"] = "= '$chambre->_id'";
+    if (isset($sejours_chambre[$chambre->_id])) {
+      $listSejours[$nom][$chambre->_id] = $sejours_chambre[$chambre->_id];
     }
     else {
-      $where["rpu.box_id"] = CSQLDataSource::prepareIn(array_keys($chambre->_ref_lits));
+      $listSejours[$nom][$chambre->_id] = array();
     }
-
-    if (!CAppUI::conf("dPurgences create_sejour_hospit")) {
-      $where[] = "rpu.mutation_sejour_id IS NULL";
-    }
-
-    $sejour = new CSejour();
-    /** @var CSejour[] $sejours */
-    $sejours = $sejour->loadList($where, null, null, null, $ljoin);
-    foreach ($sejours as $sejour) {
-      $sejour->loadRefPatient();
-      $sejour->loadRefPraticien();
-      $sejour->loadRefCurrAffectation()->loadRefService();
-      if (!$sejour->loadRefRPU()->_id) {
-        $sejour->_ref_rpu = $sejour->loadUniqueBackRef("rpu_mute");
-      }
-      $prescription = $sejour->loadRefPrescriptionSejour();
-
-      if ($prescription->_id) {
-        if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
-          $prescription->_count_fast_recent_modif = $prescription->countAlertsNotHandled("medium");
-          $prescription->_count_urgence["all"]    = $prescription->countAlertsNotHandled("high");
-        }
-        else {
-          $prescription->countFastRecentModif();
-          $prescription->loadRefsLinesMedByCat();
-          $prescription->loadRefsLinesElementByCat();
-          $prescription->countUrgence(CMbDT::date($date));
-        }
-
-        $sejour->countDocItems();
-      }
-    }
-    $listSejours[$nom][$chambre->_id] = $sejours;
   }
-  
+
   //Traitement des lignes vides
   $nb = 0;
   $total = 0;
@@ -169,15 +189,13 @@ for ($num = 0; $num <= 1; $num++) {
         if ($j == 0 || $j == 9) {
           $nb++;
         }
-        else {
-          if (
-              !isset($grille[$nom][$j-1][$i]) ||
-              $grille[$nom][$j-1][$i] == "0" ||
-              !isset($grille[$nom][$j+1][$i]) ||
-              $grille[$nom][$j+1][$i] == "0"
-          ) {
-            $nb++;
-          }
+        elseif (
+          !isset($grille[$nom][$j-1][$i]) ||
+          $grille[$nom][$j-1][$i] == "0" ||
+          !isset($grille[$nom][$j+1][$i]) ||
+          $grille[$nom][$j+1][$i] == "0"
+        ) {
+          $nb++;
         }
       }
     }
@@ -187,7 +205,7 @@ for ($num = 0; $num <= 1; $num++) {
       unset($grille[$nom][$j]);
     }
   }
-  
+
   //Traitement des colonnes vides
   for ($i = 0; $i < $conf_nb_colonnes; $i++) {
     $nb = 0;
@@ -196,17 +214,15 @@ for ($num = 0; $num <= 1; $num++) {
       $total++;
       if (!isset($grille[$nom][$j][$i]) || $grille[$nom][$j][$i] == "0") {
         if ($i == 0 || $i == 9) {
-          $nb++; 
+          $nb++;
         }
-        else {
-          if (
-              !isset($grille[$nom][$j][$i-1]) ||
-              $grille[$nom][$j][$i-1] == "0" ||
-              !isset($grille[$nom][$j][$i+1]) ||
-              $grille[$nom][$j][$i+1] == "0"
-          ) {
-            $nb++;
-          }
+        elseif (
+          !isset($grille[$nom][$j][$i-1]) ||
+          $grille[$nom][$j][$i-1] == "0" ||
+          !isset($grille[$nom][$j][$i+1]) ||
+          $grille[$nom][$j][$i+1] == "0"
+        ) {
+          $nb++;
         }
       }
     }
@@ -218,6 +234,7 @@ for ($num = 0; $num <= 1; $num++) {
     }
   }
 }
+
 $exist_plan = array("urgence" => count($chambres_urgences), "uhcd" => count($chambres_uhcd));
 
 // Création du template
