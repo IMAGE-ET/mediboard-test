@@ -225,7 +225,18 @@ updateTP = function(selected){
     return
   }
   $V(oFormTP._code, dn);
-  $("_libelle").insert("<button type='button' class='cancel notext' onclick='resetEditLineTP(); resetFormTP();'></button><a href=\"#nothing\" onclick=\"Prescription.showMonographyMedicament('','','"+selected.down(".code-cis").getText()+"')\">"+selected.down(".libelle").getText()+"</a>");
+  $("_libelle").insert("<button type='button' class='cancel notext' onclick='resetEditLineTP(); resetFormTP();'></button>" +
+                       "<a href=\"#nothing\" onclick=\"Prescription.showMonographyMedicament('','','"+selected.down(".code-cis").getText()+"')\">"+
+                        selected.down(".libelle").getText()+"</a>");
+
+  if (selected.down(".alias")) {
+    $("_libelle").insert(selected.down(".alias").getText());
+  }
+
+  if (selected.down(".forme")) {
+    $("_libelle").insert("<br /><span class='compact'>"+selected.down(".forme").getText()+"</span>");
+  }
+
   $V(oFormTP.produit, '');
   $('button_submit_traitement').focus();
 };
@@ -236,7 +247,7 @@ urlAuto.autoComplete(getForm('editLineTP').produit, "_produit_auto_complete", {
   minChars: 3,
   updateElement: updateFieldsMedicamentTP,
   callback: function(input, queryString){
-    return (queryString + "&produit_max=40&only_prescriptible_sf=0");
+    return (queryString + "&produit_max=40&only_prescriptible_sf=0&with_alias=1");
   }
 } );
 
