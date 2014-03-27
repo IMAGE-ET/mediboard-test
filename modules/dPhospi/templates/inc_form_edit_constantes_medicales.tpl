@@ -87,7 +87,7 @@ Main.add(function () {
   {{if $show_cat_tabs}}
     Control.Tabs.create("constantes-by-type{{$tri_rpu}}");
   {{/if}}
-  {{if $tri_rpu == '' && !$callback_administration}}
+  {{if $tri_rpu == ''}}
   ViewPort.SetAvlHeight('constant_form',1);
   {{/if}}
   ViewPort.SetAvlHeight('graphs', 1);
