@@ -2221,7 +2221,6 @@ $locales['mod-system-tab-view_translations'] = 'Traductions de remplacement';
 $locales['mod-system-tab-view_user_logs'] = 'Journaux utilisateurs';
 $locales['mod-system-tab-vw_idx_redirections'] = 'Redirections http';
 $locales['mod-system-tab-vw_object_tree_explorer'] = 'Explorateur d\'objets';
-$locales['mod-system-tab-vw_performance_profiling_help'] = 'Aide sur le profilage de performances';
 $locales['mod-system-tab-vw_purge_objects'] = 'Purge d\'objets';
 $locales['module-connectathon-court'] = 'Connectathon';
 $locales['module-connectathon-long'] = 'Outillage connectathon';

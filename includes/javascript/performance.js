@@ -25,6 +25,7 @@ MbPerformance = {
 
   /** {MbPerformanceTimeEntry[]} timeline */
   timeline: [],
+  currentTimeline: null,
   timers: {},
   intervalTimer: null,
   profiling: false,
@@ -524,6 +525,8 @@ MbPerformance = {
   buildTimingDetails: function(timeline){
     var left, right, table;
 
+    MbPerformance.currentTimeline = timeline || MbPerformance.currentTimeline;
+
     if (MbPerformance.timingDetailsTable) {
       table = MbPerformance.timingDetailsTable;
       left  = table.down(".left-col").update("");
@@ -594,7 +597,7 @@ MbPerformance = {
     var navStart;
 
     // Draw each bar
-    timeline.each(function(d){
+    MbPerformance.currentTimeline.each(function(d){
       var container = DOM.div({});
       var perfTiming = d.perfTiming;
       var perfOffset;
@@ -602,7 +605,7 @@ MbPerformance = {
       var serverOffset;
 
       var title = DOM.div({title: d.pageInfo.a},
-          "<span style='float: right; color: #999; font-size: 0.9em;'>#{size} Kio, DB: #{db} ms</span><strong>#{m}</strong><br />#{a}".interpolate({
+          "<span style='float: right;' class='compact'>#{size} Kio, DB: #{db} ms</span><strong>#{m}</strong><br /><span class='compact'>#{a}</span>".interpolate({
             size: (serverTiming.size / 1024).toFixed(2),
             db:   (serverTiming.db * 1000).toFixed(2),
             m:    $T("module-"+d.pageInfo.m+"-court"),
@@ -798,10 +801,10 @@ MbPerformance = {
     }
   },
 
-  showTimingDetails: function(timeline, page) {
+  showTimingDetails: function(timeline) {
     timeline = timeline || MbPerformance.timeline;
 
-    MbPerformance.buildTimingDetails(timeline, page);
+    MbPerformance.buildTimingDetails(timeline);
 
     Modal.open(MbPerformance.timingDetailsTable, {
       showClose: true,
@@ -1031,7 +1034,7 @@ MbPerformance = {
   },
 
   showHelp: function(){
-    var url = new Url("system", "vw_performance_profiling_help");
+    var url = new Url("developpement", "vw_performance_profiling_help");
     url.popup(900, 600, "Aide du profilage de performances");
   },
 

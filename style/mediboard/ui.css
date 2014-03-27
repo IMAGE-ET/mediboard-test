@@ -1042,6 +1042,8 @@ table.active {
   height: 100%;
   position: relative;
   bottom: 0;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .modal > .content > iframe {
@@ -1561,7 +1563,6 @@ div.bullet.error {
   position: relative;
   font-size: 10px;
   color: #999;
-  line-height: 1;
   overflow: hidden;
   /*max-width: 100%;*/
 }
@@ -1575,8 +1576,9 @@ div.bullet.error {
 .timeline .left-col  > div,
 .timeline .right-col > div {
   position: relative;
-  height: 25px;
+  height: 20px;
   border-bottom: 1px solid #999;
+  line-height: 1;
 }
 
 /** Bars **/
@@ -1647,8 +1649,8 @@ div.bullet.error {
   border-width: 1px;
   display: inline-block;
   vertical-align: middle;
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
 }
 
 .timeline .legend-item {

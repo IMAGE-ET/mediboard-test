@@ -805,6 +805,10 @@ button.gantt:before, a.button.gantt:before {
   content: url(images/buttons/gantt.png);
 }
 
+button.back-forward:before, a.button.back-forward:before {
+  content: url(images/buttons/back-forward.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }
