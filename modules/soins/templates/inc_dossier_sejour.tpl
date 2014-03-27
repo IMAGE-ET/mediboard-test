@@ -53,7 +53,7 @@
     var url = new Url("patients", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", '{{$sejour->_guid}}');
     url.addParam("paginate", 1);
-    url.requestUpdate("constantes");
+    url.requestUpdate("constantes-medicales");
   }
 
   loadDocuments = function() {
@@ -87,7 +87,7 @@
       if (count) {
         url.addParam("count", count);
       }
-      url.requestUpdate("constantes");
+      url.requestUpdate("constantes-medicales");
     }
   }
 
@@ -147,7 +147,7 @@
 
 <ul id="tab-sejour" class="control_tabs">
   <li><a href="#suivi_clinique" onmousedown="loadSuiviClinique();">{{tr}}CSejour.suivi_clinique{{/tr}}</a></li>
-  <li><a href="#constantes" onmousedown="loadConstantes();">{{tr}}CPatient.surveillance{{/tr}}</a></li>
+  <li onmousedown="loadConstantes();"><a href="#constantes-medicales">{{tr}}CPatient.surveillance{{/tr}}</a></li>
   <li><a href="#dossier_traitement" onmousedown="loadSuiviSoins();">{{tr}}CSejour.suivi_soins{{/tr}}</a></li>
   {{if $isPrescriptionInstalled}}
     <li><a href="#prescription_sejour" onmousedown="loadPrescription();">Prescription</a></li>
@@ -166,7 +166,7 @@
 </ul>
 
 <div id="suivi_clinique" style="display: none;"></div>
-<div id="constantes" style="display: none;"></div>
+<div id="constantes-medicales" style="display: none;"></div>
 <div id="dossier_traitement" style="display: none;"></div>
 {{if $isPrescriptionInstalled}}
   <div id="prescription_sejour" style="text-align: left; display: none;"></div>
