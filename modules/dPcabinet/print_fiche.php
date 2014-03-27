@@ -21,7 +21,7 @@ $today = CMbDT::date();
 
 $dossier_anesth_id     = CValue::get("dossier_anesth_id");
 $operation_id          = CValue::getOrSession("operation_id");
-$create_dossier_anesth = CValue::get("create_dossier_anesth", 0);
+$create_dossier_anesth = CValue::get("create_dossier_anesth", 1);
 $multi                 = CValue::get("multi");
 $offline               = CValue::get("offline");
 $display               = CValue::get("display");
@@ -52,9 +52,9 @@ if (!$dossier_anesth->_id) {
 
   // Chargement des praticiens
   $listAnesths = array();
-  if (!$offline) {
-    $listAnesths = new CMediusers();
-    $listAnesths = $listAnesths->loadAnesthesistes(PERM_READ);
+  if ($offline == "false") {
+    $anesths = new CMediusers();
+    $listAnesths = $anesths->loadAnesthesistes(PERM_READ);
   }
 
   foreach ($patient->_ref_consultations as $consultation) {

@@ -31,7 +31,7 @@
       url.addParam("operation_id", "{{$selOp->_id}}");
     {{/if}}
 
-    url.addParam("offline", true);
+    url.addParam("offline", false);
     url.addParam("display", true);
     url.addParam("pdf"    , 0);
     url.requestUpdate("fiche_anesth");
