@@ -102,17 +102,15 @@ if (!isset($_SESSION['browser'])) {
     }
 
     $ios = preg_match("/(ipad|iphone)/", $user_agent, $matches);
-    $ipad = preg_match("/(ipad)/", $user_agent, $matches);
     if ($ios) {
       $browser['name'] = $matches[1];
     }
 
     //detect if the browser is host on mobile device
     $mobile = new Mobile_Detect();
-    $browser['mobile'] = $ipad ? false : ($mobile->isMobile() || $mobile->isTablet());
+    $browser['mobile'] = $mobile->isMobile() && !$mobile->isTablet();
     $browser['tablet'] = $mobile->isTablet();
     CAppUI::$instance->touch_device = $browser['tablet'];
-
   }
 
   $browser['deprecated'] = isset($minimal_versions[$browser['name']]) &&
