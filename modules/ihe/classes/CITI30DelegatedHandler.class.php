@@ -147,8 +147,8 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
 
           if ($receiver->_configs["send_patient_with_current_admit"]) {
             // On charge seulement le séjour courant pour le patient
-            $sejour = $mbObject->getCurrSejour(null, $receiver->group_id);
-            if (!$sejour->_id) {
+            $sejours = $mbObject->getCurrSejour(null, $receiver->group_id);
+            if (!$sejours || ($sejour = reset($sejours) && !$sejour->_id)) {
               $code = null;
               break;
             }
