@@ -25,11 +25,9 @@
       au {{mb_value object=$sejour field=sortie_prevue}}
     </th>
   </tr>
-  
-  <tr>
-    <td id="codage_actes">
-      <!-- codage des acte ccam et ngap -->
-      {{mb_include module=salleOp template="inc_codage_actes" subject=$selOp}}
-    </td>
-  </tr>    
 </table>
+
+<div id="codage_actes">
+  <!-- codage des acte ccam et ngap -->
+  {{mb_include module=salleOp template="inc_codage_actes" subject=$selOp}}
+</div>
