@@ -54,8 +54,8 @@ if ($chirSel) {
 if ($patient_id) {
   $where["patient_id"] =" = '$patient_id'";
 }
-if ($numero && !CAppUI::conf("dPfacturation Other use_search_easy")) {
-  $where["numero"] =" = '$numero'";
+if ($numero && !CAppUI::conf("dPfacturation Other use_search_easy") && ($etat_relance || $search_easy == 7)) {
+  $where["facture_relance.numero"] =" = '$numero'";
 }
 if ($search_easy == 1) {
   $where["definitive"] =" = '1'";
