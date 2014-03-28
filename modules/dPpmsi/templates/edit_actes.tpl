@@ -5,14 +5,14 @@
 <table class="tbl">
   <tr>
     <th class="title">
-      <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
+      <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=patients&tab=vw_edit_patients&patient_id={{$patient->_id}}">
         <img src="images/icons/edit.png" />
       </a>
       
-      {{$patient->_view}}
+      {{$patient}}
       ({{$patient->_age}}
       {{if $patient->_annees != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
-      &mdash; Dr {{$selOp->_ref_chir->_view}}
+      &mdash; Dr {{$selOp->_ref_chir}}
       <br />
       
       {{if $selOp->libelle}}{{$selOp->libelle}} &mdash;{{/if}}
@@ -25,11 +25,9 @@
       au {{mb_value object=$sejour field=sortie_prevue}}
     </th>
   </tr>
-  
-  <tr>
-    <td id="codage_actes">
-      <!-- codage des acte ccam et ngap -->
-      {{mb_include module=salleOp template="inc_codage_actes" subject=$selOp}}
-    </td>
-  </tr>    
 </table>
+
+<div id="codage_actes">
+  <!-- codage des acte ccam et ngap -->
+  {{mb_include module=salleOp template="inc_codage_actes" subject=$selOp}}
+</div>
