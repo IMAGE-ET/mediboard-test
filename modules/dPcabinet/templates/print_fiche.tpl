@@ -84,7 +84,7 @@
         </tr>
       {{/foreach}}
     </table>
-  </div>
+  </div><br/>
 {{/if}}
 
 {{mb_include module=cabinet template=inc_header_fiche_anesth}}
