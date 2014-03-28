@@ -19,7 +19,7 @@
         GestionDA.url.refreshModal();
       }});
   }
-  reloadDossierAnesth = function() {
+  reloadDossierAnesthCurr = function() {
     var consultUrl = new Url("dPcabinet", "httpreq_vw_consult_anesth");
     consultUrl.addParam("selConsult", '{{$consult->_id}}');
     consultUrl.addParam("dossier_anesth_id", '{{$consult->_ref_consult_anesth->_id}}');
@@ -108,7 +108,7 @@
                 </tr>
                 <tr>
                   <td colspan="2" class="button">
-                    <button type="button" class="save" onclick="reloadDossierAnesth();Control.Modal.close();">{{tr}}Validate{{/tr}}</button>
+                    <button type="button" class="save" onclick="reloadDossierAnesthCurr();Control.Modal.close();">{{tr}}Validate{{/tr}}</button>
                   </td>
                 </tr>
               </table>
