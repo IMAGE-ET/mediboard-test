@@ -371,8 +371,6 @@ $library->versionFile = "include/style.cls.php";
 $library->versionString = 'dispose() {}';
 CLibrary::$all[$library->name] = $library;
 
-CLibrary::$all[$library->name] = $library;
-
 $library = new CLibrary;
 $library->name = "DBase reader class";
 $library->url = "http://www.phpclasses.org/package/1302.html";
@@ -455,19 +453,6 @@ $library->sourceDir = "NuSOAP";
 $library->targetDir = "NuSOAP";
 $library->versionFile = "changelog";
 $library->versionString = "0.9.6";
-
-CLibrary::$all[$library->name] = $library;
-
-$library = new CLibrary;
-$library->name = "Zebra_Session";
-$library->url = "http://stefangabos.ro/php-libraries/zebra-session/";
-$library->fileName = "zebra_session.2.0.3.zip";
-$library->description = "MySQL session handler";
-$library->extraDir = "zebra_session";
-$library->sourceDir = "zebra_session";
-$library->targetDir = "zebra_session";
-$library->versionFile = "Zebra_Session.php";
-$library->versionString = "yoplet";
 
 CLibrary::$all[$library->name] = $library;
 
