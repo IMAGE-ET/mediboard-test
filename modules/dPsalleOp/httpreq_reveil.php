@@ -16,9 +16,14 @@ $bloc_id           = CValue::getOrSession("bloc_id");
 $type              = CValue::get("type"); // Type d'affichage => encours, ops, reveil, out
 $modif_operation   = CCanDo::edit() || $date >= CMbDT::date();
 
+$curr_user = CMediusers::get();
+$group = CGroups::loadCurrent();
+
+$use_poste = CAppUI::conf("dPplanningOp COperation use_poste");
+$password_sortie = CAppUI::conf("dPsalleOp COperation password_sortie", $group->_guid);
+
 // Chargement des Chirurgiens
-$chir      = new CMediusers();
-$listChirs = $chir->loadPraticiens(PERM_READ);
+$listChirs = $curr_user->loadPraticiens(PERM_READ);
 
 // Selection des salles du bloc
 $salle = new CSalle();
@@ -38,7 +43,7 @@ $where["annulee"] = "= '0'";
 $where["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($listChirs));
 $ljoin = array();
 
-if (CAppUI::conf("dPplanningOp COperation use_poste")) {
+if ($use_poste) {
   $ljoin["poste_sspi"] = "poste_sspi.poste_sspi_id = operations.poste_sspi_id";
   $where[] = "(operations.poste_sspi_id IS NOT NULL AND poste_sspi.bloc_id = '$bloc_id')
               OR (operations.poste_sspi_id IS NULL AND operations.salle_id ". CSQLDataSource::prepareIn(array_keys($listSalles)) . ")";
@@ -75,8 +80,6 @@ switch ($type) {
     break;
 }
 
-$use_poste = CAppUI::conf("dPplanningOp COperation use_poste");
-
 // Chargement des interventions    
 $operation = new COperation();
 $listOperations = $operation->loadList($where, $order, null, null, $ljoin);
@@ -88,25 +91,29 @@ CMbObject::massLoadFwdRef($listOperations, "plageop_id");
 if ($use_poste) {
   CMbObject::massLoadFwdRef($listOperations, "poste_sspi_id");
 }
-if (($type == "ops" || $type == "reveil") && CModule::getActive("bloodSalvage")) {
+if ($password_sortie) {
+  $anesths = CMbObject::massLoadFwdRef($listOperations, "sortie_locker_id");
+  CMbObject::massLoadFwdRef($anesths, "function_id");
+}
+if (in_array($type, array("ops", "reveil")) && CModule::getActive("bloodSalvage")) {
   CMbObject::massCountBackRefs($listOperations, "blood_salvages");
 }
 $sejours = CMbObject::massLoadFwdRef($listOperations, "sejour_id");
 CMbObject::massLoadFwdRef($sejours, "patient_id");
 
-$group = CGroups::loadCurrent();
 $nb_sorties_non_realisees = 0;
 $now = CMbDT::time();
 
 /** @var $op COperation */
 foreach ($listOperations as $op) {
   $sejour = $op->loadRefSejour();
-  $sejour->loadNDA();
-  
+
   if ($sejour->type == "exte") {
     unset($listOperations[$op->_id]);
     continue;
   }
+
+  $sejour->loadNDA();
 
   $op->loadRefChir()->loadRefFunction();
   $op->loadRefPlageOp();
@@ -117,8 +124,11 @@ foreach ($listOperations as $op) {
   if ($use_poste) {
     $op->loadRefPoste();
   }
-  
-  if (($type == "ops" || $type == "reveil") && CModule::getActive("bloodSalvage")) {
+  if ($password_sortie) {
+    $op->loadRefSortieLocker()->loadRefFunction();
+  }
+
+  if (in_array($type, array("ops", "reveil")) && CModule::getActive("bloodSalvage")) {
     $salvage = $op->loadRefBloodSalvage();;
     $salvage->loadRefPlageOp();
     $salvage->_totaltime = "00:00:00";
@@ -132,7 +142,7 @@ foreach ($listOperations as $op) {
     }
   }
   
-  if ($type == "reveil" || $type == "out") {
+  if (in_array($type, array("out", "reveil"))) {
     if (!$op->sortie_reveil_reel) {
       $nb_sorties_non_realisees++;
     }
@@ -147,7 +157,7 @@ foreach ($listOperations as $op) {
 
 // Chargement de la liste du personnel pour le reveil
 $personnels = array();
-if (Cmodule::getActive("dPpersonnel")) {
+if (in_array($type, array("ops", "reveil")) && Cmodule::getActive("dPpersonnel")) {
   $personnel  = new CPersonnel();
   $personnels = $personnel->loadListPers("reveil");
 }
@@ -164,5 +174,6 @@ $smarty->assign("hour"                    , CMbDT::time());
 $smarty->assign("modif_operation"         , $modif_operation);
 $smarty->assign("isImedsInstalled"        , (CModule::getActive("dPImeds") && CImeds::getTagCIDC($group)));
 $smarty->assign("nb_sorties_non_realisees", $nb_sorties_non_realisees);
+$smarty->assign("is_anesth"               , $curr_user->isAnesth());
 
 $smarty->display("inc_reveil_$type.tpl");

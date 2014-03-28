@@ -30,6 +30,7 @@ class COperation extends CCodable implements IPatientRelated {
   public $chir_3_id;
   public $chir_4_id;
   public $anesth_id;
+  public $sortie_locker_id;
   public $plageop_id;
   public $salle_id;
   public $poste_sspi_id;
@@ -200,7 +201,8 @@ class COperation extends CCodable implements IPatientRelated {
   public $_ref_blood_salvage;
   /** @var CBrancardage */
   public $_ref_brancardage;
-
+  /** @var CMediusers */
+  public $_ref_sortie_locker;
   /** @var CSupervisionGraphPack */
   public $_ref_graph_pack;
 
@@ -275,6 +277,7 @@ class COperation extends CCodable implements IPatientRelated {
     $props["chir_3_id"]            = "ref class|CMediusers seekable";
     $props["chir_4_id"]            = "ref class|CMediusers seekable";
     $props["anesth_id"]            = "ref class|CMediusers";
+    $props["sortie_locker_id"]     = "ref class|CMediusers";
     $props["plageop_id"]           = "ref class|CPlageOp seekable show|0";
     $props["pause"]                = "time show|0";
     $props["salle_id"]             = "ref class|CSalle";
@@ -1334,10 +1337,18 @@ class COperation extends CCodable implements IPatientRelated {
    *
    * @return CSupervisionGraphPack
    */
-  function loadRefGraphPack(){
+  function loadRefGraphPack() {
     return $this->_ref_graph_pack = $this->loadFwdRef("graph_pack_id");
   }
 
+  /**
+   * Charge le validateur de la sortie
+   *
+   * @return CMediusers
+   */
+  function loadRefSortieLocker() {
+    return $this->_ref_sortie_locker = $this->loadFwdRef("sortie_locker_id", true);
+  }
   /**
    * @see parent::loadRefsBack()
    */

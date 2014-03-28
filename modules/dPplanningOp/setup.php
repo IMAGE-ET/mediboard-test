@@ -1720,6 +1720,11 @@ class CSetupdPplanningOp extends CSetup {
                 ADD `facturable` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.86";
+    $this->makeRevision("1.86");
+    $query = "ALTER TABLE `operations`
+      ADD `sortie_locker_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.87";
   }
 }

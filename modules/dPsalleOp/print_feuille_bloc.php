@@ -25,8 +25,15 @@ foreach ($operation->_ref_actes_ccam as $keyActe => $valueActe) {
   $acte =& $operation->_ref_actes_ccam[$keyActe];
   $acte->loadRefsFwd();
   $acte->guessAssociation();
-}  
-$sejour =& $operation->_ref_sejour;
+}
+
+$password_sortie = CAppUI::conf("dPsalleOp COperation password_sortie", CGroups::loadCurrent()->_guid);
+
+if ($password_sortie) {
+  $operation->loadRefSortieLocker()->loadRefFunction();
+}
+
+$sejour = $operation->_ref_sejour;
 $sejour->loadRefsFwd();
 $sejour->loadRefPrescriptionSejour();
 
@@ -113,5 +120,6 @@ $smarty->assign("time_fin_op"  , $time_fin_op);
 $smarty->assign("observation_grid", $grid);
 $smarty->assign("observation_labels", $labels);
 $smarty->assign("observation_list", $list_obr);
+$smarty->assign("password_sortie", $password_sortie);
 
 $smarty->display("print_feuille_bloc.tpl");

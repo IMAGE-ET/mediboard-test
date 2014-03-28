@@ -15,7 +15,6 @@ $date    = CValue::getOrSession("date", CMbDT::date());
 $bloc_id = CValue::getOrSession("bloc_id");
 
 $modif_operation = CCanDo::edit() || $date >= CMbDT::date();
-$hour = CMbDT::time();
 $blocs_list = CGroups::loadCurrent()->loadBlocs();
 
 $bloc = new CBlocOperatoire();
@@ -36,31 +35,36 @@ if ($require_check_list) {
   }
 }
 
-// Chargement de la liste du personnel pour le reveil
-$personnels = array();
-if (CModule::getActive("dPpersonnel")) {
-  $type_personnel = array("reveil");
-  if (count($daily_check_list_types) && $require_check_list) {
-    $type_personnel = array();
-    foreach ($daily_check_list_types as $check_list_type) {
-      $validateurs = explode("|", $check_list_type->type_validateur);
-      foreach ($validateurs as $validateur) {
-        $type_personnel[] = $validateur;
+$personnels  = array();
+$listChirs   = array();
+$listAnesths = array();
+
+if ($require_check_list) {
+  // Chargement de la liste du personnel pour le reveil
+  if (CModule::getActive("dPpersonnel")) {
+    $type_personnel = array("reveil");
+    if (count($daily_check_list_types)) {
+      $type_personnel = array();
+      foreach ($daily_check_list_types as $check_list_type) {
+        $validateurs = explode("|", $check_list_type->type_validateur);
+        foreach ($validateurs as $validateur) {
+          $type_personnel[] = $validateur;
+        }
       }
     }
+
+    $personnel  = new CPersonnel();
+    $personnels = $personnel->loadListPers(array_unique(array_values($type_personnel)));
   }
 
-  $personnel  = new CPersonnel();
-  $personnels = $personnel->loadListPers(array_unique(array_values($type_personnel)));
+  $curr_user = CMediusers::get();
+
+  // Chargement des praticiens
+  $listChirs = $curr_user->loadPraticiens(PERM_DENY);
+
+  // Chargement des anesths
+  $listAnesths = $curr_user->loadAnesthesistes(PERM_DENY);
 }
-
-// Chargement des praticiens
-$listChirs = new CMediusers();
-$listChirs = $listChirs->loadPraticiens(PERM_DENY);
-
-// Chargement des anesths
-$listAnesths = new CMediusers();
-$listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -72,7 +76,7 @@ $smarty->assign("daily_check_list_types", $daily_check_list_types);
 
 $smarty->assign("personnels"           , $personnels);
 $smarty->assign("date"                 , $date);
-$smarty->assign("hour"                 , $hour);
+$smarty->assign("hour"                 , CMbDT::time());
 $smarty->assign("modif_operation"      , $modif_operation);
 $smarty->assign("blocs_list"           , $blocs_list);
 $smarty->assign("bloc"                 , $bloc);

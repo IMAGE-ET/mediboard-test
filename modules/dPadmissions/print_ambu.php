@@ -51,13 +51,22 @@ $where["sejour.group_id"] = " = '$group->_id'";
 /** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
+CMbObject::massLoadFwdRef($sejours, "patient_id");
+CMbObject::massLoadFwdRef($sejours, "praticien_id");
+
+$password_sortie = CAppUI::conf("dPsalleOp COperation password_sortie", $group->_guid);
+
 foreach ($sejours as $key => $_sejour) {
   $_sejour->loadRefPatient();
   $_sejour->loadRefPraticien();
   $_sejour->loadRefsAffectations("sortie ASC");
   $_sejour->loadRefsOperations();
   $_sejour->_duree = CMbDT::subTime(CMbDT::time($_sejour->entree_reelle), CMbDT::time($_sejour->sortie_reelle));
-  
+
+  if ($password_sortie && $_sejour->_ref_last_operation->sortie_locker_id) {
+    $_sejour->_ref_last_operation->loadRefSortieLocker()->loadRefFunction();
+  }
+
   $affectation = $_sejour->_ref_last_affectation;
   if ($affectation->_id) {
     $affectation->loadReflit();
@@ -71,9 +80,12 @@ foreach ($sejours as $key => $_sejour) {
 
 // Création du template
 $smarty = new CSmartyDP();
+
 $smarty->assign("service_id", $service_id);
-$smarty->assign("sejours", $sejours);
-$smarty->assign("services", $services);
-$smarty->assign("date", $date);
-$smarty->assign("type", $type);
+$smarty->assign("sejours"   , $sejours);
+$smarty->assign("services"  , $services);
+$smarty->assign("date"      , $date);
+$smarty->assign("type"      , $type);
+$smarty->assign("password_sortie", $password_sortie);
+
 $smarty->display("print_ambu.tpl");

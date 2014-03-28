@@ -1,11 +1,11 @@
 <script>
   submitPrepaForm = function(oFormPrepa) {
-    submitFormAjax(oFormPrepa,'systemMsg', {onComplete: function(){ refreshTabsReveil() }});
+    onSubmitFormAjax(oFormPrepa, refreshTabsReveil);
   };
   
-  Main.add(function () {    
+  Main.add(function() {
     Control.Tabs.setTabCount("preop", "{{$listOperations|@count}}");
-    
+
     {{if $isImedsInstalled}}
       ImedsResultsWatcher.loadResults();
     {{/if}}
@@ -29,6 +29,7 @@
     <th class="narrow"></th>
   </tr>
 {{foreach from=$listOperations item=_operation}}
+  {{assign var=_operation_id value=$_operation->_id}}
   <tr>
     <td class="text">
       {{if $_operation->rank}}
@@ -44,7 +45,7 @@
     <td class="text">
         <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
               onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}');">
-          {{$_operation->_ref_patient->_view}}
+          {{$_operation->_ref_patient}}
         </span>
     </td>
     <td>
@@ -79,13 +80,12 @@
     {{/if}}
     <td class="button">
       {{if $modif_operation}}
-        <form name="editDebutPreopFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
-          <input type="hidden" name="m" value="dPplanningOp" />
+        <form name="editDebutPreopFrm{{$_operation->_id}}" action="?" method="post">
+          <input type="hidden" name="m" value="planningOp" />
           <input type="hidden" name="dosql" value="do_planning_aed" />
-          <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
+          {{mb_key object=$_operation}}
           <input type="hidden" name="del" value="0" />
           {{if $_operation->debut_prepa_preop}}
-            {{assign var=_operation_id value=$_operation->_id}}
             {{mb_field object=$_operation field=debut_prepa_preop form="editDebutPreopFrm$_operation_id" onchange="submitPrepaForm(this.form);"}}
           {{else}}
             <input type="hidden" name="debut_prepa_preop" value="now" />
@@ -98,13 +98,12 @@
     </td>
     <td class="button">
       {{if $modif_operation}}
-        <form name="editFinPreopFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
-          <input type="hidden" name="m" value="dPplanningOp" />
+        <form name="editFinPreopFrm{{$_operation->_id}}" action="?" method="post">
+          <input type="hidden" name="m" value="planningOp" />
           <input type="hidden" name="dosql" value="do_planning_aed" />
-          <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
+          {{mb_key object=$_operation}}
           <input type="hidden" name="del" value="0" />
           {{if $_operation->fin_prepa_preop}}
-            {{assign var=_operation_id value=$_operation->_id}}
             {{mb_field object=$_operation field=fin_prepa_preop form="editFinPreopFrm$_operation_id" onchange="submitPrepaForm(this.form);"}}
           {{else}}
             <input type="hidden" name="fin_prepa_preop" value="now" />

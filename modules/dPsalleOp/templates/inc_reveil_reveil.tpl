@@ -1,19 +1,37 @@
+{{assign var=use_poste value=$conf.dPplanningOp.COperation.use_poste}}
+{{assign var=use_sortie_reveil_reel value="dPsalleOp COperation use_sortie_reveil_reel"|conf:"CGroups-$g"}}
+{{assign var=password_sortie value="dPsalleOp COperation password_sortie"|conf:"CGroups-$g"}}
+
 <script>
-  Main.add(function () {    
+  Main.add(function() {
     Control.Tabs.setTabCount("reveil", "{{$listOperations|@count}}");
-    
+
     {{if $isImedsInstalled}}
-      ImedsResultsWatcher.loadResults();
+    ImedsResultsWatcher.loadResults();
     {{/if}}
   });
 
   submitReveilForm = function(oFormOperation) {
-    submitFormAjax(oFormOperation,'systemMsg', {onComplete: function(){refreshTabsReveil()}});
+    onSubmitFormAjax(oFormOperation, refreshTabsReveil);
+  }
+
+  submitReveil = function(form) {
+    {{if !$password_sortie || $is_anesth}}
+      {{if $is_anesth}}
+      $V(form.sortie_locker_id, '{{$app->user_id}}');
+      {{/if}}
+      submitReveilForm(form);
+    {{else}}
+      window.current_form = form;
+      var url = new Url("salleOp", "ajax_lock_sortie");
+      url.requestModal("30%", "20%", {onClose: function() {
+        $V(form.sortie_reveil_possible_da, '', false);
+        $V(form.sortie_reveil_possible, '', false);
+      }
+      });
+    {{/if}}
   }
 </script>
-
-{{assign var=use_poste value=$conf.dPplanningOp.COperation.use_poste}}
-{{assign var=use_sortie_reveil_reel value="dPsalleOp COperation use_sortie_reveil_reel"|conf:"CGroups-$g"}}
 
 <table class="tbl">
   <tr>
@@ -58,10 +76,10 @@
         {{/if}}
       </div>
 
-        <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
-            onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
-        {{$_operation->_ref_patient->_view}}
-        </span>
+      <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
+          onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
+      {{$_operation->_ref_patient}}
+      </span>
     </td>
     <td>
       <button class="soins button notext" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">Dossier de soins</button>
@@ -80,7 +98,7 @@
       <td>
         {{if $salvage->_id}}
         <div style="float:left ; display:inline">
-          <a href="#" title="Voir la procédure RSPO" onclick="viewRSPO({{$_operation->_id}});">         
+          <a href="#" title="Voir la procédure RSPO" onclick="viewRSPO({{$_operation->_id}});">
           <img src="images/icons/search.png" title="Voir la procédure RSPO" alt="vw_rspo" />
           {{if $salvage->_totaltime > "00:00:00"}}
            Débuté à {{$salvage->_recuperation_start|date_format:$conf.time}}
@@ -105,8 +123,8 @@
     </td>
     {{if $personnels !== null}}
     <td>
-      <form name="selPersonnel{{$_operation->_id}}" action="?m={{$m}}" method="post">
-        <input type="hidden" name="m" value="dPpersonnel" />
+      <form name="selPersonnel{{$_operation->_id}}" action="?" method="post">
+        <input type="hidden" name="m" value="personnel" />
         <input type="hidden" name="dosql" value="do_affectation_aed" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="object_id" value="{{$_operation->_id}}" />
@@ -116,33 +134,33 @@
         <select name="personnel_id" style="max-width: 120px;">
         <option value="">&mdash; Personnel</option>
         {{foreach from=$personnels item="personnel"}}
-        <option value="{{$personnel->_id}}">{{$personnel->_ref_user->_view}}</option>
+        <option value="{{$personnel->_id}}">{{$personnel->_ref_user}}</option>
         {{/foreach}}
         </select>
-        <button type="button" class="add notext" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function() { refreshTabsReveil(); }})">
+        <button type="button" class="add notext" onclick="onSubmitFormAjax(this.form, refreshTabsReveil)">
           {{tr}}Add{{/tr}}
         </button>
       </form>
       {{foreach from=$_operation->_ref_affectations_personnel.reveil item=curr_affectation}}
         <br />
-        <form name="delPersonnel{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
-          <input type="hidden" name="m" value="dPpersonnel" />
+        <form name="delPersonnel{{$curr_affectation->_id}}" action="?" method="post">
+          <input type="hidden" name="m" value="personnel" />
           <input type="hidden" name="dosql" value="do_affectation_aed" />
           <input type="hidden" name="del" value="1" />
-          <input type="hidden" name="affect_id" value="{{$curr_affectation->_id}}" />
-          <button type="button" class="trash notext" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function() { refreshTabsReveil(); }})">
+          {{mb_key object=$curr_affectation}}
+          <button type="button" class="trash notext" onclick="onSubmitFormAjax(this.form, refreshTabsReveil)">
             {{tr}}Delete{{/tr}}
           </button>
         </form>
-        {{$curr_affectation->_ref_personnel->_ref_user->_view}}
+        {{$curr_affectation->_ref_personnel->_ref_user}}
       {{/foreach}}
     </td>
     {{/if}}
     <td>
-      <form name="editEntreeReveilReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
+      <form name="editEntreeReveilReveilFrm{{$_operation->_id}}" action="?" method="post">
         <input type="hidden" name="m" value="planningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
-        <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
+        {{mb_key object=$_operation}}
         <input type="hidden" name="del" value="0" />
         {{if $_operation->_ref_sejour->type=="exte"}}
         -
@@ -157,23 +175,35 @@
     <td>
        <span id="demandebrancard-{{$_operation->sejour_id}}">
          {{mb_include module=brancardage template=inc_exist_brancard brancardage=$_operation->_ref_brancardage id="demandebrancard"
-           sejour_id=$_operation->sejour_id salle_id=$_operation->salle_id operation_id=$_operation->_id
-           opid=$_operation->_id reveil=true }}
+           sejour_id=$_operation->sejour_id salle_id=$_operation->salle_id operation_id=$_operation_id
+           opid=$_operation_id reveil=true }}
        </span>
     </td>
     {{/if}}
     <td class="button">
       {{if $modif_operation}}
-      <form name="editSortieReveilReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
-        <input type="hidden" name="m" value="dPplanningOp" />
+      <form name="editSortieReveilReveilFrm{{$_operation->_id}}" action="?" method="post">
+        <input type="hidden" name="m" value="planningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
-        <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
+        {{mb_key object=$_operation}}
         <input type="hidden" name="del" value="0" />
-
-        {{mb_field object=$_operation field=sortie_reveil_possible form=editSortieReveilReveilFrm`$_operation->_id` onchange="submitReveilForm(this.form)"}}
+        {{mb_field object=$_operation field=sortie_locker_id hidden=1}}
+        {{if $password_sortie && $_operation->sortie_locker_id}}
+          <span onmouseover="ObjectTooltip.createDOM(this, 'info_locker_{{$_operation_id}}')">
+                {{mb_field object=$_operation field="sortie_reveil_possible" hidden=1}}
+            {{mb_value object=$_operation field="sortie_reveil_possible"}}
+            <button type="button" class="cancel notext" title="Annuler la validation"
+                    onclick="$V(this.form.sortie_reveil_possible, ''); $V(this.form.sortie_reveil_reel, ''); submitSortie(this.form);"></button>
+              </span>
+          <div id="info_locker_{{$_operation_id}}" style="display: none">
+            Validée par {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_sortie_locker}}
+          </div>
+        {{else}}
+          {{mb_field object=$_operation field=sortie_reveil_possible form=editSortieReveilReveilFrm`$_operation->_id` onchange="submitReveil(this.form)"}}
+        {{/if}}
         {{if !$_operation->sortie_reveil_possible}}
           <button class="tick notext" type="button"
-            onclick="if (!this.form.sortie_reveil_possible.value) { $V(this.form.sortie_reveil_possible, 'current'); }; submitReveilForm(this.form);">{{tr}}Modify{{/tr}}</button>
+            onclick="if (!this.form.sortie_reveil_possible.value) { $V(this.form.sortie_reveil_possible, 'current', false); }; submitReveil(this.form);">{{tr}}Modify{{/tr}}</button>
         {{/if}}
       </form>
       {{else}}-{{/if}}
@@ -182,16 +212,16 @@
     </td>
     {{if $use_sortie_reveil_reel}}
       <td class="button">
-        <form name="editSortieReveilReelReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
-          <input type="hidden" name="m" value="dPplanningOp" />
+        <form name="editSortieReveilReelReveilFrm{{$_operation->_id}}" action="?" method="post">
+          <input type="hidden" name="m" value="planningOp" />
           <input type="hidden" name="dosql" value="do_planning_aed" />
-          <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
+          {{mb_key object=$_operation}}
           <input type="hidden" name="del" value="0" />
           {{if $modif_operation}}
-            {{mb_field object=$_operation field=sortie_reveil_reel register=true form="editSortieReveilReelReveilFrm$_operation_id" onchange="submitSortieForm(this.form);"}}
+            {{mb_field object=$_operation field=sortie_reveil_reel register=true form="editSortieReveilReelReveilFrm$_operation_id" onchange="submitReveilForm(this.form);"}}
             {{if !$_operation->sortie_reveil_reel}}
               <button class="tick notext" type="button"
-              onclick="if (!this.form.sortie_reveil_reel.value) { $V(this.form.sortie_reveil_reel, 'current'); }; submitSortieForm(this.form);">{{tr}}Modify{{/tr}}</button>
+              onclick="if (!this.form.sortie_reveil_reel.value) { $V(this.form.sortie_reveil_reel, 'current'); }; submitReveilForm(this.form);">{{tr}}Modify{{/tr}}</button>
             {{/if}}
           {{else}}
             {{mb_value object=$_operation field="sortie_reveil_reel"}}

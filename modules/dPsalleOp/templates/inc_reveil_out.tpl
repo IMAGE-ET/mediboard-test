@@ -1,4 +1,5 @@
 {{assign var=use_sortie_reveil_reel value="dPsalleOp COperation use_sortie_reveil_reel"|conf:"CGroups-$g"}}
+{{assign var=password_sortie value="dPsalleOp COperation password_sortie"|conf:"CGroups-$g"}}
 
 <script>
   Main.add(function () {
@@ -13,7 +14,17 @@
   });
 
   submitSortieForm = function(oFormSortie) {
-    submitFormAjax(oFormSortie,'systemMsg', {onComplete: function(){ refreshTabsReveil() }});
+    onSubmitFormAjax(oFormSortie, refreshTabsReveil);
+  }
+
+  submitSortie = function(form) {
+    {{if !$password_sortie || $is_anesth}}
+      submitSortieForm(form);
+    {{else}}
+    window.current_form = form;
+    var url = new Url("salleOp", "ajax_lock_sortie");
+    url.requestModal("30%", "20%");
+    {{/if}}
   }
 </script>
 
@@ -57,7 +68,7 @@
       
         <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
             onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
-        {{$_operation->_ref_patient->_view}}
+        {{$_operation->_ref_patient}}
       </span>
     </td>
     <td>
@@ -77,12 +88,11 @@
     
     <td class="button">
       {{if $can->edit}}
-      <form name="editSortieBlocOutFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
+      <form name="editSortieBlocOutFrm{{$_operation->_id}}" action="?" method="post">
         <input type="hidden" name="m" value="planningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
-        <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
+        {{mb_key object=$_operation}}
         <input type="hidden" name="del" value="0" />
-        {{assign var=_operation_id value=$_operation->_id}}
         {{mb_field object=$_operation field=sortie_salle form="editSortieBlocOutFrm$_operation_id" onchange="submitSortieForm(this.form);"}}
       </form>
       {{else}}
@@ -92,10 +102,10 @@
     <td class="button">
       {{if $_operation->entree_reveil}}
         {{if $can->edit && !$_operation->sortie_reveil_possible}}
-        <form name="editEntreeReveilOutFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
+        <form name="editEntreeReveilOutFrm{{$_operation->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="planningOp" />
           <input type="hidden" name="dosql" value="do_planning_aed" />
-          <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
+          {{mb_key object=$_operation}}
           <input type="hidden" name="del" value="0" />
           {{mb_field object=$_operation field=entree_reveil form="editEntreeReveilOutFrm$_operation_id" onchange="submitSortieForm(this.form);"}}
         </form>
@@ -108,31 +118,44 @@
       
       {{foreach from=$_operation->_ref_affectations_personnel.reveil item=curr_affectation}}
         <br />
-        {{$curr_affectation->_ref_personnel->_ref_user->_view}}
+        {{$curr_affectation->_ref_personnel->_ref_user}}
       {{/foreach}}
     </td>
     <td class="button">
-      <form name="editSortieReveilOutFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
+      <form name="editSortieReveilOutFrm{{$_operation->_id}}" action="?" method="post">
         <input type="hidden" name="m" value="planningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
-        <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
+        {{mb_key object=$_operation}}
         <input type="hidden" name="del" value="0" />
         {{mb_field object=$_operation field="entree_reveil" hidden=1}}
         {{mb_field object=$_operation field="sortie_reveil_reel" hidden=1}}
-        {{if $modif_operation}}
+        {{mb_field object=$_operation field="sortie_locker_id" hidden=1}}
+        {{if $modif_operation && (!$password_sortie || !$_operation->sortie_locker_id)}}
           {{mb_field object=$_operation field=sortie_reveil_possible register=true form="editSortieReveilOutFrm$_operation_id"
-            onchange="if (!this.value && !this.form.entree_reveil.value) { \$V(this.form.sortie_reveil_reel, '') } submitSortieForm(this.form);"}}
+            onchange="if (!this.value && !this.form.entree_reveil.value) { \$V(this.form.sortie_reveil_reel, '') } submitSortie(this.form);"}}
         {{else}}
-          {{mb_value object=$_operation field="sortie_reveil_possible"}}
+          {{if $password_sortie && $_operation->sortie_locker_id}}
+            <span onmouseover="ObjectTooltip.createDOM(this, 'info_locker_{{$_operation_id}}')">
+              {{mb_field object=$_operation field="sortie_reveil_possible" hidden=1}}
+              {{mb_value object=$_operation field="sortie_reveil_possible"}}
+              <button type="button" class="cancel notext" title="Annuler la validation"
+                      onclick="$V(this.form.sortie_reveil_possible, ''); $V(this.form.sortie_reveil_reel, ''); submitSortie(this.form);"></button>
+            </span>
+            <div id="info_locker_{{$_operation_id}}" style="display: none">
+              Validée par {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_sortie_locker}}
+            </div>
+          {{else}}
+            {{mb_value object=$_operation field="sortie_reveil_possible"}}
+          {{/if}}
         {{/if}}
       </form>      
     </td>
     {{if $use_sortie_reveil_reel}}
       <td class="button">
-        <form name="editSortieReveilReelOutFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
+        <form name="editSortieReveilReelOutFrm{{$_operation->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="planningOp" />
           <input type="hidden" name="dosql" value="do_planning_aed" />
-          <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
+          {{mb_key object=$_operation}}
           <input type="hidden" name="del" value="0" />
           {{mb_field object=$_operation field="entree_reveil" hidden=1}}
           {{mb_field object=$_operation field="sortie_reveil_possible" hidden=1}}

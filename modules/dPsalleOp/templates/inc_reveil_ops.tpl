@@ -1,28 +1,26 @@
 <script>
-  Main.add(function () {    
+  Main.add(function() {
     Control.Tabs.setTabCount("ops", "{{$listOperations|@count}}");
-    
+
+    $('heure').innerHTML = "{{$hour|date_format:$conf.time}}";
+
     {{if $isImedsInstalled}}
       ImedsResultsWatcher.loadResults();
     {{/if}}
   });
   
   // faire le submit de formOperation dans le onComplete de l'ajax
-  checkPersonnel = function(oFormAffectation, oFormOperation){
+  checkPersonnel = function(oFormAffectation, oFormOperation) {
     oFormOperation.entree_reveil.value = 'current';
     // si affectation renseignée, on submit les deux formulaires
-    if(oFormAffectation && oFormAffectation.personnel_id.value != ""){
-      submitFormAjax(oFormAffectation, 'systemMsg', {onComplete: submitOperationForm.curry(oFormOperation,1)} );
+    if (oFormAffectation && $V(oFormAffectation.personnel_id) != "") {
+      onSubmitFormAjax(oFormAffectation, onSubmitFormAjax.curry(oFormOperation, refreshTabsReveil));
     }
     else {
     // sinon, on ne submit que l'operation
-      submitOperationForm(oFormOperation,1);
+      onSubmitFormAjax(oFormOperation, refreshTabsReveil);
     }
   };
-  
-  submitOperationForm = function(oFormOperation) {
-    submitFormAjax(oFormOperation,'systemMsg', {onComplete: function(){ refreshTabsReveil() }});
-  }
 </script>
 
 {{assign var=use_poste value=$conf.dPplanningOp.COperation.use_poste}}
@@ -102,14 +100,14 @@
     {{/if}}
     <td>
       {{if $can->edit}}
-      <form name="editSortieBlocOpsFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
+      <form name="editSortieBlocOpsFrm{{$_operation->_id}}" action="?" method="post">
         {{assign var=_operation_id value=$_operation->_id}}
-        <input type="hidden" name="m" value="dPplanningOp" />
+        <input type="hidden" name="m" value="planningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         {{mb_key object=$_operation}}
         <input type="hidden" name="del" value="0" />
         {{mb_field object=$_operation field="sortie_salle" register=true form="editSortieBlocOpsFrm$_operation_id"}}
-        <button class="tick notext" type="button" onclick="submitOperationForm(this.form);">{{tr}}Modify{{/tr}}</button>
+        <button class="tick notext" type="button" onclick="onSubmitFormAjax(this.form, refreshTabsReveil)">{{tr}}Modify{{/tr}}</button>
       </form>
       {{else}}
       {{mb_value object=$_operation field="sortie_salle"}}
@@ -119,7 +117,7 @@
       {{if $modif_operation}}
       
       {{if $personnels !== null}}
-      <form name="selPersonnel{{$_operation->_id}}" action="?m={{$m}}" method="post">
+      <form name="selPersonnel{{$_operation->_id}}" action="?" method="post">
         <input type="hidden" name="m" value="dPpersonnel" />
         <input type="hidden" name="dosql" value="do_affectation_aed" />
         <input type="hidden" name="del" value="0" />
@@ -128,35 +126,35 @@
         <input type="hidden" name="tag" value="reveil" />
         <input type="hidden" name="realise" value="0" />
         <select name="personnel_id" style="max-width: 120px;">
-        <option value="">&mdash; Personnel</option>
-        {{foreach from=$personnels item="personnel"}}
-        <option value="{{$personnel->_id}}">{{$personnel->_ref_user->_view}}</option>
-        {{/foreach}}
+          <option value="">&mdash; Personnel</option>
+          {{foreach from=$personnels item="personnel"}}
+          <option value="{{$personnel->_id}}">{{$personnel->_ref_user}}</option>
+          {{/foreach}}
         </select>
       </form>
       {{/if}}
       
-      <form name="editEntreeReveilOpsFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
-        <input type="hidden" name="m" value="dPplanningOp" />
+      <form name="editEntreeReveilOpsFrm{{$_operation->_id}}" action="?" method="post">
+        <input type="hidden" name="m" value="planningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
-        <input type="hidden" name="operation_id" value="{{$_operation->operation_id}}" />
+        {{mb_key object=$_operation}}
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="entree_reveil" value="" /> 
-        <button class="tick notext" type="button" onclick="checkPersonnel(document.selPersonnel{{$_operation->_id}}, this.form);">{{tr}}Modify{{/tr}}</button>
+        <button class="tick notext" type="button" onclick="checkPersonnel(getForm('selPersonnel{{$_operation->_id}}'), this.form);">{{tr}}Modify{{/tr}}</button>
       </form>
       
       {{foreach from=$_operation->_ref_affectations_personnel.reveil item=curr_affectation}}
         <br />
-        <form name="delPersonnel{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
-          <input type="hidden" name="m" value="dPpersonnel" />
+        <form name="delPersonnel{{$curr_affectation->_id}}" action="?" method="post">
+          <input type="hidden" name="m" value="personnel" />
           <input type="hidden" name="dosql" value="do_affectation_aed" />
           <input type="hidden" name="del" value="1" />
-          <input type="hidden" name="affect_id" value="{{$curr_affectation->_id}}" />
-          <button type="button" class="trash notext" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function() { refreshTabsReveil(); }})">
+          {{mb_key object=$curr_affectation}}
+          <button type="button" class="trash notext" onclick="onSubmitFormAjax(this.form, refreshTabsReveil)">
             {{tr}}Delete{{/tr}}
           </button>
         </form>
-        {{$curr_affectation->_ref_personnel->_ref_user->_view}}
+        {{$curr_affectation->_ref_personnel->_ref_user}}
       {{/foreach}}
       {{else}}
         -
@@ -164,14 +162,14 @@
     </td>
     <td class="button">
       {{if $modif_operation}}
-      <form name="editSortieReveilOpsFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
-        <input type="hidden" name="m" value="dPplanningOp" />
+      <form name="editSortieReveilOpsFrm{{$_operation->_id}}" action="?" method="post">
+        <input type="hidden" name="m" value="planningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="sortie_reveil_possible" value="current" />
         <input type="hidden" name="sortie_reveil_reel" value="current" />
-        <button class="tick notext" type="button" onclick="submitOperationForm(this.form)">
+        <button class="tick notext" type="button" onclick="onSubmitFormAjax(this.form, refreshTabsReveil)">
           {{tr}}Modify{{/tr}}
         </button>
       </form>
@@ -186,7 +184,3 @@
   <tr><td colspan="20" class="empty">{{tr}}COperation.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>
-
-<script>
-  $('heure').innerHTML = "{{$hour|date_format:$conf.time}}";
-</script>

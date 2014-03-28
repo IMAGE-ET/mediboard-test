@@ -43,6 +43,7 @@
     <th>Temps écoulé</th>
   </tr>
   {{foreach from=$sejours item=_sejour}}
+    {{assign var=last_op value=$_sejour->_ref_last_operation}}
     <tr>
       <td class="text">{{$_sejour->_ref_patient->_view}}</td>
       <td class="text">{{$_sejour->_ref_praticien->_view}}</td>
@@ -64,8 +65,14 @@
       </td>
       <td style="text-align: center;">{{$_sejour->entree_reelle|date_format:$conf.time}}</td>
       <td style="text-align: center;">{{$_sejour->_ref_last_operation->entree_salle|date_format:$conf.time}}</td>
-      <!-- <td style="text-align: center;">{{$_sejour->_ref_last_operation->entree_reveil|date_format:$conf.time}}</td> -->
-      <td style="text-align: center;">{{$_sejour->_ref_last_operation->sortie_reveil_possible|date_format:$conf.time}}</td>
+      <!-- <td style="text-align: center;">{{$last_op->entree_reveil|date_format:$conf.time}}</td> -->
+      <td style="text-align: center;">
+        {{$last_op->sortie_reveil_possible|date_format:$conf.time}}
+        {{if $password_sortie && $last_op->sortie_locker_id}}
+          <br />
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$last_op->_ref_sortie_locker}}
+        {{/if}}
+      </td>
       <td style="text-align: center;">{{$_sejour->sortie_reelle|date_format:$conf.time}}</td>
       <td style="text-align: center;">{{$_sejour->_duree|date_format:$conf.time}}</td></td>
     </tr>
