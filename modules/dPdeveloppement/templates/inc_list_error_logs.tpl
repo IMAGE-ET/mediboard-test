@@ -231,7 +231,7 @@ Main.add(function(){
             <tr>
               <td style="width: 20%;"></td>
               <td>{{$_log->file_name|ide:$_log->line_number:$_log->file_name}}</td>
-              <td class="narrow" style="text-align: right;">{{$_log->line_number|ide:$_log->line_number:$_log->line_number}}</td>
+              <td class="narrow" style="text-align: right;">{{$_log->file_name|ide:$_log->line_number:$_log->line_number}}</td>
             </tr>
             {{foreach from=$_log->_stacktrace_output item=_output name=output}}
               {{if $smarty.foreach.output.iteration < 4 ||

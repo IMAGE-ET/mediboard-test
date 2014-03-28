@@ -116,7 +116,7 @@
 {{/if}}
 
 {{* if IDE is configured *}}
-{{if "MEDIBOARD_PATH"|getenv}}
+{{if @$conf.dPdeveloppement.ide_url || @$conf.dPdeveloppement.ide_path}}
   <iframe name="ide-launch-iframe" id="ide-launch-iframe" style="display: none;"></iframe>
 {{/if}}
 
