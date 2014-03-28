@@ -1,4 +1,12 @@
 {{mb_default var=display value=false}}
+<script>
+  printFiche = function(dossier_anesth_id) {
+    var url = new Url("dPcabinet", "print_fiche");
+    url.addParam("dossier_anesth_id", dossier_anesth_id);
+    url.addParam("print", true);
+    url.popup(700, 500, "printFiche");
+  };
+</script>
 
 {{if !@$offline || @$multi}}
   {{if !$offline}}
@@ -24,23 +32,34 @@
 {{assign var="sejour"    value=$operation->_ref_sejour}}
 
 {{if $operation->_id && $display}}
+  {{mb_script module="cabinet" script="edit_consultation" ajax=true}}
   <script>
     refreshFicheAnesthOp = function(form) {
-      return onSubmitFormAjax(form, {onComplete: function() {
-        var url = new Url("cabinet", "print_fiche");
-        url.addParam("operation_id", "{{$operation->_id}}");
-        url.addParam("offline", false);
-        url.addParam("display", true);
-        url.addParam("pdf"    , 0);
-        url.requestUpdate("fiche_anesth");
-      }});
+      var rep= confirm('Êtes-vous sûr de vouloir délier ce dossier à l\'intervention?');
+      if (rep) {
+        return onSubmitFormAjax(form, {onComplete: function() {
+          var url = new Url("cabinet", "print_fiche");
+          url.addParam("operation_id", "{{$operation->_id}}");
+          url.addParam("offline", false);
+          url.addParam("display", true);
+          url.addParam("pdf"    , 0);
+          url.requestUpdate("fiche_anesth");
+        }});
+      }
     }
   </script>
+  <button type="button" class="print" onclick="printFiche('{{$dossier_anesth->_id}}');" style="float:left;">
+    Imprimer la fiche
+  </button>
+  <button type="button" class="edit" onclick="Consultation.editModal('{{$consult->_id}}');" style="float:left;">
+    Modifier le dossier d'anesthésie
+  </button>
   <form name="addInterv-{{$operation->_id}}" action="?m={{$m}}" method="post" onsubmit="return refreshFicheAnesthOp(this);">
     <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
     <input type="hidden" name="del" value="{{if $consult->_refs_dossiers_anesth|@count == 1}}0{{else}}1{{/if}}" />
     <input type="hidden" name="m" value="dPcabinet" />
     <input type="hidden" name="operation_id" value=""/>
+    <input type="hidden" name="sejour_id" value=""/>
     {{mb_key object=$dossier_anesth}}
     <button type="button" class="unlink" onclick="return refreshFicheAnesthOp(this.form);" style="float:left;">
       Supprimer le {{if $consult->_refs_dossiers_anesth|@count == 1}}lien à l'intervention{{else}}dossier d'anesthésie{{/if}}
@@ -48,14 +67,6 @@
   </form>
 {{/if}}
 {{if $display && $dossiers|@count != 0}}
-  <script>
-    printFiche = function(dossier_anesth_id) {
-      var url = new Url("dPcabinet", "print_fiche");
-      url.addParam("dossier_anesth_id", dossier_anesth_id);
-      url.addParam("print", true);
-      url.popup(700, 500, "printFiche");
-    };
-  </script>
   <span style="display:inline-block;float:right;" onmouseover="ObjectTooltip.createDOM(this, 'DetailDossiers');">
     {{$dossiers|@count}} Dossiers d'anesthésie
   </span>
