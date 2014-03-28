@@ -879,7 +879,7 @@ class CSetupsystem extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("1.0.99");
-    $this->addPrefQuery("MobileUI", 1);
+    $this->addPrefQuery("MobileUI", 0);
 
     $this->makeRevision("1.1.00");
     $query = "ALTER TABLE `source_smtp` 
