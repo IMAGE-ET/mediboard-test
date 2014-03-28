@@ -15,5 +15,5 @@ CCanDo::checkAdmin();
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("path", realpath(dirname(__FILE__)."/../../"));
+$smarty->assign("path", realpath(__DIR__."/../../"));
 $smarty->display('configure.tpl');

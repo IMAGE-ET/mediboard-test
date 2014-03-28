@@ -12,5 +12,7 @@
  */
 
 $dPconfig["dPdeveloppement"] = array (
+  "ide_url"  => "",
   "ide_path" => "",
+  "profiling_xhprof_path" => "",
 );

@@ -678,11 +678,18 @@ class CSmartyMB extends Smarty {
   function ide($file, $line = null, $text = null) {
     $text = isset($text) ? $text : $file;
 
-    if (!CAppUI::conf("dPdeveloppement ide_path")) {
-      return $text;
+    $ide_url  = CAppUI::conf("dPdeveloppement ide_url");
+    if ($ide_url) {
+      $url = str_replace("%file%", urlencode($file), $ide_url).":$line";
+    }
+    else {
+      $ide_path = CAppUI::conf("dPdeveloppement ide_path");
+      if ($ide_path) {
+        $url = "ide:".urlencode($file).":$line";
+      }
     }
 
-    return "<a target=\"ide-launch-iframe\" href=\"ide:".urlencode($file).":$line\">$text</a>";
+    return "<a target=\"ide-launch-iframe\" href=\"$url\">$text</a>";
   }
 
   /**

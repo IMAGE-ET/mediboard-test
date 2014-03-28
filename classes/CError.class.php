@@ -119,10 +119,17 @@ class CError {
   static function openInIDE($file, $line = null) {
     global $dPconfig;
 
-    if (empty($dPconfig["dPdeveloppement"]["ide_path"])) {
-      return $file;
+    $ide_url = !empty($dPconfig["dPdeveloppement"]["ide_url"]) ? $dPconfig["dPdeveloppement"]["ide_url"] : false;
+    if ($ide_url) {
+      $url = str_replace("%file%", urlencode($file), $ide_url).":$line";
+    }
+    else {
+      $ide_path = !empty($dPconfig["dPdeveloppement"]["ide_path"]) ? $dPconfig["dPdeveloppement"]["ide_path"] : false;
+      if ($ide_path) {
+        $url = "ide:".urlencode($file).":$line";
+      }
     }
 
-    return "<a target=\"ide-launch-iframe\" href=\"ide:".urlencode($file).":$line\">$file</a>";
+    return "<a target=\"ide-launch-iframe\" href=\"$url\">$text</a>";
   }
 }
