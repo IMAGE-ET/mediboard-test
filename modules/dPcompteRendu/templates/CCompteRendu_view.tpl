@@ -22,9 +22,8 @@
     {{assign var=file value=$document->_ref_file}}
     {{if $document->object_id && $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs && $file->_id}}
     <td id="thumbnail-{{$document->_id}}" style="text-align: center;">
-     <a href="#1" onclick="new Url().ViewFilePopup('{{$file->object_class}}', '{{$file->object_id}}', 'CFile', '{{$file->_id}}')">
-        <img class="thumbnail" style="width: 64px; height: 92px;"
-          src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$file->_id}}&amp;phpThumb=1&amp;w=64&h=92" />
+     <a href="#1" onclick="new Url().ViewFilePopup('{{$document->object_class}}', '{{$document->object_id}}', 'CCompteRendu', '{{$document->_id}}')">
+        <img class="thumbnail" style="width: 64px; height: 92px;" src="?m=files&a=fileviewer&suppressHeaders=1&file_id={{$file->_id}}&phpThumb=1&w=64&h=92" />
      </a>
       <br />
       {{mb_value object=$file field=_file_size}}
@@ -32,7 +31,7 @@
 
     {{else}}
     <td>
-      <img src="images/pictures/medifile.png"/>
+      <img src="images/pictures/medifile.png" />
     </td>
     {{/if}}
   
