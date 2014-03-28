@@ -537,9 +537,10 @@ Main.add(function() {
 <!-- Zone de confirmation de verrouillage du document -->
 <div id="lock_area" style="display: none;">
   {{if !$conf.dPcompteRendu.CCompteRendu.pass_lock && !$app->user_prefs.pass_lock}}
-    <form name="LockDocOwner" method="post" action="?m=compteRendu&a=ajax_lock_doc"
+    <form name="LockDocOwner" method="post" action="?m=system&a=ajax_password_action"
           onsubmit="return onSubmitFormAjax(this, {useFormAction: true})">
       <input type="hidden" name="user_id" class="notNull" value="{{$app->user_id}}" />
+      <input type="hidden" name="callback" value="toggleLock" />
       <table class="form">
         <tr>
           <th class="title" colspan="2" >
@@ -565,14 +566,15 @@ Main.add(function() {
       </table>
     </form>
   {{/if}}
-  <form name="LockDocOther" method="post" action="?m=compteRendu&a=ajax_lock_doc"
+  <form name="LockDocOther" method="post" action="?m=system&a=ajax_password_action"
         onsubmit="return onSubmitFormAjax(this, {useFormAction: true})">
     <input type="hidden" name="user_id" class="notNull"
            {{if $conf.dPcompteRendu.CCompteRendu.pass_lock || $app->user_prefs.pass_lock}}value="{{$curr_user->_id}}"{{/if}} />
+    <input type="hidden" name="callback" value="toggleLock" />
     <table class="form">
       {{if $conf.dPcompteRendu.CCompteRendu.pass_lock || $app->user_prefs.pass_lock}}
         <tr>
-          <th class="title" colspan="2" >
+          <th class="title" colspan="2">
             Verrouillage du document
           </th>
         </tr>
