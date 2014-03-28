@@ -23,7 +23,7 @@ Main.add(function(){
 
 <table class="tbl" id="score_igs">
 <tr>
-  <th class="title" colspan="18">
+  <th class="title" colspan="19">
     <button type="button" style="float: right" class="add" onclick="openScoreIGS()">
       Ajouter un score IGS
     </button>
@@ -34,7 +34,8 @@ Main.add(function(){
 
 
 <tr>
-  <th style="font-weight: bold; text-align: center;">{{mb_label class="CExamIgs" field="scoreIGS"}}</th>  
+  <th style="font-weight: bold; text-align: center;" class="text">{{mb_label class="CExamIgs" field="scoreIGS"}}</th>
+  <th style="text-align: center;" class="text">{{mb_label class="CExamIgs" field=simplified_igs}}</th>
   <th class="text">Date</th>
   {{foreach from="CExamIGS"|static:fields item=_field}}
   <th class="text">{{mb_label class="CExamIgs" field=$_field}}</th>
@@ -46,7 +47,10 @@ Main.add(function(){
 <tr>
   <td style="font-weight: bold; font-size: 1.3em; text-align: center;">
     {{mb_value object=$_igs field="scoreIGS"}}
-  </td>  
+  </td>
+  <td style="font-size: 1.2em; text-align: center;">
+    {{mb_value object=$_igs field=simplified_igs}}
+  </td>
   <td class="text" style="text-align: center;">
     {{if $_igs->date}}
       {{mb_value object=$_igs field=date}}

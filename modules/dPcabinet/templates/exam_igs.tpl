@@ -18,7 +18,9 @@ checkSelect = function(){
     oRadio.up('tr').down('.value').update(value_content);
   });
   
-  $V(oForm.scoreIGS, score_igs);
+  $V(oForm.scoreIGS, score_igs + "");
+  var simplified_igs = score_igs - parseInt($V(oForm.age), 10);
+  $V(oForm.simplified_igs, simplified_igs + "");
 };
 
 empty_on_click = function(elem) {
@@ -112,8 +114,16 @@ Main.add(checkSelect);
       <th class="title">
         {{mb_label object=$exam_igs field="scoreIGS"}}
       </th>
-      <td colspan="10">
+      <td>
         {{mb_field object=$exam_igs field="scoreIGS" readonly="readonly" style="font-weight: bold; text-align: center; font-size: 1.2em;"}}
+      </td>
+      <th class="category">
+        {{mb_label object=$exam_igs field=simplified_igs}}
+      </th>
+      <td>
+        {{mb_field object=$exam_igs field=simplified_igs readonly="readonly" style="text-align: center; font-size: 1.1em;"}}
+      </td>
+      <td colspan="6">
         {{if $exam_igs->_id}}
           <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
           <button type="button" class="trash" onclick="confirmDeletion(this.form, { ajax:true, typeName:'cet examen IGS'}, {onComplete: function(){ refreshFiches('{{$sejour->_id}}'); Control.Modal.close(); } })">
@@ -122,7 +132,7 @@ Main.add(checkSelect);
         {{else}}
           <button type="submit" class="submit">{{tr}}Create{{/tr}}</button>
         {{/if}}
-       </td>    
+      </td>
     </tr>
   </table>
 </form>

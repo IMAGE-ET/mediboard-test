@@ -2096,6 +2096,12 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("2.29");
     $this->addDefaultConfig("dPcabinet CPrescription view_prescription");
 
-    $this->mod_version = "2.30";
+    $this->makeRevision('2.30');
+
+    $query = "ALTER TABLE `examigs`
+                ADD `simplified_igs` INT(11);";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.31';
   }
 }

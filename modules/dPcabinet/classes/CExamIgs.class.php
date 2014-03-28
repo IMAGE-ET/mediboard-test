@@ -36,6 +36,7 @@ class CExamIgs extends CMbObject {
   public $maladies_chroniques;
   public $admission;
   public $scoreIGS;
+  public $simplified_igs;
   
   static $fields = array("age", "FC", "TA", "temperature", "PAO2_FIO2", "diurese", "uree", "globules_blancs",
     "kaliemie", "natremie", "HCO3" , "billirubine", "glasgow", "maladies_chroniques", "admission");
@@ -73,6 +74,7 @@ class CExamIgs extends CMbObject {
     $props["maladies_chroniques"] = "enum list|9|10|17";
     $props["admission"]           = "enum list|0|6|8";
     $props["scoreIGS"]            = "num";
+    $props["simplified_igs"]      = "num";
     return $props;
   }
 
@@ -81,6 +83,6 @@ class CExamIgs extends CMbObject {
    */
   function updateFormFields(){
     parent::updateFormFields();
-    $this->_view = "Score IGS: $this->scoreIGS";  
+    $this->_view = "Score IGS: $this->scoreIGS";
   }
 }
