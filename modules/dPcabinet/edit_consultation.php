@@ -95,7 +95,7 @@ $anesth = new CTypeAnesth();
 $orderanesth = "name";
 $anesth = $anesth->loadList(null, $orderanesth);
 
-$consultAnesth = $consult->_ref_consult_anesth;
+$consultAnesth = $consult->_ref_consult_anesth ? $consult->_ref_consult_anesth : new CConsultAnesth();
 
 // Consultation courante
 $consult->_ref_chir = $userSel;
