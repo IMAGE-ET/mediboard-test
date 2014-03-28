@@ -41,7 +41,7 @@ orderColonne = function(order_col, order_way) {
     {{if $exchange instanceof CExchangeHL7v2}}
       <th>{{mb_title object=$exchange field="code"}}</th>
     {{/if}}
-    {{if $exchange instanceof CExchangeHL7v2 || $exchange instanceof CEchangeHprim21}}
+    {{if $exchange instanceof CExchangeHL7v2 || $exchange instanceof CEchangeHprim21 ||$exchange instanceof CExchangeHprimSante}}
       <th>{{mb_title object=$exchange field="version"}}</th>
     {{/if}}
     <th>{{mb_colonne class=$exchange->_class field="date_echange" order_col=$order_col order_way=$order_way function=orderColonne}}</th>

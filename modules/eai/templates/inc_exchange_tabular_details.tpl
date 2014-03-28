@@ -11,7 +11,7 @@
 
 {{if $exchange instanceof CExchangeHL7v2}}
   {{mb_include template=inc_exchange_er7_details}}
-{{elseif $exchange instanceof CEchangeHprim21}}
+{{elseif $exchange instanceof CEchangeHprim21 || $exchange instanceof CExchangeHprimSante}}
   {{mb_include template=inc_exchange_hpr_details}}
 {{/if}}
       

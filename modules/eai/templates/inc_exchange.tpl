@@ -113,7 +113,7 @@
   {{if $object instanceof CExchangeHL7v2}}
     <td class="narrow">{{mb_value object=$object field="code"}}</td>
   {{/if}}
-  {{if $object instanceof CExchangeHL7v2 || $object instanceof CEchangeHprim21}}
+  {{if $object instanceof CExchangeHL7v2 || $object instanceof CEchangeHprim21 || $object instanceof CExchangeHprimSante}}
     <td class="narrow">{{mb_value object=$object field="version"}}</td>
   {{/if}}
   <td class="{{if $object->date_echange}}ok{{else}}warning{{/if}} narrow">

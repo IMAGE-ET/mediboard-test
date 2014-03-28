@@ -35,10 +35,14 @@ class CSenderMLLP extends CInteropSender {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["expediteur_hl7v2"]   = "CExchangeHL7v2 sender_id";
-    $backProps["expediteur_mvsante"] = "CMVSanteXMLConfig sender_id";
-    $backProps["config_hprimxml"]    = "CHprimXMLConfig sender_id";
-    $backProps["config_hl7"]         = "CHL7Config sender_id";
+
+    $backProps["expediteur_hprimsante"] = "CExchangeHprimSante sender_id";
+    $backProps["expediteur_hl7v2"]      = "CExchangeHL7v2 sender_id";
+    $backProps["expediteur_mvsante"]    = "CMVSanteXMLConfig sender_id";
+
+    $backProps["config_hprimxml"]       = "CHprimXMLConfig sender_id";
+    $backProps["config_hl7"]            = "CHL7Config sender_id";
+    $backProps["config_hprimsante"]     = "CHPrimSanteConfig sender_id";
         
     return $backProps;
   }

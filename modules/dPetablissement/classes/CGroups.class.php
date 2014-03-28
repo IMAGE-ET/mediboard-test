@@ -123,6 +123,7 @@ class CGroups extends CMbObject {
     $backProps["destinataires_hprim"]       = "CDestinataireHprim group_id";
     $backProps["destinataires_sigems"]      = "CDestinataireSigems group_id";
     $backProps["destinataires_hprim21"]     = "CDestinataireHprim21 group_id";
+    $backProps["destinataires_hprimsante"]  = "CReceiverHprimSante group_id";
     $backProps["destinataires_HL7v2"]       = "CReceiverHL7v2 group_id";
     $backProps["destinataires_HL7v3"]       = "CReceiverHL7v3 group_id";
     $backProps["destinataires_dmp"]         = "CReceiverDMP group_id";
@@ -130,6 +131,7 @@ class CGroups extends CMbObject {
     $backProps["echanges_generique"]        = "CExchangeAny group_id";
     $backProps["echanges_hprim"]            = "CEchangeHprim group_id";
     $backProps["echanges_hprim21"]          = "CEchangeHprim21 group_id";
+    $backProps["echanges_hprimsante"]       = "CExchangeHprimSante group_id";
     $backProps["echanges_hl7v2"]            = "CExchangeHL7v2 group_id";
     $backProps["echanges_hl7v3"]            = "CExchangeHL7v3 group_id";
     $backProps["echanges_dmp"]              = "CExchangeDMP group_id";

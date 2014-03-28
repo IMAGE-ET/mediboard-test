@@ -70,6 +70,7 @@ class CMedecin extends CPerson {
     $backProps["sejours_adresses"]        = "CSejour adresse_par_prat_id";
     $backProps["consultations_adresses"]  = "CConsultation adresse_par_prat_id";
     $backProps["echanges_hprim21"]        = "CEchangeHprim21 object_id";
+    $backProps["echanges_hprimsante"]     = "CExchangeHprimSante object_id";
     $backProps["correspondants_courrier"] = "CCorrespondantCourrier object_id";
     return $backProps;
   }

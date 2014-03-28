@@ -35,18 +35,20 @@ class CSenderFTP extends CInteropSender {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["expediteur_hprimxml"] = "CEchangeHprim sender_id";
-    $backProps["expediteur_hprim21"]  = "CEchangeHprim21 sender_id";
-    $backProps["expediteur_hl7v2"]    = "CExchangeHL7v2 sender_id";
-    $backProps["expediteur_hl7v3"]    = "CExchangeHL7v3 sender_id";
-    $backProps["expediteur_dmp"]      = "CExchangeDMP sender_id";
-    $backProps["expediteur_phast"]    = "CExchangePhast sender_id";
-    $backProps["expediteur_any"]      = "CExchangeAny sender_id";
-    $backProps["expediteur_mvsante"]  = "CExchangeMVSante sender_id";
+    $backProps["expediteur_hprimxml"]   = "CEchangeHprim sender_id";
+    $backProps["expediteur_hprim21"]    = "CEchangeHprim21 sender_id";
+    $backProps["expediteur_hprimsante"] = "CExchangeHprimSante sender_id";
+    $backProps["expediteur_hl7v2"]      = "CExchangeHL7v2 sender_id";
+    $backProps["expediteur_hl7v3"]      = "CExchangeHL7v3 sender_id";
+    $backProps["expediteur_dmp"]        = "CExchangeDMP sender_id";
+    $backProps["expediteur_phast"]      = "CExchangePhast sender_id";
+    $backProps["expediteur_any"]        = "CExchangeAny sender_id";
+    $backProps["expediteur_mvsante"]    = "CExchangeMVSante sender_id";
     
-    $backProps["config_hprimxml"]     = "CHprimXMLConfig sender_id";
-    $backProps["config_hl7"]          = "CHL7Config sender_id";
-    $backProps["config_mvsante"]      = "CMVSanteXMLConfig sender_id";
+    $backProps["config_hprimxml"]       = "CHprimXMLConfig sender_id";
+    $backProps["config_hprimsante"]     = "CHPrimSanteConfig sender_id";
+    $backProps["config_hl7"]            = "CHL7Config sender_id";
+    $backProps["config_mvsante"]        = "CMVSanteXMLConfig sender_id";
     
     
     return $backProps;

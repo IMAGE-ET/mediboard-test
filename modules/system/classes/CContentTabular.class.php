@@ -48,10 +48,12 @@ class CContentTabular extends CMbObject {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["messages_hprim21"]      = "CEchangeHprim21 message_content_id";
-    $backProps["acquittements_hprim21"] = "CEchangeHprim21 acquittement_content_id";
-    $backProps["messages_hl7v2"]        = "CExchangeHL7v2 message_content_id";
-    $backProps["acquittements_hl7v2"]   = "CExchangeHL7v2 acquittement_content_id";
+    $backProps["messages_hprim21"]         = "CEchangeHprim21 message_content_id";
+    $backProps["acquittements_hprim21"]    = "CEchangeHprim21 acquittement_content_id";
+    $backProps["messages_hprimsante"]      = "CExchangeHprimSante message_content_id";
+    $backProps["acquittements_hprimsante"] = "CExchangeHprimSante acquittement_content_id";
+    $backProps["messages_hl7v2"]           = "CExchangeHL7v2 message_content_id";
+    $backProps["acquittements_hl7v2"]      = "CExchangeHL7v2 acquittement_content_id";
     return $backProps;
   }
 }

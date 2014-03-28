@@ -110,7 +110,8 @@
         
         <ul class="control_tabs" id="ack-message-tab">
           <li><a href="#ack-message-tree">Arbre</a></li>
-          <li><a href="#ack-message-hpr">ER7</a></li>
+          <li><a href="#ack-message-hpr-input">HPR Input</a></li>
+          <li><a href="#ack-message-hpr-output">HPR Output</a></li>
           <li><a href="#ack-message-xml">XML</a></li>
           <li><a href="#ack-message-warnings" class="{{if $exchange->_doc_warnings_ack}}wrong{{else}}empty{{/if}}">Avertissements</a></li>
           <li><a href="#ack-message-errors" class="{{if $exchange->_doc_errors_ack}}wrong{{else}}empty{{/if}}">Erreurs</a></li>
@@ -128,8 +129,16 @@
           {{/if}}
         </ul>
         
-        <div id="ack-message-hpr" style="display: none;">
+        <div id="ack-message-hpr-input" style="display: none;">
           {{$ack_segment_group->highlight($ack_segment_group->data)|smarty:nodefaults}}
+        </div>
+
+        <div id="ack-message-hpr-output" style="display: none;">
+          {{if $ack_segment_group->children|@count > $limit_size}}
+            <div class="small-info">Message trop volumineux pour être affiché (voir volet "Input")</div>
+          {{else}}
+            {{$ack_segment_group->flatten(true)|smarty:nodefaults}}
+          {{/if}}
         </div>
         
         <div id="ack-message-xml" style="display: none;">
