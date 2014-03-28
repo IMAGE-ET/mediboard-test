@@ -33,6 +33,7 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
     "use_sortie_matching",
     "fully_qualified",
     "check_similar",
+    "att_system",
     
     // Format
     "encoding", 
@@ -60,6 +61,7 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
   public $use_sortie_matching;
   public $fully_qualified;
   public $check_similar;
+  public $att_system;
   
   // Format
   public $encoding;
@@ -83,6 +85,7 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
       "use_sortie_matching",
       "fully_qualified",
       "check_similar",
+      "att_system",
     ),
     
     // Digit
@@ -126,23 +129,24 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
     $props = parent::getProps();
     
     // Encoding
-    $props["encoding"]       = "enum list|UTF-8|ISO-8859-1 default|UTF-8";
-    $props["display_errors"] = "bool default|1";
+    $props["encoding"]             = "enum list|UTF-8|ISO-8859-1 default|UTF-8";
+    $props["display_errors"]       = "bool default|1";
 
     // Digit
-    $props["type_sej_hospi"]      = "str";
-    $props["type_sej_ambu"]       = "str";
-    $props["type_sej_urg"]        = "str";
-    $props["type_sej_exte"]       = "str";
-    $props["type_sej_scanner"]    = "str";
-    $props["type_sej_chimio"]     = "str";
-    $props["type_sej_dialyse"]    = "str";
-    $props["type_sej_pa"]         = "str";
+    $props["type_sej_hospi"]       = "str";
+    $props["type_sej_ambu"]        = "str";
+    $props["type_sej_urg"]         = "str";
+    $props["type_sej_exte"]        = "str";
+    $props["type_sej_scanner"]     = "str";
+    $props["type_sej_chimio"]      = "str";
+    $props["type_sej_dialyse"]     = "str";
+    $props["type_sej_pa"]          = "str";
     
     // Handle
-    $props["use_sortie_matching"] = "bool default|1";
-    $props["fully_qualified"]     = "bool default|1";
-    $props["check_similar"]       = "bool default|0";
+    $props["use_sortie_matching"]  = "bool default|1";
+    $props["fully_qualified"]      = "bool default|1";
+    $props["check_similar"]        = "bool default|0";
+    $props["att_system"]           = "enum list|acteur|application|système|finessgeographique|finessjuridique default|système";
         
     // Repair
     $props["repair_patient"]       = "bool default|1";

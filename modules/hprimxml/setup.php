@@ -476,6 +476,12 @@ class CSetuphprimxml extends CSetup {
                 ADD `check_similar` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.54";
+    $this->makeRevision("0.54");
+
+    $query  = "ALTER TABLE `hprimxml_config`
+                ADD `att_system` ENUM ('acteur','application','système','finessgeographique','finessjuridique') DEFAULT 'système';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.55";
   }
 }

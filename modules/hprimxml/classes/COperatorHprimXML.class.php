@@ -42,6 +42,10 @@ class COperatorHprimXML extends CEAIOperator {
     // Création de l'échange
     $echg_hprim = new CEchangeHprim();
 
+    $data_format->loadRefsInteropActor();
+    $data_format->_ref_sender->getConfigs($data_format);
+    $dom_evt->_ref_sender = $data_format->_ref_sender;
+
     try {
       // Récupération des données de l'entête
       $data = $dom_evt->getEnteteEvenementXML($nodeName);

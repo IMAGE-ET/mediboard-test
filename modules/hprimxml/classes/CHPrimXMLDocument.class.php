@@ -176,7 +176,12 @@ class CHPrimXMLDocument extends CMbXMLDocument {
    */
   function getAttSysteme() {
     $systeme = "système";
-    
+    $sender = $this->_ref_sender;
+
+    if ($sender && $sender->_configs) {
+      $systeme = $sender->_configs["att_system"];
+    }
+
     return (CAppUI::conf("hprimxml ".$this->evenement." version") < "1.07") ? 
       $systeme : CMbString::removeDiacritics($systeme);
   }
