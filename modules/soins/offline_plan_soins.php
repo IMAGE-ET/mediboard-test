@@ -23,13 +23,19 @@ $mode_dupa    = CValue::get("mode_dupa", 0);
 
 $sejours = array();
 
-$period = CAppUI::conf("soins plan_soins period" , CGroups::loadCurrent()->_guid);
-
 $now = CMbDT::dateTime();
 $now_date = CMbDT::date();
 
-$datetime_min = "$date 00:00:00";
-$datetime_max = CMbDT::date("+ $period days", $date) . " 23:59:59";
+if ($mode_dupa) {
+  $period = CAppUI::conf("soins plan_soins period" , CGroups::loadCurrent()->_guid);
+  $datetime_min = "$date 00:00:00";
+  $datetime_max = CMbDT::date("+ $period days", $date) . " 23:59:59";
+}
+else {
+  $period = 4;
+  $datetime_min = CMbDT::date("-1 day", $date) . " 00:00:00";
+  $datetime_max = CMbDT::date("+ 3 days", $date) . " 23:59:59";
+}
 
 if ($sejours_ids) {
   $sejours_ids = explode(",", $sejours_ids);
@@ -63,7 +69,7 @@ CMbObject::massLoadFwdRef($sejours, "patient_id");
 
 $dates = array();
 
-$date_temp = $date;
+$date_temp = CMbDT::date($datetime_min);
 $date_max = CMbDT::date($datetime_max);
 
 CPrescription::$mode_plan_soins = true;
@@ -140,8 +146,10 @@ foreach ($sejours as $_sejour) {
     continue;
   }
 
+  $_sejour->loadRefCurrAffectation($now);
+
   if (!$service_id) {
-    $_sejour->loadRefCurrAffectation($now)->loadRefService();
+    $_sejour->_ref_curr_affectation->loadRefService();
   }
 
   $_sejour->loadRefPatient();
@@ -153,7 +161,6 @@ foreach ($sejours as $_sejour) {
     $line->_quantity_by_date_moment = array();
     $line->_administrations_moment  = array();
 
-    $line->loadFirstLog();
     $line->loadRefLogSignee();
 
     if (count($line->_quantity_by_date)) {
@@ -203,7 +210,6 @@ foreach ($sejours as $_sejour) {
   foreach ($prescription->_ref_prescription_line_mixes as $line) {
     $line->_prises_prevues_moment = array();
     $line->loadRefPraticien();
-    $line->loadFirstLog();
     $line->loadRefLogSignaturePrat();
 
     if (count($line->_prises_prevues)) {
@@ -213,7 +219,7 @@ foreach ($sejours as $_sejour) {
             continue;
           }
           $key = $postes_by_date[$_date][$_hour];
-          if (isset($_prise["real_hour"])) {
+          if (isset($_prise["real_hour"]) && is_array($_prise["real_hour"])) {
             foreach ($_prise["real_hour"] as $_real_hour) {
               @$line->_prises_prevues_moment[$key["day"]][$key["moment"]]["real_hour"][] = $_real_hour;
             }
@@ -221,17 +227,18 @@ foreach ($sejours as $_sejour) {
         }
       }
     }
-
-    foreach ($line->_ref_lines as $_line_item) {
-      $_line_item->_administrations_moment = array();
-      if (count($_line_item->_administrations)) {
-        foreach ($_line_item->_administrations as $date => $_administrations_by_date) {
-          foreach ($_administrations_by_date as $_hour => $_quantite) {
-            if (!isset($postes_by_date[$_date][$_hour])) {
-              continue;
+    if (count($line->_ref_lines)) {
+      foreach ($line->_ref_lines as $_line_item) {
+        $_line_item->_administrations_moment = array();
+        if (count($_line_item->_administrations)) {
+          foreach ($_line_item->_administrations as $date => $_administrations_by_date) {
+            foreach ($_administrations_by_date as $_hour => $_quantite) {
+              if (!isset($postes_by_date[$_date][$_hour])) {
+                continue;
+              }
+              $key = $postes_by_date[$_date][$_hour];
+              @$_line_item->_administrations_moment[$_date][$key["moment"]] += $_quantite;
             }
-            $key = $postes_by_date[$_date][$_hour];
-            @$_line_item->_administrations_moment[$_date][$key["moment"]] += $_quantite;
           }
         }
       }
@@ -242,7 +249,6 @@ foreach ($sejours as $_sejour) {
     $line->_quantity_by_date_moment = array();
     $line->_administrations_moment  = array();
 
-    $line->loadFirstLog();
     $line->loadRefLogSignee();
 
     if (count($line->_quantity_by_date)) {

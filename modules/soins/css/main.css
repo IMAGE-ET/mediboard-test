@@ -1,0 +1,7 @@
+table.tbl td.left_day {
+  border-left: 2px solid grey;
+}
+
+table.tbl td.right_day {
+  border-right: 2px solid grey;
+}

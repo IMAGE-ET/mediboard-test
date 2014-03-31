@@ -15,4 +15,6 @@
   {{if !$smarty.foreach.sejour.last}}
     <hr style="border: 0; page-break-after: always" />
   {{/if}}
+{{foreachelse}}
+  <h2>Pas de plan de soins à afficher.</h2>
 {{/foreach}}
