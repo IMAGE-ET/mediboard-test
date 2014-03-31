@@ -36,3 +36,6 @@
     {{mb_include module=hospi template=inc_vw_liaisons_prestation liaisons=$sejour->_liaisons_for_prestation}}
   </td>
 {{/if}}
+{{if $_show_comment_sejour}}
+  <td>{{$sejour->rques}}</td>
+{{/if}}

@@ -15,3 +15,6 @@
 {{if $prestation->_id}}
   <th>{{$prestation}}</th>
 {{/if}}
+{{if $_show_comment_sejour}}
+  <th>Rques</th>
+{{/if}}

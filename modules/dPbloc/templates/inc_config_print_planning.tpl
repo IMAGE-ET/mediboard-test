@@ -15,20 +15,20 @@
   <table class="form">
     {{assign var="var" value="planning"}}
     {{foreach from=$conf.$m.$class.$var item=value key=col}}
-    <tr>
-      <th>
-        <label for="{{$m}}[{{$class}}][{{$var}}][{{$col}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$col}}{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$col}}{{/tr}}
-        </label>
-      </th>
-      <td>
-        <select name="{{$m}}[{{$class}}][{{$var}}][{{$col}}]">
-          <option value="patient" {{if $value=="patient"}} selected="selected"{{/if}}>Patient</option>
-          <option value="sejour" {{if $value=="sejour"}} selected="selected"{{/if}}>Sejour</option>
-          <option value="interv" {{if $value=="interv"}} selected="selected"{{/if}}>Intervention</option>
-        </select>
-      </td>   
-    </tr>
+      <tr>
+        <th>
+          <label for="{{$m}}[{{$class}}][{{$var}}][{{$col}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$col}}{{/tr}}">
+            {{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$col}}{{/tr}}
+          </label>
+        </th>
+        <td>
+          <select name="{{$m}}[{{$class}}][{{$var}}][{{$col}}]">
+            <option value="patient" {{if $value=="patient"}} selected="selected"{{/if}}>Patient</option>
+            <option value="sejour" {{if $value=="sejour"}} selected="selected"{{/if}}>Sejour</option>
+            <option value="interv" {{if $value=="interv"}} selected="selected"{{/if}}>Intervention</option>
+          </select>
+        </td>
+      </tr>
     {{/foreach}}
     
     {{mb_include module=system template=inc_config_bool var=plage_vide}}
@@ -37,6 +37,7 @@
     {{mb_include module=system template=inc_config_bool var=view_extra}}
     {{mb_include module=system template=inc_config_bool var=view_duree}}
     {{mb_include module=system template=inc_config_bool var=view_hors_plage}}
+    {{mb_include module=system template=inc_config_bool var=show_comment_sejour}}
 
     <tr>
       <td class="button" colspan="100">

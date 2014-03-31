@@ -10,6 +10,7 @@ $dPconfig["dPbloc"]["CPlageOp"] = array (
   "view_extra"           => "1",
   "view_duree"           => "1",
   "view_hors_plage"      => "1",
+  "show_comment_sejour"  => "1",
   "locked"               => "1",
   "systeme_materiel"     => "standard",
   "planning"             => array (

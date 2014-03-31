@@ -34,7 +34,9 @@ $_print_annulees         = CValue::get("_print_annulees");
 $_materiel               = CValue::get("_materiel", CAppUI::conf("dPbloc CPlageOp view_materiel"));
 $_extra                  = CValue::get("_extra", CAppUI::conf("dPbloc CPlageOp view_extra"));
 $_duree                  = CValue::get("_duree", CAppUI::conf("dPbloc CPlageOp view_duree"));
-$_hors_plage             = CValue::get("_hors_plage", "toto");
+$_hors_plage             = CValue::get("_hors_plage");
+$_show_comment_sejour    = CValue::get("_show_comment_sejour");
+
 
 $no_consult_anesth       = CValue::get("no_consult_anesth");
 
@@ -330,5 +332,6 @@ $smarty->assign("_materiel"         , $_materiel);
 $smarty->assign("_extra"            , $_extra);
 $smarty->assign("_duree"            , $_duree);
 $smarty->assign("_hors_plage"       , $_hors_plage);
+$smarty->assign("_show_comment_sejour", $_show_comment_sejour);
 
 $smarty->display("view_planning.tpl");

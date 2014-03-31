@@ -8,4 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<th class="title" colspan="{{if $prestation->_id}}4{{else}}3{{/if}}">Sejour</th>
+{{assign var=colspan value=3}}
+{{if $prestation->_id}}
+  {{assign var=colspan value=$colspan+1}}
+{{/if}}
+{{if $_show_comment_sejour}}
+  {{assign var=colspan value=$colspan+1}}
+{{/if}}
+
+<th class="title" colspan="{{$colspan}}">Sejour</th>
