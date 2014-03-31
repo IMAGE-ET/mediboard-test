@@ -11,8 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-CCanDo::checkRead();
-
 $user_id       = CValue::post("user_id");
 $user_password = CValue::post("user_password");
 $callback      = CValue::post("callback");
