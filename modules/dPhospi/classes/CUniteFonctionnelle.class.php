@@ -107,6 +107,10 @@ class CUniteFonctionnelle extends CMbObject {
    * @return CUniteFonctionnelle
    */
   static function getUF($code_uf, $type = null, $group_id = null) {
+    if (!$code_uf) {
+      return null;
+    }
+
     $uf       = new self;
     $uf->code = $code_uf;
     $uf->type = $type;
