@@ -88,6 +88,8 @@ function importFile($file, $start, $count) {
 
       //clone and IPP
       $IPP = $patient->_IPP;
+      $patient->_IPP = null;
+      $patient->_generate_IPP = false;
       $patient_full = $patient;
 
       // load by ipp if basic didn't find.
