@@ -122,7 +122,7 @@ class CPlageconsult extends CPlageHoraire {
     $props["_affected"]    = "";
     $props["_total"]       = "";
     $props["_fill_rate"]   = "";
-    $props["_type_repeat"] = "enum list|simple|double|triple|quadruple|sameweek";
+    $props["_type_repeat"] = "enum list|simple|double|triple|quadruple|quintuple|sextuple|septuple|octuple|sameweek";
 
     // Filter fields
     $props["_date_min"]          = "date";
@@ -466,6 +466,22 @@ class CPlageconsult extends CPlageHoraire {
     $week_jumped = 0;
 
     switch ($this->_type_repeat) {
+      case "octuple" :
+        $this->date = CMbDT::date("+8 WEEK", $this->date); // 8
+        $week_jumped += 8;
+        break;
+      case "septuple":
+        $this->date = CMbDT::date("+7 WEEK", $this->date); // 7
+        $week_jumped += 7;
+        break;
+      case "sextuple":
+        $this->date = CMbDT::date("+6 WEEK", $this->date); // 6
+        $week_jumped += 6;
+        break;
+      case "quintuple":
+        $this->date = CMbDT::date("+5 WEEK", $this->date); // 5
+        $week_jumped += 5;
+        break;
       case "quadruple":
         $this->date = CMbDT::date("+4 WEEK", $this->date); // 4
         $week_jumped += 4;
