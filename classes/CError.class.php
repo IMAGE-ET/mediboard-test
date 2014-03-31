@@ -119,6 +119,8 @@ class CError {
   static function openInIDE($file, $line = null) {
     global $dPconfig;
 
+    $url = null;
+
     $ide_url = (!empty($dPconfig["dPdeveloppement"]["ide_url"]) ? $dPconfig["dPdeveloppement"]["ide_url"] : false);
     if ($ide_url) {
       $url = str_replace("%file%", urlencode($file), $ide_url).":$line";
@@ -130,6 +132,10 @@ class CError {
       }
     }
 
-    return "<a target=\"ide-launch-iframe\" href=\"$url\">$file</a>";
+    if ($url) {
+      return "<a target=\"ide-launch-iframe\" href=\"$url\">$file</a>";
+    }
+
+    return $file;
   }
 }

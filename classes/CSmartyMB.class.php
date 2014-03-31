@@ -677,6 +677,7 @@ class CSmartyMB extends Smarty {
    */
   function ide($file, $line = null, $text = null) {
     $text = isset($text) ? $text : $file;
+    $url = null;
 
     $ide_url  = CAppUI::conf("dPdeveloppement ide_url");
     if ($ide_url) {
@@ -689,7 +690,11 @@ class CSmartyMB extends Smarty {
       }
     }
 
-    return "<a target=\"ide-launch-iframe\" href=\"$url\">$text</a>";
+    if ($url) {
+      return "<a target=\"ide-launch-iframe\" href=\"$url\">$text</a>";
+    }
+
+    return $text;
   }
 
   /**
