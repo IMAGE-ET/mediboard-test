@@ -16,17 +16,25 @@
       <ul id="tab-modules" class="control_tabs_vertical" style="width: 20em;">
         {{foreach from=$prefs key=module item=_prefs}}
           {{if $_prefs && ($module == "common" || $module|module_active)}}
-          <li>
-            <a href="#module-{{$module}}" style="line-height: 24px;">
-              {{if $module != "common"}}
-                <img src="modules/{{$module}}/images/icon.png" width="24" style="float: left;" />
-              {{/if}}
-              {{tr}}module-{{$module}}-court{{/tr}}
-              <small>({{$_prefs|@count}})</small>
-            </a>
-          </li>
+            <li>
+              <a href="#module-{{$module}}" style="line-height: 24px;">
+                {{if $module != "common"}}
+                  <img src="modules/{{$module}}/images/icon.png" width="24" style="float: left;" />
+                {{/if}}
+                {{tr}}module-{{$module}}-court{{/tr}}
+                <small>({{$_prefs|@count}})</small>
+              </a>
+            </li>
           {{/if}}
         {{/foreach}}
+        {{if is_dir("./mobile")}}
+          <li>
+            <a href="#module-mobile" style="line-height: 24px;">
+              <img src="mobile/images/icon.png" width="24" style="float: left;" />
+              {{tr}}mbMobile{{/tr}}
+            </a>
+          </li>
+        {{/if}}
       </ul>
       <script>
       Main.add(Control.Tabs.create.curry('tab-modules', true));
@@ -84,31 +92,35 @@
           <!-- Tous modules confondus -->
           {{assign var="module" value="common"}}
           <tbody style="display: none" id="module-{{$module}}">
-
-          {{mb_include template=inc_pref spec=enum var=LOCALE values=$locales value_locale_prefix="language."}}
-          {{mb_include template=inc_pref spec=enum var=UISTYLE values=$styles value_locale_prefix="style."}}
-          {{mb_include template=inc_pref spec=enum var=MenuPosition values="top|left"}}
-          {{if is_dir("./mobile")}}
-            {{mb_include template=inc_pref spec=bool var=MobileUI}}
-          {{/if}}
-          {{mb_include template=inc_pref spec=module var=DEFMODULE}}
-          {{mb_include template=inc_pref spec=bool var=touchscreen}}
-          {{mb_include template=inc_pref spec=bool var=accessibility_dyslexic}}
-          {{mb_include template=inc_pref spec=enum var=tooltipAppearenceTimeout values="short|medium|long" value_locale_prefix=""}}
-          {{mb_include template=inc_pref spec=enum var=autocompleteDelay values="short|medium|long" value_locale_prefix=""}}
-          {{mb_include template=inc_pref spec=bool var=showCounterTip}}
-          {{mb_include template=inc_pref spec=bool var=showLastUpdate}}
-          {{mb_include template=inc_pref spec=bool var=useEditAutocompleteUsers}}
-          {{mb_include template=inc_pref spec=enum var=textareaToolbarPosition values="right|left"}}
-          {{mb_include template=inc_pref spec=bool var=planning_dragndrop}}
-          {{mb_include template=inc_pref spec=bool var=planning_resize}}
-          {{mb_include template=inc_pref spec=enum var=planning_hour_division values="2|3|4|6"}}
-          {{if $conf.session_handler == "zebra" || $conf.session_handler == "mysql"}}
-            {{mb_include template=inc_pref spec=enum var=sessionLifetime values=$session_lifetime_enum}}
-          {{/if}}
-          {{mb_include template=inc_pref spec=bool var=notes_anonymous}}
-
+            {{mb_include template=inc_pref spec=enum var=LOCALE values=$locales value_locale_prefix="language."}}
+            {{mb_include template=inc_pref spec=enum var=UISTYLE values=$styles value_locale_prefix="style."}}
+            {{mb_include template=inc_pref spec=enum var=MenuPosition values="top|left"}}
+            {{mb_include template=inc_pref spec=module var=DEFMODULE}}
+            {{mb_include template=inc_pref spec=bool var=touchscreen}}
+            {{mb_include template=inc_pref spec=bool var=accessibility_dyslexic}}
+            {{mb_include template=inc_pref spec=enum var=tooltipAppearenceTimeout values="short|medium|long" value_locale_prefix=""}}
+            {{mb_include template=inc_pref spec=enum var=autocompleteDelay values="short|medium|long" value_locale_prefix=""}}
+            {{mb_include template=inc_pref spec=bool var=showCounterTip}}
+            {{mb_include template=inc_pref spec=bool var=showLastUpdate}}
+            {{mb_include template=inc_pref spec=bool var=useEditAutocompleteUsers}}
+            {{mb_include template=inc_pref spec=enum var=textareaToolbarPosition values="right|left"}}
+            {{mb_include template=inc_pref spec=bool var=planning_dragndrop}}
+            {{mb_include template=inc_pref spec=bool var=planning_resize}}
+            {{mb_include template=inc_pref spec=enum var=planning_hour_division values="2|3|4|6"}}
+            {{if $conf.session_handler == "zebra" || $conf.session_handler == "mysql"}}
+              {{mb_include template=inc_pref spec=enum var=sessionLifetime values=$session_lifetime_enum}}
+            {{/if}}
+            {{mb_include template=inc_pref spec=bool var=notes_anonymous}}
           </tbody>
+
+          {{if is_dir("./mobile")}}
+            <tbody id="module-mobile">
+            {{mb_include template=inc_pref spec=bool var=MobileUI}}
+            {{mb_include template=inc_pref spec=bool var=MobileDefaultModuleView}}
+            {{mb_include template=inc_pref spec=bool var=useMobileSwipe}}
+            {{mb_include template=inc_pref spec=enum var=MobileDefaultTheme values="a"}}
+            </tbody>
+          {{/if}}
 
           {{foreach from=$prefs key=module item=_prefs}}
             {{if $module != "common" && $module|module_active}}
