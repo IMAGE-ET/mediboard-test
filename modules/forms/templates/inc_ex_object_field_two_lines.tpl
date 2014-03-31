@@ -15,7 +15,7 @@
     style=$_style
     defaultstyle=1
     class=$_field_class
-    readonly=$ex_field->readonly
+    readonly=$field_readonly
     tabindex=$ex_field->tab_index
   }}
   {{$ex_field->suffix}}
@@ -30,7 +30,7 @@
     style=$_style
     defaultstyle=1
     class=$_field_class
-    readonly=$ex_field->readonly
+    readonly=$field_readonly
     tabindex=$ex_field->tab_index
   }}
   {{$ex_field->suffix}}

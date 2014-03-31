@@ -42,6 +42,11 @@
   {{/if}}
 {{/foreach}}
 
+{{assign var=field_readonly value=$ex_field->readonly}}
+{{if !$field_readonly}}
+  {{assign var=field_readonly value=null}}
+{{/if}}
+
 {{if $mode == "normal" && $_spec instanceof CRefSpec}}
   {{mb_include module=forms template=inc_ex_object_field_autocomplete}}
 

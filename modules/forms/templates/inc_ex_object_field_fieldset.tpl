@@ -11,7 +11,7 @@
               field=$_field_name
               form=$form
               emptyLabel=" "
-              readonly=$ex_field->readonly
+              readonly=$field_readonly
               tabindex=$ex_field->tab_index
             }}
             {{$ex_field->suffix}}
@@ -25,7 +25,7 @@
         field=$_field_name
         form=$form
         emptyLabel=" "
-        readonly=$ex_field->readonly
+        readonly=$field_readonly
         tabindex=$ex_field->tab_index}}
       {{$ex_field->suffix}}
     {{/if}}
@@ -46,7 +46,7 @@
         object=$ex_object
         field=$_field_name
         form=$form
-        readonly=$ex_field->readonly
+        readonly=$field_readonly
         tabindex=$ex_field->tab_index}}
       {{$ex_field->suffix}}
     </div>

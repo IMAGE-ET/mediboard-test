@@ -21,7 +21,7 @@
             style=$_style
             defaultstyle=1
             tabindex=$ex_field->tab_index
-            readonly=$ex_field->readonly
+            readonly=$field_readonly
           }}
         </div>
         {{$ex_field->suffix}}
@@ -40,7 +40,7 @@
       style=$_style
       defaultstyle=1
       tabindex=$ex_field->tab_index
-      readonly=$ex_field->readonly
+      readonly=$field_readonly
     }}
   </div>
   {{$ex_field->suffix}}
