@@ -15,7 +15,7 @@
  */
 class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   static $event_codes = array ("A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10", "A11", "A12", "A13", "A14", "A15",
-    "A16", "A21", "A22", "A25", "A26", "A27", "A32", "A33", "A38", "A52", "A53", "A54", "A55", "Z80", "Z81", "Z84", "Z85", "Z99");
+    "A16", "A21", "A22", "A25", "A26", "A27", "A32", "A33", "A38", "A45", "A50", "A52", "A53", "A54", "A55", "Z80", "Z81", "Z84", "Z85", "Z99");
   
   public $_object_found_by_vn;
 
@@ -1192,18 +1192,18 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     // Si pas de lit on affecte le service sur le séjour
     if (!$this->queryTextNode("PL.3", $PV1_3)) {
+      $affectation_uf = new CAffectationUniteFonctionnelle();
+
       // On essaye de récupérer le service dans ce cas depuis l'UF d'hébergement
       $uf = new CUniteFonctionnelle();
       $uf->group_id = $newVenue->group_id;
       $uf->code     = $this->queryTextNode("PL.1", $PV1_3);
-      if (!$uf->loadMatchingObject()) {
-        return $affectation;
+      $uf->loadMatchingObject();
+      if ($uf->code && $uf->_id) {
+        $affectation_uf->uf_id        = $uf->_id;
+        $affectation_uf->object_class = "CService";
+        $affectation_uf->loadMatchingObject();
       }
-
-      $affectation_uf = new CAffectationUniteFonctionnelle();
-      $affectation_uf->uf_id        = $uf->_id;
-      $affectation_uf->object_class = "CService";
-      $affectation_uf->loadMatchingObject();
 
       // Dans le cas où l'on retrouve un service associé à l'UF d'hébergement
       if ($affectation_uf->_id) {
@@ -1221,6 +1221,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $newVenue->_skip_date_consistencies = true;
       if ($msgVenue = $newVenue->store()) {
         return $msgVenue;
+      }
+
+      // Si on a pas d'UF on retourne une affectation vide
+      if (!$uf->_id) {
+        return $affectation;
       }
     }
 
