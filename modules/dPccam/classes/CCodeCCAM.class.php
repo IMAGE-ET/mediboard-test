@@ -76,12 +76,6 @@ class CCodeCCAM {
   const MEDIUM = 2;
   const FULL   = 3;
 
-  // table de chargement
-  static $loadLevel = array();
-
-  /** @var self[] */
-  static $loadedCodes = array();
-
   static $cacheCount = 0;
 
   static $useCount = array(
@@ -98,7 +92,7 @@ class CCodeCCAM {
    *
    * @return CMbObjectSpec
    */
-  static function getSpec(){
+  static function getSpec() {
     if (self::$spec) {
       return self::$spec;
     }
@@ -144,7 +138,7 @@ class CCodeCCAM {
    *
    * @return array
    */
-  function __sleep(){
+  function __sleep() {
     $fields = get_object_vars($this);
     unset($fields["_spec"]);
     return array_keys($fields);
@@ -169,38 +163,18 @@ class CCodeCCAM {
    */
   static function get($code, $niv = self::MEDIUM) {
     self::$useCount[$niv]++;
-
-    // Si le code n'a encore jamais été chargé,
-    // on instancie et on met son niveau de chargement à zéro
-    if (!isset(self::$loadedCodes[$code])) {
-      self::$loadedCodes[$code] = new CCodeCCAM($code);
-      self::$loadLevel[$code] = null;
-    } 
-
-    /** @var CCodeCCAM $code_ccam */
-    $code_ccam =& self::$loadedCodes[$code];
-
-    // Si le niveau demandé est inférieur au niveau courant, on retourne le code 
-    if ($niv <= self::$loadLevel[$code]) {
+    if ($code_ccam = SHM::get("code_ccam-$code-$niv")) {
       self::$cacheCount++;
-      return $code_ccam->copy();
+      return $code_ccam;
     }
 
     // Chargement
+    $code_ccam = new CCodeCCAM($code);
     $code_ccam->load($niv);
-    self::$loadLevel[$code] = $niv;
 
-    return $code_ccam->copy();
-  }
+    SHM::put("code_ccam-$code-$niv", $code_ccam);
 
-  /**
-   * Should use clone with appropriate behaviour
-   * But a bit complicated to implement
-   *
-   * @return CCodeCCAM
-   */
-  function copy() {
-    return unserialize(serialize($this));
+    return $code_ccam;
   }
 
   /**
@@ -244,7 +218,7 @@ class CCodeCCAM {
    * @return bool
    */
   function getLibelles() {
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->code);
     $result = $ds->exec($query);
     if ($ds->numRows($result) == 0) {
@@ -255,14 +229,13 @@ class CCodeCCAM {
       $this->_code7 = 1;
       return false;
     }
-    else {
-      $row = $ds->fetchArray($result);
-      //On rentre les champs de la table actes
-      $this->libelleCourt = $row["LIBELLECOURT"];
-      $this->libelleLong = $row["LIBELLELONG"];
-      $this->type        = $row["TYPE"];
-      return true;
-    }
+
+    $row = $ds->fetchArray($result);
+    //On rentre les champs de la table actes
+    $this->libelleCourt = $row["LIBELLECOURT"];
+    $this->libelleLong = $row["LIBELLELONG"];
+    $this->type        = $row["TYPE"];
+    return true;
   }
 
   /**
@@ -271,7 +244,7 @@ class CCodeCCAM {
    * @return void
    */
   function getActivite7() {
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
     // recherche de la dernière date d'effet
     $query1 = "SELECT MAX(DATEEFFET) as LASTDATE FROM modificateuracte WHERE ";
     $query1 .= $ds->prepare("CODEACTE = %", $this->code);
@@ -300,7 +273,7 @@ class CCodeCCAM {
    * @return void
    */
   function getTarification() {
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM infotarif WHERE CODEACTE = % ORDER BY DATEEFFET DESC", $this->code);
     $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
@@ -314,7 +287,7 @@ class CCodeCCAM {
    * @return void
    */
   function getForfaitSpec() {
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM forfaits WHERE CODE = %", $this->code);
     $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
@@ -327,7 +300,7 @@ class CCodeCCAM {
    * @return void
    */
   function getChaps() {
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->code);
     $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
@@ -370,7 +343,7 @@ class CCodeCCAM {
    * @return void
    */
   function getRemarques() {
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
     $this->remarques = array();
     $query = $ds->prepare("SELECT * FROM notes WHERE CODEACTE = %", $this->code);
     $result = $ds->exec($query);
@@ -386,7 +359,7 @@ class CCodeCCAM {
    */
   function getActivites() {
     $this->getChaps();
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
     // Extraction des activités
     $query = "SELECT ACTIVITE AS numero
               FROM activiteacte
@@ -454,7 +427,7 @@ class CCodeCCAM {
    * @return object liste de modificateurs de convergence disponibles
    */
   function getConvergenceFromActivite($activite) {
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
     // Recherche de la ligne des modificateurs de convergence
     $query = "SELECT *
               FROM convergence
@@ -475,7 +448,7 @@ class CCodeCCAM {
   function getModificateursFromActivite(&$activite) {
     $convergence = $this->getConvergenceFromActivite($activite);
     $listModifConvergence = array("X", "I", "9", "O");
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
     // recherche de la dernière date d'effet
     $query = "SELECT MAX(DATEEFFET) AS LASTDATE
               FROM modificateuracte
@@ -539,7 +512,7 @@ class CCodeCCAM {
    * @return void
    */
   function getPhasesFromActivite(&$activite) {
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
     // Extraction des phases
     $activite->phases = array();
     $phases =& $activite->phases;
@@ -587,7 +560,7 @@ class CCodeCCAM {
     if ($this->type == 2) {
       return;
     }
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
     $queryEffet = $ds->prepare(
       "SELECT MAX(DATEEFFET) as LASTDATE FROM associabilite WHERE CODEACTE = % GROUP BY CODEACTE",
       $this->code
@@ -637,7 +610,7 @@ class CCodeCCAM {
    * @return void
    */
   function getActesIncomp() {
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
     $queryEffet = $ds->prepare(
       "SELECT MAX(DATEEFFET) as LASTDATE FROM incompatibilite WHERE CODEACTE = % GROUP BY CODEACTE",
       $this->code
@@ -667,7 +640,7 @@ class CCodeCCAM {
    * @return void
    */
   function getProcedure() {
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM procedures WHERE CODEACTE = % GROUP BY CODEACTE ORDER BY DATEEFFET DESC", $this->code);
     $result = $ds->exec($query);
     if ($ds->numRows($result) > 0) {
@@ -692,7 +665,7 @@ class CCodeCCAM {
    * @return array forfait et coefficient
    */
   function getForfait($modificateur) {
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM modificateurforfait WHERE CODE = % AND DATEFIN = '00000000'", $modificateur);
     $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
@@ -718,7 +691,7 @@ class CCodeCCAM {
       return 100;
     }
 
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
     $query = $ds->prepare(
       "SELECT * FROM association WHERE CODE = % AND DATEFIN = '00000000'",
       $code
@@ -740,7 +713,7 @@ class CCodeCCAM {
    * @return array Tableau d'actes
    */
   function findCodes($code='', $keys='', $max_length = null, $where = null) {
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
 
     $query = "SELECT CODE, LIBELLELONG
               FROM actes
@@ -813,7 +786,7 @@ class CCodeCCAM {
    * @return array Tableau des actes
    */
   function getActeRadio() {
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
     $query = "SELECT code
       FROM ccam_radio
       WHERE code_saisi LIKE '%$this->code%'";

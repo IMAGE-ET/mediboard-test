@@ -113,6 +113,7 @@ $locales['mod-dPccam-tab-vw_find_code'] = 'Rechercher un code';
 $locales['mod-dPccam-tab-vw_full_code'] = 'Affichage d\'un code';
 $locales['mod-dPccam-tab-vw_idx_favoris'] = 'Mes favoris';
 $locales['mod-dPccam-tab-vw_idx_frais_divers_types'] = 'Types de frais divers';
+$locales['module-ccam-msg-cache-code_ccam-suppr'] = '%d codes CCAM supprimés du cache';
 $locales['module-dPccam-court'] = 'CCAM';
 $locales['module-dPccam-long'] = 'Aide au codage CCAM';
 $locales['pref-ccam_consultation'] = 'Cotation des consultations (actes CCAM, NGAP, diagnistics CIM)';
