@@ -1856,8 +1856,8 @@ class CStoredObject extends CModelObject {
     // Back collection and back count in correspondance is the "signature" on mass preloading mechanism
     // So that we can use the mechanism safely with probably no side effects
     if (
-      isset($this->_back[$backName]) &&
-      isset($this->_count[$backName]) &&
+      array_key_exists($backName, $this->_back) &&
+      array_key_exists($backName, $this->_count) &&
       count($this->_back[$backName]) == $this->_count[$backName]) {
       return $this->_back[$backName];
     }
