@@ -170,12 +170,8 @@ function stripslashes_deep($value) {
  * @return void
  **/
 function bindHashToObject($hash, &$object) {
-  // @TODO use property_exists() which is a bit faster
-  // BUT requires PHP >= 5.1
-
-  $vars = get_object_vars($object);
   foreach ($hash as $k => $v) {
-    if (array_key_exists($k, $vars)) {
+    if (property_exists($object, $k)) {
       $object->$k = $v;
     }
   }
