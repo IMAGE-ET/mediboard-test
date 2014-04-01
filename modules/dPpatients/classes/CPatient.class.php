@@ -770,8 +770,8 @@ class CPatient extends CPerson {
     //$this->_dossier_cabinet_url = self::$dossier_cabinet_prefix[CAppUI::pref("DossierCabinet")] . $this->_id;
     $this->_dossier_cabinet_url = self::$dossier_cabinet_prefix["dPpatients"] . $this->_id;
 
-    if ($this->pays_insee && !$this->pays) {
-      $this->pays = $this->updatePatNomPays($this->pays_insee);
+    if ($this->pays_insee) {
+      $this->pays = CPaysInsee::getNomFR($this->pays_insee);
     }
 
     if ($this->csp) {
@@ -2161,16 +2161,6 @@ class CPatient extends CPerson {
       $pays->loadObject($where);
       $this->_assure_pays_naissance_insee = $pays->nom_fr;
     }
-  }
-
-  function updatePatNomPays($pays_insee) {
-    $pays = new CPaysInsee();
-    $where = array(
-      "numerique" => $pays->_spec->ds->prepare("= %", $pays_insee),
-    );
-    $pays->loadObject($where);
-
-    return $pays->nom_fr;
   }
 
   function getCSPName() {

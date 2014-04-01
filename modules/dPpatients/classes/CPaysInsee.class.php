@@ -73,4 +73,26 @@ class CPaysInsee extends CMbObject {
 
     return $pays;
   }
+
+  /**
+   * Retourne le nom français du pays
+   *
+   * @param string $numerique
+   *
+   * @return mixed
+   */
+  static function getNomFR($numerique) {
+    static $noms = array();
+
+    if (array_key_exists($numerique, $noms)) {
+      return $noms[$numerique];
+    }
+
+    $pays = new self;
+    $pays->numerique = $numerique;
+    $pays->loadMatchingObject();
+
+    return $noms[$numerique] = $pays->nom_fr;
+  }
+
 }
