@@ -2,17 +2,17 @@
 
 /**
  * Event HL7
- *  
+ *
  * @category HL7
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
  * @link     http://www.mediboard.org
  */
 
 /**
- * Class CHL7Event 
+ * Class CHL7Event
  * Event HL7
  */
 class CHL7Event {
@@ -77,7 +77,7 @@ class CHL7Event {
   function __construct($i18n = null) {
     $this->_is_i18n = $i18n;
   }
-  
+
   /**
    * Build HL7 message
    *

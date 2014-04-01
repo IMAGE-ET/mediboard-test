@@ -2,12 +2,12 @@
 
 /**
  * Represents an HL7 PV2 message segment (Patient Visit - Additional Information) - HL7
- *  
+ *
  * @category HL7
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
  * @link     http://www.mediboard.org
  */
 
@@ -20,14 +20,10 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
 
   /** @var string */
   public $name   = "PV2";
-  
+
 
   /** @var CSejour */
   public $sejour;
-  
-
-  /** @var COperation */
-  public $operation;
 
   /**
    * Build PV2 segement
@@ -38,18 +34,18 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
    */
   function build(CHL7v2Event $event) {
     $data = array();
-    
+
     $sejour   = $this->sejour;
     $receiver = $event->_receiver;
-    
+
     parent::build($event);
-    
+
     // PV2-1: Prior Pending Location (PL) (optional)
     $data[] = null;
-    
+
     // PV2-2: Accommodation Code (CE) (optional)
     $data[] = null;
-    
+
     // PV2-3: Admit Reason (Psychiatrie) (CE) (optional)
     // Table - 9000
     // HL  - Hospitalisation libre
@@ -62,16 +58,16 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
     else {
       $data[] = null;
     }
-    
+
     // PV2-4: Transfer Reason (CE) (optional)
     $data[] = null;
-    
+
     // PV2-5: Patient Valuables (ST) (optional repeating)
     $data[] = null;
-    
+
     // PV2-6: Patient Valuables Location (ST) (optional)
     $data[] = null;
-    
+
     // PV2-7: Visit User Code (IS) (optional repeating)
     // Table - 0130
     // TN - Nouveau médecin traitant (le patient a changé de médecin traitant ou déclaré ce médecin pour la 1ère fois)
@@ -106,97 +102,97 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
 
     // PV2-8: Expected Admit Date/Time (TS) (optional)
     $data[] = $sejour->entree_prevue;
-    
+
     // PV2-9: Expected Discharge Date/Time (TS) (optional)
     $data[] = $sejour->sortie_prevue;
-    
+
     // PV2-10: Estimated Length of Inpatient Stay (NM) (optional)
     $data[] = null;
-    
+
     // PV2-11: Actual Length of Inpatient Stay (NM) (optional)
     $data[] = null;
-    
+
     // PV2-12: Visit Description (ST) (optional)
     $data[] = $sejour->libelle;
-    
+
     // PV2-13: Referral Source Code (XCN) (optional repeating)
     $data[] = null;
-    
+
     // PV2-14: Previous Service Date (DT) (optional)
     $data[] = null;
-    
+
     // PV2-15: Employment Illness Related Indicator (ID) (optional)
     $data[] = null;
-    
+
     // PV2-16: Purge Status Code (IS) (optional)
     $data[] = null;
-    
+
     // PV2-17: Purge Status Date (DT) (optional)
     $data[] = null;
-    
+
     // PV2-18: Special Program Code (IS) (optional)
     $data[] = null;
-    
+
     // PV2-19: Retention Indicator (ID) (optional)
     $data[] = null;
-    
+
     // PV2-20: Expected Number of Insurance Plans (NM) (optional)
     $data[] = null;
-    
+
     // PV2-21: Visit Publicity Code (IS) (optional)
     $data[] = null;
-    
+
     // PV2-22: Visit Protection Indicator (ID) (optional)
     // Table - 0136
     // Y - Oui - Accès protégé à l'information du patient
     // N - Non - Accès normal à l'information du patient
     $data[] = ($sejour->loadRefPatient()->vip) ? "Y" : "N";
-    
+
     // PV2-23: Clinic Organization Name (XON) (optional repeating)
     $data[] = null;
-    
+
     // PV2-24: Patient Status Code (IS) (optional)
     $data[] = null;
-    
+
     // PV2-25: Visit Priority Code (IS) (optional)
     $data[] = null;
-    
+
     // PV2-26: Previous Treatment Date (DT) (optional)
     $data[] = null;
-    
+
     // PV2-27: Expected Discharge Disposition (IS) (optional)
     $data[] = null;
-    
+
     // PV2-28: Signature on File Date (DT) (optional)
     $data[] = null;
-    
+
     // PV2-29: First Similar Illness Date (DT) (optional)
     $data[] = null;
-    
+
     // PV2-30: Patient Charge Adjustment Code (CE) (optional)
     $data[] = null;
-    
+
     // PV2-31: Recurring Service Code (IS) (optional)
     $data[] = null;
-    
+
     // PV2-32: Billing Media Code (ID) (optional)
     $data[] = null;
-    
+
     // PV2-33: Expected Surgery Date and Time (TS) (optional)
     $data[] = null;
-    
+
     // PV2-34: Military Partnership Code (ID) (optional)
     $data[] = null;
-    
+
     // PV2-35: Military Non-Availability Code (ID) (optional)
     $data[] = null;
-    
+
     // PV2-36: Newborn Baby Indicator (ID) (optional)
     $data[] = null;
-    
+
     // PV2-37: Baby Detained Indicator (ID) (optional)
     $data[] = null;
-    
+
     // PV2-38: Mode of Arrival Code (CE) (optional)
     // Table - 0430
     // 0 - Police
@@ -215,40 +211,40 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
     else {
       $data[] = null;
     }
-    
+
     // PV2-39: Recreational Drug Use Code (CE) (optional repeating)
     $data[] = null;
-    
+
     // PV2-40: Admission Level of Care Code (CE) (optional)
     $data[] = null;
-    
+
     // PV2-41: Precaution Code (CE) (optional repeating)
     $data[] = null;
-    
+
     // PV2-42: Patient Condition Code (CE) (optional)
     $data[] = null;
-    
+
     // PV2-43: Living Will Code (IS) (optional)
     $data[] = null;
-    
+
     // PV2-44: Organ Donor Code (IS) (optional)
     $data[] = null;
-    
+
     // PV2-45: Advance Directive Code (CE) (optional repeating)
-    $data[] = $this->getPV245($receiver, $sejour, $this->operation);
-    
+    $data[] = $this->getPV245($receiver, $sejour);
+
     // PV2-46: Patient Status Effective Date (DT) (optional)
     $data[] = null;
-    
+
     // PV2-47: Expected LOA Return Date/Time (TS) (optional)
     $data[] = null;
-    
+
     // PV2-48: Expected Pre-admission Testing Date/Time (TS) (optional)
     $data[] = null;
-    
+
     // PV2-49: Notify Clergy Code (IS) (optional repeating)
     $data[] = null;
-    
+
     $this->fill($data);
   }
 }

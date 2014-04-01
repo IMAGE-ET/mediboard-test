@@ -2,17 +2,17 @@
 
 /***
  * Admit Discharge Transfer HL7
- *  
+ *
  * @category HL7
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
  * @link     http://www.mediboard.org
  */
 
 /**
- * Classe CHL7v2EventADT 
+ * Classe CHL7v2EventADT
  * Admit Discharge Transfer
  */
 class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
@@ -29,16 +29,16 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    */
   function __construct($i18n = null) {
     parent::__construct($i18n);
-    
+
     $this->profil      = $i18n ? "PAM_$i18n" : "PAM";
-    $this->msg_codes   = array ( 
+    $this->msg_codes   = array (
       array(
         $this->event_type, $this->code, "{$this->event_type}_{$this->struct_code}"
       )
     );
     $this->transaction = CIHE::getPAMTransaction($this->code, $i18n);
   }
-  
+
   /**
    * Build event
    *
@@ -50,14 +50,14 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    */
   function build($object) {
     parent::build($object);
-        
+
     // Message Header 
     $this->addMSH();
 
     // Event Type
     $this->addEVN($this->getEVNPlannedDateTime($object), $this->getEVNOccuredDateTime($object));
   }
-  
+
   /**
    * Get event planned datetime
    *
@@ -67,7 +67,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    */
   function getEVNPlannedDateTime($object) {
   }
-  
+
   /**
    * Get event planned datetime
    *
@@ -77,7 +77,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    */
   function getEVNOccuredDateTime($object) {
   }
-  
+
   /**
    * MSH - Represents an HL7 MSH message segment (Message Header)
    *
@@ -87,7 +87,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     $MSH = CHL7v2Segment::create("MSH", $this->message);
     $MSH->build($this);
   }
-  
+
   /**
    * Represents an HL7 EVN message segment (Event Type)
    *
@@ -102,7 +102,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     $EVN->occured_datetime = $occured_datetime;
     $EVN->build($this);
   }
-  
+
   /**
    * Represents an HL7 PID message segment (Patient Identification)
    *
@@ -119,7 +119,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     $PID->set_id  = 1;
     $PID->build($this);
   }
-  
+
   /**
    * Represents an HL7 PD1 message segment (Patient Additional Demographic)
    *
@@ -132,7 +132,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     $PD1->patient = $patient;
     $PD1->build($this);
   }
-  
+
   /**
    * Represents an HL7 ROL message segment (Role)
    *
@@ -152,7 +152,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
       }
       $ROL->build($this);
     }
-    
+
     foreach ($patient->_ref_medecins_correspondants as $_correspondant) {
       $medecin = $_correspondant->loadRefMedecin();
       if ($medecin->type != "medecin") {
@@ -164,7 +164,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
       $ROL->build($this);
     }
   }
-  
+
   /**
    * Represents an HL7 NK1 message segment (Next of Kin / Associated Parties)
    *
@@ -182,7 +182,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
       $i++;
     }
   }
-  
+
   /**
    * Represents an HL7 PV1 message segment (Patient Visit)
    *
@@ -201,7 +201,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     }
     $PV1->build($this);
   }
-  
+
   /**
    * Represents an HL7 PV2 message segment (Patient Visit - Additional Information)
    *
@@ -212,12 +212,9 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   function addPV2(CSejour $sejour = null) {
     $PV2            = CHL7v2Segment::create("PV2", $this->message);
     $PV2->sejour    = $sejour;
-    if (isset($sejour->_operation)) {
-      $PV2->operation = $sejour->_operation;
-    }
     $PV2->build($this);
   }
-  
+
   /**
    * Represents an HL7 MRG message segment (Merge Patient Information)
    *
@@ -230,7 +227,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     $MRG->patient_eliminee = $patient_eliminee;
     $MRG->build($this);
   }
-  
+
   /**
    * Represents an HL7 ZBE message segment (Movement)
    *
@@ -265,7 +262,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     $ZFP->patient = $sejour->_ref_patient;
     $ZFP->build($this);
   }
-  
+
   /**
    * Represents an HL7 ZFV message segment (Compléments d'information sur la venue)
    *
@@ -278,7 +275,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     $ZFV->sejour = $sejour;
     $ZFV->build($this);
   }
-  
+
   /**
    * Represents an HL7 ZFM message segment (Mouvement PMSI)
    *
@@ -291,7 +288,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     $ZFM->sejour = $sejour;
     $ZFM->build($this);
   }
-  
+
   /**
    * Represents an HL7 ZFD message segment (Complément démographique)
    *
@@ -304,7 +301,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     $ZFD->patient = $sejour->_ref_patient;
     $ZFD->build($this);
   }
-  
+
   /**
    * Represents an HL7 GT1 message segment (Guarantor)
    *
@@ -313,6 +310,6 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    * @return void
    */
   function addGT1(CPatient $patient = null) {
-    
+
   }
 }
