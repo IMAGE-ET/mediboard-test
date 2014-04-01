@@ -1473,6 +1473,22 @@ class CSetupdPsalleOp extends CSetup {
                 ADD INDEX (`list_type_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.59";
+    $this->makeRevision("0.59");
+
+    $query = "UPDATE `daily_check_item_type` SET `title` = 'un risque allergique'
+            WHERE `title` = 'un risque alergique'";
+    $this->addQuery($query);
+
+    $query = "UPDATE `daily_check_item_type`
+    SET `title` = 'sur le plan anesthésique (risques potentiels liés au terrain ou à des traitements éventuellement maintenus, etc.)'
+    WHERE `title` = 'sur le plan anesthésique (risque potentiels liés au terrain ou à des traitements éventuellement maintenus, etc.)'";
+    $this->addQuery($query);
+
+    $query = "UPDATE `daily_check_item_type`
+    SET `title` = 'La documentation clinique et para clinique nécessaire est disponible en salle: Bilan sanguin, carte de groupe, ACI'
+    WHERE `title` = 'La documentation clinique et para clinique nécessaire est disponible en salle:Bilan sanguin, carte de groupe, ACI'";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.60";
   }
 }
