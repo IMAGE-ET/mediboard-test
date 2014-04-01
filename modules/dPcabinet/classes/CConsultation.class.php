@@ -13,7 +13,7 @@
  * Consultation d'un patient par un praticien, éventuellement pendant un séjour
  * Un des évenements fondamentaux du dossier patient avec l'intervention
  */
-class CConsultation extends CFacturable {
+class CConsultation extends CFacturable implements IPatientRelated {
   const PLANIFIE       = 16;
   const PATIENT_ARRIVE = 32;
   const EN_COURS       = 48;
@@ -2168,6 +2168,15 @@ class CConsultation extends CFacturable {
     
     $facture->store();
     return $facture;
+  }
+
+  /**
+   * Loads the related patient, wether it is a far or a close reference
+   *
+   * @return CPatient
+   */
+  function loadRelPatient() {
+    return $this->loadRefPatient();
   }
 
   /**
