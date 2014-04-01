@@ -1,20 +1,59 @@
 {{mb_default var=incident value=0}}
+<script>
+  submitPerOp = function(form){
+    {{if $incident == 1}}
+      if ($V(form.antecedent)) {
+        saveIncident(form);
+      }
+    {{/if}}
+    return onSubmitFormAjax(form, {
+      onComplete: function(){
+        refreshAnesthPerops('{{$selOp->_id}}');
+        $V(form.libelle, '');
+      }.bind(this)  });
+  }
+  saveIncident = function(formAnt){
+    var form = getForm('addAntecedentIncident');
+    $V(form.rques, formAnt.libelle.value+' '+$V(formAnt.codecim));
+    return onSubmitFormAjax(form);
+  }
 
-<form name="addAnesthPerop-{{$incident}}" action="?" method="post" 
-              onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ refreshAnesthPerops('{{$selOp->_id}}'); $V(this.libelle, '');}.bind(this)  } )">
-  
+  showCIMs10 = function(form){
+    var url = new Url("cim10", "find_codes_antecedent");
+    url.addParam("mater", '{{$selOp->_ref_sejour->grossesse_id}}');
+    url.requestUpdate('printFiche');
+  }
+
+  incidentAntecedent = function(form){
+    if ($V(form.antecedent)) {
+      $('printFiche').show();
+    }
+    else {
+      $('printFiche').hide();
+    }
+  }
+
+  {{if $incident == 1}}
+  Main.add(function () {
+    showCIMs10();
+    incidentAntecedent(getForm('addAnesthPerop-{{$incident}}'));
+  });
+  {{/if}}
+</script>
+
+<form name="addAnesthPerop-{{$incident}}" action="?" method="post">
   <input type="hidden" name="m" value="dPsalleOp" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="do_anesth_perop_aed" />
   <input type="hidden" name="operation_id" value="{{$selOp->_id}}" />
   <input type="hidden" name="datetime" value="now" />
   {{mb_key object=$anesth_perop}}
-  
+
   {{if $incident == 1}}
     <input type="hidden" name="incident" value="1" />
   {{/if}}
   <table class="main layout">
-    <tr>  
+    <tr>
       <td>
         {{if $selOp->_ref_anesth->_id}}
           {{assign var=contextUserId value=$selOp->_ref_anesth->_id}}
@@ -24,13 +63,35 @@
           {{assign var=contextUserView value=$app->_ref_user->_view|smarty:nodefaults:JSAttribute}}
         {{/if}}
         {{mb_field object=$anesth_perop field="libelle" form="addAnesthPerop-$incident"
-          aidesaisie="contextUserId: '$contextUserId', contextUserView: '$contextUserView'"}}
+        aidesaisie="contextUserId: '$contextUserId', contextUserView: '$contextUserView'"}}
       </td>
     </tr>
+    {{if $incident == 1}}
+      <tr>
+        <td>
+          <input name="antecedent" type="checkbox" value="" onchange="incidentAntecedent(this.form);"/>
+          En faire un antécédent
+        </td>
+      </tr>
+      <tr id="printFiche" ></tr>
+    {{/if}}
     <tr>
       <td colspan="2" class="button">
-        <button type="submit" class="submit">Ajouter</button>
+        <button type="button" class="submit" onclick="return submitPerOp(this.form);">Ajouter</button>
       </td>
     </tr>
   </table>
 </form>
+
+{{if $incident == 1}}
+  <form name="addAntecedentIncident" action="?" method="post">
+    <input type="hidden" name="m"           value="patients" />
+    <input type="hidden" name="del"         value="0" />
+    <input type="hidden" name="dosql"       value="do_antecedent_aed" />
+    <input type="hidden" name="_patient_id" value="{{$selOp->_ref_sejour->patient_id}}" />
+    <input type="hidden" name="_sejour_id"  value="{{$selOp->sejour_id}}" />
+    <input type="hidden" name="date"        value="now" />
+    <input type="hidden" name="type"        value="anesth" />
+    <input type="hidden" name="rques"       value="" />
+  </form>
+{{/if}}
