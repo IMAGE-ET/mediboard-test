@@ -26,8 +26,8 @@ $locales['mod-dPcim10-tab-vw_find_code'] = 'Rechercher un code';
 $locales['mod-dPcim10-tab-vw_full_code'] = 'Afficher un code';
 $locales['mod-dPcim10-tab-vw_idx_chapter'] = 'Sommaire de la CIM';
 $locales['mod-dPcim10-tab-vw_idx_favoris'] = 'Mes favoris';
+$locales['module-cim-msg-cache-code_cim-suppr'] = '%d codes CIM supprimés du cache';
 $locales['module-dPcim10-court'] = 'CIM';
 $locales['module-dPcim10-long'] = 'Aide au codage CIM';
 $locales['pref-new_search_cim10'] = 'Nouvelle recherche de code CIM';
 $locales['pref-new_search_cim10-desc'] = 'Nouvelle ergonomie de recherche de code CIM';
-?>

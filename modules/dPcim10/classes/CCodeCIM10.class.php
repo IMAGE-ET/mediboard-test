@@ -62,12 +62,6 @@ class CCodeCIM10 {
   const MEDIUM = 2;
   const FULL   = 3;
 
-  // table de chargement
-  static $loadLevel = array();
-
-  /** @var self[] */
-  static $loadedCodes = array();
-
   static $cacheCount = 0;
 
   static $useCount = array(
@@ -143,7 +137,7 @@ class CCodeCIM10 {
    */
   function loadLite($lang = self::LANG_FR) {
     $this->exist = true;
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
     
     $this->_lang = $lang;
 
@@ -303,23 +297,13 @@ class CCodeCIM10 {
    */
   static function get($code, $niv = self::LITE, $lang = self::LANG_FR) {
     self::$useCount[$niv]++;
-
-    // Si le code n'a encore jamais été chargé, on instancie et on met son niveau de chargement à zéro
-    if (!isset(self::$loadedCodes[$code])) {
-      self::$loadedCodes[$code] = new CCodeCIM10($code, $niv === self::LITE);
-      self::$loadLevel[$code] = null;
-    }
-
-    /** @var CCodeCIM10 $code */
-    $code_cim = self::$loadedCodes[$code];
-
-    // Si le niveau demandé est inférieur au niveau courant, on retourne le code
-    if ($niv <= self::$loadLevel[$code]) {
+    if ($code_cim = SHM::get("code_cim-$code-$niv")) {
       self::$cacheCount++;
-      return $code_cim->copy();
+      return $code_cim;
     }
 
     // Chargement
+    $code_cim = new CCodeCIM10($code, $niv === self::LITE);
     switch ($niv) {
       case self::LITE:
         $code_cim->loadLite();
@@ -332,8 +316,9 @@ class CCodeCIM10 {
         $code_cim->loadRefs();
     }
 
-    self::$loadLevel[$code] = $niv;
-    return $code_cim->copy();
+    SHM::put("code_cim-$code-$niv", $code_cim);
+
+    return $code_cim;
   }
 
   /**
@@ -436,7 +421,7 @@ class CCodeCIM10 {
 
   // Sommaire
   function getSommaire($lang = self::LANG_FR, $level = 0) {
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
     $this->_lang = $lang;
 
     $query = "SELECT * FROM chapter ORDER BY chap";
@@ -462,7 +447,7 @@ class CCodeCIM10 {
   
   // Recherche de codes
   function findCodes($code, $keys, $lang = self::LANG_FR, $max_length = null, $where = null) {
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
     $this->_lang = $lang;
   
     $query = "SELECT libelle.$this->_lang AS $this->_lang, master.abbrev AS abbrev
