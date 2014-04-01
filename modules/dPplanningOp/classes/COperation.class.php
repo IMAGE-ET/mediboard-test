@@ -1679,7 +1679,7 @@ class COperation extends CCodable implements IPatientRelated {
     $new_fields = array(
       "ANESTH"  => $this->_ref_anesth->_view,
       "LIBELLE" => $this->libelle,
-      "DATE"    => CMbDT::dateToLocale(CMbDT::date($this->_datetime_best)),
+      "DATE"    => $this->_id ? CMbDT::dateToLocale(CMbDT::date($this->_datetime_best)) : "",
       "COTE"    => $this->getFormattedValue("cote")
     );
 
