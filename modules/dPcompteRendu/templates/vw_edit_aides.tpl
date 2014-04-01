@@ -1,4 +1,4 @@
-{{mb_script module=system script=object_selector}}
+{{mb_script module=system script=object_selector ajax=1}}
 
 <script>
   Main.add(function() {
@@ -12,6 +12,7 @@
     url.requestModal("80%", "60%", {
       title:"Création d'aide à la saisie",
       method: "post",
+      showReload: false,
       getParameters: {
         m      : "compteRendu",
         a      : "edit_aide",

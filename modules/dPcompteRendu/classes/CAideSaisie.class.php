@@ -166,10 +166,11 @@ class CAideSaisie extends CMbObject {
           $this->_class_dp_1 = "CObservationValueType";
           $this->_class_dp_2 = "CObservationValueUnit";
           break;
+        case "CPrescriptionLineElement":
+          $this->_class_dp_1 = "CElementPrescription";
       }
       $this->loadViewDependValues($object);
     }
-
     $this->searchRefsObject();
   }
 

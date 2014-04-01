@@ -956,6 +956,16 @@ class CSetupdPcompteRendu extends CSetup {
 
     $this->addPrefQuery('hprim_med_header', 0);
 
-    $this->mod_version = '0.98';
+    $this->makeRevision("0.98");
+    if (CModule::getActive("dPprescription")) {
+      $query = "UPDATE aide_saisie
+        JOIN element_prescription ON element_prescription.libelle = aide_saisie.depend_value_1
+        SET aide_saisie.depend_value_1 = element_prescription.element_prescription_id
+        WHERE element_prescription_id IS NOT NULL
+        AND aide_saisie.class = 'CPrescriptionLineElement'";
+      $this->addQuery($query);
+    }
+
+    $this->mod_version = '0.99';
   }
 }

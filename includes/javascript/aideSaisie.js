@@ -425,6 +425,7 @@ var AideSaisie = {
     url.requestModal("80%", "60%", {
       title:"Création d'aide à la saisie",
       method: "post",
+      showReload: false,
       getParameters: {
         m      : "compteRendu",
         a      : "edit_aide",
