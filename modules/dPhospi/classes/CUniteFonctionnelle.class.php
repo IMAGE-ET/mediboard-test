@@ -15,7 +15,7 @@
 class CUniteFonctionnelle extends CMbObject {
   // DB Table key
   public $uf_id;
-  
+
   // DB Fields
   public $group_id;
   public $code;
@@ -23,13 +23,13 @@ class CUniteFonctionnelle extends CMbObject {
   public $description;
   public $type;
   public $type_sejour;
-  
+
   /** @var CGroups */
   public $_ref_group;
 
   /** @var CAffectationUniteFonctionnelle[] */
   public $_ref_affectations_uf;
-  
+
   /** @var CMediusers[] */
   public $_ref_praticiens;
 
@@ -63,7 +63,7 @@ class CUniteFonctionnelle extends CMbObject {
     $props["description"] = "text";
     $props["type"]        = "enum list|hebergement|soins|medicale default|hebergement";
     $props["type_sejour"] = "enum list|comp|ambu|exte|seances|ssr|psy|urg|consult";
-    
+
     return $props;
   }
 
@@ -77,15 +77,15 @@ class CUniteFonctionnelle extends CMbObject {
     $backProps["affectations_hebergement"] = "CAffectation uf_hebergement_id";
     $backProps["affectations_medical"    ] = "CAffectation uf_medicale_id";
     $backProps["affectations_soin"       ] = "CAffectation uf_soins_id";
-    
+
     $backProps["sejours_hebergement"     ] = "CSejour uf_hebergement_id";
     $backProps["sejours_medical"         ] = "CSejour uf_medicale_id";
     $backProps["sejours_soin"            ] = "CSejour uf_soins_id";
-    
+
     $backProps["protocoles_hebergement"  ] = "CProtocole uf_hebergement_id";
     $backProps["protocoles_medical"      ] = "CProtocole uf_medicale_id";
     $backProps["protocoles_soin"         ] = "CProtocole uf_soins_id";
-    
+
     return $backProps;
   }
 
@@ -107,6 +107,10 @@ class CUniteFonctionnelle extends CMbObject {
    * @return CUniteFonctionnelle
    */
   static function getUF($code_uf, $type = null, $group_id = null) {
+    if (!$code_uf) {
+      return null;
+    }
+
     $uf       = new self;
     $uf->code = $code_uf;
     $uf->type = $type;
