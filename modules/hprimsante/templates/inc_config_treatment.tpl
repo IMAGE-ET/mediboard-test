@@ -17,6 +17,7 @@
     {{mb_include module=system template=inc_config_bool var=mandatory_num_dos_ipp_adm}}
 
     {{mb_include module=system template=inc_config_str var=tag}}
+    {{mb_include module=system template=inc_config_str var=sending_application}}
 
     <tr>
       <td class="button" colspan="2">

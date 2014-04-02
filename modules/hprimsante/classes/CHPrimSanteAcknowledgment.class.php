@@ -84,8 +84,19 @@ class CHPrimSanteAcknowledgment {
   /**
    * get status of Acknowledgment
    *
-   * @return void
+   * @return String
    */
   function getStatutAcknowledgment() {
+    $xpath = new CHPrimSanteMessageXPath($this->dom_message);
+    $nodes = $xpath->query("//ERR/ERR.4/CE.1[text()='T']");
+    if ($nodes->length > 0) {
+      return "T";
+    }
+    $nodes = $xpath->query("//ERR/ERR.4/CE.1[text()='P']");
+    if ($nodes->length > 0) {
+      return "P";
+    }
+
+    return "OK";
   }
 }

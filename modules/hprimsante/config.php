@@ -13,5 +13,6 @@
 
 $dPconfig["hprimsante"] = array (
   "mandatory_num_dos_ipp_adm" => "1",
-  "tag" => ""
+  "tag" => "",
+  "sending_application" => "",
 );

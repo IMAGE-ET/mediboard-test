@@ -36,7 +36,7 @@
         <field minOccurs="0" maxOccurs="0" length="26">
             <name>P.7</name>
             <description>Date/Time of Birth</description>
-            <datatype>TS</datatype>
+            <datatype>DT</datatype>
         </field>
         <field minOccurs="0" maxOccurs="0" length="1">
             <name>P.8</name>

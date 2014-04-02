@@ -50,9 +50,9 @@ class CADM extends CHPrimSante {
    * @return object|null An instance of data format
    */
   static function getEvent(CExchangeDataFormat $exchange) {
-    $code = $exchange->code;
+    $sous_type = $exchange->sous_type;
     //@todo voir pour la gestion
-    $classname = "CHPrimSanteADM$code";
+    $classname = "CHPrimSanteADM$sous_type";
 
     return new $classname;
   }

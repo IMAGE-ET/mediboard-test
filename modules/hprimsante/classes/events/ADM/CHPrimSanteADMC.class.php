@@ -25,4 +25,3 @@ class CHPrimSanteADMC extends CHPrimSanteADM {
     parent::__construct();
   }
 }
-

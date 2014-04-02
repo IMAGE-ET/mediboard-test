@@ -305,7 +305,7 @@ class CHPrimSanteRecordADM extends CHPrimSanteMessageXML {
       return new CHPrimSanteError($this->_ref_exchange_hpr, "P", "08", array("P", $this->loop, $this->identifier_patient), "8.3", $msg);
     }
 
-    $ins = $this->getINS($node);
+    /*$ins = $this->getINS($node);
 
     foreach ($ins as $_ins) {
       $ins_patient           = new CINSPatient();
@@ -317,7 +317,7 @@ class CHPrimSanteRecordADM extends CHPrimSanteMessageXML {
       if ($msg = $ins_patient->store()) {
         return new CHPrimSanteError($this->_ref_exchange_hpr, "P", "11", array("P", $this->loop, $this->identifier_patient), "8.12", $msg);
       }
-    }
+    }*/
 
     return null;
   }

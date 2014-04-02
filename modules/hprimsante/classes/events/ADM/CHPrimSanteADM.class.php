@@ -29,7 +29,16 @@ class CHPrimSanteADM extends CHPrimSanteEvent {
   function build($object) {
     parent::build($object);
 
-    /* @todo Pas de création de message pour le moment */
+    if ($object instanceof CPatient) {
+      $patient = $object;
+    }
+    else {
+      $patient = $object->loadRefPatient();
+    }
+
+    $this->addP($patient);
+
+    $this->addL();
   }
 }
 

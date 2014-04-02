@@ -42,13 +42,13 @@ class CHPrimSanteSegmentH extends CHPrimSanteSegment {
     $data[] = null;
 
     // H-5 : Sender ID
-    $data[] = $event->_sender->nom;
+    $data[] = CAppUI::conf("hprimsante sending_application");
 
     // H-6 : Sender address
     $data[] = null;
 
     // H-7 : Context
-    $data[] = $event->event_type;
+    $data[] = $event->type;
 
     // H-8 : Sender phone
     $data[] = null;
@@ -58,21 +58,23 @@ class CHPrimSanteSegmentH extends CHPrimSanteSegment {
 
     // H-10 : Receiver ID
     $data[] = array(
-      $event->_receiver->_id,
-      $event->_receiver->nom
+      array(
+        $event->_receiver->_id,
+        $event->_receiver->nom
+      )
     );
 
     // H-11 : Comment
     $data[] = null;
 
     // H-12 : Processing ID
-    $data[] = null;
+    $data[] = (CAppUI::conf("instance_role") == "prod") ? "P" : "T";
 
     // H-13 : Version and Type
     $data[] = array(
       array(
         $event->version,
-        $event->_exchange_hpr->type
+        $event->_exchange_hpr->sous_type
       )
     );
 

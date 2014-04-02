@@ -19,7 +19,7 @@ class CHPrimSante {
 
   /** @var array*/
   static $object_handlers = array(
-    "CSipObjectHandler"     => "CADMDelegatedHandler",
+    "CSipObjectHandler" => "CADMDelegatedHandler",
   );
 
   /** @var array  */

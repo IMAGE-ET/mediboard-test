@@ -67,11 +67,13 @@ class CSetuphprimsante extends CSetup {
     $this->makeRevision("0.2");
 
     $query = "CREATE TABLE `receiver_hprimsante` (
-              `dest_hprimsante_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `receiver_hprimsante_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `nom` VARCHAR (255) NOT NULL,
               `libelle` VARCHAR (255),
-              `group_id` INT (11) UNSIGNED NOT NULL,
-              `actif` ENUM ('0','1') NOT NULL DEFAULT '0'
+              `group_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+              `actif` ENUM ('0','1') NOT NULL DEFAULT '0',
+              `OID` VARCHAR (255),
+              `synchronous` ENUM ('0','1') NOT NULL DEFAULT '1'
             ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 
@@ -96,6 +98,20 @@ class CSetuphprimsante extends CSetup {
                 ADD INDEX (`sender_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.4";
+    $this->makeRevision("0.4");
+
+    $query = "CREATE TABLE `receiver_hprimsante_config` (
+                `receiver_hprimsante_config_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `object_id` INT (11) UNSIGNED,
+                `ADM_version` ENUM ('2.1','2.2','2.3','2.4') DEFAULT '2.1',
+                `ADM_sous_type` ENUM ('C','L', 'R') DEFAULT 'C'
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `receiver_hprimsante_config`
+                ADD INDEX (`object_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.5";
   }
 }

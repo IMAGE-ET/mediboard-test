@@ -214,6 +214,7 @@ class CHPrimSanteMessage extends CHMessage {
 
     // message type
     $message_type = explode($this->componentSeparator, $first_line[6]);
+
     $this->name  = $message_type[0];
     $this->event_name = $message_type[0];
 
