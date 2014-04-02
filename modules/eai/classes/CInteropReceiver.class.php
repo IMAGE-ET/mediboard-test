@@ -109,6 +109,38 @@ class CInteropReceiver extends CInteropActor {
   }
 
   /**
+   * Get objects by events
+   *
+   * @param array $events Events name
+   *
+   * @return array Receivers supported
+   */
+  static function getObjectsBySupportedEvents($events = array()) {
+    $receivers = array();
+    foreach ($events as $_event) {
+      $msg_supported          = new CMessageSupported();
+      $msg_supported->message = $_event;
+      $msg_supported->active  = 1;
+      $messages = $msg_supported->loadMatchingList(null, null, "object_class");
+
+      foreach ($messages as $_message) {
+        /** @var CInteropReceiver $receiver */
+        $receiver = CMbObject::loadFromGuid("$_message->object_class-$_message->object_id");
+        if (!$receiver->actif) {
+          continue;
+        }
+
+        $receiver->loadRefGroup();
+        $receiver->isReachable();
+
+        $receivers[$_event][] = $receiver;
+      }
+    }
+
+    return $receivers;
+  }
+
+  /**
    * Load exchanges sources
    *
    * @return void
