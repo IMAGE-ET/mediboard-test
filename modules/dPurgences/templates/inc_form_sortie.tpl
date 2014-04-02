@@ -294,7 +294,7 @@
     <!-- Diagnostic Principal -->
     {{if !$ajax}}
     <tr id="dp_{{$sejour->_id}}">
-      {{mb_include module=urgences template=inc_diagnostic_principal}}
+      {{mb_include module=urgences template=inc_diagnostic_principal diagCanNull=true}}
     </tr>
     {{/if}}
   </table>

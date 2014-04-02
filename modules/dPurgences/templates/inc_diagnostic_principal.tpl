@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_default var=diagCanNull value=false}}
+
 <th>{{mb_label object=$sejour field="DP"}}</th>
 <td>
 {{mb_script module="dPplanningOp" script="cim10_selector"}}
@@ -65,7 +67,11 @@
 
   {{assign var=notnull value=""}}
   {{if "CAppUI::conf"|static_call:"dPurgences Display check_dp":"CGroups-$g" == "2"}}
-    {{assign var=notnull value="notNull"}}
+    {{if $diagCanNull}}
+      {{assign var=notnull value="canNull"}} {{* canNull pour eviter d'avoir l'alert "notNull" sans arret *}}
+    {{else}}
+      {{assign var=notnull value="notNull"}}
+    {{/if}}
   {{/if}}
 
   <input type="text" name="keywords_code" id="editSejour_keywords_code" class="autocomplete str" value="{{$sejour->DP}}" size="10"/>
