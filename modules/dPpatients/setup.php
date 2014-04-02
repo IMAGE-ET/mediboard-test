@@ -2535,7 +2535,12 @@ class CSetupdPpatients extends CSetup {
                 ADD INDEX (`function_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "2.05";
+    $this->makeRevision("2.05");
+    $query = "ALTER TABLE `medecin`
+                ADD `sexe` VARCHAR (2) NOT NULL DEFAULT 'u' AFTER `jeunefille` ";
+    $this->addQuery($query);
+
+    $this->mod_version = "2.06";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

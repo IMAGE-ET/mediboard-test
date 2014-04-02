@@ -34,6 +34,11 @@
     </tr>
 
     <tr>
+      <th>{{mb_label object=$object field=sexe}}</th>
+      <td>{{mb_field object=$object field=sexe}}</td>
+    </tr>
+
+    <tr>
       <th>{{mb_label object=$object field=adresse}}</th>
       <td>{{mb_field object=$object field=adresse}}</td>
     </tr>

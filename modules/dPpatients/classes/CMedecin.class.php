@@ -23,6 +23,7 @@ class CMedecin extends CPerson {
   public $nom;
   public $prenom;
   public $jeunefille;
+  public $sexe;
   public $adresse;
   public $ville;
   public $cp;
@@ -87,6 +88,7 @@ class CMedecin extends CPerson {
     $props["nom"]                 = "str notNull confidential seekable";
     $props["prenom"]              = "str seekable";
     $props["jeunefille"]          = "str confidential";
+    $props["sexe"]                = "enum list|u|f|m default|u";
     $props["adresse"]             = "text$medecin_strict confidential";
     $props["ville"]               = "str$medecin_strict confidential seekable";
     $props["cp"]                  = "numchar$medecin_strict maxLength|5 confidential";
@@ -116,7 +118,20 @@ class CMedecin extends CPerson {
       $this->function_id = CMediusers::get()->function_id;
     }
 
+
+    // sexe undefined
+    if ($this->sexe == "u") {
+      $this->guessSexe();
+    }
+
     return parent::store();
+  }
+
+  /**
+   * @TODO
+   */
+  function guessSexe() {
+    return;
   }
 
   /**
