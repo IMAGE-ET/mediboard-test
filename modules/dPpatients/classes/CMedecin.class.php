@@ -121,7 +121,7 @@ class CMedecin extends CPerson {
 
     // sexe undefined
     if ($this->sexe == "u") {
-      $this->guessSexe();
+      $this->guessSex();
     }
 
     return parent::store();
@@ -130,7 +130,7 @@ class CMedecin extends CPerson {
   /**
    * @TODO
    */
-  function guessSexe() {
+  function guessSex() {
     return;
   }
 
@@ -206,7 +206,7 @@ class CMedecin extends CPerson {
    * @return self[]
    */
   function loadExactSiblings($strict_cp = true) {
-    $medecin = new CMedecin();
+    $medecin = new self();
     $where           = array();
     $where["nom"]    = $this->_spec->ds->prepare(" = %", $this->nom);
     $where["prenom"] = $this->_spec->ds->prepare(" = %", $this->prenom);
