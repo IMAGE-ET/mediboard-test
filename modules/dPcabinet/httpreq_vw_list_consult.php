@@ -29,7 +29,7 @@ $prat_id          = CValue::getOrSession("chirSel", $user->_id);
 $selConsult       = CValue::getOrSession("selConsult");
 $vue              = CValue::getOrSession("vue2", 0);
 
-$consult = new CConsultation;
+$consult = new CConsultation();
 // Test compliqué afin de savoir quelle consultation charger
 if (isset($_GET["selConsult"])) {
   if ($consult->load($selConsult)) {
@@ -52,8 +52,7 @@ else {
 }
 
 // On charge le praticien
-$userSel = new CMediusers;
-$userSel->load($prat_id);
+$userSel = CMediusers::get($prat_id);
 $canUserSel = $userSel->canDo();
 
 if (!$userSel->isMedical()) {
@@ -72,16 +71,16 @@ if ($consult->_id) {
 
 // Récupération des plages de consultation du jour et chargement des références
 $plage = new CPlageconsult();
-$where = array();
-$where["chir_id"] = "= '$userSel->user_id'";
-$where["date"] = "= '$date'";
+$plage->chir_id = $userSel->_id;
+$plage->date = $date;
 if ($plageconsult_id && $boardItem) {
-  $where["plageconsult_id"] =  $ds->prepare("= %", $plageconsult_id);
+  $plage->plageconsult_id = $plageconsult_id;
 }
 $order = "debut";
 /** @var CPlageconsult[] $listPlage */
-$listPlage = $plage->loadList($where, $order);
+$listPlage = $plage->loadMatchingList($order);
 
+CMbObject::massCountBackRefs($listPlage, "notes");
 
 foreach ($listPlage as $_plage) {
   $_plage->_ref_chir =& $userSel;
