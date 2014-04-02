@@ -139,6 +139,14 @@ if ($fileSel && $elementClass == "CFile" && !$acces_denied) {
           break;
         }
 
+      case "text/ami-patient-text":
+        if (class_exists("CAMIDocument")) {
+          $includeInfosFile = CAMIDocument::toHTML($raw_content);
+          $show_editor      = false;
+          $display_as_is    = true;
+          break;
+        }
+
       case "text/plain": 
         $includeInfosFile = "<pre>".CMbString::htmlSpecialChars($raw_content)."</pre>";
         break;
