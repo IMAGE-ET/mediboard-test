@@ -17,4 +17,9 @@ $dPconfig["system"] = array (
     "default_email_from" => "",
     "default_email_to" => "",
   ),
+
+  "import_firstname" => array(
+    "start" => "0",
+    "step"  => "100"
+  ),
 );

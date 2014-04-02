@@ -1611,7 +1611,14 @@ class CSetupsystem extends CSetup {
     }
     $this->addFunction("setup_system_removeZombieExLinks");
 
-    $this->mod_version = "1.1.58";
+    $this->makeRevision("1.1.58");
+    $query = "CREATE TABLE `firstname_to_gender` (
+                `first_name_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `firstname`  VARCHAR (255) NOT NULL ,
+                `sex` VARCHAR (10) NOT NULL DEFAULT 'u')/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.59";
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,
