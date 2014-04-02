@@ -29,12 +29,18 @@ for ($a = 1; $a <= CAppUI::pref("NbConsultMultiple"); $a ++) {
   $_rques       = CValue::post("rques_$a");
   $_cancel      = CValue::post("cancel_$a", 0);
 
-  if ($_heure && $_plage_id && $_chir_id && $patient_id) {
+  if ($_heure && $_plage_id && $_chir_id) {
     $consult = new CConsultation();
     if ($_consult_id) {
       $consult->load($_consult_id);
     }
-    $consult->patient_id      = $patient_id;
+    if (!$pause) {
+      $consult->patient_id      = $patient_id;
+    }
+    else {
+      $consult->patient_id = null;
+    }
+
     $consult->plageconsult_id = $_plage_id;
     $consult->heure           = $_heure;
     $consult->motif           = $motif;
@@ -44,9 +50,11 @@ for ($a = 1; $a <= CAppUI::pref("NbConsultMultiple"); $a ++) {
     $consult->annule          = $_cancel;
     $consult->_hour           = null;
     $consult->_min           = null;
+
     if ($msg = $consult->store()) {
-      mbLog($msg);
       CAppUI::setMsg(CAppUI::tr("CConsultation")."$a :".$msg, UI_MSG_ERROR);
     }
   }
 }
+
+echo CAppUI::getMsg();
