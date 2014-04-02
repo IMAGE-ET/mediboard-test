@@ -1922,22 +1922,17 @@ class CPatient extends CPerson {
       $template->addProperty("Patient - accord genre"    , "e"               );
     }
 
-    if ($this->medecin_traitant) {
-      $medecin = $this->_ref_medecin_traitant;
-      $template->addProperty("Patient - médecin traitant"          , "$medecin->nom $medecin->prenom");
-      $template->addProperty("Patient - médecin traitant - adresse", "$medecin->adresse \n $medecin->cp $medecin->ville");
-      $template->addProperty("Patient - médecin traitant - voie"   , $medecin->adresse);
-      $template->addProperty("Patient - médecin traitant - cp"     , $medecin->cp);
-      $template->addProperty("Patient - médecin traitant - ville"  , $medecin->ville);
-      $template->addProperty("Patient - médecin traitant - entête de texte", ($medecin->sexe == "f") ? "Chère consoeur" : "Cher confrère");
-    }
-    else {
-      $template->addProperty("Patient - médecin traitant");
-      $template->addProperty("Patient - médecin traitant - adresse");
-      $template->addProperty("Patient - médecin traitant - voie");
-      $template->addProperty("Patient - médecin traitant - cp");
-      $template->addProperty("Patient - médecin traitant - ville");
-    }
+    $medecin = ($this->_ref_medecin_traitant->_id) ? $this->_ref_medecin_traitant : new CMedecin();
+    $template->addProperty("Patient - médecin traitant"                   , "$medecin->nom $medecin->prenom");
+    $template->addProperty("Patient - médecin traitant - Nom Prénom"      , "$medecin->nom $medecin->prenom");
+    $template->addProperty("Patient - médecin traitant - nom"             , $medecin->nom);
+    $template->addProperty("Patient - médecin traitant - prenom"          , $medecin->prenom);
+    $template->addProperty("Patient - médecin traitant - adresse"         , "$medecin->adresse \n $medecin->cp $medecin->ville");
+    $template->addProperty("Patient - médecin traitant - voie"            , $medecin->adresse);
+    $template->addProperty("Patient - médecin traitant - cp"              , $medecin->cp);
+    $template->addProperty("Patient - médecin traitant - ville"           , $medecin->ville);
+    $template->addProperty("Patient - médecin traitant - entête de texte" , ($medecin->sexe == "f") ? "Chère consoeur" : "Cher confrère");
+
 
     // Employeur
     $this->loadRefsCorrespondantsPatient();
