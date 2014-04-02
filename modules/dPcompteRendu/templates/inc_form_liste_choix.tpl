@@ -1,10 +1,9 @@
 <!--  $Id: vw_idx_listes.tpl 12241 2011-05-20 10:29:53Z flaviencrochard $ -->
 
 <form name="Edit" method="post" class="{{$liste->_spec}}" onsubmit="return ListeChoix.onSubmit(this)">
-  <input type="hidden" name="m"      value="{{$m}}" />
+  {{mb_class object=$liste}}
+  {{mb_key   object=$liste}}
   <input type="hidden" name="del"    value="0" />
-  <input type="hidden" name="dosql"  value="do_liste_aed" />
-  {{mb_key object=$liste}}
 
   <table class="form">
     {{mb_include module=system template=inc_form_table_header object=$liste}}

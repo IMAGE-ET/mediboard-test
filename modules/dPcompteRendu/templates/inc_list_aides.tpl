@@ -42,9 +42,8 @@
   <td>
     {{if $_aide->_depend_field_1 && !$_aide->_is_ref_dp_1}}
       <form name="edit-CAidesSaisie-depend1-{{$_aide->_id}}" action="" method="post" onsubmit="return onSubmitFormAjax(this)">
-        <input type="hidden" name="m" value="dPcompteRendu" />
-        <input type="hidden" name="dosql" value="do_aide_aed" />
-        {{mb_key object=$_aide}}
+        {{mb_class object=$_aide}}
+        {{mb_key   object=$_aide}}
         
         <select 
           style="width: 10em;"
@@ -70,9 +69,8 @@
   <td>
     {{if $_aide->_depend_field_2 && !$_aide->_is_ref_dp_2}}
       <form name="edit-CAidesSaisie-depend2-{{$_aide->_id}}" action="" method="post" onsubmit="return onSubmitFormAjax(this)">
-        <input type="hidden" name="m" value="dPcompteRendu" />
-        <input type="hidden" name="dosql" value="do_aide_aed" />
-        {{mb_key object=$_aide}}
+        {{mb_class object=$_aide}}
+        {{mb_key   object=$_aide}}
         
         <select 
           style="width: 10em;"
@@ -106,10 +104,10 @@
     
   <td>
     <form name="delete-{{$_aide->_guid}}" action="?m={{$m}}" method="post">
-      <input type="hidden" name="m" value="{{$m}}" />
+      {{mb_class object=$_aide}}
+      {{mb_key   object=$_aide}}
       <input type="hidden" name="del" value="1" />
-      <input type="hidden" name="dosql" value="do_aide_aed" />
-      {{mb_key object=$_aide}}
+
       <button class="trash notext" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'aide',objName:'{{$_aide->_view|smarty:nodefaults|JSAttribute}}'})">
         {{tr}}Delete{{/tr}}
       </button>

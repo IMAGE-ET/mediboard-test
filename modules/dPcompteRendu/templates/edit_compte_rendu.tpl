@@ -507,8 +507,7 @@ Main.add(function() {
 
 <!-- Formulaire d'ajout de correspondant courrier par autocomplete -->
 <form name="addCorrespondant" method="post">
-  <input type="hidden" name="m" value="compteRendu" />
-  <input type="hidden" name="dosql" value="do_correspondant_courrier_aed" />
+  {{mb_class class="CCorrespondantCourrier"}}
   <input type="hidden" name="correspondant_courrier_id" />
   <input type="hidden" name="compte_rendu_id" value="" />
   <input type="hidden" name="object_class" value="CMedecin" />

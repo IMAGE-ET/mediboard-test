@@ -72,12 +72,12 @@
 
 <div id="edit" style="display: none;">
   <form name="editAides" action="?" method="post" class="{{$aide->_spec}}" onsubmit="return onSubmitFormAjax(this)">
-  <input type="hidden" name="dosql" value="do_aide_aed" />
-  <input type="hidden" name="m" value="compteRendu" />
+  {{mb_class object=$aide}}
+  {{mb_key object=$aide}}
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="callback" value="editAideCallback" />
   
-  {{mb_key object=$aide}}
+
   {{mb_field object=$aide field="class" hidden=1}}
   {{mb_field object=$aide field="field" hidden=1}}
   

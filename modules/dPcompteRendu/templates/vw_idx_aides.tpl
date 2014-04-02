@@ -229,9 +229,9 @@
 
     <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)" class="{{$aide->_spec}}">
 
-    <input type="hidden" name="dosql" value="do_aide_aed" />
+    {{mb_class object=$aide}}
+    {{mb_key   object=$aide}}
     <input type="hidden" name="del" value="0" />
-    {{mb_key object=$aide}}
 
     <table class="form">
 

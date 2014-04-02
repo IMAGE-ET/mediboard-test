@@ -16,14 +16,12 @@
       <td class="text">{{$_valeur|nl2br}}</td>
       <td class="narrow">
         <form name="Add-Choix-{{$smarty.foreach.choix.iteration}}" action="?m={{$m}}" method="post" onsubmit="return ListeChoix.onSubmitChoix(this);">
-  
-        <input type="hidden" name="m"      value="{{$m}}" />
-        <input type="hidden" name="dosql" value="do_liste_aed" />
-        {{mb_key object=$liste}}
-  
-        {{mb_field object=$liste field=valeurs hidden=1}}
-        <input type="hidden" name="_del" value="{{$_valeur}}" />
-        <button class="remove notext compact" type="submit">{{tr}}Delete{{/tr}}</button>
+          {{mb_class object=$liste}}
+          {{mb_key   object=$liste}}
+
+          {{mb_field object=$liste field=valeurs hidden=1}}
+          <input type="hidden" name="_del" value="{{$_valeur}}" />
+          <button class="remove notext compact" type="submit">{{tr}}Delete{{/tr}}</button>
         </form>
       </td>
     </tr>
@@ -37,10 +35,8 @@
 </div>
  
 <form name="Add-Choix" action="?m={{$m}}" method="post" onsubmit="return ListeChoix.onSubmitChoix(this);">
-
-  <input type="hidden" name="m"      value="{{$m}}" />
-  <input type="hidden" name="dosql" value="do_liste_aed" />
-  {{mb_key object=$liste}}
+  {{mb_class object=$liste}}
+  {{mb_key   object=$liste}}
   
   {{mb_field object=$liste field=valeurs hidden=1}}
   
