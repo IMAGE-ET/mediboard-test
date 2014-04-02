@@ -63,10 +63,10 @@ function importFile($targetPath, $start, $count) {
 
       $firstname = new CFirstNameAssociativeSex();
       $firstname->firstname = $fn;
-      $firstname->sex = $sex == "m,f" ? "u" : $sex;
+      $firstname->sex = $sex == ("m,f" || 'f,m') ? "u" : $sex;
       $firstname->loadMatchingObjectEsc();
       if ($msg = $firstname->store()) {
-        CAppUI::setMsg($msg, UI_MSG_ERROR);
+        CAppUI::stepAjax($msg, UI_MSG_ERROR);
       }
       else {
         CAppUI::stepAjax("prénom <strong>$fn</strong>, mis à jour");

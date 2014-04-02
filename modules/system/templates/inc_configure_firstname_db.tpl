@@ -11,8 +11,6 @@
 
 <h2>Import de la base de données de correspondance Prénoms / sexe</h2>
 
-{{mb_include module=system template=configure_dsn dsn=firstnames_db}}
-
 <script>
   function updateCountsFirstName(start, count) {
     var form = getForm("do_firstnames");

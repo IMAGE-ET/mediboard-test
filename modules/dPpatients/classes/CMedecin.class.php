@@ -131,6 +131,11 @@ class CMedecin extends CPerson {
    * @TODO
    */
   function guessSex() {
+    // @TODO: prenom composé
+    $sex_found = CFirstNameAssociativeSex::getSexFor($this->prenom);
+    if ($sex_found && $sex_found != "u") {
+      $this->sexe = $sex_found;
+    }
     return;
   }
 

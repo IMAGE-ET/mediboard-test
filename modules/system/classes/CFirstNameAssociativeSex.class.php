@@ -37,4 +37,18 @@ class CFirstNameAssociativeSex extends CMbObject {
     return $specs;
   }
 
+  /**
+   * return the sex if found for firstname, else return null
+   *
+   * @param string $firstname the firstname to have
+   *
+   * @return string|null sex
+   */
+  static function getSexFor($firstname) {
+    $object = new self();
+    $object->firstname = trim($firstname);
+    $object->loadMatchingObjectEsc();
+    return $object->sex;
+  }
+
 }

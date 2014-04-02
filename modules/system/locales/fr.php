@@ -2038,6 +2038,7 @@ $locales['config-eai-idex'] = 'Gestion identifiants';
 $locales['config-eai-max_files_to_process'] = 'Nombre de fichiers à traiter';
 $locales['config-eai-max_files_to_process-desc'] = 'Nombre de fichiers à traiter (FTP, FS)';
 $locales['config-exchange-source'] = 'Configuration source d\'échange';
+$locales['config-firstname_to_gender'] = 'Table Prénoms/sexe';
 $locales['config-formats'] = 'Formats d\'affichage';
 $locales['config-handlers'] = 'Handlers';
 $locales['config-help_page_url'] = 'URL vers la page d\'aide (%m = nom du module, %a = tabulation)';
@@ -2260,9 +2261,8 @@ $locales['template-cache-ok'] = '%d fichiers de cache Smarty';
 $locales['template-cache-removed'] = '%d fichiers de cache supprimés';
 $locales['template_placeholders'] = 'Placeholders de template';
 $locales['utilities-exchange-source-receive'] = 'Récupérer et dispatcher les fichiers';
+$locales['utilities-source-file_system'] = 'Utilitaires de la source FS';
 $locales['utilities-source-file_system-connexion'] = 'Test d\'accessibilité';
 $locales['utilities-source-file_system-getFiles'] = 'Liste des fichiers';
 $locales['utilities-source-file_system-sendFile'] = 'Dépôt d\'un fichier';
 $locales['utilities-source-http'] = 'Utilitaires de la source HTTP';
-$locales['utilities-source-file_system'] = 'Utilitaires de la source FS';
-
