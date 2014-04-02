@@ -284,10 +284,13 @@ class CConstantGraph {
     $xaxis = array();
     $min_x_index = 0;
     if ($this->display['mode'] == 'time') {
+      $dtz = new DateTimeZone('Europe/Paris');
+      $tz_ofsset = $dtz->getOffset(new DateTime('now', $dtz));
+
       $ticks = self::createTicksTimeMode($constants);
-      $min_x_value = (time() - ($this->display['time'] * 3600) + 3600) * 1000;
+      $min_x_value = (time() - ($this->display['time'] * 3600) + $tz_ofsset) * 1000;
       $min = $min_x_value;
-      $max = (time() + 3600) * 1000;
+      $max = (time() + $tz_ofsset) * 1000;
       $xaxis['mode']  = 'time';
       $xaxis['timeformat'] = '%d/%m/%y<br/>%H:%M';
     }
@@ -665,9 +668,11 @@ class CConstantGraph {
         }
 
         $cumul_datas = array();
+        $dtz = new DateTimeZone('Europe/Paris');
+        $tz_ofsset = $dtz->getOffset(new DateTime('now', $dtz));
         foreach ($periods as $_period) {
           if ($this->display['mode'] == 'time') {
-            $x = $_period['start_time'] * 1000 + 3600000;
+            $x = ($_period['start_time'] + $tz_ofsset) * 1000;
             $bar_width = ($_period['end_time'] - $_period['start_time']) * 1000;
           }
           else {
