@@ -40,7 +40,7 @@
             <th>{{mb_title class=CUser field=user_first_name}}</th>
             <th>{{mb_title class=CUser field=user_type}}</th>
             <th>{{mb_title class=CUser field=profile_id}}</th>
-            <th>{{mb_title class=CUser field=user_last_login}}</th>
+            <th>{{mb_title class=CMediusers field=_user_last_login}}</th>
           </tr>
           {{foreach from=$primary_users item=_user}}
           <tr>
@@ -129,7 +129,7 @@
             <th>{{mb_title class=CUser field=user_first_name}}</th>
             <th>{{mb_title class=CUser field=user_type}}</th>
             <th>{{mb_title class=CUser field=profile_id}}</th>
-            <th>{{mb_title class=CUser field=user_last_login}}</th>
+            <th>{{mb_title class=CUser field=_user_last_login}}</th>
             <th></th>
           </tr>
           {{foreach from=$function->_back.secondary_functions item=curr_function}}

@@ -33,6 +33,8 @@ class CUser extends CPerson {
   public $user_country;
   public $user_birthday;
   public $user_last_login;
+
+  /** @deprecated */
   public $user_login_errors;
   public $template;
   public $profile_id;
@@ -53,6 +55,7 @@ class CUser extends CPerson {
 
   public $_is_logging;
   public $_user_salt;
+  public $_user_last_login;
 
   public $_is_changing;
 
@@ -67,12 +70,13 @@ class CUser extends CPerson {
   // Object references
   public $_ref_preferences;
 
-  /**
-   * @var CMediusers
-   */
+  /** @var CUserAuthentication */
+  public $_ref_last_auth;
+
+  /** @var CMediusers */
   public $_ref_mediuser;
 
-  // Object collections
+  /** @var self[] */
   public $_ref_profiled_users;
 
   static $types = array(
@@ -130,6 +134,7 @@ class CUser extends CPerson {
     $backProps["password_keepers"]   = "CPasswordKeeper user_id";
     $backProps["preferences"]        = "CPreferences user_id";
     $backProps["error_logs"]         = "CErrorLog user_id";
+    $backProps["authentications"]    = "CUserAuthentication user_id";
     return $backProps;
   }
 
@@ -155,7 +160,7 @@ class CUser extends CPerson {
     $props["user_zip"]                  = "str maxLength|11";
     $props["user_country"]              = "str maxLength|30";
     $props["user_birthday"]             = "birthDate";
-    $props["user_last_login"]           = "dateTime";
+    $props["user_last_login"]           = "dateTime"; // To be removed
     $props["user_login_errors"]         = "num notNull min|0 max|100 default|0";
     $props["template"]                  = "bool notNull default|0";
     $props["profile_id"]                = "ref class|CUser";
@@ -178,7 +183,8 @@ class CUser extends CPerson {
     $props["_is_logging"]        = "bool";
     $props["_is_changing"]       = "bool";
     $props["_user_salt"]         = "str";
-    $props["_login_locked"]     = "bool";
+    $props["_login_locked"]      = "bool";
+    $props["_user_last_login"]   = "dateTime";
 
     return $props;
   }
@@ -486,19 +492,6 @@ class CUser extends CPerson {
   }
 
   /**
-   * Prepare the user log before object persistence
-   * @see parent
-   * @return CUserLog null if not loggable
-   */
-  function prepareLog() {
-    if ($this->dont_log_connection && $this->fieldModified("user_last_login")) {
-      return null;
-    }
-
-    return parent::prepareLog();
-  }
-
-  /**
    * Merges an array of objects
    * @see parent
    *
@@ -665,4 +658,41 @@ class CUser extends CPerson {
     $this->_p_birth_date          = $this->user_birthday;
   }
 
+  /**
+   * Get last authentication
+   *
+   * @return CUserAuthentication|null
+   */
+  function loadRefLastAuth(){
+    if (!$this->_id) {
+      return null;
+    }
+
+    $authentications = $this->loadBackRefs("authentications", "datetime_login DESC", 1);
+    if (!empty($authentications)) {
+      $this->_ref_last_auth = reset($authentications);
+    }
+
+    return $this->_ref_last_auth;
+  }
+
+  /**
+   * Get last authentication date
+   *
+   * @return string|null
+   */
+  function getLastLogin(){
+    if ($this->_user_last_login) {
+      return $this->_user_last_login;
+    }
+
+    $auth = $this->loadRefLastAuth();
+
+    $last_login = null;
+    if ($auth && $auth->_id) {
+      $last_login = $auth->datetime_login;
+    }
+
+    return $this->_user_last_login = $last_login;
+  }
 }

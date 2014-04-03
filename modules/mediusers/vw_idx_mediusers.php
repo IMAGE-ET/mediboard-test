@@ -49,22 +49,11 @@ $where["functions_mediboard.group_id"] = "= '$group->_id'";
 if ($filter) {
   $filters = explode(" ", $filter);
 
-  $re = "/(\d+)\s*(jour|mois|an)/i";
-
   foreach ($filters as $_filter) {
-    if (preg_match($re, $_filter, $matches)) {
-      $map = array("an" => "YEAR", "mois" => "MONTH", "jour" => "DAY");
-
-      $nouvelle_date = CMbDT::dateTime("-".$matches[1]." ".$map[$matches[2]]);
-
-      $where[] = "users.user_last_login <= '$nouvelle_date'";
-    }
-    else {
-      $where[] = "functions_mediboard.text LIKE '%$_filter%' OR
-              users.user_last_name LIKE '$_filter%' OR
-              users.user_first_name LIKE '$_filter%' OR
-              users.user_username LIKE '$_filter%' ";
-    }
+    $where[] = "functions_mediboard.text LIKE '%$_filter%' OR
+            users.user_last_name LIKE '$_filter%' OR
+            users.user_first_name LIKE '$_filter%' OR
+            users.user_username LIKE '$_filter%' ";
   }
 }
 
@@ -85,7 +74,7 @@ if ($inactif) {
   $where["users_mediboard.actif"] = "!= '1'";
 }
 
-if($type) {
+if ($type) {
   $where["users.user_type"] = "= '$type'";
 }
 
@@ -152,11 +141,6 @@ if ($order_col == "user_first_name") {
 } 
 if ($order_col == "user_type") {
   $order = "users.user_type $order_way, users.user_last_name ASC, users.user_first_name ASC";
-} 
-if ($order_col == "user_last_login") {
-  $order = "users.user_last_login ";
-  $order .= $order_way == "ASC" ? "DESC" : "ASC";
-  $order .= ", users.user_last_name ASC, users.user_first_name ASC";
 }
 
 $total_mediuser = $mediuser->countList($where, null, $ljoin);
@@ -169,6 +153,7 @@ foreach ($mediusers as $_mediuser) {
   $_mediuser->loadRefProfile();
   $_mediuser->loadRefUser();
   $_mediuser->_ref_user->isLDAPLinked();
+  $_mediuser->getLastLogin();
 }
 
 // Création du template

@@ -1618,7 +1618,46 @@ class CSetupsystem extends CSetup {
                 `sex` VARCHAR (10) NOT NULL DEFAULT 'u')/*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.59";
+    $this->makeRevision("1.1.59");
+    $query = "CREATE TABLE `user_agent` (
+                `user_agent_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `user_agent_string` VARCHAR (255) NOT NULL,
+                `browser_name` VARCHAR (30),
+                `browser_version` VARCHAR (10),
+                `platform_name` VARCHAR (30),
+                `platform_version` VARCHAR (10),
+                `device_name` VARCHAR (30),
+                `device_maker` VARCHAR (30),
+                `device_type` ENUM ('desktop','mobile','tablet','unknown') NOT NULL DEFAULT 'unknown',
+                `pointing_method` ENUM ('mouse','touchscreen','unknown') NOT NULL DEFAULT 'unknown',
+                INDEX (`user_agent_string`)
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "CREATE TABLE `user_authentication` (
+                `user_authentication_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `user_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `previous_user_id` INT (11) UNSIGNED,
+                `auth_method` ENUM ('basic','ldap','ldap_guid','token'),
+                `datetime_login` DATETIME NOT NULL,
+                `datetime_logout` DATETIME,
+                `id_address` CHAR (39) NOT NULL,
+                `session_id` CHAR (32) NOT NULL,
+                `screen_width` SMALLINT (5),
+                `screen_height` SMALLINT (5),
+                `user_agent_id` INT (11) UNSIGNED,
+                INDEX(`user_id`),
+                INDEX(`datetime_login`),
+                INDEX(`user_agent_id`),
+                INDEX(`session_id`)
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "INSERT INTO `user_authentication` (`user_id`, `auth_method`, `datetime_login`)
+                SELECT `user_id`, 'basic', `user_last_login` FROM `users` WHERE `user_last_login` IS NOT NULL";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.60";
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,

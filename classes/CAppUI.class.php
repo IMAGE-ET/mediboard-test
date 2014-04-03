@@ -683,21 +683,18 @@ class CAppUI {
 
     self::$instance->user_id = $user->_id;
 
+    // save the last_login dateTime
+    if ($ds->loadTable("user_authentication")) {
+      CUserAuthentication::logAuth($user);
+    }
+
     // <DEPRECATED>
     self::$instance->user_first_name = $user->user_first_name;
     self::$instance->user_last_name  = $user->user_last_name;
     self::$instance->user_email      = $user->user_email;
     self::$instance->user_type       = $user->user_type;
-    self::$instance->user_last_login = $user->user_last_login;
+    self::$instance->user_last_login = $user->getLastLogin();
     // </DEPRECATED>
-
-    // save the last_login dateTime
-    if ($ds->loadField("users", "user_last_login")) {
-      // Nullify password or you hash it once more
-      $user->user_last_name = null;
-      $user->user_last_login = CMbDT::dateTime();
-      $user->store();
-    }
 
     // load the user preferences
     self::buildPrefs();

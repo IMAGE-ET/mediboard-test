@@ -492,7 +492,7 @@ class CMediusers extends CPerson {
       $this->_user_adresse    = $user->user_address1;
       $this->_user_cp         = $user->user_zip;
       $this->_user_ville      = $user->user_city;
-      $this->_user_last_login = $user->user_last_login;
+      $this->_user_last_login = $user->getLastLogin();
       $this->_user_template   = $user->template;
       $this->_profile_id      = $user->profile_id;
 
@@ -1638,5 +1638,9 @@ class CMediusers extends CPerson {
     $mediuser->loadObject($where);
 
     return CFunctionCache::set($context, $mediuser);
+  }
+
+  function getLastLogin(){
+    return $this->_user_last_login = $this->_ref_user->getLastLogin();
   }
 }

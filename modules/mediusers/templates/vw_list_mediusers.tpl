@@ -21,7 +21,7 @@
       <th>{{mb_title class="CUser" field="_ldap_linked"}}</th>
     {{/if}}
     <th>
-      {{mb_colonne class="CUser" field="user_last_login" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}
+      {{mb_title class=CMediusers field=_user_last_login}}
     </th>
     <th>{{mb_title class="CUser" field="_login_locked"}}</th>
   </tr>

@@ -45,7 +45,12 @@ document.observe('dom:loaded', function(){
       Main.init();
     MbPerformance.timeEnd("main");
 
-    new CookieJar().put("cookie-supported", 1);
+    var cookiejar = new CookieJar();
+    cookiejar.put("uainfo", {
+      screen: [screen.width, screen.height],
+      pixelRatio: window.devicePixelRatio || null
+    });
+    cookiejar.put("cookie-supported", 1);
   }
   catch (e) {
     errorHandler(e.extMessage || e.message || e.description || e, e.fileName, e.lineNumber, e);
