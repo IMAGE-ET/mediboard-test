@@ -64,8 +64,31 @@ class CUserAuthentication extends CMbObject {
     return $props;
   }
 
+  /**
+   * Tells if the "user_authentication" table exists
+   *
+   * @return bool
+   */
+  static function authReady(){
+    static $ready = null;
+
+    if ($ready === null) {
+      $ds = CSQLDataSource::get("std");
+      $ready = $ds->loadTable("user_authentication") != null;
+    }
+
+    return $ready;
+  }
+
+  /**
+   * Log user authentication
+   *
+   * @param CUser $user The user logging-in
+   *
+   * @return void
+   */
   static function logAuth(CUser $user) {
-    if ($user->dont_log_connection) {
+    if (!self::authReady() || $user->dont_log_connection) {
       return;
     }
 

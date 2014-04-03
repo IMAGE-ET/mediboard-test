@@ -684,9 +684,7 @@ class CAppUI {
     self::$instance->user_id = $user->_id;
 
     // save the last_login dateTime
-    if ($ds->loadTable("user_authentication")) {
-      CUserAuthentication::logAuth($user);
-    }
+    CUserAuthentication::logAuth($user);
 
     // <DEPRECATED>
     self::$instance->user_first_name = $user->user_first_name;

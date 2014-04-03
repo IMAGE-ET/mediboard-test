@@ -664,7 +664,7 @@ class CUser extends CPerson {
    * @return CUserAuthentication|null
    */
   function loadRefLastAuth(){
-    if (!$this->_id) {
+    if (!$this->_id || !CUserAuthentication::authReady()) {
       return null;
     }
 
