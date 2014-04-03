@@ -1,4 +1,5 @@
 {{mb_default var=current_m value=""}}
+{{mb_default var=op_sans_dossier_anesth value=0}}
 
 <script>
 function checkConsult() {
@@ -32,6 +33,28 @@ function changePratPec(prat_id) {
     $V(oForm.prat_id, prat_id);
     oForm.submit();
   }
+}
+
+function duplicateDossier(close) {
+  {{if $consult_anesth && $consult_anesth->_id && $op_sans_dossier_anesth}}
+  var url = new Url("dPcabinet", "ajax_duplicate_consult_anesth");
+  url.addParam("consult_id", "{{$consult->_id}}");
+  url.addParam("operation_id", "{{$op_sans_dossier_anesth}}");
+  url.addParam("consult_anesth_id", "{{$consult_anesth->_id}}");
+  if (close) {
+    url.requestModal(null, null, { onClose: function(){ submitAll(); submitConsultWithChrono({{$consult|const:'TERMINE'}}); } } );
+  }
+  else {
+    url.requestModal();
+  }
+  {{else}}
+  if (close) {
+    submitAll(); submitConsultWithChrono({{$consult|const:'TERMINE'}});
+  }
+  else {
+    checkConsult();
+  }
+  {{/if}}
 }
 </script>
 
@@ -112,7 +135,7 @@ function changePratPec(prat_id) {
       {{if $consult->chrono <= $consult|const:'EN_COURS'}}
         /
         {{if $consult_anesth && $consult_anesth->_id}}
-          <button class="tick" type="button" onclick="checkConsult();">
+          <button class="tick" type="button" onclick="duplicateDossier(false);">
         {{else}}
           <button class="tick" type="button"
                   onclick="{{if $sejour && $sejour->_ref_rpu && $sejour->_ref_rpu->_id}}ContraintesRPU.checkObligatory('{{$sejour->_ref_rpu->_id}}', function() {submitAll(); submitConsultWithChrono({{$consult|const:'TERMINE'}});});{{else}}submitAll(); submitConsultWithChrono({{$consult|const:'TERMINE'}});{{/if}}">

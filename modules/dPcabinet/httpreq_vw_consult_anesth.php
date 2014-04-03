@@ -33,6 +33,7 @@ $selConsult = CValue::getOrSession("selConsult", 0);
 $consult = new CConsultation();
 $consult->_ref_chir = $userSel;
 
+$op_sans_dossier_anesth = 0;
 if ($selConsult) {
   $consult->load($selConsult);
   
@@ -72,6 +73,9 @@ if ($selConsult) {
       $_operation->loadRefsConsultAnesth();
       $_operation->loadRefPlageOp(true);
       $_operation->loadRefChir(true);
+      if (!$_operation->_ref_consult_anesth->_id && $_sejour->entree_prevue > $consult->_ref_plageconsult->date) {
+        $op_sans_dossier_anesth = $_operation->_id;
+      }
     }
   }
 }
@@ -92,5 +96,6 @@ $smarty->assign("consult_anesth"        , $consult_anesth);
 $smarty->assign("patient"               , $patient);
 $smarty->assign("nextSejourAndOperation", $nextSejourAndOperation);
 $smarty->assign("listChirs"             , $listChirs);
+$smarty->assign("op_sans_dossier_anesth", $op_sans_dossier_anesth);
 
 $smarty->display("inc_consult_anesth/interventions.tpl");
