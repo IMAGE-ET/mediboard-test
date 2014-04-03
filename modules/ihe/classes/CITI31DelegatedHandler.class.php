@@ -798,6 +798,14 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         $sejour_eliminee = $infos_fus["sejourElimine"];
         $sejour2_nda     = $sejour_eliminee->_NDA = $infos_fus["sejour2_nda"];
 
+        // Suppression de tous les mouvements du séjours à éliminer
+        $movements = $sejour_eliminee->loadRefsMovements();
+        foreach ($movements as $_movement) {
+          $_movement->last_update = "now";
+          $_movement->cancel      = 1;
+          $_movement->store();
+        }
+
         // Cas 0 NDA : Aucune notification envoyée
         if (!$sejour1_nda && !$sejour2_nda) {
           continue;
@@ -815,6 +823,8 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
           }
 
           $this->createMovement($code, $sejour);
+
+          $sejour->loadRefPatient();
 
           $this->sendITI($this->profil, $this->transaction, $this->message, $code, $sejour);
           continue;
