@@ -39,6 +39,7 @@ class CUserAuthentication extends CMbObject {
     $spec = parent::getSpec();
     $spec->table  = "user_authentication";
     $spec->key    = "user_authentication_id";
+    $spec->loggable = false;
     return $spec;
   }
   
