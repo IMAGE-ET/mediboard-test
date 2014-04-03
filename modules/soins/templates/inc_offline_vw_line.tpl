@@ -134,15 +134,17 @@
                   {{/if}}
                 {{/if}}
               {{else}}
-                {{* Que les planifications *}}
-                {{if isset($administrations_in_hour.quantite|smarty:nodefaults) && $administrations_in_hour.quantite == 0}}
-                  a/{{/if}}{{if @$administrations_in_hour.quantite_planifiee}} {{$administrations_in_hour.quantite_planifiee}}{{elseif $quantite}}{{$quantite}}
+                {{* Si plusieurs administration, pas d'affichage de la quantité, juste une flêche pour indiquer la présence de multiples planifications *}}
+                {{if @$line->_quantity_by_date_moment.$unite_prise.$_date.$_moment.nb_adm > 1}}
+                  <div>
+                    <img src="style/mediboard/images/buttons/down.png" />
+                  </div>
+                {{else}}
+                  {{* Que les planifications *}}
+                  {{if isset($administrations_in_hour.quantite|smarty:nodefaults) && $administrations_in_hour.quantite == 0}}
+                    a/{{/if}}{{if @$administrations_in_hour.quantite_planifiee}} {{$administrations_in_hour.quantite_planifiee}}{{elseif $quantite}}{{$quantite}}
+                  {{/if}}
                 {{/if}}
-              {{/if}}
-              {{if @$line->_quantity_by_date_moment.$unite_prise.$_date.$_moment.nb_adm > 1}}
-                <div>
-                  <img src="style/mediboard/images/buttons/down.png" />
-                </div>
               {{/if}}
             {{/if}}
           </div>
