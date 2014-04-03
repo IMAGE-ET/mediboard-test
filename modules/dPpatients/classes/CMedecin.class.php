@@ -135,7 +135,8 @@ class CMedecin extends CPerson {
   function guessSex() {
     $prenom = $this->prenom;
     if (strpos($prenom, "-") !== false) {
-      $prenom = explode("-", $this->prenom)[0];   // get the first firstname of composed one
+      $prenom_exploded = explode("-", $this->prenom);   // get the first firstname of composed one
+      $prenom = $prenom_exploded[0];
     }
 
     $sex_found = CFirstNameAssociativeSex::getSexFor($prenom);
