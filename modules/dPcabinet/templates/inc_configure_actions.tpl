@@ -1,12 +1,11 @@
 <table class="tbl">
-
   <tr>
     <th class="category">{{tr}}CPlageconsult{{/tr}}</th>
   </tr>
   
   <tr>
     <td class="button">
-      <script type="text/javascript">
+      <script>
         PlageConsult = {
           transfert: function() {
             var url = new Url();
@@ -20,6 +19,20 @@
       </button> 
     </td>
   </tr>
+  <tr>
+    <td class="button">
+      <script>
+        correctionPlagesConsult = function(resolve) {
+          var url = new Url("cabinet", "ajax_move_consult_plage");
+          url.addParam("resolve", resolve);
+          url.requestModal(500);
+        };
+      </script>
+      <button class="modify" type="button" onclick="correctionPlagesConsult(0);">
+        Déplacer des consultations
+      </button>
+    </td>
+  </tr>
 
   <tr>
     <th class="category">{{tr}}CConsultation{{/tr}}</th>
@@ -27,7 +40,7 @@
   
   <tr>
     <td class="button">
-      <script type="text/javascript">
+      <script>
         Main.add(function() {
           Calendar.regField(getForm("MacroStats").date);
         });
@@ -60,12 +73,11 @@
       </button> 
     </td>
   </tr>
-
 </table>
 
 <h2>Actions de maintenances</h2>
 
-<script type="text/javascript">
+<script>
   createConsultAnesth = function() {
     var url = new Url("cabinet", "ajax_create_missing_consult_anesth");
     url.addParam("anesth_id", $V($("anesth_id")));
@@ -91,7 +103,6 @@
     <th>{{tr}}Action{{/tr}}</th>
     <th>{{tr}}Status{{/tr}}</th>
   </tr>
-  
   <tr>
     <td class="narrow">
       <button class="search" onclick="createConsultAnesth()">

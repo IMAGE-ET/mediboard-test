@@ -1549,6 +1549,7 @@ $locales['mod-dPcabinet-tab-ajax_edit_tarif'] = 'Gestion d\'un tarif';
 $locales['mod-dPcabinet-tab-ajax_full_consult'] = 'Consultation';
 $locales['mod-dPcabinet-tab-ajax_legend_planning_new'] = 'Légende';
 $locales['mod-dPcabinet-tab-ajax_link_sejour'] = 'Choix du séjour';
+$locales['mod-dPcabinet-tab-ajax_move_consult_plage'] = 'Consultation placées dans une mauvaise plage';
 $locales['mod-dPcabinet-tab-ajax_short_consult'] = 'Consultation immédiate';
 $locales['mod-dPcabinet-tab-ajax_total_cotation'] = 'Totaux des cotations';
 $locales['mod-dPcabinet-tab-ajax_view_facture'] = 'Voir une facture';
