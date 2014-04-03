@@ -128,15 +128,22 @@ class CMedecin extends CPerson {
   }
 
   /**
-   * @TODO
+   * guess sexe by firstname
+   *
+   * @return boolean true if sexe found, false if sexe not found
    */
   function guessSex() {
-    // @TODO: prenom composé
-    $sex_found = CFirstNameAssociativeSex::getSexFor($this->prenom);
+    $prenom = $this->prenom;
+    if (strpos($prenom, "-") !== false) {
+      $prenom = explode("-", $this->prenom)[0];   // get the first firstname of composed one
+    }
+
+    $sex_found = CFirstNameAssociativeSex::getSexFor($prenom);
     if ($sex_found && $sex_found != "u") {
       $this->sexe = $sex_found;
+      return true;
     }
-    return;
+    return false;
   }
 
   /**

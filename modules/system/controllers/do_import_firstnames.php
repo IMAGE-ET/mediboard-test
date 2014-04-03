@@ -58,18 +58,39 @@ function importFile($targetPath, $start, $count) {
   $line_nb=0;
   while ($line = fgetcsv($fp, null, ";")) {
     if ($line_nb >= $start && $line_nb<($start+$count)) {
+      $found = false;
       $fn = trim($line[0]);
       $sex = trim($line[1]);
+      if ($sex == "m,f" || $sex == "f,m") {
+        $sex = "u";
+      }
 
       $firstname = new CFirstNameAssociativeSex();
       $firstname->firstname = $fn;
-      $firstname->sex = $sex == ("m,f" || 'f,m') ? "u" : $sex;
       $firstname->loadMatchingObjectEsc();
+
+      if ($firstname->_id) { // found
+        $found = true;
+        if ($sex != $firstname->sex) {
+          $firstname->sex = "u";
+        }
+      }
+      else { // not found
+        $firstname->sex = $sex;
+      }
+
+      // store & message
       if ($msg = $firstname->store()) {
-        CAppUI::stepAjax($msg, UI_MSG_ERROR);
+        CAppUI::stepAjax($msg, UI_MSG_WARNING);
       }
       else {
-        CAppUI::stepAjax("prénom <strong>$fn</strong>, mis à jour");
+        if ($found == true) {
+          CAppUI::stepAjax("prénom <strong>$fn</strong>, mis à jour <strong>[$firstname->sex]</strong>");
+        }
+        else {
+          CAppUI::stepAjax("prénom <strong>$fn</strong>, ajouté <strong>[$firstname->sex]</strong>");
+        }
+
       }
     }
 

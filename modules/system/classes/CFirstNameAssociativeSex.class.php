@@ -23,6 +23,7 @@ class CFirstNameAssociativeSex extends CMbObject {
     $spec = parent::getSpec();
     $spec->table       = 'firstname_to_gender';
     $spec->key         = 'first_name_id';
+    $spec->loggable = false;
     return $spec;
   }
 
@@ -42,7 +43,7 @@ class CFirstNameAssociativeSex extends CMbObject {
    *
    * @param string $firstname the firstname to have
    *
-   * @return string|null sex
+   * @return string|null sex (u = undefined, f = female, m = male, null = not in base)
    */
   static function getSexFor($firstname) {
     $object = new self();
