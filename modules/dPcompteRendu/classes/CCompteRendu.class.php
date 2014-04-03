@@ -14,7 +14,7 @@
  * Un modèle est associé à un utilisateur, une fonction ou un établissement.
  * Le document est une utilisation d'un modèle (référencé par modele_id)
  */
-class CCompteRendu extends CDocumentItem {
+class CCompteRendu extends CDocumentItem implements IIndexableObject{
   // DB Table key
   public $compte_rendu_id;
 
@@ -1743,5 +1743,91 @@ class CCompteRendu extends CDocumentItem {
     }
 
     return $source;
+  }
+
+  /**
+   * Loads the related fields for indexing datum
+   *
+   * @return array
+   */
+  function getFieldsSearch () {
+    $array["id"]          = $this->_id;
+    $array["author_id"]   = $this->author_id;
+    $array["title"]       = utf8_encode($this->nom);
+
+    $this->loadContent(false);
+    $content              = $this->_ref_content;
+    $array["body"]        = $this->redesignBody($content->content);
+    $date = $this->loadFirstLog()->date;
+    if (!$date) {
+      $date = CMbDT::dateTime();
+    }
+    $array["date"]        = str_replace("-", "/", $date);
+    $author = $this->loadRefAuthor();
+    $array["function_id"] = $author->function_id;
+    $array["group_id"]    = $author->loadRefFunction()->group_id;
+    $array["patient_id"]  = $this->getFieldPatient($this->object_class);
+
+    return $array;
+  }
+
+  /**
+   * Redesign the content of the body you will index
+   *
+   * @param string $content The content you want to redesign
+   *
+   * @return string
+   */
+  function redesignBody ($content) {
+    $xml     = new DOMDocument('1.0', 'iso-8859-1');
+    $content = str_replace("<", " <", $content);
+    $xml->loadXML("<div>".utf8_encode(CMbString::convertHTMLToXMLEntities(CHtmlToPDF::cleanWord($content)))."</div>");
+    $xpath   = new DOMXpath($xml);
+
+    // Test body id
+    $elements = $xpath->query("//div[@id='body']");
+
+    if ($elements->length > 0 ) {
+      $xml = $elements->item(0);
+    }
+    else {
+      $xml = $xml->documentElement;
+    }
+    $body = $xml->textContent;
+    $body = preg_replace("/\s+/", ' ', $body);
+    $body = strip_tags($body);
+    $body = html_entity_decode($body);
+    $body = trim($body);
+    return $body;
+  }
+
+  /**
+   * Get the patient_id of CMbobject
+   *
+   * @return string
+   */
+  function getFieldPatient () {
+    $object = new $this->object_class();
+    $object->load($this->object_id);
+
+    if (!method_exists($this, "loadRelPatient")) {
+      $object->loadRefPatient();
+    }
+    else {
+      $object->loadRelPatient();
+    }
+
+    switch ($this->object_class) {
+      case "CConsultAnesth" :
+        return $object->_ref_consultation->_ref_patient->_id;
+        break;
+
+      case "CPatient" :
+        return $object->_id;
+        break;
+
+      default :
+        return $object->_ref_patient->_id;
+    }
   }
 }
