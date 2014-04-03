@@ -516,3 +516,15 @@ $library->versionFile   = "Parsedown.php";
 $library->versionString = "private function parse_block_elements";
 
 CLibrary::$all[$library->name] = $library;
+
+$library = new CLibrary;
+$library->name          = "Elastica";
+$library->url           = "https://github.com/ruflin/Elastica";
+$library->fileName      = "Elastica.zip";
+$library->description   = "Client fulltext search for PHP.";
+$library->sourceDir     = "Elastica";
+$library->targetDir     = "elastica";
+$library->versionFile   = "changes.txt";
+$library->versionString = "v1.0.1.2";
+
+CLibrary::$all[$library->name] = $library;
