@@ -175,6 +175,7 @@ foreach ($sejours as $_sejour) {
             }
             $key = $postes_by_date[$_date][$_hour];
             @$line->_quantity_by_date_moment[$_unite][$key["day"]][$key["moment"]]["total"] += $_quantite["total"];
+            @$line->_quantity_by_date_moment[$_unite][$key["day"]][$key["moment"]]["nb_adm"] += $_quantite["nb_adm"];
           }
         }
       }
@@ -263,6 +264,7 @@ foreach ($sejours as $_sejour) {
             }
             $key = $postes_by_date[$_date][$_hour];
             @$line->_quantity_by_date_moment[$_unite][$key["day"]][$key["moment"]]["total"] += $_quantite["total"];
+            @$line->_quantity_by_date_moment[$_unite][$key["day"]][$key["moment"]]["nb_adm"] += $_quantite["nb_adm"];
           }
         }
       }

@@ -17,10 +17,6 @@
       {{/if}}
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$line->_ref_praticien}}
       <div class="compact">
-        {{foreach from=$line->_ref_prises item=_prise}}
-          {{$_prise}} <br />
-        {{/foreach}}
-
         Du {{mb_value object=$line field=debut}} {{if $line->time_debut}}à {{mb_value object=$line field=time_debut}}{{/if}} au
           {{$line->_fin_reelle|date_format:$conf.date}} à {{$line->_fin_reelle|date_format:$conf.time}}
       </div>
@@ -33,6 +29,11 @@
           {{$line->_ucd_view}}
         {{/if}}
       </strong> <br />
+      <div class="compact">
+        {{foreach from=$line->_ref_prises item=_prise}}
+          {{$_prise}} <br />
+        {{/foreach}}
+      </div>
       {{if $line->_class == "CPrescriptionLineMedicament" && $line->voie}}
         {{mb_value object=$line field=voie}}
       {{/if}}
@@ -119,8 +120,12 @@
                     /{{$administrations_in_hour.quantite_planifiee}}
                   {{/if}}
                 {{else}}
-                  {{if @$administrations_in_hour.quantite}}
-                    {{$administrations_in_hour.quantite}}
+                  {{if isset($administrations_in_hour.quantite|smarty:nodefaults)}}
+                    {{if $administrations_in_hour.quantite == 0}}
+                      a
+                    {{else}}
+                      {{$administrations_in_hour.quantite}}
+                    {{/if}}
                     {{if $administrations_in_hour.quantite != $quantite}}
                       {{if !$line->sans_planif}}/{{$quantite}}{{/if}}
                     {{/if}}
@@ -130,11 +135,14 @@
                 {{/if}}
               {{else}}
                 {{* Que les planifications *}}
-                {{if @$administrations_in_hour.quantite_planifiee}}
-                  {{$administrations_in_hour.quantite_planifiee}}
-                {{elseif $quantite}}
-                  {{$quantite}}
+                {{if isset($administrations_in_hour.quantite|smarty:nodefaults) && $administrations_in_hour.quantite == 0}}
+                  a/{{/if}}{{if @$administrations_in_hour.quantite_planifiee}} {{$administrations_in_hour.quantite_planifiee}}{{elseif $quantite}}{{$quantite}}
                 {{/if}}
+              {{/if}}
+              {{if @$line->_quantity_by_date_moment.$unite_prise.$_date.$_moment.nb_adm > 1}}
+                <div>
+                  <img src="style/mediboard/images/buttons/down.png" />
+                </div>
               {{/if}}
             {{/if}}
           </div>
