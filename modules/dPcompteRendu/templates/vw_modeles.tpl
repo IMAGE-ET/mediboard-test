@@ -47,7 +47,7 @@
   Main.add(Modele.refresh);
 </script>
 
-<a class="button new" href="#1" onclick="Modele.edit(0)">
+<a id="didac_button_create" class="button new" href="#1" onclick="Modele.edit(0)">
   {{tr}}CCompteRendu-title-create{{/tr}}
 </a>
 
