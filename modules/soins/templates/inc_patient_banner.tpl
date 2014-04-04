@@ -26,7 +26,7 @@
     <th class="title text" style="text-align: left; border: none;">
       {{mb_include module=system template=inc_object_notes object=$patient}}
       <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
-        {{mb_include module="patients" template=inc_vw_photo_identite mode="read" size=32}}
+        {{mb_include module="patients" template=inc_vw_photo_identite mode="read" size=52}}
       </a>
     </th>
     <th class="title text" colspan="2" style="border: none;">
@@ -41,9 +41,9 @@
           -
           <span style="font-size: 0.7em;" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
             {{if $rpu}}
-              {{$sejour->_shortview|replace:"Du":"RPU du"}}
+              Admission du {{$rpu->_entree|date_format:"%d/%m/%Y"}}
             {{else}}
-              {{$sejour->_shortview|replace:"Du":"Séjour du"}} <br /> {{$sejour->_ref_curr_affectation->_ref_lit}}
+              {{$sejour->_shortview|replace:"Du":"Séjour du"}} {{if $sejour->_ref_curr_affectation}}<br /> {{$sejour->_ref_curr_affectation->_ref_lit}}{{/if}}
             {{/if}}
           </span>
           {{include file="../../soins/templates/inc_vw_antecedent_allergie.tpl" nodebug=true}}
@@ -62,7 +62,7 @@
           {{if $prescription->_jour_op}}
             <br/>
             {{foreach from=$prescription->_jour_op item=_info_jour_op}}
-              (<span onmouseover="ObjectTooltip.createEx(this, '{{$_info_jour_op.operation_guid}}');">J{{$_info_jour_op.jour_op}}</span>)
+              <span style="font-size: 0.6em;" onmouseover="ObjectTooltip.createEx(this, '{{$_info_jour_op.operation_guid}}');">(J{{$_info_jour_op.jour_op}})</span>
             {{/foreach}}
           {{/if}}
         </h2>
