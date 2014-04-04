@@ -164,6 +164,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_count_evenements_ssr_week;
   public $_collisions = array();
   public $_rques_sejour;
+  public $_jour_op = array();
 
   // Behaviour fields
   public $_check_bounds  = true;
@@ -3024,6 +3025,26 @@ class CSejour extends CFacturable implements IPatientRelated {
     $leftjoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
     $operation = new COperation;
     return $this->_ref_curr_operations = $operation->loadList($where, null, null, null, $leftjoin);
+  }
+
+  /**
+   * Chargement du jour operatoire
+   *
+   * @param Date $date Date
+   *
+   * @return void
+   */
+  function loadJourOp ($date) {
+    if (!$date) {
+      $date = CMbDT::date();
+    }
+ml($date);
+    $this->loadRefsOperations();
+    foreach ($this->_ref_operations as $_operation) {
+      $_operation->loadRefPlageOp();
+      $this->_jour_op[$_operation->_id]["operation_guid"] = $_operation->_guid;
+      $this->_jour_op[$_operation->_id]["jour_op"] = CMbDT::daysRelative(CMbDT::date($_operation->_datetime), $date);
+    }
   }
 
   /**

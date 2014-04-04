@@ -10,7 +10,7 @@
     {{assign var=prescription_sortie value=$prescriptions.sortie}}
 
     <a class="text" href="#1" 
-       onclick="markAsSelected(this); addSejourIdToSession('{{$curr_sejour->_id}}'); loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}},{{$curr_sejour->patient_id}},'{{$date}}')">
+       onclick="markAsSelected(this); addSejourIdToSession('{{$curr_sejour->_id}}'); loadViewSejour({{$curr_sejour->_id}},'{{$date}}')">
       <span class="{{if !$curr_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $curr_sejour->septique}}septique{{/if}}"
             onmouseover="ObjectTooltip.createEx(this, '{{$curr_sejour->_guid}}');" >
         {{$curr_sejour->_ref_patient->_view}}
@@ -18,7 +18,7 @@
     </a>
   </td>
 
-  <td style="padding: 1px;" onclick="markAsSelected(this); addSejourIdToSession('{{$curr_sejour->_id}}'); loadViewSejour('{{$curr_sejour->_id}}', {{$curr_sejour->praticien_id}}, {{$curr_sejour->patient_id}}, '{{$date}}'); tab_sejour.setActiveTab('Imeds')">
+  <td style="padding: 1px;" onclick="markAsSelected(this); addSejourIdToSession('{{$curr_sejour->_id}}'); loadViewSejour('{{$curr_sejour->_id}}', '{{$date}}'); tab_sejour.setActiveTab('Imeds')">
     {{if $isImedsInstalled}}
       {{mb_include module=Imeds template=inc_sejour_labo sejour=$curr_sejour link="#"}}
     {{/if}}

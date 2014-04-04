@@ -27,26 +27,22 @@
 
 <script>
   loadResultLabo = function(sejour_id) {
-    $('select_praticien').hide();
     var url = new Url("Imeds", "httpreq_vw_sejour_results");
     url.addParam("sejour_id", sejour_id);
     url.requestUpdate('Imeds');
   }
 
   loadSuiviClinique = function() {
-    $('select_praticien').hide();
     var url = new Url("soins", "ajax_vw_suivi_clinique");
     url.addParam("sejour_id", '{{$sejour->_id}}');
     url.requestUpdate("suivi_clinique");
   }
 
   loadSuiviSoins = function() {
-    $('select_praticien').hide();
     PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration', null, null, null, null, null, 1);
   }
 
   loadPrescription = function() {
-    $('select_praticien').show();
     $('prescription_sejour').update('');
     Prescription.hide_header = true;
     Prescription.reloadPrescSejour('{{$prescription_id}}','{{$sejour->_id}}');
@@ -57,7 +53,6 @@
   }
   
   loadConstantes = function() {
-    $('select_praticien').hide();
     var url = new Url("patients", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", '{{$sejour->_guid}}');
     url.addParam("paginate", 1);
@@ -71,7 +66,6 @@
   }
 
   loadAntecedents = function() {
-    $('select_praticien').hide();
     var url = new Url("cabinet","httpreq_vw_antecedents");
     url.addParam("sejour_id", '{{$sejour->_id}}');
     url.addParam("show_header", 0);
@@ -79,7 +73,6 @@
   }
 
   loadActes = function(sejour_id, praticien_id) {
-    $('select_praticien').hide();
     if($('listActesNGAP')){
       loadActesNGAP(sejour_id);
     }

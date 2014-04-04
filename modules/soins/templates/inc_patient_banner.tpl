@@ -43,7 +43,7 @@
             {{if $rpu}}
               Admission du {{$rpu->_entree|date_format:"%d/%m/%Y"}}
             {{else}}
-              {{$sejour->_shortview|replace:"Du":"Séjour du"}} {{if $sejour->_ref_curr_affectation}}<br /> {{$sejour->_ref_curr_affectation->_ref_lit}}{{/if}}
+              {{$sejour->_shortview|replace:"Du":"Séjour du"}} {{if $sejour->_ref_curr_affectation->_id}}<br /> {{$sejour->_ref_curr_affectation->_ref_lit}}{{/if}}
             {{/if}}
           </span>
           {{include file="../../soins/templates/inc_vw_antecedent_allergie.tpl" nodebug=true}}
@@ -59,9 +59,9 @@
             <img src="images/icons/warning.png" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}', 'allergies');" />
           {{/if}}
 
-          {{if $prescription->_jour_op}}
+          {{if $sejour->_jour_op}}
             <br/>
-            {{foreach from=$prescription->_jour_op item=_info_jour_op}}
+            {{foreach from=$sejour->_jour_op item=_info_jour_op}}
               <span style="font-size: 0.6em;" onmouseover="ObjectTooltip.createEx(this, '{{$_info_jour_op.operation_guid}}');">(J{{$_info_jour_op.jour_op}})</span>
             {{/foreach}}
           {{/if}}
@@ -93,61 +93,6 @@
           <img src="images/icons/carte_vitale.png" title="{{tr}}CPatient-date-lecture-vitale{{/tr}} : {{mb_value object=$patient field="date_lecture_vitale" format=relative}}" />
         </div>
       {{/if}}
-
-      <br/>
-      <label {{if $app->user_prefs.options_ordo_checked}}style="display: none;"{{/if}}>
-        <input type="checkbox" id="options_print" name="options_print"
-               {{if $app->user_prefs.options_ordo_checked}}checked="checked"{{/if}}/>
-        <span style="font-size: xx-small;">Options</span>
-      </label>
-
-      <button type="button" class="print" onclick="
-        if (!$('options_print').checked) {
-        Prescription.printPrescription('{{$prescription->_id}}', {
-        dci: {{if $prescription->type!="sejour" && $app->user_prefs.dci_checked_externe}}1{{else}}0{{/if}},
-        globale: 0,
-        in_progress: {{if $prescription->type!="sejour"}}1{{else}}0{{/if}},
-        showOptions: 0,
-        praticien_sortie_id: '{{$prescription->_current_praticien_id}}'
-        });
-        }
-        else {
-        Prescription.printOrdonnance('{{$prescription->_id}}', '', '{{$operation_id}}');
-        }
-        ">
-        Ordonnance
-      </button>
-
-      <div id="select_praticien" style="display: none;">
-        {{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma || ($is_executant_prescription && !$conf.dPprescription.CPrescription.role_propre))}}
-          <form name="selPraticienLine" action="?" method="get">
-            <select style="font-size: 0.8em; width: 15em;" name="praticien_id" onchange="{{if !$conf_preselect_prat}}toggleAddLine();{{/if}} Prescription.changePraticienMed(this.value); {{if !$mode_pharma}}Prescription.changePraticienElt(this.value);{{/if}} if($('protocole_prat_name')) { $('protocole_prat_name').update('Dr '+this.options[this.selectedIndex].text); }">
-              {{if !$conf_preselect_prat}}
-                <option value="">&mdash; Choix du prescripteur</option>
-              {{/if}}
-              <optgroup label="Responsables">
-                <option class="mediuser" style="border-color: #{{$prescription->_ref_current_praticien->_ref_function->color}};"
-                        value="{{$prescription->_ref_current_praticien->_id}}"
-                        {{if $conf_preselect_prat && $prescription->_ref_current_praticien->_id == $prescription->_current_praticien_id}}selected="selected"{{/if}}>{{$prescription->_ref_current_praticien->_view}}</option>
-                {{if @$operation->_ref_anesth->_id}}
-                  <option  class="mediuser" style="border-color: #{{$operation->_ref_anesth->_ref_function->color}};"
-                           value="{{$operation->_ref_anesth->_id}}"
-                           {{if $conf_preselect_prat && $operation->_ref_anesth->_id == $prescription->_current_praticien_id}}selected="selected"{{/if}}>{{$operation->_ref_anesth->_view}}</option>
-                {{/if}}
-              </optgroup>
-              <optgroup label="Tous les praticiens">
-                {{foreach from=$listPrats item=_praticien}}
-                  <option class="mediuser"
-                          style="border-color: #{{$_praticien->_ref_function->color}};"
-                          value="{{$_praticien->_id}}"
-                          {{if $conf_preselect_prat && $_praticien->_id == $prescription->_current_praticien_id}}selected="selected"{{/if}}>{{$_praticien->_view}}
-                  </option>
-                {{/foreach}}
-              </optgroup>
-            </select>
-          </form>
-        {{/if}}
-      </div>
     </th>
   </tr>
   {{mb_include module=soins template=inc_infos_patients_soins add_class_poids=1 add_class_taille=1}}

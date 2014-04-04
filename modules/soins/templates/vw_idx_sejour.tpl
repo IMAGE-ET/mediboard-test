@@ -396,7 +396,12 @@ savePref = function(form) {
       </table>    
     </td>
     <td style="width:100%;">
-      <div id="dossier_sejour"></div>
+      <div id="dossier_sejour">
+        <div class="small-info">
+          Veuillez sélectionner un séjour dans la liste de gauche pour afficher
+          le dossier de soin du patient concerné.
+        </div>
+      </div>
     </td>
   </tr>
 </table>
