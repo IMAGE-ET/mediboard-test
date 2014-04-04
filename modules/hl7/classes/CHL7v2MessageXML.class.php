@@ -278,7 +278,8 @@ class CHL7v2MessageXML extends CMbXMLDocument {
       return;
     }
 
-    if ($sender->_configs["search_master_IPP"]) {
+    $search_master_IPP = CValue::read($sender->_configs, "search_master_IPP");
+    if ($search_master_IPP) {
       $domain = CDomain::getMasterDomain("CPatient", $sender->group_id);
 
       if (($this->queryTextNode("CX.5", $node) == "PI") && ($domain->namespace_id == $this->queryTextNode("CX.4/HD.1", $node))) {
@@ -310,7 +311,8 @@ class CHL7v2MessageXML extends CMbXMLDocument {
       return;
     }
 
-    if ($sender->_configs["search_master_NDA"]) {
+    $search_master_NDA = CValue::read($sender->_configs, "search_master_NDA");
+    if ($search_master_NDA) {
       $domain = CDomain::getMasterDomain("CSejour", $sender->group_id);
 
       if (($this->queryTextNode("CX.5", $node) == "AN") && ($domain->namespace_id == $this->queryTextNode("CX.4/HD.1", $node))) {
@@ -482,8 +484,9 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     // RI - Resource identifier 
     // VN - Visit Number
     // AN - On peut également retrouver le numéro de dossier dans ce champ
+    $handle_NDA = CValue::read($sender->_configs, "handle_NDA");
     foreach ($this->query("PV1.19", $contextNode) as $_node) {
-      switch ($sender->_configs["handle_NDA"]) {
+      switch ($handle_NDA) {
         case 'PV1_19':
           $this->getANIdentifier($_node, $data, $sender);
           break;
@@ -499,7 +502,8 @@ class CHL7v2MessageXML extends CMbXMLDocument {
       }
     }
 
-    switch ($sender->_configs["handle_PV1_50"]) {
+    $handle_PV1_50 = CValue::read($sender->_configs, "handle_PV1_50");
+    switch ($handle_PV1_50) {
       // Il s'agit-là du sejour_id qui fait office de "NDA temporaire"
       case 'sejour_id':
         foreach ($this->query("PV1.50", $contextNode) as $_node) {
