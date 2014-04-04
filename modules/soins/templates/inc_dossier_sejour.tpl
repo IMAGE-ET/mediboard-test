@@ -184,7 +184,14 @@
     url.addParam("sejour_id", "{{$sejour->_id}}");
     url.popup("850", "500", "Dossier complet");
   }
-  
+
+  printPlanSoins = function() {
+    var url = new Url("soins", "offline_plan_soins");
+    url.addParam("sejours_ids", "{{$sejour->_id}}");
+    url.addParam("mode_dupa", 1);
+    url.pop(1000, 600);
+  }
+
   Main.add(function() {
     Prescription.mode_pharma = "{{$mode_pharma}}";
 
@@ -224,6 +231,7 @@
   <li><a href="#docs" onmousedown="loadDocuments();">{{tr}}CMbObject-back-documents{{/tr}}</a></li>
   <li><a href="#antecedents" onmousedown="loadAntecedents();">{{tr}}IDossierMedical-back-antecedents{{/tr}}</a></li>
   <li style="float: right">
+    <button type="button" class="print" style="float: left" onclick="printPlanSoins()">Plan de soins</button>
     <button type="button" class="button print" onclick="printDossierSoins();">Dossier soins</button>
     {{if !$popup && $modal}}
       <button type="button" class="cancel" onclick="closeModal();">{{tr}}Close{{/tr}}</button>
