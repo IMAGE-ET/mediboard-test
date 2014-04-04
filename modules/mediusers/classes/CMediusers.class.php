@@ -468,6 +468,30 @@ class CMediusers extends CPerson {
   }
 
   /**
+   * @see parent::loadQueryList()
+   */
+  function loadQueryList($query) {
+    /** @var self[] $mediusers */
+    CMediusers::$user_autoload = false;
+    $mediusers = parent::loadQueryList($query);
+    CMediusers::$user_autoload = true;
+
+    if (!count($mediusers)) {
+      return array();
+    }
+
+    // Mass user speficic preloading
+    $user = new CUser();
+    $user->loadAll(array_keys($mediusers));
+
+    // Attach cached user
+    foreach ($mediusers as $_mediuser) {
+      $_mediuser->updateFormFields();
+    }
+
+    return $mediusers;
+  }
+  /**
    * Chargement de l'utilisateur système
    *
    * @return CUser
@@ -950,19 +974,8 @@ class CMediusers extends CPerson {
 
     // Get all users
     $mediuser = new CMediusers();
-    CMediusers::$user_autoload = false;
     /** @var CMediusers[] $mediusers */
     $mediusers = $mediuser->loadList($where, $order, null, $group_by, $ljoin);
-    CMediusers::$user_autoload = true;
-
-    // Mass user speficic preloading
-    $user = new CUser();
-    $user->loadAll(array_keys($mediusers));
-
-    // Attach cached user
-    foreach ($mediusers as $_mediuser) {
-      $_mediuser->updateFormFields();
-    }
 
     // Mass fonction standard preloading
     CMbObject::massLoadFwdRef($mediusers, "function_id");
