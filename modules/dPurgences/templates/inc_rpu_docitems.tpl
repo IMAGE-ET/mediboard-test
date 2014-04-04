@@ -12,20 +12,6 @@
 
 <table class="form">
   <tr>
-    <th class="title" colspan="2">
-      <a style="float: left" href="?m=patients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}">
-        {{mb_include module=patients template=inc_vw_photo_identite size=42}}
-      </a>
-
-      <h2 style="color: #fff; font-weight: bold;">
-        {{$patient}}
-        {{if isset($sejour|smarty:nodefaults)}}
-          <span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
-        {{/if}}
-      </h2>
-    </th>
-  </tr>
-  <tr>
     <td class="halfPane">
       <fieldset>
         <legend>{{tr}}CFile{{/tr}} - {{tr}}CSejour{{/tr}}</legend>

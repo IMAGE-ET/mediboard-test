@@ -53,9 +53,6 @@ refreshFiches = function(sejour_id) {
 <table class="tbl" {{if $print || $simple_view}}style="display: none;"{{/if}}>
   <tr>
     <th colspan="10" class="title">
-      <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}">
-        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$patient size=42}}
-      </a>
       Constantes médicales dans le cadre de: 
       <br />
       {{if !$can_select_context}}
@@ -72,30 +69,6 @@ refreshFiches = function(sejour_id) {
         </select>
       {{/if}}
     </th>
-  </tr>
-  <tr>
-    <td style="width: 25%;">
-      {{mb_title object=$patient->_ref_constantes_medicales field=poids}}:
-      {{if $patient->_ref_constantes_medicales->poids}}
-        {{mb_value object=$patient->_ref_constantes_medicales field=poids}} kg
-      {{else}}??{{/if}}
-    </td>
-    <td style="width: 25%;">
-      {{mb_title object=$patient field=naissance}}: 
-      {{mb_value object=$patient field=naissance}} ({{$patient->_age}})
-    </td>
-    <td style="width: 25%;">
-      {{mb_title object=$patient->_ref_constantes_medicales field=taille}}:
-      {{if $patient->_ref_constantes_medicales->taille}}
-        {{mb_value object=$patient->_ref_constantes_medicales field=taille}} cm
-      {{else}}??{{/if}}
-    </td>
-    <td style="width: 25%;">
-      {{mb_title object=$patient->_ref_constantes_medicales field=_imc}}:
-      {{if $patient->_ref_constantes_medicales->_imc}}
-        {{mb_value object=$patient->_ref_constantes_medicales field=_imc}}
-      {{else}}??{{/if}}
-    </td>
   </tr>
 </table>
 

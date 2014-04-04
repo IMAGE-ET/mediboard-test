@@ -328,62 +328,6 @@
   <input type="hidden" name="original_datetime" value="" />
 </form>
 
-<table class="tbl">
-  <tr>
-    <th colspan="10" class="title text">
-       <span style="float: right">
-         {{if !$hide_close}}
-           <button type="button" class="cancel" style="float: right; display: none;"
-                   onclick="modalWindow.close();
-                    {{if "dPprescription"|module_active}}
-                    if(window.refreshLinePancarte){ refreshLinePancarte('{{$prescription_id}}'); }
-                    if(window.refreshLineSejour){ refreshLineSejour('{{$sejour->_id}}'); }
-                    {{/if}}" id="modal_button">
-             {{tr}}Close{{/tr}}
-           </button>
-         {{/if}}
-       </span>
-       <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}">
-        {{mb_include module=patients template=inc_vw_photo_identite patient=$patient size=42}}
-       </a>
-
-      <h2 style="color: #fff; font-weight: bold;">
-       <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_ref_patient->_guid}}')">
-         {{$sejour->_ref_patient->_view}}
-       </span>
-       -
-       <span style="font-size: 0.7em;" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">{{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
-       <br />
-       <span style="font-size: 0.7em;">{{$sejour->_ref_curr_affectation->_ref_lit}}</span>
-
-       {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
-       {{assign var=antecedents value=$dossier_medical->_ref_antecedents_by_type}}
-       {{assign var=sejour_id value=$sejour->_id}}
-       {{mb_include module="soins" template="inc_vw_antecedent_allergie"}}
-
-
-       {{if $dossier_medical->_id && $dossier_medical->_count_allergies}}
-        <script type="text/javascript">
-          ObjectTooltip.modes.allergies = {
-            module: "patients",
-            action: "ajax_vw_allergies",
-            sClass: "tooltip"
-          };
-        </script>
-        <img src="images/icons/warning.png" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_ref_patient->_guid}}', 'allergies');" />
-      {{/if}}
-      {{if $prescription->_jour_op}}
-        <br/>
-        {{foreach from=$prescription->_jour_op item=_info_jour_op}}
-          (<span onmouseover="ObjectTooltip.createEx(this, '{{$_info_jour_op.operation_guid}}');">J{{$_info_jour_op.jour_op}}</span>)
-        {{/foreach}}
-      {{/if}}
-      </h2>
-    </th>
-  </tr>
-  {{mb_include module=soins template=inc_infos_patients_soins}}
-</table>
-
 {{if $conf.soins.vue_condensee_dossier_soins}}
   <table class="main layout">
     <tr>

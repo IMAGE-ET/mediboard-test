@@ -1,47 +1,54 @@
-{{if $popup}}
-  {{mb_script module="patients"    script="patient"         ajax=true}}
-  {{mb_script module="soins"       script="plan_soins"      ajax=true}}
-  {{mb_script module="planningOp"  script="cim10_selector"  ajax=true}}
-  {{mb_script module="compteRendu" script="document"        ajax=true}}
-  {{mb_script module="compteRendu" script="modele_selector" ajax=true}}
-  {{mb_script module="cabinet"     script="file"            ajax=true}}
 
-  {{if "dPmedicament"|module_active}}
-    {{mb_script module="medicament" script="medicament_selector" ajax=true}}
-    {{mb_script module="medicament" script="equivalent_selector" ajax=true}}
-  {{/if}}
+{{mb_script module="patients"    script="patient"         ajax=true}}
+{{mb_script module="soins"       script="plan_soins"      ajax=true}}
+{{mb_script module="planningOp"  script="cim10_selector"  ajax=true}}
+{{mb_script module="compteRendu" script="document"        ajax=true}}
+{{mb_script module="compteRendu" script="modele_selector" ajax=true}}
+{{mb_script module="cabinet"     script="file"            ajax=true}}
 
-  {{if "dPprescription"|module_active}}
-    {{mb_script module="prescription" script="element_selector" ajax=true}}
-    {{mb_script module="prescription" script="prescription"     ajax=true}}
-  {{/if}}
+{{if "dPmedicament"|module_active}}
+  {{mb_script module="medicament" script="medicament_selector" ajax=true}}
+  {{mb_script module="medicament" script="equivalent_selector" ajax=true}}
+{{/if}}
+
+{{if "dPprescription"|module_active}}
+  {{mb_script module="prescription" script="element_selector" ajax=true}}
+  {{mb_script module="prescription" script="prescription"     ajax=true}}
 {{/if}}
 
 {{if $isImedsInstalled}}
   {{mb_script module="dPImeds" script="Imeds_results_watcher" ajax=true}}
 {{/if}}
-
+{{assign var="do_subject_aed" value="do_sejour_aed"}}
+{{assign var="module" value="dPhospi"}}
+{{assign var=object value=$sejour}}
+{{mb_include module=salleOp template=js_codage_ccam}}
 {{assign var=prescription_id value=$sejour->_ref_prescription_sejour->_id}}
 
 <script>
   loadResultLabo = function(sejour_id) {
+    $('select_praticien').hide();
     var url = new Url("Imeds", "httpreq_vw_sejour_results");
     url.addParam("sejour_id", sejour_id);
     url.requestUpdate('Imeds');
   }
 
   loadSuiviClinique = function() {
+    $('select_praticien').hide();
     var url = new Url("soins", "ajax_vw_suivi_clinique");
     url.addParam("sejour_id", '{{$sejour->_id}}');
     url.requestUpdate("suivi_clinique");
   }
 
   loadSuiviSoins = function() {
+    $('select_praticien').hide();
     PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration', null, null, null, null, null, 1);
   }
 
   loadPrescription = function() {
+    $('select_praticien').show();
     $('prescription_sejour').update('');
+    Prescription.hide_header = true;
     Prescription.reloadPrescSejour('{{$prescription_id}}','{{$sejour->_id}}');
   }
 
@@ -50,6 +57,7 @@
   }
   
   loadConstantes = function() {
+    $('select_praticien').hide();
     var url = new Url("patients", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", '{{$sejour->_guid}}');
     url.addParam("paginate", 1);
@@ -63,10 +71,53 @@
   }
 
   loadAntecedents = function() {
+    $('select_praticien').hide();
     var url = new Url("cabinet","httpreq_vw_antecedents");
     url.addParam("sejour_id", '{{$sejour->_id}}');
-    url.addParam("show_header", 1);
+    url.addParam("show_header", 0);
     url.requestUpdate('antecedents')
+  }
+
+  loadActes = function(sejour_id, praticien_id) {
+    $('select_praticien').hide();
+    if($('listActesNGAP')){
+      loadActesNGAP(sejour_id);
+    }
+    if($('ccam')){
+      ActesCCAM.refreshList(sejour_id, praticien_id);
+    }
+    if($('cim')){
+      reloadDiagnostic(sejour_id, '1');
+    }
+    if ($('tarif')) {
+      loadTarifsSejour(sejour_id);
+    }
+    if ($('tarmed')) {
+      ActesTarmed.refreshListSejour(sejour_id, praticien_id);
+    }
+    if ($('caisse')) {
+      ActesCaisse.refreshListSejour(sejour_id, praticien_id);
+    }
+  }
+
+  loadActesNGAP = function (sejour_id){
+    var url = new Url("dPcabinet", "httpreq_vw_actes_ngap");
+    url.addParam("object_id", sejour_id);
+    url.addParam("object_class", "CSejour");
+    url.requestUpdate('listActesNGAP');
+  }
+
+  loadTarifsSejour = function (sejour_id) {
+    var url = new Url("soins", "ajax_tarifs_sejour");
+    url.addParam("sejour_id", sejour_id);
+    url.requestUpdate("tarif");
+  }
+
+  reloadDiagnostic = function (sejour_id, modeDAS) {
+    var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("modeDAS", modeDAS);
+    url.requestUpdate("cim");
   }
 
   closeModal = function() {
@@ -140,17 +191,32 @@
     tab_sejour = Control.Tabs.create('tab-sejour');
     tab_sejour.setActiveTab('{{$default_tab}}');
     tab_sejour.activeLink.onmousedown();
-   
+
+    {{if $app->user_prefs.ccam_sejour == 1 }}
+      var tab_actes = Control.Tabs.create('tab-actes', false);
+    {{/if}}
+
 		window.DMI_operation_id = "{{$operation_id}}";
   });
 </script>
 
+<div id="patient_banner">
+  {{mb_include module=soins template=inc_patient_banner}}
+</div>
 <ul id="tab-sejour" class="control_tabs">
+  {{if !$modal && !$popup}}
+    <li>
+      <button type="button" class="hslip notext compact" style="vertical-align: bottom; float: left;" onclick="$('left-column').toggle();" title="Afficher/cacher la colonne de gauche"></button>
+    </li>
+  {{/if}}
   <li><a href="#suivi_clinique" onmousedown="loadSuiviClinique();">{{tr}}CSejour.suivi_clinique{{/tr}}</a></li>
   <li onmousedown="loadConstantes();"><a href="#constantes-medicales">{{tr}}CPatient.surveillance{{/tr}}</a></li>
   <li><a href="#dossier_traitement" onmousedown="loadSuiviSoins();">{{tr}}CSejour.suivi_soins{{/tr}}</a></li>
   {{if $isPrescriptionInstalled}}
-    <li><a href="#prescription_sejour" onmousedown="loadPrescription();">Prescription</a></li>
+    <li><a href="#prescription_sejour" onmousedown="loadPrescription();">{{tr}}soins.tab.Prescription{{/tr}}</a></li>
+  {{/if}}
+  {{if $app->user_prefs.ccam_sejour == 1 }}
+    <li><a href="#Actes" onmousedown="loadActes({{$sejour->_id}}, {{$sejour->_ref_praticien->_id}});">{{tr}}CCodable-actes{{/tr}}</a></li>
   {{/if}}
   {{if $isImedsInstalled}}
     <li><a href="#Imeds" onmousedown="loadResultLabo('{{$sejour->_id}}');">Labo</a></li>
@@ -159,7 +225,7 @@
   <li><a href="#antecedents" onmousedown="loadAntecedents();">{{tr}}IDossierMedical-back-antecedents{{/tr}}</a></li>
   <li style="float: right">
     <button type="button" class="button print" onclick="printDossierSoins();">Dossier soins</button>
-    {{if !$popup}}
+    {{if !$popup && $modal}}
       <button type="button" class="cancel" onclick="closeModal();">{{tr}}Close{{/tr}}</button>
     {{/if}}
   </li>
@@ -170,6 +236,59 @@
 <div id="dossier_traitement" style="display: none;"></div>
 {{if $isPrescriptionInstalled}}
   <div id="prescription_sejour" style="text-align: left; display: none;"></div>
+{{/if}}
+{{if $app->user_prefs.ccam_sejour == 1}}
+  <div id="Actes" style="display: none;">
+    <table class="form">
+      <tr>
+        <td style="">
+          <ul id="tab-actes" class="control_tabs">
+            {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
+              <li id="tarif" style="float: right;"></li>
+              <li><a href="#one">Actes CCAM</a></li>
+              <li><a href="#two">Actes NGAP</a></li>
+              <li><a href="#three">Diagnostics</a></li>
+            {{/if}}
+            {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
+              <li><a href="#tarmed_tab">TARMED</a></li>
+              <li><a href="#caisse_tab">{{tr}}CPrestationCaisse{{/tr}}</a></li>
+            {{/if}}
+          </ul>
+          <hr class="control_tabs" />
+
+          <table class="form">
+            <tr id="one" style="display: none;">
+              <td id="ccam">
+              </td>
+            </tr>
+            <tr id="two" style="display: none;">
+              <td id="listActesNGAP">
+              </td>
+            </tr>
+            <tr id="three" style="display: none;">
+              <td id="cim">
+              </td>
+            </tr>
+            {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+              {{mb_script module=tarmed script=actes}}
+              <tr id="tarmed_tab" style="display: none;">
+                <td id="tarmed">
+                  <div id="listActesTarmed">
+                  </div>
+                </td>
+              </tr>
+              <tr id="caisse_tab" style="display: none;">
+                <td id="caisse">
+                  <div id="listActesCaisse">
+                  </div>
+                </td>
+              </tr>
+            {{/if}}
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
 {{/if}}
 {{if $isImedsInstalled}}
   <div id="Imeds" style="display: none;"></div>

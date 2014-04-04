@@ -24,6 +24,6 @@ $smarty = new CSmartyDP("modules/dPcabinet");
 $smarty->assign("consult" , $consult);
 $smarty->assign("readonly", 1);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
-$smarty->assign("show_header", 1);
+$smarty->assign("show_header", 0);
 
 $smarty->display("inc_main_consultform.tpl");

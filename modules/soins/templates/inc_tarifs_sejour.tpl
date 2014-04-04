@@ -9,7 +9,7 @@
  * @link     http://www.mediboard.org
 *}}
 
-<form name="selectTarif" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: window.tabLoaders.Actes.curry({{$sejour->_id}}, {{$sejour->praticien_id}}, '')});">
+<form name="selectTarif" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: loadActes.curry({{$sejour->_id}}, {{$sejour->praticien_id}})});">
   {{mb_class object=$sejour}}
   {{mb_key object=$sejour}}
   <input type="hidden" name="_bind_tarif" value="1"/>

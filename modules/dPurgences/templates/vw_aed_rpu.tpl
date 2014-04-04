@@ -246,6 +246,7 @@
   showDossierSoins = function(sejour_id, date, default_tab){
     var url = new Url("soins", "ajax_vw_dossier_sejour");
     url.addParam("sejour_id", sejour_id);
+    url.addParam("modal", 1);
     if(default_tab){
       url.addParam("default_tab", default_tab);
     }
@@ -268,6 +269,10 @@
       }
       var tab_sejour = Control.Tabs.create('tab-dossier', false);
       loadDocItems('{{$rpu->sejour_id}}', '{{$rpu->_ref_consult->_id}}');
+    {{/if}}
+
+    {{if $isPrescriptionInstalled}}
+      Prescription.hide_header = true;
     {{/if}}
 
     {{if "forms"|module_active}}
@@ -308,6 +313,7 @@
       <button type="button" class="search" onclick="showDossierSoins('{{$rpu->mutation_sejour_id}}');">{{tr}}soins.button.Dossier-soins{{/tr}}</button>
     </div>
   {{else}}
+    {{mb_include module=soins template=inc_patient_banner}}
     <ul id="tab-dossier" class="control_tabs">
       <li><a href="#rpu">RPU</a></li>
       <li><a href="#suivi_clinique" onmouseup="loadSuiviClinique('{{$rpu->sejour_id}}')">Synthèse</a></li>
@@ -324,7 +330,7 @@
       <li onmouseup="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">{{tr}}soins.tab.surveillance{{/tr}}</a></li>
 
       {{if "forms"|module_active}}
-        <li><a href="#ex-forms-rpu-tab">{{tr}}soins.tab.Formulaires{{/tr}}</a></li>
+        <li><a href="#ex-forms-rpu">{{tr}}soins.tab.Formulaires{{/tr}}</a></li>
       {{/if}}
 
       <li onmouseup="showExamens('{{$consult->_id}}')"><a href="#examens">{{tr}}soins.tab.dossier-medical{{/tr}}</a></li>
@@ -332,7 +338,7 @@
         <li onmouseup="loadActes('{{$rpu->sejour_id}}')"><a href="#actes">{{tr}}soins.tab.Cotation-infirmiere{{/tr}}</a></li>
       {{/if}}
       {{if "dPImeds"|module_active}}
-        <li onmouseup="loadResultLabo('{{$rpu->sejour_id}}')"><a href="#Imeds-tab">{{tr}}soins.tab.Labo{{/tr}}</a></li>
+        <li onmouseup="loadResultLabo('{{$rpu->sejour_id}}')"><a href="#Imeds">{{tr}}soins.tab.Labo{{/tr}}</a></li>
       {{/if}}
       <li onmouseup="loadDocItems('{{$rpu->sejour_id}}', '{{$consult->_id}}')"><a href="#doc-items">{{tr}}soins.tab.Documents{{/tr}}</a></li>
     </ul>
@@ -363,26 +369,11 @@
       {{assign var="_is_anesth" value="0"}}
       {{assign var=sejour_id    value=""}}
 
-      {{mb_include module=cabinet template=inc_ant_consult chir_id=$app->user_id show_header=1}}
+      {{mb_include module=cabinet template=inc_ant_consult chir_id=$app->user_id show_header=0}}
     </div>
 
     <div id="constantes" style="display:none"></div>
-    <div id="ex-forms-rpu-tab" style="display: none">
-      <table class="main">
-        <tr>
-          <th class="title" colspan="2">
-            <a style="float: left" href="?m=patients&amp;tab=vw_full_patients&amp;patient_id={{$sejour->_ref_patient->_id}}">
-              {{mb_include module=patients template=inc_vw_photo_identite size=42 patient=$sejour->_ref_patient}}
-            </a>
-
-            <h2 style="color: #fff; font-weight: bold;">
-              {{$sejour->_ref_patient}}
-              <span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
-            </h2>
-          </th>
-        </tr>
-      </table>
-      <div id="ex-forms-rpu"></div>
+    <div id="ex-forms-rpu" style="display: none">
     </div>
 
     <div id="examens"    style="display:none">
@@ -411,22 +402,7 @@
     {{/if}}
 
     {{if "dPImeds"|module_active}}
-    <div id="Imeds-tab" style="display: none;">
-      <table class="main">
-        <tr>
-          <th class="title" colspan="2">
-            <a style="float: left" href="?m=patients&amp;tab=vw_full_patients&amp;patient_id={{$sejour->_ref_patient->_id}}">
-              {{mb_include module=patients template=inc_vw_photo_identite size=42 patient=$sejour->_ref_patient}}
-            </a>
-
-            <h2 style="color: #fff; font-weight: bold;">
-              {{$sejour->_ref_patient}}
-              <span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
-            </h2>
-          </th>
-        </tr>
-      </table>
-      <div id="Imeds"></div>
+    <div id="Imeds" style="display: none;">
     </div>
     {{/if}}
 

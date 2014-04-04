@@ -46,8 +46,19 @@ if ($rpu->_id || $rpu->sejour_id) {
   }
   $rpu->loadFwdRef("_mode_entree_id");
   $sejour  = $rpu->_ref_sejour;
+  $sejour->loadRefCurrAffectation();
+  $sejour->loadRefPrescriptionSejour();
+  $sejour->_ref_prescription_sejour->loadJourOp(CMbDT::date());
+  $sejour->_ref_prescription_sejour->loadRefCurrentPraticien();
   $patient = $sejour->_ref_patient;
-  
+  $patient->loadRefConstantesMedicales(null, array('poids', 'talle'));
+  $patient->loadRefDossierMedical();
+  if ($patient->_ref_dossier_medical->_id) {
+    $patient->_ref_dossier_medical->loadRefsAllergies();
+    $patient->_ref_dossier_medical->loadRefsAntecedents();
+    $patient->_ref_dossier_medical->countAntecedents();
+    $patient->_ref_dossier_medical->countAllergies();
+  }
   // Chargement de l'IPP ($_IPP)
   $patient->loadIPP();
 
@@ -134,7 +145,7 @@ if (CAppUI::conf("ref_pays") == 2) {
   $motifs = $motif->loadMatchingList();
 }
 
-$sejour->loadRefCurrAffectation();
+$is_praticien = CAppUI::$user->isPraticien();
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -167,6 +178,7 @@ $smarty->assign("orumip_active"       , $orumip_active);
 $smarty->assign("nb_printers"         , $nb_printers);
 $smarty->assign("traitement"          , new CTraitement());
 $smarty->assign("antecedent"          , new CAntecedent());
+$smarty->assign("is_praticien"        , $is_praticien);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isImedsInstalled"    , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("list_mode_entree"    , $list_mode_entree);

@@ -22,6 +22,7 @@
     PlanSoins.save_nb_decalage = PlanSoins.nb_decalage;
     var url = new Url("soins", "ajax_vw_dossier_sejour");
     url.addParam("sejour_id", sejour_id);
+    url.addParam("modal", 1);
     url.requestModal("95%", "90%", {
       showClose: false
     });

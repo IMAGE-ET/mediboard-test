@@ -7,31 +7,6 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
-
-{{mb_script module="dPcompteRendu" script="document"}}
-{{mb_script module="dPcompteRendu" script="modele_selector"}}
-{{mb_script module="dPcabinet" script="file"}}
-{{mb_script module="dPplanningOp" script="cim10_selector"}}
-{{if $isImedsInstalled}}
-{{mb_script module="dPImeds" script="Imeds_results_watcher"}}
-{{/if}}
-
-{{if "dPmedicament"|module_active}}
-  {{mb_script module="dPmedicament" script="medicament_selector"}}
-  {{mb_script module="dPmedicament" script="equivalent_selector"}}
-{{/if}}
-
-{{mb_script module="soins" script="plan_soins"}}
-  
-{{if "dPprescription"|module_active}}
-  {{mb_script module="dPprescription" script="element_selector"}}
-  {{mb_script module="dPprescription" script="prescription"}}
-{{/if}}
-
-{{mb_script module="dPpatients" script="patient"}}
-{{assign var="do_subject_aed" value="do_sejour_aed"}}
-{{assign var="module" value="dPhospi"}}
-{{mb_include module=salleOp template=js_codage_ccam}}
 {{if $conf.dPhospi.CLit.alt_icons_sortants}}
   {{assign var=suffixe_icons value="2"}}
 {{else}}
@@ -39,31 +14,6 @@
 {{/if}}
 
 <script>
-     
-function loadActesNGAP(sejour_id){
-  var url = new Url("dPcabinet", "httpreq_vw_actes_ngap");
-  url.addParam("object_id", sejour_id);
-  url.addParam("object_class", "CSejour");
-  url.requestUpdate('listActesNGAP');
-}
-
-function loadTarifsSejour(sejour_id) {
-  var url = new Url("soins", "ajax_tarifs_sejour");
-  url.addParam("sejour_id", sejour_id);
-  url.requestUpdate("tarif");
-}
-
-function loadSuiviClinique(sejour_id) {
-  var url = new Url("soins", "ajax_vw_suivi_clinique");
-  url.addParam("sejour_id", sejour_id);
-  url.requestUpdate("suivi_clinique");
-}
-
-function loadDocuments(sejour_id) {
-  var url = new Url("dPhospi", "httpreq_documents_sejour");
-  url.addParam("sejour_id" , sejour_id);
-  url.requestUpdate("documents");
-}
 
 
 function popEtatSejour(sejour_id) {
@@ -71,20 +21,6 @@ function popEtatSejour(sejour_id) {
   url.addParam("sejour_id",sejour_id);
   url.pop(1000, 650, 'Etat du Séjour');
 }
-
-function reloadDiagnostic(sejour_id, modeDAS) {
-  var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
-  url.addParam("sejour_id", sejour_id);
-  url.addParam("modeDAS", modeDAS);
-  url.requestUpdate("cim");
-}
-
-{{if $isPrescriptionInstalled}}
-  function reloadPrescription(prescription_id){
-    Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null,'',null, false, '0');
-  }
-{{/if}}
-
 
 function addSejourIdToSession(sejour_id){
   var url = new Url("system", "httpreq_set_value_to_session");
@@ -94,171 +30,12 @@ function addSejourIdToSession(sejour_id){
   url.requestUpdate("systemMsg");
 }
 
-// Cet objet doit contenir des entrée clé/valeur dont la clé est l'ID du 
-// conteneur du volet et en valeur la fonction appelée pour charger ce volet.
-window.tabLoaders = {
-  "suivi_clinique": function(sejour_id, praticien_id, date){
-    if(!$("suivi_clinique").visible()) return;
-    
-    loadSuiviClinique(sejour_id);
-  },
-  "constantes-medicales": function(sejour_id, praticien_id, date){
-    if(!$("constantes-medicales").visible()) return;
-    
-    refreshConstantesMedicales("CSejour-"+sejour_id, 1);
-  },
-  
-    "dossier_traitement": function(sejour_id, praticien_id, date){
-      if(!$("dossier_traitement").visible()) return;
-      
-      PlanSoins.loadTraitement(sejour_id, date,'','administration');
-    },
-    
-  {{if "dPprescription"|module_active}}
-    "prescription_sejour": function(sejour_id, praticien_id, date){
-      if(!$("prescription_sejour").visible()) return;
-      
-      Prescription.reloadPrescSejour('', sejour_id, null, null, null, null, null, null, null, false, '0');
-    },
-  {{/if}}
-       
-  {{if $app->user_prefs.ccam_sejour == 1 }}
-    "Actes": function(sejour_id, praticien_id, date){
-      if($('listActesNGAP')){
-        loadActesNGAP(sejour_id);
-      }
-      if($('ccam')){
-        ActesCCAM.refreshList(sejour_id, praticien_id);
-      }
-      if($('cim')){
-        reloadDiagnostic(sejour_id, '1');
-      }
-      if ($('tarif')) {
-        loadTarifsSejour(sejour_id);
-      }
-      if ($('tarmed')) {
-        ActesTarmed.refreshListSejour(sejour_id, praticien_id);
-      }
-      if ($('caisse')) {
-        ActesCaisse.refreshListSejour(sejour_id, praticien_id);
-      }
-    },
-  {{/if}}
-  
-  {{if $isImedsInstalled}}
-    "Imeds": function(sejour_id, praticien_id, date){
-      loadResultLabo(sejour_id);
-    },
-  {{/if}}
-  
-  "documents": function(sejour_id, praticien_id, date){
-    loadDocuments(sejour_id);
-  },
-  
-  {{if $can_view_dossier_medical}}
-    "antecedents": function(sejour_id, praticien_id, date){
-      loadAntecedents(sejour_id);
-    },
-  {{/if}} 
-};
-
-function loadViewSejour(sejour_id, praticien_id, patient_id, date){
-  document.form_prescription.sejour_id.value = sejour_id;
-  
-  var loaders = $H(window.tabLoaders);
-  var activeTab = window.tab_sejour.activeContainer.id;
-  
-  // Chargement du volet actif en premier
-  window.tabLoaders[activeTab](sejour_id, praticien_id, date);
-  
-  // Chargement des autres
-  loaders.each(function(pair){
-    if (pair.key != activeTab && $(pair.key)) {
-      pair.value(sejour_id, praticien_id, date);
-    }
-  });
+function loadViewSejour(sejour_id, date){
+  var url = new Url('soins', 'ajax_vw_dossier_sejour');
+  url.addParam('sejour_id', sejour_id);
+  url.addParam('date', date);
+  url.requestUpdate('dossier_sejour');
 }
-
-{{if $can_view_dossier_medical}}
-function loadAntecedents(sejour_id){
-  var url = new Url("dPcabinet","httpreq_vw_antecedents");
-  url.addParam("sejour_id", sejour_id);
-  url.addParam("show_header", 1);
-  url.requestUpdate('antecedents');
-}
-{{/if}}
-
-function loadResultLabo(sejour_id) {
-  var url = new Url("dPImeds", "httpreq_vw_sejour_results");
-  url.addParam("sejour_id", sejour_id);
-  url.requestUpdate('Imeds');
-}
-
-// Cette fonction est dupliquée
-function updateNbTrans(sejour_id) {
-  var url = new Url("hospi", "ajax_count_transmissions");
-  url.addParam("sejour_id", sejour_id);
-  url.requestJSON(function(count)  {
-    Control.Tabs.setTabCount('dossier_suivi', count);
-  });
-}
-
-function loadSuivi(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
-  if(!sejour_id) return;
-
-  updateNbTrans(sejour_id);
-  var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
-  urlSuivi.addParam("sejour_id", sejour_id);
-  urlSuivi.addParam("user_id", user_id);
-  if (!Object.isUndefined(cible)) {
-    urlSuivi.addParam("cible", cible);
-  }
-  if (!Object.isUndefined(show_obs)) {
-    urlSuivi.addParam("_show_obs", show_obs);
-  }
-  if (!Object.isUndefined(show_trans)) {
-    urlSuivi.addParam("_show_trans", show_trans);
-  }
-  if (!Object.isUndefined(show_const)) {
-    urlSuivi.addParam("_show_const", show_const);
-  }
-  urlSuivi.requestUpdate("dossier_suivi");
-}
-
-function submitSuivi(oForm) {
-  sejour_id = oForm.sejour_id.value;
-  submitFormAjax(oForm, 'systemMsg', { onComplete: function() {
-    if($V(oForm.object_class)|| $V(oForm.libelle_ATC)){
-      // Refresh de la partie administration
-      if($('jour').visible()){
-        PlanSoins.loadTraitement(sejour_id,'{{$date}}','','administration');
-      }
-      // Refresh de la partie plan de soin
-      if($('semaine').visible()){
-        {{if $object->_ref_prescriptions}}
-        calculSoinSemaine('{{$date}}', '{{$object->_ref_prescriptions.sejour->_id}}');
-        {{/if}}
-      }
-    }
-    if ($('dossier_suivi').visible()) {
-      loadSuivi(sejour_id);
-    }
-    updateNbTrans(sejour_id);
-  } });
-}
-
-function refreshConstantesMedicales(context_guid, paginate, count) {
-  if(context_guid && context_guid.split("-")[1]) {
-    var url = new Url("patients", "httpreq_vw_constantes_medicales");
-    url.addParam("context_guid", context_guid);
-    url.addParam("paginate", paginate || 0);
-    if (count) {
-      url.addParam("count", count);
-    }
-    url.requestUpdate("constantes-medicales");
-  }
-}
-
 
 function printPatient(patient_id) {
   var url = new Url("dPpatients", "print_patient");
@@ -273,31 +50,9 @@ function updatePatientsListHeight() {
   scroller.setStyle({height: (vpd.height - pos[1] - 6)+'px'});
 }
 
-var tab_sejour = null;
-
 Main.add(function () {
   Calendar.regField(getForm("changeDate").date, null, {noView: true});
 
-  // Tab initialization
-  window.tab_sejour = Control.Tabs.create('tab-sejour', true);
-  
-  // Activation d'un onglet
-  {{if $_active_tab}}
-    tab_sejour.setActiveTab('{{$_active_tab}}');
-  {{/if}}
-  
-  {{if $app->user_prefs.ccam_sejour == 1 }}
-  var tab_actes = Control.Tabs.create('tab-actes', false);
-  {{/if}}
-
-  {{if $object->_id}}
-  loadViewSejour('{{$object->_id}}', null, '{{$object->patient_id}}', '{{$date}}');
-  {{/if}}
-  
-  {{if $isImedsInstalled}}
-    ImedsResultsWatcher.loadResults();
-  {{/if}}
-  
   updatePatientsListHeight();
   
   Event.observe(window, "resize", updatePatientsListHeight);
@@ -312,19 +67,6 @@ viewBilanService = function(service_id, date){
   url.addParam("service_id", service_id);
   url.addParam("date", date);
   url.popup(800,500,"Bilan par service");
-}
-
-printDossierComplet = function(){
-  var url = new Url("soins", "print_dossier_soins");
-  url.addParam("sejour_id", $V(document.form_prescription.sejour_id));
-  url.popup(850, 600, "Dossier complet");
-}
-
-printPlanSoins = function() {
-  var url = new Url("soins", "offline_plan_soins");
-  url.addParam("sejours_ids", $V(document.form_prescription.sejour_id));
-  url.addParam("mode_dupa", 1);
-  url.pop(1000, 600);
 }
 
 checkAnesth = function(oField){
@@ -577,14 +319,14 @@ savePref = function(form) {
                   {{assign var=sejour value=$curr_affectation->_ref_sejour}}
 
                   <a class="text" href="#1" 
-                     onclick="markAsSelected(this); addSejourIdToSession('{{$sejour->_id}}'); loadViewSejour('{{$sejour->_id}}', {{$sejour->praticien_id}}, {{$sejour->patient_id}}, '{{$date}}');">
+                     onclick="markAsSelected(this); addSejourIdToSession('{{$sejour->_id}}'); loadViewSejour('{{$sejour->_id}}',  '{{$date}}');">
                     <span class="{{if !$sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $sejour->septique}}septique{{/if}}" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
                       {{$sejour->_ref_patient->_view}}
                     </span>
                   </a>
                 </td>
 
-                <td style="padding: 1px;" onclick="markAsSelected(this); addSejourIdToSession('{{$sejour->_id}}'); loadViewSejour('{{$sejour->_id}}', {{$sejour->praticien_id}}, {{$sejour->patient_id}}, '{{$date}}'); tab_sejour.setActiveTab('Imeds')">
+                <td style="padding: 1px;" onclick="markAsSelected(this); addSejourIdToSession('{{$sejour->_id}}'); loadViewSejour('{{$sejour->_id}}', '{{$date}}'); tab_sejour.setActiveTab('Imeds')">
                   {{if $isImedsInstalled}}
                     {{mb_include module=Imeds template=inc_sejour_labo link="#"}}
                   {{/if}}
@@ -654,166 +396,7 @@ savePref = function(form) {
       </table>    
     </td>
     <td style="width:100%;">
-      <!-- Tab titles -->
-      <ul id="tab-sejour" class="control_tabs">
-        <li>
-          <button type="button" class="hslip notext compact" style="vertical-align: bottom;" onclick="$('left-column').toggle();" title="Afficher/cacher la colonne de gauche"></button>
-        </li>
-        <li><a href="#suivi_clinique" onmousedown="loadSuiviClinique(document.form_prescription.sejour_id.value)">{{tr}}soins.tab.suivi_clinique{{/tr}}</a></li>
-        <li onmousedown="refreshConstantesMedicales('CSejour-'+document.form_prescription.sejour_id.value, 1)"><a href="#constantes-medicales">{{tr}}soins.tab.surveillance{{/tr}}</a></li>
-        <li onmousedown="PlanSoins.loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')"><a href="#dossier_traitement">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
-        {{if "dPprescription"|module_active}}
-        <li onmousedown="$('prescription_sejour').update(''); Prescription.reloadPrescSejour('', document.form_prescription.sejour_id.value, null, null, null, null, null, '', null, false);">
-          <a href="#prescription_sejour">{{tr}}soins.tab.Prescription{{/tr}}</a>
-        </li>
-        {{/if}}
-        {{if $app->user_prefs.ccam_sejour == 1 }}
-          <li><a href="#Actes">{{tr}}CCodable-actes{{/tr}}</a></li>
-        {{/if}}
-        {{if $isImedsInstalled}}
-          <li><a href="#Imeds">{{tr}}soins.tab.Labo{{/tr}}</a></li>
-        {{/if}}
-        <li onmousedown=loadDocuments(document.form_prescription.sejour_id.value)><a href="#documents">{{tr}}soins.tab.Documents{{/tr}}</a></li>
-        {{if $can_view_dossier_medical}}
-        <li onmousedown="DossierMedical.reloadDossierSejour();"><a href="#antecedents">{{tr}}soins.tab.antecedent_and_treatment{{/tr}}</a></li>
-        {{/if}} 
-        <li style="float: right">
-          <button type="button" class="print" style="float: left" onclick="printPlanSoins()">Plan de soins</button>
-          <button type="button" class="button print" onclick="printDossierComplet();">{{tr}}soins.button.Dossier-soins{{/tr}}</button>
-        </li>
-      </ul>
-      
-      <hr class="control_tabs" />
-      
-      <!-- Tabs -->
-      <div id="suivi_clinique" style="display: none;">
-        <div class="small-info">
-          Veuillez sélectionner un séjour dans la liste de gauche pour afficher
-          ici toutes les informations sur le patient et le séjour.
-        </div>
-      </div>
-      
-      <div id="constantes-medicales" style="display: none;">
-        <div class="small-info">
-          Veuillez sélectionner un séjour dans la liste de gauche pour afficher
-          les constantes du patient concerné.
-        </div>
-      </div>
-      
-      <div id="dossier_traitement" style="display: none;">
-        <div class="small-info">
-          Veuillez sélectionner un séjour dans la liste de gauche pour afficher
-          le dossier de soin du patient concerné.
-        </div>
-      </div>
-      
-      {{if "dPprescription"|module_active}}
-      <div id="prescription_sejour" style="display: none;">
-        <div class="small-info">
-          Veuillez sélectionner un séjour dans la liste de gauche pour afficher
-          la prescription du patient concerné.
-        </div>
-      </div>
-      {{/if}}
-      
-      {{if $app->user_prefs.ccam_sejour == 1 }}
-      <div id="Actes" style="display: none;">
-        <table class="form">
-          <tr>
-            <td style="">
-              <ul id="tab-actes" class="control_tabs">
-                {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
-                  <li id="tarif" style="float: right;"></li>
-                  <li><a href="#one">Actes CCAM</a></li>
-                  <li><a href="#two">Actes NGAP</a></li>
-                  <li><a href="#three">Diagnostics</a></li>
-                {{/if}}
-                {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
-                  <li><a href="#tarmed_tab">TARMED</a></li>
-                  <li><a href="#caisse_tab">{{tr}}CPrestationCaisse{{/tr}}</a></li>
-                {{/if}}
-              </ul>
-              <hr class="control_tabs" />
-
-              <table class="form">
-                <tr id="one" style="display: none;">
-                  <td id="ccam">
-                    <div class="small-info">
-                      Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
-                      ajouter des actes CCAM au patient concerné.
-                    </div>
-                  </td>
-                </tr>
-                <tr id="two" style="display: none;">
-                  <td id="listActesNGAP">
-                    <div class="small-info">
-                      Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
-                      ajouter des actes NGAP au patient concerné.
-                    </div>
-                  </td>
-                </tr>
-                <tr id="three" style="display: none;">
-                  <td id="cim">
-                    <div class="small-info">
-                      Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
-                      ajouter des actes diagnostics CIM au patient concerné.
-                    </div>
-                  </td>
-                </tr>
-                {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
-                  {{mb_script module=tarmed script=actes}}
-                  <tr id="tarmed_tab" style="display: none;">
-                    <td id="tarmed">
-                      <div id="listActesTarmed">
-                        <div class="small-info">
-                          Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
-                          ajouter des actes Tarmed au patient concerné.
-                         </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr id="caisse_tab" style="display: none;">
-                    <td id="caisse">
-                      <div id="listActesCaisse">
-                        <div class="small-info">
-                          Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
-                          ajouter des actes caisses au patient concerné.
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                {{/if}}
-              </table>
-            </td>
-          </tr>
-        </table>
-      </div>
-      {{/if}}
-    
-      {{if $isImedsInstalled}}
-      <div id="Imeds" style="display: none;">
-        <div class="small-info">
-          Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
-          consulter les résultats de laboratoire disponibles pour le patient concerné.
-        </div>
-      </div>
-      {{/if}}
-      
-      <div id="documents" style="display: none;">
-        <div class="small-info">
-          Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
-          consulter et ajouter des documents pour le patient concerné.
-        </div>
-      </div>
-
-      {{if $can_view_dossier_medical}}
-      <div id="antecedents" style="display: none;">
-        <div class="small-info">
-          Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
-          consulter et modifier les antécédents du patient concerné.
-        </div>
-      </div>
-      {{/if}}
+      <div id="dossier_sejour"></div>
     </td>
   </tr>
 </table>
