@@ -783,4 +783,76 @@ abstract class CMbString {
     return str_replace(array("\r\n", "\n", "\r"), " &bull; ", $string);
 
   }
+
+  /**
+   * Convert a decimal number into a roman literal number
+   *
+   * @param integer $num The number to convert
+   *
+   * @return string
+   */
+  static function dec2roman($num) {
+    $vals = array(1000, 500, 100, 50, 10, 5, 1, 'M' => 1000, 'D' => 500, 'C' => 100, 'L' => 50, 'X' => 10, 'V' => 5, 'I' => 1);
+    $chars = array('M', 'D', 'C', 'L', 'X', 'V', 'I');
+
+    if (is_numeric($num) && ($num < 1 || $num > 3999)) {
+      return '';
+    }
+
+    $str = '';
+
+    for ($x = 0; $x < 7; $x++) {
+      $am = floor($num / $vals[$x]);
+      $num %= $vals[$x];
+
+      if ($am == 4) { // max is 3 of same
+        if (isset($lastChar) && (($lastChar == 'V' && $x == 6) || ($lastChar == 'L' && $x == 4) || ($lastChar == 'D' && $x == 2))) {
+          // trying to make 9__
+          $str = substr($str, 0, -1).$chars[$x].$chars[($x-2)]; // remove last
+        }
+        else { // 4__
+          $str .= $chars[$x].$chars[($x-1)];
+        }
+        $lastChar = $chars[$x];
+      }
+      elseif ($am > 0) {
+        for ($y = 0; $y < $am; $y++) { // add the chars
+          $str .= $chars[$x];
+        }
+        $lastChar = $chars[$x]; // save last for next loop
+      }
+
+    }
+    return $str;
+  }
+
+  /**
+   * Convert a roman literal number in a decimal number
+   *
+   * @param string $str The roman literal number to convert
+   *
+   * @return int
+   */
+  static function roman2dec($str) {
+    $vals = array(1000, 500, 100, 50, 10, 5, 1, 'M' => 1000, 'D' => 500, 'C' => 100, 'L' => 50, 'X' => 10, 'V' => 5, 'I' => 1);
+    $chars = array('M', 'D', 'C', 'L', 'X', 'V', 'I');
+
+    if (!is_numeric($str) && !preg_match('/[MDCLXVI]+/i', $str)) {
+      return 0;
+    }
+
+    $str = strtoupper($str);
+    $arr = str_split($str);
+    $lastVal = 0;
+    $num = 0;
+
+    foreach ($arr as $char) {
+      $num += $vals[$char];
+      if ($vals[$char] > $lastVal) { // trying to deduct (ex. XC -> 90)
+        $num -= (2 * $lastVal); // remove added before this loop AND deduct
+      }
+      $lastVal = $vals[$char];
+    }
+    return $num;
+  }
 }

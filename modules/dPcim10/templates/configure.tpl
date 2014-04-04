@@ -18,13 +18,11 @@ function startCIM10() {
   url.requestUpdate("cim10");
 }
 
-function diffCIM10Atih(del) {
+function importModifsCim10() {
   var url = new Url;
-  url.setModuleAction("dPcim10", "httpreq_diff_cim10_atih");
-  if (del) {
-    url.addParam('do_delete', true);
-  }
-  url.requestUpdate(del ? "cim10_remove" : "cim10_add");
+  url.setModuleAction("dPcim10", "ajax_import_modifs_cim10");
+
+  url.requestUpdate('cim10_import_modifs');
 }
 
 function modalImportFavoris() {
@@ -49,25 +47,18 @@ function modalImportFavoris() {
 <h2>Import de la base de données CIM10</h2>
 
 <table class="tbl">
+  <tr>
+    <th>{{tr}}Action{{/tr}}</th>
+    <th>{{tr}}Status{{/tr}}</th>
+  </tr>
 
-<tr>
-  <th>{{tr}}Action{{/tr}}</th>
-  <th>{{tr}}Status{{/tr}}</th>
-</tr>
-  
-<tr>
-  <td><button class="tick" onclick="startCIM10()">Importer la base de données CIM10</button></td>
-  <td id="cim10"></td>
-</tr>
+  <tr>
+    <td><button class="tick" onclick="startCIM10()">Importer la base de données CIM10</button></td>
+    <td id="cim10"></td>
+  </tr>
 
-<tr>
-  <td><button class="tick" onclick="diffCIM10Atih()">Ajouter les modifications de l'ATIH</button></td>
-  <td id="cim10_add"></td>
-</tr>
-
-<tr>
-  <td><button class="tick" onclick="diffCIM10Atih(true)">Supprimer les modifications de l'ATIH</button></td>
-  <td id="cim10_remove"></td>
-</tr>
-
+  <tr>
+    <td><button class="tick" onclick="importModifsCim10()">Importer les modifications de la CIM10</button></td>
+    <td id="cim10_import_modifs"></td>
+  </tr>
 </table>
