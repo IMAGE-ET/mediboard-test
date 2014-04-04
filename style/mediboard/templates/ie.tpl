@@ -16,6 +16,6 @@ window.onerror = function(){};
   <div class="deprecated-browser-warning">
     <img src="images/icons/error.png" />
     Vous utilisez le navigateur Internet Explorer 8, qui ne sera plus pris en charge par Mediboard à partir de la version de juillet 2014.
-    <a href="modules/system/public/ie8_deprecated_info.html" target="_blank" style="font-weight: bold;">En savoir plus</a>
+    <a href="#1" onclick="window.open('modules/system/public/ie8_deprecated_info.html', 'ie8information', 'width=800,height=600,toolbar=no,menubar=no,scrollbars=no,location=no')" style="font-weight: bold;">En savoir plus</a>
   </div>
 {{/if}}
