@@ -70,6 +70,8 @@ class CUserAgent extends CMbObject {
   }
 
   /**
+   * Create a User agent entry from a US string
+   *
    * @param string $ua_string User agent string
    *
    * @return self
