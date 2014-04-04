@@ -51,7 +51,7 @@
   <button type="button" class="print" onclick="printFiche('{{$dossier_anesth->_id}}');" style="float:left;">
     Imprimer la fiche
   </button>
-  <button type="button" class="edit" onclick="Consultation.editModal('{{$consult->_id}}');" style="float:left;">
+  <button type="button" class="edit" onclick="Consultation.editModalDossierAnesth('{{$consult->_id}}', '{{$dossier_anesth->_id}}', refreshFicheAnesth);" style="float:left;">
     Modifier le dossier d'anesthésie
   </button>
   <form name="addInterv-{{$operation->_id}}" action="?m={{$m}}" method="post" onsubmit="return refreshFicheAnesthOp(this);">

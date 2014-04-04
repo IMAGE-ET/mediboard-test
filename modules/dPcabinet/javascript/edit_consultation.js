@@ -57,7 +57,22 @@ Consultation = {
       height: "95%"
     });
   },
-  
+
+  editModalDossierAnesth: function (consult_id, dossier_anesth_id, callback) {
+    callback = callback || this.modalCallback;
+    var url = new Url("dPcabinet", "ajax_full_consult");
+    url.addParam("consult_id", consult_id);
+    url.addParam("dossier_anesth_id", dossier_anesth_id);
+    url.modal({
+      width: "95%",
+      height: "95%",
+      afterClose: callback
+    });
+  },
+
+  modalCallback: function() {
+    document.location.reload();
+  },
   useModal: function() {
     this.edit = this.editModal;
   }
