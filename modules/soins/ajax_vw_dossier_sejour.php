@@ -15,7 +15,7 @@ $popup        = CValue::get("popup", 0);
 $modal        = CValue::get("modal", 0);
 $operation_id = CValue::get("operation_id");
 $mode_pharma  = CValue::get("mode_pharma", 0);
-ml($date, "date");
+
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 CPrescription::$_load_lite = true;

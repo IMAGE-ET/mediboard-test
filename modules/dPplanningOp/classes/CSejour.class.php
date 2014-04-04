@@ -3038,7 +3038,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     if (!$date) {
       $date = CMbDT::date();
     }
-ml($date);
+
     $this->loadRefsOperations();
     foreach ($this->_ref_operations as $_operation) {
       $_operation->loadRefPlageOp();
