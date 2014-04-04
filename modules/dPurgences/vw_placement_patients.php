@@ -64,14 +64,17 @@ $where["sejour.sortie_reelle"] = "IS NULL";
 $where["sejour.annule"]        = " = '0'";
 $where["sejour.group_id"]      = "= '".CGroups::loadCurrent()->_id."'";
 
+$temp = "";
 if (CAppUI::conf("dPurgences create_affectation")) {
   $ljoin["affectation"] = "affectation.sejour_id = sejour.sejour_id";
   $ljoin["service"]     = "service.service_id = affectation.service_id";
   $ljoin["lit"]         = "lit.lit_id = affectation.lit_id";
   $ljoin["chambre"]     = "chambre.chambre_id = lit.chambre_id";
 
-  $where[]                     = "'$date' BETWEEN affectation.entree AND affectation.sortie";
-  $where[]                     = "service.urgence = '1' OR service.radiologie = '1'";
+  $where[]  = "'$date' BETWEEN affectation.entree AND affectation.sortie";
+  if (!CAppUI::conf("dPurgences view_rpu_uhcd")) {
+    $temp     = "service.urgence = '1' OR service.radiologie = '1'";
+  }
   $where["chambre.chambre_id"] = CSQLDataSource::prepareIn(array_keys($_chambres));
 }
 else {
@@ -86,10 +89,14 @@ if (!CAppUI::conf("dPurgences view_rpu_uhcd")) {
   $where["sejour.uhcd"] = " = '0'";
 }
 
+$where_temp = $where;
+if ($temp != "") {
+  $where_temp[] = $temp;
+}
 $sejours_chambre = array ();
 $sejour = new CSejour();
 /** @var CSejour[] $sejours */
-$sejours = $sejour->loadList($where, null, null, null, $ljoin, "entree");
+$sejours = $sejour->loadList($where_temp, null, null, null, $ljoin, "entree");
 
 if (!CAppUI::conf("dPurgences view_rpu_uhcd")) {
   $where["sejour.uhcd"] = " = '1'";
