@@ -14,7 +14,7 @@
  * Un modèle est associé à un utilisateur, une fonction ou un établissement.
  * Le document est une utilisation d'un modèle (référencé par modele_id)
  */
-class CCompteRendu extends CDocumentItem implements IIndexableObject{
+class CCompteRendu extends CDocumentItem implements IIndexableObject {
   // DB Table key
   public $compte_rendu_id;
 
@@ -362,22 +362,24 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject{
    * @return void
    */
   function loadContent($field_source = true) {
-
-    $content = $this->loadFwdRef("content_id", true);
     /** @var  CContentHTML $content */
+    $content = $this->loadFwdRef("content_id", true);
     $this->_ref_content = $content;
 
-    $this->_ref_content->content = preg_replace("/#body\s*{\s*padding/", "body { margin", $this->_ref_content->content);
-    $this->_ref_content->content = preg_replace("/#39/", "#039", $this->_ref_content->content);
+    $html = $content->content;
+    $html = preg_replace("/#body\s*{\s*padding/", "body { margin", $html);
+    $html = preg_replace("/#39/", "#039", $html);
 
     // Supprimer les sauts de pages dans les entêtes et pieds de pages
     if (in_array($this->type, array('header', 'footer'))) {
-      $this->_ref_content->content = str_ireplace('<hr class="pagebreak" />', '', $this->_ref_content->content);
+      $html = str_ireplace('<hr class="pagebreak" />', '', $html);
     }
     elseif ($this->object_id) {
-      $this->_ref_content->content = preg_replace('/(<div id="header">)(.*)(<hr class="pagebreak" \/>)(.*)(<div id="body")/s', '$1$2$4$5', $this->_ref_content->content);
-      $this->_ref_content->content = preg_replace('/(<div id="footer">)(.*)(<hr class="pagebreak" \/>)(.*)(<div id="body")/s', '$1$2$4$5', $this->_ref_content->content);
+      $html = preg_replace('/(<div id="header">)(.*)(<hr class="pagebreak" \/>)(.*)(<div id="body")/s', '$1$2$4$5', $html);
+      $html = preg_replace('/(<div id="footer">)(.*)(<hr class="pagebreak" \/>)(.*)(<div id="body")/s', '$1$2$4$5', $html);
     }
+
+    $content->content = $html;
 
     // Passage de la date de dernière modification du content dans la table compte_rendu
     if (!$content->last_modified && $content->_id) {
@@ -386,7 +388,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject{
     }
 
     if ($field_source) {
-      $this->_source = $this->_ref_content->content;
+      $this->_source = $content->content;
 
       // Suppression des commentaires, provenant souvent de Word
       $this->_source =  preg_replace("/<!--.+?-->/s", "", $this->_source);
@@ -1757,7 +1759,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject{
 
     $this->loadContent(false);
     $content              = $this->_ref_content;
-    $array["body"]        = $this->redesignBody($content->content);
+    $array["body"]        = utf8_encode($this->redesignBody($content->content));
     $date = $this->loadFirstLog()->date;
     if (!$date) {
       $date = CMbDT::dateTime();
@@ -1778,11 +1780,21 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject{
    *
    * @return string
    */
-  function redesignBody ($content) {
-    $xml     = new DOMDocument('1.0', 'iso-8859-1');
-    $content = str_replace("<", " <", $content);
-    $xml->loadXML("<div>".utf8_encode(CMbString::convertHTMLToXMLEntities(CHtmlToPDF::cleanWord($content)))."</div>");
-    $xpath   = new DOMXpath($xml);
+  function redesignBody($content) {
+    $content = strtr(
+      $content,
+      array(
+        "<"      => " <",
+        "&nbsp;" => " ",
+      )
+    );
+
+    $content = CHtmlToPDF::cleanWord($content);
+    $content = CMbString::convertHTMLToXMLEntities($content);
+
+    $xml   = new DOMDocument('1.0', 'iso-8859-1');
+    $xpath = new DOMXpath($xml);
+    $xml->loadXML("<?xml version=\"1.0\" encoding=\"iso-8859-1\" ?><div>$content</div>");
 
     // Test body id
     $elements = $xpath->query("//div[@id='body']");
@@ -1807,8 +1819,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject{
    * @return string
    */
   function getFieldPatient () {
-    $object = new $this->object_class();
-    $object->load($this->object_id);
+    $object = $this->loadTargetObject();
 
     if (!method_exists($this, "loadRelPatient")) {
       $object->loadRefPatient();

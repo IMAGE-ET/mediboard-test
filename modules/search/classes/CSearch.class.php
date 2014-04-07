@@ -153,9 +153,9 @@ class CSearch {
   function getDataTemporaryTable ($limit, $object_class = null) {
     $ds = CSQLDataSource::get("std");
     $query = ($object_class) ?
-      "SELECT * FROM `search_indexing` WHERE `object_class` = '$object_class' LIMIT $limit"
+      "SELECT * FROM `search_indexing` WHERE `object_class` = '$object_class' ORDER BY `type`, `search_indexing_id` LIMIT $limit"
       :
-      "SELECT * FROM `search_indexing` ORDER BY `object_class` ,`type` LIMIT $limit";
+      "SELECT * FROM `search_indexing` ORDER BY `object_class` ,`type`, `search_indexing_id` LIMIT $limit";
     return $ds->loadList($query);
   }
 
@@ -169,7 +169,7 @@ class CSearch {
   function deleteDataTemporaryTable ($array) {
     $ds = CSQLDataSource::get("std");
     $query = "DELETE FROM `search_indexing` WHERE `search_indexing_id` ". $ds->prepareIn($array);
-     return $ds->exec($query);
+    return $ds->exec($query);
   }
 
   /**
