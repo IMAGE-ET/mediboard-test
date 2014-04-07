@@ -20,7 +20,11 @@
     else {
       $V(form.rques, formAnt.libelle.value);
     }
-    return onSubmitFormAjax(form);
+    return onSubmitFormAjax(form, {
+      onComplete: function(){
+        $V(formAnt.codecim, '');
+        $V(formAnt.antecedent, 0);
+      }});
   }
 
   showCIMs10 = function(form){
