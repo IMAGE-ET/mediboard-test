@@ -6,7 +6,15 @@
 <tr>
   <td colspan="2" class="text">
     <strong>{{$activite->libelle}}</strong>
-    <hr />
+    <!-- Référence -->
+    {{assign var=reference value=$activite->_ref_reference}}
+    <div style="padding-left: 2em;">
+      {{mb_include module=system template=inc_field_view object=$reference prop=dedie}}
+      {{mb_include module=system template=inc_field_view object=$reference prop=non_dedie}}
+      {{mb_include module=system template=inc_field_view object=$reference prop=collectif}}
+      {{mb_include module=system template=inc_field_view object=$reference prop=pluripro}}
+      {{mb_include module=system template=inc_field_view object=$reference prop=appareillage}}
+    </div>
   </td>
 </tr>
 

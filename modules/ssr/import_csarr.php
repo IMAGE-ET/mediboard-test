@@ -16,6 +16,17 @@ $targetDir = "tmp/csarr";
 
 $targetTables    = "tmp/csarr/tables.sql";
 
+// Ajout des fichiers NX dans les tables
+$listTables = array(
+  "activite"             => "code_csarr_v2.txt",
+  "note_activite"        => "notes_code_csarr_v2.txt",
+  "geste_complementaire" => "geste_compl_csarr_v2.txt",
+  "modulateur"           => "modulateur_csarr_v2.txt",
+  "hierarchie"           => "hier_csarr_v2.txt",
+  "note_hierarchie"      => "note_hier_csarr_v2.txt",
+  "activite_reference"   => "acte_ref_csarr_v2.txt"
+);
+
 // Extract the SQL dump
 if (null == $nbFiles = CMbPath::extract($sourcePath, $targetDir)) {
   CAppUI::stepAjax("extraction-error", UI_MSG_ERROR, $sourcePath);
@@ -31,16 +42,6 @@ if (null == $count = $ds->queryDump($targetTables, true)) {
   CAppUI::stepAjax("ssr-import-tables-error", UI_MSG_ERROR, $msg);
 }
 CAppUI::stepAjax("ssr-import-tables-success", UI_MSG_OK, $count);
-
-// Ajout des fichiers NX dans les tables
-$listTables = array(
-  "activite"             => "code_csarr_v0.txt",
-  "note_activite"        => "notes_code_csarr_v0.txt",
-  "geste_complementaire" => "geste_compl_csarr_v0.txt",
-  "modulateur"           => "modulateur_csarr_v0.txt",
-  "hierarchie"           => "hier_csarr_v0.txt",
-  "note_hierarchie"      => "note_hier_csarr_v0.txt",
-);
 
 /**
  * Parse le fichier et remplit la table correspondante

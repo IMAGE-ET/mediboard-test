@@ -20,6 +20,7 @@ class CActiviteCsARR extends CCsARRObject {
   public $ordre;
 
   // Refs
+  public $_ref_reference;
   public $_ref_hierarchie;
   public $_ref_hierarchies;
   public $_ref_modulateurs;
@@ -130,6 +131,19 @@ class CActiviteCsARR extends CCsARRObject {
     $modulateurs = $modulateur->loadMatchingList();
     return $this->_ref_modulateurs = $modulateurs;
   }
+
+  /**
+   * Charge la reference asociée
+   *
+   * @return CReferenceActiviteCsARR[]
+   */
+  function loadRefReference() {
+    $reference = new CReferenceActiviteCsARR;
+    $reference->code = $this->code;
+    $reference->loadMatchingObject();
+    return $this->_ref_reference = $reference;
+  }
+
 
   /**
    * Chage les gestes complémentaires associés
@@ -257,6 +271,7 @@ class CActiviteCsARR extends CCsARRObject {
     if (!isset(self::$cached[$code])) {
       $activite = new self();
       $activite->load($code);
+      $activite->loadRefReference();
       $activite->loadRefsModulateurs();
       self::$cached[$code] = $activite;
     }

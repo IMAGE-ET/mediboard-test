@@ -14,7 +14,6 @@ CCanDo::checkRead();
 $code = CValue::get("code");
 $activite = CActiviteCsARR::get($code);
 $activite->loadRefsNotesActivites();
-$activite->loadRefsModulateurs();
 $activite->loadRefsGestesComplementaires();
 $activite->loadRefsHierarchies();
 
