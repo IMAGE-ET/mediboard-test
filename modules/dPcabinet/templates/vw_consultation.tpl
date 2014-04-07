@@ -21,6 +21,19 @@
   })
 </script>
 
+{{if $consult->_ref_consult_anesth->_id}}
+  {{assign var=operation value=$consult->_ref_consult_anesth->_ref_operation}}
+  {{if $operation->_id}}
+    <form name="addOpFrm" action="?m={{$m}}" method="post">
+      <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="m" value="dPcabinet" />
+      <input type="hidden" name="sejour_id" value="{{$operation->sejour_id}}" />
+      <input type="hidden" name="operation_id" value="{{$operation->_id}}" />
+    </form>
+  {{/if}}
+{{/if}}
+
 <table class="main">
   <tr>
     <td id="listConsult" style="width: 240px;"></td>
