@@ -1,7 +1,8 @@
 <script>
-  createDA = function(operation_id, consult_anesth_id, duplicate) {
+  createDA = function(operation_id, consult_anesth_id, duplicate, sejour_id) {
     var form = getForm("createDossierAnesth");
     $V(form.operation_id, operation_id);
+    $V(form.sejour_id, sejour_id);
     if (duplicate == 1) {
       $V(form.dosql, "do_duplicate_dossier_anesth_aed");
       $V(form.redirect, "1");
@@ -34,6 +35,7 @@
   <input type="hidden" name="_consult_anesth_id" value="" />
   <input type="hidden" name="consultation_id" value="{{$consult->_id}}" />
   <input type="hidden" name="operation_id" value=""/>
+  <input type="hidden" name="sejour_id" value=""/>
 </form>
 
 <table class="tbl">
@@ -159,7 +161,7 @@
             </tr>
           </table>
           {{if $smarty.foreach.consults_anesth.last && $ops_sans_dossier_anesth|@count != 0}}
-            <button class="down" id="didac_button_duplicate" onclick="createDA('{{$first_operation->_id}}','{{$consult_anesth->_id}}', 1);" style="position:relative;top:15px;">Dupliquer</button>
+            <button class="down" id="didac_button_duplicate" onclick="createDA('{{$first_operation->_id}}','{{$consult_anesth->_id}}', 1, '{{$first_operation->sejour_id}}');" style="position:relative;top:15px;">Dupliquer</button>
           {{/if}}
         </td>
         <td>
@@ -197,7 +199,7 @@
     {{foreach from=$ops_sans_dossier_anesth item=operation}}
       <tr>
         <td class="button">
-          <button class="link" onclick="createDA('{{$operation->_id}}', 0, 0);">Nouveau dossier vierge</button>
+          <button class="link" onclick="createDA('{{$operation->_id}}', 0, 0, '{{$operation->sejour_id}}');">Nouveau dossier vierge</button>
         </td>
         <td>
           <span onmouseover="ObjectTooltip.createEx(this, '{{$operation->_guid}}', null, { view_tarif: true })">

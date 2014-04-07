@@ -2101,7 +2101,14 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `examigs`
                 ADD `simplified_igs` INT(11);";
     $this->addQuery($query);
+    $this->makeRevision('2.31');
 
-    $this->mod_version = '2.31';
+    $query = "UPDATE consultation_anesth, operations
+          SET consultation_anesth.sejour_id = operations.sejour_id
+          WHERE consultation_anesth.sejour_id IS NULL
+          AND consultation_anesth.operation_id IS NOT NULL
+          AND operations.operation_id = consultation_anesth.operation_id";
+    $this->addQuery($query);
+    $this->mod_version = '2.32';
   }
 }
