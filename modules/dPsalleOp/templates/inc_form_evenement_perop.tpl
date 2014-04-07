@@ -14,7 +14,12 @@
   }
   saveIncident = function(formAnt){
     var form = getForm('addAntecedentIncident');
-    $V(form.rques, formAnt.libelle.value+' '+$V(formAnt.codecim));
+    if ($V(formAnt.codecim)) {
+      $V(form.rques, formAnt.libelle.value+' '+$V(formAnt.codecim));
+    }
+    else {
+      $V(form.rques, formAnt.libelle.value);
+    }
     return onSubmitFormAjax(form);
   }
 
