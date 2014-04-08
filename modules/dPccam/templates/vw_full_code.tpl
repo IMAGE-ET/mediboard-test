@@ -1,15 +1,4 @@
-{{* $Id$ *}}
-
-{{*
- * @package Mediboard
- * @subpackage dPccam
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
-
-<script type="text/javascript">
-
+<script>
 function viewCodeComplet(){
   var oForm = document.findCode;
   $V(oForm._codes_ccam, "{{$code->code}}");
@@ -32,7 +21,6 @@ Main.add(function () {
     select: "code"
   });
 });
-  
 </script>
 
 <table class="fullCode">
@@ -88,7 +76,7 @@ Main.add(function () {
                   {{/if}}
 
                   {{if $dialog && !$hideSelect}}
-                    <button class="tick" type="button" onclick="selectCode('{{$codeacte}}','{{$tarif}}')">Sélectionner ce code</button>
+                    <button class="tick" type="button" onclick="selectCode('{{$codeacte}}','{{$code->_default}}')">Sélectionner ce code</button>
                   {{/if}}
                 </td>
               </tr>
@@ -98,21 +86,21 @@ Main.add(function () {
         </tr>
         
         <tr>
-          <td><strong>Description</strong><br />{{$libelle}}</td>
+          <td><strong>Description</strong><br />{{$code->libelleLong}}</td>
         </tr>
 
-        {{foreach from=$rq item=_rq}}
-        <tr>
-          <td><em>{{$_rq|nl2br}}</em></td>
-        </tr>
+        {{foreach from=$code->remarques item=_rq}}
+          <tr>
+            <td><em>{{$_rq|nl2br}}</em></td>
+          </tr>
         {{/foreach}}
  
-        {{if $act|@count}}
+        {{if $code->activites|@count}}
         <tr>
           <td><strong>Activités associées</strong></td>
         </tr>
         
-        {{foreach from=$act item=_act}}
+        {{foreach from=$code->activites item=_act}}
         <tr>
           <td style="vertical-align: top; width: 100%">
             <ul>
@@ -148,106 +136,98 @@ Main.add(function () {
         {{/foreach}}
         {{/if}}
         
-        {{if $codeproc}}
+        {{if $code->procedure.code}}
         <tr>
           <td><strong>Procédure associée</strong></td>
         </tr>
         
         <tr>
           <td>
-            <a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;_codes_ccam={{$codeproc}}"><strong>{{$codeproc}}</strong></a>
+            <a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;_codes_ccam={{$code->procedure.code}}"><strong>{{$code->procedure.code}}</strong></a>
             <br />
-            {{$textproc}}
+            {{$code->procedure.texte}}
           </td>
         </tr>
         {{/if}}
         
-        {{if $remboursement !== null}}
-        <tr>
-          <td><strong>Remboursement</strong></td>
-        </tr>
-        
-        <tr>
-          <td>{{tr}}CCodeCCAM.remboursement.{{$remboursement}}{{/tr}}</td>
-        </tr>
+        {{if $code->remboursement !== null}}
+          <tr>
+            <td><strong>Remboursement</strong></td>
+          </tr>
+          <tr>
+            <td>{{tr}}CCodeCCAM.remboursement.{{$code->remboursement}}{{/tr}}</td>
+          </tr>
         {{/if}}
         
-        {{if $forfait !== null}}
-        <tr>
-          <td><strong>Forfait spécifique</strong></td>
-        </tr>
-        
-        <tr>
-          <td>{{tr}}CCodeCCAM.remboursement.{{$forfait}}{{/tr}}</td>
-        </tr>
+        {{if $code->forfait !== null}}
+          <tr>
+            <td><strong>Forfait spécifique</strong></td>
+          </tr>
+          <tr>
+            <td>{{tr}}CCodeCCAM.remboursement.{{$code->forfait}}{{/tr}}</td>
+          </tr>
         {{/if}}
       </table>
-
     </td>
-    <td class="pane">
 
+    <td class="pane">
       <table>
         <tr>
-          <th class="category" colspan="2">Place dans la CCAM {{$place}}</th>
+          <th class="category" colspan="2">Place dans la CCAM {{$code->place}}</th>
         </tr>
         
-        {{foreach from=$chap item=_chap}}
-        <tr id="chap{{$_chap.rang}}-trigger">
-          <th style="text-align:left">{{$_chap.rang}}</th>
-          <td>{{$_chap.nom}}<br /></td>
-        </tr>
-        <tbody class="chapEffect" id="chap{{$_chap.rang}}">
-          <tr>
-            <td></td>
-            <td>
-              <em>
-                {{if $_chap.rq}}
-                {{$_chap.rq|nl2br}}
-                {{else}}
-                * Pas d'informations
-                {{/if}}
-              </em>
-            </td>
+        {{foreach from=$code->chapitres item=_chap}}
+          <tr id="chap{{$_chap.rang}}-trigger">
+            <th style="text-align:left">{{$_chap.rang}}</th>
+            <td>{{$_chap.nom}}<br /></td>
           </tr>
-        </tbody>
+          <tbody class="chapEffect" id="chap{{$_chap.rang}}">
+            <tr>
+              <td></td>
+              <td>
+                <em>
+                  {{if $_chap.rq}}
+                  {{$_chap.rq|nl2br}}
+                  {{else}}
+                  * Pas d'informations
+                  {{/if}}
+                </em>
+              </td>
+            </tr>
+          </tbody>
         {{/foreach}}
-        
       </table>
-
     </td>
   </tr>
   <tr>
     <td class="pane">
-
       <table>
         <tr>
-          <th class="category" colspan="2">Actes associés ({{$asso|@count}})</th>
+          <th class="category" colspan="2">Actes associés ({{$code->assos|@count}})</th>
         </tr>
         
-        {{foreach name=associations from=$asso item=_asso}}
-        <tr>
-          <th><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;_codes_ccam={{$_asso.code}}">{{$_asso.code}}</a></th>
-          <td>{{$_asso.texte}}</td>
-        </tr>
+        {{foreach name=associations from=$code->assos item=_asso}}
+          <tr>
+            <th><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;_codes_ccam={{$_asso.code}}">{{$_asso.code}}</a></th>
+            <td>{{$_asso.texte}}</td>
+          </tr>
         {{/foreach}}
       </table>
-
     </td>
-    <td class="pane">
 
+    <td class="pane">
       <table>
         <tr>
-          <th class="category" colspan="2">Actes incompatibles ({{$incomp|@count}})</th>
+          <th class="category" colspan="2">Actes incompatibles ({{$code->incomps|@count}})</th>
         </tr>
         
-        {{foreach name=incompatibilites from=$incomp item=_incomp}}
-        <tr>
-          <th><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;_codes_ccam={{$_incomp.code}}">{{$_incomp.code}}</a></th>
-          <td>{{$_incomp.texte}}</td>
-        </tr>
+        {{foreach name=incompatibilites from=$code->incomps item=_incomp}}
+          <tr>
+            <th><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;_codes_ccam={{$_incomp.code}}">{{$_incomp.code}}</a></th>
+            <td>{{$_incomp.texte}}</td>
+          </tr>
         {{/foreach}}
       </table>
-
     </td>
   </tr>
 </table>
