@@ -625,7 +625,6 @@ class CConsultation extends CFacturable implements IPatientRelated {
     $secteur2_CCAM    = 0;
     $secteur2_TARMED  = 0;
     $secteur2_CAISSE  = 0;
-    $secteur2_divers  = 0;
     $count_actes = 0;
 
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
@@ -657,17 +656,9 @@ class CConsultation extends CFacturable implements IPatientRelated {
       $secteur2_CCAM += $acteCCAM->montant_depassement;
     }
 
-    // Chargement des actes CCAM
-    $this->loadRefsFraisDivers();
-    foreach ($this->_ref_frais_divers as $frais) {
-      $count_actes++;
-      $secteur2_divers += $frais->montant_base;
-      $secteur2_divers += $frais->montant_depassement;
-    }
-
     // Remplissage des montant de la consultation
     $this->secteur1 = $secteur1_NGAP + $secteur1_CCAM + $secteur1_TARMED + $secteur1_CAISSE;
-    $this->secteur2 = $secteur2_NGAP + $secteur2_CCAM + $secteur2_TARMED + $secteur2_CAISSE + $secteur2_divers;
+    $this->secteur2 = $secteur2_NGAP + $secteur2_CCAM + $secteur2_TARMED + $secteur2_CAISSE;
 
     if ($secteur1_NGAP == 0 && $secteur1_CCAM == 0 && $secteur2_NGAP==0 && $secteur2_CCAM ==0) {
       $this->du_patient = $this->secteur1 + $this->secteur2 +  $this->secteur3 + $this->du_tva;

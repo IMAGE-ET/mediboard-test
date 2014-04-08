@@ -1,5 +1,4 @@
 <?php
-
 /**
  * $Id$
  *
@@ -226,11 +225,14 @@ class CActe extends CMbMetaObject {
     if ($this->_preserve_montant || $this->_forwardRefMerging) {
       return null;
     }
-    if ($this->_class != "CFraisDivers" || $this->num_facture == 1) {
+    if($this->num_facture == 1) {
       /** @var CCodable $object */
       $object = new $this->object_class;
       $object->load($this->object_id);
-
+      if ($this->_class == "CFraisDivers" && $this->object_class == "CConsultation") {
+        $object->secteur3 += $this->montant_base;
+        $object->secteur3 += $this->montant_depassement;
+      }
       // Permet de mettre a jour le montant dans le cas d'une consultation
       return $object->doUpdateMontants();
     }
