@@ -715,7 +715,7 @@ class CFacture extends CMbObject {
       // Chargement des actes de consultations
       foreach ($this->_ref_consults as $_consult) {
         $_consult->loadRefPlageConsult();
-        $_consult->loadRefsActes($this->numero);
+        $_consult->loadRefsActes($this->numero, 1);
         $_consult->loadExtCodesCCAM();
         $this->rangeActes($_consult);
       }
@@ -753,10 +753,10 @@ class CFacture extends CMbObject {
         /** @var CSejour $sejour*/
         $sejour->loadRefsOperations();
         foreach ($sejour->_ref_operations as $op) {
-          $op->loadRefsActes($this->numero);
+          $op->loadRefsActes($this->numero, 1);
           $this->rangeActes($op);
         }
-        $sejour->loadRefsActes($this->numero);
+        $sejour->loadRefsActes($this->numero, 1);
         $this->rangeActes($sejour);
       }
     }
@@ -1012,7 +1012,7 @@ class CFacture extends CMbObject {
     $this->loadRefsConsultation();
     foreach ($this->_ref_consults as $consult) {
       $consult->loadRefsFraisDivers($this->numero);
-      $consult->loadRefsActes($this->numero);
+      $consult->loadRefsActes($this->numero, 1);
       foreach ($consult->_ref_frais_divers as $_frais) {
         $consult->_ref_actes[] = $_frais;
       }

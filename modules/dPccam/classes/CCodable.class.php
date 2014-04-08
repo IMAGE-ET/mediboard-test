@@ -439,14 +439,15 @@ class CCodable extends CMbObject {
    * Charge tous les actes du codable, quelque soit leur type
    *
    * @param int $num_facture numéro de la facture concernée
+   * @param int $facturable  actes facturables
    *
    * @return CActe[] collection d'actes concrets
    */
-  function loadRefsActes($num_facture = 1) {
+  function loadRefsActes($num_facture = 1, $facturable = null) {
     $this->_ref_actes = array();
 
-    $this->loadRefsActesCCAM();
-    $this->loadRefsActesNGAP();
+    $this->loadRefsActesCCAM($facturable);
+    $this->loadRefsActesNGAP($facturable);
     $this->loadRefsActesTarmed($num_facture);
     $this->loadRefsActesCaisse($num_facture);
 
@@ -478,10 +479,12 @@ class CCodable extends CMbObject {
 
   /**
    * Charge les actes CCAM codés
-   * 
+   *
+   * @param int $facturable actes facturables
+   *
    * @return CActeCCAM[]
    */
-  function loadRefsActesCCAM() {
+  function loadRefsActesCCAM($facturable = null) {
     if ($this->_ref_actes_ccam) {
       return $this->_ref_actes_ccam;
     }
@@ -497,6 +500,14 @@ class CCodable extends CMbObject {
       return $this->_ref_actes_ccam;
     }
 
+    if ($facturable == 1) {
+      foreach ($this->_ref_actes_ccam as $_acte_ccam) {
+        if (!$_acte_ccam->facturable) {
+          unset($this->_ref_actes_ccam[$_acte_ccam->_id]);
+        }
+      }
+    }
+
     $this->_temp_ccam = array();
     foreach ($this->_ref_actes_ccam as $_acte_ccam) {
       $this->_temp_ccam[] = $_acte_ccam->makeFullCode();
@@ -508,10 +519,12 @@ class CCodable extends CMbObject {
 
   /**
    * Charge les actes NGAP codés
-   * 
+   *
+   * @param int $facturable actes facturables
+   *
    * @return CActeNGAP[]
    */
-  function loadRefsActesNGAP() {
+  function loadRefsActesNGAP($facturable = null) {
     /** ajout d'un paramètre d'ordre à passer, ici "lettre_cle" qui vaut 0 ou 1
      * la valeur 1 étant pour les actes principaux et O pour les majorations
      * on souhaite que les actes principaux soient proritaires( donc '1' avant '0')
@@ -520,6 +533,13 @@ class CCodable extends CMbObject {
       return;
     }
 
+    if ($facturable == 1) {
+      foreach ($this->_ref_actes_ngap as $_acte_ngap) {
+        if (!$_acte_ngap->facturable) {
+          unset($this->_ref_actes_ngap[$_acte_ngap->_id]);
+        }
+      }
+    }
     $this->_codes_ngap = array();
     foreach ($this->_ref_actes_ngap as $_acte_ngap) {
       /** @var CActeNGAP $_acte_ngap */
