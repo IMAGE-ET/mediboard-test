@@ -796,15 +796,19 @@ Main.add( function(){
     {{mb_label object=$sejour field="service_id"}}
   </th>
   <td colspan="3">
-    <select name="service_id" class="{{$sejour->_props.service_id}}" style="width: 15em"
-      onchange="Value.synchronize(this, 'editSejour');">
-      <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-      {{foreach from=$listServices item=_service}}
-      <option value="{{$_service->_id}}" {{if $sejour->service_id == $_service->_id}} selected="selected" {{/if}}>
-        {{$_service->_view}}
-      </option>
-      {{/foreach}}
-    </select>
+    {{if $sejour->_id && $sejour->_ref_curr_affectation->_id}}
+      {{$sejour->_ref_curr_affectation->_ref_service }} - {{$sejour->_ref_curr_affectation}}
+    {{else}}
+      <select name="service_id" class="{{$sejour->_props.service_id}}" style="width: 15em"
+        onchange="Value.synchronize(this, 'editSejour');">
+        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+        {{foreach from=$listServices item=_service}}
+        <option value="{{$_service->_id}}" {{if $sejour->service_id == $_service->_id}} selected="selected" {{/if}}>
+          {{$_service->_view}}
+        </option>
+        {{/foreach}}
+      </select>
+    {{/if}}
   </td>
 </tr>
 
