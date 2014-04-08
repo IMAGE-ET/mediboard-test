@@ -318,6 +318,7 @@ $locales['CUser-_ldap_linked-court'] = 'LDAP';
 $locales['CUser-_ldap_linked-desc'] = 'Utilisateur associé au LDAP';
 $locales['CUser-back-'] = 'Utilisateurs';
 $locales['CUser_user-robot'] = 'Cet utilisateur est un robot';
+$locales['E-learning'] = 'E-learning';
 $locales['Holidays'] = 'Congés';
 $locales['Show/Hide'] = 'Montrer/Masquer';
 $locales['Stats.none'] = 'Aucune statistique disponible';
