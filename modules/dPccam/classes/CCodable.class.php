@@ -125,6 +125,14 @@ class CCodable extends CMbObject {
     }
     $this->_tokens_ngap = "";
 
+    // Suppression des frais divers
+    $this->loadRefsFraisDivers();
+    foreach ($this->_ref_frais_divers as $acte) {
+      if ($msg = $acte->delete()) {
+        return $msg;
+      }
+    }
+
     if (CModule::getActive("tarmed")) {
       if (!$this->_delete_actes_type || $this->_delete_actes_type == "tarmed") {
         // Suppression des anciens actes Tarmed
@@ -766,14 +774,8 @@ class CCodable extends CMbObject {
       return $msg;
     }
 
-    //@todo: why not use $this->_old ?
-    $oldObject = new $this->_class;
-    if ($this->_id) {
-      $oldObject->load($this->_id);
-    }
-
     if (!$this->_forwardRefMerging && !$this->_merging && CAppUI::conf("dPccam CCodable use_getMaxCodagesActes")) {
-      if ($this->codes_ccam != $oldObject->codes_ccam) {
+      if ($this->codes_ccam != $this->_old->codes_ccam) {
         if ($msg = $this->getMaxCodagesActes()) {
           return $msg;
         }
