@@ -58,6 +58,7 @@ if ($sejour_id) {
   $sejour->loadRefServiceMutation();
   $sejour->loadRefsAffectations();
   $sejour->loadRefsOperations();
+  $sejour->loadRefCurrAffectation()->loadRefService();
 
   foreach ($sejour->_ref_operations as $operation) {
     $operation->loadRefPlageOp();

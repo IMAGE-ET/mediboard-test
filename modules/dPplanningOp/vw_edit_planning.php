@@ -97,6 +97,7 @@ if ($op->_id) {
 
   $sejour =& $op->_ref_sejour;
   $sejour->loadRefsFwd();
+  $sejour->loadRefCurrAffectation()->loadRefService();
   $sejour->_ref_praticien->canDo();
   $sejour->makeCancelAlerts($op->_id);
   $chir =& $op->_ref_chir;
@@ -268,4 +269,5 @@ $smarty->assign("blocages_lit"          , $blocages_lit);
 
 $smarty->assign("exchange_source"       , $exchange_source);
 
+$smarty->display("vw_edit_planning.tpl");
 $smarty->display("vw_edit_planning.tpl");
