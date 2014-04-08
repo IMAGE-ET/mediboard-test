@@ -97,6 +97,7 @@ if ($op->_id) {
 
   $sejour =& $op->_ref_sejour;
   $sejour->loadRefsFwd();
+  $sejour->loadRefCurrAffectation()->loadRefService();
   $sejour->_ref_praticien->canDo();
   $sejour->makeCancelAlerts($op->_id);
   $chir =& $op->_ref_chir;
