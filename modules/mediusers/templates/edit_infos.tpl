@@ -3,23 +3,37 @@
 
 <script type="text/javascript">
 
-Main.add(function () {
-  Control.Tabs.create('tab_edit_mediuser', true).activeLink.onmouseup();
-});
+  Main.add(function () {
+    Control.Tabs.create("tab_edit_mediuser", true, {
+      afterChange: function (container) {
+        switch (container.id) {
+          case "edit-preferences":
+            Preferences.refresh('{{$user->_id}}');
+            break;
+          case "edit-holidays":
+            PlageConge.refresh();
+            break;
+          case "edit-astreintes":
+            PlageAstreinte.refreshList('edit-astreintes', '{{$user->_id}}');
+            break;
+          case "edit-factureox":
+            factureUser();
+            break;
+          case "support" :
+          case "didac" :
+          case "edit-mediuser":
+          default :
+            break;
+        }
+      }
+    });
+  });
 </script>
 
 <ul id="tab_edit_mediuser" class="control_tabs">
-  <li>
-    <a href="#edit-mediuser" onmouseup="">
-      {{tr}}Account{{/tr}}
-    </a>
-  </li>
+  <li><a href="#edit-mediuser">{{tr}}Account{{/tr}}</a></li>
 
-  <li>
-  	<a href="#edit-preferences" onmouseup="Preferences.refresh('{{$user->_id}}')">
-  		{{tr}}Preferences{{/tr}}
-		</a>
-	</li>
+  <li><a href="#edit-preferences">{{tr}}Preferences{{/tr}}</a></li>
 
   {{if @$modules.dPpersonnel->_can->read}}
     <li>
@@ -31,19 +45,13 @@ Main.add(function () {
           PlageConge.edit('','{{$user->_id}}');
         }
       </script>
-      <a href="#edit-holidays" onmouseup="PlageConge.refresh()">
-        {{tr}}Holidays{{/tr}}
-      </a>
+      <a href="#edit-holidays">{{tr}}Holidays{{/tr}}</a>
     </li>
   {{/if}}
 
   {{if "astreintes"|module_active}}
-    <li>
-      {{mb_script module=astreintes script=plage}}
-      <a href="#edit-astreintes" onmouseup="PlageAstreinte.refreshList('edit-astreintes','{{$user->_id}}');">
-        {{tr}}CPlageAstreinte{{/tr}}
-      </a>
-    </li>
+    {{mb_script module=astreintes script=plage}}
+    <li><a href="#edit-astreintes">{{tr}}CPlageAstreinte{{/tr}}</a></li>
   {{/if}}
 
   {{if "oxFacturation"|module_active}}
@@ -53,18 +61,16 @@ Main.add(function () {
         url.requestUpdate('edit-factureox');
       }
     </script>
-    <li>
-      <a href="#edit-factureox" onmouseup="factureUser();">{{tr}}CFactureOX{{/tr}}</a>
-    </li>
+    <li><a href="#edit-factureox" >{{tr}}CFactureOX{{/tr}}</a></li>
   {{/if}}
 
   {{if "ecap"|module_active}}
-    <li>
-      {{mb_script module=astreintes script=plage}}
-      <a href="#support" onmouseup="">
-        {{tr}}Support{{/tr}}
-        </a>
-    </li>
+    {{mb_script module=astreintes script=plage}}
+    <li><a href="#support">{{tr}}Support{{/tr}}</a></li>
+  {{/if}}
+
+  {{if "didacticiel"|module_active}}
+    <li><a href="#didac">{{tr}}E-learning{{/tr}}</a></li>
   {{/if}}
 
 </ul>
@@ -119,5 +125,11 @@ Main.add(function () {
 
 {{if "oxFacturation"|module_active}}
   <div id="edit-factureox" style="display: none;">
+  </div>
+{{/if}}
+
+{{if "didacticiel"|module_active}}
+  <div id="didac" style="display: none;">
+    {{mb_include module=didacticiel template=vw_didacticiels}}
   </div>
 {{/if}}
