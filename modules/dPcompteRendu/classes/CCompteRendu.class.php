@@ -1798,6 +1798,12 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
     // Test body id
     $elements = $xpath->query("//div[@id='body']");
+    $style    = $xpath->query("//style|//script");
+
+    foreach ($style as $_style) {
+      $_style->parentNode->removeChild($_style);
+    }
+    $xml->saveXML();
 
     if ($elements->length > 0 ) {
       $xml = $elements->item(0);

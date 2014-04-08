@@ -300,11 +300,13 @@ class CSearch {
   }
 
   /**
-   * simple search wich an operator and words
+   * simple search with an operator and words
    *
-   * @param string $operator    'And' or 'Or' default : 'Or'
-   * @param string $words       data
-   * @param array  $arrayFilter the array of users where PERM_READ
+   * @param string  $operator    'And' or 'Or' default : 'Or'
+   * @param string  $words       data
+   * @param array   $arrayFilter the array of users where PERM_READ
+   * @param integer $start       the begining of the paging
+   * @param integer $limit       the interval of the paging
    *
    * @return \Elastica\ResultSet
    */
