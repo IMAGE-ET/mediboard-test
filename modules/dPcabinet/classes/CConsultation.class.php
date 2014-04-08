@@ -642,7 +642,7 @@ class CConsultation extends CFacturable implements IPatientRelated {
     }
 
     // Chargement des actes NGAP
-    $this->loadRefsActesNGAP();
+    $this->loadRefsActesNGAP(1);
     foreach ($this->_ref_actes_ngap as $acteNGAP) {
       $count_actes++;
       $secteur1_NGAP += $acteNGAP->montant_base;
@@ -650,7 +650,7 @@ class CConsultation extends CFacturable implements IPatientRelated {
     }
 
     // Chargement des actes CCAM
-    $this->loadRefsActesCCAM();
+    $this->loadRefsActesCCAM(1);
     foreach ($this->_ref_actes_ccam as $acteCCAM) {
       $count_actes++;
       $secteur1_CCAM += $acteCCAM->montant_base;

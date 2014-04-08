@@ -98,6 +98,7 @@ foreach ($prats as $_chir_id => $_prat) {
         }
         $query .= "a.object_class = '$_class'
           AND a.executant_id = '$_chir_id'
+          AND a.facturable = '1'
           AND DATE(a.execution) BETWEEN '$debut' AND '$fin';";
         $result = $ds->loadHash($query);
 

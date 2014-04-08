@@ -31,6 +31,7 @@ $ljoin = array();
 $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
 $ljoin["acte_ccam"] = "consultation.consultation_id = acte_ccam.object_id AND acte_ccam.object_class = 'CConsultation'";
 $where = array();
+$where[] = "acte_ccam.facturable = '1'";
 $where[] = "acte_ccam.execution BETWEEN '$date_min' AND '$date_max'";
 $where[] = "acte_ccam.executant_id = '$_prat_id'";
 $sejour = new CSejour();
@@ -40,13 +41,14 @@ $ljoin = array();
 $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
 $ljoin["acte_ngap"] = "consultation.consultation_id = acte_ngap.object_id AND acte_ngap.object_class = 'CConsultation'";
 $where2 = array();
+$where2[] = "acte_ngap.facturable = '1'";
 $where2[] = "acte_ngap.execution BETWEEN '$date_min' AND '$date_max'";
 $where2[] = "acte_ngap.executant_id = '$_prat_id'";
 $sejour = new CSejour();
 $sejours_ngap = $sejour->loadList($where2, null, null, "sejour_id", $ljoin);
-foreach ($sejours_ngap as $key => $_sejour) {
-  if (!isset($sejours[$key])) {
-    $sejours[$key] = $_sejour;
+foreach ($sejours_ngap as $_sejour_ngap) {
+  if (!isset($sejours[$_sejour_ngap->_id])) {
+    $sejours[$_sejour_ngap->_id] = $_sejour_ngap;
   }
 }
 
@@ -55,9 +57,9 @@ $ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";
 $ljoin["acte_ccam"] = "operations.operation_id = acte_ccam.object_id AND acte_ccam.object_class = 'COperation'";
 $where["operations.annulee"] = " = '0'";
 $sejours_consult = $sejour->loadList($where, null, null, "sejour_id", $ljoin);
-foreach ($sejours_consult as $key => $_sejour) {
-  if (!isset($sejours[$key])) {
-    $sejours[$key] = $_sejour;
+foreach ($sejours_consult as $_sejour_consult) {
+  if (!isset($sejours[$_sejour_consult->_id])) {
+    $sejours[$_sejour_consult->_id] = $_sejour_consult;
   }
 }
 
@@ -66,33 +68,33 @@ $ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";
 $ljoin["acte_ngap"] = "operations.operation_id = acte_ngap.object_id AND acte_ngap.object_class = 'COperation'";
 $where2["operations.annulee"] = " = '0'";
 $sejours_consult_ngap = $sejour->loadList($where2, null, null, "sejour_id", $ljoin);
-foreach ($sejours_consult_ngap as $key => $_sejour) {
-  if (!isset($sejours[$key])) {
-    $sejours[$key] = $_sejour;
+foreach ($sejours_consult_ngap as $_sejour_consult_ngap) {
+  if (!isset($sejours[$_sejour_consult_ngap->_id])) {
+    $sejours[$_sejour_consult_ngap->_id] = $_sejour_consult_ngap;
   }
 }
 
-foreach ($sejours as $key => $sejour) {
+foreach ($sejours as $sejour) {
   /* @var CSejour $sejour*/
   $sejour->loadRefPatient();
   $sejour->loadRefsOperations();
   $sejour->loadRefsConsultations();
-  $sejour->loadRefsActes();
+  $sejour->loadRefsActes(null, 1);
   $sejour->loadRefsFactureEtablissement();
-  foreach ($sejour->_ref_operations as $keyop => $op) {
-    $op->loadRefsActes();
+  foreach ($sejour->_ref_operations as $op) {
+    $op->loadRefsActes(null, 1);
     if (!count($op->_ref_actes)) {
-      unset($sejour->_ref_operations[$keyop]);
+      unset($sejour->_ref_operations[$op->_id]);
     }
   }
-  foreach ($sejour->_ref_consultations as $keyop => $consult) {
-    $consult->loadRefsActes();
+  foreach ($sejour->_ref_consultations as $consult) {
+    $consult->loadRefsActes(null, 1);
     if (!count($consult->_ref_actes)) {
-      unset($sejour->_ref_consultations[$keyop]);
+      unset($sejour->_ref_consultations[$consult->_id]);
     }
   }
   if (!count($sejour->_ref_actes) && !count($sejour->_ref_operations) && !count($sejour->_ref_consultations)) {
-    unset($sejours[$key]);
+    unset($sejours[$sejour->_id]);
   }
   else {
     $sejour->loadRefPatient();
