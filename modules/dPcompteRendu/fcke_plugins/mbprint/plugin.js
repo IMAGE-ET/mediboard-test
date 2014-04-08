@@ -18,22 +18,26 @@ CKEDITOR.plugins.add('mbprint',{
 
 function mbprint_onclick(editor) {
   editor.getCommand('mbprint').setState(CKEDITOR.TRISTATE_DISABLED);
-  var printDoc = function() {
-    if ( CKEDITOR.env.gecko )
-      editor.window.$.print();
-    else
-      editor.document.$.execCommand("Print");
-  };
+
   // Mise à jour de la date d'impression
   $V(getForm("editFrm").date_print, "now");
-  if (window.parent.same_print == 1) {
-    var content = editor.getData();
-    var form = getForm("download-pdf-form");
-    form.elements.content.value = encodeURIComponent(content);
-    form.onsubmit();
-  }
-  else {
-    submitCompteRendu(printDoc);
-  }
+
+  var printDoc = function() {
+    if (window.parent.same_print == 1) {
+      var content = editor.getData();
+      var form = getForm("download-pdf-form");
+      form.elements.content.value = encodeURIComponent(content);
+      form.onsubmit();
+    }
+    else {
+      if (CKEDITOR.env.gecko) {
+        editor.window.$.print();
+      }
+      else {
+        editor.document.$.execCommand("Print");
+      }
+    }
+  };
+  submitCompteRendu(printDoc);
 }
 
