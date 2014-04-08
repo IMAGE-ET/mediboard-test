@@ -270,4 +270,3 @@ $smarty->assign("blocages_lit"          , $blocages_lit);
 $smarty->assign("exchange_source"       , $exchange_source);
 
 $smarty->display("vw_edit_planning.tpl");
-$smarty->display("vw_edit_planning.tpl");
