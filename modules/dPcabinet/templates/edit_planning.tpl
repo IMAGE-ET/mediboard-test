@@ -185,7 +185,7 @@
     $V(getForm('editFrm')._pat_name, patient._view);
   }
 
-  Main.add(function () {
+  Main.add(function() {
     var form = getForm("editFrm");
     var url = new Url("system", "ajax_seek_autocomplete");
     url.addParam("object_class", "CPatient");
@@ -220,6 +220,22 @@
 
     {{if $consult->_id && $consult->patient_id}}
       $("print_fiche_consult").disabled = "";
+    {{/if}}
+
+    {{if $display_elt}}
+      var url = new Url("prescription", "httpreq_do_element_autocomplete");
+      {{if !$app->_ref_user->isPraticien()}}
+        url.addParam("user_id", $V(form.chir_id));
+      {{/if}}
+      url.addParam("where_clauses[consultation]", "= '1'");
+      url.autoComplete(form.libelle, null, {
+        minChars: 2,
+        dropdown: true,
+        updateElement: function(element) {
+          $V(form.libelle, element.down("strong").innerHTML);
+          $V(form.element_prescription_id, element.down("small").innerHTML);
+        }
+      } );
     {{/if}}
   });
 
@@ -274,6 +290,7 @@
   <input type="hidden" name="chrono" value="{{$consult|const:'PLANIFIE'}}" />
   <input type="hidden" name="_operation_id" value="" />
   {{mb_field object=$consult field=sejour_id hidden=1}}
+  {{mb_field object=$consult field=element_prescription_id hidden=1}}
   <input type="hidden" name="_force_create_sejour" value="0" />
   <input type="hidden" name="_line_element_id" value="{{$line_element_id}}" />
 
@@ -288,7 +305,7 @@
     </a>
   {{/if}}
 
-  {{if !$consult->_id && $line_element_id && !$nb_plages}}
+  {{if !$consult->_id && $consult->element_prescription_id && !$nb_plages}}
     <div class="small-warning">
       Aucune plage de consultation présente pour l'exécutant sélectionné
     </div>
@@ -432,6 +449,16 @@
                 <th>{{mb_label object=$consult field="brancardage"}}</th>
                 <td>
                   {{mb_field object=$consult field="brancardage" class="autocomplete" rows=5 form="editFrm"}}
+                </td>
+              </tr>
+            {{/if}}
+
+            {{if $display_elt}}
+              <tr>
+                <th>{{mb_label object=$consult field="element_prescription_id"}}</th>
+                <td>
+                  <input type="text" name="libelle" class="autocomplete"
+                         value="{{if $consult->element_prescription_id}}{{$consult->_ref_element_prescription}}{{else}}&mdash; {{tr}}CPrescription.select_element{{/tr}}{{/if}}" />
                 </td>
               </tr>
             {{/if}}

@@ -2109,6 +2109,19 @@ class CSetupdPcabinet extends CSetup {
           AND consultation_anesth.operation_id IS NOT NULL
           AND operations.operation_id = consultation_anesth.operation_id";
     $this->addQuery($query);
-    $this->mod_version = '2.32';
+
+    $this->makeRevision("2.32");
+    $query = "ALTER TABLE `consultation`
+      ADD `element_prescription_id` INT (11) UNSIGNED";
+    $this->addQuery($query);
+
+    if (CModule::getActive("dPprescription")) {
+      $query = "UPDATE `consultation`, `sejour_task`, `prescription_line_element`
+        SET `consultation`.`element_prescription_id` = `prescription_line_element`.`element_prescription_id`
+        WHERE `sejour_task`.`consult_id` = `consultation`.`consultation_id`
+        AND   `sejour_task`.`prescription_line_element_id` = `prescription_line_element`.`prescription_line_element_id`";
+    }
+
+    $this->mod_version = '2.33';
   }
 }

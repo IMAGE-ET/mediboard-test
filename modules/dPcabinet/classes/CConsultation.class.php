@@ -27,6 +27,7 @@ class CConsultation extends CFacturable implements IPatientRelated {
   public $patient_id;
   public $sejour_id;
   public $grossesse_id;
+  public $element_prescription_id;
 
   // DB fields
   public $type;
@@ -126,6 +127,8 @@ class CConsultation extends CFacturable implements IPatientRelated {
   public $_ref_categorie;
   /** @var CSejourTask */
   public $_ref_task;
+  /** @var CElementPrescription */
+  public $_ref_element_prescription;
 
   // Collections
   /** @var CConsultAnesth[] */
@@ -246,6 +249,7 @@ class CConsultation extends CFacturable implements IPatientRelated {
     $props["patient_id"]        = "ref class|CPatient purgeable seekable show|1";
     $props["categorie_id"]      = "ref class|CConsultationCategorie show|1";
     $props["grossesse_id"]      = "ref class|CGrossesse show|0 unlink";
+    $props["element_prescription_id"] = "ref class|CElementPrescription";
 
     $props["motif"]             = "text helped seekable";
     $props["type"]              = "enum list|classique|entree|chimio default|classique";
@@ -1015,6 +1019,8 @@ class CConsultation extends CFacturable implements IPatientRelated {
       $administration->unite_prise = $line_element->_ref_element_prescription->_ref_category_prescription->chapitre;
       $administration->setObject($line_element);
 
+      $this->element_prescription_id = $line_element->element_prescription_id;
+
       if ($msg = $administration->store()) {
         return $msg;
       }
@@ -1119,6 +1125,15 @@ class CConsultation extends CFacturable implements IPatientRelated {
    */
   function loadRefTask() {
     return $this->_ref_task = $this->loadUniqueBackRef("task");
+  }
+
+  /**
+   * Charge l'élément de prescription possiblement associé
+   *
+   * @return CElementPrescription
+   */
+  function loadRefElementPrescription() {
+    return $this->_ref_element_prescription = $this->loadFwdRef("element_prescription_id");
   }
 
   /**
