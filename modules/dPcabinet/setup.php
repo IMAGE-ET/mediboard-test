@@ -2120,6 +2120,7 @@ class CSetupdPcabinet extends CSetup {
         SET `consultation`.`element_prescription_id` = `prescription_line_element`.`element_prescription_id`
         WHERE `sejour_task`.`consult_id` = `consultation`.`consultation_id`
         AND   `sejour_task`.`prescription_line_element_id` = `prescription_line_element`.`prescription_line_element_id`";
+      $this->addQuery($query);
     }
 
     $this->mod_version = '2.33';
