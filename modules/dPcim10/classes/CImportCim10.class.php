@@ -1141,13 +1141,13 @@ class CImportCim10 {
   static function cleanCode($code) {
     $search = array(
       '-',
-      html_entity_decode('&ndash;'),
-      html_entity_decode('&mdash;'),
+      html_entity_decode('&ndash;', null, 'UTF-8'),
+      html_entity_decode('&mdash;', null, 'UTF-8'),
       "\xe2\x88\x92",
       '?',
       '+',
-      html_entity_decode('&dagger;'),
-      html_entity_decode('&Dagger;'),
+      html_entity_decode('&dagger;', null, 'UTF-8'),
+      html_entity_decode('&Dagger;', null, 'UTF-8'),
       '(groupe)',
       '*',
       '#EOL',
