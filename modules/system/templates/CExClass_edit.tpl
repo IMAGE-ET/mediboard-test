@@ -214,7 +214,6 @@ toggleGroupLabelEdit = function(link) {
     </form>
   </li>
 </ul>
-<hr class="control_tabs" />
 
 <table class="main layout">
   <tr>
@@ -246,7 +245,6 @@ toggleGroupLabelEdit = function(link) {
               </li>
             {{/if}}
           </ul>
-          <hr class="control_tabs" />
 
           <table class="main tbl">
             <tbody id="list-fields-{{$_group->_guid}}" style="display: none;">

@@ -88,7 +88,8 @@ table.ex-form th {
   -ms-filter: "alpha(opacity=0)";
 }
 
-.grid .hostfield .field-name, 
+.pixel-grid .hostfield .field-name,
+.grid .hostfield .field-name,
 .hostfield.dragging .field-name {
   display: inline !important;
 }
@@ -309,6 +310,10 @@ form[name="form-grid-layout"].pickmode .drop-grid .droppable:hover {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   margin: 0;
+}
+
+.pixel-positionning .hostfield button.compact {
+  padding: 0 1px 0 0;
 }
 
 /** fill box **/

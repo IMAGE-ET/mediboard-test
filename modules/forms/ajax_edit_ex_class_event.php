@@ -21,6 +21,7 @@ $host_object = null;
 $reference1 = null;
 $reference2 = null;
 
+/** @var CEnumSpec $unicity_spec */
 $unicity_spec = $ex_class_event->_specs["unicity"];
 
 // mise a jour des specs de l'unicité pour etre plus user friendly

@@ -515,6 +515,9 @@ class CExClass extends CMbObject {
       foreach ($_ex_group->_ref_messages as $_ex_message) {
         $_ex_message->getDefaultProperties();
       }
+
+      // Host fields
+      $_ex_group->loadRefsHostFields();
     }
 
     return $groups;
@@ -584,6 +587,10 @@ class CExClass extends CMbObject {
       // Host fields
       $_host_fields = $_ex_group->loadRefsHostFields();
       foreach ($_host_fields as $_host_field) {
+        if ($_host_field->type) {
+          continue;
+        }
+
         $label_x = $_host_field->coord_label_x;
         $label_y = $_host_field->coord_label_y;
         

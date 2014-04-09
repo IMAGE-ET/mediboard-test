@@ -183,7 +183,6 @@ Main.add(function(){
       </li>
     {{/if}}
   </ul>
-  <hr class="control_tabs" />
 
   {{if $ex_object->_ref_ex_class->pixel_positionning}}
     {{mb_include module=forms template=inc_form_pixel_grid}}

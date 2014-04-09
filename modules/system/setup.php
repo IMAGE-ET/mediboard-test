@@ -1657,7 +1657,12 @@ class CSetupsystem extends CSetup {
                 SELECT `user_id`, 'basic', `user_last_login` FROM `users` WHERE `user_last_login` IS NOT NULL";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.60";
+    $this->makeRevision("1.1.60");
+    $query = "ALTER TABLE `ex_class_host_field`
+                ADD `type` ENUM ('label','value');";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.61";
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,

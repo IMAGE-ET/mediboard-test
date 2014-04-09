@@ -3,6 +3,10 @@
     <tr>
       <td class="narrow input-label">{{mb_label object=$ex_object field=$_field_name}}</td>
       <td style="text-align: right;">
+        {{if $ex_class->pixel_positionning}}
+          {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$ex_field}}
+        {{/if}}
+
         {{$ex_field->prefix}}
           {{mb_field
             object=$ex_object
@@ -21,6 +25,10 @@
     </tr>
   </table>
 {{else}}
+  {{if $ex_class->pixel_positionning}}
+    {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$ex_field}}
+  {{/if}}
+
   {{$ex_field->prefix}}
   {{mb_field
     object=$ex_object

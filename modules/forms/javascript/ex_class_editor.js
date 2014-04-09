@@ -205,6 +205,47 @@ ExConceptSpec = {
   }
 };
 
+ExClassHostField = {
+  create: function(element) {
+    var ex_group_id = element.get("ex_group_id");
+    var ex_class_id = element.get("ex_class_id");
+    var host_class  = element.get("host_class");
+    var field       = element.get("field");
+    var type        = element.get("type");
+
+    var url = new Url();
+    url.addParam("@class", "CExClassHostField");
+    url.addParam("ex_group_id", ex_group_id);
+    url.addParam("host_class", host_class);
+    url.addParam("field", field);
+    url.addParam("type", type);
+    url.requestUpdate(SystemMessage.id, {
+      method: "post",
+      onComplete: function(){
+        ExClass.edit(ex_class_id);
+      }
+    });
+  },
+  del: function(element){
+    if (!confirm("Souhaitez-vous supprimer cet élément du formulaire ?")) {
+      return;
+    }
+
+    var ex_class_host_field_id = element.get("field_id");
+    var ex_class_id = element.get("ex_class_id");
+    var url = new Url();
+    url.addParam("@class", "CExClassHostField");
+    url.addParam("ex_class_host_field_id", ex_class_host_field_id);
+    url.addParam("del", 1);
+    url.requestUpdate(SystemMessage.id, {
+      method: "post",
+      onComplete: function(){
+        ExClass.edit(ex_class_id);
+      }
+    });
+  }
+};
+
 ExFormula = {
   form: null,
   options: {},

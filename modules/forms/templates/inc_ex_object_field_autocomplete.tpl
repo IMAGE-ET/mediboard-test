@@ -25,6 +25,9 @@ Main.add(function(){
       <td class="narrow input-label">{{mb_label object=$ex_object field=$_field_name}}</td>
       <td>
         {{$ex_field->prefix}}
+        {{if $ex_class->pixel_positionning}}
+          {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$ex_field}}
+        {{/if}}
           <input type="text" class="autocomplete" size="30"
            name="_{{$_field_name}}_view" style="{{$_style}}"
            value="{{$ex_object->_fwd.$_field_name}}"
@@ -37,6 +40,9 @@ Main.add(function(){
   </table>
 {{else}}
   {{$ex_field->prefix}}
+  {{if $ex_class->pixel_positionning}}
+    {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$ex_field}}
+  {{/if}}
     <input type="text" class="autocomplete" size="30"
      name="_{{$_field_name}}_view" style="{{$_style}}"
      value="{{$ex_object->_fwd.$_field_name}}"

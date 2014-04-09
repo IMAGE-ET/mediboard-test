@@ -5,6 +5,9 @@
         <tr>
           <td class="narrow input-label">{{mb_label object=$ex_object field=$_field_name}}</td>
           <td>
+            {{if $ex_class->pixel_positionning}}
+              {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$ex_field}}
+            {{/if}}
             {{$ex_field->prefix}}
             {{mb_field
               object=$ex_object
@@ -19,6 +22,9 @@
         </tr>
       </table>
     {{else}}
+      {{if $ex_class->pixel_positionning}}
+        {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$ex_field}}
+      {{/if}}
       {{$ex_field->prefix}}
       {{mb_field
         object=$ex_object
@@ -38,7 +44,12 @@
 
   <fieldset style="{{$_style}}" defaultstyle="1" class="{{$_field_class}}">
     {{if $show_label}}
-      <legend>{{mb_label object=$ex_object field=$_field_name}}</legend>
+      <legend>
+        {{mb_label object=$ex_object field=$_field_name}}
+        {{if $ex_class->pixel_positionning}}
+          {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$ex_field}}
+        {{/if}}
+      </legend>
     {{/if}}
     <div class="wrapper {{if $_spec instanceof CEnumSpec && $_spec->columns > 1}} columns-{{$_spec->columns}} {{/if}}" >
       {{$ex_field->prefix}}

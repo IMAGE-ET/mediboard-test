@@ -65,7 +65,6 @@ toggleList = function(select, ex_group_id) {
     </label>
   </li>
 </ul>
-<hr class="control_tabs" />
 
 {{assign var=groups value=$ex_class->_ref_groups}}
 

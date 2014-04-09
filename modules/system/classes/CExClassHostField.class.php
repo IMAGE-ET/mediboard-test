@@ -17,19 +17,24 @@ class CExClassHostField extends CMbObject {
   //public $host_type;
   public $host_class;
   public $field;
-  
+
+  // Grid positionning
   public $coord_label_x;
   public $coord_label_y;
   public $coord_value_x;
   public $coord_value_y;
-  
+
+  // Pixel positionning
   public $coord_left;
   public $coord_top;
   public $coord_width;
   public $coord_height;
+  public $type;
   
   public $_ref_ex_group;
   public $_ref_host_object;
+
+  public $_no_size = false;
 
   /**
    * @see parent::getSpec()
@@ -52,7 +57,8 @@ class CExClassHostField extends CMbObject {
     //$props["host_type"]     = "enum list|host|reference1|reference2 default|host";
     $props["host_class"]    = "str notNull";
     $props["field"]         = "str notNull canonical";
-    
+
+    // Grid positionning
     $props["coord_value_x"] = "num min|0 max|100";
     $props["coord_value_y"] = "num min|0 max|100";
     $props["coord_label_x"] = "num min|0 max|100";
@@ -63,6 +69,7 @@ class CExClassHostField extends CMbObject {
     $props["coord_top"]    = "num";
     $props["coord_width"]  = "num min|1";
     $props["coord_height"] = "num min|1";
+    $props["type"]         = "enum list|label|value";
     return $props;
   }
 
@@ -71,6 +78,10 @@ class CExClassHostField extends CMbObject {
    */
   function updateFormFields(){
     parent::updateFormFields();
+
+    if (!$this->coord_width && !$this->coord_height) {
+      $this->_no_size = true;
+    }
     
     $this->_view = $this->field; // FIXME
   }

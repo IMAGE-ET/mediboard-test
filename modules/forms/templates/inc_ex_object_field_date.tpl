@@ -10,6 +10,9 @@
     <tr>
       <td class="narrow input-label">{{mb_label object=$ex_object field=$_field_name}}</td>
       <td style="text-align: right;">
+        {{if $ex_class->pixel_positionning}}
+          {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$ex_field}}
+        {{/if}}
         {{$ex_field->prefix}}
         <div style="display: inline-block;">
           <input class="date-toggle" type="checkbox" checked id="cb-{{$checkbox_uid}}" onclick="ExObject.toggleDateField(this)" />
@@ -31,6 +34,9 @@
 {{else}}
   {{$ex_field->prefix}}
   <div style="display: inline-block;">
+    {{if $ex_class->pixel_positionning}}
+      {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$ex_field}}
+    {{/if}}
     <input class="date-toggle" type="checkbox" checked id="cb-{{$checkbox_uid}}" onclick="ExObject.toggleDateField(this)" />
     {{mb_field
       object=$ex_object

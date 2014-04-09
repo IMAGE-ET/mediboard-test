@@ -4,7 +4,10 @@
   {{if $ex_object->_id}}
     <img src="./images/icons/reported.png" title="Valeur reportée ({{tr}}{{$ex_field->report_class}}{{/tr}})" />
   {{else}}
-    {{assign var=reported_from value=$ex_object->_reported_fields.$field_name}}
+    {{assign var=reported_from value=null}}
+    {{if array_key_exists($field_name, $ex_object->_reported_fields)}}
+      {{assign var=reported_from value=$ex_object->_reported_fields.$field_name}}
+    {{/if}}
     
     {{if $reported_from}}
       {{if $reported_from instanceof CExObject}}

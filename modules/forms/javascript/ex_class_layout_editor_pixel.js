@@ -168,6 +168,13 @@ ExClass.initPixelLayoutEditor = function(){
             url.addParam("parent_id", group.get("group_id"));
           }
         }
+
+        // Host field
+        var host_field_id = box.get("host_field_id");
+        if (host_field_id) {
+          url.addParam("@class", "CExClassHostField");
+          url.addParam("ex_class_host_field_id", host_field_id);
+        }
         
         url.mergeParams(dims);
         url.requestUpdate(SystemMessage.id, {method: "post"});

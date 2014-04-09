@@ -16,7 +16,6 @@
 
         <div class="resizable field-{{$_field_name}} field-input {{if $_field->_no_size}} no-size {{/if}}"
              style="left:{{$_field->coord_left}}px; top:{{$_field->coord_top}}px; width:{{$_field->coord_width}}px; height:{{$_field->coord_height}}px; ">
-          {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$_field}}
           {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_field form="editExObject_$ex_form_hash"}}
         </div>
       {{/if}}
@@ -28,6 +27,26 @@
            style="left:{{$_message->coord_left}}px; top:{{$_message->coord_top}}px; width:{{$_message->coord_width}}px; height:{{$_message->coord_height}}px; pointer-events: none;">
         {{mb_include module=forms template=inc_ex_message}}
       </div>
+    {{/foreach}}
+
+    {{* HOST FIELDS *}}
+    {{foreach from=$_group->_ref_host_fields item=_host_field}}
+      {{if $_host_field->type}}
+        <div class="resizable {{if $_host_field->_no_size}} no-size {{/if}}" data-host_field_id="{{$_host_field->_id}}"
+             style="left:{{$_host_field->coord_left}}px; top:{{$_host_field->coord_top}}px; width:{{$_host_field->coord_width}}px; height:{{$_host_field->coord_height}}px;">
+          {{assign var=_host_class value=$_host_field->host_class}}
+
+          {{if $_host_field->type == "label"}}
+            {{mb_label object=$_host_field->_ref_host_object field=$_host_field->field}}
+          {{else}}
+            {{if $_host_field->_ref_host_object->_id}}
+              {{mb_value object=$_host_field->_ref_host_object field=$_host_field->field}}
+            {{else}}
+              <div class="info empty opacity-30">Information non disponible</div>
+            {{/if}}
+          {{/if}}
+        </div>
+      {{/if}}
     {{/foreach}}
   </div>
 {{/foreach}}
