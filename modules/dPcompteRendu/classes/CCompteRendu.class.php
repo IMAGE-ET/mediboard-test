@@ -1827,6 +1827,10 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
   function getFieldPatient () {
     $object = $this->loadTargetObject();
 
+    if ($object instanceof CPatient) {
+      return $object->_id;
+    }
+
     if (!method_exists($this, "loadRelPatient")) {
       $object->loadRefPatient();
     }
@@ -1837,10 +1841,6 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     switch ($this->object_class) {
       case "CConsultAnesth" :
         return $object->_ref_consultation->_ref_patient->_id;
-        break;
-
-      case "CPatient" :
-        return $object->_id;
         break;
 
       default :
