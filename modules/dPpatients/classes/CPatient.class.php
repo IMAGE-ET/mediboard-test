@@ -1931,7 +1931,19 @@ class CPatient extends CPerson {
     $template->addProperty("Patient - médecin traitant - voie"            , $medecin->adresse);
     $template->addProperty("Patient - médecin traitant - cp"              , $medecin->cp);
     $template->addProperty("Patient - médecin traitant - ville"           , $medecin->ville);
-    $template->addProperty("Patient - médecin traitant - entête de texte" , ($medecin->sexe == "f") ? "Chère consoeur" : "Cher confrère");
+    $template->addProperty("Patient - médecin traitant - confraternité"   , ($medecin->sexe == "f") ? "Chère consoeur" : "Cher confrère");
+    if ($medecin->sexe == "f") {
+      $template->addProperty("Patient - médecin traitant - accord genre"    , "e");
+      $template->addProperty("Patient - médecin traitant - article long"    , "Mme le docteur");
+    }
+    elseif ($medecin->sexe == "m") {
+      $template->addProperty("Patient - médecin traitant - accord genre"    , "");
+      $template->addProperty("Patient - médecin traitant - article long"    , "Mr le docteur");
+    }
+    else {
+      $template->addProperty("Patient - médecin traitant - accord genre"    , "");
+      $template->addProperty("Patient - médecin traitant - article long"    , "le docteur");
+    }
 
 
     // Employeur
