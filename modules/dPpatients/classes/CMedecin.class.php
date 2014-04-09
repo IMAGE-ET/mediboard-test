@@ -40,6 +40,9 @@ class CMedecin extends CPerson {
   public $email_apicrypt;
   public $last_ldap_checkout;
 
+  // form fields
+  public $_article_long;
+
   // Object References
   public $_ref_patients;
 
@@ -170,9 +173,11 @@ class CMedecin extends CPerson {
 
     if ($this->type == 'medecin') {
       $this->_view = "Dr $this->nom $this->prenom";
+      $this->_article_long = CAppUI::tr("CMedecin-_civilite_longue_article.$this->sexe");   // Mr le, Mme le
     }
     else {
       $this->_view = "$this->nom $this->prenom";
+      $this->_article_long = CAppUI::tr("CMedecin-_civilite_longue.$this->sexe");   // Mr, Mme
       if ($this->type) {
         $this->_view .= " ({$this->_specs['type']->_locales[$this->type]})";
       } 

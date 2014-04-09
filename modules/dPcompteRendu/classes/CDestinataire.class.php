@@ -20,6 +20,7 @@ class CDestinataire {
   public $email;
   public $email_apicrypt;
   public $tag;
+  public $civilite_nom;
   public $_guid_object;
   
   static $destByClass = array();
@@ -53,20 +54,22 @@ class CDestinataire {
 
       // Patient
       $dest = new CDestinataire($tag);
-      $dest->tag     = "patient";
-      $dest->nom     = $patient->_view;
-      $dest->adresse = $patient->adresse;
-      $dest->cpville = "$patient->cp $patient->ville";
-      $dest->email   = $patient->email;
-      $dest->_guid_object = $patient->_guid;
+      $dest->tag              = "patient";
+      $dest->nom              = "$patient->nom $patient->prenom";
+      $dest->adresse          = $patient->adresse;
+      $dest->cpville          = "$patient->cp $patient->ville";
+      $dest->email            = $patient->email;
+      $dest->civilite_nom     = ucfirst($patient->_civilite_long)." $patient->nom $patient->prenom";
+      $dest->_guid_object     = $patient->_guid;
       self::$destByClass[$mbObject->_class][] = $dest;
 
       // Assuré
       $dest = new CDestinataire($tag);
-      $dest->tag     = "assure";
-      $dest->nom     = "$patient->assure_nom $patient->assure_prenom";
-      $dest->adresse = $patient->assure_adresse;
-      $dest->cpville = "$patient->assure_cp $patient->assure_ville";
+      $dest->tag              = "assure";
+      $dest->nom              = "$patient->assure_nom $patient->assure_prenom";
+      $dest->adresse          = $patient->assure_adresse;
+      $dest->cpville          = "$patient->assure_cp $patient->assure_ville";
+      $dest->civilite_nom     = $patient->_assure_civilite_long." $patient->assure_nom $patient->assure_prenom";
       $dest->_guid_object = $patient->_guid;
       $dest->email   = "";
       self::$destByClass[$mbObject->_class][] = $dest;
@@ -81,6 +84,7 @@ class CDestinataire {
         $dest->nom = $_corres->nom;
         $dest->adresse = $_corres->adresse;
         $dest->cpville = "$_corres->cp $_corres->ville";
+        $dest->civilite_nom = "$_corres->nom";
         $dest->email = $_corres->email;
         $dest->_guid_object = $_corres->_guid;
         self::$destByClass[$mbObject->_class][] = $dest;
@@ -95,6 +99,7 @@ class CDestinataire {
       $dest->adresse = $medecin->adresse;
       $dest->cpville = "$medecin->cp $medecin->ville";
       $dest->email   = $medecin->email;
+      $dest->civilite_nom = $medecin->_article_long." $medecin->_view";
       if ($medecin->email_apicrypt) {
         $dest->email_apicrypt = $medecin->email_apicrypt;
       }

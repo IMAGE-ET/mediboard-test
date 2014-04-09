@@ -124,6 +124,9 @@ function importFile($file, $start, $count) {
           echo "<tr style=\"color:#c98000\"><td>$line_nb</td><td>patient [$patient->nom $patient->prenom] déjà existant (MAJ ipp : $idex->id400)</td></tr>";
         }
         else {
+          if ($patient->_IPP != $IPP) {
+            mbLog($patient->_view." [ipp: ".$patient->_IPP." / ipp_import:".$IPP);
+          }
           echo "<tr style=\"color:#c98000\"><td>$line_nb</td><td>patient [$patient->nom $patient->prenom] déjà existant (ipp : $patient->_IPP)</td></tr>";
         }
 

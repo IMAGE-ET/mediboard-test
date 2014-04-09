@@ -59,7 +59,7 @@ function importFile($targetPath, $start, $count) {
   while ($line = fgetcsv($fp, null, ";")) {
     if ($line_nb >= $start && $line_nb<($start+$count)) {
       $found = false;
-      $fn = trim($line[0]);
+      $fn = CMbString::removeDiacritics(trim($line[0]));
       $sex = trim($line[1]);
       if ($sex == "m,f" || $sex == "f,m") {
         $sex = "u";
