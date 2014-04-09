@@ -72,7 +72,7 @@ function importFile($file, $start, $count) {
       //foreach SPECS, first load
       foreach ($_patient_specs as $key =>  $_specs) {
         $field = $_specs->fieldName;
-        $data = $line[$key];
+        $data = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $line[$key]);
 
         //specific cleanups
         if ($_specs instanceof CPhoneSpec) {

@@ -65,7 +65,8 @@
             <tr>
               <td colspan="2">
                 <div class="small-info">Import du fichier <code>{{$conf.dPpatients.imports.pat_csv_path}}</code></div>
-                <div class="small-warning">Attention ào l'établissement selectionné !</div>
+                <div class="small-warning">Attention ào l'établissement selectionné !<br/>
+                Attention à vider les logs fichier avant import</div>
               </td>
             </tr>
             <tr>
