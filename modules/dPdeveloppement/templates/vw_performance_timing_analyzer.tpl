@@ -59,13 +59,18 @@ loadReport = function(report) {
       back_forward: ["style/mediboard/images/buttons/back-forward.png", "Retour/avanc."]
     };
 
+    var nav = null;
     var date = new Date();
     date.setTime(page.time);
-    var nav = navigation[page.timeline[0].pageInfo.navigation];
+
+    var navType = page.timeline[0].pageInfo.navigation;
+    if (navType !== undefined) {
+      nav = navigation[navType];
+    }
 
     var item = DOM.tr({},
       DOM.td({}, date.toLocaleDateTime()),
-      DOM.td({}, DOM.img({src: nav[0], title: nav[1]})),
+      DOM.td({}, nav ? DOM.img({src: nav[0], title: nav[1]}) : ""),
       DOM.td({}, page.timeline.length),
       DOM.td({style: "text-align: right;"},
         DOM.span({title: page.view.m}, $T("module-"+page.view.m+"-court"))
