@@ -1,50 +1,54 @@
-<script type="text/javascript">
-
-UserMessage.refresh = window.location.reload;
-
-Main.add(function () {
-  Control.Tabs.create("tab-usermessages", true);
-});
-
+<script>
+  Main.add(function () {
+    Control.Tabs.create("tab-usermessages", true , {
+      afterChange: function(newContainer) {
+        UserMessage.refreshList(newContainer.id, 0);
+      }
+    });
+  });
 </script>
+
+<form method="get" name="list_usermessage" onsubmit="return onSubmitFormAjax(this, null, $V(this.mode))">
+  <input type="hidden" name="m" value="messagerie" />
+  <input type="hidden" name="a" value="ajax_list_usermessage" />
+  <input type="hidden" name="user_id" value="{{$user->_id}}" />
+  <input type="hidden" name="mode" value="inbox"/>
+  <input type="hidden" name="page" value="0" />
+</form>
 
 <table class="main">
   <tr>
     <td colspan="2">
-      <a class="button edit" href="#nothing" onclick="UserMessage.create()">
+      <button class="button edit" onclick="UserMessage.edit('', '', UserMessage.refreshListCallback)">
         {{tr}}CUserMessage-title-create{{/tr}}
-      </a>
+      </button>
     </td>
   </tr>
   <tr>
     <td style="vertical-align: top;" class="narrow">
       <ul id="tab-usermessages" class="control_tabs_vertical">
         <li>
-          {{assign var=count value=$listInbox|@count}}
-          <a href="#inbox" style="white-space: nowrap;" {{if !$count}}class="empty"{{/if}}>
+          <a href="#inbox" style="white-space: nowrap;" {{if !$listInboxUnread}}class="empty"{{/if}}>
         		{{tr}}CUserMessage-inbox{{/tr}}
-        		<small>({{$count}})</small>
+        		<small>({{$listInboxUnread}} / {{$listInbox}})</small>
         	</a>
         </li>
         <li>
-          {{assign var=count value=$listArchived|@count}}
-          <a href="#archive" style="white-space: nowrap;" {{if !$count}}class="empty"{{/if}}>
+          <a href="#archive" style="white-space: nowrap;" {{if !$listArchived}}class="empty"{{/if}}>
         		{{tr}}CUserMessage-archive{{/tr}}
-        		<small>({{$count}})</small>
+        		<small>({{$listArchived}})</small>
         	</a>
         </li>
         <li>
-          {{assign var=count value=$listSent|@count}}
-          <a href="#sentbox" style="white-space: nowrap;" {{if !$count}}class="empty"{{/if}}>
+          <a href="#sentbox" style="white-space: nowrap;" {{if !$listSent}}class="empty"{{/if}}>
         		{{tr}}CUserMessage-sentbox{{/tr}}
-        		<small>({{$count}})</small>
+        		<small>({{$listSent}})</small>
         	</a>
         </li>
         <li>
-          {{assign var=count value=$listDraft|@count}}
-          <a href="#draft" style="white-space: nowrap;" {{if !$count}}class="empty"{{/if}}>
+          <a href="#draft" style="white-space: nowrap;" {{if !$listDraft}}class="empty"{{/if}}>
         		{{tr}}CUserMessage-draft{{/tr}}
-        		<small>({{$count}})</small>
+        		<small>({{$listDraft}})</small>
         	</a>
         </li>
       </ul>
@@ -52,139 +56,20 @@ Main.add(function () {
 
     <td>
       <!-- INBOX -->
-      <table class="main tbl" id="inbox" style="display: none;">
-	      <tr>
-	        <th class="title" colspan="10">{{tr}}CUserMessage-inbox{{/tr}}</th>
-	      </tr>
-
-	      <tr>
-	        <th class="narrow">{{mb_title class=CUserMessage field=from}}</th>
-	        <th class="text">{{mb_title class=CUserMessage field=subject}}</th>
-          <th class="text">{{mb_title class=CUserMessage field=source}}</th>
-          <th class="narrow">{{mb_title class=CUserMessage field=date_sent}}</th>
-	        <th class="narrow">{{mb_title class=CUserMessage field=date_read}}</th>
-	        <th class="narrow">{{tr}}Action{{/tr}}</th>
-	      </tr>
-	      {{foreach from=$listInbox item=_mail}}
-
-	      <tr {{if !$_mail->date_read}}style="font-weight: bold;"{{/if}}>
-	        <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_mail->_ref_user_from}}</td>
-	        <td>{{$_mail->subject}}</td>
-          <td class="compact">{{$_mail->source|smarty:nodefaults|truncate:20:' ...'}}</td>
-          <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
-	        <td>{{mb_value object=$_mail field=date_read format=relative}}</td>
-	        <td>
-            <button class="search" onclick="UserMessage.edit({{$_mail->_id}})" >{{tr}}CUserMessage.read{{/tr}}</button>
-            <button class="mail" onclick="UserMessage.create({{$_mail->_ref_user_from->_id}}, null, '{{$_mail->_id}}')">{{tr}}CUserMessage.answer{{/tr}}</button>
-            <form name="archive_usermessage_{{$_mail->_id}}" method="post">
-              <input type="hidden" name="m" value="{{$m}}"/>
-              <input type="hidden" name="dosql" value="do_usermessage_aed"/>
-              <input type="hidden" name="archived" value="1"/>
-              <input type="hidden" name="usermessage_id" value="{{$_mail->_id}}"/>
-              <button type="submit" class="archive">{{tr}}Archive{{/tr}}</button>
-            </form>
-	        </td>
-	      </tr>
-        {{foreachelse}}
-          <tr><td class="empty" colspan="6">{{tr}}CUserMessage.none{{/tr}}</td></tr>
-	      {{/foreach}}
-	    </table>
+      <div id="inbox" style="display: none;">
+	    </div>
 
       <!-- ARCHIVED -->
-      <table class="main tbl" id="archive" style="display: none;">
-	      <tr>
-	        <th class="title" colspan="10">{{tr}}CUserMessage-archive{{/tr}}</th>
-	      </tr>
-
-	      <tr>
-	        <th class="narrow">{{mb_title class=CUserMessage field=from}}</th>
-	        <th>{{mb_title class=CUserMessage field=subject}}</th>
-          <th class="text">{{mb_title class=CUserMessage field=source}}</th>
-          <th class="narrow">{{mb_title class=CUserMessage field=date_sent format=relative}}</th>
-          <th class="narrow">{{mb_title class=CUserMessage field=date_read format=relative}}</th>
-          <th class="narrow">{{tr}}Action{{/tr}}</th>
-	      </tr>
-
-	      {{foreach from=$listArchived item=_mail}}
-	      <tr {{if !$_mail->date_read}}style="font-weight: bold;"{{/if}}>
-	        <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_mail->_ref_user_from}}</td>
-	        <td>{{$_mail->subject}}</td>
-          <td class="text compact">{{$_mail->source}}</td>
-          <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
-          <td>{{mb_value object=$_mail field=date_read format=relative}}</td>
-          <td>
-            <button class="search" onclick="UserMessage.edit({{$_mail->_id}})" >{{tr}}CUserMessage.read{{/tr}}</button>
-            <button class="mail" onclick="UserMessage.create({{$_mail->_ref_user_from->_id}}, 'Re: {{$_mail->_clean_subject}}')">{{tr}}CUserMessage.answer{{/tr}}</button>
-          </td>
-	      </tr>
-        {{foreachelse}}
-          <tr><td class="empty" colspan="5">{{tr}}CUserMessage.none{{/tr}}</td></tr>
-	      {{/foreach}}
-	    </table>
+      <div id="archive" style="display: none;">
+	    </div>
 
       <!-- SENT -->
-      <table class="main tbl" id="sentbox" style="display: none;">
-	      <tr>
-	        <th class="title" colspan="5">{{tr}}CUserMessage-sentbox{{/tr}}</th>
-	      </tr>
-
-	      <tr>
-	        <th class="narrow">{{mb_label class=CUserMessage field=to}}</th>
-          <th>{{mb_title class=CUserMessage field=subject}}</th>
-          <th>{{mb_title class=CUserMessage field=source}}</th>
-	        <th class="narrow">{{mb_title class=CUserMessage field=date_sent format=relative}}</th>
-	        <th class="narrow">{{tr}}Action{{/tr}}</th>
-	      </tr>
-
-	      {{foreach from=$listSent item=_mail}}
-	      <tr>
-	        <td>
-            {{foreach from=$_mail->_ref_users_to item=_to}}
-              {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_to}}
-            {{/foreach}}
-          </td>
-	        <td>{{$_mail->subject}}</td>
-          <td class="text compact">{{$_mail->source|smarty:nodefaults|truncate:20:" ..."}}</td>
-          <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
-          <td>
-            <button class="search" onclick="UserMessage.edit({{$_mail->_id}})" >{{tr}}CUserMessage.read{{/tr}}</button>
-          </td>
-	      </tr>
-        {{foreachelse}}
-          <tr><td class="empty" colspan="5">{{tr}}CUserMessage.none{{/tr}}</td></tr>
-	      {{/foreach}}
-	    </table>
+      <div id="sentbox" style="display: none;">
+	    </div>
 
       <!-- DRAFT -->
-      <table class="main tbl" id="draft" style="display: none;">
-	      <tr>
-	        <th class="title" colspan="10">{{tr}}CUserMessage-draft{{/tr}}</th>
-	      </tr>
-
-	      <tr>
-	        <th class="narrow">{{mb_label class=CUserMessage field=to}}</th>
-	        <th class="text">{{mb_label class=CUserMessage field=subject}}</th>
-          <th>{{mb_label class=CUserMessage field=source}}</th>
-	        <th class="narrow">{{tr}}Action{{/tr}}</th>
-	      </tr>
-
-	      {{foreach from=$listDraft item=_mail}}
-	      <tr>
-          <td>
-            {{foreach from=$_mail->_ref_users_to item=_to}}
-              {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_to}}
-            {{/foreach}}
-          </td>
-	        <td class="text">{{$_mail->subject}}</td>
-          <td class="text compact">{{$_mail->source|smarty:nodefaults|truncate:100:" (...)"}}</td>
-	        <td>
-            <button class="edit" onclick="UserMessage.edit({{$_mail->_id}})" >{{tr}}CUserMessage.edit{{/tr}}</button>
-	        </td>
-	      </tr>
-        {{foreachelse}}
-          <tr><td class="empty" colspan="3">{{tr}}CUserMessage.none{{/tr}}</td></tr>
-	      {{/foreach}}
-	    </table>
+      <div id="draft" style="display: none;">
+	    </div>
     </td>
   </tr>
 </table>

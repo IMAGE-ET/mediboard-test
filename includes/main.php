@@ -309,8 +309,7 @@ if (!$suppressHeaders) {
   $messages = $messages->loadPublications("present", $m, $g);
   
   // Mails
-  $mail = new CUserMessage();
-  $mails = $mail->loadVisibleList();
+  $mails = CUserMessageDest::loadNewMessages();
   
   // Creation du Template
   $tplHeader = new CSmartyDP("style/$uistyle");

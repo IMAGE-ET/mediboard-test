@@ -161,6 +161,72 @@ class CSetupmessagerie extends CSetup {
                 ADD INDEX (`in_reply_to`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.30";
+    $this->makeRevision("0.30");
+    $query = "CREATE TABLE `usermessage_dest` (
+                `usermessage_dest_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `user_message_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `from_user_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `to_user_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `datetime_read` DATETIME,
+                `datetime_sent` DATETIME,
+                `archived` ENUM ('0','1') DEFAULT '0',
+                `starred` ENUM ('0','1') DEFAULT '0'
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.31");
+    $query = "ALTER TABLE `usermessage_dest`
+                ADD INDEX (`user_message_id`),
+                ADD INDEX (`from_user_id`),
+                ADD INDEX (`to_user_id`),
+                ADD INDEX (`datetime_read`),
+                ADD INDEX (`datetime_sent`);";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.32");
+    function update_messages() {
+      $ds = CSQLDataSource::get("std");
+      if (!$ds) {
+        return false;
+      }
+      $messages = $ds->loadList("SELECT * FROM usermessage");
+      if (count($messages)) {
+        $query = "INSERT INTO `usermessage_dest` (`user_message_id`, `from_user_id`, `to_user_id`, `datetime_read`, `datetime_sent`, `archived`, `starred`)
+         VALUES";
+        $values = array();
+        foreach ($messages as $_message) {
+          $umid   = $_message['usermessage_id'];
+          $from   = $_message['from'];
+          $to     = $_message['to'];
+          $dtr    = $_message['date_read'] ? '\''.$_message['date_read'].'\'' : 'NULL';
+          $dts    = $_message['date_sent'] ? '\''.$_message['date_sent'].'\'' : 'NULL';
+          $arc    = $_message['archived'];
+          $star   = $_message['starred'];
+          $values[] = " ('$umid', '$from', '$to', $dtr, $dts, '$arc', '$star')";
+        }
+        $ds->query($query.implode(',', $values));
+        if ($msg = $ds->error()) {
+          CAppUI::stepAjax($msg, UI_MSG_WARNING);
+          return false;
+        }
+      }
+      return true;
+    }
+    $this->addFunction("update_messages");
+
+    $this->makeRevision("0.33");
+    $query = "ALTER TABLE `usermessage`
+      CHANGE `source` `content` MEDIUMTEXT,
+      CHANGE `from` `creator_id` INT (11) UNSIGNED NOT NULL,
+      DROP `to`,
+      DROP `date_read`,
+      DROP `date_sent`,
+      DROP `archived`,
+      DROP `starred`,
+      DROP `grouped`;";
+    $this->addQuery($query);
+
+
+    $this->mod_version = "0.34";
   }
 }

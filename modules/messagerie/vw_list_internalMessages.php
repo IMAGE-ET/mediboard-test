@@ -8,58 +8,60 @@
 */
 
 CCanDo::checkRead();
-$user = CUser::get();
+$user = CMediusers::get();
 
-$usermessage = new CUserMessage();
+$usermessage = new CUserMessageDest();
 
 // Liste des messages reçus
 $where = array();
-$where["to"]        = "= '$user->_id'";
-$where["date_sent"] = "IS NOT NULL";
+$where["to_user_id"]   = "= '$user->_id'";
+$where["datetime_sent"] = "IS NOT NULL";
 $where["archived"]  = "!= '1'";
-$order = "date_sent DESC";
-$listInbox = $usermessage->loadList($where, $order);
-foreach ($listInbox as &$mail) {
-  $mail->loadRefsFwd();
-}
+/** @var CUserMessageDest[] $listInbox */
+$listInbox = $usermessage->countList($where);
+$where["datetime_read"] = "IS NULL";
+$listInboxUnread = $usermessage->countList($where);
 
 // Liste des messages archivés
 $where = array();
-$where["to"]        = "= '$user->_id'";
-$where["date_sent"] = "IS NOT NULL";
+$where["to_user_id"]   = "= '$user->_id'";
+$where["datetime_sent"] = "IS NOT NULL";
 $where["archived"]  = "= '1'";
-$order = "date_sent DESC";
-$listArchived = $usermessage->loadList($where, $order);
-foreach ($listArchived as &$mail) {
-  $mail->loadRefsFwd();
-}
+/** @var CUserMessageDest[] $listArchived */
+$listArchived = $usermessage->countList($where);
 
 // Liste des messages envoyés
 $where = array();
-$where["from"]      = "= '$user->_id'";
-$where["date_sent"] = "IS NOT NULL";
-$order = "date_sent DESC";
-$listSent = $usermessage->loadList($where, $order, null, "date_sent");
-foreach ($listSent as &$mail) {
-  $mail->loadRefsFwd();
-}
+$where["from_user_id"]   = "= '$user->_id'";
+$where["datetime_sent"] = "IS NOT NULL";
+/** @var CUserMessageDest[] $listSent */
+$listSent = $usermessage->countList($where);
 
 // Liste des brouillons
+$usermessage = new CUserMessage();
 $where = array();
-$where["from"]      = "= '$user->_id'";
-$where["date_sent"] = "IS NULL";
-$order = "date_sent DESC";
-$listDraft = $usermessage->loadList($where, $order, null, "grouped");
-foreach ($listDraft as &$mail) {
-  $mail->loadRefsFwd();
+$where["creator_id"]   = "= '$user->_id'";
+/** @var CUserMessage[] $listDraft */
+$listDraft = $usermessage->loadList($where);
+foreach ($listDraft as $key => $_mail) {
+  $dests = $_mail->loadRefDests();
+  foreach ($dests as $_dest) {
+    if ($_dest->datetime_sent) {
+      unset($listDraft[$key]);
+      continue 2;
+    }
+  }
 }
+$countListDraft = count($listDraft);
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("listInbox"   , $listInbox);
-$smarty->assign("listArchived", $listArchived);
-$smarty->assign("listSent"    , $listSent);
-$smarty->assign("listDraft"   , $listDraft);
+$smarty->assign("user"            , $user);
+$smarty->assign("listInbox"       , $listInbox);
+$smarty->assign("listInboxUnread" , $listInboxUnread);
+$smarty->assign("listArchived"    , $listArchived);
+$smarty->assign("listSent"        , $listSent);
+$smarty->assign("listDraft"       , $countListDraft);
 
 $smarty->display("vw_list_usermessages.tpl");

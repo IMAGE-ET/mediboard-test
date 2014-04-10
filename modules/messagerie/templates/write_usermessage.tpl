@@ -96,10 +96,10 @@
       </tr>
     
       {{if $usermessage->date_sent}}
-      <tr>
-        <th>{{mb_label object=$usermessage field=date_sent}}</th>
-        <td>{{mb_value object=$usermessage field=date_sent}} ({{mb_value object=$usermessage field=date_sent format=relative}})</td>
-      </tr>
+        <tr>
+          <th>{{mb_label object=$usermessage field=date_sent}}</th>
+          <td>{{mb_value object=$usermessage field=date_sent}} ({{mb_value object=$usermessage field=date_sent format=relative}})</td>
+        </tr>
       {{/if}}
     
       <tr>

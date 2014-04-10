@@ -7,33 +7,64 @@
  * @author Thomas despoix
  */
 
-$dest_list = explode("|", CValue::post("to_list"));
-$date_sent =  CMbDT::dateTime();
+$user = CMediusers::get();
+$date =  CMbDT::dateTime();
+$dests = CValue::post("dest", array());
+$del = CValue::post("del", 0);
+$send_it = CValue::post("_send");
+$archive_mine = CValue::post("_archive");
+$read_only = CValue::post("_readonly");
 
-//single send
-if (count($dest_list) <= 1) {
-  $do = new CDoObjectAddEdit("CUserMessage", "usermessage_id");
-  $do->doIt();
+$usermessage = new CUserMessage();
+
+// edit mode (draft)
+$usermessage->load($_POST["usermessage_id"]);
+if ($del && $usermessage->_id) {
+  if ($msg = $usermessage->delete()) {
+    CAppUI::stepAjax($msg, UI_MSG_ERROR);
+  }
+  return;
 }
-//multi send
-else {
-  $grouped = CValue::post("grouped") ? CValue::post("grouped") : CUserMessage::getLastGroupId();
-  $num_group = CUserMessage::getLastGroupId();
-  $num_group++;
-  foreach ($dest_list as $_dest) {
-    $userMessage = new CUserMessage();
-    $userMessage->to = $_dest;
-    $userMessage->from = CValue::post("from");
-    $userMessage->subject = CValue::post("subject");
-    $userMessage->source = CValue::post("source");
-    $userMessage->grouped = $grouped;
-    $userMessage->loadMatchingObject();
-    if (CValue::post("date_sent") == "now") {
-      $userMessage->date_sent = $date_sent;
+$usermessage->bind($_POST);
+if ($msg = $usermessage->store()) {
+  mbLog($msg);
+  CAppUI::stepAjax($msg, UI_MSG_ERROR);
+}
+
+$destinataires = $usermessage->loadRefDests();
+foreach ($destinataires as $_dest) {
+
+  // mine reception
+  if ($_dest->to_user_id == $user->_id) {
+    $_dest->archived = $archive_mine;
+    if (!$_dest->datetime_read) {
+      $_dest->datetime_read = $date;
     }
-    if ($msg = $userMessage->store()) {
+    if ($msg = $_dest->store()) {
       CAppUI::stepAjax($msg, UI_MSG_ERROR);
     }
   }
-  CAppUI::redirect(CValue::post("postRedirect"));
+
+  // in edit mode, we don't find a dest, (delete it !)
+  if (!$read_only && !in_array($_dest->to_user_id, $dests)) {
+    if ($msg = $_dest->delete()) {
+      CAppUI::stepAjax($msg, UI_MSG_ERROR);
+    }
+    continue;
+  }
+}
+
+
+foreach ($dests as $_dest) {
+  $destinataire = new CUserMessageDest();
+  $destinataire->user_message_id = $usermessage->_id;
+  $destinataire->from_user_id = $usermessage->creator_id;
+  $destinataire->to_user_id = $_dest;
+  $destinataire->loadMatchingObject();
+  if ($send_it) {
+    $destinataire->datetime_sent = $date;
+  }
+  if ($msg = $destinataire->store()) {
+    CAppUI::stepAjax($msg, UI_MSG_ERROR);
+  }
 }
