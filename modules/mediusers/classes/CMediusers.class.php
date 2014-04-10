@@ -300,8 +300,6 @@ class CMediusers extends CPerson {
     $backProps["forum_threads"]                   = "CForumThread user_id";
     $backProps["hprim21_medecins"]                = "CHprim21Medecin user_id";
     $backProps["listes_choix"]                    = "CListeChoix user_id";
-    $backProps["mails_sent"]                      = "CUserMessage from";
-    $backProps["mails_received"]                  = "CUserMessage to";
     $backProps["owned_notes"]                     = "CNote user_id";
     $backProps["observations"]                    = "CObservationMedicale user_id";
     $backProps["operations_chir"]                 = "COperation chir_id";
@@ -379,6 +377,9 @@ class CMediusers extends CPerson {
     $backProps["tasking_supervisor"]              = "CTaskingTicket supervisor_id";
     $backProps["tasking_message_author"]          = "CTaskingTicketMessage user_id";
     $backProps["tasking_contact_interlocutor"]    = "CTaskingContactEvent interlocutor_user_id";
+    $backProps["usermessage_created"]             = "CUserMessage creator_id";
+    $backProps["usermessage_dest_to"]             = "CUserMessageDest to_user_id";
+    $backProps["usermessage_dest_from"]           = "CUserMessageDest from_user_id";
 
     return $backProps;
   }
