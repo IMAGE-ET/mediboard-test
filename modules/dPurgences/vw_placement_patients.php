@@ -116,7 +116,9 @@ for ($num = 0; $num <= 1; $num++) {
       $ljoin["chambre"]     = "chambre.chambre_id = lit.chambre_id";
 
       $where[]                     = "'$date' BETWEEN affectation.entree AND affectation.sortie";
-      $where["service.urgence"]    = "= '1'";
+      if (!CAppUI::conf("dPurgences view_rpu_uhcd") && $num != 0) {
+        $where[] = "service.urgence = '1' OR service.radiologie = '1'";
+      }
       $where["chambre.chambre_id"] = "= '$chambre->_id'";
     }
     else {
