@@ -38,6 +38,8 @@ class CExClass extends CMbObject {
   
   private $_latest_ex_object_cache = array();
 
+  private $_duplication_mapping = array();
+
   /** @var self[] */
   static $_list_cache = array();
   
@@ -809,6 +811,8 @@ class CExClass extends CMbObject {
     
     $new->name .= " (Copie)";
     $new->_dont_create_default_group = true;
+
+    $this->_duplication_mapping = array();
     
     if ($msg = $new->store()) {
       return $msg;
@@ -825,7 +829,8 @@ class CExClass extends CMbObject {
       
       // class_fields
       foreach ($_group->loadRefsFields() as $_field) {
-        if ($msg = $this->duplicateObject($_field, "ex_group_id", $_new_group->_id, $_new_field, array("predicate_id"))) {
+        $_exclude_fields = array("predicate_id", "subgroup_id");
+        if ($msg = $this->duplicateObject($_field, "ex_group_id", $_new_group->_id, $_new_field, $_exclude_fields)) {
           continue;
         }
         
@@ -852,13 +857,18 @@ class CExClass extends CMbObject {
       $this->duplicateBackRefs($_group, "host_fields", $fwd_field, $fwd_value);
       
       // class_messages
-      $this->duplicateBackRefs($_group, "class_messages", $fwd_field, $fwd_value);
+      $this->duplicateBackRefs($_group, "class_messages", $fwd_field, $fwd_value, array("predicate_id", "subgroup_id"));
+
+      // subgroups
+      $this->duplicateBackRefs($_group, "subgroups", "parent_id", $fwd_value, array("predicate_id", "subgroup_id"));
     }
     
     // ex_triggers
     $this->duplicateBackRefs($this, "ex_triggers", "ex_class_triggered_id", $new->_id);
     
     CExObject::clearLocales();
+
+    $this->_duplication_mapping = array();
 
     return null;
   }
@@ -875,6 +885,10 @@ class CExClass extends CMbObject {
    * @return null|string
    */
   private function duplicateObject(CMbObject $object, $fwd_field, $fwd_value, &$new = null, $exclude_fields = array()) {
+    if (isset($this->_duplication_mapping[$object->_guid])) {
+      return null;
+    }
+
     $class = $object->_class;
 
     /** @var CExObject $new */
@@ -886,24 +900,32 @@ class CExClass extends CMbObject {
     }
 
     $new->$fwd_field = $fwd_value;
+
+    if ($msg = $new->store()) {
+      return $msg;
+    }
+
+    $this->_duplication_mapping[$object->_guid] = $new->_guid;
     
-    return $new->store();
+    return $msg;
   }
 
   /**
    * Duplicate back refs
    *
-   * @param CMbObject $object    Object to duplicate back refs of
-   * @param string    $backname  Back reference name
-   * @param string    $fwd_field Forward field name
-   * @param mixed     $fwd_value Forward field value
+   * @param CMbObject $object         Object to duplicate back refs of
+   * @param string    $backname       Back reference name
+   * @param string    $fwd_field      Forward field name
+   * @param mixed     $fwd_value      Forward field value
+   * @param array     $exclude_fields Excluded fields
    *
    * @return void
    */
-  private function duplicateBackRefs(CMbObject $object, $backname, $fwd_field, $fwd_value) {
+  private function duplicateBackRefs(CMbObject $object, $backname, $fwd_field, $fwd_value, $exclude_fields = array()) {
+    $new = null;
     foreach ($object->loadBackRefs($backname) as $_back) {
       /** @var CMbObject $_back */
-      $this->duplicateObject($_back, $fwd_field, $fwd_value);
+      $this->duplicateObject($_back, $fwd_field, $fwd_value, $new, $exclude_fields);
     }
   }
 }
