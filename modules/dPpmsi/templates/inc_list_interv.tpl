@@ -1,6 +1,6 @@
 <tr>
   <td>
-    {{if $_operation->_nb_exchanges}}
+    {{if $_operation->facture}}
       <img src="images/icons/tick.png" alt="ok" />
     {{else}}
       <img src="images/icons/cross.png" alt="alerte" />
