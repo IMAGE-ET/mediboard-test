@@ -279,6 +279,10 @@ Main.add(function(){
     <tr>
       <td></td>
       <td colspan="3">
+        <button style="float: right;" type="button" class="trash opacity-50" onclick="confirmDeletion(this.form,{msg:'--- ATTENTION --- \n\nSouhaitez-vous réélement supprimer le champ {{$ex_field->_view|smarty:nodefaults|JSAttribute}} ?\nCette action entraînera la suppression de toutes ses saisies associées, ainsi que son historique.\n\nConfirmez-vous tout de même ', ajax:true,typeName:'',objName:''}, {onComplete: ExClass.edit.curry('{{$ex_class->_id}}')})">
+          {{tr}}Delete{{/tr}}
+        </button>
+
         <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
 
         {{if $ex_field->_id}}

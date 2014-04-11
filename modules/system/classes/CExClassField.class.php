@@ -939,31 +939,6 @@ class CExClassField extends CExListItemsOwner {
   }
 
   /**
-   * @see parent::delete()
-   */
-  function delete(){
-    return "Les champs ne peuvent pas être supprimés, veuillez plutôt le désactiver.";
-    /*
-    if ($msg = $this->canDeleteEx()) {
-      return $msg;
-    }
-
-    if (!$this->_dont_drop_column) {
-      $this->completeField("name");
-
-      $table_name = $this->loadRefExClass()->getTableName();
-      $query = "ALTER TABLE `$table_name` DROP `$this->name`";
-      $ds = $this->_spec->ds;
-
-      if (!$ds->query($query)) {
-        return "Le champ '$this->name' n'a pas pu être supprimé (".$ds->error().")";
-      }
-    }
-
-    return parent::delete();*/
-  }
-
-  /**
    * @return CExListItemsOwner
    */
   function getRealListOwner(){
