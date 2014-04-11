@@ -32,7 +32,7 @@ foreach ($listSejours as $_sejour) {
   $_sejour->loadRefsFwd();
   $_sejour->loadNDA();
   $_sejour->_ref_patient->loadIPP();
-  $_sejour->loadRefGHM();
+  $_sejour->countActes();
   $_sejour->countExchanges();
 }
 
