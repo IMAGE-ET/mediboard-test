@@ -689,17 +689,18 @@ class CCdaTools {
    * @param String $path_input path
    *
    * @return String|null
+   * @throws CMbException
    */
   static function generatePDFA($path_input) {
     $command_path = CAppUI::conf("cda path_ghostscript");
     $command_path = $command_path ? escapeshellarg($command_path) : "gs";
     $path_output = tempnam("temp", "pdf");
     $cmd = "$command_path -dPDFA -dBATCH -dNOPAUSE -dUseCIEColor -sProcessColorModel=DeviceCMYK -sDEVICE=pdfwrite -sOutputFile=$path_output -dPDFACompatibilityPolicy=1 $path_input";
-    $processorInstance = proc_open(escapeshellcmd($cmd), array(1 => array('pipe', 'w'), 2 => array('pipe', 'w')), $pipes);
+    $processorInstance = proc_open($cmd, array(1 => array('pipe', 'w'), 2 => array('pipe', 'w')), $pipes);
     $processorErrors = stream_get_contents($pipes[2]);
     proc_close($processorInstance);
     if ($processorErrors) {
-      return null;
+      throw new CMbException($processorErrors);
     }
     return $path_output;
   }

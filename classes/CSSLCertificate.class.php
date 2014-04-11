@@ -117,7 +117,7 @@ class CSSLCertificate {
     $separator = "+";
     $match = array_reverse($match[0]);
     foreach ($match as $_dn) {
-      if (strpos($match.current($match), "OU=") !== false) {
+      if (strpos(current($match), "OU=") !== false) {
         $separator = ",";
       }
       $rdn .= trim($_dn).$separator;
@@ -145,25 +145,12 @@ class CSSLCertificate {
    */
   static function getFingerPrint($certificate) {
 
-    $file = tempnam("", "txt");
-    file_put_contents($file, $certificate);
+    $pem = preg_replace('/\-+BEGIN CERTIFICATE\-+/', '', $certificate);
+    $pem = preg_replace('/\-+END CERTIFICATE\-+/', '', $pem);
+    $pem = str_replace(array("\n","\r"), '', trim($pem));
 
-    $cmd = "openssl x509 -in $file -outform der -fingerprint -noout";
-    $cmd = escapeshellcmd($cmd);
-    $processorInstance = proc_open($cmd, array(1 => array('pipe', 'w'), 2 => array('pipe', 'w')), $pipes);
-    $processorResult = stream_get_contents($pipes[1]);
-    $processorErrors = stream_get_contents($pipes[2]);
-    proc_close($processorInstance);
-    unlink($file);
+    $result = sha1(base64_decode($pem), true);
 
-    if ($processorErrors) {
-      return $processorErrors;
-    }
-
-    preg_match_all("#(?<==|:)[^:]+#", $processorResult, $matches);
-
-    $fingerprint = implode("", $matches[0]);
-    $result = pack("H*", trim($fingerprint));
     return $result;
   }
 }

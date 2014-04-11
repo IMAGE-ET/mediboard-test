@@ -109,18 +109,53 @@ class CInteropReceiver extends CInteropActor {
   }
 
   /**
+   * get the receiver by oid
+   *
+   * @param String $oid oid
+   *
+   * @return CInteropReceiver[]
+   */
+  static function getObjectsByOID($oid) {
+    $objects = array();
+    if (!$oid) {
+      return $objects;
+    }
+
+    foreach (self::getChildReceivers() as $_interop_receiver) {
+      /** @var CInteropReceiver $receiver */
+      $receiver = new $_interop_receiver;
+      $receiver->OID = $oid;
+      $objects = array_merge($objects,  $receiver->loadMatchingList());
+    }
+
+    return $objects;
+  }
+
+  /**
    * Get objects by events
    *
-   * @param array $events Events name
+   * @param array            $events   Events name
+   * @param CInteropReceiver $receiver receiver
    *
    * @return array Receivers supported
    */
-  static function getObjectsBySupportedEvents($events = array()) {
+  static function getObjectsBySupportedEvents($events = array(), $receiver = null) {
     $receivers = array();
     foreach ($events as $_event) {
       $msg_supported          = new CMessageSupported();
       $msg_supported->message = $_event;
       $msg_supported->active  = 1;
+
+      if ($receiver && $receiver->_id) {
+        $msg_supported->setObject($receiver);
+        if (!$msg_supported->loadMatchingObject()) {
+          $receivers[$_event] = null;
+          return $receivers;
+        }
+        $receivers[$_event] = $receiver;
+        return $receivers;
+      }
+
       $messages = $msg_supported->loadMatchingList(null, null, "object_class");
 
       foreach ($messages as $_message) {

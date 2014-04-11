@@ -1,8 +1,19 @@
 <?php
 $locales['Action-done'] = 'Action effectué';
+$locales['CHL7v3EventXDSProvideAndRegisterDocumentSetRequest'] = 'Provide And Register Document Set Request';
+$locales['CHL7v3EventXDSProvideAndRegisterDocumentSetRequest-desc'] = 'Envoie et enregistrement du document';
+$locales['CHL7v3EventXDSRegistryStoredQuery'] = 'Registry Stored Query';
+$locales['CHL7v3EventXDSRegistryStoredQuery-desc'] = 'Recherche de document';
+$locales['CHL7v3EventXDSUpdateDocumentSet'] = 'Update Document Set';
+$locales['CHL7v3EventXDSUpdateDocumentSet-desc'] = 'Mis à jour du document';
 $locales['CSourceSOAP-xop_mode'] = 'Mode XOP';
 $locales['CSourceSOAP-xop_mode-desc'] = 'Activer l\'utilisation du MTOM/XOP';
+$locales['CXDS'] = 'XDS';
+$locales['CXDS-desc'] = 'Cross-Enterprise Document Sharing';
 $locales['Generate-xml-jv'] = 'Générer les jeux de valeurs';
+$locales['ITI-18'] = 'ITI-18';
+$locales['ITI-41'] = 'ITI-41';
+$locales['ITI-57'] = 'ITI-57';
 $locales['mod-xds-tab-ajax_entete_cda_xds'] = 'Correspondance CDA vers XDS';
 $locales['mod-xds-tab-configure'] = 'Configuration';
 $locales['mod-xds-tab-vw_generate_xds'] = 'Génération d\'un document XDS';

@@ -118,6 +118,7 @@ class CCDAActCDA extends CCDADocumentCDA {
    * Création d'un corps non structuré
    *
    * @return CCDAPOCD_MT000040_NonXMLBody
+   * @throws CMbException
    */
   function setNonXMLBody() {
     $file      = self::$cda_factory->file;
@@ -127,6 +128,9 @@ class CCDAActCDA extends CCDADocumentCDA {
     $ed = new CCDAED();
     $ed->setMediaType($mediaType);
     $ed->setRepresentation("B64");
+    if (!$file) {
+      throw new CMbException("Aucun fichier renseigné");
+    }
     $ed->setData(base64_encode(file_get_contents($file)));
 
     $nonXMLBody->setText($ed);

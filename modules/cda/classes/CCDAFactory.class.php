@@ -146,7 +146,9 @@ class CCDAFactory {
       }
     }
     else {
-      $docItem->makePDFpreview(1, 0);
+      if ($msg = $docItem->makePDFpreview(1, 0)) {
+        throw new CMbException($msg);
+      }
       $file = $docItem->_ref_file;
       $path = CCdaTools::generatePDFA($file->_file_path);
     }
