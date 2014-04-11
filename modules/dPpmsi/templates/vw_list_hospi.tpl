@@ -32,7 +32,7 @@ Main.add(function () {
   {{assign var="GHM" value=$_sejour->_ref_GHM}}
   <tr>
     <td>
-      {{if $_sejour->_nb_exchanges}}
+      {{if $_sejour->facture}}
        <img src="images/icons/tick.png" alt="ok" />
       {{else}}
       <img src="images/icons/cross.png" alt="alerte" />
