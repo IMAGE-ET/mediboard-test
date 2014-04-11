@@ -74,7 +74,7 @@ class CHL7v3Event extends CHL7Event {
   function updateExchange($validate = true) {
     $exchange_hl7v3                 = $this->_exchange_hl7v3;
     $exchange_hl7v3->_message       = $this->message;
-    $exchange_hl7v3->message_valide = $validate ? $this->dom->schemaValidate() : false;
+    $exchange_hl7v3->message_valide = $validate ? $this->dom->schemaValidate() : true;
     $exchange_hl7v3->store();
 
     return $exchange_hl7v3;
