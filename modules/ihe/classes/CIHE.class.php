@@ -22,7 +22,10 @@ class CIHE {
   static $object_handlers = array(
     "CSipObjectHandler"     => "CITI30DelegatedHandler",
     "CSmpObjectHandler"     => "CITI31DelegatedHandler",
-    "CSaEventObjectHandler" => "CRAD48DelegatedHandler"
+    "CSaEventObjectHandler" => array (
+                                "CRAD3DelegatedHandler",
+                                "CRAD48DelegatedHandler"
+                               )
   );
   /**
    * @var array

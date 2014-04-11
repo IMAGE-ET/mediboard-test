@@ -95,7 +95,9 @@ class CEAIObjectHandler extends CMbObjectHandler {
           continue;
         }
 
-        if (!$format_object_handler_classname = $_receiver->getFormatObjectHandler($this)) {
+        $handler = $_receiver->getFormatObjectHandler($this);
+
+        if (!$handler) {
           continue;
         }
 
@@ -105,14 +107,20 @@ class CEAIObjectHandler extends CMbObjectHandler {
         // Affectation du receiver à l'objet
         $mbObject->_receiver = $_receiver;
 
-        // Récupère le handler du format
-        $format_object_handler = new $format_object_handler_classname;
-        // Envoi l'action au handler du format
-        try {
-          $format_object_handler->$action($mbObject);
-        }
-        catch (Exception $e) {
-          CAppUI::setMsg($e->getMessage(), UI_MSG_ERROR);
+        $handlers = !is_array($handler) ? array($handler) : $handler;
+
+        // On parcours les handlers
+        foreach ($handlers as $_handler) {
+          // Récupère le handler du format
+          $format_object_handler = new $_handler;
+
+          // Envoi l'action au handler du format
+          try {
+            $format_object_handler->$action($mbObject);
+          }
+          catch (Exception $e) {
+            CAppUI::setMsg($e->getMessage(), UI_MSG_WARNING);
+          }
         }
       }
     }
