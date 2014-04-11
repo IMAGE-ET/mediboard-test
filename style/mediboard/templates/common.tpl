@@ -211,42 +211,22 @@
 </div>
 
 <!-- Mails -->
-{{if !$dialog && @count($mails)}}
-<div class="small-mail not-printable" onmouseover="ObjectTooltip.createDOM(this, 'mail-details');">
-    {{tr}}CUserMessage{{/tr}} :
-    
-    {{if array_key_exists("received", $mails)}}
-      {{$mails.received|@count}} {{tr}}CUserMessage._to_state.received{{/tr}}
-    {{/if}}
-    
-    {{if count($mails) == 2}}&ndash;{{/if}}
-    
-    {{if array_key_exists("starred", $mails)}}
-      {{$mails.starred|@count}} {{tr}}CUserMessage._to_state.starred{{/tr}}
-    {{/if}}
-</div>
+{{if !$dialog && $mails|@count}}
+  <div class="small-mail not-printable" onmouseover="ObjectTooltip.createDOM(this, 'mail-details');">
+      {{tr}}CUserMessage{{/tr}} : {{$mails|@count}} {{tr}}CUserMessage._to_state.received{{/tr}}{{if $mails|@count >= 2}}s{{/if}}
+  </div>
 
-<div id="mail-details" class="not-printable" style="display: none;">
-  <table class="tbl">
-  {{foreach from=$mails key=to_state item=_mails}}
-    <tr>
-      <th class="category" colspan="10">{{tr}}CUserMessage._to_state.{{$to_state}}{{/tr}}</th>
-    </tr>
-    {{foreach from=$_mails item=_mail}}
+  <div id="mail-details" class="not-printable" style="display: none;">
+    <table class="tbl">
+    {{foreach from=$mails item=_mail}}
       <tr>
         <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_mail->_ref_user_from}}</td>
-        <td>{{$_mail->subject}}</td>
+        <td>{{$_mail->_ref_message->subject}}</td>
         <td>
-          <label title="{{mb_value object=$_mail field=date_sent}}">
-            {{mb_value object=$_mail field=date_sent format=relative}}
-          </label>
-        </td>
-        <td>
-          <a href="#Read-{{$_mail->_guid}}" onclick="UserMessage.edit({{$_mail->_id}})">{{tr}}CUserMessage.read{{/tr}}</a>
+          <a href="#Read-{{$_mail->_guid}}" onclick="UserMessage.edit({{$_mail->_ref_message->_id}})">{{tr}}CUserMessage.read{{/tr}}</a>
         </td>
       </tr>
     {{/foreach}}
-  {{/foreach}}
-  </table>
-</div>
+    </table>
+  </div>
 {{/if}}
