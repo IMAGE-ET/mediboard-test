@@ -62,11 +62,9 @@ Main.add(function () {
 
 <tr><td><hr /></td></tr>
   
-{{if $sejour->_ref_GHM->_CM || $sejour->_ref_actes_ccam}}
 <tr>
   <td id="export_CSejour_{{$sejour->_id}}">
   </td>
 </tr>
-{{/if}}
 
 </table>
