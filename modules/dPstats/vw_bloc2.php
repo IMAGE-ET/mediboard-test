@@ -8,10 +8,11 @@
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @version    $Revision$
  */
+
 CCanDo::checkRead();
 
-//CApp::setTimeLimit(180);
-//ini_set("memory_limit", "512M");
+$miner = new COperationWorkflow();
+$miner->warnUsage();
 
 $mode = CValue::get("mode", "html");
 
@@ -20,10 +21,7 @@ $finlist = max(CValue::get("finlistbloc", $deblist), $deblist);
 $bloc_id = CValue::getOrSession("bloc_id");
 $type    = CValue::get("type", "prevue");
 
-$user = new CMediusers();
-$listPrats = $user->loadPraticiens(PERM_READ);
-
-$listBlocs = CGroups::loadCurrent()->loadBlocs();
+$blocs = CGroups::loadCurrent()->loadBlocs();
 $bloc = new CBlocOperatoire();
 $bloc->load($bloc_id);
 
@@ -32,58 +30,80 @@ $where["stats"] = "= '1'";
 if ($bloc->_id) {
   $where["bloc_id"] = "= '$bloc->_id'";
 }
+
 $salle = new CSalle();
-$listSalles = $salle->loadGroupList($where);
+$salles = $salle->loadGroupList($where);
 
 // Récupération des plages
 $where = array(
   "date"     => "BETWEEN '$deblist 00:00:00' AND '$finlist 23:59:59'",
-  "salle_id" => CSQLDataSource::prepareIn(array_keys($listSalles)),
+  "salle_id" => CSQLDataSource::prepareIn(array_keys($salles)),
 );
-$order = "date, salle_id, debut, chir_id";
-$listPlages = array();
-$listInterv = array();
+/** @var CPlageOp[] $plages */
+$plages = array();
+/** @var COperation[] $operations */
+$operations = array();
+/** @var int $nb_interv */
 $nb_interv = 1;
 
 if ($type == "prevue") {
   $plage = new CPlageOp();
-  $listPlages = $plage->loadList($where, $order);
+  $order = "date, salle_id, debut, chir_id";
+  $plages = $plage->loadList($where, $order);
+  CStoredObject::massLoadFwdRef($plages, "chir_id");
+  CStoredObject::massLoadFwdRef($plages, "spec_id");
+
 // Récupération des interventions
-  foreach ($listPlages as $curr_plage) {
-    $curr_plage->loadRefsFwd(1);
-    $curr_plage->loadRefsBack(0, "entree_salle");
+  foreach ($plages as $_plage) {
+    $_plage->loadRefOwner();
+    $_plage->loadRefAnesth();
+    $_plage->loadRefSalle();
+    $_plage->loadRefsOperations(false, "entree_salle");
 
     $nb_interv = 1;
-    foreach ($curr_plage->_ref_operations as $curr_op) {
-      $curr_op->_rank_reel = $curr_op->entree_salle ? $nb_interv : "";
+    foreach ($_plage->_ref_operations as $_operation) {
+      // Calcul du rang
+      $_operation->_rank_reel = $_operation->entree_salle ? $nb_interv : "";
       $nb_interv++;
-      $next = next($curr_plage->_ref_operations);
-      $curr_op->_pat_next = (($next !== false) ? $next->entree_salle : null);
-      $curr_op->loadRefsFwd(1);
-      $curr_op->loadLogs();
-      $curr_op->_ref_sejour->loadRefsFwd(1);
+      $next = next($_plage->_ref_operations);
+      $_operation->_pat_next = (($next !== false) ? $next->entree_salle : null);
+
+      $_operation->_ref_plageop = $_plage;
+
+      $operations[$_operation->_id] = $_operation;
     }
   }
 }
 else {
   // Récupération des interventions
   $order = "date, salle_id, chir_id";
-  $interv = new COperation();
-  $listInterv = $interv->loadList($where, $order);
+  $operation = new COperation();
+  $operations = $operation->loadList($where, $order);
 
-  foreach ($listInterv as $op) {
-    $op->_rank_reel = $op->entree_salle ? $nb_interv : "";
+  foreach ($operations as $_operation) {
+    // Calcul du rang
+    $_operation->_rank_reel = $_operation->entree_salle ? $nb_interv : "";
     $nb_interv++;
-    $op->_pat_next = null;
-    $op->loadRefsFwd(1);
-    $op->loadLogs();
-    $op->_ref_sejour->loadRefsFwd(1);
+    $_operation->_pat_next = null;
   }
 }
 
+// Chargement exhaustif
+CStoredObject::massLoadFwdRef($operations, "anesth_id");
+CStoredObject::massLoadFwdRef($operations, "chir_id");
+$sejours = CStoredObject::massLoadFwdRef($operations, "sejour_id");
+CStoredObject::massLoadFwdRef($sejours, "patient_id");
+foreach ($operations as $_operation) {
+  $_operation->updateDatetimes();
+  $_operation->loadRefAnesth();
+  $_operation->updateSalle();
+  $_operation->loadRefChir()->loadRefFunction();
+  $_operation->loadRefPatient();
+  $_operation->loadRefWorkflow();
+}
+
+
 if ($mode == "csv") {
-    // A utiliser comme ça :
-    // m=dPstats&dialog=1&a=vw_bloc2&mode=text&suppressHeaders=1
     $csvName = "stats_bloc_".$deblist."_".$finlist."_".$bloc_id.".csv";
     $csvPath = "tmp/$csvName";
     $csvFile = fopen($csvPath, "w") or die("can't open file");
@@ -92,35 +112,36 @@ if ($mode == "csv") {
     $title .= '"Entrée salle";"Début d\'induction";"Fin d\'induction";"Début d\'intervention";"Fin d\'intervention";"Sortie salle";"Patient suivant";';
     $title .= '"Entrée reveil";"Sortie reveil"
 ';
+
     fwrite($csvFile, $title);
-    foreach ($listPlages as $curr_plage) {
-      foreach ($curr_plage->_ref_operations as $curr_op) {
-        $line  = '"'.$curr_plage->date.'";';
-        $line .= '"'.$curr_plage->_ref_salle->_view.'";';
-        $line .= '"'.$curr_op->_ref_salle->_view.'";';
-        $line .= '"'.$curr_plage->debut.'";';
-        $line .= '"'.$curr_plage->fin.'";';
-        $line .= '"'.$curr_op->rank.'";';
-        $line .= '"'.$curr_op->_rank_reel.'";';
-        $line .= '"'.$curr_op->_ref_sejour->_ref_patient->_view.'" ('.$curr_op->_ref_sejour->_ref_patient->_age.');';
-        $line .= '"'.$curr_op->_ref_sejour->type.'";';
-        $line .= '"'.$curr_op->_ref_chir->_view.'";';
-        $line .= '"'.$curr_op->_ref_anesth->_view.'";';
-        $line .= '"'.$curr_op->libelle.'";';
-        $line .= '"'.$curr_op->_ref_sejour->DP.'";';
-        $line .= '"'.$curr_op->codes_ccam.'";';
-        $line .= '"'.$curr_op->_lu_type_anesth.'";';
-        $line .= '"'.$curr_op->ASA.'";';
-        $line .= '"'.$curr_op->_ref_first_log->date.'";';
-        $line .= '"'.$curr_op->entree_salle.'";';
-        $line .= '"'.$curr_op->induction_debut.'";';
-        $line .= '"'.$curr_op->induction_fin.'";';
-        $line .= '"'.$curr_op->debut_op.'";';
-        $line .= '"'.$curr_op->fin_op.'";';
-        $line .= '"'.$curr_op->sortie_salle.'";';
-        $line .= '"'.$curr_op->_pat_next.'";';
-        $line .= '"'.$curr_op->entree_reveil.'";';
-        $line .= '"'.$curr_op->sortie_reveil_possible.'"
+    foreach ($plages as $_plage) {
+      foreach ($_plage->_ref_operations as $_operation) {
+        $line  = '"'.$_plage->date.'";';
+        $line .= '"'.$_plage->_ref_salle->_view.'";';
+        $line .= '"'.$_operation->_ref_salle->_view.'";';
+        $line .= '"'.$_plage->debut.'";';
+        $line .= '"'.$_plage->fin.'";';
+        $line .= '"'.$_operation->rank.'";';
+        $line .= '"'.$_operation->_rank_reel.'";';
+        $line .= '"'.$_operation->_ref_sejour->_ref_patient->_view.'" ('.$_operation->_ref_sejour->_ref_patient->_age.');';
+        $line .= '"'.$_operation->_ref_sejour->type.'";';
+        $line .= '"'.$_operation->_ref_chir->_view.'";';
+        $line .= '"'.$_operation->_ref_anesth->_view.'";';
+        $line .= '"'.$_operation->libelle.'";';
+        $line .= '"'.$_operation->_ref_sejour->DP.'";';
+        $line .= '"'.$_operation->codes_ccam.'";';
+        $line .= '"'.$_operation->_lu_type_anesth.'";';
+        $line .= '"'.$_operation->ASA.'";';
+        $line .= '"'.$_operation->_ref_workflow->date_creation.'";';
+        $line .= '"'.$_operation->entree_salle.'";';
+        $line .= '"'.$_operation->induction_debut.'";';
+        $line .= '"'.$_operation->induction_fin.'";';
+        $line .= '"'.$_operation->debut_op.'";';
+        $line .= '"'.$_operation->fin_op.'";';
+        $line .= '"'.$_operation->sortie_salle.'";';
+        $line .= '"'.$_operation->_pat_next.'";';
+        $line .= '"'.$_operation->entree_reveil.'";';
+        $line .= '"'.$_operation->sortie_reveil_possible.'"
 ';
         fwrite($csvFile, $line);
       }
@@ -149,9 +170,9 @@ else {
 
   $smarty->assign("deblist",    $deblist);
   $smarty->assign("finlist",    $finlist);
-  $smarty->assign("listBlocs",  $listBlocs);
-  $smarty->assign("listPlages", $listPlages);
-  $smarty->assign("listInterv", $listInterv);
+  $smarty->assign("blocs",  $blocs);
+  $smarty->assign("plages",     $plages);
+  $smarty->assign("operations", $operations);
   $smarty->assign("nb_interv" , $nb_interv);
   $smarty->assign("bloc",       $bloc);
   $smarty->assign("type",       $type);

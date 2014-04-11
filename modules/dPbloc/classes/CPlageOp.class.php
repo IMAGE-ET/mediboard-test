@@ -61,13 +61,13 @@ class CPlageOp extends CMbObject {
   // Behaviour Fields
   public $_verrouillee = array();
   public $_check_collisions = true;
-  
+
+  /** @var CMbObject */
+  public $_ref_owner;
   /** @var CMediusers */
   public $_ref_chir;
-
   /** @var CMediusers */
   public $_ref_anesth;
-
   /** @var CFunctions */
   public $_ref_spec;
 
@@ -138,6 +138,15 @@ class CPlageOp extends CMbObject {
   function loadRefs($annulee = true) {
     $this->loadRefsFwd();
     $this->loadRefsBack($annulee);
+  }
+
+  /**
+   * Chargement du propriétaire
+   *
+   * @return CMbObject
+   */
+  function loadRefOwner() {
+    return $this->_ref_owner = $this->chir_id ? $this->loadRefChir() : $this->loadRefSpec();
   }
 
   /**

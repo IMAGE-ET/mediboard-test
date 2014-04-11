@@ -10,15 +10,13 @@
 
 <script>
 function getSpreadSheet() {
-  var oForm = document.bloc;
-  var spreadSheet = new Url();
-  spreadSheet.setModuleAction("dPstats", "vw_bloc2");
-  spreadSheet.addParam("suppressHeaders", 1);
-  spreadSheet.addParam("mode", "csv");
-  spreadSheet.addParam("bloc_id", $V(oForm.bloc_id));
-  spreadSheet.addParam("deblistbloc", $V(oForm.deblistbloc));
-  spreadSheet.addParam("finlistbloc", $V(oForm.finlistbloc));
-  spreadSheet.popup(550, 300, "statsBloc");
+  var form = document.bloc;
+  var url = new Url('stats', 'vw_bloc2', 'raw');
+  url.addParam('mode', 'csv');
+  url.addElement(form.bloc_id);
+  url.addElement(form.deblistbloc);
+  url.addElement(form.finlistbloc);
+  url.popup(550, 300, 'statsBloc');
 }
 
 Main.add(function () {
@@ -53,9 +51,9 @@ Main.add(function () {
     <td colspan="4">
       <select name="bloc_id">
         <option value="">&mdash; {{tr}}CBlocOperatoire.select{{/tr}}</option>
-        {{foreach from=$listBlocs item=curr_bloc}}
-        <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $bloc->_id }}selected="selected"{{/if}}>
-          {{$curr_bloc->nom}}
+        {{foreach from=$blocs item=_bloc}}
+        <option value="{{$_bloc->_id}}" {{if $_bloc->_id == $bloc->_id }}selected="selected"{{/if}}>
+          {{$_bloc->nom}}
         </option>
         {{/foreach}}
       </select>
@@ -121,137 +119,80 @@ Main.add(function () {
     <th>sortie</th>
   </tr>
   {{if $type == "prevue"}}
-    {{foreach from=$listPlages item=curr_plage}}
-    {{foreach from=$curr_plage->_ref_operations item=curr_op}}
+    {{foreach from=$plages item=_plage}}
     <tr>
-      <td class="text">{{$curr_plage->date|date_format:"%d/%m/%Y"}}</td>
-      <td class="text">{{$curr_plage->_ref_salle->_view}}</td>
-      <td class="text">{{$curr_op->_ref_salle->_view}}</td>
-      <td class="text">{{$curr_plage->debut|date_format:$conf.time}}</td>
-      <td class="text">{{$curr_plage->fin|date_format:$conf.time}}</td>
-      <td class="text">
-        {{if $curr_op->rank}}
-          #{{$curr_op->rank}} à {{$curr_op->time_operation|date_format:$conf.time}}
-        {{else}}
-          Non validé
-        {{/if}}
-      </td>
-      <td class="text">
-        {{if $curr_op->_rank_reel}}
-          #{{$curr_op->_rank_reel}} à {{$curr_op->entree_salle|date_format:$conf.time}}
-        {{else}}
-          Non renseigné
-        {{/if}}
-      </td>
-      <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}} ({{$curr_op->_ref_sejour->_ref_patient->_age}})</td>
-      <td class="text">{{tr}}CSejour.type.{{$curr_op->_ref_sejour->type}}{{/tr}}</td>
-      <td class="text">{{$curr_op->_ref_sejour->entree_prevue|date_format:$conf.datetime}}</td>
-      <td class="text">
-        {{if $curr_op->_ref_sejour->entree_reelle}}
-          {{$curr_op->_ref_sejour->entree_reelle|date_format:$conf.datetime}}
-        {{else}}
-          Non renseigné
-        {{/if}}
-      </td>
-      <td class="text">Dr {{$curr_op->_ref_chir->_view}}</td>
-      <td class="text">
-        {{if $curr_op->_ref_anesth->_id}}
-          Dr {{$curr_op->_ref_anesth->_view}}
-        {{/if}}
-      </td>
-      <td class="text">{{$curr_op->libelle}}</td>
-      <td class="text">{{$curr_op->_ref_sejour->DP}}</td>
-      <td class="text">{{$curr_op->codes_ccam|replace:'|':' '}}</td>
-      <td class="text">{{$curr_op->_lu_type_anesth}}</td>
-      <td class="text">{{$curr_op->ASA}}</td>
-      <td class="text">
-        {{if $curr_op->_ref_first_log}}
-          {{$curr_op->_ref_first_log->date|date_format:$conf.datetime}}
-        {{else}}
-          &mdash;
-        {{/if}}
-      </td>
-      <td class="text">{{$curr_op->entree_salle|date_format:$conf.time}}</td>
-      <td class="text">{{$curr_op->induction_debut|date_format:$conf.time}}</td>
-      <td class="text">{{$curr_op->induction_fin|date_format:$conf.time}}</td>
-      <td class="text">{{$curr_op->pose_garrot|date_format:$conf.time}}</td>
-      <td class="text">{{$curr_op->debut_op|date_format:$conf.time}}</td>
-      <td class="text">{{$curr_op->fin_op|date_format:$conf.time}}</td>
-      <td class="text">{{$curr_op->retrait_garrot|date_format:$conf.time}}</td>
-      <td class="text">{{$curr_op->sortie_salle|date_format:$conf.time}}</td>
-      <td class="text">{{$curr_op->_pat_next|date_format:$conf.time}}</td>
-      <td class="text">{{$curr_op->entree_reveil|date_format:$conf.time}}</td>
-      <td class="text">{{$curr_op->sortie_reveil_possible|date_format:$conf.time}}</td>
+      <th colspan="30" class="section">
+        {{$_plage}} 
+        &mdash; {{$_plage->_ref_salle}}
+        &mdash; {{$_plage->_ref_owner}}
+      </th>
     </tr>
-    {{/foreach}}
-    {{/foreach}}
-
-    {{if $nb_interv == 1}}
+    {{foreach from=$_plage->_ref_operations item=_operation}}
+      {{mb_include template=inc_bloc2_line}}
+    {{foreachelse}}
       <tr>
         <td colspan="30" class="empty">{{tr}}COperation.none{{/tr}}</td>
       </tr>
-    {{/if}}
+    {{/foreach}}
+
+
+    {{/foreach}}
+
   {{else}}
-    {{foreach from=$listInterv item=op}}
+    {{foreach from=$operations item=_operation}}
       <tr>
-        <td class="text">{{$op->date|date_format:"%d/%m/%Y"}}</td>
-        <td class="text">{{$op->_ref_salle->_view}}</td>
-        <td class="text">{{$op->_ref_salle->_view}}</td>
-        <td class="text">{{$op->date|date_format:$conf.time}}</td>
-        <td class="text">{{$op->date|date_format:$conf.time}}</td>
+        <td class="text">{{$_operation->date|date_format:"%d/%m/%Y"}}</td>
+        <td class="text">{{$_operation->_ref_salle->_view}}</td>
+        <td class="text">{{$_operation->_ref_salle->_view}}</td>
+        <td class="text">{{$_operation->date|date_format:$conf.time}}</td>
+        <td class="text">{{$_operation->date|date_format:$conf.time}}</td>
         <td class="text">
-          {{if $op->rank}}
-            #{{$op->rank}} à {{$op->time_operation|date_format:$conf.time}}
+          {{if $_operation->rank}}
+            #{{$_operation->rank}} à {{$_operation->time_operation|date_format:$conf.time}}
           {{else}}
             Non validé
           {{/if}}
         </td>
         <td class="text">
-          {{if $op->_rank_reel}}
-            #{{$op->_rank_reel}} à {{$op->entree_salle|date_format:$conf.time}}
+          {{if $_operation->_rank_reel}}
+            #{{$_operation->_rank_reel}} à {{$_operation->entree_salle|date_format:$conf.time}}
           {{else}}
             Non renseigné
           {{/if}}
         </td>
-        <td class="text">{{$op->_ref_sejour->_ref_patient->_view}} ({{$op->_ref_sejour->_ref_patient->_age}})</td>
-        <td class="text">{{tr}}CSejour.type.{{$op->_ref_sejour->type}}{{/tr}}</td>
-        <td class="text">{{$op->_ref_sejour->entree_prevue|date_format:$conf.datetime}}</td>
+        <td class="text">{{$_operation->_ref_sejour->_ref_patient->_view}} ({{$_operation->_ref_sejour->_ref_patient->_age}})</td>
+        <td class="text">{{tr}}CSejour.type.{{$_operation->_ref_sejour->type}}{{/tr}}</td>
+        <td class="text">{{$_operation->_ref_sejour->entree_prevue|date_format:$conf.datetime}}</td>
         <td class="text">
-          {{if $op->_ref_sejour->entree_reelle}}
-            {{$op->_ref_sejour->entree_reelle|date_format:$conf.datetime}}
+          {{if $_operation->_ref_sejour->entree_reelle}}
+            {{$_operation->_ref_sejour->entree_reelle|date_format:$conf.datetime}}
           {{else}}
             Non renseigné
           {{/if}}
         </td>
-        <td class="text">Dr {{$op->_ref_chir->_view}}</td>
+        <td class="text">Dr {{$_operation->_ref_chir->_view}}</td>
         <td class="text">
-          {{if $op->_ref_anesth->_id}}
-            Dr {{$op->_ref_anesth->_view}}
+          {{if $_operation->_ref_anesth->_id}}
+            Dr {{$_operation->_ref_anesth->_view}}
           {{/if}}
         </td>
-        <td class="text">{{$op->libelle}}</td>
-        <td class="text">{{$op->_ref_sejour->DP}}</td>
-        <td class="text">{{$op->codes_ccam|replace:'|':' '}}</td>
-        <td class="text">{{$op->_lu_type_anesth}}</td>
-        <td class="text">{{$op->ASA}}</td>
-        <td class="text">
-          {{if $op->_ref_first_log}}
-            {{$op->_ref_first_log->date|date_format:$conf.datetime}}
-          {{else}}
-            &mdash;
-          {{/if}}
-        </td>
-        <td class="text">{{$op->entree_salle|date_format:$conf.time}}</td>
-        <td class="text">{{$op->induction_debut|date_format:$conf.time}}</td>
-        <td class="text">{{$op->induction_fin|date_format:$conf.time}}</td>
-        <td class="text">{{$op->pose_garrot|date_format:$conf.time}}</td>
-        <td class="text">{{$op->debut_op|date_format:$conf.time}}</td>
-        <td class="text">{{$op->fin_op|date_format:$conf.time}}</td>
-        <td class="text">{{$op->retrait_garrot|date_format:$conf.time}}</td>
-        <td class="text">{{$op->sortie_salle|date_format:$conf.time}}</td>
-        <td class="text">{{$op->_pat_next|date_format:$conf.time}}</td>
-        <td class="text">{{$op->entree_reveil|date_format:$conf.time}}</td>
-        <td class="text">{{$op->sortie_reveil_possible|date_format:$conf.time}}</td>
+        <td class="text">{{$_operation->libelle}}</td>
+        <td class="text">{{$_operation->_ref_sejour->DP}}</td>
+        <td class="text">{{$_operation->codes_ccam|replace:'|':' '}}</td>
+        <td class="text">{{$_operation->_lu_type_anesth}}</td>
+        <td class="text">{{$_operation->ASA}}</td>
+        <td class="text">{{$_operation->_ref_workflow->date_creation|date_format:$conf.datetime}}</td>
+        <td class="text">{{$_operation->entree_salle|date_format:$conf.time}}</td>
+        <td class="text">{{$_operation->induction_debut|date_format:$conf.time}}</td>
+        <td class="text">{{$_operation->induction_fin|date_format:$conf.time}}</td>
+        <td class="text">{{$_operation->pose_garrot|date_format:$conf.time}}</td>
+        <td class="text">{{$_operation->debut_op|date_format:$conf.time}}</td>
+        <td class="text">{{$_operation->fin_op|date_format:$conf.time}}</td>
+        <td class="text">{{$_operation->retrait_garrot|date_format:$conf.time}}</td>
+        <td class="text">{{$_operation->sortie_salle|date_format:$conf.time}}</td>
+        <td class="text">{{$_operation->_pat_next|date_format:$conf.time}}</td>
+        <td class="text">{{$_operation->entree_reveil|date_format:$conf.time}}</td>
+        <td class="text">{{$_operation->sortie_reveil_possible|date_format:$conf.time}}</td>
       </tr>
 
     {{foreachelse}}
