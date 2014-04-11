@@ -60,11 +60,13 @@
 {{foreach from=$object->_ref_operations item=curr_op}}
 <tr {{if $object->_guid == $selected_guid}} class="selected" {{/if}}>
   <td class="text" style="text-indent: 1em;">
+    {{mb_ternary var=tab_editor test=$curr_op->plageop_id value=vw_edit_planning other=vw_edit_urgence}}
+    {{assign var=link_editor value="?m=planningOp&tab=$tab_editor&operation_id=`$curr_op->_id`"}}
     {{if $curr_op->_canEdit}}
-    <a class="actionPat" title="Modifier l'intervention" href="{{$curr_op->_link_editor}}">
+    <a class="actionPat" title="Modifier l'intervention" href="{{$link_editor}}">
       <img src="images/icons/planning.png" alt="modifier"/>
     </a>
-    <a href="{{$curr_op->_link_editor}}" class="iconed-text interv">
+    <a href="{{$link_editor}}" class="iconed-text interv">
     {{else}}
     <a href="#nothing" class="iconed-text interv">
     {{/if}}

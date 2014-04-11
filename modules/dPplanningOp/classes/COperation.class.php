@@ -159,10 +159,6 @@ class COperation extends CCodable implements IPatientRelated {
   // EAI Fields
   public $_eai_initiateur_group_id; // group initiateur du message EAI
 
-  // Links
-  public $_link_editor;
-  public $_link_viewer;
-
   /** @var CMediusers */
   public $_ref_chir;
   /** @var CMediusers */
@@ -205,6 +201,8 @@ class COperation extends CCodable implements IPatientRelated {
   public $_ref_sortie_locker;
   /** @var CSupervisionGraphPack */
   public $_ref_graph_pack;
+  /** @var COperationWorkflow */
+  public $_ref_workflow;
 
   // Filter Fields
   public $_date_min;
@@ -549,13 +547,6 @@ class COperation extends CCodable implements IPatientRelated {
     }
     if ($this->entree_reveil && $this->sortie_reveil_possible && $this->sortie_reveil_possible > $this->entree_reveil) {
       $this->_duree_sspi = CMbDT::subTime($this->entree_reveil, $this->sortie_reveil_possible);
-    }
-
-    if ($this->plageop_id) {
-      $this->_link_editor = "index.php?m=dPplanningOp&tab=vw_edit_planning&operation_id=".$this->_id;
-    }
-    else {
-      $this->_link_editor = "index.php?m=dPplanningOp&tab=vw_edit_urgence&operation_id=".$this->_id;
     }
 
     $this->_acte_depassement        = $this->depassement;
@@ -1105,11 +1096,11 @@ class COperation extends CCodable implements IPatientRelated {
    */
   function loadRefPlageOp($cache = true) {
 
-    $this->loadRefVisiteAnesth();
-
     if (!$this->_ref_plageop) {
       $this->_ref_plageop = $this->loadFwdRef("plageop_id", $cache);
     }
+
+    $this->loadRefVisiteAnesth();
 
     /** @var CPlageOp $plage */
     $plage = $this->_ref_plageop;
@@ -1124,18 +1115,48 @@ class COperation extends CCodable implements IPatientRelated {
       else {
         $this->_ref_anesth = $plage->_ref_anesth;
       }
-
-      $date = $plage->date;
     }
     else {
       // Hors plage
       $this->loadRefAnesth();
-      $date = $this->date;
     }
 
+    // Champs dérivés
     $this->updateSalle();
+    $this->updateDatetimes();
+    $this->updateView();
 
-    //Calcul du nombre de jour entre la date actuelle et le jour de l'operation
+    return $plage;
+  }
+
+  function updateView() {
+    $this->_view = "Intervention";
+
+    if (!$this->plageop_id) {
+      $this->_view .= " [HP]";
+    }
+
+    $this->_view .= " le " . CMbDT::format($this->_datetime, CAppUI::conf("date"));
+
+    if ($this->_ref_patient) {
+      $this->_view .= " de ". $this->_ref_patient->_view;
+    }
+
+    if ($this->_ref_chir) {
+      $this->_view .= " par le Dr ". $this->_ref_chir->_view;
+    }
+  }
+
+  /**
+   * Calculs sur les champs d'horodatage dérivés, notamment en fonction de la plage
+   *
+   * @return void;
+   */
+  function updateDatetimes() {
+    $plage = $this->_ref_plageop;
+    $date = $plage && $plage->_id ? $plage->date : $this->date;
+
+    // Calcul du nombre de jour entre la date actuelle et le jour de l'operation
     $this->_compteur_jour = CMbDT::daysRelative($date, CMbDT::date());
 
     // Horaire global
@@ -1151,6 +1172,7 @@ class COperation extends CCodable implements IPatientRelated {
     else {
       $this->_datetime = "$date 00:00:00";
     }
+
     $this->_datetime_best     = $this->_datetime;
     $this->_datetime_reel     = "$date $this->debut_op";
     if ($this->debut_op) {
@@ -1171,15 +1193,6 @@ class COperation extends CCodable implements IPatientRelated {
     else {
       $this->_acte_execution = $this->_datetime;
     }
-
-    $this->_view = "Intervention ";
-
-    if ($this->date) {
-      $this->_view .= "(hors plage) ";
-    }
-
-    $this->_view .= "du " . CMbDT::format($this->_datetime, CAppUI::conf("date"));
-    return $this->_ref_plageop;
   }
 
   /**
@@ -1290,7 +1303,7 @@ class COperation extends CCodable implements IPatientRelated {
    * @return CSalle
    */
   function loadRefSalle() {
-    return $this->_ref_salle = $this->loadRefsFwd("salle_id", true);
+    return $this->_ref_salle = $this->loadFwdRef("salle_id", true);
   }
 
   /**
@@ -1311,7 +1324,7 @@ class COperation extends CCodable implements IPatientRelated {
 
     $this->loadRefChir($cache)->loadRefFunction();
     $this->loadRefPatient($cache);
-    $this->_view = "Intervention de {$this->_ref_sejour->_ref_patient->_view} par le Dr {$this->_ref_chir->_view}";
+    $this->updateView();
   }
 
   /**
@@ -1349,8 +1362,19 @@ class COperation extends CCodable implements IPatientRelated {
   function loadRefSortieLocker() {
     return $this->_ref_sortie_locker = $this->loadFwdRef("sortie_locker_id", true);
   }
+
+  /**
+   * Charge le workflow d'opération
+   *
+   * @return COperationWorkflow
+   */
+  function loadRefWorkflow() {
+    return $this->_ref_workflow = $this->loadUniqueBackRef("workflow");
+  }
+
   /**
    * @see parent::loadRefsBack()
+   * @deprecated
    */
   function loadRefsBack() {
     $this->loadRefsFiles();

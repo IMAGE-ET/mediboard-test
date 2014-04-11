@@ -137,3 +137,5 @@ Main.add(function(){
     </tr>
   </table>
 </form>
+
+{{mb_include module=system template=configure_dsn dsn=readonly}}
