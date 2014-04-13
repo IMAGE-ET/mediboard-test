@@ -82,7 +82,11 @@
         {{foreach from=$senders_source item=_sender_source}}
         {{assign var=source value=$_sender_source->_ref_source}}
 
-        <div><span onmouseover="ObjectTooltip.createEx(this, '{{$_sender_source->_guid}}');">{{$source}}</span></div>
+        <div>
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$_sender_source->_guid}}');">
+            {{$source}}
+          </span>
+        </div>
         {{foreachelse}}
         <div class="empty">{{tr}}CViewSender-back-sources_link.empty{{/tr}}</div>
         {{/foreach}}
@@ -120,7 +124,7 @@
     {{if $smarty.foreach.senders.iteration % 20 == 0 || $smarty.foreach.senders.last}}
     <tr style="height: 2px; border-top: 2px solid #888;"></tr>
     <tr>
-      <td colspan="8" style="text-align: right;"><strong>Bilan horaire</strong></td>
+      <td colspan="8" style="text-align: right;"><strong>Bilan horaire: {{$hour_total|percent}}</strong></td>
       {{foreach from=$hour_sum key=min item=sum}}
 
       {{assign var=status value=""}}
@@ -131,7 +135,7 @@
       {{assign var=active value=""}}
       {{if $sum && $min == $minute}}{{assign var=active value=active}}{{/if}}
 
-      <td class="hour-plan {{$status}} {{$active}}" title="{{$sum}} @ {{$min}}" style="height: 2em;"></td>
+      <td class="hour-plan {{$status}} {{$active}}" title="{{$sum|percent}} @ {{$min}}" style="height: 2em;"></td>
       {{/foreach}}
     </tr>
     {{/if}}
