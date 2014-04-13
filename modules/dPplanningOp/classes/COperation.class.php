@@ -1166,7 +1166,7 @@ class COperation extends CCodable implements IPatientRelated {
     elseif ($this->horaire_voulu && $this->horaire_voulu != "00:00:00") {
       $this->_datetime = "$date $this->horaire_voulu";
     }
-    elseif ($plage->_id) {
+    elseif ($plage && $plage->_id) {
       $this->_datetime = "$date ".$plage->debut;
     }
     else {

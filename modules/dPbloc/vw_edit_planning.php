@@ -82,6 +82,7 @@ $ljoin = array();
 $ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
 $where = array();
 $where["date"]            = "BETWEEN '$debut' AND '$fin'";
+$where["plageop_id"]      = "IS NULL";
 $where["annulee"]         = "= '0'";
 $where[]                  = "salle_id IS NULL OR salle_id ". CSQLDataSource::prepareIn(array_keys($listSalles));
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
@@ -99,6 +100,7 @@ foreach ($listDays as $keyDate => $valDate) {
   $where = array();
   $where["date"]     = "= '$keyDate'";
   $where["annulee"]   = "= '0'";
+  $where["plageop_id"]      = "IS NULL";
   $where["salle_id"]        = CSQLDataSource::prepareIn(array_keys($listSalles));
   $order = "time_operation";
   $horsPlages = $operation->loadList($where, $order);
