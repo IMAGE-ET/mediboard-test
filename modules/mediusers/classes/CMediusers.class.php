@@ -1373,7 +1373,6 @@ class CMediusers extends CPerson {
       $_plage->_unordered_operations = array();
 
       // Chargement d'optimisation
-
       CMbObject::massLoadFwdRef($_plage->_ref_operations, "chir_id");
       $sejours = CMbObject::massLoadFwdRef($_plage->_ref_operations, "sejour_id");
       CMbObject::massLoadFwdRef($sejours, "patient_id");

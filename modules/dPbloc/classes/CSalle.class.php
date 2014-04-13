@@ -242,6 +242,7 @@ class CSalle extends CMbObject {
     $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
     $where = array();
     $where["operations.date"]     = "= '$date'";
+    $where["operations.plageop_id"] = "IS NULL";
     $where["operations.salle_id"] = "= '$this->_id'";
     $where["operations.chir_id"]  = CSQLDataSource::prepareIn(array_keys($listPrats));
     $order = "time_operation, chir_id";
