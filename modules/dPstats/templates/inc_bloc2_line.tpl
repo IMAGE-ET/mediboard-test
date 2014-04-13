@@ -9,11 +9,11 @@
 *}}
 
 <tr>
-  <td class="text">{{$_plage->date|date_format:"%d/%m/%Y"}}</td>
-  <td class="text">{{$_plage->_ref_salle->_view}}</td>
-  <td class="text">{{$_operation->_ref_salle->_view}}</td>
-  <td class="text">{{$_plage->debut|date_format:$conf.time}}</td>
-  <td class="text">{{$_plage->fin|date_format:$conf.time}}</td>
+  <td class="text">{{$_operation->_datetime|date_format:$conf.date}}</td>
+  <td class="text">{{$_operation->_ref_salle_prevue}}</td>
+  <td class="text">{{$_operation->_ref_salle_reelle}}</td>
+  <td class="text">{{$_operation->_deb_plage|date_format:$conf.time}}</td>
+  <td class="text">{{$_operation->_fin_plage|date_format:$conf.time}}</td>
   <td class="text">
     {{if $_operation->rank}}
       #{{$_operation->rank}} à {{$_operation->time_operation|date_format:$conf.time}}

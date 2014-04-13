@@ -29,7 +29,8 @@ $listChirs = $chir->loadPraticiens(PERM_READ);
 // Listes des interventions hors plage
 $operation = new COperation();
 $where = array ();
-$where["date"]               = "= '$date'";
+$where["date"] = "= '$date'";
+$where["plageop_id"] = "IS NULL";
 $where["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($listChirs));
 
 /** @var COperation[] $urgences */

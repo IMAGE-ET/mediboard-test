@@ -11,10 +11,11 @@
 
 CCanDo::checkRead();
 
-$miner = new COperationWorkflow();
-$miner->warnUsage();
-
 $mode = CValue::get("mode", "html");
+if ($mode == "html") {
+  $miner = new COperationWorkflow();
+  $miner->warnUsage();
+}
 
 $deblist = CValue::getOrSession("deblistbloc", CMbDT::date("-1 DAY"));
 $finlist = max(CValue::get("finlistbloc", $deblist), $deblist);
@@ -100,6 +101,20 @@ foreach ($operations as $_operation) {
   $_operation->loadRefChir()->loadRefFunction();
   $_operation->loadRefPatient();
   $_operation->loadRefWorkflow();
+
+  // Ajustements ad hoc
+  if ($plage = $_operation->_ref_plageop) {
+    $_operation->_ref_salle_prevue = $plage->_ref_salle;
+    $_operation->_ref_salle_reelle = $_operation->_ref_salle;
+    $_operation->_deb_plage = $plage->debut;
+    $_operation->_fin_plage = $plage->fin;
+  }
+  else {
+    $_operation->_ref_salle_prevue = $_operation->_ref_salle;
+    $_operation->_ref_salle_reelle = $_operation->_ref_salle;
+    $_operation->_deb_plage = $_operation->date;
+    $_operation->_fin_plage = $_operation->date;
+  }
 }
 
 
@@ -114,13 +129,12 @@ if ($mode == "csv") {
 ';
 
     fwrite($csvFile, $title);
-    foreach ($plages as $_plage) {
-      foreach ($_plage->_ref_operations as $_operation) {
-        $line  = '"'.$_plage->date.'";';
-        $line .= '"'.$_plage->_ref_salle->_view.'";';
-        $line .= '"'.$_operation->_ref_salle->_view.'";';
-        $line .= '"'.$_plage->debut.'";';
-        $line .= '"'.$_plage->fin.'";';
+    foreach ($operations as $_operation) {
+        $line  = '"'.CMbDT::date($_operation->_datetime).'";';
+        $line .= '"'.$_operation->_ref_salle_prevue.'";';
+        $line .= '"'.$_operation->_ref_salle_reelle.'";';
+        $line .= '"'.$_operation->_deb_plage.'";';
+        $line .= '"'.$_operation->_fin_plage.'";';
         $line .= '"'.$_operation->rank.'";';
         $line .= '"'.$_operation->_rank_reel.'";';
         $line .= '"'.$_operation->_ref_sejour->_ref_patient->_view.'" ('.$_operation->_ref_sejour->_ref_patient->_age.');';
@@ -144,7 +158,6 @@ if ($mode == "csv") {
         $line .= '"'.$_operation->sortie_reveil_possible.'"
 ';
         fwrite($csvFile, $line);
-      }
     }
     fclose($csvFile);
   
