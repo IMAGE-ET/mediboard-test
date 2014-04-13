@@ -97,6 +97,8 @@ class CSmartyMB extends Smarty {
     $this->register_modifier("currency"          , array($this, "currency"));
     $this->register_modifier("percent"           , array($this, "percent"));
     $this->register_modifier("spancate"          , array($this, "spancate"));
+    $this->register_modifier("float"             , array($this, "float"));
+    $this->register_modifier("integer"           , array($this, "integer"));
     $this->register_modifier("decabinary"        , array($this, "decabinary"));
     $this->register_modifier("module_installed"  , array($this, "module_installed"));
     $this->register_modifier("module_active"     , array($this, "module_active"));
@@ -639,6 +641,31 @@ class CSmartyMB extends Smarty {
     $truncated = CMbString::nl2bull($truncated);
     $string = CMbString::htmlEntities($string);
     return strlen($string) > $length ? "<span title=\"$string\">$truncated</span>" : $truncated;
+  }
+
+  /**
+   * Formats a value as a float
+   * Example: {$value|float:2}
+   *
+   * @param float $value    The value to format
+   * @param int   $decimals Number of decimal digits
+   *
+   * @return string
+   */
+  function float($value , $decimals = 0) {
+    return number_format($value, $decimals, $dec_point = ',', $thousands_sep = ' ');
+  }
+
+  /**
+   * Formats a value as an integer
+   * Example: {$value|integer}
+   *
+   * @param int $value The value to format
+   *
+   * @return string
+   */
+  function integer($value) {
+    return number_format($value, 0, $dec_point = ',', $thousands_sep = ' ');
   }
 
   /**
