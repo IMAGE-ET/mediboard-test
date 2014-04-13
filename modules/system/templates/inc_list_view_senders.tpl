@@ -112,7 +112,7 @@
         {{assign var=partial value=""}}
         {{if $_sender->every > 1}}{{assign var=partial value=partial}}{{/if}}
 
-        <td class="hour-plan min-{{$min}} {{$status}} {{$active}} {{$partial}}" title="{{$plan}} @ {{$min}}"></td>
+        <td class="hour-plan min-{{$min}} {{$status}} {{$active}} {{$partial}}" title="{{$plan|percent}} @ {{$min}}"></td>
       {{/foreach}}
     </tr>
 
@@ -120,7 +120,7 @@
     {{if $smarty.foreach.senders.iteration % 20 == 0 || $smarty.foreach.senders.last}}
     <tr style="height: 2px; border-top: 2px solid #888;"></tr>
     <tr>
-      <td colspan="8" style="text-align: right;"><strong>Bilan horaire</strong></td>
+      <td colspan="8" style="text-align: right;"><strong>Bilan horaire: {{$hour_total|percent}}</strong></td>
       {{foreach from=$hour_sum key=min item=sum}}
 
       {{assign var=status value=""}}
@@ -131,7 +131,7 @@
       {{assign var=active value=""}}
       {{if $sum && $min == $minute}}{{assign var=active value=active}}{{/if}}
 
-      <td class="hour-plan {{$status}} {{$active}}" title="{{$sum}} @ {{$min}}" style="height: 2em;"></td>
+      <td class="hour-plan {{$status}} {{$active}}" title="{{$sum|percent}} @ {{$min}}" style="height: 2em;"></td>
       {{/foreach}}
     </tr>
     {{/if}}
