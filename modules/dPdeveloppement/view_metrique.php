@@ -79,19 +79,7 @@ if ($view_current) {
   $where["functions_mediboard.group_id"] = " = '$current_group'";
 
   $res_current_etab["CMediusers"]        = $mediuser->countList($where, null, $ljoin);
-   
-  // - Entrées de journal
-  $ljoin    = array();
-  $where    = array();
-  $user_log = new CUserLog;
 
-  $ljoin["users_mediboard"]              = "user_log.user_id = users_mediboard.user_id";
-  $ljoin["functions_mediboard"]          = "users_mediboard.function_id = functions_mediboard.function_id";
-
-  $where["functions_mediboard.group_id"] = " = '$current_group'";
-
-  $res_current_etab["CUserLog"]          = $user_log->countList($where, null, $ljoin);
-  
   $smarty->assign("res_current_etab", $res_current_etab);
   $smarty->display("inc_metrique_current_etab.tpl");
 }
