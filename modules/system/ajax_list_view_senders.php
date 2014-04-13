@@ -28,11 +28,13 @@ foreach ($senders as $_sender) {
 
 // Tableau de charges
 $hour_sum = array();
+$hour_total = 0;
 foreach (range(0, 59) as $min) {
   $hour_sum[$min] = 0;
   foreach ($senders as $_sender) {
     if ($_sender->active) {
       $hour_sum[$min] += $_sender->_hour_plan[$min];
+      $hour_total += $_sender->_hour_plan[$min] / 60;
     }
   }
 }
@@ -41,6 +43,7 @@ foreach (range(0, 59) as $min) {
 $smarty = new CSmartyDP();
 $smarty->assign("senders", $senders);
 $smarty->assign("hour_sum", $hour_sum);
+$smarty->assign("hour_total", $hour_total);
 $smarty->assign("time", $time);
 $smarty->assign("minute", $minute);
 $smarty->display("inc_list_view_senders.tpl");
