@@ -6,7 +6,7 @@
   {{foreach from=$res_current_etab item=curr_res key=field_res}}
   <tr>
     <td>{{tr}}{{$field_res}}{{/tr}}</td>
-    <td>{{$curr_res}}</td>
+    <td>{{$curr_res|integer}}</td>
   </tr>
   {{/foreach}}
 </table>

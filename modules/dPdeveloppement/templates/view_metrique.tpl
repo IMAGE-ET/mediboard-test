@@ -5,7 +5,7 @@ function viewGeneral() {
 }
 
 function viewCurrent() {
-  var url = new Url("dPdeveloppement", "view_metrique");
+  var url = new Url("developpement", "view_metrique");
   url.addParam("view_current", 1);
   url.requestUpdate("current");
 }
@@ -37,7 +37,7 @@ Main.add(function () {
     {{foreach from=$result item=curr_result key=class}}
     <tr>
       <td>{{tr}}{{$class}}{{/tr}}</td>
-      <td>{{$curr_result.Rows}}</td>
+      <td>{{$curr_result.Rows|integer}}</td>
       <td>
         {{assign var=relative value=$curr_result.Update_relative}}
         <label title="{{$curr_result.Update_time|date_format:$conf.datetime}}">
