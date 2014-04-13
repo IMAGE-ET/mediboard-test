@@ -68,12 +68,12 @@
           <td class="text" rowspan="{{$rowspan}}">
         {{/if}}
           {{if $salle}}
-            <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;op={{$_operation->_id}}" title="Coder l'intervention">
+            <a href="?m=salleOp&amp;tab=vw_operations&amp;op={{$_operation->_id}}" title="Coder l'intervention">
           {{/if}}
             {{if ($urgence && $salle) || $_operation->_ref_plageop->spec_id}}
-              {{$_operation->_ref_chir->_view}}
+              {{$_operation->_ref_chir}}
             {{if $vueReduite && $_operation->_ref_anesth->_id}}
-              {{$_operation->_ref_anesth->_view}} -
+              {{$_operation->_ref_anesth}} -
             {{/if}}
             {{/if}}
             {{if $_operation->time_operation != "00:00:00" && !$_operation->entree_salle}}
@@ -131,13 +131,13 @@
             <div class="warning">
               <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
                     onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
-                {{$_operation->_ref_patient->_view}}
+                {{$_operation->_ref_patient}}
                 {{if $vueReduite}}
                   ({{$_operation->_ref_patient->_age}})
                 {{/if}}
               </span>
               <br />
-              Intervention déplacée vers {{$_operation->_ref_salle->_view}}
+              Intervention déplacée vers {{$_operation->_ref_salle}}
             </div>
           </td>
         {{else}}
@@ -147,14 +147,14 @@
             {{/if}}
             <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
                   onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
-              {{$_operation->_ref_patient->_view}}
+              {{$_operation->_ref_patient}}
               {{if $vueReduite}}
                 ({{$_operation->_ref_patient->_age}})
               {{/if}}
             </span>
             {{if $_operation->_ref_affectation && $_operation->_ref_affectation->_ref_lit->_id && $conf.dPbloc.CPlageOp.chambre_operation == 1}}
               <div style="font-size: 0.9em; white-space: nowrap; border: none;">
-                {{$_operation->_ref_affectation->_ref_lit->_ref_chambre->_ref_service->_view}} &rarr; {{$_operation->_ref_affectation->_ref_lit->_view}}
+                {{$_operation->_ref_affectation->_ref_lit->_ref_chambre->_ref_service}} &rarr; {{$_operation->_ref_affectation->_ref_lit}}
               </div>
             {{/if}}
             {{if $salle}}
@@ -185,7 +185,7 @@
             {{if $conf.dPbloc.CPlageOp.view_tools && $_operation->_ref_besoins|@count && $conf.dPbloc.CPlageOp.systeme_materiel == "expert"}}
               <strong>Mat.</strong> :
               {{foreach from=$_operation->_ref_besoins item=_matos name=matos}}
-                {{$_matos->_ref_type_ressource->_view}}
+                {{$_matos->_ref_type_ressource}}
                 {{if !$smarty.foreach.matos.last}}, {{/if}}
               {{/foreach}}<br/>
             {{/if}}

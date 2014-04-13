@@ -18,9 +18,9 @@
           {{mb_include module=system template=inc_object_notes object=$_plage}}
           <a onclick="EditPlanning.order('{{$_plage->_id}}');" href="#" title="Agencer les interventions">
             {{if $_plage->chir_id}}
-              Chir : Dr {{$_plage->_ref_chir->_view}}
+              Chir : Dr {{$_plage->_ref_chir}}
             {{else}}
-              {{$_plage->_ref_spec->_view}}
+              {{$_plage->_ref_spec}}
             {{/if}}
             <br />
             {{$_plage->debut|date_format:$conf.time}} à {{$_plage->fin|date_format:$conf.time}}
@@ -30,13 +30,11 @@
 
       {{if $vueReduite}}
         <tr>
+          {{if $_plage->anesth_id}}
           <th class="category" colspan="2">
-            {{if $_plage->anesth_id}}
-              Anesth : Dr {{$_plage->_ref_anesth->_view}}
-            {{else}}
-              -
-            {{/if}}
+            Anesth : Dr {{$_plage->_ref_anesth}}
           </th>
+          {{/if}}
         </tr>
         {{assign var=affectations value=$_plage->_ref_affectations_personnel}}
         {{if $affectations|@is_array}}
@@ -65,9 +63,9 @@
           <td>
             <select name="anesth_id" onchange="this.form.submit()">
               <option value="">&mdash; Choisir un anesthésiste</option>
-              {{foreach from=$listAnesths item=curr_anesth}}
-                <option value="{{$curr_anesth->user_id}}" {{if $_plage->anesth_id == $curr_anesth->user_id}} selected="selected" {{/if}}>
-                  {{$curr_anesth->_view}}
+              {{foreach from=$listAnesths item=_anesth}}
+                <option value="{{$_anesth->user_id}}" {{if $_plage->anesth_id == $_anesth->user_id}} selected="selected" {{/if}}>
+                  {{$_anesth}}
                 </option>
               {{/foreach}}
             </select>
@@ -91,44 +89,52 @@
 
   <table class="tbl">
     {{if $_plage->_ref_operations}}
-      {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=0 operations=$_plage->_ref_operations}}
+      {{mb_include module=salleOp template=inc_liste_operations urgence=0 operations=$_plage->_ref_operations}}
+    {{else}}
+      <tr><td class="empty" colspan="10">Aucune intervention placée</td></tr>
     {{/if}}
 
     {{if $_plage->_unordered_operations}}
       <tr>
-        <th colspan="10">Non placées</th>
+        <th class="section" colspan="10">Non placées</th>
       </tr>
-      {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=0 operations=$_plage->_unordered_operations}}
+      {{mb_include module=salleOp template=inc_liste_operations urgence=0 operations=$_plage->_unordered_operations}}
     {{/if}}
+  </table>
+  {{foreachelse}}
+  <table class="tbl">
+    <tr>
+      <td class="empty">{{tr}}CPlageOp.none{{/tr}}</td>
+    </tr>
   </table>
 {{/foreach}}
 
 <!-- Déplacées -->
 {{if $salle->_ref_deplacees|@count}}
   <hr />
-  <table class="form">
+  <table class="tbl">
     <tr>
-      <th class="category" colspan="2">
+      <th class="section">
         Déplacées
       </th>
     </tr>
   </table>
   <table class="tbl">
-    {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=1 operations=$salle->_ref_deplacees}}
+    {{mb_include module=salleOp template=inc_liste_operations urgence=1 operations=$salle->_ref_deplacees}}
   </table>
 {{/if}}
 
 <!-- Urgences -->
 {{if $salle->_ref_urgences|@count}}
   <hr />
-  <table class="form">
+  <table class="tbl">
     <tr>
-      <th class="category" colspan="2">
+      <th class="section">
         Hors plage
       </th>
     </tr>
   </table>
   <table class="tbl">
-    {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=1 operations=$salle->_ref_urgences}}
+    {{mb_include module=salleOp template=inc_liste_operations urgence=1 operations=$salle->_ref_urgences}}
   </table>
 {{/if}}
