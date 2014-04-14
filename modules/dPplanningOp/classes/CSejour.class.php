@@ -35,6 +35,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $praticien_id;
   public $group_id;
   public $grossesse_id;
+  public $confirme_user_id;
 
   public $uf_hebergement_id; // UF de responsabilité d'hébergement
   public $uf_medicale_id; // UF de responsabilité médicale
@@ -260,6 +261,8 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_ref_echange_hprim;
   /** @var CConsultation */
   public $_ref_obs_entree;
+  /** @var CMediusers */
+  public $_ref_confirme_user;
 
   // Collections
   /** @var COperation[] */
@@ -482,7 +485,8 @@ class CSejour extends CFacturable implements IPatientRelated {
     $props["mode_sortie"]              = "enum list|normal|transfert|mutation|deces";
     $props["mode_sortie_id"]           = "ref class|CModeSortieSejour autocomplete|libelle|true";
 
-    $props["confirme"]                 = "bool";
+    $props["confirme"]                 = "dateTime";
+    $props["confirme_user_id"]         = "ref class|CMediusers";
     $props["prestation_id"]            = "ref class|CPrestation";
     $props["facturable"]               = "bool notNull default|1 show|0";
     $props["etablissement_sortie_id"]  = "ref class|CEtabExterne autocomplete|nom";
@@ -1823,6 +1827,15 @@ class CSejour extends CFacturable implements IPatientRelated {
    */
   function loadRefModeSortie() {
     return $this->_ref_mode_sortie = $this->loadFwdRef("mode_sortie_id", true);
+  }
+
+  /**
+   * Charge le user qui a autorisé la sortie
+   *
+   * @return CMediusers
+   */
+  function loadRefConfirmeUser() {
+    return $this->_ref_confirme_user = $this->loadFwdRef("confirme_user_id", true);
   }
 
   /**

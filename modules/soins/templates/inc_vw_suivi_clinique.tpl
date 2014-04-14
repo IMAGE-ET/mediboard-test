@@ -32,13 +32,117 @@
       window.reloadSynthese();
     }
   }
-  
-  {{if "forms"|module_active}}
-    Main.add(function(){
+
+  toggleAutorisation = function(status) {
+    var isPraticien = "{{$app->_ref_user->isPraticien()}}";
+    var form = getForm("edit-sejour-frm");
+
+    if (status == 1) {
+      if (isPraticien == "1") {
+        $V(form.confirme_user_id, User.id);
+      }
+      modal("confirmSortieModal", {width: "410px", height: "290px"});
+    }
+    else {
+      if (isPraticien == "1") {
+        $V(form.confirme, "");
+        $V(form.confirme_user_id, "");
+        return form.onsubmit();
+      }
+      else {
+        $V(form._cancel_confirme, 1);
+        $("confirme_area").hide();
+        modal("confirmSortieModal", {width: "410px", height: "290px"});
+      }
+    }
+  }
+
+  afterConfirmPassword = function() {
+    var formFrom = getForm("confirmSortie");
+    var formTo = getForm("edit-sejour-frm");
+    var cancel_confirme = $V(formTo._cancel_confirme);
+    $V(formTo.confirme, cancel_confirme == "1" ? "" : $V(formFrom.confirme));
+    $V(formTo.confirme_user_id, cancel_confirme == "1" ? "" : $V(formFrom.user_id));
+    formTo.onsubmit();
+  }
+
+  Main.add(function() {
+    {{if "forms"|module_active}}
       ExObject.loadExObjects("{{$sejour->_class}}", "{{$sejour->_id}}", "list-ex_objects", 0.5);
-    });
-  {{/if}}
+    {{/if}}
+
+    var form = getForm("confirmSortie");
+    {{if !$app->_ref_user->isPraticien()}}
+      var url = new Url("mediusers", "ajax_users_autocomplete");
+      url.addParam("input_field", form._user_view.name);
+      url.autoComplete(form._user_view, null, {
+        minChars: 0,
+        method: "get",
+        select: "view",
+        dropdown: true,
+        width: '200px',
+        afterUpdateElement: function(field, selected) {
+          $V(form._user_view, selected.down('.view').innerHTML);
+          var id = selected.getAttribute("id").split("-")[2];
+          $V(form.user_id, id);
+        }
+      });
+    {{/if}}
+    Calendar.regField(form.confirme);
+  });
 </script>
+
+<div id="confirmSortieModal" style="display: none;">
+  <form name="confirmSortie" method="post" action="?m=system&a=ajax_password_action"
+        onsubmit="return onSubmitFormAjax(this, {useFormAction: true})">
+    <input type="hidden" name="callback" value="afterConfirmPassword" />
+    <input type="hidden" name="user_id" class="notNull" value="{{$app->_ref_user->_id}}" />
+    <table class="form">
+      <tr>
+        <th class="title" colspan="2">
+          Autorisation de sortie
+        </th>
+      </tr>
+      <tr>
+        <tbody id="confirme_area">
+          <th>
+            Date de sortie autorisée :
+          </th>
+          <td>
+            <input name="confirme" type="hidden" class="dateTime" value="{{$sejour->sortie}}" />
+          </td>
+        </tr>
+        </tbody>
+      {{if !$app->_ref_user->isPraticien()}}
+        <tr>
+          <th>Utilisateur</th>
+          <td>
+            <input type="text" name="_user_view" class="autocomplete" value="{{$app->_ref_user}}" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="user_password">Mot de passe</label>
+          </th>
+          <td>
+            <input type="password" name="user_password" class="notNull password str" />
+          </td>
+        </tr>
+      {{/if}}
+      <tr>
+        <td colspan="2" class="button">
+          {{if $app->_ref_user->isPraticien()}}
+            <button type="button" class="tick singleclick" onclick="afterConfirmPassword()">{{tr}}Validate{{/tr}}</button>
+          {{else}}
+            <button class="tick singleclick">{{tr}}Validate{{/tr}}</button>
+          {{/if}}
+          <button type="button" class="cancel singleclick"
+                  onclick="Control.Modal.close(); {{if !$sejour->confirme}}getForm('edit-sejour-frm')._confirme.checked = false;{{/if}}">{{tr}}Cancel{{/tr}}</button>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
 
 <table class="main" style="text-align: left; width: 100%">
   <tr>
@@ -153,11 +257,14 @@
       
       <!--  Informations sur le séjour -->
       <form name="edit-sejour-frm" method="post" action="?"
-        onsubmit="return onSubmitFormAjax(this, { onComplete: function() { loadSuiviClinique('{{$sejour->_id}}') } })">
-        <input type="hidden" name="m" value="dPplanningOp" />
+            onsubmit="return onSubmitFormAjax(this, function() { Control.Modal.close(); loadSuiviClinique('{{$sejour->_id}}') })">
+        <input type="hidden" name="m" value="planningOp" />
         <input type="hidden" name="dosql" value="do_sejour_aed" />
         <input type="hidden" name="del" value="0" />
-         {{mb_field object=$sejour field=entree_prevue hidden=true}}
+        <input type="hidden" name="_cancel_confirme" value="0"/>
+        {{mb_field object=$sejour field=confirme hidden=true}}
+        {{mb_field object=$sejour field=confirme_user_id hidden=true}}
+        {{mb_field object=$sejour field=entree_prevue hidden=true}}
         {{mb_key object=$sejour}}
         <table class="tbl">
           <tr>
@@ -188,7 +295,7 @@
               {{if $sejour->sortie_reelle || $sejour->confirme}}
                 {{mb_value object=$sejour field="sortie"}}
               {{else}}
-                {{mb_field object=$sejour field="sortie_prevue" register=true form="edit-sejour-frm" onchange="submitFormAjax(this.form);"}}
+                {{mb_field object=$sejour field="sortie_prevue" register=true form="edit-sejour-frm" onchange="this.form.onsubmit();"}}
               {{/if}}
             </td>
           </tr>
@@ -198,10 +305,14 @@
               {{mb_value object=$sejour field="type"}}
             </td>
             <td class="text {{if $sejour->confirme}}ok{{else}}warning{{/if}}">
-              {{mb_field object=$sejour field=confirme typeEnum="checkbox" onchange="submitFormAjax(this.form);"}}
-              {{mb_label object=$sejour field=confirme}}
               {{if $sejour->confirme}}
-                par {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$user_confirm_sortie}}
+                <button type="button" class="cancel notext" onclick="toggleAutorisation()"></button>
+                Sortie autorisée pour le {{mb_value object=$sejour field=confirme}}
+                par {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_confirme_user}}
+              {{else}}
+                <label>
+                  <input type="checkbox" name="_confirme" onclick="toggleAutorisation(1)" /> Sortie autorisée
+                </label>
               {{/if}}
             </td>
           </tr>

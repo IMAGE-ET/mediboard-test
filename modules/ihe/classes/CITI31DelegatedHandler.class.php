@@ -514,12 +514,12 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
       
       // Confirmation de sortie
-      if ($sejour->fieldModified("confirme", "1")) {
+      if (!$sejour->_old->confirme && $sejour->confirme) {
         return "A16";
       }
       
       // Annulation confirmation de sortie
-      if ($sejour->_old->confirme && $sejour->fieldModified("confirme", "0")) {
+      if ($sejour->_old->confirme && !$sejour->confirme) {
         return "A25";
       }
 

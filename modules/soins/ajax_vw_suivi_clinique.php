@@ -9,6 +9,8 @@
  * @version    $Revision:$
  */
 
+CCanDo::checkRead();
+
 $sejour_id = CValue::get("sejour_id");
 
 $sejour = new CSejour;
@@ -32,9 +34,12 @@ if ($dossier_medical->_id) {
 
 $sejour->loadRefPraticien();
 $sejour->loadRefsOperations();
+$sejour->loadRefConfirmeUser()->loadRefFunction();
+
+$prescription_active = CModule::getInstalled("dPprescription");
 
 // Gestion des macro-cible seulement si prescription disponible
-$cible_importante = CModule::getInstalled("dPprescription");
+$cible_importante = $prescription_active;
 $sejour->loadRefsTransmissions($cible_importante, true);
 
 $sejour->loadRefsObservations(true);
@@ -86,7 +91,7 @@ $sejour->_ref_transmissions = $transmissions;
 $sejour->loadRefsConsultAnesth();
 $sejour->_ref_consult_anesth->loadRefConsultation();
 
-if (CModule::getActive("dPprescription")) {
+if ($prescription_active) {
   $prescription_sejour = $sejour->loadRefPrescriptionSejour();
   $prescription_sejour->loadJourOp(CMbDt::date());
   // Chargement des lignes de prescriptions
@@ -119,13 +124,7 @@ if (CModule::getActive("dPprescription")) {
   }
 }
 
-// Utilisateur ayant confirmé la sortie
-$logConfirme = $sejour->loadLastLogForField("confirme");
-$user_confirm_sortie = new CMediusers();
-$user_confirm_sortie->load($logConfirme->user_id);
-$user_confirm_sortie->loadRefFunction();
-
-if (CModule::getActive("dPprescription")) {
+if ($prescription_active) {
   $date = CMbDT::dateTime();
   $days_config = CAppUI::conf("dPprescription CPrescription nb_days_prescription_current");
   $date_before = CMbDT::dateTime("-$days_config DAY", $date);
@@ -139,14 +138,15 @@ foreach ($sejour->_ref_operations as $_operation) {
   $_operation->countAlertsNotHandled();
 }
 
-$smarty = new CSmartyDP;
-$smarty->assign("sejour"             , $sejour);
-$smarty->assign("user_confirm_sortie", $user_confirm_sortie);
+$smarty = new CSmartyDP();
 
-if (CModule::getActive("dPprescription")) {
+$smarty->assign("sejour"   , $sejour);
+
+if ($prescription_active) {
   $smarty->assign("date"  , $date);
   $smarty->assign("days_config", $days_config);
   $smarty->assign("date_before"  , $date_before);
   $smarty->assign("date_after"   , $date_after);
 }
+
 $smarty->display("inc_vw_suivi_clinique.tpl");

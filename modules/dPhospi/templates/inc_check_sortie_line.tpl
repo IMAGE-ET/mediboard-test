@@ -16,7 +16,7 @@
         {{mb_include module=Imeds template=inc_sejour_labo link="#1" float="none"}}
       {{/if}}
         
-      <a class="action" style="display: inline" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
+      <a class="action" style="display: inline" title="Modifier le séjour" href="?m=planningOp&tab=vw_edit_sejour&sejour_id={{$sejour->_id}}">
         <img src="images/icons/planning.png" alt="modifier" />
       </a>
     </div>
@@ -103,8 +103,8 @@
         {{assign var=aff_guid value=$sejour->_guid}}
       {{/if}}
       <form name="editSortiePrevue-{{$type}}-{{$aff_guid}}" method="post" action="?"
-        onsubmit="return onSubmitFormAjax(this, { onComplete: function() { refreshList(null, null, '{{$type}}', '{{$type_mouvement}}'); } })">
-        <input type="hidden" name="m" value="dPplanningOp" />
+        onsubmit="return onSubmitFormAjax(this, refreshList.curry(null, null, '{{$type}}', '{{$type_mouvement}}'))">
+        <input type="hidden" name="m" value="planningOp" />
         <input type="hidden" name="dosql" value="do_sejour_aed" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="confirme" value="{{$sejour->confirme}}" />

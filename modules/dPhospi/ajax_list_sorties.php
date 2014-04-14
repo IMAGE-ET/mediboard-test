@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Hospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 $type           = CValue::get("type");
@@ -133,7 +133,7 @@ if ($type == "presents") {
     $where[] = "('$datetime_check' BETWEEN affectation.entree AND affectation.sortie) AND affectation.effectue = '0'";
   }
   if ($vue) {
-    $where["sejour.confirme"] = " = '0'";
+    $where["sejour.confirme"] = " IS NULL";
   }
   /** @var CAffectation[] $presents */
   $presents = $affectation->loadList($where, $order, null, "affectation_id", $ljoin);
@@ -401,7 +401,7 @@ else {
   $where["sejour.sortie"]      = "= affectation.sortie";
   $where["sejour.type"]        = " = '$type'";
   if ($vue) {
-    $where["sejour.confirme"] = " = '0'";
+    $where["sejour.confirme"] = " IS NULL";
   }
 
   /** @var CAffectation[] $mouvements */

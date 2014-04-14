@@ -1725,6 +1725,25 @@ class CSetupdPplanningOp extends CSetup {
       ADD `sortie_locker_id` INT (11) UNSIGNED;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.87";
+    $this->makeRevision("1.87");
+    $query = "ALTER TABLE `sejour`
+      ADD `confirme_date` DATETIME AFTER `confirme`;";
+    $this->addQuery($query);
+
+    $query = "UPDATE `sejour`
+      SET `confirme_date` = `sejour`.`sortie_prevue`
+      WHERE `sejour`.`confirme` = '1'";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `sejour`
+      DROP `confirme`,
+      CHANGE `confirme_date` `confirme` DATETIME";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `sejour`
+      ADD `confirme_user_id` INT (11) UNSIGNED AFTER `confirme`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.88";
   }
 }

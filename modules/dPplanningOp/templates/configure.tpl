@@ -1,6 +1,10 @@
-<script type="text/javascript">
+<script>
   Main.add(function() {
-    Control.Tabs.create('tabs-configure', true);
+    Control.Tabs.create('tabs-configure', true, {afterChange: function(container) {
+      if (container.id == "CConfigEtab") {
+        Configuration.edit('dPplanningOp', ['CGroups'], $('CConfigEtab'));
+      }
+    }});
   });
 </script>
 
@@ -16,10 +20,9 @@
   <li><a href="#configure-CIdSante400">{{tr}}CIdSante400-tag{{/tr}}</a></li>
   <li><a href="#configure-maintenance">{{tr}}Maintenance{{/tr}}    </a></li>
   <li><a href="#config-sae-base"      >{{tr}}config-sae-base{{/tr}}</a></li>
+  <li><a href="#CConfigEtab"          >Config par établissement    </a></li>
   <li><a href="#Purge"                >{{tr}}Purge{{/tr}}          </a></li>
 </ul>
-
-<hr class="control_tabs" />
 
 <div id="configure-mode_easy" style="display: none">
   {{mb_include template=inc_config_mode_easy}}
@@ -58,6 +61,8 @@
 <div id="config-sae-base" style="display: none;">
   {{mb_include template=inc_config_base_sae}}
 </div>
+
+<div id="CConfigEtab" style="display: none">
 
 <div id="Purge" style="display: none;">
   {{mb_include template=inc_configure_purge_sejours}}

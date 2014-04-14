@@ -116,7 +116,7 @@ $where = array(
   "entree_reelle"   => "IS NOT NULL",
   "sortie_reelle"   => "IS NULL",
   "sortie_prevue"   => "BETWEEN '$min' AND '$max'",
-  "sejour.confirme" => "= '0'",
+  "sejour.confirme" => "IS NULL",
   "group_id"        => "= '$group_id'"
 );
 

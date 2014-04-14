@@ -912,11 +912,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     // A16 : Sortie définitive confirmée
     if ($event_code == "A16") {
-      $newVenue->confirme = 1;
+      $newVenue->confirme = $newVenue->sortie;
     }
     // A25 : Annulation de la confirmation de la sortie définitive
     if ($event_code == "A25") {
-      $newVenue->confirme = 0;
+      $newVenue->confirme = "";
     }
 
     // Segment PV1

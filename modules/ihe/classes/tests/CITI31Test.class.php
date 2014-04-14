@@ -357,7 +357,7 @@ class CITI31Test extends CIHETestCase {
     $patient = self::loadPatientPES($step, 40);
     $sejour  = self::loadAdmitPES($patient);
 
-    $sejour->confirme      = 1;
+    $sejour->confirme = $sejour->sortie;
 
     self::storeObject($sejour);
   }
@@ -443,7 +443,7 @@ class CITI31Test extends CIHETestCase {
     $patient = self::loadPatientPES($step, 40);
     $sejour  = self::loadAdmitPES($patient);
 
-    $sejour->confirme = 0;
+    $sejour->confirme = "";
 
     self::storeObject($sejour);
   }
