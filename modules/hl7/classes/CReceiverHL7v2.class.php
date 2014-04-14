@@ -46,7 +46,7 @@ class CReceiverHL7v2 extends CInteropReceiver {
       "SWF"    => array ("CSWF"),
       "PDQ"    => array ("CPDQ"),
     );
-    
+
     return $spec;
   }
 
@@ -59,7 +59,7 @@ class CReceiverHL7v2 extends CInteropReceiver {
     $backProps                   = parent::getBackProps();
     $backProps['object_configs'] = "CReceiverHL7v2Config object_id";
     $backProps['echanges']       = "CExchangeHL7v2 receiver_id";
-    
+
     return $backProps;
   }
 
@@ -70,7 +70,7 @@ class CReceiverHL7v2 extends CInteropReceiver {
    */
   function updateFormFields() {
     parent::updateFormFields();
-    
+
     if (!$this->_configs) {
       $this->loadConfigValues();
     }
@@ -87,9 +87,9 @@ class CReceiverHL7v2 extends CInteropReceiver {
     $ihe_object_handlers = CIHE::getObjectHandlers();
     $object_handler_class  = get_class($objectHandler);
     if (array_key_exists($object_handler_class, $ihe_object_handlers)) {
-      return new $ihe_object_handlers[$object_handler_class];
+      return $ihe_object_handlers[$object_handler_class];
     }
-}
+  }
 
   /**
    * Get HL7 version for one transaction
@@ -101,7 +101,7 @@ class CReceiverHL7v2 extends CInteropReceiver {
   function getHL7Version($transaction) {
     $iti_hl7_version = $this->_configs[$transaction."_HL7_version"];
 
-    foreach (CHL7::$versions as $_version => $_sub_versions) {      
+    foreach (CHL7::$versions as $_version => $_sub_versions) {
       if (in_array($iti_hl7_version, $_sub_versions)) {
         return $_version;
       }
@@ -119,11 +119,11 @@ class CReceiverHL7v2 extends CInteropReceiver {
    */
   function getInternationalizationCode($transaction) {
     $iti_hl7_version = $this->_configs[$transaction."_HL7_version"];
-    
+
     if (preg_match("/([A-Z]{2})_(.*)/", $iti_hl7_version, $matches)) {
       $this->_i18n_code = $matches[1];
     }
-    
+
     return $this->_i18n_code;
 }
 
@@ -154,11 +154,11 @@ class CReceiverHL7v2 extends CInteropReceiver {
    */
   function sendEvent($evenement, CMbObject $mbObject) {
     $evenement->_receiver = $this;
-    
+
     // build_mode = Mode simplifié lors de la génération du message
     $this->loadConfigValues();
-    CHL7v2Message::setBuildMode($this->_configs["build_mode"]); 
-    $evenement->build($mbObject);  
+    CHL7v2Message::setBuildMode($this->_configs["build_mode"]);
+    $evenement->build($mbObject);
     CHL7v2Message::resetBuildMode();
 
     if (!$msg = $evenement->flatten()) {
@@ -183,7 +183,7 @@ class CReceiverHL7v2 extends CInteropReceiver {
     }
 
     if ($this->_configs["encoding"] == "UTF-8") {
-      $msg = utf8_encode($msg); 
+      $msg = utf8_encode($msg);
     }
 
     $source->setData($msg, null, $exchange);
@@ -193,7 +193,7 @@ class CReceiverHL7v2 extends CInteropReceiver {
     catch (Exception $e) {
       throw new CMbException("CExchangeSource-no-response");
     }
-    
+
     $exchange->date_echange = CMbDT::dateTime();
 
     $ack_data = $source->getACQ();
@@ -202,7 +202,7 @@ class CReceiverHL7v2 extends CInteropReceiver {
       $exchange->store();
       return null;
     }
-    
+
     $data_format = CIHE::getEvent($exchange);
 
     $ack = new CHL7v2Acknowledgment($data_format);

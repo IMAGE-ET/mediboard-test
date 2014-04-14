@@ -68,7 +68,7 @@ class CReceiverHprimSante extends CInteropReceiver {
     $object_handler_class  = get_class($objectHandler);
 
     if (array_key_exists($object_handler_class, $hprim_object_handlers)) {
-      return new $hprim_object_handlers[$object_handler_class];
+      return $hprim_object_handlers[$object_handler_class];
     }
 
     return null;

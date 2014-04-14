@@ -39,17 +39,17 @@ class CDestinataireHprim extends CInteropReceiver {
     $spec->table = 'destinataire_hprim';
     $spec->key   = 'dest_hprim_id';
     $spec->messages = array(
-      "patients" => array ( 
-        "evenementPatient" 
+      "patients" => array (
+        "evenementPatient"
       ),
       "pmsi" => array(
-        (CAppUI::conf("hprimxml send_diagnostic") == "evt_serveuretatspatient") ? 
+        (CAppUI::conf("hprimxml send_diagnostic") == "evt_serveuretatspatient") ?
           "evenementServeurEtatsPatient" : "evenementPMSI",
         "evenementServeurActe",
         "evenementFraisDivers",
         "evenementServeurIntervention"
       ),
-      "stock" => array ( 
+      "stock" => array (
         "evenementMvtStocks"
       )
     );
@@ -177,7 +177,7 @@ class CDestinataireHprim extends CInteropReceiver {
     }
 
     $exchange = $dom_evt->_ref_echange_hprim;
-    
+
     $source->setData($msg, false, $exchange);
     try {
       $source->send();
@@ -214,7 +214,7 @@ class CDestinataireHprim extends CInteropReceiver {
     $echg_hprim = new CEchangeHprim();
     $echg_hprim->_load_content = false;
     $where = array();
-    $where["sender_id"] = " = '$this->_id'";    
+    $where["sender_id"] = " = '$this->_id'";
     $key = $echg_hprim->_spec->key;
     $echg_hprim->loadObject($where, "$key DESC");
     $this->_ref_last_message = $echg_hprim;
@@ -231,7 +231,7 @@ class CDestinataireHprim extends CInteropReceiver {
     $hprim_object_handlers = CHprimXML::getObjectHandlers();
     $object_handler_class  = get_class($objectHandler);
     if (array_key_exists($object_handler_class, $hprim_object_handlers)) {
-      return new $hprim_object_handlers[$object_handler_class];
+      return $hprim_object_handlers[$object_handler_class];
     }
 
     return null;
