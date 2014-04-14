@@ -211,7 +211,7 @@
 </div>
 
 <!-- Mails -->
-{{if !$dialog && $mails|@count && $app->user_id}}
+{{if !$dialog && $app->user_id && $mails|@count}}
   <div class="small-mail not-printable" onmouseover="ObjectTooltip.createDOM(this, 'mail-details');">
       {{tr}}CUserMessage{{/tr}} : {{$mails|@count}} {{tr}}CUserMessage._to_state.received{{/tr}}{{if $mails|@count >= 2}}s{{/if}}
   </div>
