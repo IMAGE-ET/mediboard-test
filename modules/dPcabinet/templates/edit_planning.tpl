@@ -459,6 +459,7 @@
                 <td>
                   <input type="text" name="libelle" class="autocomplete"
                          value="{{if $consult->element_prescription_id}}{{$consult->_ref_element_prescription}}{{else}}&mdash; {{tr}}CPrescription.select_element{{/tr}}{{/if}}" />
+                  <button type="button" class="cancel notext" onclick="$V(this.form.element_prescription_id, ''); $V(this.form.libelle, '');"></button>
                 </td>
               </tr>
             {{/if}}
