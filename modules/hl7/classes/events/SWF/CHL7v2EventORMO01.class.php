@@ -2,12 +2,12 @@
 
 /**
  * O01 - Order Message - HL7
- *  
+ *
  * @category HL7
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
  * @link     http://www.mediboard.org
  */
 
@@ -31,12 +31,25 @@ class CHL7v2EventORMO01 extends CHL7v2EventORM implements CHL7EventORMO01 {
    */
   function build($object) {
     parent::build($object);
-    /** @var CPrescriptionLineElement $object */
-    $prescription = $object->loadRefPrescription();
-    $sejour = $prescription->loadRefObject();
+    /** @var Cconsultation $object */
+    //cas de suppression de consutlation
+    if (!$object->_id) {
+      $object = $object->_old;
+    }
 
-    /** @var CSejour $sejour */
-    $patient = $sejour->loadRefPatient();
+    $object->loadLastLog();
+    $object->loadRefPlageConsult();
+    $object->loadRefPraticien();
+    $object->loadRefElementPrescription();
+    //cas de modification de consultation en suppression d'élément
+    if (!$object->element_prescription_id) {
+      $object->_old->loadRefElementPrescription();
+    }
+
+    $patient = $object->loadRefPatient();
+    $sejour  = $object->loadRefSejour();
+    $sejour  = $sejour->_id ? $sejour : null;
+
     $this->addPID($patient, $sejour);
     $this->addPV1($sejour);
     $this->addORC($object);

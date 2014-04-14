@@ -2,7 +2,7 @@
 
 /**
  * $Id$
- *  
+ *
  * @category HL7
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -10,7 +10,7 @@
  * @version  $Revision$
  * @link     http://www.mediboard.org
  */
- 
+
 /**
  * Class CHL7v2SegmentOBR
  * OBR - Represents an HL7 OBR message segment (Observation Request)
@@ -31,7 +31,7 @@ class CHL7v2SegmentOBR extends CHL7v2Segment {
    */
   function build(CHL7v2Event $event) {
     parent::build($event);
-    /** @var CPrescriptionLineElement $object */
+    /** @var CConsultation $object */
     $object = $this->object;
 
     // OBR-1: Set ID - Observation Request (SI) (optional)
@@ -44,8 +44,17 @@ class CHL7v2SegmentOBR extends CHL7v2Segment {
     $data[] = null;
 
     // OBR-4: Universal Service ID (CE)
-    //@todo a voir
-    $data[] = $object->_view;
+    $obr4 = null;
+    $element = $object->element_prescription_id ? $object->_ref_element_prescription: $object->_old->_ref_element_prescription;
+    if ($element) {
+      $obr4 = array(
+        array(
+          $element->_id,
+          $element->libelle,
+        )
+      );
+    }
+    $data[] = $obr4;
 
     // OBR-5: Priority (ID) (optional)
     $data[] = null;
@@ -117,11 +126,8 @@ class CHL7v2SegmentOBR extends CHL7v2Segment {
 
     // OBR-27: Quantity/Timing (TQ)
     $data[] = array(
-      null,
-      null,
-      $object->duree,
-      $object->_debut_reel,
-      $object->_fin);
+      "1"
+    );
 
     // OBR-28: Result Copies to (CN) (optional)
     $data[] = null;

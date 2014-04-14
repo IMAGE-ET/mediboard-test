@@ -2,7 +2,7 @@
 
 /**
  * $Id$
- *  
+ *
  * @category HL7
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -10,7 +10,7 @@
  * @version  $Revision$
  * @link     http://www.mediboard.org
  */
- 
+
 /**
  * Class CHL7v2SegmentORC
  * ORC - Represents an HL7 ORC message segment (Common Order)
@@ -31,16 +31,33 @@ class CHL7v2SegmentORC extends CHL7v2Segment {
    */
   function build(CHL7v2Event $event) {
     parent::build($event);
-    /** @var CPrescriptionLineElement $object */
+    /** @var CConsultation $object */
     $object = $this->object;
 
     // ORC-1: Order Control (ID)
     //NW - add; CA - delete; xo - modify;
-    //@todo voir pour suppression
-    $count = $object->countExchanges($event->profil);
-    $orc1 = "NW";
-    if ($count > 1) {
-      $orc1 = "XO";
+
+    $log = $object->_ref_last_log;
+    switch ($log->type) {
+      case "create":
+        $orc1 = "NW";
+        break;
+      case "store":
+        $orc1 = "XO";
+        //cas d'oubli d'élément de prescription lors de la création de la consutlation
+        if (!$object->_old->element_prescription_id) {
+          $orc1 = "NW";
+        }
+        //cas de suppression de l'élément de prescription
+        if (!$object->element_prescription_id) {
+          $orc1 = "CA";
+        }
+        break;
+      case "delete":
+        $orc1 = "CA";
+        break;
+      default:
+        $orc1 = null;
     }
 
     $data[] = $orc1;
@@ -63,11 +80,7 @@ class CHL7v2SegmentORC extends CHL7v2Segment {
     // ORC-7: Quantity/Timing (TQ)
     //@todo a voir
     $data[] = array(
-      null,
-      null,
-      $object->duree,
-      $object->_debut_reel,
-      $object->_fin
+      "1"
     );
 
     // ORC-8: Parent (CM) (optional)
@@ -75,7 +88,7 @@ class CHL7v2SegmentORC extends CHL7v2Segment {
     $data[] = null;
 
     // ORC-9: date/time od Transaction (TS)
-    $data[] = $object->debut;
+    $data[] = $object->_datetime;
 
     // ORC-10: Entered By (XCN) (optional)
     $data[] = null;
@@ -101,8 +114,17 @@ class CHL7v2SegmentORC extends CHL7v2Segment {
     $data[] = null;
 
     // ORC-17: Entering Organization (CE)
-    //@todo a voir
-    $data[] = $object->_ref_prescription->_ref_object->loadRefUFHebergement()->libelle;
+    $orc17 = null;
+    $element = $object->element_prescription_id ? $object->_ref_element_prescription: $object->_old->_ref_element_prescription;
+    if ($element) {
+      $orc17 = array(
+        array(
+          $element->_id,
+          $element->libelle,
+        )
+      );
+    }
+    $data[] = $orc17;
 
     // ORC-18: Entering Device (CE) (optional)
     $data[] = null;
