@@ -81,12 +81,20 @@ Main.add(function(){
         <td>
           {{foreach from=$_log->_similar_user_ids item=_user_id}}
             <div>
-              {{$users.$_user_id}}
+              {{if $_user_id && array_key_exists($_user_id,$users)}}
+                {{$users.$_user_id}}
+              {{else}}
+                <em class="empty">{{tr}}None{{/tr}}</em>
+              {{/if}}
             </div>
           {{foreachelse}}
             <div>
               {{assign var=user_id value=$_log->user_id}}
-              {{$users.$user_id}}
+              {{if $user_id && array_key_exists($user_id,$users)}}
+                {{$users.$user_id}}
+              {{else}}
+                <em class="empty">{{tr}}None{{/tr}}</em>
+              {{/if}}
             </div>
           {{/foreach}}
         </td>
