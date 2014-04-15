@@ -114,8 +114,8 @@ class CUserAuthentication extends CMbObject {
       $uainfo = json_decode($uainfo, true);
       if (isset($uainfo["screen"])) {
         $screen = $uainfo["screen"];
-        $auth->screen_width  = $screen[0];
-        $auth->screen_height = $screen[1];
+        $auth->screen_width  = (int)$screen[0];
+        $auth->screen_height = (int)$screen[1];
       }
     }
 

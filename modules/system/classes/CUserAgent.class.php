@@ -2,7 +2,7 @@
 
 /**
  * $Id$
- *  
+ *
  * @category System
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -10,7 +10,7 @@
  * @version  $Revision$
  * @link     http://www.mediboard.org
  */
- 
+
 /**
  * User agent
  */
@@ -48,7 +48,7 @@ class CUserAgent extends CMbObject {
     $backProps["user_authentications"] = "CUserAuthentication user_agent_id";
     return $backProps;
   }
-  
+
   /**
    * @see parent::getProps()
    */
@@ -87,37 +87,38 @@ class CUserAgent extends CMbObject {
 
     $user_agent = new self();
     $user_agent->user_agent_string = substr($ua_string, 0, 255);
-    $user_agent->loadMatchingObject();
 
-    $browser = $detect->getBrowser($ua_string);
+    if (!$user_agent->loadMatchingObject()) {
+      $browser = $detect->getBrowser($ua_string);
 
-    $user_agent->browser_name     = $browser->Browser;
-    $user_agent->browser_version  = $browser->Version;
+      $user_agent->browser_name     = $browser->Browser;
+      $user_agent->browser_version  = $browser->Version;
 
-    $user_agent->platform_name    = $browser->Platform;
-    $user_agent->platform_version = $browser->Platform_Version;
+      $user_agent->platform_name    = $browser->Platform;
+      $user_agent->platform_version = $browser->Platform_Version;
 
-    $user_agent->device_name      = $browser->Device_Name;
-    $user_agent->device_maker     = $browser->Device_Maker;
-    $user_agent->pointing_method  = $browser->Device_Pointing_Method;
+      $user_agent->device_name      = $browser->Device_Name;
+      $user_agent->device_maker     = $browser->Device_Maker;
+      $user_agent->pointing_method  = $browser->Device_Pointing_Method;
 
-    switch ($browser->Device_Type) {
-      case "Mobile Device":
-      case "Mobile Phone":
-        $user_agent->device_type = "mobile";
-        break;
-      case "Desktop":
-        $user_agent->device_type = "desktop";
-        break;
-      case "Tablet":
-        $user_agent->device_type = "tablet";
-        break;
-      default:
-        $user_agent->device_type = "unknown";
-        break;
+      switch ($browser->Device_Type) {
+        case "Mobile Device":
+        case "Mobile Phone":
+          $user_agent->device_type = "mobile";
+          break;
+        case "Desktop":
+          $user_agent->device_type = "desktop";
+          break;
+        case "Tablet":
+          $user_agent->device_type = "tablet";
+          break;
+        default:
+          $user_agent->device_type = "unknown";
+          break;
+      }
+
+      $user_agent->store();
     }
-
-    $user_agent->store();
 
     return $user_agent;
   }
