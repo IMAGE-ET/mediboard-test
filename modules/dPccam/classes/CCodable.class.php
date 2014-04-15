@@ -69,7 +69,7 @@ class CCodable extends CMbObject {
 
 
   // Back references
-  /** @var CActe */
+  /** @var CActe[] */
   public $_ref_actes;
   /** @var CActeCCAM[] */
   public $_ref_actes_ccam;

@@ -12,9 +12,8 @@
 $sejour_id = CValue::getOrSession("sejour_id");
 $modeDAS   = CValue::getOrSession("modeDAS", 1);
 
-$sejour = new CSejour;
+$sejour = new CSejour();
 $sejour->load($sejour_id);
-$sejour->loadRefGHM();
 $sejour->countExchanges();
 
 // Création du template

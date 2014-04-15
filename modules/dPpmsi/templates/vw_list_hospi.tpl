@@ -29,7 +29,6 @@
     <th>Actes</th>
   </tr>
   {{foreach from=$listSejours item=_sejour}}
-    {{assign var="GHM" value=$_sejour->_ref_GHM}}
     <tr>
       <td {{if !$_sejour->facture}}class="empty"{{/if}}>
         {{if $_sejour->facture}}

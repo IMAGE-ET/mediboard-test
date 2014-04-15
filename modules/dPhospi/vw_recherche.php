@@ -162,7 +162,6 @@ else if ($typeVue == 1) {
       $_aff->loadRefSejour();
       $_aff->_ref_sejour->loadRefPatient();
       $_aff->_ref_sejour->_ref_praticien = $listPrat[$_aff->_ref_sejour->praticien_id];
-      $_aff->_ref_sejour->loadRefGHM();
 
       $_aff->loadRefLit();
       $_aff->_ref_lit->loadCompleteView();
@@ -186,7 +185,6 @@ else if ($typeVue == 1) {
       /** @var CSejour $_sejour */
       $_sejour->loadRefPatient();
       $_sejour->_ref_praticien = $listPrat[$_sejour->praticien_id];
-      $_sejour->loadRefGHM();
     }
   }
 }

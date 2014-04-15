@@ -112,7 +112,6 @@ Main.add(function () {
      {{mb_title class=CAffectation field=_duree}}
     </th>
     <th>Motif</th>
-    <th>Bornes<br/>GHM</th>
   </tr>
     {{if $listAff.Aff|@count == 0 && $listAff.NotAff|@count == 0}}
         <tr>
@@ -130,7 +129,6 @@ Main.add(function () {
   {{/if}}
   {{assign var=_patient   value=$_sejour->_ref_patient}}
   {{assign var=_praticien value=$_sejour->_ref_praticien}}
-  {{assign var=_GHM       value=$_sejour->_ref_GHM}}
   <tr>
     <td class="text">
       {{if $canPlanningOp->read && !$dialog}}
@@ -174,24 +172,7 @@ Main.add(function () {
         {{/foreach}}
       {{/if}}
     </td>
-    
-    <td style="text-align: center;">
-      {{if $_GHM->_DP}}
-        De {{$_GHM->_borne_basse}}
-        à {{$_GHM->_borne_haute}} nuits
-        <br />
-        {{if $_GHM->_borne_basse > $_GHM->_duree}}
-        <div class="warning">Séjour trop court</div>
-        <img src="images/icons/cross.png" alt="alerte" />
-        {{elseif $_GHM->_borne_haute < $_GHM->_duree}}
-        <div class="warning">Séjour trop long</div>
-        {{else}}
-        <div class="info">Dans les bornes</div>
-        {{/if}}
-      {{else}}
-      &mdash;
-      {{/if}}
-    </td>
+
   </tr>
   {{/foreach}}
   {{/foreach}}

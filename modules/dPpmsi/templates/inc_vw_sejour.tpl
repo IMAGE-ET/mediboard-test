@@ -50,6 +50,19 @@
         </span>
       </th>
     </tr>
+    <tr>
+      <td>
+        <form name="editSejour" method="post" onsubmit="return onSubmitFormAjax(this)">
+          <input type="hidden" name="m" value="planningOp">
+          <input type="hidden" name="dosql" value="do_sejour_aed">
+          <input type="hidden" name="patient_id" value="{{$sejour->patient_id}}">
+          {{mb_key object=$sejour}}
+          <table class="main">
+            {{mb_include module=planningOp template=inc_check_ald patient=$sejour->_ref_patient onchange="this.form.onsubmit()"}}
+          </table>
+        </form>
+      </td>
+    </tr>
     
     {{if ($conf.dPpmsi.systeme_facturation == "siemens") && $patient->_ref_IPP}}
     <tr>
@@ -85,17 +98,6 @@
         </button>
       </li>
     {{/if}}
-    <li>
-      <form name="editSejour" method="post" onsubmit="return onSubmitFormAjax(this)">
-        <input type="hidden" name="m" value="planningOp">
-        <input type="hidden" name="dosql" value="do_sejour_aed">
-        <input type="hidden" name="patient_id" value="{{$sejour->patient_id}}">
-        {{mb_key object=$sejour}}
-        <table class="main">
-          {{mb_include module=planningOp template=inc_check_ald patient=$sejour->_ref_patient onchange="this.form.onsubmit()"}}
-        </table>
-      </form>
-    </li>
   </ul>
 
   <div id="tab-PMSI" style="display: none;">
