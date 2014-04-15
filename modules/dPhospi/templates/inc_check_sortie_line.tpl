@@ -107,7 +107,8 @@
         <input type="hidden" name="m" value="planningOp" />
         <input type="hidden" name="dosql" value="do_sejour_aed" />
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="confirme" value="{{$sejour->confirme}}" />
+        {{mb_field object=$sejour field="confirme" hidden=1}}
+        {{mb_field object=$sejour field="confirme_user_id" hidden=1}}
         {{mb_key object=$sejour}}
         {{mb_field object=$sejour field=entree_prevue hidden=true}}
         {{if $sejour->confirme || $sejour->sortie_reelle}}
@@ -116,7 +117,7 @@
           {{if $sejour->sortie_reelle}}
             / <strong>Effectuée</strong>
           {{else}}
-            <button type="button" onclick="$V(this.form.confirme, 0); this.form.onsubmit()" class="cancel">
+            <button type="button" onclick="$V(this.form.confirme, ''); $V(this.form.confirme_user_id, ''); this.form.onsubmit()" class="cancel">
               Annuler
             </button>
           {{/if}}
@@ -136,7 +137,7 @@
           {{else}}
             {{mb_field object=$sejour field="mode_sortie" onchange="if (\$V(this) == 'deces') { showDateDeces('`$sejour->_id`'); } else { this.form.onsubmit(); }"}}
           {{/if}}
-          <button type="button" onclick="$V(this.form.confirme, 1); this.form.onsubmit()" class="tick">
+          <button type="button" onclick="$V(this.form.confirme, 'now'); $V(this.form.confirme_user_id, '{{$app->user_id}}'); this.form.onsubmit()" class="tick">
             Autoriser
           </button>
           <br />
