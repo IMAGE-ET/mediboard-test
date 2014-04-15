@@ -8,21 +8,67 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-function checkSiblings() {
-  var CCAMUrl = new Url("admin", "check_siblings");
-  CCAMUrl.requestUpdate("check_siblings");
-}
-</script>
 
 <table class="tbl">
   <tr>
+    <th>{{tr}}Classname{{/tr}}</th>
     <th>{{tr}}Action{{/tr}}</th>
-    <th>{{tr}}Status{{/tr}}</th>
   </tr>
   
   <tr>
-    <td><button class="tick" onclick="checkSiblings()">{{tr}}mod-admin-action-check_siblings{{/tr}}</button></td>
-    <td id="check_siblings"></td>
+    <td>
+      {{tr}}CUser{{/tr}}
+    </td>
+    <td>
+      <script type="text/javascript">
+        CUser = {
+          checkSiblings: function () {
+            new Url('admin', 'check_siblings').requestModal(400);
+          }
+        }
+      </script>
+      <button class="tick" onclick="CUser.checkSiblings()">{{tr}}mod-admin-tab-check_siblings{{/tr}}</button>
+    </td>
   </tr>
+
+
+  <tr>
+    <td>
+      {{tr}}CUserLog{{/tr}}
+    </td>
+    <td>
+      <script type="text/javascript">
+        CUserLog = {
+          sanitize: function(form) {
+            var url = new Url('admin', 'sanitize_userlogs');
+
+            if (form) {
+              url.addNotNullElement(form.purge );
+              url.addNotNullElement(form.offset);
+              url.addNotNullElement(form.step  );
+              url.addElement(form.auto);
+            }
+
+            var modal = Control.Modal.stack.last();
+            if (modal) {
+              url.requestUpdate(modal.container.down('.content'));
+            }
+            else {
+              url.requestModal();
+            }
+
+            return false;
+          },
+
+          auto: function() {
+            if ($('Sanitize_auto').checked) {
+              CUserLog.sanitize(document.Sanitize);
+            }
+          }
+        }
+      </script>
+      <button class="tick" onclick="CUserLog.sanitize()">{{tr}}mod-admin-tab-sanitize_userlogs{{/tr}}</button>
+    </td>
+  </tr>
+
 </table>

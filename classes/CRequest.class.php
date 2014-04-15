@@ -468,4 +468,30 @@ class CRequest {
     $query = "SELECT `{$object->_spec->table}`.`{$object->_spec->key}`";
     return $query . $this->getRequestFrom($object->_spec->table);
   }
+
+
+  /**
+   * Make the SQL general DELETE query string
+   *
+   * @param CStoredObject $object Object on which table we look up rows, already added tables if null
+   *
+   *
+   * @return string
+   */
+  function makeDelete(CStoredObject $object = null) {
+    // Stored object binding
+    if ($object) {
+      // Get the table
+      $this->table = array($object->_spec->table);
+    }
+
+    // Table clauses
+    $table = implode(', ', $this->table);
+
+    // Force Index incompatible with DELETEs
+    $this->forceindex = array();
+
+    return "DELETE " . $this->getRequestFrom($table);
+  }
+
 }

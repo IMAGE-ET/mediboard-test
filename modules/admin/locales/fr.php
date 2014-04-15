@@ -351,9 +351,12 @@ $locales['module-admin-long'] = 'Permissions utilisateurs';
 $locales['module-common-court'] = 'Tous modules';
 $locales['null'] = 'null';
 $locales['pref-ccam_consultation-desc'] = 'Affiche le volet de cotation des actes CCAM dans les consultations';
+$locales['sanitize_userlogs-message-finished'] = 'La fin du journal utilisateur est atteinte (dernière entrée %d) !';
+$locales['sanitize_userlogs-message-foundrows-count'] = '%d enregistrements trouvés pour les clés entre %d et %d.';
+$locales['sanitize_userlogs-message-foundrows-purge'] = '%d enregistrements purgés pour les clés entre %d et %d.';
+$locales['sanitize_userlogs-removers'] = 'Entrées à purger dans le journal utilisateur';
 $locales['user-unlink_from_ldap'] = 'L\'utilisateur a été desassocié du LDAP';
 $locales['user-updated-from-ldap'] = 'L\'utilisateur a été mis à jour à partir du LDAP';
 $locales['utilities-source-ldap'] = 'Utilitaires LDAP';
 $locales['utilities-source-ldap-bind'] = 'Authentification au serveur LDAP';
 $locales['utilities-source-ldap-search'] = 'Recherche sur le serveur LDAP';
-?>
