@@ -75,8 +75,7 @@
       <td>{{mb_field object=$ua field=device_type}}</td>
       <td></td>
       <td>
-        {{assign var=device_type value=$detect.Device_Type|lower}}
-        {{$ua->_specs.device_type->_locales.$device_type}}
+        {{$detect.Device_Type}}
       </td>
     </tr>
     <tr>
