@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 /**
  * $Id$
- *  
+ *
  * @category EAI
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -14,6 +14,9 @@
 CCanDo::checkRead();
 
 $receiver_guid = CValue::get("receiver_guid");
+$exclude_event = CValue::get("exclude_event");
+$include_event = CValue::get("include_event");
+
 /** @var CReceiverHL7v2 $receiver */
 $receiver = CMbObject::loadFromGuid($receiver_guid);
 
@@ -25,12 +28,21 @@ $receiver->loadConfigValues();
 $where = '';
 
 $echange_hl7v2 = new CExchangeHL7v2();
+$ds = $echange_hl7v2->getDS();
 $where['statut_acquittement']     = "IS NULL";
 $where['sender_id']               = "IS NULL";
 $where['receiver_id']             = "= '$receiver->_id'";
 $where['message_valide']          = "= '1'";
 $where['date_echange']            = "IS NULL";
 $where['date_production']         = "BETWEEN '".CMbDT::dateTime("-3 DAYS")."' AND '".CMbDT::dateTime("+1 DAYS")."'";
+if ($exclude_event) {
+  $exclude_event = explode("|", $exclude_event);
+  $where['code'] = $ds->prepareNotIn($exclude_event);
+}
+if ($include_event) {
+  $include_event = explode("|", $include_event);
+  $where['code'] = $ds->prepareIn($include_event);
+}
 
 /** @var CExchangeHL7v2[] $exchanges */
 $exchanges = $echange_hl7v2->loadList($where, "date_production DESC");
