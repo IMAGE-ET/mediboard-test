@@ -387,7 +387,6 @@ class CSejour extends CFacturable implements IPatientRelated {
     $backProps["consultations_anesths"] = "CConsultAnesth sejour_id";
     $backProps["consultations"]         = "CConsultation sejour_id";
     $backProps["fiche_autonomie"]       = "CFicheAutonomie sejour_id";
-    $backProps["GHM"]                   = "CGHM sejour_id";
     $backProps["hprim21_sejours"]       = "CHprim21Sejour sejour_id";
     $backProps["observations"]          = "CObservationMedicale sejour_id";
     $backProps["operations"]            = "COperation sejour_id";
@@ -3077,6 +3076,8 @@ class CSejour extends CFacturable implements IPatientRelated {
    */
   function loadRefGHM() {
     /** @var CGHM $GHM */
+    $GHM = new CGHM();
+    /**
     $GHM = $this->loadUniqueBackRef("ghm");
 
     if (!$GHM->_id) {
@@ -3085,7 +3086,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $GHM->_ref_sejour = $this;
     $GHM->bindInfos();
     $GHM->getGHM();
-
+    **/
     $this->_ref_GHM = $GHM;
   }
 
