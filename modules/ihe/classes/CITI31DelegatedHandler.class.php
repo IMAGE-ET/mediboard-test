@@ -493,8 +493,8 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if (!$configs["modification_before_admit"] && !$sejour->entree_reelle) {
         return;
       }
-      
-      // Simple modification ? 
+
+      // Simple modification ?
       return $this->getModificationAdmitCode($sejour->_receiver);
     }
     
@@ -514,12 +514,12 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
       
       // Confirmation de sortie
-      if (!$sejour->_old->confirme && $sejour->confirme) {
+      if ($sejour->fieldFirstModified("confirme")) {
         return "A16";
       }
-      
+
       // Annulation confirmation de sortie
-      if ($sejour->_old->confirme && !$sejour->confirme) {
+      if ($sejour->fieldEmptyValued("confirme")) {
         return "A25";
       }
 
