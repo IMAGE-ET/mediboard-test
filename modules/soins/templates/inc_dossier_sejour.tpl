@@ -25,6 +25,12 @@
 {{mb_include module=salleOp template=js_codage_ccam}}
 {{assign var=prescription_id value=$sejour->_ref_prescription_sejour->_id}}
 
+<style>
+  div.shadow {
+    box-shadow: 0 8px 5px -3px rgba(0, 0, 0, .4);
+  }
+</style>
+
 <script>
   loadResultLabo = function(sejour_id) {
     var url = new Url("Imeds", "httpreq_vw_sejour_results");
@@ -197,102 +203,124 @@
     {{/if}}
 
 		window.DMI_operation_id = "{{$operation_id}}";
+    ViewPort.SetAvlHeight('content-dossier-soins', 1.0);
+    var content = $("content-dossier-soins");
+    var header = $("header-dossier-soins");
+    if (!Prototype.Browser.IE) {
+      content.on('scroll', function() {
+        header.setClassName('shadow', content.scrollTop);
+      });
+    }
+    else {
+      content.on('scroll', function() {
+        var style = content.scrollTop > 0 ?
+          "progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=180, Strength=6)" : "";
+        header.setStyle({
+          "filter": style
+        });
+      });
+    }
   });
 </script>
 
-<div id="patient_banner">
-  {{mb_include module=soins template=inc_patient_banner}}
-</div>
-<ul id="tab-sejour" class="control_tabs">
-  {{if !$modal && !$popup}}
-    <li>
-      <button type="button" class="hslip notext compact" style="vertical-align: bottom; float: left;" onclick="$('left-column').toggle();" title="Afficher/cacher la colonne de gauche"></button>
+<div id="header-dossier-soins" style="position: relative;">
+  <div id="patient_banner">
+    {{mb_include module=soins template=inc_patient_banner}}
+  </div>
+
+  <ul id="tab-sejour" class="control_tabs">
+    {{if !$modal && !$popup}}
+      <li>
+        <button type="button" class="hslip notext compact" style="vertical-align: bottom; float: left;" onclick="$('left-column').toggle();" title="Afficher/cacher la colonne de gauche"></button>
+      </li>
+    {{/if}}
+    <li><a href="#suivi_clinique" onmousedown="loadSuiviClinique();">{{tr}}CSejour.suivi_clinique{{/tr}}</a></li>
+    <li onmousedown="loadConstantes();"><a href="#constantes-medicales">{{tr}}CPatient.surveillance{{/tr}}</a></li>
+    <li><a href="#dossier_traitement" onmousedown="loadSuiviSoins();">{{tr}}CSejour.suivi_soins{{/tr}}</a></li>
+    {{if $isPrescriptionInstalled}}
+      <li><a href="#prescription_sejour" onmousedown="loadPrescription();">{{tr}}soins.tab.Prescription{{/tr}}</a></li>
+    {{/if}}
+    {{if $app->user_prefs.ccam_sejour == 1 }}
+      <li><a href="#Actes" onmousedown="loadActes({{$sejour->_id}}, {{$sejour->_ref_praticien->_id}});">{{tr}}CCodable-actes{{/tr}}</a></li>
+    {{/if}}
+    {{if $isImedsInstalled}}
+      <li><a href="#Imeds" onmousedown="loadResultLabo('{{$sejour->_id}}');">Labo</a></li>
+    {{/if}}
+    <li><a href="#docs" onmousedown="loadDocuments();">{{tr}}CMbObject-back-documents{{/tr}}</a></li>
+    <li><a href="#antecedents" onmousedown="loadAntecedents();">{{tr}}IDossierMedical-back-antecedents{{/tr}}</a></li>
+    <li style="float: right">
+      <button type="button" class="print" style="float: left" onclick="printPlanSoins()">Plan de soins</button>
+      <button type="button" class="button print" onclick="printDossierSoins();">Dossier soins</button>
+      {{if !$popup && $modal}}
+        <button type="button" class="cancel" onclick="closeModal();">{{tr}}Close{{/tr}}</button>
+      {{/if}}
     </li>
-  {{/if}}
-  <li><a href="#suivi_clinique" onmousedown="loadSuiviClinique();">{{tr}}CSejour.suivi_clinique{{/tr}}</a></li>
-  <li onmousedown="loadConstantes();"><a href="#constantes-medicales">{{tr}}CPatient.surveillance{{/tr}}</a></li>
-  <li><a href="#dossier_traitement" onmousedown="loadSuiviSoins();">{{tr}}CSejour.suivi_soins{{/tr}}</a></li>
+  </ul>
+</div>
+
+<div id="content-dossier-soins" style="width: 100%;">
+  <div id="suivi_clinique" style="display: none;"></div>
+  <div id="constantes-medicales" style="display: none;"></div>
+  <div id="dossier_traitement" style="display: none;"></div>
   {{if $isPrescriptionInstalled}}
-    <li><a href="#prescription_sejour" onmousedown="loadPrescription();">{{tr}}soins.tab.Prescription{{/tr}}</a></li>
+    <div id="prescription_sejour" style="text-align: left; display: none;"></div>
   {{/if}}
-  {{if $app->user_prefs.ccam_sejour == 1 }}
-    <li><a href="#Actes" onmousedown="loadActes({{$sejour->_id}}, {{$sejour->_ref_praticien->_id}});">{{tr}}CCodable-actes{{/tr}}</a></li>
+  {{if $app->user_prefs.ccam_sejour == 1}}
+    <div id="Actes" style="display: none;">
+      <table class="form">
+        <tr>
+          <td style="">
+            <ul id="tab-actes" class="control_tabs">
+              {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
+                <li id="tarif" style="float: right;"></li>
+                <li><a href="#one">Actes CCAM</a></li>
+                <li><a href="#two">Actes NGAP</a></li>
+                <li><a href="#three">Diagnostics</a></li>
+              {{/if}}
+              {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
+                <li><a href="#tarmed_tab">TARMED</a></li>
+                <li><a href="#caisse_tab">{{tr}}CPrestationCaisse{{/tr}}</a></li>
+              {{/if}}
+            </ul>
+            <hr class="control_tabs" />
+
+            <table class="form">
+              <tr id="one" style="display: none;">
+                <td id="ccam">
+                </td>
+              </tr>
+              <tr id="two" style="display: none;">
+                <td id="listActesNGAP">
+                </td>
+              </tr>
+              <tr id="three" style="display: none;">
+                <td id="cim">
+                </td>
+              </tr>
+              {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+                {{mb_script module=tarmed script=actes}}
+                <tr id="tarmed_tab" style="display: none;">
+                  <td id="tarmed">
+                    <div id="listActesTarmed">
+                    </div>
+                  </td>
+                </tr>
+                <tr id="caisse_tab" style="display: none;">
+                  <td id="caisse">
+                    <div id="listActesCaisse">
+                    </div>
+                  </td>
+                </tr>
+              {{/if}}
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>
   {{/if}}
   {{if $isImedsInstalled}}
-    <li><a href="#Imeds" onmousedown="loadResultLabo('{{$sejour->_id}}');">Labo</a></li>
+    <div id="Imeds" style="display: none;"></div>
   {{/if}}
-  <li><a href="#docs" onmousedown="loadDocuments();">{{tr}}CMbObject-back-documents{{/tr}}</a></li>
-  <li><a href="#antecedents" onmousedown="loadAntecedents();">{{tr}}IDossierMedical-back-antecedents{{/tr}}</a></li>
-  <li style="float: right">
-    <button type="button" class="print" style="float: left" onclick="printPlanSoins()">Plan de soins</button>
-    <button type="button" class="button print" onclick="printDossierSoins();">Dossier soins</button>
-    {{if !$popup && $modal}}
-      <button type="button" class="cancel" onclick="closeModal();">{{tr}}Close{{/tr}}</button>
-    {{/if}}
-  </li>
-</ul>
-
-<div id="suivi_clinique" style="display: none;"></div>
-<div id="constantes-medicales" style="display: none;"></div>
-<div id="dossier_traitement" style="display: none;"></div>
-{{if $isPrescriptionInstalled}}
-  <div id="prescription_sejour" style="text-align: left; display: none;"></div>
-{{/if}}
-{{if $app->user_prefs.ccam_sejour == 1}}
-  <div id="Actes" style="display: none;">
-    <table class="form">
-      <tr>
-        <td style="">
-          <ul id="tab-actes" class="control_tabs">
-            {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
-              <li id="tarif" style="float: right;"></li>
-              <li><a href="#one">Actes CCAM</a></li>
-              <li><a href="#two">Actes NGAP</a></li>
-              <li><a href="#three">Diagnostics</a></li>
-            {{/if}}
-            {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
-              <li><a href="#tarmed_tab">TARMED</a></li>
-              <li><a href="#caisse_tab">{{tr}}CPrestationCaisse{{/tr}}</a></li>
-            {{/if}}
-          </ul>
-          <hr class="control_tabs" />
-
-          <table class="form">
-            <tr id="one" style="display: none;">
-              <td id="ccam">
-              </td>
-            </tr>
-            <tr id="two" style="display: none;">
-              <td id="listActesNGAP">
-              </td>
-            </tr>
-            <tr id="three" style="display: none;">
-              <td id="cim">
-              </td>
-            </tr>
-            {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
-              {{mb_script module=tarmed script=actes}}
-              <tr id="tarmed_tab" style="display: none;">
-                <td id="tarmed">
-                  <div id="listActesTarmed">
-                  </div>
-                </td>
-              </tr>
-              <tr id="caisse_tab" style="display: none;">
-                <td id="caisse">
-                  <div id="listActesCaisse">
-                  </div>
-                </td>
-              </tr>
-            {{/if}}
-          </table>
-        </td>
-      </tr>
-    </table>
-  </div>
-{{/if}}
-{{if $isImedsInstalled}}
-  <div id="Imeds" style="display: none;"></div>
-{{/if}}
-<div id="docs" style="display: none;"></div>
-<div id="antecedents" style="display: none;"></div>
+  <div id="docs" style="display: none;"></div>
+  <div id="antecedents" style="display: none;"></div>
+</div>

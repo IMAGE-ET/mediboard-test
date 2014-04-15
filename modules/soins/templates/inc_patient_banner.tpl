@@ -23,13 +23,13 @@
 
 <table class="form">
   <tr>
-    <th class="title text" style="text-align: left; border: none;">
+    <th class="title text" style="text-align: left; border: none; width: 15%;">
       {{mb_include module=system template=inc_object_notes object=$patient}}
       <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
         {{mb_include module="patients" template=inc_vw_photo_identite mode="read" size=52}}
       </a>
     </th>
-    <th class="title text" colspan="2" style="border: none;">
+    <th class="title text" style="border: none;">
       <form name="actionPat" action="?" method="get">
         <input type="hidden" name="m" value="patients" />
         <input type="hidden" name="tab" value="vw_idx_patients" />
@@ -43,7 +43,7 @@
             {{if $rpu}}
               Admission du {{$rpu->_entree|date_format:"%d/%m/%Y"}}
             {{else}}
-              {{$sejour->_shortview|replace:"Du":"Séjour du"}} {{if $sejour->_ref_curr_affectation->_id}}<br /> {{$sejour->_ref_curr_affectation->_ref_lit}}{{/if}}
+              {{$sejour->_shortview|replace:"Du":"Séjour du"}}
             {{/if}}
           </span>
           {{include file="../../soins/templates/inc_vw_antecedent_allergie.tpl" nodebug=true}}
@@ -61,14 +61,22 @@
 
           {{if $sejour->_jour_op}}
             <br/>
+            <span style="font-size: 0.6em;">
+              {{$sejour->_motif_complet}}
+            </span>
             {{foreach from=$sejour->_jour_op item=_info_jour_op}}
-              <span style="font-size: 0.6em;" onmouseover="ObjectTooltip.createEx(this, '{{$_info_jour_op.operation_guid}}');">(J{{$_info_jour_op.jour_op}})</span>
+              <span style="font-size: 0.8em;" onmouseover="ObjectTooltip.createEx(this, '{{$_info_jour_op.operation_guid}}');">(J{{$_info_jour_op.jour_op}})</span>
             {{/foreach}}
+            {{if $sejour->_ref_curr_affectation->_id}}
+              <span style="font-size: 0.6em;">
+                {{$sejour->_ref_curr_affectation->_ref_lit}}
+              </span>
+            {{/if}}
           {{/if}}
         </h2>
       </form>
     </th>
-    <th class="title text" style="text-align: right; border: none;">
+    <th class="title text" style="text-align: right; border: none; width: 15%;">
       {{mb_include module=system template=inc_object_idsante400 object=$patient}}
       {{mb_include module=system template=inc_object_history object=$patient}}
 
@@ -95,5 +103,8 @@
       {{/if}}
     </th>
   </tr>
+</table>
+
+<table class="tbl">
   {{mb_include module=soins template=inc_infos_patients_soins add_class_poids=1 add_class_taille=1}}
 </table>
