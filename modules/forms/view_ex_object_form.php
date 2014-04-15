@@ -193,15 +193,7 @@ if (in_array("IPatientRelated", class_implements($ex_object->object_class))) {
 $can_delete = false;
 
 if ($ex_object->_id) {
-  $ex_object->loadLogs();
-  $ex_object->_ref_last_log->loadRefUser();
-  $can_delete = ($ex_object->_ref_first_log->user_id == CUser::get()->_id);
-}
-else {
-  $log = new CUserLog;
-  $log->user_id = CUser::get()->_id;
-  $log->loadRefUser();
-  $ex_object->_ref_last_log = $log;
+  $can_delete = ($ex_object->owner_id == CUser::get()->_id);
 }
 
 $can_delete = $can_delete || CModule::getInstalled("forms")->canAdmin();
@@ -220,12 +212,7 @@ foreach ($ref_objects as $_object) {
 
   if ($_object instanceof CSejour) {
     $_object->loadNDA();
-    if ($ex_object->_ref_last_log && $ex_object->_ref_last_log->_id) {
-      $date = $ex_object->_ref_last_log->date;
-    }
-    else {
-      $date = CMbDT::dateTime();
-    }
+    $date = $ex_object->getCreateDate();
     $_object->loadRefCurrAffectation($date);
     continue;
   }

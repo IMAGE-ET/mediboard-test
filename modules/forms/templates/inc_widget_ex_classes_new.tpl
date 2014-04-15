@@ -30,9 +30,9 @@
       <td style="text-align: left;">
         {{foreach from=$_ex_objects item=_ex_object}}
           {{if $_ex_object->_id}}
-            <button type="button" class="edit" title="{{mb_value object=$_ex_object->_ref_last_log field=user_id}}"
+            <button type="button" class="edit" title="{{mb_value object=$_ex_object field=owner_id}}"
               onclick="showExClassForm({{$_ex_class_id}}, '{{$object->_guid}}', '{{$_ex_object}}', '{{$_ex_object->_id}}', '{{$event_name}}', '{{$_element_id}}')">
-              {{mb_value object=$_ex_object->_ref_last_log field=date}}
+              {{mb_value object=$_ex_object field=datetime_create}}
 
               {{if $ex_classes.$_ex_class_id->_formula_field}}
                 {{assign var=_formula_field value=$ex_classes.$_ex_class_id->_formula_field}}

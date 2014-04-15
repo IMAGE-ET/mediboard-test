@@ -31,7 +31,7 @@
            </button>
          </td>
          <td class="text compact">
-           <strong style="color: #000;">{{mb_value object=$_ex_object->_ref_first_log field=date}}</strong>
+           <strong style="color: #000;">{{mb_value object=$_ex_object field=datetime_create}}</strong>
            <br />
            <span onmouseover="ObjectTooltip.createEx(this, '{{$_ex_object->_ref_object->_guid}}')">
              {{$_ex_object->_ref_object}}

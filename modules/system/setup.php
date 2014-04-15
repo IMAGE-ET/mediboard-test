@@ -1662,7 +1662,30 @@ class CSetupsystem extends CSetup {
                 ADD `type` ENUM ('label','value');";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.61";
+    $this->makeRevision("1.1.61");
+    function setup_system_addExObjectDates($setup) {
+      /** @var CSQLDataSource $ds */
+      $ds = $setup->ds;
+
+      // Changement des ExClasses
+      $query = "SELECT ex_class_id FROM ex_class";
+      $list_ex_class = $ds->loadColumn($query);
+
+      foreach ($list_ex_class as $ex_class_id) {
+        $query = "ALTER TABLE `ex_object_$ex_class_id`
+                    ADD `datetime_create` DATETIME AFTER `additional_class`,
+                    ADD `datetime_edit`   DATETIME AFTER `datetime_create`,
+                    ADD `owner_id`        INT(11) UNSIGNED AFTER `datetime_edit`,
+                    ADD INDEX (`owner_id`),
+                    ADD INDEX (`datetime_create`);";
+        $ds->exec($query);
+      }
+
+      return true;
+    }
+    $this->addFunction("setup_system_addExObjectDates");
+
+    $this->mod_version = "1.1.62";
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,

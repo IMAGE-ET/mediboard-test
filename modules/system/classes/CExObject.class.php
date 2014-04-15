@@ -16,7 +16,7 @@ class CExObject extends CMbMetaObject {
   public $ex_object_id;
   
   public $group_id;
-  
+
   public $reference_class;
   public $reference_id;
 
@@ -26,7 +26,11 @@ class CExObject extends CMbMetaObject {
   // "weak" link to an object stored after $this
   public $additional_class;
   public $additional_id;
-  
+
+  public $datetime_create;
+  public $datetime_edit;
+  public $owner_id;
+
   public $_ex_class_id;
   public $_own_ex_class_id;
   public $_specs_already_set = false;
@@ -44,6 +48,9 @@ class CExObject extends CMbMetaObject {
 
   /** @var CMbObject */
   public $_ref_additional_object;
+
+  /** @var CMediusers */
+  public $_ref_owner;
   
   /** @var CGroups */
   public $_ref_group;
@@ -170,6 +177,8 @@ class CExObject extends CMbMetaObject {
     }
     
     $lang = CAppUI::pref("LOCALE");
+    $undefined = CAppUI::tr("Undefined");
+    $ds = CSQLDataSource::get("std");
 
     $_all_locales = array();
 
@@ -195,7 +204,6 @@ class CExObject extends CMbMetaObject {
       "ex_concept.ex_list_id",
     ));
 
-    $ds = CSQLDataSource::get("std");
     $list = $ds->loadList($request->makeSelect());
 
     // Chargement des list_items par concept, field ou list
@@ -239,8 +247,12 @@ class CExObject extends CMbMetaObject {
 
       $key = "-{$_item['name']}";
       $_locales[$key]         = $_item["std"];
-      $_locales["$key-desc"]  = $_item["desc"];
-      $_locales["$key-court"] = $_item["court"];
+      if ($_item["desc"]) {
+        $_locales["$key-desc"]  = $_item["desc"];
+      }
+      if ($_item["court"]) {
+        $_locales["$key-court"] = $_item["court"];
+      }
 
       $_ex_class_id = $_item['ex_class_id'];
       $_prefix = "CExObject_$_ex_class_id";
@@ -252,7 +264,7 @@ class CExObject extends CMbMetaObject {
       }
 
       $key = ".{$_item['name']}";
-      $_locales["$key."] = CAppUI::tr("Undefined");
+      $_locales["$key."] = $undefined;
 
       $concept_id = $_item["concept_id"];
       $ex_list_id = $_item["ex_list_id"];
@@ -389,19 +401,23 @@ class CExObject extends CMbMetaObject {
     foreach ($list as $_link) {
       switch ($_link->level) {
         case "object":
-          $this->_ref_object = $_link->loadTargetObject();
+          $_object = $_link->loadTargetObject();
+          $this->setObject($_object);
           break;
 
         case "ref1":
-          $this->_ref_reference_object_1 = $_link->loadTargetObject();
+          $_object = $_link->loadTargetObject();
+          $this->setReferenceObject_1($_object);
           break;
 
         case "ref2":
-          $this->_ref_reference_object_2 = $_link->loadTargetObject();
+          $_object = $_link->loadTargetObject();
+          $this->setReferenceObject_2($_object);
           break;
 
         case "add":
-          $this->_ref_additional_object = $_link->loadTargetObject();
+          $_object = $_link->loadTargetObject();
+          $this->setAdditionalObject($_object);
           break;
       }
     }
@@ -528,7 +544,8 @@ class CExObject extends CMbMetaObject {
         else {
           list(, $_concept_fields) = $concepts[$_field->concept_id];
         }
-        
+
+        /** @var CExObject $_latest */
         $_latest = null;
         $_latest_value = null;
         
@@ -553,16 +570,14 @@ class CExObject extends CMbMetaObject {
             continue;
           }
           
-          // on regarde le log pour voir lequel a été saisi en dernier
-          //$_log = $_concept_latest->loadLastLogForField($_concept_field->name); // FIXME ne donne rien quand type=create 
-          $_log = $_concept_latest->loadLastLog();
-          
           if (!$_latest) {
             $_latest = $_concept_latest;
             $_latest_value = $_latest->{$_concept_field->name};
           }
           else {
-            if ($_log->date > $_latest->_ref_last_log->date) {
+            $_date = $_concept_latest->getEditDate();
+
+            if ($_date > $_latest->getEditDate()) {
               $_latest = $_concept_latest;
               $_latest_value = $_latest->{$_concept_field->name};
             }
@@ -783,12 +798,17 @@ class CExObject extends CMbMetaObject {
     if ($msg = $this->check()) {
       return $msg;
     }
-    
-    if (!$this->_id) {
-      $this->group_id = CGroups::loadCurrent()->_id;
-    }
 
     $new_object = !$this->_id;
+    $now = CMbDT::dateTime();
+    
+    if ($new_object) {
+      $this->group_id = CGroups::loadCurrent()->_id;
+      $this->datetime_create = $now;
+      $this->owner_id = CMediusers::get()->_id;
+    }
+
+    $this->datetime_edit = $now;
 
     if ($msg = parent::store()) {
       return $msg;
@@ -953,6 +973,10 @@ class CExObject extends CMbMetaObject {
 
     $props["additional_class"] = "str class";
     $props["additional_id"]    = "ref class|CMbObject meta|additional_class";
+
+    $props["datetime_create"]  = "dateTime";
+    $props["datetime_edit"]    = "dateTime";
+    $props["owner_id"]         = "ref class|CMediusers";
     
     if (self::$_load_lite) {
       return $props;
@@ -1287,16 +1311,7 @@ class CExObject extends CMbMetaObject {
           $_ex->loadRefAdditionalObject();
         }
 
-        $_ex->loadLogs();
-        $_log = $_ex->_ref_first_log;
-
-        // Cas tres etrange de formulaire sans aucun log
-        // Plutot que de tout planter, on ne l'affiche pas
-        if (!$_log) {
-          continue;
-        }
-
-        $ex_objects[$_ex_class_id]["$_log->date $_ex->_id"] = $_ex;
+        $ex_objects[$_ex_class_id][$_ex->_id] = $_ex;
       }
 
       if (isset($ex_objects[$_ex_class_id])) {
@@ -1336,5 +1351,106 @@ class CExObject extends CMbMetaObject {
     }
 
     return null;
+  }
+
+  /**
+   * Get owner : the person who created $this
+   *
+   * @return CMediusers
+   */
+  function loadRefOwner() {
+    $this->getOwnerId();
+    return $this->_ref_owner = $this->loadFwdRef("owner_id");
+  }
+
+  /**
+   * Get owner ID, save it if it's not present
+   *
+   * @return int
+   */
+  function getOwnerId(){
+    if (!$this->owner_id) {
+      $this->updateCreationFields();
+    }
+
+    return $this->owner_id;
+  }
+
+  /**
+   * Get creation date, save it if it's not present
+   *
+   * @return string
+   */
+  function getCreateDate(){
+    if (!$this->datetime_create) {
+      $this->updateCreationFields();
+    }
+
+    return $this->datetime_create;
+  }
+
+  /**
+   * Get owner ID, save it if it's not present
+   *
+   * @return string
+   */
+  function getEditDate(){
+    if (!$this->datetime_edit) {
+      $this->updateEditFields();
+    }
+
+    return $this->datetime_edit;
+  }
+
+  /**
+   * Update creation fields : datetime_create and owner_id
+   *
+   * @return void
+   */
+  function updateCreationFields(){
+    if (!$this->_id || ($this->datetime_create && $this->owner_id)) {
+      return;
+    }
+
+    $log = $this->loadFirstLog();
+
+    // Don't use store here because we don't want to log this action ...
+    $ds = $this->getDS();
+    $table_name = $this->getTableName();
+    $query = $ds->prepare(
+      "UPDATE $table_name SET datetime_create = ?1, owner_id = ?2 WHERE ex_object_id = ?3;",
+      $log->date,
+      $log->user_id,
+      $this->_id
+    );
+    $ds->exec($query);
+
+    $this->datetime_create = $log->date;
+    $this->owner_id = $log->user_id;
+  }
+
+  /**
+   * Update creation fields : datetime_create and owner_id
+   *
+   * @return void
+   */
+  function updateEditFields(){
+    if (!$this->_id || $this->datetime_edit) {
+      return;
+    }
+
+    $log = $this->loadLastLog();
+
+    // Don't use store here because we don't want to log this action ...
+    $ds = $this->getDS();
+    $table_name = $this->getTableName();
+    $query = $ds->prepare(
+      "UPDATE $table_name SET datetime_edit = ?1 WHERE ex_object_id = ?2;",
+      $log->date,
+      $this->_id
+    );
+    $ds->exec($query);
+
+    $this->datetime_edit = $log->date;
   }
 }

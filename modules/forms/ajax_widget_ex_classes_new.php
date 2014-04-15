@@ -61,10 +61,7 @@ foreach ($ex_class_events as $_id => $_ex_class_event) {
 
   foreach ($_ex_objects as $_ex_object) {
     $_ex_object->load(); // Needed
-    $_ex_object->loadLogs();
-    foreach ($_ex_object->_ref_logs as $_log) {
-      $_log->loadRefUser()->loadRefMediuser()->loadRefFunction();
-    }
+    $_ex_object->getCreateDate();
   }
 
   $count += count($_ex_objects);

@@ -74,7 +74,6 @@ if (empty(CExClass::$_list_cache)) {
   }
 }
 
-$all_ex_objects      = array();
 $ex_objects          = array();
 $ex_classes          = array();
 $ex_objects_counts   = array();
@@ -223,6 +222,7 @@ foreach ($counts as $_count) {
 
     if (!isset($ref_objects_cache[$guid])) {
       $_ex->loadTargetObject()->loadComplete(); // to get the view
+      $_ex->updateCreationFields();
       $ref_objects_cache[$guid] = $_ex->_ref_object;
     }
     else {
@@ -233,16 +233,7 @@ foreach ($counts as $_count) {
       $_ex->loadRefAdditionalObject();
     }
 
-    $_log = $_ex->loadFirstLog();
-
-    // Cas tres etrange de formulaire sans aucun log
-    // Plutot que de tout planter, on ne l'affiche pas
-    if (!$_log) {
-      continue;
-    }
-
-    $all_ex_objects["$_log->date $_ex->_id"] = $_ex;
-    $ex_objects[$_ex_class_id]["$_log->date $_ex->_id"] = $_ex;
+    $ex_objects[$_ex_class_id][$_ex->_id] = $_ex;
   }
 
   if (isset($ex_objects[$_ex_class_id])) {
@@ -337,14 +328,12 @@ if ($detail == 2) {
 }
 
 ksort($ex_objects);
-ksort($all_ex_objects);
 
 // Création du template
 $smarty = new CSmartyDP("modules/forms");
 $smarty->assign("reference_class", $reference_class);
 $smarty->assign("reference_id",    $reference_id);
 $smarty->assign("reference",       $reference);
-$smarty->assign("all_ex_objects",  $all_ex_objects);
 $smarty->assign("ex_objects",      $ex_objects);
 $smarty->assign("ex_objects_counts", $ex_objects_counts);
 $smarty->assign("ex_objects_results", $ex_objects_results);

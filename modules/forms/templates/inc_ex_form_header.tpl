@@ -62,8 +62,6 @@
       <img src="images/icons/new.png" width="16" height="16"/>
     {{/if}}
   {{/if}}
-
-  {{$ex_object->_ref_last_log->_ref_user}}
 </span>
 
 {{if !$readonly}}

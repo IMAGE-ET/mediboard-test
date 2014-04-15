@@ -736,12 +736,18 @@ class CExClass extends CMbObject {
 
         `additional_id`    INT (11) UNSIGNED,
         `additional_class` VARCHAR(80),
+
+        `datetime_create` DATETIME,
+        `datetime_edit`   DATETIME,
+        `owner_id`        INT(11) UNSIGNED,
         
         INDEX ( `group_id` ),
         INDEX `object`     ( `object_class`,     `object_id` ),
         INDEX `reference1` ( `reference_class`,  `reference_id` ),
         INDEX `reference2` ( `reference2_class`, `reference2_id` ),
-        INDEX `additional` ( `additional_class`, `additional_id` )
+        INDEX `additional` ( `additional_class`, `additional_id` ),
+        INDEX ( `owner_id` ),
+        INDEX ( `datetime_create` )
       ) /*! ENGINE=MyISAM */;";
       
       $ds = $this->_spec->ds;

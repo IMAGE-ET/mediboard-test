@@ -16,7 +16,7 @@
         
         {{foreach from=$_ex_objects item=_ex_object name=_ex_object}}
           <th class="narrow text" style="vertical-align: top;">
-            {{mb_value object=$_ex_object->_ref_first_log field=date}}
+            {{mb_value object=$_ex_object field=datetime_create}}
             
             {{if !$print}}
               <hr />
@@ -108,7 +108,7 @@
           
           {{foreach from=$_ex_objects item=_ex_object name=_ex_object}}
             <th class="narrow text">
-              {{mb_value object=$_ex_object->_ref_first_log field=date}}
+              {{mb_value object=$_ex_object field=datetime_create}}
             </th>
             {{if $smarty.foreach._ex_object.iteration%$_title_col==0}}
               <th></th>
