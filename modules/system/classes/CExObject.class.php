@@ -389,19 +389,23 @@ class CExObject extends CMbMetaObject {
     foreach ($list as $_link) {
       switch ($_link->level) {
         case "object":
-          $this->_ref_object = $_link->loadTargetObject();
+          $_object = $_link->loadTargetObject();
+          $this->setObject($_object);
           break;
 
         case "ref1":
-          $this->_ref_reference_object_1 = $_link->loadTargetObject();
+          $_object = $_link->loadTargetObject();
+          $this->setReferenceObject_1($_object);
           break;
 
         case "ref2":
-          $this->_ref_reference_object_2 = $_link->loadTargetObject();
+          $_object = $_link->loadTargetObject();
+          $this->setReferenceObject_2($_object);
           break;
 
         case "add":
-          $this->_ref_additional_object = $_link->loadTargetObject();
+          $_object = $_link->loadTargetObject();
+          $this->setAdditionalObject($_object);
           break;
       }
     }
