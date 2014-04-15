@@ -15,6 +15,59 @@
  * User agent
  */
 class CUserAgent extends CMbObject {
+  static $browser_names = array(
+    "Firefox",
+    "Chrome",
+    "IE",
+    "Opera",
+    "Opera Mini",
+    "Safari",
+    "Android",
+    "Konqueror",
+    "SeaMonkey",
+    "Iceweasel",
+  );
+
+  static $platform_names = array(
+    "WinNT",
+    "Win2000",
+    "WinXP",
+    "WinVista",
+    "Win7",
+    "Win8",
+    "Win8.1",
+    "Linux",
+    "MacOSX",
+    "iOS",
+    "Android",
+    "ChromeOS",
+    "unknown",
+  );
+
+  static $device_names = array(
+    "PC",
+    "Android",
+    "iPhone",
+    "iPad",
+    "Nexus 4",
+    "Blackberry",
+    "general Mobile Device",
+    "unknown",
+  );
+
+  static $device_makers = array(
+    "Various",
+    "Apple",
+    "Samsung",
+    "HTC",
+    "LG",
+    "SonyEricsson",
+    "RIM",
+    "Google",
+    "Microsoft",
+    "unknown",
+  );
+
   public $user_agent_id;
 
   public $user_agent_string;
@@ -70,13 +123,22 @@ class CUserAgent extends CMbObject {
   }
 
   /**
-   * Create a User agent entry from a US string
-   *
-   * @param string $ua_string User agent string
-   *
-   * @return self
+   * @see parent::updateFormFields()
    */
-  static function createFromUA($ua_string) {
+  function updateFormFields() {
+    parent::updateFormFields();
+
+    $this->_view = "$this->browser_name $this->browser_version / $this->platform_name $this->platform_version";
+  }
+
+  /**
+   * User agent detection
+   *
+   * @param string $ua_string UA string
+   *
+   * @return array
+   */
+  static function detect($ua_string) {
     $dir = __DIR__."/../../../classes/vendor/phpbrowscap/phpbrowscap/";
     include "$dir/Browscap.php";
 
@@ -88,20 +150,34 @@ class CUserAgent extends CMbObject {
     $user_agent = new self();
     $user_agent->user_agent_string = substr($ua_string, 0, 255);
 
+    return $detect->getBrowser($ua_string, true);
+  }
+
+  /**
+   * Create a User agent entry from a US string
+   *
+   * @param string $ua_string User agent string
+   *
+   * @return self
+   */
+  static function createFromUA($ua_string) {
+    $user_agent = new self();
+    $user_agent->user_agent_string = substr($ua_string, 0, 255);
+
     if (!$user_agent->loadMatchingObject()) {
-      $browser = $detect->getBrowser($ua_string);
+      $browser = self::detect($user_agent);
 
-      $user_agent->browser_name     = $browser->Browser;
-      $user_agent->browser_version  = $browser->Version;
+      $user_agent->browser_name     = $browser["Browser"];
+      $user_agent->browser_version  = $browser["Version"];
 
-      $user_agent->platform_name    = $browser->Platform;
-      $user_agent->platform_version = $browser->Platform_Version;
+      $user_agent->platform_name    = $browser["Platform"];
+      $user_agent->platform_version = $browser["Platform_Version"];
 
-      $user_agent->device_name      = $browser->Device_Name;
-      $user_agent->device_maker     = $browser->Device_Maker;
-      $user_agent->pointing_method  = $browser->Device_Pointing_Method;
+      $user_agent->device_name      = $browser["Device_Name"];
+      $user_agent->device_maker     = $browser["Device_Maker"];
+      $user_agent->pointing_method  = $browser["Device_Pointing_Method"];
 
-      switch ($browser->Device_Type) {
+      switch ($browser["Device_Type"]) {
         case "Mobile Device":
         case "Mobile Phone":
           $user_agent->device_type = "mobile";

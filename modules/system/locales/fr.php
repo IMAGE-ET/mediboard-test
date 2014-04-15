@@ -2284,6 +2284,7 @@ $locales['mod-system-tab-ajax_edit_configuration'] = 'Editeur de configuration';
 $locales['mod-system-tab-ajax_edit_object'] = 'Editeur';
 $locales['mod-system-tab-ajax_edit_tag'] = 'Ajout/Modification d\'étiquette';
 $locales['mod-system-tab-ajax_edit_translation'] = 'Modification d\'une traduction corrigée';
+$locales['mod-system-tab-ajax_edit_user_agent'] = 'Modification de User Agent';
 $locales['mod-system-tab-ajax_form_message'] = 'Formulaire de message';
 $locales['mod-system-tab-ajax_form_message_update'] = 'Assistant de message de mise à jour';
 $locales['mod-system-tab-ajax_form_source_to_view_sender'] = 'Lien entre un export de vue et une source';

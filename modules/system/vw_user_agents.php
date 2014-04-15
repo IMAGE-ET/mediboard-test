@@ -16,7 +16,7 @@ $date_min  = CValue::get("date_min", CMbDT::dateTime("-1 WEEK"));
 $date_max  = CValue::get("date_max");
 
 $ua = new CUserAgent();
-$uas = $ua->loadList(null, null, 100);
+$uas = $ua->loadList(null, "browser_name, browser_version", 100);
 
 CStoredObject::massCountBackRefs($uas, "user_authentications");
 

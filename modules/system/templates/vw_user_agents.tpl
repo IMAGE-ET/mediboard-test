@@ -1,5 +1,8 @@
+{{mb_script module=system script=useragent}}
+
 <table class="main tbl">
   <tr>
+    <th></th>
     <th>{{mb_title class=CUserAgent field=browser_name}}</th>
     <th>{{mb_title class=CUserAgent field=browser_version}}</th>
 
@@ -16,6 +19,9 @@
   
   {{foreach from=$user_agents item=_user_agent}}
     <tr>
+      <td class="narrow">
+        <button class="edit notext compact" onclick="UserAgent.edit({{$_user_agent->_id}})">{{tr}}Edit{{/tr}}</button>
+      </td>
       <td style="text-align: right;">{{mb_value object=$_user_agent field=browser_name}}</td>
       <td>{{mb_value object=$_user_agent field=browser_version}}</td>
 
