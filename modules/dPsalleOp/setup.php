@@ -1489,6 +1489,9 @@ class CSetupdPsalleOp extends CSetup {
     WHERE `title` = 'La documentation clinique et para clinique nécessaire est disponible en salle:Bilan sanguin, carte de groupe, ACI'";
     $this->addQuery($query);
 
-    $this->mod_version = "0.60";
+    $this->makeRevision("0.60");
+    $this->addPrefQuery("autosigne_sortie", "1");
+
+    $this->mod_version = "0.61";
   }
 }

@@ -265,7 +265,7 @@ Main.add(function(){
           <th>{{mb_label object=$operation field=sortie_reveil_possible}}</th>
           <td class="halfPane">
             {{mb_value object=$operation field=sortie_reveil_possible}}
-            {{if $password_sortie && $operation->sortie_locker_id}}
+            {{if $operation->sortie_locker_id}}
               <br />
               Validée par {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$operation->_ref_sortie_locker}}
             {{/if}}

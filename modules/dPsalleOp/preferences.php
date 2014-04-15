@@ -10,3 +10,6 @@
  */
 
 // Préférences par Module
+CPreferences::$modules["dPsalleOp"] = array(
+  "autosigne_sortie"
+);

@@ -68,7 +68,7 @@
       <!-- <td style="text-align: center;">{{$last_op->entree_reveil|date_format:$conf.time}}</td> -->
       <td style="text-align: center;">
         {{$last_op->sortie_reveil_possible|date_format:$conf.time}}
-        {{if $password_sortie && $last_op->sortie_locker_id}}
+        {{if $last_op->sortie_locker_id}}
           <br />
           {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$last_op->_ref_sortie_locker}}
         {{/if}}

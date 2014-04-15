@@ -20,7 +20,6 @@ $curr_user = CMediusers::get();
 $group = CGroups::loadCurrent();
 
 $use_poste = CAppUI::conf("dPplanningOp COperation use_poste");
-$password_sortie = CAppUI::conf("dPsalleOp COperation password_sortie", $group->_guid);
 
 // Chargement des Chirurgiens
 $listChirs = $curr_user->loadPraticiens(PERM_READ);
@@ -91,10 +90,10 @@ CMbObject::massLoadFwdRef($listOperations, "plageop_id");
 if ($use_poste) {
   CMbObject::massLoadFwdRef($listOperations, "poste_sspi_id");
 }
-if ($password_sortie) {
-  $anesths = CMbObject::massLoadFwdRef($listOperations, "sortie_locker_id");
-  CMbObject::massLoadFwdRef($anesths, "function_id");
-}
+
+$anesths = CMbObject::massLoadFwdRef($listOperations, "sortie_locker_id");
+CMbObject::massLoadFwdRef($anesths, "function_id");
+
 if (in_array($type, array("ops", "reveil")) && CModule::getActive("bloodSalvage")) {
   CMbObject::massCountBackRefs($listOperations, "blood_salvages");
 }
@@ -124,9 +123,7 @@ foreach ($listOperations as $op) {
   if ($use_poste) {
     $op->loadRefPoste();
   }
-  if ($password_sortie) {
-    $op->loadRefSortieLocker()->loadRefFunction();
-  }
+  $op->loadRefSortieLocker()->loadRefFunction();
 
   if (in_array($type, array("ops", "reveil")) && CModule::getActive("bloodSalvage")) {
     $salvage = $op->loadRefBloodSalvage();;

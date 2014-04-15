@@ -1,4 +1,5 @@
 {{assign var=use_sortie_reveil_reel value="dPsalleOp COperation use_sortie_reveil_reel"|conf:"CGroups-$g"}}
+{{assign var=use_poste value=$conf.dPplanningOp.COperation.use_poste}}
 {{assign var=password_sortie value="dPsalleOp COperation password_sortie"|conf:"CGroups-$g"}}
 
 <script>
@@ -18,17 +19,20 @@
   }
 
   submitSortie = function(form) {
-    {{if !$password_sortie || $is_anesth}}
-      submitSortieForm(form);
+    {{if $password_sortie && (!$is_anesth || !$app->user_prefs.autosigne_sortie)}}
+      window.current_form = form;
+      var url = new Url("salleOp", "ajax_lock_sortie");
+      url.requestModal("30%", "20%", {onComplete: function() {
+        {{if $is_anesth}}
+        var form_sortie = getForm("lock_sortie");
+        $V(form_sortie.user_id, '{{$app->user_id}}');
+        {{/if}}
+      }});
     {{else}}
-    window.current_form = form;
-    var url = new Url("salleOp", "ajax_lock_sortie");
-    url.requestModal("30%", "20%");
+      submitSortieForm(form);
     {{/if}}
   }
 </script>
-
-{{assign var=use_poste value=$conf.dPplanningOp.COperation.use_poste}}
 
 <table class="tbl">
   <tr>
@@ -130,16 +134,16 @@
         {{mb_field object=$_operation field="entree_reveil" hidden=1}}
         {{mb_field object=$_operation field="sortie_reveil_reel" hidden=1}}
         {{mb_field object=$_operation field="sortie_locker_id" hidden=1}}
-        {{if $modif_operation && (!$password_sortie || !$_operation->sortie_locker_id)}}
+        {{if $modif_operation && !$_operation->sortie_locker_id}}
           {{mb_field object=$_operation field=sortie_reveil_possible register=true form="editSortieReveilOutFrm$_operation_id"
             onchange="if (!this.value && !this.form.entree_reveil.value) { \$V(this.form.sortie_reveil_reel, '') } submitSortie(this.form);"}}
         {{else}}
-          {{if $password_sortie && $_operation->sortie_locker_id}}
+          {{if $_operation->sortie_locker_id}}
             <span onmouseover="ObjectTooltip.createDOM(this, 'info_locker_{{$_operation_id}}')">
               {{mb_field object=$_operation field="sortie_reveil_possible" hidden=1}}
               {{mb_value object=$_operation field="sortie_reveil_possible"}}
               <button type="button" class="cancel notext" title="Annuler la validation"
-                      onclick="$V(this.form.sortie_reveil_possible, ''); $V(this.form.sortie_reveil_reel, ''); submitSortie(this.form);"></button>
+                      onclick="$V(this.form.sortie_reveil_possible, ''); $V(this.form.sortie_reveil_reel, ''); $V(this.form.sortie_locker_id, ''); submitSortie(this.form);"></button>
             </span>
             <div id="info_locker_{{$_operation_id}}" style="display: none">
               Validée par {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_sortie_locker}}

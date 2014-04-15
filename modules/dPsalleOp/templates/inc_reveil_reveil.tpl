@@ -16,19 +16,25 @@
   }
 
   submitReveil = function(form) {
-    {{if !$password_sortie || $is_anesth}}
-      {{if $is_anesth}}
-      $V(form.sortie_locker_id, '{{$app->user_id}}');
-      {{/if}}
-      submitReveilForm(form);
-    {{else}}
+    {{if $password_sortie && (!$is_anesth || !$app->user_prefs.autosigne_sortie)}}
       window.current_form = form;
       var url = new Url("salleOp", "ajax_lock_sortie");
-      url.requestModal("30%", "20%", {onClose: function() {
-        $V(form.sortie_reveil_possible_da, '', false);
-        $V(form.sortie_reveil_possible, '', false);
-      }
+      url.requestModal("30%", "20%", {
+        onClose: function() {
+          $V(form.sortie_reveil_possible_da, '', false);
+          $V(form.sortie_reveil_possible, '', false);
+        },
+        onComplete: function() {
+          // Pré-selection si anesthésiste dans la modale de saisie du mot de passe
+          {{if $is_anesth}}
+          var form_sortie = getForm("lock_sortie");
+          $V(form_sortie.user_id, '{{$app->user_id}}');
+          {{/if}}
+        }
       });
+    {{else}}
+      $V(form.sortie_locker_id, '{{$app->user_id}}');
+      submitReveilForm(form);
     {{/if}}
   }
 </script>
@@ -188,7 +194,7 @@
         {{mb_key object=$_operation}}
         <input type="hidden" name="del" value="0" />
         {{mb_field object=$_operation field=sortie_locker_id hidden=1}}
-        {{if $password_sortie && $_operation->sortie_locker_id}}
+        {{if $_operation->sortie_locker_id}}
           <span onmouseover="ObjectTooltip.createDOM(this, 'info_locker_{{$_operation_id}}')">
                 {{mb_field object=$_operation field="sortie_reveil_possible" hidden=1}}
             {{mb_value object=$_operation field="sortie_reveil_possible"}}
