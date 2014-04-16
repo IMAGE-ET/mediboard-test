@@ -141,7 +141,7 @@ if ($praticien_id && !$service_id) {
   $where[] = $type_admission ? "type = '$type_admission'" : "type != 'urg' AND type != 'exte'";
   
   if ($praticien->isAnesth()) {
-    $sejours = $sejour->loadList($where, null, null, null, $ljoin);
+    $sejours = $sejour->loadList($where, null, null, "sejour.sejour_id", $ljoin);
   }
   else {
     $sejours = $sejour->loadList($where);
