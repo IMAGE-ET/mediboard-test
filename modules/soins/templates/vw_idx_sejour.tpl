@@ -30,11 +30,19 @@ function addSejourIdToSession(sejour_id){
   url.requestUpdate("systemMsg");
 }
 
-function loadViewSejour(sejour_id, date){
+function loadViewSejour(sejour_id, date, elt) {
   var url = new Url('soins', 'ajax_vw_dossier_sejour');
   url.addParam('sejour_id', sejour_id);
   url.addParam('date', date);
-  url.requestUpdate('dossier_sejour');
+  var selected_tab = $$('ul#tab-sejour li a.active');
+  if (selected_tab.length == 1) {
+    url.addParam('default_tab', selected_tab[0].href.split("#")[1]);
+  }
+
+  url.requestUpdate('dossier_sejour', {onComplete: function() {
+    addSejourIdToSession(sejour_id);
+    markAsSelected(elt);
+  }});
 }
 
 function printPatient(patient_id) {
@@ -319,14 +327,14 @@ savePref = function(form) {
                   {{assign var=sejour value=$curr_affectation->_ref_sejour}}
 
                   <a class="text" href="#1" 
-                     onclick="markAsSelected(this); addSejourIdToSession('{{$sejour->_id}}'); loadViewSejour('{{$sejour->_id}}',  '{{$date}}');">
+                     onclick="loadViewSejour('{{$sejour->_id}}',  '{{$date}}', this);">
                     <span class="{{if !$sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $sejour->septique}}septique{{/if}}" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
                       {{$sejour->_ref_patient->_view}}
                     </span>
                   </a>
                 </td>
 
-                <td style="padding: 1px;" onclick="markAsSelected(this); addSejourIdToSession('{{$sejour->_id}}'); loadViewSejour('{{$sejour->_id}}', '{{$date}}'); tab_sejour.setActiveTab('Imeds')">
+                <td style="padding: 1px;" onclick="loadViewSejour('{{$sejour->_id}}', '{{$date}}', this); tab_sejour.setActiveTab('Imeds')">
                   {{if $isImedsInstalled}}
                     {{mb_include module=Imeds template=inc_sejour_labo link="#"}}
                   {{/if}}
