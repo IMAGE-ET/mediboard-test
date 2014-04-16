@@ -404,6 +404,7 @@
               <button type="button" style="float: right;" class="search class_progress_before" onclick="toggleProgressBefore();" title="{{tr}}CPrescription.in_progress_before{{/tr}}">
                 -{{$days_config}}J
               </button>
+              <button type="button" style="float: left;" class="search" onclick="modalPrescriptionLegend = Modal.open($('modal-prescription-legend'));" title="{{tr}}Legend{{/tr}}">{{tr}}Legend{{/tr}}</button>
               {{tr}}CPrescription.in_progress{{/tr}}
             </th>
             {{if $prescription->_ref_lines_med_comments.med|@count || $prescription->_ref_lines_med_comments.comment|@count ||
@@ -446,6 +447,7 @@
                       {{assign var=is_first value=0}}
                       {{math equation="x+1" x=$total assign=total}}
                       <span {{if $_line->_fin_reelle|iso_date <= $date_after|iso_date}}style="border-bottom: 2px solid orange"{{/if}}
+                            {{if $_line->warning && $_line->_fin_relative == $_line->warning_day}}style="border-bottom: 2px solid orangered"{{/if}}
                             onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}')">
                         {{$_line->_ref_produit->libelle_abrege}}
                         {{if $_line->_alerte_antibio}}
@@ -519,6 +521,7 @@
                         {{math equation="x+1" x=$total assign=total}}
 
                         <span {{if $_line->_fin|iso_date <= $date_after|iso_date}}style="border-bottom: 2px solid orange"{{/if}}
+                              {{if $_line->warning && $_line->_fin_relative == $_line->warning_day}}style="border-bottom: 2px solid orangered"{{/if}}
                               onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}')">
                           {{$_line->_libelle_voie}}
                           ({{$_line->_compact_view}})
@@ -619,6 +622,7 @@
                         {{math equation="x+1" x=$count_elts assign=count_elts}}
 
                         <span {{if $element->_fin_reelle|iso_date <= $date_after|iso_date}}style="border-bottom: 2px solid orange"{{/if}}
+                              {{if $element->warning && $element->_fin_relative == $element->warning_day}}style="border-bottom: 2px solid orangered"{{/if}}
                               onmouseover="ObjectTooltip.createEx(this, '{{$element->_guid}}')">
                           {{$element->_view}}
                         </span>
@@ -683,3 +687,30 @@
     </td>
   </tr>
 </table>
+
+<div id="modal-prescription-legend" style="display: none;">
+  <table class="tbl">
+    <tr>
+      <th class="title" colspan="2">
+          <button class="cancel notext" onclick="modalPrescriptionLegend.close();" style="float: right"></button>
+          {{tr}}Legend{{/tr}}
+      </th>
+    </tr>
+    <tr>
+      <td class="narrow">
+        <span class="color-view" style="display: inline-block; vertical-align: top; padding: 0; margin: 0; border: none; width: 16px; height: 16px; background-color: orange"></span>
+      </td>
+      <td>
+        Fin de la prescription le jour même ou le lendemain
+      </td>
+    </tr>
+    <tr>
+      <td class="narrow">
+        <span class="color-view" style="display: inline-block; vertical-align: top; padding: 0; margin: 0; border: none; width: 16px; height: 16px; background-color: orangered"></span>
+      </td>
+      <td>
+        Alerte paramétrée sur la fin de la prescription
+      </td>
+    </tr>
+  </table>
+</div>
