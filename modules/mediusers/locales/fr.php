@@ -395,6 +395,8 @@ $locales['pref-tasking_real_is_estimated'] = 'Réalisé = estimé';
 $locales['pref-tasking_real_is_estimated-desc'] = 'Pour que le temps effectif soit celui estimé lors de la clôture de la tâche';
 $locales['pref-tasking_real_plus_one_button'] = 'Bouton +1 (temps réalisé)';
 $locales['pref-tasking_real_plus_one_button-desc'] = 'Bouton permettant d\'ajouter 1 heure au temps réalisé pour une tâche';
+$locales['pref-tasking_ticket_limit_result'] = 'Limite de résultats';
+$locales['pref-tasking_ticket_limit_result-desc'] = 'Nombre de demandes affichées par page';
 $locales['utilities-source-pop'] = 'Outils de test de la connexion';
 $locales['utilities-source-pop-connexion'] = 'Test de connexion';
 $locales['utilities-source-pop-envoi'] = 'Test de reception';
