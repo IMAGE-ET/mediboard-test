@@ -206,20 +206,9 @@
     ViewPort.SetAvlHeight('content-dossier-soins', 1.0);
     var content = $("content-dossier-soins");
     var header = $("header-dossier-soins");
-    if (!Prototype.Browser.IE) {
-      content.on('scroll', function() {
-        header.setClassName('shadow', content.scrollTop);
-      });
-    }
-    else {
-      content.on('scroll', function() {
-        var style = content.scrollTop > 0 ?
-          "progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=180, Strength=6)" : "";
-        header.setStyle({
-          "filter": style
-        });
-      });
-    }
+    content.on('scroll', function() {
+      header.setClassName('shadow', content.scrollTop);
+    });
   });
 </script>
 
@@ -235,7 +224,7 @@
       </li>
     {{/if}}
     <li><a href="#suivi_clinique" onmousedown="loadSuiviClinique();">{{tr}}CSejour.suivi_clinique{{/tr}}</a></li>
-    <li onmousedown="loadConstantes();"><a href="#constantes-medicales">{{tr}}CPatient.surveillance{{/tr}}</a></li>
+    <li><a href="#constantes-medicales" onmousedown="loadConstantes();">{{tr}}CPatient.surveillance{{/tr}}</a></li>
     <li><a href="#dossier_traitement" onmousedown="loadSuiviSoins();">{{tr}}CSejour.suivi_soins{{/tr}}</a></li>
     {{if $isPrescriptionInstalled}}
       <li><a href="#prescription_sejour" onmousedown="loadPrescription();">{{tr}}soins.tab.Prescription{{/tr}}</a></li>

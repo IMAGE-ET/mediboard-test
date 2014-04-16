@@ -59,19 +59,19 @@
             <img src="images/icons/warning.png" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}', 'allergies');" />
           {{/if}}
 
+          <br/>
+          <span style="font-size: 0.6em;">
+            {{$sejour->_motif_complet}}
+          </span>
           {{if $sejour->_jour_op}}
-            <br/>
-            <span style="font-size: 0.6em;">
-              {{$sejour->_motif_complet}}
-            </span>
             {{foreach from=$sejour->_jour_op item=_info_jour_op}}
               <span style="font-size: 0.8em;" onmouseover="ObjectTooltip.createEx(this, '{{$_info_jour_op.operation_guid}}');">(J{{$_info_jour_op.jour_op}})</span>
             {{/foreach}}
-            {{if $sejour->_ref_curr_affectation->_id}}
-              <span style="font-size: 0.6em;">
-                {{$sejour->_ref_curr_affectation->_ref_lit}}
-              </span>
-            {{/if}}
+          {{/if}}
+          {{if $sejour->_ref_curr_affectation->_id}}
+            <span style="font-size: 0.6em;">
+              {{$sejour->_ref_curr_affectation->_ref_lit}}
+            </span>
           {{/if}}
         </h2>
       </form>
