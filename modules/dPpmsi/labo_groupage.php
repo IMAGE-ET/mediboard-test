@@ -9,7 +9,7 @@
  * @version    $Revision$
  */
 
-CCanDo::checkEdit();
+CCanDo::checkAdmin();
 
 $sejour_id  = CValue::getOrSession("sejour_id");
 
