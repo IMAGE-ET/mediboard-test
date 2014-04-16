@@ -165,7 +165,7 @@ class CUserAgent extends CMbObject {
     $user_agent->user_agent_string = substr($ua_string, 0, 255);
 
     if (!$user_agent->loadMatchingObject()) {
-      $browser = self::detect($user_agent);
+      $browser = self::detect($ua_string);
 
       $user_agent->browser_name     = $browser["Browser"];
       $user_agent->browser_version  = $browser["Version"];
