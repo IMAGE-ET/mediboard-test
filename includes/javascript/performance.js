@@ -380,10 +380,8 @@ MbPerformance = {
       clearTimeout(this.intervalTimer);
     }
     else {
-      if (confirm("Vous allez activer le mode 'profilage de performances' de Mediboard, ce qui peut ralentir Mediboard, voulez-vous continuer ?")) {
+      if (confirm("Vous allez activer le mode 'profilage de performances' de Mediboard, ce qui peut ralentir Mediboard, voulez-vous continuer ?\n\nUn rechargement de la page sera nécessaire pour afficher le graphique.")) {
         cookie.put("profiling", 1);
-        this.profiling = true;
-        MbPerformance.startPlotting();
       }
     }
   },
@@ -566,7 +564,7 @@ MbPerformance = {
 
       table = DOM.table({className: "main layout timeline"},
         DOM.tr({},
-          DOM.td({}),
+          DOM.td({}, zoom),
           DOM.td({className: "legend"}, legend)
         ),
         DOM.tr({},
@@ -574,12 +572,25 @@ MbPerformance = {
           DOM.td({className: "right-col-cell"},
             right = DOM.div({className: "right-col"})
           )
-        ),
-        DOM.tr({},
-          DOM.td({}, zoom),
-          DOM.td({})
         )
       );
+
+      function hoverHandler(event, element){
+        element.addUniqueClassName("hover");
+
+        var i = element.get('i');
+
+        var other = null;
+        if (element.hasClassName('timerow-right')) {
+          other = element.up('tr').down('.left-col div[data-i='+i+']');
+        }
+        else {
+          other = element.up('tr').down('.right-col div[data-i='+i+']');
+        }
+        other.addUniqueClassName("hover");
+      }
+
+      table.on("mouseover", ".timerow-left, .timerow-right", hoverHandler);
     }
 
     var ruler = DOM.div({className: "ruler"});
@@ -597,14 +608,14 @@ MbPerformance = {
     var navStart;
 
     // Draw each bar
-    MbPerformance.currentTimeline.each(function(d){
-      var container = DOM.div({});
+    MbPerformance.currentTimeline.each(function(d, i){
+      var container = DOM.div({className: 'timerow-right', "data-i": i});
       var perfTiming = d.perfTiming;
       var perfOffset;
       var serverTiming = d.serverTiming;
       var serverOffset;
 
-      var title = DOM.div({title: d.pageInfo.a},
+      var title = DOM.div({className: 'timerow-left', title: d.pageInfo.a, "data-i": i},
           "<span style='float: right;' class='compact'>#{size} Kio, DB: #{db} ms</span><strong>#{m}</strong><br /><span class='compact'>#{a}</span>".interpolate({
             size: (serverTiming.size / 1024).toFixed(2),
             db:   (serverTiming.db * 1000).toFixed(2),
@@ -1015,7 +1026,7 @@ MbPerformance = {
       });
     }
 
-    struct.pages = MbPerformance.getPagesData()
+    struct.pages = MbPerformance.getPagesData();
 
     return struct;
   },
@@ -1085,7 +1096,7 @@ MbPerformance = {
 if (window.performance && performance.setResourceTimingBufferSize) {
   performance.onresourcetimingbufferfull = function(){
     console.error("Resource timing buffer full");
-  }
+  };
 
   performance.setResourceTimingBufferSize(500);
   performance.clearResourceTimings();
