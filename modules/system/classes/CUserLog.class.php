@@ -191,6 +191,10 @@ class CUserLog extends CMbMetaObject {
    * @return int
    */
   static function countRecentFor($object_class, $ids, $recent){
+    if (!count($ids)) {
+      return 0;
+    }
+
     $log = new CUserLog();
     $where = array();
     $where["object_class"] = "= '$object_class'";
