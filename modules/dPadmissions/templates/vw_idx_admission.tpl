@@ -28,6 +28,7 @@ function printPlanning() {
   url.addParam("date"      , "{{$date}}");
   url.addParam("type"      , $V(oForm._type_admission));
   url.addParam("service_id", [$V(oForm.service_id)].flatten().join(","));
+  url.addParam("period"    , $V(oForm.period));
   url.popup(700, 550, "Entrees");
 }
 

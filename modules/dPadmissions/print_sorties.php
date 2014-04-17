@@ -16,15 +16,29 @@ CCanDo::checkRead();
 $date       = CValue::get("date", CMbDT::date());
 $type       = CValue::get("type");
 $service_id = CValue::get("service_id");
+$period     = CValue::get("period");
 
-$date_next = CMbDT::date("+ 1 DAY", $date);
+$date_min  = $date;
+$date_max = CMbDT::date("+ 1 DAY", $date);
 $service = new CService();
 $service->load($service_id);
 $group = CGroups::loadCurrent();
 
+if ($period) {
+  $hour = CAppUI::conf("dPadmissions hour_matin_soir");
+  if ($period == "matin") {
+    // Matin
+    $date_max = CMbDT::dateTime($hour, $date);
+  }
+  else {
+    // Soir
+    $date_min = CMbDT::dateTime($hour, $date);
+  }
+}
+
 $sejour = new CSejour();
 $where = array();
-$where["sejour.sortie"]   = "BETWEEN '$date' AND '$date_next'";
+$where["sejour.sortie"]   = "BETWEEN '$date_min' AND '$date_max'";
 $where["sejour.annule"]   = "= '0'";
 $where["sejour.group_id"] = "= '$group->_id'";
 
