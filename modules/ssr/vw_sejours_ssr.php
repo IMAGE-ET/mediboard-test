@@ -78,7 +78,7 @@ $sejours_by_kine = array(
   "" => array(),
 );
 
-// Chargement du détail des séjour
+// Filtres des séjours
 foreach ($sejours as $_sejour) {
   // Filtre sur service
   $service = $_sejour->loadFwdRef("service_id", true);
@@ -124,7 +124,12 @@ foreach ($sejours as $_sejour) {
     unset($sejours[$_sejour->_id]);
     continue;
   }
+}
 
+// Chargement du détail des séjour
+CStoredObject::massLoadBackRefs($sejours, "notes");
+CStoredObject::massLoadFwdRef($sejours, "patient_id");
+foreach ($sejours as $_sejour) {
   // Regroupement par kine
   $sejours_by_kine[$kine_referent->_id][] = $_sejour;
   if ($kine_journee->_id && $kine_journee->_id != $kine_referent->_id) {
@@ -141,11 +146,12 @@ foreach ($sejours as $_sejour) {
   $patient->loadIPP();
 
   // Modification des prescription
-  if ($prescription) {
+  if ($prescription = $_sejour->_ref_prescription_sejour) {
     $prescription->countFastRecentModif();
   }
 
   // Praticien demandeur
+  $bilan = $_sejour->_ref_bilan_ssr;
   $bilan->loadRefPraticienDemandeur();
 
   // Chargement du lit
