@@ -30,6 +30,11 @@ $removers = array(
   array("CTriggerMark", "create", ""),
   array("CTriggerMark", "store", "mark"),
   array("CTriggerMark", "store", "mark done"),
+  // @todo Clean up after user authentication be transfered in specific table
+  //array("CUser", "store", "user_last_login"),
+  //array("CUser", "store", "user_password user_last_login"),
+  //array("CUser", "store", "user_password user_salt user_last_login"),
+
   // IMPORTANT: Leave at list one empty array() or you will purge all logs
   array("", "", ""),
 );
