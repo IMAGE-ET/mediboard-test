@@ -39,12 +39,15 @@ var Menu = {
   
   {{if !$offline}}
     <br />
-    {{mb_include style=mediboard template=svnstatus}}
+
+    {{if $applicationVersion.releaseCode}}
+      {{mb_include style=mediboard template=svnstatus}}
+      <br />
+    {{/if}}
 
     {{assign var=style value="width: 130px;"}}
     {{mb_include style=mediboard template=change_group}}
 
-    <!-- Welcome -->
     <div>
       <label title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$conf.datetime}}">
         {{$app->user_first_name}} {{$app->user_last_name}}
