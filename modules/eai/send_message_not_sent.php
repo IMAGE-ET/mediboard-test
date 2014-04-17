@@ -90,7 +90,7 @@ foreach ($exchanges as $_exchange) {
     }
 
     $patient->loadIPP();
-    if (!$patient->_IPP) {
+    if (!$patient->_IPP || $patient->_IPP === "waiting") {
       $_exchange->date_echange = "";
       $_exchange->store();
       continue;
