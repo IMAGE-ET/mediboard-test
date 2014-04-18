@@ -94,19 +94,19 @@ class CConstantGraph {
           }
           $drawn_constants[] = $_constant;
 
-          if ($axis_id == 1) {
-            $title = CAppUI::tr("CConstantesMedicales-$_constant-court");
-          }
-          else {
-            $title .= " + " . CAppUI::tr("CConstantesMedicales-$_constant-court");
-          }
           // The label of the yaxis and the title of the graph are formatted
           $label = CAppUI::tr("CConstantesMedicales-$_constant-court");
           if (CConstantesMedicales::$list_constantes[$_constant]['unit'] && !$this->widget) {
             $label .= ' (' . CConstantesMedicales::$list_constantes[$_constant]['unit'] . ')';
-            $title .= ' (' . CConstantesMedicales::$list_constantes[$_constant]['unit'] . ')';
           }
           $label = utf8_encode($label);
+
+          if ($axis_id == 1) {
+            $title = $label;
+          }
+          else {
+            $title .= " + $label";
+          }
 
           /* The type of series is determined for this constant */
           list($constant_type, $cumul) = self::getConstantType($_constant);
