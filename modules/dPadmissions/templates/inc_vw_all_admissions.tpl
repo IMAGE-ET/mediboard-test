@@ -11,9 +11,9 @@
 <table class="tbl" style="text-align: center;">
   <tr>
     <th class="title" colspan="4">
-      <a style="display: inline;" href="?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$lastmonth}}">&lt;&lt;&lt;</a>
+      <a style="display: inline" href="#1" onclick="$V(getForm('selType').date, '{{$lastmonth}}'); reloadFullAdmissions()">&lt;&lt;&lt;</a>
       {{$date|date_format:"%b %Y"}}
-      <a style="display: inline;" href="?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$nextmonth}}">&gt;&gt;&gt;</a>
+      <a style="display: inline" href="#1" onclick="$V(getForm('selType').date, '{{$nextmonth}}'); reloadFullAdmissions()">&gt;&gt;&gt;</a>
     </th>
   </tr>
     
@@ -23,17 +23,20 @@
 
   <tr>
     <th class="text">
-      <a class={{if $selAdmis=='0' && $selSaisis=='0'}}"selected"{{else}}"selectable"{{/if}} title="Toutes les admissions" href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selSaisis=0">
+      <a class="{{if $selAdmis=='0' && $selSaisis=='0'}}selected{{else}}selectable{{/if}}" title="Toutes les admissions"
+        href="#1" onclick="filterAdm(0, 0)">
         Adm.
       </a>
     </th>
     <th class="text">
-      <a class={{if $selAdmis=='0' && $selSaisis=='n'}}"selected"{{else}}"selectable"{{/if}} title="Admissions non préparées" href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selSaisis=n">
+      <a class="{{if $selAdmis=='0' && $selSaisis=='n'}}selected{{else}}selectable{{/if}}" title="Admissions non préparées"
+         href="#1" onclick="filterAdm(0, 'n')">
         Non prép.
       </a>
     </th>
     <th class="text">
-      <a class={{if $selAdmis=='n' && $selSaisis=='0'}}"selected"{{else}}"selectable"{{/if}} title="Admissions non effectuées" href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=n&amp;selSaisis=0">
+      <a class="{{if $selAdmis=='n' && $selSaisis=='0'}}selected{{else}}selectable{{/if}}" title="Admissions non effectuées"
+         href="#1" onclick="filterAdm('n', 0)">
         Non eff.
       </a>
     </th>
@@ -48,7 +51,7 @@
       {{elseif $day_number == '0' || $day_number == '6'}}
         background-color: #ccc;
       {{/if}}">
-      <a href="?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$day|iso_date}}" title="{{$day|date_format:$conf.longdate}}">
+      <a href="#1" onclick="reloadAdmissionDate(this, '{{$day|iso_date}}');" title="{{$day|date_format:$conf.longdate}}">
         <strong>
           {{$day|date_format:"%a"|upper|substr:0:1}}
           {{$day|date_format:"%d"}}

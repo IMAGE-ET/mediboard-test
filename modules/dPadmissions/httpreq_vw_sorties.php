@@ -50,9 +50,8 @@ if ($period) {
   }
 }
 
-
 // Sorties de la journée
-$sejour = new CSejour;
+$sejour = new CSejour();
 
 $group = CGroups::loadCurrent();
 
@@ -109,17 +108,18 @@ if ($order_col == "praticien_id") {
 /** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
-$patients   = CMbObject::massLoadFwdRef($sejours, "patient_id");
-CMbObject::massLoadFwdRef($sejours, "etablissement_sortie_id");
-CMbObject::massLoadFwdRef($sejours, "service_sortie_id");
-$praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
-$functions  = CMbObject::massLoadFwdRef($praticiens, "function_id");
+$patients   = CStoredObject::massLoadFwdRef($sejours, "patient_id");
+CStoredObject::massLoadFwdRef($sejours, "etablissement_sortie_id");
+CStoredObject::massLoadFwdRef($sejours, "service_sortie_id");
+$praticiens = CStoredObject::massLoadFwdRef($sejours, "praticien_id");
+$functions  = CStoredObject::massLoadFwdRef($praticiens, "function_id");
+CStoredObject::massLoadBackRefs($sejours, "affectations");
 
 // Chargement optimisée des prestations
 CSejour::massCountPrestationSouhaitees($sejours);
 
-CMbObject::massCountBackRefs($sejours, "notes");
-CMbObject::massCountBackRefs($patients, "dossier_medical");
+CStoredObject::massCountBackRefs($sejours, "notes");
+CStoredObject::massCountBackRefs($patients, "dossier_medical");
 
 $maternite_active = CModule::getActive("maternite");
 
@@ -146,7 +146,7 @@ foreach ($sejours as $sejour_id => $_sejour) {
   // Chargement des interventions
   $whereOperations = array("annulee" => "= '0'");
   $_sejour->loadRefsOperations($whereOperations);
-  $operation = new COperation();
+
   foreach ($_sejour->_ref_operations as $operation) {
     $operation->loadRefsActes();
   }

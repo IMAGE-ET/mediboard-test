@@ -11,9 +11,9 @@
 <table class="tbl" style="text-align: center;">
   <tr>
     <th class="title" colspan="3">
-      <a style="display: inline;" href="?m={{$m}}&amp;tab=vw_idx_sortie&amp;date={{$lastmonth}}">&lt;&lt;&lt;</a>
+      <a style="display: inline;" href="#1" onclick="$V(getForm('selType').date, '{{$lastmonth}}'); reloadFullSorties()">&lt;&lt;&lt;</a>
       {{$date|date_format:"%b %Y"}}
-      <a style="display: inline;" href="?m={{$m}}&amp;tab=vw_idx_sortie&amp;date={{$nextmonth}}">&gt;&gt;&gt;</a>
+      <a style="display: inline;" href="#1" onclick="$V(getForm('selType').date, '{{$nextmonth}}'); reloadFullSorties()">&gt;&gt;&gt;</a>
     </th>
   </tr>
 
@@ -22,12 +22,12 @@
       Date
     </th>
     <th class="text">
-      <a class={{if $selSortis=='0'}}"selected"{{else}}"selectable"{{/if}} title="Toutes les sorties" href="?m={{$m}}&amp;tab=vw_idx_sortie&amp;selSortis=0">
+      <a class="{{if $selSortis=='0'}}selected{{else}}selectable{{/if}}" title="Toutes les sorties" href="#1" onclick="filterAdm(0)">
         Sorties
       </a>
     </th>
     <th class="text">
-      <a class={{if $selSortis=='n'}}"selected"{{else}}"selectable"{{/if}} title="Sorties non effectuées" href="?m={{$m}}&amp;tab=vw_idx_sortie&amp;selSortis=n">
+      <a class="{{if $selSortis=='n'}}selected{{else}}selectable{{/if}}" title="Sorties non effectuées" href="#1" onclick="filterAdm('n')">
         Non Eff.
       </a>
     </th>
@@ -42,7 +42,7 @@
       {{elseif $day_number == '0' || $day_number == '6'}}
         background-color: #ccc;
       {{/if}}">
-      <a href="?m={{$m}}&amp;tab=vw_idx_sortie&amp;date={{$day|iso_date}}" title="{{$day|date_format:$conf.longdate}}">
+      <a href="#1" onclick="reloadSortiesDate(this, '{{$day|iso_date}}')" title="{{$day|date_format:$conf.longdate}}">
         <strong>
 	        {{$day|date_format:"%a"|upper|substr:0:1}}
 	        {{$day|date_format:"%d"}}

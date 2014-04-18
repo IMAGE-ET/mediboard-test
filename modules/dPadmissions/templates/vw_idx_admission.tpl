@@ -16,148 +16,203 @@
 {{mb_script module=compteRendu script=modele_selector}}
 {{mb_script module=cabinet     script=file}}
 {{mb_script module=planningOp  script=sejour}}
+{{mb_script module=planningOp  script=prestations}}
 
 {{if "web100T"|module_active}}
   {{mb_script module=web100T script=web100T}}
 {{/if}}
 
-<script type="text/javascript">
-function printPlanning() {
-  var oForm = document.selType;
-  var url = new Url("dPadmissions", "print_entrees");
-  url.addParam("date"      , "{{$date}}");
-  url.addParam("type"      , $V(oForm._type_admission));
-  url.addParam("service_id", [$V(oForm.service_id)].flatten().join(","));
-  url.popup(700, 550, "Entrees");
-}
-
-function reloadFullAdmissions(filterFunction) {
-  var oForm = getForm("selType");
-  var url = new Url("dPadmissions", "httpreq_vw_all_admissions");
-  url.addParam("date"      , "{{$date}}");
-  url.addParam("type"      , $V(oForm._type_admission));
-  url.addParam("service_id", [$V(oForm.service_id)].flatten().join(","));
-  url.addParam("prat_id"   , $V(oForm.prat_id));
-  url.requestUpdate('allAdmissions');
-  reloadAdmission(filterFunction);
-}
-
-function reloadAdmission(filterFunction) {
-  var oForm = getForm("selType");
-  var url = new Url("dPadmissions", "httpreq_vw_admissions");
-  url.addParam("selAdmis"  , "{{$selAdmis}}");
-  url.addParam("selSaisis" , "{{$selSaisis}}");
-  url.addParam("date"      , "{{$date}}");
-  url.addParam("type"      , $V(oForm._type_admission));
-  url.addParam("service_id", [$V(oForm.service_id)].flatten().join(","));
-  url.addParam("prat_id"   , $V(oForm.prat_id));
-  url.addParam("period"    , $V(oForm.period));
-  if (filterFunction !== null) {
-    url.addParam("filterFunction", filterFunction);
+<script>
+  function printPlanning() {
+    var form = getForm("selType");
+    var url = new Url("admissions", "print_entrees");
+    url.addParam("date"      , $V(form.date));
+    url.addParam("type"      , $V(form._type_admission));
+    url.addParam("service_id", [$V(form.service_id)].flatten().join(","));
+    url.addParam("period"    , $V(form.period));
+    url.popup(700, 550, "Entrees");
   }
 
-  url.requestUpdate('listAdmissions');
-}
-
-function confirmation(form) {
-  if (confirm('La date enregistrée d\'admission est différente de la date prévue, souhaitez vous confimer l\'admission du patient ?')){
-    submitAdmission(form);
-  }
-}
-
-function submitCote(oForm) {
-  return onSubmitFormAjax(oForm, reloadAdmission);
-}
-
-function submitMultiple(form) {
-  return onSubmitFormAjax(form, reloadAdmission);
-}
-
-function submitAdmission(oForm, bPassCheck) {
-  {{if @$modules.hprim21 && $conf.hprim21.mandatory_num_dos_ipp_adm}}
-    var oIPPForm = document.forms["editIPP" + oForm.patient_id.value];
-    var oNumDosForm = document.forms["editNumdos" + oForm.sejour_id.value];
-    if (!bPassCheck && oIPPForm && oNumDosForm && (!$V(oIPPForm.id400) || !$V(oNumDosForm.id400)) ) {
-      setExternalIds(oForm);
-    }
-    else {
-      return onSubmitFormAjax(oForm, reloadAdmission);
-    }
-  {{else}}
-    return onSubmitFormAjax(oForm, reloadAdmission);
-  {{/if}}
-}
-
-var ExtRefManager = {
-  sejour_id : null,
-  patient_id: null,
-
-  submitIPPForm: function(patient_id) {
-    ExtRefManager.patient_id = patient_id;
-    var oForm = document.forms["editIPP" + patient_id];
-    return onSubmitFormAjax(oForm, {onComplete: ExtRefManager.reloadIPPForm});
-  },
-
-  reloadIPPForm: function() {
-    reloadAdmission();
-  },
-
-  submitNumdosForm: function(sejour_id) {
-    ExtRefManager.sejour_id = sejour_id;
-    var oForm = document.forms["editNumdos" + this.sejour_id];
-    return onSubmitFormAjax(oForm, {onComplete: ExtRefManager.reloadNumdosForm});
-  },
-
-  reloadNumdosForm: function() {
+  function reloadFullAdmissions() {
+    var form = getForm("selType");
+    var url = new Url("admissions", "httpreq_vw_all_admissions");
+    url.addParam("date"      , $V(form.date));
+    url.addParam("type"      , $V(form._type_admission));
+    url.addParam("service_id", [$V(form.service_id)].flatten().join(","));
+    url.addParam("prat_id"   , $V(form.prat_id));
+    url.addParam("selAdmis"  , $V(form.selAdmis));
+    url.addParam("selSaisis" , $V(form.selSaisis));
+    url.requestUpdate('allAdmissions');
     reloadAdmission();
   }
-};
 
-function changeEtablissementId(oForm) {
-  $V(oForm._modifier_entree, '0');
-  submitAdmission(oForm);
-}
-
-function setExternalIds(oForm) {
-  SejourHprimSelector["init"+oForm.sejour_id.value]();
-}
-
-PatHprimSelector.doSet = function(){
-  var oForm = document[PatHprimSelector.sForm];
-  $V(oForm[PatHprimSelector.sId], PatHprimSelector.prepared.id);
-  ExtRefManager.submitIPPForm(oForm.patient_id.value);
-};
-
-SejourHprimSelector.doSet = function(){
-  var oFormSejour = document[SejourHprimSelector.sForm];
-  $V(oFormSejour[SejourHprimSelector.sId]  , SejourHprimSelector.prepared.id);
-  ExtRefManager.submitNumdosForm(oFormSejour.object_id.value);
-  if(SejourHprimSelector.prepared.IPPid) {
-    var oFormIPP = document[SejourHprimSelector.sIPPForm];
-    $V(oFormIPP[SejourHprimSelector.sIPPId]  , SejourHprimSelector.prepared.IPPid);
-    ExtRefManager.submitIPPForm(oFormIPP.object_id.value);
+  function reloadAdmission() {
+    var form = getForm("selType");
+    var url = new Url("admissions", "httpreq_vw_admissions");
+    url.addParam("date"      , $V(form.date));
+    url.addParam("type"      , $V(form ._type_admission));
+    url.addParam("service_id", [$V(form .service_id)].flatten().join(","));
+    url.addParam("prat_id"   , $V(form .prat_id));
+    url.addParam("period"    , $V(form .period));
+    url.addParam("order_way" , $V(form.order_way));
+    url.addParam("order_col" , $V(form.order_col));
+    url.addParam("selAdmis"  , $V(form.selAdmis));
+    url.addParam("selSaisis" , $V(form.selSaisis));
+    url.addParam("filterFunction", $V(form.filterFunction));
+    url.requestUpdate('listAdmissions');
   }
-  //submitAdmission(document["editAdmFrm"+oFormSejour.object_id.value]);
-};
 
-Main.add(function () {
-  var totalUpdater = new Url("dPadmissions", "httpreq_vw_all_admissions");
-  totalUpdater.addParam("date", "{{$date}}");
-  Admissions.totalUpdater = totalUpdater.periodicalUpdate('allAdmissions', { frequency: 120 });
+  function reloadAdmissionLine(sejour_id) {
+    var url = new Url("admissions", "ajax_admission_line");
+    url.addParam("sejour_id", sejour_id);
+    url.requestUpdate("CSejour-"+sejour_id);
+  }
 
-  var listUpdater = new Url("dPadmissions", "httpreq_vw_admissions");
-  listUpdater.addParam("selAdmis", "{{$selAdmis}}");
-  listUpdater.addParam("selSaisis", "{{$selSaisis}}");
-  listUpdater.addParam("date", "{{$date}}");
-  Admissions.listUpdater = listUpdater.periodicalUpdate('listAdmissions', {
-    frequency: 120,
-    onCreate: function() {
-      WaitingMessage.cover($('listAdmissions'));
-      Admissions.rememberSelection('listAdmissions');
+  function reloadAdmissionDate(elt, date) {
+    var form = getForm("selType");
+    $V(form.date, date);
+    var old_selected = elt.up("table").down("tr.selected");
+    old_selected.select('td').each(function(td) {
+      // Supprimer le style appliqué sur le nombre d'admissions
+      var style = td.readAttribute("style");
+      if (/bold/.match(style)) {
+        td.writeAttribute("style", "");
+      }
+    });
+    old_selected.removeClassName("selected");
+
+    // Mettre en gras le nombre d'admissions
+    var elt_tr = elt.up("tr");
+    elt_tr.addClassName("selected");
+    var pos = 1;
+    if ($V(form.selSaisis) == 'n') {
+      pos = 2;
     }
+    else if ($V(form.selAdmis) == 'n') {
+      pos = 3;
+    }
+    var td = elt_tr.down("td", pos);
+
+    td.writeAttribute("style", "font-weight: bold");
+    reloadAdmission();
+  }
+
+  function confirmation(form) {
+    if (confirm('La date enregistrée d\'admission est différente de la date prévue, souhaitez vous confimer l\'admission du patient ?')) {
+      submitAdmission(form);
+    }
+  }
+
+  function submitCote(form, sejour_id) {
+    return onSubmitFormAjax(form, reloadAdmissionLine.curry(sejour_id));
+  }
+
+  function submitMultiple(form) {
+    return onSubmitFormAjax(form, reloadFullAdmissions);
+  }
+
+  function submitAdmission(form, bPassCheck) {
+    {{if @$modules.hprim21 && $conf.hprim21.mandatory_num_dos_ipp_adm}}
+      var oIPPForm = getForm("editIPP" + $V(form.patient_id));
+      var oNumDosForm = getForm("editNumdos" + $V(form.sejour_id));
+      if (!bPassCheck && oIPPForm && oNumDosForm && (!$V(oIPPForm.id400) || !$V(oNumDosForm.id400)) ) {
+        setExternalIds(oForm);
+      }
+      else {
+        return onSubmitFormAjax(form, reloadAdmissionLine.curry($V(form.sejour_id)));
+      }
+    {{else}}
+      return onSubmitFormAjax(form, reloadAdmissionLine.curry($V(form.sejour_id)));
+    {{/if}}
+  }
+
+  function sortBy(order_col, order_way) {
+    var form = getForm("selType");
+    $V(form.order_col, order_col);
+    $V(form.order_way, order_way);
+    reloadAdmission();
+  }
+
+  function filterAdm(selAdmis, selSaisis) {
+    var form = getForm("selType");
+    $V(form.selAdmis, selAdmis);
+    $V(form.selSaisis, selSaisis);
+    reloadFullAdmissions();
+  }
+
+  var ExtRefManager = {
+    sejour_id : null,
+    patient_id: null,
+
+    submitIPPForm: function(patient_id) {
+      ExtRefManager.patient_id = patient_id;
+      var oForm = getForm("editIPP" + patient_id);
+      return onSubmitFormAjax(oForm, ExtRefManager.reloadIPPForm);
+    },
+
+    reloadIPPForm: function() {
+      reloadAdmission();
+    },
+
+    submitNumdosForm: function(sejour_id) {
+      ExtRefManager.sejour_id = sejour_id;
+      var oForm = getForm("editNumdos" + this.sejour_id);
+      return onSubmitFormAjax(oForm, ExtRefManager.reloadNumdosForm);
+    },
+
+    reloadNumdosForm: function() {
+      reloadAdmission();
+    }
+  };
+
+  function changeEtablissementId(oForm) {
+    $V(oForm._modifier_entree, '0');
+    submitAdmission(oForm);
+  }
+
+  function setExternalIds(oForm) {
+    SejourHprimSelector["init"+$V(oForm.sejour_id)]();
+  }
+
+  PatHprimSelector.doSet = function(){
+    var oForm = getForm(PatHprimSelector.sForm);
+    $V(oForm[PatHprimSelector.sId], PatHprimSelector.prepared.id);
+    ExtRefManager.submitIPPForm($V(oForm.patient_id));
+  };
+
+  SejourHprimSelector.doSet = function(){
+    var oFormSejour = getForm(SejourHprimSelector.sForm);
+    $V(oFormSejour[SejourHprimSelector.sId]  , SejourHprimSelector.prepared.id);
+    ExtRefManager.submitNumdosForm($V(oFormSejour.object_id));
+    if (SejourHprimSelector.prepared.IPPid) {
+      var oFormIPP = getForm(SejourHprimSelector.sIPPForm);
+      $V(oFormIPP[SejourHprimSelector.sIPPId]  , SejourHprimSelector.prepared.IPPid);
+      ExtRefManager.submitIPPForm($V(oFormIPP.object_id));
+    }
+    //submitAdmission(document["editAdmFrm"+oFormSejour.object_id.value]);
+  };
+
+  updateModeEntree = function(select) {
+    var selected = select.options[select.selectedIndex];
+    var form = select.form;
+    $V(form.elements.mode_entree, selected.get("mode"));
+  }
+
+  Main.add(function() {
+    var form = getForm("selType");
+    var totalUpdater = new Url("admissions", "httpreq_vw_all_admissions");
+
+    Admissions.totalUpdater = totalUpdater.periodicalUpdate('allAdmissions', {frequency: 120});
+
+    var listUpdater = new Url("admissions", "httpreq_vw_admissions");
+    Admissions.listUpdater = listUpdater.periodicalUpdate('listAdmissions', {
+      frequency: 120,
+      onCreate: function() {
+        WaitingMessage.cover($('listAdmissions'));
+        Admissions.rememberSelection('listAdmissions');
+      }
+    });
   });
-});
-
 </script>
 
 <div style="display: none" id="area_prompt_modele">
@@ -172,6 +227,12 @@ Main.add(function () {
   </td>
   <td style="float: right">
     <form action="?" name="selType" method="get">
+      <input type="hidden" name="date" value="{{$date}}" />
+      <input type="hidden" name="filterFunction" value="{{$filterFunction}}" />
+      <input type="hidden" name="selAdmis" value="{{$selAdmis}}" />
+      <input type="hidden" name="selSaisis" value="{{$selSaisis}}" />
+      <input type="hidden" name="order_col" value="{{$order_col}}" />
+      <input type="hidden" name="order_way" value="{{$order_way}}" />
       <select name="period" onchange="reloadAdmission();">
         <option value=""      {{if !$period          }}selected{{/if}}>&mdash; Toute la journée</option>
         <option value="matin" {{if $period == "matin"}}selected{{/if}}>Matin</option>
@@ -181,15 +242,13 @@ Main.add(function () {
       <select name="service_id" onchange="reloadFullAdmissions();" {{if $sejour->service_id|@count > 1}}size="5" multiple="true"{{/if}}>
         <option value="">&mdash; Tous les services</option>
         {{foreach from=$services item=_service}}
-          <option value="{{$_service->_id}}" {{if in_array($_service->_id, $sejour->service_id)}}selected="selected"{{/if}}>{{$_service}}</option>
+          <option value="{{$_service->_id}}" {{if in_array($_service->_id, $sejour->service_id)}}selected{{/if}}>{{$_service}}</option>
         {{/foreach}}
       </select>
-      <input type="checkbox" onclick="Admissions.toggleMultipleServices(this)" {{if $sejour->service_id|@count > 1}}checked="checked"{{/if}}/>
+      <input type="checkbox" onclick="Admissions.toggleMultipleServices(this)" {{if $sejour->service_id|@count > 1}}checked{{/if}}/>
       <select name="prat_id" onchange="reloadFullAdmissions();">
         <option value="">&mdash; Tous les praticiens</option>
-        {{foreach from=$prats item=_prat}}
-          <option value="{{$_prat->_id}}"{{if $_prat->_id == $sejour->praticien_id}}selected="selected"{{/if}}>{{$_prat}}</option>
-        {{/foreach}}
+        {{mb_include module=mediusers template=inc_options_mediuser list=$prats selected=$sejour->praticien_id}}
       </select>
     </form>
     <a href="#" onclick="printPlanning()" class="button print">{{tr}}Print{{/tr}}</a>

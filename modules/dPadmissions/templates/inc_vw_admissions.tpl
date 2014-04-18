@@ -8,20 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module=planningOp script=prestations ajax=1}}
-
-<script type="text/javascript">
-Main.add(function() {
-  Prestations.callback = reloadAdmission;
-  Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
-  Admissions.restoreSelection('listAdmissions');
-});
-
-updateModeEntree = function(select) {
-  var selected = select.options[select.selectedIndex];
-  var form = select.form;
-  $V(form.elements.mode_entree, selected.get("mode"));
-}
+<script>
+  Main.add(function() {
+    Prestations.callback = reloadAdmission;
+    Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
+    Admissions.restoreSelection('listAdmissions');
+  });
 </script>
 
 {{mb_include module=admissions template=inc_refresh_page_message}}
@@ -35,14 +27,12 @@ updateModeEntree = function(select) {
 <table class="tbl" id="admissions">
   <tr>
     <th class="title" colspan="10">
-      <a href="?m=dPadmissions&tab=vw_idx_admission&date={{$hier}}" style="display: inline">&lt;&lt;&lt;</a>
+      <a href="#1" style="display: inline" onclick="$V(getForm('selType').date, '{{$hier}}'); reloadFullAdmissions()">&lt;&lt;&lt;</a>
       {{$date|date_format:$conf.longdate}}
       <form name="changeDateAdmissions" action="?" method="get">
-        <input type="hidden" name="m" value="{{$m}}" />
-        <input type="hidden" name="tab" value="vw_idx_admission" />
-        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="$V(getForm('selType').date, this.value); reloadFullAdmissions()" />
       </form>
-      <a href="?m=admissions&tab=vw_idx_admission&date={{$demain}}" style="display: inline">&gt;&gt;&gt;</a>
+      <a href="#1" style="display: inline" onclick="$V(getForm('selType').date, '{{$demain}}'); reloadFullAdmissions()">&gt;&gt;&gt;</a>
       <br />
 
       <em style="float: left; font-weight: normal;">
@@ -53,32 +43,29 @@ updateModeEntree = function(select) {
       {{/if}}
       </em>
 
-      <select style="float: right" name="filterFunction" style="width: 16em;" onchange="reloadAdmission(this.value);">
+      <select style="float: right" name="filterFunction" style="width: 16em;" onchange="$V(getForm('selType').filterFunction, this.value); reloadAdmission();">
         <option value=""> &mdash; Toutes les fonctions</option>
-        {{foreach from=$functions item=_function}}
-          <option value="{{$_function->_id}}" {{if $_function->_id == $filterFunction}}selected="selected"{{/if}} class="mediuser" style="border-color: #{{$_function->color}};">{{$_function}}</option>
-        {{/foreach}}
+        {{mb_include module=mediusers template=inc_options_function list=$functions selected=$filterFunction}}
       </select>
     </th>
   </tr>
 
-  {{assign var=url value="?m=$m&tab=vw_idx_admission&selAdmis=$selAdmis&selSaisis=$selSaisis"}}
   <tr>
-    <th class="narrow">{{tr}}CSejour-admit{{/tr}}</th>
+    <th style="width: 13%">{{tr}}CSejour-admit{{/tr}}</th>
     <th>
       <input type="checkbox" style="float: left;" onclick="Admissions.togglePrint('admissions', this.checked)"/>
-      {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url=$url}}
+      {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way function=sortBy}}
     </th>
     <th class="narrow">
       <input type="text" size="3" onkeyup="Admissions.filter(this, 'admissions')" id="filter-patient-name" />
     </th>
 
     <th>
-      {{mb_colonne class="CSejour" field="praticien_id" order_col=$order_col order_way=$order_way url=$url}}
+      {{mb_colonne class="CSejour" field="praticien_id" order_col=$order_col order_way=$order_way function=sortBy}}
     </th>
 
     <th>
-      {{mb_colonne class="CSejour" field="entree_prevue" order_col=$order_col order_way=$order_way url=$url}}
+      {{mb_colonne class="CSejour" field="entree_prevue" order_col=$order_col order_way=$order_way function=sortBy}}
     </th>
 
     <th class="narrow">Chambre</th>
@@ -92,7 +79,7 @@ updateModeEntree = function(select) {
 
       <input type="hidden" name="entree_preparee" value="1" />
 
-      <button class="tick" type="submit">
+      <button class="tick oneclick" type="submit">
         {{tr}}CSejour-entree_preparee-tous{{/tr}}
       </button>
 

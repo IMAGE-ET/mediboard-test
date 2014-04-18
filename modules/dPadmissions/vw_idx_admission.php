@@ -24,6 +24,7 @@ $type       = CValue::getOrSession("type");
 $service_id = CValue::getOrSession("service_id");
 $prat_id    = CValue::getOrSession("prat_id");
 $period     = CValue::getOrSession("period");
+$filterFunction = CValue::getOrSession("filterFunction");
 
 $date_actuelle = CMbDT::dateTime("00:00:00");
 $date_demain = CMbDT::dateTime("00:00:00", "+ 1 day");
@@ -62,5 +63,6 @@ $smarty->assign("prats"        , $prats);
 $smarty->assign("hier"         , $hier);
 $smarty->assign("demain"       , $demain);
 $smarty->assign("period"       , $period);
+$smarty->assign("filterFunction", $filterFunction);
 
 $smarty->display("vw_idx_admission.tpl");

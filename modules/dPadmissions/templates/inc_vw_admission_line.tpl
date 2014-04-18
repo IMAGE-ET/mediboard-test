@@ -12,81 +12,81 @@
 
 <td>
   {{if $canAdmissions->edit}}
-  {{if $conf.dPplanningOp.COperation.verif_cote}}
-  {{foreach from=$_sejour->_ref_operations item=curr_op}}
-    {{if $curr_op->cote == "droit" || $curr_op->cote == "gauche"}}
-      <form name="editCoteOp{{$curr_op->_id}}" action="?" method="post" class="prepared">
-        <input type="hidden" name="m" value="dPplanningOp" />
-        <input type="hidden" name="dosql" value="do_planning_aed" />
-        {{mb_key object=$curr_op}}
-        {{mb_label object=$curr_op field="cote_admission"}} :
-        {{mb_field emptyLabel="Choose" object=$curr_op field="cote_admission" onchange="submitCote(this.form);"}}
-      </form>
-      <br />
+    {{if $conf.dPplanningOp.COperation.verif_cote}}
+      {{foreach from=$_sejour->_ref_operations item=curr_op}}
+        {{if $curr_op->cote == "droit" || $curr_op->cote == "gauche"}}
+          <form name="editCoteOp{{$curr_op->_id}}" action="?" method="post" class="prepared">
+            <input type="hidden" name="m" value="planningOp" />
+            <input type="hidden" name="dosql" value="do_planning_aed" />
+            {{mb_key object=$curr_op}}
+            {{mb_label object=$curr_op field="cote_admission"}} :
+            {{mb_field emptyLabel="Choose" object=$curr_op field="cote_admission" onchange="submitCote(this.form);"}}
+          </form>
+          <br />
+        {{/if}}
+      {{/foreach}}
     {{/if}}
-  {{/foreach}}
-  {{/if}}
-  <script type="text/javascript">
-    Main.add(function(){
-      // Ceci doit rester ici !! prepareForm necessaire car pas appelé au premier refresh d'un periodical update
-      prepareForm("editAdmFrm{{$_sejour->_id}}");
-    });
-  </script>
-  <form name="editAdmFrm{{$_sejour->_id}}" action="?" method="post">
-  <input type="hidden" name="m" value="dPplanningOp" />
-  <input type="hidden" name="dosql" value="do_sejour_aed" />
-  <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
-  <input type="hidden" name="patient_id" value="{{$_sejour->patient_id}}" />
+    <script>
+      Main.add(function() {
+        // Ceci doit rester ici !! prepareForm necessaire car pas appelé au premier refresh d'un periodical update
+        prepareForm("editAdmFrm{{$_sejour->_id}}");
+      });
+    </script>
+    <form name="editAdmFrm{{$_sejour->_id}}" action="?" method="post">
+      <input type="hidden" name="m" value="planningOp" />
+      <input type="hidden" name="dosql" value="do_sejour_aed" />
+      {{mb_key object=$_sejour}}
+      <input type="hidden" name="patient_id" value="{{$_sejour->patient_id}}" />
 
-  {{if !$_sejour->entree_reelle}}
-    <input type="hidden" name="entree_reelle" value="now" />
-    <input type="hidden" name="_modifier_entree" value="1" />
+      {{if !$_sejour->entree_reelle}}
+        <input type="hidden" name="entree_reelle" value="now" />
+        <input type="hidden" name="_modifier_entree" value="1" />
 
-    {{if $conf.dPplanningOp.CSejour.use_custom_mode_entree && $list_mode_entree|@count}}
-      {{mb_field object=$_sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 0); submitAdmission(this.form);" hidden=true}}
-      <select name="mode_entree_id" class="{{$_sejour->_props.mode_entree_id}}" style="width: 15em;" onchange="updateModeEntree(this)">
-        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-        {{foreach from=$list_mode_entree item=_mode}}
-          <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $_sejour->mode_entree_id == $_mode->_id}}selected{{/if}}>
-            {{$_mode}}
-          </option>
-        {{/foreach}}
-      </select>
-    {{else}}
-      {{mb_field object=$_sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 0); submitAdmission(this.form);"}}
-    {{/if}}
+        {{if $conf.dPplanningOp.CSejour.use_custom_mode_entree && $list_mode_entree|@count}}
+          {{mb_field object=$_sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 0); submitAdmission(this.form);" hidden=true}}
+          <select name="mode_entree_id" class="{{$_sejour->_props.mode_entree_id}}" style="width: 15em;" onchange="updateModeEntree(this)">
+            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+            {{foreach from=$list_mode_entree item=_mode}}
+              <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $_sejour->mode_entree_id == $_mode->_id}}selected{{/if}}>
+                {{$_mode}}
+              </option>
+            {{/foreach}}
+          </select>
+        {{else}}
+          {{mb_field object=$_sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 0); submitAdmission(this.form);"}}
+        {{/if}}
 
-    <button class="tick" type="button" onclick="{{if (($date_actuelle > $_sejour->entree_prevue) || ($date_demain < $_sejour->entree_prevue))}}confirmation(this.form);{{else}}submitAdmission(this.form);{{/if}}">
-      {{tr}}CSejour-admit{{/tr}}
-    </button>
-    <div id="listEtabExterne-editAdmFrm{{$_sejour->_id}}" {{if $_sejour->mode_entree != "7"}} style="display: none;" {{/if}}>
-      {{mb_field object=$_sejour field="etablissement_entree_id" form="editAdmFrm`$_sejour->_id`"
-        autocomplete="true,1,50,true,true" onchange="changeEtablissementId(this.form)"}}
-    </div>
-  {{else}}
-    <input type="hidden" name="_modifier_entree" value="0" />
-    <input type="hidden" name="mode_entree" value="{{$_sejour->mode_entree}}" />
-    <input type="hidden" name="etablissement_entree_id" value="{{$_sejour->etablissement_entree_id}}" />
+        <button class="tick" type="button" onclick="{{if (($date_actuelle > $_sejour->entree_prevue) || ($date_demain < $_sejour->entree_prevue))}}confirmation(this.form);{{else}}submitAdmission(this.form);{{/if}}">
+          {{tr}}CSejour-admit{{/tr}}
+        </button>
+        <div id="listEtabExterne-editAdmFrm{{$_sejour->_id}}" {{if $_sejour->mode_entree != "7"}} style="display: none;" {{/if}}>
+          {{mb_field object=$_sejour field="etablissement_entree_id" form="editAdmFrm`$_sejour->_id`"
+            autocomplete="true,1,50,true,true" onchange="changeEtablissementId(this.form)"}}
+        </div>
+      {{else}}
+        <input type="hidden" name="_modifier_entree" value="0" />
+        <input type="hidden" name="mode_entree" value="{{$_sejour->mode_entree}}" />
+        <input type="hidden" name="etablissement_entree_id" value="{{$_sejour->etablissement_entree_id}}" />
 
-    <input type="hidden" name="entree_reelle" value="" />
-    <button class="cancel" type="button" onclick="submitAdmission(this.form);">
-      {{tr}}Cancel{{/tr}}
-    </button>
-    <br />
+        <input type="hidden" name="entree_reelle" value="" />
+        <button class="cancel" type="button" onclick="submitAdmission(this.form);">
+          {{tr}}Cancel{{/tr}}
+        </button>
+        <br />
 
-    {{if ($_sejour->entree_reelle < $date_min) || ($_sejour->entree_reelle > $date_max)}}
-      {{$_sejour->entree_reelle|date_format:$conf.datetime}}
-      <br>
-    {{else}}
-    {{$_sejour->entree_reelle|date_format:$conf.time}}
-    {{/if}}
-    - {{tr}}CSejour.mode_entree.{{$_sejour->mode_entree}}{{/tr}}
+        {{if ($_sejour->entree_reelle < $date_min) || ($_sejour->entree_reelle > $date_max)}}
+          {{$_sejour->entree_reelle|date_format:$conf.datetime}}
+          <br>
+        {{else}}
+          {{$_sejour->entree_reelle|date_format:$conf.time}}
+        {{/if}}
+        - {{tr}}CSejour.mode_entree.{{$_sejour->mode_entree}}{{/tr}}
 
-    {{if $_sejour->etablissement_entree_id}}
-      - {{$_sejour->_ref_etablissement_provenance}}
-    {{/if}}
-  {{/if}}
-  </form>
+        {{if $_sejour->etablissement_entree_id}}
+          - {{$_sejour->_ref_etablissement_provenance}}
+        {{/if}}
+      {{/if}}
+    </form>
   {{elseif $_sejour->entree_reelle}}
     {{if ($_sejour->entree_reelle < $date_min) || ($_sejour->entree_reelle > $date_max)}}
       {{$_sejour->entree_reelle|date_format:$conf.datetime}}
@@ -117,7 +117,7 @@
       <button type="button" class="print notext" onclick="Admissions.showDocs('{{$_sejour->_id}}')"></button>
 
       {{if $conf.dPadmissions.show_deficience}}
-        {{mb_include module=patients template=inc_vw_antecedents type=deficience callback=reloadAdmission force_show=true}}
+        {{mb_include module=patients template=inc_vw_antecedents type=deficience callback="reloadAdmissionLine.curry('`$_sejour->_id`')" force_show=true}}
       {{/if}}
 
       {{foreach from=$_sejour->_ref_operations item=_op}}
@@ -133,7 +133,7 @@
       {{/foreach}}
 
       <a class="action" title="Modifier le séjour" href="#editDHE"
-        onclick="Sejour.editModal({{$_sejour->_id}}, reloadAdmission); return false;">
+        onclick="Sejour.editModal({{$_sejour->_id}}, reloadAdmissionLine.curry('{{$_sejour->_id}}')); return false;">
         <img src="images/icons/planning.png" />
       </a>
 
@@ -142,57 +142,57 @@
   {{/if}}
 
   {{if $patient->_ref_IPP}}
-  <script type="text/javascript">
-    PatHprimSelector.init{{$patient->_id}} = function(){
-      this.sForm      = "editIPP{{$patient->_id}}";
-      this.sId        = "id400";
-      this.sPatNom    = "{{$patient->nom}}";
-      this.sPatPrenom = "{{$patient->prenom}}";
-      this.pop();
-    };
+    <script>
+      PatHprimSelector.init{{$patient->_id}} = function() {
+        this.sForm      = "editIPP{{$patient->_id}}";
+        this.sId        = "id400";
+        this.sPatNom    = "{{$patient->nom}}";
+        this.sPatPrenom = "{{$patient->prenom}}";
+        this.pop();
+      };
 
-    SejourHprimSelector.init{{$_sejour->_id}} = function(){
-      this.sForm      = "editNumdos{{$_sejour->_id}}";
-      this.sId        = "id400";
-      this.sIPPForm   = "editIPP{{$patient->_id}}";
-      this.sIPPId     = "id400";
-      this.sIPP       = document.forms.editIPP{{$patient->_id}}.id400.value;
-      this.sPatNom    = "{{$patient->nom}}";
-      this.sPatPrenom = "{{$patient->prenom}}";
-      this.pop();
-    };
-  </script>
-  <form name="editIPP{{$patient->_id}}" action="?m={{$m}}" method="post" class="prepared">
-    <input type="hidden" name="dosql" value="do_idsante400_aed" />
-    <input type="hidden" name="m" value="dPsante400" />
-    <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="ajax" value="1" />
-    <input type="hidden" name="id_sante400_id" value="{{$patient->_ref_IPP->_id}}" />
-    <input type="hidden" class="notNull" name="id400" value="{{$patient->_ref_IPP->id400}}" />
-    <input type="hidden" class="notNull" name="tag" value="{{$patient->_ref_IPP->tag}}" />
-    <input type="hidden" class="notNull" name="object_id" value="{{$patient->_id}}" />
-    <input type="hidden" class="notNull" name="object_class" value="CPatient" />
-    <input type="hidden" name="last_update" value="{{$patient->_ref_IPP->last_update}}" />
-  </form>
+      SejourHprimSelector.init{{$_sejour->_id}} = function() {
+        this.sForm      = "editNumdos{{$_sejour->_id}}";
+        this.sId        = "id400";
+        this.sIPPForm   = "editIPP{{$patient->_id}}";
+        this.sIPPId     = "id400";
+        this.sIPP       = $V(getForm("editIPP{{$patient->_id}}").id400);
+        this.sPatNom    = "{{$patient->nom}}";
+        this.sPatPrenom = "{{$patient->prenom}}";
+        this.pop();
+      };
+    </script>
+    <form name="editIPP{{$patient->_id}}" action="?m={{$m}}" method="post" class="prepared">
+      <input type="hidden" name="dosql" value="do_idsante400_aed" />
+      <input type="hidden" name="m" value="sante400" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="ajax" value="1" />
+      <input type="hidden" name="id_sante400_id" value="{{$patient->_ref_IPP->_id}}" />
+      <input type="hidden" class="notNull" name="id400" value="{{$patient->_ref_IPP->id400}}" />
+      <input type="hidden" class="notNull" name="tag" value="{{$patient->_ref_IPP->tag}}" />
+      <input type="hidden" class="notNull" name="object_id" value="{{$patient->_id}}" />
+      <input type="hidden" class="notNull" name="object_class" value="CPatient" />
+      <input type="hidden" name="last_update" value="{{$patient->_ref_IPP->last_update}}" />
+    </form>
 
-  {{if $_sejour->_ref_NDA}}
-  <form name="editNumdos{{$_sejour->_id}}" action="?m={{$m}}" method="post" class="prepared" onsubmit="return ExtRefManager.submitNumdosForm({{$_sejour->_id}})">
-    <input type="hidden" name="dosql" value="do_idsante400_aed" />
-    <input type="hidden" name="m" value="dPsante400" />
-    <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="ajax" value="1" />
-    <input type="hidden" name="id_sante400_id" value="{{$_sejour->_ref_NDA->_id}}" />
-    <input type="hidden" class="notNull" name="id400" value="{{$_sejour->_ref_NDA->id400}}" size="8" />
-    <input type="hidden" class="notNull" name="tag" value="{{$_sejour->_ref_NDA->tag}}" />
-    <input type="hidden" class="notNull" name="object_id" value="{{$_sejour->_id}}" />
-    <input type="hidden" class="notNull" name="object_class" value="CSejour" />
-    <input type="hidden" class="notNull" name="sejour_id" value="{{$_sejour->_id}}" />
-    <input type="hidden" name="last_update" value="{{$_sejour->_ref_NDA->last_update}}" />
-    {{if @$modules.hprim21}}
-      <button type="button" class="edit notext" onclick="setExternalIds(this.form)">Edit external Ids</button>
+    {{if $_sejour->_ref_NDA}}
+      <form name="editNumdos{{$_sejour->_id}}" action="?m={{$m}}" method="post" class="prepared" onsubmit="return ExtRefManager.submitNumdosForm({{$_sejour->_id}})">
+        <input type="hidden" name="dosql" value="do_idsante400_aed" />
+        <input type="hidden" name="m" value="sante400" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="ajax" value="1" />
+        <input type="hidden" name="id_sante400_id" value="{{$_sejour->_ref_NDA->_id}}" />
+        <input type="hidden" class="notNull" name="id400" value="{{$_sejour->_ref_NDA->id400}}" size="8" />
+        <input type="hidden" class="notNull" name="tag" value="{{$_sejour->_ref_NDA->tag}}" />
+        <input type="hidden" class="notNull" name="object_id" value="{{$_sejour->_id}}" />
+        <input type="hidden" class="notNull" name="object_class" value="CSejour" />
+        <input type="hidden" class="notNull" name="sejour_id" value="{{$_sejour->_id}}" />
+        <input type="hidden" name="last_update" value="{{$_sejour->_ref_NDA->last_update}}" />
+        {{if @$modules.hprim21}}
+          <button type="button" class="edit notext" onclick="setExternalIds(this.form)">Edit external Ids</button>
+        {{/if}}
+      </form>
     {{/if}}
-  </form>
-  {{/if}}
   {{/if}}
   <input type="checkbox" name="print_doc" value="{{$_sejour->_id}}"/>
   {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$_sejour _show_numdoss_modal=1}}
@@ -224,9 +224,9 @@
 <td>
   {{if $canAdmissions->edit}}
     <form name="editSaisFrm{{$_sejour->_id}}" action="?" method="post" class="prepared">
-      <input type="hidden" name="m" value="dPplanningOp" />
+      <input type="hidden" name="m" value="planningOp" />
       <input type="hidden" name="dosql" value="do_sejour_aed" />
-      <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
+      {{mb_key object=$_sejour}}
       <input type="hidden" name="patient_id" value="{{$_sejour->patient_id}}" />
 
       {{if !$_sejour->entree_preparee}}
@@ -252,22 +252,22 @@
 
 <td>
   {{foreach from=$_sejour->_ref_operations item=_op}}
-  {{if $_op->_ref_consult_anesth->_id}}
-  <div class="{{if $_op->_ref_consult_anesth->_ref_consultation->chrono == 64}}small-success{{else}}small-info{{/if}}" style="margin: 0;">
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_consult_anesth->_ref_consultation->_guid}}');">
-    {{$_op->_ref_consult_anesth->_date_consult|date_format:$conf.date}}
-    </span>
-  </div>
-  {{/if}}
+    {{if $_op->_ref_consult_anesth->_id}}
+      <div class="{{if $_op->_ref_consult_anesth->_ref_consultation->chrono == 64}}small-success{{else}}small-info{{/if}}" style="margin: 0;">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_consult_anesth->_ref_consultation->_guid}}');">
+        {{$_op->_ref_consult_anesth->_date_consult|date_format:$conf.date}}
+        </span>
+      </div>
+    {{/if}}
   {{/foreach}}
 </td>
 
 <td class="button">
   {{if $_sejour->_couvert_cmu}}
-  <div><strong>CMU</strong></div>
+    <div><strong>CMU</strong></div>
   {{/if}}
   {{if $_sejour->_couvert_ald}}
-  <div><strong {{if $_sejour->ald}}style="color: red;"{{/if}}>ALD</strong></div>
+    <div><strong {{if $_sejour->ald}}style="color: red;"{{/if}}>ALD</strong></div>
   {{/if}}
 </td>
 
@@ -276,19 +276,19 @@
     {{foreach from=$_sejour->_ref_operations item=_op}}
       {{if $_op->_ref_actes_ccam|@count}}
         <span style="color: #484;">
-        {{foreach from=$_op->_ref_actes_ccam item=_acte}}
-          {{if $_acte->montant_depassement}}
-            {{if $_acte->code_activite == 1}}
-            Chir :
-            {{elseif $_acte->code_activite == 4}}
-            Anesth :
-            {{else}}
-            Activité {{$_acte->code_activite}} :
+          {{foreach from=$_op->_ref_actes_ccam item=_acte}}
+            {{if $_acte->montant_depassement}}
+              {{if $_acte->code_activite == 1}}
+              Chir :
+              {{elseif $_acte->code_activite == 4}}
+              Anesth :
+              {{else}}
+              Activité {{$_acte->code_activite}} :
+              {{/if}}
+              {{mb_value object=$_acte field=montant_depassement}}
+              <br />
             {{/if}}
-            {{mb_value object=$_acte field=montant_depassement}}
-            <br />
-          {{/if}}
-        {{/foreach}}
+          {{/foreach}}
         </span>
       {{/if}}
       {{if $_op->depassement}}

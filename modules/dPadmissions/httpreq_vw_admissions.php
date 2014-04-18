@@ -112,16 +112,17 @@ if ($order_col == "praticien_id") {
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
 // Mass preloading
-$patients   = CMbObject::massLoadFwdRef($sejours, "patient_id");
-CMbObject::massLoadFwdRef($sejours, "etablissement_entree_id");
-$praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
-$functions  = CMbObject::massLoadFwdRef($praticiens, "function_id");
+$patients   = CStoredObject::massLoadFwdRef($sejours, "patient_id");
+CStoredObject::massLoadFwdRef($sejours, "etablissement_entree_id");
+$praticiens = CStoredObject::massLoadFwdRef($sejours, "praticien_id");
+$functions  = CStoredObject::massLoadFwdRef($praticiens, "function_id");
+CStoredObject::massLoadBackRefs($sejours, "affectations");
 
 // Chargement optimisée des prestations
 CSejour::massCountPrestationSouhaitees($sejours);
 
-CMbObject::massCountBackRefs($sejours, "notes");
-CMbObject::massCountBackRefs($patients, "dossier_medical");
+CStoredObject::massCountBackRefs($sejours, "notes");
+CStoredObject::massCountBackRefs($patients, "dossier_medical");
 
 /** @var COperation[] $operations_total */
 $operations_total = array();
@@ -131,7 +132,6 @@ foreach ($sejours as $sejour_id => $_sejour) {
     unset($sejours[$sejour_id]);
     continue;
   }
-
   // Chargement du patient
   $patient = $_sejour->loadRefPatient();
   $patient->loadIPP();
@@ -142,7 +142,7 @@ foreach ($sejours as $sejour_id => $_sejour) {
   // Chargement du numéro de dossier
   $_sejour->loadNDA();
 
-  // Chargement des notes sur le séjour
+  // Chargement des notes sur le séjourw
   $_sejour->loadRefsNotes();
 
   // Chargement des modes d'entrée
