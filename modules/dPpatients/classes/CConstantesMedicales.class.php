@@ -723,7 +723,7 @@ class CConstantesMedicales extends CMbObject {
         continue;
       }
 
-      if (isset($_params["formfields"])) {
+      if (isset($_params["formfields"]) && isset($_params["conversion"])) {
         $conv = $_params["conversion"][$unit];
 
         $func_min = create_function('$matches', "return 'min|'.\$matches[1]*$conv;");
@@ -2108,19 +2108,19 @@ class CConstantesMedicales extends CMbObject {
           }
           $drawn_constants[] = $_constant;
 
-          if ($axis_id == 1) {
-            $title = CAppUI::tr("CConstantesMedicales-$_constant-court");
-          }
-          else {
-            $title .= " + " . CAppUI::tr("CConstantesMedicales-$_constant-court");
-          }
           // The label of the yaxis and the title of the graph are formatted
           $label = CAppUI::tr("CConstantesMedicales-$_constant-court");
           if (self::$list_constantes[$_constant]['unit'] && !$widget) {
             $label .= ' (' . self::$list_constantes[$_constant]['unit'] . ')';
-            $title .= ' (' . self::$list_constantes[$_constant]['unit'] . ')';
           }
           $label = utf8_encode($label);
+
+          if ($axis_id == 1) {
+            $title = $label;
+          }
+          else {
+            $title .= " + $label";
+          }
 
           /* The type of series is determined for this constant */
           $constant_type = 'line';
