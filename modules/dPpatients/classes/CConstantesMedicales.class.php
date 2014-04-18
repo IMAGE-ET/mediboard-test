@@ -723,7 +723,7 @@ class CConstantesMedicales extends CMbObject {
         continue;
       }
 
-      if (isset($_params["formfields"])) {
+      if (isset($_params["formfields"]) && isset($_params["conversion"])) {
         $conv = $_params["conversion"][$unit];
 
         $func_min = create_function('$matches', "return 'min|'.\$matches[1]*$conv;");

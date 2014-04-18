@@ -106,9 +106,9 @@ else {
   $context = CMbObject::loadFromGuid($context_guid);
 }
 
-$context->loadRefs();
-
 if ($context) {
+  $context->loadRefs();
+
   if ($context instanceof CPatient) {
     $patient = $context;
   }

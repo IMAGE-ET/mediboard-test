@@ -163,7 +163,7 @@ refreshFiches = function(sejour_id) {
                   <table class="layout">
                     <tr>
                       <td>
-                        <p style="text-align: center"><strong>{{$_graph.title}}</strong></p>
+                        <p style="text-align: center"><strong>{{$_graph.title|utf8_decode}}</strong></p>
                         <div id="placeholder_{{$_rank}}_{{$_graph_id}}" style="width: {{$_graph.width}}px; height: 175px; margin-bottom: 5px; margin-left: {{$_graph.margin_left}}px;"></div>
                       </td>
                       <td style="padding-top: 1.2em; width: 10em">
