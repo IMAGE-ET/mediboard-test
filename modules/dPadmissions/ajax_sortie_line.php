@@ -28,6 +28,9 @@ $date_max = CMbDT::dateTime("23:59:59", $date);
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 
+// Chargenemt du praticien
+$sejour->loadRefPraticien();
+
 // Chargement du patient
 $sejour->loadRefPatient(1)->loadIPP();
 
