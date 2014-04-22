@@ -11,7 +11,6 @@
 
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 {{assign var=pdf_and_thumbs value=$app->user_prefs.pdf_and_thumbs}}
-{{assign var=choice_factory value=$app->user_prefs.choice_factory}}
 
 {{foreach from=$list item=docitems_by_cat key=cat}}
   <div class="compact">
@@ -27,7 +26,7 @@
         {{if $_docitem instanceof CCompteRendu}}
         <button type="button" class="print notext"
                 onclick="{{if $pdf_thumbnails && $pdf_and_thumbs}}
-                Document.printPDF({{$_docitem->_id}}, '{{$choice_factory}}');
+                Document.printPDF({{$_docitem->_id}}, '{{$_docitem->factory}}');
                 {{else}}
                 Document.print({{$_docitem->_id}})
                 {{/if}}">{{tr}}Print{{/tr}}</button>
