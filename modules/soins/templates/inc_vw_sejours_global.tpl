@@ -9,6 +9,12 @@
  * @link       http://www.mediboard.org
 *}}
 
+<script type="text/javascript">
+  Main.add(function() {
+    Calendar.regField(getForm('changeDate').date, null, {noView: true});
+  });
+</script>
+
 {{if $print}}
   {{mb_include style=mediboard template=open_printable}}
 {{else}}
@@ -60,6 +66,12 @@
           <option value="{{$_function->_id}}" {{if $_function->_id == $function_id}}selected{{/if}}>{{$_function->_view}}</option>
         {{/foreach}}
       </select>
+
+      <select name="mode" onchange="this.form.submit();">
+        <option value="instant" {{if $mode == 'instant'}}selected{{/if}}>{{tr}}Instant view{{/tr}}</option>
+        <option value="day" {{if $mode == 'day'}}selected{{/if}}>{{tr}}Day view{{/tr}}</option>
+      </select>
+
       <br />
     {{else}}
       <input type="hidden" name="service_id" value="{{$service_id}}" />
@@ -78,6 +90,11 @@
         {{tr}}CSejour._type_admission.{{$_type}}{{/tr}}
       </label>
     {{/foreach}}
+
+    <br/>
+
+    <input type="hidden" name="date" value="{{$date}}" onchange="this.form.submit()" />
+
   </form>
 {{/if}}
 
@@ -97,7 +114,10 @@
       {{else}}
         Patients non placés
       {{/if}}
-      ({{$sejours|@count}})
+      ({{$sejours|@count}}) le {{$date|date_format:$conf.longdate}}
+      <form name="changeDate">
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="$V(getForm('TypeHospi').date, $V(getForm('changeDate').date));"/>
+      </form>
 
       {{if $print}}
         <span style="font-weight: normal;"> - {{$smarty.now|date_format:$conf.datetime}}</span>

@@ -19,6 +19,8 @@ $_type_admission = CValue::getOrSession("_type_admission", "");
 $select_view = CValue::get("select_view", false);
 $refresh = CValue::get('refresh', false);
 $ecap = CValue::get('ecap', false);
+$date = CValue::get('date', CMbDT::date());
+$mode = CValue::get('mode', 'day');
 
 $lite_view = CValue::get("lite_view");
 
@@ -69,7 +71,6 @@ $praticiens = $praticien->loadPraticiens();
 $function = new CFunctions();
 $functions = $function->loadSpecialites();
 
-$date     = CMbDT::date();
 $date_max = CMbDT::date("+ 1 DAY", $date);
 $service  = new CService();
 $user_id  = CAppUI::$user->_id;
@@ -131,6 +132,9 @@ if (!isset($sejours)) {
     if ($service_id) {
       $where["affectation.entree"] = "<= '$date_max'";
       $where["affectation.sortie"] = ">= '$date'";
+      if ($mode == 'instant') {
+        $where['affectation.effectue'] = " = '0'";
+      }
       $ljoin["sejour"] = "affectation.sejour_id = sejour.sejour_id";
       $where["sejour.annule"] = " = '0'";
       $where["affectation.service_id"] = " = '$service_id'";
@@ -138,6 +142,9 @@ if (!isset($sejours)) {
     elseif ($praticien_id && !$only_non_checked) {
       $where["affectation.entree"] = "<= '$date_max'";
       $where["affectation.sortie"] = ">= '$date'";
+      if ($mode == 'instant') {
+        $where['affectation.effectue'] = " = '0'";
+      }
       $ljoin["sejour"] = "affectation.sejour_id = sejour.sejour_id";
       $where["sejour.annule"] = " = '0'";
       
@@ -146,6 +153,9 @@ if (!isset($sejours)) {
     elseif ($function_id) {
       $where["affectation.entree"] = "<= '$date_max'";
       $where["affectation.sortie"] = ">= '$date'";
+      if ($mode == 'instant') {
+        $where['affectation.effectue'] = " = '0'";
+      }
       $ljoin["sejour"] = "affectation.sejour_id = sejour.sejour_id";
       $where["sejour.annule"] = " = '0'";
       
@@ -248,6 +258,7 @@ if (!isset($sejours)) {
     else {
       $sejours = array();
       if ($service_id || $praticien_id || $function_id) {
+        mbLog($where);
         $affectations = $affectation->loadList($where, null, null, "affectation.sejour_id", $ljoin);
 
         CMbObject::massLoadFwdRef($affectations, "sejour_id");
@@ -390,6 +401,7 @@ $smarty->assign("only_non_checked", $only_non_checked);
 $smarty->assign("print"           , $print);
 $smarty->assign("_sejour"         , $_sejour);
 $smarty->assign('ecap'            , $ecap);
+$smarty->assign('mode'            , $mode);
 
 $smarty->assign("select_view"     , $select_view);
 if ($select_view) {

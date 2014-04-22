@@ -124,19 +124,24 @@
     {{/if}}
 
     {{if !$ecap && $auto_refresh_frequency != 'disabled'}}
-      var url = new Url('soins', 'vw_sejours');
-      url.addParam('service_id', '{{$service_id}}');
-      {{if $select_view}}
+      /* Utilisation d'un timeout pour éviter que la page soit rechargée après le 1er chargement */
+      setTimeout(function() {
+        var url = new Url('soins', 'vw_sejours');
+        url.addParam('service_id', '{{$service_id}}');
+        {{if $select_view}}
         url.addParam('praticien_id', '{{$praticien_id}}');
         url.addParam('function_id', '{{$function_id}}');
-      {{/if}}
-      url.addParam('sejour_id', '{{$sejour_id}}');
-      url.addParam('show_affectation', '{{$show_affectation}}');
-      url.addParam('only_non_checked', '{{$only_non_checked}}');
-      url.addParam('print', '{{$print}}');
-      url.addParam('select_view', '{{$select_view}}');
-      url.addParam('refresh', true);
-      url.periodicalUpdate('idx_sejours', {frequency: {{$auto_refresh_frequency}}});
+        {{/if}}
+        url.addParam('sejour_id', '{{$sejour_id}}');
+        url.addParam('show_affectation', '{{$show_affectation}}');
+        url.addParam('only_non_checked', '{{$only_non_checked}}');
+        url.addParam('print', '{{$print}}');
+        url.addParam('select_view', '{{$select_view}}');
+        url.addParam('mode', '{{$mode}}');
+        url.addParam('date', '{{$date}}');
+        url.addParam('refresh', true);
+        url.periodicalUpdate('idx_sejours', {frequency: {{$auto_refresh_frequency}}});
+      }, {{$auto_refresh_frequency}} * 1000);
     {{/if}}
 
     {{if $print}}
