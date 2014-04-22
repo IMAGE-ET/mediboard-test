@@ -132,7 +132,7 @@ for ($i = 0; $i < 7; $i++) {
   
   foreach ($plagesOp as $_op) {
     $_op->loadRefSalle();
-    $_op->getNbOperations();
+    $_op->multicountOperations();
     $color = "#BCE";
 
     //to check if group is present group
@@ -188,7 +188,7 @@ function ajoutEvent(&$planning, $_plage, $date, $libelle, $color, $type, $class=
   }
   else {
     $event->plage["locked"]         = 0;
-    $event->plage["_nb_operations"] = $_plage->_nb_operations;
+    $event->plage["_count_operations"] = $_plage->_count_operations;
   }
   $event->plage["list_class"] = $_plage->_guid;
   $event->plage["add_class"]  = $date;

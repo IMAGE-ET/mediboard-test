@@ -77,8 +77,8 @@ foreach ($listDays as $keyDate => $valDate) {
     $plage->loadRefsFwd();
     $plage->loadRefsNotes();
     $plage->_ref_chir->loadRefsFwd();
-    $plage->getNbOperations();
-    $nbIntervNonPlacees += $plage->_nb_operations - $plage->_nb_operations_placees;
+    $plage->multicountOperations();
+    $nbIntervNonPlacees += $plage->_count_operations - $plage->_count_operations_placees;
     $plage->loadAffectationsPersonnel();
   
     $plage->fin = min($plage->fin, $max);

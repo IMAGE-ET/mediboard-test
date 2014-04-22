@@ -35,7 +35,7 @@
           <a onclick="EditPlanning.order('{{$plage->_id}}');" href="#">
             {{$plage->_view}}
           </a>
-          ({{$plage->_nb_operations_placees}}/{{$plage->_nb_operations}})
+          ({{$plage->_count_operations_placees}}/{{$plage->_count_operations}})
         </strong>
         <a onclick="EditPlanning.edit('{{$plage->_id}}','{{$curr_day}}');" href="#" class="not-printable">
           <img src="images/icons/edit.png" title="Modifier la plage" border="0" height="16" width="16" />
@@ -78,7 +78,7 @@
       {{else}}
       <strong title="{{$plage->_fill_rate}} % du temps occupé">
         {{$plage->_view}}
-        ({{$plage->_nb_operations_placees}}/{{$plage->_nb_operations}})
+        ({{$plage->_count_operations_placees}}/{{$plage->_count_operations}})
       </strong>
       {{/if}}
     </td>

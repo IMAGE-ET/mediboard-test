@@ -75,7 +75,7 @@ $_plage = new CPlageOp();
 foreach ($listPlages as &$_bloc) {
   foreach ($_bloc as &$_plage) {
     $_plage->loadRefSalle();
-    $_plage->getNbOperations($nb_secondes, false);
+    $_plage->multicountOperations($nb_secondes, false);
     $_plage->loadRefsNotes();
     $_plage->loadRefSpec(1);
   }

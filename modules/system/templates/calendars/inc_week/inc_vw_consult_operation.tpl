@@ -34,7 +34,7 @@
         {{if $_event->type == "consultation"}}
           {{$plage._affected}} {{if $plage._nb_patients != $plage._affected}}({{$plage._nb_patients}}){{/if}} / {{$plage._total|string_format:"%.0f"}}
         {{else}}
-          {{$plage._nb_operations}} Op
+          {{$plage._count_operations}} Op
         {{/if}}
       </div>
     </div>

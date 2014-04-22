@@ -42,8 +42,6 @@ foreach ($listBlocs as $key => $curr_bloc) {
   }
 }
 
-
-
 if (!$plagesel->temps_inter_op) {
   $plagesel->temps_inter_op = "00:00:00";
 }
@@ -57,6 +55,7 @@ if ($plagesel->_id) {
 }
 
 if (!$plagesel->_id) {
+  $plagesel->date = $date;
   $plagesel->debut = CPlageOp::$hours_start.":00:00";
   $plagesel->fin   = CPlageOp::$hours_start.":00:00";
 }
@@ -95,8 +94,9 @@ $listPers = array(
 );
 
 if ($plagesel->_id) {
-  $plagesel->getNbOperations();
-  $plagesel->getNbOperationsAnnulees();
+  $plagesel->multicountOperations();
+  $plagesel->countOperationsAnnulees();
+  $plagesel->loadRefsNotes();
   $listPers = $plagesel->loadPersonnelDisponible($listPers);
 }
 

@@ -2396,6 +2396,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   /**
    * @see parent::loadRefsFwd()
+   * @see deprecated
    */
   function loadRefsFwd($cache = true) {
     $this->loadRefPatient($cache);

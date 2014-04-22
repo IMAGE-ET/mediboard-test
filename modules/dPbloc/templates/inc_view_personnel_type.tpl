@@ -7,7 +7,7 @@
     <input type="hidden" name="object_id" value="{{$plage->_id}}" />
     <input type="hidden" name="object_class" value="{{$plage->_class}}" />
     <input type="hidden" name="realise" value="0" />
-    <select name="personnel_id" style="width: 15em;" onchange="onSubmitFormAjax(this.form, {onComplete: reloadPersonnelPrevu});">
+    <select name="personnel_id" style="width: 12em;" onchange="onSubmitFormAjax(this.form, {onComplete: reloadPersonnelPrevu});">
       <option value="">&mdash; {{tr}}CPersonnel.emplacement.{{$type}}{{/tr}}</option>
       {{foreach from=$list item=_personnelBloc}}
         <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>

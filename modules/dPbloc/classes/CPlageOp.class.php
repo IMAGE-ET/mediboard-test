@@ -51,9 +51,10 @@ class CPlageOp extends CMbObject {
   public $_year;
   public $_duree_prevue;
   public $_type_repeat;
-  public $_nb_operations;
-  public $_nb_operations_placees;
-  public $_nb_operations_annulees;
+  public $_count_operations;
+  public $_count_operations_placees;
+  public $_count_operations_annulees;
+  public $_count_all_operations;
   public $_fill_rate;
   public $_reorder_up_to_interv_id;
   public $_nbQuartHeure;
@@ -132,6 +133,7 @@ class CPlageOp extends CMbObject {
    * Chargement des back références
    *
    * @param bool|int $annulee Prise en compte des interventions annulées
+   * @deprecated
    *
    * @return void
    */
@@ -249,7 +251,7 @@ class CPlageOp extends CMbObject {
    */
   function loadRefsOperations(
       $annulee = true,
-      $order = "rank, rank_voulu, horaire_voulu",
+      $order = "rank, time_operation, rank_voulu, horaire_voulu",
       $sorted = false,
       $validated = null,
       $where = array()
@@ -470,54 +472,55 @@ class CPlageOp extends CMbObject {
       }
     }
 
-    $oldPlage = new CPlageOp();
+    $old = new CPlageOp();
     if ($this->_id) {
-      $oldPlage->load($this->_id);
-      $oldPlage->loadRefsBack();
+      $old->load($this->_id);
+      $old->loadRefsOperations();
     }
+
+    // Pas de changement de date si on a déjà des interventions
+    if ($this->fieldModified("date") && count($old->_ref_operations)) {
+      return CAppUI::tr("CPlageOp-failed-change_date", count($old->_ref_operations));
+    }
+
+    // Erreur si on est en multi-praticiens, qu'il y a des interventions et qu'on veut mettre un praticien
+    if ($this->fieldValued("chir_id") && !$this->unique_chir && $old->spec_id && count($old->_ref_operations)) {
+      mbTrace("all the same to me");
+    }
+
     if (null !== $this->chir_id && $this->_id && !$this->unique_chir) {
-      // Erreur si on est en multi-praticiens, qu'il y a des interventions et qu'on veut mettre un praticien
-      if (count($oldPlage->_ref_operations) && $oldPlage->spec_id && $this->chir_id) {
-        $msg = "Impossible de selectionner un praticien : ".
-          count($oldPlage->_ref_operations).
-          " intervention(s) déjà présentes dans une plage multi-praticiens";
-        return $msg;
+      if (count($old->_ref_operations) && $old->spec_id && $this->chir_id) {
+        return CAppUI::tr("CPlageOp-failed-multi_chir", count($old->_ref_operations));
       }
     }
     
     // Si on change de praticien alors qu'il y a déjà des interventions
-    if (null !== $this->chir_id && $this->_id) {
-      if (count($oldPlage->_ref_operations) && $oldPlage->chir_id && ($oldPlage->chir_id != $this->chir_id)) {
-        //Si toutes les interventions sont annulées, on les met hors plage
-        $this->getNbOperationsAnnulees();
-        if ($this->_nb_operations_annulees == count($oldPlage->_ref_operations)) {
-          $this->completeField("salle_id", "date");
-          foreach ($oldPlage->_ref_operations as $_op) {
-            $_op->plageop_id = "";
-            $_op->date       = $this->date;
-            $_op->salle_id   = $this->salle_id;
-            $_op->store();
-          }
-        }
-        //Sinon on retourne un message d'erreur
-        else {
-          $msg = "Impossible de changer le praticien : ".count($oldPlage->_ref_operations)." intervention(s) déjà présentes";
-          return $msg;
-        }
+    if ($this->fieldAltered("chir_id") && count($old->_ref_operations)) {
+      // Si certaines ne sont pas annulées, on sort
+      if ($this->countOperationsAnnulees() != count($old->_ref_operations)) {
+        return CAppUI::tr("CPlageOp-failed-change_chir", count($old->_ref_operations));
+      }
+
+      // Si toutes les interventions sont annulées, on les met hors plage
+      $this->completeField("salle_id", "date");
+      foreach ($old->_ref_operations as $_op) {
+        $_op->plageop_id = "";
+        $_op->date       = $this->date;
+        $_op->salle_id   = $this->salle_id;
+        $_op->store();
       }
     }
     
-    // Erreur si on créé / modifier une plage sur une salle bloquée
+    // Erreur si on créé-modifie une plage sur une salle bloquée
     $salle = $this->loadRefSalle();
     if (count($salle->loadRefsBlocages($this->date))) {
-      $msg = "Impossible de " . ($this->_id ? "modifier" : "créer") . " la plage : la salle $salle est bloquée";
-      return $msg;
+      return CAppUI::tr("CPlageOp-failed-use_locked_room", $salle->_view);
     }
     
     // Modification du salle_id de la plage -> repercussion sur les interventions
-    if ($this->_id && $this->salle_id && $this->salle_id != $oldPlage->salle_id) {
-      foreach ($oldPlage->_ref_operations as &$_operation) {
-        if ($_operation->salle_id == $oldPlage->salle_id) {
+    if ($this->fieldModified("salle_id")) {
+      foreach ($old->_ref_operations as $_operation) {
+        if ($_operation->salle_id == $old->salle_id) {
           $_operation->salle_id = $this->salle_id;
           $_operation->store(false);
         }
@@ -526,9 +529,8 @@ class CPlageOp extends CMbObject {
 
     // Modification du début de la plage ou des minutes entre les interventions
     $this->completeField("debut", "temps_inter_op");
-
-    if ($this->_id && ($this->debut != $oldPlage->debut || $this->temps_inter_op != $oldPlage->temps_inter_op)) {
-      if ($this->temps_inter_op != $oldPlage->temps_inter_op) {
+    if ($this->fieldModified("debut") || $this->fieldModified("temps_inter_op")) {
+      if ($this->fieldModified("temps_inter_op")) {
         $with_cancelled = CAppUI::conf("dPplanningOp COperation save_rank_annulee_validee");
         $this->loadRefsOperations($with_cancelled, "rank, rank_voulu, horaire_voulu", true);
       }
@@ -680,15 +682,14 @@ class CPlageOp extends CMbObject {
   }
 
   /**
-   * Récupération du taux d'occupation de la plage
-   * et du nombre d'interventions
+   * Récupération du taux d'occupation de la plage et du nombre d'interventions
    *
    * @param string $addedTime      Durée ajouté manuellement
    * @param bool   $useTimeInterOp Utilisation des durées ajoutées entre chaque intervention
    *
-   * @return void
+   * @return int
    */
-  function getNbOperations($addedTime = null, $useTimeInterOp = true) {
+  function multicountOperations($addedTime = null, $useTimeInterOp = true) {
     if ($useTimeInterOp == true) {
       $select_time = "\nSUM(TIME_TO_SEC(`operations`.`temp_operation`) + TIME_TO_SEC(`plagesop`.`temps_inter_op`)) AS time";
     }
@@ -702,7 +703,7 @@ class CPlageOp extends CMbObject {
         AND `operations`.`plageop_id` = `plagesop`.`plageop_id`
         AND `operations`.`annulee` = '0'";
     $result = $this->_spec->ds->loadHash($sql);
-    $this->_nb_operations = $result["total"];
+    $this->_count_operations = $result["total"];
     if ($addedTime) {
       $result["time"] = $result["time"] + $addedTime;
     }
@@ -715,7 +716,7 @@ class CPlageOp extends CMbObject {
         AND `operations`.`rank` > 0
         AND `operations`.`annulee` = '0'";
     $result = $this->_spec->ds->loadHash($sql);
-    $this->_nb_operations_placees = $result["total"];
+    $this->_count_operations_placees = $result["total"];
     
     if ($this->verrouillage == "oui") {
       $this->_verrouillee = array("force");
@@ -729,7 +730,7 @@ class CPlageOp extends CMbObject {
       $date_min = CMbDT::date("+ " . $this->_ref_salle->_ref_bloc->days_locked . " DAYS");
       $check_datemin = $this->date < $date_min;
       $check_fill    = ($this->_fill_rate > 100) && CAppUI::conf("dPbloc CPlageOp locked");
-      $check_max     = $this->max_intervention && $this->_nb_operations >= $this->max_intervention;
+      $check_max     = $this->max_intervention && $this->_count_operations >= $this->max_intervention;
 
       if ($check_datemin) {
         $this->_verrouillee[] = "datemin";
@@ -741,7 +742,19 @@ class CPlageOp extends CMbObject {
         $this->_verrouillee[] = "max";
       }
     }
-    
+
+    $this->countOperationsAnnulees();
+
+    return $this->_count_all_operations = $this->_count_operations + $this->_count_operations_annulees;
+  }
+
+  /**
+   * Récupération le nombre d'intervention pour la plage
+   *
+   * @return int
+   */
+  function countOperations() {
+    return $this->_count_operations = $this->countBackRefs("operations");
   }
 
   /**
@@ -749,12 +762,16 @@ class CPlageOp extends CMbObject {
    *
    * @return int
    */
-  function getNbOperationsAnnulees() {
+  function countOperationsAnnulees() {
+    if (!$this->_id) {
+      return $this->_count_operations_annulees = 0;
+    }
+
     $operation = new COperation();
     $operation->plageop_id = $this->_id;
     $operation->annulee = '1';
 
-    return $this->_nb_operations_annulees= $operation->countMatchingList();
+    return $this->_count_operations_annulees = $operation->countMatchingList();
   }
 
   /**

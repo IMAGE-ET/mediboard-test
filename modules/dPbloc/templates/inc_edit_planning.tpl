@@ -29,18 +29,16 @@
     url.requestUpdate("secondary_functions");
   };
 
-  Main.add(function(){
-    var oForm = getForm('editFrm');
-    Calendar.regField(oForm.date);
-    Calendar.regField(oForm.temps_inter_op);
+  Main.add(function() {
     var options = {
       exactMinutes: false,
       minInterval: {{"CPlageOp"|static:minutes_interval}},
       minHours: {{"CPlageOp"|static:hours_start|intval}},
       maxHours: {{"CPlageOp"|static:hours_stop|intval}}
     };
-    Calendar.regField(oForm.debut, null, options);
-    Calendar.regField(oForm.fin  , null, options);
+    var form = getForm('editFrm');
+    Calendar.regField(form.debut, null, options);
+    Calendar.regField(form.fin  , null, options);
   });
 </script>
 
@@ -51,32 +49,19 @@
 <input type="hidden" name="dosql" value="do_plagesop_aed" />
 <input type="hidden" name="del" value="0" />
 {{mb_key object=$plagesel}}
-{{*<input type="hidden" name="plageop_id" value="{{$plagesel->plageop_id}}" />*}}
 
 <table class="form">
-  <tr>
-    {{if $plagesel->plageop_id}}
-    <th class="title modify" colspan="2">
-      {{mb_include module=system template=inc_object_notes object=$plagesel}}
-      {{mb_include module=system template=inc_object_idsante400 object=$plagesel}}
-      {{mb_include module=system template=inc_object_history object=$plagesel}}
-      {{tr}}CPlageOp-title-modify{{/tr}}
-    {{else}}
-    <th class="title" colspan="2">
-      {{tr}}CPlageOp-title-create{{/tr}}
-    {{/if}}
-    </th>
-  </tr>
+{{mb_include module=system template=inc_form_table_header object=$plagesel}}
   <tr>
     <td colspan="2">
       <fieldset>
         <legend>Attributs de la plage</legend>
         <table class="form">
           <tr>
-            <th>{{mb_label object=$plagesel field="chir_id"}}</th>
-            <td>
+            <th style="width: 15%;">{{mb_label object=$plagesel field="chir_id"}}</th>
+            <td style="width: 45%;">
               <select name="chir_id" class="{{$plagesel->_props.chir_id}}" style="width: 15em;" onchange="refreshFunction(this.value)">
-                <option value="">&mdash; Choisir un chirurgien</option>
+                <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
                 {{if $chirs|@count}}
                 <optgroup label="Chirurgiens">
                 </optgroup>
@@ -88,15 +73,15 @@
                 {{/if}}
               </select>
             </td>
-            <th>{{mb_label object=$plagesel field="salle_id"}}</th>
-            <td>
+            <th style="width: 15%;">{{mb_label object=$plagesel field="salle_id"}}</th>
+            <td style="width: 25%;">
               <select name="salle_id" class="{{$plagesel->_props.salle_id}}" style="width: 15em;">
-                <option value="">&mdash; {{tr}}CSalle.select{{/tr}}</option>
-                  {{foreach from=$listBlocs item=curr_bloc}}
-                    <optgroup label="{{$curr_bloc->_view}}">
-                    {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
-                      <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $plagesel->salle_id}}selected="selected"{{/if}}>
-                        {{$curr_salle}}
+                <option value="">&mdash;  {{tr}}Choose{{/tr}}</option>
+                  {{foreach from=$listBlocs item=_bloc}}
+                    <optgroup label="{{$_bloc}}">
+                    {{foreach from=$_bloc->_ref_salles item=_salle}}
+                      <option value="{{$_salle->_id}}" {{if $_salle->_id == $plagesel->salle_id}}selected="selected"{{/if}}>
+                        {{$_salle}}
                       </option>
                     {{foreachelse}}
                       <option value="" disabled="disabled">{{tr}}CSalle.none{{/tr}}</option>
@@ -113,12 +98,12 @@
               {{assign var=selected value=$plagesel->secondary_function_id}}
               {{mb_include module=cabinet template=inc_refresh_secondary_functions field_name=secondary_function_id empty_function_principale=1 type_onchange="" change_active=0}}
             </td>
-            <th>{{mb_label object=$plagesel field="date"}}</th>
+            <th>{{mb_label object=$plagesel field=date}}</th>
             <td>
-              {{if $plagesel->plageop_id}}
-                <input type="hidden" name="date" value="{{$plagesel->date}}" />
+              {{if $plagesel->_count_all_operations}}
+                {{mb_value object=$plagesel field=date}} ({{$plagesel->_count_all_operations}} interventions)
               {{else}}
-                <input type="hidden" name="date" value="{{$date}}" />
+                {{mb_field object=$plagesel field=date form=editFrm register=true}}
               {{/if}}
             </td>
           </tr>
@@ -126,7 +111,7 @@
             <th>{{mb_label object=$plagesel field="spec_id"}}</th>
             <td>
               <select name="spec_id" class="{{$plagesel->_props.spec_id}}" style="width: 15em;">
-                <option value="">&mdash; Choisir une spécialité</option>
+                <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
                 {{foreach from=$specs item=spec}}
                   <option value="{{$spec->function_id}}" class="mediuser" style="border-color: #{{$spec->color}};"
                   {{if $spec->function_id == $plagesel->spec_id}}selected="selected"{{/if}}>
@@ -142,19 +127,19 @@
             <th>{{mb_label object=$plagesel field="anesth_id"}}</th>
             <td>
               <select name="anesth_id" style="width: 15em;">
-                <option value="">&mdash; Choisir un anesthésiste</option>
+                <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
                 {{mb_include module=mediusers template=inc_options_mediuser selected=$plagesel->anesth_id list=$anesths}}
               </select>
             </td>
-            <th>{{mb_label object=$plagesel field="fin"}}</th>
-            <td>{{mb_field object=$plagesel field="fin" }}</td>
+            <th>{{mb_label object=$plagesel field=fin}}</th>
+            <td>{{mb_field object=$plagesel field=fin}}</td>
           </tr>
           
           <tr>
             <th>{{mb_label object=$plagesel field="unique_chir"}}</th>
             <td>{{mb_field object=$plagesel field="unique_chir"}}</td>
             <th>{{mb_label object=$plagesel field="temps_inter_op"}}</th>
-            <td>{{mb_field object=$plagesel field="temps_inter_op"}}</td>
+            <td>{{mb_field object=$plagesel field="temps_inter_op" form=editFrm register=true}}</td>
           </tr>
           <tr>
             <th>{{mb_label object=$plagesel field="max_intervention"}}</th>
@@ -166,7 +151,7 @@
           {{if $plagesel->_id}}
             <tr>
               <td colspan="4">
-                <div class="small-info">Cette plage contient {{$plagesel->_nb_operations}} intervention(s) et {{$plagesel->_nb_operations_annulees}} intervention(s) annulée(s)</div>
+                <div class="small-info">Cette plage contient {{$plagesel->_count_operations}} intervention(s) et {{$plagesel->_count_operations_annulees}} intervention(s) annulée(s)</div>
               </td>
             </tr>
           {{/if}}

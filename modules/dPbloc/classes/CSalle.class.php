@@ -295,8 +295,10 @@ class CSalle extends CMbObject {
    * @return CBlocage[]
    */
   function loadRefsBlocages($date = "now") {
-    $blocage = new CBlocage();
-    
+    if (!$this->_id) {
+      return array();
+    }
+
     if ($date == "now") {
       $date = CMbDT::date();
     }
@@ -304,7 +306,8 @@ class CSalle extends CMbObject {
     $where = array();
     $where["salle_id"] = "= '$this->_id'";
     $where[] = "'$date' BETWEEN deb AND fin";
-    
+
+    $blocage = new CBlocage();
     return $blocage->loadList($where);
   }
 

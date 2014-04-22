@@ -527,9 +527,9 @@ class COperation extends CCodable implements IPatientRelated {
     $this->_time_op = $this->temp_operation;
     $this->_time_urgence = $this->time_operation;
 
-    /** @var CTypeAnesth $_ref_type_anesth */
-    $this->_ref_type_anesth = $this->loadFwdRef("type_anesth", true);
-    $this->_lu_type_anesth = $this->_ref_type_anesth->name;
+    /** @var CTypeAnesth $type_anesth */
+    $this->_ref_type_anesth = $type_anesth = $this->loadFwdRef("type_anesth", true);
+    $this->_lu_type_anesth = $type_anesth->name;
 
     $this->_fin_prevue = CMbDT::addTime($this->time_operation, $this->temp_operation);
 
@@ -636,22 +636,24 @@ class COperation extends CCodable implements IPatientRelated {
   function prepareAlert() {
     // Création d'un alerte sur l'intervention
     $comments = null;
-    if ($this->_old->rank || ($this->materiel && $this->commande_mat)) {
+    /** @var self $old */
+    $old = $this->_old;
+    if ($old->rank || ($this->materiel && $this->commande_mat)) {
       $this->loadRefPlageOp();
-      $this->_old->loadRefPlageOp();
+      $old->loadRefPlageOp();
 
       if ($this->fieldModified("annulee", "1")) {
         // Alerte sur l'annulation d'une intervention
         $comments .= "L'intervention a été annulée pour le ".CMbDT::format($this->_datetime, CAppUI::conf("datetime")).".";
       }
-      elseif (CMbDT::date(null, $this->_datetime) != CMbDT::date(null, $this->_old->_datetime)) {
+      elseif (CMbDT::date(null, $this->_datetime) != CMbDT::date(null, $old->_datetime)) {
         // Alerte sur le déplacement d'une intervention
-        $comments .= "L'intervention a été déplacée du ".CMbDT::format($this->_old->_datetime, CAppUI::conf("date")).
+        $comments .= "L'intervention a été déplacée du ".CMbDT::format($old->_datetime, CAppUI::conf("date")).
           " au ".CMbDT::format($this->_datetime, CAppUI::conf("date")).".";
       }
       elseif ($this->fieldModified("materiel") && $this->commande_mat) {
         // Alerte sur la commande de matériel
-        $comments .= "Le materiel a été modifié \n - Ancienne valeur : ".$this->_old->materiel.
+        $comments .= "Le materiel a été modifié \n - Ancienne valeur : ".$old->materiel.
           " \n - Nouvelle valeur : ".$this->materiel;
       }
       else {
@@ -660,7 +662,7 @@ class COperation extends CCodable implements IPatientRelated {
       }
 
       // Complément d'alerte
-      if ($this->_old->rank) {
+      if ($old->rank) {
         $comments .= "\nL'intervention avait été validée.";
       }
       if ($this->materiel && $this->commande_mat) {
@@ -701,7 +703,8 @@ class COperation extends CCodable implements IPatientRelated {
    * @see parent::store()
    */
   function store($reorder = true) {
-    $old_object = $this->loadOldObject();
+    /** @var self $old */
+    $old = $this->loadOldObject();
 
     $this->completeField(
       "annulee",
@@ -714,9 +717,10 @@ class COperation extends CCodable implements IPatientRelated {
       "date"
     );
 
-    // Problème après fusion si on a la date et la plage
-    if ($this->date && $this->plageop_id) {
-      $this->date = "";
+    // Si on a une plage, la date est celle de la plage
+    if ($this->plageop_id) {
+      $plage = $this->loadRefPlageOp();
+      $this->date = $plage->date;
     }
 
     // Si on choisit une plage, on copie la salle
@@ -728,8 +732,8 @@ class COperation extends CCodable implements IPatientRelated {
     // Cas d'une plage que l'on quitte
     /** @var CPlageOp $old_plage */
     $old_plage = null;
-    if ($this->fieldAltered("plageop_id") && $this->_old->rank) {
-      $old_plage = $this->_old->loadRefPlageOp();
+    if ($this->fieldAltered("plageop_id") && $old->rank) {
+      $old_plage = $old->loadRefPlageOp();
     }
 
     $comments = $this->prepareAlert();
@@ -761,14 +765,14 @@ class COperation extends CCodable implements IPatientRelated {
 
       if ($this->fieldModified("libelle")) {
         $alerte = "Le libellé a été modifié le $date\n".
-          "Ancienne valeur : ".$old_object->getFormattedValue("libelle").
+          "Ancienne valeur : ".$old->getFormattedValue("libelle").
           "\nNouvelle valeur : ".$this->getFormattedValue("libelle");
       }
       $this->createAlert($alerte, true, "libelle");
       $alerte = "";
       if ($this->fieldModified("cote")) {
         $alerte = "Le côté a été modifié le $date : \n".
-           "Ancienne valeur : " . $old_object->getFormattedValue("cote") .
+           "Ancienne valeur : " . $old->getFormattedValue("cote") .
            "\nNouvelle valeur : " . $this->getFormattedValue("cote");
       }
       $this->createAlert($alerte, true, "cote");
@@ -784,7 +788,7 @@ class COperation extends CCodable implements IPatientRelated {
     // store les protocoles
     if (
         CAppUI::conf("dPbloc CPlageOp systeme_materiel") == "expert" &&
-        $this->_types_ressources_ids && !$old_object->_id
+        $this->_types_ressources_ids && !$old->_id
     ) {
       $types_ressources_ids = explode(",", $this->_types_ressources_ids);
 
@@ -1503,7 +1507,7 @@ class COperation extends CCodable implements IPatientRelated {
 
     if (CModule::getActive("mvsante")) {
       $template->addTimeProperty("Opération - Remise au chirurgien", $this->remise_chir);
-
+      /** @var CLiaisonLibelleInterv[] $liaisons_libelles */
       $liaisons_libelles = $this->loadBackRefs("liaison_libelle", "numero");
       CMbObject::massLoadFwdRef($liaisons_libelles, "libelleop_id");
 

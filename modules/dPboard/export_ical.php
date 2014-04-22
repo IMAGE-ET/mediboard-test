@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Board
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
@@ -94,7 +94,7 @@ for ($i = 0; CMbDT::date("+$i day", $debut)!=$fin ; $i++) {
       if ($details) {
         $plage->loadRefsOperations();
       }
-      $plage->getNbOperations();
+      $plage->multicountOperations();
       $plagesOp[$plage->salle_id][$date] = $plagesPerDayOp[$key];
     }
   }
@@ -131,7 +131,7 @@ if (in_array("consult", $export)) {
 if (in_array("interv", $export)) {
   foreach ($plagesOp as $salle) {
     foreach ($salle as $plagesPerDay => $rdv) {
-      $description = "$rdv->_nb_operations intervention(s)";
+      $description = "$rdv->_count_operations intervention(s)";
       // Evènement détaillé
       if ($details) {
         foreach ($rdv->_ref_operations as $op) {
