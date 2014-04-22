@@ -19,10 +19,14 @@ abstract class CSessionHandler {
   /** @var bool Is the session started ? */
   static private $started = false;
 
+  /** @var int Session life time is seconds */
+  static private $lifetime;
+
   static $availableEngines = array(
     "files"    => "CFilesSessionHandler",
     "memcache" => "CMemcacheSessionHandler",
     "mysql"    => "CMySQLSessionHandler",
+    "redis"    => "CRedisSessionHandler",
   );
 
   /**
@@ -72,7 +76,18 @@ abstract class CSessionHandler {
    * @return void
    */
   static function updateLifetime($lifetime) {
+    self::$lifetime = $lifetime;
+
     self::$engine->setLifeTime($lifetime);
+  }
+
+  /**
+   * Get session life time
+   *
+   * @return int
+   */
+  static function getLifeTime(){
+    return self::$lifetime;
   }
 
   /**
@@ -84,8 +99,8 @@ abstract class CSessionHandler {
     // Update session lifetime
     $prefSessionLifetime = intval(CAppUI::pref("sessionLifetime")) * 60;
 
-    // If default pref, we use session.gc_maxlifetime php.ini value
-    $session_gc_maxlifetime = intval(ini_get("session.gc_maxlifetime"));
+    // If default pref, we use the PHP default value
+    $session_gc_maxlifetime = self::getPhpSessionLifeTime();
     $sessionLifetime = null;
 
     if (!$prefSessionLifetime) {
@@ -96,6 +111,15 @@ abstract class CSessionHandler {
     }
 
     self::updateLifetime($sessionLifetime);
+  }
+
+  /**
+   * Get PHP default session life time value
+   *
+   * @return int
+   */
+  static function getPhpSessionLifeTime(){
+    return intval(ini_get("session.gc_maxlifetime"));
   }
 
   /**

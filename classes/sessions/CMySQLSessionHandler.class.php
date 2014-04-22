@@ -13,13 +13,16 @@
  * MySQL based session handler
  */
 class CMySQLSessionHandler implements ISessionHandler {
+  const DATA_CHANGE_TIME = 5; // in seconds
+
   /** @var CMySQLDataSource */
   private static $ds;
 
   private $lock_name;
   private $lock_timeout = 30;
 
-  private $lifetime;
+  private $lifetime; // From ini file
+  private $expire;   // expire info from the session
 
   private $mutex_type;
 
@@ -106,10 +109,11 @@ class CMySQLSessionHandler implements ISessionHandler {
       $this->mutex = $mutex;
     }
 
-    $query = $ds->prepare("SELECT `data` FROM `session` WHERE `session_id` = ?1 AND `expire` > ?2", $session_id, time());
+    $query = $ds->prepare("SELECT `data`, `expire` FROM `session` WHERE `session_id` = ?1 AND `expire` > ?2;", $session_id, time());
     $result = $ds->exec($query);
 
     if ($record = $ds->fetchAssoc($result)) {
+      $this->expire = $record['expire'];
       $data = $record['data'];
 
       $new_data = @gzuncompress($data);
@@ -134,47 +138,33 @@ class CMySQLSessionHandler implements ISessionHandler {
     $address    = get_remote_address();
     $user_id    = CAppUI::$instance->user_id;
     $user_ip    = $address["remote"] ? inet_pton($address["remote"]) : null;
-    $user_agent = CValue::read($_SERVER, "HTTP_USER_AGENT");
     $expire     = time() + $this->lifetime;
-
-    $new_hash = md5($data);
-
-    $data = gzcompress($data);
 
     // If session is to be updated
     if ($this->data_hash) {
+      $new_hash = md5($data);
       if ($this->data_hash !== $new_hash) {
-        $query = "UPDATE `session` SET
-          `user_id`    = ?1,
-          `user_ip`    = ?2,
-          `user_agent` = ?3,
-          `expire`     = ?4,
-          `data`       = ?5
-          WHERE `session_id` = ?6;";
-
-        $query = $ds->prepare($query, $user_id, $user_ip, $user_agent, $expire, $data, $session_id);
+        $compressed_data = gzcompress($data);
+        $query = "UPDATE `session` SET `user_id` = ?1, `user_ip` = ?2, `expire` = ?3, `data` = ?4 WHERE `session_id` = ?5;";
+        $query = $ds->prepare($query, $user_id, $user_ip, $expire, $compressed_data, $session_id);
       }
       else {
-        $query = "UPDATE `session` SET
-          `user_id`    = ?1,
-          `user_ip`    = ?2,
-          `user_agent` = ?3,
-          `expire`     = ?4
-          WHERE `session_id` = ?5;";
+        // If session was aleady written less than X seconds, don't update it once again
+        if ($expire - $this->expire < self::DATA_CHANGE_TIME) {
+          return true;
+        }
 
-        $query = $ds->prepare($query, $user_id, $user_ip, $user_agent, $expire, $session_id);
+        $query = "UPDATE `session` SET `user_id` = ?1, `user_ip` = ?2, `expire` = ?3 WHERE `session_id` = ?4;";
+        $query = $ds->prepare($query, $user_id, $user_ip, $expire, $session_id);
       }
     }
 
     // No session yet
     else {
-      $query = "INSERT INTO `session` (`session_id`, `user_id`, `user_ip`, `user_agent`, `expire`, `data`)
-      VALUES (?1, ?2, ?3, ?4, ?5, ?6)
-      ON DUPLICATE KEY UPDATE
-        `data`   = ?7,
-        `expire` = ?8";
-
-      $query = $ds->prepare($query, $session_id, $user_id, $user_ip, $user_agent, $expire, $data, $data, $expire);
+      $compressed_data = gzcompress($data);
+      $query = "INSERT INTO `session` (`session_id`, `user_id`, `user_ip`, `expire`, `data`)
+                VALUES (?1, ?2, ?3, ?4, ?5) ON DUPLICATE KEY UPDATE `data` = ?6, `expire` = ?7;";
+      $query = $ds->prepare($query, $session_id, $user_id, $user_ip, $expire, $compressed_data, $compressed_data, $expire);
     }
 
     if (!$ds->query($query)) {
@@ -190,7 +180,7 @@ class CMySQLSessionHandler implements ISessionHandler {
   function destroy($session_id) {
     $ds = self::$ds;
 
-    $query = $ds->prepare("DELETE FROM `session` WHERE `session_id` = ?", $session_id);
+    $query = $ds->prepare("DELETE FROM `session` WHERE `session_id` = ?;", $session_id);
 
     if (!$ds->query($query)) {
       return false;
@@ -205,7 +195,7 @@ class CMySQLSessionHandler implements ISessionHandler {
   function gc($max) {
     $ds = self::$ds;
 
-    $query = $ds->prepare("DELETE FROM `session` WHERE `expire` < ?", time());
+    $query = $ds->prepare("DELETE FROM `session` WHERE `expire` < ?;", time());
 
     if (!$ds->query($query)) {
       return false;
