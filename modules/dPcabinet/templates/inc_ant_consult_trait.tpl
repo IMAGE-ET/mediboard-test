@@ -27,6 +27,28 @@ updateFieldsComposant = function(selected) {
   return onSubmitAnt(oFormAllergie);
 }
 
+updateFieldsCDS = function(selected) {
+  var cds_text = selected.down('.view').getText();
+  var cds_type = selected.get("type");
+  var cds_code = selected.get("code");
+
+  var oFormAllergie = getForm("editAntFrm{{$addform}}");
+  if (cds_type == "CHA") {
+    $V(oFormAllergie.type, "alle");
+  }
+  else {
+    $V(oFormAllergie.type, "");
+  }
+
+  $V(oFormAllergie.appareil, "");
+  $V(oFormAllergie.rques, cds_text);
+  $V(oFormAllergie._idex_code, cds_code);
+  $V(oFormAllergie._idex_tag, "COMPENDIUM_CDS");
+
+
+  return onSubmitAnt(oFormAllergie);
+}
+
 Main.add(function () {
   if($('tab_traitements_perso{{$addform}}')){
     Control.Tabs.create('tab_traitements_perso{{$addform}}', false);
@@ -37,11 +59,26 @@ Main.add(function () {
   }
 
   // Autocomplete des composants
-  var urlAuto = new Url("medicament", "ajax_composant_autocomplete");
-  urlAuto.autoComplete(getForm('editAntFrm{{$addform}}').keywords_composant, "composant_autocomplete{{$addform}}", {
-    minChars: 3,
-    updateElement: updateFieldsComposant
-  } );
+  if ($("composant_autocomplete{{$addform}}")) {
+    var urlAuto = new Url("medicament", "ajax_composant_autocomplete");
+    urlAuto.autoComplete(getForm('editAntFrm{{$addform}}').keywords_composant, "composant_autocomplete{{$addform}}", {
+      minChars: 3,
+      updateElement: updateFieldsComposant
+    } );
+  }
+
+  // Autocomplete des CDS
+  if ($("cds_autocomplete{{$addform}}")) {
+    var urlAuto = new Url("compendium", "ajax_list_cds");
+    urlAuto.autoComplete(getForm('editAntFrm{{$addform}}').cds, "cds_autocomplete{{$addform}}", {
+      minChars: 3,
+      updateElement: updateFieldsCDS,
+      dropdown: true,
+      callback: function(input, queryString){
+        return (queryString + "&type="+$V(getForm('editAntFrm{{$addform}}').type));
+      }
+    } );
+  }
 });
 </script>
 <tr>
@@ -62,8 +99,13 @@ Main.add(function () {
 
         <ul id="tab_atcd{{$addform}}" class="control_tabs small">
           <li><a href="#atcd_texte_simple{{$addform}}">Texte libre</a></li>
-          {{if $isPrescriptionInstalled && "CAppUI::conf"|static_call:"dPprescription show_chapters med":$groups->_guid && $conf.dPmedicament.base == "bcb"}}
-            <li><a href="#atcd_base_med{{$addform}}">Allergie à un composant</a></li>
+          {{if $isPrescriptionInstalled && "CAppUI::conf"|static_call:"dPprescription show_chapters med":$groups->_guid}}
+            {{if $conf.dPmedicament.base == "bcb"}}
+              <li><a href="#atcd_base_med{{$addform}}">Allergie à un composant</a></li>
+            {{/if}}
+            {{if $conf.dPmedicament.base == "compendium"}}
+              <li><a href="#atcd_cds{{$addform}}">CDS</a></li>
+            {{/if}}
           {{/if}}
         </ul>
         <hr class="control_tabs" />
@@ -98,7 +140,8 @@ Main.add(function () {
           </tr>
         </table>
 
-        <table class="layout" id="atcd_base_med{{$addform}}">
+        {{if $conf.dPmedicament.base == "bcb"}}
+        <table class="layout" id="atcd_base_med{{$addform}}" style="display: none;">
           <tr>
             <th>
               Composant
@@ -111,6 +154,23 @@ Main.add(function () {
             </td>
           </tr>
         </table>
+        {{/if}}
+
+        {{if $conf.dPmedicament.base == "compendium"}}
+        <table class="layout" id="atcd_cds{{$addform}}" style="display: none;">
+          <tr>
+            <th>
+              CDS
+            </th>
+            <td>
+              <input type="text" name="cds" value="" size="50" class="autocomplete" />
+              <div style="display:none; width: 350px;" class="autocomplete" id="cds_autocomplete{{$addform}}"></div>
+              <input type="hidden" name="_idex_code" value="" />
+              <input type="hidden" name="_idex_tag" value="" />
+            </td>
+          </tr>
+        </table>
+        {{/if}}
       </form>
     </fieldset>
     

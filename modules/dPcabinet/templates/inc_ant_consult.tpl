@@ -39,6 +39,13 @@ onSubmitAnt = function (form) {
   }
 
   $V(form.keywords_composant, "");
+  $V(form.cds, "");
+
+  // Dans le cas des CDS, on vide le type
+  if ($V(form._idex_tag) == "COMPENDIUM_CDS") {
+    $V(form.type    , "");
+  }
+
   $V(form._idex_code, "");
   $V(form._idex_tag, "");
 
@@ -161,38 +168,34 @@ Main.add(function () {
   
   <tr>
     <td class="halfPane">
-      
-<table class="form">
-  <tr>
-    <td class="button">
-      <button class="edit" type="button" onclick="easyMode();">Mode grille</button>
-    </td>
-  </tr>
-  {{mb_include module=cabinet template=inc_ant_consult_trait}}
-</table>
-
+      <table class="form">
+        <tr>
+          <td class="button">
+            <button class="edit" type="button" onclick="easyMode();">Mode grille</button>
+          </td>
+        </tr>
+        {{mb_include module=cabinet template=inc_ant_consult_trait}}
+      </table>
     </td>
     <td class="halfPane">
-      
-<table class="form">
-  <tr>
-    <th class="category">Dossier patient</th>
-  </tr>
-  <tr>
-    <td class="text" id="listAnt"></td>
-  </tr> 
-  {{if $_is_anesth || $sejour_id}}
-  <tr>
-    <th class="category">
-      Eléments significatifs pour le séjour
-    </th>
-  </tr>
-  <tr>
-    <td class="text" id="listAntCAnesth"></td>
-  </tr>
-  {{/if}}
-</table>
-
+      <table class="form">
+        <tr>
+          <th class="category">Dossier patient</th>
+        </tr>
+        <tr>
+          <td class="text" id="listAnt"></td>
+        </tr>
+        {{if $_is_anesth || $sejour_id}}
+        <tr>
+          <th class="category">
+            Eléments significatifs pour le séjour
+          </th>
+        </tr>
+        <tr>
+          <td class="text" id="listAntCAnesth"></td>
+        </tr>
+        {{/if}}
+      </table>
     </td>
   </tr>
 </table>
