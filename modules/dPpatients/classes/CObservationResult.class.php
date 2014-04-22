@@ -126,4 +126,18 @@ class CObservationResult extends CMbObject {
     
     $this->_view = $this->value." ".CObservationValueUnit::get($this->unit_id)->_view;
   }
+
+  /**
+   * @see parent::updatePlainFields()
+   */
+  function updatePlainFields() {
+    parent::updatePlainFields();
+
+    if ($this->value !== null) {
+      $value_type = $this->loadRefValueType();
+      if ($value_type->datatype === "NM") {
+        $this->value = CMbFieldSpec::checkNumeric($this->value, false);
+      }
+    }
+  }
 }
