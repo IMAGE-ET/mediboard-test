@@ -105,7 +105,7 @@ foreach ($exchanges as $_exchange) {
       $present_sejour = $sejour && !$sejour->_id;
 
       $sejour->loadNDA();
-      if (!$sejour->_NDA) {
+      if (!$sejour->_NDA || $sejour->_NDA === "waiting") {
         $_exchange->date_echange = "";
         $_exchange->store();
         continue;
