@@ -33,6 +33,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
   // DB fields
   public $nom;
   public $type;
+  public $factory;
   public $language;
   public $font;
   public $size;
@@ -214,6 +215,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     $props["size"]             = "enum list|xx-small|x-small|small|medium|large|x-large|xx-large|".
                                  "8pt|9pt|10pt|11pt|12pt|14pt|16pt|18pt|20pt|22pt|24pt|26pt|28pt|36pt|48pt|72pt show|0";
     $props["type"]             = "enum list|header|preface|body|ending|footer default|body";
+    $props["factory"]          = "enum list|CDomPDFConverter|CWkHtmlToPDFConverter|CPrinceXMLConverter|none";
     $props["language"]         = "enum list|en-EN|es-ES|fr-CH|fr-FR default|fr-FR show|0";
     $props["_list_classes"]    = "enum list|".implode("|", array_keys(CCompteRendu::getTemplatedClasses()));
     $props["_is_locked"]       = "bool default|0";
@@ -1022,6 +1024,10 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
     if (!$this->_id) {
       $this->author_id = CMediusers::get()->_id;
+    }
+
+    if ($this->factory == "none") {
+      $this->factory = CAppUI::pref("dPcompteRendu choice_factory");
     }
 
     $this->version++;

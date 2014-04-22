@@ -175,9 +175,7 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
   }
 
   /**
-   * Génération pdf d'une source HTML
-   *
-   * @return void
+   * @see parent::render()
    */
   function render() {
     $root_dir = CAppUI::conf("root_dir");

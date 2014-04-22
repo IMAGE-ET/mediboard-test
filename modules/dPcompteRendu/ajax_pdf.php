@@ -204,7 +204,7 @@ else {
   // Si la source envoyée et celle présente en base sont différentes, on regénère le PDF
   // Suppression des espaces, tabulations, retours chariots et sauts de lignes pour effectuer le md5
   if ($compte_rendu->valide || md5($c1) != md5($c2) || !$file->_id || !file_exists($file->_file_path) || file_get_contents($file->_file_path) == "") {
-    $htmltopdf = new CHtmlToPDF();
+    $htmltopdf = new CHtmlToPDF($compte_rendu->factory);
     $content = CCompteRendu::restoreId($content);
     $htmltopdf->generatePDF($content, 0, $compte_rendu, $file);
     $file->file_size = filesize($file->_file_path);

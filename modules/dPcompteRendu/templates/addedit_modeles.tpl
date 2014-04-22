@@ -529,7 +529,20 @@
         <tr>
           <th>{{mb_label object=$compte_rendu field="language"}}</th>
           <td>
-            {{mb_field object=$compte_rendu field=language}}
+            {{mb_field object=$compte_rendu field="language"}}
+          </td>
+        </tr>
+
+        <tr>
+          <th>{{mb_label object=$compte_rendu field="factory"}}</th>
+          <td>
+            <select name="factory">
+              {{foreach from=$compte_rendu->_specs.factory->_list item=_factory}}
+                {{if $_factory != "none"}}
+                  <option value="{{$_factory}}">{{$compte_rendu->_specs.factory->_locales.$_factory}}</option>
+                {{/if}}
+              {{/foreach}}
+            </select>
           </td>
         </tr>
 

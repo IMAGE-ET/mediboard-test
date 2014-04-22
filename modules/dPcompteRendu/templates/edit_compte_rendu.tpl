@@ -1,6 +1,5 @@
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 {{assign var=pdf_and_thumbs value=$app->user_prefs.pdf_and_thumbs}}
-{{assign var=choice_factory value=$app->user_prefs.choice_factory}}
 {{assign var=header_footer_fly value=$conf.dPcompteRendu.CCompteRendu.header_footer_fly}}
 
 {{mb_script module=compteRendu script=thumb}}
@@ -11,7 +10,6 @@ window.pdf_thumbnails = {{$pdf_thumbnails|@json}} == 1;
 window.nb_printers = {{$nb_printers|@json}};
 window.modal_mode_play = null;
 window.documentGraphs = {{$templateManager->graphs|@json}};
-window.choice_factory = {{$choice_factory|@json}};
 window.saving_doc = false;
 document.title = "{{$compte_rendu->_ref_object}} - {{$compte_rendu->nom}}";
 
@@ -535,7 +533,7 @@ Main.add(function() {
 
 <!-- Zone de confirmation de verrouillage du document -->
 <div id="lock_area" style="display: none;">
-  {{if !$conf.dPcompteRendu.CCompteRendu.pass_lock && !$app->user_prefs.pass_lock}}
+  {{if !$conf.dPcompteRendu.CCompteRendu.pass_lock}}
     <form name="LockDocOwner" method="post" action="?m=system&a=ajax_password_action"
           onsubmit="return onSubmitFormAjax(this, {useFormAction: true})">
       <input type="hidden" name="user_id" class="notNull" value="{{$app->user_id}}" />
@@ -568,10 +566,10 @@ Main.add(function() {
   <form name="LockDocOther" method="post" action="?m=system&a=ajax_password_action"
         onsubmit="return onSubmitFormAjax(this, {useFormAction: true})">
     <input type="hidden" name="user_id" class="notNull"
-           {{if $conf.dPcompteRendu.CCompteRendu.pass_lock || $app->user_prefs.pass_lock}}value="{{$curr_user->_id}}"{{/if}} />
+           {{if $conf.dPcompteRendu.CCompteRendu.pass_lock}}value="{{$curr_user->_id}}"{{/if}} />
     <input type="hidden" name="callback" value="toggleLock" />
     <table class="form">
-      {{if $conf.dPcompteRendu.CCompteRendu.pass_lock || $app->user_prefs.pass_lock}}
+      {{if $conf.dPcompteRendu.CCompteRendu.pass_lock}}
         <tr>
           <th class="title" colspan="2">
             Verrouillage du document
@@ -581,7 +579,7 @@ Main.add(function() {
       <tr>
         <td class="text button" colspan="2">
           <strong>
-            {{if $conf.dPcompteRendu.CCompteRendu.pass_lock || $app->user_prefs.pass_lock}}
+            {{if $conf.dPcompteRendu.CCompteRendu.pass_lock}}
               Pour verrouiller ce document sous votre nom, saisissez votre mot de passe ou choisissez un autre nom dans la liste.
             {{else}}
               Souhaitez-vous verrouiller ce document pour un autre utilisateur ?
@@ -593,7 +591,7 @@ Main.add(function() {
         <th>Utilisateur</th>
         <td>
           <input type="text" name="_user_view" class="autocomplete"
-                 {{if $conf.dPcompteRendu.CCompteRendu.pass_lock || $app->user_prefs.pass_lock}}value="{{$curr_user}}"{{/if}} />
+                 {{if $conf.dPcompteRendu.CCompteRendu.pass_lock}}value="{{$curr_user}}"{{/if}} />
         </td>
       </tr>
       <tr>
@@ -607,7 +605,7 @@ Main.add(function() {
       <tr>
         <td class="button" colspan="2">
           <button class="tick singleclick" onclick="return this.form.onsubmit();">Ok</button>
-          {{if $conf.dPcompteRendu.CCompteRendu.pass_lock || $app->user_prefs.pass_lock}}
+          {{if $conf.dPcompteRendu.CCompteRendu.pass_lock}}
             <button type="button" class="cancel"
                     onclick="$V(getForm('editFrm')._is_locked, 0, false);
                         $V(getForm('editFrm').___is_locked, 0, false);
@@ -621,7 +619,7 @@ Main.add(function() {
   </form>
 </div>
 <!-- Formulaire pour streamer le pdf -->
-<form style="display: none;" name="download-pdf-form" target="{{if $choice_factory == "CDomPDFConverter"}}download_pdf{{else}}_blank{{/if}}" method="post"
+<form style="display: none;" name="download-pdf-form" target="{{if $compte_rendu->factory == "CDomPDFConverter"}}download_pdf{{else}}_blank{{/if}}" method="post"
       action="?m=compteRendu&a=ajax_pdf" onsubmit="{{if $pdf_thumbnails && $pdf_and_thumbs}}completeLayout();{{/if}} this.submit();">
   <input type="hidden" name="content" value=""/>
   <input type="hidden" name="compte_rendu_id" value='{{if $compte_rendu->_id != ''}}{{$compte_rendu->_id}}{{else}}{{$modele_id}}{{/if}}' />
@@ -675,6 +673,7 @@ Main.add(function() {
   {{mb_field object=$compte_rendu field="size" hidden=1}}
   {{mb_field object=$compte_rendu field="valide" hidden=1}}
   {{mb_field object=$compte_rendu field="locker_id" hidden=1}}
+  {{mb_field object=$compte_rendu field="factory" hidden=1}}
   {{if $header_footer_fly}}
     <div id="header_footer_fly" style="display: none">
       <table class="tbl">

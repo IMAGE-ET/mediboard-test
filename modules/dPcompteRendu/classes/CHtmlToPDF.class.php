@@ -66,10 +66,9 @@ class CHtmlToPDF {
    * @param string $factory Factory name
    */
   function __construct($factory = null) {
-    if (!$factory) {
-      $factory = CAppUI::pref("choice_factory");
+    if ($factory === null || $factory === "none") {
+      $factory = "CWkHtmlToPDFConverter";
     }
-
     CHtmlToPDFConverter::init($factory);
   }
 

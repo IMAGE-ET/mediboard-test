@@ -15,7 +15,7 @@ Document = {
   create: function(modele_id, object_id, target_id, target_class, switch_mode) {
     if (!modele_id) return;
     
-    var url = new Url("dPcompteRendu", "edit_compte_rendu");
+    var url = new Url("compteRendu", "edit_compte_rendu");
     url.addParam("modele_id", modele_id);
     url.addParam("object_id", object_id);
  
@@ -38,7 +38,7 @@ Document = {
   createPack: function(pack_id, object_id, target_id, target_class, switch_mode) {
     if (!pack_id) return;
     
-    var url = new Url("dPcompteRendu", "edit_compte_rendu");
+    var url = new Url("compteRendu", "edit_compte_rendu");
     url.addParam("pack_id", pack_id);
     url.addParam("object_id", object_id);
  
@@ -61,7 +61,7 @@ Document = {
   fastMode: function(object_class, modele_id, object_id, unique_id, just_save) {
     if (!modele_id) return;
     
-    var url = new Url("dPcompteRendu", "edit_compte_rendu");
+    var url = new Url("compteRendu", "edit_compte_rendu");
     url.addParam("modele_id"   , modele_id);
     url.addParam("object_id"   , object_id);
     url.addParam("object_class", object_class);
@@ -70,15 +70,13 @@ Document = {
       url.addParam("force_fast_edit", 1);
     }
     url.addParam("just_save"   , just_save ? 1 : 0);
-    url.requestModal(750, 400);
-    
-    // En mode non fusion et édition rapide de pack
-    // A la fermeture de la modale, lancement du modèle suivant
-    if (Document.modeles_ids && Document.modeles_ids.length) {
-      url.modalObject.observe("afterClose", function() {
+    url.requestModal(750, 400, {afterClose: function() {
+      // En mode non fusion et édition rapide de pack
+      // A la fermeture de la modale, lancement du modèle suivant
+      if (Document.modeles_ids && Document.modeles_ids.length) {
         Document.fastMode(Document.object_class, Document.modeles_ids.shift(), Document.object_id, Document.unique_id, true);
-      });
-    }
+      }
+    }});
   },
   
   fastModePack: function(pack_id, object_id, object_class, unique_id, modeles_ids) {
@@ -86,7 +84,7 @@ Document = {
     
     // Mode normal
     if (!modeles_ids) {
-      var url = new Url("dPcompteRendu", "edit_compte_rendu");
+      var url = new Url("compteRendu", "edit_compte_rendu");
       url.addParam("pack_id", pack_id);
       url.addParam("object_id", object_id);
       url.addParam("unique_id", unique_id);
@@ -103,15 +101,14 @@ Document = {
     Document.fastMode(object_class, Document.modeles_ids.shift(), object_id, unique_id, true);
   },
   
-  edit: function(compte_rendu_id){
-    var url = new Url("dPcompteRendu", "edit_compte_rendu");
-    url.addParam("compte_rendu_id", compte_rendu_id);
+  edit: function(compte_rendu_id) {
+    var window_name = "Document";
     if (Preferences.multiple_docs != "0") {
-      url.popup(Document.popupSize.width, Document.popupSize.height, "cr_" + compte_rendu_id);
+      window_name = "cr_" + compte_rendu_id;
     }
-    else {
-      url.popup(Document.popupSize.width, Document.popupSize.height, "Document");
-    }
+    var url = new Url("compteRendu", "edit_compte_rendu");
+    url.addParam("compte_rendu_id", compte_rendu_id);
+    url.popup(Document.popupSize.width, Document.popupSize.height, window_name);
   },
   
   del: function(form, doc_view) {
@@ -123,9 +120,7 @@ Document = {
     };
     
     var oAjaxOptions = {
-      onComplete: function () {
-        Document.refreshList($V(form.file_category_id), $V(form.object_class), $V(form.object_id)); 
-      }
+      onComplete: Document.refreshList.curry($V(form.file_category_id), $V(form.object_class), $V(form.object_id))
     };
     
     confirmDeletion(form, oConfirmOptions, oAjaxOptions);
@@ -177,7 +172,7 @@ Document = {
       mode        : matches[4]
     }, oOptions);
     
-    var url = new Url("dPcompteRendu", "httpreq_widget_documents");
+    var url = new Url("compteRendu", "httpreq_widget_documents");
     url.addParam("object_class", oOptions.object_class);
     url.addParam("object_id"   , oOptions.object_id);
     url.addParam("praticien_id", oOptions.praticien_id);
@@ -189,15 +184,15 @@ Document = {
     if (only_docs == undefined || only_docs == 1) {
       url.addParam("only_docs", 1);
       url.requestUpdate(container.down("table"));
+      return;
     }
-    else {
-      url.requestUpdate(container);
-    }
+
+    url.requestUpdate(container);
   },
   
   print: function(document_id) {
     var oIframe = Element.getTempIframe();
-    var url = new Url("dPcompteRendu", "ajax_get_document_source");
+    var url = new Url("compteRendu", "ajax_get_document_source");
     url.addParam("dialog"         , 1);
     url.addParam("suppressHeaders", 1);
     url.addParam("update_date_print", 1);
@@ -221,29 +216,33 @@ Document = {
   },
   
   printPDF: function(document_id, factory) {
-    var url = new Url("dPcompteRendu", "ajax_pdf");
+    var url = new Url("compteRendu", "ajax_pdf");
     url.addParam("suppressHeaders", 1);
-    if (factory == "CDomPDFConverter") {
-      if (this.iframe) {
-        this.iframe.remove();
-      }
-      
-      this.iframe = Element.getTempIframe();
-      url.pop(0, 0, "Download PDF", null, null, {
-         compte_rendu_id: document_id,
-         stream: 1,
-         update_date_print: 1}, this.iframe);
-    }
-    else {
-      url.popup(600, 400, "Download PDF", null, {
-        compte_rendu_id: document_id,
-        stream: 1,
-        update_date_print: 1});
+
+    switch (factory) {
+      case "CDomPDFConverter":
+        if (this.iframe) {
+          this.iframe.remove();
+        }
+
+        this.iframe = Element.getTempIframe();
+        url.pop(0, 0, "Download PDF", null, null, {
+          compte_rendu_id: document_id,
+          stream: 1,
+          update_date_print: 1}, this.iframe);
+        break;
+      case "CWkHtmlToPDF":
+        url.popup(600, 400, "Download PDF", null, {
+          compte_rendu_id: document_id,
+          stream: 1,
+          update_date_print: 1});
+        break;
+      default:
     }
   },
   
   printSelDocs: function(object_id, object_class) {
-    var url = new Url("dPcompteRendu", "print_select_docs");
+    var url = new Url("compteRendu", "print_select_docs");
     url.addParam("object_id"   , object_id);
     url.addParam("object_class", object_class);
     url.requestModal();
@@ -264,9 +263,9 @@ Document = {
     
     object_guid = object_guid.split('-');
     var oAjaxOptions = {
-      onComplete: function() { Document.refreshList(null, object_guid[0], object_guid[1]); } 
+      onComplete: Document.refreshList.curry(null, object_guid[0], object_guid[1])
     };
     confirmDeletion(oButton.form, oOptions, oAjaxOptions);
-  },
+  }
 };
 
