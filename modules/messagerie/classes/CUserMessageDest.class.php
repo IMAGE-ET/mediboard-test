@@ -67,7 +67,7 @@ class CUserMessageDest extends CMbObject {
   static function loadNewMessages($user_id = null) {
     $dests = array();
 
-    if (CModule::getInstalled("messagerie")) {
+    if (CModule::getActive("messagerie")) {
       $user = CMediusers::get($user_id);
       $dest = new self();
       $where = array();
