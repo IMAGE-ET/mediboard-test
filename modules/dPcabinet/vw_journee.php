@@ -126,6 +126,11 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
   }
 }
 
+foreach ($praticiens as $_prat) {
+  if (!isset($listPlages[$_prat->_id])) {
+    unset($praticiens[$_prat->_id]);
+  }
+}
 
 $nb_attente = 0;
 $nb_a_venir = 0;
