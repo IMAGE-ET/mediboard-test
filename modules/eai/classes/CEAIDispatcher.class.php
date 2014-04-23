@@ -47,8 +47,8 @@ class CEAIDispatcher {
       $data    = $data["msg"];
     }
 
-    if (substr($data, 0, 2) === "\xEF\xBB\xBF") {
-      $data = substr($data, 2);
+    if (substr($data, 0, 3) === "\xEF\xBB\xBF") {
+      $data = substr($data, 3);
     }
 
     if ($actor && isset($actor->_configs["encoding"]) && $actor->_configs["encoding"] == "UTF-8") { 
