@@ -98,7 +98,7 @@ class CActiviteCsARR extends CCsARRObject {
     }
 
     // Chargement des hiérarchies intermédiaires
-    $hierarchie = new CHierarchieCsARR;
+    $hierarchie = new CHierarchieCsARR();
     $hierarchies = $hierarchie->loadAll($codes);
     return $this->_ref_hierarchies = $hierarchies;
   }
@@ -109,7 +109,7 @@ class CActiviteCsARR extends CCsARRObject {
    * @return CNoteActiviteCsARR[][]
    */
   function loadRefsNotesActivites() {
-    $note = new CNoteActiviteCsARR;
+    $note = new CNoteActiviteCsARR();
     $note->code = $this->code;
     $notes = array();
     /** @var CNoteActiviteCsARR $_note */
@@ -126,7 +126,7 @@ class CActiviteCsARR extends CCsARRObject {
    * @return CModulateurCsARR[]
    */
   function loadRefsModulateurs() {
-    $modulateur = new CModulateurCsARR;
+    $modulateur = new CModulateurCsARR();
     $modulateur->code = $this->code;
     $modulateurs = $modulateur->loadMatchingList();
     return $this->_ref_modulateurs = $modulateurs;
@@ -138,7 +138,7 @@ class CActiviteCsARR extends CCsARRObject {
    * @return CReferenceActiviteCsARR[]
    */
   function loadRefReference() {
-    $reference = new CReferenceActiviteCsARR;
+    $reference = new CReferenceActiviteCsARR();
     $reference->code = $this->code;
     $reference->loadMatchingObject();
     return $this->_ref_reference = $reference;
@@ -268,14 +268,19 @@ class CActiviteCsARR extends CCsARRObject {
       return new self();
     }
 
-    if (!isset(self::$cached[$code])) {
-      $activite = new self();
-      $activite->load($code);
+    if ($activite = SHM::get("activite_csarr_$code")) {
       $activite->loadRefReference();
       $activite->loadRefsModulateurs();
-      self::$cached[$code] = $activite;
+      return $activite;
     }
 
-    return self::$cached[$code];
+    $activite = new self();
+    $activite->load($code);
+    SHM::put("activite_csarr_$code", $activite);
+
+    $activite->loadRefReference();
+    $activite->loadRefsModulateurs();
+
+    return $activite;
   }
 }

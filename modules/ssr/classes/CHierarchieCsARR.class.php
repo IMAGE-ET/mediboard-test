@@ -97,7 +97,7 @@ class CHierarchieCsARR extends CCsARRObject {
    * @return CActiviteCsARR[]
    */
   function loadRefsActivites() {
-    $activite = new CActiviteCsARR;
+    $activite = new CActiviteCsARR();
     $activite->hierarchie = $this->code;
     $activite = $activite->loadMatchingList();
     return $this->_ref_activites = $activite;
@@ -131,12 +131,14 @@ class CHierarchieCsARR extends CCsARRObject {
       return new self();
     }
 
-    if (!isset(self::$cached[$code])) {
-      $hierarchie = new self();
-      $hierarchie->load($code);
-      self::$cached[$code] = $hierarchie;
+    if ($hierarchie = SHM::get("hierarchie_$code")) {
+      return $hierarchie;
     }
 
-    return self::$cached[$code];
+    $hierarchie = new self();
+    $hierarchie->load($code);
+    SHM::put("hierarchie_$code", $hierarchie);
+
+    return $hierarchie;
   }
 }

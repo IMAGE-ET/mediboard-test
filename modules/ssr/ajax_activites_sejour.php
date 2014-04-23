@@ -11,17 +11,18 @@
 
 CCanDo::checkEdit();
 
+$sejour_id = CValue::get("sejour_id");
+$date      = CValue::getOrSession("date", CMbDT::date());
+
 // Initialisation de la variable permettant de ne pas passer par les alertes manuelles
 if (CModule::getActive("dPprescription")) {
   CPrescriptionLine::$contexte_recent_modif = 'ssr';
 }
 
 // Sejour SSR
-$sejour = new CSejour;
-$sejour->load(CValue::get("sejour_id"));
+$sejour = new CSejour();
+$sejour->load($sejour_id);
 $sejour->loadRefPatient();
-
-$date = CValue::getOrSession("date", CMbDT::date());
 
 $monday = CMbDT::date("last monday", CMbDT::date("+1 day", $date));
 $sunday = CMbDT::date("next sunday", $date);
@@ -79,12 +80,12 @@ $technicien->loadRefPlateau();
 $bilan->sejour_id = $sejour->_id;
 
 // Technicien et plateau
-$technicien = new CTechnicien;
-$plateau = new CPlateauTechnique;
+$technicien = new CTechnicien();
+$plateau = new CPlateauTechnique();
 if ($technicien->_id = $bilan->technicien_id) {
   $technicien->loadMatchingObject();
   /** @var CPlateauTechnique $plateau */
-  $plateau = $technicien->loadFwdRef("plateau_id");
+  $plateau = $technicien->loadRefPlateau();
   $plateau->loadRefsEquipements();
   $plateau->loadRefsTechniciens();
 }
@@ -94,17 +95,20 @@ $plateau_tech = new CPlateauTechnique();
 $plateau_tech->group_id = CGroups::loadCurrent()->_id;
 /** @var CPlateauTechnique[] $plateaux */
 $plateaux = $plateau_tech->loadMatchingList();
+CMbObject::massLoadBackRefs($plateaux, "equipements", "nom ASC");
+
 foreach ($plateaux as $_plateau) {
   $_plateau->loadRefsEquipements();
 }
-
-$executants = array();
 
 // Chargement des executants en fonction des category de prescription
 $executants = array();
 $reeducateurs = array();
 $selected_cat = "";
 $user = CMediusers::get();
+$func_cats = CStoredObject::massLoadBackRefs($categories, "functions_category");
+CStoredObject::massLoadFwdRef($func_cats, "function_id");
+
 foreach ($categories as $_category) {
   // Chargement des associations pour chaque catégorie
   $associations[$_category->_id] = $_category->loadBackRefs("functions_category");
@@ -135,16 +139,18 @@ $evenement->duree = CAppUI::pref("ssr_planification_duree");
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("evenement", $evenement);
-$smarty->assign("week_days", $week_days);
-$smarty->assign("sejour" , $sejour);
-$smarty->assign("bilan"  , $bilan);
-$smarty->assign("plateau", $plateau);
-$smarty->assign("prescription", $prescription);
-$smarty->assign("plateaux", $plateaux);
-$smarty->assign("executants", $executants);
-$smarty->assign("reeducateurs", $reeducateurs);
-$smarty->assign("selected_cat", $selected_cat);
-$smarty->assign("user", $user);
+
+$smarty->assign("evenement"       , $evenement);
+$smarty->assign("week_days"       , $week_days);
+$smarty->assign("sejour"          , $sejour);
+$smarty->assign("bilan"           , $bilan);
+$smarty->assign("plateau"         , $plateau);
+$smarty->assign("prescription"    , $prescription);
+$smarty->assign("plateaux"        , $plateaux);
+$smarty->assign("executants"      , $executants);
+$smarty->assign("reeducateurs"    , $reeducateurs);
+$smarty->assign("selected_cat"    , $selected_cat);
+$smarty->assign("user"            , $user);
 $smarty->assign("lines_by_element", $lines_by_element);
+
 $smarty->display("inc_activites_sejour.tpl");

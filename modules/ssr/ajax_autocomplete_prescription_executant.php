@@ -33,6 +33,7 @@ $where["function_category_prescription.function_id"] = " = '$function_id'";
 $element = new CElementPrescription();
 /** @var CElementPrescription[] $elements */
 $elements = $element->loadList($where, null, null, null, $ljoin);
+CStoredObject::massLoadFwdRef($elements, "category_prescription_id");
 
 // Chargement de la categorie des elements
 foreach ($elements as $_element) {
@@ -41,8 +42,10 @@ foreach ($elements as $_element) {
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("elements", $elements);
-$smarty->assign("libelle", $libelle);
+
+$smarty->assign("elements"   , $elements);
+$smarty->assign("libelle"    , $libelle);
 $smarty->assign("category_id", "");
-$smarty->assign("nodebug", true);
+$smarty->assign("nodebug"    , true);
+
 $smarty->display("../../dPprescription/templates/httpreq_do_element_autocomplete.tpl");

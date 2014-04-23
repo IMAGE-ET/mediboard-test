@@ -33,8 +33,6 @@ class CActiviteCdARR extends CCdARRObject {
   public $_ref_elements_by_cat;
   public $_ref_all_executants;
 
-  static $cached = array();
-
   /**
    * @see parent::getSpec()
    */
@@ -179,12 +177,14 @@ class CActiviteCdARR extends CCdARRObject {
       return new self();
     }
 
-    if (!isset(self::$cached[$code])) {
-      $activite = new self();
-      $activite->load($code);
-      self::$cached[$code] = $activite;
+    if ($activite = SHM::get("activite_cdarr_$code")) {
+      return $activite;
     }
 
-    return self::$cached[$code];
+    $activite = new self();
+    $activite->load($code);
+    SHM::put("activite_cdarr_$code", $activite);
+
+    return $activite;
   }
 }

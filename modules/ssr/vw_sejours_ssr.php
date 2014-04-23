@@ -78,6 +78,9 @@ $sejours_by_kine = array(
   "" => array(),
 );
 
+CStoredObject::massLoadFwdRef($sejours, "praticien_id");
+CStoredObject::massLoadBackRefs($sejours, "bilan_ssr");
+
 // Filtres des séjours
 foreach ($sejours as $_sejour) {
   // Filtre sur service

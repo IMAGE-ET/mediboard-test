@@ -60,12 +60,18 @@ class CTypeActiviteCdARR extends CCdARRObject {
    * @return CTypeActiviteCdARR
    **/
   static function get($code) {
-    if (!isset(self::$cached[$code])) {
-      $type = new CTypeActiviteCdARR();
-      if ($type->load($code)) {
-        self::$cached[$code] = $type;
-      }
+    if (!$code) {
+      return new self();
     }
-    return self::$cached[$code];
+
+    if ($type = SHM::get("type_activite_$code")) {
+      return $type;
+    }
+
+    $type = new self();
+    $type->load($code);
+    SHM::put("type_activite_$code", $type);
+
+    return $type;
   }
 }

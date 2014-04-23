@@ -43,7 +43,7 @@ class CActeSSR extends CMbObject {
   /**
    * @see parent::updateFormFields()
    */
-  function updateFormFields(){
+  function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->code;
   }
@@ -53,7 +53,7 @@ class CActeSSR extends CMbObject {
    *
    * @return CEvenementSSR
    */
-  function loadRefEvenementSSR(){
+  function loadRefEvenementSSR() {
     return $this->_ref_evenement_ssr = $this->loadFwdRef("evenement_ssr_id", true);
   }
 
@@ -62,7 +62,7 @@ class CActeSSR extends CMbObject {
    *
    * @return CAdministration
    */
-  function loadRefAdministration(){
+  function loadRefAdministration() {
     return $this->_ref_administration = $this->loadFwdRef("administration_id", true);
   }
 
@@ -71,7 +71,7 @@ class CActeSSR extends CMbObject {
    *
    * @return CSejour
    */
-  function loadRefSejour(){
+  function loadRefSejour() {
     return $this->_ref_sejour = $this->loadFwdRef("sejour_id", true);
   }
 }

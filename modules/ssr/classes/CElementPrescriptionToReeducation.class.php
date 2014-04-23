@@ -34,7 +34,7 @@ class CElementPrescriptionToReeducation extends CMbObject {
   /**
    * @see parent::updateFormFields()
    */
-  function updateFormFields(){
+  function updateFormFields() {
     parent::updateFormFields();
     $this->_view = "Code $this->code";
   }
