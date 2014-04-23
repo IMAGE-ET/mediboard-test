@@ -226,6 +226,14 @@ if (CModule::getActive("dPprescription")) {
       }
     }
   }
+
+  if (CModule::getActive("dmi")) {
+    foreach ($prescription->loadRefsLinesDMI() as $_line_dmi) {
+      $_line_dmi->loadRefProduct();
+      $_line_dmi->loadRefPraticien();
+      $_line_dmi->loadRefProductOrderItemReception()->loadRefOrderItem()->loadReference()->loadRefSociete();
+    }
+  }
 }
 
 ksort($dossier);
