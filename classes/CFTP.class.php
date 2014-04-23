@@ -347,7 +347,7 @@ class CFTP {
         $type = $pregInfo[0];
         $name = $pregInfo[8];
       }
-      if (strpos($type, "d") === false) {
+      if (strpos($type, "d") === false || $name === "." || $name === "..") {
         continue;
       }
       $fileInfo[] = $name;
