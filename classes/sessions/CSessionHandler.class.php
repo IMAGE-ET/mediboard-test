@@ -9,9 +9,9 @@
  * @version    $Revision$
  */
 
- /**
-  * Session handler container
-  */
+/**
+ * Session handler container
+ */
 abstract class CSessionHandler {
   /** @var ISessionHandler */
   static private $engine;
@@ -19,15 +19,14 @@ abstract class CSessionHandler {
   /** @var bool Is the session started ? */
   static private $started = false;
 
-  /** @var int Session life time is seconds */
-  static private $lifetime;
-
   static $availableEngines = array(
     "files"    => "CFilesSessionHandler",
     "memcache" => "CMemcacheSessionHandler",
     "mysql"    => "CMySQLSessionHandler",
-    "redis"    => "CRedisSessionHandler",
   );
+
+  /** @var Zebra_Session */
+  static protected $session;
 
   /**
    * Init the correct session handler
@@ -39,7 +38,38 @@ abstract class CSessionHandler {
   static function setHandler($engine_name = "files") {
     // TODO remove Zebra
     if ($engine_name == "zebra") {
-      $engine_name = "mysql";
+      CAppUI::requireLibraryFile("zebra_session/Zebra_Session");
+
+      // Must use the MySQL connector (not MySQLi)
+      $dataSource = new CMySQLDataSource();
+      $dataSource->init("std");
+      $link = $dataSource->link;
+
+      // Auto add session_data table
+      $query = <<<SQL
+CREATE TABLE IF NOT EXISTS `session_data` (
+  `session_id` VARCHAR(32) NOT NULL DEFAULT '',
+  `http_user_agent` VARCHAR(32) NOT NULL DEFAULT '',
+  `session_data` LONGBLOB NOT NULL,
+  `session_expire` INT(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`session_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+SQL;
+      $dataSource->exec($query);
+
+      self::$session = new Zebra_Session(
+        null, // $session_lifetime
+        null, // $gc_probability
+        null, // $gc_divisor
+        'mb', // $security_code, should be changed for UA spoofing
+        'session_data',  // $table_name
+        300,  // $lock_timeout
+        $link // $link
+      );
+
+      self::$started = true;
+
+      return;
     }
 
     if (!isset(self::$availableEngines[$engine_name])) {
@@ -69,25 +99,19 @@ abstract class CSessionHandler {
   }
 
   /**
-   * Update the session lifetime
+   * Update the ZebraSession lifetime
    *
    * @param int $lifetime Session lifetime in seconds
    *
    * @return void
    */
   static function updateLifetime($lifetime) {
-    self::$lifetime = $lifetime;
+    if (CAppUI::conf("session_handler") == "zebra") {
+      self::$session->session_lifetime = intval($lifetime);
+      return;
+    }
 
     self::$engine->setLifeTime($lifetime);
-  }
-
-  /**
-   * Get session life time
-   *
-   * @return int
-   */
-  static function getLifeTime(){
-    return self::$lifetime;
   }
 
   /**
