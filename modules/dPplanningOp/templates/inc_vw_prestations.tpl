@@ -42,7 +42,7 @@
   
   onSubmitLiaisons = function(form) {
     return onSubmitFormAjax(form, function() {
-      form.up('div.modal').down('button.change').onclick(); 
+      form.up('div.modal').down('button.change').click();
     });
   };
   
