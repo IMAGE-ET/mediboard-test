@@ -332,6 +332,22 @@
       {{/foreach}}
     {{/if}}
   {{/foreach}}
+  {{if "dmi"|module_active && $prescription->_ref_lines_dmi|@count}}
+    <tr>
+      <th>
+        DMI
+      </th>
+    </tr>
+    {{foreach from=$prescription->_ref_lines_dmi item=line_dmi}}
+      <tr>
+        <td class="text">
+          <li>
+            ({{$line_dmi->_ref_praticien}}) <strong>{{$line_dmi->_ref_product}}</strong> ({{$line_dmi->_ref_product_order_item_reception->_ref_order_item->_ref_reference->_ref_societe}})
+          </li>
+        </td>
+      </tr>
+    {{/foreach}}
+  {{/if}}
 </table>
 {{/if}}
 
