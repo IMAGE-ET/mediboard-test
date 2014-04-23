@@ -26,7 +26,17 @@ $affectation = new CAffectation();
 $affectation->load($affectation_id)->loadRefLit()->loadRefChambre();
 
 if (!$services_ids_suggest) {
-  $services_ids_suggest = array($affectation->_ref_lit->_ref_chambre->service_id);
+  $group_id = CGroups::loadCurrent()->_id;
+  $pref_services_ids = json_decode(CAppUI::pref("services_ids_hospi"));
+  if (isset($pref_services_ids->{"g$group_id"})) {
+    $services_ids = $pref_services_ids->{"g$group_id"};
+    if ($services_ids) {
+      $services_ids_suggest = explode("|", $services_ids);
+    }
+  }
+  if (!count($services_ids_suggest)) {
+    $services_ids_suggest = array($affectation->_ref_lit->_ref_chambre->service_id);
+  }
 }
 else {
   $services_ids_suggest = explode(",", $services_ids_suggest);
