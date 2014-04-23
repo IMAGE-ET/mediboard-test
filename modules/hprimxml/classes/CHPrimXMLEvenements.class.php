@@ -192,26 +192,36 @@ class CHPrimXMLEvenements extends CHPrimXMLDocument {
     $tag  = $this->_ref_echange_hprim->_ref_sender->_tag_mediuser;
     $idex = CIdSante400::getMatch("CMediusers", $tag, $code);
     if ($idex->_id) {
-      $mediuser->_id = $idex->object_id;
+      return $idex->object_id;
     }
-    else {
-      $adeli = $xpath->queryTextNode("hprim:numeroAdeli", $node);
-      if ($adeli) {
-        $mediuser = CMediusers::loadFromAdeli($adeli);
-      }
-      if (!$mediuser->_id) {
-        // Récupération du typePersonne
-        // Obligatoire pour MB
-        $personne =  $xpath->queryUniqueNode("hprim:personne", $node, false);
 
-        $mediuser = self::getPersonne($personne, $mediuser);
-        $mediuser->_id = $this->createPraticien($mediuser);
+    $rpps = $xpath->queryTextNode("hprim:noRPPS", $node);
+    if ($rpps) {
+      $mediuser = new CMediusers();
+      $where = array();
+      $where["users_mediboard.rpps"] = " = '$rpps'";
+      $mediuser->loadObject($where);
 
-        $idex->object_id = $mediuser->_id;
-        $idex->last_update = CMbDT::dateTime();
-        $idex->store();
-      }
+      return $mediuser->_id;
     }
+
+    $adeli = $xpath->queryTextNode("hprim:numeroAdeli", $node);
+    if ($adeli) {
+      $mediuser = CMediusers::loadFromAdeli($adeli);
+
+      return $mediuser->_id;
+    }
+
+    // Récupération du typePersonne
+    // Obligatoire pour MB
+    $personne =  $xpath->queryUniqueNode("hprim:personne", $node, false);
+
+    $mediuser = self::getPersonne($personne, $mediuser);
+    $mediuser->_id = $this->createPraticien($mediuser);
+
+    $idex->object_id = $mediuser->_id;
+    $idex->last_update = CMbDT::dateTime();
+    $idex->store();
 
     return $mediuser->_id;
   }
