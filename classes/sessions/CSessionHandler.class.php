@@ -19,14 +19,15 @@ abstract class CSessionHandler {
   /** @var bool Is the session started ? */
   static private $started = false;
 
+  /** @var int Session life time is seconds */
+  static private $lifetime;
+
   static $availableEngines = array(
     "files"    => "CFilesSessionHandler",
     "memcache" => "CMemcacheSessionHandler",
     "mysql"    => "CMySQLSessionHandler",
+    "redis"    => "CRedisSessionHandler",
   );
-
-  /** @var Zebra_Session */
-  static protected $session;
 
   /**
    * Init the correct session handler
@@ -38,38 +39,7 @@ abstract class CSessionHandler {
   static function setHandler($engine_name = "files") {
     // TODO remove Zebra
     if ($engine_name == "zebra") {
-      CAppUI::requireLibraryFile("zebra_session/Zebra_Session");
-
-      // Must use the MySQL connector (not MySQLi)
-      $dataSource = new CMySQLDataSource();
-      $dataSource->init("std");
-      $link = $dataSource->link;
-
-      // Auto add session_data table
-      $query = <<<SQL
-CREATE TABLE IF NOT EXISTS `session_data` (
-  `session_id` VARCHAR(32) NOT NULL DEFAULT '',
-  `http_user_agent` VARCHAR(32) NOT NULL DEFAULT '',
-  `session_data` LONGBLOB NOT NULL,
-  `session_expire` INT(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`session_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-SQL;
-      $dataSource->exec($query);
-
-      self::$session = new Zebra_Session(
-        null, // $session_lifetime
-        null, // $gc_probability
-        null, // $gc_divisor
-        'mb', // $security_code, should be changed for UA spoofing
-        'session_data',  // $table_name
-        300,  // $lock_timeout
-        $link // $link
-      );
-
-      self::$started = true;
-
-      return;
+      $engine_name = "mysql";
     }
 
     if (!isset(self::$availableEngines[$engine_name])) {
@@ -99,19 +69,25 @@ SQL;
   }
 
   /**
-   * Update the ZebraSession lifetime
+   * Update the session lifetime
    *
    * @param int $lifetime Session lifetime in seconds
    *
    * @return void
    */
   static function updateLifetime($lifetime) {
-    if (CAppUI::conf("session_handler") == "zebra") {
-      self::$session->session_lifetime = intval($lifetime);
-      return;
-    }
+    self::$lifetime = $lifetime;
 
     self::$engine->setLifeTime($lifetime);
+  }
+
+  /**
+   * Get session life time
+   *
+   * @return int
+   */
+  static function getLifeTime(){
+    return self::$lifetime;
   }
 
   /**
@@ -120,21 +96,27 @@ SQL;
    * @return void
    */
   static function setUserDefinedLifetime() {
-    // Update ZebraSession lifetime
-    $prefSessionLifetime = intval(CAppUI::pref("sessionLifetime")) * 60;
+    // Update session lifetime
+    $pref = intval(CAppUI::pref("sessionLifetime")) * 60;
 
-    // If default pref, we use session.gc_maxlifetime php.ini value
-    $session_gc_maxlifetime = intval(ini_get("session.gc_maxlifetime"));
-    $sessionLifetime = null;
+    // If default pref, we use the PHP default value
+    $session_gc_maxlifetime = self::getPhpSessionLifeTime();
 
-    if (!$prefSessionLifetime) {
-      $sessionLifetime = $session_gc_maxlifetime;
-    }
-    elseif ($prefSessionLifetime < $session_gc_maxlifetime) {
-      $sessionLifetime = $prefSessionLifetime;
+    $session_lifetime = $session_gc_maxlifetime;
+    if ($pref && $pref <= $session_gc_maxlifetime) {
+      $session_lifetime = $pref;
     }
 
-    self::updateLifetime($sessionLifetime);
+    self::updateLifetime($session_lifetime);
+  }
+
+  /**
+   * Get PHP default session life time value
+   *
+   * @return int
+   */
+  static function getPhpSessionLifeTime(){
+    return intval(ini_get("session.gc_maxlifetime"));
   }
 
   /**
