@@ -142,5 +142,6 @@ $smarty->assign("max_entree", $max_entree);
 $smarty->assign("max_sortie", $max_sortie);
 $smarty->assign("_link_affectation", $_link_affectation);
 $smarty->assign("services_ids_suggest", $services_ids_suggest);
+$smarty->assign("datetime", $datetime);
 
 $smarty->display("inc_suggest_lit.tpl");

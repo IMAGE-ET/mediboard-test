@@ -8,6 +8,7 @@
         <input type="hidden" name="a" value="ajax_suggest_lit" />
         <input type="hidden" name="_link_affectation" value="{{$_link_affectation}}" />
         <input type="hidden" name="affectation_id" value="{{$affectation_id}}" />
+        <input type="hidden" name="datetime" value="{{$datetime}}" />
         <input type="hidden" name="services_ids_suggest" value="{{','|implode:$services_ids_suggest}}" />
         <button type="button" onclick="Placement.selectServices('cut', '{{','|implode:$services_ids_suggest}}');" class="search" style="float: left;">Services</button>
       </form>
