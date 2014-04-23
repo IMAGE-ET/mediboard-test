@@ -61,7 +61,7 @@
 
           <br/>
           <span style="font-size: 0.6em;">
-            {{$sejour->_motif_complet}}
+            {{$sejour->_motif_complet|spancate:30:"...":false}}
           </span>
           {{if $sejour->_jour_op}}
             {{foreach from=$sejour->_jour_op item=_info_jour_op}}
