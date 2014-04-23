@@ -866,6 +866,7 @@ class CHL7v2Segment extends CHL7v2Entity {
 
   function getPV245(CInteropReceiver $receiver, CSejour $sejour) {
     $operation = $sejour->loadRefFirstOperation();
+    $operation->loadRefPlageOp();
 
     $value = null;
     if (!empty($receiver->_configs["build_PV2_45"])) {
