@@ -235,11 +235,12 @@ if (CModule::getActive("dPprescription")) {
       // Chargement des lignes de medicament
       if (in_array($chapitre, array("all_med", "all_chaps"))) {
         $prescription->loadRefsLinesMedByCat("1", "1");
-        foreach ($prescription->_ref_prescription_lines as &$_line_med) {
+        foreach ($prescription->_ref_prescription_lines as $_line_med) {
           $_line_med->loadRefLogSignee();
           $_line_med->countVariantes();
           $_line_med->countBackRefs("administration");
           $_line_med->loadRefsVariantes();
+          $_line_med->countPlanifications();
           if (in_array($_line_med->jour_decalage, array("ER", "R"))) {
             $_line_med->loadRefOperation();
           }
@@ -251,7 +252,7 @@ if (CModule::getActive("dPprescription")) {
         
         // Chargement des prescription_line_mixes
         $prescription->loadRefsPrescriptionLineMixes("", "1");
-        foreach ($prescription->_ref_prescription_line_mixes as &$_prescription_line_mix) {
+        foreach ($prescription->_ref_prescription_line_mixes as $_prescription_line_mix) {
           $_prescription_line_mix->countVariantes();
           $_prescription_line_mix->loadRefsVariantes();
           $_prescription_line_mix->getRecentModification();
@@ -260,6 +261,7 @@ if (CModule::getActive("dPprescription")) {
           $_prescription_line_mix->loadRefPraticien();
           $_prescription_line_mix->loadRefLogSignaturePrat();
           $_prescription_line_mix->calculVariations();
+          $_prescription_line_mix->countPlanifications();
           if (in_array($_prescription_line_mix->jour_decalage, array("ER", "R"))) {
             $_prescription_line_mix->loadRefOperation();
           }
@@ -272,11 +274,12 @@ if (CModule::getActive("dPprescription")) {
       }
       elseif ($chapitre == "med" || $chapitre == "inj") {
         $prescription->loadRefsLinesMedByCat("1", "1");
-        foreach ($prescription->_ref_prescription_lines as &$_line_med) {
+        foreach ($prescription->_ref_prescription_lines as $_line_med) {
           $_line_med->loadRefLogSignee();
           $_line_med->countVariantes();
           $_line_med->countBackRefs("administration");
           $_line_med->loadRefsVariantes();
+          $_line_med->countPlanifications();
           if ($_line_med->delay_prise) {
             $_line_med->loadRefLastAdministration();
           }
@@ -289,7 +292,7 @@ if (CModule::getActive("dPprescription")) {
       elseif ($chapitre == "perfusion" || $chapitre == "aerosol" || $chapitre == "alimentation" || $chapitre == "oxygene") {
         // Chargement des prescription_line_mixes
         $prescription->loadRefsPrescriptionLineMixes($chapitre, "1");
-        foreach ($prescription->_ref_prescription_line_mixes as &$_prescription_line_mix) {
+        foreach ($prescription->_ref_prescription_line_mixes as $_prescription_line_mix) {
           $_prescription_line_mix->countVariantes();
           $_prescription_line_mix->loadRefsVariantes();
           $_prescription_line_mix->getRecentModification();
@@ -298,6 +301,7 @@ if (CModule::getActive("dPprescription")) {
           $_prescription_line_mix->loadRefPraticien();
           $_prescription_line_mix->loadRefLogSignaturePrat();
           $_prescription_line_mix->calculVariations();
+          $_prescription_line_mix->countPlanifications();
           if (in_array($_prescription_line_mix->jour_decalage, array("ER", "R"))) {
             $_prescription_line_mix->loadRefOperation();
           }
@@ -307,10 +311,11 @@ if (CModule::getActive("dPprescription")) {
       elseif ($chapitre == "inscription") {
         // Chargement des inscriptions effectuées
         $prescription->loadRefsLinesInscriptions();
-        foreach ($prescription->_ref_lines_inscriptions as &$_inscriptions_by_type) {
+        foreach ($prescription->_ref_lines_inscriptions as $_inscriptions_by_type) {
           foreach ($_inscriptions_by_type as &$_inscription) {
             $_inscription->countBackRefs("administration");
             $_inscription->loadRefLogSignee();
+            $_inscription->countPlanifications();
           }
         }
       }
@@ -331,6 +336,9 @@ if (CModule::getActive("dPprescription")) {
       else {
         // Chargement des lignes d'elements  avec pour chapitre $chapitre
         $prescription->loadRefsLinesElementByCat("1", "1", $chapitre);
+        foreach ($prescription->_ref_prescription_lines_element as $_line_elt) {
+          $_line_elt->countPlanifications();
+        }
       }
       
       $with_calcul = $chapitre ? true : false; 
