@@ -97,20 +97,17 @@ abstract class CSessionHandler {
    */
   static function setUserDefinedLifetime() {
     // Update session lifetime
-    $prefSessionLifetime = intval(CAppUI::pref("sessionLifetime")) * 60;
+    $pref = intval(CAppUI::pref("sessionLifetime")) * 60;
 
     // If default pref, we use the PHP default value
     $session_gc_maxlifetime = self::getPhpSessionLifeTime();
-    $sessionLifetime = null;
 
-    if (!$prefSessionLifetime) {
-      $sessionLifetime = $session_gc_maxlifetime;
-    }
-    elseif ($prefSessionLifetime < $session_gc_maxlifetime) {
-      $sessionLifetime = $prefSessionLifetime;
+    $session_lifetime = $session_gc_maxlifetime;
+    if ($pref && $pref <= $session_gc_maxlifetime) {
+      $session_lifetime = $pref;
     }
 
-    self::updateLifetime($sessionLifetime);
+    self::updateLifetime($session_lifetime);
   }
 
   /**
