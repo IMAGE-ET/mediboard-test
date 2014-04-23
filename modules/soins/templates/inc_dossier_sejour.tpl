@@ -238,8 +238,11 @@
     <li><a href="#docs" onmousedown="loadDocuments();">{{tr}}CMbObject-back-documents{{/tr}}</a></li>
     <li><a href="#antecedents" onmousedown="loadAntecedents();">{{tr}}IDossierMedical-back-antecedents{{/tr}}</a></li>
     <li style="float: right">
-      <button type="button" class="print" style="float: left" onclick="printPlanSoins()">Plan de soins</button>
-      <button type="button" class="button print" onclick="printDossierSoins();">Dossier soins</button>
+      {{if "telemis"|module_active}}
+        {{mb_include module=telemis template=inc_viewer_link patient=$sejour->_ref_patient label="Imagerie" button=true class="imagerie"}}
+      {{/if}}
+      <button type="button" class="print" onclick="printPlanSoins()">Plan de soins</button>
+      <button type="button" class="print" onclick="printDossierSoins();">Dossier soins</button>
       {{if !$popup && $modal}}
         <button type="button" class="cancel" onclick="closeModal();">{{tr}}Close{{/tr}}</button>
       {{/if}}
