@@ -28,7 +28,7 @@
 
       if (arguments.length == 0) {
         date.setFullYear(DateOrig.systemDate[0]);
-        date.setMonth(DateOrig.systemDate[1]);
+        date.setMonth(DateOrig.systemDate[1] - 1);
         date.setDate(DateOrig.systemDate[2]);
       }
 
