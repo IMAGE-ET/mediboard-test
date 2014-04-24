@@ -380,6 +380,8 @@ class CMediusers extends CPerson {
     $backProps["usermessage_created"]             = "CUserMessage creator_id";
     $backProps["usermessage_dest_to"]             = "CUserMessageDest to_user_id";
     $backProps["usermessage_dest_from"]           = "CUserMessageDest from_user_id";
+    $backProps["constantes"]                      = "CConstantesMedicales user_id";
+    $backProps["sejours_sortie_confirmee"]        = "CSejour confirme_user_id";
 
     return $backProps;
   }
