@@ -2670,30 +2670,93 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
-   * Charge le Numéro de pré-admission du séjour pour l'établissement courant
+   * Mass load mechanism for forward references of an object collection
    *
-   * @param int $group_id Permet de charger le NPA pour un établissement donné si non null
+   * @param self[] $sejours  Array of objects
+   * @param string $group_id Tag
    *
-   * @return void|string
+   * @return self[] Loaded collection, null if unavailable, with ids as keys of guids for meta references
    */
-  function loadNPA($group_id = null) {
-    // Objet inexistant
-    if (!$this->_id) {
-      return "-";
-    }
-
+  static function massLoadNDA($sejours, $group_id = null) {
     // Aucune configuration de numéro de dossier
-    if (null == $tag_NPA = $this->getTagNDA($group_id, "tag_dossier_pa")) {
-      $this->_NPA = str_pad($this->_id, 6, "0", STR_PAD_LEFT);
+    if (null == $tag_NDA = self::getTagNDA($group_id)) {
+      foreach ($sejours as $_sejour) {
+        $_sejour->_NDA_view = $_sejour->_NDA = str_pad($_sejour->_id, 6, "0", STR_PAD_LEFT);
+      }
+
       return null;
     }
 
-    // Recuperation de la valeur de l'id400
-    $idex = CIdSante400::getMatchFor($this, $tag_NPA);
+    // Récupération de la valeur des idex
+    $ideces = CIdSante400::massGetMatchFor($sejours, $tag_NDA);
 
-    // Stockage de la valeur de l'id400
-    $this->_ref_NPA = $idex;
-    $this->_NPA     = $idex->id400;
+    // Association idex-séjours
+    foreach ($ideces as $_idex) {
+      $sejour = $sejours[$_idex->object_id];
+
+      $sejour->_ref_NDA  = $_idex;
+      $sejour->_NDA_view = $sejour->_NDA = $_idex->id400;
+    }
+
+    foreach ($sejours as $_sejour) {
+      if ($_sejour->_ref_NDA) {
+        continue;
+      }
+
+      $_sejour->_ref_NDA  = new CIdSante400();
+    }
+
+    // Cas de l'utilisation du rang
+    self::massLoadNRA($sejours, $group_id);
+
+    return null;
+  }
+
+  /**
+   * Mass load mechanism for forward references of an object collection
+   *
+   * @param self[] $sejours  Array of objects
+   * @param string $group_id Tag
+   *
+   * @return self[] Loaded collection, null if unavailable, with ids as keys of guids for meta references
+   */
+  static function massLoadNRA($sejours, $group_id = null) {
+    // Utilise t-on le rang pour le dossier
+    if (!CAppUI::conf("dPplanningOp CSejour use_dossier_rang")) {
+      return null;
+    }
+
+    // Aucune configuration du numero de rang
+    if (null == $tag_NRA = self::getTagNRA($group_id)) {
+      return null;
+    }
+
+    // Récupération de la valeur des idex
+    $ideces = CIdSante400::massGetMatchFor($sejours, $tag_NRA);
+
+    /** @var CPatient[] $patients */
+    $patients = CMbObject::massLoadFwdRef($sejours, "patient_id");
+    CPatient::massLoadIPP($patients, $group_id);
+
+    // Association idex-séjours
+    foreach ($ideces as $_idex) {
+      $sejour  = $sejours[$_idex->object_id];
+      $patient = $patients[$sejour->patient_id];
+
+      $sejour->_ref_NRA  = $_idex;
+
+      $NRA = $_idex->_id ? $_idex->id400 : "-";
+
+      $sejour->_NDA_view = $patient->_IPP."/".$NRA;
+    }
+
+    foreach ($sejours as $_sejour) {
+      if ($_sejour->_ref_NRA) {
+        continue;
+      }
+
+      $_sejour->_ref_NRA = new CIdSante400();
+    }
 
     return null;
   }
@@ -2733,6 +2796,71 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->_ref_patient->loadIPP();
 
     $this->_NDA_view = $this->_ref_patient->_IPP."/".$NRA;
+
+    return null;
+  }
+
+  /**
+   * Charge le Numéro de pré-admission du séjour pour l'établissement courant
+   *
+   * @param int $group_id Permet de charger le NPA pour un établissement donné si non null
+   *
+   * @return void|string
+   */
+  function loadNPA($group_id = null) {
+    // Objet inexistant
+    if (!$this->_id) {
+      return "-";
+    }
+
+    // Aucune configuration de numéro de dossier
+    if (null == $tag_NPA = $this->getTagNDA($group_id, "tag_dossier_pa")) {
+      $this->_NPA = str_pad($this->_id, 6, "0", STR_PAD_LEFT);
+      return null;
+    }
+
+    // Recuperation de la valeur de l'id400
+    $idex = CIdSante400::getMatchFor($this, $tag_NPA);
+
+    // Stockage de la valeur de l'id400
+    $this->_ref_NPA = $idex;
+    $this->_NPA     = $idex->id400;
+
+    return null;
+  }
+
+  /**
+   * Mass load mechanism for forward references of an object collection
+   *
+   * @param self[] $sejours  Array of objects
+   * @param string $group_id Tag
+   *
+   * @return self[] Loaded collection, null if unavailable, with ids as keys of guids for meta references
+   */
+  static function massLoadNPA($sejours, $group_id = null) {
+    // Aucune configuration de numéro de dossier
+    if (null == $tag_NDA = self::getTagNDA($group_id, "tag_dossier_pa")) {
+      foreach ($sejours as $_sejour) {
+        $_sejour->_NPA = str_pad($_sejour->_id, 6, "0", STR_PAD_LEFT);
+      }
+
+      return null;
+    }
+
+    foreach ($sejours as $_sejour) {
+      $_sejour->_ref_NPA  = new CIdSante400();
+    }
+
+    // Récupération de la valeur des idex
+    $ideces = CIdSante400::massGetMatchFor($sejours, $tag_NDA);
+
+    // Association idex-séjours
+    foreach ($ideces as $_idex) {
+      $sejour = $sejours[$_idex->object_id];
+
+      $sejour->_ref_NPA = $_idex;
+      $sejour->_NPA     = $_idex->id400;
+    }
 
     return null;
   }
@@ -2807,7 +2935,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   /**
    * Charge l'affectation courante
    *
-   * @param datetime $dateTime Permet de spécifier un horaire de références, maintenant si null
+   * @param string $dateTime Permet de spécifier un horaire de références, maintenant si null
    *
    * @todo A dédoublonner avec loadRefCurrAffectation
    * @return CAffectation

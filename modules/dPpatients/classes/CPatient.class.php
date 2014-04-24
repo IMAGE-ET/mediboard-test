@@ -1799,6 +1799,46 @@ class CPatient extends CPerson {
   }
 
   /**
+   * Mass load mechanism for forward references of an object collection
+   *
+   * @param self[] $patients Array of objects
+   * @param string $group_id Tag
+   *
+   * @return self[] Loaded collection, null if unavailable, with ids as keys of guids for meta references
+   */
+  static function massLoadIPP($patients, $group_id = null) {
+    // Aucune configuration de numéro de dossier
+    if (null == $tag_ipp = self::getTagIPP($group_id)) {
+      foreach ($patients as $_patient) {
+        $_patient->_IPP = str_pad($_patient->_id, 6, "0", STR_PAD_LEFT);
+      }
+
+      return null;
+    }
+
+    // Récupération de la valeur des idex
+    $ideces = CIdSante400::massGetMatchFor($patients, $tag_ipp);
+
+    // Association idex-séjours
+    foreach ($ideces as $_idex) {
+      $patient = $patients[$_idex->object_id];
+
+      $patient->_ref_IPP = $_idex;
+      $patient->_IPP     = $_idex->id400;
+    }
+
+    foreach ($patients as $_patient) {
+      if ($_patient->_ref_IPP) {
+        continue;
+      }
+
+      $_patient->_ref_IPP  = new CIdSante400();
+    }
+
+    return null;
+  }
+
+  /**
    * Trash IPP
    *
    * @param CIdSante400 $IPP IPP

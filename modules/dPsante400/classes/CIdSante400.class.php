@@ -368,4 +368,29 @@ class CIdSante400 extends CMbMetaObject {
     }
     return parent::store();
   }
+
+  /**
+   * Mass load mechanism for forward references of an object collection
+   *
+   * @param CMbObject[] $objects Array of objects
+   * @param string      $tag     Tag
+   *
+   * @return self[] Loaded collection, null if unavailable, with ids as keys of guids for meta references
+   */
+  static function massGetMatchFor($objects, $tag) {
+    if (!count($objects)) {
+      return array();
+    }
+
+    $object = reset($objects);
+
+    $idex                  = new self;
+    $where["object_class"] = " = '$object->_class'";
+    $where["tag"]          = " = '$tag'";
+    $where["object_id"]    = CSQLDataSource::prepareIn(CMbArray::pluck($objects, "_id"));
+
+    $group = "object_id";
+
+    return $idex->loadList($where, null, null, $group);
+  }
 }

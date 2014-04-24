@@ -126,6 +126,11 @@ CStoredObject::massCountBackRefs($patients, "dossier_medical");
 
 /** @var COperation[] $operations_total */
 $operations_total = array();
+
+// Chargement des NDA
+CSejour::massLoadNDA($sejours);
+// Chargement des IPP
+CPatient::massLoadIPP($patients);
 foreach ($sejours as $sejour_id => $_sejour) {
   $praticien = $_sejour->loadRefPraticien();
   if ($filterFunction && $filterFunction != $praticien->function_id) {
@@ -134,13 +139,9 @@ foreach ($sejours as $sejour_id => $_sejour) {
   }
   // Chargement du patient
   $patient = $_sejour->loadRefPatient();
-  $patient->loadIPP();
 
   // Dossier médical
   $dossier_medical = $patient->loadRefDossierMedical(false);
-
-  // Chargement du numéro de dossier
-  $_sejour->loadNDA();
 
   // Chargement des notes sur le séjourw
   $_sejour->loadRefsNotes();
