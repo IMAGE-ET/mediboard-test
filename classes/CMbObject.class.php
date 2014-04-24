@@ -427,6 +427,7 @@ class CMbObject extends CStoredObject {
     $backProps["ex_links_meta"]          = "CExLink object_id";
     $backProps["notification_meta"]      = "CNotificationObject object_id";
     $backProps["notification_obj_target"]= "CNotificationObject target_notif_id";
+    $backProps["digitalpen_copies"]      = "CDigitalPenCopy object_id";
 
     return $backProps;
   }

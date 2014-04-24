@@ -384,7 +384,7 @@ class CMediusers extends CPerson {
     $backProps["sejours_sortie_confirmee"]        = "CSejour confirme_user_id";
     $backProps["ticket_requests_referer"]         = "CRequestTicket user_referer_id";
     $backProps["notification_praticien"]          = "CNotification praticien_id";
-
+    $backProps["mbhost_installations"]            = "CMbHostInstallation user_id";
 
     return $backProps;
   }

@@ -135,6 +135,7 @@ class CUser extends CPerson {
     $backProps["preferences"]        = "CPreferences user_id";
     $backProps["error_logs"]         = "CErrorLog user_id";
     $backProps["authentications"]    = "CUserAuthentication user_id";
+    $backProps["authentications_previous"] = "CUserAuthentication previous_user_id";
     return $backProps;
   }
 
