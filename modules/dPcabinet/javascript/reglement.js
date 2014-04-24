@@ -32,7 +32,10 @@ var Reglement = {
     if (reload_acts && Preferences.ccam_consultation == "1" && Preferences.MODCONSULT == "1"){
       ActesCCAM.refreshList(Reglement.consultation_id, Reglement.user_id);
       ActesNGAP.refreshList();
-     
+      if ($('fraisdivers')) {
+        refreshFraisDivers();
+      }
+
       if (reload_acts && Preferences.MODCONSULT == "1" && window.ActesTarmed){
         ActesTarmed.refreshList();
         ActesCaisse.refreshList();
