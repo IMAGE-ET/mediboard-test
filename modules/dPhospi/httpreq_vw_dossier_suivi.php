@@ -95,11 +95,6 @@ foreach ($sejour->_ref_suivi_medical as $_key => $_suivi) {
   $_suivi->canEdit();
 }
 
-foreach ($last_trans_cible as $_last) {
-  $_last->_log_lock = $_last->loadLastLogForField("locked");
-  $_last->_log_lock->loadRefUser()->loadRefMediuser()->loadRefFunction();
-}
-
 //TODO: Revoir l'ajout des constantes dans le suivi de soins
 //Ajout des constantes
 if (!$cible && CAppUI::conf("soins constantes_show") && $_show_const) {
@@ -111,6 +106,7 @@ $list_trans_const = array();
 
 $trans_compact = CAppUI::conf("soins trans_compact");
 $forms_active = CModule::getActive("forms");
+CExObject::$_load_lite = true;
 
 foreach ($sejour->_ref_suivi_medical as $_key => $_trans_const) {
   if (is_array($_trans_const)) {
@@ -141,7 +137,6 @@ foreach ($sejour->_ref_suivi_medical as $_key => $_trans_const) {
         $has_obs_entree = 1;
       }
 
-      CExObject::$_load_lite = true;
       $forms = CExObject::loadExObjectsFor($_trans_const);
 
       foreach ($_trans_const->_refs_dossiers_anesth as $_dossier_anesth) {

@@ -325,7 +325,6 @@
     {{if $_suivi[0]->locked && ($libelle_ATC && in_array($last_trans_cible.$libelle_ATC, $_suivi) ||
         ($key != " " && in_array($last_trans_cible.$key, $_suivi)))}}
       {{assign var=locked value="hatching"}}
-      {{assign var=log value=$_suivi[0]->_log_lock}}
     {{/if}}
   {{/if}}
   {{if @$show_patient}}
