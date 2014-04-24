@@ -425,6 +425,8 @@ class CMbObject extends CStoredObject {
     $backProps["sources_pop"]            = "CSourcePOP object_id";
     $backProps["hypertext_links"]        = "CHyperTextLink object_id";
     $backProps["ex_links_meta"]          = "CExLink object_id";
+    $backProps["notification_meta"]      = "CNotificationObject object_id";
+    $backProps["notification_obj_target"]= "CNotificationObject target_notif_id";
 
     return $backProps;
   }
