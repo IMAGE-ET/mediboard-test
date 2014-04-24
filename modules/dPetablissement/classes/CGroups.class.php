@@ -186,6 +186,8 @@ class CGroups extends CMbObject {
     $backProps["ex_links"]                  = "CExLink group_id";
     $backProps["group_fact_cab"]            = "CFactureCabinet group_id";
     $backProps["group_fact_etab"]           = "CFactureEtablissement group_id";
+    $backProps["notifications"]             = "CNotification group";
+    $backProps["notification_objects"]      = "CNotificationObject group_id";
     return $backProps;
   }
 

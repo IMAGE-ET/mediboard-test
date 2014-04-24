@@ -46,6 +46,7 @@ class CUserMessage extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["usermessage_destinataires"]    = "CUserMessageDest user_message_id";
+    $backProps["usermessage_in_reply"]         = "CUserMessage in_reply_to";
     return $backProps;
   }
 
