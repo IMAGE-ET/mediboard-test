@@ -258,7 +258,6 @@ if (!isset($sejours)) {
     else {
       $sejours = array();
       if ($service_id || $praticien_id || $function_id) {
-        mbLog($where);
         $affectations = $affectation->loadList($where, null, null, "affectation.sejour_id", $ljoin);
 
         CMbObject::massLoadFwdRef($affectations, "sejour_id");
