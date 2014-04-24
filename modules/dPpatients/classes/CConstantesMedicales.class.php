@@ -675,6 +675,79 @@ class CConstantesMedicales extends CMbObject {
       'type' => 'biolo',
       'unit' => 'ml/min',
       'min' => 0,
+      'max' => 250,
+    ),
+    'plaquettes' => array(
+      'type' => 'biolo',
+      'unit' => 'g/l',
+      'min' => 0,
+      'max' => 1000,
+    ),
+    'triglycerides' => array(
+      'type' => 'biolo',
+      'unit' => 'g/l',
+      'min' => 0,
+      'max' => 4,
+    ),
+    'ldlc' => array(
+      'type' => 'biolo',
+      'unit' => 'g/l',
+      'min' => 0,
+      'max' => 4,
+    ),
+    'hdlc' => array(
+      'type' => 'biolo',
+      'unit' => 'g/l',
+      'min' => 0,
+      'max' => 2,
+    ),
+    'potassium' => array(
+      'type' => 'biolo',
+      'unit' => 'mmol/l',
+      'min' => 0,
+      'max' => 50,
+    ),
+    'sodium' => array(
+      'type' => 'biolo',
+      'unit' => 'mmol/l',
+      'min' => 0,
+      'max' => 500,
+    ),
+    'cpk' => array(
+      'type' => 'biolo',
+      'unit' => 'ui/l',
+      'min' => 0,
+      'max' => 500,
+    ),
+    'asat' => array(
+      'type' => 'biolo',
+      'unit' => 'ui/l',
+      'min' => 0,
+      'max' => 100,
+    ),
+    'alat' => array(
+      'type' => 'biolo',
+      'unit' => 'ui/l',
+      'min' => 0,
+      'max' => 100,
+    ),
+    'gammagt' => array(
+      'type' => 'biolo',
+      'unit' => 'ui/l',
+      'min' => 0,
+      'max' => 100,
+    ),
+    'ipsc' => array(
+      'type' => 'physio',
+      'min' => 0,
+      'max' => 1.5,
+      "unit" => "mmHg",
+    ),
+    'broadman' => array(
+      'type' => 'physio',
+      'unit' => '',
+      'min' => 0,
+      'max' => 10,
     ),
   );
 
@@ -907,6 +980,18 @@ class CConstantesMedicales extends CMbObject {
       $props['saturation_air']         = 'float min|0';
     }
     $props['clair_creatinine']       = 'float min|0';
+    $props['plaquettes']             = 'num min|0';
+    $props['triglycerides']          = 'float min|0';
+    $props['ldlc']                   = 'float min|0';
+    $props['hdlc']                   = 'float min|0';
+    $props['potassium']              = 'float min|0';
+    $props['sodium']                 = 'float min|0';
+    $props['cpk']                    = 'num min|0';
+    $props['asat']                   = 'num min|0';
+    $props['alat']                   = 'num min|0';
+    $props['gammagt']                = 'num min|0';
+    $props['ipsc']                   = 'float min|0';
+    $props['broadman']               = 'num min|0';
     return $props;
   }
 

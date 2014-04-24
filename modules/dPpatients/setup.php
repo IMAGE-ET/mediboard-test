@@ -2540,7 +2540,24 @@ class CSetupdPpatients extends CSetup {
                 ADD `sexe` VARCHAR (2) NOT NULL DEFAULT 'u' AFTER `jeunefille` ";
     $this->addQuery($query);
 
-    $this->mod_version = "2.06";
+    $this->makeRevision("2.06");
+
+    $query = "ALTER TABLE `constantes_medicales`
+                ADD `alat` INT (3),
+                ADD `asat` INT (3),
+                ADD `broadman` INT (2),
+                ADD `cpk` INT (3),
+                ADD `hdlc` FLOAT,
+                ADD `ipsc` FLOAT,
+                ADD `gammagt` INT (3),
+                ADD `ldlc` FLOAT,
+                ADD `plaquettes` INT (4),
+                ADD `potassium` FLOAT,
+                ADD `sodium` FLOAT,
+                ADD `triglycerides` FLOAT;";
+    $this->addQuery($query);
+
+    $this->mod_version = "2.07";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
