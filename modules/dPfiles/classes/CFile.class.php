@@ -86,6 +86,7 @@ class CFile extends CDocumentItem {
     $backProps["observation_results"] = "CObservationResult file_id";
     $backProps["echanges_hl7v3"]      = "CExchangeHL7v3 object_id";
     $backProps["xds_submission_lot"]  = "CXDSSubmissionLotToDocument object_id";
+    $backProps["bioserver_document"]  = "CBioserveurDocument file_id";
 
     return $backProps;
   }
