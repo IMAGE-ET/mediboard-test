@@ -49,9 +49,6 @@ class CReceiverHprimSante extends CInteropReceiver {
   function getBackProps() {
     $backProps = parent::getBackProps();
 
-    $backProps['object_configs'] = "CReceiverHPrimSanteConfig object_id";
-    $backProps['echanges']       = "CExchangeHprimSante receiver_id";
-
     return $backProps;
   }
 
