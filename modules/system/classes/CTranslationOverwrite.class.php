@@ -62,7 +62,7 @@ class CTranslationOverwrite extends CMbObject {
       }
     }
 
-    return $this->_old_translation = $locales[$this->source];
+    return $this->_old_translation = isset($locales[$this->source]) ? $locales[$this->source] : "";
   }
 
   /**
@@ -77,7 +77,7 @@ class CTranslationOverwrite extends CMbObject {
       $locales = CAppUI::flattenCachedLocales(CAppUI::$lang);
     }
 
-    return $this->_in_cache = ($locales[$this->source] == $this->translation);
+    return $this->_in_cache = (isset($locales[$this->source]) && ($locales[$this->source] == $this->translation));
   }
 
   /**
@@ -95,12 +95,6 @@ class CTranslationOverwrite extends CMbObject {
    * @return string
    */
   function check() {
-    $locales = CAppUI::flattenCachedLocales(CAppUI::$lang);
-
-    if (!isset($locales[$this->source])) {
-      return "CTranslationOverwrite-failed-locale-doesnot-exist";
-    }
-
     return parent::check();
   }
 
