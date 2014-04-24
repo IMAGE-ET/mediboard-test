@@ -2557,7 +2557,12 @@ class CSetupdPpatients extends CSetup {
                 ADD `triglycerides` FLOAT;";
     $this->addQuery($query);
 
-    $this->mod_version = "2.07";
+    $this->makeRevision("2.07");
+    $query = "ALTER TABLE `constantes_medicales`
+      ADD `user_id` INT (11) UNSIGNED AFTER `constantes_medicales_id`";
+    $this->addQuery($query);
+
+    $this->mod_version = "2.08";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

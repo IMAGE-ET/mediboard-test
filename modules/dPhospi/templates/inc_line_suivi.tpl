@@ -60,7 +60,7 @@
     <label title="Constantes">Cst</label>
   </td>
   <td class="narrow">
-    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi->_ref_user->_ref_mediuser}}
+    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi->_ref_user}}
     <br />
     {{mb_value object=$_suivi field=datetime}}
   </td>

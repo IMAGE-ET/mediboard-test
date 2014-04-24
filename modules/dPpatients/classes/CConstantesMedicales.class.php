@@ -30,6 +30,7 @@ class CConstantesMedicales extends CMbObject {
   public $constantes_medicales_id;
 
   // DB Fields
+  public $user_id;
   public $patient_id;
   public $datetime;
   public $context_class;
@@ -42,7 +43,7 @@ class CConstantesMedicales extends CMbObject {
   /** @var CPatient */
   public $_ref_patient;
 
-  /** @var CUser */
+  /** @var CMediusers */
   public $_ref_user;
 
   // Forms fields
@@ -838,6 +839,7 @@ class CConstantesMedicales extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
+    $props['user_id']                = 'ref class|CMediusers';
     $props['patient_id']             = 'ref notNull class|CPatient';
     $props['datetime']               = 'dateTime notNull';
     $props['context_class']          = 'enum list|CConsultation|CSejour|CPatient';
@@ -1241,13 +1243,19 @@ class CConstantesMedicales extends CMbObject {
   /**
    * Charge l'utilisateur qui a enregistré la première fois la constante
    *
-   * @return CUser
+   * @return CMediusers
    */
   function loadRefUser() {
-    $first_log = $this->loadFirstLog();
-    $this->_ref_user = $first_log->loadRefUser();
-    $this->_ref_user->loadRefMediuser()->loadRefFunction();
-
+    if (!$this->user_id) {
+      $first_log = $this->loadFirstLog();
+      $this->_ref_user = $first_log->loadRefUser();
+      $this->_ref_user->loadRefMediuser()->loadRefFunction();
+      $this->user_id = $this->_ref_user->_id;
+      $this->store();
+      return $this->_ref_user = $this->_ref_user->_ref_mediuser;
+    }
+    $this->_ref_user = $this->loadFwdRef("user_id", true);
+    $this->_ref_user->loadRefFunction();
     return $this->_ref_user;
   }
 
@@ -1278,7 +1286,7 @@ class CConstantesMedicales extends CMbObject {
   /**
    * @see parent::store()
    */
-  function store () {
+  function store() {
     // S'il ne reste plus qu'un seul champ et que sa valeur est passée à vide,
     // alors on supprime la constante.
     if (
@@ -1309,6 +1317,10 @@ class CConstantesMedicales extends CMbObject {
       if (!$ok) {
         return parent::delete();
       }
+    }
+
+    if (!$this->_id) {
+      $this->user_id = CMediusers::get()->_id;
     }
 
     if (!$this->_id && !$this->_new_constantes_medicales) {
