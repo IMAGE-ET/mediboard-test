@@ -69,42 +69,44 @@
   };
 
   Main.add(function () {
-    Calendar.regField(getForm("changeDate").date, null, {noView: true});
     {{if $blocs|@count}}
-    updateSuiviSalle();
-    if (Preferences.startAutoRefreshAtStartup == 1) {
-      togglePlayPause($('autorefreshSuiviSalleButton'));
-    }
+      Calendar.regField(getForm("changeDate").date, null, {noView: true});
+      updateSuiviSalle();
+      if (Preferences.startAutoRefreshAtStartup == 1) {
+        togglePlayPause($('autorefreshSuiviSalleButton'));
+      }
     {{/if}}
   });
 </script>
 
-<table class="main not-printable">
-  <tr>
-    <td>
-      <button id="autorefreshSuiviSalleButton" style="float: left;" class="play" title="Rechargement automatique de la page ({{tr}}config-dPbloc-CPlageOp-time_autorefresh-{{$conf.dPbloc.CPlageOp.time_autorefresh}}{{/tr}})" onclick="togglePlayPause(this);">Rech. Auto</button>
-      <button type="button" onclick="showLegend()" class="search" style="float: right;">Légende</button>
-      <button type="button" onclick="$('suivi-salles').print();" class="print" style="float: right;">{{tr}}Print{{/tr}}</button>
-      <button type="button" onclick="printAnapath();" class="print" style="float: right;">{{tr}}COperation-anapath{{/tr}}</button>
-      <button type="button" onclick="printBacterio();" class="print" style="float: right;">{{tr}}COperation-labo{{/tr}}</button>
+{{if $blocs|@count}}
+  <table class="main not-printable">
+    <tr>
+      <td>
+        <button id="autorefreshSuiviSalleButton" style="float: left;" class="play" title="Rechargement automatique de la page ({{tr}}config-dPbloc-CPlageOp-time_autorefresh-{{$conf.dPbloc.CPlageOp.time_autorefresh}}{{/tr}})" onclick="togglePlayPause(this);">Rech. Auto</button>
+        <button type="button" onclick="showLegend()" class="search" style="float: right;">Légende</button>
+        <button type="button" onclick="$('suivi-salles').print();" class="print" style="float: right;">{{tr}}Print{{/tr}}</button>
+        <button type="button" onclick="printAnapath();" class="print" style="float: right;">{{tr}}COperation-anapath{{/tr}}</button>
+        <button type="button" onclick="printBacterio();" class="print" style="float: right;">{{tr}}COperation-labo{{/tr}}</button>
 
-      <form action="?" name="changeDate" method="get">
-        <label> Bloc :
-          <select name="bloc_id" onchange="updateSuiviSalle();">
-            {{foreach from=$blocs item=curr_bloc}}
-              <option value="{{$curr_bloc->_id}}">
-                {{$curr_bloc->nom}}
-              </option>
-            {{/foreach}}
-          </select>
-        </label>
-        <label>Date :
-          <input type="hidden" name="date" class="date" value="{{$date}}" onchange="updateSuiviSalle();" /><span id="dateSuiviSalle"></span>
-        </label>
-      </form>
-    </td>
-  </tr>
-</table>
+        <form action="?" name="changeDate" method="get">
+          <label> Bloc :
+            <select name="bloc_id" onchange="updateSuiviSalle();">
+              {{foreach from=$blocs item=curr_bloc}}
+                <option value="{{$curr_bloc->_id}}">
+                  {{$curr_bloc->nom}}
+                </option>
+              {{/foreach}}
+            </select>
+          </label>
+          <label>Date :
+            <input type="hidden" name="date" class="date" value="{{$date}}" onchange="updateSuiviSalle();" /><span id="dateSuiviSalle"></span>
+          </label>
+        </form>
+      </td>
+    </tr>
+  </table>
+{{/if}}
 
 <div id="result_suivi">
   {{if !$blocs|@count}}
