@@ -444,7 +444,7 @@ abstract class CMbArray {
       return null;
     }
   
-    $moyenne = mbMoyenne($array);
+    $moyenne = CMbArray::average($array);
     $sigma = 0;
     foreach ($array as $value) {
       $sigma += pow((floatval($value)-$moyenne), 2);
@@ -467,7 +467,7 @@ abstract class CMbArray {
       $haystack = explode(" ", $haystack);
     }
     
-    return in_array($needle, $haystack);
+    return in_array($needle, $haystack, $strict);
   }
 
   /**
