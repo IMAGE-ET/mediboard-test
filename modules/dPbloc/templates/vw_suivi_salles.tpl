@@ -29,15 +29,17 @@
     var date    = $V(oform.date);
     var bloc_id = $V(oform.bloc_id);
 
-    var url = new Url("dPbloc", "ajax_vw_suivi_salle");
-    url.addParam('bloc_id', bloc_id);
-    url.addParam('date', date);
-    var str = DateFormat.format(Date.fromDATE(date), " dd/MM/yyyy");
-    if (date == '{{$date}}') {
-      str= str+" (Aujourd'hui)";
+    if (bloc_id) {
+      var url = new Url("dPbloc", "ajax_vw_suivi_salle");
+      url.addParam('bloc_id', bloc_id);
+      url.addParam('date', date);
+      var str = DateFormat.format(Date.fromDATE(date), " dd/MM/yyyy");
+      if (date == '{{$date}}') {
+        str= str+" (Aujourd'hui)";
+      }
+      $('dateSuiviSalle').update(str);
+      url.requestUpdate("result_suivi");
     }
-    $('dateSuiviSalle').update(str);
-    url.requestUpdate("result_suivi");
   };
 
   printFicheBloc = function(interv_id) {
@@ -68,17 +70,19 @@
 
   Main.add(function () {
     Calendar.regField(getForm("changeDate").date, null, {noView: true});
-    updateSuiviSalle();
-    if (Preferences.startAutoRefreshAtStartup == 1) {
-      togglePlayPause($('autorefreshSuiviSalleButton'));
-    }
+    {{if $blocs|@count}}
+      updateSuiviSalle();
+      if (Preferences.startAutoRefreshAtStartup == 1) {
+        togglePlayPause($('autorefreshSuiviSalleButton'));
+      }
+    {{/if}}
   });
 </script>
 
 <table class="main not-printable">
   <tr>
     <td>
-      <button id="autorefreshSuiviSalleButton" style="float: left;" class="play" onclick="togglePlayPause(this);">Rech. Auto</button>
+      <button id="autorefreshSuiviSalleButton" style="float: left;" title="Rechargement automatique de la page ({{tr}}config-dPbloc-CPlageOp-time_autorefresh-{{$conf.dPbloc.CPlageOp.time_autorefresh}}{{/tr}})" class="play" onclick="togglePlayPause(this);">Rech. Auto</button>
       <button type="button" onclick="showLegend()" class="search" style="float: right;">Légende</button>
       <button type="button" onclick="$('suivi-salles').print();" class="print" style="float: right;">{{tr}}Print{{/tr}}</button>
       <button type="button" onclick="printAnapath();" class="print" style="float: right;">{{tr}}COperation-anapath{{/tr}}</button>
