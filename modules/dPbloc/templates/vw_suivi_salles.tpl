@@ -29,15 +29,17 @@
     var date    = $V(oform.date);
     var bloc_id = $V(oform.bloc_id);
 
-    var url = new Url("dPbloc", "ajax_vw_suivi_salle");
-    url.addParam('bloc_id', bloc_id);
-    url.addParam('date', date);
-    var str = DateFormat.format(Date.fromDATE(date), " dd/MM/yyyy");
-    if (date == '{{$date}}') {
-      str= str+" (Aujourd'hui)";
+    if (bloc_id) {
+      var url = new Url("dPbloc", "ajax_vw_suivi_salle");
+      url.addParam('bloc_id', bloc_id);
+      url.addParam('date', date);
+      var str = DateFormat.format(Date.fromDATE(date), " dd/MM/yyyy");
+      if (date == '{{$date}}') {
+        str= str+" (Aujourd'hui)";
+      }
+      $('dateSuiviSalle').update(str);
+      url.requestUpdate("result_suivi");
     }
-    $('dateSuiviSalle').update(str);
-    url.requestUpdate("result_suivi");
   };
 
   printFicheBloc = function(interv_id) {
@@ -68,10 +70,12 @@
 
   Main.add(function () {
     Calendar.regField(getForm("changeDate").date, null, {noView: true});
-    updateSuiviSalle();
-    if (Preferences.startAutoRefreshAtStartup == 1) {
-      togglePlayPause($('autorefreshSuiviSalleButton'));
-    }
+    {{if $blocs|@count}}
+      updateSuiviSalle();
+      if (Preferences.startAutoRefreshAtStartup == 1) {
+        togglePlayPause($('autorefreshSuiviSalleButton'));
+      }
+    {{/if}}
   });
 </script>
 
