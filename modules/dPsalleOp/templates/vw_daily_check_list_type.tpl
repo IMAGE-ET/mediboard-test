@@ -68,6 +68,7 @@ Main.add(Control.Tabs.create.curry("list_type_tabs", true));
         {{mb_class object=$list_type}}
         {{mb_key   object=$list_type}}
         {{mb_field object=$list_type field=group_id hidden=true}}
+        <input type=hidden name="_duplicate" value="0"/>
 
         <table class="main form">
         {{mb_include module=system template=inc_form_table_header object=$list_type}}
@@ -135,6 +136,9 @@ Main.add(Control.Tabs.create.curry("list_type_tabs", true));
                   {onComplete: Control.Modal.close}
                 )">
                   {{tr}}Delete{{/tr}}
+                </button>
+                <button class="duplicate" type="button" onclick="this.form._duplicate.value = '1';this.form.submit();">
+                  {{tr}}Duplicate{{/tr}}
                 </button>
               {{/if}}
             </td>

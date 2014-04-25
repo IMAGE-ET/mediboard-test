@@ -23,6 +23,7 @@ class CDailyCheckListType extends CMbObject {
   public $description;
 
   public $_object_guid;
+  public $_duplicate;
 
   /** @var CSalle|CBlocOperatoire|COperation|CPoseDispositifVasculaire */
   public $_ref_object;
@@ -59,8 +60,10 @@ class CDailyCheckListType extends CMbObject {
     $props['title']        = 'str notNull';
     $props['type_validateur'] = "set vertical list|chir|anesth|op|op_panseuse|reveil|service|iade|brancardier|sagefemme|manipulateur";
     $props['description']  = 'text';
+
     $props['_object_guid'] = 'str';
     $props['_links']       = 'str';
+    $props['_duplicate']   = 'bool default|0';
     return $props;
   }
 
@@ -106,6 +109,11 @@ class CDailyCheckListType extends CMbObject {
    * @see parent::store()
    */
   function store(){
+    if ($this->_duplicate == 1) {
+      $this->duplicate();
+      return;
+    }
+
     if ($msg = parent::store()) {
       return $msg;
     }
@@ -205,5 +213,50 @@ class CDailyCheckListType extends CMbObject {
       $targets,
       $by_class,
     );
+  }
+
+  /**
+   * Duplicate CheckList
+   *
+   * @return void
+   */
+  function duplicate(){
+    $checklist = new CDailyCheckListType();
+    $checklist->object_class  = $this->object_class;
+    $checklist->group_id      = $this->group_id;
+    $checklist->title         = $this->title." dupliqué";
+    $checklist->type_validateur = $this->type_validateur;
+    $checklist->description   = $this->description;
+
+    if ($msg = $checklist->store()) {
+      return $msg;
+    }
+
+    foreach ($this->loadRefTypeLinks() as $link) {
+      $_link = $link;
+      $_link->_id  = "";
+      $_link->list_type_id  = $checklist->_id;
+      if ($msg = $_link->store()) {
+        return $msg;
+      }
+    }
+
+    foreach ($this->loadRefsCategories() as $categorie) {
+      $items = $categorie->loadRefItemTypes();
+      $new_categorie = $categorie;
+      $new_categorie->_id  = "";
+      $new_categorie->list_type_id  = $checklist->_id;
+      if ($msg = $new_categorie->store()) {
+        return $msg;
+      }
+      foreach ($items as $item) {
+        $new_item = $item;
+        $new_item->_id  = "";
+        $new_item->category_id  = $new_categorie->_id;
+        if ($msg = $new_item->store()) {
+          return $msg;
+        }
+      }
+    }
   }
 }
