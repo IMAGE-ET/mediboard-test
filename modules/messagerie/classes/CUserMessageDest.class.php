@@ -33,6 +33,10 @@ class CUserMessageDest extends CMbObject {
   public $_ref_user_to;
   public $_ref_user_from;
 
+  public $_is_received;
+  public $_is_sent;
+  public $_is_draft;
+
 
   /**
    * Initialize the class specifications
@@ -98,6 +102,31 @@ class CUserMessageDest extends CMbObject {
     $props["archived"]          = "bool default|0";
     $props["starred"]           = "bool default|0";
     return $props;
+  }
+
+  /** @see parent::updateFormFields() */
+  function updateFormFields() {
+    parent::updateFormFields();
+    if ($this->_ref_message) {
+      $this->_view = $this->_ref_message->subject;
+    }
+  }
+
+
+  function loadStatusFor($user_id = null) {
+    $user = CMediusers::get($user_id);
+
+    if ($this->to_user_id == $user->_id) {
+      $this->_is_received = true;
+    }
+
+    if ($this->from_user_id == $user->_id) {
+      $this->_is_sent = true;
+    }
+
+    if (!$this->datetime_sent) {
+      $this->_is_draft = true;
+    }
   }
 
   /**

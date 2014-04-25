@@ -210,6 +210,7 @@ $locales['CUserMessage-from'] = 'Expéditeur';
 $locales['CUserMessage-from-court'] = 'Exp.';
 $locales['CUserMessage-from-desc'] = 'Expéditeur du message';
 $locales['CUserMessage-inbox'] = 'Reçus';
+$locales['CUserMessage-content'] = 'Contenu';
 $locales['CUserMessage-msg-create'] = 'Message créé';
 $locales['CUserMessage-msg-delete'] = 'Message supprimé';
 $locales['CUserMessage-msg-modify'] = 'Message modifié';
