@@ -38,7 +38,7 @@
       </h1>
     </th>
   </tr>
-  
+
   {{foreach from=$listPlage item=curr_plage}}
     <tr class="clear">
       <td colspan="{{$main_colspan}}" class="text">
@@ -82,11 +82,12 @@
     {{foreach from=$curr_plage->listPlace item =_place}}
       {{if $_place.consultations|@count}}
         {{foreach from=$_place.consultations item=curr_consult}}
+          {{assign var=consult_anesth value=$curr_consult->_ref_consult_anesth}}
           <tbody class="hoverable">
             <tr>
               {{assign var=categorie value=$curr_consult->_ref_categorie}}
-              <td rowspan="2" {{if !$categorie->_id}}colspan="2"{{/if}}
-                style="text-align: center; {{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
+              <td {{if $consult_anesth->operation_id}}rowspan="2"{{/if}} {{if !$categorie->_id}}colspan="2"{{/if}}
+                  style="text-align: center; {{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
                 {{$_place.time|date_format:$conf.time}}
               </td>
               {{mb_include template=inc_print_plages_line}}
