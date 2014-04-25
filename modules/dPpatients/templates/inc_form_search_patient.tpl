@@ -14,7 +14,7 @@
   Main.add(function() {
     var oform = getForm('find');
     oform.onsubmit();
-    $V(oform.new, 1);
+    $V(oform.elements['new'], 1);
   });
 </script>
 
