@@ -19,7 +19,8 @@ $bloc_id    = CValue::getOrSession("bloc_id");
 $bloc = new CBlocOperatoire();
 $bloc->load($bloc_id);
 if (!$bloc->_id) {
-  CAppUI::stepAjax("dPbloc-msg-select_bloc", UI_MSG_ERROR);
+  CAppUI::stepAjax("dPbloc-msg-select_bloc", UI_MSG_WARNING);
+  return;
 }
 $bloc->loadRefsSalles();
 

@@ -384,6 +384,7 @@ $locales['config-dPbloc-CPlageOp-view_rques-desc'] = 'Afficher les remarques dan
 $locales['config-dPbloc-CPlageOp-view_tools'] = 'Afficher le matériel';
 $locales['config-dPbloc-CPlageOp-view_tools-desc'] = 'Afficher le matériel dans la vue suivi salles';
 $locales['config-reaffectation_plageop'] = 'Réaffectation des plages opératoires';
+$locales['dPbloc-msg-select_bloc'] = 'Sélectionnez un bloc valide';
 $locales['mod-dPbloc-tab-ajax_edit_besoins'] = 'Besoins en matériel';
 $locales['mod-dPbloc-tab-ajax_edit_extra_interv'] = 'Changement de salle et ajout de personnel sur l\'intervention';
 $locales['mod-dPbloc-tab-ajax_edit_indispo'] = 'Création / Modification d\'indisponibilté';
