@@ -111,7 +111,7 @@
 <div id="result_suivi">
   {{if !$blocs|@count}}
     <div class="small-warning">
-      Aucun bloc configuré pour cet établissement
+      {{tr}}dPbloc-msg-no_bloc{{/tr}}
     </div>
   {{/if}}
 </div>

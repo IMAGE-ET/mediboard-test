@@ -1,3 +1,10 @@
+{{if !$blocs|@count}}
+  <div class="small-warning">
+    {{tr}}dPbloc-msg-no_bloc{{/tr}}
+  </div>
+  {{mb_return}}
+{{/if}}
+
 <script type="text/javascript">
   refreshListOperations = function(order_col, order_way) {
     var form = getForm("filterOperations");

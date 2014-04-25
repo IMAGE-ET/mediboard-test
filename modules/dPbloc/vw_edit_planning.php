@@ -33,9 +33,13 @@ for ($i = $debut; $i <= $fin; $i = CMbDT::date("+1 day", $i)) {
 }
 
 $listBlocs  = CGroups::loadCurrent()->loadBlocs();
-$bloc_id    = CValue::getOrSession("bloc_id", reset($listBlocs)->_id);
-if (!array_key_exists($bloc_id, $listBlocs)) {
-  $bloc_id = reset($listBlocs)->_id;
+
+$bloc_id = null;
+if (count($listBlocs)) {
+  $bloc_id    = CValue::getOrSession("bloc_id", reset($listBlocs)->_id);
+  if (!array_key_exists($bloc_id, $listBlocs)) {
+    $bloc_id = reset($listBlocs)->_id;
+  }
 }
 $listSalles = array();
 
