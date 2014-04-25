@@ -317,32 +317,27 @@ abstract class CMbArray {
     }
 
     $values = array();
-    foreach ($array as $key => $item) {
-      if (is_object($item)) {
-        if (!property_exists($item, $name)) {
-          trigger_error("Object at key '$key' doesn't have the '$name' property", E_USER_WARNING);
-          continue;
-        }
+    foreach ($array as $index => $value) {
+      if (is_object($value)) {
+        $value = get_object_vars($value);
+      }
 
-        $values[$key] = $item->$name;
+      if (!is_array($value)) {
+        trigger_error("Value at index '$index' is neither an array nor an object", E_USER_WARNING);
         continue;
       }
 
-      if (is_array($item)) {
-        if (!array_key_exists($name, $item)) {
-          trigger_error("Array at key '$key' doesn't have a value for '$name' key", E_USER_WARNING);
-          continue;
-        }
-
-        $values[$key] = $item[$name];
+      if (!array_key_exists($name, $value)) {
+        trigger_error("Value at index '$index' can't access to '$name' field", E_USER_WARNING);
         continue;
       }
 
-      trigger_error("Item at key '$key' is neither an array nor an object", E_USER_WARNING);
+      $values[$index] = $value[$name];
     }
 
     return $values;
   }
+
 
   /**
    * Create an array with filtered keys based on having given prefix
