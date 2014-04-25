@@ -1,95 +1,93 @@
-    {{if $curr_consult->premiere}}
-      {{assign var=consult_background value="background-color:#faa;"}}
-    {{elseif $curr_consult->derniere}}
-      {{assign var=consult_background value="background-color:#faf;"}}
-    {{else}}
-      {{assign var=consult_background value=""}}
-    {{/if}}
-    
-    {{if $categorie->_id}}
-    <td rowspan="2" style="{{$consult_background}}">
-      {{mb_include module=cabinet template=inc_icone_categorie_consult 
-        categorie=$categorie
-      }}
-    </td>
-    {{/if}}
-    
-    {{if $curr_consult->patient_id}}
-    {{assign var=patient value=$curr_consult->_ref_patient}}
-    <td rowspan="2" style="{{$consult_background}}" class="text">
-      {{$patient}}
-      {{if $filter->_print_ipp && $patient->_IPP}}
-        [{{$patient->_IPP}}]
-      {{/if}}
-    </td>
-    
-      {{if $filter->_coordonnees}}
-      <td rowspan="2" class="text" style="{{$consult_background}}">
-        {{mb_value object=$patient field=adresse}}
-        <br />
-        {{mb_value object=$patient field=cp}} 
-        {{mb_value object=$patient field=ville}}
-      </td>
+{{if $curr_consult->premiere}}
+  {{assign var=consult_background value="background-color:#faa;"}}
+{{elseif $curr_consult->derniere}}
+  {{assign var=consult_background value="background-color:#faf;"}}
+{{else}}
+  {{assign var=consult_background value=""}}
+{{/if}}
 
-      <td rowspan="2" style="{{$consult_background}}">
-        {{mb_value object=$patient field=tel}}
-        <br />
-        {{mb_value object=$patient field=tel2}}
-      </td>
-      {{elseif $filter->_telephone}}
-        <td rowspan="2" style="{{$consult_background}}">
-          {{mb_value object=$patient field=tel}}
-          <br />
-          {{mb_value object=$patient field=tel2}}
-        </td>
-      {{/if}}
-    <td rowspan="2" style="text-align: center; {{$consult_background}}">
-      {{$patient->_age}}
-      {{if $patient->_annees != "??"}}
-        <br />
-        ({{mb_value object=$patient field="naissance"}})
-      {{/if}}
-    </td>
-    {{if $show_lit}}
-      <td rowspan="2" style="{{$consult_background}}">
-        {{$patient->_ref_curr_affectation}}
-      </td>
+{{if $categorie->_id}}
+  <td {{if $consult_anesth->operation_id}}rowspan="2"{{/if}} style="{{$consult_background}}">
+    {{mb_include module=cabinet template=inc_icone_categorie_consult
+      categorie=$categorie
+    }}
+  </td>
+{{/if}}
+    
+{{if $curr_consult->patient_id}}
+  {{assign var=patient value=$curr_consult->_ref_patient}}
+  <td {{if $consult_anesth->operation_id}}rowspan="2"{{/if}} style="{{$consult_background}}" class="text">
+    {{$patient}}
+    {{if $filter->_print_ipp && $patient->_IPP}}
+      [{{$patient->_IPP}}]
     {{/if}}
-    
-    {{else}}
-    <td colspan="{{math equation='x-5' x=$main_colspan}}" style="{{$consult_background}}">
-      [PAUSE]
+  </td>
+
+  {{if $filter->_coordonnees}}
+    <td {{if $consult_anesth->operation_id}}rowspan="2"{{/if}} class="text" style="{{$consult_background}}">
+      {{mb_value object=$patient field=adresse}}
+      <br />
+      {{mb_value object=$patient field=cp}}
+      {{mb_value object=$patient field=ville}}
     </td>
-    {{/if}}
-    
-    {{assign var=consult_anesth value=$curr_consult->_ref_consult_anesth}}
-    <td {{if !$consult_anesth->operation_id}}rowspan="2"{{/if}} class="text" style="{{$consult_background}}">
-      {{if $categorie->_id}}
-        <div>
-          {{mb_include module=cabinet template=inc_icone_categorie_consult 
-            categorie=$categorie 
-            display_name=true
-          }}
-        </div>
-      {{/if}}
-      {{mb_value object=$curr_consult field=motif}}
-    </td>
-    
-    <td {{if !$consult_anesth->operation_id}}rowspan="2"{{/if}} class="text" style="{{$consult_background}}">
-      {{mb_value object=$curr_consult field=rques}}
-    </td>
-    
+
     <td {{if $consult_anesth->operation_id}}rowspan="2"{{/if}} style="{{$consult_background}}">
-      {{if $curr_consult->duree !=  1}}
-      {{$curr_consult->duree}} x 
-      {{/if}}
-      {{$curr_plage->freq|date_format:"%M"}}min
+      {{mb_value object=$patient field=tel}}
+      <br />
+      {{mb_value object=$patient field=tel2}}
     </td>
+  {{elseif $filter->_telephone}}
+    <td {{if $consult_anesth->operation_id}}rowspan="2"{{/if}} style="{{$consult_background}}">
+      {{mb_value object=$patient field=tel}}
+      <br />
+      {{mb_value object=$patient field=tel2}}
+    </td>
+  {{/if}}
+  <td {{if $consult_anesth->operation_id}}rowspan="2"{{/if}} style="text-align: center; {{$consult_background}}">
+    {{$patient->_age}}
+    {{if $patient->_annees != "??"}}
+      <br />
+      ({{mb_value object=$patient field="naissance"}})
+    {{/if}}
+  </td>
+  {{if $show_lit}}
+    <td {{if $consult_anesth->operation_id}}rowspan="2"{{/if}} style="{{$consult_background}}">
+      {{$patient->_ref_curr_affectation}}
+    </td>
+  {{/if}}
+{{else}}
+  <td colspan="{{math equation='x-5' x=$main_colspan}}" style="{{$consult_background}}">
+    [PAUSE]
+  </td>
+{{/if}}
+
+<td class="text" style="{{$consult_background}}">
+  {{if $categorie->_id}}
+    <div>
+      {{mb_include module=cabinet template=inc_icone_categorie_consult
+        categorie=$categorie
+        display_name=true
+      }}
+    </div>
+  {{/if}}
+  {{mb_value object=$curr_consult field=motif}}
+</td>
+
+<td class="text" style="{{$consult_background}}">
+  {{mb_value object=$curr_consult field=rques}}
+</td>
+
+<td {{if $consult_anesth->operation_id}}rowspan="2"{{/if}} style="{{$consult_background}}">
+  {{if $curr_consult->duree !=  1}}
+  {{$curr_consult->duree}} x
+  {{/if}}
+  {{$curr_plage->freq|date_format:"%M"}}min
+</td>
+
+{{if $consult_anesth->operation_id}}
   </tr>
-  
   <tr>
     {{* Keep table row out of condition *}}
-    {{if $consult_anesth->operation_id}}
     <td colspan="2" class="text" style="{{$consult_background}}">
       <div style="border-left: 4px solid #aaa; padding-left: 5px;">
       {{assign var=operation value=$consult_anesth->_ref_operation}}
@@ -109,5 +107,5 @@
       {{/foreach}}
       -->
       </div>
-      {{/if}}
     </td>
+{{/if}}
