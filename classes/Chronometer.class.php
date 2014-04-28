@@ -39,12 +39,12 @@ class Chronometer {
    * 
    * @param string $key The key of the step
    * 
-   * @return float Step duration in seconds
+   * @return float|null Step duration in seconds, null on error
    */
   function stop($key = "") {
     if ($this->step === 0) {
       trigger_error("Chrono stopped without starting", E_USER_WARNING);
-      return;
+      return null;
     }
     
     $time = microtime(true);
@@ -69,5 +69,22 @@ class Chronometer {
     $this->latestStep = $this->step;
     $this->step = 0;
     return $this->latestStep;
+  }
+
+  /**
+   * Stop and restart chronometer
+   */
+  function step($msg) {
+    $this->stop($msg);
+    $this->start();
+  }
+
+  /**
+   * Stop, trace latest step and restart a chronometer
+   */
+  function trace($msg) {
+    $step = $this->stop($msg);
+    mbTrace(number_format($step*1000, 2), "[Chrono] action '$msg' (ms)");
+    $this->start();
   }
 }
