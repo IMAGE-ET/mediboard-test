@@ -46,7 +46,7 @@ class CReceiverHPrimSanteConfig extends CMbObjectConfig {
   function getProps() {
     $props = parent::getProps();
 
-    $props["object_id"]     = "ref class|CReceiverHPrimSante";
+    $props["object_id"]     = "ref class|CReceiverHprimSante";
 
     // Version
     $props["ADM_version"]   = "enum list|2.1|2.2|2.3|2.4 default|2.1";

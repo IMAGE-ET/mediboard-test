@@ -51,7 +51,7 @@ class CExchangeHprimSante extends CExchangeTabular {
     $props = parent::getProps();
 
     $props["sender_class"]  = "enum list|CSenderFTP|CSenderSOAP|CSenderMLLP|CSenderFileSystem show|0";
-    $props["receiver_id"]   = "ref class|CReceiverHPrimSante";
+    $props["receiver_id"]   = "ref class|CReceiverHprimSante";
 
     $props["object_class"]  = "enum list|CPatient|CSejour|CMedecin show|0";
 
