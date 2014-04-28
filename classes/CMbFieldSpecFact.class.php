@@ -43,6 +43,7 @@ class CMbFieldSpecFact {
     "hpr"          => "CHPRSpec",
     "ipAddress"    => "CIpAddressSpec",
     "url"          => "CURLSpec",
+    "uri"          => "CURISpec",
   );
    
   /**

@@ -63,7 +63,7 @@ class CHyperTextLink extends CMbMetaObject {
   function getProps() {
     $props = parent::getProps();
     $props['name'] = 'str notNull';
-    $props['link'] = 'url notNull';
+    $props['link'] = 'uri notNull';
     return $props;
   }
 }
