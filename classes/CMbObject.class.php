@@ -428,6 +428,7 @@ class CMbObject extends CStoredObject {
     $backProps["notification_meta"]      = "CNotificationObject object_id";
     $backProps["notification_obj_target"]= "CNotificationObject target_notif_id";
     $backProps["digitalpen_copies"]      = "CDigitalPenCopy object_id";
+    $backProps["interop_sender_objects"] = "CObjectToInteropSender object_id";
 
     return $backProps;
   }
