@@ -126,6 +126,8 @@ foreach ($test_suite as $type => $systems) {
   }
 }
 
+echo "<h1>Escape sequences</h1>";
+
 function pre($str) {
   return "<pre>$str</pre>";
 }
@@ -133,18 +135,21 @@ function pre($str) {
 $message = new CHL7v2Message;
 $message->initEscapeSequences();
 
-$escaped = "debut \\F\\ \\S\\ \\T\\ \\E\\ \\R\\ fin";
+$escaped = 'START \F\ \S\ \T\ \E\ \R\ END';
 $unescaped = $message->unescape($escaped);
 
-mbExport($escaped, "escaped");
-mbExport($unescaped, "escaped unescaped");
-mbExport($message->escape($unescaped), "escaped unescaped escaped");
+echo pre("escaped: ".$escaped);
+echo pre("escaped unescaped: ".$unescaped);
+echo pre("escaped unescaped escaped: ".$message->escape($unescaped));
 
-$unicode = "coeur unicode \\M2764\\";
+$ascii = 'ASCII escape \X41\ ';
+echo pre($ascii);
+echo pre($message->unescape($ascii));
+
+$unicode = 'Unicode escape \M2764\ ';
 echo pre($unicode);
 echo pre($message->unescape($unicode));
 
-$format = "test \H\I'm strong\N\ test \.br\ new line";
+$format = 'test \H\I\'m strong\N\ test \.br\ new line';
 echo pre($format);
 echo pre($message->format($format));
-

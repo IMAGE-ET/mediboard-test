@@ -402,10 +402,22 @@ abstract class CHMessage extends CHL7v2SegmentGroup {
     $esc = preg_quote($this->escapeCharacter, "/");
     
     //  \Xxx\ => ascii char of xx
-    $str = preg_replace("/{$esc}X(\d\d){$esc}/e", 'chr(hexdec("$1"))', $str);
+    $str = preg_replace_callback(
+      "/{$esc}X(\\d\\d){$esc}/",
+      function ($matches) {
+        return chr(hexdec($matches[1]));
+      },
+      $str
+    );
     
     //  \Cxxyy\
-    //$str = preg_replace("/{$esc}C([0-9A-F]{4}){$esc}/e", 'self::unichr($1)', $str);
+    /*$str = preg_replace_callback(
+      "/{$esc}C([0-9A-F]{4}){$esc}/",
+      function ($m) {
+        return CHMessage::unichr($m[1]);
+      },
+      $str
+    );*/
     
     //  \Mxxyyzz\
     $str = preg_replace("/{$esc}M([0-9A-F]{4}(?:[0-9A-F]{2})?){$esc}/", '&#x$1;', $str);
