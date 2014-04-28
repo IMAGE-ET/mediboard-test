@@ -22,5 +22,6 @@ $module->registerTab("form_tester"            , TAB_READ);
 $module->registerTab("sniff_code"             , TAB_READ);
 $module->registerTab("regression_checker"     , TAB_READ);
 $module->registerTab("mutex_tester"           , TAB_READ);
-$module->registerTab("check_zombie_objects"   , TAB_READ);
+$module->registerTab("cache_tester"           , TAB_READ);
+//$module->registerTab("check_zombie_objects"   , TAB_READ);
 $module->registerTab("benchmark"              , TAB_READ);
