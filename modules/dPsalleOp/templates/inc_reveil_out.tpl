@@ -138,7 +138,7 @@
           {{mb_field object=$_operation field=sortie_reveil_possible register=true form="editSortieReveilOutFrm$_operation_id"
             onchange="if (!this.value && !this.form.entree_reveil.value) { \$V(this.form.sortie_reveil_reel, '') } submitSortie(this.form);"}}
         {{else}}
-          {{if $_operation->sortie_locker_id}}
+          {{if $_operation->sortie_locker_id && !$use_sortie_reveil_reel}}
             <span onmouseover="ObjectTooltip.createDOM(this, 'info_locker_{{$_operation_id}}')">
               {{mb_field object=$_operation field="sortie_reveil_possible" hidden=1}}
               {{mb_value object=$_operation field="sortie_reveil_possible"}}

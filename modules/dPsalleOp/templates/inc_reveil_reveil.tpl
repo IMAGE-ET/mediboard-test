@@ -199,7 +199,7 @@
                 {{mb_field object=$_operation field="sortie_reveil_possible" hidden=1}}
             {{mb_value object=$_operation field="sortie_reveil_possible"}}
             <button type="button" class="cancel notext" title="Annuler la validation"
-                    onclick="$V(this.form.sortie_reveil_possible, ''); $V(this.form.sortie_reveil_reel, ''); submitSortie(this.form);"></button>
+                    onclick="$V(this.form.sortie_reveil_possible, ''); $V(this.form.sortie_reveil_reel, ''); $V(this.form.sortie_locker_id, ''); submitSortie(this.form);"></button>
               </span>
           <div id="info_locker_{{$_operation_id}}" style="display: none">
             Validée par {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_sortie_locker}}
