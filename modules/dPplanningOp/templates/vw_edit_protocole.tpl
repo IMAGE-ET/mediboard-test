@@ -43,6 +43,7 @@ refreshListCCAMProtocole = function() {
 
   oCcamNode.update("");
   while (sCode = aCcam[iCode++]) {
+    sCode = sCode.htmlSanitize();
     oCcamNode.insert(DOM.button({
       className: 'remove',
       type: 'button',

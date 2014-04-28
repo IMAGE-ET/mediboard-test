@@ -1014,6 +1014,14 @@ Class.extend(String, {
   htmlDecode: function() {
     return DOM.div({}, this).getText();
   },
+  htmlSanitize: function() {
+    return this
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  },
   truncate: function(n){
     return this.length > n ? this.substr(0, n-1)+'&hellip;' : this;
   }

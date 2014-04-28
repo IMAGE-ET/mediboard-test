@@ -570,7 +570,7 @@ var ExObjectFormula = Class.create({
           fieldElement.insert({
             after: DOM.div({
               className: 'small-error'
-            }, "Formule invalide: <br /><strong>" + data.formulaView + "</strong>")
+            }, "Formule invalide: <br /><strong>",  data.formulaView.htmlSanitize(),  "</strong>")
           });
           return;
         }
