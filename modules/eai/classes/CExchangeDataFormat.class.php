@@ -95,7 +95,7 @@ class CExchangeDataFormat extends CMbMetaObject {
     $props["message_valide"]      = "bool show|0";
     $props["acquittement_valide"] = "bool show|0";
     $props["id_permanent"]        = "str";
-    $props["object_id"]           = "ref class|CMbObject meta|object_class";
+    $props["object_id"]           = "ref class|CMbObject meta|object_class unlink";
     $props["reprocess"]           = "num min|0 max|".CAppUI::conf("eai max_reprocess_retries")." default|0";
     
     $props["_self_sender"]        = "bool";
