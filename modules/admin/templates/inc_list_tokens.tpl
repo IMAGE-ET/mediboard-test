@@ -6,6 +6,7 @@
     <th>{{mb_title class=CViewAccessToken field=datetime_start}}</th>
     <th>{{mb_title class=CViewAccessToken field=ttl_hours}}</th>
     <th>{{mb_title class=CViewAccessToken field=first_use}}</th>
+    <th>{{mb_title class=CViewAccessToken field=restricted}}</th>
   </tr>
   
   {{foreach from=$tokens item=_token}}
@@ -26,10 +27,11 @@
         </a>
       </td>
       <td>{{mb_value object=$_token field=first_use}}</td>
+      <td>{{mb_value object=$_token field=restricted}}</td>
     </tr>
   {{foreachelse}}
     <tr>
-      <td class="empty" colspan="4">{{tr}}CViewAccessToken.none{{/tr}}</td>
+      <td class="empty" colspan="5">{{tr}}CViewAccessToken.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

@@ -51,6 +51,10 @@
     <td>{{mb_field object=$token field="ttl_hours" increment=true form="edit-token"}}</td>
   </tr>
   <tr>
+    <th>{{mb_label object=$token field="restricted"}}</th>
+    <td>{{mb_field object=$token field="restricted"}}</td>
+  </tr>
+  <tr>
     <th>{{mb_label object=$token field="params"}}</th>
     <td>{{mb_field object=$token field="params" size=50}}</td>
   </tr>

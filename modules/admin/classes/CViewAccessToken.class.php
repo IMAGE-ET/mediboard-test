@@ -25,6 +25,8 @@ class CViewAccessToken extends CMbObject {
   public $_ref_user;
   public $_url;
 
+  public $restricted;
+
   /**
    * @see parent::getSpec()
    */
@@ -47,6 +49,7 @@ class CViewAccessToken extends CMbObject {
     $props["first_use"]      = "dateTime";
     $props["params"]         = "str notNull";
     $props["hash"]           = "str notNull length|40 show|0";
+    $props["restricted"]     = "bool notNull default|0";
     return $props;
   }
 
@@ -153,6 +156,8 @@ class CViewAccessToken extends CMbObject {
   function applyParams() {
     // Save token expiration in the session
     CAppUI::$token_expiration = $this->getTokenExpiration();
+    CAppUI::$token_restricted = $this->restricted == 1;
+
     CValue::setSessionAbs("token_expiration", CAppUI::$token_expiration);
     
     $params = $this->getParams();

@@ -50,6 +50,9 @@ class CAppUI {
   /** @var int Token expiration ISO datetime */
   static $token_expiration;
 
+  /** @var bool Token restricted: session will be closed right after page display */
+  static $token_restricted;
+
   /* --- <Localization> --- */
   /** @var bool Localization skipped if false */
   static $localize = true;
