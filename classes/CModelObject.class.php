@@ -166,7 +166,17 @@ class CModelObject {
    * @return array Property keys to be serialized
    */
   function __sleep() {
-    return array_keys($this->_specs);
+    $vars = get_object_vars($this);
+    unset($vars["_class"]);
+    unset($vars["_spec"]);
+    unset($vars["_props"]);
+    unset($vars["_specs"]);
+    unset($vars["_backProps"]);
+    unset($vars["_backSpecs"]);
+    unset($vars["_ref_module"]);
+    // Removing null values would purge empty arrays
+    CMbArray::removeValue("", $vars);
+    return array_keys($vars);
   }
   
   /**
@@ -240,7 +250,7 @@ class CModelObject {
     $this->_backProps =& self::$backProps[$class];
     $this->_backSpecs =& self::$backSpecs[$class];
     
-    $this->_guid = "$this->_class-none";
+    $this->_guid = $this->_id ? "$this->_class-$this->_id" : "$this->_class-none";
 
     // @todo Move up to CStoredObject
     $this->loadRefModule(self::$module_name[$class]);
