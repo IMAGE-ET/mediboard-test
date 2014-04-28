@@ -127,7 +127,7 @@ if ($do) {
   /** @var CSejour[] $sejours */
   $sejours = $sejour->loadList($where, $order_by, null, "sejour.sejour_id", $ljoin);
   CMbObject::massLoadFwdRef($sejours, "patient_id");
-
+  CMbObject::massCountBackRefs($sejours, "operations");
   foreach ($sejours as $_sejour) {
     $_sejour->loadRefPatient()->loadRefConstantesMedicales();
     $_sejour->loadRefsOperations();
@@ -142,10 +142,6 @@ if ($do) {
     $_lits = CMbObject::massLoadFwdRef($affectations, "lit_id");
     CMbObject::massLoadFwdRef($_lits, "chambre_id");
 
-    foreach ($affectations as $_affectation) {
-      $_affectation->loadRefLit()->loadCompleteView();
-      $_affectation->_view = $_affectation->_ref_lit->_view;
-    }
   }
 
   $sorter_affectation = CMbArray::pluck($sejours, "_ref_last_affectation", "_view");
@@ -208,6 +204,7 @@ if ($do) {
     $whereCstes["context_id"] = CSQLDataSource::prepareIn(array_keys($sejours));
 
     $constantes = $cste->loadList($whereCstes, "FIND_IN_SET(context_id, '".implode(',', $sejours_ids)."')");
+    CMbObject::massLoadFwdRef($constantes, "user_id");
 
     foreach ($constantes as $_constante) {
       $_constante->loadRefUser();

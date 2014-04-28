@@ -1,10 +1,10 @@
   </td>
   </tr>
   </table>
-<script type="text/javascript">
 {{if !$offline}}
+<script>
   check_categ = true;
-  Main.add( function(){
+  Main.add(function() {
     oCatField = new TokenField(document.filter_prescription.token_cat); 
     
     var cats = {{$cats|@json}};
@@ -126,10 +126,8 @@
       oCatField.remove("aerosol");
     }
   }
-{{/if}}
-
 </script>
-{{if !$offline}}
+
 <form name="filter_prescription" action="?" method="get" class="not-printable">
   <input type="hidden" name="token_cat" value="{{$token_cat}}" />     
   <input type="hidden" name="m" value="dPhospi" />
@@ -210,10 +208,10 @@
            </tr>
            <tr>
              <td>
-               <a href="#1" onclick="Modal.open('detail_med')"><strong>{{tr}}CPrescription._chapitres.med{{/tr}}</strong></a>
+               <a href="#1" onclick="Modal.open('detail_med', {width: '60%', height: '40%'})"><strong>{{tr}}CPrescription._chapitres.med{{/tr}}</strong></a>
              </td>
              <td>
-               <span id="nb_elt_med">0</span> / 3
+               <span id="nb_elt_med">0</span> / 4
                <div style="display: none;" id="detail_med">
                  <table class="tbl">
                    <tr>
@@ -271,8 +269,8 @@
                  </td>
                  <td>
                    <span id="nb_elt_{{$name}}">0</span> / {{$categories_by_chap|@count}}
-                   <div style="display: none; width: 400px;" id="detail_{{$name}}">
-                     <table class="tbl">
+                   <div style="display: none;" id="detail_{{$name}}">
+                     <table class="form">
                        <tr>
                          <th class="title" colspan="4">
                            <button type="button" onclick="selectChap('{{$name}}', oCatField); check_categ = !check_categ;" class="tick" style="float: right;">Tous</button>
@@ -285,17 +283,19 @@
                            </tr>
                            <tr>
                          {{/if}}
-                           <td {{if $smarty.foreach.foreach_cat.last}}colspan="{{$smarty.foreach.foreach_cat.index}}"{{/if}}>
+                           <td {{if $smarty.foreach.foreach_cat.last}}colspan="{{$smarty.foreach.foreach_cat.index}}"{{/if}} class="text">
                            <label title="{{$categorie->_view}}">
                            <input class="{{$name}}" type="checkbox" id="{{$categorie->_id}}" value="{{$categorie->_id}}" onclick="oCatField.toggle(this.value, this.checked);"/> {{$categorie->_view}}<br />
                            </label>
                            </td>
                        {{/foreach}}
                        </tr>
+                       <tr>
+                         <td class="button" colspan="4">
+                           <button type="button" class="save" onclick="check_categ = true; Control.Modal.close(); $('nb_elt_{{$name}}').update($('detail_{{$name}}').select('input:checked').length)">Sélection des catégories</button>
+                         </td>
+                       </tr>
                      </table>
-                     <div style="margin: auto;">
-                       <button type="button" class="save" onclick="check_categ = true; Control.Modal.close(); $('nb_elt_{{$name}}').update($('detail_{{$name}}').select('input:checked').length)">Sélection des catégories</button>
-                     </div>
                    </div>
                  </td>
                </tr>
@@ -363,11 +363,7 @@
                         ($_affectation->sortie < $dateTime_min || $_affectation->sortie > $dateTime_max)}}
                         style="color: #666"
                       {{/if}}>
-                        {{if $conf.soins.show_only_lit_bilan}}
-                          {{$_affectation->_ref_lit->_shortview}}
-                        {{else}}
-                          {{$_affectation->_view}}
-                        {{/if}}
+                        {{$_affectation}}
                       </strong>
                      {{if $sejour->_ref_affectations|@count > 1}}
                      <small
@@ -453,11 +449,7 @@
         <th colspan="6" class="text title">
           <span style="float: left">
             {{if !$mode_urgences}}
-              {{if !$conf.soins.show_only_lit_bilan}}
-                <strong>{{$lit->_ref_chambre->_view}}</strong>
-                <br />
-              {{/if}}
-              <strong>{{$lit->_shortview}}</strong>
+              <strong>{{$lit}}</strong>
             {{/if}}
           </span>
           <span style="float: right">
