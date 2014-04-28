@@ -158,6 +158,7 @@ class CDestinataire {
       $dest = new CDestinataire("praticien");
       $dest->nom = "Dr " . $chir->_user_last_name . " " . $chir->_user_first_name;
       $dest->email = $chir->_user_email;
+      $dest->_guid_object = "CMedecin-$chir->_id";
       self::$destByClass[$sejour->_class][] = $dest;
     }
     

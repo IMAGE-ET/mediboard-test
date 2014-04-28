@@ -14,22 +14,18 @@ window.saving_doc = false;
 document.title = "{{$compte_rendu->_ref_object}} - {{$compte_rendu->nom}}";
 
 function openCorrespondants(compte_rendu_id, object_guid, show_modal) {
-  var url = new Url("compteRendu", "ajax_edit_correspondants_courrier");
-  url.addParam("compte_rendu_id", compte_rendu_id);
-  url.addParam("object_guid", object_guid);
-  url.requestUpdate("correspondants_courrier", {onComplete: function() {
-    // Dans le cas où on est déconnecté lors de l'ouverture de la modale,
-    // afficher un bouton afin de fermer la modale
-    if (!$('correspondants_area')) {
-      var closeButton  = DOM.button({type: "button", className: "close", onClick: "Control.Modal.close()"}, $T('Close'));
-      closeButton.innerHTML = $T('Close');
-      $("correspondants_courrier").insert({bottom: closeButton })
-    }
+  if (!$('correspondants_area')) {
+    var url = new Url("compteRendu", "ajax_edit_correspondants_courrier");
+    url.addParam("compte_rendu_id", compte_rendu_id);
+    url.addParam("object_guid", object_guid);
+    url.requestUpdate("correspondants_courrier", function() {
+      Control.Modal.position();
+    });
+  }
+  if (show_modal) {
+    Modal.open($("correspondants_courrier"));
+  }
 
-    if (show_modal) {
-      Modal.open($("correspondants_courrier"));
-    }
-  } });
 }
 
 function playField(element, class_name, editor_element, name) {
