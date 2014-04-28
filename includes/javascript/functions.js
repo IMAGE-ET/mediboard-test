@@ -576,8 +576,16 @@ var ViewPort = {
   
     // Position Top de la div, hauteur de la fenetre,
     // puis calcul de la taille de la div
-    var pos       = element.cumulativeOffset().top;
-    var winHeight = window.getInnerDimensions().height;
+    var pos = element.cumulativeOffset().top;
+    var winHeight, modal;
+    if (modal = element.up('.modal')) {
+      winHeight = modal.getDimensions().height;
+      pos = pos - modal.cumulativeOffset().top;
+    }
+    else {
+      winHeight = window.getInnerDimensions().height;
+    }
+
     element.style.overflowY = "auto";
     element.style.overflowX = "hidden";
     element.style.height = ((winHeight - pos) * pct - 10) + "px";
@@ -1247,7 +1255,7 @@ var Modal = {
 
     // Wrap the content if not already done (modal windows launched more than once)
     if (!container._alreadyWrapped) {
-      var content = DOM.div({className: "content"});
+      var content = DOM.div({className: "content content_modal"});
 
       if (options.align) {
         style.textAlign = options.align;
@@ -1260,7 +1268,7 @@ var Modal = {
       content.update(container);
 
       // Decoration preparing
-      var titleElement = DOM.div({className: "title"},
+      var titleElement = DOM.div({className: "title", id: 'title_modal'},
         DOM.span({className: "left"}, options.title),
         DOM.span({className: "right"})
       );
