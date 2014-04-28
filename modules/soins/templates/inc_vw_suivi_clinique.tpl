@@ -1,4 +1,6 @@
 {{assign var=patient value=$sejour->_ref_patient}}
+{{assign var=pass_to_confirm value="dPplanningOp CSejour pass_to_confirm"|conf:"CGroups-$g"}}
+
 {{mb_script module=patients script=correspondant ajax=true}}
 {{mb_script module=system script=alert ajax=true}}
 
@@ -35,16 +37,17 @@
 
   toggleAutorisation = function(status) {
     var isPraticien = "{{$app->_ref_user->isPraticien()}}";
+    var pass_to_confirm = "{{$pass_to_confirm}}";
     var form = getForm("edit-sejour-frm");
 
     if (status == 1) {
-      if (isPraticien == "1") {
+      if (isPraticien == "1" || pass_to_confirm == "0") {
         $V(form.confirme_user_id, User.id);
       }
       modal("confirmSortieModal", {width: "410px", height: "290px"});
     }
     else {
-      if (isPraticien == "1") {
+      if (isPraticien == "1" || pass_to_confirm == "0") {
         $V(form.confirme, "");
         $V(form.confirme_user_id, "");
         return form.onsubmit();
@@ -72,7 +75,7 @@
     {{/if}}
 
     var form = getForm("confirmSortie");
-    {{if !$app->_ref_user->isPraticien()}}
+    {{if !$app->_ref_user->isPraticien() && $pass_to_confirm}}
       var url = new Url("mediusers", "ajax_users_autocomplete");
       url.addParam("input_field", form._user_view.name);
       url.autoComplete(form._user_view, null, {
@@ -113,7 +116,7 @@
           </td>
         </tr>
         </tbody>
-      {{if !$app->_ref_user->isPraticien()}}
+      {{if !$app->_ref_user->isPraticien() && $pass_to_confirm}}
         <tr>
           <th>Utilisateur</th>
           <td>
