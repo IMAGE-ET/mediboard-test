@@ -79,7 +79,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     // Traitement du message des erreurs
     $comment = "";
     $object  = null;
-    
+
     $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
     $exchange_hl7v2->_ref_sender->loadConfigValues();
     $sender = $this->_ref_sender = $exchange_hl7v2->_ref_sender;
@@ -365,7 +365,9 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
    * @return string
    */
   function getObservationValue(DOMNode $node) {
-    return $this->queryTextNode("OBX.5", $node);
+    $observation = $this->queryTextNode("OBX.5", $node);
+    $message_object = $this->_ref_exchange_hl7v2->getMessage();
+    return $message_object->unescape($observation);
   }
 
   /**
