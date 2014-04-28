@@ -601,6 +601,12 @@ class CHL7v2MessageXML extends CMbXMLDocument {
           $where[] = $ds->prepare("adeli = %", $object->adeli);
         }
 
+        // Dans le cas où le praticien recherché par son ADELI ou RPPS est multiple
+        if ($object->countList($where, null, $ljoin) > 1) {
+          $ljoin["users"] = "users_mediboard.user_id = users.user_id";
+          $where[]        = $ds->prepare("users.user_last_name = %" , $last_name);
+        }
+
         $object->loadObject($where, null, null, $ljoin);
 
         if ($object->_id) {

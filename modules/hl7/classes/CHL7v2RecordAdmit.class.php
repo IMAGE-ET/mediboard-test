@@ -1,22 +1,23 @@
 <?php
 /**
  * $Id$
- *
+ * 
  * @package    Mediboard
  * @subpackage hl7
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @version    $Revision$
  */
 
 /**
- * Class CHL7v2RecordAdmit
+ * Class CHL7v2RecordAdmit 
  * Record admit, message XML HL7
  */
 class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   static $event_codes = array ("A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10", "A11", "A12", "A13", "A14", "A15",
-    "A16", "A21", "A22", "A25", "A26", "A27", "A32", "A33", "A38", "A45", "A50", "A52", "A53", "A54", "A55", "Z80", "Z81", "Z84", "Z85", "Z99");
+    "A16", "A21", "A22", "A25", "A26", "A27", "A32", "A33", "A38", "A52", "A53", "A54", "A55", "Z80", "Z81", "Z84", "Z85", "Z99");
 
+  /** @var CConsultation|CRPU|CSejour */
   public $_object_found_by_vn;
 
   /**
@@ -28,17 +29,17 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $data  = parent::getContentNodes();
 
     $sender = $this->_ref_sender;
-
+    
     $this->queryNodes("NK1", null, $data, true);
-
-    $this->queryNodes("ROL", null, $data, true);
-
+    
+    $this->queryNodes("ROL", null, $data, true);    
+    
     $PV1 = $this->queryNode("PV1", null, $data, true);
 
     $data["admitIdentifiers"] = $this->getAdmitIdentifiers($PV1, $sender);
-
+    
     $this->queryNode("PV2", null, $data, true);
-
+    
     // Traitement des segments spécifiques extension française PAM
     if ($this->_is_i18n == "FR" || $sender->_configs["iti31_historic_movement"]) {
       $this->queryNode("ZBE", null, $data, true);
@@ -46,31 +47,31 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     if ($this->_is_i18n == "FR") {
       $this->queryNode("ZFP", null, $data, true);
-
+      
       $this->queryNode("ZFV", null, $data, true);
-
+      
       $this->queryNode("ZFM", null, $data, true);
-
+      
       $this->queryNode("ZFD", null, $data, true);
     }
-
+    
     $this->queryNodes("OBX", null, $data, true);
-
+    
     $this->queryNodes("GT1", null, $data, true);
-
+    
     return $data;
   }
 
   /**
    * Handle event
    *
-   * @param CHL7Acknowledgment $ack        Acknowledgement
-   * @param CPatient           $newPatient Person
-   * @param array              $data       Nodes data
+   * @param CHL7v2Acknowledgment $ack        Acknowledgement
+   * @param CPatient             $newPatient Person
+   * @param array                $data       Nodes data
    *
    * @return null|string
    */
-  function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
+  function handle(CHL7v2Acknowledgment $ack, CPatient $newPatient, $data) {
     $event_temp = $ack->event;
 
     $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
@@ -88,23 +89,23 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $hl7v2_record_person = new CHL7v2RecordPerson();
     $hl7v2_record_person->_ref_exchange_hl7v2 = $exchange_hl7v2;
     $msg_ack = $hl7v2_record_person->handle($ack, $newPatient, $data);
-
+    
     // Retour de l'acquittement si erreur sur le traitement du patient
     if ($exchange_hl7v2->statut_acquittement == "AR") {
       return $msg_ack;
     }
-
+        
     // Traitement du séjour
     $ack = new CHL7v2Acknowledgment($event_temp);
     $ack->message_control_id = $data['identifiantMessage'];
     $ack->_ref_exchange_hl7v2  = $exchange_hl7v2;
-
+   
     $newVenue = new CSejour();
-
+    
     // Affectation du patient
-    $newVenue->patient_id = $newPatient->_id;
+    $newVenue->patient_id = $newPatient->_id; 
     $newVenue->loadRefPatient();
-
+    
     // Affectation de l'établissement
     $newVenue->group_id = $sender->group_id;
 
@@ -113,47 +114,92 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (!method_exists($this, $function_handle)) {
       return $exchange_hl7v2->setAckAR($ack, "E006", null, $newVenue);
     }
-
+    
     return $this->$function_handle($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A01 - admit / visit notification
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA01(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création possible
     return $this->handleA05($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A02 - transfer a patient
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA02(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_hl7v2->setAckAR($ack, "E204", null, $newVenue);
     }
-
+    
     // Récupérer données de la mutation
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A03 - discharge/end visit
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA03(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_hl7v2->setAckAR($ack, "E204", null, $newVenue);
     }
-
+    
     // Récupérer données de la sortie
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A04 - register a patient
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA04(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création possible
     return $this->handleA05($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A05 - pre-admit a patient
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA05(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création possible
     $_modif_sejour = false;
-
+    
     $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
     $sender         = $this->_ref_sender;
-
+    
     $venueRI       = CValue::read($data['admitIdentifiers'], "RI");
     //$venueRISender = CValue::read($data['admitIdentifiers'], "RI_Sender");
     $venueNPA      = CValue::read($data['admitIdentifiers'], "NPA");
@@ -161,35 +207,35 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $venueAN       = $this->getVenueAN($sender, $data);
 
     $NDA = new CIdSante400();
-
+    
     $sender_purge_idex_movements = $sender->_configs["purge_idex_movements"];
     if ($venueAN) {
       $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
     }
-
+  
     // NDA non connu (non fourni ou non retrouvé)
     if (!$NDA->_id) {
       // Aucun NDA fourni / Association du NDA
       $code_NDA = !$venueAN ? "I225" : "I222";
-
+      
       $found = false;
-
+      
       // NPA fourni
       if (!$found && $venueNPA) {
         /* @todo Gérer ce cas */
         $venueRI = $venueNPA;
       }
-
+      
       // VN fourni
       if (!$found && $venueVN && !$sender_purge_idex_movements) {
         // Le champ PV1.2 conditionne le remplissage et l'interprétation de PV1.19
         $this->getSejourByVisitNumber($newVenue, $data);
         if ($newVenue->_id) {
           $found = true;
-
+          
           // Mapping du séjour
           $this->mappingVenue($data, $newVenue);
-
+          
           // Notifier les autres destinataires autre que le sender
           $newVenue->_eai_initiateur_group_id = $sender->group_id;
           // Pas de génération de NDA
@@ -200,25 +246,25 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
             if ($newVenue->_collisions) {
               return $exchange_hl7v2->setAckAR($ack, "E213", $msgVenue, reset($newVenue->_collisions));
             }
-
+            
             return $exchange_hl7v2->setAckAR($ack, "E201", $msgVenue, $newVenue);
           }
-
+                    
           $code_NDA      = "A222";
           $_modif_sejour = true;
         }
       }
-
+      
       // RI fourni
       if (!$found && $venueRI) {
         // Recherche du séjour par son RI
         if ($newVenue->load($venueRI)) {
           // Mapping du séjour
           $this->mappingVenue($data, $newVenue);
-
+          
           // Le séjour retrouvé est-il différent que celui du message ?
           /* @todo voir comment faire (même patient, même praticien, même date ?) */
-
+          
           // Notifier les autres destinataires autre que le sender
           $newVenue->_eai_initiateur_group_id = $sender->group_id;
           // Pas de génération de NDA
@@ -229,34 +275,34 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
             if ($newVenue->_collisions) {
               return $exchange_hl7v2->setAckAR($ack, "E213", $msgVenue, reset($newVenue->_collisions));
             }
-
+            
             return $exchange_hl7v2->setAckAR($ack, "E201", $msgVenue, $newVenue);
           }
-
+                    
           $code_NDA      = "I221";
-          $_modif_sejour = true;
+          $_modif_sejour = true; 
         }
         // Séjour non retrouvé par son RI
         else {
           $code_NDA = "I220";
-        }
+        }  
       }
-
+      
       if (!$newVenue->_id) {
         // Mapping du séjour
         $this->mappingVenue($data, $newVenue);
         // Séjour retrouvé ?
         if (CAppUI::conf("hl7 strictSejourMatch")) {
-          // Recherche d'un num dossier déjà existant pour cette venue
-          if ($newVenue->loadMatchingSejour(null, true, false)) {
+          // Recherche d'un num dossier déjà existant pour cette venue 
+          if ($newVenue->loadMatchingSejour(null, true, false)) {                 
             $code_NDA     = "A221";
             $_modif_sejour = true;
           }
         }
         else {
-          // Valuer "entree" et "sortie"
+          // Valuer "entree" et "sortie" 
           $newVenue->updatePlainFields();
-
+          
           $collision = $newVenue->getCollisions();
 
           if (count($collision) == 1) {
@@ -269,7 +315,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
         // Mapping du séjour
         $newVenue = $this->mappingVenue($data, $newVenue);
-
+        
         // Notifier les autres destinataires autre que le sender
         $newVenue->_eai_initiateur_group_id = $sender->group_id;
         // Pas de génération de NDA
@@ -280,11 +326,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           if ($newVenue->_collisions) {
             return $exchange_hl7v2->setAckAR($ack, "E213", $msgVenue, reset($newVenue->_collisions));
           }
-
+          
           return $exchange_hl7v2->setAckAR($ack, "E201", $msgVenue, $newVenue);
         }
       }
-
+      
       if ($msgNDA = CEAISejour::storeNDA($NDA, $newVenue, $sender)) {
         return $exchange_hl7v2->setAckAR($ack, "E202", $msgNDA, $newVenue);
       }
@@ -292,14 +338,14 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       if ($msgNRA = $this->getAlternateVisitID($data["PV1"], $newVenue)) {
         return $exchange_hl7v2->setAckAR($ack, "E214", $msgNRA, $newVenue);
       }
-
+      
       // Création du VN, voir de l'objet
       if ($msgVN = $this->createObjectByVisitNumber($newVenue, $data)) {
         return $exchange_hl7v2->setAckAR($ack, "E210", $msgVN, $newVenue);
       }
-
+      
       $codes = array (($_modif_sejour ? "I202" : "I201"), $code_NDA);
-
+      
       $comment  = CEAISejour::getComment($newVenue);
       $comment .= CEAISejour::getComment($NDA);
     }
@@ -312,15 +358,15 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
       // RI non fourni
       if (!$venueRI) {
-        $code_NDA = "I223";
+        $code_NDA = "I223"; 
       }
       else {
         $tmpVenue = new CSejour();
         // RI connu
         if ($tmpVenue->load($venueRI)) {
           if ($tmpVenue->_id != $NDA->object_id) {
-            $comment = "L'identifiant source fait référence au séjour : $NDA->object_id et l'identifiant cible au séjour : $tmpVenue->_id.";
-
+            $comment = "L'id source fait référence au séjour : $NDA->object_id et l'id cible au séjour : $tmpVenue->_id.";
+            
             return $exchange_hl7v2->setAckAR($ack, "E230", $comment, $newVenue);
           }
           $code_NDA = "I224";
@@ -330,7 +376,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           $code_NDA = "A220";
         }
       }
-
+      
       // Notifier les autres destinataires autre que le sender
       $newVenue->_eai_initiateur_group_id = $sender->group_id;
       // On ne check pas la cohérence des dates des consults/intervs
@@ -340,7 +386,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         if ($newVenue->_collisions) {
           return $exchange_hl7v2->setAckAR($ack, "E213", $msgVenue, reset($newVenue->_collisions));
         }
-
+        
         return $exchange_hl7v2->setAckAR($ack, "E201", $msgVenue, $newVenue);
       }
 
@@ -348,12 +394,12 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       if ($msgVN = $this->createObjectByVisitNumber($newVenue, $data)) {
         return $exchange_hl7v2->setAckAR($ack, "E210", $msgVN, $newVenue);
       }
-
+            
       $codes = array ("I202", $code_NDA);
-
+      
       $comment = CEAISejour::getComment($newVenue);
     }
-
+    
     // Mapping du mouvement
     if ($sender_purge_idex_movements) {
       // On recherche un mouvement de l'event (A05/A01/A04)
@@ -362,7 +408,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $movement->original_trigger_code = $this->_ref_exchange_hl7v2->code;
       $movement->cancel                = 0;
       $movement->loadMatchingObject();
-
+      
       // Si on a un mouvement alors on annule tous les autres
       if ($movement->_id) {
         foreach ($newVenue->loadRefsMovements() as $_movement) {
@@ -374,12 +420,12 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
             $last_id400->last_update = CMbDT::dateTime();
             $last_id400->store();
           }
-
+          
           // On annule le mouvement
           $_movement->cancel = 1;
           $_movement->store();
         }
-      }
+      }      
     }
 
     $return_movement = $this->mapAndStoreMovement($ack, $newVenue, $data);
@@ -394,7 +440,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return $exchange_hl7v2->setAckAR($ack, "E208", $return_affectation, $newVenue);
     }
     $affectation = $return_affectation;
-
+    
     // Affectation de l'affectation au mouvement
     if ($movement && $affectation && $affectation->_id) {
       $movement->affectation_id = $affectation->_id;
@@ -405,42 +451,78 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if ($return_grossesse = $this->storeGrossesse($newVenue)) {
       return $exchange_hl7v2->setAckAR($ack, "E211", $return_grossesse, $newVenue);
     }
-
+    
     // Dans le cas d'une naissance
     if ($return_naissance = $this->mapAndStoreNaissance($newVenue, $data)) {
       return $exchange_hl7v2->setAckAR($ack, "E212", $return_naissance, $newVenue);
     }
-
+    
     return $exchange_hl7v2->setAckAA($ack, $codes, $comment, $newVenue);
   }
 
+  /**
+   * Handle event A06 - change an outpatient to an inpatient
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA06(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_hl7v2->setAckAR($ack, "E204", null, $newVenue);
     }
-
+    
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A07 - change an inpatient to an outpatient
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA07(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_hl7v2->setAckAR($ack, "E204", null, $newVenue);
     }
-
+    
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A08 - update patient information
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA08(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_hl7v2->setAckAR($ack, "E204", null, $newVenue);
     }
-
+    
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A11 - cancel admit / visit notification
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA11(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
@@ -451,31 +533,67 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A12 - cancel transfer
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA12(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_hl7v2->setAckAR($ack, "E204", null, $newVenue);
     }
-
+    
     // Suppression de l'affectation
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A13 - cancel discharge / end visit
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA13(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_hl7v2->setAckAR($ack, "E204", null, $newVenue);
     }
-
+    
     // Suppression sortie réelle, mode de sortie, ...
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A14 - pending admit
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA14(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création possible
     return $this->handleA05($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A15 - pending transfer
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA15(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
@@ -485,15 +603,33 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A16 - pending discharge
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA16(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_hl7v2->setAckAR($ack, "E204", null, $newVenue);
     }
-
+    
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A21 - patient goes on a "leave of absence"
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA21(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
@@ -503,6 +639,15 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A22 - patient returns from a "leave of absence"
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA22(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
@@ -512,15 +657,33 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A25 - cancel pending discharge
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA25(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_hl7v2->setAckAR($ack, "E204", null, $newVenue);
     }
-
+    
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A26 - cancel pending transfer
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA26(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
@@ -530,6 +693,15 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A27 - cancel pending admit
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA27(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
@@ -539,15 +711,33 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A38 - cancel pre-admit
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA38(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_hl7v2->setAckAR($ack, "E204", null, $newVenue);
     }
-
+    
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A52 - cancel leave of absence for a patient
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA52(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
@@ -557,6 +747,15 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A53 - cancel patient returns from a leave of absence
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA53(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
@@ -566,171 +765,255 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A54 - change attending doctor
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA54(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_hl7v2->setAckAR($ack, "E204", null, $newVenue);
     }
-
+    
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event A55 - cancel change attending doctor
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleA55(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_hl7v2->setAckAR($ack, "E204", null, $newVenue);
     }
-
+    
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event Z80 - changement d'UF médicale
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleZ80(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_hl7v2->setAckAR($ack, "E204", null, $newVenue);
     }
-
+    
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event Z80 - annulation changement d'UF médicale
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleZ81(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_hl7v2->setAckAR($ack, "E204", null, $newVenue);
     }
-
+    
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event Z84 - changement d'UF de soins
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleZ84(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_hl7v2->setAckAR($ack, "E204", null, $newVenue);
     }
-
+    
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event Z85 - annulation changement d'UF de soins
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleZ85(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_hl7v2->setAckAR($ack, "E204", null, $newVenue);
     }
-
+    
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
+  /**
+   * Handle event Z99 - admit information update
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function handleZ99(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_hl7v2->setAckAR($ack, "E204", null, $newVenue);
     }
-
+    
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
 
-  function trashNDA(CSejour $newVenue, CInteropSender $sender) {
+  /**
+   * Trash NDA
+   *
+   * @return bool
+   */
+  function trashNDA() {
     return true;
   }
 
+  /**
+   * Récupération du séjour par le numéro de visite
+   *
+   * @param CSejour $newVenue Admit
+   * @param array   $data     Datas
+   *
+   * @return bool
+   */
   function getSejourByVisitNumber(CSejour $newVenue, $data) {
     $sender  = $this->_ref_sender;
     $venueVN = CValue::read($data['admitIdentifiers'], "VN");
-
+        
     $where = $ljoin = array();
     $where["id_sante400.tag"]   = " = '$sender->_tag_visit_number'";
     $where["id_sante400.id400"] = " = '$venueVN'";
-
+           
     switch ($this->queryTextNode("PV1.2", $data["PV1"])) {
       // Identifie la venue pour actes et consultation externe
       case 'O':
         $consultation = new CConsultation();
-
+                
         $ljoin["id_sante400"]              = "id_sante400.object_id = consultation.consultation_id";
         $where["id_sante400.object_class"] = " = 'CConsultation'";
         $where["consultation.type"]        = " != 'chimio'";
-
+        
         $consultation->loadObject($where, null, null, $ljoin);
         // Nécessaire pour savoir quel objet créé en cas de besoin
         $this->_object_found_by_vn = $consultation;
-
+        
         if (!$consultation->_id) {
           return false;
         }
-
+        
         $newVenue->load($consultation->sejour_id);
-
+        
         return true;
-      // Identifie une séance
+      // Identifie une séance 
       case 'R':
         $consultation = new CConsultation();
-
+                
         $ljoin["id_sante400"]              = "id_sante400.object_id = consultation.consultation_id";
-        $where["id_sante400.object_class"] = " = 'CConsultation'";
+        $where["id_sante400.object_class"] = " = 'CConsultation'"; 
         $where["consultation.type"]        = " = 'chimio'";
-
+        
         $consultation->loadObject($where, null, null, $ljoin);
         // Nécessaire pour savoir quel objet créé en cas de besoin
         $this->_object_found_by_vn = $consultation;
-
+        
         if (!$consultation->_id) {
           return false;
         }
-
+        
         $newVenue->load($consultation->sejour_id);
-
+        
         return true;
       // Identifie le n° de passage aux urgences
       case 'E':
         $rpu = new CRPU();
-
+        
         $ljoin["id_sante400"]              = "id_sante400.object_id = rpu.rpu_id";
-        $where["id_sante400.object_class"] = " = 'CRPU'";
-
+        $where["id_sante400.object_class"] = " = 'CRPU'"; 
+        
         $rpu->loadObject($where, null, null, $ljoin);
         // Nécessaire pour savoir quel objet créé en cas de besoin
         $this->_object_found_by_vn = $rpu;
-
+        
         if (!$rpu->_id) {
           return false;
         }
-
+        
         $newVenue->load($rpu->sejour_id);
-
+        
         return true;
       // Identifie le séjour ou hospitalisation à domicile
-      default:
-        $idexVisitNumber = CIdSante400::getMatch("CSejour", $sender->_tag_visit_number, $venueVN);
+      default:      
+        $idexVisitNumber = CIdSante400::getMatch("CSejour", $sender->_tag_visit_number, $venueVN);  
         $this->_object_found_by_vn = $newVenue;
         if (!$idexVisitNumber->_id) {
           return false;
         }
-
+        
         $newVenue->load($idexVisitNumber->object_id);
         $this->_object_found_by_vn = $newVenue;
-
+        
         return true;
     }
   }
 
+  /**
+   * Création de l'objet par son numéro de visite
+   *
+   * @param CSejour $newVenue Admit
+   * @param array   $data     Datas
+   *
+   * @return null|string|void
+   */
   function createObjectByVisitNumber(CSejour $newVenue, $data) {
     $venueVN = CValue::read($data['admitIdentifiers'], "VN");
     if (!$venueVN) {
-      return;
+      return null;
     }
-
+    
     $this->getSejourByVisitNumber($newVenue, $data);
     if (!$this->_object_found_by_vn) {
-      return;
+      return null;
     }
-
+    
     $object_found_by_vn = $this->_object_found_by_vn;
-    // Création de l'objet ?
+    // Création de l'objet ? 
     if (!$object_found_by_vn->_id) {
       if (!CAppUI::conf("smp create_object_by_vn")) {
-        return;
+        return null;
       }
-
+            
       $where = array();
       $where["sejour_id"] = " = '$newVenue->_id'";
       $object_found_by_vn->sejour_id = $newVenue->_id;
@@ -750,30 +1033,29 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         case 'E':
           $object_found_by_vn->_patient_id = $newVenue->patient_id;
           $object_found_by_vn->_entree     = $newVenue->entree;
-          $object_found_by_vn->_group_id   = $newVenue->group_id;
 
           break;
-      }
-
+      }  
+      
       $count_list = $object_found_by_vn->countList($where);
       if ($count_list > 1) {
         /* @todo voir comment gérer ceci ! */
-        return;
+        return null;
       }
-
-      if ($object_found_by_vn instanceof CConsultation) {
+      
+      if ($object_found_by_vn instanceof CConsultation) {        
         $datetime = $this->queryTextNode("EVN.6/TS.1", $data["EVN"]);
-
+        
         if ($data["PV2"]) {
           $object_found_by_vn->motif = $this->queryTextNode("PV2.12", $data["PV2"]);
         }
-
+        
         // Création de la consultation
         if ($msg = $object_found_by_vn->createByDatetime($datetime, $newVenue->praticien_id, $newVenue->patient_id)) {
           return $msg;
         }
       }
-
+      
       // Dans le cas où l'on doit créer l'objet
       if (!$object_found_by_vn->_id) {
         if ($msg = $object_found_by_vn->store()) {
@@ -781,41 +1063,49 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         }
       }
     }
-
+    
     // On affecte le VN
     $sender       = $this->_ref_sender;
     $object_class = $object_found_by_vn->_class;
     $object_id    = $object_found_by_vn->_id;
-
+      
     $idexVN = CIdSante400::getMatch($object_class, $sender->_tag_visit_number, $venueVN, $object_id);
     // L'idex est déjà associé sur notre objet
     if ($idexVN->_id) {
-      return;
+      return null;
     }
-
+    
     // Création de l'idex
     $idexVN->last_update = CMbDT::dateTime();
 
     return $idexVN->store();
   }
 
+  /**
+   * Recherche du séjour par différents identifiants possibles
+   *
+   * @param CSejour $newVenue Admit
+   * @param array   $data     Datas
+   *
+   * @return bool
+   */
   function admitFound(CSejour $newVenue, $data) {
     $sender       = $this->_ref_sender;
-
+    
     $venueRI       = CValue::read($data['admitIdentifiers'], "RI");
     //$venueRISender = CValue::read($data['admitIdentifiers'], "RI_Sender");
     $venueVN       = CValue::read($data['admitIdentifiers'], "VN");
     //$venueNPA      = CValue::read($data['admitIdentifiers'], "NPA");
     $venueAN       = $this->getVenueAN($sender, $data);
-
+    
     $NDA = new CIdSante400();
     if ($venueAN) {
       $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
     }
-
+    
     if ($NDA->_id) {
       $newVenue->load($NDA->object_id);
-
+      
       return true;
     }
 
@@ -825,21 +1115,30 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
       return true;
     }
-
+    
     if ($venueVN) {
       return $this->getSejourByVisitNumber($newVenue, $data);
     }
-
+    
     return false;
   }
 
+  /**
+   * Mapping et enregistrement de la venue
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return string
+   */
   function mapAndStoreVenue(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
     $sender         = $this->_ref_sender;
-
+    
     // Mapping du séjour
     $this->mappingVenue($data, $newVenue);
-
+    
     // Notifier les autres destinataires autre que le sender
     $newVenue->_eai_initiateur_group_id = $sender->group_id;
     // On ne check pas la cohérence des dates des consults/intervs
@@ -847,14 +1146,14 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if ($msgVenue = $newVenue->store()) {
       return $exchange_hl7v2->setAckAR($ack, "E201", $msgVenue, $newVenue);
     }
-
+    
     // Mapping du mouvement
     $return_movement = $this->mapAndStoreMovement($ack, $newVenue, $data);
     if (is_string($return_movement)) {
       return $exchange_hl7v2->setAckAR($ack, "E206", $return_movement, $newVenue);
     }
     $movement = $return_movement;
-
+    
     // Mapping de l'affectation
     $return_affectation = $this->mapAndStoreAffectation($newVenue, $data, $movement);
     if (is_string($return_affectation)) {
@@ -870,23 +1169,31 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       //  return $exchange_hl7v2->setAckAR($ack, "E208", $msg, $newVenue);
       //}
     }
-
+    
     // Dans le cas d'une grossesse
     if ($return_grossesse = $this->storeGrossesse($newVenue)) {
       return $exchange_hl7v2->setAckAR($ack, "E211", $return_grossesse, $newVenue);
     }
-
+    
     // Création du VN, voir de l'objet
     if ($msgVN = $this->createObjectByVisitNumber($newVenue, $data)) {
       return $exchange_hl7v2->setAckAR($ack, "E210", $msgVN, $newVenue);
     }
-
+    
     $codes   = array ("I202", "I226");
     $comment = CEAISejour::getComment($newVenue);
-
+    
     return $exchange_hl7v2->setAckAA($ack, $codes, $comment, $newVenue);
   }
 
+  /**
+   * Mapping de la venue
+   *
+   * @param array   $data     Datas
+   * @param CSejour $newVenue Admit
+   *
+   * @return CSejour
+   */
   function mappingVenue($data, CSejour $newVenue) {
     $event_code = $this->_ref_exchange_hl7v2->code;
     // Cas spécifique de certains segments
@@ -921,19 +1228,19 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     // Segment PV1
     $this->getSegment("PV1", $data, $newVenue);
-
+    
     // Segment PV2
     $this->getSegment("PV2", $data, $newVenue);
-
+    
     // Segment ZFD
     $this->getSegment("ZFD", $data, $newVenue);
-
+    
     // Segment ZFM
     $this->getSegment("ZFM", $data, $newVenue);
-
+    
     // Segment ZFP
     $this->getSegment("ZFP", $data, $newVenue);
-
+    
     // Segment ZFV
     $this->getSegment("ZFV", $data, $newVenue);
 
@@ -943,7 +1250,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         $this->getGT1($_GT1, $newVenue);
       }
     }
-
+    
     // Constantes
     if (array_key_exists("OBX", $data)) {
       foreach ($data["OBX"] as $_OBX) {
@@ -954,7 +1261,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Dans le cas où l'on a pas de PV2, la sortie prévue peut-être nulle
     if ($newVenue->entree_reelle && !$newVenue->sortie_prevue) {
       $entree = $newVenue->entree_reelle ? $newVenue->entree_reelle : $newVenue->entree_prevue;
-      $newVenue->sortie_prevue = CMbDT::addDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$newVenue->type).":00:00", $entree);
+
+      $addDatTime = CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$newVenue->type);
+      $newVenue->sortie_prevue = CMbDT::addDateTime($addDatTime.":00:00", $entree);
     }
 
     /* TODO Supprimer ceci après l'ajout des times picker */
@@ -962,17 +1271,26 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $newVenue->_min_entree_prevue = null;
     $newVenue->_hour_sortie_prevue = null;
     $newVenue->_min_sortie_prevue = null;
-
+    
     return $newVenue;
   }
 
+  /**
+   * Mapping et enregistrement du mouvement
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CSejour            $newVenue Admit
+   * @param array              $data     Datas
+   *
+   * @return CMovement|string|null
+   */
   function mapAndStoreMovement(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     if (!array_key_exists("ZBE", $data) || !$data["ZBE"]) {
-      return;
+      return null;
     }
 
     $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
-
+    
     $movement = new CMovement();
     if (!$movement = $this->mappingMovement($data, $newVenue, $movement)) {
       return $exchange_hl7v2->setAckAR($ack, "E206", null, $newVenue);
@@ -981,17 +1299,26 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     return $movement;
   }
 
+  /**
+   * Mapping et enregistrement de l'affectation
+   *
+   * @param CSejour   $newVenue Admit
+   * @param array     $data     Datas
+   * @param CMovement $movement Movement
+   *
+   * @return CAffectation|string|null
+   */
   function mapAndStoreAffectation(CSejour $newVenue, $data, CMovement $movement = null) {
     $sender = $this->_ref_sender;
 
     $PV1_3 = $this->queryNode("PV1.3", $data["PV1"]);
-
+        
     $affectation = new CAffectation();
     $affectation->sejour_id = $newVenue->_id;
-
+    
     // Récupération de la date de réalisation de l'évènement
     $datetime = $this->queryTextNode("EVN.6/TS.1", $data["EVN"]);
-
+    
     $event_code = $this->_ref_exchange_hl7v2->code;
 
     switch ($event_code) {
@@ -1240,23 +1567,30 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if ($msg = $affectation->store()) {
       return $msg;
     }
-
+    
     return $affectation;
   }
 
+  /**
+   * Enregistrement de la grossesse
+   *
+   * @param CSejour $newVenue Admit
+   *
+   * @return null|string|void
+   */
   function storeGrossesse(CSejour $newVenue) {
     $sender = $this->_ref_sender;
 
     if (!$sender->_configs["create_grossesse"]) {
-      return;
+      return null;
     }
 
     if ($newVenue->type_pec != "O") {
-      return;
+      return null;
     }
 
     $grossesse = $newVenue->loadRefGrossesse();
-
+    
     if (!$grossesse->_id) {
       $grossesse->parturiente_id = $newVenue->patient_id;
       $grossesse->group_id       = $newVenue->group_id;
@@ -1265,20 +1599,30 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         return $msg;
       }
     }
-
+     
     $newVenue->grossesse_id = $grossesse->_id;
     // On ne check pas la cohérence des dates des consults/intervs
     $newVenue->_skip_date_consistencies = true;
     if ($msg = $newVenue->store()) {
       return $msg;
     }
+
+    return null;
   }
 
+  /**
+   * Mapping et enregistrement de la naissance
+   *
+   * @param CSejour $newVenue Admit
+   * @param array   $data     Datas
+   *
+   * @return string|null
+   */
   function mapAndStoreNaissance(CSejour $newVenue, $data) {
     if ($this->queryTextNode("PV1.4", $data["PV1"]) != "N") {
-      return;
+      return null;
     }
-
+    
     // Récupération du séjour de la maman
     if (!$mother_AN = $this->getANMotherIdentifier($data["PID"])) {
       return CAppUI::tr("CHL7Event-AA-E227");
@@ -1289,96 +1633,128 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (!$idex_mother->_id) {
       return CAppUI::tr("CHL7Event-AA-E228");
     }
-
+    
     $sejour_mother = new CSejour();
     $sejour_mother->load($idex_mother->object_id);
-
+    
     // Récupération de l'IPP de la maman
     if (!$mother_PI = $this->getPIMotherIdentifier($data["PID"])) {
       return CAppUI::tr("CHL7Event-AA-E229");
     }
-
+    
     if (CIdSante400::getMatch("CPatient", $sender->_tag_patient, $mother_PI)->object_id != $sejour_mother->patient_id) {
       return CAppUI::tr("CHL7Event-AA-E230");
     }
-
+    
     $naissance                   = new CNaissance();
-    $naissance->sejour_enfant_id = $newVenue->_id;
+    $naissance->sejour_enfant_id = $newVenue->_id;    
     $naissance->sejour_maman_id  = $sejour_mother->_id;
     $naissance->grossesse_id     = $sejour_mother->grossesse_id;
     $naissance->loadMatchingObject();
-
+    
     $naissance->rang = $this->queryTextNode("PID.25", $data["PID"]);
-
-    // On récupère l'entrée réelle ssi msg A01 pour indiquer l'heure de la naissance
+        
+    // On récupère l'entrée réelle ssi msg A01 pour indiquer l'heure de la naissance 
     if ($this->_ref_exchange_hl7v2->code == "A01") {
       $naissance->heure = CMbDT::time($this->queryTextNode("PV1.44", $data["PV1"]));
     }
-
+    
     // Notifier les autres destinataires autre que le sender
     $naissance->_eai_initiateur_group_id = $sender->group_id;
-
+    
     return $naissance->store();
   }
 
+  /**
+   * Mapping de l'UF médicale
+   *
+   * @param array $data Datas
+   *
+   * @return CUniteFonctionnelle|null
+   */
   function mappingUFMedicale($data) {
     if (!array_key_exists("ZBE", $data)) {
-      return;
+      return null;
     }
-
+  
     if (!($ZBE_7 = $this->queryNode("ZBE.7", $data["ZBE"]))) {
-      return;
+      return null;
     }
-
+    
     return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_7), "medicale");
   }
 
+  /**
+   * Mapping de l'UF de soins
+   *
+   * @param array $data Datas
+   *
+   * @return CUniteFonctionnelle|null
+   */
   function mappingUFSoins($data) {
     if (!array_key_exists("ZBE", $data)) {
-      return;
+      return null;
     }
-
+  
     if (!($ZBE_8 = $this->queryNode("ZBE.8", $data["ZBE"]))) {
-      return;
+      return null;
     }
 
     return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_8), "soins");
   }
 
+  /**
+   * Mapping du mouvement
+   *
+   * @param array     $data     Datas
+   * @param CSejour   $newVenue Admit
+   * @param CMovement $movement Movement
+   *
+   * @return CMovement|string|null
+   */
   function mappingMovement($data, CSejour $newVenue, CMovement $movement) {
     if (!array_key_exists("ZBE", $data) || !$data["ZBE"]) {
-      return;
+      return null;
     }
 
     // Segment ZBE
     return $this->getZBE($data["ZBE"], $newVenue, $movement);
   }
 
+  /**
+   * Récupération du PV1
+   *
+   * @param DOMNode $node     PV1 Node
+   * @param CSejour $newVenue Admit
+   * @param array   $data     Datas
+   *
+   * @return void
+   */
   function getPV1(DOMNode $node, CSejour $newVenue, $data = array()) {
     // Classe de patient
     $this->getPatientClass($node, $newVenue, $data);
-
+    
     // Type de l'admission
     $this->getAdmissionType($node, $newVenue);
-
+    
     // Médecin responsable
     $this->getAttendingDoctor($node, $newVenue);
-
+    
     // Médecin adressant
     $this->getReferringDoctor($node, $newVenue);
-
+    
     // Discipline médico-tarifaire
     $this->getHospitalService($node, $newVenue);
-
+    
     // Mode d'entrée
     $this->getAdmitSource($node, $newVenue);
-
+    
     // Code tarif su séjour
     $this->getFinancialClass($node, $newVenue);
-
+    
     // Type d'activité, mode de traitement
     $this->getChargePriceIndicator($node, $newVenue);
-
+    
     // Demande de chambre particulière
     $this->getCourtesyCode($node, $newVenue);
 
@@ -1387,7 +1763,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     // Etablissement de destination
     $this->getDischargedToLocation($node, $newVenue);
-
+    
     // Entrée / Sortie réelle du séjour
     $this->getAdmitDischarge($node, $newVenue);
 
@@ -1395,6 +1771,15 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $this->getAlternateVisitID($node, $newVenue);
   }
 
+  /**
+   * Récupération de la classe du patient
+   *
+   * @param DOMNode $node     PV1 Node
+   * @param CSejour $newVenue Admit
+   * @param array   $data     Datas
+   *
+   * @return void
+   */
   function getPatientClass(DOMNode $node, CSejour $newVenue, $data = array()) {
     $patient_class = CHL7v2TableEntry::mapFrom("4", $this->queryTextNode("PV1.2", $node));
 
@@ -1410,6 +1795,14 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $newVenue->type = $type;
   }
 
+  /**
+   * Récupération de la location du patient
+   *
+   * @param DOMNode      $node        PV1 Node
+   * @param CAffectation $affectation Affectation
+   *
+   * @return void
+   */
   function getPL(DOMNode $node, CAffectation $affectation) {
     $sender = $this->_ref_sender;
 
@@ -1458,7 +1851,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         $lit->loadObject($where, null, null, $ljoin);
         $lit->unescapeValues();
 
-        break;
+        break; 
     }
 
     // Affectation du lit
@@ -1469,7 +1862,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Affectation de l'UF hébergement
     $uf = CUniteFonctionnelle::getUF($code_uf, null, $sender->group_id);
     $affectation->uf_hebergement_id = $uf->_id;
-
+    
     // Affectation du service (couloir)
     if (!$affectation->lit_id) {
       $affectation_uf = new CAffectationUniteFonctionnelle();
@@ -1481,15 +1874,31 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
   }
 
+  /**
+   * Récupération du type d'admission
+   *
+   * @param DOMNode $node     PV1 Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
   function getAdmissionType(DOMNode $node, CSejour $newVenue) {
     $admission_type = $this->queryTextNode("PV1.4", $node);
-
+    
     // Gestion de l'accouchement maternité
     if ($admission_type == "L") {
       $newVenue->type_pec = "O";
     }
   }
 
+  /**
+   * Récupération du médecin responsable
+   *
+   * @param DOMNode $node     PV1 Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
   function getAttendingDoctor(DOMNode $node, CSejour $newVenue) {
     $PV17 = $this->query("PV1.7", $node);
 
@@ -1497,12 +1906,12 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if ($newVenue->type == "urg" && !$this->_ref_sender->_configs["handle_PV1_7"]) {
       return;
     }
-
+    
     $mediuser = new CMediusers();
     foreach ($PV17 as $_PV17) {
       $newVenue->praticien_id = $this->getDoctor($_PV17, $mediuser);
     }
-
+    
     // Dans le cas ou la venue ne contient pas de medecin responsable
     // Attribution d'un medecin indeterminé
     if (!$newVenue->praticien_id) {
@@ -1510,38 +1919,59 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
   }
 
+  /**
+   * Création du "médecin" indéterminé
+   *
+   * @return integer
+   */
   function createIndeterminateDoctor() {
     $sender = $this->_ref_sender;
-
+    
     $user    = new CUser();
     $user->user_last_name = CAppUI::conf("hl7 indeterminateDoctor")." $sender->group_id";
     if (!$user->loadMatchingObjectEsc()) {
       $mediuser = new CMediusers();
       $mediuser->_user_last_name = $user->user_last_name;
-
+      
       return $this->createDoctor($mediuser);
-    }
-
+    } 
+      
     return $user->loadRefMediuser()->_id;
   }
 
+  /**
+   * Récupération du médecin adressant
+   *
+   * @param DOMNode $node     PV1 Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
   function getReferringDoctor(DOMNode $node, CSejour $newVenue) {
     $PV1_8 = $this->query("PV1.8", $node);
-
+    
     $medecin = new CMedecin();
     foreach ($PV1_8 as $_PV1_8) {
       $newVenue->adresse_par_prat_id = $this->getDoctor($_PV1_8, $medecin);
     }
   }
 
+  /**
+   * Récupération de la discipline médico-tarifaire
+   *
+   * @param DOMNode $node     PV1 Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
   function getHospitalService(DOMNode $node, CSejour $newVenue) {
     $sender = $this->_ref_sender;
     $PV1_10 = $this->queryTextNode("PV1.10", $node);
-
+    
     if (!$PV1_10) {
       return;
     }
-
+    
     // Hospital Service
     switch ($sender->_configs["handle_PV1_10"]) {
       // idex du service
@@ -1559,11 +1989,19 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
   }
 
+  /**
+   * Récupération du mode d'entrée
+   *
+   * @param DOMNode $node     PV1 Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
   function getAdmitSource(DOMNode $node, CSejour $newVenue) {
     if (!($admit_source = $this->queryTextNode("PV1.14", $node))) {
       return;
     }
-
+    
     $sender = $this->_ref_sender;
 
     // Mode d'entrée personnalisable
@@ -1574,21 +2012,29 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
       $newVenue->mode_entree_id = $mode_entree->_id;
     }
-
+    
     // Admit source
     switch ($sender->_configs["handle_PV1_14"]) {
       // Combinaison du ZFM
       // ZFM.1 + ZFM.3
       case 'ZFM':
-        $newVenue->mode_entree = $admit_source[0];
+        $newVenue->mode_entree = $admit_source[0];        
         if (strlen($admit_source) == 2) {
           $newVenue->provenance = $admit_source[1];
         }
-
+        
         break;
-    }
+    }       
   }
 
+  /**
+   * Récupération du code tarif du séjour
+   *
+   * @param DOMNode $node     PV1 Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
   function getFinancialClass(DOMNode $node, CSejour $newVenue) {
     $sender = $this->_ref_sender;
     if ($sender->_configs["handle_PV1_20"] == "none") {
@@ -1638,24 +2084,32 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $item_liaison->store();
   }
 
+  /**
+   * Récupération du type d'activité, mode de traitement
+   *
+   * @param DOMNode $node     PV1 Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
   function getChargePriceIndicator(DOMNode $node, CSejour $newVenue) {
     $PV1_21 = $this->queryTextNode("PV1.21", $node);
-
+    
     $sender = $this->_ref_sender;
 
     if (!$PV1_21) {
       return;
     }
-
+    
     $charge           = new CChargePriceIndicator();
     $charge->code     = $PV1_21;
     $charge->actif    = 1;
     $charge->group_id = $sender->group_id;
     $charge->loadMatchingObject();
-
+    
     // On affecte le type d'activité reçu sur le séjour
     $newVenue->charge_id = $charge->_id;
-
+    
     // Type PEC
     $newVenue->type_pec = $charge->type_pec;
 
@@ -1665,10 +2119,26 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
   }
 
+  /**
+   * Récupération du demande de chambre particulière
+   *
+   * @param DOMNode $node     PV1 Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
   function getCourtesyCode(DOMNode $node, CSejour $newVenue) {
     $newVenue->chambre_seule = $this->getBoolean($this->queryTextNode("PV1.22", $node));
   }
 
+  /**
+   * Récupération de la circonstance de sortie
+   *
+   * @param DOMNode $node     PV1 Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
   function getDischargeDisposition(DOMNode $node, CSejour $newVenue) {
     // Gestion des circonstances de sortie
     if (!($discharge_disposition = $this->queryTextNode("PV1.36", $node))) {
@@ -1700,50 +2170,72 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
   }
 
+  /**
+   * Récupération de l'établissement de destination
+   *
+   * @param DOMNode $node     PV1 Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
   function getDischargedToLocation(DOMNode $node, CSejour $newVenue) {
     if (!$finess = $this->queryTextNode("PV1.37/DLD.1", $node)) {
       return;
     }
-
+    
     $etab_ext = new CEtabExterne();
     $etab_ext->finess = $finess;
     if (!$etab_ext->loadMatchingObjectEsc()) {
       return;
     }
-
+    
     $newVenue->etablissement_sortie_id = $etab_ext->_id;
   }
 
+  /**
+   * Récupération de la date d'entrée réelle/prévue
+   *
+   * @param DOMNode $node     PV1 Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
   function getAdmitDischarge(DOMNode $node, CSejour $newVenue) {
     $event_code = $this->_ref_exchange_hl7v2->code;
-
+    
     // On récupère l'entrée réelle ssi msg !A05
     if ($event_code != "A05") {
       $newVenue->entree_reelle = $this->queryTextNode("PV1.44", $node);
     }
-
+    
     // On récupére la sortie réelle ssi msg A03 / Z99
     if ($event_code == "A03" || $event_code == "Z99") {
       $newVenue->sortie_reelle = $this->queryTextNode("PV1.45", $node);
     }
-
-    // Cas spécifique de certains segments
-    // A11 : on supprime la date d'entrée réelle
+      
+    // Cas spécifique de certains segments 
+    // A11 : on supprime la date d'entrée réelle 
     if ($event_code == "A11") {
       $newVenue->entree_reelle = "";
     }
-
-    // A13 : on supprime la date de sortie réelle
+    
+    // A13 : on supprime la date de sortie réelle 
     if ($event_code == "A13") {
       $newVenue->sortie_reelle = "";
     }
-
-    // Cas
   }
 
+  /**
+   * Récupération du numéro de visit alternatif
+   *
+   * @param DOMNode $node     PV1 Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return string
+   */
   function getAlternateVisitID(DOMNode $node, CSejour $newVenue) {
     if (!CAppUI::conf("dPplanningOp CSejour use_dossier_rang")) {
-      return;
+      return null;
     }
 
     $tag_NRA = $newVenue->getTagNRA($newVenue->group_id);
@@ -1756,17 +2248,33 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     return $idexNRA->store();
   }
 
-  function getPV2(DOMNode $node, CSejour $newVenue) {
+  /**
+   * Récupération du PV2
+   *
+   * @param DOMNode $node     Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
+  function getPV2(DOMNode $node, CSejour $newVenue) {    
     // Entrée / Sortie prévue du séjour
     $this->getExpectedAdmitDischarge($node, $newVenue);
-
+    
     // Visit description
     $this->getVisitDescription($node, $newVenue);
-
+    
     // Mode de transport d'entrée
     $this->getModeArrivalCode($node, $newVenue);
   }
 
+  /**
+   * Récupération de la d'entrée prévue
+   *
+   * @param DOMNode $node     PV2 Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
   function getExpectedAdmitDischarge(DOMNode $node, CSejour $newVenue) {
     $entree_prevue = $this->queryTextNode("PV2.8", $node);
     $sortie_prevue = $this->queryTextNode("PV2.9", $node);
@@ -1775,9 +2283,14 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $entree_prevue = $newVenue->entree_reelle ? $newVenue->entree_reelle : $newVenue->entree_prevue;
     }
     $newVenue->entree_prevue = $entree_prevue;
-    if ((!$sortie_prevue && !$newVenue->sortie_prevue) || ($sortie_prevue && preg_match("/\d{4}-\d\d-\d\d 00:00:00/", $sortie_prevue))) {
-      $newVenue->sortie_prevue = CMbDT::addDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$newVenue->type).":00:00",
-        $newVenue->entree_reelle ? $newVenue->entree_reelle : $newVenue->entree_prevue);
+    if ((!$sortie_prevue && !$newVenue->sortie_prevue) ||
+        ($sortie_prevue && preg_match("/^\d{4}-\d\d-\d\d( 00:00:00)?$/", $sortie_prevue))
+    ) {
+      $newVenue->sortie_prevue =
+        CMbDT::addDateTime(
+          CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$newVenue->type).":00:00",
+          $newVenue->entree_reelle ? $newVenue->entree_reelle : $newVenue->entree_prevue
+        );
     }
     elseif ($sortie_prevue && preg_match("/\d{4}-\d\d-\d\d \d\d:\d\d:\d\d/", $sortie_prevue)) {
       $newVenue->sortie_prevue = $sortie_prevue;
@@ -1791,12 +2304,12 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (!$newVenue->entree_prevue) {
       $newVenue->entree_prevue = $this->queryTextNode("PV1.44", $this->queryNode("PV1", $parentNode));
     }
-
+    
     if (!$newVenue->sortie_prevue) {
       $newVenue->sortie_prevue = $this->queryTextNode("PV1.45", $this->queryNode("PV1", $parentNode));
     }
-
-    // Si les dates entrées/sorties sont incohérentes
+    
+    // Si les dates entrées/sorties sont incohérentes 
     $sender = $this->_ref_sender;
     if ($sender->_configs["control_date"] == "permissif") {
       $newVenue->entree_prevue = min($newVenue->entree_prevue, $newVenue->sortie_prevue);
@@ -1804,6 +2317,14 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
   }
 
+  /**
+   * Récupération de la description de la visite
+   *
+   * @param DOMNode $node     PV2 Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
   function getVisitDescription(DOMNode $node, CSejour $newVenue) {
     $sender = $this->_ref_sender;
 
@@ -1817,17 +2338,34 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
   }
 
+  /**
+   * Récupération du mode de transport d'entrée
+   *
+   * @param DOMNode $node     PV2 Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
   function getModeArrivalCode(DOMNode $node, CSejour $newVenue) {
     $mode_arrival_code = $this->queryTextNode("PV2.38", $node);
-
+    
     $newVenue->transport = CHL7v2TableEntry::mapFrom("0430", $mode_arrival_code);
   }
 
+  /**
+   * Récupération du segment ZBE
+   *
+   * @param DOMNode   $node     Node
+   * @param CSejour   $newVenue Admit
+   * @param CMovement $movement Movement
+   *
+   * @return CMovement|string|null
+   */
   function getZBE(DOMNode $node, CSejour $newVenue, CMovement $movement) {
     $sender      = $this->_ref_sender;
     $idex_create = false;
     $event_code  = $this->_ref_exchange_hl7v2->code;
-
+    
     $own_movement    = null;
     $sender_movement = null;
     foreach ($this->queryNodes("ZBE.1", $node) as $ZBE_1) {
@@ -1844,25 +2382,25 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       if ($EI_3 == $sender->_configs["assigning_authority_universal_id"]) {
         $sender_movement = $EI_1;
         continue;
-      }
+      }    
     }
 
     if (!$own_movement && !$sender_movement) {
       return "Impossible d'identifier le mouvement";
     }
-
+    
     $movement_id = $own_movement ? $own_movement : $sender_movement;
     if (!$movement_id) {
       return null;
     }
-
+        
     $start_movement_dt = $this->queryTextNode("ZBE.2/TS.1", $node);
     $action            = $this->queryTextNode("ZBE.4", $node);
     $original_trigger  = $this->queryTextNode("ZBE.6", $node);
     if (!$original_trigger) {
       $original_trigger = $event_code;
     }
-
+    
     $movement->sejour_id = $newVenue->_id;
     $movement->original_trigger_code = $original_trigger;
     $movement->cancel    = 0;
@@ -1878,12 +2416,12 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       if (!$movement->_id) {
         return null;
       }
-
+      
       if ($sender_movement) {
         $idexMovement = CIdSante400::getMatch("CMovement", $sender->_tag_movement, $sender_movement);
         if (!$idexMovement->_id) {
           $idex_create = true;
-        }
+        }         
       }
     }
     // ID mouvement provenant d'un système tiers
@@ -1900,7 +2438,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           $movement->loadMatchingObjectEsc();
         }
       }
-
+      
       $movement->movement_type = $newVenue->getMovementType($original_trigger);
     }
 
@@ -1908,29 +2446,37 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (($action == "UPDATE" || $action == "CANCEL") && !$movement->_id) {
       return null;
     }
-
+    
     if ($action == "CANCEL") {
       $movement->cancel = true;
     }
-
+    
     $movement->start_of_movement = $start_movement_dt;
     $movement->last_update = CMbDT::dateTime();
     if ($msg = $movement->store()) {
       return $msg;
     }
-
+    
     if ($idex_create) {
       $idexMovement->last_update = CMbDT::dateTime();
       $idexMovement->object_id   = $movement->_id;
       if ($msg = $idexMovement->store()) {
         return $msg;
-      }
+      } 
     }
-
+    
     return $movement;
   }
 
-  function getZFD(DOMNode $node, CSejour $newVenue) {
+  /**
+   * Récupération du segment ZFD
+   *
+   * @param DOMNode $node     Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
+  function getZFD(DOMNode $node, CSejour $newVenue) {  
     // Date lunaire
     if ($date_lunaire = $this->queryTextNode("ZFD.1", $node)) {
       $patient = $newVenue->_ref_patient;
@@ -1939,73 +2485,144 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
   }
 
-  function getZFM(DOMNode $node, CSejour $newVenue) {
-    // Mode entrée PMSI
+  /**
+   * Récupération du segment ZFM
+   *
+   * @param DOMNode $node     Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
+  function getZFM(DOMNode $node, CSejour $newVenue) {   
+    // Mode entrée PMSI 
     $this->getModeEntreePMSI($node, $newVenue);
-
+    
     // Mode de sortie PMSI
     $this->getModeSortiePMSI($node, $newVenue);
-
+    
     // Mode de provenance PMSI
     $this->getModeProvenancePMSI($node, $newVenue);
-
+    
     // Mode de destination PMSI
     $this->getModeDestinationPMSI($node, $newVenue);
   }
 
+  /**
+   * Récupération du mode d'entrée PMSI
+   *
+   * @param DOMNode $node     ZFM Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
   function getModeEntreePMSI(DOMNode $node, CSejour $newVenue) {
     $newVenue->mode_entree = $this->queryTextNode("ZFM.1", $node);
   }
 
+  /**
+   * Récupération du mode de sortie PMSI
+   *
+   * @param DOMNode $node     ZFM Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
   function getModeSortiePMSI(DOMNode $node, CSejour $newVenue) {
-    $newVenue->mode_sortie = CHL7v2TableEntry::mapFrom("9001", $this->queryTextNode("ZFM.2", $node));
+    $newVenue->mode_sortie = CHL7v2TableEntry::mapFrom("9001", $this->queryTextNode("ZFM.2", $node)); 
   }
 
+  /**
+   * Récupération du mode de provenance PMSI
+   *
+   * @param DOMNode $node     ZFM Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
   function getModeProvenancePMSI(DOMNode $node, CSejour $newVenue) {
     $ZFM_3 = $this->queryTextNode("ZFM.3", $node);
     if ($ZFM_3 == 0) {
-      $ZFM_3 = null;
+      $ZFM_3 = null;  
     }
     $newVenue->provenance = $ZFM_3;
   }
 
+  /**
+   * Récupération du mode de destination PMSI
+   *
+   * @param DOMNode $node     ZFM Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
   function getModeDestinationPMSI(DOMNode $node, CSejour $newVenue) {
     $ZFM_4 = $this->queryTextNode("ZFM.4", $node);
     if ($ZFM_4 == 0) {
-      $ZFM_4 = null;
+      $ZFM_4 = null;  
     }
     $newVenue->destination = $ZFM_4;
   }
 
-  function getZFP(DOMNode $node, CSejour $newVenue) {
+  /**
+   * Récupération du segment ZFP
+   *
+   * @param DOMNode $node     Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
+  function getZFP(DOMNode $node, CSejour $newVenue) {    
     // Catégorie socioprofessionnelle
     if ($csp = $this->queryTextNode("ZFP.2", $node)) {
       $patient = $newVenue->_ref_patient;
       $patient->csp = $csp;
       $patient->store();
-    }
+    }  
   }
 
-  function getZFV(DOMNode $node, CSejour $newVenue) {
+  /**
+   * Récupération du segment ZFV
+   *
+   * @param DOMNode $node     Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
+  function getZFV(DOMNode $node, CSejour $newVenue) {    
     // Etablissement de provenance
     $this->getEtablissementProvenance($node, $newVenue);
   }
 
+  /**
+   * Récupération de l'établissement de provenance
+   *
+   * @param DOMNode $node     ZFV Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
   function getEtablissementProvenance(DOMNode $node, CSejour $newVenue) {
     if (!$finess = $this->queryTextNode("ZFV.1/DLD.1", $node)) {
       return;
     }
-
+    
     $etab_ext = new CEtabExterne();
     $etab_ext->finess = $finess;
     if (!$etab_ext->loadMatchingObjectEsc()) {
       return;
     }
-
+    
     $newVenue->etablissement_entree_id = $etab_ext->_id;
   }
 
+  /**
+   * Récupération du segment GT1
+   *
+   * @param DOMNode $node     Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
   function getGT1(DOMNode $node, CSejour $newVenue) {
-
   }
 }
