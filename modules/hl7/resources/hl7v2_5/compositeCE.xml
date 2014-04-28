@@ -3,7 +3,7 @@
     <name>CE</name>
     <description>Coded Element</description>
     <elements>
-        <field minOccurs="0" maxOccurs="0" length="20">
+        <field minOccurs="0" maxOccurs="0" length="40">
             <name>CE.1</name>
             <description>Identifier</description>
             <datatype>ST</datatype>

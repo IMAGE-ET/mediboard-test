@@ -38,5 +38,6 @@
             </group>
         </group>
         <segment minOccurs="0">DSC</segment>
+        <segment minOccurs="0">ZDS</segment>
     </segments>
 </message>

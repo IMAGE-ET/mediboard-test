@@ -23,7 +23,7 @@
             <description>Observation Sub-id</description>
             <datatype>ST</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="unbounded" length="99999">
+        <field minOccurs="0" maxOccurs="unbounded">
             <name>OBX.5</name>
             <description>Observation Value</description>
             <datatype>ST</datatype>

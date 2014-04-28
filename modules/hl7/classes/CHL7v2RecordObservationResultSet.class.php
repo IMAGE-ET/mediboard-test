@@ -78,15 +78,14 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
   function handle(CHL7Acknowledgment $ack, CPatient $patient, $data) {
     // Traitement du message des erreurs
     $comment = "";
-    $codes   = array();
     $object  = null;
     
     $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
     $exchange_hl7v2->_ref_sender->loadConfigValues();
-    $sender         = $exchange_hl7v2->_ref_sender;
+    $sender = $this->_ref_sender = $exchange_hl7v2->_ref_sender;
 
     $patientPI = CValue::read($data['personIdentifiers'], "PI");
-    $venueAN   = CValue::read($data['personIdentifiers'], "AN");
+    $venueAN   = CValue::read($data["admitIdentifiers"] , "AN");
 
     if (!$patientPI) {
       return $exchange_hl7v2->setAckAR($ack, "E007", null, $patient);
@@ -99,78 +98,152 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     }
     $patient->load($IPP->object_id);
 
+    if (!$venueAN) {
+      return $exchange_hl7v2->setAckAR($ack, "E200", null, $patient);
+    }
+
+    $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
+
+    // Séjour non retrouvé par son NDA
+    if (!$NDA->_id) {
+      return $exchange_hl7v2->setAckAR($ack, "E205", null, $patient);
+    }
+
+    /** @var CSejour $sejour */
+    $sejour = $NDA->loadTargetObject();
+
+    if (!$sejour->_id) {
+      return $exchange_hl7v2->setAckAR($ack, "E220", null, $patient);
+    }
+
+    if ($sejour->patient_id !== $patient->_id) {
+      return $exchange_hl7v2->setAckAR($ack, "E606", null, $patient);
+    }
+
     // Récupération des observations
     foreach ($data["observations"] as $_observation) {
       // Récupération de la date du relevé
       $observation_dt = $this->getOBRObservationDateTime($_observation["OBR"]);
+      $name           = $this->getOBRServiceIdentifier($_observation["OBR"]);
 
-      $NDA = null;
-      if ($venueAN) {
-        $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
-      }
-
-      // Séjour non retrouvé par son NDA
-      if ($NDA && $NDA->_id) {
-        /** @var CSejour $sejour */
-        $sejour = $NDA->loadTargetObject();
-      }
-      else {
-        $where = array(
-          "patient_id" => "= '$patient->_id'",
-          "annule"     => "= '0'",
-        );
-        $sejours = CSejour::loadListForDate(CMbDT::date($observation_dt), $where, null, 1);
-        $sejour = reset($sejours);
-
-        if (!$sejour) {
-          return $exchange_hl7v2->setAckAR($ack, "E205", null);
-        }
-      }
-
-      // Récupération de l'opération courante à la date du relevé
-      $operation = $sejour->loadRefCurrOperation($observation_dt);
-
-      if (!$operation->_id) {
-        return $exchange_hl7v2->setAckAR($ack, "E301", null, $operation);
-      }
-
-      foreach ($_observation["OBX"] as $_OBX) {
+      foreach ($_observation["OBX"] as $key => $_OBX) {
         // OBX.2 : Value type
-        $value_type = $this->getOBXValueType($_OBX);
+        $value_type   = $this->getOBXValueType($_OBX);
+        $date         = $observation_dt ? $observation_dt : $this->getOBXObservationDateTime($_OBX);
+        $praticien_id = $this->getObservationAuthor($_OBX);
+
+        $object = $this->getObjectWithDate($date, $patient, $praticien_id, $sejour);
+        if (!$object) {
+          return $exchange_hl7v2->setAckAR($ack, "E301", null, $patient);
+        }
+
+        $name = $name.$key;
 
         switch ($value_type) {
           // Reference Pointer to External Report
           case "RP" :
-            if (!$this->getReferencePointerToExternalReport($_OBX, $operation)) {
-              return $exchange_hl7v2->setAckAR($ack, $this->codes, null, $operation);
+            if (!$this->getReferencePointerToExternalReport($_OBX, $object, $name)) {
+              return $exchange_hl7v2->setAckAR($ack, $this->codes, null, $object);
             }
 
             break;
 
           // Encapsulated PDF
           case "ED" :
-            if (!$this->getEncapsulatedPDF($_OBX, $patient, $operation)) {
-              return $exchange_hl7v2->setAckAR($ack, $this->codes, null, $operation);
+            if (!$this->getEncapsulatedData($_OBX, $object, $name)) {
+              return $exchange_hl7v2->setAckAR($ack, $this->codes, null, $object);
             }
 
             break;
 
           // Pulse Generator and Lead Observation Results
           case "ST" :  case "CWE" :  case "DTM" :  case "NM" :  case "SN" :
-            if (!$this->getPulseGeneratorAndLeadObservationResults($_OBX, $patient, $operation)) {
-              return $exchange_hl7v2->setAckAR($ack, $this->codes, null, $operation);
+            if (!$this->getPulseGeneratorAndLeadObservationResults($_OBX, $patient, $object)) {
+              return $exchange_hl7v2->setAckAR($ack, $this->codes, null, $object);
             }
 
             break;
 
           // Not supported
           default :
-            return $exchange_hl7v2->setAckAR($ack, "E302", null, $operation);
+            return $exchange_hl7v2->setAckAR($ack, "E302", null, $object);
         }
       }
     }
     
     return $exchange_hl7v2->setAckAA($ack, $this->codes, $comment, $object);
+  }
+
+  /**
+   * Return the object for attach the document
+   *
+   * @param String   $date         date
+   * @param CPatient $patient      patient
+   * @param String   $praticien_id praticien id
+   * @param CSejour  $sejour       sejour
+   *
+   * @return CConsultation|COperation|CSejour
+   */
+  function getObjectWithDate($date, $patient, $praticien_id, $sejour) {
+    //Recherche de la consutlation dans le séjour
+    $date         = CMbDT::date($date);
+    $date_before  = CMbDT::date("- 2 DAY", $date);
+    $consultation = new CConsultation();
+    $where = array(
+      "patient_id"           => "= '$patient->_id'",
+      "annule"               => "= '0'",
+      "plageconsult.date"    => "BETWEEN '$date_before' AND '$date'",
+      "plageconsult.chir_id" => "= '$praticien_id'",
+      "sejour_id"            => "= '$sejour->_id'",
+    );
+
+    $leftjoin = array("plageconsult" => "consultation.plageconsult_id = plageconsult.plageconsult_id");
+    $consultation->loadObject($where, "plageconsult.date DESC", null, $leftjoin);
+
+    //Recherche d'une consultation qui pourrait correspondre
+    if (!$consultation->_id) {
+      unset($where["sejour_id"]);
+      $consultation->loadObject($where, "plageconsult.date DESC", null, $leftjoin);
+    }
+
+    //Consultation trouvé dans un des deux cas
+    if ($consultation->_id) {
+      return $consultation;
+    }
+
+    //Recherche d'une opération dans le séjour
+    $where = array(
+      "sejour.patient_id"  => "= '$patient->_id'",
+      "plagesop.date"      => "BETWEEN '$date_before' AND '$date'",
+      "operations.chir_id" => "= '$praticien_id'",
+      "operations.annulee" => "= '0'",
+      "sejour.sejour_id"   => "= '$sejour->_id'",
+    );
+    $leftjoin = array(
+      "plagesop" => "operations.plageop_id = plagesop.plageop_id",
+      "sejour"   => "operations.sejour_id = sejour.sejour_id",
+    );
+    $operation = new COperation();
+    $operation->loadObject($where, "plagesop.date DESC", null, $leftjoin);
+
+    if ($operation->_id) {
+      return $operation;
+    }
+
+    /*if (!$sejour) {
+      $where = array(
+        "patient_id" => "= '$patient->_id'",
+        "annule"     => "= '0'",
+      );
+      $sejours = CSejour::loadListForDate($date, $where, null, 1);
+      $sejour = reset($sejours);
+
+      if (!$sejour) {
+        return null;
+      }
+    }*/
+
+    return $sejour;
   }
 
   /**
@@ -182,6 +255,17 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
    */
   function getOBRObservationDateTime(DOMNode $node) {
     return $this->queryTextNode("OBR.7", $node);
+  }
+
+  /**
+   * Get observation date time
+   *
+   * @param DOMNode $node DOM node
+   *
+   * @return string
+   */
+  function getOBRServiceIdentifier(DOMNode $node) {
+    return $this->queryTextNode("OBR.4/CE.1", $node);
   }
 
   /**
@@ -296,6 +380,19 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
   }
 
   /**
+   * Return the author of the document
+   *
+   * @param DOMNode $node node
+   *
+   * @return String
+   */
+  function getObservationAuthor(DOMNode $node) {
+    $xcn = $this->queryNode("OBX.16", $node);
+    $mediuser = new CMediusers();
+    return $this->getDoctor($xcn, $mediuser);
+  }
+
+  /**
    * OBX Segment pulse generator and lead observation results
    *
    * @param DOMNode    $OBX       DOM node
@@ -336,25 +433,125 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
   }
 
   /**
-   * OBX Segment with encapsulated PDF
+   * Return the mime type
+   *
+   * @param String $type type
+   *
+   * @return null|string
+   */
+  function getFileType($type) {
+    $file_type = null;
+
+    switch ($type) {
+      case "GIF":
+        $file_type = "image/gif";
+        break;
+      case "JPEG":
+      case "JPG":
+        $file_type = "image/jpeg";
+        break;
+      case "PNG":
+        $file_type = "image/png";
+        break;
+      case "RTF":
+        $file_type = "application/rtf";
+        break;
+      case "HTML":
+        $file_type = "text/html";
+        break;
+      case "TIFF":
+        $file_type = "image/tiff";
+        break;
+      case "XML":
+        $file_type = "application/xml";
+        break;
+      case "PDF":
+        $file_type = "application/pdf";
+        break;
+      default:
+    }
+
+    return $file_type;
+  }
+
+  /**
+   * OBX Segment with encapsulated Data
+   *
+   * @param DOMNode   $OBX    node
+   * @param CMbObject $object object
+   * @param String    $name   name
    *
    * @return bool
    */
-  function getEncapsulatedPDF() {
+  function getEncapsulatedData($OBX, $object, $name) {
 
+    $observation  = $this->getObservationValue($OBX);
+    $date         = $this->getOBXObservationDateTime($OBX);
+
+    $ed      = explode("^", $observation);
+    $subtype = CMbArray::get($ed, 2);
+    $content = CMbArray::get($ed, 4);
+
+    $file_type = $this->getFileType($subtype);
+    if (!$file_type) {
+      $this->codes[] = "E344";
+      return false;
+    }
+
+    $file = new CFile();
+    $file->setObject($object);
+    $file->file_name = $name.".".strtolower($subtype);
+    $file->file_type = $file_type;
+    $file->loadMatchingObject();
+
+    $file->file_date = $date;
+    $file->file_size = strlen($content);
+
+    $file->fillFields();
+    $file->updateFormFields();
+
+    $file->putContent($content);
+
+    if ($file->store()) {
+      $this->codes[] = "E343";
+      return false;
+    }
+
+    return true;
   }
 
   /**
    * OBX Segment with reference pointer to external report
    *
-   * @param DOMNode    $OBX       DOM node
-   * @param COperation $operation Opération
+   * @param DOMNode   $OBX    DOM node
+   * @param CMbObject $object object
+   * @param String    $name   name
    *
    * @return bool
    */
-  function getReferencePointerToExternalReport(DOMNode $OBX, COperation $operation) {
+  function getReferencePointerToExternalReport(DOMNode $OBX, CMbObject $object, $name) {
     $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
     $sender         = $exchange_hl7v2->_ref_sender;
+
+    $observation  = $this->getObservationValue($OBX);
+
+    $rp      = explode("^", $observation);
+    $pointer = CMbArray::get($rp, 0);
+    $type    = CMbArray::get($rp, 2);
+
+    if ($type == "HTML") {
+      $hyperlink = new CHyperTextLink();
+      $hyperlink->setObject($object);
+      $hyperlink->name = $name;
+      $hyperlink->link = $pointer;
+
+      if ($msg = $hyperlink->store()) {
+        $this->codes[] = "E343";
+        return false;
+      }
+
+      return true;
+    }
 
     // Chargement de la source associée à l'expéditeur
     /** @var CInteropSender $sender_link */
@@ -389,8 +586,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
 
     $source = $sender_link->_ref_exchanges_sources[0];
 
-    $filename = $this->getObservationValue($OBX);
-    $path     = $filename;
+    $path = $filename = $pointer;
 
     if ($source instanceof CSourceFileSystem) {
       $path = $source->getFullPath()."/$path";
@@ -398,11 +594,17 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
 
     $content = $source->getData("$path");
 
+    $file_type = $this->getFileType($type);
+    if (!$file_type) {
+      $this->codes[] = "E344";
+      return false;
+    }
+
     // Gestion du CFile
     $file = new CFile();
-    $file->setObject($operation);
+    $file->setObject($object);
     $file->file_name = $filename;
-    $file->file_type = "application/pdf";
+    $file->file_type = $file_type;
     $file->loadMatchingObject();
 
     $file->file_date = "now";
