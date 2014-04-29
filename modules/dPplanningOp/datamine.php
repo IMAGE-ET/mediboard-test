@@ -19,8 +19,9 @@ foreach ($classes as $_class) {
   $miner  = new $_class;
   $report = $miner->mineSome($limit, false);
 
-  echo "Miner: $_class. Success mining count is '" . $report["success"] . "'";
+  $dt = CMbDT::dateTime();
+  echo "<$dt> Miner: $_class. Success mining count is '" . $report["success"] . "'";
   if (!$report["failure"]) {
-    echo "\nMiner: $_class. Failure mining counts is '" . $report["failure"] . "'";
+    echo "\n<$dt> Miner: $_class. Failure mining counts is '" . $report["failure"] . "'";
   }
 }
