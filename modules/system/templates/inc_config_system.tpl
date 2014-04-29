@@ -51,9 +51,12 @@ Main.add(function(){
     {{mb_include module=system template=inc_config_str var=offline_time_start}}
     {{mb_include module=system template=inc_config_str var=offline_time_end}}
     {{mb_include module=system template=inc_config_bool var=config_db}}
+    {{mb_include module=system template=inc_config_bool var=access_logs_buffer}}
     {{mb_include module=system template=inc_config_str var=human_long_request_level numeric=true}}
     {{mb_include module=system template=inc_config_str var=bot_long_request_level numeric=true}}
+    {{mb_include module=system template=inc_config_str var=dataminer_limit numeric=true}}
     {{mb_include module=system template=inc_config_str var=aio_output_path size=50}}
+
 
     <tr>
       <th colspan="2" class="title">
