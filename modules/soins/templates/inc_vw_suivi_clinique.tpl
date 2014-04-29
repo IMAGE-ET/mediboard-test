@@ -407,7 +407,7 @@
               <button type="button" style="float: right;" class="search class_progress_before" onclick="toggleProgressBefore();" title="{{tr}}CPrescription.in_progress_before{{/tr}}">
                 -{{$days_config}}J
               </button>
-              <button type="button" style="float: left;" class="search" onclick="modalPrescriptionLegend = Modal.open($('modal-prescription-legend'));" title="{{tr}}Legend{{/tr}}">{{tr}}Legend{{/tr}}</button>
+              <button type="button" style="float: left;" class="search" onclick="modalPrescriptionLegend = Modal.open($('modal-prescription-legend'), {height: '90px', width: '290px'});" title="{{tr}}Legend{{/tr}}">{{tr}}Legend{{/tr}}</button>
               {{tr}}CPrescription.in_progress{{/tr}}
             </th>
             {{if $prescription->_ref_lines_med_comments.med|@count || $prescription->_ref_lines_med_comments.comment|@count ||
