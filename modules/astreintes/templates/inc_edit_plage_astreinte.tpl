@@ -8,19 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script>
-  onSubmitForm = function(form) {
-    if (!checkForm(form)) {
-      return false;
-    }
-    var ok = onSubmitFormAjax(form);
-    PlageAstreinte.refreshList();
-    Control.Modal.close();
-    return ok;
-  }
-</script>
-
-<form name="editplage" action="" method="post" onsubmit="return onSubmitForm(this); ">
+<form name="editplage" action="" method="post" onsubmit="return onSubmitFormAjax(this,{onComplete: Control.Modal.close}); ">
   {{mb_key object=$plageastreinte}}
   <input type="hidden" name="dosql" value="do_plageastreinte_aed" />
   <input type="hidden" name="m" value="{{$m}}" />
@@ -76,7 +64,10 @@
       <td colspan="6" class="button">
         <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
         {{if $plageastreinte->_id}}
-          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la plage',objName:'{{$plageastreinte->_view|smarty:nodefaults|JSAttribute}}', ajax :true})">{{tr}}Delete{{/tr}}</button>
+          <button class="trash" type="button"
+                  onclick="confirmDeletion(this.form,{typeName:'la plage',objName:'{{$plageastreinte->_view|smarty:nodefaults|JSAttribute}}', ajax :true})">
+            {{tr}}Delete{{/tr}}
+          </button>
         {{/if}}
       </td>
     </tr>
