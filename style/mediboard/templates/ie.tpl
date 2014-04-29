@@ -12,7 +12,7 @@ window.onerror = function(){};
 </script>
 <![endif]-->
 
-{{if $browser.ie8}}
+{{if @$browser.ie8}}
   <div class="deprecated-browser-warning">
     <img src="images/icons/error.png" />
     Vous utilisez le navigateur Internet Explorer 8, qui ne sera plus pris en charge par Mediboard à partir de la version de juillet 2014.
