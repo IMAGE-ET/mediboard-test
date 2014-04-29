@@ -31,7 +31,9 @@ var Reglement = {
     // Rafraichissement des actes CCAM et NGAP
     if (reload_acts && Preferences.ccam_consultation == "1" && Preferences.MODCONSULT == "1"){
       ActesCCAM.refreshList(Reglement.consultation_id, Reglement.user_id);
-      ActesNGAP.refreshList();
+      if (window.ActesNGAP) {
+        ActesNGAP.refreshList();
+      }
       if ($('fraisdivers')) {
         refreshFraisDivers();
       }
