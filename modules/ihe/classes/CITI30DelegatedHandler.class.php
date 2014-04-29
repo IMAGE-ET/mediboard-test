@@ -206,6 +206,43 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
   }
 
   /**
+   * Trigger when merge failed
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return bool
+   */
+  function onMergeFailure(CMbObject $mbObject) {
+    if (!$this->isHandled($mbObject)) {
+      return false;
+    }
+
+    // On va réatribuer les idexs en cas de problème dans la fusion
+    foreach ($mbObject->_fusion as $group_id => $infos_fus) {
+      if (!$infos_fus || !array_key_exists("idexs_changed", $infos_fus)) {
+        return false;
+      }
+
+      foreach ($infos_fus["idexs_changed"] as $idex_id => $tag_name) {
+        $idex = new CIdSante400();
+        $idex->load($idex_id);
+
+        if (!$idex->_id) {
+          continue;
+        }
+
+        // Réattribution sur l'objet non supprimé
+        $patient_eliminee = $infos_fus["patientElimine"];
+        $idex->object_id = $patient_eliminee->_id;
+
+        $idex->tag = $tag_name;
+        $idex->last_update = CMbDT::dateTime();
+        $idex->store();
+      }
+    }
+  }
+
+  /**
    * Trigger after event merge
    *
    * @param CMbObject $mbObject Object
