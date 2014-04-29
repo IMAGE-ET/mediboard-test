@@ -199,15 +199,6 @@ Main.add(function() {
           {{if $conf.ref_pays == 1}}
             {{if $patient->ald}}
               Affection Longue Durée<br/>
-            {{else}}
-              {{mb_form name="frm-Patient-ALD" m="patients" dosql="do_patients_aed" method="post" onsubmit="return onSubmitFormAjax(this);"}}
-                {{mb_class object=$patient}}
-                {{mb_key object=$patient}}
-                <input type="hidden" name="callback" value="Reglement.reload"/>
-
-                {{mb_title object=$patient field=ald}}
-                {{mb_field object=$patient field=ald onchange="this.form.onsubmit();"}}
-              {{/mb_form}}
             {{/if}}
           {{/if}}
         </div>
@@ -228,8 +219,13 @@ Main.add(function() {
             <table class="form">
               {{if (!$consult->tarif || $consult->tarif == "pursue") && !$consult->valide}}
                 {{if $consult->_ref_patient->ald}}
-                <tr>
-                  <th>{{mb_label object=$consult field=concerne_ALD}}</th>
+                  <tr>
+                    <th>{{mb_label object=$consult field=concerne_ALD}}</th>
+                    <td>{{mb_field object=$consult field=concerne_ALD}}</td>
+                  </tr>
+                {{elseif $gestionFSE && $app->user_prefs.LogicielFSE == 'pv'}}
+                  <tr>
+                  <th><label for="selectionTarif_concerne_ALD" title="Forcer l'ALD">Forcer l'ALD</label></th>
                   <td>{{mb_field object=$consult field=concerne_ALD}}</td>
                 </tr>
                 {{/if}}
