@@ -483,11 +483,14 @@ class CApp {
    * @return void
    */
   static function notify($message) {
+    $args = func_get_args();
+    array_shift($args); // $message
+
     // Event Handlers
     self::makeHandlers();
     foreach (self::$handlers as $_handler) {
       try {
-        call_user_func(array($_handler, "on$message"));
+        call_user_func_array(array($_handler, "on$message"), $args);
       } 
       catch (Exception $e) {
         CAppUI::setMsg($e, UI_MSG_ERROR);
