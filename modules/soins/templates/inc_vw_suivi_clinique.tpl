@@ -626,10 +626,9 @@
                         {{math equation="x+1" x=$total assign=total}}
                         {{math equation="x+1" x=$count_elts assign=count_elts}}
                         {{math assign=prolongation_time_day equation="x / 24" x="CAppUI::conf"|static_call:"dPprescription CPrescription prolongation_time"}}
-                        {{math assign=prescription_end_real equation="x - y" x=$_line->_fin_relative y=$prolongation_time_day|intval}}
-
+                        {{math assign=prescription_end_real equation="x - y" x=$element->_fin_relative y=$prolongation_time_day|intval}}
                         <span {{if $element->_fin_reelle|iso_date <= $date_after|iso_date}}style="border-bottom: 2px solid orange"{{/if}}
-                              {{if $_line->warning_day && (($_line->duree && $_line->_fin_relative == $_line->warning_day) || (!$_line->duree && $prescription_end_real == $_line->warning_day))}}style="border-bottom: 2px solid orangered"{{/if}}
+                              {{if $element->warning_day && (($element->duree && $element->_fin_relative == $element->warning_day) || (!$element->duree && $prescription_end_real == $element->warning_day))}}style="border-bottom: 2px solid orangered"{{/if}}
                               onmouseover="ObjectTooltip.createEx(this, '{{$element->_guid}}')">
                           {{$element->_view}}
                         </span>
