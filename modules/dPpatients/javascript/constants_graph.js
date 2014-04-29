@@ -58,15 +58,17 @@ ConstantsGraph = Class.create({
       var graphs = this.graphsStructure[rank];
       for (var id = 0; id < graphs.length; id++) {
         var oForm = getForm('edit-constantes-medicales');
-        var graph = graphs[id];
-        for (var i = 0; i < graph.length; i++) {
-          var constant = graph[i];
-          var checkbox = oForm['checkbox-constantes-medicales-' + constant];
-          if (checkbox) {
-            checkbox.addClassName('checkbox-graph-' + rank + '_' + id);
-            checkbox.checked = true;
-            if (i > 0) {
-              checkbox.setAttribute('readonly', 1);
+        if (graph) {
+          var graph = graphs[id];
+          for (var i = 0; i < graph.length; i++) {
+            var constant = graph[i];
+            var checkbox = oForm['checkbox-constantes-medicales-' + constant];
+            if (checkbox) {
+              checkbox.addClassName('checkbox-graph-' + rank + '_' + id);
+              checkbox.checked = true;
+              if (i > 0) {
+                checkbox.setAttribute('readonly', 1);
+              }
             }
           }
         }
@@ -224,7 +226,9 @@ ConstantsGraph = Class.create({
       if (!this.widget) {
         for (var id = 0; id < graphs.length; id++) {
           var graph = graphs[id];
-          this.drawGraph(graph, rank, id);
+          if (graph) {
+            this.drawGraph(graph, rank, id);
+          }
         }
       }
       else {
