@@ -87,4 +87,16 @@ class Chronometer {
     mbTrace(number_format($step*1000, 2), "[Chrono] action '$msg' (ms)");
     $this->start();
   }
+
+  /**
+   * Stop, trace latest step and restart a chronometer
+   */
+  function report() {
+    foreach ($this->report as $msg => $_chrono) {
+      mbTrace(number_format($_chrono->total   * 1000, 2), "[Chrono] $_chrono->nbSteps '$msg' actions (ms)");
+      if ($_chrono->nbSteps > 1) {
+        mbTrace(number_format($_chrono->avgStep * 1000, 2), "[Chrono] action '$msg' average (ms)");
+      }
+    }
+  }
 }

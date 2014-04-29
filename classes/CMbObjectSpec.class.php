@@ -53,4 +53,20 @@ class CMbObjectSpec {
     }
     return implode(" ", $specs);
   }
+
+  /**
+   * @see parent::__sleep()
+   */
+  function __sleep() {
+    $vars = get_object_vars($this);
+    unset($vars["ds"]);
+    return array_keys($vars);
+  }
+
+  /**
+   * @see parent::__wakeup()
+   */
+  function __wakeup() {
+//    $this->init();
+  }
 }

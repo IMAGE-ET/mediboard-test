@@ -116,6 +116,22 @@ class CMbFieldSpec {
   }
 
   /**
+   * @see parent::__sleep()
+   */
+  function __sleep() {
+    $vars = get_object_vars($this);
+    // Removing null values would purge empty arrays
+    CMbArray::removeValue("", $vars);
+    return array_keys($vars);
+  }
+
+  /**
+   * @see parent::__wakeup()
+   */
+  function __wakeup() {
+  }
+
+  /**
    * Get spec options and there own meta-prop
    * 
    * @return array Array of default name => option meta-prop
