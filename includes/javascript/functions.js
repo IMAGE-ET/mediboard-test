@@ -1255,7 +1255,7 @@ var Modal = {
 
     // Wrap the content if not already done (modal windows launched more than once)
     if (!container._alreadyWrapped) {
-      var content = DOM.div({className: "content content_modal"});
+      var content = DOM.div({className: "content"});
 
       if (options.align) {
         style.textAlign = options.align;
@@ -1268,7 +1268,7 @@ var Modal = {
       content.update(container);
 
       // Decoration preparing
-      var titleElement = DOM.div({className: "title", id: 'title_modal'},
+      var titleElement = DOM.div({className: "title"},
         DOM.span({className: "left"}, options.title),
         DOM.span({className: "right"})
       );
