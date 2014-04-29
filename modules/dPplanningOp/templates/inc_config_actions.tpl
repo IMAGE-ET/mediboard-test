@@ -82,6 +82,12 @@
       }
     }
   }
+
+  Intervention = {
+    checkDate: function() {
+      new Url('planningOp', 'check_date_intervention').requestModal(500);
+    }
+  }
 </script>
 
 <h2>Actions de maintenances</h2>
@@ -169,5 +175,12 @@
     <td colspan="2">
       <button class="search" onclick="Datamining.board()">{{tr}}Datamining{{/tr}}</button>
     </td>
-  </tr>  
+  </tr>
+
+  <tr>
+    <td colspan="2">
+      <button class="search" onclick="Intervention.checkDate()">{{tr}}mod-planningOp-tab-check_date_intervention{{/tr}}</button>
+    </td>
+  </tr>
+
 </table>

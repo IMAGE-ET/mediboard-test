@@ -1832,6 +1832,7 @@ $locales['mod-planningOp-tab-ajax_form_typeanesth'] = 'Formulaire type d\'anesth
 $locales['mod-planningOp-tab-ajax_revert_asa'] = 'Interventions ayant un score ASA à 1';
 $locales['mod-planningOp-tab-edit_charge_price_indicator'] = 'Modification du mode de traitement';
 $locales['mod-planningOp-tab-edit_mode_entree_sortie_sejour'] = 'Modification du mode';
+$locales['mod-planningOp-tab-check_date_intervention'] = 'Vérification des dates d\'intervention';
 $locales['mod-reservation-tab-ajax_edit_examen'] = 'Examens';
 $locales['module-dPplanningOp-court'] = 'Planif. séjour';
 $locales['module-dPplanningOp-long'] = 'Planification des hospitalisations et chirurgies';
