@@ -47,9 +47,6 @@ class CPlageconsult extends CPlageHoraire {
   public $_consult_by_categorie;
   public $_type_repeat;
 
-  // Field pour le calcul de collision (fin à 00:00:00)
-  public $_fin;
-
   // Filter fields
   public $_date_min;
   public $_date_max;

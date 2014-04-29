@@ -20,7 +20,6 @@ class CPlageHoraire extends CMbObject {
   public $debut;
   public $fin;
 
-  public $_dureePlage; //duree en minutes
   // Behaviour fields
   public $_skip_collisions;
 
@@ -55,15 +54,6 @@ class CPlageHoraire extends CMbObject {
   }
 
   /**
-   * calcul de la durée de la plage
-   *
-   * @return int durée en minutes
-   */
-  function getDuree() {
-    return $this->_dureePlage = CMbDT::minutesRelative($this->debut, $this->fin);
-  }
-  
-  /**
    * Check collision with another plage regarding defined in class spec
    *
    * @return string Collision message
@@ -72,13 +62,13 @@ class CPlageHoraire extends CMbObject {
     if ($this->_skip_collisions) {
       return null;
     }
+
     // Check whether mandatory collision keys are defined
     $keys = $this->_spec->collision_keys;
     if (!is_array($keys)) {
       CModelObject::error("CPlageHoraire-collision_keys", $this->_class);
     }
     
-    $keys = $this->_spec->collision_keys;
     $this->completeField("date", "debut", "fin");
     $this->completeField($keys);    
         
@@ -109,14 +99,14 @@ class CPlageHoraire extends CMbObject {
   }
 
   /**
-   * @see parent::store()
+   * @see parent::check()
    */
-  function store() {
+  function check() {
     if ($msg = $this->hasCollisions()) {
       return $msg;
     }
     
-    return parent::store();
+    return parent::check();
   }
 
   /**

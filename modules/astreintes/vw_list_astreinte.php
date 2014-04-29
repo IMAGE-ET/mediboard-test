@@ -65,7 +65,6 @@ $astreintes = $astreinte->loadList($where, $order);
  */
 foreach ($astreintes as $_astreinte) {
   $_astreinte->loadRefUser();
-  $_astreinte->getDuree();
   $_astreinte->loadRefColor();
   $_astreinte->getCollisions();
 }

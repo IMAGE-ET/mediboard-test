@@ -13,7 +13,7 @@
  * Plage opératoire (vacations au bloc)
  * Class CPlageOp
  */
-class CPlageOp extends CMbObject {
+class CPlageOp extends CPlageHoraire {
   const RANK_VALIDATE = 1;
   const RANK_REORDER  = 2;
   
@@ -35,9 +35,6 @@ class CPlageOp extends CMbObject {
   public $secondary_function_id;
 
   // DB fields
-  public $date;
-  public $debut;
-  public $fin;
   public $unique_chir;
   public $temps_inter_op;
   public $max_intervention;
@@ -61,7 +58,7 @@ class CPlageOp extends CMbObject {
   
   // Behaviour Fields
   public $_verrouillee = array();
-  public $_check_collisions = true;
+  public $_skip_collisions = false;
 
   /** @var CMbObject */
   public $_ref_owner;
@@ -91,6 +88,7 @@ class CPlageOp extends CMbObject {
     $spec->table = 'plagesop';
     $spec->key   = 'plageop_id';
     $spec->xor["owner"] = array("spec_id", "chir_id");
+    $spec->collision_keys = array("salle_id");
     return $spec;
   }
 
@@ -416,37 +414,6 @@ class CPlageOp extends CMbObject {
     }
     return true;
   }
-  
-
-  /**
-   * returns collision message, null for no collision
-   *
-   * @return string
-   */
-  function hasCollisions() {
-    $this->completeField("salle_id");
-    $this->completeField("date");
-    
-    // Get all other plages the same day
-    $where = array();
-    $where["salle_id"]   = "= '$this->salle_id'";
-    $where["date"]       = "= '$this->date'";
-    $where["plageop_id"] = "!= '$this->plageop_id'";
-    /** @var CPlageOp $plages */
-    $plages = $this->loadList($where);
-    $msg = null;
-    foreach ($plages as $plage) {
-      if (
-          ($plage->debut < $this->fin and $plage->fin > $this->fin)
-          or($plage->debut < $this->debut and $plage->fin > $this->debut)
-          or($plage->debut >= $this->debut and $plage->fin <= $this->fin)
-      ) {
-        $msg .= "Collision avec la plage du $plage->date, de $plage->debut à $plage->fin. ";
-      }
-    }
-
-    return $msg;   
-  }
 
   /**
    * @see parent::check()
@@ -454,7 +421,7 @@ class CPlageOp extends CMbObject {
   function check() {
     // Data checking
     $msg = null;
-    if (!$this->plageop_id && !$this->chir_id && !$this->spec_id) {
+    if (!$this->_id && !$this->chir_id && !$this->spec_id) {
       $msg .= "Vous devez choisir un praticien ou une spécialité<br />";
     }
     return $msg . parent::check();
@@ -465,12 +432,6 @@ class CPlageOp extends CMbObject {
    */
   function store() {
     $this->updatePlainFields();
-
-    if ($this->_check_collisions) {
-      if ($msg = $this->hasCollisions()) {
-        return $msg;
-      }
-    }
 
     $old = new CPlageOp();
     if ($this->_id) {
