@@ -56,18 +56,20 @@ ConstantsGraph = Class.create({
   initCheckboxes: function() {
     for (var rank in this.graphsStructure) {
       var graphs = this.graphsStructure[rank];
-      for (var id = 0; id < graphs.length; id++) {
-        var oForm = getForm('edit-constantes-medicales');
-        if (graph) {
-          var graph = graphs[id];
-          for (var i = 0; i < graph.length; i++) {
-            var constant = graph[i];
-            var checkbox = oForm['checkbox-constantes-medicales-' + constant];
-            if (checkbox) {
-              checkbox.addClassName('checkbox-graph-' + rank + '_' + id);
-              checkbox.checked = true;
-              if (i > 0) {
-                checkbox.setAttribute('readonly', 1);
+      if (graphs) {
+        for (var id = 0; id < graphs.length; id++) {
+          var oForm = getForm('edit-constantes-medicales');
+          if (graph) {
+            var graph = graphs[id];
+            for (var i = 0; i < graph.length; i++) {
+              var constant = graph[i];
+              var checkbox = oForm['checkbox-constantes-medicales-' + constant];
+              if (checkbox) {
+                checkbox.addClassName('checkbox-graph-' + rank + '_' + id);
+                checkbox.checked = true;
+                if (i > 0) {
+                  checkbox.setAttribute('readonly', 1);
+                }
               }
             }
           }
@@ -223,17 +225,19 @@ ConstantsGraph = Class.create({
     var graphs_data = JSON.parse(Object.toJSON(this.graphsData));
     for (var rank in graphs_data) {
       var graphs = graphs_data[rank];
-      if (!this.widget) {
-        for (var id = 0; id < graphs.length; id++) {
-          var graph = graphs[id];
-          if (graph) {
-            this.drawGraph(graph, rank, id);
+      if (graphs) {
+        if (!this.widget) {
+          for (var id = 0; id < graphs.length; id++) {
+            var graph = graphs[id];
+            if (graph) {
+              this.drawGraph(graph, rank, id);
+            }
           }
         }
-      }
-      else {
-        if (graphs.datas) {
-          this.drawGraph(graphs, rank);
+        else {
+          if (graphs.datas) {
+            this.drawGraph(graphs, rank);
+          }
         }
       }
     }
