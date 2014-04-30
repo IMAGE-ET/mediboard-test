@@ -1,10 +1,7 @@
-<!-- $Id$ -->
-
 {{mb_script module="dPcompteRendu" script="document"}}
 {{mb_script module="dPpatients" script="patient" ajax=true}}
 
-<script type="text/javascript">
-
+<script>
 Document.refreshList = function() {
   if (document.actionPat) {
     new Url("dPpatients", "httpreq_vw_patient").
@@ -12,7 +9,6 @@ Document.refreshList = function() {
       requestUpdate('vwPatient');
   }
 }
-
 </script>
 
 {{if $patient->_vip}}
@@ -75,7 +71,7 @@ Document.refreshList = function() {
       {{/if}}
     </td>
   </tr>
-  {{if $listPrat|@count && $canCabinet->edit}}
+  {{if $listPrat|@count && $canCabinet->read}}
   <tr><th class="category" colspan="4">Consultation immédiate</th></tr>
   <tr>
     <td class="button" colspan="4">

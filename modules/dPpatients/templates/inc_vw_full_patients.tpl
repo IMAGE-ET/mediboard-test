@@ -371,24 +371,24 @@
       </tr>
     {{/if}}
 
-    {{if $listPrat|@count && $canCabinet->edit}}
-    <tr><th class="category" colspan="2">Consultation immédiate</th></tr>
-    <tr>
-      <td class="button" colspan="2">
-        <form name="addConsFrm" action="?m=cabinet" method="post" onsubmit="return checkForm(this)">
-        <input type="hidden" name="m" value="dPcabinet" />
-        <input type="hidden" name="dosql" value="do_consult_now" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="patient_id" class="notNull ref" value="{{$patient->patient_id}}" />
-        <label for="prat_id" title="Praticien pour la consultation immédiate. Obligatoire">Praticien</label>
-        <select name="prat_id" class="notNull ref"  style="width: 140px;">
-          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-          {{mb_include module=mediusers template=inc_options_mediuser list=$listPrat selected=$app->user_id}}
-        </select>
-        <button class="new" type="submit">Consulter</button>
-        </form>
-      </td>
-    </tr>
+    {{if $listPrat|@count && $canCabinet->read}}
+      <tr><th class="category" colspan="2">Consultation immédiate</th></tr>
+      <tr>
+        <td class="button" colspan="2">
+          <form name="addConsFrm" action="?m=cabinet" method="post" onsubmit="return checkForm(this)">
+          <input type="hidden" name="m" value="dPcabinet" />
+          <input type="hidden" name="dosql" value="do_consult_now" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="patient_id" class="notNull ref" value="{{$patient->patient_id}}" />
+          <label for="prat_id" title="Praticien pour la consultation immédiate. Obligatoire">Praticien</label>
+          <select name="prat_id" class="notNull ref"  style="width: 140px;">
+            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+            {{mb_include module=mediusers template=inc_options_mediuser list=$listPrat selected=$app->user_id}}
+          </select>
+          <button class="new" type="submit">Consulter</button>
+          </form>
+        </td>
+      </tr>
     {{/if}}
   </tbody>
 </table>
