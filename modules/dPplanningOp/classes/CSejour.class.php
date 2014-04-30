@@ -2413,23 +2413,32 @@ class CSejour extends CFacturable implements IPatientRelated {
    */
   function loadComplete() {
     parent::loadComplete();
-    foreach ($this->_ref_operations as &$operation) {
+
+    // Chek if operations were loaded yet (cf ExObjects)
+    $operations = $this->_ref_operations;
+    if ($operations === null) {
+      $operations = $this->loadRefsOperations();
+    }
+
+    foreach ($operations as $operation) {
       $operation->loadRefsFwd();
       $operation->loadBrancardage();
       $operation->_ref_chir->loadRefFunction();
       $operation->_ref_chir->loadRefSpecCPAM();
       $operation->_ref_chir->loadRefDiscipline();
     }
-    foreach ($this->_ref_affectations as &$affectation) {
+
+    foreach ($this->_ref_affectations as $affectation) {
       $affectation->loadRefLit();
       $affectation->_ref_lit->loadCompleteView();
     }
 
     if ($this->_ref_actes_ccam) {
-      foreach ($this->_ref_actes_ccam as &$acte_ccam) {
+      foreach ($this->_ref_actes_ccam as $acte_ccam) {
         $acte_ccam->loadRefsFwd();
       }
     }
+
     $this->loadExtDiagnostics();
 
     // Chargement du RPU dans le cas des urgences
