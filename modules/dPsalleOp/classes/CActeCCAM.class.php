@@ -44,6 +44,9 @@ class CActeCCAM extends CActe {
   public $lieu;
   public $ald;
   public $position_dentaire;
+  public $numero_forfait_technique;
+  public $numero_agrement;
+  public $rapport_exoneration;
 
   // Derived fields
   public $_modificateurs = array();
@@ -93,24 +96,27 @@ class CActeCCAM extends CActe {
     $props = parent::getProps();
 
     // DB fields
-    $props["code_acte"]              = "code notNull ccam seekable";
-    $props["code_activite"]          = "num notNull min|0 max|99";
-    $props["code_phase"]             = "num notNull min|0 max|99";
-    $props["modificateurs"]          = "str maxLength|4";
-    $props["motif_depassement"]      = "enum list|d|e|f|n";
-    $props["commentaire"]            = "text helped";
-    $props["code_association"]       = "enum list|1|2|3|4|5";
-    $props["extension_documentaire"] = "enum list|1|2|3|4|5|6";
-    $props["rembourse"]              = "bool default|1";
-    $props["charges_sup"]            = "bool";
-    $props["regle"]                  = "bool default|0";
-    $props["regle_dh"]               = "bool default|0";
-    $props["signe"]                  = "bool default|0";
-    $props["sent"]                   = "bool default|0";
-    $props["lieu"]                   = "enum list|C|D default|C";
-    $props["exoneration"]            = "enum list|N|13|17 default|N";
-    $props["ald"]                    = "bool";
-    $props["position_dentaire"]      = "str";
+    $props["code_acte"]                = "code notNull ccam seekable";
+    $props["code_activite"]            = "num notNull min|0 max|99";
+    $props["code_phase"]               = "num notNull min|0 max|99";
+    $props["modificateurs"]            = "str maxLength|4";
+    $props["motif_depassement"]        = "enum list|d|e|f|n";
+    $props["commentaire"]              = "text helped";
+    $props["code_association"]         = "enum list|1|2|3|4|5";
+    $props["extension_documentaire"]   = "enum list|1|2|3|4|5|6";
+    $props["rembourse"]                = "bool default|1";
+    $props["charges_sup"]              = "bool";
+    $props["regle"]                    = "bool default|0";
+    $props["regle_dh"]                 = "bool default|0";
+    $props["signe"]                    = "bool default|0";
+    $props["sent"]                     = "bool default|0";
+    $props["lieu"]                     = "enum list|C|D default|C";
+    $props["exoneration"]              = "enum list|N|13|17 default|N";
+    $props["ald"]                      = "bool";
+    $props["position_dentaire"]        = "str";
+    $props["numero_forfait_technique"] = "num min|1 max|99999";
+    $props["numero_agrement"]          = "num min|1 max|99999999999999";
+    $props["rapport_exoneration"]      = "enum list|4|7|C|R";
 
     // Derived fields
     $props["_rembex"]             = "bool";
