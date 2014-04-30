@@ -270,6 +270,9 @@ if (CModule::getActive("dPprescription")) {
         // Chargement des lignes d'éléments
         if ($chapitre == "all_chaps") {
           $prescription->loadRefsLinesElementByCat("1", "1", null);
+          foreach ($prescription->_ref_prescription_lines_element as $_line_elt) {
+            $_line_elt->countPlanifications();
+          }
         }
       }
       elseif ($chapitre == "med" || $chapitre == "inj") {
