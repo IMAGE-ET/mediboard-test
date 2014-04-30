@@ -369,7 +369,7 @@ class CService extends CMbObject {
     foreach ($services as $_service) {
       $_service->loadRefsChambres();
       foreach ($_service->_ref_chambres as $_chambre) {
-        $_chambre->loadRefsBack();
+        $_chambre->loadRefsLits();
       }
     }
 

@@ -1886,9 +1886,9 @@ class CConsultation extends CFacturable implements IPatientRelated {
   /**
    * Crée une consultation à une horaire arbitraire et créé les plages correspondantes au besoin
    *
-   * @param datetime $datetime     Date et heure
-   * @param ref      $praticien_id Praticien
-   * @param ref      $patient_id   Patient
+   * @param string $datetime     Date et heure
+   * @param ref    $praticien_id Praticien
+   * @param ref    $patient_id   Patient
    *
    * @return null|string Store-like message
    */

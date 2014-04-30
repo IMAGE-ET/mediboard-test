@@ -61,7 +61,9 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     $receiver->getInternationalizationCode($this->transaction);
     
     $eai_initiateur_group_id = $mbObject->_eai_initiateur_group_id;
-    
+
+    $code = null;
+
     // Création/MAJ d'un correspondant patient
     if ($mbObject instanceof CCorrespondantPatient) {
       if (!$mbObject->patient_id) {
@@ -148,8 +150,12 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
           if ($receiver->_configs["send_patient_with_current_admit"]) {
             // On charge seulement le séjour courant pour le patient
             $sejours = $mbObject->getCurrSejour(null, $receiver->group_id);
-            if (!$sejours || ($sejour = reset($sejours) && !$sejour->_id)) {
-              $code = null;
+            if (!$sejours) {
+              break;
+            }
+
+            $sejour = reset($sejours);
+            if (!$sejour->_id) {
               break;
             }
 
@@ -160,10 +166,14 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
           $code = ($receiver->_configs["send_update_patient_information"] == "A08") ? "A08" : "A31";
 
           break;
-        default:
+
+        default :
           $code = null;
-          break;
       }
+    }
+
+    if (!$code) {
+      return;
     }
     
     $patient = $mbObject;
