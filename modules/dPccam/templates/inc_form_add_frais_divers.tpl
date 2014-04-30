@@ -18,20 +18,15 @@ Main.add(function(){
     afterUpdateElement: function(field,selected){
       var form = field.form;
       $V(form.type_id, selected.getAttribute('id').split('-')[2]);
-      $V(form.montant_base, selected.down('.tarif').innerHTML.strip());
+      $V(form.montant, selected.down('.tarif').innerHTML.strip());
       $V(form.facturable, selected.down('.facturable').innerHTML.strip());
+      updateMontant(form);
     }
   });
 });
 
 updateMontant = function(form){
-  var oldValue = $V(form._last_coefficient);
-  var newValue = $V(form.coefficient);
-  
-  if (oldValue)
-    $V(form.montant_base, $V(form.montant_base) / oldValue * newValue);
-    
-  $V(form._last_coefficient, newValue);
+  $V(form.montant_base, parseFloat($V(form.montant) * $V(form.coefficient) * $V(form.quantite)));
 };
 
 removeFraisDivers = function(id, form) {
@@ -50,8 +45,8 @@ removeFraisDivers = function(id, form) {
   <input type="hidden" name="m" value="dPccam" />
   <input type="hidden" name="dosql" value="do_frais_divers_aed" />
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="_last_coefficient" value="{{$frais_divers->coefficient}}" />
-  
+  <input type="hidden" name="montant" value="0" />
+
   {{mb_field object=$frais_divers field=object_id hidden=true}}
   {{mb_field object=$frais_divers field=object_class hidden=true}}
   {{mb_key object=$frais_divers}}
@@ -70,12 +65,12 @@ removeFraisDivers = function(id, form) {
     </tr>
     
     <tr>
-      <td>{{mb_field object=$frais_divers field=quantite increment=true form=formAddFraisDivers size=2}}</td>
+      <td>{{mb_field object=$frais_divers field=quantite increment=true form=formAddFraisDivers min=0 size=2 onchange="updateMontant(this.form)"}}</td>
       <td>
         <input type="text" name="type_id_autocomplete_view" class="autocomplete" />
         {{mb_field object=$frais_divers field=type_id hidden=true}}
       </td>
-      <td>{{mb_field object=$frais_divers field=coefficient increment=true form=formAddFraisDivers size=2 onchange="updateMontant(this.form)"}}</td>
+      <td>{{mb_field object=$frais_divers field=coefficient increment=true form=formAddFraisDivers min=0 size=2 onchange="updateMontant(this.form)"}}</td>
       <td>{{mb_field object=$frais_divers field=facturable typeEnum=select}}</td>
       <td>{{mb_field object=$frais_divers field=montant_base}}</td>
       <td>{{mb_field object=$frais_divers field=execution form="formAddFraisDivers" register=true}}</td>
@@ -87,7 +82,7 @@ removeFraisDivers = function(id, form) {
         </select>
       </td>
       <td>
-        <button type="submit" class="submit notext">{{tr}}Save{{/tr}}</button>
+        <button type="button" class="new" onclick="onSubmitFormAjax(this.form, {onComplete: refreshFraisDivers});">{{tr}}Create{{/tr}}</button>
       </td>
     </tr>
     

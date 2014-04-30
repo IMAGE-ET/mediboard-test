@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPfacturation
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
@@ -73,7 +73,7 @@ $file->updateFormFields();
 $file->forceDir();
 $file->store();
 
-$htmltopdf = new CHtmlToPDF();
+$htmltopdf = new CHtmlToPDF("CDomPDFConverter");
 $cr = new CCompteRendu();
 $cr->_page_format = "a4";
 $cr->_orientation = "portrait";
