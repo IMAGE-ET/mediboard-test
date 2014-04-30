@@ -52,6 +52,8 @@ Main.add(function(){
   {{mb_class object=$ex_subgroup}}
   {{mb_field object=$ex_subgroup field=parent_class hidden=true}}
   {{mb_field object=$ex_subgroup field=parent_id hidden=true}}
+
+  <input type="hidden" name="_ex_group_id" value="{{$ex_group->_id}}" />
   
   <table class="form">
     {{mb_include module=system template=inc_form_table_header object=$ex_subgroup colspan="4"}}
@@ -66,6 +68,9 @@ Main.add(function(){
       <td colspan="3">
         <input type="text" name="predicate_id_autocomplete_view" size="70" value="{{$ex_subgroup->_ref_predicate->_view}}" placeholder=" -- Toujours afficher -- " />
         {{mb_field object=$ex_subgroup field=predicate_id hidden=true}}
+        <button class="new notext" onclick="ExFieldPredicate.create(null, null, this.form)" type="button">
+          {{tr}}New{{/tr}}
+        </button>
       </td>
     </tr>
     

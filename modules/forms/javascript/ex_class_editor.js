@@ -365,7 +365,7 @@ ExFieldPredicate = {
     }
 
     if(form) {
-      var ex_group_id = $V(form.ex_group_id);
+      var ex_group_id = $V(form.ex_group_id) || $V(form._ex_group_id);
       if (ex_group_id) {
         url.addParam("ex_group_id", ex_group_id);
       }
