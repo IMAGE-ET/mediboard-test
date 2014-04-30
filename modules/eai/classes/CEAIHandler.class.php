@@ -30,12 +30,11 @@ abstract class CEAIHandler {
     // Static initialisations
     self::$handlers = array();
     foreach (CAppUI::conf("eai_handlers") as $_class => $_active) {
-      if ($_active && !isset(self::$ignoredHandlers[$_class])) {
+      if ($_active) {
         if (!class_exists($_class)) {
-          trigger_error("Model object handler missing class '$_class'", E_USER_ERROR);
+          CModelObject::error("application-eai-handler-missing-class%s", $_class);
           continue;
         }
-
         self::$handlers[$_class] = new $_class;
       }
     }
