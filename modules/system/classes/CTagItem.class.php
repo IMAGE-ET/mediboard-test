@@ -49,15 +49,10 @@ class CTagItem extends CMbMetaObject {
    * @return CTag
    */
   function loadRefTag($cache = true) {
-    return $this->_ref_tag = $this->loadFwdRef("tag_id", $cache);
-  }
-
-  /**
-   * @see parent::updateFormFields()
-   */
-  function updateFormFields() {
-    parent::updateFormFields();
-    $this->_view = $this->loadRefTag()->_view;
+    /** @var CTag $tag */
+    $tag = $this->loadFwdRef("tag_id", $cache);
+    $this->_view = $tag->_view;
+    return $this->_ref_tag = $tag;
   }
 
   /**

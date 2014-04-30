@@ -602,8 +602,17 @@ class CMbObject extends CStoredObject {
     if ($cache && !empty($this->_ref_tag_items)) {
       return $this->_ref_tag_items;
     }
-    
-    return $this->_ref_tag_items = $this->loadBackRefs("tag_items");
+
+    /** @var CTagItem[] $tag_items */
+    $tag_items = $this->loadBackRefs("tag_items");
+
+    CStoredObject::massLoadFwdRef($tag_items, "tag_id");
+
+    foreach ($tag_items as $_tag_item) {
+      $_tag_item->loadRefTag();
+    }
+
+    return $this->_ref_tag_items = $tag_items;
   }
 
   /**
