@@ -119,7 +119,9 @@
         </td>
         <td>
           <div class="warning" style="float:left;"> Pas d'intervention </div>
-          <button class="new" type="button" onclick="showSejourButtons();" style="float:right;">Nouvelle hospitalisation</button>
+          {{if !$app->user_prefs.simpleCabinet}}
+            <button class="new" type="button" onclick="showSejourButtons();" style="float:right;">Nouvelle hospitalisation</button>
+          {{/if}}
         </td>
       </tr>
     {{/foreach}}
