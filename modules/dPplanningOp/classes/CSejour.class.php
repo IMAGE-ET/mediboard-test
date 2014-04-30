@@ -1563,7 +1563,8 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     // Synchro durée d'hospi / type d'hospi
-    $this->_at_midnight = (CMbDT::date(null, $this->entree_prevue) != CMbDT::date(null, $this->sortie_prevue));
+    $this->completeField("entree", "sortie");
+    $this->_at_midnight = (CMbDT::date(null, $this->entree) != CMbDT::date(null, $this->sortie));
     if ($this->_at_midnight && $this->type == "ambu") {
       $this->type = "comp";
     }
