@@ -272,6 +272,9 @@ class CPatient extends CPerson {
   public $_ref_first_constantes;
   public $_ref_patient_links;
 
+  /** @var CFile */
+  public $_ref_photo_identite;
+
   /** @var CAffectation */
   public $_ref_curr_affectation;
 
