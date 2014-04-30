@@ -21,6 +21,7 @@ CAppUI::requireModuleFile('dPstats', 'graph_ressourceslog');
 
 $next     = CMbDT::date("+1 DAY", $date);
 switch ($interval) {
+  default:
   case "day":
     $from = CMbDT::date("-1 DAY", $next);
     break;

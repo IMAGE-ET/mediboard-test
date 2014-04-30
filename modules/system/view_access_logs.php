@@ -39,6 +39,7 @@ CAppUI::requireModuleFile('dPstats', 'graph_accesslog');
 
 $to = CMbDT::date("+1 DAY", $date);
 switch ($interval = CValue::getOrSession("interval", "one-day")) {
+  default:
   case "one-day":
     $today = CMbDT::date("-1 DAY", $to);
     // Hours limitation
