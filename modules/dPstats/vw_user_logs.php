@@ -18,6 +18,7 @@ CAppUI::requireModuleFile("dPstats", "graph_userlog");
 
 $to = CMbDT::date("+1 DAY", $date);
 switch ($interval = CValue::getOrSession("interval", "one-day")) {
+  default:
   case "one-day":
     $from = CMbDT::date("-1 DAY", $to);
     break;

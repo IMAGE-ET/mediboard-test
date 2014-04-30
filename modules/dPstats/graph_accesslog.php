@@ -11,6 +11,7 @@
 
 function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 'one-day', $left, $right, $DBorNotDB = false, $human_bot = null) {
   switch ($interval) {
+    default:
     case "one-day":
       $step          = "+10 MINUTES";
       $period_format = "%H:%M";
