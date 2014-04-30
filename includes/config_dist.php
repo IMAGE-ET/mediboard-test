@@ -109,6 +109,11 @@ $dPconfig["index_handlers"]   = array (
 //  "CMyIndexHandler" => "1",
 );
 
+// EAI handlers
+$dPconfig["eai_handlers"]   = array (
+//  "CMyEAIHandler" => "1",
+);
+
 // Template placehodlers
 $dPconfig["template_placeholders"]   = array (
 //  "CMyTemplatePlaceholder" => "1",

@@ -14,7 +14,7 @@
 <input type="hidden" name="dosql" value="do_configure" />
 
 <table class="form">  
-  {{assign var=types value="-"|explode:"index_handlers-object_handlers-template_placeholders"}}
+  {{assign var=types value="-"|explode:"index_handlers-object_handlers-template_placeholders-eai_handlers"}}
   {{foreach from=$types item=type}}
   {{assign var=class value=$type}}
   <tr><th class="title" colspan="2">{{tr}}{{$class}}{{/tr}}</th></tr>
@@ -39,7 +39,7 @@
     </tr>
 
   {{foreachelse}}
-  <tr><td colspan="2" class="empty">{{tr}}CMbIndexHandler{{/tr}}</td></tr>
+  <tr><td colspan="2" class="empty">{{tr}}CMbHandler-none{{/tr}}</td></tr>
   {{/foreach}}
 	
 {{/foreach}}
