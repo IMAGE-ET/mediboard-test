@@ -97,8 +97,13 @@ class CApp {
     // Long request log
     include "./includes/long_request_log.php";
 
-    // Explicit close of the session before object destruction
-    CSessionHandler::writeClose();
+    if (CAppUI::$token_restricted) {
+      CSessionHandler::end(true);
+    }
+    else {
+      // Explicit close of the session before object destruction
+      CSessionHandler::writeClose();
+    }
 
     self::$inPeace = true;
     die;
