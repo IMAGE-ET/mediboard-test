@@ -154,7 +154,8 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
               break;
             }
 
-            if ($sejour = reset($sejours) && !$sejour->_id) {
+            $sejour = reset($sejours);
+            if (!$sejour->_id) {
               break;
             }
 
