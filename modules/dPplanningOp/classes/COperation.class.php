@@ -519,6 +519,22 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
   /**
+   * @see parent::merge()
+   */
+  function merge($objects, $fast = false) {
+    // Remove operation miners as they prevent from merging
+    $miners = $this->loadBackRefs("workflow");
+    foreach ($objects as $_object) {
+      $miners = array_merge($miners, $_object->loadBackRefs("workflow"));
+    }
+    foreach ($miners as $_miner) {
+      $_miner->delete();
+    }
+
+    return parent::merge($objects, $fast);
+  }
+
+  /**
    * @see parent::updateFormFields()
    */
   function updateFormFields() {
