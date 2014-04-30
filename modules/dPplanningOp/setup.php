@@ -1744,6 +1744,15 @@ class CSetupdPplanningOp extends CSetup {
       ADD `confirme_user_id` INT (11) UNSIGNED AFTER `confirme`;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.88";
+    $this->makeRevision("1.88");
+
+    // Synchronisation de la date de l'intervention avec celle de la plage
+    $query = "UPDATE `operations`
+                LEFT JOIN plagesop ON plagesop.plageop_id = `operations`.`plageop_id`
+                SET `operations`.`date` = plagesop.date
+                WHERE `operations`.plageop_id IS NOT NULL";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.89";
   }
 }
