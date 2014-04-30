@@ -367,6 +367,16 @@ class CFacture extends CMbObject {
           $this->cloture    = CMbDT::date();
           $create_lignes = true;
         }
+
+        if ($this->numero > 1 && !count($consult->loadRefsFraisDivers(1)) && count($consult->loadRefsFraisDivers($this->numero)) && $consult->du_tva) {
+          $frais = 0;
+          foreach ($consult->loadRefsFraisDivers($this->numero) as $_frais) {
+            $frais += $_frais->montant_base;
+          }
+          $this->du_patient  = $frais + $consult->du_tva;
+          $this->du_tva      = $consult->du_tva;
+          $this->taux_tva    = $consult->taux_tva;
+        }
       }
       $_object_id = $this->_consult_id;
       $_object_class = "CConsultation";

@@ -219,7 +219,7 @@ class CActe extends CMbMetaObject {
     if ($this->_preserve_montant || $this->_forwardRefMerging) {
       return null;
     }
-    if($this->num_facture == 1) {
+    if($this->num_facture) {
       /** @var CCodable $object */
       $object = new $this->object_class;
       $object->load($this->object_id);

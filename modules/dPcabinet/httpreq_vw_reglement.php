@@ -116,7 +116,7 @@ $facture = $consult->_ref_facture;
 $divers = array();
 if (CAppui::conf("dPccam CCodable use_frais_divers CConsultation")) {
   $divers = $consult->loadRefsFraisDivers(count($consult->_ref_factures)+1);
-  $consult->loadRefsFraisDivers();
+  $consult->loadRefsFraisDivers(null);
 }
 //Si on a pas de facture on recherche d'une facture ouverte
 if (!$facture->_id && CAppUI::conf("ref_pays") == 2) {

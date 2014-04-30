@@ -968,6 +968,13 @@ class CConsultation extends CFacturable implements IPatientRelated {
       $facture->du_tiers    = $this->du_tiers;
       $facture->du_tva      = $this->du_tva;
       $facture->taux_tva    = $this->taux_tva;
+
+      if (!count($this->loadRefsFraisDivers(1)) && count($this->loadRefsFraisDivers(2)) && $this->du_tva) {
+        $facture->du_patient  = $this->du_patient - $this->du_tva - $this->secteur3;
+        $facture->du_tva      = 0;
+        $facture->taux_tva    = $this->taux_tva;
+      }
+
       if ($msg = $facture->store()) {
         echo $msg;
       }
