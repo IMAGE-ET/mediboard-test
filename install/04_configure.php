@@ -202,8 +202,23 @@ showHeader();
         </th>
         <td>
           <select id="shared_memory" name="shared_memory">
-            <option value="none"      <?php if ($dPconfig['shared_memory'] == 'none'      ) { echo 'selected'; } ?> >Disque</option>
-            <option value="apc"       <?php if ($dPconfig['shared_memory'] == 'apc'       ) { echo 'selected'; } ?> >APC</option>
+            <option value="none" <?php if ($dPconfig['shared_memory'] == 'none') { echo 'selected'; } ?> >Disque</option>
+
+            <option value="apc"
+              <?php if ($dPconfig['shared_memory'] == 'apc' ) {
+                echo 'selected';
+              }
+              if (!extension_loaded('apc')) {
+                echo 'disabled';
+              } ?> >APC</option>
+
+            <option value="apcu"
+              <?php if ($dPconfig['shared_memory'] == 'apcu') {
+                echo 'selected';
+              }
+              if (!extension_loaded('apcu')) {
+                echo 'disabled';
+              } ?> >APCu (PHP 5.5+)</option>
           </select>
         </td>
         <td>

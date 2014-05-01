@@ -15,6 +15,8 @@
  * Alternative PHP Cache (APC) based Memory class
  */
 class APCSharedMemory implements ISharedMemory {
+  protected $_cache_key = "info";
+
   /**
    * @see parent::init()
    */
@@ -63,10 +65,12 @@ class APCSharedMemory implements ISharedMemory {
     $info = apc_cache_info("user");
     $cache_list = $info["cache_list"];
     $len = strlen($prefix);
+    $cache_key = $this->_cache_key;
 
     $keys = array();
     foreach ($cache_list as $_cache) {
-      $_key = $_cache["info"];
+      $_key = $_cache[$cache_key];
+
       if (strpos($_key, $prefix) === 0) {
         $keys[] = substr($_key, $len);
       }
@@ -82,9 +86,10 @@ class APCSharedMemory implements ISharedMemory {
   function modDate($key) {
     $info = apc_cache_info("user");
     $cache_list = $info["cache_list"];
+    $cache_key = $this->_cache_key;
 
     foreach ($cache_list as $_cache) {
-      $_key = $_cache["info"];
+      $_key = $_cache[$cache_key];
 
       if ($_key === $key) {
         return strftime(CMbDT::ISO_DATETIME, $_cache["mtime"]);

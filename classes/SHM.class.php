@@ -35,6 +35,7 @@ abstract class SHM {
   static $availableEngines = array(
     "disk"      => "DiskSharedMemory",
     "apc"       => "APCSharedMemory",
+    "apcu"      => "APCuSharedMemory",
     "memcached" => "MemcachedSharedMemory",
     "redis"     => "RedisSharedMemory",
   );
