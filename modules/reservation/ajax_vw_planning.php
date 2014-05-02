@@ -93,9 +93,10 @@ if ($bloc_id) {
 }
 
 $praticien = new CMediusers();
-$praticiens = $praticien->loadChirurgiens();
+$praticiens = $praticien->loadPraticiens();
 
 $where["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($praticiens), $praticien_id);
+
 
 $operations = $operation->loadList($where, null, null, null, $ljoin);
 $nbIntervHorsPlage = $operation->countList($where, null, $ljoin);

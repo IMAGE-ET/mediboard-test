@@ -599,7 +599,7 @@ table#weeklyPlanning th.today {
 .planning .event {
   position: absolute;
   border-radius: 3px;
-  color: #fff;
+  color: black;
   white-space: normal;
   font-size: 10px;
   overflow: hidden;

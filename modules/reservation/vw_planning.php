@@ -25,7 +25,7 @@ $show_cancelled = CValue::getOrSession("show_cancelled", 0);
 $show_operations= CValue::getOrSession("show_operations", 1);
 
 $praticiens = new CMediusers;
-$praticiens = $praticiens->loadChirurgiens(); 
+$praticiens = $praticiens->loadPraticiens();
 CMbObject::massLoadFwdRef($praticiens, "function_id");
 
 foreach ($praticiens as $_prat) {
