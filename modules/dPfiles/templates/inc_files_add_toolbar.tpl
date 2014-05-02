@@ -6,6 +6,8 @@
   <button style="float: left" class="new" type="button" onclick="uploadFile('{{$object_guid}}')">
    {{tr}}CFile-title-create{{/tr}}
   </button>
+
+  <button style="float:left;" class="new" type="button" onclick="File.createMozaic('{{$object_guid}}', '', reloadAfterUploadFile);">{{tr}}CFile-create-mozaic{{/tr}}</button>
   
   {{if $app->user_prefs.directory_to_watch}}
     <button class="new yopletbutton" style="float: left" type="button" disabled="disabled"

@@ -259,6 +259,9 @@ class CSetupdPfiles extends CSetup {
       ADD `type_doc` VARCHAR(128);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.33";
+    $this->makeRevision("0.33");
+    $this->addPrefQuery("mozaic_disposition", "2x2");
+
+    $this->mod_version = "0.34";
   }
 }

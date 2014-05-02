@@ -13,5 +13,6 @@
 // Préférences par Module
 CPreferences::$modules["dPfiles"] = array(
   "directory_to_watch",
-  "debug_yoplet"
+  "debug_yoplet",
+  "mozaic_disposition"
 );
