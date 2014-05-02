@@ -18,6 +18,8 @@
     {{tr}}CFile-title-create{{/tr}}
   </button>
 
+  <button class="thumbnails" onclick="File.createMozaic('{{$object->_class}}-{{$object->_id}}', '')">{{tr}}CFile-create-mozaic{{/tr}}</button>
+
   {{if $app->user_prefs.directory_to_watch}}
     <button class="new yopletbutton" disabled="disabled" onclick="File.applet.modalOpen('{{$object->_guid}}')">
       {{tr}}Upload{{/tr}}
