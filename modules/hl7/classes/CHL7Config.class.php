@@ -45,6 +45,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     
     // Handle
     "ignore_fields",
+    "bypass_validating",
     "handle_mode",
     "handle_NDA",
     "handle_telephone_number",
@@ -102,6 +103,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
 
   // Handle
   public $ignore_fields;
+  public $bypass_validating;
   public $handle_mode;
   public $handle_NDA;
   public $handle_telephone_number;
@@ -176,6 +178,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
       "handle_PV2_12",
       "handle_NSS",
       "ignore_fields",
+      "bypass_validating",
       "create_grossesse",
       "search_master_IPP",
       "search_master_NDA",
@@ -248,6 +251,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["handle_mode"]             = "enum list|normal|simple default|normal";
     $props["handle_telephone_number"] = "enum list|XTN_1|XTN_12 default|XTN_12";
     $props["ignore_fields"]           = "str";
+    $props["bypass_validating"]       = "bool default|0";
     $props["create_grossesse"]        = "bool default|1";
     $props["search_master_IPP"]       = "bool default|0";
     $props["search_master_NDA"]       = "bool default|0";

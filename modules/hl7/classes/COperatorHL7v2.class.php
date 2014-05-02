@@ -68,9 +68,12 @@ class COperatorHL7v2 extends CEAIOperator {
         
         return $msgAck;
       }
-   
+
+      $sender = $data_format->_ref_sender;
+      $sender->getConfigs($data_format);
+
       // Acquittement d'erreur d'un document XML recu non valide
-      if (!$evt->message->isOK(CHL7v2Error::E_ERROR)) {
+      if (!$sender->_configs["bypass_validating"] && !$evt->message->isOK(CHL7v2Error::E_ERROR)) {
         $exchange_hl7v2->populateExchange($data_format, $evt);
         $exchange_hl7v2->loadRefsInteropActor();
         $exchange_hl7v2->populateErrorExchange(null, $evt);

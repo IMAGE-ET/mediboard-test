@@ -1284,7 +1284,13 @@ class CSetuphl7 extends CSetup {
                ADD `send_patient_with_current_admit` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.92";
+    $this->makeRevision("0.92");
+
+    $query = "ALTER TABLE `hl7_config`
+                ADD `bypass_validating` ENUM ('0','1') DEFAULT '0'";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.93";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
