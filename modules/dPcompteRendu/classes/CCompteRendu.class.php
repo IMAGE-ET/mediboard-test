@@ -165,6 +165,10 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     "CFactureEtablissement" => array(
       "[ENTETE FACTURE ETAB]"         => "header",
       "[PIED DE PAGE FACT ETAB]"      => "footer"
+    ),
+    "CPatient" => array(
+     "[ENTETE MOZAIC]" => "header",
+     "[PIED DE PAGE MOZAIC]" => "footer"
     )
   );
 
