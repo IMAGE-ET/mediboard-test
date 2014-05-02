@@ -12,8 +12,8 @@
 // Load AppUI from session
 global $rootName;
 
-// Ignore aborted HTTP request, so that PHP finishes the current script
-ignore_user_abort(true);
+// Don't ignore user abort as long as session is still locked
+ignore_user_abort(false);
 
 // Manage the session variable(s)
 $session_name = preg_replace("/[^a-z0-9]/i", "", $rootName);
@@ -28,6 +28,9 @@ CSessionHandler::setHandler(CAppUI::conf("session_handler"));
 
 // Start session
 CSessionHandler::start();
+
+// Ignore aborted HTTP request, so that PHP finishes the current script
+ignore_user_abort(true);
 
 // Register shutdown function to end the session
 register_shutdown_function(array("CSessionHandler", "writeClose"));
