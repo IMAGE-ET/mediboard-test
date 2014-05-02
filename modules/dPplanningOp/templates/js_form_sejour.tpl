@@ -201,8 +201,8 @@ function updateSortiePrevue() {
 
 function updateDureePrevue() {
   var oForm = document.editSejour;
-  
-  if(oForm._duree_prevue.value == 0) {
+
+  if (oForm._date_entree_prevue.value) {
     var dEntreePrevue = Date.fromDATE(oForm._date_entree_prevue.value);
     var dSortiePrevue = Date.fromDATE(oForm._date_sortie_prevue.value);
     var iSecondsDelta = dSortiePrevue - dEntreePrevue;
