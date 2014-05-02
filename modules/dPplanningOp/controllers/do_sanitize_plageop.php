@@ -15,7 +15,7 @@ $ds = CSQLDataSource::get("std");
 
 $query = "UPDATE `operations`
             LEFT JOIN plagesop ON plagesop.plageop_id = `operations`.`plageop_id`
-            SET `operation`.`date` = plagesop.date
+            SET `operations`.`date` = plagesop.date
             WHERE `operations`.plageop_id IS NOT NULL";
 
 if (!$ds->exec($query)) {
