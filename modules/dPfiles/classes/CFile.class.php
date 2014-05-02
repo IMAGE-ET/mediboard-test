@@ -239,7 +239,7 @@ class CFile extends CDocumentItem {
       return $parentPerm;
     }
 
-    if ($this->_ref_object->_id) {
+    if ($this->_ref_object && $this->_ref_object->_id) {
       return $parentPerm && $this->_ref_object->getPerm($permType);
     }
 
@@ -815,6 +815,17 @@ class CFile extends CDocumentItem {
       WHERE `author_id` $in_owner
       GROUP BY `object_class`, `category_id`";
     return $ds->loadList($query);
+  }
+
+  /**
+   * check if this is an image
+   *
+   * @return bool
+   */
+  function isImage() {
+    if (strpos($this->file_type, "image") === 0) {
+      return true;
+    }
   }
 }
 
