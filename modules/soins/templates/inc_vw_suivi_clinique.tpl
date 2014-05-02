@@ -454,7 +454,7 @@
                         {{math assign=prescription_end_real equation="x - y" x=$_line->_fin_relative y=$prolongation_time_day|intval}}
                       {{/if}}
                       <span {{if $_line->_fin_reelle|iso_date <= $date_after|iso_date}}style="border-bottom: 2px solid orange"{{/if}}
-                        {{if $_line->warning_day && (($_line->duree && $_line->_fin_relative == $_line->warning_day) || (!$_line->duree && $prescription_end_real == $_line->warning_day))}}style="border-bottom: 2px solid orangered"{{/if}}
+                        {{if $_line->warning_day && (($_line->duree && $_line->_fin_relative <= $_line->warning_day) || (!$_line->duree && $prescription_end_real <= $_line->warning_day))}}style="border-bottom: 2px solid orangered"{{/if}}
                             onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}')">
                         {{$_line->_ref_produit->libelle_abrege}}
                         {{if $_line->_alerte_antibio}}
