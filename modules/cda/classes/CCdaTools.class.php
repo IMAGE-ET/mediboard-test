@@ -175,7 +175,7 @@ class CCdaTools {
     $returnErrors = $dom->schemaValidate("modules/cda/resources/CDA.xsd", true, false);
     $validateSchematron = self::validateSchematron($cda);
     if ($returnErrors !== true || $validateSchematron) {
-      throw new CMbException("Problème de conformité, vérifiez les informations nécessaires pour le DMP et le CDA");
+      throw new CMbException("Problème de conformité, vérifiez les informations nécessaires pour le CDA");
     }
   }
 

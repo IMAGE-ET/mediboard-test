@@ -19,6 +19,12 @@ class CHL7v3EventXDSProvideAndRegisterDocumentSetRequest
   extends CHL7v3EventXDS implements CHL7EventXDSProvideAndRegisterDocumentSetRequest {
   /** @var string */
   public $interaction_id = "ProvideAndRegisterDocumentSetRequest";
+  public $_event_name    = "DocumentRepository_ProvideAndRegisterDocumentSet-b";
+  public $old_version;
+  public $old_id;
+  public $type;
+  public $uuid;
+  public $hide;
 
   /**
    * Build ProvideAndRegisterDocumentSetRequest event
@@ -55,9 +61,13 @@ class CHL7v3EventXDSProvideAndRegisterDocumentSetRequest
       case "hide_ps":
         $xds->hide_ps = true;
         break;
+
       case "hide_patient":
         $xds->hide_patient = true;
         break;
+
+      default:
+        $xds->hide_patient = false;
     }
     $header_xds = $xds->generateXDS41();
     $xml->importDOMDocument($message, $header_xds);
@@ -68,11 +78,7 @@ class CHL7v3EventXDSProvideAndRegisterDocumentSetRequest
     $document->nodeValue = base64_encode($cda);
 
     //ajout de la signature
-    $dsig = new CDSIG($xml, $this->path_certificate, $this->passphrase_certificate);
-    $dsig_signature = $dsig->createSignatureLot($xds->oid, $factory->dom_cda);
-    $signature = $xml->createDocumentRepositoryElement($message, "Document");
-    $xml->addAttribute($signature, "id", $xds->uuid["signature"]);
-    $signature->nodeValue = base64_encode($dsig_signature->saveXML());
+    CEAIHandler::notify("AfterBuild", $this, $xml, $factory, $xds);
 
     $this->message = $xml->saveXML($message);
     $this->updateExchange(false);

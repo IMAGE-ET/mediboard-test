@@ -112,7 +112,6 @@ class CXDSMappingCDA {
   function generateXDS41() {
     $id_registry  = $this->uuid["registry"];
     $id_document  = $this->uuid["extrinsic"];
-    $id_signature = $this->uuid["signature"];
     $doc_uuid     = $this->doc_uuid;
 
     $class = new CXDSRegistryObjectList();
@@ -132,21 +131,12 @@ class CXDSMappingCDA {
       throw new CMbException($msg);
     }
 
-    //Ajout du document de signature
-    $signature = $this->createSignature($id_signature);
-    $class->appendExtrinsicObject($signature);
-
     //Ajout des associations
     $asso1 = $this->createAssociation("association01", $id_registry, $id_document);
-    $asso2 = $this->createAssociation("association02", $id_registry, $id_signature);
-    $asso3 = $this->createAssociation("association03", $id_signature, $id_registry, true);
-
     $class->appendAssociation($asso1);
-    $class->appendAssociation($asso2);
-    $class->appendAssociation($asso3);
 
     if ($doc_uuid) {
-      $asso4 = $this->createAssociation("association04", $id_document, $doc_uuid, false, true);
+      $asso4 = $this->createAssociation("association02", $id_document, $doc_uuid, false, true);
       $class->appendAssociation($asso4);
     }
 
@@ -668,9 +658,9 @@ class CXDSMappingCDA {
     if (strlen($id) === 22) {
       $result = "INS-C";
     }
-    if (strlen($id) === 12) {
+    /*if (strlen($id) === 12) {
       $result = "INS-A";
-    }
+    }*/
     return $result;
   }
 

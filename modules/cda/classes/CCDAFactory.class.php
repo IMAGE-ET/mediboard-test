@@ -62,19 +62,20 @@ class CCDAFactory {
    * @return void
    */
   function extractData() {
-    $docItem = $this->docItem;
+    $docItem             = $this->docItem;
     $this->realm_code    = "FR";
     $this->langage       = $docItem->language;
     $docItem->loadLastLog();
     $this->date_creation = $docItem->_ref_last_log->date;
-    $this->date_author = $docItem->_ref_last_log->date;
-    $this->targetObject = $object = $docItem->loadTargetObject();
+    $this->date_author   = $docItem->_ref_last_log->date;
+    $this->targetObject  = $object = $docItem->loadTargetObject();
     if ($object instanceof CConsultAnesth) {
       $this->targetObject = $object = $object->loadRefConsultation();
     }
     $this->practicien = $object->loadRefPraticien();
     $this->patient    = $object->loadRefPatient();
     $this->patient->loadLastINS();
+    $this->patient->loadFromIPP();
     $this->docItem    = $docItem;
     $this->root       = CMbOID::getOIDFromClass($docItem);
 
