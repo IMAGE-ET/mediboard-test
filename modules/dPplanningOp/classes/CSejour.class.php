@@ -3134,11 +3134,16 @@ class CSejour extends CFacturable implements IPatientRelated {
   /**
    * Charge la dernière opération d'un séjour
    *
+   * @param Bool $notCancel séjour non annulé
+   *
    * @return COperation
    */
-  function loadRefLastOperation() {
+  function loadRefLastOperation($notCancel = false) {
     $operation = new COperation;
     $operation->sejour_id = $this->_id;
+    if ($notCancel) {
+      $operation->annulee = "0";
+    }
     $operation->loadMatchingObject("date DESC");
 
     return $this->_ref_last_operation = $operation;
