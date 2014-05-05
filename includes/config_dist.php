@@ -72,6 +72,9 @@ $dPconfig["human_long_request_level"] = "10";
 $dPconfig["bot_long_request_level"]   = "100";
 $dPconfig["error_logs_in_db"]         = "0";
 
+// Dataminer limit
+$dPconfig["dataminer_limit"] = "20";
+
 // Object merge
 $dPconfig["alternative_mode"]  = "1";
 $dPconfig["merge_prevent_base_without_idex"]  = "1";
