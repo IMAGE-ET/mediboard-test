@@ -9,7 +9,7 @@
  * @version    $Revision: 22983 $
  */
 
-CCanDo::checkAdmin();
+CCanDo::checkEdit();
 
 $classes = CApp::getChildClasses("COperationMiner");
 $limit   = CAppUI::conf("dataminer_limit");
