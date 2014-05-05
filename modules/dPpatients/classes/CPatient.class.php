@@ -1302,7 +1302,7 @@ class CPatient extends CPerson {
       if (CAppUI::conf("dPpatients CPatient multi_group") == "hidden") {
         $where["functions_mediboard.group_id"] = "= '$group_id'";
       }
-      $order = "plageconsult.date DESC";
+      $order = "plageconsult.date DESC, consultation.heure DESC";
       $leftjoin = array();
       $leftjoin["plageconsult"]        = "consultation.plageconsult_id = plageconsult.plageconsult_id";
       $leftjoin["users_mediboard"]     = "plageconsult.chir_id = users_mediboard.user_id";
