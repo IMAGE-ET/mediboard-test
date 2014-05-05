@@ -29,8 +29,9 @@ CMbObject::$useObjectCache = false;
 importFile(CAppUI::conf("dPpatients imports pat_csv_path"), $start, $count);
 
 $start += $count;
-CAppUI::setConf("dPpatients imports pat_start", $start);
-CAppUI::setConf("dPpatients imports pat_count", $count);
+
+$fh = fopen(CAppUI::conf("root_dir")."/tmp/import_patient.txt", "w");
+$file_w = fwrite($fh, "$start;$count");
 
 if ($callback) {
   CAppUI::js("$callback($start,$count)");

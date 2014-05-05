@@ -33,9 +33,6 @@
         <input type="hidden" name="dosql" value="do_configure" />
         <table class="form">
           {{mb_include module=system template=inc_config_str var=pat_csv_path}}
-          {{mb_include module=system template=inc_config_str var=pat_start}}
-          {{mb_include module=system template=inc_config_str var=pat_count}}
-
           <tr>
             <td class="button" colspan="6">
               <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
@@ -59,13 +56,13 @@
           <table class="main form" style="table-layout: fixed;">
             <tr>
               <th colspan="2" class="title">
-                Importation de patients
+                Import de patients
               </th>
             </tr>
             <tr>
               <td colspan="2">
                 <div class="small-info">Import du fichier <code>{{$conf.dPpatients.imports.pat_csv_path}}</code></div>
-                <div class="small-warning">Attention ào l'établissement selectionné !<br/>
+                <div class="small-warning">Attention à l'établissement selectionné !<br/>
                 Attention à vider les logs fichier avant import</div>
               </td>
             </tr>
@@ -74,7 +71,7 @@
                 <label for="start">{{tr}}config-dPpatients-imports-pat_start{{/tr}}</label>
               </th>
               <td>
-                <input type="number" name="start" value="{{$conf.dPpatients.imports.pat_start}}" size="5" />
+                <input type="number" name="start" value="{{$start_pat}}" size="5" />
               </td>
             </tr>
             <tr>
@@ -82,7 +79,7 @@
                 <label for="count">{{tr}}config-dPpatients-imports-pat_count{{/tr}}</label>
               </th>
               <td>
-                <input type="number" name="count" value="{{$conf.dPpatients.imports.pat_count}}" size="5" />
+                <input type="number" name="count" value="{{$count_pat}}" size="5" />
               </td>
             </tr>
             <tr>
