@@ -1567,8 +1567,11 @@ class CSejour extends CFacturable implements IPatientRelated {
       $this->sortie_prevue = $this->type == "comp" ? CMbDT::dateTime("+1 DAY", $entree_reelle) : $entree_reelle;
     }
 
+    // Has to be donne once entree / sortie - reelle / prevue is not modified
+    $this->entree = $this->entree_reelle ? $this->entree_reelle : $this->entree_prevue;
+    $this->sortie = $this->sortie_reelle ? $this->sortie_reelle : $this->sortie_prevue;
+
     // Synchro durée d'hospi / type d'hospi
-    $this->completeField("entree", "sortie");
     $this->_at_midnight = (CMbDT::date(null, $this->entree) != CMbDT::date(null, $this->sortie));
     if ($this->_at_midnight && $this->type == "ambu") {
       $this->type = "comp";
@@ -1576,10 +1579,6 @@ class CSejour extends CFacturable implements IPatientRelated {
     elseif (!$this->_at_midnight && $this->type == "comp") {
       $this->type = "ambu";
     }
-
-    // Has to be donne once entree / sortie - reelle / prevue is not modified
-    $this->entree = $this->entree_reelle ? $this->entree_reelle : $this->entree_prevue;
-    $this->sortie = $this->sortie_reelle ? $this->sortie_reelle : $this->sortie_prevue;
   }
 
   /**
