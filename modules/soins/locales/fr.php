@@ -167,6 +167,7 @@ $locales['mod-soins-tab-vw_ressources_soins'] = 'Charge en soins';
 $locales['mod-soins-tab-vw_sejours'] = 'Consulter un séjour';
 $locales['mod-soins-tab-vw_stocks_service'] = 'Commande / Réception';
 $locales['module-Brancardage-long'] = 'Brancarder';
+$locales['module-soins-court'] = 'Dossier de soins';
 $locales['module-soins-long'] = 'Dossier de soins';
 $locales['offline_sejour'] = 'Procédure dégradée - Séjours';
 $locales['plan_soins'] = 'Procédure dégradée - Plan de Soins';
