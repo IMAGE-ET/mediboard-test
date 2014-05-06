@@ -72,7 +72,7 @@
           {{mb_value object=$_evenement field="duree"}} min
         </td>
         
-        <td>
+        <td class="text">
           {{if $_evenement->_count_actes}}
           <div>
             {{foreach from=$_evenement->_ref_actes_cdarr item=_acte}}
