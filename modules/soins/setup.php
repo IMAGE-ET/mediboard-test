@@ -81,6 +81,13 @@ class CSetupsoins extends CSetup {
     $this->makeRevision("0.17");
     $this->addPrefQuery("vue_sejours", "standard");
 
-    $this->mod_version = '0.18';
+    $this->makeRevision('0.18');
+
+    $query = "ALTER TABLE `sejour_task`
+                ADD `date` DATETIME,
+                ADD `author_id` INT(11);";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.19';
   }
 }

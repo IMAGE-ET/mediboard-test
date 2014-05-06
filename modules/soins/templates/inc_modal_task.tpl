@@ -12,6 +12,8 @@
   <input type="hidden" name="sejour_task_id" value="{{$task->_id}}" />
   <input type="hidden" name="realise" value="{{$task->realise}}" />
   <input type="hidden" name="prescription_line_element_id" value="{{$task->prescription_line_element_id}}" />
+  <input type="hidden" name="date" value="{{$task->date}}" />
+  <input type="hidden" name="author_id" value="{{$task->author_id}}" />
         
   <table class="form">
     <tr>

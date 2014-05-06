@@ -67,13 +67,9 @@
 	  <tr>
 	  	<td class="narrow"><input type="checkbox" disabled {{if $_task->realise}}checked{{/if}} /></td>
       <td>
-        {{assign var=log value=$_task->_ref_first_log}}
-
-        {{if $log && $log->_id}}
-          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$log->_ref_user->_ref_mediuser}}
-          <br/>
-          {{mb_value object=$log field=date}}
-        {{/if}}
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_task->_ref_author->_ref_mediuser}}
+        <br/>
+        {{mb_value object=$_task field=date}}
       </td>
 	    <td style="width: 50%; {{if $_task->realise}}text-decoration: line-through; color: #888;{{/if}}">
 	      {{mb_value object=$_task field="description"}}

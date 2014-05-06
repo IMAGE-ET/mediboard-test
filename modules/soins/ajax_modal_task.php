@@ -19,6 +19,10 @@ $task = new CSejourTask();
 if ($task_id) {
   $task->load($task_id);
 }
+else {
+  $task->author_id = Cuser::get()->_id;
+  $task->date = CMbDT::dateTime();
+}
 
 $task_element = false;
 if ($prescription_line_element_id) {

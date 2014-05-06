@@ -22,10 +22,12 @@ $sejour->countTasks();
 $sejour->loadRefsTasks();
 
 foreach ($sejour->_ref_tasks as $_task) {
-  $_task->loadFirstLog();
-  $_task->_ref_first_log->loadRefUser()->loadRefMediuser()->loadRefFunction();
+  $_task->setDateAndAuthor();
+  $_task->loadRefAuthor();
   $_task->loadRefPrescriptionLineElement();
-} 
+}
+
+CSejourTask::sortByDate($sejour->_ref_tasks);
 
 // Smarty template
 $smarty = new CSmartyDP();

@@ -19,6 +19,8 @@ class CSejourTask extends CMbObject {
   public $resultat;
   public $prescription_line_element_id;
   public $consult_id;
+  public $date;
+  public $author_id;
 
   /** @var CSejour */
   public $_ref_sejour;
@@ -28,6 +30,9 @@ class CSejourTask extends CMbObject {
 
   /** @var CPrescriptionLineElement */
   public $_ref_prescription_line_element;
+
+  /** @var CMediuser */
+  public $_ref_author;
 
   /**
    * @see parent::getSpec()
@@ -50,6 +55,8 @@ class CSejourTask extends CMbObject {
     $props["resultat"]    = "text helped";
     $props["prescription_line_element_id"] = "ref class|CPrescriptionLineElement";
     $props["consult_id"]  = "ref class|CConsultation";
+    $props['date']        = 'dateTime';
+    $props['author_id']   = 'ref class|CUser';
 
     return $props;
   }
@@ -95,5 +102,54 @@ class CSejourTask extends CMbObject {
     if ($active === true || ($active = !!CModule::getActive("dPprescription"))) {
       $this->_ref_prescription_line_element = $this->loadFwdRef("prescription_line_element_id");
     }
+  }
+
+  /**
+   * Charge l'utilisateur qui a créé la tâche
+   *
+   * @return CUser|null
+   */
+  function loadRefAuthor() {
+    $this->_ref_author = $this->loadFwdRef('author_id', true);
+    $this->_ref_author->loadRefMediuser()->loadRefFunction();
+
+    return $this->_ref_author;
+  }
+
+  /**
+   * Renseigne les champs date et author_id à partir des User logs
+   *
+   * @return void
+   */
+  function setDateAndAuthor() {
+    if ($this->_id && !$this->date && !$this->author_id) {
+      $this->loadFirstLog();
+      $this->date = $this->_ref_first_log->date;
+      $this->author_id = $this->_ref_first_log->user_id;
+      $this->store();
+    }
+  }
+
+  /**
+   * Sort the tasks by date
+   *
+   * @param CSejourTask[] &$tasks The tasks to sort
+   *
+   * @return bool
+   */
+  public static function sortByDate(&$tasks) {
+    $res_sort = uasort(
+      $tasks,
+      function ($a, $b) {
+        $at = strtotime($a->date);
+        $bt = strtotime($b->date);
+
+        if ($at == $bt) {
+          return 0;
+        }
+
+        return $at > $bt ? -1 : 1;
+      }
+    );
   }
 }

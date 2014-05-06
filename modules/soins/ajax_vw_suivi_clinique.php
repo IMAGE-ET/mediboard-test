@@ -53,9 +53,11 @@ foreach ($sejour->_ref_tasks as $key=>$_task) {
   }
 
   $_task->loadRefPrescriptionLineElement();
-  $_task->loadFirstLog();
-  $_task->_ref_first_log->loadRefUser()->loadRefMediuser()->loadRefFunction();
+  $_task->setDateAndAuthor();
+  $_task->loadRefAuthor();
 }
+
+CSejourTask::sortByDate($sejour->_ref_tasks);
 
 // Tri des transmissions par catégorie
 $transmissions = array();
