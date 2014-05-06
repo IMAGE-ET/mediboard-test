@@ -1307,7 +1307,11 @@ class CMediusers extends CPerson {
     $template->addProperty("Praticien - Initiales"      , $this->_shortview);
     $template->addProperty("Praticien - Discipline"     , $this->_ref_discipline->_view);
     $template->addProperty("Praticien - Spécialité"     , $this->_ref_spec_cpam->_view);
-    
+    $template->addProperty("Praticien - CAB"            , $this->cab);
+    $template->addProperty("Praticien - CONV"           , $this->conv);
+    $template->addProperty("Praticien - ZISD"           , $this->zisd);
+    $template->addProperty("Praticien - IK"             , $this->ik);
+
     $template->addProperty("Praticien - Titres"         , $this->titres);
     $template->addProperty("Praticien - ADELI"          , $this->adeli);
     $template->addBarcode("Praticien - Code barre ADELI", $this->adeli, array("barcode" => array(
