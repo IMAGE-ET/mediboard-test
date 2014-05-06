@@ -17,7 +17,7 @@
 {{if $curr_consult->patient_id}}
   {{assign var=patient value=$curr_consult->_ref_patient}}
   <td {{if $consult_anesth->operation_id}}rowspan="2"{{/if}} style="{{$consult_background}}" class="text">
-    {{$patient}}
+    {{mb_ditto name=nom_patient value=$patient center=true}}
     {{if $filter->_print_ipp && $patient->_IPP}}
       [{{$patient->_IPP}}]
     {{/if}}
@@ -25,30 +25,36 @@
 
   {{if $filter->_coordonnees}}
     <td {{if $consult_anesth->operation_id}}rowspan="2"{{/if}} class="text" style="{{$consult_background}}">
-      {{mb_value object=$patient field=adresse}}
-      <br />
-      {{mb_value object=$patient field=cp}}
-      {{mb_value object=$patient field=ville}}
+      {{assign var=adresse_patient value="`$patient->adresse` \n `$patient->cp` `$patient->ville`"}}
+      {{if $patient->adresse || $patient->cp || $patient->ville}}
+        {{mb_ditto name=adresse_patient value=$adresse_patient|nl2br center=true}}
+      {{/if}}
     </td>
-
     <td {{if $consult_anesth->operation_id}}rowspan="2"{{/if}} style="{{$consult_background}}">
-      {{mb_value object=$patient field=tel}}
-      <br />
-      {{mb_value object=$patient field=tel2}}
+      {{if $patient->tel}}
+        {{mb_ditto name=tel_patient value=$patient->tel center=true}}
+      {{/if}}
+      {{if $patient->tel2}}
+        <br />{{mb_ditto name=tel2_patient value=$patient->tel2 center=true}}
+      {{/if}}
     </td>
   {{elseif $filter->_telephone}}
     <td {{if $consult_anesth->operation_id}}rowspan="2"{{/if}} style="{{$consult_background}}">
-      {{mb_value object=$patient field=tel}}
-      <br />
-      {{mb_value object=$patient field=tel2}}
+      {{if $patient->tel}}
+        {{mb_ditto name=tel_patient value=$patient->tel center=true}}
+      {{/if}}
+      {{if $patient->tel2}}
+        <br />{{mb_ditto name=tel2_patient value=$patient->tel2 center=true}}
+      {{/if}}
     </td>
   {{/if}}
   <td {{if $consult_anesth->operation_id}}rowspan="2"{{/if}} style="text-align: center; {{$consult_background}}">
-    {{$patient->_age}}
+    {{assign var=age_patient value="`$patient->_age`"}}
     {{if $patient->_annees != "??"}}
-      <br />
-      ({{mb_value object=$patient field="naissance"}})
+      {{assign var=age_patient value="`$age_patient` \n (`$patient->naissance`)"}}
     {{/if}}
+
+    {{mb_ditto name=age_patient value=$age_patient|nl2br}}
   </td>
   {{if $show_lit}}
     <td {{if $consult_anesth->operation_id}}rowspan="2"{{/if}} style="{{$consult_background}}">
