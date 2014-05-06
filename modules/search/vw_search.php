@@ -9,7 +9,7 @@
  * @license  OXOL, see http://www.mediboard.org/public/OXOL
  * @link     http://www.mediboard.org */
 
-CCanDo::checkRead();
+CCanDo::checkAdmin();
 
 // Création du template
 $smarty = new CSmartyDP();

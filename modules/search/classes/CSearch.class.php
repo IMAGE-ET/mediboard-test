@@ -265,12 +265,12 @@ class CSearch {
    *
    * @return bool
    */
-  function bulkIndexing ($data) {
+  function bulkIndexing($data) {
     $data_to_index = $this->constructBulkData($data);
 
     foreach ($data_to_index as $type_name => $_type) {
       $typeES = $this->_index->getType($type_name);
-      foreach ($_type as $action =>$_data) {
+      foreach ($_type as $action => $_data) {
         $documents = array();
         foreach ($_data as $_datum) {
           $documents[] = new Document($_datum['id'], $_datum);
@@ -279,15 +279,19 @@ class CSearch {
           case 'create':
             $typeES->addDocuments($documents);
             break;
-          case 'store' :
+
+          case 'store':
             $typeES->updateDocuments($documents);
             break;
+
           case 'delete':
             $typeES->deleteDocuments($documents);
             break;
-          case 'merge' :
+
+          case 'merge':
             /* supprimer un des deux et faire un update de l'autre.*/
             break;
+
           default:
             return false;
         }
@@ -296,6 +300,7 @@ class CSearch {
     }
     $ids_to_delete = CMbArray::pluck($data, "search_indexing_id");
     $this->deleteDataTemporaryTable($ids_to_delete);
+
     return true;
   }
 
@@ -350,7 +355,7 @@ class CSearch {
    */
   function constructWordsWithDate($words, $date_interval, $date_deb, $date_fin) {
     switch ($date_interval) {
-      case 'uniqueDay' :
+      case 'uniqueDay':
         if ($date_deb) {
           return $words." date:[".$date_deb." TO ".$date_deb."]";
         }
@@ -358,7 +363,8 @@ class CSearch {
           return $words;
         }
         break;
-      case 'between' :
+
+      case 'between':
         if ($date_deb && $date_fin) {
           return $words." date:[".$date_deb." TO ".$date_fin."]";
         }
@@ -366,11 +372,68 @@ class CSearch {
           return $words;
         }
         break;
-      case 'since' :
+
+      case 'since':
         return $words." date:{".$date_deb." TO *}";
+
         break;
-      default :
+
+      default:
         return $words;
     }
+  }
+  /**
+   * HTML cleaning method
+   *
+   * @param string $html HTML to purify
+   *
+   * @return string
+   */
+  static function purifyHTML($html) {
+    if (trim($html) == "") {
+      return $html;
+    }
+
+    static $cache = array();
+    static $purifier;
+
+    if (isset($cache[$html])) {
+      return $cache[$html];
+    }
+
+    // Only Unicode alphanum characters and whitespaces
+    /*
+    if (!preg_match("/[^\p{L}\p{N}\s]/u", $html)) {
+      // No need to purify
+      return $html;
+    }
+    */
+
+    if (!$purifier) {
+      $root = CAppUI::conf("root_dir");
+
+      if (!class_exists("HTMLPurifier", false) || !class_exists("HTMLPurifier_Config", false)) {
+        $file = "$root/lib/htmlpurifier/library/HTMLPurifier.auto.php";
+        if (is_readable($file)) {
+          include_once $file;
+        }
+      }
+
+      $config = HTMLPurifier_Config::createDefault();
+      // App encoding (in order to prevent from removing diacritics)
+      $config->set('Core.Encoding', CApp::$encoding);
+      $config->set('Cache.SerializerPath', "$root/tmp");
+      $config->set('HTML.Allowed', "");
+
+      $purifier = new HTMLPurifier($config);
+    }
+
+    $purified = $purifier->purify($html);
+
+    if (isset($purified[5])) {
+      $cache[$html] = $purified;
+    }
+
+    return $purified;
   }
 }

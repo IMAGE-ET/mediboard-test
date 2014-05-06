@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @link     http://www.mediboard.org */
-CCanDo::checkRead();
+CCanDo::checkAdmin();
 
 CApp::setTimeLimit(0);
 CApp::setMemoryLimit("1024M");
@@ -69,7 +69,7 @@ try {
   CAppUI::displayAjaxMsg("La requête est mal formée", UI_MSG_ERROR);
   echo $e->getMessage();
 }
-mbTrace($words);
+//mbTrace($words);
 $smarty = new CSmartyDP();
 $smarty->assign("start", $start);
 $smarty->assign("authors", $authors);

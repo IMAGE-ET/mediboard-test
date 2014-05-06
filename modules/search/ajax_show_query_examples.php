@@ -10,7 +10,7 @@
  * @link     http://www.mediboard.org
  */
 
-CCanDo::checkRead();
+CCanDo::checkAdmin();
 
 $smarty = new CSmartyDP();
 $smarty->display("inc_show_query_examples.tpl");

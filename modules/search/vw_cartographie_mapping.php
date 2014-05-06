@@ -9,7 +9,6 @@
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
 
-
 CCanDo::checkAdmin();
 try{
   $client_index   = new CSearch();

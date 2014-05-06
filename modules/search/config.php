@@ -15,8 +15,9 @@ $dPconfig["search"] = array(
     "active_handler_search"  => "0",
   ),
 
-  "client_host" => "",
-  "client_port" => "",
-  "index_name"  => "",
+  "client_host"            => "",
+  "client_port"            => "",
+  "index_name"             => "",
+  "interval_indexing"      => "100",
 );
 $dPconfig["object_handlers"]["CSearchObjectHandler"] = "0";

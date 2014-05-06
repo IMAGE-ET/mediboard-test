@@ -1786,11 +1786,12 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
   /**
    * Redesign the content of the body you will index
    *
-   * @param string $content The content you want to redesign
+   * @param string $contenu The content you want to redesign
    *
    * @return string
    */
-  function redesignBody($content) {
+  function redesignBody($contenu) {
+    $content = $contenu;
     $content = strtr(
       $content,
       array(
@@ -1798,35 +1799,11 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
         "&nbsp;" => " ",
       )
     );
-
-    $content = CHtmlToPDF::cleanWord($content);
-    $content = CMbString::convertHTMLToXMLEntities($content);
-
-    $xml   = new DOMDocument('1.0', 'iso-8859-1');
-    $xpath = new DOMXpath($xml);
-    $xml->loadXML("<?xml version=\"1.0\" encoding=\"iso-8859-1\" ?><div>$content</div>");
-
-    // Test body id
-    $elements = $xpath->query("//div[@id='body']");
-    $style    = $xpath->query("//style|//script");
-
-    foreach ($style as $_style) {
-      $_style->parentNode->removeChild($_style);
-    }
-    $xml->saveXML();
-
-    if ($elements->length > 0 ) {
-      $xml = $elements->item(0);
-    }
-    else {
-      $xml = $xml->documentElement;
-    }
-    $body = $xml->textContent;
-    $body = preg_replace("/\s+/", ' ', $body);
-    $body = strip_tags($body);
-    $body = html_entity_decode($body);
-    $body = trim($body);
-    return $body;
+    $content = CSearch::purifyHTML($content);
+    $content = preg_replace("/\s+/", ' ', $content);
+    $content = html_entity_decode($content);
+    $content = trim($content);
+    return $content;
   }
 
   /**
@@ -1849,11 +1826,12 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     }
 
     switch ($this->object_class) {
-      case "CConsultAnesth" :
+      case "CConsultAnesth":
         return $object->_ref_consultation->_ref_patient->_id;
+
         break;
 
-      default :
+      default:
         return $object->_ref_patient->_id;
     }
   }

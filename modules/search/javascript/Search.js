@@ -78,7 +78,30 @@ Search = window.Search || {
         $V(element2, id);
       }
     });
-  }
+  },
 
+  firstIndexing: function (table, mapping) {
+    if (table) {
+      Modal.confirm(" Voulez-vous remplir la table ? Si cette action a déjà été effectuée, cela entraînera une nouvelle indexation des données. ATTENTION : l'opération sera irréversible. ",
+        {onOK: function() {
+          var url = new Url('search',  'first_indexing');
+          url.addParam("table" , table);
+          url.addParam("mapping" , mapping);
+          url.requestUpdate("table_main");
+        }
+      });
+    }
+    else {
+      var url = new Url('search',  'first_indexing');
+      url.addParam("table" , table);
+      url.addParam("mapping" , mapping);
+      url.requestUpdate("table_main");
+    }
+  },
+
+  routineIndexing: function () {
+    var url = new Url('search',  'routine_indexing');
+    url.requestUpdate("table_main");
+  }
 
 };

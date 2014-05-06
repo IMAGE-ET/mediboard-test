@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
-
+CCanDo::checkAdmin();
 $lock_file = CAppUI::getTmpPath("search_indexing");
 CMbPath::forceDir($lock_file);
 
@@ -44,13 +44,24 @@ set_time_limit(600);
 set_min_memory_limit("1024M");
 
 //TRAITEMENT
-$client_index = new CSearch();
-//create a client
-$client_index->createClient();
-$client_index->loadIndex();
-$data = $client_index->getDataTemporaryTable("50", null);
-$client_index->bulkIndexing($data);
+try {
+  $client_index = new CSearch();
+  //create a client
+  $client_index->createClient();
+  $client_index->loadIndex();
+  $data = $client_index->getDataTemporaryTable(CAppUI::conf("search interval_indexing"), null);
+  $client_index->bulkIndexing($data);
+  CAppUI::displayAjaxMsg("L'indexation s'est correctement déroulée ", UI_MSG_OK);
+  $error = "";
+} catch (Exception $e) {
+  CAppUI::displayAjaxMsg("L'indexation a recontré un problème", UI_MSG_ERROR);
+  $error = "index";
+}
 
 
  // UNLOCK //
 unlink($lock_file);
+
+$smarty = new CSmartyDP();
+$smarty->assign("error", $error);
+$smarty->display("inc_configure_serveur.tpl");

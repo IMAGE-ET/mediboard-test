@@ -36,6 +36,9 @@
                 <td>
                   <input type="search" id="words" name="words" value="" placeholder="Saisissez les termes de votre recherche ici..." style="width:700px;" onchange="$V(this.form.start, '0')" >
                 </td>
+                <td>
+                  {{mb_include module=search template=inc_tooltip_help}}
+                </td>
               </tr>
               <tr>
                 <th>Date</th>
@@ -81,7 +84,7 @@
                 <td>
                   <button type="submit" id="button_search" class="button lookup">Démarrer la recherche</button>
                 </td>
-                <td style="float: right;">
+                <td style="float: right;; display:none">
                   <a href="#" id="a_advanced_search" class="button down" onclick="Search.toggleElement($('advanced_search')); Search.toggleElement($('a_advanced_search'))"> Recherche avancée</a>
                 </td>
 

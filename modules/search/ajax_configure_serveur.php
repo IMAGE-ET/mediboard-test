@@ -11,8 +11,8 @@
 
 
 CCanDo::checkAdmin();
-
+$error = "";
 // Création du template
 $smarty = new CSmartyDP();
-
+$smarty->assign("error", $error);
 $smarty->display("inc_configure_serveur.tpl");
