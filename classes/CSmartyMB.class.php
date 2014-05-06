@@ -172,12 +172,18 @@ class CSmartyMB extends Smarty {
     $name   = CMbArray::extract($params, "name",  null, true);
     $value  = CMbArray::extract($params, "value", null, true);
     $reset  = CMbArray::extract($params, "reset", false, false);
+    $center  = CMbArray::extract($params, "center", false, false);
     $old = '';
     if (!$reset) {
       $old = CMbArray::get($cache, $name, "");
     }
     $cache[$name] = $value;
-    return $old != $value ? $value : "|";
+
+    $new_value = $old != $value ? $value : "|";
+    if ($center && $new_value == "|") {
+      $new_value = "<div style='text-align:center;'>$new_value</div>";
+    }
+    return $new_value;
   }
 
   /**
