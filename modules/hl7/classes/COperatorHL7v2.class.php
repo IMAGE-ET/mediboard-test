@@ -33,7 +33,7 @@ class COperatorHL7v2 extends CEAIOperator {
     /** @var CHL7v2MessageXML $dom_evt */
     $dom_evt = $evt->handle($msg);
     $dom_evt->_is_i18n = $evt->_is_i18n;
-    
+
     try {
       // Création de l'échange
       $exchange_hl7v2 = new CExchangeHL7v2();

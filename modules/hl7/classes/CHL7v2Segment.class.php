@@ -9,21 +9,31 @@
  * @version    $Revision$
  */
 
+/**
+ * Class CHL7v2Segment
+ */
 class CHL7v2Segment extends CHL7v2Entity {
   public $name;
   public $description;
-  public $fields      = array();
-  
 
-  /** @var CHL7v2SegmentGroup */
+  /** @var CHL7v2Field[] */
+  public $fields = array();
+
+    /** @var CHL7v2SegmentGroup */
   public $parent;
-    
+
+  /**
+   * @see parent::__construct
+   */
   function __construct(CHL7v2SegmentGroup $parent) {
     parent::__construct($parent);
     
     $this->parent = $parent;
   }
-  
+
+  /**
+   * @see parent::_toXML
+   */
   function _toXML(DOMNode $node, $hl7_datatypes, $encoding) {
     $doc = $node->ownerDocument;
     $new_node = $doc->createElement($this->name);
@@ -34,7 +44,10 @@ class CHL7v2Segment extends CHL7v2Entity {
     
     $node->appendChild($new_node);
   }
-  
+
+  /**
+   * @see parent::parse
+   */
   function parse($data) {
     //parent::parse($data);
     
@@ -82,7 +95,10 @@ class CHL7v2Segment extends CHL7v2Entity {
       }
     }
   }
-  
+
+  /**
+   * @see parent::fill
+   */
   function fill($fields) {
     if (!$this->name) {
       return;
@@ -121,35 +137,60 @@ class CHL7v2Segment extends CHL7v2Entity {
       }
     }
   }
-  
+
+  /**
+   * @see parent::validate
+   */
   function validate() {
     foreach ($this->fields as $field) {
       $field->validate();
     }
   }
-  
+
+  /**
+   * Get message
+   *
+   * @return CHL7v2Message
+   */
   function getMessage() {
     return $this->parent->getMessage();
   }
   
   /**
+   * Get segment
+   *
    * @return CHL7v2Segment
    */
   function getSegment(){
     return $this;
   }
-  
+
+  /**
+   * Get version
+   *
+   * @return string
+   */
   function getVersion() {
     return $this->getMessage()->getVersion();
   }
 
   /**
+   * Get specs
+   *
    * @return CHL7v2DOMDocument
    */
   function getSpecs(){
     return $this->getMessage()->getSchema(self::PREFIX_SEGMENT_NAME, $this->name);
   }
-  
+
+  /**
+   * Get path
+   *
+   * @param string  $separator Separator
+   * @param boolean $with_name Get path with segment name ?
+   *
+   * @return string
+   */
   function getPath($separator = ".", $with_name = false){
     if (!$with_name) {
       return array();
@@ -180,7 +221,10 @@ class CHL7v2Segment extends CHL7v2Entity {
     
     return $segment;
   }
-  
+
+  /**
+   * @see parent::__toString
+   */
   function __toString(){
     $sep = $this->getMessage()->fieldSeparator;
     $name = $this->name;
@@ -207,7 +251,10 @@ class CHL7v2Segment extends CHL7v2Entity {
   
     return $str;
   }
-  
+
+  /**
+   * @see parent::build
+   */
   function build(/*CHL7Event*/ $event, $name = null) {
     if (!$event->msg_codes) {
       throw new CHL7v2Exception(CHL7v2Exception::MSG_CODE_MISSING);
@@ -220,68 +267,96 @@ class CHL7v2Segment extends CHL7v2Entity {
     
     $this->getMessage()->appendChild($this);
   }
-  
-  function getAssigningAuthority($name = "mediboard", $value= null, CInteropActor $actor = null, CDomain $domain = null) {
+
+  /**
+   * Get assigning authority
+   *
+   * @param string        $name   Assigning authority type
+   * @param string        $value  Namespace ID
+   * @param CInteropActor $actor  Actor
+   * @param CDomain       $domain Domain
+   *
+   * @return array
+   * @throws CHL7v2Exception
+   */
+  function getAssigningAuthority($name = "mediboard", $value = null, CInteropActor $actor = null, CDomain $domain = null) {
     switch ($name) {
-      case "domain" :
+      case "domain":
         return array(
           $domain->libelle,
           $domain->OID,
           "ISO"
         );
 
-      case "actor" :
+      case "actor":
         $configs = $actor->_configs;
+
         return array(
           $configs["assigning_authority_namespace_id"],
           $configs["assigning_authority_universal_id"],
           $configs["assigning_authority_universal_type_id"],
         );
       
-      case "mediboard" :
+      case "mediboard":
         return array(
           CAppUI::conf("hl7 assigning_authority_namespace_id"),
           CAppUI::conf("hl7 assigning_authority_universal_id"),
           CAppUI::conf("hl7 assigning_authority_universal_type_id"),
         );
       
-      case "INS-C" :
+      case "INS-C":
         return array(
           "ASIP-SANTE-INS-C",
           "1.2.250.1.213.1.4.2",
           "ISO"
         );
       
-      case "ADELI" :
+      case "ADELI":
         return array(
           "ASIP-SANTE-PS",
           "1.2.250.1.71.4.2.1",
           "ISO"
         );
       
-      case "RPPS" :
+      case "RPPS":
         return array(
           "ASIP-SANTE-PS",
           "1.2.250.1.71.4.2.1",
           "ISO"
         );
       
-      case "FINESS" :
+      case "FINESS":
         return array(
           $value,
           null,
           "M"
         );
         
-      default :
+      default:
         throw new CHL7v2Exception(CHL7v2Exception::UNKNOWN_AUTHORITY);
     }
   }
-  
+
+  /**
+   * Get assigning authority for group
+   *
+   * @param CGroups $group Group
+   *
+   * @return array
+   */
   function getGroupAssigningAuthority(CGroups $group) {
     return $this->getAssigningAuthority("FINESS", $group->finess);
   }
-  
+
+  /**
+   * Get person identifiers
+   *
+   * @param CPatient      $patient Person
+   * @param CGroups       $group   Group
+   * @param CInteropActor $actor   Actor
+   *
+   * @return array
+   */
   function getPersonIdentifiers(CPatient $patient, CGroups $group, CInteropActor $actor = null) {
     if (!$patient->_IPP) {
       $patient->loadIPP($group->_id);
@@ -359,6 +434,15 @@ class CHL7v2Segment extends CHL7v2Entity {
     return $identifiers;
   }
 
+  /**
+   * Get actors identifiers
+   *
+   * @param array         &$identifiers Identifiers
+   * @param CMbObject     $object       Object
+   * @param CInteropActor $actor        Actor
+   *
+   * @return void
+   */
   function fillActorsIdentifiers(&$identifiers, CMbObject $object, CInteropActor $actor = null) {
     if (!$actor->_configs["send_actor_identifier"]) {
       return;
@@ -388,21 +472,39 @@ class CHL7v2Segment extends CHL7v2Entity {
     }
   }
 
+  /**
+   * Get other identifiers
+   *
+   * @param array         &$identifiers Identifiers
+   * @param CPatient      $patient      Person
+   * @param CInteropActor $actor        Actor
+   *
+   * @return void
+   */
   function fillOtherIdentifiers(&$identifiers, CPatient $patient, CInteropActor $actor = null) {
   }
-  
-  function getXCN9(CMbObject $object, CIdSante400 $idex = null, CInteropReceiver $actor = null) {
+
+  /**
+   * Get XCN-9 : assigning authority
+   *
+   * @param CUser|CMedecin|CMediusers|CMbObject $person Object
+   * @param CIdSante400                         $idex   Idex
+   * @param CInteropReceiver                    $actor  Actor
+   *
+   * @return array|null
+   */
+  function getXCN9(CMbObject $person, CIdSante400 $idex = null, CInteropReceiver $actor = null) {
     if (empty($actor->_configs["send_assigning_authority"])) {
-      return;
+      return null;
     }
 
     // Autorité d'affectation de l'ADELI
-    if ($object->adeli) {
+    if ($person->adeli) {
       return $this->getAssigningAuthority("ADELI");
     } 
     
     // Autorité d'affectation du RPPS
-    elseif ($object->rpps) {
+    elseif ($person->rpps) {
       return $this->getAssigningAuthority("RPPS");
     } 
     
@@ -414,10 +516,20 @@ class CHL7v2Segment extends CHL7v2Entity {
     // Autorité d'affectation de Mediboard
     return $this->getAssigningAuthority("mediboard");
   }
-  
+
+  /**
+   * Get XCN : extended composite ID number and name for persons
+   *
+   * @param CMbObject        $object     Object
+   * @param CInteropReceiver $actor      Actor
+   * @param bool             $repeatable Repeatable field
+   *
+   * @return array
+   */
   function getXCN(CMbObject $object, CInteropReceiver $actor, $repeatable = false) {
     $xcn1 = $xcn2 = $xcn3 = $xcn9 = $xcn13 = null;
-    
+
+    $idex = new CIdSante400();
     if ($object instanceof CMedecin) {
       $object->completeField("adeli", "rpps");
 
@@ -560,7 +672,15 @@ class CHL7v2Segment extends CHL7v2Entity {
       ); 
     }
   }
-  
+
+  /**
+   * Get XPN : extended composite name & ID for organizations
+   *
+   * @param CMbObject        $object   Object
+   * @param CInteropReceiver $receiver Receiver
+   *
+   * @return array
+   */
   function getXPN(CMbObject $object, CInteropReceiver $receiver) {
     $names = array();
     
@@ -597,6 +717,8 @@ class CHL7v2Segment extends CHL7v2Entity {
         // P - Phonetic (i.e., ASCII, Katakana, Hiragana, etc.) 
         "A"
       );
+
+      $patient_birthname = array();
       // Cas nom de jeune fille
       if ($object->nom_jeune_fille) {
         $patient_birthname    = $patient_usualname;
@@ -605,9 +727,10 @@ class CHL7v2Segment extends CHL7v2Entity {
         $patient_usualname[6] = "D";
       }
       $names[] = $patient_usualname;
+
       if ($object->nom_jeune_fille &&  $receiver->_configs["build_PID_6"] == "none") {
         $names[] = $patient_birthname;
-      } 
+      }
     }
     if ($object instanceof CCorrespondantPatient) {
       $names[] = array(
@@ -625,6 +748,16 @@ class CHL7v2Segment extends CHL7v2Entity {
     return $names;
   }
 
+  /**
+   * Get XTN : extended telecommunication number
+   *
+   * @param CInteropReceiver $receiver           Receiver
+   * @param string           $tel_number         Telephone number
+   * @param string           $tel_use_code       Telecommunication use code
+   * @param string           $tel_equipment_type Telecommunication equiment type
+   *
+   * @return array
+   */
   function getXTN(CInteropReceiver $receiver, $tel_number, $tel_use_code, $tel_equipment_type) {
     return array(
       ($receiver->_configs["build_telephone_number"] == "XTN_1") ? $tel_number : null,
@@ -644,7 +777,15 @@ class CHL7v2Segment extends CHL7v2Entity {
     );
   }
 
-  function getPL2 (CInteropReceiver $receiver, CSejour $sejour, CAffectation $affectation = null) {
+  /**
+   * Get PL2 : room
+   *
+   * @param CInteropReceiver $receiver    Receiver
+   * @param CAffectation     $affectation Affectation
+   *
+   * @return mixed|null
+   */
+  function getPL2 (CInteropReceiver $receiver, CAffectation $affectation = null) {
     $value = null;
     if (!empty($receiver->_configs["build_PV1_3_2"])) {
       $value = $receiver->_configs["build_PV1_3_2"];
@@ -655,6 +796,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       // Valeur en config
       case 'config_value':
         return CAppUI::conf("hl7 CHL7v2Segment PV1_3_2");
+
       // Identifiant externe
       case 'idex':
         if (!$affectation->_id || !$affectation->_ref_lit) {
@@ -662,6 +804,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         } 
         
         return CIdSante400::getMatch("CChambre", $receiver->_tag_chambre, null, $affectation->_ref_lit->_ref_chambre->_id)->id400;
+
       // Nom de la chambre
       default:
         if (!$affectation->_id || !$affectation->_ref_lit) {
@@ -671,8 +814,16 @@ class CHL7v2Segment extends CHL7v2Entity {
         return $affectation->_ref_lit->_ref_chambre->nom ;
     }
   }
-  
-  function getPL3 (CInteropReceiver $receiver, CSejour $sejour, CAffectation $affectation = null) {
+
+  /**
+   * Get PL3 : bed
+   *
+   * @param CInteropReceiver $receiver    Receiver
+   * @param CAffectation     $affectation Affectation
+   *
+   * @return mixed|null
+   */
+  function getPL3 (CInteropReceiver $receiver, CAffectation $affectation = null) {
     $value = null;
     if (!empty($receiver->_configs["build_PV1_3_3"])) {
       $value = $receiver->_configs["build_PV1_3_3"];
@@ -683,12 +834,14 @@ class CHL7v2Segment extends CHL7v2Entity {
       // Valeur en config
       case 'config_value':
         return CAppUI::conf("hl7 CHL7v2Segment PV1_3_3");
+
       // Identifiant externe
       case 'idex':
         if (!$affectation->_id || !$affectation->_ref_lit) {
           return null;
         } 
         return CIdSante400::getMatch("CLit", $receiver->_tag_lit, null, $affectation->_ref_lit->_id)->id400;
+
       // Nom du lit
       default:
         if (!$affectation->_id || !$affectation->_ref_lit) {
@@ -698,7 +851,14 @@ class CHL7v2Segment extends CHL7v2Entity {
         return $affectation->_ref_lit->nom;
     }
   }
-  
+
+  /**
+   * Get PL5 : location status
+   *
+   * @param CInteropReceiver $receiver Receiver
+   *
+   * @return mixed|null
+   */
   function getPL5 (CInteropReceiver $receiver) {
     $value = null;
     if (!empty($receiver->_configs["build_PV1_3_5"])) {
@@ -710,6 +870,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       // Ne rien envoyer
       case 'null':
         return null;
+
       // Occupé - Libre
       default:
         // O - Occupé
@@ -717,7 +878,16 @@ class CHL7v2Segment extends CHL7v2Entity {
         return "O";
     }
   }
-  
+
+  /**
+   * Get PV1.10 : hospital service
+   *
+   * @param CInteropReceiver $receiver    Receiver
+   * @param CSejour          $sejour      Admit
+   * @param CAffectation     $affectation Affectation
+   *
+   * @return mixed|null
+   */
   function getPV110 (CInteropReceiver $receiver, CSejour $sejour, CAffectation $affectation = null) {
     $value = null;
     if (!empty($receiver->_configs["build_PV1_10"])) {
@@ -755,7 +925,15 @@ class CHL7v2Segment extends CHL7v2Entity {
         return $sejour->discipline_id;
     }
   }
-  
+
+  /**
+   * Get PV1.14 : admit source
+   *
+   * @param CInteropReceiver $receiver Receiver
+   * @param CSejour          $sejour   Admit
+   *
+   * @return mixed|null
+   */
   function getPV114 (CInteropReceiver $receiver, CSejour $sejour) {
     // Mode d'entrée personnalisable
     if (CAppUI::conf("dPplanningOp CSejour use_custom_mode_entree")) {
@@ -771,7 +949,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     switch ($value) {
       // Combinaison du ZFM
       // ZFM.1 + ZFM.3
-      case 'ZFM' :
+      case 'ZFM':
         // Si mutation des urgences
         if ($sejour->provenance == "8" || $sejour->provenance == "5") {
           return $sejour->mode_entree;
@@ -807,6 +985,14 @@ class CHL7v2Segment extends CHL7v2Entity {
     }
   }
 
+  /**
+   * Get PV1.26 : contract amount
+   *
+   * @param CInteropReceiver $receiver Receiver
+   * @param CSejour          $sejour   Admit
+   *
+   * @return mixed|null
+   */
   function getPV126 (CInteropReceiver $receiver, CSejour $sejour) {
     $value = null;
     if (!empty($receiver->_configs["build_PV1_26"])) {
@@ -823,7 +1009,15 @@ class CHL7v2Segment extends CHL7v2Entity {
         return null;
     }
   }
-  
+
+  /**
+   * Get PV1.36 : discharge disposition
+   *
+   * @param CInteropReceiver $receiver Receiver
+   * @param CSejour          $sejour   Admit
+   *
+   * @return mixed|null
+   */
   function getPV136 (CInteropReceiver $receiver, CSejour $sejour) {
     // Mode de sortie personnalisable
     if (CAppUI::conf("dPplanningOp CSejour use_custom_mode_sortie")) {
@@ -864,6 +1058,14 @@ class CHL7v2Segment extends CHL7v2Entity {
     }
   }
 
+  /**
+   * Get PV2.45 : operation
+   *
+   * @param CInteropReceiver $receiver Receiver
+   * @param CSejour          $sejour   Admit
+   *
+   * @return array|null
+   */
   function getPV245(CInteropReceiver $receiver, CSejour $sejour) {
     $operation = $sejour->loadRefFirstOperation();
     $operation->loadRefPlageOp();
@@ -876,7 +1078,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     // Advance Directive Code
     switch ($value) {
       // Transmission de l'intervention
-      case 'operation' :
+      case 'operation':
         if (!$operation) {
           return null;
         }
@@ -937,11 +1139,21 @@ class CHL7v2Segment extends CHL7v2Entity {
             $PV2_45_2
           )
         );
+
       default:
         return null;
     }
-  }     
-  
+  }
+
+  /**
+   * Get PL : person location
+   *
+   * @param CInteropReceiver $receiver    Receiver
+   * @param CSejour          $sejour      Admit
+   * @param CAffectation     $affectation Affectation
+   *
+   * @return array
+   */
   function getPL(CInteropReceiver $receiver, CSejour $sejour, CAffectation $affectation = null) {
     $group       = $sejour->loadRefEtablissement();
     if (!$affectation) {
@@ -963,9 +1175,9 @@ class CHL7v2Segment extends CHL7v2Entity {
         // PL-1 - Code UF hébergement
         $current_uf["hebergement"]->code,
         // PL-2 - Chambre
-        $this->getPL2($receiver, $sejour, $affectation),
+        $this->getPL2($receiver, $affectation),
         // PL-3 - Lit
-        $this->getPL3($receiver, $sejour, $affectation),
+        $this->getPL3($receiver, $affectation),
         // PL-4 - Etablissement hospitalier
         $this->getGroupAssigningAuthority($sejour->loadRefEtablissement()),
         // PL-5 - Statut du lit
@@ -980,14 +1192,31 @@ class CHL7v2Segment extends CHL7v2Entity {
       )
     );
   }
-  
+
+  /**
+   * Get PL : previous person location
+   *
+   * @param CInteropReceiver $receiver Receiver
+   * @param CSejour          $sejour   Admit
+   *
+   * @return array|null
+   */
   function getPreviousPL(CInteropReceiver $receiver, CSejour $sejour) {
     $sejour->loadSurrAffectations();
     if ($prev_affectation = $sejour->_ref_prev_affectation) {
       return $this->getPL($receiver, $sejour, $prev_affectation);
     }
+
+    return null;
   }
-  
+
+  /**
+   * Get price indicator
+   *
+   * @param CSejour $sejour Admit
+   *
+   * @return string
+   */
   function getModeTraitement(CSejour $sejour) {
     $charge = new CChargePriceIndicator();
     $charge->type     = $sejour->type;
@@ -998,35 +1227,76 @@ class CHL7v2Segment extends CHL7v2Entity {
 
     return $charge->code;
   }
-  
+
+  /**
+   * Get output mode
+   *
+   * @param CSejour $sejour Admit
+   *
+   * @return string
+   */
   function getModeSortie(CSejour $sejour) {
     switch ($sejour->mode_sortie) {
-      case "mutation" :
+      case "mutation":
         return 6;
-      case "transfert" :
+
+      case "transfert":
         return 7;
-      case "normal" :
+
+      case "normal":
         return 8;
-      case "deces" :
+
+      case "deces":
         return 9;
+
+      default:
+        return null;
     }
   }
-  
+
+  /**
+   * Get provenance
+   *
+   * @param CSejour $sejour Admit
+   *
+   * @return string
+   */
   function getModeProvenance(CSejour $sejour) {
     return ($sejour->provenance == "8") ? "5" : $sejour->provenance;  
   }
-  
+
+  /**
+   * Get segment action code
+   *
+   * @param CHL7v2Event $event Event
+   *
+   * @return string|null
+   */
   function getSegmentActionCode(CHL7v2Event $event) {
     switch ($event->code) {
       case 'S12':
         return "A";
-      case 'S13' : case 'S14' :
+
+      case 'S13':
+      case 'S14':
         return "U";
-      case 'S15' :
+
+      case 'S15':
         return "D";
+
+      default:
     }
+
+    return null;
   }
-  
+
+  /**
+   * Get filler statuts code
+   *
+   * @param CConsultation $appointment Appointment
+   *
+   * @return string
+   */
   function getFillerStatutsCode(CConsultation $appointment) {
     // Table - 0278
     // Pending   - Appointment has not yet been confirmed  
@@ -1035,17 +1305,22 @@ class CHL7v2Segment extends CHL7v2Entity {
     // Started   - The indicated appointment has begun and is currently in progress  
     // Complete  - The indicated appointment has completed normally (was not discontinued, canceled, or deleted)   
     // Cancelled - The indicated appointment was stopped from occurring (canceled prior to starting)   
-    // Dc        - The indicated appointment was discontinued (DC'ed while in progress, discontinued parent appointment, or discontinued child appointment)  
+    // Dc        - The indicated appointment was discontinued (DC'ed while in progress, discontinued parent appointment,
+    //             or discontinued child appointment)
     // Deleted   - The indicated appointment was deleted from the filler application   
     // Blocked   - The indicated time slot(s) is(are) blocked  
     // Overbook  - The appointment has been confirmed; however it is confirmed in an overbooked state  
     // Noshow    - The patient did not show up for the appointment 
     
     switch ($appointment->chrono) {
-      case '32': case '48':
+      case '32':
+      case '48':
         return "Started";
+
       case '64':
         return "Complete";
+
+      default:
     }
     
     if ($appointment->annule) {

@@ -515,7 +515,6 @@ class CHL7v2MessageXML extends CMbXMLDocument {
         break;
 
       default:
-        break;
     }
 
     // PA - Preadmit Number
@@ -541,18 +540,21 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     $first_name = $this->queryTextNode("XCN.3", $node);
 
     switch ($type_id) {
-      case "RPPS" :
+      case "RPPS":
         $object->rpps = $id;
         break;
-      case "ADELI" :
+
+      case "ADELI":
         $object->adeli = $id;
         break;
-      case "RI" :
+
+      case "RI":
         // Notre propre RI
         if (($this->queryTextNode("XCN.9/HD.2", $node) == CAppUI::conf("hl7 assigning_authority_universal_id"))) {
           return $id;
         }
-      default :
+
+      default:
         // Recherche du praticien par son idex
         $idex  = CIdSante400::getMatch($object->_class, $this->_ref_sender->_tag_mediuser, $id);
         if ($idex->_id) {
@@ -723,7 +725,8 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     switch ($sender->_configs["handle_NDA"]) {
       case 'PV1_19':
         return CValue::read($data['admitIdentifiers'], "AN");
-      default :
+
+      default:
         return CValue::read($data['personIdentifiers'], "AN");
     }
   }
@@ -779,15 +782,15 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     $constante_medicale->datetime = $this->queryTextNode("EVN.2/TS.1", $data["EVN"]);
     $constante_medicale->loadMatchingObject();
     switch ($type) {
-      case "WEIGHT" :
+      case "WEIGHT":
         $constante_medicale->poids  = $value;
         break;
       
-      case "HEIGHT" :
+      case "HEIGHT":
         $constante_medicale->taille = $value;
         break;
-      default :
-        return;  
+
+      default:
     }
     $constante_medicale->_new_constantes_medicales = true;
     

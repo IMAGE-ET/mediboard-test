@@ -21,33 +21,46 @@ class CHL7v2DOMDocument extends CMbXMLDocument {
    * @param string           $query       XPath
    * @param CHL7v2DOMElement $contextNode Context node
    *
-   * @return self[]
+   * @return CHL7v2DOMElement[]
    */
   function query($query, CHL7v2DOMElement $contextNode = null) {
     $xpath = new CMbXPath($this);
+
     return $xpath->query($query, $contextNode);
   }
 
+  /**
+   * Query text node
+   *
+   * @param string           $query       Query
+   * @param CHL7v2DOMElement $contextNode Context
+   *
+   * @return string
+   */
   function queryTextNode($query, CHL7v2DOMElement $contextNode = null) {
     $xpath = new CMbXPath($this);
+
     return $xpath->queryTextNode($query, $contextNode);
   }
 
   /**
-   * @param                  $query
-   * @param CHL7v2DOMElement $contextNode
+   * Query unique node
+   *
+   * @param string           $query       Query
+   * @param CHL7v2DOMElement $contextNode Context
    *
    * @return CHL7v2DOMElement
    */
   function queryUniqueNode($query, CHL7v2DOMElement $contextNode = null) {
     $xpath = new CMbXPath($this);
+
     return $xpath->queryUniqueNode($query, $contextNode);
   }
 
   /**
    * Get the element's items
    *
-   * @return array The array of items
+   * @return CHL7v2DOMElement[] The array of items
    */
   function getItems(){
     $items = array();

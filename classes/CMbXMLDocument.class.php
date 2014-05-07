@@ -137,7 +137,6 @@ class CMbXMLDocument extends DOMDocument {
   }
   
   function libxml_tabs_erros() {
-
   }
   
   function loadXMLSafe($source, $options = null, $returnErrors = false) {
