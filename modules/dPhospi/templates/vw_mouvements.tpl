@@ -119,18 +119,20 @@
       <input type="radio" name="mode_vue_tempo" value="compacte" onclick="refreshMouvements()"
         {{if $mode_vue_tempo == "compacte"}}checked="checked"{{/if}}/> Compacte
     </label>
-    
-    &mdash;
-    
-    Axe de prestation :
-    <select name="prestation_id" onchange="savePrefAndReload(this.value);">
-      <option value="">&mdash; {{tr}}None{{/tr}}</option>
-      <option value="all" {{if $prestation_id == "all"}}selected{{/if}}>{{tr}}All{{/tr}}</option>
-      {{foreach from=$prestations_journalieres item=_prestation}}
-        <option value="{{$_prestation->_id}}" {{if $_prestation->_id == $prestation_id}}selected="selected"{{/if}}>{{$_prestation->nom}}</option>
-      {{/foreach}}
-    </select>
-    
+
+    {{if $conf.dPhospi.systeme_prestations == "expert"}}
+      &mdash;
+
+      Axe de prestation :
+      <select name="prestation_id" onchange="savePrefAndReload(this.value);">
+        <option value="">&mdash; {{tr}}None{{/tr}}</option>
+        <option value="all" {{if $prestation_id == "all"}}selected{{/if}}>{{tr}}All{{/tr}}</option>
+        {{foreach from=$prestations_journalieres item=_prestation}}
+          <option value="{{$_prestation->_id}}" {{if $_prestation->_id == $prestation_id}}selected="selected"{{/if}}>{{$_prestation->nom}}</option>
+        {{/foreach}}
+      </select>
+    {{/if}}
+
     <button type="button" class="pause notext" onclick="togglePlayPause(this);"
       title="{{tr}}CAffectation-play_pause_temporel{{/tr}}"></button>
   </div>
