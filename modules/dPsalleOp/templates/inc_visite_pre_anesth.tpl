@@ -1,6 +1,6 @@
 {{mb_default var=callback value=''}}
 
-<script type="text/javascript">
+<script>
   refreshAidesPreAnesth = function(user_id, user_view) {
     aideRquesAnesth.options.contextUserId = user_id;
     aideRquesAnesth.options.contextUserView = user_view;
@@ -40,6 +40,14 @@
       $("visiteAnesth_date_visite_anesth_da").value = "Date actuelle";
       $V(oFormVisiteAnesth.date_visite_anesth, "current");
     {{/if}}
+
+    if ($('anesth_tab_group')){
+      {{if $selOp->date_visite_anesth}}
+      $('anesth_tab_group').select('a[href=#tab_preanesth]')[0].removeClassName('wrong');
+      {{else}}
+      $('anesth_tab_group').select('a[href=#tab_preanesth]')[0].addClassName('wrong');
+      {{/if}}
+    }
   });
 </script>
 
@@ -81,11 +89,7 @@
       {{else}}
       <select name="prat_visite_anesth_id" class="notNull" onchange="refreshAidesPreAnesth($V(this), this.options[this.selectedIndex].innerHTML.trim())">
         <option value="">&mdash; Anesthésiste</option>
-        {{foreach from=$listAnesths item=curr_anesth}}
-        <option value="{{$curr_anesth->user_id}}" {{if $selOp->prat_visite_anesth_id == $curr_anesth->user_id}} selected="selected" {{/if}}>
-          {{$curr_anesth->_view}}
-        </option>
-        {{/foreach}}
+        {{mb_include module=mediusers template=inc_options_mediuser list=$listAnesths selected=$selOp->prat_visite_anesth_id}}
       </select>
     {{/if}}
     </td>

@@ -36,6 +36,11 @@
     url.addParam("print", true);
     url.popup(700, 500, "printFiche");
   };
+  Main.add(function(){
+    if ($('anesth_tab_group')){
+      $('anesth_tab_group').select('a[href=#fiche_anesth]')[0].addClassName('wrong');
+    }
+  });
 </script>
 
 <div class="big-info">
