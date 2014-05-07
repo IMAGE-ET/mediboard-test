@@ -2,8 +2,8 @@
 
 <script>
   setClose= function (id, view) {
-    window.parent.Medecin.set(id, view);
-    window.parent.Control.Modal.close();
+    Medecin.set(id, view);
+    Control.Modal.close();
   };
 
   var formVisible = false;
