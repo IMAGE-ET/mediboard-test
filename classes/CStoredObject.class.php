@@ -1511,6 +1511,22 @@ class CStoredObject extends CModelObject {
     return null;
   }
 
+  /**
+   * Store an object, without creating user log, without properties checking.
+   *
+   * @return bool
+   */
+  function rawStore() {
+    $spec = $this->_spec;
+    if ($this->_id) {
+      return $spec->ds->updateObject($spec->table, $this, $spec->key, $spec->nullifyEmptyStrings);
+    }
+    else {
+      $key = $spec->incremented ? $spec->key : null;
+      return $spec->ds->insertObject($spec->table, $this, $key);
+    }
+  }
+
   
   /**
    * Merge an array of objects
