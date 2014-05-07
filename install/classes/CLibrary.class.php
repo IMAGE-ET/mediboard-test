@@ -154,8 +154,14 @@ $library->fileName = "Smarty-2.6.18.tar.gz";
 $library->description = "Moteur de templates PHP et framework de présentation";
 $library->sourceDir = "Smarty-2.6.18";
 $library->targetDir = "smarty";
-$library->versionFile = "NEWS";
-$library->versionString = "Version 2.6.18";
+$library->versionFile = "libs/plugins/shared.escape_special_chars.php";
+$library->versionString = "iso-8859-1";
+
+$patch = new CLibraryPatch;
+$patch->dirName = "smarty";
+$patch->sourceName = "libs/plugins/shared.escape_special_chars.php";
+$library->patches[] = $patch;
+
 
 CLibrary::$all[$library->name] = $library;
 
