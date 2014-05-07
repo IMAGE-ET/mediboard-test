@@ -1,13 +1,12 @@
 <?php
-
 /**
- * $Id: $
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision: $
+ * @version    $Revision:$
  */
 
 /**
@@ -21,7 +20,8 @@ class CMediusersStats {
   public $period;
   public $php_period;
   public $sql_date;
-  public $totals = array();
+  public $totals  = array();
+  public $cells   = array();
 
   /**
    * Standard constructor
@@ -95,13 +95,36 @@ class CMediusersStats {
       $warning = CAppUI::tr("CMediusersStats-warning-total_incorrect_date", $date);
       trigger_error($warning, E_USER_WARNING);
     }
-    
+
     if (isset($this->totals[$user_id][$date][$part])) {
       $warning = CAppUI::tr("CMediusersStats-warning-already_defined", $user_id, $date);
       trigger_error($warning, E_USER_WARNING);
     }
 
     $this->totals[$user_id][$date][$part] = $value;
+  }
+
+  /**
+   * Add a class for a cell
+   *
+   * @param int    $user_id CMediuser id
+   * @param date   $date    Date for total
+   * @param string $class   class for cell
+   *
+   * @return void
+   */
+  function setCell($user_id, $date, $class) {
+    if (!in_array($date, $this->dates)) {
+      $warning = CAppUI::tr("CMediusersStats-warning-total_incorrect_date", $date);
+      trigger_error($warning, E_USER_WARNING);
+    }
+
+    if (isset($this->cells[$user_id][$date])) {
+      $warning = CAppUI::tr("CMediusersStats-warning-cell_already_defined", $user_id, $date);
+      trigger_error($warning, E_USER_WARNING);
+    }
+
+    $this->cells[$user_id][$date] = $class;
   }
 
   /**
@@ -142,6 +165,7 @@ class CMediusersStats {
     $smarty->assign("min_date" , $this->min_date);
     $smarty->assign("max_date" , $this->max_date);
     $smarty->assign("totals"   , $this->totals);
+    $smarty->assign("cells"    , $this->cells);
     $smarty->assign("users"    , $users );
     $smarty->assign("functions", $functions);
     $smarty->assign("groups"   , $groups);

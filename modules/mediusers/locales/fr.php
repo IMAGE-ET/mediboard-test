@@ -265,6 +265,7 @@ $locales['CMediusers.secteur.1'] = 'Conventionné';
 $locales['CMediusers.secteur.2'] = 'Conventionné Honoraires libres';
 $locales['CMediusers.select'] = 'Choisir un utilisateur';
 $locales['CMediusersStats-warning-already_defined'] = 'Total déjà défini pour l\'utilisateur \'%s\' à la date \'%s\'';
+$locales['CMediusersStats-warning-cell_already_defined'] = 'Classe de cellule déjà définie pour l\'utilisateur \'%s\' à la date \'%s\'';
 $locales['CMediusersStats-warning-total_incorrect_date'] = 'Date \'%s\' incorrecte par rapport à la date et à la période choisie';
 $locales['CMediusers_administer'] = 'Administrer';
 $locales['CMediusers_create-ldap'] = 'Nouvel utilisateur depuis le LDAP';
