@@ -40,14 +40,19 @@
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_user}}
     </td>
     {{assign var=_dates value=$totals.$user_id}}
-    {{foreach from=$dates item=_date}}     
-    <td style="text-align: center;">
-      {{if array_key_exists($_date, $_dates)}}
-        {{foreach from=$_dates.$_date key=_class item=_value}}
-          <strong class="{{$_class}}">{{$_value}}</strong>
-        {{/foreach}}
-      {{/if}}
-    </td>
+    {{foreach from=$dates item=_date}}
+
+      <td style="text-align: center;"
+        {{if isset($cells[$user_id][$_date]|smarty:nodefaults)}}
+          class="{{$cells[$user_id][$_date]}}"
+        {{/if}}
+        >
+        {{if array_key_exists($_date, $_dates)}}
+          {{foreach from=$_dates.$_date key=_class item=_value}}
+            <strong class="{{$_class}}">{{$_value}}</strong>
+          {{/foreach}}
+        {{/if}}
+      </td>
     {{/foreach}}
   </tr>
   {{/foreach}}
