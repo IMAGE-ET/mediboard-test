@@ -16,7 +16,7 @@
   {{if $object->$field}}
     {{mb_label object=$object field=$field}}
     {{if $modif_operation}}
-      {{mb_field object=$object field=$field form=$form onchange="$submit(this.form);"}}
+      {{mb_field object=$object field=$field form=$form register=true onchange="$submit(this.form);"}}
     {{else}}
       {{$object->$field|date_format:$conf.time}}
     {{/if}}

@@ -126,8 +126,13 @@
             <br />
             <span class="opacity-60">{{tr}}CPersonnel.emplacement.{{$affectation->_ref_personnel->emplacement}}{{/tr}}</span>
             </td>
-            {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_debut}}
-            {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_fin disabled=$affectation->_debut|default:'yes'}}
+            {{if $selOp->date == $date}}
+              {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_debut}}
+              {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_fin disabled=$affectation->_debut|default:'yes'}}
+            {{else}}
+              {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_debut_dt}}
+              {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_fin_dt disabled=$affectation->_debut|default:'yes'}}
+            {{/if}}
           </tr>
         </table>
        </form>
@@ -163,8 +168,13 @@
           </span>
         </td>
         {{if $in_salle}}
-          {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_debut}}
-          {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_fin disabled=$affectation->_debut|default:'yes'}}
+          {{if $selOp->date == $date}}
+            {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_debut}}
+            {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_fin disabled=$affectation->_debut|default:'yes'}}
+          {{else}}
+            {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_debut_dt}}
+            {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_fin_dt disabled=$affectation->_debut|default:'yes'}}
+          {{/if}}
         {{/if}}
         <td {{if !$in_salle}}class="narrow"{{/if}}>
           {{if $modif_operation}}

@@ -81,5 +81,6 @@ $smarty->assign("tabPersonnel"    , $tabPersonnel);
 $smarty->assign("listPers"        , $listPers);
 $smarty->assign("modif_operation" , $modif_operation);
 $smarty->assign("in_salle"        , $in_salle);
+$smarty->assign('date'            , CMbDT::date());
 
 $smarty->display("inc_vw_personnel.tpl");

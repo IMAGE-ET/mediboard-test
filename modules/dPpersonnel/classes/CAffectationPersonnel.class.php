@@ -27,7 +27,9 @@ class CAffectationPersonnel extends CMbMetaObject {
 
   // Form fields
   public $_debut;
+  public $_debut_dt;
   public $_fin;
+  public $_fin_dt;
   
   // References
   public $_ref_personnel;
@@ -48,15 +50,17 @@ class CAffectationPersonnel extends CMbMetaObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["personnel_id"] = "ref notNull class|CPersonnel";
+    $props["personnel_id"]          = "ref notNull class|CPersonnel";
     $props["parent_affectation_id"] = "ref class|CAffectationPersonnel";
-    $props["realise"]  = "bool notNull";
-    $props["debut"]    = "dateTime";
-    $props["fin"]      = "dateTime moreThan|debut";
-    $props["object_class"] = "enum list|CBloodSalvage|COperation|CPlageOp";
-    $props["_debut"]   = "time";
-    $props["_fin"]     = "time moreThan|_debut";
-    
+    $props["realise"]               = "bool notNull";
+    $props["debut"]                 = "dateTime";
+    $props["fin"]                   = "dateTime moreThan|debut";
+    $props["object_class"]          = "enum list|CBloodSalvage|COperation|CPlageOp";
+    $props["_debut"]                = "time";
+    $props['_debut_dt']             = 'dateTime';
+    $props["_fin"]                  = "time moreThan|_debut";
+    $props['_fin_dt']               = 'dateTime moreThan|_debut_dt';
+
     return $props;
   }
 
@@ -150,15 +154,19 @@ class CAffectationPersonnel extends CMbMetaObject {
     switch ($this->object_class) {
       case "CPlageOp":
         $this->_debut = CMbDT::addDateTime($this->_ref_object->debut, $this->_ref_object->date);
+        $this->_debut_dt = CMbDT::addDateTime($this->_ref_object->debut, $this->_ref_object->date);
         $this->_fin = CMbDT::addDateTime($this->_ref_object->fin, $this->_ref_object->date);
+        $this->_fin_dt = CMbDT::addDateTime($this->_ref_object->fin, $this->_ref_object->date);
         break;
       case "COperation":
       case "CBloodSalvage":
         if ($this->debut) {
           $this->_debut = CMbDT::time($this->debut);
+          $this->_debut_dt = $this->debut;
         }
         if ($this->fin) {
           $this->_fin   = CMbDT::time($this->fin);
+          $this->_fin_dt = $this->fin;
         }
     }
   }
@@ -187,6 +195,14 @@ class CAffectationPersonnel extends CMbMetaObject {
       if ($this->_fin !== null && $this->_fin != "") {
         $this->_fin = CMbDT::time($this->_fin);
         $this->fin = CMbDT::addDateTime($this->_fin, CMbDT::date($this->_ref_object->_datetime));
+      }
+
+      if ($this->_debut_dt !== null && $this->_debut_dt != "") {
+        $this->debut = $this->_debut_dt;
+      }
+
+      if ($this->_fin_dt !== null && $this->_fin_dt != "") {
+        $this->fin = $this->_fin_dt;
       }
       
       // Suppression de la valeur
