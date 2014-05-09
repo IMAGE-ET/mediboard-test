@@ -13,9 +13,11 @@
   {{assign var=suffixe_icons value=""}}
 {{/if}}
 
+{{if $isImedsInstalled}}
+  {{mb_script module="dPImeds" script="Imeds_results_watcher"}}
+{{/if}}
+
 <script>
-
-
 function popEtatSejour(sejour_id) {
   var url = new Url("dPhospi", "vw_parcours");
   url.addParam("sejour_id",sejour_id);
