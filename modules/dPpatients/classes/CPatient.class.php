@@ -2456,13 +2456,17 @@ class CPatient extends CPerson {
   /**
    * Apply the mode of identito vigilance
    *
-   * @param String $string    String
-   * @param Bool   $firstname Apply the lower and the capitalize
+   * @param String $string                  String
+   * @param Bool   $firstname               Apply the lower and the capitalize
+   * @param string $mode_identito_vigilance Identito-vigilance mode
    *
    * @return string
    */
-  static function applyModeIdentitoVigilance($string, $firstname = false) {
-    switch (CAppUI::conf("dPpatients CPatient mode_identito_vigilance", CGroups::loadCurrent())) {
+  static function applyModeIdentitoVigilance($string, $firstname = false, $mode_identito_vigilance = null) {
+    $mode = $mode_identito_vigilance ?
+      $mode_identito_vigilance : CAppUI::conf("dPpatients CPatient mode_identito_vigilance", CGroups::loadCurrent());
+
+    switch ($mode) {
       case "medium":
         $result = CMbString::removeBanCharacter($string);
         $result = $firstname ? CMbString::capitalize(CMbString::lower($result)) : CMbString::upper($result);
@@ -2477,6 +2481,9 @@ class CPatient extends CPerson {
     return $result;
   }
 
+  /**
+   * @see parent::getIncrementVars()
+   */
   function getIncrementVars() {
     return array();
   }

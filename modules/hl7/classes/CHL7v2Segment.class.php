@@ -683,15 +683,22 @@ class CHL7v2Segment extends CHL7v2Entity {
    */
   function getXPN(CMbObject $object, CInteropReceiver $receiver) {
     $names = array();
-    
+
+    $nom    = CPatient::applyModeIdentitoVigilance($object->nom, false, $receiver->_configs["mode_identito_vigilance"]);
+
+    $prenom   = CPatient::applyModeIdentitoVigilance($object->prenom, true, $receiver->_configs["mode_identito_vigilance"]);
+    $prenom_2 = CPatient::applyModeIdentitoVigilance($object->prenom_2, true, $receiver->_configs["mode_identito_vigilance"]);
+    $prenom_3 = CPatient::applyModeIdentitoVigilance($object->prenom_3, true, $receiver->_configs["mode_identito_vigilance"]);
+    $prenom_4 = CPatient::applyModeIdentitoVigilance($object->prenom_4, true, $receiver->_configs["mode_identito_vigilance"]);
+
     if ($object instanceof CPatient) {
-      $prenoms = array($object->prenom_2, $object->prenom_3, $object->prenom_4);
+      $prenoms = array($prenom_2, $prenom_3, $prenom_4);
       CMbArray::removeValue("", $prenoms);
  
       // Nom usuel
       $patient_usualname = array(
-        $object->nom,
-        $object->prenom,
+        $nom,
+        $prenom,
         implode(",", $prenoms),
         null,
         $object->civilite,
@@ -710,7 +717,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         // S - Coded Pseudo-Name to ensure anonymity
         // T - Indigenous/Tribal/Community Name
         // U - Unspecified
-        (is_numeric($object->nom)) ? "S" : "L",
+        (is_numeric($nom)) ? "S" : "L",
         // Table 465
         // A - Alphabetic (i.e., Default or some single-byte)
         // I - Ideographic (i.e., Kanji)  
@@ -721,8 +728,11 @@ class CHL7v2Segment extends CHL7v2Entity {
       $patient_birthname = array();
       // Cas nom de jeune fille
       if ($object->nom_jeune_fille) {
+        $nom_jeune_fille =
+          CPatient::applyModeIdentitoVigilance($object->nom_jeune_fille, true, $receiver->_configs["mode_identito_vigilance"]);
+
         $patient_birthname    = $patient_usualname;
-        $patient_birthname[0] = $object->nom_jeune_fille;
+        $patient_birthname[0] = $nom_jeune_fille;
         // Legal Name devient Display Name
         $patient_usualname[6] = "D";
       }
@@ -732,6 +742,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         $names[] = $patient_birthname;
       }
     }
+
     if ($object instanceof CCorrespondantPatient) {
       $names[] = array(
         $object->nom,

@@ -66,10 +66,13 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     
     // PID-6: Mother's Maiden Name (XPN) (optional repeating)
     if ($patient->nom_jeune_fille && ($receiver->_configs["build_PID_6"] == "nom_naissance")) {
+      $prenom = CPatient::applyModeIdentitoVigilance($patient->prenom, true, $receiver->_configs["mode_identito_vigilance"]);
+      $nom_jf = CPatient::applyModeIdentitoVigilance($patient->nom_jeune_fille, true, $receiver->_configs["mode_identito_vigilance"]);
+
       $data[] = array(
         array(
-          $patient->nom_jeune_fille,
-          $patient->prenom,
+          $nom_jf,
+          $prenom,
           null,
           null,
           null,
