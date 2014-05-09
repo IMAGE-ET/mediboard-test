@@ -13,6 +13,10 @@
   {{assign var=suffixe_icons value=""}}
 {{/if}}
 
+{{if $isImedsInstalled}}
+  {{mb_script module="dPImeds" script="Imeds_results_watcher"}}
+{{/if}}
+
 <script>
 
 
