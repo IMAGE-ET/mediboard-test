@@ -18,8 +18,6 @@
 {{/if}}
 
 <script>
-
-
 function popEtatSejour(sejour_id) {
   var url = new Url("dPhospi", "vw_parcours");
   url.addParam("sejour_id",sejour_id);
@@ -68,6 +66,10 @@ Main.add(function () {
   updatePatientsListHeight();
   
   Event.observe(window, "resize", updatePatientsListHeight);
+
+  {{if $isImedsInstalled}}
+    ImedsResultsWatcher.loadResults();
+  {{/if}}
 });
 
 function markAsSelected(element) {
