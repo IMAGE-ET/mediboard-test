@@ -54,7 +54,7 @@ if ($sejour_type) {
 
 $order = "libelle_sejour, libelle, codes_ccam";
 
-$list_protocoles       = $protocole->loadList($where, $order, "{$page[$type]},$step");
+$list_protocoles       = $protocole->loadListWithPerms(PERM_READ, $where, $order, "{$page[$type]},$step");
 
 $total_protocoles = $protocole->countList($where);
 
