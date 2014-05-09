@@ -66,6 +66,7 @@
       sejour: {},
       interv: {}
     };
+
     ProtocoleSelector.inite();
     var oForm = getForm('{{$formOp}}');
     var url = new Url('planningOp', 'ajax_protocoles_autocomplete');

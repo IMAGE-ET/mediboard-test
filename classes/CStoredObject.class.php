@@ -1,6 +1,7 @@
 <?php 
 /**
  * $Id$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage classes
@@ -2643,6 +2644,102 @@ class CStoredObject extends CModelObject {
    */
   function getAutocompleteList($keywords, $where = null, $limit = null, $ljoin = null, $order = null) {
     return $this->seek($keywords, $where, $limit, false, $ljoin, $order);
+  }
+
+  /**
+   * Returns a list of objects for autocompleted fields
+   *
+   * @param int    $permType Type of permission
+   * @param string $keywords Autocomplete seek fields
+   * @param array  $where    Where statements
+   * @param int    $limit    Limit the number of results
+   * @param array  $ljoin    Left join statements
+   * @param array  $order    Order by
+   *
+   * @return self[]
+   */
+  function getAutocompleteListWithPerms(
+      $permType = PERM_READ, $keywords = null, $where = null, $limit = null, $ljoin = null, $order = null
+  ) {
+    // Filter with permission
+    if (!$permType) {
+      return $this->getAutocompleteList($keywords, $where, $limit, $ljoin, $order);
+    }
+
+    // Load with no limit
+    $list = $this->getAutocompleteList($keywords, $where, null, $ljoin, $order);
+    self::filterByPerm($list, $permType);
+
+    // We simulate the MySQL LIMIT
+    if ($limit) {
+      $list = CRequest::artificialLimit($list, $limit);
+    }
+
+    return $list;
+  }
+
+  /**
+   * Returns a list of objects for autocompleted fields
+   *
+   * @param int    $permType Type of permission
+   * @param string $keywords Autocomplete seek fields
+   * @param array  $where    Where statements
+   * @param int    $limit    Limit the number of results
+   * @param array  $ljoin    Left join statements
+   * @param array  $order    Order by
+   *
+   * @return self[]
+   */
+  function getAutocompleteListWithPerms(
+      $permType = PERM_READ, $keywords = null, $where = null, $limit = null, $ljoin = null, $order = null
+  ) {
+    // Filter with permission
+    if (!$permType) {
+      return $this->getAutocompleteList($keywords, $where, $limit, $ljoin, $order);
+    }
+
+    // Load with no limit
+    $list = $this->getAutocompleteList($keywords, $where, null, $ljoin, $order);
+    self::filterByPerm($list, $permType);
+
+    // We simulate the MySQL LIMIT
+    if ($limit) {
+      $list = CRequest::artificialLimit($list, $limit);
+    }
+
+    return $list;
+  }
+
+  /**
+   * Returns a list of objects for autocompleted fields
+   *
+   * @param int    $permType Type of permission
+   * @param string $keywords Autocomplete seek fields
+   * @param array  $where    Where statements
+   * @param int    $limit    Limit the number of results
+   * @param array  $ljoin    Left join statements
+   * @param array  $order    Order by
+   *
+   * @return self[]
+   */
+  function getAutocompleteListWithPerms(
+      $permType = PERM_READ, $keywords = null, $where = null, $limit = null, $ljoin = null, $order = null
+  ) {
+    // Filter with permission
+    if (!$permType) {
+      return $this->getAutocompleteList($keywords, $where, $limit, $ljoin, $order);
+    }
+
+    // Load with no limit
+    $list = $this->getAutocompleteList($keywords, $where, null, $ljoin, $order);
+    self::filterByPerm($list, $permType);
+
+    // We simulate the MySQL LIMIT
+    if ($limit) {
+      $list = CRequest::artificialLimit($list, $limit);
+    }
+
+    return $list;
   }
 
   /**

@@ -103,16 +103,15 @@ addBesoins = function(types_ressources_ids) {
 
 Main.add(function(){
   var oForm = getForm('selectFrm');
-  var urlComponents = Url.parse();
-  
+
   refreshList(oForm);
-  
+
   var url = new Url('planningOp', 'ajax_protocoles_autocomplete');
   url.addParam('field'            , 'protocole_id');
   url.addParam('input_field'      , 'search_protocole');
   if ('{{$singleType}}' == 'interv') {
     url.addParam('for_sejour', '0');
-  } 
+  }
   if ('{{$singleType}}' == 'sejour') {
     url.addParam('for_sejour', '1');
   }
@@ -126,7 +125,7 @@ Main.add(function(){
       $V(field, "");
     },
     callback: function(input, queryString){
-      return queryString + "&chir_id=" + $V(input.form.chir_id);
+      return queryString + "&chir_id=" + $V(input.form.chir_id) + "&function_id=" + $V(input.form.function_id);
     }
   });
 });
