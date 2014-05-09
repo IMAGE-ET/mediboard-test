@@ -32,10 +32,10 @@
     this.sUf_soins_id = "uf_soins_id";
     this.sTypesRessourcesIds = "_types_ressources_ids";
     {{if $conf.dPplanningOp.CSejour.show_type_pec}}
-      this.sTypePec     = "type_pec";
+    this.sTypePec     = "type_pec";
     {{/if}}
     {{if $conf.dPplanningOp.CSejour.show_facturable}}
-      this.sFacturable   = "facturable";
+    this.sFacturable   = "facturable";
     {{/if}}
     this.sDuree_uscpo   = "duree_uscpo";
     this.sDuree_preop   = "duree_preop";
@@ -66,6 +66,7 @@
       sejour: {},
       interv: {}
     };
+
     ProtocoleSelector.inite();
     var oForm = getForm('{{$formOp}}');
     var url = new Url('planningOp', 'ajax_protocoles_autocomplete');

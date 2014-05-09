@@ -16,6 +16,7 @@ $input_field  = CValue::get('input_field', $view_field);
 $keywords     = CValue::get($input_field);
 $limit        = CValue::get('limit', 30);
 $chir_id      = CValue::get('chir_id');
+$function_id  = CValue::get('function_id');
 $for_sejour   = CValue::get('for_sejour');
 
 $object = new CProtocole();
@@ -26,13 +27,16 @@ if ($chir_id) {
   $chir = new CMediusers();
   $chir->load($chir_id);
   $chir->loadRefFunction();
-  
+
   $functions_ids = array($chir->function_id);
   $chir->loadBackRefs("secondary_functions");
   if (count($chir->_back["secondary_functions"])) {
     $functions_ids = array_merge($functions_ids, CMbArray::pluck($chir->_back["secondary_functions"], "function_id"));
   }
   $where[] = "(protocole.chir_id = '$chir->_id' OR protocole.function_id ". CSQLDataSource::prepareIn($functions_ids).")";
+}
+elseif ($function_id) {
+  $where["protocole.function_id"] = "= '$function_id'";
 }
 else {
   $curr_user = CMediusers::get();
@@ -51,10 +55,10 @@ if ($keywords == "") {
 
 $order = "libelle, libelle_sejour, codes_ccam";
 
-$matches = $object->getAutocompleteList($keywords, $where, $limit, null, $order);
+$matches = $object->getAutocompleteListWithPerms(PERM_READ, $keywords, $where, $limit, null, $order);
 
 if (CAppUI::conf("dPbloc CPlageOp systeme_materiel")) {
-  foreach($matches as $protocole) {
+  foreach ($matches as $protocole) {
     $protocole->_types_ressources_ids = implode(",", CMbArray::pluck($protocole->loadRefsBesoins(), "type_ressource_id"));
   }
 }

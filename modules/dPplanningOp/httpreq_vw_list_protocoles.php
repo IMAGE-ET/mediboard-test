@@ -24,7 +24,7 @@ $chir_id  = CValue::getOrSession("chir_id", $mediuser->isPraticien() ? $mediuser
 $chir     = new CMediusers();
 $chir->load($chir_id);
 $function_id  = CValue::getOrSession("function_id");
-$type         = CValue::getOrSession("type", "interv"); 
+$type         = CValue::getOrSession("type", "interv");
 $page         = CValue::get("page");
 $sejour_type  = CValue::get("sejour_type");
 $step = 30;
@@ -54,7 +54,7 @@ if ($sejour_type) {
 
 $order = "libelle_sejour, libelle, codes_ccam";
 
-$list_protocoles       = $protocole->loadList($where, $order, "{$page[$type]},$step");
+$list_protocoles       = $protocole->loadListWithPerms(PERM_READ, $where, $order, "{$page[$type]},$step");
 
 $total_protocoles = $protocole->countList($where);
 
