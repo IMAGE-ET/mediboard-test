@@ -66,6 +66,10 @@ Main.add(function () {
   updatePatientsListHeight();
   
   Event.observe(window, "resize", updatePatientsListHeight);
+
+  {{if $isImedsInstalled}}
+    ImedsResultsWatcher.loadResults();
+  {{/if}}
 });
 
 function markAsSelected(element) {
