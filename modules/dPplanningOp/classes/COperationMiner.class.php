@@ -61,8 +61,7 @@ class COperationMiner extends CStoredObject {
     $where = null;
     $ljoin = null;
     if ($before) {
-      $ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
-      $where[] = "operations.date < '$before' OR plagesop.date < '$before'";
+      $where[] = "operations.date < '$before'";
     }
 
     return $operation->countList($where, null, $ljoin);
@@ -98,9 +97,8 @@ class COperationMiner extends CStoredObject {
     $operation = new COperation;
     $table = $this->_spec->table;
     $ljoin[$table] = "$table.operation_id = operations.operation_id";
-    $ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
     $where["$table.operation_id"] = "IS NULL";
-    $where[] = "operations.date < '$today' OR plagesop.date < '$today'";
+    $where[] = "operations.date < '$today'";
     return $this->_count_unmined = $operation->countList($where, null, $ljoin);
   }
 

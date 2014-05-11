@@ -95,6 +95,7 @@ elseif ($filter->_specialite) {
   $function->loadBackRefs("secondary_functions");
   $functions[$function->_id] = $function;
   $praticiens = $function->_back["users"];
+  /** @var CSecondaryFunction $sec_func */
   foreach ($function->_back["secondary_functions"] as $sec_func) {
     if (!isset($praticiens[$sec_func->user_id])) {
       $sec_func->loadRefUser();
@@ -108,6 +109,7 @@ elseif ($filter->_prat_id) {
   $praticien->loadBackRefs("secondary_functions");
   $praticiens[$praticien->_id] = $praticien;
   $functions[$praticien->function_id] = $praticien->_ref_function;
+  /** @var CSecondaryFunction $sec_func */
   foreach ($praticien->_back["secondary_functions"] as $sec_func) {
     if (!isset($functions[$sec_func->function_id])) {
       $sec_func->loadRefFunction();
@@ -204,7 +206,7 @@ $prestation = new CPrestationJournaliere();
 $prestation->load($prestation_id);
 
 // Operations de chaque plage
-foreach ($plagesop as &$plage) {
+foreach ($plagesop as $plage) {
   $plage->loadRefsFwd(1);
 
   $where["operations.plageop_id"] = "= '$plage->_id'";

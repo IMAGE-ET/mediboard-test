@@ -19,22 +19,32 @@ $bloc_id = CValue::get("bloc_id");
 $bloc = new CBlocOperatoire();
 $bloc->load($bloc_id);
 $bloc->loadRefsSalles();
-$inSalle = CSQLDataSource::prepareIn(array_keys($bloc->_ref_salles));
+$in_salles = CSQLDataSource::prepareIn(array_keys($bloc->_ref_salles));
 
-$op = new COperation();
 $ljoin = array();
 $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
 $where = array();
-$where[] = "operations.salle_id $inSalle OR plagesop.salle_id $inSalle";
-$where[] = "operations.date = '$date' OR plagesop.date = '$date'";
+$where[] = "operations.salle_id $in_salles OR plagesop.salle_id $in_salles";
+$where[] = "operations.date = '$date'";
 $where["anapath"] = "= 1";
 $order = "entree_salle, time_operation";
+
+$operation = new COperation();
 /** @var COperation[] $operations */
-$operations = $op->loadList($where, $order, null, null, $ljoin);
-foreach ($operations as $_op) {
-  $_op->loadRefsFwd();
-  $_op->updateSalle();
-  $_op->_ref_sejour->loadRefPatient();
+$operations = $operation->loadList($where, $order, null, null, $ljoin);
+
+CMbObject::massLoadFwdRef($operations, "plageop_id");
+$chirs = CMbObject::massLoadFwdRef($operations, "chir_id");
+CMbObject::massLoadFwdRef($chirs, "function_id");
+$sejours = CMbObject::massLoadFwdRef($operations, "sejour_id");
+CMbObject::massLoadFwdRef($sejours, "patient_id");
+
+foreach ($operations as $_operation) {
+  $_operation->loadRefPatient();
+  $_operation->loadRefPlageOp();
+  $_operation->updateSalle();
+  $_operation->loadRefChir()->loadRefFunction();
+  $_operation->loadExtCodesCCAM();
 }
 
 // Création du template

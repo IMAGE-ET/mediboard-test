@@ -246,7 +246,7 @@ class COperatorDicom extends CEAIOperator {
 
         $where = array(
           "plagesop.salle_id"   => " = '$linked_object->object_id'",
-          "plagesop.date"       => " = '" . CMbDT::date() . "'",
+          "operations.date"     => " = '" . CMbDT::date() . "'",
           "operations.salle_id" => " = '$linked_object->object_id'"
         );
 

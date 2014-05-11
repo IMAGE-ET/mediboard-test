@@ -18,12 +18,7 @@ $order_col   = CValue::get("order_col");
 
 $operation = new COperation();
 
-$ljoin = array();
-$where = array();
-
-$ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
-
-$where["plagesop.date"] = " = '".CMbDT::date($date_depart)."'";
+$where["date"] = " = '".CMbDT::date($date_depart)."'";
 $where["annulee"] = " = '0'";
 
 if ($bloc_id) {
@@ -31,24 +26,8 @@ if ($bloc_id) {
   $where["sallesbloc.bloc_id"] = "= '$bloc_id'";
 }
 
-// Avec plages
-$operations = $operation->loadList($where, "time_operation asc", null, null, $ljoin);
-
-// Hors plages
-$where = array();
-$ljoin = array();
-
-$where["plageop_id"] = "IS NULL";
-$where["annulee"] = "= '0'";
-$where["date"] = " = '".CMbDT::date($date_depart)."'";
-
-if ($bloc_id) {
-  $ljoin["sallesbloc"] = "sallesbloc.salle_id = operations.salle_id";
-  $where["sallesbloc.bloc_id"] = "= '$bloc_id'";
-}
 /** @var COperation[] $operations */
-$operations = array_merge($operation->loadList($where, null, null, null, $ljoin), $operations);
-
+$operations = $operation->loadList($where, "time_operation ASC", null, null, $ljoin);
 $sejours = CMbObject::massLoadFwdRef($operations, "sejour_id");
 CMbObject::massLoadFwdRef($sejours, "patient_id");
 CMbObject::massLoadFwdRef($operations, "salle_id");

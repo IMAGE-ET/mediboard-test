@@ -23,9 +23,9 @@ Main.add(function() {
   </tr>
 
   <tr>
-    <td><strong>{{$counts.overall    }}</strong></td>
-    <td><strong>{{$counts.tobemined  }}</strong></td>
-    <td><strong>{{$counts.toberemined}}</strong></td>
+    <td><strong>{{$counts.overall|integer    }}</strong></td>
+    <td><strong>{{$counts.tobemined|integer  }}</strong></td>
+    <td><strong>{{$counts.toberemined|integer}}</strong></td>
   </tr>
 </table>
 
@@ -61,7 +61,7 @@ Main.add(function() {
       {{mb_value object=$_miner field=date}}
     </td>
     <td>
-      {{$_miner->_count_unmined}}
+      {{$_miner->_count_unmined|integer}}
     </td>
     <td class="narrow">
       <button type="button" class="change notext compact oneclick" onclick="Datamining.mine('{{$_miner->_class}}', 0)">
@@ -69,7 +69,7 @@ Main.add(function() {
       </button>
     </td>
     <td>
-      {{$_miner->_count_unremined}}
+      {{$_miner->_count_unremined|integer}}
     </td>
     <td class="narrow">
       <button type="button" class="change notext compact oneclick" onclick="Datamining.mine('{{$_miner->_class}}', 1)">

@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
  
@@ -49,12 +49,11 @@ $where["commande_mat"] = "!= '1'";
 $where["annulee"]      = "!= '1'";
 $operations["0"] = $operation->loadList($where, $order, null, null, $ljoin);
 
-foreach ($operations as &$_operations) {
+foreach ($operations as $_operations) {
   /** @var COperation[] $_operations */
   foreach ($_operations as $_operation) {
     $_operation->loadRefPatient();
-    $_operation->loadRefChir();
-    $_operation->_ref_chir->loadRefFunction();
+    $_operation->loadRefChir()->loadRefFunction();
     $_operation->loadRefPlageOp();
     $_operation->loadExtCodesCCAM();
   }

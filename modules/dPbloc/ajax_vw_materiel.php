@@ -23,15 +23,14 @@ $ljoin = array();
 $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
 
 $where = array();
-$where[] = "plagesop.salle_id " . CSQLDataSource::prepareIn(array_keys($salles)) .
-           "OR operations.salle_id " . CSQLDataSource::prepareIn(array_keys($salles));
+$in_salles = CSQLDataSource::prepareIn(array_keys($salles));
+$where[] = "plagesop.salle_id $in_salles  OR operations.salle_id $in_salles";
 
 $where["materiel"] = "!= ''";
-$where[] = "(operations.plageop_id IS NOT NULL AND plagesop.date >= '".CMbDT::date("-7 day")."')".
-          " OR (operations.plageop_id IS NULL AND operations.date >= '".CMbDT::date("-7 day")."')";
+$date_min = CMbDT::date("-7 day");
+$where["operations.date"] = ">= '$date_min'";
 
-
-$order = "plagesop.date, rank";
+$order = "operations.date, rank";
 
 $operation = new COperation;
 

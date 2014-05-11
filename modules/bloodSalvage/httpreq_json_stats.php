@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage bloodSalvage
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -45,7 +45,7 @@ function fillData(&$where, $ljoin, &$serie, $dates) {
   $i = 0;
   
   foreach ($dates as $month => $date) {
-    $where['plagesop.date'] = "BETWEEN '{$date['start']}' AND '{$date['end']}'";
+    $where['operations.date'] = "BETWEEN '{$date['start']}' AND '{$date['end']}'";
     $count = $bs->countList($where, null, $ljoin);
     $d[$i] = array($i, intval($count));
     $i++;
@@ -60,7 +60,7 @@ function computeMeanValue(&$where, &$ljoin, &$serie, $dates, $prop) {
   $i = 0;
   
   foreach ($dates as $date) {
-    $where['plagesop.date'] = "BETWEEN '{$date['start']}' AND '{$date['end']}'";
+    $where['operations.date'] = "BETWEEN '{$date['start']}' AND '{$date['end']}'";
     $list = $bs->loadList($where, null, null, null, $ljoin);
     
     $total = 0;
@@ -80,7 +80,7 @@ $dates = array();
 $first_day = CMbDT::format(null, "%Y-%m-01");
 for ($i = $months_count - 1; $i >= 0; --$i) {
   $mr = $months_relative+$i;
-  $sample_end = CMbDT::transform("-$mr MONTHS", $first_day, "%Y-%m-31 23:59:59");
+  $sample_end   = CMbDT::transform("-$mr MONTHS", $first_day, "%Y-%m-31 23:59:59");
   $sample_start = CMbDT::transform("-$mr MONTHS", $first_day, "%Y-%m-01 00:00:00");
 
   $dates[$sample_start] = array(
@@ -94,7 +94,6 @@ $ljoin = array(
   'consultation_anesth' => 'operations.operation_id = consultation_anesth.operation_id',
   /*'consultation' => 'consultation_anesth.operation_id = consultation.consultation_id',
   'plageconsult' => 'consultation.plageconsult_id = plageconsult.plageconsult_id',*/
-  'plagesop' => 'operations.plageop_id = plagesop.plageop_id',
   'sejour' => 'operations.sejour_id = sejour.sejour_id',
   'patients' => 'sejour.patient_id = patients.patient_id',
 );
