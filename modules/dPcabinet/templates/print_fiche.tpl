@@ -392,7 +392,7 @@
         </tr>
         {{/if}}
         <tr>
-          <td>
+          <td class="text">
             <ul>
               {{if $dossier_medical->_ref_prescription}}
                 {{foreach from=$dossier_medical->_ref_prescription->_ref_prescription_lines item=_line_med}}
