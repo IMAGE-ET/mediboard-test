@@ -1,14 +1,3 @@
-{{*
- * $Id$
- *  
- * @category Urgences
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision$
- * @link     http://www.mediboard.org
-*}}
-
 <form name="editRPU" action="?m={{$m}}{{if !$can->edit}}&amp;tab=vw_idx_rpu{{/if}}" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="urgences" />
   <input type="hidden" name="dosql" value="do_rpu_aed" />
@@ -282,12 +271,21 @@
             {{mb_field object=$rpu field="circonstance" autocomplete="true,1,10,true,true" form=editRPU}}
           </td>
           {{if $conf.dPurgences.display_motif_sfmu}}
+            <script>
+              changeMotifSfmu = function(motifsfmu) {
+                {{if "CAppUI::conf"|static_call:"dPurgences CRPU defer_sfmu_diag_inf":"CGroups-$g"}}
+                  var form = motifsfmu.form;
+                  var li = $('autocomplete-CMotifSFMU-'+motifsfmu.value).select('span')[0].innerHTML;
+                  $V(form.diag_infirmier, li);
+                {{/if}}
+              };
+            </script>
             {{assign var=notnull value=""}}
             {{if "CAppUI::conf"|static_call:"dPurgences CRPU motif_sfmu_accueil":"CGroups-$g"}}
               {{assign var=notnull value="notNull"}}
             {{/if}}
             <th>{{mb_label object=$rpu field="motif_sfmu" class=$notnull}}</th>
-            <td>{{mb_field object=$rpu field="motif_sfmu" autocomplete="true,1,10,true,true" form=editRPU size=50 class=$notnull}}
+            <td>{{mb_field object=$rpu field="motif_sfmu" autocomplete="true,1,10,true,true" form=editRPU size=50 class=$notnull onchange="changeMotifSfmu(this);"}}
                 <button type="button" class="search notext" onclick="CCirconstance.searchMotifSFMU(this.form)">
                   {{tr}}Search{{/tr}}
                 </button>
