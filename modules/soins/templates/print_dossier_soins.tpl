@@ -37,7 +37,7 @@
   </style>
 {{/if}}
 
-<script type="text/javascript">
+<script>
   getDossierSoin = function(sejour_id) {
     return $("dossier-"+sejour_id) || $(document.documentElement);
   };
