@@ -982,9 +982,11 @@ class CConsultation extends CFacturable implements IPatientRelated {
 
     //Lors de dévalidation de la consultation 
     if ($this->fieldModified("valide", "0")) {
-      $facture = $this->loadRefFacture();
-      $facture->_consult_id = $this->_id;
-      $facture->cancelConsult();
+      $this->loadRefFacture();
+      foreach ($this->_ref_factures as $_facture) {
+        $_facture->_consult_id = $this->_id;
+        $_facture->cancelConsult();
+      }
     }
 
     // Standard store
