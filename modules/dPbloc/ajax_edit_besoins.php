@@ -48,15 +48,15 @@ foreach ($besoins as $_besoin) {
   // Dans ce cas, on passe en rouge
   if ($_usage->_id) {
     $ressource = $_usage->loadRefRessource();
-    
+
     $_usages = $ressource->loadRefsUsages($deb_op, $fin_op);
     unset($_usages[$_usage->_id]);
-    
+
     $_indispos = $ressource->loadRefsIndispos($deb_op, $fin_op);
-    
+
     $_besoins = $ressource->loadRefsBesoins($deb_op, $fin_op);
     unset($_besoins[$_besoin->_id]);
-    
+
     if (count($_usages) + count($_indispos) + count($_besoins) >= $nb_ressources) {
       $_besoin->_color = "a00";
     }

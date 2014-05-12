@@ -19,8 +19,8 @@ $filter = new COperation;
 $filter->_date_min = CValue::get("_date_min", $now);
 $filter->_date_max = CValue::get("_date_max", $now);
 
-$listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
-$bloc_id   = CValue::getOrSession("bloc_id", reset($listBlocs)->_id);
+$blocs = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
+$bloc_id   = CValue::getOrSession("bloc_id", reset($blocs)->_id);
 $bloc = new CBlocOperatoire();
 $bloc->load($bloc_id);
 
@@ -28,17 +28,16 @@ $bloc->load($bloc_id);
 $ljoin = array();
 $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
 
+$salles = $bloc->loadRefsSalles();
+CStoredObject::filterByPerm($salles, PERM_READ);
+$in_salles = CSQLDataSource::prepareIn(array_keys($salles));
+
 $where = array();
-
-$salle = new CSalle();
-$whereSalle = array("bloc_id" => "= '$bloc_id'");
-$where["plagesop.salle_id"] = CSQLDataSource::prepareIn(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)));
-
+$where[] = "plagesop.salle_id $in_salles OR operations.salle_id $in_salles";
 $where["materiel"] = "!= ''";
-$where["operations.plageop_id"] = "IS NOT NULL";
-$where[] = "plagesop.date BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
+$where["operations.date"] = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
 
-$order = "plagesop.date, rank";
+$order = "operations.date, rank";
 
 $operation = new COperation();
 

@@ -112,54 +112,53 @@ class CRessourceMaterielle extends CMbObject {
    * @return CUsageRessource[]
    */
   function loadRefsUsages($from = null, $to = null) {
-    if ($from && $to) { 
-      $usage = new CUsageRessource();
-      $where = array();
-      $ljoin = array();
-
-      $ljoin["besoin_ressource"] = "usage_ressource.besoin_ressource_id = besoin_ressource.besoin_ressource_id";
-      $ljoin["operations"] = "operations.operation_id = besoin_ressource.operation_id";
-      $ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
-      $from_date = CMbDT::date($from);
-      $to_date   = CMbDT::date($to);
-      $where[] = "(operations.date BETWEEN '$from_date' AND '$to_date' AND operations.plageop_id IS NULL) ".
-                 "OR (operations.plageop_id IS NOT NULL AND plagesop.date BETWEEN '$from_date' AND '$to_date')";
-
-      // Sur les interventions non annulées
-      $where[] = "operations.annulee = '0'";
-
-      // Sur la ressource instanciée
-      if ($this->_id) {
-        $where["usage_ressource.ressource_materielle_id"] = " = '$this->_id'";
-      }
-      elseif ($this->type_ressource_id) {
-        // Ou sur son type si nouvel objet
-        $ljoin["ressource_materielle"] = "ressource_materielle.type_ressource_id = besoin_ressource.type_ressource_id";
-        $where["ressource_materielle.type_ressource_id"] = "= '$this->type_ressource_id'";
-      }
-      /** @var CUsageRessource[] $usages */
-      $usages = $usage->loadList($where, null, null, "usage_ressource_id", $ljoin);
-      $besoins = CMbObject::massLoadFwdRef($usages, "besoin_ressource_id");
-      CMbObject::massLoadFwdRef($besoins, "operation_id");
-      CMbObject::massLoadFwdRef($usages, "ressource_materielle_id");
-
-      // Prendre en compte le temps de réhabilitation des ressources
-      foreach ($usages as $key => $_usage) {
-        $ressource = $_usage->loadRefRessource();
-        $operation = $_usage->loadRefBesoin()->loadRefOperation();
-        $operation->loadRefPlageOp();
-        $deb_op = $operation->_datetime;
-        $fin_op = CMbDT::addDateTime($operation->temp_operation, $deb_op);
-        $fin_op_reha = CMbDT::addDateTime($ressource->retablissement, $fin_op);
-        if ($deb_op > $to || $fin_op_reha < $from) {
-          unset($usages[$key]);
-        }
-      }
-
-      return $this->_ref_usages = $usages;
+    if (!$from || !$to) {
+      return $this->_ref_usages = $this->loadBackRefs("usages");
     }
 
-    return $this->_ref_usages = $this->loadBackRefs("usages");
+    $usage = new CUsageRessource();
+    $where = array();
+    $ljoin = array();
+
+    $ljoin["besoin_ressource"] = "usage_ressource.besoin_ressource_id = besoin_ressource.besoin_ressource_id";
+    $ljoin["operations"] = "operations.operation_id = besoin_ressource.operation_id";
+    $from_date = CMbDT::date($from);
+    $to_date   = CMbDT::date($to);
+    $where["operations.date"] = "BETWEEN '$from_date' AND '$to_date'";
+
+    // Sur les interventions non annulées
+    $where["operations.annulee"] = "= '0'";
+
+    // Sur la ressource instanciée
+    if ($this->_id) {
+      $where["usage_ressource.ressource_materielle_id"] = " = '$this->_id'";
+    }
+    elseif ($this->type_ressource_id) {
+      // Ou sur son type si nouvel objet
+      $ljoin["ressource_materielle"] = "ressource_materielle.type_ressource_id = besoin_ressource.type_ressource_id";
+      $where["ressource_materielle.type_ressource_id"] = "= '$this->type_ressource_id'";
+    }
+
+    /** @var CUsageRessource[] $usages */
+    $usages = $usage->loadList($where, null, null, "usage_ressource_id", $ljoin);
+    $besoins = CMbObject::massLoadFwdRef($usages, "besoin_ressource_id");
+    CMbObject::massLoadFwdRef($besoins, "operation_id");
+    CMbObject::massLoadFwdRef($usages, "ressource_materielle_id");
+
+    // Prendre en compte le temps de réhabilitation des ressources
+    foreach ($usages as $_usage) {
+      $ressource = $_usage->loadRefRessource();
+      $operation = $_usage->loadRefBesoin()->loadRefOperation();
+      $operation->loadRefPlageOp();
+      $deb_op = $operation->_datetime;
+      $fin_op = CMbDT::addDateTime($operation->temp_operation, $deb_op);
+      $fin_op_reha = CMbDT::addDateTime($ressource->retablissement, $fin_op);
+      if ($deb_op > $to || $fin_op_reha < $from) {
+        unset($usages[$_usage->_id]);
+      }
+    }
+
+    return $this->_ref_usages = $usages;
   }
 
   /**
@@ -214,17 +213,15 @@ class CRessourceMaterielle extends CMbObject {
     $to_date   = CMbDT::date($to);
 
     $ljoin["operations"] = "besoin_ressource.operation_id = operations.operation_id";
-    $ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
     $ljoin["usage_ressource"] = "usage_ressource.besoin_ressource_id = besoin_ressource.besoin_ressource_id";
 
     // On ne charge que les besoins qui n'ont pas d'usage 
     $where[] = "usage_ressource.usage_ressource_id IS NULL";
 
-    $where[] = "(operations.date BETWEEN '$from_date' AND '$to_date' AND operations.plageop_id IS NULL) ".
-                 "OR (operations.plageop_id IS NOT NULL AND plagesop.date BETWEEN '$from_date' AND '$to_date')";
+    $where["operations.date"] = "BETWEEN '$from_date' AND '$to_date'";
 
     // Sur les interventions non annulées
-    $where[] = "operations.annulee = '0'";
+    $where["operations.annulee"] = "= '0'";
 
     if ($this->type_ressource_id) {
       $ljoin["ressource_materielle"] = "ressource_materielle.type_ressource_id = besoin_ressource.type_ressource_id";
@@ -234,13 +231,13 @@ class CRessourceMaterielle extends CMbObject {
     $besoins = $besoin->loadList($where, null, null, "besoin_ressource_id", $ljoin);
     CMbObject::massLoadFwdRef($besoins, "operation_id");
 
-    foreach ($besoins as $key => $_besoin) {
+    foreach ($besoins as $_besoin) {
       $operation = $_besoin->loadRefOperation();
       $operation->loadRefPlageOp();
       $deb_op = $operation->_datetime;
       $fin_op = CMbDT::addDateTime($operation->temp_operation, $deb_op);
       if ($deb_op > $to || $fin_op < $from) {
-        unset($besoins[$key]);
+        unset($besoins[$_besoin->_id]);
       }
     }
 

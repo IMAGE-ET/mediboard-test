@@ -20,6 +20,9 @@
 
 <table class="tbl">
   <tr>
+    {{if $all_prats}}
+      <th>Praticiens</th>
+    {{/if}}
     <th>Patient</th>
     <th>Evènement</th>
     <th class="narrow">Actes <br /> Non cotés</th>
@@ -27,7 +30,7 @@
     <th>Actes cotés</th>
   </tr>
   <tr>
-    <th class="section" colspan="5">Interventions</th>
+    <th class="section" colspan="6">Interventions</th>
   </tr>
   
   {{foreach from=$interventions item=_interv}}
@@ -108,7 +111,7 @@
   {{/foreach}}
 
   <tr>
-    <th class="section" colspan="5">Consultations</th>
+    <th class="section" colspan="6">Consultations</th>
   </tr>
   {{foreach from=$consultations item=consult}}
     {{assign var=patient value=$consult->_ref_patient}}

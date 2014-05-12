@@ -608,7 +608,7 @@ class CStoredObject extends CModelObject {
    * @param CStoredObject[] &$objects Objects to be filtered
    * @param int             $permType One of PERM_READ, PERM_EDIT
    *
-   * @return self[] Collection of filtered objects
+   * @return int Count of filtered objects
    */
   static function filterByPerm(&$objects = array/*<CMbObject>*/(), $permType = PERM_READ) {
     $total = count($objects);
