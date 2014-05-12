@@ -39,7 +39,7 @@ $user = CMediusers::get($user_id);
 // file
 $file = new CFile();
 $file->setObject($context);
-$file->file_name = "Mozaique de ".CAppUI::tr($context->_class)." du ".CMbDT::dateToLocale(CMbDT::date()).".pdf";
+$file->file_name = CAppUI::tr("CFile-create-mozaic")." de ".CAppUI::tr($context->_class)." du ".CMbDT::dateToLocale(CMbDT::date()).".pdf";
 $file->file_type  = "application/pdf";
 $file->file_category_id = $cat_id;
 $file->author_id = CMediusers::get()->_id;
@@ -96,7 +96,7 @@ $content = "<html>
     line-height: 100%;
     max-width: 100%;
     text-align: center;
-    vertical-align: middle!important;;
+    vertical-align: middle!important;
   }
 
   #images img {
@@ -115,6 +115,10 @@ $content = "<html>
     background-color:white;
     border:solid 1px #6e6e6e;
     padding:3px;
+  }
+
+  .droppable {
+    padding:4px;
   }
 
   #body img {max-width:100%; max-height: 100%;}
