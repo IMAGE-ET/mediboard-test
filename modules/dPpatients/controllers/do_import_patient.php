@@ -146,6 +146,7 @@ function importFile($file, $start, $count, $file_import) {
             mbLog($patient->_view." [ipp: ".$patient->_IPP." / ipp_import:".$IPP);
             $line_rapport.= " [IPP du fichier: $IPP / ipp en base: $patient->_IPP ]";
           }
+          $line_rapport.= " [IPP en base et fichier identiques]";
           echo "<tr style=\"color:#c98000\"><td>$line_nb</td><td>patient [$patient->nom $patient->prenom] déjà existant (ipp : $patient->_IPP)</td></tr>";
         }
 
@@ -172,6 +173,7 @@ function importFile($file, $start, $count, $file_import) {
         else {
           $patient->repair();
           $result = $patient->store();
+          $line_rapport.= " réparé et créé";
           if (!$result) {
             //create IPP
             $idex = CIdSante400::getMatch($patient->_class, CPatient::getTagIPP(), $patient->_IPP, $patient->_id );
