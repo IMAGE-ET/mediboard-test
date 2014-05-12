@@ -1551,9 +1551,11 @@ class CStoredObject extends CModelObject {
     $this->notify("BeforeMerge");
     
     if (!$this->_id && $msg = $this->store()) {
+      $this->notify("MergeFailure");
+
       return $msg;
     }
-    
+
     foreach ($objects as $object) {
       $this->_merging[$object->_id] = $object;
     }
@@ -1562,7 +1564,7 @@ class CStoredObject extends CModelObject {
       $msg = $fast ? 
         $this->fastTransferBackRefsFrom($object) :
         $this->transferBackRefsFrom($object);
-        
+
       if ($msg) {
         $this->notify("MergeFailure");
 
