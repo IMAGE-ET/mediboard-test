@@ -120,7 +120,12 @@
         <td>
           <div class="warning" style="float:left;"> Pas d'intervention </div>
           {{if !$app->user_prefs.simpleCabinet}}
-            <button class="new" type="button" onclick="showSejourButtons();" style="float:right;">Nouvelle hospitalisation</button>
+            {{math assign=ecap_dhe equation="a * b" a='ecap'|module_active|strlen b=$current_group|idex:'ecap'|strlen}}
+            {{if $ecap_dhe}}
+              {{mb_include module=ecap template=inc_button_dhe patient_id=$patient->_id praticien_id=$consult->_ref_praticien->_id; show_non_prevue=false}}
+            {{else}}
+              <button class="new" type="button" onclick="showSejourButtons();" style="float:right;">Nouvelle hospitalisation</button>
+            {{/if}}
           {{/if}}
         </td>
       </tr>
