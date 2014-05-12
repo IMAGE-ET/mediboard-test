@@ -9,8 +9,10 @@ Prestations = {
     if (context) {
       url.addParam('context', context);
     }
-    url.requestModal(800, 600);
-    url.modalObject.observe('afterClose', Prestations.refreshAfterEdit());
+    url.requestModal(800, 600, {
+      onClose: Prestations.refreshAfterEdit,
+      showReload: true
+    });
 
   },
 
