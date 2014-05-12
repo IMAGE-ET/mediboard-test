@@ -254,7 +254,7 @@
           <th class="category" colspan="2">Allergies</th>
         </tr>
         <tr>
-          <td style="font-weight: bold; font-size:130%;">
+          <td class="text" style="font-weight: bold; font-size:130%;">
           {{if $dossier_medical->_ref_antecedents_by_type && $dossier_medical->_ref_antecedents_by_type.alle|@count}}
             <div class="small-warning">
             {{foreach from=$dossier_medical->_ref_antecedents_by_type.alle item=currAnt}}
@@ -286,7 +286,7 @@
           <th class="category">Antécédents</th>
         </tr>
         <tr>
-          <td>
+          <td class="text">
           {{if $dossier_medical->_ref_antecedents_by_type}}
             {{foreach from=$dossier_medical->_ref_antecedents_by_type key=keyAnt item=currTypeAnt}}
               {{if $currTypeAnt}}

@@ -19,7 +19,7 @@
   </tr>
   
   <tr>
-    <td class="text top">
+    <td class="text top" style="width: {{if is_array($object->_ref_traitements)}}33{{else}}50{{/if}}%">
       {{foreach from=$object->_ref_antecedents_by_type_appareil key=_type item=antecedents_by_appareil}}
         {{if $antecedents_by_appareil|@count}}
           {{foreach from=$antecedents_by_appareil key=_appareil item=antecedents name=foreach_atcd}}
@@ -48,7 +48,7 @@
 
     {{if (is_array($object->_ref_traitements) && $object->_ref_traitements|@count) ||
       ($object->_ref_prescription && $object->_ref_prescription->_id && $object->_ref_prescription->_ref_prescription_lines|@count)}}
-      <td class="text top">
+      <td class="text top" style="width: 33%">
         {{if is_array($object->_ref_traitements)}}
           {{if $object->_ref_traitements|@count}}<ul>{{/if}}
             {{foreach from=$object->_ref_traitements item=_traitement}}
@@ -98,11 +98,11 @@
         
       </td>
     {{elseif $object->absence_traitement}}
-      <td class="top">
+      <td class="top" style="width: 33%">
         <div class="empty">{{tr}}CTraitement.absence{{/tr}}</div>
       </td>
     {{else}}
-      <td class="top">
+      <td class="top" style="width: 33%">
         <div class="empty">{{tr}}CTraitement.none{{/tr}}</div>
       </td>
     {{/if}}
