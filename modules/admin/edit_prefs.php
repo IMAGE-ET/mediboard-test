@@ -83,8 +83,16 @@ if ($session_lifetime) {
   }
 }
 
-// Création du template
 $smarty = new CSmartyDP();
+
+// Tasking
+if (CModule::getActive("tasking")) {
+  $request_ticket = new CRequestTicket();
+  $request_ticket->getUserType();
+
+  $smarty->assign("request_ticket", $request_ticket);
+}
+
 $smarty->assign("user"                 , $user);
 $smarty->assign("prof"                 , $prof);
 $smarty->assign("user_id"              , $user_id);
