@@ -10,14 +10,43 @@
  * @link     http://www.mediboard.org */
 
 CCanDo::checkAdmin();
+
+$ds = CSQLDataSource::get("std");
 try{
+  // récupération du client
   $client_index   = new CSearch();
   $client_index->createClient();
-  $index          = $client_index->loadIndex();
-  $mapping        = $index->getMapping();
+
+  // récupération de l'index, cluster, mapping
+  $index      = $client_index->loadIndex();
+  $name_index = $index->getName();
+  $cluster    = $client_index->_client->getCluster();
+  $mapping    = $index->getMapping();
+
+  // récupération de la taille totale des indexes
+  $size = $index->getStats()->get("_all");
+  $size = CMbString::toDecaBinary($size["primaries"]["store"]["size_in_bytes"]);
+
+  // récupération du nombre de docs "indexés" et "à indexer"
+  $nbdocs_indexed      = $index->count();
+  $query = new CRequest();
+  $query->addTable("search_indexing");
+  $nbdocs_to_index = $ds->loadResult($query->makeSelectCount());
+
+  // récupération du statut de la connexion et du cluster
+  $status     = $cluster->getHealth()->getStatus();
+  $connexion  = "1";
+
 } catch (Exception $e) {
   CAppUI::displayAjaxMsg("Le serveur de recherche n'est pas connecté", UI_MSG_ERROR);
-  $mapping="";
+  // valeur par défaut des variables en cas d'erreur
+  $mapping    = "";
+  $nbdocs_indexed      = "";
+  $nbdocs_to_index = "";
+  $status     = "";
+  $connexion  = "0";
+  $name_index = "";
+  $size ="0";
 }
 
 
@@ -25,4 +54,10 @@ try{
 $smarty = new CSmartyDP();
 $smarty->assign("mapping", $mapping);
 $smarty->assign("mappingjson", json_encode($mapping));
+$smarty->assign("nbDocs_indexed", $nbdocs_indexed);
+$smarty->assign("nbdocs_to_index", $nbdocs_to_index);
+$smarty->assign("status", $status);
+$smarty->assign("name_index", $name_index);
+$smarty->assign("connexion", $connexion);
+$smarty->assign("size", $size);
 $smarty->display("vw_cartographie_mapping.tpl");

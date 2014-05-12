@@ -54,6 +54,7 @@ try {
   CAppUI::displayAjaxMsg("L'indexation s'est correctement déroulée ", UI_MSG_OK);
   $error = "";
 } catch (Exception $e) {
+  mbLog($e->getMessage());
   CAppUI::displayAjaxMsg("L'indexation a recontré un problème", UI_MSG_ERROR);
   $error = "index";
 }

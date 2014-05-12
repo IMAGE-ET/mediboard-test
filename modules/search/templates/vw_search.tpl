@@ -32,22 +32,22 @@
           <table>
             <tbody>
               <tr id="tr_search_bar">
-                <th id="th_search_bar">Barre de Recherche</th>
+                <th style="text-align:right;" id="th_search_bar">Barre de Recherche</th>
                 <td>
-                  <input type="search" id="words" name="words" value="" placeholder="Saisissez les termes de votre recherche ici..." style="width:700px;" onchange="$V(this.form.start, '0')" >
+                  <input type="search" id="words" name="words" value="" placeholder="Saisissez les termes de votre recherche ici..." style="width:700px;" onchange="$V(this.form.start, '0')" autofocus>
                 </td>
                 <td>
                   {{mb_include module=search template=inc_tooltip_help}}
                 </td>
               </tr>
               <tr>
-                <th>Date</th>
+                <th style="text-align:right;" >Date</th>
                 <td>
-                  <input type="radio" name="date_interval" id="dateBetween" value="between" onclick="$('span_date').show(); $('date_fin').show()">
+                  <input type="radio" name="date_interval" id="dateBetween" value="between" onclick="$('span_date').show();">
                   <label>Comprise Entre</label>
-                  <input type="radio" name="date_interval" id="dateSince" value="since" onclick="$('span_date').hide(); $('date_fin').hide()">
+                  <input type="radio" name="date_interval" id="dateSince" value="since" onclick="$('span_date').hide();">
                   <label>Depuis</label>
-                  <input type="radio" name="date_interval" id="dateUniqueDay" value="uniqueDay" checked="checked" onclick="$('span_date').hide(); $('date_fin').hide()">
+                  <input type="radio" name="date_interval" id="dateUniqueDay" value="uniqueDay" checked="checked" onclick="$('span_date').hide();">
                   <label>Jour seul</label>
                 </td>
               </tr>
@@ -55,13 +55,21 @@
                 <th></th>
                 <td>
                   <label>Début</label>
-                  <input type="date" id="date_deb" name="date_deb" onchange="$V(this.form.start, '0')" >
-                  <span id="span_date" style="display: none;">et fin</span>
-                  <input type="date" id="date_fin" name="date_fin" style="display: none;" onchange="$V(this.form.start, '0')" >
+                  <script>
+                    Main.add(function() {
+                      var form = getForm("esSearch");
+                      window.calendar_planning = Calendar.regField(form.date_deb);
+                      window.calendar_planning = Calendar.regField(form.date_fin);
+                    });
+                  </script>
+                  <input type="hidden" class="datetime" id="date_deb" name="date_deb" onchange="$V(this.form.start, '0')" >
+                  <span id="span_date" style="display: none;">et fin
+                  <input type="hidden" class="datetime" id="date_fin" name="date_fin" style="display: none;" onchange="$V(this.form.start, '0')" >
+                  </span>
                 </td>
               </tr>
               <tr>
-                <th>Filtre utilisateurs</th>
+                <th style="text-align:right;">Filtre utilisateur</th>
                 <td>
                   <input type="hidden" name="specificUser_id" value=""/>
                   <input type="text" name="specificUser_view" class="autocomplete" style="width:15em;" placeholder="&mdash; Choisir un praticien"
@@ -91,6 +99,7 @@
               </tr>
             </tbody>
           </table>
+          <!-- Recherche avancée avec boutons
           <table id="advanced_search" style="display:none;">
             <tbody>
                 <tr>
@@ -120,13 +129,14 @@
                 </tr>
             </tbody>
           </table>
+          -->
         </fieldset>
       </td>
     </tr>
     <tr>
       <td>
         <div id="list_result">
-          <!-- Résultats de la Recherche par des tr -->
+          <!-- Résultats de la Recherche -->
         </div>
       </td>
     </tr>
