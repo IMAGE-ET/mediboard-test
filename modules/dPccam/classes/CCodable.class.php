@@ -126,7 +126,7 @@ class CCodable extends CMbObject {
     $this->_tokens_ngap = "";
 
     // Suppression des frais divers
-    $this->loadRefsFraisDivers();
+    $this->loadRefsFraisDivers(null);
     foreach ($this->_ref_frais_divers as $acte) {
       if ($msg = $acte->delete()) {
         return $msg;
