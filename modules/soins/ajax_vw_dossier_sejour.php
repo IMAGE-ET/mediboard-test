@@ -18,7 +18,10 @@ $mode_pharma  = CValue::get("mode_pharma", 0);
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
-CPrescription::$_load_lite = true;
+if (CModule::getActive("dPprescription")) {
+  CPrescription::$_load_lite = true;
+}
+
 $sejour->loadRefPraticien();
 $sejour->loadRefPrescriptionSejour();
 $sejour->loadJourOp($date);
@@ -43,7 +46,9 @@ if ($operation->load($operation_id)) {
 }
 $is_praticien = CAppUI::$user->isPraticien();
 
-CPrescription::$_load_lite = false;
+if (CModule::getActive("dPprescription")) {
+  CPrescription::$_load_lite = false;
+}
 
 $smarty = new CSmartyDP();
 
