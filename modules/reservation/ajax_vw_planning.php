@@ -402,15 +402,15 @@ foreach ($commentaires_by_salle as $salle_id => $_commentaires) {
     $com_libelle = CMbString::htmlEntities($_commentaire->libelle);
 
     $libelle = "<span
-    style='display: none;'
-    data-entree_prevue='$_commentaire->debut'
-    data-sortie_prevue='$_commentaire->fin'
-    data-libelle='$com_libelle'
-    data-commentaire='$com_comm'
-    data-duree='$duree'
-    data-color='$_commentaire->color'></span>".
-      "<span style='font-size: 11px; font-weight: bold;'>".$com_libelle."</span>".
-      "\n<span class='compact'>".$com_comm."</span>";
+    style=\"display: none;\"
+    data-entree_prevue=\"$_commentaire->debut\"
+    data-sortie_prevue=\"$_commentaire->fin\"
+    data-libelle=\"$com_libelle\"
+    data-commentaire=\"$com_comm\"
+    data-duree=\"$duree\"
+    data-color=\"$_commentaire->color\"></span>".
+      "<span style=\"font-size: 11px; font-weight: bold;\">".$com_libelle."</span>".
+      "\n<span class=\"compact\">".$com_comm."</span>";
 
     $event = new CPlanningEvent($_commentaire->_guid, $debut, $duree, $libelle, "#$_commentaire->color", true, null, $_commentaire->_guid, false);
 
