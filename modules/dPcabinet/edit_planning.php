@@ -221,19 +221,22 @@ if ($pat->_id) {
 
 // Affichage de l'autocomplete des éléments de prescription
 $display_elt = false;
-$consult->loadRefElementPrescription();
 
-if ($consult->_id) {
-  $task = $consult->loadRefTask();
-  if (!$task->_id || !$task->prescription_line_element_id) {
-    $display_elt = true;
+if (CModule::getActive("dPprescription")) {
+  $consult->loadRefElementPrescription();
+
+  if ($consult->_id) {
+    $task = $consult->loadRefTask();
+    if (!$task->_id || !$task->prescription_line_element_id) {
+      $display_elt = true;
+    }
   }
-}
-else if (!$line_element_id) {
-  $elt = new CElementPrescription();
-  $elt->consultation = 1;
-  if ($elt->countMatchingList()) {
-    $display_elt = true;
+  else if (!$line_element_id) {
+    $elt = new CElementPrescription();
+    $elt->consultation = 1;
+    if ($elt->countMatchingList()) {
+      $display_elt = true;
+    }
   }
 }
 
