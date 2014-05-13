@@ -110,7 +110,7 @@
             {{/if}}
 
             <a href="#" ondblclick="popFile('{{$object->_class}}', '{{$object->_id}}', '{{$_doc_item->_class}}', '{{$elementId}}', '0');">
-              <img class="thumbnail draggable" src="{{$srcImg}}" data-id="{{$elementId}}" data-class="{{$_doc_item->_class}}" data-targetFrom="{{$_doc_item->object_class}}-{{$_doc_item->object_id}}"/>
+              <img class="thumbnail draggable" style="background: white;" src="{{$srcImg}}" data-id="{{$elementId}}" data-class="{{$_doc_item->_class}}" data-targetFrom="{{$_doc_item->object_class}}-{{$_doc_item->object_id}}"/>
             </a>
           </td>
 
