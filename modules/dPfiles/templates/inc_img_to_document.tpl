@@ -48,6 +48,7 @@
     border: solid 1px #c6c6c6;
     text-align: center;
     vertical-align: middle!important;
+    padding:5px;
   }
 
   .droppable img {
