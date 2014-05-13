@@ -289,7 +289,7 @@ class CFacture extends CMbObject {
 
     //Si on cloture la facture création des lignes de la facture 
     //Si on décloture on les supprime
-    if ($this->cloture && $this->fieldModified("cloture") && !$this->completeField("cloture")) {
+    if ($this->cloture && $this->fieldModified("cloture") && !$this->_old->cloture) {
       $create_lignes = true;
     }
     elseif (!$this->cloture && $this->fieldModified("cloture")) {
