@@ -60,10 +60,7 @@ if ($file_id = CValue::get("file_id")) {
 
   if ($file->object_class === "CCompteRendu") {
     $cr = $file->loadTargetObject();
-
-    if ($cr->valide) {
-      $cr->makePDFPreview();
-    }
+    $cr->makePDFPreview();
   }
 
   if (!is_file($file->_file_path)) {
