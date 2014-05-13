@@ -333,6 +333,7 @@ $locales['Summary'] = 'Résumé';
 $locales['Support'] = 'Support';
 $locales['Switch'] = 'Changer';
 $locales['Table'] = 'Table';
+$locales['Tags'] = 'Étiquettes';
 $locales['Titles'] = 'Titres';
 $locales['To'] = 'à';
 $locales['Today'] = 'Aujourd\'hui';
