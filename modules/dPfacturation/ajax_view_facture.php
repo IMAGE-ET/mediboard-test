@@ -10,7 +10,6 @@
  */
 CCanDo::checkEdit();
 $facture_id   = CValue::getOrSession("facture_id");
-$patient_id   = CValue::getOrSession("patient_id");
 $object_class = CValue::getOrSession("object_class", "CFactureCabinet");
 
 $facture = new $object_class;
