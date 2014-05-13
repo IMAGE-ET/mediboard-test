@@ -59,8 +59,8 @@ ConstantsGraph = Class.create({
       if (graphs) {
         for (var id = 0; id < graphs.length; id++) {
           var oForm = getForm('edit-constantes-medicales');
-          if (graph) {
             var graph = graphs[id];
+            if (graph) {
             for (var i = 0; i < graph.length; i++) {
               var constant = graph[i];
               var checkbox = oForm['checkbox-constantes-medicales-' + constant];
