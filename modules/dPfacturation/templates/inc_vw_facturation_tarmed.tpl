@@ -38,7 +38,7 @@
     url.addParam("op", operation_id);
     url.requestModal('90%', '90%');
     url.modalObject.observe("afterClose", function(){
-      Facture.reload('{{$facture->patient_id}}', '{{$facture->_class}}', 0, '{{$facture->_id}}');
+      Facture.reload('{{$facture->patient_id}}', null, 0, '{{$facture->_id}}', '{{$facture->_class}}');
     });
   }
 

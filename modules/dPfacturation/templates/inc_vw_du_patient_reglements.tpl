@@ -1,6 +1,7 @@
+{{assign var=object_guid value=$object->_guid}}
 <script>
-  updateBanque = function(mode) {
-    var form = getForm('reglement-add');
+  updateBanque = function(name, mode) {
+    var form = getForm(name);
     var banque_id = form.banque_id;
     var reference = form.reference;
     var BVR       = form.num_bvr;
@@ -36,91 +37,14 @@
         $V(banque_id, "");
     }
   }
-  updateDebiteur = function(debiteur_id) {
-    var url = new Url('dPfacturation', 'ajax_edit_debiteur');
-    url.addParam('debiteur_id'   , debiteur_id);
-    url.addParam('debiteur_desc' , 1);
-    url.requestUpdate("reload_debiteur_desc");
-  }
-  delReglement = function(reglement_id){
-    var oForm = getForm('reglement-delete');
-    $V(oForm.reglement_id, reglement_id);
-    
-    return confirmDeletion(oForm, { ajax: true, typeName:'le règlement' }, {
-       onComplete : function() {
-         {{if isset($consult|smarty:nodefaults)}}
-         Reglement.reload(true);
-         {{/if}}
-         if (!$('load_facture')) {
-           Facture.url.refreshModal();
-         }
-         else {
-          {{if $facture->_ref_reglements|@count == 1 && !isset($factures|smarty:nodefaults)}}
-            Reglement.reload(true);
-          {{else}}
-             Facture.reloadReglement('{{$facture->_id}}', '{{$facture->_class}}');
-             var url = new Url('dPfacturation', 'ajax_view_facture');
-             url.addParam('facture_id'   , '{{$facture->_id}}');
-             url.addParam('facture_class', '{{$facture->_class}}');
-             url.requestUpdate("load_facture");
-          {{/if}}
-         }
-      }
-    });
-  }
-  
-  editReglementDate = function(reglement_id, date){
-    var oForm = getForm('reglement-edit-date');
-    $V(oForm.reglement_id, reglement_id);
-    $V(oForm.date,         date);
-    
-    return onSubmitFormAjax(oForm, function() {
-      {{if isset($consult|smarty:nodefaults)}}
-      Reglement.reload(true);
-      {{/if}}
-      Facture.reloadReglement('{{$facture->_id}}', '{{$facture->_class}}');
-    });
-  }
-  
-  editAquittementDate = function(date){
-    var oForm = getForm('edit-date-aquittement');
-    $V(oForm.patient_date_reglement,     date);
-    
-    return onSubmitFormAjax(oForm, function() {
-      {{if isset($consult|smarty:nodefaults)}}
-      Reglement.reload(true);
-      {{/if}}
-      Facture.reloadReglement('{{$facture->_id}}', '{{$facture->_class}}');
-    });
-  }
-  
-  addReglement = function (oForm){
-    return onSubmitFormAjax(oForm, function() {
-      {{if isset($consult|smarty:nodefaults)}}
-      Reglement.reload(true);
-      {{/if}}
-      Facture.reloadReglement('{{$facture->_id}}', '{{$facture->_class}}');
-      {{if !$facture->_ref_reglements|@count}}
-        var url = new Url('dPfacturation', 'ajax_view_facture');
-        url.addParam('facture_id'   , '{{$facture->_id}}');
-        url.addParam('facture_class', '{{$facture->_class}}');
-        url.requestUpdate("load_facture");
-      {{/if}}
-    });
-  }
-  
-  modifMontantBVR = function (num_bvr){
-    var eclat = num_bvr.split('>')[0];
-    var form = getForm("reglement-add");
-    form.montant.value = eclat.substring(2, 12)/100;
-  }
+
   Main.add(function(){
     {{if ($object->_du_restant_patient) > 0 || $conf.dPfacturation.CReglement.use_lock_acquittement}}
-    updateBanque('{{$conf.dPfacturation.CReglement.use_mode_default}}');
+    updateBanque('reglement-add-{{$object_guid}}', '{{$conf.dPfacturation.CReglement.use_mode_default}}');
     {{/if}}
   });
 </script>
-    
+
 <!-- Formulaire de suppression d'un reglement (car pas possible de les imbriquer) -->
 <form name="reglement-delete" action="#" method="post">
   <input type="hidden" name="m" value="dPcabinet" />
@@ -137,19 +61,20 @@
   <input type="hidden" name="date" value="" />
 </form>
 
-<form name="edit-date-aquittement" action="#" method="post">
+<form name="edit-date-aquittement-{{$object_guid}}" action="#" method="post">
   {{mb_class object=$object}}
   {{mb_key   object=$object}}
   <input type="hidden" name="patient_date_reglement" value="" />
 </form>
 
-<form name="reglement-add" action="" method="post" onsubmit="return addReglement(this);">
-  <input type="hidden" name="m" value="dPcabinet" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="dosql" value="do_reglement_aed" />
-  <input type="hidden" name="emetteur" value="patient" />
-  <input type="hidden" name="object_id" value="{{$object->_id}}" />
-  <input type="hidden" name="object_class" value="{{$object->_class}}" />
+<form name="reglement-add-{{$object_guid}}" action="" method="post" onsubmit="return addReglement(this);">
+  <input type="hidden" name="m"             value="dPcabinet" />
+  <input type="hidden" name="del"           value="0" />
+  <input type="hidden" name="dosql"         value="do_reglement_aed" />
+  <input type="hidden" name="emetteur"      value="patient" />
+  <input type="hidden" name="object_id"     value="{{$object->_id}}" />
+  <input type="hidden" name="object_class"  value="{{$object->_class}}" />
+  <input type="hidden" name="reglements"    value="{{$object->_ref_reglements|@count}}" />
   <table class="main tbl">
     <tr>
       <th class="category" style="width: 50%;">
@@ -197,15 +122,15 @@
       {{else}}
         <td>
           <input type="hidden" name="date_{{$_reglement->_id}}" class="{{$_reglement->_props.date}}" value="{{$_reglement->date}}" />
-          <button type="button" class="submit notext" onclick="editReglementDate('{{$_reglement->_id}}', this.up('td').down('input[name=date_{{$_reglement->_id}}]').value);"></button>
+          <button type="button" class="submit notext" onclick="editReglementDate('{{$_reglement->_id}}', this.up('td').down('input[name=date_{{$_reglement->_id}}]').value, '{{$_reglement->object_class}}', '{{$_reglement->object_id}}');"></button>
           <script>
             Main.add(function(){
-              Calendar.regField(getForm("reglement-add").date_{{$_reglement->_id}});
+              Calendar.regField(getForm('reglement-add-{{$object_guid}}').date_{{$_reglement->_id}});
             });
           </script>
         </td>
         <td>
-          <button type="button" class="remove notext" onclick="delReglement('{{$_reglement->_id}}');"></button>
+          <button type="button" class="remove notext" onclick="delReglement('{{$_reglement->_id}}', '{{$_reglement->object_class}}', '{{$_reglement->object_id}}');"></button>
         </td>
       {{/if}}
     </tr>
@@ -213,7 +138,7 @@
     {{if ($object->_du_restant_patient) > 0 || $conf.dPfacturation.CReglement.use_lock_acquittement}}
       <tr>
         <td>
-          <select name="mode" onchange="updateBanque(this.value);" >
+          <select name="mode" onchange="updateBanque('reglement-add-{{$object_guid}}', this.value);" >
             <option value="">&mdash; Choisir</option>
             {{foreach from=$reglement->_specs.mode->_locales item=num key=key}}
               <option value="{{$key}}" {{if $conf.dPfacturation.CReglement.use_mode_default == $key}}selected{{/if}}>{{$num}}</option>
@@ -221,7 +146,7 @@
           </select>
           {{mb_field object=$reglement field=banque_id options=$banques style="display: none"}}
           {{if isset($object->_num_bvr|smarty:nodefaults)}}
-            <select name="num_bvr" style="display:none;" onchange="modifMontantBVR(this.value);" >
+            <select name="num_bvr" style="display:none;" onchange="modifMontantBVR(this, this.value);" >
               <option value="0">&mdash; Choisir un numéro</option>
               {{foreach from=$object->_num_bvr item=num}}
                 <option value="{{$num}}">{{$num}}</option>
@@ -244,7 +169,7 @@
           <td>{{mb_field object=$reglement field=tireur}}</td>
         {{/if}}
         <td><input type="text" class="currency notNull" size="4" maxlength="8" name="montant" value="{{$object->_du_restant_patient}}" /></td>
-        <td>{{mb_field object=$reglement field=date register=true form="reglement-add" value="now"}}</td>
+        <td>{{mb_field object=$reglement field=date register=true form="reglement-add-$object_guid" value="now"}}</td>
         <td>
           <button id="reglement_button_add" class="add notext" type="submit">{{tr}}Add{{/tr}}</button>
         </td>
@@ -261,11 +186,11 @@
         <strong>
           {{mb_label object=$object field=patient_date_reglement}}
           <input type="hidden" name="patient_date_reglement" class="date" value="{{$object->patient_date_reglement}}" />
-          <button type="button" class="submit notext" onclick="editAquittementDate(this.up('td').down('input[name=patient_date_reglement]').value);"></button>
+          <button type="button" class="submit notext" onclick="editAquittementDate(this.up('td').down('input[name=patient_date_reglement]').value, '{{$object->_id}}', '{{$object->_class}}');"></button>
         </strong>
         <script>
           Main.add(function(){
-            Calendar.regField(getForm("reglement-add").patient_date_reglement);
+            Calendar.regField(getForm('reglement-add-{{$object_guid}}').patient_date_reglement);
           });
         </script>
       </td>

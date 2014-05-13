@@ -1,12 +1,13 @@
 window.Facture = {
   url: null,
   modal: null,
-  reload: function(patient_id, object_class, not_load_banque, facture_id) {
+  reload: function(patient_id, consult_id ,not_load_banque, facture_id, object_class) {
     var url = new Url('facturation', 'ajax_view_facture');
     url.addParam('patient_id'      , patient_id);
-    url.addParam('object_class'      , object_class);
-    url.addParam('not_load_banque'  , not_load_banque);
-    url.addParam('facture_id'    , facture_id);
+    url.addParam('consult_id'      , consult_id);
+    url.addParam('object_class'    , object_class);
+    url.addParam('not_load_banque' , not_load_banque);
+    url.addParam('facture_id'      , facture_id);
     if (!$('load_facture')) {
       Facture.url.refreshModal();
     }
@@ -59,3 +60,30 @@ window.Facture = {
     Facture.url = url;
   }
 };
+
+editRepartition = function(facture_id, facture_class){
+  var url = new Url("facturation", "ajax_edit_repartition");
+  url.addParam("facture_id"   , facture_id);
+  url.addParam("facture_class", facture_class);
+  url.requestModal();
+}
+
+editDateFacture = function(form){
+  form.cloture.value = form.ouverture.value;
+  return onSubmitFormAjax(form);
+}
+
+printFactureFR = function(facture_id, facture_class){
+  var url = new Url("facturation", "print_facture");
+  url.addParam("facture_id"   , facture_id);
+  url.addParam("facture_class", facture_class);
+  url.addParam('suppressHeaders', '1');
+  url.pop();
+}
+
+reloadFactureModal = function(facture_id, facture_class){
+  var url = new Url('facturation', 'ajax_view_facture');
+  url.addParam('object_class'  , facture_class);
+  url.addParam('facture_id'    , facture_id);
+  url.requestUpdate('reload-'+facture_class+'-'+facture_id);
+}

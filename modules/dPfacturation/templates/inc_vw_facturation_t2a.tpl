@@ -2,32 +2,14 @@
   {{mb_return}}
 {{/if}}
 <script>
-  editDateFacture = function(form){
-    form.cloture.value = form.ouverture.value;
-    return onSubmitFormAjax(form);
-  }
-  editRepartition = function(form){
-    var url = new Url("facturation", "ajax_edit_repartition");
-    url.addParam("facture_id"   , '{{$facture->_id}}');
-    url.addParam("facture_class", '{{$facture->_class}}');
-    url.requestModal();
-  }
-  printFactureFR = function(form){
-    var url = new Url("facturation", "print_facture");
-    url.addParam("facture_id"   , '{{$facture->_id}}');
-    url.addParam("facture_class", '{{$facture->_class}}');
-    url.addParam('suppressHeaders', '1');
-    url.pop();
-  }
-
   Main.add(function(){
-    Calendar.regField(getForm("facture_date").ouverture);
+    Calendar.regField(getForm('facture_date-'+'{{$facture->_guid}}').ouverture);
   });
 </script>
 <tr>
   <td colspan="2" style="text-align: center;"><b>{{mb_label object=$facture field=ouverture}}</b></td>
   <td>
-    <form name="facture_date" method="post" action="" onsubmit="return editDateFacture(this);">
+    <form name="facture_date-{{$facture->_guid}}" method="post" action="" onsubmit="return editDateFacture(this);">
       {{mb_key object=$facture}}
       {{mb_class object=$facture}}
       <input type="hidden" name="cloture" value=""/>
@@ -46,7 +28,7 @@
       </form>
     {{/if}}
     {{if $facture->cloture}}
-      <button type="button" class="pdf" onclick="printFactureFR();" style="float:left;">Facture pdf</button>
+      <button type="button" class="pdf" onclick="printFactureFR('{{$facture->_id}}', '{{$facture->_class}}');" style="float:left;">Facture pdf</button>
     {{/if}}
   </td>
 </tr>
@@ -129,7 +111,9 @@
   <tr>
   <tr>
     <td colspan="3">
-      <button class="edit notext" style="float:right;" onclick="editRepartition();">Modifier la répartition Dû patient/Dû tiers</button>
+      {{if $facture->numero == 1}}
+        <button class="edit notext" style="float:right;" onclick="editRepartition('{{$facture->_id}}', '{{$facture->_class}}');">Modifier la répartition Dû patient/Dû tiers</button>
+      {{/if}}
     </td>
     <td colspan="2"><b>Montant Total</b></td>
     <td style="text-align:right;"><b>{{mb_value object=$facture field="_montant_avec_remise"}}</b></td>

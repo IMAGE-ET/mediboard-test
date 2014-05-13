@@ -48,11 +48,11 @@ validTarif = function(){
   if ($V(form.tarif) == ""){
     $V(form.tarif, "manuel");
   }
-  Reglement.submit(form, true, reloadFacture);
+  Reglement.submit(form, true);
 };
 
 reloadFacture = function() {
-  Facture.reload('{{$consult->patient_id}}', '{{$consult->_id}}', 1, '{{$consult->_ref_facture->_id}}');
+  Facture.reload('{{$consult->patient_id}}', '{{$consult->_id}}', 1, '{{$consult->_ref_facture->_id}}', '{{$consult->_ref_facture->_class}}');
 };
 
 modifTotal = function(){

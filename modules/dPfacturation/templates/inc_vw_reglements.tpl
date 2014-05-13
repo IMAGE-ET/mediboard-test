@@ -1,7 +1,7 @@
 {{if $facture->_id}}
   {{assign var=object value=$facture}}
 {{/if}}
-
+{{mb_script module=facturation script=reglement ajax=true}}
 <fieldset>
   <legend>Règlements ({{tr}}{{$object->_class}}{{/tr}})</legend>
   {{if $object->du_patient || $conf.dPfacturation.CReglement.use_lock_acquittement}}
