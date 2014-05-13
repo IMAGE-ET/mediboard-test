@@ -389,7 +389,11 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
     // Passage de la date de dernière modification du content dans la table compte_rendu
     if (!$content->last_modified && $content->_id) {
-      $content->last_modified = $content->loadLastLog()->date;
+      $last_log = $content->loadLastLog();
+      if (!$last_log->_id) {
+        $last_log = $this->loadLastLog();
+      }
+      $content->last_modified = $last_log->date;
       $content->store();
     }
 
