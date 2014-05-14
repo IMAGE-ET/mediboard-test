@@ -54,7 +54,6 @@
     </tr>
   </table>
 
-
 {{else}}
 
 <script>
@@ -230,21 +229,13 @@ Main.add(function(){
           {{else}}
             {{if $list_chirs && (in_array("chir", $type_validateur) || ($check_list->object_class != "CSalle" && $check_list->object_class != "CBlocOperatoire"))}}
               <optgroup label="Chirurgiens">
-                {{foreach from=$list_chirs item=_user}}
-                  <option value="{{$_user->_id}}" {{if $app->user_id == $_user->_id}}selected="selected"{{/if}}>
-                    {{$_user->_view}}
-                  </option>
-                {{/foreach}}
+                {{mb_include module=mediusers template=inc_options_mediuser list=$list_chirs selected=$app->user_id}}
               </optgroup>
             {{/if}}
 
             {{if $list_anesths && (in_array("anesth", $type_validateur) || ($check_list->object_class != "CSalle" && $check_list->object_class != "CBlocOperatoire"))}}
               <optgroup label="Anesthésistes">
-                {{foreach from=$list_anesths item=_user}}
-                  <option value="{{$_user->_id}}" {{if $app->user_id == $_user->_id}}selected="selected"{{/if}}>
-                    {{$_user->_view}}
-                  </option>
-                {{/foreach}}
+                {{mb_include module=mediusers template=inc_options_mediuser list=$list_anesths selected=$app->user_id}}
               </optgroup>
             {{/if}}
           {{/if}}
