@@ -661,7 +661,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   /**
    * Cherche les différentes collisions au séjour courant
    *
-   * @return array|CSejour
+   * @return CSejour[]
    */
   function getCollisions() {
     $collisions = array();
