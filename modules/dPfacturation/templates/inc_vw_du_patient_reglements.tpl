@@ -42,33 +42,30 @@
     url.addParam('debiteur_desc' , 1);
     url.requestUpdate("reload_debiteur_desc");
   }
-  delReglement = function(reglement_id){
+
+  delReglement = function(reglement_id, facture_class, facture_id){
     var oForm = getForm('reglement-delete');
     $V(oForm.reglement_id, reglement_id);
-    
+
     return confirmDeletion(oForm, { ajax: true, typeName:'le règlement' }, {
-       onComplete : function() {
-         {{if isset($consult|smarty:nodefaults)}}
-         Reglement.reload(true);
-         {{/if}}
-         if (!$('load_facture')) {
-           Facture.url.refreshModal();
-         }
-         else {
-          {{if $facture->_ref_reglements|@count == 1 && !isset($factures|smarty:nodefaults)}}
-            Reglement.reload(true);
-          {{else}}
-             Facture.reloadReglement('{{$facture->_id}}', '{{$facture->_class}}');
-             var url = new Url('dPfacturation', 'ajax_view_facture');
-             url.addParam('facture_id'   , '{{$facture->_id}}');
-             url.addParam('facture_class', '{{$facture->_class}}');
-             url.requestUpdate("load_facture");
-          {{/if}}
-         }
+      onComplete : function() {
+        if ($('a_reglements_consult')) {
+          Reglement.reload(true);
+        }
+        if (!$('load_facture')) {
+          Facture.url.refreshModal();
+        }
+        else {
+          Facture.reloadReglement(facture_id, facture_class);
+          var url = new Url('dPfacturation', 'ajax_view_facture');
+          url.addParam('facture_id'   , facture_id);
+          url.addParam('facture_class', facture_class);
+          url.requestUpdate("load_facture");
+        }
       }
     });
   }
-  
+
   editReglementDate = function(reglement_id, date){
     var oForm = getForm('reglement-edit-date');
     $V(oForm.reglement_id, reglement_id);
@@ -93,22 +90,18 @@
       Facture.reloadReglement('{{$facture->_id}}', '{{$facture->_class}}');
     });
   }
-  
-  addReglement = function (oForm){
-    return onSubmitFormAjax(oForm, function() {
-      {{if isset($consult|smarty:nodefaults)}}
-      Reglement.reload(true);
-      {{/if}}
-      Facture.reloadReglement('{{$facture->_id}}', '{{$facture->_class}}');
-      {{if !$facture->_ref_reglements|@count}}
-        var url = new Url('dPfacturation', 'ajax_view_facture');
-        url.addParam('facture_id'   , '{{$facture->_id}}');
-        url.addParam('facture_class', '{{$facture->_class}}');
-        url.requestUpdate("load_facture");
-      {{/if}}
+
+  addReglement = function (form){
+    return onSubmitFormAjax(form, function() {
+      if ($('a_reglements_consult')) {
+        Reglement.reload(true);
+      }
+      else {
+        Facture.reloadReglement($V(form.object_id), $V(form.object_class));
+      }
     });
   }
-  
+
   modifMontantBVR = function (num_bvr){
     var eclat = num_bvr.split('>')[0];
     var form = getForm("reglement-add");
@@ -205,7 +198,7 @@
           </script>
         </td>
         <td>
-          <button type="button" class="remove notext" onclick="delReglement('{{$_reglement->_id}}');"></button>
+          <button type="button" class="remove notext" onclick="delReglement('{{$_reglement->_id}}', '{{$_reglement->object_class}}', '{{$_reglement->object_id}}');""></button>
         </td>
       {{/if}}
     </tr>
