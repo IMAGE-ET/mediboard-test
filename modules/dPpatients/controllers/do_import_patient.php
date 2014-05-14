@@ -27,7 +27,7 @@ CApp::setMemoryLimit("512M");
 
 CMbObject::$useObjectCache = false;
 
-$file_import = fopen(CAppUI::conf("root_dir")."/tmp/rapport_import_patient_$date.csv", "a");
+$file_import = fopen(CAppUI::conf("root_dir")."/tmp/rapport_import_patient_$date.txt", "a");
 importFile(CAppUI::conf("dPpatients imports pat_csv_path"), $start, $count, $file_import);
 
 $start += $count;
@@ -71,9 +71,9 @@ function importFile($file, $start, $count, $file_import) {
 
   $line_nb=0;
   while ($line = fgetcsv($fp, null, ";")) {
-    $line_rapport = "ligne $line_nb - ";
     $patient = new CPatient();
     if ($line_nb >= $start && $line_nb<($start+$count)) {
+      $line_rapport = "ligne $line_nb - ";
 
       //foreach SPECS, first load
       foreach ($_patient_specs as $key =>  $_specs) {
