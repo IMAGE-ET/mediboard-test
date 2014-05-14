@@ -14,7 +14,7 @@
 /**
  * Class CHprimXMLObjectHandler
  */
-class CHprimXMLObjectHandler {
+class CHprimXMLObjectHandler  extends CMbObjectHandler {
   static $handled = array ();
 
   /**
