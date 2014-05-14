@@ -128,19 +128,33 @@ loadDocuments = function(sejour_id) {
   {{if $fiche_autonomie->_id || !"forms"|module_active || ("forms"|module_active && !$conf.ssr.CFicheAutonomie.use_ex_form)}}
     {{mb_include template=inc_form_fiche_autonomie}}
   {{else}}
-    {{if !$bilan->_id}}
-      <div class="small-info">Veuillez enregistrer le bilan avant de pouvoir remplir la fiche d'autonomie</div>
-    {{else}}
-      {{unique_id var=unique_id_fich_autonomie}}
+    {{unique_id var=unique_id_fich_autonomie}}
 
-      <script type="text/javascript">
-        Main.add(function(){
-          ExObject.loadExObjects("{{$bilan->_class}}", "{{$bilan->_id}}", "{{$unique_id_fich_autonomie}}", 0);
-        });
+    <div id="fiche_auto_{{$unique_id_fich_autonomie}}">
+      <script>
+        createBilanSSRcallback{{$unique_id_fich_autonomie}} = function(bilan_id, obj) {
+          updateBilanId(bilan_id, obj);
+
+          ExObject.loadExObjects("CBilanSSR", bilan_id, "fiche_auto_{{$unique_id_fich_autonomie}}", 0);
+        }
       </script>
-
-      <div id="{{$unique_id_fich_autonomie}}"></div>
-    {{/if}}
+      {{if !$bilan->_id}}
+        <form name="Create-CBilanSSR" action="?m=ssr" method="post" onsubmit="return onSubmitFormAjax(this);">
+          <input type="hidden" name="m" value="ssr" />
+          <input type="hidden" name="dosql" value="do_bilan_ssr_aed" />
+          <input type="hidden" name="callback" value="createBilanSSRcallback{{$unique_id_fich_autonomie}}" />
+          {{mb_key object=$bilan}}
+          {{mb_field object=$bilan field=sejour_id hidden=1}}
+          <button type="submit" class="new">Accéder à la fiche d'autonomie</button>
+        </form>
+      {{else}}
+        <script type="text/javascript">
+          Main.add(function(){
+            ExObject.loadExObjects("{{$bilan->_class}}", "{{$bilan->_id}}", "fiche_auto_{{$unique_id_fich_autonomie}}", 0);
+          });
+        </script>
+      {{/if}}
+    </div>
   {{/if}}
 </div>
 

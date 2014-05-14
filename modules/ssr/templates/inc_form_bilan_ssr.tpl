@@ -1,11 +1,18 @@
 <script type="text/javascript">
 
 updateBilanId = function(bilan_id){
-  $V(getForm("Edit-CBilanSSR").bilan_id, bilan_id);
-  var form = getForm("Planification-CBilanSSR");
-  if (form) {
-    $V(form.bilan_id, bilan_id);
-  }
+  var formNames = [
+    "Edit-CBilanSSR",
+    "Planification-CBilanSSR",
+    "Create-CBilanSSR"
+  ];
+
+  formNames.each(function(formName){
+    var form = getForm(formName);
+    if (form) {
+      $V(form.bilan_id, bilan_id);
+    }
+  });
 }
 </script>
 
@@ -20,30 +27,30 @@ updateBilanId = function(bilan_id){
         <div>La prescription de rééducation n'est donc pas possible.</div>
       </div>
       {{/if}}
-		</td>
-		
+    </td>
+    
     <td>
-    	<form name="Edit-CBilanSSR" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
-			  <input type="hidden" name="m" value="ssr" />
-			  <input type="hidden" name="dosql" value="do_bilan_ssr_aed" />
-			  <input type="hidden" name="del" value="0" />
-				<input type="hidden" name="callback" value="updateBilanId" />
-				{{mb_key object=$bilan}}
+      <form name="Edit-CBilanSSR" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
+        <input type="hidden" name="m" value="ssr" />
+        <input type="hidden" name="dosql" value="do_bilan_ssr_aed" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="callback" value="updateBilanId" />
+        {{mb_key object=$bilan}}
         {{mb_field object=$bilan field=sejour_id hidden=1}}
         
-	    	<table class="form">
+        <table class="form">
           <tr>
             <th class="title" style="width: 50%">{{tr}}CBilanSSR{{/tr}}</th>
           </tr>
 
-					<tr>
-						<td>
+          <tr>
+            <td>
               <fieldset>
                 <legend>{{mb_label object=$bilan field=entree}}</legend>
                 {{mb_field object=$bilan field=entree rows=6 onblur="this.form.onsubmit()" form="Edit-CBilanSSR"}}
               </fieldset>
-  	        </td>
-					</tr>
+            </td>
+          </tr>
 
           <tr>
             <td>
@@ -54,8 +61,8 @@ updateBilanId = function(bilan_id){
             </td>
           </tr>
 
-			  </table>
-			</form>
+        </table>
+      </form>
 
       {{if $can->admin && $bilan->_id}}
       <hr />
@@ -71,23 +78,23 @@ updateBilanId = function(bilan_id){
 
           <tr>
             <td class="button">
-            	{{if $bilan->planification}} 
+              {{if $bilan->planification}} 
               <button type="button" class="cancel" onclick="$V(this.form.planification, '0'); this.form.submit();">
                 {{tr}}CBilanSSR-planification-turn-off{{/tr}}
               </button>
-            	{{else}}
+              {{else}}
               <button type="button" class="change" onclick="$V(this.form.planification, '1'); this.form.submit();">
                 {{tr}}CBilanSSR-planification-turn-on{{/tr}}
               </button>
-            	{{/if}}
-						</td>
+              {{/if}}
+            </td>
           </tr>
 
         </table>
       </form>
       {{/if}}
-			
-			<!-- Affichage des sejours SSR du patient -->
+      
+      <!-- Affichage des sejours SSR du patient -->
       <div id="sejours_ssr"></div>
 
     </td>
