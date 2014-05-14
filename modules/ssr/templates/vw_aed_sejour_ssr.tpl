@@ -40,6 +40,9 @@ refreshConstantesMedicales = function (force) {
     url.addParam("patient_id", {{$sejour->_ref_patient->_id}});
     url.addParam("context_guid", "{{$sejour->_guid}}");
     url.addParam("selection[]", ["poids", "taille"]);
+    if (window.oGraphs) {
+      url.addParam('hidden_graphs', JSON.stringify(window.oGraphs.getHiddenGraphs()));
+    }
     url.requestUpdate("constantes");
     constantesMedicalesDrawn = true;
   }

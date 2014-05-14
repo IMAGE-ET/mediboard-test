@@ -53,6 +53,9 @@
     if(context_guid) {
       var url = new Url("patients", "httpreq_vw_constantes_medicales");
       url.addParam("context_guid", context_guid);
+      if (window.oGraphs) {
+        url.addParam('hidden_graphs', JSON.stringify(window.oGraphs.getHiddenGraphs()));
+      }
       url.requestUpdate("constantes-medicales");
     }
   }

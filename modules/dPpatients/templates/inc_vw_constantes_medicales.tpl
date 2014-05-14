@@ -7,26 +7,28 @@ keys_selection = {{$custom_selection|@array_keys|@json}};
 paginate = {{$paginate|@json}};
 
 newConstants = function(context_guid) {
+  window.oGraphs.getHiddenGraphs();
   var url = new Url('patients', 'httpreq_vw_form_constantes_medicales');
   url.addParam("context_guid", context_guid);
   url.addParam("selection[]", keys_selection);
   url.addParam("patient_id", '{{$patient->_id}}');
-  url.requestUpdate('constantes-medicales-form', {onComplete: initCheckboxes.curry()});
+  url.requestUpdate('constantes-medicales-form', {onComplete: function() { window.oGraphs.initCheckboxes();}});
 };
 
 editConstants = function(const_id, context_guid, start) {
+  window.oGraphs.getHiddenGraphs();
   var url = new Url('patients', 'httpreq_vw_form_constantes_medicales');
   url.addParam("const_id", const_id);
   url.addParam("context_guid", context_guid);
   url.addParam("start", start || 0);
   url.addParam("selection[]", keys_selection);
   url.addParam("patient_id", '{{$patient->_id}}');
-  url.requestUpdate('constantes-medicales-form', {onComplete: window.oGraphs.initCheckboxes});
+  url.requestUpdate('constantes-medicales-form', {onComplete: function() { window.oGraphs.initCheckboxes();}});
 };
 
 Main.add(function () {
   var graphs_data = {{$graphs_data|@json}};
-  window.oGraphs = new ConstantsGraph(graphs_data, {{$min_x_index}}, {{$min_x_value}}, false, '{{$context_guid}}', '{{$display.mode}}', {{$display.time}}, {{$drawn_constants|@json}}, {{$graphs_structure|@json}});
+  window.oGraphs = new ConstantsGraph(graphs_data, {{$min_x_index}}, {{$min_x_value}}, false, '{{$context_guid}}', '{{$display.mode}}', {{$display.time}}, {{$hidden_graphs|@json}}, {{$graphs_structure|@json}});
   window.oGraphs.draw();
   ViewPort.SetAvlHeight('tab-constantes-medicales', 1.0);
 });

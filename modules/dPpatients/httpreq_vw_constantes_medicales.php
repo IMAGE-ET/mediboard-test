@@ -268,7 +268,7 @@ $smarty->assign('graphs_data',                $graph->graphs);
 $smarty->assign('graphs_structure',           $graph->structure);
 $smarty->assign('min_x_index',                $graph->min_x_index);
 $smarty->assign('min_x_value',                $graph->min_x_value);
-$smarty->assign('drawn_constants',            $graph->drawn_constants);
+$smarty->assign('hidden_graphs',              CValue::get('hidden_graphs', ''));
 $smarty->assign('display',                    $graph->display);
 $smarty->assign('start',                      $start);
 $smarty->assign('count',                      $count);

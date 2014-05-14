@@ -17,13 +17,13 @@ ConstantsGraph = Class.create({
   minXIndex: null,
   minXValue: null,
   maxXValue: null,
-  drawnConstants: null,
+  hiddenGraphs: null,
   xTicks: null,
   graphsStructure: null,
   graphsData: null,
   widget: null,
 
-  initialize: function(graphs_data, min_x_index, min_x_value, widget, context_guid, display_mode, display_time, drawn_constants, graphs_structure) {
+  initialize: function(graphs_data, min_x_index, min_x_value, widget, context_guid, display_mode, display_time, hidden_graphs, graphs_structure) {
     this.graphsData = graphs_data;
     this.widget = widget;
     if (context_guid) {
@@ -41,8 +41,8 @@ ConstantsGraph = Class.create({
     if (min_x_value) {
       this.minXValue = min_x_value;
     }
-    if (drawn_constants) {
-      this.drawnConstants = drawn_constants
+    if (hidden_graphs) {
+      this.hiddenGraphs = hidden_graphs;
     }
     if (graphs_structure) {
       this.graphsStructure = graphs_structure;
@@ -59,14 +59,22 @@ ConstantsGraph = Class.create({
       if (graphs) {
         for (var id = 0; id < graphs.length; id++) {
           var oForm = getForm('edit-constantes-medicales');
-            var graph = graphs[id];
-            if (graph) {
+          var graph = graphs[id];
+          if (graph) {
             for (var i = 0; i < graph.length; i++) {
               var constant = graph[i];
               var checkbox = oForm['checkbox-constantes-medicales-' + constant];
               if (checkbox) {
-                checkbox.addClassName('checkbox-graph-' + rank + '_' + id);
-                checkbox.checked = true;
+                checkbox.setAttribute('data-graph_id', rank + '_' + id);
+                checkbox.addClassName('checkbox-drawn-graph');
+                if (this.hiddenGraphs) {
+                  if (this.hiddenGraphs.indexOf(rank + '_' + id) == -1) {
+                    checkbox.checked = true;
+                  }
+                }
+                else {
+                  checkbox.checked = true;
+                }
                 if (i > 0) {
                   checkbox.setAttribute('readonly', 1);
                 }
@@ -210,15 +218,15 @@ ConstantsGraph = Class.create({
   },
 
   toggle: function(checkbox) {
-    var className = $w(checkbox.className)[1];
-
-    var checkboxes = $$('.' + className);
-    checkboxes.each(function(cb) {
-      cb.checked = checkbox.checked;
-    });
-    var id_graph = className.substring(15);
-    var row = $('graph_row_' + id_graph);
-    row.setVisible(checkbox.checked);
+    var graph_id = checkbox.get('graph_id');
+    if (graph_id) {
+      var checkboxes = $$('form[name=edit-constantes-medicales] input[data-graph_id=' + graph_id + '].checkbox-drawn-graph');
+      checkboxes.each(function(cb) {
+        cb.checked = checkbox.checked;
+      });
+      var row = $('graph_row_' + graph_id);
+      row.setVisible(checkbox.checked);
+    }
   },
 
   draw: function() {
@@ -231,6 +239,9 @@ ConstantsGraph = Class.create({
             var graph = graphs[id];
             if (graph) {
               this.drawGraph(graph, rank, id);
+              if (this.hiddenGraphs && this.hiddenGraphs.indexOf(rank + '_' + id) != -1) {
+                $('graph_row_' + rank + '_' + id).hide();
+              }
             }
           }
         }
@@ -330,5 +341,18 @@ ConstantsGraph = Class.create({
     $$('#placeholder_' + rank + '_' + id + ' .x1Axis .tickLabel').each(function(item) {
       item.style.zIndex = 1000;
     });
+  },
+
+  getHiddenGraphs: function() {
+    var checkboxes = $$('form[name=edit-constantes-medicales] input[type=checkbox].checkbox-drawn-graph:not(:checked)');
+    this.hiddenGraphs = [];
+    for (var i = 0; i < checkboxes.length; i++) {
+      var checkbox = checkboxes[i];
+      if (this.hiddenGraphs.indexOf(checkbox.get('graph_id')) == -1) {
+        this.hiddenGraphs.push(checkbox.get('graph_id'));
+      }
+    }
+
+    return this.hiddenGraphs;
   }
 });

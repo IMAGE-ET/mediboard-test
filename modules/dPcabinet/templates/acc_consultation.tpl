@@ -53,6 +53,9 @@ function refreshConstantesMedicales (force) {
     url.addParam("patient_id", {{$consult->_ref_patient->_id}});
     url.addParam("context_guid", "{{$consult->_guid}}");
     //url.addParam("selection[]", ["poids", "ta", "temperature", "pouls"]);
+    if (window.oGraphs) {
+      url.addParam('hidden_graphs', JSON.stringify(window.oGraphs.getHiddenGraphs()));
+    }
     url.requestUpdate("Constantes");
     constantesMedicalesDrawn = true;
   }

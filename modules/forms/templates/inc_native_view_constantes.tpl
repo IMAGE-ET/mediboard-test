@@ -10,6 +10,9 @@ refreshConstantesMedicales = function(context_guid) {
   //url.addParam("selected_context_guid", context_guid);
   url.addParam("paginate", window.paginate || 0);
   url.addParam("simple_view", 1);
+  if (window.oGraphs) {
+    url.addParam('hidden_graphs', JSON.stringify(window.oGraphs.getHiddenGraphs()));
+  }
   url.requestUpdate("tab-native_views-constantes", function(){
     loadConstantesMedicales = refreshConstantesMedicales; // FIXME
   });

@@ -6,6 +6,9 @@ refreshConstantesMedicales = function(context_guid) {
     url.addParam("context_guid", context_guid);
     url.addParam("can_edit", 0);
     url.addParam("can_select_context", 0);
+    if (window.oGraphs) {
+      url.addParam('hidden_graphs', JSON.stringify(window.oGraphs.getHiddenGraphs()));
+    }
     url.requestUpdate("constantes");
   }
 };

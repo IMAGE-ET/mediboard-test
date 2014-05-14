@@ -37,8 +37,6 @@ class CConstantGraph {
   public $min_x_index;
   /** @var integer The value of the min x-coordinate displayed */
   public $min_x_value;
-  /** @var array The list of the constants displayed in the graphs */
-  public $drawn_constants;
 
   /** @var array The default colors for the curve */
   static private $default_colors = array('#0066FF', '#FF0000', '#FF9600', '#009900', '#9900CC');
@@ -78,8 +76,6 @@ class CConstantGraph {
 
     $xaxis = $this->createXaxis($constants);
 
-    $drawn_constants = array();
-
     foreach ($this->structure as $_rank => $_graphs) {
       foreach ($_graphs as $_graph_constants) {
         $title = '';
@@ -92,7 +88,6 @@ class CConstantGraph {
           if (!array_key_exists($_constant, $this->colors)) {
             $this->colors[$_constant] = self::$default_colors[$axis_id - 1];
           }
-          $drawn_constants[] = $_constant;
 
           // The label of the yaxis and the title of the graph are formatted
           $label = CAppUI::tr("CConstantesMedicales-$_constant-court");
@@ -176,8 +171,6 @@ class CConstantGraph {
         $datas[$_rank][] = $graph;
       }
     }
-
-    $this->drawn_constants = $drawn_constants;
 
     $this->graphs = $datas;
   }
