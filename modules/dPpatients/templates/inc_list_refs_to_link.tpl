@@ -8,6 +8,12 @@
  * @version  $Revision$
  * @link     http://www.mediboard.org
 *}}
+<style>
+  #list_Relations li {
+    list-style: none;
+  }
+</style>
+
 <script>
   function checkGuess() {
     var guesses = [[], [], [], []];
@@ -48,9 +54,9 @@
                 <li {{if $_op->_guess_status == 0}}class="empty"{{/if}}>
                   <input data-guess="{{$_op->_guess_status}}" type="radio" name="object" onclick="File_Attach.setObject('{{$_op->_class}}','{{$_op->_id}}', this);" data-class="{{$_op->_class}}" data-id="{{$_op->_id}}" data-guid="{{$_op->_guid}}" />
                 <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}')">
-                  Inter. le {{mb_value object=$_op field=_datetime}}
-                </span>
-                  avec le Dr {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_op->_ref_chir}}
+                  Interv. le {{mb_value object=$_op field=_datetime}}
+                </span>,
+                  , {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_op->_ref_chir}}
                   {{if $_op->annulee}}<span style="color: red;">[ANNULE]</span>{{/if}} {{mb_include module=patients template=inc_nb_files_short nb_files=$_op->_ref_documents|@count nb_docs=$_op->_ref_files|@count}}
                 </li>
                 {{foreachelse}}
@@ -64,16 +70,14 @@
                 <li style="margin-left:10px;" {{if $_consult->_guess_status == 0}}class="empty"{{/if}}>
                   <input data-guess="{{$_consult->_guess_status}}" type="radio" name="object" onclick="File_Attach.setObject('{{$_consult->_class}}','{{$_consult->_id}}', this);" {{if $_consult->_guid == $object_guid}}checked="checked"{{/if}} data-class="{{$_consult->_class}}" data-id="{{$_consult->_id}}" data-guid="{{$_consult->_guid}}" />
                       <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
-                      Consultation le  {{mb_value object=$_consult field=_datetime}}
+                      Consult. le {{mb_value object=$_consult field=_datetime}}
                       </span>
-                  avec le Dr {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_consult->_ref_chir}}
+                  , {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_consult->_ref_chir}}
                   {{if $_consult->annule}}<span style="color: red;">[ANNULE]</span>{{/if}} {{mb_include module=patients template=inc_nb_files_short nb_files=$_consult->_ref_documents|@count nb_docs=$_consult->_ref_files|@count}}
                 </li>
               {{/foreach}}
             </ul>
           </li>
-        {{foreachelse}}
-          <li class="empty">{{tr}}CSejour.none{{/tr}}</li>
         {{/foreach}}
 
       <!-- CONSULT -->
@@ -83,13 +87,11 @@
             <li {{if $_consult->_guess_status == 0}}class="empty"{{/if}}>
               <input data-guess="{{$_consult->_guess_status}}" type="radio"  name="object" onclick="File_Attach.setObject('{{$_consult->_class}}','{{$_consult->_id}}', this);" data-class="{{$_consult->_class}}" data-id="{{$_consult->_id}}" data-guid="{{$_consult->_guid}}" {{if $_consult->_guid == $object_guid}}checked="checked"{{/if}}/>
                 <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
-                  Consultation le  {{mb_value object=$_consult field=_datetime}}
+                  Consult. le  {{mb_value object=$_consult field=_datetime}}
                 </span>
-                avec le Dr {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_consult->_ref_chir}}
+                , {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_consult->_ref_chir}}
                 {{if $_consult->annule}}<span style="color: red;">[ANNULE]</span>{{/if}} {{mb_include module=patients template=inc_nb_files_short nb_files=$_consult->_ref_documents|@count nb_docs=$_consult->_ref_files|@count}}
             </li>
-            {{foreachelse}}
-            <li class="empty">{{tr}}CConsultation.none{{/tr}}</li>
           {{/foreach}}
         </ul>
       </li>
