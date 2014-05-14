@@ -44,14 +44,15 @@
     {{if ($app->user_prefs.ccam_consultation == 1)}}
       {{if !($consult->sejour_id && $mutation_id)}}
         var tabsActes = Control.Tabs.create('tab-actes', false);
-        loadTarifsSejour('{{$consult->sejour_id}}');
+        loadTarifsConsult('{{$consult->sejour_id}}', '{{$consult->_ref_chir->_id}}');
       {{/if}}
     {{/if}}
   });
 
-  function loadTarifsSejour(sejour_id) {
+  function loadTarifsConsult(sejour_id, chir_id) {
     var url = new Url('soins', 'ajax_tarifs_sejour');
     url.addParam('sejour_id', sejour_id);
+    url.addParam('chir_id'  , chir_id);
     url.requestUpdate('tarif');
   }
 
