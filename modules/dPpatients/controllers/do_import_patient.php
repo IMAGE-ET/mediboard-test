@@ -29,11 +29,10 @@ CMbObject::$useObjectCache = false;
 
 $file_import = fopen(CAppUI::conf("root_dir")."/tmp/rapport_import_patient_$date.txt", "a");
 importFile(CAppUI::conf("dPpatients imports pat_csv_path"), $start, $count, $file_import);
+fclose($file_import);
 
 $start += $count;
-
-$fh = fopen(CAppUI::conf("root_dir")."/tmp/import_patient.txt", "w");
-$file_w = fwrite($fh, "$start;$count");
+file_put_contents(CAppUI::conf("root_dir")."/tmp/import_patient.txt", "$start;$count");
 
 if ($callback) {
   CAppUI::js("$callback($start,$count)");
