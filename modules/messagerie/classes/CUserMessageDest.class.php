@@ -72,8 +72,14 @@ class CUserMessageDest extends CMbObject {
     $dests = array();
 
     if (CModule::getActive("messagerie")) {
-      $user = CMediusers::get($user_id);
       $dest = new self();
+
+      if ($dest->_ref_module->mod_version < 0.30) {
+        CAppUI::stepAjax("CModule%s-msg-pls_update_module", UI_MSG_WARNING, $dest->_ref_module->mod_name);
+        return $dests;
+      }
+
+      $user = CMediusers::get($user_id);
       $where = array();
       $where["to_user_id"] = " = '$user->_id'";
       $where["datetime_sent"] = " IS NOT NULL";

@@ -1278,6 +1278,7 @@ $locales['CMessageSupported.object_class.CInteropReceiver'] = 'Destinataire d\'i
 $locales['CMessageSupported.object_class.CInteropSender'] = 'Expéditeur d\'intégration';
 $locales['CMessageSupported.one'] = 'Un message supporté';
 $locales['CModule'] = 'Module';
+$locales['CModule%s-msg-pls_update_module'] = 'Le module \'%s\' n\'est pas à jour, merci d\'y remédier.';
 $locales['CModule-_configable'] = 'Configurable';
 $locales['CModule-_configable-court'] = 'Config.';
 $locales['CModule-_configable-desc'] = 'Indique si le module possède une interface de configuration';
