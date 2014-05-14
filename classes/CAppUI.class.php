@@ -53,6 +53,9 @@ class CAppUI {
   /** @var bool Token restricted: session will be closed right after page display */
   static $token_restricted;
 
+  /** @var CUserAuthenticationSuccess Authentication information */
+  static $auth_info;
+
   /* --- <Localization> --- */
   /** @var bool Localization skipped if false */
   static $localize = true;
@@ -577,6 +580,14 @@ class CAppUI {
 
       $user->load($token->user_id);
       self::$instance->auth_method = "token";
+    }
+
+    // -------------- Authentication handler
+    elseif (self::$auth_info && self::$auth_info->user_id) {
+      $auth = self::$auth_info;
+
+      $user->load($auth->user_id);
+      self::$instance->auth_method = $auth->auth_method;
     }
 
     // -------------- Standard sign-in

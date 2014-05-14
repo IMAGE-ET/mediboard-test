@@ -1,11 +1,11 @@
 <?php
 /**
  * $Id$
- * 
+ *
  * @package    Mediboard
  * @subpackage classes
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -97,7 +97,7 @@ class CApp {
     // Long request log
     include "./includes/long_request_log.php";
 
-    if (CAppUI::$token_restricted) {
+    if (CAppUI::$token_restricted || CAppUI::$auth_info && CAppUI::$auth_info->restricted) {
       CSessionHandler::end(true);
     }
     else {
@@ -476,29 +476,41 @@ class CApp {
       }
     }
   }
-  
+
   /**
-   * Subject notification mechanism 
-   * TODO Implement to factorize 
+   * Subject notification mechanism
+   * TODO Implement to factorize
    *   on[Before|After][Store|Merge|Delete]()
    *   which have to get back de CPersistantObject layer
-   * 
-   * @param string $message The notification type
-   * 
+   *
+   * @param string $message        The notification type
+   * @param bool   $break_on_first Don't catch exceptions thrown by the handlers
+   *
    * @return void
    */
-  static function notify($message) {
+  static function notify($message, $break_on_first = false) {
     $args = func_get_args();
     array_shift($args); // $message
 
     // Event Handlers
     self::makeHandlers();
-    foreach (self::$handlers as $_handler) {
-      try {
+
+    // If break on first, don't catch Exceptions
+    if ($break_on_first) {
+      foreach (self::$handlers as $_handler) {
         call_user_func_array(array($_handler, "on$message"), $args);
-      } 
-      catch (Exception $e) {
-        CAppUI::setMsg($e, UI_MSG_ERROR);
+      }
+    }
+
+    // Else, catche exceptions
+    else {
+      foreach (self::$handlers as $_handler) {
+        try {
+          call_user_func_array(array($_handler, "on$message"), $args);
+        }
+        catch (Exception $e) {
+          CAppUI::setMsg($e, UI_MSG_ERROR);
+        }
       }
     }
   }

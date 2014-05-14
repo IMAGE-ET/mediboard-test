@@ -112,9 +112,22 @@ CApp::$chrono = new Chronometer;
 CApp::$chrono->main = true;
 CApp::$chrono->start();
 
+$do_login = false;
+
 // Load default preferences if not logged in
 if (!CAppUI::$instance->user_id) {
   CAppUI::loadPrefs();
+
+  try {
+    CApp::notify("UserAuthentication", true);
+  }
+  catch (CUserAuthenticationFailure $e) {
+    CApp::rip();
+  }
+  catch (CUserAuthenticationSuccess $e) {
+    CAppUI::$auth_info = $e;
+    $do_login = true;
+  }
 }
 
 // Update session lifetime
@@ -131,7 +144,6 @@ catch (AuthenticationFailedException $e) {
 */
 
 // If the user uses a token, his session should not be reset, but only redirected
-$do_login = false;
 $token_hash = CValue::get("token");
 if ($token_hash) {
   $token = CViewAccessToken::getByHash($token_hash);
