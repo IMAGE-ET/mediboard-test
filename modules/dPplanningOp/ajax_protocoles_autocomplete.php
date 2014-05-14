@@ -42,7 +42,9 @@ else {
   $curr_user = CMediusers::get();
   $use_edit = CAppUI::pref("useEditAutocompleteUsers");
   $prats = $curr_user->loadPraticiens($use_edit ? PERM_EDIT : PERM_READ);
-  $where["protocole.chir_id"] = CSQLDataSource::prepareIn(CMbArray::pluck($prats, "user_id"));
+  $fncs  = $curr_user->loadFonctions($use_edit ? PERM_EDIT : PERM_READ);
+  $where[] = "(protocole.chir_id ".CSQLDataSource::prepareIn(CMbArray::pluck($prats, "user_id")).
+    " OR protocole.function_id ". CSQLDataSource::prepareIn(array_keys($fncs)).")";
 }
 
 if ($for_sejour !== null) {
@@ -55,6 +57,7 @@ if ($keywords == "") {
 
 $order = "libelle, libelle_sejour, codes_ccam";
 
+/** @var CProtocole[] $matches */
 $matches = $object->getAutocompleteListWithPerms(PERM_READ, $keywords, $where, $limit, null, $order);
 
 if (CAppUI::conf("dPbloc CPlageOp systeme_materiel")) {
