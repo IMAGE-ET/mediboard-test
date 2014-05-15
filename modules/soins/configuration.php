@@ -23,7 +23,11 @@ CConfiguration::register(
           "period" => "num min|0 default|72"
         ),
         "plan_soins" => array(
-          "period" => "num min|1 default|7"
+          "period"     => "num min|1 default|7",
+          "hour_matin" => "num min|0 max|23 default|8",
+          "hour_midi"  => "num min|0 max|23 default|12",
+          "hour_soir"  => "num min|0 max|23 default|18",
+          "hour_nuit"  => "num min|0 max|23 default|22"
         ),
       )
     )
