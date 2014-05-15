@@ -26,8 +26,10 @@ $sejours = array();
 $now = CMbDT::dateTime();
 $now_date = CMbDT::date();
 
+$group = CGroups::loadCurrent();
+
 if ($mode_dupa) {
-  $period = CAppUI::conf("soins plan_soins period" , CGroups::loadCurrent()->_guid);
+  $period = CAppUI::conf("soins plan_soins period" , $group->_guid);
   $datetime_min = "$date 00:00:00";
   $datetime_max = CMbDT::date("+ $period days", $date) . " 23:59:59";
 }
@@ -81,10 +83,11 @@ while ($date_temp < $date_max) {
 }
 
 $postes = array(
-  "Poste 1" => "08",
-  "Poste 2" => "12",
-  "Poste 3" => "18",
-  "Poste 4" => "22");
+  "Poste 1" => CAppUI::conf("soins plan_soins hour_matin", $group->_guid),
+  "Poste 2" => CAppUI::conf("soins plan_soins hour_midi" , $group->_guid),
+  "Poste 3" => CAppUI::conf("soins plan_soins hour_soir" , $group->_guid),
+  "Poste 4" => CAppUI::conf("soins plan_soins hour_nuit" , $group->_guid)
+);
 
 $dates_postes = array();
 
