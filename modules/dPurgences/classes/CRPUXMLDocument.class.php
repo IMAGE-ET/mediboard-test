@@ -97,7 +97,7 @@ class CRPUXMLDocument extends CMbXMLDocument {
     $motif = CMbString::htmlSpecialChars($mbObject->motif);
     if ($mbObject->motif_sfmu) {
       $motif_sfmu = $mbObject->loadRefMotifSFMU();
-      $motif = $motif_sfmu->code;
+      $motif = $motif_sfmu->code ? $motif_sfmu->code : null;
     }
     
     $this->addElement($elParent, "MOTIF", $motif);
