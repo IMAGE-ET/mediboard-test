@@ -1942,10 +1942,11 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @param bool $important        Filtrer sur le degré important
    * @param bool $macro_cible      N'utiliser que les macrocible (uniquement pour les cibles importantes)
    * @param null $limit            Limite SQL
+   * @param null $date             date limit à prendre en compte
    *
    * @return array|CStoredObject[]|null
    */
-  function loadRefsTransmissions($cible_importante = false, $important = false, $macro_cible = false, $limit = null) {
+  function loadRefsTransmissions($cible_importante = false, $important = false, $macro_cible = false, $limit = null, $date = null) {
     $this->_ref_transmissions = array();
 
     // Chargement des dernieres transmissions des cibles importantes
@@ -1962,7 +1963,6 @@ class CSejour extends CFacturable implements IPatientRelated {
       if ($macro_cible) {
         $where["category_prescription.only_cible"] = " = '1'";
       }
-
       $order = "date DESC";
       $this->_ref_transmissions = $transmission->loadList($where, $order, $limit, null, $ljoin);
     }
@@ -1974,6 +1974,9 @@ class CSejour extends CFacturable implements IPatientRelated {
       $where["sejour_id"] =  "= '$this->_id'";
       $order = "date DESC";
       $where["degre"] = " = 'high'";
+      if ($date) {
+        $where["date_max"] = " >= '".$date."'";
+      }
 
       $this->_ref_transmissions = $this->_ref_transmissions + $transmission->loadList($where, $order, $limit);
     }

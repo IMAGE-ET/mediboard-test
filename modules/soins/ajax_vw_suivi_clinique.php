@@ -10,7 +10,6 @@
  */
 
 CCanDo::checkRead();
-
 $sejour_id = CValue::get("sejour_id");
 
 $sejour = new CSejour;
@@ -40,7 +39,8 @@ $prescription_active = CModule::getInstalled("dPprescription");
 
 // Gestion des macro-cible seulement si prescription disponible
 $cible_importante = $prescription_active;
-$sejour->loadRefsTransmissions($cible_importante, true);
+$date_transmission = CAppUI::conf("soins synthese transmission_date_limit", CGroups::loadCurrent()->_guid) ? CMbDT::dateTime() : null;
+$sejour->loadRefsTransmissions($cible_importante, true, false, null, $date_transmission);
 
 $sejour->loadRefsObservations(true);
 $sejour->loadRefsTasks();
@@ -99,6 +99,7 @@ if ($prescription_active) {
   // Chargement des lignes de prescriptions
   $prescription_sejour->loadRefsLinesMedComments();
   foreach ($prescription_sejour->_ref_lines_med_comments["med"] as $_line_med) {
+    /**@var CPrescriptionLineMedicament $_line_med*/
     $_line_med->updateAlerteAntibio();
   }
   $prescription_sejour->loadRefsLinesElementsComments();
@@ -145,10 +146,10 @@ $smarty = new CSmartyDP();
 $smarty->assign("sejour"   , $sejour);
 
 if ($prescription_active) {
-  $smarty->assign("date"  , $date);
-  $smarty->assign("days_config", $days_config);
-  $smarty->assign("date_before"  , $date_before);
-  $smarty->assign("date_after"   , $date_after);
+  $smarty->assign("date"        , $date);
+  $smarty->assign("days_config" , $days_config);
+  $smarty->assign("date_before" , $date_before);
+  $smarty->assign("date_after"  , $date_after);
 }
 
 $smarty->display("inc_vw_suivi_clinique.tpl");

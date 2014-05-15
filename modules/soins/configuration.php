@@ -1,5 +1,4 @@
-<?php 
-
+<?php
 /**
  * $Id$
  *  
@@ -29,6 +28,9 @@ CConfiguration::register(
           "hour_soir"  => "num min|0 max|23 default|18",
           "hour_nuit"  => "num min|0 max|23 default|22"
         ),
+        "synthese" => array(
+          "transmission_date_limit" => "bool default|0"
+        )
       )
     )
   )
