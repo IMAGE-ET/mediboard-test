@@ -12,9 +12,9 @@
 <div style="float:right;">{{mb_include module=system template=inc_object_notes object=$plageop }}</div>
 
 {{if $plageop->chir_id }}
-  {{$plageop->_ref_chir->_view}}
+  {{$plageop->_ref_chir->_view|htmlentities}}
 {{else}}
-  {{$plageop->_ref_spec->_view}}
+  {{$plageop->_ref_spec->_view|htmlentities}}
 {{/if}}
 <br/>
 ({{$validated}} / {{$total}})
