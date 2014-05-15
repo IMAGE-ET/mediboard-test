@@ -76,7 +76,7 @@
       Environ
     </td>
     <td class="text" style="width: 300px;">
-      ~Mot
+      Mot~
     </td>
   </tr>
   <tr>
