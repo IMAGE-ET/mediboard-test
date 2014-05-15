@@ -18,6 +18,7 @@ $file_id          = CValue::get("object_id");
 $file_class       = CValue::get("object_class");
 $destination_guid = CValue::get("destination_guid");
 $name             = CValue::get("file_name");
+$category_id      = CValue::get("category_id");
 
 $allowed = array("CFile", "CCompteRendu");
 
@@ -28,6 +29,7 @@ if (!in_array($file_class, $allowed)) {
 /** @var CFile|CCompteRendu $file */
 $file = new $file_class();
 $file->load($file_id);
+$file->file_category_id = ($category_id != $file->file_category_id) ? $category_id : $file->file_category_id;
 $file->file_name = $name ? $name : $file->file_name;
 
 $destination = CStoredObject::loadFromGuid($destination_guid);
@@ -35,6 +37,7 @@ if (($file->object_id == $destination->_id) && ($file->object_class == $destinat
   CAppUI::stepAjax("CFile-msg-from_equal_to", UI_MSG_ERROR);
 }
 $file->setObject($destination);
+
 
 if ($msg = $file->store()) {
   CAppUI::setMsg($msg, UI_MSG_ERROR);

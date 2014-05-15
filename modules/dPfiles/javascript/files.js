@@ -110,16 +110,17 @@ cancelFile = function(form, category_id) {
 
 // used for move a file
 File_Attach = {
-  object_class  : null,
-  object_id     : null,
-  object_guid   : null,
-  file_id       : null,
-  file_class    : null,
-  file_guid     : null,
-  file_name     : null,
-  patient_id    : null,
-  is_valid      : false,
-  button_Attach : null,
+  object_class      : null,
+  object_id         : null,
+  object_guid       : null,
+  file_id           : null,
+  file_class        : null,
+  file_guid         : null,
+  file_name         : null,
+  file_category_id  : null,
+  patient_id        : null,
+  is_valid          : false,
+  button_Attach     : null,
 
   listRefsForPatient : function(patient_id, prat_id, guess_date, target_dom_id) {
     this.patient_id = patient_id;
@@ -157,7 +158,7 @@ File_Attach = {
     this.checkLink();
   },
 
-  doMovefile : function(file_id, file_class, destination_id, destination_class, renamefile) {
+  doMovefile : function(file_id, file_class, destination_id, destination_class, renamefile, file_category_id) {
     if (file_id && file_class) {
       this.setFile(file_id, file_class);
     }
@@ -167,10 +168,14 @@ File_Attach = {
     if (renamefile) {
       this.file_name = renamefile;
     }
+    if (file_category_id) {
+      this.file_category_id = file_category_id;
+    }
     var url = new Url("files", "controllers/do_move_file");
     url.addParam("object_id", this.file_id);
     url.addParam("object_class", this.file_class);
     url.addParam("destination_guid", this.object_guid);
+    url.addParam("category_id", this.file_category_id);
     if (this.file_name) {
       url.addParam("file_name", this.file_name);
     }
@@ -181,7 +186,7 @@ File_Attach = {
     if (this.object_class && this.object_id && this.file_id) {
       this.is_valid = true;
       if (this.button_Attach) {
-        $(this.button_Attach).show();
+        $(this.button_Attach).enable();
       }
     }
   },
