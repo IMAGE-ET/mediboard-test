@@ -1,5 +1,5 @@
 File = {
-  use_mozaic : false,
+  use_mozaic : 0,
 
   popup: function(object_class, object_id, element_class, element_id, sfn) {
     var url = new Url;

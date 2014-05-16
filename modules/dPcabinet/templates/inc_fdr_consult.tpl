@@ -9,7 +9,7 @@
         <legend>{{tr}}CFile{{/tr}} - {{tr}}{{$object->_class}}{{/tr}}</legend>
         <div id="files-fdr">
           <script>
-            File.use_mozaic = true;
+            File.use_mozaic = 1;
             File.register('{{$object->_id}}','{{$object->_class}}', 'files-fdr');
           </script>
         </div>
