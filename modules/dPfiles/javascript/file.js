@@ -1,4 +1,6 @@
 File = {
+  use_mozaic : false,
+
   popup: function(object_class, object_id, element_class, element_id, sfn) {
     var url = new Url;
     url.ViewFilePopup(object_class, object_id, element_class, element_id, sfn);
@@ -57,7 +59,8 @@ File = {
     var url = new Url("dPfiles", "httpreq_widget_files");
     url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
-    
+    url.addParam("mozaic", File.use_mozaic);
+
     if (only_files == undefined || only_files == 1) {
       url.addParam("only_files", 1);
       var elt = $("list_"+object_class+object_id);
@@ -83,7 +86,23 @@ File = {
     $(container).insert(div);
     
     Main.add(function() {
-      File.refresh(object_id, object_class, 0)
+      File.refresh(object_id, object_class, 0);
+    });
+  },
+
+  createMozaic : function(context_guid, category_id, callback) {
+    var url = new Url("files", "ajax_img_to_document");
+    url.addParam("context_guid", context_guid);
+    url.addParam("category_id", category_id);
+    url.requestModal("1024", "768");
+    url.modalObject.observe("afterClose", function() {
+      if (callback) {
+        callback();
+      }
+      else {
+        var parts = context_guid.split("-");
+        File.refresh(parts[1], parts[0]);
+      }
     });
   },
   

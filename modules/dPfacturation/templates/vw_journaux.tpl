@@ -54,7 +54,7 @@
       </div>
     </td>
     <td rowspan="2" id="files_journaux">
-      {{mb_script module=cabinet     script=file ajax=true}}
+      {{mb_script module=files     script=file ajax=true}}
     </td>
   </tr>
   <tr>

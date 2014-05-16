@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module=cabinet script=file}}
+{{mb_script module=files script=file}}
 {{mb_include module=files template=yoplet_uploader object=$sejour}}
 {{assign var=gerer_circonstance value=$conf.dPurgences.gerer_circonstance}}
 {{mb_script module=dPurgences script=CCirconstance}}

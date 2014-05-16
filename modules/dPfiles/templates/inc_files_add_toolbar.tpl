@@ -1,5 +1,6 @@
 {{mb_default var=canFile value=0}}
 {{mb_default var=canDoc  value=0}}
+{{mb_default var=mozaic  value=0}}
 
 {{assign var=object_guid value="$object_class-$object_id"}}
 {{if $canFile && !$accordDossier}}
@@ -7,7 +8,9 @@
    {{tr}}CFile-title-create{{/tr}}
   </button>
 
-  <button style="float:left;" class="new" type="button" onclick="File.createMozaic('{{$object_guid}}', '', reloadAfterUploadFile);">{{tr}}CFile-create-mozaic{{/tr}}</button>
+  {{if $mozaic}}
+    <button style="float:left;" class="new" type="button" onclick="File.createMozaic('{{$object_guid}}', '', reloadAfterUploadFile);">{{tr}}CFile-create-mozaic{{/tr}}</button>
+  {{/if}}
   
   {{if $app->user_prefs.directory_to_watch}}
     <button class="new yopletbutton" style="float: left" type="button" disabled="disabled"

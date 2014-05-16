@@ -182,7 +182,7 @@
         </tr>
         <tr>
           <td id="files">
-            {{mb_script module=cabinet script=file}}
+            {{mb_script module=files script=file}}
             <script type="text/javascript">
             File.register('{{$sejour->_id}}','{{$sejour->_class}}', 'files');
             </script>

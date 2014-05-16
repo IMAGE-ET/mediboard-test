@@ -90,9 +90,9 @@
     <select style="visibility: hidden; width: 12em;" name="file_category_id" onchange="submitFileChangt(this.form)">
       <option value="" {{if !$_doc_item->file_category_id}}selected="selected"{{/if}}>&mdash; Aucune catégorie</option>
       {{foreach from=$listCategory item=curr_cat}}
-      <option value="{{$curr_cat->file_category_id}}" {{if $curr_cat->file_category_id == $_doc_item->file_category_id}}selected="selected"{{/if}} >
-        {{$curr_cat->nom}}
-      </option>
+        <option value="{{$curr_cat->file_category_id}}" {{if $curr_cat->file_category_id == $_doc_item->file_category_id}}selected="selected"{{/if}} >
+          {{$curr_cat->nom}}
+        </option>
       {{/foreach}}
     </select>
     

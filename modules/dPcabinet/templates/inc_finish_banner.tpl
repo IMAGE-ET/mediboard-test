@@ -46,7 +46,7 @@ function changePratPec(prat_id) {
   <input type="hidden" name="prat_id" value="" />
 </form>
 
-{{mb_script module=cabinet script=file}}
+{{mb_script module=files script=file}}
 {{mb_include module=files template=yoplet_uploader object=$consult}}
 
 <form class="watch" name="editFrmFinish" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">

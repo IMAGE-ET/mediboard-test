@@ -129,7 +129,7 @@
       {{assign var="last_op" value=$facture->_ref_last_sejour->_ref_last_operation}}
       {{mb_script module=compteRendu script=document ajax=true}}
       {{mb_script module=compteRendu script=modele_selector ajax=true}}
-      {{mb_script module=cabinet     script=file ajax=true}}
+      {{mb_script module=files     script=file ajax=true}}
       <button type="button" class="injection" onclick="dossierBloc('{{$last_op->_id}}');"> Dossier bloc </button>
       {{if $facture->numero == 1}}
         <button type="button" class="new" onclick="viewInterv('{{$last_op->_id}}', '{{$last_op->plageop_id}}');"> Infos interv. </button>

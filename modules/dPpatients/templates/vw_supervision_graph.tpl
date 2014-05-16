@@ -1,6 +1,6 @@
 {{mb_script module=patients script=supervision_graph}}
 {{mb_script module=mediusers script=color_selector}}
-{{mb_script module=cabinet script=file}}
+{{mb_script module=files script=file}}
 
 <script type="text/javascript">
 Main.add(function(){

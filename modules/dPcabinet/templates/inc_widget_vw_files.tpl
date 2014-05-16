@@ -1,3 +1,5 @@
+{{mb_default var=mozaic value=0}}
+
 {{if $can->admin}}
   <form name="DeleteAll-{{$object->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
@@ -8,7 +10,7 @@
 
     <button class="trash" type="button" style="float: right;" onclick="File.removeAll(this, '{{$object->_guid}}')">
     {{tr}}Delete-all{{/tr}}
-  </button>
+    </button>
 
   </form>
 {{/if}}
@@ -18,7 +20,9 @@
     {{tr}}CFile-title-create{{/tr}}
   </button>
 
-  <button class="thumbnails" onclick="File.createMozaic('{{$object->_class}}-{{$object->_id}}', '')">{{tr}}CFile-create-mozaic{{/tr}}</button>
+  {{if $mozaic}}
+    <button class="thumbnails" onclick="File.createMozaic('{{$object->_class}}-{{$object->_id}}', '')">{{tr}}CFile-create-mozaic{{/tr}}</button>
+  {{/if}}
 
   {{if $app->user_prefs.directory_to_watch}}
     <button class="new yopletbutton" disabled="disabled" onclick="File.applet.modalOpen('{{$object->_guid}}')">

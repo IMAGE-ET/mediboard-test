@@ -4,7 +4,7 @@
 {{mb_script module=patients    script=medecin         ajax=true}}
 {{mb_script module=patients    script=patient         ajax=true}}
 {{mb_script module=cabinet     script=plage_selector  ajax=true}}
-{{mb_script module=cabinet     script=file            ajax=true}}
+{{mb_script module=files     script=file            ajax=true}}
 {{mb_script module=compteRendu script=document        ajax=true}}
 {{mb_script module=compteRendu script=modele_selector ajax=true}}
 

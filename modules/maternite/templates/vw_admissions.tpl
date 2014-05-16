@@ -30,7 +30,7 @@
 {{mb_script module=maternite   script=naissance}}
 {{mb_script module=compteRendu script=document}}
 {{mb_script module=compteRendu script=modele_selector}}
-{{mb_script module=cabinet     script=file}}
+{{mb_script module=files     script=file}}
 
 {{assign var=manage_provisoire value=$conf.maternite.CGrossesse.manage_provisoire}}
 

@@ -54,7 +54,7 @@
 
 <hr class="control_tabs" />
 
-{{mb_include module=files template=inc_files_add_toolbar}}
+{{mb_include module=files template=inc_files_add_toolbar mozaic=1}}
 
 {{foreach from=$affichageFile item=_cat key=_cat_id}}
   {{assign var=docCount value=$_cat.items|@count}}

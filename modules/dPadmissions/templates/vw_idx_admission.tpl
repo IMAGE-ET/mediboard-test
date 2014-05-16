@@ -14,7 +14,7 @@
 {{mb_script module=patients    script=antecedent}}
 {{mb_script module=compteRendu script=document}}
 {{mb_script module=compteRendu script=modele_selector}}
-{{mb_script module=cabinet     script=file}}
+{{mb_script module=files     script=file}}
 {{mb_script module=planningOp  script=sejour}}
 {{mb_script module=planningOp  script=prestations}}
 
