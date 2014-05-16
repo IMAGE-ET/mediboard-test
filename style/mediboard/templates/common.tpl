@@ -215,21 +215,13 @@
 
 <!-- Mails -->
 {{if !$dialog && $app->user_id && $mails|@count}}
-  <div class="small-mail not-printable" onmouseover="ObjectTooltip.createDOM(this, 'mail-details');">
-      {{tr}}CUserMessage{{/tr}} : {{$mails|@count}} {{tr}}CUserMessage._to_state.received{{/tr}}{{if $mails|@count >= 2}}s{{/if}}
-  </div>
-
-  <div id="mail-details" class="not-printable" style="display: none;">
-    <table class="tbl">
-    {{foreach from=$mails item=_mail}}
-      <tr>
-        <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_mail->_ref_user_from}}</td>
-        <td>{{$_mail->_ref_message->subject}}</td>
-        <td>
-          <a href="#Read-{{$_mail->_guid}}" onclick="UserMessage.edit({{$_mail->_ref_message->_id}})">{{tr}}CUserMessage.read{{/tr}}</a>
-        </td>
-      </tr>
-    {{/foreach}}
-    </table>
+  <div id="usermessage_notification" class="not-printable">
+    <a href="?m=messagerie&tab=vw_list_internalMessages" title="{{$mails|@count}} nouveaux messages">
+      <p>
+        <span>
+          {{$mails|@count}}
+        </span>
+      </p>
+    </a>
   </div>
 {{/if}}

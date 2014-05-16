@@ -178,3 +178,7 @@ table.tbl th {
 div.modal {
   margin-top: 32px!important;
 }
+
+#usermessage_notification a {
+    top:38px;
+}
