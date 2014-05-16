@@ -11,7 +11,6 @@
 
 $dPconfig["dPplanningOp"]= array(
   "COperation" => array (
-    "easy_horaire_voulu" => "1",
     "easy_materiel"      => "0",
     "easy_remarques"     => "0",
     "easy_regime"        => "1",

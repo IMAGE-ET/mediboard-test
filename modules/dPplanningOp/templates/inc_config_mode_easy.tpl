@@ -8,6 +8,10 @@
     </tr>
     
     {{assign var=class value=CSejour}}
+
+    <tr>
+      <th class="category" colspan="2">{{tr}}CSejour{{/tr}}</th>
+    </tr>
     
     {{mb_include module=system template=inc_config_bool var=easy_cim10}}
     {{mb_include module=system template=inc_config_bool var=easy_service}}
@@ -17,8 +21,11 @@
     {{mb_include module=system template=inc_config_bool var=easy_atnc}}
       
     {{assign var=class value=COperation}}
+
+    <tr>
+      <th class="category" colspan="2">{{tr}}COperation{{/tr}}</th>
+    </tr>
     
-    {{mb_include module=system template=inc_config_bool var=easy_horaire_voulu}}
     {{mb_include module=system template=inc_config_bool var=easy_materiel}}
     {{mb_include module=system template=inc_config_bool var=easy_remarques}}
     {{mb_include module=system template=inc_config_bool var=easy_regime}}
