@@ -16,7 +16,7 @@
  * H'XML Document
  */
 
-class CHPrimXMLDocument extends CMbXMLDocument {  
+class CHPrimXMLDocument extends CMbXMLDocument {
   public $evenement;
   public $finalpath;
   public $documentfinalprefix;
@@ -1011,7 +1011,10 @@ class CHPrimXMLDocument extends CMbXMLDocument {
                     (CAppUI::conf("hprimxml $this->evenement version") == "1.07") ||
                     (CAppUI::conf("hprimxml $this->evenement version") == "1.07") ||
                     (CAppUI::conf("hprimxml $this->evenement version") == "1.072")) ?
-                      "exte" : "hsp",
+                    (CAppUI::conf("hprimxml $this->evenement version") == "1.053")  ?
+                      "exte" : "ext"
+                    : "hsp",
+
       "consult" => "cslt",
       "seances" => "sc"
     );
