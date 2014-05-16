@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 /**
  * $Id$
- *  
+ *
  * @category Classes
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -15,7 +15,7 @@
  * Redis based Shared Memory
  */
 class RedisSharedMemory implements ISharedMemory {
-  /** @var Yampee_Redis_Client */
+  /** @var CRedisClient */
   public $conn;
 
   /**
@@ -23,30 +23,25 @@ class RedisSharedMemory implements ISharedMemory {
    */
   function init() {
     // Don't use autloader
-    include __DIR__."/../../lib/yampee-redis/autoloader.php";
+    include_once __DIR__ . "/../CRedisClient.class.php";
 
-    if (class_exists('Yampee_Redis_Client')) {
-      $servers = SHM::getServerAddresses();
-      $client = null;
+    $client = null;
 
-      foreach ($servers as $_server) {
-        try {
-          $client = new Yampee_Redis_Client($_server[0], $_server[1]);
-          $client->connect();
-          break;
-        }
-        catch (Exception $e) {
-          $client = null;
-        }
+    $list = SHM::getServerAddresses();
+    foreach ($list as $_server) {
+      try {
+        $client = new CRedisClient($_server[0], $_server[1]);
+        $client->connect();
+        break;
       }
-
-      if ($client) {
-        $this->conn = $client;
-
-        return true;
+      catch (Exception $e) {
+        $client = null;
       }
+    }
 
-      return false;
+    if ($client) {
+      $this->conn = $client;
+      return true;
     }
 
     return false;
@@ -100,7 +95,7 @@ class RedisSharedMemory implements ISharedMemory {
    */
   function listKeys($prefix) {
     $cache_list = $this->conn->findKeys("*");
-    $len = strlen($prefix);
+    $len        = strlen($prefix);
 
     $keys = array();
     foreach ($cache_list as $_key) {
@@ -123,5 +118,12 @@ class RedisSharedMemory implements ISharedMemory {
     }
 
     return strftime(CMbDT::ISO_DATETIME, $data["ctime"]);
+  }
+
+  /**
+   * @see parent::info()
+   */
+  function info($key) {
+    return false;
   }
 }

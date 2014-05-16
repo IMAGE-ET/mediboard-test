@@ -106,4 +106,31 @@ class DiskSharedMemory implements ISharedMemory {
 
     return strftime(CMbDT::ISO_DATETIME, filemtime($filename));
   }
+
+  /**
+   * @see parent::info()
+   */
+  function info($key) {
+    $cache_info = array(
+      "creation_date"     => null,
+      "modification_date" => null,
+      "num_hits"          => null,
+      "mem_size"          => null,
+      "compressed"        => null
+    );
+
+    $filename = $this->dir.$key;
+    clearstatcache(true, $filename);
+
+    if (!file_exists($filename)) {
+      return false;
+    }
+
+    $stats = stat($filename);
+
+    $cache_info["modification_date"] = strftime(CMbDT::ISO_DATETIME, $stats["mtime"]);
+    $cache_info["mem_size"]          = $stats["size"];
+
+    return $cache_info;
+  }
 }

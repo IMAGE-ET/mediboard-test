@@ -85,4 +85,13 @@ interface ISharedMemory {
    * @return string ISO date
    */
   function modDate($key);
+
+  /**
+   * Get information about key
+   *
+   * @param string $key Key
+   *
+   * @return array Information
+   */
+  function info($key);
 }

@@ -91,4 +91,16 @@ abstract class DSHM extends SHM {
   static function modDate($key) {
     return self::_modDate(true, $key);
   }
+
+  /**
+   * Get information about key
+   * Creation date, modification date, number of hits, size in memory, compressed or not
+   *
+   * @param string $key The key to get information about
+   *
+   * @return array
+   */
+  static function info($key) {
+    return self::_info(true, $key);
+  }
 }

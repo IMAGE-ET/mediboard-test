@@ -299,6 +299,31 @@ abstract class SHM {
   }
 
   /**
+   * Get information about key
+   *
+   * @param bool   $distributed Distributed
+   * @param string $key         The key to get information about
+   *
+   * @return array
+   */
+  protected static function _info($distributed, $key) {
+    $engine = $distributed ? self::$engineDistributed : self::$engine;
+    return $engine->info(self::$prefix.$key);
+  }
+
+  /**
+   * Get information about key
+   * Creation date, modification date, number of hits, size in memory, compressed or not
+   *
+   * @param string $key Key
+   *
+   * @return array Information
+   */
+  static function info($key) {
+    return self::_info(false, $key);
+  }
+
+  /**
    * Get servers addresses
    *
    * @return array

@@ -114,4 +114,11 @@ class MemcachedSharedMemory implements ISharedMemory {
 
     return strftime(CMbDT::ISO_DATETIME, $data["ctime"]);
   }
+
+  /**
+   * @see parent::info()
+   */
+  function info($key) {
+    return false;
+  }
 }

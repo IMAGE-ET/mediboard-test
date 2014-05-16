@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 /**
  * $Id$
- *  
+ *
  * @category Classes
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -62,10 +62,10 @@ class APCSharedMemory implements ISharedMemory {
    * @see parent::listKeys()
    */
   function listKeys($prefix) {
-    $info = apc_cache_info("user");
+    $info       = apc_cache_info("user");
     $cache_list = $info["cache_list"];
-    $len = strlen($prefix);
-    $cache_key = $this->_cache_key;
+    $len        = strlen($prefix);
+    $cache_key  = $this->_cache_key;
 
     $keys = array();
     foreach ($cache_list as $_cache) {
@@ -77,6 +77,7 @@ class APCSharedMemory implements ISharedMemory {
     }
 
     sort($keys);
+
     return $keys;
   }
 
@@ -84,9 +85,9 @@ class APCSharedMemory implements ISharedMemory {
    * @see parent::modDate()
    */
   function modDate($key) {
-    $info = apc_cache_info("user");
+    $info       = apc_cache_info("user");
     $cache_list = $info["cache_list"];
-    $cache_key = $this->_cache_key;
+    $cache_key  = $this->_cache_key;
 
     foreach ($cache_list as $_cache) {
       $_key = $_cache[$cache_key];
@@ -97,5 +98,37 @@ class APCSharedMemory implements ISharedMemory {
     }
 
     return null;
+  }
+
+  /**
+   * @see parent::info()
+   */
+  function info($key) {
+    $user_cache = apc_cache_info("user");
+
+    if (!$user_cache) {
+      return false;
+    }
+
+    $cache_info = array(
+      "creation_date"     => null,
+      "modification_date" => null,
+      "num_hits"          => null,
+      "mem_size"          => null,
+      "compressed"        => null
+    );
+
+    foreach ($user_cache["cache_list"] as $_cache_info) {
+      if ($_cache_info["info"] == $key) {
+        $cache_info["creation_date"]     = strftime(CMbDT::ISO_DATETIME, $_cache_info["creation_time"]);
+        $cache_info["modification_date"] = strftime(CMbDT::ISO_DATETIME, $_cache_info["mtime"]);
+        $cache_info["num_hits"]          = $_cache_info["num_hits"];
+        $cache_info["mem_size"]          = $_cache_info["mem_size"];
+
+        break;
+      }
+    }
+
+    return $cache_info;
   }
 }

@@ -11,7 +11,8 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireLibraryFile("yampee-redis/autoloader", false);
+// Don't use autloader
+include __DIR__."/../lib/yampee-redis/autoloader.php";
 
 // The autoloader must be triggered, so the second argument must be true
 if (!class_exists("Yampee_Redis_Client", true)) {
