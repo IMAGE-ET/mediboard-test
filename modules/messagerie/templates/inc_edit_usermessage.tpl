@@ -17,6 +17,9 @@
     width: 11px;
     height:11px;
   }
+  #list_dest li {
+    list-style: none;
+  }
 </style>
 
 <script>
