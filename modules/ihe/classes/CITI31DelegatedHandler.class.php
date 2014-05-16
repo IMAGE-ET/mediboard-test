@@ -129,6 +129,14 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         $sejour->_NDA = $NDA->id400;
       }
 
+      $patient = $sejour->_ref_patient;
+      $patient->loadIPP();
+      if (!$patient->_IPP) {
+        if ($msg = $patient->generateIPP()) {
+          CAppUI::setMsg($msg, UI_MSG_ERROR);
+        }
+      }
+
       $current_affectation = null;
       // Cas où lors de l'entrée réelle j'ai une affectation qui n'a pas été envoyée
       if ($sejour->fieldModified("entree_reelle") && !$sejour->_old->entree_reelle) {
@@ -178,6 +186,14 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
 
       $sejour->loadRefPatient();
       $sejour->_receiver = $receiver;
+
+      $patient = $sejour->_ref_patient;
+      $patient->loadIPP();
+      if (!$patient->_IPP) {
+        if ($msg = $patient->generateIPP()) {
+          CAppUI::setMsg($msg, UI_MSG_ERROR);
+        }
+      }
       
       $this->createMovement($code, $sejour, $affectation);
    
@@ -220,6 +236,14 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Cas où lors de l'entrée réelle j'ai une affectation qui n'a pas été envoyée
       if ($sejour_enfant->fieldModified("entree_reelle") && !$sejour_enfant->_old->entree_reelle) {
         $current_affectation = $sejour_enfant->getCurrAffectation();
+      }
+
+      $patient = $sejour_enfant->_ref_patient;
+      $patient->loadIPP();
+      if (!$patient->_IPP) {
+        if ($msg = $patient->generateIPP()) {
+          CAppUI::setMsg($msg, UI_MSG_ERROR);
+        }
       }
 
       $this->createMovement($code, $sejour_enfant, $current_affectation);
