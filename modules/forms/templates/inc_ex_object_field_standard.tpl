@@ -20,6 +20,8 @@
             readonly=$field_readonly
             tabindex=$ex_field->tab_index
           }}
+
+          {{mb_include module=forms template=inc_ex_field_link_formula ex_object=$ex_object ex_field=$ex_field spec=$_spec}}
         {{$ex_field->suffix}}
       </td>
     </tr>
@@ -30,17 +32,19 @@
   {{/if}}
 
   {{$ex_field->prefix}}
-  {{mb_field
-    object=$ex_object
-    field=$_field_name
-    register=true
-    increment=true
-    form=$form
-    emptyLabel=" "
-    style=$_style
-    defaultstyle=1
-    readonly=$field_readonly
-    tabindex=$ex_field->tab_index
-  }}
+    {{mb_field
+      object=$ex_object
+      field=$_field_name
+      register=true
+      increment=true
+      form=$form
+      emptyLabel=" "
+      style=$_style
+      defaultstyle=1
+      readonly=$field_readonly
+      tabindex=$ex_field->tab_index
+    }}
+
+    {{mb_include module=forms template=inc_ex_field_link_formula ex_object=$ex_object ex_field=$ex_field spec=$_spec}}
   {{$ex_field->suffix}}
 {{/if}}

@@ -53,7 +53,7 @@
 {{elseif ($_spec instanceof CEnumSpec && $_spec->typeEnum == "radio") || ($_spec instanceof CSetSpec && $_spec->typeEnum == "checkbox") || ($_spec instanceof CBoolSpec && $_spec->typeEnum == "radio")}}
   {{mb_include module=forms template=inc_ex_object_field_fieldset}}
 
-{{elseif $ex_field->formula && !$is_predicate}}
+{{elseif $ex_field->formula && !$is_predicate && !$_spec instanceof CDateSpec && !$_spec instanceof CTimeSpec && !$_spec instanceof CDateTimeSpec}}
   {{mb_include module=forms template=inc_ex_object_field_formula}}
 
 {{elseif $_spec instanceof CSetSpec && $_spec->typeEnum == "select"}}

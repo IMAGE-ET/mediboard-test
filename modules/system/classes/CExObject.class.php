@@ -664,7 +664,13 @@ class CExObject extends CMbMetaObject {
   }
 
   private function camelize($str) {
-    return preg_replace("/-+(.)?/e", "ucwords('\\1')", $str);
+    return preg_replace_callback(
+      "/-+(.)?/",
+      function ($m) {
+        return ucwords($m[1]);
+      },
+      $str
+    );
   }
 
   function setFieldsDisplay(){

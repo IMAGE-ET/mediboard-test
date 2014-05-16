@@ -5,6 +5,16 @@ var ExObject = {
   defaultProperties: {},
   pixelPositionning: false,
   groupTabsCallback: {},
+  timestampLimit: 630720000000, // 20 years
+  dateOperator: function(divisor, ms) {
+    // Absolute timestamp
+    if (ms > ExObject.timestampLimit) {
+      return Math.ceil(ms / divisor);
+    }
+
+    // Relative timestamp
+    return Math.ceil(ms * divisor);
+  },
   register: function(container, options) {
     this.container = $(container);
 
@@ -507,12 +517,12 @@ var ExObjectFormula = Class.create({
   tokenData: null,
   form: null,
   customOps: {
-    Min: function (ms) { return Math.ceil(ms / Date.minute) },
-    H:   function (ms) { return Math.ceil(ms / Date.hour) },
-    J:   function (ms) { return Math.ceil(ms / Date.day) },
-    Sem: function (ms) { return Math.ceil(ms / Date.week) },
-    M:   function (ms) { return Math.ceil(ms / Date.month) },
-    A:   function (ms) { return Math.ceil(ms / Date.year) }
+    Min: ExObject.dateOperator.curry(Date.minute),
+    H:   ExObject.dateOperator.curry(Date.hour),
+    J:   ExObject.dateOperator.curry(Date.day),
+    Sem: ExObject.dateOperator.curry(Date.week),
+    M:   ExObject.dateOperator.curry(Date.month),
+    A:   ExObject.dateOperator.curry(Date.year)
   },
 
   initialize: function(tokenData, form) {
@@ -666,6 +676,12 @@ var ExObjectFormula = Class.create({
     var data = this.tokenData[target.name];
     if (!data) return;
 
+    // Check if the field has a formula toggler, and if it's checked
+    var formulaToggle = $$("input.date-toggle-formula[data-toggle-formula-for='"+target.name+"']")[0];
+    if (formulaToggle && !formulaToggle.checked) {
+      return;
+    }
+
     var form = target.form;
 
     var date = new Date();
@@ -684,7 +700,10 @@ var ExObjectFormula = Class.create({
       DateHeureCourante: now
     };
     var values = {};
-    var isConcat = target.hasClassName("text");
+    var isConcat   = target.hasClassName("text");
+    var isDate     = target.hasClassName("date");
+    var isDateTime = target.hasClassName("dateTime");
+    var isTime     = target.hasClassName("time");
 
     data.variables.each(function(v){
       var val = constants[v] || this.getInputValue(form[v], isConcat);
@@ -709,6 +728,30 @@ var ExObjectFormula = Class.create({
       var props = target.getProperties();
       if (props.decimals) {
         result = parseFloat(result).toFixed(props.decimals);
+      }
+    }
+
+    // If the target is a date
+    if (isDate || isDateTime || isTime) {
+      if (result == "") {
+        return;
+      }
+
+      var dateResult = new Date();
+      dateResult.setTime(result);
+      var da = target.form.elements[target.name+"_da"];
+
+      if (isDate) {
+        result = dateResult.toDATE();
+        $V(da, dateResult.toLocaleDate());
+      }
+      else if (isDateTime) {
+        result = dateResult.toDATETIME();
+        $V(da, dateResult.toLocaleDateTime());
+      }
+      else {
+        result = dateResult.toTIME();
+        $V(da, dateResult.toLocaleTime());
       }
     }
 

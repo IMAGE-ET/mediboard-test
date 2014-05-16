@@ -131,10 +131,10 @@ class CExClassField extends CExListItemsOwner {
     "readonly",
   );
 
-  static $_formula_token_re = "/\[([^\]]+)\]/";
+  static $_formula_token_re = '/\[([^\]]+)\]/';
 
   static $_formula_valid_types = array(
-    "float", "num", "numchar", "pct", "currency"/*, "date", "dateTime", "time"*/
+    "float", "num", "numchar", "pct", "currency", "date", "dateTime", "time"
   );
 
   static $_concat_valid_types  = array(
@@ -500,6 +500,21 @@ class CExClassField extends CExListItemsOwner {
 
   }
 
+  function checkFormulaTokens($formula, &$matches){
+    $matches = array();
+    $has_fields = preg_match_all(self::$_formula_token_re, $formula, $matches);
+
+    $has_constant = false;
+    foreach (self::$_formula_constants as $_constant) {
+      if (strpos($formula, $_constant) !== false) {
+        $has_constant = true;
+        break;
+      }
+    }
+
+    return $has_constant || $has_fields;
+  }
+
   /**
    * Convert formula to be stored in DB
    *
@@ -520,7 +535,8 @@ class CExClassField extends CExListItemsOwner {
     $field_names = $this->getFieldNames(false);
     $formula = $this->_formula;
 
-    if (/*!in_array($formula, self::$_formula_constants) && */!preg_match_all(self::$_formula_token_re, $formula, $matches)) {
+    $matches = array();
+    if (!$this->checkFormulaTokens($formula, $matches)) {
       return "Formule invalide";
     }
 
@@ -562,7 +578,8 @@ class CExClassField extends CExListItemsOwner {
 
     $formula = $this->formula;
 
-    if (/*!in_array($formula, self::$_formula_constants) && */!preg_match_all(self::$_formula_token_re, $formula, $matches)) {
+    $matches = array();
+    if (!$this->checkFormulaTokens($formula, $matches)) {
       return "Formule invalide";
     }
 
@@ -642,7 +659,7 @@ class CExClassField extends CExListItemsOwner {
   }
 
   /**
-   * @param bool $cache
+   * @param bool $cache Use cache
    *
    * @return CExClassFieldPredicate
    */
@@ -651,7 +668,9 @@ class CExClassField extends CExListItemsOwner {
   }
 
   /**
-   * @param bool $cache
+   * Load ex field group
+   *
+   * @param bool $cache Use cache
    *
    * @return CExClassFieldGroup
    */
@@ -668,7 +687,9 @@ class CExClassField extends CExListItemsOwner {
   }
 
   /**
-   * @param bool $cache [optional]
+   * Load concept
+   *
+   * @param bool $cache Use cache
    *
    * @return CExConcept
    */
@@ -677,7 +698,9 @@ class CExClassField extends CExListItemsOwner {
   }
 
   /**
-   * @param bool $cache
+   * Load translation object
+   *
+   * @param bool $cache Use cache
    *
    * @return CExClassFieldTranslation
    */
@@ -692,6 +715,8 @@ class CExClassField extends CExListItemsOwner {
   }
 
   /**
+   * Load enum translations
+   *
    * @return CExClassFieldEnumTranslation[]
    */
   function loadRefEnumTranslations() {
@@ -702,6 +727,8 @@ class CExClassField extends CExListItemsOwner {
   }
 
   /**
+   * Update locales array
+   *
    * @return void
    */
   function updateTranslation(){
@@ -755,6 +782,8 @@ class CExClassField extends CExListItemsOwner {
   }
 
   /**
+   * Get Spec object
+   *
    * @return CMbFieldSpec
    */
   function getSpecObject(){
@@ -765,6 +794,13 @@ class CExClassField extends CExListItemsOwner {
     return $this->_spec_object;
   }
 
+  /**
+   * Build SQL spec
+   *
+   * @param bool $union Build full SQL spec
+   *
+   * @return string
+   */
   function getSQLSpec($union = true){
     $spec_obj = $this->getSpecObject();
     $spec_obj->default = null;

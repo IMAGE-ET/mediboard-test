@@ -279,6 +279,10 @@ Main.add(function(){
             $_type == "num" && $_name == "columns"
           )}}
             <input type="hidden" name="{{$_name}}" value="{{$spec_value|smarty:nodefaults}}" />
+
+            {{if $_name == "default" && ($spec instanceof CDateSpec || $spec instanceof CTimeSpec || $spec instanceof CDateTimeSpec)}}
+              <button class="formula compact" type="button" onclick="Control.Tabs.activateTab('fieldFormulaEditor')">Saisir une formule</button>
+            {{/if}}
           {{/if}}
         
           {{* str *}}
