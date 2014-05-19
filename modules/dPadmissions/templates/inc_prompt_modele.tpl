@@ -41,7 +41,9 @@
     <tr>
       <td colspan="2" class="button">
         <button type="button" class="print" onclick="Admissions.printFichesAnesth('{{$type}}')">Imprimer les fiches d'anesthésie</button>
-        <button type="button" class="print" onclick="Admissions.printPlanSoins('{{$type}}')">Imprimer les plans de soins</button>
+        {{if "soins dossier_soins show_bouton_plan_soins"|conf:"CGroups-$g"}}
+          <button type="button" class="print" onclick="Admissions.printPlanSoins('{{$type}}')">Imprimer les plans de soins</button>
+        {{/if}}
         <br />
         <button type="button" class="close" onclick="Admissions.afterPrint();">{{tr}}Close{{/tr}}</button>
       </td>

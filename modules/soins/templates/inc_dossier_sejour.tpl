@@ -247,7 +247,9 @@
       {{if "telemis"|module_active}}
         {{mb_include module=telemis template=inc_viewer_link patient=$sejour->_ref_patient label="Imagerie" button=true class="imagerie"}}
       {{/if}}
-      <button type="button" class="print" onclick="printPlanSoins()">Plan de soins</button>
+      {{if "soins dossier_soins show_bouton_plan_soins"|conf:"CGroups-$g"}}
+        <button type="button" class="print" onclick="printPlanSoins()">Plan de soins</button>
+      {{/if}}
       <button type="button" class="print" onclick="printDossierSoins();">Dossier soins</button>
       {{if !$popup && $modal}}
         <button type="button" class="cancel" onclick="closeModal();">{{tr}}Close{{/tr}}</button>
