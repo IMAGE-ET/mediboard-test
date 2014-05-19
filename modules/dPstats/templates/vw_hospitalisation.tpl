@@ -17,7 +17,7 @@
     url.addElement(oForm._date_max);
     url.addElement(oForm._service);
     url.addElement(oForm.type);
-    url.addElement(oForm.praticien_id);
+    url.addElement(oForm.prat_id);
     url.addElement(oForm.discipline_id);
     url.addElement(oForm.septique);
     url.addElement(oForm.type_data);
