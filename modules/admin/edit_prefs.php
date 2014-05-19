@@ -87,33 +87,10 @@ $smarty = new CSmartyDP();
 
 // Tasking
 if (CModule::getActive("tasking")) {
-  $request_ticket = new CRequestTicket();
-  $request_ticket->getUserType();
+  $tasking = CTaskingTicket::getPrefs($prefs, $user);
 
-  $owners = array();
-  if ($customers = CAppUI::pref("tasking_ticket_pre_filled_customers")) {
-    $customers = explode("|", $customers);
-    foreach ($customers as $_k => $_owner_guid) {
-      $owner = CMbObject::loadFromGuid($_owner_guid);
-
-      if ($owner && $owner->_id) {
-        $owner->canDo();
-
-        if ($owner->_canRead) {
-          $owners[] = $owner;
-        }
-        else {
-          unset($customers[$_k]);
-        }
-      }
-      else {
-        unset($customers[$_k]);
-      }
-    }
-  }
-
-  $smarty->assign("owners", $owners);
-  $smarty->assign("request_ticket", $request_ticket);
+  $smarty->assign("owners", $tasking["owners"]);
+  $smarty->assign("request_ticket", $tasking["request_ticket"]);
 }
 
 $smarty->assign("user"                 , $user);
