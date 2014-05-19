@@ -272,11 +272,9 @@
           </td>
           {{if $conf.dPurgences.display_motif_sfmu}}
             <script>
-              changeMotifSfmu = function(motifsfmu) {
+              changeMotifSfmu = function(form) {
                 {{if "CAppUI::conf"|static_call:"dPurgences CRPU defer_sfmu_diag_inf":"CGroups-$g"}}
-                  var form = motifsfmu.form;
-                  var li = $('autocomplete-CMotifSFMU-'+motifsfmu.value).select('span')[0].innerHTML;
-                  $V(form.diag_infirmier, li);
+                  $V(form.diag_infirmier, form.motif_sfmu_autocomplete_view.value);
                 {{/if}}
               };
             </script>
@@ -285,7 +283,7 @@
               {{assign var=notnull value="notNull"}}
             {{/if}}
             <th>{{mb_label object=$rpu field="motif_sfmu" class=$notnull}}</th>
-            <td>{{mb_field object=$rpu field="motif_sfmu" autocomplete="true,1,10,true,true" form=editRPU size=50 class=$notnull onchange="changeMotifSfmu(this);"}}
+            <td>{{mb_field object=$rpu field="motif_sfmu" autocomplete="true,1,10,true,true" form=editRPU size=50 class=$notnull onchange="changeMotifSfmu(this.form);"}}
                 <button type="button" class="search notext" onclick="CCirconstance.searchMotifSFMU(this.form)">
                   {{tr}}Search{{/tr}}
                 </button>
