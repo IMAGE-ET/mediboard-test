@@ -123,6 +123,9 @@ function importFile($file, $start, $count, $file_import) {
         }
       }
 
+      // fields created by store, let the store do the job for these
+      $patient->civilite = "";
+
       //found
       if ($patient->_id) {
         //check IPP
