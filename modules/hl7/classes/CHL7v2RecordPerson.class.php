@@ -380,7 +380,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     }
     
     // Date de naissance
-    $newPatient->naissance = CMbDT::date($this->queryTextNode("PID.7/TS.1", $node));
+    $PID_7 = $this->queryTextNode("PID.7/TS.1", $node);
+    $newPatient->naissance = $PID_7 ? CMbDT::date($PID_7, $node) : null;
     
     // Cas d'un patient anonyme
     if ($newPatient->naissance && !$newPatient->prenom) {
