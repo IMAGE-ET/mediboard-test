@@ -28,7 +28,12 @@ onSubmitAnt = function (form) {
     return false;
   }
 
-  onSubmitFormAjax(form, { onComplete : DossierMedical.reloadDossiersMedicaux } );
+  onSubmitFormAjax(form, {onComplete : function() {
+    DossierMedical.reloadDossiersMedicaux();
+    if (window.reloadAtcd) {
+      reloadAtcd();
+    }
+  }});
   
   // Après l'ajout d'antécédents
   if (Preferences.empty_form_atcd == "1") {

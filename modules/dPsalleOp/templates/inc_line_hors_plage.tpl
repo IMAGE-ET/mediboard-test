@@ -120,18 +120,9 @@
       {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
       {{assign var=sejour_id value=$sejour->_id}}
       {{assign var=antecedents value=$dossier_medical->_ref_antecedents_by_type}}
-      {{mb_include module=soins template=inc_vw_antecedent_allergie nodebug=true}}
-      {{if $dossier_medical->_id && $dossier_medical->_count_allergies}}
-        <script type="text/javascript">
-          ObjectTooltip.modes.allergies = {
-            module: "patients",
-            action: "ajax_vw_allergies",
-            sClass: "tooltip"
-          };
-
-        </script>
-        <img src="images/icons/warning.png" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}', 'allergies');" />
-      {{/if}}
+      <span id="atcd_allergies">
+            {{mb_include module=soins template=inc_antecedents_allergies patient_guid=$patient->_guid}}
+      </span>
       {{if $op->_is_urgence}}
         <img src="images/icons/attente_fourth_part.png" title="Intervention en urgence" />
       {{/if}}

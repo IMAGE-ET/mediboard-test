@@ -197,6 +197,12 @@
     url.pop(1000, 600);
   }
 
+  reloadAtcd = function() {
+    var url = new Url('soins', 'httpreq_vw_antecedent_allergie');
+    url.addParam('sejour_id', "{{$sejour->_id}}");
+    url.requestUpdate('atcd_allergies');
+  }
+
   Main.add(function() {
     Prescription.mode_pharma = "{{$mode_pharma}}";
 

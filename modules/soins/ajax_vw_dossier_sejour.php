@@ -30,15 +30,28 @@ $sejour->_ref_prescription_sejour->loadRefCurrentPraticien();
 $patient = $sejour->loadRefPatient();
 $sejour->loadRefsOperations();
 $sejour->loadRefCurrAffectation();
+$sejour->loadRefDossierMedical();
+if ($sejour->_ref_dossier_medical->_id) {
+  $sejour->_ref_dossier_medical->loadRefsAllergies();
+  $sejour->_ref_dossier_medical->loadRefsAntecedents();
+  $sejour->_ref_dossier_medical->countAntecedents(false);
+  $sejour->_ref_dossier_medical->countAllergies();
+}
 $patient->loadRefPhotoIdentite();
 $patient->loadRefDossierMedical();
 $patient->loadRefConstantesMedicales(null, array("poids", "taille"));
 if ($patient->_ref_dossier_medical->_id) {
   $patient->_ref_dossier_medical->loadRefsAllergies();
   $patient->_ref_dossier_medical->loadRefsAntecedents();
-  $patient->_ref_dossier_medical->countAntecedents();
+  $patient->_ref_dossier_medical->countAntecedents(false);
   $patient->_ref_dossier_medical->countAllergies();
 }
+
+/* Suppression des antecedents du dossier medical du patients présent dans le dossier medical du sejour */
+if ($patient->_ref_dossier_medical->_id && $sejour->_ref_dossier_medical->_id) {
+  CDossierMedical::cleanAntecedentsSignificatifs($sejour->_ref_dossier_medical, $patient->_ref_dossier_medical);
+}
+
 $operation = new COperation();
 if ($operation->load($operation_id)) {
   $operation->loadRefPlageOp();

@@ -137,7 +137,13 @@ showModalTP = function(dossier_medical_id, sejour_id, prescription_sejour_id) {
                
         <!-- Seulement si l'utilisateur est le créateur -->
         {{if $_antecedent->_ref_first_log && $_antecedent->_ref_first_log->user_id == $app->user_id}}
-        <button title="{{tr}}Delete{{/tr}}" class="trash notext" type="button" onclick="Antecedent.remove(this.form, DossierMedical.reloadDossierPatient)">
+        <button title="{{tr}}Delete{{/tr}}" class="trash notext" type="button" onclick="
+          Antecedent.remove(this.form, function() {
+            DossierMedical.reloadDossierPatient();
+            if (window.reloadAtcd) {
+              reloadAtcd();
+            }
+          })">
           {{tr}}Delete{{/tr}}
         </button>
         {{/if}}

@@ -22,7 +22,12 @@ var cancelledAnesthVisible = true;
 
 onSubmitDossierMedical = function(oForm) {
   return onSubmitFormAjax(oForm, { 
-    onComplete : DossierMedical.reloadDossierSejour 
+    onComplete : function() {
+      DossierMedical.reloadDossierSejour();
+      if (window.reloadAtcd) {
+        reloadAtcd();
+      }
+    }
   } );
 };
 
@@ -67,7 +72,13 @@ toggleCancelledAnesth = function(list) {
 
       <input type="hidden" name="annule" value="" />
 
-      <button title="{{tr}}Delete{{/tr}}" class="trash notext" type="button" onclick="Antecedent.remove(this.form, DossierMedical.reloadDossierSejour)">
+      <button title="{{tr}}Delete{{/tr}}" class="trash notext" type="button" onclick="
+          Antecedent.remove(this.form, function() {
+            DossierMedical.reloadDossierSejour();
+            if (window.reloadAtcd) {
+              reloadAtcd();
+            }
+          })">
         {{tr}}Delete{{/tr}}
       </button>
     </form>

@@ -304,14 +304,19 @@ class CDossierMedical extends CMbMetaObject {
 
   /**
    * Compte les antécédents annulés et non-annulés
-   * 
+   *
+   * @param boolean $count_allergies Permet de préciser si les allergies sont prises en compte ou non
+   *
    * @return void
    */
-  function countAntecedents(){
+  function countAntecedents($count_allergies = true) {
     $antedecent = new CAntecedent();
     $where = array();
     $where["dossier_medical_id"] = " = '$this->_id'";
     $where["annule"] = " != '1'";
+    if (!$count_allergies) {
+      $where["type"] = " != 'alle'";
+    }
     $this->_count_antecedents = $antedecent->countList($where);
 
     $where["annule"] = " = '1'";
@@ -321,15 +326,19 @@ class CDossierMedical extends CMbMetaObject {
   /**
    * MassCount des antecedents
    *
-   * @param array $dossiers Dossier médicaux
+   * @param array   $dossiers        Dossier médicaux
+   * @param boolean $count_allergies Permet de préciser si les allergies sont prises en compte ou non
    *
    * @return array
    */
-  function massCountAntecedents($dossiers = array()) {
+  function massCountAntecedents($dossiers = array(), $count_allergies = true) {
     $antecedent = new CAntecedent();
     $where = array();
     $where["dossier_medical_id"] = " = '$this->_id'";
     $where["annule"] = " != '1'";
+    if (!$count_allergies) {
+      $where["type"] = " != 'alle'";
+    }
     $where["dossier_medical_id"] = CSQLDataSource::prepareIn($dossiers);
 
     $request = new CRequest();
@@ -742,5 +751,33 @@ class CDossierMedical extends CMbMetaObject {
     }
     
     $template->addListProperty("$champ - Diagnostics", $list);
+  }
+
+  /**
+   * Supprime du dossier médical les antécedents présents dans le dossier du séjour et dans le dossier du patient
+   *
+   * @param CDossierMedical &$dossier_sejour  Le dossier medical du sejours
+   * @param CDossierMedical &$dossier_patient Le dossier medical du patient
+   *
+   * @return void
+   */
+  public static function cleanAntecedentsSignificatifs(&$dossier_sejour, &$dossier_patient) {
+    $del_ante = 0;
+    foreach ($dossier_sejour->_ref_antecedents_by_type as $_cat_name => $_cat_ante) {
+      if ($_cat_name != 'alle') {
+        foreach ($_cat_ante as $_key => $_ante) {
+          foreach ($dossier_patient->_ref_antecedents_by_type[$_cat_name] as $_pat_key => $_pat_ante) {
+            if (
+                $_ante->type == $_pat_ante->type && $_ante->appareil == $_pat_ante->appareil && $_ante->date == $_pat_ante->date &&
+                $_ante->rques == $_pat_ante->rques && $_ante->annule == $_pat_ante->annule
+            ) {
+              $del_ante++;
+              unset($dossier_patient->_ref_antecedents_by_type[$_cat_name][$_pat_key]);
+            }
+          }
+        }
+      }
+    }
+    $dossier_patient->_count_antecedents = $dossier_patient->_count_antecedents - $del_ante;
   }
 }

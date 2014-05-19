@@ -16,7 +16,13 @@
 
 {{assign var=prescription value=$sejour->_ref_prescription_sejour}}
 {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
+{{assign var=dossier_medical_sejour value=$sejour->_ref_dossier_medical}}
 {{assign var=antecedents value=$dossier_medical->_ref_antecedents_by_type}}
+{{if $dossier_medical_sejour}}
+  {{assign var=antecedents_sejour value=$dossier_medical_sejour->_ref_antecedents_by_type}}
+{{else}}
+  {{assign var=antecedents_sejour value=0}}
+{{/if}}
 {{assign var=sejour_id value=$sejour->_id}}
 {{assign var=conf_preselect_prat value=$conf.dPprescription.CPrescription.preselection_praticien_auto}}
 {{assign var=is_executant_prescription value=CAppUI::$user->isExecutantPrescription()}}
@@ -46,18 +52,9 @@
               {{$sejour->_shortview|replace:"Du":"Séjour du"}}
             {{/if}}
           </span>
-          {{include file="../../soins/templates/inc_vw_antecedent_allergie.tpl" nodebug=true}}
-
-          {{if $dossier_medical->_id && $dossier_medical->_count_allergies}}
-            <script type="text/javascript">
-              ObjectTooltip.modes.allergies = {
-                module: "patients",
-                action: "ajax_vw_allergies",
-                sClass: "tooltip"
-              };
-            </script>
-            <img src="images/icons/warning.png" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}', 'allergies');" />
-          {{/if}}
+          <span id="atcd_allergies">
+            {{mb_include module=soins template=inc_antecedents_allergies patient_guid=$patient->_guid}}
+          </span>
 
           <br/>
           <span style="font-size: 0.6em;">
