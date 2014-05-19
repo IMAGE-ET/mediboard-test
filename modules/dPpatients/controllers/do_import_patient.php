@@ -96,7 +96,8 @@ function importFile($file, $start, $count, $file_import) {
       //clone and IPP
       $IPP = $patient->_IPP;
       $patient->_generate_IPP = false;
-      $patient_full = $patient;
+      $patient_full = new CPatient();
+      $patient_full->extendsWith($patient);
 
       // load by ipp if basic didn't find.
       if (!$patient->_id) {
