@@ -70,6 +70,39 @@ class CSetupdPcompteRendu extends CSetup {
   }
 
   /**
+   * Insertion des modèles par référence pour les packs
+   *
+   * @return boolean
+   */
+  protected function setupAddmodeles() {
+    $ds = $this->ds;
+
+    $query = "SELECT * from pack;";
+    $packs = $ds->loadList($query);
+
+    foreach ($packs as $_pack) {
+      if ($_pack['modeles'] == '') {
+        continue;
+      }
+      $modeles = explode("|", $_pack['modeles']);
+      if (count($modeles) == 0) {
+        continue;
+      }
+
+      $compterendu = new CCompteRendu;
+      foreach ($modeles as $_modele) {
+        if (!$compterendu->load($_modele)) {
+          continue;
+        }
+        $query = "INSERT INTO modele_to_pack (modele_id, pack_id)
+                  VALUES ($_modele, {$_pack['pack_id']})";
+        $ds->exec($query);
+      }
+    }
+    return true;
+  }
+
+  /**
    * @see parent::__construct()
    */
   function __construct() {
@@ -78,30 +111,30 @@ class CSetupdPcompteRendu extends CSetup {
     $this->mod_name = "dPcompteRendu";
     
     $this->makeRevision("all");
-    $query = "CREATE TABLE compte_rendu (" .
-            "\ncompte_rendu_id BIGINT NOT NULL AUTO_INCREMENT ," .
-            "\nchir_id BIGINT DEFAULT '0' NOT NULL ," .
-            "\nnom VARCHAR(50) ," .
-            "\nsource TEXT," .
-            "\ntype ENUM('consultation', 'operation', 'hospitalisation', 'autre') DEFAULT 'autre' NOT NULL ," .
-            "\nPRIMARY KEY (compte_rendu_id) ," .
-            "\nINDEX (chir_id)" .
-            "\n) /*! ENGINE=MyISAM */ COMMENT = 'Table des modeles de compte-rendu';";
+    $query = "CREATE TABLE compte_rendu (
+                compte_rendu_id BIGINT NOT NULL AUTO_INCREMENT ,
+                chir_id BIGINT DEFAULT '0' NOT NULL ,
+                nom VARCHAR(50) ,
+                source TEXT,
+                type ENUM('consultation', 'operation', 'hospitalisation', 'autre') DEFAULT 'autre' NOT NULL ,
+                PRIMARY KEY (compte_rendu_id) ,
+                INDEX (chir_id)
+                ) /*! ENGINE=MyISAM */ COMMENT = 'Table des modeles de compte-rendu';";
     $this->addQuery($query);
-    $query = "ALTER TABLE permissions" .
-            "\nCHANGE permission_grant_on permission_grant_on VARCHAR(25) NOT NULL";
+    $query = "ALTER TABLE permissions
+                CHANGE permission_grant_on permission_grant_on VARCHAR(25) NOT NULL";
     $this->addQuery($query);
     
     $this->makeRevision("0.1");
-    $query = "CREATE TABLE `aide_saisie` (" .
-            "\n`aide_id` INT NOT NULL AUTO_INCREMENT ," .
-            "\n`user_id` INT NOT NULL ," .
-            "\n`module` VARCHAR(20) NOT NULL ," .
-            "\n`class` VARCHAR(20) NOT NULL ," .
-            "\n`field` VARCHAR(20) NOT NULL ," .
-            "\n`name` VARCHAR(40) NOT NULL ," .
-            "\n`text` TEXT NOT NULL ," .
-            "\nPRIMARY KEY (`aide_id`)) /*! ENGINE=MyISAM */;";
+    $query = "CREATE TABLE `aide_saisie` (
+                `aide_id` INT NOT NULL AUTO_INCREMENT ,
+                `user_id` INT NOT NULL ,
+                `module` VARCHAR(20) NOT NULL ,
+                `class` VARCHAR(20) NOT NULL ,
+                `field` VARCHAR(20) NOT NULL ,
+                `name` VARCHAR(40) NOT NULL ,
+                `text` TEXT NOT NULL ,
+                PRIMARY KEY (`aide_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.11");
@@ -221,37 +254,37 @@ class CSetupdPcompteRendu extends CSetup {
     
     $this->makeRevision("0.25");
     $this->setTimeLimit(1800);
-    $query = "ALTER TABLE `aide_saisie` " .
-               "\nCHANGE `aide_id` `aide_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `user_id` `user_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `function_id` `function_id` int(11) unsigned NULL," .
-               "\nCHANGE `class` `class` varchar(255) NOT NULL," .
-               "\nCHANGE `field` `field` varchar(255) NOT NULL," .
-               "\nCHANGE `name` `name` varchar(255) NOT NULL;";
+    $query = "ALTER TABLE `aide_saisie` 
+                CHANGE `aide_id` `aide_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `user_id` `user_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `function_id` `function_id` int(11) unsigned NULL,
+                CHANGE `class` `class` varchar(255) NOT NULL,
+                CHANGE `field` `field` varchar(255) NOT NULL,
+                CHANGE `name` `name` varchar(255) NOT NULL;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `compte_rendu` " .
-               "\nCHANGE `compte_rendu_id` `compte_rendu_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `chir_id` `chir_id` int(11) unsigned NULL," .
-               "\nCHANGE `function_id` `function_id` int(11) unsigned NULL," .
-               "\nCHANGE `object_id` `object_id` int(11) unsigned NULL," .
-               "\nCHANGE `nom` `nom` varchar(255) NOT NULL," .
-               "\nCHANGE `source` `source` mediumtext NULL," .
-               "\nCHANGE `object_class` `object_class` enum('CPatient','CConsultAnesth','COperation','CConsultation')
-                  NOT NULL DEFAULT 'CPatient'," .
-               "\nCHANGE `valide` `valide` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0'," .
-               "\nCHANGE `file_category_id` `file_category_id` int(11) unsigned NOT NULL DEFAULT '0';";
+    $query = "ALTER TABLE `compte_rendu` 
+                CHANGE `compte_rendu_id` `compte_rendu_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `chir_id` `chir_id` int(11) unsigned NULL,
+                CHANGE `function_id` `function_id` int(11) unsigned NULL,
+                CHANGE `object_id` `object_id` int(11) unsigned NULL,
+                CHANGE `nom` `nom` varchar(255) NOT NULL,
+                CHANGE `source` `source` mediumtext NULL,
+                CHANGE `object_class` `object_class` enum('CPatient','CConsultAnesth','COperation','CConsultation')
+                  NOT NULL DEFAULT 'CPatient',
+                CHANGE `valide` `valide` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0',
+                CHANGE `file_category_id` `file_category_id` int(11) unsigned NOT NULL DEFAULT '0';";
     $this->addQuery($query);
-    $query = "ALTER TABLE `liste_choix` " .
-               "\nCHANGE `liste_choix_id` `liste_choix_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `chir_id` `chir_id` int(11) unsigned NULL," .
-               "\nCHANGE `function_id` `function_id` int(11) unsigned NULL," .
-               "\nCHANGE `nom` `nom` varchar(255) NOT NULL," .
-               "\nCHANGE `compte_rendu_id` `compte_rendu_id` int(11) unsigned NOT NULL DEFAULT '0';";
+    $query = "ALTER TABLE `liste_choix` 
+                CHANGE `liste_choix_id` `liste_choix_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `chir_id` `chir_id` int(11) unsigned NULL,
+                CHANGE `function_id` `function_id` int(11) unsigned NULL,
+                CHANGE `nom` `nom` varchar(255) NOT NULL,
+                CHANGE `compte_rendu_id` `compte_rendu_id` int(11) unsigned NOT NULL DEFAULT '0';";
     $this->addQuery($query);
-    $query = "ALTER TABLE `pack` " .
-               "\nCHANGE `pack_id` `pack_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `chir_id` `chir_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `nom` `nom` varchar(255) NOT NULL;";
+    $query = "ALTER TABLE `pack` 
+                CHANGE `pack_id` `pack_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `chir_id` `chir_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `nom` `nom` varchar(255) NOT NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.26");
@@ -499,41 +532,9 @@ class CSetupdPcompteRendu extends CSetup {
               ADD INDEX (`pack_id`);
            ";
     $this->addQuery($query);
-    
-   
-    /**
-     * Insertion des modèles par référence pour les packs
-     *
-     * @return boolean
-     */
-    function setupAddmodeles() {
-      $ds = CSQLDataSource::get("std");
-      $query = "SELECT * from pack;";  
-      $packs = $ds->loadList($query);
 
-      foreach ($packs as $_pack) {
-        if ($_pack['modeles'] == '') {
-          continue;
-        }
-        $modeles = explode("|", $_pack['modeles']);
-        if (count($modeles) == 0) {
-          continue;
-        }
-        
-        $compterendu = new CCompteRendu;
-        foreach ($modeles as $_modele) {
-          if (!$compterendu->load($_modele)) {
-            continue;
-          }
-          $query = "INSERT INTO modele_to_pack (modele_id, pack_id)
-                  VALUES ($_modele, {$_pack['pack_id']})";
-          $ds->exec($query);
-        }
-      }
-      return true;
-    }
     
-    $this->addFunction("setupAddmodeles");
+    $this->addMethod("setupAddmodeles");
     
     $this->makeRevision("0.56");
     

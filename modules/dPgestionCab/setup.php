@@ -13,6 +13,34 @@
  * Gestion Cab setup
  */
 class CSetupdPgestionCab extends CSetup {
+  /**
+   * Crée les employés du cabinet
+   *
+   * @return bool
+   */
+  protected function createEmployes() {
+    $param = new CParamsPaie;
+    $params = $param->loadList();
+    if (!is_array($params)) {
+      return true;
+    }
+    foreach ($params as $key => $curr_param) {
+      $user = new CMediusers;
+      $user->load($params[$key]->employecab_id);
+      $employe = new CEmployeCab;
+      $employe->function_id = $user->function_id;
+      $employe->nom         = $user->_user_last_name;
+      $employe->prenom      = $user->_user_first_name;
+      $employe->function    = $user->_user_type;
+      $employe->adresse     = $user->_user_adresse;
+      $employe->cp          = $user->_user_cp;
+      $employe->ville       = $user->_user_ville;
+      $employe->store();
+      $params[$key]->employecab_id = $employe->employecab_id;
+      $params[$key]->store();
+    }
+    return true;
+  }
 
   /**
    * @see parent::__construct()
@@ -139,30 +167,7 @@ class CSetupdPgestionCab extends CSetup {
     $query = "ALTER TABLE `params_paie` CHANGE `user_id` `employecab_id` INT NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
-    function setup_paie() {
-      $param = new CParamsPaie;
-      $params = $param->loadList();
-      if (!is_array($params)) {
-        return true;
-      }
-      foreach ($params as $key => $curr_param) {
-        $user = new CMediusers;
-        $user->load($params[$key]->employecab_id);
-        $employe = new CEmployeCab;
-        $employe->function_id = $user->function_id;
-        $employe->nom         = $user->_user_last_name;
-        $employe->prenom      = $user->_user_first_name;
-        $employe->function    = $user->_user_type;
-        $employe->adresse     = $user->_user_adresse;
-        $employe->cp          = $user->_user_cp;
-        $employe->ville       = $user->_user_ville;
-        $employe->store();
-        $params[$key]->employecab_id = $employe->employecab_id;
-        $params[$key]->store();
-      }
-      return true;
-    }
-    $this->addFunction("setup_paie");
+    $this->addMethod("createEmployes");
     
     $this->makeRevision("0.13");
     $query = "ALTER TABLE `employecab`
@@ -244,7 +249,7 @@ class CSetupdPgestionCab extends CSetup {
     $query = "ALTER TABLE `params_paie`
             ADD `csgnis` FLOAT NOT NULL AFTER `smic`;";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.19");
     $query = "ALTER TABLE `fiche_paie` 
               ADD INDEX (`debut`),

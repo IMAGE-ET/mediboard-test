@@ -10,6 +10,177 @@
  */
 
 class CSetupdPpatients extends CSetup {
+  /**
+   * Update soundex data
+   *
+   * @return bool
+   */
+  protected function createSoundex(){
+    $where = array("nom_soundex2" => "IS NULL", "nom" => "!= ''");
+    $limit = "0,1000";
+    $pat = new CPatient;
+    $listPat = $pat->loadList($where, null, $limit);
+    while (count($listPat)) {
+      foreach ($listPat as &$pat) {
+        if ($msg = $pat->store()) {
+          trigger_error("Erreur store [$pat->_id] : $msg");
+          return false;
+        }
+      }
+      $listPat = $pat->loadList($where, null, $limit);
+    }
+    return true;
+  }
+
+  /**
+   * Add constantes ranks
+   *
+   * @return bool
+   */
+  protected function addConstantesRank() {
+    $ds = $this->ds;
+
+    $results = $ds->exec("SELECT * FROM `configuration` WHERE `feature` = 'dPpatients CConstantesMedicales important_constantes';");
+
+    $list = array();
+    foreach (CConstantesMedicales::$list_constantes as $_const => $_params) {
+      if (!isset($_params["cumul_for"])) {
+        $list[] = $_const;
+      }
+    }
+
+    if ($results) {
+      while ($row = $ds->fetchAssoc($results)) {
+        if ($row["value"] == "") {
+          continue;
+        }
+
+        $constants = explode("|", $row["value"]);
+
+        $object_class = "NULL";
+        $object_id    = "NULL";
+
+        if ($row["object_class"]) {
+          $object_class = "'".$row["object_class"]."'";
+        }
+
+        if ($row["object_id"]) {
+          $object_id    = "'".$row["object_id"]."'";
+        }
+
+        // Ajout des constantes préselectionnées
+        foreach ($constants as $_key => $_name) {
+          $rank = $_key + 1;
+
+          $query = "INSERT INTO `configuration` (`feature`, `value`, `object_id`, `object_class`)
+                         VALUES (?1, ?2, $object_id, $object_class)";
+          $query = $ds->prepare($query, "dPpatients CConstantesMedicales selection $_name", $rank);
+          $ds->exec($query);
+        }
+
+        // Valeur zéro pour les autres
+        foreach ($list as $_name) {
+          if (in_array($_name, $constants)) {
+            continue;
+          }
+
+          $query = "INSERT INTO `configuration` (`feature`, `value`, `object_id`, `object_class`)
+                         VALUES (?1, '0', $object_id, $object_class)";
+          $query = $ds->prepare($query, "dPpatients CConstantesMedicales selection $_name");
+          $ds->exec($query);
+        }
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * Update rank configs
+   *
+   * @return bool
+   */
+  protected function modifyConstantsRanksConfigs() {
+    $ds = $this->ds;
+
+    $old_configs = $ds->exec("SELECT * FROM `configuration` WHERE `feature` LIKE 'dPpatients CConstantesMedicales selection%';");
+
+    if ($old_configs) {
+      while ($row = $ds->fetchAssoc($old_configs)) {
+        $query = "UPDATE `configuration` SET `value` = ?1 WHERE `configuration_id` = ?2";
+        $query = $ds->prepare(
+          $query,
+          $row['value'] . '|' . $row['value'] . '|' ,
+          $row['configuration_id']
+        );
+        $ds->exec($query);
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * Move configs from 'config_constantes_medicales' to 'configuration'
+   *
+   * @return bool
+   */
+  protected function moveConstantesConfigsFromOldTable(){
+    $ds = $this->ds;
+    $fields = array(
+      'show_cat_tabs',
+      'show_enable_all_button',
+
+      'diuere_24_reset_hour',
+      'redon_cumul_reset_hour',
+      'sng_cumul_reset_hour',
+      'lame_cumul_reset_hour',
+      'drain_cumul_reset_hour',
+      'drain_thoracique_cumul_reset_hour',
+      'drain_pleural_cumul_reset_hour',
+      'drain_mediastinal_cumul_reset_hour',
+      'sonde_ureterale_cumul_reset_hour',
+      'sonde_nephro_cumul_reset_hour',
+      'sonde_vesicale_cumul_reset_hour',
+
+      'important_constantes',
+    );
+    $configs = $ds->loadList("SELECT * FROM `config_constantes_medicales`");
+    foreach ($configs as $_config) {
+      foreach ($fields as $_field) {
+        $object_class = null;
+        if ($object_id = $_config["service_id"]) {
+          $object_class = "CService";
+        }
+        elseif ($object_id = $_config["group_id"]) {
+          $object_class = "CGroups";
+        }
+
+        if (!$object_class) {
+          $object_class = "NULL";
+        }
+        else {
+          $object_class = "'$object_class'";
+        }
+
+        if (!$object_id) {
+          $object_id = "NULL";
+        }
+        else {
+          $object_id = "'$object_id'";
+        }
+
+        if ($_config[$_field] !== null) {
+          $query = "INSERT INTO `configuration` (`object_class`, `object_id`, `feature`, `value`)
+                    VALUES ($object_class, $object_id, ?1, ?2)";
+          $query = $ds->prepare($query, "dPpatients CConstantesMedicales $_field", $_config[$_field]);
+          $ds->exec($query);
+        }
+      }
+    }
+
+    return true;
+  }
 
   function __construct() {
     parent::__construct();
@@ -285,23 +456,7 @@ class CSetupdPpatients extends CSetup {
                 ADD `prenom_soundex2` VARCHAR(255) DEFAULT NULL AFTER `nom_soundex2`,
                 ADD `nomjf_soundex2`  VARCHAR(255) DEFAULT NULL AFTER `prenom_soundex2`;";
     $this->addQuery($query);
-    function setup_soundex(){
-      $where = array("nom_soundex2" => "IS NULL", "nom" => "!= ''");
-      $limit = "0,1000";
-      $pat = new CPatient;
-      $listPat = $pat->loadList($where, null, $limit);
-      while (count($listPat)) {
-        foreach ($listPat as &$pat) {
-          if ($msg = $pat->store()) {
-            trigger_error("Erreur store [$pat->_id] : $msg");
-            return false;
-          }
-        }
-        $listPat = $pat->loadList($where, null, $limit);
-      }
-      return true;
-    }
-    $this->addFunction("setup_soundex");
+    $this->addMethod("createSoundex");
 
     $this->makeRevision("0.38");
     $query = "ALTER TABLE `patients` ADD `rang_beneficiaire` enum('1','2','11','12','13') NULL AFTER `ald`;";
@@ -1269,20 +1424,6 @@ class CSetupdPpatients extends CSetup {
 
     $this->makeRevision("1.11");
 
-    /*function changeTa() {
-      $mbConfig = new CMbConfig;
-      $mbConfig->load();
-      $important_constants = $mbConfig->get("dPpatients CConstantesMedicales important_constantes");
-      $important_constants = preg_replace("/^ta$/", "ta_gauche", $important_constants);
-      $important_constants = preg_replace("/^ta\|/", "ta_gauche|" , $important_constants);
-      $important_constants = preg_replace("/\|ta\|/", "|ta_gauche|", $important_constants);
-      $important_constants = preg_replace("/\|ta$/", "|ta_gauche", $important_constants);
-
-      $mbConfig->update(array("dPpatients"=> array("CConstantesMedicales" => array("important_constantes" => $important_constants))));
-      return true;
-    }
-    $this->addFunction("changeTa");*/
-
     $query = "UPDATE constantes_medicales
               SET ta_gauche = ta, ta = NULL
               WHERE ta IS NOT NULL AND ta_gauche IS NULL";
@@ -1496,7 +1637,7 @@ class CSetupdPpatients extends CSetup {
          `show_cat_tabs`
        )
        VALUES (
-         %1 , %2 , %3 , %4 , %5 , %6 , %7 , %8 , %9 , %10 , %11 , '0'
+         ?1 , ?2 , ?3 , ?4 , ?5 , ?6 , ?7 , ?8 , ?9 , ?10 , ?11 , '0'
        );",
       CValue::read($conf, "important_constantes"),
       CValue::read($conf, "diuere_24_reset_hour"),
@@ -2040,65 +2181,7 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("1.69");
-
-    function setup_patients_constantes_configuration(CSetup $setup){
-      $ds = $setup->ds;
-      $fields = array(
-        'show_cat_tabs',
-        'show_enable_all_button',
-
-        'diuere_24_reset_hour',
-        'redon_cumul_reset_hour',
-        'sng_cumul_reset_hour',
-        'lame_cumul_reset_hour',
-        'drain_cumul_reset_hour',
-        'drain_thoracique_cumul_reset_hour',
-        'drain_pleural_cumul_reset_hour',
-        'drain_mediastinal_cumul_reset_hour',
-        'sonde_ureterale_cumul_reset_hour',
-        'sonde_nephro_cumul_reset_hour',
-        'sonde_vesicale_cumul_reset_hour',
-
-        'important_constantes',
-      );
-      $configs = $ds->loadList("SELECT * FROM `config_constantes_medicales`");
-      foreach ($configs as $_config) {
-        foreach ($fields as $_field) {
-          $object_class = null;
-          if ($object_id = $_config["service_id"]) {
-            $object_class = "CService";
-          }
-          elseif ($object_id = $_config["group_id"]) {
-            $object_class = "CGroups";
-          }
-
-          if (!$object_class) {
-            $object_class = "NULL";
-          }
-          else {
-            $object_class = "'$object_class'";
-          }
-
-          if (!$object_id) {
-            $object_id = "NULL";
-          }
-          else {
-            $object_id = "'$object_id'";
-          }
-
-          if ($_config[$_field] !== null) {
-            $query = "INSERT INTO `configuration` (`object_class`, `object_id`, `feature`, `value`) VALUES (
-              $object_class, $object_id, %1, %2
-            )";
-            $query = $ds->prepare($query, "dPpatients CConstantesMedicales $_field", $_config[$_field]);
-            $ds->exec($query);
-          }
-        }
-      }
-
-      return true;
-    }
-    $this->addFunction("setup_patients_constantes_configuration");
+    $this->addMethod("moveConstantesConfigsFromOldTable");
     // TODO: "DROP TABLE config_constantes_medicales"
 
     $this->makeRevision("1.70");
@@ -2146,66 +2229,7 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("1.78");
-
-    function addConstantesRank($setup) {
-      /** @var CSQLDataSource $ds */
-      $ds = $setup->ds;
-
-      $results = $ds->exec("SELECT * FROM `configuration` WHERE `feature` = 'dPpatients CConstantesMedicales important_constantes';");
-
-      $list = array();
-      foreach (CConstantesMedicales::$list_constantes as $_const => $_params) {
-        if (!isset($_params["cumul_for"])) {
-          $list[] = $_const;
-        }
-      }
-
-      if ($results) {
-        while ($row = $ds->fetchAssoc($results)) {
-          if ($row["value"] == "") {
-            continue;
-          }
-
-          $constants = explode("|", $row["value"]);
-
-          $object_class = "NULL";
-          $object_id    = "NULL";
-
-          if ($row["object_class"]) {
-            $object_class = "'".$row["object_class"]."'";
-          }
-
-          if ($row["object_id"]) {
-            $object_id    = "'".$row["object_id"]."'";
-          }
-
-          // Ajout des constantes préselectionnées
-          foreach ($constants as $_key => $_name) {
-            $rank = $_key + 1;
-
-            $query = "INSERT INTO `configuration` (`feature`, `value`, `object_id`, `object_class`)
-                         VALUES (%1, %2, $object_id, $object_class)";
-            $query = $ds->prepare($query, "dPpatients CConstantesMedicales selection $_name", $rank);
-            $ds->exec($query);
-          }
-
-          // Valeur zéro pour les autres
-          foreach ($list as $_name) {
-            if (in_array($_name, $constants)) {
-              continue;
-            }
-
-            $query = "INSERT INTO `configuration` (`feature`, `value`, `object_id`, `object_class`)
-                         VALUES (%1, '0', $object_id, $object_class)";
-            $query = $ds->prepare($query, "dPpatients CConstantesMedicales selection $_name");
-            $ds->exec($query);
-          }
-        }
-      }
-
-      return true;
-    }
-    $this->addFunction("addConstantesRank");
+    $this->addMethod("addConstantesRank");
     $this->makeRevision("1.79");
 
     $query = "UPDATE `patients` SET `INSC` = NULL, `INSC_date` = null;";
@@ -2346,28 +2370,7 @@ class CSetupdPpatients extends CSetup {
 
     $this->makeRevision("1.90");
 
-    function modifyConstantsRanksConfigs($setup) {
-      /** @var CSQLDataSource $ds */
-      $ds = $setup->ds;
-
-      $old_configs = $ds->exec("SELECT * FROM `configuration` WHERE `feature` LIKE 'dPpatients CConstantesMedicales selection%';");
-
-      if ($old_configs) {
-        while ($row = $ds->fetchAssoc($old_configs)) {
-          $query = "UPDATE `configuration` SET `value` = %1 WHERE `configuration_id` = %2";
-          $query = $ds->prepare(
-            $query,
-            $row['value'] . '|' . $row['value'] . '|' ,
-            $row['configuration_id']
-          );
-          $ds->exec($query);
-        }
-      }
-
-      return true;
-    }
-
-    $this->addFunction('modifyConstantsRanksConfigs');
+    $this->addMethod('modifyConstantsRanksConfigs');
 
     $this->makeRevision('1.91');
 

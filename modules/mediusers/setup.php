@@ -12,6 +12,24 @@
  */
 
 class CSetupmediusers extends CSetup {
+  /**
+   * Update functions named "Cabinets" to type = 'cabinet'
+   *
+   * @return bool
+   */
+  protected function updateFct(){
+    $ds = $this->ds;
+
+    if ($ds->loadTable("groups_mediboard")) {
+      $query = "UPDATE `functions_mediboard`, `groups_mediboard`
+               SET `functions_mediboard`.`type` = 'cabinet'
+               WHERE `functions_mediboard`.`group_id` = `groups_mediboard`.`group_id`
+               AND `groups_mediboard`.`text` = 'Cabinets'";
+      $ds->exec($query);
+      $ds->error();
+    }
+    return true;
+  }
 
   function __construct() {
     parent::__construct();
@@ -19,19 +37,19 @@ class CSetupmediusers extends CSetup {
     $this->mod_name = "mediusers";
 
     $this->makeRevision("all");
-    $query = "CREATE TABLE `users_mediboard` (" .
-          "\n`user_id` INT(11) UNSIGNED NOT NULL," .
-          "\n`function_id` TINYINT(4) UNSIGNED NOT NULL DEFAULT '0'," .
-          "\nPRIMARY KEY (`user_id`)" .
-          "\n) /*! ENGINE=MyISAM */;";
+    $query = "CREATE TABLE `users_mediboard` (
+               `user_id` INT(11) UNSIGNED NOT NULL,
+               `function_id` TINYINT(4) UNSIGNED NOT NULL DEFAULT '0',
+               PRIMARY KEY (`user_id`)
+             ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-    $query = "CREATE TABLE `functions_mediboard` (" .
-          "\n`function_id` TINYINT(4) UNSIGNED NOT NULL AUTO_INCREMENT," .
-          "\n`group_id` TINYINT(4) UNSIGNED NOT NULL DEFAULT '0'," .
-          "\n`text` VARCHAR(50) NOT NULL," .
-          "\n`color` VARCHAR(6) NOT NULL DEFAULT 'ffffff'," .
-          "\nPRIMARY KEY (`function_id`)" .
-          "\n) /*! ENGINE=MyISAM */;";
+    $query = "CREATE TABLE `functions_mediboard` (
+               `function_id` TINYINT(4) UNSIGNED NOT NULL AUTO_INCREMENT,
+               `group_id` TINYINT(4) UNSIGNED NOT NULL DEFAULT '0',
+               `text` VARCHAR(50) NOT NULL,
+               `color` VARCHAR(6) NOT NULL DEFAULT 'ffffff',
+               PRIMARY KEY (`function_id`)
+             ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 
     $this->makeRevision("0.1");
@@ -47,11 +65,11 @@ class CSetupmediusers extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("0.13");
-    $query = "CREATE TABLE `discipline` (" .
-            "\n`discipline_id` TINYINT(4) UNSIGNED NOT NULL AUTO_INCREMENT," .
-            "\n`text` VARCHAR(100) NOT NULL," .
-            "\nPRIMARY KEY (`discipline_id`)" .
-            "\n) /*! ENGINE=MyISAM */;";
+    $query = "CREATE TABLE `discipline` (
+                `discipline_id` TINYINT(4) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `text` VARCHAR(100) NOT NULL,
+                PRIMARY KEY (`discipline_id`)
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `users_mediboard` ADD `discipline_id` TINYINT(4) DEFAULT NULL AFTER `function_id`";
     $this->addQuery($query);
@@ -197,19 +215,7 @@ class CSetupmediusers extends CSetup {
               ADD `type` ENUM('administratif', 'cabinet') DEFAULT 'administratif' NOT NULL AFTER `group_id`;";
     $this->addQuery($query);
 
-    function setup_updateFct(){
-      $ds = CSQLDataSource::get("std");
-
-      if ($ds->loadTable("groups_mediboard")) {
-        $query = "UPDATE `functions_mediboard`, `groups_mediboard`" .
-            "\nSET `functions_mediboard`.`type` = 'cabinet'" .
-            "\nWHERE `functions_mediboard`.`group_id` = `groups_mediboard`.`group_id`" .
-            "\nAND `groups_mediboard`.`text` = 'Cabinets'";
-        $ds->exec($query); $ds->error();
-      }
-      return true;
-    }
-    $this->addFunction("setup_updateFct");
+    $this->addMethod("updateFct");
 
     $this->makeRevision("0.15");
     $query = "ALTER TABLE `functions_mediboard` ADD INDEX ( `group_id` ) ;";
@@ -220,48 +226,48 @@ class CSetupmediusers extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("0.16");
-    $query = "ALTER TABLE `discipline` " .
-               "\nCHANGE `discipline_id` `discipline_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `text` `text` varchar(255) NOT NULL;";
+    $query = "ALTER TABLE `discipline` 
+                CHANGE `discipline_id` `discipline_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `text` `text` varchar(255) NOT NULL;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `functions_mediboard` " .
-               "\nCHANGE `function_id` `function_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `group_id` `group_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `text` `text` varchar(255) NOT NULL;";
+    $query = "ALTER TABLE `functions_mediboard` 
+                CHANGE `function_id` `function_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `group_id` `group_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `text` `text` varchar(255) NOT NULL;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `users_mediboard` " .
-               "\nCHANGE `user_id` `user_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `adeli` `adeli` int(9) unsigned zerofill NULL," .
-               "\nCHANGE `remote` `remote` enum('0','1') NULL," .
-               "\nCHANGE `discipline_id` `discipline_id` int(11) unsigned NULL;";
+    $query = "ALTER TABLE `users_mediboard` 
+                CHANGE `user_id` `user_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `adeli` `adeli` int(9) unsigned zerofill NULL,
+                CHANGE `remote` `remote` enum('0','1') NULL,
+                CHANGE `discipline_id` `discipline_id` int(11) unsigned NULL;";
     $this->addQuery($query);
 
     $this->makeRevision("0.17");
-    $query = "ALTER TABLE `users_mediboard` " .
-               "\nADD `commentaires`  text NULL," .
-               "\nADD `actif` enum('0','1') NOT NULL DEFAULT '1';";
+    $query = "ALTER TABLE `users_mediboard` 
+                ADD `commentaires`  text NULL,
+                ADD `actif` enum('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
 
     $this->makeRevision("0.18");
-    $query = "ALTER TABLE `users_mediboard` " .
-               "\nADD `deb_activite` datetime NULL," .
-               "\nADD `fin_activite` datetime NULL;";
+    $query = "ALTER TABLE `users_mediboard` 
+                ADD `deb_activite` datetime NULL,
+                ADD `fin_activite` datetime NULL;";
     $this->addQuery($query);
 
     $this->makeRevision("0.19");
-    $query = "ALTER TABLE `users_mediboard` " .
-               "\nCHANGE `deb_activite` `deb_activite` date NULL," .
-               "\nCHANGE `fin_activite` `fin_activite` date NULL;";
+    $query = "ALTER TABLE `users_mediboard` 
+                CHANGE `deb_activite` `deb_activite` date NULL,
+                CHANGE `fin_activite` `fin_activite` date NULL;";
     $this->addQuery($query);
 
     $this->makeRevision("0.20");
-    $query = "CREATE TABLE `spec_cpam` (" .
-            "\n`spec_cpam_id` TINYINT(4) UNSIGNED NOT NULL," .
-            "\n`text` VARCHAR(255) NOT NULL," .
-            "\n`actes` VARCHAR(255) NOT NULL," .
-            "\nPRIMARY KEY (`spec_cpam_id`)" .
-            "\n) /*! ENGINE=MyISAM */;";
+    $query = "CREATE TABLE `spec_cpam` (
+               `spec_cpam_id` TINYINT(4) UNSIGNED NOT NULL,
+               `text` VARCHAR(255) NOT NULL,
+               `actes` VARCHAR(255) NOT NULL,
+               PRIMARY KEY (`spec_cpam_id`)
+               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `users_mediboard` ADD `spec_cpam_id` TINYINT(4) DEFAULT NULL AFTER `discipline_id`";
     $this->addQuery($query);
@@ -439,13 +445,13 @@ class CSetupmediusers extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("0.23");
-    $query = "ALTER TABLE `functions_mediboard` " .
-               "\nADD `adresse` TEXT NULL," .
-               "\nADD `cp` int(5) unsigned zerofill NULL," .
-               "\nADD `ville` VARCHAR( 50 ) NULL," .
-               "\nADD `tel` bigint(10) unsigned zerofill NULL," .
-               "\nADD `fax` bigint(10) unsigned zerofill NULL," .
-               "\nADD `soustitre` TEXT NULL;";
+    $query = "ALTER TABLE `functions_mediboard` 
+                ADD `adresse` TEXT NULL,
+                ADD `cp` int(5) unsigned zerofill NULL,
+                ADD `ville` VARCHAR( 50 ) NULL,
+                ADD `tel` bigint(10) unsigned zerofill NULL,
+                ADD `fax` bigint(10) unsigned zerofill NULL,
+                ADD `soustitre` TEXT NULL;";
     $this->addQuery($query);
 
     $this->makeRevision("0.24");

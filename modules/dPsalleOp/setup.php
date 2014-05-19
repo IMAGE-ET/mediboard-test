@@ -22,18 +22,18 @@ class CSetupdPsalleOp extends CSetup {
     foreach ($check_list as $title => $cat) {
       // Ajout de la catégorie
       $query = "INSERT INTO `daily_check_item_category` (`title`, `desc`, `target_class`, `type`) VALUES
-                               (%1, %2, '$object_class', %3)";
+                               (?1, ?2, '$object_class', ?3)";
       $query = $this->ds->prepare($query, $title, $cat[1], $cat[0]);
       $this->addQuery($query);
 
       // Ajout des élements
       foreach ($cat[2] as $i => $type) {
         $query = "INSERT INTO `daily_check_item_type` (`title`, `active`, `attribute`, `category_id`, `index`, `default_value`) VALUES
-                    (%1, '1', %2, (
+                    (?1, '1', ?2, (
                       SELECT `daily_check_item_category_id`
                       FROM `daily_check_item_category`
-                      WHERE `title` = %3 AND `target_class` = '$object_class' AND `type` = %4
-                    ), %5, %6)";
+                      WHERE `title` = ?3 AND `target_class` = '$object_class' AND `type` = ?4
+                    ), ?5, ?6)";
         $query = $this->ds->prepare($query, $type[0], $type[1], $title, $cat[0], $i+1, $type[2]);
         $this->addQuery($query);
       }
@@ -160,6 +160,67 @@ class CSetupdPsalleOp extends CSetup {
         `daily_check_item_type`.`index` = '$index'";
       $this->addQuery($query);
     }
+  }
+
+  /**
+   * Creation des index (pas au sens index SQL, mais pour ordonner les types dans chanque catégorie)
+   *
+   * @return bool
+   */
+  protected function addCheckItemsIndex(){
+    $ds = $this->ds;
+
+    $sub_query = "SELECT `daily_check_item_category`.`daily_check_item_category_id` FROM `daily_check_item_category`";
+    $categories = $ds->loadList($sub_query);
+
+    foreach ($categories as $_category) {
+      $id = reset($_category);
+      $sub_query = "SELECT `daily_check_item_type`.`daily_check_item_type_id`
+          FROM `daily_check_item_type`
+          WHERE `daily_check_item_type`.`category_id` = '$id'";
+
+      $types = $ds->loadList($sub_query);
+
+      foreach ($types as $_index => $_type) {
+        $type_id = reset($_type);
+        $_index++;
+
+        $update_query = "UPDATE `daily_check_item_type`
+            SET `daily_check_item_type`.`index` = '$_index'
+            WHERE `daily_check_item_type`.`daily_check_item_type_id` = '$type_id'";
+        $ds->exec($update_query);
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * Add a group_id to the check lists
+   *
+   * @return bool
+   */
+  protected function listToGroup(){
+    $ds = $this->ds;
+
+    $query = "SELECT `daily_check_item_category`.`list_type_id`, `daily_check_item_type`.`group_id`
+        FROM `daily_check_item_type`
+        LEFT JOIN `daily_check_item_category`
+               ON `daily_check_item_category`.`daily_check_item_category_id` = `daily_check_item_type`.`category_id`
+        LEFT JOIN `daily_check_list_type`
+               ON `daily_check_list_type`.`daily_check_list_type_id` = `daily_check_item_category`.`list_type_id`
+        WHERE `daily_check_item_type`.`category_id` = `daily_check_item_category`.`daily_check_item_category_id`
+        AND `daily_check_item_category`.`list_type_id` IS NOT NULL
+        GROUP BY `daily_check_item_category`.`list_type_id`, `daily_check_item_type`.`group_id`";
+    $list_to_group = $ds->loadHashList($query);
+
+    foreach ($list_to_group as $list_type_id => $group_id) {
+      $query = "UPDATE `daily_check_list_type` SET
+           `group_id` = '$group_id'
+           WHERE `daily_check_list_type`.daily_check_list_type_id = '$list_type_id'";
+      $ds->exec($query);
+    }
+    return true;
   }
   
   function __construct() {
@@ -613,18 +674,18 @@ class CSetupdPsalleOp extends CSetup {
     );
     
     foreach ($category_changes as $title => $cat) {
-      $query = "INSERT INTO `daily_check_item_category` (`title`, `desc`, `target_class`, `type`) VALUES (%1, %2, 'COperation', %3)";
+      $query = "INSERT INTO `daily_check_item_category` (`title`, `desc`, `target_class`, `type`) VALUES (?1, ?2, 'COperation', ?3)";
       $query = $this->ds->prepare($query, $title, $cat[1], $cat[0]);
       $this->addQuery($query);
       
       foreach ($cat[2] as $type) {
         $query = "INSERT INTO `daily_check_item_type` (`title`, `active`, `attribute`, `category_id`) VALUES (
-                    %1, '1', %2, (
+                    ?1, '1', ?2, (
                       SELECT `daily_check_item_category_id`
                       FROM `daily_check_item_category`
-                      WHERE `title` = %3
+                      WHERE `title` = ?3
                       AND `target_class` = 'COperation'
-                      AND `type` = %4
+                      AND `type` = ?4
                     )
                   )";
         $query = $this->ds->prepare($query, $type[0], $type[1], $title, $cat[0]);
@@ -642,37 +703,8 @@ class CSetupdPsalleOp extends CSetup {
                 ADD `default_value` ENUM ('yes','no','nr','na') NOT NULL DEFAULT 'yes',
                 ADD `index` TINYINT (2) UNSIGNED NOT NULL";
     $this->addQuery($query);
-    
-    // creation des index (pas au sens index SQL, mais pour ordonner les types dans chanque catégorie)
-    function setup_addCheckItemsIndex($setup){
-      $ds = $setup->ds;
-      
-      $sub_query = "SELECT `daily_check_item_category`.`daily_check_item_category_id` FROM `daily_check_item_category`";
-      $categories = $ds->loadList($sub_query);
-      
-      foreach ($categories as $_category) {
-        $id = reset($_category);
-        $sub_query = "SELECT `daily_check_item_type`.`daily_check_item_type_id`
-          FROM `daily_check_item_type`
-          WHERE `daily_check_item_type`.`category_id` = '$id'";
-          
-        $types = $ds->loadList($sub_query);
-        
-        foreach ($types as $_index => $_type) {
-          $type_id = reset($_type);
-          $_index++;
-          
-          $update_query = "UPDATE `daily_check_item_type`
-            SET `daily_check_item_type`.`index` = '$_index' 
-            WHERE `daily_check_item_type`.`daily_check_item_type_id` = '$type_id'";
-          $ds->exec($update_query);
-        }
-      }
-      
-      return true;
-    }
-    
-    $this->addFunction("setup_addCheckItemsIndex");
+
+    $this->addMethod("addCheckItemsIndex");
     
     $this->makeRevision("0.37");
     
@@ -788,7 +820,7 @@ class CSetupdPsalleOp extends CSetup {
       $data      = $_type[3];
       
       $query = $this->ds->prepare("INSERT INTO `daily_check_item_type` (`title`, `attribute`, `default_value`, `index`, `active`, `category_id`)
-      VALUES (%1, %2, %3, %4, '1', (
+      VALUES (?1, ?2, ?3, ?4, '1', (
         SELECT daily_check_item_category.daily_check_item_category_id
         FROM daily_check_item_category
         WHERE 
@@ -1205,27 +1237,7 @@ class CSetupdPsalleOp extends CSetup {
 
     $this->makeRevision("0.48");
 
-    function listToGroup($setup){
-      $query = "SELECT `daily_check_item_category`.`list_type_id`, `daily_check_item_type`.`group_id`
-        FROM `daily_check_item_type`
-        LEFT JOIN `daily_check_item_category`
-               ON `daily_check_item_category`.`daily_check_item_category_id` = `daily_check_item_type`.`category_id`
-        LEFT JOIN `daily_check_list_type`
-               ON `daily_check_list_type`.`daily_check_list_type_id` = `daily_check_item_category`.`list_type_id`
-        WHERE `daily_check_item_type`.`category_id` = `daily_check_item_category`.`daily_check_item_category_id`
-        AND `daily_check_item_category`.`list_type_id` IS NOT NULL
-        GROUP BY `daily_check_item_category`.`list_type_id`, `daily_check_item_type`.`group_id`";
-      $list_to_group = $setup->ds->loadHashList($query);
-
-      foreach ($list_to_group as $list_type_id => $group_id) {
-        $query = "UPDATE `daily_check_list_type` SET
-           `group_id` = '$group_id'
-           WHERE `daily_check_list_type`.daily_check_list_type_id = '$list_type_id'";
-        $setup->ds->exec($query);
-      }
-      return true;
-    }
-    $this->addFunction("listToGroup");
+    $this->addMethod("listToGroup");
 
     $query = "INSERT INTO `daily_check_list_type_link` (`object_class`, `object_id`, `list_type_id`)
                 SELECT `object_class`, `object_id`, `daily_check_list_type_id` FROM `daily_check_list_type`";

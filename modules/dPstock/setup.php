@@ -605,33 +605,6 @@ class CSetupdPstock extends CSetup {
     $query = "ALTER TABLE `product_stock_group` CHANGE `quantity` `quantity` INT( 11 ) NOT NULL";
     $this->addQuery($query);
 
-    $this->makeRevision("1.28");
-
-    // @todo ce callback pourra etre supprimé, car devenu inutile
-    // (toutes les cliniques l'ont passé et a l'install il n'existe aucune commande)
-    function updateOrdersReceivedStatus() {
-      $order = new CProductOrder;
-
-      $where = array(
-        "product_order.received"  => " = '0'", // enum('0', '1')
-        "product_order.cancelled" => " = 0",
-        "product_order.deleted"   => " = 0",
-      );
-
-      /** @var CProductOrder[] $orders */
-      $orders = $order->loadList($where);
-
-      foreach ($orders as $_order) {
-        if ($_order->countReceivedItems() >= $_order->countBackRefs("order_items")) {
-          $_order->received = 1;
-          $_order->store();
-        }
-      }
-
-      return true;
-    }
-    $this->addFunction("updateOrdersReceivedStatus");
-
     $this->makeRevision("1.29");
     $query = "ALTER TABLE `product` ADD `scc_code` BIGINT (10) UNSIGNED ZEROFILL";
     $this->addQuery($query);

@@ -127,6 +127,7 @@ class CModule extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'modules';
     $spec->key   = 'mod_id';
+    $spec->uniques["name"] = array("mod_name");
     return $spec;
   }
 
@@ -281,7 +282,10 @@ class CModule extends CMbObject {
   function canAdmin() {
     return $this->_canEdit = $this->getView(PERM_EDIT);
   }
-  
+
+  /**
+   * @see parent::canDo()
+   */
   function canDo(){
     if (!$this->_can) {
       $canDo = new CCanDo;
@@ -294,6 +298,13 @@ class CModule extends CMbObject {
     return $this->_can;
   }
 
+  /**
+   * Load the list of visible modules
+   *
+   * @param bool $shm Use shared memory
+   *
+   * @return void
+   */
   static function loadModules($shm = true) {
     // @todo Experiment, then remove test if no problem
     if ($shm) {
@@ -310,19 +321,19 @@ class CModule extends CMbObject {
       $modules = $module->loadList(null, "mod_ui_order");
     }
 
-    // Catagories
-    /**
-     * @var $module CModule
-     */
+    /** @var $module CModule */
     foreach ($modules as &$module) {
       $module->checkModuleFiles();
       self::$installed[$module->mod_name] =& $module;
+
       if ($module->mod_active == 1) {
         self::$active[$module->mod_name] =& $module;  
-      } 
+      }
+
       if ($module->mod_ui_active == 1) {
         self::$visible[$module->mod_name] =& $module;
       }
+
       if ($module->_files_missing) {
         self::$absent[$module->mod_name] =& $module;
       }
@@ -344,15 +355,21 @@ class CModule extends CMbObject {
           $this->_tabs[] = $file;
         }
         break;
+
       case TAB_EDIT:
         if ($this->canEdit()) {
           $this->_tabs[] = $file;
         }
         break;
+
       case TAB_ADMIN:
         if ($this->canAdmin()) {
           $this->_tabs[] = $file;
         }
+        break;
+
+      default:
+        // nothing to do
         break;
     }
   }
@@ -366,7 +383,7 @@ class CModule extends CMbObject {
    */
   function getValidTab($tab){
     if (!$this->mod_active) {
-      return;
+      return null;
     }
     
     // Try to access wanted tab
@@ -538,42 +555,35 @@ class CModule extends CMbObject {
     $module = self::getInstalled($moduleName);
     return $module ? $module->canDo() : new CCanDo;
   }
-  
+
+  /**
+   * Reorder modules' ranks
+   *
+   * @return void
+   */
   function reorder() {
-    $query = "SELECT * FROM modules ORDER BY mod_ui_order";
-    $result = $this->_spec->ds->exec($query);
+    /** @var self[] $all_modules */
+    $all_modules = $this->loadList(null, "mod_ui_order");
+
     $i = 1;
-    while ($row = $this->_spec->ds->fetchArray($result)) {
-      $query = "UPDATE modules SET mod_ui_order = '$i' WHERE mod_id = '".$row["mod_id"]."'";
-      $this->_spec->ds->exec($query);
-      $i++;
+    foreach ($all_modules as $_module) {
+      $_module->mod_ui_order = $i++;
+      $_module->store();
     }
   }
 
+  /**
+   * Install a module and reorders the list
+   *
+   * @return bool
+   */
   function install() {
-    $query = "SELECT mod_name FROM modules WHERE mod_name = '$this->mod_name'";
-    if ($this->_spec->ds->loadHash($query)) {
-      // the module is already installed
-      // TODO: check for older version - upgrade
+    if ($msg = $this->store()) {
       return false;
     }
-    
-    $this->store();
+
     $this->reorder();
     return true;
-  }
-
-  function remove() {
-    $query = "DELETE FROM modules WHERE mod_id = $this->mod_id";
-    if (!$this->_spec->ds->exec($query)) {
-      return $this->_spec->ds->error();
-    }
-    else {
-      $this->reorder();
-      $query = "DELETE FROM perm_module WHERE mod_id = $this->mod_id";
-      $this->_spec->ds->exec($query);
-      return null;
-    }
   }
 
   function move($dirn) {
@@ -594,6 +604,65 @@ class CModule extends CMbObject {
     $this->mod_id = $temp;
     
     $this->reorder();
+  }
+
+  /**
+   * Upgrade all modules
+   *
+   * @return void
+   */
+  static function upgradeAll() {
+    $module = new self();
+
+    /** @var self[] $installed */
+    $installed = $module->loadList();
+
+    $upgradeables = array();
+
+    foreach ($installed as $_module) {
+      $setupClass = "CSetup$_module->mod_name";
+      if (!class_exists($setupClass)) {
+        continue;
+      }
+
+      /** @var CSetup $setup */
+      $setup = new $setupClass;
+      $_module->compareToSetup($setup);
+
+      if ($_module->_upgradable) {
+        $upgradeables[$_module->mod_name] = array(
+          "module" => $_module,
+          "setup"  => $setup,
+        );
+      }
+    }
+
+    foreach ($upgradeables as $_upgrade) {
+      /** @var CModule $_module */
+      $_module = $_upgrade["module"];
+
+      /** @var CSetup $_setup */
+      $_setup  = $_upgrade["setup"];
+
+      if ($_module->mod_version = $_setup->upgrade($_module->mod_version)) {
+        $_module->mod_type = $_setup->mod_type;
+        $_module->store();
+
+        if ($_setup->mod_version == $_module->mod_version) {
+          CAppUI::setMsg("Installation de '%s' à la version %s", UI_MSG_OK, $_module->mod_name, $_setup->mod_version);
+        }
+        else {
+          CAppUI::setMsg(
+            "Installation de '$_module->mod_name' à la version $_module->mod_version sur $_setup->mod_version",
+            UI_MSG_WARNING,
+            true
+          );
+        }
+      }
+      else {
+        CAppUI::setMsg("Module '%s' non mis à jour", UI_MSG_WARNING, $_module->mod_name);
+      }
+    }
   }
 }
 

@@ -13,8 +13,10 @@
 // Distribution configuration
 require __DIR__."/config_dist.php";
 
-// Local configuration
-require __DIR__."/config.php";
+// Local configuration, if it exists (does not exist when installing)
+if (file_exists(__DIR__."/config.php")) {
+  include __DIR__."/config.php";
+}
 
 // Modules configuration 
 // !!!! doesn't work when the code is here and not in config_dist.php, don't know why

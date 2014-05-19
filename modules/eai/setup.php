@@ -16,6 +16,157 @@
  */
 
 class CSetupeai extends CSetup {
+  /**
+   * Create domains
+   *
+   * @return bool
+   */
+  protected function createDomain() {
+    $ds = $this->ds;
+
+    $groups = $ds->loadList("SELECT * FROM groups_mediboard");
+
+    $tab = array(
+      "CPatient", "CSejour"
+    );
+
+    foreach ($groups as $_group) {
+      $group_id = $_group["group_id"];
+
+      $group_configs = $ds->loadHash("SELECT * FROM groups_config WHERE object_id = '$group_id'");
+
+      foreach ($tab as $object_class) {
+        if ($object_class == "CPatient") {
+          $tag_group = CPatient::getTagIPP($group_id);
+          if (!$group_configs || !array_key_exists("ipp_range_min", $group_configs)) {
+            continue;
+          }
+          $range_min = $group_configs["ipp_range_min"];
+          $range_max = $group_configs["ipp_range_max"];
+        }
+        else {
+          $tag_group = CSejour::getTagNDA($group_id);
+          if (!$group_configs || !array_key_exists("nda_range_min", $group_configs)) {
+            continue;
+          }
+          $range_min = $group_configs["nda_range_min"];
+          $range_max = $group_configs["nda_range_max"];
+        }
+
+        // Insert domain
+        $query = "INSERT INTO `domain` (`domain_id`, `incrementer_id`, `actor_id`, `actor_class`, `tag`)
+                      VALUES (NULL, NULL, NULL, NULL, '$tag_group');";
+        $ds->query($query);
+        $domain_id = $ds->insertId();
+
+        // Insert group domain
+        $query = "INSERT INTO `group_domain` (`group_domain_id`, `group_id`, `domain_id`, `object_class`, `master`)
+                      VALUES (NULL, '$group_id', '$domain_id', '$object_class', '1');";
+        $ds->query($query);
+
+        // Select incrementer for this group
+        $select = "SELECT *
+                     FROM `incrementer`
+                     LEFT JOIN `domain` ON `incrementer`.`incrementer_id` = `domain`.`incrementer_id`
+                     LEFT JOIN `group_domain` ON `domain`.`domain_id` = `group_domain`.`domain_id`
+                     WHERE `incrementer`.`object_class` = '$object_class'
+                     AND `group_domain`.`group_id` = '$group_id';";
+        $incrementer = $ds->loadHash($select);
+
+        $incrementer_id = $incrementer["incrementer_id"];
+
+        if ($incrementer_id) {
+          // Update domain with incrementer_id
+          $query = "UPDATE `domain`
+                      SET `incrementer_id` = '$incrementer_id'
+                      WHERE `domain_id` = '$domain_id';";
+          $ds->query($query);
+
+          // Update incrementer
+          if (!array_key_exists("nda_range_min", $group_configs) || !$range_max || $range_min === null) {
+            continue;
+          }
+          $query = "UPDATE `incrementer`
+                      SET `range_min` = '$range_min', `range_max` = '$range_max'
+                      WHERE `incrementer_id` = '$incrementer_id';";
+          $ds->query($query);
+        }
+      }
+    }
+
+    // Update constraints to stick to the event
+    return true;
+  }
+
+  /**
+   * Update domain range
+   *
+   * @return bool
+   */
+  protected function updateRangeDomain() {
+    $ds = $this->ds;
+
+    $groups = $ds->loadList("SELECT * FROM groups_mediboard");
+
+    $tab = array(
+      "CPatient", "CSejour"
+    );
+
+    foreach ($groups as $_group) {
+      $group_id = $_group["group_id"];
+
+      $group_configs = $ds->loadHash("SELECT * FROM groups_config WHERE object_id = '$group_id'");
+
+      if (!$group_configs) {
+        continue;
+      }
+
+      foreach ($tab as $object_class) {
+        if ($object_class == "CPatient") {
+          if (!array_key_exists("ipp_range_min", $group_configs)) {
+            continue;
+          }
+          $range_min = $group_configs["ipp_range_min"];
+          $range_max = $group_configs["ipp_range_max"];
+        }
+        else {
+          if (!array_key_exists("nda_range_min", $group_configs)) {
+            continue;
+          }
+          $range_min = $group_configs["nda_range_min"];
+          $range_max = $group_configs["nda_range_max"];
+        }
+
+        // Select incrementer for this group
+        $select = "SELECT *
+                     FROM `incrementer`
+                     LEFT JOIN `domain` ON `incrementer`.`incrementer_id` = `domain`.`incrementer_id`
+                     LEFT JOIN `group_domain` ON `domain`.`domain_id` = `group_domain`.`domain_id`
+                     WHERE `incrementer`.`object_class` = '$object_class'
+                     AND `group_domain`.`group_id` = '$group_id'";
+        $incrementer = $ds->loadHash($select);
+
+        $incrementer_id = $incrementer["incrementer_id"];
+
+        if (!$incrementer_id) {
+          continue;
+        }
+
+        // Update incrementer
+        if (!array_key_exists("nda_range_min", $group_configs) || !$range_max || $range_min === null) {
+          continue;
+        }
+
+        $query = "UPDATE `incrementer`
+                    SET `range_min` = '$range_min', `range_max` = '$range_max'
+                    WHERE `incrementer_id` = '$incrementer_id';";
+        $ds->query($query);
+      }
+    }
+
+    // Update constraints to stick to the event
+    return true;
+  }
   
   function __construct() {
     parent::__construct();
@@ -160,85 +311,8 @@ class CSetupeai extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("0.11");
-    
-    function createDomain($setup) {
-      $ds = $setup->ds;
-      
-      $groups = $ds->loadList("SELECT * FROM groups_mediboard");
 
-      $tab = array(
-        "CPatient", "CSejour"
-      );
-
-      foreach ($groups as $_group) {
-        $group_id = $_group["group_id"];
-
-        $group_configs = $ds->loadHash("SELECT * FROM groups_config WHERE object_id = '$group_id'");
-
-        foreach ($tab as $object_class) {
-          if ($object_class == "CPatient") {
-            $tag_group = CPatient::getTagIPP($group_id);
-            if (!$group_configs || !array_key_exists("ipp_range_min", $group_configs)) {
-              continue;
-            }
-            $range_min = $group_configs["ipp_range_min"];
-            $range_max = $group_configs["ipp_range_max"];
-          }
-          else {
-            $tag_group = CSejour::getTagNDA($group_id);
-            if (!$group_configs || !array_key_exists("nda_range_min", $group_configs)) {
-              continue;
-            }
-            $range_min = $group_configs["nda_range_min"];
-            $range_max = $group_configs["nda_range_max"];
-          }
-
-          // Insert domain
-          $query = "INSERT INTO `domain` (`domain_id`, `incrementer_id`, `actor_id`, `actor_class`, `tag`) 
-                      VALUES (NULL, NULL, NULL, NULL, '$tag_group');";
-          $ds->query($query);
-          $domain_id = $ds->insertId();
-          
-          // Insert group domain
-          $query = "INSERT INTO `group_domain` (`group_domain_id`, `group_id`, `domain_id`, `object_class`, `master`) 
-                      VALUES (NULL, '$group_id', '$domain_id', '$object_class', '1');";
-          $ds->query($query);
-          
-          // Select incrementer for this group
-          $select = "SELECT *
-                     FROM `incrementer`
-                     LEFT JOIN `domain` ON `incrementer`.`incrementer_id` = `domain`.`incrementer_id`
-                     LEFT JOIN `group_domain` ON `domain`.`domain_id` = `group_domain`.`domain_id`
-                     WHERE `incrementer`.`object_class` = '$object_class'
-                     AND `group_domain`.`group_id` = '$group_id';";
-          $incrementer = $ds->loadHash($select);
-          
-          $incrementer_id = $incrementer["incrementer_id"];
-          
-          if ($incrementer_id) {
-            // Update domain with incrementer_id
-            $query = "UPDATE `domain` 
-                      SET `incrementer_id` = '$incrementer_id'
-                      WHERE `domain_id` = '$domain_id';";
-            $ds->query($query);
-            
-            // Update incrementer
-            if (!array_key_exists("nda_range_min", $group_configs) || !$range_max || $range_min === null) {
-              continue;
-            }
-            $query = "UPDATE `incrementer` 
-                      SET `range_min` = '$range_min', `range_max` = '$range_max'
-                      WHERE `incrementer_id` = '$incrementer_id';";
-            $ds->query($query);
-          }
-        }
-      }
-        
-        // Update constraints to stick to the event
-      return true;
-    }
-
-    $this->addFunction("createDomain");
+    $this->addMethod("createDomain");
     
     $this->makeRevision("0.12");
     
@@ -296,72 +370,7 @@ class CSetupeai extends CSetup {
 
     $this->addDependency("dPsante400", "0.26");
 
-    function updateRangeDomain($setup) {
-      $ds = $setup->ds;
-
-      $groups = $ds->loadList("SELECT * FROM groups_mediboard");
-
-      $tab = array(
-        "CPatient", "CSejour"
-      );
-
-      foreach ($groups as $_group) {
-        $group_id = $_group["group_id"];
-
-        $group_configs = $ds->loadHash("SELECT * FROM groups_config WHERE object_id = '$group_id'");
-
-        if (!$group_configs) {
-          continue;
-        }
-
-        foreach ($tab as $object_class) {
-          if ($object_class == "CPatient") {
-            if (!array_key_exists("ipp_range_min", $group_configs)) {
-              continue;
-            }
-            $range_min = $group_configs["ipp_range_min"];
-            $range_max = $group_configs["ipp_range_max"];
-          }
-          else {
-            if (!array_key_exists("nda_range_min", $group_configs)) {
-              continue;
-            }
-            $range_min = $group_configs["nda_range_min"];
-            $range_max = $group_configs["nda_range_max"];
-          }
-
-          // Select incrementer for this group
-          $select = "SELECT *
-                     FROM `incrementer`
-                     LEFT JOIN `domain` ON `incrementer`.`incrementer_id` = `domain`.`incrementer_id`
-                     LEFT JOIN `group_domain` ON `domain`.`domain_id` = `group_domain`.`domain_id`
-                     WHERE `incrementer`.`object_class` = '$object_class'
-                     AND `group_domain`.`group_id` = '$group_id'";
-          $incrementer = $ds->loadHash($select);
-
-          $incrementer_id = $incrementer["incrementer_id"];
-
-          if (!$incrementer_id) {
-            continue;
-          }
-
-          // Update incrementer
-          if (!array_key_exists("nda_range_min", $group_configs) || !$range_max || $range_min === null) {
-            continue;
-          }
-
-          $query = "UPDATE `incrementer`
-                    SET `range_min` = '$range_min', `range_max` = '$range_max'
-                    WHERE `incrementer_id` = '$incrementer_id';";
-          $ds->query($query);
-        }
-      }
-
-      // Update constraints to stick to the event
-      return true;
-    }
-
-    $this->addFunction("updateRangeDomain");
+    $this->addMethod("updateRangeDomain");
 
     $this->makeRevision("0.18");
 

@@ -64,6 +64,22 @@ class CSetuphl7 extends CSetup {
                 WHERE $nameTable.name LIKE 'CReceiverIHE-%';";
     $this->addQuery($query);
   }
+
+  /**
+   * Check HL7v2 tables presence
+   *
+   * @return bool
+   */
+  protected function checkHL7v2Tables() {
+    $dshl7 = CSQLDataSource::get("hl7v2", true);
+
+    if (!$dshl7 || !$dshl7->loadTable("table_entry")) {
+      CAppUI::setMsg("CHL7v2Tables-missing", UI_MSG_ERROR);
+      return false;
+    }
+
+    return true;
+  }
   
   function __construct() {
     parent::__construct();
@@ -72,18 +88,8 @@ class CSetuphl7 extends CSetup {
     $this->makeRevision("all");
     
     $this->makeRevision("0.01");
-       
-    function checkHL7v2Tables() {
-      $dshl7 = CSQLDataSource::get("hl7v2", true);
-    
-      if (!$dshl7 || !$dshl7->loadTable("table_entry")) {
-        CAppUI::setMsg("CHL7v2Tables-missing", UI_MSG_ERROR);
-        return false;
-      }
-      
-      return true;
-    }
-    $this->addFunction("checkHL7v2Tables");
+
+    $this->addMethod("checkHL7v2Tables");
        
     $this->makeRevision("0.02");
   

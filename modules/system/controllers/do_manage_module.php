@@ -21,12 +21,16 @@ if ($cmd == "upgrade-core") {
   // we deactivate errors under error
   $old_er = error_reporting(E_ERROR);
 
-  $module = new CModule;
+  $module = new CModule();
   $module->mod_type = "core";
+
+  /** @var CModule[] $list_modules */
   $list_modules = $module->loadMatchingList();
   
   foreach ($list_modules as $module) {
     $setupClass = "CSetup$module->mod_name";
+
+    /** @var CSetup $setup */
     $setup = new $setupClass;
     if ($module->mod_version = $setup->upgrade($module->mod_version)) {
       $module->mod_type = $setup->mod_type;
@@ -107,7 +111,7 @@ switch ($cmd) {
     $success = ($module->_files_missing ? true : $setup->remove());
     
     if ($success !== null) {
-      $module->remove();
+      $module->delete();
       CAppUI::setMsg("CModule-msg-removed", $success ? UI_MSG_OK : UI_MSG_ERROR, true);
     }
     break;

@@ -62,7 +62,7 @@ class CPermModule extends CMbObject {
   function getProps() {
     $props = parent::getProps();
     $props["user_id"]     = "ref notNull class|CUser cascade";
-    $props["mod_id"]      = "ref class|CModule";
+    $props["mod_id"]      = "ref class|CModule cascade";
     $props["permission"]  = "enum list|0|1|2";
     $props["view"]        = "enum list|0|1|2";
 

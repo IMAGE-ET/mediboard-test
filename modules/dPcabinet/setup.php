@@ -10,6 +10,72 @@
  */
 
 class CSetupdPcabinet extends CSetup {
+  /**
+   * Création des consults anesth liées à des consults d'anesthésistes
+   *
+   * @return bool
+   */
+  protected function consultAnesth(){
+    $ds = $this->ds;
+
+    $utypes_flip = array_flip(CUser::$types);
+    $id_anesth = $utypes_flip["Anesthésiste"];
+    $query = "SELECT users.user_id
+                  FROM users, users_mediboard
+                  WHERE users.user_id = users_mediboard.user_id
+                  AND users.user_type='$id_anesth'";
+    $result = $ds->loadList($query);
+    $listAnesthid = array();
+    foreach ($result as $keyresult => $resultAnesth) {
+      $listAnesthid[$keyresult] = $result[$keyresult]["user_id"];
+    }
+
+    $in_anesth = CSQLDataSource::prepareIn($listAnesthid);
+    $query = "SELECT consultation.consultation_id FROM consultation
+                  LEFT JOIN consultation_anesth ON consultation.consultation_id = consultation_anesth.consultation_id
+                  LEFT JOIN plageconsult ON consultation.plageconsult_id = plageconsult.plageconsult_id
+                  WHERE plageconsult.chir_id $in_anesth AND consultation_anesth.consultation_anesth_id IS NULL" ;
+    $result = $ds->loadList($query);
+
+    foreach ($result as $keyresult => $resultAnesth) {
+      $consultAnesth = new CConsultAnesth;
+      $consultAnesth->consultation_anesth_id = 0;
+      $consultAnesth->consultation_id = $result[$keyresult]["consultation_id"];
+      $consultAnesth->store();
+    }
+    return true;
+  }
+
+  /**
+   * Nettoie les operation_id
+   *
+   * @return bool
+   */
+  protected function cleanOperationIdError(){
+    $ds = $this->ds;
+    $where = array();
+    $where["consultation_anesth.operation_id"] = "!= 0";
+    $where[] = "consultation_anesth.operation_id IS NOT NULL";
+    $where[] = "(SELECT COUNT(operations.operation_id) FROM operations WHERE operation_id=consultation_anesth.operation_id)=0";
+
+    $query = new CRequest();
+    $query->addSelect("consultation_anesth_id");
+    $query->addTable("consultation_anesth");
+    $query->addWhere($where);
+    $aKeyxAnesth = $ds->loadColumn($query->makeSelect());
+    if ($aKeyxAnesth === false) {
+      return false;
+    }
+    if (count($aKeyxAnesth)) {
+      $query = "UPDATE consultation_anesth SET operation_id = NULL WHERE (consultation_anesth_id ".
+        CSQLDataSource::prepareIn($aKeyxAnesth).")";
+      if (!$ds->exec($query)) {
+        return false;
+      }
+      return true;
+    }
+    return true;
+  }
   
   function __construct() {
     parent::__construct();
@@ -58,13 +124,13 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("0.22");
-    $query = "ALTER TABLE `consultation` " .
-            "\nADD `chrono` TINYINT DEFAULT '16' NOT NULL," .
-            "\nADD `annule` TINYINT DEFAULT '0' NOT NULL," .
-            "\nADD `paye` TINYINT DEFAULT '0' NOT NULL," .
-            "\nADD `cr_valide` TINYINT DEFAULT '0' NOT NULL," .
-            "\nADD `examen` TEXT," .
-            "\nADD `traitement` TEXT";
+    $query = "ALTER TABLE `consultation`
+                ADD `chrono` TINYINT DEFAULT '16' NOT NULL,
+                ADD `annule` TINYINT DEFAULT '0' NOT NULL,
+                ADD `paye` TINYINT DEFAULT '0' NOT NULL,
+                ADD `cr_valide` TINYINT DEFAULT '0' NOT NULL,
+                ADD `examen` TEXT,
+                ADD `traitement` TEXT";
     $this->addQuery($query);
     
     $this->makeRevision("0.23");
@@ -84,7 +150,7 @@ class CSetupdPcabinet extends CSetup {
                 ) /*! ENGINE=MyISAM */ COMMENT = 'table des tarifs de consultation';";
     $this->addQuery($query);
     $query = "ALTER TABLE `consultation` ADD `tarif` TINYINT,
-            ADD `type_tarif` ENUM( 'cheque', 'CB', 'especes', 'tiers', 'autre' ) ;";
+              ADD `type_tarif` ENUM( 'cheque', 'CB', 'especes', 'tiers', 'autre' ) ;";
     $this->addQuery($query);
     
     $this->makeRevision("0.25");
@@ -102,28 +168,28 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("0.26");
-    $query = "ALTER TABLE `consultation` " .
-            "\nADD `ordonnance` TEXT DEFAULT NULL," .
-            "\nADD `or_valide` TINYINT DEFAULT '0' NOT NULL"; 
+    $query = "ALTER TABLE `consultation`
+                ADD `ordonnance` TEXT DEFAULT NULL,
+                ADD `or_valide` TINYINT DEFAULT '0' NOT NULL";
     $this->addQuery($query);
     
     $this->makeRevision("0.27");
-    $query = "ALTER TABLE `consultation` " .
-            "\nADD `courrier1` TEXT DEFAULT NULL," .
-            "\nADD `c1_valide` TINYINT DEFAULT '0' NOT NULL"; 
+    $query = "ALTER TABLE `consultation`
+                ADD `courrier1` TEXT DEFAULT NULL,
+                ADD `c1_valide` TINYINT DEFAULT '0' NOT NULL";
     $this->addQuery($query);
-    $query = "ALTER TABLE `consultation` " .
-            "\nADD `courrier2` TEXT DEFAULT NULL," .
-            "\nADD `c2_valide` TINYINT DEFAULT '0' NOT NULL"; 
+    $query = "ALTER TABLE `consultation`
+                ADD `courrier2` TEXT DEFAULT NULL,
+                ADD `c2_valide` TINYINT DEFAULT '0' NOT NULL";
     $this->addQuery($query);
     
     $this->makeRevision("0.28");
     $query = "ALTER TABLE `consultation` ADD `date_paiement` DATE AFTER `paye` ;";
     $this->addQuery($query);
     $query = "UPDATE consultation, plageconsult
-          SET consultation.date_paiement = plageconsult.date
-          WHERE consultation.plageconsult_id = plageconsult.plageconsult_id
-          AND consultation.paye = 1"; 
+                SET consultation.date_paiement = plageconsult.date
+                WHERE consultation.plageconsult_id = plageconsult.plageconsult_id
+                AND consultation.paye = 1";
     $this->addQuery($query);
     
     $this->makeRevision("0.29");
@@ -150,22 +216,22 @@ class CSetupdPcabinet extends CSetup {
           PRIMARY KEY ( `consultation_anesth_id` ) ,
           INDEX ( `consultation_id`) ,
           INDEX ( `operation_id` )
-          ) /*! ENGINE=MyISAM */ COMMENT = 'Consultations d\'anesthésie';";
+          ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     // CR passage des champs à enregistrements supprimé car regressifs
     // $this->makeRevision("0.30");
     
     $this->makeRevision("0.31");
-    $query = "CREATE TABLE `examaudio` (" .
-          "\n`examaudio_id` INT NOT NULL AUTO_INCREMENT ," .
-          "\n`consultation_id` INT NOT NULL ," .
-          "\n`gauche_aerien` VARCHAR( 64 ) ," .
-          "\n`gauche_osseux` VARCHAR( 64 ) ," .
-          "\n`droite_aerien` VARCHAR( 64 ) ," .
-          "\n`droite_osseux` VARCHAR( 64 ) ," .
-          "\nPRIMARY KEY ( `examaudio_id` ) ," .
-          "\nINDEX ( `consultation_id` )) /*! ENGINE=MyISAM */";
+    $query = "CREATE TABLE `examaudio` (
+                `examaudio_id` INT NOT NULL AUTO_INCREMENT ,
+                `consultation_id` INT NOT NULL ,
+                `gauche_aerien` VARCHAR( 64 ) ,
+                `gauche_osseux` VARCHAR( 64 ) ,
+                `droite_aerien` VARCHAR( 64 ) ,
+                `droite_osseux` VARCHAR( 64 ) ,
+                PRIMARY KEY ( `examaudio_id` ) ,
+                INDEX ( `consultation_id` )) /*! ENGINE=MyISAM */";
     $this->addQuery($query);
     
     $this->makeRevision("0.32");
@@ -173,34 +239,34 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("0.33");
-    $query = "ALTER TABLE `examaudio` " .
-          "\nADD `remarques` TEXT AFTER `consultation_id`," .
-          "\nADD `gauche_conlat` VARCHAR( 64 ) ," .
-          "\nADD `gauche_ipslat` VARCHAR( 64 ) ," .
-          "\nADD `gauche_pasrep` VARCHAR( 64 ) ," .
-          "\nADD `gauche_vocale` VARCHAR( 64 ) ," .
-          "\nADD `gauche_tympan` VARCHAR( 64 ) ," .
-          "\nADD `droite_conlat` VARCHAR( 64 ) ," .
-          "\nADD `droite_ipslat` VARCHAR( 64 ) ," .
-          "\nADD `droite_pasrep` VARCHAR( 64 ) ," .
-          "\nADD `droite_vocale` VARCHAR( 64 ) ," .
-          "\nADD `droite_tympan` VARCHAR( 64 )";
+    $query = "ALTER TABLE `examaudio`
+                ADD `remarques` TEXT AFTER `consultation_id`,
+                ADD `gauche_conlat` VARCHAR( 64 ) ,
+                ADD `gauche_ipslat` VARCHAR( 64 ) ,
+                ADD `gauche_pasrep` VARCHAR( 64 ) ,
+                ADD `gauche_vocale` VARCHAR( 64 ) ,
+                ADD `gauche_tympan` VARCHAR( 64 ) ,
+                ADD `droite_conlat` VARCHAR( 64 ) ,
+                ADD `droite_ipslat` VARCHAR( 64 ) ,
+                ADD `droite_pasrep` VARCHAR( 64 ) ,
+                ADD `droite_vocale` VARCHAR( 64 ) ,
+                ADD `droite_tympan` VARCHAR( 64 )";
     $this->addQuery($query);
     
     $this->makeRevision("0.34");
     $query = "ALTER TABLE `consultation_anesth`
-          CHANGE `groupe` `groupe` ENUM( '?', '0', 'A', 'B', 'AB' ) DEFAULT '?' NOT NULL ,
-          CHANGE `rhesus` `rhesus` ENUM( '?', '+', '-' ) DEFAULT '?' NOT NULL ,
-          CHANGE `tabac` `tabac` ENUM( '?', '-', '+', '++' ) DEFAULT '?' NOT NULL ,
-          CHANGE `oenolisme` `oenolisme` ENUM( '?', '-', '+', '++' ) DEFAULT '?' NOT NULL ,
-          CHANGE `transfusions` `transfusions` ENUM( '?', '-', '+' ) DEFAULT '?' NOT NULL ,
-          CHANGE `intubation` `intubation` ENUM( '?', 'dents', 'bouche', 'cou' ) DEFAULT '?' NOT NULL ,
-          CHANGE `biologie` `biologie` ENUM( '?', 'NF', 'COAG', 'IONO' ) DEFAULT '?' NOT NULL ,
-          CHANGE `commande_sang` `commande_sang` ENUM( '?', 'clinique', 'CTS', 'autologue' ) DEFAULT '?' NOT NULL ;";
+                CHANGE `groupe` `groupe` ENUM( '?', '0', 'A', 'B', 'AB' ) DEFAULT '?' NOT NULL ,
+                CHANGE `rhesus` `rhesus` ENUM( '?', '+', '-' ) DEFAULT '?' NOT NULL ,
+                CHANGE `tabac` `tabac` ENUM( '?', '-', '+', '++' ) DEFAULT '?' NOT NULL ,
+                CHANGE `oenolisme` `oenolisme` ENUM( '?', '-', '+', '++' ) DEFAULT '?' NOT NULL ,
+                CHANGE `transfusions` `transfusions` ENUM( '?', '-', '+' ) DEFAULT '?' NOT NULL ,
+                CHANGE `intubation` `intubation` ENUM( '?', 'dents', 'bouche', 'cou' ) DEFAULT '?' NOT NULL ,
+                CHANGE `biologie` `biologie` ENUM( '?', 'NF', 'COAG', 'IONO' ) DEFAULT '?' NOT NULL ,
+                CHANGE `commande_sang` `commande_sang` ENUM( '?', 'clinique', 'CTS', 'autologue' ) DEFAULT '?' NOT NULL ;";
     $this->addQuery($query);
     $query = "ALTER TABLE `consultation_anesth`
-          CHANGE `tasys` `tasys` INT( 5 ) DEFAULT NULL ,
-          CHANGE `tadias` `tadias` INT( 5 ) DEFAULT NULL;";
+                CHANGE `tasys` `tasys` INT( 5 ) DEFAULT NULL ,
+                CHANGE `tadias` `tadias` INT( 5 ) DEFAULT NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.35");
@@ -208,9 +274,8 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("0.36");
-    $query = "ALTER TABLE `consultation_anesth`" .
-          "CHANGE `groupe` `groupe` ENUM( '?', 'O', 'A', 'B', 'AB' )" .
-          "DEFAULT '?' NOT NULL ;";
+    $query = "ALTER TABLE `consultation_anesth`
+                CHANGE `groupe` `groupe` ENUM( '?', 'O', 'A', 'B', 'AB' ) DEFAULT '?' NOT NULL ;";
     $this->addQuery($query);
     
     $this->makeRevision("0.37");
@@ -255,30 +320,30 @@ class CSetupdPcabinet extends CSetup {
                PRIMARY KEY ( `technique_id` )) /*! ENGINE=MyISAM */";
     $this->addQuery($query);
     $query = "ALTER TABLE `consultation_anesth`
-            ADD `rai` float default NULL,
-            ADD `hb` float default NULL,
-            ADD `tp` float default NULL,
-            ADD `tca` time NOT NULL default '00:00:00',
-            ADD `creatinine` float default NULL,
-            ADD `na` float default NULL,
-            ADD `k` float default NULL,
-            ADD `tsivy` time NOT NULL default '00:00:00',
-            ADD `plaquettes` INT(7) default NULL,
-            ADD `ht` float default NULL,
-            ADD `ecbu` ENUM( '?', 'NEG', 'POS' ) DEFAULT '?' NOT NULL,
-            ADD `ecbu_detail` TEXT,
-            ADD `pouls` INT(4) default NULL,
-            ADD `spo2` float default NULL;";
+                ADD `rai` float default NULL,
+                ADD `hb` float default NULL,
+                ADD `tp` float default NULL,
+                ADD `tca` time NOT NULL default '00:00:00',
+                ADD `creatinine` float default NULL,
+                ADD `na` float default NULL,
+                ADD `k` float default NULL,
+                ADD `tsivy` time NOT NULL default '00:00:00',
+                ADD `plaquettes` INT(7) default NULL,
+                ADD `ht` float default NULL,
+                ADD `ecbu` ENUM( '?', 'NEG', 'POS' ) DEFAULT '?' NOT NULL,
+                ADD `ecbu_detail` TEXT,
+                ADD `pouls` INT(4) default NULL,
+                ADD `spo2` float default NULL;";
     $this->addQuery($query);
     $query = "ALTER TABLE `consultation_anesth` CHANGE `operation_id` `operation_id` BIGINT( 20 ) NULL DEFAULT NULL;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `consultation_anesth` " .
-            "\nCHANGE `etatBucco` `etatBucco` TEXT DEFAULT NULL ," .
-            "\nCHANGE `conclusion` `conclusion` TEXT DEFAULT NULL ";
+    $query = "ALTER TABLE `consultation_anesth`
+                CHANGE `etatBucco` `etatBucco` TEXT DEFAULT NULL ,
+                CHANGE `conclusion` `conclusion` TEXT DEFAULT NULL ";
     $this->addQuery($query);
-    $query = "ALTER TABLE `consultation_anesth` " .
-            "\nCHANGE `tabac` `tabac` TEXT DEFAULT NULL ," .
-            "\nCHANGE `oenolisme` `oenolisme` TEXT DEFAULT NULL ";
+    $query = "ALTER TABLE `consultation_anesth`
+                CHANGE `tabac` `tabac` TEXT DEFAULT NULL ,
+                CHANGE `oenolisme` `oenolisme` TEXT DEFAULT NULL ";
     $this->addQuery($query);
     $query = "CREATE TABLE `exams_comp` (
                `exam_id` INT NOT NULL AUTO_INCREMENT ,
@@ -290,37 +355,7 @@ class CSetupdPcabinet extends CSetup {
     
     $this->makeRevision("0.44");
     $this->addDependency("mediusers", "0.1");
-    function setup_consultAnesth(){
-      $ds = CSQLDataSource::get("std");
- 
-      $utypes_flip = array_flip(CUser::$types);
-      $id_anesth = $utypes_flip["Anesthésiste"];
-      $query = "SELECT users.user_id" .
-             "\nFROM users, users_mediboard" .
-             "\nWHERE users.user_id = users_mediboard.user_id" .
-             "\nAND users.user_type='$id_anesth'";
-      $result = $ds->loadList($query);
-      $listAnesthid = array();
-      foreach ($result as $keyresult => $resultAnesth) {
-        $listAnesthid[$keyresult] = $result[$keyresult]["user_id"];
-      } 
-       
-      $query = "SELECT consultation.consultation_id FROM consultation" .
-             "\nLEFT JOIN consultation_anesth ON consultation.consultation_id = consultation_anesth.consultation_id" .
-             "\nLEFT JOIN plageconsult ON consultation.plageconsult_id = plageconsult.plageconsult_id" .
-             "\nWHERE plageconsult.chir_id " . CSQLDataSource::prepareIn($listAnesthid) .
-             "\nAND consultation_anesth.consultation_anesth_id IS NULL" ;  
-      $result = $ds->loadList($query);
-
-      foreach ($result as $keyresult => $resultAnesth) {
-        $consultAnesth = new CConsultAnesth;
-        $consultAnesth->consultation_anesth_id = 0;
-        $consultAnesth->consultation_id = $result[$keyresult]["consultation_id"];
-        $consultAnesth->store();
-      }
-      return true;
-    }
-    $this->addFunction("setup_consultAnesth");
+    $this->addMethod("consultAnesth");
     
     $this->makeRevision("0.45");
     $query = "ALTER TABLE `exams_comp` CHANGE `consult_id` `consultation_id` INT NOT NULL ;";
@@ -331,9 +366,9 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("0.46");
     $query = "ALTER TABLE `consultation_anesth` CHANGE `tca` `tca` TINYINT(2) NULL ;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `consultation_anesth` " .
-            "\nADD `tca_temoin` TINYINT(2) NULL AFTER `tca`," .
-            "\nADD `ht_final` FLOAT DEFAULT NULL AFTER `ht`;" ;
+    $query = "ALTER TABLE `consultation_anesth`
+                ADD `tca_temoin` TINYINT(2) NULL AFTER `tca`,
+                ADD `ht_final` FLOAT DEFAULT NULL AFTER `ht`;" ;
     $this->addQuery($query);
     $query = "ALTER TABLE `consultation_anesth` DROP `transfusions`";
     $this->addQuery($query);
@@ -351,82 +386,82 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($query);
     $query = "ALTER TABLE `consultation_anesth` DROP `ecbu_detail`";
     $this->addQuery($query);
-    $query = "ALTER TABLE `consultation_anesth` ".
-               "\nADD `premedication` TEXT," .
-               "\nADD `prepa_preop` TEXT;" ;
+    $query = "ALTER TABLE `consultation_anesth`
+                ADD `premedication` TEXT,
+                ADD `prepa_preop` TEXT;" ;
     $this->addQuery($query);
     
     $this->makeRevision("0.48");
     $this->setTimeLimit(1800);
-    $query = "ALTER TABLE `consultation_anesth` " .
-               "\nCHANGE `consultation_anesth_id` `consultation_anesth_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `consultation_id` `consultation_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `operation_id` `operation_id` int(11) unsigned NULL," .
-               "\nCHANGE `poid` `poid` float unsigned NULL," .
-               "\nCHANGE `rhesus` `rhesus` enum('?','NEG','POS') NOT NULL DEFAULT '?'," .
-               "\nCHANGE `rai` `rai` enum('?','NEG','POS') NOT NULL DEFAULT '?'," .
-               "\nCHANGE `tasys` `tasys` int(5) unsigned zerofill NULL," .
-               "\nCHANGE `tadias` `tadias` int(5) unsigned zerofill NULL," .
-               "\nCHANGE `plaquettes` `plaquettes` int(7) unsigned zerofill NULL," .
-               "\nCHANGE `pouls` `pouls` mediumint(4) unsigned zerofill NULL," .
-               "\nCHANGE `ASA` `ASA` enum('1','2','3','4','5') NULL," .
-               "\nCHANGE `tca` `tca` tinyint(2) unsigned zerofill NULL," .
-               "\nCHANGE `tca_temoin` `tca_temoin` tinyint(2) unsigned zerofill NULL;";
+    $query = "ALTER TABLE `consultation_anesth` 
+                CHANGE `consultation_anesth_id` `consultation_anesth_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `consultation_id` `consultation_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `operation_id` `operation_id` int(11) unsigned NULL,
+                CHANGE `poid` `poid` float unsigned NULL,
+                CHANGE `rhesus` `rhesus` enum('?','NEG','POS') NOT NULL DEFAULT '?',
+                CHANGE `rai` `rai` enum('?','NEG','POS') NOT NULL DEFAULT '?',
+                CHANGE `tasys` `tasys` int(5) unsigned zerofill NULL,
+                CHANGE `tadias` `tadias` int(5) unsigned zerofill NULL,
+                CHANGE `plaquettes` `plaquettes` int(7) unsigned zerofill NULL,
+                CHANGE `pouls` `pouls` mediumint(4) unsigned zerofill NULL,
+                CHANGE `ASA` `ASA` enum('1','2','3','4','5') NULL,
+                CHANGE `tca` `tca` tinyint(2) unsigned zerofill NULL,
+                CHANGE `tca_temoin` `tca_temoin` tinyint(2) unsigned zerofill NULL;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `consultation_anesth` " .
-               "\nDROP `listCim10`;";
+    $query = "ALTER TABLE `consultation_anesth` 
+                DROP `listCim10`;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `consultation` " .
-               "\nCHANGE `consultation_id` `consultation_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `plageconsult_id` `plageconsult_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `patient_id` `patient_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `duree` `duree` tinyint(1) unsigned zerofill NOT NULL DEFAULT '1'," .
-               "\nCHANGE `annule` `annule` enum('0','1') NOT NULL DEFAULT '0'," .
-               "\nCHANGE `chrono` `chrono` enum('16','32','48','64') NOT NULL DEFAULT '16'," .
-               "\nCHANGE `paye` `paye` enum('0','1') NOT NULL DEFAULT '0'," .
-               "\nCHANGE `premiere` `premiere` enum('0','1') NOT NULL DEFAULT '0'," .
-               "\nCHANGE `tarif` `tarif` varchar(255) NULL;";
+    $query = "ALTER TABLE `consultation` 
+                CHANGE `consultation_id` `consultation_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `plageconsult_id` `plageconsult_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `patient_id` `patient_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `duree` `duree` tinyint(1) unsigned zerofill NOT NULL DEFAULT '1',
+                CHANGE `annule` `annule` enum('0','1') NOT NULL DEFAULT '0',
+                CHANGE `chrono` `chrono` enum('16','32','48','64') NOT NULL DEFAULT '16',
+                CHANGE `paye` `paye` enum('0','1') NOT NULL DEFAULT '0',
+                CHANGE `premiere` `premiere` enum('0','1') NOT NULL DEFAULT '0',
+                CHANGE `tarif` `tarif` varchar(255) NULL;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `consultation` " .
-               "\nDROP `compte_rendu`," .
-               "\nDROP `cr_valide`," .
-               "\nDROP `ordonnance`," .
-               "\nDROP `or_valide`," .
-               "\nDROP `courrier1`," .
-               "\nDROP `c1_valide`," .
-               "\nDROP `courrier2`," .
-               "\nDROP `c2_valide`;";
+    $query = "ALTER TABLE `consultation` 
+                DROP `compte_rendu`,
+                DROP `cr_valide`,
+                DROP `ordonnance`,
+                DROP `or_valide`,
+                DROP `courrier1`,
+                DROP `c1_valide`,
+                DROP `courrier2`,
+                DROP `c2_valide`;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `examaudio` " .
-               "\nCHANGE `examaudio_id` `examaudio_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `consultation_id` `consultation_id` int(11) unsigned NOT NULL DEFAULT '0';";
+    $query = "ALTER TABLE `examaudio` 
+                CHANGE `examaudio_id` `examaudio_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `consultation_id` `consultation_id` int(11) unsigned NOT NULL DEFAULT '0';";
     $this->addQuery($query);
-    $query = "ALTER TABLE `exams_comp` " .
-               "\nCHANGE `exam_id` `exam_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `consultation_id` `consultation_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `fait` `fait` tinyint(4) NOT NULL DEFAULT '0';";
+    $query = "ALTER TABLE `exams_comp` 
+                CHANGE `exam_id` `exam_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `consultation_id` `consultation_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `fait` `fait` tinyint(4) NOT NULL DEFAULT '0';";
     $this->addQuery($query);
-    $query = "ALTER TABLE `plageconsult` " .
-               "\nCHANGE `plageconsult_id` `plageconsult_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `chir_id` `chir_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `libelle` `libelle` varchar(255) NULL;";
+    $query = "ALTER TABLE `plageconsult` 
+                CHANGE `plageconsult_id` `plageconsult_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `chir_id` `chir_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `libelle` `libelle` varchar(255) NULL;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `tarifs` " .
-               "\nCHANGE `tarif_id` `tarif_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `chir_id` `chir_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `description` `description` varchar(255) NOT NULL," .
-               "\nCHANGE `secteur1` `secteur1` float NOT NULL;";
+    $query = "ALTER TABLE `tarifs` 
+                CHANGE `tarif_id` `tarif_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `chir_id` `chir_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `description` `description` varchar(255) NOT NULL,
+                CHANGE `secteur1` `secteur1` float NOT NULL;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `techniques_anesth` " .
-               "\nCHANGE `technique_id` `technique_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `consultation_anesth_id` `consultation_anesth_id` int(11) unsigned NOT NULL DEFAULT '0';";
+    $query = "ALTER TABLE `techniques_anesth` 
+                CHANGE `technique_id` `technique_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `consultation_anesth_id` `consultation_anesth_id` int(11) unsigned NOT NULL DEFAULT '0';";
     $this->addQuery($query);
     
     $this->makeRevision("0.49");
-    $query = "ALTER TABLE `consultation_anesth` " .
-               "\nCHANGE `tasys` `tasys` TINYINT(4) NULL," .
-               "\nCHANGE `tadias` `tadias` TINYINT(4) NULL;";
+    $query = "ALTER TABLE `consultation_anesth` 
+                CHANGE `tasys` `tasys` TINYINT(4) NULL,
+                CHANGE `tadias` `tadias` TINYINT(4) NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.50");
@@ -491,48 +526,18 @@ class CSetupdPcabinet extends CSetup {
     
     $this->makeRevision("0.56");
     $this->addDependency("dPplanningOp", "0.63");
-    function setup_cleanOperationIdError(){
-      $ds = CSQLDataSource::get("std");
-      $where = array();
-      $where["consultation_anesth.operation_id"] = "!= 0";
-      $where[] = "consultation_anesth.operation_id IS NOT NULL";
-      $where[] = "(SELECT COUNT(operations.operation_id) FROM operations WHERE operation_id=consultation_anesth.operation_id)=0";
-      
-      $query = new CRequest();
-      $query->addSelect("consultation_anesth_id");
-      $query->addTable("consultation_anesth");
-      $query->addWhere($where);
-      $aKeyxAnesth = $ds->loadColumn($query->makeSelect());
-      if ($aKeyxAnesth === false) {
-        return false;
-      }
-      if (count($aKeyxAnesth)) {
-        $query = "UPDATE consultation_anesth SET operation_id = NULL WHERE (consultation_anesth_id ".
-          CSQLDataSource::prepareIn($aKeyxAnesth).")";
-        if (!$ds->exec($query)) {
-          return false;
-        }
-        return true;
-      }
-      return true;
-    }
-    $this->addFunction("setup_cleanOperationIdError");
+    $this->addMethod("cleanOperationIdError");
     
     $this->makeRevision("0.57");
     $this->setTimeLimit(1800);
-    $query = "ALTER TABLE `consultation` ADD INDEX ( `heure` )";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `consultation` ADD INDEX ( `annule` )";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `consultation` ADD INDEX ( `paye` )";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `consultation` ADD INDEX ( `date_paiement` )";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `plageconsult` ADD INDEX ( `date` )";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `plageconsult` ADD INDEX ( `debut` )";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `plageconsult` ADD INDEX ( `fin` )";
+    $query = "ALTER TABLE `consultation`
+                ADD INDEX ( `heure` ),
+                ADD INDEX ( `annule` ),
+                ADD INDEX ( `paye` ),
+                ADD INDEX ( `date_paiement` ),
+                ADD INDEX ( `date` ),
+                ADD INDEX ( `debut` ),
+                ADD INDEX ( `fin` )";
     $this->addQuery($query);
     
     $this->makeRevision("0.58");
@@ -579,9 +584,9 @@ class CSetupdPcabinet extends CSetup {
     $this->addPrefQuery("DefaultPeriod", "month");
     
     $this->makeRevision("0.62");
-    $query = "ALTER TABLE `tarifs` " .
-           "\nCHANGE `chir_id` `chir_id` int(11) unsigned NULL DEFAULT NULL," .
-           "\nCHANGE `function_id` `function_id` int(11) unsigned NULL DEFAULT NULL;";
+    $query = "ALTER TABLE `tarifs`
+                CHANGE `chir_id` `chir_id` int(11) unsigned NULL DEFAULT NULL,
+                CHANGE `function_id` `function_id` int(11) unsigned NULL DEFAULT NULL;";
     $this->addQuery($query);
     $query = "UPDATE `tarifs` SET function_id = NULL WHERE function_id='0';";
     $this->addQuery($query);
@@ -753,15 +758,6 @@ class CSetupdPcabinet extends CSetup {
       AND `oenolisme` <> ''
       AND `consultation`.`consultation_id` = `consultation_anesth`.`consultation_id`";
     $this->addQuery($query);
-
-    // Transfert des aides à la saisie
-    // @todo : A vérifier
-    /*$this->addDependency("dPcompteRendu", "0.30", true);
-    $query = "UPDATE `aide_saisie`
-      SET `class`='CAddiction',`depend_value`=`field`, `field`='addiction'
-      WHERE `class` = 'CConsultAnesth'
-      AND `field` IN('oenolisme','tabac')";
-    $this->addQuery($query);*/
     
     $this->makeRevision("0.78");
     $query = "ALTER TABLE `consultation` ADD `adresse` enum('0','1') NOT NULL DEFAULT '0'";
@@ -772,7 +768,7 @@ class CSetupdPcabinet extends CSetup {
     // Ne pas supprimer le champs listCim10 de la consultAnesth afin d'avoir fait l'import dans dPpatient
     $this->addDependency("dPpatients", "0.51");
     $query = "ALTER TABLE `consultation_anesth`
-            DROP `listCim10`;";
+                DROP `listCim10`;";
     $this->addQuery($query);
     
     $this->makeRevision("0.80");
@@ -936,9 +932,7 @@ class CSetupdPcabinet extends CSetup {
            `scoreIGS` INT(11), 
              PRIMARY KEY (`examigs_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-    
-    
-    
+
     $this->makeRevision("0.94");
     CApp::setTimeLimit(180);
     

@@ -19,9 +19,7 @@ class CSetup {
   public $mod_version;
   public $mod_type = "user";
   
-  /**
-   * @var CSQLDataSource
-   */
+  /** @var CSQLDataSource */
   public $ds;
 
   // Protected vars
@@ -37,7 +35,10 @@ class CSetup {
   public $config_moves = array();
   
   static private $_old_pref_system = null;
-  
+
+  /**
+   * Setup constructor, initializes the datasource
+   */
   function __construct() {
     $this->ds = CSQLDataSource::get("std");
   }
@@ -87,17 +88,29 @@ class CSetup {
     $this->makeRevision($revision);
     $this->addQuery("SELECT 0");
   }
-  
+
   /**
-   * Add a callback function to be executed
-   * The function must return true/false
-   * 
-   * @param callback $function The callback to execute
-   * 
+   * Add a callback method to be executed
+   * The method must return true/false
+   *
+   * @param string $method_name The methode to execute (from $this)
+   *
    * @return void
    */
-  function addFunction($function) {
-    $this->functions[current($this->revisions)][] = $function;
+  function addMethod($method_name) {
+    if (!is_string($method_name)) {
+      trigger_error("You must give a method name", E_USER_WARNING);
+      return;
+    }
+
+    $callable = array($this, $method_name);
+    if (!is_callable($callable)) {
+      $method = get_class($this).'->'.$method_name;
+      trigger_error("'$method' is not callable", E_USER_WARNING);
+      return;
+    }
+
+    $this->functions[current($this->revisions)][] = $callable;
   }
   
   /**
@@ -285,7 +298,7 @@ class CSetup {
       return;
     }
     
-    $query = "INSERT INTO `configuration` (`feature`, `value`) VALUES (%1, %2)";
+    $query = "INSERT INTO `configuration` (`feature`, `value`) VALUES (?1, ?2)";
     $query = $this->ds->prepare($query, $new_path, $config_value);
     $this->addQuery($query);
   }
@@ -343,9 +356,15 @@ class CSetup {
 
     if (
         !array_key_exists($oldRevision, $this->queries) &&
-        !array_key_exists($oldRevision, $this->config_moves
-    )) {
-      CAppUI::setMsg("No queries or config moves for '%s' setup at revision '%s'", UI_MSG_WARNING, $this->mod_name, $oldRevision);
+        !array_key_exists($oldRevision, $this->config_moves) &&
+        !array_key_exists($oldRevision, $this->functions)
+    ) {
+      CAppUI::setMsg(
+        "No queries, functions or config moves for '%s' setup at revision '%s'",
+        UI_MSG_WARNING,
+        $this->mod_name,
+        $oldRevision
+      );
       return null;
     }
     
@@ -354,6 +373,8 @@ class CSetup {
     while ($oldRevision != $currRevision = current($this->revisions)) {
       next($this->revisions);
     }
+
+    $depFailed = false;
     
     do {
       // Check for dependencies
@@ -361,24 +382,29 @@ class CSetup {
         $module = @CModule::getInstalled($dependency->module);
         if (!$module || $module->mod_version < $dependency->revision) {
           $depFailed = true;
-          CAppUI::setMsg("Failed module depency for '%s' at revision '%s'", UI_MSG_WARNING, $dependency->module, $dependency->revision);
+          CAppUI::setMsg(
+            "Failed module depency for '%s' at revision '%s'",
+            UI_MSG_WARNING,
+            $dependency->module,
+            $dependency->revision
+          );
         }
       }
         
-      if (@$depFailed) {
+      if ($depFailed) {
         return $currRevision;
       }
       
       // Set Time Limit
       if ($this->timeLimit[$currRevision]) {
-        set_time_limit($this->timeLimit[$currRevision]);
+        CApp::setTimeLimit($this->timeLimit[$currRevision]);
       }
 
       // Query upgrading
       foreach ($this->queries[$currRevision] as $_query) {
         list($query, $ignore_errors, $dsn) = $_query;
         $ds = ($dsn ? CSQLDataSource::get($dsn) : $this->ds); 
-        
+
         if (!$ds->exec($query)) {
           if ($ignore_errors) {
             CAppUI::setMsg("Errors ignored for revision '%s'", UI_MSG_OK, $currRevision);
@@ -391,8 +417,9 @@ class CSetup {
       
       // Callback upgrading
       foreach ($this->functions[$currRevision] as $function) {
-        if (!call_user_func($function, $this)) {
-          CAppUI::setMsg("Error in function '%s' call back for revision '%s': see logs", UI_MSG_ERROR, $function, $currRevision);
+        if (!call_user_func($function)) {
+          $function_name = get_class($function[0])."->".$function[1];
+          CAppUI::setMsg("Error in function '%s' call back for revision '%s': see logs", UI_MSG_ERROR, $function_name, $currRevision);
           return $currRevision;
         }
       }

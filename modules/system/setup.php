@@ -10,6 +10,346 @@
  */
 
 class CSetupsystem extends CSetup {
+  /**
+   * Update ExObject tables
+   *
+   * @return bool
+   */
+  protected function updateExObjectTables() {
+    $ds = $this->ds;
+
+    $ex_classes = $ds->loadList("SELECT * FROM ex_class");
+    foreach ($ex_classes as $_ex_class) {
+      $_ex_class['host_class'] = strtolower($_ex_class['host_class']);
+
+      $old_name = "ex_{$_ex_class['host_class']}_{$_ex_class['event']}_{$_ex_class['ex_class_id']}";
+      $new_name = "ex_object_{$_ex_class['ex_class_id']}";
+
+      $query = "RENAME TABLE `$old_name` TO `$new_name`";
+      $ds->query($query);
+    }
+
+    return true;
+  }
+
+  /**
+   * Add reference fields to exObjects
+   *
+   * @return bool
+   */
+  protected function addExReferenceFields(){
+    CApp::setTimeLimit(1800);
+
+    $ds = $this->ds;
+
+    // Changement des chirurgiens
+    $query = "SELECT ex_class_id FROM ex_class";
+    $list_ex_class = $ds->loadHashAssoc($query);
+    foreach ($list_ex_class as $key => $hash) {
+      $query = "ALTER TABLE `ex_object_$key`
+          ADD `reference_id` INT (11) UNSIGNED AFTER `object_class`,
+          ADD `reference_class` VARCHAR(80) AFTER `object_class`";
+      $ds->exec($query);
+    }
+    return true;
+  }
+
+  /**
+   * Add reference fields to exObjects, again
+   *
+   * @return bool
+   */
+  protected function addExReferenceFields2() {
+    CApp::setTimeLimit(1800);
+
+    $ds = $this->ds;
+
+    // Changement des chirurgiens
+    $query = "SELECT ex_class_id FROM ex_class";
+    $list_ex_class = $ds->loadHashAssoc($query);
+    foreach ($list_ex_class as $key => $hash) {
+      $query = "ALTER TABLE `ex_object_$key`
+      ADD `reference2_id` INT (11) UNSIGNED AFTER `reference_id`,
+      ADD `reference2_class` VARCHAR(80) AFTER `reference_id`";
+      $ds->exec($query);
+    }
+    return true;
+  }
+
+  /**
+   * Add reference fields indices
+   *
+   * @return bool
+   */
+  protected function addExReferenceFieldsIndex() {
+    CApp::setTimeLimit(1800);
+
+    $ds = $this->ds;
+
+    // Changement des chirurgiens
+    $query = "SELECT ex_class_id FROM ex_class";
+    $list_ex_class = $ds->loadHashAssoc($query);
+    foreach ($list_ex_class as $key => $hash) {
+      $query = "ALTER TABLE `ex_object_$key`
+          ADD INDEX(`reference_id`),
+          ADD INDEX(`reference_class`),
+          ADD INDEX(`reference2_id`),
+          ADD INDEX(`reference2_class`)";
+      $ds->exec($query);
+    }
+    return true;
+  }
+
+  /**
+   * Add a group_id to all the ex_objects
+   *
+   * @return bool
+   */
+  protected function addExObjectGroupId() {
+    CApp::setTimeLimit(1800);
+
+    $ds = $this->ds;
+
+    // Changement des ExClasses
+    $query = "SELECT ex_class_id, host_class FROM ex_class";
+    $list_ex_class = $ds->loadHashAssoc($query);
+    foreach ($list_ex_class as $key => $hash) {
+      $query = "ALTER TABLE `ex_object_$key`
+      ADD `group_id` INT (11) UNSIGNED NOT NULL AFTER `ex_object_id`";
+      $ds->exec($query);
+
+      $field_class = null;
+      $field_id = null;
+      switch ($hash["host_class"]) {
+        default:
+        case "CMbObject":
+          break;
+
+        case "CPrescriptionLineElement":
+        case "CPrescriptionLineMedicament":
+        case "COperation":
+        case "CConsultation":
+        case "CConsultAnesth":
+        case "CAdministration":
+          $field_class = "reference_class";
+          $field_id    = "reference_id";
+          break;
+
+        case "CSejour":
+          $field_class = "object_class";
+          $field_id    = "object_id";
+      }
+
+      if ($field_class && $field_id) {
+        $query = "UPDATE `ex_object_$key`
+            LEFT JOIN `sejour` ON `ex_object_$key`.`$field_id`    = `sejour`.`sejour_id` AND
+                  `ex_object_$key`.`$field_class` = 'CSejour'
+            SET `ex_object_$key`.`group_id` = `sejour`.`group_id`";
+        $ds->exec($query);
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * Create ex_class_events from events
+   *
+   * @return bool
+   */
+  protected function createExClassEvents() {
+    $ds = $this->ds;
+
+    $ex_classes = $ds->loadList("SELECT * FROM ex_class");
+
+    $specs = array();
+
+    foreach ($ex_classes as $_ex_class) {
+      $_ex_class = array_map(array($ds, "escape"), $_ex_class);
+      extract($_ex_class);
+
+      // Insert events
+      $query = "INSERT INTO ex_class_event(ex_class_id, host_class, event_name, disabled, unicity)
+                 VALUES ('$ex_class_id', '$host_class', '$event', '$disabled', '$unicity')";
+      $ds->query($query);
+      $event_id = $ds->insertId();
+
+      // Update constraints to stick to the event
+      $query = "UPDATE ex_class_constraint
+          SET ex_class_constraint.ex_class_event_id = '$event_id'
+          WHERE ex_class_id = '$ex_class_id'";
+      $ds->query($query);
+
+      $spec = null;
+      if (isset($specs[$host_class])) {
+        $spec = $specs[$host_class];
+      }
+      elseif ($host_class) {
+        $instance = new $host_class;
+        $spec = $specs[$host_class] = $instance->_spec->events;
+      }
+
+      if (!$spec) {
+        continue;
+      }
+
+      // Update host fields to stick to the event and ex_group_id
+      $ex_groups = $ds->loadList("SELECT * FROM ex_class_field_group WHERE ex_class_id = '$ex_class_id'");
+      foreach ($ex_groups as $_ex_group) {
+        $_ex_group = array_map(array($ds, "escape"), $_ex_group);
+        $_ex_group_id = $_ex_group["ex_class_field_group_id"];
+
+        // Ex class field report level (HOST)
+        $query = "UPDATE ex_class_field
+            SET report_class = '$host_class'
+            WHERE ex_group_id = '$_ex_group_id' AND report_level = 'host'";
+        $ds->query($query);
+
+        // Ex class host field (HOST)
+        $query = "UPDATE ex_class_host_field
+            SET host_class = '$host_class'
+            WHERE ex_group_id = '$_ex_group_id' AND host_type = 'host'";
+        $ds->query($query);
+
+        // Ex class field report levl (ref 1 and 2)
+        foreach (array(1, 2) as $i) {
+          $_class = $spec[$event]["reference$i"][0];
+
+          // Ex class field report level (REF)
+          $query = "UPDATE ex_class_field
+              SET report_class = '$_class'
+              WHERE ex_group_id = '$_ex_group_id' AND report_level = '$i'";
+          $ds->query($query);
+
+          // Ex class host field (REF)
+          $query = "UPDATE ex_class_host_field
+              SET host_class = '$_class'
+              WHERE ex_group_id = '$_ex_group_id' AND host_type = 'reference$i'";
+          $ds->query($query);
+        }
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * Add additionnal object field
+   *
+   * @return bool
+   */
+  protected function addExObjectAdditionalObject() {
+    $ds = $this->ds;
+
+    // Changement des ExClasses
+    $query = "SELECT ex_class_id, ex_class_id FROM ex_class";
+    $list_ex_class = $ds->loadHashAssoc($query);
+
+    foreach ($list_ex_class as $key => $hash) {
+      $query = "ALTER TABLE `ex_object_$key`
+                    ADD `additional_id` INT (11) UNSIGNED AFTER `reference2_class`,
+                    ADD `additional_class` VARCHAR(80) AFTER `additional_id`,
+                    ADD  INDEX `additional` ( `additional_class`, `additional_id` ),
+
+                    DROP INDEX `object_id`,
+                    DROP INDEX `object_class`,
+                    ADD  INDEX `object` ( `object_class`, `object_id` ),
+
+                    DROP INDEX `reference_id`,
+                    DROP INDEX `reference_class`,
+                    ADD  INDEX `reference1` ( `reference_class`, `reference_id` ),
+
+                    DROP INDEX `reference2_id`,
+                    DROP INDEX `reference2_class`,
+                    ADD  INDEX `reference2` ( `reference2_class`, `reference2_id` );";
+      $ds->exec($query);
+    }
+
+    return true;
+  }
+
+  /**
+   * Build ExLink table
+   *
+   * @usedb ex_class.ex_class_id, ex_link
+   *
+   * @return bool
+   */
+  protected function buildExLink() {
+    $ds = $this->ds;
+
+    // Changement des ExClasses
+    $query = "SELECT ex_class_id FROM ex_class";
+    $list_ex_class = $ds->loadColumn($query);
+
+    foreach ($list_ex_class as $ex_class_id) {
+      $query = "INSERT INTO `ex_link` (`ex_class_id`, `ex_object_id`, `object_id`, `object_class`, `group_id`, `level`)
+                     SELECT '$ex_class_id', `ex_object_id`, `object_id`, `object_class`, `group_id`, 'object' FROM `ex_object_$ex_class_id`";
+      $ds->exec($query);
+
+      $query = "INSERT INTO `ex_link` (`ex_class_id`, `ex_object_id`, `object_id`, `object_class`, `group_id`, `level`)
+                     SELECT '$ex_class_id', `ex_object_id`, `reference_id`, `reference_class`, `group_id`, 'ref1' FROM `ex_object_$ex_class_id`";
+      $ds->exec($query);
+
+      $query = "INSERT INTO `ex_link` (`ex_class_id`, `ex_object_id`, `object_id`, `object_class`, `group_id`, `level`)
+                     SELECT '$ex_class_id', `ex_object_id`, `reference2_id`, `reference2_class`, `group_id`, 'ref2' FROM `ex_object_$ex_class_id`";
+      $ds->exec($query);
+
+      $query = "INSERT INTO `ex_link` (`ex_class_id`, `ex_object_id`, `object_id`, `object_class`, `group_id`, `level`)
+                     SELECT '$ex_class_id', `ex_object_id`, `additional_id`, `additional_class`, `group_id`, 'add' FROM `ex_object_$ex_class_id`
+                     WHERE `additional_id` IS NOT NULL AND `additional_class` IS NOT NULL";
+      $ds->exec($query);
+    }
+
+    return true;
+  }
+
+  /**
+   * Remove zombie ex links
+   *
+   * @return bool
+   */
+  protected function removeZombieExLinks() {
+    $ds = $this->ds;
+
+    // Changement des ExClasses
+    $query = "SELECT ex_class_id FROM ex_class";
+    $list_ex_class = $ds->loadColumn($query);
+
+    foreach ($list_ex_class as $ex_class_id) {
+      $query = "DELETE FROM `ex_link` WHERE
+                    `ex_object_id` NOT IN(SELECT `ex_object_id` FROM `ex_object_$ex_class_id`) AND
+                    `ex_class_id` = '$ex_class_id';";
+      $ds->exec($query);
+    }
+
+    return true;
+  }
+
+  /**
+   * Create ex_objects_XX date and owner fields
+   *
+   * @return bool
+   */
+  protected function addExObjectDates() {
+    $ds = $this->ds;
+
+    // Changement des ExClasses
+    $query = "SELECT ex_class_id FROM ex_class";
+    $list_ex_class = $ds->loadColumn($query);
+
+    foreach ($list_ex_class as $ex_class_id) {
+      $query = "ALTER TABLE `ex_object_$ex_class_id`
+                    ADD `datetime_create` DATETIME AFTER `additional_class`,
+                    ADD `datetime_edit`   DATETIME AFTER `datetime_create`,
+                    ADD `owner_id`        INT(11) UNSIGNED AFTER `datetime_edit`,
+                    ADD INDEX (`owner_id`),
+                    ADD INDEX (`datetime_create`);";
+      $ds->exec($query);
+    }
+
+    return true;
+  }
 
   function __construct() {
     parent::__construct();
@@ -386,26 +726,8 @@ class CSetupsystem extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("1.0.51");
-    function update_ex_object_tables() {
-      $ds = CSQLDataSource::get("std");
 
-      if ($ds) {
-        $ex_classes = $ds->loadList("SELECT * FROM ex_class");
-        foreach ($ex_classes as $_ex_class) {
-          $_ex_class['host_class'] = strtolower($_ex_class['host_class']);
-
-          $old_name = "ex_{$_ex_class['host_class']}_{$_ex_class['event']}_{$_ex_class['ex_class_id']}";
-          $new_name = "ex_object_{$_ex_class['ex_class_id']}";
-
-          $query = "RENAME TABLE `$old_name` TO `$new_name`";
-          $ds->query($query);
-        }
-      }
-
-      return true;
-    }
-
-    $this->addFunction("update_ex_object_tables");
+    $this->addMethod("updateExObjectTables");
 
     $this->makeRevision("1.0.52");
     $query = "CREATE TABLE `view_sender` (
@@ -536,24 +858,7 @@ class CSetupsystem extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("1.0.65");
-    function setup_system_addExReferenceFields(){
-      CApp::setTimeLimit(1800);
-      ignore_user_abort(1);
-
-      $ds = CSQLDataSource::get("std");
-
-      // Changement des chirurgiens
-      $query = "SELECT ex_class_id FROM ex_class";
-      $list_ex_class = $ds->loadHashAssoc($query);
-      foreach ($list_ex_class as $key => $hash) {
-        $query = "ALTER TABLE `ex_object_$key` 
-          ADD `reference_id` INT (11) UNSIGNED AFTER `object_class`,
-          ADD `reference_class` VARCHAR(80) AFTER `object_class`";
-        $ds->exec($query);
-      }
-      return true;
-    }
-    $this->addFunction("setup_system_addExReferenceFields");
+    $this->addMethod("addExReferenceFields");
     $query = "ALTER TABLE `ex_class_field`
       ADD `reported` ENUM ('0','1') NOT NULL DEFAULT '0'";
     $this->addQuery($query);
@@ -565,24 +870,8 @@ class CSetupsystem extends CSetup {
 
     $this->makeRevision("1.0.67");
 
-    function setup_system_addExReferenceFields2() {
-      CApp::setTimeLimit(1800);
-      ignore_user_abort(1);
+    $this->addMethod("addExReferenceFields2");
 
-      $ds = CSQLDataSource::get("std");
-
-      // Changement des chirurgiens
-      $query = "SELECT ex_class_id FROM ex_class";
-      $list_ex_class = $ds->loadHashAssoc($query);
-      foreach ($list_ex_class as $key => $hash) {
-        $query = "ALTER TABLE `ex_object_$key` 
-      ADD `reference2_id` INT (11) UNSIGNED AFTER `reference_id`,
-      ADD `reference2_class` VARCHAR(80) AFTER `reference_id`";
-        $ds->exec($query);
-      }
-      return true;
-    }
-    $this->addFunction("setup_system_addExReferenceFields2");
     $query = "ALTER TABLE `ex_class_field` 
       CHANGE `reported` `report_level` ENUM ('1','2')";
     $this->addQuery($query);
@@ -754,26 +1043,8 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `ex_class_constraint` 
       ADD INDEX (`field`)";
     $this->addQuery($query);
-    function setup_system_addExReferenceFieldsIndex() {
-      CApp::setTimeLimit(1800);
-      ignore_user_abort(1);
 
-      $ds = CSQLDataSource::get("std");
-
-      // Changement des chirurgiens
-      $query = "SELECT ex_class_id FROM ex_class";
-      $list_ex_class = $ds->loadHashAssoc($query);
-      foreach ($list_ex_class as $key => $hash) {
-        $query = "ALTER TABLE `ex_object_$key` 
-          ADD INDEX(`reference_id`),
-          ADD INDEX(`reference_class`),
-          ADD INDEX(`reference2_id`),
-          ADD INDEX(`reference2_class`)";
-        $ds->exec($query);
-      }
-      return true;
-    }
-    $this->addFunction("setup_system_addExReferenceFieldsIndex");
+    $this->addMethod("addExReferenceFieldsIndex");
 
     $this->makeRevision("1.0.92");
 
@@ -810,53 +1081,7 @@ class CSetupsystem extends CSetup {
 
     $this->makeRevision("1.0.96");
 
-    function setup_system_addExObjectGroupId() {
-      CApp::setTimeLimit(1800);
-      ignore_user_abort(1);
-
-      $ds = CSQLDataSource::get("std");
-
-      // Changement des ExClasses
-      $query = "SELECT ex_class_id, host_class FROM ex_class";
-      $list_ex_class = $ds->loadHashAssoc($query);
-      foreach ($list_ex_class as $key => $hash) {
-        $query = "ALTER TABLE `ex_object_$key` 
-      ADD `group_id` INT (11) UNSIGNED NOT NULL AFTER `ex_object_id`";
-        $ds->exec($query);
-
-        $field_class = null;
-        $field_id = null;
-        switch ($hash["host_class"]) {
-          case "CMbObject":
-            break;
-
-          case "CPrescriptionLineElement":
-          case "CPrescriptionLineMedicament":
-          case "COperation":
-          case "CConsultation":
-          case "CConsultAnesth":
-          case "CAdministration":
-            $field_class = "reference_class";
-            $field_id    = "reference_id";
-            break;
-
-          case "CSejour":
-            $field_class = "object_class";
-            $field_id    = "object_id";
-        }
-
-        if ($field_class && $field_id) {
-          $query = "UPDATE `ex_object_$key` 
-            LEFT JOIN `sejour` ON `ex_object_$key`.`$field_id`    = `sejour`.`sejour_id` AND 
-                  `ex_object_$key`.`$field_class` = 'CSejour'
-            SET `ex_object_$key`.`group_id` = `sejour`.`group_id`";
-          $ds->exec($query);
-        }
-      }
-
-      return true;
-    }
-    $this->addFunction("setup_system_addExObjectGroupId");
+    $this->addMethod("addExObjectGroupId");
 
     $this->makeRevision("1.0.97");
     $query = "ALTER TABLE `view_sender` 
@@ -1033,85 +1258,8 @@ class CSetupsystem extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("1.1.14");
-    function createExClassEvents($setup) {
-      /** @var CSQLDataSource $ds */
-      $ds = $setup->ds;
 
-      $ex_classes = $ds->loadList("SELECT * FROM ex_class");
-
-      $specs = array();
-
-      foreach ($ex_classes as $_ex_class) {
-        $_ex_class = array_map(array($ds, "escape"), $_ex_class);
-        extract($_ex_class);
-
-        // Insert events
-        $query = "INSERT INTO ex_class_event(ex_class_id, host_class, event_name, disabled, unicity)
-                 VALUES ('$ex_class_id', '$host_class', '$event', '$disabled', '$unicity')";
-        $ds->query($query);
-        $event_id = $ds->insertId();
-
-        // Update constraints to stick to the event
-        $query = "UPDATE ex_class_constraint 
-          SET ex_class_constraint.ex_class_event_id = '$event_id' 
-          WHERE ex_class_id = '$ex_class_id'";
-        $ds->query($query);
-
-        $spec = null;
-        if (isset($specs[$host_class])) {
-          $spec = $specs[$host_class];
-        }
-        elseif ($host_class) {
-          $instance = new $host_class;
-          $spec = $specs[$host_class] = $instance->_spec->events;
-        }
-
-        if (!$spec) {
-          continue;
-        }
-
-        // Update host fields to stick to the event and ex_group_id
-        $ex_groups = $ds->loadList("SELECT * FROM ex_class_field_group WHERE ex_class_id = '$ex_class_id'");
-        foreach ($ex_groups as $_ex_group) {
-          $_ex_group = array_map(array($ds, "escape"), $_ex_group);
-          $_ex_group_id = $_ex_group["ex_class_field_group_id"];
-
-          // Ex class field report level (HOST)
-          $query = "UPDATE ex_class_field
-            SET report_class = '$host_class' 
-            WHERE ex_group_id = '$_ex_group_id' AND report_level = 'host'";
-          $ds->query($query);
-
-          // Ex class host field (HOST)
-          $query = "UPDATE ex_class_host_field
-            SET host_class = '$host_class' 
-            WHERE ex_group_id = '$_ex_group_id' AND host_type = 'host'";
-          $ds->query($query);
-
-          // Ex class field report levl (ref 1 and 2)
-          foreach (array(1, 2) as $i) {
-            $_class = $spec[$event]["reference$i"][0];
-
-            // Ex class field report level (REF)
-            $query = "UPDATE ex_class_field
-              SET report_class = '$_class' 
-              WHERE ex_group_id = '$_ex_group_id' AND report_level = '$i'";
-            $ds->query($query);
-
-            // Ex class host field (REF)
-            $query = "UPDATE ex_class_host_field
-              SET host_class = '$_class' 
-              WHERE ex_group_id = '$_ex_group_id' AND host_type = 'reference$i'";
-            $ds->query($query);
-          }
-        }
-      }
-
-      return true;
-    }
-
-    //createExClassEvents($this);
-    $this->addFunction("createExClassEvents");
+    $this->addMethod("createExClassEvents");
 
     $this->makeRevision("1.1.15");
     $query = "CREATE TABLE `ex_class_field_property` (
@@ -1403,37 +1551,7 @@ class CSetupsystem extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("1.1.42");
-    function setup_system_addExObjectAdditionalObject($setup) {
-      /** @var CSQLDataSource $ds */
-      $ds = $setup->ds;
-
-      // Changement des ExClasses
-      $query = "SELECT ex_class_id, ex_class_id FROM ex_class";
-      $list_ex_class = $ds->loadHashAssoc($query);
-
-      foreach ($list_ex_class as $key => $hash) {
-        $query = "ALTER TABLE `ex_object_$key`
-                    ADD `additional_id` INT (11) UNSIGNED AFTER `reference2_class`,
-                    ADD `additional_class` VARCHAR(80) AFTER `additional_id`,
-                    ADD  INDEX `additional` ( `additional_class`, `additional_id` ),
-
-                    DROP INDEX `object_id`,
-                    DROP INDEX `object_class`,
-                    ADD  INDEX `object` ( `object_class`, `object_id` ),
-
-                    DROP INDEX `reference_id`,
-                    DROP INDEX `reference_class`,
-                    ADD  INDEX `reference1` ( `reference_class`, `reference_id` ),
-
-                    DROP INDEX `reference2_id`,
-                    DROP INDEX `reference2_class`,
-                    ADD  INDEX `reference2` ( `reference2_class`, `reference2_id` );";
-        $ds->exec($query);
-      }
-
-      return true;
-    }
-    $this->addFunction("setup_system_addExObjectAdditionalObject");
+    $this->addMethod("addExObjectAdditionalObject");
 
     $this->makeRevision("1.1.43");
     $query = "CREATE TABLE `error_log` (
@@ -1545,36 +1663,7 @@ class CSetupsystem extends CSetup {
               )/*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 
-    function setup_system_buildExLink($setup) {
-      /** @var CSQLDataSource $ds */
-      $ds = $setup->ds;
-
-      // Changement des ExClasses
-      $query = "SELECT ex_class_id FROM ex_class";
-      $list_ex_class = $ds->loadColumn($query);
-
-      foreach ($list_ex_class as $ex_class_id) {
-        $query = "INSERT INTO `ex_link` (`ex_class_id`, `ex_object_id`, `object_id`, `object_class`, `group_id`, `level`)
-                     SELECT '$ex_class_id', `ex_object_id`, `object_id`, `object_class`, `group_id`, 'object' FROM `ex_object_$ex_class_id`";
-        $ds->exec($query);
-
-        $query = "INSERT INTO `ex_link` (`ex_class_id`, `ex_object_id`, `object_id`, `object_class`, `group_id`, `level`)
-                     SELECT '$ex_class_id', `ex_object_id`, `reference_id`, `reference_class`, `group_id`, 'ref1' FROM `ex_object_$ex_class_id`";
-        $ds->exec($query);
-
-        $query = "INSERT INTO `ex_link` (`ex_class_id`, `ex_object_id`, `object_id`, `object_class`, `group_id`, `level`)
-                     SELECT '$ex_class_id', `ex_object_id`, `reference2_id`, `reference2_class`, `group_id`, 'ref2' FROM `ex_object_$ex_class_id`";
-        $ds->exec($query);
-
-        $query = "INSERT INTO `ex_link` (`ex_class_id`, `ex_object_id`, `object_id`, `object_class`, `group_id`, `level`)
-                     SELECT '$ex_class_id', `ex_object_id`, `additional_id`, `additional_class`, `group_id`, 'add' FROM `ex_object_$ex_class_id`
-                     WHERE `additional_id` IS NOT NULL AND `additional_class` IS NOT NULL";
-        $ds->exec($query);
-      }
-
-      return true;
-    }
-    $this->addFunction("setup_system_buildExLink");
+    $this->addMethod("buildExLink");
 
     $this->makeRevision("1.1.54");
     $query = "ALTER TABLE `ex_class_constraint`
@@ -1592,24 +1681,7 @@ class CSetupsystem extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("1.1.57");
-    function setup_system_removeZombieExLinks($setup) {
-      /** @var CSQLDataSource $ds */
-      $ds = $setup->ds;
-
-      // Changement des ExClasses
-      $query = "SELECT ex_class_id FROM ex_class";
-      $list_ex_class = $ds->loadColumn($query);
-
-      foreach ($list_ex_class as $ex_class_id) {
-        $query = "DELETE FROM `ex_link` WHERE
-                    `ex_object_id` NOT IN(SELECT `ex_object_id` FROM `ex_object_$ex_class_id`) AND
-                    `ex_class_id` = '$ex_class_id';";
-        $ds->exec($query);
-      }
-
-      return true;
-    }
-    $this->addFunction("setup_system_removeZombieExLinks");
+    $this->addMethod("removeZombieExLinks");
 
     $this->makeRevision("1.1.58");
     $query = "CREATE TABLE `firstname_to_gender` (
@@ -1663,27 +1735,7 @@ class CSetupsystem extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("1.1.61");
-    function setup_system_addExObjectDates($setup) {
-      /** @var CSQLDataSource $ds */
-      $ds = $setup->ds;
-
-      // Changement des ExClasses
-      $query = "SELECT ex_class_id FROM ex_class";
-      $list_ex_class = $ds->loadColumn($query);
-
-      foreach ($list_ex_class as $ex_class_id) {
-        $query = "ALTER TABLE `ex_object_$ex_class_id`
-                    ADD `datetime_create` DATETIME AFTER `additional_class`,
-                    ADD `datetime_edit`   DATETIME AFTER `datetime_create`,
-                    ADD `owner_id`        INT(11) UNSIGNED AFTER `datetime_edit`,
-                    ADD INDEX (`owner_id`),
-                    ADD INDEX (`datetime_create`);";
-        $ds->exec($query);
-      }
-
-      return true;
-    }
-    $this->addFunction("setup_system_addExObjectDates");
+    $this->addMethod("addExObjectDates");
 
     $this->mod_version = "1.1.62";
 

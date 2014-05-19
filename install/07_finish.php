@@ -28,8 +28,8 @@ function checkForm(oForm) {
     return false;
   }
   
-  if (oForm.password1.value.length < 5) {
-    alert("Le mot de passe est trop court (moins de 5 caractères)");
+  if (oForm.password1.value.length < 8) {
+    alert("Le mot de passe est trop court (moins de 8 caractères)");
     oForm.reset();
     oForm.password1.focus();
     return false;

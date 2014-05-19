@@ -14,6 +14,52 @@
  * Class CSetupdPbloc
  */
 class CSetupdPbloc extends CSetup {
+  /**
+   * Change prat usernames to prat ids
+   *
+   * @return bool
+   */
+  protected function swapPratIds() {
+    $ds = CSQLDataSource::get("std");
+
+    CApp::setTimeLimit(1800);
+    $user = new CUser;
+
+    // Changement des chirurgiens
+    $query = "SELECT id_chir
+        FROM plagesop
+        GROUP BY id_chir";
+    $listPlages = $ds->loadList($query);
+    foreach ($listPlages as $plage) {
+      $where["user_username"] = "= '".$plage["id_chir"]."'";
+      $user->loadObject($where);
+      if ($user->user_id) {
+        $query = "UPDATE plagesop
+            SET chir_id = '$user->user_id'
+            WHERE id_chir = '$user->user_username'";
+        $ds->exec($query);
+        $ds->error();
+      }
+    }
+
+    //Changement des anesthésistes
+    $query = "SELECT id_anesth
+         FROM plagesop
+         GROUP BY id_anesth";
+    $listPlages = $ds->loadList($query);
+    foreach ($listPlages as $plage) {
+      $where["user_username"] = "= '".$plage["id_anesth"]."'";
+      $user->loadObject($where);
+      if ($user->user_id) {
+        $query = "UPDATE plagesop
+            SET anesth_id = '$user->user_id'
+            WHERE id_anesth = '$user->user_username'";
+        $ds->exec($query);
+        $ds->error();
+      }
+    }
+    return true;
+  }
   
   function __construct() {
     parent::__construct();
@@ -41,69 +87,22 @@ class CSetupdPbloc extends CSetup {
     $this->addQuery($query);         
               
     $this->makeRevision("0.1");
-    $query = "ALTER TABLE `plagesop` ADD INDEX ( `id_chir` );";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `plagesop` ADD INDEX ( `id_anesth` )";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `plagesop` ADD INDEX ( `id_spec` )";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `plagesop` ADD INDEX ( `id_salle` )";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `plagesop` ADD INDEX ( `date` )";
+    $query = "ALTER TABLE `plagesop`
+                ADD INDEX ( `id_chir` ),
+                ADD INDEX ( `id_anesth` ),
+                ADD INDEX ( `id_spec` ),
+                ADD INDEX ( `id_salle` ),
+                ADD INDEX ( `date` )";
     $this->addQuery($query);
     
     $this->makeRevision("0.11");
-    $query = "ALTER TABLE `plagesop` ADD `chir_id` BIGINT DEFAULT '0' NOT NULL AFTER `id` ;";
+    $query = "ALTER TABLE `plagesop`
+                ADD `chir_id` BIGINT DEFAULT '0' NOT NULL AFTER `id`,
+                ADD `anesth_id` BIGINT DEFAULT '0' NOT NULL AFTER `chir_id`,
+                ADD INDEX ( `chir_id` ),
+                ADD INDEX ( `anesth_id` );";
     $this->addQuery($query);
-    $query = "ALTER TABLE `plagesop` ADD INDEX ( `chir_id` ) ;";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `plagesop` ADD `anesth_id` BIGINT DEFAULT '0' NOT NULL AFTER `chir_id` ;";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `plagesop` ADD INDEX ( `anesth_id` ) ;";
-    $this->addQuery($query);
-    function setup_swapPratIds() {
-      $ds = CSQLDataSource::get("std");
- 
-      CApp::setTimeLimit(1800);
-      ignore_user_abort(1);
-      $user = new CUser;
-      
-      // Changement des chirurgiens
-      $query = "SELECT id_chir
-        FROM plagesop
-        GROUP BY id_chir";
-      $listPlages = $ds->loadList($query);
-      foreach ($listPlages as $plage) {
-        $where["user_username"] = "= '".$plage["id_chir"]."'";
-        $user->loadObject($where);
-        if ($user->user_id) {
-          $query = "UPDATE plagesop
-            SET chir_id = '$user->user_id'
-            WHERE id_chir = '$user->user_username'";
-          $ds->exec($query);
-          $ds->error();
-        }
-      }
-      
-      //Changement des anesthésistes
-      $query = "SELECT id_anesth
-         FROM plagesop
-         GROUP BY id_anesth";
-      $listPlages = $ds->loadList($query);
-      foreach ($listPlages as $plage) {
-        $where["user_username"] = "= '".$plage["id_anesth"]."'";
-        $user->loadObject($where);
-        if ($user->user_id) {
-          $query = "UPDATE plagesop
-            SET anesth_id = '$user->user_id'
-            WHERE id_anesth = '$user->user_username'";
-          $ds->exec($query);
-          $ds->error();
-        }
-      }
-      return true;
-    }
-    $this->addFunction("setup_swapPratIds");
+    $this->addMethod("swapPratIds");
 
     $this->makeRevision("0.12");
     $query = "ALTER TABLE `sallesbloc` ADD `stats` TINYINT DEFAULT '0' NOT NULL AFTER `nom` ;";

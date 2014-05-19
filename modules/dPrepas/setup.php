@@ -8,6 +8,34 @@
 */
 
 class CSetupdPrepas extends CSetup {
+  /**
+   * Menu upgrade
+   *
+   * @return bool
+   */
+  protected function fixRepet(){
+    $ds = $this->ds;
+
+    $query = "SELECT * FROM menu";
+    $menus = $ds->loadList($query);
+    foreach ($menus as $menu) {
+      $nbDays  = CMbDT::daysRelative($menu["debut"], $menu["fin"]);
+      $nbWeeks = floor($nbDays / 7);
+      if (!$nbWeeks) {
+        $menu["nb_repet"] = 1;
+      }
+      else {
+        $menu["nb_repet"] = ceil($nbWeeks/$menu["repetition"]);
+      }
+      $query = "UPDATE `menu` SET `nb_repet` = '".$menu["nb_repet"]."' WHERE(`menu_id`='".$menu["menu_id"]."');";
+      $ds->exec($query); $ds->error();
+      $query = "UPDATE `repas` SET `typerepas_id`='".$menu["typerepas"]."' WHERE(`menu_id`='".$menu["menu_id"]."');";
+      $ds->exec($query); $ds->error();
+    }
+    $query = "ALTER TABLE `menu` DROP `fin`;";
+    $ds->exec($query); $ds->error();
+    return true;
+  }
   
   function __construct() {
     parent::__construct();
@@ -15,56 +43,56 @@ class CSetupdPrepas extends CSetup {
     $this->mod_name = "dPrepas";
     
     $this->makeRevision("all");
-    $query = "CREATE TABLE `menu` (" .
-          "\n`menu_id` int(11) unsigned NOT NULL AUTO_INCREMENT ," .
-          "\n`group_id` int(11) UNSIGNED NOT NULL," .
-          "\n`nom` VARCHAR( 255 ) NOT NULL ," .
-          "\n`typerepas` int(11) UNSIGNED NOT NULL," .
-          "\n`plat1` VARCHAR( 255 )," .
-          "\n`plat2` VARCHAR( 255 )," .
-          "\n`plat3` VARCHAR( 255 )," .
-          "\n`plat4` VARCHAR( 255 )," .
-          "\n`plat5` VARCHAR( 255 )," .
-          "\n`boisson` VARCHAR( 255 )," .
-          "\n`pain` VARCHAR( 255 )," .
-          "\n`diabete` enum('0','1') NOT NULL DEFAULT '0'," .
-          "\n`sans_sel` enum('0','1') NOT NULL DEFAULT '0'," .
-          "\n`sans_residu` enum('0','1') NOT NULL DEFAULT '0'," .
-          "\n`modif` enum('0','1') NOT NULL DEFAULT '1'," .
-          "\n`debut` date NOT NULL," .
-          "\n`fin` date NOT NULL," .
-          "\n`repetition` int(11) unsigned NOT NULL," .
-          "\nPRIMARY KEY ( `menu_id` )) /*! ENGINE=MyISAM */;";
+    $query = "CREATE TABLE `menu` (
+               `menu_id` int(11) unsigned NOT NULL AUTO_INCREMENT ,
+               `group_id` int(11) UNSIGNED NOT NULL,
+               `nom` VARCHAR( 255 ) NOT NULL ,
+               `typerepas` int(11) UNSIGNED NOT NULL,
+               `plat1` VARCHAR( 255 ),
+               `plat2` VARCHAR( 255 ),
+               `plat3` VARCHAR( 255 ),
+               `plat4` VARCHAR( 255 ),
+               `plat5` VARCHAR( 255 ),
+               `boisson` VARCHAR( 255 ),
+               `pain` VARCHAR( 255 ),
+               `diabete` enum('0','1') NOT NULL DEFAULT '0',
+               `sans_sel` enum('0','1') NOT NULL DEFAULT '0',
+               `sans_residu` enum('0','1') NOT NULL DEFAULT '0',
+               `modif` enum('0','1') NOT NULL DEFAULT '1',
+               `debut` date NOT NULL,
+               `fin` date NOT NULL,
+               `repetition` int(11) unsigned NOT NULL,
+               PRIMARY KEY ( `menu_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-    $query = "CREATE TABLE `plats` (" .
-          "\n`plat_id` int(11) unsigned NOT NULL AUTO_INCREMENT ," .
-          "\n`group_id` int(11) UNSIGNED NOT NULL," .
-          "\n`nom` VARCHAR( 255 ) NOT NULL ," .
-          "\n`type` enum('plat1','plat2','plat3','plat4','plat5','boisson','pain') NOT NULL DEFAULT 'plat1'," .
-          "\n`typerepas` int(11) UNSIGNED NOT NULL," .
-          "\nPRIMARY KEY ( `plat_id` )) /*! ENGINE=MyISAM */;";
+    $query = "CREATE TABLE `plats` (
+               `plat_id` int(11) unsigned NOT NULL AUTO_INCREMENT ,
+               `group_id` int(11) UNSIGNED NOT NULL,
+               `nom` VARCHAR( 255 ) NOT NULL ,
+               `type` enum('plat1','plat2','plat3','plat4','plat5','boisson','pain') NOT NULL DEFAULT 'plat1',
+               `typerepas` int(11) UNSIGNED NOT NULL,
+               PRIMARY KEY ( `plat_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-    $query = "CREATE TABLE `repas_type` (" .
-          "\n`typerepas_id` int(11) unsigned NOT NULL AUTO_INCREMENT ," .
-          "\n`group_id` int(11) UNSIGNED NOT NULL," .
-          "\n`nom` VARCHAR( 255 ) NOT NULL ," .
-          "\n`debut` time NOT NULL," .
-          "\n`fin` time NOT NULL," .
-          "\nPRIMARY KEY ( `typerepas_id` )) /*! ENGINE=MyISAM */;";
+    $query = "CREATE TABLE `repas_type` (
+               `typerepas_id` int(11) unsigned NOT NULL AUTO_INCREMENT ,
+               `group_id` int(11) UNSIGNED NOT NULL,
+               `nom` VARCHAR( 255 ) NOT NULL ,
+               `debut` time NOT NULL,
+               `fin` time NOT NULL,
+               PRIMARY KEY ( `typerepas_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-    $query = "CREATE TABLE `repas` (" .
-          "\n`repas_id` int(11) unsigned NOT NULL AUTO_INCREMENT ," .
-          "\n`affectation_id` int(11) UNSIGNED NOT NULL," .
-          "\n`menu_id` int(11) UNSIGNED NOT NULL," .
-          "\n`plat1` int(11) UNSIGNED NULL," .
-          "\n`plat2` int(11) UNSIGNED NULL," .
-          "\n`plat3` int(11) UNSIGNED NULL," .
-          "\n`plat4` int(11) UNSIGNED NULL," .
-          "\n`plat5` int(11) UNSIGNED NULL," .
-          "\n`boisson` int(11) UNSIGNED NULL," .
-          "\n`pain` int(11) UNSIGNED NULL," .
-          "\n`date` date NOT NULL," .
-          "\nPRIMARY KEY ( `repas_id` )) /*! ENGINE=MyISAM */;";
+    $query = "CREATE TABLE `repas` (
+               `repas_id` int(11) unsigned NOT NULL AUTO_INCREMENT ,
+               `affectation_id` int(11) UNSIGNED NOT NULL,
+               `menu_id` int(11) UNSIGNED NOT NULL,
+               `plat1` int(11) UNSIGNED NULL,
+               `plat2` int(11) UNSIGNED NULL,
+               `plat3` int(11) UNSIGNED NULL,
+               `plat4` int(11) UNSIGNED NULL,
+               `plat5` int(11) UNSIGNED NULL,
+               `boisson` int(11) UNSIGNED NULL,
+               `pain` int(11) UNSIGNED NULL,
+               `date` date NOT NULL,
+               PRIMARY KEY ( `repas_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.1");
@@ -74,38 +102,15 @@ class CSetupdPrepas extends CSetup {
     $this->addQuery($query);
     $query = "ALTER TABLE `menu` ADD `nb_repet` int(11) unsigned NOT NULL;";
     $this->addQuery($query);
-    
-    function setup_menu(){
-      $ds = CSQLDataSource::get("std");
- 
-      $query = "SELECT * FROM menu";
-      $menus = $ds->loadList($query);
-      foreach($menus as $menu){
-        $nbDays  = CMbDT::daysRelative($menu["debut"], $menu["fin"]);
-        $nbWeeks = floor($nbDays / 7);
-        if(!$nbWeeks){
-          $menu["nb_repet"] = 1;
-        }else{
-          $menu["nb_repet"] = ceil($nbWeeks/$menu["repetition"]);
-        }
-        $query = "UPDATE `menu` SET `nb_repet` = '".$menu["nb_repet"]."' WHERE(`menu_id`='".$menu["menu_id"]."');";
-        $ds->exec($query); $ds->error();
-        $query = "UPDATE `repas` SET `typerepas_id`='".$menu["typerepas"]."' WHERE(`menu_id`='".$menu["menu_id"]."');";
-        $ds->exec($query); $ds->error();
-      }
-      $query = "ALTER TABLE `menu` DROP `fin` ";
-      $ds->exec($query); $ds->error(); 
-      return true;
-    }
-    $this->addFunction("setup_menu");
+    $this->addMethod("fixRepet");
     
     $this->makeRevision("0.11");
-    $query = "CREATE TABLE `validationrepas` (" .
-          "\n`validationrepas_id` int(11) unsigned NOT NULL AUTO_INCREMENT ," .
-          "\n`service_id` int(11) UNSIGNED NOT NULL," .
-          "\n`date` date NOT NULL," .
-          "\n`typerepas_id` int(11) UNSIGNED NOT NULL," .
-          "\nPRIMARY KEY ( `validationrepas_id` )) /*! ENGINE=MyISAM */;";
+    $query = "CREATE TABLE `validationrepas` (
+               `validationrepas_id` int(11) unsigned NOT NULL AUTO_INCREMENT ,
+               `service_id` int(11) UNSIGNED NOT NULL,
+               `date` date NOT NULL,
+               `typerepas_id` int(11) UNSIGNED NOT NULL,
+               PRIMARY KEY ( `validationrepas_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.12");
@@ -116,37 +121,36 @@ class CSetupdPrepas extends CSetup {
     
     $this->makeRevision("0.13");
     $query = "ALTER TABLE `menu` 
-              ADD INDEX (`group_id`),
-              ADD INDEX (`typerepas`),
-              ADD INDEX (`debut`);";
+                ADD INDEX (`group_id`),
+                ADD INDEX (`typerepas`),
+                ADD INDEX (`debut`);";
     $this->addQuery($query);
     $query = "ALTER TABLE `plats` 
-              ADD INDEX (`group_id`),
-              ADD INDEX (`typerepas`);";
+                ADD INDEX (`group_id`),
+                ADD INDEX (`typerepas`);";
     $this->addQuery($query);
     $query = "ALTER TABLE `repas` 
-              ADD INDEX (`affectation_id`),
-              ADD INDEX (`menu_id`),
-              ADD INDEX (`plat1`),
-              ADD INDEX (`plat2`),
-              ADD INDEX (`plat3`),
-              ADD INDEX (`plat4`),
-              ADD INDEX (`plat5`),
-              ADD INDEX (`boisson`),
-              ADD INDEX (`pain`),
-              ADD INDEX (`date`),
-              ADD INDEX (`typerepas_id`);";
+                ADD INDEX (`affectation_id`),
+                ADD INDEX (`menu_id`),
+                ADD INDEX (`plat1`),
+                ADD INDEX (`plat2`),
+                ADD INDEX (`plat3`),
+                ADD INDEX (`plat4`),
+                ADD INDEX (`plat5`),
+                ADD INDEX (`boisson`),
+                ADD INDEX (`pain`),
+                ADD INDEX (`date`),
+                ADD INDEX (`typerepas_id`);";
     $this->addQuery($query);
     $query = "ALTER TABLE `repas_type` 
-              ADD INDEX (`group_id`);";
+                ADD INDEX (`group_id`);";
     $this->addQuery($query);
     $query = "ALTER TABLE `validationrepas` 
-              ADD INDEX (`service_id`),
-              ADD INDEX (`date`),
-              ADD INDEX (`typerepas_id`);";
+                ADD INDEX (`service_id`),
+                ADD INDEX (`date`),
+                ADD INDEX (`typerepas_id`);";
     $this->addQuery($query);
     
     $this->mod_version = "0.14";
   }
 }
-?>

@@ -8,6 +8,39 @@
  */
 
 class CSetupmessagerie extends CSetup {
+  /**
+   * Update user messages destinataires
+   *
+   * @return bool
+   */
+  protected function updateMessages() {
+    $ds = CSQLDataSource::get("std");
+    if (!$ds) {
+      return false;
+    }
+    $messages = $ds->loadList("SELECT * FROM usermessage");
+    if (count($messages)) {
+      $query = "INSERT INTO `usermessage_dest` (`user_message_id`, `from_user_id`, `to_user_id`, `datetime_read`, `datetime_sent`, `archived`, `starred`)
+         VALUES";
+      $values = array();
+      foreach ($messages as $_message) {
+        $umid   = $_message['usermessage_id'];
+        $from   = $_message['from'];
+        $to     = $_message['to'];
+        $dtr    = $_message['date_read'] ? '\''.$_message['date_read'].'\'' : 'NULL';
+        $dts    = $_message['date_sent'] ? '\''.$_message['date_sent'].'\'' : 'NULL';
+        $arc    = $_message['archived'];
+        $star   = $_message['starred'];
+        $values[] = " ('$umid', '$from', '$to', $dtr, $dts, '$arc', '$star')";
+      }
+      $ds->query($query.implode(',', $values));
+      if ($msg = $ds->error()) {
+        CAppUI::stepAjax($msg, UI_MSG_WARNING);
+        return false;
+      }
+    }
+    return true;
+  }
 
   function __construct() {
     parent::__construct();
@@ -184,35 +217,7 @@ class CSetupmessagerie extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("0.32");
-    function update_messages() {
-      $ds = CSQLDataSource::get("std");
-      if (!$ds) {
-        return false;
-      }
-      $messages = $ds->loadList("SELECT * FROM usermessage");
-      if (count($messages)) {
-        $query = "INSERT INTO `usermessage_dest` (`user_message_id`, `from_user_id`, `to_user_id`, `datetime_read`, `datetime_sent`, `archived`, `starred`)
-         VALUES";
-        $values = array();
-        foreach ($messages as $_message) {
-          $umid   = $_message['usermessage_id'];
-          $from   = $_message['from'];
-          $to     = $_message['to'];
-          $dtr    = $_message['date_read'] ? '\''.$_message['date_read'].'\'' : 'NULL';
-          $dts    = $_message['date_sent'] ? '\''.$_message['date_sent'].'\'' : 'NULL';
-          $arc    = $_message['archived'];
-          $star   = $_message['starred'];
-          $values[] = " ('$umid', '$from', '$to', $dtr, $dts, '$arc', '$star')";
-        }
-        $ds->query($query.implode(',', $values));
-        if ($msg = $ds->error()) {
-          CAppUI::stepAjax($msg, UI_MSG_WARNING);
-          return false;
-        }
-      }
-      return true;
-    }
-    $this->addFunction("update_messages");
+    $this->addMethod("updateMessages");
 
     $this->makeRevision("0.33");
     $query = "ALTER TABLE `usermessage`
