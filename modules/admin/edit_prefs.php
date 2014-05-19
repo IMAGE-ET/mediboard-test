@@ -5,7 +5,7 @@
  * @subpackage admin
  * @version $Revision$
  * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 $user_id = CCanDo::edit() ? CValue::getOrSession("user_id", "default") : null;
@@ -32,7 +32,7 @@ CPreferences::loadModules();
 foreach (CPreferences::$modules as $modname => $prefnames) {
   $module  = CModule::getActive($modname);
   $canRead = $module ? CPermModule::getPermModule($module->_id, PERM_READ, $user_id) : false;
-  
+
   if ($modname == "common" || $user_id == "default" || $canRead) {
     $prefs[$modname] = array();
     foreach ($prefnames as $prefname) {
@@ -90,6 +90,29 @@ if (CModule::getActive("tasking")) {
   $request_ticket = new CRequestTicket();
   $request_ticket->getUserType();
 
+  $owners = array();
+  if ($customers = CAppUI::pref("tasking_ticket_pre_filled_customers")) {
+    $customers = explode("|", $customers);
+    foreach ($customers as $_k => $_owner_guid) {
+      $owner = CMbObject::loadFromGuid($_owner_guid);
+
+      if ($owner && $owner->_id) {
+        $owner->canDo();
+
+        if ($owner->_canRead) {
+          $owners[] = $owner;
+        }
+        else {
+          unset($customers[$_k]);
+        }
+      }
+      else {
+        unset($customers[$_k]);
+      }
+    }
+  }
+
+  $smarty->assign("owners", $owners);
   $smarty->assign("request_ticket", $request_ticket);
 }
 
