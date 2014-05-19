@@ -61,7 +61,7 @@
         </button>
       </th>
     {{/if}}
-    {{if $is_admin}}
+    {{if $is_admin && $conf.dPpatients.CPatient.function_distinct}}
       <th>{{mb_title class=CMedecin field=function_id}}</th>
     {{/if}}
     {{else}}
@@ -90,7 +90,7 @@
         </td>
       {{/if}}
 
-      {{if $is_admin}}
+      {{if $is_admin && $conf.dPpatients.CPatient.function_distinct}}
         <td>
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_medecin->_ref_function->_guid}}')">
             {{mb_value object=$_medecin field=function_id}}
