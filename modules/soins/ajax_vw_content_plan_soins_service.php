@@ -15,6 +15,7 @@ $service_id    = CValue::getOrSession("service_id", "none");
 $nb_decalage   = CValue::get("nb_decalage");
 $mode_dossier  = CValue::get("mode_dossier", "administration");
 $premedication = CValue::get("premedication");
+$real_time     = CValue::getOrSession("real_time", 0);
 
 $composition_dossier = array();
 $bornes_composition_dossier = array();
@@ -65,7 +66,13 @@ $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
 
 $where = array();
 $where["element_prescription_id"] =  CSQLDataSource::prepareIn($categories_id);
-$where[] = "'$date' <= sejour.sortie && '$date_max' >= sejour.entree";
+if ($real_time) {
+  $time = CMbDT::time();
+  $where[] = "'$date $time' <= affectation.sortie && '$date $time' >= affectation.entree";
+}
+else {
+  $where[] = "'$date' <= affectation.sortie && '$date_max' >= affectation.entree";
+}
 $where["affectation.service_id"] = " = '$service_id'";
 $where["inscription"] = " = '0'";
 $where["active"] = " = '1'";

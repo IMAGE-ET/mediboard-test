@@ -11,6 +11,7 @@
 $categories_id = CValue::getOrSession("categories_id");
 $service_id    = CValue::getOrSession("service_id");
 $date          = CValue::getOrSession("date", CMbDT::date());
+$real_time     = CValue::getOrSession("real_time", 0);
 $nb_decalage   = CValue::get("nb_decalage");
 $date_max      = CMbDT::date("+ 1 DAY", $date);
 
@@ -38,7 +39,13 @@ if (!$nb_decalage) {
 $affectation = new CAffectation();
 
 $where = array();
-$where[] = "'$date' <= affectation.sortie && '$date_max' >= affectation.entree";
+if ($real_time) {
+  $time = CMbDT::time();
+  $where[] = "'$date $time' <= affectation.sortie && '$date $time' >= affectation.entree";
+}
+else {
+  $where[] = "'$date' <= affectation.sortie && '$date_max' >= affectation.entree";
+}
 $where["affectation.service_id"] = " = '$service_id'";
 
 $affectations = $affectation->loadList($where);
@@ -112,8 +119,8 @@ $smarty->assign("service"      , $service);
 $smarty->assign("categories"   , $categories);
 $smarty->assign("date"         , $date);
 $smarty->assign("nb_decalage"  , $nb_decalage);
-$smarty->assign("date"         , $date);
 $smarty->assign("services"     , $services);
 $smarty->assign("categories_id", $categories_id);
-
+$smarty->assign('real_time'    , $real_time);
+$smarty->assign('day'          , CMbDT::date());
 $smarty->display('vw_plan_soins_service.tpl');

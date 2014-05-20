@@ -289,6 +289,7 @@ $locales['Query'] = 'Requêter';
 $locales['Reactivate'] = 'Ré-activer';
 $locales['Read'] = 'Lecture';
 $locales['Realisation'] = 'Réalisation';
+$locales['Real time'] = 'Temps réel';
 $locales['Receive'] = 'Recevoir';
 $locales['Recompute'] = 'Recalculer';
 $locales['Refresh'] = 'Rafraîchir';

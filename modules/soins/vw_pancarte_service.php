@@ -11,6 +11,7 @@
 $group = CGroups::loadCurrent();
 
 $service_id = CValue::getOrSession("service_id");
+$real_time     = CValue::getOrSession("real_time", 0);
 
 if($service_id == "NP"){
   $service_id = "";
@@ -68,5 +69,7 @@ $smarty->assign("filter_line", $filter_line);
 $smarty->assign("services", $services);
 $smarty->assign("service_id", $service_id);
 $smarty->assign("date"     , $date);
+$smarty->assign('day', CMbDT::date());
+$smarty->assign('real_time', $real_time);
 $smarty->assign("date_min", "");
 $smarty->display('vw_pancarte_service.tpl');

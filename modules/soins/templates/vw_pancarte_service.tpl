@@ -47,6 +47,7 @@ viewPancarte = function() {
   var url = new Url("soins", "ajax_vw_pancarte");
   url.addParam("service_id", $V(oForm.service_id));
   url.addParam("debut", $V(oForm.debut));
+  url.addParam('real_time', $V(oForm.real_time));
   {{if $conf.soins.soin_refresh_pancarte_service != 'none'}}
     url.periodicalUpdate("pancarte_service", { frequency: {{math equation="a*60" a=$conf.soins.soin_refresh_pancarte_service}} });
   {{else}}
@@ -110,6 +111,9 @@ function viewTransmissions(service_id, user_id, degre, observations, transmissio
       </select>
       le
       {{mb_field object=$filter_line field="debut" register=true form=selService onchange="this.form.submit();" class="notNull"}}
+      <input type="checkbox" name="real_time_cb" onchange="$V('real_time', this.checked ? 1 : 0);" {{if $date != $day}}disabled="disabled"{{elseif $real_time}}checked="checked"{{/if}}/>
+      <input type="hidden" id="real_time" name="real_time" value="{{if $date == $day}}{{$real_time}}{{else}}0{{/if}}" onchange="this.form.submit();"/>
+      <label for="real_time">{{tr}}Real time{{/tr}}</label>
     </form>
   </li>
   <li style="float: right;">

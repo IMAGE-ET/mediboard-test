@@ -11,6 +11,7 @@
 $group = CGroups::loadCurrent();
 
 $service_id = CValue::getOrSession("service_id");
+$real_time     = CValue::getOrSession("real_time", 0);
 
 if($service_id == "NP"){
   $service_id = "";
@@ -88,8 +89,15 @@ else {
   $where["prescription.object_class"] = " = 'CSejour'";
   $where["prescription.type"]         = " = 'sejour'";
   $where["affectation.service_id"]        = " = '$service_id'";
-  $where["affectation.entree"]      = " < '$date 23:59:59'";
-  $where["affectation.sortie"]      = " > '$date 00:00:00'";
+  if ($real_time) {
+    $time = CMbDT::time();
+    $where["affectation.entree"] = " <= '$date $time'";
+    $where["affectation.sortie"] = " >= '$date $time'";
+  }
+  else {
+    $where["affectation.entree"] = " < '$date 23:59:59'";
+    $where["affectation.sortie"] = " > '$date 00:00:00'";
+  }
   $prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
 }
 
