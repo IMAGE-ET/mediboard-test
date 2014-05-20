@@ -1,14 +1,3 @@
-/**
- * $Id$
- *
- * @category dPurgences
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision$
- * @link     http://www.mediboard.org
- */
-
 CCirconstance = {
   form: null,
   edit : function(id) {
@@ -31,8 +20,8 @@ CCirconstance = {
 
   selectMotifSFMU : function(libelle, id) {
     var form = CCirconstance.form;
-    $V(form["motif_sfmu"], id);
     $V(form["motif_sfmu_autocomplete_view"], libelle);
+    $V(form["motif_sfmu"], id);
     Control.Modal.close();
   }
 };
