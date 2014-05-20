@@ -2100,6 +2100,9 @@ class CConstantesMedicales extends CMbObject {
           if (!in_array($_constant, $selection)) {
             $rank = 'hidden';
           }
+          elseif ($_rank == 0) {
+            $rank = 1000;
+          }
           else {
             $rank = $_rank;
           }
@@ -2126,6 +2129,16 @@ class CConstantesMedicales extends CMbObject {
           }
 
           $result['all'][$rank][] = $_constant;
+        }
+      }
+    }
+    if (!$show_cat_tabs) {
+      ksort($result['all']);
+    }
+    else {
+      foreach ($result as $cat => $constants) {
+        if (is_array($result[$cat])) {
+          ksort($result[$cat]);
         }
       }
     }
