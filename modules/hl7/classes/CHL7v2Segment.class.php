@@ -810,7 +810,7 @@ class CHL7v2Segment extends CHL7v2Entity {
 
       // Identifiant externe
       case 'idex':
-        if (!$affectation->_id || !$affectation->_ref_lit) {
+        if (!$affectation->_id || !$affectation->lit_id) {
           return null;
         } 
         
@@ -818,7 +818,7 @@ class CHL7v2Segment extends CHL7v2Entity {
 
       // Nom de la chambre
       default:
-        if (!$affectation->_id || !$affectation->_ref_lit) {
+        if (!$affectation->_id || !$affectation->lit_id) {
           return null;
         }
         
@@ -848,14 +848,14 @@ class CHL7v2Segment extends CHL7v2Entity {
 
       // Identifiant externe
       case 'idex':
-        if (!$affectation->_id || !$affectation->_ref_lit) {
+        if (!$affectation->_id || !$affectation->lit_id) {
           return null;
         } 
         return CIdSante400::getMatch("CLit", $receiver->_tag_lit, null, $affectation->_ref_lit->_id)->id400;
 
       // Nom du lit
       default:
-        if (!$affectation->_id || !$affectation->_ref_lit) {
+        if (!$affectation->_id || !$affectation->lit_id) {
           return null;
         }
         
