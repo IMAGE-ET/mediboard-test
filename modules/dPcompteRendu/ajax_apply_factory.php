@@ -37,7 +37,7 @@ foreach ($compte_rendus as $_compte_rendu) {
   }
   else {
     $_compte_rendu->factory =
-      strpos($file_content, "/Creator (DOMPDF)") !== false ? "dompdf" : "wkhtmltopdf";
+      strpos($file_content, "/Creator (DOMPDF)") !== false ? "CDomPDFConverter" : "CWkHtmlToPDFConverter";
   }
 
   if ($msg = $_compte_rendu->store()) {
