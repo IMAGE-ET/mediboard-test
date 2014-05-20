@@ -1036,6 +1036,9 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
     if ($this->factory == "none") {
       $this->factory = CAppUI::pref("dPcompteRendu choice_factory");
+      if (!$this->factory) {
+        $this->factory = "CWkHtmlToPDFConverter";
+      }
     }
 
     $this->version++;
