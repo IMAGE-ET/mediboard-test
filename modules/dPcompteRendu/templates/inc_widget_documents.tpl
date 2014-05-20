@@ -11,21 +11,21 @@
 {{unique_id var=unique_id}}
 
 {{if $nb_modeles_etiquettes}}
-<form name="download_etiq_{{$object->_class}}_{{$object->_id}}" style="display: none;" action="?" target="_blank" method="get" class="prepared">
-  <input type="hidden" name="m" value="dPhospi" />
-  <input type="hidden" name="a" value="print_etiquettes" />
-  <input type="hidden" name="object_class" value="{{$object->_class}}" />
-  <input type="hidden" name="object_id" value="{{$object->_id}}" />
-  <input type="hidden" name="modele_etiquette_id" />
-  <input type="hidden" name="suppressHeaders" value="1" />
-  <input type="hidden" name="dialog" value="1" />
-</form>
+  <form name="download_etiq_{{$object->_class}}_{{$object->_id}}" style="display: none;" action="?" target="_blank" method="get" class="prepared">
+    <input type="hidden" name="m" value="dPhospi" />
+    <input type="hidden" name="a" value="print_etiquettes" />
+    <input type="hidden" name="object_class" value="{{$object->_class}}" />
+    <input type="hidden" name="object_id" value="{{$object->_id}}" />
+    <input type="hidden" name="modele_etiquette_id" />
+    <input type="hidden" name="suppressHeaders" value="1" />
+    <input type="hidden" name="dialog" value="1" />
+  </form>
 {{/if}}
 
 
 {{if $can_doc}}
   <form name="unmergePack_{{$object->_guid}}" method="post" onsubmit="return onSubmitFormAjax(this);">
-    <input type="hidden" name="m" value="dPcompteRendu" />
+    <input type="hidden" name="m" value="compteRendu" />
     <input type="hidden" name="dosql" value="do_pack_multi_aed" />
     <input type="hidden" name="pack_id" value="" />
     <input type="hidden" name="object_class" value="{{$object->_class}}" />
@@ -33,78 +33,77 @@
     <input type="hidden" name="callback" value="Document.afterUnmerge" />
   </form>
 
-  <script type="text/javascript">
-  
-  Main.add(function() {
-    ObjectTooltip.modes.locker = {
-      module: "compteRendu",
-      action: "ajax_show_locker",
-      sClass: "tooltip"
-    };
+  <script>
+    Main.add(function() {
+      ObjectTooltip.modes.locker = {
+        module: "compteRendu",
+        action: "ajax_show_locker",
+        sClass: "tooltip"
+      };
 
-    var form = getForm('DocumentAdd-{{$unique_id}}-{{$object->_guid}}');
-    var url;
-    
-    url = new Url("dPcompteRendu", "ajax_modele_autocomplete");
-    url.addParam("user_id", "{{$praticien->_id}}");
-    url.addParam("function_id", "{{$praticien->function_id}}");
-    url.addParam("object_class", '{{$object_class}}');
-    url.addParam("object_id", '{{$object_id}}');
-    url.autoComplete(form.keywords_modele, '', {
-      minChars: 2,
-      afterUpdateElement: createDoc,
-      dropdown: true,
-      width: "250px"
+      var form = getForm('DocumentAdd-{{$unique_id}}-{{$object->_guid}}');
+      var url;
+
+      url = new Url("dPcompteRendu", "ajax_modele_autocomplete");
+      url.addParam("user_id", "{{$praticien->_id}}");
+      url.addParam("function_id", "{{$praticien->function_id}}");
+      url.addParam("object_class", '{{$object_class}}');
+      url.addParam("object_id", '{{$object_id}}');
+      url.autoComplete(form.keywords_modele, '', {
+        minChars: 2,
+        afterUpdateElement: createDoc,
+        dropdown: true,
+        width: "250px"
+      });
+
+      url = new Url("dPcompteRendu", "ajax_pack_autocomplete");
+      url.addParam("user_id", "{{$praticien->_id}}");
+      url.addParam("function_id", "{{$praticien->function_id}}");
+      url.addParam("object_class", '{{$object_class}}');
+      url.addParam("object_id", '{{$object_id}}');
+      url.autoComplete(form.keywords_pack, '', {
+        minChars: 2,
+        afterUpdateElement: createPack,
+        dropdown: true,
+        width: "250px"
+      });
+
+      ModeleEtiquette.nb_printers  = {{$nb_printers|@json}};
+
+      function createDoc(input, selected) {
+        $V(input, '');
+        var id = selected.down(".id").innerHTML;
+        var object_class = null;
+
+        if (id == 0) {
+          object_class = '{{$object->_class}}';
+        }
+
+        if (selected.select(".fast_edit").length) {
+          Document.fastMode('{{$object_class}}', id, '{{$object_id}}', '{{$unique_id}}');
+        } else {
+          Document.create(id, '{{$object_id}}', null, object_class, null);
+        }
+      }
+
+      function createPack(input, selected) {
+        $V(input, '');
+        if (selected.select(".fast_edit").length) {
+          Document.fastModePack(selected.down(".id").innerHTML, '{{$object_id}}', '{{$object_class}}', '{{$unique_id}}', selected.select(".merge_docs").length ? selected.get("modeles_ids") : null);
+        }
+        else if (selected.select(".merge_docs").length){
+          var form = getForm("unmergePack_{{$object->_guid}}");
+          $V(form.pack_id, selected.down(".id").innerHTML);
+          form.onsubmit();
+        }
+        else {
+          Document.createPack(selected.down(".id").innerHTML, '{{$object_id}}');
+        }
+      }
     });
   
-    url = new Url("dPcompteRendu", "ajax_pack_autocomplete");
-    url.addParam("user_id", "{{$praticien->_id}}");
-    url.addParam("function_id", "{{$praticien->function_id}}");
-    url.addParam("object_class", '{{$object_class}}');
-    url.addParam("object_id", '{{$object_id}}');
-    url.autoComplete(form.keywords_pack, '', {
-      minChars: 2,
-      afterUpdateElement: createPack,
-      dropdown: true,
-      width: "250px"
-    });
-    
-    ModeleEtiquette.nb_printers  = {{$nb_printers|@json}};
-    
-    function createDoc(input, selected) {
-      $V(input, '');
-      var id = selected.down(".id").innerHTML;
-      var object_class = null;
-  
-      if (id == 0) {
-        object_class = '{{$object->_class}}';
-      }
-      
-      if (selected.select(".fast_edit").length) {
-        Document.fastMode('{{$object_class}}', id, '{{$object_id}}', '{{$unique_id}}');
-      } else {
-        Document.create(id, '{{$object_id}}', null, object_class, null);
-      }
-    }
-  
-    function createPack(input, selected) {
-      $V(input, '');
-      if (selected.select(".fast_edit").length) {
-        Document.fastModePack(selected.down(".id").innerHTML, '{{$object_id}}', '{{$object_class}}', '{{$unique_id}}', selected.select(".merge_docs").length ? selected.get("modeles_ids") : null);
-      }
-      else if (selected.select(".merge_docs").length){
-        var form = getForm("unmergePack_{{$object->_guid}}");
-        $V(form.pack_id, selected.down(".id").innerHTML);
-        form.onsubmit();
-      }
-      else {
-        Document.createPack(selected.down(".id").innerHTML, '{{$object_id}}');
-      }
-    }
-  });
-  
-  //Création via ModeleSelector
-  modeleSelector[{{$object_id}}] = new ModeleSelector("DocumentAdd-{{$unique_id}}-{{$object->_guid}}", null, "_modele_id", "_object_id");
+    //Création via ModeleSelector
+    modeleSelector[{{$object_id}}] = new ModeleSelector("DocumentAdd-{{$unique_id}}-{{$object->_guid}}", null, "_modele_id", "_object_id", "_fast_edit");
   </script>
   
   {{if $can->admin}}
@@ -133,18 +132,27 @@
         Modèles disponibles
         {{/if}}
       </button>
-  {{/if}}
+    {{/if}}
   
-  <!-- Impression de tous les modèles disponibles pour l'objet -->
-  <button type="button" class="print notext" onclick="Document.printSelDocs('{{$object_id}}', '{{$object_class}}');">
-    {{tr}}Print{{/tr}}
-  </button>
+    <!-- Impression de tous les modèles disponibles pour l'objet -->
+    <button type="button" class="print notext" onclick="Document.printSelDocs('{{$object_id}}', '{{$object_class}}');">
+      {{tr}}Print{{/tr}}
+    </button>
 
-  <input type="hidden" name="_modele_id" value="" />
-  <input type="hidden" name="_object_id" value="" onchange="Document.create(this.form._modele_id.value, this.value,'{{$object_id}}','{{$object_class}}'); $V(this, '', false); $V(this.form._modele_id, ''); "/>
-
+    <input type="hidden" name="_fast_edit" value="" />
+    <input type="hidden" name="_modele_id" value="" />
+    <input type="hidden" name="_object_id" value=""
+           onchange="var fast_edit = $V(this.form._fast_edit);
+             if (fast_edit == '1') {
+               Document.fastMode('{{$object_class}}', this.form._modele_id.value, '{{$object_id}}');
+             }
+             else {
+               Document.create(this.form._modele_id.value, this.value,'{{$object_id}}','{{$object_class}}');
+             }
+             $V(this, '', false);
+             $V(this.form._fast_edit, '');
+             $V(this.form._modele_id, ''); "/>
   </form>
-
 {{/if}}
 
 {{if $nb_modeles_etiquettes > 0}}
@@ -157,5 +165,5 @@
 {{/if}}
  
 <table class="form" id="docs_{{$object_class}}{{$object_id}}">
-  {{mb_include module="dPcompteRendu" template="inc_widget_list_documents"}}
+  {{mb_include module="compteRendu" template="inc_widget_list_documents"}}
 </table>

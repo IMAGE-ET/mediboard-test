@@ -9,18 +9,21 @@ ModeleSelector = Class.create({
   sView      : null,
   sModele_id : null,
   sObject_id : null,
+  sFastEdit  : null,
+
   options : {
     width : 700,
     height: 500
   },
-  
-  initialize: function (sForm, sView, sModele_id, sObject_id, oDefaultOptions) {
+
+  initialize: function (sForm, sView, sModele_id, sObject_id, sFastEdit, oDefaultOptions) {
     Object.extend(this.options, oDefaultOptions);
-    
+
     this.sForm = sForm;
     this.sView = sView;
     this.sModele_id = sModele_id;
     this.sObject_id = sObject_id;
+    this.sFastEdit = sFastEdit;
   },
 
   pop: function(object_id, object_class, praticien_id) {
@@ -31,9 +34,10 @@ ModeleSelector = Class.create({
     url.popup(this.options.width, this.options.height, "Sélecteur de modèle");
   },
 
-  set: function(modele_id, object_id) {
+  set: function(modele_id, object_id, fast_edit) {
     var oForm = getForm(this.sForm);
-    $V(oForm[this.sModele_id], modele_id, true);
+    $V(oForm[this.sModele_id], modele_id);
+    $V(oForm[this.sFastEdit], fast_edit);
     $V(oForm[this.sObject_id], object_id, true);
   }
 });

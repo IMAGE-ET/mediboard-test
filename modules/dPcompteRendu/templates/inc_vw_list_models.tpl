@@ -1,6 +1,6 @@
-<script type="text/javascript">
+<script>
   Main.add(function() {
-    var url = new Url("dPcompteRendu", "ajax_modele_autocomplete");
+    var url = new Url("compteRendu", "ajax_modele_autocomplete");
     url.addParam("user_id", "{{$praticien->_id}}");
     url.addParam("object_class", '{{$class}}');
     url.addParam("object_id"   , '{{$target_id}}');
@@ -35,9 +35,10 @@
   <tr>
   {{foreach from=$modeles item=owned_modeles key=owner}}
     <td style="text-align: center; width: 33%;">
-      <select  style="width: 90%" id="modele_{{$class}}_prat" name="modele_{{$class}}_prat" onchange="if (this.value) setClose(this.value,'{{$modelesId.$class}}');" size="20">
+      <select  style="width: 90%" id="modele_{{$class}}_prat" name="modele_{{$class}}_prat"
+               onchange="if (this.value) setClose(this.value,'{{$modelesId.$class}}', this.options[this.selectedIndex].get('fast_edit'));" size="20">
       {{foreach from=$owned_modeles item=modele}}
-        <option value="{{$modele->_id}}">{{$modele->nom}}</option>
+        <option value="{{$modele->_id}}" data-fast_edit="{{if $modele->fast_edit || $modele->fast_edit_pdf}}1{{else}}0{{/if}}">{{$modele->nom}}</option>
       {{foreachelse}}
       	<option value="">{{tr}}CCompteRendu.none{{/tr}}</option>
       {{/foreach}}

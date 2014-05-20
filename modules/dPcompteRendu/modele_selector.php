@@ -34,7 +34,7 @@ $modelesNonCompat = array();
 
 // Chargement des modeles pour chaque classe, pour les praticiens et leur fonction
 foreach ($templateClasses as $class => $id) {
-  $modeles = CCompteRendu::loadAllModelesFor($praticien->_id, 'prat', $class, 'body', 0);
+  $modeles = CCompteRendu::loadAllModelesFor($praticien->_id, 'prat', $class, 'body');
   if ($id) {
     $modelesCompat[$class] = $modeles;
     continue;
