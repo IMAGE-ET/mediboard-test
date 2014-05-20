@@ -1,8 +1,8 @@
 <script>
-  function setClose(modele_id, object_id) {
+  function setClose(modele_id, object_id, fast_edit) {
     if (window.opener) {
       var oSelector = window.opener.modeleSelector[{{$target_id}}];
-      oSelector.set(modele_id, object_id);
+      oSelector.set(modele_id, object_id, fast_edit);
     }
     window.close();
   }
