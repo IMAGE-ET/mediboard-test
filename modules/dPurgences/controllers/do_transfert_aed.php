@@ -35,6 +35,9 @@ if (!CAppUI::conf("dPurgences create_sejour_hospit")) {
   foreach ($sejour->getProperties() as $name => $value) {
     $sejour_rpu->$name = $value;
   }
+
+  // Forcer le reliquat du séjour en urgences
+  $sejour_rpu->type = "urg";
   
   // Enregistrement
   $sejour_rpu->_id = null;
