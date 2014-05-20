@@ -2129,6 +2129,16 @@ class CConstantesMedicales extends CMbObject {
         }
       }
     }
+    if (!$show_cat_tabs) {
+      ksort($result['all']);
+    }
+    else {
+      foreach ($result as $cat => $constants) {
+        if (is_array($result[$cat])) {
+          ksort($result[$cat]);
+        }
+      }
+    }
 
     return $result;
   }
