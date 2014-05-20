@@ -196,6 +196,7 @@ else {
       FROM operations
       WHERE operations.annulee = '0'
         AND operations.chir_id = '$selPratLogin'
+        AND operations.plageop_id IS NULL
         AND operations.date BETWEEN '$month_min' AND '$month_max'
       GROUP BY operations.date
       ORDER BY operations.date";
