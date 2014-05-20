@@ -34,10 +34,20 @@
   {{mb_script module="medicament" script="equivalent_selector"}}
 {{/if}}
 
+<style>
+  div.shadow {
+    box-shadow: 0 8px 5px -3px rgba(0, 0, 0, .4);
+  }
+</style>
+
 {{if $conf.ref_pays == 2}}
   <script>
     Main.add(function () {
-      var tab_rpu = Control.Tabs.create('tab-rpu', false);
+      var tab_rpu = Control.Tabs.create('tab-rpu', false, {afterChange: function(elt) {
+        if (elt.id == 'dossier_infirmier') {
+          addScroll();
+        }
+      }});
       var hash = Url.parse().fragment;
       if (hash == "Imeds") {
         {{if $rpu->_id}}
@@ -232,6 +242,16 @@
     return true;
   }
 
+  addScroll = function() {
+    console.debug('addScroll');
+    ViewPort.SetAvlHeight('content-rpu', 1.0);
+    var content = $("content-rpu");
+    var header = $("header-rpu");
+    content.on('scroll', function() {
+      header.setClassName('shadow', content.scrollTop);
+    });
+  }
+
   function printEtiquettes() {
     var nb_printers = {{$nb_printers|@json}};
     if (nb_printers > 0) {
@@ -287,6 +307,8 @@
     if (document.editAntFrm){
       document.editAntFrm.type.onchange();
     }
+
+    addScroll();
   });
 
 </script>
@@ -316,100 +338,105 @@
       <button type="button" class="search" onclick="showDossierSoins('{{$rpu->mutation_sejour_id}}');">{{tr}}soins.button.Dossier-soins{{/tr}}</button>
     </div>
   {{else}}
-    {{mb_include module=soins template=inc_patient_banner}}
-    <ul id="tab-dossier" class="control_tabs">
-      <li><a href="#rpu">RPU</a></li>
-      <li><a href="#suivi_clinique" onmouseup="loadSuiviClinique('{{$rpu->sejour_id}}')">Synthèse</a></li>
-      <li><a href="#antecedents">{{tr}}soins.tab.antecedent_and_treatment{{/tr}}</a></li>
+    <div id="header-rpu" style="position: relative;">
+      <div id="patient-banner">
+        {{mb_include module=soins template=inc_patient_banner}}
+      </div>
+
+      <ul id="tab-dossier" class="control_tabs">
+        <li><a href="#rpu">RPU</a></li>
+        <li><a href="#suivi_clinique" onmouseup="loadSuiviClinique('{{$rpu->sejour_id}}')">Synthèse</a></li>
+        <li><a href="#antecedents">{{tr}}soins.tab.antecedent_and_treatment{{/tr}}</a></li>
+
+        {{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
+          <li {{if $rpu->sejour_id}} onmouseup="Prescription.reloadPrescSejour('', '{{$rpu->sejour_id}}','', '', null, null, null,'');" {{/if}}><a href="#prescription_sejour">{{tr}}soins.tab.Prescription{{/tr}}</a></li>
+          <li {{if $rpu->sejour_id}} onmouseup="PlanSoins.loadTraitement('{{$rpu->sejour_id}}',null,'','administration');"{{/if}}><a href="#dossier_traitement">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
+        {{else}}
+          <li onmouseup="loadSuivi({{$rpu->sejour_id}});"><a href="#dossier_suivi">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
+        {{/if}}
+
+
+        <li onmouseup="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">{{tr}}soins.tab.surveillance{{/tr}}</a></li>
+
+        {{if "forms"|module_active}}
+          <li><a href="#ex-forms-rpu">{{tr}}soins.tab.Formulaires{{/tr}}</a></li>
+        {{/if}}
+
+        <li onmouseup="showExamens('{{$consult->_id}}')"><a href="#examens">{{tr}}soins.tab.dossier-medical{{/tr}}</a></li>
+        {{if $app->user_prefs.ccam_sejour == 1 }}
+          <li onmouseup="loadActes('{{$rpu->sejour_id}}')"><a href="#actes">{{tr}}soins.tab.Cotation-infirmiere{{/tr}}</a></li>
+        {{/if}}
+        {{if "dPImeds"|module_active}}
+          <li onmouseup="loadResultLabo('{{$rpu->sejour_id}}')"><a href="#Imeds">{{tr}}soins.tab.Labo{{/tr}}</a></li>
+        {{/if}}
+        <li onmouseup="loadDocItems('{{$rpu->sejour_id}}', '{{$consult->_id}}')"><a href="#doc-items">{{tr}}soins.tab.Documents{{/tr}}</a></li>
+      </ul>
+    </div>
+
+    <div id="content-rpu">
+      <div id="rpu">
+        {{mb_include module="urgences" template="inc_aed_rpu"}}
+        <table style="width: 100%;" class="tbl">
+          <tr>
+            <th class="category">Attentes</th>
+            <th class="category">Prise en charge médicale</th>
+          </tr>
+
+          <tr>
+            <td style="width: 60%">
+              {{mb_include module="urgences" template="inc_vw_rpu_attente"}}
+            </td>
+            <td class="button {{if $sejour->type != "urg"  && !$sejour->UHCD}}arretee{{/if}}">
+              {{mb_include module="urgences" template="inc_pec_praticien"}}
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div id="suivi_clinique" style="display: none"></div>
+
+      <div id="antecedents" style="display: none">
+        {{assign var="current_m"  value="dPurgences"}}
+        {{assign var="_is_anesth" value="0"}}
+        {{assign var=sejour_id    value=""}}
+
+        {{mb_include module=cabinet template=inc_ant_consult chir_id=$app->user_id show_header=0}}
+      </div>
+
+      <div id="constantes" style="display:none"></div>
+      <div id="ex-forms-rpu" style="display: none"></div>
+
+      <div id="examens"    style="display:none">
+        <div class="small-info">
+          Aucune prise en charge médicale
+        </div>
+      </div>
+
+      {{if $app->user_prefs.ccam_sejour == 1 }}
+        <div id="actes" style="display: none;"></div>
+      {{/if}}
 
       {{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
-        <li {{if $rpu->sejour_id}} onmouseup="Prescription.reloadPrescSejour('', '{{$rpu->sejour_id}}','', '', null, null, null,'');" {{/if}}><a href="#prescription_sejour">{{tr}}soins.tab.Prescription{{/tr}}</a></li>
-        <li {{if $rpu->sejour_id}} onmouseup="PlanSoins.loadTraitement('{{$rpu->sejour_id}}',null,'','administration');"{{/if}}><a href="#dossier_traitement">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
+        <div id="prescription_sejour" style="display: none;">
+          <div class="small-info">
+            Aucune prescription
+          </div>
+        </div>
+        <div id="dossier_traitement">
+          <div class="small-info">
+            Aucun plan de soins
+          </div>
+        </div>
       {{else}}
-        <li onmouseup="loadSuivi({{$rpu->sejour_id}});"><a href="#dossier_suivi">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
+        <div id="dossier_suivi" style="display:none"></div>
       {{/if}}
 
-
-      <li onmouseup="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">{{tr}}soins.tab.surveillance{{/tr}}</a></li>
-
-      {{if "forms"|module_active}}
-        <li><a href="#ex-forms-rpu">{{tr}}soins.tab.Formulaires{{/tr}}</a></li>
-      {{/if}}
-
-      <li onmouseup="showExamens('{{$consult->_id}}')"><a href="#examens">{{tr}}soins.tab.dossier-medical{{/tr}}</a></li>
-      {{if $app->user_prefs.ccam_sejour == 1 }}
-        <li onmouseup="loadActes('{{$rpu->sejour_id}}')"><a href="#actes">{{tr}}soins.tab.Cotation-infirmiere{{/tr}}</a></li>
-      {{/if}}
       {{if "dPImeds"|module_active}}
-        <li onmouseup="loadResultLabo('{{$rpu->sejour_id}}')"><a href="#Imeds">{{tr}}soins.tab.Labo{{/tr}}</a></li>
+        <div id="Imeds" style="display: none;"></div>
       {{/if}}
-      <li onmouseup="loadDocItems('{{$rpu->sejour_id}}', '{{$consult->_id}}')"><a href="#doc-items">{{tr}}soins.tab.Documents{{/tr}}</a></li>
-    </ul>
 
-    <div id="rpu">
-      {{mb_include module="urgences" template="inc_aed_rpu"}}
-      <table style="width: 100%;" class="tbl">
-        <tr>
-          <th class="category">Attentes</th>
-          <th class="category">Prise en charge médicale</th>
-        </tr>
-
-        <tr>
-          <td style="width: 60%">
-            {{mb_include module="urgences" template="inc_vw_rpu_attente"}}
-          </td>
-          <td class="button {{if $sejour->type != "urg"  && !$sejour->UHCD}}arretee{{/if}}">
-            {{mb_include module="urgences" template="inc_pec_praticien"}}
-          </td>
-        </tr>
-      </table>
+      <div id="doc-items" style="display: none;"></div>
     </div>
-
-    <div id="suivi_clinique" style="display: none"></div>
-
-    <div id="antecedents" style="display: none">
-      {{assign var="current_m"  value="dPurgences"}}
-      {{assign var="_is_anesth" value="0"}}
-      {{assign var=sejour_id    value=""}}
-
-      {{mb_include module=cabinet template=inc_ant_consult chir_id=$app->user_id show_header=0}}
-    </div>
-
-    <div id="constantes" style="display:none"></div>
-    <div id="ex-forms-rpu" style="display: none">
-    </div>
-
-    <div id="examens"    style="display:none">
-      <div class="small-info">
-        Aucune prise en charge médicale
-      </div>
-    </div>
-
-    {{if $app->user_prefs.ccam_sejour == 1 }}
-    <div id="actes" style="display: none;"> </div>
-    {{/if}}
-
-    {{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
-    <div id="prescription_sejour" style="display: none;">
-      <div class="small-info">
-        Aucune prescription
-      </div>
-    </div>
-    <div id="dossier_traitement">
-      <div class="small-info">
-        Aucun plan de soins
-      </div>
-    </div>
-    {{else}}
-      <div id="dossier_suivi" style="display:none"></div>
-    {{/if}}
-
-    {{if "dPImeds"|module_active}}
-    <div id="Imeds" style="display: none;">
-    </div>
-    {{/if}}
-
-    <div id="doc-items" style="display: none;"></div>
   {{/if}}
 {{/if}}
 
