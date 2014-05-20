@@ -657,14 +657,14 @@ class CHL7v2Segment extends CHL7v2Entity {
         return CAppUI::conf("hl7 CHL7v2Segment PV1_3_2");
       // Identifiant externe
       case 'idex':
-        if (!$affectation->_id || !$affectation->_ref_lit) {
+        if (!$affectation->_id || !$affectation->lit_id) {
           return null;
         } 
         
         return CIdSante400::getMatch("CChambre", $receiver->_tag_chambre, null, $affectation->_ref_lit->_ref_chambre->_id)->id400;
       // Nom de la chambre
       default:
-        if (!$affectation->_id || !$affectation->_ref_lit) {
+        if (!$affectation->_id || !$affectation->lit_id) {
           return null;
         }
         
@@ -685,13 +685,13 @@ class CHL7v2Segment extends CHL7v2Entity {
         return CAppUI::conf("hl7 CHL7v2Segment PV1_3_3");
       // Identifiant externe
       case 'idex':
-        if (!$affectation->_id || !$affectation->_ref_lit) {
+        if (!$affectation->_id || !$affectation->lit_id) {
           return null;
         } 
         return CIdSante400::getMatch("CLit", $receiver->_tag_lit, null, $affectation->_ref_lit->_id)->id400;
       // Nom du lit
       default:
-        if (!$affectation->_id || !$affectation->_ref_lit) {
+        if (!$affectation->_id || !$affectation->lit_id) {
           return null;
         }
         

@@ -35,6 +35,9 @@ if (!CAppUI::conf("dPurgences create_sejour_hospit")) {
   foreach ($sejour->getProperties() as $name => $value) {
     $sejour_rpu->$name = $value;
   }
+
+  // Forcer le reliquat du séjour en urgences
+  $sejour_rpu->type = "urg";
   
   // Enregistrement
   $sejour_rpu->_id = null;
@@ -43,6 +46,14 @@ if (!CAppUI::conf("dPurgences create_sejour_hospit")) {
   $sejour_rpu->_generate_NDA = false;
   $sejour_rpu->_no_synchro   = true;
   $msg = $sejour_rpu->store();
+
+  if ($msg) {
+    CAppUI::setMsg("$action: $msg", UI_MSG_ERROR );
+    CAppUI::redirect("m=$m&tab=$tab");
+    return;
+  }
+  CAppUI::setMsg("Séjour reliquat enregistré", UI_MSG_OK);
+
   viewMsg($msg, "Séjour reliquat enregistré");
   
   // Transfert du RPU sur l'ancien séjour
