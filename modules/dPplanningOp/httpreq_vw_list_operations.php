@@ -29,6 +29,7 @@ if ($userSel->_id) {
   $where = array();
 
   $where["date"] = "= '$date'";
+  $where["plageop_id"] = "IS NULL";
   $where[] = "chir_id = '$userSel->_id' OR anesth_id = '$userSel->_id'";
   if (!$canceled) {
     $where["annulee"] = "= '0'";

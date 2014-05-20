@@ -98,7 +98,7 @@ if ($selPraticien->isAnesth()) {
     
     $listInterv["comp"][$_service->_id]      = $interv->loadList($whereHospi, $order, null, null, $ljoin);
     $count_ops["comp"] += count($listInterv["comp"][$_service->_id]);
-    
+
     $listInterv["hors_plage"][$_service->_id] = $interv->loadList($whereUrg  , $order, null, null, $ljoin);
     $count_ops["hors_plage"] += count($listInterv["hors_plage"][$_service->_id]);
   }
@@ -196,6 +196,7 @@ else {
       FROM operations
       WHERE operations.annulee = '0'
         AND operations.chir_id = '$selPratLogin'
+        AND operations.plageop_id IS NULL
         AND operations.date BETWEEN '$month_min' AND '$month_max'
       GROUP BY operations.date
       ORDER BY operations.date";
