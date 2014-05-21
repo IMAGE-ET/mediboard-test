@@ -25,7 +25,7 @@ class CMbSOAPClient extends SoapClient {
   public $loggable;
   public $encoding;
   public $options;
-  public $return_raw;
+  public $return_mode;
   public $xop_mode;
   public $response_body;
   public $ca_info;
@@ -35,6 +35,8 @@ class CMbSOAPClient extends SoapClient {
   public $check_option;
   public $use_tunnel;
 
+  /** @var string Response file path, when in "request to file mode" */
+  public $response_file;
 
   /**
    * The constructor
@@ -60,9 +62,9 @@ class CMbSOAPClient extends SoapClient {
       $verify_peer = false, $cafile = null, $wsdl_external = null, $socket_timeout = null
   ) {
 
-    $this->return_raw    = CMbArray::extract($options, "return_raw", false);
-    $this->xop_mode      = CMbArray::extract($options, "xop_mode", false);
-    $this->use_tunnel    = CMbArray::extract($options, "use_tunnel", false);
+    $this->return_mode = CMbArray::extract($options, "return_mode", "normal");
+    $this->xop_mode    = CMbArray::extract($options, "xop_mode",    false);
+    $this->use_tunnel  = CMbArray::extract($options, "use_tunnel",  false);
 
     $this->wsdl_url = $rooturl;
 
@@ -152,7 +154,7 @@ class CMbSOAPClient extends SoapClient {
     try {
       $result = parent::__soapCall($function_name, $arguments, $options, $input_headers, $output_headers);
 
-      if ($this->return_raw) {
+      if ($this->return_mode == "raw") {
         return $this->response_body;
       }
 
@@ -177,7 +179,7 @@ class CMbSOAPClient extends SoapClient {
    * @return null|string
    * @throws CMbException
    */
-  public function __doRequest($request, $location,  $action,  $version,  $one_way = 0 ) {
+  public function __doRequest($request, $location, $action, $version, $one_way = 0) {
     $ca_file = $this->ca_info;
     if ($this->use_tunnel) {
       $tunnel_exist = false;
@@ -198,61 +200,233 @@ class CMbSOAPClient extends SoapClient {
       }
     }
 
-    if ($this->xop_mode) {
-      $entete = '--MIME_boundary10
-Content-Type: application/xop+xml; charset=UTF-8; type="application/soap+xml"
-Content-Transfer-Encoding: binary
-Content-ID: <rootpart@openxtrem.com>
-';
+    $response = null;
 
-      $pied = utf8_encode("\n--MIME_boundary10--\n");
-
-      $request = preg_replace("#^<\?xml[^>]*>#", "", $request);
-      $request = $entete.$request.$pied;
-
-      $header = array('Content-Type: multipart/related', 'boundary="MIME_boundary10"', 'type="application/xop+xml"',
-                      'start="<rootpart@openxtrem.com>"', 'MIME-Version: 1.0', "SOAPAction: $action",
-                      "Content-Length: ".strlen($request));
-
-      try {
-        $http_client = new CHTTPClient($location);
-        $http_client->header = $header;
-        if ($this->local_cert) {
-          $http_client->setSSLAuthentification($this->local_cert, $this->passphrase);
-        }
-        if ($ca_file) {
-          $http_client->setSSLPeer($ca_file);
-        }
-        $result = $http_client->post($request);
-      }
-      catch (Exception $e) {
-        throw(new CMbException("Error: ".$e->getMessage()));
-      }
-
-      preg_match("#<.*Envelope>#", $result, $matches);
-      $xml = $matches[0];
+    if ($this->return_mode == "file") {
+      $this->doRequestToFile($request, $location, $action, $ca_file);
+      return "";
+    }
+    elseif ($this->xop_mode) {
+      $response = $this->doRequestXOP($request, $location, $action, $ca_file);
     }
     else {
-      $xml = parent::__doRequest($request, $location,  $action,  $version,  $one_way);
+      $response = parent::__doRequest($request, $location, $action, $version, $one_way);
     }
 
-    if (!$this->return_raw) {
-      return $xml;
+    if ($this->return_mode == "normal") {
+      return $response;
     }
 
-    if (!$xml) {
+    if (!$response) {
       return null;
     }
 
     $document = new CMbXMLDocument();
-    $document->loadXMLSafe($xml, null, true);
+    $document->loadXMLSafe($response, null, true);
     $xpath = new CMbXPath($document);
     $xpath->registerNamespace("soap", "http://schemas.xmlsoap.org/soap/envelope/");
     $body = $xpath->queryUniqueNode("/soap:Envelope/soap:Body");
     $new_document = new CMbXMLDocument("UTF-8");
     $new_document->appendChild($new_document->importNode($body->firstChild, true));
     $this->response_body = $new_document->saveXML();
-    return $xml;
+    return $response;
+  }
+
+  /**
+   * Get an HTTP client based on cURL
+   *
+   * @param string $location SOAP URL
+   * @param string $ca_file  Certification authority file path
+   * @param array  $headers  HTTP headers
+   *
+   * @return CHTTPClient
+   */
+  protected function getHttpClient($location, $ca_file, $headers) {
+    $http_client = new CHTTPClient($location);
+
+    if ($this->local_cert) {
+      $http_client->setSSLAuthentification($this->local_cert, $this->passphrase);
+    }
+    if ($ca_file) {
+      $http_client->setSSLPeer($ca_file);
+    }
+
+    $http_client->header = $headers;
+
+    return $http_client;
+  }
+
+  /**
+   * Make a XOP SOAP request
+   *
+   * @param string $request  Request
+   * @param string $location SOAP URL
+   * @param string $action   SOAP action
+   * @param string $ca_file  Certification authority file path
+   *
+   * @throws CMbException
+   * @return string
+   */
+  protected function doRequestXOP($request, $location, $action, $ca_file) {
+    $head = '--MIME_boundary10
+Content-Type: application/xop+xml; charset=UTF-8; type="application/soap+xml"
+Content-Transfer-Encoding: binary
+Content-ID: <rootpart@openxtrem.com>
+';
+
+    $foot = utf8_encode("\n--MIME_boundary10--\n");
+
+    $request = preg_replace('#^<\?xml[^>]*>#', '', $request);
+    $request = $head.$request.$foot;
+
+    $headers = array(
+      'Content-Type: multipart/related',
+      'boundary="MIME_boundary10"',
+      'type="application/xop+xml"',
+      'start="<rootpart@openxtrem.com>"',
+      'MIME-Version: 1.0',
+      "SOAPAction: $action",
+      "Content-Length: ".strlen($request),
+    );
+
+    try {
+      $http_client = $this->getHttpClient($location, $ca_file, $headers);
+      $result = $http_client->post($request);
+    }
+    catch (Exception $e) {
+      throw new CMbException("Error: ".$e->getMessage());
+    }
+
+    preg_match("#<.*Envelope>#", $result, $matches);
+    return $matches[0];
+  }
+
+  /**
+   * Make a SOAP request and get the result in a file
+   *
+   * @param string $request  Request
+   * @param string $location SOAP URL
+   * @param string $action   SOAP action
+   * @param string $ca_file  Certification authority file path
+   *
+   * @throws CMbException
+   * @return void
+   */
+  protected function doRequestToFile($request, $location, $action, $ca_file) {
+    $headers = array(
+      "Content-Type: text/xml; charset=utf-8",
+      "SOAPAction: \"$action\"",
+      "Content-Length: ".strlen($request),
+    );
+
+    try {
+      $http_client = $this->getHttpClient($location, $ca_file, $headers);
+
+      $result_file = tempnam("mb", "so");
+      $f = fopen($result_file, "w+");
+
+      $http_client->setOption(CURLOPT_FILE, $f);
+      $http_client->setOption(CURLOPT_RETURNTRANSFER, false);
+      $http_client->setOption(CURLOPT_SSL_VERIFYPEER, false);
+
+      if (isset($this->options["login"]) && isset($this->options["password"])) {
+        $username = $this->options["login"];
+        $password = $this->options["password"];
+        $http_client->setOption(CURLOPT_USERPWD, "$username:$password");
+        $http_client->setOption(CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+      }
+
+      $http_client->post($request);
+
+      fclose($f);
+
+      // Remove soap enveloppe...
+      /**
+       * <?xml version="1.0" encoding="utf-8"?>
+      <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <soap:Body>
+      .....
+       */
+      $fr = fopen($result_file, "r");
+
+      $this->response_file = tempnam("mb", "so");
+      $fw = fopen($this->response_file, "w+");
+
+      $status = "xmlheader";
+      $soapenvns = "";
+      $buffer = "";
+      $size = 0;
+      $size_truncate = null;
+      while (!feof($fr)) {
+        switch ($status) {
+          // <?xml version="1.0" encoding="utf-8"? >
+          case "xmlheader":
+            $c = fgetc($fr);
+            $buffer .= $c;
+
+            if (strpos($buffer, "?>") !== false) {
+              $xmlheader = $buffer;
+              $buffer = "";
+              $status = "soapenvns";
+
+              $size += fwrite($fw, $xmlheader."\n");
+            }
+            break;
+
+          // <soap:
+          case "soapenvns":
+            $c = fgetc($fr);
+            $buffer .= $c;
+
+            if (strpos($buffer, ":") !== false) {
+              $soapenvns = substr($buffer, strrpos($buffer, "<"));
+              $buffer = "";
+              $status = "soapenv";
+            }
+            break;
+
+          // <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+          // xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          // xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body>
+          case "soapenv":
+            $c = fgetc($fr);
+            $buffer .= $c;
+
+            if (stripos($buffer, "{$soapenvns}Body>") !== false) {
+              $buffer = "";
+              $status = "content";
+            }
+            break;
+
+          case "content":
+            $s = fgets($fr, 1024);
+            $buffer = substr($buffer.$s, -1024);
+
+            $size += fwrite($fw, $s);
+
+            // Check if we have the closing soapenv:body
+            $soapenvend = "</".substr($soapenvns, 1);
+            $pos = stripos($buffer, $soapenvend);
+            if ($pos !== false) {
+              $size_truncate = $size - (strlen($buffer) - $pos);
+              break 2;
+            }
+            break;
+
+          default:
+            // do nothing
+        }
+      }
+
+      fclose($fr);
+      unlink($result_file);
+
+      ftruncate($fw, $size_truncate);
+      fclose($fw);
+    }
+    catch (Exception $e) {
+      throw new CMbException("Error: ".$e->getMessage());
+    }
   }
   
   /**

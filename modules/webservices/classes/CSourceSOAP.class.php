@@ -31,7 +31,7 @@ class CSourceSOAP extends CExchangeSource {
   public $passphrase;
   public $iv_passphrase;
   public $safe_mode;
-  public $return_raw;
+  public $return_mode;
   public $soap_version;
   public $xop_mode;
   public $use_tunnel;
@@ -76,7 +76,7 @@ class CSourceSOAP extends CExchangeSource {
     $specs["type_soap"]        = "enum list|CMbSOAPClient|CNuSOAPClient default|CMbSOAPClient notNull";
     $specs["iv_passphrase"]    = "str show|0 loggable|0";
     $specs["safe_mode"]        = "bool default|0";
-    $specs["return_raw"]       = "bool default|0";
+    $specs["return_mode"]      = "enum list|normal|raw|file";
     $specs["soap_version"]     = "enum list|SOAP_1_1|SOAP_1_2 default|SOAP_1_1 notNull";
     $specs["xop_mode"]         = "bool default|0";
     $specs["use_tunnel"]       = "bool default|0";
@@ -177,11 +177,12 @@ class CSourceSOAP extends CExchangeSource {
     }
     
     $options = array(
-      "encoding" => $this->encoding
+      "encoding"    => $this->encoding,
+      "return_mode" => "normal",
     );
 
-    if ($this->return_raw) {
-      $options["return_raw"] = true;
+    if ($this->return_mode) {
+      $options["return_mode"] = $this->return_mode;
     }
 
     if ($this->xop_mode) {

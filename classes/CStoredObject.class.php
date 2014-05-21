@@ -1479,14 +1479,15 @@ class CStoredObject extends CModelObject {
     $this->notify("BeforeStore");
 
     $spec = $this->_spec;
+    $vars = $this->getPlainFields();
     
     // DB query
     if ($this->_old->_id) {
-      $ret = $spec->ds->updateObject($spec->table, $this, $spec->key, $spec->nullifyEmptyStrings);
+      $ret = $spec->ds->updateObject($spec->table, $this, $vars, $spec->key, $spec->nullifyEmptyStrings);
     }
     else {
       $keyToUpdate = $spec->incremented ? $spec->key : null;
-      $ret = $spec->ds->insertObject($spec->table, $this, $keyToUpdate/*, count($spec->uniques) > 0*/);
+      $ret = $spec->ds->insertObject($spec->table, $this, $vars, $keyToUpdate/*, count($spec->uniques) > 0*/);
     }
 
     if (!$ret) {
@@ -1518,12 +1519,14 @@ class CStoredObject extends CModelObject {
    */
   function rawStore() {
     $spec = $this->_spec;
+    $vars = $this->getPlainFields();
+
     if ($this->_id) {
-      return $spec->ds->updateObject($spec->table, $this, $spec->key, $spec->nullifyEmptyStrings);
+      return $spec->ds->updateObject($spec->table, $this, $vars, $spec->key, $spec->nullifyEmptyStrings);
     }
     else {
       $key = $spec->incremented ? $spec->key : null;
-      return $spec->ds->insertObject($spec->table, $this, $key);
+      return $spec->ds->insertObject($spec->table, $this, $vars, $key);
     }
   }
 

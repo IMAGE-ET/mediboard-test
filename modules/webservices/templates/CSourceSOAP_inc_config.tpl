@@ -83,8 +83,8 @@
             </tr>
 
             <tr>
-              <th>{{mb_label object=$source field="return_raw"}}</th>
-              <td>{{mb_field object=$source field="return_raw"}}</td>
+              <th>{{mb_label object=$source field="return_mode"}}</th>
+              <td>{{mb_field object=$source field="return_mode"}}</td>
             </tr>
             <tr>
               <th>{{mb_label object=$source field="xop_mode"}}</th>

@@ -239,6 +239,20 @@ class CSetupwebservices extends CSetup {
                 ADD `socket_timeout` INT (11) UNSIGNED;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.39";
+    $this->makeRevision("0.39");
+
+    $query = "ALTER TABLE `source_soap`
+                ADD `return_mode` ENUM ('normal','raw','file') NOT NULL DEFAULT 'normal' AFTER `return_raw`;";
+    $this->addQuery($query);
+
+    $query = "UPDATE `source_soap`
+                SET `return_mode` = 'raw' WHERE `return_raw` = '1';";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `source_soap`
+                DROP `return_raw`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.40";
   }
 }

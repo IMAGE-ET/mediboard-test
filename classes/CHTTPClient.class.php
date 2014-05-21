@@ -38,6 +38,7 @@ class CHTTPClient {
     }
     $this->handle = $init;
 
+    $this->setOption(CURLOPT_RETURNTRANSFER, true);
   }
 
   /**
@@ -205,7 +206,6 @@ class CHTTPClient {
    */
   function executeRequest($close = true) {
     $handle = $this->handle;
-    $this->setOption(CURLOPT_RETURNTRANSFER, true);
     $this->createOption();
 
     $result = curl_exec($handle);
