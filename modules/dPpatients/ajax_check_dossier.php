@@ -13,13 +13,12 @@ CCanDo::checkAdmin();
 $ds   = CSQLDataSource::get("std");
 $mode = CValue::get("mode", "check");
 
-$request = "SELECT DISTINCT(d.object_id)
+$request = "SELECT DISTINCT(d.object_id), d.object_class
             FROM `dossier_medical` d
-            WHERE d.`object_class` = 'CPatient'
-            AND d.`object_id` <> '0'
+            WHERE d.`object_id` <> '0'
             AND EXISTS (
               SELECT * FROM `dossier_medical` e
-              WHERE e.`object_class` = 'CPatient'
+              WHERE e.`object_class` = d.`object_class`
               AND e.`object_id` = d.`object_id`
               AND e.`dossier_medical_id` <> d.`dossier_medical_id`
             );";
@@ -31,7 +30,7 @@ if ($mode == "repair") {
   foreach ($resultats as $result) {
     //Dossier de références
     $where = array();
-    $where["object_class"] = "= 'CPatient'";
+    $where["object_class"] = "= '".$result['object_class']."'";
     $where["object_id"] = "= '".$result['object_id']."'";
     $dossier_ok = new CDossierMedical();
     $dossier_ok->loadObject($where, "dossier_medical_id ASC");
