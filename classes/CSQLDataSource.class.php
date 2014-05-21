@@ -704,8 +704,6 @@ abstract class CSQLDataSource {
     if ($keyName && $id) {
       $object->$keyName = $id;
     }
-
-    $this->freeResult($result);
     
     return true;
   }
@@ -748,8 +746,6 @@ abstract class CSQLDataSource {
         if (!$result) {
           throw new CMbException($this->error());
         }
-
-        $this->freeResult($result);
       }
     }
   }
@@ -827,8 +823,6 @@ abstract class CSQLDataSource {
     if (!$result) {
       return false;
     }
-
-    $this->freeResult($result);
 
     return true;
   }
@@ -1024,12 +1018,10 @@ abstract class CSQLDataSource {
     $tab_name = substr(uniqid("dates_"), 0, 7);
     
     $query = "CREATE TEMPORARY TABLE $tab_name (date date not null);";
-    $result = $ds->exec($query);
-    $ds->freeResult($result);
+    $ds->exec($query);
     
     $query = "INSERT INTO $tab_name VALUES " . implode(",", $dates) . ";";
-    $result = $ds->exec($query);
-    $ds->freeResult($result);
+    $ds->exec($query);
     
     return $tab_name;
   } 

@@ -248,8 +248,6 @@ class CErrorLog extends CStoredObject {
     if (!$result) {
       throw new Exception("Exec failed");
     }
-
-    $ds->freeResult($result);
   }
 
   /**
@@ -261,7 +259,7 @@ class CErrorLog extends CStoredObject {
     $ds = $this->getDS();
 
     // A little cleanup ....
-    $result = $ds->exec(
+    $ds->exec(
       "DELETE `error_log_data`
        FROM `error_log_data`
        LEFT JOIN error_log ON (
@@ -272,10 +270,6 @@ class CErrorLog extends CStoredObject {
        )
        WHERE error_log_id IS NULL"
     );
-
-    if ($result) {
-      $ds->freeResult($result);
-    }
   }
 
   /**
@@ -298,10 +292,6 @@ class CErrorLog extends CStoredObject {
       return 0;
     }
 
-    $affected = $ds->affectedRows();
-
-    $ds->freeResult($result);
-
-    return $affected;
+    return $ds->affectedRows();
   }
 }

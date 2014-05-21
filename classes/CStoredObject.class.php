@@ -2133,8 +2133,7 @@ class CStoredObject extends CModelObject {
         $query .= "\nAND `$backMeta` = '$object->_class'";
       }
 
-      $result = $ds->exec($query);
-      $ds->freeResult($result);
+      $ds->exec($query);
     }    
   }
   
@@ -2491,8 +2490,6 @@ class CStoredObject extends CModelObject {
     if (!$result) {
       return $ds->error();
     }
-
-    $ds->freeResult($result);
    
     // Deletion successful
     $this->_id = null;
