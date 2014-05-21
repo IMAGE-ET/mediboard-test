@@ -1,35 +1,25 @@
-{{* $Id: inc_vw_sorties.tpl 8332 2010-03-15 14:48:35Z lryo $ *}}
-
-{{*
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision: 8332 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
-
-<script type="text/javascript">
+<script>
 autoriserSortie = function(value){
   var form = getForm('editSortieAutorise');
-  form.elements.sortie_autorisee.value = value; 
-  if (!value) {
-    var sejourForm = getForm("editSejour");
-    $V(sejourForm.elements.mode_sortie, "normal");
-  }
-  submitRPU();
+  form.elements.sortie_autorisee.value = value;
+  onSubmitFormAjax(getForm('editSejour'), function(){
+    submitRPU();
+  });
 };
 
 autoriserEffectuerSortie = function() {
   getForm('editSortieAutorise').elements.sortie_autorisee.value = 1;
-  {{if $conf.dPurgences.valid_cotation_sortie_reelle}}
-    return onSubmitFormAjax(getForm('ValidCotation'), { onComplete : function(){ 
-      submitSejRpuConsult(); 
+  return onSubmitFormAjax(getForm('editSejour'), function(){
+    {{if $conf.dPurgences.valid_cotation_sortie_reelle}}
+      return onSubmitFormAjax(getForm('ValidCotation'), function(){
+        submitSejRpuConsult();
+        $('button_reconvoc').disabled = null;
+      });
+    {{else}}
       $('button_reconvoc').disabled = null;
-    }});
-  {{else}}
-    $('button_reconvoc').disabled = null;
-    return submitSejRpuConsult(); 
-  {{/if}}
+      return submitSejRpuConsult();
+    {{/if}}
+  });
 }
 </script>
 
