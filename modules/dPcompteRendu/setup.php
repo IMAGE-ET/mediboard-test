@@ -972,6 +972,11 @@ class CSetupdPcompteRendu extends CSetup {
       ADD `factory` ENUM ('none', 'CDomPDFConverter', 'CWkHtmlToPDFConverter', 'CPrinceXMLConverter');";
     $this->addQuery($query);
 
-    $this->mod_version = "1.00";
+    $this->makeRevision("1.00");
+    $query = "ALTER TABLE `compte_rendu`
+                ADD `type_doc_sisra` VARCHAR(10);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.01";
   }
 }

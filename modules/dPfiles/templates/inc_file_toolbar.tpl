@@ -97,8 +97,12 @@
     </select>
     
     </form>
-    {{if @$modules.dmp}}
+    {{if "dmp"|module_active}}
       {{mb_include module=dmp template=inc_buttons_files_dmp}}
+    {{/if}}
+
+    {{if "sisra"|module_active}}
+      {{mb_include module=sisra template=inc_buttons_files_sisra}}
     {{/if}}
   {{/if}}
 {{/if}}

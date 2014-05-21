@@ -555,6 +555,13 @@
           </tr>
         {{/if}}
 
+        {{if "sisra"|module_active}}
+          <tr>
+            <th>{{mb_label object=$compte_rendu field="type_doc_sisra"}}</th>
+            <td>{{mb_field object=$compte_rendu field="type_doc_sisra" emptyLabel="Choose" style="width: 15em;"}}</td>
+          </tr>
+        {{/if}}
+
         <tr>
           <th>{{mb_label object=$compte_rendu field="purge_field"}}</th>
           <td>{{mb_field object=$compte_rendu field="purge_field"}}</td>

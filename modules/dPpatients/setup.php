@@ -2565,7 +2565,12 @@ class CSetupdPpatients extends CSetup {
       ADD `user_id` INT (11) UNSIGNED AFTER `constantes_medicales_id`";
     $this->addQuery($query);
 
-    $this->mod_version = "2.08";
+    $this->makeRevision("2.08");
+    $query = "ALTER TABLE `patients`
+                ADD `allow_sisra_send` ENUM ('0','1') DEFAULT '0'";
+    $this->addQuery($query);
+
+    $this->mod_version = "2.09";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

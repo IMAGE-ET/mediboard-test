@@ -262,6 +262,11 @@ class CSetupdPfiles extends CSetup {
     $this->makeRevision("0.33");
     $this->addPrefQuery("mozaic_disposition", "2x2");
 
-    $this->mod_version = "0.34";
+    $this->makeRevision("0.34");
+    $query = "ALTER TABLE `files_mediboard`
+                ADD `type_doc_sisra` VARCHAR(10);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.35";
   }
 }

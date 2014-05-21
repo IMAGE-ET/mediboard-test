@@ -20,6 +20,7 @@ class CDocumentItem extends CMbMetaObject {
   public $author_id;
   public $private;
   public $type_doc;
+  public $type_doc_sisra;
 
   // Derivated fields
   public $_extensioned;
@@ -57,9 +58,15 @@ class CDocumentItem extends CMbMetaObject {
       }
       $type_doc = substr($type_doc, 0, -1);
     }
-    $props["type_doc"]         = (empty($type_doc) ? "str" : "enum list|$type_doc");
-    $props["_extensioned"]     = "str notNull";
-    $props["_send_problem"]    = "text";
+    $props["type_doc"]       = (empty($type_doc) ? "str" : "enum list|$type_doc");
+    $sisra_types = "";
+    if (CModule::getActive("sisra")) {
+      $sisra_types = CSisraTools::getSisraTypeDocument();
+      $sisra_types = implode("|", $sisra_types);
+    }
+    $props["type_doc_sisra"] = (empty($sisra_types) ? "str" : "enum list|$sisra_types");
+    $props["_extensioned"]   = "str notNull";
+    $props["_send_problem"]  = "text";
 
     return $props;
   }
@@ -278,6 +285,24 @@ class CDocumentItem extends CMbMetaObject {
    */
   function getUsersStatsDetails($user_ids) {
     return array();
+  }
+
+  /**
+   * Return the patient
+   *
+   * @return CPatient|null
+   */
+  function loadRelPatient() {
+    /** @var CPatient|IPatientRelated $object */
+    $object = $this->loadTargetObject();
+    if ($object instanceof CPatient) {
+      return $object;
+    }
+    if (in_array("IPatientRelated", class_implements($object))) {
+      return $object->loadRelPatient();
+    }
+
+    return null;
   }
 
   /**

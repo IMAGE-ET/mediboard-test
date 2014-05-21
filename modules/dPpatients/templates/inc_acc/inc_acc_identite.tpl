@@ -337,6 +337,12 @@ Main.add(function() {
                  tabs.changeTabAndFocus('beneficiaire', this.form.regime_sante) :
                  tabs.changeTabAndFocus('assure', this.form.assure_nom);"}}</td>
         </tr>
+        {{if "sisra"|module_active}}
+          <tr>
+            <th>{{mb_label object=$patient field="allow_sisra_send"}}</th>
+            <td>{{mb_field object=$patient field="allow_sisra_send"}}</td>
+          </tr>
+        {{/if}}
         {{if "covercard"|module_active}}
         <tr style="display:none">
           <th>{{mb_label object=$patient field="_assureCC_id"}}</th>
