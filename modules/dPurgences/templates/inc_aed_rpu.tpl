@@ -270,7 +270,7 @@
           <td>
             {{mb_field object=$rpu field="circonstance" autocomplete="true,1,10,true,true" form=editRPU}}
           </td>
-          {{if $conf.dPurgences.display_motif_sfmu}}
+          {{if "CAppUI::conf"|static_call:"dPurgences CRPU display_motif_sfmu":"CGroups-$g"}}
             <script>
               changeMotifSfmu = function(form) {
                 {{if "CAppUI::conf"|static_call:"dPurgences CRPU defer_sfmu_diag_inf":"CGroups-$g"}}
@@ -295,7 +295,7 @@
         </tr>
       {{/if}}
 
-      {{if !$gerer_circonstance && $conf.dPurgences.display_motif_sfmu}}
+      {{if !$gerer_circonstance && "CAppUI::conf"|static_call:"dPurgences CRPU display_motif_sfmu":"CGroups-$g"}}
         {{assign var=notnull value=""}}
         {{if "CAppUI::conf"|static_call:"dPurgences CRPU motif_sfmu_accueil":"CGroups-$g"}}
           {{assign var=notnull value="notNull"}}

@@ -23,7 +23,9 @@ CConfiguration::register(
           "motif_sfmu_accueil"    => "bool default|0",
           "provenance_necessary"  => "bool default|0",
           "imagerie_etendue"      => "bool default|0",
+          "display_motif_sfmu"    => "bool default|0",
           "defer_sfmu_diag_inf"   => "bool default|0",
+          "diag_prat_view"        => "bool default|0",
         ),
         "Display" => array(
           "check_cotation" => "enum list|0|1 default|1 localize",

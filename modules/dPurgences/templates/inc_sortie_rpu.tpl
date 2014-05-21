@@ -81,7 +81,7 @@
     {{if $sejour->sortie_reelle && !$rpu->_ref_consult->valide}}<div class="warning">La cotation n'est pas validée</div>{{/if}}
   {{/if}}
 
-  {{if $conf.dPurgences.display_motif_sfmu && "CAppUI::conf"|static_call:"dPurgences Display check_gemsa":"CGroups-$g" !== "0"}}
+  {{if "CAppUI::conf"|static_call:"dPurgences CRPU display_motif_sfmu":"CGroups-$g" && "CAppUI::conf"|static_call:"dPurgences Display check_gemsa":"CGroups-$g" !== "0"}}
     {{if !$rpu->motif_sfmu    }}<div class="warning">Champ manquant {{mb_label object=$rpu field=motif_sfmu      }}</div>{{/if}}
   {{/if}}
 

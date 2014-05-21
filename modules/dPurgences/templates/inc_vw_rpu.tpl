@@ -228,7 +228,7 @@ function showEtabEntreeTransfert(mode) {
           </table>
         </form>
       </fieldset>
-      {{if $conf.dPurgences.display_motif_sfmu}}
+      {{if "CAppUI::conf"|static_call:"dPurgences CRPU display_motif_sfmu":"CGroups-$g"}}
         <fieldset>
           <legend>Précisions sur l'entrée</legend>
           <form name="editRPUMotifsfmu" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">

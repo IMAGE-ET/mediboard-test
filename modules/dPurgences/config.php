@@ -19,7 +19,6 @@ $dPconfig["dPurgences"] = array (
   "motif_rpu_view"            => "1",
   "age_patient_rpu_view"      => "0",
   "responsable_rpu_view"      => "1",
-  "diag_prat_view"            => "0",
   "check_cotation"            => "1",
   "check_gemsa"               => "1",
   "check_ccmu"                => "1",
@@ -51,7 +50,6 @@ $dPconfig["dPurgences"] = array (
   "imagerie_refresh_frequency"           => "180",
   "identito_vigilance_refresh_frequency" => "300",
   "gestion_motif_sfmu"                   => "0",
-  "display_motif_sfmu"                   => "0",
   "use_vue_topologique"                  => "1",
   "vue_topo_refresh_frequency"           => "90",
 );

@@ -424,6 +424,10 @@ class CSetupdPurgences extends CSetup {
     $this->makeRevision("0.49");
 
     $this->addDefaultConfig("dPurgences use_vue_topologique", "dPhospi use_vue_topologique");
-    $this->mod_version = "0.50";
+    $this->makeRevision("0.50");
+
+    $this->addDefaultConfig("dPurgences CRPU diag_prat_view"    , "dPurgences diag_prat_view");
+    $this->addDefaultConfig("dPurgences CRPU display_motif_sfmu", "dPurgences display_motif_sfmu");
+    $this->mod_version = "0.51";
   }  
 }

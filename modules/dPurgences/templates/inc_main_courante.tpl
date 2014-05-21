@@ -11,7 +11,7 @@
 {{assign var=show_statut value=$conf.dPurgences.show_statut}}
 {{assign var=create_sejour_hospit value=$conf.dPurgences.create_sejour_hospit}}
 
-<script type="text/javascript">
+<script>
   Main.add(function() {
     Veille.refresh();
     Missing.refresh();
@@ -120,7 +120,7 @@
     <th style="width: 10em;">{{mb_title class=CRPU field=_attente}} / {{mb_title class=CRPU field=_presence}}</th>
     {{if $medicalView}}
       <th style="width: 16em;">
-      {{if $conf.dPurgences.diag_prat_view}}
+      {{if "dPurgences CRPU diag_prat_view"|conf:"CGroups-$g"}}
         {{tr}}CRPU-diag_infirmier-court{{/tr}} / {{tr}}Medical{{/tr}}
       {{else}}
         {{tr}}CRPU-diag_infirmier-court{{/tr}}
@@ -179,7 +179,7 @@
         <button type="button" class="search notext" title="Synthèse" onclick="showSynthese('{{$_sejour->_id}}');" style="float: right">Synthèse</button>
 
         {{if $patient->_ref_IPP && @$modules.hprim21}}
-          <script type="text/javascript">
+          <script>
             PatHprimSelector.init{{$patient->_id}} = function(){
               this.sForm      = "editIPP{{$patient->_id}}";
               this.sId        = "id400";
@@ -421,7 +421,7 @@
             {{if $rpu->date_at}} 
             <img src="images/icons/accident_travail.png" />
             {{/if}}
-            {{if $rpu->motif && $conf.dPurgences.diag_prat_view}}
+            {{if $rpu->motif && "dPurgences CRPU diag_prat_view"|conf:"CGroups-$g"}}
               <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
                 <strong>{{mb_title class=$rpu field=motif}}</strong> : {{$rpu->motif|nl2br}}
               </span>
@@ -435,7 +435,7 @@
                   <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');" class="compact">
                     {{mb_label object=$rpu field="motif_entree"}} : {{$rpu->motif_entree|nl2br}}
                   </span> 
-                {{/if}} 
+                {{/if}}
               {{/if}}
             {{/if}}
           </td>
