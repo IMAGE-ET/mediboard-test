@@ -36,9 +36,7 @@ abstract class CSQLDataSource {
   /** @var Chronometer */
   public $chrono      = null;
 
-  /**
-   * @var Chronometer
-   */
+  /** @var Chronometer */
   public $chronoFetch = null;
 
   // Columns to be never quoted: hack for some SQLDataSources unable to cast implicitly
@@ -52,6 +50,7 @@ abstract class CSQLDataSource {
    * Init a chronometer
    */
   function __construct() {
+    $this->chronoInit  = new Chronometer();
     $this->chrono      = new Chronometer();
     $this->chronoFetch = new Chronometer();
   }
@@ -63,7 +62,7 @@ abstract class CSQLDataSource {
    * @param string $dsn   Data source name
    * @param bool   $quiet Won't trigger errors if true
    * 
-   * @return CSQLDataSource or null if unhandled type
+   * @return CSQLDataSource|null
    */
   static function get($dsn, $quiet = false) {
     if (!array_key_exists($dsn, self::$dataSources)) {
@@ -74,13 +73,15 @@ abstract class CSQLDataSource {
 
       if (null == $dbtype = CAppUI::conf("db $dsn dbtype")) {
         trigger_error("FATAL ERROR: Undefined type DSN type for '$dsn'.", E_USER_ERROR);
-        return;
+        return null;
       }
 
-      if (null == $dsClass = @self::$engines[$dbtype]) {
+      if (empty(self::$engines[$dbtype])) {
         trigger_error("FATAL ERROR: DSN type '$dbtype' unhandled.", E_USER_ERROR);
-        return;
+        return null;
       }
+
+      $dsClass = self::$engines[$dbtype];
 
       /** @var self $dataSource */
       $dataSource = new $dsClass;
@@ -103,7 +104,7 @@ abstract class CSQLDataSource {
    * @param string $user Database user name
    * @param string $pass Database user password
    * 
-   * @return resource Database link
+   * @return resource|null Database link
    */
   abstract function connect($host, $name, $user, $pass);
 
@@ -284,13 +285,14 @@ abstract class CSQLDataSource {
     $this->dsn = $dsn;
     $this->config = CAppUI::conf("db $dsn");
 
-    $this->chrono = new Chronometer;
+    $this->chronoInit->start();
     $this->link = $this->connect(
       $this->config["dbhost"],
       $this->config["dbname"],
       $this->config["dbuser"],
       $this->config["dbpass"]
     );
+    $this->chronoInit->stop();
 
     if (!$this->link) {
       trigger_error("FATAL ERROR: link to '$this->dsn' not found.", E_USER_ERROR);
@@ -437,8 +439,9 @@ abstract class CSQLDataSource {
 
       $this->chronoFetch->stop();
 
+      $this->freeResult($cur);
+
       if ($object) {
-        $this->freeResult($cur);
         return true;
       }
       else {
@@ -691,7 +694,8 @@ abstract class CSQLDataSource {
       }
     }*/
 
-    if (!$this->exec($query)) {
+    $result = $this->exec($query);
+    if (!$result) {
       return false;
     }
 
@@ -700,6 +704,8 @@ abstract class CSQLDataSource {
     if ($keyName && $id) {
       $object->$keyName = $id;
     }
+
+    $this->freeResult($result);
     
     return true;
   }
@@ -737,10 +743,13 @@ abstract class CSQLDataSource {
       if ($counter % $step == 0 || $counter == $count_data) {
         $query .= implode(",", $queries);
         $query .= ";";
-        
-        if (!$this->exec($query)) {
+
+        $result = $this->exec($query);
+        if (!$result) {
           throw new CMbException($this->error());
         }
+
+        $this->freeResult($result);
       }
     }
   }
@@ -813,9 +822,15 @@ abstract class CSQLDataSource {
     
     $values = implode(",", $tmp);
     $query = "UPDATE $table SET $values WHERE $where";
- 
-    return $this->exec($query);
-    
+
+    $result = $this->exec($query);
+    if (!$result) {
+      return false;
+    }
+
+    $this->freeResult($result);
+
+    return true;
   }
   
   /**
@@ -1009,10 +1024,12 @@ abstract class CSQLDataSource {
     $tab_name = substr(uniqid("dates_"), 0, 7);
     
     $query = "CREATE TEMPORARY TABLE $tab_name (date date not null);";
-    $ds->exec($query);
+    $result = $ds->exec($query);
+    $ds->freeResult($result);
     
     $query = "INSERT INTO $tab_name VALUES " . implode(",", $dates) . ";";
-    $ds->exec($query);
+    $result = $ds->exec($query);
+    $ds->freeResult($result);
     
     return $tab_name;
   } 

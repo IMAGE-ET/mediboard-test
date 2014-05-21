@@ -15,7 +15,7 @@
 class CMySQLSessionHandler implements ISessionHandler {
   const DATA_CHANGE_TIME = 5; // in seconds
 
-  /** @var CMySQLDataSource */
+  /** @var CMySQLDataSource|CPDOMySQLDataSource */
   private static $ds;
 
   private $lock_name;
@@ -125,6 +125,8 @@ class CMySQLSessionHandler implements ISessionHandler {
 
       return $data;
     }
+
+    $ds->freeResult($result);
 
     return '';
   }

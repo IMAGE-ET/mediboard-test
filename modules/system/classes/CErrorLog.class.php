@@ -244,9 +244,12 @@ class CErrorLog extends CStoredObject {
       $signature_hash
     );
 
-    if (!@$ds->exec($query)) {
+    $result = @$ds->exec($query);
+    if (!$result) {
       throw new Exception("Exec failed");
     }
+
+    $ds->freeResult($result);
   }
 
   /**
@@ -255,8 +258,10 @@ class CErrorLog extends CStoredObject {
    * @return void
    */
   function cleanupLogData(){
+    $ds = $this->getDS();
+
     // A little cleanup ....
-    $this->getDS()->exec(
+    $result = $ds->exec(
       "DELETE `error_log_data`
        FROM `error_log_data`
        LEFT JOIN error_log ON (
@@ -267,14 +272,9 @@ class CErrorLog extends CStoredObject {
        )
        WHERE error_log_id IS NULL"
     );
-  }
 
-  /**
-   * @see parent::delete()
-   */
-  function delete(){
-    if ($msg = parent::delete()) {
-      return $msg;
+    if ($result) {
+      $ds->freeResult($result);
     }
   }
 
@@ -292,7 +292,16 @@ class CErrorLog extends CStoredObject {
     $ds = $this->getDS();
 
     $query = "DELETE FROM $spec->table WHERE $spec->key ";
-    $ds->exec($query.$ds->prepareIn($ids));
-    return $ds->affectedRows();
+    $result = $ds->exec($query.$ds->prepareIn($ids));
+
+    if (!$result) {
+      return 0;
+    }
+
+    $affected = $ds->affectedRows();
+
+    $ds->freeResult($result);
+
+    return $affected;
   }
 }

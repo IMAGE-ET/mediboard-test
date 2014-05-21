@@ -2101,6 +2101,8 @@ class CStoredObject extends CModelObject {
     }
 
     $this->makeAllBackSpecs();
+    $ds = $this->getDS();
+
     foreach ($this->_backSpecs as $backSpec) {
       // No existing class
       if (!self::classExists($backSpec->class)) {
@@ -2130,8 +2132,9 @@ class CStoredObject extends CModelObject {
       if ($backMeta) {
         $query .= "\nAND `$backMeta` = '$object->_class'";
       }
-      
-      $this->_spec->ds->exec($query);
+
+      $result = $ds->exec($query);
+      $ds->freeResult($result);
     }    
   }
   
@@ -2480,11 +2483,16 @@ class CStoredObject extends CModelObject {
     }
     
     // Actually delete record
-    $sql = "DELETE FROM {$this->_spec->table} WHERE {$this->_spec->key} = '$this->_id'";
-    
-    if (!$this->_spec->ds->exec($sql)) {
-      return $this->_spec->ds->error();
+    $query = "DELETE FROM {$this->_spec->table} WHERE {$this->_spec->key} = '$this->_id'";
+
+    $ds = $this->getDS();
+
+    $result = $ds->exec($query);
+    if (!$result) {
+      return $ds->error();
     }
+
+    $ds->freeResult($result);
    
     // Deletion successful
     $this->_id = null;
@@ -2664,6 +2672,7 @@ class CStoredObject extends CModelObject {
       $result = $ds->query("SELECT COUNT(*) AS _total $query");
       $line = $ds->fetchAssoc($result);
       $this->_totalSeek = $line["_total"];
+      $ds->freeResult($result);
     }
     
     $query .= "\nORDER BY";
