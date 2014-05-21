@@ -194,6 +194,9 @@ foreach ($sejours as $_sejour) {
               $adm_ids = explode("|", $_administrations_by_hour);
               foreach ($adm_ids as $_adm_id) {
                 $adm = $line->_ref_administrations[$_adm_id];
+                if (!isset($postes_by_date[$_date][$adm->_heure])) {
+                  continue;
+                }
                 $key = $postes_by_date[$_date][$adm->_heure];
                 @$initiales[$prescription->_id][$_date][$key["moment"]][] = $adm->loadRefAdministrateur()->_shortview;
               }
