@@ -48,7 +48,7 @@
     border: solid 1px #c6c6c6;
     text-align: center;
     vertical-align: middle!important;
-    padding:5px;
+    /*padding:5px;*/
   }
 
   .droppable img {
@@ -147,6 +147,13 @@
     $V(oform.tab_disposition, dispo, true);
     $(dispo).show();
   };
+
+  printMoz = function() {
+    var oform = getForm("_document_to_create");
+    $V(oform.suppressHeaders, 1);
+    $V(oform.print, 1);
+    oform.submit();
+  };
 </script>
 
 <div id="list_doc" style="float:left;">
@@ -211,6 +218,8 @@
   <form name="_document_to_create" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close});">
     <input type="hidden" name="m" value="dPfiles"/>
     <input type="hidden" name="dosql" value="do_mozaic_doc"/>
+    <input type="hidden" name="suppressHeaders" value="0"/>
+    <input type="hidden" name="print" value="0"/>
     <input type="hidden" name="context_guid" value="{{$context->_guid}}" />
     <label>
       Disposition :
@@ -229,7 +238,8 @@
         {{/foreach}}
       </select>
     </label>
-    <button class="save">{{tr}}Save{{/tr}}</button>
+    <button class="save notext" title="Enregistrer et fermer">{{tr}}Save{{/tr}}</button>
+    <button class="print notext" type="button" onclick="printMoz();">{{tr}}Print{{/tr}}</button>
 
     <div id="document_page" style="text-align:center; background-color:white; border:solid 1px #2b2b2b; box-shadow: 0 0 3px grey, 5px 5px 10px grey; margin:0 auto; height: 670px;">
       <table class="main" style="height:100%">

@@ -15,6 +15,7 @@
 $dispo = CValue::post("tab_disposition");
 $user_id = CValue::post("user_id");
 $cat_id = CValue::post("category_id");
+$print  = CValue::post("print", 0);
 
 // files
 $file_array = CValue::post("file");
@@ -163,7 +164,7 @@ $content.= "
 </html>";
 
 $htmltopdf = new CHtmlToPDF();
-$htmltopdf->generatePDF($content, 0, $cr, $file);
+$htmltopdf->generatePDF($content, $print, $cr, $file);
 
 if ($file->_id) {
   $file->file_size = filesize($file->_file_path);
