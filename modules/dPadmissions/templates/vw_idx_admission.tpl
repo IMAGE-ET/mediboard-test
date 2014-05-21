@@ -116,7 +116,7 @@
       var oIPPForm = getForm("editIPP" + $V(form.patient_id));
       var oNumDosForm = getForm("editNumdos" + $V(form.sejour_id));
       if (!bPassCheck && oIPPForm && oNumDosForm && (!$V(oIPPForm.id400) || !$V(oNumDosForm.id400)) ) {
-        setExternalIds(oForm);
+        setExternalIds(form);
       }
       else {
         return onSubmitFormAjax(form, reloadAdmissionLine.curry($V(form.sejour_id)));
