@@ -23,18 +23,17 @@ abstract class CSQLDataSource {
     "pdo_oci"    => "CPDOOracleDataSource",
   );
 
-  /**
-   * @var CSQLDataSource[]
-   */
+  /** @var CSQLDataSource[] */
   static $dataSources = array();
   static $trace       = false;
 
   public $dsn         = null;
   public $link        = null;
 
-  /**
-   * @var Chronometer
-   */
+  /** @var Chronometer */
+  public $chronoInit  = null;
+
+  /** @var Chronometer */
   public $chrono      = null;
 
   /**
@@ -292,7 +291,7 @@ abstract class CSQLDataSource {
       $this->config["dbuser"],
       $this->config["dbpass"]
     );
-    
+
     if (!$this->link) {
       trigger_error("FATAL ERROR: link to '$this->dsn' not found.", E_USER_ERROR);
     }
@@ -633,19 +632,19 @@ abstract class CSQLDataSource {
    * null and underscored vars are skipped
    * 
    * @param string $table   The table name
-   * @param object &$object The object with fields
+   * @param object $object  The object with fields
+   * @param array  $vars    The array containing the object's values
    * @param string $keyName The variable name of the key to set
    * 
    * @return bool job done
    */
-  function insertObject($table, &$object, $keyName = null/*, $updateDuplicate = false*/) {
+  function insertObject($table, $object, $vars, $keyName = null/*, $updateDuplicate = false*/) {
     if (CAppUI::conf("readonly")) {
       return false;
     }
     
     $fields = array();
     $values = array();
-    $vars = get_object_vars($object);
     
     foreach ($vars as $k => $v) {
       // Skip null, arrays and objects
@@ -759,25 +758,25 @@ abstract class CSQLDataSource {
     }
     $k = "`$k`";
   }
-  
+
   /**
    * Update a row matching object fields
    * null and underscored vars are skipped
-   * 
+   *
    * @param string $table               The table name
-   * @param object &$object             The object with fields
+   * @param object $object              The object with fields
+   * @param array  $vars                The array containing the object's values
    * @param string $keyName             The variable name of the key to set
    * @param bool   $nullifyEmptyStrings Whether to nullify empty values
-   * 
+   *
    * @return bool job done
    */
-  function updateObject($table, &$object, $keyName, $nullifyEmptyStrings = true) {
+  function updateObject($table, $object, $vars, $keyName, $nullifyEmptyStrings = true) {
     if (CAppUI::conf("readonly")) {
       return false;
     }
     
     $tmp = array();
-    $vars = get_object_vars($object);
     
     foreach ($vars as $k => $v) {
       // Where clause on key name
