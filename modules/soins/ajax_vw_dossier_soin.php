@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage soins
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -269,7 +269,7 @@ if (CModule::getActive("dPprescription")) {
         }
         // Chargement des lignes d'éléments
         if ($chapitre == "all_chaps") {
-          $prescription->loadRefsLinesElementByCat("1", "1", null, $hide_old_lines);
+          $prescription->loadRefsLinesElementByCat("1", "1", null, null, null, null, $hide_old_lines);
           foreach ($prescription->_ref_prescription_lines_element as $_line_elt) {
             $_line_elt->countPlanifications();
           }
@@ -352,6 +352,9 @@ if (CModule::getActive("dPprescription")) {
             foreach ($prescription->_ref_prescription_lines_element as $_key_line => $_line_elt) {
               if ($_line_elt->_fin_reelle && $_line_elt->_fin_reelle < CMbDT::dateTime() && $_line_elt->_fin_reelle >= $first_date) {
                 unset($prescription->_ref_prescription_lines_element[$_key_line]);
+                $category = $_line_elt->_ref_element_prescription->_ref_category_prescription;
+                unset($prescription->_ref_prescription_lines_element_by_chap[$category->chapitre][$_line_elt->_id]);
+                unset($prescription->_ref_prescription_lines_element_by_cat[$category->chapitre][$category->_id]["element"][$_line_elt->_id]);
                 $hidden_lines_count++;
               }
             }
@@ -365,7 +368,7 @@ if (CModule::getActive("dPprescription")) {
       }
       else {
         // Chargement des lignes d'elements  avec pour chapitre $chapitre
-        $prescription->loadRefsLinesElementByCat("1", "1", $chapitre, $hide_old_lines);
+        $prescription->loadRefsLinesElementByCat("1", "1", $chapitre, null, null, null, $hide_old_lines);
         foreach ($prescription->_ref_prescription_lines_element as $_line_elt) {
           $_line_elt->countPlanifications();
         }
