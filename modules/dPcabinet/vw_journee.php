@@ -17,9 +17,10 @@ if (!isset($mode_maternite)) {
   $mode_maternite = false;
 }
 
-$mediuser = CMediusers::get();
+$mediuser = new CMediusers();
+$mediuser->load(CAppUI::$instance->user_id);
 
-// Initialisations des variables
+//Initialisations des variables
 $cabinet_id   = CValue::getOrSession("cabinet_id", $mediuser->function_id);
 $date         = CValue::getOrSession("date", CMbDT::date());
 
@@ -73,46 +74,38 @@ if ($consult->_id) {
 $listPlages = array();
 $heure_limit_matin = CAppUI::conf("dPcabinet CPlageconsult hour_limit_matin");
 
-$listPlage = new CPlageconsult();
-$order = "debut";
-$where = array();
-$where["date"] = "= '$date'";
-
-if ($matin && !$apres_midi) {
-  // Que le matin
-  $where["debut"] = "< '$heure_limit_matin:00:00'";
-}
-elseif ($apres_midi && !$matin) {
-  // Que l'après-midi
-  $where["debut"] = "> '$heure_limit_matin:00:00'";
-}
-elseif (!$matin && !$apres_midi) {
-  // Ou rien
-  $where["debut"] = "IS NULL";
-}
-
-$where["chir_id"] = CSQLDataSource::prepareIn(array_keys($praticiens));
-
-$plages = $listPlage->loadList($where, $order);
-
-CMbObject::massLoadBackRefs($plages, "notes");
-
 foreach ($praticiens as $prat) {
   if ($prat->_user_type == 4) {
     $nb_anesth++;
   }
-}
+  $listPlage = new CPlageconsult();
+  $where = array();
+  $where["chir_id"] = "= '$prat->_id'";
+  $where["date"] = "= '$date'";
 
-foreach ($plages as $_plage) {
-  $chir_id = $_plage->chir_id;
-  if (!isset($listPlages[$chir_id])) {
-    $listPlages[$chir_id] = array(
-      "prat"         => $praticiens[$chir_id],
-      "plages"       => array(),
-      "destinations" => array()
-    );
+  if ($matin && !$apres_midi) {
+    // Que le matin
+    $where["debut"] = "< '$heure_limit_matin:00:00'";
   }
-  $listPlages[$_plage->chir_id]["plages"][$_plage->_id] = $_plage;
+  elseif ($apres_midi && !$matin) {
+    // Que l'après-midi
+    $where["debut"] = "> '$heure_limit_matin:00:00'";
+  }
+  elseif (!$matin && !$apres_midi) {
+    // Ou rien
+    $where["debut"] = "IS NULL";
+  }
+
+  $order = "debut";
+  $listPlage = $listPlage->loadList($where, $order);
+  if (!count($listPlage)) {
+    unset($praticiens[$prat->_id]);
+  }
+  else {
+    $listPlages[$prat->_id]["prat"] = $prat;
+    $listPlages[$prat->_id]["plages"] = $listPlage;
+    $listPlages[$prat->_id]["destinations"] = array();
+  }
 }
 
 // Destinations : plages des autres praticiens
@@ -126,11 +119,6 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
   }
 }
 
-foreach ($praticiens as $_prat) {
-  if (!isset($listPlages[$_prat->_id])) {
-    unset($praticiens[$_prat->_id]);
-  }
-}
 
 $nb_attente = 0;
 $nb_a_venir = 0;
@@ -167,8 +155,6 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
       $plage->_ref_consultations = array_combine(range(0, count($plage->_ref_consultations)-1), $plage->_ref_consultations);
     }
 
-    CMbObject::massCountDocItems($plage->_ref_consultations);
-
     foreach ($plage->_ref_consultations as $consultation) {
       if ($mode_urgence) {
         $consultation->getType();
@@ -193,7 +179,7 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
       $consultation->loadRefPatient();
       $consultation->loadRefCategorie();
       $consultation->countDocItems();
-      
+
       if ($offline && $consultation->patient_id && !isset($patients_fetch[$consultation->patient_id])) {
         $args = array(
           "object_guid" => $consultation->_ref_patient->_guid,
