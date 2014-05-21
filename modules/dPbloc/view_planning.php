@@ -61,6 +61,7 @@ $whereOperations = array();
 
 $wherePlagesop["plagesop.date"]     =  $ds->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter->_date_max);
 $whereOperations["operations.date"] =  $ds->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter->_date_max);
+$whereOperations["operations.plageop_id"] = "IS NULL";
 
 $user = CMediusers::get();
 
