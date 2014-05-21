@@ -243,13 +243,14 @@
   }
 
   addScroll = function() {
-    console.debug('addScroll');
-    ViewPort.SetAvlHeight('content-rpu', 1.0);
     var content = $("content-rpu");
     var header = $("header-rpu");
-    content.on('scroll', function() {
-      header.setClassName('shadow', content.scrollTop);
-    });
+    if (content && header) {
+      ViewPort.SetAvlHeight('content-rpu', 1.0);
+      content.on('scroll', function() {
+        header.setClassName('shadow', content.scrollTop);
+      });
+    }
   }
 
   function printEtiquettes() {
