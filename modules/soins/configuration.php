@@ -33,6 +33,9 @@ CConfiguration::register(
         ),
         "synthese" => array(
           "transmission_date_limit" => "bool default|0"
+        ),
+        "suivi" => array(
+          "hide_old_line" => "bool default|0"
         )
       )
     )

@@ -41,7 +41,7 @@
   refreshDossierSoin = function(mode_dossier, chapitre, force_refresh){
     PlanSoins.toggleAnciennete(chapitre);
     if(!window[chapitre+'SoinLoaded'] || force_refresh) {
-      PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}',PlanSoins.nb_decalage, mode_dossier, null, null, null, chapitre);
+      PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}',PlanSoins.nb_decalage, mode_dossier, null, null, null, chapitre, null, null, '{{$hide_old_lines}}');
       window[chapitre+'SoinLoaded'] = true;
     }
   }
@@ -432,8 +432,16 @@
   {{if $conf.soins.vue_condensee_dossier_soins}}
     <button type="button" class="search" onclick="PlanSoins.showModalTasks('{{$sejour->_id}}');">Tâches</button>
   {{/if}}
-  <button type="button"
-          class="print"
+
+  {{if "soins suivi hide_old_line"|conf:"CGroups-$g"}}
+    {{if $hide_old_lines}}
+      <button type="button" class="search" onclick="PlanSoins.reloadSuiviSoin('{{$sejour->_id}}', '{{$date}}', 0);">Afficher les prescriptions terminées ({{$hidden_lines_count}})</button>
+    {{else}}
+      <button type="button" class="search" onclick="PlanSoins.reloadSuiviSoin('{{$sejour->_id}}', '{{$date}}', 1);">Masquer les prescriptions terminées</button>
+    {{/if}}
+  {{/if}}
+
+  <button type="button" class="print"
           onclick="{{if isset($prescription|smarty:nodefaults)}}Prescription.printOrdonnance('{{$prescription->_id}}');{{/if}}">
     Ordonnance
   </button>

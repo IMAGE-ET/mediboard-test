@@ -1,13 +1,4 @@
-/* $Id: $ */
 
-/**
- * @package Mediboard
- * @subpackage dPprescription
- * @version $Revision:  $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- */
- 
 PlanSoins = {
   composition_dossier: null,
   timeOutBefore:       null,
@@ -280,8 +271,12 @@ PlanSoins = {
       };
     }
   },
-  
-  loadTraitement: function(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre, without_check_date, hide_close) {
+
+  reloadSuiviSoin: function(sejour_id, date, hide_old_lines) {
+    PlanSoins.loadTraitement(sejour_id, date, null, null, null, null, null, null, null, null, hide_old_lines);
+  },
+
+  loadTraitement: function(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre, without_check_date, hide_close, hide_old_lines) {
     var url = new Url("soins", "ajax_vw_dossier_soin");
     url.addParam("sejour_id", sejour_id);
     
@@ -300,6 +295,9 @@ PlanSoins = {
     url.addParam("without_check_date", without_check_date);
     if (hide_close) {
       url.addParam("hide_close", hide_close);
+    }
+    if (hide_old_lines >= 0) {
+      url.addParam("hide_old_lines", hide_old_lines);
     }
 
     if (PlanSoins.regroup_lines !== null) {

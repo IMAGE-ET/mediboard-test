@@ -1,29 +1,30 @@
 <?php
-
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage soins
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
 
-$sejour_id    = CValue::getOrSession("sejour_id");
-$date         = CValue::getOrSession("date");
-$nb_decalage  = CValue::get("nb_decalage");
-$mode_dossier = CValue::get("mode_dossier", "administration");
-$chapitre     = CValue::get("chapitre"); // Chapitre a rafraichir
-$object_id    = CValue::get("object_id");
-$object_class = CValue::get("object_class");
-$unite_prise  = CValue::get("unite_prise");
+$group = CGroups::loadCurrent();
+$sejour_id          = CValue::getOrSession("sejour_id");
+$date               = CValue::getOrSession("date");
+$nb_decalage        = CValue::get("nb_decalage");
+$mode_dossier       = CValue::get("mode_dossier", "administration");
+$chapitre           = CValue::get("chapitre"); // Chapitre a rafraichir
+$object_id          = CValue::get("object_id");
+$object_class       = CValue::get("object_class");
+$unite_prise        = CValue::get("unite_prise");
 $without_check_date = CValue::get("without_check_date", "0");
-$hide_close  = CValue::get("hide_close", 0);
-$with_navigation = CValue::get("with_navigation");
-$regroup_lines = CValue::get("regroup_lines");
+$hide_close         = CValue::get("hide_close", 0);
+$with_navigation    = CValue::get("with_navigation");
+$regroup_lines      = CValue::get("regroup_lines");
+$hide_old_lines     = CValue::get("hide_old_lines", CAppUI::conf("soins suivi hide_old_line", $group->_guid));
 
 if (!$date) {
   $date = CMbDT::date();
@@ -50,8 +51,6 @@ $sejour = new CSejour();
 $sejour->load($sejour_id);
 $sejour->loadRefCurrAffectation();
 $sejour->_ref_curr_affectation->loadView();
-
-$group = CGroups::loadCurrent();
 
 if ($group->_id != $sejour->group_id) {
   CAppUI::stepAjax("Ce séjour n'est pas dans l'établissement courant", UI_MSG_WARNING);
@@ -82,6 +81,7 @@ $const_med = $patient->_ref_constantes_medicales;
 $poids = $const_med->poids;
 $risques_cis = array();
 
+$hidden_lines_count = 0;
 if (CModule::getActive("dPprescription")) {
 
   // Chargement des cis à risque
@@ -95,26 +95,26 @@ if (CModule::getActive("dPprescription")) {
   $prescription->object_class = "CSejour";
   $prescription->type = "sejour";
   $prescription->loadMatchingObject();
-  
+
   // Chargement de toutes les planifs systemes si celles-ci ne sont pas deja chargées
   $prescription->calculAllPlanifSysteme();
 
   // Chargement des configs de service
   $sejour->loadRefCurrAffectation($date);
-  
+
   if ($sejour->_ref_curr_affectation->_id) {
     $service_id = $sejour->_ref_curr_affectation->service_id;
   }
   else {
     $service_id = "none";
   }
-  
+
   $configs = CConfigService::getAllFor($service_id);
-  
+
   if (!$nb_decalage) {
     $nb_decalage = $configs["Nombre postes avant"];
   }
-  
+
   if (!$without_check_date && !($object_id && $object_class) && !$chapitre) {
     // Si la date actuelle est inférieure a l'heure affichée sur le plan de soins, on affiche le plan de soins de la veille
     $datetime_limit = CMbDT::dateTime($configs["Poste 1"].":00:00");
@@ -125,15 +125,15 @@ if (CModule::getActive("dPprescription")) {
       $date = CMbDT::date();
     }
   }
-  
+
   $prescription->loadJourOp($date);
 
   $composition_dossier = array();
   $bornes_composition_dossier = array();
   $count_composition_dossier = array();
-  
+
   $tabHours = CAdministration::getTimingPlanSoins($date, $configs);
-  
+
   foreach ($tabHours as $_key_date => $_period_date) {
     foreach ($_period_date as $_key_periode => $_period_dates) {
       $count_composition_dossier[$_key_date][$_key_periode] = $planif_manuelle ? 3 : 2;
@@ -141,26 +141,26 @@ if (CModule::getActive("dPprescription")) {
       $first_time = reset(reset($_period_dates));
       $last_date = end(array_keys($_period_dates));
       $last_time = end(end($_period_dates));
-      
+
       $composition_dossier[] = "$_key_date-$_key_periode";
-      
+
       $bornes_composition_dossier["$_key_date-$_key_periode"]["min"] = "$first_date $first_time:00:00";
       $bornes_composition_dossier["$_key_date-$_key_periode"]["max"] = "$last_date $last_time:00:00";
-      
-      
+
+
       foreach ($_period_dates as $_key_real_date => $_period_hours) {
         $count_composition_dossier[$_key_date][$_key_periode] += count($_period_hours);
         $_dates[$_key_real_date] = $_key_real_date;
       }
     }
   }
-  
+
   // Calcul du dossier de soin pour une ligne
   if ($object_id && $object_class) {
     // Chargement de la ligne de prescription
     $line = new $object_class;
     $line->load($object_id);
-    
+
     if ($line instanceof CPrescriptionLineMedicament) {
       $line->countVariantes();
       $line->countBackRefs("administration");
@@ -170,28 +170,28 @@ if (CModule::getActive("dPprescription")) {
       }
       $line->_ref_produit->loadRefsFichesATC();
     }
-  
+
     if ($line instanceof CPrescriptionLineElement) {
       $element = $line->_ref_element_prescription;
       $name_cat = $element->category_prescription_id;
       $element->loadRefCategory();
       $name_chap = $element->_ref_category_prescription->chapitre;
     }
-    
+
     if ($line instanceof CPrescriptionLineMedicament) {
       if (!$line->_fin_reelle) {
-         $line->_fin_reelle = $prescription->_ref_object->_sortie;
+        $line->_fin_reelle = $prescription->_ref_object->_sortie;
       }
       $line->calculPrises($prescription, $_dates, null, null, true, $planif_manuelle);
       $line->calculAdministrations($_dates);
       $line->removePrisesPlanif();
     }
-    
+
     if ($line instanceof CPrescriptionLineElement) {
-      $line->calculAdministrations($_dates);  
+      $line->calculAdministrations($_dates);
       $line->calculPrises($prescription, $_dates, $name_chap, $name_cat, true, $planif_manuelle);
       $line->removePrisesPlanif();
-    }  
+    }
 
     if ($line instanceof CPrescriptionLineMix) {
       $line->countVariantes();
@@ -201,7 +201,7 @@ if (CModule::getActive("dPprescription")) {
       $line->loadRefPraticien();
       $line->loadRefLogSignaturePrat();
       $line->calculVariations();
-      
+
       // Calcul des prises prevues
       $line->calculQuantiteTotal();
       foreach ($_dates as $curr_date) {
@@ -216,7 +216,7 @@ if (CModule::getActive("dPprescription")) {
       $transmission->object_id = $line->_id;
       $transmission->sejour_id = $sejour->_id;
       $transmissions = $transmission->loadMatchingList();
-      
+
       foreach ($transmissions as $_transmission) {
         $_transmission->loadRefsFwd();
         if ($_transmission->object_id && $_transmission->object_class) {
@@ -234,7 +234,7 @@ if (CModule::getActive("dPprescription")) {
     if ($prescription->_id) {
       // Chargement des lignes de medicament
       if (in_array($chapitre, array("all_med", "all_chaps"))) {
-        $prescription->loadRefsLinesMedByCat("1", "1");
+        $prescription->loadRefsLinesMedByCat("1", "1", '', $hide_old_lines);
         foreach ($prescription->_ref_prescription_lines as $_line_med) {
           $_line_med->loadRefLogSignee();
           $_line_med->countVariantes();
@@ -249,9 +249,9 @@ if (CModule::getActive("dPprescription")) {
           }
           $_line_med->updateAlerteAntibio();
         }
-        
+
         // Chargement des prescription_line_mixes
-        $prescription->loadRefsPrescriptionLineMixes("", "1");
+        $prescription->loadRefsPrescriptionLineMixes("", "1", 1, '', $hide_old_lines);
         foreach ($prescription->_ref_prescription_line_mixes as $_prescription_line_mix) {
           $_prescription_line_mix->countVariantes();
           $_prescription_line_mix->loadRefsVariantes();
@@ -269,14 +269,14 @@ if (CModule::getActive("dPprescription")) {
         }
         // Chargement des lignes d'éléments
         if ($chapitre == "all_chaps") {
-          $prescription->loadRefsLinesElementByCat("1", "1", null);
+          $prescription->loadRefsLinesElementByCat("1", "1", null, $hide_old_lines);
           foreach ($prescription->_ref_prescription_lines_element as $_line_elt) {
             $_line_elt->countPlanifications();
           }
         }
       }
       elseif ($chapitre == "med" || $chapitre == "inj") {
-        $prescription->loadRefsLinesMedByCat("1", "1");
+          $prescription->loadRefsLinesMedByCat("1", "1", '', $hide_old_lines);
         foreach ($prescription->_ref_prescription_lines as $_line_med) {
           $_line_med->loadRefLogSignee();
           $_line_med->countVariantes();
@@ -294,7 +294,7 @@ if (CModule::getActive("dPprescription")) {
       }
       elseif ($chapitre == "perfusion" || $chapitre == "aerosol" || $chapitre == "alimentation" || $chapitre == "oxygene") {
         // Chargement des prescription_line_mixes
-        $prescription->loadRefsPrescriptionLineMixes($chapitre, "1");
+        $prescription->loadRefsPrescriptionLineMixes($chapitre, "1", 1, '', $hide_old_lines);
         foreach ($prescription->_ref_prescription_line_mixes as $_prescription_line_mix) {
           $_prescription_line_mix->countVariantes();
           $_prescription_line_mix->loadRefsVariantes();
@@ -326,10 +326,37 @@ if (CModule::getActive("dPprescription")) {
         // Parcours initial pour afficher les onglets utiles (pas de chapitre de specifié)
         $prescription->loadRefsPrescriptionLineMixes("", "1");
         $prescription->loadRefsLinesMedByCat("1", "1");
-        
+
         // Chargement des lignes d'elements
         $prescription->loadRefsLinesElementByCat("1", "1", null);
-        
+
+        if ($hide_old_lines) {
+          $first_date = reset($_dates);
+          if (count($prescription->_ref_prescription_line_mixes)) {
+            foreach ($prescription->_ref_prescription_line_mixes as $key_line_mix => $_line_mix) {
+              if ($_line_mix->_fin && $_line_mix->_fin < CMbDT::dateTime() && $_line_mix->_fin >= $first_date) {
+                unset($prescription->_ref_prescription_line_mixes[$key_line_mix]);
+                $hidden_lines_count++;
+              }
+            }
+          }
+          if (count($prescription->_ref_prescription_lines)) {
+            foreach ($prescription->_ref_prescription_lines as $_key_line_med => $_line_med) {
+              if ($_line_med->_fin_reelle && $_line_med->_fin_reelle < CMbDT::dateTime() && $_line_med->_fin_reelle >= $first_date) {
+                unset($prescription->_ref_prescription_lines[$_key_line_med]);
+                $hidden_lines_count++;
+              }
+            }
+          }
+          if (count($prescription->_ref_prescription_lines_element)) {
+            foreach ($prescription->_ref_prescription_lines_element as $_key_line => $_line_elt) {
+              if ($_line_elt->_fin_reelle && $_line_elt->_fin_reelle < CMbDT::dateTime() && $_line_elt->_fin_reelle >= $first_date) {
+                unset($prescription->_ref_prescription_lines_element[$_key_line]);
+                $hidden_lines_count++;
+              }
+            }
+          }
+        }
         if (@!CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
           // Calcul des modifications recentes par chapitre
           $prescription->countRecentModif();
@@ -338,14 +365,14 @@ if (CModule::getActive("dPprescription")) {
       }
       else {
         // Chargement des lignes d'elements  avec pour chapitre $chapitre
-        $prescription->loadRefsLinesElementByCat("1", "1", $chapitre);
+        $prescription->loadRefsLinesElementByCat("1", "1", $chapitre, $hide_old_lines);
         foreach ($prescription->_ref_prescription_lines_element as $_line_elt) {
           $_line_elt->countPlanifications();
         }
       }
-      
-      $with_calcul = $chapitre ? true : false; 
-      
+
+      $with_calcul = $chapitre ? true : false;
+
       $prescription->calculPlanSoin($_dates, 0, null, null, null, $with_calcul, "");
 
       // Chargement des operations
@@ -426,11 +453,13 @@ $smarty->assign("params"              , CConstantesMedicales::$list_constantes);
 $smarty->assign("hide_close"          , $hide_close);
 $smarty->assign("manual_planif"       , $planif_manuelle);
 $smarty->assign("regroup_lines"       , $regroup_lines);
+$smarty->assign("hide_old_lines"      , $hide_old_lines);
+$smarty->assign("hidden_lines_count"  , $hidden_lines_count);
 
 // Affichage d'une ligne
 if ($object_id && $object_class) {
   $smarty->assign("move_dossier_soin", true);
-  $smarty->assign("nodebug", true);   
+  $smarty->assign("nodebug", true);
   if ($line->_class == "CPrescriptionLineMix") {
     $smarty->assign("_prescription_line_mix", $line);
     $smarty->assign("with_navigation", $with_navigation);
@@ -439,7 +468,7 @@ if ($object_id && $object_class) {
   else {
     if ($line->_class == "CPrescriptionLineElement") {
       $smarty->assign("name_cat", $name_cat);
-      $smarty->assign("name_chap", $name_chap);  
+      $smarty->assign("name_chap", $name_chap);
     }
     $smarty->assign("line", $line);
     $smarty->assign("line_id", $line->_id);
@@ -447,7 +476,7 @@ if ($object_id && $object_class) {
     $smarty->assign("transmissions_line", $line->_transmissions);
     $smarty->assign("administrations_line", $line->_administrations);
     $smarty->assign("unite_prise", $unite_prise);
-    
+
     $smarty->display("../../dPprescription/templates/inc_vw_content_line_dossier_soin.tpl");
   }
 }
@@ -457,7 +486,7 @@ else {
     $smarty->assign("move_dossier_soin", false);
     $smarty->assign("chapitre", $chapitre);
     $smarty->assign("nodebug", true);
-    
+
     $smarty->display("../../dPprescription/templates/inc_chapitre_dossier_soin.tpl");
   }
   else {
@@ -470,11 +499,11 @@ else {
         "object_class" => " = 'CSejour'",
         "object_id" => " = '$prescription->object_id'"
       );
-      
+
       $multiple_prescription = $prescription_multiple->loadIds($where);
       $smarty->assign("multiple_prescription", $multiple_prescription);
     }
-    
+
     $sejour->countTasks();
 
     $smarty->assign("admin_prescription", CModule::getCanDo("dPprescription")->admin || CMediusers::get()->isPraticien());
