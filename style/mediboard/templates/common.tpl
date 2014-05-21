@@ -53,21 +53,23 @@
 
   <script>
     var Preferences = {{"utf8_encode"|array_map_recursive:$app->user_prefs|@json}},
-        User = {{if $app->_ref_user}}{{"utf8_encode"|array_map_recursive:$app->_ref_user->_basic_info|@json}}{{else}}{}{{/if}},
-        sessionLocked = {{$smarty.session.locked|@json}},
-        App = {
-          m: "{{$m}}",
-          a: "{{$a}}",
-          tab: "{{$tab}}",
-          action: "{{$action}}",
-          actionType: "{{$actionType}}",
-          dialog: "{{$dialog}}",
-          config: {
-            log_js_errors: {{if $conf.log_js_errors}}true{{else}}false{{/if}}
-          },
-          readonly: "{{$conf.readonly}}" == 1 && User.id != null,
-          touchDevice: /^ipad|iphone|nexus 7$/i.test("{{$browser.name}}")
-        };
+        User = {{if $app->_ref_user}}{{"utf8_encode"|array_map_recursive:$app->_ref_user->_basic_info|@json}}{{else}}{}{{/if}};
+
+    App = {
+      m: "{{$m}}",
+      a: "{{$a}}",
+      tab: "{{$tab}}",
+      action: "{{$action}}",
+      actionType: "{{$actionType}}",
+      dialog: "{{$dialog}}",
+      config: {
+        log_js_errors: {{if $conf.log_js_errors}}true{{else}}false{{/if}}
+      },
+      readonly: "{{$conf.readonly}}" == 1 && User.id != null,
+      touchDevice: /^ipad|iphone|nexus 7$/i.test("{{$browser.name}}"),
+      sessionLifetime: {{"CSessionHandler::getLifeTime"|static_call:""}},
+      sessionLocked: {{$smarty.session.locked|@json}}
+    };
 
     var Mediboard = {{$version|@json}};
   </script>

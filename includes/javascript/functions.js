@@ -23,7 +23,7 @@ document.observe('dom:loaded', function(){
       }
     } catch (e) {}
 
-    if (window.sessionLocked) {
+    if (App.sessionLocked) {
       Session.lockScreen();
     }
 
@@ -38,6 +38,7 @@ document.observe('dom:loaded', function(){
       Element.warnDuplicates();
       Event.initKeyboardEvents();
       ObjectTooltip.init();
+      //App.initSessionLocker();
       $(document.documentElement).prepareTouchEvents();
     MbPerformance.timeEnd("initUI");
 
@@ -135,7 +136,8 @@ var UAInfo = {
 
 document.observe("keydown", function(e){
   var key = Event.key(e);
-  
+
+  // Alt keys
   if (e.altKey) {
     switch (key) {
       case 80: // p
@@ -971,6 +973,21 @@ Object.extend (Control.Tabs, {
     }
 
     return anchors[0];
+  },
+
+  /**
+   * Redefine this method as it doesn't work if the tab was redefined
+   */
+  findByTabId: function(id){
+    return Control.Tabs.instances.find(function(tab){
+      return tab.links.find(function(link){
+        if (link.key != id) {
+          return false;
+        }
+
+        return link.descendantOf(document.body);
+      });
+    });
   },
     
   setTabCount: function(tabName, count, total) {
@@ -1858,6 +1875,9 @@ Element.addMethods({
   }
 });
 
+/**
+ * Print current page or iframe
+ */
 App.print = function(){
   if (Prototype.Browser.IE && document.documentMode == 9 && window.parent) {
     document.execCommand('print', false, null);
@@ -1868,16 +1888,50 @@ App.print = function(){
   }
 };
 
+/**
+ * Defer window closing
+ */
 App.deferClose = function(){
   (function(){
     window.close();
   }).defer();
 };
 
+/**
+ * Show application release information
+ */
 App.showReleaseInfo = function(){
   var url = new Url("system", "ajax_show_release_info");
   url.requestModal();
 };
+
+/**
+ * Initializes application locking when no movement
+ */
+App.initSessionLocker = (function(){
+  var duration = App.sessionLifetime;
+
+  var timer;
+
+  function setTimer() {
+    timer = window.setTimeout(function(){
+      Session.lock();
+    }, duration * 1000);
+  }
+
+  function resetTimer(){
+    window.clearTimeout(timer);
+    setTimer();
+  }
+
+  setTimer();
+
+  return function(){
+    document.observe("mousemove", resetTimer);
+    document.observe("keydown", resetTimer);
+    document.observe("touchstart", resetTimer);
+  };
+})();
 
 /**
  * Adds column highlighting to a table
