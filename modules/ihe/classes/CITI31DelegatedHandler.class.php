@@ -99,6 +99,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return;
       }
 
+      // On ne transmet pas les séjours non facturables si le destinataire ne le souhaite pas
+      if (!$receiver->_configs["send_no_facturable"] && !$sejour->facturable) {
+        return;
+      }
+
       // On ne synchronise pas un séjour d'urgences qui est un reliquat
       $rpu = $sejour->loadRefRPU();
       if ($rpu && $rpu->mutation_sejour_id && ($rpu->sejour_id != $rpu->mutation_sejour_id)) {
@@ -360,8 +365,8 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
   function getStartOfMovement($code, CSejour $sejour, CAffectation $affectation = null) {
     switch ($code) {
       // Admission hospitalisé / externe
-      case 'A01' : 
-      case 'A04' :
+      case 'A01':
+      case 'A04':
         // Date de l'admission
         return $sejour->entree_reelle;
       // Mutation : changement d'UF hébergement
@@ -393,13 +398,14 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return $sejour->sortie_reelle;
       // Pré-admission
       case 'A05':
-      case 'A14' :
+      case 'A14':
         // Date de la pré-admission
         return $sejour->entree_prevue;
       // Sortie en attente
       case 'A16':
         // Date de la sortie
         return $sejour->sortie;
+      default:
     }
   }
 
@@ -727,13 +733,12 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
   function getModificationAdmitCode(CReceiverHL7v2 $receiver) {
     switch ($receiver->_i18n_code) {
       // Cas de l'extension française : Z99
-      case "FR" :
+      case "FR":
         $code = "Z99";
         break;
       // Cas internationnal : A08
-      default :
+      default:
         $code = $receiver->_configs["modification_admit_code"];
-        break;
     }
     
     return $code;
