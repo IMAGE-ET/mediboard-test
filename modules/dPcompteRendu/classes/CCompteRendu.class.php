@@ -1576,7 +1576,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
    *
    * @return void
    */
-  static function streamDocForObject($compte_rendu, $object, $factory = "") {
+  static function streamDocForObject($compte_rendu, $object, $factory = null) {
     ob_clean();
     $template = new CTemplateManager();
     $source = $compte_rendu->getFullContentFromModel();
