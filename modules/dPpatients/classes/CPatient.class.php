@@ -1838,6 +1838,7 @@ class CPatient extends CPerson {
       }
 
       $_patient->_ref_IPP  = new CIdSante400();
+      $_patient->_ref_IPP->tag = $tag_ipp;
     }
 
     return null;

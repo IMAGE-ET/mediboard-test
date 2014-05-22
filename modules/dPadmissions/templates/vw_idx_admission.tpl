@@ -151,17 +151,17 @@
     },
 
     reloadIPPForm: function() {
-      reloadAdmission();
+      //reloadAdmission();
     },
 
     submitNumdosForm: function(sejour_id) {
       ExtRefManager.sejour_id = sejour_id;
       var oForm = getForm("editNumdos" + this.sejour_id);
-      return onSubmitFormAjax(oForm, ExtRefManager.reloadNumdosForm);
+      return onSubmitFormAjax(oForm, ExtRefManager.reloadNumdosForm.curry(this.sejour_id));
     },
 
-    reloadNumdosForm: function() {
-      reloadAdmission();
+    reloadNumdosForm: function(sejour_id) {
+      //reloadAdmissionLine(this.sejour_id);
     }
   };
 
@@ -180,7 +180,7 @@
     ExtRefManager.submitIPPForm($V(oForm.patient_id));
   };
 
-  SejourHprimSelector.doSet = function(){
+  SejourHprimSelector.doSet = function() {
     var oFormSejour = getForm(SejourHprimSelector.sForm);
     $V(oFormSejour[SejourHprimSelector.sId]  , SejourHprimSelector.prepared.id);
     ExtRefManager.submitNumdosForm($V(oFormSejour.object_id));
@@ -189,7 +189,7 @@
       $V(oFormIPP[SejourHprimSelector.sIPPId]  , SejourHprimSelector.prepared.IPPid);
       ExtRefManager.submitIPPForm($V(oFormIPP.object_id));
     }
-    //submitAdmission(document["editAdmFrm"+oFormSejour.object_id.value]);
+    submitAdmission(document["editAdmFrm"+oFormSejour.object_id.value], true);
   };
 
   updateModeEntree = function(select) {
