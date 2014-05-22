@@ -16,7 +16,7 @@ class CSearchObjectHandler extends CMbObjectHandler {
   /**
    * @var array
    */
-  static $handled = array ("CCompteRendu");
+  static $handled = array ("CCompteRendu","CTransmissionMedicale","CObservationMedicale","CConsultation", "CConsultAnesth");
 
   /**
    * If object is handled ?
@@ -39,12 +39,26 @@ class CSearchObjectHandler extends CMbObjectHandler {
     if (!$this->isHandled($object) && !parent::onAfterStore($object)) {
       return false;
     }
-    return $this->requesthandler($object);
+    return self::requesthandler($object);
 
+  }
+  /**
+   * Trigger before event delete
+   *
+   * @param CMbObject $object Object
+   *
+   * @return bool
+   */
+  function onBeforeDelete(CMbObject $object) {
+    if (!$this->isHandled($object)) {
+      return false;
+    }
+    $object->_save_id = $object->_id;
+    return true;
   }
 
   /**
-   * Trigger before event delete
+   * Trigger after event delete
    *
    * @param CMbObject $object Object
    *
@@ -54,7 +68,8 @@ class CSearchObjectHandler extends CMbObjectHandler {
     if (!$this->isHandled($object)) {
       return false;
     }
-    return $this->requesthandler($object, 'delete');
+    $object->_id = $object->_save_id;
+    return self::requesthandler($object, 'delete');
   }
 
   /**
@@ -66,13 +81,17 @@ class CSearchObjectHandler extends CMbObjectHandler {
    * @return bool
    */
   static function requesthandler(CMbObject $object, $type = null) {
-    $ds = CSQLDataSource::get("std");
+    if ((($object instanceof CConsultation) || ($object instanceof CConsultAnesth))  && !$object->sejour_id) {
+      return false;
+    }
     if (!$type) {
       $type = $object->_ref_current_log->type;
     }
-    $date        = CMbDT::dateTime();
-    $class       = $object->_class;
-    $id          = $object->_id;
+    $search_indexing               = new CSearchIndexing();
+    $search_indexing->type         = $type;
+    $search_indexing->date         = CMbDT::dateTime();
+    $search_indexing->object_class = $object->_class;
+    $search_indexing->object_id    = $object->_id;
 
     switch ($object->_class) {
       case 'CCompteRendu':
@@ -81,16 +100,30 @@ class CSearchObjectHandler extends CMbObjectHandler {
         $object->loadRefAuthor();
         $group       = $object->_ref_author->loadRefFunction()->loadRefGroup();
         break;
-
+      case 'CConsultAnesth':
+        /** @var CConsultAnesth $object */
+        $object->loadRefChir();
+        $group = $object->_ref_chir->loadRefFunction()->loadRefGroup();
+        break;
+      case 'CConsultation':
+        /** @var CConsultation $object */
+        $object->loadRefPraticien();
+        $group = $object->_ref_praticien->loadRefFunction()->loadRefGroup();
+        break;
+      case 'CObservationMedicale':
+      case 'CTransmissionMedicale':
+        /** @var CTransmissionMedicale $object */
+        $object->completeField("user_id");
+        $object->loadRefUser();
+        $group       = $object->_ref_user->loadRefFunction()->loadRefGroup();
+        break;
       default:
         return false;
     }
     if (!CAppUI::conf("search active_handler active_handler_search", $group)) {
       return false;
     }
-    $query = "INSERT INTO `search_indexing` (`object_class`,`object_id`,`type` ,`date`)
-        VALUES ('$class','$id', '$type', '$date')";
-    $ds->exec($query);
+    $search_indexing->store();
     return true;
   }
 }

@@ -3,7 +3,7 @@
 /**
  * $Id$
  *  
- * @category search
+ * @category Search
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -49,10 +49,17 @@ try {
   //create a client
   $client_index->createClient();
   $client_index->loadIndex();
+  // Passage à l'indexation en tps réel pour améliorer la performance du bulk indexing
+  $client_index->_index->setSettings(array("index" => array( "refresh_interval" => "-1")));
+
   $data = $client_index->getDataTemporaryTable(CAppUI::conf("search interval_indexing"), null);
   $client_index->bulkIndexing($data);
   CAppUI::displayAjaxMsg("L'indexation s'est correctement déroulée ", UI_MSG_OK);
   $error = "";
+
+  // on remet le paramètre à défaut et on optimise l'index
+  $client_index->_index->setSettings(array("index" => array( "refresh_interval" => "1s")));
+  $client_index->_index->optimize(array("max_num_segments" =>"5"));
 } catch (Exception $e) {
   mbLog($e->getMessage());
   CAppUI::displayAjaxMsg("L'indexation a recontré un problème", UI_MSG_ERROR);

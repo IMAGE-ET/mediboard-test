@@ -21,13 +21,29 @@
         <table class="form">
           <tr>
             <td id="optionnal" colspan="2">
-              <input type="checkbox" onclick="Search.toggleElement($('first_indexing'))"/>
+              <input type="checkbox" onclick="
+                                              Search.toggleElement($('first_indexing'));
+                                              Search.toggleElement($('indexation'))"/>
             </td>
           </tr>
           <tr>
-            <td id="first_indexing" style="display:none;" colspan="2">
-              <button class="new singleclick" onclick="Search.firstIndexing(true, null);">Remplir table temporaire</button>
-              <button class="new singleclick" onclick="Search.firstIndexing(null, true)">Créer le schéma Nosql</button>
+            <td id="first_indexing" style="display:none;" colspan="3">
+              <label for="CCompteRendu">Compte rendu</label>
+              <input type="checkbox" name="names_types" id="CCompteRendu" value="CCompteRendu"/>
+              <label for="CTransmissionMedicale"> Transmission Médicale</label>
+              <input type="checkbox" name="names_types" id="CTransmissionMedicale" value="CTransmissionMedicale">
+              <label for="CObservationMedicale"> Observation Médicale</label>
+              <input type="checkbox" name="names_types" id="CObservationMedicale" value="CObservationMedicale">
+              <label for="CConsultation"> Consultation de séjour</label>
+              <input type="checkbox" name="names_types" id="CConsultation" value="CConsultation">
+              <label for="CConsultAnesth"> Consultation anesthésique de séjour</label>
+              <input type="checkbox" name="names_types" id="CConsultAnesth" value="CConsultAnesth">
+              <button class="new singleclick" onclick="Search.firstIndexing(null, true, document.body.select('input[name=names_types]:checked'))">Créer le schéma Nosql</button>
+              <button class="new singleclick" onclick="Search.firstIndexing(true, null, document.body.select('input[name=names_types]:checked'));">Remplir table temporaire</button>
+            </td>
+          </tr>
+          <tr>
+            <td  id="indexation" style="display:none;" colspan="2">
               <button class="new singleclick" onclick="Search.routineIndexing()">Indexer les données</button>
             </td>
           </tr>

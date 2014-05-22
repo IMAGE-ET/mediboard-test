@@ -77,7 +77,22 @@ class CSearch {
     if (!$params) {
       $params = array(
                       'number_of_shards' => 5,
-                      'number_of_replicas' =>1
+                      'number_of_replicas' =>1,
+                      "analysis" => array(
+                        "analyzer" => array(
+                          "default" => array(
+                            "type" => "custom",
+                            'tokenizer' => 'standard',
+                            'filter' => array('standard', 'lowercase', 'mySnowball')
+                          )
+                        ),
+                        'filter' => array(
+                          'mySnowball' => array(
+                            'type' => 'snowball',
+                            'language' => 'French'
+                          )
+                        )
+                      )
                     );
     }
     $this->_index = $this->_client->getIndex($name);
@@ -136,6 +151,7 @@ class CSearch {
     // Define mapping
     $mapping = new Mapping();
     $mapping->setType($type);
+    $mapping->setParam('search_analyzer', 'default');
     // Set mapping
     $mapping->setProperties($array);
     // Send mapping to type
@@ -312,10 +328,11 @@ class CSearch {
    * @param array   $arrayFilter the array of users where PERM_READ
    * @param integer $start       the begining of the paging
    * @param integer $limit       the interval of the paging
+   * @param array   $names_types the restrictive type(s) where the search take place.
    *
    * @return \Elastica\ResultSet
    */
-  function searchQueryString($operator, $words , $arrayFilter, $start = 0, $limit = 30){
+  function searchQueryString($operator, $words , $arrayFilter, $start = 0, $limit = 30, $names_types = null){
     // Define a Query. We want a string query.
     $elasticaQueryString  = new QueryString();
 
@@ -340,7 +357,12 @@ class CSearch {
 
     //Search on the index.
     $this->_index = $this->loadIndex();
-    return $this->_index->search($elasticaQuery);
+    $search = new \Elastica\Search($this->_client);
+    $search->addIndex($this->_index);
+    if ($names_types) {
+      $search->addTypes($names_types);
+    }
+    return $search->search($elasticaQuery);
   }
 
   /**
@@ -435,5 +457,36 @@ class CSearch {
     }
 
     return $purified;
+  }
+
+  /**
+   * First indexing create mapping
+   *
+   * @param array $names_types the name of types we want to create
+   * @param array $index       the index where we want to create those types
+   *
+   * @return void
+   */
+  function firstIndexingMapping ($names_types , $index) {
+    if (!$index) {
+      $this->_index = $this->createIndex(null, null, false);
+    }
+    /** @var Elastica\Type $elasticaType */
+    foreach ($names_types as $name_type) {
+      $type  = $this->createType($this->_index, $name_type);
+      $array = array(
+        "id"          => array('type' => 'integer', 'include_in_all' => true),
+        "author_id"   => array('type' => 'integer', 'include_in_all' => true),
+        "title"       => array('type' => 'string', 'include_in_all' => false),
+        "body"        => array('type' => 'string', 'include_in_all' => true),
+        "date"        => array('type'           => 'date',
+                               'format'         => 'yyyy/MM/dd HH:mm:ss||yyyy/MM/dd',
+                               'include_in_all' => true),
+        "patient_id"  => array('type' => 'integer', 'include_in_all' => true),
+        "function_id" => array('type' => 'integer', 'include_in_all' => true),
+        "group_id"    => array('type' => 'integer', 'include_in_all' => true)
+      );
+      $this->createMapping($type, $array);
+  }
   }
 }

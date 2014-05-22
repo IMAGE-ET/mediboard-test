@@ -12,28 +12,31 @@
 <table class="tbl form" style="height: 70%">
   <tbody>
     <tr>
-      <th class="title" colspan="4">Résultats ({{$nbresult}} obtenus en {{$time}}ms)</th>
+      <th class="title" colspan="6">Résultats ({{$nbresult}} obtenus en {{$time}}ms)</th>
     </tr>
     <tr>
       <th class="narrow">Date </th>
+      <th class="narrow">Type </th>
       <th>Titre du document</th>
       <th class="narrow">Auteur</th>
+      <th class="narrow">Patient</th>
       <th class="narrow">Pertinence</th>
     </tr>
     <tr>
-      <th colspan="4" class="section">Triés par pertinence</th>
+      <th colspan="6" class="section">Triés par pertinence</th>
     </tr>
     <tr>
       {{foreach from=$results item=_result}}
           <tr>
             <td class="compact"> {{$_result._source.date|substr:0:10}} </td>
+            <td class="compact"> {{tr}}{{$_result._type}}{{/tr}} </td>
             {{if $_result._source.title != ""}}
               <td class="text">
                <span onmouseover="ObjectTooltip.createEx(this, '{{$_result._type}}-{{$_result._id}}')">{{$_result._source.title|utf8_decode}}</span>
               </td>
             {{else}}
               <td  class="empty">
-                <span onmouseover="ObjectTooltip.createEx(this, '{{$_result._type}}-{{$_result._id}}')"> Sans titre</span>
+                <span onmouseover="ObjectTooltip.createEx(this, '{{$_result._type}}-{{$_result._id}}')"> ---- Titre non présent---</span>
               </td>
             {{/if}}
             {{if $_result._source.author_id}}
@@ -42,9 +45,18 @@
                 {{mb_include module=mediusers template=inc_vw_mediuser mediuser=`$authors.$author_id`}}
               </td>
             {{else}}
-              <td  class="empty">Utilisateur iconnu</td>
+              <td  class="empty">Utilisateur inconnu</td>
             {{/if}}
 
+
+            {{if $_result._source.patient_id}}
+              <td>
+                {{assign var=patient_id value=$_result._source.patient_id}}
+                <span onmouseover="ObjectTooltip.createEx(this, 'CPatient-{{$patient_id}}')">{{$patients.$patient_id}}</span>
+              </td>
+            {{else}}
+              <td  class="empty">Patient inconnu</td>
+            {{/if}}
 
             <td>
               {{assign var=score value=$_result._score*100}}
@@ -61,7 +73,7 @@
           </tr>
      {{foreachelse}}
       <tr>
-        <td colspan="4" class="empty">
+        <td colspan="6" class="empty" style="text-align: center">
             Aucun document ne correspond à la recherche
         </td>
       </tr>

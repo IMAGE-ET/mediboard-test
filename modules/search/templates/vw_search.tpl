@@ -11,7 +11,52 @@
 <script>
   Main.add(function () {
     var form = getForm("esSearch");
-    Search.selectPraticien(form.specificUser_id, form.specificUser_view);
+    window.calendar_planning_deb = Calendar.regField(form.date_deb);
+    window.calendar_planning_fin = Calendar.regField(form.date_fin);
+
+    var element = form.elements.user_id,
+      tokenField = new TokenField(element, {onChange: function(){}.bind(element)});
+
+    var element_input = form.elements.user_view;
+    var url = new Url("system", "ajax_seek_autocomplete");
+    url.addParam("object_class", "CMediusers");
+    url.addParam("input_field", element_input.name);
+
+    url.autoComplete(element_input, null, {
+      minChars: 2,
+      method: "get",
+      dropdown: true,
+      updateElement: function(selected) {
+        var guid = selected.get("id");
+        var _name  = selected.down().down().getText();
+
+        var to_insert = !tokenField.contains(guid);
+        tokenField.add(guid);
+
+        if (to_insert) {
+
+          var btn = DOM.button({
+            "type": "button",
+            "className": "delete",
+            "style": "display: inline-block !important",
+            "onclick": "window.user_tag_token.remove($(this).up('li').get('tag_item_id')); this.up().remove();"
+          });
+
+          var li = DOM.li({
+            "data-tag_item_id": guid,
+            "id": "CTag-"+guid,
+            "className": "tag"
+          }, _name, btn);
+          var br = DOM.br();
+          $("user_tags").insert(br).insert(li);
+        }
+
+        var element_input = form.elements.user_view;
+        $V(element_input, "");
+      }
+    });
+
+    window.user_tag_token = tokenField;
   });
 
   function changePage(start) {
@@ -23,127 +68,131 @@
 
 <form method="get" name="esSearch" action="?m=search" class="watched prepared" onsubmit="return Search.displayResults(this);" onchange="onchange=$V(this.form, '0')">
   <input type="hidden" name="start" value="0">
-  <table class="main">
+  <table class="main layout">
     <tbody>
-    <tr>
-      <td id="td_container_search" style="width:70%;">
-        <fieldset>
-          <legend>Recherche</legend>
-          <table>
-            <tbody>
-              <tr id="tr_search_bar">
-                <th style="text-align:right;" id="th_search_bar">Barre de Recherche</th>
-                <td>
-                  <input type="search" id="words" name="words" value="" placeholder="Saisissez les termes de votre recherche ici..." style="width:700px;" onchange="$V(this.form.start, '0')" autofocus>
-                </td>
-                <td>
-                  {{mb_include module=search template=inc_tooltip_help}}
-                </td>
-              </tr>
+      <tr>
+        <td id="td_container_search">
+          <input type="search" id="words" name="words" value="" placeholder="Saisissez les termes de votre recherche ici..." style="width:50em; height:2em; font-size:large;" onchange="$V(this.form.start, '0')" autofocus>
+          {{mb_include module=search template=inc_tooltip_help}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="main layout" style="width: 80%">
+    <tbody>
+      <tr>
+        <!-- Fieldset de tri par date -->
+        <td style="width: 33%">
+          <fieldset>
+            <legend> Date</legend>
+            <table style="width:100%">
+              <tbody>
               <tr>
-                <th style="text-align:right;" >Date</th>
                 <td>
-                  <input type="radio" name="date_interval" id="dateBetween" value="between" onclick="$('span_date').show();">
-                  <label>Comprise Entre</label>
-                  <input type="radio" name="date_interval" id="dateSince" value="since" onclick="$('span_date').hide();">
-                  <label>Depuis</label>
-                  <input type="radio" name="date_interval" id="dateUniqueDay" value="uniqueDay" checked="checked" onclick="$('span_date').hide();">
-                  <label>Jour seul</label>
+                  <input type="radio" name="date_interval" id="dateUniqueDay" value="uniqueDay" checked="checked" onclick="$('span_date').hide(); $('span_date_deb').hide();">
+                  <label for="dateUniqueDay">Jour seul</label>
                 </td>
-              </tr>
-              <tr>
-                <th></th>
                 <td>
-                  <label>Début</label>
-                  <script>
-                    Main.add(function() {
-                      var form = getForm("esSearch");
-                      window.calendar_planning = Calendar.regField(form.date_deb);
-                      window.calendar_planning = Calendar.regField(form.date_fin);
-                    });
-                  </script>
+                  <span id="span_date_deb" style="display: none;">
+                    <label for="date_deb" style="display: block; width: 35px; float: left;">Début</label>
+                  </span>
                   <input type="hidden" class="datetime" id="date_deb" name="date_deb" onchange="$V(this.form.start, '0')" >
-                  <span id="span_date" style="display: none;">et fin
-                  <input type="hidden" class="datetime" id="date_fin" name="date_fin" style="display: none;" onchange="$V(this.form.start, '0')" >
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input type="radio" name="date_interval" id="dateSince" value="since" onclick="$('span_date').hide(); $('span_date_deb').hide();">
+                  <label for="dateSince">Depuis</label>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input type="radio" name="date_interval" id="dateBetween" value="between" onclick="$('span_date').show(); $('span_date_deb').show();">
+                  <label for="dateBetween">Comprise Entre</label>
+                </td>
+                <td>
+                  <span id="span_date" style="display: none;">
+                  <label for="date_fin" style="display: block; width: 35px; float: left;">Fin</label>
+                  <input type="hidden" class="datetime" id="date_fin" name="date_fin" onchange="$V(this.form.start, '0')" >
                   </span>
                 </td>
               </tr>
+              </tbody>
+            </table>
+          </fieldset>
+        </td>
+        <!-- Fieldset de tri par Utilisateurs -->
+        <td>
+          <fieldset>
+            <legend> Utilisateurs</legend>
+            <table class="layout">
               <tr>
-                <th style="text-align:right;">Filtre utilisateur</th>
                 <td>
-                  <input type="hidden" name="specificUser_id" value=""/>
-                  <input type="text" name="specificUser_view" class="autocomplete" style="width:15em;" placeholder="&mdash; Choisir un praticien"
-                         value="" />
-                  <input name="_limit_search_sejour" class="changePrefListUsers" type="checkbox"
-                         {{if $app->user_prefs.useEditAutocompleteUsers}}checked{{/if}}
-                         title="Limiter la recherche des praticiens" onchange="$V(this.form.start, '0')" />
-
-                  <button type="button" class="user notext"
-                          onclick="$V(this.form.elements.specificUser_id, '{{$app->user_id}}');
-                            $V(this.form.specificUser_view, '{{$app->_ref_user}}');">
-                  </button>
-                  <button type="button" class="erase notext"
-                          onclick="$V(this.form.elements.specificUser_id, '');
-                          $V(this.form.specificUser_view, '');">
-                  </button>
+                  <input type="text" name="user_view" class="autocomplete" value="" style="width: 15em;" placeholder="&mdash; Choisir un utilsateur"/>
+                  <input type="hidden" name="user_id" value="" />
                 </td>
               </tr>
               <tr>
                 <td>
-                  <button type="submit" id="button_search" class="button lookup">Démarrer la recherche</button>
+                  <ul id="user_tags" class="tags" style="float: none;">
+                  </ul>
                 </td>
-                <td style="float: right;; display:none">
-                  <a href="#" id="a_advanced_search" class="button down" onclick="Search.toggleElement($('advanced_search')); Search.toggleElement($('a_advanced_search'))"> Recherche avancée</a>
-                </td>
-
               </tr>
-            </tbody>
-          </table>
-          <!-- Recherche avancée avec boutons
-          <table id="advanced_search" style="display:none;">
-            <tbody>
-                <tr>
-                  <th id="th_selection_where">Sélectionner où rechercher : </th>
-                  <td>
-                    <a class="button" href="#" id="field_titre" onclick="Search.assignFieldText($('words'), 'title:')">Titre du document</a>
-                    <a class="button" href="#" id="field_body" onclick="Search.assignFieldText($('words'), 'body:')">Corps du document</a>
-                  </td>
+            </table>
+          </fieldset>
+        </td>
+        <!-- Fieldset de tri par Types -->
+        <td>
+          <fieldset>
+            <legend>
+              <input type="checkbox" name="searchAll" id="SearchAll" value="SearchAll" onclick="Search.checkAllCheckboxes(this, 'names_types[]')">
+              <label for="SearchAll">Types</label>
+            </legend>
+            <table class="layout" id="first_indexing">
+              <tr>
+                <td>
+                  <input type="checkbox" name="names_types[]" id="CCompteRendu" value="CCompteRendu"/>
+                  <label for="CCompteRendu">Compte rendu</label>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input type="checkbox" name="names_types[]" id="CTransmissionMedicale" value="CTransmissionMedicale">
+                  <label for="CTransmissionMedicale"> Transmission Médicale</label>
+                </td>
                 </tr>
-                <tr>
-                  <th id="th_selection_op">Sélectionner un opérateur (par défaut l'opérateur est ET) :</th>
-                  <td>
-                    <a class="button add" href="#" id="button_add" onclick="Search.assignFieldText($('words'), '+')">Mot obligatoire (exemple : +Douleur)</a>
-                    <a class="button" href="#" title="&&" id="button_and" onclick="Search.assignFieldText($('words'), ' && ')">ET </a>
-                    <a class="button" href="#" title="||" id="button_or" onclick="Search.assignFieldText($('words'), ' || ')">OU </a>
-                    <a class="button" href="#" title="!" id="button_not" onclick="Search.assignFieldText($('words'), ' ! ')">PAS</a>
-                    <a class="button remove" href="#" id="button_remove" onclick="Search.assignFieldText($('words'), '-')"> Mot interdit (exemple : -Hanche)</a>
-                    <a class="button" href="#" title="~ , je recherche ce mot avec erreurs de frappes, etc..." id="button_environ" onclick="Search.assignFieldText($('words'), '~')"> Environ (exemple : ~Douleur)</a>
-                    <a class="button" href="#" id="button_compose" title="*, un mot commençant/finissant par..." onclick="Search.assignFieldText($('words'), '*')">Composé de (exemple : *leur, Dou*, do*eur)</a>
-                    <a class="button" href="#" id="button_container" title="?, un mot contenant un caractère inconnu" onclick="Search.assignFieldText($('words'), '?')">Contenant (exemple : Do?leur, ?anche)</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <a href="#" class="button new" id="button_examples" onclick="Search.popupExample()"> Cliquez ici pour obtenir des exemples</a>
-                  </td>
-                </tr>
-            </tbody>
-          </table>
-          -->
-        </fieldset>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div id="list_result">
-          <!-- Résultats de la Recherche -->
-        </div>
-      </td>
-    </tr>
+              <tr>
+                <td>
+                  <input type="checkbox" name="names_types[]" id="CObservationMedicale" value="CObservationMedicale">
+                  <label for="CObservationMedicale"> Observation Médicale</label>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input type="checkbox" name="names_types[]" id="CConsultation" value="CConsultation">
+                  <label for="CConsultation"> Consultation de séjour</label>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input type="checkbox" name="names_types[]" id="CConsultAnesth" value="CConsultAnesth">
+                  <label for="CConsultAnesth"> Consultation anesthésique de séjour</label>
+                </td>
+              </tr>
+            </table>
+          </fieldset>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td style="text-align: center">
+          <button type="submit" id="button_search" class="button lookup">Démarrer la recherche</button>
+        </td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
+  <div id="list_result">
+    <!-- Résultats de la Recherche -->
+  </div>
 </form>
-
-
-
-

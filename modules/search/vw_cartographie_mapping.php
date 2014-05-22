@@ -3,7 +3,7 @@
 /**
  * $Id$
  *  
- * @category search
+ * @category Search
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -35,7 +35,7 @@ try{
 
   // récupération du statut de la connexion et du cluster
   $status     = $cluster->getHealth()->getStatus();
-  $connexion  = "1";
+  $connexion  = $client_index->_client->hasConnection();
 
 } catch (Exception $e) {
   CAppUI::displayAjaxMsg("Le serveur de recherche n'est pas connecté", UI_MSG_ERROR);

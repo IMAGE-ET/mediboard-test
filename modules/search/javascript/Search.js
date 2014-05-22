@@ -8,12 +8,6 @@
  * @link     http://www.mediboard.org */
 
 Search = window.Search || {
-  /**
-   * make the search with words
-   * @param words
-   * @param mistakes
-   * @param search
-   */
 
   displayResults: function (form){
     var url = new Url('search',  'ajax_result_search');
@@ -80,13 +74,18 @@ Search = window.Search || {
     });
   },
 
-  firstIndexing: function (table, mapping) {
+  firstIndexing: function (table, mapping, input) {
+    var values = [];
+    input.each(function(item) {
+      values.push($F(item));
+    });
     if (table) {
       Modal.confirm(" Voulez-vous remplir la table ? Si cette action a déjà été effectuée, cela entraînera une nouvelle indexation des données. ATTENTION : l'opération sera irréversible. ",
         {onOK: function() {
           var url = new Url('search',  'first_indexing');
           url.addParam("table" , table);
           url.addParam("mapping" , mapping);
+          url.addParam("names_types" , Object.toJSON(values));
           url.requestUpdate("table_main");
         }
       });
@@ -95,6 +94,7 @@ Search = window.Search || {
       var url = new Url('search',  'first_indexing');
       url.addParam("table" , table);
       url.addParam("mapping" , mapping);
+      url.addParam("names_types" , Object.toJSON(values));
       url.requestUpdate("table_main");
     }
   },
@@ -102,6 +102,27 @@ Search = window.Search || {
   routineIndexing: function () {
     var url = new Url('search',  'routine_indexing');
     url.requestUpdate("table_main");
-  }
+  },
 
+  updateListStats: function () {
+    var url = new Url('search', 'vw_cartographie_mapping');
+    setInterval(function() {
+      url.requestUpdate("cartographie_systeme");
+    }, 300000);
+  },
+
+  checkAllCheckboxes: function (form, name) {
+    var oform = form;
+
+    while (oform.parentNode && oform.nodeName.toLowerCase() != 'form'){
+      oform = oform.parentNode;
+    }
+    var elements = oform.getElementsByTagName('input');
+
+    for (var i = 0; i < elements.length; i++) {
+      if (elements[i].type == 'checkbox' && elements[i].name == name) {
+        elements[i].checked = form.checked;
+      }
+    }
+  }
 };

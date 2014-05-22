@@ -8,8 +8,12 @@
  * @link     http://www.mediboard.org*}}
 
 {{mb_script module="search" script="Search"}}
-
-<table class="main">
+<script>
+  Main.add(function () {
+    Search.updateListStats();
+  });
+</script>
+<table class="main" id="cartographie_systeme">
   <tbody>
   <tr>
     <th class="title" colspan="2"> Statut de l'index {{$name_index}}</th>
