@@ -2713,6 +2713,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       }
 
       $_sejour->_ref_NDA  = new CIdSante400();
+      $_sejour->_ref_NDA->tag = $tag_NDA;
     }
 
     // Cas de l'utilisation du rang

@@ -151,7 +151,7 @@
     },
 
     reloadIPPForm: function() {
-      reloadAdmission();
+      //reloadAdmission();
     },
 
     submitNumdosForm: function(sejour_id) {
@@ -161,7 +161,7 @@
     },
 
     reloadNumdosForm: function() {
-      reloadAdmission();
+      //reloadAdmission();
     }
   };
 
@@ -189,7 +189,7 @@
       $V(oFormIPP[SejourHprimSelector.sIPPId]  , SejourHprimSelector.prepared.IPPid);
       ExtRefManager.submitIPPForm($V(oFormIPP.object_id));
     }
-    //submitAdmission(document["editAdmFrm"+oFormSejour.object_id.value]);
+    submitAdmission(document["editAdmFrm"+oFormSejour.object_id.value], true);
   };
 
   updateModeEntree = function(select) {
