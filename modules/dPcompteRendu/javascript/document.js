@@ -232,12 +232,11 @@ Document = {
           update_date_print: 1}, this.iframe);
         break;
       case "CWkHtmlToPDF":
+      default:
         url.popup(600, 400, "Download PDF", null, {
           compte_rendu_id: document_id,
           stream: 1,
           update_date_print: 1});
-        break;
-      default:
     }
   },
   
