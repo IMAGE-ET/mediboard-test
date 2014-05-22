@@ -19,7 +19,7 @@ then
   echo " <target_directory> is the temporary target directory, /tmp"
   echo " <target_database>  is the target database name, ie target_mediboard"
   echo " [-r ] to restart the Mysql server (Warning), ie for InnoDB"
-  echo " [-s ] to make a safe copy of existing target database first"
+  echo " [-n ] to not save the target database"
   echo " [-m <mysql_directory>] is the directory where databases are stored, ie /var/lib/mysql"
   echo " [-p <port>] is the ssh port af the target remote location, 22"
   echo " [-l ] to do a local copy (default scp)"
@@ -28,8 +28,8 @@ fi
 
 port=22
 restart=0
-safe=0
-args=$(getopt m:p:lrs $*)
+safe=1
+args=$(getopt m:p:lrn $*)
 mysql_directory=/var/lib/mysql
 distant=1
 
@@ -42,7 +42,7 @@ for i; do
   case "$i" in
     -r) restart=1; shift;;
     -l) distant=0; shift;;
-    -s) safe=1; shift;;
+    -n) safe=0; shift;;
     -p) port=$2; shift 2;;
     -m) mysql_directory=$2; shift 2;;
     --) shift ; break ;;
