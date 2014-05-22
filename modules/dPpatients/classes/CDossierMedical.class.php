@@ -315,7 +315,7 @@ class CDossierMedical extends CMbMetaObject {
     $where["dossier_medical_id"] = " = '$this->_id'";
     $where["annule"] = " != '1'";
     if (!$count_allergies) {
-      $where["type"] = " != 'alle'";
+      $where["type"] = " != 'alle' OR `type` IS NULL";
     }
     $this->_count_antecedents = $antedecent->countList($where);
 
