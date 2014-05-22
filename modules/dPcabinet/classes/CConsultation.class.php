@@ -13,7 +13,7 @@
  * Consultation d'un patient par un praticien, éventuellement pendant un séjour
  * Un des évenements fondamentaux du dossier patient avec l'intervention
  */
-class CConsultation extends CFacturable implements IPatientRelated {
+class CConsultation extends CFacturable implements IPatientRelated, IIndexableObject {
   const PLANIFIE       = 16;
   const PATIENT_ARRIVE = 32;
   const EN_COURS       = 48;
@@ -2210,5 +2210,44 @@ class CConsultation extends CFacturable implements IPatientRelated {
     $plages = CMbArray::pluck($this->_refs_dossiers_anesth, "_ref_operation", "_ref_plageop", "date");
     array_multisort($plages, SORT_ASC, $this->_refs_dossiers_anesth);
     return $this->_ref_consult_anesth = reset($this->_refs_dossiers_anesth);
+  }
+
+  /**
+   * Get the patient_id of CMbobject
+   *
+   * @return string
+   */
+  function getFieldPatient () {
+    return $this->loadRelPatient()->_id;
+  }
+  /**
+   * Loads the related fields for indexing datum (patient_id et date)
+   *
+   * @return array
+   */
+  function getFieldsSearch () {
+    $array["id"]          = $this->_id;
+    $array["author_id"]   = $this->loadRefPraticien()->_id;
+    $array["title"]       = utf8_encode($this->type);
+    $array["body"]        = $this->redesignBody("");
+    $array["date"]        = str_replace("-", "/", $this->loadRefPlageConsult()->date);
+    $user = $this->loadRefPraticien();
+    $array["function_id"] = $user->function_id;
+    $array["group_id"]    = $user->loadRefFunction()->group_id;
+    $array["patient_id"]  = $this->getFieldPatient();
+
+    return $array;
+  }
+
+  /**
+   * Redesign the content of the body you will index
+   *
+   * @param string $content The content you want to redesign
+   *
+   * @return string
+   */
+  function redesignBody ($content) {
+    $content = $this->motif." ".$this->rques." ".$this->examen." ".$this->histoire_maladie." ".$this->conclusion;
+    return utf8_encode($content);
   }
 }

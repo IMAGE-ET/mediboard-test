@@ -14,7 +14,7 @@
  *
  * @property CPrescriptionLine|CCategoryPrescription|CAdministration _ref_object
  */
-class CTransmissionMedicale extends CMbMetaObject {
+class CTransmissionMedicale extends CMbMetaObject implements IIndexableObject {
   // DB Table key
   public $transmission_medicale_id;
 
@@ -232,5 +232,45 @@ class CTransmissionMedicale extends CMbMetaObject {
       $this->loadRefsFwd();
     }
     return $this->_ref_sejour->getPerm($perm);
+  }
+
+  /**
+   * Get the patient_id of CMbobject
+   *
+   * @return string
+   */
+  function getFieldPatient () {
+    $sejour = $this->loadRefSejour();
+    $sejour->loadRelPatient();
+    return $sejour->_ref_patient->_id;
+  }
+  /**
+   * Loads the related fields for indexing datum (patient_id et date)
+   *
+   * @return array
+   */
+  function getFieldsSearch () {
+    $array["id"]          = $this->_id;
+    $array["author_id"]   = $this->user_id;
+    $array["title"]       = utf8_encode($this->type);
+    $array["body"]        = utf8_encode($this->text);
+    $array["date"]        = str_replace("-", "/", $this->date);
+    $user = $this->loadRefUser();
+    $array["function_id"] = $user->function_id;
+    $array["group_id"]    = $user->loadRefFunction()->group_id;
+    $array["patient_id"]  = $this->getFieldPatient();
+
+    return $array;
+  }
+
+  /**
+   * Redesign the content of the body you will index
+   *
+   * @param string $content The content you want to redesign
+   *
+   * @return string
+   */
+  function redesignBody ($content) {
+    return $content;
   }
 }

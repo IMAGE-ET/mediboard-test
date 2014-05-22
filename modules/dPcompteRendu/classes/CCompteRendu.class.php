@@ -1785,7 +1785,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     $author = $this->loadRefAuthor();
     $array["function_id"] = $author->function_id;
     $array["group_id"]    = $author->loadRefFunction()->group_id;
-    $array["patient_id"]  = $this->getFieldPatient($this->object_class);
+    $array["patient_id"]  = $this->getFieldPatient();
 
     return $array;
   }

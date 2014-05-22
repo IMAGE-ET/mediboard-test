@@ -15,7 +15,7 @@
  *
  * @todo Renommer en CDossierAnesthesie
  */
-class CConsultAnesth extends CMbObject implements IPatientRelated {
+class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObject {
   // DB Table key
   public $consultation_anesth_id = null;
 
@@ -655,5 +655,50 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     }
 
     return parent::store();
+  }
+
+  /**
+   * Get the patient_id of CMbobject
+   *
+   * @return string
+   */
+  function getFieldPatient () {
+    return $this->loadRelPatient()->_id;
+  }
+  /**
+   * Loads the related fields for indexing datum (patient_id et date)
+   *
+   * @return array
+   */
+  function getFieldsSearch () {
+    $array["id"]          = $this->_id;
+    $consult = $this->loadRefConsultation();
+    $plageconsult = $consult->loadRefPlageConsult();
+    $array["author_id"]   = $plageconsult->chir_id;
+    $array["title"]       = utf8_encode($consult->type);
+    $array["body"]        = $this->redesignBody("");
+    $array["date"]        = str_replace("-", "/", $plageconsult->date);
+    $user = $consult->loadRefPraticien();
+    $array["function_id"] = $user->function_id;
+    $array["group_id"]    = $user->loadRefFunction()->group_id;
+    $array["patient_id"]  = $this->getFieldPatient();
+
+    return $array;
+  }
+
+  /**
+   * Redesign the content of the body you will index
+   *
+   * @param string $content The content you want to redesign
+   *
+   * @return string
+   */
+  function redesignBody ($content) {
+    $this->loadRefConsultation();
+    $content = $this->etatBucco." ".$this->examenCardio." ".$this->examenPulmo. " ".$this->examenDigest. " ".$this->examenAutre.
+      " ". $this->conclusion." ".$this->_ref_consultation->motif." ".$this->_ref_consultation->rques.
+      " ".$this->_ref_consultation->examen." ".$this->_ref_consultation->histoire_maladie." ".$this->_ref_consultation->conclusion;
+
+    return utf8_encode($content);
   }
 }
