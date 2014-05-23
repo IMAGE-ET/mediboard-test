@@ -65,6 +65,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       return false;
     }
 
+    /** @var CInteropReceiver $receiver */
     $receiver = $mbObject->_receiver;
     $receiver->getInternationalizationCode($this->transaction);  
 
@@ -135,7 +136,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
 
       $patient = $sejour->_ref_patient;
-      $patient->loadIPP();
+      $patient->loadIPP($receiver->group_id);
       if (!$patient->_IPP) {
         if ($msg = $patient->generateIPP()) {
           CAppUI::setMsg($msg, UI_MSG_ERROR);
@@ -193,7 +194,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       $sejour->_receiver = $receiver;
 
       $patient = $sejour->_ref_patient;
-      $patient->loadIPP();
+      $patient->loadIPP($receiver->group_id);
       if (!$patient->_IPP) {
         if ($msg = $patient->generateIPP()) {
           CAppUI::setMsg($msg, UI_MSG_ERROR);
@@ -249,7 +250,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
 
       $patient = $sejour_enfant->_ref_patient;
-      $patient->loadIPP();
+      $patient->loadIPP($receiver->group_id);
       if (!$patient->_IPP) {
         if ($msg = $patient->generateIPP()) {
           CAppUI::setMsg($msg, UI_MSG_ERROR);
