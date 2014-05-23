@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage PlanningOp
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 global $dialog;
@@ -19,19 +19,19 @@ else {
 }
 
 // L'utilisateur est-il chirurgien?
-$mediuser = CMediusers::get();
-$chir_id  = CValue::getOrSession("chir_id", $mediuser->isPraticien() ? $mediuser->user_id : null);
-$chir     = new CMediusers();
-$chir->load($chir_id);
+$mediuser     = CMediusers::get();
+$chir_id      = CValue::getOrSession("chir_id", $mediuser->isPraticien() ? $mediuser->user_id : null);
 $function_id  = CValue::getOrSession("function_id");
 $type         = CValue::getOrSession("type", "interv"); 
 $page         = CValue::get("page");
 $sejour_type  = CValue::get("sejour_type");
 $step = 30;
 
-$protocole = new CProtocole;
+$protocole = new CProtocole();
 $where = array();
 
+$chir     = new CMediusers();
+$chir->load($chir_id);
 if ($chir->_id) {
   $chir->loadRefFunction();
   $functions = array($chir->function_id);
@@ -54,12 +54,9 @@ if ($sejour_type) {
 
 $order = "libelle_sejour, libelle, codes_ccam";
 
-$list_protocoles       = $protocole->loadListWithPerms(PERM_READ, $where, $order, "{$page[$type]},$step");
-
-$total_protocoles = $protocole->countList($where);
+$list_protocoles  = $protocole->loadListWithPerms(PERM_READ, $where, $order, "{$page[$type]},$step");
 
 $systeme_materiel_expert = CAppUI::conf("dPbloc CPlageOp systeme_materiel") == "expert";
-
 foreach ($list_protocoles as $_prot) {
   $_prot->loadRefsFwd();
   if ($systeme_materiel_expert == "expert") {
@@ -70,11 +67,11 @@ foreach ($list_protocoles as $_prot) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("list_protocoles"      , $list_protocoles);
-$smarty->assign("total_protocoles"     , $total_protocoles);
-$smarty->assign("page"                 , $page);
-$smarty->assign("step"                 , $step);
-$smarty->assign("chir_id"              , $chir_id);
-$smarty->assign("type"                 , $type);
+$smarty->assign("list_protocoles"   , $list_protocoles);
+$smarty->assign("total_protocoles"  , $protocole->_totalWithPerms);
+$smarty->assign("page"              , $page);
+$smarty->assign("step"              , $step);
+$smarty->assign("chir_id"           , $chir_id);
+$smarty->assign("type"              , $type);
 
 $smarty->display("inc_list_protocoles.tpl");
