@@ -115,7 +115,7 @@
             <table class="layout">
               <tr>
                 <td>
-                  <input type="text" name="user_view" class="autocomplete" value="{{$app->_ref_user}}" placeholder="&mdash; Choisir un utilisateur"/>
+                  <input type="text" name="user_view" class="autocomplete" value="" placeholder="&mdash; Choisir un utilisateur"/>
                   <input type="hidden" name="user_id" value="" />
 
                   <button type="button" class="user notext"
