@@ -1822,4 +1822,17 @@ class COperation extends CCodable implements IPatientRelated {
 
     return $listPers;
   }
+
+  /**
+   * @see parent::loadAlertsNotHandled
+   */
+  function loadAlertsNotHandled($level = null, $tag = null, $perm = PERM_READ) {
+    $alert = new CAlert();
+    $alert->handled = "0";
+    $alert->setObject($this);
+    $alert->level = $level;
+    $alert->tag = $tag;
+    $this->_refs_alerts_not_handled = $alert->loadMatchingList();
+    return $this->_refs_alerts_not_handled;
+  }
 }
