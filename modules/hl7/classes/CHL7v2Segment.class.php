@@ -565,6 +565,12 @@ class CHL7v2Segment extends CHL7v2Entity {
     $names = array();
     
     if ($object instanceof CPatient) {
+      $nom      = CPatient::applyModeIdentitoVigilance($object->nom, false, $receiver->_configs["mode_identito_vigilance"]);
+      $prenom   = CPatient::applyModeIdentitoVigilance($object->prenom, true, $receiver->_configs["mode_identito_vigilance"]);
+      $prenom_2 = CPatient::applyModeIdentitoVigilance($object->prenom_2, true, $receiver->_configs["mode_identito_vigilance"]);
+      $prenom_3 = CPatient::applyModeIdentitoVigilance($object->prenom_3, true, $receiver->_configs["mode_identito_vigilance"]);
+      $prenom_4 = CPatient::applyModeIdentitoVigilance($object->prenom_4, true, $receiver->_configs["mode_identito_vigilance"]);
+
       $prenoms = array($object->prenom_2, $object->prenom_3, $object->prenom_4);
       CMbArray::removeValue("", $prenoms);
  

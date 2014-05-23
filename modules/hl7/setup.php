@@ -1,3 +1,10 @@
+    $this->makeRevision("0.94");
+
+    $query = "ALTER TABLE `receiver_hl7v2_config`
+                ADD `send_no_facturable` ENUM ('0','1') DEFAULT '1'";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.95";
 <?php /* $Id $ */
 
 /**
@@ -11,27 +18,27 @@
 class CSetuphl7 extends CSetup {
   function insertTableEntry($number, $code_hl7_from, $code_hl7_to, $code_mb_from, $code_mb_to, $description, $user = 1) {
     $description = $this->ds->escape($description);
-    
+
     $code_hl7_from = ($code_hl7_from === null) ? "NULL" : "'$code_hl7_from'";
     $code_hl7_to   = ($code_hl7_to === null)   ? "NULL" : "'$code_hl7_to'";
     $code_mb_from  = ($code_mb_from === null)  ? "NULL" : "'$code_mb_from'";
     $code_mb_to    = ($code_mb_to === null)    ? "NULL" : "'$code_mb_to'";
-    
-    
+
+
     $query = "INSERT INTO `table_entry` (
               `table_entry_id`, `number`, `code_hl7_from`, `code_hl7_to`, `code_mb_from`, `code_mb_to`, `description`, `user`
               ) VALUES (
                 NULL , '$number', $code_hl7_from, $code_hl7_to, $code_mb_from, $code_mb_to, '$description', '$user'
               );";
-    
+
     $this->addQuery($query, false, "hl7v2");
   }
-  
+
   function updateTableEntry($number, $update, $where) {
     foreach ($update as $field => $value) {
       $set[] = "`$field` = '$value'";
     }
-    
+
     $and = "";
     foreach ($where as $field => $value) {
       $and .= "AND `$field` = '$value' ";
@@ -42,15 +49,15 @@ class CSetuphl7 extends CSetup {
               $and;";
 
     $this->addQuery($query, false, "hl7v2");
-    
+
   }
-  
+
   function deleteTableEntry($number, $where) {
     $and = "";
     foreach ($where as $field => $value) {
       $and .= "AND `$field` = '$value' ";
     }
-    
+
     $query = "DELETE FROM `table_entry`
               WHERE `number` = '$number'
               $and;";
@@ -64,33 +71,33 @@ class CSetuphl7 extends CSetup {
                 WHERE $nameTable.name LIKE 'CReceiverIHE-%';";
     $this->addQuery($query);
   }
-  
+
   function __construct() {
     parent::__construct();
-    
+
     $this->mod_name = "hl7";
     $this->makeRevision("all");
-    
+
     $this->makeRevision("0.01");
-       
+
     function checkHL7v2Tables() {
       $dshl7 = CSQLDataSource::get("hl7v2", true);
-    
+
       if (!$dshl7 || !$dshl7->loadTable("table_entry")) {
         CAppUI::setMsg("CHL7v2Tables-missing", UI_MSG_ERROR);
         return false;
       }
-      
+
       return true;
     }
     $this->addFunction("checkHL7v2Tables");
-       
+
     $this->makeRevision("0.02");
-  
-    $query = "ALTER TABLE `table_description` 
+
+    $query = "ALTER TABLE `table_description`
                 ADD `user` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query, true, "hl7v2");
-    
+
     // Gestion du mode de placement en psychiatrie
     $query = "INSERT INTO `table_description` (
               `table_description_id`, `number`, `description`, `user`
@@ -98,17 +105,17 @@ class CSetuphl7 extends CSetup {
                 NULL , '9000', 'Admit Reason (Psychiatrie)', '1'
               );";
     $this->addQuery($query, false, "hl7v2");
-    
+
     $this->makeRevision("0.03");
-    
+
     $query = "ALTER TABLE `table_entry`
                 DROP INDEX `number_code_hl7` ,
                 ADD INDEX `number_code_hl7` ( `number` , `code_hl7_from` );";
     $this->addQuery($query, false, "hl7v2");
-    
+
     // Table - 0001
     // F - Female
-    $set = array( 
+    $set = array(
       "code_hl7_to"   => "F",
       "code_mb_from"  => "f",
       "code_mb_to"    => "f"
@@ -118,7 +125,7 @@ class CSetuphl7 extends CSetup {
     );
     $this->updateTableEntry("1", $set, $and);
     // M - Male
-    $set = array( 
+    $set = array(
       "code_hl7_to"   => "M",
       "code_mb_from"  => "m",
       "code_mb_to"    => "m"
@@ -143,7 +150,7 @@ class CSetuphl7 extends CSetup {
       "code_hl7_from" => "U"
     );
     $this->updateTableEntry("1", $set, $and);
-    // A - Ambiguous  
+    // A - Ambiguous
     $set = array(
       "code_mb_to"    => "m"
     );
@@ -205,7 +212,7 @@ class CSetuphl7 extends CSetup {
       "code_hl7_from" => "R"
     );
     $this->updateTableEntry("4", $set, $and);
-    
+
     // Table 0032 - Charge price indicator
     // 03 - Hospi. complète
     $set = array(
@@ -245,7 +252,7 @@ class CSetuphl7 extends CSetup {
     $this->insertTableEntry("9000", "HO", "HO", "office", "office", "Placement d'office");
     // HDT - Hospitalisation à la demande d'un tiers
     $this->insertTableEntry("9000", "HDT", "HDT", "tiers", "tiers", "Hospitalisation à la demande d'un tiers");
-    
+
     // Table - 0430
     // 0 - Police
     $this->insertTableEntry("430", "0", "0", "fo", "fo", "Police");
@@ -269,7 +276,7 @@ class CSetuphl7 extends CSetup {
     $this->insertTableEntry("430", null, "9", "perso", null, "Autre");
 
     $this->makeRevision("0.04");
-    
+
     $query = "CREATE TABLE `hl7_config` (
                 `hl7_config_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
                 `assigning_authority_namespace_id` VARCHAR (255),
@@ -279,13 +286,13 @@ class CSetuphl7 extends CSetup {
                 `sender_class` ENUM ('CSenderFTP','CSenderSOAP')
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-    
-    $query = "ALTER TABLE `hl7_config` 
+
+    $query = "ALTER TABLE `hl7_config`
               ADD INDEX (`sender_id`);";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.05");
-    
+
     // Table - 0063
     // Collègue
     $set = array(
@@ -477,7 +484,7 @@ class CSetuphl7 extends CSetup {
       "code_hl7_from" => "TRA"
     );
     $this->updateTableEntry("63", $set, $and);
-    
+
     // Table - 0131
     // Personne à prévenir
     $set = array(
@@ -531,7 +538,7 @@ class CSetuphl7 extends CSetup {
     $this->updateTableEntry("131", $set, $and);
     // Personne de confiance
     $this->insertTableEntry("131", "K", "K", "confiance", "confiance", "Personne de confiance");
-    
+
     $this->makeRevision("0.06");
     $query = "CREATE TABLE `source_mllp` (
               `source_mllp_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
@@ -548,11 +555,11 @@ class CSetuphl7 extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("0.07");
-    
+
     $this->insertTableEntry("399", "FRA", "FRA", "FRA", "FRA", "Française");
-    
+
     $this->makeRevision("0.08");
-    
+
     // Circonstance de sortie
     $this->insertTableEntry("112", "2", "2", "2", "2", "Mesures disciplinaires");
     $this->insertTableEntry("112", "3", "3", "3", "3", "Décision médicale (valeur par défaut");
@@ -562,9 +569,9 @@ class CSetuphl7 extends CSetup {
     $this->insertTableEntry("112", "R", "R", "R", "R", "Essai (contexte psychiatrique)");
     $this->insertTableEntry("112", "E", "E", "E", "E", "Evasion");
     $this->insertTableEntry("112", "F", "F", "F", "F", "Fugue");
-    
+
     $this->makeRevision("0.09");
-    
+
     // Type d'activité, mode de traitement
     // Hospi. complète
     $this->insertTableEntry("32", "CM", "CM", "comp_m", "comp_m", "Hospi. complète en médecine");
@@ -586,9 +593,9 @@ class CSetuphl7 extends CSetup {
     $this->insertTableEntry("32", "URGENCE", "URGENCE", "urg_m", "urg_m", "Passage aux ugences médicales sans hosp.");
     $this->insertTableEntry("32", "URGENCE", "URGENCE", "urg_c", "urg_c", "Passage aux ugences chirurgicales sans hosp.");
     $this->insertTableEntry("32", "URGENCE", "URGENCE", "urg_o", "urg_o", "Passage aux ugences");
-    
+
     $this->makeRevision("0.10");
-    
+
     // Ambu
     $set = array(
       "code_hl7_to"   => "I",
@@ -599,9 +606,9 @@ class CSetuphl7 extends CSetup {
       "code_mb_from" => "ambu"
     );
     $this->updateTableEntry("4", $set, $and);
-    
+
     $this->makeRevision("0.11");
-    
+
     // Type d'activité, mode de traitement
     // Hospi. complète
     $this->insertTableEntry("32", "CM", "CM", "comp", "comp", "Hospi. complète en médecine");
@@ -613,9 +620,9 @@ class CSetuphl7 extends CSetup {
     $this->insertTableEntry("32", "CHIMIO", "CHIMIO", "seances", "seances", "Séance de chimiothérapie");
     // Urgence
     $this->insertTableEntry("32", "URGENCE", "URGENCE", "urg", "urg", "Passage aux ugences chirurgicales sans hosp.");
-    
+
     $this->makeRevision("0.12");
-    
+
     $set = array(
       "code_hl7_to"   => "AMBU",
       "code_hl7_from" => "AMBU",
@@ -624,9 +631,9 @@ class CSetuphl7 extends CSetup {
       "code_mb_from" => "ambu"
     );
     $this->updateTableEntry("32", $set, $and);
-    
+
     $this->makeRevision("0.13");
-    
+
     $query = "CREATE TABLE `sender_mllp` (
                 `sender_mllp_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
                 `user_id` INT (11) UNSIGNED,
@@ -636,20 +643,20 @@ class CSetuphl7 extends CSetup {
                 `actif` ENUM ('0','1') NOT NULL DEFAULT '0'
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-    
-    $query = "ALTER TABLE `sender_mllp` 
+
+    $query = "ALTER TABLE `sender_mllp`
                 ADD INDEX (`user_id`),
                 ADD INDEX (`group_id`);";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.14");
-    
-    $query = "ALTER TABLE `hl7_config` 
+
+    $query = "ALTER TABLE `hl7_config`
                 CHANGE `sender_class` `sender_class` ENUM ('CSenderFTP','CSenderSOAP','CSenderMLLP');";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.15");
-    
+
     // Character sets
     // UTF-8
     $set = array(
@@ -671,18 +678,18 @@ class CSetuphl7 extends CSetup {
       "code_hl7_from" => "8859/1 "
     );
     $this->updateTableEntry("211", $set, $and);
-    
+
     $this->makeRevision("0.16");
-    
+
     $this->makeRevision("0.17");
-    
+
     // Externe
     $and = array(
       "code_hl7_to"  => "O",
       "code_mb_from" => "exte"
     );
     $this->deleteTableEntry("4", $and);
-    
+
     $set = array(
       "code_hl7_to"   => "O",
       "code_hl7_from" => "O",
@@ -694,12 +701,12 @@ class CSetuphl7 extends CSetup {
       "code_mb_from"  => "ambu"
     );
     $this->updateTableEntry("4", $set, $and);
-    
+
     // Ambu
     $this->insertTableEntry("4", null, "I", "ambu", null, "Inpatient");
-    
+
     $this->makeRevision("0.18");
-    
+
     // Gestion du mode de placement en psychiatrie
     $query = "INSERT INTO `table_description` (
               `table_description_id`, `number`, `description`, `user`
@@ -707,7 +714,7 @@ class CSetuphl7 extends CSetup {
                 NULL , '9001', 'Mode de sortie PMSI', '1'
               );";
     $this->addQuery($query, false, "hl7v2");
-    
+
     // Transfert
     $this->insertTableEntry("9001", "7", "7", "transfert", "transfert", "Transfert");
     // Mutation
@@ -716,77 +723,77 @@ class CSetuphl7 extends CSetup {
     $this->insertTableEntry("9001", "9", "9", "deces", "deces", "Décès");
     // Normal
     $this->insertTableEntry("9001", "5", "5", "normal", "normal", "Sorti à l'essai");
-    
+
     $this->makeRevision("0.19");
-    
-    $query = "ALTER TABLE `hl7_config` 
+
+    $query = "ALTER TABLE `hl7_config`
                 ADD `handle_mode` ENUM ('normal','simple') DEFAULT 'normal';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.20");
-    
-    $query = "ALTER TABLE `hl7_config` 
+
+    $query = "ALTER TABLE `hl7_config`
                 CHANGE `sender_class` `sender_class` VARCHAR (80);";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.21");
-    
-    $query = "ALTER TABLE `hl7_config` 
+
+    $query = "ALTER TABLE `hl7_config`
                 ADD `get_NDA` ENUM ('PID_18','PV1_19') DEFAULT 'PID_18';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.22");
-    
-    $query = "ALTER TABLE `hl7_config` 
+
+    $query = "ALTER TABLE `hl7_config`
               ADD `handle_PV1_10` ENUM ('discipline','service') DEFAULT 'discipline',
               CHANGE `get_NDA` `handle_NDA` ENUM ('PID_18','PV1_19') DEFAULT 'PID_18';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.23");
-    
-    $query = "ALTER TABLE `sender_mllp` 
+
+    $query = "ALTER TABLE `sender_mllp`
                 ADD `save_unsupported_message` ENUM ('0','1') DEFAULT '1',
                 ADD `create_ack_file` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.24");
-    
+
     $this->makeRevision("0.25");
-    
-    $query = "ALTER TABLE `hl7_config` 
+
+    $query = "ALTER TABLE `hl7_config`
                 ADD `encoding` ENUM ('UTF-8','ISO-8859-1') DEFAULT 'UTF-8';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.26");
-    
+
     // Table - 0063
     // Ascendant
     $this->insertTableEntry("63", "DAN", "DAN", "ascendant", "ascendant", "Ascendant");
-    
+
     // Collatéral
     $this->insertTableEntry("63", "COL", "COL", "colateral", "colateral", "Collatéral");
-    
+
     // Conjoint
     $this->insertTableEntry("63", "CON", "CON", "conjoint", "conjoint", "Conjoint");
-    
+
     // Directeur
     $this->insertTableEntry("63", "DIR", "DIR", "directeur", "directeur", "Directeur");
-    
+
     // Divers
     $this->insertTableEntry("63", "DIV", "DIV", "divers", "divers", "Divers");
-    
+
     // Grand-parent
     $this->insertTableEntry("63", "GRP", "GRP", "grand_parent", "grand_parent", "Grand-parent");
-    
+
     $this->makeRevision("0.27");
-    
-    $query = "ALTER TABLE `hl7_config` 
+
+    $query = "ALTER TABLE `hl7_config`
                 ADD `handle_NSS` ENUM ('PID_3','PID_19') DEFAULT 'PID_3';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.28");
-    
-    $query = "ALTER TABLE `hl7_config` 
+
+    $query = "ALTER TABLE `hl7_config`
                 ADD `iti30_option_merge` ENUM ('0','1') DEFAULT '1',
                 ADD `iti30_option_link_unlink` ENUM ('0','1') DEFAULT '0',
                 ADD `iti31_in_outpatient_emanagement` ENUM ('0','1') DEFAULT '1',
@@ -795,39 +802,39 @@ class CSetuphl7 extends CSetup {
                 ADD `iti31_temporary_patient_transfer_tracking` ENUM ('0','1') DEFAULT '0',
                 ADD `iti31_historic_movement` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.29");
-    $query = "ALTER TABLE `source_mllp` 
+    $query = "ALTER TABLE `source_mllp`
               ADD `ssl_enabled` ENUM ('0','1') NOT NULL DEFAULT '0',
               ADD `ssl_certificate` VARCHAR (255),
               ADD `ssl_passphrase` VARCHAR (255);";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.30");
-    $query = "ALTER TABLE `hl7_config` 
+    $query = "ALTER TABLE `hl7_config`
               ADD `strict_segment_terminator` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.31");
-    $query = "ALTER TABLE `sender_mllp` 
+    $query = "ALTER TABLE `sender_mllp`
                 ADD `delete_file` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.32");
-    $query = "ALTER TABLE `hl7_config` 
+    $query = "ALTER TABLE `hl7_config`
                 ADD `handle_PV1_14` ENUM ('admit_source','ZFM') DEFAULT 'admit_source',
                 ADD `handle_PV1_36` ENUM ('discharge_disposition','ZFM') DEFAULT 'discharge_disposition';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.33");
-    $query = "ALTER TABLE `hl7_config` 
+    $query = "ALTER TABLE `hl7_config`
                 ADD `purge_idex_movements` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.34");
-    
+
     /* Remise à niveau des types d'hospitalisation */
-    
+
     // Suppression
     $and = array(
       "code_mb_from" => "exte"
@@ -861,72 +868,72 @@ class CSetuphl7 extends CSetup {
       "code_mb_from" => "ssr"
     );
     $this->deleteTableEntry("4", $and);
-    
+
     // Table 0004 - Patient Class
     // E - Emergency - Passage aux Urgences - Arrivée aux urgences
     $this->insertTableEntry("4", "E", "E", "urg", "urg", "Emergency", 0);
-    
+
     // I - Inpatient - Hospitalisation
     $this->insertTableEntry("4", "I" , "I", "comp", "comp", "Inpatient", 0);
     $this->insertTableEntry("4", null, "I", "ssr" , null  , "Inpatient");
     $this->insertTableEntry("4", null, "I", "psy" , null  , "Inpatient");
     $this->insertTableEntry("4", null, "I", "ambu", null  , "Inpatient");
-    
+
     // O - Outpatient - Actes et consultation externe
     $this->insertTableEntry("4", "O" , "O", "exte"   , "exte", "Outpatient", 0);
     $this->insertTableEntry("4", null, "O", "consult", null  , "Outpatient");
-    
+
     // R - Recurring patient - Séances
     $this->insertTableEntry("4", "R", "R", "seances", "seances", "Recurring patient", 0);
-    
+
     $this->makeRevision("0.35");
-    $query = "ALTER TABLE `hl7_config` 
+    $query = "ALTER TABLE `hl7_config`
                 ADD `repair_patient` ENUM ('0','1') DEFAULT '1',
                 ADD `control_date` ENUM ('permissif','strict') DEFAULT 'strict';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.36");
-    $query = "ALTER TABLE `hl7_config` 
+    $query = "ALTER TABLE `hl7_config`
               ADD `handle_PV1_3` ENUM ('name','config_value','idex') DEFAULT 'name';";
     $this->addQuery($query);
-    
+
     $this->addDependency("ihe", "0.26");
-    
+
     $this->makeRevision("0.37");
     $query = "ALTER TABLE `receiver_ihe_config`
                 ADD `RAD48_HL7_version` ENUM ('2.1','2.2','2.3','2.3.1','2.4','2.5') DEFAULT '2.5';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.38");
-    
+
     $query = "ALTER TABLE `exchange_ihe`
                 CHANGE `object_class` `object_class` VARCHAR (80);";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.39");
-    
-    $query = "ALTER TABLE `exchange_ihe` 
+
+    $query = "ALTER TABLE `exchange_ihe`
                 ADD `reprocess` TINYINT (4) UNSIGNED DEFAULT '0';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.40");
-    $query = "ALTER TABLE `receiver_ihe_config` 
+    $query = "ALTER TABLE `receiver_ihe_config`
                 ADD `build_telephone_number` ENUM ('XTN_1','XTN_12') DEFAULT 'XTN_12';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.41");
-    $query = "ALTER TABLE `hl7_config` 
+    $query = "ALTER TABLE `hl7_config`
                 ADD `handle_telephone_number` ENUM ('XTN_1','XTN_12') DEFAULT 'XTN_12';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.42");
-    $query = "ALTER TABLE `hl7_config` 
+    $query = "ALTER TABLE `hl7_config`
                 ADD `handle_PID_31` ENUM ('avs','none') DEFAULT 'none';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.43");
-    
-    $query = "ALTER TABLE `receiver_ihe_config` 
+
+    $query = "ALTER TABLE `receiver_ihe_config`
                 ADD `build_PID_31` ENUM ('avs','none') DEFAULT 'none';";
     $this->addQuery($query);
 
@@ -934,24 +941,24 @@ class CSetuphl7 extends CSetup {
     $query = "ALTER TABLE `hl7_config`
                 ADD `segment_terminator` ENUM ('CR','LF','CRLF')";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.45");
-    $query = "ALTER TABLE `receiver_ihe_config` 
+    $query = "ALTER TABLE `receiver_ihe_config`
                 ADD `build_PID_34` ENUM ('finess','actor') DEFAULT 'finess';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.46");
-    $query = "ALTER TABLE `receiver_ihe_config` 
+    $query = "ALTER TABLE `receiver_ihe_config`
                 ADD `build_PV2_45` ENUM ('operation','none') DEFAULT 'none';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.47");
-    $query = "ALTER TABLE `receiver_ihe_config` 
+    $query = "ALTER TABLE `receiver_ihe_config`
                 ADD `build_cellular_phone` ENUM ('PRN','ORN') DEFAULT 'PRN';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.48");
-    $query = "ALTER TABLE `receiver_ihe_config` 
+    $query = "ALTER TABLE `receiver_ihe_config`
                 ADD `send_first_affectation` ENUM ('A02','Z99') DEFAULT 'Z99';";
     $this->addQuery($query);
 
@@ -996,7 +1003,7 @@ class CSetuphl7 extends CSetup {
     $query = "ALTER TABLE `receiver_ihe_config`
                 ADD `send_self_identifier` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.56");
     $query = "ALTER TABLE `hl7_config`
                 ADD `send_area_local_number` ENUM ('0','1') DEFAULT '0';";
@@ -1290,7 +1297,19 @@ class CSetuphl7 extends CSetup {
                 ADD `bypass_validating` ENUM ('0','1') DEFAULT '0'";
     $this->addQuery($query);
 
-    $this->mod_version = "0.93";
+    $this->makeRevision("0.93");
+
+    $query = "ALTER TABLE `receiver_hl7v2_config`
+                ADD `mode_identito_vigilance` ENUM ('light','medium','strict') DEFAULT 'light'";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.94");
+
+    $query = "ALTER TABLE `receiver_hl7v2_config`
+                ADD `send_no_facturable` ENUM ('0','1') DEFAULT '1'";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.95";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

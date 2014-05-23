@@ -45,7 +45,7 @@ class CHL7v2SegmentNK1 extends CHL7v2Segment {
     $data[] = $this->set_id;
      
     // NK1-2: NK Name (XPN) (optional repeating)
-    $data[] = $this->getXPN($correspondant);
+    $data[] = $this->getXPN($correspondant, $event->_receiver);
     
     // NK1-3: Relationship (CE) (optional)
     // Table 0063 - Relationship

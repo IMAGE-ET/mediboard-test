@@ -67,6 +67,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   public $send_change_after_admit;
   public $send_patient_with_visit;
   public $send_patient_with_current_admit;
+  public $send_no_facturable;
 
   // Build
   public $build_mode;
@@ -164,6 +165,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       "send_change_after_admit",
       "send_patient_with_visit",
       "send_patient_with_current_admit",
+      "send_no_facturable",
     ),
     "PID" => array(
       "build_PID_6",
@@ -265,6 +267,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["send_change_after_admit"]            = "bool default|1";
     $props["send_patient_with_visit"]            = "bool default|0";
     $props["send_patient_with_current_admit"]    = "bool default|0";
+    $props["send_no_facturable"]                 = "bool default|1";
     
     // Build
     $props["build_mode"]                   = "enum list|normal|simple default|normal";

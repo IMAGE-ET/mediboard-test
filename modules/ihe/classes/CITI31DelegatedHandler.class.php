@@ -65,6 +65,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       return false;
     }
 
+    /** @var CInteropReceiver $receiver */
     $receiver = $mbObject->_receiver;
     $receiver->getInternationalizationCode($this->transaction);  
 
@@ -77,7 +78,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if ($sejour->_no_synchro) {
         return;
       }
-      
+
       // Si on est en train de créer un séjour et qu'il s'agit d'une naissance
       $current_log = $sejour->loadLastLog();
       if ($current_log->type == "create" && $sejour->_naissance) {
@@ -96,6 +97,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
 
       // Si le group_id du séjour est différent de celui du destinataire
       if ($sejour->group_id != $receiver->group_id) {
+        return;
+      }
+
+      // On ne transmet pas les séjours non facturables si le destinataire ne le souhaite pas
+      if (!$receiver->_configs["send_no_facturable"] && !$sejour->facturable) {
         return;
       }
 
@@ -129,6 +135,14 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         $sejour->_NDA = $NDA->id400;
       }
 
+      $patient = $sejour->_ref_patient;
+      $patient->loadIPP($receiver->group_id);
+      if (!$patient->_IPP) {
+        if ($msg = $patient->generateIPP()) {
+          CAppUI::setMsg($msg, UI_MSG_ERROR);
+        }
+      }
+
       $current_affectation = null;
       // Cas où lors de l'entrée réelle j'ai une affectation qui n'a pas été envoyée
       if ($sejour->fieldModified("entree_reelle") && !$sejour->_old->entree_reelle) {
@@ -156,6 +170,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return;
       }
 
+      // On ne transmet pas les séjours non facturables si le destinataire ne le souhaite pas
+      if (!$receiver->_configs["send_no_facturable"] && !$sejour->facturable) {
+        return;
+      }
+
       // Si le group_id du séjour est différent de celui du destinataire
       if ($sejour->group_id != $receiver->group_id) {
         return;
@@ -178,13 +197,27 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
 
       $sejour->loadRefPatient();
       $sejour->_receiver = $receiver;
-      
+
+      $patient = $sejour->_ref_patient;
+      $patient->loadIPP($receiver->group_id);
+      if (!$patient->_IPP) {
+        if ($msg = $patient->generateIPP()) {
+          CAppUI::setMsg($msg, UI_MSG_ERROR);
+        }
+      }
+
       $this->createMovement($code, $sejour, $affectation);
+      $service = $affectation->loadRefService();
+      $curr_affectation = $sejour->loadRefCurrAffectation();
+      if (($service->uhcd || $service->radiologie || $service->urgence) && $affectation->sortie < $curr_affectation->sortie) {
+        return;
+      }
    
+
       // Envoi de l'événement
       $this->sendITI($this->profil, $this->transaction, $this->message, $code, $mbObject);
     }
-    
+
     // Traitement Naissance
     if ($mbObject instanceof CNaissance) {
       $current_log = $mbObject->loadLastLog();
@@ -195,6 +228,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       $sejour_enfant = $mbObject->loadRefSejourEnfant();
       $sejour_enfant->loadRefPatient();
       $sejour_enfant->_receiver = $receiver;
+
+      // On ne transmet pas les séjours non facturables si le destinataire ne le souhaite pas
+      if (!$receiver->_configs["send_no_facturable"] && !$sejour_enfant->facturable) {
+        return;
+      }
       
       $code = $this->getCodeSejour($sejour_enfant);
         
@@ -220,6 +258,14 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Cas où lors de l'entrée réelle j'ai une affectation qui n'a pas été envoyée
       if ($sejour_enfant->fieldModified("entree_reelle") && !$sejour_enfant->_old->entree_reelle) {
         $current_affectation = $sejour_enfant->getCurrAffectation();
+      }
+
+      $patient = $sejour_enfant->_ref_patient;
+      $patient->loadIPP($receiver->group_id);
+      if (!$patient->_IPP) {
+        if ($msg = $patient->generateIPP()) {
+          CAppUI::setMsg($msg, UI_MSG_ERROR);
+        }
       }
 
       $this->createMovement($code, $sejour_enfant, $current_affectation);
@@ -251,10 +297,15 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if ($affectation) {
       $current_log       = $affectation->_ref_current_log;
       $first_affectation = $sejour->loadRefFirstAffectation();
-    
+      /** @var CService $service */
+      $service = $affectation->loadRefService();
+
+      // Si le service est d'UHCD, de radiologie, d'urgence ou
       // Dans le cas où il s'agit de la première affectation du séjour et qu'on est en type "création" on ne recherche pas 
       // un mouvement avec l'affectation, mais on va prendre le mouvement d'admission
-      if ($current_log && ($current_log->type == "create") && $first_affectation && ($first_affectation->_id == $affectation->_id)) {
+      if (($service->uhcd || $service->radiologie || $service->urgence) ||
+          ($current_log && ($current_log->type == "create") && $first_affectation && ($first_affectation->_id == $affectation->_id))
+      ) {
         $affectation_id = $affectation->_id;
         $affectation    = null;
       }
@@ -336,8 +387,8 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
   function getStartOfMovement($code, CSejour $sejour, CAffectation $affectation = null) {
     switch ($code) {
       // Admission hospitalisé / externe
-      case 'A01' : 
-      case 'A04' :
+      case 'A01':
+      case 'A04':
         // Date de l'admission
         return $sejour->entree_reelle;
       // Mutation : changement d'UF hébergement
@@ -354,7 +405,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         // Absence provisoire (permission) et mouvement de transfert vers un plateau technique pour acte (<48h)
       case 'A21':
         // Retour d'absence provisoire (permission) et mouvement de transfert vers un plateau technique pour acte (<48h)
-      case 'A22': 
+      case 'A22':
         // Changement de médecin responsable
       case 'A54':
         // Changement d'UF médicale
@@ -369,13 +420,14 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return $sejour->sortie_reelle;
       // Pré-admission
       case 'A05':
-      case 'A14' :
+      case 'A14':
         // Date de la pré-admission
         return $sejour->entree_prevue;
       // Sortie en attente
       case 'A16':
         // Date de la sortie
         return $sejour->sortie;
+      default:
     }
   }
 
@@ -627,6 +679,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     $configs  = $receiver->_configs;
     $service  = $affectation->loadRefService();
 
+    $code = "A02";
+    if ($service->uhcd || $service->radiologie || $service->urgence) {
+      $code = $this->getModificationAdmitCode($receiver);
+    }
+
     if ($current_log->type == "create") {
       /* Affectation dans un service externe */
       if ($service->externe) {
@@ -639,7 +696,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
           case 'Z99':
             return $this->getModificationAdmitCode($receiver);
           default:
-            return "A02";
+            return $code;
         }
       }
       
@@ -648,7 +705,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         case 'Z99':
           return $this->getModificationAdmitCode($receiver);
         default:
-          return "A02";
+          return $code;
       }
     }
             
@@ -703,11 +760,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
   function getModificationAdmitCode(CReceiverHL7v2 $receiver) {
     switch ($receiver->_i18n_code) {
       // Cas de l'extension française : Z99
-      case "FR" :
+      case "FR":
         $code = "Z99";
         break;
       // Cas internationnal : A08
-      default :
+      default:
         $code = $receiver->_configs["modification_admit_code"];
         break;
     }
@@ -738,7 +795,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
           continue;
         }
 
-        $sejour1_nda = $sejour->_NDA = $infos_fus["sejour1_nda"];
+        $sejour1_nda = $sejour->_NDA = $infos_fus["sejour1_ndgenera"];
 
         /** @var CSejour $sejour_eliminee */
         $sejour_eliminee = $infos_fus["sejourElimine"];
