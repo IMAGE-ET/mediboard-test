@@ -13,7 +13,7 @@
               {{foreach from=$listSejours.$name_grille.$chambre item=_sejour }}
                 {{assign var=patient   value=$_sejour->_ref_patient}}
                 {{assign var=rpu   value=$_sejour->_ref_rpu}}
-                <div class="patient draggable ccmu-{{if $rpu->ccmu}}{{$rpu->ccmu}}{{else}}0{{/if}}" data-rpu-guid="{{$rpu->_guid}}" data-patient-id="{{$rpu->_ref_sejour->patient_id}}">
+                <div class="patient draggable ccmu-{{if $rpu->ccmu}}{{$rpu->ccmu}}{{else}}0{{/if}}" data-rpu-guid="{{$rpu->_guid}}" data-patient-id="{{$_sejour->patient_id}}">
                   <form name="{{$rpu->_guid}}" action="" method="post">
                     <input type="hidden" name="dosql" value="do_rpu_aed" />
                     <input type="hidden" name="del" value="0" />

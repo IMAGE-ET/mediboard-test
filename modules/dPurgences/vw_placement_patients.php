@@ -112,6 +112,9 @@ foreach ($sejours as $sejour) {
   $sejour->loadRefCurrAffectation()->loadRefService();
   if (!$sejour->loadRefRPU()->_id) {
     $sejour->_ref_rpu = $sejour->loadUniqueBackRef("rpu_mute");
+    if (!$sejour->_ref_rpu) {
+      $sejour->_ref_rpu = new CRPU();
+    }
   }
   $prescription = $sejour->loadRefPrescriptionSejour();
 
