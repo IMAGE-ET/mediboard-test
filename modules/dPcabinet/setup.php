@@ -534,7 +534,9 @@ class CSetupdPcabinet extends CSetup {
                 ADD INDEX ( `heure` ),
                 ADD INDEX ( `annule` ),
                 ADD INDEX ( `paye` ),
-                ADD INDEX ( `date_paiement` ),
+                ADD INDEX ( `date_paiement` )";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `plageconsult`
                 ADD INDEX ( `date` ),
                 ADD INDEX ( `debut` ),
                 ADD INDEX ( `fin` )";
