@@ -2117,6 +2117,13 @@ class CSetupdPcabinet extends CSetup {
       $this->addQuery($query);
     }
 
-    $this->mod_version = '2.33';
+    $this->makeRevision('2.33');
+
+    $query = "ALTER TABLE `consultation`
+                ADD `org_at` INT(9) UNSIGNED ZEROFILL,
+                ADD `feuille_at` ENUM('0', '1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.34';
   }
 }

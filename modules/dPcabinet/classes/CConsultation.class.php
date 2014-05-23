@@ -76,6 +76,8 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
   public $cle_at;
   public $reprise_at;
   public $at_sans_arret;
+  public $org_at;
+  public $feuille_at;
   public $arret_maladie;
   public $concerne_ALD;
 
@@ -237,6 +239,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $backProps["task"]              = "CSejourTask consult_id";
     $backProps["identifiants"]      = "CIdSante400 object_id cascade";
     $backProps["contextes_constante"] = "CConstantesMedicales context_id";
+    $backProps["arret_travail"]     = "CAvisArretTravail consult_id";
 
     return $backProps;
   }
@@ -289,10 +292,12 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $props["du_tiers"  ]                = "currency show|0";
 
     $props["type_assurance"] = "enum list|classique|at|maternite|smg";
-    $props["date_at"]  = "date";
-    $props["fin_at"]   = "dateTime";
-    $props["num_at"]   = "num length|8";
-    $props["cle_at"]   = "num length|1";
+    $props["date_at"]     = "date";
+    $props["fin_at"]      = "dateTime";
+    $props["num_at"]      = "num length|8";
+    $props["cle_at"]      = "num length|1";
+    $props['feuille_at']  = 'bool default|0';
+    $props['org_at']      = 'numchar length|9';
 
     $props["pec_at"]   = "enum list|soins|arret";
     $props["reprise_at"] = "dateTime";

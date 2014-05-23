@@ -70,6 +70,11 @@ if ($selConsult) {
   $consult->loadRefsActes();
   $consult->loadExtCodesCCAM();
   $consult->loadRefsReglements();
+
+  if (!$consult->org_at) {
+    $patient = $consult->_ref_patient;
+    $consult->org_at = '' . $patient->code_regime . $patient->caisse_gest .$patient->centre_gest;
+  }
 }
 
 if (CModule::getActive("fse")) {

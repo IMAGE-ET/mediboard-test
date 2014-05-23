@@ -9,6 +9,8 @@
   {{assign var=pour_compte_praticien_id value=$praticien->_id}}
 {{/if}}
 
+{{assign var=modAmeli value="ameli"|module_active}}
+
 <script>
 pursueTarif = function() {
   var form = document.tarifFrm;
@@ -54,6 +56,15 @@ validTarif = function(){
 reloadFacture = function() {
   Facture.reload('{{$consult->patient_id}}', '{{$consult->_id}}', 1, '{{$consult->_ref_facture->_id}}', '{{$consult->_ref_facture->_class}}');
 };
+
+
+{{if $modAmeli}}
+  loadArretTravail = function() {
+    var url = new Url('ameli', 'ajax_arret_travail');
+    url.addParam('consult_id', '{{$consult->_id}}');
+    url.requestUpdate('arret_travail');
+  };
+{{/if}}
 
 modifTotal = function(){
   {{if $consult->valide != "1"}}
@@ -118,11 +129,10 @@ checkActe = function(button) {
 
 tiersPayant = function() {
   var form = document.tarifFrm;
-  console.debug(form.du_tva.value);
   var du_patient = parseFloat(form.secteur2.value) + parseFloat(form.secteur3.value) + parseFloat(form.du_tva.value);
   $V(form.du_tiers, form.secteur1.value);
   $V(form.du_patient, du_patient);
-}
+};
 
 createSecondFacture = function() {
   var form = getForm('addFactureDivers');
@@ -143,6 +153,9 @@ Main.add(function() {
       $('accidentTravail_concerne_ALD_1').checked = "checked";
       onSubmitFormAjax(document.accidentTravail);
     }
+  {{/if}}
+  {{if $modAmeli}}
+    loadArretTravail();
   {{/if}}
 });
 </script>
@@ -166,7 +179,11 @@ Main.add(function() {
 
 <table class="form">
   <tr>
-    <td colspan="2">
+    {{if $modAmeli}}
+      <td id="arret_travail" class="halfPane">
+      </td>
+    {{/if}}
+    <td {{if !$modAmeli}}colspan="2"{{/if}} class="halfPane">
       {{mb_include module="cabinet" template="inc_type_assurance_reglement/accident_travail"}}
     </td>
   </tr>

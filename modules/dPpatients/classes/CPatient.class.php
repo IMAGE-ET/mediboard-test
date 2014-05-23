@@ -358,6 +358,7 @@ class CPatient extends CPerson {
     $backProps["cv_pyxvital"]           = "CPvCV id_patient";
     $backProps["ins_patient"]           = "CINSPatient patient_id";
     $backProps["dmp_documents"]         = "CDMPDocument patient_id";
+    $backProps['arret_travail']         = "CAvisArretTravail patient_id";
     return $backProps;
   }
 
