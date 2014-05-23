@@ -539,7 +539,7 @@
             <select name="factory">
               {{foreach from=$compte_rendu->_specs.factory->_list item=_factory}}
                 {{if $_factory != "none"}}
-                  <option value="{{$_factory}}">{{$compte_rendu->_specs.factory->_locales.$_factory}}</option>
+                  <option value="{{$_factory}}" {{if $compte_rendu->factory == $_factory}}selected{{/if}}>{{$compte_rendu->_specs.factory->_locales.$_factory}}</option>
                 {{/if}}
               {{/foreach}}
             </select>
