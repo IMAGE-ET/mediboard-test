@@ -15,13 +15,12 @@ CApp::setMemoryLimit("1024M");
 $ds = CSQLDataSource::get("std");
 
 $words          = utf8_encode(CValue::get("words"));
-$date_deb       = str_replace("-", "/", CValue::get("date_deb"));
-$date_fin       = str_replace("-", "/", CValue::get("date_fin"));
-$date_interval  = CValue::get("date_interval");
+$_min_date = str_replace("-", "/", CValue::get("_min_date", "*"));
+$_max_date = str_replace("-", "/", CValue::get("_max_date", "*"));
+$_date     = str_replace("-", "/", CValue::get("_date"));
 $specific_user  = CValue::get("user_id");
 $start          = (int)CValue::get("start", 0);
 $names_types    = CValue::get("names_types");
-
 /**
  * Traitement des utilisateurs spécifiques ou globaux @Todo Méthode CSearch...
  */
@@ -37,15 +36,11 @@ else {
   $users_id = explode('|', $specific_user);
   $user_req = str_replace('|', ' || ', $specific_user);
   $words = $words." author_id:(".$user_req.")";
-  mbTrace($words);
 }
 
 $client_index  = new CSearch();
 $client_index->createClient();
-if ($date_deb || $date_fin) {
-  $words = $client_index->constructWordsWithDate($words, $date_interval, $date_deb, $date_fin);
-}
-
+$words = $client_index->constructWordsWithDate($words, $_date, $_min_date, $_max_date);
 $array_results = array();
 $authors = array();
 $author_ids = array();
@@ -72,7 +67,7 @@ try {
   }
 
   foreach ($patient_ids as $_patient) {
-    $patients[$_patient] = CMbObject::loadFromGuid("Cpatient-$_patient");
+    $patients[$_patient] = CMbObject::loadFromGuid("CPatient-$_patient");
   }
 
 } catch (Exception $e) {

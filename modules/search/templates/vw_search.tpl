@@ -11,8 +11,9 @@
 <script>
   Main.add(function () {
     var form = getForm("esSearch");
-    window.calendar_planning_deb = Calendar.regField(form.date_deb);
-    window.calendar_planning_fin = Calendar.regField(form.date_fin);
+    window.calendar_planning_fin = Calendar.regField(form._min_date);
+    window.calendar_planning_fin = Calendar.regField(form._max_date);
+    window.calendar_planning_fin = Calendar.regField(form._date);
 
     var element = form.elements.user_id,
       tokenField = new TokenField(element, {onChange: function(){}.bind(element)});
@@ -34,21 +35,7 @@
         tokenField.add(guid);
 
         if (to_insert) {
-
-          var btn = DOM.button({
-            "type": "button",
-            "className": "delete",
-            "style": "display: inline-block !important",
-            "onclick": "window.user_tag_token.remove($(this).up('li').get('tag_item_id')); this.up().remove();"
-          });
-
-          var li = DOM.li({
-            "data-tag_item_id": guid,
-            "id": "CTag-"+guid,
-            "className": "tag"
-          }, _name, btn);
-          var br = DOM.br();
-          $("user_tags").insert(br).insert(li);
+          insertTag(guid, _name);
         }
 
         var element_input = form.elements.user_view;
@@ -64,6 +51,27 @@
     $V(form.elements.start, start);
     form.onsubmit();
   }
+
+  function insertTag(guid, name) {
+    var tag = $("CTag-" + guid);
+
+    if (!tag) {
+      var btn = DOM.button({
+        "type": "button",
+        "className": "delete",
+        "style": "display: inline-block !important",
+        "onclick": "window.user_tag_token.remove($(this).up('li').get('tag_item_id')); this.up().remove();"
+      });
+
+      var li = DOM.li({
+        "data-tag_item_id": guid,
+        "id": "CTag-"+guid,
+        "className": "tag"
+      }, name, btn);
+
+      $("user_tags").insert(li);
+    }
+  }
 </script>
 
 <form method="get" name="esSearch" action="?m=search" class="watched prepared" onsubmit="return Search.displayResults(this);" onchange="onchange=$V(this.form, '0')">
@@ -73,63 +81,49 @@
       <tr>
         <td id="td_container_search">
           <input type="search" id="words" name="words" value="" placeholder="Saisissez les termes de votre recherche ici..." style="width:50em; height:2em; font-size:large;" onchange="$V(this.form.start, '0')" autofocus>
+          <button type="submit" id="button_search" class="button lookup">Démarrer la recherche</button>
           {{mb_include module=search template=inc_tooltip_help}}
         </td>
       </tr>
     </tbody>
   </table>
-  <table class="main layout" style="width: 80%">
+  <table class="main layout">
     <tbody>
       <tr>
         <!-- Fieldset de tri par date -->
-        <td style="width: 33%">
+        <td>
           <fieldset>
-            <legend> Date</legend>
-            <table style="width:100%">
-              <tbody>
+            <legend>Intervalle de date </legend>
+            {{*{{mb_include module=search template=inc_tooltip_date}}*}}
+            <table>
               <tr>
                 <td>
-                  <input type="radio" name="date_interval" id="dateUniqueDay" value="uniqueDay" checked="checked" onclick="$('span_date').hide(); $('span_date_deb').hide();">
-                  <label for="dateUniqueDay">Jour seul</label>
-                </td>
-                <td>
-                  <span id="span_date_deb" style="display: none;">
-                    <label for="date_deb" style="display: block; width: 35px; float: left;">Début</label>
-                  </span>
-                  <input type="hidden" class="datetime" id="date_deb" name="date_deb" onchange="$V(this.form.start, '0')" >
+                  <input type="hidden" class="datetime" id="_min_date" name="_min_date" onchange="$V(this.form.start, '0')" >
+                  <b>&raquo;</b>
+                  <input type="hidden" class="datetime" id="_max_date" name="_max_date" onchange="$V(this.form.start, '0')" >
+                  <strong>{{tr}}or{{/tr}}</strong>
+                  Jour seul : <input type="hidden" class="datetime" id="_date" name="_date" onchange="$V(this.form.start, '0')" >
                 </td>
               </tr>
-              <tr>
-                <td>
-                  <input type="radio" name="date_interval" id="dateSince" value="since" onclick="$('span_date').hide(); $('span_date_deb').hide();">
-                  <label for="dateSince">Depuis</label>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <input type="radio" name="date_interval" id="dateBetween" value="between" onclick="$('span_date').show(); $('span_date_deb').show();">
-                  <label for="dateBetween">Comprise Entre</label>
-                </td>
-                <td>
-                  <span id="span_date" style="display: none;">
-                  <label for="date_fin" style="display: block; width: 35px; float: left;">Fin</label>
-                  <input type="hidden" class="datetime" id="date_fin" name="date_fin" onchange="$V(this.form.start, '0')" >
-                  </span>
-                </td>
-              </tr>
-              </tbody>
             </table>
           </fieldset>
         </td>
         <!-- Fieldset de tri par Utilisateurs -->
-        <td>
+        <td  style="width: 33%">
           <fieldset>
             <legend> Utilisateurs</legend>
             <table class="layout">
               <tr>
                 <td>
-                  <input type="text" name="user_view" class="autocomplete" value="" style="width: 15em;" placeholder="&mdash; Choisir un utilsateur"/>
+                  <input type="text" name="user_view" class="autocomplete" value="{{$app->_ref_user}}" placeholder="&mdash; Choisir un utilisateur"/>
                   <input type="hidden" name="user_id" value="" />
+
+                  <button type="button" class="user notext"
+                          onclick="window.user_tag_token.add('{{$app->user_id}}'); insertTag('{{$app->_ref_user->_guid}}', '{{$app->_ref_user}}')">
+                  </button>
+                  <button type="button" class="erase notext" onclick="$V(this.form.elements.user_id, '');
+                          $V(this.form.elements.user_view, ''); $$('li.tag').each(function(elt) { elt.remove(); });">
+                  </button>
                 </td>
               </tr>
               <tr>
@@ -182,13 +176,6 @@
             </table>
           </fieldset>
         </td>
-      </tr>
-      <tr>
-        <td></td>
-        <td style="text-align: center">
-          <button type="submit" id="button_search" class="button lookup">Démarrer la recherche</button>
-        </td>
-        <td></td>
       </tr>
     </tbody>
   </table>

@@ -368,41 +368,24 @@ class CSearch {
   /**
    * Construct query with date informations
    *
-   * @param string $words         the words query
-   * @param string $date_interval type of interval date
-   * @param string $date_deb      begining date
-   * @param string $date_fin      final date
+   * @param string $words     the words query
+   * @param string $_date     type of interval date
+   * @param string $_min_date begining date
+   * @param string $_max_date final date
    *
    * @return string
    */
-  function constructWordsWithDate($words, $date_interval, $date_deb, $date_fin) {
-    switch ($date_interval) {
-      case 'uniqueDay':
-        if ($date_deb) {
-          return $words." date:[".$date_deb." TO ".$date_deb."]";
-        }
-        else {
-          return $words;
-        }
-        break;
-
-      case 'between':
-        if ($date_deb && $date_fin) {
-          return $words." date:[".$date_deb." TO ".$date_fin."]";
-        }
-        else {
-          return $words;
-        }
-        break;
-
-      case 'since':
-        return $words." date:{".$date_deb." TO *}";
-
-        break;
-
-      default:
-        return $words;
+  function constructWordsWithDate($words, $_date, $_min_date, $_max_date) {
+    if ($_date) {
+      $words .= " date:[".$_date." TO ".$_date."]";
     }
+    else {
+      $_min_date = ($_min_date) ? $_min_date : "*";
+      $_max_date = ($_max_date) ? $_max_date : "*";
+
+      $words .= " date:[".$_min_date." TO ".$_max_date."]";
+    }
+    return $words;
   }
   /**
    * HTML cleaning method
@@ -462,8 +445,8 @@ class CSearch {
   /**
    * First indexing create mapping
    *
-   * @param array $names_types the name of types we want to create
-   * @param array $index       the index where we want to create those types
+   * @param array          $names_types the name of types we want to create
+   * @param Elastica\Index $index       the index where we want to create those types
    *
    * @return void
    */
@@ -487,6 +470,6 @@ class CSearch {
         "group_id"    => array('type' => 'integer', 'include_in_all' => true)
       );
       $this->createMapping($type, $array);
-  }
+    }
   }
 }
