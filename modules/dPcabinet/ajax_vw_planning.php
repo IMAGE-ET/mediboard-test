@@ -75,7 +75,7 @@ $planning->guid = $user->_guid;
 $planning->hour_min = "07";
 $planning->hour_max = "20";
 $planning->pauses   = array("07", "12", "19");
-$planning->dragndrop = $planning->resizable = $can_edit;
+$planning->dragndrop = $planning->resizable = $can_edit ? 1 : 0;
 $planning->hour_divider = 60 / CAppUI::conf("dPcabinet CPlageconsult minutes_interval");
 
 $plage = new CPlageconsult();
