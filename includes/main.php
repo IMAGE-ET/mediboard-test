@@ -99,7 +99,7 @@ CJSLoader::$files = array(
   "includes/javascript/exObject.js",
   "includes/javascript/tag.js",
   "includes/javascript/mbObject.js",
-  "includes/javascript/browserDetect.js",
+  "includes/javascript/bowser.min.js",
   "includes/javascript/configuration.js",
   "includes/javascript/plugin.js",
   "includes/javascript/xdr.js",

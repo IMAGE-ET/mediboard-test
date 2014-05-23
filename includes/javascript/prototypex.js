@@ -330,6 +330,13 @@ Class.extend(Array, {
     return this.reject(function(e){
       return e.match(css);
     });
+  },
+  average: function () {
+    var sum = 0, j = 0, l = this.length;
+    for (var i = 0; i < l, isFinite(this[i]); i++) {
+      sum += parseFloat(this[i]); ++j;
+    }
+    return j ? sum / j : 0;
   }
 });
 

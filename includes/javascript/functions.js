@@ -66,6 +66,29 @@ document.observe('dom:loaded', function(){
 var UAInfo = {
   string: "",
 
+  osInfo: [
+    {
+      string: navigator.platform,
+      subString: "Win",
+      identity: "Windows"
+    },
+    {
+      string: navigator.platform,
+      subString: "Mac",
+      identity: "Mac"
+    },
+    {
+      string: navigator.userAgent,
+      subString: "iPhone",
+      identity: "iPhone/iPod"
+    },
+    {
+      string: navigator.platform,
+      subString: "Linux",
+      identity: "Linux"
+    }
+  ],
+
   /**
    * Build the info string
    *
@@ -74,7 +97,7 @@ var UAInfo = {
   buildString: function(){
     if (UAInfo.string) return UAInfo.string;
     
-    UAInfo.append("Navigateur", BrowserDetect.browser+" "+BrowserDetect.version);
+    UAInfo.append("Navigateur", bowser.name+" "+bowser.version);
     
     if (Prototype.Browser.IE) {
       var ieVersion = IEVersion();
@@ -85,7 +108,8 @@ var UAInfo = {
     }
     
     UAInfo.append("Cookies", ("cookieEnabled" in navigator ? (navigator.cookieEnabled ? "Oui" : "Non") : "Information non disponible"));
-    UAInfo.append("Système", BrowserDetect.OS+ " ("+navigator.platform+")");
+
+    UAInfo.append("Système", UAInfo.getOS()+ " ("+navigator.platform+")");
     
     if (User.login) {
       UAInfo.append("Utilisateur", User.view+" ("+User.login+")");
@@ -115,6 +139,25 @@ var UAInfo = {
   },
 
   /**
+   * Get OS name: "Windows", "Linux", "Mac", "iPhone/iPod" or "Inconnu"
+   *
+   * @returns {string}
+   */
+  getOS: function() {
+    var os = "Inconnu";
+
+    for (var i = 0, l = UAInfo.osInfo.length; i < l; i++) {
+      var detect = UAInfo.osInfo[i];
+      if (detect.string.indexOf(detect.subString) !== false) {
+        os = detect.identity;
+        break;
+      }
+    }
+
+    return os;
+  },
+
+  /**
    * Append a value to the string
    *
    * @param {String} label  The label to append
@@ -131,6 +174,46 @@ var UAInfo = {
    */
   show: function(){
     alert(UAInfo.buildString());
+  },
+
+  doBench: function() {
+    var count = 2000000;
+
+    var Foo = function(){};
+    Foo.prototype.bar = function(){
+      return "i";
+    };
+
+    var s = "";
+    for (var i = 0; i < count; i++) {
+      var a = new Foo();
+      s += a.bar();
+    }
+
+    return s;
+  },
+
+  getBenchTime: function(){
+    var now = performance.now();
+
+    UAInfo.doBench();
+
+    return (performance.now() - now);
+  },
+
+  getBenchScore: function(callback){
+    var samples = 10;
+    var results = [];
+
+    for (var i = 0; i < samples; i++) {
+      (function(){
+        results.push(UAInfo.getBenchTime());
+
+        if (results.length == samples) {
+          callback(10000 / results.average());
+        }
+      }).delay(0.1);
+    }
   }
 };
 

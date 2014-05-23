@@ -452,7 +452,7 @@ var Url = Class.create({
 
       if (wasClosedBefore && this.oWindow.history && this.oWindow.history.length == 0) {
         // bug in Chrome 18: invisible popup
-        if (BrowserDetect.browser != "Chrome") {
+        if (bowser.name != "Chrome") {
           this.oWindow.moveTo(features.left, features.top);
           this.oWindow.resizeTo(features.width, features.height);
         }
@@ -542,6 +542,16 @@ var Url = Class.create({
     var content = DOM.div({className: "content"}, modalContainer.down("iframe"));
     modalContainer.insert(content);
     modalContainer.addClassName("modal-iframe");
+
+    /*var href = options.baseUrl + this.make(questionMark);
+    var content = DOM.div({className: "content"});
+    var modalContainer = DOM.div({href: href, className: "modal-iframe"}, titleElement, content);
+    //modalContainer.identify();
+
+    $(document.body).insert(modalContainer);
+
+    options.insertRemoteContentAt = content;
+    this.modalObject = Control.Modal.open(modalContainer, options);*/
 
     style.paddingTop = titleElement.getHeight()+"px";
     modalContainer.setStyle(style);
