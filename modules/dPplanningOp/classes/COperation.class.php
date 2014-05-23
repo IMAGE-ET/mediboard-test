@@ -354,7 +354,8 @@ class COperation extends CCodable implements IPatientRelated {
 
     $props["facture"]                = "bool default|0";
 
-    $props["duree_uscpo"]            = "num min|0 default|0";
+    // Max USCPO accélère les chargements, ne pas supprimer, au pire augmenter
+    $props["duree_uscpo"]            = "num min|0 max|10 default|0";
 
     if (CAppUI::conf("dPplanningOp COperation show_duree_uscpo") == 2) {
       $props["passage_uscpo"]        = "bool notNull";

@@ -11,18 +11,14 @@
 
 CCanDo::checkRead();
 
-$default_week = CAppUI::conf("dPplanningOp COperation default_week_stat_uscpo");
+$operation = new COperation();
+$max_uscpo = $operation->_specs["duree_uscpo"]->max;
+$default_week = $operation->conf("default_week_stat_uscpo");
 
-switch ($default_week) {
-  case "last":
-    $date_min   = CValue::getOrSession("date_min", CMbDT::date("-1 week"));
-    $date_max   = CValue::getOrSession("date_max", CMbDT::date());
-    break;
-  case "next":
-    $date_min   = CValue::getOrSession("date_min", CMbDT::date());
-    $date_max   = CValue::getOrSession("date_max", CMbDT::date("+1 week"));
-}
-
+/** @var date $date_min */
+/** @var date $date_max */
+$date_min   = CValue::getOrSession("date_min", CMbDT::date($default_week == "last" ? "-1 week" : null));
+$date_max   = CValue::getOrSession("date_max", CMbDT::date($default_week == "next" ? "+1 week" : null));
 $service_id = CValue::getOrSession("service_id", "");
  
 if ($date_min > $date_max) {
@@ -37,7 +33,6 @@ $ljoin = array();
 $where["duree_uscpo"] = "> 0";
 $where["annulee"] = "!= '1'";
 
-$ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
 if ($service_id) {
   $ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
   $where["sejour.service_id"] = "= '$service_id'";
@@ -62,8 +57,10 @@ while ($day <= $date_max) {
   }
   
   $dates[] = array(count($dates), $display);
-  $where[2] = "plagesop.date <= '$day' AND DATE_ADD(plagesop.date, INTERVAL duree_uscpo DAY) > '$day'";
-  $count = count($operation->loadIds($where, null, null, null, $ljoin));
+  $day_min = CMbDT::date("-$max_uscpo DAY", $day);
+  $where[10] = "operations.date BETWEEN '$day_min' AND '$day'";
+  $where[11] = "DATE_ADD(operations.date, INTERVAL duree_uscpo DAY) > '$day'";
+  $count = $operation->countList($where, null, $ljoin);
   $day = CMbDT::date("+1 day", $day);
   $serie['data'][] = array(count($serie['data'])-0.2, $count);
 }
@@ -79,10 +76,12 @@ $serie = array(
 $ljoin["affectation"] = "affectation.sejour_id = operations.sejour_id";
 
 while ($day <= $date_max) {
-  $where[2] = "plagesop.date <= '$day' AND DATE_ADD(plagesop.date, INTERVAL duree_uscpo DAY) > '$day'";
-  $where[3] = "DATE_ADD(plagesop.date, INTERVAL duree_uscpo DAY) <= affectation.sortie";
+  $day_min = CMbDT::date("-$max_uscpo DAY", $day);
+  $where[10] = "operations.date BETWEEN '$day_min' AND '$day'";
+  $where[11] = "DATE_ADD(operations.date, INTERVAL duree_uscpo DAY) > '$day'";
+  $where[12] = "DATE_ADD(operations.date, INTERVAL duree_uscpo DAY) <= affectation.sortie";
   $day = CMbDT::date("+1 day", $day);
-  $count = count($operation->loadIds($where, null, null, null, $ljoin));
+  $count = $operation->countList($where, null, $ljoin);
   $serie['data'][] = array(count($serie['data'])+0.2, intval($count)); 
 }
 

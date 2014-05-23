@@ -15,15 +15,17 @@ $group_id   = CGroups::loadCurrent()->_id;
 
 $where = array();
 $ljoin = array();
-
-$ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
+$index = "date";
 
 $where["duree_uscpo"] = "> 0";
 $where["annulee"] = "!= '1'";
 
-$where[] = "(operations.date <= '$date' OR plagesop.date <= '$date') AND
-  (DATE_ADD(plagesop.date, INTERVAL duree_uscpo DAY) > '$date' OR
-   DATE_ADD(operations.date, INTERVAL duree_uscpo DAY) = '$date')";
+$operation = new COperation();
+$max_uscpo = $operation->_specs["duree_uscpo"]->max;
+// Minimal date will narrow scope and boost index execution greatly
+$date_min = CMbDT::date("-$max_uscpo DAY", $date);
+$where[] = "operations.date BETWEEN '$date_min' AND '$date'";
+$where[] = "DATE_ADD(operations.date, INTERVAL duree_uscpo DAY) > '$date'";
 
 $ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
 $where["sejour.group_id"] = "= '$group_id'";
@@ -33,26 +35,18 @@ if ($service_id) {
 }
 
 // Prévues
-$operation = new COperation();
-$operations_prevues = $operation->loadList($where, null, null, null, $ljoin);
+$operations_prevues = $operation->loadList($where, null, null, null, $ljoin, $index);
 
 // Placées
 $ljoin["affectation"] = "affectation.sejour_id = operations.sejour_id";
-$where[] = "DATE_ADD(plagesop.date, INTERVAL duree_uscpo DAY) <= affectation.sortie";
-$operations_placees = $operation->loadList($where, null, null, null, $ljoin);
+$where[] = "DATE_ADD(operations.date, INTERVAL duree_uscpo DAY) <= affectation.sortie";
+$operations_placees = $operation->loadList($where, null, null, null, $ljoin, $index);
 
-CMbObject::massLoadFwdRef($operations_prevues, "plageop_id");
-CMbObject::massLoadFwdRef($operations_prevues, "chir_id");
-CMbObject::massLoadFwdRef($operations_placees, "plageop_id");
-CMbObject::massLoadFwdRef($operations_placees, "chir_id");
-
-foreach ($operations_prevues as $_operation) {
-  $_operation->loadRefPatient();
-  $_operation->loadRefPlageOp();
-  $_operation->loadRefChir()->loadRefFunction();
-}
-
-foreach ($operations_placees as $_operation) {
+/** @var COperation[] $operations */
+$operations = array_merge($operations_placees, $operations_prevues);
+CMbObject::massLoadFwdRef($operations, "plageop_id");
+CMbObject::massLoadFwdRef($operations, "chir_id");
+foreach ($operations as $_operation) {
   $_operation->loadRefPatient();
   $_operation->loadRefPlageOp();
   $_operation->loadRefChir()->loadRefFunction();
