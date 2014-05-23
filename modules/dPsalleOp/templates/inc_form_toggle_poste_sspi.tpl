@@ -16,11 +16,11 @@
   <input type="hidden" name="dosql" value="do_planning_aed" />
   {{mb_key object=$_operation}}
   <input type="hidden" name="poste_sspi_id" value="{{$_operation->poste_sspi_id}}"
-         onchange="submitOperationForm(this.form)"/>
+         onchange="onSubmitFormAjax(this.form, refreshTabReveil.curry('{{$type}}'))"/>
   <input type="text" name="_poste_sspi_id_autocomplete" value="{{$_operation->_ref_poste}}"/>
-  <script type="text/javascript">
+  <script>
     Main.add(function() {
-      var form=getForm("editPoste{{$type}}{{$_operation->_id}}");
+      var form = getForm("editPoste{{$type}}{{$_operation->_id}}");
       var url = new Url("system", "ajax_seek_autocomplete");
       url.addParam("object_class", "CPosteSSPI");
       url.addParam('show_view', true);
