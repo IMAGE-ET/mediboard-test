@@ -77,7 +77,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if ($sejour->_no_synchro) {
         return;
       }
-      
+
       // Si on est en train de créer un séjour et qu'il s'agit d'une naissance
       $current_log = $sejour->loadLastLog();
       if ($current_log->type == "create" && $sejour->_naissance) {
@@ -201,6 +201,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
       
       $this->createMovement($code, $sejour, $affectation);
+      $service = $affectation->loadRefService();
+      $curr_affectation = $sejour->loadRefCurrAffectation();
+      if (($service->uhcd || $service->radiologie || $service->urgence) && $affectation->sortie < $curr_affectation->sortie) {
+        return;
+      }
    
       // Envoi de l'événement
       $this->sendITI($this->profil, $this->transaction, $this->message, $code, $mbObject);
@@ -280,10 +285,15 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if ($affectation) {
       $current_log       = $affectation->_ref_current_log;
       $first_affectation = $sejour->loadRefFirstAffectation();
-    
+      /** @var CService $service */
+      $service = $affectation->loadRefService();
+
+      // Si le service est d'UHCD, de radiologie, d'urgence ou
       // Dans le cas où il s'agit de la première affectation du séjour et qu'on est en type "création" on ne recherche pas 
       // un mouvement avec l'affectation, mais on va prendre le mouvement d'admission
-      if ($current_log && ($current_log->type == "create") && $first_affectation && ($first_affectation->_id == $affectation->_id)) {
+      if (($service->uhcd || $service->radiologie || $service->urgence) ||
+          ($current_log && ($current_log->type == "create") && $first_affectation && ($first_affectation->_id == $affectation->_id))
+      ) {
         $affectation_id = $affectation->_id;
         $affectation    = null;
       }
@@ -657,6 +667,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     $configs  = $receiver->_configs;
     $service  = $affectation->loadRefService();
 
+    $code = "A02";
+    if ($service->uhcd || $service->radiologie || $service->urgence) {
+      $code = $this->getModificationAdmitCode($receiver);
+    }
+
     if ($current_log->type == "create") {
       /* Affectation dans un service externe */
       if ($service->externe) {
@@ -669,7 +684,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
           case 'Z99':
             return $this->getModificationAdmitCode($receiver);
           default:
-            return "A02";
+            return $code;
         }
       }
       
@@ -678,7 +693,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         case 'Z99':
           return $this->getModificationAdmitCode($receiver);
         default:
-          return "A02";
+          return $code;
       }
     }
             
