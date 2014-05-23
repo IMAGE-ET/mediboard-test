@@ -342,7 +342,10 @@
       <tr>
         <td class="text">
           <li>
-            ({{$line_dmi->_ref_praticien}}) <strong>{{$line_dmi->_ref_product}}</strong> ({{$line_dmi->_ref_product_order_item_reception->_ref_order_item->_ref_reference->_ref_societe}})
+            ({{$line_dmi->_ref_praticien}}) <strong>{{$line_dmi->_ref_product}}</strong>
+              ({{$line_dmi->_ref_product_order_item_reception->_ref_order_item->_ref_reference->_ref_societe}}),
+              code lot : {{$line_dmi->_ref_product_order_item_reception->code}},
+              date de péremption : {{mb_value object=$line_dmi->_ref_product_order_item_reception field="lapsing_date"}}
           </li>
         </td>
       </tr>
