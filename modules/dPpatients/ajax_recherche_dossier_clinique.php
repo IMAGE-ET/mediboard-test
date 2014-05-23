@@ -184,10 +184,10 @@ switch ($section) {
 
     $data_patient = $data["CPatient"];
     if (!empty($data_patient["_age_min"])) {
-      $where[] = "DATEDIFF(operations.date, patients.naissance)/365 > {$data_patient['_age_min']}";
+      $where[] = "DATEDIFF(plageconsult.date, patients.naissance)/365 > {$data_patient['_age_min']}";
     }
     if (!empty($data_patient["_age_max"])) {
-      $where[] = "DATEDIFF(operations.date, patients.naissance)/365 <= {$data_patient['_age_max']}";
+      $where[] = "DATEDIFF(plageconsult.date, patients.naissance)/365 <= {$data_patient['_age_max']}";
     }
 
     break;
