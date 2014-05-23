@@ -184,10 +184,10 @@ switch ($section) {
 
     $data_patient = $data["CPatient"];
     if (!empty($data_patient["_age_min"])) {
-      $where[] = "DATEDIFF(plageconsult.date, patients.naissance)/365 > {$data_patient['_age_min']}";
+      $where[] = "DATEDIFF(operations.date, patients.naissance)/365 > {$data_patient['_age_min']}";
     }
     if (!empty($data_patient["_age_max"])) {
-      $where[] = "DATEDIFF(plageconsult.date, patients.naissance)/365 <= {$data_patient['_age_max']}";
+      $where[] = "DATEDIFF(operations.date, patients.naissance)/365 <= {$data_patient['_age_max']}";
     }
 
     break;
@@ -252,7 +252,6 @@ switch ($section) {
     
     $interv_filled = true;
     
-    $ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
     $ljoin["sejour"] = "operations.sejour_id = sejour.sejour_id";
     $ljoin["patients"] = "patients.patient_id = sejour.patient_id";
     
@@ -278,13 +277,11 @@ switch ($section) {
 
     if (!empty($sejour_data["entree"])) {
       $from = CMbDT::date($sejour_data['entree']);
-      $where[] = "operations.date  >= '{$sejour_data['entree']}' OR 
-                  plagesop.date >= '{$sejour_data['entree']}'";
+      $where[] = "operations.date  >= '$from'";
     }
     if (!empty($sejour_data["sortie"])) {
       $to = CMbDT::date($sejour_data['sortie']);
-      $where[] = "operations.date  < '{$sejour_data['sortie']}' OR 
-                  plagesop.date < '{$sejour_data['sortie']}'";
+      $where[] = "operations.date  < '$to'";
     }
     
     $data_patient = $data["CPatient"];
@@ -440,7 +437,7 @@ if ($one_field) {
   elseif ($interv_filled) {
     $request->addSelect("operations.operation_id, patients.patient_id" . $other_fields);
     $request->addTable("operations");
-    $request->addOrder("patients.nom ASC, operations.date ASC, plagesop.date ASC");
+    $request->addOrder("patients.nom ASC, operations.date ASC");
   }
   else {
     $request->addSelect("patients.patient_id");
@@ -487,7 +484,7 @@ if ($one_field) {
     elseif ($interv_filled) {
       $request_b->addSelect("operations.operation_id, patients.patient_id" . $other_fields);
       $request_b->addTable("operations");
-      $request_b->addOrder("patients.nom ASC, operations.date ASC, plagesop.date ASC");
+      $request_b->addOrder("patients.nom ASC, operations.date ASC");
     }
     else {
       $request_b->addSelect("patients.patient_id");
