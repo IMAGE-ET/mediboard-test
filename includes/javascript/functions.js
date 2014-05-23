@@ -1908,7 +1908,7 @@ App.showReleaseInfo = function(){
 /**
  * Initializes application locking when no movement
  */
-/*App.initSessionLocker = (function(){
+App.initSessionLocker = (function(){
   var duration = App.sessionLifetime;
 
   var timer;
@@ -1924,14 +1924,14 @@ App.showReleaseInfo = function(){
     setTimer();
   }
 
-  setTimer();
-
   return function(){
+    setTimer();
+
     document.observe("mousemove", resetTimer);
     document.observe("keydown", resetTimer);
     document.observe("touchstart", resetTimer);
   };
-})();*/
+})();
 
 /**
  * Adds column highlighting to a table
