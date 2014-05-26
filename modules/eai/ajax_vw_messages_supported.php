@@ -22,8 +22,7 @@ $all_messages = array();
 foreach ($data_format->getMessagesSupported($actor_guid) as $_family => $_messages_supported) {
   $family = new $_family;
   $events = $family->getEvenements();
-mbTrace($family);
-  $categories = array();
+
   if (isset($family->_categories) && !empty($family->_categories)) {
     foreach ($family->_categories as $_category => $events_name) {
       foreach ($events_name as $_event_name) {
@@ -32,24 +31,15 @@ mbTrace($family);
             continue;
           }
 
-          $categories[$_category][] = $_message_supported;
+          $all_messages[$_family][$_category][] = $_message_supported;
         }
       }
     }
   }
   else {
-    $categories["none"] = $_messages_supported;
+    $all_messages[$_family]["none"] = $_messages_supported;
   }
-
-  // On reformate un peu le tableau des catégories
-  $family->_categories = $categories;
-
-  $domain = $family->domain ? $family->domain : "none";
-
-  $all_messages[$domain][] = $family;
 }
-
-//mbTrace($all_messages);
 
 // Création du template
 $smarty = new CSmartyDP();
