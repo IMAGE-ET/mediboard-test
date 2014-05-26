@@ -359,6 +359,39 @@ class CStoredObject extends CModelObject {
   }
 
   /**
+   * Check whether a field has been modified FROM a non falsy value
+   *
+   * @param string $field Field name
+   *
+   * @return boolean
+   */
+  function fieldFirstModified($field) {
+    return $this->fieldModified($field) && $this->_old->$field === null;
+  }
+
+  /**
+   * Check whether a field has been modified FROM a non falsy value
+   *
+   * @param string $field Field name
+   *
+   * @return boolean
+   */
+  function fieldEmptyValued($field) {
+    // Field is not valued or Nothing in base
+    if (!$this->_id) {
+      return false;
+    }
+
+    // Load DB version
+    $this->loadOldObject();
+    if (!$this->_old->_id || $this->_old->$field === null) {
+      return false;
+    }
+
+    return ($this->$field != $this->_old->$field) && $this->$field === null;
+  }
+
+  /**
    * Check whether an object has been modified (that is at least one of its fields
    *
    * @return boolean
