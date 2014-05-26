@@ -12,7 +12,7 @@
  */
  
 /**
- * Event XDS Update document set
+ * Event XDS Registry stored query
  */
-interface CHL7EventXDSUpdateDocumentSet extends CHL7EventXDS {
+interface CHL7EventXDSbRegistryStoredQuery extends CHL7EventXDSb {
 }

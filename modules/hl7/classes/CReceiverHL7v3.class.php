@@ -33,7 +33,7 @@ class CReceiverHL7v3 extends CInteropReceiver {
     $spec->key   = 'receiver_hl7v3_id';
     $spec->messages = array(
       "PRPA" => array ("CPRPA"),
-      "XDS"  => array ("CXDS"),
+      "XDSb" => array ("CXDSb"),
     );
     
     return $spec;

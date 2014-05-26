@@ -393,7 +393,14 @@ class CSetupeai extends CSetup {
                 ADD `namespace_id` VARCHAR (255);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.21";
+    $this->makeRevision("0.21");
+
+    $query = "ALTER TABLE `message_supported`
+                ADD `profil` VARCHAR (255),
+                ADD `transaction` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.22";
 
     $query = "SELECT * FROM `authorspecialty_20121112` WHERE `code` = 'G15_10/PAC00';";
 

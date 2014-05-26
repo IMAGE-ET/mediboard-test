@@ -26,7 +26,15 @@ class CITIDelegatedHandler {
     
     return $i18n_code;
   }
-  
+
+  /**
+   * @param $transaction
+   * @param $message
+   * @param $code
+   * @param CReceiverHL7v2 $receiver
+   *
+   * @return bool
+   */
   function isMessageSupported($transaction, $message, $code, $receiver) {
     $i18n_code = $this->getI18nCode($receiver);
     if (!$receiver->isMessageSupported("CHL7Event{$message}{$code}{$i18n_code}")) {

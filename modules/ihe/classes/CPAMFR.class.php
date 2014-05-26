@@ -78,7 +78,8 @@ class CPAMFR extends CPAM {
    * @return CPAMFR
    */
   function __construct() {
-    $this->type = "PAM_FR";
+    $this->domain = "ITI";
+    $this->type   = "PAM_FR";
 
     $this->_categories = array(
       "ITI-30" => self::$transaction_iti30,

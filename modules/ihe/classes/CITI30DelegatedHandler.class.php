@@ -167,7 +167,7 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
 
           break;
 
-        default :
+        default:
           $code = null;
       }
     }
@@ -291,6 +291,30 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
         if ($patient1_ipp xor $patient2_ipp) {
           if ($patient2_ipp) {
             $patient->_IPP = $patient2_ipp;
+          }
+
+          if ($receiver->_configs["send_patient_with_visit"]) {
+            /** @var CPatient $mbObject */
+            $sejour = $patient->loadRefsSejours(array("entree_reelle" => "IS NOT NULL"));
+            if (count($sejour) < 1) {
+              $code = null;
+              continue;
+            }
+          }
+
+          if ($receiver->_configs["send_patient_with_current_admit"]) {
+            // On charge seulement le séjour courant pour le patient
+            $sejours = $patient->getCurrSejour(null, $receiver->group_id);
+            if (!$sejours) {
+              continue;
+            }
+
+            $sejour = reset($sejours);
+            if (!$sejour->_id) {
+              continue;
+            }
+
+            $patient->_ref_sejour = $sejour;
           }
 
           $code = ($receiver->_configs["send_update_patient_information"] == "A08") ? "A08" : "A31";

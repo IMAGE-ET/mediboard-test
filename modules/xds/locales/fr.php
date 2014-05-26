@@ -1,15 +1,15 @@
 <?php
 $locales['Action-done'] = 'Action effectué';
-$locales['CHL7v3EventXDSProvideAndRegisterDocumentSetRequest'] = 'Provide And Register Document Set Request';
-$locales['CHL7v3EventXDSProvideAndRegisterDocumentSetRequest-desc'] = 'Envoie et enregistrement du document';
-$locales['CHL7v3EventXDSRegistryStoredQuery'] = 'Registry Stored Query';
-$locales['CHL7v3EventXDSRegistryStoredQuery-desc'] = 'Recherche de document';
-$locales['CHL7v3EventXDSUpdateDocumentSet'] = 'Update Document Set';
-$locales['CHL7v3EventXDSUpdateDocumentSet-desc'] = 'Mis à jour du document';
+$locales['CHL7v3EventXDSbProvideAndRegisterDocumentSetRequest'] = 'Provide And Register Document Set Request';
+$locales['CHL7v3EventXDSbProvideAndRegisterDocumentSetRequest-desc'] = 'Envoi et enregistrement du document';
+$locales['CHL7v3EventXDSbRegistryStoredQuery'] = 'Registry Stored Query';
+$locales['CHL7v3EventXDSbRegistryStoredQuery-desc'] = 'Recherche de document';
+$locales['CHL7v3EventXDSbUpdateDocumentSet'] = 'Update Document Set';
+$locales['CHL7v3EventXDSbUpdateDocumentSet-desc'] = 'Mis à jour du document';
 $locales['CSourceSOAP-xop_mode'] = 'Mode XOP';
 $locales['CSourceSOAP-xop_mode-desc'] = 'Activer l\'utilisation du MTOM/XOP';
-$locales['CXDS'] = 'XDS';
-$locales['CXDS-desc'] = 'Cross-Enterprise Document Sharing';
+$locales['CXDSb'] = 'XDS.b';
+$locales['CXDSb-desc'] = 'Cross-Enterprise Document Sharing';
 $locales['Generate-xml-jv'] = 'Générer les jeux de valeurs';
 $locales['ITI-18'] = 'ITI-18';
 $locales['ITI-41'] = 'ITI-41';

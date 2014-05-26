@@ -15,8 +15,7 @@
 /**
  * Hprim sante utility class
  */
-class CHPrimSante {
-
+class CHPrimSante extends CInteropNorm {
   /** @var array*/
   static $object_handlers = array(
     "CSipObjectHandler" => "CADMDelegatedHandler",
@@ -26,11 +25,6 @@ class CHPrimSante {
   static $versions = array (
     "2.1", "2.2", "2.3", "2.4"
   );
-  /** @var array */
-  static $evenements = array();
-
-
-  public $_categories   = array();
 
   /**
    * Retrieve handlers list
@@ -39,34 +33,6 @@ class CHPrimSante {
    */
   static function getObjectHandlers() {
     return self::$object_handlers;
-  }
-
-  /**
-   * Retrieve events list of data format
-   *
-   * @return array Events list
-   */
-  function getEvenements() {
-    return self::$evenements;
-  }
-
-  /**
-   * Retrieve document elements
-   *
-   * @return array
-   */
-  function getDocumentElements() {
-    return array();
-  }
-
-  /**
-   * Retrieve transaction name
-   *
-   * @param string $code Event code
-   *
-   * @return string Transaction name
-   */
-  static function getTransaction($code) {
   }
 
   /**
@@ -80,15 +46,17 @@ class CHPrimSante {
    */
   static function getEvent(CExchangeDataFormat $exchange) {
     switch ($exchange->type) {
-      case "ADM" :
+      case "ADM":
         return CADM::getEvent($exchange);
-      case "ORU" :
+
+      case "ORU":
         return CORU::getEvent($exchange);
-      case "REG" :
+
+      case "REG":
         return CREG::getEvent($exchange);
-      default :
+
+      default:
         throw new CMbException("CIHE_event-unknown");
-        break;
     }
   }
 

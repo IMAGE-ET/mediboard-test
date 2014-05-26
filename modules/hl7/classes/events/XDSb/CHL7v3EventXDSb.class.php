@@ -12,18 +12,18 @@
  */
  
 /**
- * Event XDS
+ * Event XDSb
  */
-class CHL7v3EventXDS extends CHL7v3Event implements CHL7EventXDS {
+class CHL7v3EventXDSb extends CHL7v3Event implements CHL7EventXDSb {
   /**
    * Construct
    *
-   * @return \CHL7v3EventXDS
+   * @return \CHL7v3EventXDSb
    */
   function __construct() {
     parent::__construct();
 
-    $this->event_type = "XDS";
+    $this->event_type = "XDSb";
   }
 
   /**

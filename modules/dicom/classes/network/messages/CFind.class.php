@@ -12,7 +12,7 @@
 /**
  * The Find message family
  */
-class CFind {
+class CFind extends CInteropNorm {
   static $evenements = array(
     "C-Find-RQ"         => "CDicomMessageCFindRQ",
     "C-Find-RSP"        => "CDicomMessageCFindRSP",

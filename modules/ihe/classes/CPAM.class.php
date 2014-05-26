@@ -94,7 +94,8 @@ class CPAM extends CIHE {
    * @return \CPAM
    */
   function __construct() {
-    $this->type = "PAM";
+    $this->domain = "ITI";
+    $this->type   = "PAM";
 
     $this->_categories = array(
       "ITI-30" => self::$transaction_iti30,

@@ -12,7 +12,7 @@
  */
 
 /**
- * Class COperatorHprimSante
+ * Class COperatorHPrimSante
  * Operator Hprim sante
  */
 class COperatorHPrimSante extends CEAIOperator {
@@ -31,7 +31,6 @@ class COperatorHPrimSante extends CEAIOperator {
 
     // Récupération des informations du message
     /** @var CHPrimSanteMessageXML $dom_evt */
-
     $dom_evt = $evt->handle($msg);
 
     try {
@@ -121,8 +120,8 @@ class COperatorHPrimSante extends CEAIOperator {
    * @return CHPrimSanteAcknowledgment
    */
   static function handleEvent(
-      $data = array(), CExchangeHprimSante $exchange_hpr,
-      CHPrimSanteMessageXML $dom_evt, CHPrimSanteAcknowledgment $ack
+    $data = array(), CExchangeHprimSante $exchange_hpr,
+    CHPrimSanteMessageXML $dom_evt, CHPrimSanteAcknowledgment $ack
   ) {
     $data = array_merge($data, $dom_evt->getContentNodes());
 

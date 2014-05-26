@@ -10,10 +10,10 @@
  */
 
 /**
- * Class CHL7v3AcknowledgmentXDS
+ * Class CHL7v3AcknowledgmentXDSb
  * Acknowledgment XDS
  */
-class CHL7v3AcknowledgmentXDS extends CHL7v3EventXDS {
+class CHL7v3AcknowledgmentXDSb extends CHL7v3EventXDSb {
   public $acknowledgment;
   public $status;
   public $xpath;

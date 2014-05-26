@@ -15,7 +15,7 @@
  * CHL7v3EventXDSRegistryStoredQuery
  * Registry stored query
  */
-class CHL7v3EventXDSRegistryStoredQuery extends CHL7v3EventXDS implements CHL7EventXDSRegistryStoredQuery {
+class CHL7v3EventXDSbRegistryStoredQuery extends CHL7v3EventXDSb implements CHL7EventXDSbRegistryStoredQuery {
   /** @var string */
   public $interaction_id = "RegistryStoredQuery";
 

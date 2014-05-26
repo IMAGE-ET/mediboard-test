@@ -12,7 +12,7 @@
 /**
  * The Echo message family
  */
-class CEcho {
+class CEcho extends CInteropNorm {
   static $evenements = array(
     "C-Echo-RQ"  => "CDicomMessageCEchoRQ",
     "C-Echo-RSP" => "CDicomMessageCEchoRSP",

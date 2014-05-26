@@ -16,7 +16,6 @@
  * Transfert de données d'admission
  */
 class CADM extends CHPrimSante {
-
   static $evenements = array(
     // L - Liaisons entre laboratoires
     "L" => "CHPrimSanteADML",

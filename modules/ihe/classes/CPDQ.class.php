@@ -55,7 +55,8 @@ class CPDQ extends CIHE {
    * @return CPDQ
    */
   function __construct() {
-    $this->type = "PDQ";
+    $this->domain = "ITI";
+    $this->type   = "PDQ";
 
     $this->_categories = array(
       "ITI-21" => self::$transaction_iti21,

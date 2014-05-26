@@ -44,7 +44,8 @@ class CDEC extends CIHE {
    * @return \CDEC
    */
   function __construct() {
-    $this->type = "DEC";
+    $this->domain = "PCD";
+    $this->type   = "DEC";
 
     $this->_categories = array(
       "PDC-01" => self::$transaction_pcdO1

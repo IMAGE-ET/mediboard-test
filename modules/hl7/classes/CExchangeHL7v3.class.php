@@ -19,7 +19,7 @@
 class CExchangeHL7v3 extends CEchangeXML {
   static $messages = array(
     "PRPA" => "CPRPA",
-    "XDS"  => "CXDS"
+    "XDSb" => "CXDSb"
   );
 
   // DB Table key

@@ -12,11 +12,11 @@
  */
  
 /**
- * CHL7v3EventXDSProvideAndRegisterDocumentSetRequest
+ * CHL7v3EventXDSbProvideAndRegisterDocumentSetRequest
  * Provide and register document set request
  */
-class CHL7v3EventXDSProvideAndRegisterDocumentSetRequest
-  extends CHL7v3EventXDS implements CHL7EventXDSProvideAndRegisterDocumentSetRequest {
+class CHL7v3EventXDSbProvideAndRegisterDocumentSetRequest
+  extends CHL7v3EventXDSb implements CHL7EventXDSbProvideAndRegisterDocumentSetRequest {
   /** @var string */
   public $interaction_id = "ProvideAndRegisterDocumentSetRequest";
   public $_event_name    = "DocumentRepository_ProvideAndRegisterDocumentSet-b";

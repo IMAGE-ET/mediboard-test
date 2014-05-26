@@ -57,7 +57,8 @@ class CSWF extends CIHE {
    * @return CSWF
    */
   function __construct() {
-    $this->type = "SWF";
+    $this->domain = "RAD";
+    $this->type   = "SWF";
 
     $this->_categories = array(
       "RAD-3"  => self::$transaction_rad3,

@@ -15,8 +15,7 @@
  * Class CXDS
  * Cross-Enterprise Document Sharing
  */
-class CXDS extends CIHE {
-
+class CXDSb extends CIHE {
   /** @var array */
   static $interaction_ITI41 = array (
     // Patient Registry Get Demographics Query
@@ -35,22 +34,22 @@ class CXDS extends CIHE {
     "UpdateDocumentSet"
   );
 
-
   /** @var array */
   static $evenements = array (
     // Patient Registry Get Demographics Query
-    "ProvideAndRegisterDocumentSetRequest" => "CHL7v3EventXDSProvideAndRegisterDocumentSetRequest",
-    "RegistryStoredQuery"                  => "CHL7v3EventXDSRegistryStoredQuery",
-    "UpdateDocumentSet"                    => "CHL7v3EventXDSUpdateDocumentSet",
+    "ProvideAndRegisterDocumentSetRequest" => "CHL7v3EventXDSbProvideAndRegisterDocumentSetRequest",
+    "RegistryStoredQuery"                  => "CHL7v3EventXDSbRegistryStoredQuery",
+    "UpdateDocumentSet"                    => "CHL7v3EventXDSbUpdateDocumentSet",
   );
 
   /**
    * Construct
    *
-   * @return CXDS
+   * @return CXDSb
    */
   function __construct() {
-    $this->type = "XDS";
+    $this->domain = "ITI";
+    $this->type   = "XDSb";
 
     $this->_categories = array(
       "ITI-41" => self::$interaction_ITI41,
@@ -92,7 +91,7 @@ class CXDS extends CIHE {
     $dom = new CXDSXmlDocument();
     $dom->loadXMLSafe($ack_data);
 
-    $hl7event = new CHL7v3AcknowledgmentXDS();
+    $hl7event = new CHL7v3AcknowledgmentXDSb();
     $hl7event->dom = $dom;
 
     return $hl7event;

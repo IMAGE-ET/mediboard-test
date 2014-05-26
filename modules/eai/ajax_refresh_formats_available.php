@@ -46,9 +46,10 @@ if ($actor instanceof CInteropSender) {
 }
 // Destinataire d'intégration 
 else if ($actor instanceof CInteropReceiver) {
-  $actor->makeBackSpec("echanges");
-  $data_format = new $actor->_backSpecs["echanges"]->class;
-  
+  $exchanges = $actor->makeBackSpec("echanges");
+  $actor->_backSpecs["echanges"];
+  $data_format = new $exchanges->class;
+
   if ($data_format instanceof CExchangeTabular) {
     $formats_tabular [] = $data_format;
     $temp = $data_format->getMessagesSupported($actor_guid, false, null, true);

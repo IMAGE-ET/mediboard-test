@@ -15,7 +15,7 @@
  * Class CIHE 
  * IHE classes
  */
-class CIHE {
+class CIHE extends CInteropNorm {
   /**
    * @var array
    */
@@ -27,18 +27,6 @@ class CIHE {
                                 "CRAD48DelegatedHandler"
                                )
   );
-  /**
-   * @var array
-   */
-  static $versions   = array();
-  /**
-   * @var array
-   */
-  static $evenements = array();
-  /**
-   * @var array
-   */
-  public $_categories   = array();
 
   /**
    * Retrieve handlers list
@@ -46,35 +34,7 @@ class CIHE {
    * @return array Handlers list
    */
   static function getObjectHandlers() {
-    return self::$object_handlers; 
-  }
-  
-  /**
-   * Retrieve events list of data format
-   * 
-   * @return array Events list
-   */
-  function getEvenements() {
-    return self::$evenements;
-  }
-
-  /**
-   * Retrieve document elements
-   *
-   * @return array
-   */
-  function getDocumentElements() {
-    return array();
-  }
-  
-  /**
-   * Retrieve transaction name
-   * 
-   * @param string $code Event code
-   * 
-   * @return string Transaction name
-   */
-  static function getTransaction($code) {
+    return self::$object_handlers;
   }
 
   /**
@@ -88,21 +48,26 @@ class CIHE {
    */
   static function getEvent(CExchangeDataFormat $exchange) {
     switch ($exchange->type) {
-      case "PAM" :
+      case "PAM":
         return CPAM::getEvent($exchange);
-      case "PAM_FR" :
+
+      case "PAM_FR":
         return CPAM::getEvent($exchange);
-      case "DEC" :
+
+      case "DEC":
         return CDEC::getEvent($exchange);
-      case "SWF" :
+
+      case "SWF":
         return CSWF::getEvent($exchange);
-      case "PDQ" :
+
+      case "PDQ":
         return CPDQ::getEvent($exchange);
-      case "XDS" :
-        return CXDS::getEvent($exchange);
-      default :
+
+      case "XDSb":
+        return CXDSb::getEvent($exchange);
+
+      default:
         throw new CMbException("CIHE_event-unknown");
-        break;
     }
   }
   
@@ -116,12 +81,11 @@ class CIHE {
    */
   static function getPAMTransaction($code, $i18n = null) {
     switch ($i18n) {
-      case "FR" :
+      case "FR":
         return CPAMFR::getTransaction($code);
-        break;
-      default :
+
+      default:
         return CPAM::getTransaction($code);
-        break;
     }
   }
   

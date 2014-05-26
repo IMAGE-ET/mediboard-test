@@ -12,7 +12,22 @@
  */
  
 /**
- * Event XDS Provide and register document set request
+ * Event XDSb
  */
-interface CHL7EventXDSProvideAndRegisterDocumentSetRequest extends CHL7EventXDS {
+interface CHL7EventXDSb {
+  /**
+   * Construct
+   *
+   * @return CHL7EventXDSb
+   */
+  function __construct();
+
+  /**
+   * Build XDSb message
+   *
+   * @param CMbObject $object object
+   *
+   * @return mixed
+   */
+  function build($object);
 }

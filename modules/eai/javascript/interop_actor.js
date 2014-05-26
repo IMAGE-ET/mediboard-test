@@ -26,7 +26,7 @@ InteropActor = {
     url.requestUpdate(parent_class+"s");
   },
   
-  refreshActorsAndActor : function(actor_id){
+  refreshActorsAndActor : function(actor_id) {
     InteropActor.refreshActor(InteropActor.actor_guid.split('-')[0]+"-"+actor_id);  
     InteropActor.refreshActors($V(getForm("edit"+InteropActor.actor_guid).parent_class));
   },
@@ -54,7 +54,7 @@ InteropActor = {
     var url = new Url("eai", "ajax_vw_messages_supported");
     url.addParam("actor_guid", actor_guid);
     url.addParam("exchange_class", exchange_class);
-    url.requestModal(800, 530);
+    url.requestModal("90%", "85%");
     InteropActor.modal = url.modalObject;
     InteropActor.modal.observe("afterClose", function(){ 
       InteropActor.refreshFormatsAvailable(actor_guid); 
