@@ -46,10 +46,31 @@ class CFirstNameAssociativeSex extends CMbObject {
    * @return string|null sex (u = undefined, f = female, m = male, null = not in base)
    */
   static function getSexFor($firstname) {
-    $object = new self();
-    $object->firstname = trim($firstname);
-    $object->loadMatchingObjectEsc();
-    return $object->sex;
-  }
+    $prenom_exploded = preg_split('/[-_ ]+/', $firstname);   // get the first firstname of composed one
 
+    $sex_found = array();
+    foreach ($prenom_exploded as $_pre) {
+      $object = new self();
+      $object->firstname = trim($_pre);
+      $object->loadMatchingObject();
+      $sex_found[$_pre] = $object->sex;
+    }
+    CMbArray::removeValue("", $sex_found);
+
+    $found = "u";
+    foreach ($sex_found as $_found) {
+      if ($_found != "u") {
+        if ($found == "u") {
+          $found = $_found;
+          continue;
+        }
+
+        if ($_found != $found) {
+          $found = "u";
+          continue;
+        }
+      }
+    }
+    return $found;
+  }
 }

@@ -121,7 +121,6 @@ class CMedecin extends CPerson {
       $this->function_id = CMediusers::get()->function_id;
     }
 
-
     // sexe undefined
     if ($this->sexe == "u") {
       $this->guessSex();
@@ -136,13 +135,7 @@ class CMedecin extends CPerson {
    * @return boolean true if sexe found, false if sexe not found
    */
   function guessSex() {
-    $prenom = $this->prenom;
-    if (strpos($prenom, "-") !== false) {
-      $prenom_exploded = explode("-", $this->prenom);   // get the first firstname of composed one
-      $prenom = $prenom_exploded[0];
-    }
-
-    $sex_found = CFirstNameAssociativeSex::getSexFor($prenom);
+    $sex_found = CFirstNameAssociativeSex::getSexFor($this->prenom);
     if ($sex_found && $sex_found != "u") {
       $this->sexe = $sex_found;
       return true;

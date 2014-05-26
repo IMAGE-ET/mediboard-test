@@ -68,6 +68,7 @@
       <th>{{tr}}Import{{/tr}}</th>
     {{/if}}
     <th>{{mb_title class=CMedecin field=nom}}</th>
+    <th class="narrow">{{mb_title class=CMedecin field=sexe}}</th>
     <th>{{mb_title class=CMedecin field=adresse}}</th>
     <th>{{mb_title class=CMedecin field=type}}</th>
     <th>{{mb_title class=CMedecin field=disciplines}}</th>
@@ -114,6 +115,7 @@
             </a>
         {{/if}}
       </td>
+      <td {{if $_medecin->sexe == 'u'}}class="empty" {{/if}}>{{mb_value object=$_medecin field=sexe}}</td>
       <td class="text compact">{{$_medecin->adresse}}<br/>
         {{mb_value object=$_medecin field=cp}} {{mb_value object=$_medecin field=ville}}</td>
       <td>{{mb_value object=$_medecin field=type}}</td>
