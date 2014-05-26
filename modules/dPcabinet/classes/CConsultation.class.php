@@ -792,6 +792,9 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
       if (!$this->_force_create_sejour) {
         $sejour->loadObject($where);
       }
+      else {
+        $sejour->_id = "";
+      }
 
       // Si pas de séjour et config alors le créer en type consultation
       if (!$sejour->_id && CAppUI::conf("dPcabinet CConsultation create_consult_sejour")) {
