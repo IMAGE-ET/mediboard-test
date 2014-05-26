@@ -1308,7 +1308,21 @@ class CSetuphl7 extends CSetup {
                 ADD `send_no_facturable` ENUM ('0','1') DEFAULT '1'";
     $this->addQuery($query);
 
-    $this->mod_version = "0.95";
+    $this->makeRevision("0.95");
+
+    $query = "CREATE TABLE `receiver_hl7v3_config` (
+                `receiver_hl7v3_config_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `object_id` INT (11) UNSIGNED,
+                `use_receiver_oid` ENUM ('0','1') DEFAULT '0'
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `receiver_hl7v3_config`
+                ADD INDEX (`object_id`);";
+
+    $this->addQuery($query);
+
+    $this->mod_version = "0.96";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

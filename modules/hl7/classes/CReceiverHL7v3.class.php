@@ -46,7 +46,8 @@ class CReceiverHL7v3 extends CInteropReceiver {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps['echanges'] = "CExchangeHL7v3 receiver_id";
+    $backProps['echanges']       = "CExchangeHL7v3 receiver_id";
+    $backProps['object_configs'] = "CReceiverHL7v3Config object_id";
 
     return $backProps;
   }

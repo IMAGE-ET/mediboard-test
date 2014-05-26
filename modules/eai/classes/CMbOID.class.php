@@ -25,22 +25,33 @@ class CMbOID {
   /**
    * Return the instance OID
    *
+   * @param CInteropReceiver $receiver Receiver
+   *
    * @return String
    */
-  static function getOIDRoot() {
+  static function getOIDRoot($receiver = null) {
+    if ($receiver) {
+      $receiver->loadConfigValues();
+    }
+
+    if ($receiver && $receiver->_configs["use_receiver_oid"]) {
+      return $receiver->OID;
+    }
+
     return CAppUI::conf("mb_oid");
   }
 
   /**
    * Return the instance OID
    *
-   * @param CMbObject $class Class
+   * @param CMbObject        $class    Class
+   * @param CInteropReceiver $receiver Receiver
    *
    * @return string
    */
-  static function getOIDOfInstance($class) {
+  static function getOIDOfInstance($class, $receiver = null) {
     $delimiter = self::$delimiter;
-    $oid_root  = self::getOIDRoot();
+    $oid_root  = self::getOIDRoot($receiver);
     $oid_group = self::getGroupId($class);
     return $oid_root.".".$delimiter.".".$oid_group;
   }
@@ -66,9 +77,9 @@ class CMbOID {
 
     switch (get_class($class)) {
       case "CMediusers":
-      /** @var CMediusers $class */
-      $result = $class->_group_id;
-      break;
+        /** @var CMediusers $class */
+        $result = $class->_group_id;
+        break;
       case "CSejour":
         /** @var CSejour $class */
         $result = $class->group_id;
@@ -100,6 +111,7 @@ class CMbOID {
       case "CExchangeHL7v3":
         /** @var CExchangeHL7v3 $class */
         $result = $class->group_id;
+      default:
     }
 
     return $result;
@@ -108,12 +120,13 @@ class CMbOID {
   /**
    * Return the class OID
    *
-   * @param CMbObject $class Class
+   * @param CMbObject        $class    Class
+   * @param CInteropReceiver $receiver Receiver
    *
    * @return string
    */
-  static function getOIDFromClass($class) {
-    $oid_instance = self::getOIDOfInstance($class);
+  static function getOIDFromClass($class, $receiver = null) {
+    $oid_instance = self::getOIDOfInstance($class, $receiver);
     $delimiter    = self::$delimiter;
     $oid          = self::$class_mappage[get_class($class)];
     return $oid_instance.".".$delimiter.".".$oid;
