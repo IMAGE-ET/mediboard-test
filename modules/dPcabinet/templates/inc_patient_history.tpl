@@ -18,13 +18,7 @@
   
 <!-- Consultations -->
 <div>
-	<span  onmouseover="ObjectTooltip.createEx(this, 'consultations', 'sejours_op', {patient_id: '{{$patient->_id}}', type: 'consultation'});">
-		{{$patient->_count.consultations}} {{tr}}CConsultation{{/tr}}(s)
-	</span>
+  <span  onmouseover="ObjectTooltip.createEx(this, 'consultations', 'sejours_op', {patient_id: '{{$patient->_id}}', type: 'consultation'});">
+    {{$patient->_count.consultations}} {{tr}}CConsultation{{/tr}}(s)
+  </span>
 </div>
-
-{{if $consult->_ref_chir->isAnesth() && !$consult->_refs_dossiers_anesth|@count}}
-  <div id="dossiers_anesth_area">
-    {{mb_include module=cabinet template=inc_consult_anesth/inc_multi_consult_anesth onlycreate=true}}
-  </div>
-{{/if}}
