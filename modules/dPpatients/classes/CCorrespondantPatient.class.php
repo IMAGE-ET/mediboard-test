@@ -27,6 +27,7 @@ class CCorrespondantPatient extends CPerson {
   public $surnom;
   public $nom_jeune_fille;
   public $prenom;
+  public $sex;
   public $naissance;
   public $adresse;
   public $cp;
@@ -88,6 +89,7 @@ class CCorrespondantPatient extends CPerson {
     $props["nom_jeune_fille"]     = "str";
     $props["prenom"]              = "str";
     $props["naissance"]           = "birthDate mask|99/99/9999 format|$3-$2-$1";
+    $props["sex"]                 = "enum list|f|m|u default|u";
     $props["adresse"]             = "text";
     $props["cp"]                  = "numchar minLength|4 maxLength|5";
     $props["ville"]               = "str confidential";
@@ -159,6 +161,11 @@ class CCorrespondantPatient extends CPerson {
       $this->date_debut = CMbDT::date();
     }
 
+    // sexe undefined
+    if ($this->sex == "u" && $this->prenom) {
+      $this->guessSex();
+    }
+
     // Création d'un correspondant en mode cabinets distincts
     if (CAppUI::conf('dPpatients CPatient function_distinct') && !$this->_id) {
       $this->function_id = CMediusers::get()->function_id;
@@ -175,6 +182,21 @@ class CCorrespondantPatient extends CPerson {
     }
 
     return parent::store();
+  }
+
+  /**
+   * guess sexe by firstname
+   *
+   * @return boolean true if sexe found, false if sexe not found
+   */
+  function guessSex() {
+    $sex_found = CFirstNameAssociativeSex::getSexFor($this->prenom);
+    if ($sex_found && $sex_found != "u") {
+      $this->sex = $sex_found;
+      return true;
+    }
+
+    return false;
   }
 
   /**

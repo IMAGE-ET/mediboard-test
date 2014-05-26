@@ -55,3 +55,23 @@
     <td id="cleanup-correspondant-patient-log"></td>
   </tr>
 </table>
+
+<h2>Assignement de genre pour la base de correspondants</h2>
+<table class="main form">
+  <tr>
+    <td style="width: 50%;">
+      <div class="small-info">
+        Cet outil permet de réassigner les sexes sur les correspondants pour lesquels ils ne sont pas assignés
+      </div>
+      <form name="guess-correspondant-patient" method="post" onsubmit="return onSubmitFormAjax(this, {}, 'sex-correspondant-patient-log')">
+        <input type="hidden" name="m" value="patients" />
+        <input type="hidden" name="dosql" value="do_guess_massive_sex" />
+        <input type="hidden" name="target_class" value="CCorrespondantPatient"/>
+        <label><input type="checkbox" name="reset" value="1"/>Recommencer de zéro</label>
+        <button>GO</button>
+      </form>
+    </td>
+    <td id="sex-correspondant-patient-log"></td>
+  </tr>
+
+</table>

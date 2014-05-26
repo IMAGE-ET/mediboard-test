@@ -2570,7 +2570,12 @@ class CSetupdPpatients extends CSetup {
                 ADD `allow_sisra_send` ENUM ('0','1') DEFAULT '0'";
     $this->addQuery($query);
 
-    $this->mod_version = "2.09";
+    $this->makeRevision("2.09");
+    $query = "ALTER TABLE `correspondant_patient`
+                ADD `sex` VARCHAR (2) NOT NULL DEFAULT 'u' AFTER `prenom` ";
+    $this->addQuery($query);
+
+    $this->mod_version = "2.10";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

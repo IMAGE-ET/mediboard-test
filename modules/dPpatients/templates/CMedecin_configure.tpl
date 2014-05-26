@@ -159,6 +159,7 @@ Main.add(function(){
   <li><a href="#CMedecin-import">Importation de base</a></li>
   <li><a href="#CMedecin-install_trigger">Trigger medecin-patient</a></li>
   <li><a href="#CMedecin-maintenance">Maintenance</a></li>
+  <li><a href="#sex_medecins">Table des sexes de Medecins</a></li>
 </ul>
 
 <div id="CMedecin-import" style="display: none;">
@@ -357,4 +358,16 @@ Main.add(function(){
       <td id="cleanup-correspondant-log"></td>
     </tr>
   </table>
+</div>
+
+<div id="sex_medecins" style="display: none;">
+  <div class="small-info">Tâche de réparation des sexes des correspondants Médecins</div>
+  <form name="guess-medecin" method="post" onsubmit="return onSubmitFormAjax(this, {}, 'sex-medecin-log')">
+    <input type="hidden" name="m" value="patients" />
+    <input type="hidden" name="dosql" value="do_guess_massive_sex" />
+    <input type="hidden" name="target_class" value="CMedecin"/>
+    <label><input type="checkbox" name="reset" value="1"/>Recommencer de zéro</label>
+    <button>GO</button>
+  </form>
+  <div id="sex-medecin-log"></div>
 </div>
