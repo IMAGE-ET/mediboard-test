@@ -1,10 +1,3 @@
-    $this->makeRevision("0.94");
-
-    $query = "ALTER TABLE `receiver_hl7v2_config`
-                ADD `send_no_facturable` ENUM ('0','1') DEFAULT '1'";
-    $this->addQuery($query);
-
-    $this->mod_version = "0.95";
 <?php /* $Id $ */
 
 /**
