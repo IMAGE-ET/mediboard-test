@@ -57,10 +57,11 @@ class CHPrimSanteSegmentH extends CHPrimSanteSegment {
     $data[] = null;
 
     // H-10 : Receiver ID
+    $receiver = $event->_receiver && $event->_receiver->_id ? $event->_receiver : $event->_sender;
     $data[] = array(
       array(
-        $event->_receiver->_id,
-        $event->_receiver->nom
+        $receiver->_id,
+        $receiver->nom
       )
     );
 
@@ -74,7 +75,7 @@ class CHPrimSanteSegmentH extends CHPrimSanteSegment {
     $data[] = array(
       array(
         $event->version,
-        $event->_exchange_hpr->sous_type
+        $event->type_liaison,
       )
     );
 

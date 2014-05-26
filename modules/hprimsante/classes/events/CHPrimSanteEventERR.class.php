@@ -23,8 +23,9 @@ class CHPrimSanteEventERR extends CHPrimSanteEvent {
    */
   function __construct(CHPrimSanteEvent $trigger_event) {
     $this->event_type  = "ERR";
+    $this->type        = "ERR";
     $this->version     = $trigger_event->message->version;
-
+    $this->type_liaison = $trigger_event->type_liaison;
     $this->msg_codes   = array (
       array(
         $trigger_event->type, $trigger_event->type_liaison
