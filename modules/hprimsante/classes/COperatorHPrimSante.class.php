@@ -15,7 +15,7 @@
  * Class COperatorHprimSante
  * Operator Hprim sante
  */
-class COperatorHprimSante extends CEAIOperator {
+class COperatorHPrimSante extends CEAIOperator {
   /**
    * Event
    *
