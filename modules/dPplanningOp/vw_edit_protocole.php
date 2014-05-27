@@ -42,6 +42,9 @@ if ($protocole_id) {
   $protocole->loadRefPrescriptionChir();
   $chir =& $protocole->_ref_chir;
 }
+else {
+  $protocole->temp_operation = '00:00:00';
+}
 
 // Durée d'une intervention
 $start = CAppUI::conf("dPplanningOp COperation duree_deb");
@@ -73,6 +76,6 @@ $smarty->assign("ufs"         , CUniteFonctionnelle::getUFs());
 $smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("listFunctions" , $listFunctions);
 $smarty->assign("listServices"  , $listServices);
-$smarty->assign("listAnesthType"  , $listAnesthType);
+$smarty->assign("listAnesthType", $listAnesthType);
 
 $smarty->display("vw_edit_protocole.tpl");

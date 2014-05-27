@@ -54,7 +54,7 @@ refreshListCCAMProtocole = function() {
 
 checkFormSejour = function() {
   var oForm = getForm("editProtocole");
-  return checkForm(oForm) && checkDureeProtocole() && checkDureeHospiProtocole() && checkCCAMProtocole();
+  return checkDureeProtocole() && checkForm(oForm) && checkDureeHospiProtocole() && checkCCAMProtocole();
 }
 
 checkCCAMProtocole = function() {
@@ -106,7 +106,10 @@ checkDureeProtocole = function() {
   field1 = form.temp_operation;
   
   if ($V(form.for_sejour) == 1) return true; // Si mode séjour
-  
+
+  if ($V(field1) == '00:00:00') {
+    $V(field1, '');
+  }
   if (field1 && $V(field1) == "") {
     alert("Temps opératoire invalide");
     field1.focus();
