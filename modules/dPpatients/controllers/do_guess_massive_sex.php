@@ -13,7 +13,9 @@
 
 $class = CValue::post("target_class");
 $reset = CValue::post("reset", 0);
+$callback = CValue::post("callback", 0);
 $limit = 500;
+$use_callback = true;
 
 if ($class == "CCorrespondantPatient" || $class == "CMedecin") {
   /** @var CMedecin|CCorrespondantPatient $obj */
@@ -52,9 +54,16 @@ if ($class == "CCorrespondantPatient" || $class == "CMedecin") {
       CAppUI::stepAjax($msg, UI_MSG_ERROR);
     }
   }
+  else {
+    $use_callback = false;
+  }
 }
 else {
   CAppUI::stepAjax("%s_not_managed_by_the_system", UI_MSG_ERROR, $class);
+}
+
+if ($callback && $use_callback) {
+  CAppUI::js("console.log('test'); getForm('$callback').onsubmit();");
 }
 
 CApp::rip();

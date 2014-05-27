@@ -366,6 +366,7 @@ Main.add(function(){
     <input type="hidden" name="m" value="patients" />
     <input type="hidden" name="dosql" value="do_guess_massive_sex" />
     <input type="hidden" name="target_class" value="CMedecin"/>
+    <label><input type="checkbox" name="callback" value="guess-medecin"/>Automatique</label>
     <label><input type="checkbox" name="reset" value="1"/>Recommencer de zéro</label>
     <button>GO</button>
   </form>
