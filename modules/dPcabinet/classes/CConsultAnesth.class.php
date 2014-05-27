@@ -635,7 +635,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $consult = $this->loadRefConsultation();
     $consult->loadRefPlageConsult();
 
-    if ($consult->_ref_plageconsult->date < CMbDT::date() && !$this->_ref_module->canDo()->admin) {
+    if ($consult->_ref_plageconsult->date < CMbDT::date() && !$this->_ref_module->canDo()->edit) {
       return "Impossible de supprimer un dossier d'anesthésie d'une consultation passée";
     }
 
