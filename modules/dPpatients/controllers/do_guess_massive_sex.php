@@ -63,7 +63,7 @@ else {
 }
 
 if ($callback && $use_callback) {
-  CAppUI::js("console.log('test'); getForm('$callback').onsubmit();");
+  CAppUI::js("getForm('$callback').onsubmit();");
 }
 
 CApp::rip();
