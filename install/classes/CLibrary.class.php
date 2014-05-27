@@ -433,7 +433,7 @@ $library->description = "Html To PDF converter";
 $library->sourceDir = "wkhtmltopdf";
 $library->targetDir = "wkhtmltopdf";
 $library->versionFile = "version.txt";
-$library->versionString = "0.12.1-c22928d";
+$library->versionString = "0.11.0_rc1";
 
 CLibrary::$all[$library->name] = $library;
 
