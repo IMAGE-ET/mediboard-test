@@ -251,7 +251,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["iti31_historic_movement"]                   = "bool default|1";
     
     // Send
-    $props["modification_admit_code"]            = "enum list|A08|Z99 default|A08";
+    $props["modification_admit_code"]            = "enum list|A08|Z99 default|Z99";
     $props["modification_before_admit"]          = "bool default|1";
     $props["send_assigning_authority"]           = "bool default|1";
     $props["send_change_medical_responsibility"] = "enum list|A02|Z80|Z99 default|Z80";

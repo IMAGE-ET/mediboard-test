@@ -88,7 +88,7 @@ class CCDARoleCDA extends CCDADocumentCDA {
     $patientRole->appendId($ii);
 
     $ii = new CCDAII();
-    $ii->setRoot(CMbOID::getOIDOfInstance($patient));
+    $ii->setRoot(CMbOID::getOIDOfInstance($patient, self::$cda_factory->receiver));
     $ii->setExtension($patient->_id);
     $patientRole->appendId($ii);
 

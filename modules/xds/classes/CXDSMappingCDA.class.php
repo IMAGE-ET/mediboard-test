@@ -93,6 +93,7 @@ class CXDSMappingCDA {
       case "archived":
         $statusType = "Archived";
         break;
+      default:
     }
 
     $asso = new CXDSAssociation("association01", $id_registry, $uuid, "urn:ihe:iti:2010:AssociationType:UpdateAvailabilityStatus");
@@ -245,6 +246,7 @@ class CXDSMappingCDA {
       case "CConsultation";
         $code = "07";
         break;
+      default:
     }
     $entry = CDMPTools::loadEntryJV("ASIP-SANTE_contentTypeCode.xml", $code);
     $content = new CXDSContentType("cla$cla_id", $id, $entry["id"]);
@@ -260,14 +262,14 @@ class CXDSMappingCDA {
     //patient du document
     $registry->setPatientId("ei$ei_id", $id, $ins);
     $this->setEiId();
-
+    $receiver = $this->factory->receiver;
     //OID de l'instance serveur
-    $oid_instance = CMbOID::getOIDOfInstance($registry);
+    $oid_instance = CMbOID::getOIDOfInstance($registry, $receiver);
     $registry->setSourceId("ei$ei_id", $id, $oid_instance);
     $this->setEiId();
 
     //OID unique
-    $oid = CMbOID::getOIDFromClass($registry);
+    $oid = CMbOID::getOIDFromClass($registry, $receiver);
     $cxds_submissionlot = new CXDSSubmissionLot();
     $cxds_submissionlot->date = "now";
     $cxds_submissionlot->type = $this->type;
@@ -392,6 +394,7 @@ class CXDSMappingCDA {
           $ccam = CCodeCCAM::get($eventCode, CCodeCCAM::LITE);
           $libelle = $ccam->libelleCourt;
           break;
+        default:
       }
 
         $event = new CXDSEventCodeList("cla$cla_id", $id, $eventCode);
@@ -726,6 +729,13 @@ class CXDSMappingCDA {
     return $source_info;
   }
 
+  /**
+   * Return the Marital Status
+   *
+   * @param String $status mediboard status
+   *
+   * @return string
+   */
   function getMaritalStatus($status) {
     switch ($status) {
       case "S":
@@ -761,8 +771,9 @@ class CXDSMappingCDA {
    * @return string
    */
   function getID () {
-    $patient = $this->factory->patient;
-    $oid = CMbOID::getOIDOfInstance($patient);
+    $factory = $this->factory;
+    $patient = $factory->patient;
+    $oid = CMbOID::getOIDOfInstance($patient, $factory->receiver);
 
     $comp4 = $oid;
     $comp4 = "&$comp4&ISO";

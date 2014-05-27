@@ -27,6 +27,8 @@ class CCDAFactory {
   public $practicien;
   /** @var CCDADomDocument */
   public $dom_cda;
+  /** @var  CInteropReceiver */
+  public $receiver;
 
   public $version;
   public $mediaType;
@@ -59,6 +61,7 @@ class CCDAFactory {
   /**
    * Extraction des données pour alimenter le CDA
    *
+   * @throws CMbException
    * @return void
    */
   function extractData() {
@@ -75,9 +78,9 @@ class CCDAFactory {
     $this->practicien = $object->loadRefPraticien();
     $this->patient    = $object->loadRefPatient();
     $this->patient->loadLastINS();
-    $this->patient->loadFromIPP();
+    $this->patient->loadIPP();
     $this->docItem    = $docItem;
-    $this->root       = CMbOID::getOIDFromClass($docItem);
+    $this->root       = CMbOID::getOIDFromClass($docItem, $this->receiver);
 
     $this->practicien->loadRefFunction();
     $this->practicien->loadRefOtherSpec();
@@ -228,12 +231,13 @@ class CCDAFactory {
           $service["nullflavor"] = "UNK";
         }
         break;
+      default:
     }
 
     $this->service_event = $service;
 
     if ($this->old_version) {
-      $oid = CMbOID::getOIDFromClass($docItem);
+      $oid = CMbOID::getOIDFromClass($docItem, $this->receiver);
       $this->old_version = "$oid.$this->old_id.$this->old_version";
     }
   }

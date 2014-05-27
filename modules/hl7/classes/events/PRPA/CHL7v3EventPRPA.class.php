@@ -70,7 +70,7 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
 
     // id
     $id = $dom->addElement($root, "id");
-    $this->setII($id, $this->_exchange_hl7v3->_id, CMbOID::getOIDFromClass($this->_exchange_hl7v3));
+    $this->setII($id, $this->_exchange_hl7v3->_id, CMbOID::getOIDFromClass($this->_exchange_hl7v3, $this->_receiver));
 
     // creationTime
     $creationTime = $dom->addElement($root, "creationTime");
