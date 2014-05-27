@@ -113,7 +113,12 @@ refreshFiches = function(sejour_id) {
          
         <script type="text/javascript">
           Main.add(function(){
-            Control.Tabs.create("tabs-constantes-graph-table", true);
+            Control.Tabs.create("tabs-constantes-graph-table", true, {afterChange: function(container) {
+              if (container.id == 'constantes-table') {
+                ViewPort.SetAvlHeight('constantes-table', 0.9);
+                ViewPort.SetAvlWidth('constantes-table', 0.9);
+              }
+            }});
           });
         </script>
         

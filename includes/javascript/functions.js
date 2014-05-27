@@ -590,7 +590,33 @@ var ViewPort = {
     element.style.overflowX = "hidden";
     element.style.height = ((winHeight - pos) * pct - 10) + "px";
   },
-  
+
+  /**
+   *
+   * @param {HTMLElement|string} element DOM element
+   * @param {float}              pct     Percentage of available width
+   * @constructor
+   */
+  SetAvlWidth : function(element, pct) {
+    element = $(element);
+    if (!element) return;
+
+    // Position Top de la div, hauteur de la fenetre,
+    // puis calcul de la taille de la div
+    var pos = element.cumulativeOffset().left;
+    var winWidth, modal;
+    if (modal = element.up('.modal')) {
+      winWidth = modal.getDimensions().width;
+      pos = pos - modal.cumulativeOffset().left;
+    }
+    else {
+      winWidth = window.getInnerDimensions().width;
+    }
+
+    element.style.overflowY = "auto";
+    element.style.width = ((winWidth - pos) * pct - 10) + "px";
+  },
+
   SetFrameHeight: function(element, options){
     options = Object.extend({
       marginBottom : 15
