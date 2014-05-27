@@ -16,6 +16,7 @@ $ds = CSQLDataSource::get("ccamV2");
 $object_id = CValue::get("object_id");
 $object_class = CValue::get("object_class");
 $code = CValue::post("code");
+$executant_id = CValue::post("executant_id");
 
 // Chargement de l'object
 /** @var CCodable $object */
@@ -25,13 +26,7 @@ $object->load($object_id);
 // Chargement de ses actes NGAP
 $object->countActes();
 
-$user = CMediusers::get();
-if ($user->isMedical() && !$user->isAdmin()) {
-  $praticien = $user;
-}
-else {
-  $praticien = $object->loadRefPraticien();
-}
+$praticien = CMediusers::get($executant_id);
 $praticien->loadRefFunction();
 
 $praticien->spec_cpam_id ? $spe_undefined = false : $spe_undefined = true;
