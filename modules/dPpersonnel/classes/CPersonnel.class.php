@@ -77,7 +77,7 @@ class CPersonnel extends CMbObject {
    * @return CMediusers|null
    */
   function loadRefUser() {
-    $this->_ref_user = $this->loadFwdRef("user_id");
+    $this->_ref_user = $this->loadFwdRef("user_id", true);
     $this->_view = $this->getFormattedValue("emplacement") . ": " . $this->_ref_user->_view;
     return $this->_ref_user;
   }
@@ -145,13 +145,14 @@ class CPersonnel extends CMbObject {
 
     $group = $groupby ? "personnel.user_id" : null;
 
-    $listPers = $personnel->loadGroupList($where, $order, null, $group, $ljoin);
-    $users = CMbObject::massLoadFwdRef($listPers, "user_id");
+    /** @var CPersonnel[] $personnels */
+    $personnels = $personnel->loadGroupList($where, $order, null, $group, $ljoin);
+    $users = CMbObject::massLoadFwdRef($personnels, "user_id");
     CMbObject::massLoadFwdRef($users, "function_id");
 
-    foreach ($listPers as $pers) {
-      $pers->loadRefUser()->loadRefFunction();
+    foreach ($personnels as $_personnel) {
+      $_personnel->loadRefUser()->loadRefFunction();
     }
-    return $listPers;
+    return $personnels;
   }
 }
