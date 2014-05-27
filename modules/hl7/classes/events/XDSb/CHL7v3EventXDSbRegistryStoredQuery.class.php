@@ -32,8 +32,7 @@ class CHL7v3EventXDSbRegistryStoredQuery extends CHL7v3EventXDSb implements CHL7
     parent::build($object);
 
     $xml = new CXDSXmlDocument();
-
-    $oid = CMbOID::getOIDFromClass($object);
+    $oid = CMbOID::getOIDFromClass($object, $this->_receiver);
     $oid = $oid.".".$object->_id.".".$object->version;
     $message = $xml->createQueryElement($xml, "AdhocQueryRequest");
     $response_option = $xml->createQueryElement($message, "ResponseOption");
