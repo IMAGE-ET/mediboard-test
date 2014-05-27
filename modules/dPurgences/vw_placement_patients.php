@@ -132,7 +132,12 @@ foreach ($sejours as $sejour) {
 
     $sejour->countDocItems();
   }
-  $chambre_id = $sejour->_ref_curr_affectation->loadRefLit()->loadRefChambre()->_id;
+  $chambre_id = $sejour->_ref_curr_affectation->loadRefLit()->chambre_id;
+  if (!$chambre_id && !CAppUI::conf("dPurgences create_affectation")) {
+    $lit = new CLit();
+    $lit->load($sejour->_ref_rpu->box_id);
+    $chambre_id = $lit->chambre_id;
+  }
   $sejours_chambre[$chambre_id][] = $sejour;
 }
 
