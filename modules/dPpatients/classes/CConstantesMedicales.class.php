@@ -1424,6 +1424,14 @@ class CConstantesMedicales extends CMbObject {
       $where["datetime"] = "<= '$datetime'";
     }
 
+    if (count($selection)) {
+      $ors = array();
+      foreach($selection as $_item) {
+        $ors[] = "$_item IS NOT NULL";
+      }
+      $where[] = implode(" OR ", $ors);
+    }
+
     $count = $constante->countList($where);
 
     // Load all constants instead of checking every type to reduce number of SQL queries
@@ -1460,7 +1468,6 @@ class CConstantesMedicales extends CMbObject {
           $_where = $where;
           $_where[$type] = "IS NOT NULL";
           $_list = $constante->loadList($_where, "datetime DESC", 1);
-
           if (count($_list)) {
             $_const = reset($_list);
             $constante->$type = $_const->$type;
