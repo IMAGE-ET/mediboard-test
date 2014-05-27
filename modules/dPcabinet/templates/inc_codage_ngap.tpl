@@ -311,7 +311,11 @@ url.addParam("object_id", "{{$object->_id}}");
 url.addParam("object_class", "{{$object->_class}}");
 url.autoComplete(getForm('editNGAP').code, 'code_auto_complete', {
     minChars: 1,
-    updateElement: updateFields
+    updateElement: updateFields,
+    callback: function (input, queryString) {
+      var executant_id = $V(getForm('editNGAP').executant_id);
+      return queryString + "&executant_id=" + executant_id;
+    }
 } );
 
 {{/if}}
