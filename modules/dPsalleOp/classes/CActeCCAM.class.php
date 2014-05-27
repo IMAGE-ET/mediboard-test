@@ -68,7 +68,7 @@ class CActeCCAM extends CActe {
   public $_calcul_montant_base = false;
   
   // References
-  /** @var  CCodeCCAM */
+  /** @var  CDatedCodeCCAM */
   public $_ref_code_ccam;
   /** @var  CCodable */
   public $_ref_object;
@@ -293,7 +293,7 @@ class CActeCCAM extends CActe {
     $this->_anesth    = ($this->code_activite == 4);
     
     // Remboursement exceptionnel
-    $code = CCodeCCAM::get($this->code_acte, CCodeCCAM::LITE);
+    $code = CDatedCodeCCAM::get($this->code_acte);
     $this->_rembex = $this->rembourse && $code->remboursement == 3 ? '1' : '0';
   }
 
@@ -437,10 +437,10 @@ class CActeCCAM extends CActe {
   /**
    * Charge le code CCAM complet tel que décrit par la nomenclature
    *
-   * @return CCodeCCAM
+   * @return CDatedCodeCCAM
    */
   function loadRefCodeCCAM() {
-    return $this->_ref_code_ccam = CCodeCCAM::get($this->code_acte, CCodeCCAM::FULL);
+    return $this->_ref_code_ccam = CDatedCodeCCAM::get($this->code_acte);
   }
 
   /**

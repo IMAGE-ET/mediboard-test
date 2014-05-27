@@ -26,7 +26,7 @@ if (!$tag_id) {
   $i = 0;
 
   foreach ($codes as $value) {
-    $code = CCodeCCAM::get($value["code_acte"], CCodeCCAM::LITE);
+    $code = CDatedCodeCCAM::get($value["code_acte"]);
     $code->getChaps();
 
     $code->favoris_id = 0;

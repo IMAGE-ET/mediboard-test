@@ -33,7 +33,7 @@ $completed_activite_1 = 1;
 $completed_activite_4 = 1;
 
 foreach ($actes as $_acte) {
-  $acte = CCodeCCAM::get($_acte);
+  $acte = CDatedCodeCCAM::get($_acte);
 
   if (isset($acte->activites["1"]) && $activite_1 === false) {
     $completed_activite_1 = 0;

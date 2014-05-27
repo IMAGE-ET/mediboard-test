@@ -84,7 +84,7 @@ while ($row = $ds->fetchArray($result)) {
 
 // On récupère les chapitres de niveau 1
 $listChap1 = array();
-$query = "SELECT * FROM arborescence WHERE CODEPERE = '000001' ORDER BY RANG";
+$query = "SELECT * FROM c_arborescence WHERE CODEPERE = '000001' ORDER BY RANG";
 $result = $ds->exec($query);
 while ($row = $ds->fetchArray($result)) {
   $codeChap = $row["CODEMENU"];
@@ -95,7 +95,7 @@ while ($row = $ds->fetchArray($result)) {
 // On récupère les chapitres de niveau 2
 $listChap2 = array();
 if ($chap1) {
-  $query = "SELECT * FROM arborescence WHERE CODEPERE = '$chap1' ORDER BY RANG";
+  $query = "SELECT * FROM c_arborescence WHERE CODEPERE = '$chap1' ORDER BY RANG";
   $result = $ds->exec($query);
   while ($row = $ds->fetchArray($result)) {
     $codeChap = $row["CODEMENU"];
@@ -107,7 +107,7 @@ if ($chap1) {
 // On récupère les chapitres de niveau 3
 $listChap3 = array();
 if ($chap2) {
-  $query = "SELECT * FROM arborescence WHERE CODEPERE = '$chap2' ORDER BY RANG";
+  $query = "SELECT * FROM c_arborescence WHERE CODEPERE = '$chap2' ORDER BY RANG";
   $result = $ds->exec($query);
   while ($row = $ds->fetchArray($result)) {
     $codeChap = $row["CODEMENU"];
@@ -119,7 +119,7 @@ if ($chap2) {
 // On récupère les chapitres de niveau 4
 $listChap4 = array();
 if ($chap3) {
-  $query = "SELECT * FROM arborescence WHERE CODEPERE = '$chap3' ORDER BY RANG";
+  $query = "SELECT * FROM c_arborescence WHERE CODEPERE = '$chap3' ORDER BY RANG";
   $result = $ds->exec($query);
   while ($row = $ds->fetchArray($result)) {
     $codeChap = $row["CODEMENU"];
@@ -129,11 +129,16 @@ if ($chap3) {
 }
 
 // Création de la requête
-$query = "SELECT CODE, LIBELLELONG FROM actes WHERE 0";
+$today = CMbDT::transform(null, null, "%Y%m%d");
+$query = "SELECT CODE
+  FROM p_acte
+  WHERE 0";
 
-// Si un autre élément est rempli
+// Si un élément est rempli
 if ($code || $clefs || $selacces || $seltopo1 || $chap1 || $chap2 || $chap3 || $chap4) {
-  $query .= " or (DATEFIN = '00000000'";
+  $query = "SELECT CODE
+    FROM p_acte
+    WHERE DATEFIN = '00000000' ";
   // On fait la recherche sur le code
   if ($code != "") {
     $query .= " AND CODE LIKE '" . addslashes($code) . "%'";
@@ -176,19 +181,15 @@ if ($code || $clefs || $selacces || $seltopo1 || $chap1 || $chap2 || $chap3 || $
   if ($chap1) {
     $query .= " AND ARBORESCENCE1 = '0000".$listChap1[$chap1]["rang"]."'";
   }
-  
-  $query .= ")";
 }
 
 $query .= " ORDER BY CODE LIMIT 0 , 100";
-
 //Codes correspondants à la requete
 $result = $ds->exec($query);
 $i = 0;
 $codes = array();
 while ($row = $ds->fetchArray($result)) {
-  $codes[$i]["code"]  = $row["CODE"];
-  $codes[$i]["texte"] = $row["LIBELLELONG"];
+  $codes[$i] = CDatedCodeCCAM::get($row["CODE"]);
   $i++;
 }
 $numcodes = $i;

@@ -151,12 +151,11 @@ class CSetupdPccam extends CSetup {
     $this->addQuery($query);
 
     $this->mod_version = "0.21";
+
     // Data source query
 
-    // Version 33 de la CCAM
-    $query = "SELECT *
-      FROM actes
-      WHERE CODE = 'BGQP140'";
+    // Nouvelle version CCAM
+    $query = "SHOW TABLES LIKE 'p_acte'";
     $this->addDatasource("ccamV2", $query);
 
     // Tarifs de convergence
@@ -175,5 +174,15 @@ class CSetupdPccam extends CSetup {
         $this->addDatasource("ccamV2", $query);
       }
     }
+
+    // Nouvelle architecture CCAM
+    $query = "SHOW TABLES LIKE 'p_acte';";
+    $this->addDatasource("ccamV2", $query);
+
+    // Version 34 de la CCAM
+    $query = "SELECT *
+      FROM p_acte
+      WHERE CODE = 'HBQK389'";
+    //$this->addDatasource("ccamV2", $query);
   }
 }

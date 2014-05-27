@@ -17,6 +17,7 @@
       <th class="category" colspan="2">{{tr}}{{$class}}{{/tr}}</th>
     </tr>
     {{mb_include module=system template=inc_config_bool var=use_cotation_ccam}}
+    {{mb_include module=system template=inc_config_enum var=use_new_ccam_architecture values="CDatedCodeCCAM|COldCodeCCAM"}}
     
     {{assign var=class value=CCodable}}
     <tr>

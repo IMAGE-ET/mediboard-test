@@ -14,7 +14,7 @@
 $codeacte     = CValue::get("codeacte");
 $object_class = CValue::get("object_class");
 
-$code = CCodeCCAM::get($codeacte, CCodeCCAM::FULL);
+$code = CDatedCodeCCAM::get($codeacte);
 $favoris = new CFavoriCCAM();
 
 // Variable permettant de savoir si l'affichage du code complet est necessaire

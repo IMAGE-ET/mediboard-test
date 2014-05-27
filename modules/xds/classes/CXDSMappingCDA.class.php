@@ -391,7 +391,7 @@ class CXDSMappingCDA {
           $libelle = $cim10->libelle;
           break;
         case "ccam":
-          $ccam = CCodeCCAM::get($eventCode, CCodeCCAM::LITE);
+          $ccam = CDatedCodeCCAM::get($eventCode);
           $libelle = $ccam->libelleCourt;
           break;
         default:

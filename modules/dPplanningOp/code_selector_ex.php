@@ -63,7 +63,7 @@ foreach ($profiles as $profile => $_user_id) {
 
       foreach ($codes as $key => $value) {
         // Attention à bien cloner le code CCAM car on rajoute une champ à la volée
-        $list[$value["favoris_code"]] = CCodeCCAM::get($value["favoris_code"], CCodeCCAM::MEDIUM);
+        $list[$value["favoris_code"]] = CDatedCodeCCAM::get($value["favoris_code"]);
         $list[$value["favoris_code"]]->occ = "0";
       }
 
@@ -82,7 +82,7 @@ foreach ($profiles as $profile => $_user_id) {
 
       foreach ($codes as $key => $value) {
         // Attention à bien cloner le code CCAM car on rajoute une champ à la volée
-        $list[$value["code_acte"]] = CCodeCCAM::get($value["code_acte"], CCodeCCAM::MEDIUM);
+        $list[$value["code_acte"]] = CDatedCodeCCAM::get($value["code_acte"]);
         $list[$value["code_acte"]]->occ = $value["nb_acte"];
       }
 

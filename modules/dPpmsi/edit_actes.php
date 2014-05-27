@@ -28,7 +28,7 @@ $selOp->canDo();
 $selOp->_ref_sejour->loadRefsFwd();
 
 foreach ($selOp->_ext_codes_ccam as $key => $value) {
-  $selOp->_ext_codes_ccam[$key] = CCodeCCAM::get($value->code, CCodeCCAM::FULL);
+  $selOp->_ext_codes_ccam[$key] = CDatedCodeCCAM::get($value->code);
 }
 $selOp->getAssociationCodesActes();
 $selOp->loadPossibleActes();

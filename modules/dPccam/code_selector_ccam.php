@@ -79,7 +79,7 @@ foreach ($profiles as $profile => $_user_id) {
   }
 
   // Seek sur les codes, avec ou non l'inclusion de tous les codes
-  $code = new CCodeCCAM("");
+  $code = new CDatedCodeCCAM("");
   $where = null;
 
   if (!$_all_codes && (count($codes_stats) || count($codes_favoris))) {
@@ -105,7 +105,7 @@ foreach ($profiles as $profile => $_user_id) {
   
   foreach ($codes as $value) {
     $val_code = $value["CODE"];
-    $list[$val_code] = CCodeCCAM::get($val_code, CCodeCCAM::MEDIUM);
+    $list[$val_code] = CDatedCodeCCAM::get($val_code);
     $nb_acte = 0;
     if (isset($codes_stats[$val_code])) {
       $nb_acte = $codes_stats[$val_code]["nb_acte"];

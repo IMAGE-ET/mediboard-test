@@ -72,7 +72,7 @@ CStoredObject::massLoadBackRefs($interventions, "actes_ccam", null, $where);
 foreach ($interventions as $key => $_interv) {
   $_plage = $_interv->loadRefPlageOp();
 
-  $_interv->loadExtCodesCCAM(CCodeCCAM::MEDIUM);
+  $_interv->loadExtCodesCCAM();
   $codes_ccam = $_interv->_ext_codes_ccam;
 
   // Nombre d'acte cotés par le praticien et réinitialisation du count pour le cache
@@ -168,7 +168,7 @@ foreach ($consultations as $key => $_consult) {
   }
 
   // Chargemement des codes CCAM
-  $_consult->loadExtCodesCCAM(CCodeCCAM::MEDIUM);
+  $_consult->loadExtCodesCCAM();
   $codes_ccam = $_consult->_ext_codes_ccam;
 
   // Nombre d'acte cotés par le praticien et réinitialisation du count pour le cache

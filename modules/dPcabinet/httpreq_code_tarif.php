@@ -15,7 +15,7 @@ $codeacte = CValue::getOrSession("code");
 $callback = CValue::getOrSession("callback");
 
 // Chargement du code
-$code = CCodeCCAM::get($codeacte, CCodeCCAM::FULL);
+$code = CDatedCodeCCAM::get($codeacte);
 
 if (!$code->code) {
   $tarif = 0;

@@ -62,9 +62,9 @@ class CCodable extends CMbObject {
   // References
   /** @var CMediusers */
   public $_ref_anesth;
-  /** @var CCodeCCAM[] */
+  /** @var CDatedCodeCCAM[] */
   public $_ext_codes_ccam;
-  /** @var CCodeCCAM[] */
+  /** @var CDatedCodeCCAM[] */
   public $_ext_codes_ccam_princ;
 
 
@@ -175,7 +175,7 @@ class CCodable extends CMbObject {
       ) {
         $new_code = substr($this->codes_ccam, strlen($this->_old->codes_ccam)+1);
 
-        $code_ccam = new CCodeCCAM($new_code);
+        $code_ccam = new CDatedCodeCCAM($new_code);
         $code_ccam->getRemarques();
         $activites = $code_ccam->getActivites();
 
@@ -236,7 +236,7 @@ class CCodable extends CMbObject {
   function loadView() {
     parent::loadView();
     $this->loadRefsActesCCAM();
-    $this->loadExtCodesCCAM(CCodeCCAM::FULL);
+    $this->loadExtCodesCCAM();
   }
 
   /**
@@ -668,22 +668,20 @@ class CCodable extends CMbObject {
   /**
    * Charge les codes CCAM en tant qu'objets externes
    *
-   * @param int $niv niveau de chargement
-   *
    * @return void
    */
-  function loadExtCodesCCAM($niv = CCodeCCAM::LITE) {
+  function loadExtCodesCCAM() {
     $this->_ext_codes_ccam       = array();
     $this->_ext_codes_ccam_princ = array();
     if ($this->_codes_ccam !== null) {
       foreach ($this->_codes_ccam as $code) {
-        $code = CCodeCCAM::get($code, $niv);
+        $code = CDatedCodeCCAM::get($code, $this->_datetime);
         $this->_ext_codes_ccam[] = $code;
         if ($code->type != 2) {
           $this->_ext_codes_ccam_princ[] = $code;
         }
       }
-      CMbArray::ksortByProp($this->_ext_codes_ccam, "type", "code");
+      CMbArray::ksortByProp($this->_ext_codes_ccam, "type", "_sorted_tarif");
     }
   }
 
@@ -694,7 +692,7 @@ class CCodable extends CMbObject {
    *
    * @return array
    */
-  function loadRefsFraisDivers($num_facture = 1){
+  function loadRefsFraisDivers($num_facture = 1) {
     $this->_ref_frais_divers = $this->loadBackRefs("frais_divers");
     foreach ($this->_ref_frais_divers as $_frais) {
       if ($num_facture && $_frais->num_facture != $num_facture) {
@@ -930,7 +928,8 @@ class CCodable extends CMbObject {
     $this->loadRefPatient()->evalAge();
     $this->loadRefPraticien()->loadRefDiscipline();
 
-    $this->loadExtCodesCCAM(CCodeCCAM::FULL);
+    $this->loadExtCodesCCAM();
+
     foreach ($this->_ext_codes_ccam as $code_ccam) {
       foreach ($code_ccam->activites as $activite) {
         foreach ($activite->phases as $phase) {

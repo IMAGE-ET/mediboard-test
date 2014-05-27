@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage ccam
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
@@ -50,8 +50,7 @@ class CFavoriCCAM extends CMbObject {
    * @see parent::loadRefsFwd()
    */
   function loadRefsFwd() {
-    $this->_ref_code = CCodeCCAM::get($this->favoris_code, CCodeCCAM::LITE);
-    $this->_ref_code->getChaps();
+    $this->_ref_code = CDatedCodeCCAM::get($this->favoris_code);
   }
 
   /**
@@ -60,9 +59,9 @@ class CFavoriCCAM extends CMbObject {
    * @param int    $user_id    User id
    * @param string $class      Favori class name (CFavoriCCAM or CFavoriCIM10)
    * @param bool   $ref_favori boolean
-   * @param in     $tag_id     Tag id
+   * @param int     $tag_id     Tag id
    *
-   * @return void
+   * @return array The list ordered
    */
   static function getOrdered($user_id = 0, $class = null, $ref_favori = false, $tag_id = null) {
     $listOrdered = array();
@@ -83,8 +82,8 @@ class CFavoriCCAM extends CMbObject {
       $favoris = $fav->loadList($where, "favoris_code", null, null, $ljoin);
 
       foreach ($favoris as $_favori) {
-        /** @var CCodeCCAM $code */
-        $code = CCodeCCAM::get($_favori->favoris_code, CCodeCCAM::LITE);
+        /** @var CDatedCodeCCAM $code */
+        $code = CDatedCodeCCAM::get($_favori->favoris_code);
         $code->getChaps();
 
         $code->class = $_favori->object_class;
@@ -142,6 +141,7 @@ class CFavoriCCAM extends CMbObject {
    * @return void
    */
   static function getFavorisTree(&$subtree, $user_id, $favori_class) {
+    /** @var CMbObject $favori */
     $favori = new $favori_class;
 
     $table_name = $favori->_spec->table;

@@ -101,10 +101,10 @@ class CActeDentaire extends CMbObject {
   /**
    * Load the CCAM code object
    *
-   * @return CCodeCCAM
+   * @return CDatedCodeCCAM
    */
   function loadRefCodeCCAM() {
-    return $this->_ref_code_ccam = CCodeCCAM::get($this->code);  
+    return $this->_ref_code_ccam = CDatedCodeCCAM::get($this->code);
   }
 
   /**

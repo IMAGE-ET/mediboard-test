@@ -155,7 +155,7 @@ Main.add(function () {
             <td><strong>Remboursement</strong></td>
           </tr>
           <tr>
-            <td>{{tr}}CCodeCCAM.remboursement.{{$code->remboursement}}{{/tr}}</td>
+            <td>{{tr}}CDatedCodeCCAM.remboursement.{{$code->remboursement}}{{/tr}}</td>
           </tr>
         {{/if}}
         
@@ -164,7 +164,7 @@ Main.add(function () {
             <td><strong>Forfait spécifique</strong></td>
           </tr>
           <tr>
-            <td>{{tr}}CCodeCCAM.remboursement.{{$code->forfait}}{{/tr}}</td>
+            <td>{{tr}}CDatedCodeCCAM.remboursement.{{$code->forfait}}{{/tr}}</td>
           </tr>
         {{/if}}
       </table>
@@ -173,25 +173,29 @@ Main.add(function () {
     <td class="pane">
       <table>
         <tr>
-          <th class="category" colspan="2">Place dans la CCAM {{$code->place}}</th>
+          <th class="category">Place dans la CCAM {{$code->place}}</th>
         </tr>
         
         {{foreach from=$code->chapitres item=_chap}}
           <tr id="chap{{$_chap.rang}}-trigger">
-            <th style="text-align:left">{{$_chap.rang}}</th>
-            <td>{{$_chap.nom}}<br /></td>
+            <td>
+              {{$_chap.rang}}
+              <br />
+              {{$_chap.nom}}
+            </td>
           </tr>
           <tbody class="chapEffect" id="chap{{$_chap.rang}}">
             <tr>
-              <td></td>
               <td>
-                <em>
-                  {{if $_chap.rq}}
-                  {{$_chap.rq|nl2br}}
-                  {{else}}
-                  * Pas d'informations
-                  {{/if}}
-                </em>
+                <ul>
+                  <em>
+                    {{foreach from=$_chap.rq item=rq}}
+                      <li>{{$rq}}</li>
+                    {{foreachelse}}
+                      <li>Pas d'informations</li>
+                    {{/foreach}}
+                  </em>
+                </ul>
               </td>
             </tr>
           </tbody>
@@ -203,14 +207,22 @@ Main.add(function () {
     <td class="pane">
       <table>
         <tr>
-          <th class="category" colspan="2">Actes associés ({{$code->assos|@count}})</th>
+          <th class="category" colspan="2">Actes associés</th>
         </tr>
-        
-        {{foreach name=associations from=$code->assos item=_asso}}
+        {{foreach from=$code->activites item=_activite}}
           <tr>
-            <th><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;_codes_ccam={{$_asso.code}}">{{$_asso.code}}</a></th>
-            <td>{{$_asso.texte}}</td>
+            <td colspan="2"><strong>{{$_activite->type}} ({{$_activite->assos|@count}})</strong></td>
           </tr>
+          {{foreach name=associations from=$_activite->assos item=_asso}}
+            <tr>
+              <th>
+                <a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;_codes_ccam={{$_asso.code}}">
+                  {{$_asso.code}}
+                </a>
+              </th>
+              <td>{{$_asso.texte}}</td>
+            </tr>
+          {{/foreach}}
         {{/foreach}}
       </table>
     </td>
@@ -220,11 +232,19 @@ Main.add(function () {
         <tr>
           <th class="category" colspan="2">Actes incompatibles ({{$code->incomps|@count}})</th>
         </tr>
-        
+
         {{foreach name=incompatibilites from=$code->incomps item=_incomp}}
           <tr>
-            <th><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;_codes_ccam={{$_incomp.code}}">{{$_incomp.code}}</a></th>
+            <th>
+              <a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;_codes_ccam={{$_incomp.code}}">
+                {{$_incomp.code}}
+              </a>
+            </th>
             <td>{{$_incomp.texte}}</td>
+          </tr>
+        {{foreachelse}}
+          <tr>
+            <td colspan="2">Pas de code incompatible</td>
           </tr>
         {{/foreach}}
       </table>

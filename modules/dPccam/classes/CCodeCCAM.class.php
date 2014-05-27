@@ -3,6 +3,8 @@
 /**
  * dPccam
  *
+ * Classe des informations sur l'acte CCAM
+ *
  * @category Ccam
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -12,111 +14,75 @@
  */
 
 /**
- * Classe pour gérer le mapping avec la base de données CCAM
+ * Class CCodeCCAM
+ * Table p_acte
+ *
+ * Informations sur l'acte CCAM
+ * Niveau acte
  */
-class CCodeCCAM {
-  public $code;          // Code de l'acte
-  public $chapitres;     // Chapitres de la CCAM concernes
-  public $libelleCourt;  // Libelles
-  public $libelleLong;
-  public $place;         // Place dans la CCAM
-  public $remarques;     // Remarques sur le code
-  public $type;          // Type d'acte (isolé, procédure ou complément)
-  public $activites = array(); // Activites correspondantes
-  public $phases    = array(); // Nombre de phases par activités
-  public $incomps   = array(); // Incompatibilite
-  public $assos     = array(); // Associabilite
-  public $procedure;     // Procedure
-  public $remboursement; // Remboursement
-  public $forfait;       // Forfait spécifique (SEH1, SEH2, SEH3, SEH4)
-  public $couleur;       // Couleur du code par rapport à son chapitre
+class CCodeCCAM extends CCCAM {
+  // Infos sur le code
+  public $code;
+  public $libelle_court;
+  public $libelle_long;
+  public $type_acte;
+  public $_type_acte;
+  public $sexe_comp;
+  public $place_arbo;
+  public $date_creation;
+  public $date_fin;
+  public $frais_dep;
 
-  // Variable calculées
-  public $_code7; // Possibilité d'ajouter le modificateur 7 (0 : non, 1 : oui)
-  public $_default;
-  public $occ;
+  // Nature d'assurance permises
+  public $assurance;
+  // Classification du code dans l'arborescence
+  public $arborescence;
 
-  // Distant field
-  public $class;
-  public $favoris_id;
-  public $_ref_favori;
+  // Forfait spécifique permis par le code (table forfaits)
+  public $_forfait;
 
-  // Activités et phases recuperées depuis le code CCAM
+  // Références
+
+  // Infos historisées sur le code
+  /** @var  CInfoTarifCCAM[] */
+  public $_ref_infotarif;
+  // Procédures historisées
+  /** @var  CProcedureCCAM[] */
+  public $_ref_procedures;
+  // Notes
+  /** @var  CNoteCCAM[] */
+  public $_ref_notes;
+  // Incompatibilités médicales
+  /** @var  CIncompatibiliteCCAM[] */
+  public $_ref_incompatibilites;
+  // Activités
+  /** @var  CActiviteCCAM[] */
+  public $_ref_activites;
+
+  // Elements de référence pour la récupération d'informations
   public $_activite;
   public $_phase;
 
-  /** @var CMbObjectSpec */
-  public $_spec;
-
-  public $_couleursChap = array(
-    0  => "ffffff",
-    1  => "669966",
-    2  => "6666cc",
-    3  => "6699ee",
-    4  => "cc6633",
-    5  => "ee6699",
-    6  => "ff66ee",
-    7  => "33cc33",
-    8  => "66cc99",
-    9  => "99ccee",
-    10 => "cccc33",
-    11 => "eecc99",
-    12 => "ffccee",
-    13 => "33ff33",
-    14 => "66ff99",
-    15 => "99ffee",
-    16 => "ccff33",
-    17 => "eeff99",
-    18 => "ffffee",
-    19 => "cccccc",
-  );
-
-  // niveaux de chargement
-  const LITE   = 1;
-  const MEDIUM = 2;
-  const FULL   = 3;
-
-  static $cacheCount = 0;
-
-  static $useCount = array(
-    self::LITE   => 0,
-    self::MEDIUM => 0,
-    self::FULL   => 0,
-  );
-
-  /** @var CMbObjectSpec */
-  static $spec = null;
-
-  /**
-   * Get object spec
-   *
-   * @return CMbObjectSpec
-   */
-  static function getSpec() {
-    if (self::$spec) {
-      return self::$spec;
-    }
-
-    $spec = new CMbObjectSpec();
-    $spec->dsn = "ccamV2";
-    $spec->init();
-
-    return self::$spec = $spec;
-  }
+  // Utilisation du cache
+  static $useCache       = true;
+  static $cacheCount     = 0;
+  static $useCount       = 0;
+  static $cacheCountLite = 0;
+  static $useCountLite   = 0;
 
   /**
    * Constructeur à partir du code CCAM
    *
    * @param string $code Le code CCAM
    *
-   * @return self
+   * @return string|self
    */
   function __construct($code = null) {
     $this->_spec = self::getSpec();
 
     if (strlen($code) > 7) {
       if (!preg_match("/^[A-Z]{4}[0-9]{3}(-[0-9](-[0-9])?)?$/i", $code)) {
-         return "Le code $code n'est pas formaté correctement";
+        return "Le code $code n'est pas formaté correctement";
       }
 
       // Cas ou l'activite et la phase sont indiquées dans le code (ex: BFGA004-1-0)
@@ -134,527 +100,314 @@ class CCodeCCAM {
   }
 
   /**
-   * Methode de pré-serialisation
-   *
-   * @return array
-   */
-  function __sleep() {
-    $fields = get_object_vars($this);
-    unset($fields["_spec"]);
-    return array_keys($fields);
-  }
-
-  /**
-   * Méthode de "reveil" après serialisation
-   *
-   * @return void
-   */
-  function __wakeup() {
-    $this->_spec = self::getSpec();
-  }
-
-  /**
    * Chargement optimisé des codes CCAM
    *
    * @param string $code Code CCAM
-   * @param int    $niv  Niveau du chargement
    *
    * @return CCodeCCAM
    */
-  static function get($code, $niv = self::MEDIUM) {
-    self::$useCount[$niv]++;
-    if ($code_ccam = SHM::get("code_ccam-$code-$niv")) {
-      self::$cacheCount++;
-      return $code_ccam;
+  static function get($code) {
+    if (self::$useCache) {
+      self::$useCount++;
+      if ($code_ccam = SHM::get("codeccam-$code")) {
+        self::$cacheCount++;
+        return $code_ccam;
+      }
     }
-
     // Chargement
     $code_ccam = new CCodeCCAM($code);
-    $code_ccam->load($niv);
-
-    SHM::put("code_ccam-$code-$niv", $code_ccam);
+    $code_ccam->load();
+    if (self::$useCache) {
+      SHM::put("codeccam-$code", $code_ccam);
+    }
 
     return $code_ccam;
   }
 
   /**
-   * Chargement complet d'un code
-   * en fonction du niveau de profondeur demandé
+   * Chargement des informations liées à l'acte
+   * Table p_acte
    *
-   * @param int $niv Niveau de profondeur demandé
-   *
-   * @return void
+   * @return bool Existence ou pas du code CCAM
    */
-  function load($niv) {
-    if (!$this->getLibelles()) {
-      return;
-    }
+  function load() {
+    $ds = self::$spec->ds;
 
-    if ($niv == self::LITE) {
-      $this->getActivite7();
-    }
-
-    if ($niv >= self::LITE) {
-      $this->getTarification();
-      $this->getForfaitSpec();
-    }
-
-    if ($niv >= self::MEDIUM) {
-      $this->getChaps();
-      $this->getRemarques();
-      $this->getActivites();
-    }
-
-    if ($niv == self::FULL) {
-      $this->getActesAsso();
-      $this->getActesIncomp();
-      $this->getProcedure();
-    }
-  }
-
-  /**
-   * Récuparation des libellés du code
-   *
-   * @return bool
-   */
-  function getLibelles() {
-    $ds = $this->_spec->ds;
-    $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->code);
+    $query = "SELECT p_acte.*
+      FROM p_acte
+      WHERE p_acte.CODE = %";
+    $query = $ds->prepare($query, $this->code);
     $result = $ds->exec($query);
     if ($ds->numRows($result) == 0) {
       $this->code = "-";
-      //On rentre les champs de la table actes
-      $this->libelleCourt = "Acte inconnu ou supprimé";
-      $this->libelleLong = "Acte inconnu ou supprimé";
-      $this->_code7 = 1;
       return false;
     }
 
     $row = $ds->fetchArray($result);
-    //On rentre les champs de la table actes
-    $this->libelleCourt = $row["LIBELLECOURT"];
-    $this->libelleLong = $row["LIBELLELONG"];
-    $this->type        = $row["TYPE"];
+    $this->libelle_court  = $row["LIBELLECOURT"];
+    $this->libelle_long   = $row["LIBELLELONG"];
+    $this->type_acte      = $row["TYPE"];
+    $this->sexe_comp      = $row["SEXE"];
+    $this->place_arbo     = $row["PLACEARBORESCENCE"];
+    $this->date_creation  = $row["DATECREATION"];
+    $this->date_fin       = $row["DATEFIN"];
+    $this->frais_dep      = $row["DEPLACEMENT"];
+
+    $this->assurance = array();
+    $this->assurance[1]["db"]  = $row["ASSURANCE1"];
+    $this->assurance[2]["db"]  = $row["ASSURANCE2"];
+    $this->assurance[3]["db"]  = $row["ASSURANCE3"];
+    $this->assurance[4]["db"]  = $row["ASSURANCE4"];
+    $this->assurance[5]["db"]  = $row["ASSURANCE5"];
+    $this->assurance[6]["db"]  = $row["ASSURANCE6"];
+    $this->assurance[7]["db"]  = $row["ASSURANCE7"];
+    $this->assurance[8]["db"]  = $row["ASSURANCE8"];
+    $this->assurance[9]["db"]  = $row["ASSURANCE9"];
+    $this->assurance[10]["db"] = $row["ASSURANCE10"];
+
+    $this->arborescence = array();
+    $this->arborescence[1]["db"]  = $row["ARBORESCENCE1"];
+    $this->arborescence[2]["db"]  = $row["ARBORESCENCE2"];
+    $this->arborescence[3]["db"]  = $row["ARBORESCENCE3"];
+    $this->arborescence[4]["db"]  = $row["ARBORESCENCE4"];
+    $this->arborescence[5]["db"]  = $row["ARBORESCENCE5"];
+    $this->arborescence[6]["db"]  = $row["ARBORESCENCE6"];
+    $this->arborescence[7]["db"]  = $row["ARBORESCENCE7"];
+    $this->arborescence[8]["db"]  = $row["ARBORESCENCE8"];
+    $this->arborescence[9]["db"]  = $row["ARBORESCENCE9"];
+    $this->arborescence[10]["db"] = $row["ARBORESCENCE10"];
+
+    $this->loadTypeLibelle();
+    $this->getForfaitSpec();
+    $this->loadRefProcedures();
+    $this->loadRefNotes();
+    $this->loadRefIncompatibilites();
+
+    $this->loadArborescence();
+    $this->loadAssurance();
+    $this->loadRefInfoTarif();
+    foreach ($this->_ref_infotarif as $_info_tarif) {
+      $_info_tarif->loadLibelleExo();
+      $_info_tarif->loadLibellePresc();
+      $_info_tarif->loadLibelleForfait();
+    }
+    $this->loadRefActivites();
+    foreach ($this->_ref_activites as $_activite) {
+      $_activite->loadLibelle();
+      $_activite->loadRefAssociations();
+      $_activite->loadRefConvergence();
+      $_activite->loadRefModificateurs();
+      foreach ($_activite->_ref_modificateurs as $_date_modif) {
+        foreach ($_date_modif as $_modif) {
+          $_modif->loadLibelle();
+        }
+      }
+      $_activite->loadRefClassif();
+      foreach ($_activite->_ref_classif as $_classif) {
+        $_classif->loadCatMed();
+        $_classif->loadRegroupement();
+      }
+      $_activite->loadRefPhases();
+      foreach ($_activite->_ref_phases as $_phase) {
+        $_phase->loadRefInfo();
+        $_phase->loadRefDentsIncomp();
+        foreach ($_phase->_ref_dents_incomp as $_dent) {
+          $_dent->loadRefDent();
+          $_dent->_ref_dent->loadLibelle();
+        }
+      }
+    }
+
     return true;
   }
 
   /**
-   * Vérification de l'existence du moficiateur 7 pour l'acte
+   * Chargement des informations historisées de l'acte
+   * Table p_acte_infotarif
    *
-   * @return void
+   * @return CInfoTarifCCAM[] La liste des informations historisées
    */
-  function getActivite7() {
-    $ds = $this->_spec->ds;
-    // recherche de la dernière date d'effet
-    $query1 = "SELECT MAX(DATEEFFET) as LASTDATE FROM modificateuracte WHERE ";
-    $query1 .= $ds->prepare("CODEACTE = %", $this->code);
-    $query1 .= " GROUP BY CODEACTE";
-    $result1 = $ds->exec($query1);
-    // Chargement des modificateurs
-    if ($ds->numRows($result1)) {
-      $row = $ds->fetchArray($result1);
-      $lastDate = $row["LASTDATE"];
-      $query2 = "SELECT * FROM modificateuracte WHERE ";
-      $query2 .= $ds->prepare("CODEACTE = %", $this->code);
-      $query2 .= " AND CODEACTIVITE = '4'";
-      $query2 .= " AND MODIFICATEUR = '7'";
-      $query2 .= " AND DATEEFFET = '$lastDate'";
-      $result2 = $ds->exec($query2);
-      $this->_code7 = $ds->numRows($result2);
-    }
-    else {
-      $this->_code7 = 1;
-    }
+  function loadRefInfoTarif() {
+    return $this->_ref_infotarif = CInfoTarifCCAM::loadListFromCode($this->code);
   }
 
   /**
-   * Récupération de la possibilité de remboursement de l'acte
+   * Chargement des procédures de l'acte
+   * Table p_acte_procedure
    *
-   * @return void
+   * @return CProcedureCCAM[] La liste des procédures
    */
-  function getTarification() {
-    $ds = $this->_spec->ds;
-    $query = $ds->prepare("SELECT * FROM infotarif WHERE CODEACTE = % ORDER BY DATEEFFET DESC", $this->code);
+  function loadRefProcedures() {
+    return $this->_ref_procedures = CProcedureCCAM::loadListFromCode($this->code);
+  }
+
+  /**
+   * Chargement des notes de l'acte
+   * Table p_acte_notes
+   *
+   * @return CNoteCCAM[] La liste des notes
+   */
+  function loadRefNotes() {
+    return $this->_ref_notes = CNoteCCAM::loadListFromCode($this->code);
+  }
+
+  /**
+   * Chargement des incompatibilités de l'acte
+   * Table p_acte_incompatibilite
+   *
+   * @return CIncompatibiliteCCAM[] La liste des incompatibilités
+   */
+  function loadRefIncompatibilites() {
+    return $this->_ref_incompatibilites = CIncompatibiliteCCAM::loadListFromCode($this->code);
+  }
+
+  /**
+   * Chargement des activités de l'acte
+   * Table p_activite
+   *
+   * @return CActiviteCCAM[] La liste des activités
+   */
+  function loadRefActivites() {
+    $exclude = array();
+    if ($this->arborescence[1]["db"] == "000018" && $this->arborescence[2]["db"] == "000001") {
+      $exclude[] = "'1'";
+    }
+    return $this->_ref_activites = CActiviteCCAM::loadListFromCode($this->code, $exclude);
+  }
+
+  /**
+   * Chargement du libellé du type
+   * Table c_typeacte
+   *
+   * @return string Libellé du type
+   */
+  function loadTypeLibelle() {
+    $ds = self::$spec->ds;
+    $query = "SELECT *
+      FROM c_typeacte
+      WHERE c_typeacte.CODE = %";
+    $query = $ds->prepare($query, $this->type_acte);
     $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
-    $this->remboursement = $row["REMBOURSEMENT"];
+    $this->_type_acte = $row["LIBELLE"];
   }
 
   /**
    * Récupération du type de forfait de l'acte
    * (forfait spéciaux des listes SEH)
+   * Table forfaits
    *
-   * @return void
+   * @return string Le forfait
    */
   function getForfaitSpec() {
-    $ds = $this->_spec->ds;
-    $query = $ds->prepare("SELECT * FROM forfaits WHERE CODE = %", $this->code);
-    $result = $ds->exec($query);
-    $row = $ds->fetchArray($result);
-    $this->forfait = $row["forfait"];
-  }
-
-  /**
-   * Chargement des chapitres de l'acte
-   *
-   * @return void
-   */
-  function getChaps() {
-    $ds = $this->_spec->ds;
-    $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->code);
-    $result = $ds->exec($query);
-    $row = $ds->fetchArray($result);
-
-    // On rentre les champs de la table actes
-    $this->couleur = $this->_couleursChap[intval($row["ARBORESCENCE1"])];
-    $this->chapitres[0]["db"] = $row["ARBORESCENCE1"];
-    $this->chapitres[1]["db"] = $row["ARBORESCENCE2"];
-    $this->chapitres[2]["db"] = $row["ARBORESCENCE3"];
-    $this->chapitres[3]["db"] = $row["ARBORESCENCE4"];
-    $pere = "000001";
-    $track = "";
-
-    // On rentre les infos sur les chapitres
-    foreach ($this->chapitres as $key => $value) {
-      $rang = $this->chapitres[$key]["db"];
-      $query = $ds->prepare("SELECT * FROM arborescence WHERE CODEPERE = %1 AND rang = %2", $pere, $rang);
-      $result = $ds->exec($query);
-      $row = $ds->fetchArray($result);
-
-      $query = $ds->prepare("SELECT * FROM notesarborescence WHERE CODEMENU = %", $row["CODEMENU"]);
-      $result2 = $ds->exec($query);
-
-      $track .= substr($row["RANG"], -2) . ".";
-      $this->chapitres[$key]["rang"] = $track;
-      $this->chapitres[$key]["code"] = $row["CODEMENU"];
-      $this->chapitres[$key]["nom"] = $row["LIBELLE"];
-      $this->chapitres[$key]["rq"] = "";
-      while ($row2 = $ds->fetchArray($result2)) {
-        $this->chapitres[$key]["rq"] .= "* " . str_replace("¶", "\n", $row2["TEXTE"]) . "\n";
-      }
-      $pere = $this->chapitres[$key]["code"];
-    }
-    $this->place = $this->chapitres[3]["rang"];
-  }
-
-  /**
-   * Chargement des remarques sur l'acte
-   *
-   * @return void
-   */
-  function getRemarques() {
-    $ds = $this->_spec->ds;
-    $this->remarques = array();
-    $query = $ds->prepare("SELECT * FROM notes WHERE CODEACTE = %", $this->code);
-    $result = $ds->exec($query);
-    while ($row = $ds->fetchArray($result)) {
-      $this->remarques[] = str_replace("¶", "\n", $row["TEXTE"]);
-    }
-  }
-
-  /**
-   * Chargement des activités de l'acte
-   *
-   * @return array La liste des activités
-   */
-  function getActivites() {
-    $this->getChaps();
-    $ds = $this->_spec->ds;
-    // Extraction des activités
-    $query = "SELECT ACTIVITE AS numero
-              FROM activiteacte
-              WHERE CODEACTE = %";
+    $ds = self::$spec->ds;
+    $query = "SELECT *
+      FROM forfaits
+      WHERE forfaits.CODE = %";
     $query = $ds->prepare($query, $this->code);
     $result = $ds->exec($query);
-    while ($obj = $ds->fetchObject($result)) {
-      $obj->libelle = "";
-      // On ne met pas l'activité 1 pour les actes du chapitre 18.01
-      if ($this->chapitres[0]["db"] != "000018" || $this->chapitres[1]["db"] != "000001" || $obj->numero != "1") {
-        $this->activites[$obj->numero] = $obj;
-      }
-    }
-    // Libellés des activités
-    foreach ($this->remarques as $remarque) {
-      $match = null;
-      if (preg_match("/Activité (\d) : (.*)/i", $remarque, $match)) {
-        $this->activites[$match[1]]->libelle = $match[2];
-      }
-    }
-    // Détail des activités
-    foreach ($this->activites as &$activite) {
-      // Type de l'activité
-      $query = "SELECT LIBELLE AS `type`
-                FROM activite
-                WHERE CODE = %";
-      $query = $ds->prepare($query, $activite->numero);
-      $result = $ds->exec($query);
-      $obj = $ds->fetchObject($result);
-      $activite->type = $obj->type;
-      // Modificateurs de l'activite
-      $this->getModificateursFromActivite($activite);
-      $this->getPhasesFromActivite($activite);
-    }
-    // Test de la présence d'activité virtuelle
-    /**
-    if (isset($this->activites[1]) && isset($this->activites[4])) {
-      if (isset($this->activites[1]->phases[0]) && isset($this->activites[4]->phases[0])) {
-        if ($this->activites[1]->phases[0]->tarif && !$this->activites[4]->phases[0]->tarif) {
-          unset($this->activites[4]);
-        }
-        if (!$this->activites[1]->phases[0]->tarif && $this->activites[4]->phases[0]->tarif) {
-          unset($this->activites[1]);
-        }
-      }
-    }
-    **/
-    $this->_default = reset($this->activites);
-    if (isset($this->_default->phases[0])) {
-      $this->_default = $this->_default->phases[0]->tarif;
-    }
-    else {
-      $this->_default = 0;
-    }
-
-    return $this->activites;
-  }
-
-  /**
-   * Récupération des modificateurs de convergence
-   * pour une activité donnée
-   *
-   * @param array $activite Activité concernée
-   *
-   * @return object liste de modificateurs de convergence disponibles
-   */
-  function getConvergenceFromActivite($activite) {
-    $ds = $this->_spec->ds;
-    // Recherche de la ligne des modificateurs de convergence
-    $query = "SELECT *
-              FROM convergence
-              WHERE convergence.code = %1
-                AND convergence.activite = %2";
-    $query = $ds->prepare($query, $this->code, $activite->numero);
-    $result = $ds->exec($query);
-    return $convergence = $ds->fetchObject($result);
-  }
-
-  /**
-   * Récupération des modificateurs d'une activité
-   *
-   * @param array &$activite Activité concernée
-   *
-   * @return void
-   */
-  function getModificateursFromActivite(&$activite) {
-    $convergence = $this->getConvergenceFromActivite($activite);
-    $listModifConvergence = array("X", "I", "9", "O");
-    $ds = $this->_spec->ds;
-    // recherche de la dernière date d'effet
-    $query = "SELECT MAX(DATEEFFET) AS LASTDATE
-              FROM modificateuracte
-              LEFT JOIN modificateurforfait
-                ON modificateuracte.MODIFICATEUR = modificateurforfait.CODE
-                AND modificateurforfait.DATEFIN = 00000000
-              WHERE modificateuracte.CODEACTE = %1
-                AND modificateurforfait.CODE IS NOT NULL
-              GROUP BY modificateuracte.CODEACTE";
-    $query = $ds->prepare($query, $this->code, $activite->numero);
-    $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
-    $lastDate = $row["LASTDATE"];
-    // Extraction des modificateurs
-    $activite->modificateurs = array();
-    $modificateurs =& $activite->modificateurs;
-    $query = "SELECT modificateuracte.MODIFICATEUR
-              FROM modificateuracte
-              WHERE modificateuracte.CODEACTE = %1
-                AND modificateuracte.CODEACTIVITE = %2
-                AND modificateuracte.DATEEFFET = '$lastDate'
-              GROUP BY modificateuracte.MODIFICATEUR";
-    $query = $ds->prepare($query, $this->code, $activite->numero);
-    $result = $ds->exec($query);
-
-    while ($row = $ds->fetchArray($result)) {
-      $query = "SELECT modificateur.CODE AS code, modificateur.LIBELLE AS libelle
-                FROM modificateur
-                WHERE CODE = %
-                ORDER BY CODE";
-      $query = $ds->prepare($query, $row["MODIFICATEUR"]);
-      $_modif = $ds->fetchObject($ds->exec($query));
-
-      // Cas d'un modificateur de convergence
-      if (in_array($row["MODIFICATEUR"], $listModifConvergence)) {
-        $simple = "mod".$row["MODIFICATEUR"];
-        $double = "mod".$row["MODIFICATEUR"].$row["MODIFICATEUR"];
-        if ($convergence->$simple) {
-          $_modif->_double = "1";
-          $modificateurs[] = $_modif;
-        }
-        if ($convergence->$double) {
-          $_double_modif = clone $_modif;
-          $_double_modif->_double = "2";
-          $modificateurs[] = $_double_modif;
-        }
-      }
-      // Cas d'un modificateur normal
-      else {
-        $_modif->_double = "1";
-        $modificateurs[] = $_modif;
-      }
-    }
+    $this->_forfait = $row["forfait"];
   }
 
   /**
-   * Récupération des phases d'une activité
+   * Chargement des libellés des assurances
+   * Table c_natureassurance
    *
-   * @param array &$activite Activité concernée
-   *
-   * @return void
+   * @return array Liste des assurances
    */
-  function getPhasesFromActivite(&$activite) {
-    $ds = $this->_spec->ds;
-    // Extraction des phases
-    $activite->phases = array();
-    $phases =& $activite->phases;
-    $query = "SELECT phaseacte.PHASE AS phase,
-                phaseacte.PRIXUNITAIRE AS tarif,
-                phaseacte.CHARGESCAB charges
-              FROM phaseacte
-              WHERE phaseacte.CODEACTE = %1
-                AND phaseacte.ACTIVITE = %2
-              GROUP BY phaseacte.PHASE
-              ORDER BY phaseacte.PHASE, phaseacte.DATE1 DESC";
-    $query = $ds->prepare($query, $this->code, $activite->numero);
-    $result = $ds->exec($query);
-
-    while ($obj = $ds->fetchObject($result)) {
-      $phases[$obj->phase] = $obj;
-      $phase =& $phases[$obj->phase];
-      $phase->tarif = floatval($obj->tarif)/100;
-      $phase->libelle = "Phase Principale";
-      $phase->charges = floatval($obj->charges)/100;
-
-      // Copie des modificateurs pour chaque phase. Utile pour la salle d'op
-      $phase->_modificateurs = $phase->tarif ? $activite->modificateurs : array();
-    }
-
-    // Libellés des phases
-    foreach ($this->remarques as $remarque) {
-      if (preg_match("/Phase (\d) : (.*)/i", $remarque, $match)) {
-        if (isset($phases[$match[1]])) {
-          $phases[$match[1]]->libelle = $match[2];
-        }
+  function loadAssurance() {
+    $ds = self::$spec->ds;
+    foreach ($this->assurance as &$assurance) {
+      if (!$assurance["db"]) {
+        continue;
       }
-    }
-  }
-
-  /**
-   * Récupération des actes associés (compléments / suppléments
-   *
-   * @param string $code  Chaine de caractère à trouver dans les résultats
-   * @param int    $limit Nombre max de codes retournés
-   *
-   * @return void
-   */
-  function getActesAsso($code = null, $limit = null) {
-    if ($this->type == 2) {
-      return;
-    }
-    $ds = $this->_spec->ds;
-    $queryEffet = $ds->prepare(
-      "SELECT MAX(DATEEFFET) as LASTDATE FROM associabilite WHERE CODEACTE = % GROUP BY CODEACTE",
-      $this->code
-    );
-    $resultEffet = $ds->exec($queryEffet);
-    $rowEffet = $ds->fetchArray($resultEffet);
-    $lastDate = $rowEffet["LASTDATE"];
-    if ($code) {
-      $code_explode = explode(" ", $code);
-      $codeLike = array();
-      foreach ($code_explode as $value) {
-        $codeLike[] = "LIBELLELONG LIKE '%".addslashes($value) . "%'";
-      }
-
-      $query = "SELECT * FROM associabilite
-        LEFT JOIN actes ON associabilite.ACTEASSO = actes.CODE
-        WHERE CODEACTE = '$this->code'
-        AND DATEEFFET = '$lastDate'
-        AND (CODE LIKE '$code%'
-          OR (".implode(" OR ", $codeLike)."))
-        GROUP BY ACTEASSO";
-    }
-    else {
-      $query = $ds->prepare(
-        "SELECT * FROM associabilite WHERE CODEACTE = % AND DATEEFFET = '$lastDate' GROUP BY ACTEASSO",
-        $this->code
-      );
-    }
-    if ($limit) {
-      $query .= " LIMIT $limit";
-    }
-    $result = $ds->exec($query);
-    $i = 0;
-    while ($row = $ds->fetchArray($result)) {
-      $this->assos[$i]["code"] = $row["ACTEASSO"];
-      $query2 = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", trim($row["ACTEASSO"]));
-      $result2 = $ds->exec($query2);
-      $row2 = $ds->fetchArray($result2);
-      $this->assos[$i]["texte"] = $row2["LIBELLELONG"];
-      $i++;
-    }
-  }
-
-  /**
-   * Récupération de la liste des actes incompatibles à l'acte
-   *
-   * @return void
-   */
-  function getActesIncomp() {
-    $ds = $this->_spec->ds;
-    $queryEffet = $ds->prepare(
-      "SELECT MAX(DATEEFFET) as LASTDATE FROM incompatibilite WHERE CODEACTE = % GROUP BY CODEACTE",
-      $this->code
-    );
-    $resultEffet = $ds->exec($queryEffet);
-    $rowEffet = $ds->fetchArray($resultEffet);
-    $lastDate = $rowEffet["LASTDATE"];
-    $query = $ds->prepare(
-      "SELECT * FROM incompatibilite WHERE CODEACTE = % AND DATEEFFET = '$lastDate' GROUP BY INCOMPATIBLE",
-      $this->code
-    );
-    $result = $ds->exec($query);
-    $i = 0;
-    while ($row = $ds->fetchArray($result)) {
-      $this->incomps[$i]["code"] = trim($row["INCOMPATIBLE"]);
-      $query2 = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", trim($row["INCOMPATIBLE"]));
-      $result2 = $ds->exec($query2);
-      $row2 = $ds->fetchArray($result2);
-      $this->incomps[$i]["texte"] = $row2["LIBELLELONG"];
-      $i++;
-    }
-  }
-
-  /**
-   * Récupération de la procédure liée à l'acte
-   *
-   * @return void
-   */
-  function getProcedure() {
-    $ds = $this->_spec->ds;
-    $query = $ds->prepare("SELECT * FROM procedures WHERE CODEACTE = % GROUP BY CODEACTE ORDER BY DATEEFFET DESC", $this->code);
-    $result = $ds->exec($query);
-    if ($ds->numRows($result) > 0) {
+      $query = "SELECT *
+        FROM c_natureassurance
+        WHERE c_natureassurance.CODE = %";
+      $query = $ds->prepare($query, $assurance["db"]);
+      $result = $ds->exec($query);
       $row = $ds->fetchArray($result);
-      $this->procedure["code"] = $row["CODEPROCEDURE"];
-      $query2 = $ds->prepare("SELECT LIBELLELONG FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->procedure["code"]);
-      $result2 = $ds->exec($query2);
-      $row2 = $ds->fetchArray($result2);
-      $this->procedure["texte"] = $row2["LIBELLELONG"];
+      $assurance["libelle"] = $row["LIBELLE"];
     }
-    else {
-      $this->procedure["code"] = "aucune";
-      $this->procedure["texte"] = "";
+  }
+
+  /**
+   * Chargement des informations de l'arborescence du code
+   * Table c_arborescence
+   *
+   * @return array Arborescence complète
+   */
+  function loadArborescence() {
+    $ds = self::$spec->ds;
+    $pere  = "000001";
+    $track = "";
+    foreach ($this->arborescence as &$chapitre) {
+      $rang = $chapitre["db"];
+      if ($rang == "00000") {
+        break;
+      }
+      $query = "SELECT *
+        FROM c_arborescence
+        WHERE c_arborescence.CODEPERE = %1
+          AND c_arborescence.RANG = %2";
+      $query = $ds->prepare($query, $pere, $rang);
+      $result = $ds->exec($query);
+      $row = $ds->fetchArray($result);
+
+      if (!substr($row["RANG"], -2)) {
+        break;
+      }
+      $track .= substr($row["RANG"], -2) . ".";
+      $chapitre["rang"] = $track;
+      $chapitre["code"] = $row["CODEMENU"];
+      $chapitre["nom"]  = $row["LIBELLE"];
+      $chapitre["rq"]   = array();
+      $queryNotes = "SELECT *
+        FROM c_notesarborescence
+        WHERE c_notesarborescence.CODEMENU = %";
+      $queryNotes = $ds->prepare($queryNotes, $chapitre["code"]);
+      $resultNotes = $ds->exec($queryNotes);
+      while ($rowNotes = $ds->fetchArray($resultNotes)) {
+        $chapitre["rq"][] = str_replace("¶", "\n", $rowNotes["TEXTE"]);
+      }
+      $pere = $chapitre["code"];
     }
+    return $this->arborescence;
+  }
+
+
+
+  /**
+   * Récupération des informations minimales d'un code
+   * Non caché
+   *
+   * @param string $code Code CCAM
+   *
+   * @return array()
+   */
+  static function getCodeInfos($code) {
+    if (self::$useCache) {
+      self::$useCountLite++;
+      if ($code_ccam = SHM::get("codeccamlite-$code")) {
+        self::$cacheCountLite++;
+        return $code_ccam;
+      }
+    }
+
+    // Chargement
+    $ds = self::$spec->ds;
+
+    $query = "SELECT p_acte.CODE, p_acte.LIBELLELONG, p_acte.TYPE
+        FROM p_acte
+        WHERE p_acte.CODE = %";
+    $query = $ds->prepare($query, $code);
+    $result = $ds->exec($query);
+    $code_ccam = $ds->fetchArray($result);
+    if (self::$useCache) {
+      SHM::put("codeccamlite-$code", $code_ccam);
+    }
+    return $code_ccam;
   }
 
   /**
@@ -664,9 +417,13 @@ class CCodeCCAM {
    *
    * @return array forfait et coefficient
    */
-  function getForfait($modificateur) {
-    $ds = $this->_spec->ds;
-    $query = $ds->prepare("SELECT * FROM modificateurforfait WHERE CODE = % AND DATEFIN = '00000000'", $modificateur);
+  static function getForfait($modificateur) {
+    $ds = self::$spec->ds;
+    $query = "SELECT *
+        FROM t_modificateurforfait
+        WHERE CODE = %
+          AND DATEFIN = '00000000'";
+    $query = $ds->prepare($query, $modificateur);
     $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
     $valeur = array();
@@ -682,7 +439,9 @@ class CCodeCCAM {
    *
    * @return float
    */
-  function getCoeffAsso($code) {
+  static function getCoeffAsso($code) {
+    $ds = self::$spec->ds;
+
     if ($code == "X") {
       return 0;
     }
@@ -691,9 +450,8 @@ class CCodeCCAM {
       return 100;
     }
 
-    $ds = $this->_spec->ds;
     $query = $ds->prepare(
-      "SELECT * FROM association WHERE CODE = % AND DATEFIN = '00000000'",
+      "SELECT * FROM t_association WHERE CODE = % AND DATEFIN = '00000000'",
       $code
     );
     $result = $ds->exec($query);
@@ -712,12 +470,12 @@ class CCodeCCAM {
    *
    * @return array Tableau d'actes
    */
-  function findCodes($code='', $keys='', $max_length = null, $where = null) {
-    $ds = $this->_spec->ds;
+  static function findCodes($code='', $keys='', $max_length = null, $where = null) {
+    $ds = self::getSpec()->ds;
 
     $query = "SELECT CODE, LIBELLELONG
-              FROM actes
-              WHERE DATEFIN = '00000000' ";
+                FROM p_acte
+                WHERE DATEFIN = '00000000'";
 
     $keywords = explode(" ", $keys);
     $codes    = explode(" ", $code);
@@ -783,13 +541,16 @@ class CCodeCCAM {
   /**
    * Récupération des actes radio
    *
+   * @param string $code Code de l'acte
+   *
    * @return array Tableau des actes
    */
-  function getActeRadio() {
-    $ds = $this->_spec->ds;
+  static function getActeRadio($code) {
+    $ds = self::$spec->ds;
+
     $query = "SELECT code
-      FROM ccam_radio
-      WHERE code_saisi LIKE '%$this->code%'";
+        FROM ccam_radio
+        WHERE code_saisi LIKE '%$code%'";
     return $ds->loadResult($query);
   }
 }

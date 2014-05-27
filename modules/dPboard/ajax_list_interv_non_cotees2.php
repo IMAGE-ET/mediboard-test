@@ -70,7 +70,7 @@ foreach ($plages as $_plage_id => $_plage) {
     }
     
     $actes_ccam = $_operation->loadRefsActesCCAM();
-    $_operation->loadExtCodesCCAM(CCodeCCAM::MEDIUM);
+    $_operation->loadExtCodesCCAM();
     $codes_ccam = $_operation->_ext_codes_ccam;
     
     $activites = CMbArray::pluck($codes_ccam, "activites");
@@ -106,7 +106,7 @@ $hors_plage = $operation->loadList($where);
 foreach ($hors_plage as $key => $_operation) {
   $actes_ccam = $_operation->loadRefsActesCCAM();
   
-  $_operation->loadExtCodesCCAM(CCodeCCAM::MEDIUM);
+  $_operation->loadExtCodesCCAM();
   $codes_ccam = $_operation->_ext_codes_ccam;
   
   $activites = CMbArray::pluck($codes_ccam, "activites");

@@ -2,7 +2,8 @@
 
 $dPconfig["dPccam"] = array (
   "CCodeCCAM" => array(
-    "use_cotation_ccam" =>"1"
+    "use_cotation_ccam" =>"1",
+    "use_new_ccam_architecture" => "CDatedCodeCCAM",
   ),
   "CCodable" => array (
     "use_getMaxCodagesActes" => "1",

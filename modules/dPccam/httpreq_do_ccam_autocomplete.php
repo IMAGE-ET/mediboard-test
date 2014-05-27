@@ -16,10 +16,10 @@ CCanDo::checkRead();
 $keywords = CValue::request("_codes_ccam", "%%");
 
 $codes = array();
-$code = new CCodeCCAM();
+$code = new CDatedCodeCCAM();
 foreach ($code->findCodes($keywords, $keywords) as $_code) {
   $_code_value = $_code["CODE"];
-  $codes[$_code_value] = CCodeCCAM::get($_code_value, CCodeCCAM::MEDIUM);
+  $codes[$_code_value] = CDatedCodeCCAM::get($_code_value);
 }
 
 // Création du template

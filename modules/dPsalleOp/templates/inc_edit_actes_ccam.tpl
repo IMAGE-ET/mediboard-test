@@ -68,7 +68,7 @@
       {{$_code->libelleLong}}
     </span>
     {{if $_code->forfait}}
-      <small style="color: #f00">({{tr}}CCodeCCAM.remboursement.{{$_code->forfait}}{{/tr}})</small>
+      <small style="color: #f00">({{tr}}CDatedCodeCCAM.remboursement.{{$_code->forfait}}{{/tr}})</small>
     {{/if}}
   </legend>
   <table class="main">
@@ -230,7 +230,7 @@
               <tr class="{{$view}}">
                 <th>
                   {{mb_label object=$acte field=rembourse}}<br />
-                  <small><em>({{tr}}CCodeCCAM.remboursement.{{$_code->remboursement}}{{/tr}})</em></small>
+                  <small><em>({{tr}}CDatedCodeCCAM.remboursement.{{$_code->remboursement}}{{/tr}})</em></small>
                 </th>
                 <td>
                   {{assign var=disabled value=""}}

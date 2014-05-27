@@ -11,5 +11,11 @@
  * @link     http://www.mediboard.org
  */
 
-$count = SHM::remKeys("code_ccam-*");
+
+$count     = SHM::remKeys("code_ccam-*");
+CAppUI::stepAjax("module-ccam-msg-cache-code_ccam_old-suppr", UI_MSG_OK, $count);
+
+$count     = SHM::remKeys("codeccam-*");
+$countLite = SHM::remKeys("codeccamlite-*");
 CAppUI::stepAjax("module-ccam-msg-cache-code_ccam-suppr", UI_MSG_OK, $count);
+CAppUI::stepAjax("module-ccam-msg-cache-code_ccam_lite-suppr", UI_MSG_OK, $countLite);

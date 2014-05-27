@@ -325,7 +325,7 @@ class CCodeCIM10 {
    * Should use clone with appropriate behaviour
    * But a bit complicated to implement
    *
-   * @return CCodeCCAM
+   * @return CCodeCIM10
    */
   function copy() {
     $obj = unserialize(serialize($this));

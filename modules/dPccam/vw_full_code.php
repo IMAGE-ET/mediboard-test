@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage ccam
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -14,7 +14,7 @@ $codeacte     = CValue::getOrSession("_codes_ccam");
 $object_class = CValue::get("object_class");
 $hideSelect   = CValue::get("hideSelect", 0);
 
-$code = CCodeCCAM::get($codeacte, CCodeCCAM::FULL);
+$code = CDatedCodeCCAM::get($codeacte);
 
 // Variable permettant de savoir si l'affichage du code complet est necessaire
 $codeComplet = false;

@@ -267,7 +267,7 @@ class CProtocole extends CMbObject {
   function loadExtCodesCCAM() {
     $this->_ext_codes_ccam = array();
     foreach ($this->_codes_ccam as $code) {
-      $this->_ext_codes_ccam[] = CCodeCCAM::get($code, CCodeCCAM::LITE);
+      $this->_ext_codes_ccam[] = CDatedCodeCCAM::get($code);
     }
   }
 

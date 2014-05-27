@@ -136,13 +136,15 @@
   <tr>
   {{/if}}
     <td>
+      <span class="compact" style="float: right;">
+        {{tr}}CDatedCodeCCAM.type.{{$curr_code->type}}{{/tr}}</span>
       <strong>
-        <a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}=vw_full_code&amp;_codes_ccam={{$curr_code.code}}&amp;object_class={{$object_class}}">
-          {{$curr_code.code}}
+        <a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}=vw_full_code&amp;_codes_ccam={{$curr_code->code}}&amp;object_class={{$object_class}}">
+          {{$curr_code->code}}
         </a>
       </strong>
       <br />
-      {{$curr_code.texte}}
+      {{$curr_code->libelleLong}}
     </td>
   {{if ($curr_key+1) is div by 4 or ($curr_key+1) == $codes|@count}}
   </tr>

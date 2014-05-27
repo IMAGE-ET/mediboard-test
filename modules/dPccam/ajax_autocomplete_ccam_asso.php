@@ -16,14 +16,14 @@ CCanDo::checkRead();
 $code     = CValue::get("code");
 $keywords = CValue::post("keywords");
 
-$code_ccam = new CCodeCCAM($code);
+$code_ccam = CDatedCodeCCAM::get($code);
 $code_ccam->getActesAsso($keywords, 30);
 
 $codes = array();
 
 foreach ($code_ccam->assos as $_code) {
   $_code_value = $_code['code'];
-  $codes[$_code_value] = CCodeCCAM::get($_code_value, CCodeCCAM::MEDIUM);
+  $codes[$_code_value] = CDatedCodeCCAM::get($_code_value);
 }
 
 $smarty = new CSmartyDP();

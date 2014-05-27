@@ -20,7 +20,7 @@ $operation->isCoded();
 $operation->canDo();
 $operation->_ref_sejour->loadRefsFwd();
 foreach ($operation->_ext_codes_ccam as $key => $value) {
-  $operation->_ext_codes_ccam[$key] = CCodeCCAM::get($value->code, CCodeCCAM::FULL);
+  $operation->_ext_codes_ccam[$key] = CDatedCodeCCAM::get($value->code);
 }
 $operation->getAssociationCodesActes();
 $operation->loadPossibleActes();

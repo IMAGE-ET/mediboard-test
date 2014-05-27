@@ -135,7 +135,7 @@
             </tr>
             
             <tr>
-              <td>{{tr}}CCodeCCAM.remboursement.{{$code->remboursement}}{{/tr}}</td>
+              <td>{{tr}}CDatedCodeCCAM.remboursement.{{$code->remboursement}}{{/tr}}</td>
             </tr>
             {{/if}}
           </table>
