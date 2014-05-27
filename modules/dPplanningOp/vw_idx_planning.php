@@ -28,6 +28,7 @@ $selPrat = CValue::getOrSession("selPrat", $mediuser->isPraticien() ? $mediuser-
 
 $selPraticien = new CMediusers();
 $selPraticien->load($selPrat);
+$group = CGroups::loadCurrent();
 
 if ($selPraticien->isAnesth()) {
   // Selection des différentes interventions de la journée par service
@@ -41,13 +42,13 @@ if ($selPraticien->isAnesth()) {
   $interv = new COperation();
   $order = "operations.chir_id, operations.time_operation";
   $ljoin = array(
-             "plagesop"    => "plagesop.plageop_id = operations.plageop_id",
-             "sejour"      => "sejour.sejour_id = operations.sejour_id",
-             "affectation" => "affectation.sejour_id = sejour.sejour_id AND '$date' BETWEEN DATE(affectation.entree) AND DATE(affectation.sortie)",
-             "lit"         => "lit.lit_id = affectation.lit_id",
-             "chambre"     => "chambre.chambre_id = lit.chambre_id",
-             "service"     => "service.service_id = chambre.service_id"
-           );
+    "plagesop"    => "plagesop.plageop_id = operations.plageop_id",
+    "sejour"      => "sejour.sejour_id = operations.sejour_id",
+    "affectation" => "affectation.sejour_id = sejour.sejour_id AND '$date' BETWEEN DATE(affectation.entree) AND DATE(affectation.sortie)",
+    "lit"         => "lit.lit_id = affectation.lit_id",
+    "chambre"     => "chambre.chambre_id = lit.chambre_id",
+    "service"     => "service.service_id = chambre.service_id"
+  );
   
   $where_anesth = "operations.anesth_id = '$selPraticien->_id' OR plagesop.anesth_id = '$selPraticien->_id'";
   
@@ -56,10 +57,10 @@ if ($selPraticien->isAnesth()) {
   }
   
   $whereAmbu = array(
-                 "plagesop.date = '$date' OR operations.date = '$date'",
-                 "sejour.type"   => "= 'ambu'",
-                 "sejour.group_id" => "= '".CGroups::loadCurrent()->_id."'",
-               );
+    "operations.date" => "= '$date'",
+    "sejour.type"     => "= 'ambu'",
+    "sejour.group_id" => "= '$group->_id'",
+  );
   $whereAmbu[] = $where_anesth;
   
   if (!$canceled) {
@@ -67,10 +68,10 @@ if ($selPraticien->isAnesth()) {
   }
   
   $whereHospi = array(
-                 "plagesop.date = '$date' OR operations.date = '$date'",
-                 "sejour.type"   => "= 'comp'",
-                 "sejour.group_id" => "= '".CGroups::loadCurrent()->_id."'"
-               );
+    "operations.date" => "= '$date'",
+    "sejour.type"     => "= 'comp'",
+    "sejour.group_id" => "= '$group->_id'",
+  );
   $whereHospi[] = $where_anesth;
   
   if (!$canceled) {
@@ -78,29 +79,36 @@ if ($selPraticien->isAnesth()) {
   }
   
   $whereUrg   = array(
-                 "plagesop.plageop_id" => "IS NULL",
-                 "operations.date"     => "= '$date'",
-                 "sejour.group_id" => "= '".CGroups::loadCurrent()->_id."'",
-               );
+    "plagesop.plageop_id" => "IS NULL",
+    "operations.date"     => "= '$date'",
+    "sejour.group_id"     => "= '$group->_id'",
+  );
   $whereUrg[] = $where_anesth;
   
   if (!$canceled) {
     $whereUrg["operations.annulee"] = " = '0'";
   }
+
+  /** @var COperation[] $allInterv */
+  $allInterv = array();
   
   foreach ($services as $_service) {
-    $whereAmbu["service.service_id"]          = "= '$_service->_id'";
-    $whereHospi["service.service_id"]         = "= '$_service->_id'";
-    $whereUrg["service.service_id"]           = "= '$_service->_id'";
+    $whereAmbu["service.service_id"]  = "= '$_service->_id'";
+    $whereHospi["service.service_id"] = "= '$_service->_id'";
+    $whereUrg["service.service_id"]   = "= '$_service->_id'";
     
-    $listInterv["ambu"][$_service->_id]       = $interv->loadList($whereAmbu , $order, null, null, $ljoin);
-    $count_ops["ambu"] += count($listInterv["ambu"][$_service->_id]);
-    
-    $listInterv["comp"][$_service->_id]      = $interv->loadList($whereHospi, $order, null, null, $ljoin);
-    $count_ops["comp"] += count($listInterv["comp"][$_service->_id]);
-
+    $listInterv["ambu"][$_service->_id] = $interv->loadList($whereAmbu , $order, null, null, $ljoin);
+    $listInterv["comp"][$_service->_id] = $interv->loadList($whereHospi, $order, null, null, $ljoin);
     $listInterv["hors_plage"][$_service->_id] = $interv->loadList($whereUrg  , $order, null, null, $ljoin);
+
+    $allInterv = array_merge($allInterv, $listInterv["ambu"][$_service->_id]);
+    $allInterv = array_merge($allInterv, $listInterv["comp"][$_service->_id]);
+    $allInterv = array_merge($allInterv, $listInterv["hors_plage"][$_service->_id]);
+
+    $count_ops["ambu"] += count($listInterv["ambu"][$_service->_id]);
+    $count_ops["comp"] += count($listInterv["comp"][$_service->_id]);
     $count_ops["hors_plage"] += count($listInterv["hors_plage"][$_service->_id]);
+
   }
   
   $whereAmbu["service.service_id"]       = "IS NULL";
@@ -108,28 +116,28 @@ if ($selPraticien->isAnesth()) {
   $whereUrg["service.service_id"]        = "IS NULL";
   
   $listInterv["ambu"]["non_place"]       = $interv->loadList($whereAmbu , $order, null, null, $ljoin);
-  $count_ops["ambu"] += count($listInterv["ambu"]["non_place"]);
-  
   $listInterv["comp"]["non_place"]      = $interv->loadList($whereHospi, $order, null, null, $ljoin);
-  $count_ops["comp"] += count($listInterv["comp"]["non_place"]);
-  
   $listInterv["hors_plage"]["non_place"] = $interv->loadList($whereUrg  , $order, null, null, $ljoin);
+
+  $allInterv = array_merge($allInterv, $listInterv["ambu"]["non_place"]);
+  $allInterv = array_merge($allInterv, $listInterv["comp"]["non_place"]);
+  $allInterv = array_merge($allInterv, $listInterv["hors_plage"]["non_place"]);
+
+  $count_ops["ambu"] += count($listInterv["ambu"]["non_place"]);
+  $count_ops["comp"] += count($listInterv["comp"]["non_place"]);
   $count_ops["hors_plage"] += count($listInterv["hors_plage"]["non_place"]);
   
   // Complétion du chargement
-  foreach ($listInterv as $_intervs_by_type) {
-    foreach ($_intervs_by_type as $_intervs_by_service) {
-      foreach ($_intervs_by_service as $_interv) {
-        $_interv->loadRefAffectation();
-        $_interv->loadRefsFwd(1);
-        $_interv->_ref_anesth_visite->loadRefFunction();
-        if ($_interv->_ref_consult_anesth->_id) {
-          $_interv->_ref_consult_anesth->_ref_consultation->_ref_chir->loadRefFunction();
-        }
-        $patient = $_interv->_ref_sejour->_ref_patient;
-        $patient->loadRefConstantesMedicales();
-      } 
-    }
+  CStoredObject::massLoadFwdRef($allInterv, "chir_id");
+  CStoredObject::massLoadFwdRef($allInterv, "plageop_id");
+  $sejours = CStoredObject::massLoadFwdRef($allInterv, "sejour_id");
+  $patients = CStoredObject::massLoadFwdRef($sejours, "patient_id");
+  foreach ($allInterv as $_interv) {
+    $_interv->loadRefAffectation();
+    $_interv->loadRefChir();
+    $_interv->loadRefPatient()->loadRefConstantesMedicales(null, array("poids", "taille"));
+    $_interv->loadRefVisiteAnesth()->loadRefFunction();
+    $_interv->loadRefsConsultAnesth()->loadRefConsultation()->loadRefPraticien()->loadRefFunction();
   }
 
   // Création du template
@@ -147,23 +155,18 @@ if ($selPraticien->isAnesth()) {
   $smarty->display("vw_idx_visite_anesth.tpl");
   
 }
-//non anesthesiste
+
+// Non anesthesiste
 else {
   // Selection des plages du praticien et de celles de sa spécialité
-  $selPratLogin   = null;
-  $specialite     = null;
-  $secondary_specs = array();
+  $praticien_id = null;
+  $function_ids = null;
   if ($selPraticien->isPraticien()) {
-    $selPratLogin = $selPraticien->user_id;
-    $specialite = $selPraticien->function_id;
-    $selPraticien->loadBackRefs("secondary_functions");
-    foreach ($selPraticien->_back["secondary_functions"] as  $curr_sec_spec) {
-      $curr_sec_spec->loadRefsFwd();
-      $curr_function = $curr_sec_spec->_ref_function;
-      $secondary_specs[$curr_function->_id] = $curr_function;
-    }
+    $praticien_id = $selPraticien->user_id;
+    $function_ids = CMbArray::pluck($selPraticien->loadBackRefs("secondary_functions"), "function_id");
+    $function_ids[] = $selPraticien->function_id;
   }
-  
+
   // Planning du mois
   $month_min = CMbDT::format($date, "%Y-%m-01");
   $month_max = CMbDT::format($date, "%Y-%m-31");
@@ -177,31 +180,31 @@ else {
       LEFT JOIN operations
         ON plagesop.plageop_id = operations.plageop_id
           AND operations.annulee = '0'
-          AND operations.chir_id = '$selPratLogin'
+          AND operations.chir_id = '$praticien_id'
       LEFT JOIN functions_mediboard
         ON functions_mediboard.function_id = plagesop.spec_id
-      WHERE (plagesop.chir_id = '$selPratLogin' OR plagesop.spec_id = '$specialite' OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($secondary_specs)).")
+      WHERE (plagesop.chir_id = '$praticien_id' OR plagesop.spec_id ".CSQLDataSource::prepareIn($function_ids).")
         AND plagesop.date BETWEEN '$month_min' AND '$month_max'
       GROUP BY plagesop.plageop_id
       ORDER BY plagesop.date, plagesop.debut, plagesop.plageop_id";
   $listPlages = array();
-  if ($selPratLogin) {
+  if ($praticien_id) {
     $listPlages = $ds->loadList($sql);
   }
-  
+
   // Urgences du mois
   $sql = "SELECT operations.*, operations.date AS opdate,
         SEC_TO_TIME(SUM(TIME_TO_SEC(operations.temp_operation))) AS duree,
         COUNT(operations.operation_id) AS total
       FROM operations
       WHERE operations.annulee = '0'
-        AND operations.chir_id = '$selPratLogin'
+        AND operations.chir_id = '$praticien_id'
         AND operations.plageop_id IS NULL
         AND operations.date BETWEEN '$month_min' AND '$month_max'
       GROUP BY operations.date
       ORDER BY operations.date";
   $listUrgences = array();
-  if ($selPratLogin) {
+  if ($praticien_id) {
     $listUrgences = $ds->loadList($sql);
   }
   

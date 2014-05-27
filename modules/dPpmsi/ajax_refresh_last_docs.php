@@ -65,14 +65,11 @@ if (($cat_docs || $specialite_docs || $prat_docs || ($date_docs_min && $date_doc
       $ljoin["operations"] = "operations.operation_id = compte_rendu.object_id OR operations.operation_id IS NULL";
       $where["compte_rendu.object_class"] = "= 'COperation'";
       if ($intervention_min || $intervention_max) {
-        $ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
         if ($intervention_min) {
-          $where[] = "(operations.plageop_id IS NULL AND operations.date >= '$intervention_min')
-            OR (plagesop.date >= '$intervention_min')";
+          $where[] = "operations.date >= '$intervention_min'";
         }
         if ($intervention_max) {
-          $where[] = "(operations.plageop_id IS NULL AND operations.date <= '$intervention_max')
-            OR (plagesop.date <= '$intervention_max')";
+          $where[] = "operations.date <= '$intervention_max'";
         }
       }
       if ($prat_interv) {
@@ -107,7 +104,7 @@ if (($cat_docs || $specialite_docs || $prat_docs || ($date_docs_min && $date_doc
   $total_docs = $cr->countList($where, null, $ljoin);
   /** @var CCompteRendu[] $docs */
   $docs = $cr->loadList($where, "user_log.date desc", "$page, 30", null, $ljoin);
-  
+
   switch ($section_search) {
     case "sejour":
       $sejours = CMbObject::massLoadFwdRef($docs, "object_id", "CSejour");

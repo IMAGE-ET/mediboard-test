@@ -1102,7 +1102,7 @@ class COperation extends CCodable implements IPatientRelated {
    *
    * @param bool $cache Utilisation du cache
    *
-   * @return CConsultAnesth
+   * @return CMediusers
    */
   function loadRefVisiteAnesth($cache = true) {
     return $this->_ref_anesth_visite = $this->loadFwdRef("prat_visite_anesth_id", $cache);

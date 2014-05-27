@@ -112,9 +112,9 @@ Main.add(function(){
                 </td>
                 <td style="text-align: center;">
                   {{assign var=constantes value=$_operation->_ref_sejour->_ref_patient->_ref_constantes_medicales}}
-                  {{if $constantes->poids}} {{$constantes->poids}}kg{{else}}-{{/if}}
+                  {{if $constantes->poids}} {{$constantes->poids}}kg{{/if}}
                   <br />
-                  {{if $constantes->taille}} {{$constantes->taille}}cm{{else}}-{{/if}}
+                  {{if $constantes->taille}} {{$constantes->taille}}cm{{/if}}
                 </td>
                 <td class="text {{if $_operation->annulee}} cancelled {{/if}}" style="text-align: left;">
                   <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">

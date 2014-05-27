@@ -57,15 +57,7 @@ function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $sal
   $users = $user->loadList($where, $order, null, null, $ljoin);
 
   // Gestion du hors plage
-  if ($hors_plage) {
-    $where_hors_plage = "AND (plagesop.date BETWEEN '$debut' AND '$fin'
-                              OR operations.date BETWEEN '$debut' AND '$fin')";
-  }
-  else {
-    $where_hors_plage = "AND plagesop.date BETWEEN '$debut' AND '$fin'
-                         AND operations.date IS NULL
-                         AND operations.plageop_id IS NOT NULL";
-  }
+  $where_hors_plage = !$hors_plage ? "AND operations.plageop_id IS NOT NULL" : "";
   
   $total = 0;
   $series = array();
@@ -76,19 +68,19 @@ function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $sal
     );
       
     $query = "SELECT COUNT(operations.operation_id) AS total,
-      DATE_FORMAT(plagesop.date, '%m/%Y') AS mois,
-      DATE_FORMAT(plagesop.date, '%Y%m') AS orderitem,
+      DATE_FORMAT(operations.date, '%m/%Y') AS mois,
+      DATE_FORMAT(operations.date, '%Y%m') AS orderitem,
       users_mediboard.user_id
-      FROM plagesop
-      LEFT JOIN sallesbloc ON plagesop.salle_id = sallesbloc.salle_id
-      LEFT JOIN operations ON operations.plageop_id = plagesop.plageop_id
+      FROM operations
+      INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
       LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
-      LEFT JOIN users_mediboard ON plagesop.chir_id = users_mediboard.user_id
+      LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
       LEFT JOIN users ON users_mediboard.user_id = users.user_id
       WHERE operations.annulee = '0'
-        $where_hors_plage
-        AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
-        AND users_mediboard.user_id = '$user->_id'";
+      AND operations.date BETWEEN '$debut' AND '$fin'
+      $where_hors_plage
+      AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
+      AND users_mediboard.user_id = '$user->_id'";
   
     if($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
     if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";

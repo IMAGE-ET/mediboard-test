@@ -28,34 +28,27 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
   }
 
   // Gestion du hors plage
-  if ($hors_plage) {
-    $where_hors_plage = "AND (plagesop.date BETWEEN '$debut' AND '$fin'
-                              OR operations.date BETWEEN '$debut' AND '$fin')";
-  }
-  else {
-    $where_hors_plage = "AND plagesop.date BETWEEN '$debut' AND '$fin'
-                         AND operations.date IS NULL
-                         AND operations.plageop_id IS NOT NULL";
-  }
+  $where_hors_plage = !$hors_plage ? "AND operations.plageop_id IS NOT NULL" : "";
 
   //$salles = CSalle::getSallesStats($salle_id, $bloc_id);
   $series = array();
   $serie = array('data' => array());
 
   $query = "SELECT COUNT(operations.operation_id) AS total,
-      COUNT(DISTINCT(COALESCE(operations.date, plagesop.date))) AS nb_days,
+      COUNT(DISTINCT(operations.date)) AS nb_days,
       COUNT(DISTINCT(sallesbloc.salle_id)) AS nb_salles,
-      DATE_FORMAT(COALESCE(operations.date, plagesop.date), '%m/%Y') AS mois,
-      DATE_FORMAT(COALESCE(operations.date, plagesop.date), '%Y-%m-01') AS orderitem
+      DATE_FORMAT(operations.date, '%m/%Y') AS mois,
+      DATE_FORMAT(operations.date, '%Y-%m-01') AS orderitem
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
     WHERE operations.annulee = '0'
-      $where_hors_plage 
-      AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
-      AND sallesbloc.stats = '1'";
+    AND operations.date BETWEEN '$debut' AND '$fin'
+    $where_hors_plage
+    AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
+    AND sallesbloc.stats = '1'";
 
   if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
   if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";

@@ -147,8 +147,7 @@ class COperationMiner extends CStoredObject {
       $today = CMbDT::date();
       $table = $this->_spec->table;
       $ljoin[$table]     = "$table.operation_id = operations.operation_id";
-      $ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
-      $where[] = "operations.date < '$today' OR plagesop.date < '$today'";
+      $where[] = "operations.date < '$today'";
       $where["$table.operation_id"] = "IS NULL";
       $operations = $operation->loadList($where, null, $limit, null, $ljoin);
     }

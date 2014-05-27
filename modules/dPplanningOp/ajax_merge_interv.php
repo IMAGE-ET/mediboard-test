@@ -32,7 +32,9 @@ $count = 0;
 
 $operations_merge = array();
 foreach ($sejours as $_sejour) {
+  CSQLDataSource::$trace=1;
   $operations = $_sejour->loadRefCurrOperations($date);
+  CSQLDataSource::$trace=0;
 
   if (count($operations) != 2) {
     if (count($operations) > 2) {

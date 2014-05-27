@@ -30,16 +30,14 @@ $listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
 $listPermPrats = $user->loadPraticiens(PERM_READ);
 $listPrats  = array();
 $operation = new COperation();
-$ljoin = array();
-$ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
-$where = array();
-$where[] = "operations.date = '$date' OR plagesop.date = '$date'";
-$where["annulee"] = "= '0'";
+$operation->date = $date;
+$operation->annulee = '0';
 $groupby = "operations.chir_id";
-$opsJour = $operation->loadList($where, null, null, $groupby, $ljoin);
-foreach ($opsJour as $curr_op) {
-  if (array_key_exists($curr_op->chir_id, $listPermPrats)) {
-    $listPrats[$curr_op->chir_id] = $listPermPrats[$curr_op->chir_id];
+/** @var COperation[] $operations */
+$operations = $operation->loadMatchingList(null, null, $groupby);
+foreach ($operations as $_operation) {
+  if (array_key_exists($_operation->chir_id, $listPermPrats)) {
+    $listPrats[$_operation->chir_id] = $listPermPrats[$_operation->chir_id];
   }
 }
 $listPrats = CMbArray::pluck($listPrats, "_view");

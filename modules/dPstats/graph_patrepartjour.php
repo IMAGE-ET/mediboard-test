@@ -37,17 +37,15 @@ function graphPatRepartJour($debut = null, $fin = null, $prat_id = 0, $bloc_id =
 
   // Nombre de patients par jour de la semaine
   $query = "SELECT COUNT(operations.operation_id) AS total,
-    COUNT(DISTINCT(plagesop.date)) AS nb_days,
-    DATE_FORMAT(plagesop.date, '%W') AS jour,
-	  DATE_FORMAT(plagesop.date, '%w') AS orderitem
+    COUNT(DISTINCT(operations.date)) AS nb_days,
+    DATE_FORMAT(operations.date, '%W') AS jour,
+	  DATE_FORMAT(operations.date, '%w') AS orderitem
     FROM operations
     INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
-    LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
-    WHERE 
-      sallesbloc.stats = '1' AND 
-      plagesop.date BETWEEN '$debut' AND '$fin' AND
-      operations.annulee = '0'";
+    WHERE sallesbloc.stats = '1'
+    AND operations.date BETWEEN '$debut' AND '$fin'
+    AND operations.annulee = '0'";
     
   if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
   if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";

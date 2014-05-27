@@ -55,16 +55,16 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
     );
     
     $query = "SELECT COUNT(operations.operation_id) AS total,
-      DATE_FORMAT(plagesop.date, '%d') AS jour,
+      DATE_FORMAT(operations.date, '%d') AS jour,
       sallesbloc.nom AS nom
       FROM operations
       INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
       INNER JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
       INNER JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
-      WHERE 
-        plagesop.date BETWEEN '$debut' AND '$fin' AND 
-        operations.annulee = '0' AND 
-        sallesbloc.salle_id = '$salle->_id'";
+      WHERE operations.date BETWEEN '$debut' AND '$fin'
+      AND operations.plageop_id IS NOT NULL
+      AND operations.annulee = '0'
+      AND sallesbloc.salle_id = '$salle->_id'";
         
     if ($prat_id && !$prat->isFromType(array("Anesthésiste"))) {
       $query .= "\nAND operations.chir_id = '$prat_id'";
@@ -81,22 +81,20 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
     }
     
     $query .= "\nGROUP BY jour ORDER BY jour";
-    
+
     $result = $salle->_spec->ds->loadlist($query);
-    
+
     if ($hors_plage) {
       $query_hors_plage = "SELECT COUNT(operations.operation_id) AS total,
-      DATE_FORMAT(operations.date, '%d') AS jour,
-      sallesbloc.nom AS nom
+        DATE_FORMAT(operations.date, '%d') AS jour,
+        sallesbloc.nom AS nom
       FROM operations
       INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
       INNER JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
-      WHERE
-        operations.plageop_id IS NULL AND
-        operations.date IS NOT NULL AND
-        operations.date BETWEEN '$debut' AND '$fin' AND 
-        operations.annulee = '0' AND 
-        sallesbloc.salle_id = '$salle->_id'";
+      WHERE operations.date BETWEEN '$debut' AND '$fin'
+      AND operations.plageop_id IS NOT NULL
+      AND operations.annulee = '0'
+      AND sallesbloc.salle_id = '$salle->_id'";
         
       if ($prat_id && !$prat->isFromType(array("Anesthésiste"))) {
         $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";

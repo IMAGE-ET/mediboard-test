@@ -55,32 +55,22 @@ $order = "users_mediboard.function_id, users_mediboard.discipline_id, users.user
 $listPrats = $user->loadList($where, $order, null, null, $ljoin);
 
 // Gestion du hors plage
-
-if ($hors_plage) {
-  $where_hors_plage = "AND (plagesop.date BETWEEN '$debut' AND '$fin'
-                            OR operations.date BETWEEN '$debut' AND '$fin')";
-}
-else {
-  $where_hors_plage = "AND plagesop.date BETWEEN '$debut' AND '$fin'
-                       AND operations.date IS NULL
-                       AND operations.plageop_id IS NOT NULL";
-}
+$where_hors_plage = !$hors_plage ? "AND operations.plageop_id IS NOT NULL" : "";
 
 // Nombre totaux d'interventions
-
 $tableau = array();
 
 $query = "SELECT COUNT(*) AS nbInterv, users.user_id
   FROM operations
   LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
-  LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
   LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
   LEFT JOIN users ON operations.chir_id = users.user_id
   WHERE operations.annulee = '0'
-    $where_hors_plage
-    AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
-    AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles))."
-    AND users.user_id ".CSQLDataSource::prepareIn(array_keys($listPrats));
+  AND operations.date BETWEEN '$debut' AND '$fin'
+  $where_hors_plage
+  AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
+  AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles))."
+  AND users.user_id ".CSQLDataSource::prepareIn(array_keys($listPrats));
   
 if ($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
 if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
@@ -118,17 +108,17 @@ $query = "SELECT COUNT(*) AS nbInterv,
     users.user_id
   FROM operations
   LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
-  LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
   LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
   LEFT JOIN users ON operations.chir_id = users.user_id
   WHERE operations.annulee = '0'
-    $where_hors_plage
-    AND operations.debut_op IS NOT NULL
-    AND operations.fin_op IS NOT NULL
-    AND operations.debut_op < operations.fin_op
-    AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
-    AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles))."
-    AND users.user_id ".CSQLDataSource::prepareIn(array_keys($listPrats));
+  AND operations.date BETWEEN '$debut' AND '$fin'
+  $where_hors_plage
+  AND operations.debut_op IS NOT NULL
+  AND operations.fin_op IS NOT NULL
+  AND operations.debut_op < operations.fin_op
+  AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
+  AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles))."
+  AND users.user_id ".CSQLDataSource::prepareIn(array_keys($listPrats));
   
 if ($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
 if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
@@ -152,17 +142,17 @@ $query = "SELECT COUNT(*) AS nbInterv,
     users.user_id
   FROM operations
   LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
-  LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
   LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
   LEFT JOIN users ON operations.chir_id = users.user_id
   WHERE operations.annulee = '0'
-    $where_hors_plage
-    AND operations.entree_salle IS NOT NULL
-    AND operations.sortie_salle IS NOT NULL
-    AND operations.entree_salle < operations.sortie_salle
-    AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
-    AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles))."
-    AND users.user_id ".CSQLDataSource::prepareIn(array_keys($listPrats));
+  AND operations.date BETWEEN '$debut' AND '$fin'
+  $where_hors_plage
+  AND operations.entree_salle IS NOT NULL
+  AND operations.sortie_salle IS NOT NULL
+  AND operations.entree_salle < operations.sortie_salle
+  AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
+  AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles))."
+  AND users.user_id ".CSQLDataSource::prepareIn(array_keys($listPrats));
   
 if ($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
 if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";

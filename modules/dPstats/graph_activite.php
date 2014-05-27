@@ -42,16 +42,8 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
   $ds = $salle->_spec->ds;
   
   // Gestion du hors plage
-  if ($hors_plage) {
-    $where_hors_plage = "AND (plagesop.date BETWEEN '$debut' AND '$fin'
-                              OR operations.date BETWEEN '$debut' AND '$fin')";
-  }
-  else {
-    $where_hors_plage = "AND plagesop.date BETWEEN '$debut' AND '$fin'
-                         AND operations.date IS NULL
-                         AND operations.plageop_id IS NOT NULL";
-  }
-  
+  $where_hors_plage = !$hors_plage ? "AND operations.plageop_id IS NOT NULL" : "";
+
   $total = 0;
   $series = array();
   foreach ($salles as $salle) {
@@ -61,8 +53,8 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
     );
     
     $query = "SELECT COUNT(operations.operation_id) AS total,
-      DATE_FORMAT(COALESCE(operations.date, plagesop.date), '%m/%Y') AS mois,
-      DATE_FORMAT(COALESCE(operations.date, plagesop.date), '%Y%m') AS orderitem,
+      DATE_FORMAT(operations.date, '%m/%Y') AS mois,
+      DATE_FORMAT(operations.date, '%Y%m') AS orderitem,
       sallesbloc.nom AS nom
       FROM operations
       LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
@@ -70,8 +62,9 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
       LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
       LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
       WHERE operations.annulee = '0'
-        $where_hors_plage
-        AND sejour.group_id = '".CGroups::loadCurrent()->_id."'";
+      AND operations.date BETWEEN '$debut' AND '$fin'
+      $where_hors_plage
+      AND sejour.group_id = '".CGroups::loadCurrent()->_id."'";
         
     if ($type_hospi) {
       $query .= "\nAND sejour.type = '$type_hospi'";
@@ -91,9 +84,9 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
     }
     $query .= "\nAND sallesbloc.salle_id = '$salle->_id'";
     $query .= "\nGROUP BY mois ORDER BY orderitem";
-    
+
     $result = $ds->loadlist($query);
-    
+
     foreach ($ticks as $i => $tick) {
       $f = true;
       foreach ($result as $r) {

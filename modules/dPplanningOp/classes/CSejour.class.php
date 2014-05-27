@@ -3161,12 +3161,14 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return COperation
    */
   function loadRefCurrOperation($date) {
-    $date = CMbDT::date($date);
-    $where["operations.sejour_id"] = "= '$this->_id'";
-    $where[] = "plagesop.date = '$date' OR operations.date = '$date'";
-    $leftjoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
+    if (!$this->_id) {
+      return $this->_ref_curr_operation = new COperation();
+    }
+
     $operation = new COperation;
-    $operation->loadObject($where, null, null, $leftjoin);
+    $operation->sejour_id = $this->_id;
+    $operation->date = CMbDT::date($date);
+    $operation->loadMatchingObject();
     return $this->_ref_curr_operation = $operation;
   }
 
@@ -3178,12 +3180,14 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return COperation[]
    */
   function loadRefCurrOperations($date) {
-    $date = CMbDT::date($date);
-    $where["operations.sejour_id"] = "= '$this->_id'";
-    $where[] = "plagesop.date = '$date' OR operations.date = '$date'";
-    $leftjoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
+    if (!$this->_id) {
+      return $this->_ref_curr_operations = array();
+    }
+
     $operation = new COperation;
-    return $this->_ref_curr_operations = $operation->loadList($where, null, null, null, $leftjoin);
+    $operation->sejour_id = $this->_id;
+    $operation->date = CMbDT::date($date);
+    return $this->_ref_curr_operations = $operation->loadMatchingList();
   }
 
   /**

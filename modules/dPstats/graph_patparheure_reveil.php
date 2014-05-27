@@ -42,18 +42,16 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
     $query = "DROP TEMPORARY TABLE IF EXISTS pat_par_heure";
     $ds->exec($query);
     $query = "CREATE TEMPORARY TABLE pat_par_heure
-                SELECT COUNT(operations.operation_id) AS total_by_day,
-                       '".$tick[1]."' AS heure,
-                       plagesop.date AS date
-                FROM operations
-                INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
-                LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
-                LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
-                WHERE 
-                  sallesbloc.stats = '1' AND 
-                  plagesop.date BETWEEN '$debut' AND '$fin' AND 
-                  '".$tick[1].":00' BETWEEN operations.entree_reveil AND operations.sortie_reveil_possible AND
-                  operations.annulee = '0'";
+      SELECT COUNT(operations.operation_id) AS total_by_day,
+             '".$tick[1]."' AS heure,
+             operations.date AS date
+      FROM operations
+      INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
+      LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
+      WHERE sallesbloc.stats = '1'
+      AND operations.date BETWEEN '$debut' AND '$fin'
+      AND '".$tick[1].":00' BETWEEN operations.entree_reveil AND operations.sortie_reveil_possible
+      AND operations.annulee = '0'";
       
     if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
     if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
@@ -63,7 +61,7 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
       $query .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
     }
     
-    $query .= "\nGROUP BY plagesop.date";
+    $query .= "\nGROUP BY operations.date";
     $ds->exec($query);
 
     $query = "SELECT SUM(total_by_day) AS total, MAX(total_by_day) AS max,heure
@@ -85,13 +83,11 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
     'err' AS heure
     FROM operations
     INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
-    LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
-    WHERE 
-      sallesbloc.stats = '1' AND 
-      plagesop.date BETWEEN '$debut' AND '$fin' AND 
-      (operations.entree_reveil IS NULL OR operations.sortie_reveil_possible IS NULL) AND
-      operations.annulee = '0'";
+    WHERE sallesbloc.stats = '1'
+    AND operations.date BETWEEN '$debut' AND '$fin'
+    AND (operations.entree_reveil IS NULL OR operations.sortie_reveil_possible IS NULL)
+    AND operations.annulee = '0'";
     
   if ($prat_id)  $query      .= "\nAND operations.chir_id = '$prat_id'";
   if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";

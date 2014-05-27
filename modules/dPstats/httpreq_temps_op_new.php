@@ -53,29 +53,29 @@ function buildPartialTables($tableName, $tableFields, $queryFields, $querySelect
   $ds->exec($create);
     
   // Remplissage de la table partielle
-  $query = "INSERT INTO `$tableName` ($joinedFields, `chir_id`, `ccam`)" .
-    "\nSELECT $querySelect" .
-    "\noperations.chir_id, " .
-    "\noperations.codes_ccam AS ccam" .
-    "\nFROM operations" .
-    "\nLEFT JOIN users" .
-    "\nON operations.chir_id = users.user_id" .
-    "\nLEFT JOIN plagesop" .
-    "\nON operations.plageop_id = plagesop.plageop_id" .
-    "\nWHERE operations.annulee = '0'" .
-    "$queryWhere" .
-    "\nAND ((plagesop.date BETWEEN '$deb' AND '$fin') OR (operations.date BETWEEN '$deb' AND '$fin'))" .
-    "\nGROUP BY operations.chir_id, ccam" .
-    "\nORDER BY ccam;";
+  $query = "INSERT INTO `$tableName` ($joinedFields, `chir_id`, `ccam`)
+  SELECT $querySelect
+  operations.chir_id,
+  operations.codes_ccam AS ccam
+  FROM operations
+  LEFT JOIN users
+  ON operations.chir_id = users.user_id
+  LEFT JOIN plagesop
+  ON operations.plageop_id = plagesop.plageop_id
+  WHERE operations.annulee = '0'
+  $queryWhere
+  AND operations.date BETWEEN '$deb' AND '$fin'
+  GROUP BY operations.chir_id, ccam
+  ORDER BY ccam;";
     
   $ds->exec($query);
   CAppUI::stepAjax("Nombre de valeurs pour la table '$tableName': " . $ds->affectedRows(), UI_MSG_OK);
   
   // Insert dans la table principale si vide
   if (!$ds->loadResult("SELECT COUNT(*) FROM temps_op")) {
-    $query = "INSERT INTO temps_op ($joinedFields, `chir_id`, `ccam`)" .
-      "\nSELECT $joinedFields, `chir_id`, `ccam` " .
-      "\nFROM $tableName";
+    $query = "INSERT INTO temps_op ($joinedFields, `chir_id`, `ccam`)
+      SELECT $joinedFields, `chir_id`, `ccam`
+      FROM $tableName";
     $ds->exec($query);
   } 
   // Update pour enrichir en ajoutant des colonnes sinon
