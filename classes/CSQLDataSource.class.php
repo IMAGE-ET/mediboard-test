@@ -26,6 +26,9 @@ abstract class CSQLDataSource {
   /** @var CSQLDataSource[] */
   static $dataSources = array();
   static $trace       = false;
+  static $report      = false;
+
+  static $report_data = array();
 
   public $dsn         = null;
   public $link        = null;
@@ -335,7 +338,82 @@ abstract class CSQLDataSource {
       CAppUI::stepMessage($type, $message, $this->dsn, $step, $total);
     }
 
+    if (CSQLDataSource::$report) {
+      $hash = self::hashQuery($query);
+      if (!isset(self::$report_data[$hash])) {
+        self::$report_data[$hash]   = array();
+      }
+
+      self::$report_data[$hash][]   = array(
+        $this->chrono->latestStep * 1000,
+        $query,
+      );
+    }
+
     return $result;
+  }
+
+  /**
+   * Makes a hash from the query
+   *
+   * @param string $query The query to hash
+   *
+   * @return string
+   */
+  static function hashQuery($query) {
+    $query = preg_replace('/\s+/', " ", $query);
+    $query = preg_replace('/\'[^\']*\'/', "%", $query);
+    $query = preg_replace('/IN ?\([%, ]+\)/', "IN (%)", $query);
+
+    return md5($query);
+  }
+
+  /**
+   * Displays the SQL report
+   *
+   * @return void
+   */
+  static function displayReport() {
+    $totals = array();
+    $distribution = array();
+    foreach (self::$report_data as $_hash => $_data) {
+      $totals[$_hash] = array_sum(CMbArray::pluck($_data, 0));
+
+      $_distribution = array(
+        "","","","","","","","","",
+      );
+      foreach ($_data as $_pair) {
+        $duration = $_pair[0] * 1000;
+        $log = (int)floor(log10($duration));
+
+        if (!isset($_distribution[$log])) {
+          $_distribution[$log] = "";
+        }
+        $_distribution[$log] .= "#";
+      }
+
+      $distribution[$_hash] = $_distribution;
+    }
+
+    arsort($totals);
+
+    foreach ($totals as $_hash => $_total) {
+      CAppUI::stepMessage(UI_MSG_OK, "Query was called %d times for %f ms", count(self::$report_data[$_hash]), $_total);
+      echo utf8_decode(CMbString::highlightCode("sql", self::$report_data[$_hash][0][1], false, "white-space: pre-wrap;"));
+      $_dist = $distribution[$_hash];
+      $lines = array(
+        "  1µs $_dist[0]",
+        " 10µs $_dist[1]",
+        "100µs $_dist[2]",
+        "  1ms $_dist[3]",
+        " 10ms $_dist[4]",
+        "100ms $_dist[5]",
+        "   1s $_dist[6]",
+        "  10s $_dist[7]",
+      );
+
+      echo "<pre>".implode("\n", $lines)."</pre>";
+    }
   }
   
   /**

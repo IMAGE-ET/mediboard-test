@@ -374,8 +374,11 @@ if ($muters = CValue::get("muters")) {
 }
 
 // Check whether we should trace SQL queries
-if (CValue::get("query_trace")) {
+if ($query_trace = CValue::get("query_trace")) {
   CSQLDataSource::$trace = true;
+}
+if ($query_report = CValue::get("query_report")) {
+  CSQLDataSource::$report = true;
 }
 
 // tabBox et inclusion du fichier demandé
@@ -387,8 +390,12 @@ else {
 }
 
 // Check whether we should trace SQL queries
-if (CValue::get("query_trace")) {
+if ($query_trace) {
   CSQLDataSource::$trace = false;
+}
+if ($query_report) {
+  CSQLDataSource::$report = false;
+  CSQLDataSource::displayReport();
 }
 
 CApp::$chrono->stop();
