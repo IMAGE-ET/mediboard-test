@@ -288,16 +288,17 @@ showHeader();
             <option value="files" <?php if ($dPconfig['session_handler'] == 'files') { echo 'selected'; } ?>>
               Fichiers
             </option>
-            <option value="mysql"  <?php if ($dPconfig['session_handler'] == 'mysql' || $dPconfig['session_handler'] == 'zebra') { echo 'selected'; } ?>>
-              MySQL (Utile pour les environnements répliqués)
+            <option value="mysql" <?php if ($dPconfig['session_handler'] == 'mysql' || $dPconfig['session_handler'] == 'zebra') { echo 'selected'; } ?>>
+              MySQL
+            </option>
+            <option value="redis" <?php if ($dPconfig['session_handler'] == 'redis') { echo 'selected'; } ?>>
+              Redis (Utilise le paramétrage du serveur de Mutex Redis)
             </option>
           </select>
         </td>
         <td class="text">
           <div class="small-warning">
-            Le changement de ce paramètre <strong>mettra fin à toutes les session des utilisateurs actuellement connectés</strong>.
-            <br />
-            Si vous choisissez le mode Memcache, veuillez vous assurer que le serveur est correctement configuré.
+            Le changement de ce paramètre <strong>mettra fin à toutes les sessions des utilisateurs actuellement connectés</strong>.
           </div>
         </td>
       </tr>
