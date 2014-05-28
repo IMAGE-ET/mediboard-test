@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  * $Id$
@@ -18,7 +18,12 @@ $patient->load($patient_id);
 $cv = CFseFactory::createCV();
 
 if ($cv) {
-  $cv->getPropertiesFromVitale($patient);
+  if ($patient->_id) {
+    $cv->getPropertiesFromVitale($patient, false);
+  }
+  else {
+    $cv->getPropertiesFromVitale($patient);
+  }
 
   if ($msg = $patient->store()) {
     CAppUI::setMsg($msg, UI_MSG_ERROR);
