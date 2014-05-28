@@ -2337,6 +2337,7 @@ $locales['mod-system-tab-view_user_logs'] = 'Journaux utilisateurs';
 $locales['mod-system-tab-vw_idx_redirections'] = 'Redirections http';
 $locales['mod-system-tab-vw_object_tree_explorer'] = 'Explorateur d\'objets';
 $locales['mod-system-tab-vw_purge_objects'] = 'Purge d\'objets';
+$locales['mod-system-tab-vw_user_agents'] = 'Navigateurs';
 $locales['module-connectathon-court'] = 'Connectathon';
 $locales['module-connectathon-long'] = 'Outillage connectathon';
 $locales['module-eai-court'] = 'EAI';

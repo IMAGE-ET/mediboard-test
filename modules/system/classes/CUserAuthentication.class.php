@@ -32,6 +32,9 @@ class CUserAuthentication extends CMbObject {
   // User agent
   public $user_agent_id;
 
+  /** @var CUser */
+  public $_ref_user;
+
   /**
    * @see parent::getSpec()
    */
@@ -127,5 +130,14 @@ class CUserAuthentication extends CMbObject {
     }
 
     $auth->store();
+  }
+
+  /**
+   * Get user
+   *
+   * @return CUser
+   */
+  function loadRefUser() {
+    return $this->_ref_user = $this->loadFwdRef("user_id", true);
   }
 }

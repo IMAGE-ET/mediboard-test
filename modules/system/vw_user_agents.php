@@ -11,11 +11,30 @@
 
 CCanDo::checkRead();
 
-$start     = CValue::get("start", 0);
-$date_min  = CValue::get("date_min", CMbDT::dateTime("-1 WEEK"));
-$date_max  = CValue::get("date_max");
-
 $ua = new CUserAgent();
+/*$ds = $ua->getDS();
+
+$request = new CRequest();
+$request->addTable($ua->_spec->table);
+$request->addSelect("DISTINCT `browser_name`, `platform_name`, `device_name`, `device_maker`, `device_type`, `pointing_method`");
+$list = $ds->loadList($request->makeSelect());
+
+$filter_names = array(
+  "browser_name",
+  "platform_name",
+  "device_name",
+  "device_maker",
+  "device_type",
+  "pointing_method",
+);
+
+$filter_values = array();
+foreach ($filter_names as $_filter_name) {
+  $_values = array_unique(CMbArray::pluck($list, $_filter_name));
+  sort($_values);
+  $filter_values[$_filter_name] = $_values;
+}*/
+
 $uas = $ua->loadList(null, "browser_name, browser_version", 100);
 
 CStoredObject::massCountBackRefs($uas, "user_authentications");
@@ -23,7 +42,6 @@ CStoredObject::massCountBackRefs($uas, "user_authentications");
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("start", $start);
 $smarty->assign("user_agents", $uas);
 
 $smarty->display("vw_user_agents.tpl");
