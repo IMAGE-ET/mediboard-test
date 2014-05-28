@@ -264,7 +264,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $props["secteur1"]          = "currency min|0 show|0";
     $props["secteur2"]          = "currency show|0";
     $props["secteur3"]          = "currency show|0";
-    $props["taux_tva"]          = "float default|0";
+    $props["taux_tva"]          = "float";
     $props["du_tva"]            = "currency show|0";
     $props["chrono"]            = "enum notNull list|16|32|48|64 show|0";
     $props["annule"]            = "bool show|0";
