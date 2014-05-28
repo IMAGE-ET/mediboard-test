@@ -1,15 +1,15 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
-CCanDo::checkEdit();
+CCanDo::checkRead();
 $consult_id = CValue::get("consult_id");
 $group_id   = CGroups::loadCurrent()->_id;
 
