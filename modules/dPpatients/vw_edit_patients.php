@@ -53,7 +53,7 @@ if ($useVitale && !CAppUI::pref('VitaleVision') && CModule::getActive("fse")) {
   $patVitale = new CPatient();
   $cv = CFseFactory::createCV();
   if ($cv) {
-    $cv->getPropertiesFromVitale($patVitale);
+    $cv->getPropertiesFromVitale($patVitale, false);
     $patVitale->nullifyEmptyFields();
     $patient->extendsWith($patVitale);
     $patient->updateFormFields();
