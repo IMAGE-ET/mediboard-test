@@ -261,6 +261,7 @@ class CTemplateManager {
           $thumbs = new phpthumb();
           $thumbs->setSourceFilename($file->_file_path);
           $thumbs->w = 640;
+          $thumbs->f = "png";
           $thumbs->GenerateThumbnail();
           $data = "data:".$file->file_type.";base64,".urlencode(base64_encode($thumbs->IMresizedData));
         }
