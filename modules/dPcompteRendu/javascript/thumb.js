@@ -125,10 +125,16 @@ var Thumb = {
         url.requestJSON(function(thumbnail) {
           thumb.observe("click", function() {
             // Sauvegarde du document à l'agrandissement de la vignette
+            var openThumb = function() {
+              (new Url).ViewFilePopup('CCompteRendu', Thumb.compte_rendu_id || Thumb.modele_id, 'CFile', Thumb.file_id, index);
+            };
             if (Thumb.mode != "modele") {
-              getForm("editFrm").onsubmit();
+              submitCompteRendu(openThumb);
             }
-            (new Url).ViewFilePopup('CCompteRendu', Thumb.compte_rendu_id || Thumb.modele_id, 'CFile', Thumb.file_id, index)});
+            else {
+              openThumb();
+            }
+          });
           thumb.src = "data:image/png;base64,"+thumbnail; Thumb.refreshThumb();
         });
         break;
