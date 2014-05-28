@@ -107,6 +107,16 @@ else {
   $compte_rendu->updateFormFields();
 }
 
+if (!$compte_rendu->_id) {
+  if (!$compte_rendu->font) {
+    $compte_rendu->font = array_search(CAppUI::conf("dPcompteRendu CCompteRendu default_font"), CCompteRendu::$fonts);
+  }
+
+  if (!$compte_rendu->size) {
+    $compte_rendu->size = CAppUI::conf("dPcompteRendu CCompteRendu default_size");
+  }
+}
+
 $compte_rendu->loadRefsFwd();
 
 $compte_rendu->_ref_object->loadRefsFwd();
