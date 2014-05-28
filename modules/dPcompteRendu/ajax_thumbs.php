@@ -42,6 +42,7 @@ $vignette = null;
 
 $thumbs->sfn = $index;
 $thumbs->w = 138;
+$thumbs->f = "png";
 $thumbs->GenerateThumbnail();
 $vignette = base64_encode($thumbs->IMresizedData);
 
