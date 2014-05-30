@@ -51,7 +51,7 @@ if ($rpu->_id || $rpu->sejour_id) {
   $sejour->_ref_prescription_sejour->loadJourOp(CMbDT::date());
   $sejour->_ref_prescription_sejour->loadRefCurrentPraticien();
   $patient = $sejour->_ref_patient;
-  $patient->loadRefConstantesMedicales(null, array('poids', 'talle'));
+  $patient->loadRefConstantesMedicales(null, array('poids', 'taille'));
   $patient->loadRefDossierMedical();
   if ($patient->_ref_dossier_medical->_id) {
     $patient->_ref_dossier_medical->loadRefsAllergies();
