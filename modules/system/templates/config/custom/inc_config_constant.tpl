@@ -59,7 +59,7 @@
   </script>
 
   <input type="hidden" name="c[{{$_feature}}]" value="{{'|'|implode:$value}}" {{if $is_inherited}} disabled {{/if}} />
-  <table class="layout">
+  <table class="layout" style="display: inline-table;">
     <tr>
       <td>
         <label title="{{tr}}config-dPpatient-CConstantesMedicales-selection-form-desc{{/tr}}">{{tr}}config-dPpatient-CConstantesMedicales-selection-form{{/tr}} :</label>
