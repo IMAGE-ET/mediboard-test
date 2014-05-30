@@ -294,7 +294,7 @@ class CExClassEvent extends CMbObject {
     
     $reference = $object;
     foreach ($parts as $_fwd) {
-      $reference = $reference->loadFwdRef($_fwd);
+      $reference = $reference->loadFwdRef($_fwd, true);
     }
     
     return $reference;

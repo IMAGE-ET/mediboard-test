@@ -41,6 +41,12 @@ class CExListItemsOwner extends CMbObject {
    * @return integer[]
    */
   function getItemsKeys() {
+    static $cache = array();
+
+    if (isset($cache[$this->_guid])) {
+      return $cache[$this->_guid];
+    }
+
     $item = new CExListItem;
     $where = array(
       $this->getBackRefField() => "= '$this->_id'"
@@ -50,7 +56,7 @@ class CExListItemsOwner extends CMbObject {
     // Natural sort, sort of ...
     $orderby = (self::$_order_list_items ? "LPAD(code, 20, '0'), name" : null);
 
-    return $item->loadIds($where, $orderby);
+    return $cache[$this->_guid] = $item->loadIds($where, $orderby);
   }
 
   /**

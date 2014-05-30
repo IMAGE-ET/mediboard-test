@@ -361,8 +361,6 @@ class CExClassField extends CExListItemsOwner {
 
     $this->_view = "$this->name [$this->prop]";
 
-    $this->formulaFromDB();
-
     if (!$this->coord_width && !$this->coord_height) {
       $this->_no_size = true;
     }
@@ -682,6 +680,13 @@ class CExClassField extends CExListItemsOwner {
     return $this->_ref_ex_group = $this->loadFwdRef("ex_group_id", $cache);
   }
 
+  /**
+   * Load Ex Class
+   *
+   * @param bool $cache Use object cache
+   *
+   * @return CExClass
+   */
   function loadRefExClass($cache = true){
     return $this->_ref_ex_class = $this->loadRefExGroup($cache)->loadRefExClass($cache);
   }

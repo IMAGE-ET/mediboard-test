@@ -145,13 +145,17 @@ class CExClassFieldGroup extends CMbObject {
       return $this->_ref_fields = self::$_fields_cache[$this->_id];
     }
 
-    $this->_ref_fields = $this->loadBackRefs("class_fields", "IF(tab_index IS NULL, 10000, tab_index), ex_class_field_id");
-    
+    $fields = $this->loadBackRefs("class_fields", "IF(tab_index IS NULL, 10000, tab_index), ex_class_field_id");
+
+    self::massLoadFwdRef($fields, "ex_group_id");
+
+    $this->_ref_fields = $fields;
+
     if ($cache) {
-      self::$_fields_cache[$this->_id] = $this->_ref_fields;
+      self::$_fields_cache[$this->_id] = $fields;
     }
     
-    return $this->_ref_fields;
+    return $fields;
   }
 
   /**

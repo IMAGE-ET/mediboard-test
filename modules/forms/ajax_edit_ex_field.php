@@ -33,9 +33,13 @@ else {
 }
 
 $ex_field->loadRefExClass();
-$ex_field->loadRefPredicate();
-$ex_field->loadRefPredicates();
 $ex_field->loadRefProperties();
+$ex_field->loadRefPredicate()->loadView();
+$predicates = $ex_field->loadRefPredicates();
+
+foreach ($predicates as $_predicate) {
+  $_predicate->loadView();
+}
 
 if ($ex_class_id) {
   $ex_class = new CExClass;

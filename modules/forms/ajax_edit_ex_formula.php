@@ -15,6 +15,7 @@ $ex_field_id = CValue::get("ex_field_id");
 
 $ex_field = new CExClassField;
 $ex_field->load($ex_field_id);
+$ex_field->formulaFromDB();
 
 $formula_possible = true;
 $field_names = array();

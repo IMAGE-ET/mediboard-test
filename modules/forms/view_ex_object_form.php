@@ -145,8 +145,8 @@ foreach ($ex_object->_specs as $_field => $_spec) {
   }
 }
 
-$ex_object->getReportedValues($ex_class_event);
-$ex_object->setFieldsDisplay();
+$all_fields = $ex_object->getReportedValues($ex_class_event);
+$ex_object->setFieldsDisplay($all_fields);
 $ex_object->loadRefAdditionalObject();
 
 // depends on setReferenceObject_1 and setReferenceObject_2
@@ -217,6 +217,12 @@ foreach ($ref_objects as $_object) {
     continue;
   }
 }
+
+/** @var CExConcept[] $concepts */
+$concepts = CStoredObject::massLoadFwdRef($fields, "concept_id");
+$lists    = CStoredObject::massLoadFwdRef($concepts, "ex_list_id");
+CStoredObject::massLoadBackRefs($lists, "list_items");
+CStoredObject::massLoadBackRefs($concepts, "list_items");
 
 $formula_token_values = array();
 foreach ($fields as $_field) {

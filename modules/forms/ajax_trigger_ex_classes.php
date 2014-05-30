@@ -30,7 +30,11 @@ $where = array(
 $ljoin = array(
   "ex_class" => "ex_class.ex_class_id = ex_class_event.ex_class_id",
 );
+
+/** @var CExClassEvent[] $ex_class_events */
 $ex_class_events = $ex_class_event->loadList($where, null, null, null, $ljoin);
+
+CStoredObject::massLoadBackRefs($ex_class_events, "constraints");
 
 $ex_class_events_struct = array();
 

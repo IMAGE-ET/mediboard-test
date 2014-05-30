@@ -361,11 +361,14 @@ class CExObject extends CMbMetaObject {
     
     return $this->_native_views;
   }
-  
+
   /**
-   * Permet de supprimer les valeurs non presentes dans les 
+   * Permet de supprimer les valeurs non presentes dans les
    * specs du champ dans ce formulaire, mais qui le sont peut
    * etre dans le meme champ dans un autre formulaire (cas d'un concept)
+   *
+   * @param CExClassField $field
+   * @param $value
    *
    * @return string
    */
@@ -431,8 +434,11 @@ class CExObject extends CMbMetaObject {
    * @fixme pas trop optimisé
    */
   function getReportedValues(CExClassEvent $event){
+    $ex_class = $this->_ref_ex_class;
+    $fields = $ex_class->loadRefsAllFields(true);
+
     if ($this->_id) {
-      return;
+      return $fields;
     }
 
     self::$_multiple_load = true;
@@ -440,7 +446,6 @@ class CExObject extends CMbMetaObject {
 
     $this->loadRefsLinks();
 
-    $ex_class = $this->_ref_ex_class;
     $latest_ex_objects = array(
       $ex_class->getLatestExObject($this->_ref_object),
       $ex_class->getLatestExObject($this->_ref_reference_object_1),
@@ -458,9 +463,14 @@ class CExObject extends CMbMetaObject {
     if ($this->_ref_reference_object_2->_id) {
       $this->_ref_reference_object_2->loadComplete();
     }
-    
-    $fields = $ex_class->loadRefsAllFields(true);
-    
+
+    CStoredObject::massLoadFwdRef($fields, "ex_group_id");
+    $all_concepts = CStoredObject::massLoadFwdRef($fields, "concept_id");
+    $all_back_fields = CStoredObject::massLoadBackRefs($all_concepts, "class_fields");
+
+    $ex_groups = CStoredObject::massLoadFwdRef($all_back_fields, "ex_group_id");
+    CStoredObject::massLoadFwdRef($ex_groups, "ex_class_id");
+
     // Cache de concepts
     $concepts = array();
     $ex_classes = array();
@@ -526,7 +536,7 @@ class CExObject extends CMbMetaObject {
       if ($_field->concept_id) {
         if (!isset($concepts[$_field->concept_id])) {
           $_concept_fields = $_concept->loadRefClassFields();
-          
+
           foreach ($_concept_fields as $_concept_field) {
             if (!isset($ex_classes[$_concept_field->ex_group_id])) {
               $ex_classes[$_concept_field->ex_group_id] = $_concept_field->loadRefExClass();
@@ -650,6 +660,8 @@ class CExObject extends CMbMetaObject {
     
     self::$_multiple_load = false;
     CExClassField::$_load_lite = false;
+
+    return $fields;
   }
   
   function loadOldObject() {
@@ -673,15 +685,33 @@ class CExObject extends CMbMetaObject {
     );
   }
 
-  function setFieldsDisplay(){
-    /** @var CExClassField[] $fields */
-    $fields = $this->_ref_ex_class->loadRefsAllFields(true);
-
-    CStoredObject::massCountBackRefs($fields, "predicates");
+  /**
+   * @param CExClassField[] $fields Fields to get display of
+   *
+   * @return void
+   */
+  function setFieldsDisplay($fields){
+    CStoredObject::massLoadBackRefs($fields, "predicates");
 
     $default = array();
     $this->_fields_display_struct = array();
-    
+
+    $all_predicates = array();
+    foreach ($fields as $_field) {
+      if ($_field->disabled) {
+        continue;
+      }
+
+      if ($_field->_count["predicates"] > 0) {
+        $all_predicates += $_field->loadRefPredicates();
+      }
+    }
+
+    CStoredObject::massLoadBackRefs($all_predicates, "properties");
+    CStoredObject::massLoadBackRefs($all_predicates, "display_fields");
+    CStoredObject::massLoadBackRefs($all_predicates, "display_messages");
+    CStoredObject::massLoadBackRefs($all_predicates, "display_subgroups");
+
     foreach ($fields as $_field) {
       if ($_field->disabled) {
         continue;
@@ -692,11 +722,6 @@ class CExObject extends CMbMetaObject {
 
       if ($_field->_count["predicates"] > 0) {
         $_predicates = $_field->loadRefPredicates();
-
-        CStoredObject::massCountBackRefs($_predicates, "properties");
-        CStoredObject::massCountBackRefs($_predicates, "display_fields");
-        CStoredObject::massCountBackRefs($_predicates, "display_messages");
-        CStoredObject::massCountBackRefs($_predicates, "display_subgroups");
       }
 
       foreach ($_predicates as $_predicate) {
@@ -962,8 +987,9 @@ class CExObject extends CMbMetaObject {
   function getProps() {
     $this->loadRefExClass();
     $this->_spec->table = $this->getTableName();
-    
-    $class = get_class($this)."_".$this->getClassId();
+    $class_id = $this->getClassId();
+
+    $class = get_class($this)."_".$class_id;
     $props = parent::getProps();
     $props["ex_object_id"]     = "ref class|$class show|0";
     $props["_ex_class_id"]     = "ref class|CExClass";
@@ -984,7 +1010,7 @@ class CExObject extends CMbMetaObject {
     $props["datetime_edit"]    = "dateTime";
     $props["owner_id"]         = "ref class|CMediusers";
     
-    if (self::$_load_lite) {
+    if (self::$_load_lite || !$class_id) {
       return $props;
     }
     

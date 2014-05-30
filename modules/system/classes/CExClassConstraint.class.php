@@ -171,7 +171,7 @@ class CExClassConstraint extends CMbObject {
       }
 
       return array(
-        "object" => $object->loadFwdRef($_field),
+        "object" => $object->loadFwdRef($_field, true),
         "field"  => $parts[1],
       );
     }
@@ -307,7 +307,7 @@ class CExClassConstraint extends CMbObject {
       $value = $object_fwd->$field;
 
       if ($object_fwd->_specs[$field] instanceof CRefSpec) {
-        $_obj = $object_fwd->loadFwdRef($field);
+        $_obj = $object_fwd->loadFwdRef($field, true);
         $value = $_obj->_guid;
       }
     }
@@ -328,7 +328,11 @@ class CExClassConstraint extends CMbObject {
    * @return void
    */
   function loadObjectRefs(CMbObject $object) {
-    if (!$object instanceof CPrescriptionLine && !$object instanceof CPrescription) {
+    if (
+        !$object instanceof CAdministration &&
+        !$object instanceof CPrescriptionLine &&
+        !$object instanceof CPrescription
+    ) {
       $object->loadView();
     }
 

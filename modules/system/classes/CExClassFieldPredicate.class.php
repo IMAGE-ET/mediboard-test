@@ -61,25 +61,30 @@ class CExClassFieldPredicate extends CMbObject {
   }
 
   /**
-   * @see parent::updateFormFields()
+   * @see parent::loadView()
    */
-  function updateFormFields(){
-    parent::updateFormFields();
+  function loadView(){
+    parent::loadView();
 
-    if (self::$_load_lite) {
+    if (!$this->_id) {
       return;
     }
 
     $field = $this->loadRefExClassField();
-    
-    $ex_object = new CExObject($field->loadRefExGroup()->ex_class_id);
-    $ex_object->{$field->name} = $this->value;
-    
+
     $this->_value = "";
     if ($this->operator != "hasValue" && $this->operator != "hasNoValue") {
-      $this->_value = $ex_object->getFormattedValue($field->name);
+      $_ex_class_id = $field->loadRefExGroup()->ex_class_id;
+
+      $_spec = $field->getSpecObject();
+      $_obj = (object)array(
+        "_class"     => "CExObject_$_ex_class_id",
+        $field->name => $this->value,
+      );
+
+      $this->_value = $_spec->getValue($_obj);
     }
-    
+
     $this->_view = $field->_view." ".$this->_specs["operator"]->_locales[$this->operator]." ".$this->_value;
   }
   
@@ -94,7 +99,8 @@ class CExClassFieldPredicate extends CMbObject {
   
   function getAutocompleteList($keywords, $where = null, $limit = null, $ljoin = null, $order = null) {
     $list = $this->loadList($where, null, null, null, $ljoin);
-    
+
+    /** @var self[] $real_list */
     $real_list = array();
     $re = preg_quote($keywords);
     $re = CMbString::allowDiacriticsInRegexp($re);
@@ -103,6 +109,7 @@ class CExClassFieldPredicate extends CMbObject {
     
     foreach ($list as $_match) {
       if ($keywords == "%" || $keywords == "" || preg_match($re, $_match->_view)) {
+        $_match->loadView();
         $real_list[$_match->_id] = $_match;
       }
     }

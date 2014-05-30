@@ -33,7 +33,11 @@ foreach ($object_guids as $object_guid) {
   $object = CMbObject::loadFromGuid($object_guid);
 
   $where["ex_class_event.host_class"] = $ds->prepare("=%", $object->_class);
+
+  /** @var CExClassEvent[] $_ex_class_events */
   $_ex_class_events = $ex_class_event->loadList($where, null, null, null, $ljoin);
+
+  CStoredObject::massLoadBackRefs($_ex_class_events, "constraints");
 
   foreach ($_ex_class_events as $_id => $_ex_class_event) {
     if ($_ex_class_event->checkConstraints($object)) {

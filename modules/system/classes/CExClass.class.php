@@ -416,7 +416,7 @@ class CExClass extends CMbObject {
     if ($cache && isset($groups_cache[$this->_id])) {
       return $this->_ref_groups = $groups_cache[$this->_id];
     }
-    
+
     $this->_ref_groups = $this->loadBackRefs("field_groups", "rank, ex_class_field_group_id");
     
     if ($cache) {
@@ -435,11 +435,15 @@ class CExClass extends CMbObject {
    */
   function loadRefsAllFields($cache = false){
     $groups = $this->loadRefsGroups();
+
+    CStoredObject::massLoadBackRefs($groups, "class_fields", "IF(tab_index IS NULL, 10000, tab_index), ex_class_field_id");
+
     $fields = array();
     foreach ($groups as $_group) {
       $_fields = $_group->loadRefsFields($cache);
-      $fields = array_merge($_fields, $fields);
+      $fields += $_fields;
     }
+
     return $fields;
   }
 
