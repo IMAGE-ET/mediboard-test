@@ -1978,7 +1978,7 @@ class CPatient extends CPerson {
     $template->addProperty("Patient - médecin traitant - voie"            , $medecin->adresse);
     $template->addProperty("Patient - médecin traitant - cp"              , $medecin->cp);
     $template->addProperty("Patient - médecin traitant - ville"           , $medecin->ville);
-    $template->addProperty("Patient - médecin traitant - confraternité"   , ($medecin->sexe == "f") ? "Chère consoeur" : "Cher confrère");
+    $template->addProperty("Patient - médecin traitant - confraternité"   , $medecin->_confraternite);
     if ($medecin->sexe == "f") {
       $template->addProperty("Patient - médecin traitant - accord genre"    , "e");
       $template->addProperty("Patient - médecin traitant - article long"    , "Mme le docteur");

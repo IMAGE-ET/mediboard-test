@@ -221,6 +221,7 @@ if (isset($_POST["_source"])) {
         CMbString::htmlEntities("[Courrier - nom destinataire]"),
         CMbString::htmlEntities("[Courrier - adresse destinataire]"),
         CMbString::htmlEntities("[Courrier - cp ville destinataire]"),
+        CMbString::htmlEntities("[Courrier - confraternite]"),
         CMbString::htmlEntities("[Courrier - copie à - simple]"),
         CMbString::htmlEntities("[Courrier - copie à - simple (multiligne)]"),
         CMbString::htmlEntities("[Courrier - copie à - complet]"),
@@ -228,17 +229,19 @@ if (isset($_POST["_source"])) {
       );
       
       // Champ copie à : on reconstruit en omettant le destinataire.
+      $confraternie = "";
       $copyTo = "";
       $copyToMulti = "";
       $copyToComplet = "";
       $copyToCompletMulti = "";
-      
+
       foreach ($destinataires as $_dest) {
         if ($curr_dest[0] == $_dest[0]) {
           continue;
         }
         $_destinataire = $allDest[$_dest[1]][$_dest[2]];
         $_destinataire->nom = preg_replace("/(.*)(\([^\)]+\))/", '$1', $_destinataire->nom);
+        $_destinataire->confraternite = $_destinataire->confraternite ? $_destinataire->confraternite."," : null;
         $copyTo .= $_destinataire->nom."; ";
         $copyToMulti .= $_destinataire->nom."<br />";
         $copyToComplet .= $_destinataire->nom. " - " .
@@ -257,6 +260,7 @@ if (isset($_POST["_source"])) {
         preg_replace("/(.*)(\([^\)]+\))/", '$1', $allDest[$curr_dest[1]][$curr_dest[2]]->nom),
         nl2br($allDest[$curr_dest[1]][$curr_dest[2]]->adresse),
         $allDest[$curr_dest[1]][$curr_dest[2]]->cpville,
+        $allDest[$curr_dest[1]][$curr_dest[2]]->confraternite,
         $copyTo,
         $copyToMulti,
         $copyToComplet,

@@ -50,6 +50,7 @@ class CMedecin extends CPerson {
   public $_count_patients_traites;
   public $_count_patients_correspondants;
   public $_has_siblings;
+  public $_confraternite;
 
   /** @var CFunctions */
   public $_ref_function;
@@ -174,6 +175,10 @@ class CMedecin extends CPerson {
       if ($this->type) {
         $this->_view .= " ({$this->_specs['type']->_locales[$this->type]})";
       } 
+    }
+
+    if ($this->type == "medecin") {
+      $this->_confraternite = $this->sexe == "f" ? "Chère consoeur" : "Cher confrère";
     }
   }
 

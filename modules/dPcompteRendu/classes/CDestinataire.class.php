@@ -19,6 +19,7 @@ class CDestinataire {
   public $cpville;
   public $email;
   public $email_apicrypt;
+  public $confraternite;      // used for medecin
   public $tag;
   public $civilite_nom;
   public $_guid_object;
@@ -92,9 +93,11 @@ class CDestinataire {
     }
 
     if ($mbObject instanceof CMedecin) {
+      /** @var CMedecin $medecin */
       $medecin = $mbObject;
       
       $dest = new CDestinataire($tag);
+      $dest->confraternite = $medecin->_confraternite;
       $dest->nom     = $medecin->_view;
       $dest->adresse = $medecin->adresse;
       $dest->cpville = "$medecin->cp $medecin->ville";

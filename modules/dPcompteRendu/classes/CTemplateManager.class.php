@@ -54,6 +54,7 @@ class CTemplateManager {
       $this->addProperty("Courrier - nom destinataire"     , "[Courrier - nom destinataire]");
       $this->addProperty("Courrier - adresse destinataire" , "[Courrier - adresse destinataire]");
       $this->addProperty("Courrier - cp ville destinataire", "[Courrier - cp ville destinataire]");
+      $this->addProperty("Courrier - confraternite"        , "[Courrier - confraternite]");
       $this->addProperty("Courrier - copie à - simple"     , "[Courrier - copie à - simple]");
       $this->addProperty("Courrier - copie à - simple (multiligne)", "[Courrier - copie à - simple (multiligne)]");
       $this->addProperty("Courrier - copie à - complet", "[Courrier - copie à - complet]");
