@@ -26,15 +26,16 @@ class CHL7v2EventADTA42 extends CHL7v2EventADT implements CHL7EventADTA30 {
   /**
    * Build A42 event
    *
-   * @param CPatient $patient Person
+   * @param CSejour $sejour Sejour
    *
    * @see parent::build()
    *
    * @return void
    */
-  function build($patient) {
-    parent::build($patient);
-    
+  function build($sejour) {
+    parent::build($sejour);
+    $patient = $sejour->_ref_patient;
+
     // Patient Identification
     $this->addPID($patient);
     
@@ -42,6 +43,8 @@ class CHL7v2EventADTA42 extends CHL7v2EventADT implements CHL7EventADTA30 {
     $this->addPD1($patient);
     
     // Merge Patient Information
-    $this->addMRG($patient->_patient_elimine);
+    $this->addMRG($sejour->_sejour_elimine);
+
+    $this->addPV1($sejour);
   }
 }

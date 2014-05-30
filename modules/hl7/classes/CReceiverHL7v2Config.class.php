@@ -69,6 +69,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   public $send_patient_with_current_admit;
   public $mode_identito_vigilance;
   public $send_no_facturable;
+  public $send_a42_onmerge;
 
   // Build
   public $build_mode;
@@ -168,6 +169,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       "send_patient_with_current_admit",
       "mode_identito_vigilance",
       "send_no_facturable",
+      "send_a42_onmerge",
     ),
     "PID" => array(
       "build_PID_6",
@@ -271,6 +273,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["send_patient_with_current_admit"]    = "bool default|0";
     $props["mode_identito_vigilance"]            = "enum list|light|medium|strict default|light";
     $props["send_no_facturable"]                 = "bool default|1";
+    $props["send_a42_onmerge"]                   = "bool default|0";
     
     // Build
     $props["build_mode"]                   = "enum list|normal|simple default|normal";

@@ -1322,7 +1322,14 @@ class CSetuphl7 extends CSetup {
 
     $this->addQuery($query);
 
-    $this->mod_version = "0.96";
+    $this->makeRevision("0.96");
+
+    $query = "ALTER TABLE `receiver_hl7v2_config`
+                ADD `send_a42_onmerge` ENUM ('0','1') DEFAULT '0';";
+
+    $this->addQuery($query);
+
+    $this->mod_version = "0.97";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

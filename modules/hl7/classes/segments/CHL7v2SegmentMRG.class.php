@@ -40,9 +40,18 @@ class CHL7v2SegmentMRG extends CHL7v2Segment {
     $group            = $receiver->_ref_group;
 
     $data = array();
+
+    $patient = $patient_eliminee;
+    $mrg5 = null;
+
+    if ($patient_eliminee instanceof CSejour) {
+      $sejour  = $patient_eliminee;
+      $patient = $sejour->loadRefPatient();
+      $mrg5    = $sejour->_NDA;
+    }
     
     // MRG-1: Prior Patient Identifier List (CX) (repeating)
-    $data[] = $this->getPersonIdentifiers($patient_eliminee, $group, $receiver);
+    $data[] = $this->getPersonIdentifiers($patient, $group, $receiver);
     
     // MRG-2: Prior Alternate Patient ID (CX) (optional repeating)
     $data[] = null;
@@ -54,13 +63,13 @@ class CHL7v2SegmentMRG extends CHL7v2Segment {
     $data[] = null;
     
     // MRG-5: Prior Visit Number (CX) (optional)
-    $data[] = null;
+    $data[] = $mrg5;
     
     // MRG-6: Prior Alternate Visit ID (CX) (optional)
     $data[] = null;
     
     // MRG-7: Prior Patient Name (XPN) (optional repeating)
-    $data[] = $this->getXPN($patient_eliminee, $receiver);
+    $data[] = $this->getXPN($patient, $receiver);
     
     $this->fill($data);
   }

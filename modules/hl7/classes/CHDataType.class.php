@@ -139,18 +139,18 @@ class CHDataType extends CHL7v2 {
         $value = "";
       }
     }
-    
+
     $value = trim($value);
     if ($value === "") {
       return true;
     }
-    
+
     $valid = preg_match($this->getRegExpHL7(), $value);
     if (!$valid) {
       $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, "'$value' ($this->type)", $field);
       return false;
     }
-    
+
     return true;
   }
   
@@ -184,7 +184,7 @@ class CHDataType extends CHL7v2 {
    * @return array A structure containing the elements of the value
    */
   protected function parseMB($value, CHL7v2Field $field) {
-    if ($value === null) {
+    if ($value === null || $value === "") {
       return array();
     }
     

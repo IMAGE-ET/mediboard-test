@@ -49,7 +49,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
 
     $venueEliminee = $this->addElement($fusionVenue, "venueEliminee");
     // Ajout de la venue a eliminer
-    $this->addVenue($venueEliminee, $mbVenue->_sejour_eliminee, $referent);
+    $this->addVenue($venueEliminee, $mbVenue->_sejour_elimine, $referent);
         
     // Traitement final
     $this->purgeEmptyElements();

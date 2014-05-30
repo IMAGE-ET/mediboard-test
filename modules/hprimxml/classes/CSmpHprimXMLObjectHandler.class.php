@@ -209,8 +209,8 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
           
           $sejour1_nda = $sejour->_NDA = $infos_fus["sejour1_nda"];
           
-          $sejour_eliminee = $infos_fus["sejourElimine"];
-          $sejour2_nda = $sejour_eliminee->_NDA = $infos_fus["sejour2_nda"];
+          $sejour_elimine = $infos_fus["sejourElimine"];
+          $sejour2_nda = $sejour_elimine->_NDA = $infos_fus["sejour2_nda"];
 
           // Cas 0 NDA : Aucune notification envoyée
           if (!$sejour1_nda && !$sejour2_nda) {
@@ -229,7 +229,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
           
           // Cas 2 NDA : Message de fusion
           if ($sejour1_nda && $sejour2_nda) {
-            $sejour->_sejour_eliminee = $sejour_eliminee;
+            $sejour->_sejour_elimine = $sejour_elimine;
             
             $this->sendEvenementPatient("CHPrimXMLFusionVenue", $sejour);
             continue;

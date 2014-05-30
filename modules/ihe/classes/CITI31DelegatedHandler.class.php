@@ -200,10 +200,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
           CAppUI::setMsg($msg, UI_MSG_ERROR);
         }
       }
-      
+
       $this->createMovement($code, $sejour, $affectation);
       $service = $affectation->loadRefService();
       $curr_affectation = $sejour->loadRefCurrAffectation();
+      // On envoie pas de mouvement antérieur à la dernière affectation
       if (($service->uhcd || $service->radiologie || $service->urgence) && $affectation->sortie < $curr_affectation->sortie) {
         return;
       }
@@ -773,8 +774,9 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     }
 
     if ($mbObject instanceof CSejour) {
+      /** @var CSejour $sejour */
       $sejour = $mbObject;
-
+      /** @var CInteropReceiver $receiver */
       $receiver = $sejour->_receiver;
       $receiver->getInternationalizationCode($this->transaction);
 
@@ -785,14 +787,18 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
 
         $sejour1_nda = $sejour->_NDA = $infos_fus["sejour1_nda"];
 
-        /** @var CSejour $sejour_eliminee */
-        $sejour_eliminee = $infos_fus["sejourElimine"];
-        $sejour2_nda     = $sejour_eliminee->_NDA = $infos_fus["sejour2_nda"];
+        /** @var CSejour $sejour_elimine */
+        $sejour_elimine = $infos_fus["sejourElimine"];
+        $sejour2_nda    = $sejour_elimine->_NDA = $infos_fus["sejour2_nda"];
+        $receiver->loadConfigValues();
 
         // Cas 2 NDA : Suppression du deuxième séjour
         if ($sejour1_nda && $sejour2_nda) {
+          if ($receiver->_configs["send_a42_onmerge"]) {
+            continue;
+          }
           // Dans la pré-admission : A38
-          if ($sejour_eliminee->_etat == "preadmission") {
+          if ($sejour_elimine->_etat == "preadmission") {
             $code = "A38";
           }
 
@@ -801,16 +807,16 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
             $code = "A11";
           }
 
-          $sejour_eliminee->_receiver = $receiver;
-          $sejour_eliminee->loadRefPatient();
+          $sejour_elimine->_receiver = $receiver;
+          $sejour_elimine->loadRefPatient();
 
           if (!$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
             return;
           }
 
-          $this->createMovement($code, $sejour_eliminee);
+          $this->createMovement($code, $sejour_elimine);
 
-          $this->sendITI($this->profil, $this->transaction, $this->message, $code, $sejour_eliminee);
+          $this->sendITI($this->profil, $this->transaction, $this->message, $code, $sejour_elimine);
 
           continue;
         }
@@ -869,7 +875,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
 
     if ($mbObject instanceof CSejour) {
       $sejour = $mbObject;
-
+      /** @var CInteropReceiver $receiver */
       $receiver = $sejour->_receiver;
       $receiver->getInternationalizationCode($this->transaction);
 
@@ -880,12 +886,12 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
 
         $sejour1_nda = $sejour->_NDA = $infos_fus["sejour1_nda"];
 
-        /** @var CSejour $sejour_eliminee */
-        $sejour_eliminee = $infos_fus["sejourElimine"];
-        $sejour2_nda     = $sejour_eliminee->_NDA = $infos_fus["sejour2_nda"];
+        /** @var CSejour $sejour_elimine */
+        $sejour_elimine = $infos_fus["sejourElimine"];
+        $sejour2_nda    = $sejour_elimine->_NDA = $infos_fus["sejour2_nda"];
 
         // Suppression de tous les mouvements du séjours à éliminer
-        $movements = $sejour_eliminee->loadRefsMovements();
+        $movements = $sejour_elimine->loadRefsMovements();
         foreach ($movements as $_movement) {
           $_movement->last_update = "now";
           $_movement->cancel      = 1;
@@ -912,6 +918,19 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
 
           $sejour->loadRefPatient();
 
+          $this->sendITI($this->profil, $this->transaction, $this->message, $code, $sejour);
+          continue;
+        }
+
+        $receiver->loadConfigValues();
+        //Cas 2 NDA : message de fusion si la configuration est activé
+        if ($receiver->_configs["send_a42_onmerge"] && $sejour1_nda && $sejour2_nda) {
+          $code = "A42";
+          if (!$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
+            return;
+          }
+          $sejour->loadRefPatient();
+          $sejour->_sejour_elimine = $sejour_elimine;
           $this->sendITI($this->profil, $this->transaction, $this->message, $code, $sejour);
           continue;
         }
