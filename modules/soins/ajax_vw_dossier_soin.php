@@ -160,69 +160,65 @@ if (CModule::getActive("dPprescription")) {
     // Chargement de la ligne de prescription
     $line = new $object_class;
     $line->load($object_id);
-    
-    if ($line instanceof CPrescriptionLineMedicament) {
-      $line->countVariantes();
-      $line->countBackRefs("administration");
-      $line->loadRefsVariantes();
-      if ($line->delay_prise) {
-        $line->loadRefLastAdministration();
-      }
-      $line->_ref_produit->loadRefsFichesATC();
-    }
-  
-    if ($line instanceof CPrescriptionLineElement) {
-      $element = $line->_ref_element_prescription;
-      $name_cat = $element->category_prescription_id;
-      $element->loadRefCategory();
-      $name_chap = $element->_ref_category_prescription->chapitre;
-    }
-    
-    if ($line instanceof CPrescriptionLineMedicament) {
-      if (!$line->_fin_reelle) {
-         $line->_fin_reelle = $prescription->_ref_object->_sortie;
-      }
-      $line->calculPrises($prescription, $_dates, null, null, true, $planif_manuelle);
-      $line->calculAdministrations($_dates);
-      $line->removePrisesPlanif();
-    }
-    
-    if ($line instanceof CPrescriptionLineElement) {
-      $line->calculAdministrations($_dates);  
-      $line->calculPrises($prescription, $_dates, $name_chap, $name_cat, true, $planif_manuelle);
-      $line->removePrisesPlanif();
-    }  
 
-    if ($line instanceof CPrescriptionLineMix) {
-      $line->countVariantes();
-      $line->loadRefsVariantes();
-      $line->loadRefsLines();
-      $line->loadVoies();
-      $line->loadRefPraticien();
-      $line->loadRefLogSignaturePrat();
-      $line->calculVariations();
-      
-      // Calcul des prises prevues
-      $line->calculQuantiteTotal();
-      foreach ($_dates as $curr_date) {
-        $line->calculPrisesPrevues($curr_date, $planif_manuelle);
-      }
-      $line->calculAdministrations();
-      $line->updateAlerteAntibio();
-
-      // Chargement des transmissions de la prescription_line_mix
-      $transmission = new CTransmissionMedicale();
-      $transmission->object_class = "CPrescriptionLineMix";
-      $transmission->object_id = $line->_id;
-      $transmission->sejour_id = $sejour->_id;
-      $transmissions = $transmission->loadMatchingList();
-      
-      foreach ($transmissions as $_transmission) {
-        $_transmission->loadRefsFwd();
-        if ($_transmission->object_id && $_transmission->object_class) {
-          $prescription->_transmissions[$_transmission->object_class][$_transmission->object_id][$_transmission->_id] = $_transmission;
+    switch ($line->_class) {
+      case "CPrescriptionLineMedicament":
+        $line->countVariantes();
+        $line->countBackRefs("administration");
+        $line->loadRefsVariantes();
+        if ($line->delay_prise) {
+          $line->loadRefLastAdministration();
         }
-      }
+        $line->_ref_produit->loadRefsFichesATC();
+        if (!$line->_fin_reelle) {
+          $line->_fin_reelle = $prescription->_ref_object->_sortie;
+        }
+        $line->calculPrises($prescription, $_dates, null, null, true, $planif_manuelle);
+        $line->calculAdministrations($_dates);
+        $line->removePrisesPlanif();
+        break;
+      case "CPrescriptionLineElement":
+        $element = $line->_ref_element_prescription;
+        $name_cat = $element->category_prescription_id;
+        $element->loadRefCategory();
+        $name_chap = $element->_ref_category_prescription->chapitre;
+        $line->calculAdministrations($_dates);
+        $line->calculPrises($prescription, $_dates, $name_chap, $name_cat, true, $planif_manuelle);
+        $line->removePrisesPlanif();
+        break;
+      case "CPrescriptionLineMix":
+        $line->countVariantes();
+        $line->loadRefsVariantes();
+        $line->loadRefsLines();
+        $line->loadVoies();
+        $line->loadRefPraticien();
+        $line->loadRefLogSignaturePrat();
+        if (CAppUI::conf("dPprescription CPrescription show_initiales_pharma", $group->_guid)) {
+          $line->loadRefLogValidationPharma()->loadRefUser()->loadRefMediuser();
+        }
+        $line->calculVariations();
+
+        // Calcul des prises prevues
+        $line->calculQuantiteTotal();
+        foreach ($_dates as $curr_date) {
+          $line->calculPrisesPrevues($curr_date, $planif_manuelle);
+        }
+        $line->calculAdministrations();
+        $line->updateAlerteAntibio();
+
+        // Chargement des transmissions de la prescription_line_mix
+        $transmission = new CTransmissionMedicale();
+        $transmission->object_class = "CPrescriptionLineMix";
+        $transmission->object_id = $line->_id;
+        $transmission->sejour_id = $sejour->_id;
+        $transmissions = $transmission->loadMatchingList();
+
+        foreach ($transmissions as $_transmission) {
+          $_transmission->loadRefsFwd();
+          if ($_transmission->object_id && $_transmission->object_class) {
+            $prescription->_transmissions[$_transmission->object_class][$_transmission->object_id][$_transmission->_id] = $_transmission;
+          }
+        }
     }
 
     if (in_array($line->jour_decalage, array("ER", "R"))) {
@@ -232,6 +228,8 @@ if (CModule::getActive("dPprescription")) {
   else {
     // Calcul du dossier de soin complet
     if ($prescription->_id) {
+      $show_initiales_pharma = CAppUI::conf("dPprescription CPrescription show_initiales_pharma", $group->_guid);
+
       // Chargement des lignes de medicament
       if (in_array($chapitre, array("all_med", "all_chaps"))) {
         $prescription->loadRefsLinesMedByCat("1", "1");
@@ -241,6 +239,9 @@ if (CModule::getActive("dPprescription")) {
           $_line_med->countBackRefs("administration");
           $_line_med->loadRefsVariantes();
           $_line_med->countPlanifications();
+          if ($show_initiales_pharma) {
+            $_line_med->loadRefLogValidationPharma()->loadRefUser()->loadRefMediuser();
+          }
           if (in_array($_line_med->jour_decalage, array("ER", "R"))) {
             $_line_med->loadRefOperation();
           }
@@ -265,6 +266,9 @@ if (CModule::getActive("dPprescription")) {
           if (in_array($_prescription_line_mix->jour_decalage, array("ER", "R"))) {
             $_prescription_line_mix->loadRefOperation();
           }
+          if ($show_initiales_pharma) {
+            $_prescription_line_mix->loadRefLogValidationPharma()->loadRefUser()->loadRefMediuser();
+          }
           $_prescription_line_mix->updateAlerteAntibio();
         }
         // Chargement des lignes d'éléments
@@ -276,9 +280,13 @@ if (CModule::getActive("dPprescription")) {
         }
       }
       elseif ($chapitre == "med" || $chapitre == "inj") {
+        $prescription->loadRefsLinesMedByCat("1", "1", '', $hide_old_lines);
         $prescription->loadRefsLinesMedByCat("1", "1");
         foreach ($prescription->_ref_prescription_lines as $_line_med) {
           $_line_med->loadRefLogSignee();
+          if ($show_initiales_pharma) {
+            $_line_med->loadRefLogValidationPharma()->loadRefUser()->loadRefMediuser();
+          }
           $_line_med->countVariantes();
           $_line_med->countBackRefs("administration");
           $_line_med->loadRefsVariantes();
@@ -307,6 +315,9 @@ if (CModule::getActive("dPprescription")) {
           $_prescription_line_mix->countPlanifications();
           if (in_array($_prescription_line_mix->jour_decalage, array("ER", "R"))) {
             $_prescription_line_mix->loadRefOperation();
+          }
+          if ($show_initiales_pharma) {
+            $_prescription_line_mix->loadRefLogValidationPharma()->loadRefUser()->loadRefMediuser();
           }
           $_prescription_line_mix->updateAlerteAntibio();
         }
