@@ -229,6 +229,13 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
           
           // Cas 2 NDA : Message de fusion
           if ($sejour1_nda && $sejour2_nda) {
+            $sejour_eliminee->check();
+            $sejour_eliminee->updateFormFields();
+            $sejour_eliminee->loadRefPatient();
+            $sejour_eliminee->loadRefPraticien();
+            $sejour_eliminee->loadLastLog();
+            $sejour_eliminee->loadRefAdresseParPraticien();
+
             $sejour->_sejour_eliminee = $sejour_eliminee;
             
             $this->sendEvenementPatient("CHPrimXMLFusionVenue", $sejour);
