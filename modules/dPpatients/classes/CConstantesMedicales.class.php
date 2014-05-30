@@ -75,8 +75,8 @@ class CConstantesMedicales extends CMbObject {
     "pouls"             => array(
       "type" => "physio",
       "unit" => "puls./min",
-      "min" => 70, "max" => 120,
-      "standard" => 90,
+      "min" => 20, "max" => 220,
+      "norm_min" => 90,
       "colors" => array("black")
     ),
     "ta"                => array(
@@ -85,7 +85,7 @@ class CConstantesMedicales extends CMbObject {
       "unit_iso" => "cm",
       "formfields" => array("_ta_systole", "_ta_diastole"),
       "min" => 2, "max" => 16,
-      "standard" => 8,
+      "norm_min" => 8, "norm_max" => 14,
       "colors" => array("#00A8F0", "#C0D800"),
       "conversion" => array("mmHg" => 10),
       "candles" => true,
@@ -97,7 +97,7 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "cmHg",
       "formfields" => array("_ta_gauche_systole", "_ta_gauche_diastole"),
       "min" => 2, "max" => 16,
-      "standard" => 8,
+      "norm_min" => 8, "norm_max" => 14,
       "colors" => array("#00A8F0", "#C0D800"),
       "conversion" => array("mmHg" => 10),
       "candles" => true,
@@ -109,7 +109,7 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "cmHg",
       "formfields" => array("_ta_droit_systole", "_ta_droit_diastole"),
       "min" => 2, "max" => 16,
-      "standard" => 8,
+      "norm_min" => 8, "norm_max" => 14,
       "colors" => array("#00A8F0", "#C0D800"),
       "conversion" => array("mmHg" => 10),
       "candles" => true,
@@ -121,7 +121,7 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "cmHg",
       "formfields" => array("_ta_couche_systole", "_ta_couche_diastole"),
       "min" => 2, "max" => 16,
-      "standard" => 8,
+      "norm_min" => 8, "norm_max" => 14,
       "colors" => array("#00A8F0", "#C0D800"),
       "conversion" => array("mmHg" => 10),
       "candles" => true,
@@ -133,7 +133,7 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "cmHg",
       "formfields" => array("_ta_assis_systole", "_ta_assis_diastole"),
       "min" => 2, "max" => 16,
-      "standard" => 8,
+      "norm_min" => 8, "norm_max" => 14,
       "colors" => array("#00A8F0", "#C0D800"),
       "conversion" => array("mmHg" => 10),
       "candles" => true,
@@ -145,7 +145,7 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "cmHg",
       "formfields" => array("_ta_debout_systole", "_ta_debout_diastole"),
       "min" => 2, "max" => 16,
-      "standard" => 8,
+      "norm_min" => 8, "norm_max" => 14,
       "colors" => array("#00A8F0", "#C0D800"),
       "conversion" => array("mmHg" => 10),
       "candles" => true,
@@ -1103,8 +1103,11 @@ class CConstantesMedicales extends CMbObject {
           $_params_ref["min"]      *= $conv;
           $_params_ref["max"]      *= $conv;
 
-          if (isset($_params_ref["standard"])) {
-            $_params_ref["standard"] *= $conv;
+          if (isset($_params_ref["norm_min"])) {
+            $_params_ref["norm_min"] *= $conv;
+          }
+          if (isset($_params_ref["norm_max"])) {
+            $_params_ref["norm_max"] *= $conv;
           }
         }
       }

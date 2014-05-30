@@ -9,33 +9,36 @@
  * @version    $Revision$
  */
 
-$list = array();
-foreach (CConstantesMedicales::$list_constantes as $_const => $_params) {
-  if (!isset($_params["cumul_for"])) {
-    $list[] = $_const;
-  }
-}
-
 $selection = array(
-  "poids"                   => "custom tpl|inc_config_constant components|form|graph|color default|1|0|0066FF",
-  "taille"                  => "custom tpl|inc_config_constant components|form|graph|color default|2|0|0066FF",
-  "pouls"                   => "custom tpl|inc_config_constant components|form|graph|color default|3|1|FF0000",
-  "temperature"             => "custom tpl|inc_config_constant components|form|graph|color default|4|1|0066FF",
-  "ta"                      => "custom tpl|inc_config_constant components|form|graph|color default|5|1|000000",
-  "EVA"                     => "custom tpl|inc_config_constant components|form|graph|color default|6|1|FF00FF",
-  "frequence_respiratoire"  => "custom tpl|inc_config_constant components|form|graph|color default|7|1|009900"
+  "poids"                   => "custom tpl|inc_config_constant components|form|graph|color|mode|min|max|norm_min|norm_max default|1|0|0066FF|float|2|2|0|0",
+  "taille"                  => "custom tpl|inc_config_constant components|form|graph|color|mode|min|max|norm_min|norm_max default|2|0|0066FF|float|5|5|0|0",
+  "pouls"                   => "custom tpl|inc_config_constant components|form|graph|color|mode|min|max|norm_min|norm_max default|3|1|FF0000|fixed|70|120|0|0",
+  "temperature"             => "custom tpl|inc_config_constant components|form|graph|color|mode|min|max|norm_min|norm_max default|4|1|0066FF|fixed|36|40|37.5|0",
+  "ta"                      => "custom tpl|inc_config_constant components|form|graph|color|mode|min|max|norm_min|norm_max default|5|1|000000|fixed|2|16|8|12",
+  "EVA"                     => "custom tpl|inc_config_constant components|form|graph|color|mode|min|max|norm_min|norm_max default|6|1|FF00FF|fixed|0|10|0|0",
+  "frequence_respiratoire"  => "custom tpl|inc_config_constant components|form|graph|color|mode|min|max|norm_min|norm_max default|7|1|009900|fixed|0|60|0|0"
 );
 
-CMbArray::removeValue("poids",                  $list);
-CMbArray::removeValue("taille",                 $list);
-CMbArray::removeValue("pouls",                  $list);
-CMbArray::removeValue("temperature",            $list);
-CMbArray::removeValue("ta",                     $list);
-CMbArray::removeValue("EVA",                    $list);
-CMbArray::removeValue("frequence_respiratoire", $list);
-
-foreach ($list as $_constante) {
-  $selection[$_constante] = "custom tpl|inc_config_constant components|form|graph|color default|0|0|0066FF";
+foreach (CConstantesMedicales::$list_constantes as $_constante => $_params) {
+  if (!isset($_params["cumul_for"]) && !in_array($_constante, array('poids', 'taille', 'pouls', 'temperature', 'ta', 'EVA', 'frequence_respiratoire'))) {
+    $mode = 'fixed';
+    $min = $_params['min'];
+    $max = $_params['max'];
+    $norm_min = 0;
+    $norm_max = 0;
+    if (strpos($_params['min'], '@') !== false || strpos($_params['max'], '@') !== false) {
+      $mode = 'float';
+      $min = str_replace('@-', '', $_params['min']);
+      $max = str_replace('@+', '', $_params['max']);
+    }
+    if (array_key_exists('norm_min', $_params)) {
+      $norm_min = $_params['norm_min'];
+    }
+    if (array_key_exists('norm_max', $_params)) {
+      $norm_max = $_params['norm_max'];
+    }
+    $selection[$_constante] = "custom tpl|inc_config_constant components|form|graph|color|mode|min|max|norm_min|norm_max default|0|0|0066FF|$mode|$min|$max|$norm_min|$norm_max";
+  }
 }
 
 CConfiguration::register(

@@ -16,7 +16,6 @@
   <script type="text/javascript">
     changeValuesDisplayMode = function(feature) {
       var oForm = getForm("edit-configuration");
-      console.debug(oForm[feature + "-time"]);
       if ($V(oForm[feature + "-mode"]) == 'time') {
         $('div-graphs_display_mode-time').show();
       }

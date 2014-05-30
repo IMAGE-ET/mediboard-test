@@ -111,16 +111,26 @@ class CConstantGraph {
           $yaxis = $this->createYaxis($_constant, $values, $axis_id);
 
           /* Create the markings for the standard value */
-          if (isset(CConstantesMedicales::$list_constantes[$_constant]['standard'])) {
-            $color = $this->colors[$_constant];
+          $config = self::getConfigFor($_constant, $this->host);
+          $color = $this->colors[$_constant];
             $color = 'rgba(' . hexdec(substr($color, 1, 2)) .
               ', ' . hexdec(substr($color, 3, 2)) .
-              ', ' . hexdec(substr($color, 5, 2)) . ', 0.3)';
+              ', ' . hexdec(substr($color, 5, 2)) . ', 0.5)';
 
+          if ($config['norm_min'] != 0) {
             $markings[] = array(
               'y' . $axis_id . 'axis' => array(
-                'from'    => CConstantesMedicales::$list_constantes[$_constant]['standard'],
-                'to'      => CConstantesMedicales::$list_constantes[$_constant]['standard'],
+                'from'    => $config['norm_min'],
+                'to'      => $config['norm_min'],
+              ),
+              'color'   => $color,
+            );
+          }
+          if ($config['norm_max'] != 0) {
+            $markings[] = array(
+              'y' . $axis_id . 'axis' => array(
+                'from'    => $config['norm_max'],
+                'to'      => $config['norm_max'],
               ),
               'color'   => $color,
             );
@@ -388,15 +398,13 @@ class CConstantGraph {
     $yaxis = array(
       'label'               => utf8_encode(CAppUI::tr("CConstantesMedicales-$constant-court")),
       'position'            => 'left',
-      'autoscaleMargin'     => 0.05,
       'tickDecimals'        => 1,
-      'alignTicksWithAxis'  => 1,
       'labelWidth'          => 20,
       'reserveSpace'        => true
     );
     if (array_key_exists('min', $values) && array_key_exists('max', $values)) {
-      $yaxis['min'] = self::getMin($constant, $values['min']);
-      $yaxis['max'] = self::getMax($constant, $values['max']);
+      $yaxis['min'] = self::getMin($constant, $values['min'], $this->host);
+      $yaxis['max'] = self::getMax($constant, $values['max'], $this->host);
     }
     if ($axis_id != 1) {
       $yaxis['color'] = $this->colors[$constant];
@@ -696,24 +704,20 @@ class CConstantGraph {
   /**
    * Return the max for the Yaxis
    *
-   * @param string  $constant  The name of the constant
-   * @param integer $max_value The maximum value
+   * @param string    $constant  The name of the constant
+   * @param integer   $max_value The minimum value
+   * @param CMbObject $host      The host
    *
    * @return integer
    */
-  static function getMax($constant, $max_value) {
-    $max = ceil($max_value * 1.05);
-    if (isset(CConstantesMedicales::$list_constantes[$constant]['max'])) {
-      $max_param = CConstantesMedicales::$list_constantes[$constant]['max'];
-      if (substr($max_param, 0, 1) == '@') {
-        $max = $max_value + intval(substr($max_param, 1));
-      }
-      else {
-        $max = max(intval($max_param), $max);
-      }
+  static function getMax($constant, $max_value, $host = null) {
+    $config = self::getConfigFor($constant, $host);
+
+    if ($config['mode'] == 'float') {
+      $max = $max_value + $config['max'];
     }
-    if (isset(CConstantesMedicales::$list_constantes[$constant]['candles']) && CConstantesMedicales::$list_constantes[$constant]['candles'] === true) {
-      $max += 5;
+    else {
+      $max = $config['max'];
     }
 
     return $max;
@@ -722,24 +726,20 @@ class CConstantGraph {
   /**
    * Return the min for the Yaxis
    *
-   * @param string  $constant  The name of the constant
-   * @param integer $min_value The maximum value
+   * @param string    $constant  The name of the constant
+   * @param integer   $min_value The minimum value
+   * @param CMbObject $host      The host
    *
    * @return integer
    */
-  static function getMin($constant, $min_value) {
-    $min = floor($min_value * 0.95);
-    if (isset(CConstantesMedicales::$list_constantes[$constant]['min'])) {
-      $min_param = CConstantesMedicales::$list_constantes[$constant]['min'];
-      if (substr($min_param, 0, 1) == '@') {
-        $min = $min_value + intval(substr($min_param, 1));
-      }
-      else {
-        $min = min(intval($min_param), $min);
-      }
+  static function getMin($constant, $min_value, $host = null) {
+    $config = self::getConfigFor($constant, $host);
+
+    if ($config['mode'] == 'float') {
+      $min = $min_value - $config['min'];
     }
-    if (isset(CConstantesMedicales::$list_constantes[$constant]['candles']) && CConstantesMedicales::$list_constantes[$constant]['candles'] === true && $min >= 10) {
-      $min -= 10;
+    else {
+      $min = $config['min'];
     }
 
     return $min;
@@ -799,6 +799,42 @@ class CConstantGraph {
       $cumul = 1;
     }
     return array($type, $cumul);
+  }
+
+  /**
+   * Get the configs for the given constant, and return an associative array of the configs
+   *
+   * @param string    $constant The name of the constant
+   * @param CMbObject $host     The host
+   *
+   * @return array
+   */
+  static function getConfigFor($constant, $host) {
+    $config = CConstantesMedicales::getHostConfig('selection', $host);
+    $config = explode('|', $config[$constant]);
+    if (count($config) == 3) {
+      $mode = 'fixed';
+      $min = CConstantesMedicales::$list_constantes[$constant]['min'];
+      $max = CConstantesMedicales::$list_constantes[$constant]['max'];
+      $norm_min = 0;
+      $norm_max = 0;
+
+      if (strpos($min, '@') !== false) {
+        $mode = 'float';
+        $min = substr($min, strpos($min, '-'));
+        $max = substr($min, strpos($max, '+'));
+      }
+
+      if (isset(CConstantesMedicales::$list_constantes[$constant]['norm_min'])) {
+        $norm_min = CConstantesMedicales::$list_constantes[$constant]['norm_min'];
+      }
+      if (isset(CConstantesMedicales::$list_constantes[$constant]['norm_max'])) {
+        $norm_max = CConstantesMedicales::$list_constantes[$constant]['norm_max'];
+      }
+      $config = array_merge($config, array($mode, $min, $max, $norm_min, $norm_max));
+    }
+
+    return array_combine(array('form', 'graph', 'color', 'mode', 'min', 'max', 'norm_min', 'norm_max'), $config);
   }
 
   /**
