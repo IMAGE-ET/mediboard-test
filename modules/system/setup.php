@@ -1737,7 +1737,13 @@ class CSetupsystem extends CSetup {
     $this->makeRevision("1.1.61");
     $this->addMethod("addExObjectDates");
 
-    $this->mod_version = "1.1.62";
+    $this->makeRevision("1.1.62");
+    $query = "ALTER TABLE `firstname_to_gender`
+                CHANGE `sex` `sex` ENUM ('f','m','u') NOT NULL DEFAULT 'u',
+                ADD `language` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.63";
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,

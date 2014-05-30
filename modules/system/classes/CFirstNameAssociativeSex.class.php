@@ -15,6 +15,7 @@ class CFirstNameAssociativeSex extends CMbObject {
   public $first_name_id;
   public $firstname;
   public $sex;
+  public $language;
 
   /**
    * @see parent::getSpec()
@@ -35,6 +36,7 @@ class CFirstNameAssociativeSex extends CMbObject {
     $specs = parent::getProps();
     $specs["firstname"] = "str notNull";
     $specs["sex"]       = "enum list|f|m|u notNull default|u";
+    $specs["language"]  = "str";
     return $specs;
   }
 
@@ -47,30 +49,21 @@ class CFirstNameAssociativeSex extends CMbObject {
    */
   static function getSexFor($firstname) {
     $prenom_exploded = preg_split('/[-_ ]+/', $firstname);   // get the first firstname of composed one
+    $first_first_name = addslashes(trim(reset($prenom_exploded)));
 
-    $sex_found = array();
-    foreach ($prenom_exploded as $_pre) {
-      $object = new self();
-      $object->firstname = trim($_pre);
+    $object = new self();
+    $object->firstname = $first_first_name;
+    $nb_objects = $object->countMatchingList();
+    if ($nb_objects > 1) {
+      $object->language = "french";
       $object->loadMatchingObject();
-      $sex_found[$_pre] = $object->sex;
     }
-    CMbArray::removeValue("", $sex_found);
-
-    $found = "u";
-    foreach ($sex_found as $_found) {
-      if ($_found != "u") {
-        if ($found == "u") {
-          $found = $_found;
-          continue;
-        }
-
-        if ($_found != $found) {
-          $found = "u";
-          continue;
-        }
-      }
+    if (!$object->_id || $object->sex == "u") {
+      $object = new self();
+      $object->firstname = $first_first_name;
+      $object->loadMatchingObject();
     }
-    return $found;
+
+    return $object->sex ? $object->sex : "u";
   }
 }

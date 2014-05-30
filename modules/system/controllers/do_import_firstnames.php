@@ -45,7 +45,7 @@ CApp::rip();
  * @param int    $start      start from
  * @param int    $count      step of import
  *
- * return null
+ * @return void
  */
 function importFile($targetPath, $start, $count) {
   $fp = fopen($targetPath, 'r');
@@ -61,12 +61,14 @@ function importFile($targetPath, $start, $count) {
       $found = false;
       $fn = CMbString::removeDiacritics(trim($line[0]));
       $sex = trim($line[1]);
+      $language = CMbString::removeDiacritics(trim($line[2]));
       if ($sex == "m,f" || $sex == "f,m") {
         $sex = "u";
       }
 
       $firstname = new CFirstNameAssociativeSex();
       $firstname->firstname = $fn;
+      $firstname->language = $language;
       $firstname->loadMatchingObjectEsc();
 
       if ($firstname->_id) { // found
