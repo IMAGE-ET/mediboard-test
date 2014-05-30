@@ -17,9 +17,13 @@ $callback = CValue::post("callback", 0);
 $limit = 500;
 $use_callback = true;
 
-if ($class == "CCorrespondantPatient" || $class == "CMedecin") {
-  /** @var CMedecin|CCorrespondantPatient $obj */
-  $field = ($class == "CCorrespondantPatient") ? "sex" : "sexe";
+if (is_subclass_of($class, 'CPerson')) {
+  /** @var CPerson $_class */
+  $_class = new $class();
+  $field_sex = $_class->getSexFieldName();
+  if (!$field_sex) {
+    CAppUI::stepAjax("class %s does not contain sex field", UI_MSG_ERROR, $class);
+  }
 
   $idex               = new CIdSante400();
   $idex->object_class = $class;
@@ -29,14 +33,15 @@ if ($class == "CCorrespondantPatient" || $class == "CMedecin") {
   $idex->object_id = (($idex->_id && $reset) || !$idex->_id) ? 1 : $idex->object_id;
   $start = $idex->object_id;
 
+  /** @var CMbObject $obj */
   $obj = new $class();
   $key = $obj->_spec->key;
   $where = array();
-  $where[] = "$field IS NULL OR $field = 'u'";
+  $where[] = "$field_sex IS NULL OR $field_sex = 'u'";
   $where["prenom"] = "IS NOT NULL";
   $found = $obj->countList($where);
-  echo "\n<div class='small-info'>Objets concernés : ".$found."</div>";
-  $where[] = "$key > '$start'";
+  CAppUI::stepAjax("Objets concernés : ".$found);
+  $where[$key] = " > '$start' ";
   $objs = $obj->loadList($where, "$key ASC", "0, $limit");
 
   if (count($objs)) {
@@ -46,10 +51,9 @@ if ($class == "CCorrespondantPatient" || $class == "CMedecin") {
         CAppUI::stepAjax($msg, UI_MSG_WARNING);
       }
       else {
-        echo "\n<div class='info'>".$_obj->_view." => ". $_obj->$field."</div>";
+        CAppUI::stepAjax($_obj->$field_sex." | ".$_obj->_view, $_obj->$field_sex == "u" ? UI_MSG_WARNING: UI_MSG_OK);
       }
     }
-
     if ($msg = $idex->store()) {
       CAppUI::stepAjax($msg, UI_MSG_ERROR);
     }

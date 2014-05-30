@@ -54,6 +54,26 @@ class CPerson extends CMbObject {
   }
 
   /**
+   * return the sex field of the herited class
+   *
+   * @return null|string
+   */
+  function getSexFieldName() {
+    switch ($this->_class) {
+      case 'CCorrespondantPatient':
+        return "sex";
+        break;
+
+      case 'CMedecin':
+        return "sexe";
+        break;
+
+      default:
+        return null;
+    }
+  }
+
+  /**
    * Map the class variable with CPerson variable
    *
    * @return void
