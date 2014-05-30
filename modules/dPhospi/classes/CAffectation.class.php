@@ -153,6 +153,9 @@ class CAffectation extends CMbObject {
    */
   function loadView() {
     parent::loadView();
+    if (!$this->_id) {
+      return;
+    }
     $sejour = $this->loadRefSejour();
     $sejour->loadRefPraticien();
     $sejour->loadRefPatient()->loadRefPhotoIdentite();
