@@ -161,7 +161,7 @@
           <select name="mode_sortie" onchange="changeOrientation(this);Fields.init(this.value); this.form.onsubmit();">
             {{foreach from=$sejour->_specs.mode_sortie->_list item=_mode}}
               <option value="{{$_mode}}" {{if $sejour->mode_sortie == $_mode}}selected{{/if}}
-                {{if $_mode == "mutation" && !$rpu->mutation_sejour_id}}disabled{{/if}}>
+                {{if $_mode == "mutation"}}{{if $rpu->mutation_sejour_id}}selected{{else}}disabled{{/if}}{{/if}}>
                 {{tr}}CSejour.mode_sortie.{{$_mode}}{{/tr}}
               </option>
             {{/foreach}}
