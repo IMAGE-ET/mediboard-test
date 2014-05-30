@@ -106,5 +106,5 @@
 </table>
 
 <table class="tbl">
-  {{mb_include module=soins template=inc_infos_patients_soins add_class_poids=1 add_class_taille=1}}
+  {{mb_include module=soins template=inc_infos_patients_soins add_class=1}}
 </table>
