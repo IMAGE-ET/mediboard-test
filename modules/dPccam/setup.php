@@ -139,7 +139,7 @@ class CSetupdPccam extends CSetup {
     $query = "ALTER TABLE `frais_divers`
                 ADD INDEX (`execution`),
                 ADD INDEX (`object_class`);";
-    $this->addQuery($query);
+    //$this->addQuery($query);
 
     $this->makeRevision("0.20");
 
@@ -153,10 +153,10 @@ class CSetupdPccam extends CSetup {
     $this->mod_version = "0.21";
     // Data source query
 
-    // Version 33 de la CCAM
+    // Version 35 de la CCAM
     $query = "SELECT *
       FROM actes
-      WHERE CODE = 'BGQP140'";
+      WHERE CODE = 'AZQX005'";
     $this->addDatasource("ccamV2", $query);
 
     // Tarifs de convergence
