@@ -29,7 +29,7 @@ class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
   function doBind() {
     parent::doBind();
     $this->_obj->modificateurs = "";
-    $listModifConvergence = array("X", "I", "9", "O");
+    $dents = array();
     foreach ($_POST as $propName => $propValue) {
       $matches = null;
       if (preg_match("/modificateur_(.)(.)/", $propName, $matches)) {
@@ -41,7 +41,12 @@ class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
           }
         }
       }
+      $matches = null;
+      if (preg_match("/dent_(..)/", $propName, $matches)) {
+        $dents[] = $matches[1];
+      }
     }
+    $this->_obj->position_dentaire = implode("|", $dents);
     $this->_obj->loadRefObject();
     $this->_ref_object = $this->_obj->_ref_object;
   }

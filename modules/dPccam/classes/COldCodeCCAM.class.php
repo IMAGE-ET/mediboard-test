@@ -531,18 +531,25 @@ class COldCodeCCAM {
     $query = $ds->prepare($query, $this->code, $activite->numero);
     $result = $ds->exec($query);
 
+    $this->_sorted_tarif = 2;
     while ($obj = $ds->fetchObject($result)) {
       $phases[$obj->phase] = $obj;
       $phase =& $phases[$obj->phase];
-      $phase->tarif = floatval($obj->tarif)/100;
-      $phase->libelle = "Phase Principale";
-      $phase->charges = floatval($obj->charges)/100;
-      $this->_sorted_tarif = 0;
-      if ($activite->numero == "1" && $phase->tarif != 0) {
-        $this->_sorted_tarif = 1 / $phase->tarif;
-      }
-      elseif ($phase->tarif == 0) {
-        $this->_sorted_tarif = 1;
+
+      $phase->tarif        = floatval($obj->tarif)/100;
+      $phase->libelle      = "Phase Principale";
+      $phase->charges      = floatval($obj->charges)/100;
+      $phase->nb_dents     = intval("00");
+      $phase->dents_incomp =  array();
+      
+      // Ordre des tarifs décroissants pour l'activité 1
+      if ($activite->numero == "1") {
+        if ($phase->tarif != 0) {
+          $this->_sorted_tarif = 1 / $phase->tarif;
+        }
+        else {
+          $this->_sorted_tarif = 1;
+        }
       }
 
       // Copie des modificateurs pour chaque phase. Utile pour la salle d'op

@@ -151,6 +151,8 @@ $unites["ecbu"]       = array("nom"=>"ECBU","unit"=>"");
 
 // Initialisation d'un acte NGAP
 $acte_ngap = CActeNGAP::createEmptyFor($selOp);
+// Liste des dents CCAM
+$liste_dents = reset(CDentCCAM::loadList());
 
 // Vérification de la check list journalière
 $daily_check_list = CDailyCheckList::getList($salle, $date);
@@ -202,6 +204,7 @@ $operateurs_disp_vasc = implode("-", array_merge(CMbArray::pluck($listChirs, "_i
 $smarty->assign("anesth_perop"           , new CAnesthPerop());
 $smarty->assign("unites"                 , $unites);
 $smarty->assign("acte_ngap"              , $acte_ngap);
+$smarty->assign("liste_dents"            , $liste_dents);
 $smarty->assign("op"                     , $op);
 $smarty->assign("salle"                  , $salle->_id);
 $smarty->assign("currUser"               , $currUser);

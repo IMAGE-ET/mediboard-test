@@ -50,6 +50,7 @@ class CActeCCAM extends CActe {
 
   // Derived fields
   public $_modificateurs = array();
+  public $_dents         = array();
   public $_rembex;
   public $_anesth;
   public $_anesth_associe;
@@ -288,6 +289,7 @@ class CActeCCAM extends CActe {
     parent::updateFormFields();
     $this->_modificateurs = str_split($this->modificateurs);
     CMbArray::removeValue("", $this->_modificateurs);
+    $this->_dents         = explode("|", $this->position_dentaire);
     $this->_shortview = $this->code_acte;
     $this->_view      = "$this->code_acte-$this->code_activite-$this->code_phase-$this->modificateurs";
     $this->_anesth    = ($this->code_activite == 4);
@@ -440,7 +442,7 @@ class CActeCCAM extends CActe {
    * @return CDatedCodeCCAM
    */
   function loadRefCodeCCAM() {
-    return $this->_ref_code_ccam = CDatedCodeCCAM::get($this->code_acte);
+    return $this->_ref_code_ccam = CDatedCodeCCAM::get($this->code_acte, $this->execution);
   }
 
   /**

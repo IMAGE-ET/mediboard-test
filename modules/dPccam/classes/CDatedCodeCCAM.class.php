@@ -103,9 +103,8 @@ class CDatedCodeCCAM {
     else {
       $this->code = strtoupper($code);
     }
-    if (!$date) {
-      $this->date = CMbDT::date();
-    }
+    $this->date = $date ? $date : CMbDT::date();
+
     return null;
   }
 
@@ -387,6 +386,7 @@ class CDatedCodeCCAM {
     $activite->phases = array();
     $phases =& $activite->phases;
     $infoPhase = null;
+    $this->_sorted_tarif = 2;
     foreach ($this->_ref_code_ccam->_ref_activites[$activite->numero]->_ref_phases as $phase) {
       foreach ($phase->_ref_classif as $dateEffet => $info) {
         if ($dateEffet < $this->_date) {
@@ -394,9 +394,11 @@ class CDatedCodeCCAM {
           break;
         }
       }
-      $datedPhase          = new CObject();
-      $datedPhase->phase   = $phase->code_phase;
-      $datedPhase->libelle = "Phase Principale";
+      $datedPhase               = new CObject();
+      $datedPhase->phase        = $phase->code_phase;
+      $datedPhase->libelle      = "Phase Principale";
+      $datedPhase->nb_dents     = intval($phase->nb_dents);
+      $datedPhase->dents_incomp = $phase->_ref_dents_incomp;
       if ($infoPhase) {
         $datedPhase->tarif   = floatval($infoPhase->prix_unitaire)/100;
         $datedPhase->charges = floatval($infoPhase->charge_cab)/100;
@@ -405,14 +407,20 @@ class CDatedCodeCCAM {
         $datedPhase->tarif   = 0;
         $datedPhase->charges = 0;
       }
-      $this->_sorted_tarif = 0;
-      if ($activite->numero == "1" && $datedPhase->tarif != 0) {
-        $this->_sorted_tarif = 1 / $datedPhase->tarif;
+      // Ordre des tarifs décroissants pour l'activité 1
+      if ($activite->numero == "1") {
+        if ($datedPhase->tarif != 0) {
+          $this->_sorted_tarif = 1 / $datedPhase->tarif;
+        }
+        else {
+          $this->_sorted_tarif = 1;
+        }
       }
-      elseif ($datedPhase->tarif == 0) {
-        $this->_sorted_tarif = 1;
-      }
+
+      // Ajout des modificateurs pour les phases dont le tarif existe
       $datedPhase->_modificateurs = $datedPhase->tarif ? $activite->modificateurs : array();
+
+      // Ajout de la phase
       $phases[$phase->code_phase] = $datedPhase;
     }
 

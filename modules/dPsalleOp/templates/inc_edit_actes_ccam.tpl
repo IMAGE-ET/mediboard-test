@@ -226,6 +226,33 @@
                 </td>
               </tr>
 
+              {{if $_phase->nb_dents}}
+              <tr>
+                <th>Dents concernées ({{$acte->_dents|@count}}/{{$_phase->nb_dents}})</th>
+                <td class="text" colspan="10">
+                  {{foreach from=$liste_dents item=_dent}}
+                    {{assign var=dent_ok value=true}}
+                    {{foreach from=$_phase->dents_incomp item=_incomp}}
+                      {{if $_dent->localisation == $_incomp->localisation}}
+                        {{assign var=dent_ok value=false}}
+                      {{/if}}
+                    {{/foreach}}
+                    {{if $dent_ok}}
+                      <span style="border: 1px solid #abe; background-color: #eee; border-radius: 3px; margin: 1px; vertical-align: middle;">
+                        <input type="checkbox" name="dent_{{$_dent->localisation}}"
+                          {{if in_array($_dent->localisation, $acte->_dents)}}checked="checked"{{/if}} />
+                        <label for="dent_{{$_dent->localisation}}" title="Localisation : {{$_dent->localisation}}">{{$_dent->_libelle}}</label>
+                      </span>
+                    {{else}}
+                      <span style="border: 1px solid #abe; background-color: #fdd; border-radius: 3px; margin: 1px; vertical-align: middle; display: none;">
+                        {{$_dent->_libelle}}
+                      </span>
+                    {{/if}}
+                  {{/foreach}}
+                </td>
+              </tr>
+              {{/if}}
+
               <!-- Remboursable + Dépassement -->
               <tr class="{{$view}}">
                 <th>

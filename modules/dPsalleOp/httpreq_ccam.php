@@ -25,6 +25,9 @@ $listChirs = $listChirs->loadPraticiens(PERM_DENY);
 $listAnesths = new CMediusers;
 $listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);
 
+// Liste des dents CCAM
+$liste_dents = reset(CDentCCAM::loadList());
+
 /** @var CCodable $codable */
 $codable = new $object_class;
 $codable->load($object_id);
@@ -44,6 +47,7 @@ if ($codable->_class == "COperation") {
 $smarty = new CSmartyDP();
 $smarty->assign("listAnesths"      , $listAnesths);
 $smarty->assign("listChirs"        , $listChirs);
+$smarty->assign("liste_dents"      , $liste_dents);
 $smarty->assign("subject"          , $codable);
 $smarty->assign("module"           , $module);
 $smarty->assign("do_subject_aed"   , $do_subject_aed);

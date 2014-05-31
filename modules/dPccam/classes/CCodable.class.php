@@ -673,9 +673,10 @@ class CCodable extends CMbObject {
   function loadExtCodesCCAM() {
     $this->_ext_codes_ccam       = array();
     $this->_ext_codes_ccam_princ = array();
+    $dateActe = CMbDT::format($this->_datetime, "%Y-%m-%d");
     if ($this->_codes_ccam !== null) {
       foreach ($this->_codes_ccam as $code) {
-        $code = CDatedCodeCCAM::get($code, $this->_datetime);
+        $code = CDatedCodeCCAM::get($code, $dateActe);
         $this->_ext_codes_ccam[] = $code;
         if ($code->type != 2) {
           $this->_ext_codes_ccam_princ[] = $code;
@@ -996,6 +997,7 @@ class CCodable extends CMbObject {
             }
           }
           else {
+            // Récupération des modificateurs codés
             foreach ($phase->_modificateurs as $modificateur) {
               $position = strpos($listModificateurs, $modificateur->code);
               if ($position !== false) {
