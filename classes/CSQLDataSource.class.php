@@ -70,6 +70,7 @@ abstract class CSQLDataSource {
   static function get($dsn, $quiet = false) {
     if (!array_key_exists($dsn, self::$dataSources)) {
 
+      $reporting = null;
       if ($quiet) {
         $reporting = error_reporting(0);
       }
@@ -364,6 +365,7 @@ abstract class CSQLDataSource {
     $query = preg_replace('/\s+/', " ", $query);
     $query = preg_replace('/\'[^\']*\'/', "%", $query);
     $query = preg_replace('/IN ?\([%, ]+\)/', "IN (%)", $query);
+    $query = preg_replace('/ \d+/', " %", $query);
 
     return md5($query);
   }
@@ -384,7 +386,7 @@ abstract class CSQLDataSource {
       );
       foreach ($_data as $_pair) {
         $duration = $_pair[0] * 1000;
-        $log = (int)floor(log10($duration));
+        $log = (int)floor(log10($duration)+.5);
 
         if (!isset($_distribution[$log])) {
           $_distribution[$log] = "";
@@ -398,12 +400,11 @@ abstract class CSQLDataSource {
     arsort($totals);
 
     foreach ($totals as $_hash => $_total) {
-      CAppUI::stepMessage(UI_MSG_OK, "Query was called %d times for %f ms", count(self::$report_data[$_hash]), $_total);
+      CAppUI::stepMessage(UI_MSG_OK, "Query was called %d times for %01.3fms", count(self::$report_data[$_hash]), $_total);
       echo utf8_decode(CMbString::highlightCode("sql", self::$report_data[$_hash][0][1], false, "white-space: pre-wrap;"));
       $_dist = $distribution[$_hash];
+      // No input for 1탎 and 10탎 magnitudes (< 31.6탎)
       $lines = array(
-        "  1탎 $_dist[0]",
-        " 10탎 $_dist[1]",
         "100탎 $_dist[2]",
         "  1ms $_dist[3]",
         " 10ms $_dist[4]",
