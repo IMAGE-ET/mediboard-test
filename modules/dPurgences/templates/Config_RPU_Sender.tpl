@@ -14,6 +14,8 @@
   Main.add(function() {
     Control.Tabs.create("tabs_configure", false);
 
+    Control.Tabs.create("tabs_configure_source", false);
+
     {{if !$writable}}
       $('import-key').disabled = true;
     {{/if}}
@@ -131,14 +133,40 @@
 </div>
 
 <div id="RPU_sender_source">
-  <table class="form">
+  <table class="main">
     <tr>
-      <th class="title">
-        {{tr}}config-exchange-source{{/tr}}
-      </th>
-    </tr>
-    <tr>
-      <td> {{mb_include module=system template=inc_config_exchange_source source=$source}} </td>
+      <td style="width: 10%">
+        <ul class="control_tabs_vertical" id="tabs_configure_source" style="white-space: nowrap;">
+          <li><a href="#config_source">{{tr}}config_source{{/tr}}</a></li>
+          <li><a href="#config_source_rescue">{{tr}}config_source_rescue{{/tr}}</a></li>
+        </ul>
+      </td>
+      <td style="width: 90%">
+        <div id="config_source">
+          <table class="form">
+            <tr>
+              <th class="title">
+                {{tr}}config-exchange-source{{/tr}}
+              </th>
+            </tr>
+            <tr>
+              <td> {{mb_include module=system template=inc_config_exchange_source source=$source}} </td>
+            </tr>
+          </table>
+        </div>
+        <div id="config_source_rescue">
+          <table class="form">
+            <tr>
+              <th class="title">
+                {{tr}}config-exchange-source-rescue{{/tr}}
+              </th>
+            </tr>
+            <tr>
+              <td>{{mb_include module=system template=inc_config_exchange_source source=$source_rescue}}</td>
+            </tr>
+          </table>
+        </div>
+      </td>
     </tr>
   </table>
 </div>

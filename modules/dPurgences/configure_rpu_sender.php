@@ -23,16 +23,20 @@ $writable = is_writable($home);
 
 $source_name = isset($source_name) ? $source_name : $m;
 
-// Source Oscour
+// Source
 $source = CExchangeSource::get($source_name, "ftp", true, null, false);
+
+// Source rescue
+$source_rescue = CExchangeSource::get("$source_name-rescue", "ftp", true, null, false);
 
 // Création du template
 $smarty = new CSmartyDP("modules/dPurgences");
 
-$smarty->assign("user_apache", $user_apache);
-$smarty->assign("home"       , $home);
-$smarty->assign("path"       , $path);
-$smarty->assign("writable"   , $writable);
-$smarty->assign("source"     , $source);
+$smarty->assign("user_apache"  , $user_apache);
+$smarty->assign("home"         , $home);
+$smarty->assign("path"         , $path);
+$smarty->assign("writable"     , $writable);
+$smarty->assign("source"       , $source);
+$smarty->assign("source_rescue", $source_rescue);
 
 $smarty->display("Config_RPU_Sender.tpl");

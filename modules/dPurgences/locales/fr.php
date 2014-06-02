@@ -662,6 +662,9 @@ $locales['config-dPurgences-vue_topo_refresh_frequency-180'] = '3 minutes';
 $locales['config-dPurgences-vue_topo_refresh_frequency-300'] = '5 minutes';
 $locales['config-dPurgences-vue_topo_refresh_frequency-600'] = '10 minutes';
 $locales['config-dPurgences-vue_topo_refresh_frequency-desc'] = 'Rafraîchissement du placement patients';
+$locales['config-exchange-source-rescue'] = 'Configuration source échange de secours';
+$locales['config_source'] = 'Source principal';
+$locales['config_source_rescue'] = 'Source de secours';
 $locales['confirm-RPU-Hospitalisation-simple'] = 'Vous êtes sur le point de tranformer un passage aux urgences en hospitalisation.
 
 Cette action modifiera le type d\'hospitalisation de séjour pour permettre son traitement dans les unités de soins.
