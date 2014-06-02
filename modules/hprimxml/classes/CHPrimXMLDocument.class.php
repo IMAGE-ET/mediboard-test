@@ -535,6 +535,14 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $extension_documentaire = $mbActeCCAM->extension_documentaire ? $mbActeCCAM->extension_documentaire : $type_anesth->ext_doc;
       $this->addElement($acteCCAM, "codeExtensionDocumentaire", $extension_documentaire);
     }
+
+    // Gestion des dents
+    if ($mbActeCCAM->_dents) {
+      $positionsDentaires = $this->addElement($acteCCAM, "positionsDentaires");
+      foreach ($mbActeCCAM->_dents as $_dent) {
+        $this->addElement($positionsDentaires, "positionDentaire", $_dent);
+      }
+    }
     
     $montant = $this->addElement($acteCCAM, "montant");
     if ($mbActeCCAM->montant_depassement > 0) {
@@ -1032,7 +1040,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
 
     $attrNatureVenueHprim = array (
       "comp"    => "hsp",
-      "ambu"    => ((CAppUI::conf("hprimxml $this->evenement version") == "1.053") ||
+      "ambu"    => ((CAppUI::conf("hprimxml $this->evenement ") == "1.053") ||
                     (CAppUI::conf("hprimxml $this->evenement version") == "1.07") ||
                     (CAppUI::conf("hprimxml $this->evenement version") == "1.07") ||
                     (CAppUI::conf("hprimxml $this->evenement version") == "1.072")) ?
@@ -1498,7 +1506,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
    *
    * @return void
    */
-  function addDebiteurs(DOMNode $elParent, CPatient $mbPatient, $referent = null) {
+  function addDebiteurs(DOMNode $elParent, CPatient $mbPatient) {
     $debiteur = $this->addElement($elParent, "debiteur");
     
     $assurance = $this->addElement($debiteur, "assurance");
@@ -1514,8 +1522,6 @@ class CHPrimXMLDocument extends CMbXMLDocument {
    * @return void
    */
   function addAssurance(DOMNode $elParent, CPatient $mbPatient) {
-    $identifiant = $this->addElement($elParent, "identifiant");
-    
     $this->addElement($elParent, "nom", $mbPatient->regime_sante);
     
     $assure = $this->addElement($elParent, "assure");
