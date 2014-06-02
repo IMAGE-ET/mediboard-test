@@ -234,6 +234,13 @@ class CCorrespondantPatient extends CPerson {
   }
 
   /**
+   * @see parent::getSexFieldName()
+   */
+  function getSexFieldName() {
+    return 'sex';
+  }
+
+  /**
    * Map the class variable with CPerson variable
    *
    * @return void

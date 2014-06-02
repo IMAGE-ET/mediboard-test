@@ -244,6 +244,13 @@ class CMedecin extends CPerson {
   }
 
   /**
+   * @see parent::getSexFieldName()
+   */
+  function getSexFieldName() {
+    return 'sexe';
+  }
+
+  /**
    * Exporte au format vCard
    *
    * @param CMbvCardExport $vcard Objet vCard

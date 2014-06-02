@@ -59,18 +59,7 @@ class CPerson extends CMbObject {
    * @return null|string
    */
   function getSexFieldName() {
-    switch ($this->_class) {
-      case 'CCorrespondantPatient':
-        return "sex";
-        break;
-
-      case 'CMedecin':
-        return "sexe";
-        break;
-
-      default:
-        return null;
-    }
+    return null;
   }
 
   /**
