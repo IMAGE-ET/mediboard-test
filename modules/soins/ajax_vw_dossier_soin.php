@@ -280,7 +280,6 @@ if (CModule::getActive("dPprescription")) {
         }
       }
       elseif ($chapitre == "med" || $chapitre == "inj") {
-        $prescription->loadRefsLinesMedByCat("1", "1", '', $hide_old_lines);
         $prescription->loadRefsLinesMedByCat("1", "1");
         foreach ($prescription->_ref_prescription_lines as $_line_med) {
           $_line_med->loadRefLogSignee();
