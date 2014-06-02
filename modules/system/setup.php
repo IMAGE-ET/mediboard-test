@@ -1743,7 +1743,12 @@ class CSetupsystem extends CSetup {
                 ADD `language` VARCHAR (255);";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.63";
+    $this->makeRevision("1.1.63");
+    $query = "ALTER TABLE `config_db`
+      CHANGE `value` `value` VARCHAR(1024);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.64";
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,
