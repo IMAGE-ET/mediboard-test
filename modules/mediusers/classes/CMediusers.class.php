@@ -360,7 +360,6 @@ class CMediusers extends CPerson {
     $backProps["praticien_facture_cabinet"]       = "CFactureCabinet praticien_id";
     $backProps["praticien_facture_etab"]          = "CFactureEtablissement praticien_id";
     $backProps["tokens"]                          = "CViewAccessToken user_id";
-    $backProps["etapes_didacticiel"]              = "CEtapeDidacticiel user_id";
     $backProps["didacticiel_avancement"]          = "CDidacticielAvancement user_id";
     $backProps["astreintes"]                      = "CPlageAstreinte user_id";
     $backProps["dicom_sender"]                    = "CDicomSender user_id";
