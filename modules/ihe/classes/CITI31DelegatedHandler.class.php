@@ -223,6 +223,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       $sejour_enfant = $mbObject->loadRefSejourEnfant();
       $sejour_enfant->loadRefPatient();
       $sejour_enfant->_receiver = $receiver;
+
+      // Si le group_id du séjour est différent de celui du destinataire
+      if ($sejour_enfant->group_id != $receiver->group_id) {
+        return;
+      }
       
       $code = $this->getCodeSejour($sejour_enfant);
         
