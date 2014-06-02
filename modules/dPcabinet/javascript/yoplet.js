@@ -43,7 +43,10 @@ if (!window.File.applet) {
         File.applet.current_list_status.push([elem.value, 0]);
         elem.up("tr").down(".upload").addClassName("loading");
       });
-      
+      // Désactivation des boutons si un fichier au moins est coché
+      if (files.length > 0) {
+        getForm("addFastFile").select("button").invoke("writeAttribute", "disabled", "disabled");
+      }
       var json = Object.toJSON(files);
       var rename = $V(getForm("addFastFile")._rename) || "upload";
       
@@ -166,7 +169,7 @@ if (!window.File.applet) {
       clearTimeout(File.applet.timer);
       File.applet.isOpen = true;
       this.modalWindow = Modal.open($("modal-yoplet"));
-      $$(".uploadinmodal")[0].disabled = '';
+      getForm("addFastFile").select("button").invoke("writeAttribute", "disabled", null);
       this.object_guid = object_guid;
       // Mise à jour de l'object_class dans l'autocomplete des catégories
       this.autocompleteCat.url = this.autocompleteCat.url.replace(/object_class=[^&]*/, "object_class="+object_guid.split("-")[0]);
@@ -221,9 +224,11 @@ if (!window.File.applet) {
         var cur_status = this.current_list_status.detect(function(n) { return n[0].replace(/[^\x00-\xFF]/g, "?") == file_name.replace(/\\\\/g,"\\")});
         cur_status[1] = 1;
 
-        // S'ils sont tous associés, alors on peut lancer la suppression        
+        // S'ils sont tous associés, alors on peut lancer la suppression
         if (this.current_list_status.all(function(n){ return n[1] == 1;})) {
-          
+          // Réactivation des boutons Annuler et Fermer
+          getForm("addFastFile").select("button.reactive").invoke("writeAttribute", "disabled", null);
+
           // Si la suppression auto est cochée
           if (getForm("addFastFile").delete_auto.checked) {
             File.applet.uploader.performDelete(Object.toJSON(this.current_list_status.pluck("0")));
