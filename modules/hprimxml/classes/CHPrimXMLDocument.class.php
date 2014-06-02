@@ -1037,10 +1037,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
     
     $natureVenueHprim = $this->addElement($elParent, "natureVenueHprim");
-
     $attrNatureVenueHprim = array (
       "comp"    => "hsp",
-      "ambu"    => ((CAppUI::conf("hprimxml $this->evenement ") == "1.053") ||
+      "ambu"    => ((CAppUI::conf("hprimxml $this->evenement version") == "1.053") ||
                     (CAppUI::conf("hprimxml $this->evenement version") == "1.07") ||
                     (CAppUI::conf("hprimxml $this->evenement version") == "1.07") ||
                     (CAppUI::conf("hprimxml $this->evenement version") == "1.072")) ?
