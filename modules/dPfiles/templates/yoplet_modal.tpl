@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
   Main.add(function() {
     var url = new Url("files", "ajax_category_autocomplete");
     url.addParam("object_class", "{{$object->_class}}");
@@ -13,7 +13,7 @@
 <div id="modal-yoplet" style="display: none; width: 400px;">
   <form name="addFastFile" method="post" action="?"
     onsubmit="return onSubmitFormAjax(this);">
-    <input type="hidden" name="m" value="dPfiles" />
+    <input type="hidden" name="m" value="files" />
     <input type="hidden" name="dosql" value="do_file_aed" />
     <input type="hidden" name="_from_yoplet" value="1" />
     <input type="hidden" name="object_class" value="" />
@@ -25,33 +25,32 @@
     <input type="hidden" name="_checksum" value="" />
     
     <div style="max-height: 400px; overflow: auto;">
-
-    <table class="tbl">
-      <tr>
-        <th class="title" colspan="5">
-          Fichiers disponibles dans :
-          <br />
-           {{$app->user_prefs.directory_to_watch}}
-        </th>
-      </tr>
-      <tr>
-        <th class="narrow"></th>
-        <th>{{mb_title class=CFile field=file_name}}</th>
-        <th style="width: 2em;">
-          <img src="style/mediboard/images/buttons/change.png" title="{{tr}}Send{{/tr}}"/>
-        </th>
-        <th style="width: 2em;">
-          <img src="style/mediboard/images/buttons/merge.png" title="{{tr}}Link{{/tr}}"/>
-        </th>
-        <th style="width: 2em;">
-          <img src="style/mediboard/images/buttons/trash.png" title="{{tr}}Delete{{/tr}}"/>
-        </th>
-      </tr>
-      <tbody id="file-list">
-      </tbody>
-    </table>
-
+      <table class="tbl">
+        <tr>
+          <th class="title" colspan="5">
+            Fichiers disponibles dans :
+            <br />
+             {{$app->user_prefs.directory_to_watch}}
+          </th>
+        </tr>
+        <tr>
+          <th class="narrow"></th>
+          <th>{{mb_title class=CFile field=file_name}}</th>
+          <th style="width: 2em;">
+            <img src="style/mediboard/images/buttons/change.png" title="{{tr}}Send{{/tr}}"/>
+          </th>
+          <th style="width: 2em;">
+            <img src="style/mediboard/images/buttons/merge.png" title="{{tr}}Link{{/tr}}"/>
+          </th>
+          <th style="width: 2em;">
+            <img src="style/mediboard/images/buttons/trash.png" title="{{tr}}Delete{{/tr}}"/>
+          </th>
+        </tr>
+        <tbody id="file-list">
+        </tbody>
+      </table>
     </div>
+
     <hr />
 
     <table class="form">
@@ -90,13 +89,13 @@
       </tr>
       <tr>
         <td class="button" colspan="2">
-          <button type="button" class="cancel" onclick="File.applet.cancelModal();">
+          <button type="button" class="cancel reactive" onclick="File.applet.cancelModal();">
             {{tr}}Cancel{{/tr}}
           </button>
-          <button type="button" class="change uploadinmodal" onclick="this.disabled = 'disabled'; File.applet.uploadFiles();">
+          <button type="button" class="change uploadinmodal" onclick="File.applet.uploadFiles();">
             {{tr}}Upload{{/tr}}
           </button>
-          <button type="button" class="tick" onclick="File.applet.closeModal();">
+          <button type="button" class="tick reactive" onclick="File.applet.closeModal();">
             {{tr}}Close{{/tr}}
           </button>
         </td>
