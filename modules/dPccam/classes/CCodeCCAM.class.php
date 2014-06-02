@@ -516,15 +516,17 @@ class CCodeCCAM {
     // Extraction des phases
     $activite->phases = array();
     $phases =& $activite->phases;
+    $date  = CMbDT::transform(null, null, '%Y%m%d');
     $query = "SELECT phaseacte.PHASE AS phase,
                 phaseacte.PRIXUNITAIRE AS tarif,
                 phaseacte.CHARGESCAB charges
               FROM phaseacte
               WHERE phaseacte.CODEACTE = %1
                 AND phaseacte.ACTIVITE = %2
+                AND phaseacte.DATE1 <= %3
               GROUP BY phaseacte.PHASE
               ORDER BY phaseacte.PHASE, phaseacte.DATE1 DESC";
-    $query = $ds->prepare($query, $this->code, $activite->numero);
+    $query = $ds->prepare($query, $this->code, $activite->numero, $date);
     $result = $ds->exec($query);
 
     while ($obj = $ds->fetchObject($result)) {
