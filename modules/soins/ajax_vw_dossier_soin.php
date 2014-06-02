@@ -221,6 +221,8 @@ if (CModule::getActive("dPprescription")) {
         }
     }
 
+    $line->countPlanifications();
+
     if (in_array($line->jour_decalage, array("ER", "R"))) {
       $line->loadRefOperation();
     }
