@@ -446,7 +446,7 @@ class CExClassEvent extends CMbObject {
 
               if (
                   // form field
-                  $_subfield[0] === "_" ||
+                  $_subfield[0] === "_" && ($_subspec->show === null || $_subspec->show == 0) ||
                   // not shown
                   !($_subspec->show === null || $_subspec->show == 1) ||
                   // not a finite meta class field
@@ -521,7 +521,7 @@ class CExClassEvent extends CMbObject {
    */
   function buildHostFieldsList($prefix = null) {
     $this->getAvailableFields();
-    
+
     $list = array();
     foreach ($this->_host_class_fields as $_field => $_spec) {
       $host_class = $this->host_class;
