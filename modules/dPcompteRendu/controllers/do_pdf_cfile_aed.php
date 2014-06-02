@@ -53,7 +53,7 @@ $file->forceDir();
 $file->file_name  = $compte_rendu->nom . ".pdf";
 $file->author_id = CAppUI::$user->_id;
 
-$htmltopdf = new CHtmlToPDF;
+$htmltopdf = new CHtmlToPDF($compte_rendu->factory);
 $htmltopdf->generatePDF($content, 0, $compte_rendu, $file);
 
 $file->file_size = filesize($file->_file_path);
