@@ -42,7 +42,7 @@ class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
         }
       }
       $matches = null;
-      if (preg_match("/dent_(..)/", $propName, $matches)) {
+      if (preg_match("/dent_(.{1,2})/", $propName, $matches)) {
         $dents[] = $matches[1];
       }
     }
