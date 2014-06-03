@@ -26,11 +26,11 @@
               $V(formAdd.patient_id, '{{$patient->_id}}');
               $V(formAdd.medecin_id, medecin_id);
               onSubmitFormAjax(formAdd, { onComplete: function() {
-                openCorrespondants('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}');
+                openCorrespondants('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}', 0, 1);
               } });
             }
             else {
-              openCorrespondants('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}');
+              openCorrespondants('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}', 0, 1);
             }
           } });
         }
@@ -41,7 +41,7 @@
       $V(formCorres.object_id, medecin_id);
       $V(formCorres.compte_rendu_id, '{{$compte_rendu->_id}}');
       onSubmitFormAjax(formCorres, {onComplete: function() {
-        openCorrespondants('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}');
+        openCorrespondants('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}', 0, 1);
       } });
     }
     
@@ -58,7 +58,7 @@
       <th class="title" colspan="3">
         {{if $_class == "CPatient"}}
           <button type="button" class="add notext" style="float: left;"
-          onclick="Correspondant.edit(0, '{{$patient->_id}}', openCorrespondants.curry('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}', 0))"></button>
+          onclick="Correspondant.edit(0, '{{$patient->_id}}', openCorrespondants.curry('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}', 0, 1))"></button>
           {{tr}}CCorrespondantPatient{{/tr}}
         {{/if}}
         {{if $_class == "CMedecin"}}
