@@ -39,7 +39,7 @@ $user = CMediusers::get($user_id);
 // file
 $file = new CFile();
 $file->setObject($context);
-$file->file_name = "Mozaique de ".CAppUI::tr($context->_class)." du ".CMbDT::dateToLocale(CMbDT::date()).".pdf";
+$file->file_name = "Mosaique de ".CAppUI::tr($context->_class)." du ".CMbDT::dateToLocale(CMbDT::date()).".pdf";
 $file->file_type  = "application/pdf";
 $file->file_category_id = $cat_id;
 $file->author_id = CMediusers::get()->_id;
