@@ -829,7 +829,7 @@ Main.add( function(){
         url.addParam("field", "lit_id");
         url.addParam("input_field", "_unique_lit_id_view");
         url.addParam("show_view", "true");
-        url.addParam("where[annule]", "0");
+        url.addParam("where[lit.annule]", "0");
         url.autoComplete(form.elements._unique_lit_id_view, null, {
           minChars: 2,
           method: "get",
