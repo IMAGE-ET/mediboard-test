@@ -188,7 +188,12 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
     $data[] = null;
     
     // PV2-36: Newborn Baby Indicator (ID) (optional)
-    $data[] = null;
+    $naissance = new CNaissance();
+    $naissance->sejour_enfant_id = $sejour->_id;
+    $naissance->loadMatchingObject();
+
+    // Cas d'une naissance
+    $data[] = $naissance->_id ? "Y" : "N";
     
     // PV2-37: Baby Detained Indicator (ID) (optional)
     $data[] = null;
