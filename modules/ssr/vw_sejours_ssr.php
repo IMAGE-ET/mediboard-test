@@ -133,6 +133,7 @@ foreach ($sejours as $_sejour) {
 CStoredObject::massLoadBackRefs($sejours, "notes");
 CStoredObject::massLoadFwdRef($sejours, "patient_id");
 foreach ($sejours as $_sejour) {
+  $kine_journee = $_sejour->_ref_bilan_ssr->_ref_kine_journee;
   // Regroupement par kine
   $sejours_by_kine[$kine_referent->_id][] = $_sejour;
   if ($kine_journee->_id && $kine_journee->_id != $kine_referent->_id) {
