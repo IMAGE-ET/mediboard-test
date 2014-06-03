@@ -13,8 +13,8 @@ window.documentGraphs = {{$templateManager->graphs|@json}};
 window.saving_doc = false;
 document.title = "{{$compte_rendu->_ref_object}} - {{$compte_rendu->nom}}";
 
-function openCorrespondants(compte_rendu_id, object_guid, show_modal) {
-  if (!$('correspondants_area')) {
+function openCorrespondants(compte_rendu_id, object_guid, show_modal, force_refresh) {
+  if (!$('correspondants_area') || force_refresh) {
     var url = new Url("compteRendu", "ajax_edit_correspondants_courrier");
     url.addParam("compte_rendu_id", compte_rendu_id);
     url.addParam("object_guid", object_guid);
