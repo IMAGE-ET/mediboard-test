@@ -40,7 +40,7 @@ function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $sal
     $where["users_mediboard.discipline_id"] = " = '$discipline_id'";
   }
   if ($prat_id) {
-    $where["users_mediboard.user_id"] = " = '$prat_id";
+    $where["users_mediboard.user_id"] = " = '$prat_id'";
   }
   
   $user_types = array("Chirurgien", "Anesthésiste", "Médecin");
