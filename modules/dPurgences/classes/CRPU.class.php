@@ -500,6 +500,7 @@ class CRPU extends CMbObject {
         $this->_service_entree_id = "";
         $this->_etablissement_entree_id = "";
         break;
+      default:
     }
 
     // Bind Sejour
@@ -711,6 +712,10 @@ class CRPU extends CMbObject {
     $affectation->entree     = (count($affectations) == 0) ? $sejour->entree : CMbDT::dateTime();
     $affectation->lit_id     = $this->box_id;
     $affectation->service_id = $this->_service_id;
+
+    if ($this->mutation_sejour_id && $this->mutation_sejour_id != $this->sejour_id && $sejour->mode_sortie == "mutation") {
+      $sejour = $this->loadRefSejourMutation();
+    }
 
     $msg = $sejour->forceAffectation($affectation);
 

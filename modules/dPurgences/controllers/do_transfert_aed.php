@@ -50,14 +50,7 @@ if (!CAppUI::conf("dPurgences create_sejour_hospit")) {
   
   // Transfert du RPU sur l'ancien séjour
   $rpu->sejour_id = $sejour_rpu->_id;
-} 
-
-// Modification du RPU
-$rpu->mutation_sejour_id = $sejour->_id;
-$rpu->sortie_autorisee = "1";
-$rpu->gemsa = "4";
-$msg = $rpu->store();
-viewMsg($msg, "CRPU-title-close");
+}
 
 // Passage en séjour d'hospitalisation
 $sejour->type = "comp";
@@ -67,5 +60,16 @@ $sejour->_no_synchro = false;
 $msg = $sejour->store();
 viewMsg($msg, "CSejour-title-modify");
 
-CAppUI::callbackAjax("Sejour.editModal", $sejour->_id);
+//Problème sur le séjour, aucune action fait sur le rpu
+if ($msg) {
+  return;
+}
+// Modification du RPU
+$rpu->mutation_sejour_id = $sejour->_id;
+$rpu->sortie_autorisee = "1";
+$rpu->gemsa = "4";
+$msg = $rpu->store();
+viewMsg($msg, "CRPU-title-close");
 
+
+CAppUI::callbackAjax("Sejour.editModal", $sejour->_id);

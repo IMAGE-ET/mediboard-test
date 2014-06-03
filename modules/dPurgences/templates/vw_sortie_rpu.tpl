@@ -40,7 +40,7 @@
       refreshExecuter.stop();
       var url = new Url("dPurgences", "ajax_edit_sortie");
       url.addParam("rpu_id", rpu_id);
-      url.requestModal(500, 300);
+      url.requestModal("30%", "50%");
       this.modal = url.modalObject;
     },
 

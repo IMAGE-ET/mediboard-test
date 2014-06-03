@@ -105,13 +105,38 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return;
       }
 
-      // On ne synchronise pas un séjour d'urgences qui est un reliquat
-      $rpu = $sejour->loadRefRPU();
-      if ($rpu && $rpu->mutation_sejour_id && ($rpu->sejour_id != $rpu->mutation_sejour_id)) {
+      // Passage du séjour d'urgence en hospit, pas de génération de A06
+      if ($sejour->_en_mutation) {
         return;
       }
 
-      $code = $this->getCodeSejour($sejour);
+      // Recherche si on est sur un séjour de mutation
+      $rpu = new CRPU();
+      $rpu->mutation_sejour_id = $sejour->_id;
+      $rpu->loadMatchingObject();
+
+      if ($rpu->_id) {
+        $sejour_rpu = $rpu->loadRefSejour();
+        if ($sejour_rpu->mode_sortie != "mutation") {
+          return;
+        }
+      }
+
+      /** @var CRPU $rpu */
+      $code = null;
+      $rpu  = $sejour->loadRefRPU();
+      if ($rpu->_id && $rpu->sejour_id != $rpu->mutation_sejour_id && $sejour->fieldModified("mode_sortie", "mutation")) {
+        $sejour = $rpu->loadRefSejourMutation();
+        $sejour->loadRefPatient();
+        $sejour->loadLastLog();
+        $sejour->_receiver = $receiver;
+        $code = "A06";
+      }
+      elseif ($rpu && $rpu->mutation_sejour_id && ($rpu->sejour_id != $rpu->mutation_sejour_id)) {
+        return;
+      }
+
+      $code = $code ? $code : $this->getCodeSejour($sejour);
 
       if (!$code) {
         return;
@@ -167,6 +192,24 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Affectation non liée à un séjour
       $sejour = $affectation->loadRefSejour();
       if (!$sejour->_id) {
+        return;
+      }
+
+      // Pas d'envoie d'affectation si la patient n'est pas sortie des urgences
+      $rpu = new CRPU();
+      $rpu->mutation_sejour_id = $sejour->_id;
+      $rpu->loadMatchingObject();
+
+      if ($rpu->_id) {
+        $sejour_rpu = $rpu->loadRefSejour();
+        if ($sejour_rpu->mode_sortie != "mutation") {
+          return;
+        }
+      }
+
+      // Pas d'envoie d'affectation pour les séjours reliquats
+      $rpu = $sejour->loadRefRPU();
+      if ($rpu && $rpu->mutation_sejour_id && ($rpu->sejour_id != $rpu->mutation_sejour_id)) {
         return;
       }
 

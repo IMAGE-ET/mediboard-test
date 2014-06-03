@@ -1,4 +1,4 @@
-<tr id="lit_sortie_transfert" {{if $sejour->mode_sortie != "mutation"}} style="display:none;" {{/if}}>
+<tr id="lit_sortie_transfert" {{if !$rpu->mutation_sejour_id && $sejour->mode_sortie != "mutation"}} style="display:none;" {{/if}}>
   <th>Lit</th>
   <td>
     <select name="lit_id" style="width: 15em;" onchange="Fields.modif(this.value);"  >
