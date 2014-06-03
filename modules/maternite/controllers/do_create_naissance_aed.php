@@ -79,7 +79,7 @@ if (!$naissance_id) {
 
   // Etape 2 (séjour)
   $sejour_enfant = new CSejour();
-  $sejour_enfant->entree_reelle = $datetime;
+  $sejour_enfant->entree_reelle = "$date $heure";
   $sejour_enfant->sortie_prevue = $curr_affect->sortie ? $curr_affect->sortie : $sejour->sortie;
   $sejour_enfant->patient_id = $patient->_id;
   $sejour_enfant->praticien_id = $praticien_id;
