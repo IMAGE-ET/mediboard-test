@@ -2256,7 +2256,6 @@ class CSejour extends CFacturable implements IPatientRelated {
       if ($praticien->isUrgentiste() && ($this->countBackRefs("rpu") > 0 || !CAppUI::conf("dPurgences create_sejour_hospit"))) {
         $this->_ref_consult_atu = $_consult;
         $this->_ref_consult_atu->countDocItems();
-        break;
       }
     }
 
