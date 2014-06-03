@@ -8,10 +8,11 @@
   {{mb_include module=system template=inc_select_options_configuration items=$object_tree level=0}}
 </select>
 
-{{if $object_tree|@count == 1}}
 <script type="text/javascript">
 Main.add(function(){
-  editObjectConfig($V($("object_guid-selector-{{$uid}}")), '{{$uid}}');
+  var guid = $V($("object_guid-selector-{{$uid}}"));
+  if (guid) {
+    editObjectConfig(guid, '{{$uid}}');
+  }
 });
 </script>
-{{/if}}
