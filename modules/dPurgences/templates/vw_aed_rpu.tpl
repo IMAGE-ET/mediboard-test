@@ -43,7 +43,11 @@
 {{if $conf.ref_pays == 2}}
   <script>
     Main.add(function () {
-      var tab_rpu = Control.Tabs.create('tab-rpu', false, {afterChange: function(elt) {
+      var save_colonne = false;
+      {{if $rpu->_id}}
+        save_colonne = true;
+      {{/if}}
+      var tab_rpu = Control.Tabs.create('tab-rpu', save_colonne, {afterChange: function(elt) {
         if (elt.id == 'dossier_infirmier') {
           addScroll();
         }
