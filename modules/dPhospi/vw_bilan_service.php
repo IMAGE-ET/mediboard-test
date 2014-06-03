@@ -54,7 +54,7 @@ else {
   $dateTime_max = CValue::getOrSession("_dateTime_max", "$date 23:59:59");
 }
 
-$categories = CCategoryPrescription::loadCategoriesByChap(null, "current");
+$categories = CCategoryPrescription::loadCategoriesByChap(null, "current", 1);
 
 $date_min = CMbDT::date($dateTime_min);
 $date_max = CMbDT::date($dateTime_max);
