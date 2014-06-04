@@ -1,52 +1,44 @@
-<script type="text/javascript">
-togglePatientAddresse = function(input) {
-  var checked = ($V(input) == 1);
-  var radios = $(input).up('form').select('.adresse_par');
-  
-  radios.invoke('setVisibility', checked);
-  
-  if (!checked) {
-    input.form.onsubmit();
-  }
-};
+{{mb_script module=patients script=medecin}}
 
-addOtherCorrespondant = function(medecin_id) {
-  var form = getForm("addCorrespondant");
-  $V(form.medecin_id, medecin_id);
-  onSubmitFormAjax(form, {onComplete: reloadCorrespondants.curry('{{$consult->_id}}')});
-};
+<script>
+  togglePatientAddresse = function(input) {
+    var checked = ($V(input) == 1);
+    var radios = $(input).up('form').select('.adresse_par');
 
-reloadCorrespondants = function(consultation_id) {
-  var url = new Url("cabinet", "ajax_reload_correspondants");
-  url.addParam("consultation_id", consultation_id);
-  url.requestUpdate("adresseParPrat");
-};
+    radios.invoke('setVisibility', checked);
 
-Medecin = {
-  form: null,
-  edit : function() {
-    this.form = getForm("editAdresseParPrat");
-    var url = new Url("dPpatients", "vw_correspondants");
-    url.addParam("dialog", "1");
-    url.requestModal("1000", "760");
-  },
-  
-  set: function(id, view) {
+    if (!checked) {
+      input.form.onsubmit();
+    }
+  };
+
+  addOtherCorrespondant = function(medecin_id) {
+    var form = getForm("addCorrespondant");
+    $V(form.medecin_id, medecin_id);
+    onSubmitFormAjax(form, {onComplete: reloadCorrespondants.curry('{{$consult->_id}}')});
+  };
+
+  reloadCorrespondants = function(consultation_id) {
+    var url = new Url("cabinet", "ajax_reload_correspondants");
+    url.addParam("consultation_id", consultation_id);
+    url.requestUpdate("adresseParPrat");
+  };
+
+  Medecin.set = function(id, view) {
     var radios = this.form.adresse_par_prat_id;
     var lastRadio = radios;
-    
+
     if (!Object.isElement(radios)) {
       lastRadio = radios[radios.length-1];
     }
-    
+
     var viewElement = lastRadio.next('span');
     viewElement.update(view);
     viewElement.next('button').show();
     lastRadio.checked = true;
     lastRadio.value = id;
     lastRadio.form.onsubmit();
-  }
-};
+  };
 </script>
 
 <form name="addCorrespondant" method="post">
