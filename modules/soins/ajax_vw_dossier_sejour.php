@@ -63,6 +63,10 @@ if (CModule::getActive("dPprescription")) {
   CPrescription::$_load_lite = false;
 }
 
+if (CModule::getActive("maternite")) {
+  $sejour->loadRefGrossesse();
+}
+
 $smarty = new CSmartyDP();
 
 $smarty->assign("sejour"          , $sejour);

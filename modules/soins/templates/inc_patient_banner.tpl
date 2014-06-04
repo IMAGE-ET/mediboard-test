@@ -55,7 +55,9 @@
           <span id="atcd_allergies">
             {{mb_include module=soins template=inc_antecedents_allergies patient_guid=$patient->_guid}}
           </span>
-
+          {{if "maternite"|module_active}}
+            {{mb_include module=maternite template=inc_input_grossesse object=$sejour modify_grossesse=0}}
+          {{/if}}
           <br/>
           <span style="font-size: 0.6em;">
             {{$sejour->_motif_complet|spancate:30:"...":false}}

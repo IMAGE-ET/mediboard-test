@@ -13,8 +13,9 @@
 {{assign var=grossesse value=$object->_ref_grossesse}}
 {{mb_default var=submit value=0}}
 {{mb_default var=large_icon value=0}}
+{{mb_default var=modify_grossesse value=1}}
 
-<script type="text/javascript">
+<script>
   Main.add(function() {
     Grossesse.formTo = $('grossesse_id').form;
     Grossesse.duree_sejour = '{{$conf.maternite.duree_sejour}}';
@@ -38,8 +39,8 @@
   {{/if}}
 </span>
 
-{{if !$patient->_id || $patient->sexe == "f"}}
-  <button id="button_grossesse" type="button" class="edit notext button_grossesse" {{if !$patient->_id || $patient->_annees < 12}}disabled="disabled"{{/if}}
+{{if $modify_grossesse && (!$patient->_id || $patient->sexe == "f")}}
+  <button id="button_grossesse" type="button" class="edit notext button_grossesse" {{if !$patient->_id || $patient->_annees < 12}}disabled{{/if}}
     onclick="Grossesse.viewGrossesses('{{$patient->_id}}', '{{$object->_guid}}', this.form)"></button>
 {{/if}}
   
