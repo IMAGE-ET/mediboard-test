@@ -168,6 +168,25 @@ class CPlageconsult extends CPlageHoraire {
   }
 
   /**
+   * get the plage list between 2 days or for one day
+   *
+   * @param string      $chir_id    chir of plage
+   * @param string      $date_start date of start
+   * @param string|null $date_end   date of end (if null, check only for start)
+   *
+   * @return CPlageconsult[]
+   */
+  function loadForDays($chir_id, $date_start, $date_end = null) {
+    $plage = new self();
+    $where = array();
+    $chir = new CMediusers();
+    $chir->load($chir_id);
+    $where["date"] = $date_end ? ("BETWEEN '$date_start' AND '$date_end' ") : " = '$date_start'";
+    $where[] = " chir_id = '$chir_id' OR remplacant_id = '$chir_id'";
+    return $plage->loadList($where);
+  }
+
+  /**
    * Calcul du nombre de patient dans la plage
    *
    * @param bool $include_pause count pauses too

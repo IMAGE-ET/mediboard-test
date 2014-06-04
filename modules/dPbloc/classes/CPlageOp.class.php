@@ -709,6 +709,29 @@ class CPlageOp extends CPlageHoraire {
     return $this->_count_all_operations = $this->_count_operations + $this->_count_operations_annulees;
   }
 
+
+  /**
+   * load plages for a day or between 2 days
+   * check for chir, anesth or function of given prat_id
+   *
+   * @param string      $prat_id  prat_id (mediuser_id)
+   * @param string      $date_min date min to check
+   * @param null|string $date_max date max
+   *
+   * @return CPlageOp[]
+   */
+  function loadForDays($prat_id, $date_min, $date_max = null) {
+    $prat = new CMediusers();
+    $prat->load($prat_id);
+    $function = $prat->loadRefFunction();
+
+    $where = array();
+    $where[] = "chir_id = '$prat_id' OR anesth_id = '$prat_id' OR spec_id = '$function->_id'";
+    $where["date"] = ($date_max) ? "BETWEEN '$date_min' AND '$date_max'" : " = '$date_min'";
+    return $this->loadList($where);
+
+  }
+
   /**
    * Récupération le nombre d'intervention pour la plage
    *

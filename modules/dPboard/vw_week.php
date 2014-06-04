@@ -32,6 +32,9 @@ if ($mediuser->isPraticien()) {
 
 // Praticien selectionné
 $chirSel = CValue::getOrSession("praticien_id", $chir ? $chir->user_id : null);
+$prat = new CMediusers();
+$prat->load($chirSel);
+$function_prat = $prat->loadRefFunction();
 
 $user = new CMediusers();
 
@@ -47,6 +50,7 @@ $operation = new COperation();
 $operation->chir_id = $chirSel;
 $operation->date = $fin;
 
+// find for day number
 if (!$listPlageConsult->countList($where) && !$listPlageOp->countList($where) && !$operation->countMatchingList()) {
   $nbjours--;
   // Aucune plage le dimanche, on peut donc tester le samedi.
@@ -85,65 +89,56 @@ $hours_start      = CPlageconsult::$hours_start;
 $where            = array();
 $where["chir_id"] = "= '$chirSel'";
 
-//plages consult
-for ($i = 0; $i < 7; $i++) {
-  $date             = CMbDT::date("+$i day", $debut);
-  $where["date"]    = "= '$date'";
-  /** @var CPlageconsult[] $plagesConsult */
-  $plagesConsult = $plageConsult->loadList($where);
-  $color = "#BFB";
+$last_day = CMbDT::date("+7 day", $debut);
 
-  foreach ($plagesConsult as $_consult) {
-    $_consult->loadFillRate();
-    $_consult->countPatients();
-    $_consult->loadRefChir();
-    $class = null;
-    if ($_consult->pour_tiers) {
-      $class = "pour_tiers";
-    }
-    if (CModule::getActive("3333tel")) {
-      C3333TelTools::checkPlagesConsult($_consult, $_consult->_ref_chir->function_id);
-    }
-    ajoutEvent($planning, $_consult, $date, $_consult->libelle, $color, "consultation", $class);
+//plages consult
+$plagesConsult = $plageConsult->loadForDays($chirSel, $debut, $last_day);
+$color = "#BFB";
+foreach ($plagesConsult as $_consult) {
+  $_consult->loadFillRate();
+  $_consult->countPatients();
+  $_consult->loadRefChir();
+  $class = null;
+  if ($_consult->pour_tiers) {
+    $class = "pour_tiers";
   }
+  if (CModule::getActive("3333tel")) {
+    C3333TelTools::checkPlagesConsult($_consult, $_consult->_ref_chir->function_id);
+  }
+  ajoutEvent($planning, $_consult, $_consult->date, $_consult->libelle, $color, "consultation", $class);
 }
 
-$where = array();
-$where[] = "chir_id = '$chirSel' OR anesth_id = '$chirSel'";
+// plages op
+$plagesOp = $plageOp->loadForDays($chirSel, $debut, CMbDT::date("+7 day", $debut));
+foreach ($plagesOp as $_op) {
+  $_op->loadRefSalle();
+  $_op->multicountOperations();
+  $color = "#BCE";
+
+  //to check if group is present group
+  $g = CGroups::loadCurrent();
+  $_op->loadRefSalle();
+  $_op->_ref_salle->loadRefBloc();
+  if ($_op->_ref_salle->_ref_bloc->group_id != $g->_id) {
+    $color = "#748dee";
+  }
+
+  ajoutEvent($planning, $_op, $_op->date, $_op->_ref_salle->nom, $color, "operation");
+}
+
+//Operation hors plage
 $operation = new COperation();
-//Operation
+$where = array();
 for ($i = 0; $i < 7; $i++) {
   $date             = CMbDT::date("+$i day", $debut);
   $where["date"]    = "= '$date'";
-  /** @var CPlageOp[] $plagesOp */
-  $plagesOp = $plageOp->loadList($where);
-  
-  // Affichage en label du nombre d'interventions hors plage dans la journée
   $where["annulee"] = " = '0'";
-  
+  $where["plageop_id"] = " IS NULL";
+  $where[] = "chir_id = '$chirSel' OR anesth_id = '$chirSel'";
   $nb_hors_plages = $operation->countList($where);
-  
   if ($nb_hors_plages) {
     $onclick = "viewList('$date', null, 'CPlageOp')";
     $planning->addDayLabel($date, "$nb_hors_plages intervention(s) hors-plage", null, "#ffd700", $onclick);
-  }
-  
-  unset($where["annulee"]);
-  
-  foreach ($plagesOp as $_op) {
-    $_op->loadRefSalle();
-    $_op->multicountOperations();
-    $color = "#BCE";
-
-    //to check if group is present group
-    $g = CGroups::loadCurrent();
-    $_op->loadRefSalle();
-    $_op->_ref_salle->loadRefBloc();
-    if ($_op->_ref_salle->_ref_bloc->group_id != $g->_id) {
-      $color = "#748dee";
-    }
-
-    ajoutEvent($planning, $_op, $date, $_op->_ref_salle->nom, $color, "operation");
   }
 }
 
