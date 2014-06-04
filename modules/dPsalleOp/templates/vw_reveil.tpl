@@ -102,9 +102,7 @@
       if(default_tab){
         url.addParam("default_tab", default_tab);
       }
-      url.requestModal("90%", "90%", {
-        showClose: false
-      });
+      url.modal({width: "95%", height: "95%"});
       modalWindow = url.modalObject;
     {{/if}}
   }
