@@ -1316,7 +1316,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
     $this->loadContent();
     $content = $this->loadHTMLcontent($this->_source, '', $margins, CCompteRendu::$fonts[$this->font], $this->size, $auto_print);
-    $htmltopdf = new CHtmlToPDF();
+    $htmltopdf = new CHtmlToPDF($this->factory);
     $htmltopdf->generatePDF($content, 0, $this, $file);
     $file->file_size = filesize($file->_file_path);
     $this->_ref_file = $file;
