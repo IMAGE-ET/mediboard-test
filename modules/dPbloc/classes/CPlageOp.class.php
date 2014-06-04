@@ -325,7 +325,7 @@ class CPlageOp extends CPlageHoraire {
    * @return bool
    */
   function reorderOp($action = null) {
-    $this->completeField("debut", "temps_inter_op");
+    $this->completeField("debut", "temps_inter_op", "date");
 
     if (!count($this->_ref_operations)) {
       $with_cancelled = CAppUI::conf("dPplanningOp COperation save_rank_annulee_validee");
