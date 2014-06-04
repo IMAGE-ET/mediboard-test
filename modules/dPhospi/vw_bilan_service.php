@@ -23,7 +23,7 @@ function getCurrentLit($sejour, $date, $hour, $service_id, &$lits) {
     }
     if ($datetime >= $_affectation->entree && $datetime <= $_affectation->sortie) {
       $lit = $_affectation->_ref_lit;
-      $lits["$lit->_ref_chambre->nom $lit->_view"] = $lit;
+      $lits[$lit->_ref_chambre->nom." ".$lit->_view] = $lit;
       return $lit;
     }
   }
