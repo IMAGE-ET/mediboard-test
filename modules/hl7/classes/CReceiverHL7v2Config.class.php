@@ -2,12 +2,12 @@
 
 /**
  * Receiver HL7v2 Config
- *  
+ *
  * @category HL7
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
  * @link     http://www.mediboard.org
  */
 
@@ -16,13 +16,13 @@
  */
 class CReceiverHL7v2Config extends CMbObjectConfig {
   public $receiver_hl7v2_config_id;
-  
+
   public $object_id; // CReceiverHL7v2
-  
+
   // Format
   public $encoding;
   public $ER7_segment_terminator;
-  
+
   // Version
   public $ITI30_HL7_version;
   public $ITI31_HL7_version;
@@ -38,7 +38,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   public $assigning_authority_universal_id;
   public $assigning_authority_universal_type_id;
   public $country_code;
-  
+
   // Actor Options
   public $iti30_option_merge;
   public $iti30_option_link_unlink;
@@ -47,7 +47,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   public $iti31_advanced_encounter_management;
   public $iti31_temporary_patient_transfer_tracking;
   public $iti31_historic_movement;
-  
+
   // Send
   public $modification_admit_code;
   public $modification_before_admit;
@@ -67,6 +67,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   public $send_change_after_admit;
   public $send_patient_with_visit;
   public $send_patient_with_current_admit;
+  public $mode_identito_vigilance;
   public $send_no_facturable;
 
   // Build
@@ -76,7 +77,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   public $build_cellular_phone;
   public $build_other_residence_number;
   public $build_identifier_authority;
-  
+
   // PID
   public $build_PID_6;
   public $build_PID_11;
@@ -85,7 +86,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   public $build_PID_19;
   public $build_PID_31;
   public $build_PID_34;
-  
+
   // PV1
   public $build_PV1_3_2;
   public $build_PV1_3_3;
@@ -99,13 +100,13 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   public $build_PV1_19;
   public $build_PV1_26;
   public $build_PV1_36;
-  
+
   // PV2
   public $build_PV2_45;
-  
+
   public $_categories = array(
     "format" => array(
-      "encoding", 
+      "encoding",
       "ER7_segment_terminator",
     ),
     "version" => array(
@@ -165,6 +166,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       "send_change_after_admit",
       "send_patient_with_visit",
       "send_patient_with_current_admit",
+      "mode_identito_vigilance",
       "send_no_facturable",
     ),
     "PID" => array(
@@ -218,11 +220,11 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   function getProps() {
     $props = parent::getProps();
     $props["object_id"]              = "ref class|CReceiverHL7v2";
-    
+
     // Format
     $props["encoding"]               = "enum list|UTF-8|ISO-8859-1 default|UTF-8";
     $props["ER7_segment_terminator"] = "enum list|CR|LF|CRLF";
-    
+
     // Version
     $props["ITI30_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5|FR_2.1|FR_2.2|FR_2.3 default|2.5";
     $props["ITI31_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5|FR_2.1|FR_2.2|FR_2.3 default|2.5";
@@ -230,7 +232,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["RAD48_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5 default|2.5";
     $props["ITI21_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5 default|2.5";
     $props["ITI22_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5 default|2.5";
-    
+
     // Application
     $props["receiving_application"] = "str";
     $props["receiving_facility"]    = "str";
@@ -238,7 +240,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["assigning_authority_universal_id"]      = "str";
     $props["assigning_authority_universal_type_id"] = "str";
     $props["country_code"] = "enum list|FRA|INT";
-    
+
     // Actor options
     $props["iti30_option_merge"]                        = "bool default|1";
     $props["iti30_option_link_unlink"]                  = "bool default|0";
@@ -247,9 +249,9 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["iti31_advanced_encounter_management"]       = "bool default|1";
     $props["iti31_temporary_patient_transfer_tracking"] = "bool default|0";
     $props["iti31_historic_movement"]                   = "bool default|1";
-    
+
     // Send
-    $props["modification_admit_code"]            = "enum list|A08|Z99 default|A08";
+    $props["modification_admit_code"]            = "enum list|A08|Z99 default|Z99";
     $props["modification_before_admit"]          = "bool default|1";
     $props["send_assigning_authority"]           = "bool default|1";
     $props["send_change_medical_responsibility"] = "enum list|A02|Z80|Z99 default|Z80";
@@ -267,8 +269,9 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["send_change_after_admit"]            = "bool default|1";
     $props["send_patient_with_visit"]            = "bool default|0";
     $props["send_patient_with_current_admit"]    = "bool default|0";
+    $props["mode_identito_vigilance"]            = "enum list|light|medium|strict default|light";
     $props["send_no_facturable"]                 = "bool default|1";
-    
+
     // Build
     $props["build_mode"]                   = "enum list|normal|simple default|normal";
     $props["build_NDA"]                    = "enum list|PID_18|PV1_19 default|PID_18";
@@ -276,7 +279,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["build_cellular_phone"]         = "enum list|PRN|ORN default|PRN";
     $props["build_other_residence_number"] = "enum list|ORN|WPN default|ORN";
     $props["build_identifier_authority"]   = "enum list|normal|PI_AN default|normal";
-    
+
     // PID
     $props["build_PID_6"]   = "enum list|nom_naissance|none default|none";
     $props["build_PID_11"]  = "enum list|simple|multiple default|multiple";
@@ -285,7 +288,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["build_PID_19"]  = "enum list|matricule|none default|none";
     $props["build_PID_31"]  = "enum list|avs|none default|none";
     $props["build_PID_34"]  = "enum list|finess|actor|domain default|finess";
-    
+
     // PV1
     $props["build_PV1_3_2"] = "enum list|name|config_value|idex default|name";
     $props["build_PV1_3_3"] = "enum list|name|config_value|idex default|name";
@@ -299,10 +302,10 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["build_PV1_19"]  = "enum list|normal|simple default|normal";
     $props["build_PV1_26"]  = "enum list|movement_id|none default|none";
     $props["build_PV1_36"]  = "enum list|discharge_disposition|ZFM default|discharge_disposition";
-    
+
     // PV2
     $props["build_PV2_45"]  = "enum list|operation|none default|none";
-        
+
     return $props;
   }
 }
