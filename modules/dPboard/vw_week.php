@@ -120,7 +120,8 @@ for ($i = 0; $i < 7; $i++) {
   
   // Affichage en label du nombre d'interventions hors plage dans la journée
   $where["annulee"] = " = '0'";
-  
+  $where["plageop_id"] = " IS NULL";
+
   $nb_hors_plages = $operation->countList($where);
   
   if ($nb_hors_plages) {
@@ -129,7 +130,8 @@ for ($i = 0; $i < 7; $i++) {
   }
   
   unset($where["annulee"]);
-  
+  unset($where["plageop_id"]);
+
   foreach ($plagesOp as $_op) {
     $_op->loadRefSalle();
     $_op->multicountOperations();
