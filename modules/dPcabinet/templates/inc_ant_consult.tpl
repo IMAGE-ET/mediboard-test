@@ -234,7 +234,7 @@ updateTP = function(selected){
   }
   $V(oFormTP._code, dn);
   $("_libelle").insert("<button type='button' class='cancel notext' onclick='resetEditLineTP(); resetFormTP();'></button>" +
-                       "<a href=\"#nothing\" onclick=\"Prescription.showMonographyMedicament('','','"+selected.down(".code-cis").getText()+"')\">"+
+                       "<a href=\"#nothing\" onclick=\"Prescription.viewProduit('','','"+selected.down(".code-cis").getText()+"')\">"+
                         selected.down(".libelle").getText()+"</a>");
 
   if (selected.down(".alias")) {

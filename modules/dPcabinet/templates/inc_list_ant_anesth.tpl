@@ -157,7 +157,7 @@ toggleCancelledAnesth = function(list) {
       {{/if}}
 
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView')">
-          <a href="#1" onclick="Prescription.showMonographyMedicament(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
+          <a href="#1" onclick="Prescription.viewProduit(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
             {{$_line->_ucd_view}}
           </a>
         </span>

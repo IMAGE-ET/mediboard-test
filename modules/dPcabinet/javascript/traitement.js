@@ -19,7 +19,7 @@ updateTPtri = function(selected){
   Element.cleanWhitespace(selected);
   var dn = selected.childElements();
   $V(oFormTPtri._code, dn[0].innerHTML);
-  $("_libelletri").insert("<button type='button' class='cancel notext' onclick='resetEditLineTPtri(); resetFormTPtri();'></button><a href=\"#nothing\" onclick=\"Prescription.showMonographyMedicament('','','"+selected.down(".code-cis").getText()+"')\">"+selected.down(".libelle").getText()+"</a>");
+  $("_libelletri").insert("<button type='button' class='cancel notext' onclick='resetEditLineTPtri(); resetFormTPtri();'></button><a href=\"#nothing\" onclick=\"Prescription.viewProduit('','','"+selected.down(".code-cis").getText()+"')\">"+selected.down(".libelle").getText()+"</a>");
   $V(oFormTPtri.produit, '');
   $('button_submit_traitementtri').focus();
 };
