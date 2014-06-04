@@ -1,14 +1,12 @@
 <?php
-
 /**
- * dPbloc
- *  
- * @category Bloc
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id:$
+ *
+ * @package    Mediboard
+ * @subpackage Bloc
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 $date_depart = CValue::get("date_depart");
@@ -16,16 +14,17 @@ $bloc_id     = CValue::get("bloc_id");
 $order_way   = CValue::get("order_way");
 $order_col   = CValue::get("order_col");
 
-$operation = new COperation();
-
+$where = array();
 $where["date"] = " = '".CMbDT::date($date_depart)."'";
 $where["annulee"] = " = '0'";
 
+$ljoin = array();
 if ($bloc_id) {
   $ljoin["sallesbloc"] = "sallesbloc.salle_id = operations.salle_id";
   $where["sallesbloc.bloc_id"] = "= '$bloc_id'";
 }
 
+$operation = new COperation();
 /** @var COperation[] $operations */
 $operations = $operation->loadList($where, "time_operation ASC", null, null, $ljoin);
 $sejours = CMbObject::massLoadFwdRef($operations, "sejour_id");
@@ -68,4 +67,3 @@ $smarty->assign("order_way" , $order_way);
 $smarty->assign("order_col" , $order_col);
 
 $smarty->display("inc_vw_departs_us.tpl");
-
