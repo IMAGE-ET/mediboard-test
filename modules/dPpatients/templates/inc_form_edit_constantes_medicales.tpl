@@ -11,6 +11,9 @@
 submitConstantesMedicales = function(oForm) {
   return onSubmitFormAjax(oForm, {
     onComplete: function () {
+      if ($$('.poids_patient').length && $$('.taille_patient').length && $$('.imc_patient').length) {
+        updateInfosPatient();
+      }
       {{if $display_graph}}
         refreshConstantesMedicales($V(oForm.context_class)+'-'+$V(oForm.context_id), 1);
       {{/if}}
@@ -18,10 +21,6 @@ submitConstantesMedicales = function(oForm) {
         refreshConstantesMedicalesTri($V(oForm.context_class)+'-'+$V(oForm.context_id), 1);
         refreshConstantesMedicales($V(oForm.context_class)+'-'+$V(oForm.context_id), 1);
       {{/if}}
-
-      if ($$('.poids_patient').length && $$('.taille_patient').length && $$('.imc_patient').length) {
-        updateInfosPatient();
-      }
     }
   });
 };
