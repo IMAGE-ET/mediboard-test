@@ -112,6 +112,11 @@ class CModelObject {
   public $_ref_module;
 
   /**
+   * @var bool true if object is locked
+   */
+  public $_locked;
+
+  /**
    * Tell wether class exists
    * 
    * @param klass $class Class name
