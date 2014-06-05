@@ -71,12 +71,29 @@
   function checkBills(facture_class){
     var oForm = getForm("printFrm");
     var url = new Url('tarmed', 'ajax_send_file_http');
+    url.addParam('prat_id'    , oForm.chir.value);
+    url.addParam('date_min'   , $V(oForm._date_min));
+    url.addParam('date_max'   , $V(oForm._date_max));
+    url.addParam('facture_class'  , facture_class);
+    url.addParam('check'      ,true);
+    url.requestUpdate('check_bill', { onComplete:function() {
+      var suppressHeaders = 0;
+      if ($('check_bill_ok')) {
+        suppressHeaders = 1;
+      }
+      downloadBills(facture_class, suppressHeaders);
+    }} );
+  }
+
+  function downloadBills(facture_class, suppressHeaders) {
+    var oForm = getForm("printFrm");
+    var url = new Url('tarmed', 'ajax_send_file_http');
     url.addParam('prat_id'  , oForm.chir.value);
     url.addParam('date_min' , $V(oForm._date_min));
     url.addParam('date_max' , $V(oForm._date_max));
     url.addParam('facture_class'  , facture_class);
-    url.addParam('check'    ,true);
-    url.addParam('suppressHeaders', '1');
+    url.addParam('check'      , suppressHeaders ? 0 : 1 );
+    url.addParam('suppressHeaders', suppressHeaders);
     url.popup(1000, 600);
 //  url.addParam('user'     , $V(oForm.user));
 //  url.addParam('pwd'      , $V(oForm.pwd));
@@ -96,7 +113,9 @@
     url.popup(1200, 600, 'Import des règlements');
   }
 </script>
-
+{{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+  <div id="check_bill" style="display:none;"></div>
+{{/if}}
 <form name="printCompta" action="?" method="get" onSubmit="return checkRapport()">
 <input type="hidden" name="a" value="" />
 <input type="hidden" name="dialog" value="1" />
