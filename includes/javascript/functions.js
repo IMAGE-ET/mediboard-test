@@ -672,7 +672,7 @@ var ViewPort = {
     }
 
     element.style.overflowY = "auto";
-    //element.style.overflowX = "hidden";
+    element.style.overflowX = "hidden";
     element.style.height = ((winHeight - pos) * pct - 10) + "px";
   },
 
@@ -698,7 +698,7 @@ var ViewPort = {
       winWidth = window.getInnerDimensions().width;
     }
 
-    element.style.overflowY = "auto";
+    element.style.overflowX = "auto";
     element.style.width = ((winWidth - pos) * pct - 10) + "px";
   },
 
