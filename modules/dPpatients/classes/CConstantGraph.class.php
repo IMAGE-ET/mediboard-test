@@ -812,26 +812,41 @@ class CConstantGraph {
   static function getConfigFor($constant, $host) {
     $config = CConstantesMedicales::getHostConfig('selection', $host);
     $config = explode('|', $config[$constant]);
+
+    $min = CConstantesMedicales::$list_constantes[$constant]['min'];
+    $max = CConstantesMedicales::$list_constantes[$constant]['max'];
+    $norm_min = 0;
+    $norm_max = 0;
+
+    if (strpos($min, '@') !== false) {
+      $mode = 'float';
+      $min = substr($min, strpos($min, '-'));
+      $max = substr($min, strpos($max, '+'));
+    }
+
+    if (isset(CConstantesMedicales::$list_constantes[$constant]['norm_min'])) {
+      $norm_min = CConstantesMedicales::$list_constantes[$constant]['norm_min'];
+    }
+    if (isset(CConstantesMedicales::$list_constantes[$constant]['norm_max'])) {
+      $norm_max = CConstantesMedicales::$list_constantes[$constant]['norm_max'];
+    }
     if (count($config) == 3) {
       $mode = 'fixed';
-      $min = CConstantesMedicales::$list_constantes[$constant]['min'];
-      $max = CConstantesMedicales::$list_constantes[$constant]['max'];
-      $norm_min = 0;
-      $norm_max = 0;
-
-      if (strpos($min, '@') !== false) {
-        $mode = 'float';
-        $min = substr($min, strpos($min, '-'));
-        $max = substr($min, strpos($max, '+'));
-      }
-
-      if (isset(CConstantesMedicales::$list_constantes[$constant]['norm_min'])) {
-        $norm_min = CConstantesMedicales::$list_constantes[$constant]['norm_min'];
-      }
-      if (isset(CConstantesMedicales::$list_constantes[$constant]['norm_max'])) {
-        $norm_max = CConstantesMedicales::$list_constantes[$constant]['norm_max'];
-      }
       $config = array_merge($config, array($mode, $min, $max, $norm_min, $norm_max));
+    }
+    elseif (count($config) == 8) {
+      if (!is_null($config[4])) {
+        $config[4] = $min;
+      }
+      if (!is_null($config[5])) {
+        $config[5] = $max;
+      }
+      if (!is_null($config[6])) {
+        $config[6] = $norm_min;
+      }
+      if (!is_null($config[7])) {
+        $config[7] = $norm_max;
+      }
     }
 
     return array_combine(array('form', 'graph', 'color', 'mode', 'min', 'max', 'norm_min', 'norm_max'), $config);
