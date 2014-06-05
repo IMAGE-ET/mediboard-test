@@ -70,6 +70,10 @@ if ($rpu->_id || $rpu->sejour_id) {
   $sejour->loadRefsNotes();
   $praticien = $sejour->_ref_praticien;
   $listResponsables[$praticien->_id] = $praticien;
+
+  if (CModule::getActive("maternite")) {
+    $sejour->loadRefGrossesse();
+  }
 }
 else {
   $rpu->_responsable_id = $user->_id;
