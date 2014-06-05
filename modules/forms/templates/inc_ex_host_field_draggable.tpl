@@ -20,9 +20,11 @@
         {{if $_field == "_view"}}Vue{{else}}Vue courte{{/if}}
       </button>
     {{else}}
-      <span class="field-name" style="display: none;">{{tr}}{{$host_object->_class}}{{/tr}} - </span>
-      {{if $_field == "_view"}} Vue {{else}} Vue courte {{/if}}
-      <div class="overlay"></div>
+      <span style="position: relative;">
+        <span class="field-name" style="display: none;">{{tr}}{{$host_object->_class}}{{/tr}} - </span>
+        {{if $_field == "_view"}} Vue {{else}} Vue courte {{/if}}
+        <div class="overlay"></div>
+      </span>
     {{/if}}
   </span>
 {{else}}
@@ -44,9 +46,11 @@
           libellé
         </button>
       {{else}}
+      <span style="position: relative;">
         <span class="field-name" style="display: none;">{{tr}}{{$host_object->_class}}-{{$_field}}{{/tr}}</span>
         [libellé]
         <div class="overlay"></div>
+      </span>
       {{/if}}
     </span>
   {{/if}}
@@ -69,9 +73,11 @@
           valeur
         </button>
       {{else}}
-        <span class="field-name" style="display: none;">{{tr}}{{$host_object->_class}}-{{$_field}}{{/tr}}</span>
-        [valeur]
-        <div class="overlay"></div>
+        <span style="position: relative;">
+          <span class="field-name" style="display: none;">{{tr}}{{$host_object->_class}}-{{$_field}}{{/tr}}</span>
+          [valeur]
+          <div class="overlay"></div>
+        </span>
       {{/if}}
     </span>
   {{/if}}
