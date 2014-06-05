@@ -587,7 +587,6 @@ var ViewPort = {
     }
 
     element.style.overflowY = "auto";
-    element.style.overflowX = "hidden";
     element.style.height = ((winHeight - pos) * pct - 10) + "px";
   },
 
