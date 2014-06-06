@@ -84,7 +84,7 @@ if (!$selection || $selected_context_guid === 'all') {
   $selection = CConstantesMedicales::getConstantsByRank('form', $show_cat_tabs, $host);
 }
 else {
-  $selection = CConstantesMedicales::selectConstants($selection);
+  $selection = CConstantesMedicales::selectConstants($selection, 'form', $host);
 }
 
 // If print mode, no need to include hidden graphs
@@ -250,7 +250,7 @@ if (!$constantes->_id && !$constantes->datetime) {
 
 // On récupère dans tous les cas le poids et la taille du patient
 $patient->loadRefConstantesMedicales(null, array("poids", "taille"), null, false);
-
+ml($selection);
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign('constantes',                 $constantes);
