@@ -1,7 +1,7 @@
 #!/bin/sh
 
 BASH_PATH=$(dirname $0)
-. $BASH_PATH/shell/utils.sh
+. $BASH_PATH/utils.sh
 MB_PATH=$(cd $BASH_PATH/../; pwd);
 
 ########
