@@ -184,6 +184,23 @@ class CMbDT {
   }
 
   /**
+   * Sub a relative time to a reference datetime
+   *
+   * @param string $relative The relative time to add
+   * @param string $ref      The reference datetime
+   *
+   * @return string The resulting time
+   **/
+  static function subDateTime($relative, $ref = null) {
+    $fragments = explode(":", $relative);
+    $hours   = CValue::read($fragments, 0, 0);
+    $minutes = CValue::read($fragments, 1, 0);
+    $seconds = CValue::read($fragments, 2, 0);
+
+    return self::dateTime("-$hours HOURS $minutes MINUTES $seconds SECONDS", $ref);
+  }
+
+  /**
    * Count days between two datetimes
    *
    * @param string $from From datetime
