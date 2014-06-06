@@ -1,3 +1,5 @@
+{{unique_id var=uid_exobject}}
+
 <table class="main layout">
   <tr>
     <td class="narrow" style="min-width: 20em; vertical-align: top;">
@@ -49,7 +51,7 @@
                 {{/if}}
               </strong>
 
-              <a href="#1" onclick="$(this).up('tr').addUniqueClassName('selected'); ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list', 2, '{{$_ex_class_id}}', {other_container: this.up('tr')}); return false;">
+              <a href="#1" onclick="$(this).up('tr').addUniqueClassName('selected'); ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list-{{$uid_exobject}}', 2, '{{$_ex_class_id}}', {other_container: this.up('tr')}); return false;">
                 {{$ex_classes.$_ex_class_id->name}}
               </a>
             </td>
@@ -65,7 +67,7 @@
             <td class="narrow" style="text-align: right;">
               <span class="compact ex-object-count">{{$_ex_objects_count}}</span>
               <button class="right notext compact"
-                      onclick="$(this).up('tr').addUniqueClassName('selected'); ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list', 2, '{{$_ex_class_id}}', {other_container: this.up('tr')})">
+                      onclick="$(this).up('tr').addUniqueClassName('selected'); ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list-{{$uid_exobject}}', 2, '{{$_ex_class_id}}', {other_container: this.up('tr')})">
               </button>
             </td>
           </tr>
@@ -77,7 +79,7 @@
         {{/foreach}}
       </table>
     </td>
-    <td id="ex_class-list" style="vertical-align: top;">
+    <td id="ex_class-list-{{$uid_exobject}}" style="vertical-align: top;">
       <div class="small-info">
         Cliquez sur le bouton correspondant au formulaire dont vous voulez voir le détail
       </div>
