@@ -44,7 +44,7 @@ password=$3
 
 info_script "Miner launcher"
 
-list=$(ls -C1 $MB_PATH/modules/*/datamine.php|cut -d'/' -f 8)
+list=$(ls -C1 $MB_PATH/modules/*/datamine.php|cut -d'/' -f 7)
 
 for i in $list
 do
