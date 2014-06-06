@@ -2247,6 +2247,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     foreach ($this->_ref_consultations as $_consult) {
       /** @var CConsultation $_consult */
+      $_consult->_ref_sejour = $this;
       $praticien = $_consult->loadRefPraticien();
       $praticien->loadRefFunction();
       $_consult->canDo();

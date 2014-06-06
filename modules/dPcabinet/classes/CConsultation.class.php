@@ -1174,6 +1174,9 @@ class CConsultation extends CFacturable implements IPatientRelated {
    * @return CSejour
    */
   function loadRefSejour($cache = true) {
+    if ($this->_ref_sejour) {
+      return $this->_ref_sejour;
+    }
     /** @var CSejour $sejour */
     $sejour = $this->loadFwdRef("sejour_id", $cache);
     $sejour->loadRefRPU();
