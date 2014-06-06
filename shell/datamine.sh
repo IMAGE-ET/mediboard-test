@@ -1,8 +1,8 @@
 #!/bin/sh
 
 BASH_PATH=$(dirname $0)
-. $BASH_PATH/../../../shell/utils.sh
-MB_PATH=$(cd $BASH_PATH/../../../; pwd);
+. $BASH_PATH/shell/utils.sh
+MB_PATH=$(cd $BASH_PATH/../; pwd);
 
 ########
 # Miner launcher
