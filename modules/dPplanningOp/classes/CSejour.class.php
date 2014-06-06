@@ -3265,9 +3265,17 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     $this->notify("BeforeFillLimitedTemplate", $template);
 
-    $template->addLongDateProperty("Admission - Date longue"  , $this->entree_prevue);
-    $template->addDateProperty("Admission - Date"             , $this->entree_prevue);
-    $template->addTimeProperty("Admission - Heure"            , $this->entree_prevue);
+
+    $this->loadRefsOperations();
+    $admission = $this->entree_prevue;
+
+    if ($this->_ref_last_operation && $this->_ref_last_operation->presence_preop) {
+      $admission = CMbDT::subDateTime($this->_ref_last_operation->presence_preop, $admission);
+    }
+
+    $template->addLongDateProperty("Admission - Date longue"  , $admission);
+    $template->addDateProperty("Admission - Date"             , $admission);
+    $template->addTimeProperty("Admission - Heure"            , $admission);
     $template->addProperty("Admission - Type"                 , $this->getFormattedValue("type"));
     $template->addProperty("Hospitalisation - Durée"          , $this->_duree_prevue);
     $template->addDateProperty("Hospitalisation - Date sortie", $this->sortie_prevue);
@@ -3439,7 +3447,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Interventions
     $operations = array();
-    foreach ($this->loadRefsOperations() as $_operation) {
+    foreach ($this->_ref_operations as $_operation) {
       $_operation->loadRefPlageOp(true);
       $datetime = $_operation->getFormattedValue("_datetime");
       $chir = $_operation->loadRefChir(true);
