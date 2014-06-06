@@ -84,7 +84,7 @@ if (!$selection || $selected_context_guid === 'all') {
   $selection = CConstantesMedicales::getConstantsByRank('form', $show_cat_tabs, $host);
 }
 else {
-  $selection = CConstantesMedicales::selectConstants($selection);
+  $selection = CConstantesMedicales::selectConstants($selection, 'form', $host);
 }
 
 // If print mode, no need to include hidden graphs
