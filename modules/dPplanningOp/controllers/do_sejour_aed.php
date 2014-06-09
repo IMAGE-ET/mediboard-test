@@ -45,6 +45,9 @@ if ($create_affectation && $mode_sortie  == "mutation" && $rpu->_id && ($lit_id 
   $affectation_hospit->lit_id     = $lit_id;
   $affectation_hospit->service_id = $service_sortie_id;
 
+  // Mutation en provenance des urgences
+  $affectation_hospit->_mutation_urg = true;
+
   $sejour_hospit->forceAffectation($affectation_hospit);
 }
 

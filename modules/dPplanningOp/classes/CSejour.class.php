@@ -3048,15 +3048,16 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // On retrouve une affectation a spliter
     if ($splitting->_id) {
-    //on ne splite pas et on ne créé pas d'affectation si la tolérance n'est pas atteinte
+      //on ne splite pas et on ne créé pas d'affectation si la tolérance n'est pas atteinte
       if (CMbDT::addDateTime("00:$tolerance:00", $splitting->entree) <= $now) {
         // Affecte la sortie de l'affectation a créer avec l'ancienne date de sortie
         $create->sortie = $splitting->sortie;
 
         // On passe à effectuer la split
-        $splitting->effectue    = 1;
-        $splitting->sortie      = $datetime;
-        $splitting->_no_synchro = true;
+        $splitting->effectue      = 1;
+        $splitting->sortie        = $datetime;
+        $splitting->_no_synchro   = true;
+        $splitting->_mutation_urg = $affectation->_mutation_urg;
         if ($msg = $splitting->store()) {
           return $msg;
         }
@@ -3071,10 +3072,11 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     // Créé la nouvelle affectation
-    $create->sejour_id  = $this->_id;
-    $create->entree     = $datetime;
-    $create->lit_id     = $lit_id;
-    $create->service_id = $service_id;
+    $create->sejour_id     = $this->_id;
+    $create->entree        = $datetime;
+    $create->lit_id        = $lit_id;
+    $create->service_id    = $service_id;
+    $create->_mutation_urg = $affectation->_mutation_urg;
     if ($msg = $create->store()) {
       return $msg;
     }
