@@ -41,6 +41,10 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
   CMbObject::massLoadFwdRef($sejours, "prestation_id");
   CMbObject::massLoadFwdRef($sejours, "praticien_id");
 
+  if (CModule::getActive("dPImeds")) {
+    CSejour::massLoadNDA($sejours);
+  }
+
   foreach ($affectations as $_affectation) {
     $sejour = $_affectation->loadRefSejour();
     if ($praticien_id) {

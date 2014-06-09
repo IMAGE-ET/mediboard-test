@@ -217,10 +217,9 @@ $sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
 $patients = CMbObject::massLoadFwdRef($sejours, "patient_id");
 CMbObject::massLoadBackRefs($patients, "dossier_medical");
 
-// Préchargement des users
-$user = new CUser();
-$where = array("user_id" => CSQLDataSource::prepareIn(CMbArray::pluck($sejours, "praticien_id")));
-$users = $user->loadList($where);
+if (CModule::getActive("dPImeds")) {
+  CSejour::massLoadNDA($sejours);
+}
 
 $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
 CMbObject::massLoadFwdRef($praticiens, "function_id");

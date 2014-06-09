@@ -196,6 +196,12 @@
                     {{/if}}
                     <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}');" class="CPatient-view {{if $sejour->recuse == "-1"}}opacity-70{{/if}}">
                       {{if $sejour->recuse == "-1"}}[Att] {{/if}}{{$patient->nom}} {{if $patient->nom_jeune_fille}}({{$patient->nom_jeune_fille}}) {{/if}}{{$patient->prenom}}
+                      {{if "dPImeds"|module_active}}
+                        {{mb_include module=Imeds template=inc_sejour_labo link="#1" float="none"}}
+                        <script>
+                          ImedsResultsWatcher.addSejour('{{$sejour->_id}}', '{{$sejour->_NDA}}');
+                        </script>
+                      {{/if}}
                     </span>
 
                     {{* Traitement (suisse) *}}

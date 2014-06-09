@@ -79,6 +79,12 @@
           {{else}}
             <span>
           {{/if}}
+          {{if "dPImeds"|module_active}}
+            {{mb_include module=Imeds template=inc_sejour_labo link="#1"}}
+            <script>
+              ImedsResultsWatcher.addSejour('{{$sejour->_id}}', '{{$sejour->_NDA}}');
+            </script>
+          {{/if}}
 
           <span style="float: right;">
             {{if $prestation_id && $sejour->_liaisons_for_prestation|@count}}
@@ -86,6 +92,7 @@
             {{/if}}
             {{mb_include module=patients template=inc_vw_antecedents type=deficience readonly=1}}
           </span>
+
           <span {{if $app->touch_device}}onclick{{else}}onmouseover{{/if}}="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')" {{if $sejour->recuse == "-1"}}class="opacity-70"{{/if}}>
             <strong {{if $sejour->type == "ambu"}}style="font-style: italic;"{{/if}}>
               {{if $sejour->recuse == "-1"}}[Att] {{/if}}{{$patient}}

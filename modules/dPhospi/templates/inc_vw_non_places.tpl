@@ -31,6 +31,10 @@
       list_affectations.fire('scroll');
     }
     $("list_affectations").scrollTop = Placement.scrollNonPlaces;
+
+    {{if "dPImeds"|module_active}}
+      ImedsResultsWatcher.loadResults();
+    {{/if}}
   });
 </script>
 

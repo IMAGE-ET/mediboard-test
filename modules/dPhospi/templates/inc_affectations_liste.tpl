@@ -34,6 +34,12 @@
         {{/if}}
       </td>
       <td class="patient" onclick="flipSejour({{$_sejour->_id}})">
+        {{if "dPImeds"|module_active}}
+          {{mb_include module=Imeds template=inc_sejour_labo link="#1" sejour=$_sejour}}
+          <script>
+            ImedsResultsWatcher.addSejour('{{$_sejour->_id}}', '{{$_sejour->_NDA}}');
+          </script>
+        {{/if}}
         <span {{if $app->touch_device}}onclick{{else}}onmouseover{{/if}}="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
           <strong class="{{if !$_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_sejour->septique}}septique{{/if}} {{if $_sejour->recuse == "-1"}}opacity-70{{/if}}">
             <a name="sejour{{$_sejour->_id}}" {{if $_sejour->type == "ambu"}}style="font-style: italic;"{{/if}}>

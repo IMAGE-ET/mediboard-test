@@ -1,6 +1,10 @@
 {{mb_script module=hospi script=affectation}}
 {{mb_script module=hospi script=affectation_uf}}
 
+{{if "dPImeds"|module_active}}
+  {{mb_script module="dPImeds" script="Imeds_results_watcher"}}
+{{/if}}
+
 <script>
   Affectation.from_tempo = true;
   Position.includeScrollOffsets = true;

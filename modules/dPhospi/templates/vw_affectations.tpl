@@ -1,6 +1,14 @@
 {{mb_script module=hospi script=vw_affectations ajax=1}}
 {{mb_script module=planningOp script=prestations ajax=1}}
 
+{{if "dPImeds"|module_active}}
+  <script>
+    Main.add(function() {
+      ImedsResultsWatcher.loadResults();
+    });
+  </script>
+{{/if}}
+
 <table class="main">
   <tr>
     <td class="greedyPane" id="tableauAffectations">

@@ -65,6 +65,10 @@
            });
          });
        {{/if}}
+
+      {{if "dPImeds"|module_active}}
+        ImedsResultsWatcher.loadResults();
+      {{/if}}
     });
   </script>
 {{/if}}

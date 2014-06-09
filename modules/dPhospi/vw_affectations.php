@@ -53,7 +53,7 @@ $order = "externe, nom";
 $services = $services->loadListWithPerms(PERM_READ, $where, $order);
 
 // Chargement des services
-foreach ($services as &$service) {
+foreach ($services as $service) {
   if (!in_array($service->_id, $services_ids)) {
     continue;
   }
@@ -167,8 +167,13 @@ if (CCanDo::edit()) {
   $groupSejourNonAffectes["couloir"] = loadAffectationsCouloirs($where, $order, null, $prestation_id);
 }
 
+$imeds_active = CModule::getActive("dPImeds");
+
 $functions_filter = array();
 foreach ($groupSejourNonAffectes as $_keyGroup => $_group) {
+  if ($imeds_active) {
+    CSejour::massLoadNDA($_group);
+  }
   if ($_keyGroup == "couloir") {
     continue;
   }

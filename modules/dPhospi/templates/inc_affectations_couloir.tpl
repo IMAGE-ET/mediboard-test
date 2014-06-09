@@ -83,6 +83,12 @@
                   <span style="float: right;">
                     {{mb_include module=patients template=inc_vw_antecedents type=deficience readonly=1}}
                   </span>
+                  {{if "dPImeds"|module_active}}
+                    {{mb_include module=Imeds template=inc_sejour_labo link="#1"}}
+                    <script>
+                      ImedsResultsWatcher.addSejour('{{$sejour->_id}}', '{{$sejour->_NDA}}');
+                    </script>
+                  {{/if}}
                   <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
                     <strong {{if $sejour->type == "ambu"}}style="font-style: italic;"{{/if}}>
                       {{$patient}}
