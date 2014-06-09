@@ -1,7 +1,6 @@
 <?php
 /**
  * $Id$
- * $Id$
  *
  * @package    Mediboard
  * @subpackage classes
@@ -1891,7 +1890,7 @@ class CStoredObject extends CModelObject {
     // So that we can use the mechanism safely with probably no side effects
     if (
       array_key_exists($backName, $this->_back) &&
-      array_key_exists($backName, $this->_count) &&
+      isset($this->_count[$backName]) &&
       count($this->_back[$backName]) == $this->_count[$backName]) {
       return $this->_back[$backName];
     }
