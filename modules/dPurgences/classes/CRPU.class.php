@@ -713,7 +713,7 @@ class CRPU extends CMbObject {
     $affectation->lit_id     = $this->box_id;
     $affectation->service_id = $this->_service_id;
 
-    if ($this->mutation_sejour_id && $this->mutation_sejour_id != $this->sejour_id && $sejour->mode_sortie == "mutation") {
+    if ($this->mutation_sejour_id && $this->mutation_sejour_id != $this->sejour_id) {
       $sejour = $this->loadRefSejourMutation();
     }
 

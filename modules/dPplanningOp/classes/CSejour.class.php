@@ -3024,7 +3024,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
-   * Force la création d'une affectation (?)
+   * Force la création d'une affectation en fonction de la tolérance(?)
    *
    * @param CAffectation $affectation Affectation concernée
    *
@@ -3035,8 +3035,10 @@ class CSejour extends CFacturable implements IPatientRelated {
     $datetime   = $affectation->entree;
     $lit_id     = $affectation->lit_id;
     $service_id = $affectation->service_id;
+    $tolerance  = CAppUI::conf("dPhospi CAffectation create_affectation_tolerance", CGroups::loadCurrent());
+    $now        = CMbDT::dateTime();
 
-    $splitting            = new CAffectation();
+    $splitting          = new CAffectation();
     $where["sejour_id"] = "=  '$this->_id'";
     $where["entree"]    = "<= '$datetime'";
     $where["sortie"]    = ">= '$datetime'";
@@ -3046,15 +3048,21 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // On retrouve une affectation a spliter
     if ($splitting->_id) {
-      // Affecte la sortie de l'affectation a créer avec l'ancienne date de sortie
-      $create->sortie = $splitting->sortie;
+    //on ne splite pas et on ne créé pas d'affectation si la tolérance n'est pas atteinte
+      if (CMbDT::addDateTime("00:$tolerance:00", $splitting->entree) <= $now) {
+        // Affecte la sortie de l'affectation a créer avec l'ancienne date de sortie
+        $create->sortie = $splitting->sortie;
 
-      // On passe à effectuer la split
-      $splitting->effectue    = 1;
-      $splitting->sortie      = $datetime;
-      $splitting->_no_synchro = true;
-      if ($msg = $splitting->store()) {
-        return $msg;
+        // On passe à effectuer la split
+        $splitting->effectue    = 1;
+        $splitting->sortie      = $datetime;
+        $splitting->_no_synchro = true;
+        if ($msg = $splitting->store()) {
+          return $msg;
+        }
+      }
+      else {
+        $create->affectation_id = $splitting->affectation_id;
       }
     }
     // On créé une première affectation
