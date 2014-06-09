@@ -253,6 +253,12 @@ class CSetupwebservices extends CSetup {
                 DROP `return_raw`;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.40";
+    $this->makeRevision("0.40");
+
+    $query = "ALTER TABLE `source_soap`
+                ADD `feature` ENUM ('SOAP_SINGLE_ELEMENT_ARRAYS','SOAP_USE_XSI_ARRAY_TYPE','SOAP_WAIT_ONE_WAY_CALLS');";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.41";
   }
 }

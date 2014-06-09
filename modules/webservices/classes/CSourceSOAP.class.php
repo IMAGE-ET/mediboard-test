@@ -36,6 +36,7 @@ class CSourceSOAP extends CExchangeSource {
   public $xop_mode;
   public $use_tunnel;
   public $socket_timeout;
+  public $feature;
 
   // Options de contexte SSL
   public $verify_peer;
@@ -81,6 +82,7 @@ class CSourceSOAP extends CExchangeSource {
     $specs["xop_mode"]         = "bool default|0";
     $specs["use_tunnel"]       = "bool default|0";
     $specs["socket_timeout"]   = "num min|1";
+    $specs["feature"]          = "enum list|SOAP_SINGLE_ELEMENT_ARRAYS|SOAP_USE_XSI_ARRAY_TYPE|SOAP_WAIT_ONE_WAY_CALLS";
 
     $specs["local_cert"]       = "str";
     $specs["passphrase"]       = "password show|0 loggable|0";
@@ -191,6 +193,10 @@ class CSourceSOAP extends CExchangeSource {
 
     if ($this->use_tunnel) {
       $options["use_tunnel"] = true;
+    }
+
+    if ($this->feature) {
+      $options["features"] = constant($this->feature);
     }
     
     $soap_client = new CSOAPClient($this->type_soap);
