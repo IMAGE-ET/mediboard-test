@@ -388,12 +388,15 @@
       {{/if}}
       
       {{if $sejour->_ref_tasks|@count}}
+        <table class="tbl">
+          <tr>
+            <th class="title">Tâches <small>({{$sejour->_ref_tasks|@count}})</small></th>
+          </tr>
+        </table>
         {{mb_include module=soins template=inc_vw_tasks_sejour mode_realisation=0 readonly=1 header=0}}
       {{/if}}
-      
     </td>
-    
-    
+
     <td style="vertical-align: top;" rowspan="2">
        
     {{if "dPprescription"|module_active}}
