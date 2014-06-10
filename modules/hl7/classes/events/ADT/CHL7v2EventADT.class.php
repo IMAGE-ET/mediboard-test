@@ -97,6 +97,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    * @return void
    */
   function addEVN($planned_datetime = null, $occured_datetime = null) {
+    /** @var CHL7v2SegmentEVN $EVN */
     $EVN = CHL7v2Segment::create("EVN", $this->message);
     $EVN->planned_datetime = $planned_datetime;
     $EVN->occured_datetime = $occured_datetime;
@@ -113,6 +114,8 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    */
   function addPID(CPatient $patient, CSejour $sejour = null) {
     $segment_name = $this->_is_i18n ? "PID_FR" : "PID";
+
+    /** @var CHL7v2SegmentPID $PID */
     $PID = CHL7v2Segment::create($segment_name, $this->message);
     $PID->patient = $patient;
     $PID->sejour = $sejour;
@@ -128,6 +131,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    * @return void
    */
   function addPD1(CPatient $patient) {
+    /** @var CHL7v2SegmentPD1 $PD1 */
     $PD1 = CHL7v2Segment::create("PD1", $this->message);
     $PD1->patient = $patient;
     $PD1->build($this);
@@ -143,6 +147,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   function addROLs(CPatient $patient) {
     $patient->loadRefsCorrespondants();
     if ($patient->_ref_medecin_traitant->_id) {
+      /** @var CHL7v2SegmentROL $ROL */
       $ROL = CHL7v2Segment::create("ROL", $this->message);
       $ROL->medecin = $patient->_ref_medecin_traitant;
       $ROL->role_id = "ODRP";
@@ -158,6 +163,8 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
       if ($medecin->type != "medecin") {
         continue;
       }
+
+      /** @var CHL7v2SegmentROL $ROL */
       $ROL = CHL7v2Segment::create("ROL", $this->message);
       $ROL->medecin = $medecin;
       $ROL->role_id = "RT";
@@ -175,6 +182,8 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   function addNK1s(CPatient $patient) {
     $i = 1;
     foreach ($patient->loadRefsCorrespondantsPatient() as $_correspondant) {
+      /** @var CHL7v2SegmentNK1 $NK1 */
+
       $NK1 = CHL7v2Segment::create("NK1", $this->message);
       $NK1->set_id = $i;
       $NK1->correspondant = $_correspondant;
@@ -193,9 +202,12 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    */
   function addPV1(CSejour $sejour = null, $set_id = 1) {
     $segment_name = $this->_is_i18n ? "PV1_FR" : "PV1";
+
+    /** @var CHL7v2SegmentPV1 $PV1 */
     $PV1          = CHL7v2Segment::create($segment_name, $this->message);
     $PV1->sejour  = $sejour;
     $PV1->set_id  = $set_id;
+
     if ($sejour) {
       $PV1->curr_affectation = $sejour->_ref_hl7_affectation;
     }
@@ -210,6 +222,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    * @return void
    */
   function addPV2(CSejour $sejour = null) {
+    /** @var CHL7v2SegmentPV2 $PV2 */
     $PV2            = CHL7v2Segment::create("PV2", $this->message);
     $PV2->sejour    = $sejour;
     $PV2->build($this);
@@ -223,6 +236,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    * @return void
    */
   function addMRG(CPatient $patient_eliminee) {
+    /** @var CHL7v2SegmentMRG $MRG */
     $MRG = CHL7v2Segment::create("MRG", $this->message);
     $MRG->patient_eliminee = $patient_eliminee;
     $MRG->build($this);
@@ -237,6 +251,8 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    */
   function addZBE(CSejour $sejour = null) {
     $segment_name = $this->_is_i18n ? "ZBE_FR" : "ZBE";
+
+    /** @var CHL7v2SegmentZBE $ZBE */
     $ZBE          = CHL7v2Segment::create($segment_name, $this->message);
     $ZBE->sejour  = $sejour;
     $movement     = $sejour->_ref_hl7_movement;
@@ -258,6 +274,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    * @return void
    */
   function addZFP(CSejour $sejour = null) {
+    /** @var CHL7v2SegmentZFP $ZFP */
     $ZFP = CHL7v2Segment::create("ZFP", $this->message);
     $ZFP->patient = $sejour->_ref_patient;
     $ZFP->build($this);
@@ -271,6 +288,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    * @return void
    */
   function addZFV(CSejour $sejour = null) {
+    /** @var CHL7v2SegmentZFV $ZFV */
     $ZFV = CHL7v2Segment::create("ZFV", $this->message);
     $ZFV->sejour = $sejour;
     $ZFV->build($this);
@@ -284,6 +302,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    * @return void
    */
   function addZFM(CSejour $sejour = null) {
+    /** @var CHL7v2SegmentZFM $ZFM */
     $ZFM = CHL7v2Segment::create("ZFM", $this->message);
     $ZFM->sejour = $sejour;
     $ZFM->build($this);
@@ -297,6 +316,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    * @return void
    */
   function addZFD(CSejour $sejour = null) {
+    /** @var CHL7v2SegmentZFD $ZFD */
     $ZFD = CHL7v2Segment::create("ZFD", $this->message);
     $ZFD->patient = $sejour->_ref_patient;
     $ZFD->build($this);

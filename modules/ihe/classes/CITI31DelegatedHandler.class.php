@@ -60,6 +60,19 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
    *
    * @return void
    */
+  function onBeforeStore(CMbObject $mbObject) {
+    if (!$this->isHandled($mbObject)) {
+      return false;
+    }
+  }
+
+  /**
+   * Trigger after event store
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
@@ -122,8 +135,13 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         }
       }
 
+      $current_affectation = null;
+      $code                = null;
+
+      // Cas où :
+      // * on est sur un séjour d'urgences qui n'est pas le relicat
+      // * on est en train de réaliser la mututation
       /** @var CRPU $rpu */
-      $code = null;
       $rpu  = $sejour->loadRefRPU();
       if ($rpu->_id && $rpu->sejour_id != $rpu->mutation_sejour_id && $sejour->fieldModified("mode_sortie", "mutation")) {
         $sejour = $rpu->loadRefSejourMutation();
@@ -131,7 +149,13 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         $sejour->loadLastLog();
         $sejour->_receiver = $receiver;
         $code = "A06";
+
+        // On récupère l'affectation courante qui n'a pas été transmise (affectation suite à la mutation)
+        $current_affectation          = $sejour->getCurrAffectation();
+        $sejour->_ref_hl7_affectation = $current_affectation;
       }
+
+      // On est sur le séjour relicat on ne synchronise aucun flux
       elseif ($rpu && $rpu->mutation_sejour_id && ($rpu->sejour_id != $rpu->mutation_sejour_id)) {
         return;
       }
@@ -168,7 +192,6 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         }
       }
 
-      $current_affectation = null;
       // Cas où lors de l'entrée réelle j'ai une affectation qui n'a pas été envoyée
       if ($sejour->fieldModified("entree_reelle") && !$sejour->_old->entree_reelle) {
         $current_affectation = $sejour->getCurrAffectation();
@@ -192,6 +215,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Affectation non liée à un séjour
       $sejour = $affectation->loadRefSejour();
       if (!$sejour->_id) {
+        return;
+      }
+
+      // Première affectation des urgences on ne la transmet pas, seulement pour l'évènement de bascule
+      if ($affectation->_mutation_urg) {
         return;
       }
 

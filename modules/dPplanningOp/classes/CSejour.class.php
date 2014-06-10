@@ -3049,7 +3049,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     // On retrouve une affectation a spliter
     if ($splitting->_id) {
       //on ne splite pas et on ne créé pas d'affectation si la tolérance n'est pas atteinte
-      if (CMbDT::addDateTime("00:$tolerance:00", $splitting->entree) <= $now) {
+      if (CMbDT::addDateTime("00:$tolerance:00", $splitting->entree) <= $now || $affectation->_mutation_urg) {
         // Affecte la sortie de l'affectation a créer avec l'ancienne date de sortie
         $create->sortie = $splitting->sortie;
 

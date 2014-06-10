@@ -9,9 +9,6 @@
  * @version    $Revision$
  */
 
-$do = new CDoObjectAddEdit("CSejour");
-$do->doSingle(false);
-
 if ($praticien_id = CValue::post("praticien_id")) {
   CValue::setSession("praticien_id", $praticien_id);
 }
@@ -51,4 +48,5 @@ if ($create_affectation && $mode_sortie  == "mutation" && $rpu->_id && ($lit_id 
   $sejour_hospit->forceAffectation($affectation_hospit);
 }
 
-$do->doRedirect();
+$do = new CDoObjectAddEdit("CSejour");
+$do->doIt();
