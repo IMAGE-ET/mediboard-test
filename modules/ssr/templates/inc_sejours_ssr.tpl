@@ -1,22 +1,12 @@
-{{* $Id:$ *}}
-
-{{*
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
-
-<script type="text/javascript">
+<script>
 printOffline = function(element) {
   var elements = [element];
-	
-	$$('.modal-view').each(function(modal){
-	  var id = modal.id;
-		var tab = window["tab-"+id];
+  
+  $$('.modal-view').each(function(modal){
+    var id = modal.id;
+    var tab = window["tab-"+id];
     var sejour_id = id.match(/(\d+)/)[1];
-		var sejour_guid = 'CSejour-'+sejour_id;
+    var sejour_guid = 'CSejour-'+sejour_id;
     
     modal.show();
     $("planning-"+sejour_id).show();
@@ -37,7 +27,7 @@ printOffline = function(element) {
 }
 </script>
 
-<table id="sejours-ssr" class="tbl" style="page-break-after: always;">
+<table id="sejours-ssr" class="tbl">
   <tr>
     <th class="title" colspan="11">
       {{if @$offline}}
@@ -52,10 +42,10 @@ printOffline = function(element) {
       {{if !$dialog && !@$offline}}
       <form name="selDate" action="?" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
-        <script type="text/javascript">
-        Main.add(function () {
-          Calendar.regField(getForm("selDate").date, null, { noView: true } );
-        });
+        <script>
+          Main.add(function () {
+            Calendar.regField(getForm("selDate").date, null, { noView: true } );
+          });
         </script>
         
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
@@ -203,19 +193,19 @@ printOffline = function(element) {
     </td>
     
     {{if $_sejour->annule}}
-    <td colspan="4" class="cancelled">
-      {{tr}}CSejour-{{$_sejour->recuse|ternary:"recuse":"annule"}}{{/tr}}
-    </td>
+      <td colspan="4" class="cancelled">
+        {{tr}}CSejour-{{$_sejour->recuse|ternary:"recuse":"annule"}}{{/tr}}
+      </td>
 
     {{else}}
       <td class="text">
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
         {{assign var=prat_demandeur value=$bilan->_ref_prat_demandeur}}
-        {{if $prat_demandeur->_id}} 
+        {{if $prat_demandeur->_id}}
         <br />{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$prat_demandeur}}
         {{/if}}
       </td>
-          
+
       <td class="text">
         {{assign var=kine_referent value=$bilan->_ref_kine_referent}}
         {{if $kine_referent->_id}}
@@ -226,7 +216,7 @@ printOffline = function(element) {
           {{/if}}
         {{/if}}
       </td>
-      
+
       <td colspan="2" style="text-align: center;">
         {{assign var=prescription value=$_sejour->_ref_prescription_sejour}}
         {{if $prescription && $prescription->_id}}
@@ -237,8 +227,7 @@ printOffline = function(element) {
           {{/if}}
         {{/if}}
       </td>
-       {{/if}}
-
+    {{/if}}
   </tr>
   {{foreachelse}}
   <tr>

@@ -1,16 +1,15 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
-
 // Plateaux disponibles
 $show_cancelled_services = CValue::getOrSession("show_cancelled_services", CAppUI::conf("ssr recusation view_services_inactifs"));
 $date                    = CValue::getOrSession("date", CMbDT::date());
@@ -20,7 +19,7 @@ $show                    = CValue::getOrSession("show", "all");
 $group_by                = CValue::get("group_by");
 
 // Filtre
-$filter = new CSejour;
+$filter = new CSejour();
 $filter->service_id   = CValue::getOrSession("service_id");
 $filter->praticien_id = CValue::getOrSession("praticien_id");
 $filter->referent_id  = CValue::getOrSession("referent_id");
@@ -134,7 +133,8 @@ CStoredObject::massLoadBackRefs($sejours, "notes");
 CStoredObject::massLoadFwdRef($sejours, "patient_id");
 foreach ($sejours as $_sejour) {
   // Regroupement par kine
-  $kine_journee = $_sejour->_ref_bilan_ssr->_ref_kine_journee;
+  $kine_journee   = $_sejour->_ref_bilan_ssr->_ref_kine_journee;
+  $kine_referent  = $_sejour->_ref_bilan_ssr->_ref_kine_referent;
   $sejours_by_kine[$kine_referent->_id][] = $_sejour;
   if ($kine_journee->_id && $kine_journee->_id != $kine_referent->_id) {
     $sejours_by_kine[$kine_journee->_id ][] = $_sejour;
