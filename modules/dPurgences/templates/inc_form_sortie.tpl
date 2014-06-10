@@ -195,7 +195,7 @@
       {{mb_include module=urgences template=inc_form_sortie_lit}}
     {{/if}}
 
-    <tr id="service_sortie_transfert" {{if $sejour->mode_sortie != "mutation"}} style="display:none;" {{/if}}>
+    <tr id="service_sortie_transfert" {{if !$rpu->mutation_sejour_id}} style="display:none;" {{/if}}>
       <th>{{mb_label object=$sejour field="service_sortie_id"}}</th>
       <td>
         <input type="hidden" name="service_sortie_id" value="{{$sejour->service_sortie_id}}"
