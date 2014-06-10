@@ -148,7 +148,7 @@ if (isset($_POST["_source"])) {
         CMbArray::removeValue("undef", $options);
         $values[] = nl2br(implode(", ", $options));
       }
-      $nom = str_replace("#039;", "#39;", CMbString::htmlEntities($list->nom, ENT_QUOTES));
+      $nom = CMbString::htmlEntities($list->nom, ENT_QUOTES);
       if ($is_empty) {
         $fields[] = "<span class=\"name\">[Liste - ".$nom."]</span>";
       }
