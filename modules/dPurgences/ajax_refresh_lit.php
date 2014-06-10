@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Urgences
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
@@ -61,6 +61,7 @@ foreach ($blocages_lit as $blocage) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("sejour", $sejour);
+$smarty->assign("rpu"   , $rpu);
 $smarty->assign("blocages_lit", $blocages_lit);
 
 $smarty->display("inc_form_sortie_lit.tpl");
