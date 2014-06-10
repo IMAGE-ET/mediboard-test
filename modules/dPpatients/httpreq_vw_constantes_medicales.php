@@ -250,7 +250,7 @@ if (!$constantes->_id && !$constantes->datetime) {
 
 // On récupère dans tous les cas le poids et la taille du patient
 $patient->loadRefConstantesMedicales(null, array("poids", "taille"), null, false);
-ml($selection);
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign('constantes',                 $constantes);
