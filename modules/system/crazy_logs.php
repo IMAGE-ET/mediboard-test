@@ -12,7 +12,7 @@
 CCanDo::checkAdmin();
 
 $mode  = CValue::get("mode",  "find");
-$ratio = CValue::get("ratio", 80);
+$ratio = CValue::get("ratio", 300);
 $limit = CValue::get("limit", 1000);
 
 $log = new CAccessLog();
