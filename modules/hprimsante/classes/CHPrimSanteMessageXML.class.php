@@ -309,7 +309,7 @@ class CHPrimSanteMessageXML extends CMbXMLDocument {
    */
   function getBirthdate($node) {
     $xpath = new CHPrimSanteMessageXPath($node ? $node->ownerDocument : $this);
-    $birthdate = $xpath->queryTextNode("P.7/TS.1", $node);
+    $birthdate = $xpath->queryTextNode("P.7", $node);
     return $birthdate ? CMbDT::transform(null, $birthdate, "%Y-%m-%d"): null;
   }
 
@@ -383,6 +383,151 @@ class CHPrimSanteMessageXML extends CMbXMLDocument {
     }
 
     return $ins;
+  }
+
+  /**
+   * Return or create the doctor of the message
+   *
+   * @param DOMNode $node Node
+   *
+   * @return CMediusers|int|null
+   */
+  function getDoctor($node) {
+    $xpath      = new CHPrimSanteMessageXPath($node ? $node->ownerDocument : $this);
+    $nodeDoctor = $xpath->query("P.13", $node);
+    $code       = null;
+    $nom        = null;
+    $prenom     = null;
+    $type_code  = null;
+
+    foreach ($nodeDoctor as $_node_doctor) {
+      $code       = $xpath->queryTextNode("CNA.1"     , $_node_doctor);
+      $nom        = $xpath->queryTextNode("CNA.2/PN.1", $_node_doctor);
+      $prenom     = $xpath->queryTextNode("CNA.2/PN.2", $_node_doctor);
+      $type_code  = $xpath->queryTextNode("CNA.3"     , $_node_doctor);
+      if ($code && $nom) {
+        break;
+      }
+    }
+
+    $mediuser   = new CMediusers();
+
+    $mediuser->_user_last_name = $nom;
+
+    switch ($type_code) {
+      case "R":
+        $mediuser->rpps  = $code;
+        break;
+      case "A":
+        $mediuser->adeli = $code;
+        break;
+      default:
+    }
+
+    // Cas où l'on a aucune information sur le médecin
+    if (!$mediuser->rpps && !$mediuser->adeli && !$mediuser->_id && !$mediuser->_user_last_name) {
+      return null;
+    }
+
+    $sender = $this->_ref_sender;
+    $ds     = $mediuser->getDS();
+
+    $ljoin = array();
+    $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
+
+    $where   = array();
+    $where["functions_mediboard.group_id"] = " = '$sender->group_id'";
+
+    if (($mediuser->rpps || $mediuser->adeli)) {
+      if ($mediuser->rpps) {
+        $where[] = $ds->prepare("rpps = %", $mediuser->rpps);
+      }
+      if ($mediuser->adeli) {
+        $where[] = $ds->prepare("adeli = %", $mediuser->adeli);
+      }
+
+      // Dans le cas où le praticien recherché par son ADELI ou RPPS est multiple
+      if ($mediuser->countList($where, null, $ljoin) > 1) {
+        $ljoin["users"] = "users_mediboard.user_id = users.user_id";
+        $where[]        = $ds->prepare("users.user_last_name = %" , $nom);
+      }
+
+      $mediuser->loadObject($where, null, null, $ljoin);
+
+      if ($mediuser->_id) {
+        return $mediuser;
+      }
+    }
+
+    $user = new CUser;
+
+    $ljoin = array();
+    $ljoin["users_mediboard"]     = "users.user_id = users_mediboard.user_id";
+    $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
+
+    $where   = array();
+    $where["functions_mediboard.group_id"] = " = '$sender->group_id'";
+    $where[] = $ds->prepare("users.user_first_name = %", $prenom);
+    $where[] = $ds->prepare("users.user_last_name = %" , $nom);
+
+    $order = "users.user_id ASC";
+    if ($user->loadObject($where, $order, null, $ljoin)) {
+      return $user->loadRefMediuser();
+    }
+
+    $mediuser->_user_first_name = $prenom;
+    $mediuser->_user_last_name  = $nom;
+
+    return $this->createDoctor($mediuser);
+  }
+
+  /**
+   * Create the mediuser
+   *
+   * @param CMediusers $mediuser mediuser
+   *
+   * @return int
+   */
+  function createDoctor(CMediusers $mediuser) {
+    $sender = $this->_ref_sender;
+
+    $function = new CFunctions();
+    $function->text = CAppUI::conf("hprimsante importFunctionName");
+    $function->group_id = $sender->group_id;
+    $function->loadMatchingObjectEsc();
+    if (!$function->_id) {
+      $function->type = "cabinet";
+      $function->compta_partagee = 0;
+      $function->store();
+    }
+    $mediuser->function_id = $function->_id;
+    $mediuser->makeUsernamePassword($mediuser->_user_first_name, $mediuser->_user_last_name, null, true);
+    $mediuser->_user_type = 13; // Medecin
+    $mediuser->actif = CAppUI::conf("hprimsante doctorActif") ? 1 : 0;
+
+    $user = new CUser();
+    $user->user_last_name   = $mediuser->_user_last_name;
+    $user->user_first_name  = $mediuser->_user_first_name;
+    // On recherche par le seek
+    $users                  = $user->seek("$user->user_last_name $user->user_first_name");
+    if (count($users) == 1) {
+      $user = reset($users);
+      $user->loadRefMediuser();
+      $mediuser = $user->_ref_mediuser;
+    }
+    else {
+      // Dernière recherche si le login est déjà existant
+      $user = new CUser();
+      $user->user_username = $mediuser->_user_username;
+      if ($user->loadMatchingObject()) {
+        // On affecte un username aléatoire
+        $mediuser->_user_username .= rand(1, 10);
+      }
+
+      $mediuser->store();
+    }
+
+    return $mediuser->_id;
   }
 
   /**

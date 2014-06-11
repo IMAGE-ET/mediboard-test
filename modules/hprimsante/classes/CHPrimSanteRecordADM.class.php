@@ -107,29 +107,6 @@ class CHPrimSanteRecordADM extends CHPrimSanteMessageXML {
             break;
           }
           break;
-        //sauvegarde du séjour uniquement
-        case "Sejour":
-          /*/récupération de l'identifiant du sejour
-          $nda_identifier = $this->getSejourIdentifier($_patient);
-          //récupération du séjour idex/match
-          $sejour = $this->getSejour($patient, $nda_identifier["sejour_identifier"], $_patient);
-          if ($sejour instanceof CHPrimSanteError) {
-            //problème lors de la récupération du séjour
-            $erreur[] = $sejour;
-            break;
-          }
-          //cas d'une modification d'un patient
-          if ($sejour === null) {
-            break;
-          }
-          $sejour = $this->storeSejour($sejour, $nda_identifier, $_patient);
-          $nda = $this->storeIdex($sejour, $nda_identifier["sejour_identifier"], $sender->_tag_sejour);
-          if ($nda) {
-            //sauvegarde du nda impossible
-            $erreur[] = new CHPrimSanteError($exchange_hpr, "P", "07", array("P", $_i+1, $identifier), "8.5");
-            break;
-          }*/
-          break;
         //sauvegarde du patient et du séjour
         case "Patient_Sejour":
           $result = $this->storePatient($identifier, $patient, $_patient);
@@ -142,7 +119,37 @@ class CHPrimSanteRecordADM extends CHPrimSanteMessageXML {
             $erreur[] = new CHPrimSanteError($exchange_hpr, "P", "03", array("P", $_i+1, $identifier), "8.3");
             break;
           }
+        //sauvegarde du séjour uniquement
+        case "Sejour":
+          //récupération de l'identifiant du sejour
+          $nda_identifier = $this->getSejourIdentifier($_patient);
+          //récupération du séjour idex/match
+          $sejour = $this->getSejour($patient, $nda_identifier["sejour_identifier"], $_patient, true);
+          if ($sejour instanceof CHPrimSanteError) {
+            //problème lors de la récupération du séjour
+            $erreur[] = $sejour;
+            break;
+          }
+          //cas d'une modification d'un patient
+          if ($sejour === null) {
+            break;
+          }
+
+          $sejour = $this->storeSejour($sejour, $nda_identifier, $_patient);
+          if ($sejour instanceof CHPrimSanteError) {
+            $erreur[] = $sejour;
+            break;
+          }
+
+          $nda = $this->storeIdex($sejour, $nda_identifier["sejour_identifier"], $sender->_tag_sejour);
+          if ($nda) {
+            //sauvegarde du nda impossible
+            $erreur[] = new CHPrimSanteError($exchange_hpr, "P", "07", array("P", $_i+1, $identifier), "8.5");
+            break;
+          }
           break;
+
+        default:
       }
     }
 
@@ -185,28 +192,45 @@ class CHPrimSanteRecordADM extends CHPrimSanteMessageXML {
    *
    * @return CSejour|CHPrimSanteError
    */
-  function getSejour($patient, $identifier, $node) {
-    $sender = $this->_ref_sender;
+  function getSejour($patient, $identifier, $node, $create = false) {
+    $sender     = $this->_ref_sender;
     $patient_id = $patient->_id;
 
     $idex = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $identifier);
 
-    $sejour= new CSejour();
+    $sejour = new CSejour();
     if ($idex->_id) {
-      return $sejour->load($idex->object_id);
+      $sejour->load($idex->object_id);
+      if ($sejour->patient_id != $patient_id) {
+        return new CHPrimSanteError($this->_ref_exchange_hpr, "T", "13", array("P", $this->loop+1, $this->identifier_patient), "8.5");
+      }
     }
     $sejour->patient_id = $patient_id;
 
-    $data = $this->getSejourStatut($node);
-    $entree = $data["entree"] ? CMbDT::transform(null, $data["entree"], "%Y-%m-%d"): null;
+    $data   = $this->getSejourStatut($node);
+    $entree = $data["entree"] ? CMbDT::dateTime($data["entree"]): null;
+    $sortie = $data["sortie"] ? CMbDT::dateTime($data["sortie"]): null;
 
     switch ($data["statut"]) {
+      case "OP":
+        $sejour->sortie_reelle = $sortie;
+        break;
       case "IP":
+        $sejour->type = "comp";
+        $sejour->entree_reelle = $entree;
+        $sejour->sortie_prevue = $sortie;
+        break;
       case "IO":
+        $sejour->type = "ambu";
+        $sejour->entree_reelle = $entree;
+        $sejour->sortie_prevue = $sortie;
+        break;
       case "ER":
+        $sejour->type = "urg";
         $sejour->entree_reelle = $entree;
         break;
       case "PA":
+        $sejour->type = "comp";
         $sejour->entree_prevue = $entree;
         break;
       case "MP":
@@ -220,12 +244,17 @@ class CHPrimSanteRecordADM extends CHPrimSanteMessageXML {
       default:
         return new CHPrimSanteError($this->_ref_exchange_hpr, "P", "05", array("P", $this->loop+1, $this->identifier_patient), "8.25");
     }
+    if ($sejour->_id) {
+      return $sejour;
+    }
+
     $count = $sejour->loadMatchingSejour();
 
     if ($count > 1) {
       return new CHPrimSanteError($this->_ref_exchange_hpr, "P", "04", array("P", $this->loop+1, $this->identifier_patient), "8.25");
     }
-    if (!$sejour->_id) {
+    //si on est en modification et qu'aucun séjour n'a été retrouvé
+    if (!$create && !$sejour->_id) {
       return new CHPrimSanteError($this->_ref_exchange_hpr, "P", "06", array("P", $this->loop+1, $this->identifier_patient), "8.25");
     }
 
@@ -332,14 +361,20 @@ class CHPrimSanteRecordADM extends CHPrimSanteMessageXML {
    * @return CHPrimSanteError|null
    */
   function storeSejour($sejour, $identifier, $node) {
-
-
+    /** @var CInteropSender $sender */
+    $sender               = $this->_ref_sender;
+    $mediuser             = $this->getDoctor($node);
+    if ($mediuser && !$mediuser->_id) {
+      return new CHPrimSanteError($this->_ref_exchange_hpr, "P", "15",  array("P", $this->loop, $this->identifier_patient), "8.14");
+    }
+    $sejour->praticien_id = $mediuser->_id;
+    $sejour->group_id     = $sender->group_id;
 
     if ($msg = $sejour->store()) {
-      return new CHPrimSanteError($this->_ref_exchange_hpr, "P", "13",  array("P", $this->loop, $this->identifier_patient), "8.24", $msg);
+      return new CHPrimSanteError($this->_ref_exchange_hpr, "P", "14",  array("P", $this->loop, $this->identifier_patient), "8.24", $msg);
     }
 
-    return null;
+    return $sejour;
   }
 
   /**

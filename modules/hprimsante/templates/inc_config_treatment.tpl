@@ -18,6 +18,8 @@
 
     {{mb_include module=system template=inc_config_str var=tag}}
     {{mb_include module=system template=inc_config_str var=sending_application}}
+    {{mb_include module=system template=inc_config_str var=importFunctionName}}
+    {{mb_include module=system template=inc_config_bool var=doctorActif}}
 
     <tr>
       <td class="button" colspan="2">

@@ -13,6 +13,8 @@
 
 $dPconfig["hprimsante"] = array (
   "mandatory_num_dos_ipp_adm" => "1",
-  "tag" => "",
-  "sending_application" => "",
+  "tag"                       => "",
+  "sending_application"       => "",
+  "importFunctionName"        => "Import",
+  "doctorActif"               => "0",
 );

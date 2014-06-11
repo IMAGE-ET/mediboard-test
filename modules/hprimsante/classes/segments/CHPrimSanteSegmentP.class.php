@@ -75,12 +75,12 @@ class CHPrimSanteSegmentP extends CHPrimSanteSegment {
 
     // P-10: race (forbidden)
     $data[] = null;
-
+    $address = explode("\n", $patient->_p_street_address, 1);
     // P-11: adresse (AD) (optional)
     $data[] = array(
       array(
-        $patient->_p_street_address,
-        null,
+        CMbArray::get($address, 0),
+        str_replace("\n", " ", CMbArray::get($address, 1)),
         $patient->_p_city,
         null,
         $patient->_p_postal_code,
