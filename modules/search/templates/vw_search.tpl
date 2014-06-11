@@ -85,6 +85,12 @@
           {{mb_include module=search template=inc_tooltip_help}}
         </td>
       </tr>
+      <tr>
+        <td>
+          <input type="checkbox" name="aggregate" id="aggregate" value="1" checked>
+          <label for="aggregate"> Aggregation des résultats</label>
+        </td>
+      </tr>
     </tbody>
   </table>
   <table class="main layout">

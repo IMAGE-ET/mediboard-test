@@ -20,8 +20,16 @@ interface IIndexableObject {
    * @return string
    */
   function getFieldPatient ();
+
   /**
-   * Loads the related fields for indexing datum (patient_id et date)
+   * Get the praticien_id of CMbobject
+   *
+   * @return CMediusers
+   */
+  function getFieldPraticien();
+
+  /**
+   * Loads the related fields for indexing datum
    *
    * @return array
    */
