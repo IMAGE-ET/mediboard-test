@@ -105,7 +105,7 @@
 </td>
 
 <td class="text sortie {{$sejour->mode_sortie}}">
-  <span style="float: right">
+  <span style="float: right;">
     {{if $sejour->UHCD}}
       <span class="encart encart-uhcd">UHCD</span>
     {{/if}}
@@ -134,11 +134,22 @@
 
   </span>
 
-  <br />
+  <br style="clear: both;"/>
   {{if $rpu->mutation_sejour_id && $sejour->mode_sortie != "mutation"}}
     <div class="warning">
       Un séjour de mutation a été détecté, mais le mode de sortie <strong>mutation</strong> n'a pas été renseigné.
     </div>
+  {{/if}}
+
+  {{if $can->admin && $rpu->mutation_sejour_id && $sejour->_id != $rpu->mutation_sejour_id}}
+    <form method="post" name="annulerHospitalisation">
+      <input type="hidden" name="m" value="urgences"/>
+      <input type="hidden" name="dosql" value="do_cancel_hospitalization_aed"/>
+      <input type="hidden" name="sejour_guid" value="{{$sejour->_guid}}"/>
+      <button type="submit" class="unlink notext" title="{{tr}}cancel-hospitalization{{/tr}}" style="float: right;">
+        {{tr}}cancel-hospitalization{{/tr}}
+      </button>
+    </form>
   {{/if}}
 
   {{if $sejour->sortie_reelle || $sejour->mode_sortie == "mutation"}}
