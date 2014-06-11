@@ -28,6 +28,11 @@ $filter->consult_accomp = CValue::get("consult_accomp", 0);
 $filter->_admission     = CValue::get("_admission", "heure");
 $filter->_ccam_libelle  = CValue::get("_ccam_libelle", "1");
 $filter->_coordonnees   = CValue::get("_coordonnees", 0);
+$filter->_nb_days       = CValue::get("_nb_days", 0);
+
+if ($filter->_nb_days) {
+  $filter->_date_max = CMbDT::date("+$filter->_nb_days days", CMbDT::date($filter->_date_min)) . " 21:00:00";
+}
 
 $filter->_service     = explode(",", $filter->_service);
 $filter->praticien_id = explode(",", $filter->praticien_id);
