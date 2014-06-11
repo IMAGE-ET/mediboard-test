@@ -8,7 +8,7 @@
  * @version    $Revision$
  *}}
 
-{{mb_script module=maternite script=grossesse}}
+{{mb_script module=maternite script=grossesse ajax=true}}
 
 {{assign var=grossesse value=$object->_ref_grossesse}}
 {{mb_default var=submit value=0}}
