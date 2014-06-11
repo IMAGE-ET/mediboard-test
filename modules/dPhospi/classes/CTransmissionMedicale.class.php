@@ -250,15 +250,18 @@ class CTransmissionMedicale extends CMbMetaObject implements IIndexableObject {
    * @return array
    */
   function getFieldsSearch () {
+    $prat = $this->getFieldPraticien();
     $array["id"]          = $this->_id;
     $array["author_id"]   = $this->user_id;
+    $array["prat_id"]     = $prat->_id;
     $array["title"]       = utf8_encode($this->type);
     $array["body"]        = utf8_encode($this->text);
     $array["date"]        = str_replace("-", "/", $this->date);
-    $user = $this->loadRefUser();
-    $array["function_id"] = $user->function_id;
-    $array["group_id"]    = $user->loadRefFunction()->group_id;
+    $array["function_id"] = $prat->function_id;
+    $array["group_id"]    = $prat->loadRefFunction()->group_id;
     $array["patient_id"]  = $this->getFieldPatient();
+    $array["object_ref_id"]  = $this->loadRefSejour()->_id;
+    $array["object_ref_class"]  = $this->loadRefSejour()->_class;
 
     return $array;
   }
@@ -272,5 +275,14 @@ class CTransmissionMedicale extends CMbMetaObject implements IIndexableObject {
    */
   function redesignBody ($content) {
     return $content;
+  }
+
+  /**
+   * Get the praticien_id of CMbobject
+   *
+   * @return CMediusers
+   */
+  function getFieldPraticien () {
+    return $this->loadRefSejour()->loadRefPraticien();
   }
 }

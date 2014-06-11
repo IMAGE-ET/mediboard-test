@@ -1770,10 +1770,11 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
    * @return array
    */
   function getFieldsSearch () {
+    $prat = $this->getFieldPraticien();
     $array["id"]          = $this->_id;
     $array["author_id"]   = $this->author_id;
+    $array["prat_id"]     = $prat->_id;
     $array["title"]       = utf8_encode($this->nom);
-
     $this->loadContent(false);
     $content              = $this->_ref_content;
     $array["body"]        = utf8_encode($this->redesignBody($content->content));
@@ -1782,10 +1783,11 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
       $date = CMbDT::dateTime();
     }
     $array["date"]        = str_replace("-", "/", $date);
-    $author = $this->loadRefAuthor();
-    $array["function_id"] = $author->function_id;
-    $array["group_id"]    = $author->loadRefFunction()->group_id;
+    $array["function_id"] = $prat->function_id;
+    $array["group_id"]    = $this->loadRefAuthor()->loadRefFunction()->group_id;
     $array["patient_id"]  = $this->getFieldPatient();
+    $array["object_ref_id"] = $this->loadTargetObject()->_id;
+    $array["object_ref_class"] = $this->loadTargetObject()->_class;
 
     return $array;
   }
@@ -1841,5 +1843,20 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
       default:
         return $object->_ref_patient->_id;
     }
+  }
+  /**
+   * Get the praticien_id of CMbobject
+   *
+   * @return CMediusers
+   */
+  function getFieldPraticien () {
+    $object = $this->loadTargetObject();
+    if ($object instanceof CConsultAnesth) {
+      $prat = $object->loadRefConsultation()->loadRefPraticien();
+    }
+    else {
+      $prat = $object->loadRefPraticien();
+    }
+    return $prat;
   }
 }

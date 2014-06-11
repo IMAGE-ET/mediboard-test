@@ -2234,15 +2234,18 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
    * @return array
    */
   function getFieldsSearch () {
+    $prat = $this->getFieldPraticien();
     $array["id"]          = $this->_id;
-    $array["author_id"]   = $this->loadRefPraticien()->_id;
+    $array["author_id"]   = $this->_praticien_id;
+    $array["prat_id"]     = $prat->_id;
     $array["title"]       = utf8_encode($this->type);
     $array["body"]        = $this->redesignBody("");
     $array["date"]        = str_replace("-", "/", $this->loadRefPlageConsult()->date);
-    $user = $this->loadRefPraticien();
-    $array["function_id"] = $user->function_id;
-    $array["group_id"]    = $user->loadRefFunction()->group_id;
+    $array["function_id"] = $prat->function_id;
+    $array["group_id"]    = $prat->loadRefFunction()->group_id;
     $array["patient_id"]  = $this->getFieldPatient();
+    $array["object_ref_id"]  = $this->loadRefSejour()->_id;
+    $array["object_ref_class"]  = $this->loadRefSejour()->_class;
 
     return $array;
   }
@@ -2257,5 +2260,13 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
   function redesignBody ($content) {
     $content = $this->motif." ".$this->rques." ".$this->examen." ".$this->histoire_maladie." ".$this->conclusion;
     return utf8_encode($content);
+  }
+  /**
+   * Get the praticien_id of CMbobject
+   *
+   * @return CMediusers
+   */
+  function getFieldPraticien () {
+    return $this->loadRefPraticien();
   }
 }

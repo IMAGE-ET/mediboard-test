@@ -671,17 +671,19 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
    * @return array
    */
   function getFieldsSearch () {
-    $array["id"]          = $this->_id;
     $consult = $this->loadRefConsultation();
-    $plageconsult = $consult->loadRefPlageConsult();
-    $array["author_id"]   = $plageconsult->chir_id;
+    $prat = $this->getFieldPraticien();
+    $array["id"]          = $this->_id;
+    $array["author_id"]   = $prat->_id;
+    $array["prat_id"]     = $prat->_id;
     $array["title"]       = utf8_encode($consult->type);
     $array["body"]        = $this->redesignBody("");
-    $array["date"]        = str_replace("-", "/", $plageconsult->date);
-    $user = $consult->loadRefPraticien();
-    $array["function_id"] = $user->function_id;
-    $array["group_id"]    = $user->loadRefFunction()->group_id;
+    $array["date"]        = str_replace("-", "/", $consult->loadRefPlageConsult()->date);
+    $array["function_id"] = $prat->function_id;
+    $array["group_id"]    = $prat->loadRefFunction()->group_id;
     $array["patient_id"]  = $this->getFieldPatient();
+    $array["object_ref_id"]  = $this->loadRefSejour()->_id;
+    $array["object_ref_class"]  = $this->loadRefSejour()->_class;
 
     return $array;
   }
@@ -695,10 +697,23 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
    */
   function redesignBody ($content) {
     $this->loadRefConsultation();
-    $content = $this->etatBucco." ".$this->examenCardio." ".$this->examenPulmo. " ".$this->examenDigest. " ".$this->examenAutre.
+    $content = $this->etatBucco." ".$this->examenCardio." ".$this->examenPulmo.
+      " ".$this->examenDigest. " ".$this->examenAutre.
       " ". $this->conclusion." ".$this->_ref_consultation->motif." ".$this->_ref_consultation->rques.
-      " ".$this->_ref_consultation->examen." ".$this->_ref_consultation->histoire_maladie." ".$this->_ref_consultation->conclusion;
+      " ".$this->_ref_consultation->examen." ".$this->_ref_consultation->histoire_maladie.
+      " ".$this->_ref_consultation->conclusion;
 
     return utf8_encode($content);
+  }
+
+  /**
+   * Get the praticien_id of CMbobject
+   *
+   * @return CMediusers
+   */
+  function getFieldPraticien () {
+    $consult = $this->loadRefConsultation();
+    $prat = $consult->loadRefPraticien();
+    return $prat;
   }
 }
