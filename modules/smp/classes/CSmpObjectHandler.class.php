@@ -40,6 +40,35 @@ class CSmpObjectHandler extends CEAIObjectHandler {
    *
    * @return bool
    */
+  function onBeforeStore(CMbObject $mbObject) {
+    if (!parent::onBeforeStore($mbObject)) {
+      return false;
+    }
+
+    // Si pas de tag séjour
+    if (!CAppUI::conf("dPplanningOp CSejour tag_dossier")) {
+      throw new CMbException("no_tag_defined");
+    }
+
+    // Si serveur et pas de NDA sur le séjour
+    if ((isset($mbObject->_no_num_dos) && ($mbObject->_no_num_dos == 1)) && CAppUI::conf('smp server')) {
+      return false;
+    }
+
+    $this->sendFormatAction("onBeforeStore", $mbObject);
+
+    return true;
+  }
+
+  /**
+   * Trigger after event store
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @throws CMbException
+   *
+   * @return bool
+   */
   function onAfterStore(CMbObject $mbObject) {
     if (!parent::onAfterStore($mbObject)) {
       return false;
