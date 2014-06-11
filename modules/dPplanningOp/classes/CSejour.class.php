@@ -3270,6 +3270,8 @@ class CSejour extends CFacturable implements IPatientRelated {
     $admission = $this->entree_prevue;
 
     if ($this->_ref_last_operation && $this->_ref_last_operation->presence_preop) {
+      $this->_ref_last_operation->loadRefPlageOp();
+      $admission = $this->_ref_last_operation->_datetime_best;
       $admission = CMbDT::subDateTime($this->_ref_last_operation->presence_preop, $admission);
     }
 
