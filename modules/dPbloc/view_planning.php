@@ -27,6 +27,8 @@ $filter->_codes_ccam     = CValue::get("_codes_ccam");
 $filter->exam_extempo    = CValue::get("exam_extempo");
 $filter->_ccam_libelle   = CValue::get("_ccam_libelle", CAppUI::conf("dPbloc CPlageOp libelle_ccam"));
 $filter->_planning_perso = CValue::get("planning_perso");
+$filter->_nb_days        = CValue::get("_nb_days", 0);
+
 $_coordonnees            = CValue::get("_coordonnees");
 $_print_numdoss          = CValue::get("_print_numdoss");
 $_print_ipp              = CValue::get("_print_ipp");
@@ -37,6 +39,9 @@ $_duree                  = CValue::get("_duree", CAppUI::conf("dPbloc CPlageOp v
 $_hors_plage             = CValue::get("_hors_plage");
 $_show_comment_sejour    = CValue::get("_show_comment_sejour");
 
+if ($filter->_nb_days) {
+  $filter->_date_max = CMbDT::date("+$filter->_nb_days days", CMbDT::date($filter->_date_min)) . " 21:00:00";
+}
 
 $no_consult_anesth       = CValue::get("no_consult_anesth");
 
