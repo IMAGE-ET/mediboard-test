@@ -65,11 +65,13 @@ function submitCote(oForm) {
 }
 
 function submitAdmission(oForm, bPassCheck) {
-  {{if @$modules.hprim21 && $conf.hprim21.mandatory_num_dos_ipp_adm}}
-    var oIPPForm = document.forms["editIPP" + oForm.patient_id.value];
-    var oNumDosForm = document.forms["editNumdos" + oForm.sejour_id.value];
+  {{if "dPsante400"|module_active && "CAppUI::conf"|static_call:"dPsante400 CIdSante400 admit_ipp_nda_obligatory":"CGroups-$g"}}
+    var oIPPForm = getForm("editIPP" + $V(oForm.patient_id));
+    var oNumDosForm = getForm("editNumdos" + $V(oForm.sejour_id));
     if(!bPassCheck && oIPPForm && oNumDosForm && (!$V(oIPPForm.id400) || !$V(oNumDosForm.id400)) ) {
-      setExternalIds(oForm);
+      Idex.edit_manually($V(oNumDosForm.object_class)+"-"+$V(oNumDosForm.object_id),
+                         $V(oIPPForm.object_class)+"-"+$V(oIPPForm.object_id),
+                          reloadAdmission.curry());
     } else {
       return onSubmitFormAjax(oForm, { onComplete : reloadAdmission });
     }
@@ -77,53 +79,6 @@ function submitAdmission(oForm, bPassCheck) {
     return onSubmitFormAjax(oForm, { onComplete : reloadAdmission });
   {{/if}}
 }
-
-var ExtRefManager = {
-  sejour_id : null,
-  patient_id: null,
-
-  submitIPPForm: function(patient_id) {
-    ExtRefManager.patient_id = patient_id;
-    var oForm = document.forms["editIPP" + patient_id];
-    return onSubmitFormAjax(oForm, {onComplete: ExtRefManager.reloadIPPForm});
-  },
-
-  reloadIPPForm: function() {
-    reloadAdmission();
-  },
-
-  submitNumdosForm: function(sejour_id) {
-    ExtRefManager.sejour_id = sejour_id;
-    var oForm = document.forms["editNumdos" + this.sejour_id];
-    return onSubmitFormAjax(oForm, {onComplete: ExtRefManager.reloadNumdosForm});
-  },
-
-  reloadNumdosForm: function() {
-    reloadAdmission();
-  }
-};
-
-function setExternalIds(oForm) {
-  SejourHprimSelector["init"+oForm.sejour_id.value]();
-}
-
-PatHprimSelector.doSet = function(){
-  var oForm = document[PatHprimSelector.sForm];
-  $V(oForm[PatHprimSelector.sId], PatHprimSelector.prepared.id);
-  ExtRefManager.submitIPPForm(oForm.patient_id.value);
-};
-
-SejourHprimSelector.doSet = function(){
-  var oFormSejour = document[SejourHprimSelector.sForm];
-  $V(oFormSejour[SejourHprimSelector.sId]  , SejourHprimSelector.prepared.id);
-  ExtRefManager.submitNumdosForm(oFormSejour.object_id.value);
-  if(SejourHprimSelector.prepared.IPPid) {
-    var oFormIPP = document[SejourHprimSelector.sIPPForm];
-    $V(oFormIPP[SejourHprimSelector.sIPPId]  , SejourHprimSelector.prepared.IPPid);
-    ExtRefManager.submitIPPForm(oFormIPP.object_id.value);
-  }
-  //submitAdmission(document["editAdmFrm"+oFormSejour.object_id.value]);
-};
 
 Main.add(function () {
   var totalUpdater = new Url("dPadmissions", "httpreq_vw_all_presents");

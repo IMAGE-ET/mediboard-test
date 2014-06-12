@@ -1,4 +1,13 @@
-// $Id: $
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPsante400
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ * @link       http://www.mediboard.org
+ */
 
 Idex = {
   edit: function(object_guid, tag) {
@@ -11,5 +20,13 @@ Idex = {
       .addParam('load_unique' , 1)
       .addParam('dialog'      , 1)
       .requestModal(400);
+  },
+
+  edit_manually : function(sejour_guid, patient_guid, callback) {
+    new Url("dPsante400", "ajax_edit_manually_ipp_nda")
+      .addParam("sejour_guid" , sejour_guid)
+      .addParam("patient_guid", patient_guid)
+      .requestModal("40%", "40%")
+      .modalObject.observe("afterClose", callback)
   }
-}
+};

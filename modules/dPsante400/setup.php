@@ -171,6 +171,12 @@ class CSetupdPsante400 extends CSetup {
                 ADD INDEX (`object_class`);';
     $this->addQuery($query);
 
-    $this->mod_version = '0.28';
+    $this->makeRevision("0.28");
+
+    if (CModule::getInstalled("hprim21")) {
+      $this->addDefaultConfig("dPsante400 CIdSante400 admit_ipp_nda_obligatory", "hprim21 mandatory_num_dos_ipp_adm");
+    }
+
+    $this->mod_version = '0.29';
   } 
 }

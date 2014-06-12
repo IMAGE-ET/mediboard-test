@@ -19,6 +19,10 @@ CConfiguration::register(
     //"CService CGroups.group_id"
     "CGroups" => array(
       "dPsante400" => array(
+        "CIdSante400" => array(
+          "add_ipp_nda_manually" => "bool default|0",
+          "admit_ipp_nda_obligatory" => "bool default|0",
+        ),
         "CIncrementer" => array(
           "type_sejour" => $types
         ),

@@ -65,60 +65,23 @@
     <img src="images/icons/print.png" />
   </a>
   {{/if}}
-  
+
   {{if $patient->_ref_IPP}}
-  <script type="text/javascript">
-    PatHprimSelector.init{{$patient->_id}} = function(){
-      this.sForm      = "editIPP{{$patient->_id}}";
-      this.sId        = "id400";
-      this.sPatNom    = "{{$patient->nom}}";
-      this.sPatPrenom = "{{$patient->prenom}}";
-      this.pop();
-    };
-  </script>
-  <form name="editIPP{{$patient->_id}}" action="?m={{$m}}" method="post">
-    <input type="hidden" name="dosql" value="do_idsante400_aed" />
-    <input type="hidden" name="m" value="dPsante400" />
-    <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="ajax" value="1" />
-    <input type="hidden" name="id_sante400_id" value="{{$patient->_ref_IPP->_id}}" />
-    <input type="hidden" class="notNull" name="id400" value="{{$patient->_ref_IPP->id400}}" />
-    <input type="hidden" class="notNull" name="tag" value="{{$patient->_ref_IPP->tag}}" />
-    <input type="hidden" class="notNull" name="object_id" value="{{$patient->_id}}" />
-    <input type="hidden" class="notNull" name="object_class" value="CPatient" />
-    <input type="hidden" name="last_update" value="{{$patient->_ref_IPP->last_update}}" />
-  </form>
-  
-  <script type="text/javascript">
-    SejourHprimSelector.init{{$_sejour->_id}} = function(){
-      this.sForm      = "editNumdos{{$_sejour->_id}}";
-      this.sId        = "id400";
-      this.sIPPForm   = "editIPP{{$patient->_id}}";
-      this.sIPPId     = "id400";
-      this.sIPP       = document.forms.editIPP{{$patient->_id}}.id400.value;
-      this.sPatNom    = "{{$patient->nom}}";
-      this.sPatPrenom = "{{$patient->prenom}}";
-      this.pop();
-    };
-  </script>
-  {{if $_sejour->_ref_NDA}}
-  <form name="editNumdos{{$_sejour->_id}}" action="?m={{$m}}" method="post" onsubmit="return ExtRefManager.submitNumdosForm({{$_sejour->_id}})">
-    <input type="hidden" name="dosql" value="do_idsante400_aed" />
-    <input type="hidden" name="m" value="dPsante400" />
-    <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="ajax" value="1" />
-    <input type="hidden" name="id_sante400_id" value="{{$_sejour->_ref_NDA->_id}}" />
-    <input type="hidden" class="notNull" name="id400" value="{{$_sejour->_ref_NDA->id400}}" size="8" />
-    <input type="hidden" class="notNull" name="tag" value="{{$_sejour->_ref_NDA->tag}}" />
-    <input type="hidden" class="notNull" name="object_id" value="{{$_sejour->_id}}" />
-    <input type="hidden" class="notNull" name="object_class" value="CSejour" />
-    <input type="hidden" class="notNull" name="sejour_id" value="{{$_sejour->_id}}" />
-    <input type="hidden" name="last_update" value="{{$_sejour->_ref_NDA->last_update}}" />
-    {{if @$modules.hprim21}}
-      <button type="button" class="edit notext" onclick="setExternalIds(this.form)">Edit external Ids</button>
-    {{/if}}
-  </form>
+    <form name="editIPP{{$patient->_id}}" method="post">
+      <input type="hidden" class="notNull" name="id400" value="{{$patient->_ref_IPP->id400}}" />
+      <input type="hidden" class="notNull" name="object_id" value="{{$patient->_id}}" />
+      <input type="hidden" class="notNull" name="object_class" value="CPatient" />
+    </form>
   {{/if}}
+  {{if $_sejour->_ref_NDA}}
+    <form name="editNumdos{{$_sejour->_id}}" method="post">
+      <input type="hidden" class="notNull" name="id400" value="{{$_sejour->_ref_NDA->id400}}"/>
+      <input type="hidden" class="notNull" name="object_id" value="{{$_sejour->_id}}" />
+      <input type="hidden" class="notNull" name="object_class" value="CSejour" />
+    </form>
+  {{/if}}
+  {{if "dPsante400"|module_active}}
+    {{mb_include module=dPsante400 template=inc_manually_ipp_nda sejour=$_sejour patient=$patient callback=reloadAdmission}}
   {{/if}}
   {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$_sejour}}
   <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">

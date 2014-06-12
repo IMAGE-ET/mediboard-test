@@ -14,9 +14,12 @@
 {{mb_script module=patients    script=antecedent}}
 {{mb_script module=compteRendu script=document}}
 {{mb_script module=compteRendu script=modele_selector}}
-{{mb_script module=files     script=file}}
+{{mb_script module=files       script=file}}
 {{mb_script module=planningOp  script=sejour}}
 {{mb_script module=planningOp  script=prestations}}
+{{if "dPsante400"|module_active}}
+  {{mb_script module=dPsante400  script=Idex}}
+{{/if}}
 
 {{if "web100T"|module_active}}
   {{mb_script module=web100T script=web100T}}
@@ -112,11 +115,13 @@
   }
 
   function submitAdmission(form, bPassCheck) {
-    {{if @$modules.hprim21 && $conf.hprim21.mandatory_num_dos_ipp_adm}}
-      var oIPPForm = getForm("editIPP" + $V(form.patient_id));
+    {{if "dPsante400"|module_active && "CAppUI::conf"|static_call:"dPsante400 CIdSante400 admit_ipp_nda_obligatory":"CGroups-$g"}}
+      var oIPPForm    = getForm("editIPP" + $V(form.patient_id));
       var oNumDosForm = getForm("editNumdos" + $V(form.sejour_id));
       if (!bPassCheck && oIPPForm && oNumDosForm && (!$V(oIPPForm.id400) || !$V(oNumDosForm.id400)) ) {
-        setExternalIds(form);
+        Idex.edit_manually($V(oNumDosForm.object_class)+"-"+$V(oNumDosForm.object_id),
+                           $V(oIPPForm.object_class)+"-"+$V(oIPPForm.object_id),
+                           reloadAdmissionLine.curry($V(form.sejour_id)));
       }
       else {
         return onSubmitFormAjax(form, reloadAdmissionLine.curry($V(form.sejour_id)));
@@ -140,57 +145,10 @@
     reloadFullAdmissions();
   }
 
-  var ExtRefManager = {
-    sejour_id : null,
-    patient_id: null,
-
-    submitIPPForm: function(patient_id) {
-      ExtRefManager.patient_id = patient_id;
-      var oForm = getForm("editIPP" + patient_id);
-      return onSubmitFormAjax(oForm, ExtRefManager.reloadIPPForm);
-    },
-
-    reloadIPPForm: function() {
-      //reloadAdmission();
-    },
-
-    submitNumdosForm: function(sejour_id) {
-      ExtRefManager.sejour_id = sejour_id;
-      var oForm = getForm("editNumdos" + this.sejour_id);
-      return onSubmitFormAjax(oForm, ExtRefManager.reloadNumdosForm.curry(this.sejour_id));
-    },
-
-    reloadNumdosForm: function(sejour_id) {
-      //reloadAdmissionLine(this.sejour_id);
-    }
-  };
-
   function changeEtablissementId(oForm) {
     $V(oForm._modifier_entree, '0');
     submitAdmission(oForm);
   }
-
-  function setExternalIds(oForm) {
-    SejourHprimSelector["init"+$V(oForm.sejour_id)]();
-  }
-
-  PatHprimSelector.doSet = function(){
-    var oForm = getForm(PatHprimSelector.sForm);
-    $V(oForm[PatHprimSelector.sId], PatHprimSelector.prepared.id);
-    ExtRefManager.submitIPPForm($V(oForm.patient_id));
-  };
-
-  SejourHprimSelector.doSet = function() {
-    var oFormSejour = getForm(SejourHprimSelector.sForm);
-    $V(oFormSejour[SejourHprimSelector.sId]  , SejourHprimSelector.prepared.id);
-    ExtRefManager.submitNumdosForm($V(oFormSejour.object_id));
-    if (SejourHprimSelector.prepared.IPPid) {
-      var oFormIPP = getForm(SejourHprimSelector.sIPPForm);
-      $V(oFormIPP[SejourHprimSelector.sIPPId]  , SejourHprimSelector.prepared.IPPid);
-      ExtRefManager.submitIPPForm($V(oFormIPP.object_id));
-    }
-    submitAdmission(document["editAdmFrm"+oFormSejour.object_id.value], true);
-  };
 
   updateModeEntree = function(select) {
     var selected = select.options[select.selectedIndex];
