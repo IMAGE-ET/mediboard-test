@@ -672,6 +672,9 @@ class CConsultation extends CFacturable implements IPatientRelated {
     if (!$this->tarif && $count_actes) {
       $this->tarif = "Cotation manuelle";
     }
+    elseif (!$count_actes && $this->tarif == "Cotation manuelle") {
+      $this->tarif = "";
+    }
 
     return $this->store();
 
