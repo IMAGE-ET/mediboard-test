@@ -17,8 +17,14 @@
  * entree(YYYYMMDD);entree(HHMM);sortie(YYYYMMDD);sortie(HHMM);type_hospi(comp ou ambu)
 */
 
+/*
+ * Ajout du paramètre detail_lit pour avoir :
+ * NOM;Prénom;patient_id;NOM_NAISSANCE,service_id;chambre_id;LIT_NOM;lit_id;sexe;naissance;entree;entree;sortie;sortie;type_hospi
+ */
+
 // Date actuelle
-$date = CValue::get("date", CMbDT::dateTime());
+$date       = CValue::get("date", CMbDT::dateTime());
+$detail_lit = CValue::get("detail_lit", 0);
 
 // Affectation a la date $date
 $affectation = new CAffectation();
@@ -51,32 +57,37 @@ $patients   = CMbObject::massLoadFwdRef($sejours , "patient_id");
 $list_affectations = array();
 
 foreach ($affectations as $key => $_affectation) {
-  $_affectation->loadRefLit();
-  $_affectation->_ref_lit->loadRefChambre();
-  $_affectation->_ref_lit->_ref_chambre->loadRefService();
-  $_affectation->loadRefSejour();
-  $_affectation->_ref_sejour->loadRefPraticien();
-  $_affectation->_ref_sejour->loadRefPatient();
+  $lit = $_affectation->loadRefLit();
+  $lit->loadRefChambre()->loadRefService();
 
-  $list_affectations[$key]["nom"]          = $_affectation->_ref_sejour->_ref_patient->nom;
-  $list_affectations[$key]["prenom"]       = $_affectation->_ref_sejour->_ref_patient->prenom;
-  $list_affectations[$key]["id"]           = $_affectation->_ref_sejour->_ref_patient->_id;
-  $list_affectations[$key]["service"]      = $_affectation->_ref_lit->_ref_chambre->_ref_service->_id;
-  $list_affectations[$key]["chambre"]      = $_affectation->_ref_lit->_ref_chambre->_id;
-  $list_affectations[$key]["lit"]          = $_affectation->_ref_lit->_id;
-  $list_affectations[$key]["sexe"]         = $_affectation->_ref_sejour->_ref_patient->sexe;
-  $list_affectations[$key]["naissance"]    = CMbDT::format($_affectation->_ref_sejour->_ref_patient->naissance, "%Y%m%d");
-  $list_affectations[$key]["date_entree"]  = CMbDT::format(CMbDT::date($_affectation->_ref_sejour->entree), "%Y%m%d");
-  $list_affectations[$key]["heure_entree"] = CMbDT::format(CMbDT::time($_affectation->_ref_sejour->entree), "%H%M");
-  $list_affectations[$key]["date_sortie"]  = CMbDT::format(CMbDT::date($_affectation->_ref_sejour->sortie), "%Y%m%d");
-  $list_affectations[$key]["heure_sortie"] = CMbDT::format(CMbDT::time($_affectation->_ref_sejour->sortie), "%H%M");
-  $list_affectations[$key]["type"]         = $_affectation->_ref_sejour->type;
+  $sejour = $_affectation->loadRefSejour();
+  $sejour->loadRefPraticien();
+  $patient = $_affectation->_ref_sejour->loadRefPatient();
+
+  $list_affectations[$key]["nom"]          = $patient->nom;
+  $list_affectations[$key]["prenom"]       = $patient->prenom;
+  $list_affectations[$key]["id"]           = $patient->_id;
+  $list_affectations[$key]["service"]      = $lit->_ref_chambre->_ref_service->_id;
+  $list_affectations[$key]["chambre"]      = $lit->_ref_chambre->_id;
+  $list_affectations[$key]["lit"]          = $lit->_id;
+  $list_affectations[$key]["sexe"]         = $patient->sexe;
+  $list_affectations[$key]["naissance"]    = CMbDT::format($patient->naissance, "%Y%m%d");
+  $list_affectations[$key]["date_entree"]  = CMbDT::format(CMbDT::date($sejour->entree), "%Y%m%d");
+  $list_affectations[$key]["heure_entree"] = CMbDT::format(CMbDT::time($sejour->entree), "%H%M");
+  $list_affectations[$key]["date_sortie"]  = CMbDT::format(CMbDT::date($sejour->sortie), "%Y%m%d");
+  $list_affectations[$key]["heure_sortie"] = CMbDT::format(CMbDT::time($sejour->sortie), "%H%M");
+  $list_affectations[$key]["type"]         = $sejour->type;
+
+  if ($detail_lit) {
+    $list_affectations[$key]["lit_nom"]       = $lit->nom;
+    $list_affectations[$key]["nom_naissance"] = $patient->nom_jeune_fille;
+  }
 }
-
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("list_affectations", $list_affectations);
+$smarty->assign("detail_lit"       , $detail_lit);
 
 $smarty->display("get_etat_lits_txt.tpl");
