@@ -835,16 +835,24 @@ class CConstantGraph {
       $config = array_merge($config, array($mode, $min, $max, $norm_min, $norm_max));
     }
     elseif (count($config) == 8) {
-      if (!is_null($config[4])) {
+      if (in_array($constant, array('poids', 'taille')) && $config[3] == 'fixed' && ($config[4] == '' || $config[5] == '')) {
+        $config[3] = 'float';
+        $config[4] = '';
+        $config[5]=  '';
+      }
+      if ($config[4] == '') {
+        if ($min < 0) {
+          $min *= -1;
+        }
         $config[4] = $min;
       }
-      if (!is_null($config[5])) {
+      if ($config[5] == '') {
         $config[5] = $max;
       }
-      if (!is_null($config[6])) {
+      if ($config[6] == '') {
         $config[6] = $norm_min;
       }
-      if (!is_null($config[7])) {
+      if ($config[7] == '') {
         $config[7] = $norm_max;
       }
     }
