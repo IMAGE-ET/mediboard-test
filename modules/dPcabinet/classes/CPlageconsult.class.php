@@ -46,6 +46,7 @@ class CPlageconsult extends CPlageHoraire {
   public $_nb_patients;
   public $_consult_by_categorie;
   public $_type_repeat;
+  public $_propagation;
 
   // Filter fields
   public $_date_min;
@@ -120,6 +121,7 @@ class CPlageconsult extends CPlageHoraire {
     $props["_total"]       = "";
     $props["_fill_rate"]   = "";
     $props["_type_repeat"] = "enum list|simple|double|triple|quadruple|quintuple|sextuple|septuple|octuple|sameweek";
+    $props["_propagation"] = "bool default|0";
 
     // Filter fields
     $props["_date_min"]          = "date";
@@ -537,7 +539,10 @@ class CPlageconsult extends CPlageHoraire {
     $fin            = $this->fin;
     $freq           = $this->freq;
     $libelle        = $this->libelle;
-    //$locked         = $this->locked;
+    if ($this->_propagation) {
+      $locked       = $this->locked;
+      $pour_tiers   = $this->pour_tiers;
+    }
     $color          = $this->color;
     $desistee       = $this->desistee;
     $remplacant_id  = $this->remplacant_id;
@@ -556,7 +561,10 @@ class CPlageconsult extends CPlageHoraire {
     $this->fin            = $fin;
     $this->freq           = $freq;
     $this->libelle        = $libelle;
-    //$this->locked         = $locked;
+    if ($this->_propagation) {
+      $this->locked       = $locked;
+      $this->pour_tiers   = $pour_tiers;
+    }
     $this->color          = $color;
     $this->desistee       = $desistee;
     $this->remplacant_id  = $remplacant_id;
