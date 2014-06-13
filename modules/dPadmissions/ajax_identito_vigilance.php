@@ -64,9 +64,11 @@ foreach ($sejours as $_sejour) {
   
   // Classement par patient
   if (!isset($patients[$_sejour->patient_id])) {
+    //Cas des patients anonymes où un loadrefSejour est fait
+    $_sejour->_ref_patient->_ref_sejours = array();
     $patients["$_sejour->patient_id"] = $_sejour->_ref_patient;
   }
-  
+
   $patients["$_sejour->patient_id"]->_ref_sejours[$_sejour->_id] = $_sejour;
 }
 
