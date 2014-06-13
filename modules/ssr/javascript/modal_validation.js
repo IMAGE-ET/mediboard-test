@@ -101,8 +101,8 @@ ModalValidation = {
 
   open: function(){
     this.window = Modal.open($('modal_evenements'), {
-      width: 700,
-      height: 380
+      width: -100,
+      height: 500
     });
   },
 
