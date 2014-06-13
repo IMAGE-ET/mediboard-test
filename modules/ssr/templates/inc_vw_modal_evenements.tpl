@@ -1,4 +1,4 @@
-<div style="max-height: 320px; overflow-y: auto; overflow-x: hidden;">
+<div style="height: 450px; overflow-y: auto; overflow-x: hidden;">
 
 <form name="TreatEvents" method="post" action="?">
   <input type="hidden" name="m" value="ssr" />
