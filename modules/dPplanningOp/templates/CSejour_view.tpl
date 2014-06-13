@@ -62,7 +62,10 @@
   {{if $sejour->annule == 1}}
     <tr>
       <th class="category cancelled" colspan="4">
-      {{tr}}CSejour-annule{{/tr}}
+        {{tr}}CSejour-annule{{/tr}}
+        {{if $sejour->recuse == 1}}
+          ({{tr}}CSejour.recuse.1{{/tr}})
+        {{/if}}
       </th>
     </tr>
   {{/if}}
