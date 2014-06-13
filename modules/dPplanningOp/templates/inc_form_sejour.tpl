@@ -589,7 +589,10 @@ Main.add( function(){
 {{if $sejour->annule}}
 <tr>
   <th class="category cancelled" colspan="4">
-  {{tr}}CSejour-{{$sejour->recuse|ternary:"recuse":"annule"}}{{/tr}}
+  {{tr}}CSejour-annule{{/tr}}
+    {{if $sejour->recuse == 1}}
+      ({{tr}}CSejour.recuse.1{{/tr}})
+    {{/if}}
   </th>
 </tr>
 {{/if}}
