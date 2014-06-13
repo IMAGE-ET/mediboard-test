@@ -156,6 +156,12 @@ foreach ($sejours as $sejour_id => $_sejour) {
   $whereOperations = array("annulee" => "= '0'");
   $operations = $_sejour->loadRefsOperations($whereOperations);
   $operations_total = array_merge($operations, $operations_total);
+
+  if ($_sejour->type == 'ambu' && CAppUI::conf('dPadmissions CSejour entree_pre_op_ambu', $group->_guid)) {
+    $_curr_operation = $_sejour->loadRefCurrOperation($date);
+    $_curr_operation->loadRefPlageOp();
+    $_sejour->entree_prevue = CMbDT::subTime($_curr_operation->presence_preop, CMbDT::time($_curr_operation->_datetime));
+  }
 }
 
 // Optimisation du chargement des interventions
