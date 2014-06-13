@@ -295,17 +295,17 @@ App.readonly = false;
 <button type="button" class="search" onclick="Modal.open('legend_suivi')" style="float: right;">Légende</button>
 
 {{if !$isPraticien}}
-  <button class="add" onclick="addTransmission('{{$sejour->_id}}', '{{$user->_id}}', null, null, null, null, 1);">Ajouter une transmission</button>
+  <button class="add" onclick="addTransmission('{{$sejour->_id}}', '{{$user->_id}}', null, null, null, null, 1);" style="display: inline !important;">Ajouter une transmission</button>
 {{else}}
-  <button class="add" onclick="addObservation('{{$sejour->_id}}', '{{$user->_id}}');">Ajouter une observation</button>
+  <button class="add" onclick="addObservation('{{$sejour->_id}}', '{{$user->_id}}');" style="display: inline !important;">Ajouter une observation</button>
   {{if $sejour->type == "urg" && "dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g" && "dPprescription"|module_active}}
-    <button class="add" onclick="addPrescription('{{$sejour->_id}}', '{{$user->_id}}')">Ajouter une prescription</button>
+    <button class="add" onclick="addPrescription('{{$sejour->_id}}', '{{$user->_id}}')" style="display: inline !important;">Ajouter une prescription</button>
   {{/if}}
   {{if @isset($modules.dPcabinet|smarty:nodefaults)}}
-    <a class="button new" href="#1" id="newConsult"
-      onclick="validateAdministration('{{$sejour->_id}}');">Nouvelle consultation</a>
+    <button type="button" class="new" id="newConsult" style="display: inline !important;"
+            onclick="validateAdministration('{{$sejour->_id}}');">Nouvelle consultation</button>
     <button type="button" class="new oneclick" id="newConsultEntree" {{if $has_obs_entree}}disabled{{/if}}
-      onclick="createConsultEntree();">Nouvelle observation d'entrée</button>
+            onclick="createConsultEntree();" style="display: inline !important;">Nouvelle observation d'entrée</button>
   {{/if}}
 {{/if}}
 
