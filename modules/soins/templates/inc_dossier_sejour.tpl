@@ -215,7 +215,7 @@
     {{/if}}
 
 		window.DMI_operation_id = "{{$operation_id}}";
-    ViewPort.SetAvlHeight('content-dossier-soins', 1.0);
+    ViewPort.SetAvlSize('content-dossier-soins', 1.0);
     var content = $("content-dossier-soins");
     var header = $("header-dossier-soins");
     content.on('scroll', function() {
