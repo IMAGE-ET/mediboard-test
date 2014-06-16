@@ -617,6 +617,36 @@ var ViewPort = {
     element.style.width = ((winWidth - pos) * pct - 10) + "px";
   },
 
+  SetAvlSize : function(element, pct) {
+    element = $(element);
+    if (!element) return;
+
+    // Position Top de la div, hauteur de la fenetre,
+    // puis calcul de la taille de la div
+    var size = element.cumulativeOffset();
+    var top = size.top;
+    var left = size.left;
+    var winSize, winHeight, winWidth, modal;
+    if (modal = element.up('.modal')) {
+      winSize = modal.getDimensions()
+      winHeight = winSize.height;
+      winWidth = winSize.width;
+      var modOffset = modal.cumulativeOffset()
+      top = top - modOffset.top;
+      left = left - modOffset.left;
+    }
+    else {
+      winSize = window.getInnerDimensions()
+      winHeight = winSize.height;
+      winWidth = winSize.width;
+    }
+
+    element.style.overflowY = "auto";
+    element.style.overflowX = "auto";
+    element.style.height = ((winHeight - top) * pct - 30) + "px";
+    element.style.width = ((winWidth - left) * pct - 10) + "px";
+  },
+
   SetFrameHeight: function(element, options){
     options = Object.extend({
       marginBottom : 15
