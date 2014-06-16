@@ -1,16 +1,17 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPprescription
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
 $sejour_id = CValue::get("sejour_id");
+$group = CGroups::loadCurrent();
 
 $sejour = new CSejour;
 $sejour->load($sejour_id);
@@ -39,7 +40,7 @@ $prescription_active = CModule::getInstalled("dPprescription");
 
 // Gestion des macro-cible seulement si prescription disponible
 $cible_importante = $prescription_active;
-$date_transmission = CAppUI::conf("soins synthese transmission_date_limit", CGroups::loadCurrent()->_guid) ? CMbDT::dateTime() : null;
+$date_transmission = CAppUI::conf("soins synthese transmission_date_limit", $group->_guid) ? CMbDT::dateTime() : null;
 $sejour->loadRefsTransmissions($cible_importante, true, false, null, $date_transmission);
 
 $sejour->loadRefsObservations(true);
@@ -129,7 +130,7 @@ if ($prescription_active) {
 
 if ($prescription_active) {
   $date = CMbDT::dateTime();
-  $days_config = CAppUI::conf("dPprescription CPrescription nb_days_prescription_current");
+  $days_config = CAppUI::conf("dPprescription general nb_days_prescription_current", $group->_guid);
   $date_before = CMbDT::dateTime("-$days_config DAY", $date);
   $date_after  = CMbDT::dateTime("+$days_config DAY", $date);
 }

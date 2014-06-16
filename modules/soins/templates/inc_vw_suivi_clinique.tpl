@@ -569,7 +569,7 @@
               {{/foreach}}
             {{/if}}
             
-            {{assign var=display_cat_for_elt value=$conf.dPprescription.CPrescription.display_cat_for_elt}}
+            {{assign var=display_cat_for_elt value="dPprescription general display_cat_for_elt"|conf:"CGroups-$g"}}
             
             {{foreach from=$prescription->_ref_lines_elements_comments item=chap_element key=_chap_name}}
               <tr>

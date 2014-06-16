@@ -232,7 +232,7 @@
           </th>
         </tr>
       {{/if}}
-      {{if $conf.dPprescription.CPrescription.display_cat_for_elt}}
+      {{if "dPprescription general display_cat_for_elt"|conf:"CGroups-$g"}}
         {{foreach from=$_lines_by_chap item=_lines_by_cat}}
           {{assign var=cat_displayed value="0"}}
           {{if array_key_exists('element', $_lines_by_cat) || array_key_exists('comment', $_lines_by_cat)}}
