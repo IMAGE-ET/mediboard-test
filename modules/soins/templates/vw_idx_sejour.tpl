@@ -32,13 +32,19 @@ function addSejourIdToSession(sejour_id){
   url.requestUpdate("systemMsg");
 }
 
-function loadViewSejour(sejour_id, date, elt) {
+function loadViewSejour(sejour_id, date, elt, tab) {
   var url = new Url('soins', 'ajax_vw_dossier_sejour');
   url.addParam('sejour_id', sejour_id);
   url.addParam('date', date);
-  var selected_tab = $$('ul#tab-sejour li a.active');
-  if (selected_tab.length == 1) {
-    url.addParam('default_tab', selected_tab[0].href.split("#")[1]);
+
+  if (tab) {
+    url.addParam('default_tab', tab);
+  }
+  else {
+    var selected_tab = $$('ul#tab-sejour li a.active');
+    if (selected_tab.length == 1) {
+      url.addParam('default_tab', selected_tab[0].href.split("#")[1]);
+    }
   }
 
   url.requestUpdate('dossier_sejour', {onComplete: function() {
@@ -340,7 +346,7 @@ savePref = function(form) {
                   </a>
                 </td>
 
-                <td style="padding: 1px;" onclick="loadViewSejour('{{$sejour->_id}}', '{{$date}}', this); tab_sejour.setActiveTab('Imeds')">
+                <td style="padding: 1px;" onclick="loadViewSejour('{{$sejour->_id}}', '{{$date}}', this, 'Imeds');">
                   {{if $isImedsInstalled}}
                     {{mb_include module=Imeds template=inc_sejour_labo link="#"}}
                   {{/if}}
