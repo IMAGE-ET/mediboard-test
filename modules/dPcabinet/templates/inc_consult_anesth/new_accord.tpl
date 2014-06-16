@@ -111,7 +111,7 @@
 <ul id="tab-consult-anesth" class="control_tabs">
   <li>
     <a id="acc_consultation_a_Atcd" href="#AntTrait" {{if $tabs_count.AntTrait == 0}}class="empty"{{/if}}>
-      Antécédents <small>({{$tabs_count.AntTrait}})</small>
+      {{tr}}CAntecedent.more{{/tr}} <small>({{$tabs_count.AntTrait}})</small>
     </a>
   </li>
   <li onmousedown="refreshConstantesMedicales();">

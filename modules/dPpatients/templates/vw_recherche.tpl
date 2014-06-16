@@ -178,7 +178,7 @@ function changePageDossierMed(page) {
         <ul id="tab-resultats" class="control_tabs">
           {{if $dossiersMed}}<li><a href="#diagnostic">Diagnostics ({{$total_dossierMedicals}})</a></li>{{/if}}
           {{if $traitements}}<li><a href="#traitement">Traitements ({{$total_page_traitements}})</a></li>{{/if}}
-          {{if $antecedents}}<li><a href="#antecedent">Antécédents ({{$total_antecedents}})</a></li>{{/if}}
+          {{if $antecedents}}<li><a href="#antecedent">{{tr}}CAntecedent.more{{/tr}} ({{$total_antecedents}})</a></li>{{/if}}
           {{if $consultations && $canCabinet->read}}<li><a href="#consultation">Consultations ({{$total_consults}})</a></li>{{/if}}
           {{if $interventions && $canPlanningOp->read}}<li><a href="#intervention">Interventions ({{$total_intervs}})</a></li>{{/if}}
           {{if $sejours && $canPlanningOp->read}}<li><a href="#sejour">Séjours ({{$total_sejours}})</a></li>{{/if}}

@@ -1,5 +1,5 @@
 <tr>
-    <th>Antécédents</th>
+    <th>{{tr}}CAntecedent.more{{/tr}}</th>
     <td>
       {{if $dossier_medical->_count_antecedents}}
         {{foreach from=$dossier_medical->_ref_antecedents_by_type key=curr_type item=list_antecedent}}

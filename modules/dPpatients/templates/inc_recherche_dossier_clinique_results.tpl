@@ -88,7 +88,7 @@
         {{else}}
           {{if isset($_patient->_refs_antecedents|smarty:nodefaults) && $_patient->_refs_antecedents|@count}}
             <strong>
-              Antécédents :
+              {{tr}}CAntecedent.more{{/tr}} :
             </strong>
             <ul>
               {{foreach from=$_patient->_refs_antecedents item=_atcd}}

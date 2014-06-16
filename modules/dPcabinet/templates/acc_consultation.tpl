@@ -104,7 +104,7 @@ Main.add(function () {
     </li>
   {{/if}}
   
-  <li><a id="acc_consultation_a_Atcd" href="#AntTrait">Antécédents</a></li>
+  <li><a id="acc_consultation_a_Atcd" href="#AntTrait">{{tr}}CAntecedent.more{{/tr}}</a></li>
  
   {{if "dPprescription"|module_active && $consult->sejour_id && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
   <li {{if !$mutation_id}}onmousedown="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'', null, false);"{{/if}}>

@@ -328,7 +328,7 @@
     <td class="halfPane text" rowspan="2" style="word-break: break-all">
       <table style="width: 100%">
         <tr>
-          <th class="category">Antécédents</th>
+          <th class="category">{{tr}}CAntecedent.more{{/tr}}</th>
         </tr>
         <tr>
           <td class="text">

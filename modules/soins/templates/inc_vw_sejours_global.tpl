@@ -146,7 +146,7 @@
       <th><label title="Prescriptions urgentes">Urg.</label></th>
       <th>Attentes</th>
       <th>Allergies</th>
-      <th><label title="Antécédents">Atcd</label></th>
+      <th><label title="{{tr}}CAntecedent.more{{/tr}}">Atcd</label></th>
     </tr>
   {{/if}}
 

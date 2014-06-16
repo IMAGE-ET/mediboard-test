@@ -18,7 +18,7 @@
     <table class="tbl">
       <tr>
         <th {{if $dossier_medical->_count_antecedents && $dossier_medical_sejour && $dossier_medical_sejour->_count_antecedents}}colspan="2"{{/if}} class="title">
-          Antécédents {{if $dossier_medical_sejour && $dossier_medical_sejour->_count_antecedents && !$dossier_medical->_count_antecedents}}significatifs{{/if}}
+          {{tr}}CAntecedent.more{{/tr}} {{if $dossier_medical_sejour && $dossier_medical_sejour->_count_antecedents && !$dossier_medical->_count_antecedents}}significatifs{{/if}}
         </th>
       </tr>
       {{if $dossier_medical_sejour && $dossier_medical_sejour->_count_antecedents && $dossier_medical->_count_antecedents}}

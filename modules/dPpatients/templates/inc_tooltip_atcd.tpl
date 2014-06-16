@@ -11,7 +11,7 @@
 <table class="tbl">
   <tr>
     <th class="title">
-      Antécédents
+      {{tr}}CAntecedent.more{{/tr}}
     </th>
   </tr>
   {{foreach from=$antecedents key=name item=cat}}

@@ -37,7 +37,7 @@
 
 <br />
 <table class="{{$tbl_class}}">
-  <tr><th class="title" colspan="2">Antécédents</th></tr>
+  <tr><th class="title" colspan="2">{{tr}}CAntecedent.more{{/tr}}</th></tr>
   <thead>
     <tr>
       <th class="title" colspan="2">

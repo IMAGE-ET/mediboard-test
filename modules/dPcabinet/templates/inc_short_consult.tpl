@@ -77,7 +77,7 @@
 </form>
 
 <ul id="tabs_consult" class="control_tabs">
-  <li><a href="#antecedents">Antécédents</a></li>
+  <li><a href="#antecedents"{{tr}}CAntecedent.more{{/tr}}</a></li>
   {{if !$consult_anesth->_id}}
     <li><a href="#exams">Examens</a></li>
   {{else}}

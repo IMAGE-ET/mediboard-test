@@ -64,7 +64,7 @@ Main.add(function () {
 
 <!-- Tab titles -->
 <ul id="tab-consult-anesth" class="control_tabs">
-  <li onmousedown="DossierMedical.reloadDossierSejour();"><a id="acc_consultation_a_Atcd" href="#AntTrait">Antécédents</a></li>
+  <li onmousedown="DossierMedical.reloadDossierSejour();"><a id="acc_consultation_a_Atcd" href="#AntTrait">{{tr}}CAntecedent.more{{/tr}}</a></li>
   <li onmousedown="refreshConstantesMedicales();"><a href="#Constantes">Constantes</a></li>
   <li><a href="#Exams">Exam. Clinique</a></li>
   <li><a href="#Intub">Intubation</a></li>

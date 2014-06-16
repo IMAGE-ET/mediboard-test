@@ -64,7 +64,7 @@ Main.add(function () {
 </script>
 
 <ul id="tab-main" class="control_tabs">
-  <li><a href="#antecedents">Antécédents</a></li>
+  <li><a href="#antecedents">{{tr}}CAntecedent.more{{/tr}}</a></li>
   <li><a href="#traitements">Traitements</a></li>
   <li>
     <label>

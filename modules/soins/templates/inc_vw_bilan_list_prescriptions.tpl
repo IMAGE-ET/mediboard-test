@@ -33,7 +33,7 @@
     </tr>
     <tr>
       <th class="">All.</th>
-      <th class=""><label title="Antécédents">Atcd</label></th>
+      <th class=""><label title="{{tr}}CAntecedent.more{{/tr}}">Atcd</label></th>
     </tr>
   {{else}}
   <tr>
