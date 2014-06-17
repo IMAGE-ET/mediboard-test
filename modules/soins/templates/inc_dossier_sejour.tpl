@@ -4,7 +4,7 @@
 {{mb_script module="planningOp"  script="cim10_selector"  ajax=true}}
 {{mb_script module="compteRendu" script="document"        ajax=true}}
 {{mb_script module="compteRendu" script="modele_selector" ajax=true}}
-{{mb_script module="cabinet"     script="file"            ajax=true}}
+{{mb_script module="files"       script="file"            ajax=true}}
 
 {{if "dPmedicament"|module_active}}
   {{mb_script module="medicament" script="medicament_selector" ajax=true}}
@@ -205,6 +205,7 @@
 
   Main.add(function() {
     Prescription.mode_pharma = "{{$mode_pharma}}";
+    File.use_mozaic = 1;    // using mozaic for files
 
     tab_sejour = Control.Tabs.create('tab-sejour');
     tab_sejour.setActiveTab('{{$default_tab}}');
