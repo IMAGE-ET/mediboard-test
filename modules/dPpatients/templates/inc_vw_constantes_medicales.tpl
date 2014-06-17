@@ -70,6 +70,11 @@ refreshFiches = function(sejour_id) {
       {{/if}}
     </th>
   </tr>
+  {{if $infos_patient}}
+    <tr>
+      {{mb_include module=soins template=inc_infos_patients_soins add_class=1}}
+    </tr>
+  {{/if}}
 </table>
 
 {{if $print}}

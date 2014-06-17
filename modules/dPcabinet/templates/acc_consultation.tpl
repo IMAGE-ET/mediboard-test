@@ -52,7 +52,7 @@ function refreshConstantesMedicales (force) {
     url.setModuleAction("patients", "httpreq_vw_constantes_medicales");
     url.addParam("patient_id", {{$consult->_ref_patient->_id}});
     url.addParam("context_guid", "{{$consult->_guid}}");
-    //url.addParam("selection[]", ["poids", "ta", "temperature", "pouls"]);
+    url.addParam("infos_patient", 1);
     url.requestUpdate("Constantes");
     constantesMedicalesDrawn = true;
   }
