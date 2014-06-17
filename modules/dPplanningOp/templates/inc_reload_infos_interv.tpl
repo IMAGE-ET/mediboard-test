@@ -24,7 +24,7 @@
     object=$operation
     callback="reloadIntervArea"}}
   {{if !$just_alert}}
-    {{if $operation->_canEdit}}
+    {{if $operation->_can->read}}
       {{mb_include module=planningOp template=inc_button_infos_interv operation_id=$operation->_id callback="reloadIntervArea"}}
     {{/if}}
     {{if $operation->libelle}}{{$operation->libelle}} &mdash;{{/if}}
