@@ -4,7 +4,7 @@
   {{assign var=suffixe_icons value=""}}
 {{/if}}
 
-<script type="text/javascript">
+<script>
   Main.add(function () {
     window.print();
   });
@@ -81,11 +81,12 @@
               <span>
             {{/if}} 
               <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
-                {{if $_sejour->type == "ambu"}}
-                <strong><em>{{$_patient}}</em></strong>
-                {{else}}
-                <strong>{{$_patient}}</strong>
-                {{/if}}
+                <strong>
+                  {{if $_sejour->type == "ambu"}}<em>{{/if}}
+                  {{$_patient}}
+                  {{if $_patient->naissance}}({{$_patient->_age}}){{/if}}
+                  {{if $_sejour->type == "ambu"}}</em>{{/if}}
+                </strong>
               </span>
             </span>
           </td>
