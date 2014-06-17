@@ -15,20 +15,18 @@ $sejour_id                    = CValue::get("sejour_id");
 $prescription_line_element_id = CValue::get("prescription_line_element_id");
 
 $task = new CSejourTask();
-  
-if ($task_id) {
-  $task->load($task_id);
-}
-else {
-  $task->author_id = Cuser::get()->_id;
-  $task->date = CMbDT::dateTime();
-}
+$task->load($task_id);
 
 $task_element = false;
 if ($prescription_line_element_id) {
   $task->prescription_line_element_id = $prescription_line_element_id;
   $task->loadMatchingObject();
   $task_element = true;
+}
+
+if (!$task->_id) {
+  $task->author_id = Cuser::get()->_id;
+  $task->date = CMbDT::dateTime();
 }
 
 $task->loadRefConsult()->loadRefsFwd();
