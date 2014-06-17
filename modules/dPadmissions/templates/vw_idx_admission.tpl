@@ -111,7 +111,7 @@
   }
 
   function submitMultiple(form) {
-    return onSubmitFormAjax(form, reloadFullAdmissions);
+      return onSubmitFormAjax(form, reloadFullAdmissions);
   }
 
   function submitAdmission(form, bPassCheck) {
