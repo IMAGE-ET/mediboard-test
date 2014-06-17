@@ -40,6 +40,7 @@ $start                 = CValue::get('start', 0);
 $count                 = CValue::get('count', 50);
 $simple_view           = CValue::get('simple_view', 0);
 $host_guid             = CValue::get('host_guid');
+$infos_patient         = CValue::get('infos_patient', 0);
 
 if (is_null($can_edit)) {
   if ($context_guid != $selected_context_guid) {
@@ -280,4 +281,5 @@ $smarty->assign('show_cat_tabs',              $show_cat_tabs);
 $smarty->assign('show_enable_all_button',     $show_enable_all_button);
 $smarty->assign('can_edit',                   $can_edit);
 $smarty->assign('can_select_context',         $can_select_context);
+$smarty->assign('infos_patient',              $infos_patient);
 $smarty->display('inc_vw_constantes_medicales.tpl');
