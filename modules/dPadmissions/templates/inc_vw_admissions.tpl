@@ -70,20 +70,16 @@
 
     <th class="narrow">Chambre</th>
     <th class="narrow">
-      {{if $canAdmissions->edit}}
-      <form name="Multiple-CSejour" action="?" method="post" onsubmit="return submitMultiple(this);">
-
-      <input type="hidden" name="m" value="planningOp" />
-      <input type="hidden" name="dosql" value="do_sejour_aed" />
-      <input type="hidden" name="sejour_ids" value="{{$sejours|@array_keys|@join:"-"}}" />
-
-      <input type="hidden" name="entree_preparee" value="1" />
-
-      <button class="tick oneclick" type="submit">
-        {{tr}}CSejour-entree_preparee-tous{{/tr}}
-      </button>
-
-      </form>
+      {{if $canAdmissions->edit && $sejours|@count}}
+        <form name="Multiple-CSejour" action="?" method="post" onsubmit="return submitMultiple(this);">
+          <input type="hidden" name="m" value="planningOp" />
+          <input type="hidden" name="dosql" value="do_sejour_aed" />
+          <input type="hidden" name="sejour_ids" value="{{$sejours|@array_keys|@join:"-"}}" />
+          <input type="hidden" name="entree_preparee" value="1" />
+          <button class="tick oneclick" type="submit">
+            {{tr}}CSejour-entree_preparee-tous{{/tr}}
+          </button>
+        </form>
       {{else}}
         {{tr}}CSejour-entree_preparee-tous{{/tr}}
       {{/if}}
