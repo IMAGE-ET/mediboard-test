@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @link     http://www.mediboard.org */
-CCanDo::checkAdmin();
+CCanDo::checkRead();
 // Récupération des valeurs nécessaires
 $words          = utf8_encode(CValue::get("words"));
 $_min_date = str_replace("-", "/", CValue::get("_min_date", "*"));
@@ -18,22 +18,33 @@ $specific_user  = CValue::get("user_id");
 $start          = (int)CValue::get("start", 0);
 $names_types    = CValue::get("names_types");
 $aggregate      = CValue::get("aggregate");
-
+$sejour_id      = CValue::get("sejour_id");
 /**
  * Traitement des utilisateurs spécifiques ou globaux
  */
 if (!$specific_user) {
   $user           = new CMediusers();
-  $users          = $user->loadListWithPerms(PERM_READ, CAppUI::$user);
+  if ($sejour_id) {
+    $users          = $user->loadListWithPerms(PERM_READ, CAppUI::$user);
+  }
+  else {
+    $users          = $user->loadListWithPerms(PERM_EDIT, CAppUI::$user);
+  }
   $users_id       = array();
   foreach ($users as $_user) {
     $users_id[] = $_user->_id;
   }
+  $user_req = implode(' || ', $users_id);
+  $words = $words." prat_id:(".$user_req.")";
 }
 else {
   $users_id = explode('|', $specific_user);
   $user_req = str_replace('|', ' || ', $specific_user);
   $words = $words." prat_id:(".$user_req.")";
+}
+// Traitement du séjour spécifique dans le cadre du pmsi
+if ($sejour_id) {
+  $words = $words." object_ref_class:(CSejour) object_ref_id:(".$sejour_id.")";
 }
 
 // Données nécessaires pour la recherche
@@ -53,7 +64,7 @@ $patients = array();
 
 // Recherche fulltext
 try {
-  $results_query = $client_index->searchQueryString('AND', $words, $users_id, $start, 30, $names_types, $aggregate);
+  $results_query = $client_index->searchQueryString('AND', $words, $start, 30, $names_types, $aggregate);
   $results       = $results_query->getResults();
   $time          = $results_query->getTotalTime();
   $nbresult      = $results_query->getTotalHits();

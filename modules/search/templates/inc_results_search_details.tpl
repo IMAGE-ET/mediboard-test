@@ -28,8 +28,9 @@
           {{$highlights.$_key|purify|smarty:nodefaults}}
         </span>
       </li>
+      <hr/>
     {{else}}
-      <li  onmouseover="ObjectTooltip.createEx(this, '{{$_result._type}}-{{$_result._id}}')" class="compact empty"> --- Passez la souris pour visualiser le document ---</li>
+      <li  onmouseover="ObjectTooltip.createEx(this, '{{$_result._type}}-{{$_result._id}}')" class="compact empty"> &mdash; Passez la souris pour visualiser le document &mdash;</li>
     {{/if}}
   {{/foreach}}
 </ul>

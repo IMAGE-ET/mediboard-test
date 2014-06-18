@@ -10,33 +10,6 @@
 <img src="style/mediboard/images/icons/help.png" alt="Aide" onmouseover="ObjectTooltip.createDOM(this, 'help-tooltip', {duration: 0})"/>
 <table class="tbl" id="help-tooltip" style="display: none;">
   <tr>
-    <th class="title" colspan="2">Recherche par champs</th>
-  </tr>
-  <tr>
-    <th class="text" style="width: 300px;">
-      Champs désiré
-    </th>
-    <th class="text" style="width: 300px;">
-      Nomenclature
-    </th>
-  </tr>
-  <tr>
-    <td class="text" style="width: 300px;">
-      Titre du document
-    </td>
-    <td class="text" style="width: 300px;">
-      title:"mot(s) recherchés"
-    </td>
-  </tr>
-  <tr>
-    <td class="text" style="width: 300px;">
-      Corps du document
-    </td>
-    <td class="text" style="width: 300px;">
-      body:"mot(s) recherchés"
-    </td>
-  </tr>
-  <tr>
     <th class="title" colspan="2">Recherche avec opérateurs</th>
   </tr>
   <tr>

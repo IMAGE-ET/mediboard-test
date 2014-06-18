@@ -32,13 +32,13 @@ class CSearchAggregation {
    *
    * @return Elastica\Aggregation\Terms |mixed
    */
-  function __construct ($type, $name, $field) {
+  function __construct ($type, $name, $field, $size) {
     switch ($type) {
       case "Terms":
         $this->_aggregation = new Elastica\Aggregation\Terms($name);
         $this->_aggregation->setField($field);
         $this->_aggregation->setOrder("_count", "desc");
-        $this->_aggregation->setSize(100);
+        $this->_aggregation->setSize($size);
         break;
       default:
         return null;

@@ -8,7 +8,11 @@
  * @link     http://www.mediboard.org*}}
 
 {{mb_script module="dPfiles" script="file" ajax=true}}
-
+<script>
+  Main.add (function () {
+    Search.words_request = '{{$words}}';
+  });
+</script>
 {{if $objects_refs}}
   <table class="tbl form" id="results" style="height: 70%">
     <tbody>
@@ -52,18 +56,18 @@
         <td style="width:15%">
           {{if $_object_ref.object->_class == "CConsultAnesth"}}
             {{mb_include module=mediusers template=inc_vw_mediuser mediuser=`$_object_ref.object->_ref_consultation->_ref_praticien`}}
-          {{else}}
+           {{else}}
             {{mb_include module=mediusers template=inc_vw_mediuser mediuser=`$_object_ref.object->_ref_praticien`}}
           {{/if}}
         </td>
         <td class="text">
           {{foreach from=$_object_ref.type key=_key item=_sejour_type}}
-            <span>{{tr}}{{$_sejour_type.key}}{{/tr}}</span>
-            <span>{{$_sejour_type.count}} occurrence(s) trouvée(s)</span>
-            <a href="#" class="button search notext"
-               onclick="Search.searchMoreDetails('{{$_object_ref.object->_id}}', '{{$_object_ref.object->_class}}', '{{$_sejour_type.key}}', '{{$words}}')">
+            <span>{{$_sejour_type.count}} {{tr}}{{$_sejour_type.key}}{{/tr}} trouvée(s)</span>
+            <a href="#" class="button search notext" style="float:right"
+               onclick="Search.searchMoreDetails('{{$_object_ref.object->_id}}', '{{$_object_ref.object->_class}}', '{{$_sejour_type.key}}')">
             </a>
-            <div id="details-{{$_object_ref.object->_guid}}"></div>
+            <div id="details-{{$_sejour_type.key}}-{{$_object_ref.object->_id}}"></div>
+            <hr/>
           {{/foreach}}
         </td>
       </tr>

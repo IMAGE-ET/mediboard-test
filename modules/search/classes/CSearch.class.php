@@ -325,7 +325,6 @@ class CSearch {
    *
    * @param string  $operator    'And' or 'Or' default : 'Or'
    * @param string  $words       data
-   * @param array   $arrayFilter the array of users where PERM_READ
    * @param integer $start       the begining of the paging
    * @param integer $limit       the interval of the paging
    * @param array   $names_types the restrictive type(s) where the search take place.
@@ -333,7 +332,7 @@ class CSearch {
    *
    * @return \Elastica\ResultSet
    */
-  function searchQueryString($operator, $words , $arrayFilter, $start = 0, $limit = 30, $names_types = null, $aggregation = false) {
+  function searchQueryString($operator, $words, $start = 0, $limit = 30, $names_types = null, $aggregation = false) {
     // Define a Query. We want a string query.
     $elasticaQueryString  = new QueryString();
 
@@ -345,24 +344,22 @@ class CSearch {
     $elasticaQuery        = new Query();
     $elasticaQuery->setQuery($elasticaQueryString);
 
-    //add Filter to the query
-    if ($arrayFilter) {
-      $elasticaFilterUser = new Terms();
-      $elasticaFilterUser->setTerms('prat_id', $arrayFilter);
-      $elasticaFilterOr     = new BoolOr();
-      $elasticaFilterOr->addFilter($elasticaFilterUser);
-      $elasticaQuery->setFilter($elasticaFilterOr);
-    }
     //create aggregation
     if ($aggregation) {
-      // on aggrège d'abord par class d'object référents
+       // on aggrège d'abord par class d'object référents
       // on effectue un sous aggrégation par id des objets référents.
-      $agg_by_class = new CSearchAggregation("Terms", "ref_class", "object_ref_class");
-      $sub_agg_by_id = new CSearchAggregation("Terms", "sub_ref_id", "object_ref_id");
-      $sub_agg_by_type = new CSearchAggregation("Terms", "sub_ref_type", "_type");
+      $agg_by_class = new CSearchAggregation("Terms", "ref_class", "object_ref_class", 10);
+      $sub_agg_by_id = new CSearchAggregation("Terms", "sub_ref_id", "object_ref_id", 100);
+      $sub_agg_by_type = new CSearchAggregation("Terms", "sub_ref_type", "_type", 10);
       $sub_agg_by_id->_aggregation->addAggregation($sub_agg_by_type->_aggregation);
       $agg_by_class->_aggregation->addAggregation($sub_agg_by_id->_aggregation);
       $elasticaQuery->addAggregation($agg_by_class->_aggregation);
+
+      // Nuage de mots clés pour recherche automatique.
+//      $agg_cloud = new CSearchAggregation("Terms", "cloud", "body", 400);
+//      $agg_cloud->_aggregation->setMinimumDocumentCount(10);
+//      $agg_cloud->_aggregation->setExclude("(\\b\\w{1,4}\\b|\\d*)", "CANON_EQ|CASE_INSENSITIVE");
+//      $elasticaQuery->addAggregation($agg_cloud->_aggregation);
     }
     else {
       //  Pagination

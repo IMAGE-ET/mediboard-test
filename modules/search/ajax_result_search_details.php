@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
-CCanDo::checkAdmin();
+CCanDo::checkRead();
 CApp::setTimeLimit(0);
 CApp::setMemoryLimit("1024M");
 $object_ref_id  = CValue::get("object_ref_id");
@@ -22,7 +22,7 @@ $words = $words." object_ref_class:".$object_ref_class." "."object_ref_id:".$obj
 $array_results = array();
 $array_highlights = array();
 try {
-  $results_query = $client_index->searchQueryString('AND', $words, null, 0, 30, array($type), false);
+  $results_query = $client_index->searchQueryString('AND', $words, 0, 30, array($type), false);
   $results       = $results_query->getResults();
   foreach ($results as $result) {
     $var = $result->getHit();

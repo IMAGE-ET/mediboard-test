@@ -8,7 +8,7 @@
  * @link     http://www.mediboard.org */
 
 Search = window.Search || {
-
+  words_request : null,
   displayResults: function (form){
     var url = new Url('search',  'ajax_result_search');
     url.addFormData(form);
@@ -110,13 +110,13 @@ Search = window.Search || {
     }
   },
 
-  searchMoreDetails: function (object_id, object_ref, type, $words) {
-    var id = "details-"+object_ref+"-"+object_id;
+  searchMoreDetails: function (object_id, object_ref, type) {
+    var id = "details-"+type+"-"+object_id;
     new Url('search',  'ajax_result_search_details')
       .addParam("object_ref_id", object_id)
       .addParam("object_ref_class",object_ref)
       .addParam("type", type)
-      .addParam("words", $words)
+      .addParam("words", this.words_request)
       .requestUpdate(id);
   },
 
