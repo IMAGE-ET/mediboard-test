@@ -226,7 +226,7 @@
                           </em>
                         {{/if}}
                         <span onmouseover="ObjectTooltip.createEx(this, '{{$praticien->_guid}}')">({{$praticien->_shortview}})</span>
-                        {{$sejour->_motif_complet}}
+                        {{$sejour->_motif_complet|spancate:40:"...":true}}
                       </div>
                     {{/if}}
                   {{elseif !$object->function_id}}
