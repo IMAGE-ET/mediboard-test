@@ -530,6 +530,6 @@ $library->description   = "Client fulltext search for PHP.";
 $library->sourceDir     = "Elastica";
 $library->targetDir     = "elastica";
 $library->versionFile   = "changes.txt";
-$library->versionString = "v1.0.1.2";
+$library->versionString = "v1.2.1.0";
 
 CLibrary::$all[$library->name] = $library;
