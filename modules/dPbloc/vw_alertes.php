@@ -78,8 +78,9 @@ foreach ($listNonValidees as $_operation) {
 $ljoin = array();
 $ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
 $where = array();
-$where["operations.date"]    = "BETWEEN '$date' AND '$fin'";
-$where["operations.annulee"] = "= '0'";
+$where["operations.plageop_id"] = "IS NULL";
+$where["operations.date"]       = "BETWEEN '$date' AND '$fin'";
+$where["operations.annulee"]    = "= '0'";
 if ($bloc->_id) {
   $where[] = "operations.salle_id IS NULL OR operations.salle_id ".
     CSQLDataSource::prepareIn(array_keys($bloc->_ref_salles));
