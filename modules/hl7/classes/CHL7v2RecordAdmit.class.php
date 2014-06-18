@@ -1168,7 +1168,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       // Est-ce que le mouvement est bien le dernier ?
       $last_movement = end($newVenue->loadRefsMovements());
 
-
       if ($last_movement && $last_movement->_id == $movement->_id) {
         // on affecte le praticien
         $newVenue->praticien_id = $this->_doctor_id;
@@ -1178,12 +1177,12 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         // On ne check pas la cohérence des dates des consults/intervs
         $newVenue->_skip_date_consistencies = true;
 
+        $newVenue->_no_synchro = false;
+
         if ($msgVenue = $newVenue->store()) {
           return $exchange_hl7v2->setAckAR($ack, "E201", $msgVenue, $newVenue);
         }
       }
-
-      $newVenue->_no_synchro = true;
     }
 
     // Mapping de l'affectation
