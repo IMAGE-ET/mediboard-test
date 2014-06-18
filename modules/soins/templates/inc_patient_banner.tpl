@@ -1,14 +1,3 @@
-{{*
- * $Id$
- *  
- * @package    Mediboard
- * @subpackage soins
- * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
- * @link       http://www.mediboard.org
-*}}
-
 {{mb_default var=mode_pharma value=0}}
 {{mb_default var=mode_protocole value=0}}
 {{mb_default var=operation_id value=0}}
@@ -57,6 +46,9 @@
           </span>
           {{if "maternite"|module_active}}
             {{mb_include module=maternite template=inc_input_grossesse object=$sejour modify_grossesse=0}}
+          {{/if}}
+          {{if $sejour->isolement}}
+            <img src="images/icons/isol.png" title="Isolement">
           {{/if}}
           <br/>
           <span style="font-size: 0.6em;">
