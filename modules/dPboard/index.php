@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -23,5 +23,9 @@ if (CModule::getActive("dPprescription")) {
 }
 
 $module->registerTab("vw_interv_non_cotees", TAB_EDIT);
+
+if (CModule::getActive("search")) {
+  $module->registerTab("vw_search", TAB_READ);
+}
 $module->registerTab("vw_stats", TAB_READ);
 $module->registerTab("vw_agenda", TAB_READ);

@@ -127,7 +127,7 @@
               <tr>
                 <td>
                   <input type="text" name="user_view" class="autocomplete" value="" placeholder="&mdash; Choisir un utilisateur"/>
-                  <input type="hidden" name="user_id" {{if $app->_ref_user->_is_praticien}}value="{{$app->user_id}}"{{/if}} />
+                  <input type="hidden" name="user_id" {{if $app->_ref_user->isPraticien()}}value="{{$app->user_id}}"{{/if}} />
 
                   <button type="button" class="user notext" title="Mon compte"
                           onclick="window.user_tag_token.add('{{$app->user_id}}'); insertTag('{{$app->_ref_user->_guid}}', '{{$app->_ref_user}}')">

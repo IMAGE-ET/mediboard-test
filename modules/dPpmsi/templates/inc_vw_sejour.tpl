@@ -86,6 +86,9 @@
     {{if "dmi"|module_active}}
       <li><a href="#tab-dmi">{{tr}}CDMI{{/tr}}</a></li>
     {{/if}}
+    {{if "search"|module_active}}
+      <li><a href="#tab-search">{{tr}}Search{{/tr}}</a></li>
+    {{/if}}
     <li style="float: right">
       <button type="button" class="print" onclick="printDossierComplet('{{$sejour->_id}}');">
         Dossier complet
@@ -113,6 +116,13 @@
   {{if "dmi"|module_active}}
     <div id="tab-dmi" style="display: none;"></div>
   {{/if}}
+
+  {{if "search"|module_active}}
+    <div id="tab-search" style="display: none;">
+      {{mb_include module="search" template=vw_search_pmsi}}
+    </div>
+  {{/if}}
+
 {{else}}
   <div class="small-info">Veuillez sélectionner un séjour dans la liste des séjours sur la gauche.</div>
 {{/if}}
