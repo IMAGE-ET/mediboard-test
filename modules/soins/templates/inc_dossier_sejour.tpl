@@ -197,6 +197,11 @@
     url.pop(1000, 600);
   }
 
+  toggleListSejour = function() {
+    $('left-column').toggle();
+    ViewPort.SetAvlSize('content-dossier-soins', 1.0);
+  }
+
   reloadAtcd = function() {
     var url = new Url('soins', 'httpreq_vw_antecedent_allergie');
     url.addParam('sejour_id', "{{$sejour->_id}}");
@@ -233,7 +238,7 @@
   <ul id="tab-sejour" class="control_tabs">
     {{if !$modal && !$popup}}
       <li>
-        <button type="button" class="hslip notext compact" style="vertical-align: bottom; float: left;" onclick="$('left-column').toggle();" title="Afficher/cacher la colonne de gauche"></button>
+        <button type="button" class="hslip notext compact" style="vertical-align: bottom; float: left;" onclick="toggleListSejour();" title="Afficher/cacher la colonne de gauche"></button>
       </li>
     {{/if}}
     <li><a href="#suivi_clinique" onmousedown="loadSuiviClinique();">{{tr}}CSejour.suivi_clinique{{/tr}}</a></li>
