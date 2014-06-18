@@ -52,7 +52,9 @@ else {
     
   // on indique au serveur à quel fichier de description il est lié
   try {
-    $serverSOAP = new SoapServer(CApp::getBaseUrl()."/?login=1&username=$username&password=$password&m=$m&a=$a&class=$classname&wsdl");
+    $base_url = CAppUI::conf("webservices wsdl_root_url");
+    $base = $base_url ? $base_url : CApp::getBaseUrl();
+    $serverSOAP = new SoapServer($base."/?login=1&username=$username&password=$password&m=$m&a=$a&class=$classname&wsdl");
   }
   catch (Exception $e) {
     echo $e->getMessage();
