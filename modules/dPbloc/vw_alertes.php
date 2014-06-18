@@ -78,6 +78,7 @@ foreach ($listNonValidees as $_operation) {
 $ljoin = array();
 $ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
 $where = array();
+$where["operations.plageop_id"] = "IS NULL";
 $where["operations.date"]    = "BETWEEN '$date' AND '$fin'";
 $where["operations.annulee"] = "= '0'";
 if ($bloc->_id) {
