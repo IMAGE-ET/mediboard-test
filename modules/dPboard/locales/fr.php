@@ -6,6 +6,7 @@ $locales['mod-dPboard-tab-vw_bilan_transmissions'] = 'Bilan des transmissions';
 $locales['mod-dPboard-tab-vw_day'] = 'Vue journée';
 $locales['mod-dPboard-tab-vw_idx_sejour'] = 'Hospitalisation';
 $locales['mod-dPboard-tab-vw_interv_non_cotees'] = 'Saisie des cotations';
+$locales['mod-dPboard-tab-vw_month'] = 'Vue mensuelle';
 $locales['mod-dPboard-tab-vw_prescripteurs'] = 'Médecins traitants';
 $locales['mod-dPboard-tab-vw_search'] = 'Recherche';
 $locales['mod-dPboard-tab-vw_sejours_interventions'] = 'Séjours et interventions';

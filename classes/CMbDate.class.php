@@ -265,17 +265,15 @@ class CMbDate {
     }
 
     $year = CMbDT::transform("+0 DAY", $date, "%Y");
+    $previous_year = $year-1;
+    $next_year = $year+1;
     $code_pays = CAppUI::conf("ref_pays");
 
     switch ($code_pays) {
-      case '2': // Switzerland
-        $calendar["$year-01-01"] = "Jour de l'an";                // Jour de l'an
-        $calendar["$year-08-01"] = "Fête Nationnale Suisse";      // fete nationnale suisse
-        $calendar["$year-12-25"] = "Noël";                        // Noël
-        break;
-
-      case '1':  // France
+      // France
+      case '1':
         $paques = CMbDT::getEasterDate($date);
+        $calendar["$previous_year-12-31"] = "Fête du travail";
         $calendar["$year-01-01"] = "Jour de l'an";                            // Jour de l'an
         $calendar["$year-05-01"] = "Fête du travail";                         // Fête du travail
         $calendar["$year-05-08"] = "Victoire de 1945";                        // Victoire de 1945
@@ -287,9 +285,19 @@ class CMbDate {
         $calendar["$year-11-01"] = "Toussain";                                // Toussaint
         $calendar["$year-11-11"] = "Armistice 1918";                          // Armistice 1918
         $calendar["$year-12-25"] = "Noël";                                    // Noël
+        $calendar["$next_year-01-01"] = "Jour de l'an";
+        break;
+
+      // Switzerland
+      case '2':
+        $calendar["$year-01-01"] = "Jour de l'an";                // Jour de l'an
+        $calendar["$year-08-01"] = "Fête Nationnale Suisse";      // fete nationnale suisse
+        $calendar["$year-12-25"] = "Noël";                        // Noël
+        $calendar["$next_year-01-01"] = "Jour de l'an";                // Jour de l'an
         break;
 
       default:
+        return $calendar;
         break;
     }
 
@@ -328,10 +336,9 @@ class CMbDate {
     $paques = CMbDT::getEasterDate($date);
 
     switch ($pays) {
-
       // France
       case '1':
-        //nothing to do here...
+        return $subdivisionHoliday;
         break;
 
       // Switzerland
@@ -341,7 +348,8 @@ class CMbDate {
 
         $canton = substr($group->cp, 0, 2);
         switch ($canton) {
-          case '10':  // Vaud
+          // Vaud
+          case '10':
             $subdivisionHoliday["$year-01-02"] = "Saint-Berchtold";
             $subdivisionHoliday[CMbDT::transform("last friday", $paques, "%Y-%m-%d")] = "vendredi saint";
             $subdivisionHoliday[CMbDT::transform("+1 DAY", $paques, "%Y-%m-%d")] = "lundi de paques";
@@ -350,7 +358,8 @@ class CMbDate {
             $subdivisionHoliday[CMbDT::transform("+1 DAY", $thirdSundaySeptember, "%Y-%m-%d")] = "Lundi du Jeûne fédéral";
             break;
 
-          case '12':  // Genève
+          // Genève
+          case '12':
             $subdivisionHoliday[ CMbDT::transform("next thursday", $firstSundaySeptember, "%Y-%m-%d")] = "Jeûne Genevois";
             $subdivisionHoliday[CMbDT::transform("last friday", $paques, "%Y-%m-%d")] = "vendredi saint";
             $subdivisionHoliday[CMbDT::transform("+1 DAY", $paques, "%Y-%m-%d")] = "lundi de paques";
@@ -358,7 +367,14 @@ class CMbDate {
             $subdivisionHoliday[CMbDT::transform("+50 DAY", $paques, "%Y-%m-%d")] = "lundi de pantecote";
             $subdivisionHoliday["$year-12-31"] = "fete du travail";
             break;
+          default:
+            return $subdivisionHoliday;
+            break;
         }
+        break;
+
+      default:
+        return $subdivisionHoliday;
         break;
     }
     return $subdivisionHoliday;

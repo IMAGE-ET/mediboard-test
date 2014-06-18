@@ -296,7 +296,7 @@ class CPlanning {
    * @return array _ref_holidays
    */
   function loadHolidays() {
-    return $this->_ref_holidays = CMbDate::getHolidays($this->date);
+    return $this->_ref_holidays = CMbDate::getHolidays($this->date) + CMbDate::getHolidays(CMbDT::date("-1 YEAR", $this->date));
   }
 
 }

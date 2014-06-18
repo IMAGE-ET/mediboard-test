@@ -24,6 +24,9 @@ class CPlanningMonth extends CPlanning {
   public $days_by_week;
   public $classes_for_days;
 
+  public $next_month;
+  public $previous_month;
+
   /**
    * constructor
    *
@@ -95,7 +98,8 @@ class CPlanningMonth extends CPlanning {
       $this->classes_for_days = $this->days;
     }
 
-
+    $this->previous_month = CMbDT::date("-1 DAY", $this->date_min);
+    $this->next_month     = CMbDT::date("+1 DAY", $this->date_max);
 
     $this->_date_min_planning = reset(array_keys($this->days));
     $this->_date_max_planning = end(array_keys($this->days));
