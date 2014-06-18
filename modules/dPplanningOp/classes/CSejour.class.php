@@ -291,6 +291,10 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_ref_exams_igs;
   /** @var CMovement[] */
   public $_ref_movements;
+  /** @var CMovement */
+  public $_ref_first_movement;
+  /** @var CMovement */
+  public $_ref_last_movement;
   /** @var CFactureEtablissement[] */
   public $_ref_factures;
   /** @var CMbObject[] */
@@ -3007,7 +3011,18 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return CMovement[]
    */
   function loadRefsMovements() {
-    return $this->_ref_movements = $this->loadBackRefs("movements");
+    $movements = $this->loadBackRefs("movements");
+
+    if (count($movements) > 0) {
+      $this->_ref_first_movement = reset($movements);
+      $this->_ref_last_movement  = end($movements);
+    }
+    else {
+      $this->_ref_first_movement = new CMovement();
+      $this->_ref_last_movement  = new CMovement();
+    }
+
+    return $this->_ref_movements = $movements;
   }
 
   /**

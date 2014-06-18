@@ -20,6 +20,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   /** @var CConsultation|CRPU|CSejour */
   public $_object_found_by_vn;
 
+  public $_doctor_id;
+
   /**
    * Get data nodes
    *
@@ -1135,7 +1137,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   function mapAndStoreVenue(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
     $sender         = $this->_ref_sender;
-    
+    $event_code     = $exchange_hl7v2->code;
+
     // Mapping du séjour
     $this->mappingVenue($data, $newVenue);
     
@@ -1143,6 +1146,12 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $newVenue->_eai_initiateur_group_id = $sender->group_id;
     // On ne check pas la cohérence des dates des consults/intervs
     $newVenue->_skip_date_consistencies = true;
+
+    // On ne synchronise pas le séjour pour une modification dans un premier temps pour traiter le mouvement
+    if ($event_code == "Z99") {
+      $newVenue->_no_synchro = true;
+    }
+
     if ($msgVenue = $newVenue->store()) {
       return $exchange_hl7v2->setAckAR($ack, "E201", $msgVenue, $newVenue);
     }
@@ -1153,6 +1162,29 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return $exchange_hl7v2->setAckAR($ack, "E206", $return_movement, $newVenue);
     }
     $movement = $return_movement;
+
+    // On re-synchronise le séjour ayant subi une modification
+    if ($event_code == "Z99") {
+      // Est-ce que le mouvement est bien le dernier ?
+      $newVenue->loadRefsMovements();
+
+      if ($newVenue->_ref_last_movement->_id == $movement->_id) {
+        // on affecte le praticien
+        $newVenue->praticien_id = $this->_doctor_id;
+
+        // Notifier les autres destinataires autre que le sender
+        $newVenue->_eai_initiateur_group_id = $sender->group_id;
+        // On ne check pas la cohérence des dates des consults/intervs
+        $newVenue->_skip_date_consistencies = true;
+
+        // On réactive la synchro
+        $newVenue->_no_synchro = false;
+
+        if ($msgVenue = $newVenue->store()) {
+          return $exchange_hl7v2->setAckAR($ack, "E201", $msgVenue, $newVenue);
+        }
+      }
+    }
     
     // Mapping de l'affectation
     $return_affectation = $this->mapAndStoreAffectation($newVenue, $data, $movement);
@@ -1900,23 +1932,34 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
    * @return void
    */
   function getAttendingDoctor(DOMNode $node, CSejour $newVenue) {
-    $PV17 = $this->query("PV1.7", $node);
+    $event_code = $this->_ref_exchange_hl7v2->code;
+    $PV17       = $this->query("PV1.7", $node);
 
     // On ne récupère pas le praticien dans le cas où l'on a un séjour d'urgences et que la config est à non
     if ($newVenue->type == "urg" && !$this->_ref_sender->_configs["handle_PV1_7"]) {
       return;
     }
-    
+
+    // Récupération du médecin
     $mediuser = new CMediusers();
     foreach ($PV17 as $_PV17) {
-      $newVenue->praticien_id = $this->getDoctor($_PV17, $mediuser);
+      $doctor_id = $this->getDoctor($_PV17, $mediuser);
     }
-    
+
     // Dans le cas ou la venue ne contient pas de medecin responsable
     // Attribution d'un medecin indeterminé
-    if (!$newVenue->praticien_id) {
-      $newVenue->praticien_id = $this->createIndeterminateDoctor();
+    if (!$doctor_id) {
+      $doctor_id = $this->createIndeterminateDoctor();
     }
+
+    // On ne synchronise pas dans le cas d'une modification
+    if ($event_code == "Z99") {
+      $this->_doctor_id = $doctor_id;
+
+      return;
+    }
+
+    $newVenue->praticien_id = $doctor_id;
   }
 
   /**
@@ -2174,6 +2217,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         }
 
         break;
+
+      default;
     }
   }
 
