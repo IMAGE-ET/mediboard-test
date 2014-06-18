@@ -67,9 +67,6 @@ if ($plageSel->chir_id != $chirSel && $plageSel->remplacant_id != $chirSel) {
 
 CValue::setSession("plageconsult_id", $plageconsult_id);
 
-// Liste des chirurgiens
-$listChir = CConsultation::loadPraticiens(PERM_EDIT);
-
 // Liste des consultations a avancer si desistement
 $now = CMbDT::date();
 $where = array(
@@ -278,7 +275,6 @@ $smarty->assign("show_annulees"       , $show_annulees);
 $smarty->assign("chirSel"             , $chirSel);
 $smarty->assign("canEditPlage"        , $canEditPlage);
 $smarty->assign("plageSel"            , $plageSel);
-$smarty->assign("listChirs"           , $listChir);
 $smarty->assign("today"               , $today);
 $smarty->assign("debut"               , $debut);
 $smarty->assign("fin"                 , $fin);

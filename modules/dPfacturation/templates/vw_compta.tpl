@@ -8,7 +8,30 @@
     form._date_min_da.value = Date.fromDATE(sDebut).toLocaleDate();
     form._date_max_da.value = Date.fromDATE(sFin).toLocaleDate();
   }
-  Main.add(Control.Tabs.create.curry('tabs-configure', true));
+
+  Main.add(function () {
+    Control.Tabs.create('tabs-configure', true);
+
+    // Autocomplete des praticiens
+    var form = getForm("printFrm");
+    var url = new Url("mediusers", "ajax_users_autocomplete");
+    url.addParam("edit", '1');
+    url.addParam("compta", '1');
+    url.addParam("input_field", 'chir_view');
+    url.autoComplete(form.chir_view, null, {
+      minChars: 0,
+      method: "get",
+      select: "view",
+      dropdown: true,
+      afterUpdateElement: function(field, selected) {
+        if ($V(form.chir_view) == "") {
+          $V(form.chir_view, selected.down('.view').innerHTML);
+        }
+        var id = selected.getAttribute("id").split("-")[2];
+        $V(form.chir, id);
+      }
+    });
+  });
 </script>
 
 {{if count($listPrat)}}
@@ -48,12 +71,12 @@
           </table>
         </td>
         <td class="button" rowspan="2">
-          <select name="chir">
-            {{if $listPrat|@count > 1}}
-              <option value="">&mdash; Tous</option>
-            {{/if}}
-            {{mb_include module=mediusers template=inc_options_mediuser list=$listPrat}}
-          </select>
+          <input type="hidden" name="chir" value=""/>
+          <div style="text-align: left;" class="dropdown">
+            <input type="text" name="chir_view" class="autocomplete" value="&mdash; Tous" style="text-align: left;"
+                   onmouseup="$V(this, '');" onmouseout="$V(this, '&mdash; Tous');$V(this.form.chir, '');"
+                   placeholder="&mdash; Choisir un praticien"/>
+          </div>
         </td>
       </tr>
 

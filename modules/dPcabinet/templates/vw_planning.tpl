@@ -1,7 +1,6 @@
 <!-- $Id$ -->
 
 <script>
-
   // default value
   var target_plage_consult = '{{$plageSel->_id}}';
 
@@ -68,6 +67,26 @@ Main.add(function () {
       showConsultations(plageList[0].down("a"), "{{$plageSel->_id}}");
     }
   {{/if}}
+
+  // Autocomplete des praticiens
+  var form = getForm("changePrat");
+  var url = new Url("mediusers", "ajax_users_autocomplete");
+  url.addParam("edit", '1');
+  url.addParam("praticiens", '1');
+  url.addParam("input_field", 'chir_id_view');
+  url.autoComplete(form.chir_id_view, null, {
+    minChars: 0,
+    method: "get",
+    select: "view",
+    dropdown: true,
+    afterUpdateElement: function(field, selected) {
+      if ($V(form.chir_id_view) == "") {
+        $V(form.chir_id_view, selected.down('.view').innerHTML);
+      }
+      var id = selected.getAttribute("id").split("-")[2];
+      $V(form.chirSel, id);
+    }
+  });
 });
 </script>
 
@@ -77,16 +96,19 @@ Main.add(function () {
 <table class="main">
   <tr>
     <th style="width: 50%;">
+      <form action="?" name="changePrat" method="get" style="float:left;text-align:left;width:15em;">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="{{$tab}}" />
+        <input type="hidden" name="plageconsult_id" value="0" />
+        <input type="hidden" name="chirSel" value="{{$chirSel}}" onchange="this.form.submit()"/>
+        <input type="text" name="chir_id_view" class="autocomplete" value="{{if $chirSel}}{{$planning->title}}{{/if}}"
+               onmouseup="$V(this, '');" onmouseout="$V(this, '{{$planning->title}}');"
+               placeholder="&mdash; Choisir un praticien"/>
+      </form>
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
         <input type="hidden" name="plageconsult_id" value="0" />
-
-        <select name="chirSel" style="width: 15em; float: left;" onchange="this.form.submit()">
-          <option value="-1" {{if $chirSel == -1}} selected="selected" {{/if}}>&mdash; Choisir un professionnel</option>
-          {{mb_include module=mediusers template=inc_options_mediuser selected=$chirSel list=$listChirs}}
-        </select>
-
         <a href="#1" id="vw_planning_a_semaine" onclick="$V($(this).getSurroundingForm().debut, '{{$prec}}')">&lt;&lt;&lt;</a>
 
         Semaine du {{$debut|date_format:"%A %d %b %Y"}} au {{$fin|date_format:"%A %d %b %Y"}}
