@@ -54,40 +54,42 @@
   </script>
 {{/if}}
 
-<!-- Draggable -->
-<script>
-  Main.add(function() {
-    $$(".droppable").each(function(li) {
-      Droppables.add(li, {
-        onDrop: function(from, to, event) {
-          Event.stop(event);
-          var destGuid = to.get("guid");
-          var fromGuid = from.get("targetFrom");
-          var idFile   = from.get("id");
-          var classFile   = from.get("class");
-          var url = new Url("files","controllers/do_move_file");
-          url.addParam("object_id", idFile);
-          url.addParam("object_class", classFile);
-          url.addParam("destination_guid", destGuid );
-          url.requestUpdate("systemMsg", function() {
-            $("docItem_"+destGuid).onclick();   //update destination
-            $("docItem_"+fromGuid).onclick();   //update provenance
-          });
-        },
-        accept: 'draggable',
-        hoverclass:'dropover'
+{{if !$app->touch_device}}
+  <!-- Draggable -->
+  <script>
+    Main.add(function() {
+      $$(".droppable").each(function(li) {
+        Droppables.add(li, {
+          onDrop: function(from, to, event) {
+            Event.stop(event);
+            var destGuid = to.get("guid");
+            var fromGuid = from.get("targetFrom");
+            var idFile   = from.get("id");
+            var classFile   = from.get("class");
+            var url = new Url("files","controllers/do_move_file");
+            url.addParam("object_id", idFile);
+            url.addParam("object_class", classFile);
+            url.addParam("destination_guid", destGuid );
+            url.requestUpdate("systemMsg", function() {
+              $("docItem_"+destGuid).onclick();   //update destination
+              $("docItem_"+fromGuid).onclick();   //update provenance
+            });
+          },
+          accept: 'draggable',
+          hoverclass:'dropover'
+        });
+      });
+
+      $$(".draggable").each(function(a) {
+        new Draggable(a, {
+          onEnd: function(element, event) {
+            Event.stop(event);
+          },
+          ghosting: true});
       });
     });
-
-    $$(".draggable").each(function(a) {
-      new Draggable(a, {
-        onEnd: function(element, event) {
-          Event.stop(event);
-        },
-        ghosting: true});
-    });
-  });
-</script>
+  </script>
+{{/if}}
 
 {{foreach from=$list item=_doc_item}}
   <div style="float: left; width: 220px; position: relative; {{if $_doc_item instanceof CFile && $_doc_item->annule}}display: none;{{/if}}"
@@ -109,8 +111,8 @@
               {{assign var="srcImg" value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&w=64&h=92"}}
             {{/if}}
 
-            <a href="#" ondblclick="popFile('{{$object->_class}}', '{{$object->_id}}', '{{$_doc_item->_class}}', '{{$elementId}}', '0');">
-              <img class="thumbnail draggable" style="background: white;" src="{{$srcImg}}" data-id="{{$elementId}}" data-class="{{$_doc_item->_class}}" data-targetFrom="{{$_doc_item->object_class}}-{{$_doc_item->object_id}}"/>
+            <a href="#" {{if !$app->touch_device}}ondblclick{{else}}onclick{{/if}}="popFile('{{$object->_class}}', '{{$object->_id}}', '{{$_doc_item->_class}}', '{{$elementId}}', '0');">
+              <img class="thumbnail {{if !$app->touch_device}}draggable{{/if}}" style="background: white;" src="{{$srcImg}}" data-id="{{$elementId}}" data-class="{{$_doc_item->_class}}" data-targetFrom="{{$_doc_item->object_class}}-{{$_doc_item->object_id}}"/>
             </a>
           </td>
 
