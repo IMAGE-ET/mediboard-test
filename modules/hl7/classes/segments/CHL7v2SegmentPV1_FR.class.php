@@ -98,7 +98,7 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
       $data[] = array (
         $sejour->_id,
       );
-    } 
+    }
     else {
       $sejour->loadNPA($group->_id);
       $data[] = $sejour->_NPA ? array(
@@ -229,7 +229,9 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
     $data[] = $this->getPV136($receiver, $sejour);
     
     // PV1-37: Discharged to Location (DLD) (optional)
-    $data[] = ($sejour->etablissement_sortie_id && ($event->code == "A03" || $event->code == "A16" || $event->code == "A21" || $event->code == "Z99")) ? array($sejour->loadRefEtablissementTransfert()->finess) : null;
+    $data[] = ($sejour->etablissement_sortie_id &&
+              ($event->code == "A03" || $event->code == "A16" || $event->code == "A21" || $event->code == "Z99")) ?
+                array($sejour->loadRefEtablissementTransfert()->finess) : null;
     
     // PV1-38: Diet Type (CE) (optional)
     $data[] = null;
@@ -248,7 +250,8 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
     // N - Ce n'était pas la dernière venue pour ce dossier administratif
     if ($event->code == "A03" || $event->code == "Z99") {
       $data[] = ($sejour->type != "seances" && $sejour->sortie_reelle) ? "D" : "N";
-    } else {
+    }
+    else {
       $data[] = null;
     }
     

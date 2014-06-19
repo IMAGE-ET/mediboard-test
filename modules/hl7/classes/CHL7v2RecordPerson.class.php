@@ -58,13 +58,13 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
 
     switch ($exchange_hl7v2->code) {
       // A29 - Delete person information
-      case "A29" :
+      case "A29":
         $eventCode = "A29";
         break;
+
       // All events
-      default :
+      default:
         $eventCode = "All";
-        break;
     }
 
     $function_handle = "handle$eventCode";
@@ -381,7 +381,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     
     // Date de naissance
     $PID_7 = $this->queryTextNode("PID.7/TS.1", $node);
-    $newPatient->naissance = $PID_7 ? CMbDT::date($PID_7, $node) : null;
+    $newPatient->naissance = $PID_7 ? CMbDT::date($PID_7) : null;
     
     // Cas d'un patient anonyme
     if ($newPatient->naissance && !$newPatient->prenom) {
@@ -448,10 +448,11 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $fn1 = $this->queryTextNode("XPN.1/FN.1", $node);
 
     switch ($this->queryTextNode("XPN.7", $node)) {
-      case "D" :
+      case "D":
         $newPatient->nom = $fn1;
         break;
-      case "L" :
+
+      case "L":
         // Dans le cas où l'on a pas de nom de nom de naissance le legal name
         // est le nom du patient
         if ($PID5->length > 1) {
@@ -461,9 +462,9 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
           $newPatient->nom = $fn1;
         }
         break;
+
       default:
         $newPatient->nom = $fn1;
-        break;
     }
   }
 
@@ -580,7 +581,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       }
       
       switch ($this->queryTextNode("XTN.2", $_PID13)) {
-        case "PRN" :
+        case "PRN":
           if ($this->queryTextNode("XTN.3", $_PID13) == "PH") {
             $newPatient->tel  = $this->getPhone($tel_number);
           }    
@@ -590,21 +591,20 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
           }
           break;
           
-        case "ORN" :
+        case "ORN":
           if ($this->queryTextNode("XTN.3", $_PID13) == "CP") {
             $newPatient->tel2 = $this->getPhone($tel_number);
           }
           break;
 
-        case "WPN" :
+        case "WPN":
           if ($this->queryTextNode("XTN.3", $_PID13) == "PH") {
             $newPatient->tel_autre  = $this->getPhone($tel_number);
           }
           break;
 
-        default :
+        default:
           $newPatient->tel_autre = $tel_number;
-          break;
       }
     }
   }
@@ -689,10 +689,10 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
 
     switch ($this->queryTextNode("ROL.3/CE.1", $node)) {
       // Médecin traitant
-      case "ODRP" :
+      case "ODRP":
         $newPatient->medecin_traitant = $this->getMedecin($ROL_4);
         break;
-      case "RT" : 
+      case "RT":
         $correspondant = new CCorrespondant();
         $correspondant->patient_id = $newPatient->_id;
         $correspondant->medecin_id = $this->getMedecin($ROL_4);
@@ -702,6 +702,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
           $correspondant->store();
         } 
         break;
+
+      default:
     }
   }
 
@@ -788,19 +790,23 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $medecin = new CMedecin();
     
     switch ($this->queryTextNode("XCN.13", $node)) {
-      case "RPPS" :
+      case "RPPS":
         $medecin->rpps  = $xcn1;
         $medecin->loadMatchingObjectEsc();
         break;
-      case "ADELI" :
+
+      case "ADELI":
         $medecin->adeli = $xcn1;
         $medecin->loadMatchingObjectEsc();
         break;
-      case "RI" :
+
+      case "RI":
         // Gestion de l'identifiant MB
         if ($this->queryTextNode("XCN.9/CX.4/HD.2", $node) == CAppUI::conf("hl7 assigning_authority_universal_id")) {
           $medecin->load($xcn1);
         }
+
+      default:
     }
     
     // Si pas retrouvé par son identifiant

@@ -2676,5 +2676,83 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
    * @return void
    */
   function getGT1(DOMNode $node, CSejour $newVenue) {
+    if (!$newVenue->_id) {
+      return;
+    }
+
+    $sender  = $this->_ref_sender;
+    $patient = $newVenue->_ref_patient;
+
+    $GT1_2  = $this->queryTextNode("GT1.2/CX.1", $node);
+
+    $GT1_3  = $this->queryNode("GT1.3", $node);
+    $nom    = $this->queryTextNode("XPN.1/FN.1", $GT1_3);
+    $prenom = $this->queryTextNode("XPN.2"     , $GT1_3);
+
+    if ($prenom == "") {
+      $prenom = null;
+    }
+
+    $GT1_5   = $this->queryNode("GT1.5", $node);
+    $adresse = $this->queryTextNode("XAD.1/SAD.1", $GT1_5);
+    $ville   = $this->queryTextNode("XAD.3", $GT1_5);
+    $cp      = $this->queryTextNode("XAD.5", $GT1_5);
+
+    $GT1_6 = $this->queryNodes("GT1.6", $node)->item(0);
+
+    $tel = null;
+    if ($GT1_6) {
+      $tel = $this->queryTextNode("XTN.12", $GT1_6);
+
+      if (!$tel) {
+        $tel = $this->queryTextNode("XTN.1", $GT1_6);
+      }
+    }
+
+    $GT1_13 = $this->queryTextNode("GT1.13", $node);
+    $GT1_14 = $this->queryTextNode("GT1.14", $node);
+
+    $corres_patient = new CCorrespondantPatient();
+    $where = array();
+    $where["patient_id"] = " = '$patient->_id'";
+    if ($nom) {
+      $where["nom"]        = " = '$nom'";
+    }
+    if ($prenom) {
+      $where["prenom"]     = " = '$prenom'";
+    }
+    $where["relation"]   = " = 'assurance'";
+    $where[]             = "'".CMbDT::date()."' BETWEEN date_debut AND date_fin";
+
+    $corres_patient->loadObject($where);
+
+    if (!$corres_patient->_id) {
+      $corres_patient->patient_id = $patient->_id;
+      $corres_patient->nom        = $nom;
+      $corres_patient->relation   = "assurance";
+    }
+
+    $corres_patient->prenom   = $prenom;
+    $corres_patient->adresse  = $adresse;
+    $corres_patient->cp       = $cp;
+    $corres_patient->ville    = $ville;
+    $corres_patient->tel      = $tel;
+
+    if ($GT1_13) {
+      $corres_patient->date_debut = CMbDT::date($GT1_13);
+    }
+
+    if ($GT1_14) {
+      $corres_patient->date_fin   = CMbDT::date($GT1_14);
+    }
+
+    // Notifier les autres destinataires autre que le sender
+    $corres_patient->_eai_initiateur_group_id = $sender->group_id;
+
+    if ($msg = $corres_patient->store()) {
+      $corres_patient->repair();
+
+      $corres_patient->store();
+    }
   }
 }

@@ -27,6 +27,8 @@ class CCorrespondant extends CMbObject {
   /** @var CPatient */
   public $_ref_patient;
 
+  public $_eai_initiateur_group_id;
+
   /**
    * @see parent::getSpec()
    */

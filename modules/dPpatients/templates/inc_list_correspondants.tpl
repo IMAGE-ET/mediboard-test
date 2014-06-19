@@ -57,7 +57,7 @@
               {{mb_value object=$_correspondant field=mob}}
             </td>
             <td style="white-space: nowrap;">{{mb_value object=$_correspondant field=fax}}</td>
-            <td>
+            <td {{if !$_correspondant->parente}}class="empty"{{/if}}>
               {{if $_correspondant->relation != "employeur"}}
                 {{if $_correspondant->parente == "autre"}}
                   {{mb_value object=$_correspondant field=parente_autre}}
