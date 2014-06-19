@@ -16,6 +16,9 @@
 
     <!-- Téléchargement du fichier -->
     {{if $_doc_item->_class=="CFile"}}
+      {{if $app->touch_device}}
+        <button class="search notext" onclick="popFile('{{$_doc_item->object_class}}', '{{$_doc_item->object_id}}', 'CFile', '{{$_doc_item->_id}}', '0');">{{tr}}Open{{/tr}}</button>
+      {{/if}}
       <a class="button download notext"
         href="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$_doc_item->_id}}"
         target="_blank" title="{{tr}}CFile.download{{/tr}}"></a>
