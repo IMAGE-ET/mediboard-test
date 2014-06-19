@@ -19,6 +19,12 @@
     var selected = select.options[select.selectedIndex];
     var form = select.form;
     $V(form.elements.mode_sortie, selected.get("mode"));
+    form.elements._date_deces.removeClassName("notNull");
+    form.elements._date_deces_da.removeClassName("notNull");
+    if ($V(form.elements.mode_sortie) == "deces") {
+      form.elements._date_deces.addClassName("notNull");
+      form.elements._date_deces_da.addClassName("notNull");
+    }
   };
   updateLitMutation = function(element) {
     {{if $conf.dPurgences.use_blocage_lit}}
@@ -188,7 +194,7 @@
 
     <tr id="etablissement_sortie_transfert" {{if $sejour->mode_sortie != "transfert"}} style="display:none;" {{/if}}>
       <th>{{mb_label object=$sejour field="etablissement_sortie_id"}}</th>
-      <td>{{mb_field object=$sejour field="etablissement_sortie_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="getObjectService(this);this.form.onsubmit();"}}</td>
+      <td>{{mb_field object=$sejour field="etablissement_sortie_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}</td>
     </tr>
 
     {{if $conf.dPurgences.use_blocage_lit}}
@@ -254,13 +260,11 @@
     <tr id="date_deces" {{if $sejour->mode_sortie != "deces"}}style="display: none"{{/if}}>
       <th>{{mb_label class="CPatient" field="deces"}}</th>
       <td>
-        <input type="hidden" name="_date_deces" value="{{$sejour->_ref_patient->deces}}" onchange="this.form.onsubmit()"
-            class="date progressive {{if $sejour->mode_sortie == "deces"}}notNull{{/if}}" />
-        <script>
-          Main.add(function() {
-            Calendar.regProgressiveField(getForm('editSejour')._date_deces);
-          });
-        </script>
+        {{assign var=deces_notNull value=""}}
+        {{if $sejour->mode_sortie == "deces"}}
+          {{assign var=deces_notNull value="notNull"}}
+        {{/if}}
+        {{mb_field object=$sejour field="_date_deces" register=true form="editSejour" class=$deces_notNull value=$sejour->_ref_patient->deces}}
       </td>
     </tr>
 

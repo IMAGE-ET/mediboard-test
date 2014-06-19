@@ -107,53 +107,22 @@
         <input type="hidden" name="m" value="planningOp" />
         <input type="hidden" name="dosql" value="do_sejour_aed" />
         <input type="hidden" name="del" value="0" />
-        {{mb_field object=$sejour field="confirme" hidden=1}}
-        {{mb_field object=$sejour field="confirme_user_id" hidden=1}}
         {{mb_key object=$sejour}}
         {{mb_field object=$sejour field=entree_prevue hidden=true}}
-        {{if $sejour->confirme || $sejour->sortie_reelle}}
+        {{if $sejour->confirme}}
           {{mb_value object=$sejour field=sortie}}
           / {{mb_value object=$sejour field="mode_sortie"}}
-          {{if $sejour->sortie_reelle}}
-            / <strong>Effectuée</strong>
-          {{else}}
-            <button type="button" onclick="$V(this.form.confirme, ''); $V(this.form.confirme_user_id, ''); this.form.onsubmit()" class="cancel">
-              Annuler
-            </button>
-          {{/if}}
         {{else}}
           <button class="add" type="button" onclick="addDays(this, 1)">1J</button>
-          {{mb_field object=$sejour field=sortie_prevue register=true form="editSortiePrevue-`$type`-`$aff_guid`" onchange="this.form.onsubmit()"}}
-          {{if $conf.dPplanningOp.CSejour.use_custom_mode_sortie && $list_mode_sortie|@count}}
-            {{mb_field object=$sejour field=mode_sortie onchange="\$V(this.form._modifier_sortie, 0); if (\$V(this) == 'deces') { showDateDeces('`$sejour->_id`'); } else { this.form.onsubmit(); }" hidden=true}}
-            <select name="mode_sortie_id" class="{{$sejour->_props.mode_sortie_id}}" style="width: 15em" onchange="updateModeSortie(this)">
-              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-              {{foreach from=$list_mode_sortie item=_mode}}
-                <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $sejour->mode_sortie_id == $_mode->_id}}selected{{/if}}>
-                  {{$_mode}}
-                </option>
-              {{/foreach}}
-            </select>
-          {{else}}
-            {{mb_field object=$sejour field="mode_sortie" onchange="if (\$V(this) == 'deces') { showDateDeces('`$sejour->_id`'); } else { this.form.onsubmit(); }"}}
-          {{/if}}
-          <button type="button" onclick="$V(this.form.confirme, 'now'); $V(this.form.confirme_user_id, '{{$app->user_id}}'); this.form.onsubmit()" class="tick">
-            Autoriser
+          {{mb_field object=$sejour field=sortie_prevue hidden=true form="editSortiePrevue-`$type`-`$aff_guid`" onchange="this.form.onsubmit()"}}
+        {{/if}}
+        {{if $sejour->sortie_reelle}}
+          / <strong>Effectuée</strong>
+        {{else}}
+          <button class="edit" type="button"
+                  onclick='Admissions.validerSortie("{{$sejour->_id}}", true, refreshList.curry("{{$order_col}}", "{{$order_way}}", "{{$type}}", "{{$type_mouvement}}"));'>
+            Modifier
           </button>
-          <br />
-          <div id="listEtabExterne-editFrm{{$sejour->_guid}}" {{if $sejour->mode_sortie != "transfert"}} style="display: none;" {{/if}}>
-            {{mb_field object=$sejour field="etablissement_sortie_id" form="editSortiePrevue-`$type`-`$aff_guid`" 
-              autocomplete="true,1,50,true,true" onchange="this.form.onsubmit()"}}
-          </div>
-          <div id="dateDeces{{$sejour->_id}}" {{if $sejour->mode_sortie != "deces"}}style="display: none"{{/if}}>
-            {{mb_label object=$patient field=deces}} : <input type="hidden" name="_date_deces" value="{{$patient->deces}}" onchange="this.form.onsubmit()"
-            class="date progressive {{if $sejour->mode_sortie == "deces"}}notNull{{/if}}" />
-          </div>
-          <script type="text/javascript">
-            Main.add(function() {
-              Calendar.regProgressiveField(getForm('editSortiePrevue-{{$type}}-{{$aff_guid}}')._date_deces);
-            });
-          </script>
         {{/if}}
       </form>
     </div>

@@ -73,6 +73,12 @@
     var selected = select.options[select.selectedIndex];
     var form = select.form;
     $V(form.elements.mode_sortie, selected.get("mode"));
+    form.elements._date_deces.removeClassName("notNull");
+    form.elements._date_deces_da.removeClassName("notNull");
+    if ($V(form.elements.mode_sortie) == "deces") {
+      form.elements._date_deces.addClassName("notNull");
+      form.elements._date_deces_da.addClassName("notNull");
+    }
   }
 </script>
 

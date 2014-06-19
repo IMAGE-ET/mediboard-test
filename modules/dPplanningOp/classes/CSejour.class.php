@@ -563,7 +563,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $props["_protocole_prescription_chir_id"]   = "str";
     $props["_motif_complet"]                    = "str";
     $props["_unique_lit_id"]    = "ref class|CLit";
-    $props["_date_deces"]       = "date progressive";
+    $props["_date_deces"]       = "dateTime";
     $props["_isolement_date"]   = "dateTime";
     return $props;
   }
@@ -1011,11 +1011,16 @@ class CSejour extends CFacturable implements IPatientRelated {
       $patient = new CPatient;
       $patient->load($this->patient_id);
 
-      if ("deces" === $this->mode_sortie) {
-        $patient->deces = $this->_date_deces;
-      }
-      else {
-        $patient->deces = "";
+      if ($this->fieldModified("mode_sortie")) {
+        if ("deces" == $this->mode_sortie) {
+          if (!$this->_date_deces) {
+            return "La date de décès n'est pas renseignée";
+          }
+          $patient->deces = $this->_date_deces;
+        }
+        else if ($this->_old->mode_sortie == "deces") {
+          $patient->deces = "";
+        }
       }
 
       // On verifie que le champ a été modifié pour faire le store (sinon probleme lors de la fusion de patients)

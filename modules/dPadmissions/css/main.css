@@ -7,3 +7,7 @@
 .refresh-page-message {
   display: none;
 }
+
+.inform-field {
+  background-color: #fc0 !important;
+}

@@ -73,6 +73,7 @@
   <tr>
     <td class="button">
       {{mb_script module=planningOp script=sejour ajax=true}}
+      {{mb_script module=dPadmissions script=admissions ajax=true}}
 
       {{if $object->_can->edit}}
       <button type="button" class="edit" onclick="Sejour.editModal('{{$sejour->_id}}');">
@@ -80,13 +81,10 @@
       </button>
 
       {{if !$sejour->sortie_reelle}}
-      <form name="valideSortie" method="post" onsubmit="onSubmitFormAjax(this, afterValideSortie.curry(this))">
-        <input type="hidden" name="m" value="planningOp" />
-        <input type="hidden" name="dosql" value="do_sejour_aed" />
-        {{mb_key object=$sejour}}
-        <input type="hidden" name="sortie_reelle" value="now" />
-        <button type="button" class="tick" onclick="this.form.onsubmit()">Valider la sortie</button>
-      </form>
+        <button class="tick" type="button"
+                onclick='Admissions.validerSortie("{{$sejour->_id}}", false);'>
+          Valider la sortie
+        </button>
       {{/if}}
 
       {{if $conf.dPhospi.systeme_prestations == "expert"}}

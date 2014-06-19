@@ -11,7 +11,10 @@
 {{mb_script module=urgences   script=main_courante}}
 {{mb_script module=planningOp script=cim10_selector}}
 
-{{mb_script module=ecap script=dhe}}
+{{if "ecap"|module_active}}
+  {{mb_script module=ecap script=dhe}}
+{{/if}}
+
 
 <script>
   var refreshExecuter;

@@ -9,89 +9,38 @@
  * @link     http://www.mediboard.org
 *}}
 
-<td class="text">
-  {{if $canAdmissions->edit}}
-    <script>
-      Main.add(function() {
-        // Ceci doit rester ici !! prepareForm necessaire car pas appelé au premier refresh d'un periodical update
-        prepareForm("editFrm{{$_sejour->_guid}}");
-      });
-    </script>
-
-    <form name="editFrm{{$_sejour->_guid}}" action="?m={{$m}}" method="post" data-patient_view="{{$_sejour->_ref_patient->_view}}">
-      <input type="hidden" name="m" value="planningOp" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_sejour_aed" />
-      <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
-      <input type="hidden" name="type" value="{{$_sejour->type}}" />
-      {{if $_sejour->grossesse_id}}
-        <input type="hidden" name="_sejours_enfants_ids" value="{{","|implode:$_sejour->_sejours_enfants_ids}}" />
-      {{/if}}
+<td class="text" style="width: 20%">
+  <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
+    {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$_sejour}}
+    {{if !$_sejour->sortie_reelle}}
+      {{mb_title object=$_sejour field=_entree}}
+    {{/if}}
+    <strong>
+      {{mb_value object=$_sejour field=entree date=$date}}
       {{if $_sejour->sortie_reelle}}
-        <input type="hidden" name="mode_sortie" value="{{$_sejour->mode_sortie}}" />
-        <input type="hidden" name="etablissement_sortie_id" value="{{$_sejour->etablissement_sortie_id}}" />
-        <input type="hidden" name="_modifier_sortie" value="0" />
-        <button class="cancel" type="button" onclick="submitSortie(this.form)">
-          Annuler la sortie
-        </button>
-
-        <br />
-        {{if ($_sejour->sortie_reelle < $date_min) || ($_sejour->sortie_reelle > $date_max)}}
-          {{$_sejour->sortie_reelle|date_format:$conf.datetime}}
-        {{else}}
-          {{$_sejour->sortie_reelle|date_format:$conf.time}}
-        {{/if}}
-
-        - {{tr}}CSejour.mode_sortie.{{$_sejour->mode_sortie}}{{/tr}}
-
-        {{if $_sejour->etablissement_sortie_id}}
-          - {{$_sejour->_ref_etablissement_transfert}}
-        {{/if}}
-      {{else}}
-        <input type="hidden" name="_modifier_sortie" value="1" />
-        <input type="hidden" name="entree_reelle" value="{{$_sejour->entree_reelle}}" />
-
-        <div style="white-space: nowrap;">
-          {{if $conf.dPplanningOp.CSejour.use_custom_mode_sortie && $list_mode_sortie|@count}}
-            {{mb_field object=$_sejour field=mode_sortie onchange="\$V(this.form._modifier_sortie, 0); submitSortie(this.form);" hidden=true}}
-            <select name="mode_sortie_id" class="{{$_sejour->_props.mode_sortie_id}}" style="width: 15em" onchange="updateModeSortie(this)">
-              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-              {{foreach from=$list_mode_sortie item=_mode}}
-                <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $_sejour->mode_sortie_id == $_mode->_id}}selected{{/if}}>
-                  {{$_mode}}
-                </option>
-              {{/foreach}}
-            </select>
-          {{else}}
-            {{mb_field object=$_sejour field="mode_sortie" onchange="this.form._modifier_sortie.value = '0'; submitSortie(this.form);"}}
-          {{/if}}
-          <button class="tick" type="button" onclick="confirmation('{{$date_actuelle}}', '{{$date_demain}}', '{{$_sejour->sortie_prevue}}', '{{$_sejour->entree_reelle}}', this.form);">
-            Effectuer la sortie
-          </button>
-        </div>
-        <div id="listEtabExterne-editFrm{{$_sejour->_guid}}" {{if $_sejour->mode_sortie != "transfert"}} style="display: none;" {{/if}}>
-          {{mb_field object=$_sejour field="etablissement_sortie_id" form="editFrm`$_sejour->_guid`"
-          autocomplete="true,1,50,true,true" onchange="changeEtablissementId(this.form)"}}
-        </div>
+        &gt; {{mb_value object=$_sejour field=sortie date=$date}}
       {{/if}}
-    </form>
-  {{elseif $_sejour->sortie_reelle}}
-    {{if ($_sejour->sortie_reelle < $date_min) || ($_sejour->sortie_reelle > $date_max)}}
-      {{$_sejour->sortie_reelle|date_format:$conf.datetime}}
+    </strong>
+  </span>
+  {{if $_sejour->mode_sortie}}
+    <br />{{mb_title object=$_sejour field=sortie}} :
+    {{mb_value object=$_sejour field=mode_sortie}}
+  {{/if}}
+  {{if $_sejour->mode_sortie == "transfert" && $_sejour->etablissement_sortie_id}}
+    <br />&gt; <strong>{{$_sejour->_ref_etablissement_transfert->nom|spancate:26}}</strong>
+  {{/if}}
+  {{if $canAdmissions->edit}}
+    {{if $_sejour->sortie_reelle}}
+      <button style="float: right" class="edit notext" type="button" onclick="Admissions.validerSortie('{{$_sejour->_id}}', false, reloadSortieLine.curry('{{$_sejour->_id}}'));">
+        {{tr}}Modify{{/tr}} {{mb_label object=$_sejour field=sortie}}
+      </button>
     {{else}}
-      {{$_sejour->sortie_reelle|date_format:$conf.time}}
+      <div style="white-space: nowrap;">
+        <button class="tick" type="button" onclick="Admissions.validerSortie('{{$_sejour->_id}}', false, reloadSortieLine.curry('{{$_sejour->_id}}'));">
+          Valider la sortie
+        </button>
+      </div>
     {{/if}}
-
-    {{if $_sejour->mode_sortie}}
-      <br />
-      {{tr}}CSejour.mode_sortie.{{$_sejour->mode_sortie}}{{/tr}}
-    {{/if}}
-
-    {{if $_sejour->etablissement_sortie_id}}
-      <br />{{$_sejour->_ref_etablissement_transfert}}
-    {{/if}}
-  {{else}}
-    -
   {{/if}}
 </td>
 

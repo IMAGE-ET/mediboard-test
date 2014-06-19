@@ -86,9 +86,11 @@ function loadDateDeces(mode_sortie) {
   var form = getForm("editSejour");
   if (mode_sortie == "deces") {
     form._date_deces.addClassName("notNull");
+    form._date_deces_da.addClassName("notNull");
   }
   else {
     form._date_deces.removeClassName("notNull");
+    form._date_deces_da.removeClassName("notNull");
   }
 }
 
@@ -485,7 +487,7 @@ Main.add( function(){
   Calendar.regField(form._date_sortie_prevue, dates);
 
   {{if !$mode_operation && $can->view}}
-    Calendar.regProgressiveField(form._date_deces);
+    Calendar.regField(form._date_deces);
   {{/if}}
 
   removePlageOp(false);
@@ -1080,8 +1082,11 @@ Main.add( function(){
         </select>
       </div>
       <div id="date_deces" {{if $sejour->mode_sortie != "deces"}}style="display: none"{{/if}}>
-        <input type="hidden" name="_date_deces" value="{{$patient->deces}}"
-          class="date progressive {{if $sejour->mode_sortie == "deces"}}notNull{{/if}}" />
+        {{assign var=deces_notNull value=""}}
+        {{if $sejour->mode_sortie == "deces"}}
+          {{assign var=deces_notNull value="notNull"}}
+        {{/if}}
+        {{mb_field object=$sejour field="_date_deces" register=true form="editSejour" class=$deces_notNull value=$sejour->_ref_patient->deces}}
       </div>
     {{else}}
       {{mb_value object=$sejour field=mode_sortie}}

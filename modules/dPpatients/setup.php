@@ -182,6 +182,45 @@ class CSetupdPpatients extends CSetup {
     return true;
   }
 
+  /**
+   * Update the death date to a datetime
+   *
+   * @return bool
+   */
+  function updateDeathDate() {
+    $ds = $this->ds;
+
+    $query    = "SELECT `patient_id`, `deces` FROM `patients` WHERE `deces` IS NOT NULL;";
+    $patients = $ds->loadList($query);
+
+    $query = "ALTER TABLE `patients`
+                CHANGE `deces` `deces` DATETIME;";
+    $ds->exec($query);
+
+    $query = "UPDATE `patients` SET `deces`=REPLACE(`deces`, '-00', '-01') WHERE `deces` IS NOT NULL;";
+    $ds->exec($query);
+
+    $now = CMbDT::dateTime();
+    $insert = array();
+    foreach ($patients as $_patient) {
+      $patient_id  = $_patient["patient_id"];
+      $deces       = $_patient["deces"];
+      $deces_after = CMbDT::dateToLocale(str_replace("-00", "-01", $deces));
+      $deces       = CMbDT::dateToLocale($deces);
+      $insert[] = array(
+        "object_id"    => $patient_id,
+        "object_class" => "CPatient",
+        "date"         => $now,
+        "libelle"      => "Date décès",
+        "text"         => "Changement automatique de $deces à $deces_after 00:00:00",
+      );
+    }
+
+    $ds->insertMulti("note", $insert, 100);
+
+    return true;
+  }
+
   function __construct() {
     parent::__construct();
 
@@ -2575,7 +2614,10 @@ class CSetupdPpatients extends CSetup {
                 ADD `sex` VARCHAR (2) NOT NULL DEFAULT 'u' AFTER `prenom` ";
     $this->addQuery($query);
 
-    $this->mod_version = "2.10";
+    $this->makeRevision("2.10");
+    $this->addMethod("updateDeathDate");
+
+    $this->mod_version = "2.11";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

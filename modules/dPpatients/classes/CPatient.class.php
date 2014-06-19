@@ -409,7 +409,7 @@ class CPatient extends CPerson {
     $conf = CAppUI::conf("dPpatients CPatient identitovigilence");
     $props["naissance"] = $conf === "date" || $conf === "doublons" ? "birthDate notNull" : "birthDate";
 
-    $props["deces"]             = "date progressive";
+    $props["deces"]             = "dateTime";
     $props["rques"]             = "text";
     $props["cmu"]               = "bool";
     $props["ald"]               = "bool";
@@ -460,7 +460,7 @@ class CPatient extends CPerson {
     $props["assure_matricule"]            = "code insee confidential mask|9S99S99S99S999S999S99";
     $props["date_lecture_vitale"]         = "dateTime";
     $props["allow_sms_notification"]      = "bool default|0";
-    $props["allow_sisra_send"]            = "bool default|0";
+    $props["allow_sisra_send"]            = "bool default|1";
     $props["_id_vitale"]                  = "num";
     $props["_pays_naissance_insee"]       = "str";
     $props["_assure_pays_naissance_insee"]= "str";
@@ -730,10 +730,7 @@ class CPatient extends CPerson {
     }
 
     $relative = CMbDate::relative($this->naissance);
-    if ($this->deces && preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/', $this->deces) &&
-        !preg_match('/^0000-[0-9]{2}-[0-9]{2}$/', $this->deces) &&
-        !preg_match('/^[0-9]{4}-00-[0-9]{2}$/', $this->deces) &&
-        !preg_match('/^[0-9]{4}-[0-9]{2}-00$/', $this->deces)) {
+    if ($this->deces) {
       $relative = CMbDate::relative($this->naissance, $this->deces);
     }
 

@@ -657,7 +657,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
    */
   function getDeces(DOMNode $node, CPatient $newPatient) {
     if ($deces = $this->queryTextNode("PID.29/TS.1", $node)) {
-      $newPatient->deces = CMbDT::date($deces);
+      $newPatient->deces = CMbDT::dateTime($deces);
     }
   }
 

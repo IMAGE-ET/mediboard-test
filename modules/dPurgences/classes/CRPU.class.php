@@ -114,6 +114,7 @@ class CRPU extends CMbObject {
   public $_destination;
   public $_transport;
   public $_old_service_id;
+  public $_validation;
 
   /**
    * @see parent::getSpec()
@@ -511,9 +512,16 @@ class CRPU extends CMbObject {
     // Synchronisation AT
     $this->loadRefConsult();
 
-    if ($this->_ref_consult->_id && $this->fieldModified("date_at") && !$this->_date_at) {
-      $this->_date_at = true;
-      $this->_ref_consult->date_at = $this->date_at;
+    if ($this->_ref_consult->_id) {
+      if ($this->_validation && CAppUI::conf("dPurgences valid_cotation_sortie_reelle")) {
+        $this->_ref_consult->valide = "1";
+      }
+
+      if ($this->fieldModified("date_at") && !$this->_date_at) {
+        $this->_date_at = true;
+        $this->_ref_consult->date_at = $this->date_at;
+      }
+
       if ($msg = $this->_ref_consult->store()) {
         return $msg;
       }

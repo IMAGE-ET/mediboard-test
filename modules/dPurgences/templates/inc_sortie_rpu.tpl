@@ -6,6 +6,8 @@
 {{assign var=patient value=$sejour->_ref_patient}}
 {{assign var=atu value=$sejour->_ref_consult_atu}}
 
+{{mb_script module=dPadmissions script=admissions ajax=true}}
+
 {{* La consultation de l'urgentiste peut être sur le séjour reliquat *}}
 {{if $rpu->mutation_sejour_id && $rpu->mutation_sejour_id != $rpu->sejour_id}}
   {{assign var=atu value=$rpu->_ref_sejour_mutation->_ref_consult_atu}}
@@ -159,7 +161,7 @@
       </button>
     {{/if}}
 
-    <button class="edit notext" style="float: right;" onclick="Sortie.edit('{{$rpu->_id}}')">
+    <button class="edit notext" style="float: right;" onclick="refreshExecuter.stop(); Admissions.validerSortie('{{$sejour->_id}}', false, (function () {refreshExecuter.resume(); location.reload()}).bind(refreshExecuter), refreshExecuter.resume.bind(refreshExecuter))">
       {{tr}}Edit{{/tr}} {{mb_label object=$sejour field=sortie}}
     </button>
 
@@ -191,8 +193,7 @@
         mais la sortie réelle n'est pas validée
       </div>
     {{/if}}
-
-    <button class="tick" onclick="Sortie.edit('{{$rpu->_id}}')">
+    <button class="tick" onclick="refreshExecuter.stop(); Admissions.validerSortie('{{$sejour->_id}}', false, (function () {refreshExecuter.resume(); location.reload()}).bind(refreshExecuter), refreshExecuter.resume.bind(refreshExecuter))">
       {{tr}}Validate{{/tr}} {{mb_label object=$sejour field=sortie}}
     </button>
   {{/if}}

@@ -14,7 +14,7 @@
 CCanDo::checkRead();
 
 $sejour_id = CValue::get("sejour_id");
-$date      = CValue::getOrSession("date");
+$date      = CValue::getOrSession("date", CMbDT::date());
 
 $date_actuelle = CMbDT::dateTime("00:00:00");
 $date_demain   = CMbDT::dateTime("00:00:00", "+ 1 day");
@@ -74,6 +74,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("_sejour"         , $sejour);
 $smarty->assign("hier"            , $hier);
+$smarty->assign("date"            , $date);
 $smarty->assign("demain"          , $demain);
 $smarty->assign("date_min"        , $date_min);
 $smarty->assign("date_max"        , $date_max);

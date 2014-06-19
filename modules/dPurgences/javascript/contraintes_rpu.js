@@ -56,6 +56,8 @@ ContraintesRPU = {
             DOM.ul(null, miss_input)), {className: "modal alert big-info"});
         }
       });
+
+    return false;
   },
 
   updateDestination: function(mode_sortie, clearField) {
@@ -124,5 +126,59 @@ ContraintesRPU = {
     $A(oSelect).each( function(input) {
       input.disabled = !valeursPossibles.include(input.value);
     });
+  },
+
+  //@todo a factoriser avec updateOrientation, updateDestination
+  //Changement de l'orientation en fonction du mode sortie
+  changeOrientationDestination : function(form) {
+    //Contrainte à appliquer pour l'orientation
+    var contrainteOrientation = {
+      "mutation"  : ["", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST"],
+      "transfert" : ["", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST"],
+      "normal"    : ["", "FUGUE", "SCAM", "PSA", "REO"],
+      "deces"     : [""]
+    };
+
+    var contrainteDestination = {
+      "mutation"  : ["", 1, 2, 3, 4],
+      "transfert" : ["", 1, 2, 3, 4],
+      "normal"    : ["", 6, 7],
+      "deces"     : [""]
+    };
+
+    var orientation = form.elements.orientation;
+    var destination = form.elements.destination;
+    var mode_sortie = $V(form.elements.mode_sortie);
+
+    //Pas de mode de sortie trouvé
+    if (!mode_sortie) {
+      $A(orientation).each(function (option) {
+        option.disabled = false
+      });
+      $A(destination).each(function (option) {
+        option.disabled = false
+      });
+      return false;
+    }
+
+    //Cas de l'orientation
+    if (orientation) {
+      $A(orientation).each(function (option) {
+        option.disabled = !contrainteOrientation[mode_sortie].include(option.value);
+      });
+      if (orientation[orientation.selectedIndex].disabled) {
+        $V(orientation, "");
+      }
+    }
+
+    //Cas de la destination
+    if (destination) {
+      $A(destination).each(function (option) {
+        option.disabled = !contrainteDestination[mode_sortie].include(option.value);
+      });
+      if (destination[destination.selectedIndex].disabled) {
+        $V(destination, "");
+      }
+    }
   }
 };

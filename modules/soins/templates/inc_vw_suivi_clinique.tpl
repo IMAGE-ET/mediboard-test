@@ -3,6 +3,7 @@
 
 {{mb_script module=patients script=correspondant ajax=true}}
 {{mb_script module=system script=alert ajax=true}}
+{{mb_script module=dPadmissions script=admissions ajax=true}}
 
 <script>
   modalViewComplete = function(object_guid, title) {
@@ -293,12 +294,12 @@
               <strong>{{mb_label object=$sejour field="entree"}}{{if $sejour->entree_reelle}} (effectuée){{/if}}</strong>
               {{mb_value object=$sejour field="entree"}}
             </td>
-            <td>
+            <td {{if $sejour->confirme}}class="ok"{{/if}}>
               <strong>{{mb_label object=$sejour field="sortie"}}{{if $sejour->sortie_reelle}} (effectuée){{/if}}</strong>
-              {{if $sejour->sortie_reelle || $sejour->confirme}}
                 {{mb_value object=$sejour field="sortie"}}
-              {{else}}
-                {{mb_field object=$sejour field="sortie_prevue" register=true form="edit-sejour-frm" onchange="this.form.onsubmit();"}}
+              <br/>
+              {{if $sejour->confirme}}
+              <strong>Sortie autorisée</strong> pour le {{mb_value object=$sejour field="confirme"}}
               {{/if}}
             </td>
           </tr>
@@ -307,16 +308,10 @@
               <strong>{{mb_label object=$sejour field="type"}}</strong>
               {{mb_value object=$sejour field="type"}}
             </td>
-            <td class="text {{if $sejour->confirme}}ok{{else}}warning{{/if}}">
-              {{if $sejour->confirme}}
-                <button type="button" class="cancel notext" onclick="toggleAutorisation()"></button>
-                Sortie autorisée pour le {{mb_value object=$sejour field=confirme}}
-                par {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_confirme_user}}
-              {{else}}
-                <label>
-                  <input type="checkbox" name="_confirme" onclick="toggleAutorisation(1)" /> Sortie autorisée
-                </label>
-              {{/if}}
+            <td>
+              <button type="button" class="edit" onclick='Admissions.validerSortie("{{$sejour->_id}}", true, loadSuiviClinique.curry("{{$sejour->_id}}"));'>
+                Autorisation Sortie
+              </button>
             </td>
           </tr>
           <tr>

@@ -5,6 +5,8 @@
 {{assign var=show_collation_mvt value=$conf.dPhospi.show_collation_mvt}}
 {{assign var=show_sortie_mvt value=$conf.dPhospi.show_sortie_mvt}}
 
+{{mb_script module=dPadmissions script=admissions ajax=true}}
+
 <script>
   $('count_{{$type}}_{{$type_mouvement}}').update('('+'{{$update_count}}'+')');
   Main.add(function () {

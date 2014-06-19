@@ -35,6 +35,7 @@ if (!$sejour->sortie_reelle) {
 $where = array();
 $where["entree"] = "<= '$sejour->sortie_reelle'";
 $where["sortie"] = ">= '$sejour->sortie_reelle'";
+//on recherche uniquement les lits bloqués pour les urgences(function_id == function_id d'urgence)
 $where["function_id"] = "IS NOT NULL";
 
 $affectation = new CAffectation();
