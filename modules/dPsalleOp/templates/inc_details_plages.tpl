@@ -1,3 +1,5 @@
+{{mb_default var=redirect_tab value=0}}
+
 <!-- Plages -->
 {{foreach from=$salle->_ref_plages item=_plage}}
   <hr />

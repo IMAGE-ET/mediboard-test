@@ -33,7 +33,7 @@
             <th class="title">{{$_salle->nom}}</th>
           </tr>
         </table>
-        {{mb_include module=salleOp template=inc_details_plages salle=$_salle}}
+        {{mb_include module=salleOp template=inc_details_plages salle=$_salle redirect_tab=1}}
       </td>
     {{foreachelse}}
       <td class="empty">{{tr}}CSalle.none{{/tr}}</td>
@@ -45,7 +45,7 @@
           <tr>
             <th class="title" colspan="5">{{tr}}CSejour.type.hors_plage{{/tr}}</th>
           </tr>
-          {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=1 operations=$non_traitees}}
+          {{mb_include module="salleOp" template="inc_liste_operations" urgence=1 operations=$non_traitees redirect_tab=1}}
         </table>
       </td>
     {{/if}}

@@ -30,15 +30,15 @@
   showCIMs10 = function(form){
     var url = new Url("cim10", "find_codes_antecedent");
     url.addParam("mater", '{{$selOp->_ref_sejour->grossesse_id}}');
-    url.requestUpdate('printFiche');
+    url.requestUpdate('print_fiche_area');
   }
 
   incidentAntecedent = function(form){
     if ($V(form.antecedent)) {
-      $('printFiche').show();
+      $('print_fiche_area').show();
     }
     else {
-      $('printFiche').hide();
+      $('print_fiche_area').hide();
     }
   }
 
@@ -56,7 +56,8 @@
   <input type="hidden" name="dosql" value="do_anesth_perop_aed" />
   <input type="hidden" name="operation_id" value="{{$selOp->_id}}" />
   <input type="hidden" name="datetime" value="now" />
-  {{mb_key object=$anesth_perop}}
+  <input type="hidden" name="anesth_perop_id" />
+  {{mb_class class=CAnesthPerop}}
 
   {{if $incident == 1}}
     <input type="hidden" name="incident" value="1" />
@@ -71,7 +72,7 @@
           {{assign var=contextUserId value=$app->_ref_user->_id}}
           {{assign var=contextUserView value=$app->_ref_user->_view|smarty:nodefaults:JSAttribute}}
         {{/if}}
-        {{mb_field object=$anesth_perop field="libelle" form="addAnesthPerop-$incident"
+        {{mb_field class=CAnesthPerop field="libelle" form="addAnesthPerop-$incident"
         aidesaisie="contextUserId: '$contextUserId', contextUserView: '$contextUserView'"}}
       </td>
     </tr>
@@ -82,7 +83,7 @@
           En faire un antécédent
         </td>
       </tr>
-      <tr id="printFiche" ></tr>
+      <tr id="print_fiche_area"></tr>
     {{/if}}
     <tr>
       <td colspan="2" class="button">

@@ -277,19 +277,22 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
    * @param string    $date         The date
    * @param string    $type         The type of list
    * @param int       $list_type_id List type ID
+   * @param boolean   $load_list    If true, load references for list
    *
-   * @return self
+   * @return self|self[]
    */
-  static function getList(CMbObject $object, $date = null, $type = null, $list_type_id = null){
+  static function getList(CMbObject $object, $date = null, $type = null, $list_type_id = null, $with_refs = true) {
     $list = new self;
     $list->object_class = $object->_class;
     $list->object_id = $object->_id;
     $list->list_type_id = $list_type_id;
     $list->date = $date;
     $list->type = $type;
-    $list->loadRefsFwd();
     $list->loadMatchingObject();
-    $list->loadRefListType()->loadRefsCategories();
+    $list->_ref_object = $object;
+    if ($with_refs) {
+      $list->loadRefListType()->loadRefsCategories();
+    }
     $list->isReadonly();
     return $list;
   }
@@ -299,8 +302,8 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
    *
    * @return CDailyCheckListType
    */
-  function loadRefListType(){
-    return $this->_ref_list_type = $this->loadFwdRef("list_type_id");
+  function loadRefListType() {
+    return $this->_ref_list_type = $this->loadFwdRef("list_type_id", true);
   }
 
   /**

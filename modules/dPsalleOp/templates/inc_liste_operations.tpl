@@ -4,6 +4,8 @@
   * @param $operations array|COperation interventions à afficher
   *}}
 
+{{mb_default var="redirect_tab" value="0"}}
+
 <!-- Entêtes -->
 <tr>
   {{if $urgence && $salle}}
@@ -68,7 +70,12 @@
           <td class="text" rowspan="{{$rowspan}}">
         {{/if}}
           {{if $salle}}
-            <a href="?m=salleOp&amp;tab=vw_operations&amp;op={{$_operation->_id}}" title="Coder l'intervention">
+            <a {{if $redirect_tab}}
+                href="?m=salleOp&tab=vw_operations&operation_id={{$_operation->_id}}&salle={{$salle->_id}}"
+              {{else}}
+                href="#1" onclick="loadOperation('{{$_operation->_id}}', this.up('tr'))"
+              {{/if}}
+              title="Coder l'intervention">
           {{/if}}
             {{if ($urgence && $salle) || $_operation->_ref_plageop->spec_id}}
               {{$_operation->_ref_chir}}
@@ -143,7 +150,11 @@
         {{else}}
           <td class="text">
             {{if $salle}}
-              <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}">
+              <a {{if $redirect_tab}}
+                  href="?m=salleOp&tab=vw_operations&operation_id={{$_operation->_id}}&salle={{$salle->_id}}"
+                {{else}}
+                  href="#1" onclick="loadOperation('{{$_operation->_id}}', this.up('tr'))"
+                {{/if}}>
             {{/if}}
             <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
                   onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
@@ -165,7 +176,12 @@
           <td class="text">
             {{mb_ternary var=direction test=$urgence value=vw_edit_urgence other=vw_edit_planning}}
             {{if $salle}}
-              <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}" {{if $_operation->_count_actes == "0"}}style="border-color: #F99" class="mediuser"{{/if}}>
+              <a {{if $redirect_tab}}
+                  href="?m=salleOp&tab=vw_operations&operation_id={{$_operation->_id}}&salle={{$salle->_id}}"
+                {{else}}
+                  href="#1" onclick="loadOperation('{{$_operation->_id}}', this.up('tr'))"
+                {{/if}}
+                {{if $_operation->_count_actes == "0"}}style="border-color: #F99" class="mediuser"{{/if}}>
             {{/if}}
             <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')" >
             {{if $_operation->libelle}}

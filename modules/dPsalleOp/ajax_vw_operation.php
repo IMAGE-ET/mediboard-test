@@ -10,238 +10,211 @@
  */
 
 CCanDo::checkRead();
-$user = CUser::get();
 
-$op = CValue::getOrSession("op");
+$operation_id = CValue::getOrSession("operation_id");
+$date         = CValue::getOrSession("date");
+$salle_id     = CValue::get("salle_id");
+
 $selOp = new COperation();
-$selOp->load($op);
-if (!$selOp->_id) {
-  CAppUI::stepAjax(CAppUI::tr("COperation.none"));
-  CApp::rip();
-}
+$selOp->load($operation_id);
 
-$selOp->canDo();
-$selOp->loadRefs();
+$currUser = CMediusers::get();
 
-$date = CMbDT::date($selOp->_datetime);
-$modif_operation = $selOp->canEdit() || $date >= CMbDT::date();
-
-// Récupération de l'utilisateur courant
-$currUser = new CMediusers();
-$currUser->load($user->_id);
-$currUser->isAnesth();
-$currUser->isPraticien();
-
-// Chargement des praticiens
-$listAnesths = new CMediusers();
-$listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);
-
-$listChirs = new CMediusers();
-$listChirs = $listChirs->loadPraticiens(PERM_DENY);
-
-// Sauvegarde en session du bloc (pour preselectionner dans la salle de reveil)
-$salle = new CSalle();
-$salle->load($selOp->salle_id);
-
-$protocoles = array();
+$listAnesths = $currUser->loadAnesthesistes(PERM_DENY);
+$listChirs = $currUser->loadPraticiens(PERM_DENY);
 $anesth_id = "";
-
-$selOp->countExchanges();
-$selOp->loadBrancardage();
-$selOp->isCoded();
-$selOp->_ref_consult_anesth->loadRefsTechniques();
-
-$sejour = $selOp->_ref_sejour;
-
-$sejour->loadExtDiagnostics();
-$sejour->loadRefDossierMedical();
-$sejour->_ref_dossier_medical->loadRefsBack();
-$sejour->loadRefsConsultAnesth();
-$sejour->loadRefsPrescriptions();
-$sejour->_ref_consult_anesth->loadRefsFwd();
-$sejour->loadRefCurrAffectation();
-
-$patient = $sejour->_ref_patient;
-$patient->loadRefPhotoIdentite();
-$patient->loadRefDossierMedical();
-
-if (!$selOp->_ref_consult_anesth->_id) {
-  $patient->loadRefsConsultations();
-
-  foreach ($patient->_ref_consultations as $_consultation) {
-    $_consultation->loadRefsDossiersAnesth();
-    $_consultation->loadRefPlageConsult();
-    foreach ($_consultation->_refs_dossiers_anesth as $_dossier_anesth) {
-      $_dossier_anesth->loadRefOperation();
-    }
-  }
-}
-
-$selOp->getAssociationCodesActes();
-$selOp->loadExtCodesCCAM();
-$selOp->loadPossibleActes();
-
-$selOp->_ref_plageop->loadRefsFwd();
-
-// Affichage des données
-$listChamps = array(
-  1 => array("hb", "ht", "ht_final", "plaquettes"),
-  2 => array("creatinine", "_clairance", "na", "k"),
-  3 => array("tp", "tca", "tsivy", "ecbu"),
-);
-$cAnesth = $selOp->_ref_consult_anesth;
-foreach ($listChamps as $keyCol=>$aColonne) {
-  foreach ($aColonne as $keyChamp=>$champ) {
-    $verifchamp = true;
-    if ($champ == "tca") {
-      $champ2 = $cAnesth->tca_temoin;
-    }
-    else {
-      $champ2 = false;
-      if (($champ == "ecbu" && $cAnesth->ecbu == "?") || ($champ == "tsivy" && $cAnesth->tsivy == "00:00:00")) {
-        $verifchamp = false;
-      }
-    }
-    $champ_exist = $champ2 || ($verifchamp && $cAnesth->$champ);
-    if (!$champ_exist) {
-      unset($listChamps[$keyCol][$keyChamp]);
-    }
-  }
-}
-
-$selOp->_ref_consult_anesth->_ref_consultation->loadRefsBack();
-$selOp->_ref_consult_anesth->_ref_consultation->loadRefPraticien()->loadRefFunction();
-
-// Chargement de la prescription de sejour
-if (CModule::getActive("dPprescription")) {
-  $prescription = new CPrescription();
-  $prescription->object_id = $selOp->sejour_id;
-  $prescription->object_class = "CSejour";
-  $prescription->type = "sejour";
-  $prescription->loadMatchingObject();
-}
-
-$anesth_id = ($selOp->anesth_id) ? $selOp->anesth_id : $selOp->_ref_plageop->anesth_id;
-if ($anesth_id && CModule::getActive('dPprescription')) {
-  $protocoles = CPrescription::getAllProtocolesFor($anesth_id, null, null, 'CSejour', 'sejour');
-}
-
-if (!$selOp->prat_visite_anesth_id && $selOp->_ref_anesth->_id) {
-  $selOp->prat_visite_anesth_id = $selOp->_ref_anesth->_id;
-}
-
-$listAnesthType = new CTypeAnesth();
-$orderanesth = "name";
-$listAnesthType = $listAnesthType->loadList(null, $orderanesth);
-
-// Tableau d'unités
-$unites = array();
-$unites["hb"]         = array("nom"=>"Hb","unit"=>"g/dl");
-$unites["ht"]         = array("nom"=>"Ht","unit"=>"%");
-$unites["ht_final"]   = array("nom"=>"Ht final","unit"=>"%");
-$unites["plaquettes"] = array("nom"=>"Plaquettes","unit"=>"");
-$unites["creatinine"] = array("nom"=>"Créatinine","unit"=>"mg/l");
-$unites["_clairance"] = array("nom"=>"Clairance de Créatinine","unit"=>"ml/min");
-$unites["na"]         = array("nom"=>"Na+","unit"=>"mmol/l");
-$unites["k"]          = array("nom"=>"K+","unit"=>"mmol/l");
-$unites["tp"]         = array("nom"=>"TP","unit"=>"%");
-$unites["tca"]        = array("nom"=>"TCA","unit"=>"s");
-$unites["tsivy"]      = array("nom"=>"TS Ivy","unit"=>"");
-$unites["ecbu"]       = array("nom"=>"ECBU","unit"=>"");
-
-// Initialisation d'un acte NGAP
-$acte_ngap = CActeNGAP::createEmptyFor($selOp);
-// Liste des dents CCAM
-$liste_dents = reset(CDentCCAM::loadList());
+$type_personnel = array("op", "op_panseuse", "iade", "sagefemme", "manipulateur");
+$listValidateurs = $operateurs_disp_vasc = array();
 
 // Vérification de la check list journalière
-$daily_check_list = CDailyCheckList::getList($salle, $date);
-$daily_check_list->loadItemTypes();
-$daily_check_list->loadBackRefs('items');
+if ($salle_id) {
+  $salle = new CSalle();
+  $salle->load($salle_id);
 
-$cat = new CDailyCheckItemCategory;
-$cat->target_class = "CSalle";
-$daily_check_item_categories = $cat->loadMatchingList();
+  $daily_check_lists = array();
+  $daily_check_list_types = array();
+  $require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active") && $date >= CMbDT::date() && !$currUser->_is_praticien;
 
-// Chargement des 3 check lists de l'OMS
-$operation_check_lists = array();
-$operation_check_item_categories = array();
+  if ($require_check_list) {
+    list($check_list_not_validated, $daily_check_list_types, $daily_check_lists) = CDailyCheckList::getCheckLists($salle, $date);
 
-$operation_check_list = new CDailyCheckList;
-$cat = new CDailyCheckItemCategory;
-$cat->target_class = "COperation";
+    if ($salle->cheklist_man && !$load_checklist) {
+      $check_list_not_validated = 0;
+    }
+    if ($check_list_not_validated == 0) {
+      $require_check_list = false;
+    }
+  }
 
-// Pre-anesth, pre-op, post-op
-foreach ($operation_check_list->_specs["type"]->_list as $type) {
-  $list = CDailyCheckList::getList($selOp, null, $type);
-  $list->loadItemTypes();
-  $list->loadRefsFwd();
-  $list->loadBackRefs('items');
-  $list->isReadonly();
-  $list->_ref_object->loadRefPraticien();
-  $operation_check_lists[$type] = $list;
-  
-  $cat->type = $type;
-  $operation_check_item_categories[$type] = $cat->loadMatchingList("title");
+  // Chargement des check lists de l'OMS
+  if ($require_check_list) {
+    if (count($daily_check_list_types)) {
+      $type_personnel = array();
+      foreach ($daily_check_list_types as $check_list_type) {
+        $validateurs = explode("|", $check_list_type->type_validateur);
+        foreach ($validateurs as $validateur) {
+          $type_personnel[] = $validateur;
+        }
+      }
+    }
+
+    $listValidateurs = CPersonnel::loadListPers(array_unique(array_values($type_personnel)), true, true);
+    $operateurs_disp_vasc = implode("-", array_merge(CMbArray::pluck($listChirs, "_id"), CMbArray::pluck($listValidateurs, "user_id")));
+
+    $smarty = new CSmartyDP();
+    $smarty->assign("listAnesths"           , $listAnesths);
+    $smarty->assign("listChirs"             , $listChirs);
+    $smarty->assign("listValidateurs"       , $listValidateurs);
+
+    // Daily check lists
+    $smarty->assign("require_check_list"    , $require_check_list);
+    $smarty->assign("daily_check_lists"     , $daily_check_lists);
+    $smarty->assign("daily_check_list_types", $daily_check_list_types);
+
+    $smarty->assign("require_check_list"    , $require_check_list);
+
+    $smarty->display("inc_operation.tpl");
+    CApp::rip();
+  }
 }
 
-$anesth = new CMediusers();
-$anesth->load($anesth_id);
+// Pre-anesth, pre-op, post-op
+// Don't load them if we have a daily check list to fill...
 
-// Création du template
-$smarty = new CSmartyDP();
+$operation_check_lists = $operation_check_item_categories = array();
+$listAnesthType = array();
 
 if ($selOp->_id) {
-  $smarty->assign("listChamps", $listChamps);
+  $selOp->canDo();
+  $selOp->loadRefs();
+
+  $selOp->loadRefsFiles();
+  $selOp->loadRefsDocs();
+
+  $consult_anesth = $selOp->loadRefsConsultAnesth();
+  $consult_anesth->countDocItems();
+
+  $consultation = $consult_anesth->loadRefConsultation();
+  $consultation->countDocItems();
+  $consultation->canRead();
+  $consultation->canEdit();
+
+  $selOp->loadRefPlageOp(true);
+
+  $selOp->loadRefChir()->loadRefFunction();
+  $selOp->loadRefPatient();
+
+  $date = CMbDT::date($selOp->_datetime);
+
+  // Récupération de l'utilisateur courant
+  $currUser = CMediusers::get();
+  $currUser->isAnesth();
+  $currUser->isPraticien();
+
+  $selOp->countExchanges();
+  $selOp->loadBrancardage();
+  $selOp->isCoded();
+  $selOp->_ref_consult_anesth->loadRefsTechniques();
+
+  $sejour = $selOp->_ref_sejour;
+
+  $sejour->loadRefDossierMedical();
+  $sejour->_ref_dossier_medical->loadRefsBack();
+  $sejour->loadRefsConsultAnesth();
+  $sejour->_ref_consult_anesth->loadRefsFwd();
+  $sejour->loadRefCurrAffectation();
+
+  $patient = $sejour->_ref_patient;
+  $patient->loadRefPhotoIdentite();
+  $patient->loadRefDossierMedical();
+
+  $selOp->_ref_plageop->loadRefsFwd();
+  $selOp->_ref_consult_anesth->_ref_consultation->loadRefsBack();
+  $selOp->_ref_consult_anesth->_ref_consultation->loadRefPraticien()->loadRefFunction();
+
+  if (!$selOp->prat_visite_anesth_id && $selOp->_ref_anesth->_id) {
+    $selOp->prat_visite_anesth_id = $selOp->_ref_anesth->_id;
+  }
+
+  $listAnesthType = new CTypeAnesth();
+  $orderanesth = "name";
+  $listAnesthType = $listAnesthType->loadList(null, $orderanesth);
+
+  // Vérification de la check list journalière
+  $daily_check_list = CDailyCheckList::getList($selOp->_ref_salle, $date);
+  $daily_check_list->loadItemTypes();
+  $daily_check_list->loadBackRefs('items');
+
+  $cat = new CDailyCheckItemCategory();
+  $cat->target_class = "CSalle";
+  $daily_check_item_categories = $cat->loadMatchingList();
+
+  // Chargement des 3 check lists de l'OMS
+  $operation_check_list = new CDailyCheckList();
+  $cat = new CDailyCheckItemCategory();
+  $cat->target_class = "COperation";
+  $lists = array();
+
+  // Pre-anesth, pre-op, post-op
+  foreach ($operation_check_list->_specs["type"]->_list as $type) {
+    $list = CDailyCheckList::getList($selOp, null, $type);
+    //$list->loadItemTypes();
+    $list->loadRefsFwd();
+    $list->loadBackRefs('items');
+    $list->isReadonly();
+    $list->_ref_object->loadRefPraticien();
+    $operation_check_lists[$type] = $list;
+
+    $cat->type = $type;
+    $operation_check_item_categories[$type] = $cat->loadMatchingList("title");
+  }
+
+  foreach ($operation_check_list->_specs["type"]->_list as $type) {
+    $lists[] = CDailyCheckList::getList($selOp, null, $type, null, false);
+  }
+
+  CStoredObject::massLoadBackRefs($lists, "items");
+  $lists_types = CStoredObject::massLoadFwdRef($lists, "list_type_id");
+  CStoredObject::massLoadBackRefs($lists_types, "daily_check_list_categories", "`index`, title");
+
+  foreach ($lists as $list) {
+    $list->loadBackRefs("items");
+    $list->loadItemTypes();
+    $operation_check_lists[$list->type] = $list;
+    $list->loadRefListType()->loadRefsCategories();
+    $cat->type = $list->type;
+    $operation_check_item_categories[$list->type] = $cat->loadMatchingList("title");
+  }
+
+  $anesth_id = ($selOp->anesth_id) ? $selOp->anesth_id : $selOp->_ref_plageop->anesth_id;
+  $listValidateurs = CPersonnel::loadListPers($type_personnel, true, true);
+  $operateurs_disp_vasc = implode("-", array_merge(CMbArray::pluck($listChirs, "_id"), CMbArray::pluck($listValidateurs, "user_id")));
 }
 
 $group = CGroups::loadCurrent();
 $group->loadConfigValues();
 
-$listValidateurs = CPersonnel::loadListPers(array("op", "op_panseuse", "iade", "sagefemme", "manipulateur"), true, true);
-$operateurs_disp_vasc = implode("-", array_merge(CMbArray::pluck($listChirs, "_id"), CMbArray::pluck($listValidateurs, "user_id")));
+// Création du template
+$smarty = new CSmartyDP();
 
-$smarty->assign("anesth_perop"           , new CAnesthPerop());
-$smarty->assign("unites"                 , $unites);
-$smarty->assign("acte_ngap"              , $acte_ngap);
-$smarty->assign("liste_dents"            , $liste_dents);
-$smarty->assign("op"                     , $op);
-$smarty->assign("salle"                  , $salle->_id);
+$smarty->assign("selOp"                  , $selOp);
+$smarty->assign("date"                   , $date);
 $smarty->assign("currUser"               , $currUser);
 $smarty->assign("listAnesthType"         , $listAnesthType);
 $smarty->assign("listAnesths"            , $listAnesths);
-$smarty->assign("listChirs"              , $listChirs);
 $smarty->assign("operateurs_disp_vasc"   , $operateurs_disp_vasc);
 $smarty->assign("modeDAS"                , CAppUI::conf("dPsalleOp CDossierMedical DAS"));
-$smarty->assign("selOp"                  , $selOp);
-$smarty->assign("date"                   , $date);
-$smarty->assign("modif_operation"        , $modif_operation);
-$smarty->assign("listValidateurs"        , $listValidateurs);
-$smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
-$smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
-$smarty->assign("isImedsInstalled"       , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
+$smarty->assign("modif_operation"        , $selOp->canEdit() || $date >= CMbDT::date());
+$smarty->assign("isImedsInstalled"       , (CModule::getActive("dPImeds") && CImeds::getTagCIDC($group)));
 $smarty->assign("codage_prat"            , $group->_configs["codage_prat"]);
 $smarty->assign("_is_dentiste"           , $selOp->_ref_chir->isDentiste());
-if (CModule::getActive("dPprescription")) {
-  if (!isset($prescription)) {
-    $prescription = new CPrescription();
-  }
-  $smarty->assign("prescription"           , $prescription);
-}
-$smarty->assign("protocoles"             , $protocoles);
+$smarty->assign("listValidateurs"        , $listValidateurs);
 $smarty->assign("anesth_id"              , $anesth_id);
-$smarty->assign("anesth"                 , $anesth);
-$smarty->assign("user_id"                , $user->_id);
 $smarty->assign("create_dossier_anesth"  , 1);
-
-// Check lists
-$smarty->assign("daily_check_list"               , $daily_check_list);
-$smarty->assign("daily_check_item_categories"    , $daily_check_item_categories);
+$smarty->assign("require_check_list"     , 0);
+// Operation check lists
 $smarty->assign("operation_check_lists"          , $operation_check_lists);
 $smarty->assign("operation_check_item_categories", $operation_check_item_categories);
 
-if (CModule::getActive("maternite") && $selOp->_id) {
-  $smarty->assign("naissance"            , new CNaissance);
-}
 
 $smarty->display("inc_operation.tpl");

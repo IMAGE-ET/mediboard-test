@@ -1,15 +1,15 @@
 <script>
-Main.add(function () {
-  Calendar.regField(getForm("selectSalle").date, null, {noView: true});
-});
-showLegend = function() {
-  new Url("bloc", "legende").requestModal();
-}
+  Main.add(function () {
+    Calendar.regField(getForm("selectSalle").date, null, {noView: true});
+  });
+  showLegend = function() {
+    new Url("bloc", "legende").requestModal();
+  }
 </script>
 
 <form action="?" name="selectSalle" method="get">
   <input type="hidden" name="m" value="{{$m}}" />
-  <input type="hidden" name="op" value="0" />
+  <input type="hidden" name="operation_id" value="0" />
   <table class="form">
     <tr>
       <th class="title" colspan="2">
@@ -28,18 +28,18 @@ showLegend = function() {
           {{foreach from=$listBlocs item=curr_bloc}}
           <optgroup label="{{$curr_bloc->nom}}">
             {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
-            <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $salle->_id}}selected="selected"{{/if}}>
+            <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $salle->_id}}selected{{/if}}>
               {{$curr_salle->nom}}
             </option>
             {{foreachelse}}
-            <option value="" disabled="disabled">{{tr}}CSalle.none{{/tr}}</option>
+            <option value="" disabled>{{tr}}CSalle.none{{/tr}}</option>
             {{/foreach}}
           </optgroup>
           {{/foreach}}
         </select><br />
         <input type="hidden" name="hide_finished" value="{{$hide_finished}}" onchange="this.form.submit()" />
         <label>
-          <input type="checkbox" name="_hide_finished" {{if $hide_finished}}checked="checked"{{/if}} onclick="$V(this.form.hide_finished, this.checked ? 1 : 0)" />
+          <input type="checkbox" name="_hide_finished" {{if $hide_finished}}checked{{/if}} onclick="$V(this.form.hide_finished, this.checked ? 1 : 0)" />
           Cacher les interv. terminées 
         </label>
       </td>
@@ -58,4 +58,4 @@ showLegend = function() {
   </table>
 </form>
 
-{{include file="inc_details_plages.tpl"}}
+{{mb_include module="salleOp" template="inc_details_plages"}}

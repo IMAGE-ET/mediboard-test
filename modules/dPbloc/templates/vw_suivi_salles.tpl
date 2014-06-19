@@ -93,7 +93,7 @@
           <label> Bloc :
             <select name="bloc_id" onchange="updateSuiviSalle();">
               {{foreach from=$blocs item=curr_bloc}}
-                <option value="{{$curr_bloc->_id}}">
+                <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $bloc_id}}selected{{/if}}>
                   {{$curr_bloc->nom}}
                 </option>
               {{/foreach}}

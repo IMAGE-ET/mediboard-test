@@ -30,10 +30,6 @@
     Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null);
   }
 
-  signVisiteAnesth = function(anesth_id) {
-    alert('anesth numéro ' + anesth_id);
-  }
-
   reloadAnesth = function(operation_id){
     window.opener.location.reload(true);
     window.location.reload(true);

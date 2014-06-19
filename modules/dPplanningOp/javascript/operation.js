@@ -32,7 +32,7 @@ Operation = {
   dossierBloc: function(operation_id, callback) {
     callback = callback || this.modalCallback;
     var url = new Url("salleOp", "ajax_vw_operation");
-    url.addParam("op", operation_id);
+    url.addParam("operation_id", operation_id);
     url.modal({
       width     : "95%",
       height    : "95%",

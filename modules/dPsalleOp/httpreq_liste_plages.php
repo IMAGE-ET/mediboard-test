@@ -11,10 +11,10 @@
 
 CCanDo::checkRead();
 
-$salle_id     = CValue::getOrSession("salle");
-$bloc_id      = CValue::getOrSession("bloc_id");
-$date         = CValue::getOrSession("date", CMbDT::date());
-$operation_id = CValue::getOrSession("operation_id");
+$salle_id      = CValue::getOrSession("salle");
+$bloc_id       = CValue::getOrSession("bloc_id");
+$date          = CValue::getOrSession("date", CMbDT::date());
+$operation_id  = CValue::getOrSession("operation_id");
 $hide_finished = CValue::getOrSession("hide_finished", 0);
 
 // Chargement des praticiens
@@ -100,14 +100,14 @@ if ($salle->cheklist_man) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("vueReduite"    , false        );
-$smarty->assign("salle"         , $salle       );
+$smarty->assign("vueReduite"    , false);
+$smarty->assign("salle"         , $salle);
 $smarty->assign("hide_finished" , $hide_finished);
-$smarty->assign("praticien_id"  , null         );
-$smarty->assign("listBlocs"     , $listBlocs   );
-$smarty->assign("listAnesths"   , $listAnesths );
-$smarty->assign("date"          , $date        );
+$smarty->assign("praticien_id"  , null);
+$smarty->assign("listBlocs"     , $listBlocs);
+$smarty->assign("listAnesths"   , $listAnesths);
+$smarty->assign("date"          , $date);
 $smarty->assign("operation_id"  , $operation_id);
-$smarty->assign("date_last_checklist"  , $date_last_checklist);
+$smarty->assign("date_last_checklist", $date_last_checklist);
 
 $smarty->display("inc_liste_plages.tpl");
