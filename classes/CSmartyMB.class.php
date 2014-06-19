@@ -132,6 +132,8 @@ class CSmartyMB extends Smarty {
     $this->assign("modules", $modules);
     $this->assign("base_url", CApp::getBaseUrl());
     $this->assign("current_group", CGroups::loadCurrent());
+    $this->assign("dnow" , CMbDT::date());
+    $this->assign("dtnow", CMbDT::dateTime());
   }
 
 
