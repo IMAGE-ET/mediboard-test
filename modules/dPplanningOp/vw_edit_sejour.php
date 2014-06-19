@@ -41,6 +41,7 @@ if ($patient_id) {
 
 // On récupére le séjour
 $sejour = new CSejour();
+$sejour->_ref_patient = $patient;
 if ($sejour_id) {
   $sejour->load($sejour_id);
   

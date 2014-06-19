@@ -189,7 +189,7 @@
         {{mb_field object=$sejour field="_date_deces" value=$sejour->_ref_patient->deces register=true form=$form_name}}
       </td>
     </tr>
-    {{if $rpu->sejour_id !== $rpu->mutation_sejour_id}}
+    {{if $module != "dPurgences" || ($module == "dPurgences" && $rpu && $rpu->sejour_id !== $rpu->mutation_sejour_id)}}
       <tr>
         <th>{{mb_label object=$sejour field="transport_sortie"}}</th>
         <td colspan="3">{{mb_field object=$sejour field="transport_sortie"}}</td>
