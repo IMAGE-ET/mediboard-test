@@ -60,12 +60,6 @@ foreach ($operations as $operation) {
   $dossier_anesth->_date_consult = $consultation->_date;
 }
 
-if ($sejour->type == 'ambu' && CAppUI::conf('dPadmissions CSejour entree_pre_op_ambu', CGroups::loadCurrent())) {
-  $curr_operation = $sejour->loadRefCurrOperation($date);
-  $curr_operation->loadRefPlageOp();
-  $sejour->entree_prevue = CMbDT::subTime($curr_operation->presence_preop, CMbDT::time($curr_operation->_datetime));
-}
-
 if (CAppUI::conf("dPadmissions show_deficience")) {
   CDossierMedical::massCountAntecedentsByType(array($dossier_medical), "deficience");
 }
