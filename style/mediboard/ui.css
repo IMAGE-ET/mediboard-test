@@ -305,6 +305,11 @@ ul#nav-vert {
   padding-right: 25px;
 }
 
+/** aides à la saisie ipad : on ne cache pas les boutons **/
+.touchscreen .textarea-helped .toolbar {
+    display: block!important;
+}
+
 /* control tabs */
 hr.control_tabs {
   display: none;
