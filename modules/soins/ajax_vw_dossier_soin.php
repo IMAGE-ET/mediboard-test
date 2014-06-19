@@ -427,11 +427,11 @@ if (CModule::getActive("dPprescription")) {
 }
 $signe_decalage = ($nb_decalage < 0) ? "-" : "+";
 
-$prolongation_time = CAppUI::conf("dPprescription CPrescription prolongation_time");
+$prolongation_time = CAppUI::conf("dPprescription general prolongation_time", CGroups::loadCurrent()->_guid);
 $sortie_sejour = ($sejour->sortie_reelle || !$prolongation_time) ? $sejour->sortie : CMbDT::dateTime("+ $prolongation_time HOURS", $sejour->sortie);
 
 $count_perop_adm = 0;
-if (CAppUI::conf("dPprescription CPrescription show_perop_suivi_soins") && $prescription->_id && !$chapitre) {
+if (CAppUI::conf("dPprescription general show_perop_suivi_soins", $group->_guid) && $prescription->_id && !$chapitre) {
   $count_perop_adm = CAdministration::countPerop($prescription->_id);
 }
 

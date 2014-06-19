@@ -186,7 +186,7 @@
   {{/if}}
 
   Main.add(function () {
-    PlanSoins.anciennete = {{$conf.dPprescription.CPrescription.alerte_refresh_plan}}
+    PlanSoins.anciennete = {{"dPprescription general alerte_refresh_plan"|conf:"CGroups-$g"}}
 
     {{if !"dPprescription"|module_active || $multiple_prescription|@count <= 1}}
       {{if "dPprescription"|module_active}}
@@ -395,7 +395,7 @@
     <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');" {{if $conf.soins.vue_condensee_dossier_soins}}style="display: none;"{{/if}} class="semaine">
       <a href="#semaine">{{tr}}Soin-tabSuivi-tabViewWeek{{/tr}}</a>
     </li>
-    {{if $conf.dPprescription.CPrescription.show_perop_suivi_soins}}
+    {{if "dPprescription general show_perop_suivi_soins"|conf:"CGroups-$g"}}
       <li onmousedown="PlanSoins.showPeropAdministrations('{{$prescription_id}}')" {{if $conf.soins.vue_condensee_dossier_soins}}style="display: none;"{{/if}}>
         <a href="#perop_adm" {{if $count_perop_adm == 0}}class="empty"{{/if}}>
           Perop {{if $count_perop_adm}}<small>({{$count_perop_adm}})</small>{{/if}}
@@ -536,7 +536,7 @@
 </div>
 
 <div id="semaine" style="display:none"></div>
-{{if $conf.dPprescription.CPrescription.show_perop_suivi_soins}}
+{{if "dPprescription general show_perop_suivi_soins"|conf:"CGroups-$g"}}
   <div id="perop_adm" style="display: none"></div>
 {{/if}}
 <div id="tasks" style="display:none"></div>

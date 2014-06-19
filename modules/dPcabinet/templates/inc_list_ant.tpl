@@ -6,7 +6,7 @@
 
 {{mb_script module="patients" script="antecedent" ajax=true}}
 
-<script type="text/javascript">
+<script>
 Traitement = {
   prescription_sejour_id: {{$prescription_sejour_id|@json}},
   remove: function(oForm, onComplete) {
@@ -203,7 +203,7 @@ showModalTP = function(dossier_medical_id, sejour_id, prescription_sejour_id) {
   {{/if}}
 
   {{if $dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_ref_prescription_lines && $_is_anesth &&
-       ($app->_ref_user->isPraticien() || $app->_ref_user->isSageFemme() || !$conf.dPprescription.CPrescription.role_propre)}}
+       ($app->_ref_user->isPraticien() || $app->_ref_user->isSageFemme() || !"dPprescription general role_propre"|conf:"CGroups-$g")}}
     <button class="tick" type="button" style="float: right" onclick="showModalTP('{{$dossier_medical->_id}}','{{$sejour->_id}}','{{$prescription_sejour_id}}');">
       Gestion des traitements personnels ({{$sejour->_ref_prescription_sejour->_count_lines_tp}}/{{$dossier_medical->_ref_prescription->_ref_prescription_lines|@count}})
     </button>
@@ -337,7 +337,7 @@ showModalTP = function(dossier_medical_id, sejour_id, prescription_sejour_id) {
   <input type="hidden" name="codes_cim" value="{{$dossier_medical->codes_cim}}" />
 </form>
 
-<script type="text/javascript">
+<script>
 // FIXME : Modifier le tokenfield, car deux appels à onchange
 Main.add(function(){
   var form = getForm("editDiagFrm");

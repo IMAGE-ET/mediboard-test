@@ -13,7 +13,7 @@
   {{assign var=antecedents_sejour value=0}}
 {{/if}}
 {{assign var=sejour_id value=$sejour->_id}}
-{{assign var=conf_preselect_prat value=$conf.dPprescription.CPrescription.preselection_praticien_auto}}
+{{assign var=conf_preselect_prat value="dPprescription general preselection_praticien_auto"|conf:"CGroups-$g"}}
 {{assign var=is_executant_prescription value=CAppUI::$user->isExecutantPrescription()}}
 
 <table class="form">

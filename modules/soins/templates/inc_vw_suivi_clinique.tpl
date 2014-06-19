@@ -453,7 +453,7 @@
                       {{assign var=is_first value=0}}
                       {{math equation="x+1" x=$total assign=total}}
                       {{if $_line->_fin_relative}}
-                        {{math assign=prolongation_time_day equation="x / 24" x="CAppUI::conf"|static_call:"dPprescription CPrescription prolongation_time"}}
+                        {{math assign=prolongation_time_day equation="x / 24" x="dPprescription general prolongation_time"|conf:"CGroups-$g"}}
                         {{math assign=prescription_end_real equation="x - y" x=$_line->_fin_relative y=$prolongation_time_day|intval}}
                       {{/if}}
                       <span {{if $_line->_fin_reelle|iso_date <= $date_after|iso_date}}style="border-bottom: 2px solid orange"{{/if}}
@@ -631,7 +631,7 @@
                         {{math equation="x+1" x=$total assign=total}}
                         {{math equation="x+1" x=$count_elts assign=count_elts}}
                         {{if $element->_fin_relative}}
-                          {{math assign=prolongation_time_day equation="x / 24" x="CAppUI::conf"|static_call:"dPprescription CPrescription prolongation_time"}}
+                          {{math assign=prolongation_time_day equation="x / 24" x="dPprescription general prolongation_time"|conf:"CGroups-$g"}}
                           {{math assign=prescription_end_real equation="x - y" x=$element->_fin_relative y=$prolongation_time_day|intval}}
                         {{/if}}
                         <span {{if $element->_fin_reelle|iso_date <= $date_after|iso_date}}style="border-bottom: 2px solid orange"{{/if}}
