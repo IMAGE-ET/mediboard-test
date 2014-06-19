@@ -68,6 +68,9 @@ class CMbPhone {
    */
   static function getPhoneFromGuid($guid, $checkmobile = false) {
     $object = CMbObject::loadFromGuid($guid);
+    if (!$object || !$object->_id) {
+      return false;
+    }
     $object->updateFormFields();
 
     if ($object instanceof CPerson) {
