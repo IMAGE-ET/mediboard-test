@@ -793,7 +793,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         $upper2 = CMbDT::date($sejour->sortie);
         break;
 
-      default;
+      default:
       case "datetime":
         $lower1 = $this->entree;
         $upper1 = $this->sortie;
