@@ -482,7 +482,7 @@ switch ($axe) {
 
     $data[$axe] = array(
       "options" => array(
-        "title" => utf8_encode("Nombre de date d'accident de travail")
+        "title" => utf8_encode("Nombre d'accidents de travail renseignés")
       ),
       "series" => array()
     );

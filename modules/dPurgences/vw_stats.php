@@ -32,7 +32,7 @@ $axes = array(
   "without_rpu"            => "Séjours d'urgence sans RPU",
   "transfers_count"        => "Nombre de transferts",
   "mutations_count"        => "Nombre de mutations",
-  "accident_travail_count" => "Nombre de date d'accident de travail",
+  "accident_travail_count" => "Nombre d'accidents de travail renseignés",
 );
 
 $axes_other = array(
