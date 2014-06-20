@@ -100,10 +100,18 @@ class CMailAttachments extends CMbObject{
       $this->disposition = 'INLINE';
     }
     if ($header->ifdparameters) {
-      $this->name = $header->dparameters[0]->value;
+      foreach ($header->dparameters as $_param) {
+        if ($_param->attribute == "FILENAME") {
+          $this->name = $_param->value;
+        }
+      }
     }
-    if ($header->ifparameters) {
-      $this->name = $header->parameters[0]->value;
+    if ($header->ifparameters && !$this->name) {
+      foreach ($header->parameters as $_param) {
+        if ($_param->attribute == "NAME") {
+          $this->name = $_param->value;
+        }
+      }
     }
 
     //extension
