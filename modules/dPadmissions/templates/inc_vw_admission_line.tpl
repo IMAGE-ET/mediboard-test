@@ -1,13 +1,3 @@
-{{* $Id$ *}}
-
-{{*
- * @package Mediboard
- * @subpackage dPadmissions
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
-
 {{assign var=patient value=$_sejour->_ref_patient}}
 
 <td>
@@ -183,7 +173,7 @@
 <td>
   {{if !($_sejour->type == 'exte') && !($_sejour->type == 'consult') && $_sejour->annule != 1}}
     {{mb_include template=inc_form_prestations sejour=$_sejour edit=$canAdmissions->edit}}
-    {{mb_include module=hospi template=inc_placement_sejour sejour=$_sejour}}
+    {{mb_include module=hospi template=inc_placement_sejour sejour=$_sejour which="last"}}
   {{/if}}
 </td>
 
