@@ -477,6 +477,30 @@ switch ($axe) {
     }
     $series = array_values($series);
     break;
+  case "accident_travail_count":
+    $where["rpu.date_at"] = "IS NOT NULL";
+
+    $data[$axe] = array(
+      "options" => array(
+        "title" => utf8_encode("Nombre de date d'accident de travail")
+      ),
+      "series" => array()
+    );
+
+    $series = &$data[$axe]['series'];
+    $areas = array_merge(array(null));
+    foreach($areas as $key => $value) {
+      $series[$key] = array('data' => array());
+
+      foreach ($dates as $i => $_date) {
+        $_date_next = CMbDT::date("+1 $period", $_date);
+        $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
+        $count = $sejour->countList($where, null, $ljoin);
+        $total += $count;
+        $series[$key]['data'][$i] = array($i, intval($count));
+      }
+    }
+    break;
     
   // Radio
   case "radio":
