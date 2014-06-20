@@ -191,7 +191,7 @@
                 {{$curr_tech->technique}}
               </li>
               {{foreachelse}}
-              <li>Pas de technique complémentaire prévu</li>
+              <li>Pas de technique complémentaire prévue</li>
               {{/foreach}}
             </ul>
           </td>
@@ -231,7 +231,7 @@
         </tr>
         {{if $patient->nom_jeune_fille}}
         <tr>
-          <th>Nom de jeune fille</th>
+          <th>{{mb_label object=$patient field=nom_jeune_fille}}</th>
           <td>{{$patient->nom_jeune_fille}}</td>
         </tr>
         {{/if}}
