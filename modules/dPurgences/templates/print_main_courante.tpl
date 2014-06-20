@@ -32,6 +32,8 @@
   }
 </style>
 
+{{assign var=print_gemsa value="CAppUI::conf"|static_call:"dPurgences Print gemsa":"CGroups-$g"}}
+
 <div id="main-courante-container">
   <table class="main">
     <tr>
@@ -40,7 +42,7 @@
           <button style="float: left;" onclick="$('main-courante-container').print()" class="print not-printable">Main courante</button>
           <button style="float: left;" onclick="window.print()" class="print not-printable">Dossiers</button>
           <span style="float: right;">
-            {{$dateTime|date_format:$conf.datetime}}
+            {{$dtnow|date_format:$conf.datetime}}
           </span>
         {{/if}}
          <a href="#print" onclick="printPage(this)">
@@ -65,6 +67,9 @@
               <br/> &amp;
               {{mb_title class=CRPU field=orientation}}
             </th>
+            {{if $print_gemsa}}
+              <th class="narrow">{{mb_title class=CRPU field=gemsa}}</th>
+            {{/if}}
             <th class="narrow">{{mb_title class=CRPU field=_sortie}}</th>
           </tr>
 
@@ -123,6 +128,9 @@
               <em>{{mb_value object=$sejour field=commentaires_sortie}}</em>
             </td>
 
+            {{if $print_gemsa}}
+              <td>{{mb_value object=$rpu field=gemsa}}</td>
+            {{/if}}
 
             {{if $sejour->type != "urg" && !$sejour->UHCD}}
               <td colspan="2" class="text arretee">

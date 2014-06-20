@@ -39,6 +39,9 @@ CConfiguration::register(
           "totbox"      => "num min|0",
           "totdechoc"   => "num min|0",
           "totporte"    => "num min|0",
+        ),
+        "Print" => array(
+          "gemsa" => "bool default|0",
         )
       ),
     ),

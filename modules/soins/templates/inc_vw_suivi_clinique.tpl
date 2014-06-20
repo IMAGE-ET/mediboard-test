@@ -309,7 +309,7 @@
               {{mb_value object=$sejour field="type"}}
             </td>
             <td>
-              <button type="button" class="edit" onclick='Admissions.validerSortie("{{$sejour->_id}}", true, loadSuiviClinique.curry("{{$sejour->_id}}"));'>
+              <button type="button" class="edit" onclick='Admissions.validerSortie("{{$sejour->_id}}", true, window.loadSuiviClinique && loadSuiviClinique.curry("{{$sejour->_id}}"));'>
                 Autorisation Sortie
               </button>
             </td>

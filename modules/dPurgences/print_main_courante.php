@@ -131,7 +131,6 @@ $smarty->assign("date"         , $date);
 $smarty->assign("stats"        , $stats);
 $smarty->assign("sejours"      , $sejours);
 $smarty->assign("offline"      , $offline);
-$smarty->assign("dateTime"     , CMbDT::dateTime());
 $smarty->assign("offlines"     , $offlines);
 
 $smarty->display("print_main_courante.tpl");
