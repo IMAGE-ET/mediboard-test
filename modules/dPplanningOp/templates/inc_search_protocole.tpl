@@ -26,6 +26,7 @@
     this.sPresencePreop = "presence_preop";
     this.sPresencePostop = "presence_postop";
     this.sType          = "type";
+    this.sCharge_id     = "charge_id";
     this.sTypeAnesth    = "type_anesth";
     this.sUf_hebergement_id = "uf_hebergement_id";
     this.sUf_medicale_id = "uf_medicale_id";

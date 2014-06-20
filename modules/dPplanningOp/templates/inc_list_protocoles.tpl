@@ -42,6 +42,7 @@
       forfait          : "{{$_protocole->forfait}}",
       fournitures      : "{{$_protocole->fournitures}}",
       type             : "{{$_protocole->type}}",
+      charge_id        : "{{$_protocole->charge_id}}",
       type_pec         : "{{$_protocole->type_pec}}",
       facturable       : "{{$_protocole->facturable}}",
       type_anesth      : "{{$_protocole->type_anesth}}",

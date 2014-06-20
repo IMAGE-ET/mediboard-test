@@ -23,6 +23,7 @@ class CProtocole extends CMbObject {
   public $uf_hebergement_id; // UF de responsabilité d'hébergement
   public $uf_medicale_id;    // UF de responsabilité médicale
   public $uf_soins_id;       // UF de responsabilité de soins
+  public $charge_id;
 
   // For sejour/intervention
   public $for_sejour; // Sejour / Operation
@@ -121,6 +122,7 @@ class CProtocole extends CMbObject {
     $props["uf_hebergement_id"] = "ref class|CUniteFonctionnelle seekable";
     $props["uf_medicale_id"]    = "ref class|CUniteFonctionnelle seekable";
     $props["uf_soins_id"]       = "ref class|CUniteFonctionnelle seekable";
+    $props["charge_id"]         = "ref class|CChargePriceIndicator autocomplete|libelle show|0";
     $props["for_sejour"]      = "bool notNull default|0";
     $props["type"]            = "enum list|comp|ambu|exte|seances|ssr|psy default|comp";
     $props["DP"]              = "code cim10";

@@ -11,6 +11,7 @@
 
     this.sLibelle_sejour = "libelle";
     this.sType           = "type";
+    this.sCharge_id       = "charge_id";
     this.sDuree_prevu    = "_duree_prevue";
     this.sDuree_prevu_heure = "_duree_prevue_heure";
     this.sConvalescence  = "convalescence";

@@ -19,6 +19,7 @@
 {{mb_default var=_duree_prevue value=0}}
 {{mb_default var=_duree_prevue_heure value=0}}
 {{mb_default var=dialog value=0}}
+{{assign var=use_charge_price_indicator value="dPplanningOp CSejour use_charge_price_indicator"|conf:"CGroups-$g"}}
 
 {{if "maternite"|module_active}}
   {{assign var=maternite_active value="1"}}
@@ -293,7 +294,7 @@ CIM10Selector.init = function(){
   this.pop();
 };
 
-function updateListCPI(form){
+function updateListCPI(form, callback) {
   var field = form.charge_id;
 
   var url = new Url("dPplanningOp", "ajax_vw_list_cpi");
@@ -308,6 +309,10 @@ function updateListCPI(form){
       $V(field, ""); // To check the field
     }
     $V(field, "{{$sejour->charge_id}}", true);
+
+    if (callback) {
+      callback();
+    }
   });
 }
 
@@ -494,7 +499,7 @@ Main.add( function(){
   OccupationServices.initOccupation();
   OccupationServices.configBlocage = ({{$conf.dPplanningOp.CSejour.blocage_occupation|@json}} == "1") && !{{$modules.dPcabinet->_can->edit|@json}};
 
-  {{if $conf.dPplanningOp.CSejour.use_charge_price_indicator}}
+  {{if $use_charge_price_indicator != "no"}}
     updateListCPI(form);
   {{/if}}
 });
@@ -942,14 +947,14 @@ Main.add( function(){
 </tr>
 
 <tr>
-  {{if $conf.dPplanningOp.CSejour.show_only_charge_price_indicator && $conf.dPplanningOp.CSejour.use_charge_price_indicator}}
+  {{if $conf.dPplanningOp.CSejour.show_only_charge_price_indicator && $use_charge_price_indicator != "no"}}
     <th>
       {{mb_label object=$sejour field="charge_id"}}
     </th>
     <td>
       {{mb_field object=$sejour field="type" hidden=true
         onchange="changeTypeHospi(); OccupationServices.updateOccupation(); checkDureeHospi('syncDuree');"}}
-      <select class="ref notNull" name="charge_id" onchange="updateTypeAndPeC(this)"></select>
+      <select class="ref{{if $use_charge_price_indicator == "obl"}} notNull{{/if}}" name="charge_id" onchange="updateTypeAndPeC(this)"></select>
     </td>
   {{else}}
     <th>{{mb_label object=$sejour field="type"}}</th>
@@ -959,7 +964,7 @@ Main.add( function(){
     </td>
   {{/if}}
 
-  <td colspan="2" rowspan="{{if $conf.dPplanningOp.CSejour.use_charge_price_indicator && !$conf.dPplanningOp.CSejour.show_only_charge_price_indicator}}3{{else}}2{{/if}}">
+  <td colspan="2" rowspan="{{if $use_charge_price_indicator != "no" && !$conf.dPplanningOp.CSejour.show_only_charge_price_indicator}}3{{else}}2{{/if}}">
     <table>
       <tr class="reanimation">
         <th>{{mb_label object=$sejour field="reanimation"}}</th>
@@ -991,10 +996,10 @@ Main.add( function(){
   </td>
 </tr>
 
-{{if $conf.dPplanningOp.CSejour.use_charge_price_indicator && !$conf.dPplanningOp.CSejour.show_only_charge_price_indicator}}
+{{if $use_charge_price_indicator != "no" && !$conf.dPplanningOp.CSejour.show_only_charge_price_indicator}}
   <tr>
     <th>{{mb_label object=$sejour field="charge_id"}}</th>
-    <td><select class="ref notNull" name="charge_id"></select></td>
+    <td><select class="ref{{if $use_charge_price_indicator == "obl"}} notNull{{/if}}" name="charge_id"></select></td>
   </tr>
 {{/if}}
 

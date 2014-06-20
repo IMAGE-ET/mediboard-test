@@ -40,6 +40,7 @@ ProtocoleSelector = {
   sUf_hebergement_id : null,
   sUf_medicale_id  : null,
   sUf_soins_id     : null,
+  sCharge_id       : null,
   sTypesRessourcesIds : null,
   sExamExtempo   : null,
   options : {},
@@ -131,9 +132,16 @@ ProtocoleSelector = {
     if(!oSejourForm.sejour_id.value || oSejourForm[this.sDuree_prevu].value < protocole.duree_hospi) {
       $V(oSejourForm[this.sDuree_prevu], protocole.duree_hospi);
       if (this.sType) {
-        oSejourForm[this.sType].value = protocole.type;
+        $V(oSejourForm[this.sType].value, protocole.type, false);
       }
     }
+
+    if (this.sCharge_id) {
+      window.updateListCPI(oSejourForm, function() {
+        oSejourForm[this.sCharge_id].value = protocole.charge_id;
+      }.bind(this));
+    }
+
     $V(oSejourForm[this.sDuree_prevu_heure], protocole.duree_heure_hospi);
 
     if (this.sUf_hebergement_id) {
@@ -170,7 +178,7 @@ ProtocoleSelector = {
     } else {
       $V(oSejourForm[this.sRques_sej], protocole.rques_sejour);
     }
-    
+
     if (window.refreshListCCAM) {
       refreshListCCAM("expert");
       refreshListCCAM("easy");

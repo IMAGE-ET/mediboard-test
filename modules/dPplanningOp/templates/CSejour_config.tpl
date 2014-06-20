@@ -58,7 +58,6 @@
     </tr>
     <tr>
       <td colspan="2">
-        {{mb_include module=system template=inc_config_bool class=CSejour var=use_charge_price_indicator}}
         {{mb_include module=system template=inc_config_bool class=CSejour var=show_only_charge_price_indicator}}
         {{mb_include module=system template=inc_config_bool class=CSejour var=use_custom_mode_entree}}
         {{mb_include module=system template=inc_config_bool class=CSejour var=use_custom_mode_sortie}}

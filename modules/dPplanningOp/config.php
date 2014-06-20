@@ -109,7 +109,6 @@ $dPconfig["dPplanningOp"]= array(
     "show_facturable"    => "1",
     "show_atnc"          => "0",
 
-    "use_charge_price_indicator" => "0",
     "show_only_charge_price_indicator" => "0",
     "use_custom_mode_entree" => "0",
     "use_custom_mode_sortie" => "0",

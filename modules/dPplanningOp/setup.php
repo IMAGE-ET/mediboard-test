@@ -11,6 +11,16 @@
 
 class CSetupdPplanningOp extends CSetup {
 
+  protected function addDefaultConfigCIP() {
+    $path = 'dPplanningOp CSejour use_charge_price_indicator';
+
+    if (@CAppUI::conf($path)) {
+      $query = 'INSERT INTO `configuration` (`feature`, `value`) VALUES (?1, ?2);';
+      $query = $this->ds->prepare($query, $path, 'obl');
+      $this->addQuery($query);
+    }
+  }
+
   function __construct() {
     parent::__construct();
 
@@ -1753,6 +1763,13 @@ class CSetupdPplanningOp extends CSetup {
                 WHERE `operations`.plageop_id IS NOT NULL";
     $this->addQuery($query);
 
-    $this->mod_version = "1.89";
+    $this->makeRevision('1.89');
+
+    $query = "ALTER TABLE `protocole`
+                ADD `charge_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    $this->addDefaultConfigCIP();
+
+    $this->mod_version = '1.90';
   }
 }

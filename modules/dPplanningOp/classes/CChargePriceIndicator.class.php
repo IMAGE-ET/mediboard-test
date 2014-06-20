@@ -60,6 +60,7 @@ class CChargePriceIndicator extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["sejours"] = "CSejour charge_id";
+    $backProps['protocoles'] = 'CProtocole charge_id';
     return $backProps;
   }
 

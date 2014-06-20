@@ -1,5 +1,6 @@
 {{mb_script module="dPplanningOp" script="cim10_selector" ajax=true}}
 {{mb_script module="dPplanningOp" script="ccam_selector" ajax=true}}
+{{assign var=use_charge_price_indicator value="dPplanningOp CSejour use_charge_price_indicator"|conf:"CGroups-$g"}}
 
 <script>
 
@@ -152,6 +153,10 @@ Main.add(function () {
     sProps : "notNull code ccam"
   } );
   editHour();
+
+  {{if $use_charge_price_indicator != "no"}}
+    updateListCPI(form);
+  {{/if}}
 });
 
 editHour = function () {
@@ -163,6 +168,22 @@ editHour = function () {
     $('duree_heure_hospi_view').hide();
     form.duree_heure_hospi.value = 0;
   }
+}
+
+updateListCPI = function(form) {
+  var field = form.charge_id;
+
+  var url = new Url("dPplanningOp", "ajax_vw_list_cpi");
+  url.addParam("group_id", "{{$g}}");
+
+  url.addParam("type", $V(form.type));
+
+  url.requestUpdate(field, function() {
+    if (field.type == "hidden") {
+      $V(field, ""); // To check the field
+    }
+    $V(field, "{{$protocole->charge_id}}", true);
+  });
 }
 </script>
 
@@ -455,11 +476,21 @@ editHour = function () {
           <th>{{mb_label object=$protocole field="duree_heure_hospi"}}</th>
           <td>{{mb_field object=$protocole field="duree_heure_hospi" size="2"}} {{tr}}hour{{/tr}}(s)</td>
         </tr>
-        
-        <tr>
-          <th>{{mb_label object=$protocole field="type"}}</th>
-          <td>{{mb_field object=$protocole field="type" style="width: 15em;" onchange="editHour();"}}</td>
-        </tr>
+        {{if $use_charge_price_indicator != "no"}}
+          <tr>
+            <th>{{mb_label object=$protocole field="type"}}</th>
+            <td>{{mb_field object=$protocole field="type" style="width: 15em;" onchange="updateListCPI(this.form); editHour();"}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$protocole field="charge_id"}}</th>
+            <td><select class="ref" name="charge_id"></select></td>
+          </tr>
+        {{else}}
+          <tr>
+            <th>{{mb_label object=$protocole field="type"}}</th>
+            <td>{{mb_field object=$protocole field="type" style="width: 15em;" onchange="editHour();"}}</td>
+          </tr>
+        {{/if}}
         <tr>
           <th></th>
           <td>

@@ -19,10 +19,10 @@
     {{if $liaison_sejour}}
       <strong onclick="Prestations.edit('{{$sejour->_id}}', 'sejour')">{{$liaison_sejour}}</strong>
     {{/if}}
-    {{if $conf.dPplanningOp.CSejour.use_charge_price_indicator && $charge->_id}}<strong style='color:blue; background: white;padding:2px'>{{$charge->code}}</strong>
-  {{/if}}
 
-
+    {{if "dPplanningOp CSejour use_charge_price_indicator"|conf:"CGroups-$g" != "no" && $charge->_id}}
+      <strong style='color:blue; background: white;padding:2px'>{{$charge->code}}</strong>
+    {{/if}}
   {{/if}}
 
   {{if $conf.reservation.display_dossierBloc_button}}
