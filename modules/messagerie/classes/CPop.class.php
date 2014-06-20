@@ -309,7 +309,8 @@ class CPop{
       }
 
       switch ($structure->type) {
-        case 1: //multipart, alternatived
+        //multipart, alternatived
+        case 1:
           while (list($index, $sub_structure) = each($structure->parts)) {
             if ($part_number !== false) {
               $prefix = $part_number.'.';
@@ -329,6 +330,8 @@ class CPop{
           }
           break;
 
+        // text
+        case 0:
         case 2:     //message
         case 3:     //application
         case 4:     //audio
