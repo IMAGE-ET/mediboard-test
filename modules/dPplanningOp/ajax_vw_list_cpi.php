@@ -22,7 +22,7 @@ $cpi->actif    = 1;
 if ($type) {
   $cpi->type = $type;
 }
-ml($type);
+
 $cpi_list = $cpi->loadMatchingList("libelle");
 
 $smarty = new CSmartyDP();
