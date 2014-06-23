@@ -47,9 +47,8 @@
     {{if $salle->cheklist_man}}
       <tr>
         <td colspan="2" class="button">
-          <input type="hidden" name="load_checklist" value="0"/>
           {{if $date_last_checklist|date_format:$conf.date != $date|date_format:$conf.date}}
-            <button class="add" type="button" onclick="$V(this.form.load_checklist, 1); this.form.submit();">Validation de checklist</button>
+            <button class="add" type="button" onclick="loadOperation(null, null, 1)">Validation de checklist</button>
           {{/if}}
           <div class="info">Dernière validation: {{$date_last_checklist|date_format:$conf.datetime}}</div>
         </td>

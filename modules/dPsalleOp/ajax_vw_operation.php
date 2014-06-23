@@ -11,9 +11,10 @@
 
 CCanDo::checkRead();
 
-$operation_id = CValue::getOrSession("operation_id");
-$date         = CValue::getOrSession("date");
-$salle_id     = CValue::get("salle_id");
+$operation_id   = CValue::getOrSession("operation_id");
+$date           = CValue::getOrSession("date");
+$salle_id       = CValue::get("salle_id");
+$load_checklist = CValue::get("load_checklist", 0);
 
 $selOp = new COperation();
 $selOp->load($operation_id);

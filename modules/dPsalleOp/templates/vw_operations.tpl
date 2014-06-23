@@ -2,12 +2,14 @@
 {{mb_script module=system script=alert}}
 
 <script>
-  loadOperation = function(operation_id, tr) {
+  loadOperation = function(operation_id, tr, load_checklist) {
     var url = new Url("salleOp", "ajax_vw_operation");
     url.addParam("operation_id", operation_id);
     url.addParam("date", "{{$date}}");
     url.addParam("salle_id", "{{$salle}}");
+    url.addNotNullParam("load_checklist", load_checklist);
     url.requestUpdate("operation_area");
+
     if (tr) {
       $("listplages").select("tr").invoke("removeClassName", "selected");
       tr.addClassName("selected");
