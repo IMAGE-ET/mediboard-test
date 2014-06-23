@@ -98,10 +98,10 @@ try {
     $array_aggregation = $results_query->getAggregations("ref_class");
     $agg_ref_class = $array_aggregation['ref_class']['buckets'];
     foreach ($agg_ref_class as $_agg) {
-      if ($_agg['key'] == "cconsult") {
+      if ($_agg['key'] == "cconsult" || $_agg['key'] == "cconsultation") {
         $_agg['key'] = "CConsultation";
       }
-      if ($_agg['key'] == "coper") {
+      if ($_agg['key'] == "coper" || $_agg['key'] == "coperation") {
         $_agg['key'] = "COperation";
       }
       if ($_agg['key'] == "cconsultanesth") {
