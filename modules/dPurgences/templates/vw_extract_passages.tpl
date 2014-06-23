@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module="dPcabinet" script="file"}}
+{{mb_script module="files" script="file"}}
 
 <script type="text/javascript">
   function popupEchangeViewer(extract_passages_id) {

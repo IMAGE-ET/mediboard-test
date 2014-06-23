@@ -23,7 +23,7 @@
 
   {{mb_script module="compteRendu" script="document"}}
   {{mb_script module="compteRendu" script="modele_selector"}}
-  {{mb_script module="cabinet"     script="file"}}
+  {{mb_script module="files"       script="file"}}
 
   <script>
     showDossierSoins = function(sejour_id, date, default_tab){

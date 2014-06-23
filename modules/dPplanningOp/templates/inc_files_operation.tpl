@@ -4,7 +4,7 @@
   * @param $modelesByOwner array('COperation' => array(), 'CSejour' => array())
   *}}
 
-{{mb_script module="dPcabinet" script="file" ajax="1"}}
+{{mb_script module="dPfiles" script="file" ajax="1"}}
 
 {{assign var=object value=$operation}}
 <div style="float: left; width: 50%;" id="files-{{$object->_guid}}">

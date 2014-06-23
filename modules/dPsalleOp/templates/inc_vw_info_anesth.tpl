@@ -102,7 +102,7 @@
     <tr>
       <td class="halfPane">
         <fieldset>
-          {{mb_script module="cabinet" script="file"}}
+          {{mb_script module="files" script="file"}}
           <legend>{{tr}}CFile{{/tr}} - {{tr}}CConsultAnesth{{/tr}}</legend>
           <div id="files-anesth">
             <script>
