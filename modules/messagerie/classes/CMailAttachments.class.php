@@ -81,7 +81,7 @@ class CMailAttachments extends CMbObject{
    *
    * @param object $header header from source POP
    *
-   * @return CMAilAttachments $this
+   * @return boolean|CMailAttachments
    */
   function loadFromHeader($header) {
     $this->type = $header->type;
@@ -93,16 +93,15 @@ class CMailAttachments extends CMbObject{
       $this->id = $header->id;
     }
     $this->bytes = $header->bytes;
+    $this->disposition = 'ATTACHMENT';
     if ($header->ifdisposition) {
       $this->disposition = $header->disposition;
-    }
-    else { //nothing for disposition ?
-      $this->disposition = 'INLINE';
     }
     if ($header->ifdparameters) {
       foreach ($header->dparameters as $_param) {
         if ($_param->attribute == "FILENAME") {
           $this->name = $_param->value;
+          continue;
         }
       }
     }
@@ -110,8 +109,13 @@ class CMailAttachments extends CMbObject{
       foreach ($header->parameters as $_param) {
         if ($_param->attribute == "NAME") {
           $this->name = $_param->value;
+          continue;
         }
       }
+    }
+
+    if (!$this->name) {
+      return false;
     }
 
     //extension
