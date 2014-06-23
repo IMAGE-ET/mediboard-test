@@ -264,6 +264,13 @@
     </tr>
 
     {{if $can->edit}}
+      <script>
+        changeMotifSfmu = function(form) {
+          {{if "CAppUI::conf"|static_call:"dPurgences CRPU defer_sfmu_diag_inf":"CGroups-$g"}}
+          $V(form.diag_infirmier, form.motif_sfmu_autocomplete_view.value);
+          {{/if}}
+        };
+      </script>
       {{if $gerer_circonstance}}
         <tr>
           <th>{{mb_label object=$rpu field="circonstance"}}</th>
@@ -271,13 +278,6 @@
             {{mb_field object=$rpu field="circonstance" autocomplete="true,1,10,true,true" form=editRPU}}
           </td>
           {{if "CAppUI::conf"|static_call:"dPurgences CRPU display_motif_sfmu":"CGroups-$g"}}
-            <script>
-              changeMotifSfmu = function(form) {
-                {{if "CAppUI::conf"|static_call:"dPurgences CRPU defer_sfmu_diag_inf":"CGroups-$g"}}
-                  $V(form.diag_infirmier, form.motif_sfmu_autocomplete_view.value);
-                {{/if}}
-              };
-            </script>
             {{assign var=notnull value=""}}
             {{if "CAppUI::conf"|static_call:"dPurgences CRPU motif_sfmu_accueil":"CGroups-$g"}}
               {{assign var=notnull value="notNull"}}
@@ -304,7 +304,7 @@
           <th></th>
           <td></td>
           <th>{{mb_label object=$rpu field="motif_sfmu" class=$notnull}}</th>
-          <td>{{mb_field object=$rpu field="motif_sfmu" autocomplete="true,1,10,true,true" form=editRPU size=50 class=$notnull}}
+          <td>{{mb_field object=$rpu field="motif_sfmu" autocomplete="true,1,10,true,true" form=editRPU size=50 class=$notnull onchange="changeMotifSfmu(this.form);"}}
               <button type="button" class="search notext" onclick="CCirconstance.searchMotifSFMU(this.form)">
                 {{tr}}Search{{/tr}}
               </button>
