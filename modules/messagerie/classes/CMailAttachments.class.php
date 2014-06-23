@@ -93,17 +93,30 @@ class CMailAttachments extends CMbObject{
       $this->id = $header->id;
     }
     $this->bytes = $header->bytes;
+    $this->disposition = 'ATTACHMENT';
     if ($header->ifdisposition) {
       $this->disposition = $header->disposition;
     }
-    else { //nothing for disposition ?
-      $this->disposition = 'INLINE';
-    }
+
     if ($header->ifdparameters) {
-      $this->name = $header->dparameters[0]->value;
+      foreach ($header->dparameters as $_param) {
+        if ($_param->attribute == "FILENAME") {
+          $this->name = $_param->value;
+          continue;
+        }
+      }
     }
-    if ($header->ifparameters) {
-      $this->name = $header->parameters[0]->value;
+    if ($header->ifparameters && !$this->name) {
+      foreach ($header->parameters as $_param) {
+        if ($_param->attribute == "NAME") {
+          $this->name = $_param->value;
+          continue;
+        }
+      }
+    }
+
+    if (!$this->name) {
+      return false;
     }
 
     //extension

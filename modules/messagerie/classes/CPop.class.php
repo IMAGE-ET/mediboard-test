@@ -267,16 +267,18 @@ class CPop{
           if ($only_text) {
             $attach  = new CMailAttachments();
             $attach->loadFromHeader($structure);
-            $attach->loadContentFromPop($this->openPart($mail_id, $part_number));
+            if ($attach->name) {
+              $attach->loadContentFromPop($this->openPart($mail_id, $part_number));
 
-            //inline attachments
-            if ($attach->id && $attach->subtype!="SVG+XML") {
-              $id= 'cid:'.str_replace(array("<",">"), array("",""), $attach->id);
-              $url = "data:image/$attach->subtype|strtolower;base64,".$attach->_content;
-              $this->content["text"]["html"] = str_replace($id, $url, $this->content["text"]["html"]);
-            }
-            else {  //attachments below
-              $this->content["attachments"][] = $attach;
+              //inline attachments
+              if ($attach->id && $attach->subtype != "SVG+XML") {
+                $id= 'cid:'.str_replace(array("<",">"), array("",""), $attach->id);
+                $url = "data:image/$attach->subtype|strtolower;base64,".$attach->_content;
+                $this->content["text"]["html"] = str_replace($id, $url, $this->content["text"]["html"]);
+              }
+              else {  //attachments below
+                $this->content["attachments"][] = $attach;
+              }
             }
           }
       }
@@ -329,6 +331,7 @@ class CPop{
           }
           break;
 
+        case 0:
         case 2:     //message
         case 3:     //application
         case 4:     //audio
@@ -336,10 +339,12 @@ class CPop{
         case 6:     //video
           $attach = new CMailAttachments();
           $attach->loadFromHeader($structure);
-          $attach->part = $part_temp;
+          if ($attach->name) {
+            $attach->part = $part_temp;
 
-          //inline attachments
-          $this->content["attachments"][] = $attach;
+            //inline attachments
+            $this->content["attachments"][] = $attach;
+          }
           break;
         default:    //other
       }
