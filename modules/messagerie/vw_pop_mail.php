@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 /**
  * open a mail by its UID, directly from server
  *
  * $Id$
- *  
+ *
  * @category Messagerie
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -42,7 +42,11 @@ $structure = $pop->structure($mail->uid);
 $content = $pop->getFullBody($mail->uid);
 
 //attachments
-$attachments = $pop->getListAttachments($mail->uid);
+$attachments = array();
+$_attachments = $pop->getListAttachments($mail->uid);
+foreach ($_attachments as $_attach) {
+  $attachments[] = $_attach->getPlainFields();
+}
 
 $pop->close();
 
