@@ -16,15 +16,25 @@
 {{assign var=conf_preselect_prat value="dPprescription general preselection_praticien_auto"|conf:"CGroups-$g"}}
 {{assign var=is_executant_prescription value=CAppUI::$user->isExecutantPrescription()}}
 
+{{if 'oncomip'|module_active}}
+  <script type="text/javascript">
+    Main.add(function() {
+      var url = new Url('oncomip', 'ajax_search_patient');
+      url.addParam('patient_id', {{$patient->_id}});
+      url.requestUpdate('oncomip_search_patient');
+    });
+  </script>
+{{/if}}
+
 <table class="form">
   <tr>
-    <th class="title text" style="text-align: left; border: none; width: 15%;">
+    <th class="title text" style="text-align: left; border: none; width: 5%;">
       {{mb_include module=system template=inc_object_notes object=$patient}}
       <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
         {{mb_include module="patients" template=inc_vw_photo_identite mode="read" size=52}}
       </a>
     </th>
-    <th class="title text" style="border: none;">
+    <th class="title text" style="border: none; width: 90%">
       <form name="actionPat" action="?" method="get">
         <input type="hidden" name="m" value="patients" />
         <input type="hidden" name="tab" value="vw_idx_patients" />
@@ -67,7 +77,7 @@
         </h2>
       </form>
     </th>
-    <th class="title text" style="text-align: right; border: none; width: 15%;">
+    <th class="title text" style="text-align: right; border: none; width: 5%;">
       {{mb_include module=system template=inc_object_idsante400 object=$patient}}
       {{mb_include module=system template=inc_object_history object=$patient}}
 
@@ -90,6 +100,12 @@
       {{if $patient->date_lecture_vitale}}
         <div>
           <img src="images/icons/carte_vitale.png" title="{{tr}}CPatient-date-lecture-vitale{{/tr}} : {{mb_value object=$patient field="date_lecture_vitale" format=relative}}" />
+        </div>
+      {{/if}}
+
+      {{if 'oncomip'|module_active}}
+        <div id="oncomip_search_patient">
+
         </div>
       {{/if}}
     </th>
