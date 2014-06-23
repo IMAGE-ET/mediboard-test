@@ -197,9 +197,6 @@
     var tabName = Control.Tabs.loadTab('main_tab_group');
 
     switch (tabName) {
-      case "timing_tab":
-        reloadTimingTab();
-        break;
       case "disp_vasculaire":
         loadPosesDispVasc();
         reloadBloodSalvage();
@@ -230,6 +227,11 @@
         break;
       case "surveillance_perop":
         reloadSurveillancePerop();
+        break;
+      case "timing_tab":
+      default:
+        // Par défault, le volet timing est le premier chargé
+        reloadTimingTab();
     }
 
     // Effet sur le programme
