@@ -84,7 +84,6 @@ class CGroupDomain extends CMbObject {
     // Recherche si on a un établissement du domaine déjà en master avec le même type d'objet et le même établissement
     if ($this->master) {
       $group_domain               = new CGroupDomain();
-      $group_domain->object_class = $this->object_class;
       $group_domain->group_id     = $this->group_id;
       $group_domain->master       = 1;
   
