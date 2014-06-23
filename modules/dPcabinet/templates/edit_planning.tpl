@@ -651,7 +651,7 @@
                     <input type="hidden" name="heure_{{$j}}" value=""/>
                     <input type="hidden" name="chir_id_{{$j}}" value=""/>
                     <input type="hidden" name="cancel_{{$j}}" value="0"/>
-                    <p><input type="text" name="rques_{{$j}}" placeholder="Remarque..." style="width: 30em;"/></p>
+                    <p><textarea name="rques_{{$j}}" placeholder="Remarque rdv {{$j+1}}..." style="width: 30em;"></textarea></p>
                   </fieldset>
                 {{/foreach}}
               </td>

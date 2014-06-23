@@ -9,8 +9,9 @@ var consultationRdV = Class.create ({
   _chirview       : null,
   chir_id         : null,
   is_cancelled    : 0,
+  rques           : null,
 
-  initialize: function (plage_id, consult_id, date, heure, chir_id, chir_view, todelete) {
+  initialize: function (plage_id, consult_id, date, heure, chir_id, chir_view, todelete, rques) {
     this.plage_id         = plage_id;
     this.consult_id       = consult_id;
     this.date             = date;
@@ -18,6 +19,7 @@ var consultationRdV = Class.create ({
     this.chir_id          = chir_id;
     this._chirview        = chir_view;
     this.is_cancelled     = todelete;
+    this.rques            = rques;
   }
 });
 
@@ -35,6 +37,7 @@ RDVmultiples = {
     RDVmultiples.is_multiple = multiple;
     if (consultation_ids.length > 0) {
       for (var b=0; b<consultation_ids.length; b++) {
+        console.log(consultation_ids[b]);
         var plage_id    = consultation_ids[b][0];
         var consult_id  = consultation_ids[b][1];
         var date        = consultation_ids[b][2];
@@ -42,7 +45,8 @@ RDVmultiples = {
         var chir_id     = consultation_ids[b][4];
         var chir_view   = consultation_ids[b][5];
         var annule      = consultation_ids[b][6];
-        RDVmultiples.addSlot(RDVmultiples.current_rank, plage_id, consult_id, date, time, chir_id, chir_view, annule);        // insert
+        var rques       = consultation_ids[b][7];
+        RDVmultiples.addSlot(RDVmultiples.current_rank, plage_id, consult_id, date, time, chir_id, chir_view, annule, rques);        // insert
         RDVmultiples.loadPlageConsult(plage_id, consult_id, RDVmultiples.is_multiple);  // display
         if (multiple) {
           RDVmultiples.selRank(RDVmultiples.current_rank+1);
@@ -62,7 +66,7 @@ RDVmultiples = {
   },
 
   // add a slot to the list.
-  addSlot : function(slot_number, plage_id, consult_id, date, time, chir_id, _chir_view, toTrash) {
+  addSlot : function(slot_number, plage_id, consult_id, date, time, chir_id, _chir_view, toTrash, rques) {
     var oldslot = this.slots[slot_number];
 
     // if consult_id, We keep it
@@ -74,7 +78,7 @@ RDVmultiples = {
     if (oldslot && oldslot.is_cancelled == 1 && !toTrash) {
       toTrash = 1;
     }
-    this.slots[slot_number] = new consultationRdV(plage_id, consult_id, date, time, chir_id, _chir_view, toTrash);
+    this.slots[slot_number] = new consultationRdV(plage_id, consult_id, date, time, chir_id, _chir_view, toTrash, rques);
 
     // creation                           plage_id && !consult_id
     // modif de consultation              !plage_id && consult_id
