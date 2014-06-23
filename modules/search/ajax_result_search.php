@@ -104,6 +104,9 @@ try {
       if ($_agg['key'] == "coper") {
         $_agg['key'] = "COperation";
       }
+      if ($_agg['key'] == "cconsultanesth") {
+        $_agg['key'] = "CConsultAnesth";
+      }
       $name_object = $_agg['key'];
       $agg_ref_id = $_agg['sub_ref_id']['buckets'];
 
