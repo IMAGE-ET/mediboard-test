@@ -1854,6 +1854,9 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     if ($object instanceof CConsultAnesth) {
       $prat = $object->loadRefConsultation()->loadRefPraticien();
     }
+    elseif ($object instanceof CPatient) {
+      $prat = $this->loadRefAuthor();
+    }
     else {
       $prat = $object->loadRefPraticien();
     }
