@@ -11,15 +11,14 @@
 CCanDo::checkAdmin();
 
 $incrementer_id = CValue::getOrSession("incrementer_id");
+$domain_id      = CValue::getOrSession("domain_id");
 
 // Récupération due l'incrementeur à ajouter/editer 
 $incrementer = new CIncrementer;
 $incrementer->load($incrementer_id);
-$incrementer->loadMasterDomain();
+$incrementer->loadMasterDomain($domain_id);
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("incrementer" , $incrementer);
 $smarty->display("inc_edit_incrementer.tpl");
-
-?>

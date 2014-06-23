@@ -75,9 +75,10 @@ Domain = {
   },
   
   editIncrementer : function(incrementer_id, domain_id) {
-    var url = new Url("dPsante400", "ajax_edit_incrementer");
-    url.addParam("incrementer_id", incrementer_id);
-    url.requestModal(400, 200);
+    new Url("dPsante400", "ajax_edit_incrementer")
+      .addParam("incrementer_id", incrementer_id)
+      .addParam("domain_id", domain_id)
+      .requestModal(410, 210);
   },
   
   bindIncrementerDomain : function(incrementer_id) {

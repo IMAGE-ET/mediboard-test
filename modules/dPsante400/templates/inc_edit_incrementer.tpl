@@ -4,7 +4,7 @@ getVars = function(input){
   var url = new Url("dPsante400", "ajax_get_vars");
   url.addParam("object_class", $V(input));
   url.requestUpdate("object_class_vars");
-}
+};
 
 Main.add(function(){
   var oForm = getForm("incrementer{{$incrementer->_guid}}");
@@ -27,21 +27,28 @@ Main.add(function(){
 
   <table class="form">
     {{mb_include module=system template=inc_form_table_header object=$incrementer}}
-    
+
     <tr>
       <th>{{mb_label object=$incrementer field="_object_class"}}</th>
       <td>{{mb_field object=$incrementer field="_object_class" readonly=true}}</td>
     </tr>
-    
+
     <tr>
       <th>{{mb_label object=$incrementer field="pattern"}}</th>
       <td>{{mb_field object=$incrementer field="pattern"}}</td>
     </tr>
-    
+
     <tr>
       <th></th>
       <td id="object_class_vars"></td>
     </tr>
+
+    {{if !$incrementer->_id}}
+      <tr>
+        <th>{{mb_label object=$incrementer field="value"}}</th>
+        <td>{{mb_field object=$incrementer field="value" value="1"}}</td>
+      </tr>
+    {{/if}}
     
     <tr>
       <th>{{mb_label object=$incrementer field="range_min"}}</th>

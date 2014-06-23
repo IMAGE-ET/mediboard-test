@@ -198,6 +198,7 @@ $locales['config-interop-mode_compat'] = 'Mode de compalité';
 $locales['config-interop-mode_compat-default'] = 'Aucun';
 $locales['config-interop-mode_compat-medicap'] = 'Medicap';
 $locales['config-interop-mode_compat-sample'] = 'Exemple';
+$locales['mod-dPsante400-tab-ajax_edit_incrementer'] = 'Modification de l\'incrémenteur';
 $locales['mod-dPsante400-tab-ajax_edit_manually_ipp_nda'] = 'Saisie manuelle de l\'IPP et du NDA';
 $locales['mod-dPsante400-tab-ajax_list_hypertext_links'] = 'Liste des liens hypertextes';
 $locales['mod-dPsante400-tab-ajax_list_identifiants'] = 'Liste des identifiants';

@@ -72,20 +72,29 @@ class CIncrementer extends CMbObject {
   }
   
   /**
+   * Load the master domain
+   *
+   * @param String $domain_id identifiant domain
+   *
    * @return CGroupDomain
    */
-  function loadMasterDomain() {
+  function loadMasterDomain($domain_id = null) {
     if ($this->_ref_group_domain) {
       return $this->_ref_group_domain;
     }
-    
-    $this->loadRefDomain();
+
+    $domain = new CDomain();
+    $domain = $domain_id ? $domain->load($domain_id) : $this->loadRefDomain();
+
+    if (!$domain->_id) {
+      return $this->_ref_group_domain;
+    }
     
     $group_domain            = new CGroupDomain();
-    $group_domain->domain_id = $this->_ref_domain->_id;
+    $group_domain->domain_id = $domain->_id;
     $group_domain->master    = 1;
     $group_domain->loadMatchingObject();
-    
+
     $this->_object_class = $group_domain->object_class;
     
     return $this->_ref_group_domain = $group_domain;
