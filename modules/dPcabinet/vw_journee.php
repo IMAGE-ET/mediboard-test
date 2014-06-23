@@ -130,62 +130,68 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
   foreach ($infos_by_prat["plages"] as $key_plage => $plage) {
     /** @var CPlageconsult $plage */
     $plage->_ref_chir = $infos_by_prat["prat"];
-    $plage->loadRefsConsultations($canceled, $finished);
+    $consultations = $plage->loadRefsConsultations($canceled, $finished);
     if (!$paid || !$immediate) {
       $_consult = new CConsultation();
-      foreach ($plage->_ref_consultations as $key_consult => $_consult) {
+      foreach ($consultations as $key_consult => $_consult) {
         if (!$paid) {
           $_consult->loadRefsReglements();
           if ($_consult->valide == 1 && $_consult->_du_restant_patient == 0) {
-            unset($plage->_ref_consultations[$key_consult]);
+            unset($consultations[$key_consult]);
           }
         }
         if (!$immediate && ($_consult->heure == CMbDT::time(null, $_consult->arrivee))
-          && ($_consult->motif == "Consultation immédiate") && isset($plage->_ref_consultations[$key_consult])) {
-          unset($plage->_ref_consultations[$key_consult]);
+          && ($_consult->motif == "Consultation immédiate") && isset($consultations[$key_consult])) {
+          unset($consultations[$key_consult]);
         }
       }
     }
-    if (!count($plage->_ref_consultations) && !$empty) {
+    if (!count($consultations) && !$empty) {
       unset($listPlages[$key_prat]["plages"][$key_plage]);
       continue;
     }
     $plage->loadRefsNotes();
-    if (count($plage->_ref_consultations) && $mode_vue == "horizontal") {
-      $plage->_ref_consultations = array_combine(range(0, count($plage->_ref_consultations)-1), $plage->_ref_consultations);
+    if (count($consultations) && $mode_vue == "horizontal") {
+      $consultations = array_combine(range(0, count($consultations)-1), $consultations);
     }
 
-    foreach ($plage->_ref_consultations as $consultation) {
+    // Chargement du détail des consultations
+    CStoredObject::massLoadBackRefs($consultations, "consult_anesth");
+    CStoredObject::massLoadFwdRef($consultations, "patient_id");
+    CStoredObject::massLoadFwdRef($consultations, "sejour_id");
+    CStoredObject::massLoadFwdRef($consultations, "categorie_id");
+    CMbObject::massCountDocItems($consultations);
+    foreach ($consultations as $_consultation) {
       if ($mode_urgence) {
-        $consultation->getType();
-        if ($consultation->_type == "urg") {
-          unset($plage->_ref_consultations[$consultation->_id]);
+        $_consultation->getType();
+        if ($_consultation->_type == "urg") {
+          unset($consultations[$_consultation->_id]);
           continue;
         }
       }
       if ($heure_min === null) {
-        $heure_min = $consultation->heure;
+        $heure_min = $_consultation->heure;
       }
-      if ($consultation->heure < $heure_min) {
-        $heure_min = $consultation->heure;
+      if ($_consultation->heure < $heure_min) {
+        $heure_min = $_consultation->heure;
       }
-      if ($consultation->chrono < CConsultation::TERMINE) {
+      if ($_consultation->chrono < CConsultation::TERMINE) {
         $nb_a_venir++;
       }
-      if ($consultation->chrono == CConsultation::PATIENT_ARRIVE) {
+      if ($_consultation->chrono == CConsultation::PATIENT_ARRIVE) {
         $nb_attente++;
       }
-      $consultation->loadRefSejour();
-      $consultation->loadRefPatient();
-      $consultation->loadRefCategorie();
-      $consultation->countDocItems();
+      $_consultation->loadRefSejour();
+      $_consultation->loadRefPatient();
+      $_consultation->loadRefCategorie();
+      $_consultation->countDocItems();
 
-      if ($offline && $consultation->patient_id && !isset($patients_fetch[$consultation->patient_id])) {
+      if ($offline && $_consultation->patient_id && !isset($patients_fetch[$_consultation->patient_id])) {
         $args = array(
-          "object_guid" => $consultation->_ref_patient->_guid,
+          "object_guid" => $_consultation->_ref_patient->_guid,
           "ajax" => 1,
         );
-        $patients_fetch[$consultation->patient_id] = CApp::fetch("system", "httpreq_vw_complete_object", $args);
+        $patients_fetch[$_consultation->patient_id] = CApp::fetch("system", "httpreq_vw_complete_object", $args);
       }
     }
   }
