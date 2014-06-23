@@ -18,20 +18,20 @@
 {{/foreach}}
 
 <script>
-var checkListTypes = ["normal", "endoscopie", "endoscopie-bronchique", "radio", "cesarienne"];
+  var checkListTypes = ["normal", "endoscopie", "endoscopie-bronchique", "radio", "cesarienne"];
 
-function showCheckListType(element, type) {
-  checkListTypes.each(function(t){
-    if (t != type)
-      element.select('tr.'+t).invoke("hide");
+  showCheckListType = function(element, type) {
+    checkListTypes.each(function(t){
+      if (t != type)
+        element.select('tr.'+t).invoke("hide");
+    });
+
+    element.select('tr.'+type).invoke("show");
+  }
+
+  Main.add(function() {
+    showCheckListType($("checkList-container"), "{{$active_list_type}}" || "normal");
   });
-  
-  element.select('tr.'+type).invoke("show");
-}
-
-Main.add(function(){
-  showCheckListType($("checkList-container"), "{{$active_list_type}}" || "normal");
-});
 </script>
 
 <table class="main form" id="checkList-container">

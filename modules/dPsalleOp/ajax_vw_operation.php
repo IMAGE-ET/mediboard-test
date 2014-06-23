@@ -158,7 +158,7 @@ if ($selOp->_id) {
   // Pre-anesth, pre-op, post-op
   foreach ($operation_check_list->_specs["type"]->_list as $type) {
     $list = CDailyCheckList::getList($selOp, null, $type);
-    //$list->loadItemTypes();
+    $list->loadItemTypes();
     $list->loadRefsFwd();
     $list->loadBackRefs('items');
     $list->isReadonly();
@@ -167,23 +167,6 @@ if ($selOp->_id) {
 
     $cat->type = $type;
     $operation_check_item_categories[$type] = $cat->loadMatchingList("title");
-  }
-
-  foreach ($operation_check_list->_specs["type"]->_list as $type) {
-    $lists[] = CDailyCheckList::getList($selOp, null, $type, null, false);
-  }
-
-  CStoredObject::massLoadBackRefs($lists, "items");
-  $lists_types = CStoredObject::massLoadFwdRef($lists, "list_type_id");
-  CStoredObject::massLoadBackRefs($lists_types, "daily_check_list_categories", "`index`, title");
-
-  foreach ($lists as $list) {
-    $list->loadBackRefs("items");
-    $list->loadItemTypes();
-    $operation_check_lists[$list->type] = $list;
-    $list->loadRefListType()->loadRefsCategories();
-    $cat->type = $list->type;
-    $operation_check_item_categories[$list->type] = $cat->loadMatchingList("title");
   }
 
   $anesth_id = ($selOp->anesth_id) ? $selOp->anesth_id : $selOp->_ref_plageop->anesth_id;
