@@ -2332,14 +2332,15 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $entree_prevue = $newVenue->entree_reelle ? $newVenue->entree_reelle : $newVenue->entree_prevue;
     }
     $newVenue->entree_prevue = $entree_prevue;
-    if ((!$sortie_prevue && !$newVenue->sortie_prevue) ||
-      ($sortie_prevue && preg_match("/^\d{4}-\d\d-\d\d( 00:00:00)?$/", $sortie_prevue))
-    ) {
+    if (!$sortie_prevue && !$newVenue->sortie_prevue) {
       $newVenue->sortie_prevue =
         CMbDT::addDateTime(
           CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$newVenue->type).":00:00",
           $newVenue->entree_reelle ? $newVenue->entree_reelle : $newVenue->entree_prevue
         );
+    }
+    elseif ($sortie_prevue && preg_match("/^\d{4}-\d\d-\d\d( 00:00:00)?$/", $sortie_prevue)) {
+      $newVenue->sortie_prevue = CMbDT::date($sortie_prevue)." 00:00:00";
     }
     elseif ($sortie_prevue && preg_match("/\d{4}-\d\d-\d\d \d\d:\d\d:\d\d/", $sortie_prevue)) {
       $newVenue->sortie_prevue = $sortie_prevue;
