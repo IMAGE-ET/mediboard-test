@@ -187,12 +187,13 @@
                 <td style="vertical-align: top;">
                   {{if $sejour->_id}}
                     {{if $is_aff}}
-                      {{if ($object->entree == $sejour->entree && !$sejour->entree_reelle) ||
-                        ($object->entree != $sejour->entree && !$object->_ref_prev->effectue)}}
-                        <span style="color: #A33">
-                      {{elseif $object->effectue}}
-                        <span style="text-decoration: line-through">
-                      {{/if}}
+                      <div style="width: 10px;
+                        {{if ($object->entree == $sejour->entree && !$sejour->entree_reelle) ||
+                          ($object->entree != $sejour->entree && !$object->_ref_prev->effectue)}}
+                          color: #A33;
+                        {{elseif $object->effectue}}
+                          text-decoration: line-through
+                        {{/if}}">
                     {{/if}}
                     <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}');" class="CPatient-view {{if $sejour->recuse == "-1"}}opacity-70{{/if}}">
                       {{if $sejour->recuse == "-1"}}[Att] {{/if}}{{$patient->nom}} {{if $patient->nom_jeune_fille}}({{$patient->nom_jeune_fille}}) {{/if}}{{$patient->prenom}}
@@ -205,16 +206,14 @@
 
                     {{if $show_age_patient}}({{$patient->_age}}){{/if}}
 
-                    {{if $is_aff && (($object->entree == $sejour->entree && !$sejour->entree_reelle) ||
-                      ($object->entree != $sejour->entree && !$object->_ref_prev->effectue) ||
-                      $object->effectue)}}
-                      </span>
+                    {{if $is_aff}}
+                      </div>
                     {{/if}}
                     {{if $patient->_overweight}}
                       <img src="images/pictures/overweight.png" />
                     {{/if}}
                     {{if $mode_vue_reelle == "classique"}}
-                      <div class="compact">
+                      <div class="compact" style="width: 10px;">
                         {{if $systeme_presta == "expert"}}
                           {{if $prestation_id && $sejour->_liaisons_for_prestation|@count}}
                             {{mb_include module=hospi template=inc_vw_liaisons_prestation liaisons=$sejour->_liaisons_for_prestation}}
