@@ -138,7 +138,24 @@ Main.add(function(){
         <tr>
           <th>Personnel</th>
           <td class="text">
-            Non Disponible
+            <table>
+              {{foreach from=$operation->_ref_affectations_personnel item=affectations key=emplacement}}
+                <tr>
+                {{if $affectations|@count}}
+                  <th colspan="2" style="text-align: left;">{{tr}}CPersonnel.emplacement.{{$emplacement}}{{/tr}}:</th>
+                {{/if}}
+                </tr>
+                {{foreach from=$affectations item=_affectation}}
+                  <tr>
+                  <td>{{$_affectation->_ref_personnel->_ref_user->_view}}</td>
+                    <td>{{$_affectation->debut|date_format:$conf.time}} -
+                  {{$_affectation->fin|date_format:$conf.time}}</td>
+                  </tr>
+                {{/foreach}}
+              {{foreachelse}}
+                <tr><td>{{tr}}CPersonnel.none{{/tr}}</td></tr>
+              {{/foreach}}
+            </table>
           </td>
         </tr>
         <tr>

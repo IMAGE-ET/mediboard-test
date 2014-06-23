@@ -21,6 +21,7 @@ $operation->load($operation_id);
 $operation->loadRefsAnesthPerops();
 $operation->loadRefsFwd();
 $operation->loadRefsActesCCAM();
+$operation->loadAffectationsPersonnel();
 foreach ($operation->_ref_actes_ccam as $keyActe => $valueActe) {
   $acte =& $operation->_ref_actes_ccam[$keyActe];
   $acte->loadRefsFwd();
