@@ -44,7 +44,9 @@ if ($selPraticien->isAnesth()) {
   $ljoin = array(
     "plagesop"    => "plagesop.plageop_id = operations.plageop_id",
     "sejour"      => "sejour.sejour_id = operations.sejour_id",
-    "affectation" => "affectation.sejour_id = sejour.sejour_id AND '$date' BETWEEN DATE(affectation.entree) AND DATE(affectation.sortie)",
+    "affectation" => "affectation.sejour_id = sejour.sejour_id
+      AND '$date' BETWEEN DATE(affectation.entree)
+      AND DATE(affectation.sortie)",
     "lit"         => "lit.lit_id = affectation.lit_id",
     "chambre"     => "chambre.chambre_id = lit.chambre_id",
     "service"     => "service.service_id = chambre.service_id"
@@ -128,13 +130,14 @@ if ($selPraticien->isAnesth()) {
   $count_ops["hors_plage"] += count($listInterv["hors_plage"]["non_place"]);
   
   // Complétion du chargement
-  CStoredObject::massLoadFwdRef($allInterv, "chir_id");
-  CStoredObject::massLoadFwdRef($allInterv, "plageop_id");
-  $sejours = CStoredObject::massLoadFwdRef($allInterv, "sejour_id");
-  $patients = CStoredObject::massLoadFwdRef($sejours, "patient_id");
+  $chirs     = CStoredObject::massLoadFwdRef($allInterv, "chir_id");
+  $functions = CStoredObject::massLoadFwdRef($chirs, "function_id");
+  $plages    = CStoredObject::massLoadFwdRef($allInterv, "plageop_id");
+  $sejours   = CStoredObject::massLoadFwdRef($allInterv, "sejour_id");
+  $patients  = CStoredObject::massLoadFwdRef($sejours, "patient_id");
   foreach ($allInterv as $_interv) {
     $_interv->loadRefAffectation();
-    $_interv->loadRefChir();
+    $_interv->loadRefChir()->loadRefFunction();
     $_interv->loadRefPatient()->loadRefConstantesMedicales(null, array("poids", "taille"));
     $_interv->loadRefVisiteAnesth()->loadRefFunction();
     $_interv->loadRefsConsultAnesth()->loadRefConsultation()->loadRefPraticien()->loadRefFunction();
