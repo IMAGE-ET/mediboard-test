@@ -433,7 +433,7 @@
     <button type="button" class="search" onclick="PlanSoins.showModalTasks('{{$sejour->_id}}');">Tâches</button>
   {{/if}}
 
-  {{if "soins suivi hide_old_line"|conf:"CGroups-$g"}}
+  {{if "soins suivi hide_old_line"|conf:"CGroups-$g" && $date == $smarty.now|date_format:'%Y-%m-%d'}}
     {{if $hide_old_lines}}
       <button type="button" class="search" onclick="PlanSoins.reloadSuiviSoin('{{$sejour->_id}}', '{{$date}}', 0);">Afficher les prescriptions terminées ({{$hidden_lines_count}})</button>
     {{else}}
