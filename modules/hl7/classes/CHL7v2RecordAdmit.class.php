@@ -2121,7 +2121,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     $item_liaison = new CItemLiaison();
     $ljoin = array(
-      "prestation_journaliere" => "prestation_journaliere.prestation_journaliere_id = item_liaison.item_souhait_id;"
+      "prestation_journaliere" => "prestation_journaliere.prestation_journaliere_id = item_liaison.item_souhait_id"
     );
 
     $where["item_liaison.sejour_id"]                           = " = '$newVenue->_id'";
