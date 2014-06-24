@@ -3056,7 +3056,6 @@ class CSejour extends CFacturable implements IPatientRelated {
     $lit_id     = $affectation->lit_id;
     $service_id = $affectation->service_id;
     $tolerance  = CAppUI::conf("dPhospi CAffectation create_affectation_tolerance", CGroups::loadCurrent());
-    $now        = CMbDT::dateTime();
 
     $splitting          = new CAffectation();
     $where["sejour_id"] = "=  '$this->_id'";
@@ -3069,7 +3068,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     // On retrouve une affectation a spliter
     if ($splitting->_id) {
       //on ne splite pas et on ne créé pas d'affectation si la tolérance n'est pas atteinte
-      if (CMbDT::addDateTime("00:$tolerance:00", $splitting->entree) <= $now || $affectation->_mutation_urg) {
+      if (CMbDT::addDateTime("00:$tolerance:00", $splitting->entree) <= $affectation->entree || $affectation->_mutation_urg) {
         // Affecte la sortie de l'affectation a créer avec l'ancienne date de sortie
         $create->sortie = $splitting->sortie;
 

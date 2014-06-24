@@ -30,9 +30,8 @@ if ($_date_cut < $affectation->entree || $_date_cut > $affectation->sortie) {
 }
 
 $tolerance = CAppUI::conf("dPhospi CAffectation create_affectation_tolerance", CGroups::loadCurrent());
-$now       = CMbDT::dateTime();
 
-if (CMbDT::addDateTime("00:$tolerance:00", $affectation->entree) > $now) {
+if (CMbDT::addDateTime("00:$tolerance:00", $affectation->entree) > $_date_cut) {
   $affectation_cut = $affectation;
 }
 else {
@@ -97,7 +96,7 @@ if ($affectation->countBackRefs("affectations_enfant")) {
   
   foreach ($affectations_enfant as $_affectation_enfant) {
     /** @var CAffectation $_affectation_enfant */
-    if (CMbDT::addDateTime("00:$tolerance:00", $_affectation_enfant->entree) > $now) {
+    if (CMbDT::addDateTime("00:$tolerance:00", $_affectation_enfant->entree) > $_date_cut) {
       $_affectation = $_affectation_enfant;
     }
     else {

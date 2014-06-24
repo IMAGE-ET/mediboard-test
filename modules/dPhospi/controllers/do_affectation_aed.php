@@ -42,7 +42,6 @@ if ($_lock_all_lits || $_lock_all_lits_urgences) {
 }
 else {
   $tolerance      = CAppUI::conf("dPhospi CAffectation create_affectation_tolerance", CGroups::loadCurrent());
-  $now            = CMbDT::dateTime();
   $sejour_id      = CValue::post("sejour_id");
   $affectation_id = CValue::post("affectation_id");
 
@@ -53,7 +52,7 @@ else {
     $curr_affectation = $sejour->loadRefCurrAffectation();
     //On modifie au lieu de créer une affectation si l'afectation courante ne dépasse pas la tolérance
     if ($curr_affectation && $curr_affectation->_id) {
-      if (CMbDT::addDateTime("00:$tolerance:00", $curr_affectation->entree) > $now) {
+      if (CMbDT::addDateTime("00:$tolerance:00", $curr_affectation->entree) > $entree) {
         $_POST["affectation_id"] = $curr_affectation->_id;
       }
     }
