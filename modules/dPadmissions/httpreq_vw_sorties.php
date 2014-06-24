@@ -89,7 +89,7 @@ if ($selSortis != "0") {
 }
 
 
-if ($order_col != "patient_id" && $order_col != "entree_prevue" && $order_col != "praticien_id") {
+if ($order_col != "patient_id" && $order_col != "sortie_prevue" && $order_col != "praticien_id") {
   $order_col = "patient_id";  
 }
 
@@ -97,7 +97,7 @@ if ($order_col == "patient_id") {
   $order = "patients.nom $order_way, patients.prenom $order_way, sejour.sortie_prevue";
 }
 
-if ($order_col == "entree_prevue") {
+if ($order_col == "sortie_prevue") {
   $order = "sejour.sortie_prevue $order_way, patients.nom, patients.prenom";
 }
 
