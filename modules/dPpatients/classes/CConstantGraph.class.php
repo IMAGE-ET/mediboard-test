@@ -822,7 +822,7 @@ class CConstantGraph {
     if (strpos($min, '@') !== false) {
       $mode = 'float';
       $min = substr($min, strpos($min, '-') + 1);
-      $max = substr($min, strpos($max, '+') + 1);
+      $max = substr($max, strpos($max, '+') + 1);
     }
 
     if (isset(CConstantesMedicales::$list_constantes[$constant]['norm_min'])) {
