@@ -30,6 +30,10 @@ if (!$date) {
   $date = CMbDT::date();
 }
 
+if ($date != CMbDT::date()) {
+  $hide_old_lines = 0;
+}
+
 CPrescription::$mode_plan_soins = true;
 
 // Permet de gerer le cas ou des unites de prises contiennent des '
