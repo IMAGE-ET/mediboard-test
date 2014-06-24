@@ -1975,7 +1975,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $order = "date DESC";
       $where["degre"] = " = 'high'";
       if ($date) {
-        $where["date_max"] = " >= '".$date."'";
+        $where["date_max"] = " >= '".$date."' OR date_max IS NULL";
       }
 
       $this->_ref_transmissions = $this->_ref_transmissions + $transmission->loadList($where, $order, $limit);
