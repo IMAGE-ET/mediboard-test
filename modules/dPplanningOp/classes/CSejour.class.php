@@ -919,7 +919,7 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @see parent::store()
    */
   function store() {
-    $this->completeField("entree_reelle", "entree", "patient_id", "type_pec", "grossesse_id");
+    $this->completeField("entree_reelle", "entree", "patient_id", "type_pec", "grossesse_id", "mode_sortie");
 
     // Sectorisation Rules
     $this->getServiceFromSectorisationRules();
