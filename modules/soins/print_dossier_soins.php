@@ -50,6 +50,7 @@ foreach ($sejour->loadRefsAffectations() as $_affectation) {
 foreach ($sejour->loadRefsTasks() as $_task) {
   $_task->loadRefPrescriptionLineElement();
   $_task->setDateAndAuthor();
+  $_task->loadRefAuthor()->loadRefMediuser()->loadRefFunction();
 }
 
 // Chargement des opérations

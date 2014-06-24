@@ -48,7 +48,7 @@
   {{if $header}} 
     <thead>
       <tr>
-        <th class="title" colspan="3">
+        <th class="title" colspan="4">
           {{$sejour}}
           {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
         </th>
