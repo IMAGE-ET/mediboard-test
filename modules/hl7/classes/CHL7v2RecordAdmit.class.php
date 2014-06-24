@@ -1939,6 +1939,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return;
     }
 
+    $doctor_id = null;
+
     // Récupération du médecin
     $mediuser = new CMediusers();
     foreach ($PV17 as $_PV17) {
@@ -2126,7 +2128,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $where["item_liaison.date"]                                = " = '".CMbDT::date($newVenue->entree)."'";
     $where["prestation_journaliere.prestation_journaliere_id"] = " = '$presta_journa->_id'";
 
-    $item_liaison->loadObject($where, null, $ljoin);
+    $item_liaison->loadObject($where, null, null, $ljoin);
 
     $item_liaison->item_souhait_id = $item_presta->_id;
 
