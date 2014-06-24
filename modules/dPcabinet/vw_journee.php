@@ -127,40 +127,51 @@ $patients_fetch = array();
 $heure_min = null;
 
 foreach ($listPlages as $key_prat => $infos_by_prat) {
-  foreach ($infos_by_prat["plages"] as $key_plage => $plage) {
-    /** @var CPlageconsult $plage */
-    $plage->_ref_chir = $infos_by_prat["prat"];
-    $consultations = $plage->loadRefsConsultations($canceled, $finished);
+  CMbObject::massLoadRefsNotes($infos_by_prat["plages"]);
+  foreach ($infos_by_prat["plages"] as $_plage) {
+    $_plage->loadRefsNotes();
+
+    /** @var CPlageconsult $_plage */
+    $_plage->_ref_chir = $infos_by_prat["prat"];
+    $_plage->loadRefsConsultations($canceled, $finished);
+    // Collection par référence susceptible d'être modifiée
+    $consultations =& $_plage->_ref_consultations;
+    
     if (!$paid || !$immediate) {
       $_consult = new CConsultation();
-      foreach ($consultations as $key_consult => $_consult) {
+      foreach ($consultations as $_consult) {
         if (!$paid) {
           $_consult->loadRefsReglements();
           if ($_consult->valide == 1 && $_consult->_du_restant_patient == 0) {
-            unset($consultations[$key_consult]);
+            unset($consultations[$_consult->_id]);
           }
         }
         if (!$immediate && ($_consult->heure == CMbDT::time(null, $_consult->arrivee))
-          && ($_consult->motif == "Consultation immédiate") && isset($consultations[$key_consult])) {
-          unset($consultations[$key_consult]);
+          && ($_consult->motif == "Consultation immédiate") && isset($consultations[$_consult->_id])) {
+          unset($consultations[$_consult->_id]);
         }
       }
     }
+
     if (!count($consultations) && !$empty) {
-      unset($listPlages[$key_prat]["plages"][$key_plage]);
+      unset($listPlages[$key_prat]["plages"][$_plage->_id]);
       continue;
     }
-    $plage->loadRefsNotes();
+
     if (count($consultations) && $mode_vue == "horizontal") {
       $consultations = array_combine(range(0, count($consultations)-1), $consultations);
     }
 
-    // Chargement du détail des consultations
-    CStoredObject::massLoadBackRefs($consultations, "consult_anesth");
+    // Préchargement de masse sur les consultations
     CStoredObject::massLoadFwdRef($consultations, "patient_id");
     CStoredObject::massLoadFwdRef($consultations, "sejour_id");
     CStoredObject::massLoadFwdRef($consultations, "categorie_id");
     CMbObject::massCountDocItems($consultations);
+    /** @var CConsultAnesth[] $dossiers */
+    $dossiers = CStoredObject::massLoadBackRefs($consultations, "consult_anesth");
+    $count = CMbObject::massCountDocItems($dossiers);
+
+    // Chargement du détail des consultations
     foreach ($consultations as $_consultation) {
       if ($mode_urgence) {
         $_consultation->getType();
@@ -169,18 +180,23 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
           continue;
         }
       }
+
       if ($heure_min === null) {
         $heure_min = $_consultation->heure;
       }
+
       if ($_consultation->heure < $heure_min) {
         $heure_min = $_consultation->heure;
       }
+
       if ($_consultation->chrono < CConsultation::TERMINE) {
         $nb_a_venir++;
       }
+
       if ($_consultation->chrono == CConsultation::PATIENT_ARRIVE) {
         $nb_attente++;
       }
+
       $_consultation->loadRefSejour();
       $_consultation->loadRefPatient();
       $_consultation->loadRefCategorie();
@@ -191,6 +207,7 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
           "object_guid" => $_consultation->_ref_patient->_guid,
           "ajax" => 1,
         );
+
         $patients_fetch[$_consultation->patient_id] = CApp::fetch("system", "httpreq_vw_complete_object", $args);
       }
     }

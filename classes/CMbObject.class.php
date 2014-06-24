@@ -98,6 +98,17 @@ class CMbObject extends CStoredObject {
   }
 
   /**
+   * Préchargement de masse des notes sur une collection
+   *
+   * @param $objects
+   *
+   * @return CNote[]
+   */
+  static function massLoadRefsNotes($objects) {
+    return self::massLoadBackRefs($objects, "notes");
+  }
+
+  /**
    * Chargement des notes sur l'objet
    *
    * @param int $perm One of PERM_READ | PERM_EDIT
@@ -275,10 +286,13 @@ class CMbObject extends CStoredObject {
    * Mass count doc items shortcut
    *
    * @param self[] $objects
+   *
+   * @return int
    */
   static function massCountDocItems($objects) {
-    self::massCountBackRefs($objects, "documents");
-    self::massCountBackRefs($objects, "files");
+    return
+      self::massCountBackRefs($objects, "documents") +
+      self::massCountBackRefs($objects, "files");
   }
   
   /**

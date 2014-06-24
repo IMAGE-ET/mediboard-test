@@ -1209,7 +1209,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
   /**
    * Charge la facture de cabinet associée à la consultation
    *
-   * @return CFactureCabinet
+   * @return CFacture
    */
   function loadRefFacture() {
     if (count($this->_ref_factures)) {
@@ -1219,16 +1219,16 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     if (CModule::getActive("dPfacturation")) {
       $this->completeField('patient_id');
       $facture_class = $this->sejour_id ? "CFactureEtablissement" : "CFactureCabinet";
-      $facture_sql = $this->sejour_id ? "facture_etablissement" : "facture_cabinet";
+      $facture_table = $this->sejour_id ? "facture_etablissement" : "facture_cabinet";
 
       $ljoin = array();
-      $ljoin["facture_liaison"] = "facture_liaison.facture_id = $facture_sql.facture_id";
+      $ljoin["facture_liaison"] = "facture_liaison.facture_id = $facture_table.facture_id";
       $where = array();
       $where["facture_liaison.facture_class"] = " = '$facture_class'";
       $where["facture_liaison.object_id"]     = " = '$this->_id'";
       $where["facture_liaison.object_class"]  = " = '$this->_class'";
-      $where["$facture_sql.patient_id"]       = " = '$this->patient_id'";
-      /* @var CFactureCabinet $facture*/
+      $where["$facture_table.patient_id"]       = " = '$this->patient_id'";
+      /* @var CFacture $facture */
       $facture = new $facture_class;
       $this->_ref_factures = $facture->loadList($where, null, null, "facture_id", $ljoin);
       $this->_ref_facture = reset($this->_ref_factures);

@@ -1706,7 +1706,7 @@ class CStoredObject extends CModelObject {
    * @param array  $ljoin       Additionnal ljoin clauses
    * @param string $backNameAlt BackName Alt
    *
-   * @return int|null self[] Foundobjects, null if collection is unavailable
+   * @return int|null|self[] Foundobjects, null if collection is unavailable
    */
   static function massLoadBackRefs($objects, $backName, $order = null, $where = array(), $ljoin = array(), $backNameAlt = "") {
     if (!count($objects)) {

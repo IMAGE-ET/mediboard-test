@@ -88,10 +88,13 @@ foreach ($listPlage as $_plage) {
   $_plage->loadRefsNotes();
   
   // Mass preloading
-  CMbObject::massLoadFwdRef($consultations, "patient_id");
-  CMbObject::massLoadFwdRef($consultations, "sejour_id");
-  CMbObject::massLoadFwdRef($consultations, "categorie_id");
+  CStoredObject::massLoadFwdRef($consultations, "patient_id");
+  CStoredObject::massLoadFwdRef($consultations, "sejour_id");
+  CStoredObject::massLoadFwdRef($consultations, "categorie_id");
   CMbObject::massCountDocItems($consultations);
+  /** @var CConsultAnesth[] $dossiers */
+  $dossiers = CStoredObject::massLoadBackRefs($consultations, "consult_anesth");
+  $count = CMbObject::massCountDocItems($dossiers);
 
   foreach ($consultations as $_consultation) {
     $_consultation->loadRefPatient();
