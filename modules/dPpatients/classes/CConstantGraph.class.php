@@ -818,10 +818,11 @@ class CConstantGraph {
     $norm_min = 0;
     $norm_max = 0;
 
+    $mode = 'fixed';
     if (strpos($min, '@') !== false) {
       $mode = 'float';
-      $min = substr($min, strpos($min, '-'));
-      $max = substr($min, strpos($max, '+'));
+      $min = substr($min, strpos($min, '-') + 1);
+      $max = substr($min, strpos($max, '+') + 1);
     }
 
     if (isset(CConstantesMedicales::$list_constantes[$constant]['norm_min'])) {
@@ -831,7 +832,6 @@ class CConstantGraph {
       $norm_max = CConstantesMedicales::$list_constantes[$constant]['norm_max'];
     }
     if (count($config) == 3) {
-      $mode = 'fixed';
       $config = array_merge($config, array($mode, $min, $max, $norm_min, $norm_max));
     }
     elseif (count($config) == 8) {
