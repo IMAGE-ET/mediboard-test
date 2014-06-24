@@ -15,7 +15,7 @@ $entree = $_POST["entree"];
 $sortie = $_POST["sortie"];
 
 $tolerance          = CAppUI::conf("dPhospi CAffectation create_affectation_tolerance", CGroups::loadCurrent());
-$modify_affectation = CMbDT::addDateTime("00:$tolerance:00", $entree) > $entree;
+$modify_affectation = CMbDT::addDateTime("00:$tolerance:00", $entree) > $_POST["_date_split"];
 
 // Modifier la première affectation, affectation du lit si la tolérance de création d'afectation n'est pas atteint
 $do = new CDoObjectAddEdit("CAffectation", "affectation_id");
@@ -55,7 +55,7 @@ if (CModule::getActive("maternite")) {
   foreach ($affectations_enfant as $_affectation) {
     $save_sortie = $_affectation->sortie;
 
-    $modify_affectation_enfant = CMbDT::addDateTime("00:$tolerance:00", $_affectation->entree) > $entree;
+    $modify_affectation_enfant = CMbDT::addDateTime("00:$tolerance:00", $_affectation->entree) > $_POST["_date_split"];
 
     if ($modify_affectation_enfant) {
       $_affectation->lit_id = $_POST["_new_lit_id"];
