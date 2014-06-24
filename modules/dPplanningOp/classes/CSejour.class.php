@@ -2101,6 +2101,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       }
     }
 
+    CStoredObject::massLoadBackRefs($consultations, "consult_anesth");
     foreach ($consultations as $_consultation) {
       $_consultation->canEdit();
       $_consultation->loadRefConsultAnesth();
@@ -2114,6 +2115,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     // Ajout des consultations d'anesthésie hors séjour
+    CStoredObject::massLoadBackRefs($consultations_patient, "consult_anesth");
     foreach ($consultations_patient as $_consultation) {
       $_consultation->loadRefConsultAnesth();
       if (!count($_consultation->_refs_dossiers_anesth)) {
