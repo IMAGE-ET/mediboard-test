@@ -184,8 +184,14 @@ function importFile($file, $start, $count, $file_import) {
           if (!$result) {
             //create IPP
             $idex = CIdSante400::getMatch($patient->_class, CPatient::getTagIPP(), $IPP, $patient->_id );
+            if ($idex->_id) {
+              $line_rapport.= ", IPP précédente : $idex->id400";
+            }
             $idex->last_update = CMbDT::dateTime();
             $idex->store();
+            if ($idex->_id) {
+              $line_rapport.= ", IPP enregistrée : $idex->id400";
+            }
             echo "<tr style=\"color:green\"><td>$line_nb</td><td>patient [$patient->nom $patient->prenom] créé (ipp : $idex->id400)</td></tr>";
           }
           else {
