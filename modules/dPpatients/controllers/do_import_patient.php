@@ -88,6 +88,10 @@ function importFile($file, $start, $count, $file_import) {
           $data = strtolower($data);
         }
 
+        if ($field == "deces" && $data == "0000-00-00") {
+          $data = null;
+        }
+
         $patient->$field= $data;
       }
 
@@ -179,7 +183,7 @@ function importFile($file, $start, $count, $file_import) {
           $line_rapport.= " réparé et créé";
           if (!$result) {
             //create IPP
-            $idex = CIdSante400::getMatch($patient->_class, CPatient::getTagIPP(), $patient->_IPP, $patient->_id );
+            $idex = CIdSante400::getMatch($patient->_class, CPatient::getTagIPP(), $IPP, $patient->_id );
             $idex->last_update = CMbDT::dateTime();
             $idex->store();
             echo "<tr style=\"color:green\"><td>$line_nb</td><td>patient [$patient->nom $patient->prenom] créé (ipp : $idex->id400)</td></tr>";
