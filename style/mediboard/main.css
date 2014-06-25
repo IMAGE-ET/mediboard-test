@@ -37,6 +37,10 @@ z-index ordering (foreground to background) :
    10 .ajax-upload .fakefile
 **/
 
+body.didacticiel-open {
+  margin-bottom: 100px;
+}
+
 @font-face {
   font-family: opendyslexic;
   src: url(fonts/open_dyslexic/eot/OpenDyslexic-Regular.eot?) format('eot'),
