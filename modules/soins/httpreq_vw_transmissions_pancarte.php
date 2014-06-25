@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage soins
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id:$
+ *
+ * @category Soins
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision:$
+ * @link     http://www.mediboard.org
  */
 
 $service_id = CValue::get("service_id");
@@ -24,7 +26,7 @@ else {
   $date_max = CMbDT::date("+ 1 DAY", $date)." 00:00:00";
 }
 
-$nb_hours = CAppUI::conf("soins transmissions_hours");
+$nb_hours = CAppUI::conf("soins Pancarte transmissions_hours", CGroups::loadCurrent()->_guid);
 $date_min = CMbDT::dateTime(" - $nb_hours HOURS", $date_max);
 
 $order_col = CValue::get("order_col", "date");
@@ -134,18 +136,18 @@ $filter_obs->user_id = $user_id;
 
 // Smarty template
 $smarty = new CSmartyDP();
-$smarty->assign("order_way", $order_way);
-$smarty->assign("order_col", $order_col);
-$smarty->assign("cibles", $cibles);
-$smarty->assign("service", $service);
-$smarty->assign("transmissions", $transmissions);
-$smarty->assign("observations", $observations);
-$smarty->assign("trans_and_obs", $trans_and_obs);
-$smarty->assign("filter_obs", $filter_obs);
-$smarty->assign("users", $users);
-$smarty->assign("with_filter", "1");
-$smarty->assign("date_min", $date_min);
-$smarty->assign("date_max", $date_max);
+$smarty->assign("order_way"     , $order_way);
+$smarty->assign("order_col"     , $order_col);
+$smarty->assign("cibles"        , $cibles);
+$smarty->assign("service"       , $service);
+$smarty->assign("transmissions" , $transmissions);
+$smarty->assign("observations"  , $observations);
+$smarty->assign("trans_and_obs" , $trans_and_obs);
+$smarty->assign("filter_obs"    , $filter_obs);
+$smarty->assign("users"         , $users);
+$smarty->assign("with_filter"   , "1");
+$smarty->assign("date_min"      , $date_min);
+$smarty->assign("date_max"      , $date_max);
 
 if ($user_id || $degre || $refresh) {
   $smarty->display('../../dPprescription/templates/inc_vw_transmissions.tpl'); 

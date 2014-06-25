@@ -97,14 +97,15 @@ foreach ($sejour->_ref_suivi_medical as $_key => $_suivi) {
 
 //TODO: Revoir l'ajout des constantes dans le suivi de soins
 //Ajout des constantes
-if (!$cible && CAppUI::conf("soins constantes_show") && $_show_const) {
+$group_guid = CGroups::loadCurrent()->_guid;
+if (!$cible &&CAppUI::conf("soins CConstantesMedicales constantes_show", $group_guid) && $_show_const) {
   $sejour->loadRefConstantes($user_id);
 }
 
 //mettre les transmissions dans un tableau dont l'index est le datetime
 $list_trans_const = array();
 
-$trans_compact = CAppUI::conf("soins trans_compact");
+$trans_compact = CAppUI::conf("soins Transmissions trans_compact",$group_guid);
 $forms_active = CModule::getActive("forms");
 CExObject::$_load_lite = true;
 

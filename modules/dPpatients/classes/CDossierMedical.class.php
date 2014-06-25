@@ -382,7 +382,7 @@ class CDossierMedical extends CMbMetaObject {
     $where["type"] = "= 'alle'";
     $where["annule"] = " ='0'";
     $where["dossier_medical_id"] = " = '$this->_id'";
-    $where["rques"] = 'NOT IN ("'.str_replace('|', '","', CAppUI::conf('soins ignore_allergies')) . '")';
+    $where["rques"] = 'NOT IN ("'.str_replace('|', '","', CAppUI::conf("soins Other ignore_allergies", CGroups::loadCurrent()->_guid)) . '")';
     
     return $this->_count_allergies = $antecedent->countList($where);
   }
@@ -400,7 +400,7 @@ class CDossierMedical extends CMbMetaObject {
     $where["type"] = "= 'alle'";
     $where["annule"] = " ='0'";
     $where["dossier_medical_id"] = CSQLDataSource::prepareIn($dossiers);
-    $where["rques"] = 'NOT IN ("'.str_replace('|', '","', CAppUI::conf('soins ignore_allergies')) . '")';
+    $where["rques"] = 'NOT IN ("'.str_replace('|', '","', CAppUI::conf("soins Other ignore_allergies", CGroups::loadCurrent()->_guid)) . '")';
 
     $request = new CRequest();
     $request->addColumn("dossier_medical_id");
@@ -449,7 +449,7 @@ class CDossierMedical extends CMbMetaObject {
   function loadRefsActiveAllergies() {
     self::loadRefsAllergies();
     $allergies = array();
-    $ignores = array_map('trim', explode("|", CAppUI::conf("soins ignore_allergies")));
+    $ignores = array_map('trim', explode("|", CAppUI::conf("soins Other ignore_allergies", CGroups::loadCurrent()->_guid)));
     foreach ($this->_ref_allergies as $_allergie) {
       if (!in_array(trim($_allergie->rques), $ignores)) {
         $allergies[] = $_allergie;

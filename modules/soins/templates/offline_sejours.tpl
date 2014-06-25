@@ -65,7 +65,7 @@
   {{foreach from=$sejours item=_sejour}}
     <tr>
       <td>
-        {{if $conf.soins.show_only_lit_bilan}}
+        {{if "soins Other show_only_lit_bilan"|conf:"CGroups-$g"}}
           {{$_sejour->_ref_curr_affectation->_ref_lit->_shortview}}
         {{else}}
           {{$_sejour->_ref_curr_affectation->_ref_lit}}

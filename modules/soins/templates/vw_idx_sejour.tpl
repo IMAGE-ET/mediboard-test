@@ -317,7 +317,7 @@ savePref = function(form) {
               {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
               <tr>
                 <th class="category {{if !$curr_lit->_ref_affectations|@count}}opacity-50{{/if}}" colspan="6" style="font-size: 0.9em;">
-                  {{if $conf.soins.CLit.align_right}}
+                  {{if "soins CLit align_right"|conf:"CGroups-$g"}}
                   <span style="float: left;">{{$curr_chambre}}</span>
                   <span style="float: right;">{{$curr_lit->_shortview}}</span>
                   {{else}}

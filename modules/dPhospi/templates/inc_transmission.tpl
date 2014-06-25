@@ -2,12 +2,12 @@
 {{mb_default var=hide_button_add value=0}}
 {{mb_default var=update_plan_soin value=0}}
 {{assign var=hour_quantum value=$conf.dPhospi.nb_hours_trans}}
-{{assign var=cible_mandatory_trans value=$conf.soins.cible_mandatory_trans}}
+{{assign var=cible_mandatory_trans value="soins Transmissions cible_mandatory_trans"|conf:"CGroups-$g"}}
 {{mb_default var=data_id value=""}}
 {{mb_default var=action_id value=""}}
 {{mb_default var=result_id value=""}}
 
-<script type="text/javascript">
+<script>
 updateListTransmissions = function(data, object_class) {
   var url = new Url("dPhospi", "ajax_list_transmissions_short");
   url.addParam("sejour_id", "{{$transmission->sejour_id}}");

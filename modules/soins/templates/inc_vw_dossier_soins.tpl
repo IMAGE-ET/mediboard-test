@@ -206,7 +206,7 @@
         PlanSoins.moveDossierSoin($('tbody_date'));
       }
 
-      {{if $conf.soins.vue_condensee_dossier_soins}}
+      {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}
         $('jour').show();
     $('semaine').hide();
         $('tab_dossier_soin').down('li.jour').onmousedown();
@@ -253,7 +253,7 @@
       }
     {{/if}}
 
-    {{if $conf.soins.vue_condensee_dossier_soins}}
+    {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}
       var url = new Url("patients", "httpreq_vw_constantes_medicales_widget");
       url.addParam("context_guid", "{{$sejour->_guid}}");
       url.requestUpdate("constantes-medicales-widget");
@@ -328,7 +328,7 @@
   <input type="hidden" name="original_datetime" value="" />
 </form>
 
-{{if $conf.soins.vue_condensee_dossier_soins}}
+{{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}
   <table class="main layout">
     <tr>
       <td style="width: 33%;">
@@ -384,19 +384,19 @@
   </table>
 {{/if}}
 
-<ul id="tab_dossier_soin" class="control_tabs" style="text-align: left; {{if $conf.soins.vue_condensee_dossier_soins}}border-bottom: none;{{/if}}">
+<ul id="tab_dossier_soin" class="control_tabs" style="text-align: left; {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}border-bottom: none;{{/if}}">
   {{if "dPprescription"|module_active}}
     <!-- Plan de soins journée -->
-    <li onmousedown="refreshTabState();" {{if $conf.soins.vue_condensee_dossier_soins}}style="display: none;"{{/if}} class="jour">
+    <li onmousedown="refreshTabState();" {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}style="display: none;"{{/if}} class="jour">
       <a href="#jour">{{tr}}Soin-tabSuivi-tabViewDay{{/tr}}</a>
     </li>
 
     <!-- Plan de soins semaine -->
-    <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');" {{if $conf.soins.vue_condensee_dossier_soins}}style="display: none;"{{/if}} class="semaine">
+    <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');" {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}style="display: none;"{{/if}} class="semaine">
       <a href="#semaine">{{tr}}Soin-tabSuivi-tabViewWeek{{/tr}}</a>
     </li>
     {{if "dPprescription general show_perop_suivi_soins"|conf:"CGroups-$g"}}
-      <li onmousedown="PlanSoins.showPeropAdministrations('{{$prescription_id}}')" {{if $conf.soins.vue_condensee_dossier_soins}}style="display: none;"{{/if}}>
+      <li onmousedown="PlanSoins.showPeropAdministrations('{{$prescription_id}}')" {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}style="display: none;"{{/if}}>
         <a href="#perop_adm" {{if $count_perop_adm == 0}}class="empty"{{/if}}>
           Perop {{if $count_perop_adm}}<small>({{$count_perop_adm}})</small>{{/if}}
         </a>
@@ -405,7 +405,7 @@
   {{/if}}
 
   <!-- Tâches -->
-  <li onmousedown="updateTasks('{{$sejour->_id}}');" {{if $conf.soins.vue_condensee_dossier_soins}}style="display: none;"{{/if}}>
+  <li onmousedown="updateTasks('{{$sejour->_id}}');" {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}style="display: none;"{{/if}}>
     <a href="#tasks">
       Tâches
       <small>(&ndash; / &ndash;)</small>
@@ -416,20 +416,20 @@
   </li>
 
   <!-- Transmissions -->
-  <li onmousedown="loadSuivi('{{$sejour->_id}}')" {{if $conf.soins.vue_condensee_dossier_soins}}style="display: none;"{{/if}}>
+  <li onmousedown="loadSuivi('{{$sejour->_id}}')" {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}style="display: none;"{{/if}}>
     <a href="#dossier_suivi">
       Trans. <small id="nb_trans"></small> / Obs. / Consult.
-      {{if $conf.soins.constantes_show}}/ Const.{{/if}}
+      {{if "soins CConstantesMedicales constantes_show"|conf:"CGroups-$g"}}/ Const.{{/if}}
     </a>
   </li>
 </ul>
 
-{{if $conf.soins.vue_condensee_dossier_soins}}
+{{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}
   <hr />
 {{/if}}
 
 <span style="float: right;">
-  {{if $conf.soins.vue_condensee_dossier_soins}}
+  {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}
     <button type="button" class="search" onclick="PlanSoins.showModalTasks('{{$sejour->_id}}');">Tâches</button>
   {{/if}}
 
@@ -448,7 +448,7 @@
 </span>
 
 <div id="jour" style="display:none">
-  {{if $conf.soins.vue_condensee_dossier_soins}}
+  {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}
       <button type="button" class="change" onclick="PlanSoins.toggleView('semaine');" style="float: right">Vue semaine</button>
     {{/if}}
     {{if "dPprescription"|module_active && $prescription_id}}

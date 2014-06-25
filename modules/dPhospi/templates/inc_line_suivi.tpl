@@ -4,7 +4,7 @@
 {{mb_default var=show_link   value=true}}
 {{mb_default var=show_type   value=true}}
 
-{{assign var=trans_compact value=$conf.soins.trans_compact}}
+{{assign var=trans_compact value="soins Transmissions trans_compact"|conf:"CGroups-$g"}}
 
 {{if $_suivi instanceof CObservationMedicale}}
   {{if @$show_patient}}

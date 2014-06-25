@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage Patients
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 $object_guid = CValue::get("object_guid");
@@ -26,7 +26,7 @@ if ($dossier_medical->_id) {
   $allergies = $dossier_medical->_ref_allergies;
 }
 
-$keywords = explode("|", CAppUI::conf("soins ignore_allergies"));
+$keywords = explode("|", CAppUI::conf("soins Other ignore_allergies", CGroups::loadCurrent()->_guid));
 
 foreach ($keywords as $_keyword) {
   foreach ($allergies as $_key => $_allergie) {

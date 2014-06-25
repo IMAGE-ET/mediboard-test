@@ -23,7 +23,7 @@
             onclick="loadSuivi('{{$sejour->_id}}', '', '', $('_show_obs_view').checked ? 1 : 0, this.checked ? 1 : 0, !$('_show_const_view') ? null : $('_show_const_view').checked ? 1 : 0)"/>
           <label for="_show_trans_view" title="{{tr}}CTransmissionMedicale{{/tr}}">{{tr}}CTransmissionMedicale._show_trans{{/tr}}</label>
           
-          {{if $conf.soins.constantes_show}}
+          {{if "soins CConstantesMedicales constantes_show"|conf:"CGroups-$g"}}
             <input name="_show_const_view" id="_show_const_view" type="checkbox" {{if $_show_const}}checked="checked"{{elseif $cible != ""}}disabled{{/if}}
               onclick="loadSuivi('{{$sejour->_id}}', '', '', $('_show_obs_view').checked ? 1 : 0, $('_show_trans_view').checked ? 1 : 0, this.checked ? 1 : 0)"/>
             <label for="_show_const_view" title="{{tr}}CConstantesMedicales{{/tr}}">{{tr}}CConstantesMedicales._show_const{{/tr}}</label>

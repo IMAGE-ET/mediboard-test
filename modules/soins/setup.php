@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage soins
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id:$
+ *
+ * @category Soins
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision:$
+ * @link     http://www.mediboard.org
  */
 
 class CSetupsoins extends CSetup {
@@ -87,7 +89,20 @@ class CSetupsoins extends CSetup {
                 ADD `date` DATETIME,
                 ADD `author_id` INT(11);";
     $this->addQuery($query);
+    $this->makeRevision('0.19');
 
-    $this->mod_version = '0.19';
+    $this->addDefaultConfig("soins CLit align_right"                    , "soins CLit align_right");
+    $this->addDefaultConfig("soins CConstantesMedicales constantes_show", "soins constantes_show");
+    $this->addDefaultConfig("soins Pancarte transmissions_hours"        , "soins transmissions_hours");
+    $this->addDefaultConfig("soins Pancarte soin_refresh_pancarte_service", "soins soin_refresh_pancarte_service");
+    $this->addDefaultConfig("soins Transmissions cible_mandatory_trans" , "soins cible_mandatory_trans");
+    $this->addDefaultConfig("soins Transmissions trans_compact"         , "soins trans_compact");
+    $this->addDefaultConfig("soins Sejour refresh_vw_sejours_frequency" , "soins refresh_vw_sejours_frequency");
+    $this->addDefaultConfig("soins Other show_charge_soins"             , "soins show_charge_soins");
+    $this->addDefaultConfig("soins Other max_time_modif_suivi_soins"    , "soins max_time_modif_suivi_soins");
+    $this->addDefaultConfig("soins Other show_only_lit_bilan"           , "soins show_only_lit_bilan");
+    $this->addDefaultConfig("soins Other ignore_allergies"              , "soins ignore_allergies");
+    $this->addDefaultConfig("soins Other vue_condensee_dossier_soins"   , "soins vue_condensee_dossier_soins");
+    $this->mod_version = '0.20';
   }
 }

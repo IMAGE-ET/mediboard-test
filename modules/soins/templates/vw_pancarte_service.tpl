@@ -48,8 +48,8 @@ viewPancarte = function() {
   url.addParam("service_id", $V(oForm.service_id));
   url.addParam("debut", $V(oForm.debut));
   url.addParam('real_time', $V(oForm.real_time));
-  {{if $conf.soins.soin_refresh_pancarte_service != 'none'}}
-    url.periodicalUpdate("pancarte_service", { frequency: {{math equation="a*60" a=$conf.soins.soin_refresh_pancarte_service}} });
+  {{if "soins Pancarte soin_refresh_pancarte_service"|conf:"CGroups-$g" != 'none'}}
+    url.periodicalUpdate("pancarte_service", { frequency: {{math equation="a*60" a="soins Pancarte soin_refresh_pancarte_service"|conf:"CGroups-$g"}} });
   {{else}}
     url.requestUpdate("pancarte_service");
   {{/if}}

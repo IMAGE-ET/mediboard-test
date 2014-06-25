@@ -30,7 +30,7 @@
   {{mb_script module="Imeds" script="Imeds_results_watcher"}}
 {{/if}}
 
-{{assign var=auto_refresh_frequency value=$conf.soins.refresh_vw_sejours_frequency}}
+{{assign var=auto_refresh_frequency value="soins Sejour refresh_vw_sejours_frequency"|conf:"CGroups-$g"}}
 
 <style type="text/css">
   tr + tr { /* Avoid page break before a TR following another TR */
