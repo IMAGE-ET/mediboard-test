@@ -171,7 +171,7 @@ Admissions = {
       .addParam("sejour_id"           , sejour_id)
       .addParam("module"              , App.m)
       .addParam("modify_sortie_prevue", modify_sortie_prevue ? 1 : 0)
-      .requestModal("600px", "310px")
+      .requestModal("725px", "335px")
       .modalObject.observe("afterClose", callback_close);
     document.stopObserving("mb:valider_sortie");
     document.observe("mb:valider_sortie", callback);
@@ -215,6 +215,8 @@ Admissions = {
 
     $V(form._sejours_enfants_ids   , "");
     $V(form.sortie_reelle          , "");
+    $V(form.mode_sortie            , "");
+    $V(form.mode_sortie_id         , "");
 
     return onSubmitFormAjax(form, callback);
   },
