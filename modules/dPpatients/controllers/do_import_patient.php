@@ -20,18 +20,19 @@ CAppUI::stepAjax("Désactivation du gestionnaire", UI_MSG_OK);
 $start    = CValue::post("start");
 $count    = CValue::post("count");
 $callback = CValue::post("callback");
+$date = CMbDT::date();
 
 CApp::setTimeLimit(600);
 CApp::setMemoryLimit("512M");
 
 CMbObject::$useObjectCache = false;
 
-importFile(CAppUI::conf("dPpatients imports pat_csv_path"), $start, $count);
+$file_import = fopen(CAppUI::conf("root_dir")."/tmp/rapport_import_patient_$date.txt", "a");
+importFile(CAppUI::conf("dPpatients imports pat_csv_path"), $start, $count, $file_import);
+fclose($file_import);
 
 $start += $count;
-
-$fh = fopen(CAppUI::conf("root_dir")."/tmp/import_patient.txt", "w");
-$file_w = fwrite($fh, "$start;$count");
+file_put_contents(CAppUI::conf("root_dir")."/tmp/import_patient.txt", "$start;$count");
 
 if ($callback) {
   CAppUI::js("$callback($start,$count)");
@@ -44,14 +45,16 @@ CApp::rip();
 /**
  * import the patient file
  *
- * @param string $file  path to the file
- * @param int    $start start int
- * @param int    $count number of iterations
+ * @param string   $file        path to the file
+ * @param int      $start       start int
+ * @param int      $count       number of iterations
+ * @param resource $file_import file for report
  *
  * @return null
  */
-function importFile($file, $start, $count) {
+function importFile($file, $start, $count, $file_import) {
   $fp = fopen($file, 'r');
+
 
   $patient = new CPatient();
   $patient_specs = CModelObjectFieldDescription::getSpecList($patient);
@@ -69,6 +72,7 @@ function importFile($file, $start, $count) {
   while ($line = fgetcsv($fp, null, ";")) {
     $patient = new CPatient();
     if ($line_nb >= $start && $line_nb<($start+$count)) {
+      $line_rapport = "ligne $line_nb - ";
 
       //foreach SPECS, first load
       foreach ($_patient_specs as $key =>  $_specs) {
@@ -84,23 +88,36 @@ function importFile($file, $start, $count) {
           $data = strtolower($data);
         }
 
+        if ($field == "deces" && $data == "0000-00-00") {
+          $data = null;
+        }
+
         $patient->$field= $data;
       }
 
+      $line_rapport.= "Patient $patient->nom $patient->prenom ($patient->naissance)";
+
       //clone and IPP
       $IPP = $patient->_IPP;
-      $patient->_IPP = null;
       $patient->_generate_IPP = false;
-      $patient_full = $patient;
+      $patient_full = new CPatient();
+      $patient_full->extendsWith($patient);
 
       // load by ipp if basic didn't find.
       if (!$patient->_id) {
         $patient->loadFromIPP();
+        if ($patient->_id) {
+          $line_rapport.= " (trouvé par IPP)";
+        }
       }
 
       //load patient with basics
       if (!$patient->_id) {
+        $patient->_IPP = null;
         $patient->loadMatchingPatient();
+        if ($patient->_id) {
+          $line_rapport.= " (trouvé par matching)";
+        }
       }
 
       //update fields if import have more data
@@ -109,6 +126,9 @@ function importFile($file, $start, $count) {
           $patient->$field = $patient_full->$field;
         }
       }
+
+      // fields created by store, let the store do the job for these
+      $patient->civilite = "";
 
       //found
       if ($patient->_id) {
@@ -122,12 +142,18 @@ function importFile($file, $start, $count) {
           $idex = CIdSante400::getMatch($patient->_class, CPatient::getTagIPP(), $IPP, $patient->_id );
           $idex->last_update = CMbDT::dateTime();
           $idex->store();
+          if ($idex->_id) {
+            $line_rapport.= ", IPP créé : $IPP";
+          }
           echo "<tr style=\"color:#c98000\"><td>$line_nb</td><td>patient [$patient->nom $patient->prenom] déjà existant (MAJ ipp : $idex->id400)</td></tr>";
         }
         else {
+          $line_rapport.= " déjà existant";
           if ($patient->_IPP != $IPP) {
             mbLog($patient->_view." [ipp: ".$patient->_IPP." / ipp_import:".$IPP);
+            $line_rapport.= " [IPP du fichier: $IPP / ipp en base: $patient->_IPP ]";
           }
+          $line_rapport.= " [IPP en base et fichier identiques]";
           echo "<tr style=\"color:#c98000\"><td>$line_nb</td><td>patient [$patient->nom $patient->prenom] déjà existant (ipp : $patient->_IPP)</td></tr>";
         }
 
@@ -137,16 +163,24 @@ function importFile($file, $start, $count) {
       else {
         $result = $patient->store();
         if (!$result) {
+          $line_rapport.= " créé avec succes";
           //create IPP
           $idex = CIdSante400::getMatch($patient->_class, CPatient::getTagIPP(), $IPP, $patient->_id );
+          if ($idex->_id) {
+            $line_rapport.= ", IPP précédente : $idex->id400";
+          }
           $idex->last_update = CMbDT::dateTime();
           $idex->store();
+          if ($idex->_id) {
+            $line_rapport.= ", IPP enregistrée : $idex->id400";
+          }
           echo "<tr style=\"color:green\"><td>$line_nb</td><td>patient [$patient->nom $patient->prenom] créé (ipp : $idex->id400)</td></tr>";
         }
         // error while storing
         else {
           $patient->repair();
           $result = $patient->store();
+          $line_rapport.= " réparé et créé";
           if (!$result) {
             //create IPP
             $idex = CIdSante400::getMatch($patient->_class, CPatient::getTagIPP(), $patient->_IPP, $patient->_id );
@@ -155,6 +189,7 @@ function importFile($file, $start, $count) {
             echo "<tr style=\"color:green\"><td>$line_nb</td><td>patient [$patient->nom $patient->prenom] créé (ipp : $idex->id400)</td></tr>";
           }
           else {
+            $line_rapport.= " non créé : $result";
             mbLog("LINE $line_nb : erreur: ".$result);
             echo "<tr  style=\"color:red\"><td>$line_nb</td><td>
               <div class=\"error\">le patient [$patient->nom $patient->prenom] n'a pas été créé<br/>
@@ -162,6 +197,8 @@ function importFile($file, $start, $count) {
           }
         }
       }
+      $line_rapport.="\n";
+      fwrite($file_import, $line_rapport);
     }
 
     if ($line_nb > ($start+$count)) {
