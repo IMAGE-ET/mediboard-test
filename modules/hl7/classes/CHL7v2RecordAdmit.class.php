@@ -1166,7 +1166,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // On re-synchronise le séjour ayant subi une modification
     if ($event_code == "Z99") {
       // Est-ce que le mouvement est bien le dernier ?
-      $last_movement = end($newVenue->loadRefsMovements());
+      // On prend ceux qui ne sont pas annulés
+      $where["cancel"] = " = '0'";
+
+      $last_movement = end($newVenue->loadRefsMovements($where));
 
       if ($last_movement && $last_movement->_id == $movement->_id) {
         // on affecte le praticien
