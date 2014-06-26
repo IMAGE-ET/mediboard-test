@@ -217,6 +217,7 @@ Admissions = {
     $V(form.sortie_reelle          , "");
     $V(form.mode_sortie            , "");
     $V(form.mode_sortie_id         , "");
+    form.mode_sortie.removeClassName("notNull");
 
     return onSubmitFormAjax(form, callback);
   },
