@@ -89,7 +89,7 @@
             {{/foreach}}
           </select>
         {{elseif "CAppUI::conf"|static_call:"dPurgences CRPU impose_create_sejour_mutation":"CGroups-$g"}}
-          <select name="mode_sortie" onchange="ContraintesRPU.changeOrientationDestination(this.form);Admissions.changeSortie(this.form, '`$sejour->_id`')"">
+          <select name="mode_sortie" onchange="ContraintesRPU.changeOrientationDestination(this.form);Admissions.changeSortie(this.form, '{{$sejour->_id}}')"">
             {{foreach from=$sejour->_specs.mode_sortie->_list item=_mode}}
               <option value="{{$_mode}}" {{if $sejour->mode_sortie == $_mode}}selected{{/if}}
                 {{if $_mode == "mutation"}}{{if $rpu->mutation_sejour_id}}selected{{else}}disabled{{/if}}{{/if}}>
