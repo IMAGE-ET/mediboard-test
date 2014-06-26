@@ -143,7 +143,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // * on est en train de réaliser la mututation
       /** @var CRPU $rpu */
       $rpu  = $sejour->loadRefRPU();
-      if ($rpu && $rpu->_id && $rpu->sejour_id != $rpu->mutation_sejour_id && $sejour->fieldModified("mode_sortie", "mutation")) {
+      if ($rpu && $rpu->_id && $rpu->sejour_id != $rpu->mutation_sejour_id && $sejour->fieldModified("mode_sortie", "mutation") && !$sejour->UHCD) {
         $sejour = $rpu->loadRefSejourMutation();
         $sejour->loadRefPatient();
         $sejour->loadLastLog();
@@ -219,7 +219,8 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
 
       // Première affectation des urgences on ne la transmet pas, seulement pour l'évènement de bascule
-      if ($affectation->_mutation_urg) {
+      // Sauf si nous sommes dans un séjour d'UHCD
+      if ($affectation->_mutation_urg && !$sejour->UHCD) {
         return;
       }
 
@@ -230,14 +231,15 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
 
       if ($rpu->_id) {
         $sejour_rpu = $rpu->loadRefSejour();
-        if ($sejour_rpu->mode_sortie != "mutation") {
+        if (!$affectation->_mutation_urg && $sejour_rpu->mode_sortie != "mutation") {
           return;
         }
       }
 
       // Pas d'envoie d'affectation pour les séjours reliquats
+      // Sauf si le séjour est en UHCD
       $rpu = $sejour->loadRefRPU();
-      if ($rpu && $rpu->mutation_sejour_id && ($rpu->sejour_id != $rpu->mutation_sejour_id)) {
+      if ($rpu && $rpu->mutation_sejour_id && ($rpu->sejour_id != $rpu->mutation_sejour_id) && !$sejour->UHCD) {
         return;
       }
 
