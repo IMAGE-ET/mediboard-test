@@ -115,7 +115,11 @@
         {{/if}}
       </td>
       <th style="width: 100px">{{mb_label object=$sejour field="confirme"}}</th>
-      <td>{{mb_field object=$sejour field="confirme" register=$modify_sortie_prevue form=$form_name class=$class_sortie_autorise}}</td>
+      {{if $module == "dPurgences"}}
+        <td>{{mb_value object=$rpu field="sortie_autorisee"}}</td>
+      {{else}}
+        <td>{{mb_field object=$sejour field="confirme" register=$modify_sortie_prevue form=$form_name class=$class_sortie_autorise}}</td>
+      {{/if}}
     </tr>
     <tr id="sortie_transfert_{{$sejour->_id}}" {{if $sejour->mode_sortie != "transfert"}} style="display:none;" {{/if}}>
       <th>{{mb_label object=$sejour field="etablissement_sortie_id"}}</th>
