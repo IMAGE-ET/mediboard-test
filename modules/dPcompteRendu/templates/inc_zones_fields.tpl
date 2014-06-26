@@ -10,9 +10,25 @@
           {{if $compte_rendu->_id}}
             openCorrespondants('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}', 1);
           {{else}}
+            var form = getForm('editFrm');
+            var nb_corres = form.select('input[type=checkbox]:checked');
             submitCompteRendu(function() {
               var form = getForm('editFrm');
-              openCorrespondants($V(form.compte_rendu_id), '{{$compte_rendu->_ref_object->_guid}}', 1);
+              var editor = CKEDITOR.instances.htmlarea;
+
+              if (nb_corres.length == 0) {
+                openCorrespondants($V(form.compte_rendu_id), '{{$compte_rendu->_ref_object->_guid}}', 1);
+              }
+              if (editor.getCommand('save')) {
+                editor.getCommand('save').setState(CKEDITOR.TRISTATE_OFF);
+              }
+              if (editor.getCommand('mbprint')) {
+                editor.getCommand('mbprint').setState(CKEDITOR.TRISTATE_OFF);
+              }
+              if (editor.getCommand('mbprintPDF')) {
+                editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_OFF);
+              }
+
             });
           {{/if}}">
           Correspondants
