@@ -263,11 +263,19 @@ Admissions = {
       }
     }
 
-    if (form._sejours_enfants_ids && $V(form.confirme)) {
+    if (form._sejours_enfants_ids) {
       var tokenfield = new TokenField(form._sejours_enfants_ids);
       tokenfield.getValues().each( (function(form, modify_sortie_prevue, element) {
         var form_enfant = getForm("validerSortieEnfant"+element);
         if (!form_enfant) {
+          return;
+        }
+        //Si nous sommes en autorisation de sortie et que l'enfant a déjà l'autorisation, on abandonne le traitement
+        if (modify_sortie_prevue && $V(form_enfant.confirme)) {
+          return;
+        }
+        //si nous sommes en validation de sortie et que l'enfant est déjà sortie, on abandonne le traitement
+        if (!modify_sortie_prevue && $V(form_enfant.sortie_reelle)) {
           return;
         }
         var text = "Voulez-vous effectuer dans un même temps la sortie de l'enfant ";
