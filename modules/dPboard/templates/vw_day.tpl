@@ -116,7 +116,7 @@ Main.add(function () {
 <table class="main">
   <tr>
     <th colspan="2">
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$prec}}">&lt;&lt;&lt;</a>
+      <a id="vw_day_date_a" href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$prec}}">&lt;&lt;&lt;</a>
       <form name="changeDate" action="?m={{$m}}" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
@@ -130,24 +130,24 @@ Main.add(function () {
   <tbody class="viewported">
     <tr>
       <!--  Consultations -->
-      <td class="viewport" style="width: 50%">
+      <td id="vw_day_consultations_td" class="viewport" style="width: 50%">
         <div id="consultations"></div>
       </td>
 
       <!-- Operations -->
-      <td class="viewport" style="width: 50%">
+      <td id="vw_day_operations_td" class="viewport" style="width: 50%">
         <div id="operations"></div>
       </td>
     </tr>
 
     <tr>
       <!-- Volet des worklists -->
-      <td class="viewport" style="width: 50%">
+      <td id="vw_day_worklist_td" class="viewport" style="width: 50%">
         <div id="worklist" style="overflow: auto"></div>
       </td>
 
       <!-- Patients hospitalisés -->
-      <td class="viewport" style="width: 50%">
+      <td id="vw_day_hospi_td" class="viewport" style="width: 50%">
         <div id="hospi" style="overflow: auto"></div>
       </td>
     </tr>
