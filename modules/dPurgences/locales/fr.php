@@ -478,6 +478,7 @@ $locales['Import-Motif'] = 'Importer les motifs';
 $locales['Nb-month'] = 'Nombre de mois avant la date actuelle';
 $locales['New-female'] = 'Nouvelle';
 $locales['RPU_sender_source'] = 'Source';
+$locales['cancel-hospitalization'] = 'Annuler l\'hospitalisation';
 $locales['config-dPurgence-Display-check_cotation-desc'] = 'Vérifier que la cotation des actes CCAM et NGAP a été réalisé et validé par le praticien dans l\'onglet des sorties';
 $locales['config-dPurgences-CRPU-defer_sfmu_diag_inf'] = 'Reporter les données du motif SFMU vers le diagnostic infirmier';
 $locales['config-dPurgences-CRPU-defer_sfmu_diag_inf-desc'] = 'Reporter les données du motif SFMU vers le diagnostic infirmier';
@@ -530,6 +531,8 @@ $locales['config-dPurgences-Display-check_gemsa-desc'] = 'Vérifier le code GEMSA
 $locales['config-dPurgences-Display-check_gemsa.0'] = 'Libre';
 $locales['config-dPurgences-Display-check_gemsa.1'] = 'Alerter';
 $locales['config-dPurgences-Display-check_gemsa.2'] = 'Obligatoire';
+$locales['config-dPurgences-Print-gemsa'] = 'Imprimer code GEMSA';
+$locales['config-dPurgences-Print-gemsa-desc'] = 'Afficher le code GEMSA lors de l\'impresion de la main courante';
 $locales['config-dPurgences-age_patient_rpu_view'] = 'Affichage de l\'âge du patient';
 $locales['config-dPurgences-age_patient_rpu_view-desc'] = 'Affichage de l\'âge du patient';
 $locales['config-dPurgences-allow_change_patient'] = 'Possibilité de modifier le patient d\'un RPU';
@@ -667,17 +670,13 @@ $locales['config_source'] = 'Source principal';
 $locales['config_source_rescue'] = 'Source de secours';
 $locales['confirm-RPU-Hospitalisation-simple'] = 'Vous êtes sur le point de tranformer un passage aux urgences en hospitalisation.
 
-Cette action modifiera le type d\'hospitalisation de séjour pour permettre son traitement dans les unités de soins.
-
-Souhaitez-vous poursuivre ?';
+Cette action modifiera le type d\'hospitalisation de séjour pour permettre son traitement dans les unités de soins.';
 $locales['confirm-RPU-Hospitalisation-transfert'] = 'Vous êtes sur le point de tranformer un passage aux urgences en hospitalisation.
 
 Cette action irréversible effectue les actions suivantes :
   - Création d\'un séjour reliquat contenant le RPU,
   - Chainage du reliquat vers le séjour d\'hospitalisation,
-  - Changement du type d\'hospitalisation du séjour principal.
-
-Souhaitez-vous poursuivre ?';
+  - Changement du type d\'hospitalisation du séjour principal.';
 $locales['dPurgences-no-service_uhcds_id'] = 'Veuillez indiquer un service d\'uhcd dans le module \'Etablissements\' afin d\'avoir accès aux fonctionnalités du module.';
 $locales['dPurgences-no-service_urgences_id'] = 'Veuillez indiquer un service d\'urgences dans le module \'Etablissements\' afin d\'avoir accès aux fonctionnalités du module.';
 $locales['extract-rpu'] = 'RPU';
