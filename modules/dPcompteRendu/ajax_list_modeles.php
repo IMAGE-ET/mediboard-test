@@ -17,6 +17,7 @@ CCanDo::checkRead();
 $filtre = new CCompteRendu();
 $filtre->_id          = CValue::getOrSession("compte_rendu_id");
 $filtre->user_id      = CValue::getOrSession("user_id");
+$filtre->function_id  = CValue::getOrSession("function_id");
 $filtre->object_class = CValue::getOrSession("object_class");
 $filtre->type         = CValue::getOrSession("type");
 
@@ -42,16 +43,32 @@ switch ($order_col) {
 $user = CMediusers::get($filtre->user_id);
 $filtre->user_id = $user->_id;
 
+$owner = "prat";
+$owner_id = $filtre->user_id;
 $owners = $user->getOwners();
 
-$modeles = CCompteRendu::loadAllModelesFor($filtre->user_id, 'prat', $filtre->object_class, $filtre->type, 1, $order);
+if ($filtre->function_id) {
+  $owner = "func";
+  $owner_id = $filtre->function_id;
+  $func = new CFunctions();
+  $func->load($owner_id);
+  $owners = array(
+    "func" => $func,
+    "etab" => $func->loadRefGroup()
+  );
+}
+
+$modeles = CCompteRendu::loadAllModelesFor($owner_id, $owner, $filtre->object_class, $filtre->type, 1, $order);
+if ($filtre->function_id) {
+  unset($modeles["prat"]);
+}
+
 foreach ($modeles as $_modeles) {
   /** @var $_modeles CStoredObject[] */
   CStoredObject::massCountBackRefs($_modeles, "documents_generated");
   /** @var $_modele CCompteRendu */
   foreach ($_modeles as $_modele) {
     $_modele->canDo();
-    $_modele->countBackRefs("documents_generated");
     switch ($_modele->type) {
       case "body":
         $_modele->loadComponents();

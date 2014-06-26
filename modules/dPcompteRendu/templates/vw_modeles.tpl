@@ -65,11 +65,18 @@
     <tr>
       <th>{{mb_label object=$filtre field=user_id}}</th>
       <td>
-        <select name="user_id" onchange="this.form.onsubmit()">
+        <select name="user_id" onchange="$V(this.form.function_id, '', false); this.form.onsubmit()">
+          <option value="" {{if !$filtre->user_id}}selected{{/if}}>&mdash; Choisissez un utilisateur</option>
           {{mb_include module=mediusers template=inc_options_mediuser list=$praticiens selected=$filtre->user_id}}
         </select>
       </td>
-
+      <th>{{mb_label object=$filtre field=function_id}}</th>
+      <td>
+        <select name="function_id" onchange="$V(this.form.user_id, '', false); this.form.onsubmit()">
+          <option value="" {{if !$filtre->function_id}}selected{{/if}}>&mdash; Choisissez une fonction</option>
+          {{mb_include module=mediusers template=inc_options_function list=$functions selected=$filtre->function_id}}
+        </select>
+      </td>
       <th>{{mb_label object=$filtre field=object_class}}</th>
       <td>
        {{assign var=_spec value=$filtre->_specs.object_class}}
