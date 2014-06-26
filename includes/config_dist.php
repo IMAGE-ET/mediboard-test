@@ -61,6 +61,7 @@ $dPconfig["mutex_drivers_params"] = array(
 );
 
 $dPconfig["log_js_errors"]        = "1";
+$dPconfig["log_datasource_metrics"] = "1";
 $dPconfig["weinre_debug_host"]    = "";
 
 $dPconfig["base_backup_lockfile_path"]  = "";

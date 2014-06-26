@@ -72,26 +72,31 @@ if ($msg = $log->fastStore()) {
   exit();
 }
 
-foreach (CSQLDataSource::$dataSources as $aDataSource) {
-  if ($aDataSource) {
-    $dsl = new CDataSourceLog();
-    $dsl->datasource = $aDataSource->dsn;
-    $dsl->requests   = $aDataSource->chrono->nbSteps;
-    $dsl->duration   = round(floatval($aDataSource->chrono->total), 3);
+if (CAppUI::conf("log_datasource_metrics")) {
+  // In order to retrieve inserted AccessLog ID
+  $log2 = new CAccessLog();
+  $log2->module    = $log->module;
+  $log2->action    = $log->action;
+  $log2->period    = $log->period;
+  $log2->aggregate = $log->aggregate;
+  $log2->bot       = $log->bot;
+  $log2->loadMatchingObject();
 
-    // In order to retrieve inserted AccessLog ID
-    $log2 = new CAccessLog();
-    $log2->module    = $log->module;
-    $log2->action    = $log->action;
-    $log2->period    = $log->period;
-    $log2->aggregate = $log->aggregate;
-    $log2->bot       = $log->bot;
-    $log2->loadMatchingObject();
+  $log_id = $log2->_id;
 
-    $dsl->accesslog_id = $log2->_id;
+  if ($log_id) {
+    foreach (CSQLDataSource::$dataSources as $aDataSource) {
+      if ($aDataSource) {
+        $dsl = new CDataSourceLog();
+        $dsl->datasource = $aDataSource->dsn;
+        $dsl->requests   = $aDataSource->chrono->nbSteps;
+        $dsl->duration   = round(floatval($aDataSource->chrono->total), 3);
+        $dsl->accesslog_id = $log_id;
 
-    if ($msg = $dsl->fastStore()) {
-      trigger_error($msg, E_USER_WARNING);
+        if ($msg = $dsl->fastStore()) {
+          trigger_error($msg, E_USER_WARNING);
+        }
+      }
     }
   }
 }
