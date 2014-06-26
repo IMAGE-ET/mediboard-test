@@ -137,7 +137,7 @@
     {{/foreach}}
     {{if ($object->_du_restant_patient) > 0 || $conf.dPfacturation.CReglement.use_lock_acquittement}}
       <tr>
-        <td>
+        <td id="didac_mode_banque">
           <select name="mode" onchange="updateBanque('reglement-add-{{$object_guid}}', this.value);" >
             <option value="">&mdash; Choisir</option>
             {{foreach from=$reglement->_specs.mode->_locales item=num key=key}}
@@ -169,7 +169,7 @@
           <td>{{mb_field object=$reglement field=tireur}}</td>
         {{/if}}
         <td><input type="text" class="currency notNull" size="4" maxlength="8" name="montant" value="{{$object->_du_restant_patient}}" /></td>
-        <td>{{mb_field object=$reglement field=date register=true form="reglement-add-$object_guid" value="now"}}</td>
+        <td id="didac_date_reglement">{{mb_field object=$reglement field=date register=true form="reglement-add-$object_guid" value="now"}}</td>
         <td>
           <button id="reglement_button_add" class="add notext" type="submit">{{tr}}Add{{/tr}}</button>
         </td>
