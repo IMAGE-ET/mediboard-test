@@ -159,6 +159,8 @@
                 data-chir_id="{{$plage->chir_id}}"
                 data-time="{{$_place.time}}"
                 data-slot_id="{{$slot_id}}"
+                data-consult_element="{{$consultation->element_prescription_id}}"
+                data-consult_element_libelle="{{$consultation->_ref_element_prescription->libelle}}"
               {{if !$multiple}}
                   >
               {{else}}

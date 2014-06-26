@@ -39,6 +39,7 @@ if ($consultation_id) {
   $consultation_temp = new CConsultation();
   $consultation_temp->load($consultation_id);
   $consultation_temp->loadRefPlageConsult()->loadRefChir();
+  $consultation_temp->loadRefElementPrescription();
 
   // we add the first consult to the future json list (first element)
   if (!$consultation_temp->annule && $consultation_temp->chrono = 16) {
@@ -50,7 +51,9 @@ if ($consultation_id) {
       $consultation_temp->_ref_plageconsult->chir_id,
       utf8_encode($consultation_temp->_ref_plageconsult->_ref_chir->_view),
       $consultation_temp->annule,
-      utf8_encode($consultation_temp->rques)
+      utf8_encode($consultation_temp->rques),
+      $consultation_temp->element_prescription_id,
+      utf8_encode($consultation_temp->_ref_element_prescription->libelle),
     );
   }
 
@@ -70,6 +73,7 @@ if ($consultation_id) {
     /** @var $_consult CConsultation */
     foreach ($consultation_temp->loadListWithPerms(PERM_READ, $where_next, "date", $limit, null, $ljoin_next) as $_consult) {
       $consultation_temp->loadRefPlageConsult()->loadRefChir();
+      $_consult->loadRefElementPrescription();
       $consultation_ids[]= array(
         $_consult->plageconsult_id,
         $_consult->_id,
@@ -78,7 +82,9 @@ if ($consultation_id) {
         $_consult->_ref_chir->_id,
         utf8_encode($_consult->_ref_chir->_view),
         $_consult->annule,
-        $_consult->rques
+        $_consult->rques,
+        $_consult->element_prescription_id,
+        utf8_encode($_consult->_ref_element_prescription->libelle),
       );
     }
   }

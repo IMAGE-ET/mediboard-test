@@ -13,21 +13,22 @@
 
 
 //global
-$patient_id   = CValue::post("patient_id");
-$rques        = CValue::post("rques");
-$motif        = CValue::post("motif");
-$chrono       = CValue::post("chrono");
-$premiere     = CValue::post("premiere");
-$pause        = CValue::post("_pause");
+$patient_id = CValue::post("patient_id");
+$rques      = CValue::post("rques");
+$motif      = CValue::post("motif");
+$chrono     = CValue::post("chrono");
+$premiere   = CValue::post("premiere");
+$pause      = CValue::post("_pause");
 
 for ($a = 1; $a <= CAppUI::pref("NbConsultMultiple"); $a ++) {
-  $_consult_id  = CValue::post("consult_id_$a");
-  $_heure       = CValue::post("heure_$a");
-  $_plage_id    = CValue::post("plage_id_$a");
-  $_date        = CValue::post("date_$a");
-  $_chir_id     = CValue::post("chir_id_$a");
-  $_rques       = CValue::post("rques_$a");
-  $_cancel      = CValue::post("cancel_$a", 0);
+  $_consult_id     = CValue::post("consult_id_$a");
+  $_heure          = CValue::post("heure_$a");
+  $_plage_id       = CValue::post("plage_id_$a");
+  $_date           = CValue::post("date_$a");
+  $_chir_id        = CValue::post("chir_id_$a");
+  $_rques          = CValue::post("rques_$a");
+  $_cancel         = CValue::post("cancel_$a", 0);
+  $_precription_id = CValue::post("element_prescription_id_$a");
 
   if ($_heure && $_plage_id && $_chir_id) {
     $consult = new CConsultation();
@@ -41,15 +42,16 @@ for ($a = 1; $a <= CAppUI::pref("NbConsultMultiple"); $a ++) {
       $consult->patient_id = null;
     }
 
-    $consult->plageconsult_id = $_plage_id;
-    $consult->heure           = $_heure;
-    $consult->motif           = $motif;
-    $consult->rques           = $_rques ? "$rques\n$_rques" : $rques;
-    $consult->chrono          = $chrono;
-    $consult->premiere        = $premiere;
-    $consult->annule          = $_cancel;
-    $consult->_hour           = null;
-    $consult->_min           = null;
+    $consult->plageconsult_id         = $_plage_id;
+    $consult->heure                   = $_heure;
+    $consult->motif                   = $motif;
+    $consult->rques                   = $_rques ? "$rques\n$_rques" : $rques;
+    $consult->chrono                  = $chrono;
+    $consult->premiere                = $premiere;
+    $consult->annule                  = $_cancel;
+    $consult->element_prescription_id = $_precription_id;
+    $consult->_hour                   = null;
+    $consult->_min                    = null;
 
     if ($msg = $consult->store()) {
       CAppUI::setMsg(CAppUI::tr("CConsultation")."$a :".$msg, UI_MSG_ERROR);

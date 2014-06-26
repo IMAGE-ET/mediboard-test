@@ -72,6 +72,12 @@ PlageConsultSelector = {
         $V(oForm["cancel_"+iterator], consult.is_cancelled);
         $V(oForm["rques_"+iterator], consult.rques);
         $V(oForm["_consult"+iterator], consult._chirview+" le "+DateFormat.format(new Date(consult.date), "dd/MM/yyyy")+" à "+consult.heure);
+        $V(oForm["element_prescription_id_"+iterator], consult.el_prescrip_id);
+
+        if (consult.el_prescrip_libelle) {
+          $V(oForm["libelle_"+iterator], consult.el_prescrip_libelle);
+        }
+
         if ($V(oForm["_consult"+iterator])) {
           $("place_reca_"+iterator).show();
         }

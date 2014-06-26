@@ -91,9 +91,11 @@ foreach ($plages as $_plage) {
   $consultations = $_plage->loadRefsConsultations();
   CStoredObject::massLoadFwdRef($consultations, "patient_id");
   CStoredObject::massLoadFwdRef($consultations, "categorie_id");
+  CStoredObject::massLoadFwdRef($consultations, "element_prescription_id");
   foreach ($consultations as $_consultation) {
     $_consultation->loadRefPatient();
     $_consultation->loadRefCategorie();
+    $_consultation->loadRefElementPrescription();
 
     $place = CMbDT::timeCountIntervals($_plage->debut, $_consultation->heure, $_plage->freq);
     for ($i = 0;  $i < $_consultation->duree; $i++) {

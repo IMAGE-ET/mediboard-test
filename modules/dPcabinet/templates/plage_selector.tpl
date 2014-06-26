@@ -2,24 +2,28 @@
 
 <script>
 var consultationRdV = Class.create ({
-  plage_id        : null,
-  consult_id      : null,
-  date            : null,
-  heure           : null,
-  _chirview       : null,
-  chir_id         : null,
-  is_cancelled    : 0,
-  rques           : null,
+  plage_id            : null,
+  consult_id          : null,
+  date                : null,
+  heure               : null,
+  _chirview           : null,
+  chir_id             : null,
+  is_cancelled        : 0,
+  rques               : null,
+  el_prescrip_id      : null,
+  el_prescrip_libelle : null,
 
-  initialize: function (plage_id, consult_id, date, heure, chir_id, chir_view, todelete, rques) {
-    this.plage_id         = plage_id;
-    this.consult_id       = consult_id;
-    this.date             = date;
-    this.heure            = heure;
-    this.chir_id          = chir_id;
-    this._chirview        = chir_view;
-    this.is_cancelled     = todelete;
-    this.rques            = rques;
+  initialize: function (plage_id, consult_id, date, heure, chir_id, chir_view, todelete, rques, el_prescrip_id, el_prescrip_libelle) {
+    this.plage_id            = plage_id;
+    this.consult_id          = consult_id;
+    this.date                = date;
+    this.heure               = heure;
+    this.chir_id             = chir_id;
+    this._chirview           = chir_view;
+    this.is_cancelled        = todelete;
+    this.rques               = rques;
+    this.el_prescrip_id      = el_prescrip_id;
+    this.el_prescrip_libelle = el_prescrip_libelle;
   }
 });
 
@@ -37,16 +41,18 @@ RDVmultiples = {
     RDVmultiples.is_multiple = multiple;
     if (consultation_ids.length > 0) {
       for (var b=0; b<consultation_ids.length; b++) {
-        console.log(consultation_ids[b]);
-        var plage_id    = consultation_ids[b][0];
-        var consult_id  = consultation_ids[b][1];
-        var date        = consultation_ids[b][2];
-        var time        = consultation_ids[b][3];
-        var chir_id     = consultation_ids[b][4];
-        var chir_view   = consultation_ids[b][5];
-        var annule      = consultation_ids[b][6];
-        var rques       = consultation_ids[b][7];
-        RDVmultiples.addSlot(RDVmultiples.current_rank, plage_id, consult_id, date, time, chir_id, chir_view, annule, rques);        // insert
+        var plage_id            = consultation_ids[b][0];
+        var consult_id          = consultation_ids[b][1];
+        var date                = consultation_ids[b][2];
+        var time                = consultation_ids[b][3];
+        var chir_id             = consultation_ids[b][4];
+        var chir_view           = consultation_ids[b][5];
+        var annule              = consultation_ids[b][6];
+        var rques               = consultation_ids[b][7];
+        var el_prescrip_id      = consultation_ids[b][8];
+        var el_prescrip_libelle = consultation_ids[b][9];
+
+        RDVmultiples.addSlot(RDVmultiples.current_rank, plage_id, consult_id, date, time, chir_id, chir_view, annule, rques, el_prescrip_id, el_prescrip_libelle);        // insert
         RDVmultiples.loadPlageConsult(plage_id, consult_id, RDVmultiples.is_multiple);  // display
         if (multiple) {
           RDVmultiples.selRank(RDVmultiples.current_rank+1);
@@ -66,7 +72,7 @@ RDVmultiples = {
   },
 
   // add a slot to the list.
-  addSlot : function(slot_number, plage_id, consult_id, date, time, chir_id, _chir_view, toTrash, rques) {
+  addSlot : function(slot_number, plage_id, consult_id, date, time, chir_id, _chir_view, toTrash, rques, el_prescrip_id, el_prescrip_libelle) {
     var oldslot = this.slots[slot_number];
 
     // if consult_id, We keep it
@@ -78,7 +84,7 @@ RDVmultiples = {
     if (oldslot && oldslot.is_cancelled == 1 && !toTrash) {
       toTrash = 1;
     }
-    this.slots[slot_number] = new consultationRdV(plage_id, consult_id, date, time, chir_id, _chir_view, toTrash, rques);
+    this.slots[slot_number] = new consultationRdV(plage_id, consult_id, date, time, chir_id, _chir_view, toTrash, rques, el_prescrip_id, el_prescrip_libelle);
 
     // creation                           plage_id && !consult_id
     // modif de consultation              !plage_id && consult_id
@@ -198,14 +204,17 @@ Main.add(function () {
 
 
   $('plage_list_container').on("click", '{{if !$multipleMode}}button.validPlage{{else}}input.validPlage{{/if}}', function(event, element) {
-    var consult_id  = element.get("consult_id");
-    var plage_id    = element.get("plageid");
-    var time        = element.get("time");
-    var date        = element.get("date");
-    var chir_id     = element.get("chir_id");
-    var chir_view   = element.get("chir_name");
-    var slot_id     = element.get("slot_id");
-    RDVmultiples.addSlot(slot_id, plage_id, consult_id, date, time, chir_id, chir_view);
+    var consult_id          = element.get("consult_id");
+    var plage_id            = element.get("plageid");
+    var time                = element.get("time");
+    var date                = element.get("date");
+    var chir_id             = element.get("chir_id");
+    var chir_view           = element.get("chir_name");
+    var slot_id             = element.get("slot_id");
+    var el_prescrip_id      = element.get("consult_element");
+    var el_prescrip_libelle = element.get("consult_element_libelle");
+
+    RDVmultiples.addSlot(slot_id, plage_id, consult_id, date, time, chir_id, chir_view, el_prescrip_id, el_prescrip_libelle);
 
     //end of treatment
     {{if !$multipleMode}}

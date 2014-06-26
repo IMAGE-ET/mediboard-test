@@ -452,17 +452,6 @@
                 </td>
               </tr>
             {{/if}}
-
-            {{if $display_elt}}
-              <tr>
-                <th>{{mb_label object=$consult field="element_prescription_id"}}</th>
-                <td>
-                  <input type="text" name="libelle" class="autocomplete"
-                         value="{{if $consult->element_prescription_id}}{{$consult->_ref_element_prescription}}{{else}}&mdash; {{tr}}CPrescription.select_element{{/tr}}{{/if}}" />
-                  <button type="button" class="cancel notext" onclick="$V(this.form.element_prescription_id, ''); $V(this.form.libelle, '');"></button>
-                </td>
-              </tr>
-            {{/if}}
           </table>
         </fieldset>
       </td>
@@ -638,10 +627,22 @@
                       </select>
                     </td>
                   </tr>
+                  {{if $display_elt}}
+                    <tr>
+                      <th>{{mb_label object=$consult field="element_prescription_id"}}</th>
+                      <td>
+                        <input type="text" name="libelle" class="autocomplete"
+                               value="{{if $consult->element_prescription_id}}{{$consult->_ref_element_prescription}}{{else}}&mdash; {{tr}}CPrescription.select_element{{/tr}}{{/if}}" />
+                        <button type="button" class="cancel notext" onclick="$V(this.form.element_prescription_id, ''); $V(this.form.libelle, '');"></button>
+                      </td>
+                    </tr>
+                  {{/if}}
                 </table>
               </td>
               <td id="multiplePlaces">
                 {{foreach from=1|range:$app->user_prefs.NbConsultMultiple-1 item=j}}
+                  {{assign var=libelle value="libelle_$j"}}
+                  {{assign var=el_prescription value="element_prescription_id_$j"}}
                   <fieldset id="place_reca_{{$j}}" style="display: none;">
                     <legend>Rendez-vous {{$j+1}} <button class="button cleanup notext" type="button" onclick="resetPlage('{{$j}}')">{{tr}}Delete{{/tr}}</button></legend>
                     <input type="text" name="_consult{{$j}}" value="" readonly="readonly" style="width: 30em;"/>
@@ -651,7 +652,32 @@
                     <input type="hidden" name="heure_{{$j}}" value=""/>
                     <input type="hidden" name="chir_id_{{$j}}" value=""/>
                     <input type="hidden" name="cancel_{{$j}}" value="0"/>
+                    <input type="hidden" name="{{$el_prescription}}" value="">
                     <p><textarea name="rques_{{$j}}" placeholder="Remarque rdv {{$j+1}}..." style="width: 30em;"></textarea></p>
+                    {{if $display_elt}}
+                      <input type="text" name="{{$libelle}}" class="autocomplete"
+                             value="&mdash; {{tr}}CPrescription.select_element{{/tr}}" />
+                      <button type="button" class="cancel notext" onclick="$V(this.form.{{$el_prescription}}, ''); $V(this.form.{{$libelle}}, '');"></button>
+                      <script>
+                      Main.add(function () {
+                        var form = getForm("editFrm");
+                        var url = new Url("prescription", "httpreq_do_element_autocomplete");
+                        {{if !$app->_ref_user->isPraticien()}}
+                        url.addParam("user_id", $V(form.chir_id_{{$j}}));
+                        {{/if}}
+                        url.addParam("where_clauses[consultation]", "= '1'");
+                        url.addParam("field_name", '{{$libelle}}');
+                        url.autoComplete(form.{{$libelle}}, null, {
+                          minChars: 2,
+                          dropdown: true,
+                          updateElement: function(element) {
+                            $V(form.{{$libelle}}, element.down("strong").innerHTML);
+                            $V(form.{{$el_prescription}}, element.down("small").innerHTML);
+                          }
+                        });
+                      });
+                    </script>
+                    {{/if}}
                   </fieldset>
                 {{/foreach}}
               </td>

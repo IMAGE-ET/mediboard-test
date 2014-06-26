@@ -38,6 +38,7 @@ $consultation_target = new CConsultation();
 if ($consult_id) {
   $consultation_target->load($consult_id);
 }
+$consultation_target->loadRefElementPrescription();
 /**
  * Calcul le taux d'utilisation de prise de rendez-vous par créneaux de 5 minutes
  *
