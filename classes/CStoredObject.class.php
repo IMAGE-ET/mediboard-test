@@ -1872,10 +1872,11 @@ class CStoredObject extends CModelObject {
    * @param array        $ljoin       Array of left join clauses
    * @param array        $index       Force index
    * @param string       $backNameAlt BackName Alt
+   * @param array        $where       Additional where clauses
    *
    * @return self[]|null Total count among objects, null if collection is unavailable
    */
-  function loadBackRefs($backName, $order = null, $limit = null, $group = null, $ljoin = null, $index = null, $backNameAlt = "") {
+  function loadBackRefs($backName, $order = null, $limit = null, $group = null, $ljoin = null, $index = null, $backNameAlt = "", $where = array()) {
     if (!$backSpec = $this->makeBackSpec($backName)) {
       return null;
     }

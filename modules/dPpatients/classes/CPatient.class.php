@@ -209,6 +209,7 @@ class CPatient extends CPerson {
   public $_age_max;
   public $_taille;
   public $_poids;
+  public $_age_epoque;
 
   // Vitale behaviour
   public $_bind_vitale;

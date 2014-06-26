@@ -283,7 +283,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     switch ($name) {
       case "domain":
         return array(
-          $domain->libelle,
+          $domain->namespace_id,
           $domain->OID,
           "ISO"
         );
