@@ -3005,7 +3005,7 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return CMovement[]
    */
   function loadRefsMovements() {
-    return $this->_ref_movements = $this->loadBackRefs("movements");
+    return $this->_ref_movements = $this->loadBackRefs("movements", null, null, null, null, null, "", $where);
   }
 
   /**
