@@ -173,7 +173,7 @@
             {{/foreach}}
           </select>
         {{else}}
-          {{assign var=mode_sortie value="normal"}}
+          {{assign var=mode_sortie value=$sejour->mode_sortie}}
           {{if $rpu->mutation_sejour_id}}
             {{assign var=mode_sortie value="mutation"}}
            {{/if}}
