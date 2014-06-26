@@ -74,13 +74,13 @@
     <tr>
       <th>{{mb_label object=$sejour field="mode_sortie"}}</th>
       <td>
-        {{assign var=mode_sortie value="normal"}}
+        {{assign var=mode_sortie value=$sejour->mode_sortie}}
         {{if $sejour->service_sortie_id}}
           {{assign var=mode_sortie value="mutation"}}
         {{/if}}
         {{if $conf.dPplanningOp.CSejour.use_custom_mode_sortie && $list_mode_sortie|@count}}
           {{mb_field object=$sejour field=mode_sortie hidden=true onchange="ContraintesRPU.changeOrientationDestination(this.form);Admissions.changeSortie(this.form, '`$sejour->_id`')"}}
-          <select name="mode_sortie_id" class="{{$sejour->_props.mode_sortie_id}}" style="width: 16em;" onchange="$V(this.form.mode_sortie, this.options[this.selectedIndex].get('mode'));">
+          <select name="mode_sortie_id" class="{{$sejour->_props.mode_sortie_id}} notNull" style="width: 16em;" onchange="$V(this.form.mode_sortie, this.options[this.selectedIndex].get('mode'));">
             <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
             {{foreach from=$list_mode_sortie item=_mode}}
               <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $sejour->mode_sortie_id == $_mode->_id}}selected{{/if}}>
@@ -89,7 +89,7 @@
             {{/foreach}}
           </select>
         {{elseif "CAppUI::conf"|static_call:"dPurgences CRPU impose_create_sejour_mutation":"CGroups-$g"}}
-          <select name="mode_sortie" onchange="ContraintesRPU.changeOrientationDestination(this.form);Admissions.changeSortie(this.form, '{{$sejour->_id}}')"">
+          <select name="mode_sortie" class="notNull" onchange="ContraintesRPU.changeOrientationDestination(this.form);Admissions.changeSortie(this.form, '{{$sejour->_id}}')"">
             {{foreach from=$sejour->_specs.mode_sortie->_list item=_mode}}
               <option value="{{$_mode}}" {{if $sejour->mode_sortie == $_mode}}selected{{/if}}
                 {{if $_mode == "mutation"}}{{if $rpu->mutation_sejour_id}}selected{{else}}disabled{{/if}}{{/if}}>
@@ -98,11 +98,10 @@
             {{/foreach}}
           </select>
         {{else}}
-          {{assign var=mode_sortie value="normal"}}
           {{if $rpu->mutation_sejour_id}}
             {{assign var=mode_sortie value="mutation"}}
           {{/if}}
-          {{mb_field object=$sejour field="mode_sortie" value=$mode_sortie onchange="ContraintesRPU.changeOrientationDestination(this.form);Admissions.changeSortie(this.form, '`$sejour->_id`')" value=$mode_sortie}}
+          {{mb_field object=$sejour field="mode_sortie" class="notNull" value=$mode_sortie onchange="ContraintesRPU.changeOrientationDestination(this.form);Admissions.changeSortie(this.form, '`$sejour->_id`')" value=$mode_sortie}}
         {{/if}}
         {{if !$rpu->mutation_sejour_id}}
           <input type="hidden" name="group_id" value="{{if $sejour->group_id}}{{$sejour->group_id}}{{else}}{{$g}}{{/if}}" />
