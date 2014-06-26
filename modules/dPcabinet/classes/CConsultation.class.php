@@ -2116,10 +2116,8 @@ class CConsultation extends CFacturable implements IPatientRelated {
         $order = "users.user_last_name, users.user_first_name";
 
         $mediuser = new CMediusers();
-        // les praticiens WithPerms sont déjà chargés
-        // $mediusers = $mediuser->loadListWithPerms(PERM_EDIT, $where, $order, null, null, $ljoin);
         /** @var CMediusers[] $mediusers */
-        $mediusers = $mediuser->loadList($where, $order, null, null, $ljoin);
+        $mediusers = $mediuser->loadListWithPerms(PERM_EDIT, $where, $order, null, null, $ljoin);
 
         // Associate already loaded function
         foreach ($mediusers as $_mediuser) {
