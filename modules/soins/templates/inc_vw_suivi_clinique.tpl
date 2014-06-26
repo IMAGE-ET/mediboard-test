@@ -294,13 +294,16 @@
               <strong>{{mb_label object=$sejour field="entree"}}{{if $sejour->entree_reelle}} (effectuée){{/if}}</strong>
               {{mb_value object=$sejour field="entree"}}
             </td>
-            <td {{if $sejour->confirme}}class="ok"{{/if}}>
+            <td>
               <strong>{{mb_label object=$sejour field="sortie"}}{{if $sejour->sortie_reelle}} (effectuée){{/if}}</strong>
                 {{mb_value object=$sejour field="sortie"}}
               <br/>
-              {{if $sejour->confirme}}
-              <strong>Sortie autorisée</strong> pour le {{mb_value object=$sejour field="confirme"}}
-              {{/if}}
+              <span {{if $sejour->confirme}}class="ok"{{/if}}>
+                {{if $sejour->confirme}}
+                  <strong>Sortie autorisée</strong> pour le {{mb_value object=$sejour field="confirme"}} <br/>
+                  Par {{$sejour->_ref_confirme_user->_view}}
+                {{/if}}
+              </span>
             </td>
           </tr>
           <tr>
