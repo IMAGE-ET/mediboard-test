@@ -225,6 +225,8 @@ if (CModule::getActive("dPprescription")) {
         }
     }
 
+    $line->countPlanifications();
+
     if (in_array($line->jour_decalage, array("ER", "R"))) {
       $line->loadRefOperation();
     }
@@ -425,6 +427,24 @@ if (CModule::getActive("dPprescription")) {
 
   if ($regroup_lines == "") {
     $regroup_lines = CAppUI::pref("regroup_lines_".$prescription->_ref_object->type);
+  }
+}
+
+if ($chapitre) {
+  if (count($prescription->_ref_prescription_line_mixes)) {
+    foreach ($prescription->_ref_prescription_line_mixes as $_line_mix) {
+      $_line_mix->loadRefParentLine();
+    }
+  }
+  if (count($prescription->_ref_prescription_lines)) {
+    foreach ($prescription->_ref_prescription_lines as $_line_med) {
+      $_line_med->loadRefParentLine();
+    }
+  }
+  if (count($prescription->_ref_prescription_lines_element)) {
+    foreach ($prescription->_ref_prescription_lines_element as $_line_elt) {
+      $_line_elt->loadRefParentLine();
+    }
   }
 }
 $signe_decalage = ($nb_decalage < 0) ? "-" : "+";
