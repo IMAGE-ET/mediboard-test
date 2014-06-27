@@ -46,10 +46,13 @@ for ($a = 1; $a <= CAppUI::pref("NbConsultMultiple"); $a ++) {
     if ($_category_id) {
       $cat = new CConsultationCategorie();
       $cat->load($_category_id);
-      $duree = $cat->duree;
+      if ($cat->_id) {
+        $consult->duree         = $duree = $cat->duree;
+        $consult->categorie_id  = $cat->_id;
+      }
     }
 
-    $consult->duree                   = $duree;
+
     $consult->plageconsult_id         = $_plage_id;
     $consult->heure                   = $_heure;
     $consult->motif                   = $motif;
