@@ -60,7 +60,9 @@ foreach ($modeles_to_pack as $_modele_to_pack) {
   $cr->margin_top    = $modele->margin_top;
   $cr->margin_bottom = $modele->margin_bottom;
   $cr->file_category_id = $modele->file_category_id;
-  
+  $cr->font          = $modele->font;
+  $cr->size          = $modele->size;
+
   $cr->loadContent(false);
   
   $cr->_source = $modele->generateDocFromModel();
