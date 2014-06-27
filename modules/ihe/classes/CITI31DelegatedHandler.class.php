@@ -143,7 +143,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // * on est en train de réaliser la mututation
       /** @var CRPU $rpu */
       $rpu  = $sejour->loadRefRPU();
-      if ($rpu->_id && $rpu->sejour_id != $rpu->mutation_sejour_id && $sejour->fieldModified("mode_sortie", "mutation")) {
+      if ($rpu && $rpu->_id && $rpu->sejour_id != $rpu->mutation_sejour_id && $sejour->fieldModified("mode_sortie", "mutation") && !$sejour->UHCD) {
         $sejour = $rpu->loadRefSejourMutation();
         $sejour->loadRefPatient();
         $sejour->loadLastLog();
@@ -1034,7 +1034,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       /* Annulation de l'affectation dans un service externe */
       $service = $affectation->loadRefService();
       if ($service->externe) {
-        // Affectation effectuée 
+        // Affectation effectuée
         if ($affectation->effectue) {
           $code = "A53";
         }
@@ -1044,8 +1044,8 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         $code = "A12";
       }
 
-      // Cas où : 
-      // * on est l'initiateur du message 
+      // Cas où :
+      // * on est l'initiateur du message
       // * le destinataire ne supporte pas le message
       if ($affectation->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
         return;
