@@ -1,5 +1,3 @@
-<!-- $Id$ -->
-
 <script>
   // default value
   var target_plage_consult = '{{$plageSel->_id}}';
@@ -102,7 +100,7 @@ Main.add(function () {
         <input type="hidden" name="plageconsult_id" value="0" />
         <input type="hidden" name="chirSel" value="{{$chirSel}}" onchange="this.form.submit()"/>
         <input type="text" name="chir_id_view" class="autocomplete" value="{{if $chirSel}}{{$planning->title}}{{/if}}"
-               onmouseup="$V(this, '');" onmouseout="$V(this, '{{$planning->title}}');"
+               onmousedown="$V(this, '');" onblur="$V(this, '{{$planning->title}}');"
                placeholder="&mdash; Choisir un praticien"/>
       </form>
       <form action="?" name="changeDate" method="get">
