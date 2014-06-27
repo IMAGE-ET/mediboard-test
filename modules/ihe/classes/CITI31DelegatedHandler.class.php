@@ -143,7 +143,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // * on est en train de réaliser la mututation
       /** @var CRPU $rpu */
       $rpu  = $sejour->loadRefRPU();
-      if ($rpu && $rpu->_id && $rpu->sejour_id != $rpu->mutation_sejour_id && $sejour->fieldModified("mode_sortie", "mutation")) {
+      if ($rpu && $rpu->_id && $rpu->sejour_id != $rpu->mutation_sejour_id && $sejour->fieldModified("mode_sortie", "mutation") && !$sejour->UHCD) {
         $sejour = $rpu->loadRefSejourMutation();
         $sejour->loadRefPatient();
         $sejour->loadLastLog();
