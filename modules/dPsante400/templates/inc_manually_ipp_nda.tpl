@@ -12,5 +12,6 @@
 {{if "CAppUI::conf"|static_call:"dPsante400 CIdSante400 add_ipp_nda_manually":"CGroups-$g"}}
   {{mb_script module=dPsante400 script=Idex ajax=1}}
 
-  <button class="edit notext" onclick="Idex.edit_manually('{{$sejour->_guid}}', '{{$patient->_guid}}', {{$callback}})">{{tr}}Modify{{/tr}}</button>
+  <button class="edit notext" title="{{tr}}CIdSante400-create-IPP-NDA{{/tr}}"
+          onclick="Idex.edit_manually('{{$sejour->_guid}}', '{{$patient->_guid}}', {{$callback}})">{{tr}}Modify{{/tr}}</button>
 {{/if}}
