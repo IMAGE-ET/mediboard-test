@@ -200,6 +200,11 @@ if ($isolement) {
   $where["isolement"] = "= '1'";
 }
 
+if ($item_prestation_id && $prestation_id) {
+  $ljoin["item_liaison"] = "affectation.sejour_id = item_liaison.sejour_id";
+  $where["item_liaison.item_souhait_id"] = " = '$item_prestation_id'";
+}
+
 $affectation = new CAffectation();
 
 $affectations = $affectation->loadList($where, "entree ASC", null, null, $ljoin);
