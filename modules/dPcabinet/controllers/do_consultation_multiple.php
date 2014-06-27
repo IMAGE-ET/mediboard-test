@@ -29,6 +29,7 @@ for ($a = 1; $a <= CAppUI::pref("NbConsultMultiple"); $a ++) {
   $_rques          = CValue::post("rques_$a");
   $_cancel         = CValue::post("cancel_$a", 0);
   $_precription_id = CValue::post("element_prescription_id_$a");
+  $_category_id    = CValue::post("category_id_$a");
 
   if ($_heure && $_plage_id && $_chir_id) {
     $consult = new CConsultation();
@@ -42,6 +43,13 @@ for ($a = 1; $a <= CAppUI::pref("NbConsultMultiple"); $a ++) {
       $consult->patient_id = null;
     }
 
+    if ($_category_id) {
+      $cat = new CConsultationCategorie();
+      $cat->load($_category_id);
+      $duree = $cat->duree;
+    }
+
+    $consult->duree                   = $duree;
     $consult->plageconsult_id         = $_plage_id;
     $consult->heure                   = $_heure;
     $consult->motif                   = $motif;

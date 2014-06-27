@@ -654,6 +654,12 @@
                     <input type="hidden" name="cancel_{{$j}}" value="0"/>
                     <input type="hidden" name="{{$el_prescription}}" value="">
                     <p><textarea name="rques_{{$j}}" placeholder="Remarque rdv {{$j+1}}..." style="width: 30em;"></textarea></p>
+                    <select name="categorie_id_{{$j}}">
+                      <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+                      {{foreach from=$categories item=_cat}}
+                        <option value="{{$_cat->_id}}">{{$_cat}}</option>
+                      {{/foreach}}
+                    </select>
                     {{if $display_elt}}
                       <input type="text" name="{{$libelle}}" class="autocomplete"
                              value="&mdash; {{tr}}CPrescription.select_element{{/tr}}" />
