@@ -28,14 +28,9 @@
       <div class="dropdown-menu">
         Outils
         <ul>
-          {{if $portal.help}}
           <li>
-            <a href="{{$portal.help}}" target="_blank">
-              <img src="style/aero-blue/images/icons/help.png" title="{{tr}}portal-help{{/tr}}" />
-              {{tr}}portal-help{{/tr}}
-            </a>
+            {{mb_include style=mediboard template=inc_help show=true}}
           </li>
-          {{/if}}
           
           {{if $portal.tracker}}
           <li>

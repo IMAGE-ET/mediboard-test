@@ -68,12 +68,7 @@ var Menu = {
       -  
       {{mb_include style=mediboard template=change_group}}
       {{mb_include style=mediboard template=svnstatus}}
-      
-      {{if $portal.help}}
-        <a title="{{tr}}portal-help{{/tr}}" href="{{$portal.help}}" target="_blank">
-          <img src="style/mediboard/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />
-        </a>
-      {{/if}}
+      {{mb_include style=mediboard template=inc_help show=false show_img=true root=true}}
       
       {{if $portal.tracker}}
         <a title="{{tr}}portal-tracker{{/tr}}" href="{{$portal.tracker}}" target="_blank">

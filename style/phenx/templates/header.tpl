@@ -15,10 +15,7 @@
         {{mb_include style=mediboard template=svnstatus}}    
         
         <div class="menu">
-          {{if $portal.help}}
-            <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank"><img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" /></a>
-          {{/if}}
-          
+          {{mb_include style=mediboard template=inc_help}}
           {{if $portal.tracker}}
             <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank"><img src="style/{{$uistyle}}/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" /></a>
           {{/if}}

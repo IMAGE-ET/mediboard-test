@@ -1,19 +1,29 @@
 {{*
  * $Id$
  *  
- * @category ${Module}
+ * @category Style
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org*}}
+{{mb_default var=show value=false}}
+{{mb_default var=show_img value=true}}
+{{mb_default var=root value=false}}
 
 {{if "didacticiel"|module_active}}
   {{mb_script module="didacticiel" script="permanence_didacticiel" ajax=true}}
-  <a href="#1" onclick="PermanentDidacticiel.checkTutorials()">
-    <img src="style/{{$uistyle}}/images/icons/help.png"  />
+  <a href="#1" title="{{tr}}portal-help{{/tr}}" onclick="PermanentDidacticiel.checkTutorials()">
+    {{if $show_img}}<img src="style/{{if $root}}mediboard{{else}}{{$uistyle}}{{/if}}/images/icons/help.png"/>{{/if}}
+    {{if $show}}{{tr}}portal-help{{/tr}}{{/if}}
   </a>
+
 {{elseif $portal.help}}
   <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">
-    <img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />
+    {{if $show_img}}
+      <img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />
+    {{/if}}
+    {{if $show}}
+      {{tr}}portal-help{{/tr}}
+    {{/if}}
   </a>
 {{/if}}
