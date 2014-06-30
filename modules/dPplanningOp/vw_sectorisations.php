@@ -12,11 +12,11 @@
 CCanDo::checkAdmin();
 
 $regleSector = new CRegleSectorisation();
-$regleSector->group_id = CGroups::loadCurrent()->_id;
 
 $showinactive = CValue::getOrSession("inactive", 0);
 
 $where = array();
+$where["group_id"] = " ='".CGroups::loadCurrent()->_id."'";
 if (!$showinactive) {
   $where["date_max"] = " > '".CMbDT::dateTime()."' OR date_max IS NULL";
   $where["date_min"] = " < '".CMbDT::dateTime()."' OR date_min IS NULL";
