@@ -64,6 +64,14 @@ $order_decode = array();
 
 if ($fill_pref) {
   $order_decode = get_object_vars(json_decode($order_mode_grille));
+
+  /** Suppression des types d'antécédents non cochés dans la configuration */
+  foreach ($order_decode as $key => $_order_decode) {
+    if (in_array($key, $antecedent->_specs["type"]->_list )) {
+      unset($order_decode[$key]);
+    }
+  }
+
   $keys = array_keys($order_decode);
   
   foreach ($keys as $_key => $_value) {
@@ -72,7 +80,7 @@ if ($fill_pref) {
     }
   }
   $keys = array_flip($keys);
-  
+
   $antecedent->_count_rques_aides = array_replace_recursive($keys, $antecedent->_count_rques_aides);
 }
 
