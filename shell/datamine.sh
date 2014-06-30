@@ -42,9 +42,11 @@ instance=$1
 username=$2
 password=$3
 
+deep=`expr $(echo $MB_PATH|grep -o '/'|wc -l) + 3`
+
 info_script "Miner launcher"
 
-list=$(ls -C1 $MB_PATH/modules/*/datamine.php|cut -d'/' -f 7)
+list=$(ls -C1 $MB_PATH/modules/*/datamine.php|cut -d'/' -f $deep)
 
 for i in $list
 do
