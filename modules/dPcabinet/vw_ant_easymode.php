@@ -65,7 +65,14 @@ $order_decode = array();
 if ($fill_pref) {
   $order_decode = get_object_vars(json_decode($order_mode_grille));
   $keys = array_keys($order_decode);
-  
+
+  /** Suppression des types d'antécédents non cochés dans la configuration */
+  foreach ($order_decode as $key => $_order_decode) {
+    if (in_array($key, $antecedent->_specs["type"]->_list )) {
+      unset($order_decode[$key]);
+    }
+  }
+
   foreach ($keys as $_key => $_value) {
     if ($_value == "_empty_") {
       $keys[$_key] = "";
