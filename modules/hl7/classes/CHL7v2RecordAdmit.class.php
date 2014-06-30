@@ -1895,8 +1895,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $code_uf = $this->queryTextNode("PL.1", $node);
 
     // Affectation de l'UF hébergement
-    $uf = CUniteFonctionnelle::getUF($code_uf, null, $sender->group_id);
-    $affectation->uf_hebergement_id = $uf->_id;
+    if ($code_uf) {
+      $uf = CUniteFonctionnelle::getUF($code_uf, null, $sender->group_id);
+      $affectation->uf_hebergement_id = $uf->_id;
+    }
     
     // Affectation du service (couloir)
     if (!$affectation->lit_id) {
