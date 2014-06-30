@@ -750,7 +750,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       }
       $personne['ligne'] = $mbPersonne->adresse;
       $personne['ville'] = $mbPersonne->ville;
-      $personne['pays'] = $mbPersonne->pays_insee;
+      $personne['pays'] = $mbPersonne->pays_insee ? $mbPersonne->pays_insee : "";
       $personne['codePostal'] = $mbPersonne->cp;
       $personne['tel'] = $mbPersonne->tel;
       $personne['tel2'] = $mbPersonne->tel2;
