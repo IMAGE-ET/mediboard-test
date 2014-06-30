@@ -1,4 +1,4 @@
-{{if $online && !$plage->locked && $plage->_can->edit}}
+{{if $online && !$plage->locked}}
 
   <script>
     addPlaceBefore_{{$slot_id}} = function(plage_id, slot_id, consult_id) {
@@ -129,7 +129,7 @@
       {{if $display_nb_consult}}<td colspan="3"></td>{{/if}}
     </tr>
   {{/foreach}}
-  {{if $online && !$plage->locked && $plage->_can->edit}}
+  {{if $online && !$plage->locked}}
     <tr>
       <td class="button" colspan="{{if $display_nb_consult}}4{{else}}3{{/if}}">
         <button type="button" class="up singleclick" onclick="addPlaceBefore_{{$slot_id}}('{{$plage->_id}}', '{{$slot_id}}' ,'{{$consultation->_id}}')" {{if !$plage->_can->edit}}disabled="disabled"{{/if}}>
@@ -230,7 +230,7 @@
       {{/if}}
     </tr>
   {{/foreach}}
-  {{if $online && !$plage->locked && $plage->_can->edit}}
+  {{if $online && !$plage->locked}}
     <tr>
       <td class="button" colspan="{{if $display_nb_consult}}5{{else}}3{{/if}}">
         <button type="button" class="down singleclick" onclick="addPlaceAfter_{{$slot_id}}('{{$plage->_id}}', '{{$slot_id}}' ,'{{$consultation->_id}}')" {{if !$plage->_can->edit}}disabled="disabled"{{/if}}>
