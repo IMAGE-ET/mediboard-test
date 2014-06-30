@@ -140,7 +140,7 @@
   linkSejour = function() {
     var url = new Url("dPcabinet", "ajax_link_sejour");
     url.addParam("consult_id", "{{$consult->_id}}");
-    url.requestModal(350, 300);
+    url.requestModal(700, 300);
   };
 
   unlinkSejour = function() {
@@ -465,15 +465,6 @@
                   <tr>
                     <th style="width:25%;">{{mb_label object=$consult   field="plageconsult_id"}}</th>
                     <td>
-                      {{if $consult->_id}}
-                        <span style="float: right">
-                          {{if $consult->sejour_id && $consult->_ref_sejour->type != "consult"}}
-                            <button type="button" class="remove" onclick="unlinkSejour()" title="{{$consult->_ref_sejour}}">{{tr}}CConsultation-_unlink_sejour{{/tr}}</button>
-                          {{elseif $consult->_count_matching_sejours}}
-                            <button type="button" class="add" onclick="linkSejour()">{{tr}}CConsultation-_link_sejour{{/tr}}</button>
-                          {{/if}}
-                        </span>
-                      {{/if}}
                         {{* this.blur to void infinie alert message *}}
                         <input type="text" name="_date" style="width: 15em;" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" onfocus="this.blur(); PlageConsultSelector.init(0,0)" readonly="readonly" onchange="if (this.value != '') $V(this.form._function_id, '')"/>
                         <input type="hidden" name="_date_planning" value="{{$date_planning}}" />
@@ -500,9 +491,19 @@
                         <input type="text" name="heure" value="{{$consult->heure}}" style="width: 15em;" onfocus="this.blur();PlageConsultSelector.init(0,0)" readonly="readonly" />
                         {{if $consult->patient_id}}
                           ({{$consult->_etat}})
+                          {{if $consult->_id}}
+                            <span>
+                            {{if $consult->sejour_id && $consult->_ref_sejour->type != "consult"}}
+                              <button type="button" class="remove" onclick="unlinkSejour()" title="{{$consult->_ref_sejour}}">{{tr}}CConsultation-_unlink_sejour{{/tr}}</button>
+                            {{elseif $consult->_count_matching_sejours}}
+                              <button type="button" class="add" onclick="linkSejour()">{{tr}}CConsultation-_link_sejour{{/tr}}</button>
+                            {{/if}}
+                          </span>
+                          {{/if}}
                           <br />
                           <a class="button new" id="addedit_button_new_rdv_same_patient" href="?m=dPcabinet&tab=edit_planning&pat_id={{$consult->patient_id}}&consultation_id=0&date_planning={{$consult->_date}}&chir_id={{$chir->_id}}">Nouveau RDV pour ce patient</a>
                         {{/if}}
+
                       </td>
                     </tr>
 
