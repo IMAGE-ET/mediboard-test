@@ -89,6 +89,14 @@ class CPreferences extends CMbObject {
   }
 
   /**
+   * @see parent::updateFormFields()
+   */
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = '[Pref] '.CAppUI::tr("pref-$this->key");
+  }
+
+  /**
    * Load ref user
    *
    * @return CUser
