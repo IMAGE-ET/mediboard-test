@@ -48,6 +48,14 @@
     {{if $facture->cloture}}
       <button type="button" class="pdf" onclick="printFactureFR();" style="float:left;">Facture pdf</button>
     {{/if}}
+    {{if $can->admin}}
+      <form name="delete_facture" method="post" action="" style="float:right">
+        {{mb_key object=$facture}}
+        {{mb_class object=$facture}}
+        <input type="hidden" name="del" value="1"/>
+        <button class="cancel notext" type="reset" title="Supprimer la facture" onclick="return confirmDeletion(this.form,{typeName:'la facture'});"></button>
+      </form>
+    {{/if}}
   </td>
 </tr>
 

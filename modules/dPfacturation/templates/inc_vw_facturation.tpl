@@ -20,14 +20,6 @@
 {{/if}}
 
 <div id="gestion_facture-{{$facture->_guid}}" {{if !$view}}style="display: none;"{{/if}}>
-  <div style="display: none;">
-    <form name="delete_facture" method="post" action="">
-      {{mb_key object=$facture}}
-      {{mb_class object=$facture}}
-      <input type="hidden" name="del" value="1"/>
-      <button class="cancel notext" type="submit"></button>
-    </form>
-  </div>
   <!-- Facture -->
   <fieldset class="hatching">
     {{if $facture && $facture->_id}}
