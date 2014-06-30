@@ -55,6 +55,7 @@ class CPlageOp extends CPlageHoraire {
   public $_fill_rate;
   public $_reorder_up_to_interv_id;
   public $_nbQuartHeure;
+  public $_cumulative_minutes = 0;
   
   // Behaviour Fields
   public $_verrouillee = array();
@@ -295,11 +296,14 @@ class CPlageOp extends CPlageHoraire {
         $operations = CMbArray::mergeKeys($operations, $op->loadList($where, $order));
       }
     }
-    
+
     foreach ($operations as $_operation) {
       $_operation->_ref_plageop = $this;
+
+      if ($_operation->temp_operation) {
+        $this->_cumulative_minutes = $this->_cumulative_minutes + CMbDT::minutesRelative("00:00:00", $_operation->temp_operation);
+      }
     }
-    
     return $this->_ref_operations = $operations;
   }
 

@@ -73,6 +73,9 @@ class CPlageconsult extends CPlageHoraire {
 
   public $_disponibilities;
 
+  public $_freq_minutes;          // freq in minutes (int)
+  public $_cumulative_minutes = 0;    // nb minutes usef for consultation in this plage
+
   /**
    * @see parent::getSpec()
    */
@@ -156,7 +159,13 @@ class CPlageconsult extends CPlageHoraire {
     $order = "heure";
     $consult = new CConsultation();
     $this->_ref_consultations = $consult->loadList($where, $order);
-  
+
+
+    foreach ($this->_ref_consultations as $_consult) {
+      $this->_cumulative_minutes += ($_consult->duree * $this->_freq_minutes);
+    }
+
+
     if (!$withPayees) {
       foreach ($this->_ref_consultations as $key => $consult) {
         /** @var CConsultation $consult */
@@ -455,6 +464,7 @@ class CPlageconsult extends CPlageHoraire {
     }
     else {
       $this->_freq = substr($this->freq, 3, 2);
+      $this->_freq_minutes = CMbDT::minutesRelative("00:00:00", $this->freq);
     }
   }
 
