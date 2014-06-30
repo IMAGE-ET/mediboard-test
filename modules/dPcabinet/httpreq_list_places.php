@@ -172,7 +172,7 @@ if ($plageconsult_id) {
 }
 
 // Vérifier le droit d'écriture sur la plage sélectionnée
-$plage->canEdit();
+$plage->canDo();
 
 // Création du template
 $smarty = new CSmartyDP();

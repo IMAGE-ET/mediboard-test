@@ -1,4 +1,4 @@
-{{if $online && !$plage->locked}}
+{{if $online && !$plage->locked && $plage->_can->edit}}
 
   <script>
     addPlaceBefore_{{$slot_id}} = function(plage_id, slot_id, consult_id) {
@@ -42,6 +42,7 @@
     <input type="hidden" name="_repeat" value="1" />
   </form>
 {{/if}}
+
 <table class="tbl" id="Places_{{$plage->_id}}">
   {{assign var=display_nb_consult value=$conf.dPcabinet.display_nb_consult}}
   {{if $plage->_id}}
@@ -128,10 +129,10 @@
       {{if $display_nb_consult}}<td colspan="3"></td>{{/if}}
     </tr>
   {{/foreach}}
-  {{if $online && !$plage->locked}}
+  {{if $online && !$plage->locked && $plage->_can->edit}}
     <tr>
       <td class="button" colspan="{{if $display_nb_consult}}4{{else}}3{{/if}}">
-        <button type="button" class="up singleclick" onclick="addPlaceBefore_{{$slot_id}}('{{$plage->_id}}', '{{$slot_id}}' ,'{{$consultation->_id}}')" {{if !$plage->_canEdit}}disabled="disabled"{{/if}}>
+        <button type="button" class="up singleclick" onclick="addPlaceBefore_{{$slot_id}}('{{$plage->_id}}', '{{$slot_id}}' ,'{{$consultation->_id}}')" {{if !$plage->_can->edit}}disabled="disabled"{{/if}}>
           Ajouter Avant
         </button>
       </td>
@@ -146,7 +147,7 @@
         {{/if}}
         <div style="float:left">
           <label>
-            {{if $online && !$plage->locked && ($conf.dPcabinet.CConsultation.surbooking_readonly || $plage->_canEdit || $count_places == 0)}}
+            {{if $online && !$plage->locked && ($conf.dPcabinet.CConsultation.surbooking_readonly || $plage->_can->edit || $count_places == 0)}}
               {{if !$multiple}}
                 <button type="button" class="tick validPlage"
               {{else}}
@@ -229,10 +230,10 @@
       {{/if}}
     </tr>
   {{/foreach}}
-  {{if $online && !$plage->locked}}
+  {{if $online && !$plage->locked && $plage->_can->edit}}
     <tr>
       <td class="button" colspan="{{if $display_nb_consult}}5{{else}}3{{/if}}">
-        <button type="button" class="down singleclick" onclick="addPlaceAfter_{{$slot_id}}('{{$plage->_id}}', '{{$slot_id}}' ,'{{$consultation->_id}}')" {{if !$plage->_canEdit}}disabled="disabled"{{/if}}>
+        <button type="button" class="down singleclick" onclick="addPlaceAfter_{{$slot_id}}('{{$plage->_id}}', '{{$slot_id}}' ,'{{$consultation->_id}}')" {{if !$plage->_can->edit}}disabled="disabled"{{/if}}>
           Ajouter Après
         </button>
       </td>
