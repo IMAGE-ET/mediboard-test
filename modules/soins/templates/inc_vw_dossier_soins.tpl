@@ -230,12 +230,6 @@
         } catch(e) {}
       });
 
-      {{if !$hide_close}}
-        if(window.modalWindow){
-          $('modal_button').show();
-        }
-      {{/if}}
-
       var options = {
           minHours: '0',
           maxHours: '9'
