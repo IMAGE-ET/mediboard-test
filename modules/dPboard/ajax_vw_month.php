@@ -83,7 +83,8 @@ foreach ($prats as $_prat) {
     if ($function_id) {
       $event->title .= " - ".$_prat->_shortview."";
     }
-    $event->title .= "<br/> Durée cumulée : ".CMbDT::time("+ $_plage->_cumulative_minutes MINUTES", "00:00:00");
+    $event->title .= "<br/> Durée cumulée : ";
+    $event->title .= $_plage->_cumulative_minutes ? CMbDT::time("+ $_plage->_cumulative_minutes MINUTES", "00:00:00") : "&mdash;";
     $event->title .= "</small>";
     $event->type = $_plage->_class;
     $event->css_class = $_plage->_class;
