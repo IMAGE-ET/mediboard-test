@@ -16,7 +16,8 @@ CConfiguration::register(
     "CGroups" => array(
       "dPplanningOp" => array(
         "CSejour" => array(
-          "pass_to_confirm" => "bool default|0"
+          "pass_to_confirm" => "bool default|0",
+          'entree_pre_op_ambu' => 'bool default|0'
         )
       )
     )
