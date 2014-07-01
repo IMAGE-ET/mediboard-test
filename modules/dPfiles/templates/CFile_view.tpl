@@ -21,7 +21,7 @@
     <td style="text-align: center;">
       <div style="width: 64px;">
         <a href="#1" onclick="new Url().ViewFilePopup('{{$file->object_class}}', '{{$file->object_id}}', 'CFile', '{{$file->_id}}')">
-          <img class="thumbnail" src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$file->_id}}&amp;phpThumb=1&amp;w=64" />
+          <img class="thumbnail" src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$file->_id}}&amp;phpThumb=1&amp;w=64" style="max-height: 64px; max-width: 64px;" />
         </a>
       </div>
     </td>
