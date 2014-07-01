@@ -94,7 +94,7 @@ if ($file_id = CValue::get("file_id")) {
       $finUrl.="&q=$q";
     }
 
-    if (strpos($file->file_type, "image") !== false && strpos($file->file_type, "svg") == false) {
+    if (strpos($file->file_type, "image") !== false && strpos($file->file_type, "svg") === false) {
       if ($hp) {
         $finUrl .= "&hp=$hp";
       }
@@ -143,6 +143,12 @@ if ($file_id = CValue::get("file_id")) {
       }
 
       header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path" . $finUrl);
+    }
+    // vector image
+    elseif (strpos($file->file_type, "svg") !== false) {
+      header("Content-type: image/svg+xml");
+      readfile($file->_file_path);
+      CApp::rip();
     }
     elseif ($file->isPDFconvertible()) {
       if ($hp) {
