@@ -415,6 +415,9 @@ class CDatedCodeCCAM {
           $this->_sorted_tarif = 1;
         }
       }
+      elseif ($this->_sorted_tarif === null) {
+        $this->_sorted_tarif = 2;
+      }
 
       // Ajout des modificateurs pour les phases dont le tarif existe
       $datedPhase->_modificateurs = $datedPhase->tarif ? $activite->modificateurs : array();
