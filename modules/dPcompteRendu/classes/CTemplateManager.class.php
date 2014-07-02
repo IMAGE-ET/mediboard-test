@@ -387,9 +387,6 @@ class CTemplateManager {
         break;
 
       case "inline":
-        // Hack: obligé de décoder car dans ce mode le template manager
-        // le fera une seconde fois s'il ne détecte pas d'entités HTML
-        $items = array_map("html_entity_decode", $items);
         $separator = CAppUI::pref("listInlineSeparator");
         $html = implode(" $separator ", $items);
         break;
