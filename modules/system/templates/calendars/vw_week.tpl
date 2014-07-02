@@ -18,8 +18,8 @@ Main.add(function() {
   var planning = new WeekPlanning(
     '{{$planning->guid}}', 
     '{{$planning->hour_min}}', 
-    '{{$planning->hour_max}}', 
-    {{$planning->events|@json}},
+    '{{$planning->hour_max}}',
+    {{$planning->events|@json:false:true}},
     {{$planning->ranges|@json}},
     {{$planning->hour_divider}},
     window["planning-{{$planning->guid}}"] && window["planning-{{$planning->guid}}"].scrollTop,

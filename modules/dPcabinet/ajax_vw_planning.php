@@ -190,6 +190,7 @@ for ($i = 0; $i < $nbDays; $i++) {
     //consultations
     foreach ($_plage->_ref_consultations as $_consult) {
       $debute = "$jour $_consult->heure";
+      $motif = $_consult->motif;
       if ($_consult->patient_id) {
         $_consult->loadRefPatient();
         if ($color = "#cfc") {
@@ -205,7 +206,7 @@ for ($i = 0; $i < $nbDays; $i++) {
           $_consult->_guid,
           $debute,
           $_consult->duree * $_plage->_freq,
-          $_consult->_ref_patient->_view . "\n" . $_consult->motif,
+          $_consult->_ref_patient->_view . "\n" . $motif,
           $color,
           true,
           "droppable $debute",
@@ -219,7 +220,7 @@ for ($i = 0; $i < $nbDays; $i++) {
         $event = new CPlanningEvent(
           $_consult->_guid,
           $debute, $_consult->duree * $_plage->_freq,
-          $_consult->motif ? $_consult->motif : "[PAUSE]",
+          $motif ? $motif : "[PAUSE]",
           $color,
           true,
           null,
