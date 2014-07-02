@@ -1,7 +1,7 @@
 {{*
  * $Id$
  *  
- * @category ${Module}
+ * @category Search
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  OXOL, see http://www.mediboard.org/public/OXOL
@@ -46,11 +46,11 @@
     window.user_tag_token = tokenField;
   });
 
-  function changePage(start) {
+  changePage = function(start) {
     var form = getForm("esSearch");
     $V(form.elements.start, start);
     form.onsubmit();
-  }
+  };
 
   insertTag = function (guid, name) {
     var tag = $("CTag-" + guid);
