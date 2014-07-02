@@ -2115,8 +2115,11 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
           CSQLDataSource::prepareIn(array_keys($praticiens));
         // Filters on users values
         $where["users_mediboard.actif"] = "= '1'";
+        $where["functions_mediboard.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
         $ljoin["users"] = "users.user_id = users_mediboard.user_id";
+        $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
+
         $order = "users.user_last_name, users.user_first_name";
 
         $mediuser = new CMediusers();
