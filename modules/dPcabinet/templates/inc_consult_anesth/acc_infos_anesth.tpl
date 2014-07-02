@@ -146,7 +146,8 @@ checkUSCPO = function() {
                     {{if $view_prescription}}
                       {{mb_label object=$consult_anesth field="premedication"}}
                       <br />
-                      <button class="tick" type="button" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour')">Accéder à la prescription</button>
+                      <button class="tick" type="button" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour');
+                        {{if $app->user_prefs.new_consultation}}tabsConsultAnesth.activeLink.up('li').onmousedown(){{/if}}">Accéder à la prescription</button>
                     {{/if}}
                   {{else}}
                     <div class="small-info">
