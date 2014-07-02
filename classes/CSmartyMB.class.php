@@ -468,16 +468,21 @@ class CSmartyMB extends Smarty {
    * JSON encode an object for Javascript use
    * Example:  {$object|json}
    *
-   * @param mixed $object       The object to be encoded
-   * @param bool  $force_object Force object notation for empty arrays : "{}"
+   * @param mixed $object        The object to be encoded
+   * @param bool  $force_object  Force object notation for empty arrays : "{}"
+   * @param bool  $ignore_errors Ignore errors generated while encoding
    *
    * @return string
    */
-  function json($object, $force_object = false) {
+  function json($object, $force_object = false, $ignore_errors = false) {
     // $options = $force_object ? JSON_FORCE_OBJECT : 0; // Only PHP 5.3 !!
 
     if ($force_object && is_array($object) && empty($object)) {
       return "{}";
+    }
+
+    if ($ignore_errors) {
+      return @json_encode($object);
     }
 
     return json_encode($object);
