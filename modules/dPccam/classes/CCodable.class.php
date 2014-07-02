@@ -923,6 +923,17 @@ class CCodable extends CMbObject {
     $this->preparePossibleActes();
     $depassement_affecte        = false;
     $depassement_anesth_affecte = false;
+
+    // Check if depassement is already set
+    foreach ($this->_ref_actes_ccam as $_acte) {
+      if ($_acte->code_activite == 1 && $_acte->montant_depassement) {
+        $depassement_affecte = true;
+      }
+      if ($_acte->code_activite == 4 && $_acte->montant_depassement) {
+        $depassement_anesth_affecte = true;
+      }
+    }
+
     // existing acts may only be affected once to possible acts
     $used_actes = array();
 
@@ -947,14 +958,14 @@ class CCodable extends CMbObject {
 
           // Affectation du dépassement au premier acte de chirugie
           if (!$depassement_affecte and $possible_acte->code_activite == 1) {
-            $depassement_affecte = true;
             $possible_acte->montant_depassement = $this->_acte_depassement;
+            $depassement_affecte = true;
           }
 
           // Affectation du dépassement au premier acte d'anesthésie
           if (!$depassement_anesth_affecte and $possible_acte->code_activite == 4) {
-            $depassement_anesth_affecte = true;
             $possible_acte->montant_depassement = $this->_acte_depassement_anesth;
+            $depassement_anesth_affecte = true;
           }
 
           $possible_acte->executant_id = CAppUI::pref("user_executant") ?
