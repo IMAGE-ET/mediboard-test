@@ -455,7 +455,7 @@ Main.add(function() {
                 </td>
               </tr>
             {{/if}}
-            {{if $consult->tarif && $consult->patient_date_reglement == "" && $consult->valide == "1"}}
+            {{if $consult->tarif && ($consult->patient_date_reglement == "" || $consult->du_patient == 0) && $consult->valide == "1"}}
             <tr>
               <td colspan="4" class="button">
                 <input type="hidden" name="valide" value="1" />
