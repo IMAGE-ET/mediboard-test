@@ -637,7 +637,7 @@ class COperation extends CCodable implements IPatientRelated {
             $this->rank = $op->rank+1;
           }
           break;
-        default;
+        default:
       }
 
       $this->_reorder_rank_voulu = true;
