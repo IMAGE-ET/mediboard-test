@@ -254,7 +254,8 @@
       </div>
 
       {{if $isPrescriptionInstalled && "dPcabinet CPrescription view_prescription"|conf:"CGroups-$g" && $view_prescription}}
-        <button class="tick" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour');">Accéder à la prescription</button>
+        <button class="tick" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour');
+          {{if $app->user_prefs.new_consultation}}tabsConsultAnesth.activeLink.up('li').onmousedown(){{/if}}">Accéder à la prescription</button>
       {{/if}}
 
       {{if $app->user_prefs.displayDocsConsult}}
