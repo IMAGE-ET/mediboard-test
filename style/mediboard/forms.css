@@ -67,10 +67,15 @@ textarea {
   -webkit-appearance: none; /* To remove the "shadow" on iPad" */
 }
 
+/* hides the spin-button for firefox and webkit */
 .numericField input[type=number]::-webkit-inner-spin-button,
 .numericField input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.numericField input[type=number] {
+  -moz-appearance: textfield;
 }
 
 input[type=text],
