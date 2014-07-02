@@ -14,6 +14,8 @@
 $object_guids = CValue::get("object_guids", array());
 $event_name   = CValue::get("event_name");
 
+CExClassConstraint::$_load_lite = true;
+
 $ex_class_events = array();
 $group_id = CGroups::loadCurrent()->_id;
 $ex_class_event = new CExClassEvent;

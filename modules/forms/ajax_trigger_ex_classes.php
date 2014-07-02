@@ -16,6 +16,8 @@ $event_name  = CValue::get("event_name");
 
 $object = CMbObject::loadFromGuid($object_guid);
 
+CExClassConstraint::$_load_lite = true;
+
 $ex_class_event = new CExClassEvent;
 $ds = $ex_class_event->_spec->ds;
 $group_id = CGroups::loadCurrent()->_id;

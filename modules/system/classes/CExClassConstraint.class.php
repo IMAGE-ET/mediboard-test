@@ -29,6 +29,8 @@ class CExClassConstraint extends CMbObject {
 
   /** @var CMbFieldSpec */
   public $_ref_target_spec;
+  
+  static $_load_lite = false;
 
   /**
    * @see parent::getSpec()
@@ -225,6 +227,10 @@ class CExClassConstraint extends CMbObject {
    */
   function updateFormFields(){
     parent::updateFormFields();
+    
+    if (self::$_load_lite) {
+      return;
+    }
 
     $this->loadRefExClassEvent(true);
 
@@ -328,6 +334,10 @@ class CExClassConstraint extends CMbObject {
    * @return void
    */
   function loadObjectRefs(CMbObject $object) {
+    if (isset($object->_object_refs_loaded)) {
+      return;
+    }
+    
     if (
         !$object instanceof CAdministration &&
         !$object instanceof CPrescriptionLine &&
@@ -340,6 +350,8 @@ class CExClassConstraint extends CMbObject {
       $object->isHorsT2A();
       $object->loadClasseATC();
     }
+    
+    $object->_object_refs_loaded = true;
   }
 
   /**
