@@ -404,7 +404,7 @@ class CRPU extends CMbObject {
     $sejour->patient_id    = $this->_patient_id;
     $sejour->group_id      = CGroups::loadCurrent()->_id;
     $sejour->praticien_id  = $this->_responsable_id;
-    $sejour->type          = $this->_UHCD ? "comp" : "urg";
+    $sejour->type          = $sejour->UHCD ? "comp" : "urg";
     $sejour->recuse        = CAppUI::conf("dPplanningOp CSejour use_recuse") ? -1 : 0;
     $sejour->entree_prevue = $this->_entree;
     $sejour->entree_reelle = $this->_entree;
