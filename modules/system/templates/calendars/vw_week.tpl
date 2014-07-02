@@ -19,7 +19,7 @@ Main.add(function() {
     '{{$planning->guid}}', 
     '{{$planning->hour_min}}', 
     '{{$planning->hour_max}}', 
-    {{$planning->events|@json}},
+    {{$planning->events|@json:false:true}},
     {{$planning->ranges|@json}},
     {{$planning->hour_divider}},
     window["planning-{{$planning->guid}}"] && window["planning-{{$planning->guid}}"].scrollTop,
