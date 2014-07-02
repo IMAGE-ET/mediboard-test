@@ -271,7 +271,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $props["_etat"]             = "str";
 
     $props["rques"]             = "text helped seekable";
-    $props["examen"]            = "text helped seekable show|0";
+    $props["examen"]            = "text helped seekable";
     $props["traitement"]        = "text helped seekable";
     $props["histoire_maladie"]  = "text helped seekable";
     $props["brancardage"]       = "text helped seekable";
