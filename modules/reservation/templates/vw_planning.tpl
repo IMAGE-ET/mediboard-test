@@ -36,16 +36,15 @@
     var form = getForm("filterPlanning");
     var url = new Url("reservation", "ajax_vw_planning");
     url.addParam("current_m"    , "{{$current_m}}");
-    var week_container = $$(".week-container")[0];
-    if (week_container) {
-      url.addParam("scroll_top", week_container.scrollTop);
+    var week_containers = $$(".week-container");
+    if (week_containers.length > 0) {
+      url.addParam("scroll_top", week_containers[0].scrollTop);
     }
     url.requestUpdate("planning");
   };
 
   modifPlage = function(plageop_id) {
     var oform = getForm("filterPlanning");
-    console.log(oform.bloc_id);
     var url = new Url('dPbloc', 'inc_edit_planning');
     url.addParam('plageop_id', plageop_id);
     url.addParam('date', $(oform.date_planning).getValue());
@@ -379,16 +378,16 @@
         Interface
       </th>
       <th class="category">
-        <a href="#" class="button search" onclick="openLegend();">{{tr}}Legend{{/tr}}</a>
+        <button class="button search" type="button" onclick="openLegend();">{{tr}}Legend{{/tr}}</button>
       </th>
     </tr>
     <tr>
       <td>
-        <a href="#1" onclick="window.calendar_planning.datePicked(new Date(new Date(window.calendar_planning.altElement.defaultValue).setHours('-24')))">&lt;&lt;&lt;</a>
+        <a href="#nothing" onclick="window.calendar_planning.datePicked(new Date(new Date(window.calendar_planning.altElement.defaultValue).setHours('-24')))">&lt;&lt;&lt;</a>
         <label>
         Date <input name="date_planning" type="hidden" value="{{$date_planning}}" class="date" onchange="updateSession('date_planning', this.value);"/>
         </label>
-        <a href="#1" onclick="window.calendar_planning.datePicked(new Date(new Date(window.calendar_planning.altElement.defaultValue).setHours('+24')))">&gt;&gt;&gt;</a>
+        <a href="#nothing" onclick="window.calendar_planning.datePicked(new Date(new Date(window.calendar_planning.altElement.defaultValue).setHours('+24')))">&gt;&gt;&gt;</a>
       </td>
       <td>
           <label>
