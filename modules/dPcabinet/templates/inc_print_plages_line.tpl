@@ -49,9 +49,10 @@
     </td>
   {{/if}}
   <td {{if $consult_anesth->operation_id}}rowspan="2"{{/if}} style="text-align: center; {{$consult_background}}">
-    {{assign var=age_patient value="`$patient->_age`"}}
+    {{assign var=age_patient value=$patient->_age}}
     {{if $patient->_annees != "??"}}
-      {{assign var=age_patient value="`$age_patient` \n (`$patient->naissance`)"}}
+      {{assign var=naissance_formatted value=$patient->getFormattedValue('naissance')}}
+      {{assign var=age_patient value="$age_patient \n ($naissance_formatted)"}}
     {{/if}}
 
     {{mb_ditto name=age_patient value=$age_patient|nl2br}}
