@@ -386,7 +386,6 @@ class CDatedCodeCCAM {
     $activite->phases = array();
     $phases =& $activite->phases;
     $infoPhase = null;
-    $this->_sorted_tarif = 2;
     foreach ($this->_ref_code_ccam->_ref_activites[$activite->numero]->_ref_phases as $phase) {
       foreach ($phase->_ref_classif as $dateEffet => $info) {
         if ($dateEffet < $this->_date) {
