@@ -11,7 +11,10 @@
 CCanDo::checkRead();
 
 $user_connected = CMediusers::get();
-$user_id = CValue::get("user_id", $user_connected->_id);
+$user_id = CValue::get("user_id");
+if (!$user_id) {
+  $user_id = $user_connected->_id;
+}
 $account_id = CValue::getOrSession("account_id");
 
 //user
@@ -34,13 +37,13 @@ $ljoin["users_mediboard"] = "source_pop.object_id = users_mediboard.user_id AND 
 //all accounts linked to a mediuser
 //all accounts from an unique mediuser are grouped, in order to have the mediusers list
 /** @var CSourcePOP[] $accounts_available */
-$accounts_available = $account->loadList($where, null, null, "object_id", $ljoin);
+$accounts_available = $account->loadList($where, null, null, null, $ljoin);
 
 //getting user list
 $users = array();
 foreach ($accounts_available as $_account) {
   $userPop = $_account->loadRefMetaObject();
-  $users[] = $userPop;
+  $users[$userPop->_id] = $userPop;
 }
 
 //all accounts to the selected user
