@@ -44,6 +44,9 @@ $listChirs = $listChirs->loadPraticiens();
 //Initialisation d'un acte NGAP
 $acte_ngap = CActeNGAP::createEmptyFor($selOp);
 
+// Liste des dents CCAM
+$liste_dents = reset(CDentCCAM::loadList());
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("acte_ngap"  , $acte_ngap  );
@@ -51,5 +54,6 @@ $smarty->assign("selOp"      , $selOp      );
 $smarty->assign("listAnesths", $listAnesths);
 $smarty->assign("listChirs"  , $listChirs  );
 $smarty->assign("module"     , "dPpmsi"    );
+$smarty->assign('liste_dents', $liste_dents);
 
 $smarty->display("edit_actes.tpl");
