@@ -18,8 +18,8 @@
 
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#config-CPlageOp">{{tr}}{{$class}}{{/tr}}</a></li>
-  <li><a href="#mod-dPbloc-tab-print_planning">{{tr}}mod-dPbloc-tab-print_planning{{/tr}}</a></li>
-  <li><a href="#config-reaffectation_plageop">{{tr}}config-reaffectation_plageop{{/tr}}</a></li>
+  <li><a href="#config-print_planning">{{tr}}mod-dPbloc-tab-print_planning{{/tr}}</a></li>
+  <li><a href="#actions">{{tr}}Maintenance{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -28,10 +28,10 @@
   {{mb_include template=CPlageOp_config}}
 </div>
 
-<div id="mod-dPbloc-tab-print_planning" style="display: none;">
+<div id="config-print_planning" style="display: none;">
   {{mb_include template=inc_config_print_planning}}
 </div>
 
-<div id="config-reaffectation_plageop" style="display: none;">
-  {{mb_include template=inc_config_reaffectation_plageop}}
+<div id="actions" style="display: none;">
+  {{mb_include template=inc_config_actions}}
 </div>
