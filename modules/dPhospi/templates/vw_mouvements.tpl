@@ -62,7 +62,35 @@
         });
       }
     } ));
+
+    // Zones des non placés redimensionnables
+    var grippie = $("grippie_tempo");
+    if (grippie) {
+      height_temporel = $('temporel').getHeight() - $('temporel_filtre').getHeight() - 8;
+      grippie.observe('mousedown', function(e) {
+        Event.stop(e);
+        staticOffset = $('view_affectations') .getHeight() - e.pointerY();
+
+        document.observe('mousemove', performDrag)
+          .observe('mouseup', endDrag);
+      });
+    }
   });
+
+  performDrag = function(e) {
+    Event.stop(e);
+
+    var h = Math.min(Math.max(100, staticOffset + e.pointerY()), height_temporel - 100);
+    var h2 =  height_temporel - h;
+    $('view_affectations').setStyle({height: h  + 'px'});
+    $('list_affectations').setStyle({height: h2 + 'px'});
+  }
+
+  endDrag = function(e) {
+    Event.stop(e);
+    document.stopObserving('mousemove', performDrag)
+      .stopObserving('mouseup', endDrag);
+  }
 </script>
 
 <div style="display: none;" id="choose_interv_sejour">
@@ -92,7 +120,7 @@
   <input type="hidden" name="a" value="ajax_vw_mouvements" />
   
   <!-- Filtre -->
-  <div style="width: 100%;">
+  <div id="temporel_filtre" style="width: 100%;">
     Granularité :
     {{foreach from=$granularites item=_granularite}}
       <label>    
@@ -140,5 +168,5 @@
 </form>
 
 <div id="view_affectations" style="overflow-x: auto; overflow-y: scroll;" onscroll="syncBars(this)"></div>
-<hr />
+<div id="grippie_tempo" class="grippie-h" style="margin-top: 3px; margin-bottom: 3px; height: 6px"></div>
 <div id="list_affectations" style="overflow-x: auto; overflow-y: scroll;" onscroll="syncBars(this)"></div>
