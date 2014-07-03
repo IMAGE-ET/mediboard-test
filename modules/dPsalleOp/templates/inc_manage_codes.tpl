@@ -26,14 +26,16 @@
           <input type="hidden" name="_anesth" value="{{$subject->_ref_plageop->anesth_id}}" />
         {{/if}}
         <input type="hidden" name="_class" value="{{$subject->_class}}" />
-        <fieldset>
-          <legend>Ajouter un code</legend>
+        <fieldset id="didac_inc_manage_codes_fieldset_code">
+          <legend id="didac_actes_ccam_execution">Ajouter un code</legend>
+          <span id="didac_actes_ccam_executant"></span>
+          <span id="didac_actes_ccam_button_comment" ></span>
           <input name="_actes" type="hidden" value="" />
           <input name="_selCode" type="hidden" value="" />
-          <button class="search" type="button" onclick="CCAMSelector.init()">
+          <button id="didac_actes_ccam_tr_modificateurs" class="search" type="button" onclick="CCAMSelector.init()">
             {{tr}}Search{{/tr}}
           </button>
-       
+          <span id="didac_actes_ccam_ext_doc"></span>
           <input type="text" size="10" name="_codes_ccam" />
           
           <script type="text/javascript">
