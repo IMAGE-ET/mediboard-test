@@ -143,6 +143,8 @@ class CUserAgent extends CMbObject {
     include "$dir/Browscap.php";
 
     $detect = new \phpbrowscap\Browscap("$dir/cache.php");
+    $detect->doAutoUpdate = false;
+    $detect->iniFilename  = "browscap.ini";
 
     $user_agent = new self();
     $user_agent->user_agent_string = substr($ua_string, 0, 255);
