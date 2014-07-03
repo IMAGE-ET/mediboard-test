@@ -587,10 +587,10 @@ class CMbObject extends CStoredObject {
     }
     
     // Module actif
-    if (null == $affectations = $this->loadBackRefs("affectations_personnel")) {
+    if (null === $affectations = $this->loadBackRefs("affectations_personnel")) {
       return null;
     }
-    
+
     $this->_count_affectations_personnel = count($affectations);
     
     // Chargement et classement
