@@ -33,9 +33,11 @@ if ($purge) {
   foreach ($plages as $_plage) {
 
     // Suppression des affectationde personnel
-    foreach ($_plage->loadAffectationsPersonnel() as $_affectations) {
-      foreach ($_affectations as $_affectation) {
-        $_affectation->delete();
+    if ($affectations = $_plage->loadAffectationsPersonnel()) {
+      foreach ($affectations as $_affectations) {
+        foreach ($_affectations as $_affectation) {
+          $_affectation->delete();
+        }
       }
     }
 
