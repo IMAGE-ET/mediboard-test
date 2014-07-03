@@ -67,7 +67,7 @@ if ($fill_pref) {
 
   /** Suppression des types d'antécédents non cochés dans la configuration */
   foreach ($order_decode as $key => $_order_decode) {
-    if (in_array($key, $antecedent->_specs["type"]->_list )) {
+    if (!in_array($key, $antecedent->_specs["type"]->_list )) {
       unset($order_decode[$key]);
     }
   }
