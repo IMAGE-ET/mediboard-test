@@ -37,5 +37,5 @@
   </td>
 {{/if}}
 {{if $_show_comment_sejour}}
-  <td>{{$sejour->rques}}</td>
+  <td class="text">{{$sejour->rques}}</td>
 {{/if}}
