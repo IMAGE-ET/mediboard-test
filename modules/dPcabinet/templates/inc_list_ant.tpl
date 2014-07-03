@@ -73,7 +73,7 @@ showModalTP = function(dossier_medical_id, sejour_id, prescription_sejour_id) {
   window.modalUrlTp.addParam("sejour_id", sejour_id);
   window.modalUrlTp.addParam("prescription_sejour_id", prescription_sejour_id);
   window.modalUrlTp.addParam("refresh_prescription", true);
-  window.modalUrlTp.requestModal("60%", "40%", {
+  window.modalUrlTp.requestModal("80%", "80%", {
     onClose: function() {
       if (window.DossierMedical) {
         window.DossierMedical.reloadDossierPatient();

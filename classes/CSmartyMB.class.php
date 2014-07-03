@@ -114,26 +114,27 @@ class CSmartyMB extends Smarty {
     }
 
     // Standard data assignment
-    $this->assign("style", $uistyle);
-    $this->assign("app", CAppUI::$instance);
-    $this->assign("conf", CAppUI::conf());
-    $this->assign("user", CAppUI::$instance->user_id); // shouldn't be necessary
-    $this->assign("version", $version);
+    $this->assign("style"          , $uistyle);
+    $this->assign("app"            , CAppUI::$instance);
+    $this->assign("conf"           , CAppUI::conf());
+    $this->assign("user"           , CAppUI::$instance->user_id); // shouldn't be necessary
+    $this->assign("version"        , $version);
     $this->assign("suppressHeaders", $suppressHeaders);
-    $this->assign("can", $can);
-    $this->assign("m", $m);
-    $this->assign("a", $a);
-    $this->assign("tab", $tab);
-    $this->assign("action", $action);
-    $this->assign("actionType", $actionType);
-    $this->assign("g", $g);
-    $this->assign("dialog", $dialog);
-    $this->assign("ajax", $ajax);
-    $this->assign("modules", $modules);
-    $this->assign("base_url", CApp::getBaseUrl());
-    $this->assign("current_group", CGroups::loadCurrent());
-    $this->assign("dnow" , CMbDT::date());
-    $this->assign("dtnow", CMbDT::dateTime());
+    $this->assign("can"            , $can);
+    $this->assign("m"              , $m);
+    $this->assign("a"              , $a);
+    $this->assign("tab"            , $tab);
+    $this->assign("action"         , $action);
+    $this->assign("actionType"     , $actionType);
+    $this->assign("g"              , $g);
+    $this->assign("dialog"         , $dialog);
+    $this->assign("ajax"           , $ajax);
+    $this->assign("modules"        , $modules);
+    $this->assign("base_url"       , CApp::getBaseUrl());
+    $this->assign("current_group"  , CGroups::loadCurrent());
+    $this->assign("dnow"           , CMbDT::date());
+    $this->assign("dtnow"          , CMbDT::dateTime());
+    $this->assign("tnow"           , CMbDT::time());
   }
 
 

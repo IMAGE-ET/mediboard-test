@@ -37,6 +37,7 @@
     url.addParam("current_m"  , "dPurgences");
     url.addParam("sejour_id"  , "");
     url.addParam("chir_id"    , "{{$app->user_id}}");
+    url.addParam("addform"    , "tri");
     url.requestUpdate('antecedentsanesth');
   }
   
