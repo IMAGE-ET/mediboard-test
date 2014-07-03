@@ -37,14 +37,17 @@ $where["affectation.entree"] = "<= '$datetime_max'";
 $where["affectation.sortie"] = ">= '$datetime_min'";
 $where["affectation.service_id"] = " = '$service_id'";
 
+/** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, null, null, "sejour.sejour_id", $ljoin);
-
-CMbObject::massLoadFwdRef($sejours, "patient_id");
-CMbObject::massLoadFwdRef($sejours, "praticien_id");
 
 $dossiers_complets = array();
 
-/** @var CSejour[] $sejours */
+CStoredObject::massLoadFwdRef($sejours, "praticien_id");
+CMbObject::massLoadRefsNotes($sejours);
+CSejour::massLoadNDA($sejours);
+/** @var CPatient[] $patients */
+$patients = CStoredObject::massLoadFwdRef($sejours, "patient_id");
+CPatient::massLoadIPP($patients);
 foreach ($sejours as $sejour) {
   $patient = $sejour->loadRefPatient();
   $patient->loadIPP();
