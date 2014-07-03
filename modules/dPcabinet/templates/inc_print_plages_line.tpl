@@ -32,19 +32,19 @@
     </td>
     <td {{if $consult_anesth->operation_id}}rowspan="2"{{/if}} style="{{$consult_background}}">
       {{if $patient->tel}}
-        {{mb_ditto name=tel_patient value=$patient->tel center=true}}
+        {{mb_ditto name=tel_patient value=$patient->getFormattedValue('tel') center=true}}
       {{/if}}
       {{if $patient->tel2}}
-        <br />{{mb_ditto name=tel2_patient value=$patient->tel2 center=true}}
+        <br />{{mb_ditto name=tel2_patient value=$patient->getFormattedValue('tel2') center=true}}
       {{/if}}
     </td>
   {{elseif $filter->_telephone}}
     <td {{if $consult_anesth->operation_id}}rowspan="2"{{/if}} style="{{$consult_background}}">
       {{if $patient->tel}}
-        {{mb_ditto name=tel_patient value=$patient->tel center=true}}
+        {{mb_ditto name=tel_patient value=$patient->getFormattedValue('tel') center=true}}
       {{/if}}
       {{if $patient->tel2}}
-        <br />{{mb_ditto name=tel2_patient value=$patient->tel2 center=true}}
+        <br />{{mb_ditto name=tel2_patient value=$patient->getFormattedValue('tel2') center=true}}
       {{/if}}
     </td>
   {{/if}}
