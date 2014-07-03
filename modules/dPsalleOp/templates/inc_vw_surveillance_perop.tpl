@@ -246,7 +246,7 @@ printSurveillance = function(operation_id) {
                        form="edit-grossesse-accouchement-`$_grossesse->_id`-datetime_debut_travail" onchange="this.form.onsubmit()"}}
           {{else}}
             <input type="hidden" name="datetime_debut_travail" value="now" />
-            <button type="submit" class="save">Début du travail</button>
+            <button type="submit" class="save">{{tr}}CGrossesse-datetime_debut_travail{{/tr}}</button>
           {{/if}}
         </form>
 
@@ -262,7 +262,7 @@ printSurveillance = function(operation_id) {
                        form="edit-grossesse-accouchement-`$_grossesse->_id`-datetime_accouchement" onchange="this.form.onsubmit()"}}
           {{else}}
             <input type="hidden" name="datetime_accouchement" value="now" />
-            <button type="submit" class="save">Accouchement terminé</button>
+            <button type="submit" class="save">{{tr}}CGrossesse-datetime_accouchement{{/tr}}</button>
           {{/if}}
         </form>
       </td>
