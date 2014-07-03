@@ -10,68 +10,64 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
-global $can;
+CCanDo::checkAdmin();
 
 $mode_real = CValue::get("mode_real", 1);
 
-$can->needsAdmin();
-
-$plageop = new CPlageOp();
+$date = CMbDT::date();
+$plage = new CPlageOp();
 $where = array();
 $where["plagesop.spec_repl_id"] = "IS NOT NULL";
 $where["plagesop.delay_repl"]   = "IS NOT NULL";
-$where[] = "`plagesop`.`date` < DATE_ADD('".CMbDT::date()."', INTERVAL `plagesop`.`delay_repl` DAY)";
-$where[] = "`plagesop`.`date` >= '".CMbDT::date()."'";
+$where[] = "`plagesop`.`date` < DATE_ADD('$date', INTERVAL `plagesop`.`delay_repl` DAY)";
+$where[] = "`plagesop`.`date` >= '$date'";
 $where["operations.operation_id"] = "IS NULL";
 $order = "`plagesop`.`date`, `plagesop`.`debut`";
 $limit = null;
-$group = null;
+$group = "plagesop.plageop_id";
 $ljoin = array();
 $ljoin["operations"] = "operations.plageop_id = plagesop.plageop_id AND operations.annulee = '0'";
-/** @var CPlageOp[] $listPlages */
-$listPlages = $plageop->loadList($where, $order, $limit, $group, $ljoin);
-if ($mode_real) {
-  CAppUI::getMsg("Lancement à : ".CMbDT::dateTime()." en mode réel");
-}
-else {
-  CAppUI::setMsg("Lancement à : ".CMbDT::dateTime()." en mode test");
-}
-foreach ($listPlages as $curr_plage) {
+/** @var CPlageOp[] $plages */
+$plages = $plage->loadList($where, $order, $limit, $group, $ljoin);
+
+$count = count($plages);
+CAppUI::stepAjax("Lancement à '$date' en mode '$mode_real': '$count' plages trouvées");
+
+foreach ($plages as $_plage) {
   if ($mode_real) {
     // Suppression des interventions annulées de cette plage pour les mettre en hors plannifié
-    $curr_plage->loadRefsOperations();
-    foreach ($curr_plage->_ref_operations as $curr_op) {
-      $curr_op->plageop_id = "";
-      $curr_op->date = $curr_plage->date;
-      $curr_op->store();
+    foreach ($_plage->loadRefsOperations() as $_operation) {
+      $_operation->plageop_id = "";
+      $_operation->store();
     }
     // Réaffectation de la plage
-    $curr_plage->spec_id = $curr_plage->spec_repl_id;
-    $curr_plage->chir_id = "";
-    if ($msg = $curr_plage->store()) {
-      CAppUI::setMsg($msg, UI_MSG_ERROR);
+    $_plage->spec_id = $_plage->spec_repl_id;
+    $_plage->chir_id = "";
+    if ($msg = $_plage->store()) {
+      CAppUI::stepAjax($msg, UI_MSG_ERROR);
     }
     else {
-      CAppUI::setMsg("Plage $curr_plage->_id mise à jour", UI_MSG_OK);
+      CAppUI::stepAjax("Plage '$_plage->_id' mise à jour", UI_MSG_OK);
     }
   }
   else {
-    $curr_plage->loadRefChir();
-    $curr_plage->loadRefSpec();
-    $curr_plage->loadRefSpecRepl();
-    if ($curr_plage->chir_id) {
-      $from = "Dr ".$curr_plage->_ref_chir->_view;
+    $_plage->loadRefChir();
+    $_plage->loadRefSpec();
+    $_plage->loadRefSpecRepl();
+    if ($_plage->chir_id) {
+      $from = "Dr ".$_plage->_ref_chir->_view;
     }
     else {
-      $from = $curr_plage->_ref_spec->_view;
+      $from = $_plage->_ref_spec->_view;
     }
-    $msg = "plage du $curr_plage->date de $curr_plage->debut à $curr_plage->fin : $from vers ".$curr_plage->_ref_spec_repl->_view;
-    CAppUI::setMsg($msg, UI_MSG_OK);
+
+    $to = $_plage->_ref_spec_repl->_view;
+    $msg = "plage du '$_plage->date' de '$_plage->debut' à '$_plage->fin': réattribution de '$from' vers '$to'";
+    CAppUI::stepAjax($msg, UI_MSG_OK);
   }
 }
 
-echo CAppUI::getMsg();
