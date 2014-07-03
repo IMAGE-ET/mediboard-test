@@ -40,7 +40,7 @@ Main.add(function () {
       </select>
       </form>
     </th>
-    <td rowspan="3" class="greedyPane" style="vertical-align:top;">
+    <td id="didac_operations" rowspan="3" class="greedyPane" style="vertical-align:top;">
       <div id="operations">
         <div class="small-info">
           Cette vue affiche la liste des interventions pour le jour sélectionné.
@@ -60,7 +60,7 @@ Main.add(function () {
   <tr>
     <td>
       
-      <table class="tbl">
+      <table id="didac_list_interv" class="tbl">
         <tr>
           <th>Date</th>
           <th>Plage</th>

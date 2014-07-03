@@ -569,7 +569,7 @@ Main.add( function(){
   {{mb_key object=$sejour}}
 {{/if}}
 
-<table class="form">
+<table id="didac_program_new_sejour" class="form">
 <col style="width:20%" />
 <col style="width:40%" />
 <col style="width:20%" />
@@ -700,7 +700,7 @@ Main.add( function(){
       {{elseif !($patient_id_config == 0 && $sejour->_id) && !($patient_id_config == 2 && $sejour->entree_reelle)}}
         confirmChangePatient();
       {{/if}}"/>
-    <button type="button" class="search notext" onclick="
+    <button id="didac_button_pat_selector" type="button" class="search notext" onclick="
       {{if !$sejour->_id}}
         PatSelector.init();
       {{elseif !($patient_id_config == 0 && $sejour->_id) && !($patient_id_config == 2 && $sejour->entree_reelle)}}
@@ -1356,7 +1356,7 @@ Main.add( function(){
         </div>
       {{/if}}
     {{else}}
-      <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+      <button id="didac_button_create" class="submit" type="submit">{{tr}}Create{{/tr}}</button>
     {{/if}}
     </td>
   </tr>

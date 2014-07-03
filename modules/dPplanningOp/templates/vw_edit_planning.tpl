@@ -233,7 +233,7 @@ modeExpertDisplay = function() {
       <button class="hslip" id="modeExpert-trigger" style="float: right; display:none;" type="button">
         {{tr}}button-COperation-modeExpert{{/tr}}
       </button>
-      <button style="float:left;" class="search" type="button" onclick="ProtocoleSelector.init()">
+      <button id="didac_choose_protocole" style="float:left;" class="search" type="button" onclick="ProtocoleSelector.init()">
         {{tr}}button-COperation-choixProtocole{{/tr}}
       </button>
       {{mb_ternary var=message test=$op->_id value=modify other=create}}
@@ -305,7 +305,7 @@ modeExpertDisplay = function() {
         {{mb_include module=reservation template=inc_button_send_mail operation_id=$op->_id}}
       {{/if}}
     {{else}}
-      <button class="submit" type="button" onclick="submitForms();">{{tr}}Create{{/tr}}</button>
+      <button id="didac_submit_interv" class="submit" type="button" onclick="submitForms();">{{tr}}Create{{/tr}}</button>
     {{/if}}
     </td>
   </tr>

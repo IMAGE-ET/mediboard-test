@@ -317,7 +317,7 @@ Main.add(function () {
         <tr>
           <td colspan="2" class="button">
             <button class="cancel" type="button" onclick="window._close()">{{tr}}Cancel{{/tr}}</button>
-            <button class="tick" type="button" onclick="setClose('', '')">{{tr}}OK{{/tr}}</button>          
+            <button id="didac_button_OK" class="tick" type="button" onclick="setClose('', '')">{{tr}}OK{{/tr}}</button>
           </td>
         </tr>
       </table>

@@ -42,15 +42,15 @@
 
 <table class="tbl" {{if $board}}style="font-size: 9px;"{{/if}}>
   <tr>
-    <th class="title" colspan="3">
+    <th id="didac_th_interv" class="title" colspan="3">
       <button type="button" style="float: right;" class="notext print" onclick="printPlanningChir('{{$date}}', '{{$praticien->_id}}');">{{tr}}Print{{/tr}}</button>
       Interventions
     </th>
   </tr>
   
   <tr>
-    <th></th>
-    <th>{{mb_label class=CSejour field=patient_id}}</th>
+    <th id="didac_th_listing_interv"></th>
+    <th id="didac_th_listing_patient">{{mb_label class=CSejour field=patient_id}}</th>
     <th>
       [{{mb_label class=COperation field=libelle}}] 
       {{mb_label class=COperation field=codes_ccam}}

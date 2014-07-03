@@ -239,7 +239,7 @@
         style="width: 15em;"
         onfocus="this.blur(); PlageOpSelector.init()"
         value="{{$op->_datetime|date_format:$conf.datetime}}" />
-      <button type="button" class="search notext" onclick="PlageOpSelector.init()">Choisir une date</button>
+      <button id="didac_plage_op_select_button" type="button" class="search notext" onclick="PlageOpSelector.init()">Choisir une date</button>
     </td>
   </tr>
   {{/if}}
@@ -263,7 +263,7 @@
         {{/if}}
       />
       {{if $conf.dPplanningOp.CSejour.patient_id || !$sejour->_id || $app->user_type == 1}}
-      <button type="button" class="search notext" onclick="PatSelector.init()">Choisir un patient</button>
+      <button id="didac_patient_select_button" type="button" class="search notext" onclick="PatSelector.init()">Choisir un patient</button>
       <button id="button-edit-patient-easy" type="button" 
             onclick="location.href='?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id='+this.form.patient_id.value" 
             class="edit notext" {{if !$patient->_id}}style="display: none;"{{/if}}>

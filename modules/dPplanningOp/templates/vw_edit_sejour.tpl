@@ -91,7 +91,7 @@
   {{if $sejour->_id && !$dialog}}
     <tr>
       <td colspan="2">
-        <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;sejour_id=0">
+        <a id="didac_program_new_sejour" class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;sejour_id=0">
           {{tr}}CSejour.create{{/tr}}
         </a>
       </td>
