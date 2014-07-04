@@ -10,7 +10,7 @@
 
 <script>
   Main.add(function() {
-    CPlageOp.auto.delay(2);
+    CPlageOp.purgeAuto.delay(2);
   });
 </script>
 

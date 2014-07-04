@@ -49,6 +49,40 @@
             return false;
           },
 
+          purgeAuto: function() {
+            var form = document.PurgeEmpty;
+            if (form && $(form.auto.checked)) {
+              CPlageOp.purgeEmpty(form);
+            }
+          },
+
+          mergeDuplicate: function(form) {
+            var url = new Url('bloc', 'merge_duplicate_plagesop');
+
+            if (form) {
+              url.addNotNullElement(form.merge);
+              url.addNotNullElement(form.max  );
+              url.addElement(form.auto);
+            }
+
+            var modal = Control.Modal.stack.last();
+            if (modal) {
+              url.requestUpdate(modal.container.down('.content'));
+            }
+            else {
+              url.requestModal(600);
+            }
+
+            return false;
+          },
+
+          mergeAuto: function() {
+            var form = document.MergeDuplicate;
+            if (form && $(form.auto.checked)) {
+              CPlageOp.mergeDuplicate(form);
+            }
+          },
+
           edit: function(plageop_id, bloc_id, date) {
             var url = new Url('bloc', 'inc_edit_planning');
             url.addParam('plageop_id', plageop_id);
@@ -57,11 +91,11 @@
             url.requestModal(800);
           },
 
-          auto: function() {
-            var form = document.PurgeEmpty;
-            if (form && $(form.auto.checked)) {
-              CPlageOp.purgeEmpty(form);
-            }
+          merge: function(plage_ids) {
+            var url = new Url('system', 'object_merger');
+            url.addParam('objects_class', 'CPlageOp');
+            url.addParam('objects_id', plage_ids);
+            url.popup(800, 600);
           }
         }
 
@@ -73,7 +107,8 @@
       </div>
 
       <div>
-        <button class="search" onclick="CPlageOp.purgeEmpty()">{{tr}}mod-bloc-tab-purge_empty_plagesop{{/tr}}</button>
+        <button class="search" onclick="CPlageOp.purgeEmpty()"    >{{tr}}mod-bloc-tab-purge_empty_plagesop{{/tr}}</button>
+        <button class="search" onclick="CPlageOp.mergeDuplicate()">{{tr}}mod-bloc-tab-merge_duplicate_plagesop{{/tr}}</button>
       </div>
 
     </td>

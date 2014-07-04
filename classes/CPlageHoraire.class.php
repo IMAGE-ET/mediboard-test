@@ -102,10 +102,12 @@ class CPlageHoraire extends CMbObject {
    * @see parent::check()
    */
   function check() {
-    if ($msg = $this->hasCollisions()) {
-      return $msg;
+    if (!$this->_merging) {
+      if ($msg = $this->hasCollisions()) {
+        return $msg;
+      }
     }
-    
+
     return parent::check();
   }
 
