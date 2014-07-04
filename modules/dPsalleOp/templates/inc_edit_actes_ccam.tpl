@@ -89,6 +89,7 @@
           {{/if}}
           <!-- Variable _calcul_montant_base permettant de la lancer la sauvegarde du montant de base dans le store de l'acte ccam -->
           <input type="hidden" name="_calcul_montant_base" value="1" />
+          <input type="hidden" name="_edit_modificateurs" value="1"/>
           <input type="hidden" name="object_id" class="{{$acte->_props.object_id}}" value="{{$subject->_id}}" />
           <input type="hidden" name="object_class" class="{{$acte->_props.object_class}}" value="{{$subject->_class}}" />
           <input type="hidden" name="code_acte" class="{{$acte->_props.code_acte}}" value="{{$acte->code_acte}}" />

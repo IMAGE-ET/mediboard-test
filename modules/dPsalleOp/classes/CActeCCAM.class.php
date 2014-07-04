@@ -67,6 +67,7 @@ class CActeCCAM extends CActe {
   // Behaviour fields
   public $_adapt_object = false;
   public $_calcul_montant_base = false;
+  public $_edit_modificateurs = false;
   
   // References
   /** @var  CDatedCodeCCAM */
