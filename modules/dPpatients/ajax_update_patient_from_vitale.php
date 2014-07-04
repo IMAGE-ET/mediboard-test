@@ -12,20 +12,23 @@
  */
 
 $patient_id = CValue::get("patient_id");
+$administrative_data = CValue::get('administrative_data', 0);
 $patient = new CPatient();
 $patient->load($patient_id);
-
+ml($administrative_data, 'administrative_data');
 $cv = CFseFactory::createCV();
 
 if ($cv) {
   if ($patient->_id) {
-    $cv->getPropertiesFromVitale($patient, false);
+    $cv->getPropertiesFromVitale($patient, $administrative_data);
   }
   else {
     $cv->getPropertiesFromVitale($patient);
   }
 
-  if ($msg = $patient->store()) {
+  $msg = $patient->store();
+  ml($msg, 'msg');
+  if ($msg) {
     CAppUI::setMsg($msg, UI_MSG_ERROR);
   }
 }
