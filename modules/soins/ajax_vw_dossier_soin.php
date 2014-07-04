@@ -197,6 +197,7 @@ if (CModule::getActive("dPprescription")) {
         $line->loadVoies();
         $line->loadRefPraticien();
         $line->loadRefLogSignaturePrat();
+        $line->loadRefsPrises();
         if (CAppUI::conf("dPprescription CPrescription show_initiales_pharma", $group->_guid)) {
           $line->loadRefLogValidationPharma()->loadRefUser()->loadRefMediuser();
         }
@@ -268,6 +269,7 @@ if (CModule::getActive("dPprescription")) {
           $_prescription_line_mix->loadRefPraticien();
           $_prescription_line_mix->loadRefLogSignaturePrat();
           $_prescription_line_mix->calculVariations();
+          $_prescription_line_mix->loadRefsPrises();
           $_prescription_line_mix->countPlanifications();
           if (in_array($_prescription_line_mix->jour_decalage, array("ER", "R"))) {
             $_prescription_line_mix->loadRefOperation();
@@ -318,6 +320,7 @@ if (CModule::getActive("dPprescription")) {
           $_prescription_line_mix->loadRefLogSignaturePrat();
           $_prescription_line_mix->calculVariations();
           $_prescription_line_mix->countPlanifications();
+          $_prescription_line_mix->loadRefsPrises();
           if (in_array($_prescription_line_mix->jour_decalage, array("ER", "R"))) {
             $_prescription_line_mix->loadRefOperation();
           }
