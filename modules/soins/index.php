@@ -33,7 +33,7 @@ if (CModule::getActive('dPprescription')) {
 
 if (
     CModule::getActive('pharmacie') &&
-    CAppUI::conf("pharmacie enable_v2") && 
+    CAppUI::conf("pharmacie enable_v2") &&
     CAppUI::conf("pharmacie Display show_dispensation_dossier_soins", $current_group)
 ) {
   $module->registerTab("vw_dispensation", TAB_READ);
