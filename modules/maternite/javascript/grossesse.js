@@ -59,7 +59,7 @@ Grossesse = {
         html += "class='opacity-40' ";
       }
       if ($V(this.formTo._large_icon) == 1) {
-        html += "style='width: 30px;'";
+        html += "style='width: 30px; background-color: rgb(255, 215, 247);'";
       }
       html += "/>";
       $("view_grossesse").update(html);

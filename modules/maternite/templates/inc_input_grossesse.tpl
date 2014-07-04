@@ -32,8 +32,8 @@
 
 <span id="view_grossesse">
   {{if $grossesse->_id}}
-    <img onmouseover="ObjectTooltip.createEx(this, '{{$grossesse->_guid}}')" {{if !$grossesse->active}}class="opacity-50"{{/if}}
-        src="style/mediboard/images/icons/grossesse.png" {{if $large_icon}}style="width: 30px;"{{/if}}/>
+      <img onmouseover="ObjectTooltip.createEx(this, '{{$grossesse->_guid}}')" {{if !$grossesse->active}}class="opacity-50"{{/if}}
+           src="style/mediboard/images/icons/grossesse.png" style="{{if $large_icon}}width: 30px;{{/if}} background-color: rgb(255, 215, 247);"/>
   {{elseif $modify_grossesse && (!$patient->_id || $patient->sexe == "f")}}
     <div class="empty" style="display:inline">{{tr}}CGrossesse.none_linked{{/tr}}</div>
   {{/if}}
