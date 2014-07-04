@@ -50,6 +50,15 @@ class CCorrespondant extends CMbObject {
   }
 
   /**
+   * @see parent::getBackProps()
+   */
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["identifiants"] .= " cascade";
+    return $backProps;
+  }
+
+  /**
    * @see parent::loadRefsFwd()
    */
   function loadRefsFwd() {
