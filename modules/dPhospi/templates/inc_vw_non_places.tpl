@@ -18,7 +18,7 @@
   
   Main.add(function() {
     var time_line_temporelle_non_affectes = $("time_line_temporelle_non_affectes");
-    var list_affectations = $("list_affectations");
+    var list_affectations = $("list_non_places");
     
     if (Prototype.Browser.Gecko) {
       time_line_temporelle_non_affectes.setStyle({top: window.top_tempo_na});
@@ -30,7 +30,7 @@
       });
       list_affectations.fire('scroll');
     }
-    $("list_affectations").scrollTop = Placement.scrollNonPlaces;
+    $("list_non_places").scrollTop = Placement.scrollNonPlaces;
 
     {{if "dPImeds"|module_active}}
       ImedsResultsWatcher.loadResults();
@@ -42,8 +42,8 @@
 {{math equation=x-1 x=$nb_ticks assign=nb_ticks_r}}
 {{assign var=systeme_presta value=$conf.dPhospi.systeme_prestations}}
 
-<div style="height: 2em; width: 100%; position: relative">
-  <div id="time_line_temporelle_non_affectes" style="background: #fff; position: absolute; z-index: 200;">
+<div style="height: 2em; width: 100%;">
+  <div id="time_line_temporelle_non_affectes" style="background: #fff; z-index: 200;">
     <div style="display: inline-block;">
       <input type="text" style="width: 7em;" onkeyup="filter(this, 'non_places_temporel')" class="search" />
     </div>
@@ -97,30 +97,32 @@
   {{tr}}CSejour-partial_view{{/tr}}
 </div>
 
-{{if $sejours_non_affectes|@count}}
-  <table class="tbl layout_temporel" style="table-layout: fixed; position: relative;" id="non_places_temporel">
-    <col style="width: 15%;" />
-    {{assign var=show_age_patient value=$conf.dPhospi.show_age_patient}}
-    {{foreach from=$sejours_non_affectes item=_sejours_by_service key=_service_id}}
-      {{if $_service_id != "np"}}
-        {{assign var=service value=$services.$_service_id}}
-      {{/if}}
-      <tr>
-        <th class="section {{if $_service_id != "np" && $service->externe}}service_externe{{/if}}" colspan="{{$colspan}}">
-          {{if $_service_id == "np"}}
-            Non placés
-          {{else}}
-            {{$service}} - Couloir
-          {{/if}}
-        </th>
-      </tr>
-      {{foreach from=$_sejours_by_service item=_object}}
-        <tr class="droppable line">
-          {{mb_include module=hospi template=inc_line_lit in_corridor=1 _lit=$_object}}
+<div id="list_non_places" style="height: 95%; overflow-x: auto; overflow-y: scroll;" onscroll="syncBars(this)">
+  {{if $sejours_non_affectes|@count}}
+    <table class="tbl layout_temporel" style="table-layout: fixed; position: relative;" id="non_places_temporel">
+      <col style="width: 15%;" />
+      {{assign var=show_age_patient value=$conf.dPhospi.show_age_patient}}
+      {{foreach from=$sejours_non_affectes item=_sejours_by_service key=_service_id}}
+        {{if $_service_id != "np"}}
+          {{assign var=service value=$services.$_service_id}}
+        {{/if}}
+        <tr>
+          <th class="section {{if $_service_id != "np" && $service->externe}}service_externe{{/if}}" colspan="{{$colspan}}">
+            {{if $_service_id == "np"}}
+              Non placés
+            {{else}}
+              {{$service}} - Couloir
+            {{/if}}
+          </th>
         </tr>
+        {{foreach from=$_sejours_by_service item=_object}}
+          <tr class="droppable line">
+            {{mb_include module=hospi template=inc_line_lit in_corridor=1 _lit=$_object}}
+          </tr>
+        {{/foreach}}
       {{/foreach}}
-    {{/foreach}}
-  </table>
-{{else}}
-  <div class="empty">{{tr}}CSejour.none{{/tr}}</div>
-{{/if}}
+    </table>
+  {{else}}
+    <div class="empty">{{tr}}CSejour.none{{/tr}}</div>
+  {{/if}}
+</div>

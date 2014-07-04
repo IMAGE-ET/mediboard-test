@@ -81,8 +81,9 @@
     Event.stop(e);
 
     var h = Math.min(Math.max(100, staticOffset + e.pointerY()), height_temporel - 100);
-    var h2 =  height_temporel - h;
+    var h2 =  height_temporel - h - 50;
     $('view_affectations').setStyle({height: h  + 'px'});
+    $('list_non_places').setStyle({height: h2 + 'px'});
     $('list_affectations').setStyle({height: h2 + 'px'});
   }
 
@@ -169,4 +170,4 @@
 
 <div id="view_affectations" style="overflow-x: auto; overflow-y: scroll;" onscroll="syncBars(this)"></div>
 <div id="grippie_tempo" class="grippie-h" style="margin-top: 3px; margin-bottom: 3px; height: 6px"></div>
-<div id="list_affectations" style="overflow-x: auto; overflow-y: scroll;" onscroll="syncBars(this)"></div>
+<div id="list_affectations"></div>
