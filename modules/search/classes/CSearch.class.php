@@ -66,7 +66,7 @@ class CSearch {
    *
    * @param string $name   index name
    * @param array  $params The params of the index (nb shards, replicas, etc...)
-   * @param bool   $bool   true to verify if index already exists
+   * @param bool   $bool   Deletes index first if already exists (default = false).
    *
    * @return Elastica\Index
    */
@@ -325,14 +325,14 @@ class CSearch {
    *
    * @param string  $operator    'And' or 'Or' default : 'Or'
    * @param string  $words       data
-   * @param array   $arrayFilter the array of users where PERM_READ
    * @param integer $start       the begining of the paging
    * @param integer $limit       the interval of the paging
    * @param array   $names_types the restrictive type(s) where the search take place.
+   * @param bool    $aggregation parameter the search to be aggregated or not.
    *
    * @return \Elastica\ResultSet
    */
-  function searchQueryString($operator, $words , $arrayFilter, $start = 0, $limit = 30, $names_types = null){
+  function searchQueryString($operator, $words, $start = 0, $limit = 30, $names_types = null, $aggregation = false) {
     // Define a Query. We want a string query.
     $elasticaQueryString  = new QueryString();
 
@@ -344,16 +344,39 @@ class CSearch {
     $elasticaQuery        = new Query();
     $elasticaQuery->setQuery($elasticaQueryString);
 
-    //add Filter to the query
-    $elasticaFilterUser = new Terms();
-    $elasticaFilterUser->setTerms('author_id', $arrayFilter);
-    $elasticaFilterOr     = new BoolOr();
-    $elasticaFilterOr->addFilter($elasticaFilterUser);
-    $elasticaQuery->setFilter($elasticaFilterOr);
+    //create aggregation
+    if ($aggregation) {
+       // on aggrège d'abord par class d'object référents
+      // on effectue un sous aggrégation par id des objets référents.
+      $agg_by_class = new CSearchAggregation("Terms", "ref_class", "object_ref_class", 10);
+      $sub_agg_by_id = new CSearchAggregation("Terms", "sub_ref_id", "object_ref_id", 100);
+      $sub_agg_by_type = new CSearchAggregation("Terms", "sub_ref_type", "_type", 10);
+      $sub_agg_by_id->_aggregation->addAggregation($sub_agg_by_type->_aggregation);
+      $agg_by_class->_aggregation->addAggregation($sub_agg_by_id->_aggregation);
+      $elasticaQuery->addAggregation($agg_by_class->_aggregation);
 
-    //  Pagination
-    $elasticaQuery->setFrom($start);    // Where to start?
-    $elasticaQuery->setLimit($limit);
+      // Nuage de mots clés pour recherche automatique.
+//      $agg_cloud = new CSearchAggregation("Terms", "cloud", "body", 400);
+//      $agg_cloud->_aggregation->setMinimumDocumentCount(10);
+//      $agg_cloud->_aggregation->setExclude("(\\b\\w{1,4}\\b|\\d*)", "CANON_EQ|CASE_INSENSITIVE");
+//      $elasticaQuery->addAggregation($agg_cloud->_aggregation);
+    }
+    else {
+      //  Pagination
+      $elasticaQuery->setFrom($start);    // Where to start
+      $elasticaQuery->setLimit($limit);
+    }
+
+    //Highlight
+    $elasticaQuery->setHighlight(
+      array(
+        "fields" => array("body" => array(
+          "pre_tags" => array(" <em> <strong> "),
+          "post_tags" => array(" </strong> </em>"),
+          "fragment_size" => 80,
+          "number_of_fragments" => 3,
+        )),
+      ));
 
     //Search on the index.
     $this->_index = $this->loadIndex();
@@ -460,6 +483,7 @@ class CSearch {
       $array = array(
         "id"          => array('type' => 'integer', 'include_in_all' => true),
         "author_id"   => array('type' => 'integer', 'include_in_all' => true),
+        "prat_id"     => array('type' => 'integer', 'include_in_all' => true),
         "title"       => array('type' => 'string', 'include_in_all' => false),
         "body"        => array('type' => 'string', 'include_in_all' => true),
         "date"        => array('type'           => 'date',
@@ -467,7 +491,9 @@ class CSearch {
                                'include_in_all' => true),
         "patient_id"  => array('type' => 'integer', 'include_in_all' => true),
         "function_id" => array('type' => 'integer', 'include_in_all' => true),
-        "group_id"    => array('type' => 'integer', 'include_in_all' => true)
+        "group_id"    => array('type' => 'integer', 'include_in_all' => true),
+        "object_ref_id"=> array('type' => 'integer', 'include_in_all' => true),
+        "object_ref_class"=> array('type' => 'string', 'include_in_all' => true)
       );
       $this->createMapping($type, $array);
     }

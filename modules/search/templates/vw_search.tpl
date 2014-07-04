@@ -14,15 +14,46 @@
     window.calendar_planning_fin = Calendar.regField(form._min_date);
     window.calendar_planning_fin = Calendar.regField(form._max_date);
     window.calendar_planning_fin = Calendar.regField(form._date);
+    getAutocomplete();
+  });
 
+  function changePage(start) {
+    var form = getForm("esSearch");
+    $V(form.elements.start, start);
+    form.onsubmit();
+  }
+
+  function insertTag(guid, name) {
+    var tag = $("CTag-" + guid);
+
+    if (!tag) {
+      var btn = DOM.button({
+        "type": "button",
+        "className": "delete",
+        "style": "display: inline-block !important",
+        "onclick": "window.user_tag_token.remove($(this).up('li').get('user_id')); this.up().remove();"
+      });
+
+      var li = DOM.li({
+        "data-tag_item_id": guid,
+        "id": "CTag-"+guid,
+        "className": "tag"
+      }, name, btn);
+
+      $("user_tags").insert(li);
+    }
+  }
+
+  function getAutocomplete () {
+    var form = getForm("esSearch");
     var element = form.elements.user_id,
       tokenField = new TokenField(element, {onChange: function(){}.bind(element)});
 
     var element_input = form.elements.user_view;
-    var url = new Url("system", "ajax_seek_autocomplete");
+    var url = new Url("mediusers", "ajax_users_autocomplete");
     url.addParam("object_class", "CMediusers");
     url.addParam("input_field", element_input.name);
-
+    url.addParam("edit", "1");
     url.autoComplete(element_input, null, {
       minChars: 2,
       method: "get",
@@ -44,33 +75,7 @@
     });
 
     window.user_tag_token = tokenField;
-  });
 
-  function changePage(start) {
-    var form = getForm("esSearch");
-    $V(form.elements.start, start);
-    form.onsubmit();
-  }
-
-  function insertTag(guid, name) {
-    var tag = $("CTag-" + guid);
-
-    if (!tag) {
-      var btn = DOM.button({
-        "type": "button",
-        "className": "delete",
-        "style": "display: inline-block !important",
-        "onclick": "window.user_tag_token.remove($(this).up('li').get('tag_item_id')); this.up().remove();"
-      });
-
-      var li = DOM.li({
-        "data-tag_item_id": guid,
-        "id": "CTag-"+guid,
-        "className": "tag"
-      }, name, btn);
-
-      $("user_tags").insert(li);
-    }
   }
 </script>
 
@@ -80,9 +85,15 @@
     <tbody>
       <tr>
         <td id="td_container_search">
-          <input type="search" id="words" name="words" value="" placeholder="Saisissez les termes de votre recherche ici..." style="width:50em; height:2em; font-size:large;" onchange="$V(this.form.start, '0')" autofocus>
+          <input type="search" id="words" name="words" value="" placeholder="Saisissez les termes de votre recherche ici..." style="width:50em; height:1.5em; font-size:medium;" onchange="$V(this.form.start, '0')" autofocus>
           <button type="submit" id="button_search" class="button lookup">Démarrer la recherche</button>
           {{mb_include module=search template=inc_tooltip_help}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input type="checkbox" name="aggregate" id="aggregate" value="1" checked>
+          <label for="aggregate"> Agrégation des résultats</label>
         </td>
       </tr>
     </tbody>
@@ -116,19 +127,28 @@
               <tr>
                 <td>
                   <input type="text" name="user_view" class="autocomplete" value="" placeholder="&mdash; Choisir un utilisateur"/>
-                  <input type="hidden" name="user_id" value="" />
+                  <input type="hidden" name="user_id" {{if $app->_ref_user->isPraticien()}}value="{{$app->user_id}}"{{/if}} />
 
-                  <button type="button" class="user notext"
+                  <button type="button" class="user notext" title="Mon compte"
                           onclick="window.user_tag_token.add('{{$app->user_id}}'); insertTag('{{$app->_ref_user->_guid}}', '{{$app->_ref_user}}')">
                   </button>
                   <button type="button" class="erase notext" onclick="$V(this.form.elements.user_id, '');
                           $V(this.form.elements.user_view, ''); $$('li.tag').each(function(elt) { elt.remove(); });">
                   </button>
+                  {{*<input type="checkbox" name="prat_only" title="Filtrer uniquement sur les praticiens" onchange="getAutocomplete();" checked/>*}}
                 </td>
               </tr>
               <tr>
                 <td>
                   <ul id="user_tags" class="tags" style="float: none;">
+                    {{if $app->_ref_user->_is_praticien}}
+                      <li data-tag_item_id="{{$app->_ref_user->_id}}" id="CTag-{{$app->_ref_user->_id}}" class="tag">
+                        {{$app->_ref_user->_view}}
+                        <button type="button" class="delete"
+                                onclick="window.user_tag_token.remove($(this).up('li').get('user_id')); this.up().remove(); $V(this.form.elements.user_id, '');"
+                                style="display: inline-block !important;"></button>
+                      </li>
+                    {{/if}}
                   </ul>
                 </td>
               </tr>

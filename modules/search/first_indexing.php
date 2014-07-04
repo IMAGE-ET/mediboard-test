@@ -3,7 +3,7 @@
 /**
  * $Id$
  *
- * @category ${Module}
+ * @category search
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -30,7 +30,7 @@ try {
     $client_index = new CSearch();
     //create a client
     $client_index->createClient();
-    $index = $client_index->getIndex(CAppUI::conf("db std dbname"));
+    $index = $client_index->getIndex(CAppUI::conf("db std dbname"))->exists();
     $client_index->firstIndexingMapping($names_types, $index);
     CAppUI::displayAjaxMsg("L'index " . CAppUI::conf("db std dbname") . " s'est correctement créé", UI_MSG_OK);
   }

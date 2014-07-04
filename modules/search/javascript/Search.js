@@ -8,7 +8,7 @@
  * @link     http://www.mediboard.org */
 
 Search = window.Search || {
-
+  words_request : null,
   displayResults: function (form){
     var url = new Url('search',  'ajax_result_search');
     url.addFormData(form);
@@ -21,12 +21,6 @@ Search = window.Search || {
     url.addParam("before" , before);
     url.addParam("after" , after);
     url.requestModal("85%","50%");
-  },
-
-  saveModifyMapping : function (modify) {
-    var url = new Url('search',  'vw_cartographie_mapping');
-    url.addParam("modify" , modify);
-    url.requestUpdate('table-mapping');
   },
 
   configServeur : function () {
@@ -42,16 +36,6 @@ Search = window.Search || {
     else {
       elt.toggle();
     }
-  },
-
-  assignFieldText : function (elt, text) {
-    elt.value += text;
-    elt.focus();
-  },
-
-  popupExample : function () {
-    var url = new Url('search',  'ajax_show_query_examples');
-    url.requestModal("85%","50%","Exemples de transcriptions d'une requête");
   },
 
   selectPraticien : function (element2, element) {
@@ -124,5 +108,31 @@ Search = window.Search || {
         elements[i].checked = form.checked;
       }
     }
+  },
+
+  searchMoreDetails: function (object_id, object_ref, type) {
+    var id = "details-"+type+"-"+object_id;
+    new Url('search',  'ajax_result_search_details')
+      .addParam("object_ref_id", object_id)
+      .addParam("object_ref_class",object_ref)
+      .addParam("type", type)
+      .addParam("words", this.words_request)
+      .requestUpdate(id);
+  },
+
+  filter: function (input, classe, table) {
+    table = $(table);
+    table.select("tr").invoke("show");
+    var nameClass = "." + classe;
+    var terms = $V(input);
+    if (!terms) return;
+    terms= terms.split(" ");
+    table.select(nameClass).each(function(e) {
+      terms.each(function(term){
+        if (!e.innerHTML.like(term)) {
+          e.up("tr").hide();
+        }
+      });
+    });
   }
 };

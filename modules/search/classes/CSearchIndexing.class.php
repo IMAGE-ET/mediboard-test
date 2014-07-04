@@ -85,6 +85,7 @@ class CSearchIndexing extends CStoredObject {
           SELECT 'CCompteRendu', `compte_rendu`.`compte_rendu_id`, 'create', '$date'
           FROM `compte_rendu`, `users_mediboard`, `functions_mediboard`
           WHERE `compte_rendu`.`object_id` IS NOT NULL
+          AND   `compte_rendu`.`object_class` != 'CPatient'
           AND `users_mediboard`.`user_id` =  `compte_rendu`.`author_id`
           AND `functions_mediboard`.`function_id` = `users_mediboard`.`function_id`";
         break;
