@@ -1561,7 +1561,7 @@ class CStoredObject extends CModelObject {
     foreach ($objects as $object) {
       $this->_merging[$object->_id] = $object;
     }
-    
+
     foreach ($objects as &$object) {
       $msg = $fast ? 
         $this->fastTransferBackRefsFrom($object) :
