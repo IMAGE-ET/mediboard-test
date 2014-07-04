@@ -9,8 +9,7 @@
         sClass: "tooltip"
       };
     </script>
-    <img src="images/icons/warning.png" onmouseover="ObjectTooltip.createEx(this, '{{$patient_guid}}', 'allergies');" />
-    <img src="images/icons/allergies_warning.png" title="Allergie(s) connue(s)">
+    <img src="images/icons/allergies_warning.png" onmouseover="ObjectTooltip.createEx(this, '{{$patient_guid}}', 'allergies');" >
 
   {{elseif $dossier_medical->_ref_allergies|@count}}
     <img src="images/icons/allergies_ok.png" title="Pas d'allergie connue">
