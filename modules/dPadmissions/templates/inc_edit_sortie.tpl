@@ -48,6 +48,8 @@
 {{/if}}
   <input type="hidden" name="dosql" value="do_sejour_aed" />
   <input type="hidden" name="m" value="planningOp" />
+  <input type="hidden" name="dtnow" value="{{$dtnow}}" />
+  <input type="hidden" name="action_confirm" value="">
   {{mb_field object=$sejour field="sejour_id" hidden=true}}
   <input type="hidden" name="view_patient" value="{{$sejour->_ref_patient->_view}}">
   <input type="hidden" name="del" value="0" />
@@ -234,6 +236,7 @@
         </td>
       </tr>
     {{else}}
+      {{assign var=pass_to_confirm value="dPplanningOp CSejour pass_to_confirm"|conf:"CGroups-$g"}}
       <tr>
         <td colspan="4" class="button">
           {{mb_field object=$sejour field="confirme_user_id" hidden=true}}
@@ -241,11 +244,27 @@
             {{tr}}Save{{/tr}}
           </button>
           {{if $sejour->confirme}}
-            <button type="submit" class="cancel singleclick" onclick="$V(this.form.confirme, ''); $V(this.form.confirme_user_id, '')">
+            <button type="button" class="cancel singleclick"
+                    onclick="{{if $pass_to_confirm && !$app->_ref_user->isPraticien()}}
+                                $V(this.form.action_confirm, 0);
+                                Admissions.askconfirm('{{$sejour->_id}}');
+                             {{else}}
+                               $V(this.form.confirme, ''); $V(this.form.confirme_user_id, '');this.form.onsubmit();
+                             {{/if}}">
               {{tr}}canceled_exit{{/tr}}
             </button>
           {{else}}
-            <button type="submit" class="tick singleclick" onclick="if (!$V(this.form.confirme)){$V(this.form.confirme, '{{$dtnow}}');} $V(this.form.confirme_user_id, '{{$app->user_id}}')">
+            <button type="button" class="tick singleclick"
+                    onclick="{{if $pass_to_confirm && !$app->_ref_user->isPraticien()}}
+                      $V(this.form.action_confirm, 1);
+                      Admissions.askconfirm('{{$sejour->_id}}');
+                    {{else}}
+                      if (!$V(this.form.confirme)) {
+                        $V(this.form.confirme, '{{$dtnow}}');
+                      }
+                      $V(this.form.confirme_user_id, '{{$app->user_id}}');
+                      this.form.onsubmit();
+                    {{/if}}">
               {{tr}}allowed_exit{{/tr}}
             </button>
           {{/if}}
@@ -287,3 +306,57 @@
     {{mb_field object=$rpu field="orientation" hidden=true onchange=this.form.onsubmit()}}
   </form>
 {{/if}}
+
+<div id="confirmSortieModal_{{$sejour->_id}}" style="display: none;">
+  <form name="confirmSortie_{{$sejour->_id}}" method="post" action="?m=system&a=ajax_password_action"
+        onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close, useFormAction: true})">
+    <input type="hidden" name="callback" value="Admissions.afterConfirmPassword.curry({{$sejour->_id}})" />
+    <input type="hidden" name="user_id" class="notNull" value="{{$app->_ref_user->_id}}" />
+    <table class="form">
+      <tr>
+        <th class="title" colspan="2">
+          {{tr}}Confirm-allowed-exit{{/tr}}
+        </th>
+      </tr>
+      <tr>
+        <th>{{tr}}CUser-user_username{{/tr}}</th>
+        <td>
+          <input type="text" name="_user_view" class="autocomplete" value="{{$app->_ref_user}}" />
+          <script>
+            Main.add(function() {
+              var form = getForm("confirmSortie_{{$sejour->_id}}");
+              new Url("mediusers", "ajax_users_autocomplete")
+                .addParam("input_field", form._user_view.name)
+                .autoComplete(form._user_view, null, {
+                minChars: 0,
+                method: "get",
+                select: "view",
+                dropdown: true,
+                width: '200px',
+                afterUpdateElement: function(field, selected) {
+                  $V(form._user_view, selected.down('.view').innerHTML);
+                  var id = selected.getAttribute("id").split("-")[2];
+                  $V(form.user_id, id);
+                }
+              });
+            });
+          </script>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <label for="user_password">{{tr}}Password{{/tr}}</label>
+        </th>
+        <td>
+          <input type="password" name="user_password" class="notNull password str" />
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="button">
+          <button type="submit" class="tick singleclick">{{tr}}Validate{{/tr}}</button>
+          <button type="button" class="cancel singleclick" onclick="Control.Modal.close();">{{tr}}Cancel{{/tr}}</button>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>

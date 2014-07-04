@@ -11,7 +11,11 @@
  * @link     http://www.mediboard.org
  */
 
-CCanDo::checkEdit();
+$can_admisison = CModule::getCanDo('dPadmissions');
+
+if (!$can_admisison->edit && !CModule::getCanDo('dPplanningOp')->edit) {
+  $can_admisison->redirect();
+}
 
 $sejour_id            = CValue::get("sejour_id");
 $module               = CValue::get("module");

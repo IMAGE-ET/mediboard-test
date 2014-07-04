@@ -11,6 +11,7 @@ $locales['CSejour.type.ambu.short'] = 'Ambu';
 $locales['CSejour.type.comp.short'] = 'Hospi';
 $locales['CSejour.type.consult.short'] = 'Cons';
 $locales['CSejour.type.exte.short'] = 'Ext';
+$locales['Confirm-allowed-exit'] = 'Confirmation de l\'autorisation de sortie';
 $locales['allowed_exit'] = 'Autoriser la sortie';
 $locales['canceled_exit'] = 'Annuler l\'autorisation';
 $locales['config-dPadmissions-CSejour-entree_pre_op_ambu'] = 'Heure d\'admission des séjours ambulatoires en fonction de la présence pré-op';

@@ -238,6 +238,33 @@ Admissions = {
     }
   },
 
+  askconfirm : function (sejour_id) {
+    Modal.open("confirmSortieModal_"+sejour_id, {
+      width: "410px",
+      height: "95px"
+    });
+  },
+
+  afterConfirmPassword : function (sejour_id) {
+    var form_sortie = getForm("validerSortie"+sejour_id);
+    var form_confirm = getForm("confirmSortie_"+sejour_id);
+    //cas de la confirmation de l'autorisation de sortie
+
+    if ($V(form_sortie.action_confirm) == 1) {
+      $V(form_sortie.confirme_user_id, $V(form_confirm.user_id));
+      if (!$V(form_sortie.confirme)) {
+        $V(form_sortie.confirme, $V(form_sortie.dtnow));
+      }
+    }
+    //cas de l'annulation de l'autorisation de sortie
+    else {
+      $V(form_sortie.confirme, "");
+      $V(form_sortie.confirme_user_id, "");
+    }
+
+    form_sortie.onsubmit()
+  },
+
   confirmationSortie : function (form, modify_sortie_prevue, sortie_prevue, callback) {
     if (!modify_sortie_prevue && !$V(form.entree_reelle)) {
       if (!confirm('Attention, ce patient ne possède pas de date d\'entrée réelle, souhaitez vous confirmer la sortie du patient ?')) {
