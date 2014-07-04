@@ -86,7 +86,7 @@
       return;
     }
 
-    var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
+    var urlSuivi = new Url("hospi", "httpreq_vw_dossier_suivi");
     urlSuivi.addParam("sejour_id", sejour_id);
     urlSuivi.addParam("user_id", user_id);
     urlSuivi.addParam("cible", cible);
@@ -134,7 +134,7 @@
       return;
     }
 
-    var url = new Url("dPurgences", "ajax_show_examens");
+    var url = new Url("urgences", "ajax_show_examens");
     url.addParam("consult_id", consult_id);
     url.requestUpdate("examens");
   }
@@ -144,7 +144,7 @@
       return;
     }
 
-    var url = new Url("dPurgences", "ajax_show_doc_items");
+    var url = new Url("urgences", "ajax_show_doc_items");
     url.addParam("sejour_id" , sejour_id);
     url.addParam("consult_id", consult_id);
     url.requestUpdate("doc-items");
@@ -155,7 +155,7 @@
       return;
     }
 
-    var url = new Url("dPurgences", "ajax_show_actes");
+    var url = new Url("urgences", "ajax_show_actes");
     url.addParam("sejour_id" , sejour_id);
     url.requestUpdate("actes");
   }
@@ -216,13 +216,13 @@
   }
 
   function printDossier(id) {
-    var url = new Url("dPurgences", "print_dossier");
+    var url = new Url("urgences", "print_dossier");
     url.addParam("rpu_id", id);
     url.popup(700, 550, "RPU");
   }
 
   function loadResultLabo(sejour_id) {
-    var url = new Url("dPImeds", "httpreq_vw_sejour_results");
+    var url = new Url("Imeds", "httpreq_vw_sejour_results");
     url.addParam("sejour_id", sejour_id);
     url.requestUpdate('Imeds');
   }
@@ -239,7 +239,7 @@
     if(!iPatient_id){
       return false;
     }
-    var url = new Url("dPpatients", "httpreq_get_last_refs");
+    var url = new Url("patients", "httpreq_get_last_refs");
     url.addParam("patient_id", iPatient_id);
     url.addParam("is_anesth", 0);
     url.requestUpdate("infoPat");
@@ -260,7 +260,7 @@
   function printEtiquettes() {
     var nb_printers = {{$nb_printers|@json}};
     if (nb_printers > 0) {
-      var url = new Url('dPcompteRendu', 'ajax_choose_printer');
+      var url = new Url('compteRendu', 'ajax_choose_printer');
       url.addParam('mode_etiquette', 1);
       url.addParam('object_class', '{{$rpu->_class}}');
       url.addParam('object_id', '{{$rpu->_id}}');
@@ -296,6 +296,9 @@
         DossierMedical.reloadDossierPatient();
       }
       var tab_sejour = Control.Tabs.create('tab-dossier', false);
+      if (tab_sejour.activeLink.key == "Imeds") {
+        loadResultLabo();
+      }
       loadDocItems('{{$rpu->sejour_id}}', '{{$rpu->_ref_consult->_id}}');
     {{/if}}
 
