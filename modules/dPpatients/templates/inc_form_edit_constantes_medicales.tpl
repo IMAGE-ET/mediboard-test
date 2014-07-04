@@ -29,7 +29,6 @@ updateInfosPatient = function() {
   var form = getForm("edit-constantes-medicales{{$tri_rpu}}");
   var url = new Url('soins', 'ajax_update_infos_patient');
   url.addParam('patient_id', $V(form.patient_id));
-  url.addParam('context_guid', $V(form.context_class) + '-' + $V(form.context_id));
   url.requestJSON(function(data) {
     $$('.poids_patient')[0].innerHTML = data['poids'];
     $$('.taille_patient')[0].innerHTML = data['taille'];
