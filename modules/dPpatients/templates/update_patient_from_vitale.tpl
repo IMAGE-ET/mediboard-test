@@ -17,10 +17,14 @@
     if (form.administrative_data.checked) {
       administrative_data = 1;
     }
+    {{if $app->user_prefs.VitaleVision}}
+    VitaleVision.fillForm(getForm('editFrm'), $V($('modal-beneficiaire-select')), administrative_data);
+    {{elseif $modFSE && $modFSE->canRead()}}
     var url = new Url('dPpatients', 'ajax_update_patient_from_vitale');
     url.addParam('administrative_data', administrative_data);
     url.addParam('patient_id', '{{$patient_id}}');
     url.requestUpdate('systemMsg', {onComplete: function() {location.reload();}});
+    {{/if}}
 
     Control.Modal.close();
     return false;
@@ -83,7 +87,7 @@
       {{mb_ternary test=$_status var=color value="rgba(148, 221, 137, 0.4)" other="rgba(255, 0, 0, 0.40)"}}
       <tr>
         <td>{{mb_label object=$patient_vitale field=$_field}}</td>
-        <td style="background-color: {{$color}}" style="font-weight: bold">{{mb_value object=$patient_vitale field=$_field}}</td>
+        <td style="background-color: {{$color}}; font-weight: bold;">{{mb_value object=$patient_vitale field=$_field}}</td>
         <td style="background-color: {{$color}}">{{mb_value object=$patient_mb field=$_field}}</td>
       </tr>
     {{/foreach}}

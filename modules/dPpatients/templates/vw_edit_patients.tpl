@@ -194,7 +194,7 @@
     <span></span>
   </p>
   <div>
-    <button type="button" class="tick" onclick="VitaleVision.fillForm(getForm('editFrm'), $V($('modal-beneficiaire-select'))); VitaleVision.modalWindow.close();">{{tr}}Choose{{/tr}}</button>
+    <button type="button" class="tick" onclick="VitaleVision.modalWindow.close(); {{if $app->user_prefs.update_patient_from_vitale_behavior == 'choice'}}VitaleVision.prepareUpdatePatient($V($('modal-beneficiaire-select')), '{{$patient->_id}}');{{elseif $app->user_prefs.update_patient_from_vitale_behavior == 'always'}}VitaleVision.fillForm(getForm('editFrm'), $V($('modal-beneficiaire-select')), 1);{{else}}VitaleVision.fillForm(getForm('editFrm'), $V($('modal-beneficiaire-select')));{{/if}}">{{tr}}Choose{{/tr}}</button>
     <button type="button" class="cancel" onclick="VitaleVision.modalWindow.close();">{{tr}}Cancel{{/tr}}</button>
   </div>
 </div>
