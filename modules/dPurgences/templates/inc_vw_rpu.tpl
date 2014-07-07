@@ -9,6 +9,7 @@
 *}}
 
 {{mb_script module=urgences script=contraintes_rpu ajax=1}}
+{{mb_script module=dPurgences script=urgences ajax=true}}
 
 <script type="text/javascript">
 
@@ -354,20 +355,7 @@ function showEtabEntreeTransfert(mode) {
             {{if $conf.dPurgences.gerer_hospi == "1" && ($conf.dPurgences.create_sejour_hospit == "0" || !$sejour->sortie_reelle)}} 
               {{assign var=label value=$conf.dPurgences.create_sejour_hospit|ternary:"simple":"transfert"}}
               <!-- Hospitalisation immediate, creation d'un sejour et transfert des actes dans le nouveau sejour -->
-              <form name="transfertHospi" method="post" action="?m={{$m}}"
-                onsubmit="ContraintesRPU.checkObligatory('{{$rpu->_id}}',
-                  (function() {
-                    if (confirm($T('confirm-RPU-Hospitalisation-{{$label}}'))) { 
-                      return onSubmitFormAjax(this)
-                    }
-                  }).bind(this));
-                  return false;">
-                <input type="hidden" name="dosql" value="do_transfert_aed" />
-                <input type="hidden" name="m" value="dPurgences" /> 
-                <input type="hidden" name="del" value="0" />
-                <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
-                <button class="new oneclick" type="button" onclick="this.form.onsubmit()">Hospitaliser</button>
-              </form>
+                <button class="new" type="button" onclick="Urgences.hospitalize('{{$rpu->_id}}')">Hospitaliser</button>
             {{/if}}
           {{/if}}
           

@@ -474,6 +474,7 @@ $locales['CSejour.none_uhcd'] = 'Aucun séjour en UHCD';
 $locales['CSejour.type.urg'] = 'Passage aux urgences';
 $locales['Check_rpu'] = 'Vérifier les doublons RPU';
 $locales['Config_RPU_Sender'] = 'Configuration';
+$locales['Confirm'] = 'Confirmer';
 $locales['Import-Motif'] = 'Importer les motifs';
 $locales['Nb-month'] = 'Nombre de mois avant la date actuelle';
 $locales['New-female'] = 'Nouvelle';
@@ -507,6 +508,9 @@ $locales['config-dPurgences-CRPU-provenance_domicile_pec_non_org'] = 'Valeur de 
 $locales['config-dPurgences-CRPU-provenance_domicile_pec_non_org-desc'] = 'Placer par défaut la provenance par rapport à l\'entrée';
 $locales['config-dPurgences-CRPU-provenance_necessary'] = 'Provenance obligatoire';
 $locales['config-dPurgences-CRPU-provenance_necessary-desc'] = 'Rendre la provenance obligatoire';
+$locales['config-dPurgences-CRPU-search_visit_days_count'] = 'Nombre de jours de l\'intervalle de recherche pour l\'hospitalisation';
+$locales['config-dPurgences-CRPU-search_visit_days_count-desc'] = 'Permet de définir la borne maximun de l\'intervalle de recherche pour la recherche de séjour lors de l\'hospitalisation';
+$locales['config-dPurgences-CRPU-search_visit_number_day-desc'] = 'Définit le nombre de jour';
 $locales['config-dPurgences-Display-check_can_leave'] = 'Vérifier l\'autorisation de sortie';
 $locales['config-dPurgences-Display-check_can_leave-desc'] = 'Vérifier l\'autorisation de sortie';
 $locales['config-dPurgences-Display-check_can_leave.0'] = 'Libre';
@@ -671,12 +675,9 @@ $locales['config_source_rescue'] = 'Source de secours';
 $locales['confirm-RPU-Hospitalisation-simple'] = 'Vous êtes sur le point de tranformer un passage aux urgences en hospitalisation.
 
 Cette action modifiera le type d\'hospitalisation de séjour pour permettre son traitement dans les unités de soins.';
-$locales['confirm-RPU-Hospitalisation-transfert'] = 'Vous êtes sur le point de tranformer un passage aux urgences en hospitalisation.
+$locales['confirm-RPU-Hospitalisation-transfert'] = 'Vous êtes sur le point de transformer un passage aux urgences en hospitalisation.
 
-Cette action irréversible effectue les actions suivantes :
-  - Création d\'un séjour reliquat contenant le RPU,
-  - Chainage du reliquat vers le séjour d\'hospitalisation,
-  - Changement du type d\'hospitalisation du séjour principal.';
+Cette action irréversible effectue les actions suivantes :<ul><li>Création d\'un séjour reliquat contenant le RPU</li><li>Chainage du reliquat vers le séjour d\'hospitalisation</li><li>Changement du type d\'hospitalisation du séjour principal</li></ul>';
 $locales['dPurgences-no-service_uhcds_id'] = 'Veuillez indiquer un service d\'uhcd dans le module \'Etablissements\' afin d\'avoir accès aux fonctionnalités du module.';
 $locales['dPurgences-no-service_urgences_id'] = 'Veuillez indiquer un service d\'urgences dans le module \'Etablissements\' afin d\'avoir accès aux fonctionnalités du module.';
 $locales['extract-rpu'] = 'RPU';
@@ -692,6 +693,7 @@ $locales['mod-dPurgences-tab-ajax_edit_circonstance'] = 'Edition d\'une circonst
 $locales['mod-dPurgences-tab-ajax_edit_diag'] = 'Modification du diagnostic infirmier';
 $locales['mod-dPurgences-tab-ajax_edit_fields_rpu'] = 'Modification du RPU';
 $locales['mod-dPurgences-tab-ajax_edit_sortie'] = 'Modification de la sortie';
+$locales['mod-dPurgences-tab-ajax_hospitalization_rpu'] = 'Hospitalisation du patient';
 $locales['mod-dPurgences-tab-ajax_inc_vw_box_urgence'] = 'Modification d\'un box';
 $locales['mod-dPurgences-tab-ajax_search_motif_sfmu'] = 'Recherche de motif SFMU';
 $locales['mod-dPurgences-tab-configure'] = 'Configuration';

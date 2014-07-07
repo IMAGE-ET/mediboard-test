@@ -512,7 +512,9 @@ class CRPU extends CMbObject {
     // Synchronisation AT
     $this->loadRefConsult();
 
-    if ($this->_ref_consult->_id) {
+    if ($this->_ref_consult->_id ) {
+      //Evite les check dans le cas des fusions lors du store de la consult
+      $this->_ref_consult->_forwardRefMerging = $this->_forwardRefMerging;
       if ($this->_validation && CAppUI::conf("dPurgences valid_cotation_sortie_reelle")) {
         $this->_ref_consult->valide = "1";
       }
