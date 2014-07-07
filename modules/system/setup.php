@@ -1748,7 +1748,14 @@ class CSetupsystem extends CSetup {
       CHANGE `value` `value` VARCHAR(1024);";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.64";
+    $this->makeRevision("1.1.64");
+    $query = "ALTER TABLE `alert`
+      ADD `creation_date` DATETIME,
+      ADD `handled_date` DATETIME,
+      ADD `handled_user_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.65";
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,
