@@ -2416,6 +2416,7 @@ $locales['mod-dPpatients-tab-ajax_edit_supervision_graph_series'] = 'Séries de g
 $locales['mod-dPpatients-tab-ajax_edit_supervision_graph_to_pack'] = 'Modification de lien de graphique';
 $locales['mod-dPpatients-tab-ajax_edit_supervision_timed_data'] = 'Modification de donnée textuelle';
 $locales['mod-dPpatients-tab-ajax_form_correspondant'] = 'Modification de correspondant';
+$locales['mod-dPpatients-tab-ajax_prepare_update_patient_vitale_vision'] = 'Mise à jour du patient à partir de la carte Vitale';
 $locales['mod-dPpatients-tab-ajax_recherche_dossier_clinique'] = 'Résultat de recherche de dossiers cliniques';
 $locales['mod-dPpatients-tab-ajax_vw_supervision_pictures'] = 'Images prédéfinies';
 $locales['mod-dPpatients-tab-assurance_import_csv'] = 'Importer assurance';
