@@ -1,13 +1,3 @@
-{{* $Id:  $ *}}
-
-{{*
- * @package Mediboard
- * @subpackage ecap
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
-
 {{mb_default var=lite_view value=false}}
 {{mb_default var=show_full_affectation value=false}}
 {{mb_default var=default_tab value=""}}
@@ -17,12 +7,18 @@
 
 {{if ($service_id && $service_id != "NP") || $show_affectation || $function->_id || $praticien->_id}}
   {{assign var=affectation value=$sejour->_ref_curr_affectation}}
-  <td class="text {{if $sejour->isolement}}isolement{{/if}}">
+  <td class="text {{if $sejour->isolement}}isolement{{/if}} {{if !$affectation->_id}}compact{{/if}}">
     {{if $affectation->_id}}
       {{if $show_full_affectation}}
         {{$affectation->_ref_lit->_view}}
       {{else}}
         {{mb_value object=$affectation->_ref_lit field=nom}}
+      {{/if}}
+    {{elseif $sejour->_ref_next_affectation->_id}}
+      {{if $show_full_affectation}}
+        {{$sejour->_ref_next_affectation->_ref_lit->_view}}
+      {{else}}
+        {{mb_value object=$sejour->_ref_next_affectation->_ref_lit field=nom}}
       {{/if}}
     {{/if}}
   </td>
