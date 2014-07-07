@@ -54,6 +54,7 @@
     url.addParam("object_class", "CMediusers");
     url.addParam("input_field", element_input.name);
     url.addParam("edit", "1");
+    url.addParam("praticiens", "1");
     url.autoComplete(element_input, null, {
       minChars: 2,
       method: "get",
