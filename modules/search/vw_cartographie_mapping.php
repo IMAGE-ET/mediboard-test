@@ -28,10 +28,12 @@ try{
   $size = CMbString::toDecaBinary($size["primaries"]["store"]["size_in_bytes"]);
 
   // récupération du nombre de docs "indexés" et "à indexer"
+  $search = new CSearchIndexing();
   $nbdocs_indexed      = $index->count();
-  $query = new CRequest();
-  $query->addTable("search_indexing");
-  $nbdocs_to_index = $ds->loadResult($query->makeSelectCount());
+  $nbdocs_to_index = $search->countList();
+
+  // récupération des types d'éléments restant à indexer.
+  $nbdocs_to_index_by_type = $search->countMultipleList(null,null,"object_class",null, "`object_class`, COUNT(`object_class`) AS `total`");
 
   // récupération du statut de la connexion et du cluster
   $status     = $cluster->getHealth()->getStatus();
@@ -43,6 +45,7 @@ try{
   $mapping    = "";
   $nbdocs_indexed      = "";
   $nbdocs_to_index = "";
+  $nbdocs_to_index_by_type = array();
   $status     = "";
   $connexion  = "0";
   $name_index = "";
@@ -56,6 +59,7 @@ $smarty->assign("mapping", $mapping);
 $smarty->assign("mappingjson", json_encode($mapping));
 $smarty->assign("nbDocs_indexed", $nbdocs_indexed);
 $smarty->assign("nbdocs_to_index", $nbdocs_to_index);
+$smarty->assign("nbdocs_to_index_by_type", $nbdocs_to_index_by_type);
 $smarty->assign("status", $status);
 $smarty->assign("name_index", $name_index);
 $smarty->assign("connexion", $connexion);

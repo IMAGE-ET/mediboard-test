@@ -47,12 +47,22 @@
         </tr>
         <tr>
           <td class="text">
-            <label>Nombre de documents à indexer</label>
+            <label>Nombre de documents à indexer au total</label>
           </td>
           <td class="text">
             {{$nbdocs_to_index}}
           </td>
         </tr>
+        {{foreach from=$nbdocs_to_index_by_type item=_object_to_index}}
+          <tr>
+            <td class="empty">
+              <label>Nombre de documents à indexer de type {{$_object_to_index.object_class}}</label>
+            </td>
+            <td class="empty">
+              {{$_object_to_index.total}}
+            </td>
+          </tr>
+        {{/foreach}}
         <tr>
           <td class="text">
             <label>Statut du cluster</label>
