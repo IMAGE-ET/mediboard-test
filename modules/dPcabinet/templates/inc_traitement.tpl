@@ -38,7 +38,7 @@
     Element.cleanWhitespace(selected);
     var dn = selected.childElements();
     dn = dn[0].innerHTML;
-    console.log(dn);
+
     // On peut saisir un traitement personnel seulement le code CIP est valide
     if (isNaN(parseInt(dn))) {
       return
