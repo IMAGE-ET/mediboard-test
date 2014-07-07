@@ -43,6 +43,7 @@ class CFile extends CDocumentItem {
   public $_nb_pages;
   public $_old_file_path;
   public $_data_uri;
+  public $_binary_content;
 
   // Behavior fields
   public $_rotate;
@@ -175,7 +176,7 @@ class CFile extends CDocumentItem {
    * @return string
    */
   function getBinaryContent() {
-    return file_get_contents($this->_file_path);
+    return $this->_binary_content = file_get_contents($this->_file_path);
   }
 
   /**
