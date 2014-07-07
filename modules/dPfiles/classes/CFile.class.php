@@ -176,7 +176,7 @@ class CFile extends CDocumentItem {
    * @return string
    */
   function getBinaryContent() {
-    return $this->_binary_content = file_get_contents($this->_file_path);
+    return $this->_binary_content = $this->_file_path ? file_get_contents($this->_file_path) : null;
   }
 
   /**
