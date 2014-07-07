@@ -1,0 +1,97 @@
+{{*
+ * $Id$
+ *  
+ * @package    Mediboard
+ * @subpackage patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ * @link       http://www.mediboard.org
+*}}
+
+{{assign var=modFSE value="fse"|module_active}}
+
+<script type="text/javascript">
+  updatePatient = function(form) {
+    var administrative_data = 0;
+    if (form.administrative_data.checked) {
+      administrative_data = 1;
+    }
+    var url = new Url('dPpatients', 'ajax_update_patient_from_vitale');
+    url.addParam('administrative_data', administrative_data);
+    url.addParam('patient_id', '{{$patient_id}}');
+    url.requestUpdate('systemMsg', {onComplete: function() {location.reload();}});
+
+    Control.Modal.close();
+    return false;
+  }
+
+  checkAdministrativeData = function() {
+    if ($('administrative_data').checked) {
+      $$('.administrative-data-mb').each(function(elt) {
+        elt.setStyle({fontWeight: 'normal'});
+      });
+      $$('.administrative-data-cv').each(function(elt) {
+        elt.setStyle({fontWeight: 'bold'});
+      });
+    }
+    else {
+      $$('.administrative-data-mb').each(function(elt) {
+        elt.setStyle({fontWeight: 'bold'});
+      });
+      $$('.administrative-data-cv').each(function(elt) {
+        elt.setStyle({fontWeight: 'normal'});
+      });
+    }
+  }
+
+  Main.add(function() {
+    checkAdministrativeData();
+  });
+</script>
+
+<form name="updatePatientVitale" action="?" method="get" onsubmit="return false;">
+  <table class="tbl">
+    <tr>
+      <th class="title" colspan="3">Mise à jour du patient à partir de la carte Vitale</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>Carte Vitale</th>
+      <th>Mediboard</th>
+    </tr>
+    <tr>
+      <th class="category" colspan="3">
+        Données administratives
+        <span style="float: left;">
+          <input type="checkbox" id="administrative_data" name="administrative_data" checked="checked" onclick="checkAdministrativeData();"/>
+        </span>
+      </th>
+    </tr>
+    {{foreach from=$fields.administrative key=_field item=_status}}
+      {{mb_ternary test=$_status var=color value="rgba(148, 221, 137, 0.4)" other="rgba(255, 0, 0, 0.40)"}}
+      <tr>
+        <td>{{mb_label object=$patient_vitale field=$_field}}</td>
+        <td style="background-color: {{$color}}" class="administrative-data-cv">{{mb_value object=$patient_vitale field=$_field}}</td>
+        <td style="background-color: {{$color}}" class="administrative-data-mb">{{mb_value object=$patient_mb field=$_field}}</td>
+      </tr>
+    {{/foreach}}
+    <tr>
+      <th class="category" colspan="3">Données assuré</th>
+    </tr>
+    {{foreach from=$fields.assure key=_field item=_status}}
+      {{mb_ternary test=$_status var=color value="rgba(148, 221, 137, 0.4)" other="rgba(255, 0, 0, 0.40)"}}
+      <tr>
+        <td>{{mb_label object=$patient_vitale field=$_field}}</td>
+        <td style="background-color: {{$color}}" style="font-weight: bold">{{mb_value object=$patient_vitale field=$_field}}</td>
+        <td style="background-color: {{$color}}">{{mb_value object=$patient_mb field=$_field}}</td>
+      </tr>
+    {{/foreach}}
+    <tr>
+      <td colspan="3" style="text-align: center;">
+        <button class="save" type="submit" onclick="updatePatient(this.form);">{{tr}}Save{{/tr}}</button>
+        <button class="cancel" type="button" onclick="Control.Modal.close();">{{tr}}Cancel{{/tr}}</button>
+      </td>
+    </tr>
+  </table>
+</form>

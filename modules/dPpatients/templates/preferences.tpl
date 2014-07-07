@@ -13,4 +13,4 @@
 {{mb_include template=inc_pref spec=bool var=vCardExport}}
 {{mb_include template=inc_pref spec=str  var=medecin_cps_pref}}
 {{mb_include template=inc_pref spec=bool var=sort_atc_by_date}}
-
+{{mb_include template=inc_pref spec=enum var=update_patient_from_vitale_behavior values="choice|never|always"}}

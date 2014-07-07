@@ -2617,7 +2617,10 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("2.10");
     $this->addMethod("updateDeathDate");
 
-    $this->mod_version = "2.11";
+    $this->makeRevision("2.11");
+    $this->addPrefQuery('update_patient_from_vitale_behavior', 'choice');
+
+    $this->mod_version = "2.12";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
