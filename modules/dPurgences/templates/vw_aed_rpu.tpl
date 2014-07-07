@@ -11,6 +11,7 @@
 {{mb_script module=files script=file}}
 {{mb_include module=files template=yoplet_uploader object=$sejour}}
 {{assign var=gerer_circonstance value=$conf.dPurgences.gerer_circonstance}}
+{{assign var=consult value=$rpu->_ref_consult}}
 {{mb_script module=dPurgences script=CCirconstance}}
 
 {{if !$group->service_urgences_id}}
@@ -295,7 +296,41 @@
       if (window.DossierMedical){
         DossierMedical.reloadDossierPatient();
       }
-      var tab_sejour = Control.Tabs.create('tab-dossier', false);
+      var tab_sejour = Control.Tabs.create('tab-dossier', false, {
+        afterChange: function(container) {
+          switch (container.id) {
+            case 'suivi_clinique':
+              loadSuiviClinique('{{$rpu->sejour_id}}');
+              break;
+            {{if $rpu->sejour_id}}
+              case 'prescription_sejour':
+                Prescription.reloadPrescSejour('', '{{$rpu->sejour_id}}','', '', null, null, null,'');
+                break;
+              case 'dossier_traitement':
+                PlanSoins.loadTraitement('{{$rpu->sejour_id}}',null,'','administration');
+                break;
+            {{/if}}
+            case 'dossier_suivi':
+              loadSuivi({{$rpu->sejour_id}});
+              break;
+            case 'constantes':
+              refreshConstantesHack('{{$rpu->sejour_id}}');
+              break;
+            case 'examens':
+              showExamens('{{$consult->_id}}');
+              break;
+            case 'actes':
+              loadActes('{{$rpu->sejour_id}}');
+              break;
+            case 'Imeds':
+              loadResultLabo('{{$rpu->sejour_id}}');
+              break;
+            case 'doc-items':
+              loadDocItems('{{$rpu->sejour_id}}', '{{$consult->_id}}');
+              break;
+          }
+        }
+      });
       if (tab_sejour.activeLink.key == "Imeds") {
         loadResultLabo();
       }
@@ -353,31 +388,31 @@
 
       <ul id="tab-dossier" class="control_tabs">
         <li><a href="#rpu">RPU</a></li>
-        <li><a href="#suivi_clinique" onmouseup="loadSuiviClinique('{{$rpu->sejour_id}}')">Synthèse</a></li>
+        <li><a href="#suivi_clinique">Synthèse</a></li>
         <li><a href="#antecedents">{{tr}}soins.tab.antecedent_and_treatment{{/tr}}</a></li>
 
         {{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
-          <li {{if $rpu->sejour_id}} onmouseup="Prescription.reloadPrescSejour('', '{{$rpu->sejour_id}}','', '', null, null, null,'');" {{/if}}><a href="#prescription_sejour">{{tr}}soins.tab.Prescription{{/tr}}</a></li>
-          <li {{if $rpu->sejour_id}} onmouseup="PlanSoins.loadTraitement('{{$rpu->sejour_id}}',null,'','administration');"{{/if}}><a href="#dossier_traitement">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
+          <li><a href="#prescription_sejour">{{tr}}soins.tab.Prescription{{/tr}}</a></li>
+          <li><a href="#dossier_traitement">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
         {{else}}
-          <li onmouseup="loadSuivi({{$rpu->sejour_id}});"><a href="#dossier_suivi">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
+          <li><a href="#dossier_suivi">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
         {{/if}}
 
 
-        <li onmouseup="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">{{tr}}soins.tab.surveillance{{/tr}}</a></li>
+        <li><a href="#constantes">{{tr}}soins.tab.surveillance{{/tr}}</a></li>
 
         {{if "forms"|module_active}}
           <li><a href="#ex-forms-rpu">{{tr}}soins.tab.Formulaires{{/tr}}</a></li>
         {{/if}}
 
-        <li onmouseup="showExamens('{{$consult->_id}}')"><a href="#examens">{{tr}}soins.tab.dossier-medical{{/tr}}</a></li>
+        <li><a href="#examens">{{tr}}soins.tab.dossier-medical{{/tr}}</a></li>
         {{if $app->user_prefs.ccam_sejour == 1 }}
-          <li onmouseup="loadActes('{{$rpu->sejour_id}}')"><a href="#actes">{{tr}}soins.tab.Cotation-infirmiere{{/tr}}</a></li>
+          <li><a href="#actes">{{tr}}soins.tab.Cotation-infirmiere{{/tr}}</a></li>
         {{/if}}
         {{if "dPImeds"|module_active}}
-          <li onmouseup="loadResultLabo('{{$rpu->sejour_id}}')"><a href="#Imeds">{{tr}}soins.tab.Labo{{/tr}}</a></li>
+          <li><a href="#Imeds">{{tr}}soins.tab.Labo{{/tr}}</a></li>
         {{/if}}
-        <li onmouseup="loadDocItems('{{$rpu->sejour_id}}', '{{$consult->_id}}')"><a href="#doc-items">{{tr}}soins.tab.Documents{{/tr}}</a></li>
+        <li><a href="#doc-items">{{tr}}soins.tab.Documents{{/tr}}</a></li>
       </ul>
     </div>
 
