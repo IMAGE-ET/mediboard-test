@@ -53,6 +53,10 @@ class CSetupeai extends CSetup {
           $range_max = $group_configs["nda_range_max"];
         }
 
+        if (!$tag_group) {
+          continue;
+        }
+
         // Insert domain
         $query = "INSERT INTO `domain` (`domain_id`, `incrementer_id`, `actor_id`, `actor_class`, `tag`)
                       VALUES (NULL, NULL, NULL, NULL, '$tag_group');";
