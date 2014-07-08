@@ -63,7 +63,7 @@ class CObservationMedicale extends CMbMetaObject implements IIndexableObject{
    * @see parent::canEdit()
    */
   function canEdit(){
-    $nb_hours = CAppUI::conf("soins Other max_time_modif_suivi_soins", CGroups::loadCurrent()->_guid);
+    $nb_hours = CAppUI::conf("soins max_time_modif_suivi_soins");
     $datetime_max = CMbDT::dateTime("+ $nb_hours HOURS", $this->date);
     return $this->_canEdit = (CMbDT::dateTime() < $datetime_max) && (CAppUI::$instance->user_id == $this->user_id);
   }
