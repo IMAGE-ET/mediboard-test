@@ -4,8 +4,6 @@ showField = function(field_id, field_name, value){
   window.predicateFieldName = field_name;
   
   var form = getForm("ex_field_predicate-form");
-    
-  toggleNoValue(form);
   
   var url = new Url("forms", "ajax_view_ex_class_field");
   url.addParam("ex_class_field_id", field_id);
@@ -26,6 +24,8 @@ showField = function(field_id, field_name, value){
 
     form.removeClassName("prepared");
     prepareForm(form);
+
+    toggleNoValue(form);
   });
 };
 
