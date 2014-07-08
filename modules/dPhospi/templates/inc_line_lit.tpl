@@ -155,19 +155,20 @@
                 this.setStyle({width: '{{$width}}%'});
               "
             {{/if}}>
-
-              {{foreach from=$sejour->_ref_operations item=_operation}}
-                {{math equation=(x/y)*100 x=$_operation->_debut_offset.$object_id y=$object->_width assign=offset_op}}
-                {{math equation=(x/y)*100 x=$_operation->_width.$object_id y=$object->_width assign=width_op}}
-                <div class="operation_in_mouv {{if $mode_vue_reelle == "compacte"}}compacte{{/if}} opacity-40"
-                     style="left: {{$offset_op}}%; width: {{$width_op}}%; z-index: 0;"></div>
-                {{if $_operation->duree_uscpo}}
-                  {{math equation=x+y x=$offset_op y=$width_op assign=offset_uscpo}}
-                  {{math equation=x/y*100 x=$_operation->_width_uscpo.$object_id y=$object->_width assign=width_uscpo}}
-                  <div class="soins_uscpo {{if $mode_vue_reelle == "compacte"}}compacte{{/if}} opacity-40"
-                       style="left: {{$offset_uscpo}}%; width: {{$width_uscpo}}%; z-index: 0;"></div>
-                {{/if}}
-              {{/foreach}}
+              {{if $object->_width}}
+                {{foreach from=$sejour->_ref_operations item=_operation}}
+                  {{math equation=(x/y)*100 x=$_operation->_debut_offset.$object_id y=$object->_width assign=offset_op}}
+                  {{math equation=(x/y)*100 x=$_operation->_width.$object_id y=$object->_width assign=width_op}}
+                  <div class="operation_in_mouv {{if $mode_vue_reelle == "compacte"}}compacte{{/if}} opacity-40"
+                       style="left: {{$offset_op}}%; width: {{$width_op}}%; z-index: 0;"></div>
+                  {{if $_operation->duree_uscpo}}
+                    {{math equation=x+y x=$offset_op y=$width_op assign=offset_uscpo}}
+                    {{math equation=x/y*100 x=$_operation->_width_uscpo.$object_id y=$object->_width assign=width_uscpo}}
+                    <div class="soins_uscpo {{if $mode_vue_reelle == "compacte"}}compacte{{/if}} opacity-40"
+                         style="left: {{$offset_uscpo}}%; width: {{$width_uscpo}}%; z-index: 0;"></div>
+                  {{/if}}
+                {{/foreach}}
+              {{/if}}
               {{if $is_aff && $object->_width_prolongation && $object->_is_prolong}}
                 {{math equation=(x/y)*100 x=$object->_start_prolongation y=$object->_width_prolongation assign=offset_prolongation}}
                 {{math equation=(x/y)*100 x=$object->_width_prolongation y=$object->_width_prolongation assign=width_prolongation}}
