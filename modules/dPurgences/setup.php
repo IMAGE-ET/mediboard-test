@@ -428,6 +428,17 @@ class CSetupdPurgences extends CSetup {
 
     $this->addDefaultConfig("dPurgences CRPU diag_prat_view"    , "dPurgences diag_prat_view");
     $this->addDefaultConfig("dPurgences CRPU display_motif_sfmu", "dPurgences display_motif_sfmu");
-    $this->mod_version = "0.51";
+
+    $this->makeRevision("0.51");
+
+    $query = "ALTER TABLE `rpu`
+                ADD `ide_responsable_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `rpu`
+                ADD INDEX (`ide_responsable_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.52";
   }  
 }

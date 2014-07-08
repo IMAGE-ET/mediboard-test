@@ -110,6 +110,31 @@
         </td>
       {{/if}}
     </tr>
+    <tr>
+      <th>{{mb_label object=$rpu field="ide_responsable_id"}}</th>
+      <td colspan="3">
+        {{mb_field object=$rpu field="ide_responsable_id" hidden=true}}
+        <input type="text" name="ide_responsable_id_view" class="autocomplete" value="{{$rpu->_ref_ide_responsable->_view}}"
+               placeholder="&mdash; {{tr}}Choose{{/tr}}"/>
+        <script>
+          Main.add(function () {
+            var form = getForm("editRPU");
+            new Url("dPurgences", "ajax_ide_responsable_autocomplete")
+              .autoComplete(form.ide_responsable_id_view, null, {
+              minChars: 2,
+              method: "get",
+              select: "view",
+              dropdown: true,
+              updateElement: function(selected) {
+                var id = selected.get("id");
+                $V(form.ide_responsable_id, id);
+                $V(form.ide_responsable_id_view, selected.get("name"));
+                }.bind(form)
+            });
+          });
+        </script>
+      </td>
+    </tr>
 
     <tr>
       <th>{{mb_label object=$rpu field="_entree"}}</th>

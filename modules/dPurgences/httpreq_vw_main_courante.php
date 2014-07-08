@@ -103,7 +103,9 @@ foreach ($listSejours as $sejour) {
   // Chargement du numero de dossier
   $sejour->loadNDA();
   $sejour->loadRefsFwd();
-  $sejour->loadRefRPU()->loadRefSejourMutation();
+  $rpu = $sejour->loadRefRPU();
+  $rpu->loadRefSejourMutation();
+  $rpu->loadRefIDEResponsable();
   $sejour->loadRefsConsultations();
   $sejour->loadRefsNotes();
   $sejour->countDocItems();

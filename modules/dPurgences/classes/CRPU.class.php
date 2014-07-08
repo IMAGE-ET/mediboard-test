@@ -44,6 +44,7 @@ class CRPU extends CMbObject {
   public $circonstance;
   public $regule_par;
   public $code_diag;
+  public $ide_responsable_id;
 
   // Legacy Sherpa fields
   public $type_pathologie; // Should be $urtype
@@ -103,6 +104,9 @@ class CRPU extends CMbObject {
 
   /** @var  CCirconstance */
   public $_ref_circonstance;
+
+  /** @var  CMediusers */
+  public $_ref_ide_responsable;
 
   // Behaviour fields
   public $_bind_sejour;
@@ -166,6 +170,7 @@ class CRPU extends CMbObject {
     $props["circonstance"]             = "ref class|CCirconstance autocomplete|libelle dependsOn|actif";
     $props["regule_par"]               = "enum list|centre_15|medecin";
     $props["code_diag"]                = "num";
+    $props["ide_responsable_id"]       = "ref class|CMediusers";
 
     $props["_DP"]                      = "code cim10 show|1";
     $props["_provenance"]              = "enum list|1|2|3|4|5|6|7|8";
@@ -691,6 +696,15 @@ class CRPU extends CMbObject {
    */
   function loadRefBox($cache = true){
     return $this->_ref_box = $this->loadFwdRef("box_id", $cache);
+  }
+
+  /**
+   * Chargement de l'IDE responsable
+   *
+   * @return CMediusers|null
+   */
+  function loadRefIDEResponsable() {
+    return $this->_ref_ide_responsable = $this->loadFwdRef("ide_responsable_id");
   }
 
   /**

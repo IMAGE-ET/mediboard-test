@@ -213,8 +213,14 @@
       {{else}}
   
       <td class="text" style="background-color: {{$background}}; text-align: center;">
+        {{if $rpu->_ref_ide_responsable->_id}}
+          <strong>{{mb_label class="CRPU" field="ide_responsable_id"}}</strong> :
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_ref_ide_responsable->_guid}};')">
+            {{$rpu->_ref_ide_responsable->_view}}
+          </span>
+        {{/if}}
         {{mb_include module=system template=inc_object_notes object=$_sejour mode=view float=right}}
-        
+
         {{if $isImedsInstalled}}
           {{mb_include module=Imeds template=inc_sejour_labo sejour=$_sejour link="$rpu_link#Imeds"}}
         {{/if}}

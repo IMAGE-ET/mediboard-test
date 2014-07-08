@@ -60,7 +60,7 @@ CMbObject::massLoadFwdRef($sejours, "praticien_id");
 foreach ($sejours as &$_sejour) {
   $_sejour->loadRefsFwd(1);
   $_sejour->_ref_patient->loadIPP();
-  $_sejour->loadRefRPU();
+  $_sejour->loadRefRPU()->loadRefIDEResponsable();
   $_sejour->_ref_rpu->loadRefSejourMutation();
   $_sejour->_veille = CMbDT::date($_sejour->entree) != $date;
   

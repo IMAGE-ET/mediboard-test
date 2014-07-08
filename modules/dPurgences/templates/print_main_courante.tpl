@@ -108,7 +108,16 @@
               </span>
             </td>
             <td>{{mb_value object=$consult field="heure"}}</td>
-            <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}</td>
+            <td>
+              {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
+              {{if $rpu->_ref_ide_responsable->_id}}
+                <br/>
+                <strong>{{mb_label class="CRPU" field="ide_responsable_id"}}</strong> :
+                <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_ref_ide_responsable->_guid}};')">
+                  {{$rpu->_ref_ide_responsable->_view}}
+                </span>
+              {{/if}}
+            </td>
             <td>
               {{if $sejour->sortie_reelle}}
                 {{mb_value object=$sejour field="mode_sortie"}}

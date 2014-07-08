@@ -29,6 +29,7 @@ if ($rpu_id && !$rpu->load($rpu_id)) {
   CAppUI::redirect("m=$m&tab=$tab&rpu_id=0");
 }
 $rpu->loadRefBox()->loadRefChambre();
+$rpu->loadRefIDEResponsable();
 
 // Création d'un RPU pour un séjour existant
 if ($sejour_id = CValue::get("sejour_id")) {
