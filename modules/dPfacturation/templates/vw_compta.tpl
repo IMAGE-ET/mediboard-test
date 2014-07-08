@@ -74,7 +74,7 @@
           <input type="hidden" name="chir" value=""/>
           <div style="text-align: left;" class="dropdown">
             <input type="text" name="chir_view" class="autocomplete" value="&mdash; Tous" style="text-align: left;"
-                   onmousedown="$V(this, '');" onblur="$V(this, '&mdash; Tous');$V(this.form.chir, '');"
+                   onmousedown="$V(this, '');" onblur="if (!$V(this)){$V(this, '&mdash; Tous');$V(this.form.chir, '');}"
                    placeholder="&mdash; Choisir un praticien"/>
           </div>
         </td>
