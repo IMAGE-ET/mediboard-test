@@ -74,7 +74,9 @@ if (empty(CExClass::$_list_cache)) {
   }
 }
 
+/** @var CExObject[] $ex_objects */
 $ex_objects          = array();
+
 $ex_classes          = array();
 $ex_objects_counts   = array();
 $ex_objects_results  = array();
@@ -169,24 +171,6 @@ $order = "ex_class.name ASC, ex_link.ex_object_id DESC";
 
 $ljoin["ex_class"] = "ex_class.ex_class_id = ex_link.ex_class_id";
 
-/** @var CExObject[] $_ex_objects */
-$_ex_objects = array();
-
-if ($detail >= 1) {
-  /** @var CExLink[] $links */
-  $links = $ex_link->loadList($where, $order, $limit, null, $ljoin);
-
-  CExLink::massLoadExObjects($links);
-
-  foreach ($links as $_link) {
-    $_ex = $_link->loadRefExObject();
-    $_ex->_ex_class_id = $_link->ex_class_id;
-    $_ex->load();
-
-    $_ex_objects[$_link->ex_object_id] = $_ex;
-  }
-}
-
 $fields = array(
   "ex_link.ex_class_id",
   "ex_link.ex_object_id",
@@ -209,20 +193,43 @@ foreach ($counts as $_count) {
     $ex_objects_results[$_ex_class_id] = $_ex_class->getFormulaResult($_ex_class->_formula_field, $where);
   }
 
-  if ($detail == 0) {
+  if ($detail < 1) {
     continue;
   }
 
+  /** @var CExLink[] $links */
+  $where["ex_link.ex_class_id"]  = "= '$_ex_class_id'";
+  $links = $ex_link->loadList($where, $order, $limit, "ex_link.ex_object_id", $ljoin);
+
+  CExLink::massLoadExObjects($links);
+
+  /** @var CExObject[] $_ex_objects */
+  $_ex_objects = array();
+  foreach ($links as $_link) {
+    $_ex = $_link->loadRefExObject();
+    $_ex->_ex_class_id = $_link->ex_class_id;
+    $_ex->load();
+
+    $_ex_objects[$_link->ex_object_id] = $_ex;
+  }
+  
+  /** @var CExObject $_ex */
   foreach ($_ex_objects as $_ex) {
     if (!$_ex->_id) {
       continue;
     }
 
+    $_ex->updateCreationFields();
+
     $guid = "$_ex->object_class-$_ex->object_id";
 
     if (!isset($ref_objects_cache[$guid])) {
-      $_ex->loadTargetObject()->loadComplete(); // to get the view
-      $_ex->updateCreationFields();
+      $_ex->loadTargetObject();
+      
+      if ($detail < 2) {
+        $_ex->loadComplete(); // to get the view
+      }
+      
       $ref_objects_cache[$guid] = $_ex->_ref_object;
     }
     else {
