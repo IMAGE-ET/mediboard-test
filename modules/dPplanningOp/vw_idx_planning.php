@@ -23,6 +23,9 @@ $sans_anesth    = CValue::getOrSession("sans_anesth", 0);
 // Sélection du praticien
 $mediuser = CMediusers::get();
 $listPrat = $mediuser->loadPraticiens(PERM_EDIT);
+foreach ($listPrat as $_prat) {
+  $_prat->loadRefFunction();
+}
 
 $selPrat = CValue::getOrSession("selPrat", $mediuser->isPraticien() ? $mediuser->user_id : null);
 
