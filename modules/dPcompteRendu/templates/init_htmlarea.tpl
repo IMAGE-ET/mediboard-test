@@ -187,113 +187,130 @@
 
     // Majuscule auto
     if (mbcap.state === CKEDITOR.TRISTATE_ON && keystroke >= 65 && keystroke <= 90) {
-      var range, walker, selection, native, chars, data;
-
-      selection = editor.getSelection();
-      range = selection.getRanges()[0];
-      range.setStartAt(editor.document.getBody(), CKEDITOR.POSITION_AFTER_START);
-      walker = new CKEDITOR.dom.walker(range);
-
-      var node = walker.previous();
-
-      if (!node) {
-        return insertUpperCase(editor, event, keystroke);
-      }
-
-      native = selection.getNative();
-
-      if ("focusNode" in native && native.focusNode.data) {
-        chars = native.focusNode.data.substr(native.anchorOffset-2, +2);
-      }
-
-      var elt = node.$;
-
-      if (!Object.isUndefined(elt.innerHTML)) {
-        data = elt.innerHTML;
-      }
-      else if (!Object.isUndefined(elt.data)) {
-        data = elt.data;
-      }
-
-      if (!Prototype.Browser.IE) {
-        data = data.strip();
-      }
-
-      var previous = elt.previousElementSibling;
-
-      if (data == "" && elt.nodeName != "BR" && previous && previous.nodeName == "SPAN" && previous.className == "field") {
-        return;
-      }
-
-      if (
-      /* Commence par un retour chariot ou une ligne verticale */
-        elt.nodeName === "BR" ||
-          data == ""       ||
-          (data && data.length == 0) ||
-          (Prototype.Browser.IE && !Object.isUndefined(data) && /[\.\?!]\s/.test(data.substr(-2))) ||
-          /(<br|<hr)/.test(data) ||
-          (native.focusNode && native.focusNode.length == 0) ||
-          /* Les 2 derniers caractères sont :
-           - un point ou
-           - un point d'exclamation ou
-           - un point d'interrogation
-           et un espace */
-          /[\.\?!]\s/.test(chars)) {
-        insertUpperCase(editor, event, keystroke);
-      }
+      autoCapInsert(event, keystroke);
     }
 
     // Remplacement d'aide à la saisie (après un espace, virgule, point, deux points, point d'exclamation, point d'interrogation)
     var keystrokes = {32:'', 188:',', 2228414:'.', 186:':', 191:':', 49:'!', 223:'!',2228415:'?', 2228412:'?'}
 
     if (mbreplace.state === CKEDITOR.TRISTATE_ON && keystroke in keystrokes) {
-      var range, selection, selected_ranges, container, chars, text, last_char, last_space;
-
-      selection = editor.getSelection();
-      selected_ranges = selection.getRanges();
-      range = selected_ranges[0];
-      container = range.startContainer;
-      chars = text = container.getText();
-      chars = chars.strip().trim();
-      last_char = keystrokes[keystroke];
-
-      // Espace insécable pour IE
-      if (Prototype.Browser.IE) {
-        last_space = chars.lastIndexOf(" ");
-      }
-      else {
-        last_space = chars.lastIndexOf(" ");
-      }
-
-      if (last_space != -1) {
-        chars = chars.substr(last_space+1);
-      }
-
-      chars = chars.toLowerCase();
-
-      $H(helpers[0].options).each(function(categ) {
-        var helpers = categ[1];
-        if (Object.isUndefined(helpers.length)) {
-          $H(helpers).each(function(helper) {
-            var key = helper[0];
-            if (key.toLowerCase() === chars) {
-
-              var pattern = new RegExp(key+"$", "gi");
-
-              // On insère un espace insécable après le remplacement de l'aide
-              container.setText(text.replace(pattern, helper[1] + last_char + " "));
-              selection.selectElement(container);
-              selected_ranges = selection.getRanges();
-              selected_ranges[0].collapse(false);
-              selection.selectRanges(selected_ranges);
-
-              event.data.preventDefault();
-              throw $break;
-            }
-          });
-        }
-      });
+      helperInsert(event, keystroke);
     }
   }
 
+  autoCapInsert = function(event, keystroke) {
+    var editor = CKEDITOR.instances.htmlarea;
+    var range, walker, selection, native, chars, data;
+
+    selection = editor.getSelection();
+    range = selection.getRanges()[0];
+    range.setStartAt(editor.document.getBody(), CKEDITOR.POSITION_AFTER_START);
+    walker = new CKEDITOR.dom.walker(range);
+
+    var node = walker.previous();
+
+    if (!node) {
+      return insertUpperCase(editor, event, keystroke);
+    }
+
+    native = selection.getNative();
+
+    if ("focusNode" in native && native.focusNode.data) {
+      chars = native.focusNode.data.substr(native.anchorOffset-2, +2);
+    }
+
+    var elt = node.$;
+
+    if (!Object.isUndefined(elt.innerHTML)) {
+      data = elt.innerHTML;
+    }
+    else if (!Object.isUndefined(elt.data)) {
+      data = elt.data;
+    }
+
+    if (!Prototype.Browser.IE) {
+      data = data.strip();
+    }
+
+    // Escape des zero width space characters
+    data = data.replace(/[\u200B-\u200D\uFEFF]/g, '');
+
+    if (!Object.isUndefined(elt.data) && !data) {
+      if (elt.wholeText.trim().length) {
+        return;
+      }
+    }
+
+    var previous = elt.previousElementSibling;
+    if (data == "" && elt.nodeName != "BR" && previous && previous.nodeName == "SPAN" && previous.className == "field") {
+      return;
+    }
+
+    if (
+    /* Commence par un retour chariot ou une ligne verticale */
+      elt.nodeName === "BR" ||
+        data == ""       ||
+        (data && data.length == 0) ||
+        (Prototype.Browser.IE && !Object.isUndefined(data) && /[\.\?!]\s/.test(data.substr(-2))) ||
+        /(<br|<hr)/.test(data) ||
+        (native.focusNode && native.focusNode.length == 0) ||
+        /* Les 2 derniers caractères sont :
+         - un point ou
+         - un point d'exclamation ou
+         - un point d'interrogation
+         et un espace */
+        (/[\.\?!]\s/.test(chars))) {
+      insertUpperCase(editor, event, keystroke);
+    }
+  }
+
+  helperInsert = function(event, keystroke) {
+    var editor = CKEDITOR.instances.htmlarea;
+    var range, selection, selected_ranges, container, chars, text, last_char, last_space;
+
+    selection = editor.getSelection();
+    selected_ranges = selection.getRanges();
+    range = selected_ranges[0];
+    container = range.startContainer;
+    chars = text = container.getText();
+    chars = chars.strip().trim();
+    last_char = keystrokes[keystroke];
+
+    // Espace insécable pour IE
+    if (Prototype.Browser.IE) {
+      last_space = chars.lastIndexOf(" ");
+    }
+    else {
+      last_space = chars.lastIndexOf(" ");
+    }
+
+    if (last_space != -1) {
+      chars = chars.substr(last_space+1);
+    }
+
+    chars = chars.toLowerCase();
+
+    $H(helpers[0].options).each(function(categ) {
+      var helpers = categ[1];
+      if (Object.isUndefined(helpers.length)) {
+        $H(helpers).each(function(helper) {
+          var key = helper[0];
+          if (key.toLowerCase() === chars) {
+
+            var pattern = new RegExp(key+"$", "gi");
+
+            // On insère un espace insécable après le remplacement de l'aide
+            container.setText(text.replace(pattern, helper[1] + last_char + " "));
+            selection.selectElement(container);
+            selected_ranges = selection.getRanges();
+            selected_ranges[0].collapse(false);
+            selection.selectRanges(selected_ranges);
+
+            event.data.preventDefault();
+            throw $break;
+          }
+        });
+      }
+    });
+  }
 </script>
