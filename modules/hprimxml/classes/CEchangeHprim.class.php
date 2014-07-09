@@ -309,28 +309,4 @@ class CEchangeHprim extends CEchangeXML {
 
     return $this->_configs_format = $hprimxml_config;
   }
-
-  /**
-   * @see parent::understand()
-   */
-  function understand($data, CInteropSender $actor = null) {
-    if (!$dom = $this->isWellFormed($data)) {
-      return false;
-    }
-
-    $root = $dom->documentElement;
-    $nodeName = $root->nodeName;
-
-    foreach ($this->getFamily() as $_message) {
-      $message_class = new $_message;
-      $document_elements = $message_class->getDocumentElements();
-      if (array_key_exists($nodeName, $document_elements)) {
-        $this->_family_message = new $document_elements[$nodeName];
-
-        return true;
-      }
-    }
-
-    return false;
-  }
 }
