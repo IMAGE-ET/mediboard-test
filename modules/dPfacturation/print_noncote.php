@@ -27,6 +27,7 @@ $ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsu
 $where = array();
 $where["tarif"] = " IS NULL ";
 $where["codes_ccam"] = " IS NULL";
+$where["patient_id"] = " IS NOT NULL";
 $where["secteur1"] = " = 0";
 $where["secteur2"] = " = 0";
 $where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat));
