@@ -533,3 +533,16 @@ $library->versionFile   = "changes.txt";
 $library->versionString = "v1.2.1.0";
 
 CLibrary::$all[$library->name] = $library;
+
+
+$library = new CLibrary;
+$library->name          = "Fabricjs library";
+$library->url           = "http://fabricjs.com/";
+$library->fileName      = "fabricjs.r140.tar.gz";
+$library->description   = "Canvas javascript library";
+$library->sourceDir     = "fabricjs";
+$library->targetDir     = "fabricjs";
+$library->versionFile   = "fabric.js";
+$library->versionString = 'version:"1.4.0"';
+
+CLibrary::$all[$library->name] = $library;
