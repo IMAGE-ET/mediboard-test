@@ -56,7 +56,7 @@
               </button>
             {{/if}}
             <a class="button print notext compact" target="_blank"
-              href="?m=files&a=fileviewer&file_id={{$_file->_id}}"></a>
+              href="?m=files&a=fileviewer&file_id={{$_file->_id}}&suppressHeaders=1"></a>
           </span>
         </form>
       </td>
