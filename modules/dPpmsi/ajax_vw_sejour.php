@@ -66,7 +66,12 @@ foreach ($sejour->_ref_operations as $_operation) {
   foreach ($_operation->_ref_actes_ccam as $_acte) {
     $_acte->loadRefExecutant();
     $_acte->loadRefCodeCCAM();
-    $_acte->guessAssociation();
+    if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+      CComplementCCAM::guessAssociation($_acte, $_operation);
+    }
+    else {
+      $_acte->guessAssociation();
+    }
   }
   if ($_operation->plageop_id) {
     $_operation->_ref_plageop->loadRefsFwd();

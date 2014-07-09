@@ -433,7 +433,12 @@ class CCodable extends CMbObject {
     $this->loadRefsActes();
 
     foreach ($this->_ref_actes_ccam as $_acte) {
-      $_acte->guessAssociation();
+      if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+        CComplementCCAM::guessAssociation($_acte, $this);
+      }
+      else {
+        $_acte->guessAssociation();
+      }
       if ($_acte->_guess_association != "X") {
         $_acte->code_association     = $_acte->_guess_association;
         $_acte->facturable           = $_acte->_guess_facturable;
@@ -995,7 +1000,12 @@ class CCodable extends CMbObject {
             }
           }
 
-          $possible_acte->guessAssociation();
+          if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+            CComplementCCAM::guessAssociation($possible_acte, $this);
+          }
+          else {
+            $possible_acte->guessAssociation();
+          }
           $possible_acte->getTarif();
 
           // Keep references !
@@ -1003,8 +1013,13 @@ class CCodable extends CMbObject {
           $listModificateurs = $phase->_connected_acte->modificateurs;
           if (!$possible_acte->_id) {
             $possible_acte->checkFacturable();
-            foreach ($phase->_modificateurs as $modificateur) {
-              $modificateur->_checked = $this->checkModificateur($modificateur->code, CMbDT::time($phase->_connected_acte->execution));
+            if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+              CComplementCCAM::checkModifiers($phase->_modificateurs, $phase->_connected_acte->execution, $this);
+            }
+            else {
+              foreach ($phase->_modificateurs as $modificateur) {
+                $modificateur->_checked = $this->checkModificateur($modificateur->code, CMbDT::time($phase->_connected_acte->execution));
+              }
             }
           }
           else {

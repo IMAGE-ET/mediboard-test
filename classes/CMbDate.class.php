@@ -380,6 +380,21 @@ class CMbDate {
     return $subdivisionHoliday;
   }
 
+  /**
+   * Check if the given date is an holyday
+   *
+   * @param string  $date          date to check (used to analyse the year)
+   * @param bool    $includeRegion add region holidays (cantons, regions)
+   * @param CGroups $group         group used for the check, null = current
+   *
+   * @return bool
+   */
+  static function isHoliday($date, $includeRegion = true, $group = null) {
+    $holidays = self::getHolidays($date, $includeRegion, $group);
+
+    return array_key_exists($date, $holidays);
+  }
+
   static $days_name = array(
     1 => array(
       'Jour de l\'an',

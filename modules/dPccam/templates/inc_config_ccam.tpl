@@ -18,6 +18,7 @@
     </tr>
     {{mb_include module=system template=inc_config_bool var=use_cotation_ccam}}
     {{mb_include module=system template=inc_config_enum var=use_new_ccam_architecture values="CDatedCodeCCAM|COldCodeCCAM"}}
+    {{mb_include module=system template=inc_config_bool var=use_new_association_rules}}
     
     {{assign var=class value=CCodable}}
     <tr>

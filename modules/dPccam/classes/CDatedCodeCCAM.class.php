@@ -230,7 +230,7 @@ class CDatedCodeCCAM {
     $this->chapitres[0]["nom"]  = $this->_ref_code_ccam->arborescence[1]["nom"];
     $this->chapitres[0]["rq"]   = $this->_ref_code_ccam->arborescence[1]["rq"];
     if (isset($this->_ref_code_ccam->arborescence[2]["rang"])) {
-      $this->chapitres[1]["db"]   = $this->_ref_code_ccam->arborescence[1]["db"];
+      $this->chapitres[1]["db"]   = $this->_ref_code_ccam->arborescence[2]["db"];
       $this->place = $this->chapitres[1]["rang"] = $this->_ref_code_ccam->arborescence[2]["rang"];
       $this->chapitres[1]["code"] = $this->_ref_code_ccam->arborescence[2]["code"];
       $this->chapitres[1]["nom"]  = $this->_ref_code_ccam->arborescence[2]["nom"];

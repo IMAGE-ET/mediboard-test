@@ -25,7 +25,12 @@ $operation->loadAffectationsPersonnel();
 foreach ($operation->_ref_actes_ccam as $keyActe => $valueActe) {
   $acte =& $operation->_ref_actes_ccam[$keyActe];
   $acte->loadRefsFwd();
-  $acte->guessAssociation();
+  if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+    CComplementCCAM::guessAssociation($acte, $operation);
+  }
+  else {
+    $acte->guessAssociation();
+  }
 }
 
 $operation->loadRefSortieLocker()->loadRefFunction();

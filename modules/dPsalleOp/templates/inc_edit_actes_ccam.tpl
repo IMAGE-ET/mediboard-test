@@ -373,7 +373,7 @@
    
         
                 <span onmouseover="ObjectTooltip.createDOM(this, 'association-{{$acte->_guid}}')">
-                Association pour le Dr {{$acte->_ref_executant->_view}}
+                Association pour le Dr {{$acte->_ref_executant->_view}} (règle {{$acte->_guess_regle_asso}})
                 {{if $acte->code_association != $acte->_guess_association}}
                   <strong>
                     {{if $acte->_guess_association && $acte->_guess_association != "X"}}

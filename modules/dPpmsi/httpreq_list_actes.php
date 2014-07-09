@@ -17,7 +17,12 @@ $objet = CMbObject::loadFromGuid($object_guid);
 $objet->loadRefsActes();
 foreach ($objet->_ref_actes_ccam as &$acte) {
   $acte->loadRefsFwd();
-  $acte->guessAssociation();
+  if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+    CComplementCCAM::guessAssociation($acte, $objet);
+  }
+  else {
+    $acte->guessAssociation();
+  }
 }
 
 $sejour = new CSejour();

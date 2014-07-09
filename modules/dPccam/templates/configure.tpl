@@ -50,7 +50,10 @@ function modalImportFavoris() {
   .pop(640, 400);
 }
 
-Main.add(Control.Tabs.create.curry('tabs-configure', true));
+Main.add(function() {
+  Control.Tabs.create('tabs-configure', true);
+  Configuration.edit('dPccam', 'CGroups', 'Configs');
+});
 </script>
 
 <ul id="tabs-configure" class="control_tabs">
@@ -61,6 +64,7 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
   <li><a href="#ccam_RADIO">CCAM radio</a></li>
   <li><a href="#ccam_NGAP">CCAM ngap</a></li>
   <li><a href="#FraisDivers">{{tr}}CFraisDivers{{/tr}}</a></li>
+  <li><a href="#Configs">{{tr}}CConfiguration{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -92,4 +96,8 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
 
 <div id="FraisDivers" style="display: none;">
 {{mb_include template=inc_config_frais_divers}}
+</div>
+
+<div id="Configs" style="display: none;">
+
 </div>
