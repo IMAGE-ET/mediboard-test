@@ -48,7 +48,7 @@
             {{/if}}
 
             <a class="button print notext compact" target="_blank"
-               href="?m=files&a=fileviewer&file_id={{$_file->_id}}"></a>
+               href="?m=files&a=fileviewer&file_id={{$_file->_id}}&suppressHeaders=1"></a>
 
             {{if !$_file->annule}}
               <button class="archive notext compact" type="button" onclick="File.cancel(this.form, '{{$object_id}}', '{{$object_class}}')">
