@@ -132,6 +132,7 @@ class CEchangeXML extends CExchangeDataFormat {
     foreach ($this->getFamily() as $_message) {
       $message_class = new $_message;
       $document_elements = $message_class->getDocumentElements();
+
       if (array_key_exists($nodeName, $document_elements)) {
         $this->_family_message = new $document_elements[$nodeName];
         return true;

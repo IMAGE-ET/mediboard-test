@@ -23,17 +23,19 @@ class COperatorHprimXML extends CEAIOperator {
    * @return string Acquittement
    */
   function event(CExchangeDataFormat $data_format) {
-    $msg     = $data_format->_message;
+    $msg               = $data_format->_message;
+
+    /** @var CHPrimXML $evt */
+    $evt               = $data_format->_family_message;
+    $evt->_data_format = $data_format;
+
     /** @var CHPrimXMLEvenements $dom_evt */
-    $dom_evt = $data_format->_family_message->getHPrimXMLEvenements($msg);
+    $dom_evt = $evt->getHPrimXMLEvenements($msg);
 
     $dom_evt_class = get_class($dom_evt);
     if (!in_array($dom_evt_class, $data_format->_messages_supported_class)) {
       throw new CMbException(CAppUI::tr("CEAIDispatcher-no_message_supported_for_this_actor", $dom_evt_class));
     }
-
-    // Récupération des informations du message XML
-    $dom_evt->loadXML($msg);
     
     // Récupération du noeud racine
     $root     = $dom_evt->documentElement;
@@ -157,48 +159,48 @@ class COperatorHprimXML extends CEAIOperator {
     // Un événement concernant un patient appartient à l'une des six catégories suivantes :
     switch (get_class($dom_evt)) {
       // Enregistrement d'un patient avec son identifiant (ipp) dans le système
-      case "CHPrimXMLEnregistrementPatient" :
+      case "CHPrimXMLEnregistrementPatient":
         /** @var CHPrimXMLEnregistrementPatient $dom_evt */
         $echg_hprim->id_permanent = $data['idSourcePatient'];
 
         return $dom_evt->enregistrementPatient($dom_acq, $newPatient, $data);
 
       // Fusion de deux ipp
-      case "CHPrimXMLFusionPatient" :
+      case "CHPrimXMLFusionPatient":
         /** @var CHPrimXMLFusionPatient $dom_evt */
         $echg_hprim->id_permanent = $data['idSourcePatient'];
 
         return $dom_evt->fusionPatient($dom_acq, $newPatient, $data);
 
       // Venue d'un patient dans l'établissement avec son numéro de venue
-      case "CHPrimXMLVenuePatient" :
+      case "CHPrimXMLVenuePatient":
         /** @var CHPrimXMLVenuePatient $dom_evt */
         $echg_hprim->id_permanent = $data['idSourceVenue'];
 
         return $dom_evt->venuePatient($dom_acq, $newPatient, $data);
 
       // Fusion de deux venues
-      case "CHPrimXMLFusionVenue" :
+      case "CHPrimXMLFusionVenue":
         /** @var CHPrimXMLFusionVenue $dom_evt */
         $echg_hprim->id_permanent = $data['idSourceVenue'];
 
         return $dom_evt->fusionVenue($dom_acq, $newPatient, $data);
 
       // Mouvement du patient dans une unité fonctionnelle ou médicale
-      case "CHPrimXMLMouvementPatient" :
+      case "CHPrimXMLMouvementPatient":
         /** @var CHPrimXMLMouvementPatient $dom_evt */
         $echg_hprim->id_permanent = $data['idSourceVenue'];
 
         return $dom_evt->mouvementPatient($dom_acq, $newPatient, $data);
 
         // Gestion des débiteurs d'une venue de patient
-      case "CHPrimXMLDebiteursVenue" :
+      case "CHPrimXMLDebiteursVenue":
         /** @var CHPrimXMLDebiteursVenue $dom_evt */
         $echg_hprim->id_permanent = $data['idSourcePatient'];
 
         return $dom_evt->debiteursVenue($dom_acq, $newPatient, $data);
 
-      default :
+      default:
         return $dom_acq->generateAcquittements("erreur", "E007");
     }
   }

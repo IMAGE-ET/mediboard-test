@@ -16,58 +16,26 @@
  * Serveur d'activité PMSI
  */
 class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
-  static $evenements = array(
-    'evenementPMSI'                => "CHPrimXMLEvenementsPmsi",
-    'evenementServeurActe'         => "CHPrimXMLEvenementsServeurActes",
-    'evenementServeurEtatsPatient' => "CHPrimXMLEvenementsServeurEtatsPatient",
-    'evenementFraisDivers'         => "CHPrimXMLEvenementsFraisDivers",
-    'evenementServeurIntervention' => "CHPrimXMLEvenementsServeurIntervention",
-  );
-
-  /**
-   * @see parent::getHPrimXMLEvenements
-   */
-  static function getHPrimXMLEvenements($messageServeurActivitePmsi) {
-    $hprimxmldoc = new CMbXMLDocument();
-    $hprimxmldoc->loadXML($messageServeurActivitePmsi);
-    
-    $xpath = new CMbXPath($hprimxmldoc);
-    $event = $xpath->queryUniqueNode("/*/*[2]");
-
-    if ($nodeName = $event->nodeName) {
-      return new self::$evenements[$nodeName];
-    } 
-    
-    return new CHPrimXMLEvenementsServeurActivitePmsi();
-  }
-
   /**
    * @see parent::__construct
    */
   function __construct($dirschemaname = null, $schemafilename = null) {
     $this->type = "pmsi";
-    
+
     if (!$this->evenement) {
       return;
     }
-    
+
     $version = CAppUI::conf("hprimxml $this->evenement version");
     // Version 1.01 : schemaPMSI - schemaServeurActe
     if ($version == "1.01") {
       parent::__construct($dirschemaname, $schemafilename."101");
-    } 
+    }
     // Version 1.04 - 1.05 - 1.06 - 1.07
     else {
       $version = str_replace(".", "", $version);
       parent::__construct("serveurActivitePmsi_v$version", $schemafilename.$version);
-    }   
-  }
-
-  /**
-   * @see parent::getEvenements
-   */
-  function getEvenements() {
-    return self::$evenements;
+    }
   }
 
   /**
@@ -80,14 +48,14 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
   function mappingServeurActes($data) {
     // Mapping patient
     $patient = $this->mappingPatient($data);
-    
+
     // Mapping actes CCAM
     $actesCCAM = $this->mappingActesCCAM($data);
-    
+
     return array (
       "patient"   => $patient,
       "actesCCAM" => $actesCCAM
-    );  
+    );
   }
 
   /**
@@ -100,11 +68,11 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
   function mappingPatient($data) {
     $node = $data['patient'];
     $xpath = new CHPrimXPath($node->ownerDocument);
-    
+
     $personnePhysique = $xpath->queryUniqueNode("hprim:personnePhysique", $node);
     $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $personnePhysique);
     $elementDateNaissance = $xpath->queryUniqueNode("hprim:dateNaissance", $personnePhysique);
-    
+
     return array (
       "idSourcePatient" => $data['idSourcePatient'],
       "idCiblePatient"  => $data['idCiblePatient'],
@@ -126,11 +94,11 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     // On ne récupère que l'entrée et la sortie 
     $sejour = CHPrimXMLEvenementsPatients::getEntree($node, $sejour);
     $sejour = CHPrimXMLEvenementsPatients::getSortie($node, $sejour);
-    
+
     // On ne check pas la cohérence des dates des consults/intervs
     $sejour->_skip_date_consistencies = true;
-    
-    return $sejour;    
+
+    return $sejour;
   }
 
   /**
@@ -152,10 +120,10 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     $node  = $data['intervention'];
 
     $xpath = new CHPrimXPath($node->ownerDocument);
-    
+
     $debut = $this->getDebutInterv($node);
     $fin   = $this->getFinInterv($node);
-    
+
     // Traitement de la date/heure début, et durée de l'opération
     $operation->temp_operation = CMbDT::subTime(CMbDT::time($debut), CMbDT::time($fin));
     $operation->_time_op       = null;
@@ -165,7 +133,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
       // On affecte le début de l'opération
       if (!$operation->debut_op) {
         $operation->debut_op = CMbDT::time($debut);
-      } 
+      }
       // On affecte la fin de l'opération
       if (!$operation->fin_op) {
         $operation->fin_op = CMbDT::time($fin);
@@ -176,10 +144,10 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
       $operation->_time_urgence  = null;
       $operation->time_operation = CMbDT::time($debut);
     }
-    
+
     $operation->libelle = CMbString::capitalize($xpath->queryTextNode("hprim:libelle", $node));
     $operation->rques   = CMbString::capitalize($xpath->queryTextNode("hprim:commentaire", $node));
-    
+
     // Côté
     $cote = array (
       "D" => "droit",
@@ -190,10 +158,10 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     );
     $code_cote = $xpath->queryTextNode("hprim:cote/hprim:code", $node);
     $operation->cote = isset($cote[$code_cote]) ? $cote[$code_cote] : ($operation->cote ? $operation->cote : "inconnu");
-    
+
     // Conventionnée ?
     $operation->conventionne = $xpath->queryTextNode("hprim:convention", $node);
-    
+
     // Extemporané
     $indicateurs = $xpath->query("hprim:indicateurs/*", $node);
     foreach ($indicateurs as $_indicateur) {
@@ -201,10 +169,10 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
         $operation->exam_extempo = true;
       }
     }
-    
+
     // TypeAnesthésie
     $this->getTypeAnesthesie($node, $operation);
-    
+
     $operation->duree_uscpo = $xpath->queryTextNode("hprim:dureeUscpo", $node);
   }
 
@@ -217,12 +185,12 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
    * @return void
    */
   function getTypeAnesthesie(DOMNode $node, COperation $operation) {
-    $xpath = new CHPrimXPath($node->ownerDocument); 
-       
+    $xpath = new CHPrimXPath($node->ownerDocument);
+
     if (!$typeAnesthesie = $xpath->queryTextNode("hprim:typeAnesthesie", $node)) {
       return;
     }
-    
+
     $operation->type_anesth = CIdSante400::getMatch("CTypeAnesth", $this->_ref_sender->_tag_hprimxml, $typeAnesthesie)->object_id;
   }
 
@@ -242,7 +210,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     $time_op  = CMbDT::time($debut);
 
     // Recherche d'une éventuelle plageOp avec la salle
-    $plageOp           = new CPlageOp();  
+    $plageOp           = new CPlageOp();
     $plageOp->chir_id  = $operation->chir_id;
     $plageOp->salle_id = $operation->salle_id;
     $plageOp->date     = $date_op;
@@ -266,14 +234,14 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
         break;
       }
     }
-    
+
     if ($plageOp->_id) {
       $operation->plageop_id = $plageOp->_id;
     }
     else {
       // Dans le cas où l'on avait une plage sur l'interv on la supprime
       $operation->plageop_id = "";
-      
+
       $operation->date = $date_op;
     }
   }
@@ -287,7 +255,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
    */
   function getDebutInterv(DOMNode $node) {
     $xpath = new CHPrimXPath($node->ownerDocument);
-    
+
     return $this->getDateHeure($xpath->queryUniqueNode("hprim:debut", $node, false));
   }
 
@@ -300,7 +268,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
    */
   function getFinInterv(DOMNode $node) {
     $xpath = new CHPrimXPath($node->ownerDocument);
-    
+
     return $this->getDateHeure($xpath->queryUniqueNode("hprim:fin", $node, false));
   }
 
@@ -314,15 +282,15 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
    */
   function getParticipant(DOMNode $node, CSejour $sejour = null) {
     $xpath = new CHPrimXPath($node->ownerDocument);
-    
+
     $adeli = $xpath->queryTextNode("hprim:participants/hprim:participant/hprim:medecin/hprim:numeroAdeli", $node);
-    
+
     // Recherche du mediuser
     $mediuser = new CMediusers();
     if (!$adeli) {
       return $mediuser;
     }
-    
+
     $where = array(
       "users_mediboard.adeli"        => $mediuser->_spec->ds->prepare("=%", $adeli),
       "functions_mediboard.group_id" => "= '$sejour->group_id'"
@@ -330,9 +298,9 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     $ljoin = array(
       "functions_mediboard" => "functions_mediboard.function_id = users_mediboard.function_id"
     );
-    
+
     $mediuser->loadObject($where, null, null, $ljoin);
-    
+
     return $mediuser;
   }
 
@@ -347,10 +315,10 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
   function getSalle(DOMNode $node, CSejour $sejour) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     $name = $xpath->queryTextNode("hprim:uniteFonctionnelle/hprim:code", $node);
-    
+
     // Recherche de la salle
     $salle = new CSalle();
-    
+
     $where = array(
       "sallesbloc.nom"           => $salle->_spec->ds->prepare("=%", $name),
       "bloc_operatoire.group_id" => "= '$sejour->group_id'"
@@ -358,9 +326,9 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     $ljoin = array(
       "bloc_operatoire" => "bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id"
     );
-    
+
     $salle->loadObject($where, null, null, $ljoin);
-            
+
     return $salle;
   }
 

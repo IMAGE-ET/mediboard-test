@@ -119,7 +119,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
    **/
   function venuePatient(CHPrimXMLAcquittementsPatients $dom_acq, CPatient $newPatient, $data, &$newVenue = null) {
     $echg_hprim = $this->_ref_echange_hprim;
-    
+    mbTrace($data);
     // Cas 1 : Traitement du patient
     $domEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
     $domEnregistrementPatient->_ref_echange_hprim = $echg_hprim;

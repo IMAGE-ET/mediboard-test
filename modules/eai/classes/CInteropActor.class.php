@@ -155,7 +155,7 @@ class CInteropActor extends CMbObject {
     $this->_tag_movement     = CMovement::getObjectTag($this->group_id);
     $this->_tag_visit_number = CSmp::getObjectTag($this->group_id);
 
-    $this->_tag_hprimxml      = CHprimXML::getObjectTag($this->group_id);
+    $this->_tag_hprimxml      = CHPrimXML::getObjectTag($this->group_id);
     $this->_tag_hl7           = CHL7::getObjectTag($this->group_id);
 
     $this->_self_tag          = $this->getTag($this->group_id);

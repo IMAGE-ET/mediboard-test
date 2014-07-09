@@ -228,7 +228,7 @@ class CDestinataireHprim extends CInteropReceiver {
    * @return mixed
    */
   function getFormatObjectHandler(CEAIObjectHandler $objectHandler) {
-    $hprim_object_handlers = CHprimXML::getObjectHandlers();
+    $hprim_object_handlers = CHPrimXML::getObjectHandlers();
     $object_handler_class  = get_class($objectHandler);
     if (array_key_exists($object_handler_class, $hprim_object_handlers)) {
       return $hprim_object_handlers[$object_handler_class];

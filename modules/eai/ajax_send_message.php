@@ -44,11 +44,11 @@ if ($receiver instanceof CDestinataireHprim) {
   
   if ($exchange->type == "patients") {
     $evenement   = "evenementPatient";
-    $data_format = CHPrimXMLEvenementsPatients::getHPrimXMLEvenements($exchange->_message);
+    $data_format = CHPrimXMLEventPatient::getHPrimXMLEvenements($exchange->_message);
   }
   
   if ($exchange->type == "pmsi") {
-    $data_format = CHPrimXMLEvenementsServeurActivitePmsi::getHPrimXMLEvenements($exchange->_message);
+    $data_format = CHPrimXMLEventServeurActivitePmsi::getHPrimXMLEvenements($exchange->_message);
     $evenement = $data_format->sous_type;
   }
 }

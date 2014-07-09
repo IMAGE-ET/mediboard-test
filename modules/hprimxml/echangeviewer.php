@@ -18,10 +18,10 @@ $echange_hprim_id = CValue::get("echange_hprim_id");
 $echange_hprim = new CEchangeHprim();
 $echange_hprim->load($echange_hprim_id);
 
-$domGetEvenement = new CHPrimXMLEvenementsPatients();
-$domGetEvenement->loadXML($echange_hprim->_message);
+$evt             = new CHPrimXMLEventPatient();
+$domGetEvenement = $evt->getHPrimXMLEvenements($this->_message);
 $domGetEvenement->formatOutput = true;
-$doc_errors_msg = @$domGetEvenement->schemaValidate(null, true, false);
+$doc_errors_msg  = @$domGetEvenement->schemaValidate(null, true, false);
 
 $echange_hprim->_message = utf8_encode($domGetEvenement->saveXML());
 

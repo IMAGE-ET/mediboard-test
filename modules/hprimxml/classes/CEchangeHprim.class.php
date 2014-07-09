@@ -15,10 +15,10 @@
  */
 class CEchangeHprim extends CEchangeXML {
   static $messages = array(
-     "patients" => "CHPrimXMLEvenementsPatients",
-     "pmsi"     => "CHPrimXMLEvenementsServeurActivitePmsi" 
+    "patients" => "CHPrimXMLEventPatient",
+    "pmsi"     => "CHPrimXMLEventServeurActivitePmsi"
   );
-  
+
   // DB Table key
   public $echange_hprim_id;
 
@@ -38,11 +38,11 @@ class CEchangeHprim extends CEchangeXML {
    */
   function getProps() {
     $props = parent::getProps();
-    
-    $props["receiver_id"]   = "ref class|CDestinataireHprim"; 
+
+    $props["receiver_id"]   = "ref class|CDestinataireHprim";
     $props["initiateur_id"] = "ref class|CEchangeHprim";
     $props["object_class"]  = "enum list|CPatient|CSejour|COperation|CAffectation|CConsultation show|0";
-    
+
     return $props;
   }
 
@@ -52,7 +52,7 @@ class CEchangeHprim extends CEchangeXML {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['notifications'] = "CEchangeHprim initiateur_id";
-    
+
     return $backProps;
   }
 
@@ -61,7 +61,7 @@ class CEchangeHprim extends CEchangeXML {
    */
   function loadRefsBack() {
     parent::loadRefsBack();
-    
+
     $this->loadRefNotifications();
   }
 
@@ -81,24 +81,24 @@ class CEchangeHprim extends CEchangeXML {
    */
   function getErrors() {
     if ($this->_message !== null) {
-      $domGetEvenement = null;
+      $evt = null;
       $this->type == "patients" ?
-        $domGetEvenement = new CHPrimXMLEvenementsPatients() : null;
+        $evt = new CHPrimXMLEventPatient() : null;
       $this->type == "pmsi" ?
-        $domGetEvenement = new CHPrimXMLEvenementsServeurActivitePmsi::$evenements[$this->sous_type] : null;
-        
-      $domGetEvenement->loadXML($this->_message);
+        $evt = new CHPrimXMLEventServeurActivitePmsi() : null;
+
+      $domGetEvenement = $evt->getHPrimXMLEvenements($this->_message);
       $domGetEvenement->formatOutput = true;
-      
+
       $validate = $domGetEvenement->schemaValidate(null, true, false);
       if (!is_bool($validate)) {
         $errors = explode("\n", utf8_decode($validate));
         $this->_doc_errors_msg = array_filter($errors);
       }
-      
+
       $this->_message = utf8_encode($domGetEvenement->saveXML());
-    } 
-    
+    }
+
     if ($this->_acquittement !== null) {
       $domGetAcquittement = null;
       $this->type == "patients" ?
@@ -112,7 +112,7 @@ class CEchangeHprim extends CEchangeXML {
 
       $domGetAcquittement->loadXML($this->_acquittement);
       $domGetAcquittement->formatOutput = true;
-      
+
       $validate = $domGetAcquittement->schemaValidate(null, true, false);
       if (!is_bool($validate)) {
         $errors = explode("\n", utf8_decode($validate));
@@ -156,7 +156,7 @@ class CEchangeHprim extends CEchangeXML {
    */
   function loadView() {
     parent::loadView();
-    
+
     $this->getObservations();
   }
 
@@ -169,7 +169,7 @@ class CEchangeHprim extends CEchangeXML {
    */
   function setObjectClassIdPermanent(CMbObject $mbObject) {
     $this->object_class = $mbObject->_class;
-    
+
     if ($mbObject instanceof CPatient && $mbObject->_IPP) {
       $this->id_permanent = $mbObject->_IPP;
     }
@@ -240,8 +240,10 @@ class CEchangeHprim extends CEchangeXML {
    *
    * @return string
    */
-  function setAck(CHPrimXMLAcquittements $dom_acq, $codes, $avertissement = null, $commentaires = null, CMbObject $mbObject = null, $data = array()) {
-    $commentaire = $avertissement ? $avertissement : $commentaires;                    
+  function setAck(
+      CHPrimXMLAcquittements $dom_acq, $codes, $avertissement = null, $commentaires = null, CMbObject $mbObject = null, $data = array()
+  ) {
+    $commentaire = $avertissement ? $avertissement : $commentaires;
     $statut      = $avertissement ? $dom_acq->_codes_erreurs["avt"] : $dom_acq->_codes_erreurs["ok"];
 
     $msgAcq    = $dom_acq->generateAcquittements($statut, $codes, $commentaire, $mbObject, $data);
@@ -249,14 +251,14 @@ class CEchangeHprim extends CEchangeXML {
 
     $this->acquittement_valide = $doc_valid ? 1 : 0;
     $this->statut_acquittement = $statut;
-        
+
     if ($mbObject) {
       $this->setObjectIdClass($mbObject);
     }
     $this->_acquittement = $msgAcq;
     $this->date_echange  = CMbDT::dateTime();
     $this->store();
-    
+
     return $msgAcq;
   }
 
@@ -267,18 +269,19 @@ class CEchangeHprim extends CEchangeXML {
    * @param array                  $code_erreur  Mediboard errors codes
    * @param null                   $commentaires Comments
    * @param CMbObject              $mbObject     Object
+   * @param array                  $data         Objects
    *
    * @return string
    */
   function setAckError(CHPrimXMLAcquittements $dom_acq, $code_erreur, $commentaires = null, CMbObject $mbObject = null, $data = null) {
     $statut = $dom_acq->_codes_erreurs["err"];
-    
+
     $msgAcq    = $dom_acq->generateAcquittements($dom_acq->_codes_erreurs["err"], $code_erreur, $commentaires, $mbObject, $data);
     $doc_valid = $dom_acq->schemaValidate(null, false, $this->_ref_receiver ? $this->_ref_receiver->display_errors : true);
 
     $this->acquittement_valide = $doc_valid ? 1 : 0;
     $this->statut_acquittement = $statut;
-    
+
     if ($mbObject) {
       $this->setObjectIdClass($mbObject);
     }
@@ -298,12 +301,36 @@ class CEchangeHprim extends CEchangeXML {
    */
   function getConfigs($actor_guid) {
     list($sender_class, $sender_id) = explode("-", $actor_guid);
-    
+
     $hprimxml_config = new CHprimXMLConfig();
     $hprimxml_config->sender_class = $sender_class;
     $hprimxml_config->sender_id    = $sender_id;
     $hprimxml_config->loadMatchingObject();
-    
+
     return $this->_configs_format = $hprimxml_config;
+  }
+
+  /**
+   * @see parent::understand()
+   */
+  function understand($data, CInteropSender $actor = null) {
+    if (!$dom = $this->isWellFormed($data)) {
+      return false;
+    }
+
+    $root = $dom->documentElement;
+    $nodeName = $root->nodeName;
+
+    foreach ($this->getFamily() as $_message) {
+      $message_class = new $_message;
+      $document_elements = $message_class->getDocumentElements();
+      if (array_key_exists($nodeName, $document_elements)) {
+        $this->_family_message = new $document_elements[$nodeName];
+
+        return true;
+      }
+    }
+
+    return false;
   }
 }

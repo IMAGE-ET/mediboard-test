@@ -3020,7 +3020,7 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return CMovement[]
    */
   function loadRefsMovements($where = array()) {
-    $movements = $this->loadBackRefs("movements", null, null, null, null, null, null, $where);
+    $movements = $this->loadBackRefs("movements", null, null, null, null, null, "", $where);
 
     if (count($movements) > 0) {
       $this->_ref_first_movement = reset($movements);

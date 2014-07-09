@@ -62,13 +62,14 @@ class CEAIDispatcher {
       return self::dispatchError($data, $actor);
     }
 
+    // est-ce que je comprend la famille de messages ?
     /** @var CExchangeDataFormat $data_format */
     if (($data_format = self::understand($data, $actor, $contexts)) === null) {
       self::$errors[] = CAppUI::tr("CEAIDispatcher-no_understand");
       return self::dispatchError($data, $actor);
     }
 
-    // est-ce que je comprend la famille de messages ?
+    // est-ce que je supporte cette famille de messages ?
     $supported = false;
     $family_message_class = (!$data_format->_family_message_class) ? 
                                 get_class($data_format->_family_message) : $data_format->_family_message_class;

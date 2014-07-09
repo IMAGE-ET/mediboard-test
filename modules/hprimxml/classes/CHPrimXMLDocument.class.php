@@ -16,7 +16,7 @@
  * H'XML Document
  */
 
-class CHPrimXMLDocument extends CMbXMLDocument {  
+class CHPrimXMLDocument extends CMbXMLDocument {
   public $evenement;
   public $finalpath;
   public $documentfinalprefix;
@@ -966,7 +966,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
         
     $evenementPatient = $xpath->query("/hprim:evenementsPatients/hprim:evenementPatient/*");
     $type = null;
-    $evenements = CHPrimXMLEvenementsPatients::$evenements;
+    $evenements = CHPrimXMLEventPatient::$evenements;
     foreach ($evenementPatient as $_evenementPatient) {
       if (array_key_exists($_evenementPatient->tagName, $evenements)) {
         $type = $_evenementPatient->tagName;

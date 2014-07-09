@@ -23,14 +23,6 @@ class CHPrimXMLEvenements extends CHPrimXMLDocument {
   );
 
   /**
-   * Récupération de l'évènement H'XML
-   *
-   * @return CHPrimXMLEvenements
-   */
-  static function getHPrimXMLEvenements() {
-  }
-
-  /**
    * Récupération des évènements disponibles
    *
    * @return array
