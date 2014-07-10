@@ -459,25 +459,25 @@
         
         <tr>
           <th style="font-weight: normal;">Examen cardiovasculaire</th>
-          <td style="font-weight: bold;" class="text">{{$dossier_anesth->examenCardio}}</td>
+          <td colspan="5" style="font-weight: bold;" class="text">{{$dossier_anesth->examenCardio}}</td>
         </tr>
         <tr>
           <th style="font-weight: normal;">Examen pulmonaire</th>
-          <td style="font-weight: bold;" class="text">{{$dossier_anesth->examenPulmo}}</td>
+          <td colspan="5" style="font-weight: bold;" class="text">{{$dossier_anesth->examenPulmo}}</td>
         </tr>
         <tr>
           <th style="font-weight: normal;">Examen digestif</th>
-          <td style="font-weight: bold;" class="text">{{$dossier_anesth->examenDigest}}</td>
+          <td colspan="5" style="font-weight: bold;" class="text">{{$dossier_anesth->examenDigest}}</td>
         </tr>
         <tr>
           <th style="font-weight: normal;">Examen autre</th>
-          <td style="font-weight: bold;" class="text">{{$dossier_anesth->examenAutre}}</td>
+          <td colspan="5" style="font-weight: bold;" class="text">{{$dossier_anesth->examenAutre}}</td>
         </tr>
         
         {{if $consult->examen}}
         <tr>
           <th style="font-weight: normal;">Examens</th>
-          <td style="font-weight: bold;" colspan="5" class="text">{{$consult->examen|nl2br}}</td>
+          <td colspan="5" style="font-weight: bold;" colspan="5" class="text">{{$consult->examen|nl2br}}</td>
         </tr>
         {{/if}}
       </table>
