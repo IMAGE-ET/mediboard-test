@@ -114,6 +114,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
   // Other fields
   public $_entire_doc;
   public $_ids_corres;
+  public $_page_ordonnance;
 
   static $_page_formats = array(
     'a3'      => array(29.7 , 42),

@@ -15,6 +15,7 @@
 abstract class CHtmlToPDFConverter {
   /** @var CHtmlToPDFConverter */
   static $instance;
+  static $_page_ordonnance;
 
   public $html;
   public $result;

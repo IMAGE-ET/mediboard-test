@@ -111,6 +111,8 @@ class CHtmlToPDF {
     $this->content = str_replace("[Meta Données - Verrouilleur - Prénom]"   , $locker->_user_first_name, $this->content);
     $this->content = str_replace("[Meta Données - Verrouilleur - Initiales]", $locker->_shortview, $this->content);
 
+    CHtmlToPDFConverter::$_page_ordonnance = $compte_rendu->_page_ordonnance;
+
     $pdf_content = CHtmlToPDFConverter::convert($this->content, $compte_rendu->_page_format, $compte_rendu->_orientation);
 
     if ($file->_file_path) {

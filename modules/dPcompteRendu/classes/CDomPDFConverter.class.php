@@ -46,6 +46,10 @@ class CDomPDFConverter extends CHtmlToPDFConverter {
   function render() {
     $this->dompdf->load_html($this->html);
     $this->dompdf->render();
+    if (CHtmlToPDFConverter::$_page_ordonnance) {
+      $this->dompdf->get_canvas()->page_text(273, 730, "Page {PAGE_NUM} / {PAGE_COUNT}", Font_Metrics::get_font("arial"), 10);
+    }
+
     $this->result = $this->dompdf->output();
   }
 }
