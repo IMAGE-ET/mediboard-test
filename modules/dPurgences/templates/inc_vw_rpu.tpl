@@ -355,7 +355,7 @@ function showEtabEntreeTransfert(mode) {
             {{if $conf.dPurgences.gerer_hospi == "1" && ($conf.dPurgences.create_sejour_hospit == "0" || !$sejour->sortie_reelle)}} 
               {{assign var=label value=$conf.dPurgences.create_sejour_hospit|ternary:"simple":"transfert"}}
               <!-- Hospitalisation immediate, creation d'un sejour et transfert des actes dans le nouveau sejour -->
-                <button class="new" type="button" onclick="ContraintesRPU.checkObligatory('{{$rpu->_id}}', Urgences.hospitalize.curry('{{$rpu->_id}}'))">Hospitaliser</button>
+                <button class="new singleclick" type="button" onclick="ContraintesRPU.checkObligatory('{{$rpu->_id}}', Urgences.hospitalize.curry('{{$rpu->_id}}'))">Hospitaliser</button>
             {{/if}}
           {{/if}}
           

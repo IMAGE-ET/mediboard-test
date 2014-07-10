@@ -34,6 +34,7 @@ $sejour_collision = "";
 
 if ($count_collision == 1) {
   $sejour_collision = current($collisions);
+  $sejour_collision->loadRefPraticien();
   $check_merge      = $sejour_rpu->checkMerge($collisions);
 }
 else if (!$count_collision) {
@@ -42,6 +43,7 @@ else if (!$count_collision) {
     "entree"      => "BETWEEN '$now' AND '$after'",
     "sejour_id"   => "!= '$sejour->_id'",
     "patient_id"  => "= '$patient->_id'",
+    "annule"      => "= '0'",
   );
   /** @var CSejour[] $sejours_futur */
   $sejours_futur = $sejour->loadList($where, "entree DESC", null, "type");
