@@ -44,6 +44,7 @@ if ($sejour_id_merge) {
   $msg = $sejour_merge->merge(array($sejour));
   viewMsg($msg, "Fusion");
   $sejour = $sejour_merge;
+  $rpu->sejour_id = $sejour_merge->_id;
 }
 
 // Creation d'un séjour reliquat
