@@ -18,6 +18,9 @@ $listPrat = $listPrat->loadPraticiens(PERM_READ);
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
+if ($sejour->group_id != CGroups::loadCurrent()->_id) {
+  CAppUI::redirect("m=system&a=access_denied");
+}
 $sejour->loadRefPatient();
 
 $patient = $sejour->_ref_patient;
