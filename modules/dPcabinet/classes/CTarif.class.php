@@ -222,7 +222,7 @@ class CTarif extends CMbObject {
 
     $this->secteur1 = 0.00;
     $secteur2 = $this->secteur2;
-  
+
     $types_code = array(
       "codes_ccam" => "CActeCCAM",
       "codes_ngap" => "CActeNGAP"
@@ -232,27 +232,58 @@ class CTarif extends CMbObject {
       $types_code["codes_tarmed"] = "CActeTarmed";
       $types_code["codes_caisse"] = "CActeCaisse";
     }
-    
+    $this->loadRefsFwd();
+    $this->completeField(array_keys($types_code));
+    if (!$this->codes_ngap && !$this->codes_ccam && !$this->codes_tarmed && !$this->codes_caisse) {
+      return null;
+    }
+
     foreach ($types_code as $codes => $class_acte) {
       $_codes = "_".$codes;
-      $this->completeField($codes);
       $this->$_codes = explode("|", $this->$codes);
       CMbArray::removeValue("", $this->$_codes);
       foreach ($this->$_codes as &$_code) {
         /** @var CActe $acte */
         $acte = new $class_acte;
+        if ($this->chir_id) {
+          $acte->executant_id = $this->chir_id;
+        }
+        elseif ($this->function_id) {
+          /* Recupération de l'id du premier praticien de la fonction dont la spécialité est renseignée */
+          $ds = CSQLDataSource::get('std');
+          $query = new CRequest();
+          $query->addColumn('user_id');
+          $query->addTable('users_mediboard');
+          $query->addWhereClause('function_id', "= $this->function_id");
+          $query->addWhereClause('spec_cpam_id', 'IS NOT NULL');
+          $result = $ds->loadColumn($query->makeSelect(), 1);
+          if (!empty($result)) {
+            $acte->executant_id = $result[0];
+          }
+        }
         $acte->setFullCode($_code);
         $this->secteur1 += $acte->updateMontantBase();
-        
-         // Affectation du secteur 2 au dépassement du premier acte trouvé
-        $acte->montant_depassement = $secteur2 ? $secteur2 : 0;
-        $secteur2 = 0;
-        
+
+        // Affectation du secteur 2 au dépassement du premier acte principal trouvé
+        if ($secteur2) {
+          switch ($class_acte) {
+            case 'CActeNGAP':
+              if ($acte->lettre_cle) {
+                $acte->montant_depassement = $secteur2;
+                $secteur2 = 0;
+              }
+              break;
+            default:
+              $acte->montant_depassement = $secteur2;
+              $secteur2 = 0;
+          }
+        }
+
         $_code = $acte->makeFullCode();
       }
       $this->$codes = implode("|", $this->$_codes);
     }
-    
+
     return $this->secteur1;
   }
   
