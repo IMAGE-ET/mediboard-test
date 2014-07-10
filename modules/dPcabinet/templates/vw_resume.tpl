@@ -138,6 +138,13 @@ function newExam(sAction, consultation_id) {
                   <div>{{mb_value object=$_consult field=conclusion}}</div>
                 {{/if}}
 
+                {{if $_consult->_latest_constantes}}
+                  {{assign var=_latest_constantes value=$_consult->_latest_constantes}}
+                  <strong>{{tr}}CConstantesMedicales-poids{{/tr}} :</strong>  {{if $_latest_constantes->poids}} {{$_latest_constantes->poids}}  Kg{{else}}-{{/if}}
+                  <strong>{{tr}}CConstantesMedicales-taille{{/tr}} :</strong> {{if $_latest_constantes->taille}}{{$_latest_constantes->taille}} cm{{else}}-{{/if}}
+                  <strong>{{tr}}CConstantesMedicales-_imc{{/tr}} :</strong>   {{if $_latest_constantes->_imc}}  {{$_latest_constantes->_imc}}     {{else}}-{{/if}}
+                {{/if}}
+
                 {{if $_consult->_ref_examaudio->_id}}
                   <br />
                   <a href="#" onclick="newExam('exam_audio', {{$_consult->_id}})">

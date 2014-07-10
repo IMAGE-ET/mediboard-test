@@ -59,6 +59,10 @@ foreach ($consultations as $consultation) {
   $consultation->loadRefsReglements();
   $consultation->loadRefPlageConsult();
   $consultation->_ref_plageconsult->_ref_chir->loadRefFunction();
+
+  $_latest_constantes = CConstantesMedicales::getLatestFor($patient, null, array("poids", "taille"), $consultation);
+  $consultation->_latest_constantes = $_latest_constantes[0];
+  
   // Affichage des ordonnances
   $consultation->loadRefsPrescriptions();
   if (isset($consultation->_ref_prescriptions["externe"])) {
