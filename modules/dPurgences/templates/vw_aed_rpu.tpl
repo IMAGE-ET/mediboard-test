@@ -387,32 +387,41 @@
       </div>
 
       <ul id="tab-dossier" class="control_tabs">
-        <li><a href="#rpu">RPU</a></li>
-        <li><a href="#suivi_clinique">Synthèse</a></li>
-        <li><a href="#antecedents">{{tr}}soins.tab.antecedent_and_treatment{{/tr}}</a></li>
+        <li><a href="#rpu">{{tr}}soins.tab.rpu{{/tr}}</a></li>
+
+        <li><a href="#suivi_clinique">{{tr}}soins.tab.synthese{{/tr}}</a></li>
 
         {{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
-          <li><a href="#prescription_sejour">{{tr}}soins.tab.Prescription{{/tr}}</a></li>
           <li><a href="#dossier_traitement">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
+          <li><a href="#prescription_sejour">{{tr}}soins.tab.prescription{{/tr}}</a></li>
         {{else}}
           <li><a href="#dossier_suivi">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
         {{/if}}
 
+        <li>
+          <a href="#constantes">{{tr}}soins.tab.surveillance{{/tr}}</a>
+        </li>
 
-        <li><a href="#constantes">{{tr}}soins.tab.surveillance{{/tr}}</a></li>
+        {{if $app->user_prefs.ccam_sejour == 1 }}
+          <li><a href="#actes">{{tr}}soins.tab.cotation-infirmiere{{/tr}}</a></li>
+        {{/if}}
+
+        {{if "dPImeds"|module_active}}
+          <li><a href="#Imeds">{{tr}}soins.tab.labo{{/tr}}</a></li>
+        {{/if}}
+
+        <li>
+          <a href="#examens">{{tr}}soins.tab.dossier-medical{{/tr}}</a>
+        </li>
 
         {{if "forms"|module_active}}
-          <li><a href="#ex-forms-rpu">{{tr}}soins.tab.Formulaires{{/tr}}</a></li>
+          <li><a href="#ex-forms-rpu">{{tr}}soins.tab.formulaires{{/tr}}</a></li>
         {{/if}}
 
-        <li><a href="#examens">{{tr}}soins.tab.dossier-medical{{/tr}}</a></li>
-        {{if $app->user_prefs.ccam_sejour == 1 }}
-          <li><a href="#actes">{{tr}}soins.tab.Cotation-infirmiere{{/tr}}</a></li>
-        {{/if}}
-        {{if "dPImeds"|module_active}}
-          <li><a href="#Imeds">{{tr}}soins.tab.Labo{{/tr}}</a></li>
-        {{/if}}
-        <li><a href="#doc-items">{{tr}}soins.tab.Documents{{/tr}}</a></li>
+        <li><a href="#doc-items">{{tr}}soins.tab.documents{{/tr}}</a></li>
+
+        <li><a href="#antecedents">{{tr}}soins.tab.antecedent_and_treatment{{/tr}}</a></li>
+
       </ul>
     </div>
 

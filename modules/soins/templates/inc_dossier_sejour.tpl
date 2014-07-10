@@ -269,20 +269,28 @@
         <button type="button" class="hslip notext compact" style="vertical-align: bottom; float: left;" onclick="toggleListSejour();" title="Afficher/cacher la colonne de gauche"></button>
       </li>
     {{/if}}
-    <li><a href="#suivi_clinique">{{tr}}CSejour.suivi_clinique{{/tr}}</a></li>
+    <li><a href="#suivi_clinique">{{tr}}soins.tab.synthese{{/tr}}</a></li>
+    <li><a href="#dossier_traitement">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
     <li><a href="#constantes-medicales">{{tr}}CPatient.surveillance{{/tr}}</a></li>
-    <li><a href="#dossier_traitement">{{tr}}CSejour.suivi_soins{{/tr}}</a></li>
+
     {{if $isPrescriptionInstalled}}
-      <li><a href="#prescription_sejour">{{tr}}soins.tab.Prescription{{/tr}}</a></li>
+      <li><a href="#prescription_sejour">{{tr}}soins.tab.prescription{{/tr}}</a></li>
     {{/if}}
+
     {{if $app->user_prefs.ccam_sejour == 1 }}
-      <li><a href="#Actes">{{tr}}CCodable-actes{{/tr}}</a></li>
+      <li><a href="#Actes">{{tr}}soins.tab.cotation-infirmiere{{/tr}}</a></li>
     {{/if}}
+
     {{if $isImedsInstalled}}
-      <li><a href="#Imeds">Labo</a></li>
+      <li><a href="#Imeds">{{tr}}soins.tab.labo{{/tr}}</a></li>
     {{/if}}
-    <li><a href="#docs">{{tr}}CMbObject-back-documents{{/tr}}</a></li>
-    <li><a href="#antecedents">{{tr}}IDossierMedical-back-antecedents{{/tr}}</a></li>
+
+    <li>
+      <a href="#docs">{{tr}}soins.tab.documents{{/tr}}</a>
+    </li>
+    <li>
+      <a href="#antecedents">{{tr}}soins.tab.antecedent_and_treatment{{/tr}}</a>
+    </li>
     <li style="float: right">
       {{if "telemis"|module_active}}
         {{mb_include module=telemis template=inc_viewer_link patient=$sejour->_ref_patient label="Imagerie" button=true class="imagerie"}}

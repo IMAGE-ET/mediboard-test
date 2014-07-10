@@ -124,84 +124,87 @@
 
 <ul id="tab-consult" class="control_tabs">
   {{if $rpu}}
-  <li>
-    <a href="#rpuConsult">
-      RPU
-      {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$consult->_ref_sejour}}
-    </a>
-  </li>
+    <li>
+      <a href="#rpuConsult">
+        {{tr}}soins.tab.rpu{{/tr}}
+        {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$consult->_ref_sejour}}
+      </a>
+    </li>
   {{/if}}
 
-  <li {{if $rpu}}onmousedown="this.onmousedown = ''; loadAntTrait()" {{/if}}>
-    <a id="acc_consultation_a_Atcd" href="#AntTrait" {{if $tabs_count.AntTrait == 0}}class="empty"{{/if}}>
-      {{tr}}CAntecedent.more{{/tr}} <small>({{$tabs_count.AntTrait}})</small>
-    </a>
-  </li>
-
-  {{if "dPprescription"|module_active &&
-       $consult->sejour_id          &&
-       $modules.dPprescription->_can->read &&
-       !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
-  <li {{if !$mutation_id}}onmousedown="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'', null, false);"{{/if}}>
-    <a href="#prescription_sejour" {{if $tabs_count.prescription_sejour == 0}}class="empty"{{/if}}>
-      Prescription <small>({{$tabs_count.prescription_sejour}})</small>
-    </a>
-  </li>
-  <li {{if !$mutation_id}}onmousedown="PlanSoins.loadTraitement('{{$consult->sejour_id}}',null,'','administration');"{{/if}}>
-    <a href="#dossier_traitement" {{if $tabs_count.dossier_traitement == 0}}class="empty"{{/if}}>
-      Suivi de soins <small>({{$tabs_count.dossier_traitement}})</small>
-    </a>
-  </li>
+  {{if "dPprescription"|module_active && $consult->sejour_id && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
+    <li {{if !$mutation_id}}onmousedown="PlanSoins.loadTraitement('{{$consult->sejour_id}}',null,'','administration');"{{/if}}>
+      <a href="#dossier_traitement" {{if $tabs_count.dossier_traitement == 0}}class="empty"{{/if}}>
+        {{tr}}soins.tab.suivi_soins{{/tr}} <small>({{$tabs_count.dossier_traitement}})</small>
+      </a>
+    </li>
   {{elseif $rpu}}
-  <li {{if !$mutation_id}}onmousedown="loadSuivi('{{$rpu->sejour_id}}')"{{/if}}>
-    <a href="#dossier_suivi" {{if $tabs_count.dossier_suivi == 0}}class="empty"{{/if}}>
-      Suivi de soins <small>({{$tabs_count.dossier_suivi}})</small>
-    </a>
-  </li>
+    <li {{if !$mutation_id}}onmousedown="loadSuivi('{{$rpu->sejour_id}}')"{{/if}}>
+      <a href="#dossier_suivi" {{if $tabs_count.dossier_suivi == 0}}class="empty"{{/if}}>
+        {{tr}}soins.tab.suivi_soins{{/tr}} <small>({{$tabs_count.dossier_suivi}})</small>
+      </a>
+    </li>
   {{/if}}
 
   <li onmousedown="refreshConstantesMedicales();">
     <a href="#Constantes" {{if $tabs_count.Constantes == 0}}class="empty"{{/if}}>
-      Constantes <small>({{$tabs_count.Constantes}})</small>
-    </a>
-  </li>
-  <li onmousedown="this.onmousedown = ''; loadExams()">
-    <a href="#Examens" {{if $tabs_count.Examens == 0}}class="empty"{{/if}}>
-      Examens <small>({{$tabs_count.Examens}})</small>
+      {{tr}}soins.tab.surveillance{{/tr}} <small>({{$tabs_count.Constantes}})</small>
     </a>
   </li>
 
-  {{if "dPImeds"|module_active && $consult->sejour_id}}
-    <li onmousedown="this.onmousedown = ''; loadResultLabo();">
-      <a href="#Imeds">Labo</a>
+  {{if "dPprescription"|module_active && $consult->sejour_id && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
+    <li {{if !$mutation_id}}onmousedown="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'', null, false);"{{/if}}>
+      <a href="#prescription_sejour" {{if $tabs_count.prescription_sejour == 0}}class="empty"{{/if}}>
+        {{tr}}soins.tab.prescription{{/tr}}n <small>({{$tabs_count.prescription_sejour}})</small>
+      </a>
     </li>
   {{/if}}
+
+
+  <li onmousedown="this.onmousedown = ''; loadExams()">
+    <a href="#Examens" {{if $tabs_count.Examens == 0}}class="empty"{{/if}}>
+      {{tr}}soins.tab.examens{{/tr}} <small>({{$tabs_count.Examens}})</small>
+    </a>
+  </li>
 
   {{if $app->user_prefs.ccam_consultation == 1}}
     <li onmousedown="this.onmousedown = ''; loadActes()">
       <a id="acc_consultation_a_Actes" href="#Actes" {{if $tabs_count.Actes == 0}}class="empty"{{/if}}>
-        {{tr}}CCodable-actes{{/tr}} <small>({{$tabs_count.Actes}})</small>
+        {{tr}}soins.tab.actes{{/tr}} <small>({{$tabs_count.Actes}})</small>
       </a>
+    </li>
+  {{/if}}
+
+  {{if "dPImeds"|module_active && $consult->sejour_id}}
+    <li onmousedown="this.onmousedown = ''; loadResultLabo();">
+      <a href="#Imeds">{{tr}}soins.tab.labo{{/tr}}</a>
     </li>
   {{/if}}
 
   {{if $consult->_is_dentiste}}
     <li>
-      <a href="#etat_dentaire">Etat dentaire</a>
+      <a href="#etat_dentaire">{{tr}}soins.tab.etat_dentaire{{/tr}}</a>
     </li>
     <li>
-      <a href="#devenir_dentaire">Projet thérapeutique</a>
+      <a href="#devenir_dentaire">{{tr}}soins.tab.projet_therapeutique{{/tr}}</a>
     </li>
   {{/if}}
 
   <li onmousedown="this.onmousedown = ''; loadDocs()">
     <a href="#fdrConsult" {{if $tabs_count.fdrConsult == 0}}class="empty"{{/if}}>
-      Documents <small>({{$tabs_count.fdrConsult}})</small>
+      {{tr}}soins.tab.documents{{/tr}} <small>({{$tabs_count.fdrConsult}})</small>
     </a>
   </li>
+
+  <li {{if $rpu}}onmousedown="this.onmousedown = ''; loadAntTrait()" {{/if}}>
+    <a id="acc_consultation_a_Atcd" href="#AntTrait" {{if $tabs_count.AntTrait == 0}}class="empty"{{/if}}>
+      {{tr}}soins.tab.antecedent_and_treatment{{/tr}} <small>({{$tabs_count.AntTrait}})</small>
+    </a>
+  </li>
+
   <li onmousedown="Reglement.reload(true);">
     <a id="a_reglements_consult" href="#reglement" {{if $tabs_count.reglement == 0}}class="empty"{{/if}}>
-      Réglements <small>({{$tabs_count.reglement}})</small>
+      {{tr}}soins.tab.reglements{{/tr}} <small>({{$tabs_count.reglement}})</small>
     </a>
   </li>
 </ul>
