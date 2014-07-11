@@ -37,7 +37,7 @@
       </div>
     </td>
     <td class="text" id="consultAnesth">
-      {{if !$app->user_prefs.new_consultation}}
+      {{if !$app->user_prefs.new_consultation || $app->user_prefs.DEFMODULE == "dPcabinet-edit_consultation"}}
         {{mb_include module=cabinet template=inc_consult_anesth/interventions}}
       {{/if}}
     </td>
