@@ -2581,6 +2581,12 @@ class CSejour extends CFacturable implements IPatientRelated {
       return CFunctionCache::get($context);
     }
 
+    // Permettre des IPP en fonction de l'établissement
+    $group = CGroups::loadCurrent();
+    if (!$group_id) {
+      $group_id = $group->_id;
+    }
+
     // Gestion du tag NDA par son domaine d'identification
     if (CAppUI::conf("eai use_domain")) {
       $tag_NDA = CDomain::getMasterDomain("CSejour", $group_id)->tag;
@@ -2596,12 +2602,6 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     if ($type_tag != "tag_dossier") {
       $tag_NDA = CAppUI::conf("dPplanningOp CSejour $type_tag") . $tag_NDA;
-    }
-
-    // Permettre des IPP en fonction de l'établissement
-    $group = CGroups::loadCurrent();
-    if (!$group_id) {
-      $group_id = $group->_id;
     }
 
     // Si on est dans le cas d'un établissement gérant la numérotation
