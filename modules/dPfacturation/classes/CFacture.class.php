@@ -329,9 +329,10 @@ class CFacture extends CMbObject {
       // Si la facture existe déjà on la met à jour
       $where = array();
       $ljoin = array();
+      $plage = $consult->_ref_plageconsult;
       if (CAppUI::conf("ref_pays") == 2) {
         $where["patient_id"]    = "= '$consult->patient_id'";
-        $where["praticien_id"]  = "= '".$consult->_ref_plageconsult->chir_id."'";
+        $where["praticien_id"]  = "= '".($plage->pour_compte_id ? $plage->pour_compte_id : $plage->chir_id)."'";
         $where["cloture"]       = "IS NULL";
       }
       else {
@@ -361,7 +362,7 @@ class CFacture extends CMbObject {
         // Sinon on la crée
         $this->ouverture    = CMbDT::date();
         $this->patient_id   = $consult->patient_id;
-        $this->praticien_id = $consult->_ref_plageconsult->chir_id;
+        $this->praticien_id = ($plage->pour_compte_id ? $plage->pour_compte_id : $plage->chir_id);
         $this->type_facture = $consult->pec_at == 'arret' ? "accident" : "maladie";
         if (CAppUI::conf("dPfacturation $this->_class use_auto_cloture")) {
           $this->cloture    = CMbDT::date();
