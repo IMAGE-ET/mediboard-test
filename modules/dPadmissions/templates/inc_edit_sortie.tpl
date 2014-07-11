@@ -84,6 +84,13 @@
     <tr>
       <th>{{mb_label object=$sejour field="mode_sortie"}}</th>
       <td>
+        <script>
+          Main.add(function() {
+            var form = getForm("{{$form_name}}");
+            ContraintesRPU.changeOrientationDestination(form);
+            Admissions.changeSortie(form, '{{$sejour->_id}}');
+          })
+        </script>
         {{assign var=mode_sortie value=$sejour->mode_sortie}}
         {{if $sejour->service_sortie_id}}
           {{assign var=mode_sortie value="mutation"}}
@@ -110,8 +117,10 @@
         {{else}}
           {{if $rpu->mutation_sejour_id}}
             {{assign var=mode_sortie value="mutation"}}
+           {{else}}
+            {{assign var=mode_sortie value=$sejour->mode_sortie}}
           {{/if}}
-          {{mb_field object=$sejour field="mode_sortie" class=$class_mode_sortie value=$mode_sortie onchange="ContraintesRPU.changeOrientationDestination(this.form);Admissions.changeSortie(this.form, '`$sejour->_id`')" value=$mode_sortie}}
+          {{mb_field object=$sejour field="mode_sortie" class=$class_mode_sortie value=$mode_sortie onchange="ContraintesRPU.changeOrientationDestination(this.form);Admissions.changeSortie(this.form, '`$sejour->_id`')"}}
         {{/if}}
         {{if !$rpu->mutation_sejour_id}}
           <input type="hidden" name="group_id" value="{{if $sejour->group_id}}{{$sejour->group_id}}{{else}}{{$g}}{{/if}}" />
