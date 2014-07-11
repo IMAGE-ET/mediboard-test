@@ -132,6 +132,12 @@
     </li>
   {{/if}}
 
+  <li onmousedown="refreshConstantesMedicales();">
+    <a href="#Constantes" {{if $tabs_count.Constantes == 0}}class="empty"{{/if}}>
+      {{tr}}soins.tab.surveillance{{/tr}} <small>({{$tabs_count.Constantes}})</small>
+    </a>
+  </li>
+
   {{if "dPprescription"|module_active && $consult->sejour_id && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
     <li {{if !$mutation_id}}onmousedown="PlanSoins.loadTraitement('{{$consult->sejour_id}}',null,'','administration');"{{/if}}>
       <a href="#dossier_traitement" {{if $tabs_count.dossier_traitement == 0}}class="empty"{{/if}}>
@@ -145,12 +151,6 @@
       </a>
     </li>
   {{/if}}
-
-  <li onmousedown="refreshConstantesMedicales();">
-    <a href="#Constantes" {{if $tabs_count.Constantes == 0}}class="empty"{{/if}}>
-      {{tr}}soins.tab.surveillance{{/tr}} <small>({{$tabs_count.Constantes}})</small>
-    </a>
-  </li>
 
   {{if "dPprescription"|module_active && $consult->sejour_id && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
     <li {{if !$mutation_id}}onmousedown="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'', null, false);"{{/if}}>

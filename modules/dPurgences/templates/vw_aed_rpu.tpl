@@ -391,16 +391,16 @@
 
         <li><a href="#suivi_clinique">{{tr}}soins.tab.synthese{{/tr}}</a></li>
 
+        <li>
+          <a href="#constantes">{{tr}}soins.tab.surveillance{{/tr}}</a>
+        </li>
+
         {{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
           <li><a href="#dossier_traitement">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
           <li><a href="#prescription_sejour">{{tr}}soins.tab.prescription{{/tr}}</a></li>
         {{else}}
           <li><a href="#dossier_suivi">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
         {{/if}}
-
-        <li>
-          <a href="#constantes">{{tr}}soins.tab.surveillance{{/tr}}</a>
-        </li>
 
         {{if $app->user_prefs.ccam_sejour == 1 }}
           <li><a href="#actes">{{tr}}soins.tab.cotation-infirmiere{{/tr}}</a></li>

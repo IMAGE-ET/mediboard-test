@@ -104,6 +104,10 @@ Main.add(function () {
     </li>
   {{/if}}
 
+  <li onmousedown="refreshConstantesMedicales();">
+    <a href="#Constantes">{{tr}}soins.tab.surveillance{{/tr}}</a>
+  </li>
+
   {{if "dPprescription"|module_active && $consult->sejour_id && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
     <li {{if !$mutation_id}}onmousedown="PlanSoins.loadTraitement('{{$consult->sejour_id}}',null,'','administration');"{{/if}}>
       <a href="#dossier_traitement">{{tr}}soins.tab.suivi_soins{{/tr}}</a>
@@ -113,10 +117,6 @@ Main.add(function () {
       <a href="#dossier_suivi">{{tr}}soins.tab.suivi_soins{{/tr}}</a>
     </li>
   {{/if}}
-
-  <li onmousedown="refreshConstantesMedicales();">
-    <a href="#Constantes">{{tr}}soins.tab.surveillance{{/tr}}</a>
-  </li>
 
   {{if "dPprescription"|module_active && $consult->sejour_id && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
     <li {{if !$mutation_id}}onmousedown="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'', null, false);"{{/if}}>
