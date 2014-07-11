@@ -1,6 +1,6 @@
 {{*
  * $Id$
- *  
+ *
  * @category dPadmissions
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -12,7 +12,7 @@
 {{if "dPurgences"|module_active}}
   {{mb_script module=dPurgences script=contraintes_rpu ajax=true}}
 {{/if}}
-
+{{assign var=pass_to_confirm value="dPplanningOp CSejour pass_to_confirm"|conf:"CGroups-$g"}}
 {{assign var=form_name value="validerSortie`$sejour->_id`"}}
 {{assign var=form_rpu_name value="editRpu`$sejour->_id`"}}
 
@@ -22,8 +22,14 @@
 {{assign var=class_sortie_reelle value=""}}
 {{assign var=class_sortie_autorise value=""}}
 {{assign var=class_mode_sortie value=""}}
+{{assign var=is_praticien value=$app->_ref_user->isPraticien()}}
+{{assign var=register_field_sortie_prevue value=false}}
+
 {{if $modify_sortie_prevue}}
   {{assign var=class_sortie_autorise value="inform-field"}}
+{{if $pass_to_confirm || !$pass_to_confirm && $is_praticien}}
+{{assign var=register_field_sortie_prevue value=true}}
+{{/if}}
 {{else}}
   {{assign var=class_mode_sortie value="notNull"}}
   {{assign var=class_sortie_reelle value="inform-field"}}
@@ -78,13 +84,21 @@
     <tr>
       <th>{{mb_label object=$sejour field="mode_sortie"}}</th>
       <td>
+        <script>
+          Main.add(function () {
+            var form = getForm("{{$form_name}}");
+            ContraintesRPU.changeOrientationDestination(form);
+            Admissions.changeSortie(form, '{{$sejour->_id}}');
+          })
+        </script>
         {{assign var=mode_sortie value=$sejour->mode_sortie}}
         {{if $sejour->service_sortie_id}}
           {{assign var=mode_sortie value="mutation"}}
         {{/if}}
         {{if $conf.dPplanningOp.CSejour.use_custom_mode_sortie && $list_mode_sortie|@count}}
           {{mb_field object=$sejour field=mode_sortie hidden=true class=$class_mode_sortie onchange="ContraintesRPU.changeOrientationDestination(this.form);Admissions.changeSortie(this.form, '`$sejour->_id`')"}}
-          <select name="mode_sortie_id" class="{{$sejour->_props.mode_sortie_id}}" style="width: 16em;" onchange="$V(this.form.mode_sortie, this.options[this.selectedIndex].get('mode'));">
+          <select name="mode_sortie_id" class="{{$sejour->_props.mode_sortie_id}}" style="width: 16em;"
+            onchange="$V(this.form.mode_sortie, this.options[this.selectedIndex].get('mode'));">
             <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
             {{foreach from=$list_mode_sortie item=_mode}}
               <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $sejour->mode_sortie_id == $_mode->_id}}selected{{/if}}>
@@ -93,7 +107,7 @@
             {{/foreach}}
           </select>
         {{elseif "CAppUI::conf"|static_call:"dPurgences CRPU impose_create_sejour_mutation":"CGroups-$g"}}
-          <select name="mode_sortie" class="{{$class_mode_sortie}}" onchange="ContraintesRPU.changeOrientationDestination(this.form);Admissions.changeSortie(this.form, '{{$sejour->_id}}')"">
+          <select name="mode_sortie" class="{{$class_mode_sortie}}" onchange="ContraintesRPU.changeOrientationDestination(this.form);Admissions.changeSortie(this.form, '{{$sejour->_id}}')">
             {{foreach from=$sejour->_specs.mode_sortie->_list item=_mode}}
               <option value="{{$_mode}}" {{if $sejour->mode_sortie == $_mode}}selected{{/if}}
                 {{if $_mode == "mutation"}}{{if $rpu->mutation_sejour_id}}selected{{else}}disabled{{/if}}{{/if}}>
@@ -104,6 +118,8 @@
         {{else}}
           {{if $rpu->mutation_sejour_id}}
             {{assign var=mode_sortie value="mutation"}}
+          {{else}}
+            {{assign var=mode_sortie value=$sejour->mode_sortie}}
           {{/if}}
           {{mb_field object=$sejour field="mode_sortie" class=$class_mode_sortie value=$mode_sortie onchange="ContraintesRPU.changeOrientationDestination(this.form);Admissions.changeSortie(this.form, '`$sejour->_id`')" value=$mode_sortie}}
         {{/if}}
@@ -121,7 +137,7 @@
       {{if $module == "dPurgences"}}
         <td>{{mb_value object=$rpu field="sortie_autorisee"}}</td>
       {{else}}
-        <td>{{mb_field object=$sejour field="confirme" register=$modify_sortie_prevue form=$form_name class=$class_sortie_autorise}}</td>
+        <td>{{mb_field object=$sejour field="confirme" register=$register_field_sortie_prevue form=$form_name class=$class_sortie_autorise}}</td>
       {{/if}}
     </tr>
     <tr id="sortie_transfert_{{$sejour->_id}}" {{if $sejour->mode_sortie != "transfert"}} style="display:none;" {{/if}}>
@@ -236,37 +252,38 @@
         </td>
       </tr>
     {{else}}
-      {{assign var=pass_to_confirm value="dPplanningOp CSejour pass_to_confirm"|conf:"CGroups-$g"}}
       <tr>
         <td colspan="4" class="button">
           {{mb_field object=$sejour field="confirme_user_id" hidden=true}}
           <button type="submit" class="save">
             {{tr}}Save{{/tr}}
           </button>
-          {{if $sejour->confirme}}
-            <button type="button" class="cancel singleclick"
-                    onclick="{{if $pass_to_confirm && !$app->_ref_user->isPraticien()}}
-                                $V(this.form.action_confirm, 0);
-                                Admissions.askconfirm('{{$sejour->_id}}');
-                             {{else}}
-                               $V(this.form.confirme, ''); $V(this.form.confirme_user_id, '');this.form.onsubmit();
-                             {{/if}}">
-              {{tr}}canceled_exit{{/tr}}
-            </button>
-          {{else}}
-            <button type="button" class="tick singleclick"
-                    onclick="{{if $pass_to_confirm && !$app->_ref_user->isPraticien()}}
-                      $V(this.form.action_confirm, 1);
-                      Admissions.askconfirm('{{$sejour->_id}}');
-                    {{else}}
-                      if (!$V(this.form.confirme)) {
-                        $V(this.form.confirme, '{{$dtnow}}');
-                      }
-                      $V(this.form.confirme_user_id, '{{$app->user_id}}');
-                      this.form.onsubmit();
-                    {{/if}}">
-              {{tr}}allowed_exit{{/tr}}
-            </button>
+          {{if $pass_to_confirm || !$pass_to_confirm && $is_praticien}}
+            {{if $sejour->confirme}}
+              <button type="button" class="cancel singleclick"
+              onclick="{{if $pass_to_confirm && !$is_praticien}}
+                                  $V(this.form.action_confirm, 0);
+                                  Admissions.askconfirm('{{$sejour->_id}}');
+                               {{else}}
+                                 $V(this.form.confirme, ''); $V(this.form.confirme_user_id, '');this.form.onsubmit();
+                               {{/if}}">
+                {{tr}}canceled_exit{{/tr}}
+              </button>
+            {{else}}
+              <button type="button" class="tick singleclick"
+              onclick="{{if $pass_to_confirm && !$is_praticien}}
+                        $V(this.form.action_confirm, 1);
+                        Admissions.askconfirm('{{$sejour->_id}}');
+                      {{else}}
+                        if (!$V(this.form.confirme)) {
+                          $V(this.form.confirme, '{{$dtnow}}');
+                        }
+                        $V(this.form.confirme_user_id, '{{$app->user_id}}');
+                        this.form.onsubmit();
+                      {{/if}}">
+                {{tr}}allowed_exit{{/tr}}
+              </button>
+            {{/if}}
           {{/if}}
         </td>
       </tr>
