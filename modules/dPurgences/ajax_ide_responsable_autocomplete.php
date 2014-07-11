@@ -19,23 +19,8 @@ $group    = CGroups::loadCurrent();
 if ($keywords == "") {
   $keywords = "%%";
 }
-
-$where = array(
-  "actif"       => "= '1'",
-  "function_id" => "= '$group->service_urgences_id'",
-  "user_type"   => "= '7'",
-);
-
-$leftjoin = array(
-  "users" => "users_mediboard.user_id = users.user_id",
-);
-
 $mediuser = new CMediusers();
-//Suppression du seekable sur les fonctions, on recherche sur une fonction en particulier
-unset($mediuser->_specs["function_id"]->seekable);
-/** @var CMediusers[] $matches */
-
-$matches = $mediuser->seek($keywords, $where, 50, null, $leftjoin, "user_last_name");
+$matches = $mediuser->loadListFromType(array("Infirmière"), PERM_READ, $group->service_urgences_id, $keywords, true, true);
 
 // Création du template
 $smarty = new CSmartyDP();
