@@ -214,7 +214,7 @@ class CRPUXMLDocument extends CMbXMLDocument {
       }
     }
     else {
-      if ($mbObject->_mode_sortie && !$sortie) {
+      if (!$sortie) {
         $this->addElement($elParent, "SORTIE", CMbDT::transform($sejour->sortie_prevue, null, "%d/%m/%Y %H:%M"));
       }
 
