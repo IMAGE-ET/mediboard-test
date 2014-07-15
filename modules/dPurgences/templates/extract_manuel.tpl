@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
   var extract_passages_id;
-  
+
   function extractRPU(form) {
     if (!checkForm(form)) {
       return;
@@ -20,9 +20,9 @@
     url.addParam("fin_selection", $V(form.fin_selection));
     url.requestUpdate('td_extract_rpu', { onComplete: function(){
       if (!$('td_extract_rpu').select('.error, .warning').length) {
-         $('encrypt_rpu').disabled = false;
+        $('encrypt_rpu').disabled = false;
       }
-     }});
+    }});
   }
 
   {{if array_key_exists('urg', $types)}}
@@ -35,9 +35,9 @@
     url.addParam("fin_selection", $V(form.fin_selection));
     url.requestUpdate('td_extract_urg', { onComplete: function(){
       if (!$('td_extract_urg').select('.error, .warning').length) {
-         $('encrypt_urg').disabled = false;
+        $('encrypt_urg').disabled = false;
       }
-     }});
+    }});
   }
   {{/if}}
 
@@ -55,8 +55,25 @@
     }});
   }
 
-  function encryptActivite(type) {
+  function encryptActivite() {
     var url = new Url("dPurgences", "ajax_encrypt_activite");
+    url.addParam("extract_passages_id", extract_passages_id);
+    url.requestUpdate('td_encrypt_activite', { onComplete: function(){
+      if (!$('td_encrypt_activite').select('.error, .warning').length) {
+        $('transmit_activite').disabled = false;
+      }
+    }});
+  }
+
+  function transmitActivite() {
+    var url = new Url("dPurgences", "ajax_transmit_activite");
+    url.addParam("extract_passages_id", extract_passages_id);
+    url.requestUpdate('td_transmit_activite');
+  }
+  {{/if}}
+
+  function encrypt(type) {
+    var url = new Url("dPurgences", "ajax_encrypt_passages");
     url.addParam("extract_passages_id", extract_passages_id);
     url.requestUpdate('td_encrypt_'+type, { onComplete: function(){
       if (!$('td_encrypt_'+type).select('.error, .warning').length) {
@@ -64,24 +81,13 @@
       }
     }});
   }
-  {{/if}}
-  
-  function encrypt(type) {
-    var url = new Url("dPurgences", "ajax_encrypt_passages");
-    url.addParam("extract_passages_id", extract_passages_id);
-    url.requestUpdate('td_encrypt_'+type, { onComplete: function(){
-      if (!$('td_encrypt_'+type).select('.error, .warning').length) {
-         $('transmit_'+type).disabled = false;
-      }
-     }});
-  }
-  
+
   function transmit(type) {
     var url = new Url("dPurgences", "ajax_transmit_passages");
     url.addParam("extract_passages_id", extract_passages_id);
     url.requestUpdate('td_transmit_'+type);
   }
-  
+
   Main.add(function () {
     $('encrypt_rpu').disabled = true;
     $('transmit_rpu').disabled = true;
@@ -109,15 +115,15 @@
 <hr class="control_tabs" />
 
 {{if array_key_exists('rpu', $types)}}
-<div id="RPU" style="display: none;">
-  {{mb_include template=inc_extract_rpu}}
-</div>
+  <div id="RPU" style="display: none;">
+    {{mb_include template=inc_extract_rpu}}
+  </div>
 {{/if}}
 
 {{if array_key_exists('urg', $types)}}
-<div id="URG" style="display: none;">
-  {{mb_include template=inc_extract_urg}}
-</div>
+  <div id="URG" style="display: none;">
+    {{mb_include template=inc_extract_urg}}
+  </div>
 {{/if}}
 
 {{if array_key_exists('activite', $types)}}
