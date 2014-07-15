@@ -4,7 +4,7 @@
 
 ActesCCAM = {
   notifyChange: function(subject_id, chir_id) {
-    ActesCCAM.refreshList(subject_id, chir_id)
+    ActesCCAM.refreshList(subject_id, chir_id);
     if (window.Reglement) {
       Reglement.reload(false);
     }
@@ -26,7 +26,7 @@ ActesCCAM = {
   add: function(subject_id, chir_id, oOptions){
     var oDefaultOptions = { 
       onComplete: ActesCCAM.notifyChange.curry(subject_id, chir_id)
-    }
+    };
     Object.extend(oDefaultOptions, oOptions);
     var oForm = getForm("manageCodes");
     var oCcamField = new TokenField(oForm.codes_ccam, {
@@ -49,7 +49,7 @@ ActesCCAM = {
   remove: function(subject_id, oOptions){
     var oDefaultOptions = { 
       onComplete: ActesCCAM.notifyChange.curry(subject_id)
-    }
+    };
     
     Object.extend(oDefaultOptions, oOptions);
     var oForm = getForm("manageCodes");
@@ -76,21 +76,21 @@ ActesCCAM = {
       submitFormAjax(oForm, 'systemMsg', oDefaultOptions);
     }
   }
-}
+};
 
-function setCodeTemp(code){
+setCodeTemp = function(code) {
   var oForm = getForm("manageCodes");
   oForm._codes_ccam.value = code;
   oForm.addCode.onclick();
-}
+};
 
-function setAssociation(association, oForm, subject_id, chir_id, oOptions) {
+setAssociation = function(association, oForm, subject_id, chir_id, oOptions) {
   var oDefaultOptions = { 
     onComplete: ActesCCAM.notifyChange.curry(subject_id, chir_id)
-  }
+  };
   Object.extend(oDefaultOptions, oOptions);
   oForm.code_association.value = association;
   submitFormAjax(oForm, 'systemMsg', oDefaultOptions)
-}
+};
 
 </script>
