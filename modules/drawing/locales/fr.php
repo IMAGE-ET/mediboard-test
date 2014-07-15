@@ -1,0 +1,27 @@
+<?php
+$locales['CDrawingCategory'] = 'Catégorie de ressource';
+$locales['CDrawingCategory-creation_datetime'] = 'Date de création';
+$locales['CDrawingCategory-creation_datetime-desc'] = 'Date et heure de création de la catégorie';
+$locales['CDrawingCategory-description'] = 'Description';
+$locales['CDrawingCategory-description-desc'] = 'Description de la catégorie';
+$locales['CDrawingCategory-name'] = 'Nom';
+$locales['CDrawingCategory-name-desc'] = 'Nom de la catégorie';
+$locales['CDrawingCategory.edit'] = 'Modifier la catégorie';
+$locales['CDrawingCategory.new'] = 'Nouvelle catégorie';
+$locales['CDrawingItem.new'] = 'Nouveau dessin';
+$locales['Canvas.unsupported'] = 'Le dessin n\'est pas supporté par votre navigateur';
+$locales['config-drawing-edit_svg'] = 'Modifier ses dessins';
+$locales['config-drawing-edit_svg-desc'] = 'Permet de modifier ses propres dessins';
+$locales['drawobject.delete'] = 'Supprimer l\'object selectionné';
+$locales['drawobject.flipx-desc'] = 'Miroir horizontal';
+$locales['drawobject.flipy-desc'] = 'Miroir Vertical';
+$locales['mod-dPdrawing-tab-ajax_draw'] = 'Zone de dessin';
+$locales['mod-dPdrawing-tab-ajax_edit_drawing_category'] = 'Ajout/modification d\'une catégorie';
+$locales['mod-drawing-tab-ajax_draw'] = 'Zone de dessin';
+$locales['mod-drawing-tab-ajax_edit_drawing_category'] = 'Ajout/modification d\'une catégorie';
+$locales['mod-drawing-tab-vw_categories'] = 'Catégories et Ressources';
+$locales['mod-drawing-tab-vw_drawings'] = 'Mes créations';
+$locales['module-drawing-court'] = 'Dessin';
+$locales['module-drawing-long'] = 'Annotation et dessin';
+$locales['vw_list_file'] = 'Vue en liste';
+$locales['vw_list_gallery'] = 'Gallerie';
