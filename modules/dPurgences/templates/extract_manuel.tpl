@@ -55,14 +55,20 @@
     }});
   }
 
-  function encryptActivite(type) {
+  function encryptActivite() {
     var url = new Url("dPurgences", "ajax_encrypt_activite");
     url.addParam("extract_passages_id", extract_passages_id);
-    url.requestUpdate('td_encrypt_'+type, { onComplete: function(){
-      if (!$('td_encrypt_'+type).select('.error, .warning').length) {
-        $('transmit_'+type).disabled = false;
+    url.requestUpdate('td_encrypt_activite', { onComplete: function(){
+      if (!$('td_encrypt_activite').select('.error, .warning').length) {
+        $('transmit_activite').disabled = false;
       }
     }});
+  }
+
+  function transmitActivite() {
+    var url = new Url("dPurgences", "ajax_transmit_activite");
+    url.addParam("extract_passages_id", extract_passages_id);
+    url.requestUpdate('td_transmit_activite');
   }
   {{/if}}
   

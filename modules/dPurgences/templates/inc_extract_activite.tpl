@@ -38,7 +38,7 @@
   </tr>
   <tr>
     <td>
-      <button class="tick" type="button" id="encrypt_activite" onclick="encryptActivite('activite')">Chiffrer</button>
+      <button class="tick" type="button" id="encrypt_activite" onclick="encryptActivite()">Chiffrer</button>
     </td>
     <td id="td_encrypt_activite">
       
@@ -46,7 +46,7 @@
   </tr>
   <tr>
     <td>
-      <button class="tick" type="button" id="transmit_activite" onclick="transmit('activite')">Transmission</button>
+      <button class="tick" type="button" id="transmit_activite" onclick="transmitActivite()">Transmission</button>
     </td>
     <td id="td_transmit_activite">
       
