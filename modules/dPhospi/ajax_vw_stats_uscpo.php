@@ -32,6 +32,7 @@ $ljoin = array();
 
 $where["duree_uscpo"] = "> 0";
 $where["annulee"] = "!= '1'";
+$where[] = "operations.passage_uscpo = '1' or operations.passage_uscpo IS NULL";
 
 if ($service_id) {
   $ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
