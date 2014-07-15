@@ -34,6 +34,8 @@ if ($service_id) {
   $where["sejour.service_id"] = " = '$service_id'";
 }
 
+$where[] = "operations.passage_uscpo = '1' or operations.passage_uscpo IS NULL";
+
 // Prévues
 $operations_prevues = $operation->loadList($where, null, null, null, $ljoin, $index);
 
