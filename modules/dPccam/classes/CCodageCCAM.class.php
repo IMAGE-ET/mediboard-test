@@ -12,28 +12,36 @@
  */
 
 /**
- * Description
+ * Link the association rule used by the practitioner to the CCodable
  */
-class CComplementCCAM {
+class CCodageCCAM extends CMbObject {
   /**
    * @var integer Primary key
    */
   public $complement_ccam_id;
 
+  public $association_rule;
+  public $association_mode;
+
+  public $codable_class;
+  public $codable_id;
+  public $praticien_id;
+  public $locked;
+
   /**
    * @var array
    */
-  public $_ordered_acts;
+  protected $_ordered_acts;
+
+  /**
+   * @var array
+   */
+  protected $_check_rules;
 
   /**
    * @var CCodable
    */
-  public $_ref_object;
-
-  /**
-   * @var CPatient
-   */
-  public $_ref_patient;
+  public $_ref_codable;
 
   /**
    * @var CMediusers
@@ -48,14 +56,135 @@ class CComplementCCAM {
   protected static $association_rules = array('G1', 'EA', 'EB', 'EC', 'ED', 'EE', 'EF', 'EG1', 'EG2', 'EG3', 'EG4', 'EG5', 'EG6', 'EG7', 'EH', 'EI', 'GA', 'GB', 'G2');
 
   /**
-   * Check the modifiers of the given act
-   *
-   * @param CObject  $modifiers The modifiers to check
-   * @param string   $execution The dateTime of the execution of the act
-   * @param CCodable $codable   The codable
-   *
-   * @return void
+   * @see parent::getSpec()
    */
+  function getSpec() {
+    $spec = parent::getSpec();
+
+    $spec->table = 'codage_ccam';
+    $spec->key   = 'codage_ccam_id';
+
+    return $spec;
+  }
+
+  /**
+   * @see parent::getProps()
+   */
+  public function getProps() {
+    $props = parent::getProps();
+
+    $props['association_rule'] = 'enum list|G1|EA|EB|EC|ED|EE|EF|EG1|EG2|EG3|EG4|EG5|EG6|EG7|EH|EI|GA|GB|G2|M';
+    $props['association_mode'] = 'enum list|auto|user_choice default|auto';
+    $props['codable_class'] = 'str notNull class';
+    $props['codable_id'] = 'ref notNull class|CCodable meta|codable_class';
+    $props['praticien_id'] = 'ref notNull class|CMediusers';
+    $props['locked'] = 'bool notNull default|0';
+
+    return $props;
+  }
+
+  /**
+   * Return the CCodageCCAM linked to the given codable and practitioner, and create it if it not exists
+   *
+   * @param CCodable $codable      The codable object
+   * @param integer  $praticien_id The practitioner id
+   *
+   * @return CCodageCCAM
+   */
+  public static function get($codable, $praticien_id) {
+    $codage_ccam = new CCodageCCAM();
+    $codage_ccam->codable_class = $codable->_class;
+    $codage_ccam->codable_id = $codable->_id;
+    $codage_ccam->praticien_id = $praticien_id;
+    $codage_ccam->loadMatchingObject();
+
+    return $codage_ccam;
+  }
+
+  /**
+   * Load the codable object
+   *
+   * @param bool $cache Use object cache
+   *
+   * @return CCodable|null
+   */
+  protected function loadCodable($cache = true) {
+    if (!$this->codable_class || !$this->codable_id) {
+      return null;
+    }
+
+    return $this->_ref_codable = $this->loadFwdRef('codable_id');
+  }
+
+  /**
+   * Load the practitioner
+   *
+   * @param bool $cache Use object cache
+   *
+   * @return CMediusers|null
+   */
+  protected function loadPraticien($cache = true) {
+    return $this->_ref_praticien = $this->loadFwdRef('praticien_id');
+  }
+
+  /**
+   * Load the linked acts of the given act
+   *
+   * @return CActeCCAM[]
+   */
+  protected function loadActesCCAM() {
+    $act = new CActeCCAM();
+    $act->object_class = $this->codable_class;
+    $act->object_id = $this->codable_id;
+    $act->executant_id = $this->praticien_id;
+    $this->_ref_actes_ccam = $act->loadMatchingList();
+
+    foreach ($this->_ref_actes_ccam as $_acte) {
+      $_acte->loadRefCodeCCAM();
+    }
+
+    return $this->_ref_actes_ccam;
+  }
+
+  /**
+   * Order the acts by price
+   *
+   * @return array
+   */
+  protected function getActsByTarif() {
+    $this->loadActesCCAM();
+    $this->_ordered_acts = array();
+
+    foreach ($this->_ref_actes_ccam as $_act) {
+      $this->_ordered_acts[$_act->_id] = $_act->getTarifSansAssociationNiCharge();
+    }
+
+    return self::orderActsByTarif($this->_ordered_acts);
+  }
+
+  /**
+   * Reorder the acts by price
+   *
+   * @param array $disordered_acts The acts to reorder
+   *
+   * @return array
+   */
+  protected static function orderActsByTarif($disordered_acts) {
+    ksort($disordered_acts);
+    arsort($disordered_acts);
+
+    return $disordered_acts;
+  }
+
+  /**
+    * Check the modifiers of the given act
+    *
+    * @param CObject  $modifiers The modifiers to check
+    * @param string   $execution The dateTime of the execution of the act
+    * @param CCodable $codable   The codable
+    *
+    * @return void
+    */
   public static function checkModifiers($modifiers, $execution, $codable) {
     $date = CMbDT::date(null, $execution);
     $time = CMbDT::time(null, $execution);
@@ -102,73 +231,27 @@ class CComplementCCAM {
   }
 
   /**
-   * Order the acts by price
-   *
-   * @param CActeCCAM[] $acts The CCAM acts
-   *
-   * @return array
-   */
-  protected static function getActsByTarif($acts) {
-    $ordered_acts = array();
-
-    foreach ($acts as $_act) {
-      $ordered_acts[$_act->_id] = $_act->getTarifSansAssociationNiCharge();
-    }
-
-    return self::orderActsByTarif($ordered_acts);
-  }
-
-  /**
-   * Reorder the acts by price
-   *
-   * @param array $disordered_acts The acts to reorder
-   *
-   * @return array
-   */
-  protected static function orderActsByTarif($disordered_acts) {
-    ksort($disordered_acts);
-    arsort($disordered_acts);
-
-    return $disordered_acts;
-  }
-
-  /**
-   * Load the linked acts of the given act
-   *
-   * @param CActeCCAM $act The CCAM act
-   *
-   * @return CActeCCAM[]
-   */
-  protected static function loadActesCCAM($act) {
-    $acts = $act->getLinkedActes();
-    $acts[$act->_id] = $act;
-    foreach ($acts as $_act_ccam) {
-      $_act_ccam->loadRefCodeCCAM();
-    }
-    return $acts;
-  }
-
-  /**
    * Guess the association code for an act
    *
-   * @param CActeCCAM $act     The act
-   * @param CCodable  $codable The codable
+   * @param CActeCCAM $act The act
    *
    * @return string
    */
-  public static function guessAssociation($act, $codable) {
-    $acts = self::loadActesCCAM($act);
-    $ordered_acts = self::getActsByTarif($acts);
-    $act->_position = array_search($act->_id, array_keys($ordered_acts));
+  public function guessAssociation($act) {
+    $this->getActsByTarif();
+    $act->_position = array_search($act->_id, array_keys($this->_ordered_acts));
+    $this->_check_rules = array();
 
     foreach (self::$association_rules as $_rule) {
       if (self::isRuleAllowed($_rule)) {
-        $function = "associationRule$_rule";
-        if (call_user_func(array('CComplementCCAM', $function), $act, $acts, $ordered_acts)) {
+        if (call_user_func(array($this, "checkRule$_rule"), $act)) {
+          call_user_func(array($this, "applyRule$_rule"), $act);
           break;
         }
       }
     }
+
+    $this->association_rule = $act->_guess_regle_asso;
 
     return $act->_guess_association;
   }
@@ -194,20 +277,28 @@ class CComplementCCAM {
   /**
    * Check the association rule G1
    *
-   * @param CActeCCAM   $act          The act
-   * @param CActeCCAM[] $acts         The list of the acts
-   * @param array       $ordered_acts The acts, ordered by price
+   * @param CActeCCAM $act The act
    *
    * @return bool
    */
-  protected static function associationRuleG1($act, $acts, $ordered_acts) {
-    if (count($acts) != 1) {
+  protected function checkRuleG1($act) {
+    if (count($this->_ref_actes_ccam) != 1) {
       return false;
     }
 
+    return true;
+  }
+
+  /**
+   * Apply the association rule G1 to the given act
+   *
+   * @param CActeCCAM $act The act
+   *
+   * @return void
+   */
+  protected function applyRuleG1($act) {
     $act->_guess_association = '';
     $act->_guess_regle_asso = 'G1';
-    return true;
   }
 
   /**
@@ -218,19 +309,17 @@ class CComplementCCAM {
    * complémentaire, soit un supplément, soit un acte d'imagerie pour acte de radiologie interventionnelle ou cardiologie
    * interventionnelle (Paragraphe 19.01.09.02), il ne faut pas indiquer de code d'association
    *
-   * @param CActeCCAM   $act          The act
-   * @param CActeCCAM[] $acts         The list of the acts
-   * @param array       $ordered_acts The acts, ordered by price
+   * @param CActeCCAM $act The act
    *
    * @return bool
    */
-  protected static function associationRuleGA($act, $acts, $ordered_acts) {
-    if (count($acts) != 2) {
+  protected function checkRuleGA($act) {
+    if (count($this->_ref_actes_ccam) != 2) {
       return false;
     }
 
     $cond = 0;
-    foreach ($acts as $_acte_ccam) {
+    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
 
       if (
@@ -246,9 +335,19 @@ class CComplementCCAM {
       return false;
     }
 
+    return true;
+  }
+
+  /**
+   * Apply the association rule GA to the given act
+   *
+   * @param CActeCCAM $act The act
+   *
+   * @return void
+   */
+  protected function applyRuleGA($act) {
     $act->_guess_association = '';
     $act->_guess_regle_asso = 'GA';
-    return true;
   }
 
   /**
@@ -257,20 +356,18 @@ class CComplementCCAM {
    * * Cas d'utilisation : Si un acte est associé à un geste complémentaire et à un supplément, le code d'assciation est 1 pour
    * chacun des actes.
    *
-   * @param CActeCCAM   $act          The act
-   * @param CActeCCAM[] $acts         The list of the acts
-   * @param array       $ordered_acts The acts, ordered by price
+   * @param CActeCCAM $act The act
    *
    * @return bool
    */
-  protected static function associationRuleGB($act, $acts, $ordered_acts) {
-    if (count($acts) != 3) {
+  protected function checkRuleGB($act) {
+    if (count($this->_ref_actes_ccam) != 3) {
       return false;
     }
 
     $supp = 0;
     $comp = 0;
-    foreach ($acts as $_acte_ccam) {
+    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
       if ($chapters[0]['db'] == '000018' && $chapters[1]['db'] == '000002') {
         $comp++;
@@ -284,6 +381,17 @@ class CComplementCCAM {
       return false;
     }
 
+    return true;
+  }
+
+  /**
+   * Apply the association rule GB to the given act
+   *
+   * @param CActeCCAM $act The act
+   *
+   * @return void
+   */
+  protected function applyRuleGB($act) {
     $act->_guess_association = '1';
     $act->_guess_regle_asso = 'GB';
   }
@@ -291,20 +399,18 @@ class CComplementCCAM {
   /**
    * Check the association rule G2
    *
-   * @param CActeCCAM   $act          The act
-   * @param CActeCCAM[] $acts         The list of the acts
-   * @param array       $ordered_acts The acts, ordered by price
+   * @param CActeCCAM $act The act
    *
    * @return bool
    */
-  protected static function associationRuleG2($act, $acts, $ordered_acts) {
-    foreach ($acts as $_acte_ccam) {
+  protected function checkRuleG2($act) {
+    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
       if (
           ($chapters[0]['db'] == '000019' && $chapters[1]['db'] == '000002') ||
           ($chapters[0]['db'] == '000018' && $chapters[1]['db'] == '000002')
       ) {
-        unset($ordered_acts[$_acte_ccam->_id]);
+        unset($this->_ordered_acts[$_acte_ccam->_id]);
         if ($_acte_ccam->_id == $act->_id) {
           $act->_position = -1;
         }
@@ -312,11 +418,21 @@ class CComplementCCAM {
     }
 
     if ($act->_position != -1) {
-      self::orderActsByTarif($ordered_acts);
-      $act->_position = array_search($act->_id, array_keys($ordered_acts));
+      self::orderActsByTarif($this->_ordered_acts);
+      $act->_position = array_search($act->_id, array_keys($this->_ordered_acts));
     }
 
-    // gerer le cas ou le supplements est plus cher que les actes principaux
+    return true;
+  }
+
+  /**
+   * Apply the association rule G2 to the given act
+   *
+   * @param CActeCCAM $act The act
+   *
+   * @return void
+   */
+  protected function applyRuleG2($act) {
     switch ($act->_position) {
       case -1:
         $act->_guess_association = '1';
@@ -333,8 +449,6 @@ class CComplementCCAM {
       default:
         $act->facturable = '0';
     }
-
-    return true;
   }
 
   /**
@@ -343,14 +457,12 @@ class CComplementCCAM {
    * * Cas d'utilisation : Pour les __actes de chirurgie portant sur des membres différents__ (sur le tronc et un membre,
    * sur la tête et un membre), l'acte dont le tarif (hors modificateurs) est le moins élevé est tarifé à 75% de sa valeur
    *
-   * @param CActeCCAM   $act          The act
-   * @param CActeCCAM[] $acts         The list of the acts
-   * @param array       $ordered_acts The acts, ordered by price
+   * @param CActeCCAM $act The act
    *
    * @return bool
    */
-  protected static function associationRuleEA($act, $acts, $ordered_acts) {
-    if (count($acts) != 2 /*&& $codable instanceof COperation*/) {
+  protected function checkRuleEA($act) {
+    if (count($this->_ref_actes_ccam) != 2 /*&& $codable instanceof COperation*/) {
       return false;
     }
 
@@ -358,7 +470,7 @@ class CComplementCCAM {
     $chap12 = 0;
     $chap13 = 0;
     $chap14 = 0;
-    foreach ($acts as $_act) {
+    foreach ($this->_ref_actes_ccam as $_act) {
       switch ($_act->_ref_code_ccam->chapitres[0]['db']) {
         case '000011':
           $chap11++;
@@ -380,7 +492,17 @@ class CComplementCCAM {
       return false;
     }
 
-    // choix de l'utilisateur
+    return true;
+  }
+
+  /**
+   * Apply the association rule EA to the given act
+   *
+   * @param CActeCCAM $act The act
+   *
+   * @return void
+   */
+  protected function applyRuleEA($act) {
     switch ($act->_position) {
       case 0:
         $act->_guess_association = '1';
@@ -390,7 +512,6 @@ class CComplementCCAM {
         $act->_guess_association = '3';
         $act->_guess_regle_asso = 'EA';
     }
-    return true;
   }
 
   /**
@@ -401,18 +522,26 @@ class CComplementCCAM {
    * L'acte dont le tarif (hors modificateurs) est le plus élevé est tarifé à taux plein. Le deuxième est tarifé à
    * 75% de sa valeur, et le troisième à 50%.
    *
-   * @param CActeCCAM   $act          The act
-   * @param CActeCCAM[] $acts         The list of the acts
-   * @param array       $ordered_acts The acts, ordered by price
+   * @param CActeCCAM $act The act
    *
    * @return bool
    */
-  protected static function associationRuleEB($act, $acts, $ordered_acts) {
-    if (!in_array(count($acts), array(2, 3))) {
+  protected function checkRuleEB($act) {
+    if (!in_array(count($this->_ref_actes_ccam), array(2, 3))) {
       return false;
     }
 
-    // choix de l'utilisateur
+    return true;
+  }
+
+  /**
+   * Apply the association rule EB to the given act
+   *
+   * @param CActeCCAM $act The act
+   *
+   * @return void
+   */
+  protected function applyRuleEB($act) {
     switch ($act->_position) {
       case 0:
         $act->_guess_association = '1';
@@ -426,7 +555,6 @@ class CComplementCCAM {
         $act->_guess_association = '3';
         $act->_guess_regle_asso = 'EB';
     }
-    return true;
   }
 
   /**
@@ -436,22 +564,20 @@ class CComplementCCAM {
    * l'acte dont le tarif (hots modificateurs) est le plus élevé est tarifé à taux plein, le deuxième et le troisième sont tarifés
    * à 50% de leurs valeurs.
    *
-   * @param CActeCCAM   $act          The act
-   * @param CActeCCAM[] $acts         The list of the acts
-   * @param array       $ordered_acts The acts, ordered by price
+   * @param CActeCCAM $act The act
    *
    * @return bool
    */
-  protected static function associationRuleEC($act, $acts, $ordered_acts) {
+  protected function checkRuleEC($act) {
     $discipline = $act->loadRefExecutant()->loadRefDiscipline();
-    if (count($acts) != 3 || $discipline->_compat != 'ORL') {
+    if (count($this->_ref_actes_ccam) != 3 || $discipline->_compat != 'ORL') {
       return false;
     }
 
     $exerese = false;
     $curage = false;
     $reconst = false;
-    foreach ($acts as $_acte_ccam) {
+    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
       $libelle = $_acte_ccam->_ref_code_ccam->libelleLong;
       if (stripos($libelle, 'exérèse') !== false) {
         $exerese = true;
@@ -468,6 +594,17 @@ class CComplementCCAM {
       return false;
     }
 
+    return true;
+  }
+
+  /**
+   * Apply the association rule EC to the given act
+   *
+   * @param CActeCCAM $act The act
+   *
+   * @return void
+   */
+  protected function applyRuleEC($act) {
     switch ($act->_position) {
       case 0:
         $act->_guess_association = '1';
@@ -477,20 +614,28 @@ class CComplementCCAM {
         $act->_guess_association = '2';
         $act->_guess_regle_asso = 'EC';
     }
-    return true;
   }
 
   /**
    * Actes d'échographie portant sur plusieurs régions anatomiques
    *
-   * @param CActeCCAM   $act          The act
-   * @param CActeCCAM[] $acts         The list of the acts
-   * @param array       $ordered_acts The acts, ordered by price
+   * @param CActeCCAM $act The act
    *
    * @return bool
    */
-  protected static function associationRuleED($act, $acts, $ordered_acts) {
+  protected function checkRuleED($act) {
     return false;
+  }
+
+  /**
+   * Apply the association rule ED to the given act
+   *
+   * @param CActeCCAM $act The act
+   *
+   * @return void
+   */
+  protected function applyRuleED($act) {
+
   }
 
   /**
@@ -510,19 +655,26 @@ class CComplementCCAM {
    * L'acte de guidage scanographique ne peut être tarfié qu'avec les actes dont le libellé précise qu'ils nécessitent un
    * guidage scanoraphique. Dans ce cas, deux acte au plus peuvent être tarifés à taux plein.
    *
-   * @param CActeCCAM   $act          The act
-   * @param CActeCCAM[] $acts         The list of the acts
-   * @param array       $ordered_acts The acts, ordered by price
+   * @param CActeCCAM $act The act
    *
    * @return bool
    */
-  protected static function associationRuleEE($act, $acts, $ordered_acts) {
-    if (!in_array(count($acts), array(2, 3))) {
+  protected function checkRuleEE($act) {
+    if (!in_array(count($this->_ref_actes_ccam), array(2, 3))) {
       return false;
     }
 
-    // choix de l'utilisateur
-    // gérer la minoration de 85% du tarif du second forfait technique
+    return true;
+  }
+
+  /**
+   * Apply the association rule EE to the given act
+   *
+   * @param CActeCCAM $act The act
+   *
+   * @return void
+   */
+  protected function applyRuleEE($act) {
     switch ($act->_position) {
       case 0:
         $act->_guess_association = '4';
@@ -536,7 +688,6 @@ class CComplementCCAM {
         $act->_guess_association = '4';
         $act->_guess_regle_asso = 'EE';
     }
-    return true;
   }
 
   /**
@@ -548,7 +699,7 @@ class CComplementCCAM {
    *
    * @return bool
    */
-  protected static function associationRuleEF($act, $acts, $ordered_acts) {
+  protected static function checkRuleEF($act, $acts, $ordered_acts) {
     return false;
   }
 
@@ -558,19 +709,17 @@ class CComplementCCAM {
    * * Cas d'utilisation : Les __actes du sous paragraphe 19.01.09.02__ (radiologie vasculaire et imagerie conventionnelle)
    * sont associés à taux plein, deux actes au plus peuvent tarifés.
    *
-   * @param CActeCCAM   $act          The act
-   * @param CActeCCAM[] $acts         The list of the acts
-   * @param array       $ordered_acts The acts, ordered by price
+   * @param CActeCCAM $act The act
    *
    * @return bool
    */
-  protected static function associationRuleEG1($act, $acts, $ordered_acts) {
-    if (count($acts) != 2) {
+  protected function checkRuleEG1($act) {
+    if (count($this->_ref_actes_ccam) != 2) {
       return false;
     }
 
     $cond = 0;
-    foreach ($acts as $_acte_ccam) {
+    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
       if (
           $chapters[0]['db'] == '000019' && $chapters[1]['db'] == '000001' &&
@@ -584,10 +733,19 @@ class CComplementCCAM {
       return false;
     }
 
+    return true;
+  }
+
+  /**
+   * Apply the association rule EG1 to the given act
+   *
+   * @param CActeCCAM $act The act
+   *
+   * @return void
+   */
+  protected function applyRuleEG1($act) {
     $act->_guess_association = '1';
     $act->_guess_regle_asso = 'EG1';
-
-    return true;
   }
 
   /**
@@ -596,41 +754,35 @@ class CComplementCCAM {
    * * Cas d'utilisation : Les __actes d'anatomie et de cytologie pathologique__ peuvent être associés à
    * taux plein entre eux et/ou à un autre acte, quelque soit le nombre d'acte d'anatomie et de cytologie pathologique.
    *
-   * @param CActeCCAM   $act          The act
-   * @param CActeCCAM[] $acts         The list of the acts
-   * @param array       $ordered_acts The acts, ordered by price
+   * @param CActeCCAM $act The act
    *
    * @return bool
    */
-  protected static function associationRuleEG2($act, $acts, $ordered_acts) {
-    if (!in_array(count($acts), array(2, 3))) {
+  protected function checkRuleEG2($act) {
+    if (!in_array(count($this->_ref_actes_ccam), array(2, 3))) {
       return false;
     }
 
-    $ordered_acts_eg2 = $ordered_acts;
+    $ordered_acts_eg2 = $this->_ordered_acts;
     $nb_anapath = 0;
-    foreach ($acts as $_act) {
+    foreach ($this->_ref_actes_ccam as $_act) {
       $chap = $_act->_ref_code_ccam->chapitres;
-      if (
-          ($chap[0]['db'] == '000001' && $chap[1]['db'] == '000001' && in_array($chap[2]['db'], array('000011', '000014'))) ||
-          ($chap[0]['db'] == '000002' && $chap[1]['db'] == '000001' && in_array($chap[2]['db'], array('000008', '000009', '000010'))) ||
-          ($chap[0]['db'] == '000003' && $chap[1]['db'] == '000001' && $chap[2]['db'] == '000003') ||
-          ($chap[0]['db'] == '000004' && $chap[1]['db'] == '000001' && in_array($chap[2]['db'], array('000009', '000010'))) ||
-          ($chap[0]['db'] == '000005' && $chap[1]['db'] == '000001' && in_array($chap[2]['db'], array('000006', '000008'))) ||
-          ($chap[0]['db'] == '000006' && $chap[1]['db'] == '000001' && in_array($chap[2]['db'], array('000009', '000011'))) ||
-          ($chap[0]['db'] == '000007' && $chap[1]['db'] == '000001' && in_array($chap[2]['db'], array('000011', '000013'))) ||
-          ($chap[0]['db'] == '000008' && $chap[1]['db'] == '000001' && in_array($chap[2]['db'], array('000007', '000009'))) ||
-          ($chap[0]['db'] == '000001' && $chap[1]['db'] == '000001' && in_array($chap[2]['db'], array('000011', '000014'))) ||
-          ($chap[0]['db'] == '000009' && $chap[1]['db'] == '000001' && in_array($chap[2]['db'], array('000006', '000007'))) ||
-          ($chap[0]['db'] == '000010' && $chap[1]['db'] == '000001' && in_array($chap[2]['db'], array('000004', '000005'))) ||
-          ($chap[0]['db'] == '000011' && $chap[1]['db'] == '000001' && $chap[2]['db'] == '000006') ||
-          ($chap[0]['db'] == '000012' && $chap[1]['db'] == '000001' && $chap[2]['db'] == '000006') ||
-          ($chap[0]['db'] == '000013' && $chap[1]['db'] == '000001' && $chap[2]['db'] == '000005') ||
-          ($chap[0]['db'] == '000014' && $chap[1]['db'] == '000001' && $chap[2]['db'] == '000006') ||
-          ($chap[0]['db'] == '000015' && $chap[1]['db'] == '000001' && in_array($chap[2]['db'], array('000006', '000007'))) ||
-          ($chap[0]['db'] == '000016' && in_array($chap[1]['db'], array('000001', '000002')) && in_array($chap[2]['db'], array('000005', '000006'))) ||
-          ($chap[0]['db'] == '000017' && $chap[1]['db'] == '000001' && in_array($chap[2]['db'], array('000005', '000006')))
-      ) {
+      $chapters_anapath = array(
+        '01.01.14.',
+        '02.01.10.',
+        '04.01.10.',
+        '05.01.08.',
+        '06.01.11.',
+        '07.01.13.',
+        '08.01.09.',
+        '09.01.07.',
+        '10.01.05.',
+        '15.01.07.',
+        '16.01.06.',
+        '16.02.06.',
+        '17.02.'
+      );
+      if (in_array($chap[2]['rang'], $chapters_anapath) || in_array($chap[1]['rang'], $chapters_anapath)) {
         $nb_anapath++;
         unset($ordered_acts_eg2[$_act->_id]);
         if ($_act->_id == $act->_id) {
@@ -647,7 +799,23 @@ class CComplementCCAM {
       return false;
     }
 
-    if ($nb_anapath == 2 || ($nb_anapath == 1 && count($ordered_acts) == 1)) {
+    $this->_check_rules['EG2'] = array(
+      'nb_anapath' => $nb_anapath,
+    );
+
+    return true;
+  }
+
+  /**
+   * Apply the association rule EG2 to the given act
+   *
+   * @param CActeCCAM $act The act
+   *
+   * @return void
+   */
+  protected function applyRuleEG2($act) {
+    $nb_anapath = $this->_check_rules['E$acts$acts$actsG2']['nb_anapath'];
+    if ($nb_anapath == 2 || ($nb_anapath == 1 && count($this->_ordered_acts) == 1)) {
       $act->_guess_association = '4';
       $act->_guess_regle_asso = 'EG2';
     }
@@ -662,7 +830,6 @@ class CComplementCCAM {
           $act->_guess_regle_asso = 'EG2';
       }
     }
-    return true;
   }
 
   /**
@@ -672,20 +839,18 @@ class CComplementCCAM {
    * (figurants aux paragraphes 01.01.01.01, 01.01.01.02, 01.01.01.03 de la CCAM) peuvent être associés à taux plein entre eux ou à
    * un autre acte, quelque soit le nombre d'actes
    *
-   * @param CActeCCAM   $act          The act
-   * @param CActeCCAM[] $acts         The list of the acts
-   * @param array       $ordered_acts The acts, ordered by price
+   * @param CActeCCAM $act The act
    *
    * @return bool
    */
-  protected static function associationRuleEG3($act, $acts, $ordered_acts) {
-    if (!in_array(count($acts), array(2, 3))) {
+  protected function checkRuleEG3($act) {
+    if (!in_array(count($this->_ref_actes_ccam), array(2, 3))) {
       return false;
     }
 
-    $ordered_acts_eg3 = $ordered_acts;
+    $ordered_acts_eg3 = $this->_ordered_acts;
     $nb_electromyo = 0;
-    foreach ($acts as $_acte_ccam) {
+    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
       if (
           $chapters[0]['db'] == '000001' && $chapters[1]['db'] == '000001' && $chapters[2]['db'] == '000001' &&
@@ -713,6 +878,22 @@ class CComplementCCAM {
       return false;
     }
 
+    $this->_check_rules['EG3'] = array(
+      'nb_electromyo'
+    );
+
+    return true;
+  }
+
+  /**
+   * Apply the association rule EG3 to the given act
+   *
+   * @param CActeCCAM $act The act
+   *
+   * @return void
+   */
+  protected function applyRuleEG3($act) {
+    $nb_electromyo = $this->_check_rules['EG3']['nb_electromyo'];
     if ($nb_electromyo == 2) {
       $act->_guess_association = '4';
       $act->_guess_regle_asso = 'EG3';
@@ -736,28 +917,51 @@ class CComplementCCAM {
    * * Cas d'utilisation : Les __actes d'irradiation en radiothérapie__, ainsi que les suppléments autorisés avec ces actes,
    * peuvent être associés à taux plein, quel que soit le nombre d'actes.
    *
-   * @param CActeCCAM   $act          The act
-   * @param CActeCCAM[] $acts         The list of the acts
-   * @param array       $ordered_acts The acts, ordered by price
+   * @param CActeCCAM $act The act
    *
    * @return bool
    */
-  protected static function associationRuleEG4($act, $acts, $ordered_acts) {
-    if (!in_array(count($acts), array(2, 3))) {
+  protected function checkRuleEG4($act) {
+    if (!in_array(count($this->_ref_actes_ccam), array(2, 3))) {
       return false;
     }
 
     /* @todo Calculer les actes d'irradiation en radiothérapie */
-    $cond = 0;
+    $irrad = 0;
+    $supp = 0;
+    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
+      $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
+      if (
+          ($chapters[0]['db'] == '000017' && $chapters[1]['db'] == '000004' && $chapters[2]['db'] == '000002') ||
+          ($chapters[0]['db'] == '000019' && $chapters[1]['db'] == '000001' && $chapters[2]['db'] == '000010')
+      ) {
+        $irrad++;
+      }
+      elseif (
+          ($chapters[0]['db'] == '000018' && $chapters[1]['db'] == '000002') ||
+          ($chapters[0]['db'] == '000019' && $chapters[1]['db'] == '000002')
+      ) {
+        $supp++;
+      }
+    }
 
-    if (!$cond) {
+    if (($irrad + $supp) != count($this->_ref_actes_ccam)) {
       return false;
     }
 
+    return true;
+  }
+
+  /**
+   * Apply the association rule EG4 to the given act
+   *
+   * @param CActeCCAM $act The act
+   *
+   * @return void
+   */
+  protected function applyRuleEG4($act) {
     $act->_guess_association = '4';
     $act->_guess_regle_asso = 'EG4';
-
-    return true;
   }
 
   /**
@@ -766,14 +970,12 @@ class CComplementCCAM {
    * * Cas d'utilisation : Les __actes de médecin nucléaire__ sont associés à taux plein, deux actes au plus peuvent
    * être tarfiés. Il en est de même pour un acte de médecine nucléaire associé à un autre acte.
    *
-   * @param CActeCCAM   $act          The act
-   * @param CActeCCAM[] $acts         The list of the acts
-   * @param array       $ordered_acts The acts, ordered by price
+   * @param CActeCCAM $act The act
    *
    * @return bool
    */
-  protected static function associationRuleEG5($act, $acts, $ordered_acts) {
-    if (count($acts) != 2) {
+  protected function checkRuleEG5($act) {
+    if (count($this->_ref_actes_ccam) != 2) {
       return false;
     }
 
@@ -784,9 +986,19 @@ class CComplementCCAM {
       return false;
     }
 
+    return true;
+  }
+
+  /**
+   * Apply the association rule EG5 to the given act
+   *
+   * @param CActeCCAM $act The act
+   *
+   * @return void
+   */
+  protected function applyRuleEG5($act) {
     $act->_guess_association = '4';
     $act->_guess_regle_asso = 'EG5';
-    return true;
   }
 
   /**
@@ -796,14 +1008,12 @@ class CComplementCCAM {
    * chirurgie cardiaque avec CEC), actes d'acocuchements__ peuvent être associés à taux plein à un seul des actes introduits
    * par la note "facturation : éventuellement en supplément".
    *
-   * @param CActeCCAM   $act          The act
-   * @param CActeCCAM[] $acts         The list of the acts
-   * @param array       $ordered_acts The acts, ordered by price
+   * @param CActeCCAM $act The act
    *
    * @return bool
    */
-  protected static function associationRuleEG6($act, $acts, $ordered_acts) {
-    if (count($acts) != 2) {
+  protected function checkRuleEG6($act) {
+    if (count($this->_ref_actes_ccam) != 2) {
       return false;
     }
 
@@ -813,10 +1023,19 @@ class CComplementCCAM {
       return false;
     }
 
+    return true;
+  }
+
+  /**
+   * Apply the association rule EG6 to the given act
+   *
+   * @param CActeCCAM $act The act
+   *
+   * @return void
+   */
+  protected function applyRuleEG6($act) {
     $act->_guess_association = 4;
     $act->_guess_regle_asso = 'EG6';
-
-    return true;
   }
 
   /**
@@ -825,14 +1044,12 @@ class CComplementCCAM {
    * * Cas d'utilisation : Les __actes bucco-dentaires__, y comprit les suppléments autorisés avec ces actes, peuvent
    * être associés à taux plein ente eux ou à eux-même ou à un autre acte, quel que soit le nombre d'actes bucco-dentaires.
    *
-   * @param CActeCCAM   $act          The act
-   * @param CActeCCAM[] $acts         The list of the acts
-   * @param array       $ordered_acts The acts, ordered by price
+   * @param CActeCCAM $act The act
    *
    * @return bool
    */
-  protected static function associationRuleEG7($act, $acts, $ordered_acts) {
-    if (!in_array(count($acts), array(2, 3))) {
+  protected function checkRuleEG7($act) {
+    if (!in_array(count($this->_ref_actes_ccam), array(2, 3))) {
       return false;
     }
 
@@ -842,13 +1059,28 @@ class CComplementCCAM {
       return false;
     }
 
+    $this->_check_rules['EG7'] = array(
+      'nb_bucco_dentaires' => $cond
+    );
 
-    if ($cond == 2) {
+    return true;
+  }
+
+  /**
+   * Apply the association rule EG7 to the given act
+   *
+   * @param CActeCCAM $act The act
+   *
+   * @return void
+   */
+  protected function applyRuleEG7($act) {
+    $nb_bucco_dentaires = $this->_check_rules['EG7']['nb_bucco_dentaires'];
+    if ($nb_bucco_dentaires == 2) {
       $act->_guess_association = '4';
       $act->_guess_regle_asso = 'EG7';
     }
     else {
-      if (count($acts) == 1) {
+      if (count($this->_ref_actes_ccam) == 1) {
         $act->_guess_association = '4';
         $act->_guess_regle_asso = 'EG7';
       }
@@ -864,8 +1096,6 @@ class CComplementCCAM {
         }
       }
     }
-
-    return true;
   }
 
   /**
@@ -874,13 +1104,22 @@ class CComplementCCAM {
    * * Cas d'utilisation : Actes effectués dans un temps différent et discontinu de la même journée.
    *
    * @param CActeCCAM   $act          The act
-   * @param CActeCCAM[] $acts         The list of the acts
-   * @param array       $ordered_acts The acts, ordered by price
    *
    * @return bool
    */
-  protected static function associationRuleEH($act, $acts, $ordered_acts) {
+  protected static function checkRuleEH($act) {
     return false;
+  }
+
+  /**
+   * Apply the association rule EH to the given act
+   *
+   * @param CActeCCAM $act The act
+   *
+   * @return void
+   */
+  protected function applyRuleEH($act) {
+
   }
 
   /**
@@ -890,15 +1129,24 @@ class CComplementCCAM {
    * leur nombre), ou à d'autres actes.
    *
    * @param CActeCCAM   $act          The act
-   * @param CActeCCAM[] $acts         The list of the acts
-   * @param array       $ordered_acts The acts, ordered by price
    *
    * @return bool
    */
-  protected static function associationRuleEI($act, $acts, $ordered_acts) {
-    if (!in_array(count($acts), array(2, 3, 4, 5))) {
+  protected function checkRuleEI($act) {
+    if (!in_array(count($this->_ref_actes_ccam), array(2, 3, 4, 5))) {
       return false;
     }
     return false;
+  }
+
+  /**
+   * Apply the association rule EI to the given act
+   *
+   * @param CActeCCAM $act The act
+   *
+   * @return void
+   */
+  protected function applyRuleEI($act) {
+
   }
 }

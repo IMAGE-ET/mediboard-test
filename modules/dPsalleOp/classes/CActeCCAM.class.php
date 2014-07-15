@@ -213,6 +213,12 @@ class CActeCCAM extends CActe {
       }
       return $msg;
     }
+
+    $codage_ccam = CCodageCCAM::get($this->_ref_object, $this->executant_id);
+    if (!$codage_ccam->_id) {
+      $codage_ccam->store();
+    }
+
      
     return parent::check(); 
     // datetime_execution: attention à rester dans la plage de l'opération

@@ -70,7 +70,8 @@ foreach ($sejour->_ref_operations as $_operation) {
     $_acte->loadRefExecutant();
     $_acte->loadRefCodeCCAM();
     if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
-      CComplementCCAM::guessAssociation($_acte, $_operation);
+      $codage_ccam = CCodageCCAM::get($_operation, $_acte->executant_id);
+      $codage_ccam->guessAssociation($_acte);
     }
     else {
       $_acte->guessAssociation();

@@ -150,7 +150,26 @@ class CSetupdPccam extends CSetup {
                 ADD `rapport_exoneration` ENUM ('4','7','C','R');";
     $this->addQuery($query);
 
-    $this->mod_version = "0.21";
+    $this->makeRevision('0.21');
+
+    $query = "CREATE TABLE `codage_ccam` (
+       `codage_ccam_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+       `association_rule` ENUM('G1', 'EA', 'EB', 'EC', 'ED', 'EE', 'EF', 'EG1', 'EG2', 'EG3', 'EG4', 'EG5', 'EG6', 'EG7', 'EH', 'EI', 'GA', 'GB', 'G2'),
+       `association_mode` ENUM('auto', 'user_choice') DEFAULT 'auto',
+       `codable_class` ENUM('CConsultation', 'CSejour', 'COperation') NOT NULL,
+       `codable_id` INT (11) UNSIGNED NOT NULL,
+       `praticien_id` INT (11) UNSIGNED NOT NULL,
+       `locked` ENUM('0', '1') NOT NULL DEFAULT '0'
+    ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `codage_ccam`
+      ADD INDEX (`codable_class`, `codable_id`),
+      ADD INDEX (`praticien_id`),
+      ADD UNIQUE INDEX  (`codable_class`, `codable_id`, `praticien_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.22';
 
     // Data source query
 

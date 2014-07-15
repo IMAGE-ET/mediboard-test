@@ -434,7 +434,8 @@ class CCodable extends CMbObject {
 
     foreach ($this->_ref_actes_ccam as $_acte) {
       if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
-        CComplementCCAM::guessAssociation($_acte, $this);
+        $codage_ccam = CCodageCCAM::get($this, $_acte->executant_id);
+        $codage_ccam->guessAssociation($_acte);
       }
       else {
         $_acte->guessAssociation();
@@ -1001,7 +1002,9 @@ class CCodable extends CMbObject {
           }
 
           if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
-            CComplementCCAM::guessAssociation($possible_acte, $this);
+            $codage_ccam = CCodageCCAM::get($this, $possible_acte->executant_id);
+            $codage_ccam->guessAssociation($possible_acte);
+            $codage_ccam->store();
           }
           else {
             $possible_acte->guessAssociation();
@@ -1014,7 +1017,7 @@ class CCodable extends CMbObject {
           if (!$possible_acte->_id) {
             $possible_acte->checkFacturable();
             if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
-              CComplementCCAM::checkModifiers($phase->_modificateurs, $phase->_connected_acte->execution, $this);
+              CCodageCCAM::checkModifiers($phase->_modificateurs, $phase->_connected_acte->execution, $this);
             }
             else {
               foreach ($phase->_modificateurs as $modificateur) {

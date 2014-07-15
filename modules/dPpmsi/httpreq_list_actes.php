@@ -18,7 +18,8 @@ $objet->loadRefsActes();
 foreach ($objet->_ref_actes_ccam as &$acte) {
   $acte->loadRefsFwd();
   if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
-    CComplementCCAM::guessAssociation($acte, $objet);
+    $codage_ccam = CCodageCCAM::get($objet, $acte->executant_id);
+    $codage_ccam->guessAssociation($acte);
   }
   else {
     $acte->guessAssociation();
