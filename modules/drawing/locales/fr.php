@@ -23,5 +23,7 @@ $locales['mod-drawing-tab-vw_categories'] = 'Catégories et Ressources';
 $locales['mod-drawing-tab-vw_drawings'] = 'Mes créations';
 $locales['module-drawing-court'] = 'Dessin';
 $locales['module-drawing-long'] = 'Annotation et dessin';
+$locales['pref-drawing_advanced_mode'] = 'Dessin en mode expert';
+$locales['pref-drawing_advanced_mode-desc'] = 'Utiliser le dessin de manière avancée';
 $locales['vw_list_file'] = 'Vue en liste';
 $locales['vw_list_gallery'] = 'Gallerie';

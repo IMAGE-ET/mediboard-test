@@ -83,13 +83,20 @@ DrawObject = {
     // one object
     var active = DrawObject.canvas.getActiveObject();
     if (active && active.type == "path") {
-
       active.set({strokeWidth : value});
     }
 
     if (active || objects) {
       DrawObject.refresh();
     }
+  },
+
+  changeOpacty : function(ivalue) {
+    var active = DrawObject.canvas.getActiveObject();
+    if (active && ivalue) {
+      active.set({opacity : ivalue/100})
+    }
+    DrawObject.refresh();
   },
 
   changeDrawColor : function(value) {
@@ -135,6 +142,34 @@ DrawObject = {
       object.scaleY = object.scaleY - (10*object.scaleY)/100;
     }
     DrawObject.canvas.renderAll();
+  },
+
+  sendToBack : function() {
+    var activeObject = DrawObject.canvas.getActiveObject();
+    if (activeObject) {
+      DrawObject.canvas.sendToBack(activeObject);
+    }
+  },
+
+  sendBackwards : function() {
+    var activeObject = DrawObject.canvas.getActiveObject();
+    if (activeObject) {
+      DrawObject.canvas.sendBackwards(activeObject);
+    }
+  },
+
+  bringForward  : function() {
+    var activeObject = DrawObject.canvas.getActiveObject();
+    if (activeObject) {
+      DrawObject.canvas.bringForward(activeObject);
+    }
+  },
+
+  bringToFront : function() {
+    var activeObject = DrawObject.canvas.getActiveObject();
+    if (activeObject) {
+      DrawObject.canvas.bringToFront(activeObject);
+    }
   },
 
   /**
@@ -204,27 +239,15 @@ DrawObject = {
   },
 
   insertSVG : function(uri) {
-    //console.log(uri);
     var group = [];
     var imgfjs = fabric.loadSVGFromURL(uri, function(objects, options) {
       var shape = fabric.util.groupSVGElements(objects, options);
-      console.log(shape);
-
       $(DrawObject.canvas_element).width = shape.getWidth() || 600;
       $(DrawObject.canvas_element).height = shape.getHeight() || 600;
-
       DrawObject.canvas = new fabric.Canvas('canvas', { backgroundColor: '#fff' });
       DrawObject.canvas.add(shape);
       //shape.center();
       DrawObject.canvas.renderAll();
-      //var loaded = fabric.util.groupSVGElements(objects, options);
-      //DrawObject.canvas.add(loaded);
-
-      /*objects.each(function(img) {
-        DrawObject.canvas.add(img);
-      });
-      //DrawObject.canvas.calcOffset();
-      DrawObject.canvas.renderAll.bind(DrawObject.canvas);*/
     });
   },
 

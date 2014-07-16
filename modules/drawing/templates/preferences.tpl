@@ -10,3 +10,4 @@
 *}}
 
 {{mb_include template=inc_pref spec=color var=drawing_background}}
+{{mb_include template=inc_pref spec=bool var=drawing_advanced_mode}}

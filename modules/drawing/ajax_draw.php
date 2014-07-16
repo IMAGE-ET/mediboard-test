@@ -18,6 +18,7 @@ $context_guid = CValue::get("context_guid");
 
 $draw = new CFile();
 $draw->load($draw_id);
+$draw->loadRefsNotes();
 $draw->loadRefAuthor();
 $draw->loadRefsNotes();
 $draw->getBinaryContent();

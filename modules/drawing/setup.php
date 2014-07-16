@@ -38,7 +38,9 @@ class CSetupDrawing extends CSetup {
     $this->makeRevision("0.2");
     $this->addPrefQuery("drawing_background", "ffffff");
 
+    $this->makeRevision("0.3");
+    $this->addPrefQuery("drawing_advanced_mode", 0);
 
-    $this->mod_version = "0.3";
+    $this->mod_version = "0.4";
   }
 }

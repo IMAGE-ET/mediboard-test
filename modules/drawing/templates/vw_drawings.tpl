@@ -61,7 +61,6 @@
               </td>
               <td>
                 <span onmouseover="ObjectTooltip.createEx(this, '{{$_file->_ref_object->_guid}}');">{{$_file->_ref_object}}</span>
-                <button>Lier à</button>
               </td>
               <td>{{mb_value object=$_file field=_file_size}}</td>
               <td><span title="{{mb_value object=$_file field=file_date}}">{{mb_value object=$_file field=file_date format=relative}}</span></td>

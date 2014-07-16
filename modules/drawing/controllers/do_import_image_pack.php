@@ -30,7 +30,6 @@ if ($file["type"] != "application/zip") {
 
 $mb_file_name = $file["tmp_name"];
 
-
 $zip = zip_open($mb_file_name);
 while ($zipFile = zip_read($zip)) {
   $doc_name       = zip_entry_name($zipFile);
@@ -38,10 +37,7 @@ while ($zipFile = zip_read($zip)) {
   $file_name      = pathinfo($doc_name, PATHINFO_BASENAME);
   $doc_size       = zip_entry_filesize($zipFile);
   $dir_name       = end(explode("/", dirname($doc_name)));
-  if ($dir_name == ".") {
-    $dir_name = null;
-  }
-  if (!$dir_name && $category) {
+  if ((!$dir_name || $dir_name == ".") && $category) {
     $dir_name = $category;
   }
 
