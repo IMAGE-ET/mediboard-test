@@ -170,7 +170,7 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
     $data[] = null;
     
     // PV2-30: Patient Charge Adjustment Code (CE) (optional)
-    $data[] = null;
+    $data[] = $sejour->facturable ? "F" : "N";
     
     // PV2-31: Recurring Service Code (IS) (optional)
     $data[] = null;

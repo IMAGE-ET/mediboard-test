@@ -52,7 +52,7 @@
   <tr>
   	<th>Nom</th>
     <th>Prénom</th>
-    <th>Nom de jeune fille</th>
+    <th>Nom de naissance</th>
   	<th>Adresse</th>
   	<th>Ville</th>
   	<th>CP</th>

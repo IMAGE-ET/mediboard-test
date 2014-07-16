@@ -155,6 +155,10 @@
   <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
     {{$patient}}
   </span>
+  {{if "dPpatients CPatient nom_jeune_fille_mandatory"|conf:"CGroups-$g" && $patient->sexe == "f" && !$patient->nom_jeune_fille}}
+    <br />
+    <div class="small-warning"> Le nom de naissance est obligatoire mais n'a pas été renseigné pour cette patiente (circonstances particulières)</div>
+  {{/if}}
 </td>
 
 <td class="text">

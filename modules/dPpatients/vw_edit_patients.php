@@ -74,15 +74,13 @@ if ($patient_id) {
 }
 
 $group = CGroups::loadCurrent();
-$group->loadConfigValues();
-$nom_jeune_fille_mandatory = $group->_configs['dPpatients_CPatient_nom_jeune_fille_mandatory'];
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("patient"  , $patient);
 $smarty->assign("useVitale", $useVitale);
-$smarty->assign('nom_jeune_fille_mandatory', $nom_jeune_fille_mandatory);
+$smarty->assign('nom_jeune_fille_mandatory', CAppUI::conf("dPpatients CPatient nom_jeune_fille_mandatory", $group));
 $smarty->assign("callback", $callback);
 $smarty->assign("modal", $modal);
 

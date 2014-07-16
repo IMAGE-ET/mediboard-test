@@ -726,7 +726,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       );
 
       $patient_birthname = array();
-      // Cas nom de jeune fille
+      // Cas nom de naissance
       if ($object->nom_jeune_fille) {
         $nom_jeune_fille =
           CPatient::applyModeIdentitoVigilance($object->nom_jeune_fille, true, $receiver->_configs["mode_identito_vigilance"]);
