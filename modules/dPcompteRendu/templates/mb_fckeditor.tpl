@@ -98,7 +98,7 @@ CKEDITOR.editorConfig = function(config) {
     ['TextColor', 'BGColor']
     ];
   {{else}}
-    {{if $app->user_prefs.saveOnPrint}}
+    {{if $app->user_prefs.saveOnPrint || ($pdf_thumbnails && $app->user_prefs.pdf_and_thumbs)}}
       var textForPrint = 'mbprint';
     {{else}}
       var textForPrint = 'Print';
