@@ -104,6 +104,10 @@ Main.add(function () {
     </li>
   {{/if}}
 
+  <li>
+    <a id="acc_consultation_a_Atcd" href="#AntTrait">{{tr}}soins.tab.antecedent_and_treatment{{/tr}}</a>
+  </li>
+
   <li onmousedown="refreshConstantesMedicales();">
     <a href="#Constantes">{{tr}}soins.tab.surveillance{{/tr}}</a>
   </li>
@@ -153,10 +157,6 @@ Main.add(function () {
   
   <li>
     <a href="#fdrConsult">{{tr}}soins.tab.documents{{/tr}}</a>
-  </li>
-
-  <li>
-    <a id="acc_consultation_a_Atcd" href="#AntTrait">{{tr}}soins.tab.antecedent_and_treatment{{/tr}}</a>
   </li>
 
   <li onmousedown="Reglement.reload(true);">

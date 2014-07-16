@@ -65,26 +65,26 @@ Main.add(function () {
 
 <!-- Tab titles -->
 <ul id="tab-consult-anesth" class="control_tabs">
-  <li onmousedown="DossierMedical.reloadDossierSejour();"><a id="acc_consultation_a_Atcd" href="#AntTrait">{{tr}}CAntecedent.more{{/tr}}</a></li>
-  <li onmousedown="refreshConstantesMedicales();"><a href="#Constantes">Constantes</a></li>
-  <li><a href="#Exams">Exam. Clinique</a></li>
-  <li><a href="#Intub">Intubation</a></li>
-  <li><a href="#ExamsComp">Exam. Comp.</a></li>
-  <li><a href="#InfoAnesth" id="didac_a_infos_anesth">Infos. Anesth.</a></li>
+  <li onmousedown="DossierMedical.reloadDossierSejour();"><a id="acc_consultation_a_Atcd" href="#AntTrait">{{tr}}soins.tab.antecedent_and_treatment{{/tr}}</a></li>
+  <li onmousedown="refreshConstantesMedicales();"><a href="#Constantes">{{tr}}soins.tab.surveillance{{/tr}}</a></li>
+  <li><a href="#Exams">{{tr}}soins.tab.examens{{/tr}}</a></li>
+  <li><a href="#Intub">{{tr}}soins.tab.intubation{{/tr}}</a></li>
+  <li><a href="#ExamsComp">{{tr}}soins.tab.examens_comp{{/tr}}</a></li>
+  <li><a href="#InfoAnesth" id="didac_a_infos_anesth">{{tr}}soins.tab.infos_anesth{{/tr}}</a></li>
 	{{if $isPrescriptionInstalled && "dPcabinet CPrescription view_prescription"|conf:"CGroups-$g"}}
 	  <li>
-	    <a href="#prescription_sejour">Prescription</a>
+	    <a href="#prescription_sejour">{{tr}}soins.tab.prescription{{/tr}}</a>
 	  </li>
   {{/if}}
 	{{if $conf.dPcabinet.CConsultAnesth.show_facteurs_risque}}
-    <li onmousedown="refreshFacteursRisque();"><a href="#facteursRisque">Facteurs de risque</a></li>
+    <li onmousedown="refreshFacteursRisque();"><a href="#facteursRisque">{{tr}}soins.tab.facteurs_risque{{/tr}}</a></li>
   {{/if}}
   {{if $app->user_prefs.ccam_consultation == 1}}
-  <li><a id="acc_consultation_a_Actes" href="#Actes">{{tr}}CCodable-actes{{/tr}}</a></li>
+  <li><a id="acc_consultation_a_Actes" href="#Actes">{{tr}}soins.tab.actes{{/tr}}</a></li>
   {{/if}}
-  <li><a href="#fdrConsult">Documents</a></li>
+  <li><a href="#fdrConsult">{{tr}}soins.tab.documents{{/tr}}</a></li>
   <li onmousedown="Reglement.reload(true);">
-    <a id="a_reglements_consult"  href="#reglement">Réglements</a>
+    <a id="a_reglements_consult"  href="#reglement">{{tr}}soins.tab.reglements{{/tr}}</a>
   </li>
 </ul>
 

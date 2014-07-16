@@ -77,25 +77,25 @@
 </form>
 
 <ul id="tabs_consult" class="control_tabs">
-  <li><a href="#antecedents"{{tr}}CAntecedent.more{{/tr}}</a></li>
+  <li><a href="#antecedents">{{tr}}soins.tab.antecedent_and_treatment{{/tr}}</a></li>
   {{if !$consult_anesth->_id}}
-    <li><a href="#exams">Examens</a></li>
+    <li><a href="#exams">{{tr}}soins.tab.examens{{/tr}}</a></li>
   {{else}}
-    <li><a href="#exam_clinique">Exam. Clinique</a> </li>
-    <li><a href="#intubation">Intubation</a>        </li>
-    <li><a href="#exam_comp">Exam. Comp.</a>        </li>
-    <li><a href="#infos_anesth">Infos. Anesth.</a>  </li>
+    <li><a href="#exam_clinique">{{tr}}soins.tab.examens{{/tr}}</a> </li>
+    <li><a href="#intubation">{{tr}}soins.tab.intubation{{/tr}}</a>        </li>
+    <li><a href="#exam_comp">{{tr}}soins.tab.examens_comp{{/tr}}</a>        </li>
+    <li><a href="#infos_anesth">{{tr}}soins.tab.infos_anesth{{/tr}}</a>  </li>
     {{if $conf.dPcabinet.CConsultAnesth.show_facteurs_risque}}
-      <li><a href="#facteurs_risque">Facteurs de risques</a></li>
+      <li><a href="#facteurs_risque">{{tr}}soins.tab.facteurs_risque{{/tr}}</a></li>
     {{/if}}
     {{if $consult_anesth->operation_id}}
-      <li><a href="#visite_pre_anesth">Visite pré-anesth.</a></li>
+      <li><a href="#visite_pre_anesth">{{tr}}soins.tab.visite_pre_anesth{{/tr}}</a></li>
     {{/if}}
   {{/if}}
   {{if $app->user_prefs.ccam_consultation == 1}}
-    <li><a href="#Actes">{{tr}}CCodable-actes{{/tr}}</a></li>
+    <li><a href="#Actes">{{tr}}soins.tab.actes{{/tr}}</a></li>
   {{/if}}
-  <li><a href="#fdrConsult">Documents</a></li>
+  <li><a href="#fdrConsult">{{tr}}soins.tab.documents{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
