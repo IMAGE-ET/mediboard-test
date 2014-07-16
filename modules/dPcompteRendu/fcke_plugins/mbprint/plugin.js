@@ -17,7 +17,9 @@ CKEDITOR.plugins.add('mbprint',{
 });
 
 function mbprint_onclick(editor) {
-  editor.getCommand('mbprint').setState(CKEDITOR.TRISTATE_DISABLED);
+  if (Preferences.saveOnPrint != 0) {
+    editor.getCommand('mbprint').setState(CKEDITOR.TRISTATE_DISABLED);
+  }
 
   // Mise à jour de la date d'impression
   $V(getForm("editFrm").date_print, "now");
@@ -38,6 +40,11 @@ function mbprint_onclick(editor) {
       }
     }
   };
-  submitCompteRendu(printDoc);
+  if (Preferences.saveOnPrint == 0) {
+    printDoc();
+  }
+  else {
+    submitCompteRendu(printDoc);
+  }
 }
 
