@@ -37,7 +37,7 @@ while ($zipFile = zip_read($zip)) {
   $file_name      = pathinfo($doc_name, PATHINFO_BASENAME);
   $doc_size       = zip_entry_filesize($zipFile);
   $dir_name       = end(explode("/", dirname($doc_name)));
-  if ((!$dir_name || $dir_name == ".") && $category) {
+  if (((!$dir_name || $dir_name == ".") && $category) || $category != "divers") {
     $dir_name = $category;
   }
 
