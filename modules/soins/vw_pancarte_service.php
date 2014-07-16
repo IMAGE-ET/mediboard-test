@@ -1,17 +1,18 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage soins
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 $group = CGroups::loadCurrent();
 
 $service_id = CValue::getOrSession("service_id");
-$real_time     = CValue::getOrSession("real_time", 0);
+$real_time  = CValue::getOrSession("real_time", 0);
 
 if($service_id == "NP"){
   $service_id = "";
@@ -41,16 +42,7 @@ $configs = CConfigService::getAllFor($service_id);
 
 if (!$date) {
   $date = CMbDT::date();
-
-  // Si la date actuelle est inférieure a l'heure affichée sur le plan de soins, on affiche le plan de soins de la veille (cas de la nuit)
-  $datetime_limit = CMbDT::dateTime($configs["Poste 1"].":00:00");
-  $datetime = $date . " " . CMbDT::format(null, "%H:%M:%S");
-
-  if ($datetime < $datetime_limit) {
-    $date = CMbDT::date("- 1 DAY", $date);
-  }
 }
-
 
 $filter_line = new CPrescriptionLineMedicament();
 $filter_line->debut = $date;
@@ -64,12 +56,12 @@ $services = $service->loadGroupList($where);
 
 // Smarty template
 $smarty = new CSmartyDP();
-$smarty->assign("service", $service);
-$smarty->assign("filter_line", $filter_line);
-$smarty->assign("services", $services);
-$smarty->assign("service_id", $service_id);
-$smarty->assign("date"     , $date);
-$smarty->assign('day', CMbDT::date());
-$smarty->assign('real_time', $real_time);
-$smarty->assign("date_min", "");
+$smarty->assign("service"     , $service);
+$smarty->assign("filter_line" , $filter_line);
+$smarty->assign("services"    , $services);
+$smarty->assign("service_id"  , $service_id);
+$smarty->assign("date"        , $date);
+$smarty->assign('day'         , CMbDT::date());
+$smarty->assign('real_time'   , $real_time);
+$smarty->assign("date_min"    , "");
 $smarty->display('vw_pancarte_service.tpl');
