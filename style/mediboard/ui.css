@@ -617,12 +617,12 @@ td.show {
 
 div.rank {
   font-size: 1.3em; 
-  border-radius: 50%; 
+  border-radius: 0.7em;
   border: 2px solid #888; 
   background: #fff; 
   font-weight: bold; 
   display: inline-block;
-  width: 1.3em;
+  min-width: 1.3em;
   height: 1.3em;
   vertical-align: middle;
   text-align: center;
