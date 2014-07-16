@@ -1,22 +1,37 @@
-{{*
- * $Id$
- *
- * @category Cabinet
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision$
- * @link     http://www.mediboard.org
-*}}
 
 {{mb_default var=vw_traitement_texte_libre value=1}}
 {{mb_default var=addform                   value=""}}
 {{mb_default var=callback                  value=""}}
 {{mb_default var=gestion_tp                value=""}}
+{{mb_default var=sejour_id                 value=""}}
+{{mb_default var=reload                    value=""}}
+{{mb_default var=type_see value=""}}
 
+{{mb_script module="prescription" script="prescription" ajax=1}}
 {{mb_script module="dPmedicament" script="medicament_selector" ajax=1}}
 
 <script>
+  onSubmitTraitement = function (form) {
+    var trait = $(form.traitement);
+    if (!trait.present()) {
+      return false;
+    }
+
+    onSubmitFormAjax(form, {
+      onComplete : function() {
+        {{if $type_see}}
+          DossierMedical.reloadDossierPatient(null, '{{$type_see}}');
+        {{else}}
+          DossierMedical.reloadDossiersMedicaux();
+        {{/if}}
+      }
+    } );
+
+    trait.clear().focus();
+
+    return false;
+  };
+
   // UpdateFields de l'autocomplete de medicaments
   updateFieldsMedicamentTP{{$addform}} = function(selected) {
     var oFormTP = getForm("editLineTP{{$addform}}");
@@ -92,6 +107,15 @@
   }
 
   Main.add(function() {
+    if (!DossierMedical.patient_id) {
+      DossierMedical.sejour_id  = '{{$sejour_id}}';
+      DossierMedical._is_anesth = '{{$_is_anesth}}';
+      DossierMedical.patient_id = '{{$patient->_id}}';
+    }
+    {{if $reload}}
+    DossierMedical.reloadDossierPatient('{{$reload}}', '{{$type_see}}');
+    {{/if}}
+
     if ($('tab_traitements_perso{{$addform}}')) {
       Control.Tabs.create('tab_traitements_perso{{$addform}}', false);
     }
@@ -260,6 +284,8 @@
                   <button id="button_submit_traitement{{$addform}}" class="tick" type="button" onclick="onSubmitFormAjax(this.form, function() {
                     {{if $callback}}
                       {{$callback}}();
+                    {{elseif $reload}}
+                      DossierMedical.reloadDossierPatient('{{$reload}}', '{{$type_see}}');
                     {{else}}
                       DossierMedical.reloadDossiersMedicaux();
                     {{/if}}
