@@ -56,6 +56,16 @@ foreach ($evenements_charge as $_evenement) {
   $planning->addLoad($_evenement->debut, $_evenement->duree);
 }
 
+CMbObject::massLoadFwdRef($evenements, "prescription_line_element_id");
+CMbObject::massLoadFwdRef($evenements, "equipement_id");
+
+$therapeutes = CMbObject::massLoadFwdRef($evenements, "therapeute_id");
+CMbObject::massLoadFwdRef($therapeutes, "function_id");
+
+CMbObject::massCountBackRefs($evenements, "evenements_ssr");
+CMbObject::massCountBackRefs($evenements, "actes_cdarr");
+CMbObject::massCountBackRefs($evenements, "actes_csarr");
+
 foreach ($evenements as $_evenement) {
   $important = $sejour_id ? ($_evenement->sejour_id == $sejour_id) : true;
 
@@ -68,8 +78,7 @@ foreach ($evenements as $_evenement) {
     $title = $patient->nom;
   }
   else {
-    $_evenement->loadRefsEvenementsSeance();
-    $title = count($_evenement->_ref_evenements_seance)." patient(s)";
+    $title = $_evenement->_count["evenements_ssr"]." patient(s)";
   }
   if ($large) {
     $title .= " " . substr($patient->prenom, 0, 2) . ".";
@@ -178,7 +187,6 @@ if ($kine->fin_activite) {
   $fin = CMbDT::date("+1 DAY", $kine->fin_activite);
   $planning->addUnavailability($fin, CMbDT::date("+1 WEEK", $fin));
 }
-
 
 // Heure courante
 $planning->showNow();
