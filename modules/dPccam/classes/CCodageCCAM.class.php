@@ -34,6 +34,11 @@ class CCodageCCAM extends CMbObject {
   protected $_ordered_acts;
 
   /**
+   * @var boolean[]
+   */
+  public $_possible_rules;
+
+  /**
    * @var array
    */
   protected $_check_rules;
@@ -53,7 +58,9 @@ class CCodageCCAM extends CMbObject {
    */
   public $_ref_actes_ccam;
 
-  protected static $association_rules = array('G1', 'EA', 'EB', 'EC', 'ED', 'EE', 'EF', 'EG1', 'EG2', 'EG3', 'EG4', 'EG5', 'EG6', 'EG7', 'EH', 'EI', 'GA', 'GB', 'G2');
+  protected static $association_rules = array(
+    'G1', 'EA', 'EB', 'EC', 'ED', 'EE', 'EF', 'EG1', 'EG2', 'EG3',
+    'EG4', 'EG5', 'EG6', 'EG7', 'EH', 'EI', 'GA', 'GB', 'G2');
 
   /**
    * @see parent::getSpec()
@@ -113,7 +120,7 @@ class CCodageCCAM extends CMbObject {
       return null;
     }
 
-    return $this->_ref_codable = $this->loadFwdRef('codable_id');
+    return $this->_ref_codable = $this->loadFwdRef('codable_id', $cache);
   }
 
   /**
@@ -123,8 +130,16 @@ class CCodageCCAM extends CMbObject {
    *
    * @return CMediusers|null
    */
-  protected function loadPraticien($cache = true) {
-    return $this->_ref_praticien = $this->loadFwdRef('praticien_id');
+  public function loadPraticien($cache = true) {
+    return $this->_ref_praticien = $this->loadFwdRef('praticien_id', $cache);
+  }
+
+  /**
+   * @see parent::getPerm()
+   */
+  public function getPerm($permType) {
+    $this->loadPraticien();
+    return $this->_ref_praticien->getPerm($permType);
   }
 
   /**
@@ -132,7 +147,7 @@ class CCodageCCAM extends CMbObject {
    *
    * @return CActeCCAM[]
    */
-  protected function loadActesCCAM() {
+  public function loadActesCCAM() {
     $act = new CActeCCAM();
     $act->object_class = $this->codable_class;
     $act->object_id = $this->codable_id;
@@ -231,7 +246,7 @@ class CCodageCCAM extends CMbObject {
   }
 
   /**
-   * Guess the association code for an act
+   * Check all rules
    *
    * @param CActeCCAM $act The act
    *
@@ -244,7 +259,7 @@ class CCodageCCAM extends CMbObject {
 
     foreach (self::$association_rules as $_rule) {
       if (self::isRuleAllowed($_rule)) {
-        if (call_user_func(array($this, "checkRule$_rule"), $act)) {
+        if (call_user_func(array($this, "checkRule$_rule"))) {
           call_user_func(array($this, "applyRule$_rule"), $act);
           break;
         }
@@ -254,6 +269,23 @@ class CCodageCCAM extends CMbObject {
     $this->association_rule = $act->_guess_regle_asso;
 
     return $act->_guess_association;
+  }
+
+  /**
+   * Guess the association code for an act
+   *
+   * @return string
+   */
+  public function checkRules() {
+    $this->getActsByTarif();
+    $this->_check_rules = array();
+    $this->_possible_rules = array();
+
+    foreach (self::$association_rules as $_rule) {
+      if (self::isRuleAllowed($_rule)) {
+        $this->_possible_rules[$_rule] = call_user_func(array($this, "checkRule$_rule"));
+      }
+    }
   }
 
   /**
@@ -277,11 +309,9 @@ class CCodageCCAM extends CMbObject {
   /**
    * Check the association rule G1
    *
-   * @param CActeCCAM $act The act
-   *
    * @return bool
    */
-  protected function checkRuleG1($act) {
+  protected function checkRuleG1() {
     if (count($this->_ref_actes_ccam) != 1) {
       return false;
     }
@@ -309,11 +339,9 @@ class CCodageCCAM extends CMbObject {
    * complémentaire, soit un supplément, soit un acte d'imagerie pour acte de radiologie interventionnelle ou cardiologie
    * interventionnelle (Paragraphe 19.01.09.02), il ne faut pas indiquer de code d'association
    *
-   * @param CActeCCAM $act The act
-   *
    * @return bool
    */
-  protected function checkRuleGA($act) {
+  protected function checkRuleGA() {
     if (count($this->_ref_actes_ccam) != 2) {
       return false;
     }
@@ -356,11 +384,9 @@ class CCodageCCAM extends CMbObject {
    * * Cas d'utilisation : Si un acte est associé à un geste complémentaire et à un supplément, le code d'assciation est 1 pour
    * chacun des actes.
    *
-   * @param CActeCCAM $act The act
-   *
    * @return bool
    */
-  protected function checkRuleGB($act) {
+  protected function checkRuleGB() {
     if (count($this->_ref_actes_ccam) != 3) {
       return false;
     }
@@ -399,11 +425,20 @@ class CCodageCCAM extends CMbObject {
   /**
    * Check the association rule G2
    *
-   * @param CActeCCAM $act The act
-   *
    * @return bool
    */
-  protected function checkRuleG2($act) {
+  protected function checkRuleG2() {
+    return true;
+  }
+
+  /**
+   * Apply the association rule G2 to the given act
+   *
+   * @param CActeCCAM $act The act
+   *
+   * @return void
+   */
+  protected function applyRuleG2($act) {
     foreach ($this->_ref_actes_ccam as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
       if (
@@ -422,17 +457,6 @@ class CCodageCCAM extends CMbObject {
       $act->_position = array_search($act->_id, array_keys($this->_ordered_acts));
     }
 
-    return true;
-  }
-
-  /**
-   * Apply the association rule G2 to the given act
-   *
-   * @param CActeCCAM $act The act
-   *
-   * @return void
-   */
-  protected function applyRuleG2($act) {
     switch ($act->_position) {
       case -1:
         $act->_guess_association = '1';
@@ -457,11 +481,9 @@ class CCodageCCAM extends CMbObject {
    * * Cas d'utilisation : Pour les __actes de chirurgie portant sur des membres différents__ (sur le tronc et un membre,
    * sur la tête et un membre), l'acte dont le tarif (hors modificateurs) est le moins élevé est tarifé à 75% de sa valeur
    *
-   * @param CActeCCAM $act The act
-   *
    * @return bool
    */
-  protected function checkRuleEA($act) {
+  protected function checkRuleEA() {
     if (count($this->_ref_actes_ccam) != 2 /*&& $codable instanceof COperation*/) {
       return false;
     }
@@ -522,11 +544,9 @@ class CCodageCCAM extends CMbObject {
    * L'acte dont le tarif (hors modificateurs) est le plus élevé est tarifé à taux plein. Le deuxième est tarifé à
    * 75% de sa valeur, et le troisième à 50%.
    *
-   * @param CActeCCAM $act The act
-   *
    * @return bool
    */
-  protected function checkRuleEB($act) {
+  protected function checkRuleEB() {
     if (!in_array(count($this->_ref_actes_ccam), array(2, 3))) {
       return false;
     }
@@ -564,15 +584,17 @@ class CCodageCCAM extends CMbObject {
    * l'acte dont le tarif (hots modificateurs) est le plus élevé est tarifé à taux plein, le deuxième et le troisième sont tarifés
    * à 50% de leurs valeurs.
    *
-   * @param CActeCCAM $act The act
-   *
    * @return bool
    */
-  protected function checkRuleEC($act) {
-    $discipline = $act->loadRefExecutant()->loadRefDiscipline();
-    if (count($this->_ref_actes_ccam) != 3 || $discipline->_compat != 'ORL') {
-      return false;
-    }
+  protected function checkRuleEC() {
+    /**
+     * Suppression du test de la discipline du praticien
+     *
+     * $discipline = $act->loadRefExecutant()->loadRefDiscipline();
+     * if (count($this->_ref_actes_ccam) != 3 || $discipline->_compat != 'ORL') {
+     *  return false;
+     * }
+    */
 
     $exerese = false;
     $curage = false;
@@ -619,11 +641,9 @@ class CCodageCCAM extends CMbObject {
   /**
    * Actes d'échographie portant sur plusieurs régions anatomiques
    *
-   * @param CActeCCAM $act The act
-   *
    * @return bool
    */
-  protected function checkRuleED($act) {
+  protected function checkRuleED() {
     return false;
   }
 
@@ -655,11 +675,9 @@ class CCodageCCAM extends CMbObject {
    * L'acte de guidage scanographique ne peut être tarfié qu'avec les actes dont le libellé précise qu'ils nécessitent un
    * guidage scanoraphique. Dans ce cas, deux acte au plus peuvent être tarifés à taux plein.
    *
-   * @param CActeCCAM $act The act
-   *
    * @return bool
    */
-  protected function checkRuleEE($act) {
+  protected function checkRuleEE() {
     if (!in_array(count($this->_ref_actes_ccam), array(2, 3))) {
       return false;
     }
@@ -693,13 +711,9 @@ class CCodageCCAM extends CMbObject {
   /**
    * Association rule EF
    *
-   * @param CActeCCAM   $act          The act
-   * @param CActeCCAM[] $acts         The list of the acts
-   * @param array       $ordered_acts The acts, ordered by price
-   *
    * @return bool
    */
-  protected static function checkRuleEF($act, $acts, $ordered_acts) {
+  protected static function checkRuleEF() {
     return false;
   }
 
@@ -709,11 +723,9 @@ class CCodageCCAM extends CMbObject {
    * * Cas d'utilisation : Les __actes du sous paragraphe 19.01.09.02__ (radiologie vasculaire et imagerie conventionnelle)
    * sont associés à taux plein, deux actes au plus peuvent tarifés.
    *
-   * @param CActeCCAM $act The act
-   *
    * @return bool
    */
-  protected function checkRuleEG1($act) {
+  protected function checkRuleEG1() {
     if (count($this->_ref_actes_ccam) != 2) {
       return false;
     }
@@ -754,11 +766,9 @@ class CCodageCCAM extends CMbObject {
    * * Cas d'utilisation : Les __actes d'anatomie et de cytologie pathologique__ peuvent être associés à
    * taux plein entre eux et/ou à un autre acte, quelque soit le nombre d'acte d'anatomie et de cytologie pathologique.
    *
-   * @param CActeCCAM $act The act
-   *
    * @return bool
    */
-  protected function checkRuleEG2($act) {
+  protected function checkRuleEG2() {
     if (!in_array(count($this->_ref_actes_ccam), array(2, 3))) {
       return false;
     }
@@ -784,15 +794,7 @@ class CCodageCCAM extends CMbObject {
       );
       if (in_array($chap[2]['rang'], $chapters_anapath) || in_array($chap[1]['rang'], $chapters_anapath)) {
         $nb_anapath++;
-        unset($ordered_acts_eg2[$_act->_id]);
-        if ($_act->_id == $act->_id) {
-          $act->_position = -1;
-        }
       }
-    }
-    if ($act->_position != -1) {
-      self::orderActsByTarif($ordered_acts_eg2);
-      $act->_position = array_search($act->_id, array_keys($ordered_acts_eg2));
     }
 
     if (!$nb_anapath) {
@@ -814,7 +816,37 @@ class CCodageCCAM extends CMbObject {
    * @return void
    */
   protected function applyRuleEG2($act) {
-    $nb_anapath = $this->_check_rules['E$acts$acts$actsG2']['nb_anapath'];
+    $ordered_acts_eg2 = $this->_ordered_acts;
+    foreach ($this->_ref_actes_ccam as $_act) {
+      $chap = $_act->_ref_code_ccam->chapitres;
+      $chapters_anapath = array(
+        '01.01.14.',
+        '02.01.10.',
+        '04.01.10.',
+        '05.01.08.',
+        '06.01.11.',
+        '07.01.13.',
+        '08.01.09.',
+        '09.01.07.',
+        '10.01.05.',
+        '15.01.07.',
+        '16.01.06.',
+        '16.02.06.',
+        '17.02.'
+      );
+      if (in_array($chap[2]['rang'], $chapters_anapath) || in_array($chap[1]['rang'], $chapters_anapath)) {
+        unset($ordered_acts_eg2[$_act->_id]);
+        if ($_act->_id == $act->_id) {
+          $act->_position = -1;
+        }
+      }
+    }
+    if ($act->_position != -1) {
+      self::orderActsByTarif($ordered_acts_eg2);
+      $act->_position = array_search($act->_id, array_keys($ordered_acts_eg2));
+    }
+
+    $nb_anapath = $this->_check_rules['EG2']['nb_anapath'];
     if ($nb_anapath == 2 || ($nb_anapath == 1 && count($this->_ordered_acts) == 1)) {
       $act->_guess_association = '4';
       $act->_guess_regle_asso = 'EG2';
@@ -839,16 +871,13 @@ class CCodageCCAM extends CMbObject {
    * (figurants aux paragraphes 01.01.01.01, 01.01.01.02, 01.01.01.03 de la CCAM) peuvent être associés à taux plein entre eux ou à
    * un autre acte, quelque soit le nombre d'actes
    *
-   * @param CActeCCAM $act The act
-   *
    * @return bool
    */
-  protected function checkRuleEG3($act) {
+  protected function checkRuleEG3() {
     if (!in_array(count($this->_ref_actes_ccam), array(2, 3))) {
       return false;
     }
 
-    $ordered_acts_eg3 = $this->_ordered_acts;
     $nb_electromyo = 0;
     foreach ($this->_ref_actes_ccam as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
@@ -857,21 +886,7 @@ class CCodageCCAM extends CMbObject {
           ($chapters[3]['db'] == '000001' || $chapters[3]['db'] == '000002' || $chapters[3]['db'] == '000003' )
       ) {
         $nb_electromyo++;
-        unset($ordered_acts_eg3[$_acte_ccam->_id]);
-        if ($_acte_ccam->_id == $act->_id) {
-          $act->_position = -1;
-        }
       }
-      elseif ($chapters[0]['db'] == '000019' && $chapters[1]['db'] == '000002') {
-        unset($ordered_acts_eg3[$_acte_ccam->_id]);
-        if ($_acte_ccam->_id == $act->_id) {
-          $act->_position = -1;
-        }
-      }
-    }
-    if ($act->_position != -1) {
-      self::orderActsByTarif($ordered_acts_eg3);
-      $act->_position = array_search($act->_id, array_keys($ordered_acts_eg3));
     }
 
     if (!$nb_electromyo) {
@@ -893,7 +908,33 @@ class CCodageCCAM extends CMbObject {
    * @return void
    */
   protected function applyRuleEG3($act) {
+
+    $ordered_acts_eg3 = $this->_ordered_acts;
+    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
+      $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
+      if (
+          $chapters[0]['db'] == '000001' && $chapters[1]['db'] == '000001' && $chapters[2]['db'] == '000001' &&
+          ($chapters[3]['db'] == '000001' || $chapters[3]['db'] == '000002' || $chapters[3]['db'] == '000003' )
+      ) {
+        unset($ordered_acts_eg3[$_acte_ccam->_id]);
+        if ($_acte_ccam->_id == $act->_id) {
+          $act->_position = -1;
+        }
+      }
+      elseif ($chapters[0]['db'] == '000019' && $chapters[1]['db'] == '000002') {
+        unset($ordered_acts_eg3[$_acte_ccam->_id]);
+        if ($_acte_ccam->_id == $act->_id) {
+          $act->_position = -1;
+        }
+      }
+    }
+    if ($act->_position != -1) {
+      self::orderActsByTarif($ordered_acts_eg3);
+      $act->_position = array_search($act->_id, array_keys($ordered_acts_eg3));
+    }
+
     $nb_electromyo = $this->_check_rules['EG3']['nb_electromyo'];
+
     if ($nb_electromyo == 2) {
       $act->_guess_association = '4';
       $act->_guess_regle_asso = 'EG3';
@@ -917,11 +958,9 @@ class CCodageCCAM extends CMbObject {
    * * Cas d'utilisation : Les __actes d'irradiation en radiothérapie__, ainsi que les suppléments autorisés avec ces actes,
    * peuvent être associés à taux plein, quel que soit le nombre d'actes.
    *
-   * @param CActeCCAM $act The act
-   *
    * @return bool
    */
-  protected function checkRuleEG4($act) {
+  protected function checkRuleEG4() {
     if (!in_array(count($this->_ref_actes_ccam), array(2, 3))) {
       return false;
     }
@@ -970,11 +1009,9 @@ class CCodageCCAM extends CMbObject {
    * * Cas d'utilisation : Les __actes de médecin nucléaire__ sont associés à taux plein, deux actes au plus peuvent
    * être tarfiés. Il en est de même pour un acte de médecine nucléaire associé à un autre acte.
    *
-   * @param CActeCCAM $act The act
-   *
    * @return bool
    */
-  protected function checkRuleEG5($act) {
+  protected function checkRuleEG5() {
     if (count($this->_ref_actes_ccam) != 2) {
       return false;
     }
@@ -1008,11 +1045,9 @@ class CCodageCCAM extends CMbObject {
    * chirurgie cardiaque avec CEC), actes d'acocuchements__ peuvent être associés à taux plein à un seul des actes introduits
    * par la note "facturation : éventuellement en supplément".
    *
-   * @param CActeCCAM $act The act
-   *
    * @return bool
    */
-  protected function checkRuleEG6($act) {
+  protected function checkRuleEG6() {
     if (count($this->_ref_actes_ccam) != 2) {
       return false;
     }
@@ -1044,11 +1079,9 @@ class CCodageCCAM extends CMbObject {
    * * Cas d'utilisation : Les __actes bucco-dentaires__, y comprit les suppléments autorisés avec ces actes, peuvent
    * être associés à taux plein ente eux ou à eux-même ou à un autre acte, quel que soit le nombre d'actes bucco-dentaires.
    *
-   * @param CActeCCAM $act The act
-   *
    * @return bool
    */
-  protected function checkRuleEG7($act) {
+  protected function checkRuleEG7() {
     if (!in_array(count($this->_ref_actes_ccam), array(2, 3))) {
       return false;
     }
@@ -1103,11 +1136,9 @@ class CCodageCCAM extends CMbObject {
    * * Nombre d'actes : 2 ou 3
    * * Cas d'utilisation : Actes effectués dans un temps différent et discontinu de la même journée.
    *
-   * @param CActeCCAM   $act          The act
-   *
    * @return bool
    */
-  protected static function checkRuleEH($act) {
+  protected static function checkRuleEH() {
     return false;
   }
 
@@ -1128,11 +1159,9 @@ class CCodageCCAM extends CMbObject {
    * * Cas d'utilisation : Les __actes de radiologie conventionnelle__ peuvent être associés entre eux (quel que soit
    * leur nombre), ou à d'autres actes.
    *
-   * @param CActeCCAM   $act          The act
-   *
    * @return bool
    */
-  protected function checkRuleEI($act) {
+  protected function checkRuleEI() {
     if (!in_array(count($this->_ref_actes_ccam), array(2, 3, 4, 5))) {
       return false;
     }

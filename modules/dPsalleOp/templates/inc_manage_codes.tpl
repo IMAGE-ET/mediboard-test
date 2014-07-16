@@ -6,6 +6,12 @@
     $V(oForm._selCode, code_ccam);
     $V(oForm._actes, actes_ids);
     ActesCCAM.remove(subject_id);
+  };
+
+  editCodage = function(codage_id) {
+    var url = new Url("salleOp", "ajax_edit_codages_ccam");
+    url.addParam("codage_id", codage_id);
+    url.requestModal();
   }
 </script>
 
@@ -48,7 +54,7 @@
               {{/if}}
               this.sView = "_codes_ccam";
             this.pop();
-            }
+            };
 
             var oForm = getForm("manageCodes");
             Main.add(function() {
@@ -70,6 +76,34 @@
           </button>
         </fieldset>
         </form>
+        <fieldset>
+          <legend>Récapitulatif du codage</legend>
+          <table class="form">
+            <tr>
+              <th class="category">Praticien</th>
+              <th class="category">Nombre d'actes</th>
+              <th class="category">Règle utilisée</th>
+              <th class="category">Verrouillage</th>
+            </tr>
+            {{foreach from=$subject->_ref_codages_ccam item=_codage}}
+            {{if $_codage->_ref_actes_ccam|@count}}
+            <tr>
+              <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_codage->_ref_praticien}}</td>
+              <td>{{$_codage->_ref_actes_ccam|@count}} acte(s)</td>
+              <td>
+                <button type="button" class="notext edit" style="float: right;" onclick="editCodage({{$_codage->_id}})">{{tr}}Edit{{/tr}}</button>
+                {{$_codage->association_rule}} ({{$_codage->association_mode}})
+              </td>
+              <td class="button"><button type="button" class="notext lock">{{tr}}Lock{{/tr}}</button></td>
+            </tr>
+            {{/if}}
+            {{foreachelse}}
+            <tr>
+              <td class="empty" colspan="10">{{tr}}CCodageCCAM-none{{/tr}}</td>
+            </tr>
+            {{/foreach}}
+          </table>
+        </fieldset>
       </td>
       {{if !$subject instanceof CConsultation}}
       <td class="halfPane">

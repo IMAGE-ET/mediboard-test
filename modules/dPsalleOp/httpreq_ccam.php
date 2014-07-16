@@ -43,6 +43,12 @@ if ($codable->_class == "COperation") {
   $codable->countExchanges();
 }
 
+$codable->loadRefsCodagesCCAM();
+foreach ($codable->_ref_codages_ccam as $_codage) {
+  $_codage->loadPraticien()->loadRefFunction();
+  $_codage->loadActesCCAM();
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("listAnesths"      , $listAnesths);

@@ -121,7 +121,10 @@ class CActeCCAM extends CActe {
     $props["rapport_exoneration"]      = "enum list|4|7|C|R";
 
     // Derived fields
-    $props["_rembex"]             = "bool";
+    $props["_rembex"]          = "bool";
+    $props["_tarif_base"]      = "currency";
+    $props["_tarif_sans_asso"] = "currency";
+    $props["_tarif"]           = "currency";
     
     return $props;
   }

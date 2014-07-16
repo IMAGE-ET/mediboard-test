@@ -12,7 +12,7 @@
 $module       = CValue::getOrSession("module", "dPsalleOp");
 $operation_id = CValue::getOrSession("operation_id", 0);
 
-$operation = new COperation;
+$operation = new COperation();
 $operation->load($operation_id);
 $operation->loadRefs();
 $operation->countExchanges();
@@ -26,6 +26,13 @@ $operation->getAssociationCodesActes();
 $operation->loadPossibleActes();
 $operation->_ref_plageop->loadRefsFwd();
 $operation->loadRefPraticien();
+
+// Chargement des règles de codage
+$operation->loadRefsCodagesCCAM();
+foreach ($operation->_ref_codages_ccam as $_codage) {
+  $_codage->loadPraticien()->loadRefFunction();
+  $_codage->loadActesCCAM();
+}
 
 // Chargement des praticiens
 $listAnesths = new CMediusers;
@@ -41,13 +48,14 @@ $liste_dents = reset(CDentCCAM::loadList());
 
 // Création du template
 $smarty = new CSmartyDP("modules/dPsalleOp");
-$smarty->assign("acte_ngap"  , $acte_ngap      );
-$smarty->assign("liste_dents", $liste_dents);
-$smarty->assign("subject"    , $operation      );
-$smarty->assign("listAnesths", $listAnesths    );
-$smarty->assign("listChirs"  , $listChirs      );
-$smarty->assign("module"     , $module      );
-$smarty->assign("m"          , $module      );
+
+$smarty->assign("acte_ngap"    , $acte_ngap);
+$smarty->assign("liste_dents"  , $liste_dents);
+$smarty->assign("subject"      , $operation);
+$smarty->assign("listAnesths"  , $listAnesths);
+$smarty->assign("listChirs"    , $listChirs);
+$smarty->assign("module"       , $module);
+$smarty->assign("m"            , $module);
 $smarty->assign("_is_dentiste" , $operation->_ref_chir->isDentiste());
 
 $smarty->display("inc_codage_actes.tpl");

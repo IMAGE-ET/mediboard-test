@@ -29,7 +29,7 @@ $IPP = "";
 $confirmCloture = CValue::get("confirmCloture", 0);
 
 switch ($object_class) {
-  case "COperation" :
+  case "COperation":
     $object = new COperation();
 
     // Chargement de l'opération et génération du document
@@ -45,7 +45,7 @@ switch ($object_class) {
       $IPP = $mbSejour->_ref_patient->_IPP;
     }
     break;
-  case "CSejour" :
+  case "CSejour":
     $object = new CSejour();
 
     // Chargement du séjour et génération du document
@@ -59,6 +59,8 @@ switch ($object_class) {
       $IPP = $object->_ref_patient->_IPP;
     }
     break;
+  default:
+    // Nothing to do
 }
 
 $object->countExchanges("pmsi", "evenementServeurActe");

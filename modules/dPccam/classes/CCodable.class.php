@@ -73,6 +73,8 @@ class CCodable extends CMbObject {
   public $_ref_actes;
   /** @var CActeCCAM[] */
   public $_ref_actes_ccam;
+  /** @var CCodageCCAM[] */
+  public $_ref_codages_ccam;
   /** @var CActeNGAP[] */
   public $_ref_actes_ngap;
   /** @var CFraisDivers[] */
@@ -298,6 +300,7 @@ class CCodable extends CMbObject {
     $backProps = parent::getBackProps();
     $backProps["actes_ngap"]    = "CActeNGAP object_id";
     $backProps["actes_ccam"]    = "CActeCCAM object_id";
+    $backProps["codages_ccam"]  = "CCodageCCAM codable_id";
     $backProps["actes_tarmed"]  = "CActeTarmed object_id";
     $backProps["actes_caisse"]  = "CActeCaisse object_id";
     $backProps["frais_divers"]  = "CFraisDivers object_id";
@@ -529,6 +532,18 @@ class CCodable extends CMbObject {
 
     $this->_tokens_ccam = implode("|", $this->_temp_ccam);
     return $this->_ref_actes_ccam;
+  }
+
+  /**
+   * Charge les éléments de codage CCAM
+   *
+   * @return CCodageCCAM[]
+   */
+  function loadRefsCodagesCCAM() {
+    if ($this->_ref_codages_ccam) {
+      return $this->_ref_codages_ccam;
+    }
+    return $this->_ref_codages_ccam = $this->loadBackRefs("codages_ccam");
   }
 
   /**
