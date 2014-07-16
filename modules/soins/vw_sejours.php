@@ -1,30 +1,28 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage soins
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id:$
+ *
+ * @package    Mediboard
+ * @subpackage dPcabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
-$service_id   = CValue::get("service_id");
-$praticien_id = CValue::get("praticien_id");
-$function_id  = CValue::get("function_id");
-$sejour_id    = CValue::get("sejour_id");
+$service_id       = CValue::get("service_id");
+$praticien_id     = CValue::get("praticien_id");
+$function_id      = CValue::get("function_id");
+$sejour_id        = CValue::get("sejour_id");
 $show_affectation = CValue::get("show_affectation", false);
 $only_non_checked = CValue::get("only_non_checked", 0);
-$print        = CValue::get("print", false);
-$_type_admission = CValue::getOrSession("_type_admission", "");
-$select_view = CValue::get("select_view", false);
-$refresh = CValue::get('refresh', false);
-$ecap = CValue::get('ecap', false);
-$date = CValue::get('date', CMbDT::date());
-$mode = CValue::get('mode', 'day');
-
-$lite_view = CValue::get("lite_view");
-
-
+$print            = CValue::get("print", false);
+$_type_admission  = CValue::getOrSession("_type_admission", "");
+$select_view      = CValue::get("select_view", false);
+$refresh          = CValue::get('refresh', false);
+$ecap             = CValue::get('ecap', false);
+$date             = CValue::get('date', CMbDT::date());
+$mode             = CValue::get('mode', 'day');
+$lite_view        = CValue::get("lite_view");
 
 // Mode Dossier de soins, chargement de la liste des service, praticiens, functions
 $services = array();
@@ -184,7 +182,7 @@ if (!isset($sejours)) {
       // Lignes de médicament
       $line = new CPrescriptionLineMedicament();
       $lines = $line->loadList($where_line, null, null, null, $ljoin_line);
-      
+      /* @var CPrescriptionLineMedicament[] $lines*/
       foreach ($lines as $_line) {
         $_line->loadRefPrescription();
         $_sejour = $_line->_ref_prescription->_ref_object;
@@ -262,6 +260,7 @@ if (!isset($sejours)) {
 
         CMbObject::massLoadFwdRef($affectations, "sejour_id");
 
+        /* @var CAffectation[] $affectations*/
         foreach($affectations as $_affectation){
           $_affectation->loadRefLit()->loadCompleteView();
           $_affectation->_view = $_affectation->_ref_lit->_view;
@@ -277,6 +276,7 @@ if (!isset($sejours)) {
   }
 }
 
+/* @var CSejour[] $sejours*/
 CMbObject::massLoadFwdRef($sejours, "patient_id");
 CMbObject::massLoadFwdRef($sejours, "praticien_id");
 CMbObject::massCountBackRefs($sejours, "tasks", array("realise" => " = '0'"), array(), "taches_non_realisees");
@@ -314,6 +314,7 @@ foreach ($sejours as $sejour) {
   $ljoin["sejour_task"] = "sejour_task.prescription_line_element_id = prescription_line_element.prescription_line_element_id";
   $where["prescription_id"] = " = '$prescription->_id'";
   $where["element_prescription.rdv"] = " = '1'";
+  $where["prescription_line_element.date_arret"] = " IS NULL";
   $where["active"] = " = '1'";
   $where[] = "sejour_task.sejour_task_id IS NULL";
   $where["child_id"] = " IS NULL";
@@ -363,6 +364,7 @@ CMbArray::removeValue("", $dossiers);
 $_counts_allergie    = CDossierMedical::massCountAllergies($dossiers_id);
 $_counts_antecedent  = CDossierMedical::massCountAntecedents($dossiers_id);
 
+/* @var CDossierMedical[] $dossiers*/
 foreach ($dossiers as $_dossier) {
   if ($print) {
     $_dossier->loadRefsAllergies();
@@ -386,7 +388,7 @@ $praticien->load($praticien_id);
 $_sejour = new CSejour();
 $_sejour->_type_admission = $_type_admission;
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 $smarty->assign("service"         , $service);
 $smarty->assign("service_id"      , $service_id);
 $smarty->assign("sejours"         , $sejours);
