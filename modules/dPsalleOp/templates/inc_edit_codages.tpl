@@ -43,13 +43,14 @@
       Règles d'association
     </th>
   </tr>
-  <tr>
-    {{foreach from=$codage->_possible_rules key=_rulename item=_rule}}
-      {{if $_rule}}
-        <td class="ok">{{$_rulename}}</td>
-        {{else}}
-        <td class="error">{{$_rulename}}</td>
-      {{/if}}
-    {{/foreach}}
-  </tr>
+  {{foreach from=$codage->_possible_rules key=_rulename item=_rule}}
+    <tr>
+      <td class="{{if $_rule}}ok{{else}}error{{/if}}">
+        {{$_rulename}}
+      </td>
+      <td class="greedyPane">
+        {{tr}}CActeCCAM-regle-association-{{$_rulename}}{{/tr}}
+      </td>
+    </tr>
+  {{/foreach}}
 </table>
