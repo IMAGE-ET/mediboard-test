@@ -12,5 +12,5 @@
  */
 
 $dPconfig["drawing"] = array(
-  "edit_svg" => 0
+  "edit_svg" => 1
 );

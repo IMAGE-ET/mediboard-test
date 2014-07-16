@@ -13,6 +13,10 @@
 
 CCanDo::checkAdmin();
 
+$cat = new CDrawingCategory();
+$cats = $cat->loadList(null, "name");
+
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("cats", $cats);
 $smarty->display("configure.tpl");
