@@ -109,7 +109,9 @@
   Main.add(function() {
     if (!DossierMedical.patient_id) {
       DossierMedical.sejour_id  = '{{$sejour_id}}';
-      DossierMedical._is_anesth = '{{$_is_anesth}}';
+      {{if isset($_is_anesth|smarty:nodefaults)}}
+        DossierMedical._is_anesth = '{{$_is_anesth}}';
+      {{/if}}
       DossierMedical.patient_id = '{{$patient->_id}}';
     }
     {{if $reload}}
