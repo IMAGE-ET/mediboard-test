@@ -219,6 +219,7 @@
                       this.sOnglet = onglet;
                       this.traitement_perso = true;
                       this.only_prescriptible_sf = 0;
+                      this.addForm = '{{$addform}}';
                       this.pop();
                     }
                   </script>
