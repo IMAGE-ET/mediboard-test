@@ -41,6 +41,7 @@ class CExchangeSource extends CMbObject {
   public $type_echange;
   public $active;
   public $loggable;
+  public $libelle;
   
   // Behaviour Fields
   public $_client;
@@ -63,13 +64,14 @@ class CExchangeSource extends CMbObject {
     $props = parent::getProps();
     $props["name"]           = "str notNull";
     $props["role"]           = "enum list|prod|qualif default|qualif notNull";
-    $props["host"]           = "text notNull";
+    $props["host"]           = "text notNull autocomplete";
     $props["user"]           = "str";
     $props["password"]       = "password show|0 loggable|0";
     $props["iv"]             = "str show|0 loggable|0";
     $props["type_echange"]   = "str protected";
     $props["active"]         = "bool default|1 notNull";
     $props["loggable"]       = "bool default|1 notNull";
+    $props["libelle"]        = "str";
     
     $props["_incompatible"]  = "bool";
     $props["_reachable"]     = "enum list|0|1|2 default|0";

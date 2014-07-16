@@ -19,7 +19,7 @@ class CSourceDicom extends CExchangeSource {
    * 
    * @var integer
    */
-  public $source_dicom_id = null;
+  public $dicom_source_id = null;
   
   /**
    * The port

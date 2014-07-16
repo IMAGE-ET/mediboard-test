@@ -127,6 +127,15 @@ class CSetupdicom extends CSetup {
                 MODIFY `presentation_contexts` TEXT;";
     $this->addQuery($query);
 
-    $this->mod_version = '0.4';
+    $this->makeRevision('0.4');
+
+    $query = "ALTER TABLE `dicom_source`
+                ADD `user` VARCHAR (255),
+                ADD `password` VARCHAR (50),
+                ADD `iv` VARCHAR (255),
+                ADD `libelle` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.5';
   }
 }

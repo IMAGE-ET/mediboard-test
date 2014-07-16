@@ -1329,7 +1329,14 @@ class CSetuphl7 extends CSetup {
 
     $this->addQuery($query);
 
-    $this->mod_version = "0.97";
+    $this->makeRevision("0.97");
+
+    $query = "ALTER TABLE `source_mllp`
+                ADD `libelle` VARCHAR (255);";
+
+    $this->addQuery($query);
+
+    $this->mod_version = "0.98";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

@@ -189,6 +189,15 @@ class CSetupftp extends CSetup {
                 ADD INDEX (`group_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.18";
+    $this->makeRevision("0.18");
+    $query = "ALTER TABLE `source_ftp`
+                ADD `libelle` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `source_sftp`
+                ADD `libelle` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.19";
   }
 }

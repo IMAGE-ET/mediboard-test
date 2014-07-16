@@ -1169,7 +1169,7 @@ class CSetupsystem extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("1.1.07");
-    $query = "CREATE TABLE `source_http` (
+    $query = "CREATE TABLE `v` (
       `source_http_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
       `name` VARCHAR (255) NOT NULL,
       `role` ENUM ('prod','qualif') NOT NULL DEFAULT 'qualif',
@@ -1755,7 +1755,21 @@ class CSetupsystem extends CSetup {
       ADD `handled_user_id` INT (11) UNSIGNED;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.65";
+    $this->makeRevision("1.1.65");
+
+    $query = "ALTER TABLE `source_smtp`
+        ADD `libelle` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `source_file_system`
+        ADD `libelle` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `source_http`
+        ADD `libelle` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.66";
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,

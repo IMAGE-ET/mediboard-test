@@ -13,17 +13,14 @@
  * Class CSourcePOP
  */
 class CSourcePOP extends CExchangeSource {
-
   /* KEY */
   public $source_pop_id;
 
   // DB Fields
-  public $host;
   public $port;
   public $auth_ssl;
   public $timeout; //seconds
   public $type;
-  public $libelle;
   public $is_private;
 
   public $last_update;
@@ -61,16 +58,15 @@ class CSourcePOP extends CExchangeSource {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["host"]         = "str autocomplete";
     $props["port"]         = "num default|25";
     $props["auth_ssl"]     = "enum list|None|SSL/TLS|STARTTLS";
     $props["password"]     = "password show|0";
     $props["timeout"]      = "num default|5 max|30";
     $props["type"]         = "enum list|pop3|imap";
-    $props["libelle"]      = "str notNull";
     $props["extension"]    = "str";
     $props["cron_update"]  = "bool default|1";
     $props["is_private"]   = "bool default|0";
+    $props["libelle"]      = "str notNull";
 
     $props["last_update"]  = "dateTime loggable|0";
     $props["object_id"]    = "ref notNull class|CMbObject meta|object_class";
