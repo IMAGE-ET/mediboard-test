@@ -225,6 +225,9 @@ abstract class CMbPath {
       case "spl" :
       case "rlb" :
         return "application/vnd.sante400";
+
+      case "svg":
+        return "image/svg+xml";
     }
   }
 
