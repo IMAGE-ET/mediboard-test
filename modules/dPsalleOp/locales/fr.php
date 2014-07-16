@@ -537,6 +537,7 @@ $locales['mod-salleOp-tab-ajax_edit_checklist'] = 'Vérification de checklist';
 $locales['mod-salleOp-tab-ajax_edit_codages_ccam'] = 'Règles de codage';
 $locales['mod-salleOp-tab-ajax_info_anapath'] = 'Information sur les prélèvements anapath';
 $locales['mod-salleOp-tab-ajax_lock_sortie'] = 'Validation de la sortie SSPI';
+$locales['module-dPsalleOp-court'] = 'Salle d\'op';
 $locales['module-dPsalleOp-long'] = 'Gestion des salles d\'intervention';
 $locales['pref-autosigne_sortie'] = 'Validation de la sortie SSPI sans mot de passe';
 $locales['pref-autosigne_sortie-desc'] = 'Auto-signer la sortie SSPI sans mot de passe (si anesthésiste)';
