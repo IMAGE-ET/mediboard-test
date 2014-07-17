@@ -391,6 +391,8 @@
 
         <li><a href="#suivi_clinique">{{tr}}soins.tab.synthese{{/tr}}</a></li>
 
+        <li><a href="#antecedents">{{tr}}soins.tab.antecedent_and_treatment{{/tr}}</a></li>
+
         <li>
           <a href="#constantes">{{tr}}soins.tab.surveillance{{/tr}}</a>
         </li>
@@ -419,8 +421,6 @@
         {{/if}}
 
         <li><a href="#doc-items">{{tr}}soins.tab.documents{{/tr}}</a></li>
-
-        <li><a href="#antecedents">{{tr}}soins.tab.antecedent_and_treatment{{/tr}}</a></li>
 
       </ul>
     </div>
