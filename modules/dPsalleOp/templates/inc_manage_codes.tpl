@@ -81,7 +81,7 @@
           <table class="form">
             <tr>
               <th class="category">Praticien</th>
-              <th class="category">Nombre d'actes</th>
+              <th class="category">Actes</th>
               <th class="category">Règle utilisée</th>
               <th class="category">Verrouillage</th>
             </tr>
@@ -89,12 +89,38 @@
             {{if $_codage->_ref_actes_ccam|@count}}
             <tr>
               <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_codage->_ref_praticien}}</td>
-              <td>{{$_codage->_ref_actes_ccam|@count}} acte(s)</td>
+              <td class="text">
+                {{foreach from=$_codage->_ref_actes_ccam item=_acte}}
+                  {{$_acte->code_acte}}({{$_acte->code_activite}}) :
+                  {{mb_value object=$_acte field = _tarif}}
+                  <br />
+                {{/foreach}}
+              </td>
               <td>
                 <button type="button" class="notext edit" style="float: right;" onclick="editCodage({{$_codage->_id}})">{{tr}}Edit{{/tr}}</button>
                 {{$_codage->association_rule}} ({{$_codage->association_mode}})
               </td>
-              <td class="button"><button type="button" class="notext lock">{{tr}}Lock{{/tr}}</button></td>
+              <td class="button">
+                <form name="formCodage-{{$_codage->_id}}" action="?" method="post" onsubmit="return checkForm(this)">
+                  <input type="hidden" name="m" value="ccam" />
+                  <input type="hidden" name="dosql" value="do_codageccam_aed" />
+                  <input type="hidden" name="del" value="0" />
+                  <input type="hidden" name="codage_ccam_id" value="{{$_codage->_id}}" />
+                  {{if $_codage->locked}}
+                    <input type="hidden" name="locked" value="0" />
+                    <button type="button" class="notext unlock" onclick="onSubmitFormAjax(this.form, {
+                      onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}}) })">
+                      {{tr}}Unlock{{/tr}}
+                    </button>
+                  {{else}}
+                    <input type="hidden" name="locked" value="1" />
+                    <button type="button" class="notext lock" onclick="onSubmitFormAjax(this.form, {
+                      onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}}) })">
+                      {{tr}}Lock{{/tr}}
+                    </button>
+                  {{/if}}
+                </form>
+              </td>
             </tr>
             {{/if}}
             {{foreachelse}}

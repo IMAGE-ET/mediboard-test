@@ -1,6 +1,6 @@
 <h1>Actes du Dr {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$codage->_ref_praticien}}</h1>
 
-<table class="tbl">
+<table class="tbl" style="min-width: 400px;">
   <tr>
     <th>Acte</th>
     <th>Activité</th>
@@ -37,7 +37,7 @@
   {{/foreach}}
 </table>
 
-<table class="tbl">
+<table class="tbl" style="min-width: 400px;">
   <tr>
     <th class="title" colspan="20">
       Règles d'association
@@ -48,7 +48,7 @@
       <td class="{{if $_rule}}ok{{else}}error{{/if}}">
         {{$_rulename}}
       </td>
-      <td class="greedyPane">
+      <td class="text greedyPane">
         {{tr}}CActeCCAM-regle-association-{{$_rulename}}{{/tr}}
       </td>
     </tr>

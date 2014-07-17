@@ -18,7 +18,7 @@ class CCodageCCAM extends CMbObject {
   /**
    * @var integer Primary key
    */
-  public $complement_ccam_id;
+  public $codage_ccam_id;
 
   public $association_rule;
   public $association_mode;
@@ -773,7 +773,6 @@ class CCodageCCAM extends CMbObject {
       return false;
     }
 
-    $ordered_acts_eg2 = $this->_ordered_acts;
     $nb_anapath = 0;
     foreach ($this->_ref_actes_ccam as $_act) {
       $chap = $_act->_ref_code_ccam->chapitres;

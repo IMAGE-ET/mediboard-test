@@ -32,6 +32,9 @@ $operation->loadRefsCodagesCCAM();
 foreach ($operation->_ref_codages_ccam as $_codage) {
   $_codage->loadPraticien()->loadRefFunction();
   $_codage->loadActesCCAM();
+  foreach ($_codage->_ref_actes_ccam as $_acte) {
+    $_acte->getTarif();
+  }
 }
 
 // Chargement des praticiens

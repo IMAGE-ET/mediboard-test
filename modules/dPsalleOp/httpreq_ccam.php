@@ -47,6 +47,9 @@ $codable->loadRefsCodagesCCAM();
 foreach ($codable->_ref_codages_ccam as $_codage) {
   $_codage->loadPraticien()->loadRefFunction();
   $_codage->loadActesCCAM();
+  foreach ($_codage->_ref_actes_ccam as $_acte) {
+    $_acte->getTarif();
+  }
 }
 
 // Création du template
