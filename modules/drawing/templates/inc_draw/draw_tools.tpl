@@ -62,81 +62,46 @@
   {{/if}}
 
 </fieldset>
+
 <hr/>
+
 <fieldset>
   <legend>Historique</legend>
   <button onclick="DrawObject.undo()" class="undo">Annuler le dernier ajout</button>
-  <button onclick="DrawObject.clearCanvas();" class="trash">Tout effacer</button>
+  <button onclick="DrawObject.clearCanvas();" class="cleanup">Tout effacer</button>
 </fieldset>
+
 <hr/>
-<fieldset>
-  <legend>Enregistrement du fichier</legend>
-  <form name="save_file_{{$draw->_id}}" method="post">
-    <input type="hidden" name="m" value="drawing" />
-    <input type="hidden" name="dosql" value="do_drawfile_aed"/>
-    <input type="hidden" name="svg_content" value=""/>
-    <input type="hidden" name="export" value="0"/>
-    {{mb_field object=$draw field=author_id hidden=1}}
-    {{mb_field object=$draw field=file_type hidden=1}}
-    {{mb_field object=$draw field=object_class hidden=1}}
-    {{mb_field object=$draw field=object_id hidden=1}}
-    {{mb_key object=$draw}}
-    <table class="form">
-      <tr>
-        <th class="narrow">{{mb_label object=$draw field=author_id}}</th>
-        <td>{{$draw->_ref_author}}</td>
-      </tr>
-      <tr>
-        <th>{{mb_label object=$draw field=file_name}}</th>
-        <td>{{mb_field object=$draw field=file_name style="width:10em;"}}</td>
-      </tr>
 
-      <tr>
-        <td class="button" colspan="2">
-          <button class="save" onclick="return saveDraw(this.form, 0)">{{tr}}Save{{/tr}}</button>
-          {{if $draw->_id}}
-            <button class="trash" type="button" onclick="return confirmDeletion(this.form, {ajax:1}, {onComplete:Control.Modal.close});">{{tr}}Delete{{/tr}}</button>
-          {{/if}}
-        </td>
-      </tr>
-    </table>
-  </form>
-</fieldset>
+<form method="get" name="titi" >
+  <table class="form">
+    <tr>
+      <th>Texte</th>
+      <td>
+        <textarea id="content_text_cv" name="content_text_cv"></textarea>
+      </td>
+    </tr>
+    <tr>
+      <th>Couleur</th>
+      <td>
+        <input type="color" value="#000000" name="color_text_cv" id="color_text_cv"/>
+      </td>
+    </tr>
+    <tr>
+      <th>{{if $app->user_prefs.drawing_advanced_mode}}
+          Ombre<br/>du texte {{/if}}
 
-<fieldset>
-  <legend>Export du fichier</legend>
-  <form name="export_file_{{$draw->_id}}" method="post">
-    <input type="hidden" name="m" value="drawing" />
-    <input type="hidden" name="dosql" value="do_drawfile_aed"/>
-    <input type="hidden" name="svg_content" value=""/>
-    <input type="hidden" name="export" value="1"/>
-    {{mb_field object=$draw field=author_id hidden=1}}
-    {{mb_field object=$draw field=file_type hidden=1}}
-    {{mb_field object=$draw field=object_class hidden=1}}
-    {{mb_field object=$draw field=object_id hidden=1}}
-    {{mb_key object=$draw}}
-
-    <table class="form">
-      <tr>
-        <th class="narrow">{{mb_label object=$draw field=author_id}}</th>
-        <td>{{$draw->_ref_author}}</td>
-      </tr>
-      <tr>
-        <th>{{mb_label object=$draw field=file_name}}</th>
-        <td>{{mb_field object=$draw field=file_name style="width:10em;"}}</td>
-      </tr>
-      <tr>
-        <th>Catégorie</th>
-        <td>
-          <select name="file_category_id">
-            <option value="">{{tr}}All{{/tr}}</option>
-            {{foreach from=$file_categories item=_cat}}
-              <option value="{{$_cat->_id}}" {{if $draw->file_category_id == $_cat->_id}}selected="selected" {{/if}}>{{$_cat}}</option>
-            {{/foreach}}
-          </select>
-        </td>
-      </tr>
-    </table>
-    <button class="upload" onclick="return saveDraw(this.form, 1)">{{tr}}Export{{/tr}} {{tr}}and{{/tr}} {{tr}}Close{{/tr}}</button>
-  </form>
-</fieldset>
+      </th>
+      <td>
+        <input type="text" value="#ffffff 0 0 10px" name="bgcolor_text_cv" id="bgcolor_text_cv"   {{if !$app->user_prefs.drawing_advanced_mode}}
+style="display: none;" {{/if}}            />
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" class="button">
+        <button type="button" onclick="DrawObject.addEditText( $V('content_text_cv'), $V('color_text_cv'), $V('bgcolor_text_cv') );">Valider</button>
+        <button type="button" onclick="Control.Modal.close();">Annuler</button>
+      </td>
+    </tr>
+  </table>
+</form>

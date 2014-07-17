@@ -20,10 +20,15 @@ DrawObject = {
     DrawObject.canvas.isDrawingMode = true;
 
     // object selected
-    /*DrawObject.canvas.on('object:selected', function(tata) {
-      console.log('selected');
+    DrawObject.canvas.on('object:selected', function(obj) {
+      if (obj.target.type == "text") {
+        $V('content_text_cv', obj.target.text, true);
+        $V('color_text_cv', obj.target.fill, true);
+        $V('bgcolor_text_cv', obj.target.shadow, true);
+      }
     });
 
+    /*
     // no selection
     DrawObject.canvas.on('selection:cleared', function(tata) {
       console.log('unselected');
@@ -61,6 +66,36 @@ DrawObject = {
       var text = button.innerText;
     }
     return DrawObject.canvas.isDrawingMode;
+  },
+
+  addEditText : function(str, col, ctr) {
+    var text = str;
+    var color = col || "#000000";
+    var color_2 = ctr;
+    if (!text || !color) {
+      return;
+    }
+    var active = DrawObject.canvas.getActiveObject();
+    if (active && active.type == "text") {
+      console.log(active);
+      active.set({
+        text: text,
+        fill : color,
+        shadow: color_2
+      });
+      DrawObject.refresh();
+    }
+    //add text
+    else {
+      var canvas_text = new fabric.Text(text, {});
+      canvas_text.set({
+        left: (DrawObject.canvas.width-canvas_text.width)/2,
+        top: (DrawObject.canvas.height-canvas_text.height)/2,
+        fill : col,
+        shadow: color_2
+      });
+      DrawObject.canvas.add(canvas_text);
+    }
   },
 
   changeDrawWidth : function(value) {
@@ -262,12 +297,13 @@ DrawObject = {
           width: width_sup_height ? DrawObject.canvas.width : DrawObject.canvas.height*ratio,
           height: width_sup_height ? DrawObject.canvas.width/ratio : DrawObject.canvas.height
         });
-        if (img.width < DrawObject.canvas.width) {
-          img.set({
-            left: (DrawObject.canvas.width - img.width)/2
-          });
-        }
       }
+
+      // positionning
+      img.set({
+        left: (DrawObject.canvas.width - img.width)/2,
+        top: (DrawObject.canvas.height - img.height)/2
+      });
 
       DrawObject.canvas.add(img);
       DrawObject.canvas.renderAll.bind(DrawObject.canvas);

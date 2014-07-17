@@ -22,7 +22,9 @@
 </script>
 
 {{if !$gallery}}
-  <button class="new" onclick="DrawingItem.editModal(null, null)">{{tr}}CDrawingItem.new{{/tr}}</button>
+  <button class="new" onclick="DrawingItem.editModal()">{{tr}}CDrawingItem.new{{/tr}}</button>
+  <button class="new" onclick="DrawingItem.editModal(null, null, 'CConsultation-29968')">{{tr}}CDrawingItem.new{{/tr}}</button>
+
   <a href="?m={{$m}}&tab={{$tab}}&gallery=1" class="button thumbnails">{{tr}}vw_list_gallery{{/tr}}</a>
 
   <table class="main">

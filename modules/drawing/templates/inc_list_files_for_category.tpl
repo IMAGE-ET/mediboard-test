@@ -11,7 +11,7 @@
 
 <!-- use the "selectThisElement" function -->
 
-<ul>
+<ul class="cfile_to_select_list">
   {{foreach from=$category->_ref_files item=_file}}
     <li>
       <a href="#"

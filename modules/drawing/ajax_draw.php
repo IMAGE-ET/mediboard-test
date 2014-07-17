@@ -32,6 +32,11 @@ if ($context_guid) {
   $object= CMbObject::loadFromGuid($context_guid);
   if ($object->_id) {
     $object->loadRefsFiles();
+    foreach ($object->_ref_files as $file_id => $_file) {
+      if ( (strpos($_file->file_type, "image/") === false) || ($_file->file_type == "image/fabricjs") ) {
+        unset($object->_ref_files[$file_id]);
+      }
+    }
   }
 }
 
@@ -39,9 +44,8 @@ if ($context_guid) {
 if (!$draw->_id) {
 
   // author = self
-  $mediuser = CMediusers::get();
-  $draw->author_id = $mediuser->_id;
-  $draw->_ref_author = $mediuser;
+  $draw->author_id = $user->_id;
+  $draw->_ref_author = $user;
   $draw->file_type = "image/svg+xml";
   $draw->file_name  = "Sans titre";
 

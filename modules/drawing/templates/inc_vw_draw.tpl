@@ -13,19 +13,19 @@
 {{mb_script module="mediusers" script="color_selector" ajax=1}}
 
 <style>
-  #target_files img {
+  .cfile_to_select_list img {
     max-width: 150px;
   }
 
-  #target_files {
+  .cfile_to_select_list {
     text-align: center;
   }
 
-  #target_files li {
+  .cfile_to_select_list li {
     display: inline-block;
     list-style: none;
     padding:0;
-    margin: 0;
+    margin: 5px 0;
   }
 
   fieldset.active{
@@ -69,13 +69,13 @@
     }
   };
 
+  canvas_text = function() {
+    DrawObject.addEditText('modal_text_cv');
+  };
+
   colorSelect = function(value) {
     DrawObject.changeDrawColor(value);
     $('current_color').setStyle({backgroundColor : value});
-  };
-
-  debug = function() {
-    console.log(DrawObject.getSvgStr());
   };
 
   selectThisElement = function(element) {
@@ -107,19 +107,14 @@
     }
 
     if (key == 46) { // suppr
-      ev.preventDefault();
+      //ev.preventDefault();
       DrawObject.removeActiveObject();
       return false;
     }
 
-    /*
-    Later
     if (key == 65) { // a = annuler
-      ev.preventDefault();
-      DrawObject.undo();
-      return false;
     }
-    */
+
     return false;
   };
 
@@ -135,10 +130,10 @@
     var tabs = Control.Tabs.create('tabs_draw', false);
 
     // right click to toggle modes
-    document.observe('contextmenu', rightclicEvent);
+    //document.observe('contextmenu', rightclicEvent);
 
     // keyboard down
-    document.observe('keydown', keyBoardEvent);
+    //document.observe('keydown', keyBoardEvent);
 
     // init
     DrawObject.init('canvas');
@@ -160,16 +155,13 @@
       </canvas>
     </td>
     <td style="text-align: center;">
-      {{if $draw->_id}}Modification{{else}}Création{{/if}}
+      {{if $draw->_id}}Modification{{else}}Création{{/if}} (lié à {{$draw->_ref_object}})
       <ul class="control_tabs" id="tabs_draw">
         <li><a href="#draw_tools"><img src="modules/drawing/images/icon.png" alt="Dessin" style="width: 16px" /></a></li>
         <li><a href="#notes"><img src="style/mediboard/images/buttons/comment.png" alt="{{tr}}Help{{/tr}}" /></a></li>
         <li><a href="#ressources"><img src="modules/dPfiles/images/icon.png" alt="Fichiers" style="width: 16px" /></a></li>
         <li><a href="#draw_help"><img src="style/mediboard/images/buttons/help.png" alt="{{tr}}Help{{/tr}}" /></a></li>
-
-        {{if $admin}}
-          <li><a href="#debug_canvas">Debug</a></li>
-        {{/if}}
+        <li><a href="#save"><img src="style/mediboard/images/buttons/save.png" alt="{{tr}}Save{{/tr}}" /></a></li>
       </ul>
       <div id="draw_tools">
         {{mb_include module=drawing template=inc_draw/draw_tools}}
@@ -177,39 +169,13 @@
 
       <div id="notes">
         {{foreach from=$draw->_ref_notes item=_note}}
-
+          {{$_note}}
         {{/foreach}}
       </div>
 
       <div id="ressources" style="height: 500px; overflow-y: auto; display: none;">
-        {{if $object}}
-          <h2>Contexte</h2>
-          {{foreach from=$object->_ref_files item=_file}}
-            <img src="?m=files&a=fileviewer&file_id={{$_file->_id}}&phpThumb=1" alt=""/>
-          {{foreachelse}}
-            {{tr}}CFile.none{{/tr}}
-          {{/foreach}}
-        {{/if}}
-        <h2>Ressources</h2>
-        <form method="get" name="filter_files_draw" onsubmit="return onSubmitFormAjax(this, null, 'target_files')">
-          <input type="hidden" name="m" value="drawing"/>
-          <input type="hidden" name="a" value="ajax_list_files_for_category"/>
-          <select name="category_id" style="width:15em;" onchange="this.form.onsubmit();">
-            <option value="">&mdash; {{tr}}Select{{/tr}}</option>
-            {{foreach from=$categories item=_cat}}
-              <option value="{{$_cat->_id}}">{{$_cat}} ({{$_cat->_nb_files}})</option>
-            {{/foreach}}
-          </select>
-        </form>
-        <div id="target_files">
-        </div>
+        {{mb_include module=drawing template=inc_draw/draw_ressources}}
       </div>
-
-      {{if $admin}}
-        <div id="debug_canvas" style="display: none;">
-          <button class="" onclick="debug();">Debug</button>
-        </div>
-      {{/if}}
 
       <div id="draw_help" style="display: none;">
         <h2>Raccourcis clavier</h2>
@@ -228,8 +194,10 @@
           </tr>
         </table>
       </div>
+
+      <div id="save" style="display: none">
+        {{mb_include module=drawing template=inc_draw/draw_save}}
+      </div>
     </td>
   </tr>
 </table>
-
-{{* lets work *}}
