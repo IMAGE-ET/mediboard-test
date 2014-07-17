@@ -262,6 +262,11 @@ DrawObject = {
           width: width_sup_height ? DrawObject.canvas.width : DrawObject.canvas.height*ratio,
           height: width_sup_height ? DrawObject.canvas.width/ratio : DrawObject.canvas.height
         });
+        if (img.width < DrawObject.canvas.width) {
+          img.set({
+            left: (DrawObject.canvas.width - img.width)/2
+          });
+        }
       }
 
       DrawObject.canvas.add(img);

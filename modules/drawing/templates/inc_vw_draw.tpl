@@ -14,10 +14,15 @@
 
 <style>
   #target_files img {
-    width: 150px;
+    max-width: 150px;
+  }
+
+  #target_files {
+    text-align: center;
   }
 
   #target_files li {
+    display: inline-block;
     list-style: none;
     padding:0;
     margin: 0;

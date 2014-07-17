@@ -46,7 +46,7 @@
               <input type="hidden" name="del" value="1"/>
               {{mb_class object=$_file}}
               {{mb_key object=$_file}}
-              <button style="position: absolute; top:0; left:0;" class="trash" onclick="confirmDeletion(this.form, {ajax:true}, {onComplete: reloadPage})"></button>
+              <button style="position: absolute; top:0; left:0;" class="trash" type="button" onclick="confirmDeletion(this.form, {ajax:true}, {onComplete: reloadPage})"></button>
             </form>
             <span onmouseover="ObjectTooltip.createEx(this, '{{$_file->_guid}}');">
               <img src="?m=files&amp;a=fileviewer&amp;file_id={{$_file->_id}}&amp;phpThumb=1" alt=""/>
