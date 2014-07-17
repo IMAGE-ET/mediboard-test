@@ -27,7 +27,7 @@ $ljoin        = CValue::get("ljoin", array());
 $object = new CMediusers();
 $user = CMediusers::get();
 
-$use_edit = CAppUI::pref("useEditAutocompleteUsers");
+$use_edit           = CAppUI::pref("useEditAutocompleteUsers");
 if (!$edit && $use_edit) {
   $edit = 1;
 }
@@ -38,9 +38,14 @@ $permType = $edit ?
   PERM_READ;
 
 // Récupération de la liste des utilisateurs
-$listUsers = $praticiens ?
-  $user->loadPraticiens($permType, null, $keywords) :
-  $user->loadUsers($permType, null, $keywords);
+if ($praticiens) {
+  $listUsers = CAppUI::pref("pratOnlyForConsult") ?
+    $user->loadPraticiens($permType, null, $keywords) :
+    $user->loadProfessionnelDeSante($permType, null, $keywords);
+}
+else {
+  $listUsers = $user->loadUsers($permType, null, $keywords);
+}
 
 if ($compta) {
   $listUsersCompta = CConsultation::loadPraticiensCompta();
