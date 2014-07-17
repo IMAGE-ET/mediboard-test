@@ -22,12 +22,46 @@
 <script>
   reloadPage = function() {
     document.location.reload();
-  }
+  };
+
+  Main.add(function() {
+    $$("#cat_drawing td.droppable").each(function(td) {
+      console.log(td);
+      Droppables.add(td, {
+        onDrop: function(from, to, event) {
+          Event.stop(event);
+          console.log(to);
+          console.log(from);
+          var file_id = from.get("file_id");
+          var target_guid = to.get("cat_guid");
+          if (target_guid && file_id) {
+            var url = new Url("files","controllers/do_move_file");
+            url.addParam("object_id", file_id);
+            url.addParam("object_class", "CFile");
+            url.addParam("destination_guid", target_guid );
+            url.requestUpdate("systemMsg", function() {
+              document.location.reload();
+            });
+          }
+        },
+        accept: 'draggable',
+        hoverclass:'dropover'
+      });
+    });
+
+    $$("#cat_drawing div.draggable").each(function(a) {
+      new Draggable(a, {
+        onEnd: function(element, event) {
+          Event.stop(event);
+        },
+        ghosting: true});
+    });
+  });
 </script>
 
 <button class="new" type="button" onclick="DrawingCategory.editModal('', reloadPage);">{{tr}}CDrawingCategory.new{{/tr}}</button>
 
-<table class="tbl">
+<table class="tbl" id="cat_drawing">
   {{foreach from=$categories item=_cat}}
     <tr>
       <th class="title" style="text-align: left;">
@@ -37,9 +71,9 @@
       </th>
     </tr>
     <tr>
-      <td class="droppable drawing_file_list {{if !$_cat->_ref_files|@count}}empty{{/if}}" style="text-align: center;">
+      <td class="droppable drawing_file_list {{if !$_cat->_ref_files|@count}}empty{{/if}}" data-cat_guid="{{$_cat->_guid}}" style="text-align: center;">
         {{foreach from=$_cat->_ref_files item=_file}}
-          <div style="position: relative; display: inline-block">
+          <div style="position: relative; display: inline-block" class="draggable" data-file_id="{{$_file->_id}}">
             <form method="post" name="delete-{{$_file->_guid}}">
               <input type="hidden" name="m" value="files" />
               <input type="hidden" name="dosql" value="do_file_aed" />
