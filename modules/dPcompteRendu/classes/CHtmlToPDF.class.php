@@ -135,7 +135,6 @@ class CHtmlToPDF {
       header("Content-disposition: inline; filename=\"".$file->file_name."\"");
 
       echo $pdf_content;
-      return null;
     }
     
     return $pdf_content;

@@ -84,7 +84,7 @@ class CSourceFTP extends CExchangeSource {
     }
 
     if ($ftp->connect()) {
-      $ftp->sendContent($this->_data, "$destination_basename.$this->fileextension");
+      $ftp->sendContent($this->_data, $destination_basename.($this->fileextension ? ".$this->fileextension" : ""));
       if ($this->fileextension_write_end) {
         $ftp->sendContent($this->_data, "$destination_basename.$this->fileextension_write_end");
       }
