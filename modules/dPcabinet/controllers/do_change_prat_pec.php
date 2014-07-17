@@ -78,11 +78,9 @@ if ($msg = $consult->store()) {
   CAppUI::setMsg($msg, UI_MSG_ERROR);
 }
 
-$vw_tab = CAppUI::pref("new_consultation") ? "vw_consultation" : "edit_consultation";
-
 if ($current_m == "dPurgences") {
-  CAppUI::redirect("m=dPurgences&tab=$vw_tab&selConsult=$consult->_id&ajax=$ajax");
+  CAppUI::redirect("m=dPurgences&tab=edit_consultation&selConsult=$consult->_id&ajax=$ajax");
 }
 else {
-  CAppUI::redirect("m=dPcabinet&tab=$vw_tab&selConsult=$consult->_id&ajax=$ajax");
+  CAppUI::redirect("m=dPcabinet&tab=edit_consultation&selConsult=$consult->_id&ajax=$ajax");
 }

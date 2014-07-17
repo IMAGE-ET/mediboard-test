@@ -111,7 +111,7 @@ $current_date = ($date != $today) ? $today : null;
 $smarty = new CSmartyDP();
 
 $smarty->assign("boardItem", $boardItem);
-$smarty->assign("tab"      , CAppUI::pref("new_consultation") ? "vw_consultation" : "edit_consultation");
+$smarty->assign("tab"      , "edit_consultation");
 $smarty->assign("board"    , $board);
 $smarty->assign("date"     , $date);
 $smarty->assign("hour"     , CMbDT::time());

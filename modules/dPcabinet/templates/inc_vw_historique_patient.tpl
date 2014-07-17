@@ -15,12 +15,7 @@
       {{if $_consult->_ref_chir->_ref_function->group_id == $g || $conf.dPpatients.CPatient.multi_group == "full"}}
         <tr>
           <td {{if $_consult->annule == 1}}class="cancelled"{{/if}}>
-            <a
-               {{if $app->user_prefs.new_consultation}}
-                 href="?m=dPcabinet&tab=vw_consultation&selConsult={{$_consult->_id}}"
-               {{else}}
-                 href="?m=dPcabinet&tab=edit_consultation&selConsult={{$_consult->_id}}"
-               {{/if}}
+            <a href="?m=dPcabinet&tab=edit_consultation&selConsult={{$_consult->_id}}"
                onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
               le {{$_consult->_datetime|date_format:$conf.date}}
             </a>

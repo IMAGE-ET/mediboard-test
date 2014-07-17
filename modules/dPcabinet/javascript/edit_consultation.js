@@ -44,7 +44,7 @@ Consultation = {
   },
   
   edit: function(consult_id) {
-    var url = new Url("dPcabinet", Preferences.new_consultation == "1" ? "vw_consultation" : "edit_consultation", "tab");
+    var url = new Url("dPcabinet", "edit_consultation", "tab");
     url.addParam("selConsult", consult_id);
     url.redirect();
   },

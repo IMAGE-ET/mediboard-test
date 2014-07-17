@@ -36,11 +36,7 @@
           praticien_id=$consult->_ref_plageconsult->chir_id}}
       </div>
     </td>
-    <td class="text" id="consultAnesth">
-      {{if !$app->user_prefs.new_consultation || $app->user_prefs.DEFMODULE == "dPcabinet-edit_consultation"}}
-        {{mb_include module=cabinet template=inc_consult_anesth/interventions}}
-      {{/if}}
-    </td>
+    <td class="text" id="consultAnesth"></td>
     <td>
       {{mb_include module=cabinet template=inc_patient_history}}
     </td>

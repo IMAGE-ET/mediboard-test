@@ -197,11 +197,7 @@ toggleCancelledAnesth = function(list) {
 <form name="editDiagAnesthFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm(this);">
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="m" value="dPpatients" />
-  {{if $app->user_prefs.new_consultation}}
-    <input type="hidden" name="tab" value="vw_consultation" />
-  {{else}}
-    <input type="hidden" name="tab" value="edit_consultation" />
-  {{/if}}
+  <input type="hidden" name="tab" value="edit_consultation" />
   <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
   <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
   <input type="hidden" name="object_class" value="CSejour" />

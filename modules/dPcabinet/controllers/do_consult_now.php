@@ -174,6 +174,5 @@ if ($current_m = CValue::post("_m_redirect")) {
 }
 else {
   $current_m = ($sejour->type == "urg") ? "dPurgences" : "dPcabinet";
-  $vw_tab = CAppUI::pref("new_consultation") ? "vw_consultation" : "edit_consultation";
-  CAppUI::redirect("m=$current_m&tab=$vw_tab&selConsult=$consult->consultation_id&chirSel=$chir->user_id");
+  CAppUI::redirect("m=$current_m&tab=edit_consultation&selConsult=$consult->consultation_id&chirSel=$chir->user_id");
 }

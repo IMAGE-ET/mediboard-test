@@ -3,7 +3,7 @@
 Consultation = {
   edit: function(consult_id, fragment) {
     new Url().
-      setModuleTab('cabinet', Preferences.new_consultation == "1" ? 'vw_consultation' : 'edit_consultation').
+      setModuleTab('cabinet', 'edit_consultation').
       addParam('selConsult', consult_id).
       setFragment(fragment).
       redirectOpener();

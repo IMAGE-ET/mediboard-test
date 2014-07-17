@@ -88,11 +88,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         <tbody class="consEffect" id="cons{{$curr_consult->consultation_id}}">
           <tr>
             <td colspan="2">
-              {{if $app->user_prefs.new_consultation}}
-                <a href="?m=dPcabinet&tab=vw_consultation&selConsult={{$curr_consult->consultation_id}}">
-              {{else}}
-                <a href="?m=dPcabinet&tab=edit_consultation&selConsult={{$curr_consult->consultation_id}}">
-              {{/if}}
+              <a href="?m=dPcabinet&tab=edit_consultation&selConsult={{$curr_consult->consultation_id}}">
                 Voir la consultation
               </a>
             </td>

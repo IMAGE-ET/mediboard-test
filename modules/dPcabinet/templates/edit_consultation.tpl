@@ -37,6 +37,6 @@
 <table class="main">
   <tr>
     <td id="listConsult" style="width: 240px;"></td>
-    <td>{{mb_include module=cabinet template=inc_new_full_consult}}</td>
+    <td>{{mb_include module=cabinet template=inc_full_consult}}</td>
   </tr>
 </table>

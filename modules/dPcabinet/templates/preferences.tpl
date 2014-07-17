@@ -32,7 +32,6 @@
 {{mb_include template=inc_pref spec=bool var=viewAutreResult}}
 {{mb_include template=inc_pref spec=bool var=use_acte_date_now}}
 {{mb_include template=inc_pref spec=bool var=multi_popups_resume}}
-{{mb_include template=inc_pref spec=bool var=new_consultation}}
 <tr><th class="category" colspan="6">Planning</th></tr>
 {{mb_include template=inc_pref spec=bool var=allow_plage_holiday}}
 {{mb_include template=inc_pref spec=bool var=new_semainier}}

@@ -4,7 +4,7 @@
 
 <script>
   reloadDossierAnesth = function(dossier_anesth_id) {
-    var url = new Url("cabinet", Preferences.new_consultation == "1" ? "vw_consultation" : "edit_consultation", "tab");
+    var url = new Url("cabinet", "edit_consultation", "tab");
     url.addParam("selConsult", "{{$consult->_id}}");
     url.addParam("dossier_anesth_id", dossier_anesth_id);
     url.redirect();
