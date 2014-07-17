@@ -1169,7 +1169,7 @@ class CSetupsystem extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("1.1.07");
-    $query = "CREATE TABLE `v` (
+    $query = "CREATE TABLE `source_http` (
       `source_http_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
       `name` VARCHAR (255) NOT NULL,
       `role` ENUM ('prod','qualif') NOT NULL DEFAULT 'qualif',
