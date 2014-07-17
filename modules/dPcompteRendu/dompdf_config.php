@@ -11,8 +11,7 @@
  * @link     http://www.mediboard.org
  */
 
-
-ini_set("memory_limit", "256M");
+CApp::setMemoryLimit("256M");
 
 // Le type de @media accepté par DOMPDF  
 define("DOMPDF_DEFAULT_MEDIA_TYPE", "print");

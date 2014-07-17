@@ -1769,7 +1769,12 @@ class CSetupsystem extends CSetup {
         ADD `libelle` VARCHAR (255);";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.66";
+    $this->makeRevision("1.1.66");
+    $query = "ALTER TABLE `view_sender` 
+                ADD `multipart` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.67";
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,

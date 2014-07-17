@@ -21,6 +21,11 @@
       <th class="narrow">{{mb_label object=$sender field=name}}</th>
       <td>{{mb_field object=$sender field=name}}</td>
     </tr>
+
+    <tr>
+      <th>{{mb_label object=$sender field=active}}</th>
+      <td>{{mb_field object=$sender field=active}}</td>
+    </tr>
     
     <tr>
       <th>{{mb_label object=$sender field=description}}</th>
@@ -34,6 +39,11 @@
         <button class="add" type="button" onclick="ViewSender.urlToParams(this);">URL</button>
       </th>
       <td>{{mb_field object=$sender field=params}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$sender field=multipart}}</th>
+      <td>{{mb_field object=$sender field=multipart}}</td>
     </tr>
     
     <tr>
@@ -49,11 +59,6 @@
     <tr>
       <th>{{mb_label object=$sender field=every}}</th>
       <td>{{mb_field object=$sender field=every}}</td>
-    </tr>
-
-    <tr>
-      <th>{{mb_label object=$sender field=active}}</th>
-      <td>{{mb_field object=$sender field=active}}</td>
     </tr>
     
     <tr>

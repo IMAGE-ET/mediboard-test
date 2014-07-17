@@ -20,6 +20,11 @@
       <th>{{mb_label object=$sender_source field=name}}</th>
       <td>{{mb_field object=$sender_source field=name}}</td>
     </tr>
+
+    <tr>
+      <th>{{mb_label object=$sender_source field=actif}}</th>
+      <td>{{mb_field object=$sender_source field=actif}}</td>
+    </tr>
     
     <tr>
       <th>{{mb_label object=$sender_source field=libelle}}</th>
@@ -29,11 +34,6 @@
     <tr>
       <th>{{mb_label object=$sender_source field=group_id}}</th>
       <td>{{mb_field object=$sender_source field=group_id form="Edit-`$sender_source->_guid`" autocomplete="true,1,50,true,true"}}</td>
-    </tr>
-    
-    <tr>
-      <th>{{mb_label object=$sender_source field=actif}}</th>
-      <td>{{mb_field object=$sender_source field=actif}}</td>
     </tr>
     
     <tr>

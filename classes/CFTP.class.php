@@ -8,7 +8,21 @@
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @version    $Revision$
  */
- 
+
+/**
+ * Class CFTP
+ * 
+ * @method init
+ * @method connect
+ * @method close
+ * @method sendFile
+ * @method sendContent
+ * @method getFile
+ * @method delFile
+ * @method getSize
+ * @method createDirectory
+ * @method getListFiles
+ */
 class CFTP {
   public $hostname;
   public $username;

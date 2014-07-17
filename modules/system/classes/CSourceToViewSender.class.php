@@ -25,10 +25,15 @@ class CSourceToViewSender extends CMbObject {
   // Form fields
   public $_last_age;
 
-  // Object references
+  /** @var CViewSenderSource */
   public $_ref_source;
+  
+  /** @var CViewSender */
   public $_ref_sender;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "source_to_view_sender";
@@ -37,6 +42,9 @@ class CSourceToViewSender extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["sender_id"]     = "ref class|CViewSender notNull autocomplete|name";

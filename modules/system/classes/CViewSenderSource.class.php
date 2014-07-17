@@ -26,12 +26,21 @@ class CViewSenderSource extends CMbObject {
   
   // Form fields
   public $_type_echange;
+
+  /** @var CSourceFTP */
   public $_ref_source_ftp;
+  
+  /** @var CGroups */
+  public $_ref_group;
+  
   public $_reachable;
   
-  // Distant refs
+  /** @var CSourceToViewSender[] */
   public $_ref_senders;
-      
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "view_sender_source";
@@ -40,6 +49,9 @@ class CViewSenderSource extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["name"]     = "str notNull";
@@ -51,13 +63,19 @@ class CViewSenderSource extends CMbObject {
     $props["_reachable"] = "bool";
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["senders_link"] = "CSourceToViewSender source_id";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     
