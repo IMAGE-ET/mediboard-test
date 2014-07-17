@@ -135,12 +135,12 @@
                 </button>
 
                 <!-- Liste des fichiers -->
-                <button type="button" class="search" onclick="FTP.getFiles('{{$source->name}}');"
+                <button type="button" class="list" onclick="FTP.getFiles('{{$source->name}}');"
                         {{if !$source->_id}}disabled{{/if}}>
                   {{tr}}utilities-source-ftp-getFiles{{/tr}}
                 </button>
 
-                <button type="button" class="search" onclick="ExchangeSource.manageFiles('{{$source->_guid}}');"
+                <button type="button" class="lookup" onclick="ExchangeSource.manageFiles('{{$source->_guid}}');"
                         {{if !$source->_id}}disabled{{/if}}>
                   {{tr}}utilities-source-ftp-manageFiles{{/tr}}
                 </button>
