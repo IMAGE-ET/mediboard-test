@@ -43,8 +43,14 @@
                 {{if $source->_id}}
                   <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
                   <button class="trash" type="button" onclick="confirmDeletion(this.form,
-                  {ajax: 1, typeName: '', objName: '{{$source->_view}}'},
-                  {onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}')})">
+                  { ajax: 1, typeName: '', objName: '{{$source->_view}}'},
+                  { onComplete: (function() {
+                    if (this.up('.modal')) {
+                      Control.Modal.close();
+                    } else {
+                      ExchangeSource.refreshExchangeSource('{{$source->name}}', '{{$source->_wanted_type}}');
+                    }}).bind(this.form)})">
+
                     {{tr}}Delete{{/tr}}
                   </button>
                 {{else}}

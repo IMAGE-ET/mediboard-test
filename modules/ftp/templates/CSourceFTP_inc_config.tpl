@@ -9,7 +9,6 @@
 *}}
 
 {{mb_script module=ftp    script=action_ftp      ajax=true}}
-{{mb_script module=system script=exchange_source ajax=true}}
 
 {{mb_default var=light value=""}}
 
@@ -17,12 +16,12 @@
   <tr>
     <td>
       <form name="editSourceFTP-{{$source->name}}" action="?m={{$m}}" method="post"
-            onsubmit="return onSubmitFormAjax(this, { onComplete : (function() {
-            if (this.up('.modal')) {
-              Control.Modal.close();
-            } else {
-              ExchangeSource.refreshExchangeSource('{{$source->name}}', '{{$source->_wanted_type}}');
-            }}).bind(this)})">
+          onsubmit="return onSubmitFormAjax(this, { onComplete : (function() {
+          if (this.up('.modal')) {
+            Control.Modal.close();
+          } else {
+            ExchangeSource.refreshExchangeSource('{{$source->name}}', '{{$source->_wanted_type}}');
+          }}).bind(this)})">
 
         <input type="hidden" name="m" value="ftp" />
         <input type="hidden" name="dosql" value="do_source_ftp_aed" />
@@ -104,8 +103,15 @@
               {{if $source->_id}}
                 <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
 
-                <button type="button" class="trash" onclick="confirmDeletion(this.form, {ajax:1, typeName:'',
-                  objName:'{{$source->_view|smarty:nodefaults|JSAttribute}}'}, Control.Modal.close)">
+                <button class="trash" type="button" onclick="confirmDeletion(this.form,
+                  { ajax: 1, typeName: '', objName: '{{$source->_view}}'},
+                  { onComplete: (function() {
+                  if (this.up('.modal')) {
+                    Control.Modal.close();
+                  } else {
+                    ExchangeSource.refreshExchangeSource('{{$source->name}}', '{{$source->_wanted_type}}');
+                  }}).bind(this.form)})">
+
                   {{tr}}Delete{{/tr}}
                 </button>
               {{else}}

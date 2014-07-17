@@ -52,7 +52,7 @@ class CSourceFTP extends CExchangeSource {
     $specs["port"]                    = "num default|21";
     $specs["timeout"]                 = "num default|5";
     $specs["pasv"]                    = "bool default|0";
-    $specs["mode"]                    = "enum list|FTP_ASCII|FTP_BINARY default|FTP_ASCII";
+    $specs["mode"]                    = "enum list|FTP_ASCII|FTP_BINARY default|FTP_BINARY";
     $specs["counter"]                 = "str protected loggable|0";
     $specs["fileprefix"]              = "str";
     $specs["fileextension"]           = "str";
