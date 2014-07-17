@@ -8,32 +8,23 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-  SOAP = {
-    connexion: function (exchange_source_name) {
-      new Url("webservices", "ajax_connexion_soap")
-        .addParam("exchange_source_name", exchange_source_name)
-        .requestModal(500, 400);
-    },
-
-    getFunctions: function (exchange_source_name, form) {
-      new Url("webservices", "ajax_getFunctions_soap")
-        .addParam("form_name", form.getAttribute("name"))
-        .addParam("exchange_source_name", exchange_source_name)
-        .requestModal(500, 400);
-    }
-  }
-</script>
+{{mb_script module=webservices script=soap ajax=true}}
 
 <table class="main layout">
   <tr>
     <td>
-      <form name="editSourceSOAP-{{$source->name}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, {
-          onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}') } )">
+      <form name="editSourceSOAP-{{$source->name}}" action="?m={{$m}}" method="post"
+            onsubmit="return onSubmitFormAjax(this, { onComplete : (function() {
+              if (this.up('.modal')) {
+              Control.Modal.close();
+              } else {
+              ExchangeSource.refreshExchangeSource('{{$source->name}}', '{{$source->_wanted_type}}');
+              }}).bind(this)})">
+
         <input type="hidden" name="m" value="webservices" />
         <input type="hidden" name="dosql" value="do_source_soap_aed" />
         <input type="hidden" name="source_soap_id" value="{{$source->_id}}" />
-        <input type="hidden" name="del" value="0" /> 
+        <input type="hidden" name="del" value="0" />
         <input type="hidden" name="name" value="{{$source->name}}" />
 
         <fieldset>
@@ -44,22 +35,22 @@
 
             <tr>
               <th>{{mb_label object=$source field="wsdl_external"}}</th>
-              <td>{{mb_field object=$source field="wsdl_external" size="70"}}</td>
+              <td>{{mb_field object=$source field="wsdl_external" size="50"}}</td>
             </tr>
 
             <tr>
               <th style="width: 100px">{{mb_label object=$source field="type_soap"}}</th>
-              <td>{{mb_field object=$source field="type_soap"}}</td>
+              <td>{{mb_field object=$source field="type_soap" typeEnum="radio"}}</td>
             </tr>
 
             <tr>
               <th>{{mb_label object=$source field="soap_version"}}</th>
-              <td>{{mb_field object=$source field="soap_version"}}</td>
+              <td>{{mb_field object=$source field="soap_version" typeEnum="radio"}}</td>
             </tr>
 
             <tr>
               <th>{{mb_label object=$source field="encoding"}}</th>
-              <td>{{mb_field object=$source field="encoding"}}</td>
+              <td>{{mb_field object=$source field="encoding" typeEnum="radio"}}</td>
             </tr>
 
             <tr>
@@ -111,7 +102,7 @@
           <table class="main form">
             <tr>
               <th style="width: 100px">{{mb_label object=$source field="user"}}</th>
-              <td>{{mb_field object=$source field="user"}}</td>
+              <td>{{mb_field object=$source field="user" size="50"}}</td>
             </tr>
             <tr>
               <th>{{mb_label object=$source field="password"}}</th>
@@ -119,7 +110,7 @@
               {{if $source->password}}
                 {{assign var=placeholder value="Mot de passe enregistré"}}
               {{/if}}
-              <td>{{mb_field object=$source field="password" placeholder=$placeholder}}</td>
+              <td>{{mb_field object=$source field="password" placeholder=$placeholder size="30"}}</td>
             </tr>
           </table>
         </fieldset>
@@ -130,7 +121,7 @@
           <table class="main form">
             <tr>
               <th style="width: 100px">{{mb_label object=$source field="local_cert"}}</th>
-              <td>{{mb_field object=$source field="local_cert" size="70"}}</td>
+              <td>{{mb_field object=$source field="local_cert" size="50"}}</td>
             </tr>
             <tr>
               <th>{{mb_label object=$source field="passphrase"}}</th>
@@ -153,7 +144,7 @@
             </tr>
             <tr>
               <th>{{mb_label object=$source field="cafile"}}</th>
-              <td>{{mb_field object=$source field="cafile" size="70"}}</td>
+              <td>{{mb_field object=$source field="cafile" size="45"}}</td>
             </tr>
           </table>
         </fieldset>
@@ -164,11 +155,11 @@
               {{if $source->_id}}
                 <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
                 <button type="button" class="trash" onclick="confirmDeletion(this.form, {ajax:1, typeName:'',
-                  objName:'{{$source->_view|smarty:nodefaults|JSAttribute}}'}, 
+                  objName:'{{$source->_view|smarty:nodefaults|JSAttribute}}'},
                   {onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}')})">
                   {{tr}}Delete{{/tr}}
                 </button>
-              {{else}}  
+              {{else}}
                 <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
               {{/if}}
             </td>

@@ -1,5 +1,5 @@
 <?php
-$locales['Account'] = 'Compte';
+$locales['Account'] = 'Identité';
 $locales['Action'] = 'Action';
 $locales['Actions'] = 'Actions';
 $locales['Activities'] = 'Activités';
@@ -193,6 +193,7 @@ $locales['History.desc'] = 'Voir l\'historique';
 $locales['Home'] = 'Accueil';
 $locales['Hour'] = 'Heure';
 $locales['Hyperlink'] = 'Lien';
+$locales['Identity'] = 'Identité';
 $locales['Import'] = 'Importer';
 $locales['Import-CSV'] = 'Importer un fichier CSV';
 $locales['Imports/Exports'] = 'Imports/Exports';

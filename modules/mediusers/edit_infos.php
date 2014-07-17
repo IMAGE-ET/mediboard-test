@@ -36,17 +36,13 @@ $spec_cpam = $spec_cpam->loadList();
 
 $affiche_nom = CValue::get("affiche_nom", 0);
 
-// Source SMTP
-$smtp_source = CExchangeSource::get("mediuser-".$mediuser->_id, "smtp", true, null, false);
-
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("banques"     , $banques);
-$smarty->assign("disciplines" , $disciplines);
-$smarty->assign("spec_cpam"   , $spec_cpam);
-$smarty->assign("user"        , $mediuser);
-$smarty->assign("fonction"    , $mediuser->_ref_function);
-$smarty->assign("affiche_nom" , $affiche_nom);
-$smarty->assign("smtp_source" , $smtp_source );
+$smarty->assign("banques"    , $banques);
+$smarty->assign("disciplines", $disciplines);
+$smarty->assign("spec_cpam"  , $spec_cpam);
+$smarty->assign("user"       , $mediuser);
+$smarty->assign("fonction"   , $mediuser->_ref_function);
+$smarty->assign("affiche_nom", $affiche_nom);
 $smarty->display("edit_infos.tpl");

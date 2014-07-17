@@ -944,6 +944,13 @@ var Url = Class.create({
     var m = this.oParams.m,
         a = this.oParams.a;
 
+    // onComplete callback definition shortcut
+    if (options instanceof Function) {
+      options = {
+        onComplete: options
+      };
+    }
+
     options = Object.extend({
       title: Localize.first('mod-'+m+'-tab-'+a, 'mod-dP'+m+'-tab-'+a),
       showReload: Preferences.INFOSYSTEM == 1,

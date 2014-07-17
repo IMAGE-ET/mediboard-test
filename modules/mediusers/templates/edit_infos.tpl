@@ -1,5 +1,6 @@
-{{mb_script module=admin    script=preferences  ajax=true}}
-{{mb_script module=patients script=autocomplete ajax=true}}
+{{mb_script module=admin     script=preferences     ajax=true}}
+{{mb_script module=patients  script=autocomplete    ajax=true}}
+{{mb_script module=system    script=exchange_source ajax=true}}
 
 <script type="text/javascript">
 
@@ -9,6 +10,9 @@
         switch (container.id) {
           case "edit-preferences":
             Preferences.refresh('{{$user->_id}}');
+            break;
+          case "edit-exchange_source":
+            ExchangeSource.refreshUserSources();
             break;
           case "edit-holidays":
             PlageConge.refresh();
@@ -31,7 +35,9 @@
 </script>
 
 <ul id="tab_edit_mediuser" class="control_tabs">
-  <li><a href="#edit-mediuser">{{tr}}Account{{/tr}}</a></li>
+  <li><a href="#edit-mediuser">{{tr}}Identity{{/tr}}</a></li>
+
+  <li><a href="#edit-exchange_source">{{tr}}CExchangeSource.plural{{/tr}}</a></li>
 
   <li><a href="#edit-preferences">{{tr}}Preferences{{/tr}}</a></li>
 
@@ -75,14 +81,11 @@
 
 </ul>
 
-<hr class="control_tabs" />
-
 <div id="edit-mediuser" style="display: block;">
 <table class="main">
   <tr>
-    <td class="halfPane">
+    <td class="halfPane" style="width: 60%">
       {{mb_include template=inc_info_mediuser}}
-      {{mb_include template=inc_info_exchange_source}}
     </td>
 
     <td class="halfPane">
@@ -90,6 +93,9 @@
     </td>
   </tr>
 </table>
+</div>
+
+<div id="edit-exchange_source" style="display: none;">
 </div>
 
 <div id="edit-preferences" style="display: none;">

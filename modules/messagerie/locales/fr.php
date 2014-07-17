@@ -1,7 +1,5 @@
 <?php
 $locales['Attachments'] = 'Pièces jointes';
-$locales['CExchangeSource.pop-desc'] = 'Reception POP';
-$locales['CExchangeSource.smtp-desc'] = 'Envoi SMTP';
 $locales['CMail-Attachment-linked'] = 'Pièce jointe liée';
 $locales['CMailAttachment-LinkedTo'] = 'Lié à : ';
 $locales['CMailAttachment-button-getAllAttachments'] = 'Tout récupérer';

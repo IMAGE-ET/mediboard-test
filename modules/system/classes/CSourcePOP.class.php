@@ -58,11 +58,12 @@ class CSourcePOP extends CExchangeSource {
    */
   function getProps() {
     $props = parent::getProps();
+    $props["host"]         = "text autocomplete";
     $props["port"]         = "num default|25";
     $props["auth_ssl"]     = "enum list|None|SSL/TLS|STARTTLS";
     $props["password"]     = "password show|0";
     $props["timeout"]      = "num default|5 max|30";
-    $props["type"]         = "enum list|pop3|imap";
+    $props["type"]         = "enum notNull list|pop3|imap";
     $props["extension"]    = "str";
     $props["cron_update"]  = "bool default|1";
     $props["is_private"]   = "bool default|0";

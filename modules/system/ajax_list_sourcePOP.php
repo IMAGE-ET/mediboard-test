@@ -12,8 +12,6 @@
  */
  
 $mediuser = CMediusers::get();
-$pop_sources = $mediuser->loadRefsSourcePop();
-
 //smarty
 $smarty = new CSmartyDP();
 $smarty->assign("pop_source", $pop_sources);

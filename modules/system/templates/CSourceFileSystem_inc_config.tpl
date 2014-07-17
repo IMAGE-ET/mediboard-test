@@ -36,8 +36,14 @@
 <table class="main"> 
   <tr>
     <td>
-      <form name="editSourceFileSystem-{{$source->name}}" action="?m={{$m}}" method="post" 
-        onsubmit="return onSubmitFormAjax(this, { onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}') } )">
+      <form name="editSourceFileSystem-{{$source->name}}" action="?m={{$m}}" method="post"
+            onsubmit="return onSubmitFormAjax(this, { onComplete : (function() {
+              if (this.up('.modal')) {
+                Control.Modal.close();
+              } else {
+                ExchangeSource.refreshExchangeSource('{{$source->name}}', '{{$source->_wanted_type}}');
+              }}).bind(this)})">
+
         <input type="hidden" name="m" value="system" />
         <input type="hidden" name="dosql" value="do_source_file_system_aed" />
         <input type="hidden" name="source_file_system_id" value="{{$source->_id}}" />
@@ -66,7 +72,7 @@
 
             <tr>
               <th>{{mb_label object=$source field="sort_files_by"}}</th>
-              <td>{{mb_field object=$source field="sort_files_by"}}</td>
+              <td>{{mb_field object=$source field="sort_files_by" typeEnum="radio"}}</td>
             </tr>
           </table>
         </fieldset>

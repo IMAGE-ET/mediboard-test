@@ -11,51 +11,43 @@
 <table class="main"> 
   <tr>
     <td>
-      <form name="editSourceHTTP-{{$source->name}}" action="?m={{$m}}" method="post" 
-        onsubmit="return onSubmitFormAjax(this, { onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}') } )">
+      <form name="editSourceHTTP-{{$source->name}}" action="?m={{$m}}" method="post"
+            onsubmit="return onSubmitFormAjax(this, { onComplete : (function() {
+              if (this.up('.modal')) {
+              Control.Modal.close();
+              } else {
+              ExchangeSource.refreshExchangeSource('{{$source->name}}', '{{$source->_wanted_type}}');
+              }}).bind(this)})">
+
         <input type="hidden" name="m" value="system" />
         <input type="hidden" name="dosql" value="do_source_http_aed" />
         <input type="hidden" name="source_http_id" value="{{$source->_id}}" />
-        <input type="hidden" name="del" value="0" /> 
-           
-        <table class="form">        
-          <tr>
-            <th class="category" colspan="2">
-              {{tr}}config-source-http{{/tr}}
-            </th>
-          </tr>
+        <input type="hidden" name="del" value="0" />
+
+        <fieldset>
+          <legend>{{tr}}CSourceHTTP{{/tr}}</legend>
+
+          <table class="main form">
           
-          {{mb_include module=system template=CExchangeSource_inc}}
-          
-          <tr>
-            <td class="button" colspan="2">
-              {{if $source->_id}}
-                <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-                <button type="button" class="trash" onclick="confirmDeletion(this.form, {ajax:1, typeName:'',
-                  objName:'{{$source->_view|smarty:nodefaults|JSAttribute}}'}, 
-                  {onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}')})">
-                  {{tr}}Delete{{/tr}}
-                </button>
-              {{else}}  
-                <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
-              {{/if}}
-            </td>
-          </tr>
-        </table>
+            {{mb_include module=system template=CExchangeSource_inc}}
+
+            <tr>
+              <td class="button" colspan="2">
+                {{if $source->_id}}
+                  <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+                  <button type="button" class="trash" onclick="confirmDeletion(this.form, {ajax:1, typeName:'',
+                    objName:'{{$source->_view|smarty:nodefaults|JSAttribute}}'},
+                    {onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}')})">
+                    {{tr}}Delete{{/tr}}
+                  </button>
+                {{else}}
+                  <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+                {{/if}}
+              </td>
+            </tr>
+          </table>
+        </fieldset>
       </form>
-    </td>
-    <td class="greedyPane">
-      <script type="text/javascript">
-        HTTP = {
-        }
-      </script>
-      <table class="tbl">
-        <tr>
-          <th class="category" colspan="100">
-            {{tr}}utilities-source-http{{/tr}}
-          </th>
-        </tr>
-      </table>
     </td>
   </tr>
 </table>

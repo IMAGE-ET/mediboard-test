@@ -13,7 +13,7 @@ ExchangeSource = {
   status_images : ["images/icons/status_red.png", "images/icons/status_orange.png", "images/icons/status_green.png"],
   sources_actif : {},
 
-  resfreshImageStatus : function(element){
+  resfreshImageStatus: function(element) {
     if (!element.get('id')) {
       return;
     }
@@ -135,10 +135,21 @@ ExchangeSource = {
       , br.nextSibling);
   },
 
-  editSource : function (guid) {
+  editSource : function (guid, light, source_name, type, object_guid) {
     new Url("eai", "ajax_edit_source")
       .addParam("source_guid", guid)
-      .requestModal();
+      .addParam("source_name", source_name)
+      .addParam("light", light)
+      .addParam("object_guid", object_guid)
+      .requestModal(600)
+      .modalObject.observe("afterClose", function () {
+        if (light) {
+          ExchangeSource.refreshUserSources()
+        }
+        else {
+          ExchangeSource.refreshExchangeSource(source_name, type);
+        }
+      });
   },
 
   SourceAvailability : function (container) {
@@ -172,5 +183,17 @@ ExchangeSource = {
       }
       Control.Tabs.setTabCount(id_div, ExchangeSource.sources_actif[id_div]);
     })
+  },
+
+  refreshUserSources: function () {
+    new Url('mediusers', 'ajax_edit_exchange_sources')
+      .requestUpdate('edit-exchange_source');
+  },
+
+  refreshExchangeSource: function(source_name, type){
+    new Url("system", "ajax_refresh_exchange_source")
+      .addParam("type", type)
+      .addParam("exchange_source_name", source_name)
+      .requestUpdate('exchange_source-'+source_name);
   }
 };

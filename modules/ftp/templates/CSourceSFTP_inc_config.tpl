@@ -14,7 +14,14 @@
 <table class="main">
   <tr>
     <td>
-      <form name="editSourceSFTP-{{$source->name}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}') } )">
+      <form name="editSourceSFTP-{{$source->name}}" action="?m={{$m}}" method="post"
+            onsubmit="return onSubmitFormAjax(this, { onComplete : (function() {
+              if (this.up('.modal')) {
+              Control.Modal.close();
+              } else {
+              ExchangeSource.refreshExchangeSource('{{$source->name}}', '{{$source->_wanted_type}}');
+              }}).bind(this)})">
+
         <input type="hidden" name="m" value="ftp" />
         {{mb_class object=$source}}
         {{mb_key object=$source}}
@@ -27,7 +34,7 @@
 
             <tr>
               <th style="width: 120px">{{mb_label object=$source field="user"}}</th>
-              <td>{{mb_field object=$source field="user"}}</td>
+              <td>{{mb_field object=$source field="user" size="50"}}</td>
             </tr>
             <tr>
               <th>{{mb_label object=$source field="password"}}</th>
@@ -35,7 +42,7 @@
               {{if $source->password}}
                 {{assign var=placeholder value="Mot de passe enregistré"}}
               {{/if}}
-              <td>{{mb_field object=$source field="password" placeholder=$placeholder}}</td>
+              <td>{{mb_field object=$source field="password" placeholder=$placeholder size="30"}}</td>
             </tr>
             <tr>
               <th>{{mb_label object=$source field="port"}}</th>
@@ -43,7 +50,7 @@
             </tr>
             <tr>
               <th>{{mb_label object=$source field="timeout"}}</th>
-              <td>{{mb_field object=$source field="timeout"}}</td>
+              <td>{{mb_field object=$source field="timeout" register=true increment=true form="editSourceSFTP-`$source->name`" size=3 step=1 min=0}}</td>
             </tr>
           </table>
         </fieldset>

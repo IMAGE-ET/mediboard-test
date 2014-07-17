@@ -10,8 +10,8 @@
 
 {{assign var="sourcename" value=$source->name}}
 
-{{if $source->_incompatible}} 
-<div class="small-error">
+{{if $source->_incompatible }}
+<div class="small-error" {{if !$can->admin}}style="display:none;"{{/if}}>
   {{tr}}CExchangeSource-_incompatible{{/tr}} <strong>({{tr}}config-instance_role-{{$conf.instance_role}}{{/tr}})</strong>
 </div>
 {{/if}}
@@ -22,7 +22,7 @@
   </div>
 {{else}}
   <div id="exchange_source-{{$sourcename}}">
-    <div class="small-info">{{tr}}CExchangeSource-only_one_active{{/tr}}</div>
+    <div class="small-info" {{if !$can->admin}}style="display:none;"{{/if}}>{{tr}}CExchangeSource-only_one_active{{/tr}}</div>
 
     <script type="text/javascript">
       refreshExchangeSource = function(exchange_source_name, type){

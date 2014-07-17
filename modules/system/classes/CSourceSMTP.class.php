@@ -52,7 +52,8 @@ class CSourceSMTP extends CExchangeSource {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = $this->email;
+
+    $this->_view = $this->email ? $this->email : $this->libelle ? $this->libelle : $this->host;
   }
 
   /**
