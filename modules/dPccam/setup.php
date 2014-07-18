@@ -169,7 +169,13 @@ class CSetupdPccam extends CSetup {
       ADD UNIQUE INDEX  (`codable_class`, `codable_id`, `praticien_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = '0.22';
+    $this->makeRevision('0.22');
+
+    $query = "ALTER TABLE `codage_ccam`
+      ADD `nb_acts` INT (2) NOT NULL;";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.23';
 
     // Data source query
 

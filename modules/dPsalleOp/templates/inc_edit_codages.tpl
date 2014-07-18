@@ -71,16 +71,17 @@
         Règles d'association
       </th>
     </tr>
+    {{assign var=association_rules value="CCodageCCAM"|static:"association_rules"}}
     {{foreach from=$codage->_possible_rules key=_rulename item=_rule}}
       <tr>
         <td {{if $_rulename == $codage->association_rule}}class="ok"{{/if}}>
-          <input type="radio" name="rule" value="{{$_rulename}}"
+          <input type="radio" name="association_rule" value="{{$_rulename}}"
             {{if $_rulename == $codage->association_rule}}checked="checked"{{/if}}
             {{if $codage->association_mode == "auto"}}disabled="disabled"{{/if}}
             onchange="this.form.onsubmit()"/>
         </td>
         <td class="{{if $_rule}}ok{{else}}error{{/if}}">
-          {{$_rulename}}
+          {{$_rulename}} {{if $association_rules.$_rulename == 'ask'}}(manuel){{/if}}
         </td>
         <td class="text greedyPane">
           {{tr}}CActeCCAM-regle-association-{{$_rulename}}{{/tr}}
