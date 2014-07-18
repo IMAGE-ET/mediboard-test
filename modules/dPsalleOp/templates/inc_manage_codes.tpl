@@ -11,7 +11,11 @@
   editCodage = function(codage_id) {
     var url = new Url("salleOp", "ajax_edit_codages_ccam");
     url.addParam("codage_id", codage_id);
-    url.requestModal();
+    url.requestModal(
+      null, null,
+      {onClose: function() {ActesCCAM.refreshList('{{$subject->_id}}','{{$subject->_praticien_id}}')}}
+    );
+    window.urlCodage = url;
   }
 </script>
 
@@ -98,7 +102,8 @@
               </td>
               <td>
                 <button type="button" class="notext edit" style="float: right;" onclick="editCodage({{$_codage->_id}})">{{tr}}Edit{{/tr}}</button>
-                {{$_codage->association_rule}} ({{$_codage->association_mode}})
+                {{$_codage->association_rule}}
+                ({{mb_value object=$_codage field=association_mode}})
               </td>
               <td class="button">
                 <form name="formCodage-{{$_codage->_id}}" action="?" method="post" onsubmit="return checkForm(this)">
