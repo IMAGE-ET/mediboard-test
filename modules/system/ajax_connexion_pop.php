@@ -40,8 +40,9 @@ switch ($type_action) {
     try {
       if ($pop->open()) {
         $boxes = imap_list($pop->_mailbox, $pop->_server, "*");
+        CAppUI::stepAjax("OK, %d comptes", UI_MSG_OK, count($boxes));
         foreach ($boxes as $_box) {
-          echo str_replace($pop->_server, "", $_box).'<br/>';
+          echo $_box.'<br/>';
         }
       }
     } catch(CMbException $e) {
