@@ -15,6 +15,7 @@
 
   <table class="form">
     {{mb_include module=system template=inc_config_bool var=edit_svg}}
+    {{mb_include module=system template=inc_config_bool var=drawing_allow_external_ressource}}
     <tr>
       <td class="button" colspan="6">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

@@ -78,13 +78,19 @@
     $('current_color').setStyle({backgroundColor : value});
   };
 
+  insertFromInternet = function(surl) {
+    var url = new Url("drawing", "ajax_get_content");
+    url.addParam('url', surl);
+    url.addParam('format', 'uri');
+    url.requestJSON(DrawObject.insertImg);
+  };
+
   selectThisElement = function(element) {
     var file_id = element.get('file_id');
     var is_svg = element.get('file_type').indexOf('svg') != -1;
     if (is_svg) {
       //old
       DrawObject.insertImg("?m=files&a=fileviewer&file_id="+file_id+"&phpThumb=1");
-
     }
     else {
       //new

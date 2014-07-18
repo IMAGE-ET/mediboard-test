@@ -13,21 +13,42 @@
 
 CCanDo::checkRead();
 
-$file_id = CValue::get("file_id");
-$format = CValue::get('format');
+$file_id  = CValue::get("file_id");
+$url      = CValue::get('url');
 
-$file = new CFile();
-$file->load($file_id);
-$file->canDo();
-if (!$file->_can->read) {
+$format   = CValue::get('format');
+
+if (!$file_id && !$url) {
   return "";
 }
 
-if (strpos($file->file_type, "svg") !== false) {
-  echo json_encode("?m=files&a=fileviewer&file_id=$file->_id&phpTumb=1");
-  CApp::rip();
-  //echo CApp::json(file_get_contents($file->_file_path));
+if ($file_id) {
+  $file = new CFile();
+  $file->load($file_id);
+  $file->canDo();
+  if (!$file->_can->read) {
+    return "";
+  }
+
+  //@TODO le faire marcher avec du datauri
+  if (strpos($file->file_type, "svg") !== false) {
+    echo json_encode("?m=files&a=fileviewer&file_id=$file->_id&phpTumb=1");
+    CApp::rip();
+    //echo CApp::json(file_get_contents($file->_file_path));
+  }
+  elseif ($format == 'uri') {
+    $data = $file->getDataURI();
+    CApp::json($data);
+  }
 }
-elseif ($format == 'uri') {
-  CApp::json($file->getDataURI());
+elseif ($url) {
+  $mime_type = CMbPath::guessMimeType($url);
+  $content = @file_get_contents($url);
+  if ($content) {
+    $data = "data:".$mime_type.";base64,".urlencode(base64_encode($content));
+    CApp::json($data);
+  }
+  else {
+    return "";
+  }
 }
