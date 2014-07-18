@@ -1150,11 +1150,13 @@ Element.warnDuplicates = function(){
     console.error("Method-less forms: ", elements);
   }
 
+  /*
+  // Disabled because of https://stackoverflow.com/questions/3434278/ie-chrome-are-dom-tree-elements-global-variables-here
   elements = $$("*[id]").pluck("id").intersect($H(window).keys().without("console", "main", "menubar", "performance")); // FIXME
   if (elements.length && !Element._idConflicts.intersect(elements).length) {
     Element._idConflicts = Element._idConflicts.concat(elements);
     console.error("ID conflicts (element ID and global variable have the same name): ", elements);
-  }
+  }*/
 };
 
 Event.initKeyboardEvents = function() {
