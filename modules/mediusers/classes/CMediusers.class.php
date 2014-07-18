@@ -214,7 +214,7 @@ class CMediusers extends CPerson {
     $props["deb_activite"]           = "date";
     $props["fin_activite"]           = "date";
     $props["spec_cpam_id"]           = "ref class|CSpecCPAM";
-    $props["compte"]                 = "code rib confidential mask|99999S99999S99999999999S99 show|0";
+    $props["compte"]                 = "code rib confidential mask|99999S99999S***********S99 show|0";
     $props["banque_id"]              = "ref class|CBanque show|0";
     $props["code_intervenant_cdarr"] = "str length|2";
     $props["secteur"]                = "enum list|1|2";
