@@ -144,6 +144,9 @@ class CMediusers extends CPerson {
   /** @var CRetrocession[] */
   public $_ref_retrocessions;
 
+  /** @var CFile */
+  public $_ref_signature;
+
   /**
    * Lazy access to a given user, defaultly connected user
    *
@@ -1329,7 +1332,7 @@ class CMediusers extends CPerson {
     $template->addImageProperty("Praticien - Photo d'identite", $identite->_id);
 
     // Signature
-    $signature = $this->loadNamedFile("signature.jpg");
+    $signature = $this->loadRefSignature();
     $template->addImageProperty("Praticien - Signature", $signature->_id);
   }
 
@@ -1663,5 +1666,9 @@ class CMediusers extends CPerson {
 
   function getLastLogin(){
     return $this->_user_last_login = $this->_ref_user->getLastLogin();
+  }
+
+  function loadRefSignature() {
+    return $this->_ref_signature = $this->loadNamedFile("signature.jpg");
   }
 }
