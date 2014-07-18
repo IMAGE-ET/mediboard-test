@@ -34,7 +34,7 @@
       $V(oform.start_med, page);
       oform.onsubmit();
     }
-  };
+  }
 
   refreshPageCorrespondant = function(page) {
     var oform = getForm('find_correspondant');
@@ -42,7 +42,11 @@
       $V(oform.start_corres, page);
       oform.onsubmit();
     }
-  };
+  }
+
+  onMergeComplete = function() {
+    getForm("find_medecin").onsubmit();
+  }
 </script>
 
 
@@ -56,8 +60,6 @@
     </li>
   {{/if}}
 </ul>
-
-<hr class="control_tabs" />
 
 <div id="medicaux">
   <form name="find_medecin" action="?" method="get" onsubmit="return onSubmitFormAjax(this, null, 'medicaux_result')">
