@@ -11,8 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-mbTrace("toto");return;
-
 CCanDo::checkRead();
 CPop::checkImapLib();
 
