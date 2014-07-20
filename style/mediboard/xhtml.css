@@ -68,8 +68,6 @@ p + p {
 img {
   border: none;
   vertical-align: middle;
-  image-rendering: optimizeQuality;  /* Firefox 3.6+ */
-  -ms-interpolation-mode: bicubic;   /* Internet Explorer 7.0+ */
 }
 
 ul, ol {

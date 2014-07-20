@@ -370,32 +370,6 @@ var WaitingMessage = {
   }
 };
 
-var Profiler = {
-  trace: function(getParams, performance, targetElement) {
-    try {
-      // If Firebug or Chrome console
-      if (console.firebug || console._inspectorCommandLineAPI) {
-        console.log(getParams, " ", performance);
-      }
-      this.profile(getParams, performance, null, targetElement);
-    } catch (e) {}
-  },
-  profile: function (getParams, performance, win, targetElement) {
-    var parent = window.opener || window.parent;
-    if (parent && parent !== window && parent.Profiler) {
-      parent.Profiler.profile(getParams, performance, win || window, targetElement);
-    }
-  }
-};
-
-/**
- * Detects the Skype scripts and stylesheets to check whether the extension is active or not
- * This extension slows down Firefox
- */
-function detectSkypeExtension(){
-  return $$("#injection_graph_func, #_skypeplugin_dropdownmenu_css, #_injection_graph_nh_css, #_nameHighlight_injection").length > 0;
-}
-
 /**
  * Handles different status changes of Ajax requests
  *
@@ -914,7 +888,6 @@ var Note = {
 };
 
 // *******
-var notWhitespace   = /\S/;
 var Dom = {
   writeElem : function(elem, elemReplace){
     elem = $(elem);
@@ -981,7 +954,7 @@ var Dom = {
     if(node.hasChildNodes()){
       for(var i=0; i< node.childNodes.length; i++){
         var childNode = node.childNodes[i];
-        if((childNode.nodeType == Node.TEXT_NODE) && (!notWhitespace.test(childNode.nodeValue))){
+        if((childNode.nodeType == Node.TEXT_NODE) && (!/\S/.test(childNode.nodeValue))){
           node.removeChild(node.childNodes[i]);
           i--;
         }else if (Object.isElement(childNode)) {
@@ -1736,8 +1709,8 @@ Class.extend(Control.Modal, {
     var left = Math.max(0, (vpDims.width  - contDims.width)  / 2);
 
     container.setStyle({
-      top: top + "px",
-      left: left + "px"
+      top:  Math.round(top)  + "px",
+      left: Math.round(left) + "px"
     });
   },
   // Redefine this method to ...
