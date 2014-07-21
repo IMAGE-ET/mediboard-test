@@ -132,15 +132,15 @@
     </li>
   {{/if}}
 
-  <li onmousedown="this.onmousedown = ''; loadAntTrait()">
-    <a id="acc_consultation_a_Atcd" href="#AntTrait" {{if $tabs_count.AntTrait == 0}}class="empty"{{/if}}>
-      {{tr}}soins.tab.antecedent_and_treatment{{/tr}} <small>({{$tabs_count.AntTrait}})</small>
-    </a>
-  </li>
-
   <li onmousedown="refreshConstantesMedicales();">
     <a href="#Constantes" {{if $tabs_count.Constantes == 0}}class="empty"{{/if}}>
       {{tr}}soins.tab.surveillance{{/tr}} <small>({{$tabs_count.Constantes}})</small>
+    </a>
+  </li>
+
+  <li onmousedown="this.onmousedown = ''; loadAntTrait()">
+    <a id="acc_consultation_a_Atcd" href="#AntTrait" {{if $tabs_count.AntTrait == 0}}class="empty"{{/if}}>
+      {{tr}}soins.tab.antecedent_and_treatment{{/tr}} <small>({{$tabs_count.AntTrait}})</small>
     </a>
   </li>
 
