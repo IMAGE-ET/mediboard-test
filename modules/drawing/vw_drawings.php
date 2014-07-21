@@ -26,6 +26,7 @@ $files = $file->loadList($where, "file_date DESC");
 foreach ($files as $_file) {
   $_file->loadTargetObject();
   $_file->updateFormFields();
+  $_file->loadRefAuthor()->loadRefFunction();
 }
 
 $where["file_type"] = " LIKE '%svg%' ";

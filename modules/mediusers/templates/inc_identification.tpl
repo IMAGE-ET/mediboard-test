@@ -11,29 +11,34 @@
 </tr>
 
 {{if !$readOnlyLDAP}}
-<tr>
-  <th>{{mb_label object=$object field="_user_password"}}</th>
-  <td>
-    <input type="password" name="_user_password"
-          class="{{$object->_props._user_password}}{{if !$object->user_id}} notNull{{/if}}"
-          onkeyup="checkFormElement(this);" value="" />
-    <span id="mediuser__user_password_message"></span>
-  </td>
-</tr>
+  <tr>
+    <th>{{mb_label object=$object field="_user_password"}}</th>
+    <td>
+      <input type="password" name="_user_password"
+            class="{{$object->_props._user_password}}{{if !$object->user_id}} notNull{{/if}}"
+            onkeyup="checkFormElement(this);" value="" />
+      <span id="mediuser__user_password_message"></span>
+    </td>
+  </tr>
 
-<tr>
-  <th>{{mb_label object=$object field="_user_password2"}}</th>
-  <td>
-    <input
-      type="password"
-      name="_user_password2"
-      value=""
-      class="{{$object->_props._user_password2}}{{if !$object->user_id}} notNull{{/if}}"
-    />
-  </td>
-</tr>
-
+  <tr>
+    <th>{{mb_label object=$object field="_user_password2"}}</th>
+    <td>
+      <input
+        type="password"
+        name="_user_password2"
+        value=""
+        class="{{$object->_props._user_password2}}{{if !$object->user_id}} notNull{{/if}}"
+      />
+    </td>
+  </tr>
 {{/if}}
+
+<tr>
+  <th>{{mb_label object=$object field="color"}}</th>
+  <td>{{mb_field object=$object field="color" form="mediuser"}}</td>
+</tr>
+
 <tr>
   <th>{{mb_label object=$object field="actif"}}</th>
   <td>

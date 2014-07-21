@@ -22,6 +22,7 @@ class CMediusers extends CPerson {
   public $cps;
   public $titres;
   public $initials;
+  public $color;
   public $commentaires;
   public $actif;
   public $deb_activite;
@@ -89,6 +90,8 @@ class CMediusers extends CPerson {
 
   // Distant fields
   public $_group_id;
+
+  public $_color; // color following this or function
 
   // Behaviour fields
   static $user_autoload = true;
@@ -209,6 +212,7 @@ class CMediusers extends CPerson {
     $props["other_specialty_id"]     = "ref class|CSpecialtyAsip autocomplete|libelle";
     $props["titres"]                 = "text";
     $props["initials"]               = "str";
+    $props["color"]                  = "color";
     $props["commentaires"]           = "text";
     $props["actif"]                  = "bool default|1";
     $props["deb_activite"]           = "date";
@@ -461,6 +465,8 @@ class CMediusers extends CPerson {
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefUser();
+
+    $this->updateColor();
   }
 
   /**
@@ -583,7 +589,13 @@ class CMediusers extends CPerson {
     /** @var CFunctions $function */
     $function = $this->loadFwdRef("function_id", true);
     $this->_group_id = $function ? $function->group_id : null;
+    $this->updateColor();
     return $this->_ref_function = $function;
+  }
+
+  function updateColor() {
+    $function_color = $this->_ref_function ? $this->_ref_function->color : null;
+    return $this->_color = $this->color ? $this->color : $function_color;
   }
 
   /**

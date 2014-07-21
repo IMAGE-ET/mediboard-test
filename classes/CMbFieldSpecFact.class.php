@@ -44,6 +44,7 @@ class CMbFieldSpecFact {
     "ipAddress"    => "CIpAddressSpec",
     "url"          => "CURLSpec",
     "uri"          => "CURISpec",
+    "color"        => "CColorSpec"
   );
    
   /**

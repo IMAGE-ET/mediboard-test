@@ -111,7 +111,7 @@ class CFunctions extends CMbObject {
     $props["group_id"]           = "ref notNull class|CGroups";
     $props["type"]               = "enum notNull list|administratif|cabinet";
     $props["text"]               = "str notNull confidential seekable";
-    $props["color"]              = "str notNull length|6 default|ffffff";
+    $props["color"]              = "color notNull";
     $props["adresse"]            = "text";
     $props["cp"]                 = "numchar minLength|4 maxLength|5";
     $props["ville"]              = "str maxLength|50";

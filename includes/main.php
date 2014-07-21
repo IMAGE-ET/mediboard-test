@@ -105,6 +105,9 @@ CJSLoader::$files = array(
   "includes/javascript/xdr.js",
   "includes/javascript/usermessage.js",
 
+  // color picker
+  "includes/javascript/jscolor.js",
+
   //Flot
   "lib/flot/jquery.min.js",
   "includes/javascript/no_conflicts.js",

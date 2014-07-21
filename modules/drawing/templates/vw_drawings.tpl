@@ -38,6 +38,7 @@
             <th class="narrow"></th>
             <th>titre</th>
             <th>Lié à</th>
+            <th>Créateur</th>
             <th>Taille</th>
             <th>date</th>
           </tr>
@@ -62,6 +63,9 @@
               </td>
               <td>
                 <span onmouseover="ObjectTooltip.createEx(this, '{{$_file->_ref_object->_guid}}');">{{$_file->_ref_object}}</span>
+              </td>
+              <td>
+                {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_file->_ref_author}}
               </td>
               <td>{{mb_value object=$_file field=_file_size}}</td>
               <td><span title="{{mb_value object=$_file field=file_date}}">{{mb_value object=$_file field=file_date format=relative}}</span></td>

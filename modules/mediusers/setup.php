@@ -624,6 +624,11 @@ class CSetupmediusers extends CSetup {
               ADD INDEX (`other_specialty_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.54";
+    $this->makeRevision("0.54");
+    $query = "ALTER TABLE `users_mediboard`
+              ADD `color` VARCHAR (6);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.55";
   }
 }

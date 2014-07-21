@@ -57,21 +57,7 @@
     <tr>
       <th>{{mb_label object=$function field="color"}}</th>
       <td>
-				<script type="text/javascript">
-				ColorSelector.init = function(){
-				  this.sForm  = "editFrm";
-				  this.sColor = "color";
-				  this.sColorView = "color-view";
-				  this.pop();
-				}
-				</script>
-        <span class="color-view" id="color-view" style="background: #{{$function->color}};">
-				  {{tr}}Choose{{/tr}}
-				</span>
-				<button type="button" class="search notext" onclick="ColorSelector.init()">
-					{{tr}}Choose{{/tr}}
-				</button>
-        {{mb_field object=$function field="color" hidden=1}}
+        {{mb_field object=$function field="color" form="editFrm"}}
       </td>
     </tr>
     <tr>
