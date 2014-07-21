@@ -334,6 +334,7 @@ class CCodageCCAM extends CMbObject {
    * @return string
    */
   public function guessAssociation($act) {
+    $this->completeField("association_rule");
     $this->getActsByTarif();
     $act->_position = array_search($act->_id, array_keys($this->_ordered_acts));
     $this->_check_rules = array();
