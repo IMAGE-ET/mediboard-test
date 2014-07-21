@@ -2,8 +2,13 @@
 
 {{mb_script module="compteRendu" script="document"}}
 {{mb_script module="files" script="files"}}
-{{mb_script module="cabinet" script=file}}
+{{mb_script module="files" script="file"}}
 {{mb_include module="files" template="yoplet_uploader" object=$object}}
+{{if "drawing"|module_active}}
+  {{mb_script module="drawing" script="DrawingItem"}}
+  {{mb_include module=drawing template=fabricjs}}
+{{/if}}
+
 
 <script>
   function viewCompleteItem(object_guid) {
