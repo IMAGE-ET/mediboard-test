@@ -793,6 +793,10 @@ button.reboot:before, a.button.reboot:before {
   content: url(images/buttons/reboot.png);
 }
 
+button.drawing:before, a.button.drawing:before {
+    content: url(images/buttons/drawing.png);
+}
+
 /** dossier de soins **/
 button.soins:before, a.button.soins:before {
   content: url(images/buttons/soins.png);
