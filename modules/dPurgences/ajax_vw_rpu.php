@@ -17,12 +17,14 @@ $consult_id = CValue::get("consult_id");
 
 $consult = new CConsultation();
 $consult->load($consult_id);
+$consult->loadRefPlageConsult();
 
 $sejour = $consult->loadRefSejour();
 
 $rpu = $sejour->loadRefRPU();
 
-$services = array();
+$services         = array();
+$list_mode_sortie = null;
 
 if ($rpu && $rpu->_id) {
   // Mise en session du rpu_id
@@ -96,14 +98,15 @@ $contrainteOrientation["normal"   ] = array("", "FUGUE", "SCAM", "PSA", "REO");
 
 $smarty = new CSmartyDP();
 
-$smarty->assign("consult"       , $consult);
-$smarty->assign("rpu"           , $rpu);
-$smarty->assign("sejour"        , $sejour);
-$smarty->assign("services"      , $services);
-$smarty->assign("now"           , CMbDT::dateTime());
-$smarty->assign("blocages_lit"  , $blocages_lit);
-$smarty->assign("consult_anesth", null);
-$smarty->assign("contrainteProvenance" , $contrainteProvenance );
+$smarty->assign("consult"              , $consult);
+$smarty->assign("rpu"                  , $rpu);
+$smarty->assign("sejour"               , $sejour);
+$smarty->assign("services"             , $services);
+$smarty->assign("now"                  , CMbDT::dateTime());
+$smarty->assign("blocages_lit"         , $blocages_lit);
+$smarty->assign("consult_anesth"       , null);
+$smarty->assign("list_mode_sortie"     , $list_mode_sortie);
+$smarty->assign("contrainteProvenance" , $contrainteProvenance);
 $smarty->assign("contrainteDestination", $contrainteDestination);
 $smarty->assign("contrainteOrientation", $contrainteOrientation);
 
