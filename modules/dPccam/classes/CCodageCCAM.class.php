@@ -60,6 +60,10 @@ class CCodageCCAM extends CMbObject {
    * @var CActeCCAM[]
    */
   public $_ref_actes_ccam;
+  /**
+   * @var CActeCCAM[]
+   */
+  public $_ref_actes_ccam_facturables;
 
   protected static $association_rules = array(
     'G1'  => 'auto',
@@ -227,7 +231,7 @@ class CCodageCCAM extends CMbObject {
     $this->checkFacturableActs();
     $this->_ordered_acts = array();
 
-    foreach ($this->_ref_actes_ccam as $_act) {
+    foreach ($this->_ref_actes_ccam_facturables as $_act) {
       $this->_ordered_acts[$_act->_id] = $_act->getTarifSansAssociationNiCharge();
     }
 
@@ -261,7 +265,9 @@ class CCodageCCAM extends CMbObject {
       $_acte->getTarifSansAssociationNiCharge();
       if ($_acte->getTarifSansAssociationNiCharge() == 0) {
         $_acte->facturable = 0;
-        unset($this->_ref_actes_ccam[$_acte->_id]);
+      }
+      else {
+        $this->_ref_actes_ccam_facturables[$_acte->_id] = $_acte;
       }
     }
   }
@@ -331,13 +337,12 @@ class CCodageCCAM extends CMbObject {
     $this->getActsByTarif();
     $act->_position = array_search($act->_id, array_keys($this->_ordered_acts));
     $this->_check_rules = array();
-
     if ((!$this->association_rule || $this->_recheck_asso) && $this->association_mode == 'auto') {
 
       foreach (self::$association_rules as $_rule => $_type) {
         if (self::isRuleAllowed($_rule)) {
           if (call_user_func(array($this, "checkRule$_rule")) && $_type == 'auto') {
-            call_user_func(array($this, "applyRule$_rule"), $act);
+            $this->applyRule($_rule, $act);
             break;
           }
         }
@@ -347,10 +352,30 @@ class CCodageCCAM extends CMbObject {
     }
     else {
       call_user_func(array($this, "checkRule$this->association_rule"));
-      call_user_func(array($this, "applyRule$this->association_rule"), $act);
+      $this->applyRule($this->association_rule, $act);
     }
 
     return $act->_guess_association;
+  }
+
+  /**
+   * Application d'une règle nommée sur un acte
+   *
+   * @param string    $rulename Rule name
+   * @param CActeCCAM $act      The act
+   *
+   * @return void
+   */
+  protected function applyRule($rulename, $act) {
+    if ($act->_position === false) {
+      $act->facturable = 0;
+      $act->_guess_association = '';
+      $act->_guess_regle_asso = $rulename;
+    }
+    else {
+      $act->loadRefCodeCCAM();
+      call_user_func(array($this, "applyRule$rulename"), $act);
+    }
   }
 
   /**
@@ -394,7 +419,7 @@ class CCodageCCAM extends CMbObject {
    * @return bool
    */
   protected function checkRuleG1() {
-    if (count($this->_ref_actes_ccam) != 1) {
+    if (count($this->_ref_actes_ccam_facturables) != 1) {
       return false;
     }
 
@@ -409,8 +434,16 @@ class CCodageCCAM extends CMbObject {
    * @return void
    */
   protected function applyRuleG1($act) {
-    $act->_guess_association = '';
-    $act->_guess_regle_asso = 'G1';
+    switch ($act->_position) {
+      case 0:
+        $act->_guess_association = '';
+        $act->_guess_regle_asso = 'G1';
+        break;
+      default:
+        $act->facturable = 0;
+        $act->_guess_association = '';
+        $act->_guess_regle_asso = 'G1';
+    }
   }
 
   /**
@@ -424,24 +457,23 @@ class CCodageCCAM extends CMbObject {
    * @return bool
    */
   protected function checkRuleGA() {
-    if (count($this->_ref_actes_ccam) != 2) {
+    if (count($this->_ref_actes_ccam_facturables) != 2) {
       return false;
     }
 
-    $cond = 0;
-    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
-      $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
+    $complement = 0;
+    foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
 
       if (
-          ($chapters[0]['db'] == '000019' && (($chapters[1]['db'] == '000001' && $chapters[2]['db'] == '000009' &&
-          $chapters[2]['db'] == '000002') || $chapters[1]['db'] == '000002')) || $chapters[0]['db'] == '000018' &&
-          $chapters[1]['db'] == '000002'
+          $_acte_ccam->_ref_code_ccam->isComplement() ||
+          $_acte_ccam->_ref_code_ccam->isSupplement() ||
+          $_acte_ccam->_ref_code_ccam->isRadioCardioInterv()
       ) {
-        $cond++;
+        $complement++;
       }
     }
 
-    if ($cond != 1) {
+    if ($complement != 1) {
       return false;
     }
 
@@ -456,8 +488,20 @@ class CCodageCCAM extends CMbObject {
    * @return void
    */
   protected function applyRuleGA($act) {
-    $act->_guess_association = '';
-    $act->_guess_regle_asso = 'GA';
+    if (
+        $act->_position == 0 ||
+        $act->_ref_code_ccam->isSupplement() ||
+        $act->_ref_code_ccam->isComplement()
+    ) {
+      $act->_guess_association = '';
+      $act->_guess_regle_asso = 'GA';
+    }
+    else {
+      $act->facturable = 0;
+      $act->_guess_association = '';
+      $act->_guess_regle_asso = 'GA';
+
+    }
   }
 
   /**
@@ -469,18 +513,17 @@ class CCodageCCAM extends CMbObject {
    * @return bool
    */
   protected function checkRuleGB() {
-    if (count($this->_ref_actes_ccam) != 3) {
+    if (count($this->_ref_actes_ccam_facturables) != 3) {
       return false;
     }
 
     $supp = 0;
     $comp = 0;
-    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
-      $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
-      if ($chapters[0]['db'] == '000018' && $chapters[1]['db'] == '000002') {
+    foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
+      if ($_acte_ccam->_ref_code_ccam->isComplement()) {
         $comp++;
       }
-      if ($chapters[0]['db'] == '000019' && $chapters[1]['db'] == '000002') {
+      if ($_acte_ccam->_ref_code_ccam->isSupplement()) {
         $supp++;
       }
     }
@@ -500,8 +543,19 @@ class CCodageCCAM extends CMbObject {
    * @return void
    */
   protected function applyRuleGB($act) {
-    $act->_guess_association = '1';
-    $act->_guess_regle_asso = 'GB';
+    if (
+        $act->_position == 0 ||
+        $act->_ref_code_ccam->isSupplement() ||
+        $act->_ref_code_ccam->isComplement()
+    ) {
+      $act->_guess_association = '1';
+      $act->_guess_regle_asso = 'GB';
+    }
+    else {
+      $act->facturable = 0;
+      $act->_guess_association = '';
+      $act->_guess_regle_asso = 'GB';
+    }
   }
 
   /**
@@ -521,11 +575,10 @@ class CCodageCCAM extends CMbObject {
    * @return void
    */
   protected function applyRuleG2($act) {
-    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
-      $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
+    foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
       if (
-          ($chapters[0]['db'] == '000019' && $chapters[1]['db'] == '000002') ||
-          ($chapters[0]['db'] == '000018' && $chapters[1]['db'] == '000002')
+          $_acte_ccam->_ref_code_ccam->isSupplement() ||
+          $_acte_ccam->_ref_code_ccam->isComplement()
       ) {
         unset($this->_ordered_acts[$_acte_ccam->_id]);
         if ($_acte_ccam->_id == $act->_id) {
@@ -551,6 +604,7 @@ class CCodageCCAM extends CMbObject {
         break;
       default:
         $act->facturable = '0';
+        $act->_guess_association = '0';
     }
   }
 
@@ -567,7 +621,7 @@ class CCodageCCAM extends CMbObject {
     $chap12 = 0;
     $chap13 = 0;
     $chap14 = 0;
-    foreach ($this->_ref_actes_ccam as $_act) {
+    foreach ($this->_ref_actes_ccam_facturables as $_act) {
       switch ($_act->_ref_code_ccam->chapitres[0]['db']) {
         case '000011':
           $chap11++;
@@ -585,7 +639,7 @@ class CCodageCCAM extends CMbObject {
       }
     }
 
-    if (!$chap11 || !$chap12 || !$chap13 || !$chap14) {
+    if (count($this->_ref_actes_ccam_facturables) < 2 || !$chap11 || !$chap12 || !$chap13 || !$chap14) {
       return false;
     }
 
@@ -611,6 +665,8 @@ class CCodageCCAM extends CMbObject {
         break;
       default:
         $act->facturable = 0;
+        $act->_guess_association = '';
+        $act->_guess_regle_asso = 'EA';
     }
   }
 
@@ -626,7 +682,7 @@ class CCodageCCAM extends CMbObject {
    */
   protected function checkRuleEB() {
     $nb_chir = 0;
-    foreach ($this->_ref_actes_ccam as $_act) {
+    foreach ($this->_ref_actes_ccam_facturables as $_act) {
       $classif = reset($_act->_ref_code_ccam->_ref_code_ccam->_ref_activites[$_act->code_activite]->_ref_classif);
       if ($classif->code_regroupement == 'ADC') {
         $nb_chir++;
@@ -659,8 +715,11 @@ class CCodageCCAM extends CMbObject {
       case 2:
         $act->_guess_association = '2';
         $act->_guess_regle_asso = 'EB';
+        break;
       default:
         $act->facturable = 0;
+        $act->_guess_association = '';
+        $act->_guess_regle_asso = 'EB';
     }
   }
 
@@ -677,7 +736,7 @@ class CCodageCCAM extends CMbObject {
     $exerese = false;
     $curage = false;
     $reconst = false;
-    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
+    foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
       $libelle = $_acte_ccam->_ref_code_ccam->libelleLong;
       if (stripos($libelle, 'exérèse') !== false) {
         $exerese = true;
@@ -711,12 +770,17 @@ class CCodageCCAM extends CMbObject {
         $act->_guess_regle_asso = 'EC';
         break;
       case 1:
+        $act->_guess_association = '2';
+        $act->_guess_regle_asso = 'EC';
+        break;
       case 2:
         $act->_guess_association = '2';
         $act->_guess_regle_asso = 'EC';
         break;
       default:
         $act->facturable = 0;
+        $act->_guess_association = '';
+        $act->_guess_regle_asso = 'EC';
     }
   }
 
@@ -744,7 +808,7 @@ class CCodageCCAM extends CMbObject {
     );
     $nb_echo = 0;
 
-    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
+    foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
       if (in_array($chapters[2]['rang'], $chapters_echo)) {
         $nb_echo++;
@@ -777,6 +841,8 @@ class CCodageCCAM extends CMbObject {
         break;
       default:
         $act->facturable = 0;
+        $act->_guess_association = '';
+        $act->_guess_regle_asso = 'ED';
     }
   }
 
@@ -817,7 +883,7 @@ class CCodageCCAM extends CMbObject {
     );
     $nb_scano = 0;
 
-    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
+    foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
       if (in_array($chapters[2]['rang'], $chapters_scano)) {
         $nb_scano++;
@@ -841,13 +907,21 @@ class CCodageCCAM extends CMbObject {
   protected function applyRuleEE($act) {
     switch ($act->_position) {
       case 0:
+        $act->_guess_association = '4';
+        $act->_guess_regle_asso = 'EE';
+        break;
       case 1:
+        $act->_guess_association = '4';
+        $act->_guess_regle_asso = 'EE';
+        break;
       case 2:
         $act->_guess_association = '4';
         $act->_guess_regle_asso = 'EE';
         break;
       default:
         $act->facturable = 0;
+        $act->_guess_association = '';
+        $act->_guess_regle_asso = 'EE';
     }
   }
 
@@ -874,7 +948,7 @@ class CCodageCCAM extends CMbObject {
     $nb_remno = 0;
     $guidage_remno = 0;
 
-    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
+    foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
       if (strpos($_acte_ccam->_ref_code_ccam->libelleLong, 'guidage remnographique') !== false) {
         $guidage_remno++;
@@ -916,6 +990,8 @@ class CCodageCCAM extends CMbObject {
           break;
         default:
           $act->facturable = 0;
+          $act->_guess_association = '';
+          $act->_guess_regle_asso = 'EF';
       }
     }
     else {
@@ -926,6 +1002,8 @@ class CCodageCCAM extends CMbObject {
           break;
         default:
           $act->facturable = 0;
+          $act->_guess_association = '';
+          $act->_guess_regle_asso = 'EF';
       }
     }
   }
@@ -940,7 +1018,7 @@ class CCodageCCAM extends CMbObject {
    */
   protected function checkRuleEG1() {
     $cond = 0;
-    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
+    foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
       if (
           $chapters[0]['db'] == '000019' && $chapters[1]['db'] == '000001' &&
@@ -967,12 +1045,17 @@ class CCodageCCAM extends CMbObject {
   protected function applyRuleEG1($act) {
     switch ($act->_position) {
       case 0:
+        $act->_guess_association = '1';
+        $act->_guess_regle_asso = 'EG1';
+        break;
       case 1:
         $act->_guess_association = '1';
         $act->_guess_regle_asso = 'EG1';
         break;
       default:
         $act->facturable = 0;
+        $act->_guess_association = '';
+        $act->_guess_regle_asso = 'EG1';
     }
   }
 
@@ -1002,7 +1085,7 @@ class CCodageCCAM extends CMbObject {
       '17.02.'
     );
     $nb_anapath = 0;
-    foreach ($this->_ref_actes_ccam as $_act) {
+    foreach ($this->_ref_actes_ccam_facturables as $_act) {
       $chap = $_act->_ref_code_ccam->chapitres;
       if (in_array($chap[2]['rang'], $chapters_anapath) || in_array($chap[1]['rang'], $chapters_anapath)) {
         $nb_anapath++;
@@ -1045,7 +1128,7 @@ class CCodageCCAM extends CMbObject {
       '17.02.'
     );
 
-    foreach ($this->_ref_actes_ccam as $_act) {
+    foreach ($this->_ref_actes_ccam_facturables as $_act) {
       $chap = $_act->_ref_code_ccam->chapitres;
       if (in_array($chap[2]['rang'], $chapters_anapath) || in_array($chap[1]['rang'], $chapters_anapath)) {
         unset($ordered_acts_eg2[$_act->_id]);
@@ -1077,6 +1160,8 @@ class CCodageCCAM extends CMbObject {
           break;
         default:
           $act->facturable = 0;
+          $act->_guess_association = '';
+          $act->_guess_regle_asso = 'EG2';
       }
     }
   }
@@ -1092,7 +1177,7 @@ class CCodageCCAM extends CMbObject {
    */
   protected function checkRuleEG3() {
     $nb_electromyo = 0;
-    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
+    foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
       if (
           $chapters[0]['db'] == '000001' && $chapters[1]['db'] == '000001' && $chapters[2]['db'] == '000001' &&
@@ -1122,7 +1207,7 @@ class CCodageCCAM extends CMbObject {
    */
   protected function applyRuleEG3($act) {
     $ordered_acts_eg3 = $this->_ordered_acts;
-    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
+    foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
       if (
           $chapters[0]['db'] == '000001' && $chapters[1]['db'] == '000001' && $chapters[2]['db'] == '000001' &&
@@ -1164,6 +1249,8 @@ class CCodageCCAM extends CMbObject {
           break;
         default:
           $act->facturable = 0;
+          $act->_guess_association = '';
+          $act->_guess_regle_asso = 'EG3';
       }
     }
   }
@@ -1179,7 +1266,7 @@ class CCodageCCAM extends CMbObject {
   protected function checkRuleEG4() {
     $irrad = 0;
     $supp = 0;
-    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
+    foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
       if (
           ($chapters[0]['db'] == '000017' && $chapters[1]['db'] == '000004' && $chapters[2]['db'] == '000002') ||
@@ -1188,14 +1275,14 @@ class CCodageCCAM extends CMbObject {
         $irrad++;
       }
       elseif (
-          ($chapters[0]['db'] == '000018' && $chapters[1]['db'] == '000002') ||
-          ($chapters[0]['db'] == '000019' && $chapters[1]['db'] == '000002')
+          $_acte_ccam->_ref_code_ccam->isSupplement() ||
+          $_acte_ccam->_ref_code_ccam->isComplement()
       ) {
         $supp++;
       }
     }
 
-    if (($irrad + $supp) != count($this->_ref_actes_ccam)) {
+    if (($irrad + $supp) != count($this->_ref_actes_ccam_facturables)) {
       return false;
     }
 
@@ -1243,12 +1330,17 @@ class CCodageCCAM extends CMbObject {
   protected function applyRuleEG5($act) {
     switch ($act->_position) {
       case 0:
+        $act->_guess_association = '4';
+        $act->_guess_regle_asso = 'EG5';
+        break;
       case 1:
         $act->_guess_association = '4';
         $act->_guess_regle_asso = 'EG5';
         break;
       default:
         $act->facturable = 0;
+        $act->_guess_association = '';
+        $act->_guess_regle_asso = 'EG5';
     }
   }
 
@@ -1268,7 +1360,7 @@ class CCodageCCAM extends CMbObject {
      * Actes d'accouchements : 09.03.03
      */
     $cond = 0;
-    foreach ($this->_ref_actes_ccam as $_act) {
+    foreach ($this->_ref_actes_ccam_facturables as $_act) {
       foreach ($_act->_ref_code_ccam->_ref_code_ccam->_ref_notes as $_note) {
         if ($_note->type == 17 && strpos($_note->texte, 'Facturation éventuellement en supplément') !== false) {
           $cond++;
@@ -1301,12 +1393,17 @@ class CCodageCCAM extends CMbObject {
   protected function applyRuleEG6($act) {
     switch ($act->_position) {
       case 0:
+        $act->_guess_association = '4';
+        $act->_guess_regle_asso = 'EG6';
+        break;
       case 1:
         $act->_guess_association = '4';
         $act->_guess_regle_asso = 'EG6';
         break;
       default:
         $act->facturable = 0;
+        $act->_guess_association = '';
+        $act->_guess_regle_asso = 'EG6';
     }
   }
 
@@ -1320,7 +1417,7 @@ class CCodageCCAM extends CMbObject {
    */
   protected function checkRuleEG7() {
     $nb_bucco_dentaires = 0;
-    foreach ($this->_ref_actes_ccam as $_act) {
+    foreach ($this->_ref_actes_ccam_facturables as $_act) {
       $classif = reset($_act->_ref_code_ccam->_ref_code_ccam->_ref_activites[$_act->code_activite]->_ref_classif);
       if ($classif->code_regroupement == 'DEN') {
         $nb_bucco_dentaires++;
@@ -1346,7 +1443,7 @@ class CCodageCCAM extends CMbObject {
    */
   protected function applyRuleEG7($act) {
     $ordered_acts_eg7 = $this->_ordered_acts;
-    foreach ($this->_ref_actes_ccam as $_act) {
+    foreach ($this->_ref_actes_ccam_facturables as $_act) {
       $chapters = $_act->_ref_code_ccam->chapitres;
       if ($_act->_ref_code_ccam->_activite[$_act->code_activite]->_ref_classif->code_regroupement == 'DEN') {
         unset($ordered_acts_eg7[$_act->_id]);
@@ -1375,15 +1472,21 @@ class CCodageCCAM extends CMbObject {
     else {
       switch ($act->_position) {
         case -1:
+          $act->_guess_association = '1';
+          $act->_guess_regle_asso = 'EG7';
+          break;
         case 0:
           $act->_guess_association = '1';
           $act->_guess_regle_asso = 'EG7';
+          break;
         case 1:
           $act->_guess_association = '2';
           $act->_guess_regle_asso = 'EG7';
           break;
         default:
           $act->facturable = 0;
+          $act->_guess_association = '';
+          $act->_guess_regle_asso = 'EG7';
       }
     }
   }
@@ -1441,7 +1544,7 @@ class CCodageCCAM extends CMbObject {
       '17.01.02'
     );
     $nb_radio = 0;
-    foreach ($this->_ref_actes_ccam as $_act) {
+    foreach ($this->_ref_actes_ccam_facturables as $_act) {
       $chap = $_act->_ref_code_ccam->chapitres;
       if (in_array($chap[2]['rang'], $chapters_radio)) {
         $nb_radio++;
@@ -1488,7 +1591,7 @@ class CCodageCCAM extends CMbObject {
 
     $nb_radio_sein = 0;
 
-    foreach ($this->_ref_actes_ccam as $_act) {
+    foreach ($this->_ref_actes_ccam_facturables as $_act) {
       $chap = $_act->_ref_code_ccam->chapitres;
       if (in_array($chap[2]['rang'], $chapters_radio)) {
         unset($ordered_acts_ei[$_act->_id]);
@@ -1531,6 +1634,8 @@ class CCodageCCAM extends CMbObject {
           break;
         default:
           $act->facturable = 0;
+          $act->_guess_association = '';
+          $act->_guess_regle_asso = 'EI';
       }
     }
     else {
@@ -1546,6 +1651,8 @@ class CCodageCCAM extends CMbObject {
           break;
         default:
           $act->facturable = 0;
+          $act->_guess_association = '';
+          $act->_guess_regle_asso = 'EI';
       }
     }
   }

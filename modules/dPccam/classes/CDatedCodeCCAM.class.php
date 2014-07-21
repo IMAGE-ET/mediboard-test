@@ -556,6 +556,38 @@ class CDatedCodeCCAM {
   }
 
   /**
+   * Check wether an acte is a complement or not
+   *
+   * @return bool
+   */
+  function isComplement() {
+    $this->getChaps();
+    return $this->chapitres[0]['db'] == '000018' && $this->chapitres[1]['db'] == '000002';
+  }
+
+  /**
+   * Check wether an acte is a supplement or not
+   *
+   * @return bool
+   */
+  function isSupplement() {
+    $this->getChaps();
+    return $this->chapitres[0]['db'] == '000019' && $this->chapitres[1]['db'] == '000002';
+  }
+
+  /**
+   * Check wether an acte is inclued in 'acte d'imagerie pour acte de radiologie interventionnelle
+   * ou cardiologie interventionnelle'
+   *
+   * @return bool
+   */
+  function isRadioCardioInterv() {
+    $this->getChaps();
+    return $this->chapitres[0]['db'] == '000019' && $this->chapitres[1]['db'] == '000001'
+      && $this->chapitres[2]['db'] == '000009' && $this->chapitres[3]['db'] == '000002';
+  }
+
+  /**
    * Recherche de codes CCAM
    *
    * @param string $code       Codes partiels à chercher
