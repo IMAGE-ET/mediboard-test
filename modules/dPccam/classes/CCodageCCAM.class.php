@@ -263,13 +263,16 @@ class CCodageCCAM extends CMbObject {
    * @return void
    */
   protected function checkFacturableActs() {
+    $this->_ref_actes_ccam_facturables = array();
     foreach ($this->_ref_actes_ccam as $_acte) {
       if (!$_acte->facturable) {
         $_acte->facturable = 1;
+        $_acte->_guess_facturable = 1;
       }
       $_acte->getTarifSansAssociationNiCharge();
       if ($_acte->getTarifSansAssociationNiCharge() == 0) {
         $_acte->facturable = 0;
+        $_acte->_guess_facturable = 0;
       }
       else {
         $this->_ref_actes_ccam_facturables[$_acte->_id] = $_acte;
@@ -339,6 +342,9 @@ class CCodageCCAM extends CMbObject {
    * @return string
    */
   public function guessAssociation($act) {
+    if (!$act->_id) {
+      return "";
+    }
     $this->completeField("association_rule");
     $this->completeField("association_auto");
     $this->getActsByTarif();
