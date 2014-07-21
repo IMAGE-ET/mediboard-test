@@ -218,7 +218,7 @@ Main.add(function () {
                   {{else}}
                     {{assign var=_hidden value=false}}
 
-                    {{if $_constant.0 == "_"}}
+                    {{if $_constant.0 == "_" && !$_params.edit}}
                       {{assign var=_readonly value="readonly"}}
 
                       {{if array_key_exists("formula", $_params)}}

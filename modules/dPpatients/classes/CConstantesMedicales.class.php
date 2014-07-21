@@ -47,6 +47,7 @@ class CConstantesMedicales extends CMbObject {
   public $_ref_user;
 
   // Forms fields
+  public $_poids_g;
   public $_imc_valeur;
   public $_vst;
   public $_new_constantes_medicales;
@@ -65,6 +66,14 @@ class CConstantesMedicales extends CMbObject {
       "callback" => "calculImcVst",
       "min" => "@-2", "max" => "@+2",
     ),
+    "_poids_g"          => array(
+    "type" => "physio",
+    "unit" => "g",
+    "unit_iso" => "g",
+    "plot" => true,
+    "edit" => true,
+    "min" => "@-200", "max" => "@+200"
+  ),
     "taille"            => array(
       "type" => "physio",
       "unit" => "cm",
@@ -846,7 +855,8 @@ class CConstantesMedicales extends CMbObject {
     $props['context_id']             = 'ref class|CMbObject meta|context_class cascade';
     $props['comment']                = 'text';
 
-    $props['poids']                  = 'float pos';
+    $props['poids']                  = 'float pos max|300';
+    $props['_poids_g']               = 'num pos min|300';
     $props['taille']                 = 'float pos';
 
     $props['ta']                     = 'str maxLength|10';
@@ -1042,6 +1052,11 @@ class CConstantesMedicales extends CMbObject {
       $this->_imc = round($this->poids / ($this->taille * $this->taille * 0.0001), 2);
     }
 
+    // Calcul du poids en grammes
+    if ($this->poids) {
+      $this->_poids_g = $this->poids * 1000;
+    }
+
     // Afficher le champ diurèse dans le formulaire si une des valeurs n'est pas vide
     // FIXME Utiliser "cumul_in"
     foreach (self::$list_constantes["_diurese"]["formula"] as $_field => $_sign) {
@@ -1152,6 +1167,10 @@ class CConstantesMedicales extends CMbObject {
    */
   function updatePlainFields() {
     $group = CGroups::loadCurrent();
+
+    if ($this->_poids_g) {
+      $this->poids = round($this->_poids_g / 1000, 2);
+    }
 
     foreach (self::$list_constantes as $_constant => &$_params) {
       // If field is a
@@ -1302,6 +1321,16 @@ class CConstantesMedicales extends CMbObject {
 
     if ($this->_id) {
       $ok = false;
+      $this->loadOldObject();
+
+      /* Pour permettre la suppression du poids et de _poids_g */
+      if (!$this->_poids_g && $this->_old->poids) {
+        $this->poids = $this->_poids_g;
+      }
+      if (!$this->poids && $this->_old->poids) {
+        $this->_poids_g = $this->poids;
+      }
+
       foreach (CConstantesMedicales::$list_constantes as $const => $params) {
         $this->completeField($const);
         if (array_key_exists('formfields', $params)) {
