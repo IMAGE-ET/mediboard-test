@@ -240,7 +240,8 @@ class CCodageCCAM extends CMbObject {
       $this->_ordered_acts[$_act->_id] = $_act->getTarifSansAssociationNiCharge();
     }
 
-    return self::orderActsByTarif($this->_ordered_acts);
+    $this->_ordered_acts = self::orderActsByTarif($this->_ordered_acts);
+    return $this->_ordered_acts;
   }
 
   /**
@@ -346,7 +347,6 @@ class CCodageCCAM extends CMbObject {
       return "";
     }
     $this->completeField("association_rule");
-    $this->completeField("association_auto");
     $this->getActsByTarif();
     $act->_position = array_search($act->_id, array_keys($this->_ordered_acts));
     $this->_check_rules = array();
