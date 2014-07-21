@@ -21,8 +21,8 @@
 
   checkAll = function(type, message) {
     $$("input.switch_on_"+message+type+"[value=1]").each(function(checkbox) {
-        checkbox.checked = true
-        checkbox.form.onsubmit()
+        checkbox.checked = true;
+        checkbox.form.onsubmit();
       });
   }
 </script>
@@ -74,7 +74,7 @@
                   {{if $_category_name != "none"}}
                     <tr>
                       <th class="section" colspan="3">
-                        <button class="tick notext" onclick="checkAll('{{$_category_name}}', '{{$_message}}')"></button>
+                        <button class="tick notext" onclick="checkAll('{{$_category_name}}', '{{$_family_name}}')"></button>
                         {{tr}}{{$_category_name}}{{/tr}} (<em>{{$_category_name}})</em></th>
                     </tr>
                   {{/if}}
