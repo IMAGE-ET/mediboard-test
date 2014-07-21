@@ -11,6 +11,7 @@
 {{mb_default var=form value=""}}
 {{mb_default var=patient_id value=""}}
 {{mb_default var=other_form value=""}}
+{{mb_default var=callback value=""}}
 
 <script type="text/javascript">
   createPatAnonyme = function() {
@@ -18,7 +19,7 @@
     url.addParam("callback", "fillPatAnonyme");
     url.requestUpdate("systemMsg", {method: "post"});
   };
-  fillPatAnonyme = function(pat_id, pat_view) {  
+  fillPatAnonyme = function(pat_id, pat_view) {
     var form = getForm('{{$form}}');
     
     if (form) {
@@ -32,6 +33,10 @@
       $V(otherForm.patient_id, pat_id);
       $V(otherForm._patient_view, pat_view);
     }
+
+    {{if $callback}}
+      {{$callback}}();
+    {{/if}}
   }
 </script>
 

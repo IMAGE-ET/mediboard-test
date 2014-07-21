@@ -65,7 +65,7 @@
     var oForm = getForm("editFrm");
     if(oForm._pause.checked){
       oForm.patient_id.value = "";
-      oForm._pat_name.value = "";
+      oForm._patient_view.value = "";
       $("viewPatient").hide();
       $("infoPat").update("");
     }else{
@@ -83,6 +83,11 @@
     url.addElement(oForm.consultation_id);
     url.requestUpdate("infoPat");
     return true;
+  };
+
+  refreshAnonymous = function() {
+    var form = getForm("editFrm");
+    $V(form.rques, 'Patient anonyme,\nutilisez ce champ pour sauvegarder ses informations');
   };
 
   ClearRDV = function(){
@@ -182,15 +187,15 @@
   };
 
   afterEditPatient = function(patient_id, patient) {
-    $V(getForm('editFrm')._pat_name, patient._view);
-  }
+    $V(getForm('editFrm')._patient_view, patient._view);
+  };
 
   Main.add(function() {
     var form = getForm("editFrm");
     var url = new Url("system", "ajax_seek_autocomplete");
     url.addParam("object_class", "CPatient");
     url.addParam("field", "patient_id");
-    url.addParam("view_field", "_pat_name");
+    url.addParam("view_field", "_patient_view");
     url.addParam("input_field", "_seek_patient");
     url.autoComplete(form.elements._seek_patient, null, {
       minChars: 3,
@@ -200,7 +205,7 @@
       width: "300px",
       afterUpdateElement: function(field,selected){
         $V(field.form.patient_id, selected.getAttribute("id").split("-")[2]);
-        $V(field.form.elements._pat_name, selected.down('.view').innerHTML);
+        $V(field.form.elements._patient_view, selected.down('.view').innerHTML);
         $V(field.form.elements._seek_patient, "");
       }
     });
@@ -259,7 +264,7 @@
   PatSelector.init = function() {
     this.sForm      = "editFrm";
     this.sId        = "patient_id";
-    this.sView      = "_pat_name";
+    this.sView      = "_patient_view";
     var seekResult  = $V(getForm(this.sForm)._seek_patient).split(" ");
     this.sName      = seekResult[0] ? seekResult[0] : "";
     this.sFirstName = seekResult[1] ? seekResult[1] : "";
@@ -411,11 +416,12 @@
             {{/if}}
             <tr id="viewPatient" {{if $consult->_id && $consult->patient_id==0}}style="display:none;"{{/if}}>
               <th>
+                {{mb_include module=patients template=inc_button_pat_anonyme form=editFrm patient_id=$consult->patient_id callback=refreshAnonymous}}
                 {{mb_label object=$consult field="patient_id"}}
               </th>
               <td>
                 {{mb_field object=$pat field="patient_id" hidden=1 ondblclick="PatSelector.init()" onchange="requestInfoPat(); $('button-edit-patient').setVisible(this.value);"}}
-                <input type="text" name="_pat_name" style="width: 15em;" value="{{$pat->_view}}" readonly="readonly" onfocus="PatSelector.init()" onchange="checkCorrespondantMedical()"/>
+                <input type="text" name="_patient_view" style="width: 15em;" value="{{$pat->_view}}" readonly="readonly" onfocus="PatSelector.init()" onchange="checkCorrespondantMedical()"/>
                 <button class="search notext" id="add_edit_button_pat_selector" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
                 <button id="button-edit-patient" type="button" onclick="Patient.editModal(this.form.patient_id.value, 0, 'window.parent.afterEditPatient')"
                         class="edit notext" {{if !$pat->_id}}style="display: none;"{{/if}}>
