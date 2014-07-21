@@ -132,6 +132,11 @@ class CCodageCCAM extends CMbObject {
     $codage_ccam->praticien_id = $praticien_id;
     $codage_ccam->loadMatchingObject();
 
+    if (!$codage_ccam->_id) {
+      $codage_ccam->association_mode = 'auto';
+      $codage_ccam->locked = 0;
+    }
+
     return $codage_ccam;
   }
 
@@ -258,7 +263,6 @@ class CCodageCCAM extends CMbObject {
    * @return void
    */
   protected function checkFacturableActs() {
-    $this->_ref_actes_ccam_facturables = array();
     foreach ($this->_ref_actes_ccam as $_acte) {
       if (!$_acte->facturable) {
         $_acte->facturable = 1;
@@ -335,10 +339,8 @@ class CCodageCCAM extends CMbObject {
    * @return string
    */
   public function guessAssociation($act) {
-    if (!$act->_id) {
-      return "";
-    }
     $this->completeField("association_rule");
+    $this->completeField("association_auto");
     $this->getActsByTarif();
     $act->_position = array_search($act->_id, array_keys($this->_ordered_acts));
     $this->_check_rules = array();
