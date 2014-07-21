@@ -13,7 +13,7 @@
   <legend>Dessin au crayon</legend>
   <p><label>Largeur du trait<input type="range" min="1" max="10" value="3" onchange="DrawObject.changeDrawWidth($V(this));"/></label></p>
   <p><label>Couleur
-      <input type="text" class="color_picker" name="color" onchange="colorSelect(this.value);" id="color_picker_draw"/>
+      <input type="text" class="color_picker" name="color" value="000000" onchange="colorSelect(this.value);" id="color_picker_draw"/>
     </label>
     <script>
       Main.add(function(){new jscolor.color($('color_picker_draw'), {})})
