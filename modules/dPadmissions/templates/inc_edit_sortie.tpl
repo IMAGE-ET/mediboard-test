@@ -136,7 +136,7 @@
       {{if $module == "dPurgences"}}
         <td>{{mb_value object=$rpu field="sortie_autorisee"}}</td>
       {{else}}
-        <td>{{mb_field object=$sejour field="confirme" register=$register_field_sortie_prevue form=$form_name class=$class_sortie_autorise}}</td>
+        <td>{{mb_field object=$sejour field="confirme" register=$register_field_sortie_prevue form=$form_name class=$class_sortie_autorise onchange="if(!this.value){\$('submitForm_sortie').disabled = false;}else{\$('submitForm_sortie').disabled = true;}"}}</td>
       {{/if}}
     </tr>
     <tr id="sortie_transfert_{{$sejour->_id}}" {{if $sejour->mode_sortie != "transfert"}} style="display:none;" {{/if}}>
@@ -254,7 +254,7 @@
       <tr>
         <td colspan="4" class="button">
           {{mb_field object=$sejour field="confirme_user_id" hidden=true}}
-          <button type="submit" class="save">
+          <button type="submit" id="submitForm_sortie" class="save">
             {{tr}}Save{{/tr}}
           </button>
           {{if $pass_to_confirm || !$pass_to_confirm && $is_praticien}}
