@@ -74,8 +74,7 @@
   };
 
   colorSelect = function(value) {
-    DrawObject.changeDrawColor(value);
-    $('current_color').setStyle({backgroundColor : value});
+    DrawObject.changeDrawColor("#"+value);
   };
 
   insertFromInternet = function(surl) {

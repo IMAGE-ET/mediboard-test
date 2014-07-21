@@ -13,31 +13,11 @@
   <legend>Dessin au crayon</legend>
   <p><label>Largeur du trait<input type="range" min="1" max="10" value="3" onchange="DrawObject.changeDrawWidth($V(this));"/></label></p>
   <p><label>Couleur
-      <div class="basic_color" style="background-color: black;" onclick="colorSelect('black');"></div>
-      <div class="basic_color" style="background-color: gray;" onclick="colorSelect('gray');"></div>
-      <div class="basic_color" style="background-color: white;" onclick="colorSelect('white');"></div>
-      <div class="basic_color" style="background-color: blue;" onclick="colorSelect('blue');"></div>
-      <div class="basic_color" style="background-color: green;" onclick="colorSelect('green');"></div>
-      <div class="basic_color" style="background-color: yellow;" onclick="colorSelect('yellow');"></div>
-      <div class="basic_color" style="background-color: red;" onclick="colorSelect('red');"></div>
-      <div class="basic_color" style="background-color: fuchsia;" onclick="colorSelect('fuchsia');"></div>
-      {{if $app->user_prefs.drawing_advanced_mode}}
-        <form name="osef" method="get" onsubmit="return false;">
-          <input type="hidden" name="color_inout" value="#fff" onchange="colorSelect(this.value);"/>
-          <script>
-            ColorSelector.init = function(form_name) {
-              this.sForm  = form_name;
-              this.sColor = "color_inout";
-              this.sColorView = 'current_color';
-              this.pop();
-            };
-          </script>
-          <button style="border:none; display: inline-block; width:1.35em; height: 2em; text-align: center;" onclick="ColorSelector.init(this.form);">P</button>
-        </form>
-      {{/if}}
-      <span style="display:block; width: 100%; height:1.5em; background-color: black;" id="current_color"></span>
-
+      <input type="text" class="color_picker" name="color" onchange="colorSelect(this.value);" id="color_picker_draw"/>
     </label>
+    <script>
+      Main.add(function(){new jscolor.color($('color_picker_draw'), {})})
+    </script>
   </p>
 </fieldset>
 
