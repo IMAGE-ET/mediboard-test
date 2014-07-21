@@ -188,7 +188,7 @@ class CCodageCCAM extends CMbObject {
     $act->object_class = $this->codable_class;
     $act->object_id = $this->codable_id;
     $act->executant_id = $this->praticien_id;
-    $this->_ref_actes_ccam = $act->loadMatchingList();
+    $this->_ref_actes_ccam = $act->loadMatchingList("code_association");
 
     if ($this->nb_acts != count($this->_ref_actes_ccam)) {
       $this->_recheck_asso = 1;
@@ -239,9 +239,7 @@ class CCodageCCAM extends CMbObject {
     foreach ($this->_ref_actes_ccam_facturables as $_act) {
       $this->_ordered_acts[$_act->_id] = $_act->getTarifSansAssociationNiCharge();
     }
-
-    $this->_ordered_acts = self::orderActsByTarif($this->_ordered_acts);
-    return $this->_ordered_acts;
+    return $this->_ordered_acts = self::orderActsByTarif($this->_ordered_acts);
   }
 
   /**
