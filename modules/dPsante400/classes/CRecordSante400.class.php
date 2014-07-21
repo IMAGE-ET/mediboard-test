@@ -151,7 +151,7 @@ class CRecordSante400 {
    * @param int    $max    Maximum records returned
    * @param string $class  Records specific class instances
    * 
-   * @return CMouvement400[]
+   * @return CRecordSante400[]
    */
   static function loadMultiple($query, $values = array(), $max = 100, $class = "CRecordSante400") {
     if (!new $class instanceof CRecordSante400) {
