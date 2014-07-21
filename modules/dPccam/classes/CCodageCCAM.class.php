@@ -258,6 +258,7 @@ class CCodageCCAM extends CMbObject {
    * @return void
    */
   protected function checkFacturableActs() {
+    $this->_ref_actes_ccam_facturables = array();
     foreach ($this->_ref_actes_ccam as $_acte) {
       if (!$_acte->facturable) {
         $_acte->facturable = 1;
@@ -334,6 +335,9 @@ class CCodageCCAM extends CMbObject {
    * @return string
    */
   public function guessAssociation($act) {
+    if (!$act->_id) {
+      return "";
+    }
     $this->completeField("association_rule");
     $this->getActsByTarif();
     $act->_position = array_search($act->_id, array_keys($this->_ordered_acts));
