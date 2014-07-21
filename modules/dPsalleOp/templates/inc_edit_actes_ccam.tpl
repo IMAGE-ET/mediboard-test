@@ -106,7 +106,7 @@
           {{/if}}
           
           <!-- Couleur de l'acte -->
-          {{if $acte->_id && (($acte->_guess_association == null) || ($acte->code_association == $acte->_guess_association || !$confCCAM.alerte_asso))}}
+          {{if $acte->_id && ($acte->code_association == $acte->_guess_association || !$confCCAM.alerte_asso)}}
             {{assign var=bg_color value=9f9}}
           {{elseif $acte->_id}}
             {{assign var=bg_color value=fc9}}
