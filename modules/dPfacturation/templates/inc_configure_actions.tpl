@@ -1,6 +1,8 @@
 {{if $see}}
   {{$factures|@count}} facture(s) en erreur.
   {{$items|@count}} item(s) concernés.
+  {{if $debut}}Du {{$debut}}{{/if}}
+  {{if $fin}}Du {{$fin}}{{/if}}
   {{if $factures|@count}}
     <table class="tbl">
       <th>Facture</th>

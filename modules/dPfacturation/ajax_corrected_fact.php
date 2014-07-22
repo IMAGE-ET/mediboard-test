@@ -10,7 +10,9 @@
  */
 
 CCanDo::checkAdmin();
-$see  = CValue::get("see", 1);
+$see    = CValue::get("see", 1);
+$debut  = CValue::get("debut", CMbDT::date());
+$fin    = CValue::get("fin", CMbDT::date());
 
 $fact_item = new CFactureItem();
 $ds = $fact_item->_spec->ds;
@@ -25,6 +27,7 @@ $query = "SELECT f.*
   AND f.montant_base = c.montant_base
   AND f.montant_depassement = c.montant_depassement
   AND f.quantite = c.quantite
+  AND f.date BETWEEN '".$debut."' AND '".$fin."'
 ";
 $items = $ds->loadList($query);
 
@@ -104,5 +107,7 @@ $smarty->assign("factures"    , $factures);
 $smarty->assign("items"       , $items);
 $smarty->assign("items_delete", $items_delete);
 $smarty->assign("see"         , $see);
+$smarty->assign("debut"       , $debut);
+$smarty->assign("fin"         , $fin);
 
 $smarty->display("inc_configure_actions.tpl");
