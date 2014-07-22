@@ -173,17 +173,15 @@ class CRecordSante400 {
       // Fetching results
       self::$chrono->start();
       while ($data = $sth->fetch(PDO::FETCH_ASSOC) and $max--) {
-        self::$chrono->stop("multiple load fetch");
-        self::traceChrono("multiple load fetch");
         $record = new $class;
         $record->data = $data;
         $records[] = $record;
         self::$chrono->start();
       }
       self::$chrono->stop("multiple load fetch");
-      self::traceChrono("multiple load fetch");
-
-    } 
+      $count = count($records);
+      self::traceChrono("multiple load fetch for '$count' records");
+    }
     catch (PDOException $e) {
       trigger_error("Error querying '$query' : " . $e->getMessage(), E_USER_ERROR);
     }
