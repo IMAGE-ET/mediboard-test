@@ -320,7 +320,7 @@ printSurveillance = function(operation_id) {
                   <div class="label" title="{{$_evenement.datetime|date_format:$conf.datetime}}
 {{$_evenement.value|JSAttribute|replace:"\\n":"\n"|replace:"\\r":""}}">
                     <a href="#" onclick="editObservationResultSet('{{$_evenement.set_id}}', '{{$pack->_id}}', '{{$_evenement.result_id}}')">
-                      {{$_evenement.value|truncate:50|nl2br}}
+                      {{$_evenement.value|truncate:60|nl2br}}
                     </a>
                   </div>
                 </div>
