@@ -70,32 +70,11 @@ class CNumcharSpec extends CNumSpec {
     // control
     if ($this->control) {
       // Luhn control
-      if ($this->control == "luhn" && !$this->checkLuhn($propValue)) {
+      if ($this->control == "luhn" && !luhn($propValue)) {
         return "La clé est incorrecte";
       }
     }
 
     return null;
-  }
-  
-  /**
-   * Returns true if it's a valid Luhn number.
-   *
-   * @param int $number Number to check
-   *
-   * @fixme Why not use luhn() function ?
-   *
-   * @return bool
-   */
-  function checkLuhn($number) {
-    $split = array_reverse(str_split($number));
-    
-    for ($i = 1; $i <= count($split); $i += 2) {
-      if (isset($split[$i])) {
-        $split[$i] = array_sum(str_split($split[$i]*2));
-      }
-    }
-    
-    return !(array_sum($split) % 10);
   }
 }
