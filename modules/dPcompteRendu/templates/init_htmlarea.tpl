@@ -236,7 +236,7 @@
     data = data.replace(/[\u200B-\u200D\uFEFF]/g, '');
 
     if (!Object.isUndefined(elt.data) && !data) {
-      if (elt.wholeText.trim().length) {
+      if (elt.wholeText.replace(/[\u200B-\u200D\uFEFF]/g, '').trim().length) {
         return;
       }
     }
