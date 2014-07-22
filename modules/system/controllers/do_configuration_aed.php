@@ -19,6 +19,9 @@ if ($object_guid && $object_guid != "global") {
   $object->needsRead();
 }
 
+// Strip slashed because added in store
+$configs = stripslashes_deep($configs);
+
 $messages = CConfiguration::setConfigs($configs, $object);
 
 foreach ($messages as $msg) {

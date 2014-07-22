@@ -111,16 +111,16 @@ Main.add(function() {
         {{assign var=prev_value value=null}}
 
         {{foreach from=$ancestor_configs item=_ancestor name=ancestor}}
-          {{assign var=value value=$_ancestor.config_parent.$_feature}}
+          {{assign var=value value=$_ancestor.config_parent.$_feature|smarty:nodefaults}}
           {{assign var=is_inherited value=true}}
 
           {{if array_key_exists($_feature, $_ancestor.config)}}
-            {{assign var=value value=$_ancestor.config.$_feature}}
+            {{assign var=value value=$_ancestor.config.$_feature|smarty:nodefaults}}
             {{assign var=is_inherited value=false}}
           {{/if}}
 
           {{if $is_inherited}}
-            {{assign var=value value=$prev_value}}
+            {{assign var=value value=$prev_value|smarty:nodefaults}}
           {{/if}}
 
           {{if $_ancestor.object != "default"}}
@@ -140,7 +140,7 @@ Main.add(function() {
             </td>
           {{/if}}
 
-          {{assign var=prev_value value=$value}}
+          {{assign var=prev_value value=$value|smarty:nodefaults}}
         {{/foreach}}
       </tr>
     {{/foreach}}
