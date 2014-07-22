@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @category Soins
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision:$
+ * @version  $Revision$
  * @link     http://www.mediboard.org
  */
 
@@ -103,6 +103,11 @@ class CSetupsoins extends CSetup {
     $this->addDefaultConfig("soins Other show_only_lit_bilan"           , "soins show_only_lit_bilan");
     $this->addDefaultConfig("soins Other ignore_allergies"              , "soins ignore_allergies");
     $this->addDefaultConfig("soins Other vue_condensee_dossier_soins"   , "soins vue_condensee_dossier_soins");
-    $this->mod_version = '0.20';
+    $this->makeRevision('0.20');
+
+    $query = "INSERT INTO `configuration` (`feature`, `value`) VALUES (?1, ?2)";
+    $query = $this->ds->prepare($query, "soins Other default_motif_observation", "Observation d'entrée");
+    $this->addQuery($query);
+    $this->mod_version = '0.21';
   }
 }

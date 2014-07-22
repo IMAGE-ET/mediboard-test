@@ -60,6 +60,7 @@ CConfiguration::register(
           "show_only_lit_bilan"         => "bool default|0",
           "ignore_allergies"            => "str default|aucun|ras|r.a.s.|0",
           "vue_condensee_dossier_soins" => "bool default|0",
+          "default_motif_observation"   => "str",
         ),
       )
     )

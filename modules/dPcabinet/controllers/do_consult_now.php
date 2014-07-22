@@ -139,7 +139,7 @@ if ($type) {
 // Cas standard
 $consult->motif = CValue::post("motif", CAppUI::conf('dPcabinet CConsultation show_motif_consult_immediate') ? "Consultation immédiate" : null);
 if ($type == "entree") {
-  $consult->motif = "Observation d'entrée";
+  $consult->motif = CAppUI::conf('soins Other default_motif_observation', CGroups::loadCurrent()->_guid);
 }
 // Cas des urgences
 if ($sejour->type == "urg") {
