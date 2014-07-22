@@ -181,7 +181,8 @@ var ExObject = {
       start: 0,
       search_mode: null,
       onComplete: function(){},
-      other_container: null
+      other_container: null,
+      readonly: false
     }, options);
 
     target = $(target);
@@ -198,6 +199,8 @@ var ExObject = {
     url.addParam("ex_class_id",     ex_class_id);
     url.addParam("target_element",  target.identify());
     url.mergeParams(options);
+    
+    url.addParam("readonly",        (options.readonly ? 1 : 0));
 
     if (options.other_container) {
       url.addParam("other_container", options.other_container.identify());

@@ -21,6 +21,7 @@ $print           = CValue::get("print");
 $start           = CValue::get("start", 0);
 $limit           = CValue::get("limit");
 $only_host       = CValue::get("only_host");
+$readonly        = CValue::get("readonly");
 
 // Search mode
 $search_mode     = CValue::get("search_mode", 0);
@@ -356,4 +357,5 @@ $smarty->assign("other_container", $other_container);
 $smarty->assign("print",           $print);
 $smarty->assign("start",           $start);
 $smarty->assign("search_mode",     $search_mode);
+$smarty->assign("readonly",        $readonly);
 $smarty->display("inc_list_ex_object.tpl");

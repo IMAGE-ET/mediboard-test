@@ -55,7 +55,7 @@ refreshFiches = function(sejour_id) {
 <table class="tbl" {{if $print || $simple_view}}style="display: none;"{{/if}}>
   <tr>
     <th colspan="10" class="title">
-      Constantes médicales dans le cadre de: 
+      Surveillance dans le cadre de: 
       <br />
       {{if !$can_select_context}}
         {{$context}}
@@ -66,7 +66,10 @@ refreshFiches = function(sejour_id) {
             <option value="{{$curr_context->_guid}}" 
             {{if !$all_contexts && $curr_context->_guid == $context->_guid}}selected="selected"{{/if}}
             {{if !$all_contexts && $curr_context->_guid == $context_guid}}style="font-weight:bold;"{{/if}}
-            >{{$curr_context}}</option>
+            >
+              {{if !$all_contexts && $curr_context->_guid == $context_guid}}&rArr;{{/if}}
+              {{$curr_context}}
+            </option>
           {{/foreach}}
         </select>
       {{/if}}
@@ -82,40 +85,73 @@ refreshFiches = function(sejour_id) {
 {{if $print}}
   <div id="constantes-medicales-graph" style="text-align: center;"></div>
 {{else}}
-   <script type="text/javascript">
-     Main.add(function(){
-      Control.Tabs.create("surveillance-tab");
-     });
-   </script>
+  {{assign var=_context value=$context}}
+  {{assign var=_readonly value=false}}
+  {{if !$_context || $context->_guid != $context_guid}}
+    {{assign var=_readonly value=true}}
+  {{/if}}
+  {{if !$_context}}
+    {{assign var=_context value=$patient}}
+  {{/if}}
+  
+  <script type="text/javascript">
+    Main.add(function () {
+      Control.Tabs.create("surveillance-tab", true, {
+        afterChange: function (container) {
+          switch (container.id) {
+            case "tab-constantes-medicales":
+              break;
+            
+            case "tab-ex_class-list":
+              ExObject.loadExObjects(
+                '{{$_context->_class}}', 
+                '{{$_context->_id}}', 
+                'tab-ex_class-list', 
+                0, 
+                null, 
+                {
+                  readonly: {{$_readonly|ternary:1:0}}
+                }
+              );
+              break;
+            
+            case "tab-fiches":
+              {{if $context instanceof CSejour}}
+                refreshFiches('{{$context->_id}}');
+              {{/if}}
+              break;
+          }
+        }
+      });
+    });
+  </script>
 
     <ul class="control_tabs" id="surveillance-tab">
       <li>
         <a href="#tab-constantes-medicales">Constantes</a>
       </li>
       
-      {{if $context instanceof CSejour && !$simple_view}}
+      {{if !$simple_view}}
         {{if "forms"|module_active}}
           <li>
-            <a href="#tab-ex_class-list" onmousedown="this.onmousedown=null; ExObject.loadExObjects('{{$context->_class}}', '{{$context->_id}}', 'tab-ex_class-list', 0)">
-              Formulaires
-            </a>
+            <a href="#tab-ex_class-list">Formulaires</a>
           </li>
         {{/if}}
         
+        {{if $context instanceof CSejour}}
         <li>
-          <a href="#tab-fiches" onmousedown="refreshFiches('{{$context->_id}}');">Fiches</a>
+          <a href="#tab-fiches">Fiches</a>
         </li>
+        {{/if}}
       {{/if}}
     </ul>
-    <hr class="control_tabs" />
       
   <table class="main" id="tab-constantes-medicales">
     <tr>
-      <td class="narrow" id="constantes-medicales-form" style="width: 30%;
-      ">
+      <td class="narrow" id="constantes-medicales-form" style="width: 30%;">
         {{include file="inc_form_edit_constantes_medicales.tpl" context_guid=$context_guid}}
       </td>
-      <td id="constantes-medicales-graphs" style="width: 69%;">
+      <td id="constantes-medicales-graphs">
         {{unique_id var=uniq_id_constantes}}
          
         <script type="text/javascript">
@@ -151,7 +187,6 @@ refreshFiches = function(sejour_id) {
             </li>
           {{/if}}
         </ul>
-        <hr class="control_tabs" />
         
         {{if $const_ids|@count == $count}}
           <div class="small-warning">
@@ -160,8 +195,8 @@ refreshFiches = function(sejour_id) {
         {{/if}}
           
         <div id="constantes-graph" style="min-height: 290px;">
-          <button class="hslip notext" style="float: left;" title="Afficher/Cacher le formulaire" onclick="$('constantes-medicales-form').toggle();" type="button">
-            Formulaire constantes
+          <button class="hslip notext" style="float: left;" onclick="$('constantes-medicales-form').toggle();" type="button">
+            Afficher/Cacher le formulaire
           </button>
           
           <button id="constantes-medicales-graph-before" class="left" style="float: left;"       onclick="window.oGraphs.shift('before');">Avant</button>

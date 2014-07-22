@@ -21,7 +21,7 @@
             {{if !$print}}
               <hr />
               <div style="white-space: nowrap;">
-                {{if !$search_mode}}
+                {{if !$search_mode && !$readonly}}
                   <button class="edit notext compact" title="{{tr}}Edit{{/tr}}"
                           onclick="ExObject.edit('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}', '{{$target_element}}')">
                  </button>

@@ -8,7 +8,7 @@
         {{mb_include module=digitalpen template=inc_widget_forms_to_validate object_guid="$reference_class-$reference_id" narrow=true}}
       {{/if}}
 
-      {{if $ex_classes_creation|@count}}
+      {{if !$readonly && $ex_classes_creation|@count}}
         <select onchange="ExObject.showExClassFormSelect.defer(this, '{{$self_guid}}')" style="width: 22em;">
           <option value=""> &ndash; Remplir nouveau formulaire </option>
           {{foreach from=$ex_classes_creation item=_ex_class_events key=_ex_class_id}}
@@ -51,12 +51,12 @@
                 {{/if}}
               </strong>
 
-              <a href="#1" onclick="$(this).up('tr').addUniqueClassName('selected'); ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list-{{$uid_exobject}}', 2, '{{$_ex_class_id}}', {other_container: this.up('tr')}); return false;">
+              <a href="#1" onclick="$(this).up('tr').addUniqueClassName('selected'); ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list-{{$uid_exobject}}', 2, '{{$_ex_class_id}}', {other_container: this.up('tr'), readonly: {{$readonly|ternary:1:0}}}); return false;">
                 {{$ex_classes.$_ex_class_id->name}}
               </a>
             </td>
             <td class="narrow">
-              {{if isset($ex_classes_creation.$_ex_class_id|smarty:nodefaults)}}
+              {{if !$readonly && isset($ex_classes_creation.$_ex_class_id|smarty:nodefaults)}}
                 {{assign var=_ex_class_event value=$ex_classes_creation.$_ex_class_id|@reset}}
                 <button class="add notext compact"
                         onclick="showExClassForm('{{$_ex_class_id}}', '{{$reference_class}}-{{$reference_id}}', '{{$_ex_class_event->host_class}}-{{$_ex_class_event->event_name}}', null, '{{$_ex_class_event->event_name}}', '@ExObject.refreshSelf.{{$self_guid}}');">
@@ -67,7 +67,7 @@
             <td class="narrow" style="text-align: right;">
               <span class="compact ex-object-count">{{$_ex_objects_count}}</span>
               <button class="right notext compact"
-                      onclick="$(this).up('tr').addUniqueClassName('selected'); ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list-{{$uid_exobject}}', 2, '{{$_ex_class_id}}', {other_container: this.up('tr')})">
+                      onclick="$(this).up('tr').addUniqueClassName('selected'); ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list-{{$uid_exobject}}', 2, '{{$_ex_class_id}}', {other_container: this.up('tr'), readonly: {{$readonly|ternary:1:0}}})">
               </button>
             </td>
           </tr>
