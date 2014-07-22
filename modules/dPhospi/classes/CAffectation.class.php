@@ -90,9 +90,6 @@ class CAffectation extends CMbObject {
   /** @var CMediusers */
   public $_ref_praticien;
 
-  // EAI Fields
-  public $_eai_initiateur_group_id; // group initiateur du message EAI
-
   /**
    * @see parent::getSpec()
    */

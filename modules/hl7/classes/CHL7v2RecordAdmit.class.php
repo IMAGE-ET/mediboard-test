@@ -239,7 +239,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           $this->mappingVenue($data, $newVenue);
           
           // Notifier les autres destinataires autre que le sender
-          $newVenue->_eai_initiateur_group_id = $sender->group_id;
+          $newVenue->_eai_sender_guid = $sender->_guid;
           // Pas de génération de NDA
           $newVenue->_generate_NDA = false;
           // On ne check pas la cohérence des dates des consults/intervs
@@ -268,7 +268,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           /* @todo voir comment faire (même patient, même praticien, même date ?) */
           
           // Notifier les autres destinataires autre que le sender
-          $newVenue->_eai_initiateur_group_id = $sender->group_id;
+          $newVenue->_eai_sender_guid = $sender->_guid;
           // Pas de génération de NDA
           $newVenue->_generate_NDA = false;
           // On ne check pas la cohérence des dates des consults/intervs
@@ -319,7 +319,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         $newVenue = $this->mappingVenue($data, $newVenue);
         
         // Notifier les autres destinataires autre que le sender
-        $newVenue->_eai_initiateur_group_id = $sender->group_id;
+        $newVenue->_eai_sender_guid = $sender->_guid;
         // Pas de génération de NDA
         $newVenue->_generate_NDA = false;
         // On ne check pas la cohérence des dates des consults/intervs
@@ -380,7 +380,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       }
       
       // Notifier les autres destinataires autre que le sender
-      $newVenue->_eai_initiateur_group_id = $sender->group_id;
+      $newVenue->_eai_sender_guid = $sender->_guid;
       // On ne check pas la cohérence des dates des consults/intervs
       $newVenue->_skip_date_consistencies = true;
 
@@ -1037,6 +1037,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           $object_found_by_vn->_entree     = $newVenue->entree;
 
           break;
+        default:
       }  
       
       $count_list = $object_found_by_vn->countList($where);
@@ -1143,7 +1144,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $this->mappingVenue($data, $newVenue);
     
     // Notifier les autres destinataires autre que le sender
-    $newVenue->_eai_initiateur_group_id = $sender->group_id;
+    $newVenue->_eai_sender_guid = $sender->_guid;
     // On ne check pas la cohérence des dates des consults/intervs
     $newVenue->_skip_date_consistencies = true;
 
@@ -1176,7 +1177,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         $newVenue->praticien_id = $this->_doctor_id;
 
         // Notifier les autres destinataires autre que le sender
-        $newVenue->_eai_initiateur_group_id = $sender->group_id;
+        $newVenue->_eai_sender_guid = $sender->_guid;
         // On ne check pas la cohérence des dates des consults/intervs
         $newVenue->_skip_date_consistencies = true;
 
@@ -1303,9 +1304,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     /* TODO Supprimer ceci après l'ajout des times picker */
     $newVenue->_hour_entree_prevue = null;
-    $newVenue->_min_entree_prevue = null;
+    $newVenue->_min_entree_prevue  = null;
     $newVenue->_hour_sortie_prevue = null;
-    $newVenue->_min_sortie_prevue = null;
+    $newVenue->_min_sortie_prevue  = null;
     
     return $newVenue;
   }
@@ -1359,22 +1360,22 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     switch ($event_code) {
       // Cas d'une suppression de mutation ou d'une permission d'absence
       case "A12" : case "A52" :
-        if (!$movement) {
-          return null;
-        }
-
-        $affectation->load($movement->affectation_id);
-        if (!$affectation->_id) {
-          return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
-        }
-
-        // Pas de synchronisation
-        $affectation->_no_synchro = true;
-        if ($msgAffectation = $affectation->delete()) {
-          return $msgAffectation;
-        }
-
+      if (!$movement) {
         return null;
+      }
+
+      $affectation->load($movement->affectation_id);
+      if (!$affectation->_id) {
+        return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
+      }
+
+      // Pas de synchronisation
+      $affectation->_no_synchro = true;
+      if ($msgAffectation = $affectation->delete()) {
+        return $msgAffectation;
+      }
+
+      return null;
 
       // Annulation admission
       case "A11" :
@@ -1543,8 +1544,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           $affectation->entree    = $newVenue->entree;
           $affectation->sortie    = $newVenue->sortie;
         }
-
-        break;
     }
 
     // Si pas d'UF/service/chambre/lit on retourne une affectation vide
@@ -1695,7 +1694,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
     
     // Notifier les autres destinataires autre que le sender
-    $naissance->_eai_initiateur_group_id = $sender->group_id;
+    $naissance->_eai_sender_guid = $sender->_guid;
     
     return $naissance->store();
   }
@@ -2780,7 +2779,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
 
     // Notifier les autres destinataires autre que le sender
-    $corres_patient->_eai_initiateur_group_id = $sender->group_id;
+    $corres_patient->_eai_sender_guid = $sender->_guid;
 
     if ($msg = $corres_patient->store()) {
       $corres_patient->repair();

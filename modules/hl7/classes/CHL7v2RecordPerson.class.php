@@ -274,7 +274,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
 
     foreach ($sejours as $_sejour) {
       // Notifier les autres destinataires autre que le sender
-      $_sejour->_eai_initiateur_group_id = $sender->group_id;
+      $_sejour->_eai_sender_guid = $sender->_guid;
       // Pas de génération de NDA
       $_sejour->_generate_NDA = false;
       // On ne check pas la cohérence des dates des consults/intervs

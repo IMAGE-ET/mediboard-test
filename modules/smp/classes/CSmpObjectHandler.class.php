@@ -117,7 +117,9 @@ class CSmpObjectHandler extends CEAIObjectHandler {
     if (!CAppUI::conf('smp server')) {
       $mbObject->_fusion = array();
       foreach (CGroups::loadGroups() as $_group) {
-        if ($mbObject->_eai_initiateur_group_id == $_group->_id) {
+        $sender = CMbObject::loadFromGuid($mbObject->_eai_sender_guid);
+
+        if ($sender->group_id == $_group->_id) {
           continue;
         }
         

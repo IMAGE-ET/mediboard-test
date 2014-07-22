@@ -20,8 +20,8 @@ class CEAIObjectHandler extends CMbObjectHandler {
   /** @var array */
   static $handled = array ();
 
-  /** @var null */
-  public $_eai_initiateur_group_id;
+  /** @var  string Sender GUID */
+  public $_eai_sender_guid;
 
   /**
    * If object is handled ?
@@ -58,18 +58,26 @@ class CEAIObjectHandler extends CMbObjectHandler {
       }
       else {
         // On est dans le cas d'un enregisrement provenant d'une interface
-
-        // Chargement des routes du eai_sender_guid
         /** @var CInteropSender $sender */
         $sender = CMbObject::loadFromGuid($mbObject->_eai_sender_guid);
 
-        // Récupération des receivers de ttes les routes
-        /** @var CEAIRoute[] $routes */
-        $routes = $sender->loadBackRefs("routes");
-
         $receivers = array();
-        foreach ($routes as $_route) {
-          $receivers[] = $_route->loadRefReceiver();
+        // Chargement des routes du eai_sender_guid
+        if (CAppUI::conf("eai use_routers")) {
+          // On supprime le _eai_sender_guid sur l'objet pour pouvoir envoyer les messages
+          $mbObject->_eai_sender_guid = null;
+
+          // Récupération des receivers de ttes les routes actives
+          /** @var CEAIRoute[] $routes */
+          $where = array();
+          $where["active"] = " = '1'";
+          $routes = $sender->loadBackRefs("routes", null, null, null, null, null, null, $where);
+
+          $receivers = array();
+          foreach ($routes as $_route) {
+            $receiver = $_route->loadRefReceiver();
+            $receivers[get_class($receiver)][] = $receiver;
+          }
         }
       }
     }
@@ -138,8 +146,8 @@ class CEAIObjectHandler extends CMbObjectHandler {
       return false;
     }
     
-    if (isset($mbObject->_eai_initiateur_group_id)) {
-      $this->_eai_initiateur_group_id = $mbObject->_eai_initiateur_group_id;
+    if (isset($mbObject->_eai_sender_guid)) {
+      $this->_eai_sender_guid = $mbObject->_eai_sender_guid;
     }
 
     return true;
@@ -156,8 +164,8 @@ class CEAIObjectHandler extends CMbObjectHandler {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
-    
-    $mbObject->_eai_initiateur_group_id = $this->_eai_initiateur_group_id;
+
+    $this->_eai_sender_guid = $mbObject->_eai_sender_guid;
 
     if (!$mbObject->_ref_last_log && $mbObject->_class != "CIdSante400") {
       return false;

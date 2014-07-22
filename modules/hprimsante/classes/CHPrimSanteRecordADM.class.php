@@ -425,7 +425,8 @@ class CHPrimSanteRecordADM extends CHPrimSanteMessageXML {
     $patient->_id = $first_patient_id;
 
     // Notifier les autres destinataires
-    $patient->_eai_initiateur_group_id = $this->_ref_sender->group_id;
+
+    $patient->_eai_sender_guid = $this->_ref_sender->_guid;
     $patient->_merging = CMbArray::pluck($patientsElimine_array, "_id");
     if ($msg = $patient->merge($patientsElimine_array)) {
       return new CHPrimSanteError($this->_ref_exchange_hpr, "P", "12", array("P", $this->loop, $this->identifier_patient), "8.3.3", $msg);

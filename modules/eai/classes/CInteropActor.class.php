@@ -176,7 +176,6 @@ class CInteropActor extends CMbObject {
     $backProps["messages_supported"] = "CMessageSupported object_id";
     $backProps["domains"]            = "CDomain actor_id";
     $backProps["dicom_exchanges"]    = "CExchangeDicom receiver_id";
-    $backProps["routes"]             = "CEAIRoute receiver_id";
 
     return $backProps;
   }

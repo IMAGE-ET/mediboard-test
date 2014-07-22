@@ -104,7 +104,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
 
       // Si initiateur du message
-      if ($sejour->_eai_initiateur_group_id) {
+      if ($sejour->_eai_sender_guid) {
         return;
       }
 
@@ -259,7 +259,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Cas où : 
       // * on est l'initiateur du message 
       // * le destinataire ne supporte pas le message
-      if ($affectation->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
+      if ($affectation->_eai_sender_guid || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
         return;
       }
 

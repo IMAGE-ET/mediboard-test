@@ -300,7 +300,7 @@ class CHL7v2MoveAccountInformation extends CHL7v2MessageXML {
     $venue->patient_id = $keep_patient->_id;
 
     // Notifier les autres destinataires autre que le sender
-    $venue->_eai_initiateur_group_id = $sender->group_id;
+    $venue->_eai_sender_guid = $sender->_guid;
     if ($msg = $venue->store()) {
       return $exchange_hl7v2->setAckAR($ack, "E707", $msg, $venue);
     }

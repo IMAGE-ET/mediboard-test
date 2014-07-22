@@ -175,9 +175,6 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_generate_NDA            = true;
   public $_skip_date_consistencies = false; // On ne check pas la cohérence des dates des consults/intervs
 
-  // EAI Fields
-  public $_eai_initiateur_group_id; // group initiateur du message EAI
-
   //Fields for bill
   public $_assurance_maladie;
   public $_rques_assurance_maladie;

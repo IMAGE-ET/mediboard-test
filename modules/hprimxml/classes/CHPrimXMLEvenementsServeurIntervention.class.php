@@ -176,7 +176,7 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     $sejour = $this->mappingVenue($data['venue'], $sejour);
 
     // Notifier les autres destinataires autre que le sender
-    $sejour->_eai_initiateur_group_id = $sender->group_id;
+    $sejour->_eai_sender_guid = $sender->_guid;
     
     /* TODO Supprimer ceci après l'ajout des times picker */
     $sejour->_hour_entree_prevue = null;

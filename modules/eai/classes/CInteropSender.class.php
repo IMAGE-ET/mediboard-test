@@ -66,7 +66,7 @@ class CInteropSender extends CInteropActor {
 
     $backProps["messages_supported"] = "CMessageSupported object_id";
     $backProps["object_links"]       = "CObjectToInteropSender sender_id";
-    $backProps["route_sender"]       = "CEAIRoute sender_id";
+    $backProps["routes"]             = "CEAIRoute sender_id";
 
     return $backProps;
   }

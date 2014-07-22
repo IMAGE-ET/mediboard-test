@@ -77,14 +77,18 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     }
     // Si Client
     else {
-      if ($mbObject->_eai_initiateur_group_id || !$receiver->isMessageSupported("CHPrimXMLEnregistrementPatient")) {
+      if ($mbObject->_eai_sender_guid || !$receiver->isMessageSupported("CHPrimXMLEnregistrementPatient")) {
         return false;
       }
-      
+
       if (!$mbObject->_IPP) {
+        // Génération de l'IPP dans le cas de la création, ce dernier n'était pas créé
+        if ($msg = $mbObject->generateIPP()) {
+          CAppUI::setMsg($msg, UI_MSG_ERROR);
+        }
+
         $IPP = new CIdSante400();
         $IPP->loadLatestFor($mbObject, $receiver->_tag_patient);
-        
         $mbObject->_IPP = $IPP->id400;
       }
   

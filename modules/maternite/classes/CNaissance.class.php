@@ -45,8 +45,6 @@ class CNaissance extends CMbObject {
   /** @var CSejour */
   public $_ref_sejour_maman;
 
-  public $_eai_initiateur_group_id;
-
   /**
    * @see parent::getSpec()
    */

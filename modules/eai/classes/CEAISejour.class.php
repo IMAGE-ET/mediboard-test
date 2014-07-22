@@ -162,11 +162,15 @@ class CEAISejour extends CEAIMbObject {
    */
   static function storeSejour(CSejour $newSejour, CInteropSender $sender, $generateNDA = false) {
     // Notifier les autres destinataires autre que le sender
-    $newSejour->_eai_initiateur_group_id = $sender->group_id;
-    $newSejour->_generate_NDA            = $generateNDA;
+    $newSejour->_eai_sender_guid = $sender->_guid;
+    $newSejour->_generate_NDA    = $generateNDA;
 
     if ($msg = $newSejour->store()) {
       $newSejour->repair();
+
+      // Notifier les autres destinataires autre que le sender
+      $newSejour->_eai_sender_guid = $sender->_guid;
+      $newSejour->_generate_NDA    = $generateNDA;
 
       return $newSejour->store();
     }

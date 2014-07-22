@@ -156,13 +156,16 @@ class CEAIPatient extends CEAIMbObject {
    */ 
   static function storePatient(CPatient $newPatient, CInteropSender $sender, $generateIPP = false) {   
     // Notifier les autres destinataires autre que le sender
-    $newPatient->_eai_initiateur_group_id = $sender->group_id;
-    $newPatient->_generate_IPP            = $generateIPP;
-    
+    $newPatient->_eai_sender_guid = $sender->_guid;
+    $newPatient->_generate_IPP    = $generateIPP;
     if ($msg = $newPatient->store()) {
       if ($sender->_configs && $sender->_configs["repair_patient"]) {
         $newPatient->repair();
       }
+
+      // Notifier les autres destinataires autre que le sender
+      $newPatient->_eai_sender_guid = $sender->_guid;
+      $newPatient->_generate_IPP    = $generateIPP;
       
       return $newPatient->store();
     }

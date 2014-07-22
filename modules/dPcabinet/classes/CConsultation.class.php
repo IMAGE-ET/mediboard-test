@@ -195,9 +195,6 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
   public $_list_forms = array();
   public $_skip_count = false;
 
-  //eai
-  public $_eai_initiateur_group_id;
-
   /**
    * @see parent::getSpec()
    */

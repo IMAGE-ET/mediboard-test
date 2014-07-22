@@ -39,7 +39,7 @@ class CRAD48DelegatedHandler extends CITIDelegatedHandler {
     // Récupération du code du trigger    
     $code = $this->getCode($consultation);
     
-    if ($consultation->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $this->message, $code, $consultation->_receiver)) {
+    if ($consultation->_eai_sender_guid || !$this->isMessageSupported($this->transaction, $this->message, $code, $consultation->_receiver)) {
       return;
     }
     

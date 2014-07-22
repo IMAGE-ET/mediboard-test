@@ -228,9 +228,6 @@ class CPatient extends CPerson {
   // Navigation Fields
   public $_dossier_cabinet_url;
 
-  // EAI Fields
-  public $_eai_initiateur_group_id; // group initiateur du message EAI
-
   // HPRIM Fields
   public $_prenoms; // multiple
   public $_nom_naissance; // +/- = nom_jeune_fille

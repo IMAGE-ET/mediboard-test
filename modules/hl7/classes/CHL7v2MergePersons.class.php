@@ -128,7 +128,7 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
       $mbPatient->_id = $first_patient_id;
 
       // Notifier les autres destinataires
-      $mbPatient->_eai_initiateur_group_id = $sender->group_id;
+      $mbPatient->_eai_sender_guid = $sender->_guid;
       $mbPatient->_merging = CMbArray::pluck($patientsElimine_array, "_id");
       if ($msg = $mbPatient->merge($patientsElimine_array)) {
         return $exchange_hl7v2->setAckAR($ack, "E103", $msg, $mbPatient);

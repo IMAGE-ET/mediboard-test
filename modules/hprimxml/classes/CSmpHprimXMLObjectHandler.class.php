@@ -81,20 +81,23 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       }
       // Si Client
       else {
-        if ($sejour->_eai_initiateur_group_id || !$receiver->isMessageSupported("CHPrimXMLVenuePatient")) {
+        if ($sejour->_eai_sender_guid || !$receiver->isMessageSupported("CHPrimXMLVenuePatient")) {
           return false;
         }
           
         if (CGroups::loadCurrent()->_id != $receiver->group_id) {
           return false;
         }
-        
-        if (!$sejour->_NDA) {
-          $nda = new CIdSante400();
-          //Paramétrage de l'id 400
-          $nda->loadLatestFor($sejour, $receiver->_tag_sejour);
 
-          $sejour->_NDA = $nda->id400;
+        if (!$sejour->_IPP) {
+          // Génération du NDA dans le cas de la création, ce dernier n'était pas créé
+          if ($msg = $sejour->generateNDA()) {
+            CAppUI::setMsg($msg, UI_MSG_ERROR);
+          }
+
+          $NDA = new CIdSante400();
+          $NDA->loadLatestFor($sejour, $receiver->_tag_sejour);
+          $sejour->_NDA = $NDA->id400;
         }
         
         if (!$sejour->_ref_patient->_IPP) {

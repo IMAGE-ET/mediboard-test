@@ -60,7 +60,7 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     $receiver = $mbObject->_receiver;
     $receiver->getInternationalizationCode($this->transaction);
     
-    $eai_initiateur_group_id = $mbObject->_eai_initiateur_group_id;
+    $eai_sender_guid = $mbObject->_eai_sender_guid;
 
     $code = null;
 
@@ -70,9 +70,9 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
         return; 
       }
       
-      $mbObject                           = $mbObject->loadRefPatient();
-      $mbObject->_receiver                = $receiver;
-      $mbObject->_eai_initiateur_group_id = $eai_initiateur_group_id;
+      $mbObject                   = $mbObject->loadRefPatient();
+      $mbObject->_receiver        = $receiver;
+      $mbObject->_eai_sender_guid = $eai_sender_guid;
       
       $code = "A31";
     }
@@ -177,7 +177,7 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     }
     
     $patient = $mbObject;
-    if ($patient->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
+    if ($patient->_eai_sender_guid || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
       return;
     }
      
@@ -186,7 +186,7 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
       if ($msg = $patient->generateIPP()) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
       }
-      
+
       $IPP = new CIdSante400();
       $IPP->loadLatestFor($patient, $receiver->_tag_patient);
       $patient->_IPP = $IPP->id400;
@@ -381,7 +381,7 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     
     $code = ($receiver->_configs["send_update_patient_information"] == "A08") ? "A08" : "A31";
         
-    if ($patient->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
+    if ($patient->_eai_sender_guid || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
       return;
     }
     

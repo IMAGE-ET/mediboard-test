@@ -156,9 +156,6 @@ class COperation extends CCodable implements IPatientRelated {
   /** @var CBesoinRessource[]  */
   public $_ref_besoins;
 
-  // EAI Fields
-  public $_eai_initiateur_group_id; // group initiateur du message EAI
-
   /** @var CMediusers */
   public $_ref_chir;
   /** @var CMediusers */

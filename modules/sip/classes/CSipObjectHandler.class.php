@@ -46,7 +46,7 @@ class CSipObjectHandler extends CEAIObjectHandler {
     if (!parent::onAfterStore($mbObject)) {
       return;
     }
-    
+
     // Si pas de tag patient
     if (!CAppUI::conf("dPpatients CPatient tag_ipp")) {
       throw new CMbException("no_tag_defined");
@@ -88,7 +88,10 @@ class CSipObjectHandler extends CEAIObjectHandler {
     if (!CAppUI::conf('sip server')) {
       $mbObject->_fusion = array();
       foreach (CGroups::loadGroups() as $_group) {
-        if ($mbObject->_eai_initiateur_group_id == $_group->_id) {
+        /** @var CInteropSender $sender */
+        $sender = CMbObject::loadFromGuid($mbObject->_eai_sender_guid);
+
+        if ($sender->group_id == $_group->_id) {
           continue;
         }
         $patient->_IPP = null;

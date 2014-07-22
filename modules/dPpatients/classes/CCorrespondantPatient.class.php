@@ -50,8 +50,6 @@ class CCorrespondantPatient extends CPerson {
   public $num_assure;
   public $employeur;
 
-  public $_eai_initiateur_group_id;
-
   // Form fields
   public $_duplicate;
   public $_is_obsolete = false;
