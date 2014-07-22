@@ -74,7 +74,13 @@
 	    <td style="width: 50%; {{if $_task->realise}}text-decoration: line-through; color: #888;{{/if}}">
 	      {{mb_value object=$_task field="description"}}
 			  {{if $_task->prescription_line_element_id}}
-				  <strong>{{$_task->_ref_prescription_line_element}}</strong>
+				  <strong>
+            {{$_task->_ref_prescription_line_element}}
+            {{if $_task->_ref_prescription_line_element->date_arret && $_task->_ref_prescription_line_element->time_arret}}
+              <br />
+              Prescription arrêtée le {{mb_value object=$_task->_ref_prescription_line_element field=date_arret}} à {{mb_value object=$_task->_ref_prescription_line_element field=time_arret}}
+            {{/if}}
+          </strong>
 				{{/if}}
 			</td>
 	    <td style="width: 50%;">{{mb_value object=$_task field="resultat"}}</td>
