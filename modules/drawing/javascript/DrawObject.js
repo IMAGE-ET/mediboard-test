@@ -49,7 +49,7 @@ DrawObject = {
   },
 
   loadDraw : function(data) {
-    DrawObject.canvas.loadFromJSON(data).renderAll();
+    DrawObject.canvas.loadFromDatalessJSON(data).renderAll();
   },
 
   setProperty : function(name, value) {

@@ -143,7 +143,7 @@
     // init
     DrawObject.init('canvas');
     {{if $draw->_id}}
-      DrawObject.loadDraw('{{$draw->_binary_content|smarty:nodefaults}}');
+    DrawObject.loadDraw({{$draw->_binary_content|smarty:nodefaults}});
     {{else}}
       DrawObject.canvas.backgroundColor = '#'+Preferences.drawing_background;
       DrawObject.canvas.renderAll();
