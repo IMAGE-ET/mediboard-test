@@ -65,7 +65,7 @@
       if (window.oGraphs) {
         url.addParam('hidden_graphs', JSON.stringify(window.oGraphs.getHiddenGraphs()));
       }
-      url.requestUpdate("Constantes");
+      url.requestUpdate("constantes-medicales");
       constantesMedicalesDrawn = true;
     }
   }
@@ -133,7 +133,7 @@
   {{/if}}
 
   <li onmousedown="refreshConstantesMedicales();">
-    <a href="#Constantes" {{if $tabs_count.Constantes == 0}}class="empty"{{/if}}>
+    <a href="#constantes-medicales" {{if $tabs_count.Constantes == 0}}class="empty"{{/if}}>
       {{tr}}soins.tab.surveillance{{/tr}} <small>({{$tabs_count.Constantes}})</small>
     </a>
   </li>
@@ -245,7 +245,7 @@
 
 <div id="AntTrait" style="display: none;"></div>
 
-<div id="Constantes" style="display: none"></div>
+<div id="constantes-medicales" style="display: none"></div>
 
 <div id="Examens" style="display: none;"></div>
 
