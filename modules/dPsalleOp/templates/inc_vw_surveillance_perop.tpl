@@ -317,9 +317,10 @@ printSurveillance = function(operation_id) {
               <div style="padding-left: {{$_evenement.position}}%; margin-left: -1px;" class="evenement">
                 <div>
                   <div class="marking"></div>
-                  <div class="label" title="{{$_evenement.datetime|date_format:$conf.datetime}}">
+                  <div class="label" title="{{$_evenement.datetime|date_format:$conf.datetime}}
+{{$_evenement.value|JSAttribute|replace:"\\n":"\n"|replace:"\\r":""}}">
                     <a href="#" onclick="editObservationResultSet('{{$_evenement.set_id}}', '{{$pack->_id}}', '{{$_evenement.result_id}}')">
-                      {{$_evenement.value|truncate:40}}
+                      {{$_evenement.value|truncate:50|nl2br}}
                     </a>
                   </div>
                 </div>

@@ -140,7 +140,8 @@ class CObservationResultSet extends CMbObject {
         $label = $label_obj->title;
       }
 
-      $float_value = CMbFieldSpec::checkNumeric($_result["value"], false);
+      $float_value = $_result["value"];
+      $float_value = CMbFieldSpec::checkNumeric($float_value, false);
 
       $data[$_result["value_type_id"]][$unit_id][] = array(
         0           => $_time,
