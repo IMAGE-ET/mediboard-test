@@ -56,7 +56,7 @@ function refreshConstantesMedicales (force) {
     if (window.oGraphs) {
       url.addParam('hidden_graphs', JSON.stringify(window.oGraphs.getHiddenGraphs()));
     }
-    url.requestUpdate("Constantes");
+    url.requestUpdate("constantes-medicales");
     constantesMedicalesDrawn = true;
   }
 }
@@ -121,7 +121,7 @@ Main.add(function () {
   <li><a href="#dossier_suivi">Suivi de soins</a></li>
   {{/if}}
   
-  <li onmousedown="refreshConstantesMedicales();"><a href="#Constantes">Constantes</a></li>
+  <li onmousedown="refreshConstantesMedicales();"><a href="#constantes-medicales">Constantes</a></li>
   <li><a href="#Examens">Examens</a></li>
   
   {{if @$modules.dPImeds->mod_active && $consult->sejour_id}}
@@ -181,7 +181,7 @@ Main.add(function () {
 {{/if}}
 
 <div id="AntTrait" style="display: none;">{{mb_include module=cabinet template=inc_ant_consult}}</div>
-<div id="Constantes" style="display: none"></div>
+<div id="constantes-medicales" style="display: none"></div>
 
 <div id="Examens" style="display: none;">
   {{mb_include module=cabinet template=inc_main_consultform}}
