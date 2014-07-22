@@ -95,7 +95,7 @@ if ($pdf) {
   $model = CCompteRendu::getSpecialModel($consult->_ref_chir, "CConsultAnesth", "[FICHE ANESTH]");
 
   if ($model->_id) {
-    CCompteRendu::streamDocForObject($model, $dossier_anesth);
+    CCompteRendu::streamDocForObject($model, $dossier_anesth, "CDomPDFConverter");
   }
 }
 
