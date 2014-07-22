@@ -1336,7 +1336,22 @@ class CSetuphl7 extends CSetup {
 
     $this->addQuery($query);
 
-    $this->mod_version = "0.98";
+    $this->makeRevision("0.98");
+
+    $query = "ALTER TABLE `receiver_hl7v2_config`
+                ADD `build_ZBE_7` ENUM ('medicale','soins') DEFAULT 'medicale',
+                ADD `build_ZBE_8` ENUM ('medicale','soins') DEFAULT 'soins';";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.99");
+
+    $query = "ALTER TABLE `hl7_config`
+                ADD `handle_ZBE_7` ENUM ('medicale','soins') DEFAULT 'medicale',
+                ADD `handle_ZBE_8` ENUM ('medicale','soins') DEFAULT 'soins';";
+
+    $this->addQuery($query);
+
+    $this->mod_version = "1.00";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

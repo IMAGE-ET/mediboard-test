@@ -59,6 +59,8 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "handle_PV1_50",
     "handle_PV2_12",
     "handle_NSS",
+    "handle_ZBE_7",
+    "handle_ZBE_8",
     "create_grossesse",
     "search_master_IPP",
     "search_master_NDA",
@@ -117,6 +119,8 @@ class CHL7Config extends CExchangeDataFormatConfig {
   public $handle_PV1_50;
   public $handle_PV2_12;
   public $handle_NSS;
+  public $handle_ZBE_7;
+  public $handle_ZBE_8;
   public $create_grossesse;
   public $search_master_IPP;
   public $search_master_NDA;
@@ -177,6 +181,8 @@ class CHL7Config extends CExchangeDataFormatConfig {
       "handle_PV1_50",
       "handle_PV2_12",
       "handle_NSS",
+      "handle_ZBE_7",
+      "handle_ZBE_8",
       "ignore_fields",
       "bypass_validating",
       "create_grossesse",
@@ -272,6 +278,10 @@ class CHL7Config extends CExchangeDataFormatConfig {
 
     // => PV2
     $props["handle_PV2_12"] = "enum list|libelle|none default|libelle";
+
+    // => ZBE
+    $props["handle_ZBE_7"] = "enum list|medicale|soins default|medicale";
+    $props["handle_ZBE_8"] = "enum list|medicale|soins default|soins";
 
     // Send
     $props["send_assigning_authority"] = "bool default|1";

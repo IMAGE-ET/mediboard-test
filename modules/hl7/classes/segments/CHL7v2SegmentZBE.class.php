@@ -120,7 +120,8 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
 
     $ufs = $sejour->getUFs(null, $affectation->_id);
     // ZBE-7: Ward of medical responsibility in the period starting with this movement (XON) (optional)
-    $uf_medicale = isset($ufs["medicale"]) ? $ufs["medicale"] : null;
+    $uf_type = $receiver->_configs["build_ZBE_7"];
+    $uf_medicale = isset($ufs[$uf_type]) ? $ufs[$uf_type] : null;
     if (isset($uf_medicale->_id)) {
       $data[] = array(
         array(

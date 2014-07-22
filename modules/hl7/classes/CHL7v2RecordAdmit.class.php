@@ -1711,11 +1711,14 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (!array_key_exists("ZBE", $data)) {
       return null;
     }
-  
-    if (!($ZBE_7 = $this->queryNode("ZBE.7", $data["ZBE"]))) {
+
+    $uf_type = $this->_ref_sender->_configs["handle_ZBE_7"];
+    // si le ZBE.7 possède l'uf de soins on prend le ZBE.8
+    $number  = $uf_type == "soins" ? "8" : "7";
+    if (!($ZBE_7 = $this->queryNode("ZBE.$number", $data["ZBE"]))) {
       return null;
     }
-    
+
     return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_7), "medicale");
   }
 
@@ -1730,8 +1733,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (!array_key_exists("ZBE", $data)) {
       return null;
     }
-  
-    if (!($ZBE_8 = $this->queryNode("ZBE.8", $data["ZBE"]))) {
+
+    $uf_type = $this->_ref_sender->_configs["handle_ZBE_8"];
+    $number  = $uf_type == "medicale" ? "7" : "8";
+    if (!($ZBE_8 = $this->queryNode("ZBE.$number", $data["ZBE"]))) {
       return null;
     }
 
