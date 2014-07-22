@@ -68,6 +68,7 @@
       <button type="button" class="change" onclick="Consultation.plan('{{$consultation->_id}}')">
         {{tr}}Rendez-vous{{/tr}}
       </button>
+
       {{if $object->_can->edit}}
         <button type="button" class="edit" onclick="Consultation.edit('{{$consultation->_id}}')">
           {{tr}}CConsultation{{/tr}}
@@ -75,6 +76,18 @@
         <button type="button" class="edit" onclick="Consultation.edit('{{$consultation->_id}}', 'reglement')">
           {{tr}}Reglement{{/tr}}
         </button>
+
+        {{if $consultation->chrono != 64}}
+          <form method="post" name="finish_consult_{{$consultation->_id}}" onsubmit="return onSubmitFormAjax(this, {})">
+            <input type="hidden" name="chrono" value="64"/>
+            {{mb_key object=$consultation}}
+            {{mb_class object=$consultation}}
+            <button type="button" class="tick" onclick="this.form.onsubmit();">
+              Terminer
+            </button>
+          </form>
+        {{/if}}
+
       {{/if}}
     </td>
   </tr>
