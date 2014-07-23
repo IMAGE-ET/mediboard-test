@@ -18,3 +18,6 @@ $module->registerTab("edit_actes"         , TAB_READ);
 //$module->registerTab("labo_groupage"      , TAB_ADMIN);
 $module->registerTab("form_print_planning", TAB_READ);
 //$module->registerTab("vw_last_docs"       , TAB_EDIT);
+if (CAppUI::conf("ref_pays") == "2") {
+  $module->registerTab("vw_idx_sortie"     , TAB_READ);
+}

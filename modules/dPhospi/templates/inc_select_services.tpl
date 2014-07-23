@@ -59,7 +59,11 @@
 
 <div style="overflow-x: auto;">
   <form name="selectServices" method="get" {{if $ajax_request}}onsubmit="return onSubmitFormAjax(this, null, '{{$view}}')"{{/if}}>
-    <input type="hidden" name="m" value="dPhospi" />
+    {{if  $view == "listSorties" }}
+      <input type="hidden" name="m" value="pmsi" />
+    {{else}}
+      <input type="hidden" name="m" value="hospi" />
+    {{/if}}
     {{if $view == "mouvements"}}
       <input type="hidden" name="tab" value="edit_sorties" />
     {{elseif $view == "tableau"}}
@@ -68,6 +72,8 @@
       <input type="hidden" name="a" value="vw_placement_patients" />
     {{elseif $view == "etat_lits"}}
       <input type="hidden" name="tab" value="vw_recherche" />
+    {{elseif $view == "listSorties"}}
+      <input type="hidden" name="a" value="httpreq_vw_sorties" />
     {{else}}
       <input type="hidden" name="a" value="vw_mouvements" />
     {{/if}}

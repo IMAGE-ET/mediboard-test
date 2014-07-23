@@ -49,7 +49,7 @@ if (!$services_ids_hospi) {
   $services_ids_hospi = "{}";
 }
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP("modules/dPhospi");
 
 $smarty->assign("view"        , $view);
 $smarty->assign("services_ids_hospi", $services_ids_hospi);
