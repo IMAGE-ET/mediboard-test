@@ -89,7 +89,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
           return false;
         }
 
-        if (!$sejour->_IPP) {
+        if (!$sejour->_NDA) {
           // Génération du NDA dans le cas de la création, ce dernier n'était pas créé
           if ($msg = $sejour->generateNDA()) {
             CAppUI::setMsg($msg, UI_MSG_ERROR);
