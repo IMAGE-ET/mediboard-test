@@ -17,9 +17,9 @@
     <tr>
       <th colspan="2" class="title">Couleurs</th>
     </tr>
-    {{mb_include module=system template=inc_config_color var=astreinte_medical_color}}
-    {{mb_include module=system template=inc_config_color var=astreinte_admin_color}}
-    {{mb_include module=system template=inc_config_color var=astreinte_personnelsoignant_color}}
+    {{mb_include module=system template=inc_config_color var=astreinte_medical_color form="editConfigAstreintes"}}
+    {{mb_include module=system template=inc_config_color var=astreinte_admin_color form="editConfigAstreintes"}}
+    {{mb_include module=system template=inc_config_color var=astreinte_personnelsoignant_color form="editConfigAstreintes"}}
 
     {{mb_include module=system template=configure_placeholder placeholder=CAstreintesTemplatePlaceholder}}
     <tr>

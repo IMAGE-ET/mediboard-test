@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module="mediusers" script="color_selector"}}
-
 {{if @$m}}
   {{if @$class}}
     {{assign var=field  value="$m[$class][$var]"}}
@@ -35,24 +33,15 @@
   
   <td {{if @$tdcolspan}}colspan="{{$tdcolspan}}"{{/if}}>
     {{unique_id var=uid}}
-    
-		<script type="text/javascript">
-			ColorSelector.init{{$uid}} = function(form_name, color_view){
-			  this.sForm  = form_name;
-			  this.sColor = "{{$field}}";
-			  this.sColorView = color_view;
-			  this.pop();
-			}
-    </script>
 
-    <span class="color-view" id="color-{{$uid}}" style="background: #{{$value}};">
-      {{tr}}Choose{{/tr}}
-    </span>
-		
-    <button type="button" class="search notext" onclick="ColorSelector.init{{$uid}}(this.form,'color-{{$uid}}')">
-      {{tr}}Choose{{/tr}}
-    </button>
-		
-		<input name="{{$field}}" value="{{$value}}" type="hidden" /> 
+		<input name="{{$field}}" value="{{$value}}" type="text" class="color_picker" />
+    <button type="button" class="cancel notext" onclick="$V(getForm('{{$form}}').elements['{{$field}}'], '', true);"></button>
+
+    <script>
+      Main.add(function(){
+        var _e = getForm('{{$form}}').elements['{{$field}}'];
+        new jscolor.color(_e, {required:false});
+      });
+    </script>
   </td>
 </tr>

@@ -19,16 +19,16 @@
       </th>
     </tr>
 
-    {{mb_include module=system template=inc_config_color class=colors var=ambu}}
-    {{mb_include module=system template=inc_config_color class=colors var=comp}}
-    {{mb_include module=system template=inc_config_color class=colors var=exte}}
-    {{mb_include module=system template=inc_config_color class=colors var=seances}}
-    {{mb_include module=system template=inc_config_color class=colors var=ssr}}
-    {{mb_include module=system template=inc_config_color class=colors var=psy}}
-    {{mb_include module=system template=inc_config_color class=colors var=urg}}
-    {{mb_include module=system template=inc_config_color class=colors var=consult}}
-    {{mb_include module=system template=inc_config_color class=colors var=recuse}}
-    {{mb_include module=system template=inc_config_color class=colors var=default}}
+    {{mb_include module=system template=inc_config_color class=colors var=ambu form="editConfig-dPhospiColor"}}
+    {{mb_include module=system template=inc_config_color class=colors var=comp form="editConfig-dPhospiColor"}}
+    {{mb_include module=system template=inc_config_color class=colors var=exte form="editConfig-dPhospiColor"}}
+    {{mb_include module=system template=inc_config_color class=colors var=seances form="editConfig-dPhospiColor"}}
+    {{mb_include module=system template=inc_config_color class=colors var=ssr form="editConfig-dPhospiColor"}}
+    {{mb_include module=system template=inc_config_color class=colors var=psy form="editConfig-dPhospiColor"}}
+    {{mb_include module=system template=inc_config_color class=colors var=urg form="editConfig-dPhospiColor"}}
+    {{mb_include module=system template=inc_config_color class=colors var=consult form="editConfig-dPhospiColor"}}
+    {{mb_include module=system template=inc_config_color class=colors var=recuse form="editConfig-dPhospiColor"}}
+    {{mb_include module=system template=inc_config_color class=colors var=default form="editConfig-dPhospiColor"}}
     <tr>
       <td colspan="2" class="button">
         <button type="submit" class="save">{{tr}}Save{{/tr}}</button>
