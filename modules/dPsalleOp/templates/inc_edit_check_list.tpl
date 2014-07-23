@@ -222,7 +222,7 @@ Main.add(function(){
             <optgroup label="Praticiens">
               {{assign var=_obj value=$check_list->_ref_object}}
               <option value="{{$_obj->_ref_chir->user_id}}">{{$_obj->_ref_chir}}</option>
-              {{if $anesth_id}}
+              {{if $anesth_id && isset($anesth|smarty:nodefaults)}}
               <option value="{{$anesth->_id}}">{{$anesth}}</option>
               {{/if}}
             </optgroup>
