@@ -116,14 +116,14 @@
       if (window.oGraphs) {
         url.addParam('hidden_graphs', JSON.stringify(window.oGraphs.getHiddenGraphs()));
       }
-      url.requestUpdate("constantes");
+      url.requestUpdate("constantes-medicales");
     }
   }
 
   var constantesMedicalesDrawn = false;
   function refreshConstantesHack(sejour_id) {
     (function(){
-      if (constantesMedicalesDrawn == false && $('constantes').visible() && sejour_id) {
+      if (constantesMedicalesDrawn == false && $('constantes-medicales').visible() && sejour_id) {
         refreshConstantesMedicales('CSejour-'+sejour_id);
         constantesMedicalesDrawn = true;
       }
@@ -313,7 +313,7 @@
             case 'dossier_suivi':
               loadSuivi({{$rpu->sejour_id}});
               break;
-            case 'constantes':
+            case 'constantes-medicales':
               refreshConstantesHack('{{$rpu->sejour_id}}');
               break;
             case 'examens':
@@ -394,7 +394,7 @@
         <li><a href="#antecedents">{{tr}}soins.tab.antecedent_and_treatment{{/tr}}</a></li>
 
         <li>
-          <a href="#constantes">{{tr}}soins.tab.surveillance{{/tr}}</a>
+          <a href="#constantes-medicales">{{tr}}soins.tab.surveillance{{/tr}}</a>
         </li>
 
         {{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
@@ -455,7 +455,7 @@
         {{mb_include module=cabinet template=inc_ant_consult chir_id=$app->user_id show_header=0}}
       </div>
 
-      <div id="constantes" style="display:none"></div>
+      <div id="constantes-medicales" style="display:none"></div>
       <div id="ex-forms-rpu" style="display: none"></div>
 
       <div id="examens"    style="display:none">
