@@ -187,12 +187,21 @@ Admissions = {
     $('sortie_deces_'+sejour_id).setVisible(mode_sortie === "deces");
 
     //Suppression des valeurs lors du changement de mode de sortie
-    $V(form.service_sortie_id                        , "");
-    $V(form.service_sortie_id_autocomplete_view      , "");
-    $V(form.etablissement_sortie_id                  , "");
-    $V(form.etablissement_sortie_id_autocomplete_view, "");
-    $V(form._date_deces                              , "");
-    $V(form._date_deces_da                           , "");
+    if (mode_sortie != "mutation") {
+      $V(form.service_sortie_id                        , "");
+      $V(form.service_sortie_id_autocomplete_view      , "");
+    }
+
+    if (mode_sortie != "transfert") {
+      $V(form.etablissement_sortie_id                  , "");
+      $V(form.etablissement_sortie_id_autocomplete_view, "");
+    }
+
+    if (mode_sortie != "deces") {
+      $V(form._date_deces                              , "");
+      $V(form._date_deces_da                           , "");
+    }
+
     var label_deces = form._date_deces.getLabel();
 
     label_deces.removeClassName("notNull");
