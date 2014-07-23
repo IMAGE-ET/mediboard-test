@@ -364,7 +364,7 @@
         {{/if}}
 
 
-        <li onmouseup="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes-medicales">{{tr}}soins.tab.surveillance{{/tr}}</a></li>
+        <li onmousedown="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes-medicales">{{tr}}soins.tab.surveillance{{/tr}}</a></li>
 
         {{if "forms"|module_active}}
           <li><a href="#ex-forms-rpu">{{tr}}soins.tab.Formulaires{{/tr}}</a></li>
