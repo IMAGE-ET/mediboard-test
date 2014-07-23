@@ -650,7 +650,7 @@ class CCodageCCAM extends CMbObject {
       }
     }
 
-    if (count($this->_ref_actes_ccam_facturables) < 2 || !$chap11 || !$chap12 || !$chap13 || !$chap14) {
+    if (count($this->_ref_actes_ccam_facturables) < 2 || (!$chap11 && !$chap12 && !$chap13 && !$chap14)) {
       return false;
     }
 
