@@ -121,14 +121,12 @@ guessDataFormEmail = function(element){
               <tr>
                 <td class="button">
                   <!-- Test d'envoi SMTP -->
-
                   <button type="button" class="search"
                           onclick="SMTP.connexion('{{$source->name}}');" {{if !$source->_id}}disabled{{/if}}>
                     {{tr}}utilities-source-smtp-connexion{{/tr}}
                   </button>
 
-                  <!-- Liste des fichiers -->
-
+                  <!-- Test d'envoi SMTP -->
                   <button type="button" class="search"
                           onclick="SMTP.envoi('{{$source->name}}');" {{if !$source->_id}}disabled{{/if}}>
                     {{tr}}utilities-source-smtp-envoi{{/tr}}
