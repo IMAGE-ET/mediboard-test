@@ -277,8 +277,8 @@ var ExObject = {
     }
 
     // An empty value hides the target
-    if (triggerValue === ""/* || isNaN(triggerValue)*/) { // pas isNaN car on peut avoir des dates ou du texte!!
-      return false;
+    if (triggerValue === "") {
+      return (predicate.operator == "hasNoValue");
     }
 
     switch (predicate.operator) {
