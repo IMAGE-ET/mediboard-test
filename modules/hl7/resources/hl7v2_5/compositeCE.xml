@@ -13,7 +13,7 @@
             <description>Text</description>
             <datatype>ST</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="20" table="0396">
+        <field minOccurs="0" maxOccurs="0" length="199" table="0396">
             <name>CE.3</name>
             <description>Name of Coding System</description>
             <datatype>ID</datatype>
