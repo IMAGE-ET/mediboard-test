@@ -10,12 +10,18 @@
  */
 
 Route = {
+  add : function (actor_guid, callback) {
+    new Url("eai", "ajax_edit_route")
+      .addParam("actor_guid", actor_guid)
+      .requestModal(400)
+      .modalObject.observe("afterClose", callback);
+  },
 
-  edit : function (id) {
+  edit : function (id, callback) {
     new Url("eai", "ajax_edit_route")
       .addParam("route_id", id)
-      .requestModal(400, 400)
-      .modalObject.observe("afterClose", Route.refreshList);
+      .requestModal(400)
+      .modalObject.observe("afterClose", callback);
   },
 
   refreshList : function () {

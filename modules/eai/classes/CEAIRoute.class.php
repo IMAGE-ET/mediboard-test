@@ -26,6 +26,7 @@ class CEAIRoute extends CMbObject {
   public $receiver_id;
   public $receiver_class;
   public $active;
+  public $description;
 
   /** @var CInteropSender */
   public $_ref_sender;
@@ -56,17 +57,9 @@ class CEAIRoute extends CMbObject {
     $props["receiver_class"] = "str notNull class maxLength|80";
     $props["receiver_id"]    = "ref notNull class|CInteropActor meta|receiver_class";
     $props["active"]         = "bool default|1";
+    $props["description"]    = "text";
 
     return $props;
-  }
-
-  /**
-   * @see parent::getBackProps()
-   */
-  function getBackProps() {
-    $backProps = parent::getBackProps();
-
-    return $backProps;
   }
 
   /**

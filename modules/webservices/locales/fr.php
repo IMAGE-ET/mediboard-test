@@ -128,6 +128,7 @@ $locales['CSenderSOAP.one'] = 'Expéditeur SOAP';
 $locales['CSenderSOAP_actions'] = 'Actions';
 $locales['CSenderSOAP_configs-formats'] = 'Configs formats';
 $locales['CSenderSOAP_formats-available'] = 'Formats disponibles';
+$locales['CSenderSOAP_routes'] = 'Routes';
 $locales['CSourceSOAP'] = 'Source SOAP';
 $locales['CSourceSOAP-_incompatible'] = 'Rôle de la source incompatible avec le rôle de l\'instance';
 $locales['CSourceSOAP-_incompatible-court'] = 'Rôle de la source incompatible avec le rôle de l\'instance';

@@ -404,7 +404,13 @@ class CSetupeai extends CSetup {
                 ADD `transaction` VARCHAR (255);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.22";
+    $this->makeRevision("0.22");
+
+    $query = "ALTER TABLE `eai_router`
+                ADD `description` TEXT;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.23";
 
     $query = "SELECT * FROM `authorspecialty_20121112` WHERE `code` = 'G15_10/PAC00';";
 

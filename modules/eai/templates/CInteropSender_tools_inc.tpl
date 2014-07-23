@@ -29,6 +29,9 @@
               case "tags_{{$actor->_guid}}" :
                 InteropActor.refreshTags('{{$actor->_guid}}');
                 break;
+              case "routes_{{$actor->_guid}}" :
+                InteropActor.refreshRoutes('{{$actor->_guid}}');
+                break;
               case "linked_objects_{{$actor->_guid}}" :
                 InteropActor.refreshLinkedObjects('{{$actor->_guid}}');
                 break;
@@ -37,8 +40,9 @@
       });
     });
   </script>
-    
-  
+
+  {{assign var=count_routes value=$actor->_count.routes}}
+
   <table class="form">  
     <tr>
       <td>
@@ -55,7 +59,12 @@
             <a href="#tags_{{$actor->_guid}}">{{tr}}{{$actor->_parent_class}}_tags{{/tr}}</a></li>  
           <li>
             <a href="#linked_objects_{{$actor->_guid}}">{{tr}}CObjectToInteropSender{{/tr}}</a>
-          </li> 
+          </li>
+          <li>
+            <a class="{{if $count_routes == 0}}empty{{else}}wrong{{/if}}" href="#routes_{{$actor->_guid}}">
+              {{tr}}{{$actor->_class}}_routes{{/tr}} {{if $count_routes > 0}}({{$count_routes}}){{/if}}
+            </a>
+          </li>
           <li>
             <a href="#actions_{{$actor->_guid}}">{{tr}}{{$actor->_class}}_actions{{/tr}}</a></li>
         </ul>
@@ -73,6 +82,8 @@
         <div id="tags_{{$actor->_guid}}" style="display:none"></div>
         
         <div id="linked_objects_{{$actor->_guid}}" style="display: none"></div>
+
+        <div id="routes_{{$actor->_guid}}" style="display: none"></div>
         
         <div id="actions_{{$actor->_guid}}" style="display:none">
           {{mb_include module=$mod_name template="`$actor->_class`_actions_inc"}}

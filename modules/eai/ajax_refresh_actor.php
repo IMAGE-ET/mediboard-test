@@ -22,11 +22,16 @@ if ($actor_class) {
 }
 else {
   if ($actor_guid) {
+    /** @var CInteropActor $actor */
     $actor = CMbObject::loadFromGuid($actor_guid);
     if ($actor->_id) {
       $actor->loadRefGroup();
       $actor->loadRefUser();
       $actor->loadRefObjectConfigs();
+
+      if ($actor instanceof CInteropSender) {
+        $actor->countBackRefs("routes");
+      }
     }
   }
 }

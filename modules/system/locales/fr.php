@@ -1472,6 +1472,7 @@ $locales['CSenderFileSystem.one'] = 'Un expéditeur système de fichiers';
 $locales['CSenderFileSystem_actions'] = 'Actions';
 $locales['CSenderFileSystem_configs-formats'] = 'Configs formats';
 $locales['CSenderFileSystem_formats-available'] = 'Formats disponibles';
+$locales['CSenderFileSystem_routes'] = 'Routes';
 $locales['CSourceFTP.new'] = 'Nouvelle source FTP';
 $locales['CSourceFileSystem'] = 'Source FS';
 $locales['CSourceFileSystem-_incompatible'] = 'Rôle de la source incompatible avec le rôle de l\'instance';

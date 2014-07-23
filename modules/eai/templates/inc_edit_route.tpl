@@ -79,6 +79,10 @@
       <td>{{mb_field object=$route field="active"}}</td>
     </tr>
     <tr>
+      <th>{{mb_label object=$route field="description"}}</th>
+      <td>{{mb_field object=$route field="description"}}</td>
+    </tr>
+    <tr>
       <td colspan="2" class="button">
         {{if $route->_id}}
           <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>

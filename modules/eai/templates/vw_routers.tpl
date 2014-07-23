@@ -20,6 +20,7 @@
 </script>
 
 <button type="button" class="new" onclick="Route.edit()">
-  {{tr}}New-female{{/tr}} {{tr}}CEAIRoute{{/tr}}
+  {{tr}}CEAIRoute-new{{/tr}}
 </button>
+
 <div id="list_route"></div>

@@ -11,14 +11,14 @@
 
 <table class="tbl">
   <tr>
-    <th colspan="6" class="title">
+    <th colspan="7" class="title">
       {{tr}}CEAIRoute.list{{/tr}}
     </th>
   </tr>
   <tr>
     <th class="section" colspan="2">{{tr}}CInteropSender{{/tr}}</th>
     <th class="section" colspan="2">{{tr}}CInteropReceiver{{/tr}}</th>
-    <th class="section"></th>
+    <th class="section" colspan="2"></th>
   </tr>
   <tr>
     <th> {{mb_title class=CEAIRoute field=sender_class}} </th>
@@ -26,40 +26,58 @@
     <th> {{mb_title class=CEAIRoute field=receiver_class}} </th>
     <th> {{mb_title class=CEAIRoute field=receiver_id}} </th>
     <th> {{mb_title class=CEAIRoute field=active}} </th>
+    <th> {{mb_title class=CEAIRoute field=description}} </th>
   </tr>
-  {{foreach from=$routes item=_route}}
-    {{assign var=sender value=$_route->_ref_sender}}
-    <tr>
-      <td>
-        <button type="button" class="edit notext" onclick="Route.edit('{{$_route->_id}}')">
-          {{tr}}Edit{{/tr}}
-        </button>
-        {{$sender->_class}}
-      </td>
-      <td>
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$sender->_guid}}');">
-           {{$sender->_view}}
-         </span>
-      </td>
-
+  {{foreach from=$routes key=_sender_guid item=_routes}}
+    {{assign var=sender value=$senders.$_sender_guid}}
+    <tbody class="hoverable">
+    {{foreach from=$_routes item=_route name="foreach_routes"}}
       {{assign var=receiver value=$_route->_ref_receiver}}
-      <td>
-        {{$receiver->_class}}
-      </td>
-      <td>
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$receiver->_guid}}');">
-           {{$receiver->_view}}
-         </span>
-      </td>
-      <td>
-        <form name="editActiveRoute{{$_route->_id}}" method="post" onsubmit="return onSubmitFormAjax(this)">
-          {{mb_key object=$_route}}
-          {{mb_class object=$_route}}
-          {{mb_field object=$_route field="active" onchange=this.form.onsubmit()}}
-        </form>
-      </td>
-    </tr>
-    {{foreachelse}}
-    <tr><td colspan="6" class="empty">{{tr}}CEAIRoute.none{{/tr}}</td></tr>
+
+        <tr>
+          {{if $smarty.foreach.foreach_routes.first}}
+          <td rowspan="{{$_routes|@count}}" class="button">
+            <button type="button" class="add notext"
+                    onclick="Route.add('{{$sender->_guid}}', 'Route.refreshList()')">{{tr}}CInteropSender-add-route{{/tr}}</button>
+
+           {{tr}} {{$sender->_class}} {{/tr}}
+          </td>
+          {{/if}}
+
+          {{if $smarty.foreach.foreach_routes.first}}
+          <td rowspan="{{$_routes|@count}}">
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$sender->_guid}}');">
+               {{$sender->_view}}
+             </span>
+          </td>
+          {{/if}}
+
+          <td class="button">
+            <button type="button" class="edit notext" onclick="Route.edit('{{$_route->_id}}', 'Route.refreshList()')">
+              {{tr}}Edit{{/tr}}
+            </button>
+
+            {{tr}} {{$receiver->_class}} {{/tr}}
+          </td>
+
+          <td>
+           <span onmouseover="ObjectTooltip.createEx(this, '{{$receiver->_guid}}');">
+             {{$receiver->_view}}
+           </span>
+          </td>
+
+          <td>
+            <form name="editActiveRoute{{$_route->_id}}" method="post" onsubmit="return onSubmitFormAjax(this)">
+              {{mb_key object=$_route}}
+              {{mb_class object=$_route}}
+              {{mb_field object=$_route field="active" onchange=this.form.onsubmit()}}
+            </form>
+          </td>
+          <td class="text compact">
+            {{mb_value object=$_route field="description"}}
+          </td>
+        </tr>
+    {{/foreach}}
+    </tbody>
   {{/foreach}}
 </table>

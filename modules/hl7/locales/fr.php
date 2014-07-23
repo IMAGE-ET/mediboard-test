@@ -1199,6 +1199,7 @@ $locales['CSenderMLLP.one'] = 'Expéditeur MLLP';
 $locales['CSenderMLLP_actions'] = 'Actions';
 $locales['CSenderMLLP_configs-formats'] = 'Configs formats';
 $locales['CSenderMLLP_formats-available'] = 'Formats disponibles';
+$locales['CSenderMLLP_routes'] = 'Routes';
 $locales['CSourceHTTP-libelle-desc'] = 'Libellé de la source MLLP';
 $locales['CSourceMLLP'] = 'Source MLLP';
 $locales['CSourceMLLP-_incompatible'] = 'Rôle de la source incompatible avec le rôle de l\'instance';

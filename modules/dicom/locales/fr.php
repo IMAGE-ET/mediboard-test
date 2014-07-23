@@ -47,6 +47,7 @@ $locales['CDicomSender.one'] = 'un expéditeur Dicom';
 $locales['CDicomSender_actions'] = 'Actions';
 $locales['CDicomSender_configs-formats'] = 'Config formats';
 $locales['CDicomSender_formats-available'] = 'Formats disponibles';
+$locales['CDicomSender_routes'] = 'Routes';
 $locales['CDicomSession'] = 'Session Dicom';
 $locales['CDicomSession-_date_max'] = 'jusqu\'au';
 $locales['CDicomSession-_date_max-court'] = 'jusqu\'au';
