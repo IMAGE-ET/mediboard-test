@@ -40,7 +40,7 @@ $where["sejour.group_id"] = "= '$group_id'";
 $where["sejour.patient_id"] = "= '$consult->patient_id'";
 /** @var CSejour[] $sejours */
 $sejour = new CSejour();
-$sejours = $sejour->loadListWithPerms(PERM_EDIT, $where);
+$sejours = $sejour->loadListWithPerms(PERM_READ, $where);
 CMbObject::massLoadFwdRef($sejours, "praticien_id");
 foreach ($sejours as $_sejour) {
   $_sejour->loadRefPraticien()->loadRefFunction();
