@@ -24,6 +24,7 @@
 {{assign var=class_mode_sortie value=""}}
 {{assign var=is_praticien value=$app->_ref_user->isPraticien()}}
 {{assign var=register_field_sortie_prevue value=false}}
+{{assign var=modify_sortie_reelle value=false}}
 
 {{if $modify_sortie_prevue}}
   {{assign var=class_sortie_autorise value="inform-field"}}
@@ -31,6 +32,7 @@
 {{assign var=register_field_sortie_prevue value=true}}
 {{/if}}
 {{else}}
+  {{assign var=modify_sortie_reelle value=true}}
   {{assign var=class_mode_sortie value="notNull"}}
   {{assign var=class_sortie_reelle value="inform-field"}}
 {{/if}}
@@ -72,7 +74,7 @@
     <tr>
       {{if $module != "dPurgences" || ($module == "dPurgences" && $rpu && $rpu->sejour_id !== $rpu->mutation_sejour_id)}}
         <th>{{mb_label object=$sejour field="sortie_reelle"}}</th>
-        <td>{{mb_field object=$sejour field="sortie_reelle" form=$form_name register=false class=$class_sortie_reelle
+        <td>{{mb_field object=$sejour field="sortie_reelle" form=$form_name register=$modify_sortie_reelle class=$class_sortie_reelle
                       onchange="Admissions.updateLitMutation(this.form);"}}</td>
       {{else}}
         <th></th>
