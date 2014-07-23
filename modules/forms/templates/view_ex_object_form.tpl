@@ -20,9 +20,17 @@ ExObjectForms.{{$ex_form_hash}} = {
   confirmSavePrint: function(form){
     var oldCallback = $V(form.callback);
     $V(form.callback, 'ExObjectForms.{{$ex_form_hash}}.printForm');
-
-    (FormObserver.changes == 0 || confirm("Pour imprimer le formulaire, il est nécessaire de l'enregistrer, souhaitez-vous continuer ?")) &&
-             form.onsubmit();
+    
+    if (FormObserver.changes > 0) {
+      Modal.confirm("Pour imprimer le formulaire, il est nécessaire de l'enregistrer, souhaitez-vous continuer ?", {
+        onOK: function(){
+          form.onsubmit();
+        }
+      });
+    }
+    else {
+      form.onsubmit();
+    }
 
     $V(form.callback, oldCallback);
 

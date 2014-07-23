@@ -217,7 +217,7 @@ toggleGroupLabelEdit = function(link) {
 
 <table class="main layout">
   <tr>
-    <td style="width: 20em; max-width: 300px;">
+    <td style="width: 22em; max-width: 300px;">
       {{foreach from=$object->_ref_groups item=_group}}
         <div id="group-{{$_group->_guid}}" style="display: none;">
           <script type="text/javascript">
@@ -249,7 +249,7 @@ toggleGroupLabelEdit = function(link) {
           <table class="main tbl">
             <tbody id="list-fields-{{$_group->_guid}}" style="display: none;">
               <tr>
-                <td style="text-align: right; min-width: 14em;">
+                <td style="text-align: right; min-width: 15em;" colspan="2">
                   <button type="button" class="new" onclick="ExField.create({{$object->_id}}, '{{$_group->_id}}')">
                     {{tr}}CExClassField-title-create{{/tr}}
                   </button>
@@ -297,6 +297,7 @@ toggleGroupLabelEdit = function(link) {
                       {{/if}}
                     </a>
                   </td>
+                  <td class="narrow spec-type spec-type-{{$_spec_type}}" title="{{tr}}CMbFieldSpec.type.{{$_spec_type}}{{/tr}}" style="padding: 1px;"></td>
                 </tr>
               {{foreachelse}}
                 <tr>

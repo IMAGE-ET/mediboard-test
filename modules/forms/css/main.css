@@ -454,3 +454,54 @@ ul.ac-native-fields .col-class {
   background-color: rgba(127,127,127,0.1);
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#1A7F7F7F,endColorstr=#1A7F7F7F)";
 }
+
+.spec-type {
+  font-size: 0.7em;
+  color: #999;
+}
+
+.spec-type-enum:before {
+  content: "LCU";
+}
+.spec-type-set:before {
+  content: "LCM";
+}
+.spec-type-str:before {
+  content: "TXC";
+}
+.spec-type-text:before {
+  content: "TXL";
+}
+.spec-type-num:before {
+  content: "ENT";
+}
+.spec-type-float:before {
+  content: "FLO";
+}
+.spec-type-date:before {
+  content: "DAT";
+}
+.spec-type-time:before {
+  content: "HRE";
+}
+.spec-type-dateTime:before {
+  content: "DTH";
+}
+.spec-type-bool:before {
+  content: "BLN";
+}
+.spec-type-pct:before {
+  content: "PCT";
+}
+.spec-type-birthDate:before {
+  content: "NAI";
+}
+.spec-type-phone:before {
+  content: "TEL";
+}
+.spec-type-currency:before {
+  content: "MON";
+}
+.spec-type-email:before {
+  content: "EML";
+}
