@@ -8,8 +8,14 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-  Main.add(Control.Tabs.create.curry('tabs-configure', true));
+<script>
+  Main.add(Control.Tabs.create.curry('tabs-configure', true, {
+    afterChange: function(container) {
+      if (container.id == "CConfigEtab") {
+        Configuration.edit('dPhospi', 'CGroups', $('CConfigEtab'));
+      }
+    }
+  }));
 </script>
 
 <ul id="tabs-configure" class="control_tabs">
@@ -20,12 +26,9 @@
   <li><a href="#CMovement">{{tr}}CMovement{{/tr}}</a></li>
   <li><a href="#config-synchro_sejour_affectation">{{tr}}config-synchro_sejour_affectation{{/tr}}</a></li>
   <li><a href="#config-colors">{{tr}}config-color_type_hospi{{/tr}}</a></li>
-  <li onmousedown="Configuration.edit('dPhospi', 'CGroups', $('CConfigEtab'))">
-    <a href="#CConfigEtab">Config par établissement</a>
+  <li><a href="#CConfigEtab">Config par établissement</a>
   </li>
 </ul>
-
-<hr class="control_tabs" />
 
 <div id="config-dPhospi" style="display: none;">
   {{mb_include template=inc_config_dPhospi}}

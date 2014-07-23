@@ -77,25 +77,25 @@ if ($filter->user_id) {
   $where["user_id"] = "= '$filter->user_id'";
 }
 
-// Inclusion des logs sur l'objet CContentHTML si c'est un compte-rendu
-if ($object instanceof CCompteRendu) {
-  $object->loadContent(false);
-  $content = $object->_ref_content;
-  // To activate force index below
-  $where["object_id"] = "IN ('$filter->object_id', '$content->_id')";
-  // Actual query
-  $where[] = "
+switch ($object->_class) {
+  case "CCompteRendu":
+    // Inclusion des logs sur l'objet CContentHTML
+    $object->loadContent(false);
+    $content = $object->_ref_content;
+    // To activate force index below
+    $where["object_id"] = "IN ('$filter->object_id', '$content->_id')";
+    // Actual query
+    $where[] = "
     (object_id = '$filter->object_id' AND object_class = '$filter->object_class') OR
-    (object_id = '$content->_id'      AND object_class = 'CContentHTML')
-  ";
-}
-else {
-  if ($filter->object_id) {
-    $where["object_id"   ] = "= '$filter->object_id'";
-  }
-  if ($filter->object_class) {
-    $where["object_class"] = "= '$filter->object_class'";
-  }
+    (object_id = '$content->_id'      AND object_class = 'CContentHTML')";
+    break;
+  default:
+    if ($filter->object_id) {
+      $where["object_id"   ] = "= '$filter->object_id'";
+    }
+    if ($filter->object_class) {
+      $where["object_class"] = "= '$filter->object_class'";
+    }
 }
 
 if ($filter->type) {

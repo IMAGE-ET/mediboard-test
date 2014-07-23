@@ -106,7 +106,7 @@
       </td>
     </tr>
 
-    {{if $_sejour->prestation_id}}
+    {{if $systeme_presta == "standard" && $_sejour->prestation_id}}
     <tr>
       <td colspan="2"><strong>Prestation: </strong>{{$_sejour->_ref_prestation}}</td>
     </tr>

@@ -2,14 +2,15 @@
 
 Prestations = {
   callback: null,
-  
+  urlPresta: null,
+
   edit: function(sejour_id, context) {
     var url = new Url('planningOp', 'ajax_vw_prestations');
     url.addParam('sejour_id', sejour_id);
     if (context) {
       url.addParam('context', context);
     }
-    url.requestModal(800, 600, {
+    Prestations.urlPresta = url.requestModal(800, 600, {
       onClose: Prestations.refreshAfterEdit,
       showReload: true
     });
@@ -19,6 +20,9 @@ Prestations = {
   refreshAfterEdit : function() {
     if (window.refreshMouvements) {
       refreshMouvements();
+    }
+    if (window.Placement.loadTableau) {
+      Placement.loadTableau();
     }
   }
 };

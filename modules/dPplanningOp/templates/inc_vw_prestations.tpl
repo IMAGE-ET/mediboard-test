@@ -12,8 +12,7 @@
     window.save_checked = div.select("input").pluck("checked");
     Modal.open(id_div).observe("afterClose",
       function() {
-        Control.Modal.close();
-        Prestations.edit('{{$sejour->_id}}');
+        Prestations.urlPresta.refreshModal();
       }
     );
   };
@@ -144,7 +143,7 @@
               <strong>{{$_date|date_format:"%d/%m"}} {{$day}}</strong>
             </span>
             
-            <div class="modal" id="edit_{{$_date}}" style="display: none;">
+            <div id="edit_{{$_date}}" style="display: none;">
               <table class="form">
                 <th class="title" colspan="2">
                   {{$_date|date_format:$conf.date}}
@@ -157,6 +156,7 @@
                   {{/if}}
                   <tr>
                     <th class="category" colspan="2">
+                      {{mb_include module=system template=inc_object_history object=$liaison}}
                       {{$_prestation}}
                     </th>
                   </tr>
