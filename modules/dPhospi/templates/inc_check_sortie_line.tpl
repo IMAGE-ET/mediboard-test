@@ -96,7 +96,7 @@
         {{/if}}
       {{/if}}
     </div>
-    <div class="not-printable">
+    <div class="not-printable" style="text-align: center">
       {{if $affectation}}
         {{assign var=aff_guid value=$affectation->_guid}}
       {{else}}
@@ -113,6 +113,7 @@
           {{mb_value object=$sejour field=sortie}}
           / {{mb_value object=$sejour field="mode_sortie"}}
         {{else}}
+          {{mb_value object=$sejour field=sortie_prevue}}<br/>
           <button class="add" type="button" onclick="addDays(this, 1)">1J</button>
           {{mb_field object=$sejour field=sortie_prevue hidden=true form="editSortiePrevue-`$type`-`$aff_guid`" onchange="this.form.onsubmit()"}}
         {{/if}}
