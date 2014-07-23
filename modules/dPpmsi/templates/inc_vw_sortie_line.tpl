@@ -58,7 +58,7 @@
     <img src="images/icons/tick.png" title="Sortie confirmée par le praticien" />
   {{/if}}
 </td>
-<td class="text">
+<td class="text button">
   <button type="button" class="tick" disabled>Facturer</button>
   <button type="button" class="print" disabled>Facturation</button>
   <button type="button" class="print" disabled>CHOP</button>

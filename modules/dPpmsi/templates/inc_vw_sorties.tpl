@@ -66,7 +66,7 @@
     <th>
       {{mb_colonne class="CSejour" field="sortie_prevue" order_col=$order_col order_way=$order_way function=sortBy}}
     </th>
-    <th>{{tr}}Actions{{/tr}}</th>
+    <th style="width: 30%">{{tr}}Actions{{/tr}}</th>
   </tr>
 
   {{foreach from=$sejours item=_sejour}}

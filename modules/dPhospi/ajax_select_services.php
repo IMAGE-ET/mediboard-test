@@ -9,10 +9,10 @@
  * @version    $Revision$
  */
 
-$services_ids = CValue::getOrSession("services_ids");
+$services_ids         = CValue::getOrSession("services_ids", array());
 $services_ids_suggest = CValue::get("services_ids_suggest", null);
-$view         = CValue::get("view");
-$ajax_request = CValue::get("ajax_request", 1);
+$view                 = CValue::get("view");
+$ajax_request         = CValue::get("ajax_request", 1);
 
 if (!is_array($services_ids_suggest) && !is_null($services_ids_suggest)) {
   $services_ids = explode(",", $services_ids_suggest);
@@ -20,20 +20,22 @@ if (!is_array($services_ids_suggest) && !is_null($services_ids_suggest)) {
 
 $group_id = CGroups::loadCurrent()->_id;
 
-$service = new CService();
-$where = array();
-$where["group_id"] = "= '$group_id'";
-$where["cancelled"] = "= '0'";
+$where               = array();
+$where["group_id"]   = "= '$group_id'";
+$where["cancelled"]  = "= '0'";
 $where["secteur_id"] = "IS NULL";
-$order = "externe, nom";
-$all_services = $service->loadList($where, $order);
+$order               = "externe, nom";
+
+$service = new CService();
+$all_services        = $service->loadList($where, $order);
 
 unset($where["secteur_id"]);
 $services_allowed = $service->loadListWithPerms(PERM_READ, $where, $order);
 
 $where = array();
 $where["group_id"] = "= '$group_id'";
-$secteur = new CSecteur();
+
+$secteur  = new CSecteur();
 $secteurs = $secteur->loadList($where, "nom");
 
 foreach ($secteurs as $_secteur) {
