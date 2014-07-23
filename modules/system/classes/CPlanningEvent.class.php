@@ -71,10 +71,6 @@ class CPlanningEvent  {
    * @param bool        $html_escape    do I escape the html from title
    */
   function __construct ($guid, $date, $length = 0, $title = "", $color = null, $important = true, $css_class = null, $draggable_guid = null, $html_escape = true) {
-    if (!$color) {
-      $color = "#999";
-    }
-    
     $this->guid = $guid;
     $this->draggable_guid = $draggable_guid;
     

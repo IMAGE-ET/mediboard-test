@@ -158,9 +158,11 @@
             <div class="day_events">
               <p class="day_number">{{$_day|date_format:"%e"}}{{if $oday->ferie}} ({{$calendar->_ref_holidays.$_day}}){{/if}}</p>
               {{foreach from=$_events item=_event}}
-                <div id="{{$_event->guid}}" class="{{$_event->css_class}} event">
+                <div id="{{$_event->guid}}" class="{{$_event->css_class}} event" {{if $_event->color}}style="border-left:solid 4px {{$_event->color}}" {{/if}}>
                   {{if $_event->mb_object.guid}}
-                    <span onmouseover="ObjectTooltip.createEx(this, '{{$_event->mb_object.guid}}')">{{$_event->title|smarty:nodefaults}}</span>
+                    <span onmouseover="ObjectTooltip.createEx(this, '{{$_event->mb_object.guid}}')">
+                      {{$_event->title|smarty:nodefaults}} - {{$_event->color}}
+                    </span>
                   {{else}}
                     {{$_event->title|smarty:nodefaults}}
                   {{/if}}

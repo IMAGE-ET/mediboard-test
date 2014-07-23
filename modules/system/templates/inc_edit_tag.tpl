@@ -31,18 +31,8 @@
     <tr>
       <th>{{mb_label object=$tag field=color}}</th>
       <td>
-        <script>
-          ColorSelector.init = function(){
-            this.sForm  = "edit_tag_{{$tag->_guid}}";
-            this.sColor = "color";
-            this.sColorView = "edit_tag_{{$tag->_guid}}_color";
-            this.pop();
-          }
-        </script>
-        {{mb_field object=$tag field=color style="background: #`$tag->color`;" readonly="readonly"}}
-        <button type="button" class="search notext" onclick="ColorSelector.init()">
-          {{tr}}Choose{{/tr}}
-        </button>
+        {{assign var=guid value=$tag->_guid}}
+        {{mb_field object=$tag field=color form="edit_tag_$guid"}}
       </td>
     </tr>
 

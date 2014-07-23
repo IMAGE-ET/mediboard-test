@@ -49,7 +49,7 @@ class CTag extends CMbObject {
     $props["parent_id"]    = "ref class|CTag autocomplete|name dependsOn|object_class";
     $props["object_class"] = "str class";
     $props["name"]         = "str notNull seekable";
-    $props["color"]        = "str maxLength|20";
+    $props["color"]        = "color";
     $props["_nb_items"]    = "num";
     return $props;
   }
