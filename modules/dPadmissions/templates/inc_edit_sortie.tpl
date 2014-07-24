@@ -117,14 +117,14 @@
             {{/foreach}}
           </select>
         {{else}}
-          {{if $rpu->mutation_sejour_id}}
+          {{if $rpu && $rpu->mutation_sejour_id}}
             {{assign var=mode_sortie value="mutation"}}
            {{else}}
             {{assign var=mode_sortie value=$sejour->mode_sortie}}
           {{/if}}
           {{mb_field object=$sejour field="mode_sortie" class=$class_mode_sortie value=$mode_sortie onchange="ContraintesRPU.changeOrientationDestination(this.form);Admissions.changeSortie(this.form, '`$sejour->_id`')"}}
         {{/if}}
-        {{if !$rpu->mutation_sejour_id}}
+        {{if !$rpu || ($rpu && !$rpu->mutation_sejour_id)}}
           <input type="hidden" name="group_id" value="{{if $sejour->group_id}}{{$sejour->group_id}}{{else}}{{$g}}{{/if}}" />
         {{else}}
           <strong>
