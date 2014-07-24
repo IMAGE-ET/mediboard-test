@@ -194,6 +194,11 @@ form[name="form-grid-layout"].pickmode .drop-grid .droppable:hover {
   min-height: 10px;
 }
 
+.pixel-positionning .reported-icon {
+  height: 13px;
+  width: 13px;
+}
+
 .pixel-positionning .subgroup > .overlayed > fieldset {
   margin: 0;
 }
@@ -267,15 +272,6 @@ form[name="form-grid-layout"].pickmode .drop-grid .droppable:hover {
   line-height: 1;
 }
 
-/** <IE8 specific> **/
-.ua-msie-8 .pixel-positionning .resizable fieldset {
-  padding-top: 0;
-}
-.ua-msie-8 .pixel-positionning .resizable fieldset legend {
-  margin-top: -1px;
-}
-/** </IE8 specific> **/
-
 .pixel-positionning .resizable fieldset .wrapper {
   overflow-y: auto;
   position: absolute;
@@ -283,6 +279,10 @@ form[name="form-grid-layout"].pickmode .drop-grid .droppable:hover {
   left: 2px;
   right: 2px;
   bottom: 2px;
+}
+
+.ua-firefox .pixel-positionning .resizable fieldset .wrapper {
+  top: 2px;
 }
 
 .pixel-positionning .resizable.no-size > *,
