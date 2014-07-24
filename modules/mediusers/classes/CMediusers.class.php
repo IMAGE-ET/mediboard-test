@@ -825,12 +825,13 @@ class CMediusers extends CPerson {
     }
 
     // Can't use parent::store cuz user_id don't auto-increment
-    $vars = $this->getPlainFields();
     if ($this->user_id) {
+      $vars = $this->getPlainFields();
       $ret = $spec->ds->updateObject($spec->table, $this, $vars, $spec->key, $spec->nullifyEmptyStrings);
     }
     else {
       $this->user_id = $user->user_id;
+      $vars = $this->getPlainFields();
       $keyToUpdate = $spec->incremented ? $spec->key : null;
       $ret = $spec->ds->insertObject($spec->table, $this, $vars, $keyToUpdate);
     }
