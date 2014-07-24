@@ -131,7 +131,7 @@ if ($userSel->_id) {
       $where["chir_id"] = "= '$userSel->_id'";
     }
     
-    $_plage->loadRefsOperations($canceled, "annulee ASC, rank, rank_voulu, horaire_voulu", false, null, $where);
+    $_plage->loadRefsOperations($canceled, "annulee ASC, rank, rank_voulu, horaire_voulu", true, null, $where);
 
     // Chargement d'optimisation
 
