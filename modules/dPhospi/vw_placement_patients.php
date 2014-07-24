@@ -11,8 +11,8 @@
 
 CCanDo::checkRead();
 // Récupération des paramètres
-$date           = CValue::getOrSession("date", CMbDT::dateTime());
-$services_ids   = CValue::getOrSession("services_ids");
+$date         = CValue::getOrSession("date", CMbDT::dateTime());
+$services_ids = CValue::getOrSession("services_ids");
 
 $group_id           = CGroups::loadCurrent()->_id;
 $pref_services_ids  = json_decode(CAppUI::pref("services_ids_hospi"));
@@ -171,6 +171,7 @@ foreach ($listAff as &$_aff) {
   $_aff->loadRefSejour();
   $_aff->_ref_sejour->checkDaysRelative($date);
   $_aff->_ref_sejour->loadRefPatient()->loadRefDossierMedical(false);
+  $_aff->_ref_sejour->loadRefPrestation();
 }
 
 $dossiers = CMbArray::pluck($listAff, "_ref_sejour", "_ref_patient", "_ref_dossier_medical");
@@ -202,6 +203,7 @@ foreach ($listNotAff["Non placés"] as $key => $_sejour) {
     $_sejour->loadRefPatient();
     $_sejour->checkDaysRelative($date);
   }
+  $_sejour->loadRefPrestation();
 }
 
 // Chargement des affectations dans les couloirs (sans lit_id)
@@ -219,16 +221,17 @@ foreach ($listNotAff["Couloir"] as $_aff) {
   $_aff->loadView();
   $_aff->loadRefSejour();
   $_aff->_ref_sejour->checkDaysRelative($date);
+  $_aff->_ref_sejour->loadRefPrestation();
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("chambres"              , $chambres);
-$smarty->assign("date"                  , $date);
-$smarty->assign("chambres_affectees"    , $listAff);
-$smarty->assign("list_patients_notaff"  , $listNotAff);
-$smarty->assign("services"              , $services_noms);
-$smarty->assign("grilles"               , $grilles);
+$smarty->assign("chambres"            , $chambres);
+$smarty->assign("date"                , $date);
+$smarty->assign("chambres_affectees"  , $listAff);
+$smarty->assign("list_patients_notaff", $listNotAff);
+$smarty->assign("services"            , $services_noms);
+$smarty->assign("grilles"             , $grilles);
 
 $smarty->display("vw_placement_patients.tpl");

@@ -9,13 +9,12 @@
  * @version    $Revision$
  */
 
-CCanDo::checkEdit();
-
 global $g;
 
+CCanDo::checkEdit();
 // Récupération des paramètres
-$date  = CValue::getOrSession("date", CMbDT::dateTime());
-$services_ids    = CValue::getOrSession("services_ids");
+$date         = CValue::getOrSession("date", CMbDT::dateTime());
+$services_ids = CValue::getOrSession("services_ids");
 
 if (is_array($services_ids)) {
   CMbArray::removeValue("", $services_ids);
@@ -39,6 +38,7 @@ $where["group_id"] = "= '$g'";
 $listNotAff["Non placés"] = $sejour->loadList($where);
 
 foreach ($listNotAff["Non placés"] as $key => $_sejour) {
+  /* @var CSejour $_sejour*/
   $_sejour->loadRefsAffectations();
   if (!empty($_sejour->_ref_affectations)) {
     unset($listNotAff["Non placés"][$key]);
@@ -47,6 +47,7 @@ foreach ($listNotAff["Non placés"] as $key => $_sejour) {
     $_sejour->loadRefPatient();
   }
   $_sejour->checkDaysRelative($date);
+  $_sejour->loadRefPrestation();
 }
 
 // Chargement des affectations dans les couloirs (sans lit_id)
@@ -61,9 +62,11 @@ $affectation = new CAffectation();
 $listNotAff["Couloir"] = $affectation->loadList($where, "entree ASC", null, null, $ljoin);
 
 foreach ($listNotAff["Couloir"] as $_aff) {
+  /* @var CAffectation $_aff*/
   $_aff->loadView();
   $_aff->loadRefSejour();
   $_aff->_ref_sejour->checkDaysRelative($date);
+  $_aff->_ref_sejour->loadRefPrestation();
 }
 
 // Création du template

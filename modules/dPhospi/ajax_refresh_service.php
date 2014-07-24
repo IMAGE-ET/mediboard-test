@@ -1,22 +1,21 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Hospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
-
-CCanDo::checkRead();
 
 global $g;
 
+CCanDo::checkRead();
 // Récupération des paramètres
-$date  = CValue::getOrSession("date", CMbDT::dateTime());
-$service_id    = CValue::get("service_id");
-$chambre_id    = CValue::get("chambre_id");
+$date       = CValue::getOrSession("date", CMbDT::dateTime());
+$service_id = CValue::get("service_id");
+$chambre_id = CValue::get("chambre_id");
 
 $service = new CService();
 if ($service_id) {
@@ -34,6 +33,7 @@ $grille = array_fill(0, 10, array_fill(0, 10, 0));
   
 $chambres = $service->loadRefsChambres();
 foreach ($chambres as $ch) {
+  /* @var CChambre $ch*/
   $ch->loadRefEmplacement();
   if ($ch->_ref_emplacement->_id) {
     $ch->loadRefsLits();
@@ -137,13 +137,14 @@ foreach ($listAff as &$_aff) {
   $_aff->loadView();
   $_aff->loadRefSejour();
   $_aff->_ref_sejour->checkDaysRelative($date);
+  $_aff->_ref_sejour->loadRefPrestation();
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("chambres_affectees"  , $listAff);
-$smarty->assign("grille"              , $grille);
-$smarty->assign("key"                 , $service->_id);
+$smarty->assign("chambres_affectees", $listAff);
+$smarty->assign("grille"            , $grille);
+$smarty->assign("key"               , $service->_id);
 
 $smarty->display("inc_plan_service.tpl");

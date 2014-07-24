@@ -34,8 +34,14 @@
     </div>
     <br/>
     <div class="libelle compact" style="float:left;">
-      {{$_sejour->libelle|truncate:30|lower}}
       {{if $conf.dPhospi.show_age_patient}}({{$patient->_age}}){{/if}}
+      {{if $conf.dPhospi.systeme_prestations}}
+        <em style="color: #f00;" title="Chambre {{if $_sejour->chambre_seule}}seule{{else}}double{{/if}}">
+          {{if $_sejour->chambre_seule}}CS{{else}}CD{{/if}}
+          {{if $_sejour->prestation_id}}- {{$_sejour->_ref_prestation->code}}{{/if}}&nbsp;
+        </em>
+      {{/if}}
+      {{$_sejour->libelle|truncate:30|lower}}
     </div>
     {{if $can->edit}}
       <div style="float:right;">

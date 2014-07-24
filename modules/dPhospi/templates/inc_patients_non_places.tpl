@@ -64,10 +64,16 @@
               <div style="width: {{if $_sejour->_duree}}{{math equation='100*(-entree / (duree))' entree=$_sejour->_entree_relative duree=$_sejour->_duree format='%.2f'}}{{else}}100{{/if}}%;"></div>
               </div>
              <div class="libelle compact">
-                {{$_sejour->libelle|lower}}
-                {{$_sejour->_type_admission}}
-                <div style="float:left;{{if !$conf.dPhospi.show_age_patient}}display:none;{{/if}}">({{$_patient->_age}})</div>
-              </div>
+              {{if $conf.dPhospi.systeme_prestations}}
+                <em style="color: #f00;" title="Chambre {{if $_sejour->chambre_seule}}seule{{else}}double{{/if}}">
+                  {{if $_sejour->chambre_seule}}CS{{else}}CD{{/if}}
+                  {{if $_sejour->prestation_id}}- {{$_sejour->_ref_prestation->code}}{{/if}}
+                </em>
+              {{/if}}
+              <div style="float:left;{{if !$conf.dPhospi.show_age_patient}}display:none;{{/if}}">({{$_patient->_age}})&nbsp;</div>
+              {{$_sejour->libelle|lower}}
+              {{$_sejour->_type_admission}}
+             </div>
             </div>
           {{/if}}
         {{foreachelse}}
