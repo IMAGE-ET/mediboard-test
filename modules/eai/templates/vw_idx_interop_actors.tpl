@@ -36,7 +36,7 @@
 
 <table class="main">
   <tr>
-    <td style="width:35%;">
+    <td style="width: 35%">
       <ul id="tabs-actors" class="control_tabs">
         <li>
           <a href="#CInteropReceivers">
@@ -62,7 +62,7 @@
         {{mb_include template=inc_actors actor=$sender actors=$senders parent_class="CInteropSender"}}
       </div>
     </td>
-    <td style="width:70%" rowspan="2" class="halfPane" id="actor">
+    <td style="width: 65%" class="halfPane" id="actor">
     </td> 
   </tr>
 </table>

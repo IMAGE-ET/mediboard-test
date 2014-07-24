@@ -11,7 +11,7 @@
 {{mb_script module=eai    script=exchange_data_format ajax=true}}
 {{mb_script module=system script=sender_fs            ajax=true}}
 
-<table class="main">
+<table class="tbl">
   <tr>
     <th colspan="2" class="category">{{tr}}CSenderFileSystem-utilities{{/tr}}</th>
   </tr>  
@@ -22,8 +22,7 @@
         {{tr}}CSenderFileSystem-utilities_create_exchanges{{/tr}}
       </button> 
     </td>
-    <td id="CSenderFileSystem-create_exchanges"></td>
-  </tr> 
+  </tr>
   
   <tr>
     <td class="narrow">
@@ -31,8 +30,7 @@
         {{tr}}CExchangeDataFormat-utilities_treatment_exchanges{{/tr}}
       </button> 
     </td>
-    <td id="CExchangeDataFormat-treatment_exchanges"></td>
-  </tr> 
+  </tr>
    
   <tr>
     <td class="narrow">
@@ -40,6 +38,5 @@
         {{tr}}CSenderFileSystem-utilities_dispatch{{/tr}}
       </button> 
     </td>
-    <td id="CSenderFileSystem-utilities_dispatch"></td>
-  </tr> 
+  </tr>
 </table>
