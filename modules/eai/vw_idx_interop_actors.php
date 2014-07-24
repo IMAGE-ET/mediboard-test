@@ -12,11 +12,11 @@
  
 CCanDo::checkRead();
 
-$receiver = new CInteropReceiver(); 
-$receivers = $receiver->getObjects();
+$receiver  = new CInteropReceiver();
+$receivers = array();
 
-$sender = new CInteropSender(); 
-$senders = $sender->getObjects();
+$sender  = new CInteropSender();
+$senders = array();
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -9,17 +9,19 @@
  * @link     http://www.mediboard.org
 *}}
 
-{{mb_script module=system script=exchange_source}}
+<script>
+  Main.add(function () {
+    var link = $('tabs-actors').select("a[href=#{{$parent_class}}s]")[0];
+    link.update("{{tr}}{{$parent_class}}-court{{/tr}} (<span title='Total actifs'>{{$count_actors_actif}}</span> / <span title='Total'>{{$count_actors}}</span>)");
+    {{if $actors|@count == '0'}}
+      link.addClassName('empty');
+    {{else}}
+      link.removeClassName('empty');
+    {{/if}}
+  });
+</script>
 
 <table class="tbl">
-  <tr>
-    <th class="title" colspan="5">
-      <a style="float: right" class="button change notext" href="#" onclick="InteropActor.refreshActors('{{$actor->_class}}');">
-        {{tr}}reload{{/tr}} {{tr}}{{$actor->_class}}{{/tr}}
-      </a>
-      {{tr}}{{$actor->_class}}{{/tr}}
-    </th>
-  </tr>
   <tr>
     <th>{{mb_label object=$actor field="nom"}}</th>
     <th>{{mb_label object=$actor field="group_id"}}</th>
@@ -28,29 +30,16 @@
   {{foreach from=$actors key=type_actor item=_actors}}
     <tr>
       <th class="section" colspan="6">
-        <a style="float: right" class="button new notext" href="#" onclick="InteropActor.refreshActor(null, '{{$type_actor}}');" 
-            title="Créer acteurs {{$type_actor}}">
+        <a style="float: right" class="button new notext" href="#"
+            onclick="InteropActor.editActor(null, '{{$type_actor}}', '{{$parent_class}}');"
+            title="Créer acteurs {{tr}}{{$type_actor}}{{/tr}}">
           {{tr}}{{$type_actor}}-title-create{{/tr}}
         </a>
         {{tr}}{{$type_actor}}{{/tr}}
       </th>
     </tr>
     {{foreach from=$_actors item=_actor}}
-    <tr {{if !$_actor->actif}} class="opacity-30" {{/if}}>
-      <td class="text">
-        <a href="#" onclick="InteropActor.refreshActor('{{$_actor->_guid}}', null);" title="Modifier l'acteur d'intégration">
-          {{$_actor->_view}}
-        </a>
-      </td>
-      <td>{{$_actor->_ref_group->_view}}</td>
-      <td>
-        {{foreach from=$_actor->_ref_exchanges_sources item=_exchange_source}}
-          {{if !$_actor instanceof CSenderSOAP && !$_actor instanceof CSenderMLLP && !$_actor instanceof CDicomSender}}
-            {{mb_include module=system template=inc_img_status_source exchange_source=$_exchange_source}}
-          {{/if}}
-        {{/foreach}}
-      </td>
-    </tr>
+      {{mb_include template=inc_actor}}
     {{/foreach}}
   {{/foreach}}
 </table>

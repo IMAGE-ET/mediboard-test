@@ -384,10 +384,10 @@ class CInteropActor extends CMbObject {
   /**
    * Get objects
    * 
-   * @return array CInteropReceiver/CInteropSender collection 
+   * @return array CInteropReceiver/CInteropSender collection
    */
   function getObjects() {
-    $receiver = new CInteropReceiver(); 
+    $receiver = new CInteropReceiver();
     $sender   = new CInteropSender(); 
     
     return array(

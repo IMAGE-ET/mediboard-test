@@ -90,6 +90,7 @@ class CInteropReceiver extends CInteropActor {
   function getObjects() {
     $objects = array();
     foreach (self::getChildReceivers() as $_interop_receiver) {
+      /** @var CInteropReceiver $receiver */
       $receiver = new $_interop_receiver;
       
       $order = "group_id ASC, nom ASC";
@@ -99,6 +100,7 @@ class CInteropReceiver extends CInteropActor {
         continue;
       }
       foreach ($objects[$_interop_receiver] as $_receiver) {
+        /** @var CInteropReceiver $_receiver */
         $_receiver->loadRefGroup();
         $_receiver->isReachable();
         // Pose des problèmes de performances (SLOW QUERY)

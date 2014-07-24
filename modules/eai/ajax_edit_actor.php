@@ -1,16 +1,17 @@
-<?php 
+<?php
+
 /**
- * Details interop receiver EAI
- *  
+ * $Id$
+ *
  * @category EAI
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
  * @link     http://www.mediboard.org
  */
- 
-CCanDo::checkRead();
+
+CCanDo::checkEdit();
 
 $actor_guid  = CValue::getOrSession("actor_guid");
 $actor_class = CValue::getOrSession("actor_class");
@@ -27,12 +28,11 @@ else {
     if ($actor->_id) {
       $actor->loadRefGroup();
       $actor->loadRefUser();
-      $actor->isReachable();
     }
   }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("_actor" , $actor);
-$smarty->display("inc_actor.tpl");
+$smarty->assign("actor" , $actor);
+$smarty->display("inc_edit_actor.tpl");

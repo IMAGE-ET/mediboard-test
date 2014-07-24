@@ -43,7 +43,7 @@
 
   {{assign var=count_routes value=$actor->_count.routes}}
 
-  <table class="form">  
+  <table class="main">
     <tr>
       <td>
         <ul id="tabs-{{$actor->_guid}}" class="control_tabs">

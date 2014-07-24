@@ -13,7 +13,7 @@ ExchangeSource = {
   status_images : ["images/icons/status_red.png", "images/icons/status_orange.png", "images/icons/status_green.png"],
   sources_actif : {},
 
-  resfreshImageStatus: function(element) {
+  resfreshImageStatus: function(element, actor_actif, actor_parent_class) {
     if (!element.get('id')) {
       return;
     }
@@ -25,6 +25,26 @@ ExchangeSource = {
 
     url.addParam("source_guid", element.get('guid'));
     url.requestJSON(function(status) {
+      if (actor_parent_class) {
+        var link = $('tabs-actors').select("a[href=#"+actor_parent_class+"s]")[0];
+
+        if (!ExchangeSource.sources_actif[actor_parent_class]) {
+          ExchangeSource.sources_actif[actor_parent_class] = 0;
+        }
+
+        if (actor_actif == 1 && status.reachable != 2) {
+          ExchangeSource.sources_actif[actor_parent_class] = ExchangeSource.sources_actif[actor_parent_class]+1;
+
+          link.addClassName('wrong');
+
+          Control.Tabs.setTabCount(actor_parent_class+"s", ExchangeSource.sources_actif[actor_parent_class]);
+        }
+
+        if (!ExchangeSource.sources_actif[actor_parent_class]) {
+          link.removeClassName('wrong');
+        }
+      }
+
       element.src = ExchangeSource.status_images[status.reachable];
       element.onmouseover = function() { 
         ObjectTooltip.createDOM(element, 

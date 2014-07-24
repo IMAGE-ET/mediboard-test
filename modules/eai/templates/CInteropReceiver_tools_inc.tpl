@@ -37,7 +37,7 @@
     });
   </script>
   
-  <table class="form">  
+  <table class="main">
     <tr>
       <td>
         <ul id="tabs-{{$actor->_guid}}" class="control_tabs">
