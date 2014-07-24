@@ -75,6 +75,10 @@ class CEAIObjectHandler extends CMbObjectHandler {
 
           $receivers = array();
           foreach ($routes as $_route) {
+            if (!$_route->active) {
+              continue;
+            }
+
             $receiver = $_route->loadRefReceiver();
             $receivers[get_class($receiver)][] = $receiver;
           }
