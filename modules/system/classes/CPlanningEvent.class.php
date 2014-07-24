@@ -27,6 +27,7 @@ class CPlanningEvent  {
   public $plage     = array();
   public $menu      = array();
   public $mb_object = array();
+  public $datas     = array();      // used for data-xxx="test" for the event div
   
   public $start;
   public $end;

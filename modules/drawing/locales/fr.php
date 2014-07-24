@@ -27,5 +27,7 @@ $locales['module-drawing-court'] = 'Dessin';
 $locales['module-drawing-long'] = 'Annotation et dessin';
 $locales['pref-drawing_advanced_mode'] = 'Dessin en mode expert';
 $locales['pref-drawing_advanced_mode-desc'] = 'Utiliser le dessin de manière avancée';
+$locales['pref-drawing_background'] = 'Couleur de fond des dessins';
+$locales['pref-drawing_background-desc'] = 'Couleur par défaut du fond des dessins lors de la création';
 $locales['vw_list_file'] = 'Vue en liste';
 $locales['vw_list_gallery'] = 'Gallerie';

@@ -11,10 +11,10 @@
  * @link     http://www.mediboard.org
  */
 
-$date = CValue::get("date", CMbDT::date());
+$date = CValue::getOrSession("date", CMbDT::date());
 
 $user = CMediusers::get();
-$prat_id      = CValue::get("prat_id");
+$prat_id      = CValue::getOrSession("prat_id");
 $function_id  = CValue::get("function_id");
 
 if (!$prat_id && !$function_id) {
@@ -75,9 +75,10 @@ foreach ($prats as $_prat) {
     $_plage->loadRefsConsultations(false);
     $count = count($_plage->_ref_consultations);
     $_plage->loadFillRate();
-    $event = new CPlanningEvent($_plage->_guid, $_plage->date." $_plage->debut", CMbDT::minutesRelative($_plage->date." ".$_plage->debut, $_plage->date." ".$_plage->fin));
+    $event = new CPlanningEvent($_plage->_guid, $_plage->date." $_plage->debut", CMbDT::minutesRelative($_plage->date." ".$_plage->debut, $_plage->date." ".$_plage->fin), null, "#".$_plage->color);
     $title = $_plage->libelle ? $_plage->libelle : CAppUI::tr($_plage->_class);
     $event->title = "<strong>".CMbDT::format($_plage->debut, "%H:%M"). " - " .CMbDT::format($_plage->fin, "%H:%M")."</strong> $count ".CAppUI::tr("CConsultation");
+    $event->title .= $count > 1 ? "s" : null;
     $event->title .= "<small>";
     $event->title .= "<br/>$title";
     if ($function_id) {
@@ -87,6 +88,7 @@ foreach ($prats as $_prat) {
     $event->title .= $_plage->_cumulative_minutes ? CMbDT::time("+ $_plage->_cumulative_minutes MINUTES", "00:00:00") : "&mdash;";
     $event->title .= "</small>";
     $event->type = $_plage->_class;
+    $event->datas = array("id" => $_plage->_id);
     $event->css_class = $_plage->_class;
     $event->setObject($_plage);
     $calendar->days[$_plage->date][$_plage->_guid] = $event;
@@ -116,6 +118,7 @@ foreach ($prats as $_prat) {
     $event->title .= $_plage->_cumulative_minutes ? CMbDT::transform("+ $_plage->_cumulative_minutes MINUTES", "00:00:00", "%Hh%M") : " &mdash;" ;
     $event->title .= "</small>";
     $event->type = $_plage->_class;
+    $event->datas = array("id" => $_plage->_id);
     $event->css_class = $_plage->_class;
     $event->setObject($_plage);
     $calendar->days[$_plage->date][$_plage->_guid] = $event;
@@ -132,9 +135,9 @@ foreach ($prats as $_prat) {
     WHERE date BETWEEN  '$calendar->date_min' AND  '$calendar->date_max'
     AND chir_id = '$_prat->_id'
     GROUP BY date, plageop_id";
-  $results = $ds->loadList($sql);
+  $hps = $ds->loadList($sql);
 
-  foreach ($results as $_hp) {
+  foreach ($hps as $_hp) {
     $guid = "hps_".$_hp["date"].$_prat->_id;
     $event = new CPlanningEvent($guid, $_hp["date"]." ".$_hp["first_time"], CMbDT::minutesRelative($_hp["date"]." 00:00:00", $_hp["date"]." ".$_hp["accumulated_time"]));
     $event->title = "<strong>".CMbDT::format($_hp["first_time"], '%H:%M')." - ".CMbDT::format($_hp["last_time"], "%H:%M")."</strong> ".$_hp["nb_op"]." ".CAppUI::tr("CIntervHorsPlage");
@@ -145,11 +148,17 @@ foreach ($prats as $_prat) {
     $event->title.= "<br/>Durée cumulée : ".CMbDT::format($_hp["accumulated_time"], '%Hh%M');
     $event->title.= "</small>";
 
+    $event->datas = array("date" => $_hp['date']);
+
     $event->css_class = $event->type = "CIntervHorsPlage";
+    $event->css_class .= " date_".$_hp["date"];
     $calendar->days[$_hp["date"]][$guid] = $event;
   }
 }
 
 $smarty = new CSmartyDP();
 $smarty->assign("calendar", $calendar);
+$smarty->assign("plages_op", $plages_op);
+$smarty->assign("plages_consult", $plages_c);
+$smarty->assign("hors_plage", $hps);
 $smarty->display("inc_vw_month.tpl");

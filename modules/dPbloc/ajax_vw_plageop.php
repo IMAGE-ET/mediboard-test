@@ -11,6 +11,8 @@
  * @link     http://www.mediboard.org
  */
 
+CCanDo::checkRead();
+
 $plage_id = CValue::get("plage_id");
 
 $object = new CPlageOp();
