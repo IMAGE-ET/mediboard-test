@@ -120,6 +120,7 @@ $locales['CIndispoRessource.none'] = 'Aucune indisponibilité';
 $locales['CIndispoRessource.one'] = 'Une indisponibilité';
 $locales['CMediusers-back-plages_op_anesth'] = 'Plages opératoires';
 $locales['CMediusers-back-plages_op_chir'] = 'Plages opératoires';
+$locales['COperation-_time_op-court'] = 'Durée Op';
 $locales['CPlageOp'] = 'Plage Opératoire';
 $locales['CPlageOp-_type_repeat'] = 'Type de répétition';
 $locales['CPlageOp-_type_repeat-court'] = 'Répétition';
