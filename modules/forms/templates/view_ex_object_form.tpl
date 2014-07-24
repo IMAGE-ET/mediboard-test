@@ -25,14 +25,14 @@ ExObjectForms.{{$ex_form_hash}} = {
       Modal.confirm("Pour imprimer le formulaire, il est nécessaire de l'enregistrer, souhaitez-vous continuer ?", {
         onOK: function(){
           form.onsubmit();
+          $V(form.callback, oldCallback);
         }
       });
     }
     else {
       form.onsubmit();
+      $V(form.callback, oldCallback);
     }
-
-    $V(form.callback, oldCallback);
 
     return false;
   },
