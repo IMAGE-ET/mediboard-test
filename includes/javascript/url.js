@@ -719,6 +719,7 @@ var Url = Class.create({
       minChars: 2,
       frequency: autocompleteDelays[Preferences.autocompleteDelay],
       width: null,
+      inputWidth: null,
       dropdown: false,
       valueElement: null,
 
@@ -861,6 +862,16 @@ var Url = Class.create({
     // Drop down button, like <select> tags
     if (oOptions.dropdown) {
       var container = new Element("div").addClassName("dropdown");
+
+      if (oOptions.inputWidth) {
+        container.addClassName("fixed-width").setStyle({
+          width: oOptions.inputWidth
+        });
+        
+        input.setStyle({
+          width: '100%'
+        });
+      }
 
       input.wrap(container);
       container.insert(populate);

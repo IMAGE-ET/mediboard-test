@@ -106,13 +106,24 @@
   <tr>
     <th>{{mb_label object=$op field="libelle"}}</th>
     <td colspan="2">
-      {{mb_field object=$op field="libelle" style="width: $easy_length_input_label%; padding-right: 1px;" onfocus="ProtocoleSelector.init()" readonly="readonly"}}
-      <button class="search notext" type="button" onclick="ProtocoleSelector.init()">
-        Choisir un protocole
-      </button>
-      {{if @$modules.mvsante->_can->read && "mvsante"|module_active}}
-        <button class="edit notext" type="button" onclick="LiaisonOp.edit('{{$op->_id}}');"></button>
-      {{/if}}
+      <table class="layout" style="width: {{$easy_length_input_label}}%; box-sizing: border-box;">
+        <tr>
+          <td style="padding: 0;">
+            {{mb_field object=$op field="libelle" style="width: 100%; box-sizing: border-box;"
+                       onfocus="ProtocoleSelector.init()" readonly="readonly"}}
+          </td>
+          <td style="padding: 0;" class="narrow">
+            <button class="search notext" type="button" onclick="ProtocoleSelector.init()">
+              Choisir un protocole
+            </button>
+
+            {{if @$modules.mvsante->_can->read && "mvsante"|module_active}}
+              <button class="edit notext" type="button" onclick="LiaisonOp.edit('{{$op->_id}}');"></button>
+            {{/if}}
+          </td>
+        </tr>
+      </table>
+
       {{mb_include module=planningOp template="inc_search_protocole" formOp="editOpEasy" formSecondOp="editOp" id_protocole="get_protocole_easy"}}
     </td>
   </tr>

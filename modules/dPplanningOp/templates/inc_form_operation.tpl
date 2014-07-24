@@ -204,17 +204,26 @@ refreshFunction = function(chir_id) {
   <tr>
     <th>{{mb_label object=$op field="libelle"}}</th>
     <td colspan="2">
-      {{mb_field object=$op field="libelle" form="editOp"
-        autocomplete="true,1,50,true,true"
-        onblur="\$V(getForm('editOpEasy').libelle, \$V(getForm('editOp').libelle));"
-        style="width: 20em"}}
-      <button class="search notext" type="button" onclick="ProtocoleSelector.init()">
-        Choisir un protocole
-      </button>
-      {{if @$modules.mvsante->_can->read && "mvsante"|module_active}}
-        {{mb_script module="mvsante" script="libelle"}}
-        <button class="edit notext" type="button" onclick="LiaisonOp.edit('{{$op->_id}}');"></button>
-      {{/if}}
+      <table class="main layout">
+        <tr>
+          <td style="padding: 0;">
+            {{mb_field object=$op field="libelle" form="editOp"
+                autocomplete="true,1,50,true,true" inputWidth="100%"
+                onblur="\$V(getForm('editOpEasy').libelle, \$V(getForm('editOp').libelle));"}}
+          </td>
+          <td style="padding: 0;" class="narrow">
+            <button class="search notext" type="button" onclick="ProtocoleSelector.init()">
+              Choisir un protocole
+            </button>
+
+            {{if @$modules.mvsante->_can->read && "mvsante"|module_active}}
+              {{mb_script module="mvsante" script="libelle"}}
+              <button class="edit notext" type="button" onclick="LiaisonOp.edit('{{$op->_id}}');"></button>
+            {{/if}}
+          </td>
+        </tr>
+      </table>
+
       {{mb_include module=planningOp template=inc_search_protocole}}
     </td>
   </tr>

@@ -87,7 +87,7 @@ input[type=password],
 select,
 textarea {
   border: 1px #999 solid;
-  background-color: #efe;
+  background-color: #fff;
 }
 
 textarea {
@@ -96,7 +96,7 @@ textarea {
   -webkit-box-sizing: border-box;
   -ms-box-sizing: border-box;
   box-sizing: border-box;
-  background-color: #efe;
+  background-color: #fff;
 }
 
 .textarea-container {
@@ -109,17 +109,6 @@ textarea {
   border: none;
   overflow-x: hidden;
   resize: none;
-}
-
-input[type=text]:focus,
-input[type=search]:focus,
-input[type=tel]:focus,
-input[type=number]:focus,
-input[type=email]:focus,
-input[type=password]:focus,
-select:focus,
-textarea:focus {
-  background-color: #fff;
 }
 
 .textarea-container textarea:focus {
@@ -980,6 +969,14 @@ div.dropdown {
   display: -moz-inline-box;
   display: inline-block;
   padding-right: 17px;
+}
+
+div.dropdown.fixed-width,
+div.dropdown.fixed-width input {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 div.dropdown-trigger {

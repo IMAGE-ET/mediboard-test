@@ -261,7 +261,7 @@ modeExpertDisplay = function() {
   
   <!-- Mode expert -->
   <tr id="modeExpert" style="display:none;">
-    <td>
+    <td style="width: 35%;">
       {{mb_include template=inc_form_operation}}
     </td>
     <td id="inc_form_sejour">

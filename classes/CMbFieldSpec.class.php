@@ -763,6 +763,7 @@ class CMbFieldSpec {
     $autocomplete = CMbArray::extract($params, "autocomplete", "true,2,30,false,false,1");
     $form         = CMbArray::extract($params, "form");
     $multiline    = CMbArray::extract($params, "multiline");
+    $inputWidth   = CMbArray::extract($params, "inputWidth");
     $extra        = CMbArray::makeXmlAttributes($params);
     $spec         = $object->_specs[$field];
     $ref = false;
@@ -832,6 +833,11 @@ class CMbFieldSpec {
             $V(field.form["'.$field.'"], selected.getAttribute("id").split("-")[2]);
           }';
       }
+
+      if ($inputWidth) {
+        $sHtml .= ',inputWidth:"'.$inputWidth.'"';
+      }
+
       if ($this->dependsOn) {
         $wheres = explode("|", $this->dependsOn);
         $sHtml .= ',

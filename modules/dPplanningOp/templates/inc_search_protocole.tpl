@@ -2,8 +2,7 @@
 {{mb_default var=formSecondOp value="editOpEasy"}}
 {{mb_default var=id_protocole value="get_protocole"}}
 
-<br />
-<input type="text" name="search_protocole" style="width: 13em;" placeholder="{{tr}}fast-search{{/tr}}" onblur="$V(this, '')"/>
+<input type="text" name="search_protocole" style="width: 15em;" placeholder="{{tr}}fast-search{{/tr}}" onblur="$V(this, '')"/>
 <input type="checkbox" name="search_all_chir" title="Étendre la recherche à tous les praticiens" />
 <div style="display:none;" id="{{$id_protocole}}"></div>
 
@@ -79,6 +78,7 @@
       method: 'get',
       select: 'view',
       dropdown: true,
+      width: '400px',
       afterUpdateElement: function(field, selected) {
         ajoutProtocole(selected.get('id'));
         $V(field.form.elements.search_protocole, "")
