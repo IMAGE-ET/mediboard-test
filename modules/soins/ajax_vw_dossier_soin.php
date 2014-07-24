@@ -338,6 +338,7 @@ if (CModule::getActive("dPprescription")) {
             $_inscription->countBackRefs("administration");
             $_inscription->loadRefLogSignee();
             $_inscription->countPlanifications();
+            $_inscription->loadRefParentLine();
           }
         }
       }
