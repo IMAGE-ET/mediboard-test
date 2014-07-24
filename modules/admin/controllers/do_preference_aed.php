@@ -13,6 +13,7 @@
 
 $prefs = CValue::post("pref", array());
 $user_id = CValue::post("user_id", 0);
+$restricted = CValue::post("restricted");
 
 // @todo: voir à utiliser CDoObjectAddEdit
 foreach ($prefs as $key => $value) {
@@ -22,6 +23,7 @@ foreach ($prefs as $key => $value) {
   $pref->loadMatchingObject();
   
   $pref->value = stripslashes($value);
+  $pref->restricted = ($restricted) ? "1" : "0";
 
   if ($msg = $pref->store()) {
     CAppUI::setMsg($msg, UI_MSG_ERROR);

@@ -20,14 +20,17 @@ class CPreferences extends CMbObject {
   public $user_id;
   public $key;
   public $value;
+  public $restricted;
 
   /**
    * Load preferences files from each module
    *
    * @return void
    */
-  static function loadModules() {
-    foreach (glob("./modules/*/preferences.php") as $file) {
+  static function loadModules($restricted = false) {
+    $filename = ($restricted) ? "functional_perms" : "preferences";
+
+    foreach (glob("./modules/*/$filename.php") as $file) {
       include_once $file;
     }
   }
@@ -36,10 +39,11 @@ class CPreferences extends CMbObject {
    * @see parent::getSpec()
    */
   function getSpec() {
-    $spec = parent::getSpec();
-    $spec->table = "user_preferences";
-    $spec->key   = "pref_id";
+    $spec                     = parent::getSpec();
+    $spec->table              = "user_preferences";
+    $spec->key                = "pref_id";
     $spec->uniques["uniques"] = array("user_id", "key");
+
     return $spec;
   }
 
@@ -47,10 +51,12 @@ class CPreferences extends CMbObject {
    * @see parent::getProps()
    */
   function getProps() {
-    $props = parent::getProps();
-    $props["user_id"] = "ref class|CUser cascade";
-    $props["key"]     = "str notNull maxLength|40";
-    $props["value"]   = "str";
+    $props               = parent::getProps();
+    $props["user_id"]    = "ref class|CUser cascade";
+    $props["key"]        = "str notNull maxLength|40";
+    $props["value"]      = "str";
+    $props["restricted"] = "bool notNull default|0";
+
     return $props;
   }
 
@@ -61,15 +67,19 @@ class CPreferences extends CMbObject {
    *
    * @return array
    */
-  static function get($user_id = null) {
+  static function get($user_id = null, $restricted = false) {
     $where["user_id"] = "IS NULL";
     if ($user_id) {
       $where["user_id"] = "= '$user_id'";
-      $where["value"  ] = "IS NOT NULL";
+      $where["value"]   = "IS NOT NULL";
+    }
+
+    if ($restricted) {
+      $where["restricted"] = "= '1'";
     }
 
     $preferences = array();
-    $pref = new self;
+    $pref        = new self;
 
     /** @var self[] $list */
     $list = $pref->loadList($where);
@@ -84,7 +94,7 @@ class CPreferences extends CMbObject {
   /**
    * @see parent::loadRefsFwd()
    */
-  function loadRefsFwd(){
+  function loadRefsFwd() {
     $this->loadRefUser();
   }
 
@@ -93,7 +103,7 @@ class CPreferences extends CMbObject {
    */
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = '[Pref] '.CAppUI::tr("pref-$this->key");
+    $this->_view = '[Pref] ' . CAppUI::tr("pref-$this->key");
   }
 
   /**
@@ -101,7 +111,7 @@ class CPreferences extends CMbObject {
    *
    * @return CUser
    */
-  function loadRefUser(){
+  function loadRefUser() {
     return $this->loadFwdRef("user_id", true);
   }
 }

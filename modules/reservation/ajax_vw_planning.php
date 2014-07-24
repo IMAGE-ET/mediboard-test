@@ -1,7 +1,7 @@
-<?php 
+<?php
 /**
  * $Id$
- * 
+ *
  * @package    Mediboard
  * @subpackage reservation
  * @author     SARL OpenXtrem <dev@openxtrem.com>
@@ -13,27 +13,35 @@ CCanDo::checkRead();
 
 global $m;
 
-// On sauvegarde le module pour que les mises en session des paramètes se fassent
+// On sauvegarde le module pour que les mises en session des paramètres se fassent
 // dans le module depuis lequel on accède à la ressource
 $save_m = $m;
 
-$current_m     = CValue::get("current_m");
-$m = $current_m;
+$current_m = CValue::get("current_m");
+$m         = $current_m;
 
-$date_planning    = CValue::getOrSession("date_planning", CMbDT::date());
-$praticien_id     = CValue::getOrSession("planning_chir_id");
-$scroll_top       = CValue::get("scroll_top", null);
-$bloc_id          = CValue::getOrSession("bloc_id");
-$show_cancelled   = CValue::getOrSession("show_cancelled", 0);
-$show_operations  = CValue::getOrSession("show_operations", 1);
+$today           = CMbDT::date();
+$date_planning   = CValue::getOrSession("date_planning", $today);
+$praticien_id    = CValue::getOrSession("planning_chir_id");
+$scroll_top      = CValue::get("scroll_top", null);
+$bloc_id         = CValue::getOrSession("bloc_id");
+$show_cancelled  = CValue::getOrSession("show_cancelled", 0);
+$show_operations = CValue::getOrSession("show_operations", 1);
+
+$max_date_planning = CMbDT::date("+ " . CAppUI::pref("planning_resa_days_limit") . " DAYS", $today);
+if ($date_planning > $today && CAppUI::pref("planning_resa_days_limit") != '0' && $date_planning > $max_date_planning) {
+  $date_planning = $max_date_planning;
+}
+
+CValue::setSession("date_planning", $date_planning);
 
 //alerts
 $nbIntervHorsPlage  = 0;
 $nbIntervNonPlacees = 0;
 $nbAlertesInterv    = 0;
-$debut = $fin = $date_planning;
+$debut              = $fin = $date_planning;
 
-$bloc = new CBlocOperatoire();
+$bloc  = new CBlocOperatoire();
 $where = array();
 if ($bloc_id) {
   $where["bloc_operatoire_id"] = " = '$bloc_id'";
@@ -48,7 +56,7 @@ foreach ($blocs as $_bloc) {
   /** @var CBlocOperatoire $_bloc */
   $_bloc->canDo();
   $_bloc->loadRefsSalles();
-  $nbAlertesInterv+= count($_bloc->loadRefsAlertesIntervs());
+  $nbAlertesInterv += count($_bloc->loadRefsAlertesIntervs());
 }
 
 $group = CGroups::loadCurrent();
@@ -68,10 +76,10 @@ else {
   $where["bloc_id"] = CSQLDataSource::prepareIn(array_keys($blocs));
 }
 
-$where["group_id"] = "= '$group->_id'";
+$where["group_id"]        = "= '$group->_id'";
 $ljoin["bloc_operatoire"] = "bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id";
 
-$salles = $salle->loadList($where, $order, null, null, $ljoin);
+$salles     = $salle->loadList($where, $order, null, null, $ljoin);
 $salles_ids = array_keys($salles);
 
 // Récupération des opérations
@@ -86,47 +94,47 @@ if (!$show_cancelled) {
 }
 //$where["operations.plageop_id"] = "IS NULL";
 if ($bloc_id) {
-  $ljoin["sallesbloc"] = "sallesbloc.salle_id = operations.salle_id";
-  $ljoin["bloc_operatoire"] = "bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id";
+  $ljoin["sallesbloc"]          = "sallesbloc.salle_id = operations.salle_id";
+  $ljoin["bloc_operatoire"]     = "bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id";
   $where["operations.salle_id"] = CSQLDataSource::prepareIn($salles_ids);
-  $where["sallesbloc.bloc_id"] = "= '$bloc_id'";
+  $where["sallesbloc.bloc_id"]  = "= '$bloc_id'";
 }
 
-$praticien = new CMediusers();
+$praticien  = new CMediusers();
 $praticiens = $praticien->loadPraticiens();
 
 $where["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($praticiens), $praticien_id);
 
 
-$operations = $operation->loadList($where, null, null, null, $ljoin);
+$operations        = $operation->loadList($where, null, null, null, $ljoin);
 $nbIntervHorsPlage = $operation->countList($where, null, $ljoin);
 
-$prats  = CMbObject::massLoadFwdRef($operations, "chir_id");
+$prats = CMbObject::massLoadFwdRef($operations, "chir_id");
 CMbObject::massLoadFwdRef($operations, "salle_id");
 CMbObject::massLoadFwdRef($operations, "anesth_id");
 CMbObject::massLoadFwdRef($prats, "function_id");
 
 // Récupération des commentaires
 $commentaire = new CCommentairePlanning();
-$where = array();
+$where       = array();
 
-$where[] = "'$date_planning' BETWEEN date(debut) AND date(fin)";
+$where[]           = "'$date_planning' BETWEEN date(debut) AND date(fin)";
 $where["salle_id"] = CSQLDataSource::prepareIn($salles_ids);
 
 $commentaires = $commentaire->loadList($where);
 
 // Récupération des plages opératoires
 $plageop = new CPlageOp();
-$where = array();
+$where   = array();
 
-$where["date"] = " = '$date_planning'";
+$where["date"]     = " = '$date_planning'";
 $where["salle_id"] = CSQLDataSource::prepareIn($salles_ids);
 
 $plages = $plageop->loadList($where);
 
 // Création du planning
-$planning = new CPlanningWeek(0, 0, count($salles), count($salles), false, "auto");
-$planning->title =  "Planning du ".CMbDT::format($date_planning, "%A %d %B %Y");
+$planning        = new CPlanningWeek(0, 0, count($salles), count($salles), false, "auto");
+$planning->title = "Planning du " . CMbDT::format($date_planning, "%A %d %B %Y");
 
 
 //load the current bloc
@@ -134,20 +142,20 @@ if (isset($current_bloc)) {
   $planning->title .= " - $current_bloc->nom";
 }
 
-$planning->guid = "planning_interv";
-$planning->hour_min  = str_pad(CAppUI::conf("reservation debut_planning"), 2, 0, STR_PAD_LEFT);
-$planning->dragndrop = $planning->resizable = CCanDo::edit() ? 1 : 0; //hack for "false => 0"
+$planning->guid         = "planning_interv";
+$planning->hour_min     = str_pad(CAppUI::conf("reservation debut_planning"), 2, 0, STR_PAD_LEFT);
+$planning->dragndrop    = $planning->resizable = CCanDo::edit() ? 1 : 0; //hack for "false => 0"
 $planning->hour_divider = 12;
-$planning->show_half = true;
-$i = 0;
-$today = CMbDT::date();
+$planning->show_half    = true;
+$i                      = 0;
+$today                  = CMbDT::date();
 
 foreach ($salles as $_salle) {
   $label_day = $bloc_id ? $_salle->_shortview : str_replace("-", "<br/>", $_salle->_view);
-  $planning->addDayLabel($i, $label_day, null, null,null, true, array("salle_id" => $_salle->_id));
+  $planning->addDayLabel($i, $label_day, null, null, null, true, array("salle_id" => $_salle->_id));
 
   if ($today == $date_planning) {
-    $planning->addEvent(new CPlanningEvent(null, "$i ".CMbDT::time(), null, null, "red", null, "now"));
+    $planning->addEvent(new CPlanningEvent(null, "$i " . CMbDT::time(), null, null, "red", null, "now"));
   }
   $i++;
 }
@@ -160,7 +168,7 @@ foreach ($operations as $key => $_operation) {
     unset($operations[$key]);
     continue;
   }
-  
+
   if (!isset($operations_by_salle[$_operation->salle_id])) {
     $operations_by_salle[$_operation->salle_id] = array();
   }
@@ -205,7 +213,7 @@ foreach ($plages as $_plage) {
       }
     }
     else {
-        $operations_by_salle[$salle_id][] = $_op;
+      $operations_by_salle[$salle_id][] = $_op;
     }
   }
 }
@@ -217,7 +225,7 @@ $diff_hour_urgence = CAppUI::conf("reservation diff_hour_urgence");
 
 //prestations
 $prestations_journalieres = CPrestationJournaliere::loadCurrentList();
-$prestation_id   = CAppUI::pref("prestation_id_hospi");
+$prestation_id            = CAppUI::pref("prestation_id_hospi");
 
 if ($show_operations) {
   /** @var $_operation COperation */
@@ -229,19 +237,19 @@ if ($show_operations) {
       $first_log = $_operation->loadFirstLog();
 
       $_operation->loadRefAffectation();
-      $lit = $_operation->_ref_affectation->_ref_lit;
-      $chir    = $_operation->loadRefChir();
+      $lit  = $_operation->_ref_affectation->_ref_lit;
+      $chir = $_operation->loadRefChir();
       $chir->loadRefFunction();
       $chir->getBasicInfo();
-      $chir_2  = $_operation->loadRefChir2();
+      $chir_2 = $_operation->loadRefChir2();
       $chir_2->loadRefFunction();
-      $chir_3  = $_operation->loadRefChir3();
+      $chir_3 = $_operation->loadRefChir3();
       $chir_3->loadRefFunction();
-      $chir_4  = $_operation->loadRefChir4();
+      $chir_4 = $_operation->loadRefChir4();
       $chir_4->loadRefFunction();
 
-      $anesth  = $_operation->_ref_anesth = $_operation->loadFwdRef("anesth_id");
-      $sejour  = $_operation->loadRefSejour();
+      $anesth = $_operation->_ref_anesth = $_operation->loadFwdRef("anesth_id");
+      $sejour = $_operation->loadRefSejour();
       $charge = $sejour->loadRefChargePriceIndicator();
       $sejour->loadLiaisonsForPrestation("all");
       $patient = $sejour->loadRefPatient();
@@ -273,26 +281,26 @@ if ($show_operations) {
       }
 
       //best time (horaire voulu / time_operation
-      $horaire = CMbDT::time($_operation->_datetime_best);
-      $debut = "$i {$horaire}";
+      $horaire  = CMbDT::time($_operation->_datetime_best);
+      $debut    = "$i {$horaire}";
       $debut_op = $horaire;
-      $fin_op = CMbDT::addTime($_operation->temp_operation, $horaire);
-      $duree = CMbDT::minutesRelative($horaire, $fin_op);
+      $fin_op   = CMbDT::addTime($_operation->temp_operation, $horaire);
+      $duree    = CMbDT::minutesRelative($horaire, $fin_op);
 
 
       // pré op
       if ($_operation->presence_preop) {
         $hour_debut_preop = CMbDT::subTime($_operation->presence_preop, $_operation->time_operation);
-        $offset_top = CMbDT::minutesRelative($hour_debut_preop, $_operation->time_operation);
-        $duree = $duree + $offset_top;
-        $debut = "$i $hour_debut_preop";
+        $offset_top       = CMbDT::minutesRelative($hour_debut_preop, $_operation->time_operation);
+        $duree            = $duree + $offset_top;
+        $debut            = "$i $hour_debut_preop";
       }
 
       //post op
       if ($_operation->presence_postop) {
         $hour_fin_postop = CMbDT::addTime($_operation->presence_postop, $fin_op);
-        $offset_bottom = CMbDT::minutesRelative($fin_op, $hour_fin_postop);
-        $duree = $duree + $offset_bottom;
+        $offset_bottom   = CMbDT::minutesRelative($fin_op, $hour_fin_postop);
+        $duree           = $duree + $offset_bottom;
       }
 
       //factures
@@ -317,43 +325,43 @@ if ($show_operations) {
 
       //template de contenu
       $smarty = new CSmartyDP("modules/reservation");
-      $smarty->assign("operation"           , $_operation);
-      $smarty->assign("patient"             , $patient);
-      $smarty->assign("sejour"              , $sejour);
-      $smarty->assign("liaison_sejour"      , $liaison_sejour);
-      $smarty->assign("charge"              , $charge);
-      $smarty->assign("facture"             , $facture);
-      $smarty->assign("debut_op"            , $debut_op);
-      $smarty->assign("fin_op"              , $fin_op);
-      $smarty->assign("lit"                 , $lit);
-      $smarty->assign("chir"                , $chir);
-      $smarty->assign("chir_2"              , $chir_2);
-      $smarty->assign("chir_3"              , $chir_3);
-      $smarty->assign("chir_4"              , $chir_4);
-      $smarty->assign("anesth"              , $anesth);
-      $smarty->assign("count_atcd"          , $count_atcd);
-      $smarty->assign("besoins"             , $besoins);
-      $smarty->assign("interv_en_urgence"   , abs(CMbDT::hoursRelative("$_operation->date $debut_op", $first_log->date)) <= $diff_hour_urgence);
+      $smarty->assign("operation", $_operation);
+      $smarty->assign("patient", $patient);
+      $smarty->assign("sejour", $sejour);
+      $smarty->assign("liaison_sejour", $liaison_sejour);
+      $smarty->assign("charge", $charge);
+      $smarty->assign("facture", $facture);
+      $smarty->assign("debut_op", $debut_op);
+      $smarty->assign("fin_op", $fin_op);
+      $smarty->assign("lit", $lit);
+      $smarty->assign("chir", $chir);
+      $smarty->assign("chir_2", $chir_2);
+      $smarty->assign("chir_3", $chir_3);
+      $smarty->assign("chir_4", $chir_4);
+      $smarty->assign("anesth", $anesth);
+      $smarty->assign("count_atcd", $count_atcd);
+      $smarty->assign("besoins", $besoins);
+      $smarty->assign("interv_en_urgence", abs(CMbDT::hoursRelative("$_operation->date $debut_op", $first_log->date)) <= $diff_hour_urgence);
       $smartyL = $smarty->fetch("inc_planning/libelle_plage.tpl");
       //@todo : UGLY, find a global better way !
       $smartyL = htmlspecialchars_decode(CMbString::htmlEntities($smartyL, ENT_NOQUOTES), ENT_NOQUOTES);
 
       // couleurs
-      $color = CAppUI::conf("hospi colors default");
+      $color     = CAppUI::conf("hospi colors default");
       $important = true;
-      $css = null;
+      $css       = null;
       if ($sejour->annule) {
-        $css = "hatching";
+        $css       = "hatching";
         $important = false;
       }
       else {
         switch ($sejour->recuse) {
           case "0":
-              $color = CAppUI::conf("hospi colors $sejour->type");
+            $color = CAppUI::conf("hospi colors $sejour->type");
             break;
           case "-1" :
             $color = CAppUI::conf("hospi colors recuse");
-            $css = "recuse";
+            $css   = "recuse";
             break;
         }
       }
@@ -361,27 +369,27 @@ if ($show_operations) {
       $event = new CPlanningEvent($_operation->_guid, $debut, $duree, $smartyL, "#$color", $important, $css, $_operation->_guid, false);
 
       if ($can_edit) {
-        $event->addMenuItem("edit" , "Modifier cette intervention");
-        $event->addMenuItem("cut"  , "Couper cette intervention");
-        $event->addMenuItem("copy" , "Copier cette intervention");
+        $event->addMenuItem("edit", "Modifier cette intervention");
+        $event->addMenuItem("cut", "Couper cette intervention");
+        $event->addMenuItem("copy", "Copier cette intervention");
         $event->addMenuItem("clock", utf8_encode("Modifier les dates d'entrée et sortie du séjour"));
       }
 
       if ($offset_bottom) {
-        $event->offset_bottom = $offset_bottom;
+        $event->offset_bottom      = $offset_bottom;
         $event->offset_bottom_text = "Post op";
       }
 
       if ($offset_top) {
-        $event->offset_top = $offset_top;
+        $event->offset_top      = $offset_top;
         $event->offset_top_text = "Pre op";
       }
 
       $event->plage["id"] = $_operation->_id;
-      $event->type = "operation_horsplage";
-      $event->draggable = $event->resizable = CCanDo::edit();
+      $event->type        = "operation_horsplage";
+      $event->draggable   = $event->resizable = CCanDo::edit();
       if ($_operation->rank) {
-        $event->type = "operation_enplage";
+        $event->type      = "operation_enplage";
         $event->draggable = false;
       }
 
@@ -395,10 +403,10 @@ foreach ($commentaires_by_salle as $salle_id => $_commentaires) {
   $i = array_search($salle_id, $salles_ids);
 
   foreach ($_commentaires as $_commentaire) {
-    $debut = "$i ".CMbDT::time($_commentaire->debut);
+    $debut = "$i " . CMbDT::time($_commentaire->debut);
 
-    $duree = CMbDT::minutesRelative(CMbDT::time($_commentaire->debut), CMbDT::time($_commentaire->fin));
-    $com_comm = CMbString::htmlEntities($_commentaire->commentaire);
+    $duree       = CMbDT::minutesRelative(CMbDT::time($_commentaire->debut), CMbDT::time($_commentaire->fin));
+    $com_comm    = CMbString::htmlEntities($_commentaire->commentaire);
     $com_libelle = CMbString::htmlEntities($_commentaire->libelle);
 
     $libelle = "<span
@@ -408,20 +416,20 @@ foreach ($commentaires_by_salle as $salle_id => $_commentaires) {
     data-libelle=\"$com_libelle\"
     data-commentaire=\"$com_comm\"
     data-duree=\"$duree\"
-    data-color=\"$_commentaire->color\"></span>".
-      "<span style=\"font-size: 11px; font-weight: bold;\">".$com_libelle."</span>".
-      "\n<span class=\"compact\">".$com_comm."</span>";
+    data-color=\"$_commentaire->color\"></span>" .
+      "<span style=\"font-size: 11px; font-weight: bold;\">" . $com_libelle . "</span>" .
+      "\n<span class=\"compact\">" . $com_comm . "</span>";
 
     $event = new CPlanningEvent($_commentaire->_guid, $debut, $duree, $libelle, "#$_commentaire->color", true, null, $_commentaire->_guid, false);
 
-    $event->type = "commentaire_planning";
-    $event->draggable = $event->resizable = CCanDo::edit();
+    $event->type        = "commentaire_planning";
+    $event->draggable   = $event->resizable = CCanDo::edit();
     $event->plage["id"] = $_commentaire->_id;
 
     if ($can_edit) {
-      $event->addMenuItem("edit"    , "Modifier ce commentaire");
-      $event->addMenuItem("copy"    , "Copier ce commentaire");
-      $event->addMenuItem("cancel"  , "Supprimer ce commentaire");
+      $event->addMenuItem("edit", "Modifier ce commentaire");
+      $event->addMenuItem("copy", "Copier ce commentaire");
+      $event->addMenuItem("cancel", "Supprimer ce commentaire");
     }
 
     $planning->addEvent($event);
@@ -431,16 +439,16 @@ foreach ($commentaires_by_salle as $salle_id => $_commentaires) {
 // Ajout des plages
 foreach ($plages_by_salle as $salle_id => $_plages) {
   $i = array_search($salle_id, $salles_ids);
-  
+
   foreach ($_plages as $_plage) {
     $_plage->loadRefsNotes();
 
     $validated = count($_plage->loadRefsOperations(false, null, true, true));
-    $total = count($_plage->loadRefsOperations(false));
+    $total     = count($_plage->loadRefsOperations(false));
     $_plage->loadRefAnesth();
 
-    $debut = "$i ".CMbDT::time($_plage->debut);
-    
+    $debut = "$i " . CMbDT::time($_plage->debut);
+
     $duree = CMbDT::minutesRelative(CMbDT::time($_plage->debut), CMbDT::time($_plage->fin));
 
     //fetch
@@ -452,13 +460,13 @@ foreach ($plages_by_salle as $salle_id => $_plages) {
 
     $event = new CPlanningEvent($_plage->_guid, $debut, $duree, $smarty_plageop, "#efbf99", true, null, $_plage->_guid, false);
 
-    $event->below = true;
-    $event->type = "plage_planning";
+    $event->below       = true;
+    $event->type        = "plage_planning";
     $event->plage["id"] = $_plage->_id;
 
     if ($can_edit) {
-      $event->addMenuItem("edit" , utf8_encode("Modifier cette plage"));
-      $event->addMenuItem("list" , utf8_encode("Gestion des interventions"));
+      $event->addMenuItem("edit", utf8_encode("Modifier cette plage"));
+      $event->addMenuItem("list", utf8_encode("Gestion des interventions"));
     }
 
     $planning->addEvent($event);
@@ -471,20 +479,20 @@ $planning->allow_superposition = true;
 $planning->rearrange(); //ReArrange the planning
 
 $bank_holidays = CMbDate::getHolidays($date_planning);
-$smarty = new CSmartyDP();
-$smarty->assign("planning",             $planning);
-$smarty->assign("salles"  ,             $salles);
-$smarty->assign("salles_ids",           $salles_ids);
-$smarty->assign("date_planning",        $date_planning);
-$smarty->assign("scroll_top",           $scroll_top);
-$smarty->assign("show_cancelled",       $show_cancelled);
-$smarty->assign("show_operations",      $show_operations);
-$smarty->assign("bank_holidays",        $bank_holidays);
-$smarty->assign("bloc_id",              $bloc_id );
-$smarty->assign("prestations",          $prestations_journalieres);
+$smarty        = new CSmartyDP();
+$smarty->assign("planning", $planning);
+$smarty->assign("salles", $salles);
+$smarty->assign("salles_ids", $salles_ids);
+$smarty->assign("date_planning", $date_planning);
+$smarty->assign("scroll_top", $scroll_top);
+$smarty->assign("show_cancelled", $show_cancelled);
+$smarty->assign("show_operations", $show_operations);
+$smarty->assign("bank_holidays", $bank_holidays);
+$smarty->assign("bloc_id", $bloc_id);
+$smarty->assign("prestations", $prestations_journalieres);
 $smarty->assign("height_planning_resa", CAppUI::pref("planning_resa_height", 1500));
 
-$smarty->assign("nbIntervNonPlacees",   $nbIntervNonPlacees);
-$smarty->assign("nbIntervHorsPlage" ,   $nbIntervHorsPlage );
-$smarty->assign("nbAlertesInterv",      $nbAlertesInterv);
+$smarty->assign("nbIntervNonPlacees", $nbIntervNonPlacees);
+$smarty->assign("nbIntervHorsPlage", $nbIntervHorsPlage);
+$smarty->assign("nbAlertesInterv", $nbAlertesInterv);
 $smarty->display("inc_vw_planning.tpl");

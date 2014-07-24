@@ -103,12 +103,18 @@
     {{/if}}
     
     <td class="button" style="white-space: nowrap; text-align: left;">
-      <button class="search" onclick="location.href='?m={{$m}}&amp;tab=edit_perms&amp;user_id={{$_user->_id}}'">
+      <a class="button search" href="?m={{$m}}&amp;tab=edit_perms&amp;user_id={{$_user->_id}}">
         Droits
-      </button>
-      <button class="search" onclick="location.href='?m={{$m}}&amp;tab=edit_prefs&amp;user_id={{$_user->_id}}'">
+      </a>
+
+      <a class="button search" href="?m={{$m}}&amp;tab=edit_prefs&amp;user_id={{$_user->_id}}">
         Préférences
-      </button>
+      </a>
+
+      <a class="button search" href="?m={{$m}}&amp;tab=vw_functional_perms&amp;user_id={{$_user->_id}}">
+        {{tr}}FunctionalPerms{{/tr}}
+      </a>
+
       {{assign var="loginas_user" value=$_user}}
       {{mb_include template=loginas}}
       {{mb_include template=unlock}}

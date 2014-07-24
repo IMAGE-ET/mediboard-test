@@ -11,5 +11,5 @@
 
 // Préférences par Module
 CPreferences::$modules["reservation"] = array (
-  "planning_resa_height",
+  "planning_resa_days_limit"
 );

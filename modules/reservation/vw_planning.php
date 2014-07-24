@@ -1,7 +1,7 @@
-<?php 
+<?php
 /**
  * $Id$
- * 
+ *
  * @package    Mediboard
  * @subpackage reservation
  * @author     SARL OpenXtrem <dev@openxtrem.com>
@@ -17,12 +17,11 @@ if (!isset($current_m)) {
   $current_m = CValue::get("current_m", $m);
 }
 
-
-$date_planning = CValue::getOrSession("date_planning", CMbDT::date());
-$praticien_id  = CValue::getOrSession("planning_chir_id");
-$bloc_id       = CValue::getOrSession("bloc_id", "");
-$show_cancelled = CValue::getOrSession("show_cancelled", 0);
-$show_operations= CValue::getOrSession("show_operations", 1);
+$date_planning   = CValue::getOrSession("date_planning", CMbDT::date());
+$praticien_id    = CValue::getOrSession("planning_chir_id");
+$bloc_id         = CValue::getOrSession("bloc_id", "");
+$show_cancelled  = CValue::getOrSession("show_cancelled", 0);
+$show_operations = CValue::getOrSession("show_operations", 1);
 
 $praticiens = new CMediusers;
 $praticiens = $praticiens->loadPraticiens();
@@ -35,17 +34,23 @@ foreach ($praticiens as $_prat) {
 $plageOp = new CPlageOp();
 $plageOp->canDo();
 
-$bloc = new CBlocOperatoire();
+$bloc  = new CBlocOperatoire();
 $blocs = $bloc->loadGroupList();
 
+$limit_date = null;
+if (CAppUI::pref("planning_resa_days_limit") != '0') {
+  $limit_date = CMbDT::date("+ " . CAppUI::pref("planning_resa_days_limit") . " DAYS", CMbDT::date());
+}
+
 $smarty = new CSmartyDP("modules/reservation");
-$smarty->assign("current_m"    , $current_m);
+$smarty->assign("current_m", $current_m);
 $smarty->assign("date_planning", $date_planning);
-$smarty->assign("praticien_id" , $praticien_id);
-$smarty->assign("praticiens"   , $praticiens);
-$smarty->assign("blocs"        , $blocs);
-$smarty->assign("plageop"      , $plageOp);
-$smarty->assign("bloc_id"      , $bloc_id);
+$smarty->assign("praticien_id", $praticien_id);
+$smarty->assign("praticiens", $praticiens);
+$smarty->assign("blocs", $blocs);
+$smarty->assign("plageop", $plageOp);
+$smarty->assign("bloc_id", $bloc_id);
 $smarty->assign("show_cancelled", $show_cancelled);
 $smarty->assign("show_operations", $show_operations);
+$smarty->assign("limit_date", $limit_date);
 $smarty->display("vw_planning.tpl");
