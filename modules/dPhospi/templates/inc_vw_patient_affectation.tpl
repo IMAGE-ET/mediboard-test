@@ -35,7 +35,7 @@
     <br/>
     <div class="libelle compact" style="float:left;">
       {{$_sejour->libelle|truncate:30|lower}}
-      ({{$patient->_age}})
+      {{if $conf.dPhospi.show_age_patient}}({{$patient->_age}}){{/if}}
     </div>
     {{if $can->edit}}
       <div style="float:right;">

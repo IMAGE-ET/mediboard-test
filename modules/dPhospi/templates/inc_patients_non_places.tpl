@@ -66,7 +66,7 @@
              <div class="libelle compact">
                 {{$_sejour->libelle|lower}}
                 {{$_sejour->_type_admission}}
-                <div style="float:left;">({{$_patient->_age}})</div>
+                <div style="float:left;{{if !$conf.dPhospi.show_age_patient}}display:none;{{/if}}">({{$_patient->_age}})</div>
               </div>
             </div>
           {{/if}}
