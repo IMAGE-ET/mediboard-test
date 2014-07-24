@@ -77,7 +77,8 @@ foreach ($prats as $_prat) {
     $_plage->loadFillRate();
     $event = new CPlanningEvent($_plage->_guid, $_plage->date." $_plage->debut", CMbDT::minutesRelative($_plage->date." ".$_plage->debut, $_plage->date." ".$_plage->fin), null, "#".$_plage->color);
     $title = $_plage->libelle ? $_plage->libelle : CAppUI::tr($_plage->_class);
-    $event->title = "<strong>".CMbDT::format($_plage->debut, "%H:%M"). " - " .CMbDT::format($_plage->fin, "%H:%M")."</strong> $count ".CAppUI::tr("CConsultation");
+    $event->title = $_plage->locked ? "<img src=\"images/icons/lock.png\" style='max-height: 1em;' alt=\"\" />" : null;
+    $event->title .= "<strong>".CMbDT::format($_plage->debut, "%H:%M"). " - " .CMbDT::format($_plage->fin, "%H:%M")."</strong> $count ".CAppUI::tr("CConsultation");
     $event->title .= $count > 1 ? "s" : null;
     $event->title .= "<small>";
     $event->title .= "<br/>$title";
