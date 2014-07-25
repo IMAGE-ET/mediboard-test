@@ -603,12 +603,16 @@ class CHL7v2Segment extends CHL7v2Entity {
         
         $xncs[] = $xcn;
       }
-      // Ajout de l'ID Mediboard
-      $xcn[0]  = $object->_id;
-      $xcn[8]  = $this->getAssigningAuthority("mediboard");
-      $xcn[12] = "RI";
-      
-      $xncs[]  = $xcn;
+
+      // Est-ce que l'on transmet notre identifiant de praticien
+      if ($actor->_configs["send_own_identifier"]) {
+        // Ajout de l'ID Mediboard
+        $xcn[0]  = $object->_id;
+        $xcn[8]  = $this->getAssigningAuthority("mediboard");
+        $xcn[12] = "RI";
+
+        $xncs[]  = $xcn;
+      }
 
       return $xncs;
     }
