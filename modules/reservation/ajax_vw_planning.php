@@ -105,9 +105,8 @@ $praticiens = $praticien->loadPraticiens();
 
 $where["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($praticiens), $praticien_id);
 
-
-$operations        = $operation->loadList($where, null, null, null, $ljoin);
-$nbIntervHorsPlage = $operation->countList($where, null, $ljoin);
+$operations = $operation->loadList($where, null, null, "operations.operation_id", $ljoin);
+$nbIntervHorsPlage = CIntervHorsPlage::countForDates($date_planning, null, $praticien_id);
 
 $prats = CMbObject::massLoadFwdRef($operations, "chir_id");
 CMbObject::massLoadFwdRef($operations, "salle_id");

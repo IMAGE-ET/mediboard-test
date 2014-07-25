@@ -11,7 +11,11 @@
  * @link     http://www.mediboard.org
  */
 
+CCanDo::checkRead();
+
 $date = CValue::getOrSession("date", CMbDT::date());
+
+$group_id = CGroups::loadCurrent()->_id;
 
 $user = CMediusers::get();
 $prat_id      = CValue::getOrSession("prat_id");
@@ -126,15 +130,19 @@ foreach ($prats as $_prat) {
   }
 
   //hors plage
+
   $sql = "
-    SELECT plageop_id, date,
+    SELECT plageop_id, date, chir_id,
       SEC_TO_TIME(SUM(TIME_TO_SEC(temp_operation))) as accumulated_time,
       MIN(time_operation) AS first_time,
       MAX(time_operation) AS last_time,
       COUNT(*) AS nb_op
-    FROM operations
+    FROM operations, sejour
     WHERE date BETWEEN  '$calendar->date_min' AND  '$calendar->date_max'
+    AND sejour.sejour_id = operations.sejour_id
+    AND sejour.group_id = '$group_id'
     AND chir_id = '$_prat->_id'
+    AND operations.annulee = '0'
     GROUP BY date, plageop_id";
   $hps = $ds->loadList($sql);
 
@@ -149,7 +157,7 @@ foreach ($prats as $_prat) {
     $event->title.= "<br/>Durée cumulée : ".CMbDT::format($_hp["accumulated_time"], '%Hh%M');
     $event->title.= "</small>";
 
-    $event->datas = array("date" => $_hp['date']);
+    $event->datas = array("date" => $_hp['date'], "chir_id" => $_hp["chir_id"]);
 
     $event->css_class = $event->type = "CIntervHorsPlage";
     $event->css_class .= " date_".$_hp["date"];

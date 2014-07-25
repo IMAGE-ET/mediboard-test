@@ -74,23 +74,7 @@ foreach ($listNonValidees as $_operation) {
   $_operation->loadRefPatient();
 }
 
-// Liste des interventions hors plage
-$ljoin = array();
-$ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
-$where = array();
-$where["operations.plageop_id"] = "IS NULL";
-$where["operations.date"]       = "BETWEEN '$date' AND '$fin'";
-$where["operations.annulee"]    = "= '0'";
-if ($bloc->_id) {
-  $where[] = "operations.salle_id IS NULL OR operations.salle_id ".
-    CSQLDataSource::prepareIn(array_keys($bloc->_ref_salles));
-}
-$where["sejour.group_id"]    = "= '".CGroups::loadCurrent()->_id."'";
-$order = "operations.date, operations.chir_id";
-
-/** @var COperation[] $listHorsPlage */
-$listHorsPlage = $operation->loadList($where, $order, null, null, $ljoin);
-
+$listHorsPlage = CIntervHorsPlage::getForDates($date, $fin, null, array_keys($bloc->_ref_salles) );
 foreach ($listHorsPlage as $_operation) {
   $_operation->loadRefPlageOp();
   $_operation->loadExtCodesCCAM();

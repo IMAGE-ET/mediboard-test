@@ -36,7 +36,11 @@
 
     if (stype == 'CIntervHorsPlage') {
       var sdate = event.get('date');
-      EditPlanning.showAlerte(sdate, '', 'day');
+      var schir = event.get('chir_id');
+      var url = new Url("bloc", "ajax_vw_horsplage");
+      url.addParam('date', sdate);
+      url.addParam('chir_id', schir);
+      url.requestModal(700);
     }
   };
 
