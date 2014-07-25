@@ -29,7 +29,7 @@
   
   afterEditCorrespondant = function() {
     if (window.loadSuiviClinique) {
-      loadSuiviClinique(document.form_prescription.sejour_id.value)
+      loadSuiviClinique('{{$sejour->_id}}')
     }
     else if (window.reloadSynthese) {
       window.reloadSynthese();
