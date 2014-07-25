@@ -10,6 +10,7 @@
 
 {{mb_default var=offline value=false}}
 {{mb_default var=embed value=false}}
+{{assign var=forms_limit value=10000}}
 
 {{if !$offline}}
 <!-- Fermeture du tableau pour faire fonctionner le page-break -->
@@ -112,10 +113,14 @@
     loading.setStyle({display: "inline-block"});
     $$("button.print").each(function(e){ e.disabled = true; });
     
-    ExObject.loadExObjects("CSejour", sejour_id, "ex-objects-"+sejour_id, 3, null, {print: 1, onComplete: function(){
-      loading.hide();
-      $$("button.print").each(function(e){ e.disabled = null; });
-    }});
+    ExObject.loadExObjects("CSejour", sejour_id, "ex-objects-"+sejour_id, 3, null, {
+      print: 1, 
+      limit: {{$forms_limit}},
+      onComplete: function(){
+        loading.hide();
+        $$("button.print").each(function(e){ e.disabled = null; });
+      }
+    });
     
     checkbox._loaded = true;
   };
@@ -150,7 +155,7 @@
       
       <button class="print" type="button" onclick="printDossierFromSejour({{$sejour->_id}})">{{tr}}Print{{/tr}}</button>
 
-      <a class="button download" href="?{{$smarty.server.QUERY_STRING|html_entity_decode}}&offline=1&embed=1&_aio=savefile" target="_blank">{{tr}}Download{{/tr}}</a>
+      <a class="button download" href="?{{$smarty.server.QUERY_STRING|html_entity_decode}}&offline=1&embed=1&_aio=savefile&limit={{$forms_limit}}" target="_blank">{{tr}}Download{{/tr}}</a>
     </td>
   </tr>
   {{/if}}

@@ -13,6 +13,7 @@ $offline   = CValue::get("offline");
 $in_modal  = CValue::get("in_modal");
 $embed     = CValue::get("embed");
 $period    = CValue::get("period");
+$forms_limit = CValue::get("forms_limit");
 
 if (!$sejour_id) {
   CAppUI::stepMessage(UI_MSG_WARNING, "Veuillez sélectionner un sejour pour visualiser le dossier complet");
@@ -97,6 +98,7 @@ if ($offline && CModule::getActive("forms")) {
     "reference_class" => $sejour->_class,
     "target_element"  => "ex-objects-$sejour->_id",
     "print"           => 1,
+    "limit"           => $forms_limit,
   );
 
   $formulaires = CApp::fetch("forms", "ajax_list_ex_object", $params);
