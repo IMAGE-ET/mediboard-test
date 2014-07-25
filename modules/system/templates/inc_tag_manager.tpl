@@ -41,11 +41,28 @@
     oform.onsubmit();
   };
 
+  purgeTag = function(tag_id, name) {
+    var form = getForm('delete_tag');
+    $V(form.elements.tag_id, tag_id ? tag_id : '');
+    var message = tag_id ? 'Voulez vous purger l\'étiquette "'+name+'" non utilisée ?' : 'Voulez vous purger les étiquettes non utilisées ?' ;
+    if (confirm(message)) {
+      form.onsubmit();
+    }
+  };
+
   Main.add(function() {
-    refreshTagList();
+    refreshTagList(0);
   });
 </script>
 
+<form name="delete_tag" method="post" onsubmit="onSubmitFormAjax(this, {onComplete : refreshTagList})">
+  <input type="hidden" name="m" value="system" />
+  <input type="hidden" name="dosql" value="do_purge_unused_tag" />
+  <input type="hidden" name="object_class" value="{{$object_class}}" />
+  <input type="hidden" name="tag_id" value=""/>
+</form>
+
+<button class="cleanup" style="float:right;" onclick="purgeTag();">{{tr}}Purge{{/tr}}</button>
 <button class="new" onclick="editTag(null, '{{$object_class}}')" style="float:right">{{tr}}CTag.add{{/tr}} ({{tr}}{{$object_class}}{{/tr}})</button>
 <form name="filterTag" method="get" onsubmit="return onSubmitFormAjax(this, null, 'result_tags')" style="margin:0 auto;">
   <input type="hidden" name="m" value="system"/>

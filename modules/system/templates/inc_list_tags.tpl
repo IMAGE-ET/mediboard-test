@@ -40,6 +40,7 @@
           {{/if}}
         </td>
         <td {{if !$_tag->_nb_items}}class="empty"{{/if}}>
+          {{if !$_tag->_nb_items}}<button type="button" class="trash notext" style="float:right;" onclick="purgeTag('{{$_tag->_id}}', '{{$_tag->name}}');">{{tr}}Delete{{/tr}}</button>{{/if}}
           {{$_tag->_nb_items}}
         </td>
       </tr>
