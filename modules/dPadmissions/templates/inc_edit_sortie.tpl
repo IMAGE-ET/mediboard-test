@@ -241,6 +241,18 @@
     {{if !$modify_sortie_prevue}}
       <tr>
         <td colspan="4" class="button">
+          {{if "trajectoire"|module_active}}
+            <script type="text/javascript">
+              Main.add(function() {
+                var url = new Url('trajectoire', 'ajax_trajectoire_redirect');
+                url.addParam('patient_id', '{{$sejour->patient_id}}');
+                url.addParam('sejour_id', '{{$sejour->_id}}');
+                url.requestUpdate('trajectoire_button');
+              });
+            </script>
+
+            <span id="trajectoire_button"></span>
+          {{/if}}
           <button type="button" class="close singleclick"
                 onclick="Admissions.annulerSortie(this.form, function() { document.fire('mb:valider_sortie'); document.stopObserving('mb:valider_sortie'); Control.Modal.close();})">
             {{tr}}Cancel{{/tr}}
