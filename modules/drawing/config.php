@@ -13,5 +13,6 @@
 
 $dPconfig["drawing"] = array(
   "edit_svg" => 1,
-  "drawing_allow_external_ressource" => 0
+  "drawing_allow_external_ressource" => 0,
+  "drawing_square" => 0
 );

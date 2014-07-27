@@ -155,7 +155,7 @@
 <table class="main">
   <tr>
     <td style="text-align: center; width: 600px;">
-      <canvas id="canvas" width="800" height="600" style="border: solid 1px black;" >
+      <canvas id="canvas" width="{{if $conf.drawing.drawing_square}}600{{else}}800{{/if}}" height="600" style="border: solid 1px black;" >
         {{tr}}Canvas.unsupported{{/tr}}
       </canvas>
     </td>

@@ -16,7 +16,10 @@
       <input type="text" class="color_picker" name="color" value="000000" onchange="colorSelect(this.value);" id="color_picker_draw"/>
     </label>
     <script>
-      Main.add(function(){new jscolor.color($('color_picker_draw'), {})})
+      Main.add(function(){
+        new jscolor.color($('color_picker_draw'), {});
+        new jscolor.color($('color_text_cv'), {});
+      });
     </script>
   </p>
 </fieldset>
@@ -53,35 +56,36 @@
 
 <hr/>
 
-<form method="get" name="titi" >
-  <table class="form">
-    <tr>
-      <th>Texte</th>
-      <td>
-        <textarea id="content_text_cv" name="content_text_cv"></textarea>
-      </td>
-    </tr>
-    <tr>
-      <th>Couleur</th>
-      <td>
-        <input type="color" value="#000000" name="color_text_cv" id="color_text_cv"/>
-      </td>
-    </tr>
-    <tr>
-      <th>{{if $app->user_prefs.drawing_advanced_mode}}
-          Ombre<br/>du texte {{/if}}
-
-      </th>
-      <td>
-        <input type="text" value="#ffffff 0 0 10px" name="bgcolor_text_cv" id="bgcolor_text_cv"   {{if !$app->user_prefs.drawing_advanced_mode}}
-style="display: none;" {{/if}}            />
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2" class="button">
-        <button type="button" onclick="DrawObject.addEditText( $V('content_text_cv'), $V('color_text_cv'), $V('bgcolor_text_cv') );">Valider</button>
-        <button type="button" onclick="Control.Modal.close();">Annuler</button>
-      </td>
-    </tr>
-  </table>
-</form>
+<fieldset>
+  <legend>Texte</legend>
+  <form method="get" name="text_edit_canvas" >
+    <table class="form">
+      <tr>
+        <th>Texte</th>
+        <td>
+          <textarea id="content_text_cv" name="content_text_cv"></textarea>
+        </td>
+      </tr>
+      <tr>
+        <th>Couleur</th>
+        <td>
+          <input type="text" class="color_picker" value="#000000" name="color_text_cv" id="color_text_cv"/>
+        </td>
+      </tr>
+      <tr>
+        <th>{{if $app->user_prefs.drawing_advanced_mode}}
+            Ombre<br/>du texte {{/if}}
+        </th>
+        <td>
+          <input type="text" value="#000000 0 0 10px" name="bgcolor_text_cv" id="bgcolor_text_cv"   {{if !$app->user_prefs.drawing_advanced_mode}}
+            style="display: none;" {{/if}}            />
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="button">
+          <button type="button" onclick="DrawObject.addEditText( $V('content_text_cv'), $V('color_text_cv'), $V('bgcolor_text_cv') );">Valider</button>
+        </td>
+      </tr>
+    </table>
+  </form>
+</fieldset>
