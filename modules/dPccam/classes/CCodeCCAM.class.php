@@ -64,12 +64,12 @@ class CCodeCCAM extends CCCAM {
   public $_phase;
 
   // Utilisation du cache
-  static $useCache       = true;
   static $cacheCount     = 0;
   static $useCount       = 0;
   static $cacheCountLite = 0;
   static $useCountLite   = 0;
-
+  static $cache = array();
+  static $cacheLite = array();
   /**
    * Constructeur à partir du code CCAM
    *
@@ -107,20 +107,23 @@ class CCodeCCAM extends CCCAM {
    * @return CCodeCCAM
    */
   static function get($code) {
-    if (self::$useCache) {
-      self::$useCount++;
-      if ($code_ccam = SHM::get("codeccam-$code")) {
-        self::$cacheCount++;
-        return $code_ccam;
-      }
+    self::$useCount++;
+
+    if (isset(self::$cache[$code])) {
+      return self::$cache[$code];
     }
+
+    if ($code_ccam = SHM::get("codeccam-$code")) {
+      self::$cacheCount++;
+      self::$cache[$code] = $code_ccam;
+      return $code_ccam;
+    }
+
     // Chargement
     $code_ccam = new CCodeCCAM($code);
     $code_ccam->load();
-    if (self::$useCache) {
-      SHM::put("codeccam-$code", $code_ccam);
-    }
-
+    SHM::put("codeccam-$code", $code_ccam);
+    self::$cache[$code] = $code_ccam;
     return $code_ccam;
   }
 
@@ -194,7 +197,12 @@ class CCodeCCAM extends CCCAM {
     $this->loadRefActivites();
     foreach ($this->_ref_activites as $_activite) {
       $_activite->loadLibelle();
-      $_activite->loadRefAssociations();
+      // Ne pas charger les associations possibles des codes complémentaires (des milliers)
+      $_activite->_ref_associations = array();
+      if ($this->type_acte != 2) {
+        $_activite->loadRefAssociations();
+      }
+
       $_activite->loadRefConvergence();
       $_activite->loadRefModificateurs();
       foreach ($_activite->_ref_modificateurs as $_date_modif) {
@@ -387,12 +395,16 @@ class CCodeCCAM extends CCCAM {
    * @return array()
    */
   static function getCodeInfos($code) {
-    if (self::$useCache) {
-      self::$useCountLite++;
-      if ($code_ccam = SHM::get("codeccamlite-$code")) {
-        self::$cacheCountLite++;
-        return $code_ccam;
-      }
+    self::$useCountLite++;
+
+    if (isset(self::$cacheLite[$code])) {
+      return self::$cacheLite[$code];
+    }
+
+    if ($code_ccam = SHM::get("codeccamlite-$code")) {
+      self::$cacheCountLite++;
+      self::$cacheLite[$code] = $code_ccam;
+      return $code_ccam;
     }
 
     // Chargement
@@ -404,9 +416,8 @@ class CCodeCCAM extends CCCAM {
     $query = $ds->prepare($query, $code);
     $result = $ds->exec($query);
     $code_ccam = $ds->fetchArray($result);
-    if (self::$useCache) {
-      SHM::put("codeccamlite-$code", $code_ccam);
-    }
+    SHM::put("codeccamlite-$code", $code_ccam);
+    self::$cacheLite[$code] = $code_ccam;
     return $code_ccam;
   }
 
