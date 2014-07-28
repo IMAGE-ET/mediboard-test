@@ -272,6 +272,15 @@
                 </td>
               </tr>
 
+              <tr class="{{$view}}">
+                <th>
+                  {{mb_label object=$acte field=gratuit}}
+                </th>
+                <td>
+                  {{mb_field object=$acte field=gratuit}}
+                </td>
+              </tr>
+
               <!-- Facturable -->
               <tr class="{{$view}}">
                 <th>

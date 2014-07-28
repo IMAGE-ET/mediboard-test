@@ -236,33 +236,38 @@ class CActeNGAP extends CActe {
     $this->_ref_executant->loadRefFunction();
     $zone = self::getZone($this->_ref_executant->_ref_function);
 
-    $this->_ref_executant->spec_cpam_id ? $spe = $this->_ref_executant->spec_cpam_id : $spe = 1;
+    if ($this->gratuit) {
+      return $this->montant_base = 0;
+    }
+    else {
+      $this->_ref_executant->spec_cpam_id ? $spe = $this->_ref_executant->spec_cpam_id : $spe = 1;
 
-    $ds = CSQLDataSource::get("ccamV2");
-    $query = "SELECT t.`tarif`, t.`maj_nuit`, t.`maj_ferie`
+      $ds = CSQLDataSource::get("ccamV2");
+      $query = "SELECT t.`tarif`, t.`maj_nuit`, t.`maj_ferie`
       FROM `tarif_ngap` AS t, `specialite_to_tarif_ngap` AS s
       WHERE t.`code` = ?1 AND t.`zone` = ?2 AND s.`specialite` = ?3 AND t.`tarif_ngap_id` = s.`tarif_id`;";
-    $query = $ds->prepare($query, $this->code, $zone, $spe);
+      $query = $ds->prepare($query, $this->code, $zone, $spe);
 
-    $res = $ds->loadList($query);
-    if (empty($res)) {
-      $res[0] = array('tarif' => 0, 'maj_ferie' => 0, 'maj_nuit' => 0);
-    }
+      $res = $ds->loadList($query);
+      if (empty($res)) {
+        $res[0] = array('tarif' => 0, 'maj_ferie' => 0, 'maj_nuit' => 0);
+      }
 
-    $this->montant_base = $res[0]['tarif'];
-    $this->montant_base *= $this->coefficient;
-    $this->montant_base *= $this->quantite;
+      $this->montant_base = $res[0]['tarif'];
+      $this->montant_base *= $this->coefficient;
+      $this->montant_base *= $this->quantite;
 
-    if ($this->demi) {
-      $this->montant_base /= 2;
-    }
+      if ($this->demi) {
+        $this->montant_base /= 2;
+      }
 
-    if ($this->complement == "F") {
-      $this->montant_base += $res[0]['maj_ferie'];
-    }
+      if ($this->complement == "F") {
+        $this->montant_base += $res[0]['maj_ferie'];
+      }
 
-    if ($this->complement == "N") {
-      $this->montant_base += $res[0]['maj_nuit'];
+      if ($this->complement == "N") {
+        $this->montant_base += $res[0]['maj_nuit'];
+      }
     }
 
     return $this->montant_base;

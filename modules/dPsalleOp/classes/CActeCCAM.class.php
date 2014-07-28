@@ -994,7 +994,7 @@ class CActeCCAM extends CActe {
     // Coefficient d'association
     $code = $this->loadRefCodeCCAM();
 
-    if ($this->code_activite) {
+    if ($this->code_activite && !$this->gratuit) {
       $this->_tarif = $this->getTarifSansAssociationNiCharge();
       $this->_tarif *= ($code->getCoeffAsso($this->code_association) / 100);
       // Charges supplémentaires

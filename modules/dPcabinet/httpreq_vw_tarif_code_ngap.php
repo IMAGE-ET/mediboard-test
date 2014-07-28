@@ -18,6 +18,7 @@ $acte->coefficient  = CValue::get("coefficient", "1");
 $acte->demi         = CValue::get("demi");
 $acte->complement   = CValue::get("complement");
 $acte->executant_id = CValue::get('executant_id');
+$acte->gratuit      = CValue::get('gratuit');
 $acte->updateMontantBase();
 $acte->getLibelle();
 

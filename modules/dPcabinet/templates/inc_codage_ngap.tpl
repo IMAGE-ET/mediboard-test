@@ -9,6 +9,7 @@ refreshTarif = function(){
   url.addElement(oForm.demi);
   url.addElement(oForm.complement);
   url.addElement(oForm.executant_id);
+  url.addElement(oForm.gratuit);
   url.requestUpdate('tarifActe', function() {
     $('inc_codage_ngap_button_create').disabled = false;
   });
@@ -135,6 +136,7 @@ ActesNGAP = {
       {{/if}}
       <th class="category">{{mb_title object=$acte_ngap field=complement}}</th>
 
+      <th class="category">{{mb_title object=$acte_ngap field=gratuit}}</th>
       {{if $object->_class == "CConsultation"}}
         <th class="category">{{mb_title object=$acte_ngap field=lieu}}</th>
       {{/if}}
@@ -173,6 +175,7 @@ ActesNGAP = {
           </td>
           <td>{{mb_field object=$acte_ngap field="montant_depassement"}}</td>
           <td>{{mb_field object=$acte_ngap field="complement" onchange="refreshTarif()" onkeyup="refreshTarif()" emptyLabel="None"}}</td>
+          <td>{{mb_field object=$acte_ngap field=gratuit onchange="refreshTarif()" onkeyup="refreshTarif()" typeEnum='select'}}</td>
           {{if $object->_class == "CConsultation"}}
             <td>{{mb_field object=$acte_ngap field="lieu"}}</td>
           {{/if}}
@@ -234,6 +237,9 @@ ActesNGAP = {
         {{/if}}
       </td>
 
+      <td>
+        {{mb_value object=$_acte_ngap field=gratuit}}
+      </td>
       {{if $object->_class == "CConsultation"}}
         <td>{{mb_value object=$_acte_ngap field="lieu"}}</td>
       {{/if}}

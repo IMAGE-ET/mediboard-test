@@ -1504,6 +1504,12 @@ class CSetupdPsalleOp extends CSetup {
     $this->makeRevision("0.60");
     $this->addPrefQuery("autosigne_sortie", "1");
 
-    $this->mod_version = "0.61";
+    $this->makeRevision('0.61');
+
+    $query = "ALTER TABLE `acte_ccam`
+                ADD `gratuit` ENUM('0', '1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.62';
   }
 }

@@ -2126,6 +2126,12 @@ class CSetupdPcabinet extends CSetup {
                 ADD `feuille_at` ENUM('0', '1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = '2.34';
+    $this->makeRevision('2.34');
+
+    $query = "ALTER TABLE `acte_ngap`
+                ADD `gratuit` ENUM('0', '1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.35';
   }
 }
