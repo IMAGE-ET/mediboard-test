@@ -286,6 +286,12 @@ if (CModule::getActive("dPprescription")) {
             $_line_elt->countPlanifications();
           }
         }
+        elseif ($chapitre == "all_med" && CAppUI::pref("regroupement_med_plan_soins") && CAppUI::conf("soins suivi group_hors_amm_med", $group)) {
+          $prescription->loadRefsLinesElementByCat("1", "1", "med_elt", null, null, null, $hide_old_lines);
+          foreach ($prescription->_ref_prescription_lines_element as $_line_elt) {
+            $_line_elt->countPlanifications();
+          }
+        }
       }
       elseif ($chapitre == "med" || $chapitre == "inj") {
         $prescription->loadRefsLinesMedByCat("1", "1", '', $hide_old_lines);
@@ -453,7 +459,7 @@ if ($chapitre) {
 }
 $signe_decalage = ($nb_decalage < 0) ? "-" : "+";
 
-$prolongation_time = CAppUI::conf("dPprescription general prolongation_time", CGroups::loadCurrent()->_guid);
+$prolongation_time = CAppUI::conf("dPprescription general prolongation_time", $group->_guid);
 $sortie_sejour = ($sejour->sortie_reelle || !$prolongation_time) ? $sejour->sortie : CMbDT::dateTime("+ $prolongation_time HOURS", $sejour->sortie);
 
 $count_perop_adm = 0;
@@ -461,10 +467,17 @@ if (CAppUI::conf("dPprescription general show_perop_suivi_soins", $group->_guid)
   $count_perop_adm = CAdministration::countPerop($prescription->_id);
 }
 
+if (!$chapitre && CAppUI::pref("regroupement_med_plan_soins") && CAppUI::conf("soins suivi group_hors_amm_med", $group) && $prescription->_ref_lines_elt_for_plan["med_elt"]) {
+  foreach ($prescription->_ref_lines_elt_for_plan["med_elt"] as $_line_elt) {
+    $prescription->_nb_lines_plan_soins["all_med"] ++;
+  }
+  unset($prescription->_ref_lines_elt_for_plan["med_elt"]);
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("risques_cis"         , $risques_cis);
-$smarty->assign("plan_soins_unite_prescription", CAppUI::conf("dPprescription CPrescription unite_prescription_plan_soins", CGroups::loadCurrent()));
+$smarty->assign("plan_soins_unite_prescription", CAppUI::conf("dPprescription CPrescription unite_prescription_plan_soins", $group));
 $smarty->assign("sortie_sejour"       , $sortie_sejour);
 $smarty->assign("signe_decalage"      , $signe_decalage);
 $smarty->assign("nb_decalage"         , abs($nb_decalage));

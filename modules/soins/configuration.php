@@ -35,7 +35,8 @@ CConfiguration::register(
           "transmission_date_limit" => "bool default|0"
         ),
         "suivi" => array(
-          "hide_old_line"   => "bool default|0"
+          "hide_old_line"       => "bool default|0",
+          "group_hors_amm_med"  => "bool default|0",
         ),
         "CLit"  => array(
           "align_right"     => "bool default|1",
