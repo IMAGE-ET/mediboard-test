@@ -430,26 +430,25 @@ class CCodable extends CMbObject {
   }
 
   /**
-   * Correction des actes
+   * Correction des actes CCAM
    *
    * @return void
    */
   function correctActes() {
-    $this->loadRefsActes();
+    if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+      return;
+    }
+    else {
+      $this->loadRefsActes();
 
-    foreach ($this->_ref_actes_ccam as $_acte) {
-      if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
-        $codage_ccam = CCodageCCAM::get($this, $_acte->executant_id);
-        $codage_ccam->guessAssociation($_acte);
-      }
-      else {
+      foreach ($this->_ref_actes_ccam as $_acte) {
         $_acte->guessAssociation();
-      }
-      if ($_acte->_guess_association != "X") {
-        $_acte->code_association     = $_acte->_guess_association;
-        $_acte->facturable           = $_acte->_guess_facturable;
-        $_acte->_calcul_montant_base = true;
-        $_acte->store();
+        if ($_acte->_guess_association != "X") {
+          $_acte->code_association     = $_acte->_guess_association;
+          $_acte->facturable           = $_acte->_guess_facturable;
+          $_acte->_calcul_montant_base = true;
+          $_acte->store();
+        }
       }
     }
   }
@@ -546,6 +545,20 @@ class CCodable extends CMbObject {
       return $this->_ref_codages_ccam;
     }
     return $this->_ref_codages_ccam = $this->loadBackRefs("codages_ccam");
+  }
+
+  function bindActesCodage() {
+    $this->loadRefsCodagesCCAM();
+    $this->loadRefsActesCCAM();
+    foreach ($this->_ref_codages_ccam as $_codage) {
+      $_codage->_ref_actes_ccam = array();
+      foreach ($this->_ref_actes_ccam as $_acte) {
+        if ($_codage->praticien_id == $_acte->executant_id) {
+          $_codage->_ref_actes_ccam[$_acte->_id] = $_acte;
+        }
+      }
+      $_codage->guessActesAssociation();
+    }
   }
 
   /**
@@ -948,7 +961,9 @@ class CCodable extends CMbObject {
     $depassement_anesth_affecte = false;
 
     // Check if depassement is already set
+    $this->loadRefsActesCCAM();
     foreach ($this->_ref_actes_ccam as $_acte) {
+      $_acte->guessAssociation();
       if ($_acte->code_activite == 1 && $_acte->montant_depassement) {
         $depassement_affecte = true;
       }
@@ -1018,15 +1033,12 @@ class CCodable extends CMbObject {
             }
           }
 
-          if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
-            $codage_ccam = CCodageCCAM::get($this, $possible_acte->executant_id);
-            $codage_ccam->guessAssociation($possible_acte);
-            $codage_ccam->store();
+          if ($possible_acte->_id) {
+            $possible_acte->getTarif();
           }
           else {
-            $possible_acte->guessAssociation();
+            $possible_acte->getTarifSansAssociationNiCharge();
           }
-          $possible_acte->getTarif();
 
           // Keep references !
           $phase->_connected_acte = $possible_acte;
@@ -1038,7 +1050,8 @@ class CCodable extends CMbObject {
             }
             else {
               foreach ($phase->_modificateurs as $modificateur) {
-                $modificateur->_checked = $this->checkModificateur($modificateur->code, CMbDT::time($phase->_connected_acte->execution));
+                $modificateur->_checked =
+                  $this->checkModificateur($modificateur->code, CMbDT::time($phase->_connected_acte->execution));
               }
             }
           }

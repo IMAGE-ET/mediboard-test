@@ -18,13 +18,23 @@ $codage->canDo();
 if (!$codage->_can->edit) {
   CAppUI::redirect("m=system&a=access_denied");
 }
-
 $codage->loadPraticien()->loadRefFunction();
 $codage->loadActesCCAM();
 $codage->checkRules();
 foreach ($codage->_ref_actes_ccam as $_acte) {
   $_acte->getTarif();
 }
+
+// Chargement du codable et des actes possibles
+$codage->loadCodable();
+
+$codable = $codage->_ref_codable;
+$codable->isCoded();
+$codable->loadRefPatient();
+$codable->loadRefPraticien();
+$codable->loadExtCodesCCAM();
+$codable->getAssociationCodesActes();
+$codable->loadPossibleActes();
 
 // Création du template
 $smarty = new CSmartyDP();

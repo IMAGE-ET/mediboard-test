@@ -74,6 +74,8 @@ class CActeCCAM extends CActe {
   public $_ref_code_ccam;
   /** @var  CCodable */
   public $_ref_object;
+  /** @var CCodageCCAM */
+  public $_ref_codage_ccam;
 
   // Collections
   /** @var  CActeCCAM[] */
@@ -185,6 +187,22 @@ class CActeCCAM extends CActe {
     if ($msg = $this->checkCoded()) {
       return $msg;
     }
+    return null;
+  }
+
+
+  /**
+   * @see parent::delete()
+   */
+  function delete() {
+    $this->loadRefCodageCCAM();
+    if ($msg = parent::delete()) {
+      return $msg;
+    }
+    if ($this->_ref_codage_ccam->_id) {
+      $this->_ref_codage_ccam->updateRule();
+    }
+    $this->_ref_codage_ccam->store();
     return null;
   }
 
@@ -328,7 +346,6 @@ class CActeCCAM extends CActe {
       return null;
     }
     $this->loadRefCodeCCAM();
-    $this->_ref_code_ccam->getChaps();
     $this->getLinkedActes(false, false);
     
     /**
@@ -374,7 +391,10 @@ class CActeCCAM extends CActe {
       }
 
       // Cas du chapitre sur la radiologie vasculaire
-      if ($this->_ref_code_ccam->chaptitre['3']['rang'] == '19.01.09.02.') {
+      if (
+        isset($this->_ref_code_ccam->chapitres['3']) &&
+        $this->_ref_code_ccam->chapitres['3']['rang'] == '19.01.09.02.'
+      ) {
         $possible = true;
         foreach ($this->_linked_actes as $_acte) {
           $codes_incompatibles = array('YYYY033', 'YYYY300');
@@ -383,7 +403,8 @@ class CActeCCAM extends CActe {
           }
         }
         if (!$possible) {
-          return "Un acte du chapitre 19.01.09.02 (Radiologie vasculaire et imagerie interventionnelle) ne peut pas être associé avec les actes YYYY030 et YYYY300";
+          return "Un acte du chapitre 19.01.09.02 (Radiologie vasculaire et imagerie interventionnelle)
+          ne peut pas être associé avec les actes YYYY030 et YYYY300";
         }
       }
     }
@@ -416,6 +437,9 @@ class CActeCCAM extends CActe {
    * @see parent::store()
    */
   function store() {
+    // Chargement du oldObject
+    $oldObject = new CActeCCAM();
+    $oldObject->load($this->_id);
     // On test si l'acte CCAM est facturable
     $this->checkFacturable();
 
@@ -427,9 +451,6 @@ class CActeCCAM extends CActe {
 
     // En cas d'une modification autre que signe, on met signe à 0
     if (!$this->signe) {
-      // Chargement du oldObject
-      $oldObject = new CActeCCAM();
-      $oldObject->load($this->_id);
     
       // Parcours des objets pour detecter les modifications
       $_modif = 0;
@@ -446,6 +467,20 @@ class CActeCCAM extends CActe {
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
+    }
+
+    // Si on crée un nouvel acte, on relance l'analyse du codage
+    $codage = CCodageCCAM::get($this->loadRefObject(), $this->executant_id);
+    if (!$codage->_id) {
+      if ($msg = $codage->store()) {
+        return $msg;
+      }
+    }
+    elseif (!$oldObject->_id) {
+      $codage->updateRule();
+      if ($msg = $codage->store()) {
+        return $msg;
+      }
     }
     return null;
   }
@@ -470,6 +505,18 @@ class CActeCCAM extends CActe {
   }
 
   /**
+   * Charge le codage CCAM associé
+   *
+   * @return CCodageCCAM
+   */
+  function loadRefCodageCCAM() {
+    $this->loadRefObject();
+    if (isset($this->_ref_object)) {
+      return $this->_ref_codage_ccam = CCodageCCAM::get($this->_ref_object, $this->executant_id);
+    }
+  }
+
+  /**
    * @see parent::loadRefsFwd()
    */
   function loadRefsFwd() {
@@ -477,6 +524,7 @@ class CActeCCAM extends CActe {
 
     $this->loadRefExecutant();
     $this->loadRefCodeCCAM();
+    $this->loadRefCodageCCAM();
   }
 
   /**

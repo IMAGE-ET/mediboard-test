@@ -86,8 +86,7 @@
             <tr>
               <th class="category">Praticien</th>
               <th class="category">Actes</th>
-              <th class="category">Règle utilisée</th>
-              <th class="category">Verrouillage</th>
+              <th class="category">Actions</th>
             </tr>
             {{foreach from=$subject->_ref_codages_ccam item=_codage}}
             {{if $_codage->_ref_actes_ccam|@count}}
@@ -100,12 +99,11 @@
                   <br />
                 {{/foreach}}
               </td>
-              <td>
-                <button type="button" class="notext edit" style="float: right;" onclick="editCodage({{$_codage->_id}})">{{tr}}Edit{{/tr}}</button>
-                {{$_codage->association_rule}}
-                ({{mb_value object=$_codage field=association_mode}})
-              </td>
               <td class="button">
+                <button type="button" class="notext edit" onclick="editCodage({{$_codage->_id}})"
+                  title="{{$_codage->association_rule}} ({{mb_value object=$_codage field=association_mode}})">
+                  {{tr}}Edit{{/tr}}
+                </button>
                 <form name="formCodage-{{$_codage->_id}}" action="?" method="post" onsubmit="return checkForm(this)">
                   <input type="hidden" name="m" value="ccam" />
                   <input type="hidden" name="dosql" value="do_codageccam_aed" />

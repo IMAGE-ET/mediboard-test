@@ -30,7 +30,7 @@ class CCodageCCAM extends CMbObject {
   public $nb_acts;
 
   /**
-   * @var array
+   * @var CActeCCAM[]
    */
   protected $_ordered_acts;
 
@@ -44,7 +44,8 @@ class CCodageCCAM extends CMbObject {
    */
   protected $_check_rules;
 
-  protected $_recheck_asso = 0;
+  protected $_check_asso  = true;
+  protected $_apply_rules = true;
 
   /**
    * @var CCodable
@@ -133,8 +134,7 @@ class CCodageCCAM extends CMbObject {
     $codage_ccam->loadMatchingObject();
 
     if (!$codage_ccam->_id) {
-      $codage_ccam->association_mode = 'auto';
-      $codage_ccam->locked = 0;
+      $codage_ccam->store();
     }
 
     return $codage_ccam;
@@ -147,7 +147,7 @@ class CCodageCCAM extends CMbObject {
    *
    * @return CCodable|null
    */
-  protected function loadCodable($cache = true) {
+  public function loadCodable($cache = true) {
     if (!$this->codable_class || !$this->codable_id) {
       return null;
     }
@@ -191,7 +191,6 @@ class CCodageCCAM extends CMbObject {
     $this->_ref_actes_ccam = $act->loadMatchingList("code_association");
 
     if ($this->nb_acts != count($this->_ref_actes_ccam)) {
-      $this->_recheck_asso = 1;
       $this->nb_acts = count($this->_ref_actes_ccam);
     }
 
@@ -203,27 +202,84 @@ class CCodageCCAM extends CMbObject {
   }
 
   /**
+   * Force the update of the rule
+   *
+   * @return bool
+   */
+  function updateRule() {
+    if ($this->association_mode != 'auto' || !$this->_check_asso) {
+      return false;
+    }
+    $this->guessRule();
+    if ($this->fieldModified('association_rule')) {
+      $this->applyRuleToActes();
+      return true;
+    }
+    $this->_check_asso = false;
+    return false;
+  }
+
+  /**
    * @see parent::check()
    */
   public function check() {
-    $this->completeField('codable_class', 'codable_id', 'praticien_id');
+    $this->completeField('codable_class', 'codable_id', 'praticien_id', 'association_mode', 'association_rule', 'locked');
 
     if ($this->_old->locked) {
       return "";
     }
-    if ($this->fieldModified('association_rule') || $this->fieldModified('association_mode')) {
-      $this->loadActesCCAM();
-      foreach ($this->_ref_actes_ccam as $_act) {
-
-        $_act->code_association = $this->guessAssociation($_act);
-
-        if ($msg = $_act->store()) {
-          return $msg;
-        }
-      }
+    if (!$this->_id || $this->fieldModified('association_mode', 'auto')) {
+      $this->guessRule();
     }
-
+    if (!$this->_id || $this->fieldModified('association_rule')) {
+      $this->applyRuleToActes();
+    }
     return parent::check();
+  }
+
+  /**
+   * Guess the correct rule and replace it
+   *
+   * @return string
+   */
+  function guessRule() {
+    if ($this->association_mode != 'auto') {
+      return "";
+    }
+    return $this->association_rule = $this->checkRules();
+  }
+
+  /**
+   * Guess the association code of all actes
+   *
+   * @return void
+   */
+  function guessActesAssociation() {
+    $this->completeField("association_rule");
+    $this->getActsByTarif();
+    foreach ($this->_ref_actes_ccam as $_act) {
+      $_act->_position = array_search($_act->_id, array_keys($this->_ordered_acts));
+      $this->guessActeAssociation($this->association_rule, $_act);
+    }
+  }
+
+  /**
+   * Apply the rule to all actes
+   *
+   * @return void
+   */
+  function applyRuleToActes() {
+    if (!$this->_apply_rules) {
+      return;
+    }
+    $this->completeField("association_rule");
+    $this->getActsByTarif();
+    foreach ($this->_ref_actes_ccam as $_act) {
+      $_act->_position = array_search($_act->_id, array_keys($this->_ordered_acts));
+      $this->applyRule($this->association_rule, $_act);
+      $_act->store();
+    }
+    $this->_apply_rules = false;
   }
 
   /**
@@ -234,7 +290,12 @@ class CCodageCCAM extends CMbObject {
   protected function getActsByTarif() {
     $this->loadActesCCAM();
     $this->checkFacturableActs();
-    $this->_ordered_acts = array();
+    if (!isset($this->_ordered_acts)) {
+      $this->_ordered_acts = array();
+    }
+    if (count($this->_ref_actes_ccam_facturables) == count($this->_ordered_acts)) {
+      return $this->_ordered_acts;
+    }
 
     foreach ($this->_ref_actes_ccam_facturables as $_act) {
       $this->_ordered_acts[$_act->_id] = $_act->getTarifSansAssociationNiCharge();
@@ -337,50 +398,14 @@ class CCodageCCAM extends CMbObject {
   }
 
   /**
-   * Check all rules
-   *
-   * @param CActeCCAM $act The act
-   *
-   * @return string
-   */
-  public function guessAssociation($act) {
-    if (!$act->_id) {
-      return "";
-    }
-    $this->completeField("association_rule");
-    $this->getActsByTarif();
-    $act->_position = array_search($act->_id, array_keys($this->_ordered_acts));
-    $this->_check_rules = array();
-    if ((!$this->association_rule || $this->_recheck_asso) && $this->association_mode == 'auto') {
-
-      foreach (self::$association_rules as $_rule => $_type) {
-        if (self::isRuleAllowed($_rule)) {
-          if (call_user_func(array($this, "checkRule$_rule")) && $_type == 'auto') {
-            $this->applyRule($_rule, $act);
-            break;
-          }
-        }
-      }
-
-      $this->association_rule = $act->_guess_regle_asso;
-    }
-    else {
-      call_user_func(array($this, "checkRule$this->association_rule"));
-      $this->applyRule($this->association_rule, $act);
-    }
-
-    return $act->_guess_association;
-  }
-
-  /**
-   * Application d'une règle nommée sur un acte
+   * Vérification de l'application d'une règle nommée sur un acte
    *
    * @param string    $rulename Rule name
-   * @param CActeCCAM $act      The act
+   * @param CActeCCAM &$act     The act
    *
    * @return void
    */
-  protected function applyRule($rulename, $act) {
+  public function guessActeAssociation($rulename, &$act) {
     if ($act->_position === false) {
       $act->facturable = 0;
       $act->_guess_association = '';
@@ -393,6 +418,19 @@ class CCodageCCAM extends CMbObject {
   }
 
   /**
+   * Application d'une règle nommée sur un acte
+   *
+   * @param string    $rulename Rule name
+   * @param CActeCCAM &$act     The act
+   *
+   * @return void
+   */
+  protected function applyRule($rulename, &$act) {
+    $this->guessActeAssociation($rulename, $act);
+    $act->code_association = $act->_guess_association;
+  }
+
+  /**
    * Guess the association code for an act
    *
    * @return string
@@ -401,12 +439,17 @@ class CCodageCCAM extends CMbObject {
     $this->getActsByTarif();
     $this->_check_rules = array();
     $this->_possible_rules = array();
+    $firstRule = null;
 
     foreach (self::$association_rules as $_rule => $_type) {
       if (self::isRuleAllowed($_rule)) {
         $this->_possible_rules[$_rule] = call_user_func(array($this, "checkRule$_rule"));
+        if ($firstRule === null && $this->_possible_rules[$_rule] && $_type == "auto") {
+          $firstRule = $_rule;
+        }
       }
     }
+    return $firstRule;
   }
 
   /**
@@ -443,11 +486,11 @@ class CCodageCCAM extends CMbObject {
   /**
    * Apply the association rule G1 to the given act
    *
-   * @param CActeCCAM $act The act
+   * @param CActeCCAM &$act The act
    *
    * @return void
    */
-  protected function applyRuleG1($act) {
+  protected function applyRuleG1(&$act) {
     switch ($act->_position) {
       case 0:
         $act->_guess_association = '';
@@ -497,11 +540,11 @@ class CCodageCCAM extends CMbObject {
   /**
    * Apply the association rule GA to the given act
    *
-   * @param CActeCCAM $act The act
+   * @param CActeCCAM &$act The act
    *
    * @return void
    */
-  protected function applyRuleGA($act) {
+  protected function applyRuleGA(&$act) {
     if (
         $act->_position == 0 ||
         $act->_ref_code_ccam->isSupplement() ||
@@ -552,11 +595,11 @@ class CCodageCCAM extends CMbObject {
   /**
    * Apply the association rule GB to the given act
    *
-   * @param CActeCCAM $act The act
+   * @param CActeCCAM &$act The act
    *
    * @return void
    */
-  protected function applyRuleGB($act) {
+  protected function applyRuleGB(&$act) {
     if (
         $act->_position == 0 ||
         $act->_ref_code_ccam->isSupplement() ||
@@ -584,11 +627,11 @@ class CCodageCCAM extends CMbObject {
   /**
    * Apply the association rule G2 to the given act
    *
-   * @param CActeCCAM $act The act
+   * @param CActeCCAM &$act The act
    *
    * @return void
    */
-  protected function applyRuleG2($act) {
+  protected function applyRuleG2(&$act) {
     foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
       if (
           $_acte_ccam->_ref_code_ccam->isSupplement() ||
@@ -663,11 +706,11 @@ class CCodageCCAM extends CMbObject {
   /**
    * Apply the association rule EA to the given act
    *
-   * @param CActeCCAM $act The act
+   * @param CActeCCAM &$act The act
    *
    * @return void
    */
-  protected function applyRuleEA($act) {
+  protected function applyRuleEA(&$act) {
     switch ($act->_position) {
       case 0:
         $act->_guess_association = '1';
@@ -712,11 +755,11 @@ class CCodageCCAM extends CMbObject {
   /**
    * Apply the association rule EB to the given act
    *
-   * @param CActeCCAM $act The act
+   * @param CActeCCAM &$act The act
    *
    * @return void
    */
-  protected function applyRuleEB($act) {
+  protected function applyRuleEB(&$act) {
     switch ($act->_position) {
       case 0:
         $act->_guess_association = '1';
@@ -773,11 +816,11 @@ class CCodageCCAM extends CMbObject {
   /**
    * Apply the association rule EC to the given act
    *
-   * @param CActeCCAM $act The act
+   * @param CActeCCAM &$act The act
    *
    * @return void
    */
-  protected function applyRuleEC($act) {
+  protected function applyRuleEC(&$act) {
     switch ($act->_position) {
       case 0:
         $act->_guess_association = '1';
@@ -839,11 +882,11 @@ class CCodageCCAM extends CMbObject {
   /**
    * Apply the association rule ED to the given act
    *
-   * @param CActeCCAM $act The act
+   * @param CActeCCAM &$act The act
    *
    * @return void
    */
-  protected function applyRuleED($act) {
+  protected function applyRuleED(&$act) {
     switch ($act->_position) {
       case 0:
         $act->_guess_association = '1';
@@ -914,11 +957,11 @@ class CCodageCCAM extends CMbObject {
   /**
    * Apply the association rule EE to the given act
    *
-   * @param CActeCCAM $act The act
+   * @param CActeCCAM &$act The act
    *
    * @return void
    */
-  protected function applyRuleEE($act) {
+  protected function applyRuleEE(&$act) {
     switch ($act->_position) {
       case 0:
         $act->_guess_association = '4';
@@ -987,11 +1030,11 @@ class CCodageCCAM extends CMbObject {
   /**
    * Apply the association rule EF to the given act
    *
-   * @param CActeCCAM $act The act
+   * @param CActeCCAM &$act The act
    *
    * @return void
    */
-  protected function applyRuleEF($act) {
+  protected function applyRuleEF(&$act) {
     if ($this->_check_rules['EF']['guidage_remno'] == 2) {
       switch ($act->_position) {
         case 0:
@@ -1052,11 +1095,11 @@ class CCodageCCAM extends CMbObject {
   /**
    * Apply the association rule EG1 to the given act
    *
-   * @param CActeCCAM $act The act
+   * @param CActeCCAM &$act The act
    *
    * @return void
    */
-  protected function applyRuleEG1($act) {
+  protected function applyRuleEG1(&$act) {
     switch ($act->_position) {
       case 0:
         $act->_guess_association = '1';
@@ -1120,11 +1163,11 @@ class CCodageCCAM extends CMbObject {
   /**
    * Apply the association rule EG2 to the given act
    *
-   * @param CActeCCAM $act The act
+   * @param CActeCCAM &$act The act
    *
    * @return void
    */
-  protected function applyRuleEG2($act) {
+  protected function applyRuleEG2(&$act) {
     $ordered_acts_eg2 = $this->_ordered_acts;
     $chapters_anapath = array(
       '01.01.14.',
@@ -1215,11 +1258,11 @@ class CCodageCCAM extends CMbObject {
   /**
    * Apply the association rule EG3 to the given act
    *
-   * @param CActeCCAM $act The act
+   * @param CActeCCAM &$act The act
    *
    * @return void
    */
-  protected function applyRuleEG3($act) {
+  protected function applyRuleEG3(&$act) {
     $ordered_acts_eg3 = $this->_ordered_acts;
     foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
@@ -1306,11 +1349,11 @@ class CCodageCCAM extends CMbObject {
   /**
    * Apply the association rule EG4 to the given act
    *
-   * @param CActeCCAM $act The act
+   * @param CActeCCAM &$act The act
    *
    * @return void
    */
-  protected function applyRuleEG4($act) {
+  protected function applyRuleEG4(&$act) {
     $act->_guess_association = '4';
     $act->_guess_regle_asso = 'EG4';
   }
@@ -1337,11 +1380,11 @@ class CCodageCCAM extends CMbObject {
   /**
    * Apply the association rule EG5 to the given act
    *
-   * @param CActeCCAM $act The act
+   * @param CActeCCAM &$act The act
    *
    * @return void
    */
-  protected function applyRuleEG5($act) {
+  protected function applyRuleEG5(&$act) {
     switch ($act->_position) {
       case 0:
         $act->_guess_association = '4';
@@ -1400,11 +1443,11 @@ class CCodageCCAM extends CMbObject {
   /**
    * Apply the association rule EG6 to the given act
    *
-   * @param CActeCCAM $act The act
+   * @param CActeCCAM &$act The act
    *
    * @return void
    */
-  protected function applyRuleEG6($act) {
+  protected function applyRuleEG6(&$act) {
     switch ($act->_position) {
       case 0:
         $act->_guess_association = '4';
@@ -1451,11 +1494,11 @@ class CCodageCCAM extends CMbObject {
   /**
    * Apply the association rule EG7 to the given act
    *
-   * @param CActeCCAM $act The act
+   * @param CActeCCAM &$act The act
    *
    * @return void
    */
-  protected function applyRuleEG7($act) {
+  protected function applyRuleEG7(&$act) {
     $ordered_acts_eg7 = $this->_ordered_acts;
     foreach ($this->_ref_actes_ccam_facturables as $_act) {
       $chapters = $_act->_ref_code_ccam->chapitres;
@@ -1519,11 +1562,11 @@ class CCodageCCAM extends CMbObject {
   /**
    * Apply the association rule EH to the given act
    *
-   * @param CActeCCAM $act The act
+   * @param CActeCCAM &$act The act
    *
    * @return void
    */
-  protected function applyRuleEH($act) {
+  protected function applyRuleEH(&$act) {
     /**
      * Trier les actes par moments:
      *    - 1er moment : acte de tarif le + élevé => 1, les autres => 2
@@ -1579,11 +1622,11 @@ class CCodageCCAM extends CMbObject {
   /**
    * Apply the association rule EI to the given act
    *
-   * @param CActeCCAM $act The act
+   * @param CActeCCAM &$act The act
    *
    * @return void
    */
-  protected function applyRuleEI($act) {
+  protected function applyRuleEI(&$act) {
     $ordered_acts_ei = $this->_ordered_acts;
     $ordered_acts_radio = array();
     $chapters_radio = array(
