@@ -77,7 +77,7 @@
   </tr>
 
   {{foreach from=$sejours item=_sejour}}
-    <tr class="sejour-type-default sejour-type-{{$_sejour->type}} {{if !$_sejour->facturable}} non-facturable {{/if}} {{if $_sejour->facture}}opacity-30{{/if}}" id="{{$_sejour->_guid}}">
+    <tr class="sejour-type-default sejour-type-{{$_sejour->type}} {{if !$_sejour->facturable}} non-facturable {{/if}}" id="{{$_sejour->_guid}}">
       {{mb_include module="pmsi" template="inc_vw_sortie_line" nodebug=true}}
     </tr>
   {{/foreach}}

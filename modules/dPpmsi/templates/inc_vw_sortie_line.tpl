@@ -8,8 +8,9 @@
  * @link     http://www.mediboard.org*}}
 
 {{mb_script module=soins  script=plan_soins ajax=true}}
+{{mb_script module=dPpmsi script=pmsi       ajax=true}}
 
-<td class="text CPatient-view" colspan="2">
+<td class="text CPatient-view {{if $_sejour->facture}}opacity-30{{/if}}" " colspan="2" >
   {{if $canPlanningOp->read}}
     <div style="float: right;">
       {{if "web100T"|module_active}}
@@ -45,10 +46,10 @@
     {{$_sejour->_ref_patient->_view}}
   </span>
 </td>
-<td class="text">
+<td class="text {{if $_sejour->facture}}opacity-30{{/if}}">
   {{mb_value object=$_sejour field=entree date=$date}}
 </td>
-<td>
+<td class="{{if $_sejour->facture}}opacity-30{{/if}}">
   <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
     {{if ($_sejour->sortie_prevue < $date_min) || ($_sejour->sortie_prevue > $date_max)}}
       {{$_sejour->sortie_prevue|date_format:$conf.datetime}}
@@ -62,13 +63,13 @@
 </td>
 <td class="text button">
   <form name="facturer-{{$_sejour->_guid}}" action="?" method="post"
-        onsubmit="return onSubmitFormAjax(this, reloadSortieLine.curry('{{$_sejour->_id}}'));">
+        onsubmit="return onSubmitFormAjax(this, PMSI.reloadFacturationLine('{{$_sejour->_id}}'));">
     {{mb_key   object=$_sejour}}
     {{mb_class object=$_sejour}}
 
     <input type="hidden" name="facture" value="1"/>
 
-    <button {{if $_sejour->facture}}disabled{{/if}} type="submit" class="tick">Facturer</button>
+    <button {{if $_sejour->facture}}disabled{{/if}} type="submit" class="tick singleclick">Facturer</button>
   </form>
   <button {{if !$_sejour->_ref_prescription_sejour->_id}}disabled{{/if}} type="button" class="print"
           onclick="PlanSoins.printAdministrations('{{$_sejour->_ref_prescription_sejour->_id}}')">Facturation</button>

@@ -98,5 +98,11 @@ PMSI = {
       }
       PMSI.exportActes(object_id, object_class, oOptions, module);
     });
+  },
+
+  reloadFacturationLine: function (sejour_id) {
+    new Url("dPpmsi", "ajax_sortie_line")
+      .addParam("sejour_id", sejour_id)
+      .requestUpdate("CSejour-"+sejour_id);
   }
 };
