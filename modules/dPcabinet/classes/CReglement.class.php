@@ -57,6 +57,15 @@ class CReglement extends CMbMetaObject {
   }
 
   /**
+   * @see parent::getBackProps()
+   */
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["rembourst_noemie"]  = "CPvRemboursementNoemie reglement_id";
+    return $backProps;
+  }
+
+  /**
    * @see parent::getProps()
    */
   function getProps() {
