@@ -3,18 +3,7 @@
     var form = getForm("editConfigSejour");
     form["dPplanningOp[CSejour][max_cancel_time]"    ].addSpinner({min:0, max:24});
     form["dPplanningOp[CSejour][hours_sejour_proche]"].addSpinner({min:0, max:96});
-    form["dPplanningOp[CSejour][anonymous_naissance]"].type = "hidden";
-    Calendar.regField(form["dPplanningOp[CSejour][anonymous_naissance]"]);
   });
-  toggleSpecsPat = function(statut) {
-    var area_pat = $("specs_anonymous_pat");
-    if (statut == 1) {
-      area_pat.show();
-    }
-    else {
-      area_pat.hide();
-    }
-  }
 </script>
 
 <form name="editConfigSejour" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return onSubmitFormAjax(this)">
@@ -43,11 +32,7 @@
     {{mb_include module=system template=inc_config_str  var=max_cancel_time     size=2 suffix=h}}
     {{mb_include module=system template=inc_config_str  var=hours_sejour_proche size=2 suffix=h}}
     {{mb_include module=system template=inc_config_bool var=fix_doc_edit}}
-    {{mb_include module=system template=inc_config_bool var=create_anonymous_pat onchange="toggleSpecsPat(this.value)"}}
-    <tbody id="specs_anonymous_pat" {{if !$conf.dPplanningOp.CSejour.create_anonymous_pat}}style="display: none;"{{/if}}>
-      {{mb_include module=system template=inc_config_enum var=anonymous_sexe values=m|f}}
-      {{mb_include module=system template=inc_config_str var=anonymous_naissance}}
-    </tbody>
+
     {{mb_include module=system template=inc_config_bool var=use_recuse}}
     {{mb_include module=system template=inc_config_enum var=systeme_isolement values=standard|expert}}
     {{mb_include module=system template=inc_config_bool var=specified_output_mode}}

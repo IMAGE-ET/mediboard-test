@@ -10,12 +10,13 @@
  */
 
 $callback = CValue::post("callback");
+$group = CGroups::loadCurrent();
 
 $patient = new CPatient;
 $patient->nom = "anonyme";
 $patient->prenom = "anonyme";
-$patient->sexe = CAppUI::conf("dPplanningOp CSejour anonymous_sexe");
-$patient->naissance = CAppUI::conf("dPplanningOp CSejour anonymous_naissance");
+$patient->sexe = CAppUI::conf("dPpatients CPatient anonymous_sexe", $group);
+$patient->naissance = CAppUI::conf("dPpatients CPatient anonymous_naissance", $group);
 
 $msg = $patient->store();
 

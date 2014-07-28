@@ -13,12 +13,13 @@
 {{mb_default var=other_form value=""}}
 {{mb_default var=callback value=""}}
 
-<script type="text/javascript">
+<script>
   createPatAnonyme = function() {
     var url = new Url("patients", "do_anonymous_patient", "dosql");
     url.addParam("callback", "fillPatAnonyme");
     url.requestUpdate("systemMsg", {method: "post"});
   };
+
   fillPatAnonyme = function(pat_id, pat_view) {
     var form = getForm('{{$form}}');
     
@@ -40,7 +41,7 @@
   }
 </script>
 
-{{if $conf.dPplanningOp.CSejour.create_anonymous_pat && !$patient_id}}
+{{if "dPpatients CPatient allow_anonymous_patient"|conf:"CGroups-$g" && !$patient_id}}
   <button type="button" class="notext" onclick="createPatAnonyme()">
     <img src="modules/dPpatients/images/anonyme.png" alt="Anonyme" />
   </button>

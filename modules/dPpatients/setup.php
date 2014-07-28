@@ -2620,7 +2620,12 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("2.11");
     $this->addPrefQuery('update_patient_from_vitale_behavior', 'choice');
 
-    $this->mod_version = "2.12";
+    $this->makeRevision("2.12");
+    $this->addDefaultConfig("dPpatients CPatient allow_anonymous_patient", 'dPplanningOp CSejour create_anonymous_pat');
+    $this->addDefaultConfig("dPpatients CPatient anonymous_sexe", 'dPplanningOp CSejour anonymous_sexe');
+    $this->addDefaultConfig("dPpatients CPatient anonymous_naissance", 'dPplanningOp CSejour anonymous_naissance');
+
+    $this->mod_version = "2.13";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
