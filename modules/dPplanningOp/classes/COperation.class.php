@@ -413,11 +413,26 @@ class COperation extends CCodable implements IPatientRelated {
   /**
    * @see parent::getExtensionDocumentaire()
    */
-  function getExtensionDocumentaire() {
-    /** @var CTypeAnesth $type_anesth */
-    $type_anesth = $this->loadFwdRef("type_anesth", true);
-    $this->_ref_type_anesth = $type_anesth;
-    return $type_anesth->ext_doc;
+  function getExtensionDocumentaire($executant_id) {
+    $codage_ccam = CCodageCCAM::get($this, $executant_id);
+    $actes = $codage_ccam->loadActesCCAM();
+    $extension_documentaire = null;
+
+    foreach ($actes as $_acte) {
+      if ($_acte->extension_documentaire) {
+        $extension_documentaire = $_acte->extension_documentaire;
+        break;
+      }
+    }
+
+    if (!$extension_documentaire) {
+      /** @var CTypeAnesth $type_anesth */
+      $type_anesth = $this->loadFwdRef("type_anesth", true);
+      $this->_ref_type_anesth = $type_anesth;
+      $extension_documentaire = $type_anesth->ext_doc;
+    }
+
+    return $extension_documentaire;
   }
 
   /**

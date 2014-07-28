@@ -402,9 +402,11 @@ class CCodable extends CMbObject {
   /**
    * Récupération de l'extensions documentaires
    *
+   * @param integer $executant_id L'id du praticien executant
+   *
    * @return int|null
    */
-  function getExtensionDocumentaire() {
+  function getExtensionDocumentaire($executant_id) {
     return null;
   }
 
@@ -994,7 +996,7 @@ class CCodable extends CMbObject {
             $this->getExecutantId($possible_acte->code_activite);
           
           if ($possible_acte->code_activite == 4) {
-            $possible_acte->extension_documentaire = $this->getExtensionDocumentaire();
+            $possible_acte->extension_documentaire = $this->getExtensionDocumentaire($possible_acte->executant_id);
           }
 
           $possible_acte->updateFormFields();

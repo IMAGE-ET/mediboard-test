@@ -372,6 +372,20 @@ class CActeCCAM extends CActe {
           return "Aucun acte codé ne permet actuellement d'associer une Anesthésie Complémentaire";
         }
       }
+
+      // Cas du chapitre sur la radiologie vasculaire
+      if ($this->_ref_code_ccam->chaptitre['3']['rang'] == '19.01.09.02.') {
+        $possible = true;
+        foreach ($this->_linked_actes as $_acte) {
+          $codes_incompatibles = array('YYYY033', 'YYYY300');
+          if (in_array($_acte->code_acte, $codes_incompatibles)) {
+            $possible = false;
+          }
+        }
+        if (!$possible) {
+          return "Un acte du chapitre 19.01.09.02 (Radiologie vasculaire et imagerie interventionnelle) ne peut pas être associé avec les actes YYYY030 et YYYY300";
+        }
+      }
     }
     return null;
   }

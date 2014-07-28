@@ -326,6 +326,9 @@ class CCodageCCAM extends CMbObject {
         case "7":
           $_modifier->_checked = CAppUI::conf("dPccam CCodable precode_modificateur_7");
           break;
+        case "J":
+          $_modifier->_checked = $codable->_class == 'COperations' && CAppUI::conf("dPccam CCodable precode_modificateur_J");
+          break;
         default:
           $_modifier->_checked = 0;
           break;
