@@ -132,6 +132,25 @@ foreach ($ds->loadHashList($query) as $day => $num3) {
   $days[$day]["num3"] = $num3;
 }
 
+// Liste des séjours non facturés
+if (CAppUI::conf("ref_pays") == "2") {
+  $query = "SELECT DATE_FORMAT(`sejour`.`sortie`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
+            FROM `sejour`
+            $leftjoinService
+            WHERE `sejour`.`sortie` BETWEEN '$month_min' AND '$nextmonth'
+              AND `sejour`.`group_id` = '$group->_id'
+              AND `sejour`.`annule` = '0'
+              AND `sejour`.`facture` = '0'
+              $filterType
+              $filterService
+              $filterPrat
+            GROUP BY `date`
+            ORDER BY `date`";
+  foreach ($ds->loadHashList($query) as $day => $num5) {
+    $days[$day]["num5"] = $num5;
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 

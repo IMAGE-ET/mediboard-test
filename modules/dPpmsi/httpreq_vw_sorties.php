@@ -79,7 +79,11 @@ $where["sejour.group_id"] = "= '$group->_id'";
 $where["sejour.sortie"]   = "BETWEEN '$date_min' AND '$date_max'";
 $where["sejour.annule"]   = "= '0'";
 
-if ($selSortis != "0") {
+// Séjours non facture
+if ($selSortis == "nf") {
+  $where["sejour.facture"] = "= '0'";
+}
+elseif ($selSortis != "0") {
   $where[] = "(sortie_reelle IS NULL)";
 }
 
@@ -156,6 +160,9 @@ foreach ($sejours as $sejour_id => $_sejour) {
   // Chargement des modes de sortie
   $_sejour->loadRefEtablissementTransfert();
   $_sejour->loadRefServiceMutation();
+
+  // Chargement de la prescription du séjour
+  $_sejour->loadRefPrescriptionSejour();
 }
 
 // Si la fonction selectionnée n'est pas dans la liste des fonction, on la rajoute

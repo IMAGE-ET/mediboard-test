@@ -26,10 +26,17 @@
         Sorties
       </a>
     </th>
+
     <th class="text">
-      <a class="{{if $selSortis=='n'}}selected{{else}}selectable{{/if}}" title="Sorties non effectuées" href="#1" onclick="filterAdm('n')">
-        Non Eff.
-      </a>
+      {{if $conf.ref_pays == "2" && $current_m == "dPpmsi"}}
+        <a class="{{if $selSortis=='nf'}}selected{{else}}selectable{{/if}}" title="Sorties non facturées" href="#1" onclick="filterAdm('nf')">
+          Non fact.
+        </a>
+      {{else}}
+        <a class="{{if $selSortis=='n'}}selected{{else}}selectable{{/if}}" title="Sorties non effectuées" href="#1" onclick="filterAdm('n')">
+          Non Eff.
+        </a>
+      {{/if}}
     </th>
   </tr>
 
@@ -52,9 +59,15 @@
     <td {{if $selSortis=='0' && $day == $date}}style="font-weight: bold;"{{/if}}>
       {{if $counts.num1}}{{$counts.num1}}{{else}}-{{/if}}
     </td>
+    {{if $conf.ref_pays == "2" && $current_m == "dPpmsi"}}
+    <td {{if $selSortis=='nf' && $day == $date}}style="font-weight: bold;"{{/if}}>
+      {{if $counts.num5}}{{$counts.num5}}{{else}}-{{/if}}
+    </td>
+    {{else}}
     <td {{if $selSortis=='n' && $day == $date}}style="font-weight: bold;"{{/if}}>
       {{if $counts.num2}}{{$counts.num2}}{{else}}-{{/if}}
     </td>
+    {{/if}}
   </tr>
   {{foreachelse}}
 	<tr>

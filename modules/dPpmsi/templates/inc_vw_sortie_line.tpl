@@ -7,6 +7,8 @@
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org*}}
 
+{{mb_script module=soins  script=plan_soins ajax=true}}
+
 <td class="text CPatient-view" colspan="2">
   {{if $canPlanningOp->read}}
     <div style="float: right;">
@@ -59,8 +61,17 @@
   {{/if}}
 </td>
 <td class="text button">
-  <button type="button" class="tick" disabled>Facturer</button>
-  <button type="button" class="print" disabled>Facturation</button>
-  <button type="button" class="print" disabled>CHOP</button>
-  <button type="button" class="print" disabled>Tarmed</button>
+  <form name="facturer-{{$_sejour->_guid}}" action="?" method="post"
+        onsubmit="return onSubmitFormAjax(this, reloadSortieLine.curry('{{$_sejour->_id}}'));">
+    {{mb_key   object=$_sejour}}
+    {{mb_class object=$_sejour}}
+
+    <input type="hidden" name="facture" value="1"/>
+
+    <button {{if $_sejour->facture}}disabled{{/if}} type="submit" class="tick">Facturer</button>
+  </form>
+  <button {{if !$_sejour->_ref_prescription_sejour->_id}}disabled{{/if}} type="button" class="print"
+          onclick="PlanSoins.printAdministrations('{{$_sejour->_ref_prescription_sejour->_id}}')">Facturation</button>
+  <!-- <button type="button" class="print" disabled>CHOP</button>
+  <button type="button" class="print" disabled>Tarmed</button> -->
 </td>

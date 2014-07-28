@@ -45,13 +45,11 @@ for ($day = $month_min; $day <= $nextmonth; $day = CMbDT::date("+1 DAY", $day)) 
     "num1" => "0",
     "num2" => "0",
     "num3" => "0",
+    // Réservation
+    "num4" => "0",
+    // Séjours facturés
+    "num5" => "0",
   );
-}
-
-if ($current_m == "reservation") {
-  for ($day = $month_min; $day <= $nextmonth; $day = CMbDT::date("+1 DAY", $day)) {
-    $days[$day]["num4"] = "0";
-  }
 }
 
 // filtre sur les types d'admission
@@ -193,6 +191,25 @@ if ($current_m == "reservation") {
     if (isset($days[$day])) {
       $days[$day]["num4"] = preg_replace("/0\//", "$num4/", $days[$day]["num4"]);
     }
+  }
+}
+
+// Liste des séjours non facturés
+if (CAppUI::conf("ref_pays") == "2") {
+  $query = "SELECT DATE_FORMAT(`sejour`.`sortie`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
+            FROM `sejour`
+            $leftjoinService
+            WHERE `sejour`.`sortie` BETWEEN '$month_min' AND '$nextmonth'
+              AND `sejour`.`group_id` = '$group->_id'
+              AND `sejour`.`annule` = '0'
+              AND `sejour`.`facture` = '0'
+              $filterType
+              $filterService
+              $filterPrat
+            GROUP BY `date`
+            ORDER BY `date`";
+  foreach ($ds->loadHashList($query) as $day => $num5) {
+    $days[$day]["num5"] = $num5;
   }
 }
 

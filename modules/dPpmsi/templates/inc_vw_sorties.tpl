@@ -8,6 +8,12 @@
  * @link     http://www.mediboard.org*}}
 
 <script>
+  function reloadSortieLine(sejour_id) {
+    var url = new Url("admissions", "ajax_sortie_line");
+    url.addParam("sejour_id", sejour_id);
+    url.requestUpdate("CSejour-"+sejour_id);
+  }
+
   Main.add(function() {
     Admissions.restoreSelection('listSorties');
     Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
@@ -38,6 +44,7 @@
       <em style="float: left; font-weight: normal;">
         {{$sejours|@count}}
         {{if $selSortis == "n"}}sorties non effectuées
+        {{elseif $selSortis == "nf"}}sorties non facturées
         {{else}}sorties ce jour
         {{/if}}
       </em>
@@ -66,11 +73,11 @@
     <th>
       {{mb_colonne class="CSejour" field="sortie_prevue" order_col=$order_col order_way=$order_way function=sortBy}}
     </th>
-    <th style="width: 30%">{{tr}}Actions{{/tr}}</th>
+    <th style="width: 20%">{{tr}}Actions{{/tr}}</th>
   </tr>
 
   {{foreach from=$sejours item=_sejour}}
-    <tr class="sejour-type-default sejour-type-{{$_sejour->type}} {{if !$_sejour->facturable}} non-facturable {{/if}}" id="{{$_sejour->_guid}}">
+    <tr class="sejour-type-default sejour-type-{{$_sejour->type}} {{if !$_sejour->facturable}} non-facturable {{/if}} {{if $_sejour->facture}}opacity-30{{/if}}" id="{{$_sejour->_guid}}">
       {{mb_include module="pmsi" template="inc_vw_sortie_line" nodebug=true}}
     </tr>
   {{/foreach}}

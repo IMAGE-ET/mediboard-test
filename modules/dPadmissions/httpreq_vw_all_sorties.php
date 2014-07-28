@@ -22,6 +22,8 @@ $month_min     = CMbDT::date("first day of +0 month", $date);
 $lastmonth     = CMbDT::date("last day of -1 month" , $date);
 $nextmonth     = CMbDT::date("first day of +1 month", $date);
 
+$current_m     = CValue::get("current_m");
+
 $selSortis     = CValue::getOrSession("selSortis", "0");
 $type          = CValue::getOrSession("type");
 $service_id    = CValue::getOrSession("service_id");
@@ -38,6 +40,7 @@ $days = array();
 for ($day = $month_min; $day < $nextmonth; $day = CMbDT::date("+1 DAY", $day)) {
   $days[$day]["num1"] = 0;
   $days[$day]["num2"] = 0;
+  $days[$day]["num5"] = 0;
 }
 
 // filtre sur les types de sortie
@@ -79,39 +82,64 @@ $group = CGroups::loadCurrent();
 
 // Listes des sorties par jour
 $query = "SELECT DATE_FORMAT(`sejour`.`sortie`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
-  FROM `sejour`
-  $leftjoinService
-  WHERE `sejour`.`sortie` BETWEEN '$month_min' AND '$nextmonth'
-    AND `sejour`.`group_id` = '$group->_id'
-    AND `sejour`.`annule` = '0'
-    $filterType
-    $filterService
-    $filterPrat
-  GROUP BY `date`
-  ORDER BY `date`";
+          FROM `sejour`
+          $leftjoinService
+          WHERE `sejour`.`sortie` BETWEEN '$month_min' AND '$nextmonth'
+            AND `sejour`.`group_id` = '$group->_id'
+            AND `sejour`.`annule` = '0'
+            $filterType
+            $filterService
+            $filterPrat
+          GROUP BY `date`
+          ORDER BY `date`";
+
 foreach ($ds->loadHashList($query) as $day => $num1) {
   $days[$day]["num1"] = $num1;
 }
 
 // Liste des sorties non effectuées par jour
 $query = "SELECT DATE_FORMAT(`sejour`.`sortie`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
-  FROM `sejour`
-  $leftjoinService
-  WHERE `sejour`.`sortie` BETWEEN '$month_min' AND '$nextmonth'
-    AND `sejour`.`group_id` = '$group->_id'
-    AND `sejour`.`sortie_reelle` IS NULL
-    AND `sejour`.`annule` = '0'
-    $filterType
-    $filterService
-    $filterPrat
-  GROUP BY `date`
-  ORDER BY `date`";
+          FROM `sejour`
+          $leftjoinService
+          WHERE `sejour`.`sortie` BETWEEN '$month_min' AND '$nextmonth'
+            AND `sejour`.`group_id` = '$group->_id'
+            AND `sejour`.`sortie_reelle` IS NULL
+            AND `sejour`.`annule` = '0'
+            $filterType
+            $filterService
+            $filterPrat
+          GROUP BY `date`
+          ORDER BY `date`";
+
 foreach ($ds->loadHashList($query) as $day => $num2) {
   $days[$day]["num2"] = $num2;
 }
 
+// Liste des séjours non facturés par jour
+if (CAppUI::conf("ref_pays") == "2") {
+  $query = "SELECT DATE_FORMAT(`sejour`.`sortie`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
+            FROM `sejour`
+            $leftjoinService
+            WHERE `sejour`.`sortie` BETWEEN '$month_min' AND '$nextmonth'
+              AND `sejour`.`group_id` = '$group->_id'
+              AND `sejour`.`sortie_reelle` IS NULL
+              AND `sejour`.`annule` = '0'
+              AND `sejour`.`facture` = '0'
+              $filterType
+              $filterService
+              $filterPrat
+            GROUP BY `date`
+            ORDER BY `date`";
+
+  foreach ($ds->loadHashList($query) as $day => $num5) {
+    $days[$day]["num5"] = $num5;
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign("current_m"    , $current_m);
 
 $smarty->assign("hier"         , $hier);
 $smarty->assign("demain"       , $demain);

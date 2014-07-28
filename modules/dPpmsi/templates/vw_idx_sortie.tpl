@@ -58,6 +58,7 @@
     url.addParam("type"      , $V(form._type_admission));
     url.addParam("service_id", [$V(form.service_id)].flatten().join(","));
     url.addParam("prat_id"   , $V(form.prat_id));
+    url.addParam("current_m" , App.m);
     url.requestUpdate('allSorties');
     reloadSorties();
   }
@@ -145,6 +146,7 @@
 
   Main.add(function() {
     var totalUpdater = new Url("admissions", "httpreq_vw_all_sorties");
+    totalUpdater.addParam("current_m" , App.m);
     Admissions.totalUpdater = totalUpdater.periodicalUpdate('allSorties', { frequency: 120 });
 
     var listUpdater = new Url("pmsi", "httpreq_vw_sorties");
