@@ -1,23 +1,20 @@
 <?php
-
 /**
- * dPbloc
+ * $Id:$
  *
- * @category Bloc
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage dPbloc
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 CCanDo::checkEdit();
-
 $plageop_id = CValue::get("plageop_id");
 $list_type  = CValue::get("list_type", "left");
 
 $anesth = new CTypeAnesth();
-$anesth = $anesth->loadList(null, "name");
+$anesth = $anesth->loadGroupList();
 
 // Infos sur la plage opératoire
 $plage = new CPlageOp();

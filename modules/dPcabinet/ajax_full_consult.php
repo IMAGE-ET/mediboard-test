@@ -13,7 +13,7 @@ CCanDo::check();
 
 $user = CMediusers::get();
 
-$consult_id   = CValue::getOrSession("consult_id");
+$consult_id        = CValue::getOrSession("consult_id");
 $dossier_anesth_id = CValue::getOrSession("dossier_anesth_id");
 
 if (!isset($current_m)) {
@@ -55,8 +55,7 @@ $userSel->loadRefs();
 $canUserSel = $userSel->canDo();
 
 $anesth = new CTypeAnesth();
-$orderanesth = "name";
-$anesth = $anesth->loadList(null, $orderanesth);
+$anesth = $anesth->loadGroupList();
 
 $consultAnesth =& $consult->_ref_consult_anesth;
 

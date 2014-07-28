@@ -1753,7 +1753,6 @@ class CSetupdPplanningOp extends CSetup {
     $query = "ALTER TABLE `sejour`
       ADD `confirme_user_id` INT (11) UNSIGNED AFTER `confirme`;";
     $this->addQuery($query);
-
     $this->makeRevision("1.88");
 
     // Synchronisation de la date de l'intervention avec celle de la plage
@@ -1762,14 +1761,21 @@ class CSetupdPplanningOp extends CSetup {
                 SET `operations`.`date` = plagesop.date
                 WHERE `operations`.plageop_id IS NOT NULL";
     $this->addQuery($query);
-
     $this->makeRevision('1.89');
 
     $query = "ALTER TABLE `protocole`
                 ADD `charge_id` INT (11) UNSIGNED;";
     $this->addQuery($query);
     $this->addDefaultConfigCIP();
+    $this->makeRevision('1.90');
 
-    $this->mod_version = '1.90';
+    $query = "ALTER TABLE `type_anesth`
+                ADD `group_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `type_anesth`
+                ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = '1.91';
   }
 }

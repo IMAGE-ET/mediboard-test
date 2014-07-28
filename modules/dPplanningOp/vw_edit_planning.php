@@ -69,8 +69,7 @@ if ($sejour_id && !$operation_id) {
 
 // Liste des types d'anesthésie
 $listAnesthType = new CTypeAnesth();
-$orderanesth = "name";
-$listAnesthType = $listAnesthType->loadList(null, $orderanesth);
+$listAnesthType = $listAnesthType->loadGroupList();
 
 // Liste des anesthésistes
 $anesthesistes = $user->loadAnesthesistes(PERM_READ);

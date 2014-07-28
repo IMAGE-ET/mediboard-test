@@ -125,9 +125,8 @@ else {
   $op->salle_id = $salle_id;
 }
 // Liste des types d'anesthésie
-$listAnesthType = new CTypeAnesth;
-$orderanesth = "name";
-$listAnesthType = $listAnesthType->loadList(null, $orderanesth);
+$listAnesthType = new CTypeAnesth();
+$listAnesthType = $listAnesthType->loadGroupList();
 
 // Liste des anesthésistes
 $anesthesistes = $user->loadAnesthesistes(PERM_READ);

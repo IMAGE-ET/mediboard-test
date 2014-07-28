@@ -42,7 +42,7 @@ if ($consult_anesth->_id) {
 }
 
 $anesth = new CTypeAnesth();
-$anesth = $anesth->loadList(null, "name");
+$anesth = $anesth->loadGroupList();
 
 // Création du template
 $smarty = new CSmartyDP();

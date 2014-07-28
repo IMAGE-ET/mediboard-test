@@ -60,9 +60,8 @@ $order = "nom";
 $listServices = $service->loadListWithPerms(PERM_READ,$where, $order);
 
 // Liste des types d'anesthésie
-$listAnesthType = new CTypeAnesth;
-$orderanesth = "name";
-$listAnesthType = $listAnesthType->loadList(null,$orderanesth);
+$listAnesthType = new CTypeAnesth();
+$listAnesthType = $listAnesthType->loadGroupList();
 
 // Création du template
 $smarty = new CSmartyDP();

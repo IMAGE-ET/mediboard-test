@@ -24,6 +24,7 @@
       <th>{{mb_title class=CTypeAnesth field=name}}</th>
       <th>{{tr}}CTypeAnesth-back-operations{{/tr}}</th>
       <th>{{mb_title class=CTypeAnesth field=ext_doc}}</th>
+      <th>{{mb_title class=CTypeAnesth field=group_id}}</th>
     </tr>
     {{foreach from=$types_anesth item=_type_anesth}}
     <tr {{if !$_type_anesth->actif}}class="hatching"{{/if}}">
@@ -37,6 +38,9 @@
       </td>
       <td class="text {{if !$_type_anesth->ext_doc}} empty {{/if}}">
         {{mb_value object=$_type_anesth field=ext_doc}}
+      </td>
+      <td class="text {{if !$_type_anesth->_ref_group->_id}} empty {{/if}}">
+        {{$_type_anesth->_ref_group}}
       </td>
     </tr>
     {{foreachelse}}

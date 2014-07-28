@@ -10,7 +10,6 @@
  */
 
 CCanDo::checkRead();
-
 $operation_id = CValue::getOrSession("operation_id");
 $date         = CValue::getOrSession("date", CMbDT::date());
 $modif_operation = CCanDo::edit() || $date >= CMbDT::date();
@@ -25,15 +24,14 @@ if ($operation_id) {
 }
 
 // Chargement des praticiens
-$listAnesths = new CMediusers;
+$listAnesths = new CMediusers();
 $listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);
 
-$listChirs = new CMediusers;
+$listChirs = new CMediusers();
 $listChirs = $listChirs->loadPraticiens(PERM_READ);
 
-$listAnesthType = new CTypeAnesth;
-$orderanesth = "name";
-$listAnesthType = $listAnesthType->loadList(null, $orderanesth);
+$listAnesthType = new CTypeAnesth();
+$listAnesthType = $listAnesthType->loadGroupList();
 
 // Création du template
 $smarty = new CSmartyDP();

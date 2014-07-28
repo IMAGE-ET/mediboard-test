@@ -37,9 +37,7 @@ if (isset($_GET["date"])) {
 }
 
 $anesth = new CTypeAnesth();
-$orderanesth = "name";
-$anesth = $anesth->loadList(null, $orderanesth);
-
+$anesth = $anesth->loadGroupList();
 
 // Consultation courante
 $consult = new CConsultation();

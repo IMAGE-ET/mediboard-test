@@ -138,8 +138,7 @@ if ($selOp->_id) {
   }
 
   $listAnesthType = new CTypeAnesth();
-  $orderanesth = "name";
-  $listAnesthType = $listAnesthType->loadList(null, $orderanesth);
+  $listAnesthType = $listAnesthType->loadGroupList();
 
   // Vérification de la check list journalière
   $daily_check_list = CDailyCheckList::getList($selOp->_ref_salle, $date);

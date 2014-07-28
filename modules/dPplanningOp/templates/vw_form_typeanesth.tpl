@@ -1,14 +1,3 @@
-{{*
-  * typeanesth form
-  *  
-  * @category PlanningOp
-  * @package  Mediboard
-  * @author   SARL OpenXtrem <dev@openxtrem.com>
-  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
-  * @version  SVN: $Id:$ 
-  * @link     http://www.mediboard.org
-*}}
-
 <form name="editType" action="?m={{$m}}&amp;tab=vw_edit_typeanesth" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="dosql" value="do_typeanesth_aed" />
@@ -24,6 +13,10 @@
     <tr>
       <th>{{mb_label object=$type_anesth field="ext_doc"}}</th>
       <td>{{mb_field object=$type_anesth field="ext_doc" emptyLabel="Choose"}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$type_anesth field="group_id"}}</th>
+      <td>{{mb_field object=$type_anesth field="group_id" choose="All" options=$groups}}</td>
     </tr>
     <tr>
       <th>{{mb_label object=$type_anesth field="actif"}}</th>
