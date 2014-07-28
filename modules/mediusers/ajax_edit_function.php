@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Edit function
  *
@@ -12,13 +11,10 @@
  */
 
 CCanDo::checkRead();
-
 $function_id = CValue::getOrSession("function_id");
 
-// Récupération des groupes
-$group = new CGroups;
-$order = "text";
-$groups = $group->loadListWithPerms(PERM_EDIT, null, $order);
+// Récupération des groups
+$groups = CGroups::loadGroups(PERM_EDIT);
 
 // Récupération de la fonction selectionnée
 $function = new CFunctions;
@@ -28,10 +24,11 @@ if ($function->_id) {
   $function->loadRefsNotes();
   $function->loadRefsFwd();
 }
+
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("function"           , $function);
-$smarty->assign("groups"             , $groups);
+$smarty->assign("function", $function);
+$smarty->assign("groups"  , $groups);
 
 $smarty->display("inc_edit_function.tpl");

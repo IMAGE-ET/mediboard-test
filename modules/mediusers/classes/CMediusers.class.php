@@ -1015,15 +1015,14 @@ class CMediusers extends CPerson {
   }
 
   /**
+   * Liste de Tous les établissements
+   *
    * @param int $permType
    *
    * @return CGroups[]
    */
   static function loadEtablissements($permType = PERM_READ) {
-    // Liste de Tous les établissements
-    $group = new CGroups;
-    $order = "text";
-    return $group->loadListWithPerms($permType, null, $order);
+    return CGroups::loadGroups($permType);
   }
 
   /**
