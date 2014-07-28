@@ -83,6 +83,12 @@ Main.add(function () {
             <td style="background-color:#748dee;">&nbsp;&nbsp;</td>
             <td>Plage opératoire (Autre Etab.)</td>
           </tr>
+
+          <tr>
+            <td style=" background-image: url('../../../images/icons/ray_blue.gif');">&nbsp;&nbsp;</td>
+            <td>Plage partagée avec le personnel soignant</td>
+          </tr>
+
           <tr>
             <td colspan="2"><button onclick="Control.Modal.close()" class="close">{{tr}}Close{{/tr}}</button></td>
           </tr>
