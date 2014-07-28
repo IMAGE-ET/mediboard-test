@@ -547,7 +547,12 @@ class CCodable extends CMbObject {
     return $this->_ref_codages_ccam = $this->loadBackRefs("codages_ccam");
   }
 
-  function bindActesCodage() {
+  /**
+   * Relie les actes aux codages pour calculer les règles d'association
+   *
+   * @return void
+   */
+  function guessActesAssociation() {
     $this->loadRefsCodagesCCAM();
     $this->loadRefsActesCCAM();
     foreach ($this->_ref_codages_ccam as $_codage) {
@@ -960,10 +965,11 @@ class CCodable extends CMbObject {
     $depassement_affecte        = false;
     $depassement_anesth_affecte = false;
 
+    $this->guessActesAssociation();
+
     // Check if depassement is already set
     $this->loadRefsActesCCAM();
     foreach ($this->_ref_actes_ccam as $_acte) {
-      $_acte->guessAssociation();
       if ($_acte->code_activite == 1 && $_acte->montant_depassement) {
         $depassement_affecte = true;
       }

@@ -392,8 +392,8 @@ class CActeCCAM extends CActe {
 
       // Cas du chapitre sur la radiologie vasculaire
       if (
-        isset($this->_ref_code_ccam->chapitres['3']) &&
-        $this->_ref_code_ccam->chapitres['3']['rang'] == '19.01.09.02.'
+          isset($this->_ref_code_ccam->chapitres['3']) &&
+          $this->_ref_code_ccam->chapitres['3']['rang'] == '19.01.09.02.'
       ) {
         $possible = true;
         foreach ($this->_linked_actes as $_acte) {
@@ -611,7 +611,6 @@ class CActeCCAM extends CActe {
     /*
      * Calculs initiaux
      */
-
     // Chargements initiaux
     if (!$this->facturable) {
       $this->_guess_association = "";
