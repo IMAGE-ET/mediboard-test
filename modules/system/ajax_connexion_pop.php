@@ -29,7 +29,7 @@ switch ($type_action) {
   case 'connexion':
     try {
       if ($pop->open()) {
-        CAppUI::stepAjax("CSourcePOP-info-connection-established", UI_MSG_OK, $exchange_source->host, $exchange_source->port);
+        CAppUI::stepAjax("CSourcePOP-info-connection-established@%s:%s", UI_MSG_OK, $exchange_source->host, $exchange_source->port);
       }
     } catch(CMbException $e) {
       $e->stepAjax(UI_MSG_WARNING);
