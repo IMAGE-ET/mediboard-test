@@ -589,8 +589,9 @@ class CMediusers extends CPerson {
     /** @var CFunctions $function */
     $function = $this->loadFwdRef("function_id", true);
     $this->_group_id = $function ? $function->group_id : null;
+    $this->_ref_function = $function;
     $this->updateColor();
-    return $this->_ref_function = $function;
+    return $this->_ref_function;
   }
 
   function updateColor() {
