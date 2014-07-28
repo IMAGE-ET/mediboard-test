@@ -77,7 +77,7 @@
           {{tr}}Reglement{{/tr}}
         </button>
 
-        {{if $consultation->chrono != 64}}
+        {{if $consultation->chrono != 64 && $consultation->_date == $dnow}}
           <form method="post" name="finish_consult_{{$consultation->_id}}" onsubmit="return onSubmitFormAjax(this, {})">
             <input type="hidden" name="chrono" value="64"/>
             {{mb_key object=$consultation}}
