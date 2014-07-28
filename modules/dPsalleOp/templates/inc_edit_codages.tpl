@@ -16,6 +16,9 @@
     var fieldName = element.name;
     var fieldValue = $V(element);
     $V(acteForm[fieldName], fieldValue);
+    if($V(acteForm.acte_id)) {
+      acteForm.onsubmit();
+    }
   };
 
 </script>
@@ -89,10 +92,16 @@
             {{mb_field object=$acte field=motif_depassement emptyLabel="CActeCCAM-motif_depassement" onchange="syncCodageField(this, '$view');"}}
           </form>
         </td>
-        <td>
+        <td
+          {{if $acte->_id && ($acte->code_association != $acte->_guess_association)}}style="background-color: #fc9"{{/if}}>
+          {{if $acte->_id}}
           <form name="codageActeCodeAssociation-{{$view}}" action="?" method="post" onsubmit="return false;">
-            {{mb_value object=$acte field=code_association}}
+            {{mb_field object=$acte field=code_association emptyLabel="CActeCCAM.code_association." onchange="syncCodageField(this, '$view');"}}
           </form>
+          {{if $acte->code_association != $acte->_guess_association}}
+            ({{$acte->_guess_association}})
+          {{/if}}
+          {{/if}}
         </td>
         <td>
           {{mb_value object=$acte field=_tarif}}
@@ -127,8 +136,6 @@
               <button class="add notext" type="submit">{{tr}}Add{{/tr}}
               </button>
             {{else}}
-              <button class="save notext" type="submit">{{tr}}Save{{/tr}}
-              </button>
               <button class="trash notext" type="button"
                       onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}', ajax: '1'},
                         {onComplete: function() {window.urlCodage.refreshModal()}});">
