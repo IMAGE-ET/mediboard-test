@@ -52,6 +52,8 @@ class CDatedCodeCCAM {
   public $_activite;
   public $_phase;
 
+  static $cache = array();
+
   /** @var CMbObjectSpec */
   public $_spec;
 
@@ -121,8 +123,23 @@ class CDatedCodeCCAM {
     if (CAppUI::conf("ccam CCodeCCAM use_new_ccam_architecture") == "COldCodeCCAM") {
       return COldCodeCCAM::get($code);
     }
+    $code_date = "cdatedcodeccam-".$code."-".($date == null ? CMbDT::date() : $date);
+
+    if (isset(self::$cache[$code_date])) {
+      return self::$cache[$code_date];
+    }
+    if (CAppUI::conf("ccam CDatedCodeCCAM use_cache")) {
+      if ($code_ccam = SHM::get($code_date)) {
+        self::$cache[$code_date] = $code_ccam;
+        return $code_ccam;
+      }
+    }
     $code_ccam = new CDatedCodeCCAM($code, $date);
     $code_ccam->load();
+    if (CAppUI::conf("ccam CDatedCodeCCAM use_cache")) {
+      SHM::put($code_date, $code_ccam, true);
+    }
+    self::$cache[$code_date] = $code_ccam;
     return $code_ccam;
   }
 
@@ -149,6 +166,16 @@ class CDatedCodeCCAM {
     $this->getActesIncomp();
     $this->getProcedure();
     $this->getActivite7();
+  }
+
+  function __sleep() {
+    $vars = get_object_vars($this);
+    unset($vars["_ref_code_ccam"]);
+    return array_keys($vars);
+  }
+
+  function __wakeup() {
+    $this->_ref_code_ccam = CCodeCCAM::get($this->code);
   }
 
   /**

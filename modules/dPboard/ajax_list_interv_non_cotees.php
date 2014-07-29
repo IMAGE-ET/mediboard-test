@@ -53,13 +53,6 @@ $operation = new COperation();
 $interventions = $operation->loadList($where, null, null, null, $ljoin);
 
 CStoredObject::massLoadFwdRef($interventions, "plageop_id");
-/** @var CSejour[] $sejours */
-$sejours = CStoredObject::massLoadFwdRef($interventions, "sejour_id");
-CStoredObject::massLoadFwdRef($sejours, "patient_id");
-
-/** @var CMediusers[] $chirs */
-$chirs = CStoredObject::massLoadFwdRef($interventions, "chir_id");
-CStoredObject::massLoadFwdRef($chirs, "function_id");
 
 $where = array();
 if (!$all_prats) {
@@ -67,12 +60,12 @@ if (!$all_prats) {
   $where["code_activite"] = $user->_is_anesth ? "= '4'" : "!= '4'";
 }
 
-CStoredObject::massLoadBackRefs($interventions, "actes_ccam", null, $where);
+CStoredObject::massCountBackRefs($interventions, "actes_ccam", $where);
 
 foreach ($interventions as $key => $_interv) {
   $_plage = $_interv->loadRefPlageOp();
-
   $_interv->loadExtCodesCCAM();
+
   $codes_ccam = $_interv->_ext_codes_ccam;
 
   // Nombre d'acte cotés par le praticien et réinitialisation du count pour le cache
@@ -81,10 +74,6 @@ foreach ($interventions as $key => $_interv) {
 
   // Aucun acte prévu ou coté
   if (!count($codes_ccam) && !$_interv->_count_actes) {
-    $_interv->loadRefSejour();
-    $_interv->loadRefChir()->loadRefFunction();
-    $_interv->loadRefAnesth()->loadRefFunction();
-    $_interv->loadRefPatient();
     continue;
   }
 
@@ -114,6 +103,19 @@ foreach ($interventions as $key => $_interv) {
   }
 
   $_interv->_actes_non_cotes = $nbCodes - $nb_actes_ccam;
+}
+
+/** @var CSejour[] $sejours */
+$sejours = CStoredObject::massLoadFwdRef($interventions, "sejour_id");
+CStoredObject::massLoadFwdRef($sejours, "patient_id");
+
+/** @var CMediusers[] $chirs */
+//$chirs = CStoredObject::massLoadFwdRef($interventions, "chir_id");
+//CStoredObject::massLoadFwdRef($chirs, "function_id");
+
+CStoredObject::massLoadBackRefs($interventions, "actes_ccam");
+
+foreach ($interventions as $_interv) {
   $_interv->loadRefSejour();
   $_interv->loadRefChir()->loadRefFunction();
   $_interv->loadRefAnesth()->loadRefFunction();
