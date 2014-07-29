@@ -10,6 +10,11 @@
 
 {{mb_script module=cabinet script=plage_consultation}}
 {{mb_script module=ssr script=planning}}
+{{mb_default var=multiple value=0}}
+
+{{if $listChirs|@count && $function_id}}
+  {{assign var=multiple value=1}}
+{{/if}}
 
 <script type="text/javascript">
   window.save_dates = {
@@ -19,8 +24,20 @@
   };
   
   Main.add(function() {
-    refreshPlanning(null, '{{$debut}}');
+    {{if $multiple}}
+      var tabs = Control.Tabs.create('tabs_prats', true, {
+        afterChange: function(container) {
+          var chir_id = container.get('chir_id');
+          var form = getForm("changeDate");
+          $V(form.chirSel, chir_id, false);
+          form.chirSel.onchange();
+        }
+      });
+    {{else}}
+      refreshPlanning(null, '{{$debut}}');
+    {{/if}}
   });
+
   function printPlanning() {
     var url = new Url("cabinet", "print_planning");
     url.addParam("date", $V(getForm("changeDate").debut));
@@ -61,6 +78,13 @@
     $V(form.dosql, action);
     onSubmitFormAjax(form, {onComplete: refreshPlanning});
   }
+
+
+  ChirOrFunction = function(multiple) {
+    var form = getForm("changeDate");
+    var schir = $V(form.chirSel);
+    refreshPlanning();
+  };
   
   function refreshPlanning(type_date, date) {
     var form = getForm("changeDate");
@@ -78,7 +102,7 @@
     else if (date) {
       url.addParam("debut", date);
     }
-    url.requestUpdate("planning-plages");
+    url.requestUpdate('planning-plages');
   }
   
   function setClose(heure, plage_id, date, chir_id, consult_id) {
@@ -149,49 +173,76 @@
   <input type="hidden" name="heure" />
 </form>
 
-<form action="?" name="changeDate" method="get">
+
+<form name="func_planning" method="get">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
-  <input type="hidden" name="plageconsult_id" value="0" />
-  <table class="main">
-    <tr>
-      <th style="width: 25%; text-align: left;">
-        {{if $canEditPlage}}
-          <button type="button" style="float: left;" class="new" onclick="PlageConsultation.edit('0');">{{tr}}CPlageconsult-title-create{{/tr}}</button>
-        {{/if}}
-        <select name="chirSel" style="width: 15em;" onchange="refreshPlanning()">
-          <option value="-1" {{if $chirSel == -1}} selected="selected" {{/if}}>&mdash; Choisir un professionnel</option>
-          {{mb_include module=mediusers template=inc_options_mediuser selected=$chirSel list=$listChirs}}
-        </select>
-      </th>
-      <th style="width: 50%">
-        <a href="#1" onclick="refreshPlanning('prev')">&lt;&lt;&lt;</a>
-        
-        Semaine du <span id="debut_periode">{{$debut|date_format:"%A %d %b %Y"}}</span> au
-        <span id="fin_periode">{{$fin|date_format:"%A %d %b %Y"}}</span>
-        <input type="hidden" name="debut" class="date" value="{{$debut}}" onchange="refreshPlanning(null, this.value)" />
-        
-        <a href="#1" onclick="refreshPlanning('next')">&gt;&gt;&gt;</a>
-        <br />
-        <a href="#1" onclick="refreshPlanning('today')">Aujourd'hui</a>
-      </th>
-      <th style="width: 15%; text-align: right;">
-        <button class="help" onclick="openLegend();return false;">{{tr}}Legend{{/tr}}</button>
-        <button type="button" class="print" onclick="printPlanning();">{{tr}}Print{{/tr}}</button>
-        <br />
-        <button type="button" class="lookup" id="desistement_count"
-                {{if !$count_si_desistement}}disabled="disabled"{{/if}}
-                onclick="showConsultSiDesistement()">
-          {{tr}}CConsultation-si_desistement{{/tr}} <span>({{$count_si_desistement}})</span>
-        </button>
-      </th>
-      <th>
-        <div id="status_cut" onclick="window.cut_consult_id = null; window.copy_consult_id = null; updateStatusCut();"
-          style="width: 100px; height: 14px; border: 2px dashed #ddd; font-weight: bold; text-align: center; cursor: pointer;">
-        </div>
-      </th>
-    </tr>
-  </table>
+  <select name="function_id" style="width: 11em; float:left;" onchange="this.form.submit();">
+    <option value="">&mdash; {{tr}}CFunctions{{/tr}}</option>
+    {{foreach from=$listFnc item=_fnc}}
+      <option value="{{$_fnc->_id}}" {{if $_fnc->_id == $function_id}}selected="selected" {{/if}}>{{$_fnc}}</option>
+    {{/foreach}}
+  </select>
+  {{if $multiple}}
+    <ul class="control_tabs small" id="tabs_prats">
+      {{foreach from=$listChirs item=_chir}}
+        <li>
+          <a href="#planning-plages_{{$_chir->_id}}">
+            {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_chir}}
+            <div id="planning-plages_{{$_chir->_id}}" data-chir_id="{{$_chir->_id}}"></div>
+          </a>
+        </li>
+      {{/foreach}}
+    </ul>
+  {{/if}}
 </form>
 
+  <form action="?" name="changeDate" method="get">
+    <input type="hidden" name="m" value="{{$m}}" />
+    <input type="hidden" name="tab" value="{{$tab}}" />
+    <input type="hidden" name="plageconsult_id" value="0" />
+    <input type="hidden" name="function_id" value="" />
+    <table class="main">
+      <tr>
+        <th style="width: 25%; text-align: left;">
+          <select name="chirSel" style="width: 11em;float:left; {{if $multiple}}display:none;{{/if}}" onchange="ChirOrFunction({{$multiple}})">
+            <option value="-1" {{if $chirSel == -1}} selected="selected" {{/if}}>&mdash; Choisir un professionnel</option>
+            {{mb_include module=mediusers template=inc_options_mediuser selected=$chirSel list=$listChirs}}
+          </select>
+          {{if $canEditPlage}}
+            <p><button type="button" class="new" onclick="PlageConsultation.edit('0');">{{tr}}CPlageconsult-title-create{{/tr}}</button></p>
+          {{/if}}
+        </th>
+        <th style="width: 50%">
+          <a href="#1" onclick="refreshPlanning('prev')">&lt;&lt;&lt;</a>
+
+          Semaine du <span id="debut_periode">{{$debut|date_format:"%A %d %b %Y"}}</span> au
+          <span id="fin_periode">{{$fin|date_format:"%A %d %b %Y"}}</span>
+          <input type="hidden" name="debut" class="date" value="{{$debut}}" onchange="refreshPlanning(null, this.value)" />
+
+          <a href="#1" onclick="refreshPlanning('next')">&gt;&gt;&gt;</a>
+          <br />
+          <a href="#1" onclick="refreshPlanning('today')">Aujourd'hui</a>
+        </th>
+        <th style="width: 15%; text-align: right;">
+          <button class="help" onclick="openLegend();return false;">{{tr}}Legend{{/tr}}</button>
+          <button type="button" class="print" onclick="printPlanning();">{{tr}}Print{{/tr}}</button>
+          <br />
+          <button type="button" class="lookup" id="desistement_count"
+                  {{if !$count_si_desistement}}disabled="disabled"{{/if}}
+                  onclick="showConsultSiDesistement()">
+            {{tr}}CConsultation-si_desistement{{/tr}} <span>({{$count_si_desistement}})</span>
+          </button>
+        </th>
+        <th>
+          <div id="status_cut" onclick="window.cut_consult_id = null; window.copy_consult_id = null; updateStatusCut();"
+            style="width: 100px; height: 14px; border: 2px dashed #ddd; font-weight: bold; text-align: center; cursor: pointer;">
+          </div>
+        </th>
+      </tr>
+    </table>
+  </form>
+
+
 <div id="planning-plages"></div>
+

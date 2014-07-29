@@ -11,20 +11,42 @@
 
 CCanDo::checkRead();
 
-$chirSel = CValue::getOrSession("chirSel");
-$today = CMbDT::date();
+$chirSel      = CValue::getOrSession("chirSel");
+$function_id  = CValue::get("function_id");
+$today        = CMbDT::date();
+
+$consultation_desist = new CConsultation();
+$ds = $consultation_desist->getDS();
+
+// gathering prat ids
+$ids = array();
+$function = new CFunctions();
+$function->load($function_id);
+if ($function->_id) {
+  $function->loadRefsUsers();
+  foreach ($function->_ref_users as $_user) {
+    $ids[] = $_user->_id;
+  }
+}
+
+if (!$function_id && $chirSel) {
+  $ids[] = $chirSel;
+}
+
+if (!count($ids)) {
+  CAppUI::stepAjax("problem", UI_MSG_ERROR);
+}
 
 // Liste des consultations a avancer si desistement
 $where = array(
   "plageconsult.date" => " > '$today'",
   "consultation.si_desistement" => "= '1'",
 );
-$where[] = "plageconsult.chir_id = '$chirSel' OR plageconsult.remplacant_id = '$chirSel'";
+$where[] = "plageconsult.chir_id ".$ds->prepareIn($ids)." OR plageconsult.remplacant_id ".$ds->prepareIn($ids);
 $ljoin = array(
   "plageconsult" => "plageconsult.plageconsult_id = consultation.plageconsult_id",
 );
 
-$consultation_desist = new CConsultation();
 $count_si_desistement = $consultation_desist->countList($where, null, $ljoin);
 
 // Période
@@ -44,8 +66,8 @@ $whereInterv = array();
 $whereHP = array();
 $where = array();
 $where["date"] = $whereInterv["date"] = $whereHP["date"] = "= '$dateArr'";
-$whereInterv["chir_id"] = $whereHP["chir_id"] =  " = '$chirSel'";
-$where[] = "chir_id = '$chirSel' OR remplacant_id = '$chirSel'";
+$whereInterv["chir_id"] = $whereHP["chir_id"] =  $ds->prepareIn($ids);
+$where[] = "chir_id ".$ds->prepareIn($ids)." OR remplacant_id ".$ds->prepareIn($ids);
 
 if (!$listPlage->countList($where)) {
   $nbDays--;
@@ -62,8 +84,10 @@ $bank_holidays = array_merge(CMbDate::getHolidays($debut), CMbDate::getHolidays(
 // Planning Week
 $planning = new CPlanningWeek($debut, $debut, $fin, $nbDays, false, "auto");
 $user = new CMediusers();
-if ($user->load($chirSel)) {
-  $planning->title = $user->load($chirSel)->_view;
+$user->load($chirSel);
+if ($user->_id) {
+  $user->loadRefFunction();
+  $planning->title = $user->_view;
 }
 else {
   $planning->title = "";
@@ -147,6 +171,7 @@ for ($i = 0; $i < $nbDays; $i++) {
   foreach ($plages as $_plage) {
     $_plage->loadRefsFwd(1);
     $_plage->loadRefsConsultations(false);
+    $_plage->loadRefChir()->loadRefFunction();
 
     // Affichage de la plage sur le planning
     $range = new CPlanningRange(
@@ -202,15 +227,20 @@ for ($i = 0; $i < $nbDays; $i++) {
             $color = "#faf";
           }
         }
+
+
+        $title = "<span style=\"float:right; border-left: solid 3px #".$_plage->_ref_chir->_color."; \">".$_plage->_ref_chir->_shortview."</span>".$_consult->_ref_patient->_view . "\n" . $motif;
+
         $event = new CPlanningEvent(
           $_consult->_guid,
           $debute,
           $_consult->duree * $_plage->_freq,
-          $_consult->_ref_patient->_view . "\n" . $motif,
+          $title,
           $color,
           true,
           "droppable $debute",
-          $_consult->_guid
+          $_consult->_guid,
+          false
         );
       }
       else {
@@ -267,6 +297,7 @@ $smarty->assign("fin"      , $fin);
 $smarty->assign("prev"     , $prev);
 $smarty->assign("next"     , $next);
 $smarty->assign("chirSel"  , $chirSel);
+$smarty->assign("user"     , $user);
 $smarty->assign("today"    , $today);
 $smarty->assign("bank_holidays", $bank_holidays);
 $smarty->assign("count_si_desistement", $count_si_desistement);

@@ -25,6 +25,19 @@ $canEditPlage = $plage->getPerm(PERM_EDIT);
 // Praticien selectionné
 $chirSel = CValue::getOrSession("chirSel", $chir ? $chir->user_id : null);
 
+// function selected
+$function_id = CValue::getOrSession("function_id");
+$listFnc = array();
+if ($function_id) {
+  $listChir = CConsultation::loadPraticiens(PERM_EDIT, $function_id);
+  foreach ($listChir as $_chir) {
+    $_chir->loadRefFunction();
+  }
+}
+else {
+  $listChir = CConsultation::loadPraticiens(PERM_EDIT);
+}
+
 // Liste des consultations a avancer si desistement
 $now = CMbDT::date();
 $where = array(
@@ -39,8 +52,17 @@ $ljoin = array(
 $consultation_desist = new CConsultation();
 $count_si_desistement = $consultation_desist->countList($where, null, $ljoin);
 
-// Liste des chirurgiens
-$listChir = CConsultation::loadPraticiens(PERM_EDIT);
+// Liste des praticiens
+
+$fnc = new CFunctions();
+$listFnc = $fnc->loadListWithPerms(PERM_READ, null, 'text');
+$mediuser = new CMediusers();
+foreach ($listFnc as $id => $_fnc) {
+  $users = $mediuser->loadProfessionnelDeSanteByPref(PERM_READ, $_fnc->_id);
+  if (!count($users)) {
+    unset($listFnc[$id]);
+  }
+}
 
 // Période
 $today = CMbDT::date();
@@ -63,6 +85,8 @@ $smarty->assign("fin"                 , $fin);
 $smarty->assign("prev"                , $prev);
 $smarty->assign("next"                , $next);
 $smarty->assign("chirSel"             , $chirSel);
+$smarty->assign("function_id"         , $function_id);
+$smarty->assign("listFnc"             , $listFnc);
 $smarty->assign("canEditPlage"        , $canEditPlage);
 $smarty->assign("count_si_desistement", $count_si_desistement);
 
