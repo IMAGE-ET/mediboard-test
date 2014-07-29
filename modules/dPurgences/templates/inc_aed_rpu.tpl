@@ -155,6 +155,8 @@
 
     <tr>
       <th>
+        {{mb_include module=patients template=inc_button_pat_anonyme form=editRPU patient_id=$rpu->_patient_id input_name="_patient_id"}}
+
         <input type="hidden" name="_patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$rpu->_patient_id}}"  onchange="requestInfoPat();" />
         {{mb_label object=$rpu field="_patient_id"}}
       </th>

@@ -12,6 +12,7 @@
 {{mb_default var=patient_id value=""}}
 {{mb_default var=other_form value=""}}
 {{mb_default var=callback value=""}}
+{{mb_default var=input_name value="patient_id"}}
 
 <script>
   createPatAnonyme = function() {
@@ -24,14 +25,14 @@
     var form = getForm('{{$form}}');
     
     if (form) {
-      $V(form.patient_id, pat_id);
+      $V(form.{{$input_name}}, pat_id);
       $V(form._patient_view, pat_view);
     }
     
     var otherForm = getForm("{{$other_form}}");
     
     if (otherForm) {
-      $V(otherForm.patient_id, pat_id);
+      $V(otherForm.{{$input_name}}, pat_id);
       $V(otherForm._patient_view, pat_view);
     }
 
