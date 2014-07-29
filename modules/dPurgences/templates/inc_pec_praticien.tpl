@@ -71,7 +71,16 @@
               </select>
               <input type="hidden" name="_datetime" value="" class="dateTime" />
             </div>
-
+            <script>
+              checkPraticien = function(oForm){
+                var prat = oForm.prat_id.value;
+                if (prat == ""){
+                  alert("Veuillez sélectionner un praticien");
+                  return false;
+                }
+                return true;
+              }
+            </script>
             <button type="submit" class="new" onclick="return checkPraticien(this.form)">Prendre en charge</button>
           </form>
         {{else}}

@@ -56,6 +56,10 @@
 {{if !$app->user_prefs.simpleCabinet}}
   {{math assign=ecap_dhe equation="a * b" a='ecap'|module_active|strlen b=$current_group|idex:'ecap'|strlen}}
   {{if $ecap_dhe}}
+    {{if ($sejour && $sejour->type == "urg") || ($consult && $consult->_ref_sejour && $consult->_ref_sejour->type == "urg")}}
+      {{mb_default var=show_dhe_ecap value=0}}
+    {{/if}}
+
     {{mb_include
     module=ecap
     template=inc_button_dhe

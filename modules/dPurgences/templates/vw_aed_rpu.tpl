@@ -12,6 +12,7 @@
 {{mb_include module=files template=yoplet_uploader object=$sejour}}
 {{assign var=gerer_circonstance value=$conf.dPurgences.gerer_circonstance}}
 {{assign var=consult value=$rpu->_ref_consult}}
+{{assign var=show_buttons_urgence value="ecap Display show_buttons_urgence"|conf:"CGroups-$g"}}
 {{mb_script module=dPurgences script=CCirconstance}}
 
 {{if !$group->service_urgences_id}}
@@ -243,6 +244,7 @@
     var url = new Url("patients", "httpreq_get_last_refs");
     url.addParam("patient_id", iPatient_id);
     url.addParam("is_anesth", 0);
+    url.addParam("show_dhe_ecap", '{{$show_buttons_urgence}}');
     url.requestUpdate("infoPat");
     return true;
   }

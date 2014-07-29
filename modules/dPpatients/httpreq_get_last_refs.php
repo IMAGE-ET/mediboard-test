@@ -56,9 +56,10 @@ if (CCanDo::read()) {
   // Création du template
   $smarty = new CSmartyDP();
   
-  $smarty->assign("is_anesth", $is_anesth);
-  $smarty->assign("consultation", $consultation);
-  $smarty->assign("patient", $patient);
+  $smarty->assign("is_anesth"     , $is_anesth);
+  $smarty->assign("consultation"  , $consultation);
+  $smarty->assign("patient"       , $patient);
+  $smarty->assign("show_dhe_ecap" , CValue::get("show_dhe_ecap", 1));
 
   $smarty->display("httpreq_get_last_refs.tpl");
 }
