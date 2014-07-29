@@ -350,6 +350,7 @@ $locales['mod-mediusers-tab-vw_idx_disciplines'] = 'Spécialités médicales';
 $locales['mod-mediusers-tab-vw_idx_functions'] = 'Fonctions des utilisateurs';
 $locales['mod-mediusers-tab-vw_idx_mediusers'] = 'Utilisateurs';
 $locales['mod-system-tab-ajax_edit_sourcePOP'] = 'Edition de compte de messagerie';
+$locales['module-mediusers-court'] = 'Mediusers';
 $locales['module-mediusers-long'] = 'Gestion des utilisateurs';
 $locales['pref-accessibility_dyslexic'] = 'Activation de la police adaptée aux personnes atteintes de dyslexie';
 $locales['pref-accessibility_dyslexic-desc'] = 'Utilisation de la police adaptée aux personnes atteintes de dyslexie';
