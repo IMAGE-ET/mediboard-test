@@ -14,6 +14,7 @@ CCanDo::checkEdit();
 $patient_id = CValue::get("patient_id");
 $type       = CValue::get("type");
 $antecedent_id = CValue::get("antecedent_id");
+$callback   = CValue::get('callback', 0);
 
 $patient = new CPatient();
 $patient->load($patient_id);
@@ -40,5 +41,7 @@ $smarty->assign("antecedents", $antecedents);
 $smarty->assign("is_anesth"  , CAppUI::$user->isAnesth());
 $smarty->assign("antecedent" , $antecedent);
 $smarty->assign("type"       , $type);
-
+if ($callback) {
+  $smarty->assign('callback', $callback);
+}
 $smarty->display("inc_edit_antecedents.tpl");

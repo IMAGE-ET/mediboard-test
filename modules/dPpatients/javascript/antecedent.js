@@ -47,11 +47,10 @@ Antecedent = {
     if (antecedent_id) {
       url.addParam("antecedent_id", antecedent_id);
     }
+    if (callback) {
+      url.addParam('callback', callback);
+    }
 
-    url.modal({
-      width: 700,
-      height: 400
-    });
-    url.modalObject.observe("afterClose", function() { if (callback) { callback(); } });
+    url.requestModal(700, 400);
   }
 };

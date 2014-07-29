@@ -24,7 +24,7 @@
           'type': '{{$type}}'});"
       {{/if}}
       {{if !$readonly}}
-        onclick="Antecedent.editAntecedents('{{$patient->_id}}', '{{$type}}', {{$callback}})"
+        onclick="Antecedent.editAntecedents('{{$patient->_id}}', '{{$type}}', '{{$callback}}')"
       {{/if}}></a>
   {{/if}}
 {{else}}
