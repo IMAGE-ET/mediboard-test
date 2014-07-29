@@ -45,7 +45,7 @@
     {{assign var="acte" value=$_phase->_connected_acte}}
     {{assign var="view" value=$acte->_id|default:$acte->_view}}
     {{assign var="key" value="$_key$view"}}
-    {{if $acte->executant_id == $codage->praticien_id}}
+    {{if (!$acte->_id && $codage->_ref_praticien->_is_anesth) || ($acte->executant_id == $codage->praticien_id)}}
       <tr>
         <td {{if !$acte->_id}}class="error"{{/if}}
             onclick="CodeCCAM.show('{{$acte->code_acte}}', '{{$subject->_class}}')"
@@ -125,7 +125,7 @@
             {{mb_field object=$acte field=code_activite hidden=true}}
             {{mb_field object=$acte field=code_phase hidden=true}}
             {{mb_field object=$acte field=code_association hidden=true emptyLabel="None"}}
-            {{mb_field object=$acte field=executant_id hidden=true}}
+            {{mb_field object=$acte field=executant_id hidden=true value=$codage->praticien_id}}
             {{mb_field object=$acte field=execution hidden=true}}
             {{mb_field object=$acte field=montant_depassement hidden=true}}
             {{mb_field object=$acte field=motif_depassement hidden=true emptyLabel="CActeCCAM-motif_depassement"}}

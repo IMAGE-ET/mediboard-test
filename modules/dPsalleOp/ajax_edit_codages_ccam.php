@@ -19,6 +19,7 @@ if (!$codage->_can->edit) {
   CAppUI::redirect("m=system&a=access_denied");
 }
 $codage->loadPraticien()->loadRefFunction();
+$codage->_ref_praticien->isAnesth();
 $codage->loadActesCCAM();
 $codage->checkRules();
 foreach ($codage->_ref_actes_ccam as $_acte) {

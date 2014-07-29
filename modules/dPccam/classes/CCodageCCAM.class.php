@@ -1379,8 +1379,7 @@ class CCodageCCAM extends CMbObject {
         $supp++;
       }
     }
-
-    if (($irrad + $supp) != count($this->_ref_actes_ccam_facturables)) {
+    if (!$irrad || (($irrad + $supp) != count($this->_ref_actes_ccam_facturables))) {
       return false;
     }
 
