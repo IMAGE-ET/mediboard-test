@@ -752,6 +752,7 @@ class CCodageCCAM extends CMbObject {
         $act->_guess_facturable = '1';
         $act->_guess_association = '2';
         $act->_guess_regle_asso = 'EA';
+        break;
       default:
         $act->_guess_facturable = '0';
         $act->_guess_association = '';
