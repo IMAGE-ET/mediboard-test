@@ -15,6 +15,7 @@
 $count     = SHM::remKeys("code_ccam-*");
 CAppUI::stepAjax("module-ccam-msg-cache-code_ccam_old-suppr", UI_MSG_OK, $count);
 
+$count      = SHM::remKeys("cdatedcodeccam-*");
 $count      = SHM::remKeys("codeccam-*");
 $countLite  = SHM::remKeys("codeccamlite-*");
 $countDents = SHM::remKeys("dentsccam");

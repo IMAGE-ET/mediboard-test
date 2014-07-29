@@ -122,7 +122,7 @@ class CCodeCCAM extends CCCAM {
     // Chargement
     $code_ccam = new CCodeCCAM($code);
     $code_ccam->load();
-    SHM::put("codeccam-$code", $code_ccam);
+    SHM::put("codeccam-$code", $code_ccam, true);
     self::$cache[$code] = $code_ccam;
     return $code_ccam;
   }

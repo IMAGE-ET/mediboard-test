@@ -8,47 +8,46 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
+<script>
+  function startCCAM() {
+    new Url("ccam", "httpreq_do_add_ccam")
+    .requestUpdate("ccam");
+  }
 
-function startCCAM() {
-  new Url("ccam", "httpreq_do_add_ccam")
-  .requestUpdate("ccam");
-}
+  function startNGAP(){
+    new Url("ccam", "httpreq_do_add_ngap")
+    .requestUpdate("ngap");
+  }
 
-function startNGAP(){
-  new Url("ccam", "httpreq_do_add_ngap")
-  .requestUpdate("ngap");
-}
+  function startCCAM_convergence() {
+    new Url("ccam", "ajax_do_add_ccam_convergence")
+      .requestUpdate("ccam_convergence");
+  }
 
-function startCCAM_convergence() {
-  new Url("ccam", "ajax_do_add_ccam_convergence")
-    .requestUpdate("ccam_convergence");
-}
+  function startCCAM_ICR() {
+    new Url("ccam", "ajax_do_add_ccam_ICR")
+    .requestUpdate("ccam_icr");
+  }
 
-function startCCAM_ICR() {
-  new Url("ccam", "ajax_do_add_ccam_ICR")
-  .requestUpdate("ccam_icr");
-}
+  function startCCAM_radio() {
+    new Url("ccam", "ajax_do_add_ccam_radio")
+    .requestUpdate("ccam_radio");
+  }
 
-function startCCAM_radio() {
-  new Url("ccam", "ajax_do_add_ccam_radio")
-  .requestUpdate("ccam_radio");
-}
+  function startCCAM_ngap() {
+    new Url("dPccam", "ajax_do_add_ccam_ngap")
+    .requestUpdate("ccam_ngap");
+  }
 
-function startCCAM_ngap() {
-  new Url("dPccam", "ajax_do_add_ccam_ngap")
-  .requestUpdate("ccam_ngap");
-}
+  function startForfaits(){
+    new Url("dPccam", "httpreq_do_add_forfaits")
+    .requestUpdate("forfaits");
+  }
 
-function startForfaits(){
-  new Url("dPccam", "httpreq_do_add_forfaits")
-  .requestUpdate("forfaits");
-}
-
-function modalImportFavoris() {
-  new Url("ccam", "ajax_import_favoris")
-  .pop(640, 400);
-}
+  function modalImportFavoris() {
+    new Url("ccam", "ajax_import_favoris")
+    .pop(640, 400);
+  }
 
 Main.add(Control.Tabs.create.curry('tabs-configure', true));
 </script>
@@ -62,8 +61,6 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
   <li><a href="#ccam_NGAP">CCAM ngap</a></li>
   <li><a href="#FraisDivers">{{tr}}CFraisDivers{{/tr}}</a></li>
 </ul>
-
-<hr class="control_tabs" />
 
 <div id="CCAM" style="display: none;">
 {{mb_include template=inc_config_ccam}}
