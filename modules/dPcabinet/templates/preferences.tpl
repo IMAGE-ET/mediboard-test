@@ -20,7 +20,6 @@
 {{mb_include template=inc_pref spec=bool var=autoCloseConsult}}
 {{mb_include template=inc_pref spec=bool var=resumeCompta}}
 {{mb_include template=inc_pref spec=bool var=showDatesAntecedents}}
-{{mb_include template=inc_pref spec=bool var=pratOnlyForConsult}}
 {{mb_include template=inc_pref spec=bool var=displayDocsConsult}}
 {{mb_include template=inc_pref spec=bool var=choosePatientAfterDate}}
 {{mb_include template=inc_pref spec=bool var=empty_form_atcd}}
@@ -41,3 +40,11 @@
 <tr><th class="category" colspan="6">Consultations multiples</th></tr>
 {{mb_include template=inc_pref spec=enum var=NbConsultMultiple values="2|3|4|5|6"}}
 {{mb_include template=inc_pref spec=enum var=today_ref_consult_multiple values="0|1"}}
+<tr><th class="category" colspan="6">Prise de RDV personnalisée, prendre RDV pour :</th></tr>
+{{mb_include template=inc_pref spec=bool var=take_consult_for_chirurgien}}
+{{mb_include template=inc_pref spec=bool var=take_consult_for_anesthesiste}}
+{{mb_include template=inc_pref spec=bool var=take_consult_for_medecin}}
+{{mb_include template=inc_pref spec=bool var=take_consult_for_infirmiere}}
+{{mb_include template=inc_pref spec=bool var=take_consult_for_reeducateur}}
+{{mb_include template=inc_pref spec=bool var=take_consult_for_sage_femme}}
+{{mb_include template=inc_pref spec=bool var=take_consult_for_dentiste}}

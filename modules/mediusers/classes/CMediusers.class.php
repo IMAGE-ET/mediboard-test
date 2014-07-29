@@ -1129,6 +1129,32 @@ class CMediusers extends CPerson {
     return $this->loadListFromType(array("Anesthésiste"), $permType, $function_id, $name, $actif);
   }
 
+  function loadProfessionnelDeSanteByPref($permType = PERM_READ, $function_id = null, $name = null, $secondary = false, $actif = true) {
+    $list = array();
+    if (CAppUI::pref("take_consult_for_chirurgien")) {
+      $list[] = "Chirurgien";
+    }
+    if (CAppUI::pref("take_consult_for_anesthesiste")) {
+      $list[] = "Anesthésiste";
+    }
+    if (CAppUI::pref("take_consult_for_medecin")) {
+      $list[] = "Médecin";
+    }
+    if (CAppUI::pref("take_consult_for_dentiste")) {
+      $list[] = "Dentiste";
+    }
+    if (CAppUI::pref("take_consult_for_infirmiere")) {
+      $list[] = "Infirmière";
+    }
+    if (CAppUI::pref("take_consult_for_reeducateur")) {
+      $list[] = "Rééducateur";
+    }
+    if (CAppUI::pref("take_consult_for_sage_femme")) {
+      $list[] = "Sage Femme";
+    }
+    return $this->loadListFromType($list, $permType, $function_id, $name, $actif, $secondary);
+  }
+
   /**
    * @param int    $permType    permission
    * @param int    $function_id fontion

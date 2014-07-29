@@ -143,6 +143,7 @@ foreach ($prats as $_prat) {
     AND sejour.group_id = '$group_id'
     AND chir_id = '$_prat->_id'
     AND operations.annulee = '0'
+    AND sejour.annule = '0'
     GROUP BY date, plageop_id";
   $hps = $ds->loadList($sql);
 

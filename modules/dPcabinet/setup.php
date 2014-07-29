@@ -10,6 +10,45 @@
  */
 
 class CSetupdPcabinet extends CSetup {
+
+  /**
+   * créée les préférences pour les médecins visés par la prise de rdv en se basant sur la pref précédente
+   *
+   * @TODO: virer la pref 'pratOnlyForConsult'
+   *
+   * @return bool
+   */
+  protected function prefForConsultPratType() {
+    $ds = $this->ds;
+    $query = "SELECT * FROM `user_preferences` WHERE `key` = 'pratOnlyForConsult' AND `value` IS NOT NULL  GROUP BY user_id ;";
+    $result = $ds->loadList($query);
+    $insertion = 'INSERT INTO `user_preferences` VALUES ';
+    $values = array();
+    foreach ($result as $_result) {
+      $only_prat_for_consult = $_result["value"];
+      $prefs = array(
+        "take_consult_for_chirurgien" => 1,
+        "take_consult_for_anesthesiste" => 1,
+        "take_consult_for_medecin" => 1,
+        "take_consult_for_dentiste" => 1,
+        "take_consult_for_infirmiere" => 0,
+        "take_consult_for_reeducateur" => 0,
+        "take_consult_for_sage_femme" => 0
+      );
+      foreach ($prefs as $key => $default_pref) {
+        $_value = ($only_prat_for_consult) ? $default_pref : '1';
+        $user_id = $_result["user_id"] ? "'".$_result["user_id"]."'" : "NULL";
+        $values[] = " (".$user_id.", '".$key."', '".$_value."', '', '')";
+      }
+    }
+    $insertion = $insertion.implode("," , $values).";";
+    if (!$ds->exec($insertion)) {
+      return false;
+    }
+
+    return true;
+  }
+
   /**
    * Création des consults anesth liées à des consults d'anesthésistes
    *
@@ -2132,6 +2171,10 @@ class CSetupdPcabinet extends CSetup {
                 ADD `gratuit` ENUM('0', '1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = '2.35';
+    $this->makeRevision('2.35');
+    // check for old preferences
+    $this->addMethod("prefForConsultPratType");
+
+    $this->mod_version = '2.36';
   }
 }

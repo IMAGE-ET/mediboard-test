@@ -40,5 +40,14 @@ CPreferences::$modules["dPcabinet"] = array (
   "use_acte_date_now",
   "multi_popups_resume",
   "allow_plage_holiday",
-  "today_ref_consult_multiple"
+  "today_ref_consult_multiple",
+
+  // take consultation for :
+  "take_consult_for_chirurgien",    // 1
+  "take_consult_for_anesthesiste",  // 1
+  "take_consult_for_medecin",       // 1
+  "take_consult_for_infirmiere",    // le reste non
+  "take_consult_for_reeducateur",
+  "take_consult_for_sage_femme",
+  "take_consult_for_dentiste"
 );

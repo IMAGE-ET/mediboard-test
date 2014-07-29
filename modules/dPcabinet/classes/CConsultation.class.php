@@ -2063,8 +2063,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
    */
   static function loadPraticiens($permType = PERM_READ, $function_id = null, $name = null, $secondary = false, $actif = true) {
     $user = new CMediusers();
-    $method = CAppUI::pref("pratOnlyForConsult", 1) ? "loadPraticiens" : "loadProfessionnelDeSante";
-    return $user->$method($permType, $function_id, $name, $secondary, $actif);
+    return $user->loadProfessionnelDeSanteByPref($permType, $function_id, $name, $secondary, $actif);
   }
 
   /**
