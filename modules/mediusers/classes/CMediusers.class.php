@@ -70,6 +70,7 @@ class CMediusers extends CPerson {
   // Other fields
   public $_profile_id;
   public $_is_praticien;
+  public $_is_professionnel_sante;
   public $_is_dentiste;
   public $_is_secretaire;
   public $_is_anesth;
@@ -1189,6 +1190,17 @@ class CMediusers extends CPerson {
    */
   function isPraticien() {
     return $this->_is_praticien = $this->isFromType(array("Médecin", "Chirurgien", "Anesthésiste", "Dentiste"));
+  }
+
+  /**
+   * Check whether user is a medical professionnal
+   *
+   * @return bool
+   */
+  function isProfessionnelDeSante() {
+    return $this->_is_professionnel_sante = $this->isFromType(
+      array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Dentiste")
+    );
   }
 
   /**
