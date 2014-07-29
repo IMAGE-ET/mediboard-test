@@ -463,6 +463,13 @@ class CActeCCAM extends CActe {
         $this->signe = 0;
       }
     }
+    // Vérification de l'existence du codage
+    $codage = CCodageCCAM::get($this->loadRefObject(), $this->executant_id);
+    if (!$codage->_id) {
+      if ($msg = $codage->store()) {
+        return $msg;
+      }
+    }
     
     // Standard store
     if ($msg = parent::store()) {
@@ -470,13 +477,7 @@ class CActeCCAM extends CActe {
     }
 
     // Si on crée un nouvel acte, on relance l'analyse du codage
-    $codage = CCodageCCAM::get($this->loadRefObject(), $this->executant_id);
-    if (!$codage->_id) {
-      if ($msg = $codage->store()) {
-        return $msg;
-      }
-    }
-    elseif (!$oldObject->_id) {
+    if (!$oldObject->_id) {
       $codage->updateRule();
       if ($msg = $codage->store()) {
         return $msg;
