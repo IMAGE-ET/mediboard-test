@@ -11,6 +11,8 @@
  * @link     http://www.mediboard.org
  */
 
+CCAnDo::checkRead();
+
 $parturiente_id    = CValue::get("parturiente_id");
 $object_guid       = CValue::get("object_guid");
 

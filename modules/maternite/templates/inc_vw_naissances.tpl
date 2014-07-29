@@ -36,8 +36,8 @@ Main.add(function(){
       <form name="closeGrossesse" method="post"
         onsubmit="return onSubmitFormAjax(this, {onComplete: function() { refreshGrossesse('{{$operation->_id}}'); } });">
         <input type="hidden" name="m" value="maternite" />
-        <input type="hidden" name="dosql" value="do_grossesse_aed" />
-        {{mb_key object=$grossesse}}
+        {{mb_class object=$grossesse}}
+        {{mb_key   object=$grossesse}}
         {{if $grossesse->active}}
           <input type="hidden" name="active" value="0" />
           <button type="button" class="tick" onclick="this.form.onsubmit()" style="float: right;">{{tr}}CGrossesse-stop_grossesse{{/tr}}</button>

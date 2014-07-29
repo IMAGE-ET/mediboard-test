@@ -27,7 +27,6 @@ class CGrossesse extends CMbObject {
   public $active;
   public $multiple;
   public $allaitement_maternel;
-  public $date_fin_allaitement;
   public $date_dernieres_regles;
   public $lieu_accouchement;
   public $fausse_couche;
@@ -51,7 +50,13 @@ class CGrossesse extends CMbObject {
 
   /** @var CConsultation */
   public $_ref_last_consult_anesth;
-  
+
+  /** @var  CAllaitement[] */
+  public $_ref_allaitements;
+
+  /** @var  CAllaitement */
+  public $_ref_last_allaitement;
+
   // Form fields
   public $_praticiens;
   public $_date_fecondation;
@@ -89,7 +94,7 @@ class CGrossesse extends CMbObject {
     $specs["active"]         = "bool default|1";
     $specs["multiple"]       = "bool default|0";
     $specs["allaitement_maternel"] = "bool default|0";
-    $specs["date_fin_allaitement"] = "date";
+
     if (CAppUI::conf("maternite CGrossesse date_regles_obligatoire")) {
       $specs["date_dernieres_regles"] = "date notNull";
     }
@@ -115,6 +120,7 @@ class CGrossesse extends CMbObject {
     $backProps["naissances"] = "CNaissance grossesse_id";
     $backProps["consultations"] = "CConsultation grossesse_id";
     $backProps["sejours"] = "CSejour grossesse_id";
+    $backProps["allaitements"] = "CAllaitement grossesse_id";
     return $backProps;
   }
 
@@ -152,8 +158,6 @@ class CGrossesse extends CMbObject {
     $this->_view = "Terme du " . CMbDT::dateToLocale($this->terme_prevu);
     // Nombre de semaines (aménorrhée = 41, grossesse = 39)
     $this->_date_fecondation = CMbDT::date("-41 weeks", $this->terme_prevu);
-    $this->_allaitement_en_cours =
-      $this->allaitement_maternel && !$this->active && (!$this->date_fin_allaitement || $this->date_fin_allaitement > CMbDT::date());
     $this->_semaine_grossesse = ceil(CMbDT::daysRelative($this->_date_fecondation, CMbDT::date()) / 7);
   }
 
@@ -207,6 +211,8 @@ class CGrossesse extends CMbObject {
     foreach ($naissances as $_naissance) {
       $_naissance->loadRefSejourEnfant()->loadRefPatient();
     }
+
+    $this->loadLastAllaitement();
   }
 
   /**
@@ -280,5 +286,22 @@ class CGrossesse extends CMbObject {
     }
 
     return parent::store();
+  }
+
+  function loadRefsAllaitement() {
+    return $this->_ref_allaitements = $this->loadBackRefs("allaitements");
+  }
+
+
+  function isAllaitementEnCours() {
+    $allaitements = $this->loadRefsAllaitement();
+    $last_allaitement = end($allaitements);
+
+    return $this->_allaitement_en_cours =
+      $this->allaitement_maternel && !$this->active && $last_allaitement && (!$last_allaitement->date_fin || $last_allaitement->date_debut > CMbDT::date());
+  }
+
+  function loadLastAllaitement() {
+    return $this->_ref_last_allaitement = $this->loadLastBackRef("allaitements", "date_debut DESC");
   }
 }

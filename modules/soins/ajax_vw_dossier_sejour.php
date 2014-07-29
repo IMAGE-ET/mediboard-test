@@ -64,7 +64,7 @@ if (CModule::getActive("dPprescription")) {
 }
 
 if (CModule::getActive("maternite")) {
-  $sejour->loadRefGrossesse();
+  $patient->loadLastGrossesse();
 }
 
 $smarty = new CSmartyDP();

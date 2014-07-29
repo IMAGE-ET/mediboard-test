@@ -265,10 +265,26 @@ class CPatient extends CPerson {
 
   /** @var CConsultation[] */
   public $_ref_consultations;
+
+  /** @var  CPrescription[] */
   public $_ref_prescriptions;
+
+  /** @var  CGrossesse[] */
   public $_ref_grossesses;
+
+  /** @var  CGrossesse */
   public $_ref_last_grossesse;
+
+  /** @var  CAllaitement[] */
+  public $_ref_allaitements;
+
+  /** @var CAllaitement */
+  public $_ref_last_allaitement;
+
+  /** @var  CConstantesMedicales */
   public $_ref_first_constantes;
+
+  /** @var CPatient[] */
   public $_ref_patient_links;
 
   /** @var CFile */
@@ -290,7 +306,6 @@ class CPatient extends CPerson {
   public $_ref_correspondants_patient;
   public $_ref_cp_by_relation;
 
-
   /** @var CFunctions */
   public $_ref_function;
   /** @var CDossierMedical */
@@ -307,7 +322,6 @@ class CPatient extends CPerson {
   public $_refs_ins;
   /** @var  CINSPatient */
   public $_ref_last_ins;
-
 
   // Distant fields
   public $_ref_praticiens; // Praticiens ayant participé à la pec du patient
@@ -348,6 +362,7 @@ class CPatient extends CPerson {
     $backProps["devenirs_dentaires"]    = "CDevenirDentaire patient_id";
     $backProps["correspondants_courrier"] = "CCorrespondantCourrier object_id";
     $backProps["grossesses"]            = "CGrossesse parturiente_id";
+    $backProps["allaitements"]          = "CAllaitement patient_id";
     $backProps["facture_patient_consult"] = "CFactureCabinet patient_id";
     $backProps["facture_patient_sejour"]  = "CFactureEtablissement patient_id";
     // interfere avec CMbObject-back-observation_result_sets
@@ -1420,6 +1435,10 @@ class CPatient extends CPerson {
     return $this->_ref_grossesses = $this->loadBackRefs("grossesses", $order);
   }
 
+  function loadRefsAllaitements($order = "date_fin DESC") {
+    return $this->_ref_allaitements = $this->loadBackRefs("allaitements", $order);
+  }
+
   /**
    * @see parent::loadRefsBack()
    */
@@ -1872,10 +1891,19 @@ class CPatient extends CPerson {
   }
 
   function loadLastGrossesse() {
-    $grossesse = new CGrossesse;
+    $grossesse = new CGrossesse();
     $grossesse->parturiente_id = $this->_id;
-    $grossesse->loadMatchingObject("terme_prevu desc");
+    $grossesse->loadMatchingObject("terme_prevu DESC");
     return $this->_ref_last_grossesse = $grossesse;
+  }
+
+  function loadLastAllaitement() {
+    $allaitement = new CAllaitement();
+    $allaitement->patient_id = $this->_id;
+    $where = array();
+    $where[] = "date_fin IS NULL OR date_fin >= '" . CMbDT::dateTime() . "'";
+    $allaitement->loadObject($where, "date_fin DESC");
+    return $this->_ref_last_allaitement = $allaitement;
   }
 
   function getTemplateClasses(){

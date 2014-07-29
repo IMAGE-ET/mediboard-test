@@ -18,6 +18,24 @@
 {{mb_include module=system template=CMbObject_view}}
 
 <table class="tbl">
+  {{assign var=allaitement value=$object->_ref_last_allaitement}}
+  {{if $allaitement->_id}}
+    <tr>
+      <th class="category">Allaitement</th>
+    </tr>
+    <tr>
+      <td>
+        <strong>Date de début :</strong> {{mb_value object=$allaitement field=date_debut}}
+      </td>
+    </tr>
+    {{if $allaitement->date_fin}}
+      <tr>
+        <td>
+          <strong>Date de fin :</strong> {{mb_value object=$allaitement field=date_fin}}
+        </td>
+      </tr>
+    {{/if}}
+  {{/if}}
   <tr>
     <th class="category">Naissances</th>
   </tr>
@@ -32,6 +50,12 @@
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_naissance->_guid}}')">
           {{mb_value object=$patient field=naissance}}
         </span>
+      </td>
+    </tr>
+  {{foreachelse}}
+    <tr>
+      <td class="empty">
+        {{tr}}CNaissance.none{{/tr}}
       </td>
     </tr>
   {{/foreach}}

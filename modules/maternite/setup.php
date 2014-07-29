@@ -130,6 +130,32 @@ class CSetupmaternite extends CSetup {
                 ADD `datetime_accouchement` DATETIME;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.13";
+    $this->makeRevision("0.13");
+    $query = "CREATE TABLE `allaitement` (
+      `allaitement_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `patient_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+      `grossesse_id` INT (11) UNSIGNED,
+      `date_debut` DATETIME NOT NULL,
+      `date_fin` DATETIME
+    )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `allaitement`
+      ADD INDEX (`patient_id`),
+      ADD INDEX (`grossesse_id`),
+      ADD INDEX (`date_debut`),
+      ADD INDEX (`date_fin`);";
+    $this->addQuery($query);
+
+    $query = "INSERT INTO `allaitement`
+      SELECT null, `parturiente_id`, `grossesse_id`, `terme_prevu`, `date_fin_allaitement`
+      FROM `grossesse`
+      WHERE `date_fin_allaitement` IS NOT NULL;
+    ";
+
+    $query = "ALTER TABLE `grossesse`
+      DROP `date_fin_allaitement`;";
+
+    $this->mod_version = "0.14";
   }
 }

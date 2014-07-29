@@ -68,5 +68,9 @@
         </form>
       </fieldset>
     {{/if}}
+
+    {{if "maternite"|module_active && $patient->sexe == "f" && $patient->_annees > 12}}
+      {{mb_include module="maternite" template="inc_fieldset_etat_actuel"}}
+    {{/if}}
   </td>
 </tr>

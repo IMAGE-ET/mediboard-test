@@ -10,13 +10,21 @@
 
 {{mb_script module=maternite script=grossesse ajax=true}}
 
-{{assign var=grossesse value=$object->_ref_grossesse}}
+{{if $object->_class == "CPatient"}}
+  {{assign var=grossesse value=$object->_ref_last_grossesse}}
+{{else}}
+  {{assign var=grossesse value=$object->_ref_grossesse}}
+{{/if}}
 {{mb_default var=submit value=0}}
 {{mb_default var=large_icon value=0}}
 {{mb_default var=modify_grossesse value=1}}
 
 <script>
   Main.add(function() {
+    Grossesse.parturiente_id = '{{$patient->_id}}';
+    Grossesse.submit = '{{$submit}}';
+    Grossesse.large_icon = '{{$large_icon}}';
+    Grossesse.modify_grossesse = '{{$modify_grossesse}}';
     Grossesse.formTo = $('grossesse_id').form;
     Grossesse.duree_sejour = '{{$conf.maternite.duree_sejour}}';
     
@@ -26,7 +34,7 @@
   });
 </script>
 
-<input type="hidden" name="grossesse_id" value="{{$object->grossesse_id}}" id="grossesse_id"/>
+<input type="hidden" name="grossesse_id" value="{{$grossesse->_id}}" id="grossesse_id"/>
 <input type="hidden" name="_patient_sexe" value="" onchange="Grossesse.toggleGrossesse(this.value, this.form)"/>
 <input type="hidden" name="_large_icon" value="{{$large_icon}}" />
 

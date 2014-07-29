@@ -236,9 +236,9 @@ printSurveillance = function(operation_id) {
       <td class="narrow">
         <form name="edit-grossesse-accouchement-{{$_grossesse->_id}}-datetime_debut_travail" method="post" onsubmit="return onSubmitFormAjax(this)">
           <input type="hidden" name="m" value="maternite"/>
-          <input type="hidden" name="dosql" value="do_grossesse_aed" />
+          {{mb_class object=$_grossesse}}
+          {{mb_key   object=$_grossesse}}
           <input type="hidden" name="callback" value="reloadSurveillancePerop" />
-          {{mb_key object=$_grossesse}}
 
           {{if $_grossesse->datetime_debut_travail}}
             {{mb_label object=$_grossesse field=datetime_debut_travail}}
@@ -252,9 +252,9 @@ printSurveillance = function(operation_id) {
 
         <form name="edit-grossesse-accouchement-{{$_grossesse->_id}}-datetime_accouchement" method="post" onsubmit="return onSubmitFormAjax(this)">
           <input type="hidden" name="m" value="maternite"/>
-          <input type="hidden" name="dosql" value="do_grossesse_aed" />
+          {{mb_class object=$_grossesse}}
+          {{mb_key   object=$_grossesse}}
           <input type="hidden" name="callback" value="reloadSurveillancePerop" />
-          {{mb_key object=$_grossesse}}
 
           {{if $_grossesse->datetime_accouchement}}
             {{mb_label object=$_grossesse field=datetime_accouchement}}

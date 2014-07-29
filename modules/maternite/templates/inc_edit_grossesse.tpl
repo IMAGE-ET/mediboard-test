@@ -10,10 +10,11 @@
 
 <form name="editFormGrossesse" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="maternite"/>
-  <input type="hidden" name="dosql" value="do_grossesse_aed" />
+  {{mb_class object=$grossesse}}
+  {{mb_key   object=$grossesse}}
   <input type="hidden" name="callback" value="Grossesse.afterEditGrossesse" />
   <input type="hidden" name="del" value="0" />
-  {{mb_key object=$grossesse}}
+
   {{mb_field object=$grossesse field=parturiente_id hidden=true}}
   
   <table class="form">
@@ -58,14 +59,6 @@
       </th>
       <td>
         {{mb_field object=$grossesse field=allaitement_maternel}}
-      </td>
-    </tr>
-    <tr>
-      <th>
-        {{mb_label object=$grossesse field=date_fin_allaitement}}
-      </th>
-      <td>
-        {{mb_field object=$grossesse field=date_fin_allaitement form=editFormGrossesse register=true}}
       </td>
     </tr>
     <tr>

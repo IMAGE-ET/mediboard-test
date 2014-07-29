@@ -8,7 +8,7 @@
  * @version    $Revision$
  *}}
 
-<script type="text/javascript">
+<script>
   Main.add(function() {
     Grossesse.refreshList('{{$parturiente_id}}', '{{$object_guid}}');
   });
@@ -21,8 +21,12 @@
     <td style="width: 40%">
       <div id="list_grossesses"></div>
       <div style="text-align: right;">
-        <button id="button_select_grossesse" type="button" class="tick" onclick="Grossesse.bindGrossesse(); Control.Modal.close();">Sélectionner</button>
-        <button type="button" class="cancel" onclick="Grossesse.emptyGrossesses(); Control.Modal.close();">Vider</button>
+        {{if $object_guid}}
+          <button id="button_select_grossesse" type="button" class="tick" onclick="Grossesse.bindGrossesse(); Control.Modal.close();">Sélectionner</button>
+          <button type="button" class="cancel" onclick="Grossesse.emptyGrossesses(); Control.Modal.close();">Vider</button>
+        {{else}}
+          <button type="button" class="cancel" onclick="Control.Modal.close();">{{tr}}Close{{/tr}}</button>
+        {{/if}}
       </div>
     </td>
     <td id="edit_grossesse"></td>

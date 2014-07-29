@@ -14,6 +14,10 @@ Grossesse = {
   formFrom: null,
   duree_sejour: null,
   submit: false,
+  parturiente_id: null,
+  large_icon: 0,
+  modify_grossesse: 1,
+
   viewGrossesses: function(parturiente_id, object_guid, form) {
     var url = new Url("maternite", "ajax_bind_grossesse");
     if (parturiente_id == '') {
@@ -22,8 +26,13 @@ Grossesse = {
     else {
       url.addParam("parturiente_id", parturiente_id);
     }
-    url.addParam("object_guid", object_guid);
-    url.requestModal(900, 400);
+    url.addNotNullParam("object_guid", object_guid);
+    url.requestModal(900, 400, {onClose: function() {
+      if (!Grossesse.modify_grossesse) {
+        Grossesse.updateGrossesseArea();
+        Grossesse.updateEtatActuel();
+      }
+    }});
   },
   toggleGrossesse: function(sexe, form) {
     form.select(".button_grossesse")[0].disabled = sexe == "f" ? "" : "disabled";
@@ -31,17 +40,13 @@ Grossesse = {
   editGrossesse: function(grossesse_id, parturiente_id) {
     var url = new Url("maternite", "ajax_edit_grossesse");
     url.addParam("grossesse_id", grossesse_id);
-    url.addParam("parturiente_id", parturiente_id);
+    url.addNotNullParam("parturiente_id", parturiente_id);
     url.requestUpdate("edit_grossesse");
   },
-  refreshList: function(patient_id, object_guid) {
+  refreshList: function(parturiente_id, object_guid) {
     var url = new Url("maternite", "ajax_list_grossesses");
-    if (patient_id) {
-      url.addParam("patient_id", patient_id);
-    }
-    if (object_guid) {
-      url.addParam("object_guid", object_guid);
-    }
+    url.addNotNullParam("parturiente_id", parturiente_id);
+    url.addNotNullParam("object_guid", object_guid);
     url.requestUpdate("list_grossesses");
   },
   afterEditGrossesse: function(grossesse_id) {
@@ -81,6 +86,29 @@ Grossesse = {
       input.checked = "";
     });
     this.bindGrossesse();
+  },
+
+  updateGrossesseArea: function() {
+    if (!Grossesse.parturiente_id) {
+      return;
+    }
+
+    var url = new Url("maternite", "ajax_update_grossesse_area");
+    url.addParam("parturiente_id", Grossesse.parturiente_id);
+    url.addParam("submit", Grossesse.submit);
+    url.addParam("large_icon", Grossesse.large_icon);
+    url.addParam("modify_grossesse", Grossesse.modify_grossesse);
+    url.requestUpdate("view_grossesse");
+  },
+
+  updateEtatActuel: function() {
+    if (!Grossesse.parturiente_id) {
+      return;
+    }
+
+    var url = new Url("maternite", "ajax_update_fieldset_etat_actuel");
+    url.addParam("patient_id", Grossesse.parturiente_id);
+    url.requestUpdate("etat_actuel_grossesse");
   }
 }
 

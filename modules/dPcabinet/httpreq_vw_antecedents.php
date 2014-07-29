@@ -29,6 +29,11 @@ else if ($patient_id) {
 $patient->loadRefPhotoIdentite();
 $patient->loadRefDossierMedical();
 
+if (CModule::getActive("maternite")) {
+  $patient->loadLastGrossesse();
+  $patient->loadLastAllaitement();
+}
+
 $isPrescriptionInstalled = CModule::getActive("dPprescription");
 
 // Création du template

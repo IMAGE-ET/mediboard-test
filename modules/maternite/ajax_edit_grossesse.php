@@ -11,8 +11,8 @@
  * @link     http://www.mediboard.org
  */
 
-$grossesse_id      = CValue::get('grossesse_id');
-$parturiente_id    = CValue::getOrSession("parturiente_id");
+$grossesse_id   = CValue::get('grossesse_id');
+$parturiente_id = CValue::getOrSession("parturiente_id");
 
 $grossesse = new CGrossesse();
 $grossesse->load($grossesse_id);

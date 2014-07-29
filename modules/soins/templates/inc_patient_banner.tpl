@@ -55,7 +55,7 @@
             {{mb_include module=soins template=inc_antecedents_allergies patient_guid=$patient->_guid}}
           </span>
           {{if "maternite"|module_active}}
-            {{mb_include module=maternite template=inc_input_grossesse object=$sejour modify_grossesse=0}}
+            {{mb_include module=maternite template=inc_input_grossesse object=$patient modify_grossesse=0}}
           {{/if}}
           {{if $sejour->isolement}}
             <img src="images/icons/isol.png" title="Isolement">
@@ -104,9 +104,7 @@
       {{/if}}
 
       {{if 'oncomip'|module_active}}
-        <div id="oncomip_search_patient">
-
-        </div>
+        <div id="oncomip_search_patient"></div>
       {{/if}}
     </th>
   </tr>

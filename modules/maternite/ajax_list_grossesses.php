@@ -11,13 +11,18 @@
  * @link     http://www.mediboard.org
  */
 
-$patient_id   = CValue::getOrSession("patient_id");
-$object_guid  = CValue::getOrSession("object_guid");
+CCanDo::checkRead();
 
-$object = CMbObject::loadFromGuid($object_guid);
+$parturiente_id = CValue::getOrSession("parturiente_id");
+$object_guid    = CValue::get("object_guid");
+
+$object = new CMbObject();
+if ($object_guid) {
+  $object = CMbObject::loadFromGuid($object_guid);
+}
 
 $grossesse = new CGrossesse();
-$grossesse->parturiente_id = $patient_id;
+$grossesse->parturiente_id = $parturiente_id;
 $grossesses = $grossesse->loadMatchingList("terme_prevu DESC, active DESC");
 
 CMbObject::massCountBackRefs($grossesses, "sejours");
@@ -27,7 +32,6 @@ CMbObject::massCountBackRefs($grossesses, "naissances");
 $smarty = new CSmartyDP();
 
 $smarty->assign("grossesses"  , $grossesses);
-$smarty->assign("patient_id"  , $patient_id);
 $smarty->assign("object"      , $object);
 
 $smarty->display("inc_list_grossesses.tpl");
