@@ -1359,26 +1359,27 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     switch ($event_code) {
       // Cas d'une suppression de mutation ou d'une permission d'absence
-      case "A12" : case "A52" :
-      if (!$movement) {
+      case "A12":
+      case "A52":
+        if (!$movement) {
+          return null;
+        }
+
+        $affectation->load($movement->affectation_id);
+        if (!$affectation->_id) {
+          return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
+        }
+
+        // Pas de synchronisation
+        $affectation->_no_synchro = true;
+        if ($msgAffectation = $affectation->delete()) {
+          return $msgAffectation;
+        }
+
         return null;
-      }
-
-      $affectation->load($movement->affectation_id);
-      if (!$affectation->_id) {
-        return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
-      }
-
-      // Pas de synchronisation
-      $affectation->_no_synchro = true;
-      if ($msgAffectation = $affectation->delete()) {
-        return $msgAffectation;
-      }
-
-      return null;
 
       // Annulation admission
-      case "A11" :
+      case "A11":
         if (!$movement) {
           return null;
         }
@@ -1404,7 +1405,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         return null;
 
       // Annuler le retour du patient
-      case "A53" :
+      case "A53":
         if (!$movement) {
           return null;
         }
@@ -1425,7 +1426,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         return $affectation;
 
       // Cas d'un départ pour une permission d'absence
-      case "A21" :
+      case "A21":
         $affectation->entree = $datetime;
         $affectation->loadMatchingObject();
 
@@ -1453,7 +1454,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         return $affectation;
 
       // Cas d'un retour pour une permission d'absence
-      case "A22" :
+      case "A22":
         $service_externe = CService::loadServiceExterne($sender->group_id);
 
         if (!$service_externe->_id) {
@@ -1489,7 +1490,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         return $search;
 
       // Cas mutation
-      case "A02" :
+      case "A02":
         $affectation->entree = $datetime;
         $affectation->loadMatchingObject();
 
@@ -1512,7 +1513,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         break;
 
       // Cas modification
-      case "Z99" :
+      case "Z99":
         if (!$movement) {
           return null;
         }
@@ -1536,7 +1537,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         break;
 
       // Tous les autres cas on récupère et on met à jour la première affectation
-      default :
+      default:
         $newVenue->loadRefsAffectations();
         $affectation = $newVenue->_ref_first_affectation;
         if (!$affectation->_id) {
@@ -2082,6 +2083,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         }
         
         break;
+
+      default:
     }       
   }
 
@@ -2295,10 +2298,27 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $newVenue->sortie_reelle = $PV1_45;
     }
       
-    // Cas spécifique de certains segments 
-    // A11 : on supprime la date d'entrée réelle 
+    // Cas spécifique de certains segments
+    // A11 : on supprime la date d'entrée réelle && on met en trash le numéro de dossier
     if ($event_code == "A11") {
       $newVenue->entree_reelle = "";
+
+      $where = array();
+      $where["original_trigger_code"] = " = 'A05'";
+
+      $movements = $newVenue->loadRefsMovements($where);
+      if (empty($movements)) {
+        $newVenue->_generate_NDA = false;
+
+        $newVenue->trashNDA();
+      }
+    }
+
+    // A38 : on met en trash le numéro de dossier
+    if ($event_code == "A38") {
+      $newVenue->_generate_NDA = false;
+
+      $newVenue->trashNDA();
     }
     
     // A13 : on supprime la date de sortie réelle 
