@@ -101,6 +101,9 @@ foreach ($files as $_filepath) {
   }
   
   if (!$sender->delete_file) {
+    // Rename file
+    $source->renameFile($_filepath, $_old_filepath);
+
     CAppUI::stepAjax("CEAIDispatcher-message_dispatch");
     continue;
   }
