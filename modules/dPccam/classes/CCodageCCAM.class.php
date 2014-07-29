@@ -720,7 +720,23 @@ class CCodageCCAM extends CMbObject {
    * @return void
    */
   protected function applyRuleEA(&$act) {
+    $ordered_acts_ea = $this->_ordered_acts;
+    foreach ($this->_ref_actes_ccam_facturables as $_act) {
+      $chap = $_act->_ref_code_ccam->chapitres;
+      if ($_act->_ref_code_ccam->isSupplement()) {
+        unset($ordered_acts_ea[$_act->_id]);
+        if ($_act->_id == $act->_id) {
+          $act->_position = -1;
+        }
+      }
+    }
+    if ($act->_position != -1) {
+      $ordered_acts_ea = self::orderActsByTarif($ordered_acts_ea);
+      $act->_position = array_search($act->_id, array_keys($ordered_acts_ea));
+    }
+
     switch ($act->_position) {
+      case -1:
       case 0:
         $act->_guess_facturable = '1';
         $act->_guess_association = '1';
@@ -731,6 +747,11 @@ class CCodageCCAM extends CMbObject {
         $act->_guess_association = '3';
         $act->_guess_regle_asso = 'EA';
         break;
+      case 2:
+      case 3:
+        $act->_guess_facturable = '1';
+        $act->_guess_association = '2';
+        $act->_guess_regle_asso = 'EA';
       default:
         $act->_guess_facturable = '0';
         $act->_guess_association = '';
