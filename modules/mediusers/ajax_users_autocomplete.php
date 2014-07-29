@@ -39,9 +39,7 @@ $permType = $edit ?
 
 // Récupération de la liste des utilisateurs
 if ($praticiens) {
-  $listUsers = CAppUI::pref("pratOnlyForConsult") ?
-    $user->loadPraticiens($permType, null, $keywords) :
-    $user->loadProfessionnelDeSante($permType, null, $keywords);
+  $listUsers = $object->loadProfessionnelDeSanteByPref($permType, null, $keywords);
 }
 else {
   $listUsers = $user->loadUsers($permType, null, $keywords);

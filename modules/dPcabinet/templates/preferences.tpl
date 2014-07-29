@@ -40,7 +40,7 @@
 <tr><th class="category" colspan="6">Consultations multiples</th></tr>
 {{mb_include template=inc_pref spec=enum var=NbConsultMultiple values="2|3|4|5|6"}}
 {{mb_include template=inc_pref spec=enum var=today_ref_consult_multiple values="0|1"}}
-<tr><th class="category" colspan="6">Prise de RDV personnalisée, prendre RDV pour :</th></tr>
+<tr><th class="category" colspan="6">Prise de RDV personnalisée :</th></tr>
 {{mb_include template=inc_pref spec=bool var=take_consult_for_chirurgien}}
 {{mb_include template=inc_pref spec=bool var=take_consult_for_anesthesiste}}
 {{mb_include template=inc_pref spec=bool var=take_consult_for_medecin}}
