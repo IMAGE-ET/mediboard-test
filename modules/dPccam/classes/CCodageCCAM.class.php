@@ -113,7 +113,7 @@ class CCodageCCAM extends CMbObject {
     $props['codable_id'] = 'ref notNull class|CCodable meta|codable_class';
     $props['praticien_id'] = 'ref notNull class|CMediusers';
     $props['locked'] = 'bool notNull default|0';
-    $props['nb_acts'] = 'num notNull';
+    $props['nb_acts'] = 'num notNull default|0';
 
     return $props;
   }
