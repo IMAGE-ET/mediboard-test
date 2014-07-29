@@ -11,7 +11,7 @@
 
 CCanDo::checkRead();
 $codeacte     = CValue::getOrSession("_codes_ccam");
-$object_class = CValue::get("object_class");
+$object_class = CValue::get("object_class", "COperation");
 $hideSelect   = CValue::get("hideSelect", 0);
 
 $code = CDatedCodeCCAM::get($codeacte);

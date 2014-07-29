@@ -47,9 +47,11 @@
     {{assign var="key" value="$_key$view"}}
     {{if $acte->executant_id == $codage->praticien_id}}
       <tr>
-        <td {{if !$acte->_id}}class="error"{{/if}}>
+        <td {{if !$acte->_id}}class="error"{{/if}}
+            onclick="CodeCCAM.show('{{$acte->code_acte}}', '{{$subject->_class}}')"
+            style="cursor: help;">
           {{if $_code->type != 2}}
-            <strong onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class}}')">
+            <strong>
               {{mb_value object=$acte field=code_acte}}
             </strong>
           {{else}}
@@ -103,7 +105,7 @@
           {{/if}}
           {{/if}}
         </td>
-        <td>
+        <td {{if $acte->_id && !$acte->facturable}}style="background-color: #fc9"{{/if}}>
           {{mb_value object=$acte field=_tarif}}
         </td>
         <td class="text">
@@ -136,6 +138,7 @@
               <button class="add notext" type="submit">{{tr}}Add{{/tr}}
               </button>
             {{else}}
+              <button class="edit notext" type="button" onclick="ActesCCAM.edit({{$acte->_id}})">{{tr}}Edit{{/tr}}</button>
               <button class="trash notext" type="button"
                       onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}', ajax: '1'},
                         {onComplete: function() {window.urlCodage.refreshModal()}});">

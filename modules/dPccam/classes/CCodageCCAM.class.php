@@ -326,13 +326,10 @@ class CCodageCCAM extends CMbObject {
     $this->_ref_actes_ccam_facturables = array();
     foreach ($this->_ref_actes_ccam as $_acte) {
       if (!$_acte->facturable) {
-        $_acte->facturable = 1;
-        $_acte->_guess_facturable = 1;
+        $_acte->_guess_facturable = '1';
       }
-      $_acte->getTarifSansAssociationNiCharge();
       if ($_acte->getTarifSansAssociationNiCharge() == 0) {
-        $_acte->facturable = 0;
-        $_acte->_guess_facturable = 0;
+        $_acte->_guess_facturable = '0';
       }
       else {
         $this->_ref_actes_ccam_facturables[$_acte->_id] = $_acte;
@@ -428,6 +425,7 @@ class CCodageCCAM extends CMbObject {
   protected function applyRule($rulename, &$act) {
     $this->guessActeAssociation($rulename, $act);
     $act->code_association = $act->_guess_association;
+    $act->facturable       = $act->_guess_facturable;
   }
 
   /**
@@ -493,11 +491,12 @@ class CCodageCCAM extends CMbObject {
   protected function applyRuleG1(&$act) {
     switch ($act->_position) {
       case 0:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '';
         $act->_guess_regle_asso = 'G1';
         break;
       default:
-        $act->facturable = 0;
+        $act->_guess_facturable = '0';
         $act->_guess_association = '';
         $act->_guess_regle_asso = 'G1';
     }
@@ -550,11 +549,13 @@ class CCodageCCAM extends CMbObject {
         $act->_ref_code_ccam->isSupplement() ||
         $act->_ref_code_ccam->isComplement()
     ) {
+
+      $act->_guess_facturable = '1';
       $act->_guess_association = '';
       $act->_guess_regle_asso = 'GA';
     }
     else {
-      $act->facturable = 0;
+      $act->_guess_facturable = '0';
       $act->_guess_association = '';
       $act->_guess_regle_asso = 'GA';
 
@@ -605,11 +606,12 @@ class CCodageCCAM extends CMbObject {
         $act->_ref_code_ccam->isSupplement() ||
         $act->_ref_code_ccam->isComplement()
     ) {
+      $act->_guess_facturable = '1';
       $act->_guess_association = '1';
       $act->_guess_regle_asso = 'GB';
     }
     else {
-      $act->facturable = 0;
+      $act->_guess_facturable = '0';
       $act->_guess_association = '';
       $act->_guess_regle_asso = 'GB';
     }
@@ -651,15 +653,22 @@ class CCodageCCAM extends CMbObject {
 
     switch ($act->_position) {
       case -1:
+        $act->_guess_facturable = '1';
+        $act->_guess_association = '1';
+        $act->_guess_regle_asso = 'G2';
+        break;
       case 0:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '1';
         $act->_guess_regle_asso = 'G2';
         break;
       case 1:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '2';
         $act->_guess_regle_asso = 'G2';
         break;
       default:
+        $act->_guess_facturable = '0';
         $act->facturable = '0';
         $act->_guess_association = '0';
     }
@@ -713,15 +722,17 @@ class CCodageCCAM extends CMbObject {
   protected function applyRuleEA(&$act) {
     switch ($act->_position) {
       case 0:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '1';
         $act->_guess_regle_asso = 'EA';
         break;
       case 1:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '3';
         $act->_guess_regle_asso = 'EA';
         break;
       default:
-        $act->facturable = 0;
+        $act->_guess_facturable = '0';
         $act->_guess_association = '';
         $act->_guess_regle_asso = 'EA';
     }
@@ -762,19 +773,22 @@ class CCodageCCAM extends CMbObject {
   protected function applyRuleEB(&$act) {
     switch ($act->_position) {
       case 0:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '1';
         $act->_guess_regle_asso = 'EB';
         break;
       case 1:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '3';
         $act->_guess_regle_asso = 'EB';
         break;
       case 2:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '2';
         $act->_guess_regle_asso = 'EB';
         break;
       default:
-        $act->facturable = 0;
+        $act->_guess_facturable = '0';
         $act->_guess_association = '';
         $act->_guess_regle_asso = 'EB';
     }
@@ -823,19 +837,22 @@ class CCodageCCAM extends CMbObject {
   protected function applyRuleEC(&$act) {
     switch ($act->_position) {
       case 0:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '1';
         $act->_guess_regle_asso = 'EC';
         break;
       case 1:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '2';
         $act->_guess_regle_asso = 'EC';
         break;
       case 2:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '2';
         $act->_guess_regle_asso = 'EC';
         break;
       default:
-        $act->facturable = 0;
+        $act->_guess_facturable = '0';
         $act->_guess_association = '';
         $act->_guess_regle_asso = 'EC';
     }
@@ -889,15 +906,17 @@ class CCodageCCAM extends CMbObject {
   protected function applyRuleED(&$act) {
     switch ($act->_position) {
       case 0:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '1';
         $act->_guess_regle_asso = 'ED';
         break;
       case 1:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '2';
         $act->_guess_regle_asso = 'ED';
         break;
       default:
-        $act->facturable = 0;
+        $act->_guess_facturable = '0';
         $act->_guess_association = '';
         $act->_guess_regle_asso = 'ED';
     }
@@ -964,19 +983,22 @@ class CCodageCCAM extends CMbObject {
   protected function applyRuleEE(&$act) {
     switch ($act->_position) {
       case 0:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '4';
         $act->_guess_regle_asso = 'EE';
         break;
       case 1:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '4';
         $act->_guess_regle_asso = 'EE';
         break;
       case 2:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '4';
         $act->_guess_regle_asso = 'EE';
         break;
       default:
-        $act->facturable = 0;
+        $act->_guess_facturable = '0';
         $act->_guess_association = '';
         $act->_guess_regle_asso = 'EE';
     }
@@ -1038,15 +1060,17 @@ class CCodageCCAM extends CMbObject {
     if ($this->_check_rules['EF']['guidage_remno'] == 2) {
       switch ($act->_position) {
         case 0:
+          $act->_guess_facturable = '1';
           $act->_guess_association = '1';
           $act->_guess_regle_asso = 'EF';
           break;
         case 1:
+          $act->_guess_facturable = '1';
           $act->_guess_association = '2';
           $act->_guess_regle_asso = 'EF';
           break;
         default:
-          $act->facturable = 0;
+          $act->_guess_facturable = '0';
           $act->_guess_association = '';
           $act->_guess_regle_asso = 'EF';
       }
@@ -1054,11 +1078,12 @@ class CCodageCCAM extends CMbObject {
     else {
       switch ($act->_position) {
         case 0:
+          $act->_guess_facturable = '1';
           $act->_guess_association = '';
           $act->_guess_regle_asso = 'EF';
           break;
         default:
-          $act->facturable = 0;
+          $act->_guess_facturable = '0';
           $act->_guess_association = '';
           $act->_guess_regle_asso = 'EF';
       }
@@ -1102,15 +1127,17 @@ class CCodageCCAM extends CMbObject {
   protected function applyRuleEG1(&$act) {
     switch ($act->_position) {
       case 0:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '1';
         $act->_guess_regle_asso = 'EG1';
         break;
       case 1:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '1';
         $act->_guess_regle_asso = 'EG1';
         break;
       default:
-        $act->facturable = 0;
+        $act->_guess_facturable = '0';
         $act->_guess_association = '';
         $act->_guess_regle_asso = 'EG1';
     }
@@ -1201,22 +1228,29 @@ class CCodageCCAM extends CMbObject {
 
     $nb_anapath = $this->_check_rules['EG2']['nb_anapath'];
     if ($nb_anapath == 2 || ($nb_anapath == 1 && count($ordered_acts_eg2) == 1)) {
+      $act->_guess_facturable = '1';
       $act->_guess_association = '4';
       $act->_guess_regle_asso = 'EG2';
     }
     else {
       switch ($act->_position) {
         case -1:
+          $act->_guess_facturable = '1';
+          $act->_guess_association = '1';
+          $act->_guess_regle_asso = 'EG2';
+          break;
         case 0:
+          $act->_guess_facturable = '1';
           $act->_guess_association = '1';
           $act->_guess_regle_asso = 'EG2';
           break;
         case 1:
+          $act->_guess_facturable = '1';
           $act->_guess_association = '2';
           $act->_guess_regle_asso = 'EG2';
           break;
         default:
-          $act->facturable = 0;
+          $act->_guess_facturable = '0';
           $act->_guess_association = '';
           $act->_guess_regle_asso = 'EG2';
       }
@@ -1290,22 +1324,29 @@ class CCodageCCAM extends CMbObject {
     $nb_electromyo = $this->_check_rules['EG3']['nb_electromyo'];
 
     if ($nb_electromyo == 2 || ($nb_electromyo == 1 && count($ordered_acts_eg3) == 1)) {
+      $act->_guess_facturable = '1';
       $act->_guess_association = '4';
       $act->_guess_regle_asso = 'EG3';
     }
     else {
       switch ($act->_position) {
         case -1:
+          $act->_guess_facturable = '1';
+          $act->_guess_association = '1';
+          $act->_guess_regle_asso = 'EG3';
+          break;
         case 0:
+          $act->_guess_facturable = '1';
           $act->_guess_association = '1';
           $act->_guess_regle_asso = 'EG3';
           break;
         case 1:
+          $act->_guess_facturable = '1';
           $act->_guess_association = '2';
           $act->_guess_regle_asso = 'EG3';
           break;
         default:
-          $act->facturable = 0;
+          $act->_guess_facturable = '0';
           $act->_guess_association = '';
           $act->_guess_regle_asso = 'EG3';
       }
@@ -1354,6 +1395,7 @@ class CCodageCCAM extends CMbObject {
    * @return void
    */
   protected function applyRuleEG4(&$act) {
+    $act->_guess_facturable = '1';
     $act->_guess_association = '4';
     $act->_guess_regle_asso = 'EG4';
   }
@@ -1387,15 +1429,17 @@ class CCodageCCAM extends CMbObject {
   protected function applyRuleEG5(&$act) {
     switch ($act->_position) {
       case 0:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '4';
         $act->_guess_regle_asso = 'EG5';
         break;
       case 1:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '4';
         $act->_guess_regle_asso = 'EG5';
         break;
       default:
-        $act->facturable = 0;
+        $act->_guess_facturable = '0';
         $act->_guess_association = '';
         $act->_guess_regle_asso = 'EG5';
     }
@@ -1450,15 +1494,17 @@ class CCodageCCAM extends CMbObject {
   protected function applyRuleEG6(&$act) {
     switch ($act->_position) {
       case 0:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '4';
         $act->_guess_regle_asso = 'EG6';
         break;
       case 1:
+        $act->_guess_facturable = '1';
         $act->_guess_association = '4';
         $act->_guess_regle_asso = 'EG6';
         break;
       default:
-        $act->facturable = 0;
+        $act->_guess_facturable = '0';
         $act->_guess_association = '';
         $act->_guess_regle_asso = 'EG6';
     }
@@ -1523,25 +1569,29 @@ class CCodageCCAM extends CMbObject {
 
     $nb_bucco_dentaires = $this->_check_rules['EG7']['nb_bucco_dentaires'];
     if ($nb_bucco_dentaires == 2 || count($ordered_acts_eg7) == 1) {
+      $act->_guess_facturable = '1';
       $act->_guess_association = '4';
       $act->_guess_regle_asso = 'EG7';
     }
     else {
       switch ($act->_position) {
         case -1:
+          $act->_guess_facturable = '1';
           $act->_guess_association = '1';
           $act->_guess_regle_asso = 'EG7';
           break;
         case 0:
+          $act->_guess_facturable = '1';
           $act->_guess_association = '1';
           $act->_guess_regle_asso = 'EG7';
           break;
         case 1:
+          $act->_guess_facturable = '1';
           $act->_guess_association = '2';
           $act->_guess_regle_asso = 'EG7';
           break;
         default:
-          $act->facturable = 0;
+          $act->_guess_facturable = '0';
           $act->_guess_association = '';
           $act->_guess_regle_asso = 'EG7';
       }
@@ -1682,15 +1732,17 @@ class CCodageCCAM extends CMbObject {
       $act->_position = array_search($act->_id, array_keys($this->_ordered_acts));
       switch ($act->_position) {
         case 0:
+          $act->_guess_facturable = '1';
           $act->_guess_association = '1';
           $act->_guess_regle_asso = 'EI';
           break;
         case 1:
+          $act->_guess_facturable = '1';
           $act->_guess_association = '2';
           $act->_guess_regle_asso = 'EI';
           break;
         default:
-          $act->facturable = 0;
+          $act->_guess_facturable = '0';
           $act->_guess_association = '';
           $act->_guess_regle_asso = 'EI';
       }
@@ -1698,16 +1750,22 @@ class CCodageCCAM extends CMbObject {
     else {
       switch ($act->_position) {
         case -1:
+          $act->_guess_facturable = '1';
+          $act->_guess_association = '1';
+          $act->_guess_regle_asso = 'EI';
+          break;
         case 0:
+          $act->_guess_facturable = '1';
           $act->_guess_association = '1';
           $act->_guess_regle_asso = 'EI';
           break;
         case 1:
+          $act->_guess_facturable = '1';
           $act->_guess_association = '2';
           $act->_guess_regle_asso = 'EI';
           break;
         default:
-          $act->facturable = 0;
+          $act->_guess_facturable = '0';
           $act->_guess_association = '';
           $act->_guess_regle_asso = 'EI';
       }

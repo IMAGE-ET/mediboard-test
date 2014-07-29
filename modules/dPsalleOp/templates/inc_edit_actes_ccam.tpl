@@ -60,13 +60,13 @@
         });
       </script>
     {{/if}}
-    <!-- Forfait spécifique -->
     <a href="#" {{if $confCCAM.contraste}}style="color: #fff;"{{/if}} onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class}}')">
       {{$_code->code}}
     </a>
     <span style="font-weight: normal;">
       {{$_code->libelleLong}}
     </span>
+    <!-- Forfait spécifique -->
     {{if $_code->forfait}}
       <small style="color: #f00">({{tr}}CDatedCodeCCAM.remboursement.{{$_code->forfait}}{{/tr}})</small>
     {{/if}}

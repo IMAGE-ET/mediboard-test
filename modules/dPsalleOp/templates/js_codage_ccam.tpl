@@ -75,6 +75,17 @@ ActesCCAM = {
     if(oCcamField.remove(oForm._selCode.value)){
       submitFormAjax(oForm, 'systemMsg', oDefaultOptions);
     }
+  },
+
+  edit: function(acte_id, oOptions) {
+    var oDefaultOptions = {
+      onClose: function() {window.urlCodage.refreshModal();}
+    };
+    Object.extend(oDefaultOptions, oOptions);
+    var url = new Url("salleOp", "ajax_edit_acte_ccam");
+    url.addParam("acte_id", acte_id);
+    url.requestModal(null, null, oDefaultOptions);
+    window.urlEditActe = url;
   }
 };
 

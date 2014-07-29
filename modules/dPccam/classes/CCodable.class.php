@@ -1021,7 +1021,9 @@ class CCodable extends CMbObject {
           }
 
           $possible_acte->updateFormFields();
-          $possible_acte->loadRefs();
+          $possible_acte->loadRefExecutant();
+          $possible_acte->loadRefCodeCCAM();
+          $possible_acte->loadRefCodageCCAM();
           $possible_acte->getAnesthAssocie();
 
           // Affect a loaded acte if exists
