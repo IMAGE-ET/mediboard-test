@@ -18,7 +18,7 @@
     {{mb_include module=system template=inc_config_bool var=tarif}}
     {{mb_include module=system template=inc_config_bool var=restrict_display_tarif}}  
     {{mb_include module=system template=inc_config_bool var=codage_strict}}  
-    {{mb_include module=system template=inc_config_bool var=check_incompatibility}}
+    {{mb_include module=system template=inc_config_enum var=check_incompatibility values=block|alert|allow}}
     {{mb_include module=system template=inc_config_bool var=openline}}
     {{mb_include module=system template=inc_config_bool var=modifs_compacts}}
     {{mb_include module=system template=inc_config_bool var=commentaire}}

@@ -34,6 +34,8 @@ class CCodageCCAM extends CMbObject {
    */
   protected $_ordered_acts;
 
+  protected $_check_failed_acts = array();
+
   /**
    * @var boolean[]
    */
@@ -195,6 +197,10 @@ class CCodageCCAM extends CMbObject {
     }
 
     foreach ($this->_ref_actes_ccam as $_acte) {
+      if (in_array($_acte->code_acte, $this->_check_failed_acts)) {
+        unset($this->_ref_actes_ccam[$_acte->_id]);
+        continue;
+      }
       $_acte->loadRefCodeCCAM();
     }
 
@@ -207,6 +213,7 @@ class CCodageCCAM extends CMbObject {
    * @return bool
    */
   function updateRule() {
+    ml('updateRule');
     if ($this->association_mode != 'auto' || !$this->_check_asso) {
       return false;
     }
@@ -277,7 +284,14 @@ class CCodageCCAM extends CMbObject {
     foreach ($this->_ref_actes_ccam as $_act) {
       $_act->_position = array_search($_act->_id, array_keys($this->_ordered_acts));
       $this->applyRule($this->association_rule, $_act);
-      $_act->store();
+      if ($msg = $_act->store()) {
+        CAppUI::setMsg($msg, UI_MSG_ERROR);
+        if (!in_array($_act->code_acte, $this->_check_failed_acts)) {
+          $this->_check_failed_acts[] = $_act->code_acte;
+          $this->updateRule();
+          break;
+        }
+      }
     }
     $this->_apply_rules = false;
   }
@@ -385,7 +399,7 @@ class CCodageCCAM extends CMbObject {
           $_modifier->_checked = CAppUI::conf("dPccam CCodable precode_modificateur_7");
           break;
         case "J":
-          $_modifier->_checked = $codable->_class == 'COperations' && CAppUI::conf("dPccam CCodable precode_modificateur_J");
+          $_modifier->_checked = $codable->_class == 'COperation' && CAppUI::conf("dPccam CCodable precode_modificateur_J");
           break;
         default:
           $_modifier->_checked = 0;
