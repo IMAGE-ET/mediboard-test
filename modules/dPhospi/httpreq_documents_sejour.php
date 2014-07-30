@@ -20,6 +20,10 @@ $sejour->loadRefsOperations();
 $sejour->canRead();
 
 if (!$only_sejour) {
+  $sejour->loadRefsConsultations();
+  foreach ($sejour->_ref_consultations as $consult) {
+    $consult->countDocItems();
+  }
   $consult_anesth = $sejour->loadRefsConsultAnesth();
   $consult_anesth->loadRefsFwd();
   
