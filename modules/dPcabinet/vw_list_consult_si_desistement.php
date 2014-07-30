@@ -39,7 +39,7 @@ $ljoin = array(
 );
 $consultation_desist = new CConsultation();
 /** @var CConsultation[] $consultations */
-$consultations = $consultation_desist->loadList($where, "date", null, null, $ljoin);
+$consultations = $consultation_desist->loadList($where, "date, heure", null, null, $ljoin);
 
 foreach ($consultations as $_consult) {
   $_consult->loadRefPatient();
