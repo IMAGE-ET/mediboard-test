@@ -268,6 +268,34 @@
             </ul>
           </td>
         </tr>
+
+        {{if $lines_per_op|@count}}
+            <tr>
+              <th class="category">
+                Per-op
+              </th>
+            </tr>
+            {{assign var=prescription value=$sejour->_ref_prescription_sejour}}
+            <tr>
+              <td>
+                <ul>
+                  {{foreach from=$lines_per_op item=_line_per_op}}
+                    {{if $_line_per_op instanceof CPrescriptionLineMedicament}}
+                      {{mb_include module="prescription" template="inc_print_medicament" med=$_line_per_op print=0 dci=0}}
+                    {{/if}}
+                    {{if $_line_per_op instanceof CPrescriptionLineMix}}
+                      {{mb_include module="prescription" template="inc_print_prescription_line_mix" perf=$_line_per_op print=0 dci=0}}
+                    {{/if}}
+                    {{if $_line_per_op instanceof CPrescriptionLineElement}}
+                      {{mb_include module="prescription" template="inc_print_element" elt=$_line_per_op}}
+                    {{/if}}
+                  {{/foreach}}
+                </ul>
+              </td>
+            </tr>
+        {{/if}}
+
+        <tr>
           <th class="category">Techniques complémentaires</th>
         </tr>
         <tr>

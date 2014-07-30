@@ -26,7 +26,8 @@ $multi                 = CValue::get("multi");
 $offline               = CValue::get("offline");
 $display               = CValue::get("display");
 $pdf                   = CValue::get("pdf", 1);
-$lines = array();
+$lines        = array();
+$lines_per_op = array();
 
 // Consultation courante
 $dossier_anesth = new CConsultAnesth();
@@ -114,6 +115,7 @@ if (CModule::getActive("dPprescription")) {
   $prescription->loadRefsLinesElement();
   $prescription->loadRefsLinesMed();
   $prescription->loadRefsPrescriptionLineMixes();
+  $prescription->loadRefsLinesPerop();
 
   foreach ($prescription->_ref_prescription_lines_element as $_line_elt) {
     if (!$_line_elt->premedication) {
@@ -138,6 +140,21 @@ if (CModule::getActive("dPprescription")) {
     $_line_mix->loadRefPraticien();
     $_line_mix->loadRefsLines();
     $lines[] = $_line_mix;
+  }
+  foreach ($prescription->_ref_lines_perop as $type => $tab_line) {
+    foreach ($tab_line as $_line_per_op) {
+      if ($type == "med" || $type == "elt") {
+        /* @var CPrescriptionLine $_line_per_op*/
+        $_line_per_op->loadRefsPrises();
+      }
+      if ($type == "mix") {
+        /* @var CPrescriptionLineMix $_line_per_op*/
+        $_line_per_op->loadRefPraticien();
+        $_line_per_op->loadRefsLines();
+      }
+
+      $lines_per_op[] = $_line_per_op;
+    }
   }
 }
 
@@ -248,17 +265,18 @@ $unites["date_analyse"] = array("nom" => "Date", "unit" => "");
 // Création du template
 $smarty = new CSmartyDP("modules/dPcabinet");
 
-$smarty->assign("dossiers"  , $dossiers);
-$smarty->assign("display"   , $display);
-$smarty->assign("offline"   , $offline);
-$smarty->assign("unites"    , $unites);
-$smarty->assign("listChamps", $listChamps);
+$smarty->assign("dossiers"      , $dossiers);
+$smarty->assign("display"       , $display);
+$smarty->assign("offline"       , $offline);
+$smarty->assign("unites"        , $unites);
+$smarty->assign("listChamps"    , $listChamps);
 $smarty->assign("dossier_anesth", $dossier_anesth);
-$smarty->assign("etatDents" , $sEtatsDents);
-$smarty->assign("print"     , $print);
-$smarty->assign("praticien" , new CUser());
-$smarty->assign("lines"     , $lines);
-$smarty->assign("multi"     , $multi);
+$smarty->assign("etatDents"     , $sEtatsDents);
+$smarty->assign("print"         , $print);
+$smarty->assign("praticien"     , new CUser());
+$smarty->assign("lines"         , $lines);
+$smarty->assign("lines_per_op"  , $lines_per_op);
+$smarty->assign("multi"         , $multi);
 $smarty->assign("dossier_medical_sejour", $dossier_anesth->_ref_sejour->_ref_dossier_medical);
 
 $smarty->display(CAppUI::conf("dPcabinet CConsultAnesth feuille_anesthesie").".tpl");
