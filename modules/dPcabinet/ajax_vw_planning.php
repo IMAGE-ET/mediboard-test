@@ -15,9 +15,6 @@ $chirSel      = CValue::getOrSession("chirSel");
 $function_id  = CValue::get("function_id");
 $today        = CMbDT::date();
 
-$consultation_desist = new CConsultation();
-$ds = $consultation_desist->getDS();
-
 // gathering prat ids
 $ids = array();
 $function = new CFunctions();
@@ -34,16 +31,7 @@ if (!$function_id && $chirSel) {
 }
 
 // Liste des consultations a avancer si desistement
-$where = array(
-  "plageconsult.date" => " > '$today'",
-  "consultation.si_desistement" => "= '1'",
-);
-$where[] = "plageconsult.chir_id ".$ds->prepareIn($ids)." OR plageconsult.remplacant_id ".$ds->prepareIn($ids);
-$ljoin = array(
-  "plageconsult" => "plageconsult.plageconsult_id = consultation.plageconsult_id",
-);
-
-$count_si_desistement = $consultation_desist->countList($where, null, $ljoin);
+$count_si_desistement = CConsultation::countDesistementsForDay($ids, $today);
 
 // Période
 $debut = CValue::getOrSession("debut");
@@ -62,8 +50,8 @@ $whereInterv = array();
 $whereHP = array();
 $where = array();
 $where["date"] = $whereInterv["date"] = $whereHP["date"] = "= '$dateArr'";
-$whereInterv["chir_id"] = $whereHP["chir_id"] =  $ds->prepareIn($ids);
-$where[] = "chir_id ".$ds->prepareIn($ids)." OR remplacant_id ".$ds->prepareIn($ids);
+$whereInterv["chir_id"] = $whereHP["chir_id"] =  "= '$chirSel' ";
+$where[] = "chir_id = '$chirSel' OR remplacant_id = '$chirSel'";
 
 if (!$listPlage->countList($where)) {
   $nbDays--;

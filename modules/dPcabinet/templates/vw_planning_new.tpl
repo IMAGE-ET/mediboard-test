@@ -95,6 +95,7 @@
     var form = getForm("changeDate");
     var url = new Url("dPcabinet", "ajax_vw_planning");
     url.addParam("chirSel", $V(form.chirSel));
+    url.addParam("function_id", $V(form.function_id));
     if (type_date == "prev") {
       url.addParam("debut", window.save_dates.prev);
     }
