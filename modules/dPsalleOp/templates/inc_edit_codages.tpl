@@ -21,6 +21,10 @@
     }
   };
 
+  Main.add(function(){
+    Control.Tabs.create('rules-tab', true);
+  });
+
 </script>
 
 {{assign var="subject" value=$codage->_ref_codable}}
@@ -154,43 +158,109 @@
   {{/foreach}}
 </table>
 
-<form name="formCodageRules-{{$codage->_id}}" action="?" method="post"
-      onsubmit="return onSubmitFormAjax(this, {onComplete: function() {window.urlCodage.refreshModal()}});">
-  <input type="hidden" name="m" value="ccam" />
-  <input type="hidden" name="dosql" value="do_codageccam_aed" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="codage_ccam_id" value="{{$codage->_id}}" />
-  <input type="hidden" name="association_mode" value="{{$codage->association_mode}}" />
-  <table class="tbl" style="min-width: 400px;">
+<ul id="rules-tab" class="control_tabs">
+  <li><a href="#questionRules">Informations médicales</a></li>
+  <li><a href="#concreteRules">Règles de codage</a></li>
+</ul>
+
+<hr class="control_tabs" />
+
+<div style="display: none;" id="questionRules">
+  <table class="tbl">
     <tr>
-      <th colspan="2">
-        <input type="checkbox" name="_association_mode" value="manuel"
-          {{if $codage->association_mode == "user_choice"}}checked="checked"{{/if}}
-          onchange="changeCodageMode();"/>
-        Manuel
-      </th>
-      <th class="title" colspan="20">
-        Règles d'association
-      </th>
+      <th class="title" colspan="2">Les actes que vous codez répondent-ils à un des critères suivants ?</th>
     </tr>
-    {{assign var=association_rules value="CCodageCCAM"|static:"association_rules"}}
-    {{foreach from=$codage->_possible_rules key=_rulename item=_rule}}
-      {{if $_rule || 1}}
-      <tr>
-        <td {{if $_rulename == $codage->association_rule}}class="ok"{{/if}}>
-          <input type="radio" name="association_rule" value="{{$_rulename}}"
-            {{if $_rulename == $codage->association_rule}}checked="checked"{{/if}}
-            {{if $codage->association_mode == "auto"}}disabled="disabled"{{/if}}
-            onchange="this.form.onsubmit()"/>
-        </td>
-        <td class="{{if $_rule}}ok{{else}}error{{/if}}">
-          {{$_rulename}} {{if $association_rules.$_rulename == 'ask'}}(manuel){{/if}}
-        </td>
-        <td class="text greedyPane">
-          {{tr}}CActeCCAM-regle-association-{{$_rulename}}{{/tr}}
-        </td>
-      </tr>
-      {{/if}}
-    {{/foreach}}
+    <tr>
+      <th>
+        <input type="radio" name="_association_question" value="EA"
+               {{if $codage->association_rule == "EA"}}checked="checked"{{/if}}
+               onchange="this.form.onsubmit()"/>
+      </th>
+      <td>
+        Les actes portent sur :
+        <ul>
+          <li>des membres différents ou</li>
+          <li>le tronc et un membre ou</li>
+          <li>la tête et un membre.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <th>
+        <input type="radio" name="_association_question" value="EB"
+               {{if $codage->association_rule == "EB"}}checked="checked"{{/if}}
+               onchange="this.form.onsubmit()"/>
+      </th>
+      <td>
+        Les actes visent à traiter des lésions traumatiques multiples et récentes
+      </td>
+    </tr>
+    <tr>
+      <th>
+        <input type="radio" name="_association_question" value="EC"
+               {{if $codage->association_rule == "EC"}}checked="checked"{{/if}}
+               onchange="this.form.onsubmit()"/>
+      </th>
+      <td>
+        Les actes décrivent une intervention de carcinologie ORL comprenant :
+        <ul>
+          <li>une exérèse et</li>
+          <li>un curage et</li>
+          <li>une reconstruction.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <th>
+        <input type="radio" name="_association_question" value="EC"
+               {{if $codage->association_rule == "EC"}}checked="checked"{{/if}}
+               onchange="this.form.onsubmit()"/>
+      </th>
+      <td>
+        Les actes sont des actes d'imagerie portant su plusieurs régions anatomiques.
+      </td>
+    </tr>
   </table>
-</form>
+</div>
+<div style="display: none;" id="concreteRules">
+  <form name="formCodageRules-{{$codage->_id}}" action="?" method="post"
+        onsubmit="return onSubmitFormAjax(this, {onComplete: function() {window.urlCodage.refreshModal()}});">
+    <input type="hidden" name="m" value="ccam" />
+    <input type="hidden" name="dosql" value="do_codageccam_aed" />
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="codage_ccam_id" value="{{$codage->_id}}" />
+    <input type="hidden" name="association_mode" value="{{$codage->association_mode}}" />
+    <table class="tbl">
+      <tr>
+        <th colspan="2">
+          <input type="checkbox" name="_association_mode" value="manuel"
+                 {{if $codage->association_mode == "user_choice"}}checked="checked"{{/if}}
+                 onchange="changeCodageMode();"/>
+          Manuel
+        </th>
+        <th class="title" colspan="20">
+          Règles d'association
+        </th>
+      </tr>
+      {{assign var=association_rules value="CCodageCCAM"|static:"association_rules"}}
+      {{foreach from=$codage->_possible_rules key=_rulename item=_rule}}
+        {{if $_rule || 1}}
+          <tr>
+            <td {{if $_rulename == $codage->association_rule}}class="ok"{{/if}}>
+              <input type="radio" name="association_rule" value="{{$_rulename}}"
+                     {{if $_rulename == $codage->association_rule}}checked="checked"{{/if}}
+                {{if $codage->association_mode == "auto"}}disabled="disabled"{{/if}}
+                     onchange="this.form.onsubmit()"/>
+            </td>
+            <td class="{{if $_rule}}ok{{else}}error{{/if}}">
+              {{$_rulename}} {{if $association_rules.$_rulename == 'ask'}}(manuel){{/if}}
+            </td>
+            <td class="text greedyPane">
+              {{tr}}CActeCCAM-regle-association-{{$_rulename}}{{/tr}}
+            </td>
+          </tr>
+        {{/if}}
+      {{/foreach}}
+    </table>
+  </form>
+</div>

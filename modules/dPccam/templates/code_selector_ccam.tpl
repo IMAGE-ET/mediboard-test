@@ -11,6 +11,7 @@
   <input type="hidden" name="chir" value="{{$chir}}" />
   <input type="hidden" name="anesth" value="{{$anesth}}" />
   <input type="hidden" name="object_class" value="{{$object_class}}" />
+  <input type="hidden" name="date" value="{{$date}}" />
   <table class="tbl">
     <tr>
       <th colspan="3">

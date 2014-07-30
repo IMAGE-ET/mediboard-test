@@ -154,7 +154,8 @@ class CSetupdPccam extends CSetup {
 
     $query = "CREATE TABLE `codage_ccam` (
        `codage_ccam_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-       `association_rule` ENUM('G1', 'EA', 'EB', 'EC', 'ED', 'EE', 'EF', 'EG1', 'EG2', 'EG3', 'EG4', 'EG5', 'EG6', 'EG7', 'EH', 'EI', 'GA', 'GB', 'G2'),
+       `association_rule` ENUM('G1', 'EA', 'EB', 'EC', 'ED', 'EE', 'EF', 'EG1', 'EG2',
+       'EG3', 'EG4', 'EG5', 'EG6', 'EG7', 'EH', 'EI', 'GA', 'GB', 'G2'),
        `association_mode` ENUM('auto', 'user_choice') DEFAULT 'auto',
        `codable_class` ENUM('CConsultation', 'CSejour', 'COperation') NOT NULL,
        `codable_id` INT (11) UNSIGNED NOT NULL,
@@ -175,7 +176,14 @@ class CSetupdPccam extends CSetup {
       ADD `nb_acts` INT (2) NOT NULL;";
     $this->addQuery($query);
 
-    $this->mod_version = '0.23';
+    $this->makeRevision('0.23');
+
+    $query = "ALTER TABLE `codage_ccam`
+      CHANGE `association_rule` `association_rule` ENUM('G1', 'EA', 'EB', 'EC', 'ED', 'EE', 'EF', 'EG1', 'EG2',
+       'EG3', 'EG4', 'EG5', 'EG6', 'EG7', 'EH', 'EI', 'GA', 'GB', 'G2', 'M');";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.24';
 
     // Data source query
 

@@ -18,6 +18,7 @@ CConfiguration::register(
         'associations' => array(
           'mode'  => 'enum list|auto|manual localize default|auto',
           'rules' => array(
+            'M'    => 'bool default|1',
             'G'    => 'bool default|1',
             'EA'   => 'bool default|1',
             'EB'   => 'bool default|1',

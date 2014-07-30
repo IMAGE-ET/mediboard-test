@@ -486,7 +486,7 @@ class CCodeCCAM extends CCCAM {
 
     $query = "SELECT CODE, LIBELLELONG
                 FROM p_acte
-                WHERE DATEFIN = '00000000'";
+                WHERE 1 ";
 
     $keywords = explode(" ", $keys);
     $codes    = explode(" ", $code);

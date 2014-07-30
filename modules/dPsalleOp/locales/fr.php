@@ -94,6 +94,7 @@ $locales['CActeCCAM-regle-association-G3'] = '3 actes des chap. 12, 13 ou 14 sur
 $locales['CActeCCAM-regle-association-H'] = '3 actes des chap. 01, 04 ou 11 à 16 pour lésions traumatiques multiples';
 $locales['CActeCCAM-regle-association-I'] = '3 actes par un ORL concernant la carcinologie et associant 1 exérèse, 1 curage et 1 reconstruction';
 $locales['CActeCCAM-regle-association-Z'] = 'Règle classique d\'association de deux actes au plus';
+$locales['CActeCCAM-regle-association-M'] = 'Aucun acte ou mode manuel d\'association';
 $locales['CActeCCAM-regle-association-G1'] = 'Un seul acte';
 $locales['CActeCCAM-regle-association-GA'] = 'Association de 2 actes dont un complément/supplément';
 $locales['CActeCCAM-regle-association-GB'] = 'Association de 3 actes dont 2 compléments/suppléments';

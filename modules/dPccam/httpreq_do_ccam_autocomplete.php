@@ -14,12 +14,16 @@
 CCanDo::checkRead();
 
 $keywords = CValue::request("_codes_ccam", "%%");
+$date     = CMbDT::date(null, CValue::request("date", CMbDT::date()));
 
 $codes = array();
 $code = new CDatedCodeCCAM();
 foreach ($code->findCodes($keywords, $keywords) as $_code) {
   $_code_value = $_code["CODE"];
-  $codes[$_code_value] = CDatedCodeCCAM::get($_code_value);
+  $code = CDatedCodeCCAM::get($_code_value, $date);
+  if ($code->code != "-") {
+    $codes[$_code_value] = $code;
+  }
 }
 
 // Création du template

@@ -69,6 +69,7 @@ class CCodageCCAM extends CMbObject {
   public $_ref_actes_ccam_facturables;
 
   protected static $association_rules = array(
+    'M'   => 'auto',
     'G1'  => 'auto',
     'EA'  => 'ask',
     'EB'  => 'ask',
@@ -136,6 +137,7 @@ class CCodageCCAM extends CMbObject {
     $codage_ccam->loadMatchingObject();
 
     if (!$codage_ccam->_id) {
+      $codage_ccam->_apply_rules = false;
       $codage_ccam->store();
     }
 
@@ -250,8 +252,8 @@ class CCodageCCAM extends CMbObject {
    * @return string
    */
   function guessRule() {
-    if ($this->association_mode != 'auto') {
-      return "";
+    if ($this->_id && $this->association_mode != 'auto') {
+      return $this->association_rule;
     }
     return $this->association_rule = $this->checkRules();
   }
@@ -452,7 +454,6 @@ class CCodageCCAM extends CMbObject {
     $this->_check_rules = array();
     $this->_possible_rules = array();
     $firstRule = null;
-
     foreach (self::$association_rules as $_rule => $_type) {
       if (self::isRuleAllowed($_rule)) {
         $this->_possible_rules[$_rule] = call_user_func(array($this, "checkRule$_rule"));
@@ -481,6 +482,33 @@ class CCodageCCAM extends CMbObject {
   }
 
   /** Association rules **/
+
+  /**
+   * Check the association rule G1
+   *
+   * @return bool
+   */
+  protected function checkRuleM() {
+    if (count($this->_ref_actes_ccam_facturables) > 0) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Apply the association rule G1 to the given act
+   *
+   * @param CActeCCAM &$act The act
+   *
+   * @return void
+   */
+  protected function applyRuleM(&$act) {
+    $this->completeField('facturable', 'code_association');
+    $act->_guess_facturable = $act->facturable;
+    $act->_guess_association = $act->code_association;
+    $act->_guess_regle_asso = 'M';
+  }
 
   /**
    * Check the association rule G1
@@ -637,7 +665,9 @@ class CCodageCCAM extends CMbObject {
    * @return bool
    */
   protected function checkRuleG2() {
-    return true;
+    if (count($this->_ref_actes_ccam_facturables) >= 2) {
+      return true;
+    }
   }
 
   /**

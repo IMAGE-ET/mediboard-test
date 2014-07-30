@@ -7,6 +7,7 @@ CCAMSelector = {
   sClass    : null,
   sChir     : null,
   sAnesth   : null,
+  sDate     : null,
   oUrl      : null,
   
   prepared : {
@@ -33,7 +34,9 @@ CCAMSelector = {
       this.oUrl.addParam("chir"        , oForm[this.sChir].value);
       this.oUrl.addParam("object_class", oForm[this.sClass].value);
       this.oUrl.addParam("type"        , "ccam");
-      
+      if(this.sDate) {
+        this.oUrl.addParam("date", this.sDate);
+      }
       this.oUrl.popup(this.options.width, this.options.height, "CCAM Selector");
     }
     else {
@@ -43,7 +46,9 @@ CCAMSelector = {
       this.oUrl.addParam("type", "ccam");
       this.oUrl.addParam("object_class", oForm[this.sClass].value);
       this.oUrl.addParam("mode", this.options.mode);
-      
+      if(this.sDate) {
+        this.oUrl.addParam("date", this.sDate);
+      }
       this.oUrl.requestModal(750, 500);
     }
   },

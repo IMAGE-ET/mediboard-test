@@ -1497,13 +1497,14 @@ class CStoredObject extends CModelObject {
     
     // Préparation du log, doit être fait AVANT $this->load()
     $this->prepareLog();
-    
+
+
     // Load the object to get all properties
     $this->load();
     
     // Enregistrement du log une fois le store terminé
     $this->doLog();
-        
+
     // Trigger event
     $this->notify("AfterStore");
 

@@ -12,7 +12,7 @@
     var url = new Url("salleOp", "ajax_edit_codages_ccam");
     url.addParam("codage_id", codage_id);
     url.requestModal(
-      null, null,
+      -30, -30,
       {onClose: function() {ActesCCAM.refreshList('{{$subject->_id}}','{{$subject->_praticien_id}}')}}
     );
     window.urlCodage = url;
@@ -59,6 +59,7 @@
                       {{if ($subject->_class=="COperation")}}
                       this.sAnesth = "_anesth";
                       {{/if}}
+                      this.sDate = '{{$subject->_datetime}}';
                       this.sView = "_codes_ccam";
                       this.pop();
                     };
@@ -66,6 +67,7 @@
                     var oForm = getForm("manageCodes");
                     Main.add(function() {
                       var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
+                      url.addParam("date", '{{$subject->_datetime}}');
                       url.autoComplete(oForm._codes_ccam, '', {
                         minChars: 1,
                         dropdown: true,

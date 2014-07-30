@@ -14,6 +14,7 @@
 $chir           = CValue::get("chir");
 $anesth         = CValue::get("anesth");
 $_keywords_code = CValue::get("_keywords_code");
+$date           = CMbDT::date(null, CValue::get("date", CMbDT::date()));
 $_all_codes     = CValue::get("_all_codes", 0);
 $object_class   = CValue::get("object_class");
 $only_list      = CValue::get("only_list", 0);
@@ -105,15 +106,18 @@ foreach ($profiles as $profile => $_user_id) {
   
   foreach ($codes as $value) {
     $val_code = $value["CODE"];
-    $list[$val_code] = CDatedCodeCCAM::get($val_code);
-    $nb_acte = 0;
-    if (isset($codes_stats[$val_code])) {
-      $nb_acte = $codes_stats[$val_code]["nb_acte"];
+    $code = CDatedCodeCCAM::get($val_code, $date);
+    if ($code->code != "-") {
+      $list[$val_code] = $code;
+      $nb_acte = 0;
+      if (isset($codes_stats[$val_code])) {
+        $nb_acte = $codes_stats[$val_code]["nb_acte"];
+      }
+      else if (isset($codes_favoris[$val_code])) {
+        $nb_acte = 0.5;
+      }
+      $list[$val_code]->nb_acte = $nb_acte;
     }
-    else if (isset($codes_favoris[$val_code])) {
-      $nb_acte = 0.5;
-    }
-    $list[$val_code]->nb_acte = $nb_acte;
   }
   
   if ($tag_id) {
@@ -132,11 +136,12 @@ foreach ($profiles as $profile => $_user_id) {
 
 $tag_tree = CFavoriCCAM::getTree($user->_id);
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 
 $smarty->assign("listByProfile" , $listByProfile);
 $smarty->assign("users"         , $users);
 $smarty->assign("object_class"  , $object_class);
+$smarty->assign("date"          , $date);
 $smarty->assign("_keywords_code", $_keywords_code);
 $smarty->assign("_all_codes"    , $_all_codes);
 $smarty->assign("tag_tree"      , $tag_tree);

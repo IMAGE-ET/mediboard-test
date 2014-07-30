@@ -147,13 +147,13 @@ class CDatedCodeCCAM {
    * Chargement complet d'un code
    * en fonction du niveau de profondeur demandé
    *
-   * @return void
+   * @return bool
    */
   function load() {
     $this->_ref_code_ccam = CCodeCCAM::get($this->code);
     $this->_date = CMbDT::format($this->date, "%Y%m%d");
     if (!$this->getLibelles()) {
-      return;
+      return false;
     }
     $this->getTarification();
     $this->getForfaitSpec();
@@ -166,6 +166,8 @@ class CDatedCodeCCAM {
     $this->getActesIncomp();
     $this->getProcedure();
     $this->getActivite7();
+
+    return true;
   }
 
   function __sleep() {
