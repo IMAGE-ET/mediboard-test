@@ -46,8 +46,13 @@
   }
   
   function showConsultSiDesistement(){
+    var form = getForm("changeDate");
     var url = new Url("cabinet", "vw_list_consult_si_desistement");
-    url.addParam("chir_id", $V(getForm("changeDate").chirSel));
+    {{if $multiple}}
+      url.addParam("function_id", $V(form.function_id));
+    {{else}}
+      url.addParam("chir_id", $V(form.chirSel));
+    {{/if}}
     url.pop(500, 500, "test");
   }
   
@@ -201,7 +206,7 @@
     <input type="hidden" name="m" value="{{$m}}" />
     <input type="hidden" name="tab" value="{{$tab}}" />
     <input type="hidden" name="plageconsult_id" value="0" />
-    <input type="hidden" name="function_id" value="" />
+    <input type="hidden" name="function_id" value="{{$function_id}}" />
     <table class="main">
       <tr>
         <th style="width: 25%; text-align: left;">

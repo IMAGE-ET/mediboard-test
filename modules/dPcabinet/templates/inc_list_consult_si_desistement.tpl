@@ -9,7 +9,7 @@
 *}}
 
 <h3>
-  Consultations à avancer si désistement pour le Dr {{$user}}
+  Consultations à avancer si désistement {{if !$function_id}}pour le Dr {{$user}}{{/if}}
 </h3>
 
 <table class="tbl">
@@ -22,6 +22,9 @@
     <th>Remarques</th>
     <th class="narrow">RDV</th>
     <th>Etat</th>
+    {{if $function_id}}
+      <th>Prat</th>
+    {{/if}}
   </tr>
   
   {{foreach from=$consultations item=_consult}}
@@ -78,6 +81,12 @@
       </a>
     </td>
     <td {{$style|smarty:nodefaults}}>{{if $patient->_id}}{{$_consult->_etat}}{{/if}}</td>
+    {{if $function_id}}
+      <td>
+        {{mb_ditto name=nom_prat value=$_consult->_ref_praticien}}
+      </td>
+    {{/if}}
+
   </tr>
   {{foreachelse}}
   <tr>

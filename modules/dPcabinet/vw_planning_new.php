@@ -41,22 +41,9 @@ else {
 // Liste des consultations a avancer si desistement
 $ds = $plage->getDS();
 $now = CMbDT::date();
-$where = array(
-  "plageconsult.date" => " > '$now'",
-  "consultation.si_desistement" => "= '1'",
-);
-if ($function_id) {
-  $where[] = "plageconsult.chir_id ".$ds->prepareIn(array_keys($listChir))." OR plageconsult.remplacant_id ".$ds->prepareIn(array_keys($listChir));
-}
-else {
-  $where[] = "plageconsult.chir_id = '$chirSel' OR plageconsult.remplacant_id = '$chirSel'";
-}
-$ljoin = array(
-  "plageconsult" => "plageconsult.plageconsult_id = consultation.plageconsult_id",
-);
 
-$consultation_desist = new CConsultation();
-$count_si_desistement = $consultation_desist->countList($where, null, $ljoin);
+// get desistements
+$count_si_desistement = CConsultation::countDesistementsForDay($function_id ? array_keys($listChir) : array($chirSel), $now);
 
 // Liste des praticiens
 

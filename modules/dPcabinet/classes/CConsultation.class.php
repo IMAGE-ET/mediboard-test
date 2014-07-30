@@ -2251,6 +2251,29 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
   }
 
   /**
+   * count the number of consultations asking to be
+   *
+   * @param array()   $chir_ids list of chir ids
+   * @param Date|null $day      date targeted, default = today
+   *
+   * @return int number of result
+   */
+  static function countDesistementsForDay($chir_ids, $day = null) {
+    $date = CMbDT::date($day);
+    $consultation = new self();
+    $ds = $consultation->getDS();
+    $where = array(
+      "plageconsult.date" => " > '$date'",
+      "consultation.si_desistement" => "= '1'",
+    );
+    $where[] = "plageconsult.chir_id ".$ds->prepareIn($chir_ids)." OR plageconsult.remplacant_id ".$ds->prepareIn($chir_ids);
+    $ljoin = array(
+      "plageconsult" => "plageconsult.plageconsult_id = consultation.plageconsult_id",
+    );
+    return $consultation->countList($where, null, $ljoin);
+  }
+
+  /**
    * Redesign the content of the body you will index
    *
    * @param string $content The content you want to redesign

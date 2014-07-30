@@ -12,15 +12,26 @@
 CCanDo::checkRead();
 
 $chir_id = CValue::get("chir_id");
+$function_id = CValue::get("function_id");
+$list_chir_ids = array();
 
 $user = new CMediusers;
 $user->load($chir_id);
+$ds = $user->getDS();
+
+if ($function_id) {
+  $users = CConsultation::loadPraticiens(PERM_EDIT, $function_id);
+  $list_chir_ids = array_keys($users);
+}
+else {
+  $list_chir_ids = array($chir_id);
+}
 
 // Liste des consultations a avancer si desistement
 $now = CMbDT::date();
 $where = array(
   "plageconsult.date" => " > '$now'",
-  "plageconsult.chir_id" => "= '$chir_id'",
+  "plageconsult.chir_id" => $ds->prepareIn($list_chir_ids),
   "consultation.si_desistement" => "= '1'",
 );
 $ljoin = array(
@@ -34,10 +45,12 @@ foreach ($consultations as $_consult) {
   $_consult->loadRefPatient();
   $_consult->loadRefPlageConsult();
   $_consult->loadRefCategorie();
+  $_consult->loadRefPraticien()->loadRefFunction();
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("consultations", $consultations);
+$smarty->assign("function_id", $function_id);
 $smarty->assign("user", $user);
 $smarty->display("inc_list_consult_si_desistement.tpl");
