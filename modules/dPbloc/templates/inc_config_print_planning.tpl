@@ -37,7 +37,9 @@
     {{mb_include module=system template=inc_config_bool var=view_extra}}
     {{mb_include module=system template=inc_config_bool var=view_duree}}
     {{mb_include module=system template=inc_config_bool var=view_hors_plage}}
+    {{mb_include module=system template=inc_config_bool var=view_convalescence}}
     {{mb_include module=system template=inc_config_bool var=show_comment_sejour}}
+    {{mb_include module=system template=inc_config_bool var=show_anesth_alerts}}
 
     <tr>
       <td class="button" colspan="100">

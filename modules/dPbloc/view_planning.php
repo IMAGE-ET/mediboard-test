@@ -36,8 +36,10 @@ $_print_annulees         = CValue::get("_print_annulees");
 $_materiel               = CValue::get("_materiel", CAppUI::conf("dPbloc CPlageOp view_materiel"));
 $_extra                  = CValue::get("_extra", CAppUI::conf("dPbloc CPlageOp view_extra"));
 $_duree                  = CValue::get("_duree", CAppUI::conf("dPbloc CPlageOp view_duree"));
+$_convalescence          = CValue::get('_convalescenve', CAppUI::conf('dPbloc CPlageOp view_convalescence'));
 $_hors_plage             = CValue::get("_hors_plage");
 $_show_comment_sejour    = CValue::get("_show_comment_sejour");
+$_compact                = CValue::get('_compact', 0);
 
 if ($filter->_nb_days) {
   $filter->_date_max = CMbDT::date("+$filter->_nb_days days", CMbDT::date($filter->_date_min)) . " 21:00:00";
@@ -256,6 +258,14 @@ foreach ($plagesop as $plage) {
       $affectation->loadRefLit()->loadCompleteView();
     }
     $sejour->_ref_first_affectation = $affectation;
+
+    // Chargement des ressources si gestion du materiel en mode expert
+    if ($_materiel && CAppUI::conf("dPbloc CPlageOp systeme_materiel") == "expert") {
+      $operation->loadRefsBesoins();
+      foreach ($operation->_ref_besoins as $_besoin) {
+        $_besoin->_available = $_besoin->isAvailable();
+      }
+    }
   }
   if ((count($listOp) == 0) && !$filter->_plage) {
     unset($plagesop[$plage->_id]);
@@ -317,6 +327,14 @@ foreach ($operations as $operation) {
   }
   $sejour->_ref_first_affectation = $affectation;
 
+  // Chargement des ressources si gestion du materiel en mode expert
+  if ($_materiel && CAppUI::conf("dPbloc CPlageOp systeme_materiel") == "expert") {
+    $operation->loadRefsBesoins();
+    foreach ($operation->_ref_besoins as $_besoin) {
+      $_besoin->loadRefTypeRessource();
+    }
+  }
+
   $listDates[$operation->date]["hors_plage"][] = $operation;
 }
 
@@ -327,19 +345,21 @@ ksort($listDates);
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("affectations_plage", $affectations_plage);
-$smarty->assign("filter"            , $filter);
-$smarty->assign("prestation"        , $prestation);
-$smarty->assign("_coordonnees"      , $_coordonnees);
-$smarty->assign("_print_numdoss"    , $_print_numdoss);
-$smarty->assign("_print_ipp"        , $_print_ipp);
-$smarty->assign("listDates"         , $listDates);
-$smarty->assign("operations"        , $operations);
-$smarty->assign("numOp"             , $numOp);
-$smarty->assign("_materiel"         , $_materiel);
-$smarty->assign("_extra"            , $_extra);
-$smarty->assign("_duree"            , $_duree);
-$smarty->assign("_hors_plage"       , $_hors_plage);
+$smarty->assign("affectations_plage"  , $affectations_plage);
+$smarty->assign("filter"              , $filter);
+$smarty->assign("prestation"          , $prestation);
+$smarty->assign("_coordonnees"        , $_coordonnees);
+$smarty->assign("_print_numdoss"      , $_print_numdoss);
+$smarty->assign("_print_ipp"          , $_print_ipp);
+$smarty->assign("listDates"           , $listDates);
+$smarty->assign("operations"          , $operations);
+$smarty->assign("numOp"               , $numOp);
+$smarty->assign("_materiel"           , $_materiel);
+$smarty->assign("_extra"              , $_extra);
+$smarty->assign("_duree"              , $_duree);
+$smarty->assign('_convalescence'      , $_convalescence);
+$smarty->assign("_hors_plage"         , $_hors_plage);
 $smarty->assign("_show_comment_sejour", $_show_comment_sejour);
+$smarty->assign('_compact'            , $_compact);
 
 $smarty->display("view_planning.tpl");

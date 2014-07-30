@@ -11,15 +11,18 @@
 {{mb_script module="dPplanningOp" script="ccam_selector"}}
 
 <script>
-function checkFormPrint(form) {
+function checkFormPrint(form, compact) {
   if (!checkForm(form)){
     return false;
   }
-  
-  popPlanning(form);
+
+  if (!compact) {
+    compact = 0;
+  }
+  popPlanning(form, compact);
 }
   
-function popPlanning(form) {
+function popPlanning(form, compact) {
   var url = new Url("bloc", "view_planning");
   url.addElement(form._date_min);
   url.addElement(form._date_max);
@@ -43,6 +46,7 @@ function popPlanning(form) {
   url.addRadio(form._hors_plage);
   url.addRadio(form._show_comment_sejour);
   url.addParam("_bloc_id[]", $V(form.elements["_bloc_id[]"]), true);
+  url.addParam('_compact', compact);
   
   if (form.planning_perso.checked){ // pour l'affichage du planning perso d'un anesthesiste
     url.addParam("planning_perso", true);
@@ -440,6 +444,7 @@ function showCheckboxAnesth(element){
         <tr>
           <td colspan="2" class="button">
             <button class="print" id="print_button" type="button" onclick="checkFormPrint(this.form)">Afficher</button>
+            <button class="print" id="print_compact_button" type="button" onclick="checkFormPrint(this.form, 1)">Impression compacte</button>
             {{if $can->edit}}
               <button class="print" type="button" onclick="printPlanningPersonnel(this.form)">Planning du personnel</button>
             {{/if}}

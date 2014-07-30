@@ -43,25 +43,64 @@
   {{if $curr_op->anesth_id}}
     <br /> {{$curr_op->_ref_anesth->_view}}
   {{/if}}
-  {{if !$curr_op->_ref_consult_anesth->_id}}
+  {{if !$curr_op->_ref_consult_anesth->_id && ($conf.dPbloc.CPlageOp.show_anesth_alerts && !$_compact)}}
     <div class="small-warning">{{tr}}COperation-back-dossiers_anesthesie.empty{{/tr}} informatisé</div>
   {{/if}}
 </td>
-<td class="text">
-  {{if $curr_op->exam_extempo}}
-    <strong>{{mb_title object=$curr_op field=exam_extempo}}</strong>
-    <br />
-  {{/if}}
-  {{assign var=consult_anesth value=$curr_op->_ref_consult_anesth}}
-  {{mb_include module=bloc template=inc_rques_intub operation=$curr_op}}
-</td>
 
-{{if $_materiel}}
+{{if !$_compact}}
   <td class="text">
-    {{if $curr_op->commande_mat == '0' && $curr_op->materiel != ''}}
-    <em>Materiel manquant:</em>
+    {{if $curr_op->exam_extempo}}
+      <strong>{{mb_title object=$curr_op field=exam_extempo}}</strong>
+      <br />
     {{/if}}
-    {{$curr_op->materiel|nl2br}}
+    {{assign var=consult_anesth value=$curr_op->_ref_consult_anesth}}
+    {{mb_include module=bloc template=inc_rques_intub operation=$curr_op}}
+  </td>
+
+  {{if $_materiel}}
+    <td class="text">
+      {{if $conf.dPbloc.CPlageOp.systeme_materiel == 'expert'}}
+        {{foreach from=$curr_op->_ref_besoins item=_besoin name=ressources}}
+          {{if !$smarty.foreach.ressources.first}}
+            <br/>
+          {{/if}}
+          <span style="display: inline-block; width: 10px; height: 10px; background-color: #{{$_besoin->_color}};"></span>
+          {{mb_value object=$_besoin->_ref_type_ressource field=libelle}}
+        {{/foreach}}
+      {{else}}
+        {{if $curr_op->commande_mat == '0' && $curr_op->materiel != ''}}
+          <em>Materiel manquant:</em>
+        {{/if}}
+        {{$curr_op->materiel|nl2br}}
+      {{/if}}
+    </td>
+  {{/if}}
+{{else}}
+  <td class="text">
+    {{if $curr_op->exam_extempo}}
+      <strong>{{mb_title object=$curr_op field=exam_extempo}}</strong>
+      <br />
+    {{/if}}
+    {{assign var=consult_anesth value=$curr_op->_ref_consult_anesth}}
+    {{mb_include module=bloc template=inc_rques_intub operation=$curr_op}}
+
+    {{if $_materiel}}
+      {{if $conf.dPbloc.CPlageOp.systeme_materiel == 'expert'}}
+        {{foreach from=$curr_op->_ref_besoins item=_besoin name=ressources}}
+          {{if !$smarty.foreach.ressources.first}}
+            <br/>
+          {{/if}}
+          <span style="display: inline-block; width: 10px; height: 10px; background-color: #{{$_besoin->_color}};"></span>
+          {{mb_value object=$_besoin->_ref_type_ressource field=libelle}}
+        {{/foreach}}
+      {{else}}
+        {{if $curr_op->commande_mat == '0' && $curr_op->materiel != ''}}
+          <em>Materiel manquant:</em>
+        {{/if}}
+        {{$curr_op->materiel|nl2br}}
+      {{/if}}
+    {{/if}}
   </td>
 {{/if}}
 

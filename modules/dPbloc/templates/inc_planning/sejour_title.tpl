@@ -12,8 +12,17 @@
 {{if $prestation->_id}}
   {{assign var=colspan value=$colspan+1}}
 {{/if}}
-{{if $_show_comment_sejour}}
-  {{assign var=colspan value=$colspan+1}}
+{{if !$_compact}}
+  {{if $_show_comment_sejour}}
+    {{assign var=colspan value=$colspan+1}}
+  {{/if}}
+  {{if $_convalescence}}
+    {{assign var=colspan value=$colspan+1}}
+  {{/if}}
+{{else}}
+  {{if $_show_comment_sejour || $_convalescence}}
+    {{assign var=colspan value=$colspan+1}}
+  {{/if}}
 {{/if}}
 
 <th class="title" colspan="{{$colspan}}">Sejour</th>

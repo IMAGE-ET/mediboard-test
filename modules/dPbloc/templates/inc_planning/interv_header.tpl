@@ -12,9 +12,13 @@
 <th>Intervention</th>
 <th>Coté</th>
 <th>Anesthésie</th>
-<th>Remarques</th>
-{{if $_materiel}}
-  <th>Matériel</th>
+{{if !$_compact}}
+  <th>Remarques</th>
+  {{if $_materiel}}
+    <th>Matériel</th>
+  {{/if}}
+{{else}}
+  <th>Rques{{if $_materiel}} / Mat.{{/if}}</th>
 {{/if}}
 {{if $_extra}}
   <th>Extra</th>

@@ -36,6 +36,20 @@
     {{mb_include module=hospi template=inc_vw_liaisons_prestation liaisons=$sejour->_liaisons_for_prestation}}
   </td>
 {{/if}}
-{{if $_show_comment_sejour}}
-  <td class="text">{{$sejour->rques}}</td>
+{{if !$_compact}}
+  {{if $_show_comment_sejour}}
+    <td class="text">{{$sejour->rques}}</td>
+  {{/if}}
+  {{if $_convalescence}}
+    <td class="text">{{$sejour->convalescence}}</td>
+  {{/if}}
+{{elseif $_show_comment_sejour || $_convalescence}}
+  <td>
+    {{if $_show_comment_sejour}}
+      {{$sejour->rques}}
+    {{/if}}
+    {{if $_convalescence}}
+      {{$sejour->convalescence}}
+    {{/if}}
+  </td>
 {{/if}}

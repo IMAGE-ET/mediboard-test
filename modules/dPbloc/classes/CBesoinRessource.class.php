@@ -75,6 +75,69 @@ class CBesoinRessource extends CMbObject {
   }
 
   /**
+   * Check if the ressource is available or not, and set the color
+   *
+   * @return boolean
+   */
+  function isAvailable() {
+    $this->loadRefOperation();
+    $deb_op = $this->_ref_operation->_datetime;
+    $fin_op  = CMbDT::addDateTime($this->_ref_operation->temp_operation, $deb_op);
+    $type_ressource = $this->loadRefTypeRessource();
+    $nb_ressources = $type_ressource->countBackRefs("ressources_materielles");
+    $_usage = $this->loadRefUsage();
+    $this->_color = '0a0';
+    // S'il y a un usage, alors on peut vérifier si conflit avec :
+    // - un autre usage
+    // - une indispo
+    // - un besoin
+    // Dans ce cas, on passe en rouge
+    if ($_usage->_id) {
+      $ressource = $_usage->loadRefRessource();
+
+      $_usages = $ressource->loadRefsUsages($deb_op, $fin_op);
+      unset($_usages[$_usage->_id]);
+
+      $_indispos = $ressource->loadRefsIndispos($deb_op, $fin_op);
+
+      $_besoins = $ressource->loadRefsBesoins($deb_op, $fin_op);
+      unset($_besoins[$this->_id]);
+
+      if (count($_usages) + count($_indispos) + count($_besoins) >= $nb_ressources) {
+        $this->_color = 'a00';
+        return 0;
+      }
+
+      return 1;
+    }
+
+    // Sinon, on parcourt les ressources associées au type de ressource du besoin.
+    $ressources = $type_ressource->loadRefsRessources();
+    $_usages   = 0;
+    $_indispos = 0;
+    $_besoins  = 0;
+
+    foreach ($ressources as $_ressource) {
+      $_usages += count($_ressource->loadRefsUsages($deb_op, $fin_op));
+      $_indispos += count($_ressource->loadRefsIndispos($deb_op, $fin_op));
+    }
+
+    // Pour compter les besoins, on ne le fait qu'une fois.
+    // Car un besoin cible un type de ressource.
+    // On décrémente d'une unité, car le besoin de la boucle est compté
+    $_ressource = new CRessourceMaterielle;
+    $_ressource->type_ressource_id = $type_ressource->_id;
+    $_besoins = count($_ressource->loadRefsBesoins($deb_op, $fin_op)) - 1;
+
+    if ($_usages + $_indispos + $_besoins >= $nb_ressources) {
+      $this->_color = 'a00';
+      return 0;
+    }
+
+    return 1;
+  }
+
+  /**
    * Chargement du type de ressource correspondant
    *
    * @return CTypeRessource
