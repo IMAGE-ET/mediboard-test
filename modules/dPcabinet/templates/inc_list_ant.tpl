@@ -68,11 +68,9 @@ Traitement = {
   }
 };
 
-showModalTP = function(dossier_medical_id, sejour_id, prescription_sejour_id) {
+showModalTP = function() {
   window.modalUrlTp = new Url("prescription", "ajax_vw_traitements_personnels");
-  window.modalUrlTp.addParam("dossier_medical_id", dossier_medical_id);
-  window.modalUrlTp.addParam("sejour_id", sejour_id);
-  window.modalUrlTp.addParam("prescription_sejour_id", prescription_sejour_id);
+  window.modalUrlTp.addParam("sejour_id", '{{$sejour->_id}}');
   window.modalUrlTp.addParam("refresh_prescription", true);
   window.modalUrlTp.requestModal("80%", "80%", {
     onClose: function() {
@@ -175,7 +173,7 @@ showModalTP = function(dossier_medical_id, sejour_id, prescription_sejour_id) {
 
 {{if !$type_see || $type_see == "traitement"}}
   {{assign var=display value="none"}}
-  {{if !($dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_ref_prescription_lines|@count)}}
+  {{if !($dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_ref_prescription_lines|@count != $dossier_medical->_count_cancelled_traitements)}}
     {{assign var=display value="inline"}}
   {{elseif $dossier_medical->absence_traitement}}
     <script>
@@ -204,9 +202,8 @@ showModalTP = function(dossier_medical_id, sejour_id, prescription_sejour_id) {
       </button>
     {{/if}}
 
-    {{if $dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_ref_prescription_lines && $_is_anesth &&
-         ($app->_ref_user->isPraticien() || $app->_ref_user->isSageFemme() || !"dPprescription general role_propre"|conf:"CGroups-$g")}}
-      <button class="tick" type="button" style="float: right" onclick="showModalTP('{{$dossier_medical->_id}}','{{$sejour->_id}}','{{$prescription_sejour_id}}');">
+    {{if $_is_anesth && ($app->_ref_user->isPraticien() || $app->_ref_user->isSageFemme() || !"dPprescription general role_propre"|conf:"CGroups-$g")}}
+      <button class="tick" type="button" style="float: right" onclick="showModalTP();">
         Gestion des traitements personnels ({{$sejour->_ref_prescription_sejour->_count_lines_tp}}/{{$dossier_medical->_ref_prescription->_ref_prescription_lines|@count}})
       </button>
     {{/if}}

@@ -74,6 +74,7 @@ if ($rpu->_id || $rpu->sejour_id) {
 
   if (CModule::getActive("maternite")) {
     $patient->loadLastGrossesse();
+    $patient->loadLastAllaitement();
   }
 }
 else {
