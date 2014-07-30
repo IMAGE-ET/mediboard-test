@@ -563,6 +563,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
       $this->_codes_ccam[] = substr($_code_ccam, 0, 7);
     }
     $this->codes_ccam = implode("|", $this->_codes_ccam);
+    $this->exec_tarif = $this->_acte_execution;
     if ($msg = $this->store()) {
       return $msg;
     }

@@ -2164,7 +2164,6 @@ class CSetupdPcabinet extends CSetup {
                 ADD `org_at` INT(9) UNSIGNED ZEROFILL,
                 ADD `feuille_at` ENUM('0', '1') DEFAULT '0';";
     $this->addQuery($query);
-
     $this->makeRevision('2.34');
 
     $query = "ALTER TABLE `acte_ngap`
@@ -2175,6 +2174,14 @@ class CSetupdPcabinet extends CSetup {
     // check for old preferences
     $this->addMethod("prefForConsultPratType");
 
-    $this->mod_version = '2.36';
+    $this->makeRevision('2.36');
+    $query = "ALTER TABLE `consultation`
+                ADD `exec_tarif` DATETIME;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `consultation`
+                ADD INDEX (`exec_tarif`);";
+    $this->addQuery($query);
+    $this->mod_version = '2.37';
   }
 }

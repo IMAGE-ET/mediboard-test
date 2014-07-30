@@ -1110,6 +1110,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Gestion du tarif et precodage des actes
     if ($this->_bind_tarif && $this->_id) {
+      $this->getActeExecution();
       if ($msg = $this->bindTarif()) {
         return $msg;
       }

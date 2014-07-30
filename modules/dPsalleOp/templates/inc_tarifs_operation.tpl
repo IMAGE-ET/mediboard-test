@@ -1,26 +1,23 @@
-{{*
- * $Id$
- *  
- * @category dPsalleOp
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision$
- * @link     http://www.mediboard.org
-*}}
+<table>
+  <tr>
+    <th>{{mb_label object=$operation field="exec_tarif"}}</th>
+    <td>
+      <!-- Formulaire date d'éxécution de tarif -->
+      <form name="editExecTarif" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
+        {{mb_key object=$operation}}
+        {{mb_class object=$operation}}
+        {{mb_field object=$operation field="exec_tarif" form="editExecTarif" register=true onchange="this.form.onsubmit();"}}
+      </form>
+    </td>
+    <th><label for="_tarif_id">Tarif</label></th>
+    <td>
+      <form name="selectTarif" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: reloadActes.curry({{$operation->_id}}, {{$operation->chir_id}})});">
+        {{mb_class object=$operation}}
+        {{mb_key object=$operation}}
+        <input type="hidden" name="_bind_tarif" value="1"/>
+        <input type="hidden" name="_delete_actes" value="0"/>
+        <input type="hidden" name="_datetime" value="{{$operation->_datetime}}">
 
-
-<form name="selectTarif" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: reloadActes.curry({{$operation->_id}}, {{$operation->chir_id}})});">
-  {{mb_class object=$operation}}
-  {{mb_key object=$operation}}
-  <input type="hidden" name="_bind_tarif" value="1"/>
-  <input type="hidden" name="_delete_actes" value="0"/>
-  <input type="hidden" name="_datetime" value="{{$operation->_datetime}}">
-
-  <table>
-    <tr>
-      <th><label for="_tarif_id">Tarif</label></th>
-      <td>
         <select name="_tarif_id" class="str" onchange="this.form.onsubmit();">
           <option value="" selected="selected">&mdash; {{tr}}Choose{{/tr}}</option>
           {{if $tarifs.user|@count}}
@@ -45,7 +42,7 @@
             </optgroup>
           {{/if}}
         </select>
-      </td>
-    </tr>
-  </table>
-</form>
+      </form>
+    </td>
+  </tr>
+</table>

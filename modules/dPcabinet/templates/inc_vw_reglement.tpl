@@ -232,7 +232,7 @@ Main.add(function() {
             {{if $consult->tarif == "pursue"}}
             {{mb_field object=$consult field=tarif hidden=1}}
             {{/if}}
-           
+
             <table class="form">
               {{if (!$consult->tarif || $consult->tarif == "pursue") && !$consult->valide}}
                 {{if $consult->_ref_patient->ald}}
@@ -246,9 +246,9 @@ Main.add(function() {
                   <td>{{mb_field object=$consult field=concerne_ALD}}</td>
                 </tr>
                 {{/if}}
-                
+
                 <tr>
-                  <th><label for="choix" title="Type de cotation pour la consultation. Obligatoire.">Cotation</label></th>
+                  <th style="width: 225px;"><label for="choix" title="Type de cotation pour la consultation. Obligatoire.">Cotation</label></th>
                   <td>
                     <select name="_tarif_id"  class="notNull str" style="width: 130px;" onchange="this.form.onsubmit();">
                       <option value="" selected="selected">&mdash; {{tr}}Choose{{/tr}}</option>
@@ -283,9 +283,9 @@ Main.add(function() {
                   <td>{{mb_value object=$consult field=concerne_ALD}}</td>
                 </tr>
                 {{/if}}
-                
+
                 <tr>
-                  <th>{{mb_label object=$consult field=tarif}}</th>
+                  <th style="width: 225px;">{{mb_label object=$consult field=tarif}}</th>
                   <td>
                     {{if $consult->valide}}
                       {{mb_script module=cabinet script=tarif ajax=true}}
@@ -309,7 +309,25 @@ Main.add(function() {
             </table>
           </form>
           <!-- Fin formulaire de selection du tarif -->
-          
+
+        <!-- Formulaire date d'éxécution de tarif -->
+          <table class="form">
+            <tr>
+              <th style="width: 225px;">{{mb_label object=$consult field="exec_tarif"}}</th>
+              <td>
+                {{if $consult->valide}}
+                  {{mb_value object=$consult field="exec_tarif"}}
+                {{else}}
+                  <form name="editExecTarif" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, Reglement.reload.curry(true));">
+                    {{mb_key object=$consult}}
+                    {{mb_class object=$consult}}
+                    {{mb_field object=$consult field="exec_tarif" form="editExecTarif" register=true onchange="this.form.onsubmit();"}}
+                  </form>
+                {{/if}}
+              </td>
+            </tr>
+          </table>
+
           <hr />
 
           <!-- Formulaire de tarification -->
@@ -324,7 +342,7 @@ Main.add(function() {
           </script>
           
           <form name="tarifFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-    
+
           <input type="hidden" name="m" value="dPcabinet" />
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="dosql" value="do_consultation_aed" />
@@ -481,11 +499,11 @@ Main.add(function() {
                 <input type="hidden" name="_somme" value="{{$consult->_somme}}" />
                 <input type="hidden" name="du_patient" value="{{$consult->du_patient}}" />
                 <input type="hidden" name="du_tiers" value="{{$consult->du_tiers}}" />
-                
+
                 {{if $app->user_prefs.autoCloseConsult}}
                 <input type="hidden" name="chrono" value="{{$consult->chrono}}" />
                 {{/if}}
-                
+
                 {{if !$consult->_current_fse && !count($consult->_ref_reglements)}}
                   <button class="cancel" type="button" id="buttonCheckActe" onclick="checkActe(this);">
                     Rouvrir la cotation
@@ -502,7 +520,7 @@ Main.add(function() {
                 <td colspan="4" class="button">
                   <input type="hidden" name="_delete_actes" value="0" />
                   <input type="hidden" name="valide" value="1" />
-                  
+
                   {{if $app->user_prefs.autoCloseConsult}}
                   <input type="hidden" name="chrono" value="64" />
                   {{/if}}

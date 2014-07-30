@@ -19,6 +19,7 @@ class CCodable extends CMbObject {
   /** @var bool Séjour facturé ou non  */
   public $facture;
   public $tarif;
+  public $exec_tarif;
 
   // Form fields
   public $_acte_execution;
@@ -108,6 +109,7 @@ class CCodable extends CMbObject {
    */
   function deleteActes() {
     $this->_delete_actes = false;
+    $this->exec_tarif = "";
 
     // Suppression des anciens actes CCAM
     $this->loadRefsActesCCAM();
@@ -247,7 +249,10 @@ class CCodable extends CMbObject {
    * @return void
    */
   function getActeExecution() {
-    $this->_acte_execution = CMbDT::dateTime();
+    if (!$this->_acte_execution) {
+      $this->_acte_execution = CMbDT::dateTime();
+    }
+    return $this->_acte_execution;
   }
 
   /**
@@ -280,6 +285,7 @@ class CCodable extends CMbObject {
     $props["codes_ccam"]      = "str show|0";
     $props["facture"]         = "bool default|0";
     $props["tarif"]           = "str show|0";
+    $props["exec_tarif"]      = "dateTime";
 
     $props["_tokens_ccam"]    = "";
     $props["_tokens_ngap"]    = "";
@@ -924,6 +930,7 @@ class CCodable extends CMbObject {
     }
 
     $this->codes_ccam = implode("|", $this->_codes_ccam);
+    $this->exec_tarif = $this->_acte_execution ? $this->_acte_execution : $this->getActeExecution();
     if ($msg = $this->store()) {
       return $msg;
     }
