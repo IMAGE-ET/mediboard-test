@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPcabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 $service_id       = CValue::get("service_id");
@@ -131,7 +131,7 @@ if (!isset($sejours)) {
       $where["affectation.entree"] = "<= '$date_max'";
       $where["affectation.sortie"] = ">= '$date'";
       if ($mode == 'instant') {
-        $where['affectation.effectue'] = " = '0'";
+        $where[] = "affectation.effectue = '0' OR sejour.sortie_reelle >= '".CMbDT::dateTime()."'";
       }
       $ljoin["sejour"] = "affectation.sejour_id = sejour.sejour_id";
       $where["sejour.annule"] = " = '0'";
@@ -141,7 +141,7 @@ if (!isset($sejours)) {
       $where["affectation.entree"] = "<= '$date_max'";
       $where["affectation.sortie"] = ">= '$date'";
       if ($mode == 'instant') {
-        $where['affectation.effectue'] = " = '0'";
+        $where[] = "affectation.effectue = '0' OR sejour.sortie_reelle >= '".CMbDT::dateTime()."'";
       }
       $ljoin["sejour"] = "affectation.sejour_id = sejour.sejour_id";
       $where["sejour.annule"] = " = '0'";
@@ -152,7 +152,7 @@ if (!isset($sejours)) {
       $where["affectation.entree"] = "<= '$date_max'";
       $where["affectation.sortie"] = ">= '$date'";
       if ($mode == 'instant') {
-        $where['affectation.effectue'] = " = '0'";
+        $where[] = "affectation.effectue = '0' OR sejour.sortie_reelle >= '".CMbDT::dateTime()."'";
       }
       $ljoin["sejour"] = "affectation.sejour_id = sejour.sejour_id";
       $where["sejour.annule"] = " = '0'";
