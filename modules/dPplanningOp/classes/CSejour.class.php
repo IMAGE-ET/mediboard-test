@@ -3304,17 +3304,10 @@ class CSejour extends CFacturable implements IPatientRelated {
 
 
     $this->loadRefsOperations();
-    $admission = $this->entree_prevue;
 
-    if ($this->_ref_last_operation && $this->_ref_last_operation->presence_preop) {
-      $this->_ref_last_operation->loadRefPlageOp();
-      $admission = $this->_ref_last_operation->_datetime_best;
-      $admission = CMbDT::subDateTime($this->_ref_last_operation->presence_preop, $admission);
-    }
-
-    $template->addLongDateProperty("Admission - Date longue"  , $admission);
-    $template->addDateProperty("Admission - Date"             , $admission);
-    $template->addTimeProperty("Admission - Heure"            , $admission);
+    $template->addLongDateProperty("Admission - Date longue"  , $this->entree_prevue);
+    $template->addDateProperty("Admission - Date"             , $this->entree_prevue);
+    $template->addTimeProperty("Admission - Heure"            , $this->entree_prevue);
     $template->addProperty("Admission - Type"                 , $this->getFormattedValue("type"));
     $template->addProperty("Hospitalisation - Durée"          , $this->_duree_prevue);
     $template->addDateProperty("Hospitalisation - Date sortie", $this->sortie_prevue);
