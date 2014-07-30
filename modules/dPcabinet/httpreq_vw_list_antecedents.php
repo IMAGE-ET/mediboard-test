@@ -27,6 +27,13 @@ $dossier_medical->needsRead();
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 
+// Incohérence possible du séjour en session, auquel cas on réinitialise le séjour
+if ($patient_id != $sejour->patient_id) {
+  $sejour = new CSejour();
+  $sejour_id = null;
+}
+
+
 $prescription_sejour = $sejour->loadRefPrescriptionSejour();
 if ($prescription_sejour) {
   $prescription_sejour->countLinesTP();
