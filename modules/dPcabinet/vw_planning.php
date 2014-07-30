@@ -68,17 +68,7 @@ if ($plageSel->chir_id != $chirSel && $plageSel->remplacant_id != $chirSel) {
 CValue::setSession("plageconsult_id", $plageconsult_id);
 
 // Liste des consultations a avancer si desistement
-$now = CMbDT::date();
-$where = array(
-  "plageconsult.date" => " > '$now'",
-  "plageconsult.chir_id" => "= '$chirSel'",
-  "consultation.si_desistement" => "= '1'",
-);
-$ljoin = array(
-  "plageconsult" => "plageconsult.plageconsult_id = consultation.plageconsult_id",
-);
-$consultation_desist = new CConsultation;
-$count_si_desistement = $consultation_desist->countList($where, null, $ljoin);
+$count_si_desistement = CConsultation::countDesistementsForDay(array($chirSel));
   
 $nbjours = 7;
 
