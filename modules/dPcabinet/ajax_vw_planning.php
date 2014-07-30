@@ -33,10 +33,6 @@ if (!$function_id && $chirSel) {
   $ids[] = $chirSel;
 }
 
-if (!count($ids)) {
-  CAppUI::stepAjax("problem", UI_MSG_ERROR);
-}
-
 // Liste des consultations a avancer si desistement
 $where = array(
   "plageconsult.date" => " > '$today'",
@@ -297,6 +293,7 @@ $smarty->assign("fin"      , $fin);
 $smarty->assign("prev"     , $prev);
 $smarty->assign("next"     , $next);
 $smarty->assign("chirSel"  , $chirSel);
+$smarty->assign("function_id"  , $function_id);
 $smarty->assign("user"     , $user);
 $smarty->assign("today"    , $today);
 $smarty->assign("bank_holidays", $bank_holidays);
