@@ -224,7 +224,7 @@ Admissions = {
 
     $V(form._sejours_enfants_ids   , "");
     $V(form.sortie_reelle          , "");
-    $V(form.mode_sortie            , "");
+    $V(form.mode_sortie            , "normal");
     $V(form.mode_sortie_id         , "");
     form.mode_sortie.removeClassName("notNull");
 
@@ -262,7 +262,10 @@ Admissions = {
     if ($V(form_sortie.action_confirm) == 1) {
       $V(form_sortie.confirme_user_id, $V(form_confirm.user_id));
       if (!$V(form_sortie.confirme)) {
-        $V(form_sortie.confirme, $V(form_sortie.dtnow));
+        var sortie_prevue = $V(form_sortie.sortie_prevue);
+        var sortie_reelle = $V(form_sortie.sortie_reelle);
+        var sortie = sortie_reelle ? sortie_reelle : sortie_prevue;
+        $V(form_sortie.confirme, sortie);
       }
     }
     //cas de l'annulation de l'autorisation de sortie
@@ -339,5 +342,42 @@ Admissions = {
     }
 
     return onSubmitFormAjax(form, callback);
+  },
+
+  //Changement de la destination en fonction du mode sortie
+  changeDestination : function(form) {
+    //Contrainte à appliquer pour la destination
+    var contrainteDestination = {
+      "mutation"  : ["", 1, 2, 3, 4],
+      "transfert" : ["", 1, 2, 3, 4],
+      "normal"    : ["", 6, 7],
+      "deces"     : [""]
+    };
+
+    var destination = form.elements.destination;
+    var mode_sortie = $V(form.elements.mode_sortie);
+
+    // Aucun champ trouvé
+    if (!destination) {
+      return true;
+    }
+
+    //Pas de mode de sortie, activation de tous les options
+    if (!mode_sortie) {
+      $A(destination).each(function (option) {
+        option.disabled = false
+      });
+      return true;
+    }
+
+    //Application des contraintes
+    $A(destination).each(function (option) {
+      option.disabled = !contrainteDestination[mode_sortie].include(option.value);
+    });
+    if (destination[destination.selectedIndex].disabled) {
+      $V(destination, "");
+    }
+
+    return true;
   }
 };

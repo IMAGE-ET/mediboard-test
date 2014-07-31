@@ -728,3 +728,5 @@ $locales['pref-defaultRPUSort-desc'] = 'Trai par défaut dans la main courante';
 $locales['pref-showMissingRPU'] = 'Afficher les RPU manquants';
 $locales['pref-showMissingRPU-desc'] = 'Afficher les séjour de type Urgence n\'ayant pas de RPU';
 $locales['send_RPU'] = 'Envoi des RPUs vers la veille sanitaire';
+$locales['Csejour-confirme_mutation'] = 'Mutation confirmée';
+$locales['Csejour-sortie_reelle_mutation'] = 'Mutation réelle';

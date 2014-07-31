@@ -9,9 +9,11 @@
  * @link     http://www.mediboard.org
 *}}
 
-{{if "dPurgences"|module_active}}
+{{assign var=urgences_active value="dPurgences"|module_active}}
+{{if $urgences_active}}
   {{mb_script module=dPurgences script=contraintes_rpu ajax=true}}
 {{/if}}
+
 {{assign var=pass_to_confirm value="dPplanningOp CSejour pass_to_confirm"|conf:"CGroups-$g"}}
 {{assign var=form_name value="validerSortie`$sejour->_id`"}}
 {{assign var=form_rpu_name value="editRpu`$sejour->_id`"}}
@@ -36,12 +38,6 @@
   {{assign var=class_mode_sortie value="notNull"}}
   {{assign var=class_sortie_reelle value="inform-field"}}
 {{/if}}
-
-<script>
-  Main.add(function () {
-    ContraintesRPU.changeOrientationDestination(getForm({{$form_name}}));
-  })
-</script>
 
 {{if $rpu && $rpu->_id}}
   <form name="{{$form_name}}" method="post"
@@ -73,7 +69,13 @@
     </tr>
     <tr>
       {{if $module != "dPurgences" || ($module == "dPurgences" && $rpu && $rpu->sejour_id !== $rpu->mutation_sejour_id)}}
-        <th>{{mb_label object=$sejour field="sortie_reelle"}}</th>
+        <th>
+          {{if $module == "dPurgences" && $rpu && $rpu->sejour_id !== $rpu->mutation_sejour_id}}
+            <label>{{tr}}Csejour-sortie_reelle_mutation{{/tr}}</label>
+          {{else}}
+            {{mb_label object=$sejour field="sortie_reelle"}}
+          {{/if}}
+        </th>
         <td>{{mb_field object=$sejour field="sortie_reelle" form=$form_name register=$modify_sortie_reelle class=$class_sortie_reelle
                       onchange="Admissions.updateLitMutation(this.form);"}}</td>
       {{else}}
@@ -89,16 +91,24 @@
         <script>
           Main.add(function () {
             var form = getForm("{{$form_name}}");
-            ContraintesRPU.changeOrientationDestination(form);
+            {{if $urgences_active}}
+              ContraintesRPU.changeOrientation(form);
+            {{/if}}
+            Admissions.changeDestination(form);
             Admissions.changeSortie(form, '{{$sejour->_id}}');
           })
         </script>
+        {{if $urgences_active}}
+          {{assign var=onchange_mode_sortie value="ContraintesRPU.changeOrientation(this.form);Admissions.changeDestination(this.form);Admissions.changeSortie(this.form, '`$sejour->_id`')"}}
+        {{else}}
+          {{assign var=onchange_mode_sortie value="Admissions.changeDestination(this.form);Admissions.changeSortie(this.form, '`$sejour->_id`')"}}
+        {{/if}}
         {{assign var=mode_sortie value=$sejour->mode_sortie}}
         {{if $sejour->service_sortie_id}}
           {{assign var=mode_sortie value="mutation"}}
         {{/if}}
         {{if $conf.dPplanningOp.CSejour.use_custom_mode_sortie && $list_mode_sortie|@count}}
-          {{mb_field object=$sejour field=mode_sortie hidden=true class=$class_mode_sortie onchange="ContraintesRPU.changeOrientationDestination(this.form);Admissions.changeSortie(this.form, '`$sejour->_id`')"}}
+          {{mb_field object=$sejour field=mode_sortie hidden=true class=$class_mode_sortie onchange="$onchange_mode_sortie"}}
           <select name="mode_sortie_id" class="{{$sejour->_props.mode_sortie_id}}" style="width: 16em;"
             onchange="$V(this.form.mode_sortie, this.options[this.selectedIndex].get('mode'));">
             <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
@@ -109,7 +119,7 @@
             {{/foreach}}
           </select>
         {{elseif "CAppUI::conf"|static_call:"dPurgences CRPU impose_create_sejour_mutation":"CGroups-$g"}}
-          <select name="mode_sortie" class="{{$class_mode_sortie}}" onchange="ContraintesRPU.changeOrientationDestination(this.form);Admissions.changeSortie(this.form, '{{$sejour->_id}}')">
+          <select name="mode_sortie" class="{{$class_mode_sortie}}" onchange="{{$onchange_mode_sortie}}">
             {{foreach from=$sejour->_specs.mode_sortie->_list item=_mode}}
               <option value="{{$_mode}}" {{if $sejour->mode_sortie == $_mode}}selected{{/if}}
                 {{if $_mode == "mutation"}}{{if $rpu->mutation_sejour_id}}selected{{else}}disabled{{/if}}{{/if}}>
@@ -123,7 +133,7 @@
           {{else}}
             {{assign var=mode_sortie value=$sejour->mode_sortie}}
           {{/if}}
-          {{mb_field object=$sejour field="mode_sortie" class=$class_mode_sortie value=$mode_sortie onchange="ContraintesRPU.changeOrientationDestination(this.form);Admissions.changeSortie(this.form, '`$sejour->_id`')" value=$mode_sortie}}
+          {{mb_field object=$sejour field="mode_sortie" class=$class_mode_sortie value=$mode_sortie onchange="$onchange_mode_sortie"}}
         {{/if}}
         {{if !$rpu || ($rpu && !$rpu->mutation_sejour_id)}}
           <input type="hidden" name="group_id" value="{{if $sejour->group_id}}{{$sejour->group_id}}{{else}}{{$g}}{{/if}}" />
@@ -135,7 +145,13 @@
           </strong>
         {{/if}}
       </td>
-      <th style="width: 100px">{{mb_label object=$sejour field="confirme"}}</th>
+      <th style="width: 100px">
+        {{if $module == "dPurgences" && $rpu && $rpu->sejour_id !== $rpu->mutation_sejour_id}}
+          <label>{{tr}}Csejour-confirme_mutation{{/tr}}</label>
+        {{else}}
+          {{mb_label object=$sejour field="confirme"}}
+        {{/if}}
+      </th>
       {{if $module == "dPurgences"}}
         <td>{{mb_value object=$rpu field="sortie_autorisee"}}</td>
       {{else}}
@@ -278,7 +294,10 @@
                         Admissions.askconfirm('{{$sejour->_id}}');
                       {{else}}
                         if (!$V(this.form.confirme)) {
-                          $V(this.form.confirme, '{{$dtnow}}');
+                          var sortie_prevue = $V(this.form.sortie_prevue);
+                          var sortie_reelle = $V(this.form.sortie_reelle);
+                          var sortie = sortie_reelle ? sortie_reelle : sortie_prevue;
+                          $V(this.form.confirme, sortie);
                         }
                         $V(this.form.confirme_user_id, '{{$app->user_id}}');
                         this.form.onsubmit();
