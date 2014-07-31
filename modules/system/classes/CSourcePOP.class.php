@@ -39,6 +39,9 @@ class CSourcePOP extends CExchangeSource {
   /** @var  CMbMetaObject */
   public $_ref_metaobject;
 
+  /**  */
+  public $_nb_ref_mails;
+
   /**
    * table spec
    *
@@ -82,14 +85,13 @@ class CSourcePOP extends CExchangeSource {
    * @return CMbObject|CMediusers
    */
   function loadRefMetaObject() {
+    $this->_ref_metaobject = CMbMetaObject::loadFromGuid("$this->object_class-$this->object_id");
     if ($this->object_class == "CMediusers") {
-      $this->_ref_mediuser = CMbMetaObject::loadFromGuid("$this->object_class-$this->object_id");
+      $this->_ref_mediuser = $this->_ref_metaobject;
       $this->_ref_mediuser->loadRefFunction();
-
-      return $this->_ref_mediuser;
     }
 
-    return $this->_ref_metaobject = CMbMetaObject::loadFromGuid("$this->object_class-$this->object_id");
+    return $this->_ref_metaobject;
   }
 
   /**
@@ -101,5 +103,14 @@ class CSourcePOP extends CExchangeSource {
     $backProps = parent::getBackProps();
     $backProps["user_mail_account"] = "CUserMail account_id";
     return $backProps;
+  }
+
+  /**
+   * return the number of mails linked to the present account
+   *
+   * @return int|null
+   */
+  function countRefMails() {
+    return $this->_nb_ref_mails = $this->countBackRefs("user_mail_account");
   }
 }
