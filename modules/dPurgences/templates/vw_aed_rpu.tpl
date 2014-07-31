@@ -1,18 +1,11 @@
-{{* $Id$ *}}
-
-{{*
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
-
 {{mb_script module=files script=file}}
 {{mb_include module=files template=yoplet_uploader object=$sejour}}
 {{assign var=gerer_circonstance value=$conf.dPurgences.gerer_circonstance}}
 {{assign var=consult value=$rpu->_ref_consult}}
-{{assign var=show_buttons_urgence value="ecap Display show_buttons_urgence"|conf:"CGroups-$g"}}
+{{mb_default var=show_buttons_urgence value=false}}
+{{if "ecap"|module_active}}
+  {{assign var=show_buttons_urgence value="ecap Display show_buttons_urgence"|conf:"CGroups-$g"}}
+{{/if}}
 {{mb_script module=dPurgences script=CCirconstance}}
 
 {{if !$group->service_urgences_id}}
