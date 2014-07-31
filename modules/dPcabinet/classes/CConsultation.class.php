@@ -1028,7 +1028,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
       $administration->administrateur_id = CAppUI::$user->_id;
       $administration->dateTime = $this->_datetime;
       $administration->quantite = $administration->planification = 1;
-      $administration->unite_prise = $line_element->_ref_element_prescription->_ref_category_prescription->chapitre;
+      $administration->unite_prise = "aucune_prise";
       $administration->setObject($line_element);
 
       $this->element_prescription_id = $line_element->element_prescription_id;
