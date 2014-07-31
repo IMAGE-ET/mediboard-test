@@ -92,13 +92,13 @@ foreach ($sources as $_source) {
   $total = imap_num_msg($pop->_mailbox);
 
   //if get last email => check if uid server is > maxuidMb
-  if (!$import) {
+  /*if (!$import) {
     foreach ($unseen as $key => $_unseen) {
       if ($_unseen < $mbMailUid) {
         unset($unseen[$key]);
       }
     }
-  }
+  }*/
   array_splice($unseen, $limitMail);
 
   if (count($unseen)>0) {
