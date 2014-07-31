@@ -42,6 +42,7 @@ foreach ($sources as $_source) {
 
   //no user => next
   if (!$_source->user) {
+    CAppUI::stepAjax("pas d'utilisateur pour cette source %s", UI_MSG_WARNING, $_source->_view);
     continue;
   }
 
@@ -76,6 +77,7 @@ foreach ($sources as $_source) {
   //pop open account
   $pop = new CPop($_source);
   if (!$pop->open()) {
+    CAppUI::stepAjax("Impossible de se connecter à la source (open) %s", UI_MSG_WARNING, $_source->_view);
     continue;
   }
 
@@ -92,13 +94,14 @@ foreach ($sources as $_source) {
   $total = imap_num_msg($pop->_mailbox);
 
   //if get last email => check if uid server is > maxuidMb
-  if (!$import) {
+  // @TODO : temporarly removed, we already get the more recent mail for filter
+  /*if (!$import) {
     foreach ($unseen as $key => $_unseen) {
       if ($_unseen < $mbMailUid) {
         unset($unseen[$key]);
       }
     }
-  }
+  }*/
   array_splice($unseen, $limitMail);
 
   if (count($unseen)>0) {
