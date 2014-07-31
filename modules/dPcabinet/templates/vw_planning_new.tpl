@@ -38,11 +38,20 @@
     {{/if}}
   });
 
-  function printPlanning() {
-    var url = new Url("cabinet", "print_planning");
-    url.addParam("date", $V(getForm("changeDate").debut));
-    url.addParam("chir_id", $V(getForm("changeDate").chirSel));
-    url.popup(900, 600, "Planning");
+  function printPlanning(function_mode) {
+    var form = getForm("changeDate");
+    if (function_mode) {
+      var url = new Url("cabinet", "print_planning_function");
+      url.addParam("date", $V(form.debut));
+      url.addParam("function_id", $V(form.function_id));
+      url.popup(900, 600, "Planning");
+    }
+    else {
+      var url = new Url("cabinet", "print_planning");
+      url.addParam("date", $V(form.debut));
+      url.addParam("chir_id", $V(form.chirSel));
+      url.popup(900, 600, "Planning");
+    }
   }
   
   function showConsultSiDesistement(){
@@ -233,6 +242,9 @@
         <th style="width: 15%; text-align: right;">
           <button class="help" onclick="openLegend();return false;">{{tr}}Legend{{/tr}}</button>
           <button type="button" class="print" onclick="printPlanning();">{{tr}}Print{{/tr}}</button>
+          {{if $function_id}}
+          <button type="button" class="print" onclick="printPlanning(1);">{{tr}}Print{{/tr}} (cabinet)</button>
+          {{/if}}
           <br />
           <button type="button" class="lookup" id="desistement_count"
                   {{if !$count_si_desistement}}disabled="disabled"{{/if}}
