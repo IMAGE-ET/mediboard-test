@@ -101,6 +101,7 @@ foreach ($lines as $_line_element) {
   $_line_element->loadRefLogSignee();
   $_line_element->loadRefOperation();
   $_line_element->countPlanifications();
+  $_line_element->loadRefParentLine();
   $_line_element->_ref_praticien->loadRefFunction();
   $category = $_line_element->_ref_element_prescription->_ref_category_prescription;
   $name_chap = $category->chapitre;
