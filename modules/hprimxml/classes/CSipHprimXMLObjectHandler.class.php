@@ -147,9 +147,11 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       foreach ($mbObject->_fusion as $group_id => $infos_fus) {
         if ($receiver->group_id != $group_id) {
           continue;
-        }      
-      
-        if ($mbObject->_eai_initiateur_group_id == $receiver->group_id) {
+        }
+
+        /** @var CInteropSender $sender */
+        $sender = CMbObject::loadFromGuid($mbObject->_eai_sender_guid);
+        if ($sender->group_id == $receiver->group_id) {
           continue;
         }
         

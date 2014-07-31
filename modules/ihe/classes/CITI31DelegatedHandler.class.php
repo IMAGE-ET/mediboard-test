@@ -140,10 +140,12 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
 
       // Cas où :
       // * on est sur un séjour d'urgences qui n'est pas le relicat
-      // * on est en train de réaliser la mututation
+      // * on est en train de réaliser la mutation
       /** @var CRPU $rpu */
       $rpu  = $sejour->loadRefRPU();
-      if ($rpu && $rpu->_id && $rpu->sejour_id != $rpu->mutation_sejour_id && $sejour->fieldModified("mode_sortie", "mutation") && !$sejour->UHCD) {
+      if ($rpu && $rpu->_id && $rpu->sejour_id != $rpu->mutation_sejour_id && $sejour->fieldModified("mode_sortie", "mutation") &&
+          !$sejour->UHCD
+      ) {
         $sejour = $rpu->loadRefSejourMutation();
         $sejour->loadRefPatient();
         $sejour->loadLastLog();
@@ -159,6 +161,18 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       elseif ($rpu && $rpu->mutation_sejour_id && ($rpu->sejour_id != $rpu->mutation_sejour_id)) {
         return;
       }
+
+      // Dans le cas d'une annulation d'hospitalisation
+      /*elseif ($sejour->_cancel_hospitalization) {
+        $sejour->loadRefPatient();
+        $sejour->loadLastLog();
+        $sejour->_receiver = $receiver;
+        $code = "A07";
+
+        // On récupère l'affectation courante qui n'a pas été transmise (affectation suite à la mutation)
+        $current_affectation          = $sejour->getCurrAffectation();
+        $sejour->_ref_hl7_affectation = $current_affectation;
+      }*/
 
       $code = $code ? $code : $this->getCodeSejour($sejour);
 
@@ -307,7 +321,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Cas où : 
       // * on est l'initiateur du message 
       // * le destinataire ne supporte pas le message
-      if ($mbObject->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
+      if ($mbObject->_eai_sender_guid || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
         return;
       }
       
@@ -1065,7 +1079,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Cas où : 
       // * on est l'initiateur du message 
       // * le destinataire ne supporte pas le message
-      if ($affectation->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
+      if ($affectation->_eai_sender_guid || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
         return;
       }
             

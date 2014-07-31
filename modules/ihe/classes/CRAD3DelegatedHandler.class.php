@@ -108,7 +108,7 @@ class CRAD3DelegatedHandler extends CITIDelegatedHandler {
     switch ($category->chapitre) {
       case "imagerie":
         $code = "O01";
-        if ($consultation->_eai_initiateur_group_id ||
+        if ($consultation->_eai_sender_guid ||
             !$this->isMessageSupported($this->transaction, $this->message, $code, $consultation->_receiver)
         ) {
           return;

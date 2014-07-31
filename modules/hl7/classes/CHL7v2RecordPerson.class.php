@@ -698,7 +698,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
         $correspondant->medecin_id = $this->getMedecin($ROL_4);
         if (!$correspondant->loadMatchingObjectEsc()) {
           // Notifier les autres destinataires autre que le sender
-          $correspondant->_eai_initiateur_group_id = $sender->group_id;
+          $correspondant->_eai_sender_guid = $sender->_guid;
           $correspondant->store();
         } 
         break;
@@ -770,7 +770,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $corres_patient->relation_autre = $relation_autre;
     
     // Notifier les autres destinataires autre que le sender
-    $corres_patient->_eai_initiateur_group_id = $sender->group_id;
+    $corres_patient->_eai_sender_guid = $sender->_guid;
     
     $corres_patient->store();
   }
