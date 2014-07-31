@@ -38,7 +38,11 @@ class CColorSpec extends CMbFieldSpec {
     $extra        = CMbArray::makeXmlAttributes($params);
     $readonly     = CMbArray::extract($params, "readonly");
 
-    $reset_value = $this->notNull ? 'ffffff' : "";
+    $default_color = $this->default ? $this->default : "ffffff";
+
+    $reset_value = $this->notNull ? $default_color : "";
+
+    $value = (!$value && ($this->notNull || $this->default)) ? $default_color : "";
 
     $sHtml = "
     <input type=\"text\" class=\"color_picker\" name=\"$field\" value=\"$value\" $extra />

@@ -106,21 +106,7 @@
               </td>
               <th>{{mb_label object=$plageSel field="color"}}</th>
               <td>
-                <script>
-                  ColorSelector.init = function(){
-                    this.sForm  = "editFrm";
-                    this.sColor = "color";
-                    this.sColorView = "color-view";
-                    this.pop();
-                  };
-                </script>
-                <span class="color-view" id="color-view" style="background: #{{if $plageSel->color}}{{$plageSel->color}}{{else}}DDDDDD{{/if}};">
-                  {{tr}}Choose{{/tr}}
-                </span>
-                <button type="button" class="search notext" onclick="ColorSelector.init()">
-                  {{tr}}Choose{{/tr}}
-                </button>
-                {{mb_field object=$plageSel field="color" hidden=1}}
+                {{mb_field object=$plageSel field="color" form=editFrm}}
               </td>
             </tr>
             <tr>

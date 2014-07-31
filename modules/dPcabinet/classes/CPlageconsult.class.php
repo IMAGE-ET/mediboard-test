@@ -114,7 +114,7 @@ class CPlageconsult extends CPlageHoraire {
     $props["locked"]           = "bool default|0";
     $props["remplacant_ok"]    = "bool default|0 show|0";
     $props["desistee"]         = "bool default|0 show|0";
-    $props["color"]            = "str length|6 default|DDDDDD";
+    $props["color"]            = "color default|dddddd";
     $props["pct_retrocession"] = "pct default|70 show|0";
     $props["pour_tiers"]       = "bool default|0 show|0";
 
