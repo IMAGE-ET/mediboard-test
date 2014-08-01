@@ -283,7 +283,7 @@ if ($show_operations) {
       $horaire  = CMbDT::time($_operation->_datetime_best);
       $debut    = "$i {$horaire}";
       $debut_op = $horaire;
-      $fin_op   = CMbDT::addTime($_operation->temp_operation, $horaire);
+      $fin_op   = $_operation->sortie_salle ? $_operation->sortie_salle : CMbDT::addTime($_operation->temp_operation, $horaire);
       $duree    = CMbDT::minutesRelative($horaire, $fin_op);
 
 
