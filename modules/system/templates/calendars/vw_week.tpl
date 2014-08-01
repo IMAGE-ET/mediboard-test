@@ -280,7 +280,9 @@ Main.add(function() {
                                 <img src="style/mediboard/images/buttons/lock.png" style="float: right; height: 12px; width: 12px;" />
                               {{/if}}
                               <span style="color: #000;">
-                                <strong>{{$_event->start|date_format:"%H:%M"}}</strong>
+                                {{if !$planning->no_dates && $_event->start}}
+                                  <strong>{{$_event->start|date_format:"%H:%M"}}</strong>
+                                {{/if}}
                                 {{if $_event->icon}}
                                   <img src="{{$_event->icon}}" style="height: 12px; width: 12px;" alt="{{$_event->icon_desc}}" title="{{$_event->icon_desc|smarty:nodefaults}}" />
                                 {{/if}}
