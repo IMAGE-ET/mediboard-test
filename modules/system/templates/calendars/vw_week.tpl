@@ -231,7 +231,7 @@ Main.add(function() {
                               {{if $_event->useHeight}}z-index:{{math equation="20+y" y=$_event->height}};{{/if}}"
                             {{if $_event->type == "rdvfull"}}onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}')"{{/if}}
                             {{if ($_event->type == "rdvfree" || $_event->type == "rdvfull") && !$_event->disabled}}
-                              onclick="setClose('{{$_event->start|date_format:"%H:%M:00"}}', '{{$_event->plage.id}}', '{{$_event->start|date_format:"%A %d/%m/%Y"}}', '{{$chir_id}}' {{if isset($_event->plage.consult_id|smarty:nodefaults)}}, '{{$_event->plage.consult_id}}'{{/if}});"
+                              onclick="setClose('{{$_event->start|date_format:"%H:%M:00"}}', '{{$_event->plage.id}}', '{{$_event->start|date_format:"%A %d/%m/%Y"}}', '{{if isset($chir_id|smarty:nodefaults)}}{{$chir_id}}{{/if}}' {{if isset($_event->plage.consult_id|smarty:nodefaults)}}, '{{$_event->plage.consult_id}}'{{/if}});"
                               data-plageconsult_id="{{$_event->plage.id}}"
                             {{/if}}>
 
