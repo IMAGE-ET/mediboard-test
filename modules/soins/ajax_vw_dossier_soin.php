@@ -467,7 +467,7 @@ if (CAppUI::conf("dPprescription general show_perop_suivi_soins", $group->_guid)
   $count_perop_adm = CAdministration::countPerop($prescription->_id);
 }
 
-if (!$chapitre && CAppUI::pref("regroupement_med_plan_soins") && CAppUI::conf("soins suivi group_hors_amm_med", $group) && $prescription->_ref_lines_elt_for_plan["med_elt"]) {
+if (!$chapitre && CAppUI::pref("regroupement_med_plan_soins") && CAppUI::conf("soins suivi group_hors_amm_med", $group) && isset($prescription->_ref_lines_elt_for_plan["med_elt"])) {
   foreach ($prescription->_ref_lines_elt_for_plan["med_elt"] as $_line_elt) {
     $prescription->_nb_lines_plan_soins["all_med"] ++;
   }
