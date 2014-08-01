@@ -1,14 +1,14 @@
 <script>
 
-  changeCodageMode = function() {
-    var form = getForm("formCodageRules-{{$codage->_id}}");
-    if($V(form._association_mode)) {
-      $V(form.association_mode, "user_choice");
+  changeCodageMode = function(element) {
+    var codageForm = getForm("formCodageRules");
+    if($V(element)) {
+      $V(codageForm.association_mode, "user_choice");
     }
     else {
-      $V(form.association_mode, "auto");
+      $V(codageForm.association_mode, "auto");
     }
-    form.onsubmit();
+    codageForm.onsubmit();
   };
 
   syncCodageField = function(element, view) {
@@ -19,6 +19,17 @@
     if($V(acteForm.acte_id)) {
       acteForm.onsubmit();
     }
+  };
+
+  setRule = function(element) {
+    var codageForm = getForm("formCodageRules");
+    $V(codageForm.association_mode, "user_choice", false);
+    var inputs = document.getElementsByName("association_rule");
+    for(var i = 0; i < inputs.length; i++) {
+      inputs[i].disabled = false;
+    }
+    $V(codageForm.association_rule, $V(element), false);
+    codageForm.onsubmit();
   };
 
   Main.add(function(){
@@ -161,48 +172,63 @@
 <ul id="rules-tab" class="control_tabs">
   <li><a href="#questionRules">Informations médicales</a></li>
   <li><a href="#concreteRules">Règles de codage</a></li>
+  <li>
+    <input type="checkbox" name="_association_mode" value="manuel"
+           {{if $codage->association_mode == "user_choice"}}checked="checked"{{/if}}
+           onchange="changeCodageMode(this);"/>
+    Mode manuel pour les règles d'association
+  </li>
 </ul>
 
 <hr class="control_tabs" />
 
 <div style="display: none;" id="questionRules">
+  <form name="questionRulesForm" action="?" method="post" onsubmit="return false;">
   <table class="tbl">
     <tr>
       <th class="title" colspan="2">Les actes que vous codez répondent-ils à un des critères suivants ?</th>
     </tr>
     <tr>
-      <th>
+      <th class="category" colspan="2">Pour les interventions chirurgicales</th>
+    </tr>
+    {{if isset($codage->_possible_rules.EA|smarty:nodefaults)}}
+    <tr>
+      <th class="narrow {{if $codage->_possible_rules.EA}}ok{{/if}}">
         <input type="radio" name="_association_question" value="EA"
                {{if $codage->association_rule == "EA"}}checked="checked"{{/if}}
-               onchange="this.form.onsubmit()"/>
+               onchange="setRule(this);"/>
       </th>
       <td>
         Les actes portent sur :
         <ul>
-          <li>des membres différents ou</li>
-          <li>le tronc et un membre ou</li>
-          <li>la tête et un membre.</li>
+          <li><strong>des membres différents ou</strong></li>
+          <li><strong>le tronc et un membre ou</strong></li>
+          <li><strong>la tête et un membre.</strong></li>
         </ul>
       </td>
     </tr>
+    {{/if}}
+    {{if isset($codage->_possible_rules.EB|smarty:nodefaults)}}
     <tr>
-      <th>
+      <th class="narrow {{if $codage->_possible_rules.EB}}ok{{/if}}">
         <input type="radio" name="_association_question" value="EB"
                {{if $codage->association_rule == "EB"}}checked="checked"{{/if}}
-               onchange="this.form.onsubmit()"/>
+               onchange="setRule(this);"/>
       </th>
       <td>
-        Les actes visent à traiter des lésions traumatiques multiples et récentes
+        Les actes visent à traiter des <strong>lésions traumatiques multiples et récentes</strong>
       </td>
     </tr>
+    {{/if}}
+    {{if isset($codage->_possible_rules.EC|smarty:nodefaults)}}
     <tr>
-      <th>
+      <th class="narrow {{if $codage->_possible_rules.EC}}ok{{/if}}">
         <input type="radio" name="_association_question" value="EC"
                {{if $codage->association_rule == "EC"}}checked="checked"{{/if}}
-               onchange="this.form.onsubmit()"/>
+               onchange="setRule(this);"/>
       </th>
       <td>
-        Les actes décrivent une intervention de carcinologie ORL comprenant :
+        Les actes décrivent une intervention de <strong>carcinologie ORL</strong> comprenant :
         <ul>
           <li>une exérèse et</li>
           <li>un curage et</li>
@@ -210,20 +236,51 @@
         </ul>
       </td>
     </tr>
+    {{/if}}
+    {{if isset($codage->_possible_rules.ED|smarty:nodefaults)}}
     <tr>
-      <th>
-        <input type="radio" name="_association_question" value="EC"
-               {{if $codage->association_rule == "EC"}}checked="checked"{{/if}}
-               onchange="this.form.onsubmit()"/>
+      <th class="category" colspan="2">Pour les actes d'imagerie</th>
+    </tr>
+    <tr>
+      <th class="narrow {{if $codage->_possible_rules.ED}}ok{{/if}}">
+        <input type="radio" name="_association_question" value="ED"
+               {{if $codage->association_rule == "ED"}}checked="checked"{{/if}}
+               onchange="setRule(this);"/>
       </th>
       <td>
-        Les actes sont des actes d'imagerie portant su plusieurs régions anatomiques.
+        Les actes sont des actes d'<strong>échographie</strong> portant sur <strong>plusieurs régions anatomiques</strong>.
       </td>
     </tr>
+    {{/if}}
+    {{if isset($codage->_possible_rules.EE|smarty:nodefaults)}}
+    <tr>
+      <th class="narrow {{if $codage->_possible_rules.EE}}ok{{/if}}">
+        <input type="radio" name="_association_question" value="EE"
+               {{if $codage->association_rule == "EE"}}checked="checked"{{/if}}
+               onchange="setRule(this);"/>
+      </th>
+      <td>
+        Les actes sont des actes d'<strong>électromyographie</strong>, de <strong>mesure des vitesses de conduction</strong>, d'<strong>étude des latences et des réflexes</strong> portant sur <strong>plusieurs régions anatomiques</strong>.
+      </td>
+    </tr>
+    {{/if}}
+    {{if isset($codage->_possible_rules.EF|smarty:nodefaults)}}
+    <tr>
+      <th class="narrow {{if $codage->_possible_rules.EF}}ok{{/if}}">
+        <input type="radio" name="_association_question" value="EF"
+               {{if $codage->association_rule == "EF"}}checked="checked"{{/if}}
+               onchange="setRule(this);"/>
+      </th>
+      <td>
+        Les actes sont des actes de <strong>scanographie</strong> portant sur <strong>plusieurs régions anatomiques</strong>.
+      </td>
+    </tr>
+    {{/if}}
   </table>
+  </form>
 </div>
 <div style="display: none;" id="concreteRules">
-  <form name="formCodageRules-{{$codage->_id}}" action="?" method="post"
+  <form name="formCodageRules" action="?" method="post"
         onsubmit="return onSubmitFormAjax(this, {onComplete: function() {window.urlCodage.refreshModal()}});">
     <input type="hidden" name="m" value="ccam" />
     <input type="hidden" name="dosql" value="do_codageccam_aed" />
@@ -232,12 +289,6 @@
     <input type="hidden" name="association_mode" value="{{$codage->association_mode}}" />
     <table class="tbl">
       <tr>
-        <th colspan="2">
-          <input type="checkbox" name="_association_mode" value="manuel"
-                 {{if $codage->association_mode == "user_choice"}}checked="checked"{{/if}}
-                 onchange="changeCodageMode();"/>
-          Manuel
-        </th>
         <th class="title" colspan="20">
           Règles d'association
         </th>
@@ -246,12 +297,12 @@
       {{foreach from=$codage->_possible_rules key=_rulename item=_rule}}
         {{if $_rule || 1}}
           <tr>
-            <td {{if $_rulename == $codage->association_rule}}class="ok"{{/if}}>
+            <th class="narrow {{if $_rulename == $codage->association_rule}}ok{{/if}}">
               <input type="radio" name="association_rule" value="{{$_rulename}}"
                      {{if $_rulename == $codage->association_rule}}checked="checked"{{/if}}
                 {{if $codage->association_mode == "auto"}}disabled="disabled"{{/if}}
                      onchange="this.form.onsubmit()"/>
-            </td>
+            </th>
             <td class="{{if $_rule}}ok{{else}}error{{/if}}">
               {{$_rulename}} {{if $association_rules.$_rulename == 'ask'}}(manuel){{/if}}
             </td>
