@@ -383,6 +383,8 @@ class CDatedCodeCCAM {
       $_modif = new CObject();
       $_modif->code    = $modificateur->modificateur;
       $_modif->libelle = $modificateur->_libelle;
+      $_modif->_checked = null;
+      $_modif->_state = null;
       if (in_array($modificateur->modificateur, $listModifConvergence)) {
         $simple = "mod".$modificateur->modificateur;
         $double = "mod".$modificateur->modificateur.$modificateur->modificateur;

@@ -353,59 +353,167 @@ class CCodageCCAM extends CMbObject {
   }
 
   /**
+   * Count the number of modifiers F, U, P and S coded
+   *
+   * @param CActeCCAM &$act The act
+   *
+   * @return integer
+   */
+  public static function countExclusiveModifiers(&$act) {
+    $act->getLinkedActes();
+    $exclusive_modifiers = array('F', 'U', 'P', 'S');
+    $count_exclusive_modifiers = count(array_intersect($act->_modificateurs, $exclusive_modifiers));
+
+    foreach ($act->_linked_actes as $_linked_act) {
+      $count_exclusive_modifiers += count(array_intersect($_linked_act->_modificateurs, $exclusive_modifiers));
+    }
+
+    return $count_exclusive_modifiers;
+  }
+
+  /**
     * Check the modifiers of the given act
     *
-    * @param CObject  $modifiers The modifiers to check
-    * @param string   $execution The dateTime of the execution of the act
-    * @param CCodable $codable   The codable
+    * @param CObject   &$modifiers The modifiers to check
+    * @param CActeCCAM &$act       The dateTime of the execution of the act
+    * @param CCodable  $codable    The codable
     *
     * @return void
     */
-  public static function checkModifiers($modifiers, $execution, $codable) {
-    $date = CMbDT::date(null, $execution);
-    $time = CMbDT::time(null, $execution);
+  public static function precodeModifiers(&$modifiers, &$act, $codable) {
+    $date = CMbDT::date(null, $act->execution);
+    $time = CMbDT::time(null, $act->execution);
     $discipline = $codable->_ref_praticien->_ref_discipline;
     $patient = $codable->_ref_patient;
+    $checked = 0;
+    $spe_gyneco = $spe_gyneco = array(
+      'GYNECOLOGIE MEDICALE, OBSTETRIQUE',
+      'GYNECOLOGIE-OBSTETRIQUE',
+      'MEDECINE DE LA REPRODUCTION ET GYNECOLOGIE MEDICAL'
+    );
+    $spe_gen_pediatre = array("MEDECINE GENERALE", "PEDIATRIE");
+    $count_exclusive_modifiers = self::countExclusiveModifiers($act);
+    $store_act = 0;
+    $modifiers_to_add = "";
 
     foreach ($modifiers as $_modifier) {
       switch ($_modifier->code) {
         case 'A':
-          $_modifier->_checked = ($patient->_annees < 4 || $patient->_annees > 80);
+          $checked = ($patient->_annees < 4 || $patient->_annees > 80);
+          $_modifier->_state = $checked ? 'prechecked' : 'not_recommended';
           break;
         case 'E':
-          $_modifier->_checked = $patient->_annees < 5;
+          $checked = $patient->_annees < 5;
+          $_modifier->_state = $checked ? 'prechecked' : 'not_recommended';
           break;
         case 'F':
-          $_modifier->_checked = (CMbDT::transform('', $execution, '%w') == 0 || CMbDate::isHoliday(CMbDT::date(null, $execution)));
-          break;
-        case 'N':
-          $_modifier->_checked = $patient->_annees < 13;
-          break;
-        case 'P':
-          // gerer specialite cpam?
-          $_modifier->_checked = (in_array($discipline->text, array("MEDECINE GENERALE", "PEDIATRIE")) &&
-            ($time >= "20:00:00" && $time < "00:00:00"));
-          break;
-        case 'S':
-          // Gérer : 'ou autres med. pr acte thérapeutique sous anesthésie
-          $_modifier->_checked = (in_array($discipline->text, array("MEDECINE GENERALE", "PEDIATRIE")) ||
-              ($codable->_class == "COperation" && $codable->_lu_type_anesth)) &&
-            ($time >= "00:00:00" && $time <= "08:00:00");
-          break;
-        case 'U':
-          $_modifier->_checked = !in_array($discipline->text, array("MEDECINE GENERALE", "PEDIATRIE")) &&
-            ($time >= '20:00:00' || $time <= '08:00:00');
-          break;
-        case "7":
-          $_modifier->_checked = CAppUI::conf("dPccam CCodable precode_modificateur_7");
+          $checked = (($count_exclusive_modifiers == 1 && $_modifier->_checked) || $count_exclusive_modifiers == 0) &&
+            (CMbDT::transform('', $act->execution, '%w') == 0 || CMbDate::isHoliday($date))
+            && ($time > '08:00:00' && $time < '20:00:00');
+          if ($checked) {
+            $_modifier->_state = 'prechecked';
+          }
+          elseif (($count_exclusive_modifiers == 1 && $_modifier->_checked) || $count_exclusive_modifiers > 0) {
+            $_modifier->_state = 'forbidden';
+          }
+          else {
+            $_modifier->_state = 'not_recommended';
+          }
           break;
         case "J":
-          $_modifier->_checked = $codable->_class == 'COperation' && CAppUI::conf("dPccam CCodable precode_modificateur_J");
+          $checked = $codable->_class == 'COperation' && CAppUI::conf("dPccam CCodable precode_modificateur_J");
+          $_modifier->_state = $checked ? 'prechecked' : null;
+          break;
+        case 'K':
+          $checked = !$act->montant_depassement && ($codable->_ref_praticien->secteur == 1 || ($codable->_ref_praticien->secteur == 2 && $patient->cmu));
+          if ($checked) {
+            $_modifier->_state = 'prechecked';
+          }
+          elseif (!in_array($discipline, $spe_gyneco)) {
+            $_modifier->_state = 'not_recommended';
+          }
+          break;
+        case 'M':
+          $checked = 0;
+          if (!in_array($discipline->text, $spe_gen_pediatre)) {
+            $_modifier->_state = 'not_recommended';
+          }
+          break;
+        case 'N':
+          $checked = $patient->_annees < 13;
+          $_modifier->_state = $checked ? 'prechecked' : 'not_recommended';
+          break;
+        case 'P':
+          $checked = (($count_exclusive_modifiers == 1 && $_modifier->_checked) || $count_exclusive_modifiers == 0) &&
+            in_array($discipline->text, $spe_gen_pediatre) &&
+            ($time >= "20:00:00" && $time < "23:59:59");
+          if ($checked) {
+            $_modifier->_state = 'prechecked';
+          }
+          elseif (($count_exclusive_modifiers == 1 && $_modifier->_checked) || $count_exclusive_modifiers > 0) {
+            $_modifier->_state = 'forbidden';
+          }
+          else {
+            $_modifier->_state = 'not_recommended';
+          }
+          break;
+        case 'S':
+          $checked = (
+                       in_array($discipline->text, $spe_gen_pediatre) ||
+                       ($codable->_class == "COperation" && $codable->_lu_type_anesth)
+                     ) && ($time >= "00:00:00" && $time <= "08:00:00") &&
+                     (($count_exclusive_modifiers == 1 && $_modifier->_checked) || $count_exclusive_modifiers == 0);
+          if ($checked) {
+            $_modifier->_state = 'prechecked';
+          }
+          elseif (($count_exclusive_modifiers == 1 && $_modifier->_checked) || $count_exclusive_modifiers > 0) {
+            $_modifier->_state = 'forbidden';
+          }
+          else {
+            $_modifier->_state = 'not_recommended';
+          }
+          break;
+        case 'U':
+          $checked = (($count_exclusive_modifiers == 1 && $_modifier->_checked) || $count_exclusive_modifiers == 0) &&
+            !in_array($discipline->text, $spe_gen_pediatre) &&
+            ($time >= '20:00:00' || $time <= '07:59:59');
+          if ($checked) {
+            $_modifier->_state = 'prechecked';
+          }
+          elseif (($count_exclusive_modifiers == 1 && $_modifier->_checked) || $count_exclusive_modifiers > 0) {
+            $_modifier->_state = 'forbidden';
+          }
+          else {
+            $_modifier->_state = 'not_recommended';
+          }
+          break;
+        case "7":
+          $checked = CAppUI::conf("dPccam CCodable precode_modificateur_7") &&
+            $codable->_class == 'COperation' && isset($codable->anesth_id);
+          $_modifier->_state = ($codable->_class == 'COperation' && isset($codable->anesth_id)) ? null : 'not_recommended';
           break;
         default:
-          $_modifier->_checked = 0;
+          $checked = 0;
           break;
       }
+
+      /* If the modifier has already been checked by a user, we don't modify it */
+      if (!isset($_modifier->_checked)) {
+        $_modifier->_checked = $checked;
+      }
+
+      if ($act->_id && $_modifier->_checked && !in_array($_modifier->code, $act->_modificateurs)) {
+        $store_act = 1;
+        $modifiers_to_add .= $_modifier->code;
+      }
+    }
+
+    /* Store de l'acte si des modificateurs ont été codés en automatique */
+    if ($store_act) {
+      $act->modificateurs .= $modifiers_to_add;
+      $act->_modificateurs = array_merge($act->_modificateurs, str_split($modifiers_to_add));
+      $act->_calcul_montant_base = true;
+      $act->store();
     }
   }
 
@@ -419,7 +527,7 @@ class CCodageCCAM extends CMbObject {
    */
   public function guessActeAssociation($rulename, &$act) {
     if ($act->_position === false) {
-      $act->facturable = 0;
+      $act->facturable = '0';
       $act->_guess_association = '';
       $act->_guess_regle_asso = $rulename;
     }

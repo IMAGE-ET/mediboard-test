@@ -235,6 +235,11 @@ class CActeCCAM extends CActe {
       }
       return $msg;
     }
+
+    if ($msg = $this->checkExclusiveModifiers()) {
+      return $msg;
+    }
+
     $codage_ccam = CCodageCCAM::get($this->_ref_object, $this->executant_id);
     if (!$codage_ccam->_id) {
       $codage_ccam->store();
@@ -462,6 +467,28 @@ class CActeCCAM extends CActe {
   }
 
   /**
+   * Check if there is only one modifier F, U, P or S coded on the act and it's linked acts
+   *
+   * @return null|string
+   */
+  function checkExclusiveModifiers() {
+    $this->getLinkedActes();
+
+    $exclusive_modifiers = array('F', 'U', 'P', 'S');
+
+    $count_exclusive_modifiers = count(array_intersect($this->_modificateurs, $exclusive_modifiers));
+    foreach ($this->_linked_actes as $_linked_acte) {
+      $count_exclusive_modifiers += count(array_intersect($_linked_acte->_modificateurs, $exclusive_modifiers));
+    }
+
+    if ($count_exclusive_modifiers > 1) {
+      return 'Les modificateurs F, P, S et U sont exclusifs les uns des autres, et ne peuvent être facturés qu\'une seule fois par praticien, quel que soit le nombre d \'actes réalisés';
+    }
+
+    return null;
+  }
+
+  /**
    * @see parent::store()
    */
   function store() {
@@ -626,7 +653,7 @@ class CActeCCAM extends CActe {
     if ($same_executant) {
       $where["executant_id"]  = "= '$this->executant_id'";
     }
-    
+
     $this->_linked_actes = $acte->loadList($where);
     return $this->_linked_actes;
   }
@@ -1057,8 +1084,26 @@ class CActeCCAM extends CActe {
       $forfait     += $result["forfait"];
       $coefficient += $result["coefficient"] - 100;
     }
-    
+
     return $this->_tarif_sans_asso = ($this->_tarif_base * ($coefficient / 100) + $forfait);
+  }
+
+  /**
+   * Calcule le montant des modificateurs
+   *
+   * @param array $modificateurs Les modificateurs de l'acte
+   *
+   * @return void
+   */
+  function getMontantModificateurs($modificateurs) {
+    $code = $this->loadRefCodeCCAM();
+    $phase = $code->activites[$this->code_activite]->phases[$this->code_phase];
+    $this->_tarif_base = $phase->tarif;
+
+    foreach ($modificateurs as $_modificateur) {
+      $tarif_modif = $code->getForfait($_modificateur->code);
+      $_modificateur->_montant = round($this->_tarif_base * ($tarif_modif['coefficient'] - 100) / 100 + $tarif_modif['forfait'], 2);
+    }
   }
 
   /**

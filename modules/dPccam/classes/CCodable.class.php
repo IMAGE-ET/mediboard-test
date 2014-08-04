@@ -1022,6 +1022,8 @@ class CCodable extends CMbObject {
           $possible_acte->executant_id = CAppUI::pref("user_executant") ?
             CMediusers::get()->_id :
             $this->getExecutantId($possible_acte->code_activite);
+          $possible_acte->object_class = $this->_class;
+          $possible_acte->object_id = $this->_id;
           
           if ($possible_acte->code_activite == 4) {
             $possible_acte->extension_documentaire = $this->getExtensionDocumentaire($possible_acte->executant_id);
@@ -1061,7 +1063,8 @@ class CCodable extends CMbObject {
           if (!$possible_acte->_id) {
             $possible_acte->checkFacturable();
             if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
-              CCodageCCAM::checkModifiers($phase->_modificateurs, $phase->_connected_acte->execution, $this);
+              CCodageCCAM::precodeModifiers($phase->_modificateurs, $possible_acte, $this);
+              $possible_acte->getMontantModificateurs($phase->_modificateurs);
             }
             else {
               foreach ($phase->_modificateurs as $modificateur) {
@@ -1085,13 +1088,16 @@ class CCodable extends CMbObject {
                   $listModificateurs = substr($listModificateurs, 0, $position).substr($listModificateurs, $nextposition+1);
                 }
                 else {
-                  $modificateur->_checked = "";
+                  $modificateur->_checked = null;
                 }
               }
               else {
-                $modificateur->_checked = "";
+                $modificateur->_checked = null;
               }
             }
+            /* Vérification et précodage des modificateurs */
+            CCodageCCAM::precodeModifiers($phase->_modificateurs, $phase->_connected_acte, $this);
+            $possible_acte->getMontantModificateurs($phase->_modificateurs);
           }
         }
       }
