@@ -1899,8 +1899,8 @@ class CPatient extends CPerson {
 
   function loadLastAllaitement() {
     $allaitement = new CAllaitement();
-    $allaitement->patient_id = $this->_id;
     $where = array();
+    $where["patient_id"] = "= '$this->_id'";
     $where[] = "date_fin IS NULL OR date_fin >= '" . CMbDT::dateTime() . "'";
     $allaitement->loadObject($where, "date_fin DESC");
     return $this->_ref_last_allaitement = $allaitement;
