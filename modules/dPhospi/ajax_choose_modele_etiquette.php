@@ -11,6 +11,7 @@
 
 $object_class = CValue::get("object_class");
 $object_id    = CValue::get("object_id");
+$unique_id    = CValue::get("unique_id");
 
 $modele_etiquette = new CModeleEtiquette();
 $modele_etiquette->object_class = $object_class;
@@ -21,7 +22,8 @@ $modeles_etiquettes = $modele_etiquette->loadMatchingList();
 $smarty = new CSmartyDP();
 
 $smarty->assign("modeles_etiquettes", $modeles_etiquettes);
-$smarty->assign("object_class", $object_class);
-$smarty->assign("object_id", $object_id);
+$smarty->assign("object_class"      , $object_class);
+$smarty->assign("object_id"         , $object_id);
+$smarty->assign("unique_id"         , $unique_id);
 
 $smarty->display("inc_choose_modele_etiquette.tpl");
