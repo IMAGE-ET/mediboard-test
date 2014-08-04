@@ -1,13 +1,13 @@
 <?php 
 
 /**
- * $Id:$
+ * $Id$
  *  
  * @category Cabinet
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision:$
+ * @version  $Revision$
  * @link     http://www.mediboard.org
  */
 
@@ -29,6 +29,16 @@ $consult->loadRefsActesNGAP();
 
 // Initialisation d'un acte NGAP
 $acte_ngap = CActeNGAP::createEmptyFor($consult);
+
+// Chargement des règles de codage
+$consult->loadRefsCodagesCCAM();
+foreach ($consult->_ref_codages_ccam as $_codage) {
+  $_codage->loadPraticien()->loadRefFunction();
+  $_codage->loadActesCCAM();
+  foreach ($_codage->_ref_actes_ccam as $_acte) {
+    $_acte->getTarif();
+  }
+}
 
 $sejour = $consult->loadRefSejour();
 

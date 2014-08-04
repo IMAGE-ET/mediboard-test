@@ -1,6 +1,5 @@
 {{if !$conf.dPccam.CCodeCCAM.use_new_association_rules}}
 
-{{mb_script module="dPccam" script="code_ccam" ajax="true"}}
 <script type="text/javascript">
 
   function setToNow(element) {

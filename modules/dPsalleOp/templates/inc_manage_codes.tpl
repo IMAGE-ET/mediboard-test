@@ -1,4 +1,5 @@
 {{mb_script module="dPpmsi" script="PMSI" ajax=$ajax}}
+{{mb_script module="dPccam" script="code_ccam" ajax=$ajax}}
 
 <script>
   changeCodeToDel = function(subject_id, code_ccam, actes_ids){
@@ -125,7 +126,7 @@
             {{/foreach}}
             <tr>
               <td>
-                <a href="#" onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class}}')">
+                <a href="#" onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class}}');">
                   {{$_code->code}}
                 </a>
               </td>
