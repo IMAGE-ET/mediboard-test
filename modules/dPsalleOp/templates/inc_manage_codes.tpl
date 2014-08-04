@@ -110,7 +110,7 @@
         <legend>Actes</legend>
         <table class="tbl">
           <tr>
-            <th colspan="3">Actes disponibles</th>
+            <th colspan="10">Actes disponibles</th>
           </tr>
 
           {{foreach from=$subject->_ext_codes_ccam item=_code key=_key}}
@@ -129,6 +129,9 @@
                 <a href="#" onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class}}');">
                   {{$_code->code}}
                 </a>
+              </td>
+              <td class="text">
+                {{$_code->libelleLong}}
               </td>
               <td>
                 <!-- Actes complémentaires -->
