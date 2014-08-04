@@ -34,9 +34,9 @@ guessDataFormEmail = function(element){
       <form name="editSourceSMTP-{{$source->name}}" action="?m={{$m}}" method="post"
             onsubmit="return onSubmitFormAjax(this, { onComplete : (function() {
               if (this.up('.modal')) {
-              Control.Modal.close();
+                Control.Modal.close();
               } else {
-              ExchangeSource.refreshExchangeSource('{{$source->name}}', '{{$source->_wanted_type}}');
+                ExchangeSource.refreshExchangeSource('{{$source->name}}', '{{$source->_wanted_type}}');
               }}).bind(this)})">
 
         <input type="hidden" name="m" value="system" />
@@ -112,32 +112,27 @@ guessDataFormEmail = function(element){
             </tr>
           </table>
         </fieldset>
+      </form>
+    </td>
+  </tr>
 
+  <tr>
+     <td>
         {{if !$light}}
           <fieldset>
             <legend>{{tr}}utilities-source-smtp{{/tr}}</legend>
 
-            <table class="main form">
+            <table class="main tbl">
+              <!-- Test de connexion pop -->
               <tr>
                 <td class="button">
-                  <!-- Test d'envoi SMTP -->
-                  <button type="button" class="search"
-                          onclick="SMTP.connexion('{{$source->name}}');" {{if !$source->_id}}disabled{{/if}}>
-                    {{tr}}utilities-source-smtp-connexion{{/tr}}
-                  </button>
-
-                  <!-- Test d'envoi SMTP -->
-                  <button type="button" class="search"
-                          onclick="SMTP.envoi('{{$source->name}}');" {{if !$source->_id}}disabled{{/if}}>
-                    {{tr}}utilities-source-smtp-envoi{{/tr}}
-                  </button>
+                  {{mb_include module=system template=CSourceSMTP_tools_inc _source=$source}}
                 </td>
               </tr>
             </table>
           </fieldset>
         </td>
         {{/if}}
-      </form>
     </td>
   </tr>
 </table>

@@ -48,6 +48,17 @@
               <td>{{mb_field object=$source field="auth_ssl" typeEnum="radio"}}</td>
             </tr>
             <tr>
+              <th>{{mb_label object=$source field="object_id"}}</th>
+              <td>
+                {{if $source->_ref_mediuser}}
+                  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$source->_ref_mediuser}}
+                {{else}}
+                  <input type="text" readonly="readonly" name="_object_view"
+                         value="{{$source->_ref_metaobject->_view}}" size="50"/>
+                {{/if}}
+              </td>
+            </tr>
+            <tr>
               <th>{{mb_label object=$source field="user"}}</th>
               <td>{{mb_field object=$source field="user" size="50"}}</td>
             </tr>
@@ -88,36 +99,26 @@
             </tr>
           </table>
         </fieldset>
-
-        {{if !$light}}
-        <script type="text/javascript">
-          POP = {
-            connexion: function (exchange_source_name) {
-              var url = new Url("system", "ajax_connexion_pop");
-              url.addParam("exchange_source_name", exchange_source_name);
-              url.addParam("type_action", "connexion");
-              url.requestUpdate("utilities-source-pop-connexion-" + exchange_source_name);
-            }
-          }
-        </script>
-
-        <fieldset>
-          <legend>{{tr}}utilities-source-pop{{/tr}}</legend>
-
-          <table class="main form">
-            <!-- Test de connexion pop -->
-            <tr>
-              <td class="button">
-                <button type="button" class="search"
-                        onclick="POP.connexion('{{$source->name}}');" {{if !$source->_id}}disabled{{/if}}>
-                {{tr}}utilities-source-pop-connexion{{/tr}}
-                </button>
-              </td>
-            </tr>
-          </table>
-        </fieldset>
-        {{/if}}
       </form>
     </td>
   </tr>
+
+  {{if !$light}}
+  <tr>
+    <td>
+      <fieldset>
+        <legend>{{tr}}utilities-source-pop{{/tr}}</legend>
+
+        <table class="main tbl">
+          <!-- Test de connexion pop -->
+          <tr>
+            <td class="button">
+              {{mb_include module=system template=CSourcePOP_tools_inc _source=$source}}
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+    </td>
+  </tr>
+  {{/if}}
 </table>

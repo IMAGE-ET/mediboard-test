@@ -18,14 +18,20 @@ $light       = CValue::get("light", false);
 
 /** @var CExchangeSource $source */
 $source = CMbObject::loadFromGuid($guid);
-$source->name = $source_name;
+if (!$source->_id) {
+  $source->name = $source_name;
+}
 
-if ($source instanceof CSourcePOP && !$source->_id && $object_guid) {
-  list($object_class, $object_id) = explode("-", $object_guid);
+if ($source instanceof CSourcePOP) {
+  if (!$source->_id && $object_guid) {
+    list($object_class, $object_id) = explode("-", $object_guid);
 
-  /** @var CSourcePOP $source */
-  $source->object_class = $object_class;
-  $source->object_id    = $object_id;
+    /** @var CSourcePOP $source */
+    $source->object_class = $object_class;
+    $source->object_id    = $object_id;
+  }
+
+  $source->loadRefMetaObject();
 }
 
 $smarty = new CSmartyDP("modules/".$source->_ref_module->mod_name);

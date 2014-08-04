@@ -15,17 +15,11 @@
   Main.add(function () {
     Control.Tabs.create("tabs-configure", true, {
       afterChange: function(container) {
+        console.log(container);
         ExchangeSource.SourceAvailability(container);
       }
     })
   });
-
-  refreshExchangeSource = function(exchange_source_name, type){
-    var url = new Url("system", "ajax_refresh_exchange_source");
-    url.addParam("exchange_source_name", exchange_source_name);
-    url.addParam("type", type);
-    url.requestUpdate('exchange_source-'+exchange_source_name);
-  };
 
   Echange = {
     purge: function(force, source_class) {
@@ -45,9 +39,22 @@
     }
 
   }
+
+  function editSource(guid, source_class) {
+    new Url("eai", "ajax_edit_source")
+      .addParam("source_guid", guid)
+      .requestModal(600)
+      .modalObject.observe("afterClose", function() {
+        new Url("eai", "ajax_refresh_exchange_sources")
+          .addParam("source_class", source_class)
+          .requestUpdate(source_class+"_sources", function() {
+            ExchangeSource.SourceAvailability($('tab'+source_class));
+          });
+      });
+  }
 </script>
 
-<ul id="tabs-configure" class="control_tabs">
+<ul id="tabs-configure" class="control_tabs small">
 {{foreach from=$all_sources key=name item=_sources}}
   <li>
     <a href="#tab{{$name}}">
@@ -61,54 +68,24 @@
   <div id="tab{{$name}}" style="display: none;">
     <table class="tbl">
       <tr>
-        <th>
-          {{tr}}Name{{/tr}}
+        <th class="section" style="width: 30%">
+          {{tr}}CExchangeSource-name{{/tr}}
         </th>
-        <th>
-          {{tr}}Reachable{{/tr}}
+        <th class="section" style="width: 15%">
+          {{tr}}CExchangeSource-libelle{{/tr}}
         </th>
-        <th>
-          {{tr}}Message{{/tr}}
+        <th class="section">
         </th>
-        <th>
+        <th class="section">
           {{tr}}Time-response{{/tr}}
         </th>
-        <th>
-          {{tr}}Number-exchange{{/tr}}
+        <th class="section">
+          {{tr}}Message{{/tr}}
         </th>
       </tr>
-      {{foreach from=$_sources name=boucle_source item=_source}}
-        <tr>
-          <td class="narrow">
-            <a href="#" onclick="ExchangeSource.editSource('{{$_source->_guid}}');" title="Modifier la source">
-              {{$_source->name}}
-            </a>
-          </td>
-          <td class="narrow">
-            {{unique_id var=uid}}
-            <img class="status" id="{{$uid}}" data-id="{{$_source->_id}}"
-                 data-guid="{{$_source->_guid}}" src="images/icons/status_grey.png"
-                 title="{{$_source->name}}"/>
-          </td>
-          <td class="text compact">
-            {{$_source->_message|smarty:nodefaults}}
-          </td>
-          <td class="narrow">
-            {{$_source->_response_time}}
-          </td>
-          {{if $smarty.foreach.boucle_source.first}}
-            <td class="narrow" style="text-align: center" rowspan="{{$smarty.foreach.boucle_source.total}}">
-              {{$count_exchange.$name}}
-            </td>
-          {{/if}}
-        </tr>
-      {{foreachelse}}
-        <tr>
-          <td colspan="5" class="empty">
-            {{tr}}{{$name}}.none{{/tr}}
-          </td>
-        </tr>
-    {{/foreach}}
+      <tbody id="{{$name}}_sources">
+        {{mb_include module=eai template=inc_vw_sources}}
+      </tbody>
     </table>
     {{if $_sources|@count > 0 && $name === "CSourceSOAP" || $name === "CSourceFTP"}}
     <br/>

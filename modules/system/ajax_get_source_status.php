@@ -27,6 +27,7 @@ $source->isReachable();
 $source->getResponseTime();
 
 $status = array(
+  "active"        => $source->active,
   "reachable"     => $source->_reachable,
   "message"       => utf8_encode($source->_message),
   "name"          => $source->name,

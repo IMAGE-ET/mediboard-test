@@ -41,7 +41,8 @@
 
             {{if !$smtp_source->_id}}
             <button class="add notext"
-                    onclick="ExchangeSource.editSource('{{$smtp_source->_guid}}', true, '{{$smtp_source->name}}', '{{$smtp_source->_wanted_type}}')">
+                    onclick="ExchangeSource.editSource('{{$smtp_source->_guid}}', true, '{{$smtp_source->name}}',
+                      '{{$smtp_source->_wanted_type}}', null, ExchangeSource.refreshUserSources())">
               {{tr}}CSourceSMTP.new{{/tr}}
             </button>
             {{/if}}

@@ -155,21 +155,14 @@ ExchangeSource = {
       , br.nextSibling);
   },
 
-  editSource : function (guid, light, source_name, type, object_guid) {
+  editSource : function (guid, light, source_name, type, object_guid, callback) {
     new Url("eai", "ajax_edit_source")
       .addParam("source_guid", guid)
       .addParam("source_name", source_name)
       .addParam("light", light)
       .addParam("object_guid", object_guid)
       .requestModal(600)
-      .modalObject.observe("afterClose", function () {
-        if (light) {
-          ExchangeSource.refreshUserSources()
-        }
-        else {
-          ExchangeSource.refreshExchangeSource(source_name, type);
-        }
-      });
+      .modalObject.observe("afterClose", callback);
   },
 
   SourceAvailability : function (container) {
@@ -198,9 +191,16 @@ ExchangeSource = {
       $(tdmessage).update(status.message);
       var tdtime = tdmessage.next();
       $(tdtime).update(status.response_time);
-      if (status.reachable === 2) {
+      if (status.active == 1 && status.reachable != 2) {
         ExchangeSource.sources_actif[id_div] = ExchangeSource.sources_actif[id_div]+1;
       }
+
+      if (status.active == 1 && status.reachable != 2) {
+        var anchor = Control.Tabs.getTabAnchor(id_div);
+
+        anchor.addClassName('wrong');
+      }
+
       Control.Tabs.setTabCount(id_div, ExchangeSource.sources_actif[id_div]);
     })
   },
