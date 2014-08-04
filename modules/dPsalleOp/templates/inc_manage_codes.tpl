@@ -18,6 +18,33 @@
     );
     window.urlCodage = url;
   };
+
+  CCAMSelector.init = function(){
+    this.sForm = "manageCodes";
+    this.sClass = "_class";
+    this.sChir = "_chir";
+    {{if ($subject->_class=="COperation")}}
+    this.sAnesth = "_anesth";
+    {{/if}}
+    this.sDate = '{{$subject->_datetime}}';
+    this.sView = "_codes_ccam";
+    this.pop();
+  };
+
+  Main.add(function() {
+    var oForm = getForm("manageCodes");
+    var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
+    url.addParam("date", '{{$subject->_datetime}}');
+    url.autoComplete(oForm._codes_ccam, '', {
+      minChars: 1,
+      dropdown: true,
+      width: "250px",
+      updateElement: function(selected) {
+        $V(oForm._codes_ccam, selected.down("strong").innerHTML);
+        ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}');
+      }
+    });
+  });
 </script>
 
 {{if $conf.dPccam.CCodeCCAM.use_new_association_rules}}
@@ -25,8 +52,22 @@
 <table class="main layout">
   <tr>
     <td class="halfPane">
-      <fieldset>
-        <legend>Executants</legend>
+      <fieldset id="didac_inc_manage_codes_fieldset_executant">
+        <legend id="didac_actes_ccam_executant">Ajouter un executant</legend>
+        <form name="newCodage" action="?" method="post"
+              onsubmit="return onSubmitFormAjax(this, {
+                onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}}) })">
+          <input type="hidden" name="m" value="ccam" />
+          <input type="hidden" name="dosql" value="do_codageccam_aed" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="codage_ccam_id" value="" />
+          <input type="hidden" name="codable_class" value="{{$subject->_class}}" />
+          <input type="hidden" name="codable_id" value="{{$subject->_id}}" />
+          <select name="praticien_id" style="width: 20em;" onchange="this.form.onsubmit();">
+            <option value="">&mdash; Choisir un professionnel de santé</option>
+            {{mb_include module=mediusers template=inc_options_mediuser list=$listChirs}}
+          </select>
+        </form>
         <table class="form">
           <tr>
             <th class="category">Praticien</th>
@@ -83,34 +124,40 @@
               <td class="empty" colspan="10">{{tr}}CCodageCCAM-none{{/tr}}</td>
             </tr>
           {{/foreach}}
-          <tr>
-            <td colspan="3">
-              <form name="newCodage" action="?" method="post"
-                    onsubmit="return onSubmitFormAjax(this, {
-                      onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}}) })">
-                <input type="hidden" name="m" value="ccam" />
-                <input type="hidden" name="dosql" value="do_codageccam_aed" />
-                <input type="hidden" name="del" value="0" />
-                <input type="hidden" name="codage_ccam_id" value="" />
-                <input type="hidden" name="codable_class" value="{{$subject->_class}}" />
-                <input type="hidden" name="codable_id" value="{{$subject->_id}}" />
-                Ajouter un executant
-                <select name="praticien_id" style="width: 20em;" onchange="this.form.onsubmit();">
-                  <option value="">&mdash; Choisir un professionnel de santé</option>
-                  {{mb_include module=mediusers template=inc_options_mediuser list=$listChirs}}
-                </select>
-              </form>
-            </td>
-          </tr>
         </table>
       </fieldset>
     </td>
     <td>
-      <fieldset>
-        <legend>Actes</legend>
-        <table class="tbl">
+      <fieldset id="didac_inc_manage_codes_fieldset_code">
+        <legend id="didac_actes_ccam_execution">Ajouter un code</legend>
+        <form name="manageCodes" action="?m={{$module}}" method="post">
+          <input type="hidden" name="m" value="{{$subject->_ref_module->mod_name}}" />
+          <input type="hidden" name="dosql" value="{{$do_subject_aed}}" />
+          <input type="hidden" name="{{$subject->_spec->key}}" value="{{$subject->_id}}" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="codes_ccam" value="{{$subject->codes_ccam}}" />
+          <input type="submit" disabled="disabled" style="display:none;"/>
+          <input type="hidden" name="_chir" value="{{$subject->_praticien_id}}" />
+          {{if ($subject->_class=="COperation")}}
+            <input type="hidden" name="_anesth" value="{{$subject->_ref_plageop->anesth_id}}" />
+          {{/if}}
+          <input type="hidden" name="_class" value="{{$subject->_class}}" />
+          <span id="didac_actes_ccam_executant"></span>
+          <span id="didac_actes_ccam_button_comment" ></span>
+          <input name="_actes" type="hidden" value="" />
+          <input name="_selCode" type="hidden" value="" />
+          <button id="didac_actes_ccam_tr_modificateurs" class="search" type="button" onclick="CCAMSelector.init()">
+            {{tr}}Search{{/tr}}
+          </button>
+          <span id="didac_actes_ccam_ext_doc"></span>
+          <input type="text" size="10" name="_codes_ccam" />
+          <button class="add" name="addCode" type="button" onclick="ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}')">
+            {{tr}}Add{{/tr}}
+          </button>
+        </form>
+        <table class="form">
           <tr>
-            <th colspan="10">Actes disponibles</th>
+            <th class="category" colspan="10">Actes disponibles</th>
           </tr>
 
           {{foreach from=$subject->_ext_codes_ccam item=_code key=_key}}
@@ -129,6 +176,27 @@
                 <a href="#" onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class}}');">
                   {{$_code->code}}
                 </a>
+              </td>
+              <td>
+                {{foreach from=$_code->activites item=_activite}}
+                  {{foreach from=$_activite->phases item=_phase}}
+                    {{assign var="acte" value=$_phase->_connected_acte}}
+                    {{assign var="view" value=$acte->_id|default:$acte->_view}}
+                    {{assign var="key" value="$_key$view"}}
+                    <form name="formActe-{{$view}}" action="?m={{$module}}" method="post" onsubmit="return checkForm(this)">
+                      <input type="hidden" name="m" value="dPsalleOp" />
+                      <input type="hidden" name="dosql" value="do_acteccam_aed" />
+                      <input type="hidden" name="del" value="0" />
+                      <input type="hidden" name="acte_id" value="{{$acte->_id}}" />
+                      <input type="hidden" name="object_id" value="{{$acte->object_id}}" />
+                      <input type="hidden" name="object_class" value="{{$acte->object_class}}" />
+                    </form>
+                    <span style="display: inline-block; border: 1px solid #abe; border-radius: 3px; padding: 1px; margin: 1px; vertical-align: middle;"
+                          class="{{if $_phase->_connected_acte->_id}}ok{{else}}error{{/if}}">
+                    {{$_activite->numero}}
+                  </span>
+                  {{/foreach}}
+                {{/foreach}}
               </td>
               <td class="text">
                 {{$_code->libelleLong}}
@@ -177,6 +245,7 @@
  {{*if $subject instanceof CConsultation && !$subject->_coded*}}  
   <table class="main layout">
     <tr>
+      {{if !$conf.dPccam.CCodeCCAM.use_new_association_rules}}
       <td class="halfPane">
         <fieldset id="didac_inc_manage_codes_fieldset_code">
           <legend id="didac_actes_ccam_execution">Ajouter un code</legend>
@@ -201,42 +270,13 @@
             </button>
             <span id="didac_actes_ccam_ext_doc"></span>
             <input type="text" size="10" name="_codes_ccam" />
-
-            <script type="text/javascript">
-              CCAMSelector.init = function(){
-                this.sForm = "manageCodes";
-                this.sClass = "_class";
-                this.sChir = "_chir";
-                {{if ($subject->_class=="COperation")}}
-                this.sAnesth = "_anesth";
-                {{/if}}
-                this.sDate = '{{$subject->_datetime}}';
-                this.sView = "_codes_ccam";
-                this.pop();
-              };
-
-              var oForm = getForm("manageCodes");
-              Main.add(function() {
-                var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
-                url.addParam("date", '{{$subject->_datetime}}');
-                url.autoComplete(oForm._codes_ccam, '', {
-                  minChars: 1,
-                  dropdown: true,
-                  width: "250px",
-                  updateElement: function(selected) {
-                    $V(oForm._codes_ccam, selected.down("strong").innerHTML);
-                    ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}');
-                  }
-                });
-              });
-            </script>
-
             <button class="add" name="addCode" type="button" onclick="ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}')">
               {{tr}}Add{{/tr}}
             </button>
           </form>
         </fieldset>
       </td>
+      {{/if}}
       {{if !$subject instanceof CConsultation}}
       <td class="halfPane">
         <fieldset>

@@ -199,10 +199,12 @@ class CActeCCAM extends CActe {
     if ($msg = parent::delete()) {
       return $msg;
     }
-    if ($this->_ref_codage_ccam->_id) {
-      $this->_ref_codage_ccam->updateRule();
+    if (isset($this->_ref_codage_ccam)) {
+      if ($this->_ref_codage_ccam->_id) {
+        $this->_ref_codage_ccam->updateRule();
+      }
+      $this->_ref_codage_ccam->store();
     }
-    $this->_ref_codage_ccam->store();
 
     return null;
   }
@@ -563,13 +565,14 @@ class CActeCCAM extends CActe {
   /**
    * Charge le codage CCAM associé
    *
-   * @return CCodageCCAM
+   * @return CCodageCCAM|null
    */
   function loadRefCodageCCAM() {
     $this->loadRefObject();
     if (isset($this->_ref_object)) {
       return $this->_ref_codage_ccam = CCodageCCAM::get($this->_ref_object, $this->executant_id);
     }
+    return null;
   }
 
   /**
