@@ -75,6 +75,7 @@ if (file_exists($filename_excludes)) {
 
 $array_diff = array_diff($files_excludes, $files);
 
+$files = array_diff($files, array($filename_excludes));
 $files = array_diff($files, $files_excludes);
 $files = array_slice($files, 0, $count);
 
@@ -85,6 +86,12 @@ if (file_exists($filename_excludes)) {
 $file  = fopen($filename_excludes, "a+");
 foreach (array_diff($files_excludes, $array_diff) as $_file_exclude) {
   fputs($file, $_file_exclude."\n");
+}
+
+if (empty($files)) {
+  CAppUI::stepAjax("CEAIDispatcher-no-file", UI_MSG_WARNING);
+
+  return;
 }
 
 foreach ($files as $_filepath) {

@@ -34,7 +34,7 @@
     {{foreach from=$_routes item=_route name="foreach_routes"}}
       {{assign var=receiver value=$_route->_ref_receiver}}
 
-        <tr>
+        <tr {{if !$_route->active}}class="opacity-30"{{/if}}>
           {{if $smarty.foreach.foreach_routes.first}}
           <td rowspan="{{$_routes|@count}}" class="button">
             <button type="button" class="add notext"

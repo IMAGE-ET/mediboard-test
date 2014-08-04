@@ -20,7 +20,7 @@
     {{foreach from=$routes item=_route}}
       {{assign var=receiver value=$_route->_ref_receiver}}
 
-      <tr>
+      <tr {{if !$_route->active}}class="opacity-30"{{/if}}>
         <td>
           <button type="button" class="edit notext" onclick="Route.edit('{{$_route->_id}}', 'InteropActor.refreshRoutes()')">
             {{tr}}Edit{{/tr}}
