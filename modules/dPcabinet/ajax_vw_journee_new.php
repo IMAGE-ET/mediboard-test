@@ -30,7 +30,7 @@ $muser = new CMediusers();
 $musers = $muser->loadProfessionnelDeSanteByPref(PERM_READ, $function_id);
 
 $planning               = new CPlanningWeek(0, 0, count($musers), count($musers), false, "auto");
-$planning->title        = "Planning du " . CMbDT::format($date, "%A %d %B %Y");
+$planning->title        = "Planning du " . htmlentities(CMbDT::format($date, "%A %d %B %Y"));
 $planning->guid         = "planning_j_n";
 $planning->dragndrop    = 0;
 $planning->hour_divider = 12;

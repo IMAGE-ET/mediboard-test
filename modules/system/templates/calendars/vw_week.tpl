@@ -69,7 +69,7 @@ Main.add(function() {
         <div class="nbSelectedEvents" style="float: left; font-size: smaller; width: 20px;">
           (-) {{if @$date && $dialog}} {{$date|date_format:$conf.datetime}} {{/if}}
         </div>
-        {{$planning->title}}
+        {{$planning->title|smarty:nodefaults}}
     </th>
     </tr>
     <tr>
