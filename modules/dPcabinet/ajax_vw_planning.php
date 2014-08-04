@@ -148,6 +148,32 @@ for ($i = 0; $i < $nbDays; $i++) {
     }
   }
 
+  // PLAGES CONGE
+  $conge = new CPlageConge();
+  $where_conge = array();
+  $where_conge["date_debut"] = " <= '$jour' ";
+  $where_conge["date_fin"] = " >= '$jour' ";
+  $where_conge["user_id"] = "= '$chirSel'";
+  /** @var CPlageconge[] $conges */
+  $conges = $conge->loadList($where_conge);
+  foreach ($conges as $_conge) {
+    $libelle = '<h3 style="text-align: center">
+    CONGES</h3>
+    <p style="text-align: center">'.$_conge->libelle.'</p>';
+    $event = new CPlanningEvent(
+      $_conge->_guid.$jour,
+      $jour." 00:00:00",
+      1440,       // 1440 min = 1 day
+      $libelle,
+      "#dddddd",
+      true,
+      "hatching",
+      null,
+      false
+    );
+    $planning->addEvent($event);
+  }
+
   //PLAGES CONSULT
   /** @var CPlageConsult[] $plages */
   $plages = $plage->loadList($where, "date, debut");
