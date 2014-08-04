@@ -15,7 +15,6 @@
   Main.add(function () {
     Control.Tabs.create("tabs-configure", true, {
       afterChange: function(container) {
-        console.log(container);
         ExchangeSource.SourceAvailability(container);
       }
     })
