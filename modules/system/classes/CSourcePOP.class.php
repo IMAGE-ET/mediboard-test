@@ -113,4 +113,20 @@ class CSourcePOP extends CExchangeSource {
   function countRefMails() {
     return $this->_nb_ref_mails = $this->countBackRefs("user_mail_account");
   }
+
+  /**
+   * @see parent::isReachableSource()
+   */
+  function isReachableSource() {
+    return true;
+  }
+
+  function isAuthentificate() {
+    $pop = new CPop($this);
+    if (!$pop->open()) {
+      return false;
+    }
+    $pop->close();
+    return true;
+  }
 }
