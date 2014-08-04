@@ -238,10 +238,23 @@
       </td>
     </tr>
     {{/if}}
-    {{if isset($codage->_possible_rules.ED|smarty:nodefaults)}}
+    {{if isset($codage->_possible_rules.EH|smarty:nodefaults)}}
+      <tr>
+        <th class="narrow {{if $codage->_possible_rules.EH}}ok{{/if}}">
+          <input type="radio" name="_association_question" value="EH"
+                 {{if $codage->association_rule == "EH"}}checked="checked"{{/if}}
+                 onchange="setRule(this);"/>
+        </th>
+        <td>
+          <strong>Des actes ont précédemment été codés pour ce patient dans cette journée</strong> et les nouveaux actes
+          sont effectués dans un <strong>temps différent et discontinu</strong> des premiers.
+        </td>
+      </tr>
+    {{/if}}
     <tr>
       <th class="category" colspan="2">Pour les actes d'imagerie</th>
     </tr>
+    {{if isset($codage->_possible_rules.ED|smarty:nodefaults)}}
     <tr>
       <th class="narrow {{if $codage->_possible_rules.ED}}ok{{/if}}">
         <input type="radio" name="_association_question" value="ED"

@@ -561,6 +561,7 @@ $locales['mod-dPsalleOp-tab-vw_soins_reveil'] = 'Soins SSPI';
 $locales['mod-dPsalleOp-tab-vw_suivi_salles'] = 'Programme';
 $locales['mod-dPsalleOp-tab-vw_surveillance_peranesth'] = 'Feuille de surveillance per-anesthésique';
 $locales['mod-dPsalleOp-tab-vw_urgences'] = 'Hors plage';
+$locales['mod-salleOp-tab-ajax_edit_acte_ccam'] = 'Modification de l\'acte';
 $locales['mod-salleOp-tab-ajax_edit_checklist'] = 'Vérification de checklist';
 $locales['mod-salleOp-tab-ajax_edit_codages_ccam'] = 'Règles de codage';
 $locales['mod-salleOp-tab-ajax_info_anapath'] = 'Information sur les prélèvements anapath';
