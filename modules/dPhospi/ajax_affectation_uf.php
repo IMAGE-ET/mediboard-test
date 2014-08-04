@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Hospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
@@ -30,12 +30,8 @@ $ufs_selected = array(
 foreach ($affectations_uf as $key => $_affectation_uf) {
   $_affectation_uf->loadRefUniteFonctionnelle();
   //Utilisation d'un seul type d'uf par service/chambre/lit?
-  if (CAppUI::conf("dPhospi use_one_uf_speciality")) {
-    $ufs_selected[$_affectation_uf->_ref_uf->type] = true;
-  }
-  else {
-    $ufs_selected[$_affectation_uf->_ref_uf->_id] = true;
-  }
+  $ufs_selected[$_affectation_uf->_ref_uf->_id] = true;
+  $ufs_selected[$_affectation_uf->_ref_uf->type] = true;
 }
 
 $ufs = CUniteFonctionnelle::getUFs($object->_class);

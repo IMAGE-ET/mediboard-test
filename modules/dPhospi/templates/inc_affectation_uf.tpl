@@ -12,7 +12,7 @@
 
 <table class="form">
   <tr>
-    <th colspan="3" class="title">
+    <th colspan="4" class="title">
     {{tr}}{{$object->_class}}-uf-title-choice{{/tr}} '{{$object}}'
     </th>
   </tr>
@@ -36,11 +36,22 @@
           {{tr}}CUniteFonctionnelle.type.{{$_affectation_uf->_ref_uf->type}}{{/tr}}
         </strong>
       </td>
+      <td class="text empty">
+        {{assign var=uf_aff value=$_affectation_uf->_ref_uf}}
+        {{if $uf_aff->date_debut && $uf_aff->date_fin}}
+          Du {{mb_value object=$uf_aff field=date_debut}}
+          Au {{mb_value object=$uf_aff field=date_fin}}
+        {{elseif $uf_aff->date_debut}}
+          Jusqu'au {{mb_value object=$uf_aff field=date_fin}}
+        {{elseif $uf_aff->date_fin}}
+          A partir du {{mb_value object=$uf_aff field=date_fin}}
+        {{/if}}
+      </td>
     </tr>
   {{/foreach}}
     
   <tr>
-    <td colspan="3">
+    <td colspan="4">
       <form name="create-CAffectationUniteFonctionnelle" action="?" method="post" onsubmit="return AffectationUf.onSubmit(this);">
         <input type="hidden" name="m" value="dPhospi" />
         <input type="hidden" name="del" value="0" />
@@ -54,8 +65,16 @@
               <optgroup label="{{tr}}CUniteFonctionnelle.type.{{$type}}{{/tr}}">
                 {{foreach from=$_ufs item=uf}}
                   {{assign var=uf_id value=$uf->_id}}
-                  <option value="{{$uf->_id}}" {{if $ufs_selected.$type || isset($ufs_selected.$uf_id|smarty:nodefaults)}}disabled{{/if}}>
+                  <option value="{{$uf->_id}}" {{if isset($ufs_selected.$uf_id|smarty:nodefaults)}}disabled{{/if}}>
                     {{$uf->libelle}}
+                    {{if $uf->date_debut && $uf->date_fin}}
+                      Du {{mb_value object=$uf field=date_debut}}
+                      Au {{mb_value object=$uf field=date_fin}}
+                    {{elseif $uf->date_debut}}
+                      Jusqu'au {{mb_value object=$uf field=date_fin}}
+                    {{elseif $uf->date_fin}}
+                      A partir du {{mb_value object=$uf field=date_fin}}
+                    {{/if}}
                   </option>
                 {{/foreach}}
               </optgroup>

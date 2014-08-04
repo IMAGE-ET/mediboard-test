@@ -65,33 +65,41 @@ if ($uf->_id) {
 $ufs_service = array();
 foreach ($auf->loadListFor($service) as $_auf) {
   $uf = $_auf->loadRefUniteFonctionnelle();
-  $ufs_service    [$uf->_id] = $uf;
-  $ufs_soins      [$uf->_id] = $uf;
-  $ufs_hebergement[$uf->_id] = $uf;
+  if ((!$uf->date_debut || $uf->date_debut < $affectation->sortie) && (!$uf->date_fin || $uf->date_fin > $affectation->entree)) {
+    $ufs_service    [$uf->_id] = $uf;
+    $ufs_soins      [$uf->_id] = $uf;
+    $ufs_hebergement[$uf->_id] = $uf;
+  }
 }
 
 // UFs de chambre
 $ufs_chambre = array();
 foreach ($auf->loadListFor($chambre) as $_auf) {
   $uf = $_auf->loadRefUniteFonctionnelle();
-  $ufs_chambre    [$uf->_id] = $uf;
-  $ufs_hebergement[$uf->_id] = $uf;
+  if ((!$uf->date_debut || $uf->date_debut < $affectation->sortie) && (!$uf->date_fin || $uf->date_fin > $affectation->entree)) {
+    $ufs_chambre    [$uf->_id] = $uf;
+    $ufs_hebergement[$uf->_id] = $uf;
+  }
 }
 
 // UFs de lit
 $ufs_lit = array();
 foreach ($auf->loadListFor($lit) as $_auf) {
   $uf = $_auf->loadRefUniteFonctionnelle();
-  $ufs_lit        [$uf->_id] = $uf;
-  $ufs_hebergement[$uf->_id] = $uf;
+  if ((!$uf->date_debut || $uf->date_debut < $affectation->sortie) && (!$uf->date_fin || $uf->date_fin > $affectation->entree)) {
+    $ufs_lit        [$uf->_id] = $uf;
+    $ufs_hebergement[$uf->_id] = $uf;
+  }
 }
 
 // UFs de fonction
 $ufs_function = array();
 foreach ($auf->loadListFor($function) as $_auf) {
   $uf = $_auf->loadRefUniteFonctionnelle();
-  $ufs_function   [$uf->_id] = $uf;
-  $ufs_medicale   [$uf->_id] = $uf;
+  if ((!$uf->date_debut || $uf->date_debut < $affectation->sortie) && (!$uf->date_fin || $uf->date_fin > $affectation->entree)) {
+    $ufs_function   [$uf->_id] = $uf;
+    $ufs_medicale   [$uf->_id] = $uf;
+  }
 }
 
 // UFs de praticien
@@ -99,15 +107,19 @@ $ufs_praticien_sejour = array();
 $ufs_prat_placement = array();
 foreach ($auf->loadListFor($praticien) as $_auf) {
   $uf = $_auf->loadRefUniteFonctionnelle();
-  $ufs_praticien_sejour [$uf->_id] = $uf;
-  $ufs_medicale  [$uf->_id] = $uf;
+  if ((!$uf->date_debut || $uf->date_debut < $affectation->sortie) && (!$uf->date_fin || $uf->date_fin > $affectation->entree)) {
+    $ufs_praticien_sejour [$uf->_id] = $uf;
+    $ufs_medicale  [$uf->_id] = $uf;
+  }
 }
 
 if ($prat_placement->_id) {
   foreach ($auf->loadListFor($prat_placement) as $_auf) {
     $uf = $_auf->loadRefUniteFonctionnelle();
-    $ufs_prat_placement [$uf->_id] = $uf;
-    $ufs_medicale  [$uf->_id] = $uf;
+    if ((!$uf->date_debut || $uf->date_debut < $affectation->sortie) && (!$uf->date_fin || $uf->date_fin > $affectation->entree)) {
+      $ufs_prat_placement [$uf->_id] = $uf;
+      $ufs_medicale  [$uf->_id] = $uf;
+    }
   }
 }
 else {

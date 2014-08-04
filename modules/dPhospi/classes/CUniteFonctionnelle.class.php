@@ -23,7 +23,9 @@ class CUniteFonctionnelle extends CMbObject {
   public $description;
   public $type;
   public $type_sejour;
-  
+  public $date_debut;
+  public $date_fin;
+
   /** @var CGroups */
   public $_ref_group;
 
@@ -63,7 +65,9 @@ class CUniteFonctionnelle extends CMbObject {
     $props["description"] = "text";
     $props["type"]        = "enum list|hebergement|soins|medicale default|hebergement";
     $props["type_sejour"] = "enum list|comp|ambu|exte|seances|ssr|psy|urg|consult";
-    
+    $props["date_debut"]  = "date";
+    $props["date_fin"]    = "date";
+
     return $props;
   }
 

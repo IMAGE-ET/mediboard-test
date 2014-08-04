@@ -3899,9 +3899,9 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     if ($affectation->_id) {
       $ufs = $affectation->getUFs();
-      $this->uf_hebergement_id = $affectation->uf_hebergement_id;
-      $this->uf_soins_id = $affectation->uf_soins_id;
-      $this->uf_medicale_id = $affectation->uf_medicale_id;
+      $this->uf_hebergement_id  = $affectation->uf_hebergement_id;
+      $this->uf_soins_id        = $affectation->uf_soins_id;
+      $this->uf_medicale_id     = $affectation->uf_medicale_id;
       return $ufs;
     }
     else {
@@ -3916,12 +3916,16 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   function makeUF() {
-    $this->completeField("uf_hebergement_id", "uf_soins_id", "uf_medicale_id");
+    $this->completeField("uf_hebergement_id", "uf_soins_id", "uf_medicale_id", "entree_prevue", "sortie_prevue");
+
     $ljoin = array("uf" => "uf.uf_id = affectation_uf.uf_id");
+    $where = array();
+    $where[] = "uf.date_debut IS NULL OR uf.date_debut < '$this->_date_sortie_prevue'";
+    $where[] = "uf.date_fin IS NULL OR uf.date_fin > '$this->_date_entree_prevue'";
 
     if (!$this->uf_hebergement_id || $this->fieldModified("service_id")) {
       $affectation_uf = new CAffectationUniteFonctionnelle();
-      $where = array("uf.type" => "= 'hebergement'");
+      $where["uf.type"] =  "= 'hebergement'";
 
       if (!$affectation_uf->uf_id) {
         $where["object_id"]    = "= '$this->service_id'";
@@ -3934,7 +3938,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     if (!$this->uf_soins_id || $this->fieldModified("service_id")) {
       $affectation_uf = new CAffectationUniteFonctionnelle();
-      $where = array("uf.type" => "= 'soins'");
+      $where["uf.type"] =  "= 'soins'";
 
       if (!$affectation_uf->uf_id) {
         $where["object_id"]    = "= '$this->service_id'";
@@ -3947,7 +3951,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     if (!$this->uf_medicale_id) {
       $affectation_uf = new CAffectationUniteFonctionnelle();
-      $where = array("uf.type" => "= 'medicale'");
+      $where["uf.type"] =  "= 'medicale'";
 
       if (!$affectation_uf->uf_id) {
         $praticien = $this->loadRefPraticien();

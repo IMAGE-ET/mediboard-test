@@ -779,6 +779,18 @@ class CSetupdPhospi extends CSetup {
       ADD INDEX (`parent_affectation_id`)";
     $this->addQuery($query);
 
-    $this->mod_version = "0.86";
+    $this->makeRevision("0.86");
+    $query = "ALTER TABLE `uf`
+                CHANGE `group_id` `group_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                CHANGE `type` `type` ENUM ('hebergement','soins','medicale') DEFAULT 'hebergement',
+                ADD `date_debut` DATE,
+                ADD `date_fin` DATE;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `uf`
+                ADD INDEX (`date_debut`),
+                ADD INDEX (`date_fin`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.87";
   }
 }
