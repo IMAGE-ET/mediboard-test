@@ -181,13 +181,12 @@ class CActeCCAM extends CActe {
    * @see parent::canDeleteEx()
    */
   function canDeleteEx(){
-    parent::canDeleteEx();
-   
     // Test si la consultation est validée
     if ($msg = $this->checkCoded()) {
       return $msg;
     }
-    return null;
+
+    return parent::canDeleteEx();
   }
 
 
