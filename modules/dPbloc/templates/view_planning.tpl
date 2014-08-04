@@ -1,13 +1,3 @@
-{{* $Id$ *}}
-
-{{*
- * @package Mediboard
- * @subpackage dPbloc
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
-
 {{assign var=show_duree_preop value=$conf.dPplanningOp.COperation.show_duree_preop}}
 
 <table class="tbl">
@@ -94,7 +84,16 @@
       {{else}}
         {{assign var=listOperations value=$curr_plageop->_ref_operations}}
       {{/if}}
+      {{assign var=salle_id value=""}}
       {{foreach from=$listOperations item=curr_op}}
+          {{if $salle_id != $curr_op->salle_id && $curr_plage_id == "hors_plage"}}
+            {{assign var=salle_id value=$curr_op->salle_id}}
+            <tr>
+              <th class="section" colspan="{{$_materiel+$_extra+$_duree+$_coordonnees+13}}">
+                {{$curr_op->_ref_salle->_view}}
+              </th>
+            </tr>
+          {{/if}}
           <tr>
           {{if $show_duree_preop}}
             <td>{{mb_value object=$curr_op field=_heure_us}}</td>
