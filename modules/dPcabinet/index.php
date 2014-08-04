@@ -13,11 +13,13 @@ $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
 if (CAppUI::pref("new_semainier") == "1") {
   $module->registerTab("vw_planning_new"               , TAB_READ);
+  $module->registerTab("vw_journee_new"               , TAB_READ);
 }
 else {
   $module->registerTab("vw_planning"               , TAB_READ);
+  $module->registerTab("vw_journee"                , TAB_READ);
+
 }
-$module->registerTab("vw_journee"                , TAB_READ);
 $module->registerTab("edit_planning"             , TAB_READ);
 $module->registerTab("edit_consultation"         , TAB_EDIT);
 //$module->registerTab("vw_dossier"                , TAB_EDIT);
