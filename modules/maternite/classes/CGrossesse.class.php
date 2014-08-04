@@ -292,15 +292,6 @@ class CGrossesse extends CMbObject {
     return $this->_ref_allaitements = $this->loadBackRefs("allaitements");
   }
 
-
-  function isAllaitementEnCours() {
-    $allaitements = $this->loadRefsAllaitement();
-    $last_allaitement = end($allaitements);
-
-    return $this->_allaitement_en_cours =
-      $this->allaitement_maternel && !$this->active && $last_allaitement && (!$last_allaitement->date_fin || $last_allaitement->date_debut > CMbDT::date());
-  }
-
   function loadLastAllaitement() {
     return $this->_ref_last_allaitement = $this->loadLastBackRef("allaitements", "date_debut DESC");
   }
