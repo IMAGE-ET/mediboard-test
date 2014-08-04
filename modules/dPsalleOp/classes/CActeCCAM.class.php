@@ -63,12 +63,13 @@ class CActeCCAM extends CActe {
   public $_guess_facturable;
   public $_guess_association;
   public $_guess_regle_asso;
+  public $_exclusive_modifiers;
 
   // Behaviour fields
   public $_adapt_object = false;
   public $_calcul_montant_base = false;
   public $_edit_modificateurs = false;
-  
+
   // References
   /** @var  CDatedCodeCCAM */
   public $_ref_code_ccam;

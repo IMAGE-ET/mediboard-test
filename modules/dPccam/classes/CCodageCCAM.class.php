@@ -367,6 +367,7 @@ class CCodageCCAM extends CMbObject {
     foreach ($act->_linked_actes as $_linked_act) {
       $count_exclusive_modifiers += count(array_intersect($_linked_act->_modificateurs, $exclusive_modifiers));
     }
+    $act->_exclusive_modifiers = $count_exclusive_modifiers;
 
     return $count_exclusive_modifiers;
   }
