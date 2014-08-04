@@ -84,15 +84,15 @@
     <div class="only-printable">
       {{if $type == 'presents'}}
         {{if $affectation}}
-          {{$affectation->sortie|date_format:$conf.datetime}}
+          {{$affectation->sortie|date_format:$conf.datetime}} / {{mb_value object=$sejour field="mode_sortie"}}
         {{else}}
-          {{$sejour->sortie|date_format:$conf.datetime}}
+          {{$sejour->sortie|date_format:$conf.datetime}} / {{mb_value object=$sejour field="mode_sortie"}}
         {{/if}}
       {{else}}
         {{if $affectation}}
-          {{$affectation->sortie|date_format:$conf.time}}
+          {{$affectation->sortie|date_format:$conf.time}} / {{mb_value object=$sejour field="mode_sortie"}}
         {{else}}
-          {{$sejour->sortie|date_format:$conf.time}}
+          {{$sejour->sortie|date_format:$conf.time}} / {{mb_value object=$sejour field="mode_sortie"}}
         {{/if}}
       {{/if}}
     </div>
