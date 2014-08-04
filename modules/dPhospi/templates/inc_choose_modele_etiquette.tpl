@@ -17,7 +17,7 @@
     <tr>
       <td>
         <button type="button" class="tick notext"
-          onclick="ModeleEtiquette.print('{{$object_class}}', '{{$object_id}}', '{{$_modele->_id}}');"></button>
+          onclick="ModeleEtiquette.print('{{$object_class}}', '{{$object_id}}', '{{$_modele->_id}}', '{{$unique_id}}');"></button>
       </td>
       <td>
         {{$_modele->nom}}

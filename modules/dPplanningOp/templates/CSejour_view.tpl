@@ -11,7 +11,7 @@
 {{assign var=patient      value=$object->_ref_patient}}
 {{assign var=operations   value=$object->_ref_operations}}
 {{assign var=affectations value=$object->_ref_affectations}}
-
+{{unique_id var=unique_id}}
 
 <script>
   popEtatSejour = function(sejour_id) {
@@ -37,7 +37,7 @@
   ModeleEtiquette.nb_printers = {{$sejour->_nb_printers|@json}};
 </script>
 
-<form name="download_etiq_{{$object->_class}}_{{$sejour->_id}}" style="display: none;" target="_blank" method="get" class="prepared">
+<form name="download_etiq_{{$object->_class}}_{{$sejour->_id}}_{{$unique_id}}" style="display: none;" target="_blank" method="get" class="prepared">
   <input type="hidden" name="m" value="hospi" />
   <input type="hidden" name="a" value="print_etiquettes" />
   <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
@@ -129,9 +129,9 @@
       {{if @$modules.dPhospi->_can->read}}
         <button type="button" class="print"
           {{if $sejour->_count_modeles_etiq == 1}}
-            onclick="ModeleEtiquette.print('{{$sejour->_class}}', '{{$sejour->_id}}');"
+            onclick="ModeleEtiquette.print('{{$sejour->_class}}', '{{$sejour->_id}}', '{{$unique_id}}');"
           {{else}}
-            onclick="ModeleEtiquette.chooseModele('{{$sejour->_class}}', '{{$sejour->_id}}')"
+            onclick="ModeleEtiquette.chooseModele('{{$sejour->_class}}', '{{$sejour->_id}}', '{{$unique_id}}')"
           {{/if}}>
           {{tr}}CModeleEtiquette.print_labels{{/tr}}
         </button>

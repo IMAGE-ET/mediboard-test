@@ -11,7 +11,7 @@
 {{unique_id var=unique_id}}
 
 {{if $nb_modeles_etiquettes}}
-  <form name="download_etiq_{{$object->_class}}_{{$object->_id}}" style="display: none;" action="?" target="_blank" method="get" class="prepared">
+  <form name="download_etiq_{{$object->_class}}_{{$object->_id}}_{{$unique_id}}" style="display: none;" action="?" target="_blank" method="get" class="prepared">
     <input type="hidden" name="m" value="dPhospi" />
     <input type="hidden" name="a" value="print_etiquettes" />
     <input type="hidden" name="object_class" value="{{$object->_class}}" />
@@ -21,7 +21,6 @@
     <input type="hidden" name="dialog" value="1" />
   </form>
 {{/if}}
-
 
 {{if $can_doc}}
   <form name="unmergePack_{{$object->_guid}}" method="post" onsubmit="return onSubmitFormAjax(this);">
@@ -158,9 +157,9 @@
 {{if $nb_modeles_etiquettes > 0}}
   <button type="button" class="modele_etiquette"
     {{if $nb_modeles_etiquettes == 1}}
-      onclick="ModeleEtiquette.print('{{$object_class}}', '{{$object_id}}')"
+      onclick="ModeleEtiquette.print('{{$object_class}}', '{{$object_id}}', '{{$unique_id}}')"
     {{else}}
-      onclick="ModeleEtiquette.chooseModele('{{$object_class}}', '{{$object_id}}')"
+      onclick="ModeleEtiquette.chooseModele('{{$object_class}}', '{{$object_id}}', '{{$unique_id}}')"
     {{/if}}>Etiquettes</button>
 {{/if}}
  
