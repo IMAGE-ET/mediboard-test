@@ -44,15 +44,15 @@
 
 <table class="tbl" style="min-width: 400px;">
   <tr>
-    <th>{{mb_title class=CActeCCAM field=code_acte}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=code_acte}}</th>
     <th>{{mb_title class=CActeCCAM field=code_activite}}</th>
     <th>{{mb_title class=CActeCCAM field=modificateurs}}</th>
-    <th>{{mb_title class=CActeCCAM field=execution}}</th>
-    <th>{{mb_title class=CActeCCAM field=montant_depassement}}</th>
-    <th>{{mb_title class=CActeCCAM field=motif_depassement}}</th>
-    <th>{{mb_title class=CActeCCAM field=code_association}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=execution}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=montant_depassement}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=motif_depassement}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=code_association}}</th>
     <th>{{mb_title class=CActeCCAM field=_tarif}}</th>
-    <th>Actions</th>
+    <th class="narrow">Actions</th>
   </tr>
   {{foreach from=$subject->_ext_codes_ccam item=_code key=_key}}
   {{foreach from=$_code->activites item=_activite}}
@@ -126,7 +126,7 @@
         <td {{if $acte->_id && !$acte->facturable}}style="background-color: #fc9"{{/if}}>
           {{mb_value object=$acte field=_tarif}}
         </td>
-        <td class="text">
+        <td class="button">
           <form name="codageActe-{{$view}}" action="?" method="post"
           onsubmit="return onSubmitFormAjax(this, {onComplete: function() {window.urlCodage.refreshModal()}});">
             <input type="hidden" name="m" value="salleOp" />
@@ -153,11 +153,12 @@
             {{/foreach}}
 
             {{if !$acte->_id}}
-              <button class="add notext" type="submit">{{tr}}Add{{/tr}}
+              <button class="add notext compact" type="submit">
+                {{tr}}Add{{/tr}}
               </button>
             {{else}}
-              <button class="edit notext" type="button" onclick="ActesCCAM.edit({{$acte->_id}})">{{tr}}Edit{{/tr}}</button>
-              <button class="trash notext" type="button"
+              <button class="edit notext compact" type="button" onclick="ActesCCAM.edit({{$acte->_id}})">{{tr}}Edit{{/tr}}</button>
+              <button class="trash notext compact" type="button"
                       onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}', ajax: '1'},
                         {onComplete: function() {window.urlCodage.refreshModal()}});">
                 {{tr}}Delete{{/tr}}

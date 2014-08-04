@@ -13,7 +13,7 @@
     var url = new Url("salleOp", "ajax_edit_codages_ccam");
     url.addParam("codage_id", codage_id);
     url.requestModal(
-      -30, -30,
+      -200, -100,
       {onClose: function() {ActesCCAM.refreshList('{{$subject->_id}}','{{$subject->_praticien_id}}')}}
     );
     window.urlCodage = url;
