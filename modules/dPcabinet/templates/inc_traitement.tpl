@@ -312,7 +312,7 @@
                       <button type="button" class="hslip" onclick="submitAndCallback(this.form, 'relaiLineDialog');">
                         Relai
                       </button>
-                      <button type="button" class="pause" onclick="pauseLineDialog();">
+                      <button type="button" class="pause" onclick="submitAndCallback(this.form, 'pauseLineDialog')">
                         Pause
                       </button>
                     </fieldset>
