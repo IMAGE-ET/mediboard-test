@@ -1,10 +1,12 @@
+{{mb_default var=callback_uf value=false}}
+
 <tr>
   <th class="narrow">{{tr}}Choose{{/tr}}</th>
   <td colspan="2">
     {{assign var=field value=uf_`$context`_id}}
     {{assign var=value value=$affectation->$field}}
 
-    <input type="hidden" name="{{$field}}" value="{{$value}}"/>
+    <input type="hidden" name="{{$field}}" value="{{$value}}" {{if $callback_uf}}onchange="{{$callback_uf}}"{{/if}}/>
     {{assign var=found_checked value=0}}
     {{foreach from=$ufs item=_uf}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_uf->_guid}}')">

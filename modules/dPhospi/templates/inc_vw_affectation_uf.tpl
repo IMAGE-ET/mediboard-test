@@ -58,14 +58,14 @@
           </tbody>
           <tr>
             <th>{{tr}}CAffectation-praticien_id{{/tr}}</th>
-            <td colspan="2">
-              <select name="praticien_id" style="width: 15em;" onchange="AffectationUf.onSubmitRefresh(this.form, '{{$affectation->_guid}}', '{{$lit->_guid}}', '{{$see_validate}}')">
-                <option value="" {{if !$praticien->_id}} selected="selected" {{/if}}>&mdash; Choisir un professionnel</option>
-                {{mb_include module=mediusers template=inc_options_mediuser selected=$prat_placement->_id list=$praticiens}}
-              </select>
+            <td colspan="2" id="select_prat_uf_med">
+              {{mb_include template=inc_vw_select_prat_uf}}
              </td>
           </tr>
-          {{mb_include template=inc_options_ufs_context context=medicale ufs=$ufs_medicale}}
+          {{assign var=affectation_guid value=$affectation->_guid}}
+          {{assign var=lit_guid         value=$lit->_guid}}
+          {{mb_include template=inc_options_ufs_context context=medicale ufs=$ufs_medicale
+              callback_uf="AffectationUf.reloadPratUfMed(this, '$affectation_guid', '$lit_guid', '$see_validate')"}}
         </table>
       </fieldset>
     </td>
