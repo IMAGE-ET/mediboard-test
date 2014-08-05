@@ -201,7 +201,7 @@ class CActeCCAM extends CActe {
     }
     if (isset($this->_ref_codage_ccam)) {
       if ($this->_ref_codage_ccam->_id) {
-        $this->_ref_codage_ccam->updateRule();
+        $this->_ref_codage_ccam->updateRule(true);
       }
       $this->_ref_codage_ccam->store();
     }
@@ -535,7 +535,7 @@ class CActeCCAM extends CActe {
 
     // Si on crée un nouvel acte, on relance l'analyse du codage
     if (!$oldObject->_id) {
-      $codage->updateRule();
+      $codage->updateRule(true);
       if ($msg = $codage->store()) {
         return $msg;
       }
