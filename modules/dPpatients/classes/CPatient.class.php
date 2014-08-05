@@ -2002,6 +2002,8 @@ class CPatient extends CPerson {
     $template->addProperty("Patient - médecin traitant - cp"              , $medecin->cp);
     $template->addProperty("Patient - médecin traitant - ville"           , $medecin->ville);
     $template->addProperty("Patient - médecin traitant - confraternité"   , $medecin->_confraternite);
+    $template->addProperty("Patient - médecin traitant - fax"             , $medecin->getFormattedValue("fax"));
+
     if ($medecin->sexe == "f") {
       $template->addProperty("Patient - médecin traitant - accord genre"    , "e");
       $template->addProperty("Patient - médecin traitant - article long"    , "Mme le docteur");
