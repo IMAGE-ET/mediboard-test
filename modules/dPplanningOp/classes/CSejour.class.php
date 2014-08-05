@@ -921,9 +921,6 @@ class CSejour extends CFacturable implements IPatientRelated {
   function store() {
     $this->completeField("entree_reelle", "entree", "patient_id", "type_pec", "grossesse_id", "mode_sortie");
 
-    // Sectorisation Rules
-    $this->getServiceFromSectorisationRules();
-
     // Vérification de la validité des codes CIM
     if ($this->DP != null) {
       $dp = CCodeCIM10::get($this->DP);
@@ -1118,6 +1115,9 @@ class CSejour extends CFacturable implements IPatientRelated {
       $old =  $this->loadOldObject();
       $naissances = $old->loadRefGrossesse()->loadRefsNaissances();
     }
+
+    // Sectorisation Rules
+    $this->getServiceFromSectorisationRules();
 
     $this->getUFs();
     // On fait le store du séjour
