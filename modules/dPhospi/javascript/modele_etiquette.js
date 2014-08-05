@@ -16,7 +16,6 @@ ModeleEtiquette = {
       url.requestModal(400);
     }
     else {
-      console.log('download_etiq_'+object_class+'_'+object_id+'_'+uniq_id);
       var form = getForm('download_etiq_'+object_class+'_'+object_id+'_'+uniq_id);
       if (modele_etiquette_id) {
         Control.Modal.close();
