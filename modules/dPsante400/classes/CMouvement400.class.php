@@ -548,15 +548,21 @@ class CMouvement400 extends CRecordSante400 {
    */
   function synchronize() {
   }
-  
+
   /**
-   * Tell whether a field has been changed in this mouvement
-   * 
-   * @param string [optional] Changed to a specific value, if not null
-   * 
+   * Tell whether a field has been changed in this mouvement for a given new value
+   *
+   * @param $field string            Name of the the field
+   * @param $new   string [optional] Changed to a specific new value, if not null
+   * @param $old   string [optional] Changed from a specific old value, if not null
+   *
+   * @return bool
    */
-  function changedField($field, $value = null) {
-    $newValue = $this->data[$this->new_prefix . $field];
-    return in_array($field, $this->changedFields) && ($value !== null ? $newValue == $value : true);
+  function changedField($field, $new = null, $old = null) {
+    $new_value = $this->data[$this->new_prefix . $field];
+    $old_value = $this->data[$this->old_prefix . $field];
+    return in_array($field, $this->changedFields)
+      && ($new !== null ? $new_value == $new : true)
+      && ($old !== null ? $old_value == $old : true);
   }
 }
