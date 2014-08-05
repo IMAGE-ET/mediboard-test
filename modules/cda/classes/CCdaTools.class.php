@@ -159,12 +159,13 @@ class CCdaTools {
   /**
    * Valide le CDA
    *
-   * @param String $cda CDA
+   * @param String $cda                   CDA
+   * @param Bool   $schematron_validation Validation par schémtron
    *
    * @throws CMbException
    * @return void
    */
-  static function validateCDA($cda) {
+  static function validateCDA($cda, $schematron_validation = true) {
     $dom = new CMbXMLDocument("UTF-8");
 
     $returnErrors = $dom->loadXMLSafe($cda, null, true);
@@ -172,9 +173,14 @@ class CCdaTools {
       throw new CMbException("Erreur lors de la conception du document");
     }
 
-    $returnErrors = $dom->schemaValidate("modules/cda/resources/CDA.xsd", true, false);
-    $validateSchematron = self::validateSchematron($cda);
+    $validateSchematron = null;
+    if ($schematron_validation) {
+      $returnErrors = $dom->schemaValidate("modules/cda/resources/CDA.xsd", true, false);
+      $validateSchematron = self::validateSchematron($cda);
+    }
+
     if ($returnErrors !== true || $validateSchematron) {
+      mbTrace($returnErrors);
       throw new CMbException("Problème de conformité, vérifiez les informations nécessaires pour le CDA");
     }
   }
