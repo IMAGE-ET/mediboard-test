@@ -27,7 +27,6 @@ class CCodageCCAM extends CMbObject {
   public $codable_id;
   public $praticien_id;
   public $locked;
-  public $nb_acts;
 
   /**
    * @var CActeCCAM[]
@@ -116,7 +115,6 @@ class CCodageCCAM extends CMbObject {
     $props['codable_id'] = 'ref notNull class|CCodable meta|codable_class';
     $props['praticien_id'] = 'ref notNull class|CMediusers';
     $props['locked'] = 'bool notNull default|0';
-    $props['nb_acts'] = 'num notNull default|0';
 
     return $props;
   }
@@ -193,10 +191,6 @@ class CCodageCCAM extends CMbObject {
     $act->object_id = $this->codable_id;
     $act->executant_id = $this->praticien_id;
     $this->_ref_actes_ccam = $act->loadMatchingList("code_association");
-
-    if ($this->nb_acts != count($this->_ref_actes_ccam)) {
-      $this->nb_acts = count($this->_ref_actes_ccam);
-    }
 
     foreach ($this->_ref_actes_ccam as $_acte) {
       if (in_array($_acte->code_acte, $this->_check_failed_acts)) {

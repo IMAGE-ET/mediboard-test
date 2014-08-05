@@ -183,7 +183,13 @@ class CSetupdPccam extends CSetup {
        'EG3', 'EG4', 'EG5', 'EG6', 'EG7', 'EH', 'EI', 'GA', 'GB', 'G2', 'M');";
     $this->addQuery($query);
 
-    $this->mod_version = '0.24';
+    $this->makeRevision('0.24');
+
+    $query = "ALTER TABLE  `codage_ccam`
+      DROP `nb_acts`;";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.25';
 
     // Data source query
 
