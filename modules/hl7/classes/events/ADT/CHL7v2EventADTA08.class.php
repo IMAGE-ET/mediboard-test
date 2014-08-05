@@ -49,7 +49,7 @@ class CHL7v2EventADTA08 extends CHL7v2EventADT implements CHL7EventADTA01 {
       $patient = $object;
 
       /** @var CSejour $sejour */
-      $sejour = $patient->_ref_sejour;
+      $sejour = isset($patient->_ref_sejour) ? $patient->_ref_sejour : null;
 
       if (!$sejour || !$sejour->_id) {
         parent::build($patient);

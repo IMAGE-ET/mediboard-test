@@ -378,7 +378,22 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     
     $patient = $mbObject->loadRefPatient();
     $patient->_receiver = $receiver;
-    
+
+    if ($receiver->_configs["send_patient_with_current_admit"]) {
+      // On charge seulement le séjour courant pour le patient
+      $sejours = $patient->getCurrSejour(null, $receiver->group_id);
+      if (!$sejours) {
+        return;
+      }
+
+      $sejour = reset($sejours);
+      if (!$sejour->_id) {
+        return;
+      }
+
+      $patient->_ref_sejour = $sejour;
+    }
+
     $code = ($receiver->_configs["send_update_patient_information"] == "A08") ? "A08" : "A31";
         
     if ($patient->_eai_sender_guid || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
