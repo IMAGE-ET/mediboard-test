@@ -475,7 +475,7 @@ foreach ($plages_by_salle as $salle_id => $_plages) {
 $m = $save_m;
 
 $planning->allow_superposition = true;
-$planning->rearrange(); //ReArrange the planning
+$planning->rearrange(true); //ReArrange the planning
 
 $bank_holidays = CMbDate::getHolidays($date_planning);
 $smarty        = new CSmartyDP();

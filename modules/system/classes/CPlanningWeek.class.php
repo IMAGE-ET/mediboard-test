@@ -197,9 +197,11 @@ class CPlanningWeek{
   /**
    * rearrange the current list of events in a optimized way
    *
+   * @param bool $new_mode use the new mode
+   *
    * @return null
    */
-  function rearrange() {
+  function rearrange($new_mode = false) {
     $events = array();
     //days
     foreach ($this->events_sorted as $_events_by_day) {
@@ -222,37 +224,42 @@ class CPlanningWeek{
           $events[$_event->internal_id] = $_event;
         }
       }
-      $uncollided = array();
-      $lines = CMbRange::rearrange($intervals, true, $uncollided);
 
-      $lines_count = count($lines);
-      foreach ($lines as $_line_number => $_line) {
-        foreach ($_line as $_event_id) {
-          $event = $events[$_event_id]; //get the event
-          $event->height = $_line_number;
-          //global = first line
-          $event->width = (1 / $lines_count);
-          $event->offset = ($_line_number / $lines_count);
-          if ($this->allow_superposition) {
-            $event->offset+=.05;
+      if ($new_mode) {
+        $lines = CMbRange::rearrange2($intervals);
+
+        foreach ($lines as $guid => $_line) {
+          /** @var CPlanningEvent $event */
+          $event = $events[$guid];
+          $event->offset =  $_line["start"] / $_line["total"];
+          $event->width = ($_line["end"] - $_line["start"]) / $_line["total"];
+        }
+      }
+      else {
+        $lines = CMbRange::rearrange($intervals);
+
+        $lines_count = count($lines);
+        foreach ($lines as $_line_number => $_line) {
+          foreach ($_line as $_event_id) {
+            $event = $events[$_event_id]; //get the event
+            $event->height = $_line_number;
+            //global = first line
+            $event->width = (1 / $lines_count);
+            $event->offset = ($_line_number / $lines_count);
+            if ($this->allow_superposition) {
+              $event->offset+=.05;
+            }
+
+            if ($lines_count == 1 && $this->allow_superposition) {
+              $event->width =  $event->width-.1;
+            }
+
+            //the line is not the first
+            if ($_line_number >= 1 && $this->allow_superposition) {
+              $event->width = (1 / ($lines_count))+0.05;
+              $event->offset = ($_line_number / $lines_count)-.1;
+            }
           }
-
-          if ($lines_count == 1 && $this->allow_superposition) {
-            $event->width =  $event->width-.1;
-          }
-
-          //the line is not the first
-          if ($_line_number >= 1 && $this->allow_superposition) {
-            $event->width = (1 / ($lines_count))+0.05;
-            $event->offset = ($_line_number / $lines_count)-.1;
-          }
-
-          // lines uncollided
-          //TODO: fix collisions problems
-          /*if ((in_array($event->internal_id, array_keys($uncollided))) && ($_line_number < ($lines_count-1)) && !$event->below) {
-            $event->width = (($lines_count - ($_line_number)) / $lines_count);
-            $event->width = ($_line_number == 0) ? $event->width-0.1 :$event->width +.05;
-          }*/
         }
       }
     }
