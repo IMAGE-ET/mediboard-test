@@ -238,7 +238,7 @@ foreach ($musers as $_user) {
   $i++;
 }
 $planning->allow_superposition =1 ;
-//$planning->rearrange();
+$planning->rearrange(true);
 
 
 // smarty
