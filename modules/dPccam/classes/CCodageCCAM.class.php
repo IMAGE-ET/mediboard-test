@@ -786,12 +786,13 @@ class CCodageCCAM extends CMbObject {
    * @return void
    */
   protected function applyRuleG2(&$act) {
+    $ordered_acts_g2 = $this->_ordered_acts;
     foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
       if (
           $_acte_ccam->_ref_code_ccam->isSupplement() ||
           $_acte_ccam->_ref_code_ccam->isComplement()
       ) {
-        unset($this->_ordered_acts[$_acte_ccam->_id]);
+        unset($ordered_acts_g2[$_acte_ccam->_id]);
         if ($_acte_ccam->_id == $act->_id) {
           $act->_position = -1;
         }
@@ -799,8 +800,8 @@ class CCodageCCAM extends CMbObject {
     }
 
     if ($act->_position != -1) {
-      self::orderActsByTarif($this->_ordered_acts);
-      $act->_position = array_search($act->_id, array_keys($this->_ordered_acts));
+      self::orderActsByTarif($ordered_acts_g2);
+      $act->_position = array_search($act->_id, array_keys($ordered_acts_g2));
     }
 
     switch ($act->_position) {
