@@ -78,7 +78,11 @@
           {{/if}}
         </td>
         <td>
-            {{mb_value object=$acte field=code_activite}} : {{mb_value object=$acte field=_tarif_base}}
+          <span style="display: inline-block; border: 1px solid #abe; border-radius: 3px; padding: 1px; margin: 1px; vertical-align: middle;"
+                class="{{if $acte->_id}}ok{{else}}error{{/if}}">
+            {{mb_value object=$acte field=code_activite}}
+          </span>
+          {{mb_value object=$acte field=_tarif_base}}
         </td>
         <td>
           {{assign var=nb_modificateurs value=$acte->modificateurs|strlen}}
