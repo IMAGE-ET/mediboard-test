@@ -169,6 +169,32 @@ showModalTP = function() {
       <li class="empty">{{tr}}CAntecedent.unknown{{/tr}}</li>
     {{/if}}
   </ul>
+
+  {{if $sejours|@count}}
+    <hr style="width: 50%;" />
+    <strong>Motif des séjours précédents</strong>
+    <ul>
+      {{foreach from=$sejours item=_sejour}}
+        <li>
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
+            {{if $_sejour->_motif_complet}}
+              {{$_sejour->_motif_complet|nl2br}}
+            {{else}}
+              {{assign var=motif_see value=true}}
+              {{foreach from=$_sejour->_ref_operations item=_operation}}
+                {{if $motif_see && $_operation->libelle}}
+                  {{assign var=motif_see value=false}}
+                {{/if}}
+              {{/foreach}}
+              {{if $motif_see}}
+                {{$_sejour}}
+              {{/if}}
+            {{/if}}
+          </span>
+        </li>
+      {{/foreach}}
+    </ul>
+  {{/if}}
 {{/if}}
 
 {{if !$type_see || $type_see == "traitement"}}

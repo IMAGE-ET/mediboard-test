@@ -26,6 +26,17 @@ $dossier_medical->needsRead();
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 
+$date_sejour = $sejour->_id ? $sejour->entree_prevue : CMbDT::dateTime();
+$where = array();
+$where["patient_id"] = " = '$patient_id'";
+$where[] = "sortie_prevue < '$date_sejour' OR sortie < '$date_sejour'";
+$_sejour = new CSejour();
+/* @var CSejour[] $sejours*/
+$sejours = $_sejour->loadList($where, 'entree DESC');
+foreach ($sejours as $_sejour) {
+  $_sejour->loadRefsOperations();
+}
+
 $prescription_sejour = $sejour->loadRefPrescriptionSejour();
 if ($prescription_sejour) {
   $prescription_sejour->countLinesTP();
@@ -64,10 +75,10 @@ $user->isPraticien();
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("sejour"    , $sejour);
-$smarty->assign("patient"   , $patient);
-$smarty->assign("_is_anesth", $_is_anesth);
-
+$smarty->assign("sejours"     , $sejours);
+$smarty->assign("sejour"      , $sejour);
+$smarty->assign("patient"     , $patient);
+$smarty->assign("_is_anesth"  , $_is_anesth);
 $smarty->assign("user"        , $user);
 $smarty->assign("sort_by_date", $sort_by_date);
 $smarty->assign("type_see"    , CValue::getOrSession("type_see", ""));
