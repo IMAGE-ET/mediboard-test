@@ -46,19 +46,6 @@ Traitement = {
   toggleCancelled: function(list) {
     $(list).select('.cancelled').invoke('toggle');
   },
-  copyTraitement: function(traitement_id) {
-    var oFormPrescription = getForm("prescription-sejour-{{$patient->_id}}");
-    var oFormTransfert = getForm("transfert_line_TP-{{$patient->_id}}");
-    
-    $V(oFormTransfert.prescription_line_medicament_id, traitement_id);
-
-    if (!this.prescription_sejour_id) {
-      return onSubmitFormAjax(oFormPrescription);
-    }
-    else {
-      return onSubmitFormAjax(oFormTransfert, {onComplete: DossierMedical.reloadDossierSejour});
-    }
-  },
   copyLine: function(prescription_id) {
     this.prescription_sejour_id = prescription_id;
     var oFormTransfert = getForm("transfert_line_TP-{{$patient->_id}}");
@@ -254,11 +241,6 @@ showModalTP = function() {
           </button>
           {{/if}}
 
-          {{if $sejour->_id && "dPprescription CPrescription show_plus_ttt"|conf:"CGroups-$g" && $user->_is_praticien}}
-            <button class="add notext" type="button" onclick="Traitement.copyTraitement('{{$_line->_id}}')">
-              {{tr}}Add{{/tr}}
-            </button>
-          {{/if}}
           {{mb_include module=system template=inc_interval_date from=$_line->debut to=$_line->fin}}
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView')">
             <a href="#1" onclick="Prescription.viewProduit(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
@@ -302,12 +284,6 @@ showModalTP = function() {
       {{if $_traitement->_ref_first_log && $_traitement->_ref_first_log->user_id == $app->user_id}}
       <button class="trash notext" type="button" onclick="Traitement.remove(this.form, function() {DossierMedical.reloadDossierPatient(null, '{{$type_see}}');})">
         {{tr}}delete{{/tr}}
-      </button>
-      {{/if}}
-
-      {{if $_is_anesth && $sejour->_id}}
-      <button class="add notext" type="button" onclick="copyTraitement('{{$_traitement->_id}}')">
-        {{tr}}Add{{/tr}}
       </button>
       {{/if}}
 
