@@ -212,14 +212,16 @@ class CCodageCCAM extends CMbObject {
   /**
    * Force the update of the rule
    *
+   * @param bool $force force the update of the actes
+   *
    * @return bool
    */
-  function updateRule() {
+  function updateRule($force = false) {
     if ($this->association_mode != 'auto' || !$this->_check_asso) {
       return false;
     }
     $this->guessRule();
-    if ($this->fieldModified('association_rule')) {
+    if ($this->fieldModified('association_rule') || $force) {
       $this->applyRuleToActes();
       return true;
     }
@@ -776,6 +778,7 @@ class CCodageCCAM extends CMbObject {
     if (count($this->_ref_actes_ccam_facturables) >= 2) {
       return true;
     }
+    return false;
   }
 
   /**
