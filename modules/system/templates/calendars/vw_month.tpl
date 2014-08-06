@@ -118,7 +118,7 @@
   {{if $calendar->title}}
     <tr>
       <th colspan="{{if $_week_end_filled}}8{{else}}6{{/if}}" class="title">
-        {{$calendar->title}}
+        {{$calendar->title|smarty:nodefaults}}
       </th>
     </tr>
   {{/if}}
