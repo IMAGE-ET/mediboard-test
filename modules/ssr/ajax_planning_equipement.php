@@ -71,6 +71,7 @@ foreach ($evenements as $_evenement) {
   $planning->addEvent($event);
 }
 
+$planning->rearrange();
 $planning->showNow();
 
 // Création du template
