@@ -43,7 +43,7 @@ $ds = $function->getDS();
 
 
 $calendar = new CPlanningMonth($date);
-$calendar->title = CMbDT::format($date, "%B %Y");
+$calendar->title = htmlentities(CMbDT::format($date, "%B %Y"));
 
 foreach ($prats as $_prat) {
 
@@ -141,7 +141,7 @@ foreach ($prats as $_prat) {
     WHERE date BETWEEN  '$calendar->date_min' AND  '$calendar->date_max'
     AND sejour.sejour_id = operations.sejour_id
     AND sejour.group_id = '$group_id'
-    AND chir_id = '$_prat->_id'
+    AND (chir_id = '$_prat->_id' OR anesth_id = '$_prat->_id')
     AND operations.annulee = '0'
     AND sejour.annule = '0'
     GROUP BY date, plageop_id";
