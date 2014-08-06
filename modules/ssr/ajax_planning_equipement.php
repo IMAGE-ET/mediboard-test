@@ -72,6 +72,7 @@ foreach ($evenements as $_evenement) {
 }
 
 $planning->showNow();
+$planning->rearrange(true);
 
 // Création du template
 $smarty = new CSmartyDP();

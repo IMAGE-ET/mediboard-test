@@ -129,6 +129,7 @@ foreach ($evenements as $_evenement) {
 }
 
 $planning->showNow();
+$planning->rearrange(true);
 
 // Alertes séjour
 $total_evenement = array();

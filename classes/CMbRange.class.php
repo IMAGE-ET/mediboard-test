@@ -221,4 +221,119 @@ abstract class CMbRange {
     }
     return $lines;
   }
+
+  /**
+   * rearrange intervals in an optimized way
+   *
+   * @param array $intervals
+   *
+   * @return array
+   */
+  static function rearrange2($intervals) {
+    if (!count($intervals)) {
+      return array();
+    }
+
+    // 1. Sort by min then max for each events
+    uasort($intervals, array("CMbRange", "compare"));
+
+
+    // 2. Gather all collision
+    $collisions = array();
+    foreach ($intervals as $key1 => $event1) {
+      $collisions[$key1] = array();
+      foreach ($intervals as $key2 => $event2) {
+        if ($key1 !== $key2 && self::collide($event1, $event2)) {
+          $collisions[$key1][$key2] = $key2;
+        }
+      }
+    }
+
+    // 3. Builds grapes recursively
+    $grapes = array();
+    $grapables = array_combine(array_keys($intervals), array_keys($intervals));
+    while (count($grapables)) {
+      $grape_key = "grape-". count($grapes);
+      $event_key = reset($grapables);
+      self::engrape($grapes, $grapables, $collisions, $grape_key, $event_key);
+    }
+
+    // 4. For each grape, place events on columns
+    $columns = array();
+    foreach ($grapes as $_grape_key => $_grape) {
+      $columns[$_grape_key] = array();
+      // Place events on actual columns
+      foreach ($_grape as $_event_key) {
+        // Trying to place event on the first available existing column
+        foreach ($columns[$_grape_key] as $_column_key => $placed_event_keys) {
+          if (!count(array_intersect($collisions[$_event_key], $placed_event_keys))) {
+            $columns[$_grape_key][$_column_key][$_event_key] = $_event_key;
+            continue 2;
+          }
+        }
+
+        // No suitable column found, create one
+        $column_key = count($columns[$_grape_key]);
+        $columns[$_grape_key][$column_key][$_event_key] = $_event_key;
+      }
+    }
+
+    // 5. Build positions for events
+    $positions = array();
+    // Parse columns to prepare event positions
+    foreach ($grapes as $_grape_key => $_grape) {
+      foreach ($columns[$_grape_key] as $_column_key => $_event_keys) {
+        foreach ($_event_keys as $_event_key) {
+          $positions[$_event_key] = array(
+            "total" => count($columns[$_grape_key]),
+            "start" => $_column_key,
+            "end"   => count($columns[$_grape_key]),
+          );
+        }
+      }
+    }
+
+    foreach ($positions as $_event_key => &$_position) {
+      foreach ($collisions[$_event_key] as $_collider_key) {
+        $collider_start = $positions[$_collider_key]["start"];
+        if ($_position["start"] < $collider_start && $_position["end"] > $collider_start) {
+          $_position["end"] = $collider_start;
+        }
+      }
+    }
+
+    return $positions;
+  }
+
+  static function engrape(&$grapes, &$grapables, $collisions, $grape_key, $event_key) {
+    // Event already in a grape
+    if (!isset($grapables[$event_key])) {
+      return;
+    }
+
+    // Put event in the current grape
+    $grapes[$grape_key][$event_key] = $event_key;
+    unset($grapables[$event_key]);
+
+    // Recurse on colliding events for same grape
+    foreach ($collisions[$event_key] as $_collider_key) {
+      self::engrape($grapes, $grapables, $collisions, $grape_key, $_collider_key);
+    }
+  }
+
+  static function collide($event1, $event2) {
+    return ($event1["lower"] < $event2["upper"] && $event2["lower"] < $event1["upper"]);
+  }
+
+  /**
+   * @param $event1
+   * @param $event2
+   *
+   * @return mixed
+   */
+  static function compare($event1, $event2) {
+    return $event1["lower"] != $event2["lower"] ?
+      ($event1["lower"] < $event2["lower"] ? -1 : 1 ):
+      ($event2["upper"] < $event1["upper"] ? -1 : 1 );
+  }
 }
