@@ -100,6 +100,10 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
   public $_examen_consult;
   public $_line_element_id;
 
+  // seances
+  public $_consult_sejour_nb;
+  public $_consult_sejour_out_of_nb;
+
   // References
   /** @var CMediusers */
   public $_ref_chir;
@@ -264,7 +268,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $props["taux_tva"]          = "float";
     $props["du_tva"]            = "currency show|0";
     $props["chrono"]            = "enum notNull list|16|32|48|64 show|0";
-    $props["annule"]            = "bool show|0";
+    $props["annule"]            = "bool show|0 default|0";
     $props["_etat"]             = "str";
 
     $props["rques"]             = "text helped seekable";
@@ -606,6 +610,32 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     }
 
     return null;
+  }
+
+
+  function loadPosition() {
+    if (!$this->sejour_id) {
+      return;
+    }
+
+    $ds = $this->getDS();
+    $sql = "SELECT type FROM sejour WHERE sejour_id = '$this->sejour_id'";
+    $type = $ds->loadResult($sql);
+
+    if ($type != "seances") {
+      return;
+    }
+
+    $sql = "SELECT heure, consultation_id FROM consultation WHERE sejour_id = '$this->sejour_id' AND annule = '0'";
+    $list = $ds->loadList($sql);
+    $seance_nb = 1;
+    foreach ($list as $_seance) {
+      if ($_seance["heure"] == $this->heure) {
+        $this->_consult_sejour_nb = $seance_nb;
+      }
+      $seance_nb++;
+    }
+    $this->_consult_sejour_out_of_nb = count($list);
   }
 
   /**
