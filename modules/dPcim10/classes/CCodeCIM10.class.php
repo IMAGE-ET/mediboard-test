@@ -62,6 +62,8 @@ class CCodeCIM10 {
   const MEDIUM = 2;
   const FULL   = 3;
 
+  static $cache = array();
+
   static $cacheCount = 0;
 
   static $useCount = array(
@@ -297,8 +299,14 @@ class CCodeCIM10 {
    */
   static function get($code, $niv = self::LITE, $lang = self::LANG_FR) {
     self::$useCount[$niv]++;
+
+    $key_cache = "$code-$niv";
+    if (isset(self::$cache[$key_cache])) {
+      return self::$cache[$key_cache];
+    }
     if ($code_cim = SHM::get("code_cim-$code-$niv")) {
       self::$cacheCount++;
+      self::$cache[$key_cache] = $code_cim;
       return $code_cim;
     }
 
@@ -317,6 +325,7 @@ class CCodeCIM10 {
     }
 
     SHM::put("code_cim-$code-$niv", $code_cim);
+    self::$cache[$key_cache] = $code_cim;
 
     return $code_cim;
   }
