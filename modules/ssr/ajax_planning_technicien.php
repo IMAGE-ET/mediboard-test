@@ -190,6 +190,7 @@ if ($kine->fin_activite) {
 
 // Heure courante
 $planning->showNow();
+$planning->rearrange();
 
 // Création du template
 $smarty = new CSmartyDP();
