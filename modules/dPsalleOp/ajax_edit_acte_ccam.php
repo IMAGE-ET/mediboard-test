@@ -40,13 +40,17 @@ foreach ($phase->_modificateurs as $modificateur) {
       $listModificateurs = substr($listModificateurs, 0, $position).substr($listModificateurs, $nextposition+1);
     }
     else {
-      $modificateur->_checked = "";
+      $modificateur->_checked = null;
     }
   }
   else {
-    $modificateur->_checked = "";
+    $modificateur->_checked = null;
   }
 }
+
+/* Vérification et précodage des modificateurs */
+CCodageCCAM::precodeModifiers($phase->_modificateurs, $acte, $acte->loadRefObject());
+$acte->getMontantModificateurs($phase->_modificateurs);
 
 // Liste des dents CCAM
 $liste_dents = reset(CDentCCAM::loadList());
