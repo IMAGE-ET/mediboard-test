@@ -11,12 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-$can_admisison = CModule::getCanDo('dPadmissions');
-
-if (!$can_admisison->edit && !CModule::getCanDo('dPplanningOp')->edit) {
-  $can_admisison->redirect();
-}
-
 $sejour_id            = CValue::get("sejour_id");
 $module               = CValue::get("module");
 $callback             = CValue::get("callback");
@@ -24,6 +18,15 @@ $modify_sortie_prevue = CValue::get("modify_sortie_prevue", true);
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
+
+$can_admission = CModule::getCanDo("dPadmissions");
+
+if (!$sejour->canDo()->edit && !$can_admission->edit &&
+    !CModule::getCanDo("dPhospi")->edit && !CModule::getCanDo("dPurgences")->edit && !CModule::getCanDo("soins")->edit
+) {
+  $can_admission->redirect();
+}
+
 $sejour->loadRefServiceMutation();
 $sejour->loadRefEtablissementTransfert();
 
