@@ -423,6 +423,14 @@ class CSetupdPbloc extends CSetup {
                 ADD `cheklist_man` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.44";
+    $this->makeRevision("0.44");
+    $query = "ALTER TABLE `plagesop`
+      ADD `original_owner_id` INT (11) UNSIGNED AFTER `salle_id`,
+      ADD `original_function_id` INT (11) UNSIGNED AFTER `original_owner_id`,
+      ADD INDEX (`original_owner_id`),
+      ADD INDEX (`original_function_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.45";
   }
 }

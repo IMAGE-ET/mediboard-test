@@ -57,6 +57,31 @@
       <fieldset>
         <legend>Attributs de la plage</legend>
         <table class="form">
+          {{if "dPbloc CPlageOp original_owner"|conf:"CGroups-$g" && $plagesel->_id}}
+            <tr>
+              <th>
+                {{mb_label object=$plagesel field="original_owner_id"}}
+              </th>
+              <td colspan="3">
+                <select name="original_owner_id" style="width: 15em;" onchange="$V(this.form.original_function_id, '', false)">
+                  <option value="">&mdash; Choisir un praticien</option>
+                  {{if $chirs|@count}}
+                    <optgroup label="Chirurgiens">
+                    </optgroup>
+                    {{mb_include module=mediusers template=inc_options_mediuser selected=$plagesel->original_owner_id list=$chirs}}
+                  {{/if}}
+                  {{if $anesths|@count}}
+                    <optgroup label="Anesthésistes"></optgroup>
+                    {{mb_include module=mediusers template=inc_options_mediuser selected=$plagesel->original_owner_id list=$anesths}}
+                  {{/if}}
+                </select>
+                <select name="original_function_id" style="width: 15em;" onchange="$V(this.form.original_owner_id, '', false)">
+                  <option value="">&mdash; Choisir un cabinet</option>
+                  {{mb_include module=mediusers template=inc_options_function selected=$plagesel->original_function_id list=$specs}}
+                </select>
+              </td>
+            </tr>
+          {{/if}}
           <tr>
             <th style="width: 15%;">{{mb_label object=$plagesel field="chir_id"}}</th>
             <td style="width: 45%;">
@@ -112,12 +137,7 @@
             <td>
               <select name="spec_id" class="{{$plagesel->_props.spec_id}}" style="width: 15em;">
                 <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-                {{foreach from=$specs item=spec}}
-                  <option value="{{$spec->function_id}}" class="mediuser" style="border-color: #{{$spec->color}};"
-                  {{if $spec->function_id == $plagesel->spec_id}}selected="selected"{{/if}}>
-                    {{$spec->text}}
-                  </option>
-                {{/foreach}}
+                {{mb_include module=mediusers template=inc_options_function selected=$plagesel->spec_id list=$specs}}
               </select>
             </td>
             <th>{{mb_label object=$plagesel field="debut"}}</th>

@@ -99,6 +99,7 @@ class CFunctions extends CMbObject {
     $backProps["correspondantpatients_function"] = "CCorrespondantPatient function_id";
     $backProps["medecins_function"]              = "CMedecin function_id";
     $backProps["patients_function"]              = "CPatient function_id";
+    $backProps["plages_op_owner"]                = "CPlageOp original_function_id";
     return $backProps;
   }
 

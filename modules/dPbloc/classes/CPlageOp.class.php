@@ -33,6 +33,8 @@ class CPlageOp extends CPlageHoraire {
   public $salle_id;
   public $spec_repl_id;
   public $secondary_function_id;
+  public $original_owner_id;
+  public $original_function_id;
 
   // DB fields
   public $unique_chir;
@@ -89,6 +91,7 @@ class CPlageOp extends CPlageHoraire {
     $spec->table = 'plagesop';
     $spec->key   = 'plageop_id';
     $spec->xor["owner"] = array("spec_id", "chir_id");
+    $spec->xor["original_owner"] = array("original_owner_id", "original_function_id");
     $spec->collision_keys = array("salle_id");
     return $spec;
   }
@@ -114,6 +117,8 @@ class CPlageOp extends CPlageHoraire {
     $props["salle_id"]         = "ref notNull class|CSalle";
     $props["spec_repl_id"]     = "ref class|CFunctions";
     $props["secondary_function_id"] = "ref class|CFunctions";
+    $props["original_owner_id"] = "ref class|CMediusers";
+    $props["original_function_id"] = "ref class|CFunctions";
     $props["date"]             = "date notNull";
     $props["debut"]            = "time notNull";
     $props["fin"]              = "time notNull moreThan|debut";
@@ -500,6 +505,11 @@ class CPlageOp extends CPlageHoraire {
         $this->loadRefsOperations($with_cancelled, "rank, rank_voulu, horaire_voulu", true);
       }
       $this->reorderOp();
+    }
+
+    if (!$this->_id) {
+      $this->original_owner_id    = $this->chir_id;
+      $this->original_function_id = $this->spec_id;
     }
 
     return parent::store();
