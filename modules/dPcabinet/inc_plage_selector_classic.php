@@ -12,7 +12,7 @@
 $ds = CSQLDataSource::get("std");
 
 // Initialisation des variables
-global $period, $periods, $chir_id, $function_id, $date, $ndate, $pdate, $plageconsult_id, $consultation_id;
+global $period, $periods, $chir_id, $function_id, $date, $ndate, $pdate, $heure, $plageconsult_id, $consultation_id;
 
 $hour             = CValue::get("hour");
 $hide_finished    = CValue::get("hide_finished", true);
@@ -88,6 +88,21 @@ if ($consultation_id) {
       );
     }
   }
+}
+
+if ($heure) {
+  $consultation_ids[] = array(
+    $plageconsult_id,
+    null,
+    $date,
+    $heure,
+    $chir_id,
+    "chir",
+    0,
+    null,
+    null,
+    null
+  );
 }
 
 //functions

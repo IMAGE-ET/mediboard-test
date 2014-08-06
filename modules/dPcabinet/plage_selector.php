@@ -11,7 +11,7 @@
 
 CCanDo::check();
 
-global $period, $periods, $listPraticiens, $chir_id, $function_id, $date, $ndate, $pdate, $plageconsult_id, $consultation_id;
+global $period, $periods, $listPraticiens, $chir_id, $function_id, $date, $ndate, $pdate, $heure, $plageconsult_id, $consultation_id;
 
 $period          = CValue::get("period", CAppUI::pref("DefaultPeriod"));
 $periods         = array("day", "week", "month","weekly");
@@ -20,6 +20,7 @@ $function_id     = $chir_id ? null : CValue::get("function_id");
 $date            = CValue::get("date", CMbDT::date());
 $plageconsult_id = CValue::get("plageconsult_id");
 $consultation_id = CValue::get("consultation_id");
+$heure           = CValue::get("heure");
 
 // Vérification des droits sur les praticiens
 $listPraticiens = CConsultation::loadPraticiens(PERM_EDIT);

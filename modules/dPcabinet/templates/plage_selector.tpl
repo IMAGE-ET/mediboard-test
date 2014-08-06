@@ -53,7 +53,7 @@ RDVmultiples = {
         var el_prescrip_libelle = consultation_ids[b][9];
 
         RDVmultiples.addSlot(RDVmultiples.current_rank, plage_id, consult_id, date, time, chir_id, chir_view, annule, rques, el_prescrip_id, el_prescrip_libelle);        // insert
-        RDVmultiples.loadPlageConsult(plage_id, consult_id, RDVmultiples.is_multiple);  // display
+        RDVmultiples.loadPlageConsult(plage_id, consult_id, RDVmultiples.is_multiple, time);  // display
         if (multiple) {
           RDVmultiples.selRank(RDVmultiples.current_rank+1);
         }
@@ -154,13 +154,14 @@ RDVmultiples = {
   },
 
   // load the plageconsult to the right
-  loadPlageConsult : function(plageconsult_id, consult_id, multiple) {
-  var url = new Url("dPcabinet", "httpreq_list_places");
-  url.addParam("plageconsult_id", plageconsult_id);
-  url.addParam("consult_id"     , consult_id);
-  url.addParam("multipleMode", multiple);
-  url.addParam("slot_id", this.current_rank);
-  url.requestUpdate("listPlaces-"+this.current_rank);
+  loadPlageConsult : function(plageconsult_id, consult_id, multiple, heure) {
+    var url = new Url("dPcabinet", "httpreq_list_places");
+    url.addParam("plageconsult_id", plageconsult_id);
+    url.addParam("heure", heure);
+    url.addParam("consult_id"     , consult_id);
+    url.addParam("multipleMode", multiple);
+    url.addParam("slot_id", this.current_rank);
+    url.requestUpdate("listPlaces-"+this.current_rank);
   },
 
   sendData : function() {

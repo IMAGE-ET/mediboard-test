@@ -21,6 +21,7 @@ PlageConsultSelector = {
       var oForm = getForm(this.sForm);
       var chir_id = $V(oForm[this.sChir_id]);
       var function_id = $V(oForm[this.sFunction_id]);
+      var heure = $V(oForm[this.sHeure]);
 
       // no chir, no function = heavy load
       if (!chir_id && !function_id) {
@@ -33,6 +34,7 @@ PlageConsultSelector = {
       url.addParam("chir_id"        , chir_id);
       url.addParam("function_id"    , function_id);
       url.addParam("plageconsult_id", $V(oForm[this.sPlageconsult_id]));
+      url.addParam("heure"          , heure);                               // first plage prise
       url.addParam("multipleMode"       , this.multipleMode);
       url.addParam("_line_element_id", $V(oForm[this.sLineElementId]));
       url.addParam("consultation_id", $V(oForm[this.sConsultId]));

@@ -17,6 +17,7 @@ $ds = CSQLDataSource::get("std");
 $plageconsult_id    = CValue::get("plageconsult_id");
 $consult_id         = CValue::get("consult_id");
 $slot_id            = CValue::get("slot_id");
+$heure              = CValue::get("heure");
 $multiple           = CValue::get("multipleMode", false);
 $display_nb_consult = CAppUI::conf("dPcabinet display_nb_consult");
 $quotas             = null;
@@ -37,6 +38,9 @@ else {
 $consultation_target = new CConsultation();
 if ($consult_id) {
   $consultation_target->load($consult_id);
+}
+elseif ($heure) {
+  $consultation_target->heure = $heure;
 }
 $consultation_target->loadRefElementPrescription();
 /**
