@@ -2096,6 +2096,15 @@ span.hatching {
   background-image: url(images/icons/ray.gif);
 }
 
+span.circled {
+  display: inline-block;
+  border: 1px solid #abe;
+  border-radius: 3px;
+  padding: 1px;
+  margin: 1px;
+  vertical-align: middle;
+}
+
 a.inline-url {
   display: inline !important;
 }

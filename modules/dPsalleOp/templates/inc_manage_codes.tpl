@@ -68,23 +68,61 @@
             {{mb_include module=mediusers template=inc_options_mediuser list=$listChirs}}
           </select>
         </form>
-        <table class="form">
+        <table class="tbl">
           <tr>
             <th class="category">Praticien</th>
-            <th class="category">Actes</th>
+            <th class="category">Actes cotés</th>
             <th class="category">Actions</th>
           </tr>
           {{foreach from=$subject->_ref_codages_ccam item=_codage}}
             <tr>
               <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_codage->_ref_praticien}}</td>
-              <td class="text">
-                {{foreach from=$_codage->_ref_actes_ccam item=_acte}}
-                  {{$_acte->code_acte}}({{$_acte->code_activite}}) :
-                  {{mb_value object=$_acte field = _tarif}}
-                  <br />
-                  {{foreachelse}}
+              <td {{if !$_codage->_ref_actes_ccam|@count}}class="empty"{{/if}}>
+                {{if !$_codage->_ref_actes_ccam|@count}}
                   {{tr}}CActeCCAM.none{{/tr}}
-                {{/foreach}}
+                {{/if}}
+                <table class="layout">
+                  {{foreach from=$subject->_ext_codes_ccam item=_code key=_key}}
+                  {{foreach from=$_code->activites item=_activite}}
+                  {{foreach from=$_activite->phases item=_phase}}
+                    {{if $_phase->_connected_acte->_id && $_phase->_connected_acte->executant_id == $_codage->praticien_id}}
+                      {{assign var =_acte value=$_phase->_connected_acte}}
+                      <tr>
+                        <td>
+                          <a href="#" onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class}}');">
+                            {{$_acte->code_acte}}
+                          </a>
+                        </td>
+                        <td>
+                          <span class="circled ok">
+                            {{$_acte->code_activite}}
+                          </span>
+                        </td>
+                        <td>
+                          {{if !$_phase->_modificateurs|@count}}
+                            <em>Aucun modif. dispo.</em>
+                          {{elseif !$_acte->modificateurs}}
+                            <strong>Aucun modif. codé</strong>
+                          {{else}}
+                            {{foreach from=$_phase->_modificateurs item=_mod name=modificateurs}}
+                              {{if $_mod->_checked}}
+                                <span class="circled {{if in_array($_mod->_state, array('not_recommended', 'forbidden'))}}error{{/if}}"
+                                      title="{{$_mod->libelle}}">
+                                  {{$_mod->code}}{{if $_mod->_double == 2}}{{$_mod->code}}{{/if}}
+                                </span>
+                              {{/if}}
+                            {{/foreach}}
+                          {{/if}}
+                        </td>
+                        <td>
+                          {{if $_acte->montant_depassement}}DH{{/if}}
+                        </td>
+                      </tr>
+                    {{/if}}
+                  {{/foreach}}
+                  {{/foreach}}
+                  {{/foreach}}
+                </table>
               </td>
               <td class="button">
                 <button type="button" class="notext edit" onclick="editCodage({{$_codage->_id}})"
@@ -155,7 +193,7 @@
             {{tr}}Add{{/tr}}
           </button>
         </form>
-        <table class="form">
+        <table class="tbl">
           <tr>
             <th class="category" colspan="10">Actes disponibles</th>
           </tr>
@@ -191,10 +229,9 @@
                       <input type="hidden" name="object_id" value="{{$acte->object_id}}" />
                       <input type="hidden" name="object_class" value="{{$acte->object_class}}" />
                     </form>
-                    <span style="display: inline-block; border: 1px solid #abe; border-radius: 3px; padding: 1px; margin: 1px; vertical-align: middle;"
-                          class="{{if $_phase->_connected_acte->_id}}ok{{else}}error{{/if}}">
-                    {{$_activite->numero}}
-                  </span>
+                    <span class="circled {{if $_phase->_connected_acte->_id}}ok{{else}}error{{/if}}">
+                      {{$_activite->numero}}
+                    </span>
                   {{/foreach}}
                 {{/foreach}}
               </td>
