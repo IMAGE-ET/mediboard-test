@@ -19,6 +19,11 @@ $mode_vue_tempo = CValue::getOrSession("mode_vue_tempo", "classique");
 $readonly       = CValue::getOrSession("readonly", 0);
 $prestation_id  = CValue::getOrSession("prestation_id", 0);
 
+if (CAppUI::conf("dPhospi systeme_prestations") == "standard") {
+  CValue::setSession("prestation_id", "");
+  $prestation_id = "";
+}
+
 if (is_array($services_ids)) {
   CMbArray::removeValue("", $services_ids);
 }
