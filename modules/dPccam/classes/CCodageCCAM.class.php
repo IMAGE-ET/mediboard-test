@@ -380,6 +380,8 @@ class CCodageCCAM extends CMbObject {
   public static function precodeModifiers(&$modifiers, &$act, $codable) {
     $date = CMbDT::date(null, $act->execution);
     $time = CMbDT::time(null, $act->execution);
+    $codable->loadRefPraticien();
+    $codable->_ref_praticien->loadRefDiscipline();
     $discipline = $codable->_ref_praticien->_ref_discipline;
     $patient = $codable->_ref_patient;
     $checked = 0;

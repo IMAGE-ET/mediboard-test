@@ -1,3 +1,45 @@
+
+<script type="text/javascript">
+  checkModificateurs = function(input) {
+    var exclusive_modifiers = ['F', 'P', 'S', 'U'];
+    var checkboxes = $$('input.modificateur');
+    var nb_checked = 0;
+    var exclusive_modifier = '';
+    var exclusive_modifier_checked = false;
+    checkboxes.each(function(checkbox) {
+      if (checkbox.checked) {
+        nb_checked++;
+        if (exclusive_modifiers.indexOf(checkbox.get('code')) != -1) {
+          exclusive_modifier = checkbox.get('code');
+          exclusive_modifier_checked = true;
+        }
+      }
+    });
+
+    checkboxes.each(function(checkbox) {
+      if (
+          (!checkbox.checked && nb_checked == 4) ||
+          (exclusive_modifiers.indexOf(exclusive_modifier) != -1 && exclusive_modifiers.indexOf(checkbox.get('code')) != -1 && !checkbox.checked && exclusive_modifier_checked)
+         ) {
+        checkbox.disabled = true;
+      }
+      else {
+        checkbox.disabled = false;
+      }
+    });
+
+    var container = input.up();
+    if (input.checked == true && container.hasClassName('warning')) {
+      container.removeClassName('warning');
+      container.addClassName('error');
+    }
+    else if (input.checked == false && container.hasClassName('error')) {
+      container.removeClassName('error');
+      container.addClassName('warning');
+    }
+  }
+</script>
+
 {{assign var="view" value=$acte->_id}}
 <form name="formEditFullActe-{{$view}}" action="?" method="post"
       onsubmit="return onSubmitFormAjax(this, {onComplete: function() { window.urlEditActe.modalObject.close() }});">
@@ -66,12 +108,15 @@
     <tr>
       <th>{{mb_label object=$acte field=modificateurs}}</th>
       <td class="text" colspan="10">
+        {{assign var=nb_modificateurs value=$acte->modificateurs|strlen}}
         {{foreach from=$phase->_modificateurs item=_mod name=modificateurs}}
-            <input type="checkbox" name="modificateur_{{$_mod->code}}{{$_mod->_double}}" {{if $_mod->_checked}}checked="checked"{{/if}} />
-            <label for="modificateur_{{$_mod->code}}{{$_mod->_double}}" title="{{$_mod->libelle}}">
+          <span class="circled {{if $_mod->_state == 'prechecked'}}ok{{elseif $_mod->_checked && in_array($_mod->_state, array('not_recommended', 'forbidden'))}}error{{elseif in_array($_mod->_state, array('not_recommended', 'forbidden'))}}warning{{/if}}">
+            <input type="checkbox" class="modificateur" data-code="{{$_mod->code}}" name="modificateur_{{$_mod->code}}{{$_mod->_double}}" {{if $_mod->_checked}}checked="checked"{{elseif $nb_modificateurs == 4 || $_mod->_state == 'forbidden' || (intval($acte->_exclusive_modifiers) > 0 && in_array($_mod->code, array('F', 'U', 'P', 'S')))}}disabled="disabled"{{/if}} onchange="checkModificateurs(this);"/>
+            <label for="modificateur_{{$_mod->code}}{{$_mod->_double}}">
               {{$_mod->code}}{{if $_mod->_double == 2}}{{$_mod->code}}{{/if}}
-              : {{$_mod->libelle}}
             </label>
+          </span>
+          <span>{{$_mod->libelle}}</span>
           <br />
           {{foreachelse}}
           <em>{{tr}}None{{/tr}}</em>
