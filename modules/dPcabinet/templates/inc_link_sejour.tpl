@@ -95,7 +95,7 @@
                 </td>
                 <td>
                   <label for="sejour_id_{{$_sejour->_id}}">
-                    <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">{{$_sejour}}</span><br/>
+                    <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">[{{mb_value object=$_sejour field=type}}] {{$_sejour}}</span><br/>
                     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
                   </label>
                 </td>

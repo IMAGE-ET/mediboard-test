@@ -224,6 +224,7 @@ for ($i = 0; $i < $nbDays; $i++) {
 
     //consultations
     foreach ($_plage->_ref_consultations as $_consult) {
+      $_consult->loadPosition();
       $debute = "$jour $_consult->heure";
       $motif = $_consult->motif;
       if ($_consult->patient_id) {
@@ -239,7 +240,13 @@ for ($i = 0; $i < $nbDays; $i++) {
         }
 
 
-        $title = "<span style=\"float:right; border-left: solid 3px #".$_plage->_ref_chir->_color."; \">".$_plage->_ref_chir->_shortview."</span>".$_consult->_ref_patient->_view . "\n" . $motif;
+        $title = "";
+        if ($_consult->_consult_sejour_out_of_nb) {
+          $nb = $_consult->_consult_sejour_nb;
+          $of = $_consult->_consult_sejour_out_of_nb;
+          $title .= "<span style=\"float:right;\">$nb / $of</span>";
+        }
+        $title .= $_consult->_ref_patient->_view . "\n" . $motif;
 
         $event = new CPlanningEvent(
           $_consult->_guid,
@@ -298,7 +305,7 @@ for ($i = 0; $i < $nbDays; $i++) {
   }
 }
 
-$planning->rearrange();
+$planning->rearrange(true);
 $smarty = new CSmartyDP();
 
 $smarty->assign("planning" , $planning);

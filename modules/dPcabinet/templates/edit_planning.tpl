@@ -511,7 +511,11 @@
 
                   <tr>
                     <th>{{mb_label object=$consult field="premiere"}}</th>
-                    <td>{{mb_field object=$consult field="premiere" typeEnum=checkbox}}</td>
+                    <td>
+                      {{mb_field object=$consult field="premiere" typeEnum=checkbox}} {{if $consult->_consult_sejour_out_of_nb}}
+                        <strong>Séance {{$consult->_consult_sejour_nb}} / {{$consult->_consult_sejour_out_of_nb}}</strong>
+                      {{/if}}
+                    </td>
                   </tr>
 
                   {{if $conf.dPcabinet.CConsultation.use_last_consult}}

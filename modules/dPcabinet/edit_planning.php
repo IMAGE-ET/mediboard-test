@@ -240,6 +240,8 @@ if (CModule::getActive("dPprescription")) {
   }
 }
 
+$consult->loadPosition();
+
 // Création du template
 $smarty = new CSmartyDP();
 

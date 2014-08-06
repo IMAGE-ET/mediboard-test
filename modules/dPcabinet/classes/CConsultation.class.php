@@ -622,6 +622,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $sql = "SELECT type FROM sejour WHERE sejour_id = '$this->sejour_id'";
     $type = $ds->loadResult($sql);
 
+    // only for seances
     if ($type != "seances") {
       return;
     }
@@ -632,6 +633,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     foreach ($list as $_seance) {
       if ($_seance["heure"] == $this->heure) {
         $this->_consult_sejour_nb = $seance_nb;
+        break;
       }
       $seance_nb++;
     }

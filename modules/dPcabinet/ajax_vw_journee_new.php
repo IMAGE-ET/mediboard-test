@@ -153,6 +153,7 @@ foreach ($musers as $_user) {
 
     // consultations prises
     foreach ($consults as $_consult) {
+      $_consult->loadPosition();
 
       $_actes = $_consult->loadRefsActes();
       $nb_actes = $_consult->_count_actes;
@@ -181,8 +182,11 @@ foreach ($musers as $_user) {
           }
         }
 
-
-        $title = "<strong>$heure</strong> ".$_consult->_ref_patient->_view . "\n" . $motif;
+        $title = "";
+        if ($_consult->_consult_sejour_out_of_nb) {
+          $title.= "<span style='float:right;'>$_consult->_consult_sejour_nb/ $_consult->_consult_sejour_out_of_nb</span>";
+        }
+        $title .= "<strong>$heure</strong> ".$_consult->_ref_patient->_view . "\n" . $motif;
 
         $event = new CPlanningEvent(
           $_consult->_guid,
