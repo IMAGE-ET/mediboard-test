@@ -127,7 +127,7 @@ class CModeleEtiquette extends CMbMetaObject {
     ));
   }
   
-  function printEtiquettes($printer_id = null) {
+  function printEtiquettes($printer_id = null, $stream = 1) {
     // Affectation de la police par défault si aucune n'est choisie
     if ($this->font == "") {
       $this->font = "dejavusansmono";
@@ -326,8 +326,11 @@ class CModeleEtiquette extends CMbMetaObject {
       
       unlink($file->_file_path);
     }
-    else {
+    else if ($stream) {
       $pdf->Output($this->nom.'.pdf', "I");
+    }
+    else {
+      return $pdf->OutPut($this->nom.'.pdf', "S");
     }
   }
 }

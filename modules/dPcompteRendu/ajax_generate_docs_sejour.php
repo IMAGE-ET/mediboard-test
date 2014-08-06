@@ -13,11 +13,11 @@
 
 CCanDo::checkRead();
 
-$modele_id = CValue::get("modele_id");
-$sejours_ids = CValue::get("sejours_ids");
+$modele_id   = CValue::post("modele_id");
+$sejours_ids = CValue::post("sejours_ids");
 
 // Chargement des séjours
-$sejour = new CSejour;
+$sejour = new CSejour();
 
 $where = array();
 $where["sejour_id"] = "IN ($sejours_ids)";
@@ -44,9 +44,8 @@ $source = $modele->generateDocFromModel();
 $nbDoc = array();
 
 foreach ($sejours as $_sejour) {
-  $compte_rendu = new CCompteRendu;
-  $compte_rendu->object_class = "CSejour";
-  $compte_rendu->object_id = $_sejour->_id;
+  $compte_rendu = new CCompteRendu();
+  $compte_rendu->setObject($_sejour);
   $compte_rendu->nom = $modele->nom;
   $compte_rendu->modele_id = $modele->_id;
   $compte_rendu->margin_top = $modele->margin_top;
@@ -60,7 +59,7 @@ foreach ($sejours as $_sejour) {
   $compte_rendu->private = $modele->private;
   $compte_rendu->_source = $source;
   
-  $templateManager = new CTemplateManager;
+  $templateManager = new CTemplateManager();
   $templateManager->isModele = false;
   $_sejour->fillTemplate($templateManager);
   $templateManager->applyTemplate($compte_rendu);

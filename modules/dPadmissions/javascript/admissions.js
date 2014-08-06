@@ -3,6 +3,7 @@ Admissions = {
   listUpdater:  null,
   target_date: null,
   pre_admission_filter: null,
+  table_id: null,
 
   filter: function(input, table) {
     table = $(table);
@@ -18,8 +19,8 @@ Admissions = {
     });
   },
   
-  togglePrint: function(table_id, status) {
-    var table = $(table_id);!
+  togglePrint: function(status) {
+    var table = $(Admissions.table_id);
     table.select("input[name=print_doc]").each(function(elt) {
       elt.checked = status ? "checked" : "";
     });
@@ -30,13 +31,18 @@ Admissions = {
     url.addParam(type, object_id);
     url.popup(700, 550, "DHE");
   },
-  
-  printForSelection: function(modele_id, table_id) {
+
+  choosePrintForSelection: function() {
+    Admissions.beforePrint();
+    Modal.open('area_prompt_modele', {width: '500px', height: '300px'});
+  },
+
+  printForSelection: function(modele_id) {
     if (!modele_id) {
       alert("Veuillez choisir un modèle avant de lancer l'impression");
       return false;
     }
-    var table = $(table_id);
+    var table = $(Admissions.table_id);
     var sejours_ids = table.select("input[name=print_doc]:checked").pluck("value");
     
     if (sejours_ids == "") {
@@ -50,13 +56,13 @@ Admissions = {
     return true;
   },
   
-  rememberSelection: function(table_id) {
-    var table = $(table_id);
+  rememberSelection: function() {
+    var table = $(Admissions.table_id);
     window.sejours_ids = table.select("input[name=print_doc]:checked").pluck("value");
   },
   
-  restoreSelection: function(table_id) {
-    var table = $(table_id);
+  restoreSelection: function() {
+    var table = $(Admissions.table_id);
     
     table.select("input[name=print_doc]").each(function(elt) {
       if ($H(window.sejours_ids).index(elt.value)) {
@@ -64,9 +70,10 @@ Admissions = {
       }
     });
   },
-  printFichesAnesth: function(table_id) {
+
+  printFichesAnesth: function() {
     var url = new Url("admissions", "print_fiches_anesth");
-    var table = $(table_id);
+    var table = $(Admissions.table_id);
     var sejours_ids = table.select("input[name=print_doc]:checked").pluck("value");
     
     if (sejours_ids == "") {
@@ -78,9 +85,10 @@ Admissions = {
     url.addParam("pdf", 0);
     url.popup(700, 500);
   },
-  printPlanSoins: function(table_id) {
+
+  printPlanSoins: function() {
     var url = new Url("soins", "offline_plan_soins");
-    var table = $(table_id);
+    var table = $(Admissions.table_id);
     var sejours_ids = table.select("input[name=print_doc]:checked").pluck("value");
 
     if (sejours_ids == "") {
@@ -92,11 +100,35 @@ Admissions = {
     url.addParam("mode_dupa", 1);
     url.popup(700, 500);
   },
+
+  chooseEtiquette: function() {
+    var url = new Url("hospi", "ajax_choose_modele_etiquette");
+    url.addParam("object_class", "CSejour");
+    url.addParam("custom_function", "Admissions.printEtiquettes");
+    url.requestModal("40%", "40%");
+  },
+
+  printEtiquettes: function(object_class, object_id, modele_etiquette_id) {
+    var table = $(Admissions.table_id);
+    var sejours_ids = table.select("input[name=print_doc]:checked").pluck("value");
+
+    if (sejours_ids == "") {
+      alert("Veuillez sélectionner au minimum un patient pour l'impression");
+      return false;
+    }
+
+    var form = getForm("download_etiqs");
+    $V(form.modele_etiquette_id, modele_etiquette_id);
+    $V(form.sejours_ids, sejours_ids.join("-"));
+    form.submit();
+    Control.Modal.close();
+  },
+
   beforePrint: function() {
     Admissions.totalUpdater.stop();
     Admissions.listUpdater.stop();
   },
-  
+
   afterPrint: function() {
     Control.Modal.close();
     Admissions.totalUpdater.resume();

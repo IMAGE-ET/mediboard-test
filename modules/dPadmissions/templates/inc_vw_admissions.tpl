@@ -12,7 +12,7 @@
   Main.add(function() {
     Prestations.callback = reloadAdmission;
     Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
-    Admissions.restoreSelection('listAdmissions');
+    Admissions.restoreSelection();
   });
 </script>
 
@@ -53,7 +53,7 @@
   <tr>
     <th style="width: 13%">{{tr}}CSejour-admit{{/tr}}</th>
     <th>
-      <input type="checkbox" style="float: left;" onclick="Admissions.togglePrint('admissions', this.checked)"/>
+      <input type="checkbox" style="float: left;" onclick="Admissions.togglePrint(this.checked)"/>
       {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way function=sortBy}}
     </th>
     <th class="narrow">

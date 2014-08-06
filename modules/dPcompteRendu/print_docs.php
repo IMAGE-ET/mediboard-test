@@ -35,7 +35,7 @@ foreach ($compte_rendu->loadList($where) as $_compte_rendu) {
 
   $nb_print = $nbDoc[$_compte_rendu->_id];
   for ($i = 1; $i <= $nb_print; $i++) {
-    $pdf->addPDF($_compte_rendu->_ref_file->_file_path, 'all');
+    $pdf->addPDF($_compte_rendu->_ref_file->_file_path);
   }
 }
 

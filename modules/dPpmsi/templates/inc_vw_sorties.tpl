@@ -15,7 +15,7 @@
   }
 
   Main.add(function() {
-    Admissions.restoreSelection('listSorties');
+    Admissions.restoreSelection();
     Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
     Prestations.callback = reloadSorties;
   });

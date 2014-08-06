@@ -20,81 +20,82 @@
   {{mb_script module=web100T script=web100T}}
 {{/if}}
 
-<script type="text/javascript">
-function printPlanning() {
-  var oForm = document.selType;
-  var url = new Url("dPadmissions", "print_entrees");
-  url.addParam("date"      , "{{$date}}");
-  url.addParam("type"      , $V(oForm._type_admission));
-  url.addParam("service_id", [$V(oForm.service_id)].flatten().join(","));
-  url.popup(700, 550, "Entrees");
-}
-
-function reloadFullPresents(filterFunction) {
-  var oForm = getForm("selType");
-  var url = new Url("dPadmissions", "httpreq_vw_all_presents");
-  url.addParam("date"      , "{{$date}}");
-  url.addParam("type"      , $V(oForm._type_admission));
-  url.addParam("service_id", [$V(oForm.service_id)].flatten().join(","));
-  url.addParam("prat_id", $V(oForm.prat_id));
-  url.requestUpdate('allPresents');
-	reloadPresent(filterFunction);
-}
-
-function reloadPresent(filterFunction) {
-  var oForm = getForm("selType");
-  var url = new Url("dPadmissions", "httpreq_vw_presents");
-  url.addParam("date"      , "{{$date}}");
-  url.addParam("type"      , $V(oForm._type_admission));
-  url.addParam("service_id", [$V(oForm.service_id)].flatten().join(","));
-  url.addParam("prat_id", $V(oForm.prat_id));
-	if(!Object.isUndefined(filterFunction)){
-	  url.addParam("filterFunction", filterFunction);
-	}
-  url.requestUpdate('listPresents');
-}
-
-function confirmation(oForm){
-  if(confirm('La date enregistrée d\'admission est différente de la date prévue, souhaitez vous confimer l\'admission du patient ?')){
-    submitAdmission(oForm);
+<script>
+  function printPlanning() {
+    var oForm = getForm("selType");
+    var url = new Url("dPadmissions", "print_entrees");
+    url.addParam("date"      , "{{$date}}");
+    url.addParam("type"      , $V(oForm._type_admission));
+    url.addParam("service_id", [$V(oForm.service_id)].flatten().join(","));
+    url.popup(700, 550, "Entrees");
   }
-}
 
-function submitCote(oForm) {
-  return onSubmitFormAjax(oForm, { onComplete : reloadAdmission });
-}
+  function reloadFullPresents(filterFunction) {
+    var oForm = getForm("selType");
+    var url = new Url("dPadmissions", "httpreq_vw_all_presents");
+    url.addParam("date"      , "{{$date}}");
+    url.addParam("type"      , $V(oForm._type_admission));
+    url.addParam("service_id", [$V(oForm.service_id)].flatten().join(","));
+    url.addParam("prat_id", $V(oForm.prat_id));
+    url.requestUpdate('allPresents');
+    reloadPresent(filterFunction);
+  }
 
-function submitAdmission(oForm, bPassCheck) {
-  {{if "dPsante400"|module_active && "CAppUI::conf"|static_call:"dPsante400 CIdSante400 admit_ipp_nda_obligatory":"CGroups-$g"}}
-    var oIPPForm = getForm("editIPP" + $V(oForm.patient_id));
-    var oNumDosForm = getForm("editNumdos" + $V(oForm.sejour_id));
-    if(!bPassCheck && oIPPForm && oNumDosForm && (!$V(oIPPForm.id400) || !$V(oNumDosForm.id400)) ) {
-      Idex.edit_manually($V(oNumDosForm.object_class)+"-"+$V(oNumDosForm.object_id),
-                         $V(oIPPForm.object_class)+"-"+$V(oIPPForm.object_id),
-                          reloadAdmission.curry());
-    } else {
-      return onSubmitFormAjax(oForm, { onComplete : reloadAdmission });
+  function reloadPresent(filterFunction) {
+    var oForm = getForm("selType");
+    var url = new Url("dPadmissions", "httpreq_vw_presents");
+    url.addParam("date"      , "{{$date}}");
+    url.addParam("type"      , $V(oForm._type_admission));
+    url.addParam("service_id", [$V(oForm.service_id)].flatten().join(","));
+    url.addParam("prat_id", $V(oForm.prat_id));
+    if(!Object.isUndefined(filterFunction)){
+      url.addParam("filterFunction", filterFunction);
     }
-  {{else}}
-    return onSubmitFormAjax(oForm, { onComplete : reloadAdmission });
-  {{/if}}
-}
+    url.requestUpdate('listPresents');
+  }
 
-Main.add(function () {
-  var totalUpdater = new Url("dPadmissions", "httpreq_vw_all_presents");
-  totalUpdater.addParam("date", "{{$date}}");
-  Admissions.totalUpdater = totalUpdater.periodicalUpdate('allPresents', { frequency: 120 });
+  function confirmation(oForm) {
+    if(confirm('La date enregistrée d\'admission est différente de la date prévue, souhaitez vous confimer l\'admission du patient ?')){
+      submitAdmission(oForm);
+    }
+  }
 
-  var listUpdater = new Url("dPadmissions", "httpreq_vw_presents");
-  listUpdater.addParam("date", "{{$date}}");
-  Admissions.listUpdater = listUpdater.periodicalUpdate('listPresents', {
-    frequency: 120,
-    onCreate: function() {
-      WaitingMessage.cover($('listPresents'));
-      Admissions.rememberSelection('listPresents');
-    } });
-});
+  function submitCote(oForm) {
+    return onSubmitFormAjax(oForm, reloadAdmission);
+  }
 
+  function submitAdmission(oForm, bPassCheck) {
+    {{if "dPsante400"|module_active && "CAppUI::conf"|static_call:"dPsante400 CIdSante400 admit_ipp_nda_obligatory":"CGroups-$g"}}
+      var oIPPForm = getForm("editIPP" + $V(oForm.patient_id));
+      var oNumDosForm = getForm("editNumdos" + $V(oForm.sejour_id));
+      if(!bPassCheck && oIPPForm && oNumDosForm && (!$V(oIPPForm.id400) || !$V(oNumDosForm.id400)) ) {
+        Idex.edit_manually($V(oNumDosForm.object_class)+"-"+$V(oNumDosForm.object_id),
+                           $V(oIPPForm.object_class)+"-"+$V(oIPPForm.object_id),
+                            reloadAdmission.curry());
+      } else {
+        return onSubmitFormAjax(oForm, reloadAdmission);
+      }
+    {{else}}
+      return onSubmitFormAjax(oForm, reloadAdmission);
+    {{/if}}
+  }
+
+  Main.add(function () {
+    Admissions.table_id = "listPresents";
+
+    var totalUpdater = new Url("admissions", "httpreq_vw_all_presents");
+    totalUpdater.addParam("date", "{{$date}}");
+    Admissions.totalUpdater = totalUpdater.periodicalUpdate('allPresents', { frequency: 120 });
+
+    var listUpdater = new Url("admissions", "httpreq_vw_presents");
+    listUpdater.addParam("date", "{{$date}}");
+    Admissions.listUpdater = listUpdater.periodicalUpdate('listPresents', {
+      frequency: 120,
+      onCreate: function() {
+        WaitingMessage.cover($('listPresents'));
+        Admissions.rememberSelection();
+      } });
+  });
 </script>
 
 <div style="display: none" id="area_prompt_modele">
@@ -125,7 +126,7 @@ Main.add(function () {
       </select>
     </form>
     <a href="#" onclick="printPlanning()" class="button print" style="display: none;">Imprimer</a>
-    <a href="#" onclick="Admissions.beforePrint(); Modal.open('area_prompt_modele')" class="button print">{{tr}}CCompteRendu-print_for_select{{/tr}}</a>
+    <a href="#" onclick="Admissions.choosePrintForSelection()" class="button print">{{tr}}CCompteRendu-print_for_select{{/tr}}</a>
     {{if "web100T"|module_active}}
       {{mb_include module=web100T template=inc_button_send_all_prestations type=admissions}}
     {{/if}}

@@ -19,8 +19,6 @@ $modele_etiquette_id = CValue::get("modele_etiquette_id");
 $object = new $object_class;
 $object->load($object_id);
 
-$patient = new CPatient;
-
 $fields = array();
 
 $object->completeLabelFields($fields);

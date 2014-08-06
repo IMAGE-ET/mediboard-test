@@ -17,7 +17,12 @@
     <tr>
       <td>
         <button type="button" class="tick notext"
-          onclick="ModeleEtiquette.print('{{$object_class}}', '{{$object_id}}', '{{$_modele->_id}}', '{{$unique_id}}');"></button>
+          onclick="
+            {{if $custom_function}}
+              {{$custom_function}}('{{$object_class}}', '{{$object_id}}', '{{$_modele->_id}}');
+            {{else}}
+              ModeleEtiquette.print('{{$object_class}}', '{{$object_id}}', '{{$_modele->_id}}', '{{$unique_id}}');
+            {{/if}}"></button>
       </td>
       <td>
         {{$_modele->nom}}

@@ -157,9 +157,10 @@
   }
 
   Main.add(function() {
+    Admissions.table_id = "listAdmissions";
     var form = getForm("selType");
-    var totalUpdater = new Url("admissions", "httpreq_vw_all_admissions");
 
+    var totalUpdater = new Url("admissions", "httpreq_vw_all_admissions");
     Admissions.totalUpdater = totalUpdater.periodicalUpdate('allAdmissions', {frequency: 120});
 
     var listUpdater = new Url("admissions", "httpreq_vw_admissions");
@@ -167,7 +168,7 @@
       frequency: 120,
       onCreate: function() {
         WaitingMessage.cover($('listAdmissions'));
-        Admissions.rememberSelection('listAdmissions');
+        Admissions.rememberSelection();
       }
     });
   });
@@ -210,7 +211,7 @@
       </select>
     </form>
     <a href="#" onclick="printPlanning()" class="button print">{{tr}}Print{{/tr}}</a>
-    <a href="#" onclick="Admissions.beforePrint(); Modal.open('area_prompt_modele')" class="button print">{{tr}}CCompteRendu-print_for_select{{/tr}}</a>
+    <a href="#" onclick="Admissions.choosePrintForSelection()" class="button print">{{tr}}CCompteRendu-print_for_select{{/tr}}</a>
     {{if "web100T"|module_active}}
       {{mb_include module=web100T template=inc_button_send_all_prestations type=admissions}}
     {{/if}}

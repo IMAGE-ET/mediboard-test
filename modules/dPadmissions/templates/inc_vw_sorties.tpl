@@ -10,7 +10,7 @@
 
 <script>
   Main.add(function() {
-    Admissions.restoreSelection('listSorties');
+    Admissions.restoreSelection();
     Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
     Prestations.callback = reloadSorties;
   });
@@ -57,7 +57,7 @@
   <tr>
     <th class="narrow">Effectuer la sortie</th>
     <th>
-      <input type="checkbox" style="float: left;" onclick="Admissions.togglePrint('sortie', this.checked)"/>
+      <input type="checkbox" style="float: left;" onclick="Admissions.togglePrint(this.checked)"/>
       {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way function=sortBy}}
     </th>
     <th class="narrow">
