@@ -159,7 +159,7 @@ ProtocoleSelector = {
     if (this.sFacturable) {
       $V(oSejourForm[this.sFacturable], protocole.facturable);
     }
-    if(this.sServiceId && (!oSejourForm.sejour_id.value || !oSejourForm[this.sServiceId].value)) {
+    if(this.sServiceId && oSejourForm[this.sServiceId] && (!oSejourForm.sejour_id.value || !oSejourForm[this.sServiceId].value)) {
       $V(oSejourForm[this.sServiceId], protocole.service_id);
     }
     if(this.sDP && (!oSejourForm.sejour_id.value || !oSejourForm[this.sDP].value)) {
