@@ -215,7 +215,7 @@ showModalTP = function() {
       </button>
     {{/if}}
 
-    {{if $_is_anesth && ($app->_ref_user->isPraticien() || $app->_ref_user->isSageFemme() || !"dPprescription general role_propre"|conf:"CGroups-$g")}}
+    {{if $sejour->_id && $_is_anesth && ($app->_ref_user->isPraticien() || $app->_ref_user->isSageFemme() || !"dPprescription general role_propre"|conf:"CGroups-$g")}}
       <button class="tick" type="button" style="float: right" onclick="showModalTP();">
         Gestion des traitements personnels ({{$sejour->_ref_prescription_sejour->_count_lines_tp}}/{{$dossier_medical->_ref_prescription->_ref_prescription_lines|@count}})
       </button>
