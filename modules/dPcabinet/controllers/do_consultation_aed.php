@@ -26,7 +26,7 @@ CAppUI::requireModuleFile("dPcabinet", "controllers/do_consultation_multiple");
 if ($consultation_ids = CValue::post("consultation_ids")) {
   $_POST = array(
     "consultation_ids" => CValue::post("consultation_ids"),
-    "annule"           => CValue::post("annule"),
+    "annule"           => CValue::post("annule", 0),
     "del"              => CValue::post("del"),
     "sejour_id"        => CValue::post("sejour_id"),
     "postRedirect"     => CValue::post("postRedirect")
