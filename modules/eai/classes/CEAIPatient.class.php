@@ -90,7 +90,8 @@ class CEAIPatient extends CEAIMbObject {
       $IPP->object_class = "CPatient";
       $IPP->object_id    = $patient->_id;
       $IPP->last_update  = CMbDT::dateTime();
-      
+      $IPP->_eai_sender_guid = $sender->_guid;
+
       return $IPP->store();  
     }
 
@@ -106,7 +107,8 @@ class CEAIPatient extends CEAIMbObject {
       }
         
       $IPP->last_update = CMbDT::dateTime();
-      
+      $IPP->_eai_sender_guid = $sender->_guid;
+
       return $IPP->store();  
     }
     else {
@@ -129,6 +131,7 @@ class CEAIPatient extends CEAIMbObject {
         if ($IPP_temp->_id) {
           // On passe l'IPP courant en trash
           $IPP_temp->tag = CAppUI::conf("dPpatients CPatient tag_ipp_trash").$IPP_temp->tag;
+          $IPP_temp->_eai_sender_guid = $sender->_guid;
           $IPP_temp->store();
         }
 
@@ -139,7 +142,8 @@ class CEAIPatient extends CEAIMbObject {
         
         $IPP->object_id   = $patient->_id;
         $IPP->last_update = CMbDT::dateTime();
-      
+        $IPP->_eai_sender_guid = $sender->_guid;
+
         return $IPP->store();  
       }
     }

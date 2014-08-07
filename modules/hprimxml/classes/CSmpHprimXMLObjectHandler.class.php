@@ -81,7 +81,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       }
       // Si Client
       else {
-        if ($sejour->_eai_sender_guid || !$receiver->isMessageSupported("CHPrimXMLVenuePatient")) {
+        if (!$receiver->isMessageSupported("CHPrimXMLVenuePatient")) {
           return false;
         }
           
@@ -138,7 +138,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       // Cas où :
       // * on est l'initiateur du message
       // * le destinataire ne supporte pas le message
-      if ($affectation->_eai_sender_guid || !$receiver->isMessageSupported("CHPrimXMLMouvementPatient")) {
+      if (!$receiver->isMessageSupported("CHPrimXMLMouvementPatient")) {
         return false;
       }
 

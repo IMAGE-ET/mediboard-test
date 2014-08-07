@@ -77,7 +77,7 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     }
     // Si Client
     else {
-      if ($mbObject->_eai_sender_guid || !$receiver->isMessageSupported("CHPrimXMLEnregistrementPatient")) {
+      if (!$receiver->isMessageSupported("CHPrimXMLEnregistrementPatient")) {
         return false;
       }
 
@@ -91,12 +91,12 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
         $IPP->loadLatestFor($mbObject, $receiver->_tag_patient);
         $mbObject->_IPP = $IPP->id400;
       }
-  
+
       // Envoi pas les patients qui n'ont pas d'IPP
       if (!$receiver->_configs["send_all_patients"] && !$mbObject->_IPP) {
         return false;
       }
-      
+
       $this->sendEvenementPatient("CHPrimXMLEnregistrementPatient", $mbObject);
       
       $mbObject->_IPP = null;

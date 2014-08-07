@@ -97,6 +97,7 @@ class CEAISejour extends CEAIMbObject {
       
       // On passe le NDA courant en trash
       $ref_NDA->tag = CAppUI::conf("dPplanningOp CSejour tag_dossier_trash").$ref_NDA->tag;
+      $ref_NDA->_eai_sender_guid = $sender->_guid;
       $ref_NDA->store();
       
       // On sauvegarde le nouveau
@@ -104,7 +105,8 @@ class CEAISejour extends CEAIMbObject {
       $NDA->object_class = "CSejour";
       $NDA->object_id    = $sejour->_id;
       $NDA->last_update  = CMbDT::dateTime();
-      
+      $NDA->_eai_sender_guid = $sender->_guid;
+
       return $NDA->store();  
     }
       
@@ -120,7 +122,8 @@ class CEAISejour extends CEAIMbObject {
       }
         
       $NDA->last_update = CMbDT::dateTime();
-      
+      $NDA->_eai_sender_guid = $sender->_guid;
+
       return $NDA->store();  
     }
     else {
@@ -145,7 +148,8 @@ class CEAISejour extends CEAIMbObject {
         
         $NDA->object_id   = $sejour->_id;
         $NDA->last_update = CMbDT::dateTime();
-      
+        $NDA->_eai_sender_guid = $sender->_guid;
+
         return $NDA->store();  
       }
     }  

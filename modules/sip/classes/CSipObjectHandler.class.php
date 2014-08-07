@@ -34,13 +34,16 @@ class CSipObjectHandler extends CEAIObjectHandler {
   }
 
   /**
-   * Trigger after event store
-   *
-   * @param CMbObject $mbObject Object
-   *
-   * @throws CMbException
-   *
-   * @return void
+   * @see parent::onBeforeStore
+   */
+  function onBeforeStore(CMbObject $mbObject) {
+    if (!parent::onAfterStore($mbObject)) {
+      return;
+    }
+  }
+
+  /**
+   * @see parent::onAfterStore
    */
   function onAfterStore(CMbObject $mbObject) {
     if (!parent::onAfterStore($mbObject)) {
@@ -61,13 +64,7 @@ class CSipObjectHandler extends CEAIObjectHandler {
   }
 
   /**
-   * Trigger before event merge
-   *
-   * @param CMbObject $mbObject Object
-   *
-   * @throws CMbException
-   *
-   * @return void
+   * @see parent::onBeforeMerge
    */
   function onBeforeMerge(CMbObject $mbObject) {
     if (!parent::onBeforeMerge($mbObject)) {
@@ -159,11 +156,7 @@ class CSipObjectHandler extends CEAIObjectHandler {
   }
 
   /**
-   * Trigger after event merge
-   *
-   * @param CMbObject $mbObject Object
-   *
-   * @return void
+   * @see parent::onAfterMerge
    */
   function onAfterMerge(CMbObject $mbObject) {
     if (!parent::onAfterMerge($mbObject)) {
@@ -174,17 +167,24 @@ class CSipObjectHandler extends CEAIObjectHandler {
   }
 
   /**
-   * Trigger after event delete
-   *
-   * @param CMbObject $mbObject Object
-   *
-   * @return void
+   * @see parent::onBeforeDelete
+   */
+  function onBeforeDelete(CMbObject $mbObject) {
+    if (!parent::onBeforeDelete($mbObject)) {
+      return;
+    }
+
+    $this->sendFormatAction("onBeforeDelete", $mbObject);
+  }
+
+  /**
+   * @see parent::onAfterDelete
    */
   function onAfterDelete(CMbObject $mbObject) {
     if (!parent::onAfterDelete($mbObject)) {
       return;
     }
-    
+
     $this->sendFormatAction("onAfterDelete", $mbObject);
   }
 }

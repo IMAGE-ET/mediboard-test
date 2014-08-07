@@ -49,23 +49,23 @@ class CEAIObjectHandler extends CMbObjectHandler {
 
     $cn_receiver_guid = CValue::sessionAbs("cn_receiver_guid");
 
+    $receiver = new CInteropReceiver();
     // Parcours des receivers actifs
     if (!$cn_receiver_guid) {
       // On est dans le cas d'un store d'un objet depuis MB
       if (!$mbObject->_eai_sender_guid) {
-        $receiver = new CInteropReceiver();
-        $receivers = $receiver->getObjects();
+        $receivers = $receiver->getObjects(true);
       }
+
+      // On est dans le cas d'un enregistrement provenant d'une interface
       else {
-        // On est dans le cas d'un enregisrement provenant d'une interface
+        $receivers = array();
+
         /** @var CInteropSender $sender */
         $sender = CMbObject::loadFromGuid($mbObject->_eai_sender_guid);
 
-        $receivers = array();
-        // Chargement des routes du eai_sender_guid
+        // On utilise le routeur de l'EAI
         if (CAppUI::conf("eai use_routers")) {
-          // On supprime le _eai_sender_guid sur l'objet pour pouvoir envoyer les messages
-          $mbObject->_eai_sender_guid = null;
 
           // Récupération des receivers de ttes les routes actives
           /** @var CEAIRoute[] $routes */
@@ -73,7 +73,6 @@ class CEAIObjectHandler extends CMbObjectHandler {
           $where["active"] = " = '1'";
           $routes = $sender->loadBackRefs("routes", null, null, null, null, null, null, $where);
 
-          $receivers = array();
           foreach ($routes as $_route) {
             if (!$_route->active) {
               continue;
@@ -83,9 +82,27 @@ class CEAIObjectHandler extends CMbObjectHandler {
             $receivers[get_class($receiver)][] = $receiver;
           }
         }
+
+        // On ne va transmettre aucun message, hormis pour les patients
+        else {
+          if (!$mbObject instanceof CPatient) {
+            return;
+          }
+
+          $no_group = null;
+          // Dans le cas des patients on va envoyer à tous les destinataires
+
+          // On ne transmet pas le message aux destinataires du même établissement que celui de l'expéditeur
+          if (!CAppUI::conf("eai send_messages_with_same_group")) {
+            $no_group = $sender->group_id;
+          }
+
+          $receivers = $receiver->getObjects(true, $no_group);
+        }
       }
     }
-    // Sinon envoi destinataire sélectionné
+
+    // Sinon envoi destinataire sélectionné (cas sur un destinataire ciblé ex. mod-connectathon)
     else {
       if ($cn_receiver_guid == "none") {
         return;
@@ -101,6 +118,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
       if (!$_receivers) {
         continue;
       }
+
       foreach ($_receivers as $_receiver) {
         // Destinataire non actif on envoi pas
         if (!$_receiver->actif) {
@@ -149,7 +167,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
-    
+
     if (isset($mbObject->_eai_sender_guid)) {
       $this->_eai_sender_guid = $mbObject->_eai_sender_guid;
     }
@@ -168,8 +186,6 @@ class CEAIObjectHandler extends CMbObjectHandler {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
-
-    $this->_eai_sender_guid = $mbObject->_eai_sender_guid;
 
     if (!$mbObject->_ref_last_log && $mbObject->_class != "CIdSante400") {
       return false;
@@ -201,6 +217,10 @@ class CEAIObjectHandler extends CMbObjectHandler {
     
     if (!$mbObject->_merging) {
       return false;
+    }
+
+    if (isset($mbObject->_eai_sender_guid)) {
+      $this->_eai_sender_guid = $mbObject->_eai_sender_guid;
     }
 
     return true;
@@ -254,6 +274,10 @@ class CEAIObjectHandler extends CMbObjectHandler {
   function onBeforeDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
+    }
+
+    if (isset($mbObject->_eai_sender_guid)) {
+      $this->_eai_sender_guid = $mbObject->_eai_sender_guid;
     }
 
     return true;

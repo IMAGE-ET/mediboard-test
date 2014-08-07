@@ -324,6 +324,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         $newVenue->_generate_NDA = false;
         // On ne check pas la cohérence des dates des consults/intervs
         $newVenue->_skip_date_consistencies = true;
+
         if ($msgVenue = $newVenue->store()) {
           if ($newVenue->_collisions) {
             return $exchange_hl7v2->setAckAR($ack, "E213", $msgVenue, reset($newVenue->_collisions));
@@ -420,11 +421,13 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           if ($last_id400->_id) {
             $last_id400->tag = "trash_".$last_id400->tag;
             $last_id400->last_update = CMbDT::dateTime();
+            $last_id400->_eai_sender_guid = $sender->_guid;
             $last_id400->store();
           }
           
           // On annule le mouvement
           $_movement->cancel = 1;
+          $_movement->_eai_sender_guid = $sender->_guid;
           $_movement->store();
         }
       }      
@@ -446,6 +449,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Affectation de l'affectation au mouvement
     if ($movement && $affectation && $affectation->_id) {
       $movement->affectation_id = $affectation->_id;
+      $movement->_eai_sender_guid = $sender->_guid;
       $movement->store();
     }
 
@@ -1008,6 +1012,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (!$this->_object_found_by_vn) {
       return null;
     }
+
+    $sender = $this->_ref_sender;
     
     $object_found_by_vn = $this->_object_found_by_vn;
     // Création de l'objet ? 
@@ -1061,6 +1067,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       
       // Dans le cas où l'on doit créer l'objet
       if (!$object_found_by_vn->_id) {
+        $object_found_by_vn->_eai_sender_guid = $sender->_guid;
         if ($msg = $object_found_by_vn->store()) {
           return $msg;
         }
@@ -1068,7 +1075,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
     
     // On affecte le VN
-    $sender       = $this->_ref_sender;
     $object_class = $object_found_by_vn->_class;
     $object_id    = $object_found_by_vn->_id;
       
@@ -1080,6 +1086,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     // Création de l'idex
     $idexVN->last_update = CMbDT::dateTime();
+    $idexVN->_eai_sender_guid = $sender->_guid;
 
     return $idexVN->store();
   }
@@ -1200,6 +1207,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Attribution de l'affectation au mouvement
     if ($movement && $affectation && $affectation->_id) {
       $movement->affectation_id = $affectation->_id;
+      $movement->_eai_sender_guid = $sender->_guid;
       $movement->store();
       //if ($msg = $movement->store()) {
       //  return $exchange_hl7v2->setAckAR($ack, "E208", $msg, $newVenue);
@@ -1419,6 +1427,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
         // Pas de synchronisation
         $affectation->_no_synchro = true;
+        $affectation->_eai_sender_guid = $sender->_guid;
         if ($msg = $affectation->store()) {
           return $msg;
         }
@@ -1483,6 +1492,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
         $search->effectue = 1;
         $search->sortie   = $datetime;
+        $search->_eai_sender_guid = $sender->_guid;
         if ($msg = $search->store()) {
           return $msg;
         }
@@ -1581,6 +1591,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
       // On ne check pas la cohérence des dates des consults/intervs
       $newVenue->_skip_date_consistencies = true;
+      $newVenue->_eai_sender_guid = $sender->_guid;
+
       if ($msgVenue = $newVenue->store()) {
         return $msgVenue;
       }
@@ -1599,6 +1611,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $uf_soins = $this->mappingUFSoins($data);
     $affectation->uf_soins_id = $uf_soins ? $uf_soins->_id : null;
 
+    $affectation->_eai_sender_guid = $sender->_guid;
     if ($msg = $affectation->store()) {
       return $msg;
     }
@@ -1630,6 +1643,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $grossesse->parturiente_id = $newVenue->patient_id;
       $grossesse->group_id       = $newVenue->group_id;
       $grossesse->terme_prevu    = CMbDT::date($newVenue->sortie);
+      $grossesse->_eai_sender_guid = $sender->_guid;
       if ($msg = $grossesse->store()) {
         return $msg;
       }
@@ -1638,6 +1652,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $newVenue->grossesse_id = $grossesse->_id;
     // On ne check pas la cohérence des dates des consults/intervs
     $newVenue->_skip_date_consistencies = true;
+    $newVenue->_eai_sender_guid = $sender->_guid;
     if ($msg = $newVenue->store()) {
       return $msg;
     }
@@ -2147,7 +2162,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     $item_liaison->loadObject($where, null, null, $ljoin);
 
-    $item_liaison->item_souhait_id = $item_presta->_id;
+    $item_liaison->item_souhait_id  = $item_presta->_id;
+    $item_liaison->_eai_sender_guid = $sender->_guid;
 
     $item_liaison->store();
   }
@@ -2340,12 +2356,15 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return null;
     }
 
+    $sender = $this->_ref_sender;
+
     $tag_NRA = $newVenue->getTagNRA($newVenue->group_id);
     $PV1_50  = $this->queryTextNode("PV1.50/CX.1", $node);
 
     //Paramétrage de l'id 400
     $idexNRA = CIdSante400::getMatch($newVenue->_class, $tag_NRA, $PV1_50, $newVenue->_id);
     $idexNRA->last_update  = CMbDT::dateTime();
+    $idexNRA->_eai_sender_guid = $sender->_guid;
 
     return $idexNRA->store();
   }
@@ -2557,6 +2576,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     $movement->start_of_movement = $start_movement_dt;
     $movement->last_update = CMbDT::dateTime();
+    $movement->_eai_sender_guid = $sender->_guid;
     if ($msg = $movement->store()) {
       return $msg;
     }
@@ -2564,6 +2584,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if ($idex_create) {
       $idexMovement->last_update = CMbDT::dateTime();
       $idexMovement->object_id   = $movement->_id;
+      $idexMovement->_eai_sender_guid = $sender->_guid;
       if ($msg = $idexMovement->store()) {
         return $msg;
       } 
@@ -2580,11 +2601,14 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
    *
    * @return void
    */
-  function getZFD(DOMNode $node, CSejour $newVenue) {  
+  function getZFD(DOMNode $node, CSejour $newVenue) {
+    $sender = $this->_ref_sender;
+
     // Date lunaire
     if ($date_lunaire = $this->queryTextNode("ZFD.1", $node)) {
       $patient = $newVenue->_ref_patient;
       $patient->naissance = $date_lunaire;
+      $patient->_eai_sender_guid = $sender->_guid;
       $patient->store();
     }
   }
@@ -2675,11 +2699,14 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
    *
    * @return void
    */
-  function getZFP(DOMNode $node, CSejour $newVenue) {    
+  function getZFP(DOMNode $node, CSejour $newVenue) {
+    $sender = $this->_ref_sender;
+
     // Catégorie socioprofessionnelle
     if ($csp = $this->queryTextNode("ZFP.2", $node)) {
       $patient = $newVenue->_ref_patient;
       $patient->csp = $csp;
+      $patient->_eai_sender_guid = $sender->_guid;
       $patient->store();
     }  
   }
@@ -2803,6 +2830,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     if ($msg = $corres_patient->store()) {
       $corres_patient->repair();
+
+      $corres_patient->_eai_sender_guid = $sender->_guid;
 
       $corres_patient->store();
     }

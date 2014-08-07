@@ -35,11 +35,16 @@ class CSaObjectHandler extends CEAIObjectHandler {
   }
 
   /**
-   * Trigger after event store
-   *
-   * @param CMbObject $mbObject Object
-   *
-   * @return void
+   * @see parent::onBeforeStore
+   */
+  function onBeforeStore(CMbObject $mbObject) {
+    if (!parent::onBeforeStore($mbObject)) {
+      return;
+    }
+  }
+
+  /**
+   * @see parent::onAfterStore
    */
   function onAfterStore(CMbObject $mbObject) {
     if (!parent::onAfterStore($mbObject)) {
@@ -112,7 +117,7 @@ class CSaObjectHandler extends CEAIObjectHandler {
               $this->sendFormatAction("onAfterStore", $operation);
             }
             break;
-          
+
           case 'sortie_reelle':
             break;
             

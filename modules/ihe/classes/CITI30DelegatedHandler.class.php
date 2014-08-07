@@ -59,8 +59,6 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     /** @var CInteropReceiver $receiver */
     $receiver = $mbObject->_receiver;
     $receiver->getInternationalizationCode($this->transaction);
-    
-    $eai_sender_guid = $mbObject->_eai_sender_guid;
 
     $code = null;
 
@@ -72,7 +70,6 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
       
       $mbObject                   = $mbObject->loadRefPatient();
       $mbObject->_receiver        = $receiver;
-      $mbObject->_eai_sender_guid = $eai_sender_guid;
       
       $code = "A31";
     }
@@ -175,9 +172,9 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     if (!$code) {
       return;
     }
-    
+
     $patient = $mbObject;
-    if ($patient->_eai_sender_guid || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
+    if (!$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
       return;
     }
      
@@ -396,7 +393,7 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
 
     $code = ($receiver->_configs["send_update_patient_information"] == "A08") ? "A08" : "A31";
         
-    if ($patient->_eai_sender_guid || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
+    if (!$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
       return;
     }
     

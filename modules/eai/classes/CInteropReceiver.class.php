@@ -84,18 +84,30 @@ class CInteropReceiver extends CInteropActor {
   
   /**
    * Get objects
+   *
+   * @param bool $actif    Actif
+   * @param int  $no_group Group excluded
    * 
    * @return array CInteropReceiver collection 
    */
-  function getObjects() {
+  function getObjects($actif = false, $no_group = null) {
     $objects = array();
     foreach (self::getChildReceivers() as $_interop_receiver) {
       /** @var CInteropReceiver $receiver */
       $receiver = new $_interop_receiver;
+
+      $where = array();
+      if ($actif) {
+        $where["actif"]    = " = '1'";
+      }
+
+      if ($no_group) {
+        $where["group_id"] = " != '$no_group'";
+      }
       
       $order = "group_id ASC, nom ASC";
       // Récupération de la liste des destinataires
-      $objects[$_interop_receiver] = $receiver->loadList(null, $order);
+      $objects[$_interop_receiver] = $receiver->loadList($where, $order);
       if (!is_array($objects[$_interop_receiver])) {
         continue;
       }
@@ -103,6 +115,7 @@ class CInteropReceiver extends CInteropActor {
         /** @var CInteropReceiver $_receiver */
         $_receiver->loadRefGroup();
         $_receiver->isReachable();
+
         // Pose des problèmes de performances (SLOW QUERY)
         //$_receiver->lastMessage();
       }
@@ -190,7 +203,12 @@ class CInteropReceiver extends CInteropActor {
 
     $this->_ref_exchanges_sources = array();
     foreach ($this->_ref_msg_supported_family as $_evenement) {
-      $this->_ref_exchanges_sources[$_evenement] = CExchangeSource::get("$this->_guid-$_evenement", null, true, $this->_type_echange);
+      $source = CExchangeSource::get("$this->_guid-$_evenement", null, true, $this->_type_echange);
+      if ($source instanceof CSourcePOP) {
+        $source->loadRefMetaObject();
+      }
+
+      $this->_ref_exchanges_sources[$_evenement] = $source;
     }
 
     return $this->_ref_exchanges_sources;

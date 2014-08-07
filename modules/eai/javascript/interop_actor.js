@@ -36,7 +36,11 @@ InteropActor = {
       .requestUpdate("line_"+actor_guid);
   },
 
-  viewActor : function(actor_guid, actor_class){
+  viewActor : function(actor_guid, actor_class, element){
+    if (element) {
+      element.up('tr').addUniqueClassName('selected');
+    }
+
     new Url("eai", "ajax_view_actor")
       .addParam("actor_guid", actor_guid)
       .addParam("actor_class", actor_class)

@@ -47,6 +47,7 @@
               <th>{{mb_label object=$source field="auth_ssl"}}</th>
               <td>{{mb_field object=$source field="auth_ssl" typeEnum="radio"}}</td>
             </tr>
+            {{if $source->_id}}
             <tr>
               <th>{{mb_label object=$source field="object_id"}}</th>
               <td>
@@ -58,6 +59,7 @@
                 {{/if}}
               </td>
             </tr>
+            {{/if}}
             <tr>
               <th>{{mb_label object=$source field="user"}}</th>
               <td>{{mb_field object=$source field="user" size="50"}}</td>

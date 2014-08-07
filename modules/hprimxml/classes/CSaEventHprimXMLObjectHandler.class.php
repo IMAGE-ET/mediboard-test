@@ -50,7 +50,7 @@ class CSaEventHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       return;
     }
 
-    if ($mbObject->_eai_sender_guid || !$receiver->isMessageSupported("CHPrimXMLEvenementsServeurIntervention")) {
+    if (!$receiver->isMessageSupported("CHPrimXMLEvenementsServeurIntervention")) {
       return;
     }
 

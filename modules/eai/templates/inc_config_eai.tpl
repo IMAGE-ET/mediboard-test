@@ -23,12 +23,15 @@
     {{mb_include module=system template=inc_config_str var=max_files_to_process numeric=true}}
     
     {{mb_include module=system template=inc_config_str var=max_reprocess_retries numeric=true}}
+
+    {{mb_include module=system template=inc_config_bool var=convert_encoding}}
     
     {{mb_include module=system template=inc_config_bool var=use_domain}}
 
     {{mb_include module=system template=inc_config_bool var=use_routers}}
 
-    {{mb_include module=system template=inc_config_bool var=convert_encoding}}
+    {{mb_include module=system template=inc_config_bool var=send_messages_with_same_group}}
+
 
     <tr>
       <td class="button" colspan="10">

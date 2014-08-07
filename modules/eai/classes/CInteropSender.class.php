@@ -22,9 +22,12 @@ class CInteropSender extends CInteropActor {
   public $delete_file;
   
   // Forward references
+  /** @var CMediusers $_ref_user */
   public $_ref_user;
-
+  /** @var CObjectToInteropSender[] $_ref_object_links */
   public $_ref_object_links;
+  /** @var CEAIRoute[] $_ref_routes */
+  public $_ref_routes;
 
   /**
    * @see parent::updateFormFields
@@ -89,6 +92,17 @@ class CInteropSender extends CInteropActor {
    */
   function loadRefUser() {
     return $this->_ref_user = $this->loadFwdRef("user_id", 1);
+  }
+
+  /**
+   * Load routes
+   *
+   * @param array $where Clause where
+   *
+   * @return CEAIRoute[]
+   */
+  function loadRefsRoutes($where = array()) {
+    return $this->_ref_routes = $this->loadBackRefs("routes", null, null, null, null, null, null, $where);
   }
   
   /**

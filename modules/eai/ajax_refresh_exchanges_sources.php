@@ -14,6 +14,7 @@ CCanDo::checkRead();
 
 $actor_guid = CValue::getOrSession("actor_guid");
 
+/** @var CInteropActor $actor */
 $actor = CMbObject::loadFromGuid($actor_guid);
 $actor->loadRefsExchangesSources();
 

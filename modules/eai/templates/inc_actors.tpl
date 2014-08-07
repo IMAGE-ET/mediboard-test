@@ -38,6 +38,7 @@
         {{tr}}{{$type_actor}}{{/tr}}
       </th>
     </tr>
+
     {{foreach from=$_actors item=_actor}}
       {{mb_include template=inc_actor}}
     {{/foreach}}

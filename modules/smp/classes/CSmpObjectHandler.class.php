@@ -102,7 +102,7 @@ class CSmpObjectHandler extends CEAIObjectHandler {
     if (!parent::onBeforeMerge($mbObject)) {
       return false;
     }
-    
+
     // Si pas en mode alternatif
     if (!CAppUI::conf("alternative_mode")) {
       throw new CMbException("no_alternative_mode");

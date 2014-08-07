@@ -80,7 +80,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
 
     /** @var CInteropReceiver $receiver */
     $receiver = $mbObject->_receiver;
-    $receiver->getInternationalizationCode($this->transaction);  
+    $receiver->getInternationalizationCode($this->transaction);
 
     // Traitement Sejour
     if ($mbObject instanceof CSejour) {
@@ -100,11 +100,6 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
 
       // Si Serveur
       if (CAppUI::conf('smp server')) {
-        return;
-      }
-
-      // Si initiateur du message
-      if ($sejour->_eai_sender_guid) {
         return;
       }
 
@@ -273,7 +268,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Cas où : 
       // * on est l'initiateur du message 
       // * le destinataire ne supporte pas le message
-      if ($affectation->_eai_sender_guid || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
+      if (!$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
         return;
       }
 
@@ -321,7 +316,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Cas où : 
       // * on est l'initiateur du message 
       // * le destinataire ne supporte pas le message
-      if ($mbObject->_eai_sender_guid || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
+      if (!$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
         return;
       }
       
@@ -1079,7 +1074,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Cas où : 
       // * on est l'initiateur du message 
       // * le destinataire ne supporte pas le message
-      if ($affectation->_eai_sender_guid || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
+      if (!$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
         return;
       }
             
