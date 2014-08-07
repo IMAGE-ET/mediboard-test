@@ -6,7 +6,7 @@
       <form name="editExecTarif" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
         {{mb_key object=$operation}}
         {{mb_class object=$operation}}
-        {{mb_field object=$operation field="exec_tarif" form="editExecTarif" register=true onchange="this.form.onsubmit();"}}
+        {{mb_field object=$operation field="exec_tarif" form="editExecTarif" register=true onchange="this.form.onsubmit();" style="width:70px;"}}
       </form>
     </td>
     <th><label for="_tarif_id">Tarif</label></th>
@@ -18,7 +18,7 @@
         <input type="hidden" name="_delete_actes" value="0"/>
         <input type="hidden" name="_datetime" value="{{$operation->_datetime}}">
 
-        <select name="_tarif_id" class="str" onchange="this.form.onsubmit();">
+        <select name="_tarif_id" class="str" onchange="this.form.onsubmit();" style="width:120px;">
           <option value="" selected="selected">&mdash; {{tr}}Choose{{/tr}}</option>
           {{if $tarifs.user|@count}}
             <optgroup label="Tarifs praticien">
