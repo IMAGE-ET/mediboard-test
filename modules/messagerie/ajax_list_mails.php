@@ -38,23 +38,37 @@ $account_pop->loadObject($where);
 $where = array();
 //mails
 $mail = new CUserMail();
-$where['account_id'] = "= '$account_id'";
+
 switch ($mode) {
   case 'inbox':
+    $where['account_id'] = "= '$account_id'";
+    $where['account_class'] = "= 'CSourcePOP'";
     $where['archived'] = "= '0' ";
     $where['sent'] = "= '0'";
     //$where['date_read'] = ' IS NULL';
     break;
 
   case 'archived':
+    $where['account_id'] = "= '$account_id'";
+    $where['account_class'] = "= 'CSourcePOP'";
     $where['archived'] = "= '1' ";
     break;
 
   case 'favorited' :
+    $where['account_id'] = "= '$account_id'";
+    $where['account_class'] = "= 'CSourcePOP'";
     $where['favorite'] = "= '1' ";
     break;
 
   case 'sent':
+    $source_smtp = CExchangeSource::get("mediuser-$user->_id", "smtp");
+    if ($source_smtp->_id) {
+      $where[] = "(account_id = '$account_id' AND account_class = 'CSourcePOP') OR (account_id = '$source_smtp->_id' AND account_class = 'CSourceSMTP')";
+    }
+    else {
+      $where['account_id'] = "= '$account_id'";
+      $where['account_class'] = "= 'CSourcePOP'";
+    }
     $where['sent'] = " = '1' ";
     break;
 }

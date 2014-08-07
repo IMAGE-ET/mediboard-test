@@ -20,7 +20,7 @@ $account_pop->load($account_id);
 //get the list
 $mail = new CUserMail();
 $where = array();
-$where[] = "date_read IS NULL AND account_id = '$account_id'";
+$where[] = "date_read IS NULL AND account_id = '$account_id' AND account_class = 'CSourcePOP'";
 $mails = $mail->loadList($where);
 
 $pop = new CPop($account_pop);

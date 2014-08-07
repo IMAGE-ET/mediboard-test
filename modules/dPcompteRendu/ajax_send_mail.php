@@ -47,6 +47,7 @@ try {
       $exchange_source->addAttachment($object->_file_path, $object->file_name);
   }
   $exchange_source->send();
+  $exchange_source->createUserMail(CAppUI::$user->_id, $object);
   CAppUI::displayAjaxMsg("Message envoyé");
 }
 catch(phpmailerException $e) {

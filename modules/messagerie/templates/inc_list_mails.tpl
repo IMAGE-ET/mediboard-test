@@ -24,7 +24,7 @@
     {{tr}}Actions{{/tr}}
   </th>
   <th style="width: 30px;">Date</th>
-  <th>{{tr}}CUserMail-from{{/tr}}</th>
+  <th>{{if $mode == 'sent'}}{{tr}}CUserMail-to{{/tr}}{{else}}{{tr}}CUserMail-from{{/tr}}{{/if}}</th>
   <th>{{tr}}CUserMail-subject{{/tr}}</th>
   <th>{{tr}}CUserMail-abstract{{/tr}}</th>
 </tr>
@@ -55,7 +55,11 @@
       </td>
       <td>{{mb_value object=$_mail field=date_inbox format=relative}}</td>
       <td class="text">
-        <label title="{{$_mail->from}}">{{$_mail->_from}}</label>
+        {{if $mode == 'sent'}}
+          <label title="{{$_mail->to}}">{{$_mail->_to}}</label>
+        {{else}}
+          <label title="{{$_mail->from}}">{{$_mail->_from}}</label>
+        {{/if}}
       </td>
       <td class="text">
         {{assign var=subject value=$_mail->subject}}

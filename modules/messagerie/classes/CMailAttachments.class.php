@@ -253,4 +253,48 @@ class CMailAttachments extends CMbObject{
     }
     return strtolower($string.'/'.$extension);
   }
+
+  /**
+   * get attachment mime type
+   *
+   * @param string $type File type (style text/plain or image/jpg)
+   *
+   * @return int
+   */
+  function getTypeInt($type) {
+    switch ($type) {
+      case 'text':
+        $int = 0;
+        break;
+
+      case 'multipart':
+        $int = 1;
+        break;
+
+      case 'message':
+        $int = 2;
+        break;
+
+      case 'application':
+        $int = 3;
+        break;
+
+      case 'audio':
+        $int = 4;
+        break;
+
+      case 'image':
+        $int = 5;
+        break;
+
+      case 'video':
+        $int = 6;
+        break;
+
+      default:
+        $int = -1;
+        break;
+    }
+    return $int;
+  }
 }

@@ -113,6 +113,7 @@ foreach ($sources as $_source) {
 
       $mail_unseen = new CUserMail();
       $mail_unseen->account_id = $_source->_id;
+      $mail_unseen->account_class = $_source->_class;
 
       //mail non existant
       $header = $pop->header($_mail);

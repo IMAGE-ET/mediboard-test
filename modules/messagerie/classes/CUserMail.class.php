@@ -16,7 +16,8 @@ class CUserMail extends CMbObject{
 
   public $user_mail_id;  //key
 
-  public $account_id; //POP account
+  public $account_id; //Source id
+  public $account_class;// Source class
   //headers
   public $subject;  //subject of the mail
   public $from;  //who sent it
@@ -41,7 +42,7 @@ class CUserMail extends CMbObject{
   //body
   public $text_plain_id; //plain text (no html) = CContentAny_id
   public $_text_plain;
-  public $_ref_account_pop;
+  public $_ref_account_;
   public $_is_apicrypt;
   public $_is_hprim;
 
@@ -72,7 +73,8 @@ class CUserMail extends CMbObject{
   function getProps() {
     $props = parent::getProps();
     $props["subject"]       = "str";
-    $props["account_id"]    = "ref notNull class|CSourcePOP cascade";
+    $props["account_id"]    = "ref notNull class|CSourcePOP|CSourceSMTP meta|account_class cascade";
+    $props["account_class"] = "enum list|CSourcePOP|CSourceSMTP notNull";
     $props["from"]          = "str";
     $props["_from"]         = "str";
     $props["to"]            = "str";
@@ -150,12 +152,13 @@ class CUserMail extends CMbObject{
    *
    * @param int $account_id account id = source_pop_id
    *
+   *
    * @return array
    */
   static function getListMailInMb($account_id) {
     $mail = new self;
     $ds = $mail->getDS();
-    $query = "SELECT `uid` FROM `user_mail` WHERE `account_id` = '$account_id' ";
+    $query = "SELECT `uid` FROM `user_mail` WHERE `account_id` = '$account_id' AND `account_class` = 'CSourcePOP'";
     return $ds->loadColumn($query);
   }
 
@@ -169,14 +172,14 @@ class CUserMail extends CMbObject{
   static function getLastMailUid($account_id) {
     $mail = new self;
     $ds = $mail->getDS();
-    $query = "SELECT MAX(`uid`) FROM `user_mail` WHERE `account_id` = '$account_id' ";
+    $query = "SELECT MAX(`uid`) FROM `user_mail` WHERE `account_id` = '$account_id' AND `account_class` = 'CSourcePOP'";
     return $ds->loadResult($query);
   }
 
   static function getLastMailDate($account_id) {
     $mail = new self;
     $ds = $mail->getDS();
-    $query = "SELECT MAX(`date_inbox`) FROM `user_mail` WHERE `account_id` = '$account_id' ";
+    $query = "SELECT MAX(`date_inbox`) FROM `user_mail` WHERE `account_id` = '$account_id' AND `account_class` = 'CSourcePOP'";
     $date = $ds->loadResult($query);
     $date = ($date) ? $date : CMbDT::dateTime();
     return $date;
@@ -185,7 +188,7 @@ class CUserMail extends CMbObject{
   static function getFirstMailDate($account_id) {
     $mail = new self;
     $ds = $mail->getDS();
-    $query = "SELECT MIN(`date_inbox`) FROM `user_mail` WHERE `account_id` = '$account_id' ";
+    $query = "SELECT MIN(`date_inbox`) FROM `user_mail` WHERE `account_id` = '$account_id' AND `account_class` = 'CSourcePOP'";
     $date = $ds->loadResult($query);
     $date = ($date) ? $date : CMbDT::dateTime();
     return $date;
@@ -464,7 +467,7 @@ class CUserMail extends CMbObject{
    * @return CMbObject
    */
   function loadAccount() {
-    return $this->_ref_account_pop = $this->loadFwdRef("account_id");
+    return $this->_ref_source_account = CMbObject::loadFromGuid("$this->account_class-$this->account_id");
   }
 
   /**

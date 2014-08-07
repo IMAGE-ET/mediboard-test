@@ -231,7 +231,15 @@ class CSetupmessagerie extends CSetup {
       DROP `grouped`;";
     $this->addQuery($query);
 
+    $this->makeRevision('0.34');
 
-    $this->mod_version = "0.34";
+    $query = "ALTER TABLE `user_mail`
+                ADD `account_class` VARCHAR (50) NOT NULL AFTER `account_id`";
+    $this->addQuery($query);
+
+    $query = "UPDATE `user_mail` SET `account_class` = 'CSourcePOP';";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.35';
   }
 }

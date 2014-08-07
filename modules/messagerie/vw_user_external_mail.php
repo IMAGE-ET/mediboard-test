@@ -32,8 +32,16 @@ $whereGlob = array();
 $whereGlob["account_id"] = " = '$account->_id'";
 
 $where = array();
+$source_smtp = CExchangeSource::get("mediuser-" . CAppUI::$user->_id, "smtp");
+if ($source_smtp->_id) {
+  $where[] = "(account_id = '$account_id' AND account_class = 'CSourcePOP') OR (account_id = '$source_smtp->_id' AND account_class = 'CSourceSMTP')";
+}
+else {
+  $where['account_id'] = "= '$account_id'";
+  $where['account_class'] = "= 'CSourcePOP'";
+}
 $where["sent"] = "= '1'";
-$nbSent = $mail->countList(array_merge($where, $whereGlob));
+$nbSent = $mail->countList($where);
 
 $where = array();
 $where["favorite"] = " = '1'";
