@@ -143,6 +143,9 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     "zapfdingbats" => "ZapfDingBats"
   );
 
+  // Liste des chapitres concernés par l'impression des bons
+  static $_chap_bons = array("anapath", "biologie", "imagerie", "consult", "kine");
+
   // Noms de modèles réservés
   static $special_names = array(
     "CConsultAnesth" => array(
@@ -1863,4 +1866,11 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     }
     return $prat;
   }
+}
+
+// Ajout des en-têtes de bons pour chacuns des chapitres
+foreach (CCompteRendu::$_chap_bons as $chapitre) {
+  $maj_chap = strtoupper($chapitre);
+  CCompteRendu::$special_names["CPrescription"]["[ENTETE BON $maj_chap]"] = "header";
+  CCompteRendu::$special_names["CPrescription"]["[PIED DE PAGE BON $maj_chap]"] = "footer";
 }
