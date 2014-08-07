@@ -577,7 +577,7 @@ class CAffectation extends CMbObject {
   }
 
   function makeUF() {
-    $this->completeField("lit_id", "uf_hebergement_id", "uf_soins_id", "uf_medicale_id");
+    $this->completeField("lit_id", "uf_hebergement_id", "uf_soins_id", "uf_medicale_id", "sortie", "entree");
     $this->loadRefsAffectations();
     $this->loadRefLit()->loadRefChambre()->loadRefService();
 
@@ -590,11 +590,13 @@ class CAffectation extends CMbObject {
       "uf" => "uf.uf_id = affectation_uf.uf_id",
     );
 
+    $where = array();
+    $where[] = "uf.date_debut IS NULL OR uf.date_debut < '$this->sortie'";
+    $where[] = "uf.date_fin IS NULL OR uf.date_fin > '$this->entree'";
+
     if (!$this->uf_hebergement_id || $this->fieldModified("service_id") || $this->fieldModified("lit_id")) {
       $affectation_uf = new CAffectationUniteFonctionnelle();
-      $where = array(
-        "uf.type" => "= 'hebergement'",
-      );
+      $where["uf.type"] =  "= 'hebergement'";
 
       if (!$affectation_uf->uf_id) {
         $where["object_id"]    = "= '$lit->_id'";
@@ -619,9 +621,7 @@ class CAffectation extends CMbObject {
 
     if (!$this->uf_soins_id || $this->fieldModified("service_id")) {
       $affectation_uf = new CAffectationUniteFonctionnelle();
-      $where = array(
-        "uf.type" => "= 'soins'",
-      );
+      $where["uf.type"] =  "= 'soins'";
 
       if (!$prev_aff->_id) {
         $affectation_uf->uf_id = $sejour->uf_soins_id;
@@ -638,9 +638,7 @@ class CAffectation extends CMbObject {
 
     if (!$this->uf_medicale_id) {
       $affectation_uf = new CAffectationUniteFonctionnelle();
-      $where = array(
-        "uf.type" => "= 'medicale'",
-      );
+      $where["uf.type"] =  "= 'medicale'";
 
       if (!$prev_aff->_id) {
         $affectation_uf->uf_id = $sejour->uf_medicale_id;
