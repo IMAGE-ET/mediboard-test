@@ -168,4 +168,30 @@ class CBlocOperatoire extends CMbObject {
     $order = "operations.date, operations.chir_id";
     return $this->_alertes_intervs = $alerte->loadList($where, $order, null, null, $ljoin);
   }
+
+  /**
+   * count the number of alerts for this bloc
+   *
+   * @param array $key_ids list of salle keys
+   *
+   * @return int
+   */
+  static function countAlertesIntervsForSalles($key_ids) {
+    if (!count($key_ids)) {
+      return 0;
+    }
+    $inSalles = CSQLDataSource::prepareIn($key_ids);
+    $alerte = new CAlert();
+    $ljoin = array();
+    $ljoin["operations"] = "operations.operation_id = alert.object_id";
+    $ljoin["plagesop"]   = "plagesop.plageop_id = operations.plageop_id";
+    $where = array();
+    $where["alert.object_class"] = "= 'COperation'";
+    $where["alert.tag"] = "= 'mouvement_intervention'";
+    $where["alert.handled"]   = "= '0'";
+    $where[] = "operations.salle_id ".$inSalles.
+      " OR plagesop.salle_id ".$inSalles.
+      " OR (plagesop.salle_id IS NULL AND operations.salle_id IS NULL)";
+    return $alerte->countList($where, null, $ljoin);
+  }
 }
