@@ -9,7 +9,7 @@
  * @link     http://www.mediboard.org
 *}}
 
-<table class="tbl">
+<table class="main tbl">
   <tr>
     <th colspan="7" class="title">
       {{tr}}CEAIRoute.list{{/tr}}
@@ -28,6 +28,7 @@
     <th> {{mb_title class=CEAIRoute field=active}} </th>
     <th> {{mb_title class=CEAIRoute field=description}} </th>
   </tr>
+
   {{foreach from=$routes key=_sender_guid item=_routes}}
     {{assign var=sender value=$senders.$_sender_guid}}
     <tbody class="hoverable">
@@ -38,7 +39,8 @@
           {{if $smarty.foreach.foreach_routes.first}}
           <td rowspan="{{$_routes|@count}}" class="button">
             <button type="button" class="add notext"
-                    onclick="Route.add('{{$sender->_guid}}', 'Route.refreshList()')">{{tr}}CInteropSender-add-route{{/tr}}</button>
+                    onclick="Route.add('{{$sender->_guid}}', Route.refreshList.curry())">
+              {{tr}}CInteropSender-add-route{{/tr}}</button>
 
            {{tr}} {{$sender->_class}} {{/tr}}
           </td>
@@ -53,7 +55,8 @@
           {{/if}}
 
           <td class="button">
-            <button type="button" class="edit notext" onclick="Route.edit('{{$_route->_id}}', 'Route.refreshList()')">
+            <button type="button" class="edit notext"
+                    onclick="Route.edit('{{$_route->_id}}', Route.refreshList.curry())">
               {{tr}}Edit{{/tr}}
             </button>
 

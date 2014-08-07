@@ -26,7 +26,7 @@ Route = {
 
   refreshList : function () {
     new Url("eai", "ajax_list_route")
-      .requestUpdate("list_route")
+      .requestUpdate("list_route");
   },
 
   autocomplete_receiver : function () {
