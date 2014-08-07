@@ -11,13 +11,11 @@
 
 <div style="float:right;">{{mb_include module=system template=inc_object_notes object=$plageop }}</div>
 
-{{if $plageop->chir_id }}
-  {{$plageop->_ref_chir->_view|htmlentities}}
+{{if $plageop->chir_id}}
+  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$plageop->_ref_chir}}
 {{else}}
-  {{$plageop->_ref_spec->_view|htmlentities}}
+  {{mb_include module=mediusers template=inc_vw_function function=$plageop->_ref_spec}}
 {{/if}}
-<br/>
-({{$validated}} / {{$total}})
 
 {{if $plageop->_ref_anesth->_id}}
   <img src='images/icons/anesth.png'/> {{$plageop->_ref_anesth}}

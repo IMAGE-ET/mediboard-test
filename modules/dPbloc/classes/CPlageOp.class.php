@@ -80,6 +80,8 @@ class CPlageOp extends CPlageHoraire {
 
   /** @var COperation[] */
   public $_ref_operations;
+  public $_nb_ref_operations;
+
   /** @var COperation[] */
   public $_unordered_operations;
 

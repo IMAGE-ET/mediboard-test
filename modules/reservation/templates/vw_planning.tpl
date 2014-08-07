@@ -12,6 +12,8 @@
 {{if "dPfacturation"|module_active}}
   {{mb_script module=facturation script=facture}}
 {{/if}}
+{{mb_script module="dPplanningOp" script="prestations"}}
+
 
 <script>
 

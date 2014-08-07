@@ -19,6 +19,7 @@ $save_m = $m;
 
 $current_m = CValue::get("current_m");
 $m         = $current_m;
+$group = CGroups::loadCurrent();
 
 $today           = CMbDT::date();
 $date_planning   = CValue::getOrSession("date_planning", $today);
@@ -46,41 +47,30 @@ $where = array();
 if ($bloc_id) {
   $where["bloc_operatoire_id"] = " = '$bloc_id'";
 }
+$where["group_id"] = " = '$group->_id' ";
+/** @var CBlocOperatoire[] $blocs */
 $blocs = $bloc->loadList($where);
 
 if (count($blocs) == 1) {
   $current_bloc = reset($blocs);
 }
 
-foreach ($blocs as $_bloc) {
-  /** @var CBlocOperatoire $_bloc */
-  $_bloc->canDo();
-  $_bloc->loadRefsSalles();
-  $nbAlertesInterv += count($_bloc->loadRefsAlertesIntervs());
-}
-
-$group = CGroups::loadCurrent();
-
-// Récupération des salles
+// optimisation du chargement des salles (one shot) + alertes
 $salle = new CSalle();
+$ds = $salle->getDS();
 $where = array();
-$ljoin = array();
-$order = "bloc_operatoire.nom";
-
-
-$blocs = $bloc->loadGroupList();
-if ($bloc_id) {
-  $where["bloc_id"] = "= '$bloc_id'";
-}
-else {
-  $where["bloc_id"] = CSQLDataSource::prepareIn(array_keys($blocs));
-}
-
-$where["group_id"]        = "= '$group->_id'";
+$where["bloc_id"] = $ds->prepareIn(array_keys($blocs));
 $ljoin["bloc_operatoire"] = "bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id";
-
-$salles     = $salle->loadList($where, $order, null, null, $ljoin);
+$order = "bloc_operatoire.nom, sallesbloc.salle_id";
+$salles = $salle->loadList($where, $order, null, null, $ljoin);
 $salles_ids = array_keys($salles);
+
+$nbAlertesInterv = CBlocOperatoire::countAlertesIntervsForSalles(array_keys($salles));
+
+foreach ($blocs as $_bloc) {
+  $_bloc->canDo();
+}
+
 
 // Récupération des opérations
 $operation = new COperation();
@@ -104,14 +94,18 @@ $praticien  = new CMediusers();
 $praticiens = $praticien->loadPraticiens();
 
 $where["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($praticiens), $praticien_id);
-
+/** @var COperation[] $operations */
 $operations = $operation->loadList($where, null, null, "operations.operation_id", $ljoin);
+
 $nbIntervHorsPlage = CIntervHorsPlage::countForDates($date_planning, null, $praticien_id);
 
 $prats = CMbObject::massLoadFwdRef($operations, "chir_id");
+CMbObject::massLoadFwdRef($prats, "function_id");
 CMbObject::massLoadFwdRef($operations, "salle_id");
 CMbObject::massLoadFwdRef($operations, "anesth_id");
-CMbObject::massLoadFwdRef($prats, "function_id");
+CMbObject::massLoadFwdRef($operations, "chir_2_id");
+CMbObject::massLoadFwdRef($operations, "chir_3_id");
+CMbObject::massLoadFwdRef($operations, "chir_4_id");
 
 // Récupération des commentaires
 $commentaire = new CCommentairePlanning();
@@ -171,7 +165,11 @@ foreach ($operations as $key => $_operation) {
   if (!isset($operations_by_salle[$_operation->salle_id])) {
     $operations_by_salle[$_operation->salle_id] = array();
   }
-  $operations_by_salle[$_operation->salle_id][] = $_operation;
+
+  // only hors plage
+  if (!$_operation->plageop_id) {
+    $operations_by_salle[$_operation->salle_id][$_operation->_id] = $_operation;
+  }
 }
 
 // Tri des commentaires par salle
@@ -194,25 +192,29 @@ foreach ($plages as $_plage) {
   /** @var CPlageOp $_plage */
   $_plage->loadRefChir();
   $_plage->loadRefSpec();
-  $_plage->loadRefsOperations();
   $salle_id = $_plage->salle_id;
   if (!isset($plages_by_salle[$salle_id])) {
     $plages_by_salle[$salle_id] = array();
   }
   $plages_by_salle[$salle_id][] = $_plage;
 
-  //load operation in salle
-  foreach ($_plage->_ref_operations as $_op) {
+  //load operation in salle (plage_id
+  foreach ($operations as $_op) {
+
+    if ($_op->plageop_id != $_plage->_id) {
+      continue;
+    }
     if ($praticien_id != $_op->chir_id && $praticien_id != "") {
       continue;
     }
+
     if (!$show_cancelled) {
       if (!$_op->annulee) {
-        $operations_by_salle[$salle_id][] = $_op;
+        $operations_by_salle[$salle_id][$_op->_id] = $_op;
       }
     }
     else {
-      $operations_by_salle[$salle_id][] = $_op;
+      $operations_by_salle[$salle_id][$_op->_id] = $_op;
     }
   }
 }
@@ -230,33 +232,65 @@ if ($show_operations) {
   /** @var $_operation COperation */
   foreach ($operations_by_salle as $salle_id => $_operations) {
     $i = array_search($salle_id, $salles_ids);
+
+    //en plage & non validé, skip
+    if ($_operation->plageop_id && !$_operation->rank) {
+      continue;
+    }
+
+    //mbTrace($_operation->_id);
+
     foreach ($_operations as $_operation) {
-      $_operation->_ref_salle = $_operation->loadFwdRef("salle_id");
+      //CSQLDataSource::$trace = true;
+
+      $_operation->_ref_salle = $salles[$_operation->salle_id];
 
       $first_log = $_operation->loadFirstLog();
 
-      $_operation->loadRefAffectation();
-      $lit  = $_operation->_ref_affectation->_ref_lit;
-      $chir = $_operation->loadRefChir();
-      $chir->loadRefFunction();
-      $chir->getBasicInfo();
-      $chir_2 = $_operation->loadRefChir2();
-      $chir_2->loadRefFunction();
-      $chir_3 = $_operation->loadRefChir3();
-      $chir_3->loadRefFunction();
-      $chir_4 = $_operation->loadRefChir4();
-      $chir_4->loadRefFunction();
-
-      $anesth = $_operation->_ref_anesth = $_operation->loadFwdRef("anesth_id");
       $sejour = $_operation->loadRefSejour();
-      $charge = $sejour->loadRefChargePriceIndicator();
+
+      //@TODO: optimize the following line
+      //$_operation->loadRefAffectation();
+      $affectation = new CAffectation();
+      $affectation->sejour_id = $_operation->sejour_id;
+      $affectation->loadMatchingObject("entree");
+      $affectation->loadRefParentAffectation();
+
+      $affectation->loadRefLit();
+
+      $_operation->_ref_affectation = $affectation;
+
+      $lit  = $_operation->_ref_affectation->_ref_lit;
+
+      $chir   = $_operation->loadRefChir()->loadRefFunction();
+      $chir_2 = $_operation->loadRefChir2()->loadRefFunction();
+      $chir_3 = $_operation->loadRefChir3()->loadRefFunction();
+      $chir_4 = $_operation->loadRefChir4()->loadRefFunction();
+      $anesth = $_operation->loadRefAnesth()->loadRefFunction();
+
+      $_operation->loadRefPlageOp();
+
+      // liaisons
       $sejour->loadLiaisonsForPrestation("all");
+
+      $charge = $sejour->loadRefChargePriceIndicator();
       $patient = $sejour->loadRefPatient();
       $patient->loadRefDossierMedical();
       $patient->_ref_dossier_medical->countAllergies();
-      $patient->_ref_dossier_medical->loadRefsAntecedents();
-      $besoins = $_operation->loadRefsBesoins();
 
+      //antecedents, OK
+      $types_antecedent = CAntecedent::$types;
+      $types_antecedent = array_diff($types_antecedent, array("alle"));
+      $count_atcd = $patient->_ref_dossier_medical->countRefsAntecedentsByType($types_antecedent);
+
+      //besoins
+      $besoins = $_operation->loadRefsBesoins();
+      if (count($besoins)) {
+        CMbObject::massLoadFwdRef($besoins, "type_ressource_id");
+        foreach ($besoins as $_besoin) {
+          $_besoin->loadRefTypeRessource();
+        }
+      }
 
       //liaisons
       $liaison_sejour = "";
@@ -267,19 +301,10 @@ if ($show_operations) {
         }
       }
 
-      //en plage & non validé, skip
-      if ($_operation->plageop_id && !$_operation->rank) {
-        continue;
-      }
-
       $offset_bottom = 0;
       $offset_top    = 0;
 
-      if (!$anesth->_id) {
-        $anesth = $_operation->loadFwdRef("anesth_id", true);
-      }
-
-      //best time (horaire voulu / time_operation
+      //best time (horaire voulu / time_operation)
       $horaire  = CMbDT::time($_operation->_datetime_best);
       $debut    = "$i {$horaire}";
       $debut_op = $horaire;
@@ -305,22 +330,6 @@ if ($show_operations) {
       //factures
       $sejour->loadRefsFactureEtablissement();
       $facture = $sejour->_ref_last_facture;
-
-      //antecedants
-      $count_atcd = 0;
-      foreach ($patient->_ref_dossier_medical->_ref_antecedents_by_type as $_type => $_atcd) {
-        if ($_type != "alle") {
-          $count_atcd += count($_atcd);
-        }
-      }
-
-      //besoins
-      if (count($besoins)) {
-        CMbObject::massLoadFwdRef($besoins, "type_ressource_id");
-        foreach ($besoins as $_besoin) {
-          $_besoin->loadRefTypeRessource();
-        }
-      }
 
       //template de contenu
       $smarty = new CSmartyDP("modules/reservation");
@@ -397,7 +406,7 @@ if ($show_operations) {
   }
 }
 
-// Ajout des événements (commentaires)
+// Ajout des événements (commentaires), OK
 foreach ($commentaires_by_salle as $salle_id => $_commentaires) {
   $i = array_search($salle_id, $salles_ids);
 
@@ -435,16 +444,22 @@ foreach ($commentaires_by_salle as $salle_id => $_commentaires) {
   }
 }
 
-// Ajout des plages
+// Ajout des plages, OK
 foreach ($plages_by_salle as $salle_id => $_plages) {
   $i = array_search($salle_id, $salles_ids);
+
+  CMbObject::massLoadBackRefs($_plages, "notes");
+  CMbObject::massLoadFwdRef($_plages, "chir_id");
+  CMbObject::massLoadFwdRef($_plages, "anesth_id");
+  CMbObject::massLoadFwdRef($_plages, "spec_id");
 
   foreach ($_plages as $_plage) {
     $_plage->loadRefsNotes();
 
-    $validated = count($_plage->loadRefsOperations(false, null, true, true));
-    $total     = count($_plage->loadRefsOperations(false));
-    $_plage->loadRefAnesth();
+    $_plage->loadRefChir()->loadRefFunction();
+    $_plage->loadRefSpec();
+
+    $_plage->loadRefAnesth()->loadRefFunction();
 
     $debut = "$i " . CMbDT::time($_plage->debut);
 
@@ -453,8 +468,6 @@ foreach ($plages_by_salle as $salle_id => $_plages) {
     //fetch
     $smarty = new CSmartyDP("modules/reservation");
     $smarty->assign("plageop", $_plage);
-    $smarty->assign("validated", $validated);
-    $smarty->assign("total", $total);
     $smarty_plageop = $smarty->fetch("inc_planning/libelle_plageop.tpl");
 
     $event = new CPlanningEvent($_plage->_guid, $debut, $duree, $smarty_plageop, "#efbf99", true, null, $_plage->_guid, false);
@@ -474,7 +487,6 @@ foreach ($plages_by_salle as $salle_id => $_plages) {
 
 $m = $save_m;
 
-$planning->allow_superposition = true;
 $planning->rearrange(true); //ReArrange the planning
 
 $bank_holidays = CMbDate::getHolidays($date_planning);

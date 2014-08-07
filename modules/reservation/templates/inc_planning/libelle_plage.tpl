@@ -9,8 +9,6 @@
  * @link     http://www.mediboard.org
 *}}
 
-{{mb_script module="dPplanningOp" script="prestations" ajax=true}}
-
 <span style="display: none;" data-duree="{{$sejour->_duree}}" data-entree_prevue='{{$sejour->entree_prevue}}' data-sortie_prevue='{{$sejour->sortie_prevue}}' data-sejour_id='{{$sejour->_id}}' data-preop='{{if $operation->presence_preop}}{{$operation->presence_preop|date_format:"%H:%M"}}{{else}}00:00{{/if}}' data-postop='{{if $operation->presence_postop}}{{$operation->presence_postop|date_format:"%H:%M"}}{{else}}00:00{{/if}}' data-traitement='{{$charge->_id}}' data-pec='{{$sejour->type_pec}}'></span>
 <!-- CADRE DROIT -->
 <span style="float:right; text-align: right">
@@ -60,7 +58,7 @@
 {{/if}}
 
 
-<br/><span  class="mediuser" style="border-left-color: #{{$chir->_ref_function->color}};" onmouseover="ObjectTooltip.createEx(this, '{{$chir->_guid}}')"> {{$chir->_view}}</span>
+<br/>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$operation->_ref_chir}}
 <br/><span style='font-size: 11px; font-weight: bold;' onmouseover="ObjectTooltip.createEx(this, '{{$operation->_guid}}')">{{$debut_op|date_format:"%H:%M"}} - {{$fin_op|date_format:"%H:%M"}}<br/>
   {{$operation->libelle}}</span><hr/>
 
