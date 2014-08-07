@@ -8,21 +8,36 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-function toggleColumn(className) {
-  var inputs = getForm("form-merge").select("tr.multiple ."+className+" input[type=radio]");
-  inputs.each(function(input){
-    input.checked = true;
-    input.onclick();
-  });
-}
+<script>
+  function toggleColumn(className) {
+    var inputs = getForm("form-merge").select("tr.multiple ."+className+" input[type=radio]");
+    inputs.each(function(input) {
+      input.checked = true;
+      input.onclick();
+    });
+  }
 </script>
 
 {{if !$dialog}}
   {{mb_include module=system template=inc_form_merger}}
 {{/if}}
 
-{{if $result}}
+{{if !$result}}
+  <script>
+    Main.add(function() {
+      if (window.opener && window.opener.onMergeComplete) {
+        window.opener.onMergeComplete();
+        if (!$("systemMsg").down(".error, .warning")) {
+          window.close();
+        }
+      }
+    } );
+  </script>
+  <div class="small-info">
+    Veuillez choisir des objets existants à fusionner.
+  </div>
+  {{mb_return}}
+{{/if}}
 
 {{mb_script module=system script=object_merger}}
 
@@ -195,20 +210,3 @@ function toggleColumn(className) {
 	  </tr>
   </table>
 </form>
-
-{{else}}
-<script type="text/javascript">
-Main.add(function () {
-  if (window.opener && window.opener.onMergeComplete) {
-    window.opener.onMergeComplete();
-    if (!$("systemMsg").down(".error, .warning")) {
-      window.close();
-    }
-  }
-} );
-
-</script>
-<div class="small-info">
-  Veuillez choisir des objets existants à fusionner.
-</div>
-{{/if}}

@@ -1,236 +1,247 @@
-<script type="text/javascript">
-delCibleTransmission = function() {
-  var oDiv = $('cibleTrans');
-  if(!oDiv) return;
-  var oForm = document.forms['editTrans'];
-  $V(oForm.object_class, '');
-  $V(oForm.object_id, '');
-  $V(oForm.libelle_ATC, '');
-  oDiv.innerHTML = "";
-}
-
-showListTransmissions = function(page, total) {
-  page = page || 0;
-  
-  $$("div.list_trans").invoke("hide");
-  $("list_"+page).show();
-  
-  var url = new Url("system", "ajax_pagination");
-  
-  if (total){
-    url.addParam("total",total);
+<script>
+  delCibleTransmission = function() {
+    var oDiv = $('cibleTrans');
+    if(!oDiv) return;
+    var oForm = getForm('editTrans');
+    $V(oForm.object_class, '');
+    $V(oForm.object_id, '');
+    $V(oForm.libelle_ATC, '');
+    oDiv.innerHTML = "";
   }
-  url.addParam("step", '{{$page_step}}');
-  url.addParam("page", page);
-  url.addParam("change_page", "showListTransmissions");
-  url.requestUpdate("pagination");
-}
 
-// Submit d'une ligne d'element
-submitLineElement = function(){
-  // Formulaire de creation de ligne
-  var oFormLineElementSuivi = getForm('addLineElementSuivi');
+  showListTransmissions = function(page, total) {
+    page = page || 0;
 
-  // Formulaire autocomplete
-  var oFormLineSuivi = getForm('addLineSuivi');
-  $V(oFormLineElementSuivi.commentaire, $V(oFormLineSuivi.commentaire));
-  
-  // Si la prescription de sejour n'existe pas
-  if (!$V(oFormLineElementSuivi.prescription_id)){
-    var oFormPrescription = getForm("addPrescriptionSuiviSoins");
-    return onSubmitFormAjax(oFormPrescription);
-  }
-  
-  return onSubmitFormAjax(oFormLineElementSuivi, { onComplete: function() {
-    Control.Modal.close();
-    loadSuivi('{{$sejour->_id}}');
-  } } );
-}
+    $$("div.list_trans").invoke("hide");
+    $("list_"+page).show();
 
-// Submit d'une ligne de commentaire
-submitLineComment = function(){
-  var oFormLineCommentSuivi = getForm('addLineCommentMedSuiviSoins');
+    var url = new Url("system", "ajax_pagination");
 
-  // Si la prescription de sejour n'existe pas
-  if (!$V(oFormLineCommentSuivi.prescription_id)){
-    var oFormPrescription = getForm("addPrescriptionSuiviSoins");
-    return onSubmitFormAjax(oFormPrescription);
-  }
-  
-  return onSubmitFormAjax(oFormLineCommentSuivi, { onComplete: function() {
-    Control.Modal.close();
-    loadSuivi('{{$sejour->_id}}');
-  } } );
-}
-
-submitProtocoleSuiviSoins = function(){
-  var oFormProtocoleSuiviSoins = getForm("applyProtocoleSuiviSoins");
-  // Si la prescription de sejour n'existe pas
-  if (!$V(oFormProtocoleSuiviSoins.prescription_id)){
-    var oFormPrescription = getForm("addPrescriptionSuiviSoins");
-    return onSubmitFormAjax(oFormPrescription);
-  } 
-  
-  return onSubmitFormAjax(oFormProtocoleSuiviSoins, { onComplete: function() {
-    Control.Modal.close();
-    if (window.updateNbTrans) {
-      updateNbTrans('{{$sejour->_id}}');
+    if (total) {
+      url.addParam("total",total);
     }
-    if (window.loadSuivi) {
+    url.addParam("step", '{{$page_step}}');
+    url.addParam("page", page);
+    url.addParam("change_page", "showListTransmissions");
+    url.requestUpdate("pagination");
+  }
+
+  // Submit d'une ligne d'element
+  submitLineElement = function() {
+    // Formulaire de creation de ligne
+    var oFormLineElementSuivi = getForm('addLineElementSuivi');
+
+    // Formulaire autocomplete
+    var oFormLineSuivi = getForm('addLineSuivi');
+    $V(oFormLineElementSuivi.commentaire, $V(oFormLineSuivi.commentaire));
+
+    // Si la prescription de sejour n'existe pas
+    if (!$V(oFormLineElementSuivi.prescription_id)){
+      var oFormPrescription = getForm("addPrescriptionSuiviSoins");
+      return onSubmitFormAjax(oFormPrescription);
+    }
+
+    return onSubmitFormAjax(oFormLineElementSuivi, function() {
+      Control.Modal.close();
       loadSuivi('{{$sejour->_id}}');
+    } );
+  }
+
+  // Submit d'une ligne de commentaire
+  submitLineComment = function(){
+    var oFormLineCommentSuivi = getForm('addLineCommentMedSuiviSoins');
+
+    // Si la prescription de sejour n'existe pas
+    if (!$V(oFormLineCommentSuivi.prescription_id)){
+      var oFormPrescription = getForm("addPrescriptionSuiviSoins");
+      return onSubmitFormAjax(oFormPrescription);
     }
-  } } );
-}
 
-updatePrescriptionId = function(prescription_id){
-  // Ligne d'element
-  var oFormLineElementSuivi = getForm('addLineElementSuivi');
-  $V(oFormLineElementSuivi.prescription_id, prescription_id);
-  
-  // Ligne de commentaire
-  var oFormLineCommentSuivi = getForm('addLineCommentMedSuiviSoins');
-  $V(oFormLineCommentSuivi.prescription_id, prescription_id);
-
-  // Protocole
-  var oFormProtocoleSuiviSoins = getForm("applyProtocoleSuiviSoins");
-  $V(oFormProtocoleSuiviSoins.prescription_id, prescription_id);
-  
-  // Envoi du formulaire (suivant celui qui est rempli)
-  if($V(oFormLineElementSuivi.element_prescription_id)){
-    submitLineElement();
+    return onSubmitFormAjax(oFormLineCommentSuivi, function() {
+      Control.Modal.close();
+      loadSuivi('{{$sejour->_id}}');
+    } );
   }
-  else if($V(oFormLineCommentSuivi.commentaire)){
-    submitLineComment();
+
+  submitProtocoleSuiviSoins = function() {
+    var oFormProtocoleSuiviSoins = getForm("applyProtocoleSuiviSoins");
+    // Si la prescription de sejour n'existe pas
+    if (!$V(oFormProtocoleSuiviSoins.prescription_id)){
+      var oFormPrescription = getForm("addPrescriptionSuiviSoins");
+      return onSubmitFormAjax(oFormPrescription);
+    }
+
+    return onSubmitFormAjax(oFormProtocoleSuiviSoins, function() {
+      Control.Modal.close();
+      if (window.updateNbTrans) {
+        updateNbTrans('{{$sejour->_id}}');
+      }
+      if (window.loadSuivi) {
+        loadSuivi('{{$sejour->_id}}');
+      }
+    } );
   }
-  else {
-    submitProtocoleSuiviSoins();
-  }
-}
 
-addTransmissionAdm = function(line_id, line_class){
-  var oFormTransmission = getForm("addTransmissionFrm");
-  $V(oFormTransmission.object_id, line_id);
-  $V(oFormTransmission.object_class, line_class);
-  $V(oFormTransmission.text, "Réalisé");
-  return onSubmitFormAjax(oFormTransmission, { onComplete: loadSuivi.curry('{{$sejour->_id}}')});
-}
+  updatePrescriptionId = function(prescription_id) {
+    // Ligne d'element
+    var oFormLineElementSuivi = getForm('addLineElementSuivi');
+    $V(oFormLineElementSuivi.prescription_id, prescription_id);
 
-highlightTransmissions = function(cible_guid){
-  $('transmissions').select("."+cible_guid+" .libelle_trans").invoke("addClassName", "highlight");
-}
+    // Ligne de commentaire
+    var oFormLineCommentSuivi = getForm('addLineCommentMedSuiviSoins');
+    $V(oFormLineCommentSuivi.prescription_id, prescription_id);
 
-removeHighlightTransmissions = function(){
- $('transmissions').select('.highlight').invoke("removeClassName", "highlight");
-}
+    // Protocole
+    var oFormProtocoleSuiviSoins = getForm("applyProtocoleSuiviSoins");
+    $V(oFormProtocoleSuiviSoins.prescription_id, prescription_id);
 
-addTransmission = function(sejour_id, user_id, transmission_id, object_id, object_class, libelle_ATC, refreshTrans) {
-  var url = new Url("dPhospi", "ajax_transmission");
-  url.addParam("sejour_id", sejour_id);
-  url.addParam("user_id", user_id);
-  url.addParam("refreshTrans", refreshTrans);
-  
-  if (transmission_id != undefined) {
-    // Plusieurs transmissions
-    if (typeof(transmission_id) == "object") {
-      $H(transmission_id).each(function(trans) {
-        url.addParam(trans["0"], trans["1"]);
-      });
+    // Envoi du formulaire (suivant celui qui est rempli)
+    if($V(oFormLineElementSuivi.element_prescription_id)){
+      submitLineElement();
+    }
+    else if($V(oFormLineCommentSuivi.commentaire)){
+      submitLineComment();
     }
     else {
-      url.addParam("transmission_id", transmission_id);
+      submitProtocoleSuiviSoins();
     }
   }
-  if (object_id != undefined && object_class !=undefined) {
-    url.addParam("object_id",    object_id);
-    url.addParam("object_class", object_class);
-  }
-  if (libelle_ATC != undefined) {
-    url.addParam("libelle_ATC", libelle_ATC);
-  }
-  url.requestModal(800, 400);
-}
 
-addObservation = function(sejour_id, user_id, observation_id) {
-  var url = new Url("dPhospi", "ajax_observation");
-  url.addParam("sejour_id", sejour_id);
-  url.addParam("user_id", user_id);
-  if (observation_id != undefined) {
-    url.addParam("observation_id", observation_id);
+  addTransmissionAdm = function(line_id, line_class) {
+    var oFormTransmission = getForm("addTransmissionFrm");
+    $V(oFormTransmission.object_id, line_id);
+    $V(oFormTransmission.object_class, line_class);
+    $V(oFormTransmission.text, "Réalisé");
+    return onSubmitFormAjax(oFormTransmission, loadSuivi.curry('{{$sejour->_id}}'));
   }
-  url.requestModal(600, 400);
-}
 
-addPrescription = function(sejour_id, user_id, object_id, object_class) {
-  var url = new Url("dPhospi", "ajax_prescription_lite");
-  url.addParam("sejour_id", sejour_id);
-  url.addParam("user_id", user_id);
-  if (object_id && object_class) {
-    url.addParam("object_id", object_id);
-    url.addParam("object_class", object_class);
-    url.requestModal(300);
+  highlightTransmissions = function(cible_guid) {
+    $('transmissions').select("."+cible_guid+" .libelle_trans").invoke("addClassName", "highlight");
   }
-  else {
-    url.requestModal(800, 180);
+
+  removeHighlightTransmissions = function() {
+   $('transmissions').select('.highlight').invoke("removeClassName", "highlight");
   }
-}
 
-bindOperation = function(sejour_id) {
-  var url = new Url("dPcabinet", "ajax_bind_operation");
-  url.addParam("sejour_id", sejour_id);
-  url.requestModal(500, null, {showReload: false, showClose: false});
-}
+  addTransmission = function(sejour_id, user_id, transmission_id, object_id, object_class, libelle_ATC, refreshTrans) {
+    var url = new Url("hospi", "ajax_transmission");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("user_id", user_id);
+    url.addParam("refreshTrans", refreshTrans);
 
-validateAdministration = function(sejour_id) {
-  var url = new Url("dPprescription", "ajax_administration_for_consult");
-  url.addParam("sejour_id", sejour_id);
-  url.requestModal(500, null, {showReload: false, showClose: false});
-}
-
-modalConsult = function(consult_id) {
-  var url = new Url("dPcabinet", "ajax_short_consult");
-  url.addParam("sejour_id", "{{$sejour->_id}}");
-  url.addParam("consult_id", consult_id);
-  url.modal(600, 400);
-  url.modalObject.observe("afterClose", function() {
-    if (window.loadSuivi) {
-      loadSuivi("{{$sejour->_id}}");
+    if (transmission_id != undefined) {
+      // Plusieurs transmissions
+      if (typeof(transmission_id) == "object") {
+        $H(transmission_id).each(function(trans) {
+          url.addParam(trans["0"], trans["1"]);
+        });
+      }
+      else {
+        url.addParam("transmission_id", transmission_id);
+      }
     }
-  });
-}
+    if (object_id != undefined && object_class !=undefined) {
+      url.addParam("object_id",    object_id);
+      url.addParam("object_class", object_class);
+    }
+    if (libelle_ATC != undefined) {
+      url.addParam("libelle_ATC", libelle_ATC);
+    }
+    url.requestModal(800, 400);
+  }
 
-createConsult = function() {
-  {{if $isAnesth}}
-    bindOperation('{{$sejour->_id}}');
-  {{else}}
+  addObservation = function(sejour_id, user_id, observation_id) {
+    var url = new Url("hospi", "ajax_observation");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("user_id", user_id);
+    if (observation_id != undefined) {
+      url.addParam("observation_id", observation_id);
+    }
+    url.requestModal(600, 400);
+  }
+
+  addPrescription = function(sejour_id, user_id, object_id, object_class) {
+    var url = new Url("hospi", "ajax_prescription_lite");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("user_id", user_id);
+    if (object_id && object_class) {
+      url.addParam("object_id", object_id);
+      url.addParam("object_class", object_class);
+      url.requestModal(300);
+    }
+    else {
+      url.requestModal(800, 180);
+    }
+  }
+
+  bindOperation = function(sejour_id) {
+    var url = new Url("cabinet", "ajax_bind_operation");
+    url.addParam("sejour_id", sejour_id);
+    url.requestModal(500, null, {showReload: false, showClose: false});
+  }
+
+  validateAdministration = function(sejour_id) {
+    var url = new Url("prescription", "ajax_administration_for_consult");
+    url.addParam("sejour_id", sejour_id);
+    url.requestModal(500, null, {showReload: false, showClose: false});
+  }
+
+  modalConsult = function(consult_id) {
+    var url = new Url("cabinet", "ajax_short_consult");
+    url.addParam("sejour_id", "{{$sejour->_id}}");
+    url.addParam("consult_id", consult_id);
+    url.modal(600, 400);
+    url.modalObject.observe("afterClose", function() {
+      if (window.loadSuivi) {
+        loadSuivi("{{$sejour->_id}}");
+      }
+    });
+  }
+
+  createConsult = function() {
+    {{if $isAnesth}}
+      bindOperation('{{$sejour->_id}}');
+    {{else}}
+      onSubmitFormAjax(getForm('addConsultation'));
+    {{/if}}
+  }
+
+  createConsultEntree = function() {
+    var form = getForm('addConsultation');
+    $V(form.type, 'entree');
     onSubmitFormAjax(getForm('addConsultation'));
-  {{/if}}
-}
+  }
 
-createConsultEntree = function() {
-  var form = getForm('addConsultation');
-  $V(form.type, 'entree');
-  onSubmitFormAjax(getForm('addConsultation'));
-}
+  toggleLockCible = function(transmission_id, lock) {
+    var form = getForm("lockTransmission");
+    $V(form.transmission_medicale_id, transmission_id);
+    $V(form.locked, lock);
+    onSubmitFormAjax(form, {onComplete: function() {
+      loadSuivi('{{$sejour->_id}}');
+    }});
+  }
 
-toggleLockCible = function(transmission_id, lock) {
-  var form = getForm("lockTransmission");
-  $V(form.transmission_medicale_id, transmission_id);
-  $V(form.locked, lock);
-  onSubmitFormAjax(form, {onComplete: function() {
+  showTrans = function(transmission_id, from_compact) {
+    var url = new Url("hospi", "ajax_list_locked_trans");
+    url.addParam("transmission_id", transmission_id);
+    url.addParam("from_compact", from_compact);
+    url.requestModal(850, null, {maxHeight: '550'});
+  }
+
+  mergeTrans = function(transmissions_ids) {
+    var url = new Url("system", "object_merger");
+    url.addParam("objects_class", "CTransmissionMedicale");
+    url.addParam("objects_id", transmissions_ids);
+    url.popup(800, 600, "merge_transmissions");
+  }
+
+  onMergeComplete = function() {
     loadSuivi('{{$sejour->_id}}');
-  }});
-}
+  }
 
-showTrans = function(transmission_id, from_compact) {
-  var url = new Url("hospi", "ajax_list_locked_trans");
-  url.addParam("transmission_id", transmission_id);
-  url.addParam("from_compact", from_compact);
-  url.requestModal(850, null, {maxHeight: '550'});
-}
-
-{{if $count_trans > 0}}
-  Main.add(showListTransmissions.curry(0, {{$count_trans}}));
-{{/if}}
+  {{if $count_trans > 0}}
+    Main.add(showListTransmissions.curry(0, {{$count_trans}}));
+  {{/if}}
 </script>
 
 <form name="lockTransmission" method="post" action="?">
