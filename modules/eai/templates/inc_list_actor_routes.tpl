@@ -6,7 +6,8 @@
   <table class="tbl">
     <tr>
       <td colspan="4">
-        <button type="button" class="add" onclick="Route.add('{{$sender->_guid}}', 'InteropActor.refreshRoutes()')">
+        <button type="button" class="add"
+                onclick="Route.add('{{$sender->_guid}}', InteropActor.refreshRoutes.curry('{{$sender->_guid}}'))">
           {{tr}}CInteropSender-add-route{{/tr}}
         </button>
       </td>
@@ -22,7 +23,8 @@
 
       <tr {{if !$_route->active}}class="opacity-30"{{/if}}>
         <td>
-          <button type="button" class="edit notext" onclick="Route.edit('{{$_route->_id}}', 'InteropActor.refreshRoutes()')">
+          <button type="button" class="edit notext"
+                  onclick="Route.edit('{{$_route->_id}}', InteropActor.refreshRoutes.curry('{{$sender->_guid}}'))">
             {{tr}}Edit{{/tr}}
           </button>
 

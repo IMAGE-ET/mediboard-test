@@ -160,9 +160,11 @@ class CEAIDispatcher {
     // Création d'un échange Any
     $exchange_any                  = new CExchangeAny();
     $exchange_any->date_production = CMbDT::dateTime();
-    $exchange_any->sender_id       = $actor->_id;
-    $exchange_any->sender_class    = $actor->_class;
-    $exchange_any->group_id        = $actor->group_id ? $actor->group_id : CGroups::loadCurrent()->_id;
+    if ($actor) {
+      $exchange_any->sender_id       = $actor->_id;
+      $exchange_any->sender_class    = $actor->_class;
+      $exchange_any->group_id        = $actor->group_id;
+    }
     $exchange_any->type            = "None";
     $exchange_any->_message        = $data;
     $exchange_any->store();
