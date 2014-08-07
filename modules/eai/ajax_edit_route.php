@@ -25,7 +25,7 @@ if ($actor_guid) {
 
 $route = new CEAIRoute();
 $route->load($route_id);
-if (!$route->_id) {
+if (!$route->_id && isset($actor)) {
   $route->sender_class = $actor->_class;
   $route->sender_id    = $actor->_id;
 }
