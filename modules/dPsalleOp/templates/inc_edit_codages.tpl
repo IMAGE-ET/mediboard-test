@@ -81,7 +81,8 @@
     {{assign var="view" value=$acte->_id|default:$acte->_view}}
     {{assign var="key" value="$_key$view"}}
     {{if (!$acte->_id) || ($acte->executant_id == $codage->praticien_id)}}
-      <tr class="activite-{{$acte->code_activite}}" {{if !$list_activites.$numero}}style="display:none;"{{/if}}>
+      <tr {{if !$acte->_id}}class="activite-{{$acte->code_activite}}"{{/if}}
+        {{if !$list_activites.$numero && !$acte->_id}}style="display:none;"{{/if}}>
         <td {{if !$acte->_id}}class="error"{{/if}}>
           <a href="#" onclick="CodeCCAM.show('{{$acte->code_acte}}', '{{$subject->_class}}')">
             {{if $_code->type != 2}}
