@@ -32,6 +32,15 @@
     codageForm.onsubmit();
   };
 
+  switchViewActivite = function(value, activite) {
+    if(value) {
+      $$('.activite-'+activite).each(function(oElement) {oElement.show()});
+    }
+    else {
+      $$('.activite-'+activite).each(function(oElement) {oElement.hide()});
+    }
+  };
+
   Main.add(function(){
     Control.Tabs.create('rules-tab', true);
   });
@@ -45,7 +54,17 @@
 <table class="tbl" style="min-width: 400px;">
   <tr>
     <th class="narrow">{{mb_title class=CActeCCAM field=code_acte}}</th>
-    <th>{{mb_title class=CActeCCAM field=code_activite}}</th>
+    <th colspan="2" class="narrow">
+      {{mb_title class=CActeCCAM field=code_activite}}
+      <form name="list_activites-{{$codage->_guid}}" action="?" method="post" onsubmit="return false;">
+        {{foreach from=$list_activites key=_num_activite item=_activite}}
+          <input type="checkbox" name="activite_{{$_num_activite}}"
+                 onchange="switchViewActivite($V(this), {{$_num_activite}});"
+            {{if $_activite}}checked="checked"{{/if}} />
+          <label for="activite_{{$_num_activite}}">{{$_num_activite}}</label>
+        {{/foreach}}
+      </form>
+    </th>
     <th>{{mb_title class=CActeCCAM field=modificateurs}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=execution}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=montant_depassement}}</th>
@@ -56,34 +75,37 @@
   </tr>
   {{foreach from=$subject->_ext_codes_ccam item=_code key=_key}}
   {{foreach from=$_code->activites item=_activite}}
+    {{assign var="numero" value=$_activite->numero}}
   {{foreach from=$_activite->phases item=_phase}}
     {{assign var="acte" value=$_phase->_connected_acte}}
     {{assign var="view" value=$acte->_id|default:$acte->_view}}
     {{assign var="key" value="$_key$view"}}
-    {{if (!$acte->_id && $codage->_ref_praticien->_is_anesth) || ($acte->executant_id == $codage->praticien_id)}}
-      <tr>
-        <td {{if !$acte->_id}}class="error"{{/if}}
-            onclick="CodeCCAM.show('{{$acte->code_acte}}', '{{$subject->_class}}')"
-            style="cursor: help;">
-          {{if $_code->type != 2}}
-            <strong>
-              {{mb_value object=$acte field=code_acte}}
-            </strong>
-          {{else}}
-            <em>{{mb_value object=$acte field=code_acte}}</em>
-          {{/if}}
+    {{if (!$acte->_id) || ($acte->executant_id == $codage->praticien_id)}}
+      <tr class="activite-{{$acte->code_activite}}" {{if !$list_activites.$numero}}style="display:none;"{{/if}}>
+        <td {{if !$acte->_id}}class="error"{{/if}}>
+          <a href="#" onclick="CodeCCAM.show('{{$acte->code_acte}}', '{{$subject->_class}}')">
+            {{if $_code->type != 2}}
+              <strong>
+                {{mb_value object=$acte field=code_acte}}
+              </strong>
+            {{else}}
+              <em>{{mb_value object=$acte field=code_acte}}</em>
+            {{/if}}
+          </a>
           {{if $_code->forfait}}
             <br />
             <small style="color: #f00">({{tr}}CDatedCodeCCAM.remboursement.{{$_code->forfait}}{{/tr}})</small>
           {{/if}}
         </td>
-        <td>
+        <td class="narrow">
           <span class="circled {{if $acte->_id}}ok{{else}}error{{/if}}">
             {{mb_value object=$acte field=code_activite}}
           </span>
-          {{mb_value object=$acte field=_tarif_base}}
         </td>
         <td>
+          {{mb_value object=$acte field=_tarif_base}}
+        </td>
+        <td class="greedyPane">
           {{assign var=nb_modificateurs value=$acte->modificateurs|strlen}}
           {{foreach from=$_phase->_modificateurs item=_mod name=modificateurs}}
             <span class="circled {{if $_mod->_state == 'prechecked'}}ok{{elseif $_mod->_checked && in_array($_mod->_state, array('not_recommended', 'forbidden'))}}error{{elseif in_array($_mod->_state, array('not_recommended', 'forbidden'))}}warning{{/if}}"

@@ -13,7 +13,7 @@
     var url = new Url("salleOp", "ajax_edit_codages_ccam");
     url.addParam("codage_id", codage_id);
     url.requestModal(
-      -200, -100,
+      -200, -10,
       {onClose: function() {ActesCCAM.refreshList('{{$subject->_id}}','{{$subject->_praticien_id}}')}}
     );
     window.urlCodage = url;
@@ -115,7 +115,16 @@
                           {{/if}}
                         </td>
                         <td>
-                          {{if $_acte->montant_depassement}}DH{{/if}}
+                          {{if $_acte->code_association}}
+                          Asso : {{$_acte->code_association}}
+                          {{/if}}
+                        </td>
+                        <td>
+                          {{if $_acte->montant_depassement}}
+                            <span class="circled" style="background-color: #aaf" title="{{mb_value object=$_acte field=montant_depassement}}">
+                                DH
+                           </span>
+                          {{/if}}
                         </td>
                       </tr>
                     {{/if}}
