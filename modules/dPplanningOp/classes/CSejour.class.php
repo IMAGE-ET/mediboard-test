@@ -3539,6 +3539,25 @@ class CSejour extends CFacturable implements IPatientRelated {
       CMVSante::fillLimitedTemplate($template, $this);
     }
 
+    if (CModule::getActive("maternite")) {
+      $grossesse = $this->loadRefGrossesse();
+      $naissance = new CNaissance();
+      $enfant = new CPatient();
+      $constantes_enfant = new CConstantesMedicales();
+      if ($this->grossesse_id && count($grossesse->loadRefsNaissances())) {
+        $naissance = reset($grossesse->_ref_naissances);
+        $enfant = $naissance->loadRefSejourEnfant()->loadRefPatient();
+        $constantes_enfant = reset($enfant->loadRefConstantesMedicales(null, array("poids")));
+      }
+
+      $template->addProperty("Sejour - Accouchement - Heure de naissance", $naissance->getFormattedValue("heure"));
+      $template->addProperty("Sejour - Accouchement - Sexe de l'enfant", $enfant->getFormattedValue("sexe"));
+      $template->addProperty("Sejour - Accouchement - Poids (kg)", $constantes_enfant->poids . " kg");
+      $template->addProperty("Sejour - Accouchement - Poids (g)", $constantes_enfant->_poids_g. " g");
+      $template->addProperty("Sejour - Accouchement - Prénom de l'enfant", $enfant->prenom);
+      $template->addProperty("Sejour - Accouchement - Nom de l'enfant", $enfant->nom);
+    }
+
     $this->notify("AfterFillLimitedTemplate", $template);
   }
 
