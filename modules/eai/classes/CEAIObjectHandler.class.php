@@ -52,25 +52,23 @@ class CEAIObjectHandler extends CMbObjectHandler {
     // Parcours des receivers actifs
     if (!$cn_receiver_guid) {
       // On est dans le cas d'un store d'un objet depuis MB
-      if (!$mbObject->_eai_sender_guid) {
+      if (!$mbObject->_eai_initiateur_group_id) {
         $receiver = new CInteropReceiver();
         $receivers = $receiver->getObjects();
       }
       else {
         // On est dans le cas d'un enregisrement provenant d'une interface
-
+        /*
         // Chargement des routes du eai_sender_guid
-        /** @var CInteropSender $sender */
-        $sender = CMbObject::loadFromGuid($mbObject->_eai_sender_guid);
+        $sender = CMbObject::loadFromGuid($mbObject->_eai_initiateur_group_id);
 
         // Récupération des receivers de ttes les routes
-        /** @var CEAIRoute[] $routes */
         $routes = $sender->loadBackRefs("routes");
 
         $receivers = array();
         foreach ($routes as $_route) {
           $receivers[] = $_route->loadRefReceiver();
-        }
+        }*/
       }
     }
     // Sinon envoi destinataire sélectionné
