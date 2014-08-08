@@ -134,10 +134,12 @@
                 </table>
               </td>
               <td class="button">
+                {{if !$_codage->locked}}
                 <button type="button" class="notext edit" onclick="editCodage({{$_codage->_id}})"
                         title="{{$_codage->association_rule}} ({{mb_value object=$_codage field=association_mode}})">
                   {{tr}}Edit{{/tr}}
                 </button>
+                {{/if}}
                 <form name="formCodage-{{$_codage->_id}}" action="?" method="post"
                       onsubmit="return onSubmitFormAjax(this, {
                         onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}}) });">

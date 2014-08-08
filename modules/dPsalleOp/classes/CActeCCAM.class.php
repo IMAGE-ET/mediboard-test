@@ -179,6 +179,17 @@ class CActeCCAM extends CActe {
   }
 
   /**
+   * @see parent::checkCoded()
+   */
+  function checkCoded() {
+    $this->loadRefCodageCCAM();
+    if ($this->_ref_codage_ccam->_id && $this->_ref_codage_ccam->locked) {
+      return $this->_ref_codage_ccam->_view . " verrouillé, impossible de supprimer le code";
+    }
+    return parent::checkCoded();
+  }
+
+  /**
    * @see parent::canDeleteEx()
    */
   function canDeleteEx(){
@@ -186,7 +197,6 @@ class CActeCCAM extends CActe {
     if ($msg = $this->checkCoded()) {
       return $msg;
     }
-
     return parent::canDeleteEx();
   }
 
