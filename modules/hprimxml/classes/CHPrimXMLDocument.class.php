@@ -846,6 +846,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     if (isset($this->_ref_receiver->_id) && $this->_ref_receiver->_configs["uppercase_fields"]) {
       $personne['nom']          = CMbString::upper($personne['nom']);
       $personne['nomNaissance'] = CMbString::upper($personne['nomNaissance']);
+      $personne['ligne']        = CMbString::upper($personne['ligne']);
+      $personne['ville']        = CMbString::upper($personne['ville']);
     }
 
     $this->addTexte($elParent, "nomUsuel", $personne['nom']);
