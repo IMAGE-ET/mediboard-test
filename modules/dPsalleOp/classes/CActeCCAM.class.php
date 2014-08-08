@@ -184,7 +184,7 @@ class CActeCCAM extends CActe {
   function checkCoded() {
     $this->loadRefCodageCCAM();
     if ($this->_ref_codage_ccam->_id && $this->_ref_codage_ccam->locked) {
-      return $this->_ref_codage_ccam->_view . " verrouillé, impossible de supprimer le code";
+      return "Codage CCAM verrouillé, impossible de modifier l'acte";
     }
     return parent::checkCoded();
   }
