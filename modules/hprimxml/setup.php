@@ -482,6 +482,12 @@ class CSetuphprimxml extends CSetup {
                 ADD `att_system` ENUM ('acteur','application','système','finessgeographique','finessjuridique') DEFAULT 'système';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.55";
+    $this->makeRevision("0.55");
+
+    $query = "ALTER TABLE `hprimxml_config`
+                ADD `insc_integrated` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.56";
   }
 }

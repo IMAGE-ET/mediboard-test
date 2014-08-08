@@ -34,6 +34,7 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
     "fully_qualified",
     "check_similar",
     "att_system",
+    "insc_integrated",
     
     // Format
     "encoding", 
@@ -62,6 +63,7 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
   public $fully_qualified;
   public $check_similar;
   public $att_system;
+  public $insc_integrated;
   
   // Format
   public $encoding;
@@ -86,6 +88,7 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
       "fully_qualified",
       "check_similar",
       "att_system",
+      "insc_integrated",
     ),
     
     // Digit
@@ -147,6 +150,7 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
     $props["fully_qualified"]      = "bool default|1";
     $props["check_similar"]        = "bool default|0";
     $props["att_system"]           = "enum list|acteur|application|système|finessgeographique|finessjuridique default|système";
+    $props["insc_integrated"]      = "bool default|0";
         
     // Repair
     $props["repair_patient"]       = "bool default|1";

@@ -920,4 +920,38 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
 
     return false;
   }
+
+  /**
+   * Sauvegarde des INSC
+   *
+   * @param CPatient $patient Patient
+   * @param DOMNode  $node    Elément NumeroIdentifiantSante
+   *
+   * @return void
+   */
+  function storeINSC(CPatient $patient, DOMNode $node) {
+    $xpath     = new CHPrimXPath($node->ownerDocument);
+    $list_insc = $xpath->query("insC", $node);
+    $insc      = new CINSPatient();
+    $insc->patient_id = $patient->_id;
+
+    foreach ($list_insc as $_insc) {
+      $ins  = $xpath->queryTextNode("valeur", $_insc);
+      $date = $xpath->queryTextNode("dateEffet", $_insc);
+
+      if (!$ins) {
+        continue;
+      }
+
+      $insc->ins_patient_id = null;
+      $insc->ins            = $ins;
+      $insc->loadMatchingObject();
+
+      if ($insc->date < $date) {
+        $insc->date = $date;
+      }
+
+      $insc->store();
+    }
+  }
 }

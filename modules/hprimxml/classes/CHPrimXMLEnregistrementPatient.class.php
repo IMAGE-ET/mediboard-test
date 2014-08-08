@@ -72,7 +72,8 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
 
     $data['idSourcePatient'] = $this->getIdSource($data['patient']);
     $data['idCiblePatient']  = $this->getIdCible($data['patient']);
-    
+    $data["numeroSante"]     = $xpath->queryUniqueNode("hprim:numeroIdentifiantSante", $enregistrementPatient);
+
     return $data;
   }
 
@@ -224,6 +225,10 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         // On store le patient
         $msgPatient = CEAIPatient::storePatient($newPatient, $sender);
         $commentaire = CEAIPatient::getComment($newPatient);
+
+        if ($newPatient->_id && $sender->_configs["insc_integrated"]) {
+          $this->storeINSC($newPatient, $data["numeroSante"]);
+        }
 
         $codes = array ($msgPatient ? "A003" : "I002", $_code_IPP);
         
