@@ -1351,7 +1351,13 @@ class CSetuphl7 extends CSetup {
 
     $this->addQuery($query);
 
-    $this->mod_version = "1.00";
+    $this->makeRevision("1.00");
+
+    $query = "ALTER TABLE `hl7_config`
+                ADD `ins_integrated` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.01";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

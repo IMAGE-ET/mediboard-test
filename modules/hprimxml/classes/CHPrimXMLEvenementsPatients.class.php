@@ -930,10 +930,10 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
    * @return void
    */
   function storeINSC(CPatient $patient, DOMNode $node) {
-    $xpath     = new CHPrimXPath($node->ownerDocument);
-    $list_insc = $xpath->query("insC", $node);
-    $insc      = new CINSPatient();
-    $insc->type = "C";
+    $xpath            = new CHPrimXPath($node->ownerDocument);
+    $list_insc        = $xpath->query("insC", $node);
+    $insc             = new CINSPatient();
+    $insc->type       = "C";
     $insc->patient_id = $patient->_id;
 
     foreach ($list_insc as $_insc) {
@@ -945,11 +945,14 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       }
 
       $insc->ins_patient_id = null;
+      $insc->date           = null;
+      $insc->provider       = null;
       $insc->ins            = $ins;
       $insc->loadMatchingObject();
 
       if ($insc->date < $date) {
         $insc->date = $date;
+        $insc->provider   = $this->_ref_sender->nom;
       }
 
       $insc->store();

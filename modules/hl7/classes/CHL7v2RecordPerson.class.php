@@ -228,6 +228,10 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       
       $comment = CEAIPatient::getComment($newPatient);
     }
+
+    if ($sender->_configs["ins_integrated"]) {
+      $this->getINS($data["PID"], $newPatient);
+    }
     
     return $exchange_hl7v2->setAckAA($ack, $codes, $comment, $newPatient);
   }
@@ -820,5 +824,48 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     }
     
     return $medecin->_id;
+  }
+
+  /**
+   * Récupère les INS du patient
+   *
+   * @param DOMNode  $node    PID3
+   * @param CPatient $patient Patient
+   *
+   * @return void
+   */
+  function getINS(DOMNode $node, CPatient $patient) {
+    if (!$patient->_id) {
+      return;
+    }
+
+    $list_ins        = $this->query("PID.3[CX.5[text() = 'INS-C' or text() = 'INS-A']]", $node);
+    $ins             = new CINSPatient();
+    $ins->patient_id = $patient->_id;
+
+    foreach ($list_ins as $_ins) {
+      $ins->ins_patient_id = null;
+      $ins->date           = null;
+      $ins->provider       = null;
+      $valeur = $this->queryTextNode("CX.1", $_ins);
+      $date   = $this->queryTextNode("CX.7", $_ins);
+      $type   = $this->queryTextNode("CX.5", $_ins);
+
+      if (!$valeur) {
+        continue;
+      }
+      $type = substr($type, -1);
+
+      $ins->ins  = $valeur;
+      $ins->type = $type;
+      $ins->loadMatchingObject();
+
+      if ($date && $ins->date < $date) {
+        $ins->date     = CMbDT::dateTime($date);
+        $ins->provider = $this->_ref_sender->nom;
+      }
+
+      $ins->store();
+    }
   }
 }

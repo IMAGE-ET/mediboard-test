@@ -64,6 +64,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "create_grossesse",
     "search_master_IPP",
     "search_master_NDA",
+    "ins_integrated",
 
     // Send
     "send_assigning_authority",
@@ -124,6 +125,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
   public $create_grossesse;
   public $search_master_IPP;
   public $search_master_NDA;
+  public $ins_integrated;
 
   // Send
   public $send_assigning_authority;
@@ -188,6 +190,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
       "create_grossesse",
       "search_master_IPP",
       "search_master_NDA",
+      "ins_integrated",
     ),
 
     "send" => array(
@@ -261,6 +264,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["create_grossesse"]        = "bool default|1";
     $props["search_master_IPP"]       = "bool default|0";
     $props["search_master_NDA"]       = "bool default|0";
+    $props["ins_integrated"]          = "bool default|0";
     
     // => PID
     $props["handle_NDA"]    = "enum list|PID_18|PV1_19 default|PID_18";

@@ -27,19 +27,19 @@ class CHL7v2SegmentPID_FR extends CHL7v2SegmentPID {
    * @return null
    */
   function fillOtherIdentifiers(&$identifiers, CPatient $patient, CInteropActor $actor = null) {
-    //@todo recupéré l'insc avec la fonction loadLastINS
-    /*if ($patient->INSC) {
+    $ins = $patient->loadLastINS();
+    if ($ins) {
       $identifiers[] = array(
-        $patient->INSC,
+        $ins->ins,
         null,
         null,
         // PID-3-4 Autorité d'affectation
-        $this->getAssigningAuthority("INS-C"),
-        "INS-C",
+        $this->getAssigningAuthority("INS-$ins->type"),
+        "INS-$ins->type",
         null,
-        CMbDT::date($patient->INSC_date)
+        CMbDT::date($ins->date)
       );
-    }*/
+    }
 
     if ($actor->_configs["send_own_identifier"]) {
       $identifiers[] = array(
