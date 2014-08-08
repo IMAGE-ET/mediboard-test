@@ -933,6 +933,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $xpath     = new CHPrimXPath($node->ownerDocument);
     $list_insc = $xpath->query("insC", $node);
     $insc      = new CINSPatient();
+    $insc->type = "C";
     $insc->patient_id = $patient->_id;
 
     foreach ($list_insc as $_insc) {
