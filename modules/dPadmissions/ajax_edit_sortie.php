@@ -19,10 +19,10 @@ $modify_sortie_prevue = CValue::get("modify_sortie_prevue", true);
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 
-$can_admisison = CModule::getCanDo('dPadmissions');
+$can_admission = CModule::getCanDo('dPadmissions');
 
 if (!$sejour->canDo()->edit && !$can_admission->edit &&
-  !CModule::getCanDo("dPhospi")->edit && !CModule::getCanDo("dPurgences")->edit && !CModule::getCanDo("soins")->edit
+    !CModule::getCanDo("dPhospi")->edit && !CModule::getCanDo("dPurgences")->edit && !CModule::getCanDo("soins")->edit
 ) {
   $can_admission->redirect();
 }
