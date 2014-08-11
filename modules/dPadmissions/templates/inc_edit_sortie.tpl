@@ -44,7 +44,14 @@
       onsubmit="return ContraintesRPU.checkObligatory('{{$rpu->_id}}',
         Admissions.confirmationSortie.curry(this, {{$modify_sortie_prevue}}, '{{$sejour->sortie_prevue}}',
         function() {
-          document.fire('mb:valider_sortie'); document.stopObserving('mb:valider_sortie'); Control.Modal.close();}))">
+          {{if $atu && $atu->_id && $conf.dPurgences.valid_cotation_sortie_reelle}}
+            onSubmitFormAjax(getForm('ValidCotation_{{$sejour->_id}}'), function() {
+              document.fire('mb:valider_sortie'); document.stopObserving('mb:valider_sortie'); Control.Modal.close();
+            });
+          {{else}}
+            document.fire('mb:valider_sortie'); document.stopObserving('mb:valider_sortie'); Control.Modal.close();
+          {{/if}}
+         }))">
 {{else}}
 <form name="{{$form_name}}" method="post"
       onsubmit="return Admissions.confirmationSortie(this, {{$modify_sortie_prevue}}, '{{$sejour->sortie_prevue}}',
@@ -70,7 +77,7 @@
     <tr>
       {{if $module != "dPurgences" || ($module == "dPurgences" && $rpu && $rpu->sejour_id !== $rpu->mutation_sejour_id)}}
         <th>
-          {{if $module == "dPurgences" && $rpu && $rpu->sejour_id !== $rpu->mutation_sejour_id}}
+          {{if $module == "dPurgences" && $rpu && $rpu->mutation_sejour_id && $rpu->sejour_id !== $rpu->mutation_sejour_id}}
             <label>{{tr}}Csejour-sortie_reelle_mutation{{/tr}}</label>
            {{else}}
             {{mb_label object=$sejour field="sortie_reelle"}}
@@ -145,7 +152,7 @@
         {{/if}}
       </td>
       <th style="width: 100px">
-        {{if $module == "dPurgences" && $rpu && $rpu->sejour_id !== $rpu->mutation_sejour_id}}
+        {{if $module == "dPurgences" && $rpu && $rpu->mutation_sejour_id && $rpu->sejour_id !== $rpu->mutation_sejour_id}}
           <label>{{tr}}Csejour-confirme_mutation{{/tr}}</label>
         {{else}}
           {{mb_label object=$sejour field="confirme"}}
@@ -353,6 +360,16 @@
     <input type="hidden" name="_validation" value="1">
     <input type="hidden" name="del" value="0" />
     {{mb_field object=$rpu field="orientation" hidden=true onchange=this.form.onsubmit()}}
+  </form>
+{{/if}}
+
+{{if $atu && $atu->_id && $conf.dPurgences.valid_cotation_sortie_reelle}}
+  <form name="ValidCotation_{{$sejour->_id}}" action="" method="post">
+    <input type="hidden" name="dosql" value="do_consultation_aed" />
+    <input type="hidden" name="m" value="dPcabinet" />
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="consultation_id" value="{{$atu->_id}}" />
+    <input type="hidden" name="valide" value="1" />
   </form>
 {{/if}}
 
