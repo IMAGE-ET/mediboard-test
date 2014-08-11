@@ -2182,6 +2182,11 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `consultation`
                 ADD INDEX (`exec_tarif`);";
     $this->addQuery($query);
-    $this->mod_version = '2.37';
+
+    $this->makeRevision("2.37");
+    $query = "UPDATE `consultation` SET `annule` = '0' WHERE (`annule` = '' OR `annule` IS NULL );";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.38';
   }
 }
