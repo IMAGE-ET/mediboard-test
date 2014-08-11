@@ -14,7 +14,8 @@
 CCanDo::checkRead();
 
 $parturiente_id = CValue::getOrSession("parturiente_id");
-$object_guid    = CValue::get("object_guid");
+$object_guid    = CValue::getOrSession("object_guid");
+$show_checkbox  = CValue::get("show_checkbox");
 
 $object = new CMbObject();
 if ($object_guid) {
@@ -31,7 +32,8 @@ CMbObject::massCountBackRefs($grossesses, "naissances");
 
 $smarty = new CSmartyDP();
 
-$smarty->assign("grossesses"  , $grossesses);
-$smarty->assign("object"      , $object);
+$smarty->assign("grossesses"   , $grossesses);
+$smarty->assign("object"       , $object);
+$smarty->assign("show_checkbox", $show_checkbox);
 
 $smarty->display("inc_list_grossesses.tpl");

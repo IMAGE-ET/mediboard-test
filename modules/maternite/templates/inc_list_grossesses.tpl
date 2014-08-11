@@ -13,7 +13,7 @@
     Grossesse.formFrom = getForm("bindFormGrossesse");
     // Après création d'une grossesse, si l'objet concerné n'est relié à aucune grossesse,
     // alors
-    {{if $object->_id && !$object->grossesse_id && $grossesses|@count == 1}}
+    {{if $show_checkbox && $object->_id && !$object->grossesse_id && $grossesses|@count == 1}}
       Grossesse.formFrom.unique_grossesse_id.checked = true;
     {{/if}}
   });
@@ -28,9 +28,9 @@
     {{foreach from=$grossesses item=_grossesse}}
       <tr>
         <td class="narrow">
-          {{if $object->_id}}
+          {{if $show_checkbox}}
             <input type="radio" name="unique_grossesse_id" data-active="{{$_grossesse->active}}"
-            {{if $_grossesse->_id == $object->grossesse_id}}checked="checked"{{/if}} value="{{$_grossesse->_id}}"
+            {{if $_grossesse->_id == $object->grossesse_id}}checked{{/if}} value="{{$_grossesse->_id}}"
             data-view_grossesse="{{$_grossesse}}" />
           {{/if}}
         </td>

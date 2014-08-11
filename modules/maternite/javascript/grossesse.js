@@ -17,6 +17,7 @@ Grossesse = {
   parturiente_id: null,
   large_icon: 0,
   modify_grossesse: 1,
+  show_checkbox: 1,
 
   viewGrossesses: function(parturiente_id, object_guid, form) {
     var url = new Url("maternite", "ajax_bind_grossesse");
@@ -47,6 +48,7 @@ Grossesse = {
     var url = new Url("maternite", "ajax_list_grossesses");
     url.addNotNullParam("parturiente_id", parturiente_id);
     url.addNotNullParam("object_guid", object_guid);
+    url.addParam("show_checkbox", Grossesse.show_checkbox);
     url.requestUpdate("list_grossesses");
   },
   afterEditGrossesse: function(grossesse_id) {

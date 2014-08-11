@@ -107,6 +107,7 @@ if (!$naissance_id) {
     $affectation->entree = $sejour_enfant->entree_reelle;
     $affectation->sortie = $sejour_enfant->sortie_prevue;
     $affectation->lit_id = $curr_affect->lit_id;
+    $affectation->service_id = $curr_affect->service_id;
     $affectation->sejour_id = $sejour_enfant->_id;
     $affectation->parent_affectation_id = $curr_affect->_id;
     storeObject($affectation);
