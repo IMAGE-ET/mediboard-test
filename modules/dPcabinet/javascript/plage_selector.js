@@ -105,7 +105,7 @@ PlageConsultSelector = {
       refreshFunction(chir_id);
       $V(oForm[this.sFunction_id], '');
     }
-    $V(oForm.annule          , is_cancelled);
+    $V(oForm.annule          , is_cancelled ? 1 : 0);
     $V(oForm[this.sHeure]          , heure);
     var clean_date = (date.indexOf(" ") != -1) ? date : DateFormat.format(Date.fromDATE(date), "dd/MM/yyyy");
     $V(oForm[this.sDate]           , clean_date);
