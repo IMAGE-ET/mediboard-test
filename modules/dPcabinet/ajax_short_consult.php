@@ -46,6 +46,14 @@ $user->isAnesth();
 $user->isPraticien();
 $user->canDo();
 
+// Chargement des listes de praticiens
+$user = new CMediusers();
+$listAnesths = $user->loadAnesthesistes(PERM_DENY);
+$listChirs   = $user->loadPraticiens(PERM_DENY);
+
+// Liste des dents CCAM
+$liste_dents = reset(CDentCCAM::loadList());
+
 // Chargement des boxes
 $services = array();
 $list_mode_sortie = array();
@@ -90,6 +98,8 @@ if ($sejour && $sejour->_id) {
 
 $smarty = new CSmartyDP();
 
+$smarty->assign("listAnesths"    , $listAnesths);
+$smarty->assign("listChirs"      , $listChirs);
 $smarty->assign("services"       , $services);
 $smarty->assign("list_mode_sortie", $list_mode_sortie);
 $smarty->assign("consult"        , $consult);
@@ -99,6 +109,7 @@ $smarty->assign("_is_anesth"     , $user->isAnesth());
 $smarty->assign("antecedent"     , new CAntecedent());
 $smarty->assign("traitement"     , new CTraitement);
 $smarty->assign("acte_ngap"      , CActeNGAP::createEmptyFor($consult));
+$smarty->assign("liste_dents"    , $liste_dents);
 if (CModule::getActive("dPprescription")) {
   $smarty->assign("line"           , new CPrescriptionLineMedicament());
 }
@@ -127,12 +138,6 @@ if ($consult_anesth->_id) {
     $sejour->load($sejour_id);
     $sejour->loadRefDossierMedical();
     $smarty->assign("sejour"       , $sejour);
-  }
-  
-  if ($consult_anesth->operation_id) {
-    $listAnesths = new CMediusers();
-    $listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);
-    $smarty->assign("listAnesths", $listAnesths);
   }
 }
 
