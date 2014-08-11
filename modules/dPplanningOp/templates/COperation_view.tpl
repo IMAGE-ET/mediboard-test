@@ -136,6 +136,11 @@
         {{mb_script module=brancardage script=creation_brancardage ajax=true}}
         <button type="button" class="lookup" onmousedown="CreationBrancard.jumelles('{{$operation->_id}}', 'operation_id');">Brancardage</button>
       {{/if}}
+
+      {{if @$modules.mvsante->_can->read && "mvsante"|module_active}}
+        {{mb_script module=mvsante script=libelle ajax=true}}
+        <button class="edit" type="button" onclick="LiaisonOp.edit('{{$operation->_id}}');">Modifier les libellés</button>
+      {{/if}}
     </td>
   </tr>
 </table>
