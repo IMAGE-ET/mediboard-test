@@ -5,10 +5,10 @@ var ExObject = {
   defaultProperties: {},
   pixelPositionning: false,
   groupTabsCallback: {},
-  timestampLimit: 630720000000, // 20 years
+  timestampLimit: 50000,
   dateOperator: function(divisor, ms) {
     // Absolute timestamp
-    if (ms > ExObject.timestampLimit) {
+    if (Math.abs(ms) > ExObject.timestampLimit) {
       return Math.ceil(ms / divisor);
     }
 
