@@ -14,6 +14,12 @@
   Main.add(Control.Tabs.create.curry('tab-modules', true));
 </script>
 
+{{if empty($prefs.common|smarty:nodefaults) && $prefs|@count == 1}}
+  <div class="small-warning">
+    {{tr}}No-functional-perm{{/tr}}
+  </div>
+{{/if}}
+
 <table class="main">
   <tr>
     <td class="narrow">

@@ -285,6 +285,7 @@ $locales['CViewAccessToken.none'] = 'Aucun jeton d\'accès';
 $locales['CViewAccessToken.one'] = 'jeton d\'accès';
 $locales['Ditto'] = 'Idem';
 $locales['FunctionalPerms'] = 'Permissions fonctionnelles';
+$locales['No-functional-perm'] = 'Aucune permission fonctionnelle parmi les modules actifs.';
 $locales['Permission denied'] = 'Accès refusé';
 $locales['Preference'] = 'Préférence';
 $locales['Repeat New Password'] = 'Confirmez le nouveau mot de passe';
