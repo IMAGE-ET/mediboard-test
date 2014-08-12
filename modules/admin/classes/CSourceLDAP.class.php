@@ -118,7 +118,7 @@ class CSourceLDAP extends CMbObject {
       $ldaprdn = $ldaprdn.$this->bind_rdn_suffix;
     }
 
-    $ldapbind = ldap_bind($ldapconn, $ldaprdn, $ldappass);
+    $ldapbind = ldap_bind($ldapconn, $ldaprdn, utf8_encode($ldappass));
     $error = ldap_errno($ldapconn);
 
     // 49 == LDAP_INVALID_CREDENTIALS
