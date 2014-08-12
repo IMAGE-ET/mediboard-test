@@ -119,7 +119,6 @@ class CGroups extends CMbObject {
     $backProps["reception_bills"]           = "CProductReceptionBill group_id";
     $backProps['object_configs']            = "CGroupsConfig object_id";
     $backProps["stock_locations"]           = "CProductStockLocation object_id";
-    $backProps["stock_first_config"]        = "CCegiStockFirstConfig object_id";
     $backProps["destinataires_hprim"]       = "CDestinataireHprim group_id";
     $backProps["destinataires_sigems"]      = "CDestinataireSigems group_id";
     $backProps["destinataires_hprim21"]     = "CDestinataireHprim21 group_id";
@@ -180,7 +179,6 @@ class CGroups extends CMbObject {
     $backProps["daily_check_list_types"]    = "CDailyCheckListType group_id";
     $backProps["grossesses"]                = "CGrossesse group_id";
     $backProps["libelle_mvsante"]           = "CLibelleOp group_id";
-    $backProps["ex_object"]                 = "CExObject group_id";
     $backProps["cn_test"]                   = "CCnTest group_id";
     $backProps["digital_pen_printer"]       = "CDigitalPenPrinter group_id";
     $backProps["ex_links"]                  = "CExLink group_id";
@@ -189,6 +187,8 @@ class CGroups extends CMbObject {
     $backProps["notifications"]             = "CNotification group_id";
     $backProps["notification_objects"]      = "CNotificationObject group_id";
     $backProps["type_anesth_group"]         = "CTypeAnesth group_id";
+    
+    //$backProps["ex_object"]                 = "CExObject group_id"; // DO NOT ADD THIS BACK PROP
     return $backProps;
   }
 
