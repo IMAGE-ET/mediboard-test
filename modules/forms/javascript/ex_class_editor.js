@@ -18,6 +18,11 @@ ExClass = window.ExClass || {
         }
       }
     });
+  },
+  exportObject: function(id) {
+    var url = new Url("forms", "export_ex_class", "raw");
+    url.addParam("ex_class_id", id);
+    url.pop(10, 10, "export");
   }
 };
 

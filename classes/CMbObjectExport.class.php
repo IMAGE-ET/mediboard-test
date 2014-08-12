@@ -9,38 +9,49 @@
  * @version    $Revision$
  */
 
+/**
+ * Object exporting utility class
+ */
 class CMbObjectExport {
   const DEFAULT_DEPTH = 6;
   
-  /**
-   * @var CMbObject
-   */
-  public $dom;
+  /** @var CMbXMLDocument */
+  public $doc;
   
-  /**
-   * @var CMbObject
-   */
+  /** @var CMbObject */
   public $object;
   
-  /**
-   * @var array
-   */
+  /** @var array */
   public $backrefs_tree;
   
-  /**
-   * @var integer
-   */
+  /** @var array */
+  public $fwdrefs_tree;
+  
+  /** @var integer */
   public $depth = self::DEFAULT_DEPTH;
   
-  /**
-   * @var bool
-   */
+  /** @var bool */
   public $empty_values = true;
-  
-  static function str_trim($s) {
+
+  /**
+   * Trim no break space and 0xFF chars
+   * 
+   * @param string $s String to trim
+   *
+   * @return string
+   */
+  static function trimString($s) {
     return trim(trim($s), "\xA0\xFF");
   }
-  
+
+  /**
+   * Export constructor
+   *
+   * @param CMbObject $object        Object to export
+   * @param null      $backrefs_tree Backrefs tree
+   *
+   * @throws CMbException
+   */
   function __construct(CMbObject $object, $backrefs_tree = null) {
     if (!$object->getPerm(PERM_READ)) {
       throw new CMbException("Permission denied");
@@ -49,12 +60,25 @@ class CMbObjectExport {
     $this->object = $object;
     $this->backrefs_tree = isset($backrefs_tree) ? $backrefs_tree : $object->getExportedBackRefs();
   }
+
+  /**
+   * Set the forward refs tree to export
+   * 
+   * @param array $fwdrefs_tree Forward refs tree to export
+   * 
+   * @return void
+   */
+  function setForwardRefsTree($fwdrefs_tree) {
+    $this->fwdrefs_tree = $fwdrefs_tree;
+  }
   
   /**
+   * Export to DOM
+   * 
    * @return CMbXMLDocument
    */
   function toDOM(){
-    $this->doc = new CMbXMLDocument();
+    $this->doc = new CMbXMLDocument("utf-8");
     $this->doc->formatOutput = true;
     $root = $this->doc->createElement($this->object->_guid);
     $root->setAttribute("date", CMbDT::dateTime());
@@ -64,9 +88,19 @@ class CMbObjectExport {
     
     return $this->doc;
   }
-  
-  private function _toDOM(CMbObject $object, $depth) {
-    if (!$depth || !$object->_id || !$object->getPerm(PERM_READ)) return;
+
+  /**
+   * Internal DOM export method
+   * 
+   * @param CStoredObject $object Object to export
+   * @param int           $depth  Export depth
+   *                              
+   * @return void
+   */
+  private function _toDOM(CStoredObject $object, $depth) {
+    if (!$depth || !$object->_id || !$object->getPerm(PERM_READ)) {
+      return;
+    }
     
     $doc = $this->doc;
     $object_node = $doc->getElementById($object->_guid);
@@ -85,7 +119,16 @@ class CMbObjectExport {
     
     foreach ($db_fields as $key => $value) {
       // Forward Refs Fields
-      if ($object->_specs[$key] instanceof CRefSpec) {
+      $_fwd_spec = $object->_specs[$key];
+      if ($_fwd_spec instanceof CRefSpec) {
+        if ($key === $object->_spec->key) {
+          continue;
+        }
+
+        if (!isset($this->fwdrefs_tree[$object->_class]) || !in_array($key, $this->fwdrefs_tree[$object->_class])) {
+          continue;
+        }
+        
         $object->loadFwdRef($key);
         $guid = "";
         $_object = $object->_fwd[$key];
@@ -107,7 +150,7 @@ class CMbObjectExport {
       
       // Scalar fields
       else {
-        $value = self::str_trim($value);
+        $value = self::trimString($value);
         
         if ($this->empty_values || $value !== "") {
           $doc->insertTextElement($object_node, $key, $value);
@@ -116,7 +159,9 @@ class CMbObjectExport {
     }
     
     // Collections
-    if (!isset($this->backrefs_tree[$object->_class])) return;
+    if (!isset($this->backrefs_tree[$object->_class])) {
+      return;
+    }
     
     foreach ($object->_backProps as $backName => $backProp) {
       if (!in_array($backName, $this->backrefs_tree[$object->_class])) {
@@ -131,15 +176,32 @@ class CMbObjectExport {
       }
     }
   }
-  
+
+  /**
+   * Stream in text/xml mimetype
+   * 
+   * @return void
+   */
   function streamXML(){
     $this->stream("text/xml");
   }
-  
+
+  /**
+   * Stream in text/plain mimetype
+   *
+   * @return void
+   */
   function streamXMLText(){
     $this->stream("text/plain");
   }
-  
+
+  /**
+   * Stream the DOM
+   * 
+   * @param string $mimetype Mime type type
+   * 
+   * @return void
+   */
   function stream($mimetype){
     $xml = $this->toDOM()->saveXML();
     $date = CMbDT::dateTime();
