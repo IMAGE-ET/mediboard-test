@@ -74,22 +74,13 @@ class CBoolSpec extends CMbFieldSpec {
   /**
    * @see parent::checkProperty()
    */
-  function checkProperty($object) {
-    $value = &$object->{$this->fieldName};
+  function checkProperty($object){
+    $value = $object->{$this->fieldName};
 
-    if ($this->notNull) {
-      $value = intval($value);
-    }
-    else {
-      // Has to be numeric
-      $value = CMbFieldSpec::checkNumeric($value, true);
-      if ($value === null) {
-        return "N'est pas une chaîne numérique";
-      }
-    }
-
-    if ($this->default !== null && !in_array($value, array(0, 1), true)) {
-      $value = intval($this->default);
+    // Has to be numeric
+    $value = CMbFieldSpec::checkNumeric($value, true);
+    if ($value === null) {
+      return "N'est pas une chaîne numérique";
     }
 
     // Only two options
@@ -97,27 +88,6 @@ class CBoolSpec extends CMbFieldSpec {
       return "Ne peut être différent de 0 ou 1";
     }
 
-    return null;
-  }
-
-  /**
-   * @see parent::checkPropertyValue()
-   */
-  function checkPropertyValue($object){
-    $propValue = $object->{$this->fieldName};
-
-    if ($msg = $this->checkParams($object)) {
-      return $msg;
-    }
-
-
-    if ($this->default === null && $this->notNull && ($propValue === null || $propValue === "")) {
-      return null;
-    }
-
-    if ($msg = $this->checkProperty($object)) {
-      return $msg;
-    }
     return null;
   }
 

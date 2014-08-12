@@ -458,7 +458,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $this->loadOldObject();
     $this->loadRefsReglements();
 
-    $this->completeField("sejour_id", "plageconsult_id");
+    $this->completeField("sejour_id", "plageconsult_id", "annule");
 
     if ($this->sejour_id && !$this->_forwardRefMerging) {
       $this->loadRefPlageConsult();
@@ -472,6 +472,8 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
         return $msg . parent::check();
       }
     }
+
+    $this->annule = $this->annule != 1 ? 0 : $this->annule;
 
     /** @var self $old */
     $old = $this->_old;
