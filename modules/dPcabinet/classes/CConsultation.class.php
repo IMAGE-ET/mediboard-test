@@ -1147,7 +1147,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
    * @return CElementPrescription
    */
   function loadRefElementPrescription() {
-    return $this->_ref_element_prescription = $this->loadFwdRef("element_prescription_id");
+    return $this->_ref_element_prescription = $this->loadFwdRef("element_prescription_id", true);
   }
 
   /**

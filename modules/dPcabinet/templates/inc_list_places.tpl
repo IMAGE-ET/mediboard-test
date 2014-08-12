@@ -161,7 +161,7 @@
                 data-time="{{$_place.time}}"
                 data-slot_id="{{$slot_id}}"
                 data-consult_element="{{$consultation->element_prescription_id}}"
-                data-consult_element_libelle="{{$consultation->_ref_element_prescription->libelle}}"
+                data-consult_element_libelle="{{if $consultation->_ref_element_prescription}}{{$consultation->_ref_element_prescription->libelle}}{{/if}}"
               {{if !$multiple}}
                   >
               {{else}}
