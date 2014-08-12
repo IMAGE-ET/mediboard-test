@@ -11,7 +11,7 @@
 {{mb_script module="dPprescription" script=prescription}}
 {{mb_script module="dPcompteRendu"  script="document"}}
 {{mb_script module="dPcompteRendu"  script="modele_selector"}}
-{{mb_script module="files"      script="file"}}
+{{mb_script module="files"          script="file"}}
 {{mb_script module="dPpmsi"         script="PMSI" ajax=$ajax}}
 
 {{if @$sejour->_id}}
@@ -44,7 +44,7 @@
         <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
           {{$patient->_view}}
         </span>
-        &mdash;
+        &mdash; Séjour
         <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
           {{$sejour->_shortview}}
         </span>
@@ -80,7 +80,8 @@
   </table>
   
   <ul id="tabs-pmsi" class="control_tabs">
-    <li><a href="#tab-PMSI">{{tr}}PMSI{{/tr}}</a></li>
+    <li><a href="#tab-patient">{{tr}}PMSI.DossierPatient{{/tr}}</a></li>
+    <li><a href="#tab-PMSI">{{tr}}PMSI.Diagnostics{{/tr}}</a></li>
     <li><a href="#ServeurActes" {{if !$sejour->_ref_operations}}class="empty"{{/if}}>{{tr}}CCodable-actes{{/tr}}</a></li>
     <li onmousedown="loadDocuments()"><a href="#Docs">Documents</a></li>
     {{if "dmi"|module_active}}
@@ -101,8 +102,12 @@
         </button>
       </li>
     {{/if}}
+    {{*<li><a href="#rss">{{tr}}PMSI.RSS{{/tr}}</a></li>*}}
   </ul>
 
+  <div id="tab-patient" style="display:none;">
+    {{mb_include template=inc_vw_patient}}
+  </div>
   <div id="tab-PMSI" style="display: none;">
     {{mb_include template=inc_vw_pmsi}}
   </div>
@@ -123,6 +128,13 @@
     </div>
   {{/if}}
 
+  {{*<div id="rss" style="display: none;">*}}
+    {{*{{mb_include template=vw_rss}}*}}
+  {{*</div>*}}
+
 {{else}}
-  <div class="small-info">Veuillez sélectionner un séjour dans la liste des séjours sur la gauche.</div>
+  <div class="small-info">Veuillez sélectionner un séjour dans la liste</div>
+  <div id="tab-patient">
+    {{mb_include template=inc_vw_patient}}
+  </div>
 {{/if}}

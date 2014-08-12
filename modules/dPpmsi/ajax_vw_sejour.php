@@ -16,6 +16,7 @@ $sejour_id = CValue::getOrSession("sejour_id");
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
 
+// Chargement du séjour précis du patient
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 if ($sejour->group_id != CGroups::loadCurrent()->_id) {
@@ -26,6 +27,30 @@ $sejour->loadRefPatient();
 $patient = $sejour->_ref_patient;
 $patient->loadRefsFwd();
 $patient->loadRefPhotoIdentite();
+$patient->loadRefsCorrespondants();
+$patient->loadRefDossierMedical();
+$patient->_ref_dossier_medical->updateFormFields();
+$patient->loadIPP();
+
+// Chargement des séjours du Patient
+$sejours = $patient->loadRefsSejours();
+$isSejourPatient = null;
+
+if (array_key_exists($sejour_id, $patient->_ref_sejours)) {
+  $isSejourPatient = $sejour_id;
+}
+foreach ($sejours as $_sej) {
+  $_sej->loadRefPraticien();
+  $_sej->loadRefsOperations();
+  $_sej->loadNDA();
+  $_sej->canDo();
+  foreach ($_sej->_ref_operations as $_op) {
+    $_op->countDocItems();
+    $_op->canDo();
+  }
+}
+
+// Dossier médical
 $dossier_medical = $patient->loadRefDossierMedical();
 $dossier_medical->updateFormFields();
 $dossier_medical->loadRefsAntecedents();
@@ -88,6 +113,47 @@ foreach ($sejour->_ref_operations as $_operation) {
   }
 }
 
+//// Création/Chargement du rss
+//$rss = new CRSS();
+//$whereIs = "`sejour_id` = ".$sejour_id;
+//$rss->loadList($whereIs);
+//
+//if (!$rss->rss_id) {
+//  $rss->sejour_id = $sejour_id;
+//  $rss->loadMatchingObject();
+//  if ($msg = $rss->store()) {
+//    CAppUI::stepAjax($msg, UI_MSG_WARNING);
+//  }
+//}
+//
+////Création des RUM du RSS
+//$affectations = $sejour->loadRefsAffectations();
+//$list_rum = null;
+//if ($affectations) {
+//  foreach ($affectations as $key => $affectation) {
+//    $rum = new CRUM();
+//    $where["rss_id"] = " = ".$rss->rss_id;
+//    $where["affectation_id"] = " = ".$affectation->affectation_id;
+//    $rum->loadList($where);
+//    if (!$rum->rum_id) {
+//      $rum->rss_id = $rss->rss_id;
+//      $rum->affectation_id = $affectation->affectation_id;
+//      $rum->loadMatchingObject();
+//      $rum->loadMedicalesInfos();
+//      if ($msg = $rum->store()) {
+//        CAppUI::stepAjax($msg, UI_MSG_WARNING);
+//      }
+//    }
+//
+//    $list_rum[$key] = $rum;
+//  }
+//}
+//else {
+//  $rum = new CRUM();
+//  $rum->rss_id = $rss->rss_id;
+//  $list_rum[] = $rum;
+//}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -99,5 +165,9 @@ $smarty->assign("canCabinet"   , CModule::getCanDo("dPcabinet"));
 $smarty->assign("hprim21installed", CModule::getActive("hprim21"));
 $smarty->assign("sejour"  , $sejour );
 $smarty->assign("listPrat", $listPrat);
+//$smarty->assign("rss", $rss);
+//$smarty->assign("list_rum", $list_rum);
+$smarty->assign("patient", $patient);
+$smarty->assign("isSejourPatient" , $isSejourPatient);
 
 $smarty->display("inc_vw_sejour.tpl");
