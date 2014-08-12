@@ -53,7 +53,7 @@ if ($consultation_id) {
       $consultation_temp->annule,
       utf8_encode($consultation_temp->rques),
       $consultation_temp->element_prescription_id,
-      utf8_encode($consultation_temp->_ref_element_prescription->libelle),
+      utf8_encode($consultation_temp->element_prescription_id ? $consultation_temp->_ref_element_prescription->libelle : ""),
     );
   }
 
