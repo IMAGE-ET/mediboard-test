@@ -6,6 +6,9 @@
   <td>
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}
   </td>
+  <td>
+    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_anesth}}
+  </td>
   <td>{{$_operation->_datetime|date_format:$conf.date}}
   {{if $_operation->_datetime|date_format:$conf.time != "00h00"}}
     {{$_operation->_datetime|date_format:$conf.time}}

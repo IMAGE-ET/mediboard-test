@@ -35,7 +35,7 @@
 {{if $sejour->_canRead}}
   <table class="tbl">
     <tr>
-      <th class="title" colspan="{{if @$modules.brancardage->_can->read}}5{{else}}4{{/if}}">
+      <th class="title" colspan="{{if @$modules.brancardage->_can->read}}6{{else}}5{{/if}}">
         {{if $sejour->_ref_consult_anesth->_id && !$sejour->_ref_consult_anesth->operation_id}}
           <button style="float: right" class="print" type="button" onclick="printFicheAnesth('{{$sejour->_ref_consult_anesth->_id}}');">
             Fiche d'anesthésie
@@ -46,6 +46,7 @@
     </tr>
     <tr>
       <th>{{tr}}COperation-chir_id{{/tr}}</th>
+      <th>{{tr}}COperation-anesth_id{{/tr}}</th>
       <th>{{tr}}Date{{/tr}}</th>
       <th>{{tr}}COperation-_ext_codes_ccam{{/tr}}</th>
       {{if @$modules.brancardage->_can->read}}
