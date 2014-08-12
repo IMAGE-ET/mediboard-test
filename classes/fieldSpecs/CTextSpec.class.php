@@ -56,7 +56,8 @@ class CTextSpec extends CMbFieldSpec {
 
     // Markdown case: full delegation
     if ($this->markdown) {
-      $content = CMbString::markdown($value);
+      // In order to prevent from double escaping
+      $content = CMbString::markdown(html_entity_decode($value));
       return "<div class='markdown'>$content</div>";
     }
 
