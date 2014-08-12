@@ -59,14 +59,15 @@ class CMbFieldSpecFact {
   static function getSpec(CModelObject $object, $field, $prop) {
     return self::getSpecWithClassName($object->_class, $field, $prop);
   }
-  
+
   /**
    * Returns a spec object for an object's field from a class name
-   * 
+   *
    * @param string $class The class name
    * @param string $field The field name
    * @param string $prop  The prop string serializing the spec object options
-   * 
+   *
+   * @throws Exception
    * @return CMbFieldSpec
    */
   static function getSpecWithClassName($class, $field, $prop) {
@@ -78,7 +79,7 @@ class CMbFieldSpecFact {
 
     // Get spec class
     if ($spec_type && (null == $spec_class = CMbArray::get(self::$classes, $spec_type))) {
-      trigger_error("No spec class name for '$class::$field' = '$prop'", E_USER_ERROR);
+      throw new Exception("Invalid spec '$prop' for field '$class::$field'");
     }
 
     return new $spec_class($class, $field, $prop);
