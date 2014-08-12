@@ -74,15 +74,14 @@ class CBoolSpec extends CMbFieldSpec {
   /**
    * @see parent::checkProperty()
    */
-  function checkProperty($object){
+  function checkProperty($object) {
     $value = &$object->{$this->fieldName};
-
-    // Has to be numeric
 
     if ($this->notNull) {
       $value = intval($value);
     }
     else {
+      // Has to be numeric
       $value = CMbFieldSpec::checkNumeric($value, true);
       if ($value === null) {
         return "N'est pas une chaîne numérique";
@@ -111,7 +110,8 @@ class CBoolSpec extends CMbFieldSpec {
       return $msg;
     }
 
-    if ($this->default === null && ($propValue === null || $propValue === "")) {
+
+    if ($this->default === null && $this->notNull && ($propValue === null || $propValue === "")) {
       return null;
     }
 
