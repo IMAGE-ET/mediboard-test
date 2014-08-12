@@ -74,8 +74,8 @@
             <th class="category">Actes cotés</th>
             <th class="category">Actions</th>
           </tr>
-          {{foreach from=$subject->_ref_codages_ccam item=_codage}}
-            <tr>
+          {{foreach from=$subject->_ref_codages_ccam item=_codage name=codages}}
+            <tr {{if !$smarty.foreach.codages.last}}style="border-bottom: 1pt dotted #93917e;"{{/if}}>
               <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_codage->_ref_praticien}}</td>
               <td {{if !$_codage->_ref_actes_ccam|@count}}class="empty"{{/if}}>
                 {{if !$_codage->_ref_actes_ccam|@count}}
@@ -100,7 +100,7 @@
                         </td>
                         <td>
                           {{if !$_phase->_modificateurs|@count}}
-                            <em>Aucun modif. dispo.</em>
+                            <em style="color: #7d7d7d;">Aucun modif. dispo.</em>
                           {{elseif !$_acte->modificateurs}}
                             <strong>Aucun modif. codé</strong>
                           {{else}}
@@ -209,7 +209,7 @@
             <th class="category" colspan="10">Actes disponibles</th>
           </tr>
 
-          {{foreach from=$subject->_ext_codes_ccam item=_code key=_key}}
+          {{foreach from=$subject->_ext_codes_ccam item=_code key=_key name=codes_ccam}}
             {{assign var=actes_ids value=$subject->_associationCodesActes.$_key.ids}}
             {{unique_id var=uid_autocomplete_asso}}
             {{assign var=can_delete value=1}}
@@ -220,7 +220,7 @@
                 {{/if}}
               {{/foreach}}
             {{/foreach}}
-            <tr>
+            <tr {{if !$smarty.foreach.codes_ccam.last}}style="border-bottom: 1pt dotted #93917e;"{{/if}}>
               <td>
                 <a href="#" onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class}}');">
                   {{$_code->code}}
