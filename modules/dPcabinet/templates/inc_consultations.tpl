@@ -145,16 +145,17 @@
         <a class="action" href="{{$href_planning}}">
           <img src="images/icons/planning.png" title="Modifier le rendez-vous" />
         </a>
-        {{if $_consult->chrono == $_consult|const:'PLANIFIE' && $patient->_id}}
+        {{if $_consult->chrono == $_consult|const:'PLANIFIE' && $patient->_id && !$_consult->annule}}
           <button class="tick button notext" type="button" onclick="putArrivee(document.etatFrm{{$_consult->_id}})">Notifier l'arrivée du patient</button>
           <button type="button" class="cancel button notext" onclick="if(confirm('Voulez-vous vraiment annuler cette consultation ?')) {document.cancelFrm{{$_consult->_id}}.submit()}">
             Annuler ce rendez-vous
           </button>
-        {{elseif $patient->_id}}
+        {{elseif $patient->_id && $_consult->annule}}
           <form name="cancel_arrive_{{$_consult->_id}}" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
             {{mb_key object=$_consult}}
+            <input type="hidden" name="annule" value="0" />
             <input type="hidden" name="chrono" value="{{$_consult|const:'PLANIFIE'}}" />
             <button class="tick_cancel button notext" type="submit">Annuler l'arrivée</button>
           </form>
