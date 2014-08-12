@@ -458,7 +458,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $this->loadOldObject();
     $this->loadRefsReglements();
 
-    $this->completeField("sejour_id", "plageconsult_id", "annule");
+    $this->completeField("sejour_id", "plageconsult_id");
 
     if ($this->sejour_id && !$this->_forwardRefMerging) {
       $this->loadRefPlageConsult();
@@ -473,7 +473,6 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
       }
     }
 
-    $this->annule = $this->annule != 1 ? 0 : $this->annule;
 
     /** @var self $old */
     $old = $this->_old;
@@ -780,11 +779,14 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
    * 11. Déplacement de C2 dans un autre jour (S5 et S3 reste tel quel)
    */
   function store() {
-    $this->completeField('sejour_id', 'heure', 'plageconsult_id', 'si_desistement');
+    $this->completeField('sejour_id', 'heure', 'plageconsult_id', 'si_desistement', 'annule');
 
     if ($this->si_desistement === null) {
       $this->si_desistement = 0;
     }
+
+    $this->annule = $this->annule === null || $this->annule === '' ? 0 : $this->annule;
+
 
     // Consultation dans un séjour
     $sejour = new CSejour();
