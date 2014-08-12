@@ -21,6 +21,8 @@ class CSejourTask extends CMbObject {
   public $consult_id;
   public $date;
   public $author_id;
+  public $date_realise;
+  public $author_realise_id;
 
   /** @var CSejour */
   public $_ref_sejour;
@@ -33,6 +35,8 @@ class CSejourTask extends CMbObject {
 
   /** @var CMediuser */
   public $_ref_author;
+  /** @var CMediuser */
+  public $_ref_author_realise;
 
   /**
    * @see parent::getSpec()
@@ -56,7 +60,9 @@ class CSejourTask extends CMbObject {
     $props["prescription_line_element_id"] = "ref class|CPrescriptionLineElement";
     $props["consult_id"]  = "ref class|CConsultation";
     $props['date']        = 'dateTime';
+    $props['date_realise'] = 'dateTime';
     $props['author_id']   = 'ref class|CUser';
+    $props['author_realise_id'] = 'ref class|CUser';
 
     return $props;
   }
@@ -117,6 +123,18 @@ class CSejourTask extends CMbObject {
   }
 
   /**
+   * Charge l'utilisateur qui a réalisé la tâche
+   *
+   * @return CUser|null
+   */
+  function loadRefAuthorRealise() {
+    $this->_ref_author_realise = $this->loadFwdRef('author_realise_id', true);
+    $this->_ref_author_realise->loadRefMediuser()->loadRefFunction();
+
+    return $this->_ref_author_realise;
+  }
+
+  /**
    * Renseigne les champs date et author_id à partir des User logs
    *
    * @return void
@@ -151,5 +169,28 @@ class CSejourTask extends CMbObject {
         return $at > $bt ? -1 : 1;
       }
     );
+  }
+
+
+  /**
+   * @see parent::store()
+   */
+  function store($reorder = true) {
+
+    // Création d'une alerte si modification du libellé et/ou du côté
+    if ($this->fieldModified("realise", "0")) {
+      $this->date_realise = null;
+      $this->author_realise_id = null;
+    }
+
+    if ($this->fieldModified("realise", "1")) {
+      $this->date_realise = CMbDT::dateTime();
+      $this->author_realise_id = CMediusers::get()->_id;
+    }
+
+    // Standard storage
+    if ($msg = parent::store()) {
+      return $msg;
+    }
   }
 }

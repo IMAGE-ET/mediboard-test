@@ -1,13 +1,12 @@
 <?php
-
 /**
- * $Id$
+ * $Id:$
  *
  * @category Soins
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision$
+ * @version  $Revision:$
  * @link     http://www.mediboard.org
  */
 
@@ -25,6 +24,7 @@ foreach ($sejour->_ref_tasks as $_task) {
   $_task->setDateAndAuthor();
   $_task->loadRefAuthor();
   $_task->loadRefPrescriptionLineElement();
+  $_task->loadRefAuthorRealise();
 }
 
 CSejourTask::sortByDate($sejour->_ref_tasks);

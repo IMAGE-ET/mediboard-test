@@ -108,6 +108,20 @@ class CSetupsoins extends CSetup {
     $query = "INSERT INTO `configuration` (`feature`, `value`) VALUES (?1, ?2)";
     $query = $this->ds->prepare($query, "soins Other default_motif_observation", "Observation d'entrée");
     $this->addQuery($query);
-    $this->mod_version = '0.21';
+    $this->makeRevision('0.21');
+
+    $query = "ALTER TABLE `sejour_task`
+                ADD `date_realise` DATETIME,
+                ADD `author_realise_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `sejour_task`
+                ADD INDEX (`date`),
+                ADD INDEX (`author_id`),
+                ADD INDEX (`date_realise`),
+                ADD INDEX (`author_realise_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.22';
   }
 }

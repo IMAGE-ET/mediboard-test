@@ -1,14 +1,3 @@
-{{*
- * $Id$
- *
- * @category Soins
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision$
- * @link     http://www.mediboard.org
-*}}
-
 {{mb_default var=offline value=0}}
 {{mb_default var=header  value=1}}
 
@@ -48,68 +37,74 @@
   {{if $header}} 
     <thead>
       <tr>
-        <th class="title" colspan="4">
+        <th class="title" colspan="5">
           {{$sejour}}
           {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
         </th>
       </tr>
     </thead>
   {{/if}}
-	<tr>
+  <tr>
     <th colspan="2">Utilisateur / Date</th>
     <th>{{mb_title class="CSejourTask" field="description"}}</th>
-		<th>{{mb_title class="CSejourTask" field="resultat"}}</th>
-		{{if !$readonly}}
+    <th>Utilisateur / Date</th>
+    <th>{{mb_title class="CSejourTask" field="resultat"}}</th>
+    {{if !$readonly}}
       <th></th>
     {{/if}}
-	</tr>
-	{{foreach from=$sejour->_ref_tasks item=_task}}
-	  <tr>
-	  	<td class="narrow"><input type="checkbox" disabled {{if $_task->realise}}checked{{/if}} /></td>
+  </tr>
+  {{foreach from=$sejour->_ref_tasks item=_task}}
+    <tr>
+      <td class="narrow"><input type="checkbox" disabled {{if $_task->realise}}checked{{/if}} /></td>
       <td>
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_task->_ref_author->_ref_mediuser}}
         <br/>
         {{mb_value object=$_task field=date}}
       </td>
-	    <td style="width: 50%; {{if $_task->realise}}text-decoration: line-through; color: #888;{{/if}}">
-	      {{mb_value object=$_task field="description"}}
-			  {{if $_task->prescription_line_element_id}}
-				  <strong>
+      <td style="width: 50%; {{if $_task->realise}}text-decoration: line-through; color: #888;{{/if}}">
+        {{mb_value object=$_task field="description"}}
+        {{if $_task->prescription_line_element_id}}
+          <strong>
             {{$_task->_ref_prescription_line_element}}
             {{if $_task->_ref_prescription_line_element->date_arret && $_task->_ref_prescription_line_element->time_arret}}
               <br />
               Prescription arrêtée le {{mb_value object=$_task->_ref_prescription_line_element field=date_arret}} à {{mb_value object=$_task->_ref_prescription_line_element field=time_arret}}
             {{/if}}
           </strong>
-				{{/if}}
-			</td>
-	    <td style="width: 50%;">{{mb_value object=$_task field="resultat"}}</td>
+        {{/if}}
+      </td>
+      <td>
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_task->_ref_author_realise->_ref_mediuser}}
+        <br/>
+        {{mb_value object=$_task field=date_realise}}
+      </td>
+      <td style="width: 50%;">{{mb_value object=$_task field="resultat"}}</td>
       {{if !$readonly}}
-  			<td class="narrow">
-  				{{if $mode_realisation}}
-  				  <form name="closeTask-{{$_task->_id}}" action="?" method="post" 
-  					      onsubmit="return onSubmitFormAjax(this, function() {
-  								             refreshLineSejour('{{$sejour->_id}}');
-  								             $('tooltip-content-tasks-{{$sejour->_id}}').up('.tooltip').remove();
-  													 });">
-  				  	<input type="hidden" name="m" value="soins" />
-  						<input type="hidden" name="dosql" value="do_sejour_task_aed" />
-  						<input type="hidden" name="del" value="" />
-  						{{mb_key object=$_task}}
-  						<input type="hidden" name="realise" value="1" />
-  				    <button type="submit" class="tick notext"></button>
-  					</form> 
-        	{{else}}
-  				  <button type="button" class="edit notext" onclick="editTask('{{$_task->_id}}');"></button>
-  				{{/if}}
-  			</td>
+        <td class="narrow">
+          {{if $mode_realisation}}
+            <form name="closeTask-{{$_task->_id}}" action="?" method="post" 
+                  onsubmit="return onSubmitFormAjax(this, function() {
+                               refreshLineSejour('{{$sejour->_id}}');
+                               $('tooltip-content-tasks-{{$sejour->_id}}').up('.tooltip').remove();
+                             });">
+              <input type="hidden" name="m" value="soins" />
+              <input type="hidden" name="dosql" value="do_sejour_task_aed" />
+              <input type="hidden" name="del" value="" />
+              {{mb_key object=$_task}}
+              <input type="hidden" name="realise" value="1" />
+              <button type="submit" class="tick notext"></button>
+            </form> 
+          {{else}}
+            <button type="button" class="edit notext" onclick="editTask('{{$_task->_id}}');"></button>
+          {{/if}}
+        </td>
       {{/if}}
-	  </tr>
-	{{foreachelse}}
-	  <tr>
-	  	<td colspan="4" class="empty">
-	  		{{tr}}CSejourTask.none{{/tr}}
-	  	</td>
-	  </tr>
-	{{/foreach}}
+    </tr>
+  {{foreachelse}}
+    <tr>
+      <td colspan="6" class="empty">
+        {{tr}}CSejourTask.none{{/tr}}
+      </td>
+    </tr>
+  {{/foreach}}
 </table>

@@ -1,39 +1,4 @@
-{{*  *}}
-
-{{*
- * @package Mediboard
- * @subpackage soins
- * @version $Revision: 
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
-
 <script>
-  redirectOffline = function(type, embed) {
-    switch(type) {
-      case 'bilan':
-        var url = new Url("soins", "offline_bilan_service");
-        break;
-      case 'plan':
-        var url = new Url("soins", "offline_plan_soins");
-        break;
-      case 'sejour':
-        var url = new Url("soins", "offline_sejours");
-    }
-    
-    url.addParam("service_id", $("service_id").value);
-    url.addParam("dialog", 1);
-
-    if (embed) {
-      url.addParam("embed", 1);
-      url.addParam("_aio", "savefile");
-      url.pop(500, 400, "Vue embarquée");
-    }
-    else {
-      url.redirect();
-    }
-  }
-
   Main.add(function () {
     var tabs = Control.Tabs.create('tabs-configure', true);
     if (tabs.activeLink.key == "CConfigEtab") {
