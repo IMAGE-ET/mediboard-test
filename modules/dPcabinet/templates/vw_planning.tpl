@@ -70,7 +70,7 @@ Main.add(function () {
   var form = getForm("changePrat");
   var url = new Url("mediusers", "ajax_users_autocomplete");
   url.addParam("edit", '1');
-  url.addParam("praticiens", '1');
+  url.addParam("rdv", '1');
   url.addParam("input_field", 'chir_id_view');
   url.autoComplete(form.chir_id_view, null, {
     minChars: 0,

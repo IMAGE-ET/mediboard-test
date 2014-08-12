@@ -15,6 +15,7 @@ $view_field   = CValue::get('view_field', $field);
 $input_field  = CValue::get('input_field', $view_field);
 $show_view    = CValue::get('show_view', 'false') == 'true';
 $praticiens   = CValue::get('praticiens', 0);
+$rdv          = CValue::get('rdv', 0);
 $compta       = CValue::get('compta', 0);
 $edit         = CValue::get('edit', 0);
 $keywords     = CValue::get($input_field);
@@ -23,7 +24,7 @@ $where        = CValue::get('where', array());
 $whereComplex = CValue::get('whereComplex', array());
 $ljoin        = CValue::get("ljoin", array());
 
-/** @var CMbObject $object */
+/** @var CMediusers $object */
 $object = new CMediusers();
 $user = CMediusers::get();
 
@@ -38,11 +39,14 @@ $permType = $edit ?
   PERM_READ;
 
 // Récupération de la liste des utilisateurs
-if ($praticiens) {
+if ($rdv) {
   $listUsers = $object->loadProfessionnelDeSanteByPref($permType, null, $keywords);
 }
+elseif ($praticiens) {
+  $listUsers = $object->loadPraticiens();
+}
 else {
-  $listUsers = $user->loadUsers($permType, null, $keywords);
+  $listUsers = $object->loadUsers($permType, null, $keywords);
 }
 
 if ($compta) {

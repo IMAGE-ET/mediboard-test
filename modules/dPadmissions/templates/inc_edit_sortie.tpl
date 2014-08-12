@@ -25,14 +25,10 @@
 {{assign var=class_sortie_autorise value=""}}
 {{assign var=class_mode_sortie value=""}}
 {{assign var=is_praticien value=$app->_ref_user->isPraticien()}}
-{{assign var=register_field_sortie_prevue value=false}}
 {{assign var=modify_sortie_reelle value=false}}
 
 {{if $modify_sortie_prevue}}
   {{assign var=class_sortie_autorise value="inform-field"}}
-  {{if $pass_to_confirm || !$pass_to_confirm && $is_praticien}}
-    {{assign var=register_field_sortie_prevue value=true}}
-  {{/if}}
 {{else}}
   {{assign var=modify_sortie_reelle value=true}}
   {{assign var=class_mode_sortie value="notNull"}}
@@ -161,7 +157,7 @@
       {{if $module == "dPurgences"}}
         <td>{{mb_value object=$rpu field="sortie_autorisee"}}</td>
       {{else}}
-        <td>{{mb_field object=$sejour field="confirme" register=$register_field_sortie_prevue form=$form_name class=$class_sortie_autorise onchange="if(!this.value){\$('submitForm_sortie').disabled = false;}else{\$('submitForm_sortie').disabled = true;}"}}</td>
+        <td>{{mb_field object=$sejour field="confirme" register=true form=$form_name class=$class_sortie_autorise onchange="if(!this.value){\$('submitForm_sortie').disabled = false;}else{\$('submitForm_sortie').disabled = true;}"}}</td>
       {{/if}}
     </tr>
     <tr id="sortie_transfert_{{$sejour->_id}}" {{if $sejour->mode_sortie != "transfert"}} style="display:none;" {{/if}}>
@@ -294,35 +290,33 @@
           <button type="submit" id="submitForm_sortie" class="save">
             {{tr}}Save{{/tr}}
           </button>
-          {{if $pass_to_confirm || !$pass_to_confirm && $is_praticien}}
-            {{if $sejour->confirme}}
-              <button type="button" class="cancel singleclick"
-                      onclick="{{if $pass_to_confirm && !$is_praticien}}
-                                  $V(this.form.action_confirm, 0);
-                                  Admissions.askconfirm('{{$sejour->_id}}');
-                               {{else}}
-                                 $V(this.form.confirme, ''); $V(this.form.confirme_user_id, '');this.form.onsubmit();
-                               {{/if}}">
-                {{tr}}canceled_exit{{/tr}}
-              </button>
-            {{else}}
-              <button type="button" class="tick singleclick"
-                      onclick="{{if $pass_to_confirm && !$is_praticien}}
-                        $V(this.form.action_confirm, 1);
-                        Admissions.askconfirm('{{$sejour->_id}}');
-                      {{else}}
-                        if (!$V(this.form.confirme)) {
-                          var sortie_prevue = $V(this.form.sortie_prevue);
-                          var sortie_reelle = $V(this.form.sortie_reelle);
-                          var sortie = sortie_reelle ? sortie_reelle : sortie_prevue;
-                          $V(this.form.confirme, sortie);
-                        }
-                        $V(this.form.confirme_user_id, '{{$app->user_id}}');
-                        this.form.onsubmit();
-                      {{/if}}">
-                {{tr}}allowed_exit{{/tr}}
-              </button>
-            {{/if}}
+          {{if $sejour->confirme}}
+            <button type="button" class="cancel singleclick"
+                    onclick="{{if !$is_praticien}}
+                      $V(this.form.action_confirm, 0);
+                      Admissions.askconfirm('{{$sejour->_id}}');
+                    {{else}}
+                      $V(this.form.confirme, ''); $V(this.form.confirme_user_id, '');this.form.onsubmit();
+                    {{/if}}">
+              {{tr}}canceled_exit{{/tr}}
+            </button>
+          {{else}}
+            <button type="button" class="tick singleclick"
+                    onclick="{{if !$is_praticien}}
+                      $V(this.form.action_confirm, 1);
+                      Admissions.askconfirm('{{$sejour->_id}}');
+                    {{else}}
+                      if (!$V(this.form.confirme)) {
+                        var sortie_prevue = $V(this.form.sortie_prevue);
+                        var sortie_reelle = $V(this.form.sortie_reelle);
+                        var sortie = sortie_reelle ? sortie_reelle : sortie_prevue;
+                        $V(this.form.confirme, sortie);
+                      }
+                      $V(this.form.confirme_user_id, '{{$app->user_id}}');
+                      this.form.onsubmit();
+                    {{/if}}">
+              {{tr}}allowed_exit{{/tr}}
+            </button>
           {{/if}}
         </td>
       </tr>
@@ -377,22 +371,35 @@
   <form name="confirmSortie_{{$sejour->_id}}" method="post" action="?m=system&a=ajax_password_action"
         onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close, useFormAction: true})">
     <input type="hidden" name="callback" value="Admissions.afterConfirmPassword.curry({{$sejour->_id}})" />
-    <input type="hidden" name="user_id" class="notNull" value="{{$app->_ref_user->_id}}" />
+    <input type="hidden" name="user_id" class="notNull" value="{{$sejour->_ref_praticien->_id}}" />
     <table class="form">
       <tr>
         <th class="title" colspan="2">
           {{tr}}Confirm-allowed-exit{{/tr}}
         </th>
       </tr>
+      {{if !$pass_to_confirm}}
+        <tr>
+          <td colspan="2" class="button">
+            <button type="button" class="tick"
+                    onclick="Admissions.afterConfirmPassword({{$sejour->_id}}, '{{$app->_ref_user->_id}}'); Control.Modal.close();">
+              {{$app->_ref_user}}
+            </button>
+            <br/>
+            OU
+          </td>
+        </tr>
+      {{/if}}
       <tr>
         <th>{{tr}}CUser-user_username{{/tr}}</th>
         <td>
-          <input type="text" name="_user_view" class="autocomplete" value="{{$app->_ref_user}}" />
+          <input type="text" name="_user_view" class="autocomplete" value="{{$sejour->_ref_praticien}}" />
           <script>
             Main.add(function() {
               var form = getForm("confirmSortie_{{$sejour->_id}}");
               new Url("mediusers", "ajax_users_autocomplete")
                 .addParam("input_field", form._user_view.name)
+                .addParam("praticiens", 1)
                 .autoComplete(form._user_view, null, {
                 minChars: 0,
                 method: "get",
