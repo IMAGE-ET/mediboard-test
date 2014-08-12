@@ -443,6 +443,7 @@ class CPlageOp extends CPlageHoraire {
    */
   function store() {
     $this->updatePlainFields();
+    $this->completeField("chir_id", "spec_id");
 
     $old = new CPlageOp();
     if ($this->_id) {
@@ -509,7 +510,7 @@ class CPlageOp extends CPlageHoraire {
       $this->reorderOp();
     }
 
-    if (!$this->_id) {
+    if (!$this->_id || (!$this->original_owner_id && !$this->original_function_id)) {
       $this->original_owner_id    = $this->chir_id;
       $this->original_function_id = $this->spec_id;
     }
