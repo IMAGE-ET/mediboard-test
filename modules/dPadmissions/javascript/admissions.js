@@ -282,17 +282,17 @@ Admissions = {
   askconfirm : function (sejour_id) {
     Modal.open("confirmSortieModal_"+sejour_id, {
       width: "410px",
-      height: "95px"
+      height: "300px"
     });
   },
 
-  afterConfirmPassword : function (sejour_id) {
+  afterConfirmPassword : function (sejour_id, id_user) {
     var form_sortie = getForm("validerSortie"+sejour_id);
     var form_confirm = getForm("confirmSortie_"+sejour_id);
     //cas de la confirmation de l'autorisation de sortie
-
+    var user_id = id_user || $V(form_confirm.user_id);
     if ($V(form_sortie.action_confirm) == 1) {
-      $V(form_sortie.confirme_user_id, $V(form_confirm.user_id));
+      $V(form_sortie.confirme_user_id, user_id);
       if (!$V(form_sortie.confirme)) {
         var sortie_prevue = $V(form_sortie.sortie_prevue);
         var sortie_reelle = $V(form_sortie.sortie_reelle);
