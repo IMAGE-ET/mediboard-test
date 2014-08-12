@@ -149,7 +149,7 @@ class CPlageconsult extends CPlageHoraire {
     $where["plageconsult_id"] = "= '$this->_id'";
 
     if (!$withCanceled) {
-      $where["annule"] = "= '0'";
+      $where["annule"] = "!= '1'";
     }
 
     if (!$withClosed) {
