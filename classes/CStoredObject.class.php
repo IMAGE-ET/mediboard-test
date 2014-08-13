@@ -622,13 +622,14 @@ class CStoredObject extends CModelObject {
   /**
    * Load all objects for given identifiers
    * 
-   * @param array $ids list of identifiers
-   * 
+   * @param array $ids   list of identifiers
+   * @param array $order Order SQL statement
+   *
    * @return self[] List of objects
    */
-  function loadAll($ids) {
+  function loadAll($ids, $order = null) {
     $where[$this->_spec->key] = CSQLDataSource::prepareIn($ids);
-    return $this->loadList($where);
+    return $this->loadList($where, $order);
   }
   
   /**
