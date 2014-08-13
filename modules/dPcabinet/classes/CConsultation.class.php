@@ -746,11 +746,13 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
    * 11. Déplacement de C2 dans un autre jour (S5 et S3 reste tel quel)
    */
   function store() {
-    $this->completeField('sejour_id', 'heure', 'plageconsult_id', 'si_desistement');
+    $this->completeField('sejour_id', 'heure', 'plageconsult_id', 'si_desistement', 'annule');
 
     if ($this->si_desistement === null) {
       $this->si_desistement = 0;
     }
+
+    $this->annule = $this->annule === null || $this->annule === '' ? 0 : $this->annule;
 
     // Consultation dans un séjour
     $sejour = new CSejour();
