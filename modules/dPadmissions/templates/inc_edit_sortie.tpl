@@ -391,7 +391,7 @@
         </tr>
       {{/if}}
       <tr>
-        <th>{{tr}}CUser-user_username{{/tr}}</th>
+        <th>{{tr}}CSejour-_nomPraticien{{/tr}}</th>
         <td>
           <input type="text" name="_user_view" class="autocomplete" value="{{$sejour->_ref_praticien}}" />
           <script>
