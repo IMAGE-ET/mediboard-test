@@ -216,6 +216,7 @@ class COperation extends CCodable implements IPatientRelated {
   public $_planning_perso;
   public $_libelle_interv;
   public $_rques_interv;
+  public $_ref_chirs = array();
 
   function __construct() {
     parent::__construct();
@@ -1060,6 +1061,32 @@ class COperation extends CCodable implements IPatientRelated {
    */
   function loadRefChir4($cache = true) {
     return $this->_ref_chir_4 = $this->loadFwdRef("chir_4_id", $cache);
+  }
+
+  /**
+   * Chargement de tous les chirurgiens
+   *
+   * @param bool $cache Utilisation du cache
+   *
+   * @return null
+   */
+  function loadRefChirs($cache = true) {
+    if ($this->loadRefChir($cache)->_id) {
+      $this->_ref_chir->loadRefFunction();
+      $this->_ref_chirs["chir_id"] = $this->_ref_chir;
+    }
+    if ($this->loadRefChir2($cache)->_id) {
+      $this->_ref_chir_2->loadRefFunction();
+      $this->_ref_chirs["chir_2_id"] = $this->_ref_chir_2;
+    }
+    if ($this->loadRefChir3($cache)->_id) {
+      $this->_ref_chir_3->loadRefFunction();
+      $this->_ref_chirs["chir_3_id"] = $this->_ref_chir_3;
+    }
+    if ($this->loadRefChir4($cache)->_id) {
+      $this->_ref_chir_4->loadRefFunction();
+      $this->_ref_chirs["chir_4_id"] = $this->_ref_chir_4;
+    }
   }
 
   /**

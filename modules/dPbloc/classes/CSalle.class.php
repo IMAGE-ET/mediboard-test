@@ -1,14 +1,12 @@
 <?php
-
 /**
- * dPbloc
+ * $Id:$
  *
- * @category Bloc
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage dPbloc
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 /**
@@ -192,7 +190,7 @@ class CSalle extends CMbObject {
 
       foreach ($_plage->_ref_operations as $operation) {
         $operation->loadRefAnesth();
-        $operation->loadRefChir();
+        $operation->loadRefChirs();
         $operation->loadRefPatient();
         $operation->loadExtCodesCCAM();
         $operation->loadRefPlageOp();
@@ -230,7 +228,7 @@ class CSalle extends CMbObject {
 
     foreach ($this->_ref_deplacees as $_deplacee) {
       /** @var COperation $_deplacee */
-      $_deplacee->loadRefChir();
+      $_deplacee->loadRefChirs();
       $_deplacee->loadRefPatient();
       $_deplacee->loadExtCodesCCAM();
       $_deplacee->loadRefPlageOp();
@@ -255,7 +253,7 @@ class CSalle extends CMbObject {
 
     foreach ($this->_ref_urgences as $_urgence) {
       /** @var COperation $_urgence */
-      $_urgence->loadRefChir();
+      $_urgence->loadRefChirs();
       $_urgence->loadRefPatient();
       $_urgence->loadExtCodesCCAM();
       $_urgence->loadRefPlageOp();

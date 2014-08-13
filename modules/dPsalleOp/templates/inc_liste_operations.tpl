@@ -1,9 +1,3 @@
-{{** 
-  * @param $urgence bool Urgence mode
-  * @param $vueReduite bool Affichage compact
-  * @param $operations array|COperation interventions à afficher
-  *}}
-
 {{mb_default var="redirect_tab" value="0"}}
 
 <!-- Entêtes -->
@@ -115,6 +109,42 @@
           {{if $salle}}
             </a>
           {{/if}}
+
+          {{if $_operation->_ref_chirs|@count > 1}}
+            <span class="noteDiv" onmouseover="ObjectTooltip.createDOM(this, 'chirs_{{$_operation->_guid}}');">
+              <button class="user notext">Chirurgiens multiples</button>
+              <span class="countertip" style="margin-top:2px;">
+                {{$_operation->_ref_chirs|@count}}
+              </span>
+            </span>
+            <div style="display:none;" id="chirs_{{$_operation->_guid}}">
+              <table class="main form">
+                <tr>
+                  <th colspan="2" class="title">
+                    Intervention
+                    {{if !$_operation->plageop_id}}[HP]{{/if}}
+                    le {{$_operation->_datetime|date_format:$conf.date}}
+                    {{if $_operation->_ref_patient}}de {{$_operation->_ref_patient}}{{/if}}</th>
+                </tr>
+                {{foreach from=$_operation->_ref_chirs key=key_chir item=_chir}}
+                  <tr>
+                    <th>{{mb_label object=$_operation field=$key_chir}}</th>
+                    <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_chir}}</td>
+                  </tr>
+                {{/foreach}}
+                {{if $_operation->_ref_anesth->_id}}
+                  <tr>
+                    <td colspan="2"><hr style="width: 50%;"/></td>
+                  </tr>
+                  <tr>
+                    <th>{{mb_label object=$_operation field=anesth_id}}</th>
+                    <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_anesth}}</td>
+                  </tr>
+                {{/if}}
+              </table>
+            </div>
+          {{/if}}
+
           {{if $vueReduite && $systeme_materiel == "expert"}}
             <button class="print notext not-printable" onclick="printFicheBloc({{$_operation->_id}})">{{tr}}Print{{/tr}}</button>
             {{if $urgence && $salle && $_operation->_ref_besoins|@count}}
