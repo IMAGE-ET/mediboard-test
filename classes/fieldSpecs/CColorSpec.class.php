@@ -42,7 +42,7 @@ class CColorSpec extends CMbFieldSpec {
 
     $reset_value = $this->notNull ? $default_color : "";
 
-    $value = (!$value && ($this->notNull || $this->default)) ? $default_color : "";
+    $value = (!$value && ($this->notNull || $this->default)) ? $default_color : $value;
 
     $sHtml = "
     <input type=\"text\" class=\"color_picker\" name=\"$field\" value=\"$value\" $extra />
