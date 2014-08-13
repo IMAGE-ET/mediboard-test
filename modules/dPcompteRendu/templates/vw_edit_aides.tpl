@@ -28,7 +28,6 @@
   }
 
   editAideCallback = function(id) {
-    Control.Modal.close();
     editAide(id, {{$aide->class|@json}}, {{$aide->field|@json}}, {{$user->_id|@json}});
   }
 
