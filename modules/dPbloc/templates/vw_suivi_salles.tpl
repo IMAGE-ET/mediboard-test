@@ -34,7 +34,7 @@
       url.addParam('bloc_id', bloc_id);
       url.addParam('date', date);
       var str = DateFormat.format(Date.fromDATE(date), " dd/MM/yyyy");
-      if (date == '{{$date}}') {
+      if (date == '{{$dnow}}') {
         str= str+" (Aujourd'hui)";
       }
       $('dateSuiviSalle').update(str);
