@@ -72,6 +72,7 @@ $sejour = new CSejour();
 if ($sejour_id && !$operation_id) {
   $sejour->load($sejour_id);
   $sejour->loadRefsFwd();
+  $sejour->loadRefCurrAffectation()->loadRefService();
   if (!$chir_id) {
     $chir = $sejour->_ref_praticien;
   }

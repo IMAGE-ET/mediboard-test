@@ -3234,6 +3234,9 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     $this->loadRefsOperations();
     foreach ($this->_ref_operations as $_operation) {
+      if ($_operation->annulee) {
+        continue;
+      }
       $_operation->loadRefPlageOp();
       $this->_jour_op[$_operation->_id]["operation_guid"] = $_operation->_guid;
       $this->_jour_op[$_operation->_id]["jour_op"] = CMbDT::daysRelative(CMbDT::date($_operation->_datetime), $date);

@@ -41,6 +41,8 @@ else {
 $sejour->makeDatesOperations();
 $sejour->loadNDA();
 
+$sejour->loadRefCurrAffectation()->loadRefService();
+
 $patient->loadRefsFwd();
 $patient->loadRefsCorrespondants();
 $patient->loadRefsCorrespondantsPatient();
