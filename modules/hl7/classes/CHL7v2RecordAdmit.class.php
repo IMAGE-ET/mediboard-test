@@ -1598,7 +1598,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       }
 
       // Si on a pas d'UF on retourne une affectation vide
-      if (!$uf->_id) {
+      if (!$uf->_id || !$affectation_uf->_id) {
         return $affectation;
       }
     }
