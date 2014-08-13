@@ -169,7 +169,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
       return false;
     }
 
-    $this->_eai_sender_guid = $mbObject->_eai_sender_guid;
+    $mbObject->_eai_sender_guid = $this->_eai_sender_guid;
 
     if (!$mbObject->_ref_last_log && $mbObject->_class != "CIdSante400") {
       return false;
