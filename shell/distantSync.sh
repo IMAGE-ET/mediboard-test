@@ -43,7 +43,7 @@ destination=$3
 dir_dest=$(echo $location | cut -d'@' -f2)
 
 # Backups directory
-rsync -e "ssh -p $port" -avzPL $location:$directory $destination/$dir_dest --exclude-from=$BASH_PATH/distantSync.exclude
+rsync -e "ssh -p $port" -avzP --copy-unsafe-links $location:$directory $destination/$dir_dest --exclude-from=$BASH_PATH/distantSync.exclude
 check_errs $? "Failed to rsync Backups directory" "Succesfully rsync-ed Backups directory!"
 
 if [ -n "$passphrase" ]; then
