@@ -59,6 +59,9 @@
     url.addParam("function_id", "{{$function->_id}}");
     url.addParam("praticien_id", "{{$praticien->_id}}");
     url.addParam("show_affectation", '{{$show_affectation}}');
+    {{if !$ecap}}
+      url.addParam("select_view", 1);
+    {{/if}}
     url.requestUpdate("line_sejour_"+sejour_id, { onComplete: function(){
       {{if "dPImeds"|module_active}}
       ImedsResultsWatcher.loadResults();
