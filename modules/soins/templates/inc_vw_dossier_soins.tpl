@@ -169,7 +169,6 @@
   openSurveillanceTab = function() {
     var elt = $$('a[href="#constantes-medicales"]')[0];
     elt.click();
-    elt.up('li').onmousedown();
   }
 
   // Cette fonction est dupliquée

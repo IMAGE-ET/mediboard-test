@@ -212,9 +212,37 @@
     Prescription.mode_pharma = "{{$mode_pharma}}";
     File.use_mozaic = 1;
 
-    tab_sejour = Control.Tabs.create('tab-sejour');
+    tab_sejour = Control.Tabs.create('tab-sejour', false, {
+      afterChange: function(container) {
+        switch (container.id) {
+          case 'suivi_clinique':
+            loadSuiviClinique();
+            break;
+          case 'constantes-medicales':
+            loadConstantes();
+            break;
+          case 'dossier_traitement':
+            loadSuiviSoins();
+            break;
+          case 'prescription_sejour':
+            loadPrescription();
+            break;
+          case 'Actes':
+            loadActes({{$sejour->_id}}, {{$sejour->_ref_praticien->_id}});
+            break;
+          case 'Imeds':
+            loadResultLabo('{{$sejour->_id}}');
+            break;
+          case 'docs':
+            loadDocuments();
+            break;
+          case 'antecedents':
+            loadAntecedents();
+            break;
+        }
+      }
+    });
     tab_sejour.setActiveTab('{{$default_tab}}');
-    tab_sejour.activeLink.onmousedown();
 
     {{if $app->user_prefs.ccam_sejour == 1 }}
       var tab_actes = Control.Tabs.create('tab-actes', false);
@@ -241,20 +269,20 @@
         <button type="button" class="hslip notext compact" style="vertical-align: bottom; float: left;" onclick="toggleListSejour();" title="Afficher/cacher la colonne de gauche"></button>
       </li>
     {{/if}}
-    <li><a href="#suivi_clinique" onmousedown="loadSuiviClinique();">{{tr}}CSejour.suivi_clinique{{/tr}}</a></li>
-    <li><a href="#constantes-medicales" onmousedown="loadConstantes();">{{tr}}CPatient.surveillance{{/tr}}</a></li>
-    <li><a href="#dossier_traitement" onmousedown="loadSuiviSoins();">{{tr}}CSejour.suivi_soins{{/tr}}</a></li>
+    <li><a href="#suivi_clinique">{{tr}}CSejour.suivi_clinique{{/tr}}</a></li>
+    <li><a href="#constantes-medicales">{{tr}}CPatient.surveillance{{/tr}}</a></li>
+    <li><a href="#dossier_traitement">{{tr}}CSejour.suivi_soins{{/tr}}</a></li>
     {{if $isPrescriptionInstalled}}
-      <li><a href="#prescription_sejour" onmousedown="loadPrescription();">{{tr}}soins.tab.Prescription{{/tr}}</a></li>
+      <li><a href="#prescription_sejour">{{tr}}soins.tab.Prescription{{/tr}}</a></li>
     {{/if}}
     {{if $app->user_prefs.ccam_sejour == 1 }}
-      <li><a href="#Actes" onmousedown="loadActes({{$sejour->_id}}, {{$sejour->_ref_praticien->_id}});">{{tr}}CCodable-actes{{/tr}}</a></li>
+      <li><a href="#Actes">{{tr}}CCodable-actes{{/tr}}</a></li>
     {{/if}}
     {{if $isImedsInstalled}}
-      <li><a href="#Imeds" onmousedown="loadResultLabo('{{$sejour->_id}}');">Labo</a></li>
+      <li><a href="#Imeds">Labo</a></li>
     {{/if}}
-    <li><a href="#docs" onmousedown="loadDocuments();">{{tr}}CMbObject-back-documents{{/tr}}</a></li>
-    <li><a href="#antecedents" onmousedown="loadAntecedents();">{{tr}}IDossierMedical-back-antecedents{{/tr}}</a></li>
+    <li><a href="#docs">{{tr}}CMbObject-back-documents{{/tr}}</a></li>
+    <li><a href="#antecedents">{{tr}}IDossierMedical-back-antecedents{{/tr}}</a></li>
     <li style="float: right">
       {{if "telemis"|module_active}}
         {{mb_include module=telemis template=inc_viewer_link patient=$sejour->_ref_patient label="Imagerie" button=true class="imagerie"}}
