@@ -59,7 +59,7 @@
                 <input type="hidden" name="sortie" value="{{$_sejour->sortie_prevue}}" />
                 <input type="hidden" name="lit_id" value="" />
               </form>
-              <span style="color: #A33;" onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');" >{{$_patient->nom}} {{$_patient->prenom}}</span>
+              <span style="color: #A33;" onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');" >{{$_patient}}</span>
               <div class="ssr-sejour-bar" title="arrivée il y a {{$_sejour->_entree_relative}}j et départ prévu dans {{$_sejour->_sortie_relative}}j ">                
               <div style="width: {{if $_sejour->_duree}}{{math equation='100*(-entree / (duree))' entree=$_sejour->_entree_relative duree=$_sejour->_duree format='%.2f'}}{{else}}100{{/if}}%;"></div>
               </div>
