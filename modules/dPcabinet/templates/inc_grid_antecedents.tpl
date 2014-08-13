@@ -1,105 +1,109 @@
-<script type="text/javascript">
-function addAntecedent(event, rques, type, appareil, input) {
-  if (event && event.ctrlKey) {
-    window.save_params = { 'input': input, 'type': type, 'appareil': appareil};
-    var complete_atcd = $('complete_atcd');
-    $V(complete_atcd.down("textarea"), rques);
-    Modal.open(complete_atcd);
-    return;
-  }
-  if (window.opener) {
-    var oForm = window.opener.getForm('editAntFrm');
-    if (oForm) {
-      oForm.rques.value = rques;
-      oForm.type.value = type;
-      oForm.appareil.value = appareil;
-      window.opener.onSubmitAnt(oForm);
-      
-      //input.checked = 'checked';
-      input.disabled = 'disabled';
-      
-      $(input).up('td').setStyle({cursor: 'default', opacity: 0.3});
+<script>
+  function addAntecedent(event, rques, type, appareil, input) {
+    if (event && event.ctrlKey) {
+      window.save_params = { 'input': input, 'type': type, 'appareil': appareil};
+      var complete_atcd = $('complete_atcd');
+      $V(complete_atcd.down("textarea"), rques);
+      Modal.open(complete_atcd);
+      return;
     }
+    if (window.opener) {
+      var oForm = window.opener.getForm('editAntFrm');
+      if (oForm) {
+        if ($V(oForm._patient_id) != "{{$patient->_id}}") {
+          alert("Veuillez fermer cette fenêtre, elle ne concerne pas ce patient.");
+          input.checked = false;
+          return;
+        }
+        oForm.rques.value = rques;
+        oForm.type.value = type;
+        oForm.appareil.value = appareil;
+        window.opener.onSubmitAnt(oForm);
+
+        //input.checked = 'checked';
+        input.disabled = 'disabled';
+
+        $(input).up('td').setStyle({cursor: 'default', opacity: 0.3});
+      }
+    }
+    window.focus();
   }
-  window.focus();
-}
 
-var oFormAntFrmGrid;
+  var oFormAntFrmGrid;
 
-Main.add(function () {
-  Control.Tabs.create('tab-antecedents', false);
-  
-  var oFormAnt = window.opener.document.editAntFrm;
-  oFormAntFrmGrid = document.editAntFrmGrid;
-  $V(oFormAntFrmGrid._patient_id,  oFormAnt._patient_id.value);
-  if(oFormAnt._sejour_id){
-    $V(oFormAntFrmGrid._sejour_id,  oFormAnt._sejour_id.value);
-  }
-  
-  $$(".droppable").each(function(li) {
-    Droppables.add(li, {
-      onDrop: function(from, to, event) {
-        var parent = from.up("ul");
-        if (parent != to.up("ul") || !to) {
-          return;
-        }
-        // S'ils sont côte à côte, juste insérer le premier après le deuxième
-        if (from.next("li") == to) {
-          from = from.remove();
-          to.insert({after: from});
-          return;
-        }
-        if (from.previous("li") == to) {
-          from = from.remove();
-          to.insert({before: from});
-          return;
-        }
-        
-        // Sinon on sauvegarde la position et on insère
-        // Cas du dernier élément
-        var next = from.next("li");
-        if (next) {
-          from = from.remove();
-          to.insert({before: from});
-          to = to.remove();
-          next.insert({before: to});
-          return;
-        }
-        
-        var previous = from.previous("li");
-        if (previous) {
-          from = from.remove();
-          to.insert({after: from});
-          to = to.remove();
-          previous.insert({after: to});
-          return;
-        } 
-      },
-      accept: 'draggable',
-      hoverclass: "atcd_hover"
+  Main.add(function () {
+    Control.Tabs.create('tab-antecedents', false);
+
+    var oFormAnt = window.opener.document.editAntFrm;
+    oFormAntFrmGrid = document.editAntFrmGrid;
+    $V(oFormAntFrmGrid._patient_id,  oFormAnt._patient_id.value);
+    if(oFormAnt._sejour_id){
+      $V(oFormAntFrmGrid._sejour_id,  oFormAnt._sejour_id.value);
+    }
+
+    $$(".droppable").each(function(li) {
+      Droppables.add(li, {
+        onDrop: function(from, to, event) {
+          var parent = from.up("ul");
+          if (parent != to.up("ul") || !to) {
+            return;
+          }
+          // S'ils sont côte à côte, juste insérer le premier après le deuxième
+          if (from.next("li") == to) {
+            from = from.remove();
+            to.insert({after: from});
+            return;
+          }
+          if (from.previous("li") == to) {
+            from = from.remove();
+            to.insert({before: from});
+            return;
+          }
+
+          // Sinon on sauvegarde la position et on insère
+          // Cas du dernier élément
+          var next = from.next("li");
+          if (next) {
+            from = from.remove();
+            to.insert({before: from});
+            to = to.remove();
+            next.insert({before: to});
+            return;
+          }
+
+          var previous = from.previous("li");
+          if (previous) {
+            from = from.remove();
+            to.insert({after: from});
+            to = to.remove();
+            previous.insert({after: to});
+            return;
+          }
+        },
+        accept: 'draggable',
+        hoverclass: "atcd_hover"
+      });
     });
-  });
-  
-  $$(".draggable").each(function(li) {
-    new Draggable(li, {
-      onEnd: function() {
-        var form = getForm("editPref");
-        var pref_tabs ={};
-        
-        $("tab-antecedents").select("a").each(function(a) {
-          
-          var appareils = $(a.href.split("#")[1]).select("a").invoke("get", "appareil").join("|");
-          var type = a.get("type");
-          pref_tabs[type] = appareils;
-        });
-        
-        $V(form.elements["pref[order_mode_grille]"], Object.toJSON(pref_tabs));
-        onSubmitFormAjax(form);
-      },
-      revert: true });
-    });
-  });
 
+    $$(".draggable").each(function(li) {
+      new Draggable(li, {
+        onEnd: function() {
+          var form = getForm("editPref");
+          var pref_tabs ={};
+
+          $("tab-antecedents").select("a").each(function(a) {
+
+            var appareils = $(a.href.split("#")[1]).select("a").invoke("get", "appareil").join("|");
+            var type = a.get("type");
+            pref_tabs[type] = appareils;
+          });
+
+          $V(form.elements["pref[order_mode_grille]"], Object.toJSON(pref_tabs));
+          onSubmitFormAjax(form);
+        },
+        revert: true });
+      });
+    });
 </script>
 
 <form name="editPref" method="post">
