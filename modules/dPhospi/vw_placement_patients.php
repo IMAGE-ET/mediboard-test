@@ -44,7 +44,7 @@ if (!$services_ids) {
 }
 
 $service = new CService();
-$services = $service->loadAll($services_ids);
+$services = $service->loadAll($services_ids, "nom");
 
 $services_noms = array();
 foreach ($services as $serv) {
