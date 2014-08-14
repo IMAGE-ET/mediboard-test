@@ -76,7 +76,13 @@ $where = array();
 $where["externe"]   = "= '0'";
 $where["cancelled"] = "= '0'";
 $service = new CService();
-$services = $service->loadGroupList($where);
+
+if ($_is_praticien) {
+  $services = $service->loadGroupList($where);
+}
+else {
+  $services = $service->loadListWithPerms(PERM_READ, $where);
+}
   
 $changeSejour = CValue::get("service_id") || CValue::get("praticien_id");
 $changeSejour = $changeSejour || (!$service_id && !$praticien_id);
