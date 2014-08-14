@@ -53,8 +53,12 @@
     border-top:solid 1px #ccc!important;
   }
 
+  .plage_planning:hover {
+    z-index: 100;
+  }
 
 </style>
+
   {{if $can->edit && ($nbIntervNonPlacees || $nbIntervHorsPlage || $nbAlertesInterv)}}
   <div class="warning" style="margin:0 auto">
     <a href="#nothing" onclick="showAlerte('{{$date_planning}}', '{{$bloc_id}}', 'day', 1)">
