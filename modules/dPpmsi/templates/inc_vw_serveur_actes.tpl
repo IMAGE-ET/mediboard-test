@@ -7,14 +7,24 @@
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  *}}
+
 <script>
-Main.add(function () {
-  {{foreach from=$sejour->_ref_operations item=curr_op}}
-    PMSI.loadExportActes('{{$curr_op->_id}}', 'COperation');
-  {{/foreach}}
-  Control.Tabs.create('tabs-codable');
-});
+
+  reloadActes = function(operation_id) {
+    var url = new Url("salleOp", "ajax_refresh_actes");
+    url.addParam("operation_id", operation_id);
+    url.requestUpdate("codage_actes-" + operation_id);
+  };
+
+  Main.add(function () {
+    {{foreach from=$sejour->_ref_operations item=curr_op}}
+      PMSI.loadExportActes('{{$curr_op->_id}}', 'COperation');
+      reloadActes({{$curr_op->_id}});
+    {{/foreach}}
+    Control.Tabs.create('tabs-codable');
+  });
 </script>
+
 <table>
   <tr>
     <td style="white-space:nowrap;" class="narrow">
@@ -43,6 +53,7 @@ Main.add(function () {
       </ul>
     </td>
     <td>
+      {{assign var=do_subject_aed value="do_sejour_aed"}}
       {{foreach from=$sejour->_ref_operations item=curr_op}}
       <div id="{{$curr_op->_guid}}" style="display: none;">
         <table class="form">
@@ -130,15 +141,8 @@ Main.add(function () {
             </tr>
           {{/if}}
           <tr>
-            <td class="button" colspan="4">
-              <a class="button edit" href="?m=dPpmsi&amp;tab=edit_actes&amp;operation_id={{$curr_op->operation_id}}">
-                Modifier les actes
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="4" id="modifActes-{{$curr_op->_id}}">
-              {{mb_include template="inc_confirm_actes_ccam" objet=$curr_op}}
+            <td colspan="4" id="codage_actes-{{$curr_op->_id}}">
+              {{*mb_include module="salleOp" template="inc_codage_ccam" subject=$curr_op*}}
             </td>
           </tr>
           {{if ($conf.dPpmsi.systeme_facturation == "siemens")}}

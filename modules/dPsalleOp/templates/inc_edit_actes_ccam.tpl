@@ -80,7 +80,7 @@
           {{assign var="acte" value=$_phase->_connected_acte}}
           {{assign var="view" value=$acte->_id|default:$acte->_view}}
           {{assign var="key" value="$_key$view"}}
-          <form name="formActe-{{$view}}" action="?m={{$module}}" method="post" onsubmit="return checkForm(this)">
+          <form name="formActe-{{$view}}" action="?" method="post" onsubmit="return checkForm(this)">
           <input type="hidden" name="m" value="dPsalleOp" />
           <input type="hidden" name="dosql" value="do_acteccam_aed" />
           <input type="hidden" name="del" value="0" />

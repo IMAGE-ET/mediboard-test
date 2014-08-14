@@ -14,8 +14,7 @@ ActesCCAM = {
       loadSejour(subject_id);
     }
     url_actes = new Url;
-    url_actes.addParam("chir_id", chir_id);  
-    url_actes.addParam("module","{{$module}}");
+    url_actes.addParam("chir_id", chir_id);
     url_actes.addParam("do_subject_aed","{{$do_subject_aed}}");
     url_actes.addParam("object_class", "{{$object->_class}}");
     url_actes.addParam("object_id", subject_id);
@@ -70,7 +69,7 @@ ActesCCAM = {
     var oCcamField = new TokenField(oForm.codes_ccam);
     if(oForm._selCode.value == 0){
       alert("Aucun code selectionné");
-      return false;
+      return;
     }
     if(oCcamField.remove(oForm._selCode.value)){
       submitFormAjax(oForm, 'systemMsg', oDefaultOptions);

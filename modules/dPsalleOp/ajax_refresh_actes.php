@@ -9,7 +9,6 @@
  * @version    $Revision$
  */
 
-$module       = CValue::getOrSession("module", "dPsalleOp");
 $operation_id = CValue::getOrSession("operation_id", 0);
 
 $operation = new COperation();
@@ -57,8 +56,6 @@ $smarty->assign("liste_dents"  , $liste_dents);
 $smarty->assign("subject"      , $operation);
 $smarty->assign("listAnesths"  , $listAnesths);
 $smarty->assign("listChirs"    , $listChirs);
-$smarty->assign("module"       , $module);
-$smarty->assign("m"            , $module);
 $smarty->assign("_is_dentiste" , $operation->_ref_chir->isDentiste());
 
 $smarty->display("inc_codage_actes.tpl");

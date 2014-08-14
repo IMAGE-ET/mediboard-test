@@ -91,14 +91,30 @@ foreach ($sejour->_ref_operations as $_operation) {
   $_operation->countDocItems();
   $_operation->loadRefsActes();
   $_operation->canDo();
-  foreach ($_operation->_ref_actes_ccam as $_acte) {
-    $_acte->loadRefExecutant();
-    $_acte->loadRefCodeCCAM();
-    if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
-      $codage_ccam = CCodageCCAM::get($_operation, $_acte->executant_id);
-      $codage_ccam->guessAssociation($_acte);
+  if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+    $_operation->_ref_sejour->loadRefsFwd();
+    foreach ($_operation->_ext_codes_ccam as $key => $value) {
+      $_operation->_ext_codes_ccam[$key] = CDatedCodeCCAM::get($value->code);
     }
-    else {
+    $_operation->getAssociationCodesActes();
+    $_operation->loadPossibleActes();
+    $_operation->_ref_plageop->loadRefsFwd();
+    $_operation->loadRefPraticien();
+
+    // Chargement des règles de codage
+    $_operation->loadRefsCodagesCCAM();
+    foreach ($_operation->_ref_codages_ccam as $_codage) {
+      $_codage->loadPraticien()->loadRefFunction();
+      $_codage->loadActesCCAM();
+      foreach ($_codage->_ref_actes_ccam as $_acte) {
+        $_acte->getTarif();
+      }
+    }
+  }
+  else {
+    foreach ($_operation->_ref_actes_ccam as $_acte) {
+      $_acte->loadRefExecutant();
+      $_acte->loadRefCodeCCAM();
       $_acte->guessAssociation();
     }
   }

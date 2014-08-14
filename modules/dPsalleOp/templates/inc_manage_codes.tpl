@@ -179,7 +179,7 @@
     <td>
       <fieldset id="didac_inc_manage_codes_fieldset_code">
         <legend id="didac_actes_ccam_execution">Ajouter un code</legend>
-        <form name="manageCodes" action="?m={{$module}}" method="post">
+        <form name="manageCodes" action="?" method="post">
           <input type="hidden" name="m" value="{{$subject->_ref_module->mod_name}}" />
           <input type="hidden" name="dosql" value="{{$do_subject_aed}}" />
           <input type="hidden" name="{{$subject->_spec->key}}" value="{{$subject->_id}}" />
@@ -232,7 +232,7 @@
                     {{assign var="acte" value=$_phase->_connected_acte}}
                     {{assign var="view" value=$acte->_id|default:$acte->_view}}
                     {{assign var="key" value="$_key$view"}}
-                    <form name="formActe-{{$view}}" action="?m={{$module}}" method="post" onsubmit="return checkForm(this)">
+                    <form name="formActe-{{$view}}" action="?" method="post" onsubmit="return checkForm(this)">
                       <input type="hidden" name="m" value="dPsalleOp" />
                       <input type="hidden" name="dosql" value="do_acteccam_aed" />
                       <input type="hidden" name="del" value="0" />
@@ -297,7 +297,7 @@
       <td class="halfPane">
         <fieldset id="didac_inc_manage_codes_fieldset_code">
           <legend id="didac_actes_ccam_execution">Ajouter un code</legend>
-          <form name="manageCodes" action="?m={{$module}}" method="post">
+          <form name="manageCodes" action="?" method="post">
             <input type="hidden" name="m" value="{{$subject->_ref_module->mod_name}}" />
             <input type="hidden" name="dosql" value="{{$do_subject_aed}}" />
             <input type="hidden" name="{{$subject->_spec->key}}" value="{{$subject->_id}}" />
@@ -345,7 +345,7 @@
               </tr>
             </table>
           {{/if}}
-          {{if ($module == "dPsalleOp" || $module == "dPhospi") && $conf.dPsalleOp.CActeCCAM.signature}}
+          {{if $conf.dPsalleOp.CActeCCAM.signature}}
             {{if $subject instanceof COperation && $subject->cloture_activite_1 && $subject->cloture_activite_4}}
               <button class="tick" disabled="disabled">Signer les actes</button>
             {{else}}

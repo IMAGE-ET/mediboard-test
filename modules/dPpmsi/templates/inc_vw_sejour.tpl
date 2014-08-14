@@ -13,6 +13,7 @@
 {{mb_script module="dPcompteRendu"  script="modele_selector"}}
 {{mb_script module="files"          script="file"}}
 {{mb_script module="dPpmsi"         script="PMSI" ajax=$ajax}}
+{{mb_script module="dPplanningOp"   script="ccam_selector"}}
 
 {{if @$sejour->_id}}
   <script>

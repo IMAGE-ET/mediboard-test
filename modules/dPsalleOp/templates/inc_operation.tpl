@@ -70,13 +70,13 @@
     var url = new Url("cabinet", "print_fiche");
     url.addParam("dossier_anesth_id", dossier_anesth_id);
     url.popup(700, 500, "printFiche");
-  }
+  };
 
   submitTiming = function(oForm) {
     onSubmitFormAjax(oForm, function() {
       reloadTiming($V(oForm.operation_id));
     });
-  }
+  };
 
   reloadTiming = function(operation_id) {
     {{if $object->_id}}
@@ -84,12 +84,12 @@
     url.addParam("operation_id", operation_id);
     url.requestUpdate("timing", ActesCCAM.refreshList.curry({{$object->_id}},{{$object->_praticien_id}}));
     {{/if}}
-  }
+  };
 
   reloadTimingTab = function() {
     reloadTiming('{{$selOp->_id}}');
     reloadPersonnel('{{$selOp->_id}}');
-  }
+  };
 
   submitAnesth = function(oForm) {
     onSubmitFormAjax(oForm, function() {
@@ -102,7 +102,7 @@
         $V(formVisite.prat_visite_anesth_id, $V(oForm.anesth_id));
       }
     });
-  }
+  };
 
   reloadAnesth = function(operation_id) {
     var url = new Url("salleOp", "httpreq_vw_anesth");
@@ -113,14 +113,14 @@
       }
       ActesCCAM.refreshList(operation_id,"{{$selOp->chir_id}}");
     });
-  }
+  };
 
   reloadDiagnostic = function(sejour_id, modeDAS) {
     var url = new Url("salleOp", "httpreq_diagnostic_principal");
     url.addParam("sejour_id", sejour_id);
     url.addParam("modeDAS", modeDAS);
     url.requestUpdate("cim");
-  }
+  };
 
   reloadPersonnel = function(operation_id) {
     var url = new Url("salleOp", "httpreq_vw_personnel");
@@ -132,25 +132,25 @@
     var url = new Url("cabinet", "httpreq_vw_antecedents");
     url.addParam("sejour_id","{{$selOp->sejour_id}}");
     url.requestUpdate("antecedents");
-  }
+  };
 
   reloadBloodSalvage = function() {
     var url = new Url("bloodSalvage", "httpreq_vw_bloodSalvage");
     url.addParam("op","{{$selOp->_id}}");
     url.requestUpdate("bloodsalvage_form");
-  }
+  };
 
   reloadImeds = function() {
     var url = new Url("Imeds", "httpreq_vw_sejour_results");
     url.addParam("sejour_id", "{{$sejour->_id}}");
     url.requestUpdate('Imeds_tab');
-  }
+  };
 
   reloadActes = function() {
     var url = new Url("salleOp", "ajax_refresh_actes");
     url.addParam("operation_id", "{{$selOp->_id}}");
     url.requestUpdate("codage_actes");
-  }
+  };
 
   var constantesMedicalesDrawn = false;
   refreshConstantesHack = function(sejour_id) {
@@ -160,7 +160,7 @@
         constantesMedicalesDrawn = true;
       }
     }).delay(0.5);
-  }
+  };
 
   refreshConstantesMedicales = function(context_guid) {
     if (context_guid) {
@@ -171,11 +171,11 @@
       }
       url.requestUpdate("constantes-medicales");
     }
-  }
+  };
 
   reloadPrescription = function(prescription_id) {
     Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null);
-  }
+  };
 
   reloadSurveillancePerop = function() {
     if($('surveillance_perop')){
@@ -183,11 +183,11 @@
       url.addParam("operation_id","{{$selOp->_id}}");
       url.requestUpdate("surveillance_perop");
     }
-  }
+  };
 
   confirmeCloture = function() {
     return confirm("Action irréversible. Seul le service PSMI pourra modifier le codage de vos actes. Confirmez-vous la cloture de votre cotation pour aujourd'hui ?");
-  }
+  };
 
   Main.add(function() {
     // Sauvegarde de l'operation_id selectionné (utile pour l'ajout de DMI dans la prescription)
@@ -246,7 +246,7 @@
     var url = new Url("dPsalleOp", "print_feuille_bloc");
     url.addParam("operation_id", interv_id);
     url.popup(700, 700, 'FeuilleBloc');
-  }
+  };
 
   loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
     if (sejour_id) {
@@ -265,7 +265,7 @@
       }
       urlSuivi.requestUpdate("dossier_suivi");
     }
-  }
+  };
 
   submitSuivi = function(oForm) {
     sejour_id = $V(oForm.sejour_id);
@@ -276,7 +276,7 @@
         PlanSoins.loadTraitement(sejour_id, "{{$date}}", "", "administration");
       }
     });
-  }
+  };
 
   createObservationResultSet = function(object_guid, pack_id) {
     if($('surveillance_perop')){
@@ -287,7 +287,7 @@
         onClose: reloadSurveillancePerop
       });
     }
-  }
+  };
 
   editObservationResultSet = function(result_set_id, pack_id, result_id) {
     if($('surveillance_perop')){
@@ -299,7 +299,7 @@
         onClose: reloadSurveillancePerop
       });
     }
-  }
+  };
 
   loadPosesDispVasc = function() {
     var url = new Url("planningOp", "ajax_list_pose_disp_vasc");
@@ -307,13 +307,13 @@
     url.addParam("sejour_id",    "{{$selOp->sejour_id}}");
     url.addParam("operateur_ids", "{{$operateurs_disp_vasc}}");
     url.requestUpdate("list-pose-dispositif-vasculaire");
-  }
+  };
 
   refreshGrossesse = function(operation_id) {
     var url = new Url("maternite", "ajax_vw_grossesse");
     url.addParam('operation_id', operation_id);
     url.requestUpdate('grossesse');
-  }
+  };
 
   infoAnapath = function(field) {
     if ($V(field) == 1) {
@@ -322,7 +322,7 @@
       url.requestModal();
     }
     onSubmitFormAjax(field.form);
-  }
+  };
 
   infoBacterio = function(field) {
     if ($V(field) == 1) {
