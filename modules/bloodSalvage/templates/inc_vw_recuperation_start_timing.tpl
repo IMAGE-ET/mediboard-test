@@ -19,7 +19,7 @@
     <tr>
       <th class="category" colspan="2">Timing</th>
     </tr>
-    {{assign var=submit value=submitStartTiming}}
+    {{assign var=submit value=submitStartTiming ajax=1}}
     {{assign var=blood_salvage_id value=$blood_salvage->_id}}
     {{assign var=form value=timing$blood_salvage_id}}
     <tr>
