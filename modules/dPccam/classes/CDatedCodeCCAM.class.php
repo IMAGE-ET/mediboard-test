@@ -378,6 +378,7 @@ class CDatedCodeCCAM {
         break;
       }
     }
+    $modifsConvergence = array();
     foreach ($listModificateurs as $modificateur) {
       // Cas d'un modificateur de convergence
       $_modif = new CObject();
@@ -386,22 +387,50 @@ class CDatedCodeCCAM {
       $_modif->_checked = null;
       $_modif->_state = null;
       if (in_array($modificateur->modificateur, $listModifConvergence)) {
-        $simple = "mod".$modificateur->modificateur;
-        $double = "mod".$modificateur->modificateur.$modificateur->modificateur;
-        if ($convergence->$simple) {
-          $_modif->_double = "1";
-          $modificateurs[] = $_modif;
-        }
-        if ($convergence->$double) {
-          $_double_modif = clone $_modif;
-          $_double_modif->_double = "2";
-          $modificateurs[] = $_double_modif;
-        }
+        $modifsConvergence[] = $modificateur;
       }
       // Cas d'un modificateur normal
       else {
         $_modif->_double = "1";
         $modificateurs[] = $_modif;
+      }
+    }
+
+    if (!empty($modifsConvergence)) {
+      if (count($modifsConvergence) == 1) {
+        $simple = 'mod' . $modifsConvergence[0]->modificateur;
+        $double = 'mod' . $modifsConvergence[0]->modificateur . $modifsConvergence[0]->modificateur;
+        if ($convergence->$simple) {
+          $_modif = new CObject();
+          $_modif->code    = $modifsConvergence[0]->modificateur;
+          $_modif->libelle = $modifsConvergence[0]->_libelle;
+          $_modif->_checked = null;
+          $_modif->_state = null;
+          $_modif->_double = "1";
+          $modificateurs[] = $_modif;
+        }
+        elseif ($convergence->$double) {
+          $_modif = new CObject();
+          $_modif->code    = $modifsConvergence[0]->modificateur . $modifsConvergence[0]->modificateur;
+          $_modif->libelle = $modifsConvergence[0]->_libelle;
+          $_modif->_checked = null;
+          $_modif->_state = null;
+          $_modif->_double = "2";
+          $modificateurs[] = $_modif;
+        }
+      }
+      else {
+        $field_1 = 'mod' . $modifsConvergence[0]->modificateur;
+        $field_2 = 'mod' . $modifsConvergence[1]->modificateur;
+        if ($convergence->$field_1 && $convergence->$field_2) {
+          $_modif = new CObject();
+          $_modif->code    = $modifsConvergence[0]->modificateur . $modifsConvergence[1]->modificateur;
+          $_modif->libelle = $modifsConvergence[0]->_libelle;
+          $_modif->_checked = null;
+          $_modif->_state = null;
+          $_modif->_double = "2";
+          $modificateurs[] = $_modif;
+        }
       }
     }
   }

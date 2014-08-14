@@ -108,7 +108,7 @@
                               {{if $_mod->_checked}}
                                 <span class="circled {{if in_array($_mod->_state, array('not_recommended', 'forbidden'))}}error{{/if}}"
                                       title="{{$_mod->libelle}}">
-                                  {{$_mod->code}}{{if $_mod->_double == 2}}{{$_mod->code}}{{/if}}
+                                  {{$_mod->code}}
                                 </span>
                               {{/if}}
                             {{/foreach}}

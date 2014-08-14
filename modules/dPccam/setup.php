@@ -198,8 +198,18 @@ class CSetupdPccam extends CSetup {
     $this->addDatasource("ccamV2", $query);
 
     // Tarifs de convergence
-    $query = "SHOW TABLES LIKE 'convergence'";
-    $this->addDatasource("ccamV2", $query);
+    if (array_key_exists('ccamV2', CAppUI::conf('db'))) {
+      $dsn = CSQLDataSource::get('ccamV2');
+      if ($dsn->fetchRow($dsn->exec('SHOW TABLES LIKE \'convergence\';'))) {
+        // Nouvelle table de convergence
+        $query = "SELECT COUNT(*) FROM `convergence` HAVING COUNT(*) = 3761;";
+        $this->addDatasource("ccamV2", $query);
+      }
+      else {
+        $query = "SHOW TABLES LIKE 'convergence'";
+        $this->addDatasource("ccamV2", $query);
+      }
+    }
 
     // Tarifs NGAP
     $query = "SHOW TABLES LIKE 'tarif_ngap';";

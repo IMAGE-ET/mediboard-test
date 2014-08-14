@@ -501,7 +501,11 @@ class CCodageCCAM extends CMbObject {
         $_modifier->_checked = $checked;
       }
 
-      if ($act->_id && $_modifier->_checked && !in_array($_modifier->code, $act->_modificateurs)) {
+      if (
+          $act->_id && $_modifier->_checked && (
+            ($_modifier->_double == 1 && !in_array($_modifier->code, $act->_modificateurs) ||
+            ($_modifier->_double == 1 && !in_array($_modifier->code[0], $act->_modificateurs) && !in_array($_modifier->code[1], $act->_modificateurs))))
+      ) {
         $store_act = 1;
         $modifiers_to_add .= $_modifier->code;
       }

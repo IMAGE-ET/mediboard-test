@@ -1078,14 +1078,11 @@ class CCodable extends CMbObject {
             foreach ($phase->_modificateurs as $modificateur) {
               $position = strpos($listModificateurs, $modificateur->code);
               if ($position !== false) {
-                $nextposition = strrpos($listModificateurs, $modificateur->code);
-                if ($position === $nextposition && $modificateur->_double == "1") {
+                if ($modificateur->_double == "1") {
                   $modificateur->_checked = $modificateur->code;
-                  $listModificateurs = substr($listModificateurs, 0, $position).substr($listModificateurs, $nextposition+1);
                 }
-                elseif ($position != $nextposition && $modificateur->_double == "2") {
+                elseif ($modificateur->_double == "2") {
                   $modificateur->_checked = $modificateur->code.$modificateur->_double;
-                  $listModificateurs = substr($listModificateurs, 0, $position).substr($listModificateurs, $nextposition+1);
                 }
                 else {
                   $modificateur->_checked = null;

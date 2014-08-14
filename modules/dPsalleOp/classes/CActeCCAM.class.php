@@ -1114,8 +1114,18 @@ class CActeCCAM extends CActe {
     $this->_tarif_base = $phase->tarif;
 
     foreach ($modificateurs as $_modificateur) {
-      $tarif_modif = $code->getForfait($_modificateur->code);
-      $_modificateur->_montant = round($this->_tarif_base * ($tarif_modif['coefficient'] - 100) / 100 + $tarif_modif['forfait'], 2);
+      if ($_modificateur->_double == 1) {
+        $tarif_modif = $code->getForfait($_modificateur->code);
+        $_modificateur->_montant = round($this->_tarif_base * ($tarif_modif['coefficient'] - 100) / 100 + $tarif_modif['forfait'], 2);
+      }
+      else {
+        $_montant = 0;
+        for ($i = 0; $i < strlen($_modificateur->code); $i++) {
+          $tarif_modif = $code->getForfait($_modificateur->code[$i]);
+          $_montant += round($this->_tarif_base * ($tarif_modif['coefficient'] - 100) / 100 + $tarif_modif['forfait'], 2);
+        }
+        $_modificateur->_montant = $_montant;
+      }
     }
   }
 

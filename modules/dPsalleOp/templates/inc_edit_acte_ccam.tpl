@@ -1,14 +1,17 @@
 
 <script type="text/javascript">
-  checkModificateurs = function(input) {
+  checkModificateurs = function(input, acte) {
     var exclusive_modifiers = ['F', 'P', 'S', 'U'];
-    var checkboxes = $$('input.modificateur');
+    var checkboxes = $$('form[name="' + input.form.name + '"] input.modificateur');
     var nb_checked = 0;
     var exclusive_modifier = '';
     var exclusive_modifier_checked = false;
     checkboxes.each(function(checkbox) {
       if (checkbox.checked) {
         nb_checked++;
+        if (checkbox.get('double') == 2) {
+          nb_checked++;
+        }
         if (exclusive_modifiers.indexOf(checkbox.get('code')) != -1) {
           exclusive_modifier = checkbox.get('code');
           exclusive_modifier_checked = true;
@@ -111,9 +114,11 @@
         {{assign var=nb_modificateurs value=$acte->modificateurs|strlen}}
         {{foreach from=$phase->_modificateurs item=_mod name=modificateurs}}
           <span class="circled {{if $_mod->_state == 'prechecked'}}ok{{elseif $_mod->_checked && in_array($_mod->_state, array('not_recommended', 'forbidden'))}}error{{elseif in_array($_mod->_state, array('not_recommended', 'forbidden'))}}warning{{/if}}">
-            <input type="checkbox" class="modificateur" data-code="{{$_mod->code}}" name="modificateur_{{$_mod->code}}{{$_mod->_double}}" {{if $_mod->_checked}}checked="checked"{{elseif $nb_modificateurs == 4 || $_mod->_state == 'forbidden' || (intval($acte->_exclusive_modifiers) > 0 && in_array($_mod->code, array('F', 'U', 'P', 'S')))}}disabled="disabled"{{/if}} onchange="checkModificateurs(this);"/>
+            <input type="checkbox" class="modificateur" data-code="{{$_mod->code}}" data-double="{{$_mod->_double}}" name="modificateur_{{$_mod->code}}{{$_mod->_double}}"
+                   {{if $_mod->_checked}}checked="checked"{{elseif $nb_modificateurs == 4 || $_mod->_state == 'forbidden' || (intval($acte->_exclusive_modifiers) > 0 && in_array($_mod->code, array('F', 'U', 'P', 'S')))}}disabled="disabled"{{/if}}
+                   onchange="checkModificateurs(this, '{{$acte->code_acte}}');"/>
             <label for="modificateur_{{$_mod->code}}{{$_mod->_double}}">
-              {{$_mod->code}}{{if $_mod->_double == 2}}{{$_mod->code}}{{/if}}
+              {{$_mod->code}}
             </label>
           </span>
           <span>{{$_mod->libelle}}</span>

@@ -33,12 +33,12 @@ class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
       $dents = array();
       foreach ($_POST as $propName => $propValue) {
         $matches = null;
-        if (preg_match("/modificateur_(.)(.)/", $propName, $matches)) {
+        if (preg_match("/modificateur_(.)(.)(.)?/", $propName, $matches)) {
           $modificateur = $matches[1];
           if (strpos($this->_obj->modificateurs, $matches[1]) === false) {
             $this->_obj->modificateurs .= $modificateur;
-            if ($matches[2] == 2) {
-              $this->_obj->modificateurs .= $modificateur;
+            if (isset($matches[3]) && $matches[3] == 2) {
+              $this->_obj->modificateurs .= $matches[2];
             }
           }
         }
