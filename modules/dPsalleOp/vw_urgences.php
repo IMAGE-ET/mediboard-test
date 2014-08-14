@@ -34,7 +34,7 @@ $where["plageop_id"] = "IS NULL";
 $where["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($listChirs));
 
 /** @var COperation[] $urgences */
-$urgences = $operation->loadGroupList($where, "salle_id, chir_id");
+$urgences = $operation->loadGroupList($where, "salle_id, date, chir_id");
 
 $reservation_installed = CModule::getActive("reservation");
 $diff_hour_urgence = CAppUI::conf("reservation diff_hour_urgence");
