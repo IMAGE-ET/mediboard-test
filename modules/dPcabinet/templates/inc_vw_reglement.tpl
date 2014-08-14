@@ -112,7 +112,7 @@ modifSecteur2 = function(){
   var somme    = form._somme.value;
   
   $V(form.du_patient, somme);
-  $V(form.secteur2, Math.round(100*(parseFloat(somme) - (parseFloat(secteur1) + parseFloat(secteur3) + parseFloat(du_tva)))) / 100);
+  $V(form.secteur2, Math.round(100*(parseFloat(somme) - (Math.round(100*parseFloat(secteur1))/100 + parseFloat(secteur3) + parseFloat(du_tva)))) / 100);
 };
 
 printActes = function(){
