@@ -9,7 +9,7 @@
 
 {{mb_script module="dPcompteRendu" script="document"}}
 {{mb_script module="dPcompteRendu" script="modele_selector"}}
-
+{{mb_script module="dPfiles"       script="file"}}
 <script type="text/javascript">
 
 Main.add(function(){
