@@ -54,6 +54,7 @@
 
 {{mb_script module="compteRendu"  script="document"        ajax=1}}
 {{mb_script module="compteRendu"  script="modele_selector" ajax=1}}
+{{mb_script module="files"        script="file"            ajax=1}}
 {{mb_script module="bloodSalvage" script="bloodSalvage"    ajax=1}}
 {{mb_script module="soins"        script="plan_soins"      ajax=1}}
 {{mb_script module="planningOp"   script="cim10_selector"  ajax=1}}
@@ -203,6 +204,7 @@
         break;
       case "diag_tab":
         reloadDiagnostic('{{$selOp->sejour_id}}', '{{$modeDAS}}');
+        break;
       case "codage_tab":
         reloadActes();
         break;
