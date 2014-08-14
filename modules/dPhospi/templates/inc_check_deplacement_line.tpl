@@ -9,8 +9,12 @@
     {{if $sens == "entrants"}}
       {{assign var=_mouv value=$_sortie->_ref_prev}}
     {{/if}}
-    <form name="Edit-{{$_mouv->_guid}}" action="?m={{$m}}" method="post"
-      onsubmit="return onSubmitFormAjax(this, { onComplete: function() { refreshList(null, null, 'deplacements');} })">
+    <form name="Edit-{{$sens}}-{{$_mouv->_guid}}" action="?m={{$m}}" method="post"
+      onsubmit="
+        {{if !$_mouv->effectue}}
+          $V(this.sortie, $V(getForm('change-sortie-{{$sens}}-{{$_mouv->_id}}')._sortie));
+        {{/if}}
+        return onSubmitFormAjax(this, refreshList.curry(null, null, 'deplacements'));">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_affectation_aed" />
@@ -79,6 +83,17 @@
   </td>
   
   <td>
-    {{$_mouv->sortie|date_format:$conf.time}}
+    {{if $_mouv->effectue}}
+      {{$_mouv->sortie|date_format:$conf.time}}
+    {{else}}
+      <form name="change-sortie-{{$sens}}-{{$_mouv->_id}}">
+        <input type="hidden" name="_sortie" class="dateTime notNull" value="{{$_mouv->sortie}}"/>
+        <script>
+          Main.add(function() {
+            Calendar.regField(getForm("change-sortie-{{$sens}}-{{$_mouv->_id}}")._sortie);
+          });
+        </script>
+      </form>
+    {{/if}}
   </td>
 </tr>

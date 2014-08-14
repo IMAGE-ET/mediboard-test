@@ -37,7 +37,7 @@
       <a href="#places-{{$type}}_sortants">Sortants <small id="count_dep_sortants">({{$update_splitted.1}})</small></a>
     </li>
   </ul>
-  <hr class="control_tabs" />
+
   <div id="places-{{$type}}_entrants" style="display: none;">
     <table class="tbl">
       <tr class="only-printable">
