@@ -2187,6 +2187,17 @@ class CSetupdPcabinet extends CSetup {
     $query = "UPDATE `consultation` SET `annule` = '0' WHERE (`annule` = '' OR `annule` IS NULL );";
     $this->addQuery($query);
 
-    $this->mod_version = '2.38';
+    $this->makeRevision('2.38');
+
+    $query = "ALTER TABLE `consultation_anesth`
+                ADD `passage_uscpo` ENUM ('0','1'),
+                ADD `duree_uscpo` INT (11) UNSIGNED DEFAULT '0',
+                ADD `type_anesth` INT (11) UNSIGNED NULL,
+                ADD `position` ENUM ('DD','DV','DL','GP','AS','TO','GYN'),
+                ADD `ASA` ENUM ('1','2','3','4','5','6'),
+                ADD `rques` TEXT;";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.39';
   }
 }

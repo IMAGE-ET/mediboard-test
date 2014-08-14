@@ -84,6 +84,14 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
   public $apfel_non_fumeur;
   public $apfel_atcd_nvp;
   public $apfel_morphine;
+
+  // Champs concernant l'intervention
+  public $passage_uscpo;
+  public $duree_uscpo;
+  public $type_anesth;
+  public $position;
+  public $ASA;
+  public $rques;
   
   // Form fields
   public $_date_consult;
@@ -202,6 +210,19 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
     $props["examenAutre"]      = "text helped";
     
     $props["conclusion"]       = "text helped seekable";
+
+    // Champs concernant l'intervention
+    if (CAppUI::conf("dPplanningOp COperation show_duree_uscpo") == 2) {
+      $props["passage_uscpo"]  = "bool notNull";
+    }
+    else {
+      $props["passage_uscpo"]  = "bool";
+    }
+    $props["duree_uscpo"]      = "num min|0 max|10 default|0";
+    $props['type_anesth']      = 'ref class|CTypeAnesth';
+    $props['position']         = 'enum list|DD|DV|DL|GP|AS|TO|GYN';
+    $props['ASA']              = 'enum list|1|2|3|4|5|6';
+    $props['rques']            = 'text helped';
 
     // Champs dérivés
     $props["_intub_difficile"] = "";

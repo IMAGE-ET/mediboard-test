@@ -26,6 +26,13 @@
     consultUrl.addParam("dossier_anesth_id", '{{$consult->_ref_consult_anesth->_id}}');
     consultUrl.requestUpdate('consultAnesth');
   }
+
+  updateOperation = function(operation_id, consult_anesth_id) {
+    var url = new Url('cabinet', 'ajax_update_operation');
+    url.addParam('operation_id', operation_id);
+    url.addParam('consult_anesth_id', consult_anesth_id);
+    url.requestModal(800, 250);
+  }
 </script>
 <form name="createDossierAnesth" action="?m={{$m}}&tab=edit_consultation&selConsult={{$consult->_id}}" method="post">
   <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
@@ -48,14 +55,7 @@
       {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
         <tr>
           <td class="button">
-            <form name="addInterv-{{$curr_op->_id}}" action="?m={{$m}}" method="post">
-              <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-              <input type="hidden" name="del" value="0" />
-              <input type="hidden" name="m" value="dPcabinet" />
-              {{mb_key object=$consult->_ref_consult_anesth}}
-              <input type="hidden" name="operation_id" value="{{$curr_op->_id}}"/>
-              <button type="submit" class="link">Associer à cette intervention</button>
-            </form>
+            <button type="button" class="link" onclick="updateOperation({{$curr_op->_id}}, {{$consult->_ref_consult_anesth->_id}});">Associer à cette intervention</button>
           </td>
           <td>
           <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}', null, { view_tarif: true })">

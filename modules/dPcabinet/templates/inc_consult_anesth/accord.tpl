@@ -74,7 +74,7 @@
     url.requestUpdate("Actes");
   }
 
-  function loadIntervention() {
+  loadIntervention = function() {
     var consultUrl = new Url("cabinet", "httpreq_vw_consult_anesth");
     consultUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
     consultUrl.addParam("dossier_anesth_id", document.editFrmFinish._consult_anesth_id.value);

@@ -29,7 +29,7 @@ afterStoreScore = function(id, obj) {
 };
 
 toggleUSCPO = function(status) {
-  var form = getForm("editTypeAnesthFrm");
+  var form = getForm("editOpAnesthFrm");
   if (status == 1) {
     $("uscpo_area").setStyle({visibility: "visible"});
   }
@@ -42,13 +42,13 @@ toggleUSCPO = function(status) {
 };
 
 checkUSCPO = function() {
-  var form = getForm("editTypeAnesthFrm");
+  var form = getForm("editOpAnesthFrm");
   if ($V(form._passage_uscpo) == 1 && $V(form.duree_uscpo) == "") {
     alert("Veuillez saisir une durée USCPO");
     return false;
   }
-  
-  return true; 
+
+  return true;
 }
 
 </script>
@@ -60,67 +60,51 @@ checkUSCPO = function() {
     <td colspan="2">
       <fieldset>
         <legend id="didac_legend_intervention">Intervention</legend>
-        <table class="layout main">
-          <tr>
-            <td class="halfPane">
-              {{if $operation->_id}}
-              <form name="editOpAnesthFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitFormAjax(this);">
-              <input type="hidden" name="m" value="dPplanningOp" />
-              <input type="hidden" name="del" value="0" />
-              <input type="hidden" name="dosql" value="do_planning_aed" />
-              {{mb_key object=$operation}}
-              {{mb_label object=$operation field="rques"}}
-              {{mb_field object=$operation field="rques" rows="4" onblur="this.form.onsubmit()" form="editOpAnesthFrm"
-                  aidesaisie="validateOnBlur: 0"}}
-              </form>
-              {{else}}
-              <div class="small-info text">
-                Aucune intervention n'étant selectionné, vous ne pouvez pas accéder
-                à la totalité des champs disponibles pour la consultation
+        {{mb_ternary var=object test=$operation->_id value=$operation other=$consult_anesth}}
+        {{mb_ternary var=dosql test=$operation->_id value='do_planning_aed' other='do_consult_anesth_aed'}}
+        {{mb_ternary var=module test=$operation->_id value='planningOp' other='cabinet'}}
+        <form name="editOpAnesthFrm" action="?m=dPcabinet" method="post" onsubmit="{{if $conf.dPplanningOp.COperation.show_duree_preop == 2}}if (checkUSCPO()) {{/if}} return onSubmitFormAjax(this);"">
+          <input type="hidden" name="m" value="{{$module}}" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="dosql" value="{{$dosql}}" />
+          {{mb_key object=$object}}
+
+          <div style="width: 50%; float: left;">
+            {{mb_label object=$object field="rques"}}
+            {{mb_field object=$object field="rques" rows="4" onblur="this.form.onsubmit()" form="editOpAnesthFrm"
+            aidesaisie="validateOnBlur: 0"}}
+          </div>
+          <div style="width: 49%; float: right;">
+            {{if $conf.dPplanningOp.COperation.show_duree_uscpo >= 1}}
+              <div>
+                {{mb_label object=$object field=passage_uscpo}}
+                {{mb_field object=$object field=passage_uscpo onclick="toggleUSCPO(\$V(this)); this.form.onsubmit();"}}
+
+                <span id="uscpo_area" {{if !$object->passage_uscpo}}style="visibility: hidden;"{{/if}}>
+                  {{mb_label object=$object field=duree_uscpo style="padding-left: 1.4em;" id="uscpo_label"}}
+                  {{mb_field object=$object field=duree_uscpo form=editOpAnesthFrm increment=true onblur="this.form.onsubmit()"}} nuit(s)
+                </span>
               </div>
-              {{/if}}
-            </td>
-            <td class="halfPane">
-              {{if $operation->_id}}
-                <form name="editTypeAnesthFrm" action="?m=dPcabinet" method="post"
-                  onsubmit="{{if $conf.dPplanningOp.COperation.show_duree_preop == 2}}if (checkUSCPO()) {{/if}} return onSubmitFormAjax(this);">
-                  <input type="hidden" name="m" value="dPplanningOp" />
-                  <input type="hidden" name="del" value="0" />
-                  <input type="hidden" name="dosql" value="do_planning_aed" />
-                  {{mb_key object=$operation}}
-                  {{if $conf.dPplanningOp.COperation.show_duree_uscpo >= 1}}
-                    <div>
-                      {{mb_label object=$operation field=passage_uscpo}}
-                      {{mb_field object=$operation field=passage_uscpo onclick="toggleUSCPO(\$V(this)); this.form.onsubmit();"}}
-                      
-                      <span id="uscpo_area" {{if !$operation->passage_uscpo}}style="visibility: hidden;"{{/if}}>
-                        {{mb_label object=$operation field=duree_uscpo style="padding-left: 1.4em;" id="uscpo_label"}}
-                        {{mb_field object=$operation field=duree_uscpo form=editTypeAnesthFrm increment=true onblur="this.form.onsubmit()"}} nuit(s)
-                      </span>
-                    </div>
-                  {{/if}}
-                  {{mb_label object=$operation field=type_anesth}}
-                  <select name="type_anesth" onchange="this.form.onsubmit()" style="width: 12em;">
-                    <option value="">&mdash; Anesthésie</option>
-                    {{foreach from=$anesth item=curr_anesth}}
-                      {{if $curr_anesth->actif || $operation->type_anesth == $curr_anesth->type_anesth_id}}
-                        <option value="{{$curr_anesth->type_anesth_id}}" {{if $operation->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}}>
-                          {{$curr_anesth->name}} {{if !$curr_anesth->actif && $operation->type_anesth == $curr_anesth->type_anesth_id}}(Obsolète){{/if}}
-                        </option>
-                      {{/if}}
-                    {{/foreach}}
-                  </select>
-                  <br />
-                  {{mb_label object=$operation field="ASA" style="padding-left: 6em;"}}
-                  {{mb_field object=$operation field="ASA" emptyLabel="Choose" style="width: 12em;" onchange="this.form.onsubmit()"}}
-                  <br />
-                  {{mb_label object=$operation field="position" style="padding-left: 4.5em;"}}
-                  {{mb_field object=$operation field="position" emptyLabel="Choose" style="width: 12em;" onchange="this.form.onsubmit()"}}
-                </form>
-              {{/if}}
-            </td>
-          </tr>
-        </table>
+            {{/if}}
+            {{mb_label object=$object field=type_anesth}}
+            <select name="type_anesth" onchange="this.form.onsubmit()" style="width: 12em;">
+              <option value="">&mdash; Anesthésie</option>
+              {{foreach from=$anesth item=curr_anesth}}
+                {{if $curr_anesth->actif || $object->type_anesth == $curr_anesth->type_anesth_id}}
+                  <option value="{{$curr_anesth->type_anesth_id}}" {{if $object->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}}>
+                    {{$curr_anesth->name}} {{if !$curr_anesth->actif && $object->type_anesth == $curr_anesth->type_anesth_id}}(Obsolète){{/if}}
+                  </option>
+                {{/if}}
+              {{/foreach}}
+            </select>
+            <br />
+            {{mb_label object=$object field="ASA" style="padding-left: 6em;"}}
+            {{mb_field object=$object field="ASA" emptyLabel="Choose" style="width: 12em;" onchange="this.form.onsubmit()"}}
+            <br />
+            {{mb_label object=$object field="position" style="padding-left: 4.5em;"}}
+            {{mb_field object=$object field="position" emptyLabel="Choose" style="width: 12em;" onchange="this.form.onsubmit()"}}
+          </div>
+        </form>
       </fieldset>
       <fieldset>
         <legend>Pré-opératoire</legend>
@@ -160,7 +144,7 @@ checkUSCPO = function() {
           </table>
         </form>
       </fieldset>
-      
+
       <fieldset>
         <legend>{{mb_label object=$techniquesComp field="technique"}}</legend>
         <table class="layout main">
@@ -187,7 +171,7 @@ checkUSCPO = function() {
   <tr>
     <td style="width: 50%;">
       <form name="editRquesConsultFrm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
-  
+
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consultation_aed" />
