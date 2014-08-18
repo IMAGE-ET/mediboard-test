@@ -1,9 +1,9 @@
-<script type="text/javascript">
-printCheckList = function(id){
-  var url = new Url('dPsalleOp', 'print_check_list_pose_disp_vasc');
-  url.addParam('pose_disp_vasc_id', id);
-  url.popup(800, 600, 'check_list');
-}
+<script>
+  printCheckList = function(id) {
+    var url = new Url('salleOp', 'print_check_list_pose_disp_vasc');
+    url.addParam('pose_disp_vasc_id', id);
+    url.popup(800, 600, 'check_list');
+  }
 </script>
 
 <button class="print" onclick="printCheckList('{{$object->_id}}')" style="float: right;">{{tr}}Print{{/tr}}</button>
@@ -36,10 +36,10 @@ printCheckList = function(id){
   {{/foreach}}
   
   <tr class="{{$type_group}}">
-    {{foreach from=$check_item_categories item=_cat key=_key}}
-    <td class="button" id="check_list_{{$_key}}_{{$_cat->list_type_id}}-title">
+    {{foreach from=$check_lists item=_cat key=_key}}
+    <td class="button" id="{{$_key}}-title">
       <h3 style="margin: 2px;">
-        <img src="images/icons/{{$check_lists.$_key->_readonly|ternary:"tick":"cross"}}.png" />
+        <img src="images/icons/{{$_cat->_readonly|ternary:"tick":"cross"}}.png" />
         {{tr}}CDailyCheckItemCategory.type.{{$_key}}{{/tr}}
       </h3>
     </td>
@@ -47,12 +47,12 @@ printCheckList = function(id){
   </tr>
   
   <tr class="{{$type_group}}">
-    {{foreach from=$check_item_categories item=_cat key=_key}}
+    {{foreach from=$check_lists item=_cat key=_key}}
       <td style="padding:0;">
         <div id="check_list_{{$_key}}_{{$_cat->list_type_id}}">
-        {{assign var=check_list value=$check_lists.$_key}}
-        {{mb_include module=salleOp template=inc_edit_check_list 
-             check_item_categories=$_cat
+        {{assign var=check_list value=$_cat}}
+        {{mb_include module=salleOp template=inc_edit_check_list
+             check_item_categories=$check_item_categories.$_key
              personnel=$validateurs_list}}
         </div>
       </td>
