@@ -148,10 +148,10 @@ Main.add(function () {
           {{/if}}
         </tr>
         <tr>
-          <td colspan="2"rowspan="2" class="halfPane" id="listChoix"></td>
+          <td colspan="2"rowspan="2" class="halfPane" id="listChoix" style="vertical-align: top"></td>
           <th> <label for="_cat_evenement" title="{{tr}}CFicheEi-_cat_evenement-desc{{/tr}}">{{tr}}CFicheEi-_cat_evenement{{/tr}}</label>
           </th>
-          <td style="height: 1%;">
+          <td>
             <input type="hidden" name="evenements" class="{{$fiche->_props.evenements}}" value="{{$fiche->evenements}}"/>
             <input type="hidden" name="_elemOpen" value="{{$firstdiv}}" />
             
