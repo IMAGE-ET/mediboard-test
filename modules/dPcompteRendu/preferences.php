@@ -30,4 +30,5 @@ CPreferences::$modules["dPcompteRendu"] = array(
   "auto_capitalize",
   "auto_replacehelper",
   'hprim_med_header',
+  "show_old_print",
 );

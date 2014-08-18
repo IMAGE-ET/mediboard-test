@@ -104,6 +104,10 @@ CKEDITOR.editorConfig = function(config) {
       var textForPrint = 'Print';
     {{/if}}
 
+    {{if !$app->user_prefs.show_old_print}}
+      textForPrint = '';
+    {{/if}}
+
     config.extraPlugins =  'mbfields,mbfreetext,mbhelpers,mblists,{{if $mode_play && !$templateManager->isModele}}mbplay,{{/if}},mbprint,mbprintPDF,mbspace,';
     config.extraPlugins += 'mbheader,mbfooter,mbpagebreak,mblineheight{{if "printing"|module_active && !$templateManager->isModele}},mbprinting{{/if}}{{if $can->admin}},mbthumbs{{/if}},mbcap,mbreplace';
     {{if !$templateManager->isModele}}

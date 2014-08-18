@@ -24,3 +24,4 @@
 {{mb_include template=inc_pref spec=bool var=auto_capitalize}}
 {{mb_include template=inc_pref spec=bool var=auto_replacehelper}}
 {{mb_include template=inc_pref spec=bool var=hprim_med_header}}
+{{mb_include template=inc_pref spec=bool var=show_old_print}}

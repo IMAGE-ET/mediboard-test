@@ -977,6 +977,9 @@ class CSetupdPcompteRendu extends CSetup {
                 ADD `type_doc_sisra` VARCHAR(10);";
     $this->addQuery($query);
 
-    $this->mod_version = "1.01";
+    $this->makeRevision("1.01");
+    $this->addPrefQuery("show_old_print", 1);
+
+    $this->mod_version = "1.02";
   }
 }

@@ -62,6 +62,7 @@ foreach ($modeles_to_pack as $_modele_to_pack) {
   $cr->file_category_id = $modele->file_category_id;
   $cr->font          = $modele->font;
   $cr->size          = $modele->size;
+  $cr->factory       = $modele->factory;
 
   $cr->loadContent(false);
   

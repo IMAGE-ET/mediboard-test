@@ -813,3 +813,5 @@ $locales['pref-saveOnPrint-0'] = 'Non';
 $locales['pref-saveOnPrint-1'] = 'Oui';
 $locales['pref-saveOnPrint-2'] = 'Oui, sans confirmation';
 $locales['pref-saveOnPrint-desc'] = 'demande de sauvegarde lors de l\'impression';
+$locales['pref-show_old_print'] = 'Afficher le bouton Imprimante';
+$locales['pref-show_old_print-desc'] = 'Afficher le bouton Imprimante dans la barre d\'outils de l\'éditeur de texte';
