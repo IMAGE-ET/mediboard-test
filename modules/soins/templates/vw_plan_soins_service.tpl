@@ -14,123 +14,117 @@
   {{mb_script module="prescription" script="prescription"}}
 {{/if}}
 
-<script type="text/javascript">
-
-// Refresh du plan de soin
-updatePlanSoinsPatients = function(){
-  var oForm = getForm("selectElts");
-  if($('content_plan_soins_service')){
-    var url = new Url("soins", "ajax_vw_content_plan_soins_service");
-    url.addParam("categories_id[]", $V(getForm("selectElts").elts), true);
-    url.addParam("date", "{{$date}}");
-    url.addParam("premedication", $V(oForm.premedication) ? 1 : 0);
-    url.requestUpdate("content_plan_soins_service");
-  }
-}
-
-// Selection ou deselection de tous les elements d'une catégorie
-selectCategory = function(oCheckboxCat){
-  var checked = oCheckboxCat.checked;
-  var checkboxs = $('categories').select('input.'+oCheckboxCat.value);
-  var count_cat   = checkboxs.length;
-
-  checkboxs.each(function(oCheckbox){
-    oCheckbox.checked = checked;
-  });
-
-  var counter = $("countSelected_"+oCheckboxCat.value);
-  counter.update(checked ? count_cat : 0);
-  selectTr(counter);
-}
-
-resetCheckbox = function() {
-  $('categories').select('input[type=checkbox]').each(function(oCheckbox){
-    oCheckbox.checked = null;
-  });
-  $('categories').select('tr').each(function(tr){
-    tr.removeClassName('selected');
-  });
-
-  $('categories').select('.counter').each(function(oSpan){
-    oSpan.update('0');
-  });
-}
-
-// Mise a jour du compteur lors de la selection d'un element
-updateCountCategory = function(checkbox, category_guid){
-  var counter = $('countSelected_'+category_guid);
-  var count = parseInt(counter.innerHTML);
-  count = checkbox.checked ? count+1 : count-1;
-  counter.update(count);
-  selectTr(counter);
-  var all_checked = $$("."+category_guid).all(function(elt) { return elt.checked });
-  var input_category = $("categories").select("input[value="+category_guid+"]")[0];
-  input_category.checked = all_checked;
-}
-
-// Affichage des elements au sein des catégories
-toggleElements = function(category_guid){
-  $('categories').select('.category_'+category_guid).invoke('toggle');
-}
-
-selectTr = function(counter){
-  var count = parseInt(counter.innerHTML);
-  count ? counter.up("tr").addClassName("selected") : counter.up("tr").removeClassName("selected");
-}
-
-addTransmission = function(sejour_id, user_id, transmission_id, object_id, object_class, libelle_ATC, update_plan_soin) {
-  var url = new Url("hospi", "ajax_transmission");
-  url.addParam("sejour_id", sejour_id);
-  url.addParam("user_id", user_id);
-  url.addParam("update_plan_soin", update_plan_soin);
-
-  if (transmission_id != undefined) {
-    url.addParam("transmission_id", transmission_id);
-  }
-  if (object_id != undefined && object_class !=undefined) {
-    url.addParam("object_id",    object_id);
-    url.addParam("object_class", object_class);
-  }
-  if (libelle_ATC != undefined) {
-    url.addParam("libelle_ATC", libelle_ATC);
-  }
-  url.requestModal(600, 400);
-}
-
-addCibleTransmission = function(sejour_id, object_class, object_id, libelle_ATC, update_plan_soin) {
-  addTransmission(sejour_id, '{{$app->user_id}}', null, object_id, object_class, libelle_ATC, update_plan_soin);
-}
-
-viewBilanService = function(service_id, date){
-  var url = new Url("hospi", "vw_bilan_service");
-  url.addParam("service_id", service_id);
-  url.addParam("date", date);
-  url.popup(800,500,"Bilan par service");
-}
-
-printBons = function(service_id, date) {
-  var url = new Url("prescription", "print_bon");
-  url.addParam("service_id", service_id);
-  url.addParam("debut", date);
-  url.popup(800, 500);
-}
-
-Main.add(function(){
-  {{if $service->_id}}
-    var table_categories = $("categories");
-    if (table_categories) {
-      {{foreach from=$categories_id item=_category_id}}
-        var elts = table_categories.select("input[value={{$_category_id}}]");
-        if (elts.length > 0) {
-          elts[0].click();
-        }
-      {{/foreach}}
+<script>
+  // Refresh du plan de soin
+  updatePlanSoinsPatients = function(hide_old_lines) {
+    var oForm = getForm("selectElts");
+    if ($('content_plan_soins_service')) {
+      var url = new Url("soins", "ajax_vw_content_plan_soins_service");
+      url.addParam("categories_id[]", $V(getForm("selectElts").elts), true);
+      url.addParam("date", "{{$date}}");
+      url.addParam("premedication", $V(oForm.premedication) ? 1 : 0);
+      if (!Object.isUndefined(hide_old_lines)) {
+        url.addParam("hide_old_lines", hide_old_lines);
+      }
+      url.requestUpdate("content_plan_soins_service");
     }
-  {{/if}}
-  updatePlanSoinsPatients();
-  Calendar.regField(getForm("updateActivites").date);
-});
+  }
 
+  // Selection ou deselection de tous les elements d'une catégorie
+  selectCategory = function(oCheckboxCat) {
+    var checked = oCheckboxCat.checked;
+    var checkboxs = $('categories').select('input.'+oCheckboxCat.value);
+    var count_cat   = checkboxs.length;
+
+    checkboxs.each(function(oCheckbox){
+      oCheckbox.checked = checked;
+    });
+
+    var counter = $("countSelected_"+oCheckboxCat.value);
+    counter.update(checked ? count_cat : 0);
+    selectTr(counter);
+  }
+
+  resetCheckbox = function() {
+    $('categories').select('input[type=checkbox]').each(function(oCheckbox) {
+      oCheckbox.checked = null;
+    });
+    $('categories').select('tr').each(function(tr){
+      tr.removeClassName('selected');
+    });
+
+    $('categories').select('.counter').each(function(oSpan){
+      oSpan.update('0');
+    });
+  }
+
+  // Mise a jour du compteur lors de la selection d'un element
+  updateCountCategory = function(checkbox, category_guid) {
+    var counter = $('countSelected_'+category_guid);
+    var count = parseInt(counter.innerHTML);
+    count = checkbox.checked ? count+1 : count-1;
+    counter.update(count);
+    selectTr(counter);
+    var all_checked = $$("."+category_guid).all(function(elt) { return elt.checked });
+    var input_category = $("categories").select("input[value="+category_guid+"]")[0];
+    input_category.checked = all_checked;
+  }
+
+  // Affichage des elements au sein des catégories
+  toggleElements = function(category_guid) {
+    $('categories').select('.category_'+category_guid).invoke('toggle');
+  }
+
+  selectTr = function(counter) {
+    var count = parseInt(counter.innerHTML);
+    count ? counter.up("tr").addClassName("selected") : counter.up("tr").removeClassName("selected");
+  }
+
+  addTransmission = function(sejour_id, user_id, transmission_id, object_id, object_class, libelle_ATC, update_plan_soin) {
+    var url = new Url("hospi", "ajax_transmission");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("user_id", user_id);
+    url.addParam("update_plan_soin", update_plan_soin);
+    url.addNotNullParam("transmission_id", transmission_id);
+    url.addNotNullParam("object_id",    object_id);
+    url.addNotNullParam("object_class", object_class);
+    url.addNotNullParam("libelle_ATC", libelle_ATC);
+    url.requestModal(600, 400);
+  }
+
+  addCibleTransmission = function(sejour_id, object_class, object_id, libelle_ATC, update_plan_soin) {
+    addTransmission(sejour_id, '{{$app->user_id}}', null, object_id, object_class, libelle_ATC, update_plan_soin);
+  }
+
+  viewBilanService = function(service_id, date){
+    var url = new Url("hospi", "vw_bilan_service");
+    url.addParam("service_id", service_id);
+    url.addParam("date", date);
+    url.popup(800,500,"Bilan par service");
+  }
+
+  printBons = function(service_id, date) {
+    var url = new Url("prescription", "print_bon");
+    url.addParam("service_id", service_id);
+    url.addParam("debut", date);
+    url.popup(800, 500);
+  }
+
+  Main.add(function(){
+    {{if $service->_id}}
+      var table_categories = $("categories");
+      if (table_categories) {
+        {{foreach from=$categories_id item=_category_id}}
+          var elts = table_categories.select("input[value={{$_category_id}}]");
+          if (elts.length > 0) {
+            elts[0].click();
+          }
+        {{/foreach}}
+      }
+    {{/if}}
+    updatePlanSoinsPatients();
+    Calendar.regField(getForm("updateActivites").date);
+  });
 </script>
 
 <form name="adm_multiple" action="?" method="get">
@@ -138,8 +132,8 @@ Main.add(function(){
 </form>
 
 <form name="addPlanif" action="" method="post">
-  <input type="hidden" name="dosql" value="do_administration_aed" />
   <input type="hidden" name="m" value="prescription" />
+  <input type="hidden" name="dosql" value="do_administration_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="administration_id" value="" />
   <input type="hidden" name="planification" value="1" />
@@ -177,12 +171,12 @@ Main.add(function(){
         <select name="service_id" onchange="this.form.submit();">
           <option value="">&mdash; Service</option>
           {{foreach from=$services item=_service}}
-            <option value="{{$_service->_id}}" {{if $_service->_id == $service->_id}}selected="selected"{{/if}}>{{$_service->_view}}</option>
+            <option value="{{$_service->_id}}" {{if $_service->_id == $service->_id}}selected{{/if}}>{{$_service->_view}}</option>
           {{/foreach}}
         </select>
         le
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit();" />
-        <input type="checkbox" name="real_time_cb" onchange="$V('real_time', this.checked ? 1 : 0);" {{if $date != $day}}disabled="disabled"{{elseif $real_time}}checked="checked"{{/if}}/>
+        <input type="checkbox" name="real_time_cb" onchange="$V('real_time', this.checked ? 1 : 0);" {{if $date != $day}}disabled{{elseif $real_time}}checked{{/if}}/>
         <input type="hidden" id="real_time" name="real_time" value="{{if $date == $day}}{{$real_time}}{{else}}0{{/if}}" onchange="this.form.submit();"/>
         <label for="real_time">{{tr}}Real time{{/tr}}</label>
       </form>

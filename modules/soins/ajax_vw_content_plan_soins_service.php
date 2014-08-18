@@ -1,22 +1,25 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage soins
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
-$categories_id = CValue::getOrSession("categories_id");
-$date          = CValue::getOrSession("date");
-$date_max      = CMbDT::date("+ 1 DAY", $date);
-$service_id    = CValue::getOrSession("service_id", "none");
-$nb_decalage   = CValue::get("nb_decalage");
-$mode_dossier  = CValue::get("mode_dossier", "administration");
-$premedication = CValue::get("premedication");
-$real_time     = CValue::getOrSession("real_time", 0);
+$group = CGroups::loadCurrent();
+
+$categories_id  = CValue::getOrSession("categories_id");
+$date           = CValue::getOrSession("date");
+$date_max       = CMbDT::date("+ 1 DAY", $date);
+$service_id     = CValue::getOrSession("service_id", "none");
+$nb_decalage    = CValue::get("nb_decalage");
+$mode_dossier   = CValue::get("mode_dossier", "administration");
+$premedication  = CValue::get("premedication");
+$real_time      = CValue::getOrSession("real_time", 0);
+$hide_old_lines = CValue::get("hide_old_lines", CAppUI::conf("soins suivi hide_old_line", $group->_guid));
 
 $composition_dossier        = array();
 $bornes_composition_dossier = array();
@@ -34,7 +37,7 @@ if (!$nb_decalage) {
   $nb_decalage = $configs["Nombre postes avant"];
 }
 
-$planif_manuelle = CAppUI::conf("dPprescription CPrescription planif_manuelle", CGroups::loadCurrent()->_guid);
+$planif_manuelle = CAppUI::conf("dPprescription CPrescription planif_manuelle", $group->_guid);
 $_dates = array();
 $tabHours = CAdministration::getTimingPlanSoins($date, $configs);
 foreach ($tabHours as $_key_date => $_period_date) {
@@ -87,9 +90,19 @@ $lines = $line->loadList($where, null, null, null, $ljoin);
 $sejours       = CMbArray::pluck($lines, "_ref_prescription", "_ref_object");
 $patients      = CMbObject::massLoadFwdRef($sejours, "patient_id");
 
+$hidden_lines_count = 0;
+$first_date = reset($_dates);
+
 $prescriptions = array();
 /* @var CPrescriptionLineElement[] $lines*/
 foreach ($lines as $_line_element) {
+  if ($hide_old_lines && $_line_element->_fin_reelle && $_line_element->_fin_reelle < CMbDT::dateTime() && $_line_element->_fin_reelle >= $first_date) {
+    if ($_line_element->countAdministrations()) {
+      $hidden_lines_count++;
+    }
+    unset($lines[$_line_element->_id]);
+    continue;
+  }
   if (!in_array($_line_element->prescription_id, $prescriptions)) {
     $prescriptions[$_line_element->prescription_id] = $_line_element->_ref_prescription;
   }
@@ -160,24 +173,26 @@ $prescriptions = CMbArray::ksortByArray($prescriptions, $prescriptions_order);
 $categories = CCategoryPrescription::loadCategoriesByChap();
 
 $smarty = new CSmartyDP();
-$smarty->assign("lines"           , $lines);
-$smarty->assign("patients"        , $patients);
-$smarty->assign("tabHours"        , $tabHours);
-$smarty->assign("prescriptions"   , $prescriptions);
-$smarty->assign("categories"      , $categories);
-$smarty->assign("tabHours"        , $tabHours);
+$smarty->assign("lines"             , $lines);
+$smarty->assign("patients"          , $patients);
+$smarty->assign("tabHours"          , $tabHours);
+$smarty->assign("prescriptions"     , $prescriptions);
+$smarty->assign("categories"        , $categories);
+$smarty->assign("tabHours"          , $tabHours);
 $smarty->assign("composition_dossier"       , $composition_dossier);
 $smarty->assign("bornes_composition_dossier", $bornes_composition_dossier);
 $smarty->assign("count_composition_dossier" , $count_composition_dossier);
-$smarty->assign("operations"      , array());
-$smarty->assign("nb_decalage"     , $nb_decalage);
-$smarty->assign("mode_dossier"    , $mode_dossier);
-$smarty->assign("nb_lines_element", $nb_lines_element);
-$smarty->assign("now"             , CMbDT::dateTime());
-$smarty->assign("date"            , $date);
-$smarty->assign("move_dossier_soin", false);
-$smarty->assign("configs"         , $configs);
-$smarty->assign("params"          , CConstantesMedicales::$list_constantes);
-$smarty->assign("manual_planif"   , $planif_manuelle);
+$smarty->assign("operations"        , array());
+$smarty->assign("nb_decalage"       , $nb_decalage);
+$smarty->assign("mode_dossier"      , $mode_dossier);
+$smarty->assign("nb_lines_element"  , $nb_lines_element);
+$smarty->assign("now"               , CMbDT::dateTime());
+$smarty->assign("date"              , $date);
+$smarty->assign("move_dossier_soin" , false);
+$smarty->assign("configs"           , $configs);
+$smarty->assign("params"            , CConstantesMedicales::$list_constantes);
+$smarty->assign("manual_planif"     , $planif_manuelle);
+$smarty->assign("hidden_lines_count", $hidden_lines_count);
+$smarty->assign("hide_old_lines"    , $hide_old_lines);
 
 $smarty->display('inc_vw_content_plan_soins_service.tpl');
