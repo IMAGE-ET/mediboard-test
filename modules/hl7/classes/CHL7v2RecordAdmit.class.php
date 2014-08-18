@@ -2153,7 +2153,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     $item_liaison = new CItemLiaison();
     $ljoin = array(
-      "prestation_journaliere" => "prestation_journaliere.prestation_journaliere_id = item_liaison.item_souhait_id"
+      "item_prestation"        => "item_prestation.item_prestation_id = item_liaison.item_souhait_id",
+      "prestation_journaliere" => "item_prestation.object_id = prestation_journaliere_id"
     );
 
     $where["item_liaison.sejour_id"]                           = " = '$newVenue->_id'";
@@ -2161,6 +2162,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $where["prestation_journaliere.prestation_journaliere_id"] = " = '$presta_journa->_id'";
 
     $item_liaison->loadObject($where, null, null, $ljoin);
+
+    if (!$item_liaison->_id) {
+      $item_liaison->sejour_id = $newVenue->_id;
+      $item_liaison->date      = CMbDT::date($newVenue->entree);
+    }
 
     $item_liaison->item_souhait_id  = $item_presta->_id;
     $item_liaison->_eai_sender_guid = $sender->_guid;
