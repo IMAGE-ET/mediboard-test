@@ -43,7 +43,7 @@ if ($rdv) {
   $listUsers = $object->loadProfessionnelDeSanteByPref($permType, null, $keywords);
 }
 elseif ($praticiens) {
-  $listUsers = $object->loadPraticiens();
+  $listUsers = $object->loadPraticiens($permType, null, $keywords);
 }
 else {
   $listUsers = $object->loadUsers($permType, null, $keywords);
