@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
   Main.add(function () {
     Control.Tabs.create('tab_user', true);
   });
@@ -20,9 +20,7 @@
           </a>
         </li>
       </ul>
-      
-      <hr class="control_tabs" />
-      
+
       <div id="list-primary-users" style="display: none;">
         <table class="tbl">
           <tr>
@@ -43,7 +41,7 @@
             <th>{{mb_title class=CMediusers field=_user_last_login}}</th>
           </tr>
           {{foreach from=$primary_users item=_user}}
-          <tr>
+          <tr {{if !$_user->actif}}class="hatching"{{/if}}>
             {{assign var=user_id value=$_user->_id}}
             {{assign var="href" value="?m=mediusers&tab=vw_idx_mediusers&user_id=$user_id"}}
             <td><a href="{{$href}}">{{$_user->_user_username}}</a></td>

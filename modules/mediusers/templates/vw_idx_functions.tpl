@@ -2,22 +2,21 @@
 {{mb_script module="system" script="object_selector"}}
 {{mb_script module="patients" script="autocomplete"}}
 
-<script type="text/javascript">
+<script>
+  showFunction = function(function_id, element) {
+    if (element && !element._class) {
+      element.up('tr').addUniqueClassName('selected');
+    }
+    var url = new Url("mediusers", "ajax_edit_function");
+    url.addParam("function_id", function_id);
+    url.requestUpdate("vw_function");
+  };
 
-showFunction = function(function_id, element) {
-  if (element && !element._class) {
-    element.up('tr').addUniqueClassName('selected');
+  function changePage(page) {
+    $V(getForm('listFilter').page,page);
   }
-  var url = new Url("mediusers", "ajax_edit_function");
-  url.addParam("function_id", function_id);
-  url.requestUpdate("vw_function");
-};
 
-function changePage(page) {
-  $V(getForm('listFilter').page,page);
-}
-
-Main.add(showFunction.curry('{{$function_id}}'));
+  Main.add(showFunction.curry('{{$function_id}}'));
 </script>
 
 <table class="main">

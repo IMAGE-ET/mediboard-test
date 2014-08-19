@@ -23,11 +23,10 @@ $total_sec_functions = null;
 $function = new CFunctions();
 $function->load($function_id);
 
-$function->loadBackRefs("users");
 $total_sec_functions = $function->countBackRefs("users");
 /** @var CMediusers[] $primary_users */
 $primary_users = $function->loadBackRefs("users", null, "$page_function, $step_sec_function");
-
+CStoredObject::massLoadFwdRef($primary_users, "_profile_id");
 foreach ($primary_users as $_mediuser) {
   $_mediuser->loadRefProfile();
 }
@@ -35,7 +34,7 @@ foreach ($primary_users as $_mediuser) {
 /** @var CSecondaryFunction[] $secondaries_functions */
 $secondaries_functions = $function->loadBackRefs("secondary_functions");
 $users = CMbObject::massLoadFwdRef($secondaries_functions, "user_id");
-
+CStoredObject::massLoadFwdRef($users, "_profile_id");
 foreach ($secondaries_functions as $_sec_function) {
   $_sec_function->loadRefUser();
   $_sec_function->_ref_user->loadRefProfile();
