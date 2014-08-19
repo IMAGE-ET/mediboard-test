@@ -1893,6 +1893,7 @@ class CPatient extends CPerson {
   function loadLastGrossesse() {
     $grossesse = new CGrossesse();
     $grossesse->parturiente_id = $this->_id;
+    $grossesse->active = 1;
     $grossesse->loadMatchingObject("terme_prevu DESC");
     return $this->_ref_last_grossesse = $grossesse;
   }
