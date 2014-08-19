@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage bloodSalvage
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 $type_ei_id = CValue::getOrSession("type_ei_id");
@@ -17,7 +17,6 @@ $type_ei_list = $type_ei->loadlist();
 $type_ei->loadRefs();
 
 if ($type_ei_id) {
-  $type_ei = new CTypeEi();
   $type_ei->load($type_ei_id);
 }
 
@@ -28,35 +27,33 @@ if (!$type_ei->_ref_evenement) {
   $type_ei->_ref_evenement = array();
 }
 
-$listCategories = new CEiCategorie;
+$listCategories = new CEiCategorie();
 $listCategories = $listCategories->loadList(null, "nom");
-foreach ($listCategories as $key=>$value) {
+foreach ($listCategories as $key => $categorie) {
   if ($firstdiv===null) {
     $firstdiv = $key;
   }
-  $listCategories[$key]->loadRefsBack();
-  $listCategories[$key]->checked = null;
-  foreach ($listCategories[$key]->_ref_items as $keyItem=>$valueItem) {
+  $categorie->loadRefsBack();
+  $categorie->checked = null;
+  foreach ($categorie->_ref_items as $keyItem => $item) {
+    $item->checked = false;
     if (in_array($keyItem, $type_ei->_ref_evenement)) {
-      $listCategories[$key]->_ref_items[$keyItem]->checked = true;
-      if ($listCategories[$key]->checked) {
-        $listCategories[$key]->checked .= "|". $keyItem;
+      $item->checked = true;
+      if ($categorie->checked) {
+        $categorie->checked .= "|". $keyItem;
       }
       else {
-        $listCategories[$key]->checked = $keyItem;
+        $categorie->checked = $keyItem;
       }
-    }
-    else {
-      $listCategories[$key]->_ref_items[$keyItem]->checked = false;
     }
   }
 }
 
 $smarty = new CSmartyDP();
 
-$smarty->assign("type_ei",      $type_ei);
-$smarty->assign("type_ei_list", $type_ei_list);
-$smarty->assign("firstdiv",     $firstdiv);
+$smarty->assign("type_ei"        , $type_ei);
+$smarty->assign("type_ei_list"   , $type_ei_list);
+$smarty->assign("firstdiv"       , $firstdiv);
 $smarty->assign("listCategories" , $listCategories);
 
 $smarty->display("vw_typeEi_manager.tpl");
