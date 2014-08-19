@@ -60,7 +60,7 @@
 
         <input type="hidden" name="entree_reelle" value="" />
         <button class="cancel" type="button" onclick="submitAdmission(this.form);">
-          {{tr}}Cancel{{/tr}}
+          {{tr}}CSejour-cancel_admit{{/tr}}
         </button>
         <br />
 

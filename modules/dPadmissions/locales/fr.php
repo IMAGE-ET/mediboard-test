@@ -1,16 +1,5 @@
 <?php
 $locales['Admission'] = 'Admission';
-$locales['CPatient-_nomPatient'] = 'Patient';
-$locales['CPatient-_nomPatient-desc'] = 'Tri par patient';
-$locales['CSejour-_nomPatient'] = 'Patient';
-$locales['CSejour-_nomPatient-desc'] = 'Tri par patient';
-$locales['CSejour-_nomPraticien'] = 'Praticien';
-$locales['CSejour-_nomPraticien-desc'] = 'Tri par praticien';
-$locales['CSejour-admit'] = 'Admettre';
-$locales['CSejour.type.ambu.short'] = 'Ambu';
-$locales['CSejour.type.comp.short'] = 'Hospi';
-$locales['CSejour.type.consult.short'] = 'Cons';
-$locales['CSejour.type.exte.short'] = 'Ext';
 $locales['Confirm-allowed-exit'] = 'Confirmation de l\'autorisation de sortie';
 $locales['allowed_exit'] = 'Autoriser la sortie';
 $locales['canceled_exit'] = 'Annuler l\'autorisation';
