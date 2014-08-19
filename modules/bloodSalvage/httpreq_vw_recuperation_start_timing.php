@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage bloodSalvage
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -18,8 +18,6 @@ $timing           = CValue::getOrSession("timing");
 $blood_salvage = new CBloodSalvage();
 if ($blood_salvage_id) {
   $blood_salvage->load($blood_salvage_id);
-  $blood_salvage->loadRefs();
-  $blood_salvage->loadRefPlageOp();
   $timing["_recuperation_start"]       = array();
   $max_add_minutes = CAppUI::conf("dPsalleOp max_add_minutes");
   foreach ($timing as $key => $value) {
