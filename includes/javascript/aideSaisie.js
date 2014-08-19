@@ -113,6 +113,7 @@ var AideSaisie = {
       if (Object.isFunction(input.onchange)){
         input.onchange.bindAsEventListener(input)();
       }
+      input.fire("ui:change");
       input.tryFocus();
       $V(this.options.dependField1, data.depend1);
       $V(this.options.dependField2, data.depend2);
