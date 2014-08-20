@@ -54,6 +54,9 @@ $graphs[] = CUserAgentGraph::getScreenSizeSeries($screens);
 $graphs[] = CUserAgentGraph::getPointingMethodSeries($methods);
 //$graphs[] = CUserAgentGraph::getNbConnectionsSeries($connections);
 
+// To get them in the list
+unset($where["platform_name"]);
+
 $uas = $ua->loadList($where, "browser_name, browser_version", "$start, 50", "`user_agent`.`user_agent_id`", $ljoin);
 CStoredObject::massCountBackRefs($uas, "user_authentications");
 
