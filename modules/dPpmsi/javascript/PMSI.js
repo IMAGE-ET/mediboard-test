@@ -5,7 +5,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @version  SVN: $Id:$
  * @link     http://www.mediboard.org
  */
 
@@ -104,5 +104,66 @@ PMSI = {
     new Url("dPpmsi", "ajax_sortie_line")
       .addParam("sejour_id", sejour_id)
       .requestUpdate("CSejour-"+sejour_id);
+  },
+
+  // The new PMSI view part
+
+  loadPatient: function(patient_id, sejour_id) {
+    var url = new Url("pmsi", "ajax_view_patient_pmsi");
+    url.addParam("patient_id", patient_id);
+    url.addParam("sejour_id" , sejour_id);
+    url.requestUpdate("tab-patient");
+  },
+
+  loadDiagnostics: function(sejour_id) {
+    var url = new Url("pmsi", "ajax_view_diagnostics_pmsi");
+    url.addParam("sejour_id" , sejour_id);
+    url.requestUpdate("tab-diagnostics");
+  },
+
+  loadActes: function(sejour_id) {
+    var url = new Url("pmsi", "ajax_view_actes_pmsi");
+    url.addParam("sejour_id" , sejour_id);
+    url.requestUpdate("tab-actes");
+  },
+
+  loadDocuments: function(sejour_id) {
+    var url = new Url("dPhospi", "httpreq_documents_sejour");
+    url.addParam("sejour_id" , sejour_id);
+    url.requestUpdate("tab-documents");
+  },
+
+  loadDMI: function(sejour_id) {
+    var url = new Url("dmi", "ajax_list_dmis");
+    url.addParam("sejour_id" , sejour_id);
+    url.requestUpdate("tab-dmi");
+  },
+
+  loadSearch: function(sejour_id) {
+    alert('on load le module search du séjour '+sejour_id);
+  },
+
+  loadRSS: function(sejour_id) {
+    alert('on load le module RSS du séjour '+sejour_id);
+  },
+
+  printDossierComplet: function(sejour_id) {
+    var url = new Url("soins", "print_dossier_soins");
+    url.addParam("sejour_id", sejour_id);
+    url.popup(850, 600, "Dossier complet");
+  },
+
+  choosePreselection: function (oSelect) {
+    if (!oSelect.value) {
+      return;
+    }
+    var aParts = oSelect.value.split("|");
+    var sLibelle = aParts.pop();
+    var sCode = aParts.pop();
+    var oForm = oSelect.form;
+    $V(oForm.code_uf, sCode);
+    $V(oForm.libelle_uf, sLibelle);
+
+    oSelect.value = "";
   }
 };

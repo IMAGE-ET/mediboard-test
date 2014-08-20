@@ -8,13 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-Main.add(function () {
-  prepareForm(document.forms.editIPP);
-});
-</script>
-
-<form name="editIPP" action="?m={{$m}}" method="post" onsubmit="return ExtRefManager.submitIPPForm()">
+<form name="editIPP" action="?m={{$m}}" method="post"
+      onsubmit="return onSubmitFormAjax(this); PMSI.loadActes({{$sejour->_id}});">
   <input type="hidden" name="dosql" value="do_idsante400_aed" />
   <input type="hidden" name="m" value="dPsante400" />
   <input type="hidden" name="del" value="0" />
@@ -36,7 +31,7 @@ Main.add(function () {
           PatHprimSelector.doSet = function(){
             var oForm = document[PatHprimSelector.sForm];
             $V(oForm[PatHprimSelector.sId], PatHprimSelector.prepared.id);
-            ExtRefManager.submitIPPForm();
+            oForm.onsubmit();
           }
         </script>
       </th>

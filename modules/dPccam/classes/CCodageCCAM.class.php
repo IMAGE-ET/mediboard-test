@@ -614,7 +614,7 @@ class CCodageCCAM extends CMbObject {
    * @return void
    */
   protected function applyRuleM(&$act) {
-    $this->completeField('facturable', 'code_association');
+    $act->completeField('facturable', 'code_association');
     $act->_guess_facturable = $act->facturable;
     $act->_guess_association = $act->code_association;
     $act->_guess_regle_asso = 'M';

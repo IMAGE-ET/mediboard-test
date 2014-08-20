@@ -9,6 +9,8 @@
  * @version    $Revision$
  */
 
+//CAppUI::redirect("m=dPpmsi&tab=vw_dossier_pmsi");
+
 CCanDo::checkEdit();
 
 $NDA = CValue::getOrSession("NDA");

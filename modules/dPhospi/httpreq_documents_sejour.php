@@ -9,7 +9,7 @@
  * @version    $Revision$
  */
 
-$only_sejour  = CValue::get("only_sejour", 0);
+$only_sejour  = CValue::get("only_sejour" , 0);
 $with_patient = CValue::get("with_patient", 0);
 $operation_id = CValue::get("operation_id", 0);
 
@@ -17,7 +17,7 @@ $sejour = new CSejour();
 $sejour->load(CValue::get("sejour_id"));
 $sejour->loadRefPatient();
 $sejour->loadRefsOperations();
-$sejour->canRead();
+$sejour->canDo();
 
 if (!$only_sejour) {
   $sejour->loadRefsConsultations();

@@ -44,15 +44,8 @@
     });
 
     checkboxes.each(function(checkbox) {
-      if (
-        (!checkbox.checked && nb_checked == 4) ||
-          (exclusive_modifiers.indexOf(exclusive_modifier) != -1 && exclusive_modifiers.indexOf(checkbox.get('code')) != -1 && !checkbox.checked && exclusive_modifier_checked)
-        ) {
-        checkbox.disabled = true;
-      }
-      else {
-        checkbox.disabled = false;
-      }
+      checkbox.disabled = (!checkbox.checked && nb_checked == 4) ||
+        (exclusive_modifiers.indexOf(exclusive_modifier) != -1 && exclusive_modifiers.indexOf(checkbox.get('code')) != -1 && !checkbox.checked && exclusive_modifier_checked);
     });
 
     var container = input.up();
@@ -91,6 +84,8 @@
   });
 
 </script>
+
+{{mb_script module="dPccam" script="code_ccam" ajax=$ajax}}
 
 {{assign var="subject" value=$codage->_ref_codable}}
 
@@ -156,7 +151,8 @@
           {{foreach from=$_phase->_modificateurs item=_mod name=modificateurs}}
             <span class="circled {{if $_mod->_state == 'prechecked'}}ok{{elseif $_mod->_checked && in_array($_mod->_state, array('not_recommended', 'forbidden'))}}error{{elseif in_array($_mod->_state, array('not_recommended', 'forbidden'))}}warning{{/if}}"
                   title="{{$_mod->libelle}} ({{$_mod->_montant}})">
-              <input type="checkbox" name="modificateur_{{$_mod->code}}{{$_mod->_double}}" {{if $_mod->_checked}}checked="checked"{{elseif $nb_modificateurs == 4 || $_mod->_state == 'forbidden' || (intval($acte->_exclusive_modifiers) > 0 && in_array($_mod->code, array('F', 'U', 'P', 'S')))}}disabled="disabled"{{/if}}
+              <input type="checkbox" name="modificateur_{{$_mod->code}}{{$_mod->_double}}"
+                     {{if $_mod->_checked}}checked="checked"{{elseif $nb_modificateurs == 4 || $_mod->_state == 'forbidden' || (intval($acte->_exclusive_modifiers) > 0 && in_array($_mod->code, array('F', 'U', 'P', 'S')))}}disabled="disabled"{{/if}}
                      data-acte="{{$view}}" data-code="{{$_mod->code}}" data-double="{{$_mod->_double}}" class="modificateur" onchange="syncCodageField(this, '{{$view}}');" />
               <label for="modificateur_{{$_mod->code}}{{$_mod->_double}}">
                 {{$_mod->code}}

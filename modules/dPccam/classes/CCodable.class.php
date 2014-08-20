@@ -48,6 +48,7 @@ class CCodable extends CMbObject {
   public $_temp_ccam;
 
   // Actes NGAP
+  public $_empty_ngap;
   public $_store_ngap;
   public $_codes_ngap;
   public $_tokens_ngap;
@@ -584,6 +585,7 @@ class CCodable extends CMbObject {
      * la valeur 1 étant pour les actes principaux et O pour les majorations
      * on souhaite que les actes principaux soient proritaires( donc '1' avant '0')
      * */
+    $this->_empty_ngap = CActeNGAP::createEmptyFor($this);
     if (null === $this->_ref_actes_ngap = $this->loadBackRefs("actes_ngap", "lettre_cle DESC")) {
       return;
     }
@@ -1067,6 +1069,7 @@ class CCodable extends CMbObject {
               $possible_acte->getMontantModificateurs($phase->_modificateurs);
             }
             else {
+              $possible_acte->getMontantModificateurs($phase->_modificateurs);
               foreach ($phase->_modificateurs as $modificateur) {
                 $modificateur->_checked =
                   $this->checkModificateur($modificateur->code, CMbDT::time($phase->_connected_acte->execution));

@@ -20,7 +20,7 @@
 	
   <td class="text">
     {{assign var=patient value=$sejour->_ref_patient}}
-    <a href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$sejour->patient_id}}&amp;sejour_id={{$sejour->_id}}">
+    <a href="?m=dPpmsi&amp;tab=vw_dossier_pmsi&amp;patient_id={{$sejour->patient_id}}&amp;sejour_id={{$sejour->_id}}">
     	<span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
 	      {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}
 	      {{$patient}}

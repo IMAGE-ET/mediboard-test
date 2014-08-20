@@ -9,13 +9,8 @@
 *}}
 
 {{if $sejour->_ref_NDA}}
-  <script type="text/javascript">
-  Main.add(function () {
-    prepareForm(document.forms.editNumdos{{$sejour->_id}});
-  });
-  </script>
-  
-  <form name="editNumdos{{$sejour->_id}}" action="?m={{$m}}" method="post" onsubmit="return ExtRefManager.submitNumdosForm({{$sejour->_id}})">
+  <form name="editNumdos{{$sejour->_id}}" action="?" method="post"
+        onsubmit="return onSubmitFormAjax(this); PMSI.loadActes({{$sejour->_id}});">
     <input type="hidden" name="dosql" value="do_idsante400_aed" />
     <input type="hidden" name="m" value="dPsante400" />
     <input type="hidden" name="del" value="0" />

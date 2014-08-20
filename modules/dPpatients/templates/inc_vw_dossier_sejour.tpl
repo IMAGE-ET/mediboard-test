@@ -51,7 +51,7 @@ Main.add( function(){
 <hr class="control_tabs" />
 
 <div id="div_sejour" style="display:none;">
-  {{include file="../../dPplanningOp/templates/CSejour_complete.tpl"}}
+  {{mb_include module=planningOp template="CSejour_complete"}}
 </div>
 
 <div id="constantes" style="display:none;">

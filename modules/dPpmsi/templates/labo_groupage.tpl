@@ -23,7 +23,7 @@
       <table class="form">
         <tr>
           <th class="title" style="text-align:left;">
-            <a class="button search" href="?m=dPpmsi&tab=vw_dossier&amp;pat_id={{$patient->_id}}" style="float:right;">
+            <a class="button search" href="?m=dPpmsi&tab=vw_dossier_pmsi&amp;patient_id={{$patient->_id}}" style="float:right;">
               Voir le dossier
             </a>
             Hospitalisation

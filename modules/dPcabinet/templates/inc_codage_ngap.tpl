@@ -16,7 +16,12 @@ refreshTarif = function(){
 };
 
 ActesNGAP = {
-  list_prats: { {{foreach from=$acte_ngap->_list_executants item=_executant name=executants}}{{$_executant->_id}}: {{if $_executant->spec_cpam_id}}{{$_executant->spec_cpam_id}}{{else}}0{{/if}}{{if !$smarty.foreach.executants.last}}, {{/if}}{{/foreach}} },
+  list_prats: {
+    {{foreach from=$acte_ngap->_list_executants item=_executant name=executants}}
+      {{$_executant->_id}}: {{if $_executant->spec_cpam_id}}{{$_executant->spec_cpam_id}}{{else}}0{{/if}}{{if !$smarty.foreach.executants.last}}, {{/if}}
+    {{/foreach}}
+  },
+
   checkExecutant: function(executant_id) {
     if (!ActesNGAP.list_prats[executant_id]) {
       alert("{{if $app->_ref_user->isPraticien()}}{{tr}}CActeNGAP-specialty-undefined_medecin{{/tr}}{{else}}{{tr}}CActeNGAP-specialty-undefined_user{{/tr}}{{/if}}");
@@ -79,7 +84,7 @@ ActesNGAP = {
   {{/if}}
 {{/if}}
 
- <form name="editNGAP" method="post" action=""> 
+ <form name="editNGAP" method="post" action="">
   <input type="hidden" name="acte_ngap_id" value="" />
   <input type="hidden" name="m" value="dPcabinet" />
   <input type="hidden" name="dosql" value="do_acte_ngap_aed" />

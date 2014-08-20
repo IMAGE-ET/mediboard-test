@@ -58,6 +58,8 @@ foreach ($sejour->loadRefsTasks() as $_task) {
 $sejour->loadRefsOperations();
 foreach ($sejour->_ref_operations as $_interv) {
   $_interv->loadRefChir();
+  $_interv->loadRefAnesth();
+  $_interv->loadRefPlageOp();
   $_interv->_ref_chir->loadRefFunction();
   $_interv->loadRefsConsultAnesth();
   $_interv->loadBrancardage();
@@ -75,6 +77,7 @@ foreach ($sejour->_ref_operations as $_interv) {
 
     $_check_list->loadItemTypes();
     $_check_list->loadBackRefs('items');
+    /** @var $_item CDailyCheckItem */
     foreach ($_check_list->_back['items'] as $_item) {
       $_item->loadRefsFwd();
     }
