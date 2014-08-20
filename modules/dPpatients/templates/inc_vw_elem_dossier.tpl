@@ -2,6 +2,12 @@
 
 {{mb_default var=selected_guid value=""}}
 {{mb_default var=show_semaine_grossesse value=0}}
+
+{{assign var=tab_consult value="edit_consultation"}}
+{{if $app->user_prefs.new_consultation}}
+  {{assign var=tab_consult value="vw_consultation"}}
+{{/if}}
+
 {{if $object instanceof CSejour}}
 
 {{if $object->group_id == $g || $conf.dPpatients.CPatient.multi_group == "full"}}
@@ -30,11 +36,6 @@
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$object->_ref_praticien}}
   </td>
 </tr>
-
-{{assign var=tab_consult value="edit_consultation"}}
-{{if $app->user_prefs.new_consultation}}
-  {{assign var=tab_consult value="vw_consultation"}}
-{{/if}}
 
 {{foreach from=$object->_ref_consultations item=_consult}}
 <tr {{if $object->_guid == $selected_guid}} class="selected" {{/if}}>
