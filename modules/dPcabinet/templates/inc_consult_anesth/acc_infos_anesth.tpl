@@ -1,56 +1,56 @@
 {{mb_default var="view_prescription" value=1}}
 
-<script type="text/javascript">
-function submitTech(oForm) {
-  onSubmitFormAjax(oForm, { onComplete : reloadListTech });
-  if ($V(oForm.elements.del)) {
-    oForm.reset();
-  }
-  return false;
-}
-
-function reloadListTech() {
-  var UrllistTech = new Url("dPcabinet", "httpreq_vw_list_techniques_comp");
-  UrllistTech.addParam("selConsult", document.editFrmFinish.consultation_id.value);
-  UrllistTech.requestUpdate('listTech');
-}
-
-guessScoreApfel = function() {
-  var url = new Url("dPcabinet", "ajax_guess_score_apfel");
-  url.addParam("patient_id", "{{$consult->patient_id}}");
-  url.addParam("consult_id", "{{$consult_anesth->_id}}");
-  url.requestUpdate("score_apfel_area", {onComplete: function() {
-    return getForm('editScoreApfel').onsubmit();
-  }});
-};
-
-afterStoreScore = function(id, obj) {
-  $("score_apfel").update(obj._score_apfel);
-};
-
-toggleUSCPO = function(status) {
-  var form = getForm("editTypeAnesthFrm");
-  if (status == 1) {
-    $("uscpo_area").setStyle({visibility: "visible"});
-  }
-  else {
-    $("uscpo_area").setStyle({visibility: "hidden"});
-  }
-  // Permet de valuer à 1 automatiquement la durée uscpo,
-  // ou bien 0 si le passage uscpo est repassé à non.
-  $V(form.duree_uscpo, status);
-};
-
-checkUSCPO = function() {
-  var form = getForm("editTypeAnesthFrm");
-  if ($V(form._passage_uscpo) == 1 && $V(form.duree_uscpo) == "") {
-    alert("Veuillez saisir une durée USCPO");
+<script>
+  submitTech = function(oForm) {
+    onSubmitFormAjax(oForm, reloadListTech);
+    if ($V(oForm.elements.del)) {
+      oForm.reset();
+    }
     return false;
   }
-  
-  return true; 
-}
 
+  reloadListTech = function() {
+    var UrllistTech = new Url("dPcabinet", "httpreq_vw_list_techniques_comp");
+    UrllistTech.addParam("selConsult", "{{$consult->_id}}");
+    UrllistTech.addParam("dossier_anesth_id", "{{$consult_anesth->_id}}");
+    UrllistTech.requestUpdate('listTech');
+  }
+
+  guessScoreApfel = function() {
+    var url = new Url("dPcabinet", "ajax_guess_score_apfel");
+    url.addParam("patient_id", "{{$consult->patient_id}}");
+    url.addParam("consult_id", "{{$consult_anesth->_id}}");
+    url.requestUpdate("score_apfel_area", {onComplete: function() {
+      return getForm('editScoreApfel').onsubmit();
+    }});
+  };
+
+  afterStoreScore = function(id, obj) {
+    $("score_apfel").update(obj._score_apfel);
+  };
+
+  toggleUSCPO = function(status) {
+    var form = getForm("editTypeAnesthFrm");
+    if (status == 1) {
+      $("uscpo_area").setStyle({visibility: "visible"});
+    }
+    else {
+      $("uscpo_area").setStyle({visibility: "hidden"});
+    }
+    // Permet de valuer à 1 automatiquement la durée uscpo,
+    // ou bien 0 si le passage uscpo est repassé à non.
+    $V(form.duree_uscpo, status);
+  };
+
+  checkUSCPO = function() {
+    var form = getForm("editTypeAnesthFrm");
+    if ($V(form._passage_uscpo) == 1 && $V(form.duree_uscpo) == "") {
+      alert("Veuillez saisir une durée USCPO");
+      return false;
+    }
+
+    return true;
+  }
 </script>
 
 {{assign var=operation value=$consult_anesth->_ref_operation}}
@@ -173,7 +173,7 @@ checkUSCPO = function() {
                 {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1}}
                 {{mb_field object=$techniquesComp field="technique" rows="4" form="addEditTechCompFrm"
                   aidesaisie="validateOnBlur: 0"}}
-                <button class="add" type="submit">{{tr}}Add{{/tr}}</button>
+                <button class="add">{{tr}}Add{{/tr}}</button>
               </form>
             </td>
             <td class="halfPane text" id="listTech">
