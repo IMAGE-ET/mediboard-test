@@ -1872,6 +1872,7 @@ $locales['CUserAgent.one'] = 'user agent';
 $locales['CUserAgent.pointing_method.mouse'] = 'Souris';
 $locales['CUserAgent.pointing_method.touchscreen'] = 'Ecran tactile';
 $locales['CUserAgent.pointing_method.unknown'] = 'Inconnu';
+$locales['CUserAgentGraph.none'] = 'Aucun graphique disponible';
 $locales['CUserAuthentication'] = 'Authentification utilisateur';
 $locales['CUserAuthentication-auth_method'] = 'Méthode d\'authentification';
 $locales['CUserAuthentication-auth_method-court'] = 'Méthode auth.';

@@ -1,100 +1,38 @@
 {{mb_script module=system script=useragent}}
 
 <script>
-  Main.add(function () {
-    drawBrowserGraph();
+  Main.add(function() {
+    var form = getForm("filter_graph");
+    Calendar.regField(form._min_date);
+    Calendar.regField(form._max_date);
+
+    form.onsubmit();
   });
 
-  drawBrowserGraph = function() {
-    var oPh, oData, oOptions, sTitle;
-    var oData   = {{$graph.data|@json}};
-    var oOptions = {{$graph.options|@json}};
-
-    var oPh = jQuery("#browser_placeholder");
-    oPh.bind('plothover', plotHover);
-    var plot = jQuery.plot(oPh, oData, oOptions);
-  };
-
-  plotHover = function(event, pos, item) {
-    if (item) {
-      jQuery("#flot-tooltip").remove();
-
-      aLabel  = item.series.label.split("-");
-      content = "<strong>" + item.series.data[0][1] + "</strong>";
-
-      $$("body")[0].insert(DOM.div({className: "tooltip", id: "flot-tooltip"}, content).setStyle({
-        position: 'absolute',
-        top: pos.pageY + 5 + "px",
-        left: pos.pageX + 5 + "px",
-        opacity: 0.8,
-        backgroundColor: '#000000',
-        color: '#FFFFFF',
-        borderRadius: '4px',
-        textAlign: 'center',
-        maxWidth: '300px',
-        whiteSpace: 'normal'
-      }));
-    }
-    else {
-      jQuery("#flot-tooltip").remove();
-    }
-  };
+  function changePage(start) {
+    var form = getForm("filter_graph");
+    $V(form.elements.start, start);
+    form.onsubmit();
+  }
 </script>
 
-<div id="browser_graph">
-  <table class="layout">
+<form name="filter_graph" action="" method="get" onsubmit="return onSubmitFormAjax(this, null, 'browser_results');" onchange="$V(this.elements.start, '0');">
+  <input type="hidden" name="m" value="system" />
+  <input type="hidden" name="a" value="ajax_search_user_agents" />
+  <input type="hidden" name="start" value="0" />
+
+  <table class="form">
     <tr>
+      <th class="narrow">{{tr}}Period{{/tr}}</th>
       <td>
-        <p style="text-align: center">
-          <strong>{{$graph.title}}</strong>
-        </p>
-        <div id="browser_placeholder" style="width: 400px; height: 300px;"></div>
+        <input type="hidden" class="dateTime" id="_min_date" name="_min_date" value="{{$min_date}}" />
+        <b>&raquo;</b>
+        <input type="hidden" class="dateTime" id="_max_date" name="_max_date" value="{{$max_date}}" />
+
+        <button type="submit" class="search ">{{tr}}Search{{/tr}}</button>
       </td>
     </tr>
   </table>
-</div>
+</form>
 
-<table class="main tbl">
-  <tr>
-    <th class="narrow"></th>
-    <th class="narrow">{{mb_title class=CUserAgent field=browser_name}}</th>
-    <th class="narrow">{{mb_title class=CUserAgent field=browser_version}}</th>
-
-    <th class="narrow">{{mb_title class=CUserAgent field=platform_name}}</th>
-    <th class="narrow">{{mb_title class=CUserAgent field=platform_version}}</th>
-
-    <th class="narrow">{{mb_title class=CUserAgent field=device_name}}</th>
-    <th class="narrow">{{mb_title class=CUserAgent field=device_maker}}</th>
-    <th class="narrow">{{mb_title class=CUserAgent field=device_type}}</th>
-    <th class="narrow">{{mb_title class=CUserAgent field=pointing_method}}</th>
-    <th class="narrow">{{tr}}CUserAgent-back-user_authentications{{/tr}}</th>
-    <th>{{mb_title class=CUserAgent field=user_agent_string}}</th>
-  </tr>
-  
-  {{foreach from=$user_agents item=_user_agent}}
-    <tr>
-      <td>
-        <button class="edit notext compact" onclick="UserAgent.edit({{$_user_agent->_id}})">{{tr}}Edit{{/tr}}</button>
-      </td>
-
-      <td style="text-align: right;">{{mb_value object=$_user_agent field=browser_name}}</td>
-      <td>{{mb_value object=$_user_agent field=browser_version}}</td>
-
-      <td style="text-align: right;">{{mb_value object=$_user_agent field=platform_name}}</td>
-      <td {{if $_user_agent->platform_version == "unknown"}} class="empty" {{/if}}>{{mb_value object=$_user_agent field=platform_version}}</td>
-
-      <td {{if $_user_agent->device_name == "unknown"}} class="empty" {{/if}}>{{mb_value object=$_user_agent field=device_name}}</td>
-      <td {{if $_user_agent->device_maker == "unknown"}} class="empty" {{/if}}>{{mb_value object=$_user_agent field=device_maker}}</td>
-      <td {{if $_user_agent->device_type == "unknown"}} class="empty" {{/if}}>{{mb_value object=$_user_agent field=device_type}}</td>
-      <td {{if $_user_agent->pointing_method == "unknown"}} class="empty" {{/if}}>{{mb_value object=$_user_agent field=pointing_method}}</td>
-
-      <td>
-        <a href="?m=system&amp;tab=vw_user_authentications&amp;user_agent_id={{$_user_agent->_id}}">
-          {{$_user_agent->_count.user_authentications}}
-        </a>
-      </td>
-
-      <td class="compact text">{{mb_value object=$_user_agent field=user_agent_string}}</td>
-    </tr>
-  {{/foreach}}
-</table>
+<div id="browser_results"></div>

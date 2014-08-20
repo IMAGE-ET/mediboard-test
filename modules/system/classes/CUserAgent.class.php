@@ -83,6 +83,9 @@ class CUserAgent extends CMbObject {
   public $device_type; // Mobile Device, Mobile Phone, Desktop, Tablet
   public $pointing_method; // mouse, unknown, touchscreen
 
+  /** @var  CUserAuthentication[] */
+  public $_ref_user_authentications;
+
   /**
    * @see parent::getSpec()
    */
@@ -129,6 +132,10 @@ class CUserAgent extends CMbObject {
     parent::updateFormFields();
 
     $this->_view = "$this->browser_name $this->browser_version / $this->platform_name $this->platform_version";
+  }
+
+  function loadRefUserAuthentication() {
+    return $this->_ref_user_authentications = $this->loadBackRefs("user_authentications");
   }
 
   /**
