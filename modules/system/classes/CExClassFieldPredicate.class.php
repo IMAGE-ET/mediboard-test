@@ -16,6 +16,7 @@ class CExClassFieldPredicate extends CMbObject {
   public $operator;
   public $value;
   public $_value;
+  public $_compute_view;
 
   /** @var CExClassField */
   public $_ref_ex_class_field;
@@ -45,6 +46,7 @@ class CExClassFieldPredicate extends CMbObject {
     $props["operator"]          = "enum notNull list|=|!=|>|>=|<|<=|startsWith|endsWith|contains|hasValue|hasNoValue default|=";
     $props["value"]             = "str notNull seekable";
     $props["_value"]            = "str";
+    $props["_compute_view"]     = "bool";
     return $props;
   }
 
@@ -136,7 +138,15 @@ class CExClassFieldPredicate extends CMbObject {
   function store(){
     CExObject::$_locales_cache_enabled = false;
 
-    return parent::store();
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+    
+    if ($this->_compute_view) {
+      $this->loadView();
+    }
+    
+    return null;
   }
 
   /**

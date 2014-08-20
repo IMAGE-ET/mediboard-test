@@ -98,6 +98,7 @@ Main.add(function(){
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="dosql" value="do_ex_class_field_predicate_aed" />
   <input type="hidden" name="callback" value="predicateCallback" />
+  <input type="hidden" name="_compute_view" value="1" />
   <input type="hidden" name="del" value="" />
   {{mb_key object=$ex_field_predicate}}
   
