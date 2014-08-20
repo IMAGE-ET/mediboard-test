@@ -366,6 +366,10 @@ a.button.big.notext {
   padding-top: 6px;
 }
 
+button.thumb:before, a.button.thumb:before {
+  content: url(images/buttons/thumb.png);
+}
+
 button.target:before, a.button.target:before {
   content: url(images/buttons/target.png);
 }

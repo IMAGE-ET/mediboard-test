@@ -1,4 +1,5 @@
 <?php
+$locales['Accept'] = 'Accepter';
 $locales['Account'] = 'Identité';
 $locales['Action'] = 'Action';
 $locales['Actions'] = 'Actions';
