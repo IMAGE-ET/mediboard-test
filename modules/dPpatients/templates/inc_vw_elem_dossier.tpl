@@ -31,6 +31,11 @@
   </td>
 </tr>
 
+{{assign var=tab_consult value="edit_consultation"}}
+{{if $app->user_prefs.new_consultation}}
+  {{assign var=tab_consult value="vw_consultation"}}
+{{/if}}
+
 {{foreach from=$object->_ref_consultations item=_consult}}
 <tr {{if $object->_guid == $selected_guid}} class="selected" {{/if}}>
   <td class="text" style="text-indent: 1em;">
@@ -39,7 +44,7 @@
       <img src="images/icons/planning.png" alt="modifier" />
     </a>
     <a class="iconed-text {{$_consult->_type}}" 
-      href="?m=cabinet&tab=edit_consultation&selConsult={{$_consult->_id}}&chirSel={{$_consult->_ref_plageconsult->chir_id}}">
+      href="?m=cabinet&tab={{$tab_consult}}&selConsult={{$_consult->_id}}&chirSel={{$_consult->_ref_plageconsult->chir_id}}">
     {{else}}
     <a href="#nothing" class="iconed-text {{$_consult->_type}}">
     {{/if}}
@@ -94,7 +99,7 @@
       {{/if}}
       {{if $consult->_canEdit}}
       <a class="iconed-text anesth"
-         href="?m=cabinet&tab=edit_consultation&selConsult={{$consult->_id}}&chirSel={{$consult->_ref_plageconsult->chir_id}}&dossier_anesth_id={{$consult_anesth->_id}}">
+         href="?m=cabinet&tab={{$tab_consult}}&selConsult={{$consult->_id}}&chirSel={{$consult->_ref_plageconsult->chir_id}}&dossier_anesth_id={{$consult_anesth->_id}}">
         {{else}}
         <a href="#nothing" class="iconed-text anesth">
           {{/if}}
@@ -132,7 +137,7 @@
     {{/if}}
     {{if $object->_canEdit}}
     <a class="iconed-text {{$object->_type}}" 
-      href="?m=cabinet&tab=edit_consultation&selConsult={{$object->_id}}&chirSel={{$object->_ref_plageconsult->chir_id}}">
+      href="?m=cabinet&tab={{$tab_consult}}&selConsult={{$object->_id}}&chirSel={{$object->_ref_plageconsult->chir_id}}">
     {{else}}
     <a href="#nothing" class="iconed-text {{$object->_type}}">
     {{/if}}
