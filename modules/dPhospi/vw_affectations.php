@@ -171,11 +171,11 @@ $imeds_active = CModule::getActive("dPImeds");
 
 $functions_filter = array();
 foreach ($groupSejourNonAffectes as $_keyGroup => $_group) {
-  if ($imeds_active) {
-    CSejour::massLoadNDA($_group);
-  }
   if ($_keyGroup == "couloir") {
     continue;
+  }
+  if ($imeds_active) {
+    CSejour::massLoadNDA($_group);
   }
   /** @var CSejour[] $_group */
   foreach ($_group as $_key => $_sejour) {
