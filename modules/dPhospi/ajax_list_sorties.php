@@ -171,7 +171,13 @@ if ($type == "presents") {
         $op->_ref_anesth->loadRefFunction();
       }
     }
-    
+
+    if ($dmi_active) {
+      foreach ($sejour->_ref_operations as $_interv) {
+        $_interv->getDMIAlert();
+      }
+    }
+
     $_present->_ref_next->loadRefLit(1)->loadCompleteView();
   }
 
@@ -201,6 +207,12 @@ if ($type == "presents") {
       if ($show_hour_anesth) {
         $op->loadRefPlageOp();
         $op->_ref_anesth->loadRefFunction();
+      }
+    }
+
+    if ($dmi_active) {
+      foreach ($sejour->_ref_operations as $_interv) {
+        $_interv->getDMIAlert();
       }
     }
   }
