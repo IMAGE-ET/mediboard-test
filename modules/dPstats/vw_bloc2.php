@@ -97,6 +97,7 @@ CStoredObject::massLoadFwdRef($sejours, "patient_id");
 foreach ($operations as $_operation) {
   $_operation->updateDatetimes();
   $_operation->loadRefAnesth();
+  $_operation->loadRefPlageOp();
   $_operation->updateSalle();
   $_operation->loadRefChir()->loadRefFunction();
   $_operation->loadRefPatient();
