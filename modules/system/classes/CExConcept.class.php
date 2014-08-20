@@ -87,7 +87,7 @@ class CExConcept extends CExListItemsOwner {
     $spec = parent::getSpec();
     $spec->table = "ex_concept";
     $spec->key   = "ex_concept_id";
-    $spec->uniques["name"] = array("name", "ex_list_id");
+    $spec->uniques["name"] = array("name");
     return $spec;
   }
 
@@ -251,6 +251,10 @@ class CExConcept extends CExListItemsOwner {
    * @return CMbFieldSpec
    */
   function loadConceptSpec(){
+    if ($this->_concept_spec) {
+      return $this->_concept_spec;
+    }
+    
     return $this->_concept_spec = self::getConceptSpec($this->prop);
   }
 

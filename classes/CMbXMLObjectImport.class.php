@@ -10,34 +10,108 @@
  */
 
 class CMbXMLObjectImport {
+  /** @var CStoredObject[] */
   static $all = array();
   
-  public $class;
-  public $instance;
+  protected $filename;
   
-  public $values;
-  public $ids;
+  /** @var DOMDocument */
+  protected $dom;
   
-  public $refs;
-  public $collections;
-  
-  public $similar;
-  
-  function __construct($class, $values, $ids) {
-    $this->class  = $class;
-    $this->values = $values;
-    $this->ids    = $ids;
+  /** @var DOMXPath */
+  protected $xpath;
+
+  /**
+   * @param string $filename XML file name
+   */
+  function __construct($filename) {
+    $this->filename  = $filename;
+
+    $this->dom = new DOMDocument();
+    $this->dom->load($this->filename);
     
-    $this->instance = new $class;
-    $this->similar = $this->instance->getSimilar($values);
+    $this->xpath = new DOMXPath($this->dom);
+  }
+  
+  function import($datamap) {
+    /** @var DOMElement[] $objects */
+    $objects = $this->xpath->query("//object");
     
-    $this->mapToObject();
-    
-    foreach ($ids as $fwd => $id) {
-      mbTrace($this->getObjectGuidByFwdRef($this->instance, $fwd));
+    foreach ($objects as $_object) {
+      $this->importObject($_object);
     }
     
-    self::$all[$ids["id"]] = $this;
+    mbTrace(count(self::$all));
+  }
+  
+  function importObject(DOMElement $element) {
+    $guid = $element->getAttribute("id");
+    
+    self::$all[$guid] = $this->getValuesFromElement($element);
+  }
+  
+  function getValuesFromElement(DOMElement $element) {
+    /** @var DOMElement[] $value_elements */
+    $value_elements = $this->xpath->query("field", $element);
+
+    $values = array();
+    foreach ($value_elements as $_element) {
+      $values[$_element->getAttribute("name")] = utf8_decode($_element->nodeValue);
+    }
+    
+    foreach ($element->attributes as $_attribute) {
+      $_name = $_attribute->name;
+      if (in_array($_name, array("id", "class"))) {
+        continue;
+      }
+      
+      /** @var DOMAttr $_attribute */
+      $values[$_name] = $_attribute->value;
+    }
+    
+    return $values;
+  }
+
+  function getSimilarFromElement(DOMElement $element) {
+    $class = $element->getAttribute("class");
+
+    $values = $this->getValuesFromElement($element);
+
+    /** @var CStoredObject $object */
+    $object = new $class;
+    return $object->getSimilar($values);
+  }
+
+  function getNamedValueFromElement(DOMElement $element, $name) {
+    $fields = $this->xpath->query("field[@name='$name']", $element);
+
+    if ($fields->length == 0) {
+      return null;
+    }
+    
+    return utf8_decode($fields->item(0)->nodeValue);
+  }
+
+  /**
+   * Get DOM elements by class name
+   *
+   * @param string $class Class name
+   *
+   * @return DOMNodeList|DOMElement[]
+   */
+  function getElementsbyClass($class) {
+    return $this->xpath->query("//object[@class='$class']");
+  }
+
+  /**
+   * Get DOM elements by class name
+   *
+   * @param string $class Class name
+   *
+   * @return DOMNodeList|DOMElement[]
+   */
+  function getElementsByFwdRef($class, $field_name, $field_value) {
+    return $this->xpath->query("//object[@class='$class' and @$field_name='$field_value']");
   }
   
   function getObjectGuidByFwdRef(CMbObject $object, $fwd) {
@@ -46,7 +120,8 @@ class CMbXMLObjectImport {
       return $object;
     }
     
-    $spec = $object->_specs[$fwd]; // We assume it's alway a CRefSpec
+    /** @var CRefSpec $spec */
+    $spec = $object->_specs[$fwd]; // We assume it's always a CRefSpec
     
     $class = $spec->meta ? $object->{$spec->meta} : $spec->class;
     
@@ -56,18 +131,6 @@ class CMbXMLObjectImport {
     
     $id = $object->$fwd;
     return "$class-$id";
-  }
-  
-  function mapToObject(){
-    $obj = $this->instance;
-    
-    foreach ($this->values as $field => $value) {
-      $obj->$field = $value;
-    }
-    
-    foreach ($this->ids as $field => $value) {
-      $obj->$field = $value;
-    }
   }
 }
 

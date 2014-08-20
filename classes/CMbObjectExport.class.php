@@ -80,8 +80,9 @@ class CMbObjectExport {
   function toDOM(){
     $this->doc = new CMbXMLDocument("utf-8");
     $this->doc->formatOutput = true;
-    $root = $this->doc->createElement($this->object->_guid);
+    $root = $this->doc->createElement("mediboard-export");
     $root->setAttribute("date", CMbDT::dateTime());
+    $root->setAttribute("root", $this->object->_guid);
     $this->doc->appendChild($root);
     
     $this->_toDOM($this->object, $this->depth);
@@ -91,14 +92,14 @@ class CMbObjectExport {
 
   /**
    * Internal DOM export method
-   * 
+   *
    * @param CStoredObject $object Object to export
    * @param int           $depth  Export depth
-   *                              
+   *
    * @return void
    */
   private function _toDOM(CStoredObject $object, $depth) {
-    if (!$depth || !$object->_id || !$object->getPerm(PERM_READ)) {
+    if ($depth == 0 || !$object->_id || !$object->getPerm(PERM_READ)) {
       return;
     }
     
@@ -110,7 +111,8 @@ class CMbObjectExport {
       return;
     }
     
-    $object_node = $doc->createElement($object->_class);
+    $object_node = $doc->createElement("object");
+    $object_node->setAttribute('class', $object->_class);
     $object_node->setAttribute('id', $object->_guid);
     $object_node->setIdAttribute('id', true);
     $doc->documentElement->appendChild($object_node);
@@ -137,15 +139,14 @@ class CMbObjectExport {
           if ($key !== $object->_spec->key) {
             $this->_toDOM($_object, $depth-1);
           }
-          
+
           $guid = $_object->_guid;
         }
         
-        if ($guid === "" || $guid === null) {
-          continue;
+        if ($this->empty_values || $guid) {
+          $object_node->setAttribute($key, $guid);
+          //$doc->insertTextElement($object_node, "field", $id, array("name" => $key));
         }
-        
-        $object_node->setAttribute($key, $guid);
       }
       
       // Scalar fields
@@ -153,7 +154,7 @@ class CMbObjectExport {
         $value = self::trimString($value);
         
         if ($this->empty_values || $value !== "") {
-          $doc->insertTextElement($object_node, $key, $value);
+          $doc->insertTextElement($object_node, "field", $value, array("name" => $key));
         }
       }
     }
@@ -207,7 +208,7 @@ class CMbObjectExport {
     $date = CMbDT::dateTime();
     
     header("Content-Type: $mimetype");
-    header("Content-Disposition: attachment;filename=\"{$this->object->_guid} - $date.xml\"");
+    //header("Content-Disposition: attachment;filename=\"{$this->object->_guid} - $date.xml\"");
     header("Content-Length: ".strlen($xml));
     
     echo $xml;

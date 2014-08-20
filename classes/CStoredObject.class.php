@@ -2763,7 +2763,7 @@ class CStoredObject extends CModelObject {
     $where = array();
     foreach ($first_unique as $field_name) {
       if (!array_key_exists($field_name, $values)) {
-        return null;
+        continue;
       }
       
       $where[$field_name] = $spec->ds->prepare("=%", $values[$field_name]);

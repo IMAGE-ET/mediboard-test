@@ -794,7 +794,6 @@ class CExClass extends CMbObject {
    *
    * - field_groups
    *   - class_fields
-   *     - enum_translations
    *     - field_translations
    *     - list_items
    *     - ex_triggers
@@ -849,9 +848,6 @@ class CExClass extends CMbObject {
         
         // field_translations
         $this->duplicateBackRefs($_field, "field_translations", $_fwd_field, $_fwd_value);
-        
-        // enum_translations
-        $this->duplicateBackRefs($_field, "enum_translations", $_fwd_field, $_fwd_value);
         
         // list_items
         $this->duplicateBackRefs($_field, "list_items", "field_id", $_fwd_value);

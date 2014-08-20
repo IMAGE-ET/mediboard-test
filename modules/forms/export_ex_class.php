@@ -28,7 +28,6 @@ try {
     ),
 
     "CExClassField" => array(
-      "enum_translations",
       "field_translations",
       "list_items",
       "properties",
@@ -46,20 +45,46 @@ try {
     "CExClassFieldPredicate" => array(
       "properties",
     ),
+    
+    "CExClassFieldProperties" => array(
+      
+    )
   );
   
   $fwdrefs_tree = array(
+    "CExClassFieldGroup" => array(
+      "ex_class_id",
+    ),
     "CExClassField" => array(
+      "ex_group_id",
       "concept_id",
       "predicate_id",
+    ),
+    "CExClassMessage" => array(
+      "ex_group_id",
+      "subgroup_id",
+      "predicate_id",
+    ),
+    "CExClassHostField" => array(
+      "ex_group_id",
+    ),
+    "CExClassFieldTranslation" => array(
+      "ex_class_field_id",
     ),
     
     "CExConcept" => array(
       "ex_list_id",
     ),
+
+    "CExListItem" => array(
+      "list_id",
+      "concept_id",
+      "field_id",
+    ),
     
     "CExClassFieldProperty" => array(
       "predicate_id",
+      "object_id",
     ),
     
     "CExClassFieldSubroup" => array(
