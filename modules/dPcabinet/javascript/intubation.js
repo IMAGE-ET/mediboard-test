@@ -24,8 +24,7 @@ verifIntubDifficileAndSave = function(oForm){
    // Possibilité de dire qu'elle ne l'est pas. 
    if (intubation_difficile) {
      div.setStyle({color: "#f00"});
-     div.removeClassName("opacity-50");
-     div.removeClassName("hatching");
+     div.update("<strong>"+$T("CConsultAnesth-_intub_difficile")+"</strong>");
      div.previous("button#force_difficile").hide();
      div.previous("button#force_pas_difficile").show();
    }
@@ -33,8 +32,7 @@ verifIntubDifficileAndSave = function(oForm){
    // qu'elle l'est en réalité
    else {
      div.setStyle({color: "#000"});
-     div.addClassName("opacity-50");
-     div.addClassName("hatching");
+     div.update($T("CConsultAnesth-_intub_pas_difficile"));
      div.previous("button#force_difficile").show();
      div.previous("button#force_pas_difficile").hide();
      
