@@ -32,6 +32,8 @@ if ($max_date) {
   $where[] = $ds->prepare("`datetime_login` <= %", $max_date);
 }
 
+$where["platform_name"] = $ds->prepare("!= 'unknown'");
+
 $total = $ua->countMultipleList($where, null, "`user_agent`.`user_agent_id`", $ljoin);
 $total = count($total);
 
