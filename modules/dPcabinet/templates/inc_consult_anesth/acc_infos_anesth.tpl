@@ -11,7 +11,8 @@
 
   reloadListTech = function() {
     var UrllistTech = new Url("dPcabinet", "httpreq_vw_list_techniques_comp");
-    UrllistTech.addParam("selConsult", document.editFrmFinish.consultation_id.value);
+    UrllistTech.addParam("selConsult", "{{$consult->_id}}");
+    UrllistTech.addParam("dossier_anesth_id", "{{$consult_anesth->_id}}");
     UrllistTech.requestUpdate('listTech');
   }
 
