@@ -11,11 +11,12 @@
 
 CCanDo::checkEdit();
 
-$selConsult  = CValue::getOrSession("selConsult", 0);
+$selConsult        = CValue::getOrSession("selConsult", 0);
+$dossier_anesth_id = CValue::getOrSession("dossier_anesth_id", 0);
 
 $consult = new CConsultation();
 $consult->load($selConsult);
-$consult->loadRefConsultAnesth();
+$consult->loadRefConsultAnesth($dossier_anesth_id);
 $consult->_ref_consult_anesth->loadRefsBack();
 
 // Création du template
