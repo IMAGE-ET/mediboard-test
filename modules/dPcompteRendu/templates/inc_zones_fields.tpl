@@ -80,10 +80,10 @@
       <td colspan="2" class="text textelibreCR">
       {{foreach from=$textes_libres item=_nom}}
         <div {{if !$mode_play}}style="max-width: 200px; display: inline-block;"{{/if}} data-nom="{{$_nom}}">
-          {{$_nom|html_entity_decode}}
           {{if !$mode_play}}
             <input type="checkbox" name="_empty_texte_libre[{{$_nom|md5}}]" title="{{tr}}CListeChoix.fill{{/tr}}" class="empty_field"/>
           {{/if}}
+          {{$_nom|html_entity_decode}}
           <textarea class="freetext" name="_texte_libre[{{$_nom|md5}}]" id="editFrm__texte_libre[{{$_nom|md5}}]"
           {{if !$mode_play && !$check_to_empty_field}}
             onkeydown="this.form.elements['_empty_texte_libre[{{$_nom|md5}}]'].checked='checked'; this.onkeydown=''"
