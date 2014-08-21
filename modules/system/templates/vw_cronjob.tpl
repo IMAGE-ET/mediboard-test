@@ -9,7 +9,7 @@
  * @link     http://www.mediboard.org
 *}}
 
-{{mb_script module="System" script="cronjob" ajax=true}}
+{{mb_script module="system" script="cronjob" ajax=true}}
 
 <script>
   Main.add(function () {
