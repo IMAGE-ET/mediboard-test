@@ -108,6 +108,12 @@ PMSI = {
 
   // The new PMSI view part
 
+  setSejour: function(sejour_id) {
+    var oForm = getForm("dossier_pmsi_selector");
+    $V(oForm.sejour_id, sejour_id);
+    oForm.submit();
+  },
+
   loadPatient: function(patient_id, sejour_id) {
     var url = new Url("pmsi", "ajax_view_patient_pmsi");
     url.addParam("patient_id", patient_id);
@@ -116,9 +122,7 @@ PMSI = {
   },
 
   loadDiagnostics: function(sejour_id) {
-    var url = new Url("pmsi", "ajax_view_diagnostics_pmsi");
-    url.addParam("sejour_id" , sejour_id);
-    url.requestUpdate("tab-diagnostics");
+    alert('Fonction pour recharger les diagnostics pour le séjour ' + sejour_id);
   },
 
   loadActes: function(sejour_id) {

@@ -43,7 +43,7 @@
     </tr>
     <tr>
       <th class="category halfPane" colspan="2">Champs de recherche</th>
-      <th class="category halfPane" colspan="2">Sejours disponibles</th>
+      <th class="category halfPane">Sejours disponibles</th>
     </tr>
     <tr>
       <th>
@@ -64,19 +64,15 @@
           }
         </script>
       </td>
-      <th rowspan="2">Séjours disponibles</th>
-      <td rowspan="2">
-        {{foreach from=$patient->_ref_sejours item=_sejour}}
-          <input type="radio" name="sejour_id" value="{{$_sejour->_id}}" {{if $_sejour->_id == $sejour->_id}}checked="checked"{{/if}}
-            onchange="this.form.submit();" />
-          <span class="circled{{if $_sejour->_id == $sejour->_id}} ok{{/if}}"
-            onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
-            {{$_sejour}}
-          </span>
-          <br />
-          {{foreachelse}}
-          <span>{{tr}}CSejour.none{{/tr}}</span>
-        {{/foreach}}
+      <td>
+        {{if $sejour->_id}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}');">
+          {{$sejour}}
+        </span>
+        {{else}}
+          {{tr}}CSejour.none{{/tr}}
+        {{/if}}
+        <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
       </td>
     </tr>
     <tr>
@@ -88,6 +84,24 @@
       <td>
         <input type="text" name="NDA" value="" />
         <button type="submit" class="search notext compact">{{tr}}Search{{/tr}}</button>
+      </td>
+      <td>
+        <span onmouseover="ObjectTooltip.createDOM(this, 'list_sejours_pat')">
+          {{$patient->_ref_sejours|@count}} séjour(s) disponible(s)
+        </span>
+        <div id="list_sejours_pat" style="display: none;">
+          {{foreach from=$patient->_ref_sejours item=_sejour}}
+            <input type="radio" name="_sejour_id" value="{{$_sejour->_id}}" {{if $_sejour->_id == $sejour->_id}}checked="checked"{{/if}}
+                   onchange="PMSI.setSejour({{$_sejour->_id}});" />
+            <span class="circled{{if $_sejour->_id == $sejour->_id}} ok{{/if}}"
+                  onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
+              {{$_sejour}}
+            </span>
+            <br />
+            {{foreachelse}}
+            <span>{{tr}}CSejour.none{{/tr}}</span>
+          {{/foreach}}
+        </div>
       </td>
     </tr>
   </table>
