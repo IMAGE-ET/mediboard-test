@@ -233,14 +233,16 @@
       </td>
     </tr>
     {{if $module != "dPurgences" || ($module == "dPurgences" && $rpu && $rpu->sejour_id !== $rpu->mutation_sejour_id)}}
-      <tr>
-        <th>{{mb_label object=$sejour field="transport_sortie"}}</th>
-        <td colspan="3">{{mb_field object=$sejour field="transport_sortie"}}</td>
-      </tr>
-      <tr>
-        <th>{{mb_label object=$sejour field="rques_transport_sortie"}}</th>
-        <td colspan="3">{{mb_field object=$sejour field="rques_transport_sortie"}}</td>
-      </tr>
+      <tbody id="transport_sortie_mutation_{{$sejour->_id}}">
+        <tr>
+          <th>{{mb_label object=$sejour field="transport_sortie"}}</th>
+          <td colspan="3">{{mb_field object=$sejour field="transport_sortie"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$sejour field="rques_transport_sortie"}}</th>
+          <td colspan="3">{{mb_field object=$sejour field="rques_transport_sortie"}}</td>
+        </tr>
+      </tbody>
     {{/if}}
     <tr>
       <th>{{mb_label object=$sejour field="commentaires_sortie"}}</th>
@@ -261,7 +263,7 @@
       <tr>
         <td colspan="4" class="button">
           {{if "trajectoire"|module_active}}
-            <script type="text/javascript">
+            <script>
               Main.add(function() {
                 var url = new Url('trajectoire', 'ajax_trajectoire_redirect');
                 url.addParam('patient_id', '{{$sejour->patient_id}}');

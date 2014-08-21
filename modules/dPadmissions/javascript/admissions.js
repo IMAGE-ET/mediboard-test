@@ -217,7 +217,9 @@ Admissions = {
     $('sortie_service_mutation_'+sejour_id).setVisible(mode_sortie == "mutation");
     $('lit_sortie_mutation_'+sejour_id).setVisible(mode_sortie === "mutation");
     $('sortie_deces_'+sejour_id).setVisible(mode_sortie === "deces");
-
+    if ($('transport_sortie_mutation_'+sejour_id)) {
+      $('transport_sortie_mutation_'+sejour_id).setVisible(mode_sortie != "mutation");
+    }
     //Suppression des valeurs lors du changement de mode de sortie
     if (mode_sortie != "mutation") {
       $V(form.service_sortie_id                        , "");
