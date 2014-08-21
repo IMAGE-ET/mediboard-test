@@ -8,24 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-function fixUnits(){
-  var url = new Url("dPstock", "do_fix_quantities_units");
-  url.requestUpdate("fix-units-logs");
-}
 
-Main.add(function(){
-  Control.Tabs.create("tabs-{{$m}}-config");
-});
-</script>
-
-<ul class="control_tabs" id="tabs-{{$m}}-config">
-  <li><a href="#config">Configuration</a></li>
-  <li><a href="#units">Unités de stockage</a></li>
-</ul>
-<hr class="control_tabs" />
-
-<div id="config">
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
@@ -54,7 +37,7 @@ Main.add(function(){
     
     {{assign var="class" value="CProductReference"}}
     <tr><th class="category" colspan="2">{{tr}}{{$class}}{{/tr}}</th></tr>
-    {{mb_include module=system template=inc_config_bool var=use_mdq}}
+    {{*mb_include module=system template=inc_config_bool var=use_mdq*}}
     {{mb_include module=system template=inc_config_bool var=show_cond_price}}
     
     {{assign var="class" value="CProductStock"}}
@@ -139,19 +122,3 @@ Les caractères suivants sont utilisés pour spécifier le format du numéro de comm
   <li>%% - un caractère `%&#039; littéral</li>
 </ul>
 </div>
-</div>
-
-<table class="main tbl" id="units" style="table-layout: fixed;">
-  <tr>
-    <td>
-      <button type="button" class="change oneclick" onclick="fixUnits()">Corriger les unités des stocks</button>
-    </td>
-    <td id="fix-units-logs"></td>
-  </tr>
-  <tr>
-    <td>
-      <a class="button search" href="?m=dPstock&tab=vw_reference_price_changes">Commandes avec prix unitaire erroné</a>
-    </td>
-    <td></td>
-  </tr>
-</table>
