@@ -9,12 +9,12 @@
       <table style="width: 100%;">
         <tr>
           <th style="width: 30%">{{mb_label object=$consult field=date_at}}</th>
-          <td>{{mb_field object=$consult field=date_at form=editConsultation register=true onchange="updateDates(this); onSubmitFormAjax(this.form, {onComplete: refreshAt});"}}</td>
+          <td>{{mb_field object=$consult field=date_at form=editConsultation register=true onchange="this.form.onsubmit()"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$consult field=num_at}}</th>
           <td>
-            {{mb_field object=$consult field=num_at style="width:50px;" size=8}}
+            {{mb_field object=$consult field=num_at style="width:50px;" size=8 onchange="this.form.onsubmit()"}}
             {{mb_field object=$consult field=cle_at onchange="this.form.onsubmit();" style="width:8px;"}}
             {{mb_label object=$consult field=cle_at}}
           </td>
