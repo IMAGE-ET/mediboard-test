@@ -12,29 +12,29 @@
   {{mb_script module="dPImeds" script="Imeds_results_watcher"}}
 {{/if}}
 
-<script type="text/javascript">
-var refreshExecuter;
+<script>
+  var refreshExecuter;
 
-function refreshAttente(debut, fin, rpu_id) {
-  var url = new Url("dPurgences", "ajax_vw_attente");
-  url.addParam("rpu_id", rpu_id);
-  url.addParam("debut", debut);
-  url.addParam("fin", fin);
-  url.addParam("attente", 1);
-  url.requestUpdate(fin+'-'+rpu_id);
-}
+  function refreshAttente(debut, fin, rpu_id) {
+    var url = new Url("urgences", "ajax_vw_attente");
+    url.addParam("rpu_id", rpu_id);
+    url.addParam("debut", debut);
+    url.addParam("fin", fin);
+    url.addParam("attente", 1);
+    url.requestUpdate(fin + '-' + rpu_id);
+  }
 
-Main.add(function () {
-  Calendar.regField(getForm("changeDate").date, null, {noView: true});
+  Main.add(function () {
+    Calendar.regField(getForm("changeDate").date, null, {noView: true});
 
-  refreshExecuter = new PeriodicalExecuter(function(){
-    getForm("changeDate").submit();
-  }, 60);
+    refreshExecuter = new PeriodicalExecuter(function() {
+      getForm("changeDate").submit();
+    }, 60);
 
-  {{if $isImedsInstalled}}
-    ImedsResultsWatcher.loadResults();
-  {{/if}}
-});
+    {{if $isImedsInstalled}}
+      ImedsResultsWatcher.loadResults();
+    {{/if}}
+  });
 </script>
 
 <table style="width:100%">
@@ -71,14 +71,14 @@ Main.add(function () {
     {{assign var=rpu value=$_sejour->_ref_rpu}}
     {{assign var=rpu_id value=$rpu->_id}}
     {{assign var=patient value=$_sejour->_ref_patient}}
-    {{assign var=rpu_link value="?m=dPurgences&tab=vw_aed_rpu&rpu_id=$rpu_id"}}
+    {{assign var=rpu_link value="?m=urgences&tab=vw_aed_rpu&rpu_id=$rpu_id"}}
 
     <tr style="text-align: center;">
       <td {{if $_sejour->sortie_reelle}}class="opacity-60"{{/if}}>
-        <a style="float: right;" title="Voir le dossier" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;sejour_id={{$_sejour->_id}}">
+        <a style="float: right;" title="Voir le dossier" href="?m=patients&tab=vw_full_patients&patient_id={{$patient->_id}}&sejour_id={{$_sejour->_id}}">
           <img src="images/icons/search.png" alt="Dossier patient"/>
         </a>
-        <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}">
+        <a href="?m=urgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}">
           <strong>
           {{$patient->_view}}
           </strong>
@@ -87,7 +87,7 @@ Main.add(function () {
       </td>
 
       <td {{if $_sejour->sortie_reelle}}class="opacity-60"{{/if}}>
-        <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}">
+        <a href="?m=urgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}">
           {{$_sejour->_ref_praticien->_view}}
         </a>
       </td>
