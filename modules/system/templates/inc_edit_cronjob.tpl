@@ -16,7 +16,7 @@
   });
 </script>
 
-<form name="editcronjob" method="post" action="?" onsubmit="return onSubmitFormAjax(this, Control.Modal.close())">
+<form name="editcronjob" method="post" action="?" onsubmit="return onSubmitFormAjax(this, Control.Modal.close)">
   {{mb_class object=$cronjob}}
   {{mb_key object=$cronjob}}
   <input type="hidden" name="m" value="{{$m}}" />
