@@ -43,10 +43,11 @@ refreshPlanning = function () {
     url.addParam("scroll_top", week_containers[0].scrollTop);
   }
 
-  if (Preferences.planning_resa_days_limit != '0') {
+  var planning_resa_days_limit = Math.abs(Preferences.planning_resa_days_limit);
+  if (planning_resa_days_limit != 0) {
     var today = new Date();
     var date_limit = new Date();
-    date_limit.setDate(today.getDate() + parseInt(Preferences.planning_resa_days_limit));
+    date_limit.setDate(today.getDate() + planning_resa_days_limit);
 
     var date_planning = Date.fromDATE($V(form.elements.date_planning));
     var next_day = new Date().setDate(date_planning.getDate() + 1);

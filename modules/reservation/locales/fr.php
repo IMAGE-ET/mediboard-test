@@ -136,5 +136,7 @@ $locales['mod-reservation-tab-vw_sejours_validation'] = 'Validation séjours';
 $locales['mod-reservation-tab-vw_suivi_salles'] = 'Suivi salles';
 $locales['module-reservation-court'] = 'Réservation';
 $locales['module-reservation-long'] = 'Réservation';
+$locales['pref-planning_resa_days_limit'] = 'Blocage du calendrier dans le futur, en jours (J+...). Aucune limite = 0';
+$locales['pref-planning_resa_days_limit-desc'] = 'Nombre de jours du blocage de calendrier dans le futur, mettre 0 pour aucune limite';
 $locales['pref-planning_resa_height'] = 'Hauteur du planning de réservation';
 $locales['pref-planning_resa_height-desc'] = 'Hauteur du planning de réservation en pixels (permet de zoomer sur les plages)';

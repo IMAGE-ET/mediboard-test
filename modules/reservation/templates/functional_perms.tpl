@@ -12,4 +12,4 @@
 <tr>
   <th colspan="5" class="category">Planning</th>
 </tr>
-{{mb_include template=inc_pref spec=enum var=planning_resa_days_limit values="0|1|7"}}
+{{mb_include template=inc_pref spec=num var=planning_resa_days_limit}}
