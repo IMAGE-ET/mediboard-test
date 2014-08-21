@@ -39,6 +39,7 @@ foreach ($sejour->_ref_operations as $_op) {
   $_op->loadPossibleActes();
   $_op->canDo();
   $_op->countExchanges();
+  $_op->loadRefsConsultAnesth()->loadRefConsultation()->loadRefPlageConsult();
 }
 
 // Chargement des consultations et de leurs actes

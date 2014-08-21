@@ -330,6 +330,78 @@
       </div>
       {{foreach from=$sejour->_ref_operations item=_op}}
         <div id="{{$_op->_guid}}" style="display: none;">
+          <table class="main layout">
+            <tr>
+              <th>
+                <h1>
+                  Intervention par le Dr {{$_op->_ref_chir}}
+                  &mdash; {{$_op->_datetime|date_format:$conf.longdate}}
+                  &mdash;
+                  {{if $_op->salle_id}}
+                    {{$_op->_ref_salle}}
+                  {{else}}
+                    Salle inconnue
+                  {{/if}}
+                </h1>
+              </th>
+            </tr>
+          </table>
+
+          <table class="form">
+            <tr>
+              <th>Libellé</th>
+              <td colspan="3" class="text"><em>{{$_op->libelle}}</em></td>
+            </tr>
+            <tr>
+              <th>Chirurgien</th>
+              <td class="text">{{$_op->_ref_chir}}</td>
+              <th>Anesthésiste</th>
+              <td class="text">{{$_op->_ref_anesth}}</td>
+            </tr>
+            <tr>
+              <th>{{mb_label object=$_op field=depassement}}</th>
+              <td>{{mb_value object=$_op field=depassement}}</td>
+              <th>{{mb_label object=$_op field=depassement_anesth}}</th>
+              <td>{{mb_value object=$_op field=depassement_anesth}}</td>
+            </tr>
+            <tr>
+              <th>{{mb_label object=$_op field=anapath}}</th>
+              <td>{{mb_value object=$_op field=anapath}}</td>
+              <th>{{mb_label object=$_op field=labo}}</th>
+              <td>{{mb_value object=$_op field=labo}}</td>
+            </tr>
+            <tr>
+              <th>{{mb_label object=$_op field=prothese}}</th>
+              <td>{{mb_value object=$_op field=prothese}}</td>
+              <th>{{mb_label object=$_op field=ASA}}</th>
+              <td>{{mb_value object=$_op field=ASA}}</td>
+            </tr>
+            <tr>
+              <th>{{mb_label object=$_op field=type_anesth}}</th>
+              <td colspan="3">{{mb_value object=$_op field=type_anesth}}</td>
+            </tr>
+            {{if $_op->_ref_consult_anesth->consultation_anesth_id}}
+              <tr>
+                <td class="button" colspan="4">
+                  Consultation de pré-anesthésie le
+                  {{$_op->_ref_consult_anesth->_ref_consultation->_ref_plageconsult->date|date_format:$conf.longdate}}
+                  avec le Dr
+                  {{$_op->_ref_consult_anesth->_ref_consultation->_ref_plageconsult->_ref_chir}}
+                </td>
+              </tr>
+            {{/if}}
+            <tr>
+              <td class="button" colspan="4">
+                <button class="{{if $_op->_ref_consult_anesth->_id}}print{{else}}warning{{/if}}"
+                        style="width:11em;" type="button" onclick="PMSI.printFicheAnesth('{{$_op->_ref_consult_anesth->_id}}', '{{$_op->_id}}');">
+                  Fiche d'anesthésie
+                </button>
+                <button class="print" onclick="PMSI.printFicheBloc({{$_op->operation_id}})">
+                  Feuille de bloc
+                </button>
+              </td>
+            </tr>
+          </table>
 
           {{mb_include module=pmsi template=inc_codage_actes subject=$_op}}
 

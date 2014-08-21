@@ -114,6 +114,19 @@ PMSI = {
     oForm.submit();
   },
 
+  printFicheBloc: function(oper_id) {
+    var url = new Url("salleOp", "print_feuille_bloc");
+    url.addParam("operation_id", oper_id);
+    url.popup(700, 600, 'FeuilleBloc');
+  },
+
+  printFicheAnesth: function(dossier_anesth_id, operation_id) {
+    var url = new Url("cabinet", "print_fiche");
+    url.addParam("dossier_anesth_id", dossier_anesth_id);
+    url.addParam("operation_id", operation_id);
+    url.popup(700, 500, "printFicheAnesth");
+  },
+
   loadPatient: function(patient_id, sejour_id) {
     var url = new Url("pmsi", "ajax_view_patient_pmsi");
     url.addParam("patient_id", patient_id);
