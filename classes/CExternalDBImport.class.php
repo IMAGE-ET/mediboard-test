@@ -86,15 +86,16 @@ class CExternalDBImport {
     $function_name = CAppUI::conf($this->_import_function_name_conf);
     $function = new CFunctions;
     $function->text = $function_name;
-    $function->escapeValues();
-    $function->loadMatchingObject();
+    $function->loadMatchingObjectEsc();
 
     if (!$function->_id) {
-      $function->unescapeValues();
       $function->group_id = CGroups::loadCurrent()->_id;
       $function->type     = "cabinet";
       $function->compta_partagee = 0;
-      $function->store();
+      $function->color = "#CCCCCC";
+      if ($msg = $function->store()) {
+        CAppUI::setMsg($msg, UI_MSG_WARNING);
+      }
     }
 
     return $function;
@@ -373,9 +374,9 @@ class CExternalDBImport {
    *
    * @return bool|CSejour|CStoredObject Finds a sejour from a patient, praticien and date
    */
-  static function findSejour($patient_id, $prat, $date, $idex = null) {
+  function findSejour($patient_id, $prat, $date, $idex = null) {
     if ($idex) {
-      $object = self::getMbObjectByClass("CSejour", $idex);
+      $object = $this->getMbObjectByClass("CSejour", $idex);
 
       if ($object->_id) {
         return $object;
@@ -383,14 +384,14 @@ class CExternalDBImport {
     }
 
     // Trouver ou importer le patient
-    $patient = self::getOrImportObject("COsoftPatient", $patient_id);
+    $patient = $this->getOrImportObject("COsoftPatient", $patient_id);
     if (!$patient || !$patient->_id) {
       CAppUI::setMsg("Patient non retrouvé et non importé: $patient_id", UI_MSG_WARNING);
       return false;
     }
 
     // Trouver le praticien du sejour
-    $user = self::getMbObjectByClass("CMediusers", $prat);
+    $user = $this->getMbObjectByClass("CMediusers", $prat);
     if (!$user->_id) {
       CAppUI::setMsg("Praticien du séjour non retrouvé: $prat", UI_MSG_WARNING);
       return false;
@@ -410,7 +411,7 @@ class CExternalDBImport {
     $sejour->loadObject($where);
 
     if ($sejour->_id && $idex) {
-      self::storeIdExt($sejour, $idex);
+      $this->storeIdExt($sejour, $idex);
     }
 
     if (!$sejour->_id) {
@@ -570,7 +571,7 @@ class CExternalDBImport {
    * @return array The hash
    */
   protected function getHash($id) {
-    $id = $this->_ds->escape($id);
+    $id = $this->getDS()->escape($id);
 
     $sep = "|";
     $key = $this->_key;
