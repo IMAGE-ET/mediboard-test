@@ -44,7 +44,7 @@ switch ($context->_class) {
     break;
 
   case 'CConsultation':
-  case 'CConsultationAnesth':
+  case 'CConsultAnesth':
     /** @var CConsultation $context */
     $patient = $context->loadRefPatient();
     break;
