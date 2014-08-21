@@ -31,7 +31,6 @@
     {{mb_include module=system template=inc_config_bool var=delete_only_admin}}
     {{mb_include module=system template=inc_config_str  var=max_cancel_time     size=2 suffix=h}}
     {{mb_include module=system template=inc_config_str  var=hours_sejour_proche size=2 suffix=h}}
-    {{mb_include module=system template=inc_config_bool var=fix_doc_edit}}
 
     {{mb_include module=system template=inc_config_bool var=use_recuse}}
     {{mb_include module=system template=inc_config_enum var=systeme_isolement values=standard|expert}}

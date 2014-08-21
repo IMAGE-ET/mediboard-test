@@ -77,7 +77,6 @@ $dPconfig["dPplanningOp"]= array(
     "consult_accomp"      => "0",
     "accident"            => "0",
     "assurances"          => "0",
-    "fix_doc_edit"        => "0",
     "sortie_prevue"       => array(
       "comp"    => "24",
       "ambu"    => "04",

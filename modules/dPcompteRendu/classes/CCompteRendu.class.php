@@ -885,16 +885,6 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
           $this->_is_auto_locked = CMbDT::dateTime("+ 24 HOUR", "{$consult->_date} {$consult->heure}") > CMbDT::dateTime();
         }
         break;
-      case "CSejour" :
-        $fix_edit_doc = CAppUI::conf("dPplanningOp CSejour fix_doc_edit");
-        $sejour = $this->loadTargetObject();
-        $this->_is_auto_locked = $fix_edit_doc && ($sejour->sortie_reelle === null);
-        break;
-      case "COperation" :
-        $fix_edit_doc = CAppUI::conf("dPplanningOp CSejour fix_doc_edit");
-        $sejour = $this->loadTargetObject()->loadRefSejour();
-        $this->_is_auto_locked = $fix_edit_doc && ($sejour->sortie_reelle === null);
-        break;
       default :
         $this->_is_auto_locked = false;
     }
