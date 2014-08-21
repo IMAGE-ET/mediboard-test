@@ -1774,7 +1774,37 @@ class CSetupsystem extends CSetup {
                 ADD `multipart` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.67";
+    $this->makeRevision("1.1.67");
+
+    $query = "CREATE TABLE `cronjob` (
+                `cronjob_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `name` VARCHAR (255) NOT NULL,
+                `description` TEXT,
+                `active` ENUM ('0','1') NOT NULL DEFAULT '1',
+                `params` TEXT NOT NULL,
+                `execution` VARCHAR (255) NOT NULL,
+                `cron_login` VARCHAR (20) NOT NULL,
+                `cron_password` VARCHAR (50)
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "CREATE TABLE `cronjob_log` (
+                `cronjob_log_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `status` ENUM ('started','finished','error') NOT NULL,
+                `error` VARCHAR (255),
+                `cronjob_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `start_datetime` DATETIME NOT NULL,
+                `end_datetime` DATETIME
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `cronjob_log`
+                ADD INDEX (`cronjob_id`),
+                ADD INDEX (`start_datetime`),
+                ADD INDEX (`end_datetime`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.68";
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,

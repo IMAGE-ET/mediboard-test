@@ -134,3 +134,15 @@ table.calendar_horizontal div.event div.toolbar {
 table.calendar_horizontal div.event:hover div.toolbar {
   display:block;
 }
+
+.statusCron_error {
+  background-color: #c41300 !important;
+}
+
+.statusCron_started {
+  background-color: #f2bd05 !important;
+}
+
+.statusCron_finished {
+  background-color: #1a9707 !important;
+}

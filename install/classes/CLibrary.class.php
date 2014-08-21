@@ -546,3 +546,15 @@ $library->versionFile   = "fabric.js";
 $library->versionString = 'version:"1.4.0"';
 
 CLibrary::$all[$library->name] = $library;
+
+$library = new CLibrary;
+$library->name = "cronExpression";
+$library->url = "https://github.com/mtdowling/cron-expression";
+$library->fileName = "cron-expression-1.0.3.tar.gz";
+$library->description = "CRON for PHP";
+$library->sourceDir = "cron-expression-1.0.3";
+$library->targetDir = "cron-expression-1.0.3";
+$library->versionFile = "README.md";
+$library->versionString = "1.0.3 (2013-11-23)";
+
+CLibrary::$all[$library->name] = $library;

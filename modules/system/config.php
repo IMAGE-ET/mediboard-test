@@ -9,6 +9,8 @@
  * @version    $Revision$
  */
 
+$dPconfig['index_handlers']['CCronJobIndexHandler'] = '1';
+
 $dPconfig["system"] = array (
   "phone_number_format" => "99 99 99 99 99",
   "reverse_proxy"  => "0.0.0.0",

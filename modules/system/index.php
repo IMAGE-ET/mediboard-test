@@ -23,5 +23,6 @@ $module->registerTab("view_translations",      TAB_EDIT);
 $module->registerTab("view_network_address",   TAB_EDIT);
 $module->registerTab("vw_user_agents",         TAB_READ);
 $module->registerTab("idx_view_senders",       TAB_EDIT);
+$module->registerTab('vw_cronjob',             TAB_ADMIN);
 //$module->registerTab("vw_purge_objects",       TAB_ADMIN);
 $module->registerTab("about",                  TAB_READ);
