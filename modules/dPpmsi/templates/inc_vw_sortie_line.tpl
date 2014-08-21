@@ -8,9 +8,9 @@
  * @link     http://www.mediboard.org*}}
 
 {{mb_script module=soins  script=plan_soins ajax=true}}
-{{mb_script module=dPpmsi script=pmsi       ajax=true}}
+{{mb_script module=dPpmsi script=PMSI       ajax=true}}
 
-<td class="text CPatient-view {{if $_sejour->facture}}opacity-30{{/if}}" " colspan="2" >
+<td class="text CPatient-view {{if $_sejour->facture}}opacity-30{{/if}}" colspan="2" >
   {{if $canPlanningOp->read}}
     <div style="float: right;">
       {{if "web100T"|module_active}}
