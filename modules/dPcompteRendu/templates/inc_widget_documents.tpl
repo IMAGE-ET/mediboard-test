@@ -159,7 +159,7 @@
     {{if $nb_modeles_etiquettes == 1}}
       onclick="ModeleEtiquette.print('{{$object_class}}', '{{$object_id}}', null, '{{$unique_id}}')"
     {{else}}
-      onclick="ModeleEtiquette.chooseModele('{{$object_class}}', '{{$object_id}}', null, '{{$unique_id}}')"
+      onclick="ModeleEtiquette.chooseModele('{{$object_class}}', '{{$object_id}}', '{{$unique_id}}')"
     {{/if}}>Etiquettes</button>
 {{/if}}
  
