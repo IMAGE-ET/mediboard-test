@@ -117,7 +117,7 @@
     {{if $rpu}}
       loadRPU();
     {{else}}
-      refreshConstantesMedicales();
+    loadAntTrait();
     {{/if}}
   });
 </script>
@@ -132,12 +132,12 @@
     </li>
   {{/if}}
 
-  <li onmousedown="refreshConstantesMedicales();">
-    <a href="#constantes-medicales">{{tr}}soins.tab.surveillance{{/tr}}</a>
-  </li>
-
   <li onmousedown="this.onmousedown = ''; loadAntTrait()">
     <a id="acc_consultation_a_Atcd" href="#AntTrait">{{tr}}soins.tab.antecedent_and_treatment{{/tr}}</a>
+  </li>
+
+  <li onmousedown="refreshConstantesMedicales();">
+    <a href="#constantes-medicales">{{tr}}soins.tab.surveillance{{/tr}}</a>
   </li>
 
   {{if "dPprescription"|module_active && $consult->sejour_id && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
