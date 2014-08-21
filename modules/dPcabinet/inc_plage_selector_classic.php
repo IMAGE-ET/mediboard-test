@@ -90,7 +90,7 @@ if ($consultation_id) {
   }
 }
 
-if ($heure) {
+if ($heure && !$consultation_id) {
   $consultation_ids[] = array(
     $plageconsult_id,
     null,

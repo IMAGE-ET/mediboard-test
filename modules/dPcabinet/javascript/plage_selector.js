@@ -58,7 +58,6 @@ PlageConsultSelector = {
     var iterator = 0;
     this.consultations.each(function(elt) {
       var consult = elt.value;
-      //console.log(iterator+ " -> ", consult);
       // main consult
       if (iterator == 0) {
         window.PlageConsultSelector.set(consult.heure, consult.plage_id, consult.date, consult.chir_id, consult.is_cancelled);
@@ -105,7 +104,7 @@ PlageConsultSelector = {
       refreshFunction(chir_id);
       $V(oForm[this.sFunction_id], '');
     }
-    $V(oForm.annule          , is_cancelled ? 1 : 0);
+    $V(oForm.annule          , (parseInt(is_cancelled) == 1) ? 1 : 0);
     $V(oForm[this.sHeure]          , heure);
     var clean_date = (date.indexOf(" ") != -1) ? date : DateFormat.format(Date.fromDATE(date), "dd/MM/yyyy");
     $V(oForm[this.sDate]           , clean_date);

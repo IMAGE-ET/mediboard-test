@@ -90,6 +90,7 @@
       <th colspan="{{if $display_nb_consult}}5{{else}}3{{/if}}">Pas de plage le {{$date|date_format:$conf.longdate}}</th>
     </tr>
   {{/if}}
+
   {{foreach from=$listBefore item =_consultation}}
     <tr>
       <td>
@@ -129,6 +130,7 @@
       {{if $display_nb_consult}}<td colspan="3"></td>{{/if}}
     </tr>
   {{/foreach}}
+
   {{if $online && !$plage->locked}}
     <tr>
       <td class="button" colspan="{{if $display_nb_consult}}4{{else}}3{{/if}}">
@@ -138,6 +140,7 @@
       </td>
     </tr>
   {{/if}}
+
   {{foreach from=$listPlace item=_place}}
     {{assign var=count_places value=$_place.consultations|@count}}
     <tr {{if $online && ($_place.time == $consultation->heure)}}class="selected"{{/if}}>
@@ -230,6 +233,7 @@
       {{/if}}
     </tr>
   {{/foreach}}
+
   {{if $online && !$plage->locked}}
     <tr>
       <td class="button" colspan="{{if $display_nb_consult}}5{{else}}3{{/if}}">
