@@ -129,9 +129,9 @@
       {{if @$modules.dPhospi->_can->read}}
         <button type="button" class="print"
           {{if $sejour->_count_modeles_etiq == 1}}
-            onclick="ModeleEtiquette.print('{{$sejour->_class}}', '{{$sejour->_id}}', '{{$unique_id}}');"
+            onclick="ModeleEtiquette.print('{{$sejour->_class}}', '{{$sejour->_id}}', null, '{{$unique_id}}');"
           {{else}}
-            onclick="ModeleEtiquette.chooseModele('{{$sejour->_class}}', '{{$sejour->_id}}', '{{$unique_id}}')"
+            onclick="ModeleEtiquette.chooseModele('{{$sejour->_class}}', '{{$sejour->_id}}', null, '{{$unique_id}}')"
           {{/if}}>
           {{tr}}CModeleEtiquette.print_labels{{/tr}}
         </button>
