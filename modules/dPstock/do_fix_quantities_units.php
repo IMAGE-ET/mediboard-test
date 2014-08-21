@@ -11,6 +11,9 @@
 
 CCanDo::checkAdmin();
 
+// TODO : supprimer
+return;
+
 CApp::setTimeLimit(1200);
 
 function append_user_logs(&$all_logs, $logs) {
