@@ -28,8 +28,9 @@ $bloc_id         = CValue::getOrSession("bloc_id");
 $show_cancelled  = CValue::getOrSession("show_cancelled", 0);
 $show_operations = CValue::getOrSession("show_operations", 1);
 
-$max_date_planning = CMbDT::date("+ " . CAppUI::pref("planning_resa_days_limit") . " DAYS", $today);
-if ($date_planning > $today && CAppUI::pref("planning_resa_days_limit") != '0' && $date_planning > $max_date_planning) {
+$days_limit_future = abs(CAppUI::pref("planning_resa_days_limit"));
+$max_date_planning = CMbDT::date("+ $days_limit_future DAYS", $today);
+if ($date_planning > $today && $days_limit_future != 0 && $date_planning > $max_date_planning) {
   $date_planning = $max_date_planning;
 }
 

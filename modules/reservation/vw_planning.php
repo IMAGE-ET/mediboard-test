@@ -38,8 +38,9 @@ $bloc  = new CBlocOperatoire();
 $blocs = $bloc->loadGroupList();
 
 $limit_date = null;
-if (CAppUI::pref("planning_resa_days_limit") != '0') {
-  $limit_date = CMbDT::date("+ " . CAppUI::pref("planning_resa_days_limit") . " DAYS", CMbDT::date());
+$days_limit_future = abs(CAppUI::pref("planning_resa_days_limit"));
+if ($days_limit_future != 0) {
+  $limit_date = CMbDT::date("+ $days_limit_future DAYS", CMbDT::date());
 }
 
 $smarty = new CSmartyDP("modules/reservation");
