@@ -30,7 +30,7 @@
       </td>
       <td>{{mb_value object=$_log field="start_datetime"}}</td>
       <td>{{mb_value object=$_log field="end_datetime"}}</td>
-      <td>{{mb_value object=$_log field="_duration" date_format"%h:%i:%s"}}</td>
+      <td>{{mb_value object=$_log field="_duration"}}</td>
     </tr>
   {{foreachelse}}
     <tr><td class="empty" colspan="6">{{tr}}CCronJobLog.none{{/tr}}</td></tr>
