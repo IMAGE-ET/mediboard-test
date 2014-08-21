@@ -97,7 +97,7 @@ $where["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($praticiens)
 /** @var COperation[] $operations */
 $operations = $operation->loadList($where, null, null, "operations.operation_id", $ljoin);
 
-$nbIntervHorsPlage = CIntervHorsPlage::countForDates($date_planning, null, $praticien_id);
+$nbIntervHorsPlage = CIntervHorsPlage::countForDates($date_planning, null, array($praticien_id));
 
 $prats = CMbObject::massLoadFwdRef($operations, "chir_id");
 CMbObject::massLoadFwdRef($prats, "function_id");
