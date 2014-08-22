@@ -162,6 +162,7 @@ savePref = function(form) {
               <input type="hidden" name="m" value="{{$m}}" />
               <input type="hidden" name="tab" value="{{$tab}}" />
               <input type="hidden" name="sejour_id" value="" />
+              <input type="hidden" name="date" value="{{$date}}" />
              
               <table class="main form">
                 <tr>
