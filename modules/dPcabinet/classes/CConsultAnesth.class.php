@@ -550,6 +550,26 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
     $this->fillLimitedTemplate($template);
     $this->_ref_operation->fillLimitedTemplate($template);
     $this->_ref_sejour->fillLimitedTemplate($template);
+
+    if (CModule::getActive("dPprescription")) {
+      $sejour = $this->_ref_sejour;
+      $sejour->loadRefsPrescriptions();
+      $prescription = isset($sejour->_ref_prescriptions["pre_admission"]) ?
+        $sejour->_ref_prescriptions["pre_admission"] :
+        new CPrescription();
+      $prescription->type = "pre_admission";
+      $prescription->fillLimitedTemplate($template);
+      $prescription = isset($sejour->_ref_prescriptions["sejour"]) ?
+        $sejour->_ref_prescriptions["sejour"] :
+        new CPrescription();
+      $prescription->type = "sejour";
+      $prescription->fillLimitedTemplate($template);
+      $prescription = isset($sejour->_ref_prescriptions["sortie"]) ?
+        $sejour->_ref_prescriptions["sortie"] :
+        new CPrescription();
+      $prescription->type = "sortie";
+      $prescription->fillLimitedTemplate($template);
+    }
   }
 
   /**
@@ -621,7 +641,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
     if (CModule::getActive("forms")) {
       CExObject::addFormsToTemplate($template, $this, "Anesthésie");
     }
-    
+
     $this->notify("AfterFillLimitedTemplate", $template);
   }
 
