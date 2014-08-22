@@ -5,18 +5,18 @@
     url.addParam("object_class", object_class);
     url.addParam("dialog", 1);
     url.requestModal(700, 400, 'Signature des actes');
-  }
+  };
   
   clotureActivite = function(object_id, object_class) {
     var url = new Url("dPsalleOp", "ajax_cloture_activite");
     url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
     url.requestModal(500, 300);
-  }
+  };
 </script>
 
 <table class="form">
-  {{if $subject->_coded && $m != "dPpmsi"}}
+  {{if $subject->_coded}}
     {{if $subject->_class == "CConsultation"}}
     <tr>
       <td colspan="10">
@@ -44,7 +44,7 @@
         <div class="small-info">Vous n'avez pas les droits nécessaires pour coder les actes</div>
       </td>
     </tr>
-  {{else}}
+  {{elseif !$subject->_coded}}
     <!-- Gestion des codes -->
     {{if $can->admin || $m == "dPpmsi" || (!$subject->_coded && $subject->_canRead)}}
     <tr>
@@ -64,5 +64,7 @@
         {{/if}}
       </td>
     </tr>
+  {{else}}
+    {{mb_include module=pmsi template=inc_codage_actes show_ngap=false read_only=true}}
   {{/if}}
 </table>

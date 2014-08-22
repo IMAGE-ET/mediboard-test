@@ -1,4 +1,9 @@
+{{mb_default var=read_only value=false}}
+{{mb_default var=show_ccam value=true}}
+{{mb_default var=show_ngap value=true}}
+
 <table class="main layout">
+  {{if $show_ccam}}
   <tr>
     <td>
       <table class="tbl">
@@ -15,7 +20,9 @@
           <th class="narrow">{{mb_title class=CActeCCAM field=motif_depassement}}</th>
           <th class="narrow">{{mb_title class=CActeCCAM field=code_association}}</th>
           <th>{{mb_title class=CActeCCAM field=_tarif}}</th>
+          {{if !$read_only}}
           <th class="narrow">Actions</th>
+          {{/if}}
         </tr>
         {{foreach from=$subject->_ext_codes_ccam item=_code key=_key}}
           {{foreach from=$_code->activites item=_activite}}
@@ -48,15 +55,21 @@
                   {{mb_value object=$acte field=_tarif_base}}
                 </td>
                 <td>
-                  {{mb_field object=$acte field=executant_id options=$listPrats onchange="CCodageCCAM.syncCodageField(this, '$view');"}}
+                  {{if $read_only}}
+                    {{mb_value object=$acte field=executant_id}}
+                  {{else}}
+                    {{mb_field object=$acte field=executant_id options=$listPrats onchange="CCodageCCAM.syncCodageField(this, '$view');"}}
+                  {{/if}}
                 </td>
                 <td class="greedyPane text">
                   {{assign var=nb_modificateurs value=$acte->modificateurs|strlen}}
                   {{foreach from=$_phase->_modificateurs item=_mod name=modificateurs}}
                     <span class="circled {{if $_mod->_state == 'prechecked'}}ok{{elseif $_mod->_checked && in_array($_mod->_state, array('not_recommended', 'forbidden'))}}error{{elseif in_array($_mod->_state, array('not_recommended', 'forbidden'))}}warning{{/if}}"
                           title="{{$_mod->libelle}} ({{$_mod->_montant}})">
-                      <input type="checkbox" name="modificateur_{{$_mod->code}}{{$_mod->_double}}" {{if $_mod->_checked}}checked="checked"{{elseif $nb_modificateurs == 4 || $_mod->_state == 'forbidden' || (intval($acte->_exclusive_modifiers) > 0 && in_array($_mod->code, array('F', 'U', 'P', 'S')))}}disabled="disabled"{{/if}}
-                             data-acte="{{$view}}" data-code="{{$_mod->code}}" data-double="{{$_mod->_double}}" class="modificateur" onchange="CCodageCCAM.syncCodageField(this, '{{$view}}');" />
+                      {{if !$read_only}}
+                        <input type="checkbox" name="modificateur_{{$_mod->code}}{{$_mod->_double}}" {{if $_mod->_checked}}checked="checked"{{elseif $nb_modificateurs == 4 || $_mod->_state == 'forbidden' || (intval($acte->_exclusive_modifiers) > 0 && in_array($_mod->code, array('F', 'U', 'P', 'S')))}}disabled="disabled"{{/if}}
+                               data-acte="{{$view}}" data-code="{{$_mod->code}}" data-double="{{$_mod->_double}}" class="modificateur" onchange="CCodageCCAM.syncCodageField(this, '{{$view}}');" />
+                      {{/if}}
                       <label for="modificateur_{{$_mod->code}}{{$_mod->_double}}">
                         {{$_mod->code}}
                       </label>
@@ -66,34 +79,51 @@
                   {{/foreach}}
                 </td>
                 <td>
-                  <form name="codageActeExecution-{{$view}}" action="?" method="post" onsubmit="return false;">
-                    {{mb_field object=$acte field=execution form="codageActeExecution-$view" register=true onchange="CCodageCCAM.syncCodageField(this, '$view');"}}
-                  </form>
+                    {{if $read_only}}
+                      {{mb_value object=$acte field=execution}}
+                    {{else}}
+                      <form name="codageActeExecution-{{$view}}" action="?" method="post" onsubmit="return false;">
+                        {{mb_field object=$acte field=execution form="codageActeExecution-$view" register=true onchange="CCodageCCAM.syncCodageField(this, '$view');"}}
+                      </form>
+                    {{/if}}
                 </td>
                 <td>
-                  <form name="codageActeMontantDepassement-{{$view}}" action="?" method="post" onsubmit="return false;">
-                    {{mb_field object=$acte field=montant_depassement onchange="CCodageCCAM.syncCodageField(this, '$view');"}}
-                  </form>
+                  {{if $read_only}}
+                    {{mb_value object=$acte field=montant_depassement}}
+                  {{else}}
+                    <form name="codageActeMontantDepassement-{{$view}}" action="?" method="post" onsubmit="return false;">
+                      {{mb_field object=$acte field=montant_depassement onchange="CCodageCCAM.syncCodageField(this, '$view');"}}
+                    </form>
+                  {{/if}}
                 </td>
                 <td>
-                  <form name="codageActeMotifDepassement-{{$view}}" action="?" method="post" onsubmit="return false;">
-                    {{mb_field object=$acte field=motif_depassement emptyLabel="CActeCCAM-motif_depassement" onchange="CCodageCCAM.syncCodageField(this, '$view');"}}
-                  </form>
+                  {{if $read_only}}
+                    {{mb_value object=$acte field=motif_depassement}}
+                  {{else}}
+                    <form name="codageActeMotifDepassement-{{$view}}" action="?" method="post" onsubmit="return false;">
+                      {{mb_field object=$acte field=motif_depassement emptyLabel="CActeCCAM-motif_depassement" onchange="CCodageCCAM.syncCodageField(this, '$view');"}}
+                    </form>
+                  {{/if}}
                 </td>
                 <td
                   {{if $acte->_id && ($acte->code_association != $acte->_guess_association)}}style="background-color: #fc9"{{/if}}>
-                  {{if $acte->_id}}
-                    <form name="codageActeCodeAssociation-{{$view}}" action="?" method="post" onsubmit="return false;">
-                      {{mb_field object=$acte field=code_association emptyLabel="CActeCCAM.code_association." onchange="CCodageCCAM.syncCodageField(this, '$view');"}}
-                    </form>
-                    {{if $acte->code_association != $acte->_guess_association}}
-                      ({{$acte->_guess_association}})
+                  {{if $read_only}}
+                    {{mb_value object=$acte field=code_association}}
+                  {{else}}
+                    {{if $acte->_id}}
+                      <form name="codageActeCodeAssociation-{{$view}}" action="?" method="post" onsubmit="return false;">
+                        {{mb_field object=$acte field=code_association emptyLabel="CActeCCAM.code_association." onchange="CCodageCCAM.syncCodageField(this, '$view');"}}
+                      </form>
+                      {{if $acte->code_association != $acte->_guess_association}}
+                        ({{$acte->_guess_association}})
+                      {{/if}}
                     {{/if}}
                   {{/if}}
                 </td>
                 <td {{if $acte->_id && !$acte->facturable}}style="background-color: #fc9"{{/if}}>
                   {{mb_value object=$acte field=_tarif}}
                 </td>
+                {{if !$read_only}}
                 <td class="button">
                   <form name="codageActe-{{$view}}" action="?" method="post"
                         onsubmit="return onSubmitFormAjax(this, {onComplete: function() {PMSI.loadActes({{$sejour->_id}})}});">
@@ -134,6 +164,7 @@
                     {{/if}}
                   </form>
                 </td>
+                {{/if}}
               </tr>
             {{/foreach}}
           {{/foreach}}
@@ -145,6 +176,8 @@
       </table>
     </td>
   </tr>
+  {{/if}}
+  {{if $show_ngap}}
   <tr>
     <td>
       <table class="tbl">
@@ -174,4 +207,5 @@
       </table>
     </td>
   </tr>
+  {{/if}}
 </table>
