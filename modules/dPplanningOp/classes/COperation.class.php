@@ -1548,10 +1548,38 @@ class COperation extends CCodable implements IPatientRelated {
 
     $this->notify("BeforeFillLimitedTemplate", $template);
 
-    $template->addProperty("Opération - Chirurgien",   $this->_ref_chir->_id   ? "Dr " . $this->_ref_chir->_view : '');
-    $template->addProperty("Opération - Chirurgien 2", $this->_ref_chir_2->_id ? "Dr " . $this->_ref_chir_2->_view : '');
-    $template->addProperty("Opération - Chirurgien 3", $this->_ref_chir_3->_id ? "Dr " . $this->_ref_chir_3->_view : '');
-    $template->addProperty("Opération - Chirurgien 4", $this->_ref_chir_4->_id ? "Dr " . $this->_ref_chir_4->_view : '');
+    for ($i = 1; $i < 5; $i ++) {
+      $prop = "_ref_chir".($i == 1 ? "" : "_$i");
+      $praticien = $this->$prop;
+      $praticien->loadRefFunction();
+      $praticien->loadRefDiscipline();
+      $praticien->loadRefSpecCPAM();
+
+      $number = $i == 1 ? "" : " $i";
+
+      $template->addProperty("Opération - Chirurgien$number",   $praticien->_id   ? "Dr " . $praticien->_view : '');
+      $template->addProperty("Opération - Chirurgien$number - Nom"            , $praticien->_user_last_name );
+      $template->addProperty("Opération - Chirurgien$number - Prénom"         , $praticien->_user_first_name);
+      $template->addProperty("Opération - Chirurgien$number - Initiales"      , $praticien->_shortview);
+      $template->addProperty("Opération - Chirurgien$number - Discipline"     , $praticien->_ref_discipline->_view);
+      $template->addProperty("Opération - Chirurgien$number - Spécialité"     , $praticien->_ref_spec_cpam->_view);
+      $template->addProperty("Opération - Chirurgien$number - CAB"            , $praticien->cab);
+      $template->addProperty("Opération - Chirurgien$number - CONV"           , $praticien->conv);
+      $template->addProperty("Opération - Chirurgien$number - ZISD"           , $praticien->zisd);
+      $template->addProperty("Opération - Chirurgien$number - IK"             , $praticien->ik);
+
+      $template->addProperty("Opération - Chirurgien$number - Titres"         , $praticien->titres);
+      $template->addProperty("Opération - Chirurgien$number - ADELI"          , $praticien->adeli);
+      $template->addBarcode("Opération - Chirurgien$number - Code barre ADELI", $praticien->adeli, array("barcode" => array(
+        "title" => CAppUI::tr("CMediusers-adeli")
+      )));
+      $template->addProperty("Opération - Chirurgien$number - RPPS"           , $praticien->rpps);
+      $template->addBarcode("Opération - Chirurgien$number - Code barre RPPS" , $praticien->rpps, array("barcode" => array(
+        "title" => CAppUI::tr("CMediusers-rpps")
+      )));
+      $template->addProperty("Opération - Chirurgien$number - E-mail"         , $praticien->_user_email);
+      $template->addProperty("Opération - Chirurgien$number - E-mail Apicrypt", $praticien->mail_apicrypt);
+    }
 
     $template->addProperty("Opération - Anesthésiste - nom"        , @$this->_ref_anesth->_user_last_name);
     $template->addProperty("Opération - Anesthésiste - prénom"     , @$this->_ref_anesth->_user_first_name);

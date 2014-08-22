@@ -215,7 +215,12 @@ class CTemplateManager {
 
     // Barcode
     if (isset($options["barcode"])) {
-      $_field = &$this->sections[$section][$field];
+      if ($sub_item) {
+        $_field = &$this->sections[$section][$item][$sub_item];
+      }
+      else {
+        $_field = &$this->sections[$section][$field];
+      }
 
       if ($this->valueMode) {
         $src = $this->getBarcodeDataUri($_field['value'], $options["barcode"]);
@@ -714,7 +719,13 @@ class CTemplateManager {
       foreach ($properties as $key => $property) {
         if (strpos($key, ' - ') === false) {
           foreach ($property as $_property) {
-            if (isset($_property["options"]["data"])) {
+            if ($_property["valueHTML"] && isset($_property["options"]["barcode"])) {
+              $options = $_property["options"]["barcode"];
+              $image = $this->getBarcodeDataUri($_property["valueHTML"], $options);
+              $fields[] = utf8_decode(html_entity_decode("src=\"{$_property['fieldHTML']}\""));
+              $values[] = "src=\"$image\"";
+            }
+            elseif (isset($_property["options"]["data"])) {
               $data = $_property["options"]["data"];
               $fields_regex[] = $this->getDataRegex($data);
               $values_regex[] = $_property["valueHTML"];

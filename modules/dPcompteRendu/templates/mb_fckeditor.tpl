@@ -155,11 +155,14 @@ CKEDITOR.editorConfig = function(config) {
             view: "{{$_property.view|smarty:nodefaults|escape:"javascript"}}" ,
             item:
             {{if $templateManager->valueMode}}
-              "{{$_property.value|smarty:nodefaults|nl2br|escape:"javascript"}}",
-
+              {{if @$_property.options.barcode || @$_property.options.image || @$_property.options.data}}
+                "{{$_property.field|smarty:nodefaults|escape:"javascript"}}" ,
+              {{else}}
+                "{{$_property.value|smarty:nodefaults|nl2br|escape:"javascript"}}",
+              {{/if}}
             {{else}}
-              {{if @$_property.options.data}}
-                "[{{$_property.field|smarty:nodefaults|escape:"javascript"}}]",
+              {{if @$_property.options.barcode || @$_property.options.image || @$_property.options.data}}
+                "{{$_property.field|smarty:nodefaults|escape:"javascript"}}",
               {{else}}
                 "[{{$_property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]",
               {{/if}}
