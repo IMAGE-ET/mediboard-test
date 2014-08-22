@@ -18,112 +18,112 @@
 {{/if}}
 
 <script>
-function popEtatSejour(sejour_id) {
-  var url = new Url("dPhospi", "vw_parcours");
-  url.addParam("sejour_id",sejour_id);
-  url.pop(1000, 650, 'Etat du Séjour');
-}
-
-function addSejourIdToSession(sejour_id){
-  var url = new Url("system", "httpreq_set_value_to_session");
-  url.addParam("module","{{$m}}");
-  url.addParam("name","sejour_id");
-  url.addParam("value",sejour_id);
-  url.requestUpdate("systemMsg");
-}
-
-function loadViewSejour(sejour_id, date, elt, tab) {
-  var url = new Url('soins', 'ajax_vw_dossier_sejour');
-  url.addParam('sejour_id', sejour_id);
-  url.addParam('date', date);
-
-  if (tab) {
-    url.addParam('default_tab', tab);
+  function popEtatSejour(sejour_id) {
+    var url = new Url("hospi", "vw_parcours");
+    url.addParam("sejour_id",sejour_id);
+    url.pop(1000, 650, 'Etat du Séjour');
   }
-  else {
-    var selected_tab = $$('ul#tab-sejour li a.active');
-    if (selected_tab.length == 1) {
-      url.addParam('default_tab', selected_tab[0].href.split("#")[1]);
+
+  function addSejourIdToSession(sejour_id) {
+    var url = new Url("system", "httpreq_set_value_to_session");
+    url.addParam("module","{{$m}}");
+    url.addParam("name","sejour_id");
+    url.addParam("value",sejour_id);
+    url.requestUpdate("systemMsg");
+  }
+
+  function loadViewSejour(sejour_id, date, elt, tab) {
+    var url = new Url('soins', 'ajax_vw_dossier_sejour');
+    url.addParam('sejour_id', sejour_id);
+    url.addParam('date', date);
+
+    if (tab) {
+      url.addParam('default_tab', tab);
+    }
+    else {
+      var selected_tab = $$('ul#tab-sejour li a.active');
+      if (selected_tab.length == 1) {
+        url.addParam('default_tab', selected_tab[0].href.split("#")[1]);
+      }
+    }
+
+    url.requestUpdate('dossier_sejour', function() {
+      addSejourIdToSession(sejour_id);
+      markAsSelected(elt);
+    });
+  }
+
+  function printPatient(patient_id) {
+    var url = new Url("dPpatients", "print_patient");
+    url.addParam("patient_id", patient_id);
+    url.popup(700, 550, "Patient");
+  }
+
+  function updatePatientsListHeight() {
+    var vpd = document.viewport.getDimensions(),
+        scroller = $("left-column").down(".scroller"),
+        pos = scroller.cumulativeOffset();
+    scroller.setStyle({height: (vpd.height - pos[1] - 6)+'px'});
+  }
+
+  Main.add(function () {
+    Calendar.regField(getForm("changeDate").date, null, {noView: true});
+
+    updatePatientsListHeight();
+
+    Event.observe(window, "resize", updatePatientsListHeight);
+
+    {{if $isImedsInstalled}}
+      ImedsResultsWatcher.loadResults();
+    {{/if}}
+  });
+
+  function markAsSelected(element) {
+    element.up("tr").addUniqueClassName("selected");
+  }
+
+  viewBilanService = function(service_id, date) {
+    var url = new Url("hospi", "vw_bilan_service");
+    url.addParam("service_id", service_id);
+    url.addParam("date", date);
+    url.popup(800,500,"Bilan par service");
+  }
+
+  checkAnesth = function(oField) {
+    // Recuperation de la liste des anesthésistes
+    var anesthesistes = {{$anesthesistes|@json}};
+
+    var oForm = getForm("selService");
+    var praticien_id = $V(oForm.praticien_id);
+    var service_id   = $V(oForm.service_id);
+
+    if (oField.name == "service_id"){
+      if (anesthesistes.include(praticien_id)) {
+        $V(oForm.praticien_id, '', false);
+      }
+    }
+
+    if (oField.name == "praticien_id"){
+      if (anesthesistes.include(praticien_id)) {
+        $V(oForm.service_id, '', false);
+      }
     }
   }
 
-  url.requestUpdate('dossier_sejour', {onComplete: function() {
-    addSejourIdToSession(sejour_id);
-    markAsSelected(elt);
-  }});
-}
+  savePref = function(form) {
+    var formPref = getForm('editPrefServiceSoins');
+    var formService = getForm('selService');
+    var service_id = $V(form.default_service_id);
 
-function printPatient(patient_id) {
-  var url = new Url("dPpatients", "print_patient");
-  url.addParam("patient_id", patient_id);
-  url.popup(700, 550, "Patient");
-}
-
-function updatePatientsListHeight() {
-  var vpd = document.viewport.getDimensions(),
-      scroller = $("left-column").down(".scroller"),
-      pos = scroller.cumulativeOffset();
-  scroller.setStyle({height: (vpd.height - pos[1] - 6)+'px'});
-}
-
-Main.add(function () {
-  Calendar.regField(getForm("changeDate").date, null, {noView: true});
-
-  updatePatientsListHeight();
-  
-  Event.observe(window, "resize", updatePatientsListHeight);
-
-  {{if $isImedsInstalled}}
-    ImedsResultsWatcher.loadResults();
-  {{/if}}
-});
-
-function markAsSelected(element) {
-  element.up("tr").addUniqueClassName("selected");
-}
-
-viewBilanService = function(service_id, date){
-  var url = new Url("dPhospi", "vw_bilan_service");
-  url.addParam("service_id", service_id);
-  url.addParam("date", date);
-  url.popup(800,500,"Bilan par service");
-}
-
-checkAnesth = function(oField){
-  // Recuperation de la liste des anesthésistes
-  var anesthesistes = {{$anesthesistes|@json}};
-  
-  var oForm = getForm("selService");
-  var praticien_id = $V(oForm.praticien_id);
-  var service_id   = $V(oForm.service_id);
-  
-  if (oField.name == "service_id"){
-    if(anesthesistes.include(praticien_id)){
-      $V(oForm.praticien_id, '', false);
-    }
+    var services_ids_hospi_elt = formPref.elements['pref[services_ids_hospi]'];
+    var services_ids_hospi = $V(services_ids_hospi_elt).evalJSON();
+    services_ids_hospi.g{{$group_id}} = service_id;
+    $V(services_ids_hospi_elt, Object.toJSON(services_ids_hospi));
+    return onSubmitFormAjax(formPref, function() {
+      Control.Modal.close();
+      $V(formService.service_id, service_id);
+    });
   }
-  
-  if (oField.name == "praticien_id"){
-    if(anesthesistes.include(praticien_id)){
-      $V(oForm.service_id, '', false);    
-    }
-  }
-}
-
-savePref = function(form) {
-  var formPref = getForm('editPrefServiceSoins');
-  var formService = getForm('selService');
-  var service_id = $V(form.default_service_id);
-
-  var services_ids_hospi_elt = formPref.elements['pref[services_ids_hospi]'];
-  var services_ids_hospi = $V(services_ids_hospi_elt).evalJSON();
-  services_ids_hospi.g{{$group_id}} = service_id;
-  $V(services_ids_hospi_elt, Object.toJSON(services_ids_hospi));
-  return onSubmitFormAjax(formPref, {onComplete: function() {
-    Control.Modal.close();
-    $V(formService.service_id, service_id);
-  } });
-}
 
 </script>
 
@@ -162,14 +162,15 @@ savePref = function(form) {
               <input type="hidden" name="m" value="{{$m}}" />
               <input type="hidden" name="tab" value="{{$tab}}" />
               <input type="hidden" name="sejour_id" value="" />
-             
+              <input type="hidden" name="date" value="{{$date}}" />
+
               <table class="main form">
                 <tr>
                   <th></th>
                   <td>
                     <select name="mode" onchange="this.form.submit()" style="width:135px">
-                      <option value="0" {{if $mode == 0}}selected="selected"{{/if}}>{{tr}}Instant view{{/tr}}</option>
-                      <option value="1" {{if $mode == 1}}selected="selected"{{/if}}>{{tr}}Day view{{/tr}}</option>
+                      <option value="0" {{if $mode == 0}}selected{{/if}}>{{tr}}Instant view{{/tr}}</option>
+                      <option value="1" {{if $mode == 1}}selected{{/if}}>{{tr}}Day view{{/tr}}</option>
                     </select>
                   </td>
                 </tr>
@@ -185,9 +186,9 @@ savePref = function(form) {
                     <select name="service_id" onchange="checkAnesth(this); this.form.submit()" style="max-width: 135px;">
                       <option value="">&mdash; Service</option>
                       {{foreach from=$services item=curr_service}}
-                      <option value="{{$curr_service->_id}}" {{if $curr_service->_id == $service_id}} selected="selected" {{/if}}>{{$curr_service->nom}}</option>
+                      <option value="{{$curr_service->_id}}" {{if $curr_service->_id == $service_id}}selected{{/if}}>{{$curr_service->nom}}</option>
                       {{/foreach}}
-                      <option value="NP" {{if $service_id == "NP"}} selected="selected" {{/if}}>Non placés</option>
+                      <option value="NP" {{if $service_id == "NP"}}selected{{/if}}>Non placés</option>
                     </select>
                     {{if $service_id && $isPrescriptionInstalled && $service_id != "NP"}}
                       <button type="button" class="search compact" onclick="viewBilanService('{{$service_id}}','{{$date}}');">Bilan</button>
@@ -233,7 +234,7 @@ savePref = function(form) {
                       <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
                       {{foreach from=$type_admission->_locales key=key item=_type}} 
                       {{if $key != "urg" && $key != "exte"}}
-                      <option value="{{$key}}" {{if $key == $object->type}}selected="selected"{{/if}}>{{$_type}}</option>
+                      <option value="{{$key}}" {{if $key == $object->type}}selected{{/if}}>{{$_type}}</option>
                       {{/if}}
                       {{/foreach}}
                     </select>
@@ -391,7 +392,7 @@ savePref = function(form) {
                   <th class="title" colspan="6">Non placés</th>
                 </tr>
                 {{foreach from=$sejoursParService.NP item=_sejour_NP}}
-                  {{include file="../../dPhospi/templates/inc_vw_sejour_np.tpl" curr_sejour=$_sejour_NP}}
+                  {{mb_include module="hospi" template="inc_vw_sejour_np" curr_sejour=$_sejour_NP}}
                 {{/foreach}}
               {{/if}}
             {{/if}}
@@ -405,7 +406,7 @@ savePref = function(form) {
                   </th>
                 </tr>
                 {{foreach from=$sejourNonAffectes item=curr_sejour}}
-                  {{include file="../../dPhospi/templates/inc_vw_sejour_np.tpl"}}
+                  {{mb_include module="hospi" template="inc_vw_sejour_np"}}
                 {{/foreach}}
               {{/foreach}}
             {{/if}}
@@ -415,7 +416,7 @@ savePref = function(form) {
         </tr> 
       </table>    
     </td>
-    <td style="width:100%;">
+    <td style="width: 100%;">
       <div id="dossier_sejour">
         <div class="small-info">
           Veuillez sélectionner un séjour dans la liste de gauche pour afficher
