@@ -1,13 +1,22 @@
 {{mb_default var=_is_dentiste value=0}}
 {{mb_script module=cabinet script=intubation}}
 
-<script type="text/javascript">
-SchemaDentaire.oListEtats = {{$list_etat_dents|@json}};
+<script>
+  SchemaDentaire.oListEtats = {{$list_etat_dents|@json}};
 
-Main.add(function () {
-  var states = [0, 'defaut', 'bridge', 'pivot', 'mobile', 'appareil', 'implant'];
-  SchemaDentaire.initialize("dents-schema", states);
-} );
+  guessVentilation = function() {
+    var url = new Url("cabinet", "ajax_guess_ventilation");
+    url.addParam("patient_id", "{{$consult->patient_id}}");
+    url.addParam("consult_id", "{{$consult_anesth->_id}}");
+    url.requestUpdate("ventilation_area", function() {
+      return onSubmitFormAjax(getForm('editFrmIntubation'));
+    });
+  };
+
+  Main.add(function() {
+    var states = [0, 'defaut', 'bridge', 'pivot', 'mobile', 'appareil', 'implant'];
+    SchemaDentaire.initialize("dents-schema", states);
+  } );
 </script>
 
 <form name="etat-dent-edit" action="?" method="post">
@@ -142,33 +151,13 @@ Main.add(function () {
           <tr>
             <td colspan="2">
               <fieldset>
-                <legend>Critères de ventilation</legend>
-                <table class="layout">
-                  <tr>
-                    <td>
-                      {{mb_field object=$consult_anesth field=plus_de_55_ans typeEnum=checkbox onchange="verifIntubDifficileAndSave(this.form);"}}
-                      {{mb_label object=$consult_anesth field=plus_de_55_ans}}
-                    </td>
-                    <td>
-                      {{mb_field object=$consult_anesth field=edentation typeEnum=checkbox onchange="verifIntubDifficileAndSave(this.form);"}}
-                      {{mb_label object=$consult_anesth field=edentation}}
-                    </td>
-                    <td>
-                      {{mb_field object=$consult_anesth field=barbe typeEnum=checkbox onchange="verifIntubDifficileAndSave(this.form);"}}
-                      {{mb_label object=$consult_anesth field=barbe}}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      {{mb_field object=$consult_anesth field=imc_sup_26 typeEnum=checkbox onchange="verifIntubDifficileAndSave(this.form);"}}
-                      {{mb_label object=$consult_anesth field=imc_sup_26}}
-                    </td>
-                    <td>
-                      {{mb_field object=$consult_anesth field=ronflements typeEnum=checkbox onchange="verifIntubDifficileAndSave(this.form);"}}
-                      {{mb_label object=$consult_anesth field=ronflements}}
-                    </td>
-                  </tr>
-                </table>
+                <legend>
+                  Critères de ventilation
+                  <button type="button" class="tick" onclick="guessVentilation()">Evaluer</button>
+                </legend>
+                <div id="ventilation_area">
+                  {{mb_include module="cabinet" template="inc_guess_ventilation"}}
+                </div>
               </fieldset>
             </td>
           </tr>

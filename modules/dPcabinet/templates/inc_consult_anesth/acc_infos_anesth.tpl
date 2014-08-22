@@ -17,12 +17,12 @@
   }
 
   guessScoreApfel = function() {
-    var url = new Url("dPcabinet", "ajax_guess_score_apfel");
+    var url = new Url("cabinet", "ajax_guess_score_apfel");
     url.addParam("patient_id", "{{$consult->patient_id}}");
     url.addParam("consult_id", "{{$consult_anesth->_id}}");
-    url.requestUpdate("score_apfel_area", {onComplete: function() {
+    url.requestUpdate("score_apfel_area", function() {
       return getForm('editScoreApfel').onsubmit();
-    }});
+    });
   };
 
   afterStoreScore = function(id, obj) {
