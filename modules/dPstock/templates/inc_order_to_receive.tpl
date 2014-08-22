@@ -52,7 +52,7 @@ editUnitPrice = function(order_item_id) {
   {{mb_key object=$order}}
   
   <button type="submit" class="cancel" style="float: left;">
-    Clôturer la réception de cette commande
+    Clôturer commande incomplète
   </button>
 </form>
 
