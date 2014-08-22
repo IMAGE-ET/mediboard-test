@@ -21,7 +21,7 @@ Prestations = {
     if (window.refreshMouvements) {
       refreshMouvements();
     }
-    if (window.Placement.loadTableau) {
+    if (window.Placement && window.Placement.loadTableau) {
       Placement.loadTableau();
     }
   }
