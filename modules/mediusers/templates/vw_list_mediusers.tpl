@@ -27,7 +27,7 @@
   </tr>
 
   {{foreach from=$mediusers item=_user}}
-  <tr {{if $_user->_id == $user_id}} class="selected" {{/if}}>
+  <tr class="{{if $_user->_id == $user_id}}selected{{/if}} {{if !$_user->actif}}hatching{{/if}}">
 
     {{if $_user->_ref_user->_id}}
 
