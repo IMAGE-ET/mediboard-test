@@ -47,11 +47,25 @@ document.observe('dom:loaded', function(){
     MbPerformance.timeEnd("main");
 
     var cookiejar = new CookieJar();
-    cookiejar.put("uainfo", {
-      screen: [screen.width, screen.height],
-      pixelRatio: window.devicePixelRatio || null
-    });
+    
+    // If the user is not connected
+    if (!User.id) {
+      cookiejar.put("uainfo", {
+        screen: [screen.width, screen.height],
+        pixelRatio: window.devicePixelRatio || null
+      });
+    }
+    
     cookiejar.put("cookie-supported", 1);
+
+    /*
+    // If the user is not connected, we compute and write the score in the cookie
+    if (!User.id) {
+      UAInfo.getBenchScore(function(result){
+        uainfo.performanceScore.result = result;
+        cookiejar.put("uainfo", uainfo);
+      });
+    }*/
   }
   catch (e) {
     errorHandler(e.extMessage || e.message || e.description || e, e.fileName, e.lineNumber, e);
