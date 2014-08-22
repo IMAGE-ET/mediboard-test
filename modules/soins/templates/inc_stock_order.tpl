@@ -153,7 +153,7 @@
         </th>
         <td>
           <input type="text" name="keywords" value="{{$keywords}}" onchange="$V(this.form.start, 0, false); " />
-          <button type="submit" class="cancel notext" onclick="$V(this.form.keywords, '')">{{tr}}Reset{{/tr}}</button>
+          <button type="button" class="cancel notext" onclick="$V(this.form.keywords, '')">{{tr}}Reset{{/tr}}</button>
         </td>
       {{else}}
         <td colspan="2"></td>
