@@ -3,6 +3,8 @@ PlageAstreinte = {
   lastList : "",
   user_id : "",
 
+  modalList: null,
+
   showForUser: function(user_id) {
     new Url("astreintes", "ajax_plage_astreinte").
       addParam("user_id", user_id).
@@ -21,7 +23,6 @@ PlageAstreinte = {
 
   // Select plage and open form
   edit: function(plage_id, user_id) {
-
     var url = new Url("astreintes", "ajax_edit_plage_astreinte");
     url.addParam("plage_id", plage_id);
     url.addParam("user_id", user_id);
@@ -32,12 +33,12 @@ PlageAstreinte = {
   },
 
   refreshList: function(target_id, user_id) {
-    if (this.lastList || target_id) {
-      if (user_id != null) {this.user_id = user_id;}
-      if (target_id != null) {this.lastList = target_id;}
+    if (PlageAstreinte.lastList || target_id) {
+      if (user_id != null) {PlageAstreinte.user_id = user_id;}
+      if (target_id != null) {PlageAstreinte.lastList = target_id;}
       var url = new Url("astreintes", "vw_idx_plages_astreinte");
-      url.addParam("user_id", this.user_id);
-      url.requestUpdate(this.lastList);
+      url.addParam("user_id", PlageAstreinte.user_id);
+      url.requestUpdate(PlageAstreinte.lastList);
     }
   },
 
@@ -55,14 +56,13 @@ PlageAstreinte = {
     url.addParam("minutes", minutestart);
     url.requestModal(500,300);
     url.modalObject.observe("afterClose", function() {
-      if ($('edit-astreintes')) {
-        PlageAstreinte.refreshList();
+      if (callback) {
+        callback();
       }
       else {
         location.reload();
       }
     });
-
   },
 
   modaleastreinteForDay: function(date) {
@@ -70,6 +70,6 @@ PlageAstreinte = {
     if (date) {
       url.addParam("date", date);
     }
-    url.requestModal(600,500);
+    url.requestModal(600);
   }
 };

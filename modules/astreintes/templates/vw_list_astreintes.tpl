@@ -11,7 +11,7 @@
 
 {{mb_script module=astreintes script=plage}}
 
-<button onclick="PlageAstreinte.modal()" class="new">Créer</button>
+<button type="button" onclick="PlageAstreinte.modal()" class="new">Créer</button>
 
   <form method="get" action="">
     <input type="hidden" name="m" value="{{$m}}"/>

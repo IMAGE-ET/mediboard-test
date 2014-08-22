@@ -10,7 +10,7 @@
 
 <table class="tbl">
   <tr>
-    <th colspan="4">{{tr}}CPlageAstreinte.For{{/tr}} {{$date|date_format:$conf.longdate}}</th>
+    <th colspan="4">{{$title|smarty:nodefaults}}</th>
   </tr>
   <tr>
     <th>Personne</th>

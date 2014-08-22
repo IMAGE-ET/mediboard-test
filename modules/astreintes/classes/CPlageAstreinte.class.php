@@ -117,10 +117,6 @@ class CPlageAstreinte extends CPlageCalendaire {
       return true;
     }
 
-    if ($this->_ref_user->_id == CAppUI::$user->_id) {
-      return true;
-    }
-
     if (CModule::getCanDo('astreintes')->edit && $this->_ref_user->getPerm($permType)) {
       return true;
     }

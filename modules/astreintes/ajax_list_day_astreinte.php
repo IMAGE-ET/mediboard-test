@@ -28,6 +28,7 @@ foreach ($plages_astreinte as $_plage) {
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("plages_astreinte",   $plages_astreinte);
+$smarty->assign("title", CAppUI::tr("CPlageAstreinte.For")." ".htmlentities(CMbDT::format($date, CAppUI::conf("longdate"))));
 $smarty->assign("date",   $date);
 $smarty->display("vw_list_day_astreinte.tpl");
 

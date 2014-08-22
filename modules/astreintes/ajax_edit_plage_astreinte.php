@@ -20,10 +20,8 @@ $user = CMediusers::get($user_id);
 
 $users = array($user);
 
-if ($user->isAdmin()) {
-  $where = array("actif" => "= '1'");
-  $users = $user->loadListWithPerms(PERM_EDIT);
-}
+$where = array("actif" => "= '1' ");
+$users = $user->loadListWithPerms(PERM_EDIT, $where);
 
 $plageastreinte = new CPlageAstreinte();
 
@@ -32,20 +30,26 @@ if ($plage_id) {
   $plageastreinte->load($plage_id);
   $plageastreinte->loadRefsNotes();
 }
-else {
-  $plageastreinte->phone_astreinte = $user->_user_astreinte;
-}
 
-//creation
+// creation
 if (!$plageastreinte->_id) {
+  // phone
+  $plageastreinte->phone_astreinte = $user->_user_astreinte;
+
+  // date & hour
   if ($plage_date && $plage_hour) {
     $plageastreinte->start = "$plage_date $plage_hour:$plage_minutes:00";
   }
-  $plageastreinte->user_id = $user_id;
+
+  // user
+  if (in_array($user->_id, array_keys($users))) {
+    $plageastreinte->user_id = $user->_id;
+  }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("users",      $users);
+$smarty->assign("users",     $users);
+$smarty->assign("user",      $user);
 $smarty->assign("plageastreinte",  $plageastreinte);
 $smarty->display("inc_edit_plage_astreinte.tpl");

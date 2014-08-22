@@ -9,7 +9,7 @@
 *}}
 
 {{mb_script module="astreintes" script="plage"}}
-<button class="new" type="button" onclick="PlageAstreinte.modal(null, null, null, null, 'Control.modal.close')">
+<button class="new" type="button" onclick="PlageAstreinte.modal(null, null, null, null, PlageAstreinte.refreshList)">
 {{tr}}CPlageAstreinte-title-create{{/tr}}
 </button>
 <table class="main">
