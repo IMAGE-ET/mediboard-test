@@ -1736,7 +1736,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
       $rpu->fillLimitedTemplate($template);
     }
 
-    if (CModule::getActive("dPprescription")) {
+    if (!$this->countBackRefs("consult_anesth") && CModule::getActive("dPprescription")) {
       $sejour->loadRefsPrescriptions();
       $prescription = isset($sejour->_ref_prescriptions["pre_admission"]) ?
         $sejour->_ref_prescriptions["pre_admission"] :
