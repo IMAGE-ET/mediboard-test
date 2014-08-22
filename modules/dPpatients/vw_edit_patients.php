@@ -42,6 +42,7 @@ if (!$patient_id) {
   $patient->prenom = $firstName;
   $patient->assure_nom    = $name;
   $patient->assure_prenom = $firstName;
+  $patient->unescapeValues();
 
   if ($naissance_day && $naissance_month && $naissance_year) {
     $patient->naissance = sprintf('%04d-%02d-%02d', $naissance_year, $naissance_month, $naissance_day);
