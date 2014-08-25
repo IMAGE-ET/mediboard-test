@@ -13,8 +13,13 @@
   {{mb_script module=facturation script=facture}}
 {{/if}}
 
-<script>
+<style>
+  .draggable {
+    opacity:1!important;
+  }
+</style>
 
+<script>
 function strpad(val) {
   return (!isNaN(val) && val.toString().length == 1) ? "0" + val : val;
 }
