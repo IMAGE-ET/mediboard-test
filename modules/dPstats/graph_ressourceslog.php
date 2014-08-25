@@ -53,13 +53,13 @@ function graphRessourceLog($module, $date, $element = 'duration', $interval = 'd
     $module_name = $module;
   }
 
-  $logs = CAccessLog::loadAgregation($startx, $endx, $groupmod, $module_name);
+  $logs = CAccessLog::loadAggregation($startx, $endx, $groupmod, $module_name);
 
   $series = array();
   $i = 0;
   foreach ($logs as $data) {
     $series[$i]["data"]  = array(array(0, $data->$element));
-    $series[$i]["label"] = $module != 'modules' ? $data->action : $data->module;
+    $series[$i]["label"] = $module != 'modules' ? $data->_action : $data->_module;
     $i++;
   }
 

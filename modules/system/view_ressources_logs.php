@@ -41,9 +41,9 @@ if ($groupres == 1) {
   $graphs[] = graphRessourceLog('total', $date, $element, $interval, $numelem);
 }
 else {
-  $logs = CAccessLog::loadAgregation($from, $next, ($groupres + 1), 0);
+  $logs = CAccessLog::loadAggregation($from, $next, ($groupres + 1), 0);
   foreach ($logs as $log) {
-    $graphs[] = graphRessourceLog($log->module, $date, $element, $interval, $numelem);
+    $graphs[] = graphRessourceLog($log->_module, $date, $element, $interval, $numelem);
   }
 }
 

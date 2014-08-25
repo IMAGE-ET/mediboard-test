@@ -8,45 +8,31 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<table class="tbl">
+<script>
+  Main.add(function() {
+    var al_url = new Url("system", "crazy_access_logs");
+    al_url.addParam("mode", "find");
+    al_url.requestUpdate("crazy_al");
+
+    var dsl_url = new Url("system", "crazy_datasource_logs");
+    dsl_url.addParam("mode", "find");
+    dsl_url.requestUpdate("crazy_dsl");
+  });
+</script>
+
+<table class="main">
   <tr>
-    <th class="title" colspan="3">
-      {{tr}}CAccessLog-title-crazy-found{{/tr}}
-      <br />
-      {{mb_label class=CAccessLog field=_average_duration}} &gt; {{$ratio}}s
-    </th>
-  </tr>
-  <tr>
-    <th>{{mb_label class=CAccessLog field=module}}</th>
-    <th>{{mb_label class=CAccessLog field=action}}</th>
-    <th>{{tr}}Total{{/tr}}</th>
+    <th>{{tr}}CAccessLog{{/tr}}</th>
+    <th>{{tr}}CDataSourceLog{{/tr}}</th>
   </tr>
 
-  {{foreach from=$logs item=_log}}
-    <tr>
-      <td><strong>{{$_log.module}}</strong></td>
-      <td>{{$_log.action}}</td>
-      <td>{{$_log.total}}</td>
-    </tr>
-  {{foreachelse}}
-    <tr>
-      <td class="empty" colspan="3">{{tr}}CAccessLog.none{{/tr}}</td>
-    </tr>
-  {{/foreach}}
-
   <tr>
-    <td colspan="3" class="button">
-      <button class="trash" type="button" onclick="AccessLog.crazyLogs('purge');" {{if !count($logs)}}disabled="true"{{/if}}>
-        {{tr}}Purge{{/tr}}
-      </button>
+    <td>
+      <div id="crazy_al"></div>
+    </td>
+
+    <td>
+      <div id="crazy_dsl"></div>
     </td>
   </tr>
 </table>
-
-{{if $purged_count !== null}}
-  <div class="small-success">
-    {{tr}}CAccessLog-title-crazy-purged{{/tr}} : {{$purged_count}}
-  </div>
-{{/if}}
-
-

@@ -1,13 +1,13 @@
-<?php 
+<?php
 /**
  * Access logging
- *  
+ *
  * @category   Dispatcher
  * @package    Mediboard
  * @subpackage Includes
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    SVN: $Id$ 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    SVN: $Id$
  * @link       http://www.mediboard.org
  */
 
@@ -29,14 +29,19 @@ if (!$action) {
 // Check prerequisites
 $ds = CSQLDataSource::get("std");
 
+$ma         = new CModuleAction();
+$ma->module = isset($m_post) ? $m_post : $m;
+$ma->action = $action;
+
+$module_action_id = $ma->getID();
+
 // Key initialisation
-$log = new CAccessLog();
-$log->module   = isset($m_post) ? $m_post : $m;
-$log->action   = $action;
+$log                   = new CAccessLog();
+$log->module_action_id = $module_action_id;
 
 $minutes     = CMbDT::format(null, "%M");
 $arr_minutes = (floor($minutes / 10) * 10) % 60;
-($arr_minutes === 0) ? $arr_minutes = "00" : null;
+$arr_minutes = ($arr_minutes === 0) ? "00" : null;
 
 // 10 min. long aggregation
 $log->period = CMbDT::format(null, "%Y-%m-%d %H:" . $arr_minutes . ":00");
@@ -50,6 +55,7 @@ if ($chrono->step > 0) {
 
 // Probe aquisition
 $rusage = getrusage();
+
 $log->hits++;
 $log->duration    += $chrono->total;
 $log->processus   += floatval($rusage["ru_utime.tv_usec"]) / 1000000 + $rusage["ru_utime.tv_sec"];
@@ -63,8 +69,7 @@ $log->warnings    += CApp::$performance["warning"];
 $log->notices     += CApp::$performance["notice"];
 
 $log->aggregate = 10;
-
-$log->bot = CApp::$is_robot ? 1 : 0;
+$log->bot       = CApp::$is_robot ? 1 : 0;
 
 // Fast store
 if ($msg = $log->fastStore()) {
@@ -73,29 +78,19 @@ if ($msg = $log->fastStore()) {
 }
 
 if (CAppUI::conf("log_datasource_metrics")) {
-  // In order to retrieve inserted AccessLog ID
-  $log2 = new CAccessLog();
-  $log2->module    = $log->module;
-  $log2->action    = $log->action;
-  $log2->period    = $log->period;
-  $log2->aggregate = $log->aggregate;
-  $log2->bot       = $log->bot;
-  $log2->loadMatchingObject();
+  foreach (CSQLDataSource::$dataSources as $_datasource) {
+    if ($_datasource) {
+      $dsl                   = new CDataSourceLog();
+      $dsl->module_action_id = $log->module_action_id;
+      $dsl->datasource       = $_datasource->dsn;
+      $dsl->requests         = $_datasource->chrono->nbSteps;
+      $dsl->duration         = round(floatval($_datasource->chrono->total), 3);
+      $dsl->period           = $log->period;
+      $dsl->aggregate        = $log->aggregate;
+      $dsl->bot              = $log->bot;
 
-  $log_id = $log2->_id;
-
-  if ($log_id) {
-    foreach (CSQLDataSource::$dataSources as $aDataSource) {
-      if ($aDataSource) {
-        $dsl = new CDataSourceLog();
-        $dsl->datasource = $aDataSource->dsn;
-        $dsl->requests   = $aDataSource->chrono->nbSteps;
-        $dsl->duration   = round(floatval($aDataSource->chrono->total), 3);
-        $dsl->accesslog_id = $log_id;
-
-        if ($msg = $dsl->fastStore()) {
-          trigger_error($msg, E_USER_WARNING);
-        }
+      if ($msg = $dsl->fastStore()) {
+        trigger_error($msg, E_USER_WARNING);
       }
     }
   }

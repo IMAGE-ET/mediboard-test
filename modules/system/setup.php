@@ -1804,11 +1804,121 @@ class CSetupsystem extends CSetup {
                 ADD INDEX (`end_datetime`);";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.68";
+    $this->makeRevision("1.1.68");
+    $query = "CREATE TABLE `module_action` (
+                `module_action_id` INT(11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `module` VARCHAR(255) NOT NULL,
+                `action` VARCHAR(255) NOT NULL,
+                UNIQUE `module_action` (`module`, `action`)
+                )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
 
-    /*$query = "ALTER TABLE `user_log`
-        DROP INDEX `object_id`,
-        ADD INDEX `object` (`object_id`, `object_class`)";
-    $this->addQuery($query);*/
+    $query = "ALTER TABLE `access_log`
+              ADD `module_action_id` INT(11) UNSIGNED NOT NULL AFTER `accesslog_id`;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `access_log`
+              ADD INDEX (`module_action_id`);";
+    $this->addQuery($query);
+
+    $query = "INSERT INTO `module_action` (`module`, `action`)
+              SELECT DISTINCT `module`, `action`
+              FROM `access_log`;";
+    $this->addQuery($query);
+
+    $query = "UPDATE `access_log`
+              SET `module_action_id` = (
+                SELECT `ma`.`module_action_id`
+                FROM `module_action` as `ma`
+                WHERE `ma`.`module` = `access_log`.`module`
+                  AND `ma`.`action` = `access_log`.`action`
+              );";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `access_log`
+                DROP INDEX `aggregate`,
+                DROP INDEX `triplet`,
+                ADD UNIQUE `aggregate` (`module_action_id`, `period`, `aggregate`, `bot`),
+                ADD INDEX `triplet` (`module_action_id`, `period`);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `access_log`
+                DROP COLUMN `module`,
+                DROP COLUMN `action`;";
+    $this->addQuery($query);
+
+    $this->makeRevision("1.1.69");
+    $query = "ALTER TABLE `datasource_log`
+                ADD COLUMN `module_action_id` INT(11) UNSIGNED NOT NULL AFTER `datasourcelog_id`,
+                ADD COLUMN `period`           DATETIME NOT NULL,
+                ADD COLUMN `aggregate`        INT(11) UNSIGNED NOT NULL DEFAULT '10',
+                ADD COLUMN `bot`              BOOL NOT NULL DEFAULT 0;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `datasource_log`
+              ADD INDEX (`module_action_id`),
+              ADD INDEX (`period`);";
+    $this->addQuery($query);
+
+    $query = "UPDATE `datasource_log`
+              JOIN `access_log` ON `access_log`.`accesslog_id` = `datasource_log`.`accesslog_id`
+              SET `datasource_log`.`module_action_id` = `access_log`.`module_action_id`,
+                  `datasource_log`.`period`           = `access_log`.`period`,
+                  `datasource_log`.`aggregate`        = `access_log`.`aggregate`,
+                  `datasource_log`.`bot`              = `access_log`.`bot`;";
+    $this->addQuery($query);
+
+    // Purge of orphan datasource logs
+    $query = "DELETE FROM `datasource_log`
+              WHERE `accesslog_id` = '0'
+                OR `period` = '0000-00-00 00:00:00';";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `datasource_log`
+                DROP INDEX `doublon`,
+                DROP INDEX `agregat`,
+                ADD UNIQUE `aggregate` (`datasource`, `module_action_id`, `period`, `aggregate`, `bot`),
+                ADD INDEX `triplet` (`datasource`, `module_action_id`, `period`);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `datasource_log`
+                DROP COLUMN `accesslog_id`;";
+    $this->addQuery($query);
+
+//    $this->makeRevision("1.1.70");
+//    $query = "CREATE TABLE `access_log_archive`
+//              LIKE `access_log`;";
+//    $this->addQuery($query);
+//
+//    $query = "CREATE TABLE `datasource_log_archive`
+//              LIKE `datasource_log`;";
+//    $this->addQuery($query);
+//
+//    $this->makeRevision("1.1.71");
+//    $query = "INSERT INTO `access_log_archive` (
+//                SELECT *
+//                FROM `access_log`
+//                WHERE `aggregate` > '10'
+//              );";
+//    $this->addQuery($query);
+//
+//    $query = "INSERT INTO `datasource_log_archive` (
+//                SELECT *
+//                FROM `datasource_log`
+//                WHERE `aggregate` > '10'
+//              );";
+//    $this->addQuery($query);
+//
+//    $this->makeRevision("1.1.72");
+//    $query = "DELETE FROM `access_log`
+//              WHERE `aggregate` > '10';";
+//    $this->addQuery($query);
+//
+//    $query = "DELETE FROM `datasource_log`
+//              WHERE `aggregate` > '10';";
+//    $this->addQuery($query);
+//
+//    $this->mod_version = "1.1.73";
+    $this->mod_version = "1.1.70";
   }
 }

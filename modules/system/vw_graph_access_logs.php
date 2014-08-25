@@ -10,6 +10,7 @@
  */
 
 CCanDo::checkRead();
+
 $date     = CValue::getOrSession("date", CMbDT::date());
 $groupmod = CValue::getOrSession("groupmod", 2);
 
@@ -18,13 +19,17 @@ $hour_min = CValue::getOrSession("hour_min", "6");
 $hour_max = CValue::getOrSession("hour_max", "22");
 $hours    = range(0, 24);
 
-$left_mode     = CValue::getOrSession("left_mode", "request_time"); // request_time, cpu_time, errors, memory_peak
-$left_sampling = CValue::getOrSession("left_sampling", "mean"); // total, mean
+// request_time, cpu_time, errors, memory_peak
+$left_mode = CValue::getOrSession("left_mode", "request_time");
 
-$right_mode     = CValue::getOrSession("right_mode", "hits"); // hits, size
-$right_sampling = CValue::getOrSession("right_sampling", "total"); // total, mean
+// total, mean
+$left_sampling = CValue::getOrSession("left_sampling", "mean");
 
-$show_datasources = CValue::getOrSession("show_datasources", false); // Do we use DB or datasource_logs?
+// hits, size
+$right_mode = CValue::getOrSession("right_mode", "hits");
+
+// total, mean
+$right_sampling = CValue::getOrSession("right_sampling", "total");
 
 // Human/bot filter
 $human_bot = CValue::getOrSession("human_bot", "0");
@@ -66,26 +71,30 @@ switch ($interval = CValue::getOrSession("interval", "one-day")) {
     break;
 }
 
+$graphs = array();
+$left   = array($left_mode, $left_sampling);
+$right  = array($right_mode, $right_sampling);
+
+$logs = CAccessLog::loadAggregation($from, $to, $groupmod, $module, $human_bot);
+
+foreach ($logs as $log) {
+  switch ($groupmod) {
+    case 0:
+      $graphs[] = CAccessLog::graphAccessLog($log->_module, $log->_action, $from, $to, $interval, $left, $right, $human_bot);
+      break;
+
+    case 1:
+      $graphs[] = CAccessLog::graphAccessLog($log->_module, null, $from, $to, $interval, $left, $right, $human_bot);
+      break;
+
+    case 2:
+      $_graph         = CAccessLog::graphAccessLog(null, null, $from, $to, $interval, $left, $right, $human_bot);
+      $graphs[]       = $_graph;
+      break;
+  }
+}
+
 $smarty = new CSmartyDP();
-
+$smarty->assign("graphs", $graphs);
 $smarty->assign("groupmod", $groupmod);
-
-$smarty->assign("date", $date);
-$smarty->assign("hours", $hours);
-$smarty->assign("hour_min", $hour_min);
-$smarty->assign("hour_max", $hour_max);
-
-$smarty->assign("left_mode", $left_mode);
-$smarty->assign("left_sampling", $left_sampling);
-
-$smarty->assign("right_mode", $right_mode);
-$smarty->assign("right_sampling", $right_sampling);
-
-$smarty->assign("module", $module);
-$smarty->assign("interval", $interval);
-$smarty->assign("listModules", CModule::getInstalled());
-
-$smarty->assign("show_datasources", $show_datasources);
-$smarty->assign("human_bot", $human_bot);
-
-$smarty->display("view_access_logs.tpl");
+$smarty->display("vw_graph_access_logs.tpl");
