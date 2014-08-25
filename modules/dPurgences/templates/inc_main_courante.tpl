@@ -205,7 +205,7 @@
         {{tr}}Cancelled{{/tr}}
       </td>
       <td class="cancelled">
-        {{if $rpu->_ref_consult->_id}}
+        {{if $rpu->_ref_consult && $rpu->_ref_consult->_id}}
           {{mb_include template="inc_pec_praticien"}}
         {{/if}}
       </td>
