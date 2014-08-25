@@ -11,8 +11,8 @@
 
 CCanDo::checkRead();
 
-$min_date = CMbDT::date("-1 WEEK") . " 00:00:00";
-$max_date = CMbDT::date("+1 DAY") . " 00:00:00";
+$min_date = CValue::getOrSession("ua_min_date", CMbDT::date("-1 WEEK") . " 00:00:00");
+$max_date = CValue::getOrSession("ua_max_date", CMbDT::date("+1 DAY") . " 00:00:00");
 
 $smarty = new CSmartyDP();
 $smarty->assign("min_date", $min_date);

@@ -1,37 +1,28 @@
+<script>
+  Main.add(function() {
+    getForm("user_auth").onsubmit();
+  });
+
+  changeAuthPage = function(start) {
+    var form = getForm("user_auth");
+    $V(form.elements.start, start);
+    form.onsubmit();
+  }
+</script>
+
 {{if $ua->_id}}
   <h3 onmouseover="ObjectTooltip.createEx(this, '{{$ua->_guid}}')">{{$ua}}</h3>
 {{/if}}
 
-<table class="main tbl">
-  <tr>
-    <th>{{mb_title class=CUserAuthentication field=datetime_login}}</th>
-    <th>{{mb_title class=CUserAuthentication field=id_address}}</th>
-    <th>{{mb_title class=CUserAuthentication field=auth_method}}</th>
-    <th>{{mb_title class=CUserAuthentication field=user_id}}</th>
-    <th>{{mb_title class=CUserAuthentication field=screen_width}}</th>
-    <th>{{mb_title class=CUserAuthentication field=user_agent_id}}</th>
-  </tr>
 
-  {{foreach from=$auth_list item=_user_auth}}
-    <tr>
-      <td class="narrow">{{mb_value object=$_user_auth field=datetime_login}}</td>
-      <td class="narrow">{{mb_value object=$_user_auth field=id_address}}</td>
-      <td class="narrow">{{mb_value object=$_user_auth field=auth_method}}</td>
-      <td>
-        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_user_auth->_ref_user->_ref_mediuser}}
-      </td>
-      <td>
-        {{if $_user_auth->screen_width && $_user_auth->screen_height}}
-          {{mb_value object=$_user_auth field=screen_width}}
-          x
-          {{mb_value object=$_user_auth field=screen_height}}
-        {{/if}}
-      </td>
-      <td>{{mb_value object=$_user_auth field=user_agent_id tooltip=true}}</td>
-    </tr>
-  {{foreachelse}}
-    <tr>
-      <td colspan="6" class="empty">{{tr}}CUserAuthentication.none{{/tr}}</td>
-    </tr>
-  {{/foreach}}
-</table>
+<form name="user_auth" method="get" action="" onsubmit="return onSubmitFormAjax(this, null, 'auth_results');">
+  <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="a" value="ajax_search_user_authentications" />
+  <input type="hidden" name="start" value="{{$start}}" />
+  <input type="hidden" name="user_agent_id" value="{{$user_agent_id}}" />
+  <input type="hidden" name="user_id" value="{{$user_id}}" />
+  <input type="hidden" name="date_min" value="{{$date_min}}" />
+  <input type="hidden" name="date_max" value="{{$date_max}}" />
+</form>
+
+<div id="auth_results"></div>
