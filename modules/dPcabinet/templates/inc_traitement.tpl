@@ -36,7 +36,7 @@
   updateFieldsMedicamentTP{{$addform}} = function(selected) {
     var oFormTP = getForm("editLineTP{{$addform}}");
     // Submit du formulaire avant de faire le selection d'un nouveau produit
-    if ($V(oFormTP._code.value)) {
+    if ($V(oFormTP._code)) {
       onSubmitFormAjax(oFormTP, function() {
         updateTP{{$addform}}(selected);
         DossierMedical.reloadDossiersMedicaux();
