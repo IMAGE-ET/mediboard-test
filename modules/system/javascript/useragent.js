@@ -12,7 +12,7 @@ UserAgent = window.UserAgent = {
   openAuthentications : function(id) {
     var url = new Url("system", "vw_user_authentications");
     url.addParam("user_agent_id", id);
-    url.requestModal(600, 350);
+    url.requestModal(900, 700);
   },
 
   refreshUALine : function(id) {
