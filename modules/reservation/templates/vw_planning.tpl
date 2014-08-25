@@ -15,6 +15,12 @@
 {{mb_script module="dPplanningOp" script="prestations"}}
 
 
+<style>
+  .draggable {
+    opacity:1!important;
+  }
+</style>
+
 <script>
 
 function strpad(val) {
