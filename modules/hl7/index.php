@@ -14,6 +14,7 @@ $module = CModule::getInstalled(basename(dirname(__FILE__)));
 $module->registerTab("vw_read_hl7v2_files"     , TAB_EDIT);
 $module->registerTab("vw_display_hl7v2_message", TAB_READ);
 $module->registerTab("vw_test_hl7v2_data_type" , TAB_EDIT);
+$module->registerTab("vw_test_hl7v2"           , TAB_ADMIN);
 $module->registerTab("vw_hl7v2_tables"         , TAB_EDIT);
 $module->registerTab("vw_hl7v2_schemas"        , TAB_READ);
 
