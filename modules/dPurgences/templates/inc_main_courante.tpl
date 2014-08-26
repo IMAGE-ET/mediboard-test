@@ -213,7 +213,7 @@
       {{else}}
   
       <td class="text" style="background-color: {{$background}}; text-align: center;">
-        {{if $rpu->_ref_ide_responsable->_id}}
+        {{if $rpu->_ref_ide_responsable && $rpu->_ref_ide_responsable->_id}}
           <strong>{{mb_label class="CRPU" field="ide_responsable_id"}}</strong> :
           <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_ref_ide_responsable->_guid}};')">
             {{$rpu->_ref_ide_responsable->_view}}
