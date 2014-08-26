@@ -42,7 +42,10 @@
     url.addParam("heure", heure);
     url.addParam("plageconsult_id", plage_id);
 
-    url.modal({width: 950, height: 700});
+    url.modal({
+      width: "95%",
+      height: "95%"
+    });
 
     url.modalObject.observe("afterClose", refreshPlanning);
   };
