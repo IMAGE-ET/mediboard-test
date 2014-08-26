@@ -60,7 +60,7 @@ function reloadSortieReelle() {
   url.requestUpdate('div_sortie_reelle');
 }
 
-function submitSejRpuConsult() {
+submitSejRpuConsult = function () {
   if (checkForm(getForm("editRPU")) && checkForm(getForm("editRPUDest"))) {
     submitSejourWithSortieReelle(
       submitRPU.curry(
@@ -68,7 +68,7 @@ function submitSejRpuConsult() {
       )
     ); 
   }
-}
+};
 
 Fields = {
   init: function(mode_sortie) {
