@@ -29,7 +29,7 @@
   <button class="new" type="button" onclick="CronJob.edit(0)">{{tr}}CCronJob.new{{/tr}}</button>
   <table class="tbl">
     <tr>
-      <th class="title" colspan="5">{{tr}}CCronJob{{/tr}}</th>
+      <th class="title" colspan="6">{{tr}}CCronJob{{/tr}}</th>
       <th class="title" colspan="5" style="width: 50%">Execution</th>
     </tr>
     <tr>
@@ -38,6 +38,7 @@
       <th>{{mb_title class="CCronJob" field="description"}}</th>
       <th>{{mb_title class="CCronJob" field="params"}}</th>
       <th>{{mb_title class="CCronJob" field="execution"}}</th>
+      <th>{{mb_title class="CCronJob" field="servers_address"}}</th>
       <th>n</th>
       <th>n+1</th>
       <th>n+2</th>

@@ -50,5 +50,15 @@ CronJob = {
 
   ChangeActive : function (form) {
     form.up(1).toggleClassName("opacity-30");
+  },
+
+  setServerAddress : function (element) {
+    var tokenfield = new TokenField(element.form.servers_address);
+    if ($V(element)) {
+      tokenfield.add(element.value);
+    }
+    else {
+      tokenfield.remove(element.value);
+    }
   }
 };

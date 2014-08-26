@@ -60,6 +60,20 @@
       <td>{{mb_field object=$cronjob field="cron_password"}}</td>
     </tr>
     <tr>
+      <th>{{mb_label object=$cronjob field="servers_address"}}</th>
+      <td>
+        {{mb_field object=$cronjob field="servers_address"}}<br/>
+        <div style="width: 250px;">
+          {{foreach from=$address item=_address}}
+            <label style="display: block; float: left; padding-right: 5px;">
+              <input type="checkbox" name="address" value="{{$_address}}"
+                    onclick="CronJob.setServerAddress(this)" {{if in_array($_address, $cronjob->_servers)}}checked{{/if}}>{{$_address}}
+            </label>
+          {{/foreach}}
+        </div>
+      </td>
+    </tr>
+    <tr>
       <th>{{mb_label object=$cronjob field="execution" canNull=true}}</th>
       <td>{{mb_value object=$cronjob field="execution"}}</td>
     </tr>

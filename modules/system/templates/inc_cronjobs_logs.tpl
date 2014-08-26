@@ -15,6 +15,7 @@
     <th>{{mb_title class=CCronJobLog field="status"}}</th>
     <th>{{mb_title class=CCronJobLog field="error"}}</th>
     <th>{{mb_title class=CCronJobLog field="cronjob_id"}}</th>
+    <th>{{mb_title class=CCronJobLog field="server_address"}}</th>
     <th>{{mb_title class=CCronJobLog field="start_datetime"}}</th>
     <th>{{mb_title class=CCronJobLog field="end_datetime"}}</th>
     <th>{{mb_title class=CCronJobLog field="_duration"}}</th>
@@ -28,6 +29,7 @@
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_log->_ref_cronjob->_guid}}');">{{$_log->_ref_cronjob->_view}}</span>
         {{/if}}
       </td>
+      <td>{{mb_value object=$_log field="server_address"}}</td>
       <td>{{mb_value object=$_log field="start_datetime"}}</td>
       <td>{{mb_value object=$_log field="end_datetime"}}</td>
       <td>{{mb_value object=$_log field="_duration"}}</td>

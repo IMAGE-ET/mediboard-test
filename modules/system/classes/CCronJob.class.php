@@ -25,6 +25,7 @@ class CCronJob extends CMbObject {
   public $execution;
   public $cron_login;
   public $cron_password;
+  public $servers_address;
 
   public $_frequently;
   public $_second;
@@ -41,6 +42,7 @@ class CCronJob extends CMbObject {
 
   public $_url;
   public $_params;
+  public $_servers = array();
 
   /**
    * @see parent::getSpec
@@ -69,21 +71,22 @@ class CCronJob extends CMbObject {
   function getProps() {
     $props = parent::getProps();
 
-    $props["name"]          = "str notNull";
-    $props["active"]        = "bool notNull default|1";
-    $props["params"]        = "text notNull";
-    $props["description"]   = "text";
-    $props["execution"]     = "str notNull";
-    $props["cron_login"]    = "str notNull maxLength|20";
-    $props["cron_password"] = "password show|0 loggable|0";
+    $props["name"]            = "str notNull";
+    $props["active"]          = "bool notNull default|1";
+    $props["params"]          = "text notNull";
+    $props["description"]     = "text";
+    $props["execution"]       = "str notNull";
+    $props["cron_login"]      = "str notNull maxLength|20";
+    $props["cron_password"]   = "password show|0 loggable|0";
+    $props["servers_address"] = "str";
 
     $props["_frequently"]     = "enum list|@yearly|@monthly|@weekly|@daily|@hourly";
-    $props["_second"]       = "str";
-    $props["_minute"]       = "str";
-    $props["_hour"]         = "str";
-    $props["_day"]          = "str";
-    $props["_month"]        = "str";
-    $props["_week"]         = "str";
+    $props["_second"]         = "str";
+    $props["_minute"]         = "str";
+    $props["_hour"]           = "str";
+    $props["_day"]            = "str";
+    $props["_month"]          = "str";
+    $props["_week"]           = "str";
 
     return $props;
   }
@@ -106,6 +109,9 @@ class CCronJob extends CMbObject {
     $params = strtr($this->params, array("\r\n" => "&", "\n" => "&", " " => ""));
     parse_str($params, $this->_params);
 
+    if ($this->servers_address) {
+      $this->_servers = explode("|", $this->servers_address);
+    }
   }
 
   /**

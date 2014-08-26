@@ -25,6 +25,7 @@ class CCronJobLog extends CMbObject {
   public $cronjob_id;
   public $start_datetime;
   public $end_datetime;
+  public $server_address;
 
   /** @var CCronJob */
   public $_ref_cronjob;
@@ -70,6 +71,7 @@ class CCronJobLog extends CMbObject {
     $props["cronjob_id"]     = "ref class|CCronJob notNull autocomplete|name";
     $props["start_datetime"] = "dateTime notNull";
     $props["end_datetime"]   = "dateTime";
+    $props["server_address"] = "str";
 
     //filter
     $props["_date_min"]      = "dateTime";

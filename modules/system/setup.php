@@ -1875,6 +1875,16 @@ class CSetupsystem extends CSetup {
                 ADD INDEX `triplet` (`datasource`, `module_action_id`, `period`);";
     $this->addQuery($query);
 
+    $this->makeRevision("1.1.70");
+
+    $query = "ALTER TABLE `cronjob`
+                ADD `servers_address` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `cronjob_log`
+                ADD `server_address` VARCHAR (255);";
+    $this->addQuery($query);
+
 //    $this->makeRevision("1.1.70");
 //    $query = "CREATE TABLE `access_log_archive`
 //              LIKE `access_log`;";
@@ -1909,6 +1919,6 @@ class CSetupsystem extends CSetup {
 //    $this->addQuery($query);
 //
 //    $this->mod_version = "1.1.73";
-      $this->mod_version = "1.1.70";
+    $this->mod_version = "1.1.71";
   }
 }

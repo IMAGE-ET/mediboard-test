@@ -27,6 +27,13 @@
     <td class="text compact">{{mb_value object=$_cronjob field="description"}}</td>
     <td>{{mb_value object=$_cronjob field="params"}}</td>
     <td style="font-family: monospace">{{mb_value object=$_cronjob field="execution"}}</td>
+    <td>
+      {{if $_cronjob->servers_address}}
+        {{mb_value object=$_cronjob field="servers_address"}}
+      {{else}}
+        {{tr}}All{{/tr}}
+      {{/if}}
+    </td>
     {{foreach from=$_cronjob->_next_datetime item=_next_datetime}}
       <td style="text-align: right">
         {{if $_next_datetime|date_format:"%d-%m-%Y" == $now}}
