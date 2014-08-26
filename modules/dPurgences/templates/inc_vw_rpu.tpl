@@ -21,44 +21,44 @@ function redirect() {
   //document.location.href="?m=dPurgences&tab=vw_idx_rpu";
 }
 
-function submitSejourWithSortieReelle(callback){
+submitSejourWithSortieReelle = function (callback){
   submitFormAjax(getForm('editSortieReelle'), 'systemMsg', { onComplete : 
     callback 
   });
-}
+};
 
-function submitRPU(callback) {
+submitRPU = function (callback) {
   var oForm = document.editSortieAutorise;
   submitFormAjax(oForm, 'systemMsg', { onComplete : function(){ 
     reloadSortieReelle(); 
     if (callback) callback(); 
   }});
-}
+};
 
-function submitConsultWithChrono(chrono, callback) {
+submitConsultWithChrono = function (chrono, callback) {
   var oForm = document.editFrmFinish;
   oForm.chrono.value = chrono;
   submitFormAjax(oForm, 'systemMsg', { onComplete : function(){ 
     reloadFinishBanner(); 
     if (callback) callback(); 
   }});
-}
+};
 
-function submitSejour(sejour_id) {
+submitSejour = function (sejour_id) {
   var oForm = document.editSejour;
   return onSubmitFormAjax(oForm, { onComplete: function() {
     if (sejour_id != null) {
       reloadDiagnostic(sejour_id, 1);
     }
   }});
-} 
+};
 
-function reloadSortieReelle() {
+reloadSortieReelle = function () {
   var url = new Url("dPurgences", "ajax_sortie_reelle");
   url.addParam("sejour_id", getForm('editSortieReelle').elements.sejour_id.value);
   url.addParam("consult_id", getForm('ValidCotation').elements.consultation_id.value);
   url.requestUpdate('div_sortie_reelle');
-}
+};
 
 submitSejRpuConsult = function () {
   if (checkForm(getForm("editRPU")) && checkForm(getForm("editRPUDest"))) {
@@ -87,13 +87,13 @@ Fields = {
   }
 };
 
-function printDossier(id) {
+printDossier = function (id) {
   var url = new Url("dPurgences", "print_dossier");
   url.addParam("rpu_id", id);
   url.popup(700, 550, "RPU");
-}
+};
 
-function showEtabEntreeTransfert(mode) {
+showEtabEntreeTransfert = function (mode) {
   // mode de transfert = transfert (7)
   $('service_entree_transfert').hide();
   $('etablissement_entree_transfert').hide();
@@ -106,7 +106,7 @@ function showEtabEntreeTransfert(mode) {
     $('service_entree_transfert').show();
     $V(getForm('editRPU')._etablissement_entree_id, '');
   }
-}
+};
 
 </script>
 
