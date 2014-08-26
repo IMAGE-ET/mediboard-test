@@ -79,13 +79,14 @@ class CDataSourceLogArchive extends CDataSourceLog {
     $query = "SELECT
                 CAST(GROUP_CONCAT(`datasourcelog_id` SEPARATOR ',') AS CHAR) AS ids,
                 `module_action_id`,
+                `datasource`,
                 `period`,
                 `bot`
               FROM $table
               WHERE `period` BETWEEN '$oldest_from' AND '$oldest_to'
                 AND `period` <= '$last_year'
                 AND `aggregate` < '$sup_agg'
-              GROUP BY `module_action_id`, date_format(`period`, '%Y-%m-%d 00:00:00'), `bot`";
+              GROUP BY `module_action_id`, `datasource`, DATE_FORMAT(`period`, '%Y-%m-%d 00:00:00'), `bot`";
 
     $year_IDs_to_aggregate = $ds->loadList($query);
 
@@ -110,7 +111,7 @@ class CDataSourceLogArchive extends CDataSourceLog {
                     @duration := SUM(`duration`)
                   FROM $table
                   WHERE `datasourcelog_id` IN (" . $_aggregate['ids'] . ")
-                  GROUP BY `module_action_id`, DATE_FORMAT(`period`, '%Y-%m-%d 00:00:00'), `bot`
+                  GROUP BY `module_action_id`, `datasource`, DATE_FORMAT(`period`, '%Y-%m-%d 00:00:00'), `bot`
                   ON DUPLICATE KEY UPDATE
                     `requests` = `requests` + @requests,
                     `duration` = `duration` + @duration";
@@ -133,6 +134,7 @@ class CDataSourceLogArchive extends CDataSourceLog {
     $query = "SELECT
                 CAST(GROUP_CONCAT(`datasourcelog_id` SEPARATOR ',') AS CHAR) AS ids,
                 `module_action_id`,
+                `datasource`,
                 `period`,
                 `bot`
               FROM $table
@@ -140,13 +142,14 @@ class CDataSourceLogArchive extends CDataSourceLog {
                 AND `period` <= '$last_month'
                 AND `period`  > '$last_year'
                 AND `aggregate` < '$avg_agg'
-              GROUP BY `module_action_id`, date_format(`period`, '%Y-%m-%d %H:00:00'), `bot`";
+              GROUP BY `module_action_id`, `datasource`, DATE_FORMAT(`period`, '%Y-%m-%d %H:00:00'), `bot`";
 
     $month_IDs_to_aggregate = $ds->loadList($query);
 
     if ($month_IDs_to_aggregate) {
       foreach ($month_IDs_to_aggregate as $_aggregate) {
         $query = "INSERT INTO $table (
+                    `datasource`,
                     `module_action_id`,
                     `period`,
                     `aggregate`,
@@ -155,6 +158,7 @@ class CDataSourceLogArchive extends CDataSourceLog {
                     `duration`
                   )
                   SELECT
+                    `datasource`,
                     `module_action_id`,
                     date_format(`period`, '%Y-%m-%d %H:00:00'),
                     '$avg_agg',
@@ -163,7 +167,7 @@ class CDataSourceLogArchive extends CDataSourceLog {
                     @duration := SUM(`duration`)
                   FROM $table
                   WHERE `datasourcelog_id` IN (" . $_aggregate['ids'] . ")
-                  GROUP BY `module_action_id`, DATE_FORMAT(`period`, '%Y-%m-%d %H:00:00'), `bot`
+                  GROUP BY `module_action_id`, `datasource`, DATE_FORMAT(`period`, '%Y-%m-%d %H:00:00'), `bot`
                   ON DUPLICATE KEY UPDATE
                     `requests` = `requests` + @requests,
                     `duration` = `duration` + @duration";
