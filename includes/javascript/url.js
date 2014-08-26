@@ -1097,7 +1097,7 @@ var Url = Class.create({
       getParameters: null,
       coverIE: true,
       onComplete: Prototype.emptyFunction,
-      abortPrevious: false,
+      abortPrevious: true,
       onFailure: function(){ element.update('<div class="error">Le serveur rencontre quelques problèmes.</div>');}
     }, oOptions);
 
