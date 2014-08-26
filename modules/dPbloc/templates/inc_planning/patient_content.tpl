@@ -9,14 +9,16 @@
 *}}
 
 <!-- Patient -->
-<td class="text">
-  <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
-    {{$patient->_view}}
-  </span>
-  {{if $_print_ipp && $patient->_IPP}}
-    [{{$patient->_IPP}}]
-  {{/if}}
-</td>
+{{if $_show_identity}}
+  <td class="text">
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
+      {{$patient->_view}}
+    </span>
+    {{if $_print_ipp && $patient->_IPP}}
+      [{{$patient->_IPP}}]
+    {{/if}}
+  </td>
+{{/if}}
 <td class="text">
   {{$patient->_age}}
   ({{mb_value object=$patient field=naissance}})

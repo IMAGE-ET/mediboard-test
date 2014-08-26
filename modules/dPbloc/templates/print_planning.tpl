@@ -45,6 +45,7 @@ function popPlanning(form, compact) {
   url.addRadio(form._duree);
   url.addRadio(form._hors_plage);
   url.addRadio(form._show_comment_sejour);
+  url.addRadio(form._show_identity);
   url.addParam("_bloc_id[]", $V(form.elements["_bloc_id[]"]), true);
   url.addParam('_compact', compact);
   
@@ -142,7 +143,7 @@ function showCheckboxAnesth(element){
           <td>{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" onchange="changeDateCal(true)" register=true}} </td>
           <td rowspan="2">
             <label>
-              <input type="radio" name="select_days" onclick="changeDate('{{$now}}','{{$now}}');"  value="day" checked="checked" /> 
+              <input type="radio" name="select_days" onclick="changeDate('{{$now}}','{{$now}}');"  value="day" checked />
               Jour courant
             </label>
             <br />
@@ -304,7 +305,7 @@ function showCheckboxAnesth(element){
               Oui <input type="radio" name="_coordonnees" value="1" />
             </label> 
             <label>
-              Non <input type="radio" name="_coordonnees" value="0" checked="checked"/>
+              Non <input type="radio" name="_coordonnees" value="0" checked />
             </label> 
           </td>
         </tr>
@@ -318,7 +319,7 @@ function showCheckboxAnesth(element){
               Oui <input type="radio" name="_print_numdoss" value="1" />
             </label> 
             <label>
-              Non <input type="radio" name="_print_numdoss" value="0" checked="checked"/>
+              Non <input type="radio" name="_print_numdoss" value="0" checked />
             </label> 
           </td>
         </tr>
@@ -332,7 +333,7 @@ function showCheckboxAnesth(element){
               Oui <input type="radio" name="_print_ipp" value="1" />
             </label>
             <label>
-              Non <input type="radio" name="_print_ipp" value="0" checked="checked"/>
+              Non <input type="radio" name="_print_ipp" value="0" checked/>
             </label>
           </td>
         </tr>
@@ -341,10 +342,10 @@ function showCheckboxAnesth(element){
           <td>  
             {{assign var="var" value="plage_vide"}}
             <label>
-              Oui <input type="radio" name="_plage" value="1" {{if $conf.dPbloc.$class.$var == "1"}}checked="checked"{{/if}}/>
+              Oui <input type="radio" name="_plage" value="1" {{if $conf.dPbloc.$class.$var == "1"}}checked{{/if}}/>
             </label>
             <label>
-              Non <input type="radio" name="_plage" value="0" {{if $conf.dPbloc.$class.$var == "0"}}checked="checked"{{/if}}/>
+              Non <input type="radio" name="_plage" value="0" {{if $conf.dPbloc.$class.$var == "0"}}checked{{/if}}/>
             </label>
           </td>
         </tr>
@@ -353,10 +354,10 @@ function showCheckboxAnesth(element){
           <td>  
             {{assign var="var" value="libelle_ccam"}}
             <label>
-              Oui <input type="radio" name="_ccam_libelle" value="1" {{if $conf.dPbloc.$class.$var == "1"}}checked="checked"{{/if}}/>
+              Oui <input type="radio" name="_ccam_libelle" value="1" {{if $conf.dPbloc.$class.$var == "1"}}checked{{/if}}/>
             </label> 
             <label>
-              Non <input type="radio" name="_ccam_libelle" value="0" {{if $conf.dPbloc.$class.$var == "0"}}checked="checked"{{/if}}/>
+              Non <input type="radio" name="_ccam_libelle" value="0" {{if $conf.dPbloc.$class.$var == "0"}}checked{{/if}}/>
             </label> 
           </td>
         </tr>
@@ -390,10 +391,10 @@ function showCheckboxAnesth(element){
           <th><label for="_materiel_1" title="Afficher ou cacher le materiel">Afficher le matériel</label></th>
           <td>
             <label>
-              Oui <input type="radio" name="_materiel" value="1" {{if $conf.dPbloc.CPlageOp.view_materiel == "1"}}checked="checked"{{/if}}/>
+              Oui <input type="radio" name="_materiel" value="1" {{if $conf.dPbloc.CPlageOp.view_materiel == "1"}}checked{{/if}}/>
             </label>
             <label>
-              Non <input type="radio" name="_materiel" value="0" {{if $conf.dPbloc.CPlageOp.view_materiel == "0"}}checked="checked"{{/if}}/>
+              Non <input type="radio" name="_materiel" value="0" {{if $conf.dPbloc.CPlageOp.view_materiel == "0"}}checked{{/if}}/>
             </label>
           </td>
         </tr>
@@ -401,10 +402,10 @@ function showCheckboxAnesth(element){
           <th><label for="_extra_1" title="Afficher ou cacher les extras">Afficher les extra</label></th>
           <td>
             <label>
-              Oui <input type="radio" name="_extra" value="1" {{if $conf.dPbloc.CPlageOp.view_extra == "1"}}checked="checked"{{/if}}/>
+              Oui <input type="radio" name="_extra" value="1" {{if $conf.dPbloc.CPlageOp.view_extra == "1"}}checked{{/if}}/>
             </label>
             <label>
-              Non <input type="radio" name="_extra" value="0" {{if $conf.dPbloc.CPlageOp.view_extra == "0"}}checked="checked"{{/if}}/>
+              Non <input type="radio" name="_extra" value="0" {{if $conf.dPbloc.CPlageOp.view_extra == "0"}}checked{{/if}}/>
             </label>
           </td>
         </tr>
@@ -412,10 +413,10 @@ function showCheckboxAnesth(element){
           <th><label for="_duree_1" title="Afficher ou cacher la durée de l'intervention">Afficher la durée de l'intervention</label></th>
           <td>
             <label>
-              Oui <input type="radio" name="_duree" value="1" {{if $conf.dPbloc.CPlageOp.view_duree == "1"}}checked="checked"{{/if}}/>
+              Oui <input type="radio" name="_duree" value="1" {{if $conf.dPbloc.CPlageOp.view_duree == "1"}}checked{{/if}}/>
             </label>
             <label>
-              Non <input type="radio" name="_duree" value="0" {{if $conf.dPbloc.CPlageOp.view_duree == "0"}}checked="checked"{{/if}}/>
+              Non <input type="radio" name="_duree" value="0" {{if $conf.dPbloc.CPlageOp.view_duree == "0"}}checked{{/if}}/>
             </label>
           </td>
         </tr>
@@ -423,21 +424,32 @@ function showCheckboxAnesth(element){
           <th><label for="_hors_plage_1" title="Afficher ou cacher la mention hors plage">Afficher ou cacher la mention hors plage</label></th>
           <td>
             <label>
-              Oui <input type="radio" name="_hors_plage" value="1" {{if $conf.dPbloc.CPlageOp.view_hors_plage == "1"}}checked="checked"{{/if}}/>
+              Oui <input type="radio" name="_hors_plage" value="1" {{if $conf.dPbloc.CPlageOp.view_hors_plage == "1"}}checked{{/if}}/>
             </label>
             <label>
-              Non <input type="radio" name="_hors_plage" value="0" {{if $conf.dPbloc.CPlageOp.view_hors_plage == "0"}}checked="checked"{{/if}}/>
+              Non <input type="radio" name="_hors_plage" value="0" {{if $conf.dPbloc.CPlageOp.view_hors_plage == "0"}}checked{{/if}}/>
             </label>
           </td>
         </tr>
         <tr class="not-full">
-          <th><label for="_show_comment_sejour_1" title="Afficher ou cacher les remarques de séjour">Afficher les remarques de séjour</label></th>
+          <th><label title="Afficher ou cacher les remarques de séjour">Afficher les remarques de séjour</label></th>
           <td>
             <label>
-              Oui <input type="radio" name="_show_comment_sejour" value="1" {{if $conf.dPbloc.CPlageOp.show_comment_sejour == "1"}}checked="checked"{{/if}}/>
+              Oui <input type="radio" name="_show_comment_sejour" value="1" {{if $conf.dPbloc.CPlageOp.show_comment_sejour == "1"}}checked{{/if}}/>
             </label>
             <label>
-              Non <input type="radio" name="_show_comment_sejour" value="0" {{if $conf.dPbloc.CPlageOp.show_comment_sejour == "0"}}checked="checked"{{/if}}/>
+              Non <input type="radio" name="_show_comment_sejour" value="0" {{if $conf.dPbloc.CPlageOp.show_comment_sejour == "0"}}checked{{/if}}/>
+            </label>
+          </td>
+        </tr>
+        <tr class="not-full">
+          <th><label title="Afficher ou cacher l'identité du patient">Afficher l'identité du patient</label></th>
+          <td>
+            <label>
+              Oui <input type="radio" name="_show_identity" value="1" checked/>
+            </label>
+            <label>
+              Non <input type="radio" name="_show_identity" value="0" />
             </label>
           </td>
         </tr>

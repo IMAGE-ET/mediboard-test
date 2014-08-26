@@ -9,7 +9,9 @@
 *}}
 
 <!-- Patient -->
-<th>Nom - Prénom</th>
+{{if $_show_identity}}
+  <th>Nom - Prénom</th>
+{{/if}}
 <th>Age</th>
 <th>Sexe</th>
 {{if $_coordonnees}}

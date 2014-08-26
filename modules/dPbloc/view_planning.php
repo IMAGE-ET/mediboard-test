@@ -40,6 +40,7 @@ $_convalescence          = CValue::get('_convalescenve', CAppUI::conf('dPbloc CP
 $_hors_plage             = CValue::get("_hors_plage");
 $_show_comment_sejour    = CValue::get("_show_comment_sejour");
 $_compact                = CValue::get('_compact', 0);
+$_show_identity          = CValue::get('_show_identity', 1);
 
 if ($filter->_nb_days) {
   $filter->_date_max = CMbDT::date("+$filter->_nb_days days", CMbDT::date($filter->_date_min)) . " 21:00:00";
@@ -361,5 +362,6 @@ $smarty->assign('_convalescence'      , $_convalescence);
 $smarty->assign("_hors_plage"         , $_hors_plage);
 $smarty->assign("_show_comment_sejour", $_show_comment_sejour);
 $smarty->assign('_compact'            , $_compact);
+$smarty->assign("_show_identity"      , $_show_identity);
 
 $smarty->display("view_planning.tpl");
