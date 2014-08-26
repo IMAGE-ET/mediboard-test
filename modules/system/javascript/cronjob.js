@@ -60,5 +60,22 @@ CronJob = {
     else {
       tokenfield.remove(element.value);
     }
+  },
+
+  purge : function (force) {
+    var form = getForm("purge_cronjob_log");
+    if (!force && !$V(form.auto)) {
+      return false;
+    }
+
+    if (!checkForm(form)) {
+      return false;
+    }
+
+    new Url('system', 'ajax_purge_cronjob_log')
+      .addFormData(form)
+      .requestUpdate("purge-log");
+
+    return false;
   }
 };

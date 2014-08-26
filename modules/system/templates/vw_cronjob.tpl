@@ -23,6 +23,7 @@
 <ul id="tabs-cronjob" class="control_tabs">
   <li onmousedown="CronJob.refresh_list_cronjobs()"><a href="#tab_list_cronjobs">{{tr}}CCronJob.list{{/tr}}</a></li>
   <li><a href="#tab_log_cronjobs">{{tr}}CCronJobLog{{/tr}}</a></li>
+  <li><a href="#tab_purge_cronjobs_log">{{tr}}CCronJobLog-purge{{/tr}}</a></li>
 </ul>
 
 <div id="tab_list_cronjobs" style="display: none;">
@@ -77,4 +78,27 @@
     </table>
   </form>
   <div id="search_log_cronjob"></div>
+</div>
+
+<div id="tab_purge_cronjobs_log">
+  <form name="purge_cronjob_log" action="?" method="get" onsubmit="return CronJob.purge(true)">
+    <table class="form">
+      <tr>
+        <th style="width: 50%">{{mb_label class="CCronJobLog" field="_date_max" prop="dateTime notNull"}}</th>
+        <td>{{mb_field class="CCronJobLog" field="_date_max" prop="dateTime notNull" register=true form="purge_cronjob_log"}}</td>
+      </tr>
+      <tr>
+        <th><label for="delete">Supprimer les journaux d'exécution antérieurs à 6 mois : </label></th>
+        <td><input type="checkbox" name="delete" value="1" /></td>
+      </tr>
+      <tr>
+        <td class="button" colspan="2">
+          <button type="submit" class="change">{{tr}}CCronJobLog-purge-search{{/tr}}</button>
+          <label><input type="checkbox" name="do_purge" />{{tr}}Purge{{/tr}}</label>
+          <label><input type="checkbox" name="auto" />{{tr}}Auto{{/tr}}</label>
+        </td>
+      </tr>
+    </table>
+  </form>
+  <div id="purge-log"></div>
 </div>
