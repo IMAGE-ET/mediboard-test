@@ -56,6 +56,7 @@ foreach ($sejour->_ref_tasks as $key=>$_task) {
   $_task->loadRefPrescriptionLineElement();
   $_task->setDateAndAuthor();
   $_task->loadRefAuthor();
+  $_task->loadRefAuthorRealise();
 }
 
 CSejourTask::sortByDate($sejour->_ref_tasks);
@@ -64,30 +65,37 @@ CSejourTask::sortByDate($sejour->_ref_tasks);
 $transmissions = array();
 
 foreach ($sejour->_ref_transmissions as $_trans) {
+  $_trans->loadRefUser()->loadRefFunction();
   $_trans->loadTargetObject();
+  $_trans->calculCibles();
+  $sort_key_pattern = "$_trans->_class $_trans->user_id $_trans->object_id $_trans->object_class $_trans->libelle_ATC";
 
-  switch (get_class($_trans->_ref_object)) {
-    case "CCategoryPrescription":
-      $nom = $_trans->_ref_object->nom;
-      break;
-    case "CAdministration":
-      $target_object = $_trans->_ref_object->loadTargetObject();
+  $sort_key = "$_trans->date $sort_key_pattern";
 
-      if ($target_object instanceof CPrescriptionLineElement) {
-        $nom = $target_object->_ref_element_prescription->_ref_category_prescription->nom;
-      }
-      else {
-        $nom = "Autres";
-      }
-      break;
-    default:
-      $nom = "Autres";
+  $date_before = CMbDT::dateTime("-1 SECOND", $_trans->date);
+  $sort_key_before = "$date_before $sort_key_pattern";
+
+  $date_after  = CMbDT::dateTime("+1 SECOND", $_trans->date);
+  $sort_key_after = "$date_after $sort_key_pattern";
+
+  // Aggrégation à -1 sec
+  if (array_key_exists($sort_key_before, $transmissions)) {
+    $sort_key = $sort_key_before;
   }
-  if (!isset($transmissions[$nom])) {
-    $transmissions[$nom] = array();
+  // à +1 sec
+  else if (array_key_exists($sort_key_after, $transmissions)) {
+    $sort_key = $sort_key_after;
   }
-  $transmissions[$nom][] = $_trans;
+
+  if (!isset($transmissions[$sort_key])) {
+    $transmissions[$sort_key] = array("data" => array(), "action" => array(), "result" => array());
+  }
+  if (!isset($transmissions[$sort_key][0])) {
+    $transmissions[$sort_key][0] = $_trans;
+  }
+  $transmissions[$sort_key][$_trans->type][] = $_trans;
 }
+krsort($transmissions);
 
 $sejour->_ref_transmissions = $transmissions;
 

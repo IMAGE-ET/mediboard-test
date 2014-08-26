@@ -331,31 +331,18 @@
       {{if $sejour->_ref_transmissions|@count}}
         <table class="tbl">
           <tr>
-            <th class="title" colspan="3">Transmissions de synthèse</th>
+            <th class="title" colspan="6">Transmissions de synthèse</th>
           </tr>
           <tr>
             <th class="narrow">{{tr}}Date{{/tr}}</th>
-            <th class="narrow">{{tr}}Hour{{/tr}}</th>
-            <th>{{mb_title class=CTransmissionMedicale field=text}}</th>
+            <th class="narrow">Cible</th>
+            <th>Donnée</th>
+            <th>Action</th>
+            <th>Résultat</th>
           </tr>
-          {{foreach from=$sejour->_ref_transmissions item=_transmissions key=_cat_name name=foreach_trans}}
+          {{foreach from=$sejour->_ref_transmissions item=_suivi}}
             <tr>
-              <th colspan="3" class="section">{{$_cat_name}}</th>
-            </tr>
-            {{foreach from=$_transmissions item=_trans}}
-              <tr>
-                <td style="text-align: center; height: 22px;">
-                  {{mb_ditto name=date value=$_trans->date|date_format:$conf.date}}
-                </td>
-                <td style="text-align: center;">
-                  {{$_trans->date|date_format:$conf.time}}
-                </td>
-                <td class="text {{if $_trans->type}}trans-{{$_trans->type}}{{/if}} libelle_trans">{{mb_value object=$_trans field=text}}</td>
-              </tr>
-            {{/foreach}}
-          {{foreachelse}}
-            <tr>
-              <td colspan="3">{{tr}}CTransmissionMedicale.none{{/tr}}</td>
+              {{mb_include module=hospi template=inc_line_suivi show_type=false show_patient=false readonly=true}}
             </tr>
           {{/foreach}}
         </table>
