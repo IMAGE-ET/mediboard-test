@@ -28,5 +28,24 @@ Idex = {
       .addParam("patient_guid", patient_guid)
       .requestModal("40%", "40%")
       .modalObject.observe("afterClose", callback)
+  },
+
+  submit_ipp_nda : function(name_form_nda, name_form_ipp) {
+    var form_nda = getForm("edit"+name_form_nda);
+    var form_ipp = getForm("edit"+name_form_ipp);
+
+    if (form_ipp.id400 && !checkForm(form_ipp) || form_nda.id400 && !checkForm(form_nda)) {
+      return false;
+    }
+
+    if (form_nda.id400) {
+      form_nda.onsubmit();
+    }
+
+    if (form_ipp.id400) {
+      form_ipp.onsubmit();
+    }
+
+    Control.Modal.close();
   }
 };
