@@ -13,7 +13,7 @@ PMSI = {
   confirmCloture: 0,
   
   loadExportActes: function(object_id, object_class, confirmCloture, module) {
-    var url = new Url("dPpmsi", "ajax_view_export_actes");
+    var url = new Url("pmsi", "ajax_view_export_actes");
     url.addParam("object_id"   , object_id);
     url.addParam("object_class", object_class);
     url.addParam("module"      , module);
@@ -21,7 +21,7 @@ PMSI = {
       PMSI.confirmCloture = 1;
       url.addParam("confirmCloture", confirmCloture);
     }
-    
+
     url.requestUpdate("export_" + object_class + "_" + object_id); 
   },
   
@@ -37,7 +37,7 @@ PMSI = {
   
     Object.extend(oDefaultOptions, oOptions);
   
-    var url = new Url("dPpmsi", "export_actes_pmsi");
+    var url = new Url("pmsi", "export_actes_pmsi");
     url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
     url.addParam("sent_files", oDefaultOptions.onlySentFiles ? 1 : 0);
@@ -48,7 +48,7 @@ PMSI = {
         "Chargement des fichers envoyés" : 
         "Export des actes..."
     };
-    
+
     if (PMSI.confirmCloture == 1) {
       oRequestOptions.onComplete = function() {
         PMSI.reloadActes(object_id, module);
@@ -59,11 +59,11 @@ PMSI = {
   },
   
   deverouilleDossier: function(object_id, object_class, module) {
-    var url = new Url("dPpmsi", "export_actes_pmsi");
+    var url = new Url("pmsi", "export_actes_pmsi");
     url.addParam("object_id"     , object_id);
     url.addParam("object_class"  , object_class);
     url.addParam("unlock_dossier", 1);
-  
+
     var oRequestOptions = {
       waitingText: "Dévérouillage du dossier..."
     };
@@ -72,19 +72,19 @@ PMSI = {
         PMSI.reloadActes(object_id, module);
       }
     }
-  
+
     url.requestUpdate("export_" + object_class + "_" + object_id, oRequestOptions);     
   },
-  
+
   reloadActes: function(operation_id, module) {
-    var url = new Url("dPsalleOp", "ajax_refresh_actes");
+    var url = new Url("salleOp", "ajax_refresh_actes");
     url.addParam("operation_id", operation_id);
     url.addParam("module", module);
     url.requestUpdate("codage_actes");
   },
 
   checkActivites: function(object_id, object_class, oOptions, module) {
-    var url = new Url("dPsalleOp", "ajax_check_activites_cloture");
+    var url = new Url("salleOp", "ajax_check_activites_cloture");
     url.addParam("object_class", object_class);
     url.addParam("object_id", object_id);
     url.addParam("suppressHeaders", 1);
@@ -145,7 +145,7 @@ PMSI = {
   },
 
   loadDocuments: function(sejour_id) {
-    var url = new Url("dPhospi", "httpreq_documents_sejour");
+    var url = new Url("hospi", "httpreq_documents_sejour");
     url.addParam("sejour_id" , sejour_id);
     url.requestUpdate("tab-documents");
   },
@@ -162,6 +162,30 @@ PMSI = {
 
   loadRSS: function(sejour_id) {
     alert('on load le module RSS du séjour '+sejour_id);
+  },
+
+  loadDiagsPMSI: function(sejour_id) {
+    var url = new Url("pmsi", "ajax_diags_pmsi");
+    url.addParam("sejour_id", sejour_id);
+    url.requestUpdate("diags_pmsi");
+  },
+
+  loadDiagsDossier: function(sejour_id) {
+    var url = new Url("pmsi", "ajax_diags_dossier");
+    url.addParam("sejour_id", sejour_id);
+    url.requestUpdate("diags_dossier");
+  },
+
+  afterEditDiag: function(sejour_id) {
+    PMSI.loadDiagsPMSI(sejour_id);
+    PMSI.loadDiagsDossier(sejour_id);
+    PMSI.loadRSS(sejour_id);
+  },
+  reloadActesCCAM: function(subject_guid, read_only) {
+    var url = new Url("pmsi", "ajax_actes_ccam");
+    url.addParam("subject_guid", subject_guid);
+    url.addNotNullParam("read_only", read_only);
+    url.requestUpdate("codes_ccam_"+subject_guid);
   },
 
   printDossierComplet: function(sejour_id) {

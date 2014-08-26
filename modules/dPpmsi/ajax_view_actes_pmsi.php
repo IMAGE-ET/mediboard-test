@@ -11,18 +11,12 @@
 
 CCanDo::checkEdit();
 
-$prat = new CMediusers();
-$listPrats = $prat->loadPraticiens();
-
 // Chargement du séjour et des ses actes
 $sejour  = new CSejour();
 $sejour->load(CValue::get("sejour_id"));
 $patient = $sejour->loadRefPatient();
 $sejour->loadRefPraticien();
 $sejour->loadRefsActes();
-$sejour->loadExtCodesCCAM();
-$sejour->getAssociationCodesActes();
-$sejour->loadPossibleActes();
 $sejour->canDo();
 $sejour->countExchanges();
 $sejour->loadRefDossierMedical()->loadComplete();
@@ -34,9 +28,6 @@ foreach ($sejour->_ref_operations as $_op) {
   $_op->loadRefPatient();
   $_op->loadRefPraticien();
   $_op->loadRefsActes();
-  $_op->loadExtCodesCCAM();
-  $_op->getAssociationCodesActes();
-  $_op->loadPossibleActes();
   $_op->canDo();
   $_op->countExchanges();
   $_op->loadRefsConsultAnesth()->loadRefConsultation()->loadRefPlageConsult();
@@ -48,9 +39,6 @@ foreach ($sejour->_ref_consultations as $_consult) {
   $_consult->loadRefPatient();
   $_consult->loadRefPraticien();
   $_consult->loadRefsActes();
-  $_consult->loadExtCodesCCAM();
-  $_consult->getAssociationCodesActes();
-  $_consult->loadPossibleActes();
   $_consult->canDo();
   $_consult->countExchanges();
 }
@@ -58,7 +46,6 @@ foreach ($sejour->_ref_consultations as $_consult) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("listPrats", $listPrats);
-$smarty->assign("sejour"   , $sejour);
+$smarty->assign("sejour", $sejour);
 
 $smarty->display("inc_vw_actes_pmsi.tpl");

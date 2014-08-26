@@ -9,7 +9,7 @@
 *}}
 
 <form name="editIPP" action="?m={{$m}}" method="post"
-      onsubmit="return onSubmitFormAjax(this); PMSI.loadActes({{$sejour->_id}});">
+      onsubmit="return onSubmitFormAjax(this, PMSI.loadActes.curry({{$sejour->_id}}));">
   <input type="hidden" name="dosql" value="do_idsante400_aed" />
   <input type="hidden" name="m" value="dPsante400" />
   <input type="hidden" name="del" value="0" />
@@ -20,7 +20,7 @@
     <tr>
       <th class="category" colspan="4">
         Identifiant externe Patient 
-        <script type="text/javascript">
+        <script>
           PatHprimSelector.init = function(){
             this.sForm      = "editIPP";
             this.sId        = "id400";
