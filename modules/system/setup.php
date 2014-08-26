@@ -1814,10 +1814,7 @@ class CSetupsystem extends CSetup {
     $this->addQuery($query);
 
     $query = "ALTER TABLE `access_log`
-              ADD `module_action_id` INT(11) UNSIGNED NOT NULL AFTER `accesslog_id`;";
-    $this->addQuery($query);
-
-    $query = "ALTER TABLE `access_log`
+              ADD `module_action_id` INT(11) UNSIGNED NOT NULL AFTER `accesslog_id`,
               ADD INDEX (`module_action_id`);";
     $this->addQuery($query);
 
@@ -1838,26 +1835,22 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `access_log`
                 DROP INDEX `aggregate`,
                 DROP INDEX `triplet`,
+                DROP COLUMN `module`,
+                DROP COLUMN `action`,
                 ADD UNIQUE `aggregate` (`module_action_id`, `period`, `aggregate`, `bot`),
                 ADD INDEX `triplet` (`module_action_id`, `period`);";
     $this->addQuery($query);
 
-    $query = "ALTER TABLE `access_log`
-                DROP COLUMN `module`,
-                DROP COLUMN `action`;";
-    $this->addQuery($query);
-
     $this->makeRevision("1.1.69");
+
     $query = "ALTER TABLE `datasource_log`
                 ADD COLUMN `module_action_id` INT(11) UNSIGNED NOT NULL AFTER `datasourcelog_id`,
+                CHANGE     `datasource` `datasource` CHAR(20) NOT NULL,
                 ADD COLUMN `period`           DATETIME NOT NULL,
                 ADD COLUMN `aggregate`        INT(11) UNSIGNED NOT NULL DEFAULT '10',
-                ADD COLUMN `bot`              BOOL NOT NULL DEFAULT 0;";
-    $this->addQuery($query);
-
-    $query = "ALTER TABLE `datasource_log`
-              ADD INDEX (`module_action_id`),
-              ADD INDEX (`period`);";
+                ADD COLUMN `bot`              BOOL NOT NULL DEFAULT 0,
+                ADD INDEX (`module_action_id`),
+                ADD INDEX (`period`);";
     $this->addQuery($query);
 
     $query = "UPDATE `datasource_log`
@@ -1877,12 +1870,9 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `datasource_log`
                 DROP INDEX `doublon`,
                 DROP INDEX `agregat`,
+                DROP COLUMN `accesslog_id`,
                 ADD UNIQUE `aggregate` (`datasource`, `module_action_id`, `period`, `aggregate`, `bot`),
                 ADD INDEX `triplet` (`datasource`, `module_action_id`, `period`);";
-    $this->addQuery($query);
-
-    $query = "ALTER TABLE `datasource_log`
-                DROP COLUMN `accesslog_id`;";
     $this->addQuery($query);
 
 //    $this->makeRevision("1.1.70");
@@ -1919,6 +1909,6 @@ class CSetupsystem extends CSetup {
 //    $this->addQuery($query);
 //
 //    $this->mod_version = "1.1.73";
-    $this->mod_version = "1.1.70";
+      $this->mod_version = "1.1.70";
   }
 }

@@ -41,7 +41,7 @@ $log->module_action_id = $module_action_id;
 
 $minutes     = CMbDT::format(null, "%M");
 $arr_minutes = (floor($minutes / 10) * 10) % 60;
-$arr_minutes = ($arr_minutes === 0) ? "00" : null;
+($arr_minutes === 0) ? $arr_minutes = "00" : null;
 
 // 10 min. long aggregation
 $log->period = CMbDT::format(null, "%Y-%m-%d %H:" . $arr_minutes . ":00");

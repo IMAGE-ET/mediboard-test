@@ -54,8 +54,9 @@ class CDataSourceLog extends CMbObject {
     $props["bot"]           = "enum list|0|1 default|0";
     $props['module_action'] = "ref notNull class|CModuleAction";
 
-    $props["_module"] = "str";
-    $props["_action"] = "str";
+    $props["_module"]     = "str";
+    $props["_action"]     = "str";
+    $props["_datasource"] = "str";
 
     return $props;
   }
@@ -410,13 +411,14 @@ class CDataSourceLog extends CMbObject {
     $query = "SELECT
                 CAST(GROUP_CONCAT(`datasourcelog_id` SEPARATOR ',') AS CHAR) AS ids,
                 `module_action_id`,
+                `datasource`,
                 `period`,
                 `bot`
               FROM $table
               WHERE `period` BETWEEN '$oldest_from' AND '$oldest_to'
                 AND `period` <= '$last_year'
                 AND `aggregate` < '$sup_agg'
-              GROUP BY `module_action_id`, date_format(`period`, '%Y-%m-%d 00:00:00'), `bot`";
+              GROUP BY `module_action_id`, `datasource`, date_format(`period`, '%Y-%m-%d 00:00:00'), `bot`";
 
     $year_IDs_to_aggregate = $ds->loadList($query);
 
@@ -441,7 +443,7 @@ class CDataSourceLog extends CMbObject {
                     @duration := SUM(`duration`)
                   FROM $table
                   WHERE `datasourcelog_id` IN (" . $_aggregate['ids'] . ")
-                  GROUP BY `module_action_id`, DATE_FORMAT(`period`, '%Y-%m-%d 00:00:00'), `bot`
+                  GROUP BY `module_action_id`, `datasource`, DATE_FORMAT(`period`, '%Y-%m-%d 00:00:00'), `bot`
                   ON DUPLICATE KEY UPDATE
                     `requests` = `requests` + @requests,
                     `duration` = `duration` + @duration";
@@ -464,6 +466,7 @@ class CDataSourceLog extends CMbObject {
     $query = "SELECT
                 CAST(GROUP_CONCAT(`datasourcelog_id` SEPARATOR ',') AS CHAR) AS ids,
                 `module_action_id`,
+                `datasource`,
                 `period`,
                 `bot`
               FROM $table
@@ -471,7 +474,7 @@ class CDataSourceLog extends CMbObject {
                 AND `period` <= '$last_month'
                 AND `period`  > '$last_year'
                 AND `aggregate` < '$avg_agg'
-              GROUP BY `module_action_id`, date_format(`period`, '%Y-%m-%d %H:00:00'), `bot`";
+              GROUP BY `module_action_id`, `datasource`, date_format(`period`, '%Y-%m-%d %H:00:00'), `bot`";
 
     $month_IDs_to_aggregate = $ds->loadList($query);
 
@@ -479,6 +482,7 @@ class CDataSourceLog extends CMbObject {
       foreach ($month_IDs_to_aggregate as $_aggregate) {
         $query = "INSERT INTO $table (
                     `module_action_id`,
+                    `datasource`,
                     `period`,
                     `aggregate`,
                     `bot`,
@@ -487,6 +491,7 @@ class CDataSourceLog extends CMbObject {
                   )
                   SELECT
                     `module_action_id`,
+                    `datasource`,
                     date_format(`period`, '%Y-%m-%d %H:00:00'),
                     '$avg_agg',
                     `bot`,
@@ -494,7 +499,7 @@ class CDataSourceLog extends CMbObject {
                     @duration := SUM(`duration`)
                   FROM $table
                   WHERE `datasourcelog_id` IN (" . $_aggregate['ids'] . ")
-                  GROUP BY `module_action_id`, DATE_FORMAT(`period`, '%Y-%m-%d %H:00:00'), `bot`
+                  GROUP BY `module_action_id`, `datasource`, DATE_FORMAT(`period`, '%Y-%m-%d %H:00:00'), `bot`
                   ON DUPLICATE KEY UPDATE
                     `requests` = `requests` + @requests,
                     `duration` = `duration` + @duration";

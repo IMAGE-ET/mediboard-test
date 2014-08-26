@@ -56,9 +56,8 @@ class CModuleAction extends CMbObject {
    */
   function getBackProps() {
     $backProps                    = parent::getBackProps();
-    $backProps["access_logs"]     = "CAccessLog accesslog_id";
-    $backProps["datasource_logs"] = "CDataSourceLog datasourcelog_id";
-
+    $backProps["access_logs"]     = "CAccessLog module_action_id";
+    $backProps["datasource_logs"] = "CDataSourceLog module_action_id";
 
     return $backProps;
   }
