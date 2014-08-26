@@ -24,16 +24,6 @@ class CAccessLogArchive extends CAccessLog {
   }
 
   /**
-   * @see parent::getBackProps()
-   */
-  function getBackProps() {
-    $backProps                    = parent::getBackProps();
-    $backProps["datasource_logs"] = "CDataSourceLogArchive accesslog_id";
-
-    return $backProps;
-  }
-
-  /**
    * Logs aggregation
    *
    * @param int  $std_agg

@@ -56,7 +56,6 @@ class CDataSourceLog extends CMbObject {
 
     $props["_module"]     = "str";
     $props["_action"]     = "str";
-    $props["_datasource"] = "str";
 
     return $props;
   }
