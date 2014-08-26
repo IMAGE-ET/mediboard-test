@@ -9,7 +9,6 @@
  * @link     http://www.mediboard.org
 *}}
 
-{{unique_id var=unique}}
 {{assign var=trad value=`$object->_class`-`$field`}}
 
 <form name="edit{{$unique}}" method="post" onsubmit="return onSubmitFormAjax(this)">
