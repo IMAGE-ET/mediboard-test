@@ -118,7 +118,8 @@ printOffline = function(element) {
     <th colspan="2" class="narrow"><label title="Evénements planifiés pour ce patient (ce jour - pendant tout le séjour)">Evt.</label></th>
   </tr>
   
-  {{foreach from=$sejours key=sejour_id item=_sejour}}
+  {{foreach from=$sejours item=_sejour}}
+  {{assign var=sejour_id value=$_sejour->_id}}
   {{assign var=ssr_class value=""}}
   {{if !$_sejour->entree_reelle}}
   {{assign var=ssr_class value=ssr-prevu}}
