@@ -326,10 +326,6 @@
           }
         }
       });
-      if (tab_sejour.activeLink.key == "Imeds") {
-        loadResultLabo();
-      }
-      loadDocItems('{{$rpu->sejour_id}}', '{{$rpu->_ref_consult->_id}}');
     {{/if}}
 
     {{if $isPrescriptionInstalled}}
