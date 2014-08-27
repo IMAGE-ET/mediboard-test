@@ -187,35 +187,31 @@
 
                 <td style="vertical-align: top;">
                   {{if $sejour->_id}}
-                    {{if $is_aff}}
-                      <div style="width: 10px;
-                        {{if ($object->entree == $sejour->entree && !$sejour->entree_reelle) ||
-                          ($object->entree != $sejour->entree && !$object->_ref_prev->effectue)}}
-                          color: #A33;
-                        {{elseif $object->effectue}}
-                          text-decoration: line-through
-                        {{/if}}">
-                    {{/if}}
-                    <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}');" class="CPatient-view {{if $sejour->recuse == "-1"}}opacity-70{{/if}}">
-                      {{if $sejour->recuse == "-1"}}[Att] {{/if}}{{$patient->nom}} {{if $patient->nom_jeune_fille}}({{$patient->nom_jeune_fille}}) {{/if}}{{$patient->prenom}}
-                      {{if "dPImeds"|module_active}}
-                        {{mb_include module=Imeds template=inc_sejour_labo link="#1" float="none"}}
-                        <script>
-                          ImedsResultsWatcher.addSejour('{{$sejour->_id}}', '{{$sejour->_NDA}}');
-                        </script>
+                    <div style="width: 10px;
+                      {{if ($is_aff && ($object->entree == $sejour->entree && !$sejour->entree_reelle) ||
+                        ($object->entree != $sejour->entree && !$object->_ref_prev->effectue)) || (!$is_aff && !$sejour->entree_reelle)}}
+                        color: #A33;
+                      {{elseif $object->effectue}}
+                        text-decoration: line-through
+                      {{/if}}">
+                      <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}');" class="CPatient-view {{if $sejour->recuse == "-1"}}opacity-70{{/if}}">
+                        {{if $sejour->recuse == "-1"}}[Att] {{/if}}{{$patient->nom}} {{if $patient->nom_jeune_fille}}({{$patient->nom_jeune_fille}}) {{/if}}{{$patient->prenom}}
+                        {{if "dPImeds"|module_active}}
+                          {{mb_include module=Imeds template=inc_sejour_labo link="#1" float="none"}}
+                          <script>
+                            ImedsResultsWatcher.addSejour('{{$sejour->_id}}', '{{$sejour->_NDA}}');
+                          </script>
+                        {{/if}}
+                      </span>
+
+                      {{* Traitement (suisse) *}}
+                      {{if $conf.ref_pays == 2}}
+                        <strong>{{$sejour->_ref_charge_price_indicator->code}}</strong>
                       {{/if}}
-                    </span>
 
-                    {{* Traitement (suisse) *}}
-                    {{if $conf.ref_pays == 2}}
-                      <strong>{{$sejour->_ref_charge_price_indicator->code}}</strong>
-                    {{/if}}
+                      {{if $show_age_patient}}({{$patient->_age}}){{/if}}
 
-                    {{if $show_age_patient}}({{$patient->_age}}){{/if}}
-
-                    {{if $is_aff}}
-                      </div>
-                    {{/if}}
+                    </div>
                     {{if $patient->_overweight}}
                       <img src="images/pictures/overweight.png" />
                     {{/if}}
