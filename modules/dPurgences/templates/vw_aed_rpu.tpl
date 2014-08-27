@@ -297,7 +297,7 @@
       }
       var tab_sejour = Control.Tabs.create('tab-dossier', false);
       if (tab_sejour.activeLink.key == "Imeds") {
-        loadResultLabo();
+        loadResultLabo('{{$rpu->sejour_id}}');
       }
       loadDocItems('{{$rpu->sejour_id}}', '{{$rpu->_ref_consult->_id}}');
     {{/if}}
