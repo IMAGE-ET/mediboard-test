@@ -64,7 +64,8 @@ Document = {
     var url = new Url("compteRendu", "edit_compte_rendu");
     url.addParam("modele_id"   , modele_id);
     url.addParam("object_id"   , object_id);
-    url.addParam("object_class", object_class);
+    url.addParam("target_id"   , object_id);
+    url.addParam("target_class", object_class);
     url.addParam("unique_id"   , unique_id);
     if (just_save) {
       url.addParam("force_fast_edit", 1);
