@@ -45,6 +45,10 @@ try {
     "CExClassFieldPredicate" => array(
       "properties",
     ),
+
+    "CExClassFieldSubgroup" => array(
+      "properties",
+    ),
     
     "CExClassFieldProperties" => array(
       
@@ -59,6 +63,7 @@ try {
       "ex_group_id",
       "concept_id",
       "predicate_id",
+      "subgroup_id",
     ),
     "CExClassMessage" => array(
       "ex_group_id",
@@ -91,8 +96,9 @@ try {
       "ex_class_field_id",
     ),
     
-    "CExClassFieldSubroup" => array(
+    "CExClassFieldSubgroup" => array(
       "predicate_id",
+      "parent_id",
     ),
   );
   
