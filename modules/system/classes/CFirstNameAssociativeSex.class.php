@@ -28,6 +28,11 @@ class CFirstNameAssociativeSex extends CMbObject {
     return $spec;
   }
 
+  function updateFormFields() {
+    parent::updateFormFields();
+
+    $this->_view = $this->firstname;
+  }
 
   /**
    * @see parent::getProps()

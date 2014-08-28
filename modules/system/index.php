@@ -19,6 +19,7 @@ $module->registerTab("view_access_logs",       TAB_READ);
 $module->registerTab("view_ressources_logs",   TAB_READ);
 $module->registerTab("view_long_request_logs", TAB_READ);
 $module->registerTab("vw_idx_redirections",    TAB_ADMIN);
+$module->registerTab("vw_firstnames",          TAB_ADMIN);
 $module->registerTab("view_translations",      TAB_EDIT);
 $module->registerTab("view_network_address",   TAB_EDIT);
 $module->registerTab("vw_user_agents",         TAB_READ);
