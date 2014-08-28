@@ -1209,6 +1209,7 @@ $locales['CFirstNameAssociativeSex-firstname-desc'] = 'Prénom';
 $locales['CFirstNameAssociativeSex-msg-create'] = 'Association Prénom - sexe crée';
 $locales['CFirstNameAssociativeSex-msg-delete'] = 'Association Prénom - sexe supprimée';
 $locales['CFirstNameAssociativeSex-msg-modify'] = 'Association Prénom - sexe modifiée';
+$locales['CFirstNameAssociativeSex-msg-no_data_in_db'] = 'La table d\'association prénom/sexe est vide';
 $locales['CFirstNameAssociativeSex-sex'] = 'Sexe';
 $locales['CFirstNameAssociativeSex-sex-court'] = 'S';
 $locales['CFirstNameAssociativeSex-sex-desc'] = 'Sexe';

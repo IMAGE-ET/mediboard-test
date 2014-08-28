@@ -17,6 +17,11 @@ $callback = CValue::post("callback", 0);
 $limit = 500;
 $use_callback = true;
 
+if (!CFirstNameAssociativeSex::countData()) {
+  CAppUI::stepAjax("CFirstNameAssociativeSex-msg-no_data_in_db", UI_MSG_WARNING);
+  CApp::rip();
+}
+
 if (is_subclass_of($class, 'CPerson')) {
   /** @var CPerson $_class */
   $_class = new $class();

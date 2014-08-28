@@ -66,4 +66,9 @@ class CFirstNameAssociativeSex extends CMbObject {
 
     return $object->sex ? $object->sex : "u";
   }
+
+  static function countData() {
+    $fs = new self();
+    return $fs->countList();
+  }
 }
