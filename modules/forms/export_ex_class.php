@@ -86,6 +86,10 @@ try {
       "predicate_id",
       "object_id",
     ),
+
+    "CExClassFieldPredicate" => array(
+      "ex_class_field_id",
+    ),
     
     "CExClassFieldSubroup" => array(
       "predicate_id",

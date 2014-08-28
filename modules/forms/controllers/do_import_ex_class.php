@@ -24,4 +24,9 @@ $temp = CAppUI::getTmpPath("ex_class_import");
 $file = "$temp/$uid";
 
 $import = new CExClassImport($file);
-$import->import($from_db, $options);
+try {
+  $import->import($from_db, $options);
+}
+catch (Exception $e) {
+  CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING);
+} 

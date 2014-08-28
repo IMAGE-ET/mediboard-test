@@ -16,6 +16,13 @@ class CExClassImport extends CMbXMLObjectImport {
   
   protected $imported = array();
   
+  protected $import_order = array(
+    "//object[@class='CExClass']",
+    "//object[@class='CExList']",
+    "//object[@class='CExConcept']",
+    "//object",
+  );
+  
   function importObject(DOMElement $element) {
     $id = $element->getAttribute("id");
     
@@ -36,8 +43,7 @@ class CExClassImport extends CMbXMLObjectImport {
         $ex_class->_dont_create_default_group = true;
 
         if ($msg = $ex_class->store()) {
-          CAppUI::stepAjax($msg, UI_MSG_WARNING);
-          return;
+          throw new Exception($msg);
         }
 
         CAppUI::stepAjax("Formulaire '%s' créé", UI_MSG_OK, $ex_class->name);
@@ -69,10 +75,22 @@ class CExClassImport extends CMbXMLObjectImport {
               break;
             }
             CAppUI::stepAjax("Elément de liste '%s' créé", UI_MSG_OK, $_list_item);
-            $this->imported[$_element->getAttribute("id")] = true;
+
+            $_item_id = $_element->getAttribute("id");
+
+            $this->map[$_item_id] = $_list_item->_guid;
+            $this->imported[$_item_id] = true;
           }
 
           $map_to = $_ex_list->_guid;
+        }
+        else {
+          /** @var CExList $ex_list */
+          $ex_list = CStoredObject::loadFromGuid($map_to);
+          $list_items = $ex_list->loadRefItems();
+          foreach ($list_items as $_item) {
+            $this->map[$_item->_guid] = $_item->_guid;
+          }
         }
         break;
 
@@ -105,6 +123,15 @@ class CExClassImport extends CMbXMLObjectImport {
         if ($this->options["ignore_disabled_fields"] && $_ex_field->disabled) {
           break;
         }
+        $_ex_field->_make_unique_name = false;
+        
+        // Met à jour default|XXX des champs enum pour garder la bonne référence
+        // @FIXME Ne fonctionne pas à cause du fait qu'il y a un concept_id ....
+        $_spec_obj = $_ex_field->getSpecObject();
+        if ($_spec_obj instanceof CEnumSpec && $_spec_obj->default) {
+          $_new_default = $this->getIdFromGuid($this->map["CExListItem-$_spec_obj->default"]);
+          $_ex_field->prop = preg_replace('/ default\|\d+/', " default|$_new_default", $_ex_field->prop);
+        }
 
         if ($msg = $_ex_field->store()) {
           CAppUI::stepAjax($msg, UI_MSG_WARNING);
@@ -120,6 +147,7 @@ class CExClassImport extends CMbXMLObjectImport {
       case "CExClassFieldTranslation":
       case "CExClassMessage":
       case "CExClassHostField":
+      case "CExClassFieldPredicate":
         $_object = $this->getObjectFromElement($element);
 
         if ($msg = $_object->store()) {

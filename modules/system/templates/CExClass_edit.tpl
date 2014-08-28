@@ -82,9 +82,9 @@ Main.add(function(){
                 <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'{{tr}}CExClass.one{{/tr}}',objName:'{{$object->_view|smarty:nodefaults|JSAttribute}}'})">
                   {{tr}}Delete{{/tr}}
                 </button>
-                {{*<button type="button" class="change" onclick="MbObject.export('{{$object->_guid}}')">
+                <button type="button" class="change" onclick="ExClass.exportObject('{{$object->_id}}')">
                   {{tr}}Export{{/tr}}
-                </button>*}}
+                </button>
               {{else}}
                 <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
               {{/if}}

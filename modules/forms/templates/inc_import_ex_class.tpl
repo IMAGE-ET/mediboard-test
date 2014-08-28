@@ -51,7 +51,7 @@
               <em>Non codée</em>
             {{/if}}
           </td>
-          <td>
+          <td class="text">
             <ul>
               {{foreach from=$_list.elements item=_values}}
                 <li>{{$_values.name}} &mdash; {{if $_values.code !== ""}}{{$_values.code}}{{else}}<span class="empty">Aucune code</span>{{/if}}</li>
@@ -65,7 +65,7 @@
                 displayListItems(form.elements["fromdb[{{$_key}}]"], '{{$_key}}');
               })
             </script>
-            <select name="fromdb[{{$_key}}]" style="width: 30em;" onchange="displayListItems(this, '{{$_key}}')">
+            <select name="fromdb[{{$_key}}]" style="width: 20em;" onchange="displayListItems(this, '{{$_key}}')">
               {{foreach from=$_list.similar item=_similar}}
                 <option value="{{$_similar->_guid}}">{{$_similar}}</option>
                 <option value="__create__"> &ndash; Créer (renommé si déjà présent) &ndash; </option>
@@ -77,7 +77,7 @@
               </optgroup>
             </select>
           </td>
-          <td id="list-items-{{$_key}}"></td>
+          <td id="list-items-{{$_key}}" class="text"></td>
         </tr>
       {{/foreach}}
     </table>

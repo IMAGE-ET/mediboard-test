@@ -26,6 +26,10 @@ abstract class CMbXMLObjectImport {
   
   /** @var DOMXPath */
   protected $xpath;
+  
+  protected $import_order = array(
+    "//object",
+  );
 
   /**
    * @param string $filename XML file name
@@ -43,11 +47,13 @@ abstract class CMbXMLObjectImport {
     $this->map = $map;
     $this->options = $options;
     
-    /** @var DOMElement[] $objects */
-    $objects = $this->xpath->query("//object");
-    
-    foreach ($objects as $_object) {
-      $this->importObject($_object);
+    foreach ($this->import_order as $_xpath) {
+      /** @var DOMNodeList|DOMElement[] $objects */
+      $objects = $this->xpath->query($_xpath);
+
+      foreach ($objects as $_object) {
+        $this->importObject($_object);
+      }
     }
   }
 

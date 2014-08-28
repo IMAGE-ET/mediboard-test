@@ -907,6 +907,10 @@ class CExClass extends CMbObject {
 
     $new->$fwd_field = $fwd_value;
 
+    if ($new instanceof CExClassField) {
+      $new->_make_unique_name = false;
+    }
+
     if ($msg = $new->store()) {
       return $msg;
     }
