@@ -9,14 +9,20 @@
  * @version    $Revision$
  */
 
-class CMbXMLObjectImport {
+abstract class CMbXMLObjectImport {
   /** @var CStoredObject[] */
   static $all = array();
   
   protected $filename;
-  
+
   /** @var DOMDocument */
   protected $dom;
+
+  /** @var array */
+  protected $map = array();
+
+  /** @var array */
+  protected $options = array();
   
   /** @var DOMXPath */
   protected $xpath;
@@ -33,21 +39,58 @@ class CMbXMLObjectImport {
     $this->xpath = new DOMXPath($this->dom);
   }
   
-  function import($datamap) {
+  function import($map, $options) {
+    $this->map = $map;
+    $this->options = $options;
+    
     /** @var DOMElement[] $objects */
     $objects = $this->xpath->query("//object");
     
     foreach ($objects as $_object) {
       $this->importObject($_object);
     }
+  }
+
+  /**
+   * 
+   * @param DOMElement $element
+   *
+   * @return CMbObject
+   */
+  function getObjectFromElement(DOMElement $element) {
+    $class = $element->getAttribute("class");
+    $object = new $class();
     
-    mbTrace(count(self::$all));
+    $values = $this->getValuesFromElement($element);
+    foreach ($values as $_field => $_value) {
+      if ($_value && $object->_specs[$_field] instanceof CRefSpec && $_field !== $object->_spec->key) {
+        /** @var DOMElement $_element */
+        $_element = $this->xpath->query("//*[@id='$_value']")->item(0);
+        $this->importObject($_element);
+        
+        if (isset($this->map[$_value])) {
+          $values[$_field] = $this->getIdFromGuid($this->map[$_value]);
+        }
+      }
+    }
+    
+    bindHashToObject($values, $object);
+    
+    return $object;
   }
   
-  function importObject(DOMElement $element) {
-    $guid = $element->getAttribute("id");
-    
-    self::$all[$guid] = $this->getValuesFromElement($element);
+  abstract function importObject(DOMElement $element);
+
+  /**
+   * Get ID from a GUID
+   * 
+   * @param string $guid The GUID
+   *
+   * @return int
+   */
+  function getIdFromGuid($guid) {
+    list($class, $id) = explode("-", $guid);
+    return $id;
   }
   
   function getValuesFromElement(DOMElement $element) {

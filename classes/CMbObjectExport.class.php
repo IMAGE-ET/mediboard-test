@@ -208,7 +208,7 @@ class CMbObjectExport {
     $date = CMbDT::dateTime();
     
     header("Content-Type: $mimetype");
-    //header("Content-Disposition: attachment;filename=\"{$this->object->_guid} - $date.xml\"");
+    header("Content-Disposition: attachment;filename=\"{$this->object} - $date.xml\"");
     header("Content-Length: ".strlen($xml));
     
     echo $xml;

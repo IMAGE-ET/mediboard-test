@@ -23,6 +23,28 @@ ExClass = window.ExClass || {
     var url = new Url("forms", "export_ex_class", "raw");
     url.addParam("ex_class_id", id);
     url.pop(10, 10, "export");
+  },
+  uploadSaveUID: function(uid) {
+    var uploadForm = getForm("upload-import-file-form");
+    
+    var url = new Url("forms", "ajax_import_ex_class");
+    url.addParam("uid", uid);
+    url.requestUpdate("import-steps");
+
+    uploadForm.down(".upload-ok").show();
+    uploadForm.down(".upload-error").hide();
+  },
+  uploadError: function() {
+    var uploadForm = getForm("upload-import-file-form");
+
+    uploadForm.down(".upload-ok").hide();
+    uploadForm.down(".upload-error").show();
+  },
+  uploadReset: function() {
+    var uploadForm = getForm("upload-import-file-form");
+    
+    uploadForm.down(".upload-ok").hide();
+    uploadForm.down(".upload-error").hide();
   }
 };
 
