@@ -31,5 +31,6 @@ $locales['mod-forms-tab-view_ex_object_explorer'] = 'Recherche';
 $locales['mod-forms-tab-view_ex_object_form'] = 'Formulaire';
 $locales['mod-forms-tab-view_import'] = 'Importation';
 $locales['mod-forms-tab-view_import_fields'] = 'Importation de formulaires';
+$locales['mod-forms-tab-vw_import_ex_class'] = 'Importation de formulaires';
 $locales['module-forms-court'] = 'Formulaires';
 $locales['module-forms-long'] = 'Formulaires';
