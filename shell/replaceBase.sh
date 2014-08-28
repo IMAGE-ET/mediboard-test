@@ -73,8 +73,8 @@ fi
 
 # Retrieve archive 
 archive="archive.tar.gz"
-if [ $distant  -eq 1 ]; then
-  scp $source_location:$source_directory/$source_database-db/$source_database-latest.tar.gz $target_directory/$archive
+if [ $distant -eq 1 ]; then
+  scp -P $port $source_location:$source_directory/$source_database-db/$source_database-latest.tar.gz $target_directory/$archive
   check_errs $? "Failed to retrieve remote archive" "Succesfully retrieved remote archive!"
 else
   rm $target_directory/$archive
