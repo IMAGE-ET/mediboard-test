@@ -421,7 +421,7 @@ var AideSaisie = {
   
   create: function (objectClass, field, name, dependValue1, dependValue2, text, userId, class_depend_value_1, class_depend_value_2) {
     var url = new Url("compteRendu", "edit_aide");
-    url.addParam("text", text || field.value);
+    url.addParam("text", text || field.value);
 
     url.requestModal("80%", "60%", {
       title:"Création d'aide à la saisie",
