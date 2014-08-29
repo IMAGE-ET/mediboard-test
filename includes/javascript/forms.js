@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-App.notReadonlyForms = ["do_configure", "do_login_as"];
+App.notReadonlyForms = ["do_configure", "do_login_as", "do_chpwd_aed"];
 
 /**
  * @param {HTMLFormElement} oForm
