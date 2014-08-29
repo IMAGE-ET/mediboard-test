@@ -54,8 +54,10 @@ class CColorSpec extends CMbFieldSpec {
         $js_params = "{required:false}";
       }
       $sHtml .= "<script type=\"text/javascript\">
-        var _e = getForm('".$form."').elements['".$field."'];
-        Main.add(function(){new jscolor.color(_e, $js_params)})
+        Main.add(function(){
+          var _e = getForm('".$form."').elements['".$field."'];
+          new jscolor.color(_e, $js_params);
+        })
       </script>";
     }
     return $sHtml;
