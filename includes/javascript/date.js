@@ -65,7 +65,7 @@ Object.extend(DateFormat, {
       if (value[token] != null) result += value[token];
       else result += token;
     }
-    return result;
+    return result.htmlDecode();
   },
   _isInteger: function(val) {
     return parseInt(val) == val;
@@ -598,7 +598,7 @@ var Calendar = {
     // We update the view
     if (element.value && !elementView.value) {
       var date = DateFormat.parse(element.value, datepicker.options.altFormat);
-      elementView.value = (DateFormat.format(date, datepicker.options.currentFormat) || '').htmlDecode();
+      elementView.value = DateFormat.format(date, datepicker.options.currentFormat) || '';
     }
 
     if (datepicker.icon) {
