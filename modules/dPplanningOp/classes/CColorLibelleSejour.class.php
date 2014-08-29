@@ -37,7 +37,7 @@ class CColorLibelleSejour extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs["libelle"] = "str notNull";
-    $specs["color"]   = "str length|6";
+    $specs["color"]   = "color";
     return $specs;
   }
 
