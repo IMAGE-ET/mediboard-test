@@ -170,9 +170,13 @@ modeExpertDisplay = function() {
 {{mb_include module=planningOp template=js_form_operation}}
 {{mb_include module=planningOp template=js_form_sejour}}
 
-<div class="big-info text"  style="display: none; text-align: center;" id="sejour-value-chooser">
-  Veuillez indiquer si vous souhaitez garder les valeurs du <strong>dossier existant</strong> ou bien utiliser celles que vous venez de saisir (<strong>nouveau dossier</strong>) :
-  <br /><br />
+<div  id="sejour-value-chooser" style="display: none; width: 600px;">
+
+  <div class="small-info text">
+    Veuillez indiquer si vous souhaitez garder les valeurs du <strong>dossier existant</strong>
+    ou bien utiliser celles que vous venez de saisir (<strong>nouveau dossier</strong>).
+  </div>
+
   <form name="sejourChooserFrm" action="?m={{$m}}" method="get">
   <input name="majDP"     type="hidden" value="0" />
   <input name="majEntree" type="hidden" value="0" />
@@ -211,6 +215,7 @@ modeExpertDisplay = function() {
     </tr>
   </table>  
   </form>
+
 </div>
 
 <table class="main">
