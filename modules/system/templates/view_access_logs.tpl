@@ -31,30 +31,9 @@
       url.requestUpdate("crazy_dsl");
     },
 
-    viewAggregateLogs : function () {
-      var url = new Url('system', 'view_aggregate_access_logs');
-      url.requestModal(400);
-    },
-
     viewAggregationBoard : function () {
       var url = new Url('system', 'ajax_vw_aggregation_board');
       url.requestModal();
-    },
-
-    aggregate : function (dry_run) {
-      var url = new Url('system', 'aggregate_access_logs');
-
-      if (dry_run) {
-        url.addParam('dry_run', 1);
-        url.requestUpdate("dry_run");
-      }
-      else {
-        Modal.confirm("Agréger ?", {onValidate: function (v) {
-          if (v) {
-            url.requestUpdate("aggregate")
-          }
-        } });
-      }
     }
   };
 
@@ -86,7 +65,6 @@
 
 <fieldset>
   <button class="stats" type="button" onclick="AccessLog.viewAggregationBoard()">{{tr}}Aggregation-board{{/tr}}</button>
-  <button class="search" type="button" onclick="AccessLog.viewAggregateLogs()">{{tr}}Aggregate{{/tr}}</button>
   <button class="search" type="button" onclick="AccessLog.crazyLogs()">Journaux douteux</button>
 </fieldset>
 

@@ -614,8 +614,8 @@ class CAccessLog extends CMbObject {
       return;
     }
 
-    // Take the 6 months period to aggregate
-    $oldest_to = min(CMbDT::transform("+ 6 MONTHS", $oldest_from, "%Y-%m-%d 00:00:00"), $last_month);
+    // Take the 1 month period to aggregate
+    $oldest_to = min(CMbDT::transform("+ 1 MONTH", $oldest_from, "%Y-%m-%d 00:00:00"), $last_month);
 
     // Dry run mode, just compute the number of logs to aggregate
     if ($dry_run) {

@@ -8,6 +8,29 @@
  * @link     http://www.mediboard.org
  *}}
 
+<script>
+  aggregate = function (dry_run, table) {
+    var url = new Url('system', 'aggregate_access_logs');
+    url.addParam("table", table);
+
+    if (dry_run) {
+      url.addParam('dry_run', 1);
+      url.requestUpdate("aggregate_" + table);
+    }
+    else {
+      Modal.confirm("Agréger ?", {onValidate: function (v) {
+        if (v) {
+          url.requestUpdate("aggregate_" + table)
+        }
+      } });
+    }
+  }
+</script>
+
+<div class="small-warning">
+  Ne seront agrégés que les journaux du plus ancien mois.
+</div>
+
 <table class="main tbl">
   <tr>
     <th>{{tr}}Table{{/tr}}</th>
@@ -38,16 +61,17 @@
         <td style="text-align: right;">{{$_aggregate.date_max|date_format:"%d-%m-%Y"}}</td>
 
         {{if $smarty.foreach._loop.first}}
-          <td style="text-align: right;">{{$_stats.meta.data_mb|number_format:2:'.':' '}}</td>
-          <td style="text-align: right;">{{$_stats.meta.index_mb|number_format:2:'.':' '}}</td>
-          <td style="text-align: right;">{{$_stats.meta.data_free|number_format:2:'.':' '}}</td>
-          <td style="text-align: right;">{{$_stats.meta.total|number_format:2:'.':' '}}</td>
+          <td rowspan="{{$_stats.data|@count}}" style="text-align: right;">{{$_stats.meta.data_mb|number_format:2:'.':' '}}</td>
+          <td rowspan="{{$_stats.data|@count}}" style="text-align: right;">{{$_stats.meta.index_mb|number_format:2:'.':' '}}</td>
+          <td rowspan="{{$_stats.data|@count}}" style="text-align: right;">{{$_stats.meta.data_free|number_format:2:'.':' '}}</td>
+          <td rowspan="{{$_stats.data|@count}}" style="text-align: right;">{{$_stats.meta.total|number_format:2:'.':' '}}</td>
 
           <td rowspan="{{$_stats.data|@count}}" style="text-align: center;">
-            <button class="search" type="button" onclick="AccessLog.aggregate(true)">{{tr}}DryRun{{/tr}}</button>
-            <button class="search" type="button" onclick="AccessLog.aggregate(false)">{{tr}}Aggregate{{/tr}}</button>
+            <button class="search" type="button" onclick="aggregate(true, '{{$_table}}');">{{tr}}DryRun{{/tr}}</button>
+            <button class="search" type="button" onclick="aggregate(false, '{{$_table}}')">{{tr}}Aggregate{{/tr}}</button>
           </td>
-          <td rowspan="{{$_stats.data|@count}}"></td>
+
+          <td rowspan="{{$_stats.data|@count}}" id="aggregate_{{$_table}}"></td>
         {{/if}}
       </tr>
     {{/foreach}}
