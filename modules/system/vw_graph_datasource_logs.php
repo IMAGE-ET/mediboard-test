@@ -19,18 +19,6 @@ $hour_min = CValue::getOrSession("hour_min", "6");
 $hour_max = CValue::getOrSession("hour_max", "22");
 $hours    = range(0, 24);
 
-// request_time, cpu_time, errors, memory_peak
-$left_mode = CValue::getOrSession("left_mode", "request_time");
-
-// total, mean
-$left_sampling = CValue::getOrSession("left_sampling", "mean");
-
-// hits, size
-$right_mode = CValue::getOrSession("right_mode", "hits");
-
-// total, mean
-$right_sampling = CValue::getOrSession("right_sampling", "total");
-
 // Human/bot filter
 $human_bot = CValue::getOrSession("human_bot", "0");
 
@@ -72,33 +60,154 @@ switch ($interval = CValue::getOrSession("interval", "one-day")) {
 }
 
 $graphs = array();
-$left   = array($left_mode, $left_sampling);
-$right  = array($right_mode, $right_sampling);
 
-$logs = CDataSourceLog::loadAggregation($from, $to, $groupmod, $module, $human_bot);
+$access_logs  = CDataSourceLog::loadAggregation($from, $to, $groupmod, $module, $human_bot);
+$archive_logs = CDataSourceLogArchive::loadAggregation($from, $to, $groupmod, $module, $human_bot);
 
+switch ($groupmod) {
+  case 0:
+  case 1:
+    $logs = array_merge($access_logs, $archive_logs);
+    break;
+
+  case 2:
+    /** @var CDataSourceLog[] $access_logs */
+    $access_logs = array_merge($access_logs, $archive_logs);
+
+    $logs       = array();
+    $unique_log = new CDataSourceLog();
+    foreach ($access_logs as $_log) {
+      $unique_log->datasourcelog_id = $_log->datasourcelog_id;
+      $unique_log->module_action_id = $_log->module_action_id;
+      $unique_log->period           = $_log->period;
+    }
+
+    $logs[] = $unique_log;
+    break;
+
+  default:
+    $logs = $access_logs;
+}
+
+$series_by_module = array();
+$graphs_by_module = array();
 foreach ($logs as $log) {
   switch ($groupmod) {
     case 0:
-      $graph = CDataSourceLog::graphDataSourceLog($log->_module, $log->_action, $from, $to, $interval, $left, $right, $human_bot);
-      if ($graph["series"]) {
-        $graphs[] = $graph;
+      $_graph = call_user_func("{$log->_class}::graphDataSourceLog", $log->_module, $log->_action, $from, $to, $interval, $human_bot);
+
+      if (!isset($_graph["series"])) {
+        continue;
+      }
+
+      if (!isset($graphs_by_module[$log->_module . "-" . $log->_action])) {
+        // 1st iteration => graph initialisation
+        $graphs_by_module[$log->_module . "-" . $log->_action] = $_graph;
+
+        // In order to know which series are already initialised
+        $series_by_module[$log->_module . "-" . $log->_action] = CMbArray::pluck($_graph["series"], "label");
+      }
+      else {
+        // Merging of module series and datetime_by_index
+        $_series = CMbArray::pluck($_graph["series"], "label");
+
+        foreach ($_series as $_k => $_one_serie) {
+          // If series doesn't exist, simply push it
+          if (!in_array($_one_serie, $series_by_module[$log->_module . "-" . $log->_action])) {
+            $graphs_by_module[$log->_module . "-" . $log->_action]["series"][] = $_graph["series"][$_k];
+          }
+          else {
+            foreach ($graphs_by_module[$log->_module . "-" . $log->_action]["series"] as $_k1 => $_serie) {
+
+              if ($_serie["label"] == $_one_serie) {
+                foreach ($_serie["data"] as $_k2 => $_data) {
+                  // We merge the associated data witch has different indexes according to the graph ($_k1 and $_k)
+                  $graphs_by_module[$log->_module . "-" . $log->_action]["series"][$_k1]["data"][$_k2][1] += $_graph["series"][$_k]["data"][$_k2][1];
+                }
+              }
+            }
+          }
+          $graphs_by_module[$log->_module . "-" . $log->_action]["datetime_by_index"] += $_graph["datetime_by_index"];
+        }
       }
       break;
 
     case 1:
-      $graph = CDataSourceLog::graphDataSourceLog($log->_module, null, $from, $to, $interval, $left, $right, $human_bot);
-      if ($graph["series"]) {
-        $graphs[] = $graph;
+      $_graph = call_user_func("{$log->_class}::graphDataSourceLog", $log->_module, null, $from, $to, $interval, $human_bot);
+
+      if (!isset($_graph["series"])) {
+        continue;
+      }
+
+      if (!isset($graphs_by_module[$log->_module])) {
+        // 1st iteration => graph initialisation
+        $graphs_by_module[$log->_module] = $_graph;
+
+        // In order to know which series are already initialised
+        $series_by_module[$log->_module] = CMbArray::pluck($_graph["series"], "label");
+      }
+      else {
+        // Merging of module series and datetime_by_index
+        $_series = CMbArray::pluck($_graph["series"], "label");
+
+        foreach ($_series as $_k => $_one_serie) {
+          // If series doesn't exist, simply push it
+          if (!in_array($_one_serie, $series_by_module[$log->_module])) {
+            $graphs_by_module[$log->_module]["series"][] = $_graph["series"][$_k];
+          }
+          else {
+            foreach ($graphs_by_module[$log->_module]["series"] as $_k1 => $_serie) {
+
+              if ($_serie["label"] == $_one_serie) {
+                foreach ($_serie["data"] as $_k2 => $_data) {
+                  // We merge the associated data witch has different indexes according to the graph ($_k1 and $_k)
+                  $graphs_by_module[$log->_module]["series"][$_k1]["data"][$_k2][1] += $_graph["series"][$_k]["data"][$_k2][1];
+                }
+              }
+            }
+          }
+          $graphs_by_module[$log->_module]["datetime_by_index"] += $_graph["datetime_by_index"];
+        }
       }
       break;
 
     case 2:
-      $graph = CDataSourceLog::graphDataSourceLog(null, null, $from, $to, $interval, $left, $right, $human_bot);
-      if ($graph["series"]) {
-        $graphs[] = $graph;
+      $_graph         = CDataSourceLog::graphDataSourceLog(null, null, $from, $to, $interval, $human_bot);
+      $_archive_graph = CDataSourceLogArchive::graphDataSourceLog(null, null, $from, $to, $interval, $human_bot);
+
+      if (!isset($_graph["series"]) && !isset($_archive_graph["series"])) {
+        continue;
+      }
+
+      $graphs_by_module["all"] = $_graph;
+
+      $_series         = CMbArray::pluck($_graph["series"], "label");
+      $_archive_series = CMbArray::pluck($_archive_graph["series"], "label");
+
+      foreach ($_archive_series as $_k => $_one_serie) {
+        // If series doesn't exist, simply push it
+        if (!in_array($_one_serie, $_series)) {
+          $graphs_by_module["all"]["series"][] = $_archive_graph["series"][$_k];
+        }
+        else {
+          foreach ($graphs_by_module["all"]["series"] as $_k1 => $_serie) {
+
+            if ($_serie["label"] == $_one_serie) {
+              foreach ($_serie["data"] as $_k2 => $_data) {
+                // We merge the associated data witch has different indexes according to the graph ($_k1 and $_k)
+                $graphs_by_module["all"]["series"][$_k1]["data"][$_k2][1] += $_archive_graph["series"][$_k]["data"][$_k2][1];
+              }
+            }
+          }
+        }
+        $graphs_by_module["all"]["datetime_by_index"] += $_archive_graph["datetime_by_index"];
       }
   }
+}
+
+$graphs = array();
+foreach ($graphs_by_module as $_graph) {
+  $graphs[] = $_graph;
 }
 
 $smarty = new CSmartyDP();

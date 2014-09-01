@@ -31,13 +31,17 @@
       url.requestUpdate("crazy_dsl");
     },
 
-    viewAggregateLogs: function () {
-      Control.Modal.close();
+    viewAggregateLogs : function () {
       var url = new Url('system', 'view_aggregate_access_logs');
       url.requestModal(400);
     },
 
-    aggregate: function (dry_run) {
+    viewAggregationBoard : function () {
+      var url = new Url('system', 'ajax_vw_aggregation_board');
+      url.requestModal();
+    },
+
+    aggregate : function (dry_run) {
       var url = new Url('system', 'aggregate_access_logs');
 
       if (dry_run) {
@@ -80,8 +84,11 @@
   });
 </script>
 
-<button class="search" type="button" onclick="AccessLog.crazyLogs()">Journaux douteux</button>
-<button class="search" type="button" onclick="AccessLog.viewAggregateLogs()">{{tr}}Aggregate{{/tr}}</button>
+<fieldset>
+  <button class="stats" type="button" onclick="AccessLog.viewAggregationBoard()">{{tr}}Aggregation-board{{/tr}}</button>
+  <button class="search" type="button" onclick="AccessLog.viewAggregateLogs()">{{tr}}Aggregate{{/tr}}</button>
+  <button class="search" type="button" onclick="AccessLog.crazyLogs()">Journaux douteux</button>
+</fieldset>
 
 <ul class="control_tabs" id="logs_tab">
   <li>

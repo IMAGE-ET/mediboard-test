@@ -75,23 +75,109 @@ $graphs = array();
 $left   = array($left_mode, $left_sampling);
 $right  = array($right_mode, $right_sampling);
 
-$logs = CAccessLog::loadAggregation($from, $to, $groupmod, $module, $human_bot);
+$access_logs  = CAccessLog::loadAggregation($from, $to, $groupmod, $module, $human_bot);
+$archive_logs = CAccessLogArchive::loadAggregation($from, $to, $groupmod, $module, $human_bot);
 
+switch ($groupmod) {
+  case 0:
+  case 1:
+    $logs = array_merge($access_logs, $archive_logs);
+    break;
+
+  case 2:
+    /** @var CAccessLog[] $access_logs */
+    $access_logs = array_merge($access_logs, $archive_logs);
+
+    $logs = array();
+    $unique_log = new CAccessLog();
+    foreach ($access_logs as $_log) {
+      $unique_log->accesslog_id      = $_log->accesslog_id;
+      $unique_log->module_action_id  = $_log->module_action_id;
+      $unique_log->period            = $_log->period;
+      $unique_log->hits             += $_log->hits;
+      $unique_log->duration         += $_log->duration;
+      $unique_log->processus        += $_log->processus;
+      $unique_log->processor        += $_log->processor;
+      $unique_log->request          += $_log->request;
+      $unique_log->nb_requests      += $_log->nb_requests;
+      $unique_log->peak_memory      += $_log->peak_memory;
+      $unique_log->size             += $_log->size;
+      $unique_log->errors           += $_log->errors;
+      $unique_log->warnings         += $_log->warnings;
+      $unique_log->notices          += $_log->notices;
+    }
+
+    $logs[] = $unique_log;
+    break;
+
+  default:
+    $logs = $access_logs;
+}
+
+$graphs_by_module = array();
 foreach ($logs as $log) {
   switch ($groupmod) {
     case 0:
-      $graphs[] = CAccessLog::graphAccessLog($log->_module, $log->_action, $from, $to, $interval, $left, $right, $human_bot);
+      $_graph = call_user_func("{$log->_class}::graphAccessLog", $log->_module, $log->_action, $from, $to, $interval, $left, $right, $human_bot);
+
+      if (!isset($graphs_by_module[$log->_module . "-" . $log->_action])) {
+        // 1st iteration => graph initialisation
+        $graphs_by_module[$log->_module . "-" . $log->_action] = $_graph;
+      }
+      else {
+        // Merging of module-action series and datetime_by_index
+        foreach ($_graph["series"] as $_k1 => $_serie) {
+          foreach ($_graph["series"][$_k1]["data"] as $_k2 => $_data) {
+            $graphs_by_module[$log->_module . "-" . $log->_action]["series"][$_k1]["data"][$_k2][1] += $_data[1];
+          }
+        }
+        $graphs_by_module[$log->_module . "-" . $log->_action]["datetime_by_index"] += $_graph["datetime_by_index"];
+      }
       break;
 
     case 1:
-      $graphs[] = CAccessLog::graphAccessLog($log->_module, null, $from, $to, $interval, $left, $right, $human_bot);
+      $_graph = call_user_func("{$log->_class}::graphAccessLog", $log->_module, null, $from, $to, $interval, $left, $right, $human_bot);
+
+      if (!isset($graphs_by_module[$log->_module])) {
+        // 1st iteration => graph initialisation
+        $graphs_by_module[$log->_module] = $_graph;
+      }
+      else {
+        // Merging of module series and datetime_by_index
+        foreach ($_graph["series"] as $_k1 => $_serie) {
+          foreach ($_graph["series"][$_k1]["data"] as $_k2 => $_data) {
+            $graphs_by_module[$log->_module]["series"][$_k1]["data"][$_k2][1] += $_data[1];
+          }
+        }
+        $graphs_by_module[$log->_module]["datetime_by_index"] += $_graph["datetime_by_index"];
+      }
       break;
 
     case 2:
       $_graph         = CAccessLog::graphAccessLog(null, null, $from, $to, $interval, $left, $right, $human_bot);
-      $graphs[]       = $_graph;
+      $_archive_graph = CAccessLogArchive::graphAccessLog(null, null, $from, $to, $interval, $left, $right, $human_bot);
+
+      // Merging of series and datetime_by_index
+      foreach ($_archive_graph["series"] as $_k1 => $_serie) {
+        foreach ($_archive_graph["series"][$_k1]["data"] as $_k2 => $_data) {
+          $_graph["series"][$_k1]["data"][$_k2][1] += $_data[1];
+        }
+      }
+      $_graph["datetime_by_index"] += $_archive_graph["datetime_by_index"];
+
+      $graphs[] = $_graph;
       break;
   }
+}
+
+switch ($groupmod) {
+  case 0:
+  case 1:
+    $graphs = array();
+    foreach ($graphs_by_module as $_graph) {
+      $graphs[] = $_graph;
+    }
+    break;
 }
 
 $smarty = new CSmartyDP();

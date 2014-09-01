@@ -35,7 +35,7 @@
         relative: true,
         sensibility: 2,
         trackFormatter: function (obj) {
-          return "Valeur : " + obj.y + "<br />Date : " + g.datetime_by_index[obj.index];
+          return obj.series.label + "<br />Valeur : " + obj.y + "<br />Date : " + g.datetime_by_index[obj.index];
         }
       };
       var f = Flotr.draw(container, g.series, g.options);

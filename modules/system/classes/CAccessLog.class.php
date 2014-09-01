@@ -155,7 +155,6 @@ class CAccessLog extends CMbObject {
    * @param string $end       End date
    * @param int    $groupmod  Grouping mode
    * @param null   $module    Module name
-   * @param bool   $DBorNotDB Load database stats or not
    * @param string $human_bot Human/bot filter
    *
    * @return CAccessLog[]
@@ -207,65 +206,6 @@ class CAccessLog extends CMbObject {
         break;
     }
 
-//    $table = "access_log_archive";
-//    $query .= "\nUNION\n";
-//    $query .= "SELECT
-//        $table.`accesslog_id`,
-//        $table.`module_action_id`,
-//        `module_action`.`module`   AS _module,
-//        `module_action`.`action`   AS _action,
-//        SUM($table.`hits`)         AS hits,
-//        SUM($table.`size`)         AS size,
-//        SUM($table.`duration`)     AS duration,
-//        SUM($table.`processus`)    AS processus,
-//        SUM($table.`processor`)    AS processor,
-//        SUM($table.`request`)      AS request,
-//        SUM($table.`nb_requests`)  AS nb_requests,
-//        SUM($table.`peak_memory`)  AS peak_memory,
-//        SUM($table.`errors`)       AS errors,
-//        SUM($table.`warnings`)     AS warnings,
-//        SUM($table.`notices`)      AS notices,
-//        0 AS grouping
-//      FROM $table USE INDEX (`period`), `module_action`
-//      WHERE $table.`module_action_id` = `module_action`.`module_action_id`";
-//
-//    $query .= "\nAND $table.`period` BETWEEN '$start' AND '$end'";
-//
-//    // 2 means for both of them
-//    if ($human_bot === '0' || $human_bot === '1') {
-//      $query .= "\nAND $table.`bot` = '$human_bot' ";
-//    }
-//
-//    if ($module && !$groupmod) {
-//      $query .= "\nAND `module_action`.`module` = '$module' ";
-//    }
-//
-//    switch ($groupmod) {
-//      case 2:
-//        $query .= "GROUP BY grouping ";
-//        break;
-//      case 1:
-//        $query .= "GROUP BY `module_action`.`module` ORDER BY `module_action`.`module` ";
-//        break;
-//      case 0:
-//        $query .= "GROUP BY `module_action`.`module`, `module_action`.`action` ORDER BY `module_action`.`module`, `module_action`.`action` ";
-//        break;
-//    }
-//
-//    $query = "SELECT
-//                SUM(`hits`)         AS hits,
-//                SUM(`size`)         AS size,
-//                SUM(`duration`)     AS duration,
-//                SUM(`processus`)     AS processus,
-//                SUM(`processor`)     AS processor,
-//                SUM(`request`)      AS request,
-//                SUM(`nb_requests`)  AS nb_requests,
-//                SUM(`peak_memory`)  AS peak_memory,
-//                SUM(`errors`)       AS errors,
-//                SUM(`warnings`)     AS warnings,
-//                SUM(`notices`)      AS notices
-//              FROM ( " . $query . " ) as t";
-
     return $al->loadQueryList($query);
   }
 
@@ -277,7 +217,6 @@ class CAccessLog extends CMbObject {
    * @param string $period_format Period format
    * @param string $module_name   Module name
    * @param string $action_name   Action name
-   * @param bool   $DBorNotDB     Include database logs stats
    * @param string $human_bot     Human/bot filter
    *
    * @return CAccessLog[]
@@ -332,81 +271,23 @@ class CAccessLog extends CMbObject {
 
     $query .= "\nGROUP BY `gperiod`";
 
-//    $table = "access_log_archive";
-//    $query .= "\nUNION\n";
-//    $query .= "SELECT
-//        `accesslog_id`,
-//        `module_action`.`module`,
-//        `module_action`.`action`,
-//        `period`,
-//        AVG(duration/hits)    AS _average_duration,
-//        AVG(processus/hits)   AS _average_processus,
-//        AVG(processor/hits)   AS _average_processor,
-//        AVG(request/hits)     AS _average_request,
-//        AVG(nb_requests/hits) AS _average_nb_requests,
-//        AVG(peak_memory/hits) AS _average_peak_memory,
-//        SUM(hits)             AS hits,
-//        SUM(size)             AS size,
-//        SUM(duration)         AS duration,
-//        SUM(processus)        AS processus,
-//        SUM(processor)        AS processor,
-//        SUM(request)          AS request,
-//        SUM(nb_requests)      AS nb_requests,
-//        SUM(peak_memory)      AS peak_memory,
-//        SUM(errors)           AS errors,
-//        SUM(warnings)         AS warnings,
-//        SUM(notices)          AS notices,
-//      DATE_FORMAT(`period`, '$period_format') AS `gperiod`
-//      FROM $table, `module_action`
-//      /*USE INDEX (`period`)*/
-//      WHERE $table.`module_action_id` = `module_action`.`module_action_id`
-//        AND `period` BETWEEN '$start' AND '$end'";
-//
-//    // 2 means for both of them
-//    if ($human_bot === '0' || $human_bot === '1') {
-//      $query .= "\nAND bot = '$human_bot' ";
-//    }
-//
-//    if ($module_name) {
-//      $query .= "\nAND `module` = '$module_name'";
-//    }
-//
-//    if ($action_name) {
-//      $query .= "\nAND `action` = '$action_name'";
-//    }
-//
-//    $query .= "\nGROUP BY `gperiod`";
-//
-//    $query = "SELECT
-//                `accesslog_id`,
-//                `module`,
-//                `action`,
-//                `period`,
-//                AVG(duration/hits)    AS _average_duration,
-//                AVG(processus/hits)   AS _average_processus,
-//                AVG(processor/hits)   AS _average_processor,
-//                AVG(request/hits)     AS _average_request,
-//                AVG(nb_requests/hits) AS _average_nb_requests,
-//                AVG(peak_memory/hits) AS _average_peak_memory,
-//                SUM(hits)             AS hits,
-//                SUM(size)             AS size,
-//                SUM(duration)         AS duration,
-//                SUM(processus)        AS processus,
-//                SUM(processor)        AS processor,
-//                SUM(request)          AS request,
-//                SUM(nb_requests)      AS nb_requests,
-//                SUM(peak_memory)      AS peak_memory,
-//                SUM(errors)           AS errors,
-//                SUM(warnings)         AS warnings,
-//                SUM(notices)          AS notices,
-//                DATE_FORMAT(`period`, '$period_format') AS `gperiod`
-//              FROM ( " . $query . " ) as t
-//              GROUP BY `gperiod` ORDER BY `period`";
-//    mt($query);
-
     return $al->loadQueryList($query);
   }
 
+  /**
+   * Compute Flotr graph
+   *
+   * @param string  $module_name
+   * @param string  $action_name
+   * @param integer $startx
+   * @param integer $endx
+   * @param string  $interval
+   * @param array   $left
+   * @param array   $right
+   * @param bool    $human_bot
+   *
+   * @return array
+   */
   static function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 'one-day', $left, $right, $human_bot = null) {
     $al    = new static;
 
@@ -752,86 +633,7 @@ class CAccessLog extends CMbObject {
       return;
     }
 
-    // Récupération des IDs de journaux à supprimer
-    $query = "SELECT
-                CAST(GROUP_CONCAT(`accesslog_id` SEPARATOR ',') AS CHAR) AS ids,
-                `module_action_id`,
-                `period`,
-                `bot`
-              FROM $table
-              WHERE `period` BETWEEN '$oldest_from' AND '$oldest_to'
-                AND `period` <= '$last_year'
-                AND `aggregate` < '$sup_agg'
-              GROUP BY `module_action_id`, date_format(`period`, '%Y-%m-%d 00:00:00'), `bot`";
-
-    $year_IDs_to_aggregate = $ds->loadList($query);
-
-    if ($year_IDs_to_aggregate) {
-      foreach ($year_IDs_to_aggregate as $_aggregate) {
-        $query = "INSERT INTO $table (
-                    `module_action_id`,
-                    `period`,
-                    `aggregate`,
-                    `bot`,
-                    `hits`,
-                    `duration`,
-                    `request`,
-                    `nb_requests`,
-                    `size`,
-                    `errors`,
-                    `warnings`,
-                    `notices`,
-                    `processus`,
-                    `processor`,
-                    `peak_memory`
-                  )
-                  SELECT
-                    `module_action_id`,
-                    date_format(`period`, '%Y-%m-%d 00:00:00'),
-                    '$sup_agg',
-                    `bot`,
-                    @hits        := SUM(`hits`),
-                    @duration    := SUM(`duration`),
-                    @request     := SUM(`request`),
-                    @nb_requests := SUM(`nb_requests`),
-                    @size        := SUM(`size`),
-                    @errors      := SUM(`errors`),
-                    @warnings    := SUM(`warnings`),
-                    @notices     := SUM(`notices`),
-                    @processus   := SUM(`processus`),
-                    @processor   := SUM(`processor`),
-                    @peak_memory := SUM(`peak_memory`)
-                  FROM $table
-                  WHERE `accesslog_id` IN (" . $_aggregate['ids'] . ")
-                  GROUP BY `module_action_id`, DATE_FORMAT(`period`, '%Y-%m-%d 00:00:00'), `bot`
-                  ON DUPLICATE KEY UPDATE
-                    `hits`        = `hits`        + @hits,
-                    `duration`    = `duration`    + @duration,
-                    `request`     = `request`     + @request,
-                    `nb_requests` = `nb_requests` + @nb_requests,
-                    `size`        = `size`        + @size,
-                    `errors`      = `errors`      + @errors,
-                    `warnings`    = `warnings`    + @warnings,
-                    `notices`     = `notices`     + @notices,
-                    `processus`   = `processus`   + @processus,
-                    `processor`   = `processor`   + @processor,
-                    `peak_memory` = `peak_memory` + @peak_memory";
-
-        if (!$ds->exec($query)) {
-          CAppUI::setMsg("Failed to insert aggregated access logs", UI_MSG_ERROR);
-
-          return;
-        }
-
-        // Delete previous logs
-        $query = "DELETE
-                  FROM $table
-                  WHERE `accesslog_id` IN (" . $_aggregate['ids'] . ")";
-
-        $ds->exec($query);
-      }
-    }
-
+    // Récupération des IDs de journaux à agréger à l'heure
     $query = "SELECT
                 CAST(GROUP_CONCAT(`accesslog_id` SEPARATOR ',') AS CHAR) AS ids,
                 `module_action_id`,
@@ -848,7 +650,7 @@ class CAccessLog extends CMbObject {
 
     if ($month_IDs_to_aggregate) {
       foreach ($month_IDs_to_aggregate as $_aggregate) {
-        $query = "INSERT INTO $table (
+        $query = "INSERT INTO `access_log_archive` (
                     `module_action_id`,
                     `period`,
                     `aggregate`,
@@ -884,6 +686,86 @@ class CAccessLog extends CMbObject {
                   FROM $table
                   WHERE `accesslog_id` IN (" . $_aggregate['ids'] . ")
                   GROUP BY `module_action_id`, DATE_FORMAT(`period`, '%Y-%m-%d %H:00:00'), `bot`
+                  ON DUPLICATE KEY UPDATE
+                    `hits`        = `hits`        + @hits,
+                    `duration`    = `duration`    + @duration,
+                    `request`     = `request`     + @request,
+                    `nb_requests` = `nb_requests` + @nb_requests,
+                    `size`        = `size`        + @size,
+                    `errors`      = `errors`      + @errors,
+                    `warnings`    = `warnings`    + @warnings,
+                    `notices`     = `notices`     + @notices,
+                    `processus`   = `processus`   + @processus,
+                    `processor`   = `processor`   + @processor,
+                    `peak_memory` = `peak_memory` + @peak_memory";
+
+        if (!$ds->exec($query)) {
+          CAppUI::setMsg("Failed to insert aggregated access logs", UI_MSG_ERROR);
+
+          return;
+        }
+
+        // Delete previous logs
+        $query = "DELETE
+                  FROM $table
+                  WHERE `accesslog_id` IN (" . $_aggregate['ids'] . ")";
+
+        $ds->exec($query);
+      }
+    }
+
+    // Récupération des IDs de journaux à agréger à la journée
+    $query = "SELECT
+                CAST(GROUP_CONCAT(`accesslog_id` SEPARATOR ',') AS CHAR) AS ids,
+                `module_action_id`,
+                `period`,
+                `bot`
+              FROM $table
+              WHERE `period` BETWEEN '$oldest_from' AND '$oldest_to'
+                AND `period` <= '$last_year'
+                AND `aggregate` < '$sup_agg'
+              GROUP BY `module_action_id`, date_format(`period`, '%Y-%m-%d 00:00:00'), `bot`";
+
+    $year_IDs_to_aggregate = $ds->loadList($query);
+
+    if ($year_IDs_to_aggregate) {
+      foreach ($year_IDs_to_aggregate as $_aggregate) {
+        $query = "INSERT INTO `access_log_archive` (
+                    `module_action_id`,
+                    `period`,
+                    `aggregate`,
+                    `bot`,
+                    `hits`,
+                    `duration`,
+                    `request`,
+                    `nb_requests`,
+                    `size`,
+                    `errors`,
+                    `warnings`,
+                    `notices`,
+                    `processus`,
+                    `processor`,
+                    `peak_memory`
+                  )
+                  SELECT
+                    `module_action_id`,
+                    date_format(`period`, '%Y-%m-%d 00:00:00'),
+                    '$sup_agg',
+                    `bot`,
+                    @hits        := SUM(`hits`),
+                    @duration    := SUM(`duration`),
+                    @request     := SUM(`request`),
+                    @nb_requests := SUM(`nb_requests`),
+                    @size        := SUM(`size`),
+                    @errors      := SUM(`errors`),
+                    @warnings    := SUM(`warnings`),
+                    @notices     := SUM(`notices`),
+                    @processus   := SUM(`processus`),
+                    @processor   := SUM(`processor`),
+                    @peak_memory := SUM(`peak_memory`)
+                  FROM $table
+                  WHERE `accesslog_id` IN (" . $_aggregate['ids'] . ")
+                  GROUP BY `module_action_id`, DATE_FORMAT(`period`, '%Y-%m-%d 00:00:00'), `bot`
                   ON DUPLICATE KEY UPDATE
                     `hits`        = `hits`        + @hits,
                     `duration`    = `duration`    + @duration,

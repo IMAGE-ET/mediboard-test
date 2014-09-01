@@ -18,6 +18,9 @@ CApp::setMemoryLimit("1024M");
 $dry_run = CValue::get("dry_run", false);
 
 CAccessLog::aggregate(10, 60, 1440, $dry_run);
+CAccessLogArchive::aggregate(10, 60, 1440, $dry_run);
+
 CDataSourceLog::aggregate(10, 60, 1440, $dry_run);
+CDataSourceLogArchive::aggregate(10, 60, 1440, $dry_run);
 
 echo CAppUI::getMsg();

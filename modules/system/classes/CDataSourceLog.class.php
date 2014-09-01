@@ -104,7 +104,6 @@ class CDataSourceLog extends CMbObject {
    * @param string $end       End date
    * @param int    $groupmod  Grouping mode
    * @param null   $module    Module name
-   * @param bool   $DBorNotDB Load database stats or not
    * @param string $human_bot Human/bot filter
    *
    * @return CAccessLog[]
@@ -158,7 +157,6 @@ class CDataSourceLog extends CMbObject {
    * @param string $period_format Period format
    * @param string $module_name   Module name
    * @param string $action_name   Action name
-   * @param bool   $DBorNotDB     Include database logs stats
    * @param string $human_bot     Human/bot filter
    *
    * @return CAccessLog[]
@@ -201,7 +199,19 @@ class CDataSourceLog extends CMbObject {
     return $dl->loadQueryList($query);
   }
 
-  static function graphDataSourceLog($module_name, $action_name, $startx, $endx, $interval = 'one-day', $left, $right, $human_bot = null) {
+  /**
+   * Compute Flotr graph
+   *
+   * @param string  $module_name
+   * @param string  $action_name
+   * @param integer $startx
+   * @param integer $endx
+   * @param string  $interval
+   * @param bool    $human_bot
+   *
+   * @return array
+   */
+  static function graphDataSourceLog($module_name, $action_name, $startx, $endx, $interval = 'one-day', $human_bot = null) {
     $dl    = new static;
 
     switch ($interval) {
@@ -406,62 +416,7 @@ class CDataSourceLog extends CMbObject {
       return;
     }
 
-    // Récupération des IDs de journaux à supprimer
-    $query = "SELECT
-                CAST(GROUP_CONCAT(`datasourcelog_id` SEPARATOR ',') AS CHAR) AS ids,
-                `module_action_id`,
-                `datasource`,
-                `period`,
-                `bot`
-              FROM $table
-              WHERE `period` BETWEEN '$oldest_from' AND '$oldest_to'
-                AND `period` <= '$last_year'
-                AND `aggregate` < '$sup_agg'
-              GROUP BY `module_action_id`, `datasource`, date_format(`period`, '%Y-%m-%d 00:00:00'), `bot`";
-
-    $year_IDs_to_aggregate = $ds->loadList($query);
-
-    if ($year_IDs_to_aggregate) {
-      foreach ($year_IDs_to_aggregate as $_aggregate) {
-        $query = "INSERT INTO $table (
-                    `datasource`,
-                    `module_action_id`,
-                    `period`,
-                    `aggregate`,
-                    `bot`,
-                    `requests`,
-                    `duration`
-                  )
-                  SELECT
-                    `datasource`,
-                    `module_action_id`,
-                    date_format(`period`, '%Y-%m-%d 00:00:00'),
-                    '$sup_agg',
-                    `bot`,
-                    @requests := SUM(`requests`),
-                    @duration := SUM(`duration`)
-                  FROM $table
-                  WHERE `datasourcelog_id` IN (" . $_aggregate['ids'] . ")
-                  GROUP BY `module_action_id`, `datasource`, DATE_FORMAT(`period`, '%Y-%m-%d 00:00:00'), `bot`
-                  ON DUPLICATE KEY UPDATE
-                    `requests` = `requests` + @requests,
-                    `duration` = `duration` + @duration";
-
-        if (!$ds->exec($query)) {
-          trigger_error("Failed to insert aggregated datasource logs", E_USER_ERROR);
-
-          return;
-        }
-
-        // Delete previous logs
-        $query = "DELETE
-                  FROM $table
-                  WHERE `datasourcelog_id` IN (" . $_aggregate['ids'] . ")";
-
-        $ds->exec($query);
-      }
-    }
-
+    // Récupération des IDs de journaux à agréger à l'heure
     $query = "SELECT
                 CAST(GROUP_CONCAT(`datasourcelog_id` SEPARATOR ',') AS CHAR) AS ids,
                 `module_action_id`,
@@ -479,7 +434,7 @@ class CDataSourceLog extends CMbObject {
 
     if ($month_IDs_to_aggregate) {
       foreach ($month_IDs_to_aggregate as $_aggregate) {
-        $query = "INSERT INTO $table (
+        $query = "INSERT INTO `datasource_log_archive` (
                     `module_action_id`,
                     `datasource`,
                     `period`,
@@ -504,7 +459,63 @@ class CDataSourceLog extends CMbObject {
                     `duration` = `duration` + @duration";
 
         if (!$ds->exec($query)) {
-          trigger_error("Failed to insert aggregated datasource logs", E_USER_ERROR);
+          CAppUI::setMsg("Failed to insert aggregated datasource logs", UI_MSG_ERROR);
+
+          return;
+        }
+
+        // Delete previous logs
+        $query = "DELETE
+                  FROM $table
+                  WHERE `datasourcelog_id` IN (" . $_aggregate['ids'] . ")";
+
+        $ds->exec($query);
+      }
+    }
+
+    // Récupération des IDs de journaux à agréger à la journée
+    $query = "SELECT
+                CAST(GROUP_CONCAT(`datasourcelog_id` SEPARATOR ',') AS CHAR) AS ids,
+                `module_action_id`,
+                `datasource`,
+                `period`,
+                `bot`
+              FROM $table
+              WHERE `period` BETWEEN '$oldest_from' AND '$oldest_to'
+                AND `period` <= '$last_year'
+                AND `aggregate` < '$sup_agg'
+              GROUP BY `module_action_id`, `datasource`, date_format(`period`, '%Y-%m-%d 00:00:00'), `bot`";
+
+    $year_IDs_to_aggregate = $ds->loadList($query);
+
+    if ($year_IDs_to_aggregate) {
+      foreach ($year_IDs_to_aggregate as $_aggregate) {
+        $query = "INSERT INTO `datasource_log_archive` (
+                    `datasource`,
+                    `module_action_id`,
+                    `period`,
+                    `aggregate`,
+                    `bot`,
+                    `requests`,
+                    `duration`
+                  )
+                  SELECT
+                    `datasource`,
+                    `module_action_id`,
+                    date_format(`period`, '%Y-%m-%d 00:00:00'),
+                    '$sup_agg',
+                    `bot`,
+                    @requests := SUM(`requests`),
+                    @duration := SUM(`duration`)
+                  FROM $table
+                  WHERE `datasourcelog_id` IN (" . $_aggregate['ids'] . ")
+                  GROUP BY `module_action_id`, `datasource`, DATE_FORMAT(`period`, '%Y-%m-%d 00:00:00'), `bot`
+                  ON DUPLICATE KEY UPDATE
+                    `requests` = `requests` + @requests,
+                    `duration` = `duration` + @duration";
+
+        if (!$ds->exec($query)) {
+          CAppUI::setMsg("Failed to insert aggregated datasource logs", UI_MSG_ERROR);
 
           return;
         }

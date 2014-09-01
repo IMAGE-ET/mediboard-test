@@ -1876,7 +1876,6 @@ class CSetupsystem extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("1.1.70");
-
     $query = "ALTER TABLE `cronjob`
                 ADD `servers_address` VARCHAR (255);";
     $this->addQuery($query);
@@ -1885,40 +1884,39 @@ class CSetupsystem extends CSetup {
                 ADD `server_address` VARCHAR (255);";
     $this->addQuery($query);
 
-//    $this->makeRevision("1.1.70");
-//    $query = "CREATE TABLE `access_log_archive`
-//              LIKE `access_log`;";
-//    $this->addQuery($query);
-//
-//    $query = "CREATE TABLE `datasource_log_archive`
-//              LIKE `datasource_log`;";
-//    $this->addQuery($query);
-//
-//    $this->makeRevision("1.1.71");
-//    $query = "INSERT INTO `access_log_archive` (
-//                SELECT *
-//                FROM `access_log`
-//                WHERE `aggregate` > '10'
-//              );";
-//    $this->addQuery($query);
-//
-//    $query = "INSERT INTO `datasource_log_archive` (
-//                SELECT *
-//                FROM `datasource_log`
-//                WHERE `aggregate` > '10'
-//              );";
-//    $this->addQuery($query);
-//
-//    $this->makeRevision("1.1.72");
-//    $query = "DELETE FROM `access_log`
-//              WHERE `aggregate` > '10';";
-//    $this->addQuery($query);
-//
-//    $query = "DELETE FROM `datasource_log`
-//              WHERE `aggregate` > '10';";
-//    $this->addQuery($query);
-//
-//    $this->mod_version = "1.1.73";
-    $this->mod_version = "1.1.71";
+    $this->makeRevision("1.1.71");
+    $query = "CREATE TABLE `access_log_archive`
+              LIKE `access_log`;";
+    $this->addQuery($query);
+
+    $query = "CREATE TABLE `datasource_log_archive`
+              LIKE `datasource_log`;";
+    $this->addQuery($query);
+
+    $this->makeRevision("1.1.72");
+    $query = "INSERT INTO `access_log_archive` (
+                SELECT *
+                FROM `access_log`
+                WHERE `aggregate` > '10'
+              );";
+    $this->addQuery($query);
+
+    $query = "INSERT INTO `datasource_log_archive` (
+                SELECT *
+                FROM `datasource_log`
+                WHERE `aggregate` > '10'
+              );";
+    $this->addQuery($query);
+
+    $this->makeRevision("1.1.73");
+    $query = "DELETE FROM `access_log`
+              WHERE `aggregate` > '10';";
+    $this->addQuery($query);
+
+    $query = "DELETE FROM `datasource_log`
+              WHERE `aggregate` > '10';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.74";
   }
 }

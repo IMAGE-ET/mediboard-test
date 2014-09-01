@@ -23,7 +23,7 @@
 
   <table class="form">
     <tr>
-      <th class="narrow">{{tr}}Period{{/tr}}</th>
+      <th class="narrow">{{tr}}Interval{{/tr}}</th>
       <td>
         <input type="hidden" class="dateTime" id="_min_date" name="_min_date" value="{{$min_date}}" onchange="$V(this.form.elements.start, '0');" />
         <b>&raquo;</b>
