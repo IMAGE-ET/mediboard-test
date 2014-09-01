@@ -2250,10 +2250,12 @@ class CSejour extends CFacturable implements IPatientRelated {
   /**
    * Charge les consultations, en particulier l'ATU dans le cas UPATOU
    *
+   * @param string $order order of the list
+   *
    * @return CConsultation[]
    */
-  function loadRefsConsultations() {
-    $this->_ref_consultations = $this->loadBackRefs("consultations");
+  function loadRefsConsultations($order = "date DESC, heure DESC") {
+    $this->_ref_consultations = $this->loadBackRefs("consultations", $order, null, null, array("plageconsult" => "plageconsult.plageconsult_id = consultation.plageconsult_id"));
 
     $this->_ref_consult_atu = new CConsultation();
 
@@ -3108,13 +3110,13 @@ class CSejour extends CFacturable implements IPatientRelated {
   /**
    * Chargement des opérations
    *
-   * @param array $where xhere
+   * @param array  $where where
+   * @param string $order order of list
    *
    * @return COperation[]
    */
-  function loadRefsOperations($where = array()) {
+  function loadRefsOperations($where = array(), $order = "date ASC") {
     $where["sejour_id"] = "= '$this->_id'";
-    $order = "date ASC";
 
     $operations = new COperation();
     $this->_ref_operations = $operations->loadList($where, $order);
