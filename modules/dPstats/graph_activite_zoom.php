@@ -9,7 +9,7 @@
  * @version    $Revision$
  */
 
-function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = 0, $codes_ccam = '', $hors_plage) {
+function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = 0, $codes_ccam = '', $type_hospi, $hors_plage) {
   if (!$date) {
     $date = CMbDT::transform("+0 DAY", CMbDT::date(), "%m/%Y");
   }
@@ -53,11 +53,12 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
       'data' => array(),
       'label' => utf8_encode($salle->nom)
     );
-    
+
     $query = "SELECT COUNT(operations.operation_id) AS total,
       DATE_FORMAT(operations.date, '%d') AS jour,
       sallesbloc.nom AS nom
       FROM operations
+      INNER JOIN sejour ON operations.sejour_id = sejour.sejour_id
       INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
       INNER JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
       INNER JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
@@ -79,7 +80,11 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
     if ($codes_ccam) {
       $query .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
     }
-    
+
+    if ($type_hospi) {
+      $query .= "\nAND sejour.type = '$type_hospi'";
+    }
+
     $query .= "\nGROUP BY jour ORDER BY jour";
 
     $result = $salle->_spec->ds->loadlist($query);
@@ -89,10 +94,11 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
         DATE_FORMAT(operations.date, '%d') AS jour,
         sallesbloc.nom AS nom
       FROM operations
+      INNER JOIN sejour ON operations.sejour_id = sejour.sejour_id
       INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
       INNER JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
       WHERE operations.date BETWEEN '$debut' AND '$fin'
-      AND operations.plageop_id IS NOT NULL
+      AND operations.plageop_id IS NULL
       AND operations.annulee = '0'
       AND sallesbloc.salle_id = '$salle->_id'";
         
@@ -108,7 +114,11 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
       if ($codes_ccam) {
         $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
       }
-      
+
+      if ($type_hospi) {
+        $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
+      }
+
       $query_hors_plage .= "\nGROUP BY jour ORDER BY jour";
       
       $result_hors_plage = $salle->_spec->ds->loadlist($query_hors_plage);
@@ -161,6 +171,9 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
   }
   if ($codes_ccam) {
     $subtitle .= " - CCAM : $codes_ccam";
+  }
+  if ($type_hospi) {
+    $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_hospi");
   }
 
   $options = CFlotrGraph::merge("bars", array(
