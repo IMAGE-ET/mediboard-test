@@ -1625,7 +1625,7 @@ class CPatient extends CPerson {
         $this->_ref_grossesses[$_sejour->grossesse_id]->_ref_sejours[$_sejour->_id] = $_sejour;
       }
 
-      $_sejour->loadRefsOperations();
+      $_sejour->loadRefsOperations(array(), "date DESC");
       foreach ($_sejour->_ref_operations as $_operation) {
         $_operation->canDo();
 
