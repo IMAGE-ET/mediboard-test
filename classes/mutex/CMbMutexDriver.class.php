@@ -33,7 +33,7 @@ abstract class CMbMutexDriver implements IMbMutex {
    * @see parent::acquire()
    */
   function acquire($duration = self::DEFAULT_TIMEOUT, $poll_delay = self::DEFAULT_POLL_DELAY) {
-    $start  = $this->getTime();
+    $start = $this->getTime();
 
     do {
       $this->expire = $this->timeout($duration);
@@ -48,22 +48,29 @@ abstract class CMbMutexDriver implements IMbMutex {
         break;
       }
 
-      // Don't wait if no duration, but return false to indicate that the lock could not be aquired
-      if ($duration == 0) {
-        return false;
-      }
-
       // Sleep a little
       usleep($poll_delay);
 
     } while (true);
 
-    // If it's a "lock" not a mutex
-    if ($duration == 0) {
+    return $this->getTime() - $start;
+  }
+
+  /**
+   * @see parent::lock()
+   */
+  function lock($duration = self::DEFAULT_TIMEOUT) {
+    // Set lock if not already here and acquire it
+    if ($this->setLock($duration)) {
       return true;
     }
 
-    return $this->getTime() - $start;
+    // Recover an abandonned lock and acquire it
+    if ($this->recover($duration)) {
+      return true;
+    }
+
+    return false;
   }
 
     /**

@@ -1,11 +1,13 @@
-<?php /* $Id: form_tester.php 6402 2009-06-08 07:53:07Z phenxdesign $ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPdeveloppement
-* @version $Revision: 6402 $
-* @author Fabien Ménager
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage developpement
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
@@ -37,5 +39,3 @@ $smarty->assign("types", $types);
 $smarty->assign("reports", $reports);
 $smarty->assign("stats", $stats);
 $smarty->display("sniff_code.tpl");
-
-?>

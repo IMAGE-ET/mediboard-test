@@ -1,11 +1,13 @@
-<?php /* $Id: aidesaisie.class.php 8576 2010-04-15 12:35:57Z phenxdesign $ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision: 8576 $
-* @author SARL OpenXtrem
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage developpement
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 @include "PHP/CodeSniffer.php";
 
@@ -21,8 +23,7 @@ if (!class_exists("PHP_CodeSniffer", false)) {
  * File tree and report caching
  */
 class CMbCodeSniffer extends PHP_CodeSniffer {
-  
-  var $reports = array();
+  public $reports = array();
   
   /**
    * Adapt CLI behaviour to framework
@@ -56,13 +57,15 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
    * 
    * @param  string $file
    * @see    parent::process()
+   * 
    * @return bool
    */
   function process($file) {
     $root_dir = CAppUI::conf("root_dir");
     $file     = "$root_dir/$file";
     $standard = $this->getStandardDir();
-    return parent::process($file, $standard);
+    
+    parent::process($file, $standard);
   }
   
   /**
@@ -108,6 +111,7 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
    * 
    * @param string $file       
    * @param string $reportType One of full xml checkstyle csv emacs source summary svnblame gitblame
+   *                           
    * @return string
    */
   function makeReportPath($file, $reportType = "xml") {

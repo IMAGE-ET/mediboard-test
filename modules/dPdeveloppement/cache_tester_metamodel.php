@@ -1,14 +1,15 @@
-<?php /* $Id: cache_tester.php 22953 2014-04-28 05:19:23Z mytto $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPdeveloppement
- * @version $Revision: 22953 $
- * @author Thomas Despoix
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage developpement
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
-
 
 $chrono = new Chronometer();
 $chrono->start();

@@ -29,9 +29,18 @@ interface IMbMutex {
    * @param float $duration   The max time in seconds to acquire the semaphore (max 10s)
    * @param int   $poll_delay Poll delay in microseconds
    *
-   * @return float|bool Time spent waiting, in seconds, or true/false of $duration is 0
+   * @return float Time spent waiting, in seconds
    */
   function acquire($duration = self::DEFAULT_TIMEOUT, $poll_delay = self::DEFAULT_POLL_DELAY);
+
+  /**
+   * Puts the mutex in a "lock" mode : doesn't wait if the mutex is aquired, waits otherwise
+   *
+   * @param float $duration The lock TTL
+   *
+   * @return bool true if the lock is free, false otherwise
+   */
+  function lock($duration = self::DEFAULT_TIMEOUT);
 
   /**
    * Releases the lock

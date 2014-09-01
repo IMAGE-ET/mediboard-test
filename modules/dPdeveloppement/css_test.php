@@ -1,11 +1,13 @@
-<?php /* $Id: form_tester.php 6402 2009-06-08 07:53:07Z phenxdesign $ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPdeveloppement
-* @version $Revision: 6402 $
-* @author Fabien Ménager
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage developpement
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
@@ -20,7 +22,7 @@ foreach ($files as $_file) {
   $forms_css = file_get_contents($_file);
 
   $matches = array();
-  preg_match_all("/a\.button\.([^\:]+)\:before/", $forms_css, $matches);
+  preg_match_all('/a\.button\.([^\:]+)\:before/', $forms_css, $matches);
 
   $button_classes = array_merge($button_classes, $matches[1]);
 }

@@ -1,12 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPdeveloppement
-* @version $Revision$
-* @author Sébastien Fillonneau
-* @author Fabien Ménager
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage developpement
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
@@ -58,6 +59,7 @@ function array_duplicates($array, $field) {
 
 // Pour toutes les classes selectionnées
 foreach ($selected_classes as $_class) {
+  /** @var CStoredObject $object */
   $object = new $_class;
 
   if (!$object->_spec->table) {

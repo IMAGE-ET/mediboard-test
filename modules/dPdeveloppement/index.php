@@ -1,13 +1,15 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPdeveloppement
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage developpement
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
-$module = CModule::getInstalled(basename(dirname(__FILE__)));
+$module = CModule::getInstalled(basename(__DIR__));
 
 $module->registerTab("view_logs"              , TAB_READ);
 $module->registerTab("view_metrique"          , TAB_READ);

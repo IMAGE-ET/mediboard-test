@@ -1,10 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPdeveloppement
- * @version $Revision$
- * @author Thomas Despoix
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage developpement
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -21,24 +23,24 @@ CAppUI::stepAjax("test_mutex-try", UI_MSG_OK, $action);
 $mutex = new CMbMutex("test");
 
 switch ($action) {
-  case "stall" :
+  case "stall":
     CAppUI::stepAjax("test_mutex-acquired", UI_MSG_OK, $mutex->acquire($duration));
     sleep(5);
     $mutex->release();
     break;
 
-  case "die" : 
+  case "die": 
     CAppUI::stepAjax("test_mutex-acquired", UI_MSG_OK, $mutex->acquire($duration));
     sleep(5);
     CApp::rip();
     break;
 
-  case "run" :
+  case "run":
     CAppUI::stepAjax("test_mutex-acquired", UI_MSG_OK, $mutex->acquire($duration));
     $mutex->release();
     break;
 
-  case "dummy" :
+  case "dummy":
     break;
   
   default:
