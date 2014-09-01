@@ -69,7 +69,7 @@ elseif (CAppUI::conf('dPpatients CPatient function_distinct') && !$is_admin) {
 
 if ($medecin_nom) {
   $medecin_nom = stripslashes($medecin_nom);
-  $where["nom"] = $ds->prepareLike("%$medecin_nom%");
+  $where["nom"] = $ds->prepareLike("$medecin_nom%");
 }
 
 if ($medecin_prenom) {
