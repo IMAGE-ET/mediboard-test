@@ -775,6 +775,7 @@ $locales['CUniteFonctionnelle.type_sejour.psy'] = 'Psychiatrie';
 $locales['CUniteFonctionnelle.type_sejour.seances'] = 'Séance(s)';
 $locales['CUniteFonctionnelle.type_sejour.ssr'] = 'SSR';
 $locales['CUniteFonctionnelle.type_sejour.urg'] = 'Urgences';
+$locales['Service-msg-%d_use_this_service'] = '%d patients présents aujourd\'hui ou plus tard dans ce service';
 $locales['config-color_type_hospi'] = 'Couleurs des plages';
 $locales['config-color_type_hospi_by_type'] = 'Couleur des plages d\'hospitalisation par type';
 $locales['config-dPhospi'] = 'Hospitalisation';

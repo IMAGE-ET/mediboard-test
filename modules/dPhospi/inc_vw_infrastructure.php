@@ -11,6 +11,8 @@
 
 CCanDo::checkAdmin();
 
+$now            = CMbDT::dateTime();
+
 $use_service    = CValue::get("service_id");
 $service_id     = CValue::getOrSession("service_id");
 $use_chambre    = CValue::get("chambre_id");
@@ -34,6 +36,17 @@ if ($use_service != null) {
   $service->group_id = $group->_id;
   $service->load($service_id);
   $service->loadRefsNotes();
+
+  // get nb of patients using this service
+  if ($service->_id) {
+    $sejour = new CSejour();
+    $where = array();
+    $where["service_id"] = " = '$service->_id'";
+    $where["sortie_prevue"] = "> '$now'";
+    $where["annule"] = "!= '1'";
+    $nb = $sejour->countList($where);
+    CAppUI::stepAjax("Service-msg-%d_use_this_service", $nb ? UI_MSG_WARNING : UI_MSG_OK, $nb);
+  }
 }
 
 if ($use_chambre != null) {
