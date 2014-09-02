@@ -34,6 +34,7 @@
         position: "ne",
         relative: true,
         sensibility: 2,
+        trackDecimals: 3,
         trackFormatter: function (obj) {
           return "DSN : " + obj.series.label + "<br />Valeur : " + obj.y + "<br />Date : " + g.datetime_by_index[obj.index];
         }

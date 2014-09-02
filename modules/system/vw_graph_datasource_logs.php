@@ -205,9 +205,29 @@ foreach ($logs as $log) {
   }
 }
 
+
 $graphs = array();
 foreach ($graphs_by_module as $_graph) {
   $graphs[] = $_graph;
+}
+
+// Ajustements cosmétiques
+foreach ($graphs as &$_graph) {
+  foreach ($_graph["series"] as &$_series) {
+    if (isset($_series["lines"])) {
+      $_series["points"] = array(
+        "show" => true,
+        "radius" => 2,
+        "lineWidth" => 1,
+      );
+    }
+
+    foreach ($_series["data"] as  &$_data) {
+      if ($_data[1] === 0) {
+        $_data[1] = null;
+      }
+    }
+  }
 }
 
 $smarty = new CSmartyDP();
