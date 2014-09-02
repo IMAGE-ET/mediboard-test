@@ -78,8 +78,9 @@
         {{foreach from=$_activite->phases item=_phase}}
           {{assign var="acte" value=$_phase->_connected_acte}}
           {{assign var="view" value=$acte->_id|default:$acte->_view}}
+          {{assign var=unique_id_acte value=""|uniqid}}
           {{assign var="key" value="$_key$view"}}
-          <form name="formActe-{{$view}}" action="?m={{$module}}" method="post" onsubmit="return checkForm(this)">
+          <form name="formActe-{{$view}}{{$unique_id_acte}}" action="?m={{$module}}" method="post" onsubmit="return checkForm(this)">
           <input type="hidden" name="m" value="dPsalleOp" />
           <input type="hidden" name="dosql" value="do_acteccam_aed" />
           <input type="hidden" name="del" value="0" />
@@ -178,7 +179,7 @@
                     {{mb_include module=system template=inc_object_idsante400 object=$acte}}
                     {{mb_include module=system template=inc_object_history object=$acte}}
                   {{/if}}
-                  {{mb_field object=$acte field=execution form="formActe-$view" register=true}}
+                  {{mb_field object=$acte field=execution form="formActe-$view$unique_id_acte" register=true}}
                 </td>
               </tr>
       
@@ -311,7 +312,7 @@
               {{if $confCCAM.commentaire}}
               <tr class="{{$view}} commentaire" {{if !$acte->commentaire}}style="display: none;"{{/if}}>
                 <th>{{mb_label object=$acte field=commentaire}}</th>
-                <td class="text" colspan="10">{{mb_field object=$acte field=commentaire class="autocomplete" form="formActe-$view"}}</td>
+                <td class="text" colspan="10">{{mb_field object=$acte field=commentaire class="autocomplete" form="formActe-$view$unique_id_acte"}}</td>
               </tr>
               {{/if}}
       
@@ -345,7 +346,7 @@
                 {{/if}}
                 {{if !$conf.dPsalleOp.CActeCCAM.codage_strict || ($acte->code_association != $acte->_guess_association)}}
                 <select name="{{$view}}"
-                  onchange="setAssociation(this.value, document.forms['formActe-{{$view}}'], {{$subject->_id}}, {{$subject->_praticien_id}})">
+                  onchange="setAssociation(this.value, document.forms['formActe-{{$view}}{{$unique_id_acte}}'], {{$subject->_id}}, {{$subject->_praticien_id}})">
                   <option value="" {{if !$acte->code_association}}selected="selected"{{/if}}>Aucun (100%)</option>
                   <option value="1" {{if $acte->code_association == 1}}selected="selected"{{/if}}>1 (100%)</option>
                   <option value="2" {{if $acte->code_association == 2}}selected="selected"{{/if}}>2 (50%)</option>
