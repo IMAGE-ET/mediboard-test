@@ -1096,7 +1096,9 @@ class CCodable extends CMbObject {
               }
             }
             /* Vérification et précodage des modificateurs */
-            CCodageCCAM::precodeModifiers($phase->_modificateurs, $phase->_connected_acte, $this);
+            if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+              CCodageCCAM::precodeModifiers($phase->_modificateurs, $possible_acte, $this);
+            }
             $possible_acte->getMontantModificateurs($phase->_modificateurs);
           }
         }
