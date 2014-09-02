@@ -93,9 +93,13 @@ class CMbMutex implements IMbMutex {
    * @see parent::lock()
    */
   function lock($duration = self::DEFAULT_TIMEOUT) {
-    self::$open_mutexes[$this->key] = $this;
+    $lock_aquired = $this->driver->lock($duration);
 
-    return $this->driver->lock($duration);
+    if ($lock_aquired) {
+      self::$open_mutexes[$this->key] = $this;
+    }
+
+    return $lock_aquired;
   }
 
   /**
