@@ -60,6 +60,8 @@ abstract class CMbMutexDriver implements IMbMutex {
    * @see parent::lock()
    */
   function lock($duration = self::DEFAULT_TIMEOUT) {
+    $this->expire = $this->timeout($duration);
+    
     // Set lock if not already here and acquire it
     if ($this->setLock($duration)) {
       return true;

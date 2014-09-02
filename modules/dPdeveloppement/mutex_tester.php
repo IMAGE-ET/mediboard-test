@@ -15,6 +15,7 @@ $actions = array(
   "stall",
   "die",
   "run",
+  "lock",
   "dummy",
 );
 

@@ -40,7 +40,22 @@ switch ($action) {
     $mutex->release();
     break;
 
+  case "lock":
+    $locked_aquired = $mutex->lock($duration);
+    if ($locked_aquired) {
+      CAppUI::stepAjax("test_mutex-lock_aquired", UI_MSG_OK);
+
+      sleep(5);
+
+      $mutex->release();
+    }
+    else {
+      CAppUI::stepAjax("test_mutex-already_locked", UI_MSG_WARNING);
+    }
+    break;
+
   case "dummy":
+    // Nothing to do
     break;
   
   default:
