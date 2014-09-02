@@ -39,10 +39,10 @@
     <th>Date min.</th>
     <th>Date max.</th>
 
-    <th>{{tr}}Data{{/tr}} (MB)</th>
-    <th>{{tr}}Indexes{{/tr}} (MB)</th>
-    <th>{{tr}}Free{{/tr}} (MB)</th>
-    <th>{{tr}}Total{{/tr}} (MB)</th>
+    <th>{{tr}}Data{{/tr}}</th>
+    <th>{{tr}}Indexes{{/tr}}</th>
+    <th>{{tr}}Free{{/tr}}</th>
+    <th>{{tr}}Total{{/tr}}</th>
 
     <th>{{tr}}Action{{/tr}}</th>
     <th></th>
@@ -56,15 +56,15 @@
       {{/if}}
 
         <td style="text-align: right;">{{$_aggregate.aggregate}}</td>
-        <td style="text-align: right;">{{$_aggregate.records|number_format:0:'.':' '}}</td>
-        <td style="text-align: right;">{{$_aggregate.date_min|date_format:"%d-%m-%Y"}}</td>
-        <td style="text-align: right;">{{$_aggregate.date_max|date_format:"%d-%m-%Y"}}</td>
+        <td style="text-align: right;">{{$_aggregate.records|integer}}</td>
+        <td style="text-align: right;">{{$_aggregate.date_min|date_format:$conf.date}}</td>
+        <td style="text-align: right;">{{$_aggregate.date_max|date_format:$conf.date}}</td>
 
         {{if $smarty.foreach._loop.first}}
-          <td rowspan="{{$_stats.data|@count}}" style="text-align: right;">{{$_stats.meta.data_mb|number_format:2:'.':' '}}</td>
-          <td rowspan="{{$_stats.data|@count}}" style="text-align: right;">{{$_stats.meta.index_mb|number_format:2:'.':' '}}</td>
-          <td rowspan="{{$_stats.data|@count}}" style="text-align: right;">{{$_stats.meta.data_free|number_format:2:'.':' '}}</td>
-          <td rowspan="{{$_stats.data|@count}}" style="text-align: right;">{{$_stats.meta.total|number_format:2:'.':' '}}</td>
+          <td rowspan="{{$_stats.data|@count}}" style="text-align: right;">{{$_stats.meta.data_length|decabinary}}</td>
+          <td rowspan="{{$_stats.data|@count}}" style="text-align: right;">{{$_stats.meta.index_length|decabinary}}</td>
+          <td rowspan="{{$_stats.data|@count}}" style="text-align: right;">{{$_stats.meta.data_free|decabinary}}</td>
+          <td rowspan="{{$_stats.data|@count}}" style="text-align: right;">{{$_stats.meta.total|decabinary}}</td>
 
           <td rowspan="{{$_stats.data|@count}}" style="text-align: center;">
             <button class="search" type="button" onclick="aggregate(true, '{{$_table}}');">{{tr}}DryRun{{/tr}}</button>

@@ -40,15 +40,15 @@ foreach ($tables as $_table) {
   );
 
   $query = "SELECT
-              ROUND((data_length / 1024 / 1024), 2)  AS 'data_mb',
-              ROUND((index_length / 1024 / 1024), 2) AS 'index_mb',
-              ROUND((data_free / 1024 / 1024), 2)    AS 'data_free'
+              data_length,
+              index_length,
+              data_free
             FROM information_schema.TABLES
             WHERE `table_schema` = '$db'
               AND `table_name` = '$_table';";
 
   $meta                   = $ds->loadHash($query);
-  $meta["total"]          = round($meta["data_mb"] + $meta["index_mb"], 2);
+  $meta["total"]          = round($meta["data_length"] + $meta["index_length"], 2);
 
   $stats[$_table]["meta"] = $meta;
 }
