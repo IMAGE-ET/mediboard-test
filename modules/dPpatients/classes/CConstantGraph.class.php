@@ -717,7 +717,7 @@ class CConstantGraph {
       $max = $max_value + $config['max'];
     }
     else {
-      $max = $config['max'];
+      $max = max($config['max'], $max_value * 1.05);
     }
 
     return $max;
