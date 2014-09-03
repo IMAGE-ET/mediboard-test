@@ -123,24 +123,10 @@ class CDatedCodeCCAM {
     if (CAppUI::conf("ccam CCodeCCAM use_new_ccam_architecture") == "COldCodeCCAM") {
       return COldCodeCCAM::get($code);
     }
-    $code_date = "cdatedcodeccam-".$code."-".($date == null ? CMbDT::date() : $date);
 
-    if (isset(self::$cache[$code_date])) {
-      return self::$cache[$code_date];
-    }
-    if (CAppUI::conf("ccam CDatedCodeCCAM use_cache")) {
-      if ($code_ccam = SHM::get($code_date)) {
-        self::$cache[$code_date] = $code_ccam;
-        return $code_ccam;
-      }
-    }
     $code_ccam = new CDatedCodeCCAM($code, $date);
     $code_ccam->load();
-    if (CAppUI::conf("ccam CDatedCodeCCAM use_cache")) {
-      SHM::put($code_date, $code_ccam, true);
-    }
 
-    self::$cache[$code_date] = $code_ccam;
     return $code_ccam;
   }
 
