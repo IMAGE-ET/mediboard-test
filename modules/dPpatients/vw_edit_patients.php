@@ -54,7 +54,7 @@ if ($useVitale && !CAppUI::pref('VitaleVision') && CModule::getActive("fse")) {
   $patVitale = new CPatient();
   $cv = CFseFactory::createCV();
   if ($cv) {
-    $cv->getPropertiesFromVitale($patVitale, false);// Si false, pas de nom/prenom/adresse/ddn/sexe à la création
+    $cv->getPropertiesFromVitale($patVitale, CValue::sessionAbs('administrative_data'));
     $patVitale->nullifyEmptyFields();
     $patient->extendsWith($patVitale);
     $patient->updateFormFields();
