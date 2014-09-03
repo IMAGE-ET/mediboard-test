@@ -273,6 +273,9 @@ class CExchangeSource extends CMbObject {
   function getPassword($pwd = null, $iv_field = "iv") {
     if (is_null($pwd)) {
       $pwd = $this->password;
+      if (!$this->password) {
+        return "";
+      }
     }
 
     try {
