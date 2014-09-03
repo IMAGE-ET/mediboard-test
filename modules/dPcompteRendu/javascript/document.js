@@ -71,7 +71,7 @@ Document = {
       url.addParam("force_fast_edit", 1);
     }
     url.addParam("just_save"   , just_save ? 1 : 0);
-    url.requestModal(750, 400, {afterClose: function() {
+    url.requestModal(750, 400, {onClose: function() {
       // En mode non fusion et édition rapide de pack
       // A la fermeture de la modale, lancement du modèle suivant
       if (Document.modeles_ids && Document.modeles_ids.length) {
