@@ -40,10 +40,8 @@ var Menu = {
   {{if !$offline}}
     <br />
 
-    {{if $applicationVersion.releaseCode}}
-      {{mb_include style=mediboard template=svnstatus}}
-      <br />
-    {{/if}}
+    {{mb_include style=mediboard template=svnstatus}}
+    <br />
 
     {{assign var=style value="width: 130px;"}}
     {{mb_include style=mediboard template=change_group}}
