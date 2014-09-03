@@ -17,11 +17,12 @@ $objet = CMbObject::loadFromGuid($object_guid);
 $objet->loadRefsActes();
 foreach ($objet->_ref_actes_ccam as &$acte) {
   $acte->loadRefsFwd();
-  if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
-    $codage_ccam = CCodageCCAM::get($objet, $acte->executant_id);
-    $codage_ccam->guessAssociation($acte);
-  }
-  else {
+}
+if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+  $objet->guessActesAssociation();
+}
+else {
+  foreach ($objet->_ref_actes_ccam as &$acte) {
     $acte->guessAssociation();
   }
 }
