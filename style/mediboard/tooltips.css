@@ -14,19 +14,6 @@ div.tooltip {
   border: 2px solid #999;
   padding: 2px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  
-  /* IE specific shadow */
-  /* Commented out because of a possible bug with IE9 (2012-11-15)
-  /*zoom: 1;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=135, Strength=6)";*/
-  
-  /* Fun with box-shadows */
-  /*box-shadow:
-  0 0 20px black,
-  20px 15px 30px yellow,
-  -20px 15px 30px lime,
-  -20px -15px 30px blue,
-  20px -15px 30px red;*/
 }
 
 /** Postit **/

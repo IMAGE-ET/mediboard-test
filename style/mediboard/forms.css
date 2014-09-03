@@ -117,7 +117,6 @@ textarea {
 
 input[type=checkbox].disabled {
   opacity: 0.7;
-  -ms-filter: "alpha(opacity=70)";
 }
 
 /** <Two rules required> !! Don't merge them
@@ -334,7 +333,6 @@ button[disabled="disabled"],
 input[disabled="disabled"] { /* For IE */
   cursor: not-allowed;
   opacity: 0.5;
-  -ms-filter: "alpha(opacity=50)";
 }
 
 button[disabled]:hover,
@@ -1248,7 +1246,6 @@ span.highlight {
 .ajax-upload input[type="file"] {
   position: relative;
   text-align: right;
-  -ms-filter: "alpha(opacity=0)";
   opacity: 0;
   z-index: 20;
   right: 0;

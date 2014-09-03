@@ -7,14 +7,7 @@
  * @returns {Array}
  */
 $A = function(list) {
-  // Array.prototype.slice.call(list); Doesn't work on IE8 ...
-
-  var array = [];
-  for (var i = 0, l = list.length; i < l; i++) {
-    array.push(list[i]);
-  }
-
-  return array;
+  return Array.prototype.slice.call(list);
 };
 
 /**

@@ -76,9 +76,6 @@ CJSLoader::$files = array(
 
   // Flotr
   "lib/flotr/flotr.js",
-  "lib/flotr/lib/excanvas.js",
-  "lib/flotr/lib/base64.js",
-  "lib/flotr/lib/canvas2image.js",
   "lib/flotr/lib/canvastext.js",
   
   // JS Expression eval

@@ -1,12 +1,6 @@
 {{if @$conf.system_date}}
 <script>
   (function(){
-    // Ne fonctionne pas sous IE8
-    if (document.documentMode == 8) {
-      alert("La fonctionnalité 'Date système' ne fonctionne que sur des navigateurs récents, vous utilisez Internet Explorer 8, veuillez le mettre à jour.");
-      return;
-    }
-
     var bind = Function.prototype.bind;
     var unbind = bind.bind(bind);
 

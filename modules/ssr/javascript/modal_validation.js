@@ -92,10 +92,7 @@ ModalValidation = {
     var url = new Url("ssr", "ajax_update_modal_evenements");
     url.addParam("token_field_evts", $V(form.event_ids));
     url.requestUpdate("modal_evenements", function() {
-      // Positioning takes a lot of time for big modals with IE8-
-      if (!Prototype.Browser.IE || document.documentMode > 8) {
-        ModalValidation.window.position();
-      }
+      ModalValidation.window.position();
     });
   },
 

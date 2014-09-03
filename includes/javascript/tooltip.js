@@ -179,7 +179,6 @@ var ObjectTooltip = Class.create({
       
       url.requestUpdate(eTooltip, {
         waitingText: $T("Loading tooltip"),
-        coverIE: false,
         onComplete: this.reposition.bind(this)
       });
     }

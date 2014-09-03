@@ -267,34 +267,17 @@ if (Prototype.Browser.IE && document.documentMode && document.documentMode == 9)
 }
 
 // FIX in Scriptaculous
-// Précompilation plutot qu'un test dans la fonction : plus rapide
-if (!Prototype.Browser.IE || document.documentMode > 8) {
-  Droppables.isAffected = function(point, element, drop) {
-    Position.prepare();
-    return (
-      (drop.element!=element) &&
-      ((!drop._containers) ||
-        this.isContained(element, drop)) &&
-      ((!drop.accept) ||
-        (Element.classNames(element).detect(
-          function(v) { return drop.accept.include(v) } ) )) &&
-      Position.withinIncludingScrolloffsets(drop.element, point[0], point[1]) );
-  };
-}
-else {
-  Droppables.isAffected = function(point, element, drop) {
-    Position.prepare();
-    return (
-      (drop.element!=element) &&
-       drop.element.visible() && // Cette ligne a été ajoutée. Dans le plan de soins, une cellule cachée a les dimensions du plan de soins entier.
-      ((!drop._containers) ||
-        this.isContained(element, drop)) &&
-      ((!drop.accept) ||
-        (Element.classNames(element).detect(
-          function(v) { return drop.accept.include(v) } ) )) &&
-      Position.withinIncludingScrolloffsets(drop.element, point[0], point[1]) );
-  };
-}
+Droppables.isAffected = function(point, element, drop) {
+  Position.prepare();
+  return (
+    (drop.element!=element) &&
+    ((!drop._containers) ||
+      this.isContained(element, drop)) &&
+    ((!drop.accept) ||
+      (Element.classNames(element).detect(
+        function(v) { return drop.accept.include(v) } ) )) &&
+    Position.withinIncludingScrolloffsets(drop.element, point[0], point[1]) ); // differs from original code
+};
 
 Class.extend(Ajax.Request, {
   abort: function() {

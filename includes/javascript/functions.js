@@ -13,16 +13,6 @@
  */
 document.observe('dom:loaded', function(){
   try {
-    // Fix for IE9/IE10 in IE8 mode
-    try {
-      if (Prototype.Browser.IE && document.documentMode == 8) {
-        $$("html")[0].
-          removeClassName("ua-msie-9").
-          removeClassName("ua-msie-10").
-          addClassName("ua-msie-8");
-      }
-    } catch (e) {}
-
     if (App.sessionLocked) {
       Session.lockScreen();
     }
@@ -134,7 +124,7 @@ var UAInfo = {
       UAInfo.append("Utilisateur", "Non connecté");
     }
     
-    if (Prototype.Browser.IE) {
+    if (!navigator.plugins || navigator.plugins.length == 0) {
       UAInfo.append("Plugins", "Information non disponible");
     }
     else {
@@ -325,12 +315,6 @@ var WaitingMessage = {
    * @param {HTMLElement} element The element to cover
    */
   cover: function(element) {
-    // don't cover hidden elements in IE8
-    //if (Prototype.Browser.IE && document.documentMode < 9 && /Trident\/4.0/.test(navigator.userAgent)/* && (element.style && element.style.display === "none")*/) {
-    //  element.update();
-    //  return;
-    //}
-
     element = $(element);
     
     var coverContainer = new Element("div", {style: "border:none;background:none;padding:0;margin:0;position:relative;"}).addClassName("cover-container").hide(),
@@ -894,9 +878,7 @@ var Note = {
       element.addClassName("initialized");
       var url = new Url("system", "httpreq_get_notes_image");
       url.addParam("object_guid", element.className.split(" ")[1]);
-      url.requestUpdate(element, {
-        coverIE: false
-      });
+      url.requestUpdate(element);
     });
   }
 };
@@ -1424,10 +1406,8 @@ var Modal = {
 
       content.insert({before: titleElement});
 
-      if (!Prototype.Browser.IE || document.documentMode >= 9) {
-        // Display small shadows if the user has to scroll
-        content.observe("scroll", Modal.updateScrollStatus.curry(content, wrapper, offset));
-      }
+      // Display small shadows if the user has to scroll
+      content.observe("scroll", Modal.updateScrollStatus.curry(content, wrapper, offset));
 
       container._alreadyWrapped = true;
     }
@@ -1465,9 +1445,7 @@ var Modal = {
 
         this.position();
 
-        if (!Prototype.Browser.IE || document.documentMode >= 9) {
-          Modal.updateScrollStatus(content, container, offset);
-        }
+        Modal.updateScrollStatus(content, container, offset);
       }).bindAsEventListener(modal));
     }
 
@@ -1530,13 +1508,6 @@ var Modal = {
     if (dimensions.height) {
       if (/^-/.test(dimensions.height)) {
         dimensions.height = viewportDimensions.height + parseInt(dimensions.height, 10) * 2;
-      }
-
-      // IE8 doesn't handle max-height well
-      if (Prototype.Browser.IE && document.documentMode == 8) {
-        if (!/%/.test(dimensions.height)) {
-          dimensions.height = Math.min(parseInt(dimensions.height, 10), viewportDimensions.height - 5);
-        }
       }
 
       newDimensions.height = String.getCSSLength(dimensions.height);

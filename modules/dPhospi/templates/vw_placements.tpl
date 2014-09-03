@@ -128,8 +128,7 @@
     after_refresh = after_refresh || Prototype.emptyFunction;
     var url = new Url("hospi", "ajax_vw_non_places");
     url.requestUpdate("list_affectations", {
-      onComplete: after_refresh,
-      coverIE: false
+      onComplete: after_refresh
     });
   }
  
@@ -373,8 +372,7 @@
       Placement.scrollAffectations = target.scrollTop;
 
       return onSubmitFormAjax(getForm('filterMouv'), {
-        onComplete: after_refresh,
-        coverIE: false
+        onComplete: after_refresh
       }, target);
     }
   }

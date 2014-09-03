@@ -1095,7 +1095,6 @@ var Url = Class.create({
       asynchronous: true,
       evalScripts: true,
       getParameters: null,
-      coverIE: true,
       onComplete: Prototype.emptyFunction,
       abortPrevious: true,
       onFailure: function(){ element.update('<div class="error">Le serveur rencontre quelques problèmes.</div>');}
@@ -1148,8 +1147,7 @@ var Url = Class.create({
       }
       // Cover div
       else {
-        if (!Prototype.Browser.IE || oOptions.coverIE || document.documentMode > 8)
-          WaitingMessage.cover(element);
+        WaitingMessage.cover(element);
       }
 
       if (oOptions.waitingText) {

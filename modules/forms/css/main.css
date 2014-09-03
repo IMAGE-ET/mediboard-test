@@ -452,7 +452,6 @@ ul.ac-native-fields .col-class {
   text-overflow: ellipsis;
   overflow: hidden;
   background-color: rgba(127,127,127,0.1);
-  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#1A7F7F7F,endColorstr=#1A7F7F7F)";
 }
 
 .spec-type {

@@ -17,7 +17,7 @@ PlanningEquipement = {
       $("planning-equipement-"+equipement_id).update("");
       new Url("ssr", "ajax_planning_equipement") .
         addParam("equipement_id", equipement_id) .
-        requestUpdate("planning-equipement-"+equipement_id, {coverIE: false});
+        requestUpdate("planning-equipement-"+equipement_id);
     } );
   },
   
@@ -31,7 +31,7 @@ PlanningEquipement = {
     new Url("ssr", "ajax_planning_equipement") .
       addParam("equipement_id", this.equipement_id) .
       addParam("sejour_id", this.sejour_id) .
-      requestUpdate("planning-equipement", {coverIE: false});
+      requestUpdate("planning-equipement");
   },
   
   hide: function() {
@@ -82,8 +82,7 @@ PlanningTechnicien = {
           }
       
           }
-        }, 
-        coverIE: false
+        }
       }
     );
   },
@@ -117,7 +116,7 @@ Planification = {
     this.sejour_id = sejour_id || this.sejour_id;
     new Url("ssr", "ajax_activites_sejour") .
       addParam("sejour_id", this.sejour_id) .
-      requestUpdate("activites-sejour", {coverIE: false});
+      requestUpdate("activites-sejour");
   },
   
   refreshSejour: function(sejour_id, selectable, height, print, large) {
@@ -147,8 +146,7 @@ Planification = {
               $$('.hour-'+i)[0].hide();
             }
           }
-        }, 
-        coverIE: false
+        }
       });
   },
   
@@ -163,11 +161,11 @@ Planification = {
     if (date) {
       url.addParam("date", date);
     }
-    url.requestUpdate("week-changer", { onComplete: function(){
+    url.requestUpdate("week-changer", function(){
       if (date){
         Planification.onCompleteShowWeek();
       }
-    }, coverIE: false});
+    });
   },
   
   onCompleteShowWeek: Prototype.emptyFunction

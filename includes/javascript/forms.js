@@ -396,8 +396,6 @@ function prepareForm(oForm) {
         props.min || props.max || props.bool || props.ref || props.pct || props.num
       ), "'"+oElement.id+"' mask may conflit with other props");
     }
-
-    var observeClick = (Prototype.Browser.IE && document.documentMode == 8) && (sType === "radio" || sType === "checkbox");
     
     // Can null
     if (props.canNull && !readonly) {
@@ -405,10 +403,6 @@ function prepareForm(oForm) {
       oElement.observe("change", canNullOK)
               .observe("keyup",  canNullOK)
               .observe("ui:change", canNullOK);
-
-      if (observeClick) {
-        oElement.observe("click", canNullOK);
-      }
     }
 
     // Not null
@@ -417,10 +411,6 @@ function prepareForm(oForm) {
       oElement.observe("change", notNullOK)
               .observe("keyup",  notNullOK)
               .observe("ui:change", notNullOK);
-
-      if (observeClick) {
-        oElement.observe("click", notNullOK);
-      }
     }
     else {
       var label = Element.getLabel(oElement);
@@ -477,66 +467,6 @@ function makeReadOnly(element) {
     });
   }).defer();
 }
- 
-// In IE, width:100% makes scrollbars+cursor crazy
-// http://dev.ckeditor.com/attachment/ticket/4762/4762_2.patch
-var IEShim = {
-  // Restore all the 100% width
-  textareaPass1: function(root){
-    var elements = root.select(".textarea-container > textarea");
-    
-    // Only helped fields
-    elements = elements.filter(function(textarea){
-      return textarea.className.indexOf("helped") !== -1 && textarea.clientWidth;
-    });
-    
-    elements.each(function(textarea){
-      textarea.parentNode.style.width = "";
-      textarea.style.width = "";
-    });
-    
-    return elements;
-  },
-  
-  // Fix the width with pixels
-  textareaPass2: function(elements){
-    elements.each(function(textarea){
-      textarea._origWidth = textarea.getWidth();
-    });
-  },
-  
-  // Fix the width with pixels
-  textareaPass3: function(elements){
-    elements.each(function(textarea){
-      var width = textarea._origWidth;
-      
-      if (width < 40) return;
-      
-      textarea.parentNode.style.width = width+"px";
-      textarea.style.width = width+"px";
-    });
-  },
-  
-  // Do all this
-  fixTextareas: function(root){
-    root = $(root || document.documentElement);
-    
-    var elements = IEShim.textareaPass1(root);
-    IEShim.textareaPass2(elements);
-    IEShim.textareaPass3(elements);
-  }
-};
-
-if (Prototype.Browser.IE && document.documentMode < 9) {
-  Event.observe(window, "resize", function(){
-    IEShim.fixTextareas(); // no args !!
-  });
-  
-  IEShim.fixTextareas.defer();
-}
-else {
-  IEShim.fixTextareas = function(){};
-}
 
 /**
  * Prepare forms from a container, or all the page
@@ -570,8 +500,6 @@ function prepareForms(root) {
     root.select("button.notext:not([title])").each(function(button) {
       button.title = button.getText().strip();
     });
-    
-    IEShim.fixTextareas(root);
   } catch (e) {}
 }
 
@@ -640,7 +568,6 @@ function onSubmitFormAjax(oForm, oOptions, ioTarget) {
     method: oForm.method,
     check: checkForm,
     useFormAction: false,
-    coverIE: false,
     useDollarV: false
   }, oOptions);
   
