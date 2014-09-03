@@ -21,15 +21,16 @@ $operation->load($operation_id);
 $operation->loadRefsAnesthPerops();
 $operation->loadRefsFwd();
 $operation->loadRefsActesCCAM();
-$operation->loadAffectationsPersonnel();
-foreach ($operation->_ref_actes_ccam as $keyActe => $valueActe) {
+foreach ($operation->_ref_actes_ccam as $keyActe => $acte) {
   $acte =& $operation->_ref_actes_ccam[$keyActe];
   $acte->loadRefsFwd();
-  if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
-    $codage_ccam = CCodageCCAM::get($operation, $acte->executant_id);
-    $codage_ccam->guessAssociation($acte);
-  }
-  else {
+}
+$operation->loadAffectationsPersonnel();
+if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+    $operation->guessActesAssociation();
+}
+else {
+  foreach ($operation->_ref_actes_ccam as $acte) {
     $acte->guessAssociation();
   }
 }
