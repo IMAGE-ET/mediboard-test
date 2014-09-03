@@ -40,6 +40,11 @@ Object.merge = function(src, dest){
   return result;
 };
 
+// In order IE8 to work just a little bit ...
+if (!window.CanvasRenderingContext2D) {
+  window.CanvasRenderingContext2D = function(){};
+}
+
 /** TODO: Remove theses fixes */
 //fixes getDimensions bug which does not work with Android
 Object.extend(document.viewport,{
