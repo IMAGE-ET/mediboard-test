@@ -209,7 +209,7 @@
          Lire Vitale
         </button>
       {{elseif $modFSE && $modFSE->canRead()}}
-        {{mb_include module=fse template=inc_button_vitale action='update'}}
+        {{mb_include module=fse template=inc_button_vitale operation='update'}}
       {{/if}}
 
       {{if $patient->date_lecture_vitale}}
@@ -233,7 +233,7 @@
          Lire Vitale
         </button>
       {{elseif $modFSE && $modFSE->canRead()}}
-        {{mb_include module=fse template=inc_button_vitale action='update'}}
+        {{mb_include module=fse template=inc_button_vitale operation='update'}}
       {{/if}}
       {{tr}}Create{{/tr}}
       {{if $patient->_bind_vitale}}{{tr}}UseVitale{{/tr}}{{/if}}
