@@ -68,8 +68,8 @@
             <select name="fromdb[{{$_key}}]" style="width: 20em;" onchange="displayListItems(this, '{{$_key}}')">
               {{foreach from=$_list.similar item=_similar}}
                 <option value="{{$_similar->_guid}}">{{$_similar}}</option>
-                <option value="__create__"> &ndash; Créer (renommé si déjà présent) &ndash; </option>
               {{/foreach}}
+              <option value="__create__"> &ndash; Créer (renommé si déjà présent) &ndash; </option>
               <optgroup label="Autre">
                 {{foreach from=$all_lists item=_list_object}}
                   <option value="{{$_list_object->_guid}}">{{$_list_object}}</option>
