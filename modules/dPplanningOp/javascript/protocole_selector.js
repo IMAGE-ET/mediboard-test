@@ -132,14 +132,14 @@ ProtocoleSelector = {
     if(!oSejourForm.sejour_id.value || oSejourForm[this.sDuree_prevu].value < protocole.duree_hospi) {
       $V(oSejourForm[this.sDuree_prevu], protocole.duree_hospi);
       if (this.sType) {
-        $V(oSejourForm[this.sType].value, protocole.type, false);
+        $V(oSejourForm[this.sType], protocole.type, false);
       }
     }
 
     if (this.sCharge_id) {
       window.updateListCPI(oSejourForm, function() {
         oSejourForm[this.sCharge_id].value = protocole.charge_id;
-      }.bind(this));
+      }.bind(this, protocole));
     }
 
     $V(oSejourForm[this.sDuree_prevu_heure], protocole.duree_heure_hospi);
