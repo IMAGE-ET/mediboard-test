@@ -45,7 +45,7 @@
           <tr>
             <th class="title" colspan="5">{{tr}}CSejour.type.hors_plage{{/tr}}</th>
           </tr>
-          {{mb_include module="salleOp" template="inc_liste_operations" urgence=1 operations=$non_traitees redirect_tab=1}}
+          {{mb_include module="salleOp" template="inc_liste_operations" urgence=1 operations=$non_traitees redirect_tab=1 ajax_salle=1}}
         </table>
       </td>
     {{/if}}

@@ -1,4 +1,5 @@
 {{mb_default var="redirect_tab" value="0"}}
+{{mb_default var="ajax_salle" value="0"}}
 
 <!-- Entêtes -->
 <tr>
@@ -276,12 +277,12 @@
       {{if $conf.dPsalleOp.COperation.modif_salle && !($_operation->_deplacee && $_operation->salle_id != $salle->_id) && @$allow_moves|default:1}}
         <tr {{if $_operation->_id == $operation_id}}class="selected"{{/if}}>
           <td colspan="5" class="not-printable">
-            <form name="changeSalle{{$_operation->_id}}" action="?m={{$m}}" method="post">
+            <form name="changeSalle{{$_operation->_id}}" action="?m={{$m}}" method="post" {{if $ajax_salle}}onsubmit="return onSubmitFormAjax(this, {onComplete: updateSuiviSalle});" {{/if}}>
             <input type="hidden" name="dosql" value="do_planning_aed" />
             <input type="hidden" name="m" value="dPplanningOp" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
-            <select name="salle_id" onchange="this.form.submit();">
+            <select name="salle_id" onchange="this.form.{{if $ajax_salle}}on{{/if}}submit();">
               {{if $urgence && !$_operation->salle_id}}
                 <option value="">&mdash; Choisir une salle</option>
               {{/if}}

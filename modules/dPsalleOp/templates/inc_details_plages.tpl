@@ -92,7 +92,7 @@
 
     <table class="tbl">
       {{if $_plage->_ref_operations}}
-        {{mb_include module=salleOp template=inc_liste_operations urgence=0 operations=$_plage->_ref_operations}}
+        {{mb_include module=salleOp template=inc_liste_operations urgence=0 operations=$_plage->_ref_operations ajax_salle=1}}
       {{else}}
         <tr><td class="empty" colspan="10">Aucune intervention placée</td></tr>
       {{/if}}
@@ -101,7 +101,7 @@
         <tr>
           <th class="section" colspan="10">Non placées</th>
         </tr>
-        {{mb_include module=salleOp template=inc_liste_operations urgence=0 operations=$_plage->_unordered_operations}}
+        {{mb_include module=salleOp template=inc_liste_operations urgence=0 operations=$_plage->_unordered_operations ajax_salle=1}}
       {{/if}}
     </table>
   {{/if}}
@@ -118,7 +118,7 @@
     </tr>
   </table>
   <table class="tbl">
-    {{mb_include module=salleOp template=inc_liste_operations urgence=1 operations=$salle->_ref_deplacees}}
+    {{mb_include module=salleOp template=inc_liste_operations urgence=1 operations=$salle->_ref_deplacees  ajax_salle=1}}
   </table>
 {{/if}}
 
@@ -133,6 +133,6 @@
     </tr>
   </table>
   <table class="tbl">
-    {{mb_include module=salleOp template=inc_liste_operations urgence=1 operations=$salle->_ref_urgences}}
+    {{mb_include module=salleOp template=inc_liste_operations urgence=1 operations=$salle->_ref_urgences  ajax_salle=1}}
   </table>
 {{/if}}
