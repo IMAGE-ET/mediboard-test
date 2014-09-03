@@ -36,7 +36,7 @@
 </script>
 
 
-{{if !$dialog && !$annuaire}}
+{{if !$annuaire}}
   <form name="fusion" action="?" method="get">
     <input type="hidden" name="m" value="system" />
     <input type="hidden" name="a" value="object_merger" />
@@ -54,13 +54,11 @@
   {{/if}}
   <tr>
     {{if !$annuaire}}
-    {{if !$dialog}}
-      <th class="narrow">
-        <button type="button" onclick="Medecin.doMerge('fusion');" class="merge notext compact" title="{{tr}}Merge{{/tr}}">
-          {{tr}}Merge{{/tr}}
-        </button>
-      </th>
-    {{/if}}
+    <th class="narrow">
+      <button type="button" onclick="Medecin.doMerge('fusion');" class="merge notext compact" title="{{tr}}Merge{{/tr}}">
+        {{tr}}Merge{{/tr}}
+      </button>
+    </th>
     {{if $is_admin && $conf.dPpatients.CPatient.function_distinct}}
       <th>{{mb_title class=CMedecin field=function_id}}</th>
     {{/if}}
@@ -85,11 +83,9 @@
       {{mb_ternary var=href test=$dialog value="#choose" other="?m=$m&tab=vw_correspondants&medecin_id=$medecin_id"}}
 
       {{if !$annuaire}}
-      {{if !$dialog}}
         <td>
           <input type="checkbox" name="objects_id[]" value="{{$_medecin->_id}}" />
         </td>
-      {{/if}}
 
       {{if $is_admin && $conf.dPpatients.CPatient.function_distinct}}
         <td>
@@ -107,11 +103,11 @@
       {{/if}}
 
       <td class="text">
-        {{if !$dialog && !$annuaire}}
+        {{if !$annuaire}}
             <a href="#" onclick="Medecin.editMedecin('{{$_medecin->_id}}', refreshPageMedecin);">
         {{/if}}
           {{$_medecin->nom}} {{$_medecin->prenom|strtolower|ucfirst}}
-        {{if !$dialog && !$annuaire}}
+        {{if !$annuaire}}
             </a>
         {{/if}}
       </td>
@@ -138,6 +134,6 @@
 
 {{mb_include module=system template=inc_pagination current=$start_med step=$step_med total=$count_medecins change_page=refreshPageMedecin}}
 
-{{if !$dialog && !$annuaire}}
+{{if !$annuaire}}
   </form>
 {{/if}}
