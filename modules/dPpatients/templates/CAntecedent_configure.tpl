@@ -45,10 +45,14 @@ Main.add(function () {
       
       {{assign var=static_types     value="CAntecedent"|static:types}}
       {{assign var=static_non_types value="CAntecedent"|static:non_types}}
+      {{assign var=usage_non_types  value=0}}
 
       {{foreach from=$all_types item=_type}}
         {{if in_array($_type, $static_non_types)}}
-        <div class="non-type opacity-50" style="width: 16em; float: left; display: none;">
+          {{if in_array($_type, $active_types)}}
+            {{assign var=usage_non_types  value=1}}
+          {{/if}}
+        <div class="non-type opacity-50" style="width: 16em; float: left; {{if !in_array($_type, $active_types)}} display: none;{{/if}}">
         {{else}}
         <div style="width: 16em; float: left;">
         {{/if}}
@@ -62,6 +66,13 @@ Main.add(function () {
           </label>
         </div>
       {{/foreach}}
+
+      {{if $usage_non_types}}
+        <div class="small-warning" style="clear: both;">
+          Certains types sélectionnés (grisés) sont désormais classés dans les appareils et devraient être cochés
+          dans cette section.
+        </div>
+      {{/if}}
     </td>
     
     <td class="text" colspan="3">
