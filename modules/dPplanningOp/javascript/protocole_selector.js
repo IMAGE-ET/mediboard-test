@@ -126,6 +126,7 @@ ProtocoleSelector = {
     }
     else {
       $V(oSejourForm[this.sChir_id], protocole.chir_id, true);
+      $V(oSejourForm[this.sChir_view], protocole.chir_view, true);
     }
     
     // Champs du séjour

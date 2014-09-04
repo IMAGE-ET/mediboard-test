@@ -5,6 +5,7 @@
     this.sForSejour      = true;
     this.sForm           = "editSejour";
     this.sChir_id        = "praticien_id";
+    this.sChir_view      = "praticien_id_view";
     this.sServiceId      = "service_id";
     this.sDP             = "DP";
     this.sDepassement    = "depassement";

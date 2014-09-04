@@ -19,8 +19,11 @@ else {
 }
 
 // L'utilisateur est-il chirurgien?
-$mediuser     = CMediusers::get();
-$chir_id      = CValue::getOrSession("chir_id", $mediuser->isPraticien() ? $mediuser->user_id : null);
+$chir_id      = CValue::getOrSession("chir_id");
+$mediuser     = CMediusers::get($chir_id);
+if (!$mediuser->isPraticien()) {
+  $mediuser = new CMediusers();
+}
 $function_id  = CValue::getOrSession("function_id");
 $type         = CValue::getOrSession("type", "interv"); 
 $page         = CValue::get("page");
@@ -71,7 +74,7 @@ $smarty->assign("list_protocoles"   , $list_protocoles);
 $smarty->assign("total_protocoles"  , $protocole->_totalWithPerms);
 $smarty->assign("page"              , $page);
 $smarty->assign("step"              , $step);
-$smarty->assign("chir_id"           , $chir_id);
+$smarty->assign("chir"              , $mediuser);
 $smarty->assign("type"              , $type);
 
 $smarty->display("inc_list_protocoles.tpl");
