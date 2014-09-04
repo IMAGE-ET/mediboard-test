@@ -488,6 +488,12 @@ class CSetuphprimxml extends CSetup {
                 ADD `insc_integrated` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.56";
+    $this->makeRevision("0.56");
+
+    $query = "ALTER TABLE `destinataire_hprim`
+                ADD `monitor_sources` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.57";
   }
 }

@@ -21,6 +21,7 @@ class CInteropReceiver extends CInteropActor {
   public $_exchanges_sources_save = 0;
   public $OID = null;
   public $synchronous;
+  public $monitor_sources;
 
   /**
    * Initialize object specification
@@ -42,8 +43,9 @@ class CInteropReceiver extends CInteropActor {
   function getProps() {
     $props = parent::getProps();
 
-    $props["OID"]         = "str";
-    $props["synchronous"] = "bool default|1 notNull";
+    $props["OID"]             = "str";
+    $props["synchronous"]     = "bool default|1 notNull";
+    $props["monitor_sources"] = "bool default|1 notNull";
     
     $props["_exchanges_sources_save"] = "num";
     return $props;

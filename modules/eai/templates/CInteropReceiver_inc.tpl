@@ -17,5 +17,9 @@
   <th>{{mb_label object=$actor field="synchronous"}}</th>
   <td>{{mb_field object=$actor field="synchronous"}}</td>
 </tr>
+<tr>
+  <th>{{mb_label object=$actor field="monitor_sources"}}</th>
+  <td>{{mb_field object=$actor field="monitor_sources"}}</td>
+</tr>
 
 {{mb_include module=$actor->_ref_module->mod_name template="`$actor->_class`_inc"}}

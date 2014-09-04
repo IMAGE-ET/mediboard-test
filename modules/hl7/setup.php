@@ -1357,7 +1357,17 @@ class CSetuphl7 extends CSetup {
                 ADD `ins_integrated` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.01";
+    $this->makeRevision("1.01");
+
+    $query = "ALTER TABLE `receiver_hl7v2`
+                ADD `monitor_sources` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `receiver_hl7v3`
+                ADD `monitor_sources` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.02";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

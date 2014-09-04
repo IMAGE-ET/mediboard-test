@@ -112,6 +112,12 @@ class CSetuphprimsante extends CSetup {
                 ADD INDEX (`object_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.5";
+    $this->makeRevision("0.5");
+
+    $query = "ALTER TABLE `receiver_hprimsante`
+                ADD `monitor_sources` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.6";
   }
 }
