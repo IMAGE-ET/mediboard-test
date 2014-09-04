@@ -166,7 +166,13 @@ foreach ($exchanges as $_exchange) {
     }
 
     $source->setData($msg, null, $_exchange);
-    $source->send();
+    try {
+      $source->send();
+    }
+    catch (CMbException $e) {
+      //Si un problème survient lors de l'envoie, on arrête le script pour ne aps rompre la séquentialité
+       $e->stepAjax(UI_MSG_ERROR);
+    }
   }
   catch (Exception $e) {
     $_exchange->date_echange = "";
