@@ -9,6 +9,9 @@
  * @link     http://www.mediboard.org
 *}}
 
+{{mb_default var=count_actors_actif value="-"}}
+{{mb_default var=count_actors value="-"}}
+
 <script>
   Main.add(function () {
     var link = $('tabs-actors').select("a[href=#{{$parent_class}}s]")[0];
