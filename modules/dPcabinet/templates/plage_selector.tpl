@@ -162,13 +162,44 @@
 
     // load the plageconsult to the right
     loadPlageConsult : function(plageconsult_id, consult_id, multiple, heure) {
+      // load plage
       var url = new Url("dPcabinet", "httpreq_list_places");
       url.addParam("plageconsult_id", plageconsult_id);
       url.addParam("heure", heure);
       url.addParam("consult_id"     , consult_id);
       url.addParam("multipleMode", multiple);
       url.addParam("slot_id", this.current_rank);
-      url.requestUpdate("listPlaces-"+this.current_rank);
+      url.requestUpdate("listPlaces-"+this.current_rank, {onComplete : RDVmultiples.updateSelections.curry(plageconsult_id, multiple)});
+    },
+
+    updateSelections : function(plage_id, multiple) {
+      var list_of_plages_left = [];
+      $('listePlages').select('table.tbl tr.plage').each(function(elt) {
+        elt.removeClassName('selected');
+        list_of_plages_left.push((elt.id).split('-')[1]);
+      });
+
+      if (!multiple) {
+        var line = $('plage-'+plage_id);
+        line.addUniqueClassName("selected");
+      }
+      // multiple mode
+      else {
+        var plages_displayed = $('plage_list_container').select('table');
+        var ids = [];
+        plages_displayed.each(function(elt) {
+          ids.push(elt.id.split('_')[1]);
+        });
+
+        $(ids).each(function(elt) {
+          for(var a = 0; a < list_of_plages_left.length; a++) {
+            if (list_of_plages_left[a] == elt) {
+              var line = $('plage-'+elt);
+              line.addClassName("selected");
+            }
+          }
+        });
+      }
     },
 
     sendData : function() {
