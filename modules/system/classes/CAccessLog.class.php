@@ -82,6 +82,8 @@ class CAccessLog extends CMbObject {
     $props["bot"]              = "enum list|0|1 default|0";
 
     $props["_average_duration"]    = "num min|0";
+    $props["_average_request"]     = "num min|0";
+    $props["_average_peak_memory"] = "num min|0";
     $props["_average_nb_requests"] = "num min|0";
 
     $props["_module"] = "str";
@@ -163,27 +165,50 @@ class CAccessLog extends CMbObject {
     $al    = new static;
     $table = $al->_spec->table;
 
-    $query = "SELECT
-        $table.`accesslog_id`,
-        $table.`module_action_id`,
-        `module_action`.`module`   AS _module,
-        `module_action`.`action`   AS _action,
-        SUM($table.`hits`)         AS hits,
-        SUM($table.`size`)         AS size,
-        SUM($table.`duration`)     AS duration,
-        SUM($table.`processus`)    AS processus,
-        SUM($table.`processor`)    AS processor,
-        SUM($table.`request`)      AS request,
-        SUM($table.`nb_requests`)  AS nb_requests,
-        SUM($table.`peak_memory`)  AS peak_memory,
-        SUM($table.`errors`)       AS errors,
-        SUM($table.`warnings`)     AS warnings,
-        SUM($table.`notices`)      AS notices,
-        0 AS grouping
-      FROM $table USE INDEX (`period`), `module_action`
-      WHERE $table.`module_action_id` = `module_action`.`module_action_id`";
+    switch ($groupmod) {
+      case 2:
+        $query = "SELECT
+                    $table.`accesslog_id`,
+                    $table.`module_action_id`,
+                    SUM($table.`hits`)         AS hits,
+                    SUM($table.`size`)         AS size,
+                    SUM($table.`duration`)     AS duration,
+                    SUM($table.`processus`)    AS processus,
+                    SUM($table.`processor`)    AS processor,
+                    SUM($table.`request`)      AS request,
+                    SUM($table.`nb_requests`)  AS nb_requests,
+                    SUM($table.`peak_memory`)  AS peak_memory,
+                    SUM($table.`errors`)       AS errors,
+                    SUM($table.`warnings`)     AS warnings,
+                    SUM($table.`notices`)      AS notices,
+                    0 AS grouping
+                  FROM $table USE INDEX (`period`)
+                  WHERE $table.`period` BETWEEN '$start' AND '$end'";
+        break;
 
-    $query .= "\nAND $table.`period` BETWEEN '$start' AND '$end'";
+      case 0:
+      case 1:
+      $query = "SELECT
+                  $table.`accesslog_id`,
+                  $table.`module_action_id`,
+                  `module_action`.`module`   AS _module,
+                  `module_action`.`action`   AS _action,
+                  SUM($table.`hits`)         AS hits,
+                  SUM($table.`size`)         AS size,
+                  SUM($table.`duration`)     AS duration,
+                  SUM($table.`processus`)    AS processus,
+                  SUM($table.`processor`)    AS processor,
+                  SUM($table.`request`)      AS request,
+                  SUM($table.`nb_requests`)  AS nb_requests,
+                  SUM($table.`peak_memory`)  AS peak_memory,
+                  SUM($table.`errors`)       AS errors,
+                  SUM($table.`warnings`)     AS warnings,
+                  SUM($table.`notices`)      AS notices,
+                  0 AS grouping
+                FROM $table USE INDEX (`period`), `module_action`
+                WHERE $table.`module_action_id` = `module_action`.`module_action_id`
+                  AND $table.`period` BETWEEN '$start' AND '$end'";
+    }
 
     // 2 means for both of them
     if ($human_bot === '0' || $human_bot === '1') {
@@ -228,33 +253,59 @@ class CAccessLog extends CMbObject {
     // Convert date format from PHP to MySQL
     $period_format = str_replace("%M", "%i", $period_format);
 
-    $query = "SELECT
-        `accesslog_id`,
-        `module_action`.`module`,
-        `module_action`.`action`,
-        `period`,
-        AVG(duration/hits)    AS _average_duration,
-        AVG(processus/hits)   AS _average_processus,
-        AVG(processor/hits)   AS _average_processor,
-        AVG(request/hits)     AS _average_request,
-        AVG(nb_requests/hits) AS _average_nb_requests,
-        AVG(peak_memory/hits) AS _average_peak_memory,
-        SUM(hits)             AS hits,
-        SUM(size)             AS size,
-        SUM(duration)         AS duration,
-        SUM(processus)        AS processus,
-        SUM(processor)        AS processor,
-        SUM(request)          AS request,
-        SUM(nb_requests)      AS nb_requests,
-        SUM(peak_memory)      AS peak_memory,
-        SUM(errors)           AS errors,
-        SUM(warnings)         AS warnings,
-        SUM(notices)          AS notices,
-      DATE_FORMAT(`period`, '$period_format') AS `gperiod`
-      FROM $table, `module_action`
-      /*USE INDEX (`period`)*/
-      WHERE $table.`module_action_id` = `module_action`.`module_action_id`
-        AND `period` BETWEEN '$start' AND '$end'";
+    if (!$module_name && !$action_name) {
+      $query = "SELECT
+                  `accesslog_id`,
+                  `period`,
+                  AVG(duration/hits)    AS _average_duration,
+                  AVG(processus/hits)   AS _average_processus,
+                  AVG(processor/hits)   AS _average_processor,
+                  AVG(request/hits)     AS _average_request,
+                  AVG(nb_requests/hits) AS _average_nb_requests,
+                  AVG(peak_memory/hits) AS _average_peak_memory,
+                  SUM(hits)             AS hits,
+                  SUM(size)             AS size,
+                  SUM(duration)         AS duration,
+                  SUM(processus)        AS processus,
+                  SUM(processor)        AS processor,
+                  SUM(request)          AS request,
+                  SUM(nb_requests)      AS nb_requests,
+                  SUM(peak_memory)      AS peak_memory,
+                  SUM(errors)           AS errors,
+                  SUM(warnings)         AS warnings,
+                  SUM(notices)          AS notices,
+                DATE_FORMAT(`period`, '$period_format') AS `gperiod`
+                FROM $table USE INDEX (`period`)
+                WHERE `period` BETWEEN '$start' AND '$end'";
+    }
+    else {
+      $query = "SELECT
+                  `accesslog_id`,
+                  `module_action`.`module`,
+                  `module_action`.`action`,
+                  `period`,
+                  AVG(duration/hits)    AS _average_duration,
+                  AVG(processus/hits)   AS _average_processus,
+                  AVG(processor/hits)   AS _average_processor,
+                  AVG(request/hits)     AS _average_request,
+                  AVG(nb_requests/hits) AS _average_nb_requests,
+                  AVG(peak_memory/hits) AS _average_peak_memory,
+                  SUM(hits)             AS hits,
+                  SUM(size)             AS size,
+                  SUM(duration)         AS duration,
+                  SUM(processus)        AS processus,
+                  SUM(processor)        AS processor,
+                  SUM(request)          AS request,
+                  SUM(nb_requests)      AS nb_requests,
+                  SUM(peak_memory)      AS peak_memory,
+                  SUM(errors)           AS errors,
+                  SUM(warnings)         AS warnings,
+                  SUM(notices)          AS notices,
+                DATE_FORMAT(`period`, '$period_format') AS `gperiod`
+                FROM $table USE INDEX (`period`), `module_action`
+                WHERE $table.`module_action_id` = `module_action`.`module_action_id`
+                  AND `period` BETWEEN '$start' AND '$end'";
+    }
 
     // 2 means for both of them
     if ($human_bot === '0' || $human_bot === '1') {
@@ -289,7 +340,7 @@ class CAccessLog extends CMbObject {
    * @return array
    */
   static function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 'one-day', $left, $right, $human_bot = null) {
-    $al    = new static;
+    $al = new static;
 
     switch ($interval) {
       default:
