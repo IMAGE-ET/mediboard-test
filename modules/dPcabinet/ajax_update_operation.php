@@ -41,15 +41,20 @@ $fields = array(
   )
 );
 
+$auto_link = true;
 foreach ($fields as $_name => &$_field) {
   if (is_null($consult_anesth->$_name) || is_null($operation->$_name)) {
     $_field['status'] = 'warning';
   }
   elseif ($consult_anesth->$_name == $operation->$_name) {
     $_field['status'] = 'ok';
+    if ($_name == 'duree_uscpo' && ($consult_anesth->$_name == 0 && $operation->$_name == 0)) {
+      $_field['status'] = 'warning';
+    }
   }
   else {
     $_field['status'] = 'error';
+    $auto_link = false;
   }
   if (is_null($operation->$_name) && !is_null($consult_anesth->$_name)) {
     $_field['object'] = 'CConsultAnesth';
@@ -65,4 +70,5 @@ $smarty = new CSmartyDP();
 $smarty->assign('consult_anesth', $consult_anesth);
 $smarty->assign('operation', $operation);
 $smarty->assign('fields', $fields);
+$smarty->assign('auto_link', $auto_link);
 $smarty->display('inc_consult_anesth/update_operation.tpl');
