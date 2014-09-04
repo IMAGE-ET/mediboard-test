@@ -199,13 +199,15 @@ ProtocoleSelector = {
     }
   },
   reloadInitCCAMSelector: function(form_name) {
-    CCAMSelector.init = function(){
-      var oForm     = (ProtocoleSelector.sForm && getForm(ProtocoleSelector.sForm)) || getForm("editOp");
-      this.sForm  = oForm.name;
-      this.sView  = "_codes_ccam";
-      this.sChir  = "chir_id";
-      this.sClass = "_class";
-      this.pop();
+    if (window.CCAMSelector) {
+      CCAMSelector.init = function(){
+        var oForm     = (ProtocoleSelector.sForm && getForm(ProtocoleSelector.sForm)) || getForm("editOp");
+        this.sForm  = oForm.name;
+        this.sView  = "_codes_ccam";
+        this.sChir  = "chir_id";
+        this.sClass = "_class";
+        this.pop();
+      }
     }
   }
 };
