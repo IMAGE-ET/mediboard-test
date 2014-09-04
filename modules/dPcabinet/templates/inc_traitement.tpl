@@ -1,4 +1,3 @@
-
 {{mb_default var=vw_traitement_texte_libre value=1}}
 {{mb_default var=addform                   value=""}}
 {{mb_default var=callback                  value=""}}
@@ -306,15 +305,17 @@
                       <button type="button" class="edit" onclick="submitAndCallback(this.form, 'modifyLineTP');">
                         Represcrire
                       </button>
-                      <button type="button" class="right" onclick="submitAndCallback(this.form, 'poursuivreLineTP');">
-                        Poursuivre
-                      </button>
-                      <button type="button" class="hslip" onclick="submitAndCallback(this.form, 'relaiLineDialog');">
-                        Relai
-                      </button>
-                      <button type="button" class="pause" onclick="submitAndCallback(this.form, 'pauseLineDialog')">
-                        Pause
-                      </button>
+                      {{if $sejour_id}}
+                        <button type="button" class="right" onclick="submitAndCallback(this.form, 'poursuivreLineTP');">
+                          Poursuivre
+                        </button>
+                        <button type="button" class="hslip" onclick="submitAndCallback(this.form, 'relaiLineDialog');">
+                          Relai
+                        </button>
+                        <button type="button" class="pause" onclick="submitAndCallback(this.form, 'pauseLineDialog')">
+                          Pause
+                        </button>
+                      {{/if}}
                     </fieldset>
 
                   {{/if}}
