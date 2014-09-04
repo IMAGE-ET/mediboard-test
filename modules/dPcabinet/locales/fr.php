@@ -289,6 +289,7 @@ $locales['CConsultAnesth-tsivy-desc'] = 'Temps de saignement par la méthode d\'I
 $locales['CConsultAnesth-type_anesth'] = 'Type d\'anesthésie';
 $locales['CConsultAnesth-type_anesth-court'] = 'Type anesth.';
 $locales['CConsultAnesth-type_anesth-desc'] = 'Anesthésie mise en oeuvre pour l\'intervention';
+$locales['CConsultAnesth.ASA.'] = 'Non défini';
 $locales['CConsultAnesth.ASA.1'] = '1 - Patient sain';
 $locales['CConsultAnesth.ASA.2'] = '2 - Maladie systémique légère';
 $locales['CConsultAnesth.ASA.3'] = '3 - Maladie systémique sévère ou invalidante';
