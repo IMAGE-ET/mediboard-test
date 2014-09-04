@@ -369,6 +369,26 @@ class CCodageCCAM extends CMbObject {
   }
 
   /**
+   * Check if the modifier K has been checked on the linked acts of the given act
+   *
+   * @param CActeCCAM &$act the act
+   *
+   * @return boolean
+   */
+  public static function isModifierKchecked(&$act) {
+    $act->getLinkedActes();
+
+    $modifier_K = false;
+    foreach ($act->_linked_actes as $_linked_act) {
+      if (in_array('K', $_linked_act->_modificateurs)) {
+        $modifier_K = true;
+      }
+    }
+
+    return $modifier_K;
+  }
+
+  /**
     * Check the modifiers of the given act
     *
     * @param CObject   &$modifiers The modifiers to check
@@ -430,6 +450,9 @@ class CCodageCCAM extends CMbObject {
           }
           elseif (!in_array($discipline, $spe_gyneco)) {
             $_modifier->_state = 'not_recommended';
+          }
+          if (self::isModifierKchecked($act)) {
+            $checked = true;
           }
           break;
         case 'M':
