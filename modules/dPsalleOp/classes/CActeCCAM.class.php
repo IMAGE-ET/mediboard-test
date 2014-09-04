@@ -520,26 +520,32 @@ class CActeCCAM extends CActe {
         $this->signe = 0;
       }
     }
-    // Vérification de l'existence du codage
-    $codage = CCodageCCAM::get($this->loadRefObject(), $this->executant_id);
-    if (!$codage->_id) {
-      if ($msg = $codage->store()) {
-        return $msg;
+
+    if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+      // Vérification de l'existence du codage
+      $codage = CCodageCCAM::get($this->loadRefObject(), $this->executant_id);
+      if (!$codage->_id) {
+        if ($msg = $codage->store()) {
+          return $msg;
+        }
       }
     }
-    
+
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
     }
 
-    // Si on crée un nouvel acte, on relance l'analyse du codage
-    if (!$oldObject->_id) {
-      $codage->updateRule(true);
-      if ($msg = $codage->store()) {
-        return $msg;
+    if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+      // Si on crée un nouvel acte, on relance l'analyse du codage
+      if (!$oldObject->_id) {
+        $codage->updateRule(true);
+        if ($msg = $codage->store()) {
+          return $msg;
+        }
       }
     }
+
     return null;
   }
 
