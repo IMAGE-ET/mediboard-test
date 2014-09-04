@@ -23,7 +23,6 @@
       var url = new Url("dPsalleOp", "httpreq_liste_plages");
     {{/if}}
     url.addParam("date"         , "{{$date}}");
-    url.addParam("operation_id" , "{{$operation_id}}");
     url.addParam("hide_finished", "{{$hide_finished}}");
 
     url.periodicalUpdate('listplages', { frequency: 90 });
