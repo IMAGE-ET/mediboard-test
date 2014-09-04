@@ -89,9 +89,59 @@
 
 {{assign var="subject" value=$codage->_ref_codable}}
 
-<h1>Actes du Dr {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$codage->_ref_praticien}}</h1>
-
 <table class="tbl" style="min-width: 400px;">
+  <tr>
+    <th class="title" colspan="10">
+      <div style="float: left">
+        <form name="addActes-{{$subject->_guid}}" method="post" onsubmit="return onSubmitFormAjax(this, window.urlCodage.refreshModal.bind(window.urlCodage))">
+          {{if $subject instanceof CConsultation}}
+            <input type="hidden" name="m" value="cabinet" />
+            <input type="hidden" name="dosql" value="do_consultation_aed" />
+          {{elseif $subject instanceof COperation}}
+            <input type="hidden" name="m" value="planningOp" />
+            <input type="hidden" name="dosql" value="do_planning_aed" />
+          {{else}}
+            <input type="hidden" name="m" value="planningOp" />
+            <input type="hidden" name="dosql" value="do_sejour_aed" />
+          {{/if}}
+          {{mb_key object=$subject}}
+
+            {{mb_field object=$subject field="codes_ccam" hidden=true onchange="this.form.onsubmit()"}}
+            <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" style="width: 12em" value="" class="autocomplete" placeholder="Choisissez un acte" />
+            <div style="text-align: left; color: #000; display: none; width: 200px !important; font-weight: normal; font-size: 11px; text-shadow: none;"
+                 class="autocomplete" id="_ccam_autocomplete_{{$subject->_guid}}"></div>
+            <script>
+              Main.add(function() {
+                var form = getForm("addActes-{{$subject->_guid}}");
+                var url = new Url("ccam", "httpreq_do_ccam_autocomplete");
+                url.autoComplete(form._codes_ccam, "_ccam_autocomplete_{{$subject->_guid}}", {
+                  minChars: 1,
+                  dropdown: true,
+                  width: "250px",
+                  updateElement: function(selected) {
+                    CCAMField{{$subject->_class}}{{$subject->_id}}.add(selected.down("strong").innerHTML);
+                  }
+                });
+                CCAMField{{$subject->_class}}{{$subject->_id}} = new TokenField(form.elements["codes_ccam"], {
+                  onChange : function() {
+                    form.onsubmit();
+                  },
+                  sProps : "notNull code ccam"
+                } );
+              })
+            </script>
+        </form>
+      </div>
+      <span style="float: right;">
+        {{foreach from=$subject->_codes_ccam item=_code_ccam}}
+          <button type="button" class="remove" onclick="CCAMField{{$subject->_class}}{{$subject->_id}}.remove('{{$_code_ccam}}')">
+            {{$_code_ccam}}
+          </button>
+        {{/foreach}}
+      </span>
+      Actes du Dr {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$codage->_ref_praticien}}
+    </th>
+  </tr>
   <tr>
     <th class="narrow">{{mb_title class=CActeCCAM field=code_acte}}</th>
     <th colspan="2" class="narrow">
