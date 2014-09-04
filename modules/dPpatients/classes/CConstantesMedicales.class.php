@@ -1330,6 +1330,9 @@ class CConstantesMedicales extends CMbObject {
       if (!$this->poids && $this->_old->poids) {
         $this->_poids_g = $this->poids;
       }
+      if ($this->poids != $this->_old->poids && $this->_poids_g != $this->poids * 1000) {
+        $this->_poids_g = $this->poids * 1000;
+      }
 
       foreach (CConstantesMedicales::$list_constantes as $const => $params) {
         $this->completeField($const);
