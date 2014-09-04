@@ -150,8 +150,8 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
         }
 
         /** @var CInteropSender $sender */
-        $sender = CMbObject::loadFromGuid($mbObject->_eai_sender_guid);
-        if ($sender->group_id == $receiver->group_id) {
+        $sender = $mbObject->_eai_sender_guid ? CMbObject::loadFromGuid($mbObject->_eai_sender_guid) : null;
+        if ($sender && $sender->group_id == $receiver->group_id) {
           continue;
         }
         

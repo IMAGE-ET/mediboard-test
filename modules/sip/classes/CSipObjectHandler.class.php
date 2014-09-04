@@ -86,9 +86,9 @@ class CSipObjectHandler extends CEAIObjectHandler {
       $mbObject->_fusion = array();
       foreach (CGroups::loadGroups() as $_group) {
         /** @var CInteropSender $sender */
-        $sender = CMbObject::loadFromGuid($mbObject->_eai_sender_guid);
+        $sender = $mbObject->_eai_sender_guid ? CMbObject::loadFromGuid($mbObject->_eai_sender_guid) : null;
 
-        if ($sender->group_id == $_group->_id) {
+        if ($sender && $sender->group_id == $_group->_id) {
           continue;
         }
         $patient->_IPP = null;
