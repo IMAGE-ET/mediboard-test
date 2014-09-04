@@ -205,7 +205,6 @@ foreach ($logs as $log) {
   }
 }
 
-
 $graphs = array();
 foreach ($graphs_by_module as $_graph) {
   $graphs[] = $_graph;

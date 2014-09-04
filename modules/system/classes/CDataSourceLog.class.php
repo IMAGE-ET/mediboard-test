@@ -111,19 +111,31 @@ class CDataSourceLog extends CMbObject {
   static function loadAggregation($start, $end, $groupmod = 0, $module = null, $human_bot = null) {
     $dl    = new static;
     $table = $dl->_spec->table;
-    
-    $query = "SELECT
+
+    switch ($groupmod) {
+      case 2:
+        $query = "SELECT
                 `datasourcelog_id`,
                 $table.`module_action_id`,
-                `module_action`.`module`         AS _module,
-                `module_action`.`action`         AS _action,
+                `period`,
+                0 AS grouping
+              FROM $table USE INDEX (`period`)
+              WHERE $table.`period` BETWEEN '$start' AND '$end'";
+        break;
+
+      case 0:
+      case 1:
+      $query = "SELECT
+                `datasourcelog_id`,
+                $table.`module_action_id`,
+                `module_action`.`module` AS _module,
+                `module_action`.`action` AS _action,
                 `period`,
                 0 AS grouping
               FROM $table USE INDEX (`period`), `module_action`
-              WHERE $table.`module_action_id` = `module_action`.`module_action_id`";
-
-
-    $query .= "\nAND $table.`period` BETWEEN '$start' AND '$end'";
+              WHERE $table.`module_action_id` = `module_action`.`module_action_id`
+                AND $table.`period` BETWEEN '$start' AND '$end'";
+    }
 
     // 2 means for both of them
     if ($human_bot === '0' || $human_bot === '1') {
@@ -168,18 +180,31 @@ class CDataSourceLog extends CMbObject {
     // Convert date format from PHP to MySQL
     $period_format = str_replace("%M", "%i", $period_format);
 
-    $query = "SELECT
-                $table.`datasourcelog_id`,
-                `module_action`.`module`         AS _module,
-                `module_action`.`action`         AS _action,
-                $table.`period`,
-                $table.`datasource`,
-                SUM($table.`requests`) AS requests,
-                SUM($table.`duration`) AS duration,
-                DATE_FORMAT($table.`period`, '$period_format') AS `gperiod`
-              FROM $table, `module_action`
-              WHERE $table.`period` BETWEEN '$start' AND '$end'
-                AND $table.`module_action_id` = `module_action`.`module_action_id`";
+    if (!$module_name && !$action_name) {
+      $query = "SELECT
+                  $table.`datasourcelog_id`,
+                  $table.`period`,
+                  $table.`datasource`,
+                  SUM($table.`requests`) AS requests,
+                  SUM($table.`duration`) AS duration,
+                  DATE_FORMAT($table.`period`, '$period_format') AS `gperiod`
+                FROM $table USE INDEX (`period`)
+                WHERE $table.`period` BETWEEN '$start' AND '$end'";
+    }
+    else {
+      $query = "SELECT
+                  $table.`datasourcelog_id`,
+                  `module_action`.`module` AS _module,
+                  `module_action`.`action` AS _action,
+                  $table.`period`,
+                  $table.`datasource`,
+                  SUM($table.`requests`)  AS requests,
+                  SUM($table.`duration`)  AS duration,
+                  DATE_FORMAT($table.`period`, '$period_format') AS `gperiod`
+                FROM $table USE INDEX (`period`), `module_action`
+                WHERE $table.`period` BETWEEN '$start' AND '$end'
+                  AND $table.`module_action_id` = `module_action`.`module_action_id`";
+    }
 
     if ($module_name) {
       $query .= "\nAND `module_action`.`module` = '$module_name'";
