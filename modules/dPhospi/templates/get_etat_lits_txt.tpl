@@ -1,3 +1,3 @@
 {{foreach from=$list_affectations item="affectation"}}
-  {{$affectation.nom}};{{$affectation.prenom}};{{$affectation.id}};{{if $detail_lit}}{{$affectation.nom_naissance}};{{/if}}{{$affectation.service}};{{$affectation.chambre}};{{if $detail_lit}}{{$affectation.lit_nom}};{{/if}}{{$affectation.lit}};{{$affectation.sexe}};{{$affectation.naissance}};{{$affectation.date_entree}};{{$affectation.heure_entree}};{{$affectation.date_sortie}};{{$affectation.heure_sortie}};{{$affectation.type}}<br/>
+  {{$affectation.nom}};{{$affectation.prenom}};{{$affectation.id}};{{if $detail_lit}}{{$affectation.nom_naissance}};{{/if}}{{$affectation.service}};{{$affectation.chambre}};{{if $detail_lit}}{{$affectation.chambre_nom}};{{$affectation.lit_nom}};{{/if}}{{$affectation.lit}};{{$affectation.sexe}};{{$affectation.naissance}};{{$affectation.date_entree}};{{$affectation.heure_entree}};{{$affectation.date_sortie}};{{$affectation.heure_sortie}};{{$affectation.type}}<br/>
 {{/foreach}}
