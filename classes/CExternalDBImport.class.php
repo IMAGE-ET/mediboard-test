@@ -37,7 +37,7 @@ class CExternalDBImport {
   protected $_map = array();
 
   /** @var string Order by key name */
-  public $_order_by;
+  protected $_order_by;
 
   /** @var CMbObject */
   public $_mb_object;
@@ -143,10 +143,6 @@ class CExternalDBImport {
       $select = implode(", ", $items);
     }
 
-    if ($order_by = $this->getOrderBy()) {
-      $select .= ", $order_by as DATE_IMPORT_MB";
-    }
-
     $query = "SELECT $select";
 
     $query .= " FROM $this->_table";
@@ -248,10 +244,6 @@ class CExternalDBImport {
         continue;
       }
 
-      if (isset($hash["DATE_IMPORT_MB"])) {
-        $date = $hash["DATE_IMPORT_MB"];
-      }
-
       $count--;
     }
 
@@ -289,8 +281,15 @@ class CExternalDBImport {
     if (isset($objects[$class][$db_id])) {
       return $objects[$class][$db_id];
     }
+    
+    $idex = CIdSante400::getMatch($class, $this->getImportTag(), $db_id);
+    $target = $idex->loadTargetObject();
+    
+    if ($idex->_id) {
+      $objects[$class][$db_id] = $target;
+    }
 
-    return $objects[$class][$db_id] = CIdSante400::getMatch($class, $this->getImportTag(), $db_id)->loadTargetObject();
+    return $target;
   }
 
   function getDbIds() {
