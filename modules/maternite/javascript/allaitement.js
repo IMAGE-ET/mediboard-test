@@ -14,7 +14,9 @@ Allaitement = {
     var url = new Url("maternite", "ajax_bind_allaitement");
     url.addParam("patient_id", patient_id);
     url.requestModal(900, 400, {onClose: function() {
-      Grossesse.updateGrossesseArea();
+      if (!Grossesse.modify_grossesse) {
+        Grossesse.updateGrossesseArea();
+      }
       Grossesse.updateEtatActuel();
     }});
   },
