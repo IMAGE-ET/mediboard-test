@@ -18,10 +18,8 @@
       url.requestUpdate("aggregate_" + table);
     }
     else {
-      Modal.confirm("Agréger ?", {onValidate: function (v) {
-        if (v) {
-          url.requestUpdate("aggregate_" + table)
-        }
+      Modal.confirm("Souhaitez vous réellement aggréger les journaux ?", {onOK: function () {
+          url.requestUpdate("aggregate_" + table);
       } });
     }
   }
@@ -45,7 +43,7 @@
     <th>{{tr}}Total{{/tr}}</th>
 
     <th>{{tr}}Action{{/tr}}</th>
-    <th></th>
+    <th>{{tr}}Status{{/tr}}</th>
   </tr>
 
   {{foreach from=$stats key=_table item=_stats}}
