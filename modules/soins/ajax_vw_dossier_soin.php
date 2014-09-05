@@ -13,7 +13,7 @@ CCanDo::checkRead();
 
 $group = CGroups::loadCurrent();
 $sejour_id          = CValue::getOrSession("sejour_id");
-$date               = CValue::getOrSession("date");
+$date               = CValue::getOrSession("date_plan_soins");
 $nb_decalage        = CValue::get("nb_decalage");
 $mode_dossier       = CValue::get("mode_dossier", "administration");
 $chapitre           = CValue::get("chapitre"); // Chapitre a rafraichir

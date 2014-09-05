@@ -1,4 +1,3 @@
-
 PlanSoins = {
   composition_dossier: null,
   timeOutBefore:       null,
@@ -280,7 +279,7 @@ PlanSoins = {
     var url = new Url("soins", "ajax_vw_dossier_soin");
     url.addParam("sejour_id", sejour_id);
     
-    url.addParam("date", date);
+    url.addParam("date_plan_soins", date);
     
     url.addParam("line_type", "bloc");
     url.addParam("mode_bloc", "0");
