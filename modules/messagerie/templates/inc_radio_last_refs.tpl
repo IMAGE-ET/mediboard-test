@@ -10,6 +10,8 @@
 
 <form method="get" action="?" id="list_Relations">
   <ul style="text-align: left;">
+    <li><input type="radio" name="object" onclick="attach.setObject('{{$patient->_class}}','{{$patient->_id}}');checkrelation()" {{if $patient->_id == $dossier_id}}checked="checked"{{/if}} /> <strong> {{$patient}}  (Patient)</strong></li>
+
     <li><strong>Sejours</strong></li>
   {{foreach from=$patient->_ref_sejours item=_sejour}}
     <li><input type="radio" name="object" onclick="attach.setObject('{{$_sejour->_class}}','{{$_sejour->_id}}');checkrelation()" {{if $_sejour->_id == $dossier_id}}checked="checked"{{/if}} /> {{$_sejour}}  </li>
