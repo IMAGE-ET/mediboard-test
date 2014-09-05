@@ -80,6 +80,7 @@ foreach ($affectations as $key => $_affectation) {
 
   if ($detail_lit) {
     $list_affectations[$key]["lit_nom"]       = $lit->nom;
+    $list_affectations[$key]["chambre_nom"]   = $lit->_ref_chambre->nom;
     $list_affectations[$key]["nom_naissance"] = $patient->nom_jeune_fille;
   }
 }
