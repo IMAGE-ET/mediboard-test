@@ -54,10 +54,10 @@
   <td class="text" style="vertical-align: top;">
     <!-- Praticien -->
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
-    <hr />
 
     <!-- Transmissions -->
     {{if $sejour->_ref_transmissions|@count}}
+      <hr />
       {{foreach from=$sejour->_ref_transmissions item=_transmission}}
         <div onmouseover="ObjectTooltip.createEx(this, '{{$_transmission->_guid}}')" style="display: inline;">
           <strong>{{$_transmission->type|substr:0:1|upper}}</strong>: {{$_transmission->text|nl2br}}
@@ -69,8 +69,11 @@
   <td class="text" style="vertical-align: top;">
     <!-- Modif d'hospi -->
     {{if $sejour->_ref_prescription_sejour->_jour_op|@count}}
+
       {{foreach from=$sejour->_ref_prescription_sejour->_jour_op item=_info_jour_op}}
-        (<span onmouseover="ObjectTooltip.createEx(this, '{{$_info_jour_op.operation_guid}}');">J{{$_info_jour_op.jour_op}}</span>)
+        <div>
+          (<span onmouseover="ObjectTooltip.createEx(this, '{{$_info_jour_op.operation_guid}}');">J{{$_info_jour_op.jour_op}}</span>)
+        </div>
       {{/foreach}}
     {{/if}}
 
@@ -78,9 +81,9 @@
       <strong>{{mb_label object=$sejour field=libelle}}:</strong>
       {{mb_value object=$sejour field=libelle}}
     {{/if}}
-    <hr />
 
     {{if $sejour->_ref_tasks}}
+      <hr />
       {{foreach from=$sejour->_ref_tasks item=_task}}
         {{$_task->description}}
         {{if $_task->prescription_line_element_id}}
@@ -91,40 +94,37 @@
         {{/if}}
         <br />
       {{/foreach}}
-      <hr />
     {{/if}}
 
     {{if $sejour->_ref_tasks_not_created|@count}}
       {{foreach from=$sejour->_ref_tasks_not_created item=_task_not_created}}
-        {{$_task_not_created->_view}}
+        {{$_task_not_created}}
         <br />
       {{/foreach}}
-      <hr />
     {{/if}}
 
     <!-- Allergies -->
-    <strong>Allergies:</strong>
-    {{if $dossier_medical->_ref_allergies|@count}}
-      {{foreach from=$dossier_medical->_ref_allergies item=_allergie}}
-        {{$_allergie}}<br />
+    <strong>{{tr}}CAntecedent.type.alle{{/tr}}:</strong>
+      {{foreach from=$dossier_medical->_ref_allergies item=_allergie name=alle}}
+        {{$_allergie}}
+        {{if !$smarty.foreach.alle.last}}&bull;{{/if}}
+      {{foreachelse}}
+        <em>Non renseigné</em>
       {{/foreach}}
-    {{else}}
-      ?
-    {{/if}}
-    <hr />
 
     <!-- Antécédents -->
     {{if $dossier_medical->_count_antecedents && ($dossier_medical->_count_antecedents > $dossier_medical->_count_allergies)}}
+      <hr />
       {{assign var=antecedents value=$dossier_medical->_ref_antecedents_by_type}}
       {{foreach from=$antecedents key=name item=cat}}
         {{if $name != "alle" && $cat|@count}}
-          <strong>{{tr}}CAntecedent.type.{{$name}}{{/tr}}</strong>
+          <strong>{{tr}}CAntecedent.type.{{$name}}{{/tr}}:</strong>
           {{foreach from=$cat item=ant name=ants}}
             {{if $ant->date}}
               {{mb_value object=$ant field=date}}:
             {{/if}}
             {{$ant->rques}}
-            {{if !$smarty.foreach.ants.last}},{{/if}}
+            {{if !$smarty.foreach.ants.last}}&bull;{{/if}}
           {{/foreach}}
           <br />
         {{/if}}
