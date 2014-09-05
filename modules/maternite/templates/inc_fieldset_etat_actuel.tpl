@@ -13,10 +13,6 @@
 {{assign var=grossesse   value=$patient->_ref_last_grossesse}}
 {{assign var=allaitement value=$patient->_ref_last_allaitement}}
 
-<script>
-  Grossesse.show_checkbox = 0;
-</script>
-
 <fieldset id="etat_actuel_grossesse">
   <legend>Etat actuel</legend>
 
@@ -31,7 +27,7 @@
         {{/if}}
       </td>
       <td class="narrow">
-        <button type="button" class="add notext" style="float: right;" onclick="Grossesse.viewGrossesses('{{$patient->_id}}')"></button>
+        <button type="button" class="add notext" style="float: right;" onclick="Grossesse.viewGrossesses('{{$patient->_id}}', null, null, 0)"></button>
       </td>
     </tr>
     <tr>

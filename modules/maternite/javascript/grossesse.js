@@ -19,7 +19,8 @@ Grossesse = {
   modify_grossesse: 1,
   show_checkbox: 1,
 
-  viewGrossesses: function(parturiente_id, object_guid, form) {
+  viewGrossesses: function(parturiente_id, object_guid, form, show_checkbox) {
+    Grossesse.show_checkbox = Object.isUndefined(show_checkbox) ? 1 : show_checkbox;
     var url = new Url("maternite", "ajax_bind_grossesse");
     if (parturiente_id == '') {
       url.addParam("parturiente_id", $V(form.patient_id));
@@ -31,8 +32,8 @@ Grossesse = {
     url.requestModal(900, 400, {onClose: function() {
       if (!Grossesse.modify_grossesse) {
         Grossesse.updateGrossesseArea();
-        Grossesse.updateEtatActuel();
       }
+      Grossesse.updateEtatActuel();
     }});
   },
   toggleGrossesse: function(sexe, form) {
@@ -104,7 +105,7 @@ Grossesse = {
   },
 
   updateEtatActuel: function() {
-    if (!Grossesse.parturiente_id) {
+    if (!Grossesse.parturiente_id || !$("etat_actuel_grossesse")) {
       return;
     }
 
