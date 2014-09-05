@@ -135,15 +135,15 @@ class CAccessLog extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     if ($this->hits) {
-      $this->_average_duration    = $this->duration / $this->hits;
-      $this->_average_processus   = $this->processus / $this->hits;
-      $this->_average_processor   = $this->processor / $this->hits;
-      $this->_average_request     = $this->request / $this->hits;
+      $this->_average_duration    = $this->duration    / $this->hits;
+      $this->_average_processus   = $this->processus   / $this->hits;
+      $this->_average_processor   = $this->processor   / $this->hits;
+      $this->_average_request     = $this->request     / $this->hits;
       $this->_average_nb_requests = $this->nb_requests / $this->hits;
       $this->_average_peak_memory = $this->peak_memory / $this->hits;
-      $this->_average_errors      = $this->errors / $this->hits;
-      $this->_average_warnings    = $this->warnings / $this->hits;
-      $this->_average_notices     = $this->notices / $this->hits;
+      $this->_average_errors      = $this->errors      / $this->hits;
+      $this->_average_warnings    = $this->warnings    / $this->hits;
+      $this->_average_notices     = $this->notices     / $this->hits;
     }
     // If time period == 1 hour
     $this->_average_hits = $this->hits / 60; // hits per min
@@ -162,7 +162,7 @@ class CAccessLog extends CMbObject {
    * @return CAccessLog[]
    */
   static function loadAggregation($start, $end, $groupmod = 0, $module = null, $human_bot = null) {
-    $al    = new static;
+    $al    = new self;
     $table = $al->_spec->table;
 
     switch ($groupmod) {
@@ -247,7 +247,7 @@ class CAccessLog extends CMbObject {
    * @return CAccessLog[]
    */
   static function loadPeriodAggregation($start, $end, $period_format, $module_name, $action_name, $human_bot = null) {
-    $al    = new static;
+    $al    = new self;
     $table = $al->_spec->table;
 
     // Convert date format from PHP to MySQL
@@ -257,12 +257,6 @@ class CAccessLog extends CMbObject {
       $query = "SELECT
                   `accesslog_id`,
                   `period`,
-                  AVG(duration/hits)    AS _average_duration,
-                  AVG(processus/hits)   AS _average_processus,
-                  AVG(processor/hits)   AS _average_processor,
-                  AVG(request/hits)     AS _average_request,
-                  AVG(nb_requests/hits) AS _average_nb_requests,
-                  AVG(peak_memory/hits) AS _average_peak_memory,
                   SUM(hits)             AS hits,
                   SUM(size)             AS size,
                   SUM(duration)         AS duration,
@@ -284,12 +278,6 @@ class CAccessLog extends CMbObject {
                   `module_action`.`module`,
                   `module_action`.`action`,
                   `period`,
-                  AVG(duration/hits)    AS _average_duration,
-                  AVG(processus/hits)   AS _average_processus,
-                  AVG(processor/hits)   AS _average_processor,
-                  AVG(request/hits)     AS _average_request,
-                  AVG(nb_requests/hits) AS _average_nb_requests,
-                  AVG(peak_memory/hits) AS _average_peak_memory,
                   SUM(hits)             AS hits,
                   SUM(size)             AS size,
                   SUM(duration)         AS duration,
@@ -340,7 +328,7 @@ class CAccessLog extends CMbObject {
    * @return array
    */
   static function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 'one-day', $left, $right, $human_bot = null) {
-    $al = new static;
+    $al    = new static;
 
     switch ($interval) {
       default:
