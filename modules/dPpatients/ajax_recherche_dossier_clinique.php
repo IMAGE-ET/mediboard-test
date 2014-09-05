@@ -384,17 +384,17 @@ if ($one_field_presc) {
   }
   else if ($composant) {
     $composition = new CBcbComposition();
-    $composition->Produits($composant);
-    $codes_cip = CMbArray::pluck($composition->distObj->TabProduit, "CodeCIP");
+    $composition->searchProduits($composant);
+    $codes_cip = @CMbArray::pluck($composition->distObj->TabProduit, "CodeCIP");
     $whereMed[] = "prescription_line_medicament.code_cip " . CSQLDataSource::prepareIn($codes_cip);
-    $whereMix[] = "prescription_line_mix_item.code_cis ".CSQLDataSource::prepareIn($codes_cip);
+    $whereMix[] = "prescription_line_mix_item.code_cip ".CSQLDataSource::prepareIn($codes_cip);
   }
   else if ($indication) {
     $bcb_indication = new CBcbIndication();
     $produits = $bcb_indication->searchProduits($indication, $type_indication);
     $codes_cip = CMbArray::pluck($produits, "Code_CIP");
     $whereMed[] = "prescription_line_medicament.code_cip " . CSQLDataSource::prepareIn($codes_cip);
-    $whereMix[] = "prescription_line_mix_item.code_cis ".CSQLDataSource::prepareIn($codes_cip);
+    $whereMix[] = "prescription_line_mix_item.code_cip ".CSQLDataSource::prepareIn($codes_cip);
   }
   else if ($commentaire) {
     $whereMed["prescription_line_medicament.commentaire"] = "LIKE '%".addslashes($commentaire)."%'";
@@ -543,6 +543,7 @@ if ($one_field) {
       $consult = new CConsultation();
       $consult->load($_result["consultation_id"]);
       $pat->_distant_object = $consult;
+      $consult->loadRefPlageConsult();
       $pat->_age_epoque = intval(CMbDT::daysRelative($pat->naissance, $consult->_ref_plageconsult->date)/365);
     }
     else if ($interv_filled) {
