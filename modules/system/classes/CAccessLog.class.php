@@ -162,7 +162,7 @@ class CAccessLog extends CMbObject {
    * @return CAccessLog[]
    */
   static function loadAggregation($start, $end, $groupmod = 0, $module = null, $human_bot = null) {
-    $al    = new self;
+    $al    = new static;
     $table = $al->_spec->table;
 
     switch ($groupmod) {
@@ -247,7 +247,7 @@ class CAccessLog extends CMbObject {
    * @return CAccessLog[]
    */
   static function loadPeriodAggregation($start, $end, $period_format, $module_name, $action_name, $human_bot = null) {
-    $al    = new self;
+    $al    = new static;
     $table = $al->_spec->table;
 
     // Convert date format from PHP to MySQL
