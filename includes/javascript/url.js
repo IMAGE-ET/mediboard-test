@@ -1101,6 +1101,10 @@ var Url = Class.create({
       onFailure: function(){ element.update('<div class="error">Le serveur rencontre quelques problèmes.</div>');}
     }, oOptions);
 
+    if (oOptions.method != "get") {
+      oOptions.abortPrevious = false;
+    }
+
     if (Preferences.INFOSYSTEM == 1 && oOptions.method === "get") {
       var lastQuery = Url.requestTimers[targetId];
 
