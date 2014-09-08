@@ -1,0 +1,82 @@
+div.planning_ressource {
+  margin-top: -0.8em;
+  margin-left: 10%;
+}
+
+div.planning_ressource.interv {
+  outline: 2px solid black;
+}
+
+div.planning_ressource.usage {
+  background: #fd7;
+  height: 1.5em;
+}
+
+div.planning_ressource.usage_selected {
+  background: #fb0;
+  height: 1.5em;
+}
+
+div.planning_ressource.indispo {
+  background: #f88;
+  height: 1.5em;
+}
+
+div.planning_ressource.besoin {
+  background: #ffb;
+  outline: 1px solid #000;
+}
+
+table.planningBloc {
+  width: 100%;
+  border-spacing: 1px;
+}
+
+table.planningBloc th {
+  background-color: #888;
+  padding: 2px;
+  color: #fff;
+  border: outset #ccc 1px;
+  font-weight: normal;
+  white-space: nowrap;
+}
+
+table.planningBloc th a {
+  color: #fff;
+}
+
+table.planningBloc th.heure {
+  text-align: left;
+  width: 6%;
+}
+
+table.planningBloc td.salle {
+  background-color: #eee;
+  text-align: center;
+}
+
+table.planningBloc td {
+  vertical-align: middle;
+  background-color: #888;
+}
+
+table.planningBloc td.empty {
+  background: #eee;
+  width: 1.5%;
+}
+
+table.planningBloc td.firsthour {
+  background: #ccc;
+}
+
+table.planningBloc td.plageop {
+  background: #ddd;
+  vertical-align: top;
+  text-align: center;
+  white-space: normal;
+  text-shadow:  0   0   0 rgba(0, 0, 0, 0),
+  -1px 0   0 rgba(255,255,255,.3),
+  0   1px 0 rgba(255,255,255,.3),
+  1px 0   0 rgba(255,255,255,.3),
+  0  -1px 0 rgba(255,255,255,.3);
+}

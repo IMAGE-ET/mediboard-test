@@ -11,3 +11,19 @@
 .inform-field {
   background-color: #fc0 !important;
 }
+
+.merge-selected {
+  outline: 3px solid #88f;
+}
+
+.merge-possible {
+  outline: 3px solid #ff8;
+}
+
+.merge-probable {
+  outline: 3px solid #8f8;
+}
+
+.mergeable big {
+  font-weight: bold;
+}

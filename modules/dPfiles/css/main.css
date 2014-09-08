@@ -1,0 +1,12 @@
+#modal-yoplet td.warning, td.cross {
+  background: url(images/buttons/cancel.png) no-repeat 6px;
+}
+
+img#thumb {
+  box-shadow: 0 6px 10px rgba(0,0,0,0.4);
+}
+
+.preview {
+  border: 1px solid #aaa;
+  background: #fff;
+}

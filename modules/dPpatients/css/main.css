@@ -36,3 +36,21 @@ td.legend-onhover {
   font-weight: bold;
   color: black;
 }
+
+.iconed-text {
+  padding-left: 20px !important;
+  background-repeat: no-repeat;
+  background-position: center left;
+}
+
+.iconed-text.interv {
+  background-image: url(images/icons/interv.png);
+}
+
+.iconed-text.urg {
+  background-image: url(images/icons/urg.png);
+}
+
+.iconed-text.anesth {
+  background-image: url(images/icons/anesth.png);
+}

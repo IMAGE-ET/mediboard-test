@@ -16,6 +16,11 @@ li.atcd_hover a {
   outline: 3px #f88 solid;
 }
 
+.categorieConsult {
+  padding-left: 20px;
+  height: 18px;
+  margin-left: 0;
+}
 
 .planning div.event-container div.pour_tiers {
   background-image: url("../../../images/icons/ray_blue.gif");
@@ -50,4 +55,154 @@ div.progressBar_dispo div.disponibility_planning_-1 {
 
 div.progressBar_dispo div.disponibility_planning_1 {
   background: #ff7b66;
+}
+
+.schema-dentaire {
+  margin: auto;
+}
+
+.dent {
+  border-radius: 22px;
+  position: absolute;
+  cursor: pointer;
+  background:transparent;
+}
+
+.dent:hover {
+  outline: 2px solid #F00;
+}
+
+.focus {
+  outline: 1px solid #F00;
+}
+
+.schema-dentaire .defaut {
+  background: red;
+}
+
+.schema-dentaire .bridge {
+  background: #6699FF;
+}
+
+.schema-dentaire .implant {
+  background: #FFFF00;
+}
+
+.schema-dentaire .pivot {
+  background: #FF9900;
+}
+
+.schema-dentaire .mobile {
+  background: #33CC00;
+}
+
+.schema-dentaire .appareil {
+  background: #FF66FF;
+}
+
+.dent-menu {
+  position: absolute;
+  z-index: 100;
+  border: 1px solid #999;
+  background: #fff;
+}
+
+.dent-menu a {
+  display: block;
+  cursor: pointer;
+  padding: 3px;
+  color: #000;
+  clear: both;
+}
+
+.dent-menu a:hover {
+  text-decoration: none;
+  color: #666;
+}
+
+.dent-menu a.cancel {
+  padding-top: 0;
+  padding-bottom: 0;
+  text-align: right;
+  background: #999;
+  color: #fff;
+}
+
+.dent-legend, .dent-buttons {
+  position: absolute;
+  top: -4px;
+  margin: 0;
+}
+
+.dent-legend {
+  right: 0;
+}
+
+.dent-buttons {
+  left: 0;
+}
+
+.dent-legend a {
+  padding: 1px;
+  margin: 1px;
+}
+
+.dent-legend a.none {
+  background-color: #fff;
+}
+
+.dent-legend a.active {
+  outline: 2px solid #f00;
+}
+
+.mallampati-selected {
+  background: #B2CCFF;
+}
+
+div.jeton_dizaine {
+  background: #333;
+  border: 1px solid #666;
+  border-radius: 6px;
+  float: left;
+  width: 11px;
+  height: 11px;
+  margin-right: -7px;
+}
+
+div.jeton_unite {
+  background: #ddd;
+  border: 1px solid #666;
+  border-radius: 4px;
+  float: left;
+  width: 7px;
+  height: 7px;
+  margin-top: 2px;
+  margin-right: -6px;
+}
+
+table#weber td {
+  text-align: center;
+}
+
+table#weber tr.values,
+table#weber tr.vocales {
+  display: none;
+}
+
+table#weber tr.moyenne td {
+  background-color: #ddd;
+}
+
+table#weber tr.moyenne td.aerien {
+  background-color: #aaf;
+  font-weight: bold;
+}
+
+table#weber tr.moyenne td.osseux {
+  background-color: #faa;
+  font-weight: bold;
+}
+
+table#weber td {
+  text-align: center;
 }

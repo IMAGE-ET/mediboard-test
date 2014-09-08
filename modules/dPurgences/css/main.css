@@ -55,6 +55,34 @@
   border-left: 5px solid #0F0;
 }
 
+table.tbl td.ccmu-1, table.tbl tr:hover td.ccmu-1{
+  background-color: #0F0;
+}
+
+table.tbl td.ccmu-2, table.tbl tr:hover td.ccmu-2{
+  background-color: #9F0;
+}
+
+table.tbl td.ccmu-3, table.tbl tr:hover td.ccmu-3{
+  background-color: #FF0;
+}
+
+table.tbl td.ccmu-4, table.tbl tr:hover td.ccmu-4{
+  background-color: #FFCD00;
+}
+
+table.tbl td.ccmu-5, table.tbl tr:hover td.ccmu-5{
+  background-color: #F60;
+}
+
+table.tbl td.ccmu-D, table.tbl tr:hover td.ccmu-D{
+  background-color: #F00;
+}
+
+table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
+  background-color: #0F0;
+}
+
 table.tbl td.ccmu-21, table.tbl tr:hover td.ccmu-21{
   background-color: #F00;
 }

@@ -5,3 +5,65 @@ table.tbl td.left_day {
 table.tbl td.right_day {
   border-right: 2px solid grey;
 }
+
+tr.in_progress_before, tr.in_progress_after {
+  display: none !important;
+}
+
+tr.show_important {
+  display: table-row !important;
+}
+
+div.cellule_patient {
+  float: left;
+  width: 49%;
+  padding: 1px;
+}
+
+div.sejour-bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 1px solid #aaa;
+  height: 3px;
+  width: 90%;
+  background-color: #fff;
+}
+
+div.sejour-bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 1px solid #aaa;
+  height: 3px;
+  width: 90%;
+  background-color: #fff;
+}
+
+div.ssr-sejour-bar {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  border: 1px solid #aaa;
+  height: 3px;
+  width: 20px;
+  background-color: #fff;
+}
+
+div.ecap-sejour-bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 1px solid #aaa;
+  height: 3px;
+  width: 90%;
+  background-color: #fff;
+  margin: 2px;
+}
+
+div.sejour-bar div,
+div.ecap-sejour-bar div,
+div.ssr-sejour-bar div {
+  background: #444;
+  height: 4px;
+}

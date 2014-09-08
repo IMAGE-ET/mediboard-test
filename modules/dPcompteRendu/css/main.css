@@ -1,0 +1,23 @@
+.listeChoixCR {
+  white-space: normal;
+}
+
+.listeChoixCR select {
+  margin: 1px;
+  float: left;
+  width: 150px;
+}
+
+.listeChoixCR input {
+  margin: 1px;
+  float: left;
+}
+
+div.oldThumbs {
+  z-index: 1;
+  position: fixed;
+  width: 160px;
+  height: 100%;
+  cursor: pointer;
+  background: url(images/buttons/change.png) no-repeat 50% 40% #aaa;
+}
