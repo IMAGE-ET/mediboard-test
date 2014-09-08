@@ -152,11 +152,14 @@
               {{if $dossier_medical->_ref_prescription}}
                 {{foreach from=$dossier_medical->_ref_prescription->_ref_prescription_lines item=_line_med}}
                   <li>
-                    {{$_line_med->_view}}
+                    {{$_line_med->_ucd_view}}
                     {{if $_line_med->_ref_prises|@count}}
                       ({{foreach from=$_line_med->_ref_prises item=_prise name=foreach_prise}}
                         {{$_prise->_view}}{{if !$smarty.foreach.foreach_prise.last}},{{/if}}
                       {{/foreach}})
+                    {{/if}}
+                    {{if $_line_med->debut || $_line_med->fin}}
+                      <span class="compact">({{mb_include module=system template=inc_interval_date from=$_line_med->debut to=$_line_med->fin}})</span>
                     {{/if}}
                   </li>
                 {{/foreach}}
