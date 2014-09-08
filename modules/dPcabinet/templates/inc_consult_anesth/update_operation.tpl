@@ -27,6 +27,13 @@
       }
     });
   };
+
+
+{{if $auto_link}}
+    Main.add(function() {
+      getForm('updateOperation').onsubmit();
+    });
+{{/if}}
 </script>
 
 <form name="updateOperation" target="?m={{$m}}" method="post" onsubmit="return linkOperation(this);">
