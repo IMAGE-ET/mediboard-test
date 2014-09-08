@@ -37,7 +37,7 @@
         {{if $acte->montant_depassement && $acte->_class == "CActeCCAM"}}
           <button id="regle_dh-{{$acte->_id}}" type="button"
             class="{{if $acte->regle_dh}}cancel{{else}}tick{{/if}} notext"
-            onclick="submitActeCCAM(getForm('reglement-{{$acte->_id}}'), '{{$acte->_id}}', 'regle_dh')">
+            onclick="submitActeCCAM(getForm('reglement-{{$acte->_guid}}'), '{{$acte->_id}}', 'regle_dh')">
             Changer
           </button>
         {{/if}}
@@ -51,6 +51,8 @@
               <input type="hidden" name="dosql" value="do_acteccam_aed" />
               <input type="hidden" name="m" value="dPsalleOp" />
               <input type="hidden" name="acte_id" value="{{$acte->_id}}" />
+              <input type="hidden" name="object_class" value="{{$acte->object_class}}" />
+              <input type="hidden" name="object_id" value="{{$acte->object_id}}" />
               <input type="hidden" name="_check_coded" value="0" />
               <input type="hidden" name="regle" value="{{$acte->regle}}" />
               <input type="hidden" name="regle_dh" value="{{$acte->regle_dh}}" />
