@@ -605,7 +605,8 @@ var ExObjectFormula = Class.create({
           if (input.hasClassName("date") ||
               input.hasClassName("dateTime") ||
               input.hasClassName("time")) {
-            input.onchange = compute;
+            // Ne pas utiliser onchange car il peut y avoir plusieurs observer sur un meme input
+            input.observe("change", compute).observe("ui:change", compute);
           }
           else {
             input.observe("change", compute).observe("ui:change", compute).observe("click", compute);
