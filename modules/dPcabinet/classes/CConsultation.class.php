@@ -1155,10 +1155,19 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
    */
   function loadComplete() {
     parent::loadComplete();
+
+    if (!$this->_ref_patient) {
+      $this->loadRefPatient();
+    }
     $this->_ref_patient->loadRefConstantesMedicales();
+
+    if (!$this->_ref_actes_ccam) {
+      $this->loadRefsActesCCAM();
+    }
     foreach ($this->_ref_actes_ccam as $_acte) {
       $_acte->loadRefExecutant();
     }
+
     $this->loadRefConsultAnesth();
     foreach ($this->_refs_dossiers_anesth as $_dossier_anesth) {
       $_dossier_anesth->loadRefOperation();
