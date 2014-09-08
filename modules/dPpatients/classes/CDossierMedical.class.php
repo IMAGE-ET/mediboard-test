@@ -685,8 +685,20 @@ class CDossierMedical extends CMbMetaObject {
           $prises = $_line->loadRefsPrises();
           $posologie = implode(" - ", CMbArray::pluck($prises, "_view"));
           $posologie = $posologie ? " ($posologie)" : "";
-          $list[] = $view . $posologie;
-          
+          $duree = "";
+          if ($_line->debut && (!$_line->fin || $_line->fin >= CMbDT::date())) {
+            if ($_line->fin) {
+              $duree = " (Du " . $_line->getFormattedValue("debut"). "au " . $_line->getFormattedValue("fin").")";
+            }
+            else {
+              $duree = " (Depuis le " . $_line->getFormattedValue("debut").")";
+            }
+          }
+          elseif ($_line->fin && $_line->fin >= CMbDT::date()) {
+            $duree = " (Jusqu'au " . $_line->getFormattedValue("fin").")";
+          }
+
+          $list[] = $view . $posologie. $duree;
         }
       }
       
