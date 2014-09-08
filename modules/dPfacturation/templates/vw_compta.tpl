@@ -31,6 +31,12 @@
         $V(form.chir, id);
       }
     });
+    {{if count($listPrat) == 1}}
+      {{foreach from=$listPrat item=prat_info}}
+        $V(form.chir_view, '{{$prat_info->_view}}');
+        $V(form.chir, '{{$prat_info->user_id}}');
+      {{/foreach}}
+    {{/if}}
   });
 </script>
 
