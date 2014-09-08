@@ -2,7 +2,7 @@
 
 <!-- Plages -->
 {{foreach from=$salle->_ref_plages item=_plage}}
-  {{if $_plage->_ref_operations}}
+  {{if $_plage->_ref_operations || $_plage->_unordered_operations}}
     <hr />
 
     <form name="anesth{{$_plage->_id}}" action="?" method="post" class="{{$_plage->_spec}}">
