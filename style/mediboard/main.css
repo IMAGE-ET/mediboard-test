@@ -39,35 +39,35 @@ z-index ordering (foreground to background) :
 
 @font-face {
   font-family: opendyslexic;
-  src: url(fonts/open_dyslexic/eot/OpenDyslexic-Regular.eot?) format('eot'),
+  src: url(fonts/open_dyslexic/eot/OpenDyslexic-Regular.eot?)  format('eot'),
        url(fonts/open_dyslexic/woff/OpenDyslexic-Regular.woff) format('woff'),
-       url(fonts/open_dyslexic/otf/OpenDyslexic-Regular.otf) format('opentype');
+       url(fonts/open_dyslexic/otf/OpenDyslexic-Regular.otf)   format('opentype');
 }
 
 @font-face {
   font-family: opendyslexic;
   font-weight: bold;
-  src: url(fonts/open_dyslexic/eot/OpenDyslexic-Bold.eot?) format('eot'),
+  src: url(fonts/open_dyslexic/eot/OpenDyslexic-Bold.eot?)  format('eot'),
        url(fonts/open_dyslexic/woff/OpenDyslexic-Bold.woff) format('woff'),
-       url(fonts/open_dyslexic/otf/OpenDyslexic-Bold.otf) format('opentype');
+       url(fonts/open_dyslexic/otf/OpenDyslexic-Bold.otf)   format('opentype');
 }
 
 @font-face {
   font-family: opendyslexic;
   font-weight: normal;
   font-style: italic;
-  src: url(fonts/open_dyslexic/eot/OpenDyslexic-Italic.eot?) format('eot'),
+  src: url(fonts/open_dyslexic/eot/OpenDyslexic-Italic.eot?)  format('eot'),
        url(fonts/open_dyslexic/woff/OpenDyslexic-Italic.woff) format('woff'),
-       url(fonts/open_dyslexic/otf/OpenDyslexic-Italic.otf) format('opentype');
+       url(fonts/open_dyslexic/otf/OpenDyslexic-Italic.otf)   format('opentype');
 }
 
 @font-face {
   font-family: opendyslexic;
   font-weight: bold;
   font-style: italic;
-  src: url(fonts/open_dyslexic/eot/OpenDyslexic-BoldItalic.eot?) format('eot'),
+  src: url(fonts/open_dyslexic/eot/OpenDyslexic-BoldItalic.eot?)  format('eot'),
        url(fonts/open_dyslexic/woff/OpenDyslexic-BoldItalic.woff) format('woff'),
-       url(fonts/open_dyslexic/otf/OpenDyslexic-BoldItalic.otf) format('opentype');
+       url(fonts/open_dyslexic/otf/OpenDyslexic-BoldItalic.otf)   format('opentype');
 }
 
 @media screen {
@@ -99,10 +99,6 @@ li.cancelled {
   background-color: #eee;
 }
 
-tr.script {
-  display: none;
-}
-
 /** Must not apply it to every tag, or it will break textareas behavior */
 td.text,
 th.text,
@@ -124,50 +120,50 @@ span.compact {
 td.compact strong,
 th.compact strong,
 div.compact strong,
-span.compact strong{
+span.compact strong {
   line-height: 1;
   font-size: 0.9em; 
   color: #000;
 }
 
-a.selected{
+a.selected {
   background: url(../../images/icons/td_selected.png) no-repeat bottom center;
   padding-bottom: 8px;    
 }  
 
-a.selectable{
+a.selectable {
   padding-bottom: 8px;  
 }
-a.selectable:hover{
+a.selectable:hover {
   background: url(../../images/icons/td_selected.png) no-repeat bottom center;
   padding-bottom: 8px;    
 }  
 
-a.sortable{
+a.sortable {
   background: url(../../images/icons/a_sortable.png) no-repeat bottom center;
   padding-bottom: 8px;  
 }
 
-a.sortable:hover{
+a.sortable:hover {
   background: url(../../images/icons/a_asc.png) no-repeat bottom center;
   padding-bottom: 8px;  
 }
 
-a.ASC{
+a.ASC {
   background: url(../../images/icons/a_asc.png) no-repeat bottom center;
   padding-bottom: 8px;
 }
 
-a.ASC:hover{
+a.ASC:hover {
   background: url(../../images/icons/a_desc.png) no-repeat bottom center;
   padding-bottom: 8px;
 }
 
-a.DESC{
+a.DESC {
   background: url(../../images/icons/a_desc.png) no-repeat bottom center;
   padding-bottom: 8px;
 }
-a.DESC:hover{
+a.DESC:hover {
   background: url(../../images/icons/a_asc.png) no-repeat bottom center;
   padding-bottom: 8px;
 }
@@ -275,21 +271,6 @@ div.generated {
   margin: 5px;
   text-align: center;
   font-size: 90%;
-}
-
-#slideshow {
-  margin: 50px auto 0;
-  width: 60%;
-  font-size: 150%;
-  text-align: center;
-}
-
-div.about div.text {
-  height: 300px;
-}
-
-div.about div.nav {
-  border-top: 1px solid #aaa;
 }
 
 .inputExtension {
@@ -469,28 +450,6 @@ option.modification {
   background-position: center right;
 }
 
-div.sejour {
-   font-weight: bold;
-}
-
-table.tbl th.element{
-  background-color: #ddf;
-  color: #000;
-}
-
-table.tbl th.element a{
-  color: #000;
-}
-
-.div_signature {
-  position: absolute;
-  right: 25px;
-}
-
-.div_signature button {
-  margin-top: -3px;
-}
-
 div.arretee,
 span.hatching,
 table.tbl th.arretee, table.tbl th.hatching, 
@@ -532,26 +491,6 @@ table.form tr.hatching td {
 
 pre.geshi ol {
   padding-left: 3em;
-}
-
-strong.realises {
-  color: #080;
-}
-
-strong.annules {
-  color: #800;
-}
-
-strong.planifies {
-  color: #888;
-}
-
-strong.csarr {
-  color: #080;
-}
-
-strong.cdarr {
-  color: #800;
 }
 
 td.tick {
@@ -626,18 +565,6 @@ td.loading {
   .ua-firefox .opacity-90 {
     opacity: 1.0;
   }
-}
-
-td.desistee {
-  background: #faa !important;
-}
-
-td.waiting {
-  background: #fda !important;
-}
-
-td.remplacement_ok {
-  background: #bfb !important;
 }
 
 span.circled {
