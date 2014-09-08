@@ -398,7 +398,7 @@
                 {{foreach from=$dossier_medical->_ref_prescription->_ref_prescription_lines item=_line_med}}
                   <li>
                     <a href="#1" onclick="Prescription.viewProduit(null,'{{$_line_med->code_ucd}}','{{$_line_med->code_cis}}');">
-                      {{$_line_med->_view}}
+                      {{$_line_med->_ucd_view}}
                     </a>
                     {{if $_line_med->_ref_prises|@count}}
                       ({{foreach from=$_line_med->_ref_prises item=_prise name=foreach_prise}}
@@ -407,6 +407,9 @@
                     {{/if}}
                     {{if $_line_med->commentaire}}
                     ({{$_line_med->commentaire}})
+                    {{/if}}
+                    {{if $_line_med->debut || $_line_med->fin}}
+                      <span class="compact">({{mb_include module=system template=inc_interval_date from=$_line_med->debut to=$_line_med->fin}})</span>
                     {{/if}}
                   </li>
                 {{/foreach}}
