@@ -3,16 +3,22 @@
     switch(type) {
       case 'bilan':
         var url = new Url("soins", "offline_bilan_service");
+        url.addParam("dialog", 1);
         break;
       case 'plan':
         var url = new Url("soins", "offline_plan_soins");
+        url.addParam("dialog", 1);
         break;
       case 'sejour':
         var url = new Url("soins", "offline_sejours");
+        url.addParam("dialog", 1);
+        break;
+      case 'ordonnances':
+        var url = new Url("soins", "offline_prescriptions_multipart", "raw");
+        url.addParam("dialog", 0);
     }
 
     url.addParam("service_id", $("service_id").value);
-    url.addParam("dialog", 1);
 
     if (embed) {
       url.addParam("embed", 1);
@@ -54,6 +60,8 @@
         <button type="button" class="search" onclick="redirectOffline('bilan');">{{tr}}CService.bilan{{/tr}}</button>
         <br />
         <button type="button" class="search" onclick="redirectOffline('plan');">{{tr}}CService.plan_soins{{/tr}}</button>
+        <br />
+        <button type="button" class="search" onclick="redirectOffline('ordonnances');">{{tr}}CService.ordonnances{{/tr}}</button>
       {{/if}}
     </td>
   </tr>
