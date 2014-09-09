@@ -70,7 +70,7 @@ Traitement = {
 
 showModalTP = function() {
   window.modalUrlTp = new Url("prescription", "ajax_vw_traitements_personnels");
-  window.modalUrlTp.addParam("sejour_id", '{{$sejour->_id}}');
+  window.modalUrlTp.addParam("object_guid", '{{$sejour->_guid}}');
   window.modalUrlTp.addParam("refresh_prescription", true);
   window.modalUrlTp.requestModal("80%", "80%", {
     onClose: function() {
