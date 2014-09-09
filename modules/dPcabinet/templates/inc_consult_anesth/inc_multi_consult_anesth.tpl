@@ -36,7 +36,11 @@
       le <strong>{{$operation->_datetime|date_format:"%a %d %b %Y"}}</strong>
       par le <strong>Dr {{$operation->_ref_chir->_view}}</strong>
         {{if $operation->libelle}}
-          <em>[{{$operation->libelle}}]</em>
+          [{{$operation->libelle}}]
+        {{/if}}
+        {{if $operation->cote}}
+          ({{mb_label object=$operation field=cote}}:
+          {{mb_value object=$operation field=cote}})
         {{/if}}
     </span><br/>
     <strong>{{mb_label object=$operation field="depassement"}} :</strong>
