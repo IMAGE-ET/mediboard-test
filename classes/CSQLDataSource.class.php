@@ -68,35 +68,40 @@ abstract class CSQLDataSource {
    * @return CSQLDataSource|null
    */
   static function get($dsn, $quiet = false) {
-    if (!array_key_exists($dsn, self::$dataSources)) {
-
-      $reporting = null;
-      if ($quiet) {
-        $reporting = error_reporting(0);
-      }
-
-      if (null == $dbtype = CAppUI::conf("db $dsn dbtype")) {
-        trigger_error("FATAL ERROR: Undefined type DSN type for '$dsn'.", E_USER_ERROR);
-        return null;
-      }
-
-      if (empty(self::$engines[$dbtype])) {
-        trigger_error("FATAL ERROR: DSN type '$dbtype' unhandled.", E_USER_ERROR);
-        return null;
-      }
-
-      $dsClass = self::$engines[$dbtype];
-
-      /** @var self $dataSource */
-      $dataSource = new $dsClass;
-      $dataSource->init($dsn);
-      self::$dataSources[$dsn] = $dataSource->link ? $dataSource : null;
-         
-      if ($quiet) {
-        error_reporting($reporting);
-      }
+    if ($dsn === "std" && CView::$slavestate) {
+      $dsn = "readonly";
     }
-    
+
+    if (array_key_exists($dsn, self::$dataSources)) {
+      return self::$dataSources[$dsn];
+    }
+
+    $reporting = null;
+    if ($quiet) {
+      $reporting = error_reporting(0);
+    }
+
+    if (null == $dbtype = CAppUI::conf("db $dsn dbtype")) {
+      trigger_error("FATAL ERROR: Undefined type DSN type for '$dsn'.", E_USER_ERROR);
+      return null;
+    }
+
+    if (empty(self::$engines[$dbtype])) {
+      trigger_error("FATAL ERROR: DSN type '$dbtype' unhandled.", E_USER_ERROR);
+      return null;
+    }
+
+    $dsClass = self::$engines[$dbtype];
+
+    /** @var self $dataSource */
+    $dataSource = new $dsClass;
+    $dataSource->init($dsn);
+    self::$dataSources[$dsn] = $dataSource->link ? $dataSource : null;
+
+    if ($quiet) {
+      error_reporting($reporting);
+    }
+
     return self::$dataSources[$dsn];
   }
   
@@ -721,7 +726,7 @@ abstract class CSQLDataSource {
    * @return bool job done
    */
   function insertObject($table, $object, $vars, $keyName = null/*, $updateDuplicate = false*/) {
-    if (CAppUI::conf("readonly")) {
+    if (CAppUI::conf("readonly")  || $this->dsn === "readonly") {
       return false;
     }
     
@@ -786,7 +791,16 @@ abstract class CSQLDataSource {
     
     return true;
   }
-  
+
+  function deleteObject($table, $keyName, $keyValue) {
+    if (CAppUI::conf("readonly")  || $this->dsn === "readonly") {
+      return false;
+    }
+
+    $query = "DELETE FROM $table WHERE $keyName = '$keyValue'";
+
+    return $this->exec($query);
+  }
   
   function insertMulti($table, $data, $step){
     $counter = 0;
@@ -855,8 +869,8 @@ abstract class CSQLDataSource {
    *
    * @return bool job done
    */
-  function updateObject($table, $object, $vars, $keyName, $nullifyEmptyStrings = true) {
-    if (CAppUI::conf("readonly")) {
+  function updateObject($table, $vars, $keyName, $nullifyEmptyStrings = true) {
+    if (CAppUI::conf("readonly") || $this->dsn === "readonly") {
       return false;
     }
     

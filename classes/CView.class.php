@@ -21,6 +21,8 @@ class CView {
   /** @var string[] Parameters properties */
   public static $props;
 
+  public static $slavestate = false;
+
   /**
    * Get a REQUEST parameter
    *
@@ -166,6 +168,28 @@ class CView {
     $smarty->display("view_info.tpl");
     CApp::rip();
   }
+
+  static function enableSlave() {
+    self::$slavestate = true;
+    self::rerouteStdDS();
+  }
+
+  static function disableSlave() {
+    if (!self::$slavestate) {
+      return;
+    }
+    self::$slavestate = false;
+    self::rerouteStdDS();
+  }
+
+  static function rerouteStdDS() {
+    foreach (CStoredObject::$spec as $_spec) {
+      if ($_spec->dsn === "std") {
+        $_spec->init();
+      }
+    }
+  }
+
 }
 
 CView::$params = new stdClass;

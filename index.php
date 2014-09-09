@@ -342,6 +342,8 @@ else {
   include __DIR__."/includes/main.php";
 }
 
+CView::disableSlave();
+
 CApp::notify("AfterMain");
 
 // Send timing data in HTTP header

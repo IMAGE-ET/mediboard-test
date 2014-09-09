@@ -1483,7 +1483,7 @@ class CStoredObject extends CModelObject {
     
     // DB query
     if ($this->_old->_id) {
-      $ret = $spec->ds->updateObject($spec->table, $this, $vars, $spec->key, $spec->nullifyEmptyStrings);
+      $ret = $spec->ds->updateObject($spec->table, $vars, $spec->key, $spec->nullifyEmptyStrings);
     }
     else {
       $keyToUpdate = $spec->incremented ? $spec->key : null;
@@ -1523,7 +1523,7 @@ class CStoredObject extends CModelObject {
     $vars = $this->getPlainFields();
 
     if ($this->_id) {
-      return $spec->ds->updateObject($spec->table, $this, $vars, $spec->key, $spec->nullifyEmptyStrings);
+      return $spec->ds->updateObject($spec->table, $vars, $spec->key, $spec->nullifyEmptyStrings);
     }
     else {
       $key = $spec->incremented ? $spec->key : null;
@@ -2484,13 +2484,13 @@ class CStoredObject extends CModelObject {
     }
     
     // Actually delete record
-    $query = "DELETE FROM {$this->_spec->table} WHERE {$this->_spec->key} = '$this->_id'";
-
     $ds = $this->getDS();
+    $result = $ds->deleteObject($this->_spec->table, $this->_spec->key, $this->_id);
 
-    $result = $ds->exec($query);
     if (!$result) {
-      return $ds->error();
+      return CAppUI::tr($this->_class) .
+        CAppUI::tr("CMbObject-msg-delete-failed") .
+        $this->_spec->ds->error();
     }
    
     // Deletion successful

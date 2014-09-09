@@ -106,6 +106,7 @@ $locales['CMbObject-msg-cascade-issues'] = 'problèmes en cascade pour';
 $locales['CMbObject-msg-check-failed'] = ': Données incorrectes, ';
 $locales['CMbObject-msg-nodelete-backrefs'] = 'Suppression impossible en raison des liaisons suivantes';
 $locales['CMbObject-msg-store-failed'] = ': Enregistrement impossible,';
+$locales['CMbObject-msg-delete-failed'] = ': Suppression impossible,';
 $locales['CMbObject.none'] = 'Aucun objet';
 $locales['CModule'] = 'Module';
 $locales['CPlageCalendaire-collision-with-plageNb%d-start%s-end%s'] = 'Collision de plage avec la plage n°%d [%s - %s]';

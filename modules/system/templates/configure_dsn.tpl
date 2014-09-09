@@ -41,9 +41,20 @@ var DSN = {
   {{assign var=dsnConfig value=$conf.$section.$dsn}}
 {{/if}} 
 
+
 <table class="main"> 
   <tr>
     <th colspan="2" class="title">{{tr}}config-{{$section}}{{/tr}} '{{$dsn}}'</th>
+  </tr>
+  <tr>
+    <td colspan="2">
+      {{if $dsn === "readonly"}}
+        <div class="small-info">
+          Attention à configurer un utilisateur qui n'a des droits qu'en lecture sur la base par précaution. <br />
+          <strong>Surtout, ne pas utiliser le même utilisateur que la source de données principale.</strong>
+        </div>
+      {{/if}}
+    </td>
   </tr>
   <tr>
     <td style="width: 30%;">
