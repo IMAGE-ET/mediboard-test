@@ -178,7 +178,11 @@
                 {{math equation=x*y x=$_usage->_debut_offset y=$td_width assign=offset}}
                 {{math equation=x*y x=$_usage->_width y=$td_width assign=width}}
                 <div class="planning_ressource usage{{if $_usage->_id == $usage_ressource_id}}_selected{{/if}}"
-                  style="position: absolute; left: {{$offset}}%; width: {{$width}}%;"></div>
+                     style="position: absolute; left: {{$offset}}%; width: {{$width}}%;"></div>
+                {{math equation=x*y x=$_usage->_debut_offset_retablissement y=$td_width assign=offset_retablissement}}
+                {{math equation=x*y x=$_usage->_width_retablissement y=$td_width assign=width_retablissement}}
+                <div class="planning_ressource indispo"
+                     style="position: absolute; left: {{$offset_retablissement}}%; width: {{$width_retablissement}}%;"></div>
               {{/foreach}}
             {{/if}}            
             {{if isset($indispos_by_ressource.$ressource_id|smarty:nodefaults)}}

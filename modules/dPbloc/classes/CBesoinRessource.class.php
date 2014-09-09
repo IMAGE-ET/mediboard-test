@@ -81,7 +81,7 @@ class CBesoinRessource extends CMbObject {
    */
   function isAvailable() {
     $this->loadRefOperation();
-    $deb_op = $this->_ref_operation->_datetime;
+    $deb_op = $this->_ref_operation->_datetime_best;
     $fin_op  = CMbDT::addDateTime($this->_ref_operation->temp_operation, $deb_op);
     $type_ressource = $this->loadRefTypeRessource();
     $nb_ressources = $type_ressource->countBackRefs("ressources_materielles");

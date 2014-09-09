@@ -8,7 +8,7 @@
  * @version    $Revision$
  *}}
 
-<script type="text/javascript">
+<script>
   {{if !$usage}}
     Main.add(function() {
       var form = getForm("addBesoin");
@@ -51,13 +51,13 @@
   onDelBesoin = function(besoin_id, nom) {
     var form = getForm("delBesoin");
     $V(form.besoin_ressource_id, besoin_id);
-    confirmDeletion(form, {objName: nom, ajax: 1}, {onComplete: function() { reloadModal(); } });
+    confirmDeletion(form, {objName: nom, ajax: 1}, {onComplete: reloadModal});
   };
   
   onDelUsage = function(usage_id, nom) {
     var form = getForm("delUsage");
     $V(form.usage_ressource_id, usage_id);
-    confirmDeletion(form, {objName: nom, ajax: 1}, {onComplete: function() { reloadModal(); } });
+    confirmDeletion(form, {objName: nom, ajax: 1}, {onComplete: reloadModal});
   };
   
   reloadModal = function() {
@@ -94,14 +94,14 @@
 </script>
 
 <form name="delBesoin" method="post">
-  <input type="hidden" name="m" value="dPbloc" />
+  <input type="hidden" name="m" value="bloc" />
   <input type="hidden" name="dosql" value="do_besoin_ressource_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="besoin_ressource_id" />
 </form>
 
 <form name="delUsage" method="post">
-  <input type="hidden" name="m" value="dPbloc" />
+  <input type="hidden" name="m" value="bloc" />
   <input type="hidden" name="dosql" value="do_usage_ressource_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="usage_ressource_id" />
@@ -113,7 +113,7 @@
       {{if !$usage}}
         <div style="float: right;">
           <form name="addBesoin" method="post" onsubmit="onSubmitBesoins(this)">
-            <input type="hidden" name="m" value="dPbloc" />
+            <input type="hidden" name="m" value="bloc" />
             <input type="hidden" name="dosql" value="do_besoin_ressource_aed" />
             <input type="text" name="libelle" class="autocomplete" />
             <input type="hidden" name="{{$type}}" value="{{$object_id}}"/>

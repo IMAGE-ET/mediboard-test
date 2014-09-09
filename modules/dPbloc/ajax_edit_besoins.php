@@ -28,6 +28,8 @@ $deb_op = $operation->_datetime;
 $fin_op  = CMbDT::addDateTime($operation->temp_operation, $deb_op);
 
 foreach ($besoins as $_besoin) {
+  $_besoin->loadRefTypeRessource();
+  $_besoin->loadRefUsage();
   // Côté protocole, rien à vérifier
   if ($type != "operation_id") {
     $_besoin->_color = "";

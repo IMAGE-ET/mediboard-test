@@ -58,27 +58,33 @@ $ressource->type_ressource_id = $type_ressource_id;
 // Les usages sur la période définie
 
 $usages = $ressource->loadRefsUsages($date_min, $date_max);
-
+CStoredObject::massLoadFwdRef($usages, "ressource_materielle_id");
 $usages_by_ressource = array();
 
-$besoins = CMbObject::massLoadFwdRef($usages, "besoin_ressource_id");
-CMbObject::massLoadFwdRef($besoins, "operation_id");
+$besoins = CStoredObject::massLoadFwdRef($usages, "besoin_ressource_id");
+CStoredObject::massLoadFwdRef($besoins, "operation_id");
 
 foreach ($usages as $_usage) {
   if (!isset($usages_by_ressource[$_usage->ressource_materielle_id])) {
     $usages_by_ressource[$_usage->ressource_materielle_id] = array();
   }
-  
+
+  $_ressource = $_usage->loadRefRessource();
+
   $_operation = $_usage->loadRefBesoin()->loadRefOperation();
   $_operation->loadRefPlageOp();
   $_debut_op = $_operation->_datetime;
   $_fin_op = CMbDT::addDateTime($_operation->temp_operation, $_debut_op);
-  
+  $fin_retab = CMbDT::addDateTime($_ressource->retablissement, $_fin_op);
+
   $_usage->_debut_offset = CMbDate::position(max($date_min, $_debut_op), $date_min, "1hour");
-  
   $_usage->_fin_offset = CMbDate::position(min($date_max, $_fin_op), $date_min, "1hour");
   $_usage->_width = $_usage->_fin_offset - $_usage->_debut_offset;
-  
+
+  $_usage->_debut_offset_retablissement = $_usage->_fin_offset;
+  $_usage->_fin_offset_retablissement = CMbdate::position(min($date_max, $fin_retab), $date_min, "1hour");
+  $_usage->_width_retablissement = $_usage->_fin_offset_retablissement - $_usage->_debut_offset_retablissement;
+
   if ($_usage->_width <= 0) {
     continue;
   }
@@ -90,7 +96,6 @@ $indispos = $ressource->loadRefsIndispos($date_min, $date_max);
 $indispos_by_ressource = array();
 
 foreach ($indispos as $_indispo) {
-  
   $_indispo->_debut_offset = CMbDate::position(max($date_min, $_indispo->deb), $date_min, "1hour");
   $_indispo->_fin_offset   = CMbDate::position(min($date_max, $_indispo->fin), $date_min, "1hour");
   $_indispo->_width        = $_indispo->_fin_offset - $_indispo->_debut_offset;

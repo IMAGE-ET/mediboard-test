@@ -26,8 +26,7 @@
           {{/if}}></button>
         {{if $type == "operation_id"}}
           <button type="button" class="modele_etiquette notext"
-            onclick="showPlanning('{{$_besoin->type_ressource_id}}', '{{$object_id}}', '{{$_usage->_id}}', '{{$_besoin->_id}}', '{{$usage}}')" title="Planning"></button>
-        {{/if}}
+            onclick="showPlanning('{{$_besoin->type_ressource_id}}', '{{$object_id}}', '{{$_usage->_id}}', '{{$_besoin->_id}}', '{{$usage}}')" title="Planning"></button> {{/if}}
       </div>
       <strong>
         {{$type_ressource->libelle}}
