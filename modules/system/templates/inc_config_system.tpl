@@ -8,33 +8,42 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-Main.add(function(){
-  var input = getForm("editConfig-system")["migration[limit_date]"];
-  input.className = "date";
-  input.type = "hidden";
-  Calendar.regField(input);
-  
-  input = getForm("editConfig-system")["system_date"];
-  input.className = "date";
-  input.type = "hidden";
-  Calendar.regField(input);
+<script>
+  Main.add(function() {
+    var input = getForm("editConfig-system")["migration[limit_date]"];
+    input.className = "date";
+    input.type = "hidden";
+    Calendar.regField(input);
 
-  input = getForm("editConfig-system")["offline_time_start"];
-  input.className = "time";
-  input.type = "hidden";
-  Calendar.regField(input);
+    input = getForm("editConfig-system")["system_date"];
+    input.className = "date";
+    input.type = "hidden";
+    Calendar.regField(input);
 
-  input = getForm("editConfig-system")["offline_time_end"];
-  input.className = "time";
-  input.type = "hidden";
-  Calendar.regField(input);
-});
+    input = getForm("editConfig-system")["offline_time_start"];
+    input.className = "time";
+    input.type = "hidden";
+    Calendar.regField(input);
+
+    input = getForm("editConfig-system")["offline_time_end"];
+    input.className = "time";
+    input.type = "hidden";
+    Calendar.regField(input);
+  });
+
+  migrateConfigs = function() {
+    if (!confirm("Voulez-vous vraiment migrer les configurations en base de données ?")) {
+      return;
+    }
+
+    var url = new Url("system", "ajax_migrate_configs");
+    url.requestUpdate("migration_config_db");
+  }
 </script>
 
-<form name="editConfig-system" action="?m=system&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
-  <input type="hidden" name="dosql" value="do_configure" />
+<form name="editConfig-system" action="?" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="system" />
+  <input type="hidden" name="dosql" value="do_configure" />
   <table class="form" style="table-layout: fixed;">
     
     {{mb_include module=system template=inc_config_str var=root_dir size=40}}
@@ -52,13 +61,22 @@ Main.add(function(){
     {{mb_include module=system template=inc_config_str var=offline_time_start}}
     {{mb_include module=system template=inc_config_str var=offline_time_end}}
     {{mb_include module=system template=inc_config_bool var=config_db}}
+
+    {{if $conf.config_db}}
+      <tr>
+        <th></th>
+        <td id="migration_config_db">
+          <button type="button" onclick="migrateConfigs()" class="send">Migrer les configurations</button>
+        </td>
+      </tr>
+    {{/if}}
+
     {{*mb_include module=system template=inc_config_bool var=access_logs_buffer*}}
     {{mb_include module=system template=inc_config_bool var=log_datasource_metrics}}
     {{mb_include module=system template=inc_config_str var=human_long_request_level numeric=true}}
     {{mb_include module=system template=inc_config_str var=bot_long_request_level numeric=true}}
     {{mb_include module=system template=inc_config_str var=dataminer_limit numeric=true}}
     {{mb_include module=system template=inc_config_str var=aio_output_path size=50}}
-
 
     <tr>
       <th colspan="2" class="title">

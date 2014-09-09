@@ -26,10 +26,13 @@ class CMbConfig {
   public $overloadPath = "";
 
   // Configs interdites à stocker en base de données
+  // Ignorer également db et php
   static $forbidden_values = array(
     "config_db",
     "root_dir",
-    "instance_role"
+    "instance_role",
+    "base_url",
+    "servers_ip"
   );
 
   function __construct() {
