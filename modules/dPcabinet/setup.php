@@ -2198,6 +2198,9 @@ class CSetupdPcabinet extends CSetup {
                 ADD `rques` TEXT;";
     $this->addQuery($query);
 
-    $this->mod_version = '2.39';
+    $this->makeRevision("2.39");
+
+    $this->addDefaultConfig("dPcabinet CPrescription view_prescription_externe", "dPcabinet CPrescription view_prescription");
+    $this->mod_version = '2.40';
   }
 }

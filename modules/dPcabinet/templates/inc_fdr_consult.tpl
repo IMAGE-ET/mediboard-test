@@ -29,7 +29,7 @@
   </tr>
   <tr>
     <td colspan="2">
-      {{if "dPprescription"|module_active && "dPcabinet CPrescription view_prescription"|conf:"CGroups-$g"}}
+      {{if "dPprescription"|module_active && "dPcabinet CPrescription view_prescription_externe"|conf:"CGroups-$g"}}
       <fieldset>
         <legend>{{tr}}CPrescription{{/tr}}</legend>
         <div id="prescription_register">
