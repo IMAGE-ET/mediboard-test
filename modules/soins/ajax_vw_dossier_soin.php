@@ -362,7 +362,7 @@ if (CModule::getActive("dPprescription")) {
             foreach ($prescription->_ref_prescription_line_mixes as $key_line_mix => $_line_mix) {
               if ($_line_mix->_fin && $_line_mix->_fin < CMbDT::dateTime() && $_line_mix->_fin >= $first_date) {
                 unset($prescription->_ref_prescription_line_mixes[$key_line_mix]);
-                if ($_line_mix->countAdministrations()) {
+                if (!$_line_mix->next_line_id || $_line_mix->countAdministrations()) {
                   $hidden_lines_count++;
                 }
               }
@@ -372,7 +372,7 @@ if (CModule::getActive("dPprescription")) {
             foreach ($prescription->_ref_prescription_lines as $_key_line_med => $_line_med) {
               if ($_line_med->_fin_reelle && $_line_med->_fin_reelle < CMbDT::dateTime() && $_line_med->_fin_reelle >= $first_date) {
                 unset($prescription->_ref_prescription_lines[$_key_line_med]);
-                if ($_line_med->countAdministrations()) {
+                if (!$_line_med->child_id || $_line_med->countAdministrations()) {
                   $hidden_lines_count++;
                 }
               }
@@ -385,7 +385,7 @@ if (CModule::getActive("dPprescription")) {
                 $category = $_line_elt->_ref_element_prescription->_ref_category_prescription;
                 unset($prescription->_ref_prescription_lines_element_by_chap[$category->chapitre][$_line_elt->_id]);
                 unset($prescription->_ref_prescription_lines_element_by_cat[$category->chapitre][$category->_id]["element"][$_line_elt->_id]);
-                if ($_line_elt->countAdministrations()) {
+                if (!$_line_elt->child_id || $_line_elt->countAdministrations()) {
                   $hidden_lines_count++;
                 }
               }
