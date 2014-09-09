@@ -107,7 +107,7 @@
       <button type="button" class="print notext" onclick="Admissions.showDocs('{{$_sejour->_id}}')"></button>
 
       {{if $conf.dPadmissions.show_deficience}}
-        {{mb_include module=patients template=inc_vw_antecedents type=deficience callback="reloadAdmissionLine.curry('`$_sejour->_id`')" force_show=true}}
+        {{mb_include module=patients template=inc_vw_antecedents type=deficience callback="reloadAdmissionLine.curry(`$_sejour->_id`)" force_show=true}}
       {{/if}}
 
       {{foreach from=$_sejour->_ref_operations item=_op}}
