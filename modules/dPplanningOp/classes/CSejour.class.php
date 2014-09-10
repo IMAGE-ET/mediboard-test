@@ -3075,6 +3075,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       if (CMbDT::addDateTime("00:$tolerance:00", $splitting->entree) <= $affectation->entree || $affectation->_mutation_urg) {
         // Affecte la sortie de l'affectation a créer avec l'ancienne date de sortie
         $create->sortie = $splitting->sortie;
+        $create->entree = $datetime;
 
         // On passe à effectuer la split
         $splitting->effectue      = 1;
@@ -3087,16 +3088,17 @@ class CSejour extends CFacturable implements IPatientRelated {
       }
       else {
         $create->affectation_id = $splitting->affectation_id;
+        $create->sortie  = $splitting->sortie;
       }
     }
     // On créé une première affectation
     else {
+      $create->entree = $datetime;
       $create->sortie  = $this->sortie;
     }
 
     // Créé la nouvelle affectation
     $create->sejour_id     = $this->_id;
-    $create->entree        = $datetime;
     $create->lit_id        = $lit_id;
     $create->service_id    = $service_id;
     $create->_mutation_urg = $affectation->_mutation_urg;
