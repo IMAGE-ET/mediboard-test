@@ -628,7 +628,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
       return;
     }
 
-    $sql = "SELECT consultation.plageconsult_id, date, heure, consultation_id FROM consultation, plageconsult WHERE consultation.plageconsult_id = plageconsult.plageconsult_id AND sejour_id = '$this->sejour_id' AND annule = '0' ORDER BY 'date, heure' ";
+    $sql = "SELECT consultation.plageconsult_id, date, heure, consultation_id FROM consultation, plageconsult WHERE consultation.plageconsult_id = plageconsult.plageconsult_id AND sejour_id = '$this->sejour_id' AND annule = '0' ORDER BY date, heure ";
     $list = $ds->loadList($sql);
     $seance_nb = 1;
     foreach ($list as $_seance) {
