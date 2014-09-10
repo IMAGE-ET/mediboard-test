@@ -161,7 +161,7 @@
       </button>
     {{/if}}
 
-    <button class="edit notext" style="float: right;" onclick="refreshExecuter.stop(); Admissions.validerSortie('{{$sejour->_id}}', false, (function () {refreshExecuter.resume(); location.reload()}).bind(refreshExecuter), refreshExecuter.resume.bind(refreshExecuter))">
+    <button class="edit notext" style="float: right;" onclick="refreshExecuter.stop(); Admissions.validerSortie('{{$sejour->_id}}', false, (function () {refreshExecuter.resume(); Sortie.refresh('{{$rpu->_id}}')}).bind(refreshExecuter), refreshExecuter.resume.bind(refreshExecuter))">
       {{tr}}Edit{{/tr}} {{mb_label object=$sejour field=sortie}}
     </button>
 
@@ -193,7 +193,7 @@
         mais la sortie réelle n'est pas validée
       </div>
     {{/if}}
-    <button class="tick" onclick="refreshExecuter.stop(); Admissions.validerSortie('{{$sejour->_id}}', false, (function () {refreshExecuter.resume(); location.reload()}).bind(refreshExecuter), refreshExecuter.resume.bind(refreshExecuter))">
+    <button class="tick" onclick="refreshExecuter.stop(); Admissions.validerSortie('{{$sejour->_id}}', false, (function () {refreshExecuter.resume(); Sortie.refresh('{{$rpu->_id}}')}).bind(refreshExecuter), refreshExecuter.resume.bind(refreshExecuter))">
       {{tr}}Validate{{/tr}} {{mb_label object=$sejour field=sortie}}
     </button>
   {{/if}}
