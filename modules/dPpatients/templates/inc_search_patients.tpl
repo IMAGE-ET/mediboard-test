@@ -40,7 +40,7 @@
             </button>
           {{/if}}
           {{if $conf.dPpatients.CPatient.show_patient_link}}
-            <button type="button" class="link notext compact" title="{{tr}}Link{{/tr}}" onclick="doLink(this.form);">
+            <button type="button" class="link notext compact" title="{{tr}}Link{{/tr}}" onclick="Patient.doLink(this.form);">
               {{tr}}Link{{/tr}}
             </button>
           {{/if}}

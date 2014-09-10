@@ -25,11 +25,25 @@ Document.refreshList = function() {
     Patient associé avec le(s) patient(s) suivant(s) : 
     <ul>
       {{foreach from=$patient->_ref_patient_links item=_patient_link}}
+        {{assign var=doubloon value=$_patient_link->_ref_patient_doubloon}}
         <li>
-          <button type="button" class="unlink notext compact" title="{{tr}}Unlink{{/tr}}" onclick="Patient.doUnlink('{{$patient->_id}}');">
-            {{tr}}Unlink{{/tr}}
-          </button>
-          <a href="?m=patients&tab=vw_edit_patients&patient_id={{$_patient_link->_id}}">{{$_patient_link->_view}}</a></li>
+          <form name="unlink_patient_{{$doubloon->_id}}" method="post"
+                onsubmit="return onSubmitFormAjax(this, function() {
+                                                                    if (window.reloadPatient) {
+                                                                      reloadPatient('{{$patient->_id}}');
+                                                                    }
+                                                                  })">
+            {{mb_key object=$_patient_link}}
+            {{mb_class object=$_patient_link}}
+            <input type="hidden" name="del" value="1">
+            <button type="submit" class="unlink notext" title="{{tr}}Unlink{{/tr}}">
+              {{tr}}Unlink{{/tr}}
+            </button>
+          </form>
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$doubloon->_guid}}')">
+            <a href="?m=patients&tab=vw_edit_patients&patient_id={{$doubloon->_id}}">{{$doubloon->_IPP}} - {{$doubloon->_view}}</a>
+          </span>
+        </li>
       {{/foreach}}
     </ul>
   </div>

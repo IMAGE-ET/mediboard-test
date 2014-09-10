@@ -18,22 +18,21 @@ if (count($objects_id) != 2) {
   CAppUI::stepAjax("Trop d'objet pour réaliser une association", UI_MSG_ERROR);
 }
 
-$objects = array();
-
 if (class_exists("CPatient") && count($objects_id)) {  
-  $patient      = new CPatient();
-  $patient_link = new CPatient();
+  $patient1     = new CPatient();
+  $patient2     = new CPatient();
 
-  if (!$patient->load($objects_id[0]) || !$patient_link->load($objects_id[1])) {
+  if (!$patient1->load($objects_id[0]) || !$patient2->load($objects_id[1])) {
     CAppUI::stepAjax("Chargement impossible du patient", UI_MSG_ERROR);
   }
 
-  $patient->patient_link_id = $patient_link->_id;
-  if ($msg = $patient->store()) {
+  $patient1->_doubloon_ids = array($patient2->_id);
+
+  if ($msg = $patient1->store()) {
     CAppUI::stepAjax("Association du patient impossible : $msg", UI_MSG_ERROR);
   }
 
-  CAppUI::stepAjax("$patient->_view associé avec $patient_link->_view");
+  CAppUI::stepAjax("$patient1->_view associé avec $patient2->_view");
 }
 
 CApp::rip();

@@ -50,7 +50,8 @@ CConfiguration::register(
           'nom_jeune_fille_mandatory' => "bool default|0",
           'allow_anonymous_patient'   => "bool default|0",
           'anonymous_naissance'       => "str default|1970-01-01",
-          'anonymous_sexe'            => "enum list|m|f default|m"
+          'anonymous_sexe'            => "enum list|m|f default|m",
+          'manage_identity_status'    => "bool default|0",
         ),
         'CConstantesMedicales' => array(
           'unite_ta'        => 'enum list|cmHg|mmHg default|' . CAppUI::conf('dPpatients CConstantesMedicales unite_ta'),

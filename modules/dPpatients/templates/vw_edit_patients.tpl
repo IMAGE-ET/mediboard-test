@@ -91,7 +91,7 @@
       return false;
     }
 
-    SiblingsChecker.submit = true;
+    SiblingsChecker.submit = 1;
     SiblingsChecker.request(oForm);
     return false;
   };
@@ -267,6 +267,7 @@
         <input type="hidden" name="_purge" value="0" />
         <input type="hidden" name="modal" value="{{$modal}}" />
         <input type="hidden" name="callback" value="{{$callback}}" />
+        <input type="hidden" name="_reason_state" value="">
         {{mb_field object=$patient field="_vitale_firstname" hidden=1}}
         {{mb_field object=$patient field="_vitale_birthdate" hidden=1}}
         {{mb_field object=$patient field="_vitale_nir_certifie" hidden=1}}
@@ -315,7 +316,8 @@
     <td class="button" colspan="5" style="text-align:center;" id="button">
       <div id="divSiblings" style="display:none;"></div>
       {{if $patient->_id}}
-        <button tabindex="400" id="submit-patient" type="{{if $modal}}button{{else}}submit{{/if}}" class="submit" onclick="return document.editFrm.onsubmit();">
+        <button tabindex="400" id="submit-patient" name="submit_patient" type="{{if $modal}}button{{else}}submit{{/if}}"
+                class="submit" onclick="return document.editFrm.onsubmit();">
           {{tr}}Save{{/tr}}
           {{if $patient->_bind_vitale}}
           & {{tr}}BindVitale{{/tr}}
@@ -350,7 +352,7 @@
         {{/if}}
 
       {{else}}
-        <button tabindex="400" id="submit-patient" type="submit" class="submit" onclick="document.editFrm.onsubmit();">
+        <button tabindex="400" id="submit-patient" name="submit_patient" type="submit" class="submit" onclick="document.editFrm.onsubmit();">
           {{tr}}Create{{/tr}}
           {{if $patient->_bind_vitale}}
           &amp; {{tr}}BindVitale{{/tr}}

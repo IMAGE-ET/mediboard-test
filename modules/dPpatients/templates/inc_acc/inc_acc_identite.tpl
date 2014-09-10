@@ -100,11 +100,9 @@ anonymous = function() {
 };
 
 checkDoublon = function() {
-  var oForm = document.editFrm;
-
-  if ($V("editFrm_nom") && $V("editFrm_prenom") && $V("editFrm_naissance")) {
-    SiblingsChecker.submit = false;
-    SiblingsChecker.request(oForm);
+  var oform = getForm("editFrm");
+  if ($V(oform.nom) && $V(oform.prenom) && $V(oform.naissance)) {
+    SiblingsChecker.request(oform);
   }
 };
 
@@ -147,11 +145,7 @@ Main.add(function() {
         </tr>
         <tr>
           <td colspan="3" class="text">
-            <div class="small-warning" id="doublon-warning" style="display: none;">
-
-            </div>
-            <div class="small-error" id="doublon-error" style="display: none;">
-
+            <div id="doublon-patient">
             </div>
           </td>
         </tr>

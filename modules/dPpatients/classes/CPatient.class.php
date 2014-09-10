@@ -151,6 +151,7 @@ class CPatient extends CPerson {
   public $profession;
   public $csp; // Catégorie socioprofessionnelle
   public $patient_link_id; // Patient link
+  public $status;
 
   // Assuré
   public $assure_nom;
@@ -254,6 +255,9 @@ class CPatient extends CPerson {
   public $_dmp_vitale_prenom_usuel;
   public $_dmp_vitale_date;
 
+  public $_reason_state;
+  public $_doubloon_ids = array();
+
   /** @var CPatient */
   public $_patient_elimine; // fusion
 
@@ -326,6 +330,9 @@ class CPatient extends CPerson {
   // Distant fields
   public $_ref_praticiens; // Praticiens ayant participé à la pec du patient
 
+  /** @var  CPatientState[] */
+  public $_ref_patient_states;
+
   /**
    * @see parent::getSpec()
    */
@@ -372,6 +379,10 @@ class CPatient extends CPerson {
     $backProps["ins_patient"]           = "CINSPatient patient_id";
     $backProps["dmp_documents"]         = "CDMPDocument patient_id";
     $backProps['arret_travail']         = "CAvisArretTravail patient_id";
+    $backProps["patient_state"]         = "CPatientState patient_id";
+    $backProps["patient_link1"]         = "CPatientLink patient_id1";
+    $backProps["patient_link2"]         = "CpatientLink patient_id2";
+
     return $backProps;
   }
 
@@ -448,6 +459,7 @@ class CPatient extends CPerson {
     $props["profession"]           = "str autocomplete";
     $props["csp" ]                 = "numchar length|2";
     $props["patient_link_id"]      = "ref class|CPatient";
+    $props["status"]               = "enum list|PROV|VALI|DPOT|ANOM|CACH";
 
     $props["assure_nom"]                  = "str confidential";
     $props["assure_prenom"]               = "str";
@@ -520,9 +532,11 @@ class CPatient extends CPerson {
     $props["_dmp_vitale_prenom_usuel"]     = "str";
     $props["_dmp_vitale_date"]             = "str confidential";
     $props["_vitale_lastname"]             = "str";
-    $props["_vitale_firstname"]             = "str";
-    $props["_vitale_birthdate"]             = "str confidential";
-    $props["_vitale_nir_certifie"]          = "str confidential";
+    $props["_vitale_firstname"]            = "str";
+    $props["_vitale_birthdate"]            = "str confidential";
+    $props["_vitale_nir_certifie"]         = "str confidential";
+
+    $props["_reason_state"]                = "text";
 
     return $props;
   }
@@ -589,6 +603,8 @@ class CPatient extends CPerson {
       return $msg;
     }
 
+    CPatientLink::deleteDoubloon();
+
     // Merge them
     if (count($list) > 1) {
       $dossier_medical->mergePlainFields($list);
@@ -609,7 +625,9 @@ class CPatient extends CPerson {
     }
 
     // Creation d'un patient
-    if (!$this->_merging && CAppUI::conf('dPpatients CPatient identitovigilence') == "doublons") {
+    if (!$this->_merging && !CAppUI::conf("dPpatients CPatient manage_identity_status", CGroups::loadCurrent()) &&
+        CAppUI::conf('dPpatients CPatient identitovigilence') == "doublons"
+    ) {
       if ($this->loadMatchingPatient(true, false) > 0) {
         return "Doublons détectés";
       }
@@ -637,16 +655,23 @@ class CPatient extends CPerson {
       DSHM::remKeys("alertes-*-CPatient-".$this->_id);
     }
 
+    $this->_anonyme = $this->checkAnonymous();
+
+    if ($state = CPatientState::getState($this)) {
+      $this->status = $state;
+    }
+
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
     }
 
-    if ($this->checkAnonymous()) {
+    if ($this->_anonyme) {
       $this->nom = $this->_id;
-      $this->_anonyme = true;
       $this->store();
     }
+
+    CPatientState::storeState($this);
 
     // Vitale
     if (CModule::getActive("fse")) {
@@ -957,8 +982,9 @@ class CPatient extends CPerson {
     }
 
     // Détermine la civilité du patient automatiquement (utile en cas d'import)
+    // Ne pas vérifier que la civilité est null (utilisation de updatePlainField dans le loadmatching)
     $this->completeField("civilite");
-    if ($this->civilite === "guess" || !$this->civilite) {
+    if ($this->civilite === "guess") {
       $this->naissance = CMbDT::dateFromLocale($this->naissance);
       $this->evalAge();
       $this->civilite = ($this->_annees < CAppUI::conf("dPpatients CPatient adult_age")) ?
@@ -967,7 +993,7 @@ class CPatient extends CPerson {
 
     // Détermine la civilité de l'assure automatiquement (utile en cas d'import)
     $this->completeField("assure_civilite");
-    if ($this->assure_civilite === "guess" || !$this->assure_civilite) {
+    if ($this->assure_civilite === "guess") {
       $this->assure_naissance = CMbDT::dateFromLocale($this->assure_naissance);
       $this->evalAgeAssure();
       $sexe = $this->assure_sexe ? $this->assure_sexe : $this->sexe;
@@ -1036,11 +1062,34 @@ class CPatient extends CPerson {
    * @return CPatient[]
    */
   function loadPatientLinks() {
-    if ($this->patient_link_id) {
-      return $this->_ref_patient_links = array($this->loadFwdRef("patient_link_id"));
+    /** @var CPatientLink[] $links1 */
+    $links1 = $this->loadBackRefs("patient_link1");
+    /** @var CPatientLink[] $links2 */
+    $links2 = $this->loadBackRefs("patient_link2");
+    /** @var CPatient[] $patient_link1 */
+    $patient_link1 = CPatientLink::massLoadFwdRef($links1, "patient_id2");
+    $patient_link2 = CPatientLink::massLoadFwdRef($links2, "patient_id1");
+    $patient_link = $patient_link1+$patient_link2;
+    self::massLoadIPP($patient_link);
+
+    foreach ($links1 as $_link1) {
+      $_link1->_ref_patient_doubloon = $patient_link[$_link1->patient_id2];
     }
-    return null;
-    // return $this->_ref_patient_links = $this->loadBackRefs("patient_links");
+
+    foreach ($links2 as $_link2) {
+      $_link2->_ref_patient_doubloon = $patient_link[$_link2->patient_id1];
+    }
+
+    return $this->_ref_patient_links = $links1+$links2;
+  }
+
+  /**
+   * Count the patient link
+   *
+   * @return int
+   */
+  function countPatientLinks() {
+    return $this->countBackRefs("patient_link1") + $this->countBackRefs("patient_link2");
   }
 
   /**
@@ -1135,50 +1184,85 @@ class CPatient extends CPerson {
    * @return int Nombre d'occurences trouvées
    */
   function loadMatchingPatient($other = false, $loadObject = true) {
-    $ds = $this->_spec->ds;
 
-    if (CAppUI::conf('dPpatients CPatient function_distinct')) {
-      $function_id = CMediusers::get()->function_id;
-      $where["function_id"] = "= '$function_id'";
-    }
+    $where = $this->getWhereDoubloon($this, $other);
 
-    if ($other && $this->_id) {
-      $where["patient_id"] = " != '$this->_id'";
-    }
-
-    // if no birthdate, sql request too strong
-    if (!$this->naissance) {
+    if (!$where) {
       return null;
     }
-
-    $whereOr[] = "nom "             . $ds->prepareLikeName($this->nom);
-    $whereOr[] = "nom_jeune_fille " . $ds->prepareLikeName($this->nom);
-
-    if ($this->nom_jeune_fille) {
-      $whereOr[] = "nom "             . $ds->prepareLikeName($this->nom_jeune_fille);
-      $whereOr[] = "nom_jeune_fille " . $ds->prepareLikeName($this->nom_jeune_fille);
-    }
-
-    $where[] = implode(" OR ", $whereOr);
-    $where["prenom"]          = $ds->prepareLikeName($this->prenom);
-
-    if ($this->prenom_2) {
-      $where["prenom_2"] = $ds->prepareLikeName($this->prenom_2);
-    }
-    if ($this->prenom_3) {
-      $where["prenom_3"] = $ds->prepareLikeName($this->prenom_3);
-    }
-    if ($this->prenom_4) {
-      $where["prenom_4"] = $ds->prepareLikeName($this->prenom_4);
-    }
-
-    $where["naissance"] = $ds->prepare("= %", $this->naissance);
 
     if ($loadObject) {
       $this->loadObject($where);
     }
 
     return $this->countList($where);
+  }
+
+  /**
+   * Return the Id of the doubloons
+   *
+   * @return integer[]|array
+   */
+  function getDoubloonIds() {
+    $where = $this->getWhereDoubloon($this, true);
+
+    if (!$where) {
+      return array();
+    }
+
+    return $this->loadIds($where);
+  }
+
+  /**
+   * Créé la clause pour la recherche de doublon sctrict
+   *
+   * @param CPatient $patient Patient
+   * @param bool     $other   Inclusion du patient en cours
+   *
+   * @return null|String[]
+   */
+  function getWhereDoubloon($patient, $other = false) {
+    $ds = $patient->_spec->ds;
+    $where = array();
+
+    if (CAppUI::conf('dPpatients CPatient function_distinct')) {
+      $function_id = CMediusers::get()->function_id;
+      $where["function_id"] = "= '$function_id'";
+    }
+
+    if ($other && $patient->_id) {
+      $where["patient_id"] = " != '$patient->_id'";
+    }
+
+    // if no birthdate, sql request too strong
+    if (!$patient->naissance) {
+      return null;
+    }
+
+    $whereOr[] = "nom "             . $ds->prepareLikeName($patient->nom);
+    $whereOr[] = "nom_jeune_fille " . $ds->prepareLikeName($patient->nom);
+
+    if ($patient->nom_jeune_fille) {
+      $whereOr[] = "nom "             . $ds->prepareLikeName($patient->nom_jeune_fille);
+      $whereOr[] = "nom_jeune_fille " . $ds->prepareLikeName($patient->nom_jeune_fille);
+    }
+
+    $where[] = implode(" OR ", $whereOr);
+    $where["prenom"]          = $ds->prepareLikeName($patient->prenom);
+
+    if ($patient->prenom_2) {
+      $where["prenom_2"] = $ds->prepareLikeName($patient->prenom_2);
+    }
+    if ($patient->prenom_3) {
+      $where["prenom_3"] = $ds->prepareLikeName($patient->prenom_3);
+    }
+    if ($patient->prenom_4) {
+      $where["prenom_4"] = $ds->prepareLikeName($patient->prenom_4);
+    }
+
+    $where["naissance"] = $ds->prepare("= %", $patient->naissance);
+
+    return $where;
   }
 
   /**
@@ -1393,6 +1477,24 @@ class CPatient extends CPerson {
     $this->_ref_next_affectation = new CAffectation();
     $where["affectation.entree"] = "> '$date'";
     $this->_ref_next_affectation->loadObject($where, $order, null, $ljoin);
+  }
+
+  /**
+   * Load the patient state
+   *
+   * @return CPatientState[]|null
+   */
+  function loadRefPatientState() {
+    return $this->_ref_patient_states = $this->loadBackRefs("patient_state");
+  }
+
+  /**
+   * Return the last state
+   *
+   * @return CPatientState|null
+   */
+  function loadLastState() {
+    return current($this->loadBackRefs("patient_state", "datetime", 1));
   }
 
   function loadRefsDocs() {
@@ -2268,7 +2370,7 @@ class CPatient extends CPerson {
   }
 
   function checkAnonymous() {
-    return $this->nom === "ANONYME" && $this->prenom === "Anonyme";
+    return CMbString::upper($this->nom) === "ANONYME" && CMbString::upper($this->prenom) === "ANONYME";
   }
 
   function toVcard(CMbvCardExport $vcard) {

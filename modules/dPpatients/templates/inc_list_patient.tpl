@@ -52,14 +52,6 @@
       if (checkedMerge.length > 2)
         checkedMerge.shift().checked = false;
     };
-
-    doLink = function(oForm) {
-      var url = new Url("patients", "do_link", "dosql");
-      url.addParam("objects_id", $V(oForm["objects_id[]"]).join("-"));
-      url.requestUpdate("systemMsg", {
-        method: 'post'
-      });
-    }
   </script>
 {{/if}}
 

@@ -26,13 +26,13 @@ Patient = Object.extend({
       addParam("use_vitale", use_vitale).
       redirectOpener();
   },
-  editModal: function(patient_id, use_vitale, callback) {
+  editModal: function(patient_id, use_vitale, callback, onclose) {
     new Url("patients", "vw_edit_patients").
       addParam("patient_id", patient_id).
       addParam("use_vitale", use_vitale).
       addParam("callback"  , callback).
       addParam("modal"     , 1).
-      modal({width: "90%", height: "90%"});
+      modal({width: "90%", height: "90%", onClose : onclose});
   },
   
   exportVcard: function(patient_id) {
@@ -47,17 +47,12 @@ Patient = Object.extend({
       .addParam("id_patient", $id)
       .requestModal();
   },
-  
-  doUnlink: function(patient_id) {
-    var url = new Url("dPpatients", "do_unlink", "dosql");
-    url.addParam("patient_id", patient_id);
-    url.requestUpdate("systemMsg", {
-      method: 'post',
-      onComplete : function() {
-        if (window.reloadPatient) {
-          reloadPatient(patient_id);
-        }
-      }
+
+  doLink : function(oForm) {
+    new Url("patients", "do_link", "dosql")
+      .addParam("objects_id", $V(oForm["objects_id[]"]).join("-"))
+      .requestUpdate("systemMsg", {
+      method: 'post'
     });
   }
 }, window.Patient);

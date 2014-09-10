@@ -2625,7 +2625,56 @@ class CSetupdPpatients extends CSetup {
     $this->addDefaultConfig("dPpatients CPatient anonymous_sexe", 'dPplanningOp CSejour anonymous_sexe');
     $this->addDefaultConfig("dPpatients CPatient anonymous_naissance", 'dPplanningOp CSejour anonymous_naissance');
 
-    $this->mod_version = "2.13";
+    $this->makeRevision("2.13");
+
+    $query = "CREATE TABLE `patient_state` (
+                `patient_state_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `patient_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `mediuser_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `state` ENUM ('PROV','VALI','DPOT','ANOM', 'CACH') NOT NULL,
+                `datetime` DATETIME NOT NULL,
+                `reason` TEXT
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `patient_state`
+                ADD INDEX (`patient_id`),
+                ADD INDEX (`datetime`),
+                ADD INDEX (`mediuser_id`);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `patients`
+                ADD `status` ENUM ('PROV','VALI','DPOT','ANOM','CACH'),
+                ADD INDEX (`status`);";
+    $this->addQuery($query);
+
+    $this->makeRevision("2.14");
+
+    $query = "CREATE TABLE `patient_link` (
+                `patient_link_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `patient_id1` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `patient_id2` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `type` ENUM ('DPOT') DEFAULT 'DPOT',
+                `reason` TEXT
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `patient_link`
+                ADD INDEX (`patient_id1`),
+                ADD INDEX (`patient_id2`);";
+
+    $this->addQuery($query);
+
+    //cas où des doublons ont été saisie
+    $query = "INSERT INTO `patient_link`(`patient_id1`, `patient_id2`)
+                SELECT `patient_id`, `patient_link_id` FROM `patients` WHERE `patient_link_id` IS NOT NULL";
+    $this->addQuery($query);
+
+    $this->makeRevision("2.15");
+
+    $this->addFunctionalPermQuery("allowed_identity_status", "0");
+
+    $this->mod_version = "2.16";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
