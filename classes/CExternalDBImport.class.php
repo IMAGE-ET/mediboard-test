@@ -320,7 +320,7 @@ class CExternalDBImport {
    * @return CMbObject The CMbObject
    */
   function getMbObject($db_id) {
-    return self::getMbObjectByClass($this->_class, $db_id);
+    return $this->getMbObjectByClass($this->_class, $db_id);
   }
 
   /**
@@ -354,7 +354,7 @@ class CExternalDBImport {
   static function getOrImportObject($class, $id) {
     /** @var self $import_object */
     $import_object = new $class;
-    $object        = self::getMbObjectByClass($import_object->_class, $id);
+    $object = $import_object->getMbObjectByClass($import_object->_class, $id);
 
     if (!$object->_id) {
       $import_object->importObject($id);

@@ -473,7 +473,7 @@ abstract class CSQLDataSource {
    * 
    * @param string $sql The SQL query
    * 
-   * @return array|null The value returned in the query or null if the query failed.
+   * @return string|null The value returned in the query or null if the query failed.
    */
   function loadResult($sql) {
     $cur = $this->exec($sql);
