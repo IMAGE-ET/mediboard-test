@@ -53,6 +53,10 @@
   {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
     <li><a href="#ccam_tab">CCAM</a></li>
     <li><a href="#ngap_tab">NGAP</a></li>
+    {{assign var=subject_class value=$subject->_class}}
+    {{if $conf.dPccam.CCodable.use_frais_divers.$subject_class}}
+      <li><a href="#fraisdivers">Frais divers</a></li>
+    {{/if}}
     {{if $subject instanceof COperation}}
       {{assign var=sejour value=$subject->_ref_sejour}}
       <li style="float: right">
@@ -95,17 +99,25 @@
 
 <hr class="control_tabs" />
 
-<div id="ccam_tab" style="display:none">
-  <div id="ccam">
-    {{mb_include module=salleOp template=inc_codage_ccam}}
+{{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
+  <div id="ccam_tab" style="display:none">
+    <div id="ccam">
+      {{mb_include module=salleOp template=inc_codage_ccam}}
+    </div>
   </div>
-</div>
 
-<div id="ngap_tab" style="display:none">
-  <div id="listActesNGAP">
-    {{mb_include module=cabinet template=inc_codage_ngap}}
+  <div id="ngap_tab" style="display:none">
+    <div id="listActesNGAP">
+      {{mb_include module=cabinet template=inc_codage_ngap}}
+    </div>
   </div>
-</div>
+
+  {{if $conf.dPccam.CCodable.use_frais_divers.$subject_class}}
+    <div id="fraisdivers" style="display: none;">
+      {{mb_include module=ccam template=inc_frais_divers object=$subject}}
+    </div>
+  {{/if}}
+{{/if}}
 {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
   {{mb_script module=tarmed script=actes ajax=true}}
   <script>

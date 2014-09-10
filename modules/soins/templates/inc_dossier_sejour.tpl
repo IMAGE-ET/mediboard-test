@@ -323,6 +323,9 @@
                 <li id="tarif" style="float: right;"></li>
                 <li><a href="#one">Actes CCAM</a></li>
                 <li><a href="#two">Actes NGAP</a></li>
+                {{if $conf.dPccam.CCodable.use_frais_divers.CSejour}}
+                  <li><a href="#fraisdivers">Frais divers</a></li>
+                {{/if}}
                 <li><a href="#three">Diagnostics</a></li>
               {{/if}}
               {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
@@ -333,18 +336,25 @@
             <hr class="control_tabs" />
 
             <table class="form">
-              <tr id="one" style="display: none;">
-                <td id="ccam">
-                </td>
-              </tr>
-              <tr id="two" style="display: none;">
-                <td id="listActesNGAP">
-                </td>
-              </tr>
-              <tr id="three" style="display: none;">
-                <td id="cim">
-                </td>
-              </tr>
+              {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
+                <tr id="one" style="display: none;">
+                  <td id="ccam">
+                  </td>
+                </tr>
+                <tr id="two" style="display: none;">
+                  <td id="listActesNGAP">
+                  </td>
+                </tr>
+                {{if $conf.dPccam.CCodable.use_frais_divers.CSejour}}
+                  <tr id="fraisdivers" style="display: none;">
+                    {{mb_include module=ccam template=inc_frais_divers}}
+                  </tr>
+                {{/if}}
+                <tr id="three" style="display: none;">
+                  <td id="cim">
+                  </td>
+                </tr>
+              {{/if}}
               {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
                 {{mb_script module=tarmed script=actes}}
                 <tr id="tarmed_tab" style="display: none;">
