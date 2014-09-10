@@ -11,18 +11,27 @@
  * @link     http://www.mediboard.org
  */
 
-$prefs = CValue::post("pref", array());
-$user_id = CValue::post("user_id", 0);
+$prefs      = CValue::post("pref", array());
+$user_id    = CValue::post("user_id");
 $restricted = CValue::post("restricted");
+
+$pref = new CPreferences();
+$ds   = $pref->getDS();
 
 // @todo: voir à utiliser CDoObjectAddEdit
 foreach ($prefs as $key => $value) {
   $pref = new CPreferences();
-  $pref->user_id = $user_id;
-  $pref->key = $key;
-  $pref->loadMatchingObject();
-  
-  $pref->value = stripslashes($value);
+
+  $where = array(
+    "user_id" => ($user_id) ? $ds->prepare("= '$user_id'") : "IS NULL",
+    "key"     => $ds->prepare("= '$key'")
+  );
+
+  $pref->loadObject($where);
+
+  $pref->user_id    = $user_id;
+  $pref->key        = $key;
+  $pref->value      = stripslashes($value);
   $pref->restricted = ($restricted) ? "1" : "0";
 
   if ($msg = $pref->store()) {
@@ -38,7 +47,7 @@ if ($pref->user_id) {
   CAppUI::buildPrefs();
 }
 
-if ($redirect =  CValue::post("postRedirect")) {
+if ($redirect = CValue::post("postRedirect")) {
   echo $redirect;
   CAppUI::redirect($redirect);
 }
