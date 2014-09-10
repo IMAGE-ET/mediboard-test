@@ -15,7 +15,10 @@
     edit: function() {
       var url = new Url("cabinet", "vw_gestion_da");
       url.addParam("conusultation_id", '{{$consult->_id}}');
-      url.requestModal(800);
+      url.requestModal(800, null, {
+        onClose: function() {
+          document.location.reload();
+      }});
       GestionDA.url = url;
     }
   }
