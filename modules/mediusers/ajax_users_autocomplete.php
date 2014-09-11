@@ -24,6 +24,8 @@ $where        = CValue::get('where', array());
 $whereComplex = CValue::get('whereComplex', array());
 $ljoin        = CValue::get("ljoin", array());
 
+CSessionHandler::writeClose();
+
 /** @var CMediusers $object */
 $object = new CMediusers();
 $user = CMediusers::get();
