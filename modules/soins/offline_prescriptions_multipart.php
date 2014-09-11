@@ -47,6 +47,7 @@ foreach ($sejours as $_sejour) {
 
   $params = array(
     "prescription_id" => $_prescription->_id,
+    "sejour_id"       => $_sejour->_id,
     "in_progress"     => 1,
   );
 
