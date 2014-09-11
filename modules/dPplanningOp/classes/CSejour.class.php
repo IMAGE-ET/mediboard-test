@@ -2982,7 +2982,8 @@ class CSejour extends CFacturable implements IPatientRelated {
       $where["sortie"] = $ds->prepare(">= %", $dateTime);
     }
 
-    $order = "entree";
+    //Cas où il y a deux affectations trouvées, on prend la dernière en date
+    $order = "entree DESC";
 
     $curr_affectation = new CAffectation();
     $curr_affectation->loadObject($where, $order);
