@@ -11,8 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-CCanDo::check();
-
 $mediuser = CMediusers::get();
 
 // Source SMTP

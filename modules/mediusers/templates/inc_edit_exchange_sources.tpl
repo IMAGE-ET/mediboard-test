@@ -42,7 +42,7 @@
             {{if !$smtp_source->_id}}
             <button class="add notext"
                     onclick="ExchangeSource.editSource('{{$smtp_source->_guid}}', true, '{{$smtp_source->name}}',
-                      '{{$smtp_source->_wanted_type}}', null, ExchangeSource.refreshUserSources())">
+                      '{{$smtp_source->_wanted_type}}', null, ExchangeSource.refreshUserSources)">
               {{tr}}CSourceSMTP.new{{/tr}}
             </button>
             {{/if}}
@@ -82,7 +82,8 @@
 
             {{if !$archiving_source->_id}}
               <button class="add notext"
-                      onclick="ExchangeSource.editSource('{{$archiving_source->_guid}}', true, '{{$archiving_source->name}}', '{{$archiving_source->_wanted_type}}')">
+                      onclick="ExchangeSource.editSource('{{$archiving_source->_guid}}', true, '{{$archiving_source->name}}',
+                        '{{$archiving_source->_wanted_type}}', null, ExchangeSource.refreshUserSources)">
                 {{tr}}CSourceFTP.new{{/tr}}
               </button>
             {{/if}}
