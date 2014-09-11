@@ -156,7 +156,6 @@ ExchangeSource = {
   },
 
   editSource : function (guid, light, source_name, type, object_guid, callback) {
-    console.log(callback);
     new Url("eai", "ajax_edit_source")
       .addParam("source_guid", guid)
       .addParam("source_name", source_name)
