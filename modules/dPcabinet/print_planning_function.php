@@ -29,7 +29,7 @@ $musers = $muser->loadProfessionnelDeSanteByPref(PERM_READ, $function_id);
 $function = new CFunctions();
 $function->load($function_id);
 
-echo "<h1>".$function->_view."</h1>";
+echo "<h1>".$function->_view." (".CMbDT::format($start, CAppUI::conf('longdate'))." - ".CMbDT::format($end, CAppUI::conf('longdate')).")</h1>";
 
 $pconsult = new CPlageconsult();
 $ds = $pconsult->getDS();
@@ -38,7 +38,7 @@ $where[] = "chir_id ".$ds->prepareIn(array_keys($musers))." OR remplacant_id ".$
 $where["date"] = " BETWEEN '$start' AND '$end' ";
 
 /** @var CPlageconsult[] $pconsults */
-$pconsults = $pconsult->loadList($where, "date", null);
+$pconsults = $pconsult->loadList($where, "date", null, "chir_id");
 
 $pconsults_by_date_and_prat = array();
 
