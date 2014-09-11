@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage personnel
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
@@ -126,6 +126,21 @@ class CPlageConge extends CMbObject {
     $where["date_fin"  ] = ">= '$min'";
     $order = "date_debut";
     return $this->loadList($where, $order);
+  }
+
+  /**
+   * @param array $user_ids list of user's id
+   * @param date  $date date targeted
+   * @return CPlageConge[]
+   */
+  static function loadForIdsForDate($user_ids, $date) {
+    $plage = new self();
+    $ds = $plage->getDS();
+    $where = array();
+    $where["user_id"] = $ds->prepareIn($user_ids);
+    $where[] = " '$date' BETWEEN date_debut AND date_fin ";
+    $plages = $plage->loadList($where);
+    return $plages;
   }
 
   /**
