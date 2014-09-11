@@ -22,7 +22,8 @@
       <tr {{if !$_source->active}}class="hatching"{{/if}}>
         <td class="compact">
           <button class="edit notext compact"
-                  onclick="ExchangeSource.editSource('{{$_source->_guid}}', true, '{{$_source->name}}', '{{$_source->_wanted_type}}')">
+                  onclick="ExchangeSource.editSource('{{$_source->_guid}}', true, '{{$_source->name}}',
+                    '{{$_source->_wanted_type}}', null, ExchangeSource.refreshUserSources)">
             {{tr}}Edit{{/tr}}
           </button>
           {{mb_value object=$_source field=libelle}}
