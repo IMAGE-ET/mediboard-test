@@ -58,4 +58,5 @@ foreach ($pconsults as $_pc) {
   }
   echo "</h2>";
   echo CApp::fetch("dPcabinet", "inc_plage_selector_weekly");
+  echo "<hr class=\"pagebreak\">";
 }
