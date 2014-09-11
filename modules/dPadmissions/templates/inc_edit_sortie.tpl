@@ -211,6 +211,9 @@
                 if (!form.destination.value) {
                   $V(form.destination, selectedData.get("default_destination"));
                 }
+                if (form.orientation && !form.orientation.value) {
+                  $V(form.orientation, selectedData.get("default_orientation"));
+                }
               },
               callback: function(element, query){
                 query += "&where[group_id]={{if $sejour->group_id}}{{$sejour->group_id}}{{else}}{{$g}}{{/if}}";
