@@ -1,15 +1,4 @@
-{{*
- * $Id$
- *  
- * @package    Mediboard
- * @subpackage cabinet
- * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
- * @link       http://www.mediboard.org
-*}}
-
-<script type="text/javascript">
+<script>
   checkObject = function(elt) {
     var form = getForm('updateOperation');
 
@@ -23,11 +12,10 @@
     return onSubmitFormAjax(form, {
       onComplete: function() {
         loadIntervention();
-        GestionDA.url.refreshModal();
+        document.location.reload();
       }
     });
   };
-
 
 {{if $auto_link}}
     Main.add(function() {
