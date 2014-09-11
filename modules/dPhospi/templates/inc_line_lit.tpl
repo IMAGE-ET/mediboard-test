@@ -188,10 +188,10 @@
                 <td style="vertical-align: top;">
                   {{if $sejour->_id}}
                     <div style="width: 10px;
-                        {{if ($is_aff && ($object->entree == $sejour->entree && !$sejour->entree_reelle) ||
+                        {{if (($object->entree == $sejour->entree && !$sejour->entree_reelle) ||
                           ($object->entree != $sejour->entree && !$object->_ref_prev->effectue)) || (!$is_aff && !$sejour->entree_reelle)}}
                           color: #A33;
-                        {{elseif $object->effectue}}
+                        {{elseif $is_aff && $object->effectue}}
                           text-decoration: line-through
                         {{/if}}">
 
