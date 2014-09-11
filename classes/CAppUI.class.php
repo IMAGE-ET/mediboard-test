@@ -815,6 +815,45 @@ class CAppUI {
   }
 
   /**
+   * Load the stored user preference from the database
+   *
+   * @param string  $key
+   * @param integer $user_id
+   *
+   * @return array
+   */
+  static function loadPref($key, $user_id) {
+    $ds = CSQLDataSource::get("std");
+
+    $query = "SELECT `user_id`, `value`
+              FROM user_preferences
+              WHERE `key` = '$key'";
+    $pref = $ds->loadHashList($query);
+
+    // User preference
+    if (isset($pref[$user_id])) {
+      return $pref[$user_id];
+    }
+
+    // Profile preference
+    $query = "SELECT `profile_id`
+              FROM users
+              WHERE `user_id` = '$user_id'";
+    $profile_id = $ds->loadResult($query);
+
+    if ($profile_id && isset($pref[$profile_id])) {
+      return $pref[$profile_id];
+    }
+
+    // Default preference
+    if (isset($pref[""])) {
+      return $pref[""];
+    }
+
+    return false;
+  }
+
+  /**
    * Load the stored user preferences from the database into cache
    *
    * @param integer $user_id User ID, 0 for default preferences
