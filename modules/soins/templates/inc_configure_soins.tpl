@@ -19,6 +19,7 @@
     }
 
     url.addParam("service_id", $("service_id").value);
+    url.addParam("g", '{{$g}}');
 
     if (embed) {
       url.addParam("embed", 1);
