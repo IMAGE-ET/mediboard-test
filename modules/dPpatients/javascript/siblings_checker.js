@@ -26,7 +26,10 @@ SiblingsChecker = {
     url.addElement(oForm.prenom_3);
     url.addElement(oForm.prenom_4);
     url.addParam("submit", this.submit);
-    url.addParam("naissance", $(oForm.naissance).getFormatted("99/99/9999", "$3-$2-$1"));
+    if (oForm.naissance) {
+      url.addParam("naissance", $(oForm.naissance).getFormatted("99/99/9999", "$3-$2-$1"));
+    }
+
     if (this.submit) {
       url.requestModal(290, 200);
     }

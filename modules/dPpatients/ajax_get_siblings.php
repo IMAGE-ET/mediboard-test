@@ -24,7 +24,7 @@ $submit          = CValue::get("submit"         , 0);
 $old_patient = null;
 $similar     = true;
 
-if ($patient_id) {
+if ($patient_id && $nom && $prenom) {
   $old_patient = new CPatient();
   $old_patient->load($patient_id);
   $similar = $old_patient->checkSimilar($nom, $prenom);

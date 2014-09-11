@@ -132,7 +132,8 @@ Main.add(function() {
   {{/if}}
 });
 </script>
-
+{{assign var=identity_status value="CAppUI::conf"|static_call:"dPpatients CPatient manage_identity_status":"CGroups-$g"}}
+{{assign var=allowed_modify value="CAppUI::pref"|static_call:"allowed_identity_status"}}
 <table style="width: 100%">
   <tr>
     <td colspan="2" id="alert_tutelle"></td>
@@ -152,11 +153,15 @@ Main.add(function() {
         <tr>
           <th style="width:30%">{{mb_label object=$patient field="nom"}}</th>
           <td>
-            {{mb_field object=$patient field="nom" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}}
-            {{if !$patient->_id}}
-              <button type="button" style="padding: 0" onclick="anonymous()" tabIndex="1000">
-                <img src="modules/dPpatients/images/anonyme.png" alt="Anonyme" />
-              </button>
+            {{if $identity_status && $patient->_id && $patient->status == "VALI" && !$allowed_modify}}
+              {{mb_value object=$patient field="nom"}}
+            {{else}}
+              {{mb_field object=$patient field="nom" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}}
+              {{if !$patient->_id}}
+                <button type="button" style="padding: 0" onclick="anonymous()" tabIndex="1000">
+                  <img src="modules/dPpatients/images/anonyme.png" alt="Anonyme" />
+                </button>
+              {{/if}}
             {{/if}}
           </td>
           {{if $patient->_id}}
@@ -168,8 +173,13 @@ Main.add(function() {
         <tr>
           <th>{{mb_label object=$patient field="prenom"}}</th>
           <td>
-            {{mb_field object=$patient field="prenom" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}}
+            {{if $identity_status && $patient->_id && $patient->status == "VALI" && !$allowed_modify}}
+              {{mb_value object=$patient field="prenom"}}
+            {{else}}
+              {{mb_field object=$patient field="prenom" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}}
+            {{/if}}
             <button type="button" class="down notext" onclick="togglePrenomsList(this)" tabIndex="1000">{{tr}}Add{{/tr}}</button>
+
           </td>
         </tr>
 
@@ -191,10 +201,14 @@ Main.add(function() {
         <tr>
           <th>{{mb_label object=$patient field="nom_jeune_fille"}}</th>
           <td>
-            {{mb_field object=$patient field="nom_jeune_fille" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}}
-            <button type="button" class="carriage_return notext" title="{{tr}}CPatient.name_recopy{{/tr}}"
-              onclick="$V(getForm('editFrm').nom_jeune_fille, $V(getForm('editFrm').nom));" tabIndex="1000"></button>
-            {{if $patient->_id && $patient->sexe == "f" && $nom_jeune_fille_mandatory}}
+            {{if $identity_status && $patient->_id && $patient->status == "VALI" && !$allowed_modify}}
+              {{mb_value object=$patient field="nom_jeune_fille"}}
+            {{else}}
+              {{mb_field object=$patient field="nom_jeune_fille" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}}
+              <button type="button" class="carriage_return notext" title="{{tr}}CPatient.name_recopy{{/tr}}"
+                onclick="$V(getForm('editFrm').nom_jeune_fille, $V(getForm('editFrm').nom));" tabIndex="1000"></button>
+              {{if $patient->_id && $patient->sexe == "f" && $nom_jeune_fille_mandatory}}
+             {{/if}}
             <script type="text/javascript">
               document.editFrm.nom_jeune_fille.addClassName("notNull");
             </script>
@@ -207,7 +221,13 @@ Main.add(function() {
         </tr>
         <tr>
           <th>{{mb_label object=$patient field="naissance"}}</th>
-          <td>{{mb_field object=$patient field="naissance" onchange="checkDoublon();copyIdentiteAssureValues(this); changeCiviliteForDate(this);"}}</td>
+          <td>
+            {{if $identity_status && $patient->_id && $patient->status == "VALI" && !$allowed_modify}}
+              {{mb_value object=$patient field="naissance"}}
+            {{else}}
+              {{mb_field object=$patient field="naissance" onchange="checkDoublon();copyIdentiteAssureValues(this); changeCiviliteForDate(this);"}}
+            {{/if}}
+          </td>
         </tr>
         <tr>
           <th>{{mb_label object=$patient field="civilite"}}</th>

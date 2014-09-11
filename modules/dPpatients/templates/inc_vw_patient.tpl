@@ -27,19 +27,23 @@ Document.refreshList = function() {
       {{foreach from=$patient->_ref_patient_links item=_patient_link}}
         {{assign var=doubloon value=$_patient_link->_ref_patient_doubloon}}
         <li>
-          <form name="unlink_patient_{{$doubloon->_id}}" method="post"
-                onsubmit="return onSubmitFormAjax(this, function() {
-                                                                    if (window.reloadPatient) {
-                                                                      reloadPatient('{{$patient->_id}}');
-                                                                    }
-                                                                  })">
-            {{mb_key object=$_patient_link}}
-            {{mb_class object=$_patient_link}}
-            <input type="hidden" name="del" value="1">
-            <button type="submit" class="unlink notext" title="{{tr}}Unlink{{/tr}}">
-              {{tr}}Unlink{{/tr}}
-            </button>
-          </form>
+          {{assign var=identity_status value="CAppUI::conf"|static_call:"dPpatients CPatient manage_identity_status":"CGroups-$g"}}
+          {{assign var=allowed_modify value="CAppUI::pref"|static_call:"allowed_identity_status"}}
+          {{if !$identity_status || $identity_status && $allowed_modify}}
+            <form name="unlink_patient_{{$doubloon->_id}}" method="post"
+                  onsubmit="return onSubmitFormAjax(this, function() {
+                                                                      if (window.reloadPatient) {
+                                                                        reloadPatient('{{$patient->_id}}');
+                                                                      }
+                                                                    })">
+              {{mb_key object=$_patient_link}}
+              {{mb_class object=$_patient_link}}
+              <input type="hidden" name="del" value="1">
+              <button type="submit" class="unlink notext" title="{{tr}}Unlink{{/tr}}">
+                {{tr}}Unlink{{/tr}}
+              </button>
+            </form>
+          {{/if}}
           <span onmouseover="ObjectTooltip.createEx(this, '{{$doubloon->_guid}}')">
             <a href="?m=patients&tab=vw_edit_patients&patient_id={{$doubloon->_id}}">{{$doubloon->_IPP}} - {{$doubloon->_view}}</a>
           </span>

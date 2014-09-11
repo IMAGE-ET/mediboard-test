@@ -19,8 +19,8 @@
 {{mb_include module=system template=inc_pagination total=$count current=$page change_page="PatientState.changePage.$state" step=30}}
 <table class="tbl">
   <tr>
-    <th class="title" colspan="7">Données patient</th>
-    <th class="title" colspan="3">Données de l'état</th>
+    <th class="title" colspan="7">{{tr}}CPatient.data{{/tr}}</th>
+    <th class="title" colspan="3">{{tr}}CPatetientState.data{{/tr}}</th>
     <th class="title" rowspan="2">{{tr}}Action{{/tr}}</th>
   </tr>
   <tr>
@@ -30,7 +30,7 @@
     <th>{{mb_label class="CPatient" field="prenom"}}</th>
     <th>{{mb_label class="CPatient" field="naissance"}}</th>
     <th>{{mb_label class="CPatient" field="sexe"}}</th>
-    <th>List patient doublon</th>
+    <th>{{tr}}CPatient.link_list{{/tr}}</th>
     <th>{{mb_label class="CPatientState" field="datetime"}}</th>
     <th>{{mb_label class="CPatientState" field="mediuser_id"}}</th>
     <th>{{mb_label class="CPatientState" field="reason"}}</th>
@@ -81,7 +81,7 @@
       {{/if}}
       <td>
         {{if $_patient->_ref_patient_links}}
-          Le patient possèdent des doublons potentielles, veuillez fusionner les patients ou supprimer les liens pour valider l'identité.
+          {{tr}}CPatient.link_detected{{/tr}}
         {{else}}
           <form name="validationState_{{$_patient->_guid}}" method="post"
                       onsubmit="return onSubmitFormAjax(this, PatientState.getListPatientByState.curry('{{$state}}', {{$page}}))">
@@ -90,10 +90,10 @@
             {{mb_field object=$_patient field="_reason_state"}}
             {{if $_patient->status != "VALI"}}
               {{mb_field object=$_patient field="status" value="VALI" hidden=true}}
-              <button type="submit" class="tick">{{tr}}Validate{{/tr}} l'identité</button>
+              <button type="submit" class="tick">{{tr}}CPatientState.validate_identity{{/tr}}</button>
             {{else}}
               {{mb_field object=$_patient field="status" value="PROV" hidden=true}}
-              <button type="submit" class="cancel">Rendre l'identité provisoire</button>
+              <button type="submit" class="cancel">{{tr}}CPatientState.unvalidate_identity{{/tr}}</button>
             {{/if}}
           </form>
         {{/if}}

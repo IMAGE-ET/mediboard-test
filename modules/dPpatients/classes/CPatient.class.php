@@ -625,13 +625,20 @@ class CPatient extends CPerson {
     }
 
     // Creation d'un patient
-    if (!$this->_merging && !CAppUI::conf("dPpatients CPatient manage_identity_status", CGroups::loadCurrent()) &&
-        CAppUI::conf('dPpatients CPatient identitovigilence') == "doublons"
-    ) {
+    $manage_identity_status = CAppUI::conf("dPpatients CPatient manage_identity_status", CGroups::loadCurrent());
+    if (!$this->_merging && !$manage_identity_status && CAppUI::conf('dPpatients CPatient identitovigilence') == "doublons") {
       if ($this->loadMatchingPatient(true, false) > 0) {
         return "Doublons détectés";
       }
     }
+
+    if ($manage_identity_status && $this->status == "VALI" && !CAppUI::pref("allowed_identity_status")) {
+      if ($this->fieldModified("nom") || $this->fieldModified("prenom") ||
+          $this->fieldModified("naissance") || $this->fieldModified("nom_jeune_fille")) {
+        return "Vous n'avez pas les droits pour modifier les traits strict du patient";
+      }
+    }
+
     return null;
   }
 
@@ -802,6 +809,10 @@ class CPatient extends CPerson {
     $nom_naissance   = $this->nom_jeune_fille && $this->nom_jeune_fille != $this->nom ? " ($this->nom_jeune_fille)" : "";
     $this->_view     = "$this->_civilite $this->nom$nom_naissance $this->prenom";
     $this->_longview = "$this->_civilite_long $this->nom$nom_naissance $this->prenom";
+    if (CAppUI::conf("dPpatients CPatient manage_identity_status", CGroups::loadCurrent())) {
+      $this->_view .= $this->status ? " [$this->status.]" : "";
+      $this->_longview .= $this->status ? " [$this->status.]" : "";
+    }
     $this->_view .= $this->vip ? " [Conf.]" : "";
     $this->_view .= $this->deces ? " [Décès.]" : "";
     $this->_longview .= $this->vip ? " [Conf.]" : "";

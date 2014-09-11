@@ -40,10 +40,15 @@ PatientState = {
     }
   },
 
-  mergePatient : function(patients_id) {
+  mergePatient : function (patients_id) {
     new Url("system", "object_merger")
       .addParam("objects_class", "CPatient")
       .addParam("objects_id", patients_id)
       .popup(800, 600, "merge_patients");
+  },
+
+  stats_filter : function () {
+    new Url("dPpatients", "ajax_stats_patient_state")
+      .requestUpdate("patient_stats");
   }
 };
