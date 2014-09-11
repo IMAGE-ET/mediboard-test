@@ -47,6 +47,7 @@ class CPlageconsult extends CPlageHoraire {
   public $_consult_by_categorie;
   public $_type_repeat;
   public $_propagation;
+  public $_nb_free_freq;
 
   // Filter fields
   public $_date_min;
@@ -179,6 +180,41 @@ class CPlageconsult extends CPlageHoraire {
   }
 
   /**
+   * get the next plage for the chir_id
+   *
+   * @return CPlageconsult
+   */
+  function getNextPlage() {
+    $plage = new CPlageconsult();
+    if (!$this->_id) {
+      return $plage;
+    }
+
+    $where = array();
+    $where[] = " chir_id = '$this->chir_id' OR remplacant_id = '$this->remplacant_id'";
+    $where["locked"] = " != '1' ";
+    $where["date"] = "> '$this->date' ";
+    $where["plageconsult_id"] = " != '$this->plageconsult_id' ";
+    $plage->loadObject($where, "date ASC, debut ASC");
+    return $plage;
+  }
+
+  function getPreviousPlage() {
+    $plage = new CPlageconsult();
+    if (!$this->_id) {
+      return $plage;
+    }
+
+    $where = array();
+    $where[] = " chir_id = '$this->chir_id' OR remplacant_id = '$this->remplacant_id'";
+    $where["locked"] = " != '1' ";
+    $where["date"] = "< '$this->date' ";
+    $where["plageconsult_id"] = " != '$this->plageconsult_id' ";
+    $plage->loadObject($where, "date DESC, debut DESC");
+    return $plage;
+  }
+
+  /**
    * get the plage list between 2 days or for one day
    *
    * @param string      $chir_id    chir of plage
@@ -273,6 +309,7 @@ class CPlageconsult extends CPlageHoraire {
     }
 
     $this->_affected = $nb_plage_prise;
+    $this->_nb_free_freq = $nb_place_consult-$this->_affected;
     return $this->_disponibilities = $fill;
   }
 

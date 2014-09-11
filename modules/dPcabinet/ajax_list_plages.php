@@ -28,11 +28,20 @@ $plageconsult_id  = CValue::get("plageconsult_id");
 $hour             = CValue::get("hour");
 $hide_finished    = CValue::get("hide_finished", true);
 $_line_element_id = CValue::get("_line_element_id");
+$as_place         = CValue::get("as_place", 0);
 
 
 // Vérification des droits sur les praticiens
 $listPraticiens = CConsultation::loadPraticiens(PERM_EDIT);
 $listPrat = CConsultation::loadPraticiens(PERM_EDIT, $function_id, null, true);
+
+$list_prat = array();
+
+$chir = new CMediusers();
+$chir->load($chir_id);
+if ($chir->_id) {
+  $list_prat = $chir->loadPraticiens(PERM_EDIT, $chir->function_id);
+}
 
 // Récupération des plages de consultation disponibles
 $listPlage = new CPlageconsult;
@@ -128,10 +137,10 @@ foreach ($listPlage as $currPlage) {
   }
 
   $currPlage->_ref_chir = $listPrat[$currPlage->chir_id];
-  $currPlage->loadFillRate();
   $currPlage->loadCategorieFill();
   $currPlage->loadRefsNotes();
-  $currPlage->loadRefsBack();
+  $currPlage->loadRefsConsultations(false);
+  $currPlage->loadFillRate();
   $currPlage->countPatients();
   $currPlage->loadDisponibilities();
 }
@@ -156,6 +165,9 @@ $smarty->assign("plage"          , $plage);
 $smarty->assign("listPlage"      , $listPlage);
 $smarty->assign("online"         , true);
 $smarty->assign("_line_element_id", $_line_element_id);
-$smarty->assign("multiple"      , $multipleMode);
+$smarty->assign("multiple"        , $multipleMode);
+
+$smarty->assign("as_place"      , $as_place);
+$smarty->assign("list_prat"      ,$list_prat);
 
 $smarty->display("inc_list_plages.tpl");

@@ -57,6 +57,11 @@ foreach ($listFnc as $id => $_fnc) {
   }
 }
 
+// if only one function and function_id
+if (count($listFnc) == 1 && !$chirSel) {
+  $function_id = reset($listFnc)->_id;
+}
+
 // Période
 $today = CMbDT::date();
 

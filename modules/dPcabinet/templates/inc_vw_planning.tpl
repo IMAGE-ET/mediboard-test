@@ -41,8 +41,18 @@
 
 <script>
   Main.add(function() {
+    // conges
+    {{foreach from=$conges key=k item=_conge}}
+      var day = $('CMediusers-{{$chirSel}}').select("th.day-"+{{$k}});
+      day = day[0];
+      {{if $_conge}}
+        day.update(day.innerHTML+" (<em>{{$_conge}})</em>");
+      {{/if}}
+    {{/foreach}}
+
     var planning = window['planning-{{$planning->guid}}'];
-    
+
+
     planning.onMenuClick = function(action, plageconsult_id, elt) {
       window.action_in_progress = true;
       var consultation_id = elt.get("consultation_id");
