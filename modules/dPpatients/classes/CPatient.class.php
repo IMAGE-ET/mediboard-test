@@ -605,6 +605,12 @@ class CPatient extends CPerson {
 
     CPatientLink::deleteDoubloon();
 
+    $this->status = $this->countPatientLinks() ? "DPOT" : "PROV";
+    if ($this->vip) {
+      $this->status = "CACH";
+    }
+    $this->store();
+
     // Merge them
     if (count($list) > 1) {
       $dossier_medical->mergePlainFields($list);
