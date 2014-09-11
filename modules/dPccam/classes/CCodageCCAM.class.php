@@ -211,9 +211,6 @@ class CCodageCCAM extends CMbObject {
    * @return bool
    */
   function updateRule($force = false) {
-    if ($this->association_mode != 'auto' || !$this->_check_asso) {
-      return false;
-    }
     $this->guessRule();
     if ($this->fieldModified('association_rule') || $force) {
       $this->applyRuleToActes();
