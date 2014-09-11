@@ -78,13 +78,14 @@ foreach ($musers as $_user) {
   $plage->date = $date;
   $plages = $plage->loadMatchingList();
 
+  $style = "color:black;
+    font-size:1.3em;
+    text-shadow: 0 0 10px white;";
+  $style .= $nb_conges ? "text-decoration: line-through;" : null;
+
   // add prat to the calendar
   $planning->addDayLabel(
-    $i, '<span style="
-    color:black;
-    font-size:1.3em;
-    text-shadow: 0 0 10px white;
-    ">'.$_user->_view.'</span>', null, "#".$_user->_color, null, false, array("user_id" => $user_id));
+    $i, "<span style=\"$style\">".$_user->_view."</span>", null, "#".$_user->_color, null, false, array("user_id" => $user_id));
 
   $plage = new CPlageconsult();
   $plage->chir_id = $user_id;

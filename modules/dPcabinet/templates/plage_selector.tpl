@@ -162,13 +162,44 @@
 
     // load the plageconsult to the right
     loadPlageConsult : function(plageconsult_id, consult_id, multiple, heure) {
+      // load plage
       var url = new Url("dPcabinet", "httpreq_list_places");
       url.addParam("plageconsult_id", plageconsult_id);
       url.addParam("heure", heure);
       url.addParam("consult_id"     , consult_id);
       url.addParam("multipleMode", multiple);
       url.addParam("slot_id", this.current_rank);
-      url.requestUpdate("listPlaces-"+this.current_rank);
+      url.requestUpdate("listPlaces-"+this.current_rank, {onComplete : RDVmultiples.updateSelections.curry(plageconsult_id, multiple)});
+    },
+
+    updateSelections : function(plage_id, multiple) {
+      var list_of_plages_left = [];
+      $('listePlages').select('table.tbl tr.plage').each(function(elt) {
+        elt.removeClassName('selected');
+        list_of_plages_left.push((elt.id).split('-')[1]);
+      });
+
+      if (!multiple) {
+        var line = $('plage-'+plage_id);
+        line.addUniqueClassName("selected");
+      }
+      // multiple mode
+      else {
+        var plages_displayed = $('plage_list_container').select('table');
+        var ids = [];
+        plages_displayed.each(function(elt) {
+          ids.push(elt.id.split('_')[1]);
+        });
+
+        $(ids).each(function(elt) {
+          for(var a = 0; a < list_of_plages_left.length; a++) {
+            if (list_of_plages_left[a] == elt) {
+              var line = $('plage-'+elt);
+              line.addClassName("selected");
+            }
+          }
+        });
+      }
     },
 
     sendData : function() {
@@ -241,9 +272,8 @@
     url.addParam('function_id', $V(oform._function_id));
     url.addParam('chir_id', $V(oform.chir_id));
     var first_consult = RDVmultiples.slots[0];
+    if (!first_consult) {return;}
     url.addParam('date', first_consult.date);
-    //url.requestUpdate('systemMsg');
-
     url.requestJSON(function(elts) {
       if (!elts.length) {
         return;
@@ -254,6 +284,7 @@
         var data = elts[a];
         var position = a+1;
         RDVmultiples.selRank(position);
+        // if we have a plage_id
         if (elts[a].indexOf("-") == -1) {
           RDVmultiples.loadPlageConsult(data, null, true);
         }
@@ -271,14 +302,33 @@
           url.addParam("period"             , $V(form.repeat_type));
           url.addParam("date"               , data);
           url.addParam("hide_finished"      , $V(form.hide_finished));
-          url.addParam("function_id"       , $V(form._function_id));
+          url.addParam("function_id"        , $V(form._function_id));
+          url.addParam("as_place"           , 1);
           url.requestUpdate('listPlaces-'+position);
         }
         RDVmultiples.selRank(first_unknown);
       }
     });
+  };
 
+  previous_plage = next_plage = function(plage_id, dom_button) {
+    RDVmultiples.selRank($(dom_button).up('div.plage_rank').get("slot_number"));
+    RDVmultiples.loadPlageConsult(plage_id, null, true);
+  };
 
+  changePlageChir = function(chir_id, date, dom_select) {
+    var slot_id = $(dom_select).up('div.plage_rank').get("slot_number");
+    RDVmultiples.selRank(slot_id);
+    var form = getForm("Filter");
+    var url = new Url("cabinet", "ajax_list_plages");
+    url.addParam("dialog"             , 1);
+    url.addParam("chir_id"            , chir_id);
+    url.addParam("multipleMode"       , "{{$multipleMode}}");
+    url.addParam("period"             , $V(form.repeat_type));
+    url.addParam("hide_finished"      , $V(form.hide_finished));
+    url.addParam("date"               , date);
+    url.addParam("as_place"           , 1);
+    url.requestUpdate('listPlaces-'+slot_id);
   };
 
 </script>
@@ -326,21 +376,43 @@
       </td>
 
       <td>
-        <strong>Répéter </strong>
-        <select name="repeat_type" onchange="guessNexts();">
-          {{foreach from=$periods item="_period"}}
-            <option value="{{$_period}}" {{if $_period == $period}}selected="selected"{{/if}}>
-              {{tr}}Period.{{$_period}}{{/tr}}
-            </option>
-          {{/foreach}}
-        </select>
-        <select name="repeat_number" onchange="guessNexts()">
-          {{foreach from=0|range:$app->user_prefs.NbConsultMultiple-1 item=_nb}}
-            <option value="{{$_nb}}">{{$_nb}}</option>
-          {{/foreach}}
-        </select>
-        <strong> fois</strong>
-        <button type="button" class="change notext" onclick="guessNexts();">{{tr}}Repeat{{/tr}}</button>
+        <button type="button" onclick="Modal.open('repeat_modal');" class="change">Répéter </button>
+
+        <div id="repeat_modal" style="display:none;">
+          <div class="small-info">
+            Selectionnez la répétition de cette plage.
+          </div>
+          <table>
+            <tr>
+              <td>
+                Répéter de manière
+                <select name="repeat_type">
+                  {{foreach from=$periods item="_period"}}
+                    <option value="{{$_period}}" {{if $_period == $period}}selected="selected"{{/if}}>
+                      {{tr}}Period.{{$_period}}{{/tr}}
+                    </option>
+                  {{/foreach}}
+                </select>
+              </td>
+              <td>
+                pour
+                <select name="repeat_number">
+                  <option value="0">&mdash;</option>
+                  {{foreach from=1|range:$app->user_prefs.NbConsultMultiple-1 item=_nb}}
+                    <option value="{{$_nb}}">{{$_nb}}</option>
+                  {{/foreach}}
+                </select>
+                rdv supplémentaires
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <button type="button" class="tick" onclick="guessNexts(); Control.Modal.close();">{{tr}}Repeat{{/tr}} {{tr}}and{{/tr}} {{tr}}Close{{/tr}}</button>
+              </td>
+            </tr>
+          </table>
+
+        </div>
       </td>
 
       <!-- hide -->
@@ -408,7 +480,7 @@
 
 <div id="plage_list_container">
   {{foreach from=1|range:$nbConsult:-1 item=j}}
-    <div id="listPlage_dom_{{$j-1}}" data-slot_number="{{$j-1}}" style="width:{{$width}}%; float:left; height: {{$height}}%; overflow-y: auto;">
+    <div id="listPlage_dom_{{$j-1}}" data-slot_number="{{$j-1}}" style="width:{{$width}}%; float:left; height: {{$height}}%; overflow-y: auto;" class="plage_rank">
       {{if $multipleMode}}
         <div id="tools_plage_{{$j-1}}" class="tools_plage" style="text-align: center;">
           <button class="button target" onclick="RDVmultiples.selRank('{{$j-1}}')"> RDV {{$j}}</button>

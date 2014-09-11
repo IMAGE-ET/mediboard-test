@@ -16,6 +16,11 @@ li.atcd_hover a {
   outline: 3px #f88 solid;
 }
 
+.categorieConsult {
+  padding-left: 20px;
+  height: 18px;
+  margin-left: 0;
+}
 
 .planning div.event-container div.pour_tiers {
   background-image: url("../../../images/icons/ray_blue.gif");

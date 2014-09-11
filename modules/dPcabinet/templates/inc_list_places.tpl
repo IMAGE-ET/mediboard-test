@@ -54,16 +54,24 @@
         {{if $display_nb_consult}}4{{else}}2{{/if}}
       {{/if}}">
         {{if $online}}
-          {{mb_include module=system template=inc_object_notes object=$plage}}
+          {{*mb_include module=system template=inc_object_notes object=$plage*}}
         {{/if}}
-        {{$plage->_ref_chir}}
+        <select name="chir_id" onchange="changePlageChir($V(this), '{{$plage->date}}', this); return false;">
+          {{foreach from=$list_users item=_user}}
+            <option value="{{$_user->_id}}" {{if $plage->chir_id == $_user->_id}}selected="selected" {{/if}}>{{$_user}}</option>
+          {{/foreach}}
+        </select>
         <br />
-        {{if $online && $consultation->_id}}<img src="http://localhost/mediboard/style/mediboard/images/buttons/edit.png" alt="" />{{/if}}
+        {{if $online && $consultation->_id}}
+          <img src="http://localhost/mediboard/style/mediboard/images/buttons/edit.png" alt="" />
+        {{/if}}
         {{if !$multiple}}
           Plage du {{$plage->date|date_format:$conf.longdate}}
           de {{$plage->debut|date_format:$conf.time}}
           à {{$plage->fin|date_format:$conf.time}}
         {{else}}
+          {{if $previous_plage->_id}}<button class="left notext" style="float:left;" onclick="previous_plage('{{$previous_plage->_id}}', this);">Plage précédente ({{$previous_plage}})</button>{{/if}}
+          {{if $next_plage->_id}}<button class="right notext" style="float:right;" onclick="next_plage('{{$next_plage->_id}}', this);">Plage précédente ({{$next_plage}})</button>{{/if}}
           {{$plage->date|date_format:"%a %d %b"}}
         {{/if}}
       </th>

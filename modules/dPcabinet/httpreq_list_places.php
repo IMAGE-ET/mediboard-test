@@ -43,75 +43,21 @@ elseif ($heure) {
   $consultation_target->heure = $heure;
 }
 $consultation_target->loadRefElementPrescription();
-/**
- * Calcul le taux d'utilisation de prise de rendez-vous par créneaux de 5 minutes
- *
- * @param CPlageconsult[] $plages Plages
- * @param array           $list   Liste
- * @param CPlageconsult   $plage  Plage
- *
- * @return array
- */
-function utilisation_rdv($plages, $list, $plage) {
-  $utilisation = array();
-  
-  // Granularité de 5 minutes.
-  // 288 créneaux de 5 minutes dans 24 heures
-  for ($i=0 ; $i < 288 ; $i++) {
-    $time = CMbDT::time(($i*5)." minutes", $plage->debut);
-    $utilisation[$time] = 0;
-    if ($time == $plage->fin) {
-      break;
-    }
-  }
-  
-  foreach ($plages as $_plage) {
-    $rdvs = $_plage->loadRefsConsultations(false);
-    $freq = CMbDT::transform($_plage->freq, null, "%M");
-    
-    foreach ($rdvs as $_rdv) {
-      $nb_cases = ($_rdv->duree * $freq) / 5 ;
-      for ($i=0 ; $i < $nb_cases ; $i++) {
-        
-        $time = CMbDT::time(($i*5)." minutes", $_rdv->heure);
-        if (!isset($utilisation[$time])) {
-          continue;
-        }
-        $utilisation[$time] ++;
-      }
-    }
-  }
-  
-  ksort($utilisation);
-  
-  // Granularité à la fréquence des consultations de la plage
-  $creneaux = array_flip(CMbArray::pluck($list, "time"));
-  $save_key = 0;
-  
-  foreach ($utilisation as $key => $_util) {
-    if (!isset($creneaux[$key]) && isset($utilisation[$save_key])) {
-      $utilisation[$save_key] = max($_util, $utilisation[$save_key]);
-      unset($utilisation[$key]);
-    }
-    else {
-      $utilisation[$key] = $_util;
-      $save_key = $key;
-    }
-  }
-  
-  return $utilisation;
-}
+
 
 // Chargement des places disponibles
 $listPlace   = array();
 $listBefore  = array();
 $listAfter   = array();
+$next_plage = $previous_plage = new CPlageconsult();
+$function_id = null;
 
 if ($plageconsult_id) {
   if (!$plage->plageconsult_id) {
     $plage->load($plageconsult_id);
   }
   $plage->loadRefsFwd(true);
+  $function_id = $plage->_ref_chir->function_id;
   $plage->loadRefsConsultations(false, true, true);
   $plage->loadFillRate();
   $plage->_ref_chir->loadRefFunction();
@@ -173,7 +119,17 @@ if ($plageconsult_id) {
     $plages_etab      = $plage->loadList($where);
     $utilisation_etab = utilisation_rdv($plages_etab, $listPlace, $plage);
   }
+
+  // next consult
+  $next_plage = $plage->getNextPlage();
+
+  // previous consult
+  $previous_plage = $plage->getPreviousPlage();
 }
+
+// user's function available
+$mediuser = new CMediusers();
+$mediusers = $mediuser->loadProfessionnelDeSanteByPref(PERM_READ, $function_id);
 
 // Vérifier le droit d'écriture sur la plage sélectionnée
 $plage->canDo();
@@ -183,6 +139,9 @@ $smarty = new CSmartyDP();
 $smarty->assign("plageconsult_id", $plageconsult_id);
 $smarty->assign("plage"          , $plage);
 $smarty->assign("listPlace"      , $listPlace);
+$smarty->assign("next_plage"     , $next_plage);
+$smarty->assign("list_users"     , $mediusers);
+$smarty->assign("previous_plage" , $previous_plage);
 $smarty->assign("listBefore"     , $listBefore);
 $smarty->assign("listAfter"      , $listAfter);
 $smarty->assign("quotas"         , $quotas);
@@ -201,3 +160,63 @@ if ($display_nb_consult == "etab") {
 $smarty->assign("online"         , true);
 
 $smarty->display("inc_list_places.tpl");
+
+
+/**
+ * Calcul le taux d'utilisation de prise de rendez-vous par créneaux de 5 minutes
+ *
+ * @param CPlageconsult[] $plages Plages
+ * @param array           $list   Liste
+ * @param CPlageconsult   $plage  Plage
+ *
+ * @return array
+ */
+function utilisation_rdv($plages, $list, $plage) {
+  $utilisation = array();
+
+  // Granularité de 5 minutes.
+  // 288 créneaux de 5 minutes dans 24 heures
+  for ($i=0 ; $i < 288 ; $i++) {
+    $time = CMbDT::time(($i*5)." minutes", $plage->debut);
+    $utilisation[$time] = 0;
+    if ($time == $plage->fin) {
+      break;
+    }
+  }
+
+  foreach ($plages as $_plage) {
+    $rdvs = $_plage->loadRefsConsultations(false);
+    $freq = CMbDT::transform($_plage->freq, null, "%M");
+
+    foreach ($rdvs as $_rdv) {
+      $nb_cases = ($_rdv->duree * $freq) / 5 ;
+      for ($i=0 ; $i < $nb_cases ; $i++) {
+
+        $time = CMbDT::time(($i*5)." minutes", $_rdv->heure);
+        if (!isset($utilisation[$time])) {
+          continue;
+        }
+        $utilisation[$time] ++;
+      }
+    }
+  }
+
+  ksort($utilisation);
+
+  // Granularité à la fréquence des consultations de la plage
+  $creneaux = array_flip(CMbArray::pluck($list, "time"));
+  $save_key = 0;
+
+  foreach ($utilisation as $key => $_util) {
+    if (!isset($creneaux[$key]) && isset($utilisation[$save_key])) {
+      $utilisation[$save_key] = max($_util, $utilisation[$save_key]);
+      unset($utilisation[$key]);
+    }
+    else {
+      $utilisation[$key] = $_util;
+      $save_key = $key;
+    }
+  }
+
+  return $utilisation;
+}

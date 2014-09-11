@@ -90,8 +90,24 @@ $plage = new CPlageconsult();
 
 $whereHP["plageop_id"] = " IS NULL";
 
+$users = array();
+$conges_day = array();
+if ($user->_id) {
+  $muser = new CMediusers();
+  $users = $muser->loadProfessionnelDeSanteByPref(PERM_READ, $user->function_id);
+}
+
 for ($i = 0; $i < $nbDays; $i++) {
   $jour = CMbDT::date("+$i day", $debut);
+
+  // conges dans le header
+  if (count($users)) {
+    $_conges = CPlageConge::loadForIdsForDate(array_keys($users), $jour);
+    foreach ($_conges as $key => $_conge) {
+      $_conge->loadRefUser();
+      $conges_day[$i][] = $_conge->_ref_user->_shortview;
+    }
+  }
   $where["date"] = $whereInterv["date"] = $whereHP["date"] = "= '$jour'";
 
   if (CAppUI::pref("showIntervPlanning")) {
@@ -305,19 +321,25 @@ for ($i = 0; $i < $nbDays; $i++) {
   }
 }
 
+// conges
+foreach ($conges_day as $key => $_day) {
+  $conges_day[$key] = implode(", ", $_day);;
+}
+
 $planning->rearrange(true);
 $smarty = new CSmartyDP();
 
-$smarty->assign("planning" , $planning);
-$smarty->assign("debut"    , $debut);
-$smarty->assign("fin"      , $fin);
-$smarty->assign("prev"     , $prev);
-$smarty->assign("next"     , $next);
-$smarty->assign("chirSel"  , $chirSel);
-$smarty->assign("function_id"  , $function_id);
-$smarty->assign("user"     , $user);
-$smarty->assign("today"    , $today);
-$smarty->assign("bank_holidays", $bank_holidays);
+$smarty->assign("planning"            , $planning);
+$smarty->assign("debut"               , $debut);
+$smarty->assign("fin"                 , $fin);
+$smarty->assign("prev"                , $prev);
+$smarty->assign("next"                , $next);
+$smarty->assign("chirSel"             , $chirSel);
+$smarty->assign("conges"              , $conges_day);
+$smarty->assign("function_id"         , $function_id);
+$smarty->assign("user"                , $user);
+$smarty->assign("today"               , $today);
+$smarty->assign("bank_holidays"       , $bank_holidays);
 $smarty->assign("count_si_desistement", $count_si_desistement);
 
 $smarty->display("inc_vw_planning.tpl");
