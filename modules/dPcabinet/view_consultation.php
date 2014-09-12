@@ -26,11 +26,17 @@ $prat->loadRefs();
 $patient = $consultation->_ref_patient;
 $patient->loadRefs();
 
+$prat->loadRefFunction();
+$chir_ids = array_keys($prat->_ref_function->loadRefsUsers());
+
+$ds = $consultation->getDS();
+
 // nexts rdvs for the same function
 $ljoin = array("plageconsult" => "plageconsult.plageconsult_id = consultation.plageconsult_id");
 $where = array();
 $where["date"] = ">= '$date' ";
 $where["patient_id"] = " = '$consultation->patient_id' ";
+$where[] = "plageconsult.chir_id ".$ds->prepareIn($chir_ids)." OR plageconsult.remplacant_id ".$ds->prepareIn($chir_ids);
 $where["annule"] = " != '1' ";
 $where[$consultation->_spec->key] = " != '$consultation->_id'";
 /** @var CConsultation[] $consultations */
