@@ -42,13 +42,13 @@ if ($sejour->patient_id == $patient->_id) {
     $_op->loadRefPlageOp();
     $_op->loadRefAnesth();
     $_op->loadRefsConsultAnesth();
+    $_op->loadBrancardage();
   }
   $sejour->loadRefsConsultAnesth();
 }
 else {
   $sejour = new CSejour();
 }
-
 
 // Création du template
 $smarty = new CSmartyDP();
