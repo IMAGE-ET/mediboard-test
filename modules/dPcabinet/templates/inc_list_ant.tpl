@@ -264,6 +264,38 @@ showModalTP = function() {
         </form>
       </li>
     {{/foreach}}
+    {{if $dossier_medical->_ref_prescription->_ref_prescription_lines_element|@count}}
+      <hr style="width: 50%;" />
+    {{/if}}
+      {{foreach from=$dossier_medical->_ref_prescription->_ref_prescription_lines_element item=_line}}
+        <li>
+          <form name="delTraitementDossierElemsPat-{{$_line->_id}}"  action="?" method="post">
+            <input type="hidden" name="m" value="dPprescription" />
+            <input type="hidden" name="del" value="1" />
+            <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
+            <input type="hidden" name="prescription_line_element_id" value="{{$_line->_id}}" />
+
+            {{if $_line->creator_id == $app->user_id}}
+              <button class="trash notext" type="button" onclick="Traitement.remove(this.form, function() {DossierMedical.reloadDossierPatient(null, '{{$type_see}}');})">
+                {{tr}}Delete{{/tr}}
+              </button>
+            {{/if}}
+            {{mb_include module=system template=inc_interval_date from=$_line->debut to=$_line->fin}}
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView')">
+              {{$_line->_view}}
+            </span>
+            <span class="compact" style="display: inline;">
+              {{$_line->commentaire}}
+              {{if $_line->_ref_prises|@count}}
+                <br />
+                ({{foreach from=`$_line->_ref_prises` item=_prise name=foreach_prise}}
+                  {{$_prise}}{{if !$smarty.foreach.foreach_prise.last}},{{/if}}
+                {{/foreach}})
+              {{/if}}
+            </span>
+          </form>
+        </li>
+      {{/foreach}}
     </ul>
     {{if $dossier_medical->_ref_traitements|@count && $dossier_medical->_ref_prescription->_ref_prescription_lines|@count}}
     <hr style="width: 50%;" />

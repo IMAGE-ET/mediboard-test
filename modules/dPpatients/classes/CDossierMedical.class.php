@@ -139,6 +139,7 @@ class CDossierMedical extends CMbMetaObject {
 
     if ($prescription && $prescription->_id) {
       $prescription->loadRefsLinesMed();
+      $prescription->loadRefsLinesElement();
     }
 
     return $this->_ref_prescription = $prescription;

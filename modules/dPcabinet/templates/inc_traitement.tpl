@@ -205,6 +205,9 @@
           {{if $conf.dPpatients.CTraitement.enabled && $vw_traitement_texte_libre}}
             <li><a href="#tp_texte_simple{{$addform}}">Texte libre</a></li>
           {{/if}}
+          {{if "dPprescription"|module_active && "dPprescription CPrescription show_element_tp"|conf:"CGroups-$g"}}
+            <li><a href="#tp_nomenclature{{$addform}}">Nomenclature des éléments</a></li>
+          {{/if}}
         </ul>
       </td>
     </tr>
@@ -375,6 +378,10 @@
           </form>
         </td>
       </tr>
+    {{/if}}
+
+    {{if "dPprescription"|module_active && "dPprescription CPrescription show_element_tp"|conf:"CGroups-$g"}}
+      {{mb_include module=prescription template=vw_add_line_element_tp}}
     {{/if}}
   </table>
 </fieldset>
