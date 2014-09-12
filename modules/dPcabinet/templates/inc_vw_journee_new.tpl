@@ -15,6 +15,9 @@
     ViewPort.SetAvlHeight("planningInterventions", 1);
     $('planningWeek').setStyle({height : "2000px"});
   });
+
+  $("previous_day").setAttribute("data-date", '{{$pday}}');
+  $("next_day").setAttribute("data-date", '{{$nday}}');
 </script>
 
 <div id="planningInterventions">

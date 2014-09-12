@@ -12,6 +12,17 @@
 {{mb_script module=ssr script=planning}}
 
 <script>
+  assignDate = function(button) {
+    button = $(button);
+    var date = button.get("date");
+
+    if (date) {
+      var form = getForm("filter_day");
+      $V(form.date, date, true);
+      $V(form.date_da, DateFormat.format(Date.fromDATE(date), "dd/MM/yyyy"), true);
+    }
+  };
+
   refreshPlanning = function() {
     var form = getForm("filter_day");
     var week_containers = $$(".week-container");
@@ -118,7 +129,9 @@
       </p>
     </div>
 
+    <button type="button" id="previous_day" class="left notext" onclick="assignDate(this);" data-date=""></button>
     <input type="hidden" name="date" value="{{$date}}" onchange="this.form.onsubmit();"/>
+    <button type="button" id="next_day" class="right notext" onclick="assignDate(this);" data-date=""></button>
 
     <button class="change notext"></button>
   </fieldset>

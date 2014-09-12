@@ -248,6 +248,9 @@ $planning->rearrange(true);
 
 // smarty
 $smarty = new CSmartyDP();
+$smarty->assign("date", $date);
+$smarty->assign("nday", CMbDT::date("+1 DAY", $date));
+$smarty->assign("pday", CMbDT::date("-1 DAY", $date));
 $smarty->assign("planning", $planning);
 $smarty->assign("height_planning_journee", 4500);
 $smarty->display("inc_vw_journee_new.tpl");
