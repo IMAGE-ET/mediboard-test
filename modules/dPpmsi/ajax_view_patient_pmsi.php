@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id: $
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage PMSI
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision: $
+ * @version    $Revision:$
  */
 
 CCanDo::checkEdit();
@@ -42,13 +42,13 @@ if ($sejour->patient_id == $patient->_id) {
     $_op->loadRefPlageOp();
     $_op->loadRefAnesth();
     $_op->loadRefsConsultAnesth();
+    $_op->loadBrancardage();
   }
   $sejour->loadRefsConsultAnesth();
 }
 else {
   $sejour = new CSejour();
 }
-
 
 // Création du template
 $smarty = new CSmartyDP();
