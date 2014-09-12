@@ -17,8 +17,9 @@
     <td>{{$prat->_ref_discipline->_view}}</td>
   </tr>
   {{/if}}
+
   <tr>
-    <th class="category" colspan="2">Rendez-vous</th>
+    <th class="category" colspan="2">Rendez-vous {{if $consultations|@count}}principal{{/if}}</th>
   </tr>
   <tr>
     <th>Le</th>
@@ -42,6 +43,24 @@
     <th>Fax</th>
     <td>{{mb_value object=$prat->_ref_function field=fax}}</td>
   </tr>
+
+  {{if $consultations|@count}}
+    <tr>
+      <th class="category" colspan="2">{{$consultations|@count}} Rendez-vous suivants </th>
+    </tr>
+    {{foreach from=$consultations item=_consult}}
+      <tr>
+        <th>{{$_consult->_ref_plageconsult->date|date_format:$conf.longdate}}</th>
+        <td>{{$_consult->heure}} avec
+          {{if $_consult->_ref_plageconsult->chir_id}}
+            {{$_consult->_ref_plageconsult->_ref_chir}}
+          {{else}}
+            {{$_consult->_ref_plageconsult->_ref_remplacant}}
+          {{/if}}</td>
+      </tr>
+    {{/foreach}}
+  {{/if}}
+
   <tr>
     <th class="category" colspan="2">Fiche Patient</th>
   </tr>
