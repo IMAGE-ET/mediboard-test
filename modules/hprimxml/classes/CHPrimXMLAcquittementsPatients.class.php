@@ -45,8 +45,9 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLAcquittements {
    * @see parent::generateEnteteMessageAcquittement
    */
   function generateEnteteMessageAcquittement($statut, $codes = null, $commentaires = null) {
-    $echg_hprim      = $this->_ref_echange_hprim;
-    $identifiant     = isset($echg_hprim->_id) ? str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT) : "ES{$this->now}";
+    $commentaires = strip_tags($commentaires);
+    $echg_hprim   = $this->_ref_echange_hprim;
+    $identifiant  = isset($echg_hprim->_id) ? str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT) : "ES{$this->now}";
 
     $acquittementsPatients = $this->addElement($this, "acquittementsPatients", null, "http://www.hprim.org/hprimXML");
 
@@ -101,6 +102,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLAcquittements {
    * @return void
    */
   function addErreursAvertissements($statut, $codes, $commentaires = null, $mbObject = null) {
+    $commentaires = CMbString::removeAllHTMLEntities($commentaires);
     $acquittementsPatients = $this->documentElement;
      
     $erreursAvertissements = $this->addElement($acquittementsPatients, "erreursAvertissements");
@@ -136,6 +138,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLAcquittements {
    * @see parent::generateAcquittementsError
    */
   function generateAcquittementsError($code, $commentaire = null, CMbObject $mbObject = null) {
+    $commentaire = strip_tags($commentaire);
     return $this->_ref_echange_hprim->setAckError($this, $code, $commentaire, $mbObject);
   }
 

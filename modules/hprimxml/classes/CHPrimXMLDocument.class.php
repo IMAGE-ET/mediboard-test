@@ -932,11 +932,12 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
 
     $observations = $this->addElement($erreurAvertissement, "observations");
-    $this->addObservation($observations, $code, $libelle, CMbString::convertHTMLToXMLEntities($commentaires));
+    $this->addObservation($observations, $code, $libelle, $commentaires);
   }
 
   function addObservation($elParent, $code, $libelle, $commentaires = null) {
     $observation = $this->addElement($elParent, "observation");
+    $commentaires = CMbString::removeAllHTMLEntities($commentaires);
 
     $this->addElement($observation, "code", substr($code, 0, 17));
     $this->addElement($observation, "libelle", substr($libelle, 0, 80));
@@ -964,6 +965,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($erreur, "code"       , substr($code, 0, 17));
     $this->addElement($erreur, "libelle"    , substr($libelle, 0, 80));
     if ($commentaires) {
+      $commentaires = CMbString::removeAllHTMLEntities($commentaires);
       $this->addElement($erreur, "commentaire", substr("$libelle : \"$commentaires\"", 0, 4000));
     }
   }

@@ -89,7 +89,7 @@ class CHL7v2Acknowledgment implements CHL7Acknowledgment {
     $this->mb_error_codes = $mb_error_codes;
     $this->hl7_error_code = $hl7_error_code;
     $this->severity       = $severity;
-    $this->comments       = CMbString::convertHTMLToXMLEntities($comments);
+    $this->comments       = CMbString::removeAllHTMLEntities($comments);
     $this->object         = $object;
 
     $this->event->_exchange_hl7v2 = $this->_ref_exchange_hl7v2;

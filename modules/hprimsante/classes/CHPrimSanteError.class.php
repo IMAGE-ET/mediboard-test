@@ -43,7 +43,7 @@ class CHPrimSanteError {
     $this->type       = $exchange->type;
     $this->sous_type  = $exchange->sous_type;
     $this->exchange   = $exchange;
-    $this->comment    = $comment;
+    $this->comment    = CMbString::removeAllHTMLEntities($comment);
   }
 
   /**

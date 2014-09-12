@@ -107,7 +107,7 @@ class CHPRSegmentERR extends CHL7v2Segment {
       $data[] = $error[5];
       
       // ERR-10
-      $data[] = $error[6];
+      $data[] = CMbString::removeAllHTMLEntities($error[6]);
     }
     
     
