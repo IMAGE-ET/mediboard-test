@@ -54,3 +54,17 @@ td.legend-onhover {
 .iconed-text.anesth {
   background-image: url(images/icons/anesth.png);
 }
+
+.encart {
+  font-size: 0.8em;
+  padding: 2px;
+  border-radius: 3px;
+  background: white;
+  line-height: 1;
+  text-align: center;
+}
+
+.encart-vip {
+  border: 1px solid #661d00;
+  color: #661d00;
+}

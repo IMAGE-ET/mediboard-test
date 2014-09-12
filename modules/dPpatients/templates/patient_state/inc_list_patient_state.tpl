@@ -40,6 +40,9 @@
     <tr>
       <td class="narrow">{{mb_value object=$_patient field="_IPP"}}</td>
       <td>
+        {{if $_patient->vip}}
+          <span class="encart encart-vip" style="float: right">VIP</span>
+        {{/if}}
         <button type="button" class="edit notext"
                 onclick="PatientState.edit_patient('{{$_patient->_id}}', '{{$state}}')">
           {{tr}}Edit{{/tr}}
@@ -92,7 +95,11 @@
               {{mb_field object=$_patient field="status" value="VALI" hidden=true}}
               <button type="submit" class="tick">{{tr}}CPatientState.validate_identity{{/tr}}</button>
             {{else}}
-              {{mb_field object=$_patient field="status" value="PROV" hidden=true}}
+              {{assign var=state_value value="PROV"}}
+              {{if $_patient->vip}}
+                {{assign var=state_value value="CACH"}}
+              {{/if}}
+              {{mb_field object=$_patient field="status" value=$state_value hidden=true}}
               <button type="submit" class="cancel">{{tr}}CPatientState.unvalidate_identity{{/tr}}</button>
             {{/if}}
           </form>
