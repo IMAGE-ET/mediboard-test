@@ -208,10 +208,10 @@ Main.add(function() {
               <button type="button" class="carriage_return notext" title="{{tr}}CPatient.name_recopy{{/tr}}"
                 onclick="$V(getForm('editFrm').nom_jeune_fille, $V(getForm('editFrm').nom));" tabIndex="1000"></button>
               {{if $patient->_id && $patient->sexe == "f" && $nom_jeune_fille_mandatory}}
-             {{/if}}
-            <script type="text/javascript">
-              document.editFrm.nom_jeune_fille.addClassName("notNull");
-            </script>
+                <script type="text/javascript">
+                  document.editFrm.nom_jeune_fille.addClassName("notNull");
+                </script>
+              {{/if}}
             {{/if}}
           </td>
         </tr>
