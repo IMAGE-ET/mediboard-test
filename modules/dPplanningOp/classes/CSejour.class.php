@@ -3119,10 +3119,7 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return COperation[]
    */
   function loadRefsOperations($where = array(), $order = "date ASC") {
-    $where["sejour_id"] = "= '$this->_id'";
-
-    $operations = new COperation();
-    $this->_ref_operations = $operations->loadList($where, $order);
+    $this->_ref_operations = $this->loadBackRefs("operations", $order, null, null, null, null, null, $where);
 
     // Motif complet
     if (!$this->libelle) {
