@@ -136,8 +136,11 @@ class CPatientState extends CMbObject {
       return null;
     }
 
+    if ($patient->_status_no_guess) {
+      return $patient->status;
+    }
+
     if ($patient->vip || $patient->fieldModified("vip")) {
-      mbLog('ok');
       return $patient->vip == "1" ? "CACH" : "PROV";
     }
 

@@ -369,28 +369,36 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     }
     
     // PID-32: Identity Reliability Code (IS) (optional repeating)
-    $data[] =  array (
-      // Table - 0445
-      // VIDE  - Identité non encore qualifiée
-      // PROV  - Provisoire
-      // VALI  - Validé
-      // DOUB  - Doublon ou esclave
-      // DESA  - Désactivé
-      // DPOT  - Doublon potentiel
-      // DOUA  - Doublon avéré
-      // COLP  - Collision potentielle
-      // COLV  - Collision validée
-      // FILI  - Filiation
-      // CACH  - Cachée
-      // ANOM  - Anonyme
-      // IDVER - Identité vérifiée par le patient
-      // RECD  - Reçue d'un autre domaine
-      // IDRA  - Identité rapprochée dans un autre domaine
-      // USUR  - Usurpation
-      // HOMD  - Homonyme detecté
-      // HOMA  - Homonyme avéré
-      is_numeric($patient->nom) ? "ANOM" : "VALI"
-    );
+    // Table - 0445
+    // VIDE  - Identité non encore qualifiée
+    // PROV  - Provisoire
+    // VALI  - Validé
+    // DOUB  - Doublon ou esclave
+    // DESA  - Désactivé
+    // DPOT  - Doublon potentiel
+    // DOUA  - Doublon avéré
+    // COLP  - Collision potentielle
+    // COLV  - Collision validée
+    // FILI  - Filiation
+    // CACH  - Cachée
+    // ANOM  - Anonyme
+    // IDVER - Identité vérifiée par le patient
+    // RECD  - Reçue d'un autre domaine
+    // IDRA  - Identité rapprochée dans un autre domaine
+    // USUR  - Usurpation
+    // HOMD  - Homonyme detecté
+    // HOMA  - Homonyme avéré
+    if (CAppUI::conf("dPpatients CPatient manage_identity_status", $receiver->_ref_group)) {
+      $data[] =  array (
+        $patient->status,
+        $patient->vip && $patient->status != "CACH" ? "CACH": null,
+      );
+    }
+    else {
+      $data[] =  array (
+        is_numeric($patient->nom) ? "ANOM" : "VALI"
+      );
+    }
 
     // PID-33: Last Update Date/Time (TS) (optional)
     $data[] =  $event->last_log->date;

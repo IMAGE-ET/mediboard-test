@@ -437,6 +437,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     if ($sender->_configs["handle_PID_31"] == "avs") {
       $newPatient->avs = $this->queryTextNode("PID.31", $node);
     }
+
+    $this->getPatientState($node, $newPatient);
   }
 
   /**
@@ -662,6 +664,43 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   function getDeces(DOMNode $node, CPatient $newPatient) {
     if ($deces = $this->queryTextNode("PID.29/TS.1", $node)) {
       $newPatient->deces = CMbDT::dateTime($deces);
+    }
+  }
+
+  /**
+   * Get the patient state
+   *
+   * @param DOMNode  $node       Node
+   * @param CPatient $newPatient Patient
+   *
+   * @return void
+   */
+  function getPatientState(DOMNode $node, CPatient $newPatient) {
+    if ($states = $this->queryNodes("PID.32", $node)) {
+      $list_state = array();
+      foreach ($states as $_state) {
+        $list_state[] = $this->queryTextNode(".", $_state);
+      }
+
+      $state = CMbArray::extract($list_state, 0);
+      if (!$state) {
+        return;
+      }
+
+      if ($state == "CACH") {
+        $newPatient->vip = true;
+        $status = CMbArray::get($list_state, 1);
+        if ($status) {
+          $state = $status;
+        }
+      }
+      else {
+        if (in_array("CACH", $list_state)) {
+          $newPatient->vip = true;
+        }
+      }
+      $newPatient->_status_no_guess = true;
+      $newPatient->status = $state;
     }
   }
 

@@ -238,6 +238,9 @@ class CPatient extends CPerson {
   public $_IPP;
   public $_fusion; // fusion
 
+  //hl7 field
+  public $_status_no_guess = false; // Status du patient renseigné directement via une interface
+
   // DMP
   public $_dmp_create;
   // Accès urgence
