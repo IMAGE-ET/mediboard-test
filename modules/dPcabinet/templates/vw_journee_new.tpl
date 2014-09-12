@@ -33,13 +33,19 @@
   };
 
   // Clic sur une consultation
-  setClose = function(heure, plage_id, date, chir_id, consult_id) {
+  setClose = function(heure, plage_id, date, chir_id, consult_id, element) {
     if (consult_id) {
       modalPriseRDV(consult_id);
     }
     else {
-      // date doesn't work for a "no date" calendar !
-      //modalPriseRDV(0, Date.fromLocaleDate(date.split(" ")[1]).toDATE(), heure, plage_id);
+      // ugly method to get time
+      var time = "";
+      $w(element.className).each(function(elt) {
+        if (elt.indexOf(":") != -1) {
+          time = elt;
+        }
+      });
+      modalPriseRDV(0, Date.fromLocaleDate(date.split(" ")[1]).toDATE(), time, plage_id);
     }
   };
 
