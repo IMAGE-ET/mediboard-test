@@ -2780,7 +2780,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $where["prenom"]     = " = '$prenom'";
     }
     $where["relation"]   = " = 'assurance'";
-    $where[]             = "'".CMbDT::date()."' BETWEEN date_debut AND date_fin";
+    $now  = CMbDT::date();
+    $next = CMbDT::date("+ 1 DAY");
+    $where["date_debut"] = " <= '$now' AND IFNULL(date_fin, '$next') >= '$now'";
 
     $corres_patient->loadObject($where);
 
