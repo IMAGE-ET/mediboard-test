@@ -101,7 +101,7 @@
         </tr>
         
         {{foreach from=$_plage.factures item=_facture}}
-        <tr>
+        <tr id="line_facture_{{$_facture->_guid}}">
           {{if $_facture->_id}}
           <td>
             <strong onmouseover="ObjectTooltip.createEx(this, '{{$_facture->_guid}}')">
@@ -150,7 +150,7 @@
               {{foreach from=$_facture->_ref_reglements_patient item=_reglement}}
               <tr>
                 <td class="narrow">
-                  <button class="edit notext" type="button" onclick="Rapport.editReglement('{{$_reglement->_id}}', '{{$_reglement->date}}');">
+                  <button class="edit notext" type="button" onclick="Rapport.editReglement('{{$_reglement->_id}}', '{{$_reglement->date}}', '{{$_facture->_guid}}', '{{$_plage.plage->_guid}}');">
                     {{tr}}Edit{{/tr}}
                   </button>
                 </td>
@@ -161,15 +161,15 @@
               {{/foreach}}
               
               {{if abs($_facture->_du_restant_patient) > 0.01}}
-              <tr>
-                <td colspan="4" class="button">
-                  {{assign var=new_reglement value=$_facture->_new_reglement_patient}}
-                  {{assign var=object_guid value=$new_reglement->_ref_object->_guid}}
-                  <button class="add" type="button" onclick="Rapport.addReglement('{{$object_guid}}', '{{$new_reglement->emetteur}}', '{{$new_reglement->montant}}', '{{$new_reglement->mode}}', '{{$new_reglement->date}}');">
-                    {{tr}}Add{{/tr}} <strong>{{mb_value object=$new_reglement field=montant}}</strong>
-                  </button>
-                </td>
-              </tr>
+                <tr>
+                  <td colspan="4" class="button">
+                    {{assign var=new_reglement value=$_facture->_new_reglement_patient}}
+                    {{assign var=object_guid value=$new_reglement->_ref_object->_guid}}
+                    <button class="add" type="button" onclick="Rapport.addReglement('{{$object_guid}}', '{{$new_reglement->emetteur}}', '{{$new_reglement->montant}}', '{{$new_reglement->mode}}', '{{$new_reglement->date}}', '{{$_plage.plage->_guid}}');">
+                      {{tr}}Add{{/tr}} <strong>{{mb_value object=$new_reglement field=montant}}</strong>
+                    </button>
+                  </td>
+                </tr>
               {{/if}}
             </table>
           </td>
@@ -180,7 +180,7 @@
               {{foreach from=$_facture->_ref_reglements_tiers item=_reglement}}
               <tr>
                 <td class="narrow">
-                  <button class="edit notext" type="button" onclick="Rapport.editReglement('{{$_reglement->_id}}', '{{$_reglement->date}}');">
+                  <button class="edit notext" type="button" onclick="Rapport.editReglement('{{$_reglement->_id}}', '{{$_reglement->date}}', '{{$_facture->_guid}}', '{{$_plage.plage->_guid}}');">
                     {{tr}}Edit{{/tr}}
                   </button>
                 </td>
@@ -195,7 +195,7 @@
                 <td colspan="4" class="button">
                   {{assign var=new_reglement value=$_facture->_new_reglement_tiers}}
                   {{assign var=object_guid value=$new_reglement->_ref_object->_guid}}
-                  <button class="add" type="button" onclick="Rapport.addReglement('{{$object_guid}}', '{{$new_reglement->emetteur}}', '{{$new_reglement->montant}}', '{{$new_reglement->mode}}', '{{$new_reglement->date}}');">
+                  <button class="add" type="button" onclick="Rapport.addReglement('{{$object_guid}}', '{{$new_reglement->emetteur}}', '{{$new_reglement->montant}}', '{{$new_reglement->mode}}', '{{$new_reglement->date}}', '{{$_plage.plage->_guid}}');">
                     {{tr}}Add{{/tr}} <strong>{{mb_value object=$new_reglement field=montant}}</strong>
                   </button>
                 </td>
@@ -228,7 +228,7 @@
         </tr>
         
         {{/foreach}}
-        <tr>
+        <tr id="{{$_plage.plage->_guid}}_total">
           <td colspan="4" style="text-align: right" >
             <strong>{{tr}}Total{{/tr}}</strong>
           </td>
