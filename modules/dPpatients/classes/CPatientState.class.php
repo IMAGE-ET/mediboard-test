@@ -128,7 +128,7 @@ class CPatientState extends CMbObject {
    * @return null|string
    */
   static function getState(CPatient $patient) {
-
+    $patient->completeField("status");
     $identity_status = CAppUI::conf("dPpatients CPatient manage_identity_status", CGroups::loadCurrent());
 
     //Si la configuration n'est pas activé
@@ -140,8 +140,14 @@ class CPatientState extends CMbObject {
       return $patient->status;
     }
 
-    if ($patient->vip || $patient->fieldModified("vip")) {
-      return $patient->vip == "1" ? "CACH" : "PROV";
+    if (!$patient->_id && $patient->vip) {
+      return "CACH";
+    }
+
+    if ($patient->_id && $patient->fieldModified("vip")) {
+      if ($patient->status != "VALI") {
+        return $patient->vip == "1" ? "CACH" : "PROV";
+      }
     }
 
     if ($patient->_merging && $patient->countPatientLinks() == 0) {
