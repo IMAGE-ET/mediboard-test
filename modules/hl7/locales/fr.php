@@ -450,6 +450,7 @@ $locales['CHL7Event-AA-E344'] = 'Le type du fichier n\'est pas supporté';
 $locales['CHL7Event-AA-I101'] = 'L\'enregistrement du patient est terminé';
 $locales['CHL7Event-AA-I102'] = 'La modification du patient est terminée';
 $locales['CHL7Event-AA-I103'] = 'La fusion des patients est terminée';
+$locales['CHL7Event-AA-I104'] = 'Fusion sur un même patient, l\'IPP a été supprimé';
 $locales['CHL7Event-AA-I120'] = 'PI non connu, RI non connu.';
 $locales['CHL7Event-AA-I121'] = 'PI non connu, RI connu.';
 $locales['CHL7Event-AA-I122'] = 'PI non connu, RI non fourni.';
