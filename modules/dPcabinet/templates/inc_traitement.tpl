@@ -286,7 +286,7 @@
 
               <tr>
                 <td colspan="3" {{if !$gestion_tp}}class="button"{{/if}}>
-                  <button id="button_submit_traitement{{$addform}}" class="tick" type="button" onclick="onSubmitFormAjax(this.form, function() {
+                  <button id="button_submit_traitement{{$addform}}" class="tick" type="button" onclick="addToTokenPoso{{$addform}}(0);onSubmitFormAjax(this.form, function() {
                     {{if $callback}}
                       {{$callback}}();
                     {{elseif $reload}}
