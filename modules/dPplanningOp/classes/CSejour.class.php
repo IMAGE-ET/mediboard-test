@@ -1725,7 +1725,6 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
     $where[] = "'$datetime' BETWEEN entree AND sortie";
     $affectation->loadObject($where);
-    $affectation->loadRefLit()->loadCompleteView();
 
     return  $this->_ref_curr_affectation = $affectation;
   }
@@ -1753,9 +1752,6 @@ class CSejour extends CFacturable implements IPatientRelated {
     $where["sortie"] = " < '$date'";
     $where["sejour_id"] = " = '$this->_id'";
     $affectation->loadObject($where);
-    if ($affectation->_id) {
-      $affectation->loadRefLit()->loadCompleteView();
-    }
     $affectations["prev"] = $this->_ref_prev_affectation = $affectation;
 
     // Next affectation
@@ -1764,12 +1760,76 @@ class CSejour extends CFacturable implements IPatientRelated {
     $where["entree"] = "> '$date'";
     $where["sejour_id"] = " = '$this->_id'";
     $affectation->loadObject($where);
-    if ($affectation->_id) {
-      $affectation->loadRefLit()->loadCompleteView();
-    }
     $affectations["next"] = $this->_ref_next_affectation = $affectation;
 
     return $affectations;
+  }
+
+  static function massLoadSurrAffectation(&$sejours = array(), $date = null) {
+    if (!count($sejours)) {
+      return;
+    }
+
+    if (!$date) {
+      $date = CMbDT::dateTime();
+    }
+
+    self::massLoadCurrAffectation($sejours, $date);
+
+    $sejour_ids = CMbArray::pluck($sejours, "_id");
+
+    $affectation = new CAffectation();
+    $where = array();
+    $where["sortie"] = "< '$date'";
+    $where["sejour_id"] = CSQLDataSource::prepareIn($sejour_ids);
+    $affectations = $affectation->loadList($where);
+
+    foreach ($affectations as $_affectation) {
+      $sejours[$_affectation->sejour_id]->_ref_prev_affectation = $_affectation;
+    }
+
+    unset($where["sortie"]);
+    $where["entree"] = "> '$date'";
+    $affectations = $affectation->loadList($where);
+
+    foreach ($affectations as $_affectation) {
+      $sejours[$_affectation->sejour_id]->_ref_next_affectation = $_affectation;
+    }
+
+    foreach ($sejours as $_sejour) {
+      if (!$_sejour->_ref_prev_affectation) {
+        $_sejour->_ref_prev_affectation = new CAffectation();
+      }
+      if (!$_sejour->_ref_next_affectation) {
+        $_sejour->_ref_next_affectation = new CAffectation();
+      }
+    }
+  }
+
+  static function massLoadCurrAffectation(&$sejours = array(), $date = null) {
+    if (!count($sejours)) {
+      return;
+    }
+
+    if (!$date) {
+      $date = CMbDT::dateTime();
+    }
+
+    $affectation = new CAffectation();
+    $where = array();
+    $where["sejour_id"] = CSQLDataSource::prepareIn(CMbArray::pluck($sejours, "_id"));
+    $where[] = "'$date' BETWEEN entree AND sortie";
+    $affectations = $affectation->loadList($where);
+
+    foreach ($affectations as $_affectation) {
+      $sejours[$_affectation->sejour_id]->_ref_curr_affectation = $_affectation;
+    }
+
+    foreach ($sejours as $_sejour) {
+      if (!$_sejour->_ref_curr_affectation) {
+        $_sejour->_ref_curr_affectation = new CAffectation();
+      }
+    }
   }
 
   /**

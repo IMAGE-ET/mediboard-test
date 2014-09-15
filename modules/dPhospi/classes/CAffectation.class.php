@@ -128,7 +128,7 @@ class CAffectation extends CMbObject {
     $specs["function_id"]           = "ref class|CFunctions";
     $specs["praticien_id"]          = "ref class|CMediusers";
     $specs["entree"]                = "dateTime notNull";
-    $specs["sortie"]                = "dateTime notNull";
+    $specs["sortie"]                = "dateTime notNull moreThan|entree";
     $specs["effectue"]              = "bool";
     $specs["rques"]                 = "text";
 
@@ -193,13 +193,6 @@ class CAffectation extends CMbObject {
       return $msg;
     }
 
-    //TODO: utiliser moreThan
-    $this->completeField("entree");
-    $this->completeField("sortie");
-    if ($this->sortie < $this->entree) {
-      return "La date de sortie doit être supérieure ou égale à la date d'entrée";
-    }
-
     if ($msg = $this->checkCollisions()) {
       return $msg;
     }
@@ -212,13 +205,13 @@ class CAffectation extends CMbObject {
    *
    * @return string|null Store-like message
    */
-  function checkCollisions(){
+  function checkCollisions() {
     $this->completeField("sejour_id");
     if (!$this->sejour_id) {
       return null;
     }
 
-    $affectation = new CAffectation;
+    $affectation = new CAffectation();
     $affectation->sejour_id = $this->sejour_id;
     $affectations = $affectation->loadMatchingList();
     unset($affectations[$this->_id]);
