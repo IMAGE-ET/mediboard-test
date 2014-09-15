@@ -190,6 +190,8 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_ref_first_operation;
   /** @var COperation */
   public $_ref_last_operation;
+  /** @var  CService */
+  public $_ref_service;
   /** @var CAffectation[] */
   public $_ref_affectations;
   /** @var CAffectation */
@@ -4374,6 +4376,15 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     return null;
+  }
+
+  /**
+   * Return the service
+   *
+   * @return CService
+   */
+  function loadRefService() {
+    return $this->_ref_service = $this->loadFwdRef("service_id", true);
   }
 }
 
