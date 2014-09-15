@@ -87,9 +87,9 @@
           <option value="{{$_function->_id}}" {{if $function_id == $_function->_id}}selected="selected" {{/if}}>{{$_function}}</option>
         {{/foreach}}
       </select>
-    </label>voir
+    </label>
 
-    <button class="lookup notext" type="button" onclick="Modal.open('filter_more', {showClose: true, onClose:refreshPlanning, title:'Filtres'})">{{tr}}Filter{{/tr}}</button>
+    <button class="lookup" type="button" onclick="Modal.open('filter_more', {showClose: true, onClose:refreshPlanning, title:'Filtres'})">{{tr}}Filter{{/tr}}</button>
     <div id="filter_more" style="display: none;">
       <label>libres
         <select name="show_free">
