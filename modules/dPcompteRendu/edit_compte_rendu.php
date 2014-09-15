@@ -33,6 +33,7 @@ if ($compte_rendu_id) {
     CApp::rip();
   }
   $compte_rendu->loadContent();
+  $compte_rendu->loadComponents();
   $compte_rendu->loadFile();
 }
 // Création à partir d'un modèle vide
