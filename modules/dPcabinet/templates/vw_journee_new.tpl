@@ -10,6 +10,7 @@
 *}}
 
 {{mb_script module=ssr script=planning}}
+{{mb_script module=cabinet script=plage_consultation}}
 
 <script>
   assignDate = function(button) {
