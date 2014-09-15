@@ -519,6 +519,7 @@ $locales['mod-dPeai-tab-ajax_edit_source'] = 'Modification d\'une source';
 $locales['mod-dPeai-tab-ajax_edit_tunnel'] = 'Edition d\'un tunnel';
 $locales['mod-eai-tab-ajax_add_domain_with_idex'] = 'Ajouter un domaine depuis un idex';
 $locales['mod-eai-tab-ajax_edit_actor'] = 'Modification de l\'acteur';
+$locales['mod-eai-tab-ajax_edit_exchange'] = 'Modification d\'un échange';
 $locales['mod-eai-tab-ajax_edit_group_domain'] = 'Édition d\'un établissement du domaine';
 $locales['mod-eai-tab-ajax_edit_route'] = 'Edition d\'une route';
 $locales['mod-eai-tab-ajax_edit_source'] = 'Modification d\'une source';

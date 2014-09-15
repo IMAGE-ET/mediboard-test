@@ -13,7 +13,13 @@ ExchangeDataFormat = {
   evenements : null,  
   target:      "exchange_data_format",
   modal:       null,
-  
+
+  editExchange : function (exchange_guid) {
+    new Url("eai", "ajax_edit_exchange")
+      .addParam("exchange_guid", exchange_guid)
+      .requestModal(400, 180);
+  },
+
   refreshExchanges : function(exchange_class, exchange_type, exchange_group_id){
     var url = new Url("eai", "ajax_refresh_exchanges");
     url.addParam("exchange_class"   , exchange_class);

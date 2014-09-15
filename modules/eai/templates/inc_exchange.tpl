@@ -41,6 +41,9 @@
           { onComplete: ExchangeDataFormat.refreshExchangesList.curry(getForm('filterExchange'))
         })">
       </button>
+      <button class="edit notext" type="button" onclick="ExchangeDataFormat.editExchange('{{$object->_guid}}')">
+        {{tr}}Edit{{/tr}}
+      </button>
     </form>
     {{if $object->_self_receiver}}
       <button class="change" type="button" {{if $object->reprocess >= $conf.eai.max_reprocess_retries}}disabled{{/if}} 
