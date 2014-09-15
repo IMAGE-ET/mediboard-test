@@ -91,49 +91,7 @@
 
     <button class="lookup" type="button" onclick="Modal.open('filter_more', {showClose: true, onClose:refreshPlanning, title:'Filtres'})">{{tr}}Filter{{/tr}}</button>
     <div id="filter_more" style="display: none;">
-      <label>libres
-        <select name="show_free">
-          <option value="1" selected="selected">Oui</option>
-          <option value="0">Non</option>
-        </select>
-      </label>
-
-      <label>annulées
-        <select name="cancelled">
-          <option value="1">Oui</option>
-          <option value="0" selected="selected">Non</option>
-        </select>
-      </label>,
-
-      <label>facturées
-        <select name="facturated">
-          <option value="">&mdash;</option>
-          <option value="1">Oui</option>
-          <option value="0">Non</option>
-        </select>
-      </label>,
-
-      <label>statut
-        <select name="finished">
-          <option value="">&mdash;</option>
-          <option value="16">Planifié</option>
-          <option value="32">Patient arrivé</option>
-          <option value="48">En cours</option>
-          <option value="64">Terminé</option>
-        </select>
-      </label>
-
-
-      <label>Actes {{if $conf.ref_pays == 2}}tarmed{{/if}} cotés
-        <select name="actes">
-          <option value="">&mdash;</option>
-          <option value="1">Avec</option>
-          <option value="0">Sans</option>
-        </select>
-      </label>
-      <p style="text-align: center;">
-        <button class="tick" type="button" onclick="Control.Modal.close();">{{tr}}OK{{/tr}}</button>
-      </p>
+      {{mb_include module=cabinet template=inc_filter_new_planning}}
     </div>
 
     <button type="button" id="previous_day" class="left notext" onclick="assignDate(this);" data-date=""></button>

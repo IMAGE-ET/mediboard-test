@@ -119,6 +119,7 @@ foreach ($musers as $_user) {
 
     // consults libres
     if ($show_free) {
+      $_plage->loadRefsConsultations(false);
       $utilisation = $_plage->getUtilisation();
       foreach ($utilisation as $_timing => $_nb) {
         if (!$_nb) {

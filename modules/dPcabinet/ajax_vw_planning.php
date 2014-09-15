@@ -11,9 +11,16 @@
 
 CCanDo::checkRead();
 
-$chirSel      = CValue::getOrSession("chirSel");
-$function_id  = CValue::get("function_id");
-$today        = CMbDT::date();
+
+$chirSel        = CValue::getOrSession("chirSel");
+$function_id    = CValue::get("function_id");
+$today          = CMbDT::date();
+
+$show_free      = CValue::get("show_free");
+$show_cancelled = CValue::get("show_cancelled");
+$facturated     = CValue::get("facturated");
+$status         = CValue::get("status");
+$actes          = CValue::get("actes");
 
 // gathering prat ids
 $ids = array();
@@ -222,24 +229,55 @@ for ($i = 0; $i < $nbDays; $i++) {
     }
 
     //RdvFree
-    $utilisation = $_plage->getUtilisation();
-    foreach ($utilisation as $_timing => $_nb) {
-      if (!$_nb) {
-        $debute = "$jour $_timing";
-        $event = new CPlanningEvent($debute, $debute, $_plage->_freq, "", $color, true, "droppable", null);
-        $event->type        = "rdvfree";
-        $event->plage["id"] = $_plage->_id;
-        if ($_plage->locked == 1) {
-          $event->disabled = true;
+    if ($show_free) {
+      $_plage->loadRefsConsultations(false);
+      $utilisation = $_plage->getUtilisation();
+      foreach ($utilisation as $_timing => $_nb) {
+        if (!$_nb) {
+          $debute = "$jour $_timing";
+          $event = new CPlanningEvent($debute, $debute, $_plage->_freq, "", $color, true, "droppable", null);
+          $event->type        = "rdvfree";
+          $event->plage["id"] = $_plage->_id;
+          if ($_plage->locked == 1) {
+            $event->disabled = true;
+          }
+          $event->plage["color"] = $_plage->color;
+          //Ajout de l'évènement au planning
+          $planning->addEvent($event);
         }
-        $event->plage["color"] = $_plage->color;
-        //Ajout de l'évènement au planning
-        $planning->addEvent($event);
       }
     }
 
     //consultations
-    foreach ($_plage->_ref_consultations as $_consult) {
+    $consult = new CConsultation();
+    $whereC = array();
+    $whereC["plageconsult_id"] = " = '$_plage->_id' ";
+    $whereC["annule"] = " = '$show_cancelled'";
+    if ($status) {
+      $whereC["chrono"] = " = '$status'";
+    }
+    if ($facturated) {
+      $whereC["facture"] = " = '1'";
+    }
+    /** @var CConsultation[] $consults */
+    $consults = $consult->loadList($whereC, "heure");
+
+    foreach ($consults as $_consult) {
+
+      if ($actes != "") {
+        $_actes = $_consult->loadRefsActes();
+        $nb_actes = $_consult->_count_actes;
+        // avec des actes
+        if ($actes && !$nb_actes) {
+          continue;
+        }
+        // sans actes
+        if ($actes === "0" && $nb_actes > 0) {
+          continue;
+        }
+      }
+
+
       $_consult->loadPosition();
       $debute = "$jour $_consult->heure";
       $motif = $_consult->motif;
@@ -255,6 +293,10 @@ for ($i = 0; $i < $nbDays; $i++) {
           }
         }
 
+        $style = "";
+        if ($_consult->annule) {
+          $style.= "text-decoration:line-through;";
+        }
 
         $title = "";
         if ($_consult->_consult_sejour_out_of_nb) {
@@ -262,7 +304,9 @@ for ($i = 0; $i < $nbDays; $i++) {
           $of = $_consult->_consult_sejour_out_of_nb;
           $title .= "<span style=\"float:right;\">$nb / $of</span>";
         }
+        $title .= "<span style=\"$style\">";
         $title .= $_consult->_ref_patient->_view . "\n" . $motif;
+        $title .= "</span>";
 
         $event = new CPlanningEvent(
           $_consult->_guid,

@@ -121,6 +121,14 @@
       url.addParam("debut", date);
       $V(form.debut, date);
     }
+
+    // filters
+    url.addParam("show_free", $V(form.show_free));
+    url.addParam("show_cancelled", $V(form.cancelled));
+    url.addParam("facturated", $V(form.facturated));
+    url.addParam("status", $V(form.finished));
+    url.addParam("actes", $V(form.actes));
+
     url.requestUpdate('planning-plages');
   }
   
@@ -247,6 +255,10 @@
           <a href="#1" onclick="refreshPlanning('today')">Aujourd'hui</a>
         </th>
         <th style="width: 15%; text-align: right;">
+          <button class="lookup" type="button" onclick="Modal.open('filter_more', {showClose: true, onClose:refreshPlanning, title:'Filtres'})">{{tr}}Filter{{/tr}}</button>
+          <div id="filter_more" style="display: none;">
+            {{mb_include module=cabinet template=inc_filter_new_planning}}
+          </div>
           <button class="help" onclick="openLegend();return false;">{{tr}}Legend{{/tr}}</button>
           <button type="button" class="print" onclick="printPlanning();">{{tr}}Print{{/tr}}</button>
           {{if $function_id}}

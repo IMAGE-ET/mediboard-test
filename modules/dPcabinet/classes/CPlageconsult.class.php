@@ -341,7 +341,6 @@ class CPlageconsult extends CPlageHoraire {
    * @return array
    */
   function getUtilisation() {
-    $this->loadRefsConsultations(false);
 
     $utilisation = array();
     $old = $this->debut;
