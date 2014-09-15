@@ -82,7 +82,7 @@
       {{else}}
         <td colspan="3">{{tr}}CPatientState.none{{/tr}}</td>
       {{/if}}
-      <td>
+      <td class="text">
         {{if $_patient->_ref_patient_links}}
           {{tr}}CPatient.link_detected{{/tr}}
         {{else}}
