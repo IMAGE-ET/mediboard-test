@@ -39,7 +39,8 @@
         url.addParam("field", "libelle");
         url.addParam("limit", 30);
         url.addParam("view_field", "code");
-        url.addParam("where[type]", "{{$context}}")
+        url.addParam("where[type]", "{{$context}}");
+        url.addParam("where[group_id]", "{{$g}}");
         url.addParam("show_view", true);
         url.addParam("input_field", "{{$field}}_view");
         url.addParam("wholeString", false);
