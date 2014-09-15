@@ -2,7 +2,7 @@
 
 /**
  * $Id$
- *  
+ *
  * @category Classes
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -10,7 +10,7 @@
  * @version  $Revision$
  * @link     http://www.mediboard.org
  */
- 
+
 /**
  * Utility class, used for external software data import
  */
@@ -20,16 +20,16 @@ class CExternalDBImport {
 
   /** @var string Mediboard class name */
   protected $_class;
-  
+
   /** @var string External table name */
   protected $_table;
-  
+
   /** @var string Primary key name */
   protected $_key;
-  
+
   /** @var string SQL restriction */
   protected $_sql_restriction;
-  
+
   /** @var array List of fields to select */
   protected $_select = array();
 
@@ -37,24 +37,27 @@ class CExternalDBImport {
   protected $_map = array();
 
   /** @var string Order by key name */
-  public $_order_by;
+  protected $_order_by;
 
   /** @var CMbObject */
   public $_mb_object;
 
   /** @var int Stored object count */
   static $_count_stored = 0;
-  
+
   protected $_import_tag_conf;
   protected $_import_function_name_conf;
   protected $_import_dsn;
+
+  /** @var string External patient class name to import */
+  static $_patient_class;
 
   /**
    * Get external software import tag
    *
    * @return string
    */
-  function getImportTag(){
+  function getImportTag() {
     return CAppUI::conf($this->_import_tag_conf);
   }
 
@@ -63,7 +66,7 @@ class CExternalDBImport {
    *
    * @return CMySQLDataSource
    */
-  function getDS(){
+  function getDS() {
     if ($this->_ds) {
       return $this->_ds;
     }
@@ -76,23 +79,24 @@ class CExternalDBImport {
    *
    * @return CFunctions
    */
-  function getImportFunction(){
+  function getImportFunction() {
     static $function;
 
     if ($function) {
       return $function;
     }
 
-    $function_name = CAppUI::conf($this->_import_function_name_conf);
-    $function = new CFunctions;
+    $function_name  = CAppUI::conf($this->_import_function_name_conf);
+    $function       = new CFunctions;
     $function->text = $function_name;
     $function->loadMatchingObjectEsc();
 
     if (!$function->_id) {
-      $function->group_id = CGroups::loadCurrent()->_id;
-      $function->type     = "cabinet";
+      $function->group_id        = CGroups::loadCurrent()->_id;
+      $function->type            = "cabinet";
       $function->compta_partagee = 0;
-      $function->color = "#CCCCCC";
+      $function->color           = "#CCCCCC";
+
       if ($msg = $function->store()) {
         CAppUI::setMsg($msg, UI_MSG_WARNING);
       }
@@ -104,7 +108,7 @@ class CExternalDBImport {
   /**
    * @see parent::getSelectFields()
    */
-  function getSelectFields(){
+  function getSelectFields() {
     return $this->_select;
   }
 
@@ -113,7 +117,7 @@ class CExternalDBImport {
    *
    * @return string|null
    */
-  function getOrderBy(){
+  function getOrderBy() {
     $order_by = $this->_order_by;
 
     if (!$order_by) {
@@ -130,25 +134,21 @@ class CExternalDBImport {
    *
    * @return string
    */
-  function getSelectQuery($where = null){
+  function getSelectQuery($where = null) {
     if (count($this->getSelectFields()) == 0) {
       $select = "$this->_table.*";
     }
     else {
-      $items = array();
+      $items  = array();
       $fields = $this->getSelectFields();
       foreach ($fields as $col) {
         $items[] = "$this->_table.$col";
       }
+
       $select = implode(", ", $items);
     }
 
-    if ($order_by = $this->getOrderBy()) {
-      $select .= ", $order_by as DATE_IMPORT_MB";
-    }
-
     $query = "SELECT $select";
-
     $query .= " FROM $this->_table";
 
     if ($this->_sql_restriction || $where) {
@@ -171,11 +171,11 @@ class CExternalDBImport {
 
     /** @var self $self */
     $self = new static();
-    $ds = $self->getDS();
+    $ds   = $self->getDS();
 
     /** @var self $object */
     $object = new $class;
-    $query = $object->getSelectQuery();
+    $query  = $object->getSelectQuery();
 
     $order_by = $object->getOrderBy();
 
@@ -207,8 +207,9 @@ class CExternalDBImport {
       $ids = array_flip($object->getDbIds());
     }
 
-    $key_name = $object->_key;
+    $key_name  = $object->_key;
     $key_multi = strpos($key_name, "|") !== false;
+
     if ($key_multi) {
       $key_multi = explode("|", $key_name);
     }
@@ -239,17 +240,13 @@ class CExternalDBImport {
         $hash = $ds->readLOB($hash);
       }
 
-      /** @var self $osoft_object */
-      $osoft_object = new $class;
+      /** @var self $import_object */
+      $import_object = new $class;
 
-      $osoft_object->storeMbObject($hash);
+      $import_object->storeMbObject($hash);
 
-      if (!$osoft_object->_mb_object || isset($osoft_object->_mb_object->_failed)) {
+      if (!$import_object->_mb_object || isset($import_object->_mb_object->_failed)) {
         continue;
-      }
-
-      if (isset($hash["DATE_IMPORT_MB"])) {
-        $date = $hash["DATE_IMPORT_MB"];
       }
 
       $count--;
@@ -261,8 +258,8 @@ class CExternalDBImport {
   }
 
   function loadList($query) {
-    $ds = self::getDS();
-    $res = $ds->exec($query);
+    $ds   = self::getDS();
+    $res  = $ds->exec($query);
     $list = array();
 
     while ($hash = $ds->fetchAssoc($res)) {
@@ -275,10 +272,10 @@ class CExternalDBImport {
   }
 
   /**
-   * Returns an MBObject by its class and its Osoft ID
+   * Returns an MBObject by its class and its Import ID
    *
    * @param string $class The Mediboard class name
-   * @param string $db_id The Osoft ID
+   * @param string $db_id The Import ID
    *
    * @return CStoredObject The MB Object
    */
@@ -290,7 +287,14 @@ class CExternalDBImport {
       return $objects[$class][$db_id];
     }
 
-    return $objects[$class][$db_id] = CIdSante400::getMatch($class, $this->getImportTag(), $db_id)->loadTargetObject();
+    $idex   = CIdSante400::getMatch($class, $this->getImportTag(), $db_id);
+    $target = $idex->loadTargetObject();
+
+    if ($idex->_id) {
+      $objects[$class][$db_id] = $target;
+    }
+
+    return $target;
   }
 
   function getDbIds() {
@@ -311,26 +315,26 @@ class CExternalDBImport {
   /**
    * Returns the CMbObject corresponding to the given $db_id
    *
-   * @param string $db_id The Osoft ID
+   * @param string $db_id The Import ID
    *
    * @return CMbObject The CMbObject
    */
   function getMbObject($db_id) {
-    return self::getMbObjectByClass($this->_class, $db_id);
+    return $this->getMbObjectByClass($this->_class, $db_id);
   }
 
   /**
    * Store the external ID of the given object
    *
    * @param CMbObject $object The MB to store the external ID of
-   * @param string    $db_id  The Osoft ID to store on the MB Object
+   * @param string    $db_id  The Import ID to store on the MB Object
    *
    * @return string The external ID store error message
    */
   function storeIdExt(CMbObject $object, $db_id) {
     $id_ext = new CIdSante400;
     $id_ext->setObject($object);
-    $id_ext->tag = $this->getImportTag();
+    $id_ext->tag   = $this->getImportTag();
     $id_ext->id400 = $db_id;
     $id_ext->escapeValues();
     $id_ext->loadMatchingObject();
@@ -348,27 +352,28 @@ class CExternalDBImport {
    * @return bool|CStoredObject The object
    */
   static function getOrImportObject($class, $id) {
-    /** @var self $osoft_object */
-    $osoft_object = new $class;
-    $object = self::getMbObjectByClass($osoft_object->_class, $id);
+    /** @var self $import_object */
+    $import_object = new $class;
+    $object = $import_object->getMbObjectByClass($import_object->_class, $id);
 
     if (!$object->_id) {
-      $osoft_object->importObject($id);
+      $import_object->importObject($id);
 
-      if (!$osoft_object->_mb_object || !$osoft_object->_mb_object->_id) {
-        CAppUI::setMsg(CAppUI::tr($osoft_object->_class)." non retrouvé et non importé : ".$id, UI_MSG_WARNING);
+      if (!$import_object->_mb_object || !$import_object->_mb_object->_id) {
+        CAppUI::setMsg(CAppUI::tr($import_object->_class) . " non retrouvé et non importé : " . $id, UI_MSG_WARNING);
+
         return false;
       }
 
-      $object = $osoft_object->_mb_object;
+      $object = $import_object->_mb_object;
     }
 
     return $object;
   }
 
   /**
-   * @param string $patient_id Osoft patient ID
-   * @param string $prat       Osoft praticien ID
+   * @param string $patient_id Import patient ID
+   * @param string $prat       Import praticien ID
    * @param string $date       Date
    * @param string $idex       External ID
    *
@@ -384,16 +389,18 @@ class CExternalDBImport {
     }
 
     // Trouver ou importer le patient
-    $patient = $this->getOrImportObject("COsoftPatient", $patient_id);
+    $patient = $this->getOrImportObject(self::$_patient_class, $patient_id);
     if (!$patient || !$patient->_id) {
-      CAppUI::setMsg("Patient non retrouvé et non importé: $patient_id", UI_MSG_WARNING);
+      CAppUI::setMsg("Patient non retrouvé et non importé : $patient_id", UI_MSG_WARNING);
+
       return false;
     }
 
     // Trouver le praticien du sejour
     $user = $this->getMbObjectByClass("CMediusers", $prat);
     if (!$user->_id) {
-      CAppUI::setMsg("Praticien du séjour non retrouvé: $prat", UI_MSG_WARNING);
+      CAppUI::setMsg("Praticien du séjour non retrouvé : $prat", UI_MSG_WARNING);
+
       return false;
     }
 
@@ -402,7 +409,7 @@ class CExternalDBImport {
     $date = CMbDT::date($date);
 
     $sejour = new CSejour;
-    $where = array(
+    $where  = array(
       "patient_id"   => "= '$patient->_id'",
       "praticien_id" => "= '$user->_id'",
       "DATE_SUB(`sejour`.`entree`, INTERVAL 1 DAY) < '$date'",
@@ -415,7 +422,8 @@ class CExternalDBImport {
     }
 
     if (!$sejour->_id) {
-      CAppUI::setMsg("Séjour non trouvé: $patient_id / $prat / $date", UI_MSG_WARNING);
+      CAppUI::setMsg("Séjour non trouvé : $patient_id / $prat / $date", UI_MSG_WARNING);
+
       return false;
     }
 
@@ -424,17 +432,19 @@ class CExternalDBImport {
 
   static function findConsult($patient_id, $prat, $date) {
     // Trouver ou importer le patient
-    $patient = self::getOrImportObject("COsoftPatient", $patient_id);
+    $patient = self::getOrImportObject(self::$_patient_class, $patient_id);
 
     if (!$patient || !$patient->_id) {
-      CAppUI::setMsg("Patient non retrouvé et non importé: $patient_id", UI_MSG_WARNING);
+      CAppUI::setMsg("Patient non retrouvé et non importé : $patient_id", UI_MSG_WARNING);
+
       return false;
     }
 
     // Trouver le praticien de la consult
     $mediuser = self::getMbObjectByClass("CMediusers", $prat);
     if (!$mediuser->_id) {
-      CAppUI::setMsg("Praticien de la consult non retrouvé: $prat", UI_MSG_WARNING);
+      CAppUI::setMsg("Praticien de la consult non retrouvé : $prat", UI_MSG_WARNING);
+
       return false;
     }
 
@@ -442,17 +452,19 @@ class CExternalDBImport {
     $date_min = CMbDT::date("-2 DAYS", $date);
     $date_max = CMbDT::date("+1 DAYS", $date);
 
-    $consult = new CConsultation;
+    $consult = new CConsultation();
+
     $ljoin = array(
       "plageconsult" => "consultation.plageconsult_id = plageconsult.plageconsult_id",
     );
+
     $where = array(
       "consultation.patient_id" => "= '$patient->_id'",
       "plageconsult.chir_id"    => "= '$mediuser->_id'",
       "plageconsult.date"       => "BETWEEN '$date_min' AND '$date_max'",
     );
-    $consult->loadObject($where, null, null, $ljoin);
 
+    $consult->loadObject($where, null, null, $ljoin);
     if (!$consult->_id) {
       $consult = self::makeConsult($patient->_id, $mediuser->_id, $date);
     }
@@ -462,40 +474,41 @@ class CExternalDBImport {
 
   static function makeConsult($patient_id, $chir_id, $date) {
     $consult = new CConsultation;
-    $date = CMbDT::date($date);
+    $date    = CMbDT::date($date);
 
     $plage = new CPlageconsult;
     $where = array(
-      "plageconsult.chir_id"    => "= '$chir_id'",
-      "plageconsult.date"       => "= '$date'",
+      "plageconsult.chir_id" => "= '$chir_id'",
+      "plageconsult.date"    => "= '$date'",
     );
 
     $plage->loadObject($where);
 
     if (!$plage->_id) {
-      $plage->date = $date;
+      $plage->date    = $date;
       $plage->chir_id = $chir_id;
-      $plage->debut = "09:00:00";
-      $plage->fin = "19:00:00";
-      $plage->freq = "00:30:00";
-      $plage->libelle = "Import Osoft";
+      $plage->debut   = "09:00:00";
+      $plage->fin     = "19:00:00";
+      $plage->freq    = "00:30:00";
+      $plage->libelle = "Importation";
 
       if ($msg = $plage->store()) {
         return $msg;
       }
     }
 
-    $consult->patient_id = $patient_id;
+    $consult->patient_id      = $patient_id;
     $consult->plageconsult_id = $plage->_id;
-    $consult->heure = "09:00:00"; // FIXME
-    $consult->chrono = ($date < CMbDT::date() ? CConsultation::TERMINE : CConsultation::PLANIFIE);
+    $consult->heure           = "09:00:00"; // FIXME
+    $consult->chrono          = ($date < CMbDT::date() ? CConsultation::TERMINE : CConsultation::PLANIFIE);
 
     if ($msg = $consult->store()) {
       return $msg;
     }
 
     if (!$consult->_id) {
-      CAppUI::setMsg("Consultation non trouvée et non importée: $patient_id / $chir_id / $date", UI_MSG_WARNING);
+      CAppUI::setMsg("Consultation non trouvée et non importée : $patient_id / $chir_id / $date", UI_MSG_WARNING);
+
       return false;
     }
 
@@ -512,14 +525,14 @@ class CExternalDBImport {
    * @return string The value
    */
   function convertValue($hash, $from, $object) {
-    $to = $this->_map[$from];
+    $to  = $this->_map[$from];
     $src = $this->convertEncoding($hash[$from]);
 
     if (is_array($to)) {
       return CValue::read($to[1], $src, CValue::read($to, 2));
     }
     else {
-      $v = $src;
+      $v    = $src;
       $spec = $object->_specs[$to];
 
       switch (true) {
@@ -539,7 +552,7 @@ class CExternalDBImport {
       return $v;
     }
   }
-  
+
   function convertEncoding($string) {
     return $string;
   }
@@ -558,7 +571,7 @@ class CExternalDBImport {
         $to = reset($to);
       }
 
-      $value = $this->convertValue($hash, $from, $object);
+      $value         = $this->convertValue($hash, $from, $object);
       $object->{$to} = $value;
     }
   }
@@ -573,18 +586,19 @@ class CExternalDBImport {
   protected function getHash($id) {
     $id = $this->getDS()->escape($id);
 
-    $sep = "|";
-    $key = $this->_key;
-    $key_multi = strpos($key, $sep) !== false;
+    $sep          = "|";
+    $key          = $this->_key;
+    $key_multi    = strpos($key, $sep) !== false;
     $values_multi = "";
 
     if (!$key_multi) {
       $where = "$key = '$id'";
     }
     else {
-      $cols  = array_combine(explode($sep, $key), explode($sep, $id));
+      $cols         = array_combine(explode($sep, $key), explode($sep, $id));
       $values_multi = implode("|", $cols);
-      $where = array();
+      $where        = array();
+
       foreach ($cols as $_col => $_value) {
         $where[] = "$_col = '$_value'";
       }
@@ -592,8 +606,7 @@ class CExternalDBImport {
     }
 
     $query = $this->getSelectQuery($where);
-
-    $hash = $this->_ds->loadHash($query);
+    $hash  = $this->_ds->loadHash($query);
 
     if ($key_multi) {
       $hash[$key] = $values_multi;
@@ -609,23 +622,23 @@ class CExternalDBImport {
   /**
    * Bind a DB entry to a CMbObject from the primary key
    *
-   * @param string $id The Osoft ID
+   * @param string $id The Import ID
    *
    * @return CMbObject The CMbObject
    */
-  function mapIdToMbObject($id){
+  function mapIdToMbObject($id) {
     return $this->mapHashToMbObject($this->getHash($id));
   }
 
   /**
    * Bind a hash to a new CMbObject
    *
-   * @param array            $hash   The associative array
-   * @param CMbObject,string $object The object or the class name
+   * @param array $hash     The associative array
+   * @param       CMbObject ,string $object The object or the class name
    *
    * @return CMbObject The CMbObject
    */
-  function mapHashToMbObject($hash, $object = null){
+  function mapHashToMbObject($hash, $object = null) {
     if ($object) {
       $this->_mb_object = $object;
     }
@@ -647,7 +660,7 @@ class CExternalDBImport {
    * @return string The store message
    */
   function storeMbObject($hash, $force = false) {
-    $db_id = $this->getId($hash);
+    $db_id  = $this->getId($hash);
     $object = $this->getMbObject($db_id);
 
     // If object was already imported
@@ -665,6 +678,7 @@ class CExternalDBImport {
 
     if ($msg = $this->_mb_object->store()) {
       CAppUI::setMsg($msg, UI_MSG_WARNING);
+
       return $msg;
     }
     else {
@@ -681,13 +695,14 @@ class CExternalDBImport {
 
     if (empty($hash)) {
       CAppUI::setMsg("ID <strong>$db_id</strong> inconnu", UI_MSG_ALERT);
+
       return;
     }
 
     $this->storeMbObject($hash, $force);
   }
 
-  function getId($hash){
+  function getId($hash) {
     return $hash[$this->_key];
   }
 
