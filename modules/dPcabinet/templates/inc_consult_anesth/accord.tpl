@@ -105,6 +105,9 @@
     tabsConsultAnesth = Control.Tabs.create('tab-consult-anesth', false);
     loadAntTrait();
     loadIntervention();
+    if (tabsConsultAnesth.activeLink.key == "reglement") {
+      Reglement.reload(true);
+    }
   });
 </script>
 

@@ -119,6 +119,9 @@
     {{else}}
     loadAntTrait();
     {{/if}}
+    if (tabsConsult.activeLink.key == "reglement") {
+      Reglement.reload(true);
+    }
   });
 </script>
 
