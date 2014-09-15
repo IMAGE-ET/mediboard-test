@@ -81,7 +81,7 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
 
       $idexPatient = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
       if ($mbPatient->load($patientRI)) {
-        if ($mbPatient->_id != $idexPatient->object_id) {
+        if ($idexPatient->object_id && $mbPatient->_id != $idexPatient->object_id) {
           $comment  = "L'identifiant source fait référence au patient : $idexPatient->object_id";
           $comment .= " et l'identifiant cible au patient : $mbPatient->_id.";
           return $exchange_hl7v2->setAckAR($ack, "E130", $comment, $newPatient);
@@ -93,7 +93,7 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
 
       $idexPatientElimine = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientEliminePI);
       if ($mbPatientElimine->load($patientElimineRI)) {
-        if ($mbPatientElimine->_id != $idexPatientElimine->object_id) {
+        if ($idexPatientElimine->object_id && $mbPatientElimine->_id != $idexPatientElimine->object_id) {
           $comment  = "L'identifiant source fait référence au patient : $idexPatientElimine->object_id";
           $comment .= "et l'identifiant cible au patient : $mbPatientElimine->_id.";
           return $exchange_hl7v2->setAckAR($ack, "E131", $comment, $newPatient);
@@ -111,6 +111,10 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
 
       // Passage en trash de l'IPP du patient a éliminer
       $newPatient->trashIPP($idexPatientElimine);
+
+      if ($mbPatient->_id == $mbPatientElimine->_id) {
+        return $exchange_hl7v2->setAckAA($ack, "I104", null, $newPatient);
+      }
 
       $patientsElimine_array = array($mbPatientElimine);
       $first_patient_id = $mbPatient->_id;
