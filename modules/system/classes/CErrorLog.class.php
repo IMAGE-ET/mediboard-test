@@ -205,11 +205,16 @@ class CErrorLog extends CStoredObject {
       $action = $dosql;
     }
 
+    // Never trace error logging for readability
+    $trace = CSQLDataSource::$trace;
+    CSQLDataSource::$trace = false;
+
     $ds = CSQLDataSource::get("std");
 
     if (!$ds || !$ds->loadTable("error_log")) {
       throw new Exception("No datasource available");
     }
+
 
     foreach ($data as $_field => $_value) {
       if (empty($_value)) {
@@ -245,6 +250,8 @@ class CErrorLog extends CStoredObject {
     );
 
     $result = @$ds->exec($query);
+    CSQLDataSource::$trace = $trace;
+
     if (!$result) {
       throw new Exception("Exec failed");
     }
