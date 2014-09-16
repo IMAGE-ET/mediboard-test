@@ -57,6 +57,7 @@ class CConstantesMedicales extends CMbObject {
 
   static $_specs_converted = false;
   static $_latest_values = array();
+  static $_computed_constants_compounds = array();
 
   static $list_constantes = array (
     "poids"             => array(
@@ -1047,10 +1048,7 @@ class CConstantesMedicales extends CMbObject {
 
     $this->loadRefPatient();
 
-    // Calcul de l'Indice de Masse Corporelle
-    if ($this->poids && $this->taille) {
-      $this->_imc = round($this->poids / ($this->taille * $this->taille * 0.0001), 2);
-    }
+    $this->getIMC();
 
     // Calcul du poids en grammes
     if ($this->poids) {
@@ -1410,6 +1408,98 @@ class CConstantesMedicales extends CMbObject {
         }
       }
     }
+
+    return $value;
+  }
+
+  /**
+   * Compute the IMC
+   *
+   * @return void
+   */
+  function getIMC() {
+    $this->setComputedConstantsCompounds();
+
+    $poids = null;
+    $taille = null;
+    if ($this->poids && $this->taille) {
+      $poids = $this->poids;
+      $taille = $this->taille;
+    }
+    elseif (($this->poids && !$this->taille) || (!$this->poids && $this->taille)) {
+      if (!$this->poids) {
+        $taille = $this->taille;
+        $poids = $this->getComputedConstantCompound('poids');
+      }
+      elseif (!$this->taille) {
+        $poids = $this->poids;
+        $taille = $this->getComputedConstantCompound('taille');
+      }
+    }
+    if ($poids && $taille) {
+      $this->_imc = round($poids / ($taille * $taille * 0.0001), 2);
+    }
+  }
+
+  /**
+   * Set the compounds for the computed constants, who needs to be set even if there is only one compound valued
+   * For now, only the compounds of the IMC are added
+   *
+   * @return void
+   */
+  function setComputedConstantsCompounds() {
+    if ($this->_id) {
+      $compounds = array('taille', 'poids');
+      if (!array_key_exists($this->patient_id, self::$_computed_constants_compounds)) {
+        self::$_computed_constants_compounds[$this->patient_id] = array();
+        foreach ($compounds as $_compound) {
+          self::$_computed_constants_compounds[$this->patient_id][$_compound] = array();
+        }
+      }
+
+      /* Recuperation de la valeur dans latest values */
+      if (array_key_exists($this->patient_id, self::$_latest_values) && array_key_exists('', self::$_latest_values[$this->patient_id])) {
+        foreach ($compounds as $_compound) {
+          if (isset(self::$_latest_values[$this->patient_id][''][0]->$_compound)) {
+            $datetime = self::$_latest_values[$this->patient_id][''][1][$_compound];
+            $value = self::$_latest_values[$this->patient_id][''][0]->$_compound;
+            if (!array_key_exists($datetime, self::$_computed_constants_compounds[$this->patient_id][$_compound])) {
+              self::$_computed_constants_compounds[$this->patient_id][$_compound][$datetime] = $value;
+            }
+          }
+        }
+      }
+
+      foreach ($compounds as $_compound) {
+        if (isset($this->$_compound)) {
+          if (!array_key_exists($this->datetime, self::$_computed_constants_compounds[$this->patient_id][$_compound])) {
+            self::$_computed_constants_compounds[$this->patient_id][$_compound][$this->datetime] = $this->$_compound;
+          }
+        }
+
+        ksort(self::$_computed_constants_compounds[$this->patient_id][$_compound]);
+      }
+    }
+  }
+
+  /**
+   * Return the value of the last constant set before the datetime of the current constant
+   *
+   * @param string $compound The compound name
+   *
+   * @return null|integer
+   */
+  function getComputedConstantCompound($compound) {
+    $value = null;
+
+    if (isset(self::$_computed_constants_compounds[$this->patient_id][$compound]))
+      foreach (self::$_computed_constants_compounds[$this->patient_id][$compound] as $_datetime => $_value) {
+        if ($_datetime >= $this->datetime) {
+          break;
+        }
+
+        $value = $_value;
+      }
 
     return $value;
   }

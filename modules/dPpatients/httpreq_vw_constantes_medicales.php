@@ -201,6 +201,8 @@ if ($context && $selected_context_guid !== 'all') {
 
 //CConstantesMedicales::$_latest_values = array();
 $latest_constantes = $patient->loadRefConstantesMedicales(null, array(), $context, false);
+// On récupère dans tous les cas le poids et la taille du patient
+$patient->loadRefConstantesMedicales(null, array("poids", "taille"), null, false);
 
 $constantes->updateFormFields(); // Pour forcer le chargement des unités lors de la saisie d'une nouvelle constante
 
@@ -248,9 +250,6 @@ $graph->formatGraphDatas($list_constantes);
 if (!$constantes->_id && !$constantes->datetime) {
   $constantes->datetime = CMbDT::dateTime();
 }
-
-// On récupère dans tous les cas le poids et la taille du patient
-$patient->loadRefConstantesMedicales(null, array("poids", "taille"), null, false);
 
 // Création du template
 $smarty = new CSmartyDP();
