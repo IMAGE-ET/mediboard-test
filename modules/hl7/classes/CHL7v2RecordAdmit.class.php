@@ -1360,10 +1360,14 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $affectation = new CAffectation();
     $affectation->sejour_id = $newVenue->_id;
     
-    // Récupération de la date de réalisation de l'évènement
-    $datetime = $this->queryTextNode("EVN.6/TS.1", $data["EVN"]);
-    
     $event_code = $this->_ref_exchange_hl7v2->code;
+
+    // Récupération de la date de réalisation de l'évènement
+    // Dans le cas spécifique de quelques évènements, on récupère le code sur le ZBE
+    $datetime = $this->queryTextNode("EVN.6/TS.1", $data["EVN"]);
+    if (array_key_exists("ZBE", $data) && CMbArray::in($event_code, array("A01", "A02", "A04", "A15", "Z80", "Z84"))) {
+      $datetime = $this->queryTextNode("ZBE.2/TS.1", $data["ZBE"]);
+    }
 
     switch ($event_code) {
       // Cas d'une suppression de mutation ou d'une permission d'absence
@@ -1567,10 +1571,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $affectation_uf = new CAffectationUniteFonctionnelle();
 
       // On essaye de récupérer le service dans ce cas depuis l'UF d'hébergement
-      $uf = new CUniteFonctionnelle();
-      $uf->group_id = $newVenue->group_id;
-      $uf->code     = $this->queryTextNode("PL.1", $PV1_3);
-      $uf->loadMatchingObject();
+      $uf = CUniteFonctionnelle::getUF($this->queryTextNode("PL.1", $PV1_3), "hebergement", $newVenue->group_id);
       if ($uf->code && $uf->_id) {
         $affectation_uf->uf_id        = $uf->_id;
         $affectation_uf->object_class = "CService";
