@@ -125,7 +125,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
 
       if ($rpu->_id) {
         $sejour_rpu = $rpu->loadRefSejour();
-        if ($sejour_rpu->mode_sortie != "mutation") {
+        if (!$sejour->_cancel_hospitalization && $sejour_rpu->mode_sortie != "mutation") {
           return;
         }
       }
@@ -151,14 +151,8 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         $current_affectation          = $sejour->getCurrAffectation();
         $sejour->_ref_hl7_affectation = $current_affectation;
       }
-
-      // On est sur le séjour relicat on ne synchronise aucun flux
-      elseif ($rpu && $rpu->mutation_sejour_id && ($rpu->sejour_id != $rpu->mutation_sejour_id)) {
-        return;
-      }
-
       // Dans le cas d'une annulation d'hospitalisation
-      /*elseif ($sejour->_cancel_hospitalization) {
+      elseif ($sejour->fieldModified("type", "urg") && $sejour->_cancel_hospitalization) {
         $sejour->loadRefPatient();
         $sejour->loadLastLog();
         $sejour->_receiver = $receiver;
@@ -167,7 +161,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         // On récupère l'affectation courante qui n'a pas été transmise (affectation suite à la mutation)
         $current_affectation          = $sejour->getCurrAffectation();
         $sejour->_ref_hl7_affectation = $current_affectation;
-      }*/
+      }
+      // On est sur le séjour relicat, on ne synchronise aucun flux
+      elseif ($rpu && $rpu->mutation_sejour_id && ($rpu->sejour_id != $rpu->mutation_sejour_id)) {
+        return;
+      }
 
       $code = $code ? $code : $this->getCodeSejour($sejour);
 

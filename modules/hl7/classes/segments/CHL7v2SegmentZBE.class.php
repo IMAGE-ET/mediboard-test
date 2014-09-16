@@ -71,11 +71,16 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     }
 
     $action_movement = null;
-    foreach (self::$actions as $action => $events) {
-      if (in_array($event->code, $events)) {
-        $action_movement = $action;
-      }
-    };
+    if ($sejour->_cancel_hospitalization) {
+      $action_movement = "CANCEL";
+    }
+    else {
+      foreach (self::$actions as $action => $events) {
+        if (in_array($event->code, $events)) {
+          $action_movement = $action;
+        }
+      };
+    }
     
     // ZBE-1: Movement ID (EI) (optional)
     $identifiers[] = array(

@@ -327,6 +327,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_diagnostics_associes;
   public $_liaisons_for_prestation;
   public $_first_liaison_for_prestation;
+  public $_cancel_hospitalization;
 
   // Filter Fields
   public $_date_min;

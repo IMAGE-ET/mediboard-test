@@ -22,6 +22,10 @@ if ($sejour && !$sejour->_id) {
 
 $rpu             = $sejour->loadRefRPU();
 $sejour_mutation = $rpu->loadRefSejourMutation();
+//Envoie d'un A07 que si le A06 a été envoyé
+if ($sejour->sortie_reelle) {
+  $sejour_mutation->_cancel_hospitalization = true;
+}
 
 //On annule le relicat
 $sejour->mode_sortie   = "";
