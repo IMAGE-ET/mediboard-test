@@ -1356,6 +1356,9 @@ class CConstantesMedicales extends CMbObject {
 
     if (!$this->_id) {
       $this->user_id = CMediusers::get()->_id;
+      if ($this->datetime == 'now') {
+        $this->datetime = CMbDT::dateTime();
+      }
     }
 
     if (!$this->_id && !$this->_new_constantes_medicales) {

@@ -273,11 +273,13 @@ Main.add(function () {
 
     <div style="{{if $tri_rpu == ''}}position: absolute; bottom:0;{{/if}} text-align:center; height:20%; width: 100%;" id="buttons_form_const{{$tri_rpu}}">
       {{if $can_edit && !$modif_timeout}}
-        {{mb_field object=$constantes field=datetime form="edit-constantes-medicales$tri_rpu" register=true}}
         {{if $constantes->_id}}
+          {{mb_field object=$constantes field=datetime form="edit-constantes-medicales$tri_rpu" register=true}}
           <button style="display:inline-block;" class="trash notext" type="button" onclick="if (confirm('Etes-vous sûr de vouloir supprimer ce relevé ?')) {$V(this.form.del, 1); return submitConstantesMedicales(this.form);}">
             {{tr}}CConstantesMedicales.delete_all{{/tr}}
           </button>
+        {{else}}
+          <input type="hidden" name="datetime" value="now"/>
         {{/if}}
         {{mb_field object=$constantes field=comment placeholder="Commentaire" rows=2}}
         {{if !$hide_save_button}}
