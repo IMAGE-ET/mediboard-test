@@ -208,6 +208,13 @@ foreach ($sejoursParService as $key => $_service) {
             if (array_key_exists('sejour', $_sejour->_ref_prescriptions)) {
                $prescription_sejour = $_sejour->_ref_prescriptions["sejour"];
                $prescription_sejour->countNoValideLines();
+              if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
+                $prescription_sejour->_count_alertes  = $prescription_sejour->countAlertsNotHandled("medium");
+                $prescription_sejour->_count_urgences = $prescription_sejour->countAlertsNotHandled("high");
+              }
+              else {
+                $prescription_sejour->countFastRecentModif();
+              }
             }
           }
         }
@@ -309,6 +316,13 @@ if ($service_id) {
             if (array_key_exists('sejour', $_affectation->_ref_sejour->_ref_prescriptions)) {
               $prescription_sejour = $_affectation->_ref_sejour->_ref_prescriptions["sejour"];
               $prescription_sejour->countNoValideLines();
+              if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
+                $prescription_sejour->_count_alertes  = $prescription_sejour->countAlertsNotHandled("medium");
+                $prescription_sejour->_count_urgences = $prescription_sejour->countAlertsNotHandled("high");
+              }
+              else {
+                $prescription_sejour->countFastRecentModif();
+              }
             }
           }
         }
