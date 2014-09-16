@@ -125,10 +125,12 @@
         <button id="ins_list_patient_button_search" class="search" tabindex="10" type="submit" {{if !$board}}onclick="Patient.search(this.form);"{{/if}}>{{tr}}Search{{/tr}}</button>
 
         {{if !$board}}
-          {{if $app->user_prefs.VitaleVision}}
+          {{if $app->user_prefs.LogicielLectureVitale == 'vitaleVision'}}
             <button class="search singleclick" type="button" tabindex="11" onclick="VitaleVision.read();">
               Lire Vitale
             </button>
+          {{elseif $app->user_prefs.LogicielLectureVitale == 'mbHost'}}
+            {{mb_include module=mbHost template=inc_vitale operation='search'}}
           {{elseif $modFSE && $modFSE->canRead()}}
             {{mb_include module=fse template=inc_button_vitale}}
           {{/if}}

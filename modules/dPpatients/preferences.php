@@ -12,7 +12,7 @@
 // Préférences par Module
 CPreferences::$modules["dPpatients"] = array (
   "VitaleVisionDir", 
-  "VitaleVision",
+  "LogicielLectureVitale",
   "vCardExport",
   "medecin_cps_pref",
   "sort_atc_by_date",

@@ -17,9 +17,9 @@
     if (form.administrative_data.checked) {
       administrative_data = 1;
     }
-    {{if $app->user_prefs.VitaleVision}}
+    {{if $app->user_prefs.LogicielLectureVitale == 'vitaleVision'}}
       VitaleVision.fillForm(getForm('editFrm'), $V($('modal-beneficiaire-select')), administrative_data);
-    {{elseif $modFSE && $modFSE->canRead()}}
+    {{elseif $modFSE && $modFSE->canRead() && $app->user_prefs.LogicielLectureVitale == 'none'}}
       var url = new Url('dPpatients', 'ajax_update_patient_from_vitale');
       url.addParam('administrative_data', administrative_data);
       url.addParam('patient_id', '{{$patient_id}}');

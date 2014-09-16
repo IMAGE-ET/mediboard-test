@@ -1,7 +1,7 @@
 {{* $Id$ *}}
 
-{{if $app->user_prefs.VitaleVision}}
-  {{mb_include module=dPpatients template=inc_vitalevision debug=false keepFiles=true}}
+{{if $app->user_prefs.LogicielLectureVitale == 'vitaleVision'}}
+    {{mb_include module=dPpatients template=inc_vitalevision debug=false keepFiles=true}}
 {{/if}}
 
 {{assign var=modFSE value="fse"|module_active}}
@@ -51,7 +51,7 @@ var Patient = {
   }
 };
 
-{{if $modFSE && $modFSE->canRead() && !$app->user_prefs.VitaleVision}}
+{{if $modFSE && $modFSE->canRead() && $app->user_prefs.LogicielLectureVitale == 'none'}}
   var urlFSE = new Url("dPpatients", "pat_selector");
   urlFSE.addParam("useVitale", 1);
   urlFSE.addParam("dialog", 1);
@@ -207,10 +207,12 @@ var Patient = {
       
     <tr>
       <td>
-        {{if $app->user_prefs.VitaleVision}}
+        {{if $app->user_prefs.LogicielLectureVitale == 'vitaleVision'}}
           <button class="search singleclick" type="button" onclick="$V(this.form.useVitale, 1); VitaleVision.read();">
             Lire Vitale
           </button>
+        {{elseif $app->user_prefs.LogicielLectureVitale == 'mbHost'}}
+          {{mb_include module=mbHost template=inc_vitale operation='search'}}
         {{elseif $modFSE && $modFSE->canRead()}}
           {{mb_include module=fse template=inc_button_vitale}}
         {{/if}}

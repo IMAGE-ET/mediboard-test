@@ -29,7 +29,7 @@
   </tr>
 </table>
 <br/>
-{{if $app->user_prefs.VitaleVision}}
+{{if $app->user_prefs.LogicielLectureVitale == 'vitaleVision'}}
   {{include file="../../dPpatients/templates/inc_vitalevision.tpl" debug=false keepFiles=true}}
 {{/if}}
 <div id ="test_insc"></div>

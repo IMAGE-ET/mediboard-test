@@ -41,7 +41,7 @@ $patient_year        = CValue::getOrSession("Date_Year");
 $patient_naissance   = null;
 $patient_ipp         = CValue::get("patient_ipp");
 $patient_nda         = CValue::get("patient_nda");
-$useVitale           = CValue::get("useVitale",  CModule::getActive("fse") && CAppUI::pref('VitaleVision') ? 1 : 0);
+$useVitale           = CValue::get("useVitale", CModule::getActive("fse") && CAppUI::pref('LogicielLectureVitale') != 'none' ? 1 : 0);
 $prat_id             = CValue::get("prat_id");
 $patient_sexe        = CValue::get("sexe");
 $useCovercard         = CValue::get("usecovercard",  CModule::getActive("fse") && CModule::getActive("covercard") ? 1 : 0);
@@ -70,7 +70,7 @@ if ($patient_ipp && CModule::getInstalled("dPsante400")) {
 }
 else {
   // Recheche par traits classiques
-  if ($useVitale && !CAppUI::pref('VitaleVision') && CModule::getActive("fse")) {
+  if ($useVitale && CAppUI::pref('LogicielLectureVitale') == 'none' && CModule::getActive("fse")) {
     // Champs vitale
     $cv = CFseFactory::createCV();
     if ($cv) {

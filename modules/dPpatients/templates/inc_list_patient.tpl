@@ -1,9 +1,9 @@
 {{assign var=modFSE value="fse"|module_active}}
 
 {{if !$board}}
-  {{if $app->user_prefs.VitaleVision}}
+  {{if $app->user_prefs.LogicielLectureVitale == 'vitaleVision'}}
     {{mb_include module="patients" template="inc_vitalevision" debug=false keepFiles=true}}
-  {{elseif $modFSE && $modFSE->canRead()}}
+  {{elseif $app->user_prefs.LogicielLectureVitale == 'none' && $modFSE && $modFSE->canRead()}}
      <script>
        var urlFSE = new Url;
        urlFSE.setModuleTab("patients", "vw_idx_patients");

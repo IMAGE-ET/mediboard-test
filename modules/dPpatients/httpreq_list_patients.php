@@ -31,7 +31,7 @@ $patient_sexe        = CValue::get("sexe");
 $patient_naissance   = null;
 $patient_ipp         = CValue::get("patient_ipp");
 $patient_nda         = CValue::get("patient_nda");;
-$useVitale           = CValue::get("useVitale",  CModule::getActive("fse") || CAppUI::pref('VitaleVision') ? 1 : 0);
+$useVitale           = CValue::get("useVitale", CModule::getActive("fse") || CAppUI::pref('LogicielLectureVitale') != 'none' ? 1 : 0);
 $prat_id             = CValue::get("prat_id");
 
 $patVitale = new CPatient();

@@ -17,12 +17,12 @@
 
 
 {{if !$ajax}}
-  {{if $app->user_prefs.VitaleVision}}
+  {{if $app->user_prefs.LogicielLectureVitale == 'vitaleVision'}}
     {{mb_include template=inc_vitalevision}}
     <script>
       var lireVitale = VitaleVision.read;
     </script>
-  {{else}}
+  {{elseif $app->user_prefs.LogicielLectureVitale == 'none'}}
     <script>
       var urlFSE = new Url();
       urlFSE.addParam("m", "dPpatients");
@@ -147,7 +147,7 @@
         view: '{{$patient->_view|smarty:nodefaults|JSAttribute}}' });
     {{/if}}
 
-    {{if !$modal && $useVitale && $app->user_prefs.VitaleVision}}
+    {{if !$modal && $useVitale && $app->user_prefs.LogicielLectureVitale == 'vitaleVision'}}
       lireVitale.delay(1); // 1 second
     {{/if}}
 
@@ -204,10 +204,12 @@
   <tr>
   {{if $patient->_id}}
     <th class="title modify" colspan="5">
-      {{if $app->user_prefs.VitaleVision}}
+      {{if $app->user_prefs.LogicielLectureVitale == 'vitaleVision'}}
         <button class="search singleclick" type="button" onclick="lireVitale();" style="float: left;">
          Lire Vitale
         </button>
+      {{elseif $app->user_prefs.LogicielLectureVitale == 'mbHost'}}
+        {{mb_include module=mbHost template=inc_vitale operation='create'}}
       {{elseif $modFSE && $modFSE->canRead()}}
         {{mb_include module=fse template=inc_button_vitale operation='update'}}
       {{/if}}
@@ -228,11 +230,11 @@
     </th>
   {{else}}
     <th class="title" colspan="5">
-      {{if $app->user_prefs.VitaleVision}}
+      {{if $app->user_prefs.LogicielLectureVitale == 'vitaleVision'}}
         <button class="search singleclick" type="button" onclick="lireVitale();" style="float: left;">
          Lire Vitale
         </button>
-      {{elseif $modFSE && $modFSE->canRead()}}
+      {{elseif $modFSE && $modFSE->canRead() && $app->user_prefs.LogicielLectureVitale == 'none'}}
         {{mb_include module=fse template=inc_button_vitale operation='update'}}
       {{/if}}
       {{tr}}Create{{/tr}}
@@ -315,6 +317,9 @@
   <tr>
     <td class="button" colspan="5" style="text-align:center;" id="button">
       <div id="divSiblings" style="display:none;"></div>
+      {{if $app->user_prefs.LogicielLectureVitale == 'mbHost'}}
+        {{mb_include module=mbHost template=inc_vitale operation='create'}}
+      {{/if}}
       {{if $patient->_id}}
         <button tabindex="400" id="submit-patient" name="submit_patient" type="{{if $modal}}button{{else}}submit{{/if}}"
                 class="submit" onclick="return document.editFrm.onsubmit();">

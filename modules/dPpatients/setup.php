@@ -2674,7 +2674,16 @@ class CSetupdPpatients extends CSetup {
 
     $this->addFunctionalPermQuery("allowed_identity_status", "0");
 
-    $this->mod_version = "2.16";
+    $this->makeRevision("2.16");
+
+    $query = "UPDATE `user_preferences` SET `key` = 'LogicielLectureVitale', `value` = 'none'
+                WHERE `key` = 'VitaleVision' AND `value` = 0;";
+    $this->addQuery($query);
+    $query = "UPDATE `user_preferences` SET `key` = 'LogicielLectureVitale', `value` = 'vitaleVision'
+                WHERE `key` = 'VitaleVision' AND `value` = 1;";
+    $this->addQuery($query);
+
+    $this->mod_version = "2.17";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

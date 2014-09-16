@@ -50,7 +50,7 @@ if (!$patient_id) {
 }
 
 // Peut etre pas besoin de verifier si on n'utilise pas VitaleVision
-if ($useVitale && !CAppUI::pref('VitaleVision') && CModule::getActive("fse")) {
+if ($useVitale && CAppUI::pref('LogicielLectureVitale') == 'none' && CModule::getActive("fse")) {
   $patVitale = new CPatient();
   $cv = CFseFactory::createCV();
   if ($cv) {
