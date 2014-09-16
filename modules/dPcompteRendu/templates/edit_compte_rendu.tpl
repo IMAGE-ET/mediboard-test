@@ -692,6 +692,12 @@ Main.add(function() {
                     </optgroup>
                   {{/if}}
                 {{/foreach}}
+                {{* Entête associé à un modèle provenant d'un autre type d'objet *}}
+                {{assign var=header_id value=$compte_rendu->header_id}}
+                {{if $compte_rendu->header_id && !isset($headers.prat.$header_id|smarty:nodefaults) && !isset($headers.func.$header_id|smarty:nodefaults) &&
+                     !isset($headers.etab.$header_id|smarty:nodefaults)}}
+                  <option value="{{$compte_rendu->header_id}}" selected>{{$compte_rendu->_ref_header->nom}}</option>
+                {{/if}}
               </select>
             </td>
           {{else}}
@@ -720,6 +726,12 @@ Main.add(function() {
                     </optgroup>
                   {{/if}}
                 {{/foreach}}
+                {{* Pied de page associé à un modèle provenant d'un autre type d'objet *}}
+                {{assign var=footer_id value=$compte_rendu->footer_id}}
+                {{if $compte_rendu->footer_id && !isset($footers.prat.$footer_id|smarty:nodefaults) && !isset($footers.func.$footer_id|smarty:nodefaults) &&
+                     !isset($footers.etab.$footer_id|smarty:nodefaults)}}
+                  <option value="{{$compte_rendu->footer_id}}" selected>{{$compte_rendu->_ref_footer->nom}}</option>
+                {{/if}}
               </select>
             </td>
           {{else}}
