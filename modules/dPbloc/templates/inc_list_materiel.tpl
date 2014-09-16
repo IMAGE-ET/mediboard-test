@@ -16,9 +16,7 @@
     <th>{{tr}}COperation{{/tr}}</th>
     <th>{{mb_label class=COperation field=cote}}</th>
     <th>{{mb_label class=COperation field=materiel}}</th>
-    {{if !$dialog}}
     <th>{{mb_label class=COperation field=commande_mat}}</th>
-    {{/if}}
 
   </tr>
 
@@ -61,7 +59,6 @@
     <td>{{mb_value object=$_operation field=cote}}</td>
     <td>{{mb_value object=$_operation field=materiel}}</td>
 
-    {{if !$dialog}}
     <td>
       <form name="Edit-{{$_operation->_guid}}" action="?m=dPbloc" method="post"
         onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
@@ -77,7 +74,6 @@
         {{/if}}
       </form>
     </td>
-    {{/if}}
   </tr>
   {{foreachelse}}
   <tr><td colspan="10" class="empty">{{tr}}COperation.none{{/tr}}</td></tr>

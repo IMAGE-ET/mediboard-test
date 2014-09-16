@@ -8,6 +8,12 @@
   * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
   *}}
 
+<script type="text/javascript">
+  refreshLists = function() {
+    location.reload();
+  };
+</script>
+
 <h1>
 	 {{mb_label class=COperation field=materiel}} 
 	 du {{mb_value object=$filter field=_date_min}} 
