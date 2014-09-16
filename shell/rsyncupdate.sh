@@ -82,7 +82,7 @@ then
       if [ "$force_update" = "1" ] || [ "$REPLY" = "y" ] ; then
         echo "-- Rsync $line --"
         touch $MB_PATH/tmp/clearcache.flag
-        eval rsync -avpgzC $dry_run --stats $MB_PATH/ --delete $line --exclude-from=$BASH_PATH/rsyncupdate.exclude \
+        eval rsync -avpgzC $dry_run --stats $MB_PATH/ --delete $line --exclude-from=$BASH_PATH/rsyncupdate.exclude --include=*.exe\
           --exclude includes/config_overload.php \
           --exclude /tmp \
           --exclude /files \
