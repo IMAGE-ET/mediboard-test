@@ -34,7 +34,7 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
     $_lit->checkDispo($date);
   }
 
-  $affectations = $service->loadRefsAffectations($date, $mode, false);
+  $affectations = $service->loadRefsAffectations($date, $mode, false, true);
 
   $sejours = CMbObject::massLoadFwdRef($affectations, "sejour_id");
   CMbObject::massLoadFwdRef($sejours, "patient_id");
