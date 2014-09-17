@@ -1871,9 +1871,13 @@ class CPatient extends CPerson {
     }
 
     // Permettre des IPP en fonction de l'établissement
-    $group = CGroups::loadCurrent();
     if (!$group_id) {
+      $group = CGroups::loadCurrent();
       $group_id = $group->_id;
+    }
+    else {
+      $group = new CGroups();
+      $group->load($group_id);
     }
 
     // Si on est dans le cas d'un établissement gérant la numérotation

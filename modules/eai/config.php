@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+$dPconfig["object_handlers"]["CEAIGroupsHandler"] = "1";
 
 $dPconfig["eai"] = array (
   "exchange_format_delayed"       => "30",
@@ -10,4 +12,3 @@ $dPconfig["eai"] = array (
   "tunnel_pass"                   => "0",
   "convert_encoding"              => "0",
 );
-

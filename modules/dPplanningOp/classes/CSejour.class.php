@@ -2645,9 +2645,13 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     // Permettre des IPP en fonction de l'établissement
-    $group = CGroups::loadCurrent();
     if (!$group_id) {
+      $group = CGroups::loadCurrent();
       $group_id = $group->_id;
+    }
+    else {
+      $group = new CGroups();
+      $group->load($group_id);
     }
 
     // Gestion du tag NDA par son domaine d'identification
