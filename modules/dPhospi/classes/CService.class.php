@@ -209,30 +209,39 @@ class CService extends CMbObject {
   /**
    * Load affectations
    *
-   * @param string $date Date
+   * @param string $date               Date
+   * @param bool   $with_effectue      Avec effectue
+   * @param bool   $with_couloir       Avec couloir
+   * @param bool   $with_sortie_reelle Avec sortie reelle
    *
-   * @return void
+   * @return CAffectation[]
    */
-  function loadRefsAffectations($date, $with_effectue = true, $with_couloir = true) {
+  function loadRefsAffectations($date, $with_effectue = true, $with_couloir = true, $with_sortie_reelle = false) {
+    $ljoin = array();
     $where = array (
-      "service_id" => "= '$this->_id'",
-      "entree" => "<= '$date 23:59:59'",
-      "sortie" => ">= '$date 00:00:00'"
+      "affectation.service_id" => "= '$this->_id'",
+      "affectation.entree" => "<= '$date 23:59:59'",
+      "affectation.sortie" => ">= '$date 00:00:00'"
     );
 
     if (!$with_effectue) {
-      $where["effectue"] = "= '0'";
+      if ($with_sortie_reelle) {
+        $ljoin["sejour"] = "affectation.sejour_id = sejour.sejour_id";
+        $where[] = "affectation.effectue = '0' OR sejour.sortie_reelle >= '".CMbDT::dateTime()."'";
+      }
+      else {
+        $where["affectation.effectue"] = "= '0'";
+      }
     }
 
     if (!$with_couloir) {
       $where["affectation.lit_id"] = "IS NOT NULL";
     }
 
-    $order = "sortie DESC";
+    $order = "affectation.sortie DESC";
 
     $affectation = new CAffectation();
-
-    return $this->_ref_affectations = $affectation->loadList($where, $order);
+    return $this->_ref_affectations = $affectation->loadList($where, $order, null, null, $ljoin);
   }
 
   /**

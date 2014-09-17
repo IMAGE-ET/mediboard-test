@@ -17,7 +17,7 @@
  * @param string   $mode          forcer le chargement des affectations effectuées
  * @param int      $praticien     charge les séjours pour un praticien en particulier
  * @param string   $type          charge les séjours pour un type d'hospitalisation
- * @param int     $prestation_id charge la prestation éventuellement associée à chaque séjour
+ * @param int      $prestation_id charge la prestation éventuellement associée à chaque séjour
  *
  *
  * @return void
@@ -34,7 +34,7 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
     $_lit->checkDispo($date);
   }
 
-  $affectations = $service->loadRefsAffectations($date, $mode, false);
+  $affectations = $service->loadRefsAffectations($date, $mode, false, true);
 
   $sejours = CMbObject::massLoadFwdRef($affectations, "sejour_id");
   CMbObject::massLoadFwdRef($sejours, "patient_id");
@@ -215,6 +215,7 @@ function loadAffectationsCouloirs($where, $order = null, $praticien_id = null, $
   $where["affectation.lit_id"] = " IS NULL";
   
   $affectation = new CAffectation;
+  /* @var CAffectation[] $affectations*/
   $affectations = $affectation->loadList($where, $order, null, null, $ljoin);
 
   $sejours = CMbObject::massLoadFwdRef($affectations, "sejour_id");
@@ -258,7 +259,7 @@ function loadAffectationsCouloirs($where, $order = null, $praticien_id = null, $
 function loadVueTempo(&$objects = array(), $suivi_affectation, $lits = array(), &$operations = array(), $date_min, $date_max, $period, $prestation_id, &$functions_filter = null, $filter_function = null, &$sejours_non_affectes = null) {
   $maternite_active = CModule::getActive("maternite");
 
-  foreach ($objects as $key => $_object) {
+  foreach ($objects as $_object) {
     $_object->_entree = $_object->entree;
     $_object->_sortie = $_object->sortie;
 
@@ -329,7 +330,7 @@ function loadVueTempo(&$objects = array(), $suivi_affectation, $lits = array(), 
       $sejour->_sejours_enfants_ids = CMbArray::pluck($sejour->loadRefsNaissances(), "sejour_enfant_id");
     }
 
-    foreach ($operations[$sejour->_id] as $key=>$_operation) {
+    foreach ($operations[$sejour->_id] as $_operation) {
       $_operation->loadRefPlageOp(1);
       $hour_operation = CMbDT::format($_operation->temp_operation, "%H");
       $min_operation = CMbDT::format($_operation->temp_operation, "%M");
