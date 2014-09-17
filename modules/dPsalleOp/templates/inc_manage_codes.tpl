@@ -241,7 +241,7 @@
                       <input type="hidden" name="object_class" value="{{$acte->object_class}}" />
                     </form>
                     <span class="circled {{if $_phase->_connected_acte->_id}}ok{{else}}error{{/if}}">
-                      {{$_activite->numero}}
+                      {{$_activite->numero}}-{{$acte->code_phase}}
                     </span>
                   {{/foreach}}
                 {{/foreach}}

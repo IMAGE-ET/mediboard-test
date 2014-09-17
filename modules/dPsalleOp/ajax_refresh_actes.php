@@ -26,13 +26,15 @@ $operation->loadPossibleActes();
 $operation->_ref_plageop->loadRefsFwd();
 $operation->loadRefPraticien();
 
-// Chargement des règles de codage
-$operation->loadRefsCodagesCCAM();
-foreach ($operation->_ref_codages_ccam as $_codage) {
-  $_codage->loadPraticien()->loadRefFunction();
-  $_codage->loadActesCCAM();
-  foreach ($_codage->_ref_actes_ccam as $_acte) {
-    $_acte->getTarif();
+if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+  // Chargement des règles de codage
+  $operation->loadRefsCodagesCCAM();
+  foreach ($operation->_ref_codages_ccam as $_codage) {
+    $_codage->loadPraticien()->loadRefFunction();
+    $_codage->loadActesCCAM();
+    foreach ($_codage->_ref_actes_ccam as $_acte) {
+      $_acte->getTarif();
+    }
   }
 }
 

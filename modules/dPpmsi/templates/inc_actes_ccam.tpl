@@ -116,7 +116,7 @@
           </td>
           <td class="narrow">
                     <span class="circled {{if $acte->_id}}ok{{else}}error{{/if}}">
-                      {{mb_value object=$acte field=code_activite}}
+                      {{mb_value object=$acte field=code_activite}}-{{mb_value object=$acte field=code_phase}}
                     </span>
           </td>
           <td>
