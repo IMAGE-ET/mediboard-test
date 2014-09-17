@@ -95,7 +95,7 @@
                         </td>
                         <td>
                           <span class="circled ok">
-                            {{$_acte->code_activite}}-{{$acte->code_phase}}
+                            {{$_acte->code_activite}}-{{$_acte->code_phase}}
                           </span>
                         </td>
                         <td>
