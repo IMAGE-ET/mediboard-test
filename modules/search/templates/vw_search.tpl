@@ -185,13 +185,19 @@
               <tr>
                 <td>
                   <input type="checkbox" name="names_types[]" id="CConsultation" value="CConsultation">
-                  <label for="CConsultation"> Consultation de séjour</label>
+                  <label for="CConsultation"> Consultation</label>
                 </td>
               </tr>
               <tr>
                 <td>
                   <input type="checkbox" name="names_types[]" id="CConsultAnesth" value="CConsultAnesth">
-                  <label for="CConsultAnesth"> Consultation anesthésique de séjour</label>
+                  <label for="CConsultAnesth"> Consultation anesthésique</label>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input type="checkbox" name="names_types[]" id="CFile" value="CFile">
+                  <label for="CFile"> Fichier</label>
                 </td>
               </tr>
             </table>

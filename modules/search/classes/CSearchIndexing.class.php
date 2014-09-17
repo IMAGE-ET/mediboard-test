@@ -107,8 +107,7 @@ class CSearchIndexing extends CStoredObject {
         $query = "INSERT INTO `search_indexing` (`object_class`, `object_id`, `type`, `date`)
           SELECT 'CConsultation', `consultation`.`consultation_id`, 'create', '$date'
           FROM `consultation`, `users_mediboard`, `functions_mediboard`, `plageconsult`
-          WHERE `consultation`.`sejour_id` IS NOT NULL
-          AND `plageconsult`.`plageconsult_id` = `consultation`.`plageconsult_id`
+          WHERE `plageconsult`.`plageconsult_id` = `consultation`.`plageconsult_id`
           AND `users_mediboard`.`user_id` =  `plageconsult`.`chir_id`
           AND `functions_mediboard`.`function_id` = `users_mediboard`.`function_id`";
         break;
@@ -116,11 +115,19 @@ class CSearchIndexing extends CStoredObject {
         $query = "INSERT INTO `search_indexing` (`object_class`, `object_id`, `type`, `date`)
           SELECT 'CConsultAnesth', `consultation_anesth`.`consultation_anesth_id`, 'create', '$date'
           FROM `consultation_anesth`, `users_mediboard`, `functions_mediboard`, `plageconsult`, `consultation`
-          WHERE `consultation_anesth`.`sejour_id` IS NOT NULL
-          AND   `consultation_anesth`.`consultation_id` = `consultation`.`consultation_id`
+          WHERE   `consultation_anesth`.`consultation_id` = `consultation`.`consultation_id`
           AND `plageconsult`.`plageconsult_id` = `consultation`.`plageconsult_id`
           AND `users_mediboard`.`user_id` =  `plageconsult`.`chir_id`
           AND `functions_mediboard`.`function_id` = `users_mediboard`.`function_id`";
+        break;
+      case 'CFile':
+        $query = "INSERT INTO `search_indexing` (`object_class`, `object_id`, `type`, `date`)
+          SELECT 'CFile', `files_mediboard`.`file_id`, 'create', '$date'
+          FROM `files_mediboard`
+          WHERE `files_mediboard`.`object_class` != 'CCompteRendu'
+          AND `files_mediboard`.`file_type` NOT LIKE 'image/%'
+          AND `files_mediboard`.`file_type` NOT LIKE 'video/%'
+          AND `files_mediboard`.`file_type` NOT LIKE 'audio/%'";
         break;
       default: $query ="";
     }

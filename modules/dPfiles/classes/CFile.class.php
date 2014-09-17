@@ -17,7 +17,7 @@
  *  - conversion de fichiers en PDF
  *  - aperçus PDFde documents
  */
-class CFile extends CDocumentItem {
+class CFile extends CDocumentItem implements IIndexableObject {
   static $directory = null;
   
   // DB Table key
@@ -827,6 +827,108 @@ class CFile extends CDocumentItem {
     if (strpos($this->file_type, "image") === 0) {
       return true;
     }
+  }
+
+  /**
+   * Get the patient_id of CMbobject
+   *
+   * @return string
+   */
+  function getFieldPatient() {
+    $object = $this->loadTargetObject();
+
+    if ($object instanceof CPatient) {
+      return $object->_id;
+    }
+
+    if (!method_exists($this, "loadRelPatient")) {
+      $object->loadRefPatient();
+    }
+    else {
+      $object->loadRelPatient();
+    }
+
+    switch ($this->object_class) {
+      case "CConsultAnesth":
+        return $object->_ref_consultation->_ref_patient->_id;
+
+        break;
+
+      default:
+        return $object->_ref_patient->_id;
+    }
+  }
+
+  /**
+   * Get the praticien of CMbobject
+   *
+   * @return CMediusers
+   */
+  function getFieldPraticien() {
+    $object = $this->loadTargetObject();
+    if ($object instanceof CConsultAnesth) {
+      $prat = $object->loadRefConsultation()->loadRefPraticien();
+    }
+    else {
+      $prat = $object->loadRefPraticien();
+    }
+
+    return $prat;
+  }
+
+  /**
+   * Loads the related fields for indexing datum
+   *
+   * @return array
+   */
+  function getFieldsSearch() {
+
+    $prat               = $this->getFieldPraticien();
+    $array["id"]        = $this->_id;
+    $array["author_id"] = $this->author_id;
+    $array["prat_id"]   = $prat->_id;
+    $array["title"]     = utf8_encode($this->file_name);
+    $array["body"]             = $this->redesignBody($this->_absolute_dir);
+    $date                      = $this->file_date;
+    $array["date"]             = str_replace("-", "/", $date);
+    $array["function_id"]      = $prat->function_id;
+    $array["group_id"]         = "";
+    $array["patient_id"]       = $this->getFieldPatient();
+    $array["object_ref_id"]    = $this->loadTargetObject()->_id;
+    $array["object_ref_class"] = $this->loadTargetObject()->_class;
+    $array["path"]             = $this->_file_path;
+    $array["content_type"]     = $this->file_type;
+    return $array;
+  }
+
+  /**
+   * Redesign the content of the body you will index
+   *
+   * @param string $content The content you want to redesign
+   *
+   * @return string
+   */
+  function redesignBody($content) {
+    $body = "";
+    switch ($this->file_type) {
+      case 'text/osoft' :
+        $body = $this->getBinaryContent();
+        $osoft_histo      = new COsoftHistorique(false);
+        $body = $osoft_histo->toHTML($body);
+        $body = strip_tags($body);
+        break;
+      case 'application/osoft' :
+        $body = $this->getBinaryContent();
+        $osoft_dossier    = new COsoftDossier(false);
+        $body = $osoft_dossier->toHTML($body);
+        $body = strip_tags($body);
+        break;
+
+      default : $body = new CSearchFileWrapper($content, $this->_id);
+                $body = $body->getPlainText();
+
+    }
+    return $body;
   }
 }
 

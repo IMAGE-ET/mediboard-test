@@ -84,7 +84,6 @@
         <input type="search" id="words" name="words" value="" placeholder="Saisissez les termes de votre recherche ici..." style="width:100%; height:1.5em; font-size:medium;" onchange="$V(this.form.start, '0')" autofocus>
         <input type="checkbox" name="aggregate" id="aggregate" value="1">
         <label for="aggregate"> Agrégation des résultats</label>
-        <button type="submit" id="button_search" class="button lookup">Démarrer la recherche</button>
         {{mb_include module=search template=inc_tooltip_help}}
       </td>
     </tr>
@@ -113,7 +112,7 @@
         </fieldset>
       </td>
       <!-- Fieldset de tri par Utilisateurs -->
-    <tr>
+
       <td class="narrow">
         <fieldset>
           <legend> Utilisateurs</legend>
@@ -136,8 +135,7 @@
           </table>
         </fieldset>
       </td>
-    </tr>
-    <tr>
+
       <!-- Fieldset de tri par Types -->
       <td class="narrow">
         <fieldset>
@@ -145,23 +143,43 @@
             <input type="checkbox" name="searchAll" id="SearchAll" value="SearchAll" onclick="Search.checkAllCheckboxes(this, 'names_types[]')">
             <label for="SearchAll">Types</label>
           </legend>
-          <div id="first_indexing">
-            <input type="checkbox" name="names_types[]" id="CCompteRendu" value="CCompteRendu"/>
-            <label for="CCompteRendu">Compte rendu</label>
-
-            <input type="checkbox" name="names_types[]" id="CTransmissionMedicale" value="CTransmissionMedicale">
-            <label for="CTransmissionMedicale"> Transmission Médicale</label>
-
-            <input type="checkbox" name="names_types[]" id="CObservationMedicale" value="CObservationMedicale">
-            <label for="CObservationMedicale"> Observation Médicale</label>
-
-            <input type="checkbox" name="names_types[]" id="CConsultation" value="CConsultation">
-            <label for="CConsultation"> Consultation de séjour</label>
-
-            <input type="checkbox" name="names_types[]" id="CConsultAnesth" value="CConsultAnesth">
-            <label for="CConsultAnesth"> Consultation anesthésique de séjour</label>
-          </div>
+          <table class="layout" id="first_indexing">
+            <tr>
+              <td>
+                <input type="checkbox" name="names_types[]" id="CCompteRendu" value="CCompteRendu"/>
+                <label for="CCompteRendu">Compte rendu</label>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" name="names_types[]" id="CTransmissionMedicale" value="CTransmissionMedicale">
+                <label for="CTransmissionMedicale"> Transmission Médicale</label>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" name="names_types[]" id="CObservationMedicale" value="CObservationMedicale">
+                <label for="CObservationMedicale"> Observation Médicale</label>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" name="names_types[]" id="CConsultation" value="CConsultation">
+                <label for="CConsultation"> Consultation de séjour</label>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" name="names_types[]" id="CConsultAnesth" value="CConsultAnesth">
+                <label for="CConsultAnesth"> Consultation anesthésique de séjour</label>
+              </td>
+            </tr>
+          </table>
         </fieldset>
+      </td>
+    <tr>
+      <td type="button">
+        <button type="submit" id="button_search" class="button lookup">Démarrer la recherche</button>
       </td>
     </tr>
     </tbody>

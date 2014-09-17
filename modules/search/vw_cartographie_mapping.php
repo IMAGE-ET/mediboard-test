@@ -33,7 +33,7 @@ try{
   $nbdocs_to_index = $search->countList();
 
   // récupération des types d'éléments restant à indexer.
-  $nbdocs_to_index_by_type = $search->countMultipleList(null,null,"object_class",null, "`object_class`, COUNT(`object_class`) AS `total`");
+  $nbdocs_to_index_by_type = $search->countMultipleList(null, null, "object_class", null, "`object_class`, COUNT(`object_class`) AS `total`");
 
   // récupération du statut de la connexion et du cluster
   $status     = $cluster->getHealth()->getStatus();

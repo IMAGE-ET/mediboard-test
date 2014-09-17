@@ -60,6 +60,12 @@
             </tr>
             <tr>
               <td>
+                <input type="checkbox" name="names_types" id="CFile" value="CFile">
+                <label for="CFile"> Fichiers</label>
+              </td>
+            </tr>
+            <tr>
+              <td>
                 <button class="new singleclick" onclick="Search.firstIndexing(null, true, document.body.select('input[name=names_types]:checked'))">Créer le schéma Nosql</button>
                 <button class="new singleclick" onclick="Search.firstIndexing(true, null, document.body.select('input[name=names_types]:checked'));">Remplir table temporaire</button>
               </td>

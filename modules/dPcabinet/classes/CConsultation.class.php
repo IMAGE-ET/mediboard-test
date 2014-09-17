@@ -2295,8 +2295,16 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $array["function_id"] = $prat->function_id;
     $array["group_id"]    = $prat->loadRefFunction()->group_id;
     $array["patient_id"]  = $this->getFieldPatient();
-    $array["object_ref_id"]  = $this->loadRefSejour()->_id;
-    $array["object_ref_class"]  = $this->loadRefSejour()->_class;
+    $sejour_id = $this->loadRefSejour()->_id;
+    if ($sejour_id) {
+      $array["object_ref_id"]  = $sejour_id;
+      $array["object_ref_class"]  = $this->loadRefSejour()->_class;
+    }
+    else {
+      $array["object_ref_id"]  = $this->_id;
+      $array["object_ref_class"]  = $this->_class;
+    }
+
 
     return $array;
   }
