@@ -559,16 +559,23 @@ class CCodable extends CMbObject {
    * @return void
    */
   function guessActesAssociation() {
-    $this->loadRefsCodagesCCAM();
     $this->loadRefsActesCCAM();
-    foreach ($this->_ref_codages_ccam as $_codage) {
-      $_codage->_ref_actes_ccam = array();
-      foreach ($this->_ref_actes_ccam as $_acte) {
-        if ($_codage->praticien_id == $_acte->executant_id) {
-          $_codage->_ref_actes_ccam[$_acte->_id] = $_acte;
+    if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+      $this->loadRefsCodagesCCAM();
+      foreach ($this->_ref_codages_ccam as $_codage) {
+        $_codage->_ref_actes_ccam = array();
+        foreach ($this->_ref_actes_ccam as $_acte) {
+          if ($_codage->praticien_id == $_acte->executant_id) {
+            $_codage->_ref_actes_ccam[$_acte->_id] = $_acte;
+          }
         }
+        $_codage->guessActesAssociation();
       }
-      $_codage->guessActesAssociation();
+    }
+    else {
+      foreach ($this->_ref_actes_ccam as $_acte) {
+        $_acte->guessAssociation();
+      }
     }
   }
 
