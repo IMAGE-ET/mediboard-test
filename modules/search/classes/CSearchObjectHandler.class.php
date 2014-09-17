@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  * $Id$
@@ -84,9 +84,16 @@ class CSearchObjectHandler extends CMbObjectHandler {
     if ((($object instanceof CConsultation) || ($object instanceof CConsultAnesth))  && !$object->sejour_id) {
       return false;
     }
+
     if (!$type) {
-      $type = $object->_ref_current_log->type;
+      if (!$object->_ref_current_log) {
+        $type = "create";
+      }
+      else {
+        $type = $object->_ref_current_log->type;
+      }
     }
+
     $search_indexing               = new CSearchIndexing();
     $search_indexing->type         = $type;
     $search_indexing->date         = CMbDT::dateTime();
