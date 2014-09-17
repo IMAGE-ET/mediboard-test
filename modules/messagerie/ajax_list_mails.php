@@ -41,10 +41,10 @@ $mail = new CUserMail();
 
 switch ($mode) {
   case 'inbox':
-    $where['account_id'] = "= '$account_id'";
-    $where['account_class'] = "= 'CSourcePOP'";
+    $where['account_id'] = "= '$account_id' ";
+    $where['account_class'] = "= 'CSourcePOP' ";
     $where['archived'] = "= '0' ";
-    $where['sent'] = "= '0'";
+    $where['sent'] = "= '0' ";
     //$where['date_read'] = ' IS NULL';
     break;
 

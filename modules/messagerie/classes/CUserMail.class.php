@@ -467,7 +467,7 @@ class CUserMail extends CMbObject{
    * @return CMbObject
    */
   function loadAccount() {
-    return $this->_ref_source_account = CMbObject::loadFromGuid("$this->account_class-$this->account_id");
+    return $this->_ref_source_account = CMbObject::loadFromGuid("$this->account_class-$this->account_id", true);
   }
 
   /**
