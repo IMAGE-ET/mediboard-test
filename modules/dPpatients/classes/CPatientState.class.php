@@ -24,6 +24,10 @@ class CPatientState extends CMbObject {
   public $datetime;
   public $reason;
 
+  //filter
+  public $_date_min;
+  public $_date_max;
+
   /** @var CPatient */
   public $_ref_patient;
   /** @var CMediusers */
@@ -51,6 +55,10 @@ class CPatientState extends CMbObject {
     $props["datetime"]    = "dateTime notNull";
     $props["reason"]      = "text";
 
+    //filter
+    $props["_date_min"]    = "dateTime";
+    $props["_date_max"]    = "dateTime";
+
     return $props;
   }
 
@@ -70,6 +78,24 @@ class CPatientState extends CMbObject {
    */
   function loadRefMediuser() {
     return $this->_ref_mediuser = $this->loadFwdRef("mediuser_id");
+  }
+
+  /**
+   * Get the number patient by a state and the filter
+   *
+   * @param String[] $where    Clause
+   * @param String[] $leftjoin Jointure
+   *
+   * @return Int
+   */
+  static function getNumberPatient($where, $leftjoin) {
+    $ds = CSQLDataSource::get("std");
+    $request = new CRequest();
+    $request->addSelect("COUNT(DISTINCT(patients.patient_id))");
+    $request->addTable("patients");
+    $request->addLJoin($leftjoin);
+    $request->addWhere($where);
+    return $ds->loadResult($request->makeSelect());
   }
 
   /**

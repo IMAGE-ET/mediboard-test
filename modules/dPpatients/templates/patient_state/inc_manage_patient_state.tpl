@@ -39,6 +39,28 @@
   });
 </script>
 
+<form name="filter_patient_state" method="post" onsubmit="return PatientState.filterPatientState(this)">
+  <table class="form">
+    <tr>
+      <th class="title" colspan="2">Filtre de recherche</th>
+    </tr>
+    <tr>
+      <th>{{mb_label class="CPatientState" field="_date_min"}}</th>
+      <td>{{mb_field class="CPatientState" field="_date_min" value=$date_min register=true form="filter_patient_state"}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label class="CPatientState" field="_date_max"}}</th>
+      <td>{{mb_field class="CPatientState" field="_date_max" value=$date_max register=true form="filter_patient_state"}}</td>
+    </tr>
+    <tr>
+      <td class="button" colspan="2">
+        <button type="submit" class="search">{{tr}}Search{{/tr}}</button>
+      </td>
+    </tr>
+  </table>
+</form>
+<br/>
+
 <ul id="tabs-patient_state" class="control_tabs">
   <li><a href="#patient_prov">{{tr}}CPatientState.state.PROV{{/tr}}</a></li>
   <li><a href="#patient_dpot">{{tr}}CPatientState.state.DPOT{{/tr}}</a></li>

@@ -19,17 +19,30 @@ if (!CAppUI::pref("allowed_identity_status")) {
 
 $state          = CValue::get("state");
 $page           = (int)CValue::get("page", 0);
+$date_min         = CValue::session("patient_state_date_min");
+$date_max         = CValue::session("patient_state_date_max");
 $patients       = array();
 $patients_state = array();
+$where          = array();
+$leftjoin       = null;
+$patient        = new CPatient();
 
-$patient         = new CPatient();
-$patient->status = $state;
+if ($date_min) {
+  $where["entree"] = ">= '$date_min'";
+  $leftjoin["sejour"] = "patients.patient_id = sejour.patient_id";
+}
 
-$count = (int)$patient->countMatchingList();
+if ($date_max) {
+  $where["sortie"] = "<= '$date_max'";
+  $leftjoin["sejour"] = "patients.patient_id = sejour.patient_id";
+}
+
+$where["status"] = " = '$state'";
+$count = (int)CPatientState::getNumberPatient($where, $leftjoin);
 
 if ($count > 0) {
   /** @var CPatient[] $patients */
-  $patients = $patient->loadMatchingList(null, "$page, 30");
+  $patients = $patient->loadList($where, null, "$page, 30", null, $leftjoin);
   CPatient::massLoadIPP($patients);
 
   /** @var CPatientState $patients_state */

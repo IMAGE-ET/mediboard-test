@@ -13,5 +13,6 @@
 
 // Préférences par Module
 CPreferences::$modules["dPpatients"] = array (
-  "allowed_identity_status"
+  "allowed_identity_status",
+  "allowed_modify_identity_status"
 );

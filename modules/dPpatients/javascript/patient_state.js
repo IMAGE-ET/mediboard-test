@@ -11,6 +11,14 @@
 
 PatientState = {
 
+  filterPatientState : function (form) {
+    new Url("dPpatients", "ajax_filter_patient_state")
+      .addFormData(form)
+      .requestUpdate("patient_manage");
+
+    return false;
+  },
+
   getListPatientByState : function (state, page) {
     new Url("dPpatients", "ajax_list_patient_state")
       .addParam("state", state)

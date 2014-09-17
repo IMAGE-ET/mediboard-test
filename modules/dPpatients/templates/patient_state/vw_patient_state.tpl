@@ -14,7 +14,14 @@
 
 <script>
   Main.add(function () {
-    Control.Tabs.create('tabs-main_patient_state', true);
+    Control.Tabs.create('tabs-main_patient_state', true, {
+      afterChange: function(container) {
+        switch (container.id) {
+          case "patient_stats":
+            PatientState.stats_filter();
+            break;
+        }
+      }});
   });
 </script>
 
@@ -23,11 +30,16 @@
     <td class="narrow">
       <ul id="tabs-main_patient_state" class="control_tabs_vertical">
         <li><a href="#patient_manage">{{tr}}CPatientState.manage{{/tr}}</a></li>
-        <li onmousedown="PatientState.stats_filter()"><a href="#patient_stats">{{tr}}Stats{{/tr}}</a></li>
+        <li><a href="#patient_stats">{{tr}}Stats{{/tr}}</a></li>
       </ul>
     </td>
     <td id="patient_manage">
-      {{mb_include module="dPpatients" template="patient_state/inc_manage_patient_state"}}
+      <script>
+        Main.add(function () {
+          new Url("dPpatients", "ajax_filter_patient_state")
+            .requestUpdate("patient_manage");
+        });
+      </script>
     </td>
     <td id="patient_stats">
     </td>

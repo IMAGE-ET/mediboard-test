@@ -2683,7 +2683,11 @@ class CSetupdPpatients extends CSetup {
                 WHERE `key` = 'VitaleVision' AND `value` = 1;";
     $this->addQuery($query);
 
-    $this->mod_version = "2.17";
+    $this->makeRevision("2.17");
+
+    $this->addFunctionalPermQuery("allowed_modify_identity_status", "0");
+
+    $this->mod_version = "2.18";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

@@ -122,6 +122,13 @@
     }
   };
 
+  validateStatus = function() {
+    var form = getForm("editFrm");
+    form.status    = "VALI";
+    form._no_guess = "1";
+    return form.onsubmit();
+  };
+
   var tabs;
   Main.add(function () {
     initPaysField("editFrm", "_pays_naissance_insee", "profession");
@@ -270,10 +277,12 @@
         <input type="hidden" name="modal" value="{{$modal}}" />
         <input type="hidden" name="callback" value="{{$callback}}" />
         <input type="hidden" name="_reason_state" value="">
+        <input type="hidden" name="_status_no_guess" value="0">
         {{mb_field object=$patient field="_vitale_firstname" hidden=1}}
         {{mb_field object=$patient field="_vitale_birthdate" hidden=1}}
         {{mb_field object=$patient field="_vitale_nir_certifie" hidden=1}}
         {{mb_field object=$patient field="_vitale_lastname" hidden=1}}
+        {{mb_field object=$patient field="status" hidden=1}}
 
         {{mb_key object=$patient}}
 
@@ -328,6 +337,14 @@
           & {{tr}}BindVitale{{/tr}}
           {{/if}}
         </button>
+        {{assign var=identity_status value="CAppUI::conf"|static_call:"dPpatients CPatient manage_identity_status":"CGroups-$g"}}
+        {{assign var=allowed_identity value="CAppUI::pref"|static_call:"allowed_identity_status"}}
+        {{if $identity_status && $allowed_identity && $patient->status != "VALI"}}
+          <button type="{{if $modal}}button{{else}}submit{{/if}}"
+                  class="submit" onclick="return validateStatus();">
+            {{tr}}Save{{/tr}} & {{tr}}Validate{{/tr}} le statut
+          </button>
+        {{/if}}
 
         <button type="button" class="print" onclick="Patient.print('{{$patient->_id}}')">
           {{tr}}Print{{/tr}}

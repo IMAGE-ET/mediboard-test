@@ -17,14 +17,5 @@ if (!CAppUI::pref("allowed_identity_status")) {
   CApp::rip();
 }
 
-$patients_count = array();
-$patient        = new CPatient();
-
-foreach ($patient->_specs["status"]->_list as $_state) {
-  $patient->status = $_state;
-  $patients_count[CMbString::lower($_state)] = $patient->countMatchingList();
-}
-
 $smarty = new CSmartyDP();
-$smarty->assign("patients_count", $patients_count);
 $smarty->display("patient_state/vw_patient_state.tpl");

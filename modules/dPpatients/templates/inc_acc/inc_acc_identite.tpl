@@ -133,7 +133,7 @@ Main.add(function() {
 });
 </script>
 {{assign var=identity_status value="CAppUI::conf"|static_call:"dPpatients CPatient manage_identity_status":"CGroups-$g"}}
-{{assign var=allowed_modify value="CAppUI::pref"|static_call:"allowed_identity_status"}}
+{{assign var=allowed_modify value="CAppUI::pref"|static_call:"allowed_modify_identity_status"}}
 <table style="width: 100%">
   <tr>
     <td colspan="2" id="alert_tutelle"></td>

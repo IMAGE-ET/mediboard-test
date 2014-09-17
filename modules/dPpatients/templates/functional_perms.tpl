@@ -10,3 +10,4 @@
 *}}
 
 {{mb_include template=inc_pref spec=bool var=allowed_identity_status}}
+{{mb_include template=inc_pref spec=bool var=allowed_modify_identity_status}}
