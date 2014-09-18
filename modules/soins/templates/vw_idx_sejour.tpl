@@ -352,6 +352,7 @@
                     {{assign var=prescription value=$sejour->_ref_prescriptions.sejour}}
                     {{if $prescription->_id}}
                       {{if @$conf.object_handlers.CPrescriptionAlerteHandler}}
+                        {{mb_script module=system script=alert}}
                         {{mb_include module=system template=inc_icon_alerts object=$prescription nb_alerts=$prescription->_count_alertes}}
                         {{mb_include module=system template=inc_icon_alerts object=$prescription level="high"
                         nb_alerts=$prescription->_count_urgences}}
