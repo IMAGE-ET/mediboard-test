@@ -1809,7 +1809,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
   }
 
-  static function massLoadCurrAffectation(&$sejours = array(), $date = null) {
+  static function massLoadCurrAffectation(&$sejours = array(), $date = null, $service_id = null) {
     if (!count($sejours)) {
       return;
     }
@@ -1821,6 +1821,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     $affectation = new CAffectation();
     $where = array();
     $where["sejour_id"] = CSQLDataSource::prepareIn(CMbArray::pluck($sejours, "_id"));
+    if ($service_id) {
+      $where["service_id"] = "= '$service_id'";
+    }
     $where[] = "'$date' BETWEEN entree AND sortie";
     $affectations = $affectation->loadList($where);
 

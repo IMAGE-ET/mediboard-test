@@ -32,16 +32,21 @@ function getCurrentLit($sejour, $date, $hour, $service_id, &$lits) {
   return null;
 }
 
-$token_cat     = CValue::get("token_cat", "");
-$periode       = CValue::get("periode");
-$service_id    = CValue::getOrSession("service_id");
-$by_patient    = CValue::get("by_patient", false);
-$show_inactive = CValue::get("show_inactive", "0");
-$_present_only = CValue::get("_present_only", 1);
-$mode_urgences = CValue::get("mode_urgences", 0);
-$offline       = CValue::get("offline", 0);
-$date          = CValue::getOrSession("date", CMbDT::date());
-$do            = CValue::get("do");
+$token_cat      = CValue::get("token_cat", "");
+$periode        = CValue::get("periode");
+$service_id     = CValue::getOrSession("service_id");
+$by_patient     = CValue::get("by_patient", false);
+$show_inactive  = CValue::get("show_inactive", "0");
+$_present_only  = CValue::get("_present_only", 1);
+$mode_urgences  = CValue::get("mode_urgences", 0);
+$offline        = CValue::get("offline", 0);
+$date           = CValue::getOrSession("date", CMbDT::date());
+$do             = CValue::get("do");
+$calcul_planifs = CValue::get("calcul_planifs", 1);
+
+if (!$calcul_planifs) {
+  CView::enableSlave();
+}
 
 if ($offline) {
   $by_patient = true;

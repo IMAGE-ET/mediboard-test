@@ -40,8 +40,7 @@ $where["affectation.service_id"] = " = '$service_id'";
 /** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, null, null, "sejour.sejour_id", $ljoin);
 
-$dossiers_complets = array();
-
+CSejour::massLoadCurrAffectation($sejours, $datetime_avg, $service_id);
 CStoredObject::massLoadFwdRef($sejours, "praticien_id");
 CMbObject::massLoadRefsNotes($sejours);
 CSejour::massLoadNDA($sejours);
@@ -50,12 +49,9 @@ $patients = CStoredObject::massLoadFwdRef($sejours, "patient_id");
 CPatient::massLoadIPP($patients);
 foreach ($sejours as $sejour) {
   $patient = $sejour->loadRefPatient();
-  $patient->loadIPP();
   $sejour->loadRefPraticien();
   $sejour->checkDaysRelative($date);
-  $sejour->loadNDA();
   $sejour->loadRefsNotes();
-  $sejour->loadRefCurrAffectation($datetime_avg, $service_id)->loadRefLit();
 }
 
 $sorter_affectation = CMbArray::pluck($sejours, "_ref_curr_affectation", "_ref_lit", "_view");
@@ -68,6 +64,7 @@ array_multisort(
 );
 
 $period = CAppUI::conf("soins offline_sejour period", CGroups::loadCurrent()->_guid);
+$dossiers_complets = array();
 
 foreach ($sejours as $sejour) {
   $params = array(
