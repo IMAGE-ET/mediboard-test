@@ -32,6 +32,16 @@ class CSetupsearch extends CSetup {
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.02";
+    $this->makeRevision("0.02");
+    $query = "ALTER TABLE `search_indexing`
+              CHANGE `object_class` `object_class` CHAR(50) NOT NULL;";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.03");
+    $query = "ALTER TABLE `search_indexing`
+              ADD INDEX `index_order` (`object_class`, `type`, `search_indexing_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.04";
   }
 }
