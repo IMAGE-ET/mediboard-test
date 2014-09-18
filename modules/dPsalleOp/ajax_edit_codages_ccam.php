@@ -36,8 +36,7 @@ $codable->loadRefPatient();
 $codable->loadRefPraticien();
 $codable->loadExtCodesCCAM();
 $codable->getAssociationCodesActes();
-$codable->loadPossibleActes();
-
+$codable->loadPossibleActes($codage->praticien_id);
 
 $list_activites = array();
 foreach ($codable->_ext_codes_ccam as $_code) {

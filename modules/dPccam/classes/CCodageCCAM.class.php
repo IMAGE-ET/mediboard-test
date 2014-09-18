@@ -397,9 +397,9 @@ class CCodageCCAM extends CMbObject {
   public static function precodeModifiers(&$modifiers, &$act, $codable) {
     $date = CMbDT::date(null, $act->execution);
     $time = CMbDT::time(null, $act->execution);
-    $codable->loadRefPraticien();
-    $codable->_ref_praticien->loadRefDiscipline();
-    $discipline = $codable->_ref_praticien->_ref_discipline;
+    $act->loadRefExecutant();
+    $act->_ref_executant->loadRefDiscipline();
+    $discipline = $act->_ref_executant->_ref_discipline;
     $patient = $codable->_ref_patient;
     $checked = 0;
     $spe_gyneco = $spe_gyneco = array(
@@ -441,7 +441,7 @@ class CCodageCCAM extends CMbObject {
           $_modifier->_state = $checked ? 'prechecked' : null;
           break;
         case 'K':
-          $checked = !$act->montant_depassement && ($codable->_ref_praticien->secteur == 1 || ($codable->_ref_praticien->secteur == 2 && $patient->cmu));
+          $checked = !$act->montant_depassement && ($act->_ref_executant->secteur == 1 || ($act->_ref_executant->secteur == 2 && $patient->cmu));
           if ($checked) {
             $_modifier->_state = 'prechecked';
           }
@@ -465,7 +465,7 @@ class CCodageCCAM extends CMbObject {
         case 'P':
           $checked = (($count_exclusive_modifiers == 1 && $_modifier->_checked) || $count_exclusive_modifiers == 0) &&
             in_array($discipline->text, $spe_gen_pediatre) &&
-            ($time >= "20:00:00" && $time < "23:59:59");
+            ($time > "20:00:00" && $time < "23:59:59");
           if ($checked) {
             $_modifier->_state = 'prechecked';
           }
@@ -478,10 +478,10 @@ class CCodageCCAM extends CMbObject {
           break;
         case 'S':
           $checked = (
-                       in_array($discipline->text, $spe_gen_pediatre) ||
-                       ($codable->_class == "COperation" && $codable->_lu_type_anesth)
-                     ) && ($time >= "00:00:00" && $time <= "08:00:00") &&
-                     (($count_exclusive_modifiers == 1 && $_modifier->_checked) || $count_exclusive_modifiers == 0);
+              in_array($discipline->text, $spe_gen_pediatre) ||
+              ($codable->_class == "COperation" && $codable->_lu_type_anesth)
+              ) && ($time >= "00:00:00" && $time < "08:00:00") &&
+              (($count_exclusive_modifiers == 1 && $_modifier->_checked) || $count_exclusive_modifiers == 0);
           if ($checked) {
             $_modifier->_state = 'prechecked';
           }
@@ -495,7 +495,7 @@ class CCodageCCAM extends CMbObject {
         case 'U':
           $checked = (($count_exclusive_modifiers == 1 && $_modifier->_checked) || $count_exclusive_modifiers == 0) &&
             !in_array($discipline->text, $spe_gen_pediatre) &&
-            ($time >= '20:00:00' || $time <= '07:59:59');
+            ($time > '20:00:00' || $time < '08:00:00');
           if ($checked) {
             $_modifier->_state = 'prechecked';
           }

@@ -976,9 +976,11 @@ class CCodable extends CMbObject {
   /**
    * Charge les actes CCAM codables en fonction des code CCAM fournis
    *
+   * @param integer $praticien_id L'id du praticien auquel seront liés les actes
+   *
    * @return void
    */
-  function loadPossibleActes () {
+  function loadPossibleActes ($praticien_id = 0) {
     $this->preparePossibleActes();
     $depassement_affecte        = false;
     $depassement_anesth_affecte = false;
@@ -999,8 +1001,16 @@ class CCodable extends CMbObject {
     // existing acts may only be affected once to possible acts
     $used_actes = array();
 
+    if ($praticien_id) {
+      $praticien = CMediusers::get($praticien_id);
+      $executant_id = $praticien_id;
+    }
+    else {
+      $praticien = $this->loadRefPraticien();
+      $executant_id = 0;
+    }
+    $praticien->loadRefDiscipline();
     $this->loadRefPatient()->evalAge();
-    $this->loadRefPraticien()->loadRefDiscipline();
 
     $this->loadExtCodesCCAM();
 
@@ -1030,12 +1040,13 @@ class CCodable extends CMbObject {
             $depassement_anesth_affecte = true;
           }
 
-          $possible_acte->executant_id = CAppUI::pref("user_executant") ?
-            CMediusers::get()->_id :
-            $this->getExecutantId($possible_acte->code_activite);
+          if (!$executant_id) {
+            $executant_id = CAppUI::pref("user_executant") ? CMediusers::get()->_id : $this->getExecutantId($possible_acte->code_activite);
+          }
+          $possible_acte->executant_id = $executant_id;
           $possible_acte->object_class = $this->_class;
           $possible_acte->object_id = $this->_id;
-          
+
           if ($possible_acte->code_activite == 4) {
             $possible_acte->extension_documentaire = $this->getExtensionDocumentaire($possible_acte->executant_id);
           }
