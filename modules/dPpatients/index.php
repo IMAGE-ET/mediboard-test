@@ -27,6 +27,6 @@ if (CAppUI::conf("dPsalleOp enable_surveillance_perop")) {
   $module->registerTab("vw_supervision_graph",         TAB_ADMIN);
 }
 
-if (CAppUI::pref("allowed_identity_status")) {
+if (CAppUI::pref("allowed_modify_identity_status")) {
   $module->registerTab("vw_patient_state"              , TAB_ADMIN);
 }

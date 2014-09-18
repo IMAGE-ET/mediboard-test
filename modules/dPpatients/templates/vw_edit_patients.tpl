@@ -329,6 +329,9 @@
       {{if $app->user_prefs.LogicielLectureVitale == 'mbHost'}}
         {{mb_include module=mbHost template=inc_vitale operation='create'}}
       {{/if}}
+
+      {{assign var=identity_status value="CAppUI::conf"|static_call:"dPpatients CPatient manage_identity_status":"CGroups-$g"}}
+      {{assign var=allowed_identity value="CAppUI::pref"|static_call:"allowed_identity_status"}}
       {{if $patient->_id}}
         <button tabindex="400" id="submit-patient" name="submit_patient" type="{{if $modal}}button{{else}}submit{{/if}}"
                 class="submit" onclick="return document.editFrm.onsubmit();">
@@ -337,8 +340,7 @@
           & {{tr}}BindVitale{{/tr}}
           {{/if}}
         </button>
-        {{assign var=identity_status value="CAppUI::conf"|static_call:"dPpatients CPatient manage_identity_status":"CGroups-$g"}}
-        {{assign var=allowed_identity value="CAppUI::pref"|static_call:"allowed_identity_status"}}
+
         {{if $identity_status && $allowed_identity && $patient->status != "VALI"}}
           <button type="{{if $modal}}button{{else}}submit{{/if}}"
                   class="submit" onclick="return validateStatus();">
@@ -380,6 +382,13 @@
           &amp; {{tr}}BindVitale{{/tr}}
           {{/if}}
         </button>
+
+        {{if $identity_status && $allowed_identity}}
+          <button type="{{if $modal}}button{{else}}submit{{/if}}"
+                  class="submit" onclick="return validateStatus();">
+            {{tr}}Create{{/tr}} & {{tr}}Validate{{/tr}} le statut
+          </button>
+        {{/if}}
       {{/if}}
     </td>
   </tr>

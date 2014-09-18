@@ -31,7 +31,22 @@ SiblingsChecker = {
     }
 
     if (this.submit) {
-      url.requestModal(290, 200);
+      url.addParam("json_result", "1");
+      url.requestJSON((function (data) {
+        if (data) {
+          url.addParam("json_result", "0");
+          url.requestModal(290, 200);
+        }
+        else {
+          this.running = false;
+          if (this.form.modal.value == 1) {
+            onSubmitFormAjax(this.form, function() {window.parent.Control.Modal.close()});
+          }
+          else {
+            this.form.submit();
+          }
+        }
+      }).bind(this));
     }
     else {
       url.requestUpdate("doublon-patient", {

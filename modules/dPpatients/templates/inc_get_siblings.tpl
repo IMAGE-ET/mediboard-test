@@ -21,11 +21,6 @@
   {{else}}
     $("submit-patient").disabled = false;
   {{/if}}
-  {{if $submit && $similar && (!$siblings && !$doubloon || $old_patient && $old_patient->_id && $old_patient->status == "DPOT" && $doubloon)}}
-    Main.add(function() {
-      SiblingsChecker.confirmCreate();
-    });
-  {{/if}}
 </script>
 
 {{if !$similar}}
