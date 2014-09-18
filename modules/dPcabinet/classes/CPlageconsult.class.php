@@ -323,24 +323,6 @@ class CPlageconsult extends CPlageHoraire {
       return;
     }
 
-    $query = "SELECT SUM(`consultation`.`duree`)
-              FROM `consultation`
-              WHERE `consultation`.`plageconsult_id` = '$this->_id'
-                AND `consultation`.`annule` != '1'";
-
-    $this->_affected = intval($this->_spec->ds->loadResult($query));
-
-    if ($this->_total) {
-      $this->_fill_rate = round($this->_affected/$this->_total*100);
-    }
-  }
-
-
-  function getConsultTimes() {
-    if (!$this->_id) {
-      return;
-    }
-
     $ds = $this->getDS();
     $sql = "SELECT heure, duree
       FROM consultation, plageconsult
@@ -373,7 +355,9 @@ class CPlageconsult extends CPlageHoraire {
       }
     }
 
+    $this->_fill_rate = round(($nb_rdv_used/$nb_plages)*100);
     $this->_nb_free_freq = $nb_plages-$nb_rdv_used;
+    $this->_affected = $nb_rdv_used;
   }
 
   /**

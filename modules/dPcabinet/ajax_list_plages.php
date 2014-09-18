@@ -139,9 +139,8 @@ foreach ($listPlage as $currPlage) {
   $currPlage->_ref_chir = $listPrat[$currPlage->chir_id];
   $currPlage->loadCategorieFill();
   $currPlage->loadRefsNotes();
-  $currPlage->loadFillRate();
   $currPlage->countPatients();
-  $currPlage->getConsultTimes();
+  $currPlage->loadFillRate();
 }
 // Création du template
 $smarty = new CSmartyDP();
