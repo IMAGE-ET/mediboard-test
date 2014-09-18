@@ -14,14 +14,15 @@
 
 CConfiguration::register(
   array("CGroups" => array(
-      "search" => array(
-        "active_handler" => array(
-          "active_handler_search" => "bool default|0",
-        ),
-        "indexing" => array(
-          "active_indexing"          => "bool default|0",
-        )
+    "search" => array(
+      "active_handler" => array(
+        "active_handler_search"       => "bool default|0",
+        "active_handler_search_types" => "set list|CCompteRendu|CTransmissionMedicale|CObservationMedicale|CConsultation|CConsultAnesth default|",
+      ),
+      "indexing"       => array(
+        "active_indexing" => "bool default|0",
       )
     )
+  )
   )
 );

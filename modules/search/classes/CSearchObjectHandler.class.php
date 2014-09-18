@@ -16,7 +16,48 @@ class CSearchObjectHandler extends CMbObjectHandler {
   /**
    * @var array
    */
-  static $handled = array ("CCompteRendu","CTransmissionMedicale","CObservationMedicale","CConsultation", "CConsultAnesth");
+  static $handled = array ();
+
+  /**
+   * Check the types which are handled.
+   * @param $object
+   *
+   * @return bool
+   */
+  static function checkHandled($object) {
+    switch ($object->_class) {
+      case 'CCompteRendu':
+        /** @var CCompteRendu $object */
+        $object->completeField("author_id");
+        $object->loadRefAuthor();
+        $group       = $object->_ref_author->loadRefFunction()->loadRefGroup();
+        break;
+      case 'CConsultAnesth':
+        /** @var CConsultAnesth $object */
+        $object->loadRefChir();
+        $group = $object->_ref_chir->loadRefFunction()->loadRefGroup();
+        break;
+      case 'CConsultation':
+        /** @var CConsultation $object */
+        $object->loadRefPraticien();
+        $group = $object->_ref_praticien->loadRefFunction()->loadRefGroup();
+        break;
+      case 'CObservationMedicale':
+      case 'CTransmissionMedicale':
+        /** @var CTransmissionMedicale $object */
+        $object->completeField("user_id");
+        $object->loadRefUser();
+        $group       = $object->_ref_user->loadRefFunction()->loadRefGroup();
+        break;
+
+      default: return false;
+    }
+    if(CAppUI::conf("search active_handler active_handler_search_types", $group)) {
+      self::$handled = explode("|", CAppUI::conf("search active_handler active_handler_search_types", $group));
+    }
+    return true;
+  }
+
 
   /**
    * If object is handled ?
@@ -36,6 +77,7 @@ class CSearchObjectHandler extends CMbObjectHandler {
    * @return bool
    */
   function onAfterStore(CMbObject $object) {
+    $this->checkHandled($object);
     if (!$this->isHandled($object) && !parent::onAfterStore($object)) {
       return false;
     }
@@ -50,6 +92,7 @@ class CSearchObjectHandler extends CMbObjectHandler {
    * @return bool
    */
   function onBeforeDelete(CMbObject $object) {
+    $this->checkHandled($object);
     if (!$this->isHandled($object)) {
       return false;
     }
@@ -65,6 +108,7 @@ class CSearchObjectHandler extends CMbObjectHandler {
    * @return bool
    */
   function onAfterDelete(CMbObject $object) {
+    $this->checkHandled($object);
     if (!$this->isHandled($object)) {
       return false;
     }
@@ -81,6 +125,7 @@ class CSearchObjectHandler extends CMbObjectHandler {
    * @return bool
    */
   static function requesthandler(CMbObject $object, $type = null) {
+    self::checkHandled($object);
     if ((($object instanceof CConsultation) || ($object instanceof CConsultAnesth))  && !$object->sejour_id) {
       return false;
     }

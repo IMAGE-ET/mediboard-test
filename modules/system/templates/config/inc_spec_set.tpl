@@ -41,6 +41,6 @@
 {{else}}
   {{assign var=_list value="|"|explode:$value}}
   {{foreach from=$_list item=_item name=_list}}
-    {{tr}}config-{{$feature|replace:' ':'-'}}.{{$_item}}{{/tr}}{{if !$smarty.foreach._list.last}}, {{/if}}
+    {{tr}}config-{{$_feature|replace:' ':'-'}}.{{$_item}}{{/tr}}{{if !$smarty.foreach._list.last}}, {{/if}}
   {{/foreach}}
 {{/if}}
