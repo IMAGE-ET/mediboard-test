@@ -42,18 +42,16 @@
     <th id="inc_list_plages_date_th" style="width: 7em;">{{mb_title class=CPlageconsult field=date}}</th>
     <th>{{mb_title class=CPlageconsult field=chir_id}}</th>
     <th>{{mb_title class=CPlageconsult field=libelle}}</th>
-    <th>Nb Patients</th>
+    <th>Nb patients</th>
     <th>Disponibles</th>
   </tr>
   {{foreach from=$listPlage item=_plage}}
-    <tr class="plage{{if $_plage->_id == $plageconsult_id && !$multiple}} selected{{/if}}" id="plage-{{$_plage->_id}}" >
+    <tr class="plage{{if $_plage->_id == $plageconsult_id && !$multiple}} selected{{/if}}" id="plage-{{$_plage->_id}}">
       <td {{if in_array($_plage->date, $bank_holidays)}}style="background: #fc0"{{/if}} class="text">
         {{mb_include template=inc_plage_etat multiple=$multiple offline=$offline}}
       </td>
       <td class="text">
-        <div class="mediuser" style="border-color: #{{$_plage->_ref_chir->_ref_function->color}};">
-          {{$_plage->_ref_chir}}
-        </div>
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_plage->_ref_chir}}
       </td>
       <td class="text">
         <div style="background-color:#{{$_plage->color}};display:inline;">&nbsp;&nbsp;</div>
@@ -62,13 +60,13 @@
             {{mb_include module=system template=inc_object_notes object=$_plage}}
           </span>
         {{/if}}
-        {{$_plage->libelle}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_plage->_guid}}');">{{$_plage->libelle}}</span>
       </td>
-      <td style="text-align: center;">
+      <td style="text-align: center;" {{if !$_plage->_nb_patients}}class="hatching"{{/if}}>
         {{$_plage->_nb_patients}}
       </td>
       <td style="text-align: center;"  class="{{if $_plage->date < $today}}hatching{{/if}}">
-        {{$_plage->_nb_free_freq}}
+        {{if !$_plage->_nb_free_freq}}<strong style="color:red">{{$_plage->_nb_free_freq}}</strong>{{else}}{{$_plage->_nb_free_freq}}{{/if}} / {{$_plage->_total}}
       </td>
       <td>
         {{if $_plage->_consult_by_categorie|@count}}

@@ -326,13 +326,54 @@ class CPlageconsult extends CPlageHoraire {
     $query = "SELECT SUM(`consultation`.`duree`)
               FROM `consultation`
               WHERE `consultation`.`plageconsult_id` = '$this->_id'
-                AND `consultation`.`annule` = '0'";
+                AND `consultation`.`annule` != '1'";
 
     $this->_affected = intval($this->_spec->ds->loadResult($query));
 
     if ($this->_total) {
       $this->_fill_rate = round($this->_affected/$this->_total*100);
     }
+  }
+
+
+  function getConsultTimes() {
+    if (!$this->_id) {
+      return;
+    }
+
+    $ds = $this->getDS();
+    $sql = "SELECT heure, duree
+      FROM consultation, plageconsult
+      WHERE consultation.plageconsult_id = plageconsult.plageconsult_id
+      AND `consultation`.`plageconsult_id` = '$this->_id'
+      AND annule != '1'
+      AND patient_id IS NOT NULL
+    ORDER BY date, heure";
+    $result = $ds->loadList($sql);
+
+    $consults = array();
+    foreach ($result as $_result) {
+      $cons = array("debut" => $_result["heure"], "fin" => CMbDT::time("+ " . $_result["duree"] * $this->_freq . " MINUTES", $_result["heure"]));
+      $consults[] = $cons;
+    }
+
+    $duration = CMbDT::minutesRelative("$this->debut", "$this->fin");
+    $nb_plages = $duration/$this->_freq;
+
+    $nb_rdv_used = 0;
+    for ($a = 0; $a < $nb_plages; $a++) {
+      $min = $a*$this->_freq;
+      $_heure = CMbDT::time("+ $min MINUTES", $this->debut);
+
+      foreach ($consults as $_rdv) {
+        if ($_heure >= $_rdv["debut"] && $_heure < $_rdv["fin"]) {
+          $nb_rdv_used++;
+          break;
+        }
+      }
+    }
+
+    $this->_nb_free_freq = $nb_plages-$nb_rdv_used;
   }
 
   /**
