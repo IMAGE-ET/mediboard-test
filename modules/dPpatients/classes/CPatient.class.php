@@ -192,6 +192,7 @@ class CPatient extends CPerson {
   // Form fields
   public $_vip;
   public $_annees;
+  public $_mois;
   public $_age;
   public $_age_assure;
   public $_civilite;
@@ -913,7 +914,7 @@ class CPatient extends CPerson {
    */
   function evalAgeMois($date = null){
     $achieved = CMbDate::achievedDurations($this->naissance, $date);
-    return $achieved["month"];
+    return $this->_mois = $achieved["month"];
   }
 
   /**
