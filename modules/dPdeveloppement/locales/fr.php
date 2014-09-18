@@ -33,6 +33,7 @@ $locales['mod-dPdeveloppement-tab-mnt_traduction_classes'] = 'Traduction';
 $locales['mod-dPdeveloppement-tab-multiple_server_call'] = 'script multi-server';
 $locales['mod-dPdeveloppement-tab-mutex_tester'] = 'Test Mutex';
 $locales['mod-dPdeveloppement-tab-regression_checker'] = 'Non-regression';
+$locales['mod-dPdeveloppement-tab-routage'] = 'Routage';
 $locales['mod-dPdeveloppement-tab-sniff_code'] = 'Inspection du code';
 $locales['mod-dPdeveloppement-tab-sniff_file'] = 'Inspection du code d\'un fichier';
 $locales['mod-dPdeveloppement-tab-view_logs'] = 'Journal sys.';
