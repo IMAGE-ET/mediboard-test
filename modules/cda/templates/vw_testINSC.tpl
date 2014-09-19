@@ -31,5 +31,12 @@
 <br/>
 {{if $app->user_prefs.LogicielLectureVitale == 'vitaleVision'}}
   {{include file="../../dPpatients/templates/inc_vitalevision.tpl" debug=false keepFiles=true}}
+{{elseif $app->user_prefs.LogicielLectureVitale == "mbHost"}}
+  {{mb_script module=mbHost script=mbHost}}
+  {{mb_script module=mbHost script=vitaleCard}}
+{{else}}
+  <div class="warning">Aucune préférence choisie pour la lecture de carte vitale</div>
 {{/if}}
+<div id="modal-display-message" style="display: none;">
+</div>
 <div id ="test_insc"></div>
