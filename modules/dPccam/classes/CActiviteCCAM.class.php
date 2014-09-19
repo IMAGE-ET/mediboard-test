@@ -39,9 +39,6 @@ class CActiviteCCAM extends CCCAM {
   /** @var  CPhaseCCAM[] */
   public $_ref_phases;
 
-  // Modificateurs de convergence disponibles
-  public $_ref_convergence;
-
   // Elements de référence pour la récupération d'informations
   public $_code;
   public $_phase;
@@ -108,25 +105,6 @@ class CActiviteCCAM extends CCCAM {
     $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
     return $this->_libelle_activite = $row["LIBELLE"];
-  }
-
-  /**
-   * Récupération des modificateurs de convergence
-   * pour une activité donnée
-   *
-   * @return object liste de modificateurs de convergence disponibles
-   */
-  function loadRefConvergence() {
-    $ds = self::$spec->ds;
-    // Recherche de la ligne des modificateurs de convergence
-    $query = "SELECT *
-              FROM convergence
-              WHERE convergence.code = %1
-                AND convergence.activite = %2";
-    $query = $ds->prepare($query, $this->_code, $this->code_activite);
-    $result = $ds->exec($query);
-    $this->_ref_convergence = $ds->fetchObject($result);
-    return $this->_ref_convergence;
   }
 
   /**

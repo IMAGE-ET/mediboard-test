@@ -203,7 +203,6 @@ class CCodeCCAM extends CCCAM {
         $_activite->loadRefAssociations();
       }
 
-      $_activite->loadRefConvergence();
       $_activite->loadRefModificateurs();
       foreach ($_activite->_ref_modificateurs as $_date_modif) {
         foreach ($_date_modif as $_modif) {
@@ -219,6 +218,7 @@ class CCodeCCAM extends CCCAM {
       foreach ($_activite->_ref_phases as $_phase) {
         $_phase->loadRefInfo();
         $_phase->loadRefDentsIncomp();
+        $_phase->loadRefConvergence();
         foreach ($_phase->_ref_dents_incomp as $_dent) {
           $_dent->loadRefDent();
           $_dent->_ref_dent->loadLibelle();

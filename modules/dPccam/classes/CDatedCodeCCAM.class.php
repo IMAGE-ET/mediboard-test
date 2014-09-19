@@ -306,8 +306,8 @@ class CDatedCodeCCAM {
     }
     // Détail des activités
     foreach ($this->activites as &$activite) {
-      $this->getModificateursFromActivite($activite);
       $this->getPhasesFromActivite($activite);
+      $this->getModificateursFromActivite($activite);
     }
     // Test de la présence d'activité virtuelle
     /**
@@ -335,14 +335,15 @@ class CDatedCodeCCAM {
 
   /**
    * Récupération des modificateurs de convergence
-   * pour une activité donnée
+   * pour une phase d'une activité donnée
    *
    * @param object $activite Activité concernée
+   * @param object $phase    Phase concernée
    *
    * @return object liste de modificateurs de convergence disponibles
    */
-  function getConvergenceFromActivite($activite) {
-    return $this->_ref_code_ccam->_ref_activites[$activite->numero]->_ref_convergence;
+  function getConvergenceFromActivitePhase($activite, $phase) {
+    return $this->_ref_code_ccam->_ref_activites[$activite->numero]->_ref_phases[$phase->phase]->_ref_convergence;
   }
 
   /**
@@ -353,7 +354,6 @@ class CDatedCodeCCAM {
    * @return void
    */
   function getModificateursFromActivite(&$activite) {
-    $convergence = $this->getConvergenceFromActivite($activite);
     $listModifConvergence = array("X", "I", "9", "O");
     // Extraction des modificateurs
     $activite->modificateurs = array();
@@ -366,6 +366,7 @@ class CDatedCodeCCAM {
       }
     }
     $modifsConvergence = array();
+    // Ajout des modificateurs normaux
     foreach ($listModificateurs as $modificateur) {
       // Cas d'un modificateur de convergence
       $_modif = new CObject();
@@ -383,40 +384,33 @@ class CDatedCodeCCAM {
       }
     }
 
-    if (!empty($modifsConvergence)) {
-      if (count($modifsConvergence) == 1) {
-        $simple = 'mod' . $modifsConvergence[0]->modificateur;
-        $double = 'mod' . $modifsConvergence[0]->modificateur . $modifsConvergence[0]->modificateur;
-        if ($convergence->$simple) {
-          $_modif = new CObject();
-          $_modif->code    = $modifsConvergence[0]->modificateur;
-          $_modif->libelle = $modifsConvergence[0]->_libelle;
-          $_modif->_checked = null;
-          $_modif->_state = null;
-          $_modif->_double = "1";
-          $modificateurs[] = $_modif;
+    foreach ($activite->phases as &$_phase) {
+      // Ajout des modificateurs pour les phases dont le tarif existe
+      $_phase->_modificateurs = array();
+      if ($_phase->tarif) {
+        $_phase->_modificateurs = $activite->modificateurs;
+        $convergence = $this->getConvergenceFromActivitePhase($activite, $_phase);
+
+        $mod_convergence_text = '';
+        foreach ($modifsConvergence as $_modif_convergence) {
+          $mod_simple = 'mod' . $_modif_convergence->modificateur;
+          $mod_double = 'mod' . $_modif_convergence->modificateur . $_modif_convergence->modificateur;
+          if ($convergence->$mod_simple) {
+            $mod_convergence_text .= $_modif_convergence->modificateur;
+          }
+          elseif ($convergence->$mod_double) {
+            $mod_convergence_text .= $_modif_convergence->modificateur . $_modif_convergence->modificateur;
+          }
         }
-        elseif ($convergence->$double) {
+
+        if ($mod_convergence_text != '') {
           $_modif = new CObject();
-          $_modif->code    = $modifsConvergence[0]->modificateur . $modifsConvergence[0]->modificateur;
-          $_modif->libelle = $modifsConvergence[0]->_libelle;
+          $_modif->code = $mod_convergence_text;
+          $_modif->libelle = 'Modificateur transitoire de convergence vers la cible';
           $_modif->_checked = null;
           $_modif->_state = null;
-          $_modif->_double = "2";
-          $modificateurs[] = $_modif;
-        }
-      }
-      else {
-        $field_1 = 'mod' . $modifsConvergence[0]->modificateur;
-        $field_2 = 'mod' . $modifsConvergence[1]->modificateur;
-        if ($convergence->$field_1 && $convergence->$field_2) {
-          $_modif = new CObject();
-          $_modif->code    = $modifsConvergence[0]->modificateur . $modifsConvergence[1]->modificateur;
-          $_modif->libelle = $modifsConvergence[0]->_libelle;
-          $_modif->_checked = null;
-          $_modif->_state = null;
-          $_modif->_double = "2";
-          $modificateurs[] = $_modif;
+          $_modif->_double = strlen($_modif->code);
+          $_phase->_modificateurs[] = $_modif;
         }
       }
     }
@@ -465,9 +459,6 @@ class CDatedCodeCCAM {
       elseif ($this->_sorted_tarif === null) {
         $this->_sorted_tarif = 2;
       }
-
-      // Ajout des modificateurs pour les phases dont le tarif existe
-      $datedPhase->_modificateurs = $datedPhase->tarif ? $activite->modificateurs : array();
 
       // Ajout de la phase
       $phases[$phase->code_phase] = $datedPhase;
