@@ -111,7 +111,7 @@ Grossesse = {
 
     var url = new Url("maternite", "ajax_update_fieldset_etat_actuel");
     url.addParam("patient_id", Grossesse.parturiente_id);
-    url.requestUpdate("etat_actuel_grossesse");
+    url.requestUpdate($("etat_actuel_grossesse").up());
   }
 }
 
