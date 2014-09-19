@@ -300,7 +300,7 @@ class CCronJob extends CMbObject {
    * @return string
    */
   function makeUrl() {
-    $base = CAppUI::conf("base_url");
+    $base = rtrim(CAppUI::conf("base_url"), "/");
 
     $this->_params["login"] = "$this->cron_login:$this->cron_password";
 
