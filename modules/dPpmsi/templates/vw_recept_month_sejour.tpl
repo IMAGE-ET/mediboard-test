@@ -21,13 +21,16 @@
 
   <tr>
     <th class="text">
-      <a title="Toutes les sorties" href="#1"> Sort. </a>
+      <a class="{{if !$tri_recept && !$tri_complet}}selected{{else}}selectable{{/if}}" title="Toutes les sorties" href="#"
+         onclick="Reception.filterSortie(0, 0);">Sort.</a>
     </th>
     <th class="text">
-      <a title="Dossiers réceptionnées" href="#1"> Recept. </a>
+      <a class="{{if $tri_recept && !$tri_complet}}selected{{else}}selectable{{/if}}" title="Dossiers réceptionnées" href="#"
+         onclick="Reception.filterSortie(1, 0);">Recept.</a>
     </th>
     <th class="text">
-      <a title="Dossiers complétés" href="#1"> Compl. </a>
+      <a class="{{if !$tri_recept && $tri_complet}}selected{{else}}selectable{{/if}}" title="Dossiers complétés" href="#"
+         onclick="Reception.filterSortie(1, 1);">Compl.</a>
     </th>
   </tr>
 

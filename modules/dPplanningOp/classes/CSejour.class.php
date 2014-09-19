@@ -1135,7 +1135,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     // Sectorisation Rules
     $this->getServiceFromSectorisationRules();
 
-    if ($this->fieldModified("completion_sortie") && !$this->reception_sortie) {
+    if ($this->fieldModified("completion_sortie") && $this->completion_sortie && !$this->reception_sortie) {
       $this->reception_sortie = $this->completion_sortie;
     }
 

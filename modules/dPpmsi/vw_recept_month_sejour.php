@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage PMSI
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -20,6 +20,8 @@ CMbArray::removeValue("", $service_id);
 $prat_id        = CValue::getOrSession("prat_id");
 $order_way      = CValue::getOrSession("order_way", "ASC");
 $order_col      = CValue::getOrSession("order_col", "patient_id");
+$tri_recept     = CValue::getOrSession("tri_recept");
+$tri_complet    = CValue::getOrSession("tri_complet");
 $date           = CValue::getOrSession("date", CMbDT::date());
 
 $month_min  = CMbDT::date("first day of +0 month", $date);
@@ -135,6 +137,8 @@ $smarty = new CSmartyDP();
 $smarty->assign("filterFunction", $filterFunction);
 $smarty->assign("order_way"    , $order_way);
 $smarty->assign("order_col"    , $order_col);
+$smarty->assign("tri_recept"   , $tri_recept);
+$smarty->assign("tri_complet"  , $tri_complet);
 $smarty->assign('date'         , $date);
 $smarty->assign('lastmonth'    , $lastmonth);
 $smarty->assign('nextmonth'    , $nextmonth);

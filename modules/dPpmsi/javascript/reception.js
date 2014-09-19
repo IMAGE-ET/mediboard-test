@@ -19,6 +19,7 @@ Reception = {
     Reception.reloadListSejours();
   },
 
+
   reloadMonthSejours: function() {
     var form = getForm(Reception.form);
     var url = new Url("pmsi" , "vw_recept_month_sejour");
@@ -29,6 +30,8 @@ Reception = {
     url.addParam("filterFunction" , $V(form.filterFunction));
     url.addParam("order_col" , $V(form.order_col));
     url.addParam("order_way" , $V(form.order_way));
+    url.addParam("tri_recept"  , $V(form.tri_recept));
+    url.addParam("tri_complet" , $V(form.tri_complet));
     url.addParam("period"    , $V(form.period));
     url.requestUpdate('allSejours');
   },
@@ -43,8 +46,17 @@ Reception = {
     url.addParam("filterFunction" , $V(form.filterFunction));
     url.addParam("order_col" , $V(form.order_col));
     url.addParam("order_way" , $V(form.order_way));
+    url.addParam("tri_recept" , $V(form.tri_recept));
+    url.addParam("tri_complet", $V(form.tri_complet));
     url.addParam("period"    , $V(form.period));
     url.requestUpdate('listSejours');
+  },
+
+  filterSortie: function(tri_recept, tri_complet) {
+    var form = getForm(Reception.form);
+    $V(form.tri_recept  , tri_recept);
+    $V(form.tri_complet , tri_complet);
+    Reception.reloadAll();
   },
 
   filter: function(input, table) {

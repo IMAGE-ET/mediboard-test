@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id:$
+* $Id$
 *
 * @package    Mediboard
 * @subpackage PMSI
 * @author     SARL OpenXtrem <dev@openxtrem.com>
 * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-* @version    $Revision:$
+* @version    $Revision$
 */
 
 CCanDo::checkRead();
@@ -20,6 +20,8 @@ CMbArray::removeValue("", $service_id);
 $prat_id        = CValue::getOrSession("prat_id");
 $order_way      = CValue::getOrSession("order_way", "ASC");
 $order_col      = CValue::getOrSession("order_col", "sortie_reelle");
+$tri_recept     = CValue::getOrSession("tri_recept");
+$tri_complet    = CValue::getOrSession("tri_complet");
 $date           = CValue::getOrSession("date", CMbDT::date());
 $period         = CValue::getOrSession("period");
 
@@ -68,6 +70,14 @@ if ($period) {
   else {
     $date_min = CMbDT::dateTime($hour, $date);
   }
+}
+
+if ($tri_recept) {
+  $where["sejour.reception_sortie"] = " IS NULL";
+}
+
+if ($tri_complet) {
+  $where["sejour.completion_sortie"] = " IS NULL";
 }
 
 $where["sejour.group_id"] = "= '$group->_id'";

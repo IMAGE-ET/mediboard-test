@@ -20,6 +20,8 @@
     <td style="float: right">
       <form action="?" name="selType" method="get">
         <input type="hidden" name="date" value="{{$date}}" />
+        <input type="hidden" name="tri_recept" value="{{$tri_recept}}" />
+        <input type="hidden" name="tri_complet" value="{{$tri_complet}}" />
         <input type="hidden" name="order_col" value="{{$order_col}}" />
         <input type="hidden" name="order_way" value="{{$order_way}}" />
         <input type="hidden" name="filterFunction" value="{{$filterFunction}}" />

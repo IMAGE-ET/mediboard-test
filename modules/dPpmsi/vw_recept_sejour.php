@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage PMSI
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -14,11 +14,6 @@ $date       = CValue::getOrSession("date", CMbDT::date());
 $type       = CValue::getOrSession("type");
 $service_id = CValue::getOrSession("service_id");
 $prat_id    = CValue::getOrSession("prat_id");
-$filterFunction = CValue::getOrSession("filterFunction");
-$order_way  = CValue::getOrSession("order_way", "ASC");
-$order_col  = CValue::getOrSession("order_col", "patient_id");
-$date       = CValue::getOrSession("date", CMbDT::date());
-$period     = CValue::getOrSession("period");
 
 $sejour = new CSejour();
 $sejour->_type_admission = $type;
@@ -39,13 +34,15 @@ $prats = $prat->loadPraticiens();
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("sejour"       , $sejour);
-$smarty->assign("services"     , $services);
-$smarty->assign("prats"        , $prats);
-$smarty->assign("order_way"    , $order_way);
-$smarty->assign("order_col"    , $order_col);
-$smarty->assign("date"         , $date);
-$smarty->assign("period"       , $period);
-$smarty->assign("filterFunction"         , $filterFunction);
+$smarty->assign("sejour"        , $sejour);
+$smarty->assign("services"      , $services);
+$smarty->assign("prats"         , $prats);
+$smarty->assign("order_way"     , CValue::getOrSession("order_way", "ASC"));
+$smarty->assign("order_col"     , CValue::getOrSession("order_col", "patient_id"));
+$smarty->assign("tri_recept"    , CValue::getOrSession("tri_recept"));
+$smarty->assign("tri_complet"   , CValue::getOrSession("tri_complet"));
+$smarty->assign("date"          , $date);
+$smarty->assign("period"        , CValue::getOrSession("period"));
+$smarty->assign("filterFunction", CValue::getOrSession("filterFunction"));
 
 $smarty->display("vw_recept_sejour.tpl");
