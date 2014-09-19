@@ -11,19 +11,17 @@
  */
 
 CCanDo::checkRead();
-
-$ds = CSQLDataSource::get("std");
-
-$date  = CValue::getOrSession("date", CMbDT::date());
+$ds   = CSQLDataSource::get("std");
+$date = CValue::getOrSession("date", CMbDT::date());
 
 // Toutes les salles des blocs
 $listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ, true, "nom", array("type" => "= 'obst'"));
 
 // Les salles autorisées
 $salle = new CSalle();
-$ljoin = array("bloc_operation" => "sallesbloc.bloc_id = bloc_operatoire.bloc_id");
+$ljoin = array("bloc_operatoire" => "sallesbloc.bloc_id = bloc_operatoire.bloc_operatoire_id");
 $where = array("bloc_operatoire.type" => "= 'obst'");
-$listSalles = $salle->loadListWithPerms(PERM_READ);
+$listSalles = $salle->loadListWithPerms(PERM_READ, $where, null, null, null, $ljoin);
 
 // Chargement des Chirurgiens
 $chir      = new CMediusers();
@@ -132,10 +130,10 @@ $smarty = new CSmartyDP();
 $smarty->debugging = false;
 
 $smarty->assign("urgences"  , $urgences);
-$smarty->assign("listBlocs",  $listBlocs);
+$smarty->assign("listBlocs" , $listBlocs);
 $smarty->assign("listSalles", $listSalles);
-$smarty->assign("anesths",    $anesths);
-$smarty->assign("date", $date);
+$smarty->assign("anesths"   , $anesths);
+$smarty->assign("date"      , $date);
 $smarty->assign("date_last_checklist", $date_last_checklist);
 
 $smarty->display("vw_placement.tpl");
