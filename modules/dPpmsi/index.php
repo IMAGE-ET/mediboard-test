@@ -22,3 +22,7 @@ $module->registerTab("form_print_planning", TAB_READ);
 if (CAppUI::conf("ref_pays") == "2") {
   $module->registerTab("vw_idx_sortie"     , TAB_READ);
 }
+
+if (CAppUI::conf("dPpmsi display see_recept_dossier", CGroups::loadCurrent())) {
+  $module->registerTab("vw_recept_sejour"     , TAB_READ);
+}

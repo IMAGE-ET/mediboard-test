@@ -116,6 +116,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $date_accident;
   public $nature_accident;
 
+  public $reception_sortie;
+  public $completion_sortie;
+
   // Form Fields
   /** @deprecated */
   public $_entree;
@@ -514,6 +517,9 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     $props["date_accident"]            = "date";
     $props["nature_accident"]          = "enum list|P|T|D|S|J|C|L|B|U";
+
+    $props["reception_sortie"]         = "dateTime";
+    $props["completion_sortie"]        = "dateTime";
 
     // Clôture des actes
     $props["cloture_activite_1"]    = "bool default|0";
@@ -1128,6 +1134,14 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Sectorisation Rules
     $this->getServiceFromSectorisationRules();
+
+    if ($this->fieldModified("completion_sortie") && !$this->reception_sortie) {
+      $this->reception_sortie = $this->completion_sortie;
+    }
+
+    if ($this->fieldModified("reception_sortie", "") && !$this->completion_sortie) {
+      $this->completion_sortie = "";
+    }
 
     $this->getUFs();
     // On fait le store du séjour

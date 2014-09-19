@@ -1790,7 +1790,17 @@ class CSetupdPplanningOp extends CSetup {
     $query = "ALTER TABLE `operations`
                 ADD INDEX (`exec_tarif`);";
     $this->addQuery($query);
+    $this->makeRevision('1.92');
 
-    $this->mod_version = '1.92';
+    $query = "ALTER TABLE `sejour`
+                ADD `reception_sortie` DATETIME,
+                ADD `completion_sortie` DATETIME;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `sejour`
+                ADD INDEX (`reception_sortie`),
+                ADD INDEX (`completion_sortie`);";
+    $this->addQuery($query);
+
+    $this->mod_version = '1.93';
   }
 }
