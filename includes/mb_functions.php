@@ -470,7 +470,7 @@ function mb_crc32($data) {
 function build_error_log() {
   if (!is_file(LOG_PATH)) {
     $initTime = date("Y-m-d H:i:s");
-    $logInit = "<h2>Log de Mediboard ré-initialisés depuis $initTime</h2>
+    $logInit = "<h2>Log de Mediboard ré-initialisés depuis le ".CMbDT::dateToLocale($initTime)."</h2>
       <script>
         function toggle_info(anchor) {
           var style = anchor.parentNode.getElementsByTagName('span')[0].style;

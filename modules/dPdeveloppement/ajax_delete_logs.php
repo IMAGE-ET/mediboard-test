@@ -45,6 +45,8 @@ if ($log_size > $log_size_limit) {
 $log_content = file_get_contents(CError::LOG_PATH, false, null, $offset);
 
 $log_size_deca = CMbString::toDecaBinary($log_size);
-CAppUI::js("Control.Tabs.setTabCount('error-file', '$log_size_deca')");
+if (CAppUI::conf("error_logs_in_db")) {
+  CAppUI::js("Control.Tabs.setTabCount('error-file', '$log_size_deca')");
+}
 
 echo $log_content;
