@@ -516,27 +516,9 @@ class CCodageCCAM extends CMbObject {
           break;
       }
 
-      /* If the modifier has already been checked by a user, we don't modify it */
-      if (!isset($_modifier->_checked)) {
+      if (!$act->_id && !isset($_modifier->_checked)) {
         $_modifier->_checked = $checked;
       }
-
-      if (
-          $act->_id && $_modifier->_checked && (
-            ($_modifier->_double == 1 && !in_array($_modifier->code, $act->_modificateurs) ||
-            ($_modifier->_double == 1 && !in_array($_modifier->code[0], $act->_modificateurs) && !in_array($_modifier->code[1], $act->_modificateurs))))
-      ) {
-        $store_act = 1;
-        $modifiers_to_add .= $_modifier->code;
-      }
-    }
-
-    /* Store de l'acte si des modificateurs ont été codés en automatique */
-    if ($store_act) {
-      $act->modificateurs .= $modifiers_to_add;
-      $act->_modificateurs = array_merge($act->_modificateurs, str_split($modifiers_to_add));
-      $act->_calcul_montant_base = true;
-      $act->store();
     }
   }
 
