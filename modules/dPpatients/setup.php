@@ -2677,10 +2677,10 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("2.16");
 
     $query = "UPDATE `user_preferences` SET `key` = 'LogicielLectureVitale', `value` = 'none'
-                WHERE `key` = 'VitaleVision' AND `value` = 0;";
+                WHERE `key` = 'VitaleVision' AND `value` = '0';";
     $this->addQuery($query);
     $query = "UPDATE `user_preferences` SET `key` = 'LogicielLectureVitale', `value` = 'vitaleVision'
-                WHERE `key` = 'VitaleVision' AND `value` = 1;";
+                WHERE `key` = 'VitaleVision' AND `value` = '1';";
     $this->addQuery($query);
 
     $this->makeRevision("2.17");
