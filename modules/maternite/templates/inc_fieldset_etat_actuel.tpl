@@ -13,8 +13,8 @@
 {{assign var=grossesse   value=$patient->_ref_last_grossesse}}
 {{assign var=allaitement value=$patient->_ref_last_allaitement}}
 
-<div id="etat_actuel_grossesse">
-  <fieldset>
+<div>
+  <fieldset id="etat_actuel_grossesse">
     <legend>Etat actuel</legend>
 
     <table class="layout">
