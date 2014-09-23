@@ -4028,8 +4028,8 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     $ljoin = array("uf" => "uf.uf_id = affectation_uf.uf_id");
     $where = array();
-    $where[] = "uf.date_debut IS NULL OR uf.date_debut < '$this->_date_sortie_prevue'";
-    $where[] = "uf.date_fin IS NULL OR uf.date_fin > '$this->_date_entree_prevue'";
+    $where[] = "uf.date_debut IS NULL OR uf.date_debut < '".CMbDT::date($this->sortie)."'";
+    $where[] = "uf.date_fin IS NULL OR uf.date_fin > '".CMbDT::date($this->entree)."'";
 
     if (!$this->uf_hebergement_id || $this->fieldModified("service_id")) {
       $affectation_uf = new CAffectationUniteFonctionnelle();

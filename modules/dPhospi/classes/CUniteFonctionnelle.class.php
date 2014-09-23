@@ -106,21 +106,33 @@ class CUniteFonctionnelle extends CMbObject {
    *
    * @param string $code_uf  code de l'uf
    * @param string $type     type de l'uf
-   * @param int    $group_id group_id
+   * @param int    $group_id group
+   * @param string $date_deb date de début
+   * @param string $date_fin date de fin
    *
    * @return CUniteFonctionnelle
    */
-  static function getUF($code_uf, $type = null, $group_id = null) {
+  static function getUF($code_uf, $type = null, $group_id = null, $date_deb = null, $date_fin = null) {
     $uf = new self;
 
     if (!$code_uf) {
       return $uf;
     }
 
-    $uf->code = $code_uf;
-    $uf->type = $type;
-    $uf->group_id = $group_id ? $group_id : CGroups::loadCurrent()->_id;
-    $uf->loadMatchingObject();
+    $group_id = $group_id ? $group_id : CGroups::loadCurrent()->_id;
+
+    $where["code"]     = " = '$code_uf'";
+    $where["type"]     = " = '$type'";
+    $where["group_id"] = " = '$group_id'";
+
+    if ($date_fin) {
+      $where[] = "uf.date_debut IS NULL OR uf.date_debut < '".CMbDT::date($date_fin)."'";
+    }
+    if ($date_deb) {
+      $where[] = "uf.date_fin IS NULL OR uf.date_fin > '".CMbDT::date($date_deb)."'";
+    }
+
+    $uf->loadObject($where);
 
     return $uf;
   }

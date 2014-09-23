@@ -1513,7 +1513,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         // et mettre à 'effectuee' la précédente si elle existe sinon création de celle-ci
         if (!$affectation->_id) {
           // Récupération du Lit et UFs
-          $this->getPL($PV1_3, $affectation);
+          $this->getPL($PV1_3, $affectation, $newVenue);
 
           $return_affectation = $newVenue->forceAffectation($affectation);
           //$datetime, $affectation->lit_id, $affectation->service_id);
@@ -1571,7 +1571,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $affectation_uf = new CAffectationUniteFonctionnelle();
 
       // On essaye de récupérer le service dans ce cas depuis l'UF d'hébergement
-      $uf = CUniteFonctionnelle::getUF($this->queryTextNode("PL.1", $PV1_3), "hebergement", $newVenue->group_id);
+      $date_deb = $affectation->_id ? CMbDT::date($affectation->sortie) : CMbDT::date($newVenue->sortie);
+      $date_fin = $affectation->_id ? CMbDT::date($affectation->entree) : CMbDT::date($newVenue->entree);
+      $uf = CUniteFonctionnelle::getUF($this->queryTextNode("PL.1", $PV1_3), "hebergement", $newVenue->group_id, $date_deb, $date_fin);
       if ($uf->code && $uf->_id) {
         $affectation_uf->uf_id        = $uf->_id;
         $affectation_uf->object_class = "CService";
@@ -1584,10 +1586,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         $newVenue->uf_hebergement_id = $affectation_uf->uf_id;
       }
 
-      $uf_med = $this->mappingUFMedicale($data);
+      $uf_med = $this->mappingUFMedicale($data, $newVenue, $affectation);
       $newVenue->uf_medicale_id = $uf_med ? $uf_med->_id : null;
 
-      $uf_soins = $this->mappingUFSoins($data);
+      $uf_soins = $this->mappingUFSoins($data, $newVenue, $affectation);
       $newVenue->uf_soins_id  = $uf_soins ? $uf_soins->_id : null;
 
       // On ne check pas la cohérence des dates des consults/intervs
@@ -1605,11 +1607,12 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
 
     // Récupération du Lit et UFs
-    $this->getPL($PV1_3, $affectation);
-    $uf_med = $this->mappingUFMedicale($data);
+    $this->getPL($PV1_3, $affectation, $newVenue);
+
+    $uf_med = $this->mappingUFMedicale($data, $newVenue, $affectation);
     $affectation->uf_medicale_id = $uf_med ? $uf_med->_id : null;
 
-    $uf_soins = $this->mappingUFSoins($data);
+    $uf_soins = $this->mappingUFSoins($data, $newVenue, $affectation);
     $affectation->uf_soins_id = $uf_soins ? $uf_soins->_id : null;
 
     $affectation->_eai_sender_guid = $sender->_guid;
@@ -1719,11 +1722,13 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   /**
    * Mapping de l'UF médicale
    *
-   * @param array $data Datas
+   * @param array        $data        Datas
+   * @param CSejour      $newVenue    Séjour
+   * @param CAffectation $affectation Affectation
    *
    * @return CUniteFonctionnelle|null
    */
-  function mappingUFMedicale($data) {
+  function mappingUFMedicale($data, CSejour $newVenue, CAffectation $affectation = null) {
     if (!array_key_exists("ZBE", $data)) {
       return null;
     }
@@ -1735,17 +1740,22 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return null;
     }
 
-    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_7), "medicale");
+    $date_deb = $affectation && $affectation->_id ? CMbDT::date($affectation->sortie) : CMbDT::date($newVenue->sortie);
+    $date_fin = $affectation && $affectation->_id ? CMbDT::date($affectation->entree) : CMbDT::date($newVenue->entree);
+
+    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_7), "medicale", $newVenue->group_id, $date_deb, $date_fin);
   }
 
   /**
    * Mapping de l'UF de soins
    *
-   * @param array $data Datas
+   * @param array        $data        Datas
+   * @param CSejour      $newVenue    Séjour
+   * @param CAffectation $affectation Affectation
    *
    * @return CUniteFonctionnelle|null
    */
-  function mappingUFSoins($data) {
+  function mappingUFSoins($data, CSejour $newVenue, CAffectation $affectation = null) {
     if (!array_key_exists("ZBE", $data)) {
       return null;
     }
@@ -1756,7 +1766,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return null;
     }
 
-    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_8), "soins");
+    $date_deb = $affectation && $affectation->_id ? CMbDT::date($affectation->sortie) : CMbDT::date($newVenue->sortie);
+    $date_fin = $affectation && $affectation->_id ? CMbDT::date($affectation->entree) : CMbDT::date($newVenue->entree);
+
+    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_8), "soins", $newVenue->group_id, $date_deb, $date_fin);
   }
 
   /**
@@ -1842,7 +1855,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $type = $patient_class ? $patient_class : "comp";
 
     if ($data && array_key_exists("ZBE", $data)) {
-      $uf_med = $this->mappingUFMedicale($data);
+      $uf_med = $this->mappingUFMedicale($data, $newVenue);
       if ($uf_med && $uf_med->type_sejour) {
         $type = $uf_med->type_sejour;
       }
@@ -1856,10 +1869,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
    *
    * @param DOMNode      $node        PV1 Node
    * @param CAffectation $affectation Affectation
+   * @param CSejour      $newVenue    Séjour
    *
    * @return void
    */
-  function getPL(DOMNode $node, CAffectation $affectation) {
+  function getPL(DOMNode $node, CAffectation $affectation, CSejour $newVenue = null) {
     $sender = $this->_ref_sender;
 
     // Récupération de la chambre
@@ -1913,10 +1927,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Affectation du lit
     $affectation->lit_id = $lit->_id;
 
-    $code_uf = $this->queryTextNode("PL.1", $node);
 
     // Affectation de l'UF hébergement
-    $uf = CUniteFonctionnelle::getUF($code_uf, null, $sender->group_id);
+    $date_deb = $affectation->_id ? CMbDT::date($affectation->sortie) : CMbDT::date($newVenue->sortie);
+    $date_fin = $affectation->_id ? CMbDT::date($affectation->entree) : CMbDT::date($newVenue->entree);
+    $uf = CUniteFonctionnelle::getUF($this->queryTextNode("PL.1", $node), "hebergement", $newVenue->group_id, $date_deb, $date_fin);
 
     if (!$uf->_id) {
       return;

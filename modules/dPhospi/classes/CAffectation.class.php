@@ -584,8 +584,8 @@ class CAffectation extends CMbObject {
     );
 
     $where = array();
-    $where[] = "uf.date_debut IS NULL OR uf.date_debut < '$this->sortie'";
-    $where[] = "uf.date_fin IS NULL OR uf.date_fin > '$this->entree'";
+    $where[] = "uf.date_debut IS NULL OR uf.date_debut < '".CMbDT::date($this->sortie)."'";
+    $where[] = "uf.date_fin IS NULL OR uf.date_fin > '".CMbDT::date($this->entree)."'";
 
     if (!$this->uf_hebergement_id || $this->fieldModified("service_id") || $this->fieldModified("lit_id")) {
       $affectation_uf = new CAffectationUniteFonctionnelle();
