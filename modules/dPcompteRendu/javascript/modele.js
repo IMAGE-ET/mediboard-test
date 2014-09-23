@@ -21,7 +21,7 @@ Modele = {
     url.modal({width: "95%", height: "90%", onClose: Modele.refresh, closeOnEscape: false, waitingText: true});
   },
 
-  delete: function(compte_rendu_id, nom) {
+  remove: function(compte_rendu_id, nom) {
     var form = getForm("deleteModele");
     $V(form.compte_rendu_id, compte_rendu_id);
     confirmDeletion(form, {

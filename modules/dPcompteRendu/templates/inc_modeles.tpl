@@ -135,7 +135,7 @@
       <td>
         {{if $_modele->_canEdit}}
           <button class="trash notext" type="button"
-                  onclick="Modele.delete('{{$_modele->_id}}', '{{$_modele->nom|smarty:nodefaults|JSAttribute}}')">
+                  onclick="Modele.remove('{{$_modele->_id}}', '{{$_modele->nom|smarty:nodefaults|JSAttribute}}')">
             {{tr}}Delete{{/tr}}
           </button>
         {{/if}}
