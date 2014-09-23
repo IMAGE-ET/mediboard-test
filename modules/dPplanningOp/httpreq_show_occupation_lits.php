@@ -34,7 +34,7 @@ if ($type && $entree) {
   $nb_sejour = $sejour->countList($where);
 }
 
-$occupation = 0;
+$occupation = -1;
 if ($type == "ambu" && $group->_configs["max_ambu"]) {
   $occupation = $nb_sejour / $group->_configs["max_ambu"] * 100;
 }
