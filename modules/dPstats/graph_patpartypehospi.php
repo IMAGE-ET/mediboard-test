@@ -65,10 +65,19 @@ function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service
         sejour.group_id = '".CGroups::loadCurrent()->_id."' AND
         sejour.type = '$key' AND
         sejour.annule = '0'";
-    if ($service_id)    $query .= "\nAND service.service_id = '$service_id'";
-    if ($prat_id)       $query .= "\nAND sejour.praticien_id = '$prat_id'";
-    if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-    if ($septique)       $query .= "\nAND sejour.septique = '$septique'";
+
+    if ($service_id) {
+      $query .= "\nAND service.service_id = '$service_id'";
+    }
+    if ($prat_id) {
+      $query .= "\nAND sejour.praticien_id = '$prat_id'";
+    }
+    if ($discipline_id) {
+      $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+    }
+    if ($septique) {
+      $query .= "\nAND sejour.septique = '$septique'";
+    }
 
     $query .= "\nGROUP BY mois ORDER BY orderitem";
 
@@ -93,9 +102,15 @@ function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service
   $series[] = $serie_total;
 
   $subtitle = "$total patients";
-  if ($prat_id)       $subtitle .= " - Dr $prat->_view";
-  if ($discipline_id) $subtitle .= " - $discipline->_view";
-  if ($septique)      $subtitle .= " - Septiques";
+  if ($prat_id) {
+    $subtitle .= " - Dr $prat->_view";
+  }
+  if ($discipline_id) {
+    $subtitle .= " - $discipline->_view";
+  }
+  if ($septique) {
+    $subtitle .= " - Septiques";
+  }
 
   $options = array(
     'title' => utf8_encode("Nombre d'admissions par type d'hospitalisation - $type_data"),
