@@ -164,7 +164,7 @@ class CExternalDBImport {
     return $query;
   }
 
-  static function importByClass($class, $start = null, $count = null, $reimport = false, $chir_id = null, $order = null, $date = null) {
+  static function importByClass($class, $start = null, $count = null, $reimport = false, $chir_id = null, $order = null, $date = null, $id = null) {
     if (!is_subclass_of($class, "CExternalDBImport")) {
       CAppUI::stepAjax("Classe invalide", UI_MSG_ERROR);
     }
@@ -179,7 +179,7 @@ class CExternalDBImport {
 
     $order_by = $object->getOrderBy();
 
-    if ($date) {
+    if ($date || $id) {
       if ($object->_sql_restriction) {
         $query .= " AND ";
       }
@@ -196,7 +196,13 @@ class CExternalDBImport {
         $date_max = CMbDT::date("+6 MONTH", $date);
       }
 
-      $query .= " $order_by BETWEEN '$date_min' AND '$date_max'";
+      if ($date_min) {
+        $query .= " $order_by BETWEEN '$date_min' AND '$date_max'";
+      }
+
+      if ($id) {
+        $query .= " $object->_key > '$id'";
+      }
     }
 
     if ($order && $order_by) {
@@ -214,16 +220,13 @@ class CExternalDBImport {
       $key_multi = explode("|", $key_name);
     }
 
+    $oracle = $ds instanceof COracleDataSource;
+
     //echo $query;
     $res = $ds->exec($query);
 
+    $last_id = null;
     while ($count && ($hash = $ds->fetchAssoc($res, false))) {
-      $oracle = $ds instanceof COracleDataSource;
-
-      if (!$oracle) {
-        $hash = array_change_key_case($hash, CASE_UPPER);
-      }
-
       if ($key_multi) {
         $_values = array();
         foreach ($key_multi as $_col) {
@@ -249,10 +252,16 @@ class CExternalDBImport {
         continue;
       }
 
-      $count--;
+      if ($count-- == 1) {
+        $last_id = $import_object->getId($hash);
+      }
     }
 
     $ds->freeResult($res);
+
+    if ($last_id) {
+      return $last_id;
+    }
 
     return $date;
   }
@@ -298,7 +307,7 @@ class CExternalDBImport {
   }
 
   function getDbIds() {
-    $request = new CRequest;
+    $request = new CRequest();
     $request->addColumn("DISTINCT id400");
     $request->addTable("id_sante400");
     $tag = $this->getImportTag();
