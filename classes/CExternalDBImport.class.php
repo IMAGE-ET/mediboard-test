@@ -201,7 +201,7 @@ class CExternalDBImport {
       }
 
       if ($id) {
-        $query .= " $order_by > \"$date_max\"";
+        $query .= " $object->_key > '$id'";
       }
     }
 
