@@ -238,7 +238,7 @@ class CService extends CMbObject {
       $where["affectation.lit_id"] = "IS NOT NULL";
     }
 
-    $order = "affectation.affectation.sortie DESC";
+    $order = "affectation.sortie DESC";
 
     $affectation = new CAffectation();
     return $this->_ref_affectations = $affectation->loadList($where, $order, null, null, $ljoin);
