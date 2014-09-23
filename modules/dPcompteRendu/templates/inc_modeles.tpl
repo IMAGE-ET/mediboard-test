@@ -11,21 +11,23 @@
 
 <table class="tbl">
   <tr>
-    <th>{{mb_colonne class=CCompteRendu field=nom              order_col=$order_col order_way=$order_way function=sortBy}}</th>
+    <th style="width: 30%">{{mb_colonne class=CCompteRendu field=nom              order_col=$order_col order_way=$order_way function=sortBy}}</th>
+    <th class="narrow">
+      <input type="text" style="width: 10em" class="search" onkeyup="Modele.filter(this)" />
+    </th>
     <th>{{mb_colonne class=CCompteRendu field=object_class     order_col=$order_col order_way=$order_way function=sortBy}}</th>
     <th>{{mb_colonne class=CCompteRendu field=file_category_id order_col=$order_col order_way=$order_way function=sortBy}}</th>
     <th>{{mb_colonne class=CCompteRendu field=type             order_col=$order_col order_way=$order_way function=sortBy}}</th>
-    <th class="narrow" colspan="2">{{tr}}Stats{{/tr}}</th>
+    <th class="narrow" colspan="2">
+      {{mb_colonne class=CCompteRendu field=_count_utilisation order_col=$order_col order_way=$order_way function=sortBy}}
+    </th>
+    {{*<th class="narrow" colspan="2">Stats</th>*}}
     <th class="narrow"></th>
   </tr>
 
   {{foreach from=$modeles item=_modele}}
-    {{assign var="selected" value=""}}
-    {{if $_modele->_id == $filtre->_id}}
-      {{assign var="selected" value="selected"}}
-    {{/if}}
-    <tr class="{{$selected}}">
-      <td>
+    <tr class="{{if $_modele->_id == $filtre->_id}}selected{{/if}} line">
+      <td colspan="2" class="text">
         {{if $_modele->fast_edit_pdf}}
           <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprintPDF/images/mbprintPDF.png" />
         {{elseif $_modele->fast_edit}}
@@ -37,12 +39,14 @@
         <a href="#1" onclick="updateSelected(this.up('tr')); Modele.edit('{{$_modele->_id}}')">
           {{assign var=object_class value=$_modele->object_class}}
           {{assign var=name         value=$_modele->nom}}
-          {{if isset($special_names.$object_class.$name|smarty:nodefaults)}}
-            <strong>Special:</strong>
-            {{$_modele->nom|trim:"[]"}}
-          {{else}}
-            {{mb_value object=$_modele field=nom}}
-          {{/if}}
+          <span class="CCompteRendu-view">
+            {{if isset($special_names.$object_class.$name|smarty:nodefaults)}}
+              <strong>Special:</strong>
+              {{$_modele->nom|trim:"[]"}}
+            {{else}}
+              {{mb_value object=$_modele field=nom}}
+            {{/if}}
+          </span>
         </a>
       </td>
 
@@ -130,25 +134,16 @@
 
       <td>
         {{if $_modele->_canEdit}}
-          <form name="delete-{{$_modele->_guid}}" method="post">
-            <input type="hidden" name="m" value="{{$m}}" />
-            <input type="hidden" name="del" value="1" />
-            <input type="hidden" name="dosql" value="do_modele_aed" />
-            <input type="hidden" name="callback" value="Modele.refresh" />
-            {{mb_key object=$_modele}}
-            <button class="trash notext" type="button"
-                onclick="confirmDeletion(this.form, {
-                typeName: 'le modèle',
-                objName:  '{{$_modele->nom|smarty:nodefaults|JSAttribute}}',
-                ajax:     1
-              })">{{tr}}Delete{{/tr}}</button>
-          </form>
+          <button class="trash notext" type="button"
+                  onclick="Modele.delete('{{$_modele->_id}}', '{{$_modele->nom|smarty:nodefaults|JSAttribute}}')">
+            {{tr}}Delete{{/tr}}
+          </button>
         {{/if}}
       </td>
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="7" class="empty">{{tr}}CCompteRendu.none{{/tr}}</td>
+      <td colspan="8" class="empty">{{tr}}CCompteRendu.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

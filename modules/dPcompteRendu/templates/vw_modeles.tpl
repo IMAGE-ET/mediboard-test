@@ -9,27 +9,9 @@
  * @link     http://www.mediboard.org
 *}}
 
+{{mb_script module=compteRendu script=modele}}
+
 <script>
-  Modele = {
-    showUtilisation: function(compte_rendu_id) {
-      var url = new Url('compteRendu', 'ajax_show_utilisation');
-      url.addParam('compte_rendu_id', compte_rendu_id);
-      url.requestModal(640, 480);
-    },
-
-    refresh: function() {
-      var url = new Url("compteRendu", "ajax_list_modeles");
-      url.addFormData(getForm("filterModeles"));
-      url.requestUpdate("modeles_area");
-    },
-
-    edit: function(compte_rendu_id) {
-      var url = new Url("compteRendu", "addedit_modeles");
-      url.addParam("compte_rendu_id", compte_rendu_id);
-      url.modal({width: "95%", height: "90%", onClose: Modele.refresh, closeOnEscape: false, waitingText: true});
-    }
-  }
-
   function sortBy(order_col, order_way) {
     var oForm = getForm("filterModeles");
     $V(oForm.order_col, order_col);
@@ -38,10 +20,8 @@
   }
 
   function updateSelected(elt) {
-     elt.up('table').select('tr').each(function(elt) {
-       elt.removeClassName('selected');
-     });
-    elt.addClassName('selected');
+    elt.up("table").select('tr').invoke("removeClassName", "selected");
+    elt.addClassName("selected");
   }
 
   Main.add(Modele.refresh);
@@ -50,6 +30,14 @@
 <a id="didac_button_create" class="button new" href="#1" onclick="Modele.edit(0)">
   {{tr}}CCompteRendu-title-create{{/tr}}
 </a>
+
+<form name="deleteModele" method="post" class="prepared">
+  <input type="hidden" name="m" value="compteRendu" />
+  <input type="hidden" name="dosql" value="do_modele_aed" />
+  <input type="hidden" name="callback" value="Modele.refresh" />
+  <input type="hidden" name="del" value="1" />
+  <input type="hidden" name="compte_rendu_id" />
+</form>
 
 <form name="filterModeles" method="get" onsubmit="return onSubmitFormAjax(this, null, 'modeles_area')">
   <input type="hidden" name="m" value="compteRendu" />

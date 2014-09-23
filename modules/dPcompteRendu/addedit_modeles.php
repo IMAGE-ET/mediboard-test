@@ -17,6 +17,8 @@ $prat_id         = CValue::getOrSession("selPrat");
 $compte_rendu_id = CValue::getOrSession("compte_rendu_id");
 
 $group = CGroups::loadCurrent();
+$mediuser = CMediusers::get();
+
 $listEtab = array($group);
 
 $where = array(
@@ -26,10 +28,7 @@ $listFunc = new CFunctions();
 $listFunc = $listFunc->loadListWithPerms(PERM_EDIT, $where, "text");
 
 // Liste des praticiens accessibles
-$listUser = new CMediusers();
-$listUser = $listUser->loadUsers(PERM_EDIT);
-
-$mediuser = CMediusers::get();
+$listUser = $mediuser->loadUsers(PERM_EDIT);
 
 // L'utilisateur est-il praticien?
 if (!$prat_id) {
@@ -81,7 +80,7 @@ $templateManager->editor = "ckeditor";
 // L'utilisateur est il une secretaire ou un administrateur?
 $secretaire = $mediuser->isFromType(array("Secrétaire", "Administrator"));
 
-// si l'utilisateur courant est la secretaire ou le proprietaire du modele alors droit dessus, sinon, seulement droit en lecture
+// si l'utilisateur courant est la secretaire ou le propriétaire du modèle alors droit dessus, sinon, seulement droit en lecture
 $droit = (!($compte_rendu->_id) ||
            ($secretaire) ||
            ($compte_rendu->user_id == $mediuser->user_id) ||

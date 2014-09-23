@@ -1,61 +1,12 @@
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 {{assign var=pdf_and_thumbs value=$app->user_prefs.pdf_and_thumbs}}
 
+{{mb_script module=compteRendu script=modele}}
+{{mb_script module=compteRendu script=thumb}}
+
 <script>
   window.same_print = {{$conf.dPcompteRendu.CCompteRendu.same_print}};
   window.pdf_thumbnails = {{$pdf_thumbnails|@json}} == 1;
-
-  var Modele = {
-    copy: function (oForm) {
-      oForm = oForm || document.editFrm;
-
-      {{if $droit}}
-        if(confirm('{{tr}}CCompteRendu-already-access{{/tr}}')){
-          $V(oForm.compte_rendu_id, "");
-
-          {{if $isPraticien}}
-          $V(oForm.user_id, "{{$user_id}}");
-          $V(oForm.function_id, "");
-          {{/if}}
-
-          $V(oForm.nom, "Copie de "+ $V(oForm.nom));
-          oForm.onsubmit();
-        }
-      {{else}}
-        $V(oForm.compte_rendu_id, "");
-        $V(oForm.user_id, "{{$user_id}}");
-        $V(oForm.nom, "Copie de "+ $V(oForm.nom));
-        oForm.onsubmit();
-      {{/if}}
-    },
-
-    preview: function(id) {
-      var url = new Url("compteRendu", "print_cr");
-      url.addParam("compte_rendu_id", id);
-      url.popup(800, 800);
-    },
-
-    preview_layout: function() {
-      var header_size = parseInt($V(getForm("editFrm").elements.height));
-      if (!isNaN(header_size)) {
-        $("header_footer_content").style["height"] = ((header_size / 728.5)*80).round() + "px";
-      }
-      $("body_content").style["height"] =  "80px";
-    },
-
-    generate_auto_height: function() {
-      var content = window.CKEDITOR.instances.htmlarea ? CKEDITOR.instances.htmlarea.getData() : $V(form.source);
-      var container = new Element("div", {style: "width: 17cm; padding: 0; margin: 0; position: absolute; left: -1500px; bottom: 200px;"}).insert(content);
-      $$('body')[0].insert(container);
-      // Calcul approximatif de la hauteur
-      $V(getForm("editFrm").height, (container.getHeight()).round());
-    },
-    showUtilisation: function() {
-      var url = new Url("compteRendu", "ajax_show_utilisation");
-      url.addParam("compte_rendu_id", "{{$compte_rendu->_id}}");
-      url.requestModal(640, 480);
-    }
-  };
 
   // Taleau des categories en fonction de la classe du compte rendu
   var listObjectClass = {{$listObjectClass|@json}};
@@ -142,10 +93,7 @@
     $V(form.type, type);
     Control.Modal.close();
   }
-
 </script>
-
-{{mb_script module=compteRendu script=thumb}}
 
 <script>
   Main.add(function () {
@@ -219,468 +167,112 @@
 {{/if}}
 
 <form name="editFrm" action="?m={{$m}}" method="post" 
- onsubmit="Url.ping({onComplete: submitCompteRendu}); return false;"
+ onsubmit="Url.ping(submitCompteRendu); return false;"
  class="{{$compte_rendu->_spec}}">
 
-<input type="hidden" name="m" value="{{$m}}" />
-<input type="hidden" name="del" value="0" />
-<input type="hidden" name="dosql" value="do_modele_aed" />
-{{mb_key object=$compte_rendu}}
-{{mb_field object=$compte_rendu field="object_id" hidden=1}}
+  <input type="hidden" name="m" value="compteRendu" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="dosql" value="do_modele_aed" />
+  {{mb_key object=$compte_rendu}}
+  {{mb_field object=$compte_rendu field="object_id" hidden=1}}
 
-{{if $compte_rendu->type != "body"}}
-  <input type="hidden" name="fast_edit" value="{{$compte_rendu->fast_edit}}" />
+  {{if !$droit}}
+    <input type="hidden" name="group_id" />
+    <input type="hidden" name="function_id" />
+    <input type="hidden" name="user_id" value="{{$mediuser->_id}}" />
+  {{/if}}
+  {{if $compte_rendu->type != "body"}}
+    <input type="hidden" name="fast_edit" value="{{$compte_rendu->fast_edit}}" />
 
-  {{if !$pdf_thumbnails || !$pdf_and_thumbs}}
-    <input type="hidden" name="fast_edit_pdf" value="{{$compte_rendu->fast_edit_pdf}}" />
+    {{if !$pdf_thumbnails || !$pdf_and_thumbs}}
+      <input type="hidden" name="fast_edit_pdf" value="{{$compte_rendu->fast_edit_pdf}}" />
+    {{/if}}
+
   {{/if}}
 
-{{/if}}
-
-<table class="main">
-  <tr>
-    <td style="width: 300px;">
-      <table class="form">
-        <tr>
-          <th class="category" colspan="2">
-            {{if $compte_rendu->_id}}
-              {{mb_include module=system template=inc_object_notes      object=$compte_rendu}}
-              {{mb_include module=system template=inc_object_idsante400 object=$compte_rendu}}
-              {{mb_include module=system template=inc_object_history    object=$compte_rendu}}
-            {{/if}}
-            {{tr}}CCompteRendu-informations{{/tr}}
-          </th>
-        </tr>
-      </table>
-
-      <ul id="tabs-edit" class="control_tabs small">
-        <li><a href="#info">Informations</a></li>
-        <li><a href="#layout" id="a_addedit_modeles_mise_en_page">Mise en page</a></li>
-      </ul>
-
-      <table class="form" id="info" style="display: none;">
-        <tr>
-          <th>{{mb_label object=$compte_rendu field="nom"}}</th>
-          <td>
-          {{if $droit}}
-            {{mb_field object=$compte_rendu field="nom" style="width: 12em"}}
-            <button type="button" class="search notext" title="Choisir un nom réservé" onclick="Modal.open('choose_template_name')"></button>
-          {{else}}
-            {{mb_field object=$compte_rendu field="nom" readonly="readonly"}}
-          {{/if}}
-          </td>
-        </tr>
-
-        {{if $access_group}}
-        <tr>
-          <th>{{mb_label object=$compte_rendu field="group_id"}}</th>
-          <td>
-            {{if !$droit}}
-               <input type="hidden" name="group_id" />
-            {{/if}}
-            <select {{if !$droit}}disabled='disabled'{{/if}} name="group_id" class="{{$compte_rendu->_props.group_id}}" style="width: 15em;">
-              <option value="">&mdash; {{tr}}Associate{{/tr}}</option>
-              {{foreach from=$listEtab item=curr_etab}}
-              <option value="{{$curr_etab->_id}}" {{if $curr_etab->_id == $compte_rendu->group_id}}selected{{/if}}>
-              {{$curr_etab}}
-              </option>
-              {{/foreach}}
-            </select>
-          </td>
-        </tr>
-        {{/if}}
-
-        {{if $access_function}}
-        <tr>
-          <th>{{mb_label object=$compte_rendu field="function_id"}}</th>
-          <td>
-            {{if !$droit}}
-               <input type="hidden" name="function_id" />
-            {{/if}}
-            <select name="function_id" class="{{$compte_rendu->_props.function_id}}" style="width: 15em;" {{if !$droit}}disabled{{/if}} >
-              <option value="">&mdash; {{tr}}Associate{{/tr}}</option>
-              {{foreach from=$listFunc item=curr_func}}
-                <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->_id}}" {{if $curr_func->_id == $compte_rendu->function_id}}selected{{/if}}>
-                  {{if $smarty.session.browser.name == "msie"}}
-                    {{$curr_func->_view|truncate:45}}
-                  {{else}}
-                    {{$curr_func->_view}}
-                  {{/if}}
-                </option>
-              {{/foreach}}
-            </select>
-          </td>
-        </tr>
-        {{/if}}
-                
-        <tr>
-          <th>{{mb_label object=$compte_rendu field="user_id"}}</th>
-          <td>
-            {{if !$droit}}
-              <input type="hidden" name="user_id" value="{{$mediuser->_id}}" />
-            {{/if}}
-            <select name="user_id" class="{{$compte_rendu->_props.user_id}}" style="width: 15em;" {{if !$droit}}disabled='disabled'{{/if}}>
-              <option value="">&mdash; {{tr}}Associate{{/tr}}</option>
-              {{mb_include module=mediusers template=inc_options_mediuser list=$listPrat selected=$compte_rendu->user_id}}
-            </select>
-          </td>
-        </tr>
-        
-        {{if $compte_rendu->type == "body" || !$compte_rendu->_id}}
+  <table class="main">
+    <tr>
+      <td style="width: 300px;">
+        <table class="form">
           <tr>
-            <th>{{mb_label object=$compte_rendu field="fast_edit"}}</th>
-            <td>
-              {{mb_field object=$compte_rendu field="fast_edit"}}
-            </td>
-          </tr>
-        
-          {{if $pdf_thumbnails && $pdf_and_thumbs}}
-            <tr>
-              <th style="text-align: right;">
-                {{mb_label object=$compte_rendu field="fast_edit_pdf" style="display: none"}}
-                <label class="notNullOK" title="{{tr}}CCompteRendu-fast_edit_pdf-desc{{/tr}}">
-                  <strong>PDF</strong>
-                </label>
-              </th>
-              <td>
-                {{mb_field object=$compte_rendu field="fast_edit_pdf"}}
-              </td>
-            </tr>
-          {{/if}}
-        {{/if}}
-        <tr>
-          <th>{{mb_label object=$compte_rendu field="purgeable"}}</th>
-          <td>{{mb_field object=$compte_rendu field="purgeable"}}</td>
-        </tr>
-        
-        <tr>
-          <th>{{mb_label object=$compte_rendu field="font"}}</th>
-          <td>{{mb_field object=$compte_rendu field="font" emptyLabel="Choose" style="width: 15em"}}</td>
-        </tr>
-        
-        <tr>
-          <th>{{mb_label object=$compte_rendu field="size"}}</th>
-          <td>{{mb_field object=$compte_rendu field="size" emptyLabel="Choose" style="width: 15em"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$compte_rendu field=type}}</th>
-          <td>
-            {{if $droit}}
-              {{mb_field object=$compte_rendu field=type onchange="updateType();  Thumb.old();" style="width: 15em;"}}
-            {{else}}
-              {{mb_field object=$compte_rendu field=type disabled="disabled" style="width: 15em;"}}
-            {{/if}}
-          
-            <script type="text/javascript">
-              function updateType() {
-                {{if $compte_rendu->_id}}
-                  var oForm = document.editFrm;
-                  var bBody = oForm.type.value == "body";
-                  var bHeader = oForm.type.value == "header";
-                  var bOther  = (oForm.type.value == "preface" || oForm.type.value == "ending");
-                  
-                  if (bHeader) {
-                    $("preview_page").insert({top   : $("header_footer_content").remove()});
-                    $("preview_page").insert({bottom: $("body_content").remove()});
-                  }
-                  else {
-                    $("preview_page").insert({bottom: $("header_footer_content").remove()});
-                    $("preview_page").insert({top   : $("body_content").remove()});
-                  }
-                  
-                  // General Layout
-                  $("layout").down('.fields').setVisible(!bOther);
-                  $("layout").down('.notice').setVisible(bOther);
-                  
-                  // Page layout
-                  if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
-                    $("page_layout").setVisible(bBody);
-                  }
-                  $("layout_header_footer").setVisible(!bBody && !bOther);
-                  
-                  
-                  // Height
-                  $("height").setVisible(!bBody && !bOther);
-                  if (bBody) $V(oForm.height, '');
-    
-                  // Headers, Footers, Prefaces and Endings
-                  var oComponent = $("components");
-                  if (oComponent) {
-                    oComponent.setVisible(bBody);
-                    if (!bBody) {
-                      $V(oForm.header_id , '');
-                      $V(oForm.footer_id , '');
-                      $V(oForm.preface_id, '');
-                      $V(oForm.ending_id , '');
-                    }
-                  }
-                  
-                  Modele.preview_layout();
-                {{/if}}
-              }
-              
-              Main.add(updateType);
-            </script>
-            
-          </td>
-        </tr>
-        
-        <tbody id="components">
-
-          {{if $headers|@count}}
-            <tr id="headers">
-              <th>{{mb_label object=$compte_rendu field=header_id}}</th>
-              <td>
-                <select name="header_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.header_id}}" {{if !$droit}}disabled="disabled"{{/if}} style="width: 15em;">
-                  <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-                  {{foreach from=$headers item=headersByOwner key=owner}}
-                  <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
-                    {{foreach from=$headersByOwner item=_header}}
-                    <option value="{{$_header->_id}}" {{if $compte_rendu->header_id == $_header->_id}}selected{{/if}}>{{$_header->nom}}</option>
-                    {{foreachelse}}
-                    <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
-                    {{/foreach}}
-                  </optgroup>
-                  {{/foreach}}
-                </select>
-              </td>
-            </tr>
-          {{/if}}
-          
-          {{if $prefaces|@count}}
-            <tr id="prefaces">
-              <th>{{mb_label object=$compte_rendu field=preface_id}}</th>
-              <td>
-                <select name="preface_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.preface_id}}" {{if !$droit}}disabled{{/if}} style="width: 15em;">
-                  <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-                  {{foreach from=$prefaces item=prefacesByOwner key=owner}}
-                  <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
-                    {{foreach from=$prefacesByOwner item=_preface}}
-                    <option value="{{$_preface->_id}}" {{if $compte_rendu->preface_id == $_preface->_id}}selected{{/if}}>{{$_preface->nom}}</option>
-                    {{foreachelse}}
-                    <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
-                    {{/foreach}}
-                  </optgroup>
-                  {{/foreach}}
-                </select>
-              </td>
-            </tr>
-          {{/if}}
-          
-          {{if $endings|@count}}
-            <tr id="endings">
-              <th>{{mb_label object=$compte_rendu field=ending_id}}</th>
-              <td>
-                <select name="ending_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.ending_id}}" {{if !$droit}}disabled{{/if}} style="width: 15em;">
-                  <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-                  {{foreach from=$endings item=endingsByOwner key=owner}}
-                  <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
-                    {{foreach from=$endingsByOwner item=_ending}}
-                    <option value="{{$_ending->_id}}" {{if $compte_rendu->ending_id == $_ending->_id}}selected{{/if}}>{{$_ending->nom}}</option>
-                    {{foreachelse}}
-                    <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
-                    {{/foreach}}
-                  </optgroup>
-                  {{/foreach}}
-                </select>
-              </td>
-            </tr>
-          {{/if}}
-          
-          {{if $footers|@count}}
-            <tr id="footers">
-              <th>{{mb_label object=$compte_rendu field=footer_id}}</th>
-              <td>
-                <select name="footer_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.footer_id}}" {{if !$droit}}disabled{{/if}} style="width: 15em;">
-                  <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-                  {{foreach from=$footers item=footersByOwner key=owner}}
-                  <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
-                    {{foreach from=$footersByOwner item=_footer}}
-                    <option value="{{$_footer->_id}}" {{if $compte_rendu->footer_id == $_footer->_id}}selected{{/if}}>{{$_footer->nom}}</option>
-                    {{foreachelse}}
-                    <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
-                    {{/foreach}}
-                  </optgroup>
-                  {{/foreach}}
-                </select>
-              </td>
-            </tr>
-          {{/if}}
-        </tbody>
-        
-        <tr>
-          <th>{{mb_label object=$compte_rendu field="object_class"}}</th>
-          <td>
-            <select name="object_class" class="{{$compte_rendu->_props.object_class}}" onchange="loadCategory(); reloadHeadersFooters();" style="width: 15em;">
-              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-            </select>
-          </td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$compte_rendu field="file_category_id"}}</th>
-          <td>
-            <select name="file_category_id" class="{{$compte_rendu->_props.file_category_id}}" style="width: 15em;">
-              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-            </select>
-          </td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$compte_rendu field="language"}}</th>
-          <td>
-            {{mb_field object=$compte_rendu field="language"}}
-          </td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$compte_rendu field="factory"}}</th>
-          <td>
-            <select name="factory">
-              {{foreach from=$compte_rendu->_specs.factory->_list item=_factory}}
-                {{if $_factory != "none"}}
-                  <option value="{{$_factory}}" {{if $compte_rendu->factory == $_factory}}selected{{/if}}>{{$compte_rendu->_specs.factory->_locales.$_factory}}</option>
-                {{/if}}
-              {{/foreach}}
-            </select>
-          </td>
-        </tr>
-
-        {{if "cda"|module_active}}
-          <tr>
-            <th>{{mb_label object=$compte_rendu field="type_doc"}}</th>
-            <td>
-              {{mb_field object=$compte_rendu field="type_doc" emptyLabel="Choose" style="width: 15em;"}}
-            </td>
-          </tr>
-        {{/if}}
-
-        {{if "sisra"|module_active}}
-          <tr>
-            <th>{{mb_label object=$compte_rendu field="type_doc_sisra"}}</th>
-            <td>{{mb_field object=$compte_rendu field="type_doc_sisra" emptyLabel="Choose" style="width: 15em;"}}</td>
-          </tr>
-        {{/if}}
-
-        <tr>
-          <th>{{mb_label object=$compte_rendu field="purge_field"}}</th>
-          <td>{{mb_field object=$compte_rendu field="purge_field"}}</td>
-        </tr>
-      </table>
-      
-        {{if $compte_rendu->_id}}
-          <table class="form" id="layout" style="display: none;">
-            <tr class="notice">
-              <td>
-                <div class="small-info">
-                  Ce modèle n'est pas un corps de texte.
-                </div>
-              </td>
-            </tr>
-            
-            <tbody class="fields">
-              {{if $pdf_thumbnails && $pdf_and_thumbs}}
-              <tr>
-                <th class="category" colspan="2">
-                  {{tr}}CCompteRendu-Pagelayout{{/tr}}
-                </th>
-              </tr>
-              <tr id="page_layout" style="display: none;">
-                <td colspan="2">
-                  {{mb_include template=inc_page_layout}}
-                </td>
-              </tr>
+            <th class="category" colspan="2">
+              {{if $compte_rendu->_id}}
+                {{mb_include module=system template=inc_object_notes      object=$compte_rendu}}
+                {{mb_include module=system template=inc_object_idsante400 object=$compte_rendu}}
+                {{mb_include module=system template=inc_object_history    object=$compte_rendu}}
               {{/if}}
-              <tr id="height"  style="display: none;">
-                <th>{{mb_label object=$compte_rendu field=height}}</th>
-                <td>
-                {{if $droit}}
-                  <button id="button_addedit_modeles_generate_auto_height" type="button" class="change" onclick="Thumb.old(); Modele.generate_auto_height(); Modele.preview_layout();">{{tr}}CCompteRendu.auto_height{{/tr}}</button><br/>
-                    {{mb_field object=$compte_rendu field=height increment=true form=editFrm onchange="Thumb.old(); Modele.preview_layout();" step="10" onkeyup="Modele.preview_layout();"}}
-                {{else}}
-                  {{mb_field object=$compte_rendu field=height readonly="readonly"}}
-                {{/if}}
-                </td>
-              </tr>
-              
-              <tr id="layout_header_footer" style="display: none;">
-                <th>{{tr}}CCompteRendu-preview-header-footer{{/tr}}</th>
-                <td>
-                  <div id="preview_page" style="color: #000; height: 84px; padding: 7px; width: 58px; background: #fff; border: 1px solid #000; overflow: hidden;">
-                    <div id="header_footer_content" style="color: #000; white-space: normal; background: #fff; overflow: hidden; margin: -1px; height: 30px; width: 100%; font-size: 3px;">
-                      {{mb_include template=lorem_ipsum}}
-                    </div>
-                    <hr style="width: 100%; margin-top: 3px; margin-bottom: 3px;"/>
-                    <div id="body_content" style="margin: -1px; color: #999; height: 50px; width: 100%; font-size: 3px; white-space: normal; overflow: hidden;">
-                      {{mb_include template=lorem_ipsum}}
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        {{else}}
-          <div id="layout" style="display: none; " class="small-info">
-            Aucune mise en page possible
-          </div>
-        {{/if}}
+              {{tr}}CCompteRendu-informations{{/tr}}
+            </th>
+          </tr>
+        </table>
 
-      <hr />
-      <table class="form" style="width: 265px;">
-    
-        <tr>
-          {{if $droit}}
-            <td class="button" colspan="2">
-            {{if $compte_rendu->_id}}
-            <button id="button_addedit_modeles_save_mise_en_page" class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$compte_rendu->nom|smarty:nodefaults|JSAttribute}}'})">
-            {{tr}}Delete{{/tr}}
-            </button>
-            {{else}}
-            <button id="button_addedit_modeles_create" class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+        <ul id="tabs-edit" class="control_tabs small">
+          <li><a href="#info">Informations</a></li>
+          <li><a href="#layout" id="a_addedit_modeles_mise_en_page">Mise en page</a></li>
+        </ul>
+
+        {{mb_include module=compteRendu template=inc_modele_info}}
+        {{mb_include module=compteRendu template=inc_modele_layout}}
+
+        <hr />
+
+        <table class="form" style="width: 265px;">
+          <tr>
+            {{if $droit}}
+              <td class="button" colspan="2">
+              {{if $compte_rendu->_id}}
+              <button id="button_addedit_modeles_save_mise_en_page" class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$compte_rendu->nom|smarty:nodefaults|JSAttribute}}'})">
+              {{tr}}Delete{{/tr}}
+              </button>
+              {{else}}
+              <button id="button_addedit_modeles_create" class="submit">{{tr}}Create{{/tr}}</button>
+              {{/if}}
+              </td>
             {{/if}}
-            </td>
+          </tr>
+
+          {{if $compte_rendu->_id}}
+            <tr>
+              <th class="category" colspan="2">{{tr}}CCompteRendu-other-actions{{/tr}}</th>
+            </tr>
+
+            <tr>
+              <td class="button" colspan="2">
+                 <button type="button" class="duplicate"
+                         onclick="Modele.copy(this.form, '{{$user_id}}', '{{$droit}}')">{{tr}}Duplicate{{/tr}}</button>
+                 <button id="button_addedit_modeles_preview" type="button" class="search"
+                         onclick="Modele.preview('{{$compte_rendu->_id}}')">{{tr}}Preview{{/tr}}</button>
+                 <br />
+                 <button type="button" class="search"
+                         onclick="Modele.showUtilisation('{{$compte_rendu->_id}}')">Utilisation ({{$compte_rendu->_count_utilisation}})</button>
+              </td>
+            </tr>
           {{/if}}
-        </tr>
-
-        {{if $compte_rendu->_id}}
-          <tr>
-            <th class="category" colspan="2">{{tr}}CCompteRendu-other-actions{{/tr}}</th>
-          </tr>
-
-          <tr>
-            <td class="button" colspan="2">
-               <button type="button" class="duplicate" onclick="Modele.copy(this.form)">{{tr}}Duplicate{{/tr}}</button>
-               <button id="button_addedit_modeles_preview" type="button" class="search" onclick="Modele.preview($V(this.form.compte_rendu_id))">{{tr}}Preview{{/tr}}</button>
-               <br />
-               <button type="button" class="search" onclick="Modele.showUtilisation()">Utilisation ({{$compte_rendu->_count_utilisation}})</button>
-            </td>
-          </tr>
-        {{/if}}
-      </table>
-    </td>
-    
-    <td style="height: 500px; max-width: 600px !important;" class="greedyPane">
-      {{if $compte_rendu->_id}}
-        {{if !$droit}}
-          <div class="big-info">
-            Le présent modèle est en lecture seule. 
-            <br/>Il comporte en l'état {{$compte_rendu->_source|count_words}} mots.
-            <br/>Vous pouvez le copier pour votre propre usage en cliquant sur <strong>Dupliquer</strong>. 
-          </div>
-          <hr/>
-        {{/if}}
-        {{mb_field object=$compte_rendu field="_source" id="htmlarea" name="_source"}}
-      {{/if}}
-    </td>
-    {{if $pdf_thumbnails && $compte_rendu->_id && $pdf_and_thumbs}}
-      <td id="thumbs_button" class="narrow">
-        <div id="mess" class="oldThumbs opacity-60" style="display: none;">
-        </div>
-        <div id="thumbs" style="overflow: auto; overflow-x: hidden; width: 160px; text-align: center; white-space: normal;">
-        </div>
+        </table>
       </td>
-    {{/if}}
-  </tr>
-</table>    
-</form>     
+    
+      <td style="height: 500px; max-width: 600px !important;" class="greedyPane">
+        {{if $compte_rendu->_id}}
+          {{if !$droit}}
+            <div class="big-info">
+              Le présent modèle est en lecture seule.
+              <br/>Il comporte en l'état {{$compte_rendu->_source|count_words}} mots.
+              <br/>Vous pouvez le copier pour votre propre usage en cliquant sur <strong>Dupliquer</strong>.
+            </div>
+            <hr/>
+          {{/if}}
+          {{mb_field object=$compte_rendu field="_source" id="htmlarea" name="_source"}}
+        {{/if}}
+      </td>
+      {{if $pdf_thumbnails && $compte_rendu->_id && $pdf_and_thumbs}}
+        <td id="thumbs_button" class="narrow">
+          <div id="mess" class="oldThumbs opacity-60" style="display: none;">
+          </div>
+          <div id="thumbs" style="overflow: auto; overflow-x: hidden; width: 160px; text-align: center; white-space: normal;">
+          </div>
+        </td>
+      {{/if}}
+    </tr>
+  </table>
+</form>

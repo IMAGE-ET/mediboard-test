@@ -26,6 +26,7 @@ $order_way = CValue::getOrSession("order_way", "ASC");
 $order = "";
 
 switch ($order_col) {
+  default:
   case "object_class":
     $order = "object_class $order_way, type, nom";
     break;
@@ -63,7 +64,7 @@ if ($filtre->function_id) {
   unset($modeles["prat"]);
 }
 
-foreach ($modeles as $_modeles) {
+foreach ($modeles as $key => &$_modeles) {
   /** @var $_modeles CStoredObject[] */
   CStoredObject::massCountBackRefs($_modeles, "documents_generated");
   /** @var $_modele CCompteRendu */
@@ -85,6 +86,10 @@ foreach ($modeles as $_modeles) {
       case "ending":
         $_modele->countBackRefs("modeles_ended");
     }
+  }
+
+  if ($order_col == "_count_utilisation") {
+    array_multisort(CMbArray::pluck($_modeles, "_count", "documents_generated"), $order_way == "ASC" ? SORT_ASC : SORT_DESC, $_modeles);
   }
 }
 
