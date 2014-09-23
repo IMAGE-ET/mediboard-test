@@ -94,7 +94,7 @@ if ($op->_id) {
   if (!$op->canDo()->read) {
     global $m, $tab;
     CAppUI::setMsg("Vous n'avez pas accés à cette intervention hors plage", UI_MSG_WARNING);
-    CAppUI::redirect("m=$m&tab=$tab&soperation_id=0");
+    CAppUI::redirect("m=$m&tab=$tab&operation_id=0");
   }
 
   // Chargement des régérences
