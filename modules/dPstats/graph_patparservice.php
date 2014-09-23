@@ -85,9 +85,7 @@ function graphPatParService(
       FROM sejour
       INNER JOIN users_mediboard ON sejour.praticien_id = users_mediboard.user_id
       INNER JOIN affectation ON sejour.sejour_id = affectation.sejour_id
-      INNER JOIN lit ON affectation.lit_id = lit.lit_id
-      INNER JOIN chambre ON lit.chambre_id = chambre.chambre_id
-      INNER JOIN service ON chambre.service_id = service.service_id
+      INNER JOIN service ON affectation.service_id = service.service_id
       WHERE
         sejour.annule = '0' AND
         sejour.group_id = '$group_id' AND
