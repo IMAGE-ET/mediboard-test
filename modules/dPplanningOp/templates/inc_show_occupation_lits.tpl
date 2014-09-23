@@ -6,7 +6,7 @@
   {{assign var="backgroundClass" value="full"}}
 {{/if}} 
 
-{{if $occupation}}
+{{if $occupation > -1}}
 <script type="text/javascript">
   OccupationServices.tauxOccupation = {{$occupation}};
 </script>
