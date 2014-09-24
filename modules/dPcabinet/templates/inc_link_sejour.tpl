@@ -100,6 +100,12 @@
                   </label>
                 </td>
               </tr>
+            {{foreachelse}}
+              <tr>
+                <td colspan="2">
+                  <div class="small-info">Vous n'avez pas le droit de lecture sur les séjours trouvés.</div>
+                </td>
+              </tr>
             {{/foreach}}
           </tbody>
         </table>
