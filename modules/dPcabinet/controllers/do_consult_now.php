@@ -88,7 +88,7 @@ if (!$plage->_id) {
   $where["fin"]     = ">= '$hour_now'";
   $plageBefore->loadObject($where);
   $where["debut"]   = "<= '$hour_next'";
-  $where["fin"]     = ">= '$hour_next'";
+  $where["fin"]     = ">= '$time_now'";
   $plageAfter->loadObject($where);
   if ($plageBefore->_id) {
     if ($plageAfter->_id) {
