@@ -1799,6 +1799,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $where = array();
     $where["sortie"] = "< '$date'";
     $where["sejour_id"] = CSQLDataSource::prepareIn($sejour_ids);
+    /** @var CAffectation[] $affectations */
     $affectations = $affectation->loadList($where);
 
     foreach ($affectations as $_affectation) {
@@ -3634,6 +3635,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $enfant = new CPatient();
       $constantes_enfant = new CConstantesMedicales();
       if ($this->grossesse_id && count($grossesse->loadRefsNaissances())) {
+        /** @var CNaissance $naissance */
         $naissance = reset($grossesse->_ref_naissances);
         $enfant = $naissance->loadRefSejourEnfant()->loadRefPatient();
         $constantes_enfant = reset($enfant->loadRefConstantesMedicales(null, array("poids")));
@@ -3748,7 +3750,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   /**
    * Builds an array containing cancel alerts for the sejour
    *
-   * @param ref|COperation $excluded_id Exclude given operation
+   * @param int $excluded_id Exclude given operation
    *
    * @return void Valuate $this->_cancel_alert
    */
