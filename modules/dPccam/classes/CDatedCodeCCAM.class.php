@@ -489,6 +489,7 @@ class CDatedCodeCCAM {
     $anesth_comp = '';
     if ($this->type == 2) {
       $activite->assos = $assos;
+      $activite->anesth_comp = $anesth_comp;
       return;
     }
     $listeAsso = array();

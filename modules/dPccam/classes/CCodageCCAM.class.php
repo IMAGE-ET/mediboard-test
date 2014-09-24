@@ -1069,7 +1069,7 @@ class CCodageCCAM extends CMbObject {
 
     foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
-      if (in_array($chapters[2]['rang'], $chapters_echo)) {
+      if (isset($chap[2]) && in_array($chapters[2]['rang'], $chapters_echo)) {
         $nb_echo++;
       }
     }
@@ -1146,7 +1146,7 @@ class CCodageCCAM extends CMbObject {
 
     foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
-      if (in_array($chapters[2]['rang'], $chapters_scano)) {
+      if (isset($chap[2]) && in_array($chapters[2]['rang'], $chapters_scano)) {
         $nb_scano++;
       }
     }
@@ -1217,7 +1217,7 @@ class CCodageCCAM extends CMbObject {
       if (strpos($_acte_ccam->_ref_code_ccam->libelleLong, 'guidage remnographique') !== false) {
         $guidage_remno++;
       }
-      elseif (in_array($chapters[2]['rang'], $chapters_remno)) {
+      elseif (isset($chap[2]) && in_array($chapters[2]['rang'], $chapters_remno)) {
         $nb_remno++;
       }
     }
@@ -1356,7 +1356,7 @@ class CCodageCCAM extends CMbObject {
     $nb_anapath = 0;
     foreach ($this->_ref_actes_ccam_facturables as $_act) {
       $chap = $_act->_ref_code_ccam->chapitres;
-      if (in_array($chap[2]['rang'], $chapters_anapath) || in_array($chap[1]['rang'], $chapters_anapath)) {
+      if (isset($chap[2]) && in_array($chap[2]['rang'], $chapters_anapath) || in_array($chap[1]['rang'], $chapters_anapath)) {
         $nb_anapath++;
       }
     }
@@ -1399,7 +1399,7 @@ class CCodageCCAM extends CMbObject {
 
     foreach ($this->_ref_actes_ccam_facturables as $_act) {
       $chap = $_act->_ref_code_ccam->chapitres;
-      if (in_array($chap[2]['rang'], $chapters_anapath) || in_array($chap[1]['rang'], $chapters_anapath)) {
+      if ((isset($chap[2]) && in_array($chap[2]['rang'], $chapters_anapath)) || in_array($chap[1]['rang'], $chapters_anapath)) {
         unset($ordered_acts_eg2[$_act->_id]);
         if ($_act->_id == $act->_id) {
           $act->_position = -1;
@@ -1837,7 +1837,7 @@ class CCodageCCAM extends CMbObject {
     $nb_radio = 0;
     foreach ($this->_ref_actes_ccam_facturables as $_act) {
       $chap = $_act->_ref_code_ccam->chapitres;
-      if (in_array($chap[2]['rang'], $chapters_radio)) {
+      if (isset($chap[2]) && in_array($chap[2]['rang'], $chapters_radio)) {
         $nb_radio++;
       }
     }
