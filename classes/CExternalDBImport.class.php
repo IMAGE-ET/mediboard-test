@@ -210,7 +210,7 @@ class CExternalDBImport {
     }
 
     if (!$reimport) {
-      $ids = array_flip($object->getDbIds());
+      $ids = array_flip($object->getDbIds($id));
     }
 
     $key_name  = $object->_key;
@@ -306,19 +306,26 @@ class CExternalDBImport {
     return $target;
   }
 
-  function getDbIds() {
+  function getDbIds($min_id = null) {
+    $ds = CSQLDataSource::get("std");
+
     $request = new CRequest();
     $request->addColumn("DISTINCT id400");
     $request->addTable("id_sante400");
     $tag = $this->getImportTag();
-    $request->addWhere(
-      array(
-        "object_class" => "= '$this->_class'",
-        "tag"          => "= '$tag'",
-      )
+
+    $where = array(
+      "object_class" => "= '$this->_class'",
+      "tag"          => "= '$tag'",
     );
 
-    return CSQLDataSource::get("std")->loadColumn($request->makeSelect());
+    if ($min_id) {
+      $where["id400"] = $ds->prepare("> ?", $min_id);
+    }
+
+    $request->addWhere($where);
+
+    return $ds->loadColumn($request->makeSelect());
   }
 
   /**
