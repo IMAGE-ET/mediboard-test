@@ -10,9 +10,22 @@
  */
 
 $codage_id = CValue::get("codage_id");
+$codable_class = CValue::get('codable_class', '');
+$codable_id = CValue::get('codable_id');
+$praticien_id = CValue::get('praticien_id');
 
 $codage = new CCodageCCAM();
-$codage->load($codage_id);
+
+if ($codage_id) {
+  $codage->load($codage_id);
+}
+else {
+  $codage->codable_class = $codable_class;
+  $codage->codable_id = $codable_id;
+  $codage->praticien_id = $praticien_id;
+  $codage->loadMatchingObject();
+}
+
 $codage->canDo();
 
 if (!$codage->_can->edit) {

@@ -12,6 +12,19 @@
 {{assign var=obj_guid value=$subject->_guid}}
 
 <script>
+
+  editCodage = function(codable_class, codable_id, praticien_id) {
+    var url = new Url("salleOp", "ajax_edit_codages_ccam");
+    url.addParam('codable_class', codable_class);
+    url.addParam("codable_id", codable_id);
+    url.addParam('praticien_id', praticien_id);
+    url.requestModal(
+      -10, -50,
+      {onClose: PMSI.reloadActesCCAM.curry('{{$obj_guid}}')}
+    );
+    window.urlCodage = url;
+  };
+
   Main.add(function() {
     // Mise à jour du compteur et de la classe du volet correspondant
     var span = $("count_actes_{{$obj_guid}}");
@@ -96,7 +109,7 @@
     {{foreach from=$_code->activites item=_activite}}
       {{foreach from=$_activite->phases item=_phase}}
         {{assign var="acte" value=$_phase->_connected_acte}}
-        {{assign var="view" value=$acte->_id|default:$acte->_view}}
+        {{assign var="view" value='PMSI-'|cat:$acte->_id|default:$acte->_view}}
         {{assign var="key" value="$_key$view"}}
         <tr>
           <td {{if !$acte->_id}}class="error"{{/if}}>
@@ -127,6 +140,13 @@
               {{mb_value object=$acte field=executant_id}}
             {{else}}
               {{mb_field object=$acte field=executant_id options=$listPrats onchange="CCodageCCAM.syncCodageField(this, '$view');"}}
+            {{/if}}
+
+            {{if $acte->executant_id && $acte->_id}}
+              <button type="button" class="notext edit" onclick="editCodage('{{$subject->_class}}', {{$subject->_id}}, {{$acte->executant_id}})"
+                      title="Modifier le codage">
+                {{tr}}Edit{{/tr}}
+              </button>
             {{/if}}
           </td>
           <td class="greedyPane text">
