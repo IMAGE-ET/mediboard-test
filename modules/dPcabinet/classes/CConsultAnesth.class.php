@@ -572,6 +572,9 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
     $this->_ref_operation->fillLimitedTemplate($template);
     $this->_ref_sejour->fillLimitedTemplate($template);
 
+    // Dossier médical
+    $this->_ref_sejour->loadRefDossierMedical()->fillTemplate($template, "Sejour");
+
     if (CModule::getActive("dPprescription")) {
       $sejour = $this->_ref_sejour;
       $sejour->loadRefsPrescriptions();
