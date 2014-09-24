@@ -126,7 +126,12 @@ class CHL7v2SegmentOBR extends CHL7v2Segment {
 
     // OBR-27: Quantity/Timing (TQ)
     $data[] = array(
-      "1"
+      array(
+        "1",
+        null,
+        null,
+        $object->_datetime
+      )
     );
 
     // OBR-28: Result Copies to (CN) (optional)

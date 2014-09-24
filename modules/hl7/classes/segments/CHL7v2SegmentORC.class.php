@@ -44,13 +44,11 @@ class CHL7v2SegmentORC extends CHL7v2Segment {
         break;
       case "store":
         $orc1 = "XO";
-        //cas d'oubli d'élément de prescription lors de la création de la consutlation
-        if (!$object->_old->element_prescription_id) {
-          $orc1 = "NW";
-        }
-        //cas de suppression de l'élément de prescription
-        if (!$object->element_prescription_id) {
+        if ($object->fieldModified("annule", "1")) {
           $orc1 = "CA";
+        }
+        if ($object->fieldModified("annule", "0")) {
+          $orc1 = "NW";
         }
         break;
       case "delete":
@@ -78,9 +76,13 @@ class CHL7v2SegmentORC extends CHL7v2Segment {
     $data[] = null;
 
     // ORC-7: Quantity/Timing (TQ)
-    //@todo a voir
     $data[] = array(
-      "1"
+      array(
+        "1",
+        null,
+        null,
+        $object->_datetime
+      )
     );
 
     // ORC-8: Parent (CM) (optional)
@@ -88,7 +90,7 @@ class CHL7v2SegmentORC extends CHL7v2Segment {
     $data[] = null;
 
     // ORC-9: date/time od Transaction (TS)
-    $data[] = $object->_datetime;
+    $data[] = CMbDT::dateTime();
 
     // ORC-10: Entered By (XCN) (optional)
     $data[] = null;
@@ -114,16 +116,13 @@ class CHL7v2SegmentORC extends CHL7v2Segment {
     $data[] = null;
 
     // ORC-17: Entering Organization (CE)
-    $orc17 = null;
-    $element = $object->element_prescription_id ? $object->_ref_element_prescription: $object->_old->_ref_element_prescription;
-    if ($element) {
-      $orc17 = array(
-        array(
-          $element->_id,
-          $element->libelle,
-        )
-      );
-    }
+    $group = $event->_receiver->_ref_group;
+    $orc17 = array(
+      array(
+        $group->_id,
+        $group->raison_sociale,
+      )
+    );
     $data[] = $orc17;
 
     // ORC-18: Entering Device (CE) (optional)
