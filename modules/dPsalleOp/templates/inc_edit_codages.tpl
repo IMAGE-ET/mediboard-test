@@ -101,7 +101,7 @@
 
 <table class="tbl" style="min-width: 400px;">
   <tr>
-    <th class="title" colspan="10" style="border-bottom: none;">
+    <th class="title" colspan="11" style="border-bottom: none;">
       <div style="float: left">
         <form name="addActes-{{$subject->_guid}}" method="post" onsubmit="return onSubmitFormAjax(this, window.urlCodage.refreshModal.bind(window.urlCodage))">
           {{if $subject instanceof CConsultation}}
@@ -145,41 +145,44 @@
       Actes du Dr {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$codage->_ref_praticien}}
     </th>
   </tr>
-  <th class="title" colspan="10" style="border-top: none;">
-    {{foreach from=$subject->_ext_codes_ccam item=_code}}
-      <span id="action-{{$_code->code}}" class="circled" style="background-color: #eeffee; color: black; font-weight: normal; font-size: 0.8em;">
-            {{$_code->code}}
+  <tr>
+    <th class="title" colspan="10" style="border-top: none;">
+      {{foreach from=$subject->_ext_codes_ccam item=_code}}
+        <span id="action-{{$_code->code}}" class="circled" style="background-color: #eeffee; color: black; font-weight: normal; font-size: 0.8em;">
+         {{$_code->code}}
 
-        {{if count($_code->assos) > 0}}
-          {{unique_id var=uid_autocomplete_comp}}
-          <form name="addAssoCode{{$uid_autocomplete_comp}}" method="get">
-            <input type="text" size="8em" name="keywords" value="{{$_code->assos|@count}} cmp./sup." onclick="$V(this, '');"/>
-          </form>
-          <div style="text-align: left; color: #000; display: none; width: 200px !important; font-weight: normal; font-size: 11px; text-shadow: none;"
-               class="autocomplete" id="_ccam_add_comp_autocomplete_{{$_code->code}}">
-          </div>
-          <script>
-            Main.add(function() {
-              var form = getForm("addAssoCode{{$uid_autocomplete_comp}}");
-              var url = new Url("dPccam", "ajax_autocomplete_ccam_asso");
-              url.addParam("code", "{{$_code->code}}");
-              url.autoComplete(form.keywords, '_ccam_add_comp_autocomplete_{{$_code->code}}', {
-                minChars: 2,
-                dropdown: true,
-                width: "250px",
-                updateElement: function(selected) {
-                  CCAMField{{$subject->_class}}{{$subject->_id}}.add(selected.down("strong").innerHTML);
-                }
+          {{if count($_code->assos) > 0}}
+            {{unique_id var=uid_autocomplete_comp}}
+            <form name="addAssoCode{{$uid_autocomplete_comp}}" method="get">
+              <input type="text" size="8em" name="keywords" value="{{$_code->assos|@count}} cmp./sup." onclick="$V(this, '');"/>
+            </form>
+            <div style="text-align: left; color: #000; display: none; width: 200px !important; font-weight: normal; font-size: 11px; text-shadow: none;"
+                 class="autocomplete" id="_ccam_add_comp_autocomplete_{{$_code->code}}">
+            </div>
+            <script>
+              Main.add(function() {
+                var form = getForm("addAssoCode{{$uid_autocomplete_comp}}");
+                var url = new Url("dPccam", "ajax_autocomplete_ccam_asso");
+                url.addParam("code", "{{$_code->code}}");
+                url.autoComplete(form.keywords, '_ccam_add_comp_autocomplete_{{$_code->code}}', {
+                  minChars: 2,
+                  dropdown: true,
+                  width: "250px",
+                  updateElement: function(selected) {
+                    CCAMField{{$subject->_class}}{{$subject->_id}}.add(selected.down("strong").innerHTML);
+                  }
+                });
               });
-            });
-          </script>
-        {{/if}}
+            </script>
+          {{/if}}
 
-        <button type="button" class="trash notext" onclick="CCAMField{{$subject->_class}}{{$subject->_id}}.remove('{{$_code->code}}')">
-          {{tr}}Delete{{/tr}}
-        </button>
-          </span>
-    {{/foreach}}
+          <button type="button" class="trash notext" onclick="CCAMField{{$subject->_class}}{{$subject->_id}}.remove('{{$_code->code}}')">
+            {{tr}}Delete{{/tr}}
+          </button>
+      </span>
+      {{/foreach}}
+    </th>
+  </tr>
   <tr>
     <th class="narrow">{{mb_title class=CActeCCAM field=code_acte}}</th>
     <th colspan="2" class="narrow">

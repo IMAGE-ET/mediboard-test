@@ -40,7 +40,7 @@
 
 <table class="tbl">
   <tr>
-    <th class="title" colspan="20">
+    <th class="title" colspan="20" style="border-bottom: none;">
       <form name="addActes-{{$obj_guid}}" method="post" onsubmit="return onSubmitFormAjax(this, PMSI.reloadActesCCAM.curry('{{$obj_guid}}'));">
         {{if $subject instanceof CConsultation}}
           <input type="hidden" name="m" value="cabinet" />
@@ -56,7 +56,7 @@
 
         <div style="float: left">
           {{mb_field object=$subject field="codes_ccam" hidden=true onchange="this.form.onsubmit()"}}
-          <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" style="width: 12em" value="" class="autocomplete" placeholder="Choisissez un acte" />
+          <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" style="width: 12em" value="" class="autocomplete" placeholder="Ajoutez un acte" />
           <div style="text-align: left; color: #000; display: none; width: 200px !important; font-weight: normal; font-size: 11px; text-shadow: none;"
                class="autocomplete" id="_ccam_autocomplete_{{$subject->_guid}}"></div>
           <script>
@@ -80,15 +80,46 @@
             })
           </script>
         </div>
-        <div style="text-align: right;">
-          {{foreach from=$subject->_codes_ccam item=_code_ccam}}
-            <button type="button" class="remove" onclick="CCAMField{{$subject->_class}}{{$subject->_id}}.remove('{{$_code_ccam}}')">
-              {{$_code_ccam}}
-            </button>
-          {{/foreach}}
-        </div>
         {{tr}}CActeCCAM{{/tr}}
       </form>
+    </th>
+  </tr>
+  <tr>
+    <th class="title" colspan="11" style="border-top: none;">
+      {{foreach from=$subject->_ext_codes_ccam item=_code}}
+        <span id="action-{{$_code->code}}" class="circled" style="background-color: #eeffee; color: black; font-weight: normal; font-size: 0.8em;">
+         {{$_code->code}}
+
+          {{if count($_code->assos) > 0}}
+            {{unique_id var=uid_autocomplete_comp}}
+            <form name="addAssoCode{{$uid_autocomplete_comp}}" method="get">
+              <input type="text" size="8em" name="keywords" value="{{$_code->assos|@count}} cmp./sup." onclick="$V(this, '');"/>
+            </form>
+            <div style="text-align: left; color: #000; display: none; width: 200px !important; font-weight: normal; font-size: 11px; text-shadow: none;"
+                 class="autocomplete" id="_ccam_add_comp_autocomplete_{{$_code->code}}">
+            </div>
+            <script>
+              Main.add(function() {
+                var form = getForm("addAssoCode{{$uid_autocomplete_comp}}");
+                var url = new Url("dPccam", "ajax_autocomplete_ccam_asso");
+                url.addParam("code", "{{$_code->code}}");
+                url.autoComplete(form.keywords, '_ccam_add_comp_autocomplete_{{$_code->code}}', {
+                  minChars: 2,
+                  dropdown: true,
+                  width: "250px",
+                  updateElement: function(selected) {
+                    CCAMField{{$subject->_class}}{{$subject->_id}}.add(selected.down("strong").innerHTML);
+                  }
+                });
+              });
+            </script>
+          {{/if}}
+
+          <button type="button" class="trash notext" onclick="CCAMField{{$subject->_class}}{{$subject->_id}}.remove('{{$_code->code}}')">
+            {{tr}}Delete{{/tr}}
+          </button>
+      </span>
+      {{/foreach}}
     </th>
   </tr>
   <tr>
