@@ -486,6 +486,7 @@ class CDatedCodeCCAM {
   function getAssoFromActivite(&$activite, $code = null, $limit = null) {
     // Extraction des phases
     $assos = array();
+    $anesth_comp = '';
     if ($this->type == 2) {
       $activite->assos = $assos;
       return;
@@ -502,9 +503,15 @@ class CDatedCodeCCAM {
       $assos[$asso->acte_asso]["code"]  = $asso->_ref_code["CODE"];
       $assos[$asso->acte_asso]["texte"] = $asso->_ref_code["LIBELLELONG"];
       $assos[$asso->acte_asso]["type"]  = $asso->_ref_code["TYPE"];
+
+      /* Vérification si l'un des codes associés est une anesthésie complémentaire */
+      if (in_array($asso->acte_asso, array('ZZLP008', 'ZZLP012', 'ZZLP025', 'ZZLP030', 'ZZLP042', 'ZZLP054' ))) {
+        $anesth_comp = $asso->acte_asso;
+      }
     }
     $this->assos = array_merge($this->assos, $assos);
     $activite->assos = $assos;
+    $activite->anesth_comp = $anesth_comp;
   }
 
   /**

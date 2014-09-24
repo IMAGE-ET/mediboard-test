@@ -1,3 +1,7 @@
+{{mb_script module="dPccam" script="code_ccam" ajax=$ajax}}
+
+{{assign var="subject" value=$codage->_ref_codable}}
+
 <script>
 
   changeCodageMode = function(element) {
@@ -79,15 +83,21 @@
     }
   };
 
+  addActeAnesthComp = function(acte) {
+    if (confirm("Voulez vous ajoutez l'acte d'anesthésie complémentaire " + acte + '?')) {
+      var on_change = CCAMField{{$subject->_class}}{{$subject->_id}}.options.onChange;
+      CCAMField{{$subject->_class}}{{$subject->_id}}.options.onChange = Prototype.emptyFunction;
+      CCAMField{{$subject->_class}}{{$subject->_id}}.add(acte);
+      onSubmitFormAjax(getForm('addActes-{{$subject->_guid}}'));
+      CCAMField{{$subject->_class}}{{$subject->_id}}.options.onChange = on_change;
+    }
+  }
+
   Main.add(function(){
     Control.Tabs.create('rules-tab', true);
   });
 
 </script>
-
-{{mb_script module="dPccam" script="code_ccam" ajax=$ajax}}
-
-{{assign var="subject" value=$codage->_ref_codable}}
 
 <table class="tbl" style="min-width: 400px;">
   <tr>
@@ -297,7 +307,9 @@
             {{/foreach}}
 
             {{if !$acte->_id}}
-              <button class="add notext compact" type="submit">
+              <button class="add notext compact" type="submit" {{if $_activite->anesth_comp && !$_activite->anesth_comp|in_array:$subject->_codes_ccam}}
+                      onclick="addActeAnesthComp('{{$_activite->anesth_comp}}');"
+              {{/if}}>
                 {{tr}}Add{{/tr}}
               </button>
             {{else}}
