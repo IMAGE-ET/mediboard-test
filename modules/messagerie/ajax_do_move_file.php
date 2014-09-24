@@ -24,7 +24,7 @@ if (!$document->_id) {
 }
 
 $account = $document->loadRefAccount();
-$praticien = $account->loadRefMediuser();
+//$praticien = $account->loadRefMediuser();
 
 $file = $document->loadRefFile(true);
 
@@ -44,7 +44,7 @@ $patient = $document->findPatient();
 $smarty = new CSmartyDP();
 $smarty->assign("file", $file);
 $smarty->assign("file_categories", $cats);
-$smarty->assign("praticien", $praticien);
+//$smarty->assign("praticien", $praticien);
 $smarty->assign("document", $document);
 $smarty->assign("guessing_date", $document->document_date);
 $smarty->assign("patient", $patient);

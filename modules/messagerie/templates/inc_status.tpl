@@ -10,11 +10,20 @@
 *}}
 
 
-<button class="link" type="button {{if $object->_status != "linked"}}notext{{/if}}" onclick="linkDocument('{{$object->_guid}}');">
+{{if $object->_ref_file && $object->_ref_file->_id}}
+  <button class="link" type="button {{if $object->_status != "linked"}}notext{{/if}}" onclick="linkDocument('{{$object->_guid}}');">
+    {{if $object->_status == "linked"}}
+      (déjà lié)
+    {{/if}}
+  </button>
+
   {{if $object->_status == "linked"}}
-    (déjà lié)
+    <button class="unlink notext" type="button" onclick="unlinkDocument('{{$object->_guid}}')">{{tr}}Unlink{{/tr}}</button>
   {{/if}}
-</button>
+
+{{else}}
+  <div class="warning">Pas de fichier à lier</div>
+{{/if}}
 
 {{if $object->starred}}
   <img src="modules/messagerie/images/favorites-1.png" alt="" style="height:1.3em;" />

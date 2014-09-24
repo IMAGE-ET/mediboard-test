@@ -138,9 +138,13 @@ class CDocumentExterne extends CMessageExterne {
 
   /**
    * load the file attached
+   *
+   * @param boolean $fwd if file is linked, try to recover the file by fwd method
+   *
+   * @return CFile
    */
-  function loadRefFile() {
-    return $this->_ref_file = new CFile();
+  function loadRefFile($fwd = true) {
+    return $this->_ref_file;
   }
 
 }

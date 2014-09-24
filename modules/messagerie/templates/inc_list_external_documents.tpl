@@ -18,6 +18,10 @@
   changeMode = function(mode) {
     listDocuments('{{$account_id}}', mode);
   };
+
+  Main.add(function() {
+    $('li_tabs_{{$doc->_ref_account->_guid}}').down('small').update("({{$nb_unlinked}})");
+  });
 </script>
 
 
@@ -61,7 +65,6 @@
         {{mb_include module=messagerie template=inc_status object=$_document}}
       </td>
     </tr>
-
   {{foreachelse}}
     <tr>
       <td colspan="4" class="empty">{{tr}}{{$doc->_class}}.none{{/tr}}</td>

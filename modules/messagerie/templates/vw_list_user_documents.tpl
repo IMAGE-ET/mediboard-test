@@ -57,16 +57,20 @@
    * @param type
    */
   do_multi_action = function(type) {
+    var ids = [];
+    $$('#list_document input[class="input_doc"]:checked').each(function(data) {
+      ids.push(data.get('object_guid'));
+    });
+
+    if (!ids.length) {
+      return;
+    }
+
     if (type == "delete") {
       if (!confirm("Êtes vous sur de vouloir supprimer les documents sélectionnés ?")) {
         return;
       }
     }
-
-    var ids = [];
-    $$('#list_document input[class="input_doc"]:checked').each(function(data) {
-      ids.push(data.get('object_guid'));
-    });
 
     var url = new Url("messagerie", "do_document_multi_action", "dosql");
     url.addParam("type", type);
@@ -91,9 +95,13 @@
    * @param document_guid
    */
   linkDocument = function(document_guid) {
-    var url = new Url("messagerie", "ajax_do_move_file_bioserveur");
+    var url = new Url("messagerie", "ajax_do_move_file");
     url.addParam("document_guid", document_guid);
     url.requestModal(-40, -40);
+  };
+
+  unlinkDocument = function(document_guid) {
+    {{$_script}}.unlinkDocument(document_guid);
   };
 </script>
 
@@ -111,7 +119,7 @@
       <td style="vertical-align: top; width: 15%">
         <ul class="control_tabs_vertical" id="account_list">
           {{foreach from=$users item=_user}}
-            <li>
+            <li id="li_tabs_{{$_user->_guid}}">
               <span style="float:left; margin:5px;">
                 <button class="edit notext" onclick="edit_account('{{$_user->_id}}')">{{tr}}Edit{{/tr}}</button>
                 {{if $ref_module == "bioserveur"}}
@@ -122,11 +130,14 @@
               <a href="#list_document"
                  style="font-weight: normal; "  onmousedown="listDocuments('{{$_user->_id}}');">
                 <span onmouseover="ObjectTooltip.createEx(this, '{{$_user->_guid}}')">{{$_user}}<br/>
-                   <span id="count_doc_{{$_user->_id}}" style="padding:0 3px; font-weight: bold;">
-
-                   </span>
+                   <small id="count_doc_{{$_user->_guid}}" style="padding:0 3px; font-weight: bold;">
+                     {{if $_user->_nb_documents != ""}}
+                       ({{$_user->_nb_documents}})
+                     {{/if}}
+                   </small>
                 </span>
               </a>
+
             </li>
           {{/foreach}}
         </ul>
