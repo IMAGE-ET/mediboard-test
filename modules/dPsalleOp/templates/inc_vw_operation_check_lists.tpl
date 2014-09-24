@@ -51,9 +51,11 @@
           <option value="{{$_type}}" {{if $active_list_type == $_type}} selected {{/if}}>{{$_label}}</option>
         {{/foreach}}
       </select>
-      
-      <img height="20" src="images/pictures/logo-has-small.png" />
-      
+
+      {{if $conf.ref_pays == 1}}
+        <img height="20" src="images/pictures/logo-has-small.png" />
+      {{/if}}
+
       <button class="print" onclick="(new Url('dPsalleOp', 'print_check_list_operation')).addParam('operation_id', '{{$selOp->_id}}').popup(800, 600, 'check_list')">
         {{tr}}Print{{/tr}}
       </button>
