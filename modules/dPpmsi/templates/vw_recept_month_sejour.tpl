@@ -30,7 +30,7 @@
     </th>
     <th class="text">
       <a class="{{if !$tri_recept && $tri_complet}}selected{{else}}selectable{{/if}}" title="Dossiers complétés" href="#"
-         onclick="Reception.filterSortie(1, 1);">Compl.</a>
+         onclick="Reception.filterSortie(0, 1);">Compl.</a>
     </th>
   </tr>
 
