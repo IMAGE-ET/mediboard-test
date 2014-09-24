@@ -51,15 +51,13 @@ function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service
       'data' => array()
     );
 
-    $query = "SELECT COUNT(sejour.sejour_id) AS total, sejour.type,
+    $query = "SELECT COUNT(DISTINCT sejour.sejour_id) AS total, sejour.type,
       DATE_FORMAT(sejour.entree_$type_data, '%m/%Y') AS mois,
       DATE_FORMAT(sejour.entree_$type_data, '%Y%m') AS orderitem
       FROM sejour
-      INNER JOIN users_mediboard ON sejour.praticien_id = users_mediboard.user_id
+      LEFT JOIN users_mediboard ON sejour.praticien_id = users_mediboard.user_id
       LEFT JOIN affectation ON sejour.sejour_id = affectation.sejour_id
-      LEFT JOIN lit ON affectation.lit_id = lit.lit_id
-      LEFT JOIN chambre ON lit.chambre_id = chambre.chambre_id
-      LEFT JOIN service ON chambre.service_id = service.service_id
+      LEFT JOIN service ON affectation.service_id = service.service_id
       WHERE
         sejour.entree_$type_data BETWEEN '$debut 00:00:00' AND '$fin 23:59:59' AND
         sejour.group_id = '".CGroups::loadCurrent()->_id."' AND
