@@ -16,8 +16,6 @@
  */
 class CMessageExterne extends CMbObject {
 
-  //mail_object, bioserveur_object_file, ...
-
   public $account_id;     // account ID
 
   //behaviour
@@ -40,7 +38,7 @@ class CMessageExterne extends CMbObject {
   }
 
   function loadRefAccount() {
-    return $this->_ref_account = $this->loadFwdRef("account_id");
+    return $this->_ref_account = $this->loadFwdRef("account_id", true);
   }
 
   /**
