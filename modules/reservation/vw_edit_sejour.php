@@ -9,4 +9,8 @@
  * @version    $Revision$
  */
 
+$module = new CModule();
+$module->loadByName("dPplanningOp");
+$module->canDo()->needsRead();
+
 CAppUI::requireModuleFile("dPplanningOp", "vw_edit_sejour");
