@@ -79,13 +79,13 @@ function graphPatParService(
       'label' => utf8_encode($service->nom)
     );
 
-    $query = "SELECT COUNT(DISTINCT affectation.sejour_id) AS total, service.nom AS nom,
+    $query = "SELECT COUNT(DISTINCT sejour.sejour_id) AS total, service.nom AS nom,
       DATE_FORMAT(affectation.entree, '%m/%Y') AS mois,
       DATE_FORMAT(affectation.entree, '%Y%m') AS orderitem
       FROM sejour
-      INNER JOIN users_mediboard ON sejour.praticien_id = users_mediboard.user_id
-      INNER JOIN affectation ON sejour.sejour_id = affectation.sejour_id
-      INNER JOIN service ON affectation.service_id = service.service_id
+      LEFT JOIN users_mediboard ON sejour.praticien_id = users_mediboard.user_id
+      LEFT JOIN affectation ON sejour.sejour_id = affectation.sejour_id
+      LEFT JOIN service ON affectation.service_id = service.service_id
       WHERE
         sejour.annule = '0' AND
         sejour.group_id = '$group_id' AND
@@ -147,7 +147,7 @@ function graphPatParService(
       DATE_FORMAT(sejour.entree_$type_data, '%m/%Y') AS mois,
       DATE_FORMAT(sejour.entree_$type_data, '%Y%m') AS orderitem
       FROM sejour
-      INNER JOIN users_mediboard ON sejour.praticien_id = users_mediboard.user_id
+      LEFT JOIN users_mediboard ON sejour.praticien_id = users_mediboard.user_id
       LEFT JOIN  affectation ON sejour.sejour_id = affectation.sejour_id
       WHERE 
         sejour.annule = '0' AND

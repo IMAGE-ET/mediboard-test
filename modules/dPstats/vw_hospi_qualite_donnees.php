@@ -35,57 +35,74 @@ $type_data = CValue::get("type_data", "prevue");
 $qualite = array();
 
 // Liste des séjours totaux
-$query = "SELECT COUNT(sejour.sejour_id) AS total, 1 as group_field
+$query = "SELECT COUNT(DISTINCT sejour.sejour_id) AS total, 1 as group_field
       FROM sejour
-      INNER JOIN users_mediboard ON sejour.praticien_id = users_mediboard.user_id
+      LEFT JOIN users_mediboard ON sejour.praticien_id = users_mediboard.user_id
       LEFT JOIN affectation ON sejour.sejour_id = affectation.sejour_id
-      LEFT JOIN lit ON affectation.lit_id = lit.lit_id
-      LEFT JOIN chambre ON lit.chambre_id = chambre.chambre_id
-      LEFT JOIN service ON chambre.service_id = service.service_id
+      LEFT JOIN service ON affectation.service_id = service.service_id
       WHERE
         sejour.entree_prevue BETWEEN '$filter->_date_min_stat 00:00:00' AND '$filter->_date_max_stat 23:59:59' AND
         sejour.group_id = '".CGroups::loadCurrent()->_id."' AND
         sejour.annule = '0'";
-if ($filter->_service)     $query .= "\nAND service.service_id = '$filter->_service'";
-if ($filter->praticien_id) $query .= "\nAND sejour.praticien_id = '$filter->praticien_id'";
-if ($filter->_specialite)  $query .= "\nAND users_mediboard.discipline_id = '$filter->_specialite'";
-if ($filter->septique)     $query .= "\nAND sejour.septique = '$filter->septique'";
+if ($filter->_service) {
+  $query .= "\nAND service.service_id = '$filter->_service'";
+}
+if ($filter->praticien_id) {
+  $query .= "\nAND sejour.praticien_id = '$filter->praticien_id'";
+}
+if ($filter->_specialite) {
+  $query .= "\nAND users_mediboard.discipline_id = '$filter->_specialite'";
+}
+if ($filter->septique) {
+  $query .= "\nAND sejour.septique = '$filter->septique'";
+}
 if ($filter->type) {
-  if($filter->type == 1)
+  if ($filter->type == 1) {
     $query .= "\nAND (sejour.type = 'comp' OR sejour.type = 'ambu')";
-  else
+  }
+  else {
     $query .= "\nAND sejour.type = '$filter->type'";
+  }
 }
 $query .= "\nGROUP BY group_field";
-$sejour = new CSejour;
+$sejour = new CSejour();
 $result = $sejour->_spec->ds->loadlist($query);
 
 $qualite["total"] = 0;
-if (count($result))
+if (count($result)) {
   $qualite["total"] = $result[0]["total"];
+}
 
 // 1. Patients placés
 $query = "SELECT COUNT(sejour.sejour_id) AS total, 1 as group_field
       FROM sejour
-      INNER JOIN users_mediboard ON sejour.praticien_id = users_mediboard.user_id
+      LEFT JOIN users_mediboard ON sejour.praticien_id = users_mediboard.user_id
       LEFT JOIN affectation ON sejour.sejour_id = affectation.sejour_id
-      LEFT JOIN lit ON affectation.lit_id = lit.lit_id
-      LEFT JOIN chambre ON lit.chambre_id = chambre.chambre_id
-      LEFT JOIN service ON chambre.service_id = service.service_id
+      LEFT JOIN service ON affectation.service_id = service.service_id
       WHERE
         sejour.entree_prevue BETWEEN '$filter->_date_min_stat 00:00:00' AND '$filter->_date_max_stat 23:59:59' AND
         sejour.group_id = '".CGroups::loadCurrent()->_id."' AND
         sejour.annule = '0' AND
         affectation.affectation_id IS NOT NULL";
-if ($filter->_service)     $query .= "\nAND service.service_id = '$filter->_service'";
-if ($filter->praticien_id) $query .= "\nAND sejour.praticien_id = '$filter->praticien_id'";
-if ($filter->_specialite)  $query .= "\nAND users_mediboard.discipline_id = '$filter->_specialite'";
-if ($filter->septique)     $query .= "\nAND sejour.septique = '$filter->septique'";
+if ($filter->_service) {
+  $query .= "\nAND service.service_id = '$filter->_service'";
+}
+if ($filter->praticien_id) {
+  $query .= "\nAND sejour.praticien_id = '$filter->praticien_id'";
+}
+if ($filter->_specialite) {
+  $query .= "\nAND users_mediboard.discipline_id = '$filter->_specialite'";
+}
+if ($filter->septique) {
+  $query .= "\nAND sejour.septique = '$filter->septique'";
+}
 if ($filter->type) {
-  if ($filter->type == 1)
+  if ($filter->type == 1) {
     $query .= "\nAND (sejour.type = 'comp' OR sejour.type = 'ambu')";
-  else
+  }
+  else {
     $query .= "\nAND sejour.type = '$filter->type'";
+  }
 }
 $query .= "\nGROUP BY group_field";
 $sejour = new CSejour;
@@ -100,28 +117,36 @@ if (count($result)) {
 }
 
 // 2. Séjours sans entrées ou sorties réelles
-$query = "SELECT COUNT(sejour.sejour_id) AS total, 1 as group_field
+$query = "SELECT COUNT(DISTINCT sejour.sejour_id) AS total, 1 as group_field
       FROM sejour
-      INNER JOIN users_mediboard ON sejour.praticien_id = users_mediboard.user_id
+      LEFT JOIN users_mediboard ON sejour.praticien_id = users_mediboard.user_id
       LEFT JOIN affectation ON sejour.sejour_id = affectation.sejour_id
-      LEFT JOIN lit ON affectation.lit_id = lit.lit_id
-      LEFT JOIN chambre ON lit.chambre_id = chambre.chambre_id
-      LEFT JOIN service ON chambre.service_id = service.service_id
+      LEFT JOIN service ON affectation.service_id = service.service_id
       WHERE
         sejour.entree_prevue BETWEEN '$filter->_date_min_stat 00:00:00' AND '$filter->_date_max_stat 23:59:59' AND
         sejour.group_id = '".CGroups::loadCurrent()->_id."' AND
         sejour.annule = '0' AND
         sejour.entree_reelle IS NOT NULL AND
         sejour.sortie_reelle IS NOT NULL";
-if ($filter->_service)     $query .= "\nAND service.service_id = '$filter->_service'";
-if ($filter->praticien_id) $query .= "\nAND sejour.praticien_id = '$filter->praticien_id'";
-if ($filter->_specialite)  $query .= "\nAND users_mediboard.discipline_id = '$filter->_specialite'";
-if ($filter->septique)     $query .= "\nAND sejour.septique = '$filter->septique'";
+if ($filter->_service) {
+  $query .= "\nAND service.service_id = '$filter->_service'";
+}
+if ($filter->praticien_id) {
+  $query .= "\nAND sejour.praticien_id = '$filter->praticien_id'";
+}
+if ($filter->_specialite) {
+  $query .= "\nAND users_mediboard.discipline_id = '$filter->_specialite'";
+}
+if ($filter->septique) {
+  $query .= "\nAND sejour.septique = '$filter->septique'";
+}
 if ($filter->type) {
-  if($filter->type == 1)
+  if ($filter->type == 1) {
     $query .= "\nAND (sejour.type = 'comp' OR sejour.type = 'ambu')";
-  else
+  }
+  else {
     $query .= "\nAND sejour.type = '$filter->type'";
+  }
 }
 $query .= "\nGROUP BY group_field";
 $sejour = new CSejour;
