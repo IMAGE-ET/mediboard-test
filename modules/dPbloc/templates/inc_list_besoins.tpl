@@ -20,13 +20,14 @@
       <div style="float: right">
         <button type="button" class="trash notext" {{if $usage || $_usage->_id}}disabled{{/if}} title="{{tr}}Delete{{/tr}}"
           {{if $object_id}}
-            onclick="onDelBesoin('{{$_besoin->_id}}', '{{$type_ressource->libelle}}')"
+            onclick="onDelBesoin('{{$_besoin->_id}}', '{{$type_ressource->libelle|smarty:nodefaults|JSAttribute}}')"
           {{else}}
             onclick="delBesoinNonStored('{{$type_ressource->_id}}')"
           {{/if}}></button>
         {{if $type == "operation_id"}}
           <button type="button" class="modele_etiquette notext"
-            onclick="showPlanning('{{$_besoin->type_ressource_id}}', '{{$object_id}}', '{{$_usage->_id}}', '{{$_besoin->_id}}', '{{$usage}}')" title="Planning"></button> {{/if}}
+            onclick="showPlanning('{{$_besoin->type_ressource_id}}', '{{$object_id}}', '{{$_usage->_id}}', '{{$_besoin->_id}}', '{{$usage}}')" title="Planning"></button>
+        {{/if}}
       </div>
       <strong>
         {{$type_ressource->libelle}}

@@ -19,8 +19,10 @@ $besoins = $besoin->loadMatchingList();
 
 // Vert : tout va bien
 $color = "";
+$nb_besoins = count($besoins);
+$nb_valides = 0;
 
-if (count($besoins)) {
+if ($nb_besoins) {
   $color = "0a0";
   /** @var COperation $operation */
   $operation = reset($besoins)->loadRefOperation();
@@ -33,9 +35,10 @@ if (count($besoins)) {
   foreach ($besoins as $_besoin) {
     $usage = $_besoin->loadRefUsage();
     
-    $ressource = new CRessourceMaterielle;
+    $ressource = new CRessourceMaterielle();
     $ressource->type_ressource_id = $_besoin->type_ressource_id;
     if ($usage->_id) {
+      $nb_valides++;
       $ressource = $usage->loadRefRessource();
     }
     $type_ressource = $_besoin->loadRefTypeRessource();
@@ -61,5 +64,7 @@ if (count($besoins)) {
   }
 }
 
-echo json_encode($color);
+echo json_encode(array(
+  "color" => $color,
+  "count" => "$nb_valides/$nb_besoins"));
 CApp::rip();

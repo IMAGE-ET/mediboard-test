@@ -18,12 +18,12 @@ $besoin_ressource_id = CValue::get("besoin_ressource_id");
 $usage_ressource_id = CValue::get("usage_ressource_id");
 $usage             = CValue::get("usage");
 
-$operation = new COperation;
+$operation = new COperation();
 $operation->load($operation_id);
 $operation->loadRefPlageOp();
-$debut_op = $operation->_datetime;
+$debut_op = $operation->_datetime_best;
 
-$type_ressource = new CTypeRessource;
+$type_ressource = new CTypeRessource();
 $type_ressource->load($type_ressource_id);
 
 $ressources = $type_ressource->loadRefsRessources();
@@ -64,6 +64,8 @@ $usages_by_ressource = array();
 $besoins = CStoredObject::massLoadFwdRef($usages, "besoin_ressource_id");
 CStoredObject::massLoadFwdRef($besoins, "operation_id");
 
+$display_alert = 0;
+
 foreach ($usages as $_usage) {
   if (!isset($usages_by_ressource[$_usage->ressource_materielle_id])) {
     $usages_by_ressource[$_usage->ressource_materielle_id] = array();
@@ -84,6 +86,14 @@ foreach ($usages as $_usage) {
   $_usage->_debut_offset_retablissement = $_usage->_fin_offset;
   $_usage->_fin_offset_retablissement = CMbdate::position(min($date_max, $fin_retab), $date_min, "1hour");
   $_usage->_width_retablissement = $_usage->_fin_offset_retablissement - $_usage->_debut_offset_retablissement;
+
+  if (count($ressources) == 1) {
+    // S'il n'y a qu'une seule ressource dans le type de ressource, alors on peut vérifier si le temps de réhabilitation empiète
+    // sur une intervention future
+    if ($min_fin_op < $_debut_op && CMbDT::addDateTime(reset($ressources)->retablissement, $min_fin_op) > $_debut_op) {
+      $display_alert = 1;
+    }
+  }
 
   if ($_usage->_width <= 0) {
     continue;
@@ -121,18 +131,26 @@ foreach ($besoins as $key => $_besoin) {
   if ($_besoin->_width <= 0) {
     unset($besoins[$key]);
   }
+  if (count($ressources) == 1) {
+    // S'il n'y a qu'une seule ressource dans le type de ressource, alors on peut vérifier si le temps de réhabilitation empiète
+    // sur une intervention future
+    if ($min_fin_op < $_debut_op && CMbDT::addDateTime(reset($ressources)->retablissement, $min_fin_op) > $_debut_op) {
+      $display_alert = 1;
+    }
+  }
 }
 
 $smarty = new CSmartyDP;
 
-$smarty->assign("ressources", $ressources);
-$smarty->assign("hours"     , $hours);
-$smarty->assign("operation" , $operation);
-$smarty->assign("date"      , $date);
+$smarty->assign("ressources" , $ressources);
+$smarty->assign("hours"      , $hours);
+$smarty->assign("operation"  , $operation);
+$smarty->assign("date"       , $date);
 $smarty->assign("date_before", $date_before);
-$smarty->assign("date_after", $date_after);
-$smarty->assign("besoins"   , $besoins);
-$smarty->assign("usage"     , $usage);
+$smarty->assign("date_after" , $date_after);
+$smarty->assign("besoins"    , $besoins);
+$smarty->assign("usage"      , $usage);
+$smarty->assign("display_alert", $display_alert);
 $smarty->assign("usages_by_ressource"  , $usages_by_ressource);
 $smarty->assign("indispos_by_ressource", $indispos_by_ressource);
 $smarty->assign("type_ressource_id"    , $type_ressource_id);

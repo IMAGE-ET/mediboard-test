@@ -22,7 +22,7 @@
         method: "get",
         select: "view",
         dropdown: true,
-        afterUpdateElement: function(field, selected){
+        afterUpdateElement: function(field, selected) {
           var id = selected.get("id");
           if (!id) {
             return;
@@ -43,9 +43,7 @@
   {{/if}}
   
   onSubmitBesoins = function(form) {
-    return onSubmitFormAjax(form, function() {
-      reloadModal(); 
-    });
+    return onSubmitFormAjax(form, reloadModal);
   };
   
   onDelBesoin = function(besoin_id, nom) {
@@ -82,14 +80,14 @@
   };
   
   showPlanning = function(type_ressource_id, operation_id, usage_ressource_id, besoin_ressource_id, usage) {
-   var url = new Url("dPbloc", "ajax_vw_planning_ressources");
-   url.addParam("besoin_ressource_id", besoin_ressource_id);
-   url.addParam("usage_ressource_id", usage_ressource_id);
-   url.addParam("type_ressource_id", type_ressource_id);
-   url.addParam("operation_id", operation_id);
-   url.addParam("usage", usage);
-   url.modal();
-   url.modalObject.observe("afterClose", reloadModal);
+    var url = new Url("bloc", "ajax_vw_planning_ressources");
+    url.addParam("besoin_ressource_id", besoin_ressource_id);
+    url.addParam("usage_ressource_id", usage_ressource_id);
+    url.addParam("type_ressource_id", type_ressource_id);
+    url.addParam("operation_id", operation_id);
+    url.addParam("usage", usage);
+    url.modal();
+    url.modalObject.observe("afterClose", reloadModal);
   }
 </script>
 

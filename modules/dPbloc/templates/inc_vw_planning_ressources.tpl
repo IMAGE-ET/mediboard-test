@@ -8,7 +8,7 @@
  * @version    $Revision$
  *}}
 
-<script type="text/javascript">
+<script>
   createUsage = function(ressource_materielle_id) {
     var form = getForm("createUsageForm");
     $V(form.ressource_materielle_id, ressource_materielle_id);
@@ -24,7 +24,7 @@
   });
   
   redirectPlanning = function(date) {
-    var url = new Url("dPbloc", "ajax_vw_planning_ressources");
+    var url = new Url("bloc", "ajax_vw_planning_ressources");
     url.addParam("operation_id", '{{$operation->_id}}');
     url.addParam("besoin_ressource_id", '{{$besoin_ressource_id}}');
     url.addParam("usage_ressource_id", '{{$usage_ressource_id}}');
@@ -77,7 +77,7 @@
 </div>
 
 <form name="createUsageForm" method="post">
-  <input type="hidden" name="m" value="dPbloc" />
+  <input type="hidden" name="m" value="bloc" />
   <input type="hidden" name="dosql" value="do_usage_ressource_aed" />
   <input type="hidden" name="usage_ressource_id" value="" />
   <input type="hidden" name="besoin_ressource_id" value="{{$besoin_ressource_id}}" />
@@ -88,6 +88,12 @@
   {{math equation=x/y x=90 y=$hours|@count assign=td_width}}
 {{else}}
   {{math equation=x/y x=89 y=$hours|@count assign=td_width}}
+{{/if}}
+
+{{if $display_alert}}
+  <div class="small-warning">
+    Attention, la ressource demandée a un temps de réhabilitation qui va provoquer une possible indisponibilité pour l'intervention suivante.
+  </div>
 {{/if}}
 
 <table class="tbl" style="table-layout: fixed;">
@@ -106,7 +112,7 @@
       <a href="#1" onclick="redirectPlanning('{{$date_before}}')" style="display: inline;">&lt;&lt;&lt;</a>
       {{$date|date_format:$conf.longdate}}
       <form name="filterDate" method="get">
-        <input type="hidden" name="m" value="dPbloc" />
+        <input type="hidden" name="m" value="bloc" />
         <input type="hidden" name="a" value="ajax_vw_planning_ressources" />
         <input type="hidden" name="dialog" value="1" />
         <input type="hidden" name="operation_id" value="{{$operation->_id}}" />
@@ -124,7 +130,7 @@
       <th>{{$_hour|date_format:"%H"}}h</th>
     {{/foreach}}
   </tr>
-  {{* Ligne des besoins non validés (pas d'usage *}}
+  {{* Ligne des besoins non validés (pas d'usage) *}}
   <tr>
     {{assign var="div_height" value=10}}
     {{math equation=(x+8)*y x=$div_height y=$besoins|@count assign=td_height}}
@@ -134,24 +140,25 @@
     <th style="height: {{$td_height}}px !important">
       Non validés
     </th>
-    
+
     {{foreach from=$hours item=_hour name=hours name=hours}}
       <td style="vertical-align: top">
         {{if $smarty.foreach.hours.first}}
           {{math equation=x*y+z x=$ressources|@count y=26 z=$td_height assign=height}}
           {{math equation=x*y x=$operation->_debut_offset y=$td_width assign=offset}}
           {{math equation=x*y x=$operation->_width y=$td_width assign=width}}
-          
+
           {{if $width > 0}}
             <div class="planning_ressource interv"
               style="position: absolute; left: {{$offset}}%; width: {{$width}}%; height: {{$height}}px; margin-top: 3px"></div>
           {{/if}}
-          
+
           {{assign var=margin_top value=5}}
           {{foreach from=$besoins item=_besoin key=ressource_id name=ressources}}
             {{math equation=x*y x=$_besoin->_debut_offset y=$td_width assign=offset}}
             {{math equation=x*y x=$_besoin->_width y=$td_width assign=width}}
-            <div class="planning_ressource besoin" style="position: absolute; height: {{$div_height}}px; left: {{$offset}}%; width: {{$width}}%; margin-top: {{$margin_top}}px">
+            <div class="planning_ressource besoin" onmouseover="ObjectTooltip.createEx(this, 'COperation-{{$_besoin->operation_id}}')"
+                 style="position: absolute; height: {{$div_height}}px; left: {{$offset}}%; width: {{$width}}%; margin-top: {{$margin_top}}px">
             </div>
             {{math equation=x+3+y x=$div_height y=$margin_top assign=margin_top}}
           {{/foreach}}
@@ -160,29 +167,39 @@
     {{/foreach}}
   </tr>
   {{foreach from=$ressources item=_ressource key=ressource_id name=ressources}}
+    {{assign var=height_th value=23}}
+    {{if $smarty.session.browser.name == "firefox"}}
+      {{assign var=height_th value=28}}
+    {{/if}}
+    {{assign var=height_ressource value=$height_th}}
+    {{if isset($usages_by_ressource.$ressource_id|smarty:nodefaults)}}
+      {{math equation=x*y x=$usages_by_ressource.$ressource_id|@count y=$height_th assign=height_ressource}}
+    {{/if}}
     <tr>
-      <th style="height: {{if $smarty.session.browser.name == "firefox"}}28{{else}}23{{/if}}px;">
+      <th style="height: {{$height_ressource}}px;">
         {{if $usage && !$usage_ressource_id}}
           <button type="button" class="tick notext" style="float: right;" onclick="createUsage('{{$ressource_id}}')"></button>
         {{/if}}
         {{$_ressource}}
       </th>
       {{foreach from=$hours item=_hour name=hours}}
-        <td>
+        <td style="vertical-align: top;">
           {{if $smarty.foreach.hours.first}}
             {{*
               Dans la première case, on place les usages et les indisponibilités 
              *}}
             {{if isset($usages_by_ressource.$ressource_id|smarty:nodefaults)}}
-              {{foreach from=$usages_by_ressource.$ressource_id item=_usage}}
+              {{foreach from=$usages_by_ressource.$ressource_id item=_usage name=usage}}
                 {{math equation=x*y x=$_usage->_debut_offset y=$td_width assign=offset}}
                 {{math equation=x*y x=$_usage->_width y=$td_width assign=width}}
+                {{math equation=x*y x=$smarty.foreach.usage.index y=2 assign=top}}
                 <div class="planning_ressource usage{{if $_usage->_id == $usage_ressource_id}}_selected{{/if}}"
-                     style="position: absolute; left: {{$offset}}%; width: {{$width}}%;"></div>
+                     onmouseover="ObjectTooltip.createEx(this, 'COperation-{{$_usage->_ref_besoin->operation_id}}')"
+                     style="position: absolute; left: {{$offset}}%; width: {{$width}}%; margin-top: {{$top}}em;"></div>
                 {{math equation=x*y x=$_usage->_debut_offset_retablissement y=$td_width assign=offset_retablissement}}
                 {{math equation=x*y x=$_usage->_width_retablissement y=$td_width assign=width_retablissement}}
                 <div class="planning_ressource indispo"
-                     style="position: absolute; left: {{$offset_retablissement}}%; width: {{$width_retablissement}}%;"></div>
+                     style="position: absolute; left: {{$offset_retablissement}}%; width: {{$width_retablissement}}%; margin-top: {{$top}}em;"></div>
               {{/foreach}}
             {{/if}}            
             {{if isset($indispos_by_ressource.$ressource_id|smarty:nodefaults)}}
