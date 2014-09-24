@@ -117,7 +117,7 @@
           {{mb_key object=$subject}}
 
             {{mb_field object=$subject field="codes_ccam" hidden=true onchange="this.form.onsubmit()"}}
-            <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" style="width: 12em" value="" class="autocomplete" placeholder="Ajouter un acte" />
+            <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" style="width: 12em" value="" class="autocomplete" placeholder="Ajoutez un acte" />
             <div style="text-align: left; color: #000; display: none; width: 200px !important; font-weight: normal; font-size: 11px; text-shadow: none;"
                  class="autocomplete" id="_ccam_autocomplete_{{$subject->_guid}}"></div>
             <script>
