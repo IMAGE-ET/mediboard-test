@@ -481,7 +481,7 @@ Main.add(function() {
 <div style="display: none;" id="play_modal">
   <table class="form">
   <tr>
-    <th class="title">
+    <th class="title" style="cursor: move">
       {{tr}}CCompteRendu-mode_play{{/tr}}
     </th>
   </tr>
