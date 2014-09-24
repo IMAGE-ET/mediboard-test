@@ -246,7 +246,7 @@ showEtabEntreeTransfert = function (mode) {
                 <th>{{mb_label object=$rpu field="motif_sfmu" class=$notnull}}</th>
                 <td>{{mb_field object=$rpu field="motif_sfmu" class=$notnull
                   autocomplete="true,1,10,true,true" form="editRPUMotifsfmu" size=50 onchange="this.form.onsubmit();"}}
-                  {{mb_script module=dPurgences script=CCirconstance}}
+                  {{mb_script module=dPurgences script=CCirconstance ajax=true}}
                   <button type="button" class="search notext" onclick="CCirconstance.searchMotifSFMU(this.form)">
                     {{tr}}Search{{/tr}}
                   </button>
