@@ -9,6 +9,14 @@ var Actions = {
     var url = new Url("dPpatients", "ajax_civilite");
     url.addParam("mode", mode);
     url.requestUpdate("ajax_civilite");
+  },
+
+  patientState : function (action) {
+    var state = $$("input:checked[type=radio][name=state]")[0].value;
+    new Url("dPpatients", "ajax_patient_state_tools")
+      .addParam("action", action)
+      .addParam("state", state)
+      .requestUpdate("result_tools_patient_state");
   }
 };
 editAntecedent = function(mode) {
@@ -50,5 +58,17 @@ editAntecedent = function(mode) {
       <button class="change" type="button" onclick="editAntecedent('repair');">Corriger les dossiers médicaux</button>
     </td>
     <td id="ajax_check_dossier"></td>
+  </tr>
+  <tr>
+    <td>
+      <label><input type="radio" name="state" value="PROV" checked>{{tr}}CPatient.status.PROV{{/tr}}</label>
+      <label><input type="radio" name="state" value="VALI">{{tr}}CPatient.status.VALI{{/tr}}</label><br/>
+      <button type="button" class="search" onclick="Actions.patientState('verifyStatus')">
+        Vérifier le nombre de patient sans statut
+      </button>
+      <button type="button" class="send" onclick="Actions.patientState('createStatus')">
+        Placer le statut provisoire pour les patients sans statut
+      </button></td>
+    <td id="result_tools_patient_state"></td>
   </tr>
 </table>
