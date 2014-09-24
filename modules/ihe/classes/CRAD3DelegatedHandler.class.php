@@ -42,32 +42,31 @@ class CRAD3DelegatedHandler extends CITIDelegatedHandler {
 
     /** @var CConsultation $consultation */
     $consultation = $mbObject;
-    if (!$consultation->element_prescription_id && !$consultation->_old->element_prescription_id) {
+    $praticien = $consultation->loadRefPraticien();
+    if (!$praticien || $praticien && !$praticien->_id) {
       return false;
     }
 
-    $element  = $consultation->element_prescription_id ?
-                  $consultation->loadRefElementPrescription() : $consultation->_old->loadRefElementPrescription();
-    $category = $element->loadRefCategory();
+    $function = $praticien->loadRefFunction();
 
-    if (!$category) {
+    if (!$function || $function && !$function->_id) {
       return false;
     }
 
-    switch ($category->chapitre) {
-      case "imagerie":
-        $code = "O01";
+    $functions = CAppUI::conf("ihe function_ids");
+    $functions = explode("|", $functions);
 
-        if (!$this->isMessageSupported($this->transaction, $this->message, $code, $consultation->_receiver)) {
-          return;
-        }
-
-        $this->sendITI($this->profil, $this->transaction, $this->message, $code, $consultation);
-
-        break;
-      default:
-        return false;
+    if (!in_array($function->_id, $functions)) {
+      return false;
     }
+
+    $code = "O01";
+
+    if (!$this->isMessageSupported($this->transaction, $this->message, $code, $consultation->_receiver)) {
+      return false;
+    }
+
+    $this->sendITI($this->profil, $this->transaction, $this->message, $code, $consultation);
 
     return true;
   }
