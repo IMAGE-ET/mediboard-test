@@ -51,6 +51,7 @@ if ($bloc_id) {
 $where["group_id"] = " = '$group->_id' ";
 /** @var CBlocOperatoire[] $blocs */
 $blocs = $bloc->loadList($where);
+CStoredObject::filterByPerm($blocs, PERM_READ);
 
 if (count($blocs) == 1) {
   $current_bloc = reset($blocs);
@@ -100,27 +101,35 @@ $operations = $operation->loadList($where, null, null, "operations.operation_id"
 
 $nbIntervHorsPlage = CIntervHorsPlage::countForDates($date_planning, null, array($praticien_id));
 
-$prats = CMbObject::massLoadFwdRef($operations, "chir_id");
-CMbObject::massLoadFwdRef($prats, "function_id");
-CMbObject::massLoadFwdRef($operations, "salle_id");
-CMbObject::massLoadFwdRef($operations, "anesth_id");
-CMbObject::massLoadFwdRef($operations, "chir_2_id");
-CMbObject::massLoadFwdRef($operations, "chir_3_id");
-CMbObject::massLoadFwdRef($operations, "chir_4_id");
+$prats = CStoredObject::massLoadFwdRef($operations, "chir_id");
+CStoredObject::massLoadFwdRef($prats, "function_id");
+CStoredObject::massLoadFwdRef($operations, "plageop_id");
+CStoredObject::massLoadFwdRef($operations, "salle_id");
+CStoredObject::massLoadFwdRef($operations, "anesth_id");
+CStoredObject::massLoadFwdRef($operations, "chir_2_id");
+CStoredObject::massLoadFwdRef($operations, "chir_3_id");
+CStoredObject::massLoadFwdRef($operations, "chir_4_id");
+CStoredObject::massLoadBackRefs($operations, "workflow");
+$sejours = CStoredObject::massLoadFwdRef($operations, "sejour_id");
+$affectations = CStoredObject::massLoadBackRefs($sejours, "affectations");
+CStoredObject::massLoadFwdRef($affectations, "lit_id");
+$patients = CStoredObject::massLoadFwdRef($sejours, "patient_id");
+$dossiers = CStoredObject::massLoadBackRefs($patients, "dossier_medical");
+CDossierMedical::massCountAllergies($dossiers);
+
 
 // Récupération des commentaires
 $commentaire = new CCommentairePlanning();
 $where       = array();
-
-$where[]           = "'$date_planning' BETWEEN date(debut) AND date(fin)";
+$where["debut"]    = " <= '$date_planning 23:59:59'";
+$where["fin"]      = " >= '$date_planning 00:00:00'";
 $where["salle_id"] = CSQLDataSource::prepareIn($salles_ids);
-
 $commentaires = $commentaire->loadList($where);
 
 // Récupération des plages opératoires
 $plageop = new CPlageOp();
-$where   = array();
 
+$where   = array();
 $where["date"]     = " = '$date_planning'";
 $where["salle_id"] = CSQLDataSource::prepareIn($salles_ids);
 
@@ -128,7 +137,7 @@ $plages = $plageop->loadList($where);
 
 // Création du planning
 $planning        = new CPlanningWeek(0, 0, count($salles), count($salles), false, "auto");
-$planning->title = "Planning du " . CMbDT::format($date_planning, "%A %d %B %Y");
+$planning->title = "Planning du " . CMbDT::format($date_planning, CAppUI::conf("longdate"));
 
 
 //load the current bloc
@@ -239,25 +248,17 @@ if ($show_operations) {
       continue;
     }
 
-    //mbTrace($_operation->_id);
-
     foreach ($_operations as $_operation) {
       //CSQLDataSource::$trace = true;
 
       $_operation->_ref_salle = $salles[$_operation->salle_id];
 
-      $first_log = $_operation->loadFirstLog();
+      $workflow = $_operation->loadRefWorkflow();
 
       $sejour = $_operation->loadRefSejour();
 
-      //@TODO: optimize the following line
-      //$_operation->loadRefAffectation();
-      $affectation = new CAffectation();
-      $affectation->sejour_id = $_operation->sejour_id;
-      $affectation->loadMatchingObject("entree");
-      $affectation->loadRefParentAffectation();
-
-      $affectation->loadRefLit();
+      $affectation = $sejour->loadRefFirstAffectation();
+      //$affectation->loadRefLit(true);
 
       $_operation->_ref_affectation = $affectation;
 
@@ -273,7 +274,7 @@ if ($show_operations) {
 
       $charge = $sejour->loadRefChargePriceIndicator();
       $patient = $sejour->loadRefPatient();
-      $patient->loadRefDossierMedical();
+      $patient->loadRefDossierMedical(false);
       $patient->_ref_dossier_medical->countAllergies();
 
       //antecedents, OK
@@ -345,7 +346,7 @@ if ($show_operations) {
       $smarty->assign("anesth", $anesth);
       $smarty->assign("count_atcd", $count_atcd);
       $smarty->assign("besoins", $besoins);
-      $smarty->assign("interv_en_urgence", abs(CMbDT::hoursRelative("$_operation->date $debut_op", $first_log->date)) <= $diff_hour_urgence);
+      $smarty->assign("interv_en_urgence", abs(CMbDT::hoursRelative("$_operation->date $debut_op", $workflow->date_creation)) <= $diff_hour_urgence);
       $smartyL = $smarty->fetch("inc_planning/libelle_plage.tpl");
       //@todo : UGLY, find a global better way !
       $smartyL = htmlspecialchars_decode(CMbString::htmlEntities($smartyL, ENT_NOQUOTES), ENT_NOQUOTES);
