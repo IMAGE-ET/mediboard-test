@@ -11,10 +11,8 @@
  * @link     http://www.mediboard.org
  */
 
-CCanDo::checkAdmin();
-if (!CAppUI::pref("allowed_identity_status")) {
-  //todo voir pour redirect
-  CApp::rip();
+if (!CAppUI::pref("allowed_modify_identity_status")) {
+  CAppUI::redirect("m=system&a=access_denied");
 }
 
 $patients_count = array();

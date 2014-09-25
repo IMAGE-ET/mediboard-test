@@ -27,6 +27,8 @@ class CPatientState extends CMbObject {
   //filter
   public $_date_min;
   public $_date_max;
+  public $_number_day;
+  public $_date_end;
 
   /** @var CPatient */
   public $_ref_patient;
@@ -58,6 +60,8 @@ class CPatientState extends CMbObject {
     //filter
     $props["_date_min"]    = "dateTime";
     $props["_date_max"]    = "dateTime";
+    $props["_date_end"]    = "date";
+    $props["_number_day"]  = "num";
 
     return $props;
   }

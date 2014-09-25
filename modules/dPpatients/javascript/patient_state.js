@@ -55,8 +55,21 @@ PatientState = {
       .popup(800, 600, "merge_patients");
   },
 
-  stats_filter : function () {
-    new Url("dPpatients", "ajax_stats_patient_state")
-      .requestUpdate("patient_stats");
+  stats_filter : function (form) {
+    var url = new Url("dPpatients", "ajax_stats_patient_state");
+    if (form) {
+      url.addFormData(form);
+    }
+
+    url.requestUpdate("patient_stats");
+
+    return false;
+  },
+
+  downloadCSV : function () {
+    var form = getForm("filter_graph_bar_patient_state");
+    new Url("dPpatients", "ajax_export_stats_patient_state", "raw")
+      .addFormData(form)
+      .popup(200,200)
   }
 };
