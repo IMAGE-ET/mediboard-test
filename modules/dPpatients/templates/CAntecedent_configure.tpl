@@ -52,8 +52,14 @@ Main.add(function () {
           {{if in_array($_type, $active_types)}}
             {{assign var=usage_non_types  value=1}}
           {{/if}}
-        <div class="non-type opacity-50" style="width: 16em; float: left; {{if !in_array($_type, $active_types)}} display: none;{{/if}}">
-        {{else}}
+
+          {{if in_array($_type, $active_types)}}
+          <div class="opacity-50" style="width: 16em; float: left;">
+          {{else}}
+          <div class="non-type opacity-50" style="width: 16em; float: left; display: none;">
+          {{/if}}
+
+          {{else}}
         <div style="width: 16em; float: left;">
         {{/if}}
           <label>
