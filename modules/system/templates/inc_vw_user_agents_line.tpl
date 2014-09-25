@@ -3,7 +3,7 @@
 </td>
 
 <td style="text-align: right;">{{mb_value object=$_user_agent field=browser_name}}</td>
-<td>{{mb_value object=$_user_agent field=browser_version}}</td>
+<td {{if $_user_agent->_obsolete}} class="warning" {{/if}}>{{mb_value object=$_user_agent field=browser_version}}</td>
 
 <td style="text-align: right;">{{mb_value object=$_user_agent field=platform_name}}</td>
 <td {{if $_user_agent->platform_version == "unknown"}} class="empty" {{/if}}>{{mb_value object=$_user_agent field=platform_version}}</td>

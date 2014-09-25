@@ -68,6 +68,13 @@ class CUserAgent extends CMbObject {
     "unknown",
   );
 
+  static $obsolete_browsers = array(
+    "Firefox" => "24.0",
+    "Chrome"  => "28.0",
+    "IE"      => "9.0",
+    "Safari"  => "6.0",
+  );
+
   public $user_agent_id;
 
   public $user_agent_string;
@@ -82,6 +89,8 @@ class CUserAgent extends CMbObject {
   public $device_maker;
   public $device_type; // Mobile Device, Mobile Phone, Desktop, Tablet
   public $pointing_method; // mouse, unknown, touchscreen
+  
+  public $_obsolete;
 
   /** @var  CUserAuthentication[] */
   public $_ref_user_authentications;
@@ -122,6 +131,8 @@ class CUserAgent extends CMbObject {
     $props["device_type"]       = "enum notNull list|desktop|mobile|tablet|unknown default|unknown";
     $props["device_maker"]      = "str";
     $props["pointing_method"]   = "enum notNull list|mouse|touchscreen|unknown default|unknown";
+    
+    $props["_obsolete"]         = "bool";
     return $props;
   }
 
@@ -132,6 +143,12 @@ class CUserAgent extends CMbObject {
     parent::updateFormFields();
 
     $this->_view = "$this->browser_name $this->browser_version / $this->platform_name $this->platform_version";
+    
+    if (isset(self::$obsolete_browsers[$this->browser_name])) {
+      $min_version = self::$obsolete_browsers[$this->browser_name];
+      
+      $this->_obsolete = $min_version > $this->browser_version;
+    }
   }
 
   function loadRefUserAuthentication() {
