@@ -61,32 +61,20 @@ switch ($interval = CValue::getOrSession("interval", "one-day")) {
 
 $graphs = array();
 
-$access_logs  = CDataSourceLog::loadAggregation($from, $to, $groupmod, $module, $human_bot);
-$archive_logs = CDataSourceLogArchive::loadAggregation($from, $to, $groupmod, $module, $human_bot);
-
 switch ($groupmod) {
   case 0:
   case 1:
+    $access_logs  = CDataSourceLog::loadAggregation($from, $to, $groupmod, $module, $human_bot);
+    $archive_logs = CDataSourceLogArchive::loadAggregation($from, $to, $groupmod, $module, $human_bot);
     $logs = array_merge($access_logs, $archive_logs);
     break;
 
   case 2:
-    /** @var CDataSourceLog[] $access_logs */
-    $access_logs = array_merge($access_logs, $archive_logs);
-
-    $logs       = array();
-    $unique_log = new CDataSourceLog();
-    foreach ($access_logs as $_log) {
-      $unique_log->datasourcelog_id = $_log->datasourcelog_id;
-      $unique_log->module_action_id = $_log->module_action_id;
-      $unique_log->period           = $_log->period;
-    }
-
-    $logs[] = $unique_log;
+    $logs = array(new CDataSourceLog());
     break;
 
   default:
-    $logs = $access_logs;
+    return;
 }
 
 $series_by_module = array();

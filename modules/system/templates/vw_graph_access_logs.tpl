@@ -58,3 +58,6 @@
 {{foreach from=$graphs item=graph name=graphs}}
   <div id="graph-{{$smarty.foreach.graphs.index}}" style="width: 350px; height: 250px; float: left; margin: 1em;"></div>
 {{/foreach}}
+
+<!-- For styles purpose -->
+<div style="clear: both;"></div>

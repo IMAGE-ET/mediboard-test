@@ -10,7 +10,7 @@
 
 <script>
 Main.add(function () {
-  Calendar.regField(getForm("datasource-typevue").date, null, {noView: true});
+  Calendar.regField(getForm("datasource-typevue").date);
 });
 </script>
 
@@ -22,7 +22,7 @@ Main.add(function () {
         <input type="hidden" name="a" value="vw_graph_datasource_logs" />
         <input type="hidden" name="to_update" value="1" />
 
-        Journaux d'accès du {{$date|date_format:$conf.longdate}}
+        Journaux d'accès du
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.onsubmit()" />
 
         <br />
