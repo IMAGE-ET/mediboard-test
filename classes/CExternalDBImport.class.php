@@ -205,8 +205,13 @@ class CExternalDBImport {
       }
     }
 
-    if ($order && $order_by) {
-      $query .= " ORDER BY $order_by DESC";
+    if ($order && $order_by || $id) {
+      if ($id) {
+        $query .= " ORDER BY $object->_key ASC";
+      }
+      else {
+        $query .= " ORDER BY $order_by DESC";
+      }
     }
 
     if (!$reimport) {
