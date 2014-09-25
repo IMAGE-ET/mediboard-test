@@ -49,7 +49,7 @@ class CCommentairePlanning extends CMbObject {
     $specs["salle_id"]    = "ref class|CSalle";
     $specs["libelle"]     = "str autocomplete notNull";
     $specs["commentaire"] = "text helped";
-    $specs["color"]       = "str length|6 default|DDDDDD";
+    $specs["color"]       = "color default|DDDDDD";
     $specs["debut"]       = "dateTime notNull";
     $specs["fin"]         = "dateTime notNull moreThan|debut";
     
