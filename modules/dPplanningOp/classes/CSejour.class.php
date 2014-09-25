@@ -1454,15 +1454,16 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     $this->_adresse_par = ($this->etablissement_entree_id || $this->adresse_par_prat_id);
 
-    if ($this->_adresse_par) {
-      $medecin_adresse_par = new CMedecin();
-      $medecin_adresse_par->load($this->adresse_par_prat_id);
+    if ($this->adresse_par_prat_id) {
+      $medecin_adresse_par = $this->loadRefAdresseParPraticien();
       $this->_adresse_par_prat = $medecin_adresse_par->_view;
+    }
 
-      $etab = new CEtabExterne();
-      $etab->load($this->etablissement_entree_id);
+    if ($this->etablissement_entree_id) {
+      $etab = $this->loadRefEtablissementProvenance();
       $this->_ref_etablissement_provenance = $etab->_view;
     }
+
 
     // Etat d'un sejour : encours, clôturé ou preadmission
     $this->_etat = "preadmission";

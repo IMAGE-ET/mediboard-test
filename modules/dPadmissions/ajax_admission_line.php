@@ -25,6 +25,8 @@ $date_max = CMbDT::dateTime("23:59:59", $date);
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 
+$sejour->loadRefEtablissementProvenance();
+$sejour->loadRefAdresseParPraticien();
 $sejour->loadRefPraticien();
 $patient = $sejour->loadRefPatient();
 

@@ -2332,6 +2332,16 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     return $consultation->countList($where, null, $ljoin);
   }
 
+
+  /**
+   * load "adresse par prat"
+   *
+   * @return CMedecin|null
+   */
+  function loadRefAdresseParPraticien() {
+    return $this->_ref_adresse_par_prat = $this->loadFwdRef("adresse_par_prat_id", true);
+  }
+
   /**
    * Redesign the content of the body you will index
    *

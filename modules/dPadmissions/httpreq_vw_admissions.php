@@ -149,6 +149,9 @@ foreach ($sejours as $sejour_id => $_sejour) {
   // Chargement des modes d'entrée
   $_sejour->loadRefEtablissementProvenance();
 
+  // Chargement du praticien référent
+  $_sejour->loadRefAdresseParPraticien();
+
   // Chargement de l'affectation
   $affectation = $_sejour->loadRefFirstAffectation();
 

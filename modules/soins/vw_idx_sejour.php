@@ -233,13 +233,8 @@ $sejour->loadRefs();
 $sejour->loadRefsPrescriptions();
 $sejour->loadRefsDocs();
 
-$medecin_adresse_par = new CMedecin();
-$medecin_adresse_par->load($sejour->adresse_par_prat_id);
-$sejour->_adresse_par_prat = $medecin_adresse_par->_view;
-
-$etab = new CEtabExterne();
-$etab->load($sejour->etablissement_entree_id);
-$sejour->_ref_etablissement_provenance = $etab->_view;
+$sejour->loadRefAdresseParPraticien();
+$sejour->loadRefEtablissementProvenance();
 
 if ($service_id) {
   // Chargement des séjours à afficher

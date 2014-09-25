@@ -127,9 +127,7 @@ else {
   }
   
   if ($consult->adresse_par_prat_id && ($consult->adresse_par_prat_id != $pat->_ref_medecin_traitant->_id)) {
-    $medecin_adresse_par = new CMedecin();
-    $medecin_adresse_par->load($consult->adresse_par_prat_id);
-    $consult->_ref_adresse_par_prat = $medecin_adresse_par;
+    $consult->loadRefAdresseParPraticien();
   }
 
   $sejour = new CSejour();
