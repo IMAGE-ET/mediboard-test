@@ -11,6 +11,7 @@
 
 $sejour_id = CValue::get("sejour_id");
 $context   = CValue::get("context", "all");
+$relative_date = CValue::get("relative_date");
 
 $prestations_j = CPrestationJournaliere::loadCurrentList();
 $dates         = array();
@@ -177,6 +178,7 @@ $smarty = new CSmartyDP;
 
 $smarty->assign("today"        , CMbDT::date());
 $smarty->assign("dates"        , $dates);
+$smarty->assign("relative_date", $relative_date);
 $smarty->assign("sejour"       , $sejour);
 $smarty->assign("affectations" , $affectations);
 $smarty->assign("prestations_j", $prestations_j);

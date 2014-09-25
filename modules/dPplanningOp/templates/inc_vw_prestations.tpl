@@ -1,5 +1,11 @@
 {{mb_default var=editRights value=0}}
 
+<style>
+  .border-bold {
+    border:solid 2px black;
+  }
+</style>
+
 <script>
   uncheckPrestation = function(elts) {
     elts.each(function(elt) {
@@ -127,8 +133,8 @@
       {{foreach from=$dates item=_affectation_id key=_date name=foreach_date}}
         {{assign var=first_date value=$smarty.foreach.foreach_date.first}}
         {{assign var=day value=$_date|date_format:"%A"|upper|substr:0:1}}
-        <tr>
-          <td {{if $_date == $today}}class="current_hour"{{/if}}
+        <tr class="{{if $_date == $relative_date}}border-bold{{/if}}">
+          <td class="{{if $_date == $today}}current_hour{{/if}}"
             style="
             {{if $day == "S" || $day == "D"}}
               background-color: #ccc;

@@ -4207,6 +4207,34 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->_first_liaison_for_prestation->loadObject($where, null, null, $ljoin);
   }
 
+
+  /**
+   * load the last liaisons for the given date
+   *
+   * @param null $date_min
+   * @return string[]
+   */
+  function loadAllLiaisonsForDay($date = null) {
+    $ds = $this->getDS();
+    $sql = "SELECT object_id, item_prestation.nom, date
+      FROM item_liaison, item_prestation, prestation_journaliere
+      WHERE (item_liaison.item_souhait_id = item_prestation.item_prestation_id OR item_liaison.item_realise_id = item_prestation.item_prestation_id)
+      AND prestation_journaliere.prestation_journaliere_id = object_id
+      AND sejour_id = '$this->_id'
+      AND date <= '$date'
+      AND object_class = 'CPrestationJournaliere'
+      ORDER BY date asc, prestation_journaliere.nom ASC
+    ";
+    $results = $ds->loadList($sql);
+
+    $prestas = array();
+    foreach ($results as $_result) {
+      $prestas[$_result['object_id']] = $_result["nom"];
+    }
+
+    return $prestas;
+  }
+
   /**
    * Charge les liaisons de prestations pour une prestation entre deux date
    *

@@ -15,7 +15,7 @@
   <!-- only switzerland -->
   {{if $conf.ref_pays == 2 }}
     {{if $liaison_sejour}}
-      <strong onclick="Prestations.edit('{{$sejour->_id}}', 'sejour')">{{$liaison_sejour}}</strong>
+      <strong onclick="Prestations.edit('{{$sejour->_id}}', 'sejour', '{{$operation->date}}')">{{$liaison_sejour}}</strong>
     {{/if}}
 
     {{if "dPplanningOp CSejour use_charge_price_indicator"|conf:"CGroups-$g" != "no" && $charge->_id}}
