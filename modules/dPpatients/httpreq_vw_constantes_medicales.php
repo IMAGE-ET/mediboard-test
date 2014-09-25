@@ -161,7 +161,10 @@ foreach ($list as $_context) {
 
   // Cas d'un RPU
   if ($c instanceof CConsultation && $c->sejour_id) {
-    continue;
+    $c->loadRefSejour();
+    if ($c->_ref_sejour->type == 'urg') {
+      continue;
+    }
   }
 
   $c->loadRefsFwd();
@@ -175,10 +178,12 @@ if ($current_context instanceof CConsultation) {
 // Cas d'un RPU
 if ($current_context instanceof CConsultation && $current_context->sejour_id) {
   $current_context->loadRefSejour();
-  $current_context = $current_context->_ref_sejour;
-  $current_context->loadComplete();
-  $context = $current_context;
-  $context_guid = $current_context->_guid;
+  if ($current_context->_ref_sejour->type == 'urg') {
+    $current_context = $current_context->_ref_sejour;
+    $current_context->loadComplete();
+    $context = $current_context;
+    $context_guid = $current_context->_guid;
+  }
 }
 if (!isset($list_contexts[$current_context->_guid])) {
   $current_context->loadRefsFwd();
@@ -190,8 +195,30 @@ if (!count($list_contexts)) {
 }
 
 if ($context && $selected_context_guid !== 'all') {
-  $where["context_class"] = " = '$context->_class'";
-  $where["context_id"] = " = '$context->_id'";
+  if ($context->_class == 'CSejour') {
+    $context->loadRefsConsultations();
+    $context->loadRefsConsultAnesth();
+    if (!empty($context->_ref_consultations) || $context->_ref_consult_anesth) {
+      $whereOr = array();
+      $whereOr[] = "(context_class = '$context->_class' AND context_id = '$context->_id')";
+      foreach ($context->_ref_consultations as $_ref_consult) {
+        $whereOr[] = "(context_class = '$_ref_consult->_class' AND context_id = '$_ref_consult->_id')";
+      }
+      if ($context->_ref_consult_anesth) {
+        $consult = $context->_ref_consult_anesth->loadRefConsultation();
+        $whereOr[] = "(context_class = '$consult->_class' AND context_id = '$consult->_id')";
+      }
+      $where[] = implode(" OR ", $whereOr);
+    }
+    else {
+      $where["context_class"] = " = '$context->_class'";
+      $where["context_id"] = " = '$context->_id'";
+    }
+  }
+  else {
+    $where["context_class"] = " = '$context->_class'";
+    $where["context_id"] = " = '$context->_id'";
+  }
 
   // Needed to know if we are in the right context
   $constantes->context_class = $context->_class;

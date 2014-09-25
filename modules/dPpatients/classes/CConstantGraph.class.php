@@ -647,6 +647,11 @@ class CConstantGraph {
         if ($_value->comment) {
           $entry['comment'] = utf8_encode($_value->comment);
         }
+        if ("$_value->context_class-$_value->context_id" !== $this->context_guid) {
+          $_value->loadRefContext();
+          $_value->_ref_context->loadRefsFwd();
+          $entry['context'] = utf8_encode($_value->_ref_context->_view);
+        }
 
         $datas['values'][] = $entry;
       }

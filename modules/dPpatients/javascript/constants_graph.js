@@ -131,6 +131,10 @@ ConstantsGraph = Class.create({
           });
         }
 
+        if (item.series.data[item.dataIndex].context != null) {
+          content = content + '<br/>' + item.series.data[item.dataIndex].context;
+        }
+
         if (item.series.data[item.dataIndex].comment != null) {
           content = content + '<hr/>' + item.series.data[item.dataIndex].comment;
         }
