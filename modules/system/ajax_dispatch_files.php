@@ -62,6 +62,8 @@ try {
   $files = $source->receive();
 }
 catch (CMbException $e) {
+  CCronJobLog::$log = $e->getMessage();
+
   $e->stepAjax();
 }
 
@@ -89,8 +91,8 @@ foreach (array_diff($files_excludes, $array_diff) as $_file_exclude) {
 }
 
 if (empty($files)) {
+  CCronJobLog::$log = CAppUI::tr("CEAIDispatcher-no-file");
   CAppUI::stepAjax("CEAIDispatcher-no-file", UI_MSG_WARNING);
-
   return;
 }
 
@@ -131,6 +133,7 @@ foreach ($files as $_filepath) {
   catch (CMbException $e) {
     //$source->renameFile($_filepath, $_old_filepath);
 
+    CCronJobLog::$log = $e->getMessage();
     $e->stepAjax(UI_MSG_WARNING);
     continue;
   }
@@ -142,7 +145,7 @@ foreach ($files as $_filepath) {
     try {
       CEAIDispatcher::createFileACK($acq, $sender);
     }
-    catch (Exception $e) {
+    catch (CMbException $e) {
       if ($sender->_delete_file !== false) {
         $source->delFile($_filepath);
         if ($fileextension_write_end) {
@@ -151,8 +154,11 @@ foreach ($files as $_filepath) {
       }
       else {
         dispatchError($sender, $filename_excludes, $path_info);
-      } 
-      CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
+      }
+
+      CCronJobLog::$log = $e->getMessage();
+      $e->stepAjax(UI_MSG_ERROR);
+      continue;
     }
   }
   
@@ -172,7 +178,9 @@ foreach ($files as $_filepath) {
     else {
       dispatchError($sender, $filename_excludes, $path_info);
     }
-  } catch (CMbException $e) {
+  }
+  catch (CMbException $e) {
+    CCronJobLog::$log = $e->getMessage();
     $e->stepAjax(UI_MSG_WARNING);
     continue;
   }  
