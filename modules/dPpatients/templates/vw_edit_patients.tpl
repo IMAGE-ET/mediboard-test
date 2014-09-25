@@ -215,8 +215,6 @@
         <button class="search singleclick" type="button" onclick="lireVitale();" style="float: left;">
          Lire Vitale
         </button>
-      {{elseif $app->user_prefs.LogicielLectureVitale == 'mbHost'}}
-        {{mb_include module=mbHost template=inc_vitale operation='create'}}
       {{elseif $modFSE && $modFSE->canRead()}}
         {{mb_include module=fse template=inc_button_vitale operation='update'}}
       {{/if}}
