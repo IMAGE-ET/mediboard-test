@@ -277,14 +277,38 @@ class CDocumentItem extends CMbMetaObject {
   }
   
   /**
-   * Load details doc item ownership for a user collection
+   * Advanced user stats on modeles
    *
-   * @param array $user_ids ID collection of CUser
+   * @param ref[]|null $user_ids User IDs, null if no filter
    *
    * @return array collection of arrays with docs_count, docs_weight, object_class and category_id keys
    */
   function getUsersStatsDetails($user_ids) {
     return array();
+  }
+
+  /**
+   * Advanced periodical stats on modeles
+   *
+   * @param ref[]|null $user_ids User IDs, null if no filter
+   * @param int        $depth    Perdiod count for each period types
+   *
+   * @return int[][] collection of arrays daily, weekly, monthly and yearly keys
+   */
+  function getPeriodicalStatsDetails($user_ids, $depth = 8) {
+    $detail = array(
+      "count" => 10,
+      "weight" => 20000,
+    );
+
+    $sample = array_fill(0, $depth, $detail);
+    return array(
+      "hourly"  => $sample,
+      "daily"   => $sample,
+      "weekly"  => $sample,
+      "monthly" => $sample,
+      "yearly"  => $sample,
+    );
   }
 
   /**

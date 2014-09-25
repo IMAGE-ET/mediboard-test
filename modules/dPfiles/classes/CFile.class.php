@@ -811,18 +811,78 @@ class CFile extends CDocumentItem implements IIndexableObject {
    */
   function getUsersStatsDetails($user_ids) {
     $ds = $this->_spec->ds;
-    $in_owner = $ds->prepareIn($user_ids);
-    $query = "
-      SELECT 
-        COUNT(`file_id`) AS `docs_count`, 
-        SUM(`file_size`) AS `docs_weight`, 
-        `object_class`, 
-        `file_category_id` AS `category_id`
-      FROM `files_mediboard` 
-      WHERE `author_id` $in_owner
-      GROUP BY `object_class`, `category_id`";
-    return $ds->loadList($query);
+
+    $query = new CRequest();
+    $query->addColumn("COUNT(`file_id`)", "docs_count");
+    $query->addColumn("SUM(`file_size`)", "docs_weight");
+    $query->addColumn("object_class");
+    $query->addColumn("file_category_id", "category_id");
+    $query->addTable("files_mediboard");
+    $query->addGroup("object_class, category_id");
+
+    if (is_array($user_ids)) {
+      $in_owner = $ds->prepareIn($user_ids);
+      $query->addWhereClause("author_id", $in_owner);
+    }
+
+    return $ds->loadList($query->makeSelect());
   }
+
+  /**
+   * @see parent::getPeriodicalStatsDetails();
+   */
+  function getPeriodicalStatsDetails($user_ids, $depth = 8) {
+    $period_types = array(
+      "yearly" => array(
+        "format"   => "%Y",
+        "unit"     => "YEAR",
+      ),
+      "monthly" => array(
+        "format"   => "%m/%Y",
+        "unit"     => "MONTH",
+      ),
+      "weekly" => array(
+        "format"   => "%Y S%U",
+        "unit"     => "WEEK",
+      ),
+      "daily" => array(
+        "format"   => "%d/%m",
+        "unit"     => "DAY",
+      ),
+      "hourly" => array(
+        "format"   => "%d %Hh",
+        "unit"     => "HOUR",
+      ),
+    );
+
+    $details = array();
+
+    $now = CMbDT::dateTime();
+    $doc = new self;
+    $ds = $doc->_spec->ds;
+    $deeper = $depth + 1;
+
+    foreach ($period_types as $_type => $_period_info) {
+      $format = $_period_info["format"];
+      $unit   = $_period_info["unit"];
+
+      $request = new CRequest();
+      $request->addColumn("DATE_FORMAT(`file_date`, '$format')", "period");
+      $request->addColumn("COUNT(`file_id`)", "count");
+      $request->addColumn("SUM(`file_size`)", "weight");
+      $date_min = CMbDT::dateTime("- $deeper $unit", $now);
+      $request->addWhereClause("file_date", " > '$date_min'");
+      $request->addGroup("period");
+      $results = $ds->loadHashAssoc($request->makeSelect($doc));
+
+      foreach(range($depth, 0) as $i) {
+        $period = CMbDT::transform("-$i $unit", $now, $format);
+        $details[$_type][$period] = isset($results[$period]) ? $results[$period] : 0;
+      }
+    }
+
+    return $details;
+   }
 
   /**
    * check if this is an image

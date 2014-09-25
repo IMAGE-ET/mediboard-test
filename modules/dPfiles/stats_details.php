@@ -19,22 +19,31 @@ if (!is_subclass_of($doc_class, "CDocumentItem")) {
   return;
 }
 
-$owner = mbGetObjectFromGet(null, null, "owner_guid");
 
 // Users
-$user_ids = array();
-if ($owner instanceof CFunctions) {
-  $user_ids = array_keys($owner->loadBackRefs("users"));
-}
+$user_ids = null;
+if (CValue::get("owner_guid")) {
+  $owner = mbGetObjectFromGet(null, null, "owner_guid");
+  $user_ids = array();
+  if ($owner instanceof CGroups) {
+    foreach ($owner->loadBackRefs("functions") as $_function) {
+      $user_ids = array_merge($user_ids, $_function->loadBackIds("users"));
+    }
+  }
 
-if ($owner instanceof CUser || $owner instanceof CMediusers) {
-  $user_ids = array($owner->_id);
+  if ($owner instanceof CFunctions) {
+    $user_ids = $owner->loadBackIds("users");
+  }
+
+  if ($owner instanceof CUser || $owner instanceof CMediusers) {
+    $user_ids = array($owner->_id);
+  }
 }
 
 // Query prepare
 /** @var CDocumentItem $doc */
 $doc = new $doc_class;
-$results = $doc->getUsersStatsDetails($user_ids);
+$user_details = $doc->getUsersStatsDetails($user_ids);
 
 // Reorder and make totals
 $details = array();
@@ -45,11 +54,11 @@ $big_totals = array(
   "weight" => 0,
 );
 
-foreach ($results as $_result) {
-  $docs_count  = $_result["docs_count"];
-  $docs_weight = $_result["docs_weight"];
-  $object_class = $_result["object_class"];
-  $category_id  = $_result["category_id"];
+foreach ($user_details as $_detail) {
+  $docs_count   = $_detail["docs_count"];
+  $docs_weight  = $_detail["docs_weight"];
+  $object_class = $_detail["object_class"];
+  $category_id  = $_detail["category_id"];
   
   // Reorder
   $details[$category_id][$object_class] = array(
@@ -75,9 +84,12 @@ $categories = $category->loadAll(array_keys($category_totals));
 // All classes
 $classes = array_keys($class_totals);
 
+$periodical_details = $doc->getPeriodicalStatsDetails($user_ids);
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("details", $details);
+$smarty->assign("periodical_details", $periodical_details);
 $smarty->assign("class_totals", $class_totals);
 $smarty->assign("category_totals", $category_totals);
 $smarty->assign("big_totals", $big_totals);

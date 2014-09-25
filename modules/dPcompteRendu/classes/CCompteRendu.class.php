@@ -1511,27 +1511,86 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
   }
 
   /**
-   * Advanced user stats on modeles
-   * 
-   * @param string $user_ids identifiants of users
-   * 
-   * @return array
    * @see parent::getUsersStatsDetails();
    */
   function getUsersStatsDetails($user_ids) {
     $ds = $this->_spec->ds;
-    $in_owner = $ds->prepareIn($user_ids);
-    $query = "
-      SELECT 
-        COUNT(`compte_rendu_id`) AS `docs_count`, 
-        SUM(LENGTH(`content_html`.`content`)) AS `docs_weight`,
-        `object_class`, 
-        `file_category_id` AS `category_id`
-      FROM `compte_rendu` 
-      LEFT JOIN `content_html` ON `compte_rendu`.`content_id` = `content_html`.`content_id`
-      WHERE `author_id` $in_owner
-      GROUP BY `object_class`, `category_id`";
-    return $ds->loadList($query);
+
+    $query = new CRequest();
+    $query->addColumn("COUNT(`compte_rendu_id`)", "docs_count");
+    $query->addColumn("SUM(LENGTH(`content_html`.`content`))", "docs_weight");
+    $query->addColumn("object_class");
+    $query->addColumn("file_category_id", "category_id");
+    $query->addTable("compte_rendu");
+    $query->addLJoinClause("content_html", "`compte_rendu`.`content_id` = `content_html`.`content_id`");
+    $query->addGroup("object_class, category_id");
+
+    if (is_array($user_ids)) {
+      $in_owner = $ds->prepareIn($user_ids);
+      $query->addWhereClause("author_id", $in_owner);
+    }
+
+    return $ds->loadList($query->makeSelect());
+  }
+
+  /**
+   * @see parent::getPeriodicalStatsDetails();
+   */
+  function getPeriodicalStatsDetails($user_ids, $depth = 8) {
+    // Pas de champ date pour le moment
+    return array();
+
+    $period_types = array(
+      "yearly" => array(
+        "format"   => "%Y",
+        "unit"     => "YEAR",
+      ),
+      "monthly" => array(
+        "format"   => "%m/%Y",
+        "unit"     => "MONTH",
+      ),
+      "weekly" => array(
+        "format"   => "%Y S%U",
+        "unit"     => "WEEK",
+      ),
+      "daily" => array(
+        "format"   => "%d/%m",
+        "unit"     => "DAY",
+      ),
+      "hourly" => array(
+        "format"   => "%d %Hh",
+        "unit"     => "HOUR",
+      ),
+    );
+
+    $details = array();
+
+    $now = CMbDT::dateTime();
+    $doc = new self;
+    $ds = $doc->_spec->ds;
+    $deeper = $depth + 1;
+
+    foreach ($period_types as $_type => $_period_info) {
+      $format = $_period_info["format"];
+      $unit   = $_period_info["unit"];
+
+      $request = new CRequest();
+      $request->addColumn("DATE_FORMAT(`date`, '$format')", "period");
+      $request->addColumn("COUNT(`file_id`)", "count");
+      $request->addColumn("SUM(LENGTH(`content_html`.`content`))", "weight");
+      $request->addLJoinClause("content_html", "`compte_rendu`.`content_id` = `content_html`.`content_id`");
+      $date_min = CMbDT::dateTime("- $deeper $unit", $now);
+      $request->addWhereClause("file_date", " > '$date_min'");
+      $request->addGroup("period");
+      $results = $ds->loadHashAssoc($request->makeSelect($doc));
+
+      foreach(range($depth, 0) as $i) {
+        $period = CMbDT::transform("-$i $unit", $now, $format);
+        $details[$_type][$period] = isset($results[$period]) ? $results[$period] : 0;
+      }
+    }
+
+    return $details;
   }
 
   /**
