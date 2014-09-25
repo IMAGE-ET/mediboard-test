@@ -31,6 +31,7 @@
 {{mb_script module=compteRendu script=document}}
 {{mb_script module=compteRendu script=modele_selector}}
 {{mb_script module=files     script=file}}
+{{mb_script module=dPsante400 script=Idex}}
 
 {{assign var=manage_provisoire value=$conf.maternite.CGrossesse.manage_provisoire}}
 
@@ -159,7 +160,13 @@
               </form>
             </td>
             <td colspan="2" rowspan="{{$grossesse->_ref_naissances|@count}}" class="text">
-              <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">{{$_sejour->_ref_patient}}</span>
+              <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+                {{if "dPsante400"|module_active}}
+                  {{mb_include module=dPsante400 template=inc_manually_ipp_nda sejour=$_sejour patient=$patient
+                  callback=document.location.reload}}
+                {{/if}}
+                {{$_sejour->_ref_patient}}
+              </span>
             </td>
             <td rowspan="{{$grossesse->_ref_naissances|@count}}">
               <button class="print notext" onclick="Naissance.printDossier('{{$_sejour->_id}}')">
