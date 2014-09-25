@@ -9,6 +9,13 @@
  * @version    $Revision$
  */
 
+/**
+ * Class CTempsOp
+ *
+ * Classe de mining des temps opératoires
+ *
+ * @todo Passer au mining frameworké
+ */
 class CTempsOp extends CMbObject {
   // DB Table key
   public $temps_op_id;
@@ -26,6 +33,7 @@ class CTempsOp extends CMbObject {
   public $reveil_ecart;
 
   // Object References
+  /** @var  CMediusers */
   public $_ref_praticien;
 
   // Derived Fields
@@ -70,9 +78,18 @@ class CTempsOp extends CMbObject {
   /**
    * @see parent::loadRefsFwd()
    */
-  function loadRefsFwd() { 
-    $this->_ref_praticien = $this->loadFwdRef("chir_id", 1);
+  function loadRefsFwd() {
+    $this->loadRefPraticien();
     $this->_ref_praticien->loadRefFunction();
+  }
+
+  /**
+   * Chargement du praticien
+   *
+   * @return CMediusers Le praticien lié
+   */
+  function loadRefPraticien() {
+    return $this->_ref_praticien = $this->loadFwdRef("praticien_id", 1);
   }
 
   /**

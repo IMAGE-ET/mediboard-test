@@ -9,6 +9,13 @@
  * @version    $Revision$
  */
 
+/**
+ * Class CTempsHospi
+ *
+ * Classe de mining des temps d'hospitalisation
+ *
+ * @todo Passer au mining frameworké
+ */
 class CTempsHospi extends CMbObject {
   // DB Table key
   public $temps_hospi_id;
@@ -63,16 +70,25 @@ class CTempsHospi extends CMbObject {
    * @see parent::loadRefsFwd()
    */
   function loadRefsFwd() {
-    $this->_ref_praticien = $this->loadFwdRef("praticien_id", 1);
+    $this->loadRefPraticien();
     $this->_ref_praticien->loadRefFunction();
+  }
+
+  /**
+   * Chargement du praticien
+   *
+   * @return CMediusers Le praticien lié
+   */
+  function loadRefPraticien() {
+    return $this->_ref_praticien = $this->loadFwdRef("praticien_id", 1);
   }
 
   /**
    * Durée moyenne d'hospitlisation en jours
    *
-   * @param int          $praticien_id [optional]
-   * @param array|string $ccam         [optional]
-   * @param string       $type
+   * @param int          $praticien_id Praticien concerné
+   * @param array|string $ccam         Code CCAM concerné
+   * @param string       $type         Type de séjour concerné
    *
    * @return int|bool Durée en jours, 0 si aucun séjour, false si temps non calculé
    */

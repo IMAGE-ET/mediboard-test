@@ -58,8 +58,9 @@ foreach ($services as $service) {
     $sql = "SELECT affectation.entree, affectation.sortie" .
         "\nFROM affectation, operations, service, chambre, lit" .
         "\nWHERE operations.operation_id = affectation.operation_id";
-    if ($prat_id)
+    if ($prat_id) {
       $sql .= "\nAND operations.chir_id = '$prat_id'";
+    }
     $sql .= "\nAND affectation.lit_id = lit.lit_id" .
         "\nAND lit.chambre_id = chambre.chambre_id" .
         "\nAND chambre.service_id = service.service_id" .

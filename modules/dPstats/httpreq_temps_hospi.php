@@ -35,7 +35,7 @@ $sql .="\nFROM operations" .
        "\nAND sejour.sortie_reelle IS NOT NULL" .
        "\nAND sejour.sortie_reelle > sejour.entree_reelle";
 
-switch($intervalle) {
+switch ($intervalle) {
   case "month":
     $sql .= "\nAND sejour.entree_reelle BETWEEN '".CMbDT::date("-1 month")."' AND '".CMbDT::date()."'";
     break;
@@ -45,6 +45,8 @@ switch($intervalle) {
   case "year":
     $sql .= "\nAND sejour.entree_reelle BETWEEN '".CMbDT::date("-1 year")."' AND '".CMbDT::date()."'";
     break;
+  default:
+    $sql .= "\nAND sejour.entree_reelle BETWEEN '".CMbDT::date("-10 year")."' AND '".CMbDT::date()."'";
 }
        
 $sql .= "\nGROUP BY sejour.type, sejour.praticien_id, operations.codes_ccam";
@@ -56,7 +58,7 @@ foreach ($listSejours as $keylistSejours => $curr_listSejours) {
   // Mémorisation des données dans MySQL
   $sql = "INSERT INTO `temps_hospi` (`temps_hospi_id`, `praticien_id`, `ccam`, `type`, `nb_sejour`, `duree_moy`, `duree_ecart`)
           VALUES (NULL, 
-                  '".$curr_listSejours["praticien_id"]."',
+                '".$curr_listSejours["praticien_id"]."',
                 '".$curr_listSejours["ccam"]."',
                 '".$curr_listSejours["type"]."',
                 '".$curr_listSejours["total"]."',

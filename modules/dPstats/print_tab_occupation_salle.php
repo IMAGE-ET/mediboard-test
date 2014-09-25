@@ -21,8 +21,12 @@ $hors_plage    = CValue::get("hors_plage");
 
 $ds = CSQLDataSource::get("std");
 
-if (!$debut) $debut = CMbDT::date("-1 YEAR");
-if (!$fin) $fin = CMbDT::date();
+if (!$debut) {
+  $debut = CMbDT::date("-1 YEAR");
+}
+if (!$fin) {
+  $fin = CMbDT::date();
+}
 
 $salle = new CSalle();
 $salle->load($salle_id);
@@ -72,9 +76,15 @@ $query = "SELECT COUNT(*) AS nbInterv, users.user_id
   AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles))."
   AND users.user_id ".CSQLDataSource::prepareIn(array_keys($listPrats));
   
-if ($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
-if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+if ($type_hospi) {
+  $query .= "\nAND sejour.type = '$type_hospi'";
+}
+if ($discipline_id) {
+  $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+}
+if ($codeCCAM) {
+  $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+}
 
 $query .=  "\nGROUP BY users.user_id ORDER BY users.user_last_name, users.user_first_name";
 $result = $ds->loadList($query);
@@ -120,9 +130,15 @@ $query = "SELECT COUNT(*) AS nbInterv,
   AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles))."
   AND users.user_id ".CSQLDataSource::prepareIn(array_keys($listPrats));
   
-if ($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
-if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+if ($type_hospi) {
+  $query .= "\nAND sejour.type = '$type_hospi'";
+}
+if ($discipline_id) {
+  $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+}
+if ($codeCCAM) {
+  $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+}
 
 $query .=  "\nGROUP BY users.user_id";
 $result = $ds->loadList($query);
@@ -154,9 +170,15 @@ $query = "SELECT COUNT(*) AS nbInterv,
   AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles))."
   AND users.user_id ".CSQLDataSource::prepareIn(array_keys($listPrats));
   
-if ($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
-if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+if ($type_hospi) {
+  $query .= "\nAND sejour.type = '$type_hospi'";
+}
+if ($discipline_id) {
+  $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+}
+if ($codeCCAM) {
+  $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+}
 
 $query .=  "\nGROUP BY users.user_id";
 $result = $ds->loadList($query);

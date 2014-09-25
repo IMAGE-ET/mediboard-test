@@ -9,7 +9,26 @@
  * @version    $Revision$
  */
 
-function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = 0, $codes_ccam = "", $type_hospi = "", $hors_plage) {
+/**
+ * Récupération des statistiques du nombre d'interventions par mois
+ * selon plusieurs filtres
+ *
+ * @param string $debut         Date de début
+ * @param string $fin           Date de fin
+ * @param int    $prat_id       Identifiant du praticien
+ * @param int    $salle_id      Identifiant de la sall
+ * @param int    $bloc_id       Identifiant du bloc
+ * @param int    $discipline_id Identifiant de la discipline
+ * @param string $codes_ccam    Code CCAM
+ * @param string $type_hospi    Type d'hospitalisation
+ * @param bool   $hors_plage    Prise en compte des hors plage
+ *
+ * @return array
+ */
+function graphActivite(
+    $debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0,
+    $discipline_id = 0, $codes_ccam = "", $type_hospi = "", $hors_plage = true
+) {
   if (!$debut) {
     $debut = CMbDT::date("-1 YEAR");
   }

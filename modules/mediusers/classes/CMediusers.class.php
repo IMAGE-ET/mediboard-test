@@ -899,6 +899,11 @@ class CMediusers extends CPerson {
     }
   }
 
+  /**
+   * Ajout de la permission sur sa fonction à un utilisateur
+   *
+   * @return void
+   */
   function insFunctionPermission() {
     $where = array();
     $where["user_id"]      = "= '$this->user_id'";
@@ -916,6 +921,11 @@ class CMediusers extends CPerson {
     }
   }
 
+  /**
+   * Ajout de la permission sur son établissement à un utilisateur
+   *
+   * @return void
+   */
   function insGroupPermission() {
     $function = new CFunctions;
     $function->load($this->function_id);
@@ -1021,7 +1031,7 @@ class CMediusers extends CPerson {
   /**
    * Liste de Tous les établissements
    *
-   * @param int $permType
+   * @param int $permType Type de permission à valider
    *
    * @return CGroups[]
    */

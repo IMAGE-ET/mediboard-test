@@ -22,7 +22,9 @@
  */
 
 function graphRessourceLog($module, $date, $element = 'duration', $interval = 'day', $numelem = 4) {
-  if (!$date) $date = CMbDT::date();
+  if (!$date) {
+    $date = CMbDT::date();
+  }
 
   switch ($interval) {
     default:

@@ -37,6 +37,7 @@ if ($prat_personnel) {
   $where["date"] = "BETWEEN '$deb_personnel' AND '$fin_personnel'";
   $where["chir_id"] = "= '$prat_personnel'";
   $order = "date, salle_id, debut";
+  /** @var CPlageOp[] $listPlages */
   $listPlages = $plage->loadList($where, $order);
 
   // Récupération des interventions
@@ -50,7 +51,12 @@ if ($prat_personnel) {
      * - nombre de panseuses
      * - nombre d'aides op
      */
-    $curr_plage->loadRefs(0);
+    $curr_plage->loadRefChir();
+    $curr_plage->loadRefAnesth();
+    $curr_plage->loadRefSpec();
+    $curr_plage->loadRefSalle();
+    $curr_plage->loadRefsOperations(false);
+
     $curr_plage->_first_op            = "23:59:59";
     $curr_plage->_last_op             = "00:00:00";
     $curr_plage->_duree_total_op      = "00:00:00";
@@ -121,7 +127,9 @@ if ($prat_personnel) {
         $total["personnel"][$_key_cat]["duree"]      = "00:00:00";
         $total["personnel"][$_key_cat]["days_duree"] = 0;
       }
-      $newTotalPersonnel = CMbDT::addTime($curr_plage->_duree_total_personnel[$_key_cat]["duree"], $total["personnel"][$_key_cat]["duree"]);
+      $newTotalPersonnel = CMbDT::addTime(
+        $curr_plage->_duree_total_personnel[$_key_cat]["duree"], $total["personnel"][$_key_cat]["duree"]
+      );
       $total["personnel"][$_key_cat]["days_duree"] += $curr_plage->_duree_total_personnel[$_key_cat]["days_duree"];
       if ($newTotalPersonnel < $total["personnel"][$_key_cat]["duree"]) {
         $total["personnel"][$_key_cat]["days_duree"]++;

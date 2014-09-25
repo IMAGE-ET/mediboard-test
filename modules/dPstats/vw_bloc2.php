@@ -54,7 +54,7 @@ if ($type == "prevue") {
   CStoredObject::massLoadFwdRef($plages, "chir_id");
   CStoredObject::massLoadFwdRef($plages, "spec_id");
 
-// Récupération des interventions
+  // Récupération des interventions
   foreach ($plages as $_plage) {
     $_plage->loadRefOwner();
     $_plage->loadRefAnesth();
@@ -124,59 +124,59 @@ if ($mode == "csv") {
     $csvPath = "tmp/$csvName";
     $csvFile = fopen($csvPath, "w") or die("can't open file");
     $title  = '"Date";"Salle prévue";"Salle réelle";"Début vacation";"Fin vacation";"N° d\'ordre prévu";"N° d\'ordre réel";';
-    $title .= '"Patient";"Prise en charge";"Chirurgien";"Anesthésiste";"Libellé";"DP";"CCAM";"Type d\'anesthésie";"Code ASA";"Placement programme";';
-    $title .= '"Entrée salle";"Début d\'induction";"Fin d\'induction";"Début d\'intervention";"Fin d\'intervention";"Sortie salle";"Patient suivant";';
-    $title .= '"Entrée reveil";"Sortie reveil"
+    $title .= '"Patient";"Prise en charge";"Chirurgien";"Anesthésiste";"Libellé";"DP";"CCAM";"Type d\'anesthésie";"Code ASA";';
+    $title .= '"Placement programme";"Entrée salle";"Début d\'induction";"Fin d\'induction";"Début d\'intervention";';
+    $title .= '"Fin d\'intervention";"Sortie salle";"Patient suivant";"Entrée reveil";"Sortie reveil"
 ';
 
-    fwrite($csvFile, $title);
-    foreach ($operations as $_operation) {
-        $line  = '"'.CMbDT::date($_operation->_datetime).'";';
-        $line .= '"'.$_operation->_ref_salle_prevue.'";';
-        $line .= '"'.$_operation->_ref_salle_reelle.'";';
-        $line .= '"'.$_operation->_deb_plage.'";';
-        $line .= '"'.$_operation->_fin_plage.'";';
-        $line .= '"'.$_operation->rank.'";';
-        $line .= '"'.$_operation->_rank_reel.'";';
-        $line .= '"'.$_operation->_ref_sejour->_ref_patient->_view.'" ('.$_operation->_ref_sejour->_ref_patient->_age.');';
-        $line .= '"'.$_operation->_ref_sejour->type.'";';
-        $line .= '"'.$_operation->_ref_chir->_view.'";';
-        $line .= '"'.$_operation->_ref_anesth->_view.'";';
-        $line .= '"'.$_operation->libelle.'";';
-        $line .= '"'.$_operation->_ref_sejour->DP.'";';
-        $line .= '"'.$_operation->codes_ccam.'";';
-        $line .= '"'.$_operation->_lu_type_anesth.'";';
-        $line .= '"'.$_operation->ASA.'";';
-        $line .= '"'.$_operation->_ref_workflow->date_creation.'";';
-        $line .= '"'.$_operation->entree_salle.'";';
-        $line .= '"'.$_operation->induction_debut.'";';
-        $line .= '"'.$_operation->induction_fin.'";';
-        $line .= '"'.$_operation->debut_op.'";';
-        $line .= '"'.$_operation->fin_op.'";';
-        $line .= '"'.$_operation->sortie_salle.'";';
-        $line .= '"'.$_operation->_pat_next.'";';
-        $line .= '"'.$_operation->entree_reveil.'";';
-        $line .= '"'.$_operation->sortie_reveil_possible.'"
+  fwrite($csvFile, $title);
+  foreach ($operations as $_operation) {
+      $line  = '"'.CMbDT::date($_operation->_datetime).'";';
+      $line .= '"'.$_operation->_ref_salle_prevue.'";';
+      $line .= '"'.$_operation->_ref_salle_reelle.'";';
+      $line .= '"'.$_operation->_deb_plage.'";';
+      $line .= '"'.$_operation->_fin_plage.'";';
+      $line .= '"'.$_operation->rank.'";';
+      $line .= '"'.$_operation->_rank_reel.'";';
+      $line .= '"'.$_operation->_ref_sejour->_ref_patient->_view.'" ('.$_operation->_ref_sejour->_ref_patient->_age.');';
+      $line .= '"'.$_operation->_ref_sejour->type.'";';
+      $line .= '"'.$_operation->_ref_chir->_view.'";';
+      $line .= '"'.$_operation->_ref_anesth->_view.'";';
+      $line .= '"'.$_operation->libelle.'";';
+      $line .= '"'.$_operation->_ref_sejour->DP.'";';
+      $line .= '"'.$_operation->codes_ccam.'";';
+      $line .= '"'.$_operation->_lu_type_anesth.'";';
+      $line .= '"'.$_operation->ASA.'";';
+      $line .= '"'.$_operation->_ref_workflow->date_creation.'";';
+      $line .= '"'.$_operation->entree_salle.'";';
+      $line .= '"'.$_operation->induction_debut.'";';
+      $line .= '"'.$_operation->induction_fin.'";';
+      $line .= '"'.$_operation->debut_op.'";';
+      $line .= '"'.$_operation->fin_op.'";';
+      $line .= '"'.$_operation->sortie_salle.'";';
+      $line .= '"'.$_operation->_pat_next.'";';
+      $line .= '"'.$_operation->entree_reveil.'";';
+      $line .= '"'.$_operation->sortie_reveil_possible.'"
 ';
-        fwrite($csvFile, $line);
-    }
-    fclose($csvFile);
-  
-    
-    header("Pragma: ");
-    header("Cache-Control: ");
-    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-    header("Cache-Control: no-store, no-cache, must-revalidate");  //HTTP/1.1
-    header("Cache-Control: post-check=0, pre-check=0", false);
-    // END extra headers to resolve IE caching bug
-  
-    header("MIME-Version: 1.0");
-    header("Content-length: ".filesize($csvPath));
-    header("Content-type: text/csv; charset=iso-8859-1");
-    header("Content-disposition: attachment; filename=\"".$csvName."\"");
-    readfile($csvPath);
-    return;
+      fwrite($csvFile, $line);
+  }
+  fclose($csvFile);
+
+
+  header("Pragma: ");
+  header("Cache-Control: ");
+  header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+  header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+  header("Cache-Control: no-store, no-cache, must-revalidate");  //HTTP/1.1
+  header("Cache-Control: post-check=0, pre-check=0", false);
+  // END extra headers to resolve IE caching bug
+
+  header("MIME-Version: 1.0");
+  header("Content-length: ".filesize($csvPath));
+  header("Content-type: text/csv; charset=iso-8859-1");
+  header("Content-disposition: attachment; filename=\"".$csvName."\"");
+  readfile($csvPath);
+  return;
 }
 else {
   // Création du template

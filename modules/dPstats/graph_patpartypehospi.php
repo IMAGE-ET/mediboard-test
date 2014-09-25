@@ -9,9 +9,31 @@
  * @version    $Revision$
  */
 
-function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service_id = 0, $type_adm = 0, $discipline_id = 0, $septique = 0, $type_data = "prevue") {
-  if (!$debut) $debut = CMbDT::date("-1 YEAR");
-  if (!$fin) $fin = CMbDT::date();
+/**
+ * Récupération du graphique du nombre de patients hospitalisés
+ * par type d'hospitalisation
+ *
+ * @param string $debut         Date de début
+ * @param string $fin           Date de fin
+ * @param int    $prat_id       Identifiant du praticien
+ * @param int    $service_id    Identifiant du service
+ * @param int    $type_adm      Type d'admission
+ * @param int    $discipline_id Identifiant de la discipline
+ * @param int    $septique      Filtre sur le caractère septique
+ * @param string $type_data     Type de données (prévues / réelles)
+ *
+ * @return array
+ */
+function graphPatParTypeHospi(
+    $debut = null, $fin = null, $prat_id = 0, $service_id = 0, $type_adm = 0,
+    $discipline_id = 0, $septique = 0, $type_data = "prevue"
+) {
+  if (!$debut) {
+    $debut = CMbDT::date("-1 YEAR");
+  }
+  if (!$fin) {
+    $fin = CMbDT::date();
+  }
 
   $prat = new CMediusers;
   $prat->load($prat_id);

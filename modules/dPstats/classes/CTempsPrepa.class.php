@@ -9,6 +9,13 @@
  * @version    $Revision$
  */
 
+/**
+ * Class CTempsPrepa
+ *
+ * Classe de mining des temps de préparation du patient
+ *
+ * @todo Passer au mining frameworké
+ */
 class CTempsPrepa extends CMbObject {
   // DB Table key
   public $temps_prepa_id;
@@ -21,6 +28,7 @@ class CTempsPrepa extends CMbObject {
   public $duree_ecart;
 
   // Object References
+  /** @var  CMediusers */
   public $_ref_praticien;
 
   /**
@@ -49,8 +57,17 @@ class CTempsPrepa extends CMbObject {
   /**
    * @see parent::loadRefsFwd()
    */
-  function loadRefsFwd() { 
-    $this->_ref_praticien = $this->loadFwdRef("chir_id", 1);
+  function loadRefsFwd() {
+    $this->loadRefPraticien();
     $this->_ref_praticien->loadRefFunction();
+  }
+
+  /**
+   * Chargement du praticien
+   *
+   * @return CMediusers Le praticien lié
+   */
+  function loadRefPraticien() {
+    return $this->_ref_praticien = $this->loadFwdRef("praticien_id", 1);
   }
 }

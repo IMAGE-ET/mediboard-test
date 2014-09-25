@@ -10,26 +10,22 @@
  */
 
 /**
- * @param null $date_min
- * @param null $date_max
- * @param null $prat_id
- * @param null $salle_id
- * @param null $bloc_id
- * @param null $code_ccam
- * @param null $type_sejour
- * @param bool $hors_plage
+ * Récuparation du graphique du nombre d'interventions annulées le jour même
+ *
+ * @param string $date_min    Date de début
+ * @param string $date_max    Date de fin
+ * @param int    $prat_id     Identifiant du praticien
+ * @param int    $salle_id    Identifiant de la salle
+ * @param int    $bloc_id     Identifiant du bloc
+ * @param string $code_ccam   Code CCAM
+ * @param string $type_sejour Type de séjour
+ * @param bool   $hors_plage  Prise en charge des hors plage
  *
  * @return array
  */
 function graphOpAnnulees(
-  $date_min = null,
-  $date_max = null,
-  $prat_id = null,
-  $salle_id = null,
-  $bloc_id = null,
-  $code_ccam = null,
-  $type_sejour = null,
-  $hors_plage = false
+    $date_min = null, $date_max = null, $prat_id = null, $salle_id = null, $bloc_id = null,
+    $code_ccam = null, $type_sejour = null, $hors_plage = false
 ) {
   $miner = new COperationWorkflow();
   $miner->warnUsage();

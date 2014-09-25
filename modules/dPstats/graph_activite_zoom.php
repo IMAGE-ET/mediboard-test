@@ -9,7 +9,25 @@
  * @version    $Revision$
  */
 
-function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = 0, $codes_ccam = '', $type_hospi, $hors_plage) {
+/**
+ * Récupération des statistiques du nombre d'interventions par jour
+ * selon plusieurs filtres
+ *
+ * @param string $date          Date de début
+ * @param int    $prat_id       Identifiant du praticien
+ * @param int    $salle_id      Identifiant de la sall
+ * @param int    $bloc_id       Identifiant du bloc
+ * @param int    $discipline_id Identifiant de la discipline
+ * @param string $codes_ccam    Code CCAM
+ * @param string $type_hospi    Type d'hospitalisation
+ * @param bool   $hors_plage    Prise en compte des hors plage
+ *
+ * @return array
+ */
+function graphActiviteZoom(
+    $date, $prat_id = 0, $salle_id = 0, $bloc_id = 0,
+    $discipline_id = 0, $codes_ccam = '', $type_hospi = "", $hors_plage = true
+) {
   if (!$date) {
     $date = CMbDT::transform("+0 DAY", CMbDT::date(), "%m/%Y");
   }
@@ -89,6 +107,7 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
 
     $result = $salle->_spec->ds->loadlist($query);
 
+    $result_hors_plage = array();
     if ($hors_plage) {
       $query_hors_plage = "SELECT COUNT(operations.operation_id) AS total,
         DATE_FORMAT(operations.date, '%d') AS jour,
@@ -176,12 +195,14 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
     $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_hospi");
   }
 
-  $options = CFlotrGraph::merge("bars", array(
-    'title' => utf8_encode($title),
-    'subtitle' => utf8_encode($subtitle),
-    'xaxis' => array('ticks' => $ticks),
-    'bars' => array('stacked' => true, 'barWidth' => 0.8),
-  ));
+  $options = CFlotrGraph::merge(
+    "bars", array(
+      'title' => utf8_encode($title),
+      'subtitle' => utf8_encode($subtitle),
+      'xaxis' => array('ticks' => $ticks),
+      'bars' => array('stacked' => true, 'barWidth' => 0.8),
+    )
+  );
   
   return array('series' => $series, 'options' => $options);
 }

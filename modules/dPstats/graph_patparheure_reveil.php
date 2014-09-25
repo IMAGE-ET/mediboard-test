@@ -9,10 +9,30 @@
  * @version    $Revision$
  */
 
-function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_id = 0, $discipline_id = null, $codeCCAM = '') {
+/**
+ * Récuparation du graphique de répartition des patients en salle de reveil
+ * par tranche horaire
+ *
+ * @param string $debut         Date de début
+ * @param string $fin           Date de fin
+ * @param int    $prat_id       Identifiant du praticien
+ * @param int    $bloc_id       Identifiant du bloc
+ * @param int    $discipline_id Identifiant de la discipline
+ * @param string $codeCCAM      Code CCAM
+ *
+ * @return array
+ */
+function graphPatParHeureReveil(
+    $debut = null, $fin = null, $prat_id = 0, $bloc_id = 0,
+    $discipline_id = null, $codeCCAM = ''
+) {
   $ds = CSQLDataSource::get("std");
-  if (!$debut) $debut = CMbDT::date("-1 YEAR");
-  if (!$fin) $fin = CMbDT::date();
+  if (!$debut) {
+    $debut = CMbDT::date("-1 YEAR");
+  }
+  if (!$fin) {
+    $fin = CMbDT::date();
+  }
 
   $totalWorkDays = 0;
   for ($i = $debut; $i <= $fin; $i = CMbDT::date("+1 MONTH", $i)) {
@@ -26,7 +46,7 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
   $discipline->load($discipline_id);
 
   $ticks = array();
-  for ($i = "7"; $i <= "21"; $i = $i + 1) {
+  for ($i = 7; $i <= 21; $i++) {
     $ticks[] = array(count($ticks), CMbDT::transform("+0 DAY", "$i:00:00", "%Hh%M"));
   }
 
@@ -53,9 +73,15 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
       AND '".$tick[1].":00' BETWEEN operations.entree_reveil AND operations.sortie_reveil_possible
       AND operations.annulee = '0'";
       
-    if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
-    if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-    if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+    if ($prat_id) {
+      $query .= "\nAND operations.chir_id = '$prat_id'";
+    }
+    if ($discipline_id) {
+      $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+    }
+    if ($codeCCAM) {
+      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+    }
   
     if ($bloc_id) {
       $query .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
@@ -89,9 +115,15 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
     AND (operations.entree_reveil IS NULL OR operations.sortie_reveil_possible IS NULL)
     AND operations.annulee = '0'";
     
-  if ($prat_id)  $query      .= "\nAND operations.chir_id = '$prat_id'";
-  if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  if ($codeCCAM) $query      .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  if ($prat_id) {
+    $query .= "\nAND operations.chir_id = '$prat_id'";
+  }
+  if ($discipline_id) {
+    $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  }
+  if ($codeCCAM) {
+    $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  }
 
   if ($bloc_id) {
     $query .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
@@ -117,10 +149,18 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
   // Set up the title for the graph
   $title = "Patients moyens et max / heure du jour";
   $subtitle = "Moyenne sur tous les jours ouvrables";
-  if ($prat_id)       $subtitle .= " - Dr $prat->_view";
-  if ($discipline_id) $subtitle .= " - $discipline->_view";
-  if ($bloc_id)       $subtitle .= " - $bloc->_view";
-  if ($codeCCAM)      $subtitle .= " - CCAM : $codeCCAM";
+  if ($prat_id) {
+    $subtitle .= " - Dr $prat->_view";
+  }
+  if ($discipline_id) {
+    $subtitle .= " - $discipline->_view";
+  }
+  if ($bloc_id) {
+    $subtitle .= " - $bloc->_view";
+  }
+  if ($codeCCAM) {
+    $subtitle .= " - CCAM : $codeCCAM";
+  }
 
   $options = array(
     'title' => utf8_encode($title),

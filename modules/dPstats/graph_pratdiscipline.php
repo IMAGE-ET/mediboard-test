@@ -9,9 +9,31 @@
  * @version    $Revision$
  */
 
-function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = 0, $codeCCAM = "", $type_hospi = "", $hors_plage) {
-  if (!$debut) $debut = CMbDT::date("-1 YEAR");
-  if (!$fin) $fin = CMbDT::date();
+/**
+ * Récupération du graphique du nombre d'interventions par praticien
+ *
+ * @param string $debut         Date de début
+ * @param string $fin           Date de fin
+ * @param int    $prat_id       Identifiant du praticien
+ * @param int    $salle_id      Identifiant de la salle
+ * @param int    $bloc_id       Identifiant du bloc
+ * @param int    $discipline_id Identifiant de la discipline
+ * @param string $codeCCAM      Code CCAM
+ * @param string $type_hospi    Type d'hospitalisation
+ * @param bool   $hors_plage    Prise en compte des hors plage
+ *
+ * @return array
+ */
+function graphPraticienDiscipline(
+    $debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0,
+    $discipline_id = 0, $codeCCAM = "", $type_hospi = "", $hors_plage = true
+) {
+  if (!$debut) {
+    $debut = CMbDT::date("-1 YEAR");
+  }
+  if (!$fin) {
+    $fin = CMbDT::date();
+  }
 
   $discipline = new CDiscipline();
   $discipline->load($discipline_id);
@@ -82,10 +104,15 @@ function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $sal
       AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
       AND users_mediboard.user_id = '$user->_id'";
   
-    if($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
-    if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-    if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-    
+    if ($type_hospi) {
+      $query .= "\nAND sejour.type = '$type_hospi'";
+    }
+    if ($discipline_id) {
+      $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+    }
+    if ($codeCCAM) {
+      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+    }
     if ($salle_id) {
       $query .= "\nAND sallesbloc.salle_id = '$salle_id'";
     }
@@ -106,7 +133,9 @@ function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $sal
           $f = false;
         }
       }
-      if($f) $serie["data"][] = array(count($serie["data"]), 0);
+      if ($f) {
+        $serie["data"][] = array(count($serie["data"]), 0);
+      }
     }
     
     $series[] = $serie;
@@ -116,9 +145,15 @@ function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $sal
 
   $title = "Nombre d'interventions par praticien";
   $subtitle = "$total opérations";
-  if ($discipline_id) $subtitle .= " - $discipline->_view";
-  if ($codeCCAM)      $subtitle .= " - CCAM : $codeCCAM";
-  if ($type_hospi)    $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_hospi");
+  if ($discipline_id) {
+    $subtitle .= " - $discipline->_view";
+  }
+  if ($codeCCAM) {
+    $subtitle .= " - CCAM : $codeCCAM";
+  }
+  if ($type_hospi) {
+    $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_hospi");
+  }
   
   $options = array(
     'title' => utf8_encode($title),

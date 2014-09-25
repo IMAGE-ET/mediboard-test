@@ -42,6 +42,7 @@ $ljoin          = array();
 $ljoin["users"] = "users.user_id = temps_op.chir_id";
 $order          = "users.user_last_name ASC, users.user_first_name ASC, ccam";
 
+/** @var CTempsOp[] $listTemps */
 $listTemps      = $listTemps->loadList($where, $order, null, null, $ljoin);
 
 if ($codeCCAM) {
@@ -85,7 +86,8 @@ foreach ($listTemps as $keyTemps => $temps) {
     $temps->reveil_moy  = strftime("%H:%M:%S", $temps->reveil_moy / $temps->nb_intervention);
   }
 
-  $listTemps[$keyTemps]->loadRefsFwd();
+  $listTemps[$keyTemps]->loadRefPraticien();
+  $listTemps[$keyTemps]->_ref_praticien->loadRefFunction();
   $total["nbInterventions"] += $temps->nb_intervention;
   $total["estim_somme"]     += $temps->nb_intervention * strtotime($temps->estimation);
   $total["occup_somme"]     += $temps->nb_intervention * strtotime($temps->occup_moy);

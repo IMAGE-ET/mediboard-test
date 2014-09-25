@@ -20,16 +20,16 @@ $nb_sejour_mini = CValue::getOrSession("nb_sejour_mini", 3);
 $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);
 
-// Stat des temps de préparation
 if ($typeVue == 0) {
+  // Stat des temps de préparation
   include "inc_vw_timeop_op.php";
-} 
-// Stat des temps opératoires
+}
 elseif ($typeVue == 1) {
+  // Stat des temps opératoires
   include "inc_vw_timeop_prepa.php";
-} 
-// Stat des temps d'hospitalisation
+}
 else {
+  // Stat des temps d'hospitalisation
   include "inc_vw_timehospi.php";
 }
 

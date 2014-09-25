@@ -18,7 +18,18 @@ $can->needsAdmin();
 $ds = CSQLDataSource::get("std");
 $ds->exec("TRUNCATE `temps_op`");
 
-
+/**
+ * Fonction de construction du cache d'info des durées
+ * d'hospi et d'interv
+ *
+ * @param string $tableName   Nom de la table de cache
+ * @param string $tableFields Champs de la table de cache
+ * @param array  $queryFields Liste des champs du select
+ * @param string $querySelect Chaine contenant les éléments SELECT à utiliser
+ * @param array  $queryWhere  Chaine contenant les éléments WHERE à utiliser
+ *
+ * @return void
+ */
 function buildPartialTables($tableName, $tableFields, $queryFields, $querySelect, $queryWhere) {
   $ds = CSQLDataSource::get("std");
   
@@ -28,10 +39,17 @@ function buildPartialTables($tableName, $tableFields, $queryFields, $querySelect
   $intervalle = CValue::get("intervalle");
   
   switch ($intervalle) {
-    case "month" : $deb = CMbDT::date("-1 month");
-    case "6month": $deb = CMbDT::date("-6 month");
-    case "year"  : $deb = CMbDT::date("-1  year");
-    default      : $deb = CMbDT::date("-10 year");
+    case "month":
+      $deb = CMbDT::date("-1 month");
+      break;
+    case "6month":
+      $deb = CMbDT::date("-6 month");
+      break;
+    case "year":
+      $deb = CMbDT::date("-1  year");
+      break;
+    default:
+      $deb = CMbDT::date("-10 year");
   }
   
   $fin = CMbDT::date();
@@ -48,25 +66,24 @@ function buildPartialTables($tableName, $tableFields, $queryFields, $querySelect
     "\nKEY `chir_id` (`chir_id`)," .
     "\nKEY `ccam` (`ccam`)" .
     "\n) /*! ENGINE=MyISAM */;";
-  
-//  mbDump($create);
+
   $ds->exec($create);
     
   // Remplissage de la table partielle
   $query = "INSERT INTO `$tableName` ($joinedFields, `chir_id`, `ccam`)
-  SELECT $querySelect
-  operations.chir_id,
-  operations.codes_ccam AS ccam
-  FROM operations
-  LEFT JOIN users
-  ON operations.chir_id = users.user_id
-  LEFT JOIN plagesop
-  ON operations.plageop_id = plagesop.plageop_id
-  WHERE operations.annulee = '0'
-  $queryWhere
-  AND operations.date BETWEEN '$deb' AND '$fin'
-  GROUP BY operations.chir_id, ccam
-  ORDER BY ccam;";
+    SELECT $querySelect
+    operations.chir_id,
+    operations.codes_ccam AS ccam
+    FROM operations
+    LEFT JOIN users
+    ON operations.chir_id = users.user_id
+    LEFT JOIN plagesop
+    ON operations.plageop_id = plagesop.plageop_id
+    WHERE operations.annulee = '0'
+    $queryWhere
+    AND operations.date BETWEEN '$deb' AND '$fin'
+    GROUP BY operations.chir_id, ccam
+    ORDER BY ccam;";
     
   $ds->exec($query);
   CAppUI::stepAjax("Nombre de valeurs pour la table '$tableName': " . $ds->affectedRows(), UI_MSG_OK);
@@ -142,8 +159,10 @@ $tableName   = "op_reveil";
 $tableFields = "\n`reveil_moy` time NOT NULL default '00:00:00',";
 $tableFields.= "\n`reveil_ecart` time NOT NULL default '00:00:00',";
 $queryFields = array("reveil_moy", "reveil_ecart");
-$querySelect = "\nSEC_TO_TIME(AVG(TIME_TO_SEC(operations.sortie_reveil_possible)-TIME_TO_SEC(operations.entree_reveil))) as reveil_moy,";
-$querySelect.= "\nSEC_TO_TIME(STD(TIME_TO_SEC(operations.sortie_reveil_possible)-TIME_TO_SEC(operations.entree_reveil))) as reveil_ecart,";
+$querySelect = "\nSEC_TO_TIME(AVG(TIME_TO_SEC(operations.sortie_reveil_possible)-TIME_TO_SEC(operations.entree_reveil)))
+  as reveil_moy,";
+$querySelect.= "\nSEC_TO_TIME(STD(TIME_TO_SEC(operations.sortie_reveil_possible)-TIME_TO_SEC(operations.entree_reveil)))
+  as reveil_ecart,";
 $queryWhere  = "\nAND operations.entree_reveil IS NOT NULL";
 $queryWhere .= "\nAND operations.sortie_reveil_possible IS NOT NULL";
 $queryWhere .= "\nAND operations.entree_reveil < operations.sortie_reveil_possible";

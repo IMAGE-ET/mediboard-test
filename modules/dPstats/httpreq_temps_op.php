@@ -18,10 +18,17 @@ $ds = CSQLDataSource::get("std");
 $ds->exec("TRUNCATE `temps_op`");
 
 switch ($intervalle) {
-  case "month" : $deb = CMbDT::date("-1 month");
-  case "6month": $deb = CMbDT::date("-6 month");
-  case "year"  : $deb = CMbDT::date("-1  year");
-  default      : $deb = CMbDT::date("-10 year");
+  case "month":
+    $deb = CMbDT::date("-1 month");
+    break;
+  case "6month":
+    $deb = CMbDT::date("-6 month");
+    break;
+  case "year":
+    $deb = CMbDT::date("-1  year");
+    break;
+  default:
+    $deb = CMbDT::date("-10 year");
 }
 
 $fin = CMbDT::date();
@@ -54,17 +61,19 @@ $operations = $ds->loadList($query);
 // Mémorisation des données
 foreach ($operations as $_operation) {
   // Mémorisation des données dans MySQL
-  $sql = "INSERT INTO `temps_op` (`temps_op_id`, `chir_id`, `ccam`, `nb_intervention`, `estimation`, `occup_moy`, `occup_ecart`, `duree_moy`, `duree_ecart`)
-          VALUES (NULL, 
-            '".$_operation["chir_id"]."',
-            '".$_operation["ccam"]."',
-            '".$_operation["total"]."',
-            '".$_operation["estimation"]."',
-            '".$_operation["duree_bloc"]."',
-            '".$_operation["ecart_bloc"]."',
-            '".$_operation["duree_operation"]."',
-            '".$_operation["ecart_operation"]."');";
-  $ds->exec( $sql ); $ds->error();
+  $sql = "INSERT INTO `temps_op`
+      (`temps_op_id`, `chir_id`, `ccam`, `nb_intervention`, `estimation`, `occup_moy`, `occup_ecart`, `duree_moy`, `duree_ecart`)
+    VALUES (NULL,
+      '".$_operation["chir_id"]."',
+      '".$_operation["ccam"]."',
+      '".$_operation["total"]."',
+      '".$_operation["estimation"]."',
+      '".$_operation["duree_bloc"]."',
+      '".$_operation["ecart_bloc"]."',
+      '".$_operation["duree_operation"]."',
+      '".$_operation["ecart_operation"]."');";
+  $ds->exec($sql);
+  $ds->error();
 }
 
 echo "Liste des temps opératoire mise à jour (".count($operations)." lignes trouvées)";

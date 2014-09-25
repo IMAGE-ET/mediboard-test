@@ -9,9 +9,31 @@
  * @version    $Revision$
  */
 
-function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = null, $codeCCAM = '', $hors_plage) {
-  if (!$debut) $debut = CMbDT::date("-1 YEAR");
-  if (!$fin) $fin = CMbDT::date();
+/**
+ * Récupération du graphique du nombre de patient par jour et par salle
+ * au bloc opératoire
+ *
+ * @param string $debut         Date de début
+ * @param string $fin           Date de fin
+ * @param int    $prat_id       Identifiant du praticien
+ * @param int    $salle_id      Identifiant de la salle
+ * @param int    $bloc_id       Identifiant du bloc
+ * @param int    $discipline_id Identifiant de la discipline
+ * @param string $codeCCAM      Code CCAM
+ * @param bool   $hors_plage    Prise en compte des hors plage
+ *
+ * @return array
+ */
+function graphPatJourSalle(
+    $debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0,
+    $discipline_id = null, $codeCCAM = '', $hors_plage = true
+) {
+  if (!$debut) {
+    $debut = CMbDT::date("-1 YEAR");
+  }
+  if (!$fin) {
+    $fin = CMbDT::date();
+  }
 
   $prat = new CMediusers;
   $prat->load($prat_id);
@@ -50,9 +72,15 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
     AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
     AND sallesbloc.stats = '1'";
 
-  if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
-  if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  if ($prat_id) {
+    $query .= "\nAND operations.chir_id = '$prat_id'";
+  }
+  if ($discipline_id) {
+    $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  }
+  if ($codeCCAM) {
+    $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  }
 
   if ($salle_id) {
     $query .= "\nAND sallesbloc.salle_id = '$salle_id'";
@@ -87,10 +115,18 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
   // Set up the title for the graph
   $title = "Patients / jour / salle active dans le mois";
   $subtitle = "Uniquement les jours d'activité";
-  if ($prat_id)       $subtitle .= " - Dr $prat->_view";
-  if ($discipline_id) $subtitle .= " - $discipline->_view";
-  if ($salle_id)      $subtitle .= " - $salle->nom";
-  if ($codeCCAM)      $subtitle .= " - CCAM : $codeCCAM";
+  if ($prat_id) {
+    $subtitle .= " - Dr $prat->_view";
+  }
+  if ($discipline_id) {
+    $subtitle .= " - $discipline->_view";
+  }
+  if ($salle_id) {
+    $subtitle .= " - $salle->nom";
+  }
+  if ($codeCCAM) {
+    $subtitle .= " - CCAM : $codeCCAM";
+  }
 
   $options = array(
     'title' => utf8_encode($title),

@@ -9,6 +9,17 @@
  * @version    $Revision$
  */
 
+/**
+ * User log by user stats
+ * (Create, Update / Delete)
+ *
+ * @param string $startx   Datetime where the search starts
+ * @param string $endx     Datetime where the search ends
+ * @param string $interval Type of interval (day, week, 8 weeks, year, 4 years, 20 years)
+ * @param int    $user_id  User identifier
+ *
+ * @return array
+ */
 function graphUserLog($startx, $endx, $interval, $user_id) {
   switch ($interval) {
     case "one-day":
@@ -39,6 +50,10 @@ function graphUserLog($startx, $endx, $interval, $user_id) {
     case "twenty-years":
       $step = "+1 YEAR";
       $period_format = "%Y";
+      break;
+    default:
+      $step = "+1 HOUR";
+      $period_format = "%Hh";
       break;
   }
   
@@ -141,7 +156,6 @@ function graphUserLog($startx, $endx, $interval, $user_id) {
  */
 function graphUserLogSystem($startx, $endx, $period, $type = null, $user_id = null, $class = null, $object_id = null) {
   switch ($period) {
-    default:
     case "hour":
       $step = "+1 HOUR";
       $period_format = "%d-%m-%Y %Hh";
@@ -165,6 +179,11 @@ function graphUserLogSystem($startx, $endx, $period, $type = null, $user_id = nu
     case "year":
       $step = "+1 YEAR";
       $period_format = "%Y";
+      break;
+
+    default:
+      $step = "+1 HOUR";
+      $period_format = "%d-%m-%Y %Hh";
   }
 
   $datax = array();
@@ -202,7 +221,9 @@ function graphUserLogSystem($startx, $endx, $period, $type = null, $user_id = nu
 
   // Label ticks spacement
   foreach ($datax as $i => &$x) {
-    if ($i % $space) $x[1] = '';
+    if ($i % $space) {
+      $x[1] = '';
+    }
   }
 
   $subtitle = CMbDT::format($endx, CAppUI::conf("longdate"));

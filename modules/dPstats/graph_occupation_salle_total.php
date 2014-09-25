@@ -9,7 +9,26 @@
  * @version    $Revision$
  */
 
-function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = null, $codeCCAM = "", $type_hospi = "", $hors_plage, $type_duree) {
+/**
+ * Récupération du graphique de l'occupation de salle de bloc
+ *
+ * @param string $debut         Date de début
+ * @param string $fin           Date de fin
+ * @param int    $prat_id       Identifiant du praticien
+ * @param int    $salle_id      Identifiant de la salle
+ * @param int    $bloc_id       Identifiant du bloc
+ * @param int    $discipline_id Identifiant de la discipline
+ * @param string $codeCCAM      Code CCAM
+ * @param string $type_hospi    Type d'hospitalisation
+ * @param bool   $hors_plage    Pris en compte du hors plage
+ * @param string $type_duree    Type de durée (jours / mois)
+ *
+ * @return array
+ */
+function graphOccupationSalle(
+    $debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0,
+    $discipline_id = null, $codeCCAM = "", $type_hospi = "", $hors_plage = true, $type_duree = "MONTH"
+) {
 
   $ds = CSQLDataSource::get("std");
   
@@ -24,8 +43,12 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     $order_key = "%Y%m%d";
   }
   
-  if (!$debut) $debut = CMbDT::date("-1 YEAR");
-  if (!$fin) $fin = CMbDT::date();
+  if (!$debut) {
+    $debut = CMbDT::date("-1 YEAR");
+  }
+  if (!$fin) {
+    $fin = CMbDT::date();
+  }
   
   $prat = new CMediusers;
   $prat->load($prat_id);
@@ -96,9 +119,15 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles))."
     AND users.user_id ".CSQLDataSource::prepareIn(array_keys($listPrats), $prat_id);
     
-  if ($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
-  if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  if ($type_hospi) {
+    $query .= "\nAND sejour.type = '$type_hospi'";
+  }
+  if ($discipline_id) {
+    $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  }
+  if ($codeCCAM) {
+    $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  }
   
   $query .=  "\nGROUP BY $type_duree_fr ORDER BY orderitem";
   $result = $ds->loadList($query);
@@ -148,16 +177,22 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles))."
     AND users.user_id ".CSQLDataSource::prepareIn(array_keys($listPrats), $prat_id);
     
-  if ($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
-  if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  if ($type_hospi) {
+    $query .= "\nAND sejour.type = '$type_hospi'";
+  }
+  if ($discipline_id) {
+    $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  }
+  if ($codeCCAM) {
+    $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  }
   
   $query .=  "\nGROUP BY $type_duree_fr ORDER BY orderitem";
   $result = $ds->loadList($query);
   
   foreach ($ticks as $i => $tick) {
     $f = true;
-    foreach ($result as $j=>$r) {
+    foreach ($result as $j => $r) {
       if ($tick[1] == $r["$type_duree_fr"]) {
         $nb_interv = $r["nbInterv"];
         $serieMoy['data'][] = array($i, $r["duree_total"]/(60*$nb_interv));
@@ -200,9 +235,15 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles))."
     AND users.user_id ".CSQLDataSource::prepareIn(array_keys($listPrats), $prat_id);
     
-  if ($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
-  if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  if ($type_hospi) {
+    $query .= "\nAND sejour.type = '$type_hospi'";
+  }
+  if ($discipline_id) {
+    $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  }
+  if ($codeCCAM) {
+    $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  }
   
   $query .=  "\nGROUP BY $type_duree_fr ORDER BY orderitem";
   $result = $ds->loadList($query);
@@ -230,28 +271,50 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   
   // Set up the title for the graph
   $subtitle = "";
-  if ($prat_id)       $subtitle .= " - Dr $prat->_view";
-  if ($discipline_id) $subtitle .= " - $discipline->_view";
-  if ($salle_id)      $subtitle .= " - $salle->nom";
-  if ($bloc_id)       $subtitle .= " - $bloc->nom";
-  if ($codeCCAM)      $subtitle .= " - CCAM : $codeCCAM";
-  if ($type_hospi)    $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_hospi");
+  if ($prat_id) {
+    $subtitle .= " - Dr $prat->_view";
+  }
+  if ($discipline_id) {
+    $subtitle .= " - $discipline->_view";
+  }
+  if ($salle_id) {
+    $subtitle .= " - $salle->nom";
+  }
+  if ($bloc_id) {
+    $subtitle .= " - $bloc->nom";
+  }
+  if ($codeCCAM) {
+    $subtitle .= " - CCAM : $codeCCAM";
+  }
+  if ($type_hospi) {
+    $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_hospi");
+  }
 
-  $optionsMoy = CFlotrGraph::merge("lines", array(
-    'title'    => utf8_encode("Durées moyennes d'occupation du bloc (en minutes)"),
-    'subtitle' => utf8_encode("par intervention $subtitle"),
-    'xaxis'    => array('ticks' => $ticks),
-    'grid'     => array('verticalLines' => true)
-  ));
-  if ($totalMoy == 0) $optionsMoy['yaxis']['max'] = 1;
+  $optionsMoy = CFlotrGraph::merge(
+    "lines",
+    array(
+      'title'    => utf8_encode("Durées moyennes d'occupation du bloc (en minutes)"),
+      'subtitle' => utf8_encode("par intervention $subtitle"),
+      'xaxis'    => array('ticks' => $ticks),
+      'grid'     => array('verticalLines' => true)
+    )
+  );
+  if ($totalMoy == 0) {
+    $optionsMoy['yaxis']['max'] = 1;
+  }
 
-  $optionsTot = CFlotrGraph::merge("lines", array(
-    'title'    => utf8_encode("Durées totales d'occupation du bloc (en heures)"),
-    'subtitle' => utf8_encode("total estimé $subtitle"),
-    'xaxis'    => array('ticks' => $ticks),
-    'grid'     => array('verticalLines' => true)
-  ));
-  if ($totalTot == 0) $optionsTot['yaxis']['max'] = 1;
+  $optionsTot = CFlotrGraph::merge(
+    "lines",
+    array(
+      'title'    => utf8_encode("Durées totales d'occupation du bloc (en heures)"),
+      'subtitle' => utf8_encode("total estimé $subtitle"),
+      'xaxis'    => array('ticks' => $ticks),
+      'grid'     => array('verticalLines' => true)
+    )
+  );
+  if ($totalTot == 0) {
+    $optionsTot['yaxis']['max'] = 1;
+  }
   
   if ($type_duree == "MONTH") {
     return array(

@@ -9,7 +9,25 @@
  * @version    $Revision$
  */
 
-function graphJoursParService($debut = null, $fin = null, $prat_id = 0, $service_id = 0, $type_adm = 0, $discipline_id = 0, $septique = 0, $type_data = "prevue") {
+/**
+ * Récupération du graphique d'affichage du nombre de nuits passées
+ * par service
+ *
+ * @param string $debut         Date de début
+ * @param string $fin           Date de fin
+ * @param int    $prat_id       Identifiant du praticien
+ * @param int    $service_id    Identifiant du service
+ * @param int    $type_adm      Type d'admission
+ * @param int    $discipline_id Identifiant de la discipline
+ * @param int    $septique      Filtre sur les séjours septiques
+ * @param string $type_data     Type de données (réèlle ou prévue)
+ *
+ * @return array
+ */
+function graphJoursParService(
+    $debut = null, $fin = null, $prat_id = 0, $service_id = 0,
+    $type_adm = 0, $discipline_id = 0, $septique = 0, $type_data = "prevue"
+) {
   if (!$debut) {
     $debut = CMbDT::date("-1 YEAR");
   }
@@ -65,7 +83,10 @@ function graphJoursParService($debut = null, $fin = null, $prat_id = 0, $service
       $end_month = CMbDT::date("-1 DAY", $end_month);
       
       $query = "SELECT
-                  SUM(DATEDIFF(LEAST(affectation.sortie, '$end_month 23:59:59'), GREATEST(affectation.entree, '$curr_month 00:00:00'))) AS total, 
+                  SUM(DATEDIFF(
+                    LEAST(affectation.sortie, '$end_month 23:59:59'),
+                    GREATEST(affectation.entree, '$curr_month 00:00:00')
+                  )) AS total,
                   DATE_FORMAT('$curr_month', '%m/%Y') AS mois,
                   DATE_FORMAT('$curr_month', '%Y%m') AS orderitem
                 FROM affectation
@@ -139,6 +160,7 @@ function graphJoursParService($debut = null, $fin = null, $prat_id = 0, $service
       'data' => array(),
       'label' => utf8_encode("Non placés")
     );
+    $series[] = $serie;
   }
   
   $series[] = $serie_total;

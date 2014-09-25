@@ -23,11 +23,13 @@ $ljoin["users"] = "users.user_id = temps_prepa.chir_id";
 
 $order = "users.user_last_name ASC, users.user_first_name ASC";
 
-$listTemps = new CTempsPrepa;
-$listTemps = $listTemps->loadList($where, $order, null, null, $ljoin);
+$tempPrepa = new CTempsPrepa();
+/** @var CTempsPrepa[] $listTemps */
+$listTemps = $tempPrepa->loadList($where, $order, null, null, $ljoin);
 
 foreach ($listTemps as $temps) {
-  $temps->loadRefsFwd();
+  $temps->loadRefPraticien();
+  $temps->_ref_praticien->loadRefFunction();
   $total["nbPrep"  ] += $temps->nb_prepa;
   $total["nbPlages"] += $temps->nb_plages;
   $total["somme"   ] += $temps->nb_prepa * strtotime($temps->duree_moy);

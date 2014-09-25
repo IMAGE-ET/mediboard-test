@@ -16,7 +16,8 @@ CCanDo::checkEdit();
 $intervalle = CValue::get("intervalle", "none");
 
 // Liste des Praticiens
-$user = new CMediusers;
+$user = new CMediusers();
+/** @var CMediusers[] $listPrats */
 $listPrats = $user->loadList();
 
 // Initialisation des variables
@@ -51,6 +52,8 @@ foreach ($listPrats as $_prat) {
     case "year":
       $sql .= "\nAND plagesop.date BETWEEN '".CMbDT::date("-1 year")."' AND '".CMbDT::date()."'";
       break;
+    default:
+      $sql .= "\nAND plagesop.date BETWEEN '".CMbDT::date("-1 month")."' AND '".CMbDT::date()."'";
   }
 
   $sql .= "\nORDER BY plageop_id, sec_entree ASC";

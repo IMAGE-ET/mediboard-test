@@ -74,6 +74,8 @@ switch ($type) {
   case "domicile":
     $listResult = $source->loadList($queryPatient);
     break;
+  default:
+    $listResult = $source->loadList($queryTraitant);
 }
 
 // Création du template

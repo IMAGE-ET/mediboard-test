@@ -18,7 +18,6 @@ CAppUI::requireModuleFile("dPstats", "graph_userlog");
 
 $to = CMbDT::date("+1 DAY", $date);
 switch ($interval = CValue::getOrSession("interval", "one-day")) {
-  default:
   case "one-day":
     $from = CMbDT::date("-1 DAY", $to);
     break;
@@ -42,12 +41,16 @@ switch ($interval = CValue::getOrSession("interval", "one-day")) {
   case "twenty-years":
     $from = CMbDT::date("-20 YEARS", $to);
     break;
+
+  default:
+    $from = CMbDT::date("-1 DAY", $to);
 }
 
 $graph = graphUserLog($from, $to, $interval, $user_id);
 
 // Chargement des utilisateurs
-$users = CMediusers::loadListFromType();
+$user = new CMediusers();
+$users = $user->loadListFromType();
 
 // Création du template
 $smarty = new CSmartyDP();

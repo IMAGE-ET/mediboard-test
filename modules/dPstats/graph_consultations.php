@@ -11,6 +11,16 @@
 
 global $m, $debutact, $finact, $prat_id;
 
+/**
+ * Récupération des statistiques du nombre de consultations par mois
+ * selon plusieurs filtres
+ *
+ * @param string $debut   Date de début
+ * @param string $fin     Date de fin
+ * @param int    $prat_id Identifiant du praticien
+ *
+ * @return array
+ */
 function graphConsultations($debut = null, $fin = null, $prat_id = 0) {
   if (!$debut) {
     $debut = CMbDT::date("-1 YEAR");
@@ -92,12 +102,15 @@ function graphConsultations($debut = null, $fin = null, $prat_id = 0) {
     $subtitle .= " Dr $pratSel->_view -";
   }
   
-  $options = CFlotrGraph::merge("bars", array(
-    'title' => utf8_encode($title),
-    'subtitle' => utf8_encode($subtitle),
-    'xaxis' => array('ticks' => $ticks),
-    'bars' => array('stacked' => true, 'barWidth' => 0.8),
-  ));
+  $options = CFlotrGraph::merge(
+    "bars",
+    array(
+      'title' => utf8_encode($title),
+      'subtitle' => utf8_encode($subtitle),
+      'xaxis' => array('ticks' => $ticks),
+      'bars' => array('stacked' => true, 'barWidth' => 0.8),
+    )
+  );
   
   return array('series' => $series, 'options' => $options);
 }

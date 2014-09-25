@@ -9,9 +9,29 @@
  * @version    $Revision$
  */
 
-function graphPatRepartJour($debut = null, $fin = null, $prat_id = 0, $bloc_id = 0, $discipline_id = null, $codeCCAM = '') {
-  if (!$debut) $debut = CMbDT::date("-1 YEAR");
-  if (!$fin) $fin = CMbDT::date();
+/**
+ * Récupération du graphique du nombre moyen de patient
+ * en SSPI selon le jour de la semaine
+ *
+ * @param string $debut         Date de début
+ * @param string $fin           Date de fin
+ * @param int    $prat_id       Identifiant du praticien
+ * @param int    $bloc_id       Identifiant du bloc
+ * @param null   $discipline_id Identifiant de la discipline
+ * @param string $codeCCAM      Code CCAM
+ *
+ * @return array
+ */
+function graphPatRepartJour(
+    $debut = null, $fin = null, $prat_id = 0, $bloc_id = 0,
+    $discipline_id = null, $codeCCAM = ''
+) {
+  if (!$debut) {
+    $debut = CMbDT::date("-1 YEAR");
+  }
+  if (!$fin) {
+    $fin = CMbDT::date();
+  }
   
   $prat = new CMediusers();
   $prat->load($prat_id);
@@ -47,10 +67,15 @@ function graphPatRepartJour($debut = null, $fin = null, $prat_id = 0, $bloc_id =
     AND operations.date BETWEEN '$debut' AND '$fin'
     AND operations.annulee = '0'";
     
-  if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
-  if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-
+  if ($prat_id) {
+    $query .= "\nAND operations.chir_id = '$prat_id'";
+  }
+  if ($discipline_id) {
+    $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  }
+  if ($codeCCAM) {
+    $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  }
   if ($bloc_id) {
     $query .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
   }
@@ -78,10 +103,18 @@ function graphPatRepartJour($debut = null, $fin = null, $prat_id = 0, $bloc_id =
   // Set up the title for the graph
   $title = "Patients moyens / jour de la semaine";
   $subtitle = "Uniquement les jours d'activité";
-  if ($prat_id)       $subtitle .= " - Dr $prat->_view";
-  if ($discipline_id) $subtitle .= " - $discipline->_view";
-  if ($bloc_id)       $subtitle .= " - $bloc->_view";
-  if ($codeCCAM)      $subtitle .= " - CCAM : $codeCCAM";
+  if ($prat_id) {
+    $subtitle .= " - Dr $prat->_view";
+  }
+  if ($discipline_id) {
+    $subtitle .= " - $discipline->_view";
+  }
+  if ($bloc_id) {
+    $subtitle .= " - $bloc->_view";
+  }
+  if ($codeCCAM) {
+    $subtitle .= " - CCAM : $codeCCAM";
+  }
 
   $options = array(
     'title' => utf8_encode($title),
