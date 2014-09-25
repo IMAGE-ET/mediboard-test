@@ -41,9 +41,10 @@ abstract class CHMessage extends CHL7v2SegmentGroup {
   public $event_name;
   public $name;
   public $description;
-  public $lines        = array();
-  public $current_line = 0;
-  public $errors       = array();
+  public $lines          = array();
+  public $current_line   = 0;
+  public $errors         = array();
+  public $ignored_fields = array();
   
   function __construct($version = null) {
     $this->version = $version;
@@ -179,8 +180,11 @@ abstract class CHMessage extends CHL7v2SegmentGroup {
     $n = 100000; // pour eviter les boucles infinies !
 
     while ($n-- && trim($this->getCurrentLine())/* && $current_node && $this->current_line < $lines_count*/) {
-      if (!$current_node && $this->current_line <= count($this->children)) {
-        $this->error(CHL7v2Exception::UNEXPECTED_SEGMENT, $this->getCurrentLine());
+      if (!$current_node) {
+        $segment_error       = new CHL7v2Segment($current_group);
+        $segment_error->name = $this->getCurrentLineHeader();
+
+        $this->error(CHL7v2Exception::UNEXPECTED_SEGMENT, $this->getCurrentLine(), $segment_error);
         break;
       }
         
@@ -199,9 +203,12 @@ abstract class CHMessage extends CHL7v2SegmentGroup {
             $this->getCurrentLineHeader(), 
             $this->getMessage()->extension
           );
-          
+
           if ($seg_schema == false) {
-            $this->error(CHL7v2Exception::UNKOWN_SEGMENT_TYPE, $this->getCurrentLine());
+            $segment_error       = new CHL7v2Segment($current_group);
+            $segment_error->name = $this->getCurrentLineHeader();
+
+            $this->error(CHL7v2Exception::UNKOWN_SEGMENT_TYPE, $this->getCurrentLine(), $segment_error);
             break 2;
           }
           
@@ -213,7 +220,7 @@ abstract class CHMessage extends CHL7v2SegmentGroup {
           }
           
           // Segment non requis, on passe au suivant
-          elseif(!$current_node->isRequired()) {
+          elseif (!$current_node->isRequired()) {
             CHL7v2::d(" --> Segment non présent et non requis");
             list($current_node, $current_group) = self::getNext($current_node, $current_group);
             break;
@@ -323,20 +330,21 @@ abstract class CHMessage extends CHL7v2SegmentGroup {
     // To inherit
   }
   
-  function error($code, $data, $entity = null, $level = CHL7v2Error::E_ERROR) {
-    $error = new CHL7v2Error;
-    $error->line = $this->current_line+1;
-    $error->entity = $entity;
-    $error->code = $code;
-    $error->data = $data;
-    $error->level = $level;
+  function error($code, $data, $entity = null, $level = CHL7v2Error::E_ERROR, $ignored = false) {
+    $error          = new CHL7v2Error;
+    $error->line    = $this->current_line+1;
+    $error->entity  = $entity;
+    $error->code    = $code;
+    $error->data    = $data;
+    $error->level   = $level;
+    $error->ignored = $ignored;
 
-   $this->errors[] = $error;
+    $this->errors[]  = $error;
   }
   
   function isOK($min_level = 0) {
     foreach ($this->errors as $_error) {
-      if ($_error->level >= $min_level) {
+      if ($_error->level >= $min_level && !$_error->ignored) {
         return false;
       }
     }

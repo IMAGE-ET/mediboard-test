@@ -245,7 +245,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
       }
       else {
         // Même traitement que pour l'IPP
-        switch ($receiver->_configs["build_PID_34"]) {
+        switch ($receiver->_configs["build_PID_3_4"]) {
           case 'actor':
             $assigning_authority = $this->getAssigningAuthority("actor", null, $receiver);
             break;

@@ -219,7 +219,6 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
       // Ajout des identifiants des acteurs d'intégration
       $this->fillActorsIdentifiers($identifiers, $sejour, $receiver);
     }
-
     $data[] = $identifiers;
         
     // PV1-20: Financial Class (FC) (optional repeating)

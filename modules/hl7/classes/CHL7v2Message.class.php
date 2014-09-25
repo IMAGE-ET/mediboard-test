@@ -261,11 +261,14 @@ class CHL7v2Message extends CHMessage {
 
     // Recherche depuis le code du pays
     switch ($country_code) {
-      case "FRA" :
+      case "FRA":
+      case "FR":
         $this->i18n_code = "FR";
         $this->extension = $version = "FR_2.3";
 
         break;
+
+      default:
     }
 
     // Version spécifique française spécifiée
@@ -311,7 +314,9 @@ class CHL7v2Message extends CHMessage {
     $this->spec_filename = self::LIB_HL7."/$version_dir/$type$name_dir.xml";
 
     if (!file_exists($this->spec_filename)) {
-      $this->error(CHL7v2Exception::SPECS_FILE_MISSING, $this->spec_filename);
+      // on a déjà l'erreur sur le type de segment inconnu
+      //$this->error(CHL7v2Exception::SPECS_FILE_MISSING, $this->spec_filename);
+      return;
     }
 
     $schema = new CHL7v2DOMDocument();

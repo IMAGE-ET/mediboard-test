@@ -80,13 +80,13 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   public $build_identifier_authority;
 
   // PID
+  public $build_PID_3_4; // PID.3.4
   public $build_PID_6;
   public $build_PID_11;
   public $build_PID_13;
   public $build_PID_18;
   public $build_PID_19;
   public $build_PID_31;
-  public $build_PID_34;
 
   // PV1
   public $build_PV1_3_2;
@@ -176,13 +176,13 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       "send_a42_onmerge",
     ),
     "PID" => array(
+      "build_PID_3_4",
       "build_PID_6",
       "build_PID_11",
       "build_PID_13",
       "build_PID_18",
       "build_PID_19",
       "build_PID_31",
-      "build_PID_34"
     ),
     "PV1" => array(
       "build_PV1_3_2",
@@ -292,13 +292,13 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["build_identifier_authority"]   = "enum list|normal|PI_AN default|normal";
 
     // PID
+    $props["build_PID_3_4"]  = "enum list|finess|actor|domain default|finess";
     $props["build_PID_6"]    = "enum list|nom_naissance|none default|none";
     $props["build_PID_11"]   = "enum list|simple|multiple default|multiple";
     $props["build_PID_13"]   = "enum list|simple|multiple default|multiple";
     $props["build_PID_18"]   = "enum list|normal|simple default|normal";
     $props["build_PID_19"]   = "enum list|matricule|none default|none";
     $props["build_PID_31"]   = "enum list|avs|none default|none";
-    $props["build_PID_34"]   = "enum list|finess|actor|domain default|finess";
 
     // PV1
     $props["build_PV1_3_2"]  = "enum list|name|config_value|idex default|name";

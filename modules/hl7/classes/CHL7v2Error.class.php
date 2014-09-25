@@ -34,30 +34,27 @@ class CHL7v2Error {
     CHL7v2Exception::UNKNOWN_TABLE_ENTRY        => 103,
     CHL7v2Exception::UNKNOWN_DOMAINS_RETURNED   => 204,
   );
-  
 
   /** @var integer */
   public $line;
-  
 
   /** @var CHL7v2Entity */
   public $entity;
-  
 
   /** @var integer */
   public $code;
-  
 
   /** @var string */
   public $data;
-  
 
   /** @var string */
   public $level = self::E_WARNING;
 
-
   /** @var array */
   public $location;
+
+  /** @var boolean */
+  public $ignored;
 
   /**
    * Error location

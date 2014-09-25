@@ -157,19 +157,36 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
     $data[] = null;
     
     // PV1-19: Visit Number (CX) (optional)
-    /* @todo Gestion des séances */
-    $identifiers   = array();
-    $identifiers[] = array(
-      $sejour->_id,
-      null,
-      null,
-      // PID-3-4 Autorité d'affectation
-      $this->getAssigningAuthority("mediboard"),
-      $receiver->_configs["build_identifier_authority"] == "PI_AN" ? "AN": "RI"
-    );
-    // Ajout des identifiants des acteurs d'intégration
-    $this->fillActorsIdentifiers($identifiers, $sejour, $receiver);
+    $identifiers = array();
+    if ($receiver->_configs["build_PV1_19"] == "simple") {
+      $identifiers[] = $sejour->_NDA;
+    }
+    else {
+      if ($receiver->_configs["build_NDA"] == "PV1_19") {
+        $identifiers[] = $sejour->_NDA ? array(
+          $sejour->_NDA,
+          null,
+          null,
+          // PID-3-4 Autorité d'affectation
+          $this->getAssigningAuthority("FINESS", $group->finess),
+          "AN"
+        ) : array();
+      }
+      else {
+        /* @todo Gestion des séances */
+        $identifiers[] = array(
+          $sejour->_id,
+          null,
+          null,
+          // PID-3-4 Autorité d'affectation
+          $this->getAssigningAuthority("mediboard"),
+          $receiver->_configs["build_identifier_authority"] == "PI_AN" ? "AN": "RI"
+        );
+      }
 
+      // Ajout des identifiants des acteurs d'intégration
+      $this->fillActorsIdentifiers($identifiers, $sejour, $receiver);
+    }
     $data[] = $identifiers;
     
     // PV1-20: Financial Class (FC) (optional repeating)

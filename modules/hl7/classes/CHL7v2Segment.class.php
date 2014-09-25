@@ -57,7 +57,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     $this->name = array_shift($fields);
     
     $specs = $this->getSpecs();
-    
+
     $this->description = $specs->queryTextNode("description");
     
     if ($this->name === $message->getHeaderSegmentName()) {
@@ -364,10 +364,10 @@ class CHL7v2Segment extends CHL7v2Entity {
 
     $assigning_authority = $this->getAssigningAuthority("FINESS", $group->finess);
 
-    if (CValue::read($actor->_configs, "build_PID_34") === "actor") {
+    if (CValue::read($actor->_configs, "build_PID_3_4") === "actor") {
       $assigning_authority = $this->getAssigningAuthority("actor", null, $actor);
     }
-    elseif (CValue::read($actor->_configs, "build_PID_34") === "domain") {
+    elseif (CValue::read($actor->_configs, "build_PID_3_4") === "domain") {
       // Master domain
       $group_domain = new CGroupDomain();
       $group_domain->group_id     = $group->_id;

@@ -279,7 +279,7 @@ class CHL7v2Component extends CHL7v2Entity {
       }
 
       if (!$props->validate($this->data, $this->getField())) {
-        $this->error(CHL7v2Exception::INVALID_DATA_FORMAT, $this->data, $this);
+        //$this->error(CHL7v2Exception::INVALID_DATA_FORMAT, $this->data, $this);
         $this->invalid = true;
         return false;
       }

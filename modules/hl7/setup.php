@@ -1367,7 +1367,12 @@ class CSetuphl7 extends CSetup {
                 ADD `monitor_sources` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.02";
+    $this->makeRevision("1.02");
+    $query = "ALTER TABLE `receiver_hl7v2_config`
+                CHANGE `build_PID_34` `build_PID_3_4` ENUM ('finess','actor','domain') DEFAULT 'finess';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.03";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
