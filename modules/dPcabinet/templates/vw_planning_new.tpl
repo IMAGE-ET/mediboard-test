@@ -138,7 +138,7 @@
       return;
     }
     
-    // Action de couper
+    // Action de coller d'un couper
     if (window.cut_consult_id) {
       cutCopyConsultation(window.cut_consult_id, plage_id, heure, 'do_consultation_aed');
       // On garde la consultation d'origine, et on permet de la coller ultérieurement
@@ -148,7 +148,7 @@
       return;
     }
     
-    // Action de coller
+    // Action de coller d'un copier
     if (window.copy_consult_id) {
       cutCopyConsultation(window.copy_consult_id, plage_id, heure, 'do_copy_consultation_aed');
       return;
