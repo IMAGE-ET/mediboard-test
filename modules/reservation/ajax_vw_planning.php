@@ -271,9 +271,6 @@ if ($show_operations) {
 
       $_operation->loadRefPlageOp();
 
-      // liaisons
-      $sejour->loadLiaisonsForPrestation("all");
-
       $charge = $sejour->loadRefChargePriceIndicator();
       $patient = $sejour->loadRefPatient();
       $patient->loadRefDossierMedical();
@@ -295,11 +292,9 @@ if ($show_operations) {
 
       //liaisons
       $liaison_sejour = "";
-      foreach ($sejour->_liaisons_for_prestation as $_liaison) {
-        if ($date_planning >= $_liaison->date && ($_liaison->_ref_item->_id)) {
-          $liaison_sejour .= $_liaison->_ref_item->nom;
-          $liaison_sejour .= " | ";
-        }
+      foreach ($sejour->loadAllLiaisonsForDay($date_planning) as $_liaison) {
+        $liaison_sejour .= $_liaison;
+        $liaison_sejour .= " | ";
       }
 
       $offset_bottom = 0;
