@@ -12,7 +12,7 @@
 /**
  * Module-Action link class
  */
-class CModuleAction extends CMbObject {
+class CModuleAction extends CStoredObject {
   /** @var integer Primary key */
   public $module_action_id;
 
@@ -105,5 +105,26 @@ class CModuleAction extends CMbObject {
     }
 
     return $module_action_id;
+  }
+
+  /**
+   * Get actions for given module
+   *
+   * @param string $module Module name
+   *
+   * @return ref[] Array of actions with actions as keys and ids as values
+   */
+  static function getActions($module) {
+    static $modules_actions;
+    if (!$modules_actions) {
+      $request = new CRequest();
+      $request->addColumn("module");
+      $request->addColumn("action");
+      $request->addColumn("module_action_id");
+      $self = new self;
+      $ds = $self->_spec->ds;
+      $modules_actions = $ds->loadTree($request->makeSelect($self));
+    }
+    return $modules_actions[$module];
   }
 }

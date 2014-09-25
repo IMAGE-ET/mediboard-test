@@ -168,46 +168,46 @@ class CAccessLog extends CMbObject {
     switch ($groupmod) {
       case 2:
         $query = "SELECT
-                    $table.`accesslog_id`,
-                    $table.`module_action_id`,
-                    SUM($table.`hits`)         AS hits,
-                    SUM($table.`size`)         AS size,
-                    SUM($table.`duration`)     AS duration,
-                    SUM($table.`processus`)    AS processus,
-                    SUM($table.`processor`)    AS processor,
-                    SUM($table.`request`)      AS request,
-                    SUM($table.`nb_requests`)  AS nb_requests,
-                    SUM($table.`peak_memory`)  AS peak_memory,
-                    SUM($table.`errors`)       AS errors,
-                    SUM($table.`warnings`)     AS warnings,
-                    SUM($table.`notices`)      AS notices,
-                    0 AS grouping
-                  FROM $table USE INDEX (`period`)
-                  WHERE $table.`period` BETWEEN '$start' AND '$end'";
+            $table.`accesslog_id`,
+            $table.`module_action_id`,
+            SUM($table.`hits`)         AS hits,
+            SUM($table.`size`)         AS size,
+            SUM($table.`duration`)     AS duration,
+            SUM($table.`processus`)    AS processus,
+            SUM($table.`processor`)    AS processor,
+            SUM($table.`request`)      AS request,
+            SUM($table.`nb_requests`)  AS nb_requests,
+            SUM($table.`peak_memory`)  AS peak_memory,
+            SUM($table.`errors`)       AS errors,
+            SUM($table.`warnings`)     AS warnings,
+            SUM($table.`notices`)      AS notices,
+            0 AS grouping
+          FROM $table
+          WHERE $table.`period` BETWEEN '$start' AND '$end'";
         break;
 
       case 0:
       case 1:
       $query = "SELECT
-                  $table.`accesslog_id`,
-                  $table.`module_action_id`,
-                  `module_action`.`module`   AS _module,
-                  `module_action`.`action`   AS _action,
-                  SUM($table.`hits`)         AS hits,
-                  SUM($table.`size`)         AS size,
-                  SUM($table.`duration`)     AS duration,
-                  SUM($table.`processus`)    AS processus,
-                  SUM($table.`processor`)    AS processor,
-                  SUM($table.`request`)      AS request,
-                  SUM($table.`nb_requests`)  AS nb_requests,
-                  SUM($table.`peak_memory`)  AS peak_memory,
-                  SUM($table.`errors`)       AS errors,
-                  SUM($table.`warnings`)     AS warnings,
-                  SUM($table.`notices`)      AS notices,
-                  0 AS grouping
-                FROM $table USE INDEX (`period`), `module_action`
-                WHERE $table.`module_action_id` = `module_action`.`module_action_id`
-                  AND $table.`period` BETWEEN '$start' AND '$end'";
+          $table.`accesslog_id`,
+          $table.`module_action_id`,
+          `module_action`.`module`   AS _module,
+          `module_action`.`action`   AS _action,
+          SUM($table.`hits`)         AS hits,
+          SUM($table.`size`)         AS size,
+          SUM($table.`duration`)     AS duration,
+          SUM($table.`processus`)    AS processus,
+          SUM($table.`processor`)    AS processor,
+          SUM($table.`request`)      AS request,
+          SUM($table.`nb_requests`)  AS nb_requests,
+          SUM($table.`peak_memory`)  AS peak_memory,
+          SUM($table.`errors`)       AS errors,
+          SUM($table.`warnings`)     AS warnings,
+          SUM($table.`notices`)      AS notices,
+          0 AS grouping
+        FROM $table
+        LEFT JOIN `module_action` ON $table.`module_action_id` = `module_action`.`module_action_id`
+        WHERE $table.`period` BETWEEN '$start' AND '$end'";
     }
 
     // 2 means for both of them
@@ -253,59 +253,23 @@ class CAccessLog extends CMbObject {
     // Convert date format from PHP to MySQL
     $period_format = str_replace("%M", "%i", $period_format);
 
-    if (!$module_name && !$action_name) {
-      $query = "SELECT
-                  `accesslog_id`,
-                  `period`,
-                  AVG(duration/hits)    AS _average_duration,
-                  AVG(processus/hits)   AS _average_processus,
-                  AVG(processor/hits)   AS _average_processor,
-                  AVG(request/hits)     AS _average_request,
-                  AVG(nb_requests/hits) AS _average_nb_requests,
-                  AVG(peak_memory/hits) AS _average_peak_memory,
-                  SUM(hits)             AS hits,
-                  SUM(size)             AS size,
-                  SUM(duration)         AS duration,
-                  SUM(processus)        AS processus,
-                  SUM(processor)        AS processor,
-                  SUM(request)          AS request,
-                  SUM(nb_requests)      AS nb_requests,
-                  SUM(peak_memory)      AS peak_memory,
-                  SUM(errors)           AS errors,
-                  SUM(warnings)         AS warnings,
-                  SUM(notices)          AS notices,
-                DATE_FORMAT(`period`, '$period_format') AS `gperiod`
-                FROM $table USE INDEX (`period`)
-                WHERE `period` BETWEEN '$start' AND '$end'";
-    }
-    else {
-      $query = "SELECT
-                  `accesslog_id`,
-                  `module_action`.`module`,
-                  `module_action`.`action`,
-                  `period`,
-                  AVG(duration/hits)    AS _average_duration,
-                  AVG(processus/hits)   AS _average_processus,
-                  AVG(processor/hits)   AS _average_processor,
-                  AVG(request/hits)     AS _average_request,
-                  AVG(nb_requests/hits) AS _average_nb_requests,
-                  AVG(peak_memory/hits) AS _average_peak_memory,
-                  SUM(hits)             AS hits,
-                  SUM(size)             AS size,
-                  SUM(duration)         AS duration,
-                  SUM(processus)        AS processus,
-                  SUM(processor)        AS processor,
-                  SUM(request)          AS request,
-                  SUM(nb_requests)      AS nb_requests,
-                  SUM(peak_memory)      AS peak_memory,
-                  SUM(errors)           AS errors,
-                  SUM(warnings)         AS warnings,
-                  SUM(notices)          AS notices,
-                DATE_FORMAT(`period`, '$period_format') AS `gperiod`
-                FROM $table USE INDEX (`period`), `module_action`
-                WHERE $table.`module_action_id` = `module_action`.`module_action_id`
-                  AND `period` BETWEEN '$start' AND '$end'";
-    }
+    $query = "SELECT
+        `accesslog_id`,
+        `period`,
+        SUM(hits)             AS hits,
+        SUM(size)             AS size,
+        SUM(duration)         AS duration,
+        SUM(processus)        AS processus,
+        SUM(processor)        AS processor,
+        SUM(request)          AS request,
+        SUM(nb_requests)      AS nb_requests,
+        SUM(peak_memory)      AS peak_memory,
+        SUM(errors)           AS errors,
+        SUM(warnings)         AS warnings,
+        SUM(notices)          AS notices,
+      DATE_FORMAT(`period`, '$period_format') AS `gperiod`
+      FROM $table
+      WHERE `period` BETWEEN '$start' AND '$end'";
 
     // 2 means for both of them
     if ($human_bot === '0' || $human_bot === '1') {
@@ -313,11 +277,14 @@ class CAccessLog extends CMbObject {
     }
 
     if ($module_name) {
-      $query .= "\nAND `module` = '$module_name'";
-    }
-
-    if ($action_name) {
-      $query .= "\nAND `action` = '$action_name'";
+      $actions = CModuleAction::getActions($module_name);
+      if ($action_name) {
+        $action_id = $actions[$action_name];
+        $query .= "\nAND `module_action_id` = '$action_id'";
+      }
+      else {
+        $query .= "\nAND `module_action_id` " . CSQLDataSource::prepareIn(array_values($actions));
+      }
     }
 
     $query .= "\nGROUP BY `gperiod`";

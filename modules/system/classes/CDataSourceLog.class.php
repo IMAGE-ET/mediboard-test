@@ -1,6 +1,7 @@
 <?php
 /**
  * $Id$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage System
@@ -115,26 +116,26 @@ class CDataSourceLog extends CMbObject {
     switch ($groupmod) {
       case 2:
         $query = "SELECT
-                `datasourcelog_id`,
-                $table.`module_action_id`,
-                `period`,
-                0 AS grouping
-              FROM $table USE INDEX (`period`)
-              WHERE $table.`period` BETWEEN '$start' AND '$end'";
+            `datasourcelog_id`,
+            $table.`module_action_id`,
+            `period`,
+            0 AS grouping
+          FROM $table
+          WHERE $table.`period` BETWEEN '$start' AND '$end'";
         break;
 
       case 0:
       case 1:
       $query = "SELECT
-                `datasourcelog_id`,
-                $table.`module_action_id`,
-                `module_action`.`module` AS _module,
-                `module_action`.`action` AS _action,
-                `period`,
-                0 AS grouping
-              FROM $table USE INDEX (`period`), `module_action`
-              WHERE $table.`module_action_id` = `module_action`.`module_action_id`
-                AND $table.`period` BETWEEN '$start' AND '$end'";
+          `datasourcelog_id`,
+          $table.`module_action_id`,
+          `module_action`.`module` AS _module,
+          `module_action`.`action` AS _action,
+          `period`,
+          0 AS grouping
+        FROM $table
+        LEFT JOIN `module_action` ON $table.`module_action_id` = `module_action`.`module_action_id`
+        WHERE $table.`period` BETWEEN '$start' AND '$end'";
     }
 
     // 2 means for both of them
@@ -180,38 +181,25 @@ class CDataSourceLog extends CMbObject {
     // Convert date format from PHP to MySQL
     $period_format = str_replace("%M", "%i", $period_format);
 
-    if (!$module_name && !$action_name) {
-      $query = "SELECT
-                  $table.`datasourcelog_id`,
-                  $table.`period`,
-                  $table.`datasource`,
-                  SUM($table.`requests`) AS requests,
-                  SUM($table.`duration`) AS duration,
-                  DATE_FORMAT($table.`period`, '$period_format') AS `gperiod`
-                FROM $table USE INDEX (`period`)
-                WHERE $table.`period` BETWEEN '$start' AND '$end'";
-    }
-    else {
-      $query = "SELECT
-                  $table.`datasourcelog_id`,
-                  `module_action`.`module` AS _module,
-                  `module_action`.`action` AS _action,
-                  $table.`period`,
-                  $table.`datasource`,
-                  SUM($table.`requests`)  AS requests,
-                  SUM($table.`duration`)  AS duration,
-                  DATE_FORMAT($table.`period`, '$period_format') AS `gperiod`
-                FROM $table USE INDEX (`period`), `module_action`
-                WHERE $table.`period` BETWEEN '$start' AND '$end'
-                  AND $table.`module_action_id` = `module_action`.`module_action_id`";
-    }
+    $query = "SELECT
+        $table.`datasourcelog_id`,
+        $table.`period`,
+        $table.`datasource`,
+        SUM($table.`requests`) AS requests,
+        SUM($table.`duration`) AS duration,
+        DATE_FORMAT($table.`period`, '$period_format') AS `gperiod`
+      FROM $table
+      WHERE $table.`period` BETWEEN '$start' AND '$end'";
 
     if ($module_name) {
-      $query .= "\nAND `module_action`.`module` = '$module_name'";
-    }
-
-    if ($action_name) {
-      $query .= "\nAND `module_action`.`action` = '$action_name'";
+      $actions = CModuleAction::getActions($module_name);
+      if ($action_name) {
+        $action_id = $actions[$action_name];
+        $query .= "\nAND `module_action_id` = '$action_id'";
+      }
+      else {
+        $query .= "\nAND `module_action_id` " . CSQLDataSource::prepareIn(array_values($actions));
+      }
     }
 
     // 2 means for both of them

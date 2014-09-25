@@ -61,32 +61,20 @@ switch ($interval = CValue::getOrSession("interval", "one-day")) {
 
 $graphs = array();
 
-$access_logs  = CDataSourceLog::loadAggregation($from, $to, $groupmod, $module, $human_bot);
-$archive_logs = CDataSourceLogArchive::loadAggregation($from, $to, $groupmod, $module, $human_bot);
-
 switch ($groupmod) {
   case 0:
   case 1:
+    $access_logs  = CDataSourceLog::loadAggregation($from, $to, $groupmod, $module, $human_bot);
+    $archive_logs = CDataSourceLogArchive::loadAggregation($from, $to, $groupmod, $module, $human_bot);
     $logs = array_merge($access_logs, $archive_logs);
     break;
 
   case 2:
-    /** @var CDataSourceLog[] $access_logs */
-    $access_logs = array_merge($access_logs, $archive_logs);
-
-    $logs       = array();
-    $unique_log = new CDataSourceLog();
-    foreach ($access_logs as $_log) {
-      $unique_log->datasourcelog_id = $_log->datasourcelog_id;
-      $unique_log->module_action_id = $_log->module_action_id;
-      $unique_log->period           = $_log->period;
-    }
-
-    $logs[] = $unique_log;
+    $logs = array(new CDataSourceLog());
     break;
 
   default:
-    $logs = $access_logs;
+    return;
 }
 
 $series_by_module = array();
@@ -208,6 +196,25 @@ foreach ($logs as $log) {
 $graphs = array();
 foreach ($graphs_by_module as $_graph) {
   $graphs[] = $_graph;
+}
+
+// Ajustements cosmétiques
+foreach ($graphs as &$_graph) {
+  foreach ($_graph["series"] as &$_series) {
+    if (isset($_series["lines"])) {
+      $_series["points"] = array(
+        "show" => true,
+        "radius" => 2,
+        "lineWidth" => 1,
+      );
+    }
+
+    foreach ($_series["data"] as  &$_data) {
+      if ($_data[1] === 0) {
+        $_data[1] = null;
+      }
+    }
+  }
 }
 
 // Ajustements cosmétiques

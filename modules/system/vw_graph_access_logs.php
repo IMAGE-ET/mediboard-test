@@ -75,43 +75,20 @@ $graphs = array();
 $left   = array($left_mode, $left_sampling);
 $right  = array($right_mode, $right_sampling);
 
-$access_logs  = CAccessLog::loadAggregation($from, $to, $groupmod, $module, $human_bot);
-$archive_logs = CAccessLogArchive::loadAggregation($from, $to, $groupmod, $module, $human_bot);
-
 switch ($groupmod) {
   case 0:
   case 1:
+    $access_logs  = CAccessLog::loadAggregation($from, $to, $groupmod, $module, $human_bot);
+    $archive_logs = CAccessLogArchive::loadAggregation($from, $to, $groupmod, $module, $human_bot);
     $logs = array_merge($access_logs, $archive_logs);
     break;
 
   case 2:
-    /** @var CAccessLog[] $access_logs */
-    $access_logs = array_merge($access_logs, $archive_logs);
-
-    $logs = array();
-    $unique_log = new CAccessLog();
-    foreach ($access_logs as $_log) {
-      $unique_log->accesslog_id      = $_log->accesslog_id;
-      $unique_log->module_action_id  = $_log->module_action_id;
-      $unique_log->period            = $_log->period;
-      $unique_log->hits             += $_log->hits;
-      $unique_log->duration         += $_log->duration;
-      $unique_log->processus        += $_log->processus;
-      $unique_log->processor        += $_log->processor;
-      $unique_log->request          += $_log->request;
-      $unique_log->nb_requests      += $_log->nb_requests;
-      $unique_log->peak_memory      += $_log->peak_memory;
-      $unique_log->size             += $_log->size;
-      $unique_log->errors           += $_log->errors;
-      $unique_log->warnings         += $_log->warnings;
-      $unique_log->notices          += $_log->notices;
-    }
-
-    $logs[] = $unique_log;
+    $logs = array(new CAccessLog());
     break;
 
   default:
-    $logs = $access_logs;
+    return;
 }
 
 $graphs_by_module = array();
@@ -178,6 +155,25 @@ switch ($groupmod) {
       $graphs[] = $_graph;
     }
     break;
+}
+
+// Ajustements cosmétiques
+foreach ($graphs as &$_graph) {
+  foreach ($_graph["series"] as &$_series) {
+    if (isset($_series["lines"])) {
+      $_series["points"] = array(
+        "show" => true,
+        "radius" => 2,
+        "lineWidth" => 1,
+      );
+    }
+
+    foreach ($_series["data"] as  &$_data) {
+      if ($_data[1] === 0) {
+        $_data[1] = null;
+      }
+    }
+  }
 }
 
 $smarty = new CSmartyDP();
