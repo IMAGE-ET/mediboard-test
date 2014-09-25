@@ -351,10 +351,9 @@ class CDossierMedical extends CMbMetaObject {
    *
    * @return array
    */
-  function massCountAntecedents($dossiers = array(), $count_allergies = true) {
+  static function massCountAntecedents($dossiers = array(), $count_allergies = true) {
     $antecedent = new CAntecedent();
     $where = array();
-    $where["dossier_medical_id"] = " = '$this->_id'";
     $where["annule"] = " != '1'";
     if (!$count_allergies) {
       $where["type"] = " != 'alle'";
@@ -415,7 +414,7 @@ class CDossierMedical extends CMbMetaObject {
    *
    * @return array
    */
-  function massCountAllergies($dossiers = array()) {
+  static function massCountAllergies($dossiers = array()) {
     $antecedent = new CAntecedent();
     $where["type"] = "= 'alle'";
     $where["annule"] = " ='0'";
