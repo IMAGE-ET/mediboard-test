@@ -414,13 +414,19 @@ class CFile extends CDocumentItem {
    * @return boolean
    */
   function oldImageMagick() {
-    exec("convert --version", $ret);
-    if (!isset($ret[0])) {
-      return false;
+    static $old = null;
+
+    if ($old !== null) {
+      return $old;
     }
 
-    preg_match("/ImageMagick ([0-9\.-]+)/", $ret[0], $matches);
-    return $matches[1] < "6.5.8";
+    exec("convert --version", $ret);
+    if (!isset($ret[0])) {
+      return $old = false;
+    }
+
+    preg_match('/ImageMagick ([0-9\.-]+)/', $ret[0], $matches);
+    return $old = $matches[1] < "6.5.8";
   }
 
   /**
