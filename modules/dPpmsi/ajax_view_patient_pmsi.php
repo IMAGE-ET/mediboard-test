@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage PMSI
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
@@ -20,6 +20,7 @@ $patient->loadIPP();
 $patient->loadRefsCorrespondants();
 $patient->loadRefPhotoIdentite();
 $patient->loadPatientLinks();
+$patient->countINS();
 if (CModule::getActive("fse")) {
   $cv = CFseFactory::createCV();
   if ($cv) {

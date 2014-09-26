@@ -134,6 +134,7 @@ $consultAnesth = $consult->loadRefConsultAnesth($dossier_anesth_id);
 // Chargement du patient
 $patient->countBackRefs("consultations");
 $patient->countBackRefs("sejours");
+$patient->countINS();
 
 $patient->loadRefPhotoIdentite();
 $patient->loadRefsNotes();

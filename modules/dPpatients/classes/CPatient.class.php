@@ -331,6 +331,8 @@ class CPatient extends CPerson {
   /** @var  CINSPatient */
   public $_ref_last_ins;
 
+  public $_count_ins;
+
   // Distant fields
   public $_ref_praticiens; // Praticiens ayant participé à la pec du patient
 
@@ -1846,6 +1848,15 @@ class CPatient extends CPerson {
       $ins = current($array);
     }
     return $this->_ref_last_ins = $ins;
+  }
+
+  /**
+   * Count the number of INS
+   *
+   * @return int|null
+   */
+  function countINS() {
+    return $this->_count_ins = $this->countBackRefs("ins_patient");
   }
 
   /**

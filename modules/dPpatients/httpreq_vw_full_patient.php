@@ -29,6 +29,7 @@ $patient->loadDossierComplet(PERM_READ);
 $patient->loadRefDossierMedical();
 $patient->_ref_dossier_medical->loadRefsAntecedents();
 $patient->_ref_dossier_medical->loadRefsTraitements();
+$patient->countINS();
 
 $userSel = CMediusers::get();
 

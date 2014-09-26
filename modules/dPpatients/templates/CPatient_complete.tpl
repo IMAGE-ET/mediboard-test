@@ -5,13 +5,7 @@
   <tr>
     <th class="title text" colspan="2">
 
-      {{if $object->date_lecture_vitale}}
-        <div style="float: right;">
-          <img src="images/icons/carte_vitale.png"
-               title="{{tr}}CPatient-date-lecture-vitale{{/tr}} : {{mb_value object=$object field="date_lecture_vitale" format=relative}}"
-               onclick="Patient.openINS({{$object->_id}})"/>
-        </div>
-      {{/if}}
+      {{mb_include module=dPpatients template=inc_view_ins_patient patient=$object}}
 
       {{mb_include module=system template=inc_object_idsante400 object=$object}}
       {{mb_include module=system template=inc_object_history object=$object}}

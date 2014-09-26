@@ -38,6 +38,7 @@ $patient->_nb_files_docs -= $patient->_nb_cancelled_files;
 
 // Chargement de l'IPP
 $patient->loadIPP();
+$patient->countINS();
 
 // Chargement du dossier medical du patient
 $dossier_medical = $patient->loadRefDossierMedical();

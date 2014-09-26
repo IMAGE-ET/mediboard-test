@@ -52,6 +52,7 @@ if ($patient->_id) {
 
 // Chargement des identifiants standards
 $patient->loadIPP();
+$patient->countINS();
 if (CModule::getActive("fse")) {
   $cv = CFseFactory::createCV();
   if ($cv) {
@@ -64,6 +65,7 @@ $listSiblings = $patient->getSiblings();
 foreach ($listSiblings as &$_sibling) {
   $_sibling->loadDossierComplet();
   $_sibling->loadIPP();
+  $_sibling->countINS();
   if (CModule::getActive("fse")) {
     $cv = CFseFactory::createCV();
     if ($cv) {

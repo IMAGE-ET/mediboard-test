@@ -62,6 +62,7 @@ if ($rpu->_id || $rpu->sejour_id) {
   }
   // Chargement de l'IPP ($_IPP)
   $patient->loadIPP();
+  $patient->countINS();
 
   $patient->loadRefPhotoIdentite();
 

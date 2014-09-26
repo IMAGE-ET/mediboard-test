@@ -49,6 +49,7 @@ if ($patient->_id) {
   $patient->_ref_dossier_medical->updateFormFields();
   $patient->loadRefsSejours();
   $patient->loadIPP();
+  $patient->countINS();
   
   if (array_key_exists($sejour_id, $patient->_ref_sejours)) {
     $isSejourPatient = $sejour_id;

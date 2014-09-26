@@ -7,13 +7,7 @@
 <table class="form">
   <tr {{if $patient->deces}}class="hatching"{{/if}}>
     <th class="title text" colspan="5">
-      {{if $patient->date_lecture_vitale}}
-      <div style="float: right;">
-        <img src="images/icons/carte_vitale.png"
-             title="{{tr}}CPatient-date-lecture-vitale{{/tr}} : {{mb_value object=$patient field="date_lecture_vitale" format=relative}}"
-             onclick="Patient.openINS({{$patient->_id}})"/>
-      </div>
-      {{/if}}
+      {{mb_include module=dPpatients template=inc_view_ins_patient patient=$patient}}
 
       {{mb_include module=system template=inc_object_idsante400 object=$patient}}
       {{mb_include module=system template=inc_object_history object=$patient}}

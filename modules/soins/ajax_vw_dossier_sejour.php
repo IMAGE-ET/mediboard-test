@@ -28,6 +28,7 @@ $sejour->loadJourOp($date);
 $sejour->_ref_prescription_sejour->loadJourOp($date);
 $sejour->_ref_prescription_sejour->loadRefCurrentPraticien();
 $patient = $sejour->loadRefPatient();
+$patient->countINS();
 $sejour->loadRefsOperations();
 $sejour->loadRefCurrAffectation();
 $sejour->loadRefDossierMedical();

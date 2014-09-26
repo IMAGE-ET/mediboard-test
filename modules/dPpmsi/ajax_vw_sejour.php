@@ -31,6 +31,7 @@ $patient->loadRefsCorrespondants();
 $patient->loadRefDossierMedical();
 $patient->_ref_dossier_medical->updateFormFields();
 $patient->loadIPP();
+$patient->countINS();
 
 // Chargement des séjours du Patient
 $sejours = $patient->loadRefsSejours();

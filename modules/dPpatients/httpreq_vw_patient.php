@@ -31,6 +31,7 @@ if ($patient->_id) {
   $patient->loadDossierComplet();
   $patient->loadIPP();
   $patient->loadPatientLinks();
+  $patient->countINS();
   if (CModule::getActive("fse")) {
     $cv = CFseFactory::createCV();
     if ($cv) {

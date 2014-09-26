@@ -98,6 +98,7 @@ if ($consult->_id) {
   $patient->loadRefPhotoIdentite();
   $patient->countBackRefs("consultations");
   $patient->countBackRefs("sejours");
+  $patient->countINS();
   
   // Chargement de ses consultations
   foreach ($patient->_ref_consultations as $_consultation) {

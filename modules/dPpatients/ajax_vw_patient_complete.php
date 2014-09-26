@@ -18,6 +18,7 @@ $pat_id = CValue::get("patient_id");
 $patient = new CPatient();
 $patient->load($pat_id);
 $patient->loadComplete();
+$patient->countINS();
 
 //smarty
 $smarty = new CSmartyDP();

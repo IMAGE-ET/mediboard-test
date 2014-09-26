@@ -27,6 +27,7 @@ $patient->load($patient_id);
 $patient->loadRefPhotoIdentite();
 $patient->countDocItems();
 $patient->loadRefsCorrespondantsPatient();
+$patient->countINS();
 
 // Chargement de l'ipp
 $patient->loadIPP();

@@ -2,11 +2,7 @@
   <tr>
     <th class="category">
       {{mb_include module=system template=inc_object_notes object=$patient}}
-      {{if $patient->date_lecture_vitale}}
-      <div style="float: right;">
-        <img src="images/icons/carte_vitale.png" title="{{tr}}CPatient-date-lecture-vitale{{/tr}} : {{mb_value object=$patient field="date_lecture_vitale" format=relative}}" />
-      </div>
-      {{/if}}
+      {{mb_include module=dPpatients template=inc_view_ins_patient patient=$patient}}
 
       <!-- Modification de la fiche patient -->
       <script>

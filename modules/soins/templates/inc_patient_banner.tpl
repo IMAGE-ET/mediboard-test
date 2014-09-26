@@ -97,11 +97,7 @@
         </a>
       {{/if}}
 
-      {{if $patient->date_lecture_vitale}}
-        <div>
-          <img src="images/icons/carte_vitale.png" title="{{tr}}CPatient-date-lecture-vitale{{/tr}} : {{mb_value object=$patient field="date_lecture_vitale" format=relative}}" />
-        </div>
-      {{/if}}
+      {{mb_include module=dPpatients template=inc_view_ins_patient patient=$patient}}
 
       {{if 'oncomip'|module_active}}
         <div id="oncomip_search_patient"></div>
