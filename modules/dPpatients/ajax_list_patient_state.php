@@ -40,7 +40,7 @@ $count = (int)CPatientState::getNumberPatient($where, $leftjoin);
 
 if ($count > 0) {
   /** @var CPatient[] $patients */
-  $patients = $patient->loadList($where, null, "$page, 30", null, $leftjoin);
+  $patients = $patient->loadList($where, "nom, prenom", "$page, 30", null, $leftjoin);
   CPatient::massLoadIPP($patients);
 
   /** @var CPatientState $patients_state */
