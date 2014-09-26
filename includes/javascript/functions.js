@@ -768,12 +768,20 @@ var TokenField = Class.create({
     this.setValues(aToken);
     return true;
   },
-  remove: function(value) {
+  remove: function(value, unique) {
     if(!value || (this.options.confirm && !confirm(this.options.confirm))) {
       return false;
     }
 
-    this.setValues(this.getValues().without(value));
+    var values = this.getValues();
+    if (unique) {
+      values.splice(values.lastIndexOf(value), 1);
+    }
+    else {
+      values = values.without(value);
+    }
+    this.setValues(values);
+
     return true;
   },
   contains: function(value) {
