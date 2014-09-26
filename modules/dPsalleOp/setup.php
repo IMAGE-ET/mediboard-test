@@ -1510,6 +1510,108 @@ class CSetupdPsalleOp extends CSetup {
                 ADD `gratuit` ENUM('0', '1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = '0.62';
+    $this->makeRevision('0.62');
+
+    $category_type = "'preanesth','preop','postop'
+                ,'preendoscopie','postendoscopie'
+                ,'preendoscopie_bronchique','postendoscopie_bronchique'
+                ,'preanesth_radio','preop_radio','postop_radio'
+                ,'disp_vasc_avant','disp_vasc_pendant','disp_vasc_apres'
+                ,'avant_indu_cesar', 'cesarienne_avant', 'cesarienne_apres'
+                ,'preanesth_ch', 'preop_ch', 'postop_ch'";
+    $query = "ALTER TABLE `daily_check_item_category`
+                CHANGE `type` `type` ENUM ($category_type);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `daily_check_list`
+                CHANGE `type` `type` ENUM ($category_type);";
+    $this->addQuery($query);
+
+    $check_list = array(
+      // AVANT
+      '01' => array('preanesth_ch', null,
+        array(
+          array('Dossiers cliniques et personnel du patient disponibles en salle', 'normal', 'yes'),
+        ),
+      ),
+      '02' => array('preanesth_ch', 'Identité',
+        array(
+          array('Patient confirme: nom, prénom, date de naissance', 'normal', 'yes'),
+          array('Concordance avec bracelet d\'identité', 'normal', 'yes'),
+          array('Concordance avec dossier', 'normal', 'yes'),
+          array('Patient confirme le site', 'normal', 'yes'),
+        )
+      ),
+      '03' => array('preanesth_ch', null,
+        array(
+          array('Site marqué', 'notapplicable', 'yes')
+        )
+      ),
+      '04' => array('preanesth_ch', 'Risques évalués',
+        array(
+          array('Allergie', 'normal', 'yes'),
+          array('Broncho-aspiration (estomac plein, jeûne, patho gastro_oeso)', 'normal', 'yes'),
+          array('Voies aériennes', 'normal', 'yes'),
+          array('Saignement anticipé (>500 ml, 10 ml/kg en pédiatrie)', 'normal', 'yes'),
+          array('Contamination (MRSA, TBC, hépatite, HIV, ...)', 'normal', 'yes'),
+        )
+      ),
+      '05' => array('preanesth_ch', 'Vérifications',
+        array(
+          array('Mode d\'installation', 'normal', 'yes'),
+          array('Matériel particulier pour l\'anesthésie', 'normal', 'yes'),
+        )
+      ),
+      '06' => array('preanesth_ch', null,
+        array(
+          array('Confirmation matériel chirurgical avant induction', 'normal', 'yes'),
+        )
+      ),
+      '07' => array('preop_ch', null,
+        array(
+          array('Vérification identité intervenants et visiteurs', 'normal', 'yes'),
+        )
+      ),
+      '08' => array('preop_ch', 'Confirmation par le trinôme anesthésiste/chirurgien/instrumentiste sous la conduitre de l\'infirmière circulante',
+        array(
+          array('Identité patient', 'normal', 'yes'),
+          array('Site opératoire', 'normal', 'yes'),
+          array('Intervention', 'normal', 'yes'),
+          array('Installation opératoire', 'normal', 'yes'),
+          array('Matériel', 'normal', 'yes'),
+          array('Etapes critiques', 'normal', 'yes'),
+          array('Prophylaxie antibiotique si indiquée', 'normal', 'yes'),
+        )
+      ),
+      '09' => array('postop_ch', 'Infirmière circulante confirme verbalement avec l\'équipe:',
+        array(
+          array('Nom de l\'acte chirurgical réalisé', 'normal', 'yes'),
+          array('Compte de compresses / guersounis', 'normal', 'yes'),
+        )
+      ),
+      '10' => array('postop_ch', 'Prélèvements',
+        array(
+          array('Etiquetage: concordance identité patient', 'normal', 'yes'),
+          array('Milieu de conservation', 'normal', 'yes'),
+          array('Laboratoire de destination', 'normal', 'yes'),
+          array('Envoi de destination', 'notapplicable', 'yes'),
+        )
+      ),
+      '11' => array('postop_ch', 'Debriefing chirurgien - anesthésiste',
+        array(
+          array('Revue des évènements critiques', 'normal', 'yes'),
+          array('Conaissance de la destination du patient', 'normal', 'yes'),
+        )
+      ),
+      '12' => array('postop_ch', 'Documents complétés',
+        array(
+          array('Feuille d\'ordre par anesthésiste', 'normal', 'yes'),
+          array('Feuille d\'ordre par chirurgien', 'normal', 'yes'),
+        )
+      ),
+    );
+    $this->addNewCheckList($check_list);
+
+    $this->mod_version = '0.63';
   }
 }

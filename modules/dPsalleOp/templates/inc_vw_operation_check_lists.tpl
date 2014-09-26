@@ -1,13 +1,3 @@
-{{* $Id:$ *}}
-
-{{*
- * @package Mediboard
- * @subpackage dPsalleOp
- * @version $Revision:$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
-
 {{assign var=active_list_type value=null}}
 {{assign var=types value="CDailyCheckList"|static:types}}
 
@@ -18,7 +8,7 @@
 {{/foreach}}
 
 <script>
-  var checkListTypes = ["normal", "endoscopie", "endoscopie-bronchique", "radio", "cesarienne"];
+  var checkListTypes = ["normal", "endoscopie", "endoscopie-bronchique", "radio", "cesarienne", "normal_ch"];
 
   showCheckListType = function(element, type) {
     checkListTypes.each(function(t){
@@ -30,7 +20,8 @@
   }
 
   Main.add(function() {
-    showCheckListType($("checkList-container"), "{{$active_list_type}}" || "normal");
+    var first_checklist = $('select_checktlist_type').getElementsByTagName('option')[0].value;
+    showCheckListType($("checkList-container"), "{{$active_list_type}}" || first_checklist);
   });
 </script>
 
@@ -46,9 +37,13 @@
         Check list Sécurité du Patient
       </button>
       
-      <select onchange="showCheckListType($(this).up('table'), $V(this))" style="max-width: 18em;">
-        {{foreach from="CDailyCheckList"|static:_HAS_lists key=_type item=_label}}
-          <option value="{{$_type}}" {{if $active_list_type == $_type}} selected {{/if}}>{{$_label}}</option>
+      <select onchange="showCheckListType($(this).up('table'), $V(this))" style="max-width: 18em;" id="select_checktlist_type">
+        {{foreach from="CDailyCheckList"|static:_HAS_lists key=ref_pays item=tab_list_checklist}}
+          {{if $ref_pays == $conf.ref_pays }}
+            {{foreach from=$tab_list_checklist key=_type item=_label}}
+              <option value="{{$_type}}" {{if $active_list_type == $_type}} selected {{/if}}>{{$_label}}</option>
+            {{/foreach}}
+          {{/if}}
         {{/foreach}}
       </select>
 
@@ -162,6 +157,30 @@
     </td>
   </tr>
 
+  <tr class="normal_ch" style="display: none;">
+    <td class="button" id="preanesth_ch-title">
+      <h3 style="margin: 2px;">
+        <img src="images/icons/{{$operation_check_lists.preanesth_ch->_readonly|ternary:"tick":"cross"}}.png" />
+        Avant l'induction anesthésique
+      </h3>
+      <span>SIGN IN</span>
+    </td>
+    <td class="button" id="preop_ch-title">
+      <h3 style="margin: 2px;">
+        <img src="images/icons/{{$operation_check_lists.preop_ch->_readonly|ternary:"tick":"cross"}}.png" />
+        Avant incision
+      </h3>
+      <span>TIME OUT</span>
+    </td>
+    <td class="button" id="postop_ch-title">
+      <h3 style="margin: 2px;">
+        <img src="images/icons/{{$operation_check_lists.postop_ch->_readonly|ternary:"tick":"cross"}}.png" />
+        Après le départ du patient de SOP
+      </h3>
+      <span>SIGN OUT</span>
+    </td>
+  </tr>
+
   <tbody id="check-lists" style="display: none;">
     <tr class="normal" style="display: none;">
       <td style="padding:1px;">
@@ -258,26 +277,53 @@
     <tr class="cesarienne" style="display: none;">
       <td style="padding:1px;">
         <div id="check_list_avant_indu_cesar_">
-        {{assign var=check_list value=$operation_check_lists.avant_indu_cesar}}
-        {{mb_include module=salleOp template=inc_edit_check_list
-             check_item_categories=$operation_check_item_categories.avant_indu_cesar
-             personnel=$listValidateurs}}
+          {{assign var=check_list value=$operation_check_lists.avant_indu_cesar}}
+          {{mb_include module=salleOp template=inc_edit_check_list
+          check_item_categories=$operation_check_item_categories.avant_indu_cesar
+          personnel=$listValidateurs}}
         </div>
       </td>
       <td style="padding:1px;">
         <div id="check_list_cesarienne_avant_">
-        {{assign var=check_list value=$operation_check_lists.cesarienne_avant}}
-        {{mb_include module=salleOp template=inc_edit_check_list
-             check_item_categories=$operation_check_item_categories.cesarienne_avant
-             personnel=$listValidateurs}}
+          {{assign var=check_list value=$operation_check_lists.cesarienne_avant}}
+          {{mb_include module=salleOp template=inc_edit_check_list
+          check_item_categories=$operation_check_item_categories.cesarienne_avant
+          personnel=$listValidateurs}}
         </div>
       </td>
       <td style="padding:1px;">
         <div id="check_list_cesarienne_apres_">
-        {{assign var=check_list value=$operation_check_lists.cesarienne_apres}}
-        {{mb_include module=salleOp template=inc_edit_check_list
-             check_item_categories=$operation_check_item_categories.cesarienne_apres
-             personnel=$listValidateurs}}
+          {{assign var=check_list value=$operation_check_lists.cesarienne_apres}}
+          {{mb_include module=salleOp template=inc_edit_check_list
+          check_item_categories=$operation_check_item_categories.cesarienne_apres
+          personnel=$listValidateurs}}
+        </div>
+      </td>
+    </tr>
+
+    <tr class="normal_ch" style="display: none;">
+      <td style="padding:1px;">
+        <div id="check_list_preanesth_ch_">
+          {{assign var=check_list value=$operation_check_lists.preanesth_ch}}
+          {{mb_include module=salleOp template=inc_edit_check_list
+          check_item_categories=$operation_check_item_categories.preanesth_ch
+          personnel=$listValidateurs}}
+        </div>
+      </td>
+      <td style="padding:1px;">
+        <div id="check_list_preop_ch_">
+          {{assign var=check_list value=$operation_check_lists.preop_ch}}
+          {{mb_include module=salleOp template=inc_edit_check_list
+          check_item_categories=$operation_check_item_categories.preop_ch
+          personnel=$listValidateurs}}
+        </div>
+      </td>
+      <td style="padding:1px;">
+        <div id="check_list_postop_ch_">
+          {{assign var=check_list value=$operation_check_lists.postop_ch}}
+          {{mb_include module=salleOp template=inc_edit_check_list
+          check_item_categories=$operation_check_item_categories.postop_ch
+          personnel=$listValidateurs}}
         </div>
       </td>
     </tr>

@@ -38,7 +38,7 @@
       </tr>
     {{/foreach}}
 
-    {{if !in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes) || $check_list->type == "postop" || $check_list->type == "postendoscopie" || $check_list->type == "postendoscopie_bronchique" || $check_list->type == "postop_radio" || $check_list->type == "disp_vasc_apres" || $check_list->type == "cesarienne_apres"}}
+    {{if !in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes) || $check_list->type == "postop" || $check_list->type == "postendoscopie" || $check_list->type == "postendoscopie_bronchique" || $check_list->type == "postop_radio" || $check_list->type == "disp_vasc_apres" || $check_list->type == "cesarienne_apres" || $check_list->type == "postop_ch"}}
     <tr>
       <td colspan="2">
         <strong>Commentaires:</strong><br />
@@ -201,7 +201,7 @@ Main.add(function(){
       </tr>
     {{/foreach}}
 
-    {{if !in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes) || $check_list->type == "postop" || $check_list->type == "postendoscopie" || $check_list->type == "postendoscopie_bronchique" || $check_list->type == "postop_radio" || $check_list->type == "disp_vasc_apres" || $check_list->type == "cesarienne_apres"}}
+    {{if !in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes) || $check_list->type == "postop" || $check_list->type == "postendoscopie" || $check_list->type == "postendoscopie_bronchique" || $check_list->type == "postop_radio" || $check_list->type == "disp_vasc_apres" || $check_list->type == "cesarienne_apres" || $check_list->type == "postop_ch"}}
     <tr>
       <td colspan="2" class="text">
         <hr />
