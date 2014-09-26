@@ -83,11 +83,11 @@
     }
   };
 
-  addActeAnesthComp = function(acte) {
-    if (confirm("Voulez vous ajoutez l'acte d'anesthésie complémentaire " + acte + '?')) {
+  addActeAnesthComp = function(acte, auto) {
+    if (auto || confirm("Voulez vous ajoutez l'acte d'anesthésie complémentaire " + acte + '?')) {
       var on_change = CCAMField{{$subject->_class}}{{$subject->_id}}.options.onChange;
       CCAMField{{$subject->_class}}{{$subject->_id}}.options.onChange = Prototype.emptyFunction;
-      CCAMField{{$subject->_class}}{{$subject->_id}}.add(acte);
+      CCAMField{{$subject->_class}}{{$subject->_id}}.add(acte, true);
       onSubmitFormAjax(getForm('addActes-{{$subject->_guid}}'));
       CCAMField{{$subject->_class}}{{$subject->_id}}.options.onChange = on_change;
     }
@@ -311,7 +311,7 @@
 
             {{if !$acte->_id}}
               <button class="add notext compact" type="submit" {{if $_activite->anesth_comp && !$_activite->anesth_comp|in_array:$subject->_codes_ccam}}
-                      onclick="addActeAnesthComp('{{$_activite->anesth_comp}}');"
+                      onclick="addActeAnesthComp('{{$_activite->anesth_comp}}', {{'dPccam CCodable add_acte_comp_anesth_auto'|conf}});"
               {{/if}}>
                 {{tr}}Add{{/tr}}
               </button>

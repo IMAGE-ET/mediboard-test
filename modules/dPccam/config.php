@@ -10,6 +10,7 @@ $dPconfig["dPccam"] = array (
     "use_getMaxCodagesActes" => "1",
     "precode_modificateur_7" => "0",
     "precode_modificateur_J" => "0",
+    "add_acte_comp_anesth_auto" => "0",
     "use_frais_divers" => array(
       "CConsultation" => "0",
       "COperation" => "0",
