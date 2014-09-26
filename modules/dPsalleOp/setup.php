@@ -1600,7 +1600,6 @@ class CSetupdPsalleOp extends CSetup {
       '11' => array('postop_ch', 'Debriefing chirurgien - anesthésiste',
         array(
           array('Revue des évènements critiques', 'normal', 'yes'),
-          array('Conaissance de la destination du patient', 'normal', 'yes'),
         )
       ),
       '12' => array('postop_ch', 'Documents complétés',
