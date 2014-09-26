@@ -124,8 +124,8 @@
 
   validateStatus = function() {
     var form = getForm("editFrm");
-    form.status    = "VALI";
-    form._no_guess = "1";
+    $V(form.status, "VALI");
+    $V(form._status_no_guess, "1");
     return form.onsubmit();
   };
 
