@@ -44,7 +44,7 @@ if ($count > 0) {
   CPatient::massLoadIPP($patients);
 
   /** @var CPatientState $patients_state */
-  $patients_state = CPatient::massLoadBackRefs($patients, "patient_state", "datetime");
+  $patients_state = CPatient::massLoadBackRefs($patients, "patient_state", "datetime DESC");
   $mediusers      = CPatientState::massLoadFwdRef($patients_state, "mediuser_id");
 
   /** @var CPatientLink[] $link1 */
