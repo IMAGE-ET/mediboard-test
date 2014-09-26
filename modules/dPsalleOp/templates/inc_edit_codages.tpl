@@ -317,10 +317,10 @@
               </button>
             {{else}}
               <button class="edit notext compact" type="button" onclick="ActesCCAM.edit({{$acte->_id}})">{{tr}}Edit{{/tr}}</button>
-              <button class="trash notext compact" type="button"
+              <button class="remove notext compact" type="button"
                       onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}', ajax: '1'},
                         {onComplete: function() {window.urlCodage.refreshModal()}});">
-                {{tr}}Delete{{/tr}}
+                {{tr}}Remove{{/tr}}
               </button>
             {{/if}}
           </form>
