@@ -66,7 +66,7 @@ class CPatientStateTools {
     $request = new CRequest();
     $request->addSelect("DATE(datetime) AS 'date', state, count(*) as 'total'");
     $request->addTable("patient_state");
-    $request->addWhere("datetime BETWEEN '$before' AND '$now'");
+    $request->addWhere("DATE(datetime) BETWEEN '$before' AND '$now'");
     $request->addGroup("DAY(datetime), state");
 
     return $ds->loadList($request->makeSelect());
