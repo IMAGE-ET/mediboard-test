@@ -68,7 +68,7 @@
                 dropdown: true,
                 width: "250px",
                 updateElement: function(selected) {
-                  CCAMField{{$subject->_class}}{{$subject->_id}}.add(selected.down("strong").innerHTML);
+                  CCAMField{{$subject->_class}}{{$subject->_id}}.add(selected.down("strong").innerHTML, true);
                 }
               });
               CCAMField{{$subject->_class}}{{$subject->_id}} = new TokenField(form.elements["codes_ccam"], {
@@ -115,7 +115,7 @@
             </script>
           {{/if}}
 
-          <button type="button" class="trash notext" onclick="CCAMField{{$subject->_class}}{{$subject->_id}}.remove('{{$_code->code}}')">
+          <button type="button" class="trash notext" onclick="CCAMField{{$subject->_class}}{{$subject->_id}}.remove('{{$_code->code}}', true)">
             {{tr}}Delete{{/tr}}
           </button>
       </span>

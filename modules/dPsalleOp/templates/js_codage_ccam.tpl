@@ -71,7 +71,7 @@ ActesCCAM = {
       alert("Aucun code selectionné");
       return;
     }
-    if(oCcamField.remove(oForm._selCode.value)){
+    if(oCcamField.remove(oForm._selCode.value, true)){
       submitFormAjax(oForm, 'systemMsg', oDefaultOptions);
     }
   },
