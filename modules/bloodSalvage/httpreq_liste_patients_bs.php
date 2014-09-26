@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage bloodSalvage
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -16,21 +16,20 @@ $hour               = CMbDT::time();
 $totaltime          = "00:00:00";
 
 // Selection des plages opératoires de la journée
-$plages = new CPlageOp;
+$plages = new CPlageOp();
 $where = array();
 $where["date"] = "= '$date'";
 $plages = $plages->loadList($where);
 
 // Récupération des détails des RSPO.
-$listReveil = new COperation;
+$interv = new COperation();
 $where = array();
 $where[] = "`plageop_id` ".CSQLDataSource::prepareIn(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date')";
-$where["entree_reveil"] = "IS NOT NULL";
-$where["sortie_reveil_possible"] = "IS NULL";
 $leftjoin["blood_salvage"] = "operations.operation_id = blood_salvage.operation_id";
 $where["blood_salvage.operation_id"] = "IS NOT NULL";
 $order = "entree_reveil";
-$listReveil = $listReveil->loadList($where, $order, null, null, $leftjoin);
+/** @var COperation[] $listReveil */
+$listReveil = $interv->loadList($where, $order, null, null, $leftjoin);
 foreach ($listReveil as $key => $value) {
   $listReveil[$key]->loadRefs();
 }

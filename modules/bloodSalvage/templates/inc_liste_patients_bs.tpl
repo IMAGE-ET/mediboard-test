@@ -19,7 +19,6 @@
   <table class="form">
     <tr>
       <th class="category" colspan="2">
-        <div style="float: right;">{{$hour|date_format:$conf.time}}</div>
         {{$date|date_format:$conf.longdate}}
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       </th>
@@ -34,30 +33,32 @@
 	  <th>Praticien</th>
 	  <th>Patient</th>
 	  <th>Entrée réveil</th>
+    <th>Sortie réveil</th>
 	</tr>
 	
 	{{foreach from=$listReveil item=rspo}}
 		<tr class="hoverable">
 		  <td class="text">
   		  <a href="?m=bloodSalvage&amp;tab=vw_bloodSalvage_sspi&amp;op={{$rspo->_id}}" title="Gérer le Cell Saver">
-  		    {{$rspo->_ref_salle->_view}}
+  		    {{$rspo->_ref_salle}}
         </a>
 		  </td>
 		  <td class="text">
   		  <a href="?m=bloodSalvage&amp;tab=vw_bloodSalvage_sspi&amp;op={{$rspo->_id}}" title="Gérer le Cell Saver">
-  		    Dr {{$rspo->_ref_chir->_view}}
+  		    Dr {{$rspo->_ref_chir}}
         </a>
 		  </td>
 		  <td class="text">
   		  <a href="?m=bloodSalvage&amp;tab=vw_bloodSalvage_sspi&amp;op={{$rspo->_id}}" title="Gérer le Cell Saver">  
-  		    {{$rspo->_ref_sejour->_ref_patient->_view}}
+  		    {{$rspo->_ref_sejour->_ref_patient}}
         </a>
 		  </td>
 		  <td class="text">{{$rspo->entree_reveil|date_format:$conf.time}}</td>
+      <td class="text">{{$rspo->sortie_reveil_reel|date_format:$conf.time}}</td>
 		</tr>
 	{{foreachelse}}
 	<tr>
-	  <td colspan="4" class="empty">{{tr}}CBloodSalvage.none{{/tr}}</td>
+	  <td colspan="10" class="empty">{{tr}}CBloodSalvage.none{{/tr}}</td>
 	</tr>
 	{{/foreach}}
 </table>
