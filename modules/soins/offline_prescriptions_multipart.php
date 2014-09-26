@@ -46,7 +46,7 @@ foreach ($sejours as $_sejour) {
   $_patient = $_sejour->loadRefPatient();
 
   $params = array(
-    "prescription_id" => $_prescription->_id,
+    "prescription_id" => $_prescription->_id ? : "",
     "in_progress"     => 1,
   );
 
