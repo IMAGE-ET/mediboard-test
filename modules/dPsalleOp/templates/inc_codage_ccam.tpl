@@ -65,6 +65,7 @@
       </td>
     </tr>
   {{else}}
+    {{mb_script module=pmsi script=PMSI ajax=true}}
     {{mb_include module=pmsi template=inc_codage_actes show_ngap=false read_only=true}}
   {{/if}}
 </table>
