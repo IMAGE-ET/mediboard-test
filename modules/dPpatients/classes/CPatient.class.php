@@ -258,6 +258,8 @@ class CPatient extends CPerson {
   public $_dmp_vitale_nom_patronymique;
   public $_dmp_vitale_prenom_usuel;
   public $_dmp_vitale_date;
+  public $_dmp_reactivation_dmp;
+  public $_dmp_reason_close;
 
   public $_reason_state;
   public $_doubloon_ids = array();
@@ -537,6 +539,8 @@ class CPatient extends CPerson {
     $props["_dmp_vitale_nom_patronymique"] = "str";
     $props["_dmp_vitale_prenom_usuel"]     = "str";
     $props["_dmp_vitale_date"]             = "str confidential";
+    $props["_dmp_reactivation_dmp"]        = "str";
+    $props["_dmp_reason_close"]            = "text";
     $props["_vitale_lastname"]             = "str";
     $props["_vitale_firstname"]            = "str";
     $props["_vitale_birthdate"]            = "str confidential";

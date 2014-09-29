@@ -11,10 +11,10 @@
  * @link     http://www.mediboard.org
  */
 
-$id_patient = CValue::get("id_patient");
+$patient_id = CValue::get("patient_id");
 
 $ins_patient = new CINSPatient();
-$ins_patient->patient_id = $id_patient;
+$ins_patient->patient_id = $patient_id;
 $list_ins = $ins_patient->loadMatchingList("date desc", null, "ins_patient_id");
 
 

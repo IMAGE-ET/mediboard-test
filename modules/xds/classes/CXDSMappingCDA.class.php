@@ -23,7 +23,7 @@ class CXDSMappingCDA {
   public $name_submission;
   public $id_classification;
   public $id_external;
-  public $id_patient;
+  public $patient_id;
   public $xpath;
   public $xcn_mediuser;
   public $xon_etablissement;
@@ -60,7 +60,7 @@ class CXDSMappingCDA {
     $this->xpath = new CMbXPath($factory->dom_cda);
     $this->xpath->registerNamespace("cda", "urn:hl7-org:v3");
 
-    $this->id_patient = $this->getID();
+    $this->patient_id  = $this->getID();
     $this->ins_patient = $this->getIns();
     $uuid = CMbSecurity::generateUUID();
     $this->uuid["registry"]  = $uuid."1";
@@ -296,7 +296,7 @@ class CXDSMappingCDA {
     $factory      = $this->factory;
     $cla_id       = &$this->id_classification;
     $ei_id        = &$this->id_external;
-    $id_patient   = $this->id_patient;
+    $patient_id   = $this->patient_id;
     $ins          = $this->ins_patient;
     $hide_patient = $this->hide_patient;
     $hide_ps      = $this->hide_ps;
@@ -330,7 +330,7 @@ class CXDSMappingCDA {
     }
 
     //recordTarget/patientRole/id
-    $extrinsic->setSlot("sourcePatientId", array($id_patient));
+    $extrinsic->setSlot("sourcePatientId", array($patient_id));
 
     //recordtarget/patientRole
     $extrinsic->setSlot("sourcePatientInfo", $this->getSourcepatientInfo($factory->patient));

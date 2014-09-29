@@ -18,20 +18,18 @@
 class CHL7v3Messaging {
 
   /** @var array */
-  static $object_handlers = array(
-  );
+  static $object_handlers = array();
+
+  /** @var array */
+  static $versions    = array();
 
 
   /** @var array */
-  static $versions   = array();
+  static $evenements  = array();
 
 
   /** @var array */
-  static $evenements = array();
-
-
-  /** @var array */
-  var $_categories   = array();
+  public $_categories = array();
 
   /**
    * Retrieve handlers list
@@ -81,12 +79,11 @@ class CHL7v3Messaging {
    */
   static function getEvent(CExchangeDataFormat $exchange) {
     switch ($exchange->type) {
-      case "PRPA" :
+      case "PRPA":
         return CPRPA::getEvent($exchange);
 
-      default :
+      default:
         throw new CMbException("CHL7v3Messaging_event-unknown");
-        break;
     }
   }
 }

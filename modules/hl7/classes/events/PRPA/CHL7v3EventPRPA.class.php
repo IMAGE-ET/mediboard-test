@@ -16,6 +16,8 @@
  * Patient Administration HL7v3
  */
 class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
+  public $_event_name;
+
   /**
    * Construct
    *
@@ -402,9 +404,16 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
     }
 
     $dom->addElement($name, "given", $patient->_p_first_name);
-    $dom->addElement($name, "given", $patient->prenom_2);
-    $dom->addElement($name, "given", $patient->prenom_3);
-    $dom->addElement($name, "given", $patient->prenom_4);
+
+    if ($patient->prenom_2) {
+      $dom->addElement($name, "given", $patient->prenom_2);
+    }
+    if ($patient->prenom_3) {
+      $dom->addElement($name, "given", $patient->prenom_3);
+    }
+    if ($patient->prenom_4) {
+      $dom->addElement($name, "given", $patient->prenom_4);
+    }
   }
 
   /**
@@ -426,7 +435,7 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
     $this->addValue($telecom, ($patientPhoneNumber ? "tel:$patientPhoneNumber" : null), "HP");
 
     $telecom = $dom->addElement($elParent, "telecom");
-    $this->addValue($telecom, ($patientPhoneNumber ? "tel:$patientMobilePhoneNumber" : null), "MC");
+    $this->addValue($telecom, ($patientMobilePhoneNumber ? "tel:$patientMobilePhoneNumber" : null), "MC");
 
     $telecom = $dom->addElement($elParent, "telecom");
     $this->addValue($telecom, ($patientEmail ? "mailto:$patientEmail" : null));
@@ -462,6 +471,10 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
    * @return void
    */
   function addBirthPlace(DOMNode $elParent, CPatient $patient) {
+    if (!$patient->cp_naissance && !$patient->_pays_naissance_insee && !$patient->lieu_naissance) {
+      return;
+    }
+
     $dom = $this->dom;
 
     $birthplace = $dom->addElement($elParent, "birthPlace");

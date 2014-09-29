@@ -44,7 +44,7 @@ Patient = Object.extend({
 
   openINS : function($id) {
     new Url("cda", "ajax_history_ins")
-      .addParam("id_patient", $id)
+      .addParam("patient_id", $id)
       .requestModal();
   },
 

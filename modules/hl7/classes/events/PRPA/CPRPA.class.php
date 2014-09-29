@@ -16,21 +16,20 @@
  * Patient Administration
  */
 class CPRPA extends CHL7v3Messaging {
-
   /** @var array */
   static $versions = array (
     "2008", "2009"
   );
-
 
   /** @var array */
   static $interaction_ST201317UV = array (
     // Patient Registry Get Demographics Query
     "IN201307UV02", "IN201308UV02",
     // Patient Registry AddPatient
-    "IN201311UV02", "IN201312UV02", "IN201313UV02"
+    "IN201311UV02", "IN201312UV02", "IN201313UV02",
+    // Patient Registry Request Add Patient
+    "IN201314UV02", "IN201315UV02", "IN201316UV02"
   );
-
 
   /** @var array */
   static $evenements = array (
@@ -45,6 +44,13 @@ class CPRPA extends CHL7v3Messaging {
     "IN201312UV02" => "CHL7v3EventPRPAIN201312UV02",
     // Patient Registry Request Not Added
     "IN201313UV02" => "CHL7v3EventPRPAIN201313UV02",
+
+    // Patient Registry Request Add Patient
+    "IN201314UV02" => "CHL7v3EventPRPAIN201314UV02",
+    // Patient Registry Add Request Accepted
+    "IN201315UV02" => "CHL7v3EventPRPAIN201315UV02",
+    // Patient Registry Add Request Rejected
+    "IN201316UV02" => "CHL7v3EventPRPAIN201316UV02",
   );
 
   /**
@@ -53,7 +59,8 @@ class CPRPA extends CHL7v3Messaging {
    * @return CPRPA
    */
   function __construct() {
-    $this->type = "PRPA";
+    $this->domain = "ITI";
+    $this->type   = "PRPA";
 
     $this->_categories = array(
       "ST201317UV" => self::$interaction_ST201317UV,
