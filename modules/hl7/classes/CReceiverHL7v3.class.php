@@ -137,7 +137,6 @@ class CReceiverHL7v3 extends CInteropReceiver {
     $exchange->date_echange = CMbDT::dateTime();
 
     $ack_data = $source->getACQ();
-
     if (!$ack_data) {
       $exchange->store();
       return null;

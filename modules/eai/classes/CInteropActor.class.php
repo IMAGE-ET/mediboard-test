@@ -65,12 +65,6 @@ class CInteropActor extends CMbObject {
   public $_tag_visit_number;
 
   /** @var string */
-  public $_tag_hprimxml;
-
-  /** @var string */
-  public $_tag_hl7;
-
-  /** @var string */
   public $_tag_consultation;
 
   /** @var string */
@@ -112,7 +106,8 @@ class CInteropActor extends CMbObject {
     
     $props["_reachable"]        = "bool";
     $props["_parent_class"]     = "str";
-    
+
+    $props["_self_tag"]         = "str";
     $props["_tag_patient"]      = "str";
     $props["_tag_sejour"]       = "str";
     $props["_tag_consultation"] = "str";
@@ -122,13 +117,6 @@ class CInteropActor extends CMbObject {
     $props["_tag_lit"]          = "str";
     $props["_tag_movement"]     = "str";
     $props["_tag_visit_number"] = "str";
-    $props["_tag_hprimxml"]     = "str";
-    $props["_tag_hl7"]          = "str";
-    $props["_self_tag"]         = "str";
-
-    if (CModule::getActive("phast")) {
-      $props["_tag_phast"]        = "str";
-    }
     
     return $props;
   }
@@ -144,6 +132,8 @@ class CInteropActor extends CMbObject {
     $this->_view = $this->libelle ? $this->libelle : $this->nom;
     $this->_type_echange = $this->_class;
 
+    $this->_self_tag          = $this->getTag($this->group_id);
+
     $this->_tag_patient       = CPatient::getTagIPP($this->group_id);  
     $this->_tag_sejour        = CSejour::getTagNDA($this->group_id);
 
@@ -154,15 +144,6 @@ class CInteropActor extends CMbObject {
     $this->_tag_lit          = CLit::getObjectTag($this->group_id);
     $this->_tag_movement     = CMovement::getObjectTag($this->group_id);
     $this->_tag_visit_number = CSmp::getObjectTag($this->group_id);
-
-    $this->_tag_hprimxml      = CHPrimXML::getObjectTag($this->group_id);
-    $this->_tag_hl7           = CHL7::getObjectTag($this->group_id);
-
-    $this->_self_tag          = $this->getTag($this->group_id);
-
-    if (CModule::getActive("phast")) {
-      $this->_tag_phast  = CPhast::getTagPhast($this->group_id);
-    }
   }
 
   /**

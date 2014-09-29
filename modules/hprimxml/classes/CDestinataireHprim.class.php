@@ -57,9 +57,7 @@ class CDestinataireHprim extends CInteropReceiver {
   }
 
   /**
-   * Get properties specifications as strings
-   *
-   * @return array
+   * @see parent::getProps()
    */
   function getProps() {
     $props = parent::getProps();
@@ -69,6 +67,8 @@ class CDestinataireHprim extends CInteropReceiver {
     $props["code_acteur"]    = "str";
     $props["code_syst"]      = "str";
     $props["display_errors"] = "bool notNull default|1";
+
+    $props["_tag_hprimxml"] = "str";
 
     return $props;
   }
@@ -95,6 +95,8 @@ class CDestinataireHprim extends CInteropReceiver {
     parent::updateFormFields();
 
     $this->code_syst = $this->code_syst ? $this->code_syst : $this->nom;
+
+    $this->_tag_hprimxml = CHPrimXML::getObjectTag($this->group_id);
   }
 
   /**

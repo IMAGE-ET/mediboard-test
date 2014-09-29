@@ -22,13 +22,14 @@ class CReceiverHL7v2 extends CInteropReceiver {
   /** @var null */
   public $receiver_hl7v2_id;
 
-
   /** @var null */
   public $_extension;
 
-
   /** @var null */
   public $_i18n_code;
+
+  /** @var null */
+  public $_tag_hl7;
 
   /**
    * Initialize object specification
@@ -51,6 +52,17 @@ class CReceiverHL7v2 extends CInteropReceiver {
   }
 
   /**
+   * @see parent::getProps()
+   */
+  function getProps() {
+    $props = parent::getProps();
+
+    $props["_tag_hl7"] = "str";
+
+    return $props;
+  }
+
+  /**
    * Get backward reference specifications
    *
    * @return array Array of form "collection-name" => "class join-field"
@@ -70,6 +82,8 @@ class CReceiverHL7v2 extends CInteropReceiver {
    */
   function updateFormFields() {
     parent::updateFormFields();
+
+    $this->_tag_hl7 = CHL7::getObjectTag($this->group_id);
 
     if (!$this->_configs) {
       $this->loadConfigValues();
