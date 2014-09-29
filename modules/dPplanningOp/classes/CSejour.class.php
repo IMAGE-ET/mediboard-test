@@ -2481,10 +2481,26 @@ class CSejour extends CFacturable implements IPatientRelated {
       return $this->_list_constantes_medicales;
     }
 
+    $this->loadRefsConsultations();
+    $this->loadRefsConsultAnesth();
+    if (!empty($this->_ref_consultations) || $this->_ref_consult_anesth) {
+      $whereOr = array();
+      $whereOr[] = "(context_class = '$this->_class' AND context_id = '$this->_id')";
+      foreach ($this->_ref_consultations as $_ref_consult) {
+        $whereOr[] = "(context_class = '$_ref_consult->_class' AND context_id = '$_ref_consult->_id')";
+      }
+      if ($this->_ref_consult_anesth) {
+        $consult = $this->_ref_consult_anesth->loadRefConsultation();
+        $whereOr[] = "(context_class = '$consult->_class' AND context_id = '$consult->_id')";
+      }
+      $where[] = implode(" OR ", $whereOr);
+    }
+    else {
+      $where['context_class'] = " = '$this->_class'";
+      $where['context_id']    = " = '$this->_id'";
+    }
     $constantes = new CConstantesMedicales();
-    $where['context_class'] = " = '$this->_class'";
-    $where['context_id']    = " = '$this->_id'";
-    $where['patient_id']    = " = '$this->patient_id'";
+    $where['patient_id'] = " = '$this->patient_id'";
 
     return $this->_list_constantes_medicales = $constantes->loadList($where, 'datetime ASC');
   }
