@@ -98,7 +98,7 @@
       var url = new Url("soins", "ajax_vw_dossier_sejour");
       url.addParam("sejour_id", sejour_id);
       url.addParam("operation_id", operation_id);
-      url.addParam("modal", 1);
+      url.addParam("modal", 0);
       if(default_tab){
         url.addParam("default_tab", default_tab);
       }
