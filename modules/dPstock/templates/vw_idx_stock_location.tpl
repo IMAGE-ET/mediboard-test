@@ -11,42 +11,61 @@
 <script type="text/javascript">
 editStockLocation = function(stock_location_id) {
   var url = new Url("dPstock", "httpreq_vw_stock_location_form");
-  if (!Object.isUndefined(stock_location_id))
+  if (!Object.isUndefined(stock_location_id)) {
     url.addParam("stock_location_id", stock_location_id);
+  }
   url.requestUpdate("stock-location-form");
-}
+};
 
-Main.add(editStockLocation);
+Main.add(function() {
+  editStockLocation();
+  
+  Control.Tabs.create("location-tabs");
+});
 </script>
 
 <table class="main">
   <tr>
     <td class="halfPane">
-      <table class="tbl">
-        <tr>
-          <th>{{mb_title class=CProductStockLocation field=name}}</th>
-          <th>{{mb_title class=CProductStockLocation field=desc}}</th>
-          <th>{{mb_title class=CProductStockLocation field=object_id}}</th>
-          <th>{{mb_title class=CProductStockLocation field=position}}</th>
-        </tr>
-        {{foreach from=$list_locations item=curr_location}}
-        <tr>
-          <td class="text">
-            <a href="#1" onclick="editStockLocation({{$curr_location->_id}})"
-               title="{{tr}}CProductStockLocation-title-modify{{/tr}}">
-              {{mb_value object=$curr_location field=name}}
+      <ul class="control_tabs small" id="location-tabs">
+        {{foreach from=$lists key=_class item=_list}}
+          <li>
+            <a href="#location-{{$_class}}" {{if $_list|@count == 0}} class="empty" {{/if}}>
+              {{$classes.$_class}} <small>({{$_list|@count}})</small>
             </a>
-          </td>
-					<td>{{mb_value object=$curr_location field=desc}}</td>
-          <td>{{mb_value object=$curr_location field=object_class}} - {{mb_value object=$curr_location field=object_id}}</td>
-          <td>{{mb_value object=$curr_location field=position}}</td>
-        </tr>
-				{{foreachelse}}
-				<tr>
-          <td colspan="5" class="empty">{{tr}}CProductStockLocation.none{{/tr}}</td>
-        </tr>
+          </li>
         {{/foreach}}
-      </table>  
+      </ul>
+
+      {{foreach from=$lists key=_class item=_list}}
+        <div id="location-{{$_class}}" style="display: none;">
+          <table class="tbl">
+            <tr>
+              <th>{{mb_title class=CProductStockLocation field=name}}</th>
+              <th>{{mb_title class=CProductStockLocation field=desc}}</th>
+              <th>{{mb_title class=CProductStockLocation field=object_id}}</th>
+              <th>{{mb_title class=CProductStockLocation field=position}}</th>
+            </tr>
+            {{foreach from=$_list item=_location}}
+              <tr>
+                <td class="text">
+                  <a href="#1" onclick="editStockLocation({{$_location->_id}})"
+                     title="{{tr}}CProductStockLocation-title-modify{{/tr}}">
+                    {{mb_value object=$_location field=name}}
+                  </a>
+                </td>
+                <td>{{mb_value object=$_location field=desc}}</td>
+                <td>{{mb_value object=$_location field=object_class}} - {{mb_value object=$_location field=object_id}}</td>
+                <td>{{mb_value object=$_location field=position}}</td>
+              </tr>
+              {{foreachelse}}
+              <tr>
+                <td colspan="5" class="empty">{{tr}}CProductStockLocation.none{{/tr}}</td>
+              </tr>
+            {{/foreach}}
+          </table>
+        </div>
+      {{/foreach}}
     </td>
     <td class="halfPane" id="stock-location-form"></td>
   </tr>
