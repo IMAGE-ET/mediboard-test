@@ -41,7 +41,7 @@
 <table class="tbl">
   <tr>
     <th class="title" colspan="20" style="border-bottom: none;">
-      <form name="addActes-{{$obj_guid}}" method="post" onsubmit="return onSubmitFormAjax(this, PMSI.reloadActesCCAM.curry('{{$obj_guid}}'));">
+      <form name="addActes-{{$obj_guid}}" method="post" onsubmit="return false;">
         {{if $subject instanceof CConsultation}}
           <input type="hidden" name="m" value="cabinet" />
           <input type="hidden" name="dosql" value="do_consultation_aed" />
@@ -73,7 +73,7 @@
               });
               CCAMField{{$subject->_class}}{{$subject->_id}} = new TokenField(form.elements["codes_ccam"], {
                 onChange : function() {
-                  form.onsubmit();
+                  return onSubmitFormAjax(form, PMSI.reloadActesCCAM.curry('{{$obj_guid}}'))
                 },
                 sProps : "notNull code ccam"
               } );
@@ -92,7 +92,7 @@
 
           {{if count($_code->assos) > 0}}
             {{unique_id var=uid_autocomplete_comp}}
-            <form name="addAssoCode{{$uid_autocomplete_comp}}" method="get">
+            <form name="addAssoCode{{$uid_autocomplete_comp}}" method="get" onsubmit="return false;">
               <input type="text" size="8em" name="keywords" value="{{$_code->assos|@count}} cmp./sup." onclick="$V(this, '');"/>
             </form>
             <div style="text-align: left; color: #000; display: none; width: 200px !important; font-weight: normal; font-size: 11px; text-shadow: none;"
