@@ -15,6 +15,9 @@ class CExClassImport extends CMbXMLObjectImport {
   protected $name_suffix;
   
   protected $imported = array();
+
+  /** @var CExClassFieldPredicate[] */
+  protected $predicates_to_fix = array();
   
   protected $import_order = array(
     "//object[@class='CExClass']",
@@ -22,6 +25,18 @@ class CExClassImport extends CMbXMLObjectImport {
     "//object[@class='CExConcept']",
     "//object",
   );
+
+  /**
+   * @see parent::afterImport()
+   */
+  function afterImport(){
+    foreach ($this->predicates_to_fix as $_predicate) {
+      $_predicate->value = $this->getIdFromGuid($this->map["CExListItem-".$_predicate->value]);
+      if ($msg = $_predicate->store()) {
+        CAppUI::stepAjax($msg, UI_MSG_WARNING);
+      }
+    }
+  }
   
   function importObject(DOMElement $element) {
     $id = $element->getAttribute("id");
@@ -153,9 +168,27 @@ class CExClassImport extends CMbXMLObjectImport {
       case "CExClassFieldTranslation":
       case "CExClassMessage":
       case "CExClassHostField":
+        $_object = $this->getObjectFromElement($element);
+  
+        if ($msg = $_object->store()) {
+          CAppUI::stepAjax($msg, UI_MSG_WARNING);
+          break;
+        }
+        CAppUI::stepAjax(CAppUI::tr($_object->_class)." '%s' créé", UI_MSG_OK, $_object);
+  
+        $map_to = $_object->_guid;
+        break;
+
       case "CExClassFieldPredicate":
+        /** @var CExClassFieldPredicate $_object */
         $_object = $this->getObjectFromElement($element);
 
+        if ($_object->value) {
+          $_field = $_object->loadRefExClassField();
+          if ($_field->getSpecObject() instanceof CEnumSpec) {
+            $this->predicates_to_fix[] = $_object;
+          }
+        }
         if ($msg = $_object->store()) {
           CAppUI::stepAjax($msg, UI_MSG_WARNING);
           break;

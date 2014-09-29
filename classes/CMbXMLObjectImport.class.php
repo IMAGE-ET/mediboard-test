@@ -55,6 +55,17 @@ abstract class CMbXMLObjectImport {
         $this->importObject($_object);
       }
     }
+
+    $this->afterImport();
+  }
+
+  /**
+   * Post processing
+   *
+   * @return void
+   */
+  function afterImport(){
+    // Do nothing
   }
 
   /**
