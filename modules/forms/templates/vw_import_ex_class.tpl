@@ -17,12 +17,14 @@ function displayListItems(select, key) {
 </script>
 
 <div class="small-info">
-  Ne seront pas importés:
+  Quelques remarques sur l'importation des formulaires:
   <ul>
-    <li>Les valeurs par défaut des champs de type liste</li>
-    <li>Les valeurs décochées des listes dans les champs (si la liste provient d'un concept)</li>
-    <li>Les sous-formulaires</li>
-    <li>Les évènements déclencheurs</li>
+    <li>Les valeurs par défaut des champs de type liste ne seront pas importés</li>
+    <li>Toutes les valeurs des listes seront présentes dans le formulaire même si seulement une partie étaient activées dans le formulaires d'origine</li>
+    <li>Les valeurs des listes dans le formulaire n'est pas conservé</li>
+    <li>Les sous-formulaires ne seront pas importés</li>
+    <li>Les évènements déclencheurs ne seront pas importés</li>
+    <li>Les tags ne seront pas importés</li>
   </ul>
 </div>
 
