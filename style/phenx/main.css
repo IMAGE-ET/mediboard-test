@@ -655,6 +655,10 @@ span.hilite {
   background: #f5f;
 }
 
+span.empty {
+  color: #999;
+}
+
 /* control tabs */
 ul.control_tabs, 
 ul.control_tabs_vertical {
@@ -682,8 +686,7 @@ ul.control_tabs_vertical li a.active {
 }
 
 ul.control_tabs li a.empty, 
-ul.control_tabs_vertical li a.empty,
-span.empty {
+ul.control_tabs_vertical li a.empty {
   background-color: #ccc;
   color: #999;
 }
