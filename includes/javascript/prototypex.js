@@ -124,6 +124,12 @@ Class.extend(Autocompleter.Base, {
   onKeyPress: function(event) {
     if(this.active)
       switch(event.keyCode) {
+       // Hide list while typing letters
+       default:
+         this.update.update();
+         this.options.onHide(this.element, this.update);
+         break;
+        
        case Event.KEY_TAB:
          // Tab key should not select an element if this is a STR autocomplete
          if (this.element.hasClassName("str")) {
