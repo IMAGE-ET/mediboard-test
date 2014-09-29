@@ -1517,7 +1517,7 @@ class CPatient extends CPerson {
    * @return CPatientState|null
    */
   function loadLastState() {
-    return current($this->loadBackRefs("patient_state", "datetime", 1));
+    return current($this->loadBackRefs("patient_state", "datetime DESC", 1));
   }
 
   function loadRefsDocs() {
