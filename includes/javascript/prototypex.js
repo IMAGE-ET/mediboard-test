@@ -128,6 +128,7 @@ Class.extend(Autocompleter.Base, {
        default:
          this.update.update();
          this.options.onHide(this.element, this.update);
+         this.index = -1;
          break;
         
        case Event.KEY_TAB:
