@@ -41,39 +41,41 @@
         {{/if}}
         {{mb_key object=$subject}}
 
-        <div style="float: left">
-          {{mb_field object=$subject field="codes_ccam" hidden=true onchange="this.form.onsubmit()"}}
-          <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" style="width: 12em" value="" class="autocomplete" placeholder="Choisissez un acte" />
-          <div style="text-align: left; color: #000; display: none; width: 200px !important; font-weight: normal; font-size: 11px; text-shadow: none;"
-               class="autocomplete" id="_ccam_autocomplete_{{$subject->_guid}}"></div>
-          <script>
-            Main.add(function() {
-              var form = getForm("addActes-{{$obj_guid}}");
-              var url = new Url("ccam", "httpreq_do_ccam_autocomplete");
-              url.autoComplete(form._codes_ccam, "_ccam_autocomplete_{{$obj_guid}}", {
-                minChars: 1,
-                dropdown: true,
-                width: "250px",
-                updateElement: function(selected) {
-                  CCAMField{{$subject->_class}}{{$subject->_id}}.add(selected.down("strong").innerHTML);
-                }
-              });
-              CCAMField{{$subject->_class}}{{$subject->_id}} = new TokenField(form.elements["codes_ccam"], {
-                onChange : function() {
-                  form.onsubmit();
-                },
-                sProps : "notNull code ccam"
-              } );
-            })
-          </script>
-        </div>
-        <div style="text-align: right;">
-          {{foreach from=$subject->_codes_ccam item=_code_ccam}}
-            <button type="button" class="remove" onclick="CCAMField{{$subject->_class}}{{$subject->_id}}.remove('{{$_code_ccam}}')">
-              {{$_code_ccam}}
-            </button>
-          {{/foreach}}
-        </div>
+        {{if !$read_only}}
+          <div style="float: left">
+            {{mb_field object=$subject field="codes_ccam" hidden=true onchange="this.form.onsubmit()"}}
+            <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" style="width: 12em" value="" class="autocomplete" placeholder="Choisissez un acte" />
+            <div style="text-align: left; color: #000; display: none; width: 200px !important; font-weight: normal; font-size: 11px; text-shadow: none;"
+                 class="autocomplete" id="_ccam_autocomplete_{{$subject->_guid}}"></div>
+            <script>
+              Main.add(function() {
+                var form = getForm("addActes-{{$obj_guid}}");
+                var url = new Url("ccam", "httpreq_do_ccam_autocomplete");
+                url.autoComplete(form._codes_ccam, "_ccam_autocomplete_{{$obj_guid}}", {
+                  minChars: 1,
+                  dropdown: true,
+                  width: "250px",
+                  updateElement: function(selected) {
+                    CCAMField{{$subject->_class}}{{$subject->_id}}.add(selected.down("strong").innerHTML);
+                  }
+                });
+                CCAMField{{$subject->_class}}{{$subject->_id}} = new TokenField(form.elements["codes_ccam"], {
+                  onChange : function() {
+                    form.onsubmit();
+                  },
+                  sProps : "notNull code ccam"
+                } );
+              })
+            </script>
+          </div>
+          <div style="text-align: right;">
+            {{foreach from=$subject->_codes_ccam item=_code_ccam}}
+              <button type="button" class="remove" onclick="CCAMField{{$subject->_class}}{{$subject->_id}}.remove('{{$_code_ccam}}')">
+                {{$_code_ccam}}
+              </button>
+            {{/foreach}}
+          </div>
+        {{/if}}
         {{tr}}CActeCCAM{{/tr}}
       </form>
     </th>
