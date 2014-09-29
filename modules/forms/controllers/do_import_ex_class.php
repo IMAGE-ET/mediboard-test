@@ -17,6 +17,8 @@ $uid     = CValue::post("file_uid");
 $from_db = CValue::post("fromdb");
 $options = CValue::post("options");
 
+$options = stripslashes_deep($options);
+
 $options["ignore_disabled_fields"] = isset($options["ignore_disabled_fields"]);
 
 $uid = preg_replace('/[^\d]/', '', $uid);

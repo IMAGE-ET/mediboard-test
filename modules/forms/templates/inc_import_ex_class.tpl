@@ -54,7 +54,7 @@
           <td class="text">
             <ul>
               {{foreach from=$_list.elements item=_values}}
-                <li>{{$_values.name}} &mdash; {{if $_values.code !== ""}}{{$_values.code}}{{else}}<span class="empty">Aucune code</span>{{/if}}</li>
+                <li>{{$_values.name}} &mdash; {{if $_values.code !== ""}}{{$_values.code}}{{else}}<span class="empty">Aucun code</span>{{/if}}</li>
               {{/foreach}}
             </ul>
           </td>

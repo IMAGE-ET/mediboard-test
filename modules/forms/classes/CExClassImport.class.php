@@ -56,7 +56,10 @@ class CExClassImport extends CMbXMLObjectImport {
         if ($map_to == "__create__") {
           /** @var CExList $_ex_list */
           $_ex_list = $this->getObjectFromElement($element);
-          $_ex_list->name .= $this->name_suffix;
+          
+          if ($msg = $_ex_list->store()) {
+            $_ex_list->name .= $this->name_suffix;
+          }
           
           if ($msg = $_ex_list->store()) {
             CAppUI::stepAjax($msg, UI_MSG_WARNING);
@@ -99,7 +102,6 @@ class CExClassImport extends CMbXMLObjectImport {
         if ($map_to == "__create__") {
           /** @var CExConcept $_ex_concept */
           $_ex_concept = $this->getObjectFromElement($element);
-          $_ex_concept->name .= $this->name_suffix;
 
           if ($_ex_concept->ex_list_id) {
             $_ex_concept->updatePropFromList();
@@ -107,6 +109,10 @@ class CExClassImport extends CMbXMLObjectImport {
 
           $_ex_concept->prop = $_ex_concept->updateFieldProp($_ex_concept->prop);
 
+          if ($msg = $_ex_concept->store()) {
+            $_ex_concept->name .= $this->name_suffix;
+          }
+          
           if ($msg = $_ex_concept->store()) {
             CAppUI::stepAjax($msg, UI_MSG_WARNING);
             break;
