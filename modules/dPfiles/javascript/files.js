@@ -35,12 +35,12 @@ setObject = function(oObject){
   }
 };
 
-reloadListFileDossier = function(sAction){
+reloadListFileDossier = function(sAction) {
   var oForm = getForm('FrmClass');
   var sSelClass = oForm.selClass.value;
   var sSelKey   = oForm.selKey.value;
   
-  if($('tab-'+sSelClass+sSelKey)){
+  if ($('tab-'+sSelClass+sSelKey) || !oSelClass || !oSelKey) {
     return;
   }
   
@@ -69,6 +69,9 @@ reloadListFile = function(sAction, category_id){
     ZoomAjax('','','','', 0);
   }
   var oForm = getForm('FrmClass');
+  if (!oForm.selKey.value || !oForm.selClass.value) {
+    return;
+  }
   var url = new Url('files', 'httpreq_vw_listfiles');
   url.addParam('selKey', oForm.selKey.value);
   url.addParam('selClass', oForm.selClass.value);  
