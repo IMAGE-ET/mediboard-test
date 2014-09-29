@@ -95,6 +95,7 @@ else {
     $links = $pack->_back['modele_links'];
     $first_modele = reset($links);
     $first_modele = $first_modele->_ref_modele;
+    $compte_rendu->factory       = $first_modele->factory;
     $compte_rendu->margin_top    = $first_modele->margin_top;
     $compte_rendu->margin_left   = $first_modele->margin_left;
     $compte_rendu->margin_right  = $first_modele->margin_right;
