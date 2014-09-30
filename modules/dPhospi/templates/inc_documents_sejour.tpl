@@ -99,3 +99,7 @@
     </script>
   </div>
 {{/if}}
+
+{{if 'lifeline'|module_active}}
+  {{mb_include module=lifeline template=inc_get_lifeline_record patient_id=$sejour->patient_id}}
+{{/if}}
