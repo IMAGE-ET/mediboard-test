@@ -333,6 +333,7 @@ $locales['CRPU._can_leave_level.error'] = 'Ne doit pas sortir';
 $locales['CRPU._can_leave_level.ok'] = 'Peut sortir';
 $locales['CRPU._can_leave_level.warning'] = 'Ne peut pas sortir';
 $locales['CRPU._destination.'] = '-';
+$locales['CRPU._destination.0'] = 'Non applicable';
 $locales['CRPU._destination.1'] = 'Soins de courte durée';
 $locales['CRPU._destination.2'] = 'Soins de suite';
 $locales['CRPU._destination.3'] = 'Soins de longue durée';

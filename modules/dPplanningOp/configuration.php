@@ -16,9 +16,10 @@ CConfiguration::register(
     "CGroups" => array(
       "dPplanningOp" => array(
         "CSejour" => array(
-          "pass_to_confirm" => "bool default|0",
-          'entree_pre_op_ambu' => 'bool default|0',
-          'use_charge_price_indicator' => 'enum list|no|opt|obl localize default|no'
+          "pass_to_confirm"            => "bool default|0",
+          'entree_pre_op_ambu'         => 'bool default|0',
+          'use_charge_price_indicator' => 'enum list|no|opt|obl localize default|no',
+          "required_destination"       => "bool default|0",
         )
       )
     )

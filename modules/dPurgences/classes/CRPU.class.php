@@ -174,7 +174,7 @@ class CRPU extends CMbObject {
 
     $props["_DP"]                      = "code cim10 show|1";
     $props["_provenance"]              = "enum list|1|2|3|4|5|6|7|8";
-    $props["_destination"]             = "enum list|".implode("|", CSejour::$destination_values);
+    $props["_destination"]             = "enum list|0|".implode("|", CSejour::$destination_values);
     $props["_transport"]               = "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo notNull";
     $props["_mode_entree"]             = "enum list|6|7|8 notNull";
     $props["_mode_entree_id"]          = "ref class|CModeEntreeSejour autocomplete|libelle|true dependsOn|group_id|actif notNull";

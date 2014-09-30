@@ -384,8 +384,8 @@ Admissions = {
     var contrainteDestination = {
       "mutation"  : ["", 1, 2, 3, 4],
       "transfert" : ["", 1, 2, 3, 4],
-      "normal"    : ["", 6, 7],
-      "deces"     : [""]
+      "normal"    : ["", 0, 6, 7],
+      "deces"     : ["", 0]
     };
 
     var destination = form.elements.destination;
@@ -408,8 +408,13 @@ Admissions = {
     $A(destination).each(function (option) {
       option.disabled = !contrainteDestination[mode_sortie].include(option.value);
     });
+
     if (destination[destination.selectedIndex].disabled) {
       $V(destination, "");
+    }
+
+    if (!$V(destination) && destination.hasClassName("notNull") && (mode_sortie == "deces" || mode_sortie == "normal")) {
+      $V(destination, "0");
     }
 
     return true;

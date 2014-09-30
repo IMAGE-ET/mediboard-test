@@ -252,9 +252,19 @@
       <td colspan="3">{{mb_field object=$sejour field="commentaires_sortie" form=$form_name
         aidesaisie="resetSearchField: 0, resetDependFields: 0, validateOnBlur: 0"}}</td>
     </tr>
+    {{assign var=destination_notnull value=""}}
+    {{assign var=destination_value value=$sejour->destination}}
+    {{if "CAppUI::conf"|static_call:"dPplanningOp CSejour required_destination":"CGroups-$g"}}
+      {{assign var=destination_notnull value="notNull"}}
+      {{if !$sejour->destination && $sejour->mode_sortie == "normal" || $sejour->mode_sortie == "deces"}}
+        {{assign var=destination_value value=0}}
+      {{/if}}
+    {{/if}}
     <tr>
-      <th>{{mb_label object=$sejour field="destination"}}</th>
-      <td colspan="3">{{mb_field object=$sejour field="destination" emptyLabel="Choose"}}</td>
+      <th>{{mb_label object=$sejour field="destination" class=$destination_notnull}}</th>
+      <td colspan="3">
+        {{mb_field object=$sejour field="destination" emptyLabel="Choose" class=$destination_notnull value=$destination_value}}
+      </td>
     </tr>
     {{if $rpu && $rpu->_id}}
       <tr>

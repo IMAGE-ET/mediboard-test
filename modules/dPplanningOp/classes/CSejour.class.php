@@ -509,7 +509,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $props["ald"]                      = "bool default|0";
 
     $props["provenance"]               = "enum list|1|2|3|4|5|6|7|8";
-    $props["destination"]              = "enum list|".implode("|", self::$destination_values);
+    $props["destination"]              = "enum list|0|".implode("|", self::$destination_values);
     $props["transport"]                = "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo";
     $props["transport_sortie"]         = "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo";
     $props["rques_transport_sortie"]   = "text";
@@ -1526,6 +1526,10 @@ class CSejour extends CFacturable implements IPatientRelated {
       $annule = "0";
     }
     $this->annule = $annule;
+
+    if ($this->destination === 0) {
+      $this->destination = null;
+    }
 
     // Détail d'horaire d'entrée, ne pas comparer la date_entree_prevue à null
     // @todo Passer au TimePicker
