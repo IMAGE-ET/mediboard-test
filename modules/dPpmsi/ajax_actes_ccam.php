@@ -11,15 +11,17 @@
  * @link     http://www.mediboard.org
  */
 
-CCanDo::checkEdit();
-
 $subject_guid = CValue::get("subject_guid");
 $read_only    = CValue::getOrSession("read_only", 0);
 
+$subject = CMbObject::loadFromGuid($subject_guid);
+
+if (($read_only && !$subject->getPerm(PERM_READ)) || (!$read_only && !$subject->getPerm(PERM_EDIT))) {
+  CAppUI::redirect();
+}
+
 $prat = new CMediusers();
 $listPrats = $prat->loadPraticiens();
-
-$subject = CMbObject::loadFromGuid($subject_guid);
 
 $subject->loadRefsActes();
 $subject->loadExtCodesCCAM();
