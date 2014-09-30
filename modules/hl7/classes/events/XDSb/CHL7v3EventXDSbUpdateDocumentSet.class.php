@@ -12,10 +12,10 @@
  */
  
 /**
- * CHL7v3EventXDSUpdateDocumentSet
+ * CHL7v3EventXDSbUpdateDocumentSet
  * Update document set
  */
-class CHL7v3EventXDSUpdateDocumentSet extends CHL7v3EventXDS implements CHL7EventXDSUpdateDocumentSet {
+class CHL7v3EventXDSbUpdateDocumentSet extends CHL7v3EventXDSb implements CHL7EventXDSbUpdateDocumentSet {
   /** @var string */
   public $interaction_id = "UpdateDocumentSet";
 
