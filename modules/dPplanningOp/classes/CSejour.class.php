@@ -3385,6 +3385,14 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->_ref_last_affectation->loadView();
     $template->addProperty("Hospitalisation - Dernière affectation", $this->_ref_last_affectation->_view);
 
+    $affectations = array();
+    if (count($this->_ref_affectations)) {
+      foreach ($this->_ref_affectations as $_aff) {
+        $affectations[] = "$_aff->_view du ".CMbDT::format($_aff->entree, CAppUI::conf("datetime"))." au ".CMbDT::format($_aff->sortie, CAppUI::conf("datetime"));
+      }
+    }
+    $template->addListProperty("Sejour - Affectations" , $affectations);
+
     // Diagnostics
     $this->loadExtDiagnostics();
     $diag = $this->DP ? "$this->DP: {$this->_ext_diagnostic_principal->libelle}" : null;
