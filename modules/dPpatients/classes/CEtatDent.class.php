@@ -40,7 +40,7 @@ class CEtatDent extends CMbObject {
     $props = parent::getProps();
     $props["dossier_medical_id"] = "ref notNull class|CDossierMedical";
     $props["dent"]               = "num notNull pos";
-    $props["etat"]               = "enum list|bridge|pivot|mobile|appareil|implant|defaut";
+    $props["etat"]               = "enum list|bridge|pivot|mobile|appareil|implant|defaut|absence|app-partiel";
     return $props;
   }
 

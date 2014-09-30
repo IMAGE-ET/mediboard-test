@@ -80,6 +80,10 @@ div.progressBar_dispo div.disponibility_planning_1 {
   background: red;
 }
 
+.schema-dentaire .absence {
+  background: #999999;
+}
+
 .schema-dentaire .bridge {
   background: #6699FF;
 }
@@ -98,6 +102,10 @@ div.progressBar_dispo div.disponibility_planning_1 {
 
 .schema-dentaire .appareil {
   background: #FF66FF;
+}
+
+.schema-dentaire .app-partiel {
+  background: #8888ff;
 }
 
 .dent-menu {
@@ -136,6 +144,16 @@ div.progressBar_dispo div.disponibility_planning_1 {
 
 .dent-legend {
   right: 0;
+  width: 170px;
+  height: 120px;
+  font-size: 0.9em;
+}
+
+.dent-legend a {
+  display: inline-block !important;
+  width: 52px;
+  float: left;
+  color: #000000;
 }
 
 .dent-buttons {

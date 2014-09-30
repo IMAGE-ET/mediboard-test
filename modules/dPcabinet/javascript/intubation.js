@@ -106,25 +106,29 @@ SchemaDentaire = {
     }
     
     // Menu initialization
-    var oMenu = new Element('div', {id: this.sId+'-menu'}).addClassName('dent-menu'),
-        oLegend = new Element('div', {id: this.sId+'-legend'}).addClassName('dent-legend');
+    var oMenu   = DOM.div({id: this.sId+'-menu',   className: 'dent-menu'}),
+        oLegend = DOM.div({id: this.sId+'-legend', className: 'dent-legend'});
     
     // Buttons initialization
-    var oActions = new Element('div').addClassName('dent-buttons'),
-        oButton = new Element('a', {href: '#1'}).addClassName('button cancel').update($T('Reset')).observe('click', this.reset.bindAsEventListener(this));
+    var oActions = DOM.div({className: 'dent-buttons'}),
+        oButton  = DOM.a({href: '#1', className: 'button cancel'}, $T('Reset')).observe('click', this.reset.bindAsEventListener(this));
     oActions.insert({top: oButton});
     
     // For each possible state, we add a link in the menu and an item in the legend
-    var oClose = new Element('a').addClassName('cancel').update('x').observe('click', this.closeMenu.bindAsEventListener(this));
+    var oClose = DOM.a({className: 'cancel'}, 'x').observe('click', this.closeMenu.bindAsEventListener(this));
     oMenu.insert({bottom: oClose});
     
     // Options and legend items
     states.each (function (o) {
-      var oOption = new Element('a');
-      
+      var oOption = DOM.a();
       var className = o || 'none',
-          label = o ? o.capitalize() : 'Aucun';
-      var oItem = new Element('a', {href: '#1', style: 'display: block;'}).addClassName(className).update(label).observe('click', (function(){this.setPaint(className)}).bindAsEventListener(this));
+          label = $T("CEtatDent.etat."+o);
+      
+      var oItem = DOM.a({href: '#1', style: 'display: block;', className: className}, label)
+        .observe('click', (function(){
+          this.setPaint(className);
+        }).bindAsEventListener(this));
+      
       oLegend.insert({bottom: oItem});
 
       oOption.addClassName(className).update(label);
@@ -149,8 +153,7 @@ SchemaDentaire = {
             r = parseInt(area[2]);
         
         // New div for the tooth
-        var oDent = new Element('div');
-        oDent.addClassName('dent');
+        var oDent = DOM.div({className: 'dent'});
         oDent.setStyle({
           top: y-r+'px',
           left: x-r+'px',
@@ -178,10 +181,11 @@ SchemaDentaire = {
   },
   
   setPaint: function(state) {
-    $('dents-schema-legend').childElements().invoke('removeClassName', 'active');
+    var legend = $('dents-schema-legend');
+    legend.childElements().invoke('removeClassName', 'active');
     if (this.sPaint != state) {
       this.sPaint = state;
-      $('dents-schema-legend').down('.'+state).addClassName('active');
+      legend.down('.'+state).addClassName('active');
     }
     else {
       this.sPaint = null;

@@ -2687,7 +2687,15 @@ class CSetupdPpatients extends CSetup {
 
     $this->addFunctionalPermQuery("allowed_modify_identity_status", "0");
 
-    $this->mod_version = "2.18";
+    $this->makeRevision("2.18");
+    $this->addPrefQuery("new_date_naissance_selector", "0");
+
+    $this->makeRevision("2.19");
+    $query = "ALTER TABLE `etat_dent`
+                CHANGE `etat` `etat` ENUM ('bridge','pivot','mobile','appareil','implant','defaut','absence','app-partiel');";
+    $this->addQuery($query);
+
+    $this->mod_version = "2.20";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

@@ -14,7 +14,7 @@
   };
 
   Main.add(function() {
-    var states = [0, 'defaut', 'bridge', 'pivot', 'mobile', 'appareil', 'implant'];
+    var states = ['', 'defaut', 'absence', 'bridge', 'pivot', 'mobile', 'appareil', 'app-partiel', 'implant'];
     SchemaDentaire.initialize("dents-schema", states);
   } );
 </script>
