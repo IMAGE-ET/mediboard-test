@@ -33,6 +33,10 @@ class CDoPatientAddEdit extends CDoObjectAddEdit {
       $this->redirectStore .= "&a=pat_selector&dialog=1&name=".$this->_obj->nom.
         "&firstName=".$this->_obj->prenom.
         "&useVitale=".$this->_obj->_bind_vitale;
+
+      if (CAppUI::conf("dPpatients CPatient auto_selected_patient", CGroups::loadCurrent())) {
+        $this->redirectStore .= "&patient_id=".$this->_obj->patient_id;
+      }
     }
     else {
       $this->redirectStore .= "&m=dPpatients&tab=vw_idx_patients&id=".$this->_obj->patient_id;

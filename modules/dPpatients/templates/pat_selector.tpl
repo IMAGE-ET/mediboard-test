@@ -56,6 +56,12 @@ var Patient = {
   urlFSE.addParam("useVitale", 1);
   urlFSE.addParam("dialog", 1);
 {{/if}}
+
+{{if $patient}}
+  Main.add(function () {
+    Patient.select('{{$patient->_id}}', '{{$patient->_view}}', '{{$patient->sexe}}');
+  });
+{{/if}}
 </script>
 
 <div id="modal-beneficiaire" style="display:none; text-align:center;">

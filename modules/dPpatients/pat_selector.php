@@ -187,6 +187,13 @@ foreach ($patientsLimited as $_patient) {
   $_patient->loadView();
 }
 
+$patient_id = CValue::get("patient_id");
+$patient = null;
+if ($patient_id) {
+  $patient =  new CPatient();
+  $patient->load($patient_id);
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -202,5 +209,6 @@ $smarty->assign("patientsLimited"     , $patientsLimited );
 $smarty->assign("patientsSoundex"     , $patientsSoundex );
 $smarty->assign("patient_ipp"         , $patient_ipp     );
 $smarty->assign("datePat"             , "$patient_year-$patient_month-$patient_day");
+$smarty->assign("patient"             , $patient);
 
 $smarty->display("pat_selector.tpl");

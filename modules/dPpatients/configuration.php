@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage Patients
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 $selection = array(
@@ -52,6 +52,7 @@ CConfiguration::register(
           'anonymous_naissance'       => "str default|1970-01-01",
           'anonymous_sexe'            => "enum list|m|f default|m",
           'manage_identity_status'    => "bool default|0",
+          'auto_selected_patient'     => "bool default|0",
         ),
         'CConstantesMedicales' => array(
           'unite_ta'        => 'enum list|cmHg|mmHg default|' . CAppUI::conf('dPpatients CConstantesMedicales unite_ta'),
