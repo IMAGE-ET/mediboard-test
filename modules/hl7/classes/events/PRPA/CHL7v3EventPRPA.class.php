@@ -539,16 +539,16 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
     $contactPerson = $dom->addElement($contactParty, "contactPerson");
     $name = $dom->addElement($contactPerson, "name");
 
-    $family = $dom->addElement($name, "family", $patient->_dmp_vitale_nom_usuel);
+    $family = $dom->addElement($name, "family", $patient->_vitale_lastname);
     $this->setQualifier($family, "SP");
 
-    $family = $dom->addElement($name, "family", $patient->_dmp_vitale_nom_patronymique);
+    $family = $dom->addElement($name, "family", $patient->_vitale_birthname);
     $this->setQualifier($family, "BR");
 
-    $dom->addElement($name, "given", $patient->_dmp_vitale_prenom_usuel);
+    $dom->addElement($name, "given", $patient->_vitale_firstname);
 
     $birthTime = $dom->addElement($contactPerson, "birthTime");
-    $date = $patient->_dmp_vitale_date;
+    $date = $patient->_vitale_birthdate;
     if (strlen($date) > 6) {
       list($day, $month, $year, $year2) = str_split($date, 2);
       $date = $day.$month.$year2;

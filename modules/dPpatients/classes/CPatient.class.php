@@ -218,6 +218,7 @@ class CPatient extends CPerson {
   public $_update_vitale;
   public $_id_vitale;
   public $_vitale_lastname;
+  public $_vitale_birthname;
   public $_vitale_firstname;
   public $_vitale_birthdate;
   public $_vitale_nir_certifie;
@@ -253,11 +254,6 @@ class CPatient extends CPerson {
 
   /** @var  CMediusers */
   public $_dmp_mediuser;
-  public $_dmp_vitale_nir_certifie;
-  public $_dmp_vitale_nom_usuel;
-  public $_dmp_vitale_nom_patronymique;
-  public $_dmp_vitale_prenom_usuel;
-  public $_dmp_vitale_date;
   public $_dmp_reactivation_dmp;
   public $_dmp_reason_close;
 
@@ -533,15 +529,12 @@ class CPatient extends CPerson {
     $props["_dmp_medecin_traitant"]     = "bool";
     $props["_dmp_urgence_15"]           = "bool";
     $props["_dmp_urgence_PS"]           = "bool";
-    //@todo à factoriser _dmp_vitale et _vitale
-    $props["_dmp_vitale_nir_certifie"]     = "str confidential";
-    $props["_dmp_vitale_nom_usuel"]        = "str";
-    $props["_dmp_vitale_nom_patronymique"] = "str";
-    $props["_dmp_vitale_prenom_usuel"]     = "str";
-    $props["_dmp_vitale_date"]             = "str confidential";
     $props["_dmp_reactivation_dmp"]        = "str";
     $props["_dmp_reason_close"]            = "text";
+
+    //données provenant de la carte vitale
     $props["_vitale_lastname"]             = "str";
+    $props["_vitale_birthname"]            = "str";
     $props["_vitale_firstname"]            = "str";
     $props["_vitale_birthdate"]            = "str confidential";
     $props["_vitale_nir_certifie"]         = "str confidential";
