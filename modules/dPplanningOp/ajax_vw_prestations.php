@@ -104,15 +104,17 @@ foreach ($prestations_j as $_prestation_id => $_prestation) {
     $date_modif[$date_temp] = 1;
     $save_liaison = $liaisons_j_date[$_prestation_id];
     
-      $item_liaison->item_souhait_id         = $save_liaison->item_souhait_id;
-      $item_liaison->item_realise_id         = $save_liaison->item_realise_id;
-      $item_liaison->_ref_item->_id          = $save_liaison->_ref_item->_id;
-      $item_liaison->_ref_item->nom          = $save_liaison->_ref_item->nom;
-      $item_liaison->_ref_item->rank         = $save_liaison->_ref_item->rank;
-      $item_liaison->_ref_item_realise->_id  = $save_liaison->_ref_item_realise->_id;
-      $item_liaison->_ref_item_realise->nom  = $save_liaison->_ref_item_realise->nom;
-      $item_liaison->_ref_item_realise->rank = $save_liaison->_ref_item_realise->rank;
-    
+      $item_liaison->item_souhait_id          = $save_liaison->item_souhait_id;
+      $item_liaison->item_realise_id          = $save_liaison->item_realise_id;
+      $item_liaison->_ref_item->_id           = $save_liaison->_ref_item->_id;
+      $item_liaison->_ref_item->nom           = $save_liaison->_ref_item->nom;
+      $item_liaison->_ref_item->rank          = $save_liaison->_ref_item->rank;
+      $item_liaison->_ref_item->color         = $save_liaison->_ref_item->color;
+      $item_liaison->_ref_item_realise->_id   = $save_liaison->_ref_item_realise->_id;
+      $item_liaison->_ref_item_realise->nom   = $save_liaison->_ref_item_realise->nom;
+      $item_liaison->_ref_item_realise->rank  = $save_liaison->_ref_item_realise->rank;
+      $item_liaison->_ref_item_realise->color = $save_liaison->_ref_item_realise->color;
+
     $save_state[$_prestation_id] = $item_liaison;
   }
   else {
@@ -141,29 +143,31 @@ foreach ($dates as $_date => $_value) {
       $date_modif[$_date] = 1;
       $save_liaison = $liaisons_j_date[$_prestation_id];
       
-        $item_liaison->item_souhait_id         = $save_liaison->item_souhait_id;
-        $item_liaison->item_realise_id         = $save_liaison->item_realise_id;
-        $item_liaison->_ref_item->_id          = $save_liaison->_ref_item->_id;
-        $item_liaison->_ref_item->nom          = $save_liaison->_ref_item->nom;
-        $item_liaison->_ref_item->rank         = $save_liaison->_ref_item->rank;
-        $item_liaison->_ref_item_realise->_id  = $save_liaison->_ref_item_realise->_id;
-        $item_liaison->_ref_item_realise->nom  = $save_liaison->_ref_item_realise->nom;
-        $item_liaison->_ref_item_realise->rank = $save_liaison->_ref_item_realise->rank;
-      
+        $item_liaison->item_souhait_id          = $save_liaison->item_souhait_id;
+        $item_liaison->item_realise_id          = $save_liaison->item_realise_id;
+        $item_liaison->_ref_item->_id           = $save_liaison->_ref_item->_id;
+        $item_liaison->_ref_item->nom           = $save_liaison->_ref_item->nom;
+        $item_liaison->_ref_item->rank          = $save_liaison->_ref_item->rank;
+        $item_liaison->_ref_item->color         = $save_liaison->_ref_item->color;
+        $item_liaison->_ref_item_realise->_id   = $save_liaison->_ref_item_realise->_id;
+        $item_liaison->_ref_item_realise->nom   = $save_liaison->_ref_item_realise->nom;
+        $item_liaison->_ref_item_realise->rank  = $save_liaison->_ref_item_realise->rank;
+        $item_liaison->_ref_item_realise->color = $save_liaison->_ref_item_realise->color;
       $save_state[$_prestation_id] = $item_liaison;
     }
     else {
       $save_liaison = $save_state[$_prestation_id];
       
-        $item_liaison->item_souhait_id         = $save_liaison->item_souhait_id;
-        $item_liaison->item_realise_id         = $save_liaison->item_realise_id;
-        $item_liaison->_ref_item->_id          = $save_liaison->_ref_item->_id;
-        $item_liaison->_ref_item->nom          = $save_liaison->_ref_item->nom;
-        $item_liaison->_ref_item->rank         = $save_liaison->_ref_item->rank;
-        $item_liaison->_ref_item_realise->_id  = $save_liaison->_ref_item_realise->_id;
-        $item_liaison->_ref_item_realise->nom  = $save_liaison->_ref_item_realise->nom;
-        $item_liaison->_ref_item_realise->rank = $save_liaison->_ref_item_realise->rank;
-      
+        $item_liaison->item_souhait_id          = $save_liaison->item_souhait_id;
+        $item_liaison->item_realise_id          = $save_liaison->item_realise_id;
+        $item_liaison->_ref_item->_id           = $save_liaison->_ref_item->_id;
+        $item_liaison->_ref_item->nom           = $save_liaison->_ref_item->nom;
+        $item_liaison->_ref_item->rank          = $save_liaison->_ref_item->rank;
+        $item_liaison->_ref_item->color         = $save_liaison->_ref_item->color;
+        $item_liaison->_ref_item_realise->_id   = $save_liaison->_ref_item_realise->_id;
+        $item_liaison->_ref_item_realise->nom   = $save_liaison->_ref_item_realise->nom;
+        $item_liaison->_ref_item_realise->rank  = $save_liaison->_ref_item_realise->rank;
+        $item_liaison->_ref_item_realise->color = $save_liaison->_ref_item_realise->color;
       $liaisons_j_date[$_prestation_id] = $item_liaison;
       
     }

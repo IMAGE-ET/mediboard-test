@@ -37,7 +37,12 @@
           <div class="rank">{{$_item->rank}}</div>          
         </td>
       {{/if}}
-      <td><a href="#1" onclick="updateSelected('{{$_item->_id}}', 'item'); editItem('{{$_item->_id}}')">{{mb_value object=$_item field=nom}}</a></td>
+      <td>
+        <a href="#1" onclick="updateSelected('{{$_item->_id}}', 'item'); editItem('{{$_item->_id}}')" class="mediuser"
+           style="border-left-color: #{{$_item->color}}">
+          {{mb_value object=$_item field=nom}}
+        </a>
+      </td>
     </tr>
   {{foreachelse}}
     <tr>

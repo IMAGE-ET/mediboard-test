@@ -12,14 +12,15 @@
 /**
  * Items de prestation
  */
-class CItemPrestation extends CMbMetaObject{
+class CItemPrestation extends CMbMetaObject {
   // DB Table key
   public $item_prestation_id;
   
   // DB Fields
   public $nom;
   public $rank;
-  
+  public $color;
+
   // Form field
   public $_quantite;
 
@@ -40,12 +41,14 @@ class CItemPrestation extends CMbMetaObject{
    * @see parent::getProps()
    */
   function getProps() {
-    $specs = parent::getProps();
-    $specs["nom"]          = "str notNull seekable";
+    $props = parent::getProps();
+    $props["nom"]          = "str notNull seekable";
     /*$specs["object_id"]    = "ref notNull class|CMbObject meta|object_class";*/
-    $specs["object_class"] = "enum list|CPrestationPonctuelle|CPrestationJournaliere";
-    $specs["rank"]         = "num pos default|1";
-    return $specs;
+    $props["object_class"] = "enum list|CPrestationPonctuelle|CPrestationJournaliere";
+    $props["rank"]         = "num pos default|1";
+    $props["color"]        = "color show|0";
+
+    return $props;
   }
 
   /**
@@ -62,7 +65,7 @@ class CItemPrestation extends CMbMetaObject{
   /**
    * @see parent::updateFormFields()
    */
-  function updateFormFields () {
+  function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;
   }
@@ -72,7 +75,7 @@ class CItemPrestation extends CMbMetaObject{
    *
    * @return CPrestationPonctuelle|CPrestationJournaliere
    */
-  function loadRefObject(){
+  function loadRefObject() {
     $this->_ref_object = new $this->object_class;
     return $this->_ref_object = $this->_ref_object->getCached($this->object_id);
   }

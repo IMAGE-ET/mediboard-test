@@ -192,8 +192,8 @@
                         ($object->entree != $sejour->entree && !$object->_ref_prev->effectue)) || (!$is_aff && !$sejour->entree_reelle)}}
                         color: #A33;
                       {{elseif $is_aff && $object->effectue}}
-                        text-decoration: line-through
-                      {{/if}}">
+                        text-decoration: line-through;
+                      {{/if}} margin-bottom: 1px;">
                       <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}');" class="CPatient-view {{if $sejour->recuse == "-1"}}opacity-70{{/if}}">
                         {{if $sejour->recuse == "-1"}}[Att] {{/if}}{{$patient}}
                         {{if "dPImeds"|module_active}}

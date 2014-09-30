@@ -183,7 +183,8 @@
                                 autoRealiser(this);
                               {{/if}}"
                             
-                            {{if $liaison->item_souhait_id == $_item->_id}}checked="checked"{{/if}} value="{{$_item->_id}}"/>{{$_item->nom}}
+                            {{if $liaison->item_souhait_id == $_item->_id}}checked="checked"{{/if}} value="{{$_item->_id}}"/>
+                          <span {{if $_item->color}}class="mediuser" style="border-left-color: #{{$_item->color}}"{{/if}}>{{$_item->nom}}</span>
                         </label>
                       {{/foreach}}
                     </td>
@@ -200,7 +201,8 @@
                             {{if $liaison->_id == "temp"}}
                               onclick="switchToNew(this)"
                             {{/if}}
-                            {{if $liaison->item_realise_id == $_item->_id}}checked="checked"{{/if}} value="{{$_item->_id}}"/>{{$_item->nom}}
+                            {{if $liaison->item_realise_id == $_item->_id}}checked="checked"{{/if}} value="{{$_item->_id}}"/>
+                          <span {{if $_item->color}}class="mediuser" style="border-left-color: #{{$_item->color}}"{{/if}}>{{$_item->nom}}</span>
                         </label>
                       {{/foreach}}
                     </td>
@@ -238,14 +240,22 @@
 
               {{if $item_presta->_id}}
                 {{if $item_presta_realise->_id && $item_presta->nom != $item_presta_realise->nom}}
-                  {{$item_presta_realise->nom}} <br />
+                  <span {{if $item_presta_realise->color}}class="mediuser" style="border-left-color: #{{$item_presta_realise->color}}"{{/if}}>
+                    {{$item_presta_realise->nom}}
+                  </span> <br />
                   vs. <br />
-                  {{$item_presta->nom}}
+                  <span {{if $item_presta->color}}class="mediuser" style="border-left-color: #{{$item_presta->color}}"{{/if}}>
+                    {{$item_presta->nom}}
+                  </span>
                 {{else}}
-                  {{$item_presta->nom}}
+                  <span {{if $item_presta->color}}class="mediuser" style="border-left-color: #{{$item_presta->color}}"{{/if}}>
+                    {{$item_presta->nom}}
+                  </span>
                 {{/if}}
               {{elseif $item_presta_realise->_id}}
-                {{$item_presta_realise->nom}}
+                <span {{if $item_presta_realise->color}}class="mediuser" style="border-left-color: #{{$item_presta_realise->color}}"{{/if}}>
+                  {{$item_presta_realise->nom}}
+                </span>
               {{/if}}
             </td>
           {{/foreach}}
@@ -258,7 +268,8 @@
                     {{foreach from=$_liaisons_by_prestation item=_liaison}}
                       {{assign var=_item value=$_liaison->_ref_item}}
                       <div style="float: left; width: 8em;">
-                        <span onmouseover="ObjectTooltip.createEx(this, '{{$_item->_guid}}');">
+                        <span onmouseover="ObjectTooltip.createEx(this, '{{$_item->_guid}}');"
+                              {{if $_item->color}}class="mediuser" style="border-left-color: #{{$_item->color}}"{{/if}}>
                           {{$_item}}
                         </span> :
                       </div>

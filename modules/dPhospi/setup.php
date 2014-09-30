@@ -791,6 +791,11 @@ class CSetupdPhospi extends CSetup {
                 ADD INDEX (`date_fin`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.87";
+    $this->makeRevision("0.87");
+    $query = "ALTER TABLE `item_prestation`
+      ADD `color` VARCHAR (6);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.88";
   }
 }
