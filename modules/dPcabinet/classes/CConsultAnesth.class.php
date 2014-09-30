@@ -48,6 +48,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
   public $edentation;
   public $ronflements;
   public $barbe;
+  public $piercing;
 
   // Examen clinique
   public $examenCardio;
@@ -204,6 +205,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
     $props["edentation"]       = "bool";
     $props["ronflements"]      = "bool";
     $props["barbe"]            = "bool";
+    $props["piercing"]         = "bool";
     $props["examenCardio"]     = "text helped";
     $props["examenPulmo"]      = "text helped";
     $props["examenDigest"]     = "text helped";
@@ -648,6 +650,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
     $ventilation.= $this->edentation ? "Edentation, ": "";
     $ventilation.= $this->ronflements ? "Ronflements, ": "" ;
     $ventilation.= $this->barbe ? "Barbe": "" ;
+    $ventilation.= $this->piercing ? "Piercing": "" ;
     $template->addProperty("Anesthésie - Critères de ventilation"   , $ventilation ? $ventilation : "Aucun", null, false);
 
     $template->addProperty("Anesthésie - Distance thyro-mentonnière", $this->getFormattedValue('distThyro'), null, false);

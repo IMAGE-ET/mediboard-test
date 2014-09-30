@@ -2201,6 +2201,11 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("2.39");
 
     $this->addDefaultConfig("dPcabinet CPrescription view_prescription_externe", "dPcabinet CPrescription view_prescription");
-    $this->mod_version = '2.40';
+    $this->makeRevision("2.40");
+
+    $query = "ALTER TABLE `consultation_anesth`
+                ADD `piercing` ENUM ('0','1') DEFAULT '0' AFTER `ronflements`;";
+    $this->addQuery($query);
+    $this->mod_version = '2.41';
   }
 }

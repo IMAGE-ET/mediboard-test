@@ -534,6 +534,7 @@
             {{if $dossier_anesth->edentation}}{{mb_label object=$dossier_anesth field=edentation}}<br/>{{/if}}
             {{if $dossier_anesth->ronflements}}{{mb_label object=$dossier_anesth field=ronflements}}<br/>{{/if}}
             {{if $dossier_anesth->barbe}}{{mb_label object=$dossier_anesth field=barbe}}{{/if}}
+            {{if $dossier_anesth->piercing}}{{mb_label object=$dossier_anesth field=piercing}}{{/if}}
           </td>
         </tr>
         <tr>

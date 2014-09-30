@@ -1,14 +1,3 @@
-{{*
- * $Id$
- *  
- * @category Cabinet
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision$
- * @link     http://www.mediboard.org
-*}}
-
 <table class="layout">
   <tr>
     <td>
@@ -32,6 +21,10 @@
     <td>
       {{mb_field object=$consult_anesth field=ronflements typeEnum=checkbox onchange="verifIntubDifficileAndSave(this.form);"}}
       {{mb_label object=$consult_anesth field=ronflements}}
+    </td>
+    <td>
+      {{mb_field object=$consult_anesth field=piercing typeEnum=checkbox onchange="verifIntubDifficileAndSave(this.form);"}}
+      {{mb_label object=$consult_anesth field=piercing}}
     </td>
   </tr>
 </table>
