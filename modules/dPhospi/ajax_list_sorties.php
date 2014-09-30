@@ -19,6 +19,7 @@ $order_col      = CValue::getOrSession("order_col"   , "_patient");
 $show_duree_preop = CAppUI::conf("dPplanningOp COperation show_duree_preop");
 $show_hour_anesth = CAppUI::conf("dPhospi show_hour_anesth_mvt");
 $mode           = CValue::getOrSession("mode", 0);
+$prestation_id  = CValue::getOrSession("prestation_id");
 
 $hour_instantane = CValue::getOrSession("hour_instantane", CMbDT::format(CMbDT::time(), "%H"));
 
@@ -179,6 +180,11 @@ if ($type == "presents") {
     }
 
     $_present->_ref_next->loadRefLit(1)->loadCompleteView();
+
+    if ($prestation_id) {
+      $sejour->loadRefFirstLiaisonForPrestation($prestation_id);
+      $sejour->loadLiaisonsForPrestation($prestation_id, $date);
+    }
   }
 
   if ($order_col == "_chambre") {
@@ -214,6 +220,10 @@ if ($type == "presents") {
       foreach ($sejour->_ref_operations as $_interv) {
         $_interv->getDMIAlert();
       }
+    }
+    if ($prestation_id) {
+      $sejour->loadRefFirstLiaisonForPrestation($prestation_id);
+      $sejour->loadLiaisonsForPrestation($prestation_id, $date);
     }
   }
 
@@ -285,6 +295,11 @@ elseif ($type == "deplacements") {
       $op->loadRefPlageOp();
       $op->_ref_anesth->loadRefFunction();
     }
+
+    if ($prestation_id) {
+      $sejour->loadRefFirstLiaisonForPrestation($prestation_id);
+      $sejour->loadLiaisonsForPrestation($prestation_id, $date);
+    }
   }
   
   $dep_entrants_by_service = array();
@@ -345,7 +360,12 @@ elseif ($type_mouvement == "entrees") {
         $_interv->getDMIAlert();
       }
     }
-    
+
+    if ($prestation_id) {
+      $sejour->loadRefFirstLiaisonForPrestation($prestation_id);
+      $sejour->loadLiaisonsForPrestation($prestation_id, $date);
+    }
+
     $_mouvement->_ref_next->loadRefLit(1)->loadCompleteView();
   }
   
@@ -377,6 +397,11 @@ elseif ($type_mouvement == "entrees") {
       foreach ($sejour->_ref_operations as $_interv) {
         $_interv->getDMIAlert();
       }
+    }
+
+    if ($prestation_id) {
+      $sejour->loadRefFirstLiaisonForPrestation($prestation_id);
+      $sejour->loadLiaisonsForPrestation($prestation_id, $date);
     }
   }
 
@@ -445,7 +470,12 @@ else {
         $_interv->getDMIAlert();
       }
     }
-    
+
+    if ($prestation_id) {
+      $sejour->loadRefFirstLiaisonForPrestation($prestation_id);
+      $sejour->loadLiaisonsForPrestation($prestation_id, $date);
+    }
+
     $_mouvement->_ref_next->loadRefLit(1)->loadCompleteView();
   }
   
@@ -478,6 +508,11 @@ else {
       foreach ($sejour->_ref_operations as $_interv) {
         $_interv->getDMIAlert();
       }
+    }
+
+    if ($prestation_id) {
+      $sejour->loadRefFirstLiaisonForPrestation($prestation_id);
+      $sejour->loadLiaisonsForPrestation($prestation_id, $date);
     }
   }
 

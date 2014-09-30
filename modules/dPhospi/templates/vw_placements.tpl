@@ -414,7 +414,7 @@
   <input type="hidden" name="m" value="admin" />
   <input type="hidden" name="dosql" value="do_preference_aed" />
   <input type="hidden" name="user_id" value="{{$app->user_id}}" />
-  <input type="hidden" name="pref[prestation_id_hospi]" value="" />
+  <input type="hidden" name="pref[prestation_id_hospi]" />
 </form>
 
 <!-- Formulaire de changement de service d'une affectation dans un couloir (pas de lit_id) -->

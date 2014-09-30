@@ -26,6 +26,8 @@
       {{if !$sejour->entree_reelle}} class="patient-not-arrived"{{/if}}>
       {{$patient}}
     </strong>
+    <br />
+    {{mb_include module=hospi template=inc_vw_liaisons_prestation liaisons=$sejour->_liaisons_for_prestation}}
   </td>
 
   {{if $show_age_sexe_mvt}}

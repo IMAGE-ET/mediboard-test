@@ -45,6 +45,7 @@
     }
     url.addParam("vue", $V(oForm.vue));
     url.addParam("date", $V(oForm.date));
+    url.addParam("prestation_id", $V(oForm.prestation_id));
     if (type) {
       if (type_mouvement) {
         url.requestUpdate(type+"_"+type_mouvement);
@@ -80,7 +81,23 @@
       form.elements._date_deces_da.addClassName("notNull");
     }
   }
+
+  savePrefAndReload = function(prestation_id) {
+    var form = getForm("editPrefPresta");
+    $V(form.elements["pref[prestation_id_hospi]"], prestation_id);
+    return onSubmitFormAjax(form, function() {
+      getForm("typeVue").submit();
+    });
+  }
 </script>
+
+<!-- Formulaire de sauvegarde de l'axe de prestation en préférence utilisateur -->
+<form name="editPrefPresta" method="post">
+  <input type="hidden" name="m" value="admin" />
+  <input type="hidden" name="dosql" value="do_preference_aed" />
+  <input type="hidden" name="user_id" value="{{$app->user_id}}" />
+  <input type="hidden" name="pref[prestation_id_hospi]" />
+</form>
 
 <table class="main">
   <tr>
@@ -94,7 +111,7 @@
         <select name="type_hospi" style="width: 13em;" onchange="this.form.submit()">
           <option value="">&mdash; Type d'hospitalisation</option>
           {{foreach from=$mouvements item=_mouvement key=type}}
-          <option value="{{$type}}" {{if $type == $type_hospi}}selected="selected"{{/if}}>
+          <option value="{{$type}}" {{if $type == $type_hospi}}selected{{/if}}>
             {{tr}}CSejour._type_admission.{{$type}}{{/tr}}
           </option>
           {{/foreach}}
@@ -102,13 +119,25 @@
         <select name="praticien_id" style="width: 13em;" onchange="this.form.submit()">
           <option value="">&mdash; Praticien</option>
           {{foreach from=$praticiens item=_prat}}
-          <option value="{{$_prat->_id}}" {{if $_prat->_id == $praticien_id}}selected="selected"{{/if}}>{{$_prat}}</option>
+          <option value="{{$_prat->_id}}" {{if $_prat->_id == $praticien_id}}selected{{/if}}>{{$_prat}}</option>
           {{/foreach}}
         </select>
         <select name="vue" style=" width: 12em;" onchange="this.form.submit()">
-          <option value="0" {{if $vue == 0}} selected="selected"{{/if}}>Afficher les validés</option>
-          <option value="1" {{if $vue == 1}} selected="selected"{{/if}}>Ne pas afficher les validés</option>
+          <option value="0" {{if $vue == 0}}selected{{/if}}>Afficher les validés</option>
+          <option value="1" {{if $vue == 1}}selected{{/if}}>Ne pas afficher les validés</option>
         </select>
+        {{if $conf.dPhospi.systeme_prestations == "expert"}}
+          &mdash;
+
+          Axe de prestation :
+          <select name="prestation_id" onchange="savePrefAndReload(this.value);">
+            <option value="">&mdash; {{tr}}None{{/tr}}</option>
+            <option value="all" {{if $prestation_id == "all"}}selected{{/if}}>{{tr}}All{{/tr}}</option>
+            {{foreach from=$prestations_journalieres item=_prestation}}
+              <option value="{{$_prestation->_id}}" {{if $_prestation->_id == $prestation_id}}selected{{/if}}>{{$_prestation->nom}}</option>
+            {{/foreach}}
+          </select>
+        {{/if}}
         <button type="button" onclick="selectServices();" class="search">Services</button>
       </form>
     </td>

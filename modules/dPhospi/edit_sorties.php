@@ -17,6 +17,10 @@ $vue        = CValue::getOrSession("vue", 0);
 $group_id   = CValue::get("g");
 $mode       = CValue::getOrSession("mode", 0);
 $hour_instantane = CValue::getOrSession("hour_instantane", CMbDT::format(CMbDT::time(), "%H"));
+$prestation_id = CValue::getOrSession("prestation_id", CAppUI::pref("prestation_id_hospi"));
+
+// Si c'est la préférence utilisateur, il faut la mettre en session
+CValue::setSession("prestation_id", $prestation_id);
 
 $mouvements = array("comp" => array("entrees" => array("place" => 0, "non_place" => 0),
                                     "sorties" => array("place" => 0, "non_place" => 0)),
@@ -205,5 +209,7 @@ $smarty->assign("date"        , $date);
 $smarty->assign("mode"        , $mode);
 $smarty->assign("hour_instantane", $hour_instantane);
 $smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
+$smarty->assign("prestations_journalieres", CPrestationJournaliere::loadCurrentList());
+$smarty->assign("prestation_id", $prestation_id);
 
 $smarty->display("edit_sorties.tpl");

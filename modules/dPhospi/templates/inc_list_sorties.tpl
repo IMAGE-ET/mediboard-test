@@ -175,7 +175,7 @@
       </li>
     {{/if}}
   </ul>
-  <hr class="control_tabs" />
+
   <div id="places-{{$type}}_{{$type_mouvement}}" style="display: none;">
   <table class="tbl">
     <tr class="only-printable">
