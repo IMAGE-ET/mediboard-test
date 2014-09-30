@@ -2255,12 +2255,8 @@ class CSejour extends CFacturable implements IPatientRelated {
       if ($_const->context_class != "CSejour" || $_const->context_id != $this->_id) {
         unset($constantes[$_const->_id]);
       }
-      if ($user_id) {
-        $first_log = $_const->loadFirstLog();
-        $first_log->loadRefUser();
-        if ($first_log->_ref_user->_id != $user_id) {
-          unset($constantes[$_const->_id]);
-        }
+      if ($user_id && $_const->user_id != $user_id) {
+        unset($constantes[$_const->_id]);
       }
     }
 
