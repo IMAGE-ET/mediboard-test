@@ -68,3 +68,20 @@ td.legend-onhover {
   border: 1px solid #661d00;
   color: #661d00;
 }
+
+.date-naissance-input {
+  position: relative;
+  display: inline-block;
+}
+
+.date-naissance-input span {
+  font-size: 1.2em;
+  display: none;
+  position: absolute;
+  right: 5px;
+  cursor: pointer;
+}
+
+.date-naissance-input:hover span {
+  display: inline;
+}
