@@ -104,11 +104,13 @@ foreach ($sejour->_ref_operations as $_operation) {
 
     // Chargement des règles de codage
     $_operation->loadRefsCodagesCCAM();
-    foreach ($_operation->_ref_codages_ccam as $_codage) {
-      $_codage->loadPraticien()->loadRefFunction();
-      $_codage->loadActesCCAM();
-      foreach ($_codage->_ref_actes_ccam as $_acte) {
-        $_acte->getTarif();
+    foreach ($_operation->_ref_codages_ccam as $_codages_by_prat) {
+      foreach ($_codages_by_prat as $_codage) {
+        $_codage->loadPraticien()->loadRefFunction();
+        $_codage->loadActesCCAM();
+        foreach ($_codage->_ref_actes_ccam as $_acte) {
+          $_acte->getTarif();
+        }
       }
     }
   }

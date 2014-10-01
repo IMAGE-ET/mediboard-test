@@ -9,14 +9,44 @@
     ActesCCAM.remove(subject_id);
   };
 
-  editCodage = function(codage_id) {
+  editCodages = function(codable_class, codable_id, praticien_id) {
     var url = new Url("salleOp", "ajax_edit_codages_ccam");
-    url.addParam("codage_id", codage_id);
+    url.addParam('codable_class', codable_class);
+    url.addParam('codable_id', codable_id);
+    url.addParam('praticien_id', praticien_id);
     url.requestModal(
       -10, -50,
       {onClose: function() {ActesCCAM.refreshList('{{$subject->_id}}','{{$subject->_praticien_id}}')}}
     );
     window.urlCodage = url;
+  };
+
+  lockCodages = function(praticien_id) {
+    var forms = $$('form[data-praticien_id=' + praticien_id + ']');
+    forms.each(function(form) {
+      $V(form.locked, 1);
+      form.onsubmit();
+    });
+  };
+
+  unlockCodages = function(praticien_id) {
+    var forms = $$('form[data-praticien_id=' + praticien_id + ']');
+    forms.each(function(form) {
+      $V(form.locked, 0);
+      form.onsubmit();
+    });
+  };
+
+  deleteCodages = function(praticien_id) {
+    Modal.confirm('Voulez réellement supprimer les codages CCAM de ce praticien?', {
+      onOK: function() {
+        var forms = $$('form[data-praticien_id=' + praticien_id + ']');
+        forms.each(function(form) {
+          $V(form.del, 1);
+          form.onsubmit();
+        });
+      }
+    })
   };
 
   CCAMSelector.init = function(){
@@ -74,101 +104,116 @@
             <th class="category">Actes cotés</th>
             <th class="category">Actions</th>
           </tr>
-          {{foreach from=$subject->_ref_codages_ccam item=_codage name=codages}}
-            <tr {{if !$smarty.foreach.codages.last}}style="border-bottom: 1pt dotted #93917e;"{{/if}}>
-              <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_codage->_ref_praticien}}</td>
-              <td {{if !$_codage->_ref_actes_ccam|@count}}class="empty"{{/if}}>
-                {{if !$_codage->_ref_actes_ccam|@count}}
-                  {{tr}}CActeCCAM.none{{/tr}}
+          {{foreach from=$subject->_ref_codages_ccam item=_codages_by_prat name=codages}}
+            {{foreach from=$_codages_by_prat item=_codage name=codages_by_prat}}
+              <tr {{if !$smarty.foreach.codages.last && $smarty.foreach.codages_by_prat.last}}style="border-bottom: 1pt dotted #93917e;"{{/if}}>
+                {{if $smarty.foreach.codages_by_prat.first}}
+                  <td rowspan="{{$_codages_by_prat|@count}}">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_codage->_ref_praticien}}</td>
                 {{/if}}
-                <table class="layout">
-                  {{foreach from=$subject->_ext_codes_ccam item=_code key=_key}}
-                  {{foreach from=$_code->activites item=_activite}}
-                  {{foreach from=$_activite->phases item=_phase}}
-                    {{if $_phase->_connected_acte->_id && $_phase->_connected_acte->executant_id == $_codage->praticien_id}}
-                      {{assign var =_acte value=$_phase->_connected_acte}}
-                      <tr>
-                        <td>
-                          <a href="#" onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class}}');">
-                            {{$_acte->code_acte}}
-                          </a>
-                        </td>
-                        <td>
-                          <span class="circled ok">
-                            {{$_acte->code_activite}}-{{$_acte->code_phase}}
-                          </span>
-                        </td>
-                        <td>
-                          {{if !$_phase->_modificateurs|@count}}
-                            <em style="color: #7d7d7d;">Aucun modif. dispo.</em>
-                          {{elseif !$_acte->modificateurs}}
-                            <strong>Aucun modif. codé</strong>
-                          {{else}}
-                            {{foreach from=$_phase->_modificateurs item=_mod name=modificateurs}}
-                              {{if $_mod->_checked}}
-                                <span class="circled {{if in_array($_mod->_state, array('not_recommended', 'forbidden'))}}error{{/if}}"
-                                      title="{{$_mod->libelle}}">
-                                  {{$_mod->code}}
-                                </span>
-                              {{/if}}
-                            {{/foreach}}
-                          {{/if}}
-                        </td>
-                        <td>
-                          {{if $_acte->code_association}}
-                          Asso : {{$_acte->code_association}}
-                          {{/if}}
-                        </td>
-                        <td>
-                          {{if $_acte->montant_depassement}}
-                            <span class="circled" style="background-color: #aaf" title="{{mb_value object=$_acte field=montant_depassement}}">
-                                DH
-                           </span>
-                          {{/if}}
-                        </td>
-                      </tr>
-                    {{/if}}
-                  {{/foreach}}
-                  {{/foreach}}
-                  {{/foreach}}
-                </table>
-              </td>
-              <td class="button">
-                {{if !$_codage->locked}}
-                <button type="button" class="notext edit" onclick="editCodage({{$_codage->_id}})"
-                        title="{{$_codage->association_rule}} ({{mb_value object=$_codage field=association_mode}})">
-                  {{tr}}Edit{{/tr}}
-                </button>
-                {{/if}}
-                <form name="formCodage-{{$_codage->_id}}" action="?" method="post"
-                      onsubmit="return onSubmitFormAjax(this, {
-                        onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}}) });">
-                  <input type="hidden" name="m" value="ccam" />
-                  <input type="hidden" name="dosql" value="do_codageccam_aed" />
-                  <input type="hidden" name="del" value="0" />
-                  <input type="hidden" name="codage_ccam_id" value="{{$_codage->_id}}" />
-                  {{if $_codage->locked}}
-                    <input type="hidden" name="locked" value="0" />
-                    <button type="button" class="notext unlock" onclick="this.form.onsubmit()">
-                      {{tr}}Unlock{{/tr}}
-                    </button>
-                  {{else}}
-                    <input type="hidden" name="locked" value="1" />
-                    <button type="button" class="notext lock" onclick="this.form.onsubmit()">
-                      {{tr}}Lock{{/tr}}
-                    </button>
-                  {{/if}}
+
+                <td {{if !$_codage->_ref_actes_ccam|@count}}class="empty"{{/if}} {{if !$smarty.foreach.codages_by_prat.last}}style="border-bottom: 1pt dotted #93917e;"{{/if}}>
                   {{if !$_codage->_ref_actes_ccam|@count}}
-                    <button type="button" class="notext trash"
-                            onclick="confirmDeletion(this.form,{typeName:'le codage',objName:'{{$_codage->_view|smarty:nodefaults|JSAttribute}}', ajax: '1'},
-                              {onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}}) })">
-                      {{tr}}Delete{{/tr}}
-                    </button>
+                    {{tr}}CActeCCAM.none{{/tr}}
+                  {{else}}
+                    <table class="layout">
+                      {{foreach from=$subject->_ext_codes_ccam item=_code key=_key}}
+                        {{foreach from=$_code->activites item=_activite}}
+                          {{foreach from=$_activite->phases item=_phase}}
+                            {{if $_phase->_connected_acte->_id && $_phase->_connected_acte->executant_id == $_codage->praticien_id &&
+                                 (($_activite->numero != '4' && !$_codage->activite_anesth) || ($_activite->numero == '4' && $_codage->activite_anesth))}}
+                              {{assign var =_acte value=$_phase->_connected_acte}}
+                              <tr>
+                                <td>
+                                  <a href="#" onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class}}');">
+                                    {{$_acte->code_acte}}
+                                  </a>
+                                </td>
+                                <td>
+                                  <span class="circled ok">
+                                    {{$_acte->code_activite}}-{{$_acte->code_phase}}
+                                  </span>
+                                </td>
+                                <td>
+                                  {{if !$_phase->_modificateurs|@count}}
+                                    <em style="color: #7d7d7d;">Aucun modif. dispo.</em>
+                                  {{elseif !$_acte->modificateurs}}
+                                    <strong>Aucun modif. codé</strong>
+                                  {{else}}
+                                    {{foreach from=$_phase->_modificateurs item=_mod name=modificateurs}}
+                                      {{if $_mod->_checked}}
+                                        <span class="circled {{if in_array($_mod->_state, array('not_recommended', 'forbidden'))}}error{{/if}}"
+                                              title="{{$_mod->libelle}}">
+                                          {{$_mod->code}}
+                                        </span>
+                                      {{/if}}
+                                    {{/foreach}}
+                                  {{/if}}
+                                </td>
+                                <td>
+                                  {{if $_acte->code_association}}
+                                  Asso : {{$_acte->code_association}}
+                                  {{/if}}
+                                </td>
+                                <td>
+                                  {{if $_acte->montant_depassement}}
+                                    <span class="circled" style="background-color: #aaf" title="{{mb_value object=$_acte field=montant_depassement}}">
+                                        DH
+                                   </span>
+                                  {{/if}}
+                                </td>
+                              </tr>
+                            {{/if}}
+                          {{/foreach}}
+                        {{/foreach}}
+                      {{/foreach}}
+                    </table>
                   {{/if}}
-                </form>
-              </td>
-            </tr>
-            {{foreachelse}}
+                  <form name="formCodage-{{$_codage->_id}}" action="?" method="post" data-praticien_id="{{$_codage->praticien_id}}"
+                        onsubmit="return onSubmitFormAjax(this{{if $smarty.foreach.codages_by_prat.last}}, {
+                        onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}}) }{{/if}});">
+                    <input type="hidden" name="m" value="ccam" />
+                    <input type="hidden" name="dosql" value="do_codageccam_aed" />
+                    <input type="hidden" name="del" value="0" />
+                    <input type="hidden" name="codage_ccam_id" value="{{$_codage->_id}}" />
+                    <input type="hidden" name="locked" value="{{$_codage->locked}}" />
+                  </form>
+                </td>
+
+                {{if $smarty.foreach.codages_by_prat.first}}
+                  {{* On compte le nombre d'actes cotés pour ce praticien *}}
+                  {{assign var=count_actes_by_prat value=0}}
+                  {{section name=count_actes loop=$smarty.foreach.codages_by_prat.total}}
+                    {{math assign=count_actes_by_prat equation="x+y" x=$count_actes_by_prat y=$_codages_by_prat[$smarty.section.count_actes.index]->_ref_actes_ccam|@count}}
+                  {{/section}}
+
+                  <td rowspan="{{$_codages_by_prat|@count}}" class="button">
+                    {{if !$_codage->locked}}
+                      <button type="button" class="notext edit" onclick="editCodages('{{$subject->_class}}', {{$subject->_id}}, {{$_codage->praticien_id}})"
+                              title="{{$_codage->association_rule}} ({{mb_value object=$_codage field=association_mode}})">
+                        {{tr}}Edit{{/tr}}
+                      </button>
+                    {{/if}}
+
+                    {{if $_codage->locked}}
+                      <button type="button" class="notext unlock" onclick="unlockCodages({{$_codage->praticien_id}})">
+                        {{tr}}Unlock{{/tr}}
+                      </button>
+                    {{else}}
+                      <button type="button" class="notext lock" onclick="lockCodages({{$_codage->praticien_id}})">
+                        {{tr}}Lock{{/tr}}
+                      </button>
+                    {{/if}}
+                    {{if !$count_actes_by_prat}}
+                      <button type="button" class="notext trash"
+                              onclick="deleteCodages({{$_codage->praticien_id}})">
+                        {{tr}}Delete{{/tr}}
+                      </button>
+                    {{/if}}
+                  </td>
+                {{/if}}
+              </tr>
+            {{/foreach}}
+          {{foreachelse}}
             <tr>
               <td class="empty" colspan="10">{{tr}}CCodageCCAM-none{{/tr}}</td>
             </tr>

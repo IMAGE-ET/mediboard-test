@@ -252,7 +252,7 @@ class CActeCCAM extends CActe {
       return $msg;
     }
 
-    $codage_ccam = CCodageCCAM::get($this->_ref_object, $this->executant_id);
+    $codage_ccam = CCodageCCAM::get($this->_ref_object, $this->executant_id, $this->code_activite);
     if (!$codage_ccam->_id) {
       $codage_ccam->store();
     }
@@ -533,7 +533,7 @@ class CActeCCAM extends CActe {
 
     if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
       // Vérification de l'existence du codage
-      $codage = CCodageCCAM::get($this->loadRefObject(), $this->executant_id);
+      $codage = CCodageCCAM::get($this->loadRefObject(), $this->executant_id, $this->code_activite);
       if (!$codage->_id) {
         if ($msg = $codage->store()) {
           return $msg;
@@ -586,7 +586,7 @@ class CActeCCAM extends CActe {
   function loadRefCodageCCAM() {
     $this->loadRefObject();
     if (isset($this->_ref_object)) {
-      return $this->_ref_codage_ccam = CCodageCCAM::get($this->_ref_object, $this->executant_id);
+      return $this->_ref_codage_ccam = CCodageCCAM::get($this->_ref_object, $this->executant_id, $this->code_activite);
     }
     return null;
   }

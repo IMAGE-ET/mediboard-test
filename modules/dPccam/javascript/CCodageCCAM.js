@@ -10,8 +10,8 @@
  */
 
 CCodageCCAM = {
-  changeCodageMode: function(element) {
-    var codageForm = getForm("formCodageRules");
+  changeCodageMode: function(element, codage_id) {
+    var codageForm = getForm("formCodageRules_codage-" + codage_id);
     if($V(element)) {
       $V(codageForm.association_mode, "user_choice");
     }
@@ -69,8 +69,8 @@ CCodageCCAM = {
     }
   },
 
-  setRule: function(element) {
-    var codageForm = getForm("formCodageRules");
+  setRule: function(element, codage_id) {
+    var codageForm = getForm("formCodageRules_codage-" + codage_id);
     $V(codageForm.association_mode, "user_choice", false);
     var inputs = document.getElementsByName("association_rule");
     for(var i = 0; i < inputs.length; i++) {

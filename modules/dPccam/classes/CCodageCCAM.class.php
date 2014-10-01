@@ -27,6 +27,7 @@ class CCodageCCAM extends CMbObject {
   public $codable_id;
   public $praticien_id;
   public $locked;
+  public $activite_anesth;
 
   /**
    * @var CActeCCAM[]
@@ -98,7 +99,7 @@ class CCodageCCAM extends CMbObject {
 
     $spec->table   = 'codage_ccam';
     $spec->key     = 'codage_ccam_id';
-    $spec->uniques['codable_praticien'] = array('codable_class', 'codable_id', 'praticien_id');
+    $spec->uniques['codable_praticien'] = array('codable_class', 'codable_id', 'praticien_id', 'activite_anesth');
 
     return $spec;
   }
@@ -115,23 +116,40 @@ class CCodageCCAM extends CMbObject {
     $props['codable_id'] = 'ref notNull class|CCodable meta|codable_class';
     $props['praticien_id'] = 'ref notNull class|CMediusers';
     $props['locked'] = 'bool notNull default|0';
+    $props['activite_anesth'] = 'bool notNull default|0';
 
     return $props;
+  }
+
+  public function store() {
+    /* Create the CCodageCCAM for the anesthesia activity if the practitioner is an anesthesist */
+    if (!$this->_id && !$this->activite_anesth) {
+      $this->loadPraticien();
+      if ($this->_ref_praticien->isAnesth()) {
+        $this->loadCodable();
+        self::get($this->_ref_codable, $this->praticien_id, 4);
+      }
+    }
+
+    return parent::store();
   }
 
   /**
    * Return the CCodageCCAM linked to the given codable and practitioner, and create it if it not exists
    *
-   * @param CCodable $codable      The codable object
-   * @param integer  $praticien_id The practitioner id
+   * @param CCodable $codable         The codable object
+   * @param integer  $praticien_id    The practitioner id
+   * @param integer  $activite        Is the CCodage concern anesthesia activities or other activities
    *
    * @return CCodageCCAM
    */
-  public static function get($codable, $praticien_id) {
+  public static function get($codable, $praticien_id, $activite = 1) {
     $codage_ccam = new CCodageCCAM();
     $codage_ccam->codable_class = $codable->_class;
     $codage_ccam->codable_id = $codable->_id;
     $codage_ccam->praticien_id = $praticien_id;
+    $codage_ccam->loadPraticien();
+    $codage_ccam->activite_anesth = ($activite == 4 && $codage_ccam->_ref_praticien->isAnesth()) ? 1 : 0;
     $codage_ccam->loadMatchingObject();
 
     if (!$codage_ccam->_id) {
@@ -187,10 +205,12 @@ class CCodageCCAM extends CMbObject {
     }
 
     $act = new CActeCCAM();
-    $act->object_class = $this->codable_class;
-    $act->object_id = $this->codable_id;
-    $act->executant_id = $this->praticien_id;
-    $this->_ref_actes_ccam = $act->loadMatchingList("code_association");
+    $where = array();
+    $where['object_class'] = " = '$this->codable_class'";
+    $where['object_id'] = " = $this->codable_id";
+    $where['executant_id'] = " = $this->praticien_id";
+    $where['code_activite'] = $this->activite_anesth ? " = 4" : " != 4";
+    $this->_ref_actes_ccam = $act->loadList($where, "code_association");
 
     foreach ($this->_ref_actes_ccam as $_acte) {
       if (in_array($_acte->code_acte, $this->_check_failed_acts)) {
@@ -224,7 +244,7 @@ class CCodageCCAM extends CMbObject {
    * @see parent::check()
    */
   public function check() {
-    $this->completeField('codable_class', 'codable_id', 'praticien_id', 'association_mode', 'association_rule', 'locked');
+    $this->completeField('codable_class', 'codable_id', 'praticien_id', 'association_mode', 'association_rule', 'locked', 'activite_anesth');
 
     if ($this->_old->locked && $this->locked) {
       return "Codage verrouillé";

@@ -1,0 +1,319 @@
+{{*
+ * $Id$
+ *  
+ * @package    Mediboard
+ * @subpackage salleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ * @link       http://www.mediboard.org
+*}}
+
+<script type="text/javascript">
+  Main.add(function() {
+    Control.Tabs.create('rules-tab_codage-{{$codage->_id}}', true);
+  });
+</script>
+
+<table class="tbl">
+  <tr>
+    <th class="narrow">{{mb_title class=CActeCCAM field=code_acte}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=code_activite}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=_tarif_base}}</th>
+    <th>{{mb_title class=CActeCCAM field=modificateurs}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=execution}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=montant_depassement}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=motif_depassement}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=code_association}}</th>
+    <th>{{mb_title class=CActeCCAM field=_tarif}}</th>
+    <th class="narrow">Actions</th>
+  </tr>
+  {{foreach from=$subject->_ext_codes_ccam item=_code key=_key}}
+    {{foreach from=$_code->activites item=_activite}}
+      {{assign var="numero" value=$_activite->numero}}
+      {{foreach from=$_activite->phases item=_phase}}
+        {{assign var="acte" value=$_phase->_connected_acte}}
+        {{assign var="view" value=$acte->_id|default:$acte->_view}}
+        {{assign var="key" value="$_key$view"}}
+        {{if ((!$acte->_id) || ($acte->executant_id == $codage->praticien_id)) &&
+             (($_activite->numero != '4' && !$codage->activite_anesth) || ($_activite->numero == '4' && $codage->activite_anesth))}}
+          <tr {{if !$acte->_id}}class="activite-{{$acte->code_activite}}"{{/if}}>
+            <td {{if !$acte->_id}}class="error"{{/if}}>
+              <a href="#" onclick="CodeCCAM.show('{{$acte->code_acte}}', '{{$subject->_class}}')">
+                {{if $_code->type != 2}}
+                  <strong>
+                    {{mb_value object=$acte field=code_acte}}
+                  </strong>
+                {{else}}
+                  <em>{{mb_value object=$acte field=code_acte}}</em>
+                {{/if}}
+              </a>
+              {{if $_code->forfait}}
+                <br />
+                <small style="color: #f00">({{tr}}CDatedCodeCCAM.remboursement.{{$_code->forfait}}{{/tr}})</small>
+              {{/if}}
+            </td>
+            <td class="narrow">
+              <span class="circled {{if $acte->_id}}ok{{else}}error{{/if}}">
+                {{mb_value object=$acte field=code_activite}}-{{mb_value object=$acte field=code_phase}}
+              </span>
+            </td>
+            <td>
+              {{mb_value object=$acte field=_tarif_base}}
+            </td>
+            <td class="greedyPane">
+              {{assign var=nb_modificateurs value=$acte->modificateurs|strlen}}
+              {{foreach from=$_phase->_modificateurs item=_mod name=modificateurs}}
+                <span class="circled {{if $_mod->_state == 'prechecked'}}ok{{elseif $_mod->_checked && in_array($_mod->_state, array('not_recommended', 'forbidden'))}}error{{elseif in_array($_mod->_state, array('not_recommended', 'forbidden'))}}warning{{/if}}"
+                      title="{{$_mod->libelle}} ({{$_mod->_montant}})">
+                  <input type="checkbox" name="modificateur_{{$_mod->code}}{{$_mod->_double}}"
+                         {{if $_mod->_checked}}checked="checked"{{elseif $nb_modificateurs == 4 || $_mod->_state == 'forbidden' || (intval($acte->_exclusive_modifiers) > 0 && in_array($_mod->code, array('F', 'U', 'P', 'S')))}}disabled="disabled"{{/if}}
+                         data-acte="{{$view}}" data-code="{{$_mod->code}}" data-double="{{$_mod->_double}}" class="modificateur" onchange="syncCodageField(this, '{{$view}}');" />
+                  <label for="modificateur_{{$_mod->code}}{{$_mod->_double}}">
+                    {{$_mod->code}}
+                  </label>
+                </span>
+
+                {{foreachelse}}
+                <em>{{tr}}None{{/tr}}</em>
+              {{/foreach}}
+            </td>
+            <td>
+              <form name="codageActeExecution-{{$view}}" action="?" method="post" onsubmit="return false;">
+                {{mb_field object=$acte field=execution form="codageActeExecution-$view" register=true onchange="syncCodageField(this, '$view');"}}
+              </form>
+            </td>
+            <td>
+              <form name="codageActeMontantDepassement-{{$view}}" action="?" method="post" onsubmit="return false;">
+                {{mb_field object=$acte field=montant_depassement onchange="syncCodageField(this, '$view');"}}
+              </form>
+            </td>
+            <td>
+              <form name="codageActeMotifDepassement-{{$view}}" action="?" method="post" onsubmit="return false;">
+                {{mb_field object=$acte field=motif_depassement emptyLabel="CActeCCAM-motif_depassement" onchange="syncCodageField(this, '$view');"}}
+              </form>
+            </td>
+            <td
+              {{if $acte->_id && ($acte->code_association != $acte->_guess_association)}}style="background-color: #fc9"{{/if}}>
+              {{if $acte->_id}}
+              <form name="codageActeCodeAssociation-{{$view}}" action="?" method="post" onsubmit="return false;">
+                {{mb_field object=$acte field=code_association emptyLabel="CActeCCAM.code_association." onchange="syncCodageField(this, '$view');"}}
+              </form>
+              {{if $acte->code_association != $acte->_guess_association}}
+                ({{$acte->_guess_association}})
+              {{/if}}
+              {{/if}}
+            </td>
+            <td {{if $acte->_id && !$acte->facturable}}style="background-color: #fc9"{{/if}}>
+              {{mb_value object=$acte field=_tarif}}
+            </td>
+            <td class="button">
+              <form name="codageActe-{{$view}}" action="?" method="post"
+                    onsubmit="return onSubmitFormAjax(this, {onComplete: function() {window.urlCodage.refreshModal()}});">
+                <input type="hidden" name="m" value="salleOp" />
+                <input type="hidden" name="dosql" value="do_acteccam_aed" />
+                <input type="hidden" name="del" value="0" />
+                {{mb_key object=$acte}}
+
+                <input type="hidden" name="_calcul_montant_base" value="1" />
+                <input type="hidden" name="_edit_modificateurs" value="1"/>
+
+                {{mb_field object=$acte field=object_id hidden=true value=$subject->_id}}
+                {{mb_field object=$acte field=object_class hidden=true value=$subject->_class}}
+                {{mb_field object=$acte field=code_acte hidden=true}}
+                {{mb_field object=$acte field=code_activite hidden=true}}
+                {{mb_field object=$acte field=code_phase hidden=true}}
+                {{mb_field object=$acte field=code_association hidden=true emptyLabel="None"}}
+                {{mb_field object=$acte field=executant_id hidden=true value=$codage->praticien_id}}
+                {{mb_field object=$acte field=execution hidden=true}}
+                {{mb_field object=$acte field=montant_depassement hidden=true}}
+                {{mb_field object=$acte field=motif_depassement hidden=true emptyLabel="CActeCCAM-motif_depassement"}}
+
+                {{foreach from=$_phase->_modificateurs item=_mod name=modificateurs}}
+                  <input type="checkbox" name="modificateur_{{$_mod->code}}{{$_mod->_double}}" {{if $_mod->_checked}}checked="checked"{{/if}} hidden="hidden" />
+                {{/foreach}}
+
+                {{if !$acte->_id}}
+                  <button class="add notext compact" type="submit" {{if $_activite->anesth_comp && !$_activite->anesth_comp|in_array:$subject->_codes_ccam}}
+                          onclick="addActeAnesthComp('{{$_activite->anesth_comp}}', {{'dPccam CCodable add_acte_comp_anesth_auto'|conf}});"
+                  {{/if}}>
+                    {{tr}}Add{{/tr}}
+                  </button>
+                {{else}}
+                  <button class="edit notext compact" type="button" onclick="ActesCCAM.edit({{$acte->_id}})">{{tr}}Edit{{/tr}}</button>
+                  <button class="remove notext compact" type="button"
+                          onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}', ajax: '1'},
+                            {onComplete: function() {window.urlCodage.refreshModal()}});">
+                    {{tr}}Remove{{/tr}}
+                  </button>
+                {{/if}}
+              </form>
+            </td>
+          </tr>
+        {{/if}}
+      {{/foreach}}
+    {{/foreach}}
+  {{/foreach}}
+</table>
+
+<br style="margin: 10px;"/>
+
+<ul id="rules-tab_codage-{{$codage->_id}}" class="control_tabs">
+  <li><a href="#questionRules_codage-{{$codage->_id}}">Informations médicales</a></li>
+  <li><a href="#concreteRules_codage-{{$codage->_id}}">Règles de codage</a></li>
+  <li>
+    <input type="checkbox" name="_association_mode" value="manuel"
+           {{if $codage->association_mode == "user_choice"}}checked="checked"{{/if}}
+           onchange="changeCodageMode(this, {{$codage->_id}});"/>
+    Mode manuel pour les règles d'association
+  </li>
+</ul>
+
+<hr class="control_tabs" />
+
+<div style="display: none;" id="questionRules_codage-{{$codage->_id}}">
+  <form name="questionRulesForm_codage-{{$codage->_id}}" action="?" method="post" onsubmit="return false;">
+    <table class="tbl">
+      <tr>
+        <th class="title" colspan="2">Les actes que vous codez répondent-ils à un des critères suivants ?</th>
+      </tr>
+      <tr>
+        <th class="category" colspan="2">Pour les interventions chirurgicales</th>
+      </tr>
+      {{if isset($codage->_possible_rules.EA|smarty:nodefaults)}}
+      <tr>
+        <th class="narrow {{if $codage->_possible_rules.EA}}ok{{/if}}">
+          <input type="radio" name="_association_question" value="EA"
+                 {{if $codage->association_rule == "EA"}}checked="checked"{{/if}}
+                 onchange="setRule(this, {{$codage->_id}});"/>
+        </th>
+        <td>
+          Les actes portent sur :
+          <ul>
+            <li><strong>des membres différents ou</strong></li>
+            <li><strong>le tronc et un membre ou</strong></li>
+            <li><strong>la tête et un membre.</strong></li>
+          </ul>
+        </td>
+      </tr>
+      {{/if}}
+      {{if isset($codage->_possible_rules.EB|smarty:nodefaults)}}
+      <tr>
+        <th class="narrow {{if $codage->_possible_rules.EB}}ok{{/if}}">
+          <input type="radio" name="_association_question" value="EB"
+                 {{if $codage->association_rule == "EB"}}checked="checked"{{/if}}
+                 onchange="setRule(this, {{$codage->_id}});"/>
+        </th>
+        <td>
+          Les actes visent à traiter des <strong>lésions traumatiques multiples et récentes</strong>
+        </td>
+      </tr>
+      {{/if}}
+      {{if isset($codage->_possible_rules.EC|smarty:nodefaults)}}
+      <tr>
+        <th class="narrow {{if $codage->_possible_rules.EC}}ok{{/if}}">
+          <input type="radio" name="_association_question" value="EC"
+                 {{if $codage->association_rule == "EC"}}checked="checked"{{/if}}
+                 onchange="setRule(this, {{$codage->_id}});"/>
+        </th>
+        <td>
+          Les actes décrivent une intervention de <strong>carcinologie ORL</strong> comprenant :
+          <ul>
+            <li>une exérèse et</li>
+            <li>un curage et</li>
+            <li>une reconstruction.</li>
+          </ul>
+        </td>
+      </tr>
+      {{/if}}
+      {{if isset($codage->_possible_rules.EH|smarty:nodefaults)}}
+        <tr>
+          <th class="narrow {{if $codage->_possible_rules.EH}}ok{{/if}}">
+            <input type="radio" name="_association_question" value="EH"
+                   {{if $codage->association_rule == "EH"}}checked="checked"{{/if}}
+                   onchange="setRule(this, {{$codage->_id}});"/>
+          </th>
+          <td>
+            <strong>Des actes ont précédemment été codés pour ce patient dans cette journée</strong> et les nouveaux actes
+            sont effectués dans un <strong>temps différent et discontinu</strong> des premiers.
+          </td>
+        </tr>
+      {{/if}}
+      <tr>
+        <th class="category" colspan="2">Pour les actes d'imagerie</th>
+      </tr>
+      {{if isset($codage->_possible_rules.ED|smarty:nodefaults)}}
+      <tr>
+        <th class="narrow {{if $codage->_possible_rules.ED}}ok{{/if}}">
+          <input type="radio" name="_association_question" value="ED"
+                 {{if $codage->association_rule == "ED"}}checked="checked"{{/if}}
+                 onchange="setRule(this, {{$codage->_id}});"/>
+        </th>
+        <td>
+          Les actes sont des actes d'<strong>échographie</strong> portant sur <strong>plusieurs régions anatomiques</strong>.
+        </td>
+      </tr>
+      {{/if}}
+      {{if isset($codage->_possible_rules.EE|smarty:nodefaults)}}
+      <tr>
+        <th class="narrow {{if $codage->_possible_rules.EE}}ok{{/if}}">
+          <input type="radio" name="_association_question" value="EE"
+                 {{if $codage->association_rule == "EE"}}checked="checked"{{/if}}
+                 onchange="setRule(this, {{$codage->_id}});"/>
+        </th>
+        <td>
+          Les actes sont des actes d'<strong>électromyographie</strong>, de <strong>mesure des vitesses de conduction</strong>, d'<strong>étude des latences et des réflexes</strong> portant sur <strong>plusieurs régions anatomiques</strong>.
+        </td>
+      </tr>
+      {{/if}}
+      {{if isset($codage->_possible_rules.EF|smarty:nodefaults)}}
+      <tr>
+        <th class="narrow {{if $codage->_possible_rules.EF}}ok{{/if}}">
+          <input type="radio" name="_association_question" value="EF"
+                 {{if $codage->association_rule == "EF"}}checked="checked"{{/if}}
+                 onchange="setRule(this, {{$codage->_id}});"/>
+        </th>
+        <td>
+          Les actes sont des actes de <strong>scanographie</strong> portant sur <strong>plusieurs régions anatomiques</strong>.
+        </td>
+      </tr>
+      {{/if}}
+    </table>
+  </form>
+</div>
+<div style="display: none;" id="concreteRules_codage-{{$codage->_id}}">
+  <form name="formCodageRules_codage-{{$codage->_id}}" action="?" method="post"
+        onsubmit="return onSubmitFormAjax(this, {onComplete: function() {window.urlCodage.refreshModal()}});">
+    <input type="hidden" name="m" value="ccam" />
+    <input type="hidden" name="dosql" value="do_codageccam_aed" />
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="codage_ccam_id" value="{{$codage->_id}}" />
+    <input type="hidden" name="association_mode" value="{{$codage->association_mode}}" />
+    <table class="tbl">
+      <tr>
+        <th class="title" colspan="20">
+          Règles d'association
+        </th>
+      </tr>
+      {{assign var=association_rules value="CCodageCCAM"|static:"association_rules"}}
+      {{foreach from=$codage->_possible_rules key=_rulename item=_rule}}
+        {{if $_rule || 1}}
+          <tr>
+            <th class="narrow {{if $_rulename == $codage->association_rule}}ok{{/if}}">
+              <input type="radio" name="association_rule" value="{{$_rulename}}"
+                     {{if $_rulename == $codage->association_rule}}checked="checked"{{/if}}
+                {{if $codage->association_mode == "auto"}}disabled="disabled"{{/if}}
+                     onchange="this.form.onsubmit()"/>
+            </th>
+            <td class="{{if $_rule}}ok{{else}}error{{/if}}">
+              {{$_rulename}} {{if $association_rules.$_rulename == 'ask'}}(manuel){{/if}}
+            </td>
+            <td class="text greedyPane">
+              {{tr}}CActeCCAM-regle-association-{{$_rulename}}{{/tr}}
+            </td>
+          </tr>
+        {{/if}}
+      {{/foreach}}
+    </table>
+  </form>
+</div>

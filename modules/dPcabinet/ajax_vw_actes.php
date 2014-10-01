@@ -33,11 +33,13 @@ $acte_ngap = CActeNGAP::createEmptyFor($consult);
 if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
   // Chargement des règles de codage
   $consult->loadRefsCodagesCCAM();
-  foreach ($consult->_ref_codages_ccam as $_codage) {
-    $_codage->loadPraticien()->loadRefFunction();
-    $_codage->loadActesCCAM();
-    foreach ($_codage->_ref_actes_ccam as $_acte) {
-      $_acte->getTarif();
+  foreach ($consult->_ref_codages_ccam as $_codages_by_prat) {
+    foreach ($_codages_by_prat as $_codage) {
+      $_codage->loadPraticien()->loadRefFunction();
+      $_codage->loadActesCCAM();
+      foreach ($_codage->_ref_actes_ccam as $_acte) {
+        $_acte->getTarif();
+      }
     }
   }
 }

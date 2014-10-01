@@ -189,7 +189,17 @@ class CSetupdPccam extends CSetup {
       DROP `nb_acts`;";
     $this->addQuery($query);
 
-    $this->mod_version = '0.25';
+    $this->makeRevision('0.25');
+
+    $query = "ALTER TABLE `codage_ccam` DROP INDEX `codable_class_2`;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `codage_ccam`
+      ADD `activite_anesth` ENUM('0', '1') NOT NULL DEFAULT '0',
+      ADD UNIQUE INDEX uk_codage_ccam (`codable_class`, `codable_id`, `praticien_id`, `activite_anesth`);";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.26';
 
     // Data source query
 
