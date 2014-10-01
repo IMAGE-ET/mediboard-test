@@ -21,6 +21,9 @@
   Main.add(function() {
     var form = getForm("filterDate");
     Calendar.regField(form.date, null, {noView: true});
+    // Redimensionnement du cadre noir représentant l'intervention courante
+    var curr_interv = $("current_interv_planning");
+    curr_interv.setStyle({"height": (parseInt(curr_interv.up("table").getHeight()) - 56)+ "px"});
   });
   
   redirectPlanning = function(date) {
@@ -90,11 +93,11 @@
   {{math equation=x/y x=89 y=$hours|@count assign=td_width}}
 {{/if}}
 
-{{if $display_alert}}
-  <div class="small-warning">
-    Attention, la ressource demandée a un temps de réhabilitation qui va provoquer une possible indisponibilité pour l'intervention suivante.
-  </div>
-{{/if}}
+
+<div class="small-warning" id="tooltip_alert_indispo" style="display: none">
+  Attention, cette ressource a un temps de réhabilitation qui va provoquer une possible indisponibilité pour l'intervention suivante.
+</div>
+
 
 <table class="tbl" style="table-layout: fixed;">
   <col style="width: 10%" />
@@ -144,13 +147,12 @@
     {{foreach from=$hours item=_hour name=hours name=hours}}
       <td style="vertical-align: top">
         {{if $smarty.foreach.hours.first}}
-          {{math equation=x*y+z x=$ressources|@count y=26 z=$td_height assign=height}}
           {{math equation=x*y x=$operation->_debut_offset y=$td_width assign=offset}}
           {{math equation=x*y x=$operation->_width y=$td_width assign=width}}
 
           {{if $width > 0}}
-            <div class="planning_ressource interv"
-              style="position: absolute; left: {{$offset}}%; width: {{$width}}%; height: {{$height}}px; margin-top: 3px"></div>
+            <div class="planning_ressource interv" id="current_interv_planning"
+              style="position: absolute; left: {{$offset}}%; width: {{$width}}%; margin-top: 3px"></div>
           {{/if}}
 
           {{assign var=margin_top value=5}}
@@ -176,7 +178,10 @@
       {{math equation=x*y x=$usages_by_ressource.$ressource_id|@count y=$height_th assign=height_ressource}}
     {{/if}}
     <tr>
-      <th style="height: {{$height_ressource}}px;">
+      <th style="height: {{$height_ressource}}px;" class="text">
+        {{if isset($display_alert.$ressource_id|smarty:nodefaults)}}
+          <img src="images/icons/warning.png" style="float: left;" onmouseover="ObjectTooltip.createDOM(this, 'tooltip_alert_indispo')"/>
+        {{/if}}
         {{if $usage && !$usage_ressource_id}}
           <button type="button" class="tick notext" style="float: right;" onclick="createUsage('{{$ressource_id}}')"></button>
         {{/if}}

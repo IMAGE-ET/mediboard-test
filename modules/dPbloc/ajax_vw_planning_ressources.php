@@ -64,7 +64,7 @@ $usages_by_ressource = array();
 $besoins = CStoredObject::massLoadFwdRef($usages, "besoin_ressource_id");
 CStoredObject::massLoadFwdRef($besoins, "operation_id");
 
-$display_alert = 0;
+$display_alert = array();
 
 foreach ($usages as $_usage) {
   if (!isset($usages_by_ressource[$_usage->ressource_materielle_id])) {
@@ -87,11 +87,9 @@ foreach ($usages as $_usage) {
   $_usage->_fin_offset_retablissement = CMbdate::position(min($date_max, $fin_retab), $date_min, "1hour");
   $_usage->_width_retablissement = $_usage->_fin_offset_retablissement - $_usage->_debut_offset_retablissement;
 
-  if (count($ressources) == 1) {
-    // S'il n'y a qu'une seule ressource dans le type de ressource, alors on peut vérifier si le temps de réhabilitation empiète
-    // sur une intervention future
-    if ($min_fin_op < $_debut_op && CMbDT::addDateTime(reset($ressources)->retablissement, $min_fin_op) > $_debut_op) {
-      $display_alert = 1;
+  foreach ($ressources as $_ressource) {
+    if ($min_fin_op <= $_debut_op && CMbDT::addDateTime($_ressource->retablissement, $min_fin_op) > $_debut_op) {
+      $display_alert[$_ressource->_id] = 1;
     }
   }
 
@@ -131,16 +129,14 @@ foreach ($besoins as $key => $_besoin) {
   if ($_besoin->_width <= 0) {
     unset($besoins[$key]);
   }
-  if (count($ressources) == 1) {
-    // S'il n'y a qu'une seule ressource dans le type de ressource, alors on peut vérifier si le temps de réhabilitation empiète
-    // sur une intervention future
-    if ($min_fin_op < $_debut_op && CMbDT::addDateTime(reset($ressources)->retablissement, $min_fin_op) > $_debut_op) {
-      $display_alert = 1;
+  foreach ($ressources as $_ressource) {
+    if ($min_fin_op <= $_debut_op && CMbDT::addDateTime($_ressource->retablissement, $min_fin_op) > $_debut_op) {
+      $display_alert[$_ressource->_id] = 1;
     }
   }
 }
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 
 $smarty->assign("ressources" , $ressources);
 $smarty->assign("hours"      , $hours);
