@@ -64,7 +64,7 @@ editAntecedent = function(mode) {
       <label><input type="radio" name="state" value="PROV" checked>{{tr}}CPatient.status.PROV{{/tr}}</label>
       <label><input type="radio" name="state" value="VALI">{{tr}}CPatient.status.VALI{{/tr}}</label><br/>
       <button type="button" class="search" onclick="Actions.patientState('verifyStatus')">
-        Vérifier le nombre de patient sans statut
+        Vérifier le nombre de patients sans statut
       </button>
       <button type="button" class="send" onclick="Actions.patientState('createStatus')">
         Placer le statut provisoire pour les patients sans statut
