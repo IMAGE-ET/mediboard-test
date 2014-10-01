@@ -375,7 +375,7 @@
           {{/if}}
         </button>
 
-        {{if $identity_status && $allowed_identity}}
+        {{if $identity_status && $allowed_identity && $patient->status != "VALI"}}
           <button type="{{if $modal}}button{{else}}submit{{/if}}"
                   class="submit" onclick="return validateStatus();">
             {{tr}}Create{{/tr}} & {{tr}}Validate{{/tr}} le statut
