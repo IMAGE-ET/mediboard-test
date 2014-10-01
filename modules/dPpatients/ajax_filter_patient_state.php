@@ -15,34 +15,16 @@ if (!CAppUI::pref("allowed_modify_identity_status")) {
   CAppUI::redirect("m=system&a=access_denied");
 }
 
-$patients_count = array();
-$patient        = new CPatient();
-
 $date_min   = CValue::getOrSession("_date_min");
 $date_max   = CValue::getOrSession("_date_max");
-$where    = array();
-$leftjoin = null;
 
 CValue::setSession("patient_state_date_min", $date_min);
 CValue::setSession("patient_state_date_max", $date_max);
 
-if ($date_min) {
-  $where["entree"] = ">= '$date_min'";
-  $leftjoin["sejour"] = "patients.patient_id = sejour.patient_id";
-}
-
-if ($date_max) {
-  $where["entree"] = "<= '$date_max'";
-  $leftjoin["sejour"] = "patients.patient_id = sejour.patient_id";
-}
-
-foreach ($patient->_specs["status"]->_list as $_state) {
-  $where["status"] = " = '$_state'";
-  $patients_count[CMbString::lower($_state)] = (int)CPatientState::getNumberPatient($where, $leftjoin);
-}
+$patients_count = CPatientState::getAllNumberPatient($date_min, $date_max);
 
 $smarty = new CSmartyDP();
 $smarty->assign("patients_count", $patients_count);
-$smarty->assign("date_min", $date_min);
-$smarty->assign("date_max", $date_max);
+$smarty->assign("date_min"      , $date_min);
+$smarty->assign("date_max"      , $date_max);
 $smarty->display("patient_state/inc_manage_patient_state.tpl");

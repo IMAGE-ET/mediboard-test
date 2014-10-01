@@ -11,8 +11,11 @@
 
 <script>
   Main.add(function () {
-    var tabname= "patient_{{$state}}";
-    Control.Tabs.setTabCount(tabname, {{$count}});
+    Control.Tabs.setTabCount("patient_prov", {{$patients_count.prov}});
+    Control.Tabs.setTabCount("patient_dpot", {{$patients_count.dpot}});
+    Control.Tabs.setTabCount("patient_anom", {{$patients_count.anom}});
+    Control.Tabs.setTabCount("patient_cach", {{$patients_count.cach}});
+    Control.Tabs.setTabCount("patient_vali", {{$patients_count.vali}});
   });
 </script>
 
@@ -58,7 +61,7 @@
           {{if $_link->_ref_patient_doubloon}}
             {{assign var=doubloon value=$_link->_ref_patient_doubloon}}
             <form name="unlink_patient_{{$_link->_id}}_{{$_patient->_id}}" method="post"
-                  onsubmit="return onSubmitFormAjax(this, PatientState.getListPatientByState.curry('{{$state}}', {{$page}}))">
+                  onsubmit="return onSubmitFormAjax(this, PatientState.getListPatientByState.curry('{{$state}}', '{{$page}}'))">
               {{mb_key object=$_link}}
               {{mb_class object=$_link}}
               <input type="hidden" name="del" value="1">
@@ -87,7 +90,7 @@
           {{tr}}CPatient.link_detected{{/tr}}
         {{else}}
           <form name="validationState_{{$_patient->_guid}}" method="post"
-                      onsubmit="return onSubmitFormAjax(this, PatientState.getListPatientByState.curry('{{$state}}', {{$page}}))">
+                      onsubmit="return onSubmitFormAjax(this, PatientState.getListPatientByState.curry('{{$state}}', '{{$page}}'))">
           {{mb_key   object=$_patient}}
           {{mb_class object=$_patient}}
             {{mb_field object=$_patient field="_reason_state"}}

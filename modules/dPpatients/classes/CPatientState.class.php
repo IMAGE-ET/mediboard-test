@@ -18,6 +18,8 @@ class CPatientState extends CMbObject {
   /** @var integer Primary key */
   public $patient_state_id;
 
+  static $list_state = array("PROV", "VALI", "DPOT", "ANOM", "CACH");
+
   public $patient_id;
   public $mediuser_id;
   public $state;
@@ -53,7 +55,7 @@ class CPatientState extends CMbObject {
 
     $props["patient_id"]  = "ref class|CPatient notNull cascade";
     $props["mediuser_id"] = "ref class|CMediusers notNull";
-    $props["state"]       = "enum list|PROV|VALI|DPOT|ANOM|CACH notNull";
+    $props["state"]       = "enum list|".implode("|", self::$list_state)." notNull";
     $props["datetime"]    = "dateTime notNull";
     $props["reason"]      = "text";
 
@@ -100,6 +102,49 @@ class CPatientState extends CMbObject {
     $request->addLJoin($leftjoin);
     $request->addWhere($where);
     return $ds->loadResult($request->makeSelect());
+  }
+
+  /**
+   * Get all number patient by a state and the filter
+   *
+   * @param String $date_min Date minimum
+   * @param String $date_max Date maximum
+   *
+   * @return array
+   */
+  static function getAllNumberPatient($date_min = null, $date_max = null) {
+    $patients_count = array();
+    $leftjoin       = null;
+    $where          = array();
+
+    if ($date_min) {
+      $where["entree"] = ">= '$date_min'";
+      $leftjoin["sejour"] = "patients.patient_id = sejour.patient_id";
+    }
+
+    if ($date_max) {
+      $where["entree"] = "<= '$date_max'";
+      $leftjoin["sejour"] = "patients.patient_id = sejour.patient_id";
+    }
+
+    $ds = CSQLDataSource::get("std");
+    $request = new CRequest();
+    $request->addSelect("`status`, COUNT(DISTINCT(`patients`.`patient_id`)) as `total`");
+    $request->addTable("patients");
+    $request->addLJoin($leftjoin);
+    $request->addWhere($where);
+    $request->addGroup("`status`");
+    $result = $ds->loadList($request->makeSelect());
+    $state_count = array();
+    foreach ($result as $_result) {
+      $state_count[$_result["status"]] = $_result["total"];
+    }
+
+    foreach (self::$list_state as $_state) {
+      $patients_count[CMbString::lower($_state)] = CMbArray::get($state_count, $_state, 0);
+    }
+
+    return $patients_count;
   }
 
   /**

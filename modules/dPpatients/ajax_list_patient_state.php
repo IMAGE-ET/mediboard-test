@@ -17,8 +17,8 @@ if (!CAppUI::pref("allowed_modify_identity_status")) {
 
 $state          = CValue::get("state");
 $page           = (int)CValue::get("page", 0);
-$date_min         = CValue::session("patient_state_date_min");
-$date_max         = CValue::session("patient_state_date_max");
+$date_min       = CValue::session("patient_state_date_min");
+$date_max       = CValue::session("patient_state_date_max");
 $patients       = array();
 $patients_state = array();
 $where          = array();
@@ -35,11 +35,11 @@ if ($date_max) {
   $leftjoin["sejour"] = "patients.patient_id = sejour.patient_id";
 }
 
-$where["status"] = " = '$state'";
-$count = (int)CPatientState::getNumberPatient($where, $leftjoin);
+$patients_count = CPatientState::getAllNumberPatient($date_min, $date_max);
 
-if ($count > 0) {
+if ($patients_count[$state] > 0) {
   /** @var CPatient[] $patients */
+  $where["status"] = " = '$state'";
   $patients = $patient->loadList($where, "nom, prenom", "$page, 30", null, $leftjoin);
   CPatient::massLoadIPP($patients);
 
@@ -81,8 +81,9 @@ if ($count > 0) {
 }
 
 $smarty = new CSmartyDP();
-$smarty->assign("count"   , $count);
-$smarty->assign("patients", $patients);
-$smarty->assign("state"   , $state);
-$smarty->assign("page"    , $page);
+$smarty->assign("patients_count", $patients_count);
+$smarty->assign("count"         , $patients_count[$state]);
+$smarty->assign("patients"      , $patients);
+$smarty->assign("state"         , $state);
+$smarty->assign("page"          , $page);
 $smarty->display("patient_state/inc_list_patient_state.tpl");
