@@ -319,7 +319,11 @@
     <td class="button" colspan="5" style="text-align:center;" id="button">
       <div id="divSiblings" style="display:none;"></div>
       {{if $app->user_prefs.LogicielLectureVitale == 'mbHost'}}
-        {{mb_include module=mbHost template=inc_vitale operation='create'}}
+        {{assign var=autoRead value=false}}
+        {{if !$patient->_id}}
+          {{assign var=autoRead value=true}}
+        {{/if}}
+        {{mb_include module=mbHost template=inc_vitale operation='create' autoRead=$autoRead}}
       {{/if}}
 
       {{assign var=identity_status value="CAppUI::conf"|static_call:"dPpatients CPatient manage_identity_status":"CGroups-$g"}}
