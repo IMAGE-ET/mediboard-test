@@ -289,6 +289,11 @@
           {{foreach from=$line_item->_unites_prise item=_unite}}
             <option value="{{$_unite}}" {{if $line_item->unite_debit == $_unite}}selected{{/if}}>{{$_unite}}</option>
           {{/foreach}}
+          {{if $line_item->unite && !in_array($line_item->unite, $line_item->_unites_prise)}}
+            <option value="{{$line_item->unite}}" style="background-color: red;" selected>
+              {{$line_item->_ref_produit->getLibelleUnite($line_item->unite)}}
+            </option>
+          {{/if}}
         </select>
         /
         <select name="temps_debit" onchange="updateData()">
@@ -297,9 +302,14 @@
           {{/foreach}}
         </select>
         <select name="unite_temps_debit" onchange="updateData(); limitSelect(this)">
-          <option value="hour"  {{if $line_item->unite_temps_debit == "hour"}}selected{{/if}} data-facteur="1">h</option>
-          <option value="min"   {{if $line_item->unite_temps_debit == "min"}}selected{{/if}}  data-facteur="60">min</option>
+          <option value="hour" {{if $line_item->unite_temps_debit == "hour"}}selected{{/if}} data-facteur="1" >h</option>
+          <option value="min"  {{if $line_item->unite_temps_debit == "min" }}selected{{/if}} data-facteur="60">min</option>
         </select>
+        {{if $line_item->unite && !in_array($line_item->unite, $line_item->_unites_prise)}}
+          <div class="small-error text">
+            L'unité de prise sélectionnée ({{$line_item->_ref_produit->getLibelleUnite($line_item->unite)}}) n'est plus disponible dans la banque de médicaments, veuillez la modifier !
+          </div>
+        {{/if}}
       </td>
     </tr>
     <tr id="calcul_perf_poids">
