@@ -127,7 +127,8 @@
       minChars: 3,
       updateElement: updateFieldsMedicamentTP{{$addform}},
       callback: function(input, queryString) {
-        return (queryString + "&produit_max=40&only_prescriptible_sf=0&with_alias=1");
+        var form = getForm('editLineTP{{$addform}}');
+        return (queryString + "&produit_max=40&only_prescriptible_sf=0&with_alias=1&mask_generique="+($V(form.mask_generique)?'1':'0'));
       }
     } );
   });
@@ -234,6 +235,11 @@
                     <input type="text" name="produit" value="" size="12" class="autocomplete" />
                     <div style="display:none; width: 350px;" class="autocomplete" id="_produit_auto_complete{{$addform}}"></div>
                   </div>
+
+                  <input name="mask_generique" value="{{$app->user_prefs.check_default_generique}}" title="Masquer les génériques"
+                         {{if $app->user_prefs.check_default_generique}}checked="checked"{{/if}}
+                         type="{{if "dPprescription general see_generique"|conf:"CGroups-$g"}}checkbox{{else}}hidden{{/if}}"/>
+
                   <button type="button" class="search notext" onclick="MedSelector.init('produit');"></button>
                   <script>
                     MedSelector.init = function(onglet) {
