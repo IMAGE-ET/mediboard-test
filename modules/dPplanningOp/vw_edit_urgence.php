@@ -114,6 +114,7 @@ if ($op->_id) {
   $sejour->makeCancelAlerts($op->_id);
   $chir    = $op->_ref_chir;
   $patient = $sejour->_ref_patient;
+  $prat    = $sejour->_ref_praticien;
 }
 else {
   if ($hour_urgence && isset($min_urgence)) {
@@ -255,7 +256,7 @@ $smarty->assign("op"        , $op);
 $smarty->assign("plage"     , $op->plageop_id ? $op->_ref_plageop : new CPlageOp );
 $smarty->assign("sejour"    , $sejour);
 $smarty->assign("chir"      , $chir);
-$smarty->assign("praticien" , $chir);
+$smarty->assign("praticien" , $prat);
 $smarty->assign("patient"   , $patient );
 $smarty->assign("sejours"   , $sejours);
 $smarty->assign("ufs"       , CUniteFonctionnelle::getUFs());
