@@ -344,6 +344,7 @@ foreach ($sejours as $sejour) {
     
   // Chargement des transmissions sur des cibles importantes
   $sejour->loadRefsTransmissions(true, null, false, 1);
+  $sejour->loadRefDossierMedical();
   
   $patient = $sejour->_ref_patient;
   $patient->loadRefPhotoIdentite();
