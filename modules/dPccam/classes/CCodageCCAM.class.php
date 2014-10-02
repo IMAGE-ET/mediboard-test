@@ -875,7 +875,6 @@ class CCodageCCAM extends CMbObject {
   protected function applyRuleEA(&$act) {
     $ordered_acts_ea = $this->_ordered_acts;
     foreach ($this->_ref_actes_ccam_facturables as $_act) {
-      $chap = $_act->_ref_code_ccam->chapitres;
       if ($_act->_ref_code_ccam->isSupplement()) {
         unset($ordered_acts_ea[$_act->_id]);
         if ($_act->_id == $act->_id) {
@@ -1059,7 +1058,7 @@ class CCodageCCAM extends CMbObject {
 
     foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
-      if (in_array($chapters[2]['rang'], $chapters_echo)) {
+      if (isset($chapters[2]) && in_array($chapters[2]['rang'], $chapters_echo)) {
         $nb_echo++;
       }
     }
@@ -1136,7 +1135,7 @@ class CCodageCCAM extends CMbObject {
 
     foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
-      if (in_array($chapters[2]['rang'], $chapters_scano)) {
+      if (isset($chapters[2]) && in_array($chapters[2]['rang'], $chapters_scano)) {
         $nb_scano++;
       }
     }
@@ -1207,7 +1206,7 @@ class CCodageCCAM extends CMbObject {
       if (strpos($_acte_ccam->_ref_code_ccam->libelleLong, 'guidage remnographique') !== false) {
         $guidage_remno++;
       }
-      elseif (in_array($chapters[2]['rang'], $chapters_remno)) {
+      elseif (isset($chapters[2]) && in_array($chapters[2]['rang'], $chapters_remno)) {
         $nb_remno++;
       }
     }
@@ -1277,10 +1276,7 @@ class CCodageCCAM extends CMbObject {
     $cond = 0;
     foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
-      if (
-          $chapters[0]['db'] == '000019' && $chapters[1]['db'] == '000001' &&
-          $chapters[2]['db'] == '000009' && $chapters[3]['db'] == '000002'
-      ) {
+      if (isset($chapters[3]) && $chapters[3]['rang'] == '19.01.09.02.') {
         $cond++;
       }
     }
@@ -1345,8 +1341,8 @@ class CCodageCCAM extends CMbObject {
     );
     $nb_anapath = 0;
     foreach ($this->_ref_actes_ccam_facturables as $_act) {
-      $chap = $_act->_ref_code_ccam->chapitres;
-      if (in_array($chap[2]['rang'], $chapters_anapath) || in_array($chap[1]['rang'], $chapters_anapath)) {
+      $chapters = $_act->_ref_code_ccam->chapitres;
+      if ((isset($chapters[2]) && in_array($chapters[2]['rang'], $chapters_anapath)) || (isset($chapters[1]) && in_array($chapters[1]['rang'], $chapters_anapath))) {
         $nb_anapath++;
       }
     }
@@ -1388,8 +1384,8 @@ class CCodageCCAM extends CMbObject {
     );
 
     foreach ($this->_ref_actes_ccam_facturables as $_act) {
-      $chap = $_act->_ref_code_ccam->chapitres;
-      if (in_array($chap[2]['rang'], $chapters_anapath) || in_array($chap[1]['rang'], $chapters_anapath)) {
+      $chapters = $_act->_ref_code_ccam->chapitres;
+      if ((isset($chapters[2]) && in_array($chapters[2]['rang'], $chapters_anapath)) || (isset($chapters[1]) && in_array($chapters[1]['rang'], $chapters_anapath))) {
         unset($ordered_acts_eg2[$_act->_id]);
         if ($_act->_id == $act->_id) {
           $act->_position = -1;
@@ -1445,10 +1441,7 @@ class CCodageCCAM extends CMbObject {
     $nb_electromyo = 0;
     foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
-      if (
-          $chapters[0]['db'] == '000001' && $chapters[1]['db'] == '000001' && $chapters[2]['db'] == '000001' &&
-          ($chapters[3]['db'] == '000001' || $chapters[3]['db'] == '000002' || $chapters[3]['db'] == '000003' )
-      ) {
+      if (isset($chapters[3]) && in_array($chapters[3]['rang'], array('01.01.01.01.', '01.01.01.02.', '01.01.01.03.'))) {
         $nb_electromyo++;
       }
     }
@@ -1475,16 +1468,13 @@ class CCodageCCAM extends CMbObject {
     $ordered_acts_eg3 = $this->_ordered_acts;
     foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
-      if (
-          $chapters[0]['db'] == '000001' && $chapters[1]['db'] == '000001' && $chapters[2]['db'] == '000001' &&
-          ($chapters[3]['db'] == '000001' || $chapters[3]['db'] == '000002' || $chapters[3]['db'] == '000003' )
-      ) {
+      if (isset($chapters[3]) && in_array($chapters[3]['rang'], array('01.01.01.01.', '01.01.01.02.', '01.01.01.03.'))) {
         unset($ordered_acts_eg3[$_acte_ccam->_id]);
         if ($_acte_ccam->_id == $act->_id) {
           $act->_position = -1;
         }
       }
-      elseif ($chapters[0]['db'] == '000019' && $chapters[1]['db'] == '000002') {
+      elseif (isset($chapters[1]) && $chapters[1]['rang'] == '19.02.') {
         unset($ordered_acts_eg3[$_acte_ccam->_id]);
         if ($_acte_ccam->_id == $act->_id) {
           $act->_position = -1;
@@ -1541,10 +1531,7 @@ class CCodageCCAM extends CMbObject {
     $supp = 0;
     foreach ($this->_ref_actes_ccam_facturables as $_acte_ccam) {
       $chapters = $_acte_ccam->_ref_code_ccam->chapitres;
-      if (
-          ($chapters[0]['db'] == '000017' && $chapters[1]['db'] == '000004' && $chapters[2]['db'] == '000002') ||
-          ($chapters[0]['db'] == '000019' && $chapters[1]['db'] == '000001' && $chapters[2]['db'] == '000010')
-      ) {
+      if (isset($chapters[2]) && in_array($chapters[2]['rang'], array('17.04.02.', '19.01.10.'))) {
         $irrad++;
       }
       elseif (
@@ -1728,7 +1715,7 @@ class CCodageCCAM extends CMbObject {
           $act->_position = -1;
         }
       }
-      elseif ($chapters[0]['db'] == '000019' && $chapters[1]['db'] == '000002') {
+      elseif (isset($chapters[1]) && $chapters[1]['rang'] == '19.02.') {
         unset($ordered_acts_eg7[$_act->_id]);
         if ($_act->_id == $act->_id) {
           $act->_position = -1;
@@ -1826,8 +1813,8 @@ class CCodageCCAM extends CMbObject {
     );
     $nb_radio = 0;
     foreach ($this->_ref_actes_ccam_facturables as $_act) {
-      $chap = $_act->_ref_code_ccam->chapitres;
-      if (in_array($chap[2]['rang'], $chapters_radio)) {
+      $chapters = $_act->_ref_code_ccam->chapitres;
+      if (isset($chapters[2]) && in_array($chapters[2]['rang'], $chapters_radio)) {
         $nb_radio++;
       }
     }
@@ -1873,21 +1860,21 @@ class CCodageCCAM extends CMbObject {
     $nb_radio_sein = 0;
 
     foreach ($this->_ref_actes_ccam_facturables as $_act) {
-      $chap = $_act->_ref_code_ccam->chapitres;
-      if (in_array($chap[2]['rang'], $chapters_radio)) {
+      $chapters = $_act->_ref_code_ccam->chapitres;
+      if (isset($chapters[2]) && in_array($chapters[2]['rang'], $chapters_radio)) {
         unset($ordered_acts_ei[$_act->_id]);
         $ordered_acts_radio[$_act->_id] = $_act->getTarifSansAssociationNiCharge();
         if ($_act->_id == $act->_id) {
           $act->_position = -2;
         }
       }
-      elseif (in_array($chap[1]['rang'], array('19.02.', '18.02.'))) {
+      elseif (isset($chapters[1]) && in_array($chapters[1]['rang'], array('19.02.', '18.02.'))) {
         unset($ordered_acts_ei[$_act->_id]);
         if ($_act->_id == $act->_id) {
           $act->_position = -1;
         }
       }
-      elseif (in_array($chap[2]['rang'], array('16.02.01.', '16.02.02.'))) {
+      elseif (isset($chapters[2]) && in_array($chapters[2]['rang'], array('16.02.01.', '16.02.02.'))) {
         $nb_radio_sein++;
       }
     }
