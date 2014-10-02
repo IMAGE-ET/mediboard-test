@@ -45,17 +45,17 @@ class CDataSourceLog extends CMbObject {
    * @see parent::getProps()
    */
   function getProps() {
-    $props                  = parent::getProps();
-    $props["datasource"]    = "str notNull";
-    $props["period"]        = "dateTime notNull";
-    $props["requests"]      = "num";
-    $props["duration"]      = "float";
-    $props["aggregate"]     = "num min|0 default|10";
-    $props["bot"]           = "enum list|0|1 default|0";
-    $props['module_action'] = "ref notNull class|CModuleAction";
+    $props                     = parent::getProps();
+    $props["datasource"]       = "str notNull";
+    $props["period"]           = "dateTime notNull";
+    $props["requests"]         = "num";
+    $props["duration"]         = "float";
+    $props["aggregate"]        = "num min|0 default|10";
+    $props["bot"]              = "enum list|0|1 default|0";
+    $props['module_action_id'] = "ref notNull class|CModuleAction";
 
-    $props["_module"]     = "str";
-    $props["_action"]     = "str";
+    $props["_module"] = "str";
+    $props["_action"] = "str";
 
     return $props;
   }
@@ -125,7 +125,7 @@ class CDataSourceLog extends CMbObject {
 
       case 0:
       case 1:
-      $query = "SELECT
+        $query = "SELECT
           `datasourcelog_id`,
           $table.`module_action_id`,
           `module_action`.`module` AS _module,
@@ -176,7 +176,7 @@ class CDataSourceLog extends CMbObject {
   static function loadPeriodAggregation($start, $end, $period_format, $module_name, $action_name, $human_bot = null) {
     $dl    = new static;
     $table = $dl->_spec->table;
-    
+
     // Convert date format from PHP to MySQL
     $period_format = str_replace("%M", "%i", $period_format);
 
@@ -224,7 +224,7 @@ class CDataSourceLog extends CMbObject {
    * @return array
    */
   static function graphDataSourceLog($module_name, $action_name, $startx, $endx, $interval = 'one-day', $human_bot = null) {
-    $dl    = new static;
+    $dl = new static;
 
     switch ($interval) {
       default:
