@@ -1510,6 +1510,54 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
+   * check if this need to update 'entree_prevue' and/or 'sortie_prevue' data in db for ambulatoire sejour
+   *
+   * @return bool does this need to be updated
+   */
+  function checkUpdateTimeAmbu() {
+    $do_store_sejour = false;
+
+    // check for conf and if sejour type is 'ambu'
+    if (!CAppUI::conf('dPplanningOp CSejour entree_pre_op_ambu', CGroups::loadCurrent()->_guid) || $this->type != 'ambu') {
+      return $do_store_sejour;
+    }
+
+    $this->loadRefsOperations();
+    // we need only one operation = ambu
+    if (count($this->_ref_operations) == 1) {
+      /** @var COperation $interv */
+      $interv = reset($this->_ref_operations);
+      if ($interv->time_operation == '00:00:00') {
+        $interv->time_operation = null;
+      }
+      if (isset($interv->presence_preop) && (isset($interv->horaire_voulu) || isset($interv->time_operation))) {
+        $entree_prevue = $interv->date . ' ' . CMbDT::subTime($interv->presence_preop, CValue::first($interv->time_operation, $interv->horaire_voulu));
+        if ($this->entree_prevue != $entree_prevue) {
+          $this->entree_prevue = $entree_prevue;
+          $do_store_sejour = true;
+        }
+      }
+      if (
+        isset($interv->presence_postop) && isset($interv->temp_operation) &&
+        (isset($interv->horaire_voulu) || isset($interv->time_operation))
+      ) {
+        $time_postop = CMbDT::addTime($interv->temp_operation, $interv->presence_postop);
+        $sortie_prevue = $interv->date . ' ' . CMbDT::addTime($time_postop, CValue::first($interv->time_operation, $interv->horaire_voulu));
+        if ($this->sortie_prevue != $sortie_prevue) {
+          $this->sortie_prevue = $sortie_prevue;
+          $do_store_sejour = true;
+        }
+      }
+
+      if ($do_store_sejour) {
+        $this->updateFormFields();
+      }
+
+      return $do_store_sejour;
+    }
+  }
+
+  /**
    * @see parent::updatePlainFields()
    */
   function updatePlainFields() {

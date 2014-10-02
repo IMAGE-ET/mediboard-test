@@ -813,35 +813,12 @@ class COperation extends CCodable implements IPatientRelated {
 
     // Synchronisation des heures d'admission
     if (
-        CAppUI::conf('dPplanningOp CSejour entree_pre_op_ambu', CGroups::loadCurrent()->_guid) && $sejour->type == 'ambu' &&
-        ($this->fieldModified('horaire_voulu') || $this->fieldModified('temp_operation') ||
+        $this->fieldModified('horaire_voulu') || $this->fieldModified('temp_operation') ||
         $this->fieldModified('presence_preop') || $this->fieldModified('presence_postop') ||
-        $this->fieldModified('date') || $this->fieldModified('time_operation'))
+        $this->fieldModified('date') || $this->fieldModified('time_operation')
     ) {
-      $sejour->loadRefsOperations();
-      if (count($sejour->_ref_operations) == 1) {
-        if ($this->time_operation == '00:00:00') {
-          $this->time_operation = null;
-        }
-        if (isset($this->presence_preop) && (isset($this->horaire_voulu) || isset($this->time_operation))) {
-          $sejour->entree_prevue = $this->date . ' ' . CMbDT::subTime($this->presence_preop, CValue::first($this->time_operation, $this->horaire_voulu));
-          $do_store_sejour = true;
-        }
-        if (
-            isset($this->presence_postop) && isset($this->temp_operation) &&
-            (isset($this->horaire_voulu) || isset($this->time_operation))
-        ) {
-          $time_postop = CMbDT::addTime($this->temp_operation, $this->presence_postop);
-          $sejour->sortie_prevue = $this->date . ' ' . CMbDT::addTime($time_postop, CValue::first($this->time_operation, $this->horaire_voulu));
-          $do_store_sejour = true;
-        }
-
-        if ($do_store_sejour) {
-          $sejour->updateFormFields();
-        }
-        if (!isset($this->time_operation)) {
-          $this->time_operation = '00:00:00';
-        }
+      if ($sejour->checkUpdateTimeAmbu()) {
+        $do_store_sejour = true;
       }
     }
 
