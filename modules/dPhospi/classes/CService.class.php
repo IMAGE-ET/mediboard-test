@@ -227,7 +227,7 @@ class CService extends CMbObject {
     if (!$with_effectue) {
       if ($with_sortie_reelle) {
         $ljoin["sejour"] = "affectation.sejour_id = sejour.sejour_id";
-        $where[] = "affectation.effectue = '0' OR sejour.sortie_reelle >= '".CMbDT::dateTime()."'";
+        $where[] = "affectation.effectue = '0' OR (sejour.sortie_reelle >= '".CMbDT::dateTime()."' AND affectation.sortie >= '".CMbDT::dateTime()."')";
       }
       else {
         $where["affectation.effectue"] = "= '0'";
