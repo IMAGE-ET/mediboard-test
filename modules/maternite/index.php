@@ -13,7 +13,8 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab("vw_admissions"      , TAB_READ);
-$module->registerTab("vw_grossesses"      , TAB_READ);
-$module->registerTab("vw_placement"       , TAB_READ);
-$module->registerTab("vw_consultations"   , TAB_READ);
+//$module->registerTab("vw_tdb_maternite", TAB_READ);
+$module->registerTab("vw_admissions"   , TAB_READ);
+$module->registerTab("vw_grossesses"   , TAB_READ);
+$module->registerTab("vw_placement"    , TAB_READ);
+$module->registerTab("vw_consultations", TAB_READ);
