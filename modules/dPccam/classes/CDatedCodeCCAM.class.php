@@ -608,7 +608,7 @@ class CDatedCodeCCAM {
    */
   function isComplement() {
     $this->getChaps();
-    return $this->chapitres[0]['db'] == '000018' && $this->chapitres[1]['db'] == '000002';
+    return isset($this->chapitres[1]) && $this->chapitres[1]['rang'] == '18.02.';
   }
 
   /**
@@ -618,7 +618,7 @@ class CDatedCodeCCAM {
    */
   function isSupplement() {
     $this->getChaps();
-    return $this->chapitres[0]['db'] == '000019' && $this->chapitres[1]['db'] == '000002';
+    return isset($this->chapitres[1]) && $this->chapitres[1]['rang'] == '19.02.';
   }
 
   /**
@@ -629,8 +629,7 @@ class CDatedCodeCCAM {
    */
   function isRadioCardioInterv() {
     $this->getChaps();
-    return $this->chapitres[0]['db'] == '000019' && $this->chapitres[1]['db'] == '000001'
-      && $this->chapitres[2]['db'] == '000009' && $this->chapitres[3]['db'] == '000002';
+    return isset($this->chapitres[3]) && $this->chapitres[3]['rang'] == '19.01.09.02.';
   }
 
   /**
