@@ -62,6 +62,9 @@ class CSetupreservation extends CSetup {
     $this->makeRevision("0.05");
     $this->addFunctionalPermQuery("planning_resa_days_limit", '0');
 
-    $this->mod_version = "0.06";
+    $this->makeRevision("0.06");
+    $this->addFunctionalPermQuery("planning_resa_past_days_limit", '0');
+
+    $this->mod_version = "0.07";
   }
 }

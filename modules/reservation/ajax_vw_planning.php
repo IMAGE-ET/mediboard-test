@@ -35,6 +35,12 @@ if ($date_planning > $today && $days_limit_future != 0 && $date_planning > $max_
   $date_planning = $max_date_planning;
 }
 
+$days_limit_past = abs(CAppUI::pref("planning_resa_past_days_limit"));
+$min_date_planning = CMbDT::date("- $days_limit_past DAYS", $today);
+if ($date_planning < $today && $days_limit_past != 0 && $date_planning < $min_date_planning) {
+  $date_planning = $min_date_planning;
+}
+
 CValue::setSession("date_planning", $date_planning);
 
 //alerts

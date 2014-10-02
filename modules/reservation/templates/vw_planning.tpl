@@ -56,9 +56,21 @@ refreshPlanning = function () {
     date_limit.setDate(today.getDate() + planning_resa_days_limit);
 
     var date_planning = Date.fromDATE($V(form.elements.date_planning));
-    var next_day = new Date().setDate(date_planning.getDate() + 1);
+    date_planning.addDays(1);
 
-    (next_day > date_limit) ? $('next_day').hide() : $('next_day').show();
+    $('next_day').setVisible(date_planning < date_limit);
+  }
+
+  var planning_resa_past_days_limit = Math.abs(Preferences.planning_resa_past_days_limit);
+  if (planning_resa_past_days_limit != 0) {
+    var today = new Date();
+    var date_limit_past = new Date();
+    date_limit_past.setDate(today.getDate() - planning_resa_past_days_limit);
+
+    var date_planning = Date.fromDATE($V(form.elements.date_planning));
+    //date_planning.addDays(-1);
+
+    $('past_day').setVisible(date_planning > date_limit_past);
   }
 
   url.requestUpdate("planning");
@@ -339,8 +351,12 @@ resetCopy = function () {
 Main.add(function () {
   var form = getForm("filterPlanning");
 
-  {{if $limit_date}}
+  {{if $limit_date && $limit_past_date}}
+    window.calendar_planning = Calendar.regField(form.date_planning, {limit: {start: '{{$limit_past_date}}', stop: '{{$limit_date}}'}});
+  {{elseif $limit_date}}
     window.calendar_planning = Calendar.regField(form.date_planning, {limit: {start: null, stop: '{{$limit_date}}'}});
+  {{elseif $limit_past_date}}
+    window.calendar_planning = Calendar.regField(form.date_planning, {limit: {start: '{{$limit_past_date}}'}});
   {{else}}
     window.calendar_planning = Calendar.regField(form.date_planning);
   {{/if}}
@@ -417,7 +433,7 @@ Main.add(function () {
     </tr>
     <tr>
       <td>
-        <a href="#nothing"
+        <a href="#nothing" id="past_day"
            onclick="window.calendar_planning.datePicked(new Date(new Date(window.calendar_planning.altElement.defaultValue).setHours('-24')))">
           &lt;&lt;&lt;</a>
         <label>

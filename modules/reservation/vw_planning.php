@@ -43,6 +43,12 @@ if ($days_limit_future != 0) {
   $limit_date = CMbDT::date("+ $days_limit_future DAYS", CMbDT::date());
 }
 
+$limit_past_date = null;
+$days_limit_past = abs(CAppUI::pref("planning_resa_past_days_limit"));
+if ($days_limit_past != 0) {
+  $limit_past_date = CMbDT::date("- $days_limit_past DAYS", CMbDT::date());
+}
+
 $smarty = new CSmartyDP("modules/reservation");
 $smarty->assign("current_m", $current_m);
 $smarty->assign("date_planning", $date_planning);
@@ -54,4 +60,5 @@ $smarty->assign("bloc_id", $bloc_id);
 $smarty->assign("show_cancelled", $show_cancelled);
 $smarty->assign("show_operations", $show_operations);
 $smarty->assign("limit_date", $limit_date);
+$smarty->assign("limit_past_date", $limit_past_date);
 $smarty->display("vw_planning.tpl");

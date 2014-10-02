@@ -363,6 +363,7 @@ $locales['module-admin-long'] = 'Permissions utilisateurs';
 $locales['module-common-court'] = 'Tous modules';
 $locales['null'] = 'null';
 $locales['pref-ccam_consultation-desc'] = 'Affiche le volet de cotation des actes CCAM dans les consultations';
+$locales['pref-planning_resa_past_days_limit-desc'] = 'Nombre de jours du blocage de calendrier dans le passé, mettre 0 pour aucune limite';
 $locales['sanitize_userlogs-message-finished'] = 'La fin du journal utilisateur est atteinte (dernière entrée %d) !';
 $locales['sanitize_userlogs-message-foundrows-count'] = '%d enregistrements trouvés pour les clés entre %d et %d.';
 $locales['sanitize_userlogs-message-foundrows-purge'] = '%d enregistrements purgés pour les clés entre %d et %d.';
