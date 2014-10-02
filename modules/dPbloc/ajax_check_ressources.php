@@ -22,7 +22,7 @@ $color = "";
 $nb_besoins = count($besoins);
 $nb_valides = 0;
 
-if ($nb_besoins) {
+if ($nb_besoins && $object_id) {
   $color = "0a0";
   /** @var COperation $operation */
   $operation = reset($besoins)->loadRefOperation();

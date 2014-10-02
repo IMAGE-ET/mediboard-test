@@ -64,7 +64,9 @@
       // Ajout d'une bordure sur le bouton suivant l'état des besoins
       $$(".ressource_bouton_"+object_id).each(function(button) {
         button.setStyle({border: "2px solid #"+object.color});
-        button.down('span').update("("+object.count+")");
+        {{if $object_id}}
+          button.down('span').update("("+object.count+")");
+        {{/if}}
       });
     });
   }
