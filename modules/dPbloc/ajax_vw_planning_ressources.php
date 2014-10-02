@@ -87,10 +87,8 @@ foreach ($usages as $_usage) {
   $_usage->_fin_offset_retablissement = CMbdate::position(min($date_max, $fin_retab), $date_min, "1hour");
   $_usage->_width_retablissement = $_usage->_fin_offset_retablissement - $_usage->_debut_offset_retablissement;
 
-  foreach ($ressources as $_ressource) {
-    if ($min_fin_op <= $_debut_op && CMbDT::addDateTime($_ressource->retablissement, $min_fin_op) > $_debut_op) {
-      $display_alert[$_ressource->_id] = 1;
-    }
+  if ($min_fin_op <= $_debut_op && CMbDT::addDateTime($_ressource->retablissement, $min_fin_op) > $_debut_op) {
+    $display_alert[$_ressource->_id] = 1;
   }
 
   if ($_usage->_width <= 0) {
