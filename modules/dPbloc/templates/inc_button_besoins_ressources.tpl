@@ -46,7 +46,7 @@
       // Arprès fermeture de la modale, on réactualise
       // la couleur de la bordure des boutons
       {{if $type == "operation_id"}}
-        checkRessources(object_id);
+        checkAllOps();
       {{/if}}
     });
 
@@ -55,7 +55,14 @@
   synchronizeTypes = function(types) {
     window.besoins_non_stored = types.split(",");
   };
-  
+
+  checkAllOps = function() {
+    $$(".bouton_materiel").each(function(button) {
+      var object_id = button.get("object_id");
+      checkRessources(object_id);
+    });
+  }
+
   checkRessources = function(object_id) {
     var url = new Url("bloc", "ajax_check_ressources");
     url.addParam("type", "{{$type}}");
@@ -72,4 +79,5 @@
   }
 </script>
 
-<button type="button" class="search ressource_bouton_{{$object_id}}" onclick="editBesoins('{{$object_id}}');">Matériel <span></span></button>
+<button type="button" class="search bouton_materiel ressource_bouton_{{$object_id}}" data-object_id="{{$object_id}}"
+        onclick="editBesoins('{{$object_id}}');">Matériel <span></span></button>
