@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPbloc
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
@@ -66,6 +66,7 @@ class CSalle extends CMbObject {
     $backProps["commentaires"] = "CCommentairePlanning salle_id";
     $backProps["check_list_categories"] = "CDailyCheckItemCategory target_id";
     $backProps["check_list_type_links"] = "CDailyCheckListTypeLink object_id";
+    $backProps["monitoring_concentrator"] = "CMonitoringConcentrator salle_id";
     return $backProps;
   }
 
