@@ -56,7 +56,7 @@
       <td class="button" colspan="2">
         {{if $emplacement->_id}}
         <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
-        <button class="trash" type="delete" onclick="confirmDeletion(this.form,{typeName:'l\'emplacement de la chambre',objName: '{{$emplacement->_ref_chambre->nom}}'}, true)">
+        <button class="trash" type="delete" onclick="confirmDeletion(this.form,{typeName:'l\'emplacement de la chambre',objName: '{{$emplacement->_ref_chambre->nom->_view|smarty:nodefaults|JSAttribute}}'}, true)">
           {{tr}}Delete{{/tr}}
         </button>
         {{else}}

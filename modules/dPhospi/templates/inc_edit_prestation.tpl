@@ -46,7 +46,7 @@
         {{if $prestation->_id}}
           <button type="button" class="cancel" onclick="confirmDeletion(this.form, {
               typeName: 'la prestation',
-              objName:'{{$prestation}}',
+              objName:'{{$prestation->_view|smarty:nodefaults|JSAttribute}}',
               ajax: true})">{{tr}}Delete{{/tr}}</button>
         {{/if}}
       </td>
