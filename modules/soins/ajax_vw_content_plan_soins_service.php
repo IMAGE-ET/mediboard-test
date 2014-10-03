@@ -27,12 +27,6 @@ $count_composition_dossier  = array();
 
 $configs = CConfigService::getAllFor($service_id);
 
-// Si la date actuelle est inférieure a l'heure affichée sur le plan de soins, on affiche le plan de soins de la veille
-$datetime_limit = CMbDT::dateTime($configs["Poste 1"].":00:00");
-if ($date == CMbDT::date() && CMbDT::dateTime() < $datetime_limit) {
-  $date = CMbDT::date("- 1 DAY", $date);
-}
-
 if (!$nb_decalage) {
   $nb_decalage = $configs["Nombre postes avant"];
 }
