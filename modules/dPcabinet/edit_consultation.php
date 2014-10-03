@@ -185,7 +185,10 @@ foreach ($tabs_count as $_tab => $_count) {
   switch ($_tab) {
     case "AntTrait":
       $prescription = $dossier_medical->loadRefPrescription();
-      $count_meds = $prescription->countBackRefs("prescription_line_medicament");
+      $count_meds = 0;
+      if (CModule::getActive("dPprescription")) {
+        $count_meds = $prescription->countBackRefs("prescription_line_medicament");
+      }
       $dossier_medical->countTraitements();
       $dossier_medical->countAntecedents();
       $tabs_count[$_tab] = $dossier_medical->_count_antecedents + $dossier_medical->_count_traitements + $count_meds;
