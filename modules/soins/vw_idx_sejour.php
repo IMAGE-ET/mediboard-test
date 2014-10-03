@@ -161,10 +161,13 @@ if ($praticien_id && !$service_id) {
     $affectations = array();
     $affectation = new CAffectation();
     $where = array();
-    $where["sejour_id"] = " = '$_sejour->_id'";
-    $where["entree"] = "<= '$date 23:59:59'";
-    $where["sortie"] = ">= '$date 00:00:00'";
-    $affectations = $affectation->loadList($where);
+    $where["affectation.sejour_id"] = " = '$_sejour->_id'";
+    $where["affectation.entree"] = "<= '$date 23:59:59'";
+    $where["affectation.sortie"] = ">= '$date 00:00:00'";
+    $ljoin = array();
+    $ljoin["sejour"] = "affectation.sejour_id = sejour.sejour_id";
+    $where[] = "affectation.effectue = '0' OR (sejour.sortie_reelle >= '".CMbDT::dateTime()."' AND affectation.sortie >= '".CMbDT::dateTime()."')";
+    $affectations = $affectation->loadList($where, null, null, null, $ljoin);
 
     if (count($affectations) >= 1) {
       foreach ($affectations as $_affectation) {
