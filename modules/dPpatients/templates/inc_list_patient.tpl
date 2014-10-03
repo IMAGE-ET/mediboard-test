@@ -27,6 +27,14 @@
       search : function(from) {
         $("useVitale").value = 0;
         return true;
+      },
+
+      doLink : function(oForm) {
+        new Url("patients", "do_link", "dosql")
+          .addParam("objects_id", $V(oForm["objects_id[]"]).join("-"))
+          .requestUpdate("systemMsg", {
+            method: 'post'
+          });
       }
     };
 

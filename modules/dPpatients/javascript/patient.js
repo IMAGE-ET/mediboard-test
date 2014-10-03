@@ -46,13 +46,5 @@ Patient = Object.extend({
     new Url("cda", "ajax_history_ins")
       .addParam("patient_id", $id)
       .requestModal();
-  },
-
-  doLink : function(oForm) {
-    new Url("patients", "do_link", "dosql")
-      .addParam("objects_id", $V(oForm["objects_id[]"]).join("-"))
-      .requestUpdate("systemMsg", {
-      method: 'post'
-    });
   }
 }, window.Patient);
