@@ -226,8 +226,12 @@ class CService extends CMbObject {
 
     if (!$with_effectue) {
       if ($with_sortie_reelle) {
-        $ljoin["sejour"] = "affectation.sejour_id = sejour.sejour_id";
-        $where[] = "affectation.effectue = '0' OR (sejour.sortie_reelle >= '".CMbDT::dateTime()."' AND affectation.sortie >= '".CMbDT::dateTime()."')";
+        $complement = "";
+        if ($date == CMbDT::date()) {
+          $ljoin["sejour"] = "affectation.sejour_id = sejour.sejour_id";
+          $complement = "OR (sejour.sortie_reelle >= '".CMbDT::dateTime()."' AND affectation.sortie >= '".CMbDT::dateTime()."')";
+        }
+        $where[] = "affectation.effectue = '0' $complement";
       }
       else {
         $where["affectation.effectue"] = "= '0'";

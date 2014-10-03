@@ -165,8 +165,12 @@ if ($praticien_id && !$service_id) {
     $where["affectation.entree"] = "<= '$date 23:59:59'";
     $where["affectation.sortie"] = ">= '$date 00:00:00'";
     $ljoin = array();
-    $ljoin["sejour"] = "affectation.sejour_id = sejour.sejour_id";
-    $where[] = "affectation.effectue = '0' OR (sejour.sortie_reelle >= '".CMbDT::dateTime()."' AND affectation.sortie >= '".CMbDT::dateTime()."')";
+    $complement = "";
+    if ($date == CMbDT::date()) {
+      $ljoin["sejour"] = "affectation.sejour_id = sejour.sejour_id";
+      $complement = "OR (sejour.sortie_reelle >= '".CMbDT::dateTime()."' AND affectation.sortie >= '".CMbDT::dateTime()."')";
+    }
+    $where[] = "affectation.effectue = '0' $complement";
     $affectations = $affectation->loadList($where, null, null, null, $ljoin);
 
     if (count($affectations) >= 1) {
