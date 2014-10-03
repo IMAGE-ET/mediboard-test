@@ -254,6 +254,9 @@ if ($show_operations) {
       continue;
     }
 
+    $types_antecedent = CAntecedent::$types;
+    $types_antecedent = array_diff($types_antecedent, array("alle"));
+
     foreach ($_operations as $_operation) {
       //CSQLDataSource::$trace = true;
 
@@ -284,8 +287,6 @@ if ($show_operations) {
       $patient->_ref_dossier_medical->countAllergies();
 
       //antecedents, OK
-      $types_antecedent = CAntecedent::$types;
-      $types_antecedent = array_diff($types_antecedent, array("alle"));
       $count_atcd = $patient->_ref_dossier_medical->countRefsAntecedentsByType($types_antecedent);
 
       //besoins
@@ -451,7 +452,7 @@ foreach ($commentaires_by_salle as $salle_id => $_commentaires) {
 foreach ($plages_by_salle as $salle_id => $_plages) {
   $i = array_search($salle_id, $salles_ids);
 
-  CMbObject::massLoadBackRefs($_plages, "notes");
+  CMbObject::massLoadRefsNotes($_plages);
   CMbObject::massLoadFwdRef($_plages, "chir_id");
   CMbObject::massLoadFwdRef($_plages, "anesth_id");
   CMbObject::massLoadFwdRef($_plages, "spec_id");
