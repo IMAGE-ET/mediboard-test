@@ -2206,6 +2206,9 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `consultation_anesth`
                 ADD `piercing` ENUM ('0','1') DEFAULT '0' AFTER `ronflements`;";
     $this->addQuery($query);
-    $this->mod_version = '2.41';
+    $this->makeRevision("2.41");
+
+    $this->addPrefQuery("take_consult_for_dieteticien", "0");
+    $this->mod_version = '2.42';
   }
 }

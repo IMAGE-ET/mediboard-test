@@ -58,7 +58,7 @@ if ($filter) {
 }
 
 if ($pro_sante) {
-  $user_types = array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme");
+  $user_types = array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Diététicien");
   $utypes_flip = array_flip(CUser::$types);
 
   if (is_array($user_types)) {

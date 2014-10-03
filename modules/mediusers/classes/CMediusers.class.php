@@ -249,7 +249,7 @@ class CMediusers extends CPerson {
     $props["_user_cp"]               = "num length|5 confidential reported";
     $props["_user_ville"]            = "str confidential reported";
     $props["_profile_id"]            = "ref reported class|CUser";
-    $props["_user_type"]             = "num notNull min|0 max|20 reported";
+    $props["_user_type"]             = "num notNull min|0 max|21 reported";
     $props["_user_type_view"]        = "str";
 
     // The different levels of security are stored to be usable in JS
@@ -1164,6 +1164,9 @@ class CMediusers extends CPerson {
     if (CAppUI::pref("take_consult_for_sage_femme")) {
       $list[] = "Sage Femme";
     }
+    if (CAppUI::pref("take_consult_for_dieteticien")) {
+      $list[] = "Diététicien";
+    }
     return $this->loadListFromType($list, $permType, $function_id, $name, $actif, $secondary);
   }
 
@@ -1190,7 +1193,7 @@ class CMediusers extends CPerson {
    * @return CMediusers[]
    */
   function loadProfessionnelDeSante($permType = PERM_READ, $function_id = null, $name = null, $secondary = false, $actif = true) {
-    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Dentiste"), $permType, $function_id, $name, $actif, $secondary);
+    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Dentiste", "Diététicien"), $permType, $function_id, $name, $actif, $secondary);
   }
 
   /**
@@ -1203,7 +1206,7 @@ class CMediusers extends CPerson {
    * @return CMediusers[]
    */
   function loadNonProfessionnelDeSante($permType = PERM_READ, $function_id = null, $name = null, $secondary = false, $actif = true) {
-    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Dentiste"), $permType, $function_id, $name, $secondary, $actif, true);
+    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Dentiste", "Diététicien"), $permType, $function_id, $name, $secondary, $actif, true);
   }
 
   /**
@@ -1249,7 +1252,7 @@ class CMediusers extends CPerson {
    */
   function isProfessionnelDeSante() {
     return $this->_is_professionnel_sante = $this->isFromType(
-      array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Dentiste")
+      array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Dentiste", "Diététicien")
     );
   }
 
@@ -1319,14 +1322,14 @@ class CMediusers extends CPerson {
    * @return bool
    */
   function isMedical() {
-    return $this->isFromType(array("Administrator", "Chirurgien", "Anesthésiste", "Infirmière", "Médecin", "Rééducateur", "Sage Femme", "Dentiste", "Pharmacien"));
+    return $this->isFromType(array("Administrator", "Chirurgien", "Anesthésiste", "Infirmière", "Médecin", "Rééducateur", "Sage Femme", "Dentiste", "Pharmacien", "Diététicien"));
   }
 
   /**
    * @return bool
    */
   function isExecutantPrescription() {
-    return $this->isFromType(array("Infirmière", "Aide soignant", "Rééducateur", "Sage Femme"));
+    return $this->isFromType(array("Infirmière", "Aide soignant", "Rééducateur", "Sage Femme", "Diététicien"));
   }
 
   /**
@@ -1336,6 +1339,15 @@ class CMediusers extends CPerson {
    */
   function isKine() {
     return $this->isFromType(array("Rééducateur"));
+  }
+
+  /**
+   * Check whether user is a dieteticien
+   *
+   * @return bool
+   */
+  function isDieteticien() {
+    return $this->isFromType(array("Diététicien"));
   }
 
   /**

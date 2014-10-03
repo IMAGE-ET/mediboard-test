@@ -1,14 +1,3 @@
-{{* $Id:$ *}}
-
-{{*
- * @package Mediboard
- * @subpackage 
- * @version $Revision:$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
-
-  
 {{mb_include template=inc_pref spec=bool var=AUTOADDSIGN}}
 {{mb_include template=inc_pref spec=enum var=MODCONSULT values="0|1"}}
 {{mb_include template=inc_pref spec=bool var=dPcabinet_show_program}}
@@ -48,3 +37,4 @@
 {{mb_include template=inc_pref spec=bool var=take_consult_for_reeducateur}}
 {{mb_include template=inc_pref spec=bool var=take_consult_for_sage_femme}}
 {{mb_include template=inc_pref spec=bool var=take_consult_for_dentiste}}
+{{mb_include template=inc_pref spec=bool var=take_consult_for_dieteticien}}

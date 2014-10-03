@@ -102,7 +102,8 @@ class CUser extends CPerson {
     17 => "Pharmacien",
     18 => "Aide soignant",
     19 => "Dentiste",
-    20 => "Préparateur"
+    20 => "Préparateur",
+    21 => "Diététicien"
   );
 
   static $ps_types = array(3, 4, 13, 16, 17, 19);
@@ -151,7 +152,7 @@ class CUser extends CPerson {
     $props["user_username"]             = "str notNull maxLength|20";
     $props["user_password"]             = "str maxLength|64 show|0 loggable|0";
     $props["user_salt"]                 = "str maxLength|64 show|0 loggable|0";
-    $props["user_type"]                 = "num notNull min|0 max|20 default|0";
+    $props["user_type"]                 = "num notNull min|0 max|21 default|0";
     $props["user_first_name"]           = "str maxLength|50 seekable|begin";
     $props["user_last_name"]            = "str notNull maxLength|50 confidential seekable|begin";
     $props["user_email"]                = "str maxLength|255";

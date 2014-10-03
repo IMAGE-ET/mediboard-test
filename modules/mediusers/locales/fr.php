@@ -383,6 +383,7 @@ $locales['pref-take_consult_for_infirmiere'] = 'Prendre RDV pour les infirmières
 $locales['pref-take_consult_for_medecin'] = 'Prendre RDV pour les médecins';
 $locales['pref-take_consult_for_reeducateur'] = 'Prendre RDV pour les rééducateurs';
 $locales['pref-take_consult_for_sage_femme'] = 'Prendre RDV pour les sage femmes';
+$locales['pref-take_consult_for_dieteticien'] = 'Prendre RDV pour les diététiciens';
 $locales['pref-tasking_auto_assign'] = 'Auto-assignation';
 $locales['pref-tasking_auto_assign-desc'] = 'Assigner automatiquement la tâche créée à l\'utilisateur connecté';
 $locales['pref-tasking_auto_refresh_frequency'] = 'Fréquence de rafraîchissement auto.';

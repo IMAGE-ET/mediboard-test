@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id: $
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage Cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision: $
+ * @version    $Revision:$
  */
 
 // Préférences par Module
@@ -49,5 +49,6 @@ CPreferences::$modules["dPcabinet"] = array (
   "take_consult_for_infirmiere",    // le reste non
   "take_consult_for_reeducateur",
   "take_consult_for_sage_femme",
-  "take_consult_for_dentiste"
+  "take_consult_for_dentiste",
+  "take_consult_for_dieteticien"
 );
