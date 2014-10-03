@@ -63,10 +63,10 @@ foreach ($patient->_ref_sejours as $_key => $_sejour) {
     }
     else {
       unset($_sejour->_ref_operations[$_operation->_id]);
-      if (!count($_sejour->_ref_operations)) {
-        unset($patient->_ref_sejours[$_sejour->_id]);
-      }
     }
+  }
+  if (!count($_sejour->_ref_operations)) {
+    unset($patient->_ref_sejours[$_sejour->_id]);
   }
 }
 
