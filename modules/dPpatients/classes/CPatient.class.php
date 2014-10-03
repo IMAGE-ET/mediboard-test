@@ -1109,7 +1109,7 @@ class CPatient extends CPerson {
    * @return int
    */
   function countPatientLinks() {
-    return $this->countBackRefs("patient_link1") + $this->countBackRefs("patient_link2");
+    return $this->countBackRefs("patient_link1", null, null, false) + $this->countBackRefs("patient_link2", null, null, false);
   }
 
   /**

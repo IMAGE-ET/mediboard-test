@@ -164,18 +164,6 @@ class CPatientState extends CMbObject {
 
     $last_state = $patient->loadLastState();
 
-    if ($last_state && $patient->status == $last_state->state) {
-      return null;
-    }
-
-    $patient_state = new self;
-    $patient_state->patient_id = $patient->_id;
-    $patient_state->state      = $patient->status;
-    $patient_state->reason     = $patient->_reason_state;
-    if ($msg = $patient_state->store()) {
-      return $msg;
-    }
-
     if ($patient->status == "DPOT") {
       $doubloons = is_array($patient->_doubloon_ids) ? $patient->_doubloon_ids : explode("|", $patient->_doubloon_ids);
       foreach ($doubloons as $_id) {
@@ -190,6 +178,18 @@ class CPatientState extends CMbObject {
         $patient_doubloon->status = "DPOT";
         $patient_doubloon->store();
       }
+    }
+
+    if ($last_state && $patient->status == $last_state->state) {
+      return null;
+    }
+
+    $patient_state = new self;
+    $patient_state->patient_id = $patient->_id;
+    $patient_state->state      = $patient->status;
+    $patient_state->reason     = $patient->_reason_state;
+    if ($msg = $patient_state->store()) {
+      return $msg;
     }
 
     return null;
