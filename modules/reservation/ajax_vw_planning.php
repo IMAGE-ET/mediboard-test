@@ -444,7 +444,7 @@ foreach ($commentaires_by_salle as $salle_id => $_commentaires) {
 foreach ($plages_by_salle as $salle_id => $_plages) {
   $i = array_search($salle_id, $salles_ids);
 
-  CMbObject::massLoadBackRefs($_plages, "notes");
+  CMbObject::massLoadRefsNotes($_plages);
   CMbObject::massLoadFwdRef($_plages, "chir_id");
   CMbObject::massLoadFwdRef($_plages, "anesth_id");
   CMbObject::massLoadFwdRef($_plages, "spec_id");
