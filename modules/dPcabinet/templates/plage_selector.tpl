@@ -249,6 +249,7 @@
       var date                = element.get("date");
       var chir_id             = element.get("chir_id");
       var chir_view           = element.get("chir_name");
+
       var slot_id             = element.get("slot_id");
       var el_prescrip_id      = element.get("consult_element");
       var el_prescrip_libelle = element.get("consult_element_libelle");
@@ -376,43 +377,45 @@
       </td>
 
       <td>
-        <button type="button" onclick="Modal.open('repeat_modal');" class="change">Répéter </button>
+        {{if $multipleMode}}
+          <button type="button" onclick="Modal.open('repeat_modal');" class="change">Répéter </button>
 
-        <div id="repeat_modal" style="display:none;">
-          <div class="small-info">
-            Selectionnez la répétition de cette plage.
+          <div id="repeat_modal" style="display:none;">
+            <div class="small-info">
+              Selectionnez la répétition de cette plage.
+            </div>
+            <table>
+              <tr>
+                <td>
+                  Répéter de manière
+                  <select name="repeat_type">
+                    {{foreach from=$periods item="_period"}}
+                      <option value="{{$_period}}" {{if $_period == $period}}selected="selected"{{/if}}>
+                        {{tr}}Period.{{$_period}}{{/tr}}
+                      </option>
+                    {{/foreach}}
+                  </select>
+                </td>
+                <td>
+                  pour
+                  <select name="repeat_number">
+                    <option value="0">&mdash;</option>
+                    {{foreach from=1|range:$app->user_prefs.NbConsultMultiple-1 item=_nb}}
+                      <option value="{{$_nb}}">{{$_nb}}</option>
+                    {{/foreach}}
+                  </select>
+                  rdv supplémentaires
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <button type="button" class="tick" onclick="guessNexts(); Control.Modal.close();">{{tr}}Repeat{{/tr}} {{tr}}and{{/tr}} {{tr}}Close{{/tr}}</button>
+                </td>
+              </tr>
+            </table>
+
           </div>
-          <table>
-            <tr>
-              <td>
-                Répéter de manière
-                <select name="repeat_type">
-                  {{foreach from=$periods item="_period"}}
-                    <option value="{{$_period}}" {{if $_period == $period}}selected="selected"{{/if}}>
-                      {{tr}}Period.{{$_period}}{{/tr}}
-                    </option>
-                  {{/foreach}}
-                </select>
-              </td>
-              <td>
-                pour
-                <select name="repeat_number">
-                  <option value="0">&mdash;</option>
-                  {{foreach from=1|range:$app->user_prefs.NbConsultMultiple-1 item=_nb}}
-                    <option value="{{$_nb}}">{{$_nb}}</option>
-                  {{/foreach}}
-                </select>
-                rdv supplémentaires
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2">
-                <button type="button" class="tick" onclick="guessNexts(); Control.Modal.close();">{{tr}}Repeat{{/tr}} {{tr}}and{{/tr}} {{tr}}Close{{/tr}}</button>
-              </td>
-            </tr>
-          </table>
-
-        </div>
+        {{/if}}
       </td>
 
       <!-- hide -->
