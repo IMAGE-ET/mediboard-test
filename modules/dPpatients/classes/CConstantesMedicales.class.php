@@ -55,6 +55,7 @@ class CConstantesMedicales extends CMbObject {
   public $_unite_ta;
   public $_unite_glycemie;
   public $_unite_cetonemie;
+  public $_unite_hemoglobine;
 
   static $_specs_converted = false;
   static $_latest_values = array();
@@ -69,13 +70,13 @@ class CConstantesMedicales extends CMbObject {
       "min" => "@-2", "max" => "@+2",
     ),
     "_poids_g"          => array(
-    "type" => "physio",
-    "unit" => "g",
-    "unit_iso" => "g",
-    "plot" => true,
-    "edit" => true,
-    "min" => "@-200", "max" => "@+200"
-  ),
+      "type" => "physio",
+      "unit" => "g",
+      "unit_iso" => "g",
+      "plot" => true,
+      "edit" => true,
+      "min" => "@-200", "max" => "@+200"
+    ),
     "taille"            => array(
       "type" => "physio",
       "unit" => "cm",
@@ -253,7 +254,11 @@ class CConstantesMedicales extends CMbObject {
     "hemoglobine_rapide" => array(
       "type" => "biolo",
       "unit" => "g/dl",
-      "min" => 3, "max" => 25
+      "min" => 3, "max" => 25,
+      "conversion" => array('g/l' => 10),
+      'unit_config' => 'unite_hemoglobine',
+      'orig_unit' => 'g/dl',
+      'formfields' => array('_hemoglobine_rapide')
     ),
     "PVC"               => array(
       "type" => "physio",
@@ -930,6 +935,9 @@ class CConstantesMedicales extends CMbObject {
     $props['_unite_cetonemie']       = 'enum list|g/l|mmol/l';
 
     $props['hemoglobine_rapide']     = 'float';
+    $props['_hemoglobine_rapide']    = 'float';
+    $props['_unite_hemoglobine']     = 'enum list|g/dl|g/l';
+
     $props['PVC']                    = 'float min|0';
     $props['perimetre_abdo']         = 'float min|0';
     $props['perimetre_cranien']      = 'float min|0';
@@ -1124,14 +1132,16 @@ class CConstantesMedicales extends CMbObject {
     if (empty($unite_config)) {
       $group = CGroups::loadCurrent();
 
-      $unite_config["unite_ta"]        = CAppUI::conf('dPpatients CConstantesMedicales unite_ta',        $group);
-      $unite_config["unite_glycemie"]  = CAppUI::conf('dPpatients CConstantesMedicales unite_glycemie',  $group);
-      $unite_config["unite_cetonemie"] = CAppUI::conf('dPpatients CConstantesMedicales unite_cetonemie', $group);
+      $unite_config["unite_ta"]          = CAppUI::conf('dPpatients CConstantesMedicales unite_ta',          $group);
+      $unite_config["unite_glycemie"]    = CAppUI::conf('dPpatients CConstantesMedicales unite_glycemie',    $group);
+      $unite_config["unite_cetonemie"]   = CAppUI::conf('dPpatients CConstantesMedicales unite_cetonemie',   $group);
+      $unite_config["unite_hemoglobine"] = CAppUI::conf('dPpatients CConstantesMedicales unite_hemoglobine', $group);
     }
 
-    $this->_unite_ta        = $unite_config["unite_ta"];
-    $this->_unite_glycemie  = $unite_config["unite_glycemie"];
-    $this->_unite_cetonemie = $unite_config["unite_cetonemie"];
+    $this->_unite_ta          = $unite_config["unite_ta"];
+    $this->_unite_glycemie    = $unite_config["unite_glycemie"];
+    $this->_unite_cetonemie   = $unite_config["unite_cetonemie"];
+    $this->_unite_hemoglobine = $unite_config["unite_hemoglobine"];
 
     foreach (self::$list_constantes as $_constant => &$_params) {
       // Conversion des unités

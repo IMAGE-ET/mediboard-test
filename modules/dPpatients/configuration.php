@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Patients
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 $selection = array(
@@ -55,9 +55,10 @@ CConfiguration::register(
           'auto_selected_patient'     => "bool default|0",
         ),
         'CConstantesMedicales' => array(
-          'unite_ta'        => 'enum list|cmHg|mmHg default|' . CAppUI::conf('dPpatients CConstantesMedicales unite_ta'),
-          'unite_glycemie'  => 'enum list|g/l|mmol/l default|' . CAppUI::conf('dPpatients CConstantesMedicales unite_glycemie'),
-          'unite_cetonemie' => 'enum list|g/l|mmol/l default|' . CAppUI::conf('dPpatients CConstantesMedicales unite_cetonemie'),
+          'unite_ta'          => 'enum list|cmHg|mmHg default|' . CAppUI::conf('dPpatients CConstantesMedicales unite_ta'),
+          'unite_glycemie'    => 'enum list|g/l|mmol/l default|' . CAppUI::conf('dPpatients CConstantesMedicales unite_glycemie'),
+          'unite_cetonemie'   => 'enum list|g/l|mmol/l default|' . CAppUI::conf('dPpatients CConstantesMedicales unite_cetonemie'),
+          'unite_hemoglobine' => 'enum list|g/dl|g/l default|g/dl',
         )
       )
     ),
