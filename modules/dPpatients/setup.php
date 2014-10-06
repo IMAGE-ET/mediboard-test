@@ -2699,7 +2699,11 @@ class CSetupdPpatients extends CSetup {
 
     $query = "ALTER TABLE `constantes_medicales`
                 ADD `sens_membre_inf_d` FLOAT,
-                ADD `sens_membre_inf_g` FLOAT;";
+                ADD `sens_membre_inf_g` FLOAT,
+                ADD `tonus_d` FLOAT,
+                ADD `tonus_g` FLOAT,
+                ADD `motricite_d` FLOAT,
+                ADD `motricite_g` FLOAT;";
     $this->addQuery($query);
 
     $this->mod_version = '2.21';

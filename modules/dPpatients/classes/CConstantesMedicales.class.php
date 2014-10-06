@@ -786,6 +786,26 @@ class CConstantesMedicales extends CMbObject {
       'min' => 0,
       'max' => 10,
     ),
+    'tonus_d' => array(
+      'type' => 'physio',
+      'unit' => '',
+      'min' => 0, 'max' => 2
+    ),
+    'tonus_g' => array(
+      'type' => 'physio',
+      'unit' => '',
+      'min' => 0, 'max' => 2
+    ),
+    'motricite_d' => array(
+      'type' => 'physio',
+      'unit' => '',
+      'min' => 0, 'max' => 2
+    ),
+    'motricite_g' => array(
+      'type' => 'physio',
+      'unit' => '',
+      'min' => 0, 'max' => 2
+    ),
   );
 
   /** @var bool Used for making the params conversion (min, max and standard) only once */
@@ -1039,6 +1059,10 @@ class CConstantesMedicales extends CMbObject {
     $props['gammagt']                = 'num min|0';
     $props['ipsc']                   = 'float min|0';
     $props['broadman']               = 'num min|0';
+    $props['tonus_d']                = 'float min|0 max|2';
+    $props['tonus_g']                = 'float min|0 max|2';
+    $props['motricite_d']            = 'float min|0 max|2';
+    $props['motricite_g']            = 'float min|0 max|2';
     return $props;
   }
 
