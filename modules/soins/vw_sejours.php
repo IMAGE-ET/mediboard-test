@@ -398,7 +398,7 @@ $smarty->assign("show_affectation", $show_affectation);
 $smarty->assign("praticien"       , $praticien);
 $smarty->assign("function"        , $function);
 $smarty->assign("sejour_id"       , $sejour_id);
-$smarty->assign("show_full_affectation", $select_view);
+$smarty->assign("show_full_affectation", $select_view || CValue::get("show_full_affectation"));
 $smarty->assign("only_non_checked", $only_non_checked);
 $smarty->assign("print"           , $print);
 $smarty->assign("_sejour"         , $_sejour);
