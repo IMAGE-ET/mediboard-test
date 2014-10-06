@@ -1608,21 +1608,30 @@ class CConstantesMedicales extends CMbObject {
     // Cumul de la diurese
     if ($datetime) {
       foreach ($list_constantes as $_name => $_params) {
-        if (isset($_params["cumul_for"]) || isset($_params["formula"])) {
+        if (isset($_params["cumul_reset_config"]) || isset($_params["formula"])) {
           $day_defore = CMbDT::dateTime("-24 hours", $datetime);
 
-          if (isset($_params["cumul_for"])) {
-            // cumul simple sur le meme champ
-            $cumul_for = $_params["cumul_for"];
+          if (isset($_params["cumul_reset_config"]) && !isset($_params['formula'])) {
+            $cumul_field = '_' . $_name . '_cumul';
+            $reset_hour = str_pad(self::getHostConfig($_params["cumul_reset_config"], $context), 2, '0', STR_PAD_LEFT);
+            $cumul_begin = '';
+            $cumul_end = '';
 
-            $_where = $where;
-            $_where[$cumul_for] = "IS NOT NULL";
-            $_where[] = "datetime >= '$day_defore'";
-            $_list = $constante->loadList($_where);
-
-            foreach ($_list as $_const) {
-              $constante->$_name += $_const->$cumul_for;
+            if ($datetime >= CMbDT::format($datetime, "%Y-%m-%d $reset_hour:00:00")) {
+              $cumul_begin = CMbDT::format($datetime, "%Y-%m-%d $reset_hour:00:00");
+              $cumul_end = CMbDT::format(CMbDT::date('+1 DAY', $datetime), "%Y-%m-%d $reset_hour:00:00");
             }
+            else {
+              $cumul_begin = CMbDT::format(CMbDT::date('-1 DAY', $datetime), "%Y-%m-%d $reset_hour:00:00");
+              $cumul_end = CMbDT::format($datetime, "%Y-%m-%d $reset_hour:00:00");
+            }
+
+            $query = new CRequest();
+            $query->addSelect("SUM(`$_name`)");
+            $query->addTable('constantes_medicales');
+            $query->addWhere(array("`datetime` >= '$cumul_begin'", "`datetime` <= '$cumul_end'", "$_name IS NOT NULL"));
+            $ds = CSQLDataSource::get('std');
+            $constante->$cumul_field = $ds->loadResult($query->makeSelect());
           }
           else {
             // cumul de plusieurs champs (avec formule)

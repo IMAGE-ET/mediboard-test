@@ -227,7 +227,7 @@ if ($context && $selected_context_guid !== 'all') {
 }
 
 //CConstantesMedicales::$_latest_values = array();
-$latest_constantes = $patient->loadRefConstantesMedicales(null, array(), $context, false);
+$latest_constantes = $patient->loadRefConstantesMedicales(CMbDT::dateTime(), array(), $context, false);
 // On récupère dans tous les cas le poids et la taille du patient
 $patient->loadRefConstantesMedicales(null, array("poids", "taille"), null, false);
 

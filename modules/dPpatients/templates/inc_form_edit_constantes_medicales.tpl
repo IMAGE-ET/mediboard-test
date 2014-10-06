@@ -243,6 +243,11 @@ Main.add(function () {
                     {{/if}}
                     <td style="text-align: center" title="{{$dates.$_constant|date_format:$conf.datetime}}">
                       {{mb_value object=$const field=$_constant}}
+                      {{assign var=cumul_field value="_$_constant"|cat:'_cumul'}}
+                      {{if isset($_params.cumul_reset_config|smarty:nodefaults) && !isset($_params.formula|smarty:nodefaults) && isset($const->$cumul_field|smarty:nodefaults)}}
+                        {{assign var=cumul_field value="_$_constant"|cat:'_cumul'}}
+                         ({{$const->$cumul_field}})
+                      {{/if}}
                       <input type="hidden" name="_last_{{$_constant}}" value="{{$const->$_constant}}" />
                     </td>
                   {{/if}}

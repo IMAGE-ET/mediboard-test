@@ -93,7 +93,7 @@ if (!$constantes->_id && !$constantes->datetime) {
   $constantes->datetime = CMbDT::dateTime();
 }
 
-$latest_constantes = CConstantesMedicales::getLatestFor($patient_id, null, array(), $context, false);
+$latest_constantes = CConstantesMedicales::getLatestFor($patient_id, $constantes->datetime, array(), $context, false);
 // Création du template
 $smarty = new CSmartyDP();
 
