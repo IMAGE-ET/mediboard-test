@@ -263,11 +263,16 @@ if ($show_operations) {
 
       $lit  = $_operation->_ref_affectation->_ref_lit;
 
-      $chir   = $_operation->loadRefChir()->loadRefFunction();
-      $chir_2 = $_operation->loadRefChir2()->loadRefFunction();
-      $chir_3 = $_operation->loadRefChir3()->loadRefFunction();
-      $chir_4 = $_operation->loadRefChir4()->loadRefFunction();
-      $anesth = $_operation->loadRefAnesth()->loadRefFunction();
+      $chir   = $_operation->loadRefChir();
+      $chir->loadRefFunction();
+      $chir_2 = $_operation->loadRefChir2();
+      $chir_2->loadRefFunction();
+      $chir_3 = $_operation->loadRefChir3();
+      $chir_3->loadRefFunction();
+      $chir_4 = $_operation->loadRefChir4();
+      $chir_4->loadRefFunction();
+      $anesth = $_operation->loadRefAnesth();
+      $anesth->loadRefFunction();
 
       $_operation->loadRefPlageOp();
 
