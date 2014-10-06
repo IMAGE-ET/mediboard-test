@@ -53,6 +53,7 @@ CConfiguration::register(
           'anonymous_sexe'            => "enum list|m|f default|m",
           'manage_identity_status'    => "bool default|0",
           'auto_selected_patient'     => "bool default|0",
+          'default_value_allow_sms'   => "bool default|0",
         ),
         'CConstantesMedicales' => array(
           'unite_ta'          => 'enum list|cmHg|mmHg default|' . CAppUI::conf('dPpatients CConstantesMedicales unite_ta'),
