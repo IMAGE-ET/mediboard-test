@@ -113,7 +113,7 @@ if ($text_html || $text_plain) {
   $file = new CFile();
   $file->setObject($object);
   $file->author_id = CAppUI::$user->_id;
-  $file->file_name  = $mail->subject;
+  $file->file_name  = $mail->subject ? $mail->subject : "sans_titre";
   $file->file_type = "text/html";
   $file->fillFields();
   $file->putContent($text->content);
