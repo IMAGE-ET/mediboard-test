@@ -50,6 +50,7 @@ class CConstantesMedicales extends CMbObject {
   public $_poids_g;
   public $_imc_valeur;
   public $_vst;
+  public $_tam;
   public $_new_constantes_medicales;
   public $_unite_ta;
   public $_unite_glycemie;
@@ -101,6 +102,16 @@ class CConstantesMedicales extends CMbObject {
       "candles" => true,
       "unit_config" => "unite_ta",
       "orig_unit"   => "cmHg"
+    ),
+    '_tam' => array(
+      'type' => 'physio',
+      'unit' => 'cmHg',
+      'formfields' => array('__tam'),
+      'min' => 2, 'max' => 16,
+      'norm_min' => 8, 'norm_max' => 16,
+      'conversion' => array('mmHg' => 10),
+      'unit_config' => 'unite_ta',
+      'orig_unit' => 'cmHg'
     ),
     "ta_gauche"         => array(
       "type" => "physio",
@@ -864,6 +875,9 @@ class CConstantesMedicales extends CMbObject {
     $props['_ta_systole']            = 'num pos max|50';
     $props['_ta_diastole']           = 'num pos max|50';
 
+    $props['_tam']                   = 'str maxLength|10';
+    $props['__tam']                  = 'num pos max|50';
+
     $props['ta_gauche']              = 'str maxLength|10';
     $props['_ta_gauche_systole']     = 'num pos max|50';
     $props['_ta_gauche_diastole']    = 'num pos max|50';
@@ -1087,6 +1101,13 @@ class CConstantesMedicales extends CMbObject {
     // Calcul du Volume Sanguin Total
     if ($this->poids) {
       $this->_vst = (($this->_ref_patient->sexe != 'm') ? 65 : 70) * $this->poids;
+    }
+
+    // Calcul de la Tension Artérielle Moyenne
+    if ($this->ta) {
+      list($_ta_systole, $_ta_diastole) = explode('|', $this->ta);
+      $this->_tam = round(($_ta_systole + (2 * $_ta_diastole)) / 3, 2);
+      ml($this->_tam, 'tam');
     }
 
     if (empty($unite_config)) {
