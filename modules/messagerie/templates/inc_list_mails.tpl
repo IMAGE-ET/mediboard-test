@@ -52,6 +52,9 @@
         {{if !$_mail->sent}}<button onclick="messagerie.toggleArchived('{{$_mail->_id}}');" class="nowrap notext"><img src="modules/{{$m}}/images/mail_archive.png" alt="" style="height:15px;"/>Archiver</button>{{/if}}
         <button onclick="messagerie.toggleFavorite('{{$_mail->_id}}');" class="nowrap notext"><img src="modules/{{$m}}/images/favorites-{{$_mail->favorite}}.png" alt="" style="height:15px;"/>Mettre en favoris</button>
         {{if $user->isAdmin() && $_mail->uid}}<a href="?m={{$m}}&amp;a=vw_pop_mail&amp;id={{$_mail->_id}}" target="_blank" class="button help notext">Debug</a>{{/if}}
+        {{if $_mail->_is_apicrypt}}
+          <img title="apicrypt" src="modules/messagerie/images/cle.png" alt="attachments" style="height:15px;"/>
+        {{/if}}
       </td>
       <td>{{mb_value object=$_mail field=date_inbox format=relative}}</td>
       <td class="text">
@@ -61,17 +64,14 @@
           <label title="{{$_mail->from}}">{{$_mail->_from}}</label>
         {{/if}}
       </td>
-      <td class="text">
+      <td class="text {{if !$subject}}empty{{/if}}">
         {{assign var=subject value=$_mail->subject}}
-        <a href="#{{$_mail->_id}}"  onclick="messagerie.modalExternalOpen('{{$_mail->_id}}','{{$account_id}}');" style="display: inline; vertical-align: middle;">
-          {{if $subject}}{{mb_include template=inc_vw_type_message}}{{else}}{{tr}}CUserMail-no_subject{{/tr}}{{/if}}
-        </a>
         {{if count($_mail->_attachments)}}
           <img title="{{$_mail->_attachments|@count}}" src="modules/messagerie/images/attachments.png" alt="attachments"/>
         {{/if}}
-        {{if $_mail->_is_apicrypt}}
-          <img title="apicrypt" src="modules/messagerie/images/cle.png" alt="attachments" style="height:15px;"/>
-        {{/if}}
+        <a href="#{{$_mail->_id}}"  onclick="messagerie.modalExternalOpen('{{$_mail->_id}}','{{$account_id}}');" style="display: inline; vertical-align: middle;">
+          {{if $subject}}{{mb_include template=inc_vw_type_message}}{{else}}{{tr}}CUserMail-no_subject{{/tr}}{{/if}}
+        </a>
       </td>
       <td{{if $_mail->_text_plain->content == ""}} class="empty">({{tr}}CUserMail-content-empty{{/tr}}){{else}} class="text compact">{{$_mail->_text_plain->content|truncate:256}}{{/if}}</td>
     </tr>
