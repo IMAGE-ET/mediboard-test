@@ -104,8 +104,9 @@ if (CModule::getActive("dPprescription")) {
   $prescription->calculAllPlanifSysteme();
 
   // Chargement des configs de service
-  if ($sejour->type == "ambu" && $date == CMbDT::date() && CMbDT::date($sejour->entree) == $date) {
-    $sejour->loadRefCurrAffectation(CMbDT::dateTime());
+  if ($sejour->type == "ambu") {
+    $sejour->loadRefsAffectations();
+    $sejour->_ref_curr_affectation = $sejour->_ref_last_affectation;
   }
   else {
     $sejour->loadRefCurrAffectation($date);
