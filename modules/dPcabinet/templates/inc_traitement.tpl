@@ -235,11 +235,6 @@
                     <input type="text" name="produit" value="" size="12" class="autocomplete" />
                     <div style="display:none; width: 350px;" class="autocomplete" id="_produit_auto_complete{{$addform}}"></div>
                   </div>
-
-                  <input name="mask_generique" value="{{$app->user_prefs.check_default_generique}}" title="Masquer les génériques"
-                         {{if $app->user_prefs.check_default_generique}}checked="checked"{{/if}}
-                         type="{{if "dPprescription general see_generique"|conf:"CGroups-$g"}}checkbox{{else}}hidden{{/if}}"/>
-
                   <button type="button" class="search notext" onclick="MedSelector.init('produit');"></button>
                   <script>
                     MedSelector.init = function(onglet) {
@@ -262,7 +257,15 @@
                   <strong><div id="_libelle{{$addform}}"></div></strong>
                 </td>
               </tr>
-
+              <tr>
+                <td></td>
+                <td>
+                  <input name="mask_generique" value="{{$app->user_prefs.check_default_generique}}" title="Masquer les génériques"
+                         {{if $app->user_prefs.check_default_generique}}checked="checked"{{/if}}
+                         type="{{if "dPprescription general see_generique"|conf:"CGroups-$g"}}checkbox{{else}}hidden{{/if}}"/>
+                  <label for="mask_generique">Masquer les génériques</label>
+                </td>
+              </tr>
               <tr>
                 {{if $app->user_prefs.showDatesAntecedents}}
                   <th>{{mb_label object=$line field="debut"}}</th>
@@ -270,7 +273,7 @@
                 {{else}}
                   <td colspan="2"></td>
                 {{/if}}
-                <td rowspan="2" id="addPosoLine{{$addform}}"></td>
+                <td rowspan="3" id="addPosoLine{{$addform}}"></td>
               </tr>
 
               {{if $app->user_prefs.showDatesAntecedents}}
