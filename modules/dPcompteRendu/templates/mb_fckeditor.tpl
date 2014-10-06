@@ -104,10 +104,6 @@ CKEDITOR.editorConfig = function(config) {
       var textForPrint = 'Print';
     {{/if}}
 
-    {{if !$app->user_prefs.show_old_print}}
-      textForPrint = '';
-    {{/if}}
-
     config.extraPlugins =  'mbfields,mbfreetext,mbhelpers,mblists,{{if $mode_play && !$templateManager->isModele}}mbplay,{{/if}},mbprint,mbprintPDF,mbspace,';
     config.extraPlugins += 'mbheader,mbfooter,mbpagebreak,mblineheight{{if "printing"|module_active && !$templateManager->isModele}},mbprinting{{/if}}{{if $can->admin}},mbthumbs{{/if}},mbcap,mbreplace';
     {{if !$templateManager->isModele}}
@@ -115,7 +111,7 @@ CKEDITOR.editorConfig = function(config) {
     {{/if}}
 
     config.toolbar = [
-    ['Save','Preview'], [{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}'mbprintPDF',{{/if}} textForPrint, 'mbprinting', 'SelectAll', 'Cut', 'Copy', 'PasteText', 'PasteFromWord', 'Find', 'Undo', 'Redo'],
+    ['Save','Preview'], [{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}'mbprintPDF',{{/if}} {{if $app->user_prefs.show_old_print}}textForPrint,{{/if}} 'mbprinting', 'SelectAll', 'Cut', 'Copy', 'PasteText', 'PasteFromWord', 'Find', 'Undo', 'Redo'],
     [{{if !$templateManager->isModele}}'mbheader', 'mbfooter',{{/if}} 'mbpagebreak'],
     ['Table','HorizontalRule','Image','SpecialChar', 'mbspace', 'Checkbox'],
     ['Maximize', 'Source'], '/',
