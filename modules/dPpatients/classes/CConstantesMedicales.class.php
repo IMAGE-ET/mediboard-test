@@ -1119,7 +1119,6 @@ class CConstantesMedicales extends CMbObject {
     if ($this->ta) {
       list($_ta_systole, $_ta_diastole) = explode('|', $this->ta);
       $this->_tam = round(($_ta_systole + (2 * $_ta_diastole)) / 3, 2);
-      ml($this->_tam, 'tam');
     }
 
     if (empty($unite_config)) {
