@@ -101,7 +101,10 @@
 </td>
 <td style="text-align: center;">
   {{if $dossier_medical->_count_antecedents && ($dossier_medical->_count_antecedents > $dossier_medical->_count_allergies)}}
-    <img src="images/icons/antecedents.gif" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_ref_dossier_medical->_guid}}', 'antecedents');" />
+    {{if $sejour->_ref_dossier_medical}}
+      {{assign var=dossier_medical value=$sejour->_ref_dossier_medical}}
+    {{/if}}
+    <img src="images/icons/antecedents.gif" onmouseover="ObjectTooltip.createEx(this, '{{$dossier_medical->_guid}}', 'antecedents');" />
   {{/if}}
 </td>
 <td>
