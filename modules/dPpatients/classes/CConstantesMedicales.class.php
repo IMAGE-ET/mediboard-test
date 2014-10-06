@@ -202,6 +202,16 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "",
       "min" => 0, "max" => 5
     ),
+    "sens_membre_inf_d" => array(
+      "type" => "physio",
+      "unit" => "",
+      "min" => 0, "max" => 5
+    ),
+    "sens_membre_inf_g" => array(
+      "type" => "physio",
+      "unit" => "",
+      "min" => 0, "max" => 5
+    ),
     "score_motricite"   => array(
       "type" => "physio",
       "unit" => "",
@@ -904,6 +914,8 @@ class CConstantesMedicales extends CMbObject {
     $props['spo2']                   = 'float min|0 max|100';
     $props['temperature']            = 'float min|20 max|50'; // Au cas ou il y aurait des malades très malades
     $props['score_sensibilite']      = 'float min|0 max|5';
+    $props['sens_membre_inf_d']      = 'float min|0 max|5';
+    $props['sens_membre_inf_g']      = 'float min|0 max|5';
     $props['score_motricite']        = 'float min|0 max|5';
     $props['EVA']                    = 'float min|0 max|10';
     $props['score_sedation']         = 'float';
