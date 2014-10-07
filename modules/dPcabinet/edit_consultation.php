@@ -1,13 +1,12 @@
-<?php 
-
+<?php
 /**
- * $Id$
+ * $Id:$
  *  
  * @category Cabinet
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision$
+ * @version  $Revision:$
  * @link     http://www.mediboard.org
  */
 
@@ -180,14 +179,18 @@ if ($sejour->_id) {
   $rpu = $sejour->loadRefRPU();
 }
 
-CPrescription::$_load_lite = true;
+$isPrescriptionInstalled = CModule::getActive("dPprescription");
+
+if ($isPrescriptionInstalled) {
+  CPrescription::$_load_lite = true;
+}
 foreach ($tabs_count as $_tab => $_count) {
   $count = 0;
   switch ($_tab) {
     case "AntTrait":
       $prescription = $dossier_medical->loadRefPrescription();
       $count_meds = 0;
-      if (CModule::getActive("dPprescription")) {
+      if ($isPrescriptionInstalled) {
         $count_meds = $prescription->countBackRefs("prescription_line_medicament");
       }
       $dossier_medical->countTraitements();
@@ -359,9 +362,9 @@ foreach ($tabs_count as $_tab => $_count) {
       $tabs_count[$_tab] = count($consult->_ref_facture->_ref_reglements);
   }
 }
-CPrescription::$_load_lite = false;
-
-$isPrescriptionInstalled = CModule::getActive("dPprescription");
+if ($isPrescriptionInstalled) {
+  CPrescription::$_load_lite = false;
+}
 
 // Création du template
 $smarty = new CSmartyDP();
