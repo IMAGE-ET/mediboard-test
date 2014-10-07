@@ -38,8 +38,9 @@ class CMovement extends CMbObject {
    */
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = 'movement';
-    $spec->key   = 'movement_id';
+    $spec->table    = 'movement';
+    $spec->key      = 'movement_id';
+    $spec->loggable = false;
     return $spec;
   }
 
