@@ -30,7 +30,7 @@ foreach ($where as $key => $value) {
 }
 
 foreach ($whereComplex as $key => $value) {
-  $where[$key] = $value;
+  $where[$key] = stripslashes($value);
 }
 
 if ($keywords == "") {
