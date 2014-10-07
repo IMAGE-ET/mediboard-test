@@ -45,7 +45,9 @@
     </tr>
     <tr>
       <th>{{mb_label object=$uf field=type_autorisation_mode_hospitalisation}}</th>
-      {{mb_include module=dPhospi template=inc_vw_um_mode_hospit um=$uf->_ref_um}}
+      <td id="um_mode_hospi">
+        {{mb_include module=dPhospi template=inc_vw_um_mode_hospit um=$uf->_ref_um}}
+      </td>
     </tr>
     <tr>
       <th>{{mb_label object=$uf field=libelle}}</th>
