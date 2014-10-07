@@ -41,7 +41,7 @@
           </th>
           <td colspan="3" style="font-size: 1.3em;">
             {{if $operation->_id}}
-              le {{$operation->_ref_plageop->date|date_format:"%A %d/%m/%Y"}}
+              le {{$operation->_datetime_best|date_format:"%A %d/%m/%Y"}}
               {{if $operation->libelle}}
                 - {{$operation->libelle}}
               {{/if}}

@@ -100,7 +100,12 @@
     <td colspan="2" class="text" style="word-break: break-all">
       <table style="width: 100%">
         <tr>
-          <th class="category" colspan="2">Intervention</th>
+          <th class="category" colspan="2">
+            Intervention
+            {{if $other_intervs|@count > 1 && $operation->_id && $pos_curr_interv}}
+              ({{$pos_curr_interv}}/{{$other_intervs|@count}})
+            {{/if}}
+          </th>
         </tr>
         <tr>
           <td colspan="2">
@@ -212,6 +217,26 @@
             {{$consult->rques|nl2br}}
           </td>
         </tr>
+      {{/if}}
+      {{if $other_intervs|@count >= 2}}
+        <tr>
+          <th class="category" colspan="2">Autres interventions reliées</th>
+        </tr>
+        {{foreach from=$other_intervs item=_op}}
+          {{if $_op->_id != $dossier_anesth->operation_id}}
+            <tr>
+              <td colspan="2">
+                Intervention le <strong>{{$_op->_datetime_best|date_format:"%A %d/%m/%Y"}}</strong>
+                {{if $_op->libelle}}
+                  - {{$_op->libelle}}
+                {{/if}}
+                {{if $_op->cote}}
+                  - {{mb_label object=$_op field=cote}} {{mb_value object=$_op field=cote}}
+                {{/if}}
+              </td>
+            </tr>
+          {{/if}}
+        {{/foreach}}
       {{/if}}
       </table>    
     </td>

@@ -109,6 +109,25 @@ $consult->loadRefsExamPossum();
 $dossier_anesth->loadRefs();
 $dossier_anesth->_ref_sejour->loadRefDossierMedical();
 
+$other_intervs = array();
+$pos_curr_interv = 0;
+
+foreach ($consult->loadRefsDossiersAnesth() as $_dossier_anesth) {
+  if ($_dossier_anesth->operation_id) {
+    $_op = $_dossier_anesth->loadRefOperation();
+    $_op->loadRefPlageOp();
+    $_op->loadRefChir();
+    $other_intervs[$_op->_id] = $_op;
+  }
+}
+
+ksort($other_intervs);
+
+if (count($other_intervs) > 1) {
+  $pos_curr_interv = array_search($dossier_anesth->operation_id, array_keys($other_intervs));
+  $pos_curr_interv++;
+}
+
 // Lignes de prescription en prémédication
 if (CModule::getActive("dPprescription")) {
   $prescription = $dossier_anesth->_ref_sejour->loadRefPrescriptionSejour();
@@ -278,5 +297,7 @@ $smarty->assign("lines"         , $lines);
 $smarty->assign("lines_per_op"  , $lines_per_op);
 $smarty->assign("multi"         , $multi);
 $smarty->assign("dossier_medical_sejour", $dossier_anesth->_ref_sejour->_ref_dossier_medical);
+$smarty->assign("other_intervs" , $other_intervs);
+$smarty->assign("pos_curr_interv", $pos_curr_interv);
 
 $smarty->display(CAppUI::conf("dPcabinet CConsultAnesth feuille_anesthesie").".tpl");
