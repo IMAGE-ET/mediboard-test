@@ -25,6 +25,8 @@ class CUniteFonctionnelle extends CMbObject {
   public $type_sejour;
   public $date_debut;
   public $date_fin;
+  public $type_autorisation_um_id;
+  public $type_autorisation_mode_hospitalisation;
 
   /** @var CGroups */
   public $_ref_group;
@@ -44,6 +46,12 @@ class CUniteFonctionnelle extends CMbObject {
   /** @var CService */
   public $_ref_service;
 
+  /** @var CUniteMedicale */
+  public $_ref_um;
+
+  // Distant Count
+  public $_count_lits;
+
   /**
    * @see parent::getSpec()
    */
@@ -59,14 +67,16 @@ class CUniteFonctionnelle extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["group_id"]    = "ref class|CGroups notNull";
-    $props["code"]        = "str notNull seekable";
-    $props["libelle"]     = "str notNull seekable";
-    $props["description"] = "text";
-    $props["type"]        = "enum list|hebergement|soins|medicale default|hebergement";
-    $props["type_sejour"] = "enum list|comp|ambu|exte|seances|ssr|psy|urg|consult";
-    $props["date_debut"]  = "date";
-    $props["date_fin"]    = "date";
+    $props["group_id"]              = "ref class|CGroups notNull";
+    $props["code"]                  = "str notNull seekable";
+    $props["libelle"]               = "str notNull seekable";
+    $props["description"]           = "text";
+    $props["type"]                  = "enum list|hebergement|soins|medicale default|hebergement";
+    $props["type_sejour"]           = "enum list|comp|ambu|exte|seances|ssr|psy|urg|consult";
+    $props["date_debut"]            = "date";
+    $props["date_fin"]                               = "date";
+    $props["type_autorisation_um_id"]                = "ref class|CUniteMedicale";
+    $props["type_autorisation_mode_hospitalisation"] = "str";
 
     return $props;
   }
@@ -89,7 +99,7 @@ class CUniteFonctionnelle extends CMbObject {
     $backProps["protocoles_hebergement"  ] = "CProtocole uf_hebergement_id";
     $backProps["protocoles_medical"      ] = "CProtocole uf_medicale_id";
     $backProps["protocoles_soin"         ] = "CProtocole uf_soins_id";
-    
+
     return $backProps;
   }
 
@@ -99,6 +109,27 @@ class CUniteFonctionnelle extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->libelle;
+  }
+
+  /**
+   * @return CUniteMedicale
+   */
+  function loadRefUm() {
+    return $this->_ref_um = $this->loadFwdRef("type_autorisation_um_id", true);
+
+  }
+
+  /**
+   * Compte le nombre de lits pour l'UF
+   *
+   * @return int
+   */
+  function countLits () {
+    $affectation = new CAffectationUniteFonctionnelle();
+    $affectation->uf_id = $this->_id;
+    $affectation->object_class = "CLit";
+
+    return $this->_count_lits = $affectation->countMatchingList();
   }
 
   /**

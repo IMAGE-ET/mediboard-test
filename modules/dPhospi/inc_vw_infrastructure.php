@@ -90,8 +90,13 @@ if ($use_uf != null) {
   $uf = new CUniteFonctionnelle();
   $uf->group_id = $group->_id;
   $uf->load($uf_id);
+  $uf->loadRefUm();
   $uf->loadRefsNotes();
-  
+
+  // Récupération des Unités Médicales (pmsi)
+  $ums = new CUniteMedicale();
+  $ums = $ums->loadList();
+
   // Récupération des ufs
   $order = "group_id, code";
   $ufs = $uf->loadList(null, $order);
@@ -145,6 +150,7 @@ elseif ($use_chambre != null) {
 }
 elseif ($use_uf != null) {
   $smarty->assign("uf", $uf);
+  $smarty->assign("ums", $ums);
   $smarty->display("inc_vw_uf.tpl");
 }
 elseif ($use_prestation != null) {

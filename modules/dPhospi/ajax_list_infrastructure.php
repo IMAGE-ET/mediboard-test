@@ -100,8 +100,9 @@ if ($type_name == "UF") {
   $uf = new CUniteFonctionnelle();
   $uf->group_id = $group->_id;
   $uf->load($uf_id);
+  $uf->loadRefUm();
   $uf->loadRefsNotes();
-  
+
   // Récupération des ufs
   $order = "group_id, code";
   $ufs = array(
@@ -110,8 +111,13 @@ if ($type_name == "UF") {
     "soins"       => $uf->loadGroupList(array("type" => "= 'soins'"), $order),
   );
 
+  // Récupération des Unités Médicales (pmsi)
+  $ums = new CUniteMedicale();
+  $ums = $ums->loadList();
+
   $smarty->assign("ufs", $ufs);
   $smarty->assign("uf", $uf);
+  $smarty->assign("ums", $ums);
   $smarty->display("inc_vw_idx_ufs.tpl");
 }
 

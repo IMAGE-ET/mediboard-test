@@ -796,6 +796,12 @@ class CSetupdPhospi extends CSetup {
       ADD `color` VARCHAR (6);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.88";
+    $this->makeRevision("0.88");
+    $query = "ALTER TABLE `uf`
+                ADD `type_autorisation_um_id` INT (11) UNSIGNED,
+                ADD `type_autorisation_mode_hospitalisation` char(10) ;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.89";
   }
 }

@@ -75,6 +75,7 @@ $secteurs = $secteur->loadListWithPerms(PERM_READ, $where, $order);
 $uf = new CUniteFonctionnelle();
 $uf->group_id = $group->_id;
 $uf->load($uf_id);
+$uf->loadRefUm();
 $uf->loadRefsNotes();
 
 // Récupération des ufs
@@ -84,6 +85,10 @@ $ufs = array(
   "medicale"    => $uf->loadGroupList(array("type" => "= 'medicale'"), $order),
   "soins"       => $uf->loadGroupList(array("type" => "= 'soins'"), $order),
 );
+
+// Récupération des Unités Médicales (pmsi)
+$ums = new CUniteMedicale();
+$ums = $ums->loadList();
 
 // Chargement de la prestation à ajouter/éditer
 $prestation = new CPrestation();
@@ -113,6 +118,7 @@ $smarty->assign("lit"           , $lit);
 $smarty->assign("tag_lit"       , CLit::getTagLit($group->_id));
 $smarty->assign("ufs"           , $ufs);
 $smarty->assign("uf"            , $uf);
+$smarty->assign("ums"           , $ums);
 $smarty->assign("prestations"   , $prestations);
 $smarty->assign("prestation"    , $prestation);
 $smarty->assign("praticiens"    , $praticiens);
