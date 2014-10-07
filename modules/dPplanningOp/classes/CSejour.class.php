@@ -403,6 +403,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $backProps["transmissions"]         = "CTransmissionMedicale sejour_id";
     $backProps["dossier_medical"]       = "CDossierMedical object_id";
     $backProps["ghm"]                   = "CGHM sejour_id";
+    $backProps["rss"]                   = "CRSS sejour_id";
     $backProps["planifications"]        = "CPlanificationSysteme sejour_id";
     $backProps["rhss"]                  = "CRHS sejour_id";
     $backProps["evenements_ssr"]        = "CEvenementSSR sejour_id";
