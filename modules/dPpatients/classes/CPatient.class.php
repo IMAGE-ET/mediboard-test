@@ -488,7 +488,7 @@ class CPatient extends CPerson {
     $props["assure_rques"]                = "text";
     $props["assure_matricule"]            = "code insee confidential mask|9S99S99S99S999S999S99";
     $props["date_lecture_vitale"]         = "dateTime";
-    $props["allow_sms_notification"]      = "bool default|".CAppUI::conf("dPpatients CPatient default_value_allow_sms", CGroups::loadCurrent());
+    $props["allow_sms_notification"]      = "bool default|0";
     $props["allow_sisra_send"]            = "bool default|1";
     $props["_id_vitale"]                  = "num";
     $props["_pays_naissance_insee"]       = "str";

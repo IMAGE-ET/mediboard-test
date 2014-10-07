@@ -48,6 +48,10 @@ if (!$patient_id) {
   if ($naissance_day && $naissance_month && $naissance_year) {
     $patient->naissance = sprintf('%04d-%02d-%02d', $naissance_year, $naissance_month, $naissance_day);
   }
+
+  if (CAppUI::conf("dPpatients CPatient default_value_allow_sms", CGroups::loadCurrent())) {
+    $patient->allow_sms_notification = 1;
+  }
 }
 
 // Peut etre pas besoin de verifier si on n'utilise pas VitaleVision
