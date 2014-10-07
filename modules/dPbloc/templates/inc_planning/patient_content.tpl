@@ -11,7 +11,7 @@
 <!-- Patient -->
 {{if $_show_identity}}
   <td class="text">
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');" class="{{if $sejour->septique}}septique{{/if}}">
       {{$patient->_view}}
     </span>
     {{if $_print_ipp && $patient->_IPP}}

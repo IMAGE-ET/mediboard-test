@@ -1,13 +1,3 @@
-{{* $Id:  $ *}}
-
-{{*
- * @package Mediboard
- * @subpackage ecap
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
-
 {{assign var=patient value=$sejour->_ref_patient}}
 {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
 <tbody style="page-break-inside: avoid; font-size: 1.2em;">
@@ -35,7 +25,7 @@
             {{assign var=statut value="sorti"}}
           {{/if}}
 
-          <strong {{if $statut == "attente"}}class="patient-not-arrived"{{/if}}
+          <strong class="{{if $statut == "attente"}}patient-not-arrived{{/if}} {{if $sejour->septique}}septique{{/if}}"
             {{if $statut == "sorti"}}style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"{{/if}}>
             {{$patient}}
           </strong>

@@ -31,6 +31,10 @@
 <td class="text">
   {{assign var=statut value="present"}}
 
+  {{if $sejour->septique}}
+    {{assign var=statut value="septique"}}
+  {{/if}}
+
   {{if !$sejour->entree_reelle || ($sejour->_ref_prev_affectation->_id && $sejour->_ref_prev_affectation->effectue == 0)}}
     {{assign var=statut value="attente"}}
   {{/if}}
