@@ -577,3 +577,5 @@ $locales['pref-ccam_consultation-0'] = 'Cacher';
 $locales['pref-ccam_consultation-1'] = 'Visible';
 $locales['pref-ccam_sejour-0'] = 'Cacher';
 $locales['pref-ccam_sejour-1'] = 'Visible';
+$locales['pref-default_salles_id'] = 'Salle par défaut';
+$locales['pref-default_salles_id-desc'] = 'Salle sélectionnée par défaut';

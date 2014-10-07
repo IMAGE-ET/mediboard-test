@@ -1,15 +1,16 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage SalleOp
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 // Préférences par Module
 CPreferences::$modules["dPsalleOp"] = array(
-  "autosigne_sortie"
+  "autosigne_sortie",
+  "default_salles_id",
 );

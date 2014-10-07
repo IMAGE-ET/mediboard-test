@@ -1,10 +1,24 @@
 <script>
-  Main.add(function () {
-    Calendar.regField(getForm("selectSalle").date, null, {noView: true});
-  });
   showLegend = function() {
     new Url("bloc", "legende").requestModal();
   }
+  savePref = function(form) {
+    var formPref = getForm('editPrefSalles');
+    var formsalle = getForm('selectSalle');
+    var salle_id = $V(form.default_salle_id);
+
+    var default_salle_id_elt = formPref.elements['pref[default_salles_id]'];
+    var default_salle_id = $V(default_salle_id_elt).evalJSON();
+    default_salle_id.g{{$group_id}} = salle_id;
+    $V(default_salle_id_elt, Object.toJSON(default_salle_id));
+    return onSubmitFormAjax(formPref, function() {
+      Control.Modal.close();
+      $V(formsalle.salle, salle_id);
+    });
+  }
+  Main.add(function () {
+    Calendar.regField(getForm("selectSalle").date, null, {noView: true});
+  });
 </script>
 
 <form action="?" name="selectSalle" method="get">
@@ -19,7 +33,10 @@
     </tr>
     <tr>
       <th>
-        <label for="salle" title="Salle d'opération">Salle</label><br />
+        <label for="salle" title="Salle d'opération">
+          <button type="button" class="search notext" title="Salle par défaut" onclick="Modal.open('select_default_salle', { showClose: true, title: 'Salle par défaut' })"></button>
+          Salle
+        </label><br />
         <button type="button" onclick="showLegend()" class="search" style="float: left;">Légende</button>
       </th>
       <td>
@@ -42,6 +59,33 @@
           <input type="checkbox" name="_hide_finished" {{if $hide_finished}}checked{{/if}} onclick="$V(this.form.hide_finished, this.checked ? 1 : 0)" />
           Cacher les interv. terminées 
         </label>
+
+        <div id="select_default_salle" style="display: none;">
+          <table class="form">
+            <tr>
+              <td style="text-align: center;">
+                <select name="default_salle_id">
+                  <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+
+                  {{foreach from=$listBlocs item=curr_bloc}}
+                    <optgroup label="{{$curr_bloc->nom}}">
+                      {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
+                        <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $default_salle_id}}selected="selected"{{/if}}>
+                          {{$curr_salle->nom}}
+                        </option>
+                      {{/foreach}}
+                    </optgroup>
+                  {{/foreach}}
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td class="button">
+                <button type="button" class="submit" onclick="savePref(this.form);">{{tr}}Save{{/tr}}</button>
+              </td>
+            </tr>
+          </table>
+        </div>
       </td>
     </tr>
     {{if $salle->cheklist_man}}
@@ -55,6 +99,13 @@
       </tr>
     {{/if}}
   </table>
+</form>
+
+<form name="editPrefSalles" method="post">
+  <input type="hidden" name="m" value="admin" />
+  <input type="hidden" name="dosql" value="do_preference_aed" />
+  <input type="hidden" name="user_id" value="{{$app->user_id}}" />
+  <input type="hidden" name="pref[default_salles_id]" value="{{$app->user_prefs.default_salles_id}}" />
 </form>
 
 {{mb_include module="salleOp" template="inc_details_plages"}}

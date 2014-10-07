@@ -17,6 +17,19 @@ $date          = CValue::getOrSession("date", CMbDT::date());
 $operation_id  = CValue::getOrSession("operation_id");
 $hide_finished = CValue::getOrSession("hide_finished", 0);
 
+// récuperation du service par défaut dans les préférences utilisateur
+$group_id = CGroups::loadCurrent()->_id;
+$default_salles_id = CAppUI::pref("default_salles_id");
+// Récuperation de la salle à afficher par défaut
+$default_salle_id = "";
+$default_salles_id = json_decode($default_salles_id);
+if (isset($default_salles_id->{"g$group_id"})) {
+  $default_salle_id = reset(explode("|", $default_salles_id->{"g$group_id"}));
+}
+
+if (!$salle_id) {
+  $salle_id = $default_salle_id;
+}
 // Chargement des praticiens
 $mediuser    = new CMediusers();
 $listAnesths = $mediuser->loadAnesthesistes(PERM_READ);
@@ -100,6 +113,8 @@ if ($salle->cheklist_man) {
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("default_salle_id", $default_salle_id);
+$smarty->assign("group_id"      , $group_id);
 $smarty->assign("vueReduite"    , false);
 $smarty->assign("salle"         , $salle);
 $smarty->assign("hide_finished" , $hide_finished);

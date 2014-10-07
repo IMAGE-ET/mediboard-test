@@ -1611,6 +1611,8 @@ class CSetupdPsalleOp extends CSetup {
     );
     $this->addNewCheckList($check_list);
 
-    $this->mod_version = '0.63';
+    $this->makeRevision('0.63');
+    $this->addPrefQuery("default_salles_id", "{}");
+    $this->mod_version = '0.64';
   }
 }
