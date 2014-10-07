@@ -71,6 +71,8 @@
       </td>
     </tr>
 
+    {{mb_include module=system template=inc_config_bool var=view_empty_plage_op}}
+
     <tr>
       <th colspan="2" class="title">Affichages</th>
     </tr>
