@@ -79,18 +79,16 @@
     <th>{{mb_label object=$user field="dont_log_connection"}}</th>
     <td>{{mb_field object=$user field="dont_log_connection"}}</td>
   </tr>
-  
-  {{if $user->dont_log_connection}}
+
   <tr>
     <th>{{mb_label object=$user field="_count_connections"}}</th>
     <td>
       {{mb_value object=$user field="_count_connections"}}
-      {{if $can->admin && $user->_count_connections}}
+      {{if $can->admin && $user->_count_connections && $user->dont_log_connection}}
       <label><input type="checkbox" name="_purge_connections" value="1"/>{{tr}}Purge{{/tr}}</label>
       {{/if}}
     </td>
   </tr>
-  {{/if}}
   
   <tr>
     <td class="button" colspan="2">

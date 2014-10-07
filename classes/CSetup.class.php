@@ -93,7 +93,7 @@ class CSetup {
    * Add a callback method to be executed
    * The method must return true/false
    *
-   * @param string $method_name The methode to execute (from $this)
+   * @param callable $method_name The methode to execute (from $this)
    *
    * @return void
    */

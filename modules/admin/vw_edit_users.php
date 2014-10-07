@@ -48,9 +48,8 @@ if ($where) {
   $order = "user_type, user_last_name, user_first_name, template";
   $limit = 100;
   $users = $user->loadList($where, $order, $limit);
-  foreach ($users as $_user) {
-    $_user->countBackRefs("profiled_users");
-  }
+  CStoredObject::massCountBackRefs($users, "profiled_users");
+  CStoredObject::massCountBackRefs($users, "authentications");
   
   // Auto sélection du user s'il est unique
   if (count($users) == 1 && $user_id !== "0") {
@@ -64,15 +63,12 @@ $user->loadRefsNotes();
 $user->isLDAPLinked();
 
 // Chargement des conexions
-if ($user->dont_log_connection) {
-  $user->countConnections();
-}
+$user->countConnections();
 
 // Chargement des utilateurs associés
 if ($user->template) {
   $user->loadRefProfiledUsers();
 }
-
 
 // Création du template
 $smarty = new CSmartyDP();

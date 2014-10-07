@@ -610,11 +610,7 @@ class CUser extends CPerson {
    * @return integer
    */
   function countConnections() {
-    $log = new CUserLog;
-    $log->user_id = $this->_id;
-    $log->setObject($this);
-    $log->fields = "user_last_login";
-    return $this->_count_connections = $log->countMatchingList();
+    return $this->_count_connections = $this->countBackRefs("authentications");
   }
 
   /**

@@ -1043,9 +1043,9 @@ Object.extend (Control.Tabs, {
   /**
    * Create a Control Tab
    *
-   * @param {String}  id            ID of the UL
-   * @param {Boolean} storeInCookie Store the state in a cookie
-   * @param {Object=} options       Options
+   * @param {String}   id            ID of the UL
+   * @param {Boolean=} storeInCookie Store the state in a cookie
+   * @param {Object=}  options       Options
    *
    * @return {Control.Tabs,Boolean}
    */

@@ -63,6 +63,7 @@
   <tr>
     <th>Login</th>
     <th>Utilisateur</th>
+    <th>Connexions</th>
     <th colspan="2">Type</th>
     <th colspan="3">Administration</th>
   </tr>
@@ -73,45 +74,49 @@
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id={{$_user->_id}}">
         {{$_user->user_username}}
       </a>
-       
     </td>
     <td class="text">
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id={{$_user->_id}}">
         {{$_user}}
       </a>
     </td>
+    <td class="narrow">
+      <button class="search notext compact" onclick="new Url('admin','ajax_vw_user_authentications').addParam('user_id', '{{$_user->_id}}').requestModal(900, 700)"></button>
+      <span {{if $_user->_count.authentications == 0}} class="empty" {{/if}}>
+        {{$_user->_count.authentications}}
+      </span>
+    </td>
     
     {{if !$_user->user_type}}
-    <td colspan="2" class="text warning">
-      {{tr}}None{{/tr}}
-    </td>
+      <td colspan="2" class="text warning">
+        {{tr}}None{{/tr}}
+      </td>
     {{else}}
-
-    <td class="text" {{if !$_user->template}}colspan="2"{{/if}}>
-      {{assign var="type" value=$_user->user_type}}
+      <td class="text" {{if !$_user->template}}colspan="2"{{/if}}>
+        {{assign var="type" value=$_user->user_type}}
         {{if $_user->template}}
-          {{mb_label object=$_user field=template}} : 
+          {{mb_label object=$_user field=template}} :
         {{/if}}
-      {{$utypes.$type}}
+        {{$utypes.$type}}
+      </td>
     {{/if}}
-    </td>
 
     {{if $_user->template}}
-    <td class="narrow">
+      <td class="narrow">
         <small>{{$_user->_count.profiled_users}}</small> 
-    </td>
+      </td>
     {{/if}}
     
     <td class="button" style="white-space: nowrap; text-align: left;">
-      <a class="button search" href="?m={{$m}}&amp;tab=edit_perms&amp;user_id={{$_user->_id}}">
+      <a class="button search compact" href="?m={{$m}}&amp;tab=edit_perms&amp;user_id={{$_user->_id}}">
         Droits
       </a>
 
-      <a class="button search" href="?m={{$m}}&amp;tab=edit_prefs&amp;user_id={{$_user->_id}}">
+      <a class="button search compact" href="?m={{$m}}&amp;tab=edit_prefs&amp;user_id={{$_user->_id}}">
         Préférences
       </a>
 
-      <a class="button search" href="?m={{$m}}&amp;tab=vw_functional_perms&amp;user_id={{$_user->_id}}">
+      <a class="button search compact" href="?m={{$m}}&amp;tab=vw_functional_perms&amp;user_id={{$_user->_id}}">
         {{tr}}FunctionalPerms{{/tr}}
       </a>
 

@@ -16,9 +16,8 @@
   <input type="hidden" name="user_id" value="{{$_user->_id}}" />
   <input type="hidden" name="user_login_errors" value="0" />
 
-  <button type="submit" class="tick" {{if !$can->admin}} disabled="disabled" {{/if}}>
+  <button type="submit" class="tick compact" {{if !$can->admin}} disabled {{/if}}>
     {{tr}}Unlock{{/tr}}
   </button>
-  
 </form>
 {{/if}}

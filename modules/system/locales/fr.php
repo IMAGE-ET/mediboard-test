@@ -1952,6 +1952,7 @@ $locales['CTranslationOverwrite.source'] = 'Source';
 $locales['CTranslationOverwrite.translation'] = 'Traduction définie';
 $locales['CTranslationOverwrite.translation_mb'] = 'Traduction actuelle';
 $locales['CTranslationOverwrite.translation_mb-desc'] = 'Traduction actuellement affichée dans mediboard';
+$locales['CUser-back-authentications'] = 'Connexions';
 $locales['CUser-back-logs'] = 'Journaux utilisateurs';
 $locales['CUser-back-owned_logs'] = 'Actions utilisateur';
 $locales['CUser-back-owned_logs.empty'] = 'Aucune action utilisateur';

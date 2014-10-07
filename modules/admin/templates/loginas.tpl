@@ -13,7 +13,7 @@
   <input type="hidden" name="redirect" value="?"/>
   <input type="hidden" name="login" value="ok" />
   <input type="hidden" name="loginas" value="{{$loginas_user->user_username}}" />
-  <button type="submit" class="tick">
+  <button type="submit" class="tick compact">
     {{tr}}Substitute{{/tr}}
   </button>
 </form>
