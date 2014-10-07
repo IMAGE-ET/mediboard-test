@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage soins
- * @version $Revision:  $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPprescription
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license     GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $sejour_id = CValue::get("sejour_id");
@@ -51,7 +52,8 @@ foreach ($sejour->loadRefsAffectations() as $_affectation) {
 foreach ($sejour->loadRefsTasks() as $_task) {
   $_task->loadRefPrescriptionLineElement();
   $_task->setDateAndAuthor();
-  $_task->loadRefAuthor()->loadRefMediuser()->loadRefFunction();
+  $_task->loadRefAuthor();
+  $_task->loadRefAuthorRealise();
 }
 
 // Chargement des opérations
