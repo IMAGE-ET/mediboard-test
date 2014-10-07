@@ -185,7 +185,7 @@ if (CModule::getActive("dPprescription")) {
       }
       foreach ($lines_by_type as $med_id => $_line_med) {
         $list_lines["medicament"][$_line_med->_id] = $_line_med;
-
+        $_line_med->loadRefMomentArret();
         $_line_med->loadRefsAdministrations(null, $where);
         foreach ($_line_med->_ref_administrations as $_administration_med) {
           $_administration_med->loadRefAdministrateur();

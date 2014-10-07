@@ -130,6 +130,7 @@ if (CModule::getActive("dPprescription")) {
       continue;
     }
     $_line_med->loadRefsPrises();
+    $_line_med->loadRefMomentArret();
     $lines[] = $_line_med;
   }
 
