@@ -17,7 +17,4 @@ $dPconfig["dPccam"] = array (
       "CSejour" => "0"
     ),
   ),
-  "CDatedCodeCCAM" => array(
-    "use_cache" => "0"
-  )
 );

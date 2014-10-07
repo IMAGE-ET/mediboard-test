@@ -30,14 +30,6 @@
     {{mb_include module=system template=inc_config_bool var=precode_modificateur_J}}
     {{mb_include module=system template=inc_config_bool var=add_acte_comp_anesth_auto}}
 
-
-    {{assign var=class value=CDatedCodeCCAM}}
-    <tr>
-      <th class="category" colspan="2">{{tr}}{{$class}}{{/tr}}</th>
-    </tr>
-
-    {{mb_include module=system template=inc_config_bool var=use_cache}}
-
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
