@@ -30,7 +30,9 @@ if (!in_array($file_class, $allowed)) {
 $file = new $file_class();
 $file->load($file_id);
 $file->file_category_id = ($category_id != $file->file_category_id) ? $category_id : $file->file_category_id;
-$file->file_name = $name ? $name : $file->file_name;
+if ($file instanceof CFile) {
+  $file->file_name = $name ? $name : $file->file_name;
+}
 
 $destination = CStoredObject::loadFromGuid($destination_guid);
 if (($file->object_id == $destination->_id) && ($file->object_class == $destination->_class)) {
