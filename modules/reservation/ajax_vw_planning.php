@@ -197,7 +197,7 @@ foreach ($plages as $_plage) {
   if (!isset($plages_by_salle[$salle_id])) {
     $plages_by_salle[$salle_id] = array();
   }
-  $plages_by_salle[$salle_id][] = $_plage;
+  $plages_by_salle[$salle_id][$_plage->_id] = $_plage;
 
   //load operation in salle (plage_id
   foreach ($operations as $_op) {
