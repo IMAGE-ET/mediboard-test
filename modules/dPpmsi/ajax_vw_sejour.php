@@ -132,46 +132,6 @@ foreach ($sejour->_ref_operations as $_operation) {
   }
 }
 
-//// Création/Chargement du rss
-//$rss = new CRSS();
-//$whereIs = "`sejour_id` = ".$sejour_id;
-//$rss->loadList($whereIs);
-//
-//if (!$rss->rss_id) {
-//  $rss->sejour_id = $sejour_id;
-//  $rss->loadMatchingObject();
-//  if ($msg = $rss->store()) {
-//    CAppUI::stepAjax($msg, UI_MSG_WARNING);
-//  }
-//}
-//
-////Création des RUM du RSS
-//$affectations = $sejour->loadRefsAffectations();
-//$list_rum = null;
-//if ($affectations) {
-//  foreach ($affectations as $key => $affectation) {
-//    $rum = new CRUM();
-//    $where["rss_id"] = " = ".$rss->rss_id;
-//    $where["affectation_id"] = " = ".$affectation->affectation_id;
-//    $rum->loadList($where);
-//    if (!$rum->rum_id) {
-//      $rum->rss_id = $rss->rss_id;
-//      $rum->affectation_id = $affectation->affectation_id;
-//      $rum->loadMatchingObject();
-//      $rum->loadMedicalesInfos();
-//      if ($msg = $rum->store()) {
-//        CAppUI::stepAjax($msg, UI_MSG_WARNING);
-//      }
-//    }
-//
-//    $list_rum[$key] = $rum;
-//  }
-//}
-//else {
-//  $rum = new CRUM();
-//  $rum->rss_id = $rss->rss_id;
-//  $list_rum[] = $rum;
-//}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -184,8 +144,7 @@ $smarty->assign("canCabinet"   , CModule::getCanDo("dPcabinet"));
 $smarty->assign("hprim21installed", CModule::getActive("hprim21"));
 $smarty->assign("sejour"  , $sejour );
 $smarty->assign("listPrat", $listPrat);
-//$smarty->assign("rss", $rss);
-//$smarty->assign("list_rum", $list_rum);
+
 $smarty->assign("patient", $patient);
 $smarty->assign("isSejourPatient" , $isSejourPatient);
 

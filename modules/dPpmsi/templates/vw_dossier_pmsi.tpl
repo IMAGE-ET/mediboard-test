@@ -9,7 +9,7 @@
  *}}
 
 {{mb_script module="pmsi"           script="PMSI"}}
-
+{{mb_script module="planningOp"     script="cim10_selector"}}
 {{mb_script module="ccam"           script="CCodageCCAM"}}
 {{mb_script module="ccam"           script="code_ccam"}}
 
@@ -30,6 +30,27 @@
     var tab = Control.Tabs.create('tabs-pmsi', true);
     tab.activeLink.up().onmousedown();
   });
+
+  CIM10Selector.initDP = function(sejour_id){
+    this.sForm = "editDP";
+    this.sView = "DP";
+    this.sChir = "_praticien_id";
+    this.pop();
+  };
+
+  CIM10Selector.initDR = function(sejour_id){
+    this.sForm = "editDR";
+    this.sView = "DR";
+    this.sChir = "_praticien_id";
+    this.pop();
+  };
+
+  CIM10Selector.initDAS = function(sejour_id){
+    this.sForm = "editDA";
+    this.sView = "_added_code_cim";
+    this.sChir = "_praticien_id";
+    this.pop();
+  };
 </script>
 
 <form name="dossier_pmsi_selector" action="?" method="get">
@@ -144,7 +165,14 @@
         </button>
       </li>
     {{/if}}
-    {{*<li><a href="#rss">{{tr}}PMSI.RSS{{/tr}}</a></li>*}}
+    {{if "atih"|module_active}}
+      <li onmousedown="PMSI.loadRSS('{{$sejour->_id}}'); this.onmousedown=''">
+        <a href="#tab-rss">{{tr}}PMSI.RSS{{/tr}}</a>
+      </li>
+      <li onmousedown="PMSI.loadGroupage('{{$sejour->_id}}'); this.onmousedown=''">
+        <a href="#tab-groupage">{{tr}}PMSI.Groupage{{/tr}}</a>
+      </li>
+    {{/if}}
   </ul>
 
   <div id="tab-patient" style="display:none;"></div>
@@ -158,7 +186,10 @@
     <div id="tab-search" style="display: none;"></div>
   {{/if}}
 
-  {{*<div id="rss" style="display: none;"></div>*}}
+  {{if "atih"|module_active}}
+    <div id="tab-rss" style="display: none;"></div>
+    <div id="tab-groupage" style="display: none;"></div>
+  {{/if}}
 </div>
 
 {{/if}}

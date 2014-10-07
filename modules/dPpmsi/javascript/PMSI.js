@@ -157,11 +157,26 @@ PMSI = {
   },
 
   loadSearch: function(sejour_id) {
-    alert('on load le module search du séjour '+sejour_id);
+    var url = new Url("search", "vw_search_pmsi");
+    url.addParam("sejour_id" , sejour_id);
+    url.requestUpdate("tab-search");
   },
 
   loadRSS: function(sejour_id) {
-    alert('on load le module RSS du séjour '+sejour_id);
+    if($('tab-rss')) {
+      var url = new Url("atih", "vw_rss");
+      url.addParam("sejour_id", sejour_id);
+      url.requestUpdate("tab-rss");
+    }
+
+  },
+
+  loadGroupage: function(sejour_id) {
+    if($('tab-groupage')) {
+      var url = new Url("atih", "vw_groupage");
+      url.addParam("sejour_id", sejour_id);
+      url.requestUpdate("tab-groupage");
+    }
   },
 
   loadDiagsPMSI: function(sejour_id) {
@@ -180,6 +195,7 @@ PMSI = {
     PMSI.loadDiagsPMSI(sejour_id);
     PMSI.loadDiagsDossier(sejour_id);
     PMSI.loadRSS(sejour_id);
+    PMSI.loadGroupage(sejour_id);
   },
   reloadActesCCAM: function(subject_guid, read_only) {
     var url = new Url("pmsi", "ajax_actes_ccam");
