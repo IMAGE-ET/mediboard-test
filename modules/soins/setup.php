@@ -121,7 +121,10 @@ class CSetupsoins extends CSetup {
                 ADD INDEX (`date_realise`),
                 ADD INDEX (`author_realise_id`);";
     $this->addQuery($query);
+    $this->makeRevision("0.22");
 
-    $this->mod_version = '0.22';
+    $this->addPrefQuery("default_services_id", "{}");
+
+    $this->mod_version = '0.23';
   }
 }
