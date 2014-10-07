@@ -51,7 +51,8 @@ typeSwitcher = function(select){
     e.setVisible(b);
 
     if (b) {
-      e.onchange();
+      var element = e.down("input") || e;
+      element.onchange();
     }
   });
 };
