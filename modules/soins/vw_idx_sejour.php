@@ -31,10 +31,10 @@ $_active_tab    = CValue::get("_active_tab");
 $type_admission = CValue::getOrSession("type");
 
 // récuperation du service par défaut dans les préférences utilisateur
-$services_ids_hospi = CAppUI::pref("services_ids_hospi");
+$default_services_id = CAppUI::pref("default_services_id");
 
-if (!$services_ids_hospi) {
-  $services_ids_hospi = "{}";
+if (!$default_services_id) {
+  $default_services_id = "{}";
 }
 
 $group_id = CGroups::loadCurrent()->_id;
@@ -42,7 +42,7 @@ $group_id = CGroups::loadCurrent()->_id;
 // Récuperation du service à afficher par défaut (on prend le premier s'il y en a plusieurs)
 $default_service_id = "";
 
-$default_services_id = json_decode($services_ids_hospi);
+$default_services_id = json_decode($default_services_id);
 if (isset($default_services_id->{"g$group_id"})) {
   $default_service_id = reset(explode("|", $default_services_id->{"g$group_id"}));
 }
@@ -408,9 +408,8 @@ function cacheLit(CAffectation $affectation) {
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("default_service_id", $default_service_id);
-$smarty->assign("services_ids_hospi", $services_ids_hospi);
-$smarty->assign("_active_tab", $_active_tab);
+$smarty->assign("default_service_id"      , $default_service_id);
+$smarty->assign("_active_tab"             , $_active_tab);
 $smarty->assign("_is_praticien"           , $_is_praticien);
 $smarty->assign("anesthesistes"           , $anesthesistes);
 $smarty->assign("praticiens"              , $praticiens);

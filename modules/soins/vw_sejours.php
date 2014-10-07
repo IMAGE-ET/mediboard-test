@@ -40,7 +40,7 @@ if ($select_view || (!$service_id && !$praticien_id && !$function_id && !$sejour
   // Récupération d'un éventuel service_id en session
   $service_id = CValue::getOrSession("service_id");
   $default_service_id = null;
-  $default_services = json_decode(CAppUI::pref("services_ids_hospi"));
+  $default_services = json_decode(CAppUI::pref("default_services_id"));
   if (isset($default_services->{"g$group_id"})) {
     $default_service_id = reset(explode("|", $default_services->{"g$group_id"}));
   }

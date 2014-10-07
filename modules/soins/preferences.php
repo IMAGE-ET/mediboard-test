@@ -1,23 +1,16 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- */
-
-/**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage dPprescription
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    OXOL, see http://www.mediboard.org/public/OXOL
- * @version    $Revision$
+ * @license     GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 // Préférences par Module
 CPreferences::$modules["soins"] = array (
-  "vue_sejours"
+  "vue_sejours",
+  "default_services_id",
 );

@@ -115,10 +115,10 @@
     var formService = getForm('selService');
     var service_id = $V(form.default_service_id);
 
-    var services_ids_hospi_elt = formPref.elements['pref[services_ids_hospi]'];
-    var services_ids_hospi = $V(services_ids_hospi_elt).evalJSON();
-    services_ids_hospi.g{{$group_id}} = service_id;
-    $V(services_ids_hospi_elt, Object.toJSON(services_ids_hospi));
+    var default_service_id_elt = formPref.elements['pref[default_services_id]'];
+    var default_service_id = $V(default_service_id_elt).evalJSON();
+    default_service_id.g{{$group_id}} = service_id;
+    $V(default_service_id_elt, Object.toJSON(default_service_id));
     return onSubmitFormAjax(formPref, function() {
       Control.Modal.close();
       $V(formService.service_id, service_id);
@@ -247,7 +247,7 @@
               <input type="hidden" name="m" value="admin" />
               <input type="hidden" name="dosql" value="do_preference_aed" />
               <input type="hidden" name="user_id" value="{{$app->user_id}}" />
-              <input type="hidden" name="pref[services_ids_hospi]" value="{{$services_ids_hospi}}" />
+              <input type="hidden" name="pref[default_services_id]" value="{{$app->user_prefs.default_services_id}}" />
             </form>
           </td>
         </tr>
