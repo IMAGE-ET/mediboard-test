@@ -34,6 +34,7 @@
     {{mb_include module=system template=inc_config_bool var=plage_vide}}
     {{mb_include module=system template=inc_config_bool var=libelle_ccam}}
     {{mb_include module=system template=inc_config_bool var=view_materiel}}
+    {{mb_include module=system template=inc_config_bool var=view_missing_materiel}}
     {{mb_include module=system template=inc_config_bool var=view_extra}}
     {{mb_include module=system template=inc_config_bool var=view_duree}}
     {{mb_include module=system template=inc_config_bool var=view_hors_plage}}

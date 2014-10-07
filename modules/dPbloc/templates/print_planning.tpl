@@ -41,6 +41,7 @@ function popPlanning(form, compact) {
   url.addRadio(form._ranking);
   url.addRadio(form._ccam_libelle);
   url.addRadio(form._materiel);
+  url.addRadio(form._missing_materiel);
   url.addRadio(form._extra);
   url.addRadio(form._duree);
   url.addRadio(form._hors_plage);
@@ -395,6 +396,17 @@ function showCheckboxAnesth(element){
             </label>
             <label>
               Non <input type="radio" name="_materiel" value="0" {{if $conf.dPbloc.CPlageOp.view_materiel == "0"}}checked{{/if}}/>
+            </label>
+          </td>
+        </tr>
+        <tr class="not-full">
+          <th><label for="_missing_materiel_1" title="Afficher ou cacher le materiel manquant">Afficher le matériel manquant</label></th>
+          <td>
+            <label>
+              Oui <input type="radio" name="_missing_materiel" value="1" {{if $conf.dPbloc.CPlageOp.view_missing_materiel == "1"}}checked{{/if}}/>
+            </label>
+            <label>
+              Non <input type="radio" name="_missing_materiel" value="0" {{if $conf.dPbloc.CPlageOp.view_missing_materiel == "0"}}checked{{/if}}/>
             </label>
           </td>
         </tr>
