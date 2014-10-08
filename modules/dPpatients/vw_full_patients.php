@@ -48,7 +48,6 @@ $dossier_medical->loadComplete();
 foreach ($patient->_ref_consultations as $consult) {
   if ($consult->motif == "Passage aux urgences" || ($consult->annule && !$vw_cancelled)) {
     unset($patient->_ref_consultations[$consult->_id]);
-    mbTrace("tyui");
   }
 }
 
