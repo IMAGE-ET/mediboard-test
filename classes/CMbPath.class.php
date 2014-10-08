@@ -63,11 +63,12 @@ abstract class CMbPath {
   /**
    * Removes all empty sub-directories of a given directory
    *
-   * @param string $dir Directory from which we want to remove empty directories
+   * @param string  $dir         Directory from which we want to remove empty directories
+   * @param Boolean $delete_root Delete the root directory
    *
    * @return integer Removed directories count
    */
-  static function purgeEmptySubdirs($dir) {
+  static function purgeEmptySubdirs($dir, $delete_root=true) {
     $removedDirsCount = 0;
     
     if (false === $dh = opendir($dir)) {
@@ -83,7 +84,7 @@ abstract class CMbPath {
     }
     closedir($dh);
     
-    if (self::isEmptyDir($dir)) {
+    if ($delete_root && self::isEmptyDir($dir)) {
       if (rmdir($dir)) {
         $removedDirsCount++;
       }
