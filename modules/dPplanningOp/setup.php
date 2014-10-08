@@ -1802,5 +1802,11 @@ class CSetupdPplanningOp extends CSetup {
     $this->addQuery($query);
 
     $this->mod_version = '1.93';
+
+
+    // Data source query
+
+    $query = "SHOW TABLES LIKE 'type_autorisation_um'";
+    $this->addDatasource("sae", $query);
   }
 }
