@@ -57,7 +57,7 @@ abstract class CMbPath {
 
     closedir($dh);
 
-    return $file === null;
+    return $file === false;
   }
 
   /**
@@ -85,7 +85,6 @@ abstract class CMbPath {
     
     if (self::isEmptyDir($dir)) {
       if (rmdir($dir)) {
-        mbTrace($dir, "Removed directory");
         $removedDirsCount++;
       }
     }
