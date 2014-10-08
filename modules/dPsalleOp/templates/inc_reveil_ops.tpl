@@ -167,6 +167,7 @@
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
         <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="entree_reveil" value="current" />
         <input type="hidden" name="sortie_reveil_possible" value="current" />
         <input type="hidden" name="sortie_reveil_reel" value="current" />
         <button class="tick notext" type="button" onclick="onSubmitFormAjax(this.form, refreshTabsReveil)">
