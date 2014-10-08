@@ -12,6 +12,7 @@ $dPconfig["hl7"] = array(
   "doctorActif"                           => "0",
   "importFunctionName"                    => "Import",
   "default_version"                       => "2.5",
+  "default_fr_version"                    => "FR_2.3",
   "CHL7v2Segment"                         => array(
     "PV1_3_2" => "",
     "PV1_3_3" => "",

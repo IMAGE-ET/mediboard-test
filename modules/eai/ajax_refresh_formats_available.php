@@ -31,11 +31,11 @@ if ($actor instanceof CInteropSender) {
   $formats_tabular = CExchangeDataFormat::getAll("CExchangeTabular");
   foreach ($formats_tabular as &$_format_tabular) {
     $_format_tabular = new $_format_tabular;
-    
+
     $temp = $_format_tabular->getMessagesSupported($actor_guid, false, null, true);
     $messages_tabular = array_merge($messages_tabular, $temp);
   }
-  
+
   $formats_binary = CExchangeDataFormat::getAll("CExchangeBinary");
   foreach ($formats_binary as &$_format_binary) {
     $_format_binary = new $_format_binary;

@@ -313,7 +313,9 @@ class CExchangeDataFormat extends CMbMetaObject {
         $message_supported->loadMatchingObject();
         if (!$message_supported->_id && !$all) {
           continue;
-        } 
+        }
+
+        $message_supported->_data_format = $this;
 
         $this->_messages_supported_class[] = $message_supported->message;
 

@@ -22,10 +22,14 @@
     {{mb_include module=system template=inc_config_str var=assigning_authority_universal_id}}
     {{mb_include module=system template=inc_config_str var=assigning_authority_universal_type_id}}
     
-    {{assign var=hl7v2_versions value="CHL7v2"|static:versions}} 
+    {{assign var=hl7v2_versions value="CHL7v2::getInternationalVersions"|static_call:null}}
     {{assign var=list_hl7v2_versions value='|'|implode:$hl7v2_versions}}
     {{mb_include module=system template=inc_config_enum var=default_version values=$list_hl7v2_versions}}
-    
+
+    {{assign var=hl7v2_versions value="CHL7v2::getFRAVersions"|static_call:null}}
+    {{assign var=list_hl7v2_versions value='|'|implode:$hl7v2_versions}}
+    {{mb_include module=system template=inc_config_enum var=default_fr_version values=$list_hl7v2_versions}}
+
     <tr>
       <td colspan="2"> <hr /> </td>
     </tr>

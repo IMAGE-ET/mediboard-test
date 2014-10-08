@@ -23,6 +23,9 @@ class CMessageSupported extends CMbMetaObject {
   public $profil;
   public $transaction;
 
+  /** @var  CExchangeDataFormat */
+  public $_data_format;
+
   /**
    * @see parent::getSpec
    */

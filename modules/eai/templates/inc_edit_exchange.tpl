@@ -19,8 +19,6 @@
   <table class="form">
     <tr>
       <th class="title modify text" colspan="2">
-        {{mb_include module=system template=inc_object_idsante400 object=$exchange}}
-        {{mb_include module=system template=inc_object_history object=$exchange}}
         {{tr}}{{$exchange->_class}}-title-modify{{/tr}} '{{$exchange->_view}}'
       </th>
     </tr>
@@ -47,7 +45,11 @@
     </tr>
     <tr>
       <th>{{mb_label object=$exchange field="reprocess"}}({{mb_value object=$exchange field="reprocess"}})</th>
-      <td><button type="button" class="erase oneclick" onclick="$V(this.form.reprocess, '0')">{{tr}}Erase{{/tr}}</button></td>
+      <td>
+        <button type="button" class="erase oneclick" onclick="$V(this.form.reprocess, '0'); this.form.onsubmit()">
+          {{tr}}Erase{{/tr}}
+        </button>
+      </td>
     </tr>
     <tr>
       <td class="button" colspan="2">

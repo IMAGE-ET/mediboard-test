@@ -33,13 +33,7 @@ abstract class CHL7v2 {
     // Extension française
     "FR_2.1",
     "FR_2.2",
-    "FR_2.3",
-
-    // Hprim 2.1
-    "H2.1",
-
-    // Hprim 2.2
-    "H2.2"
+    "FR_2.3"
   );
 
   static $schemas = array();
@@ -63,6 +57,42 @@ abstract class CHL7v2 {
     }
 
     return ($dont_split ? array($data) : explode($delimiter, $data));
+  }
+
+  /**
+   * Create an array with filtered keys based on having given prefix
+   *
+   * @param array  $array  The array to filter
+   * @param string $prefix The prefix that has to start key strings
+   *
+   * @return array The filtered array
+   */
+  static function filterPrefix($array, $prefix) {
+    $values = array();
+    foreach ($array as $value) {
+      if (strpos($value, $prefix, 0) === 0) {
+        $values[] = $value;
+      }
+    }
+    return $values;
+  }
+
+  /**
+   * Get international HL7 versions
+   *
+   * @return array
+   */
+  static function getInternationalVersions() {
+    return self::filterPrefix(self::$versions, "2");
+  }
+
+  /**
+   * Get french HL7 versions
+   *
+   * @return array
+   */
+  static function getFRAVersions() {
+    return self::filterPrefix(self::$versions, "FR");
   }
 
   /**

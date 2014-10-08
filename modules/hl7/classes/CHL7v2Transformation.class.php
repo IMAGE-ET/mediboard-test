@@ -27,6 +27,84 @@ class CHL7v2Transformation {
     $this->messageName = $messageName;
   }
 
+  function getSegmentTree() {
+    $message_schema = $this->message->getSchema("message", $this->messageName);
+
+    $xpath = new CHL7v2MessageXPath($message_schema);
+
+    $segment = $xpath->queryUniqueNode("//segments");
+
+    $tree = array();
+
+    foreach ($segment->childNodes as $_element) {
+      $segment_schema = $this->message->getSchema("segment", $_element->nodeValue);
+      $xpath = new CHL7v2MessageXPath($segment_schema);
+
+      $tree[] = array(
+        "name"        => $_element->nodeValue,
+        "description" => $xpath->queryTextNode("description"),
+        "forbidden"   => $_element->getAttribute("forbidden") == "true"
+      );
+    }
+
+    return $tree;
+  }
+
+  function getFieldsTree($segment) {
+    $segment_schema = $this->message->getSchema("segment", $segment);
+    $xpath = new CHL7v2MessageXPath($segment_schema);
+
+    $children = array();
+    $fields = $xpath->query("//field");
+    foreach ($fields as $_field) {
+      $segment_name = $xpath->queryTextNode("name", $_field);
+      $segment_datatype = $xpath->queryTextNode("datatype", $_field);
+
+      $_fields = array();
+
+      $field_schema = $this->message->getSchema("composite", $segment_datatype);
+      $field_xpath = new CHL7v2MessageXPath($field_schema);
+
+      $components = $field_xpath->query("//field");
+      foreach ($components as $_component) {
+        $component_name     = $field_xpath->queryTextNode("name"    , $_component);
+        $component_datatype = $field_xpath->queryTextNode("datatype", $_component);
+
+        $fullpath_component = "$segment/$segment_name/$component_name";
+
+        $_datatypes = array();
+        $this->readDataTypeSchema($_datatypes, $segment_datatype, $fullpath_component);
+
+        $_fields[] = array(
+          "name"      => $component_name,
+          "fullpath"  => $fullpath_component,
+          "forbidden" => $_field->getAttribute("forbidden") == "true",
+          "datatype"  => $component_datatype,
+          "children"  => $_datatypes
+        );
+      }
+
+      $fullpath_segment = "$segment/$segment_name";
+
+      $children[] = array(
+        "name"      => $segment_name,
+        "fullpath"  => $fullpath_segment,
+        "forbidden" => $_field->getAttribute("forbidden") == "true",
+        "datatype"  => $segment_datatype,
+        "children"  => $_fields,
+      );
+    }
+
+    $tree[] = array(
+      "type"      => "segment",
+      "name"      => $segment,
+      "fullpath"  => $segment,
+      "children"  => $children,
+    );
+
+    return $tree;
+  }
+
   function getTree() {
     $message_schema = $this->message->getSchema("message", $this->messageName);
 
@@ -134,7 +212,7 @@ class CHL7v2Transformation {
 
       $_datatypes[] = array(
         "name"     => $_datatype_name,
-        "fullpath" => "$fullpath_component/$_datatype_name",
+        "fullpath" => "$fullpath_component/$_component_datatype",
         "datatype" => $_component_datatype,
         "children" => $children
       );
