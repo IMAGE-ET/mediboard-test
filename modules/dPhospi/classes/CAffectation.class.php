@@ -287,7 +287,7 @@ class CAffectation extends CMbObject {
    * @see parent::store()
    */
   function store() {
-    $this->completeField("sejour_id", "lit_id");
+    $this->completeField("sejour_id", "lit_id", "entree", "sortie");
     $create_affectations = false;
     $sejour = $this->loadRefSejour();
     $sejour->loadRefPatient();
@@ -352,7 +352,7 @@ class CAffectation extends CMbObject {
     }
 
     // Modification de la date d'admission et de la durée de l'hospi
-    $this->load($this->affectation_id);
+    $this->load($this->_id);
 
     if ($old->_id) {
       $this->_ref_prev = $old->_ref_prev;
@@ -371,9 +371,8 @@ class CAffectation extends CMbObject {
 
     // Mise à jour vs l'entrée
     if (!$prev->_id) {
-      if ($this->entree != $sejour->_entree) {
-        $field = $sejour->entree_reelle ? "entree_reelle" : "entree_prevue";
-        $sejour->$field = $this->entree;
+      if ($this->entree != $sejour->entree) {
+        $sejour->entree = $this->entree;
         $changeSejour = 1;
       }
     }
@@ -384,9 +383,8 @@ class CAffectation extends CMbObject {
 
     // Mise à jour vs la sortie
     if (!$next->_id) {
-      if ($this->sortie != $sejour->_sortie) {
-        $field = $sejour->sortie_reelle ? "sortie_reelle" : "sortie_prevue";
-        $sejour->$field = $this->sortie;
+      if ($this->sortie != $sejour->sortie) {
+        $sejour->sortie = $this->sortie;
         $changeSejour = 1;
       }
     }
@@ -471,7 +469,7 @@ class CAffectation extends CMbObject {
     $guess_no_prev = $use_sejour && $sejour && $this->entree == $sejour->entree;
     if (!$guess_no_prev) {
       $where = array (
-        "affectation_id" => "!= '$this->affectation_id'",
+        "affectation_id" => "!= '$this->_id'",
         "sejour_id" => "= '$this->sejour_id'",
         "sortie" => "= '$this->entree'"
       );
@@ -483,7 +481,7 @@ class CAffectation extends CMbObject {
     $guess_no_next = $use_sejour && $sejour && $this->sortie == $sejour->sortie;
     if (!$guess_no_next) {
       $where = array (
-        "affectation_id" => "!= '$this->affectation_id'",
+        "affectation_id" => "!= '$this->_id'",
         "sejour_id" => "= '$this->sejour_id'",
         "entree" => "= '$this->sortie'"
       );
@@ -544,7 +542,7 @@ class CAffectation extends CMbObject {
 
     $where                   = array();
     $where["date"]           = $this->_spec->ds->prepare(" = %", $date);
-    $where["affectation_id"] = $this->_spec->ds->prepare(" = %", $this->affectation_id);
+    $where["affectation_id"] = $this->_spec->ds->prepare(" = %", $this->_id);
     foreach ($listTypeRepas as $keyType => $typeRepas) {
       $where["typerepas_id"] = $this->_spec->ds->prepare("= %", $keyType);
       $repasDuJour = new CRepas;
