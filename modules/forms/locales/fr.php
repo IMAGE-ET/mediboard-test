@@ -34,3 +34,4 @@ $locales['mod-forms-tab-view_import_fields'] = 'Importation de formulaires';
 $locales['mod-forms-tab-vw_import_ex_class'] = 'Importation de formulaires';
 $locales['module-forms-court'] = 'Formulaires';
 $locales['module-forms-long'] = 'Formulaires';
+$locales['module-forms-msg-cache-ex_class-suppr'] = 'Cache de traductions du formulaire vidé (%d entrées)';
