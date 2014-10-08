@@ -52,7 +52,7 @@
             {{if $_graph.title == "CUserAuthentication"}}
               <div id="placeholder_{{$_graph.title}}" style="width: 800px; height: 300px;"></div>
             {{elseif $_graph.title == "CUserAgent-browser_version"}}
-              <div id="placeholder_{{$_graph.title}}" style="width: 450px; height: 200px;"></div>
+              <div id="placeholder_{{$_graph.title}}" style="width: 700px; height: 250px;"></div>
             {{else}}
               <div id="placeholder_{{$_graph.title}}" style="width: 300px; height: 200px;"></div>
             {{/if}}

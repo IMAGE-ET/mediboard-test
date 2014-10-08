@@ -50,11 +50,11 @@ $methods     = $ua->countMultipleList($where, null, "pointing_method", $ljoin, "
 
 $graphs   = array();
 $graphs[] = CUserAgentGraph::getBrowserNameSeries($browsers);
-$graphs[] = CUserAgentGraph::getBrowserVersionSeries($versions);
 $graphs[] = CUserAgentGraph::getPlatformNameSeries($platforms);
 $graphs[] = CUserAgentGraph::getDeviceTypeSeries($devices);
 $graphs[] = CUserAgentGraph::getScreenSizeSeries($screens);
 $graphs[] = CUserAgentGraph::getPointingMethodSeries($methods);
+$graphs[] = CUserAgentGraph::getBrowserVersionSeries($versions);
 //$graphs[] = CUserAgentGraph::getNbConnectionsSeries($connections);
 
 // To get them in the list

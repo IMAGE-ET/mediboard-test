@@ -30,6 +30,7 @@
         <input type="hidden" class="dateTime" id="_max_date" name="_max_date" value="{{$max_date}}" onchange="$V(this.form.elements.start, '0');" />
 
         <button type="submit" class="search ">{{tr}}Search{{/tr}}</button>
+        <button type="button" class="down notext" onclick="$('browser_graphs').toggle();">{{tr}}Hide{{/tr}}</button>
       </td>
     </tr>
   </table>
