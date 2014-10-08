@@ -37,7 +37,7 @@
         <Concept code="CERT_DECL" displayName="Certificat, déclaration" codeSystem="1.2.250.1.213.1.1.4.12"/>
         <Concept code="EXPPAT_1" displayName="Volontés et droits du patient" codeSystem="1.2.250.1.213.1.1.4.12"/>
         <Concept code="EXPPAT_2" displayName="Document du patient" codeSystem="1.2.250.1.213.1.1.4.12"/>
-        <Concept code="INSCR_RCP" displayName="Données d’inscription en RCP" codeSystem="1.2.250.1.213.1.1.4.12"/>
+        <Concept code="INSCR_RCP" displayName="Données d'inscription en RCP" codeSystem="1.2.250.1.213.1.1.4.12"/>
         <Concept code="E1762" displayName="Full Document" codeSystem="ASTM"/>
     </ConceptList>
     </ValueSet>

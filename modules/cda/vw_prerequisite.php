@@ -15,8 +15,6 @@ CCanDo::checkAdmin();
 
 $group            = CGroups::loadCurrent();
 $tag              = "cda_association_code";
-$category         = new CFilesCategory();
-$categories       = $category->loadGroupList();
 $mb_oid           = CAppUI::conf("mb_oid");
 $path_ghostscript = CAppUI::conf("cda path_ghostscript");
 

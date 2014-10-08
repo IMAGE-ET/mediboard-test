@@ -18,11 +18,12 @@ class CCdaTools {
   /**
    * Retourne un tableau issu du jeux de valeur
    *
-   * @param String $name nom du jeux de valeurs
+   * @param String $name         Nom du jeux de valeurs
+   * @param Bool   $array_unique Création d'un tableau avec "codeSytem^Code" comme clé
    *
    * @return array
    */
-  static function loadJV($name) {
+  static function loadJV($name, $array_unique=false) {
     $path = "modules/cda/resources/jeuxDeValeurs/$name";
     $dom = new CMbXMLDocument();
     $dom->load($path);
@@ -32,9 +33,16 @@ class CCdaTools {
 
     $jeux_valeurs = array();
     foreach ($nodes as $_node) {
-      $jeux_valeurs[] = array("code" => $xpath->queryAttributNode(".", $_node, "code"),
-                              "displayName" => $xpath->queryAttributNode(".", $_node, "displayName"),
-                              "codeSystem" => $xpath->queryAttributNode(".", $_node, "codeSystem"));
+      $code        = $xpath->queryAttributNode(".", $_node, "code");
+      $displayName = $xpath->queryAttributNode(".", $_node, "displayName");
+      $codeSystem  = $xpath->queryAttributNode(".", $_node, "codeSystem");
+      if ($array_unique) {
+        $jeux_valeurs["$codeSystem^$code"] = $displayName;
+        continue;
+      }
+      $jeux_valeurs[] = array("code" => $code,
+                              "displayName" => $displayName,
+                              "codeSystem" => $codeSystem);
     }
 
     return $jeux_valeurs;
