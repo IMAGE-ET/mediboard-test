@@ -32,7 +32,7 @@ if (!$patient->_id || $patient->_vip) {
   CAppUI::setMsg("Vous devez selectionner un patient", UI_MSG_ALERT);
   CAppUI::redirect("m=patients&tab=vw_idx_patients");
 }
-$patient->loadDossierComplet(PERM_READ);
+$patient->loadDossierComplet(PERM_READ, false);
 
 $patient->_nb_files_docs -= $patient->_nb_cancelled_files;
 
@@ -46,8 +46,9 @@ $dossier_medical->loadComplete();
 
 // Suppression des consultations d'urgences
 foreach ($patient->_ref_consultations as $consult) {
-  if ($consult->motif == "Passage aux urgences") {
+  if ($consult->motif == "Passage aux urgences" || ($consult->annule && !$vw_cancelled)) {
     unset($patient->_ref_consultations[$consult->_id]);
+    mbTrace("tyui");
   }
 }
 
@@ -92,7 +93,7 @@ $smarty->assign("listPrat"                , $listPrat);
 $smarty->assign("object"                  , $patient);
 $smarty->assign("isImedsInstalled"        , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("nb_sejours_annules"      , $nb_sejours_annules);
-$smarty->assign("nb_ops_annulees"          , $nb_ops_annulees);
+$smarty->assign("nb_ops_annulees"         , $nb_ops_annulees);
 $smarty->assign("vw_cancelled"            , $vw_cancelled);
 
 $smarty->display("vw_full_patients.tpl");

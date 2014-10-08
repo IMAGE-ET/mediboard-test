@@ -1,5 +1,3 @@
-<!-- $Id: $ -->
-
 {{mb_default var=selected_guid value=""}}
 {{mb_default var=show_semaine_grossesse value=0}}
 {{if $object instanceof CSejour}}
@@ -103,7 +101,7 @@
     </span>
         </a>
     </td>
-    <td style="text-align: left;" {{if $object->annule}}class="cancelled"{{/if}}>
+    <td style="text-align: left;" {{if $consult->annule}}class="cancelled"{{/if}}>
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$consult->_ref_chir}}
     </td>
   </tr>

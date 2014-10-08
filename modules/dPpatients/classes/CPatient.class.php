@@ -1648,7 +1648,7 @@ class CPatient extends CPerson {
     return $this->_ref_praticiens;
   }
 
-  function loadDossierComplet($permType = null) {
+  function loadDossierComplet($permType = null, $hide_consult_sejour = true) {
     $this->_total_docs = 0;
     $this->_ref_praticiens = array();
 
@@ -1694,7 +1694,7 @@ class CPatient extends CPerson {
     // Consultations
     $this->loadRefsConsultations();
     foreach ($this->_ref_consultations as $consult) {
-      if ($consult->sejour_id) {
+      if ($consult->sejour_id && $hide_consult_sejour) {
         unset($this->_ref_consultations[$consult->_id]);
         continue;
       }
