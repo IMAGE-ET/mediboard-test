@@ -43,9 +43,9 @@
             var url = new Url('admin', 'sanitize_userlogs');
 
             if (form) {
-              url.addNotNullElement(form.purge );
+              url.addNotNullElement(form.execute);
               url.addNotNullElement(form.offset);
-              url.addNotNullElement(form.step  );
+              url.addNotNullElement(form.step);
               url.addElement(form.auto);
             }
 
@@ -54,15 +54,16 @@
               url.requestUpdate(modal.container.down('.content'));
             }
             else {
-              url.requestModal();
+              url.requestModal(900, 700);
             }
 
             return false;
           },
 
           auto: function() {
-            if ($('Sanitize_auto').checked) {
-              CUserLog.sanitize(document.Sanitize);
+            var form = getForm("Sanitize");
+            if ($V(form.auto) == 1) {
+              CUserLog.sanitize(form);
             }
           }
         }
