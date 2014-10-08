@@ -425,15 +425,6 @@
   {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}
     <button type="button" class="search" onclick="PlanSoins.showModalTasks('{{$sejour->_id}}');">Tâches</button>
   {{/if}}
-
-  {{if "soins suivi hide_old_line"|conf:"CGroups-$g" && $date == $smarty.now|date_format:'%Y-%m-%d'}}
-    {{if $hide_old_lines}}
-      <button type="button" class="search" onclick="PlanSoins.reloadSuiviSoin('{{$sejour->_id}}', '{{$date}}', 0);">Afficher les prescriptions terminées ({{$hidden_lines_count}})</button>
-    {{else}}
-      <button type="button" class="search" onclick="PlanSoins.reloadSuiviSoin('{{$sejour->_id}}', '{{$date}}', 1);">Masquer les prescriptions terminées</button>
-    {{/if}}
-  {{/if}}
-
   <button type="button" class="print"
           onclick="{{if isset($prescription|smarty:nodefaults)}}Prescription.printOrdonnance('{{$prescription->_id}}');{{/if}}">
     Ordonnance
@@ -447,6 +438,18 @@
     {{if "dPprescription"|module_active && $prescription_id}}
     {{assign var=borne_inf value="CMbDT::date"|static_call:"-1 day":$sejour->_entree|@date_format:"%Y-%m-%d"}}
     {{assign var=borne_sup value="CMbDT::date"|static_call:"+1 day":$sejour->_sortie|@date_format:"%Y-%m-%d"}}
+
+    {{if "soins suivi hide_old_line"|conf:"CGroups-$g" && $date == $smarty.now|date_format:'%Y-%m-%d'}}
+      {{if $hide_old_lines}}
+        <button type="button" class="search" style="float: right;margin-top: -4px;" onclick="PlanSoins.reloadSuiviSoin('{{$sejour->_id}}', '{{$date}}', 0);">
+          Afficher les prescriptions terminées ({{$hidden_lines_count}})
+        </button>
+      {{else}}
+        <button type="button" class="search" style="float: right;margin-top: -4px;" onclick="PlanSoins.reloadSuiviSoin('{{$sejour->_id}}', '{{$date}}', 1);">
+          Masquer les prescriptions terminées
+        </button>
+      {{/if}}
+    {{/if}}
 
     <h2 style="text-align: center;">
           <button type="button"
