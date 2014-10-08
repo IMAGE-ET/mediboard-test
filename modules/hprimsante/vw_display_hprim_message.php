@@ -10,7 +10,11 @@
  * @version  $Revision$
  * @link     http://www.mediboard.org
  */
+CCanDo::checkRead();
 
-$module = CModule::getInstalled(basename(dirname(__FILE__)));
+$message = CValue::getOrSession("message");
 
-$module->registerTab("vw_display_hprim_message", TAB_READ);
+// Création du template
+$smarty = new CSmartyDP();
+$smarty->assign("message", $message);
+$smarty->display("vw_display_hprim_message.tpl");

@@ -267,4 +267,5 @@ $locales['hprimSante-msg-R'] = 'R';
 $locales['link_hprim_objects'] = 'Association des objets';
 $locales['mod-hprimSante-tab-configure'] = 'Configurer';
 $locales['mod-hprimsante-tab-configure'] = 'Configuration';
+$locales['mod-hprimsante-tab-vw_display_hprim_message'] = 'Highlight HPR';
 $locales['module-hprimsante-court'] = 'Hprim Sante';
