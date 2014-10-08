@@ -2,8 +2,8 @@
 
 <!-- Plages -->
 {{foreach from=$salle->_ref_plages item=_plage}}
-  {{if $_plage->_ref_operations || $_plage->_unordered_operations}}
-    <hr />
+  {{if $conf.dPbloc.CPlageOp.view_empty_plage_op || ($_plage->_ref_operations || $_plage->_unordered_operations)}}
+<hr />
 
     <form name="anesth{{$_plage->_id}}" action="?" method="post" class="{{$_plage->_spec}}">
       <input type="hidden" name="m" value="dPbloc" />
@@ -103,6 +103,14 @@
         </tr>
         {{mb_include module=salleOp template=inc_liste_operations urgence=0 operations=$_plage->_unordered_operations ajax_salle=1}}
       {{/if}}
+    </table>
+  {{/if}}
+{{foreachelse}}
+  {{if $conf.dPbloc.CPlageOp.view_empty_plage_op}}
+    <table class="tbl">
+      <tr>
+        <td class="empty">{{tr}}CPlageOp.none{{/tr}}</td>
+      </tr>
     </table>
   {{/if}}
 {{/foreach}}
