@@ -52,9 +52,13 @@ class CExClassImport extends CMbXMLObjectImport {
     switch ($element->getAttribute("class")) {
       // --------------------
       case "CExClass":
+        $values = $this->getValuesFromElement($element);
+
         $ex_class = new CExClass();
-        $ex_class->name = $this->options["ex_class_name"];
-        $ex_class->group_id = CGroups::loadCurrent()->_id;
+        $ex_class->name                       = $this->options["ex_class_name"];
+        $ex_class->group_id                   = CGroups::loadCurrent()->_id;
+        $ex_class->pixel_positionning         = $values["pixel_positionning"];
+        $ex_class->native_views               = $values["native_views"];
         $ex_class->_dont_create_default_group = true;
 
         if ($msg = $ex_class->store()) {
@@ -165,6 +169,7 @@ class CExClassImport extends CMbXMLObjectImport {
 
       // --------------------
       case "CExClassFieldGroup":
+      case "CExClassFieldSubgroup":
       case "CExClassFieldTranslation":
       case "CExClassMessage":
       case "CExClassHostField":
