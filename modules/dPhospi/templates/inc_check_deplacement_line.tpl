@@ -19,6 +19,7 @@
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_affectation_aed" />
       {{mb_key object=$_mouv}}
+      {{mb_field object=$_mouv field=entree hidden=1}}
       {{mb_field object=$_mouv field=sortie hidden=1}}
     
       {{if $_mouv->effectue}}
