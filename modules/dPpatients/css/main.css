@@ -44,15 +44,15 @@ td.legend-onhover {
 }
 
 .iconed-text.interv {
-  background-image: url(images/icons/interv.png);
+  background-image: url("../../../style/mediboard/images/icons/interv.png");
 }
 
 .iconed-text.urg {
-  background-image: url(images/icons/urg.png);
+  background-image: url("../../../style/mediboard/images/icons/urg.png");
 }
 
 .iconed-text.anesth {
-  background-image: url(images/icons/anesth.png);
+  background-image: url("../../../style/mediboard/images/icons/anesth.png");
 }
 
 .encart {
