@@ -77,6 +77,32 @@ class CXDSTools {
   }
 
   /**
+   * Retourne l'ensemble des valeurs d'un jeux de valeur
+   *
+   * @param String $name Nom du jeux de valeur
+   *
+   * @return array
+   */
+  static function loadJV($name) {
+    $path = "modules/xds/resources/jeux_de_valeurs/$name";
+
+    $dom = new CXDSXmlDocument();
+    $dom->load($path);
+    $xpath = new CMbXPath($dom);
+    $nodes = $xpath->query("//line");
+
+    $jeux_valeurs = array();
+    foreach ($nodes as $_node) {
+      $id   = $xpath->queryAttributNode(".", $_node, "id");
+      $oid  = $xpath->queryAttributNode(".", $_node, "oid");
+      $name = $xpath->queryAttributNode(".", $_node, "name");
+      $jeux_valeurs["$oid^$id"] = $name;
+    }
+
+    return $jeux_valeurs;
+  }
+
+  /**
    * Retourne une entrée dans un jeux de valeur
    *
    * @param String $name Nom du jeux de valeur

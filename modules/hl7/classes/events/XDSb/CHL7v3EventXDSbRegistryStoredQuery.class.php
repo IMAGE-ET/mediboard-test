@@ -22,7 +22,7 @@ class CHL7v3EventXDSbRegistryStoredQuery extends CHL7v3EventXDSb implements CHL7
   /**
    * Build ProvideAndRegisterDocumentSetRequest event
    *
-   * @param CCompteRendu|CFile $object compte rendu
+   * @param CXDSQueryRegistryStoredQuery $object compte rendu
    *
    * @see parent::build()
    *
@@ -43,7 +43,7 @@ class CHL7v3EventXDSbRegistryStoredQuery extends CHL7v3EventXDSb implements CHL7
     $slot = new CXDSSlot("\$XDSDocumentEntryUniqueId", array("('$oid')"));
     $xml->importDOMDocument($adhocQuery, $slot->toXML());
 
-    $this->message = $xml->saveXML();
+    $this->message = $object->createQuery();
 
     $this->updateExchange(false);
   }
