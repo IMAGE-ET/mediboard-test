@@ -926,6 +926,8 @@ class CCodable extends CMbObject {
         break;
       case "7":
         return CAppUI::conf("dPccam CCodable precode_modificateur_7");
+      case "J":
+        return CAppUI::conf("dPccam CCodable precode_modificateur_J");
     }
     return null;
   }
