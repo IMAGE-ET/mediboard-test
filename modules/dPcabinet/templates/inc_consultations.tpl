@@ -167,7 +167,6 @@
             <input type="hidden" name="dosql" value="do_consultation_aed" />
             {{mb_key object=$_consult}}
             <input type="hidden" name="annule" value="0" />
-            <input type="hidden" name="chrono" value="{{$_consult|const:'PLANIFIE'}}" />
             <button class="undo button notext" type="submit">Rétablir</button>
           </form>
         {{/if}}
