@@ -1818,7 +1818,7 @@ class CSetupsystem extends CSetup {
               ADD INDEX (`module_action_id`);";
     $this->addQuery($query);
 
-    $query = "INSERT INTO `module_action` (`module`, `action`)
+    $query = "INSERT IGNORE INTO `module_action` (`module`, `action`)
               SELECT DISTINCT `module`, `action`
               FROM `access_log`;";
     $this->addQuery($query);
