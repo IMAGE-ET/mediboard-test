@@ -8,8 +8,8 @@
 
 {{if $_suivi instanceof CObservationMedicale}}
   {{if @$show_patient}}
-  <td><strong>{{$_suivi->_ref_sejour->_ref_patient}}</strong></td>
-  <td class="text">{{$_suivi->_ref_sejour->_ref_last_affectation->_ref_lit->_view}}</td>
+    <td><strong>{{$_suivi->_ref_sejour->_ref_patient}}</strong></td>
+    <td class="text">{{$_suivi->_ref_sejour->_ref_last_affectation->_ref_lit->_view}}</td>
   {{/if}}
   <td style="text-align: center;">
     <strong>
@@ -25,16 +25,16 @@
     {{mb_value object=$_suivi field=date}}
   </td>
   <td class="narrow text">
-   {{if $_suivi->object_id}}
-     <span onmouseover="ObjectTooltip.createEx(this, '{{$_suivi->_ref_object->_guid}}');">
+    {{if $_suivi->object_id}}
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$_suivi->_ref_object->_guid}}');">
        {{if $_suivi->_ref_object instanceof CPrescriptionLineMedicament}}
          {{$_suivi->_ref_object->_ucd_view}}
        {{else}}
          {{$_suivi->_ref_object->_view}}
        {{/if}}
      </span>
-   {{/if}}
-  </td>  
+    {{/if}}
+  </td>
   <td colspan="3" class="text">
     <div>
       <strong>{{mb_value object=$_suivi field=text}}</strong>
@@ -80,7 +80,7 @@
       {{/if}}
     {{/foreach}}
     {{if $_suivi->comment}}
-    ({{$_suivi->comment}})
+      ({{$_suivi->comment}})
     {{/if}}
   </td>
   <td></td>
@@ -101,9 +101,9 @@
     {{if !$readonly}}
       <button type="button" class="tick" onclick="addTransmissionAdm('{{$_suivi->_id}}','{{$_suivi->_class}}');" style="float: right;">Réaliser ({{$_suivi->_count.transmissions}})</button>
     {{/if}}
-    
+
     {{if $_suivi instanceof CPrescriptionLineElement}}
-    <strong onmouseover="ObjectTooltip.createEx(this, '{{$_suivi->_ref_element_prescription->_guid}}');">{{$_suivi->_view}}</strong>
+      <strong onmouseover="ObjectTooltip.createEx(this, '{{$_suivi->_ref_element_prescription->_guid}}');">{{$_suivi->_view}}</strong>
     {{/if}}
     {{mb_value object=$_suivi field="commentaire"}}
   </td>
@@ -122,10 +122,10 @@
         <button type="button" class="trash notext" onclick="submitSuivi(this.form, 1);"></button>
       </form>
       <button type="button" class="edit notext"
-        onclick="addPrescription('{{$_suivi->_ref_prescription->object_id}}', '{{$app->user_id}}', '{{$_suivi->_id}}', '{{$_suivi->_class}}');"></button>
+              onclick="addPrescription('{{$_suivi->_ref_prescription->object_id}}', '{{$app->user_id}}', '{{$_suivi->_id}}', '{{$_suivi->_class}}');"></button>
     {{/if}}
   </td>
-  {{/if}}
+{{/if}}
 
 {{if $_suivi instanceof CConsultation}}
   <td class="narrow" style="text-align: center;">
@@ -239,18 +239,18 @@
         {{assign var=classes value=' '|explode:"CPrescriptionLineMedicament CPrescriptionLineElement CAdministration CPrescriptionLineMix"}}
         {{if in_array($_suivi->object_class, $classes)}}
           <span
-           title="{{$_suivi->_ref_object->_view}} {{if $_suivi->_ref_object instanceof CPrescriptionLineElement && $_suivi->_ref_object->commentaire}}({{$_suivi->_ref_object->commentaire}}){{/if}}"
+            title="{{$_suivi->_ref_object->_view}} {{if $_suivi->_ref_object instanceof CPrescriptionLineElement && $_suivi->_ref_object->commentaire}}({{$_suivi->_ref_object->commentaire}}){{/if}}"
             style="float: left; border: 2px solid #800; width: 5px; height: 11px; margin-right: 3px;">
           </span>
         {{/if}}
         {{if (!$readonly && $_suivi->_canEdit) || $force_new}}
           <a href="#1" onclick="
-            {{if $force_new}}
-              Control.Modal.close();
-            {{/if}}
-            if (window.addTransmission) {
-              addTransmission('{{$_suivi->sejour_id}}', '{{$app->user_id}}', null, '{{$_suivi->object_id}}', '{{$_suivi->object_class}}');
-            }"
+        {{if $force_new}}
+          Control.Modal.close();
+        {{/if}}
+          if (window.addTransmission) {
+          addTransmission('{{$_suivi->sejour_id}}', '{{$app->user_id}}', null, '{{$_suivi->object_id}}', '{{$_suivi->object_class}}');
+          }"
           >
         {{/if}}
 
@@ -258,11 +258,11 @@
           {{$_suivi->_ref_object->_view}}
         {{/if}}
         {{if $_suivi->object_class == "CPrescriptionLineMedicament"}}
-        [{{$_suivi->_ref_object->_ref_produit->_ref_ATC_2_libelle}}]
+          [{{$_suivi->_ref_object->_ref_produit->_ref_ATC_2_libelle}}]
         {{/if}}
 
         {{if $_suivi->object_class == "CPrescriptionLineElement"}}
-        [{{$_suivi->_ref_object->_ref_element_prescription->_ref_category_prescription->_view}}]
+          [{{$_suivi->_ref_object->_ref_element_prescription->_ref_category_prescription->_view}}]
         {{/if}}
 
         {{if $_suivi->object_class == "CAdministration"}}
@@ -281,20 +281,20 @@
       {{/if}}
       {{if $_suivi->libelle_ATC}}
         <a href="#1" onclick="
-          {{if $force_new}}
-            Control.Modal.close();
-          {{/if}}
+        {{if $force_new}}
+          Control.Modal.close();
+        {{/if}}
           if (window.addTransmission) {
-            addTransmission('{{$_suivi->sejour_id}}', '{{$_suivi->user_id}}', null, null, null, '{{$_suivi->libelle_ATC|smarty:nodefaults|JSAttribute}}');
+          addTransmission('{{$_suivi->sejour_id}}', '{{$_suivi->user_id}}', null, null, null, '{{$_suivi->libelle_ATC|smarty:nodefaults|JSAttribute}}');
           }"
-        >{{$_suivi->libelle_ATC}}</a>
+          >{{$_suivi->libelle_ATC}}</a>
       {{/if}}
     </td>
   {{/if}}
   <td class="text {{if $_suivi->type}}trans-{{$_suivi->type}}{{/if}} libelle_trans" colspan="3">
     {{mb_value object=$_suivi field=text}}
   </td>
-  
+
   <td class="text">
     {{if !$readonly && $_suivi->_canEdit}}
       <form name="Del-{{$_suivi->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -308,7 +308,7 @@
       <button type="button" class="edit notext" onclick="addTransmission(null, null, '{{$_suivi->_id}}', null, null, null, 1)" ></button>
     {{/if}}
   </td>
-  
+
 {{/if}}
 
 
@@ -316,25 +316,14 @@
 {{* Affichage aggrégé dans le volet transmissions, de 1 à 3 objets (D-A-R) *}}
 
 {{if $_suivi|is_array}}
-  {{assign var=nb_trans value=0}}
-  {{assign var=last_type value=""}}
-  {{assign var=last_index value=0}}
-  {{foreach from=$_suivi item=_trans_by_type key=type_trans}}
-    {{if $type_trans != "0"}}
-      {{if $_trans_by_type|@count}}
-        {{assign var=last_type value=$type_trans}}
-        {{math equation=x-1 x=$_trans_by_type|@count assign=last_index}}
-      {{/if}}
-      {{math equation=x+y x=$nb_trans y=$_trans_by_type|@count assign=nb_trans}}
-    {{/if}}
-  {{/foreach}}
+  {{assign var=nb_trans value=$_suivi|@count}}
   {{assign var=libelle_ATC value=$_suivi[0]->libelle_ATC}}
   {{assign var=key value="`$_suivi[0]->object_class` `$_suivi[0]->object_id`"}}
   {{assign var=locked value=""}}
 
   {{if isset($last_trans_cible|smarty:nodefaults)}}
     {{if $_suivi[0]->locked && ($libelle_ATC && in_array($last_trans_cible.$libelle_ATC, $_suivi) ||
-        ($key != " " && in_array($last_trans_cible.$key, $_suivi)))}}
+    ($key != " " && in_array($last_trans_cible.$key, $_suivi)))}}
       {{assign var=locked value="hatching"}}
     {{/if}}
   {{/if}}
@@ -358,30 +347,30 @@
         {{assign var=classes value=' '|explode:"CPrescriptionLineMedicament CPrescriptionLineElement CAdministration CPrescriptionLineMix"}}
         {{if in_array($_suivi[0]->object_class, $classes)}}
           <span
-           title="{{$_suivi[0]->_ref_object->_view}} {{if $_suivi[0]->_ref_object instanceof CPrescriptionLineElement && $_suivi[0]->_ref_object->commentaire}}({{$_suivi[0]->_ref_object->commentaire}}){{/if}}"
+            title="{{$_suivi[0]->_ref_object->_view}} {{if $_suivi[0]->_ref_object instanceof CPrescriptionLineElement && $_suivi[0]->_ref_object->commentaire}}({{$_suivi[0]->_ref_object->commentaire}}){{/if}}"
             style="float: left; border: 2px solid #800; width: 5px; height: 11px; margin-right: 3px;">
           </span>
         {{/if}}
         {{if $locked || $trans_compact}}
           <strong>
         {{/if}}
-        {{if $show_link}}
-          <a href="#1"
-            {{if $locked || $trans_compact}}
-              onclick="showTrans('{{$_suivi[0]->_id}}' {{if !$locked}}, 1{{/if}})"
-            {{else}}
-               onclick="if (window.addTransmission) { addTransmission('{{$_suivi[0]->sejour_id}}', '{{$app->user_id}}', null, '{{$_suivi[0]->object_id}}', '{{$_suivi[0]->object_class}}'); }"
-            {{/if}}>
-        {{/if}}
+      {{if $show_link}}
+        <a href="#1"
+          {{if $locked || $trans_compact}}
+          onclick="showTrans('{{$_suivi[0]->_id}}' {{if !$locked}}, 1{{/if}})"
+          {{else}}
+          onclick="if (window.addTransmission) { addTransmission('{{$_suivi[0]->sejour_id}}', '{{$app->user_id}}', null, '{{$_suivi[0]->object_id}}', '{{$_suivi[0]->object_class}}'); }"
+          {{/if}}>
+      {{/if}}
         {{if !in_array($_suivi[0]->object_class, $classes)}}
           {{$_suivi[0]->_ref_object->_view}}
         {{/if}}
         {{if $_suivi[0]->object_class == "CPrescriptionLineMedicament"}}
-        [{{$_suivi[0]->_ref_object->_ref_produit->_ref_ATC_2_libelle}}]
+          [{{$_suivi[0]->_ref_object->_ref_produit->_ref_ATC_2_libelle}}]
         {{/if}}
 
         {{if $_suivi[0]->object_class == "CPrescriptionLineElement"}}
-        [{{$_suivi[0]->_ref_object->_ref_element_prescription->_ref_category_prescription->_view}}]
+          [{{$_suivi[0]->_ref_object->_ref_element_prescription->_ref_category_prescription->_view}}]
         {{/if}}
 
         {{if $_suivi[0]->object_class == "CAdministration"}}
@@ -404,15 +393,15 @@
         {{if $locked || $trans_compact}}
           <strong>
         {{/if}}
-        {{if $show_link}}
-          <a href="#1"
-            {{if $locked || $trans_compact}}
-               onclick="showTrans('{{$_suivi[0]->_id}}' {{if !$locked}}, 1{{/if}})"
-            {{else}}
-               onclick="if (window.addTransmission) { addTransmission('{{$_suivi[0]->sejour_id}}', '{{$_suivi[0]->user_id}}', null, null, null, '{{$_suivi[0]->libelle_ATC|smarty:nodefaults|JSAttribute}}'); }"
-            {{/if}}
-            >
-        {{/if}}
+      {{if $show_link}}
+        <a href="#1"
+          {{if $locked || $trans_compact}}
+            onclick="showTrans('{{$_suivi[0]->_id}}' {{if !$locked}}, 1{{/if}})"
+          {{else}}
+            onclick="if (window.addTransmission) { addTransmission('{{$_suivi[0]->sejour_id}}', '{{$_suivi[0]->user_id}}', null, null, null, '{{$_suivi[0]->libelle_ATC|smarty:nodefaults|JSAttribute}}'); }"
+          {{/if}}
+          >
+      {{/if}}
         {{$_suivi[0]->libelle_ATC}}
         {{if $locked || $trans_compact}}
           </strong>
@@ -429,77 +418,73 @@
       <button type="button" class="unlock notext" title="Réouvrir la cible" onclick="toggleLockCible('{{$_suivi[0]->_id}}', 0)"></button>
     </td>
   {{else}}
-    {{foreach from=$_suivi item=_trans_by_type key=type_trans}}
-      {{if $type_trans != "0"}}
-        <td>
-          {{if is_array($_trans_by_type)}}
-            {{* Fusion de transmissions médicales *}}
-            {{if $_trans_by_type|@count > 1}}
-              {{assign var=transmissions_ids value=""}}
-              {{foreach from=$_trans_by_type item=_trans name=_trans}}
-                {{if $smarty.foreach._trans.first}}
-                  {{assign var=transmissions_ids value=$_trans->_id}}
-                {{else}}
-                  {{assign var=transmissions_ids value="$transmissions_ids-`$_trans->_id`"}}
-                {{/if}}
-              {{/foreach}}
-              <button type="button" class="merge notext" style="float: right;" onclick="mergeTrans('{{$transmissions_ids}}')"></button>
-            {{/if}}
-            {{foreach from=$_trans_by_type item=_trans}}
-              {{mb_value object=$_trans field=text}}
-              <br />
-            {{/foreach}}
-          {{/if}}
-        </td>
+    {{if $_suivi|@count}}
+      {{if $_suivi[0]->type != "data"}}
+        <td style="width: 17%"></td>
+        {{if $_suivi[0]->type == "result"}}
+          <td style="width: 17%"></td>
+        {{/if}}
       {{/if}}
+    {{/if}}
+    {{foreach from=$_suivi item=_trans name=foreach_trans}}
+      {{if $smarty.foreach.foreach_trans.index == 1 && $_suivi[0]->type == "data" && $_trans->type == "result"}}
+        <td style="width: 17%"></td>
+      {{/if}}
+      <td style="width: 17%">
+        {{mb_value object=$_trans field=text}}
+      </td>
     {{/foreach}}
+    {{if $nb_trans == 1}}
+      {{if $_suivi[0]->type != "result"}}
+        <td style="width: 17%"></td>
+        {{if $_suivi[0]->type != "action"}}
+          <td style="width: 17%"></td>
+        {{/if}}
+      {{/if}}
+    {{elseif $nb_trans == 2 && $_suivi[1]->type == "action"}}
+      <td style="width: 17%"></td>
+    {{/if}}
     {{if !$readonly}}
       <td class="nowrap">
-        {{if $_suivi.data|@count <= 1 && $_suivi.action|@count <= 1 && $_suivi.result|@count <= 1}}
-          {{if $_suivi[0]->_canEdit}}
-            <form name="Del-{{$_suivi[0]->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
-              <input type="hidden" name="m" value="hospi" />
-              <input type="hidden" name="del" value="1" />
-              {{if $_suivi|@count == 1}}
-                <input type="hidden" name="dosql" value="do_transmission_aed" />
-              {{else}}
-                <input type="hidden" name="dosql" value="do_multi_transmission_aed" />
-              {{/if}}
-              {{if $nb_trans == 1}}
-                <input type="hidden" name="transmission_medicale_id" value="{{$_suivi[0]->_id}}" />
-              {{/if}}
-              {{foreach from=$_suivi item=_trans_by_type key=type_trans}}
-                {{if $type_trans != "0" && $_trans_by_type|@count}}
-                  <input type="hidden" name="{{$_trans_by_type[0]->type}}_id" value="{{$_trans_by_type[0]->_id}}"/>
-                {{/if}}
-              {{/foreach}}
-              <input type="hidden" name="sejour_id" value="{{$_suivi[0]->sejour_id}}" />
-              <button type="button" class="trash notext"
-               onclick="confirmDeletion(this.form,
-                {typeName:'la/les transmission(s)',
-                  ajax: true,
-                  callback: function() { submitSuivi(getForm('Del-{{$_suivi[0]->_guid}}'), 1); } })"></button>
-            </form>
-            {{if $nb_trans == 1}}
-              <button type="button" class="edit notext" onclick="addTransmission('{{$_suivi.data[0]->sejour_id}}', null, '{{$_suivi.data[0]->_id}}', null, null, null, 1)"></button>
+        {{if $_suivi[0]->_canEdit}}
+          <form name="Del-{{$_suivi[0]->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+            {{if $_suivi|@count == 1}}
+              <input type="hidden" name="dosql" value="do_transmission_aed" />
             {{else}}
-              <button type="button" class="edit notext" onclick="addTransmission('{{$_suivi[0]->sejour_id}}', null, {
-                {{foreach from=$_suivi item=_trans_by_type key=type_trans name=_trans}}
-                  {{if $type_trans != "0" && isset($_trans_by_type.0|smarty:nodefaults)}}
-                    {{assign var=first_trans value=$_trans_by_type.0}}
-                    {{if !$smarty.foreach._trans.first}},{{/if}}
-                    {{$first_trans->type}}_id: '{{$first_trans->_id}}'
-                  {{/if}}
-                {{/foreach}}
-                })"></button>
+              <input type="hidden" name="dosql" value="do_multi_transmission_aed" />
             {{/if}}
-            {{if isset($last_trans_cible|smarty:nodefaults)}}
-              {{if ($libelle_ATC && in_array($last_trans_cible.$libelle_ATC, $_suivi)) ||
-                   ($key != " " && in_array($last_trans_cible.$key, $_suivi))}}
-                {{assign var=last_trans value=$_suivi.$last_type.$last_index}}
-                <button type="button" class="lock notext" title="Fermer la cible"
-                  onclick="toggleLockCible('{{$last_trans->_id}}', 1)"></button>
-              {{/if}}
+            <input type="hidden" name="del" value="1" />
+            <input type="hidden" name="m" value="dPhospi" />
+            {{if $nb_trans == 1}}
+              <input type="hidden" name="transmission_medicale_id" value="{{$_suivi[0]->_id}}" />
+            {{/if}}
+            {{if $nb_trans >= 2}}
+              <input type="hidden" name="{{$_suivi[0]->type}}_id" value="{{$_suivi[0]->_id}}" />
+              <input type="hidden" name="{{$_suivi[1]->type}}_id" value="{{$_suivi[1]->_id}}" />
+            {{/if}}
+            {{if $nb_trans == 3}}
+              <input type="hidden" name="{{$_suivi[2]->type}}_id" value="{{$_suivi[2]->_id}}" />
+            {{/if}}
+            <input type="hidden" name="sejour_id" value="{{$_suivi[0]->sejour_id}}" />
+            <button type="button" class="trash notext"
+                    onclick="confirmDeletion(this.form,
+                      {typeName:'la/les transmission(s)',
+                      ajax: true,
+                      callback: function() { submitSuivi(getForm('Del-{{$_suivi[0]->_guid}}'), 1); } })"></button>
+          </form>
+          {{if $nb_trans == 1}}
+            <button type="button" class="edit notext" onclick="addTransmission('{{$_suivi[0]->sejour_id}}', null, '{{$_suivi[0]->_id}}', null, null, null, 1)"></button>
+          {{elseif $nb_trans == 2}}
+            <button type="button" class="edit notext" onclick="addTransmission('{{$_suivi[0]->sejour_id}}', null, { {{$_suivi[0]->type}}_id: '{{$_suivi[0]->_id}}', {{$_suivi[1]->type}}_id: '{{$_suivi[1]->_id}}' }, null, null, null, 1)"></button>
+          {{else}}
+            <button type="button" class="edit notext" onclick="addTransmission('{{$_suivi[0]->sejour_id}}', null, { {{$_suivi[0]->type}}_id: '{{$_suivi[0]->_id}}', {{$_suivi[1]->type}}_id: '{{$_suivi[1]->_id}}', {{$_suivi[2]->type}}_id: '{{$_suivi[2]->_id}}' }, null, null, null, 1)"></button>
+          {{/if}}
+          {{if isset($last_trans_cible|smarty:nodefaults)}}
+            {{if ($libelle_ATC && in_array($last_trans_cible.$libelle_ATC, $_suivi)) ||
+            ($key != " " && in_array($last_trans_cible.$key, $_suivi))}}
+              {{math equation=x-1 x=$nb_trans assign=last_index}}
+              <button type="button" class="lock notext" title="Fermer la cible"
+                      onclick="toggleLockCible('{{$_suivi[$last_index]->_id}}', 1)"></button>
             {{/if}}
           {{/if}}
         {{/if}}
