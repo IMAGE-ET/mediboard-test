@@ -927,7 +927,7 @@ class CCodable extends CMbObject {
       case "7":
         return CAppUI::conf("dPccam CCodable precode_modificateur_7");
       case "J":
-        return CAppUI::conf("dPccam CCodable precode_modificateur_J");
+        return CAppUI::conf("dPccam CCodable precode_modificateur_J") && $this->_class == 'COperation' && isset($this->anesth_id);
     }
     return null;
   }
