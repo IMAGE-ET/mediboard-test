@@ -446,6 +446,13 @@
               </td>
             </tr>
 
+            {{if $consult->_id}}
+              <tr>
+                <th>{{mb_label object=$consult field=chrono}}</th>
+                <td>{{mb_field object=$consult field=chrono typeEnum=radio}}</td>
+              </tr>
+            {{/if}}
+
             {{if $consult->sejour_id}}
               <tr>
                 <th>{{mb_label object=$consult field="brancardage"}}</th>
