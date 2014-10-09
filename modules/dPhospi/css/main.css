@@ -229,20 +229,20 @@ table#diagramme td.expect {
 }
 
 table#diagramme td.ray {
-  background-image: url(./images/icons/ray.gif);
+  background-image: url(../../../images/icons/ray.gif);
   background-repeat: repeat;
 }
 
 table#diagramme td.arrowdown {
   height: 40px;
-  background-image: url(./images/icons/downarrow.png);
+  background-image: url(../../../images/icons/downarrow.png);
   background-repeat: no-repeat;
   background-position: center;
 }
 
 table#diagramme td.arrowup {
   height: 40px;
-  background-image: url(./images/icons/uparrow.png);
+  background-image: url(../../../images/icons/uparrow.png);
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -250,7 +250,7 @@ table#diagramme td.arrowup {
 table#diagramme td.arrowright {
   height: 40px;
   width: 100px;
-  background-image: url(./images/icons/loopnone.png);
+  background-image: url(../../../style/mediboard/images/icons/loopnone.png);
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -285,14 +285,14 @@ table.chambreexpand td.action {
 table.chambrecollapse th.chambre {
   padding: 2px;
   padding-left: 10px;
-  background: #aaa url(./images/icons/collapse.gif) no-repeat center left;
+  background: #aaa url(../../../images/icons/collapse.gif) no-repeat center left;
   color: #fff;
 }
 
 table.chambreexpand th.chambre {
   padding: 2px;
   padding-left: 10px;
-  background: #aaa url(./images/icons/expand.gif) no-repeat center left;
+  background: #aaa url(../../../images/icons/expand.gif) no-repeat center left;
   color: #400;
 }
 
@@ -376,13 +376,13 @@ table.operationcollapse td.patient,
 table.sejourcollapse td.patient {
   white-space: normal;
   padding-left: 17px;
-  background: #ddf url(./images/icons/collapse.gif) no-repeat center left;
+  background: #ddf url(../../../images/icons/collapse.gif) no-repeat center left;
 }
 
 table.operationexpand td.patient,
 table.sejournexpand td.patient {
   padding-left: 17px;
-  background: #ddf url(./images/icons/expand.gif) no-repeat center left;
+  background: #ddf url(../../../images/icons/expand.gif) no-repeat center left;
 }
 
 table.operationcollapse td,
@@ -407,19 +407,19 @@ table.affectations td.fullService {
 }
 
 table.tbl td.trans-data {
-  background-image: url(./images/icons/trans_data.png);
+  background-image: url(../../../images/icons/trans_data.png);
   background-repeat: no-repeat;
   background-position: left center;
 }
 
 table.tbl td.trans-action {
-  background-image: url(./images/icons/trans_action.png);
+  background-image: url(../../../images/icons/trans_action.png);
   background-repeat: no-repeat;
   background-position: left center;
 }
 
 table.tbl td.trans-result {
-  background-image: url(./images/icons/trans_result.png);
+  background-image: url(../../../images/icons/trans_result.png);
   background-repeat: no-repeat;
   background-position: left center;
 }
