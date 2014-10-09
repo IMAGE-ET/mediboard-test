@@ -891,7 +891,7 @@ class CCodable extends CMbObject {
    * @return array|void
    */
   function checkModificateur($code, $heure) {
-    $keys = array("A", "E",  "P", "S", "U", "7");
+    $keys = array("A", "E",  "P", "S", "U", "7", "J");
 
     if (!in_array($code, $keys)) {
       return null;
@@ -926,8 +926,9 @@ class CCodable extends CMbObject {
         break;
       case "7":
         return CAppUI::conf("dPccam CCodable precode_modificateur_7");
+        break;
       case "J":
-        return CAppUI::conf("dPccam CCodable precode_modificateur_J") && $this->_class == 'COperation' && isset($this->anesth_id);
+        return CAppUI::conf("dPccam CCodable precode_modificateur_J") && $this->_class == 'COperation';
     }
     return null;
   }
