@@ -161,9 +161,9 @@ foreach ($sejour->_ref_suivi_medical as $_key => $_trans_const) {
     $sort_key_after = "$date_after $sort_key_pattern";
 
     if (($_trans_const->libelle_ATC &&
-      $last_trans_cible[$_trans_const->libelle_ATC] != $_trans_const &&
-      ($last_trans_cible[$_trans_const->libelle_ATC]->locked || ($trans_compact &&
-        !array_key_exists($sort_key, $list_trans_const) && !array_key_exists($sort_key_before, $list_trans_const) && !array_key_exists($sort_key_after, $list_trans_const)))) ||
+        $last_trans_cible[$_trans_const->libelle_ATC] != $_trans_const &&
+        ($last_trans_cible[$_trans_const->libelle_ATC]->locked || ($trans_compact &&
+            !array_key_exists($sort_key, $list_trans_const) && !array_key_exists($sort_key_before, $list_trans_const) && !array_key_exists($sort_key_after, $list_trans_const)))) ||
       ($_trans_const->object_id &&
         ($last_trans_cible["$_trans_const->object_class $_trans_const->object_id"]->locked || ($trans_compact &&
             !array_key_exists($sort_key, $list_trans_const) && !array_key_exists($sort_key_before, $list_trans_const) && !array_key_exists($sort_key_after, $list_trans_const))) &&
@@ -183,16 +183,43 @@ foreach ($sejour->_ref_suivi_medical as $_key => $_trans_const) {
     }
 
     if (!isset($list_trans_const[$sort_key])) {
-      $list_trans_const[$sort_key] = array("data" => array(), "action" => array(), "result" => array());
+      $list_trans_const[$sort_key] = array();
+      $list_trans_const[$sort_key][] = $_trans_const;
     }
-    if (!isset($list_trans_const[$sort_key][0])) {
-      $list_trans_const[$sort_key][0] = $_trans_const;
+    else {
+      switch ($_trans_const->type) {
+        case "data":
+          @array_unshift($list_trans_const[$sort_key], $_trans_const);
+          break;
+        case "action":
+          switch (count($list_trans_const[$sort_key])) {
+            case 0:
+              @array_push($list_trans_const[$sort_key], $_trans_const);
+              break;
+            case 1:
+              $_trans = array_shift($list_trans_const[$sort_key]);
+              @array_unshift($list_trans_const[$sort_key], $_trans_const);
+              if ($_trans->type == "data") {
+                @array_unshift($list_trans_const[$sort_key], $_trans);
+              }
+              else {
+                @array_push($list_trans_const[$sort_key], $_trans);
+              }
+              break;
+            case 2:
+              $_trans = array_shift($list_trans_const[$sort_key]);
+              @array_unshift($list_trans_const[$sort_key], $_trans_const);
+              @array_unshift($list_trans_const[$sort_key], $_trans);
+          }
+          break;
+        case "result":
+          @array_push($list_trans_const[$sort_key], $_trans_const);
+      }
     }
-    $list_trans_const[$sort_key][$_trans_const->type][] = $_trans_const;
   }
   elseif ($_trans_const instanceof CObservationMedicale) {
     $sort_key = "$_trans_const->date $_trans_const->_guid";
-    $list_trans_const[$sort_key] = $_trans_const;  
+    $list_trans_const[$sort_key] = $_trans_const;
   }
   else {
     $sort_key = "$_trans_const->debut $_trans_const->time_debut $_trans_const->_guid";
