@@ -145,7 +145,7 @@
         <a class="action" href="{{$href_planning}}">
           <img src="images/icons/planning.png" title="Modifier le rendez-vous" />
         </a>
-        {{if !$_consult->annule}}Bug: rétablissement d'une arrivée patient + rétablissement d'une consult annulée
+        {{if !$_consult->annule}}
           {{if $_consult->chrono == $_consult|const:'PLANIFIE' && $patient->_id}}
             <button class="tick button notext" type="button" onclick="putArrivee(document.etatFrm{{$_consult->_id}})">Notifier l'arrivée du patient</button>
             <button type="button" class="cancel button notext" onclick="if(confirm('Voulez-vous vraiment annuler cette consultation ?')) {document.cancelFrm{{$_consult->_id}}.submit()}">
