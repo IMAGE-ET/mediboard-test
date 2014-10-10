@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 /**
  * $Id$
- *  
+ *
  * @category Board
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -114,6 +114,9 @@ foreach ($prats as $_prat) {
     $event->title .= "
     <strong>".CMbDT::format($_plage->debut, "%H:%M"). " - " .CMbDT::format($_plage->fin, "%H:%M")."</strong>
      ".count($_plage->_ref_operations)." ".CAppUI::tr('COperation');
+    if (count($_plage->_ref_operations) > 1) {
+      $event->title.= "s";
+    }
     $event->title .="<small>";
     $event->title .="<br/>$_plage->_ref_salle";
     if ($function_id && !$_plage->spec_id) {
@@ -129,8 +132,7 @@ foreach ($prats as $_prat) {
     $calendar->days[$_plage->date][$_plage->_guid] = $event;
   }
 
-  //hors plage
-
+  // hors plage
   $sql = "
     SELECT plageop_id, date, chir_id,
       SEC_TO_TIME(SUM(TIME_TO_SEC(temp_operation))) as accumulated_time,
@@ -138,7 +140,8 @@ foreach ($prats as $_prat) {
       MAX(time_operation) AS last_time,
       COUNT(*) AS nb_op
     FROM operations, sejour
-    WHERE date BETWEEN  '$calendar->date_min' AND  '$calendar->date_max'
+    WHERE (date BETWEEN  '$calendar->date_min' AND  '$calendar->date_max')
+    AND plageop_id IS NULL
     AND sejour.sejour_id = operations.sejour_id
     AND sejour.group_id = '$group_id'
     AND (chir_id = '$_prat->_id' OR anesth_id = '$_prat->_id')
@@ -151,6 +154,9 @@ foreach ($prats as $_prat) {
     $guid = "hps_".$_hp["date"].$_prat->_id;
     $event = new CPlanningEvent($guid, $_hp["date"]." ".$_hp["first_time"], CMbDT::minutesRelative($_hp["date"]." 00:00:00", $_hp["date"]." ".$_hp["accumulated_time"]));
     $event->title = "<strong>".CMbDT::format($_hp["first_time"], '%H:%M')." - ".CMbDT::format($_hp["last_time"], "%H:%M")."</strong> ".$_hp["nb_op"]." ".CAppUI::tr("CIntervHorsPlage");
+    if ($_hp["nb_op"] > 1) {
+      $event->title.= "s";
+    }
     $event->title.= "<small>";
     if ($function_id) {
       $event->title .= " - ".$_prat->_shortview;
