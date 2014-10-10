@@ -29,7 +29,7 @@ $function = new CFunctions();
 $listFunc = CMediusers::loadFonctions(PERM_EDIT);
 
 /** @var CMediusers[] $listPrat */
-$listPrat = $prat->loadListWithPerms(PERM_EDIT, null);
+$listPrat = $prat->loadProfessionnelDeSante(PERM_EDIT, null);
 
 foreach ($listPrat as $_prat_id => $_prat) {
   if (!$_prat->isPraticien()) {
