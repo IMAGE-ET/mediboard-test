@@ -13,12 +13,13 @@
 
 CCanDo::checkRead();
 
+$group = CGroups::loadCurrent();
+
 $today = CMbDT::date();
 $date = CValue::getOrSession("date", $today);
 $function_id = CValue::getOrSession("function_id");
-
 $function = new CFunctions();
-$functions = $function->loadListWithPerms(PERM_READ, null, "text");
+$functions = $function->loadListWithPerms(PERM_READ, array("group_id" => " = '$group->_id' "), "text");
 
 // smarty
 $smarty = new CSmartyDP();
