@@ -50,7 +50,7 @@ $count_si_desistement = CConsultation::countDesistementsForDay($function_id ? ar
 // Liste des praticiens
 
 $fnc = new CFunctions();
-$listFnc = $fnc->loadListWithPerms(PERM_READ, array("group_id", " = '$group->_id' "), 'text');
+$listFnc = $fnc->loadListWithPerms(PERM_READ, array("group_id" => " = '$group->_id' "), 'text');
 $mediuser = new CMediusers();
 foreach ($listFnc as $id => $_fnc) {
   $users = $mediuser->loadProfessionnelDeSanteByPref(PERM_READ, $_fnc->_id);
