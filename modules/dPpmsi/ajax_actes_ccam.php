@@ -12,7 +12,7 @@
  */
 
 $subject_guid = CValue::get("subject_guid");
-$read_only    = CValue::getOrSession("read_only", 0);
+$read_only    = CValue::get("read_only", 0);
 
 $subject = CMbObject::loadFromGuid($subject_guid);
 
