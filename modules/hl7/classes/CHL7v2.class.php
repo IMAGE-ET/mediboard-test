@@ -31,9 +31,9 @@ abstract class CHL7v2 {
     "2.6",
 
     // Extension française
-    "FR_2.1",
-    "FR_2.2",
-    "FR_2.3"
+    "FR_2.3",
+    "FR_2.4",
+    "FR_2.5"
   );
 
   static $schemas = array();

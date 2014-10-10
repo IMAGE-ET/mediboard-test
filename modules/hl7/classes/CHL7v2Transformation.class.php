@@ -204,14 +204,13 @@ class CHL7v2Transformation {
     $fields          = $datatype_xpath->query("//field");
 
     foreach ($fields as $_field) {
-      $_datatype_name      = $datatype_xpath->queryTextNode("name"    , $_field);
       $_component_datatype = $datatype_xpath->queryTextNode("datatype", $_field);
 
       $children = array();
       $this->readDataTypeSchema($children, $_component_datatype, $fullpath_component);
 
       $_datatypes[] = array(
-        "name"     => $_datatype_name,
+        "name"     => $_component_datatype,
         "fullpath" => "$fullpath_component/$_component_datatype",
         "datatype" => $_component_datatype,
         "children" => $children

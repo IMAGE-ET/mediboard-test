@@ -3203,11 +3203,12 @@ class CSejour extends CFacturable implements IPatientRelated {
    * Force la création d'une affectation en fonction de la tolérance(?)
    *
    * @param CAffectation $affectation Affectation concernée
+   * @param bool         $no_synchro  No synchro
    *
    * @todo A détailler
    * @return CAffectation|null|string|void
    */
-  function forceAffectation(CAffectation $affectation) {
+  function forceAffectation(CAffectation $affectation, $no_synchro = false) {
     $datetime   = $affectation->entree;
     $lit_id     = $affectation->lit_id;
     $service_id = $affectation->service_id;
@@ -3232,7 +3233,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         // On passe à effectuer la split
         $splitting->effectue      = 1;
         $splitting->sortie        = $datetime;
-        $splitting->_no_synchro   = true;
+        $splitting->_no_synchro   = $no_synchro;
         $splitting->_mutation_urg = $affectation->_mutation_urg;
         if ($msg = $splitting->store()) {
           return $msg;
@@ -3254,6 +3255,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $create->lit_id        = $lit_id;
     $create->service_id    = $service_id;
     $create->_mutation_urg = $affectation->_mutation_urg;
+    $create->_no_synchro   = $no_synchro;
     if ($msg = $create->store()) {
       return $msg;
     }
