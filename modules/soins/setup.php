@@ -124,7 +124,16 @@ class CSetupsoins extends CSetup {
     $this->makeRevision("0.22");
 
     $this->addPrefQuery("default_services_id", "{}");
+    $this->makeRevision("0.23");
 
-    $this->mod_version = '0.23';
+    $query = "INSERT INTO `user_preferences` ( `user_id` , `key` , `value` , `pref_id` , `restricted` )
+      SELECT user_id, 'default_services_id', value, null, '0'
+      FROM `user_preferences`
+      WHERE `key` = 'services_ids_hospi'
+      AND `value` != '{}'
+      AND `user_id` IS NOT NULL
+      GROUP BY user_id ;";
+    $this->addQuery($query);
+    $this->mod_version = '0.24';
   }
 }
