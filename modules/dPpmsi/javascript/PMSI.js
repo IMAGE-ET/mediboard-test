@@ -157,11 +157,9 @@ PMSI = {
   },
 
   loadSearch: function(sejour_id) {
-    alert('on load le module search du séjour '+sejour_id);
   },
 
   loadRSS: function(sejour_id) {
-    alert('on load le module RSS du séjour '+sejour_id);
   },
 
   loadDiagsPMSI: function(sejour_id) {
