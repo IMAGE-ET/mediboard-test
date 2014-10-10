@@ -698,7 +698,7 @@ class CDossierMedical extends CMbMetaObject {
             $duree = " (Jusqu'au " . $_line->getFormattedValue("fin").")";
           }
 
-          $list[] = $view . $posologie. $duree;
+          $list[] = $view . $posologie. $duree . ($_line->commentaire ? "\n$_line->commentaire" : "");
         }
       }
       
