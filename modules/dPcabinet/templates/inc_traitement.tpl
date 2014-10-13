@@ -263,7 +263,9 @@
                   <input name="mask_generique" value="{{$app->user_prefs.check_default_generique}}" title="Masquer les génériques"
                          {{if $app->user_prefs.check_default_generique}}checked="checked"{{/if}}
                          type="{{if "dPprescription general see_generique"|conf:"CGroups-$g"}}checkbox{{else}}hidden{{/if}}"/>
-                  <label for="mask_generique">Masquer les génériques</label>
+                  {{if "dPprescription general see_generique"|conf:"CGroups-$g"}}
+                    <label for="mask_generique">Masquer les génériques</label>
+                  {{/if}}
                 </td>
               </tr>
               <tr>
