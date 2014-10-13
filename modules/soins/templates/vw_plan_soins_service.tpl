@@ -28,7 +28,7 @@
       }
       url.requestUpdate("content_plan_soins_service");
     }
-  }
+  };
 
   // Selection ou deselection de tous les elements d'une catégorie
   selectCategory = function(oCheckboxCat) {
@@ -43,7 +43,7 @@
     var counter = $("countSelected_"+oCheckboxCat.value);
     counter.update(checked ? count_cat : 0);
     selectTr(counter);
-  }
+  };
 
   resetCheckbox = function() {
     $('categories').select('input[type=checkbox]').each(function(oCheckbox) {
@@ -56,7 +56,7 @@
     $('categories').select('.counter').each(function(oSpan){
       oSpan.update('0');
     });
-  }
+  };
 
   // Mise a jour du compteur lors de la selection d'un element
   updateCountCategory = function(checkbox, category_guid) {
@@ -68,17 +68,17 @@
     var all_checked = $$("."+category_guid).all(function(elt) { return elt.checked });
     var input_category = $("categories").select("input[value="+category_guid+"]")[0];
     input_category.checked = all_checked;
-  }
+  };
 
   // Affichage des elements au sein des catégories
   toggleElements = function(category_guid) {
     $('categories').select('.category_'+category_guid).invoke('toggle');
-  }
+  };
 
   selectTr = function(counter) {
     var count = parseInt(counter.innerHTML);
     count ? counter.up("tr").addClassName("selected") : counter.up("tr").removeClassName("selected");
-  }
+  };
 
   addTransmission = function(sejour_id, user_id, transmission_id, object_id, object_class, libelle_ATC, update_plan_soin) {
     var url = new Url("hospi", "ajax_transmission");
@@ -90,25 +90,25 @@
     url.addNotNullParam("object_class", object_class);
     url.addNotNullParam("libelle_ATC", libelle_ATC);
     url.requestModal(600, 400);
-  }
+  };
 
   addCibleTransmission = function(sejour_id, object_class, object_id, libelle_ATC, update_plan_soin) {
     addTransmission(sejour_id, '{{$app->user_id}}', null, object_id, object_class, libelle_ATC, update_plan_soin);
-  }
+  };
 
   viewBilanService = function(service_id, date){
     var url = new Url("hospi", "vw_bilan_service");
     url.addParam("service_id", service_id);
     url.addParam("date", date);
     url.popup(800,500,"Bilan par service");
-  }
+  };
 
   printBons = function(service_id, date) {
     var url = new Url("prescription", "print_bon");
     url.addParam("service_id", service_id);
     url.addParam("debut", date);
     url.popup(800, 500);
-  }
+  };
 
   Main.add(function(){
     {{if $service->_id}}

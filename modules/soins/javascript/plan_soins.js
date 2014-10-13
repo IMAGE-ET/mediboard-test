@@ -117,7 +117,7 @@ PlanSoins = {
     if (mode_dossier == "planification" && replanification) {
       url.addParam("replanification", true);
     }
-    url.popup(800,600,"Administration d'une prescription_line_mix");
+    url.requestModal(800,600);
   },
 
   addPlanification: function(date, time, key_tab, object_id, object_class, element_id, unite_sans_planif){
@@ -617,7 +617,7 @@ PlanSoins = {
     var url = new Url("dPprescription", "httpreq_add_multiple_administrations");
     url.addParam("mode_dossier", $V(document.mode_dossier_soin.mode_dossier));
     url.addParam("refresh_popup", "1");
-    url.popup(700, 600, "Administrations multiples");
+    url.requestModal(700, 600);
   },
   
   addInscription: function(datetime, prescription_id){
