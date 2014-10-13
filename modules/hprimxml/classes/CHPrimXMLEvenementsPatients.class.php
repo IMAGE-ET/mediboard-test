@@ -677,7 +677,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     }
 
     if (!$affectation->_id) {
-      $affectation = $newVenue->forceAffectation($affectation);
+      $affectation = $newVenue->forceAffectation($affectation, true);
       if (is_string($affectation)) {
         return $affectation;
       }
