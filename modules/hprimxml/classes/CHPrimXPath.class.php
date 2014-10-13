@@ -58,10 +58,10 @@ class CHPrimXPath extends CMbXPath {
     $array = array();
     $query = utf8_encode($query);
     $nodeList = $contextNode ? parent::query($query, $contextNode) : parent::query($query);
-    
+
     foreach ($nodeList as $n) {
       $array[] = utf8_decode($n->nodeValue);
     }
-    return $implode ? implode(" ", $array) : $array;
+    return $implode ? implode("\n", $array) : $array;
   }
 }
