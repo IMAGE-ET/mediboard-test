@@ -12,6 +12,7 @@
  */
 
 $dPconfig["hprimsante"] = array (
+  "default_version"           => "H2.3",
   "mandatory_num_dos_ipp_adm" => "1",
   "tag"                       => "",
   "sending_application"       => "",

@@ -58,7 +58,7 @@ class COperatorHPrimSante extends CEAIOperator {
         $exchange_hpr->loadRefsInteropActor();
 
         $ack->_ref_exchange_hpr = $exchange_hpr;
-        $error = new CHPrimSanteError($exchange_hpr, "T", "09", array("P", 1, ""), "8.1");
+        $error = new CHPrimSanteError($exchange_hpr, "T", "09", array("P", 1, array("")), "8.1");
         $ack = $ack->generateAcknowledgment(array($error));
 
         $exchange_hpr->populateExchangeACK($ack);
@@ -101,7 +101,7 @@ class COperatorHPrimSante extends CEAIOperator {
 
       $ack = new CHPrimSanteAcknowledgment($evt);
       $ack->_ref_exchange_hpr = $exchange_hpr;
-      $error = new CHPrimSanteError($exchange_hpr, "T", "09", array("P", 1, ""), "8.1", $e->getMessage());
+      $error = new CHPrimSanteError($exchange_hpr, "T", "09", array("P", 1, array("")), "8.1", $e->getMessage());
       $ack = $ack->generateAcknowledgment(array($error));
       $exchange_hpr->populateExchangeACK($ack);
     }

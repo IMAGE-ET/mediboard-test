@@ -84,8 +84,13 @@ class CEchangeHprim21 extends CExchangeTabular {
     if (!$this->isWellFormed($data, $actor)) {
       return false;
     }
-    
-    $hpr_message = $this->parseMessage($data, false, $actor);
+
+    try {
+      $hpr_message = $this->parseMessage($data, false, $actor);
+    }
+    catch(CHL7v2Exception $e) {
+      return false;
+    }
 
     $hpr_message_evt = "CHPrim21$hpr_message->event_name".$hpr_message->type;
     

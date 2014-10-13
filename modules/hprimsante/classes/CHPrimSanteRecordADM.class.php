@@ -53,7 +53,7 @@ class CHPrimSanteRecordADM extends CHPrimSanteMessageXML {
 
       if (!$identifier["identifier"]) {
         //identifier non transmis
-        $erreur["P"][] = new CHPrimSanteError($exchange_hpr, "P", "01", array("P", $_i+1, $identifier), "8.3");
+        $erreur[] = new CHPrimSanteError($exchange_hpr, "P", "01", array("P", $_i+1, $identifier), "8.3");
         continue;
       }
       //récupération du patient par idex/match
@@ -154,120 +154,6 @@ class CHPrimSanteRecordADM extends CHPrimSanteMessageXML {
     }
 
     return $exchange_hpr->setAck($ack, $erreur, $patient);
-  }
-
-  /**
-   * get the patient
-   *
-   * @param String  $identifier identifier
-   * @param DOMNode $node       node
-   *
-   * @return CPatient
-   */
-  function getPatient($identifier, $node) {
-    $sender = $this->_ref_sender;
-
-    $idex = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $identifier);
-
-    $patient   = new CPatient();
-    if ($idex->_id) {
-      return $patient->load($idex->object_id);
-    }
-
-    $person    = $this->getNamePerson($node);
-    $patient->nom       = $person["name"];
-    $patient->prenom    = $person["firstname"];
-    $patient->naissance = $this->getBirthdate($node);
-    $patient->loadMatchingPatient();
-
-    return $patient;
-  }
-
-  /**
-   * get the sejour
-   *
-   * @param CPatient $patient    patient
-   * @param String   $identifier identifier
-   * @param DOMNode  $node       node
-   *
-   * @return CSejour|CHPrimSanteError
-   */
-  function getSejour($patient, $identifier, $node, $create = false) {
-    $sender     = $this->_ref_sender;
-    $patient_id = $patient->_id;
-
-    $idex = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $identifier);
-
-    $sejour = new CSejour();
-    if ($idex->_id) {
-      $sejour->load($idex->object_id);
-      if ($sejour->patient_id != $patient_id) {
-        return new CHPrimSanteError($this->_ref_exchange_hpr, "T", "13", array("P", $this->loop+1, $this->identifier_patient), "8.5");
-      }
-    }
-    $sejour->patient_id = $patient_id;
-
-    $data   = $this->getSejourStatut($node);
-    $entree = $data["entree"] ? CMbDT::dateTime($data["entree"]): null;
-    $sortie = $data["sortie"] ? CMbDT::dateTime($data["sortie"]): null;
-
-    switch ($data["statut"]) {
-      case "OP":
-        $sejour->sortie_reelle = $sortie;
-        break;
-      case "IP":
-        $sejour->type = "comp";
-        $sejour->entree_reelle = $entree;
-        $sejour->sortie_prevue = $sortie;
-        break;
-      case "IO":
-        $sejour->type = "ambu";
-        $sejour->entree_reelle = $entree;
-        $sejour->sortie_prevue = $sortie;
-        break;
-      case "ER":
-        $sejour->type = "urg";
-        $sejour->entree_reelle = $entree;
-        break;
-      case "PA":
-        $sejour->type = "comp";
-        $sejour->entree_prevue = $entree;
-        break;
-      case "MP":
-        //modification patient
-        if (!$identifier && !$entree) {
-          return null;
-        }
-        //Pas de séjour retrouvé
-        if (!$sejour->_id) {
-          return new CHPrimSanteError($this->_ref_exchange_hpr, "P", "06", array("P", $this->loop+1, $this->identifier_patient), "8.24");
-        }
-
-        $sejour->entree_reelle = $entree;
-        $sejour->sortie_prevue = $sortie;
-        //Création d'affectation
-
-        //$localisation = $this->getLocalisation($node);
-        break;
-
-      default:
-        return new CHPrimSanteError($this->_ref_exchange_hpr, "P", "05", array("P", $this->loop+1, $this->identifier_patient), "8.25");
-    }
-    if ($sejour->_id) {
-      return $sejour;
-    }
-
-    $count = $sejour->loadMatchingSejour();
-
-    if ($count > 1) {
-      return new CHPrimSanteError($this->_ref_exchange_hpr, "P", "04", array("P", $this->loop+1, $this->identifier_patient), "8.25");
-    }
-    //si on est en modification et qu'aucun séjour n'a été retrouvé
-    if (!$create && !$sejour->_id) {
-      return new CHPrimSanteError($this->_ref_exchange_hpr, "P", "06", array("P", $this->loop+1, $this->identifier_patient), "8.25");
-    }
-
-    return $sejour;
   }
 
   /**

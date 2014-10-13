@@ -14,6 +14,10 @@
   <input type="hidden" name="m" value="system" />
   <table class="form">
 
+    {{assign var=hprimsante_versions value="CHPrimSanteMessage::getVersions"|static_call:null}}
+    {{assign var=list_hprimsante_versions value='|'|implode:$hprimsante_versions}}
+    {{mb_include module=system template=inc_config_enum var=default_version values=$list_hprimsante_versions}}
+
     {{mb_include module=system template=inc_config_bool var=mandatory_num_dos_ipp_adm}}
 
     {{mb_include module=system template=inc_config_str var=tag}}

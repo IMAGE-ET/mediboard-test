@@ -112,7 +112,12 @@ class CExchangeHprimSante extends CExchangeTabular {
       return false;
     }
 
-    $hpr_message = $this->parseMessage($data, false, $actor);
+    try {
+      $hpr_message = $this->parseMessage($data, false, $actor);
+    }
+    catch (CHL7v2Exception $e) {
+      return false;
+    }
 
     $hpr_message_evt = "CHPrimSante$hpr_message->event_name".$hpr_message->type;
 

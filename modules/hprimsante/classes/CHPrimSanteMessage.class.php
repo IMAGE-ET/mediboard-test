@@ -19,12 +19,28 @@ class CHPrimSanteMessage extends CHMessage {
   static $header_segment_name    = "H";
   static $segment_header_pattern = "H|P|A|C|L|OBR|OBX|FAC|ACT|REG|AP|AC|ERR";
 
+  static $versions = array(
+    "H2.1",
+    "H2.2",
+    "H2.3",
+    "H2.4",
+  );
+
   protected $keep_original = array("H.1");
 
   public $version = "2.1";
   public $type;
   public $extension;
   public $type_liaison;
+
+  /**
+   * Get the versions
+   *
+   * @return array
+   */
+  static function getVersions() {
+    return self::$versions;
+  }
 
   /**
    * get the name of header segment
@@ -254,7 +270,7 @@ class CHPrimSanteMessage extends CHMessage {
       $this->type = $parts[1];
     }
 
-    // Dans le cas où la version passée est incorrecte on met par défaut 2.5
+    // Dans le cas où la version passée est incorrecte on met par défaut 2.3
     if (!in_array($this->version, self::$versions)) {
       $this->version = CAppUI::conf("hprimsante default_version");
     }
@@ -288,6 +304,7 @@ class CHPrimSanteMessage extends CHMessage {
 
     if (!file_exists($this->spec_filename)) {
       $this->error(CHL7v2Exception::SPECS_FILE_MISSING, $this->spec_filename);
+      return null;
     }
 
     $schema = new CHL7v2DOMDocument();

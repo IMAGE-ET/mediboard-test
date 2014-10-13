@@ -19,6 +19,13 @@ class CHPrim21Message extends CHMessage {
   
   protected $keep_original = array("H.1");
 
+  static $versions = array(
+    "H2.1",
+    "H2.2",
+    "H2.3",
+    "H2.4",
+  );
+
   public $version = "2.1";
   public $type;
   public $extension;
@@ -222,6 +229,7 @@ class CHPrim21Message extends CHMessage {
 
     if (!file_exists($this->spec_filename)) {
       $this->error(CHL7v2Exception::SPECS_FILE_MISSING, $this->spec_filename);
+      return null;
     }
 
     $schema = new CHL7v2DOMDocument();
