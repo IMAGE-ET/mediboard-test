@@ -190,7 +190,7 @@
                       {{/foreach}}
                       <option value="NP" {{if $service_id == "NP"}}selected{{/if}}>Non placés</option>
                     </select>
-                    {{if $service_id && $isPrescriptionInstalled && $service_id != "NP"}}
+                    {{if $isPrescriptionInstalled}}
                       <button type="button" class="search compact" onclick="viewBilanService('{{$service_id}}','{{$date}}');">Bilan</button>
                     {{/if}}
 

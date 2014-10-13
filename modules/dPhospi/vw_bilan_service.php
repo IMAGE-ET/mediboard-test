@@ -48,12 +48,13 @@ if (!$calcul_planifs) {
   CView::enableSlave();
 }
 
+$group = CGroups::loadCurrent();
+
 if ($offline) {
   $by_patient = true;
   $do = 1;
-  $group = CGroups::loadCurrent();
-  $dateTime_min = CMbDT::dateTime(" - ". CAppUI::conf("soins bilan hour_before", $group->_guid). " HOURS");
-  $dateTime_max = CMbDT::dateTime(" + ". CAppUI::conf("soins bilan hour_after" , $group->_guid). " HOURS");
+  $dateTime_min = CMbDT::dateTime(" - ". CAppUI::conf("soins bilan hour_before", $group). " HOURS");
+  $dateTime_max = CMbDT::dateTime(" + ". CAppUI::conf("soins bilan hour_after" , $group). " HOURS");
 }
 else {
   $dateTime_min = CValue::getOrSession("_dateTime_min", "$date 00:00:00");
@@ -118,11 +119,16 @@ if ($do) {
   if ($mode_urgences) {
     $where["sejour.type"] = " = 'urg'";
   }
+  else if ($service_id == "NP") {
+    $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
+    $where["affectation.affectation_id"] = "IS NULL";
+    $where["sejour.group_id"] = "= '$group->_id'";
+  }
   else {
     $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
 
-    $where["affectation.entree"] = "<= '$dateTime_max'";
-    $where["affectation.sortie"] = ">= '$dateTime_min'";
+    $where["affectation.entree"]     = "<= '$dateTime_max'";
+    $where["affectation.sortie"]     = ">= '$dateTime_min'";
     $where["affectation.service_id"] = " = '$service_id'";
   }
 
@@ -147,7 +153,6 @@ if ($do) {
 
     $_lits = CMbObject::massLoadFwdRef($affectations, "lit_id");
     CMbObject::massLoadFwdRef($_lits, "chambre_id");
-
   }
 
   $sorter_affectation = CMbArray::pluck($sejours, "_ref_last_affectation", "_view");

@@ -51,6 +51,7 @@
         {{foreach from=$services item=_service}}
           <option value='{{$_service->_id}}'>{{$_service->nom}}</option>
         {{/foreach}}
+        <option value="NP">Non placés</option>
       </select>
     </td>
     <td>

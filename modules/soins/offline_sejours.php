@@ -25,6 +25,8 @@ $datetime_min = "$date 00:00:00";
 $datetime_max = "$date 23:59:59";
 $datetime_avg = "$date ".CMbDT::time();
 
+$group = CGroups::loadCurrent();
+
 $sejour = new CSejour();
 $where  = array();
 $ljoin  = array();
@@ -33,9 +35,16 @@ $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
 
 $where["sejour.entree"] = "<= '$datetime_max'";
 $where["sejour.sortie"] = " >= '$datetime_min'";
-$where["affectation.entree"] = "<= '$datetime_max'";
-$where["affectation.sortie"] = ">= '$datetime_min'";
-$where["affectation.service_id"] = " = '$service_id'";
+
+if ($service_id == "NP") {
+  $where["affectation.affectation_id"] = "IS NULL";
+  $where["sejour.group_id"] = "= '$group->_id'";
+}
+else {
+  $where["affectation.entree"]     = "<= '$datetime_max'";
+  $where["affectation.sortie"]     = ">= '$datetime_min'";
+  $where["affectation.service_id"] = " = '$service_id'";
+}
 
 /** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, null, null, "sejour.sejour_id", $ljoin);
@@ -54,16 +63,23 @@ foreach ($sejours as $sejour) {
   $sejour->loadRefsNotes();
 }
 
-$sorter_affectation = CMbArray::pluck($sejours, "_ref_curr_affectation", "_ref_lit", "_view");
 $sorter_patient     = CMbArray::pluck($sejours, "_ref_patient", "nom");
 
-array_multisort(
-  $sorter_affectation, SORT_ASC,
-  $sorter_patient, SORT_ASC,
-  $sejours
-);
-
-$period = CAppUI::conf("soins offline_sejour period", CGroups::loadCurrent()->_guid);
+if ($service_id == "NP") {
+  array_multisort(
+    $sorter_patient, SORT_ASC,
+    $sejours
+  );
+}
+else {
+  $sorter_affectation = CMbArray::pluck($sejours, "_ref_curr_affectation", "_ref_lit", "_view");
+  array_multisort(
+    $sorter_affectation, SORT_ASC,
+    $sorter_patient, SORT_ASC,
+    $sejours
+  );
+}
+$period = CAppUI::conf("soins offline_sejour period", $group);
 $dossiers_complets = array();
 
 foreach ($sejours as $sejour) {

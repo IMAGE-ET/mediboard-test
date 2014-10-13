@@ -37,7 +37,7 @@
   <tr>
     <th class="title" colspan="7">
       <button class="print not-printable" style="float: right;" onclick="window.print();">{{tr}}Print{{/tr}}</button>
-      ({{$sejours|@count}}) Séjours du {{$date|date_format:$conf.longdate}} {{$hour|date_format:$conf.time}} - Service {{$service}}
+      ({{$sejours|@count}}) Séjours du {{$date|date_format:$conf.longdate}} {{$hour|date_format:$conf.time}} - {{if $service->_id}}Service {{$service}}{{else}}Non placés{{/if}}
     </th>
   </tr>
   <tr>
