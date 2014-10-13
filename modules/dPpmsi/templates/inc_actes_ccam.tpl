@@ -88,6 +88,7 @@
     <th class="narrow">{{mb_title class=CActeCCAM field=execution}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=montant_depassement}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=motif_depassement}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=facturable}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=code_association}}</th>
     <th>{{mb_title class=CActeCCAM field=_tarif}}</th>
     {{if !$read_only}}
@@ -176,6 +177,15 @@
                 </form>
               {{/if}}
             </td>
+            <td>
+              {{if $read_only}}
+                {{mb_value object=$acte field=facturable}}
+              {{else}}
+                <form name="codageActeFacturable-{{$view}}" action="?" method="post" onsubmit="return false;">
+                  {{mb_field object=$acte field=facturable typeEnum="select" onchange="CCodageCCAM.syncCodageField(this, '$view');"}}
+                </form>
+              {{/if}}
+            </td>
             <td
               {{if $acte->_id && ($acte->code_association != $acte->_guess_association)}}style="background-color: #fc9"{{/if}}>
               {{if $read_only}}
@@ -216,6 +226,7 @@
                   {{mb_field object=$acte field=execution hidden=true}}
                   {{mb_field object=$acte field=montant_depassement hidden=true}}
                   {{mb_field object=$acte field=motif_depassement hidden=true emptyLabel="CActeCCAM-motif_depassement"}}
+                  {{mb_field object=$acte field=facturable hidden=true}}
 
                   {{foreach from=$_phase->_modificateurs item=_mod name=modificateurs}}
                     <input type="checkbox" name="modificateur_{{$_mod->code}}{{$_mod->_double}}" {{if $_mod->_checked}}checked{{/if}} hidden />
@@ -226,7 +237,7 @@
                       {{tr}}Add{{/tr}}
                     </button>
                   {{else}}
-                    <button class="edit notext compact" type="button" onclick="CCodageCCAM.editActe({{$acte->_id}}, {{$subject->_id}})">{{tr}}Edit{{/tr}}</button>
+                    <button class="edit notext compact" type="button" onclick="CCodageCCAM.editActe({{$acte->_id}}, '{{$subject->_guid}}')">{{tr}}Edit{{/tr}}</button>
                     <button class="trash notext compact" type="button"
                             onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}', ajax: '1'},
                               {onComplete: PMSI.reloadActesCCAM.curry('{{$obj_guid}}')});">

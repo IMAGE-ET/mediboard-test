@@ -89,9 +89,9 @@ CCodageCCAM = {
     }
   },
 
-  editActe: function(acte_id, sejour_id, oOptions) {
+  editActe: function(acte_id, sejour_guid, oOptions) {
     var oDefaultOptions = {
-      onClose: function() {PMSI.loadActes(sejour_id);}
+      onClose: function() {PMSI.reloadActesCCAM(sejour_guid);}
     };
     Object.extend(oDefaultOptions, oOptions);
     var url = new Url("salleOp", "ajax_edit_acte_ccam");
