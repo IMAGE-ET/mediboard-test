@@ -67,8 +67,9 @@ Main.add(function () {
     <th><label for="type" title="Type">Type</label></th>
     <td colspan="4">
       <select name="type">
-        <option value="prevue" {{if $type == "prevue"}}selected="selected" {{/if}}>Prévues</option>
-        <option value="hors_plage" {{if $type == "hors_plage"}}selected="selected" {{/if}}>Hors plage</option>
+        <option value="all" {{if $type == "all"}}selected="selected" {{/if}}>{{tr}}All{{/tr}}</option>
+        <option value="prevue" {{if $type == "prevue"}}selected="selected" {{/if}}>Programmées seules</option>
+        <option value="hors_plage" {{if $type == "hors_plage"}}selected="selected" {{/if}}>Hors plages seules</option>
       </select>
     </td>
   </tr>

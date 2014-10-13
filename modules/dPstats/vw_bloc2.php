@@ -77,6 +77,13 @@ if ($type == "prevue") {
 }
 else {
   // Récupération des interventions
+  $where = array();
+  $where[] = "date BETWEEN '$deblist' AND '$finlist'";
+  $where[] = "salle_id ".CSQLDataSource::prepareIn(array_keys($salles))." OR salle_id IS NULL";
+
+  if ($type != "all") {
+    $where["plageop_id"] = "IS NULL";
+  }
   $order = "date, salle_id, chir_id";
   $operation = new COperation();
   $operations = $operation->loadList($where, $order);
