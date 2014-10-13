@@ -421,6 +421,7 @@ class CCodageCCAM extends CMbObject {
     $act->_ref_executant->loadRefDiscipline();
     $discipline = $act->_ref_executant->_ref_discipline;
     $patient = $codable->_ref_patient;
+    $patient->evalAge();
     $checked = 0;
     $spe_gyneco = $spe_gyneco = array(
       'GYNECOLOGIE MEDICALE, OBSTETRIQUE',
