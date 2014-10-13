@@ -77,6 +77,13 @@ if ($type == "prevue") {
 }
 else {
   // Récupération des interventions
+  $where = array();
+  $where[] = "date BETWEEN '$deblist' AND '$finlist'";
+  $where[] = "salle_id ".CSQLDataSource::prepareIn(array_keys($salles))." OR salle_id IS NULL";
+
+  if ($type != "all") {
+    $where["plageop_id"] = "IS NULL";
+  }
   $order = "date, salle_id, chir_id";
   $operation = new COperation();
   $operations = $operation->loadList($where, $order);
@@ -182,14 +189,14 @@ else {
   // Création du template
   $smarty = new CSmartyDP();
 
-  $smarty->assign("deblist",    $deblist);
-  $smarty->assign("finlist",    $finlist);
-  $smarty->assign("blocs",  $blocs);
-  $smarty->assign("plages",     $plages);
+  $smarty->assign("deblist"   , $deblist);
+  $smarty->assign("finlist"   , $finlist);
+  $smarty->assign("blocs"     , $blocs);
+  $smarty->assign("plages"    , $plages);
   $smarty->assign("operations", $operations);
   $smarty->assign("nb_interv" , $nb_interv);
-  $smarty->assign("bloc",       $bloc);
-  $smarty->assign("type",       $type);
+  $smarty->assign("bloc"      , $bloc);
+  $smarty->assign("type"      , $type);
 
   $smarty->display("vw_bloc2.tpl");
 }
