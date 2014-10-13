@@ -1455,7 +1455,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
           $affectation->service_id = $service_externe->_id;
 
-          $return_affectation = $newVenue->forceAffectation($affectation);
+          $return_affectation = $newVenue->forceAffectation($affectation, true);
           //$datetime, $affectation->lit_id, $affectation->service_id);
           if (is_string($return_affectation)) {
             return $return_affectation;
@@ -1515,7 +1515,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           // Récupération du Lit et UFs
           $this->getPL($PV1_3, $affectation, $newVenue);
 
-          $return_affectation = $newVenue->forceAffectation($affectation);
+          $return_affectation = $newVenue->forceAffectation($affectation, true);
           //$datetime, $affectation->lit_id, $affectation->service_id);
           if (is_string($return_affectation)) {
             return $return_affectation;
