@@ -19,3 +19,4 @@ $module->registerTab("edit_prefs", TAB_EDIT);
 $module->registerTab("vw_all_perms", TAB_READ);
 $module->registerTab("vw_edit_tokens", TAB_EDIT);
 $module->registerTab("vw_functional_perms", TAB_EDIT);
+$module->registerTab("vw_bris_de_glace", TAB_ADMIN);

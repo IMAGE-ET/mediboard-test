@@ -20,6 +20,10 @@
           case "edit-astreintes":
             PlageAstreinte.refreshList('edit-astreintes', '{{$user->_id}}');
             break;
+          case "list_bris_de_glace":
+            BrisDeGlace.refreshList('list_bris_de_glace', '{{$user->_id}}');
+            break;
+
           case "edit-factureox":
             factureUser();
             break;
@@ -60,6 +64,11 @@
     <li><a href="#edit-astreintes">{{tr}}CPlageAstreinte{{/tr}}</a></li>
   {{/if}}
 
+  {{if $b2g}}
+    {{mb_script module=admin script=brisDeGlace}}
+    <li><a href="#list_bris_de_glace">{{tr}}CBrisDeGlace{{/tr}}</a></li>
+  {{/if}}
+
   {{if "oxFacturation"|module_active}}
     <script>
       factureUser = function() {
@@ -78,7 +87,6 @@
   {{if "didacticiel"|module_active}}
     <li><a href="#didac">{{tr}}E-learning{{/tr}}</a></li>
   {{/if}}
-
 </ul>
 
 <div id="edit-mediuser" style="display: block;">
@@ -112,6 +120,10 @@
   </div>
 {{/if}}
 
+{{if $b2g}}
+  <div id="list_bris_de_glace" style="display: none;">
+  </div>
+{{/if}}
 
 {{if @$modules.dPpersonnel->_can->read}}
 <div id="edit-holidays" style="display: none;">

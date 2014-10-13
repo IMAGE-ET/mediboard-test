@@ -40,9 +40,10 @@ $affiche_nom = CValue::get("affiche_nom", 0);
 $smarty = new CSmartyDP();
 
 $smarty->assign("banques"    , $banques);
+$smarty->assign("b2g"        , CAppUI::conf("admin CBrisDeGlace enable_bris_de_glace", CGroups::loadCurrent()));
 $smarty->assign("disciplines", $disciplines);
 $smarty->assign("spec_cpam"  , $spec_cpam);
-$smarty->assign("user"       , $mediuser);
 $smarty->assign("fonction"   , $mediuser->_ref_function);
+$smarty->assign("user"       , $mediuser);
 $smarty->assign("affiche_nom", $affiche_nom);
 $smarty->display("edit_infos.tpl");

@@ -818,6 +818,12 @@ function guid_log(guid) {
   url.popup(600, 500, "history");
 }
 
+function guid_access_medical(guid) {
+  var url = new Url("admin", "vw_list_medical_access");
+  url.addParam("guid", guid);
+  url.popup(600, 500, "medical_access");
+}
+
 function guid_ids(guid) {
   var parts = guid.split("-");
   var url = new Url("dPsante400", "view_identifiants");

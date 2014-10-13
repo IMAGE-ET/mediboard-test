@@ -165,6 +165,45 @@ class CSetupadmin extends CSetup {
               ADD `restricted` ENUM('0', '1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.0.35";
+    $this->makeRevision("1.0.35");
+    $query = "CREATE TABLE `log_access_medical_object` (
+                `access_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `user_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `datetime` DATETIME NOT NULL,
+                `object_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `object_class` VARCHAR (80) NOT NULL,
+                `group_id` INT (11) UNSIGNED NOT NULL DEFAULT '0'
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $this->makeRevision("1.0.36");
+    $query = "ALTER TABLE `log_access_medical_object`
+                ADD INDEX (`user_id`),
+                ADD INDEX (`datetime`),
+                ADD INDEX (`object_id`),
+                ADD INDEX (`object_class`),
+                ADD INDEX (`group_id`),
+                ADD UNIQUE unique_line (`user_id`, `datetime`, `object_id`, `object_class`);";
+    $this->addQuery($query);
+
+    $this->makeRevision("1.0.37");
+    $query = "CREATE TABLE `bris_de_glace` (
+                `bris_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `date` DATETIME NOT NULL,
+                `user_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `object_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `object_class` VARCHAR (80) NOT NULL
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $this->makeRevision("1.0.38");
+    $query ="ALTER TABLE `bris_de_glace`
+                ADD INDEX (`date`),
+                ADD INDEX (`user_id`),
+                ADD INDEX (`object_id`),
+                ADD INDEX (`object_class`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.0.39";
   }
 }

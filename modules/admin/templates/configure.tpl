@@ -9,13 +9,20 @@
 *}}
 
 <script type="text/javascript">
-Main.add(Control.Tabs.create.curry('tabs-configure', true));
+  Main.add(
+    Control.Tabs.create.curry('tabs-configure', true, { afterChange: function(container) {
+      if (container.id == "conf_etab") {
+        Configuration.edit('admin', ['CGroups'], $('conf_etab'));
+      }
+    }})
+  );
 </script>
 
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#config-permissions">{{tr}}config-permissions{{/tr}}</a></li>
   <li><a href="#config-ldap">{{tr}}config-ldap{{/tr}}</a></li>
   <li><a href="#actions">{{tr}}Maintenance{{/tr}}</a></li>
+  <li><a href="#conf_etab">Config par établissement</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -29,5 +36,9 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
 </div>
 
 <div id="actions" style="display: none;">
+  {{mb_include template=inc_config_actions}}
+</div>
+
+<div id="conf_etab" style="display: none;">
   {{mb_include template=inc_config_actions}}
 </div>
