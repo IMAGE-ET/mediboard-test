@@ -93,13 +93,11 @@ class CRPUXMLDocument extends CMbXMLDocument {
     }
     $this->addElement($elParent, "TRANSPORT", strtoupper($mbObject->_ref_sejour->transport));
     $this->addElement($elParent, "TRANSPORT_PEC", strtoupper($mbObject->pec_transport));
-    
+
     $motif = CMbString::htmlSpecialChars($mbObject->motif);
-    if ($mbObject->motif_sfmu) {
-      $motif_sfmu = $mbObject->loadRefMotifSFMU();
-      $motif = $motif_sfmu->code ? $motif_sfmu->code : null;
+    if (CAppUI::conf("dPurgences CRPU gestion_motif_sfmu", $sejour->loadRefEtablissement()) == 2 || $mbObject->motif_sfmu) {
+      $motif = $mbObject->loadRefMotifSFMU()->code;
     }
-    
     $this->addElement($elParent, "MOTIF", $motif);
 
     if (CModule::getActive("oscour") && CAppUI::conf("dPurgences gerer_circonstance") && CAppUI::conf("oscour version_complete")) {
