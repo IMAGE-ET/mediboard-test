@@ -270,7 +270,7 @@
       </li>
     {{/if}}
     <li><a href="#suivi_clinique">{{tr}}soins.tab.synthese{{/tr}}</a></li>
-    <li><a href="#constantes-medicales">{{tr}}CPatient.surveillance{{/tr}}</a></li>
+    <li><a href="#constantes-medicales">{{tr}}soins.tab.surveillance{{/tr}}</a></li>
     <li><a href="#dossier_traitement">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
 
     {{if $isPrescriptionInstalled}}
