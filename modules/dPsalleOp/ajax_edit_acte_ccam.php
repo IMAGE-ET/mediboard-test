@@ -49,9 +49,9 @@ foreach ($phase->_modificateurs as $modificateur) {
 if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
   CCodageCCAM::precodeModifiers($phase->_modificateurs, $acte, $acte->loadRefObject());
 }
-else {
+elseif (!$acte->_id) {
   foreach ($phase->_modificateurs as $modificateur) {
-    $modificateur->_checked = $acte->_ref_object->checkModificateur($modificateur->code, CMbDT::time($phase->_connected_acte->execution));
+    $modificateur->_checked = $acte->_ref_object->checkModificateur($modificateur->code, CMbDT::time($acte->execution));
   }
 }
 $acte->getMontantModificateurs($phase->_modificateurs);
