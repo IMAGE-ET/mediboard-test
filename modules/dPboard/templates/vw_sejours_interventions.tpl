@@ -15,9 +15,10 @@
 <script type="text/javascript">
 var graphs = {{$graphs|@json}};
 Main.add(function(){
-	graphs.each(function(g, i){
-		Flotr.draw($('graph-'+i), g.series, g.options);
-	});
+  graphs.each(function(g, i){
+    g.options.legend.container = $('graph-'+i+'-legend');
+    Flotr.draw($('graph-'+i), g.series, g.options);
+  });
 });
 </script>
 
@@ -91,8 +92,14 @@ Main.add(function(){
 
 </form>
 
-{{foreach from=$graphs item=graph key=key}}
-	<div style="width: 480px; height: 350px; float: left; margin: 1em;" id="graph-{{$key}}"></div>
-{{/foreach}}
-
+<table class="main layout">
+  {{foreach from=$graphs item=graph key=key}}
+    <tr>
+      <td class="narrow">
+        <div style="width: 480px; height: 350px; float: left; margin: 1em;" id="graph-{{$key}}"></div>
+      </td>
+      <td id="graph-{{$key}}-legend"></td>
+    </tr>
+  {{/foreach}}
+</table>
 {{/if}}
