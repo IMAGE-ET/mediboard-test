@@ -56,6 +56,7 @@ foreach ($sejour->_ref_tasks as $key=>$_task) {
   $_task->loadRefPrescriptionLineElement();
   $_task->setDateAndAuthor();
   $_task->loadRefAuthor();
+  $_task->loadRefAuthorRealise();
 }
 
 CSejourTask::sortByDate($sejour->_ref_tasks);
