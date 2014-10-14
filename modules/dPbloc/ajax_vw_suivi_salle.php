@@ -15,6 +15,9 @@ CCanDo::checkRead();
 
 $date_suivi = CAppUI::pref("suivisalleAutonome") ? CValue::get("date", CMbDT::date()) : CValue::getOrSession("date", CMbDT::date());
 $bloc_id    = CValue::getOrSession("bloc_id");
+$page       = CValue::get("page");
+
+$group = CGroups::loadCurrent();
 
 $bloc = new CBlocOperatoire();
 $bloc->load($bloc_id);
@@ -22,12 +25,14 @@ if (!$bloc->_id) {
   CAppUI::stepAjax("dPbloc-msg-select_bloc", UI_MSG_WARNING);
   return;
 }
-$bloc->loadRefsSalles();
+$listBlocs = array();
 
-$listBlocs  = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
-// Chargement de la liste des salles de chaque bloc
-foreach ($listBlocs as $_bloc) {
-  $_bloc->loadRefsSalles();
+if (CAppUI::conf("dPsalleOp COperation modif_salle")) {
+  $listBlocs = $group->loadBlocs(PERM_READ, null, "nom");
+  // Chargement de la liste des salles de chaque bloc
+  foreach ($listBlocs as $_bloc) {
+    $_bloc->loadRefsSalles();
+  }
 }
 
 // Chargement des Anesthésistes
@@ -41,6 +46,18 @@ $listChirs = $chir->loadPraticiens(PERM_READ);
 $salle = new CSalle();
 $where = array("bloc_id" => "='$bloc->_id'");
 $bloc->_ref_salles = $salle->loadListWithPerms(PERM_READ, $where, "nom");
+
+$total_salles = count($bloc->_ref_salles);
+$page_size = CAppUI::conf("dPbloc mode_presentation salles_count", $group);
+$page_count = null;
+$current_page = null;
+
+if ($page) {
+  $page_count = ceil($total_salles / $page_size);
+  $current_page = (($page-1) % $page_count);
+  $slice = $current_page * $page_size;
+  $bloc->_ref_salles = array_slice($bloc->_ref_salles, $slice, $page_size, true);
+}
 
 $systeme_materiel_expert = CAppUI::conf("dPbloc CPlageOp systeme_materiel") == "expert";
 
@@ -78,7 +95,7 @@ $where["operations.date"]       = "= '$date_suivi'";
 $where["operations.salle_id"]   = "IS NULL";
 $where["operations.plageop_id"] = "IS NULL";
 $where["operations.chir_id"]    = CSQLDataSource::prepareIn(array_keys($listChirs));
-$where["sejour.group_id"]       = "= '".CGroups::loadCurrent()->_id."'";
+$where["sejour.group_id"]       = "= '".$group->_id."'";
 
 /** @var COperation[] $non_traitees */
 $non_traitees = $op->loadList($where, null, null, null, $ljoin);
@@ -100,5 +117,8 @@ $smarty->assign("bloc"           , $bloc);
 $smarty->assign("date_suivi"     , $date_suivi);
 $smarty->assign("operation_id"   , 0);
 $smarty->assign("non_traitees"   , $non_traitees);
+$smarty->assign("page"           , $page);
+$smarty->assign("page_count"     , $page_count);
+$smarty->assign("current_page"   , $current_page);
 
 $smarty->display("inc_suivi_salles.tpl");

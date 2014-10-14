@@ -17,11 +17,19 @@
   </tr>
   <tr class="not-printable">
     <td class="button" colspan="100">
-      {{foreach from=$bloc->_ref_salles item=_salle}}
-        <label><input type="checkbox" onclick="Effect.toggle('salle-{{$_salle->_id}}', 'appear');" checked="checked" /> {{$_salle->nom}}</label>
-      {{/foreach}}
-      {{if $non_traitees|@count}}
-        <label><input type="checkbox" onclick="Effect.toggle('non-traitees', 'appear');" checked="checked" /> {{tr}}CSejour.type.hors_plage{{/tr}}</label>
+      {{if $page}}
+        <div>
+          {{foreach from=1|range:$page_count item=i}}
+            <span class="circled" {{if $i == $current_page+1}} style="background: orange" {{/if}}>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          {{/foreach}}
+        </div>
+      {{else}}
+        {{foreach from=$bloc->_ref_salles item=_salle}}
+          <label><input type="checkbox" onclick="Effect.toggle('salle-{{$_salle->_id}}', 'appear');" checked="checked" /> {{$_salle->nom}}</label>
+        {{/foreach}}
+        {{if $non_traitees|@count}}
+          <label><input type="checkbox" onclick="Effect.toggle('non-traitees', 'appear');" checked="checked" /> {{tr}}CSejour.type.hors_plage{{/tr}}</label>
+        {{/if}}
       {{/if}}
     </td>
   </tr>
@@ -38,6 +46,7 @@
     {{foreachelse}}
       <td class="empty">{{tr}}CSalle.none{{/tr}}</td>
     {{/foreach}}
+
     {{if $non_traitees|@count}}
       {{assign var=salle value=""}}
       <td id="non-traitees">

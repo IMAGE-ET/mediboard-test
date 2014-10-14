@@ -64,8 +64,16 @@
     url.popup(700, 600, 'Bacterio');
   };
 
+  modePresentation = function() {
+    var form = getForm('changeDate');
+    var url = new Url("dPbloc", "vw_suivi_salles_presentation");
+    url.addParam("date"   , $V(form.date));
+    url.addParam("bloc_id", $V(form.bloc_id));
+    url.popup("100%", "100%", 'Mode présentation');
+  };
+
   showLegend = function() {
-    var url = new Url('bloc', 'legende').requestModal()
+    new Url('bloc', 'legende').requestModal()
   };
 
   Main.add(function () {
@@ -83,11 +91,17 @@
   <table class="main not-printable">
     <tr>
       <td>
-        <button id="autorefreshSuiviSalleButton" style="float: left;" class="play" title="Rechargement automatique de la page ({{tr}}config-dPbloc-CPlageOp-time_autorefresh-{{$conf.dPbloc.CPlageOp.time_autorefresh}}{{/tr}})" onclick="togglePlayPause(this);">Rech. Auto</button>
-        <button type="button" onclick="showLegend()" class="search" style="float: right;">Légende</button>
-        <button type="button" onclick="$('suivi-salles').print();" class="print" style="float: right;">{{tr}}Print{{/tr}}</button>
-        <button type="button" onclick="printAnapath();" class="print" style="float: right;">{{tr}}COperation-anapath{{/tr}}</button>
-        <button type="button" onclick="printBacterio();" class="print" style="float: right;">{{tr}}COperation-labo{{/tr}}</button>
+        <button id="autorefreshSuiviSalleButton" style="float: left;" class="play" title="Rechargement automatique de la page ({{tr}}config-dPbloc-CPlageOp-time_autorefresh-{{$conf.dPbloc.CPlageOp.time_autorefresh}}{{/tr}})" onclick="togglePlayPause(this);">
+          Rech. Auto
+        </button>
+
+        <span style="float: right;">
+          <button type="button" class="print" onclick="printBacterio();">{{tr}}COperation-labo{{/tr}}</button>
+          <button type="button" class="print" onclick="printAnapath();">{{tr}}COperation-anapath{{/tr}}</button>
+          <button type="button" class="print" onclick="$('suivi-salles').print();">{{tr}}Print{{/tr}}</button>
+          <button type="button" class="search" onclick="showLegend()">Légende</button>
+          <button type="button" class="lookup" onclick="modePresentation();">Mode présentation</button>
+        </span>
 
         <form action="?" name="changeDate" method="get">
           <label> Bloc :

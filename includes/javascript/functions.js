@@ -2044,6 +2044,36 @@ App.initSessionLocker = (function(){
   };
 })();
 
+App.fullscreen = function(element) {
+  // full-screen available?
+  if (
+    document.fullscreenEnabled ||
+    document.webkitFullscreenEnabled ||
+    document.mozFullScreenEnabled ||
+    document.msFullscreenEnabled
+  ) {
+    element = $(element) || document.documentElement;
+
+    if (!element) {
+      return;
+    }
+
+    // go full-screen
+    if (element.requestFullscreen) {
+      element.requestFullscreen();
+    }
+    else if (element.webkitRequestFullScreen) {
+      element.webkitRequestFullScreen();
+    }
+    else if (element.mozRequestFullScreen) {
+      element.mozRequestFullScreen();
+    }
+    else if (element.msRequestFullscreen) {
+      element.msRequestFullscreen();
+    }
+  }
+};
+
 /**
  * Adds column highlighting to a table
  * @param {Element} table The table
