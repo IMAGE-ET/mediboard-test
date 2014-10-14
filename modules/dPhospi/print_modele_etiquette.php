@@ -9,6 +9,11 @@
  * @version    $Revision$
  */
 
+if (count($_POST) < 10) {
+  CAppUI::stepAjax("Vous pouvez fermer cette fenêtre, car elle ne contient pas les données nécessaire à l'aperçu du modèle d'étiquette");
+  CApp::rip();
+}
+
 $modele_etiquette = new CModeleEtiquette();
 
 $modele_etiquette->largeur_page  = CValue::post("largeur_page");
