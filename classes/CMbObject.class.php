@@ -347,8 +347,69 @@ class CMbObject extends CStoredObject {
     foreach ($this->_nb_exchanges_by_format as $_nb_exchange_format) {
       $this->_nb_exchanges += $_nb_exchange_format;
     }
-    
+
     return $this->_nb_exchanges;
+  }
+
+  /**
+   * Count the exchanges for the all sejours
+   *
+   * @param CSejour[] $sejours Sejour
+   * @param String    $type    Type
+   * @param String    $subtype Sous type
+   *
+   * @return void
+   */
+  function massCountExchanges($sejours, $type = null, $subtype = null) {
+    if (!count($sejours)) {
+      return null;
+    }
+
+    $sejour_ids = CMbArray::pluck($sejours, "sejour_id");
+    $sejour_ids = array_unique($sejour_ids);
+    CMbArray::removeValue("", $sejour_ids);
+
+    if (!count($sejour_ids)) {
+      return null;
+    }
+
+    $where = array(
+      "object_id"    => CSQLDataSource::prepareIn($sejour_ids),
+      "object_class" => "= '$this->_class'",
+    );
+
+    if ($type) {
+      $where["type"]      = "= '$type'";
+    }
+
+    if ($subtype) {
+      $where["sous_type"] = "= '$subtype'";
+    }
+
+    $count_exchanges = array();
+    foreach (CExchangeDataFormat::getAll() as $_data_format) {
+      /** @var CExchangeDataFormat $data_format */
+      $data_format = new $_data_format;
+      if (!$data_format->hasTable()) {
+        continue;
+      }
+
+      $table_exchange                   = $data_format->_spec->table;
+      $count_exchanges[$table_exchange] = $data_format->countMultipleList($where, null, "object_id", null, array("object_id"));
+    }
+
+    foreach ($count_exchanges as $_exchange => $_counts) {
+      foreach ($_counts as $_value) {
+        $total     = $_value["total"];
+        $sejour_id = $_value["object_id"];
+        if (!isset($sejours[$sejour_id]->_nb_exchanges_by_format[$_exchange])) {
+          $sejours[$sejour_id]->_nb_exchanges_by_format[$_exchange] = 0;
+        }
+
+        $sejours[$sejour_id]->_nb_exchanges_by_format[$_exchange] += $total;
+        $sejours[$sejour_id]->_nb_exchanges                       += $total;
+      }
+    }
   }
       
   
