@@ -64,20 +64,19 @@ foreach ($trans as $_trans) {
 
   // Aggrégation à -1 sec
   if (array_key_exists($sort_key_before, $transmissions)) {
-    $sort_key = $sort_key_before;
+    array_unshift($transmissions[$sort_key_before], $_trans);
   }
   // à +1 sec
   else if (array_key_exists($sort_key_after, $transmissions)) {
-    $sort_key = $sort_key_after;
+    array_unshift($transmissions[$sort_key_after], $_trans);
   }
-
-  if (!isset($transmissions[$sort_key])) {
-    $transmissions[$sort_key] = array("data" => array(), "action" => array(), "result" => array());
+  // au temps exact, ou unique
+  else {
+    if (!array_key_exists($sort_key, $transmissions)) {
+      $transmissions[$sort_key] = array();
+    }
+    array_push($transmissions[$sort_key], $_trans);
   }
-  if (!isset($transmissions[$sort_key][0])) {
-    $transmissions[$sort_key][0] = $_trans;
-  }
-  $transmissions[$sort_key][$_trans->type][] = $_trans;
 }
 
 $smarty = new CSmartyDP();
