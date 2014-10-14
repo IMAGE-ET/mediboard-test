@@ -1,3 +1,4 @@
+{{mb_script module=dPpatients script=patient ajax=true}}
 {{mb_script module=files script=file}}
 {{mb_include module=files template=yoplet_uploader object=$sejour}}
 {{assign var=gerer_circonstance value=$conf.dPurgences.gerer_circonstance}}
