@@ -25,7 +25,7 @@
           <input type="hidden" name="dosql"     value="do_alert_aed" />
           <input type="hidden" name="alert_ids" value="{{$alert_ids|@join:"-"}}" />
           <input type="hidden" name="handled"   value="1" />
-          <button type="submit" class="tick">
+          <button type="submit" class="singleclick tick">
             Traiter toutes les alertes
           </button>
         </form>
