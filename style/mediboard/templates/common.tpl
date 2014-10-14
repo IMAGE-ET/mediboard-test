@@ -63,7 +63,8 @@
       actionType: "{{$actionType}}",
       dialog: "{{$dialog}}",
       config: {
-        log_js_errors: {{if $conf.log_js_errors}}true{{else}}false{{/if}}
+        log_js_errors: {{if $conf.log_js_errors}}true{{else}}false{{/if}},
+        instance_role: {{$conf.instance_role|@json}}
       },
       readonly: "{{$conf.readonly}}" == 1 && User.id != null,
       touchDevice: /^ipad|iphone|nexus 7$/i.test("{{$browser.name}}"),
