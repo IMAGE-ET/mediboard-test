@@ -897,8 +897,9 @@ class CCodable extends CMbObject {
       return null;
     }
 
-    $patient   = $this->_ref_patient;
-    $discipline = $this->_ref_praticien->_ref_discipline;
+    $patient   = $this->loadRefPatient();
+    $this->loadRefPraticien();
+    $discipline = $this->_ref_praticien->loadRefDiscipline();
     // Il faut une date complête pour la comparaison
     $date_ref = CMbDT::date();
     $date = "$date_ref $heure";
@@ -1102,6 +1103,7 @@ class CCodable extends CMbObject {
           $phase->_connected_acte = $possible_acte;
           $listModificateurs = $phase->_connected_acte->modificateurs;
           if (!$possible_acte->_id) {
+            $possible_acte->facturable = '1';
             $possible_acte->checkFacturable();
             if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
               CCodageCCAM::precodeModifiers($phase->_modificateurs, $possible_acte, $this);
