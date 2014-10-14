@@ -59,7 +59,7 @@ class CHL7v3EventPRPAIN201314UV02 extends CHL7v3EventPRPA implements CHL7EventPR
    */
   function addControlActProcess(CPatient $patient) {
     $dom = $this->dom;
-
+    $transform_date = false;
     $controlActProcess = parent::addControlActProcess($patient);
 
     // reasonCode
@@ -75,6 +75,7 @@ class CHL7v3EventPRPAIN201314UV02 extends CHL7v3EventPRPA implements CHL7EventPR
 
       case 'MODIF_DATA':
         $this->setCode($reasonCode, "MODIF_DATA", "1.2.250.1.213.1.1.4.11", "Modification des données de gestion du dossier");
+        $transform_date = true;
         break;
 
       default;
@@ -119,7 +120,7 @@ class CHL7v3EventPRPAIN201314UV02 extends CHL7v3EventPRPA implements CHL7EventPR
     $dom->addAttribute($administrativeGenderCode, "code", strtoupper($patient->sexe));
 
     $birthTime = $dom->addElement($patientPerson, "birthTime");
-    $date = $this->getDateToFormatCDA($patient->_p_birth_date);
+    $date = $this->getDateToFormatCDA($patient->_p_birth_date, $transform_date);
     $dom->addAttribute($birthTime, "value", $date);
 
     $this->addAdress($patientPerson, $patient);

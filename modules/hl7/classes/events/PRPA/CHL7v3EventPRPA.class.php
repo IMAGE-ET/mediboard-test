@@ -222,17 +222,29 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
   /**
    * Transforme une chaine date au format date CDA
    *
-   * @param String $date String
+   * @param String  $date                 Date
+   * @param Boolean $transform_lunar_date Apply the algo for change lunar date to date
    *
    * @return string
    */
-  function getDateToFormatCDA($date) {
-    if ($date) {
-      $date = explode("-", $date);
-      return $date[0].$date[1].$date[2];
+  function getDateToFormatCDA($date, $transform_lunar_date = false) {
+    if (!$date) {
+      return null;
     }
 
-    return null;
+    list($year, $month, $day) = explode("-", $date);
+
+    if ($transform_lunar_date && !checkdate($month, $day, $year)) {
+      if ($month > 12) {
+        $month = 12;
+      }
+      $last_day = date("t", strtotime("$year-$month-01"));
+      if ($day > $last_day) {
+        $day = $last_day;
+      }
+    }
+
+    return $year.$month.$day;
   }
 
   /**
