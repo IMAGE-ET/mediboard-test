@@ -1644,12 +1644,16 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $grossesse = $newVenue->loadRefGrossesse();
     
     if (!$grossesse->_id) {
-      $grossesse->parturiente_id = $newVenue->patient_id;
-      $grossesse->group_id       = $newVenue->group_id;
-      $grossesse->terme_prevu    = CMbDT::date($newVenue->sortie);
-      $grossesse->_eai_sender_guid = $sender->_guid;
-      if ($msg = $grossesse->store()) {
-        return $msg;
+      $patient   = $newVenue->loadRefPatient();
+      $grossesse = $patient->loadLastGrossesse();
+      if (!$grossesse->_id) {
+        $grossesse->parturiente_id = $newVenue->patient_id;
+        $grossesse->group_id       = $newVenue->group_id;
+        $grossesse->terme_prevu    = CMbDT::date($newVenue->sortie);
+        $grossesse->_eai_sender_guid = $sender->_guid;
+        if ($msg = $grossesse->store()) {
+          return $msg;
+        }
       }
     }
      
