@@ -39,6 +39,7 @@
                       </div>
                     </div>
                     <div>{{$rpu->diag_infirmier|spancate:60:"..."|lower}}</div>
+                    <div>{{$rpu->_ref_motif_sfmu->libelle}}</div>
                   </div>
                  
                   {{if $rpu->radio_debut}}

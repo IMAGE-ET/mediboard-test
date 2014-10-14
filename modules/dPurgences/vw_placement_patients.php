@@ -116,6 +116,7 @@ foreach ($sejours as $sejour) {
       $sejour->_ref_rpu = new CRPU();
     }
   }
+  $sejour->_ref_rpu->loadRefMotifSFMU();
   $prescription = $sejour->loadRefPrescriptionSejour();
 
   if ($prescription->_id) {
