@@ -295,6 +295,7 @@ class CMediusers extends CPerson {
     $backProps["actes_caisse_executes"]           = "CActeCaisse executant_id";
     $backProps["administrations"]                 = "CAdministration administrateur_id";
     $backProps["aides_saisie"]                    = "CAideSaisie user_id";
+    $backProps["handled_alerts"]                  = "CAlert handled_user_id";
     $backProps["modeles"]                         = "CCompteRendu user_id";
     $backProps["documents_ged"]                   = "CDocGed user_id";
     $backProps["suivis__ged"]                     = "CDocGedSuivi user_id";

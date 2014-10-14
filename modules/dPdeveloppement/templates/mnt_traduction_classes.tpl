@@ -137,6 +137,17 @@ Main.add(function () {
   </tbody>  
   {{/foreach}}
 
+  {{if array_key_exists($class, $archives)}}
+    <tr>
+      <td colspan="10">
+        <div class="small-info">
+          Cette classe est une classe d'archive, toutes ces traductions héritent de sa classe parente.
+        </div>
+      </td>
+    </tr>
+  {{/if}}
+
+
 </table>
 
 </form>

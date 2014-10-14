@@ -94,14 +94,21 @@ function addLocale($class, $cat, $name) {
   @$completions[$class]["percent"] = round(100 * $completions[$class]["count"] / $completions[$class]["total"]);
 }
 
+$archives = array();
+
 // Parcours des classes
 foreach ($classes as $class) {
+  /** @var CModelObject $object */
   $object = new $class;
-  $ref_modules = $object->_specs;
   $classname = $object->_class;
   
   // Traductions au niveau classe
   addLocale($classname, $classname, "$classname");
+  if ($object->_spec->archive) {
+    $archives[$class] = true;
+    continue;
+  }
+
   addLocale($classname, $classname, "$classname.none");
   addLocale($classname, $classname, "$classname.one");
   addLocale($classname, $classname, "$classname.all");
@@ -110,7 +117,7 @@ foreach ($classes as $class) {
   addLocale($classname, $classname, "$classname-msg-delete");
   addLocale($classname, $classname, "$classname-title-create");
   addLocale($classname, $classname, "$classname-title-modify");
-  
+
   // Traductions pour la clé 
   if ($object->_spec->key) {
     $prop = $object->_spec->key;
@@ -235,12 +242,13 @@ foreach ($all_locales as &$_locale) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("items"        , $items);
-$smarty->assign("completions" , $completions);
+$smarty->assign("archives"     , $archives);
+$smarty->assign("completions"  , $completions);
 $smarty->assign("locales"      , array_keys($localesDirs));
 $smarty->assign("modules"      , $modules);
 $smarty->assign("module"       , $module);
 $smarty->assign("trans"        , $trans);
-$smarty->assign("language"    , $language);
+$smarty->assign("language"     , $language);
 $smarty->assign("other_locales", $all_locales);
 $smarty->assign("empty_locales", $empty_locales);
 

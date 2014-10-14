@@ -23,6 +23,8 @@ class CMbObjectSpec {
   public $key                 = null;
   /** @var array|null [experimental] Temporary loading restrain to a field collection when defined */
   public $columns              = null;
+  /** @var bool  */
+  public $archive             = false;
 
   public $measureable         = false;
   public $uniques             = array();

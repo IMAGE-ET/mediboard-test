@@ -19,7 +19,7 @@ class CDataSourceLogArchive extends CDataSourceLog {
   function getSpec() {
     $spec        = parent::getSpec();
     $spec->table = 'datasource_log_archive';
-
+    $spec->archive = true;
     return $spec;
   }
 }

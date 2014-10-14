@@ -10,7 +10,7 @@
  */
 
 /**
- * Handles: notes, documents, aides, views, model templates, echanges, idex, affectations personnels (!)
+ * Handles: notes, documents, aides, views, model templates, echanges, idex, configurations affectations personnels (!)
  *
  * @abstract Mediboard business object layer
  */

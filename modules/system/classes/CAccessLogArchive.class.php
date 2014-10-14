@@ -19,7 +19,7 @@ class CAccessLogArchive extends CAccessLog {
   function getSpec() {
     $spec        = parent::getSpec();
     $spec->table = 'access_log_archive';
-
+    $spec->archive = true;
     return $spec;
   }
 }
