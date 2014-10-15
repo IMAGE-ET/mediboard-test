@@ -1352,6 +1352,24 @@ Url.buildPopupFeatures = function(features) {
  */
 Url.ping = function(options) {
   var url = new Url("system", "ajax_ping");
+
+  if (Object.isFunction(options)) {
+    options = {
+      onComplete: options
+    };
+  }
+
+  if (options.onComplete) {
+    AjaxResponse.onComplete = options.onComplete;
+  }
+
+  if (options.onCompleteDisconnected) {
+    AjaxResponse.onCompleteDisconnected = options.onCompleteDisconnected;
+  }
+
+  delete options.onComplete;
+  delete options.onCompleteDisconnected;
+
   url.requestUpdate("systemMsg", options);
 };
 

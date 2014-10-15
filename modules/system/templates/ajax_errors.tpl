@@ -12,6 +12,9 @@
   {{if !$app->user_id}}
     User = {};
     AjaxResponse.onDisconnected();
+    if (AjaxResponse.onCompleteDisconnected) {
+      AjaxResponse.onCompleteDisconnected();
+    }
   {{else}}
     {{assign var=user value=$app->_ref_user}}
 
@@ -20,7 +23,10 @@
     {{else}}
     User = {};
     {{/if}}
-    	
+
+    if (AjaxResponse.onComplete) {
+      AjaxResponse.onComplete();
+    }
     AjaxResponse.onLoaded({{"utf8_encode"|array_map_recursive:$smarty.get|@json}}, {{$performance|@json}});
   {{/if}}
 </script>
