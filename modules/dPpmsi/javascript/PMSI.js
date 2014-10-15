@@ -222,5 +222,23 @@ PMSI = {
     $V(oForm.libelle_uf, sLibelle);
 
     oSelect.value = "";
+  },
+
+  listHospi: function (form , change_page) {
+    if (form) {
+      $V(form.page, change_page);
+    }
+    else {
+      form = getForm("changeDate");
+      $V(form.page, change_page);
+    }
+    var url = new Url("pmsi", "ajax_list_hospi");
+    url.addFormData(form);
+    url.requestUpdate("list-hospi");
+    return false;
+  },
+
+  changePage : function (page) {
+      PMSI.listHospi(null, page);
   }
 };
