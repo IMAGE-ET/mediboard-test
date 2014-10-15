@@ -91,28 +91,34 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
     // Défaut
     else {
       $data[] = "R";
-    } 
-    
+    }
+
     // PV1-5: Preadmit Number (CX) (optional)
-    if (CHL7v2Message::$build_mode == "simple") {
-      $data[] = array (
-        $sejour->_id,
-      );
+    if ($receiver->_configs["build_PV1_5"] == "none") {
+      $data[] = null;
     }
     else {
-      $sejour->loadNPA($group->_id);
-      $data[] = $sejour->_NPA ? array(
-                  array(
-                    $sejour->_NPA,
-                    null,
-                    null,
-                    // PID-3-4 Autorité d'affectation
-                    $this->getAssigningAuthority("FINESS", $group->finess),
-                    "RI"
-                  )
-                ) : null;
+      // PV1-5: Preadmit Number (CX) (optional)
+      if (CHL7v2Message::$build_mode == "simple") {
+        $data[] = array (
+          $sejour->_id,
+        );
+      }
+      else {
+        $sejour->loadNPA($group->_id);
+        $data[] = $sejour->_NPA ? array(
+          array(
+            $sejour->_NPA,
+            null,
+            null,
+            // PID-3-4 Autorité d'affectation
+            $this->getAssigningAuthority("FINESS", $group->finess),
+            "RI"
+          )
+        ) : null;
+      }
     }
-    
+
     // PV1-6: Prior Patient Location (PL) (optional)
     $data[] = null;
     
