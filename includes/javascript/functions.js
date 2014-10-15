@@ -706,19 +706,33 @@ var ViewPort = {
 
   SetFrameHeight: function(element, options){
     options = Object.extend({
-      marginBottom : 15
+      marginBottom : 15,
+      wrap: false
     }, options);
-    
+
     // Calcul de la position top de la frame
-    var fYFramePos = Position.cumulativeOffset(element)[1];  
-    
+    var fYFramePos = Position.cumulativeOffset(element)[1];
+
     // hauteur de la fenetre
     var fNavHeight = window.getInnerDimensions().height;
-    
+
     // Calcul de la hauteur de la div
     var fFrameHeight = fNavHeight - fYFramePos;
-    
-    element.setAttribute("height", fFrameHeight - options.marginBottom);
+
+    if (Prototype.Browser.IPad && options.wrap) {
+      var wrapper = element.up(".iframe-scroll-wrapper");
+
+      if (!wrapper) {
+        wrapper = DOM.div({className: "iframe-scroll-wrapper"});
+        element.wrap(wrapper);
+      }
+
+      element.setAttribute("height", "100%");
+      wrapper.setStyle({height: fFrameHeight+"px"});
+    }
+    else {
+      element.setAttribute("height", fFrameHeight - options.marginBottom);
+    }
   },
 
   getScrollOffset: function() {
