@@ -98,6 +98,7 @@ class CUniteFonctionnelle extends CMbObject {
     $backProps["protocoles_hebergement"  ] = "CProtocole uf_hebergement_id";
     $backProps["protocoles_medical"      ] = "CProtocole uf_medicale_id";
     $backProps["protocoles_soin"         ] = "CProtocole uf_soins_id";
+    $backProps["rum"                     ] = "CRUM um_id";
 
     return $backProps;
   }
