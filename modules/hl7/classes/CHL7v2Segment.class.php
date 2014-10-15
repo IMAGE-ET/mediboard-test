@@ -1172,7 +1172,9 @@ class CHL7v2Segment extends CHL7v2Entity {
    * @return array
    */
   function getPL(CInteropReceiver $receiver, CSejour $sejour, CAffectation $affectation = null) {
-    $group       = $sejour->loadRefEtablissement();
+    $group        = $sejour->loadRefEtablissement();
+    $default_name = $receiver->_configs["build_PV1_3_1_default"];
+
     if (!$affectation) {
       // Chargement de l'affectation courante
       $affectation = $sejour->getCurrAffectation();
@@ -1186,11 +1188,28 @@ class CHL7v2Segment extends CHL7v2Entity {
     $affectation->loadRefLit()->loadRefChambre();
 
     $current_uf = $sejour->getUFs(null, $affectation->_id);
+    $name      = null;
+    switch ($receiver->_configs["build_PV1_3_1"]) {
+      case "UF":
+        $name = $current_uf["hebergement"]->code;
+        break;
+      case "service":
+        if ($affectation->_id) {
+          $name = $affectation->loadRefService()->nom;
+        }
+        if (!$name) {
+          $name = $sejour->loadRefService()->nom;
+        }
+        break;
+      default:
+    }
+
+    $pl1 = $name ? $name : $default_name;
 
     return array(
       array(
         // PL-1 - Code UF hébergement
-        $current_uf["hebergement"]->code,
+        $pl1,
         // PL-2 - Chambre
         $this->getPL2($receiver, $affectation),
         // PL-3 - Lit

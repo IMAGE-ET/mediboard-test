@@ -1573,6 +1573,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return $affectation;
     }
 
+    if ($this->queryTextNode("PL.1", $PV1_3) == $sender->_configs["handle_PV1_3_null"]) {
+      return $affectation;
+    }
+
     // Si pas de lit on affecte le service sur le séjour
     if (!$this->queryTextNode("PL.3", $PV1_3)) {
       $affectation_uf = new CAffectationUniteFonctionnelle();

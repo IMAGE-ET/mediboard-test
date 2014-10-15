@@ -51,6 +51,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "handle_telephone_number",
     "handle_PID_31",
     "handle_PV1_3",
+    "handle_PV1_3_null",
     "handle_PV1_7",
     "handle_PV1_10",
     "handle_PV1_14",
@@ -113,6 +114,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
   public $handle_telephone_number;
   public $handle_PID_31;
   public $handle_PV1_3;
+  public $handle_PV1_3_null;
   public $handle_PV1_7;
   public $handle_PV1_10;
   public $handle_PV1_14;
@@ -177,6 +179,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
       "handle_telephone_number",
       "handle_PID_31",
       "handle_PV1_3",
+      "handle_PV1_3_null",
       "handle_PV1_7",
       "handle_PV1_10",
       "handle_PV1_14",
@@ -276,13 +279,14 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["handle_PID_31"] = "enum list|avs|none default|none";
     
      // =>PV1
-    $props["handle_PV1_3"]  = "enum list|name|config_value|idex default|name";
-    $props["handle_PV1_7"]  = "bool default|1";
-    $props["handle_PV1_10"] = "enum list|discipline|service default|discipline";
-    $props["handle_PV1_14"] = "enum list|admit_source|ZFM default|admit_source";
-    $props["handle_PV1_20"] = "enum list|old_presta|none default|none";
-    $props["handle_PV1_36"] = "enum list|discharge_disposition|ZFM default|discharge_disposition";
-    $props["handle_PV1_50"] = "enum list|sejour_id|none default|none";
+    $props["handle_PV1_3"]      = "enum list|name|config_value|idex default|name";
+    $props["handle_PV1_3_null"] = "str";
+    $props["handle_PV1_7"]      = "bool default|1";
+    $props["handle_PV1_10"]     = "enum list|discipline|service default|discipline";
+    $props["handle_PV1_14"]     = "enum list|admit_source|ZFM default|admit_source";
+    $props["handle_PV1_20"]     = "enum list|old_presta|none default|none";
+    $props["handle_PV1_36"]     = "enum list|discharge_disposition|ZFM default|discharge_disposition";
+    $props["handle_PV1_50"]     = "enum list|sejour_id|none default|none";
 
     // => PV2
     $props["handle_PV2_12"] = "enum list|libelle|none default|libelle";

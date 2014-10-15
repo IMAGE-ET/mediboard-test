@@ -89,6 +89,8 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   public $build_PID_31;
 
   // PV1
+  public $build_PV1_3_1;
+  public $build_PV1_3_1_default;
   public $build_PV1_3_2;
   public $build_PV1_3_3;
   public $build_PV1_3_5;
@@ -186,6 +188,8 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       "build_PID_31",
     ),
     "PV1" => array(
+      "build_PV1_3_1",
+      "build_PV1_3_1_default",
       "build_PV1_3_2",
       "build_PV1_3_3",
       "build_PV1_3_5",
@@ -303,6 +307,8 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["build_PID_31"]   = "enum list|avs|none default|none";
 
     // PV1
+    $props["build_PV1_3_1"]                     = "enum list|UF|service default|UF";
+    $props["build_PV1_3_1_default"]             = "str";
     $props["build_PV1_3_2"]                     = "enum list|name|config_value|idex default|name";
     $props["build_PV1_3_3"]                     = "enum list|name|config_value|idex default|name";
     $props["build_PV1_3_5"]                     = "enum list|bed_status|null default|bed_status";

@@ -1381,7 +1381,17 @@ class CSetuphl7 extends CSetup {
                 ADD `build_PV1_19_identifier_authority` ENUM ('AN','RI','VN') DEFAULT 'RI';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.04";
+    $this->makeRevision("1.04");
+    $query = "ALTER TABLE `hl7_config`
+                ADD `handle_PV1_3_null` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `receiver_hl7v2_config`
+                ADD `build_PV1_3_1_default` VARCHAR (255),
+                ADD `build_PV1_3_1` ENUM ('UF','service') DEFAULT 'UF';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.05";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
