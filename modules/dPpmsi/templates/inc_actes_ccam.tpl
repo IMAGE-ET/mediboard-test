@@ -289,7 +289,7 @@
                       {{tr}}Add{{/tr}}
                     </button>
                   {{else}}
-                    <button class="edit notext compact" type="button" onclick="CCodageCCAM.editActe({{$acte->_id}}, '{{$subject->_guid}}'')">{{tr}}Edit{{/tr}}</button>
+                    <button class="edit notext compact" type="button" onclick="CCodageCCAM.editActe({{$acte->_id}}, '{{$subject->_guid}}')">{{tr}}Edit{{/tr}}</button>
                     <button class="trash notext compact" type="button"
                             onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}', ajax: '1'},
                               {onComplete: PMSI.reloadActesCCAM.curry('{{$obj_guid}}')});">
