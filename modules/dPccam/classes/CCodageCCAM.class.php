@@ -420,7 +420,7 @@ class CCodageCCAM extends CMbObject {
     $act->loadRefExecutant();
     $act->_ref_executant->loadRefDiscipline();
     $discipline = $act->_ref_executant->_ref_discipline;
-    $patient = $codable->_ref_patient;
+    $patient = $codable->loadRefPatient();
     $patient->evalAge();
     $checked = 0;
     $spe_gyneco = $spe_gyneco = array(
