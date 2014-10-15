@@ -105,6 +105,17 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
         );
       }
       else {
+        // Même traitement que pour l'IPP
+        switch ($receiver->_configs["build_PID_3_4"]) {
+          case 'actor':
+            $assigning_authority = $this->getAssigningAuthority("actor", null, $receiver);
+            break;
+
+          default:
+            $assigning_authority = $this->getAssigningAuthority("FINESS", $group->finess);
+            break;
+        }
+
         $sejour->loadNPA($group->_id);
         $data[] = $sejour->_NPA ? array(
           array(
@@ -112,8 +123,8 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
             null,
             null,
             // PID-3-4 Autorité d'affectation
-            $this->getAssigningAuthority("FINESS", $group->finess),
-            "RI"
+            $assigning_authority,
+            "AN"
           )
         ) : null;
       }
