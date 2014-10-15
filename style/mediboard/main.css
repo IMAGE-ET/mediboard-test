@@ -84,6 +84,11 @@ body.touchscreen {
   -webkit-touch-callout:none;
 }
 
+.iframe-scroll-wrapper {
+  -webkit-overflow-scrolling: touch;
+  overflow: scroll;
+}
+
 div.cancelled,
 span.cancelled {
   color: #fff;
