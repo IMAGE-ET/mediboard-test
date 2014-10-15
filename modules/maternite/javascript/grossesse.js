@@ -80,7 +80,7 @@ Grossesse = {
     else {
       $("view_grossesse").update("<div class='empty' style='display: inline'>"+$T("CGrossesse.none_linked")+"</div>");
     }
-    if (this.submit) {
+    if (this.submit == "1") {
       return onSubmitFormAjax(this.formTo);
     }
   },
