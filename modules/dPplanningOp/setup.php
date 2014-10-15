@@ -1808,5 +1808,8 @@ class CSetupdPplanningOp extends CSetup {
 
     $query = "SHOW TABLES LIKE 'type_autorisation_um'";
     $this->addDatasource("sae", $query);
+
+    $query = "SELECT * FROM `type_autorisation_um` WHERE `code_concat` = '07A';";
+    $this->addDatasource("sae", $query);
   }
 }
