@@ -100,7 +100,7 @@ PlanSoins = {
     url.addParam("multiple_adm", multiple_adm);
     url.addParam("replanification", replanif);
     url.addParam("lock_hour", lock_hour);
-    url.popup(800,600,"Administration");
+    url.requestModal(800,600);
   },
   
   addAdministrationPerf: function(prescription_line_mix_id, date, hour, time_prevue, sejour_id, replanification){
