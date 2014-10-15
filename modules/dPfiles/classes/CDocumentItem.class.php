@@ -76,7 +76,8 @@ class CDocumentItem extends CMbMetaObject {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["dmp_documents"] = "CDMPDocument object_id";
+    $backProps["dmp_documents"]   = "CDMPDocument object_id";
+    $backProps["sisra_documents"] = "CSisraDocument object_id";
     return $backProps;
   }
 

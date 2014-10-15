@@ -88,6 +88,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
     $backProps["echanges_hl7v3"]      = "CExchangeHL7v3 object_id";
     $backProps["xds_submission_lot"]  = "CXDSSubmissionLotToDocument object_id";
     $backProps["bioserver_document"]  = "CBioserveurDocument file_id";
+    $backProps["dmp_documents_sent"]  = "CDMPFile file_id";
 
     return $backProps;
   }

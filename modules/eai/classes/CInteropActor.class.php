@@ -158,6 +158,7 @@ class CInteropActor extends CMbObject {
     $backProps["domains"]            = "CDomain actor_id";
     $backProps["dicom_exchanges"]    = "CExchangeDicom receiver_id";
     $backProps["routes_receiver"]    = "CEAIRoute receiver_id";
+    $backProps["mvsante_exchange"]   = "CExchangeMVSante receiver_id";
 
     return $backProps;
   }

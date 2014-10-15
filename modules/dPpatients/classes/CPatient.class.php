@@ -385,7 +385,10 @@ class CPatient extends CPerson {
     $backProps['arret_travail']         = "CAvisArretTravail patient_id";
     $backProps["patient_state"]         = "CPatientState patient_id";
     $backProps["patient_link1"]         = "CPatientLink patient_id1";
-    $backProps["patient_link2"]         = "CpatientLink patient_id2";
+    $backProps["patient_link2"]         = "CPatientLink patient_id2";
+    $backProps["dmp_documents_sent"]    = "CDMPFile patient_id";
+    $backProps["dmp_log"]               = "CDMPLogUser patient_id";
+    $backProps["sisra_documents"]       = "CSisraDocument patient_id";
 
     return $backProps;
   }
