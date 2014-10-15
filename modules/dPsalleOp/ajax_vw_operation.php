@@ -34,7 +34,7 @@ if ($salle_id) {
 
   $daily_check_lists = array();
   $daily_check_list_types = array();
-  $require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active") && $date >= CMbDT::date() && !$currUser->_is_praticien;
+  $require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active") && $date >= CMbDT::date() && !$currUser->isPraticien();
 
   if ($require_check_list) {
     list($check_list_not_validated, $daily_check_list_types, $daily_check_lists) = CDailyCheckList::getCheckLists($salle, $date);
@@ -71,8 +71,6 @@ if ($salle_id) {
     $smarty->assign("require_check_list"    , $require_check_list);
     $smarty->assign("daily_check_lists"     , $daily_check_lists);
     $smarty->assign("daily_check_list_types", $daily_check_list_types);
-
-    $smarty->assign("require_check_list"    , $require_check_list);
 
     $smarty->display("inc_operation.tpl");
     CApp::rip();

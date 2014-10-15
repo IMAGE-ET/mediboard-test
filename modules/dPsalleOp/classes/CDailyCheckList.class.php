@@ -222,7 +222,9 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
    * @return CMediusers
    */
   function loadRefValidator(){
-    return $this->_ref_validator = $this->loadFwdRef("validator_id", true);
+    $this->_ref_validator = $this->loadFwdRef("validator_id", true);
+    $this->_ref_validator->loadRefFunction();
+    return $this->_ref_validator;
   }
 
   /**

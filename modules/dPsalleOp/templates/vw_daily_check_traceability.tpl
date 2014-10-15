@@ -69,7 +69,7 @@ changePage = function(start) {
           <td>{{mb_value object=$curr_list field=type}}</td>
           <td>{{mb_value object=$curr_list field=comments}}</td>
           <td>{{mb_value object=$curr_list field=list_type_id}}</td>
-          <td>{{mb_value object=$curr_list field=validator_id}}</td>
+          <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_list->_ref_validator}}</td>
         </tr>
         {{foreachelse}}
         <tr>
@@ -82,7 +82,10 @@ changePage = function(start) {
     <td>
       <table class="main form">
         <tr>
-          <th class="title" colspan="2">{{$check_list}}</th>
+          <th class="title" colspan="2">
+            {{mb_include module=system template=inc_object_history object=$check_list}}
+            {{$check_list}}
+          </th>
         </tr>
         <tr>
           <th>{{mb_label object=$check_list field=date}}</th>
@@ -109,7 +112,7 @@ changePage = function(start) {
         {{/if}}
         <tr>
           <th>{{mb_label object=$check_list field=validator_id}}</th>
-          <td>{{mb_value object=$check_list field=validator_id}}</td>
+          <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$check_list->_ref_validator}}</td>
         </tr>
 
         <tr>
