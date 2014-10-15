@@ -4009,7 +4009,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $where[] = "uf.date_debut IS NULL OR uf.date_debut < '$this->_date_sortie_prevue'";
     $where[] = "uf.date_fin IS NULL OR uf.date_fin > '$this->_date_entree_prevue'";
 
-    if (!$this->uf_hebergement_id || $this->fieldModified("service_id")) {
+    if ((!$this->uf_hebergement_id && !$this->fieldModified("uf_hebergement_id")) || $this->fieldModified("service_id")) {
       $affectation_uf = new CAffectationUniteFonctionnelle();
       $where["uf.type"] =  "= 'hebergement'";
 
@@ -4022,7 +4022,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $this->uf_hebergement_id = $affectation_uf->uf_id;
     }
 
-    if (!$this->uf_soins_id || $this->fieldModified("service_id")) {
+    if ((!$this->uf_soins_id && !$this->fieldModified("uf_soins_id")) || $this->fieldModified("service_id")) {
       $affectation_uf = new CAffectationUniteFonctionnelle();
       $where["uf.type"] =  "= 'soins'";
 
@@ -4035,7 +4035,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $this->uf_soins_id = $affectation_uf->uf_id;
     }
 
-    if (!$this->uf_medicale_id) {
+    if (!$this->uf_medicale_id && !$this->fieldModified("uf_medicale_id")) {
       $affectation_uf = new CAffectationUniteFonctionnelle();
       $where["uf.type"] =  "= 'medicale'";
 
