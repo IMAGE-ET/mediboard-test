@@ -156,6 +156,42 @@ class CEAISejour extends CEAIMbObject {
   }
 
   /**
+   * Recording NPA
+   *
+   * @param String         $NPA    NPA
+   * @param CSejour        $sejour Sejour
+   * @param CInteropSender $sender Sender
+   *
+   * @return null|string
+   */
+  static function storeNPA($NPA, CSejour $sejour, CInteropSender $sender) {
+    if (!$NPA) {
+      return null;
+    }
+
+    //L'expéditeur gère les NPA
+    $manage_npa = CMbArray::get($sender->_configs, "manage_npa");
+    if (!$manage_npa) {
+      return null;
+    }
+
+    //Récupération du tag pour les NPA
+    $tag = CSejour::getTagNPA($sender->group_id);
+    if (!$tag) {
+      return null;
+    }
+
+    $idex_NPA = CIdSante400::getMatch("CSejour", $tag, null, $sejour->_id);
+
+    $idex_NPA->object_id        = $sejour->_id;
+    $idex_NPA->last_update      = CMbDT::dateTime();
+    $idex_NPA->_eai_sender_guid = $sender->_guid;
+    $idex_NPA->id400            = $NPA;
+
+    return $idex_NPA->store();
+  }
+
+  /**
    * Recording admit
    *
    * @param CSejour        $newSejour   Admit

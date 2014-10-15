@@ -402,6 +402,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       
       $comment = CEAISejour::getComment($newVenue);
     }
+
+    CEAISejour::storeNPA($venueNPA, $newVenue, $sender);
     
     // Mapping du mouvement
     if ($sender_purge_idex_movements) {
@@ -1222,6 +1224,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Création du VN, voir de l'objet
     if ($msgVN = $this->createObjectByVisitNumber($newVenue, $data)) {
       return $exchange_hl7v2->setAckAR($ack, "E210", $msgVN, $newVenue);
+    }
+
+    if ($newVenue->_etat == "preadmission") {
+      $venueNPA = CValue::read($data['admitIdentifiers'], "NPA");
+      CEAISejour::storeNPA($venueNPA, $newVenue, $sender);
     }
     
     $codes   = array ("I202", "I226");

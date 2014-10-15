@@ -65,6 +65,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "search_master_IPP",
     "search_master_NDA",
     "ins_integrated",
+    "manage_npa",
 
     // Send
     "send_assigning_authority",
@@ -126,6 +127,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
   public $search_master_IPP;
   public $search_master_NDA;
   public $ins_integrated;
+  public $manage_npa;
 
   // Send
   public $send_assigning_authority;
@@ -191,6 +193,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
       "search_master_IPP",
       "search_master_NDA",
       "ins_integrated",
+      "manage_npa",
     ),
 
     "send" => array(
@@ -249,7 +252,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["assigning_authority_namespace_id"]      = "str";
     $props["assigning_authority_universal_id"]      = "str";
     $props["assigning_authority_universal_type_id"] = "str";
-    $props["country_code"] = "enum list|FRA|INT";
+    $props["country_code"]                          = "enum list|FRA|INT";
 
     // Encoding
     $props["encoding"] = "enum list|UTF-8|ISO-8859-1 default|UTF-8";
@@ -265,6 +268,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["search_master_IPP"]       = "bool default|0";
     $props["search_master_NDA"]       = "bool default|0";
     $props["ins_integrated"]          = "bool default|0";
+    $props["manage_npa"]              = "bool default|0";
     
     // => PID
     $props["handle_NDA"]    = "enum list|PID_18|PV1_19 default|PID_18";
