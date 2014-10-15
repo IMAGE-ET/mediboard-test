@@ -61,6 +61,7 @@ class CTag extends CMbObject {
     $backProps = parent::getBackProps();
     $backProps["children"] = "CTag parent_id";
     $backProps["items"]    = "CTagItem tag_id";
+    $backProps["sites"]    = "CMonitorSite owner_tag_id";
     return $backProps;
   }
 
