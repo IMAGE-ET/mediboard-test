@@ -2189,13 +2189,13 @@ class CSejour extends CFacturable implements IPatientRelated {
    *
    * @return array
    */
-  function loadSuiviMedical($datetime_min = null) {
+  function loadSuiviMedical($datetime_min = null, $cible_trans = null, &$cibles = array(), &$last_trans_cible = array(), $user_id = null, &$users = array()) {
     if ($datetime_min) {
       $trans = new CTransmissionMedicale();
       $whereTrans = array();
       $whereTrans[] = "(degre = 'high' AND (date_max IS NULL OR date_max >= '$datetime_min')) OR (date >= '$datetime_min')";
       $whereTrans["sejour_id"] = " = '$this->_id'";
-      $this->_back["transmissions"] = $trans->loadList($whereTrans);
+      $this->_back["transmissions"] = $trans->loadList($whereTrans, "date DESC, transmission_medicale_id DESC");
 
       $obs = new CObservationMedicale();
       $whereObs = array();
@@ -2205,7 +2205,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
     else {
       $this->loadBackRefs("observations");
-      $this->loadBackRefs("transmissions");
+      $this->loadBackRefs("transmissions", "date DESC, transmission_medicale_id DESC");
     }
 
     $consultations = $this->loadRefsConsultations();
@@ -2217,20 +2217,86 @@ class CSejour extends CFacturable implements IPatientRelated {
       foreach ($this->_back["observations"] as $curr_obs) {
         /** @var CObservationMedicale $curr_obs */
         $curr_obs->loadRefsFwd();
+        $users[$curr_obs->user_id] = $curr_obs->_ref_user;
+        if ($user_id && $curr_obs->user_id != $user_id) {
+          continue;
+        }
         $curr_obs->_ref_user->loadRefFunction();
+        $curr_obs->canEdit();
         $this->_ref_suivi_medical[$curr_obs->date.$curr_obs->_id."obs"] = $curr_obs;
       }
     }
 
     if (isset($this->_back["transmissions"])) {
+      $trans_compact = CAppUI::conf("soins Transmissions trans_compact", CGroups::loadCurrent());
+      $list_trans = array();
       foreach ($this->_back["transmissions"] as $curr_trans) {
-        /** @var CTransmissionMedicale $curr_trans */
         $curr_trans->loadRefsFwd();
-        if ($curr_trans->_ref_object instanceof CAdministration) {
-          $curr_trans->_ref_object->loadRefsFwd();
+        $users[$curr_trans->user_id] = $curr_trans->_ref_user;
+
+        if ($user_id && $curr_trans->user_id != $user_id) {
+          continue;
         }
 
-        $this->_ref_suivi_medical[$curr_trans->date.$curr_trans->_id."trans"][] = $curr_trans;
+        $curr_trans->calculCibles($cibles);
+        if ($cible_trans && $curr_trans->_cible != $cible_trans) {
+          continue;
+        }
+
+        $list_trans[] = $curr_trans;
+
+        $curr_trans->canEdit();
+        $curr_trans->loadRefUser();
+
+        if ($curr_trans->libelle_ATC) {
+          if (!isset($last_trans_cible[$curr_trans->libelle_ATC])) {
+            $last_trans_cible[$curr_trans->libelle_ATC] = $curr_trans;
+          }
+        }
+        else if (!isset($last_trans_cible["$curr_trans->object_class $curr_trans->object_id"])) {
+          $last_trans_cible["$curr_trans->object_class $curr_trans->object_id"] = $curr_trans;
+        }
+      }
+
+      foreach ($list_trans as $_trans) {
+        $sort_key_pattern = "$_trans->_class $_trans->user_id $_trans->object_id $_trans->object_class $_trans->libelle_ATC";
+
+        $sort_key = "$_trans->date $sort_key_pattern";
+
+        $date_before = CMbDT::dateTime("-1 SECOND", $_trans->date);
+        $sort_key_before = "$date_before $sort_key_pattern";
+
+        $date_after  = CMbDT::dateTime("+1 SECOND", $_trans->date);
+        $sort_key_after = "$date_after $sort_key_pattern";
+
+        if (($_trans->libelle_ATC &&
+            $last_trans_cible[$_trans->libelle_ATC] != $_trans &&
+            ($last_trans_cible[$_trans->libelle_ATC]->locked || ($trans_compact &&
+                !array_key_exists($sort_key, $_trans) && !array_key_exists($sort_key_before, $this->_ref_suivi_medical) && !array_key_exists($sort_key_after, $this->_ref_suivi_medical)))) ||
+          ($_trans->object_id &&
+            ($last_trans_cible["$_trans->object_class $_trans->object_id"]->locked || ($trans_compact &&
+                !array_key_exists($sort_key, $this->_ref_suivi_medical) && !array_key_exists($sort_key_before, $this->_ref_suivi_medical) && !array_key_exists($sort_key_after, $this->_ref_suivi_medical))) &&
+            $last_trans_cible["$_trans->object_class $_trans->object_id"] != $_trans)
+        ) {
+          continue;
+        }
+
+        // Aggrégation à -1 sec
+        if (array_key_exists($sort_key_before, $this->_ref_suivi_medical)) {
+          $sort_key = $sort_key_before;
+        }
+        // à +1 sec
+        else if (array_key_exists($sort_key_after, $this->_ref_suivi_medical)) {
+          $sort_key = $sort_key_after;
+        }
+
+        if (!isset($this->_ref_suivi_medical[$sort_key])) {
+          $this->_ref_suivi_medical[$sort_key] = array("data" => array(), "action" => array(), "result" => array());
+        }
+        if (!isset($this->_ref_suivi_medical[$sort_key][0])) {
+          $this->_ref_suivi_medical[$sort_key][0] = $_trans;
+        }
+        $this->_ref_suivi_medical[$sort_key][$_trans->type][] = $_trans;
       }
     }
 
