@@ -46,6 +46,7 @@ $patient->_ref_sejours = $sejour->loadList($where, $order);
 
 $date_consult = $consult->_ref_plageconsult->date;
 $ops_sans_dossier_anesth = array();
+$ops_annulees = array();
 // Chargement de ses séjours
 foreach ($patient->_ref_sejours as $_key => $_sejour) {
   if ($date_consult > $_sejour->entree_prevue && $date_consult > $_sejour->sortie_prevue) {
@@ -59,7 +60,12 @@ foreach ($patient->_ref_sejours as $_key => $_sejour) {
     $_operation->_ref_chir->loadRefFunction()->loadRefGroup();
     $day = CMbDT::daysRelative($consult->_ref_plageconsult->date, $_operation->_ref_plageop->date);
     if (!$_operation->_ref_consult_anesth->_id && $day >= 0) {
-      $ops_sans_dossier_anesth[] = $_operation;
+      if ($_operation->annulee) {
+        $ops_annulees[] = $_operation;
+      }
+      else {
+        $ops_sans_dossier_anesth[] = $_operation;
+      }
     }
     else {
       unset($_sejour->_ref_operations[$_operation->_id]);
@@ -100,6 +106,7 @@ $smarty->assign("consult" , $consult);
 $smarty->assign("patient" , $patient);
 $smarty->assign("dm_patient"              , $dossier_medical_patient);
 $smarty->assign("ops_sans_dossier_anesth" , $ops_sans_dossier_anesth);
+$smarty->assign("ops_annulees"            , $ops_annulees);
 $smarty->assign("first_operation"         , reset($ops_sans_dossier_anesth));
 $smarty->assign("consult_anesth"          , $consult_anesth);
 $smarty->assign("listChirs"               , $listChirs);
