@@ -396,6 +396,9 @@ class CMediusers extends CPerson {
     $backProps["mbhost_installations"]            = "CMbHostInstallation user_id";
     $backProps["plages_op_owner"]                 = "CPlageOp original_owner_id";
     $backProps["documents_sisra_receiver"]        = "CSisraDocument account_id";
+    $backProps["bris_de_glace"]                   = "CBrisDeGlace user_id";
+    $backProps["drawing_creator"]                 = "CDrawingItem user_id";
+    $backProps["bris_de_glace_user"]              = "CLogAccessMedicalData user_id";
     return $backProps;
   }
 
