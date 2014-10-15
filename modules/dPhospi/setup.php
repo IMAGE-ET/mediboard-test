@@ -802,6 +802,11 @@ class CSetupdPhospi extends CSetup {
                 ADD `type_autorisation_mode_hospitalisation` char(10) ;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.89";
+    $this->makeRevision("0.89");
+    $query = "ALTER TABLE `uf`
+                ADD `nb_lits_um` INT (3) UNSIGNED ;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.90";
   }
 }

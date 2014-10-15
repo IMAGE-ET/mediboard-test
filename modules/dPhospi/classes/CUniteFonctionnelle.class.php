@@ -27,6 +27,7 @@ class CUniteFonctionnelle extends CMbObject {
   public $date_fin;
   public $type_autorisation_um_id;
   public $type_autorisation_mode_hospitalisation;
+  public $nb_lits_um;
 
   /** @var CGroups */
   public $_ref_group;
@@ -48,9 +49,6 @@ class CUniteFonctionnelle extends CMbObject {
 
   /** @var CUniteMedicale */
   public $_ref_um;
-
-  // Distant Count
-  public $_count_lits;
 
   /**
    * @see parent::getSpec()
@@ -74,9 +72,10 @@ class CUniteFonctionnelle extends CMbObject {
     $props["type"]                  = "enum list|hebergement|soins|medicale default|hebergement";
     $props["type_sejour"]           = "enum list|comp|ambu|exte|seances|ssr|psy|urg|consult";
     $props["date_debut"]            = "date";
-    $props["date_fin"]                               = "date";
+    $props["date_fin"]              = "date";
     $props["type_autorisation_um_id"]                = "ref class|CUniteMedicale";
     $props["type_autorisation_mode_hospitalisation"] = "str";
+    $props["nb_lits_um"]                             = "num maxLength|3";
 
     return $props;
   }
@@ -125,11 +124,7 @@ class CUniteFonctionnelle extends CMbObject {
    * @return int
    */
   function countLits () {
-    $affectation = new CAffectationUniteFonctionnelle();
-    $affectation->uf_id = $this->_id;
-    $affectation->object_class = "CLit";
-
-    return $this->_count_lits = $affectation->countMatchingList();
+    return $this->nb_lits_um;
   }
 
   /**

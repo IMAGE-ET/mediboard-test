@@ -35,7 +35,7 @@
     <tr>
       <th>{{mb_label object=$uf field=type_autorisation_um_id}}</th>
       <td>
-        <select name="type_autorisation_um_id" onchange="refreshUM(this.form)">
+        <select name="type_autorisation_um_id" onchange="refreshUM(this.form)" style="width:14em;">
           <option disabled selected>{{tr}}Choose{{/tr}}</option>
           {{foreach from=$ums item=_um}}
             <option value="{{$_um->_id}}" {{if $uf->type_autorisation_um_id == $_um->_id}}selected{{/if}}>{{$_um}}</option>
@@ -48,6 +48,10 @@
       <td id="um_mode_hospi">
         {{mb_include module=dPhospi template=inc_vw_um_mode_hospit um=$uf->_ref_um}}
       </td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$uf field=nb_lits_um}}</th>
+      <td>{{mb_field object=$uf field=nb_lits_um}}</td>
     </tr>
     <tr>
       <th>{{mb_label object=$uf field=libelle}}</th>
