@@ -162,7 +162,8 @@ showModalTP = function() {
     <strong>Motif des séjours précédents</strong>
     <ul>
       {{foreach from=$sejours item=_sejour}}
-        <li>
+        {{if !$_sejour->annule}}
+          <li>
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
             {{if $_sejour->_motif_complet}}
               {{$_sejour->_motif_complet|nl2br}}
@@ -178,7 +179,8 @@ showModalTP = function() {
               {{/if}}
             {{/if}}
           </span>
-        </li>
+          </li>
+        {{/if}}
       {{/foreach}}
     </ul>
   {{/if}}
