@@ -55,17 +55,20 @@
       {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
         <tr>
           <td class="button">
-            <button type="button" class="link" onclick="updateOperation({{$curr_op->_id}}, {{$consult->_ref_consult_anesth->_id}});">Associer à cette intervention</button>
+            <button type="button" class="link" {{if $curr_op->annulee}}disabled="disabled" {{/if}}
+                    onclick="updateOperation({{$curr_op->_id}}, {{$consult->_ref_consult_anesth->_id}});">
+              Associer à cette intervention
+            </button>
           </td>
-          <td>
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}', null, { view_tarif: true })">
-            Le <strong>{{$curr_op->_datetime|date_format:"%a %d %b %Y"}}</strong>
-            {{if $curr_op->cote}}Coté: {{$curr_op->cote}}{{/if}}<br/>
-            {{if $curr_op->libelle}}
-              <strong>{{$curr_op->libelle}}</strong>
-            {{/if}}
-            par le <strong>Dr {{$curr_op->_ref_chir->_view}}</strong>
-          </span><br/>
+          <td {{if $curr_op->annulee}}class="hatching" {{/if}}>
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}', null, { view_tarif: true })">
+              Le <strong>{{$curr_op->_datetime|date_format:"%a %d %b %Y"}}</strong>
+              {{if $curr_op->cote}}Coté: {{$curr_op->cote}}{{/if}}<br/>
+              {{if $curr_op->libelle}}
+                <strong>{{$curr_op->libelle}}</strong>
+              {{/if}}
+              par le <strong>Dr {{$curr_op->_ref_chir->_view}}</strong>
+            </span><br/>
             {{assign var=sejour value=$curr_op->_ref_sejour}}
             <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_sejour->_guid}}')">
               <strong>Séjour du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}} au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}</strong>
@@ -171,7 +174,7 @@
             <button class="down" id="didac_button_duplicate" onclick="createDA('{{$first_operation->_id}}','{{$consult_anesth->_id}}', 1, '{{$first_operation->sejour_id}}');" style="position:relative;top:15px;">Dupliquer</button>
           {{/if}}
         </td>
-        <td>
+        <td {{if $operation->annulee}}class="hatching"{{/if}}>
           {{if $consult_anesth->operation_id}}
             <form name="addInterv-{{$operation->_id}}" action="?m={{$m}}" method="post" onsubmit="return saveModif(this);">
               <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
@@ -226,5 +229,27 @@
       </tr>
     {{/foreach}}
 
+    {{foreach from=$ops_annulees item=operation}}
+      <tr>
+        <td class="button">
+          <button class="link" disabled="disabled">Nouveau dossier vierge</button>
+        </td>
+        <td class="hatching">
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$operation->_guid}}', null, { view_tarif: true })">
+            Le <strong>{{$operation->_datetime|date_format:"%a %d %b %Y"}}</strong>
+            {{if $operation->cote}}Coté: {{$operation->cote}}{{/if}}<br/>
+            {{if $operation->libelle}}
+              <strong>{{$operation->libelle}}</strong>
+            {{/if}}
+            par le <strong>Dr {{$operation->_ref_chir->_view}}</strong>
+          </span><br/>
+          {{assign var=sejour value=$operation->_ref_sejour}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
+              <strong>Séjour du {{$sejour->entree_prevue|date_format:"%d/%m/%Y"}} au {{$sejour->sortie_prevue|date_format:"%d/%m/%Y"}}</strong>
+            {{if $sejour->type!="ambu" && $sejour->type!="exte"}} {{$sejour->_duree_prevue}} jour(s){{/if}} {{mb_value object=$sejour field=type}}
+            </span>
+        </td>
+      </tr>
+    {{/foreach}}
   {{/if}}
 </table>
