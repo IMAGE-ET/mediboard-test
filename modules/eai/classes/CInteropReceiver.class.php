@@ -58,9 +58,8 @@ class CInteropReceiver extends CInteropActor {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["echanges_any"] = "CExchangeAny receiver_id";
-    $backProps["routes"]       = "CEAIRoute receiver_id";
-    
+    $backProps["echanges_any"]    = "CExchangeAny receiver_id";
+
     return $backProps;
   }
 
