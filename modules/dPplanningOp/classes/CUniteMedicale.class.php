@@ -18,7 +18,6 @@
 
 class CUniteMedicale extends CMbObject {
   // DB Table key
-  public $id;
   public $racine_code;
   public $spec_char;
   public $code_concat;
@@ -34,7 +33,7 @@ class CUniteMedicale extends CMbObject {
     $spec = parent::getSpec();
     $spec->dsn   = 'sae';
     $spec->table = "type_autorisation_um";
-    $spec->key   = "id";
+    $spec->key   = "code_concat";
     return $spec;
   }
 
@@ -45,21 +44,11 @@ class CUniteMedicale extends CMbObject {
     $props = parent::getProps();
     $props["racine_code"]   = "num notNull maxLength|3";
     $props["spec_char"]     = "str";
-    $props["code_concat"]   = "str notNull";
     $props["libelle"]       = "text notNull";
     $props["mode_hospitalisation"]   = "str";
     $props["sae"]           = "str";
 
     return $props;
-  }
-
-  /**
-   * @see parent::getBackProps()
-   */
-  function getBackProps() {
-    $backProps = parent::getBackProps();
-    $backProps["UniteFonctionnelle"] = "CUniteFonctionnelle type_autorisation_um_id";
-    return $backProps;
   }
 
   /**
@@ -73,5 +62,10 @@ class CUniteMedicale extends CMbObject {
     if ($this->mode_hospitalisation) {
       $this->_mode_hospitalisation = explode("|", $this->mode_hospitalisation);
     }
+  }
+
+  function loadListUm() {
+    return $this->loadList();
+
   }
 }

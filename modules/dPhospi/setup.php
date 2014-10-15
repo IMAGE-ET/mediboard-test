@@ -807,6 +807,12 @@ class CSetupdPhospi extends CSetup {
                 ADD `nb_lits_um` INT (3) UNSIGNED ;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.90";
+    $this->makeRevision("0.90");
+    $query = "ALTER TABLE `uf`
+                CHANGE `type_autorisation_um_id` `type_autorisation_um` CHAR (3),
+                CHANGE `type_autorisation_mode_hospitalisation` `type_autorisation_mode_hospi` CHAR (10);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.91";
   }
 }

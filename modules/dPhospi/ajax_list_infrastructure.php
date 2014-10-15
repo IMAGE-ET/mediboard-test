@@ -112,8 +112,11 @@ if ($type_name == "UF") {
   );
 
   // Récupération des Unités Médicales (pmsi)
-  $ums = new CUniteMedicale();
-  $ums = $ums->loadList();
+  $ums = array ();
+  $um  = new CUniteMedicale();
+  if (CSQLDataSource::get("sae")) {
+    $ums = $um->loadListUm();
+  }
 
   $smarty->assign("ufs", $ufs);
   $smarty->assign("uf", $uf);

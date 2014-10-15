@@ -87,8 +87,11 @@ $ufs = array(
 );
 
 // Récupération des Unités Médicales (pmsi)
-$ums = new CUniteMedicale();
-$ums = $ums->loadList();
+$ums = array ();
+$um  = new CUniteMedicale();
+if (CSQLDataSource::get("sae")) {
+  $ums = $um->loadListUm();
+}
 
 // Chargement de la prestation à ajouter/éditer
 $prestation = new CPrestation();

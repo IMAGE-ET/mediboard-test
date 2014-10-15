@@ -1,7 +1,7 @@
 <script>
   refreshUM = function(form) {
       var url = new Url('dPhospi',  'ajax_refresh_um');
-      url.addParam("um_id", $V(form.elements.type_autorisation_um_id));
+      url.addParam("um_id", $V(form.elements.type_autorisation_um));
       url.addParam("uf_id", $V(form.elements.uf_id));
       url.requestUpdate('um_mode_hospi');
   }
@@ -33,18 +33,18 @@
       <td>{{mb_field object=$uf field=code}}</td>
     </tr>
     <tr>
-      <th>{{mb_label object=$uf field=type_autorisation_um_id}}</th>
+      <th>{{mb_label object=$uf field=type_autorisation_um}}</th>
       <td>
-        <select name="type_autorisation_um_id" onchange="refreshUM(this.form)" style="width:14em;">
-          <option disabled selected>{{tr}}Choose{{/tr}}</option>
+        <select name="type_autorisation_um" onchange="refreshUM(this.form)" style="width:14em;">
+          <option value="">{{tr}}Choose{{/tr}}</option>
           {{foreach from=$ums item=_um}}
-            <option value="{{$_um->_id}}" {{if $uf->type_autorisation_um_id == $_um->_id}}selected{{/if}}>{{$_um}}</option>
+            <option value="{{$_um->_id}}" {{if $uf->type_autorisation_um == $_um->_id}}selected{{/if}}>{{$_um}}</option>
           {{/foreach}}
         </select>
       </td>
     </tr>
     <tr>
-      <th>{{mb_label object=$uf field=type_autorisation_mode_hospitalisation}}</th>
+      <th>{{mb_label object=$uf field=type_autorisation_mode_hospi}}</th>
       <td id="um_mode_hospi">
         {{mb_include module=dPhospi template=inc_vw_um_mode_hospit um=$uf->_ref_um}}
       </td>

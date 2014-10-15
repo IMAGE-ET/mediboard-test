@@ -25,8 +25,8 @@ class CUniteFonctionnelle extends CMbObject {
   public $type_sejour;
   public $date_debut;
   public $date_fin;
-  public $type_autorisation_um_id;
-  public $type_autorisation_mode_hospitalisation;
+  public $type_autorisation_um;
+  public $type_autorisation_mode_hospi;
   public $nb_lits_um;
 
   /** @var CGroups */
@@ -73,9 +73,9 @@ class CUniteFonctionnelle extends CMbObject {
     $props["type_sejour"]           = "enum list|comp|ambu|exte|seances|ssr|psy|urg|consult";
     $props["date_debut"]            = "date";
     $props["date_fin"]              = "date";
-    $props["type_autorisation_um_id"]                = "ref class|CUniteMedicale";
-    $props["type_autorisation_mode_hospitalisation"] = "str";
-    $props["nb_lits_um"]                             = "num maxLength|3";
+    $props["type_autorisation_um"]  = "str maxLength|3";
+    $props["type_autorisation_mode_hospi"] = "str maxLength|10";
+    $props["nb_lits_um"]                   = "num maxLength|3";
 
     return $props;
   }
@@ -115,7 +115,12 @@ class CUniteFonctionnelle extends CMbObject {
    * @return CUniteMedicale
    */
   function loadRefUm() {
-    return $this->_ref_um = $this->loadFwdRef("type_autorisation_um_id", true);
+    $um  = new CUniteMedicale();
+    $um->code_concat = $this->type_autorisation_um;
+    if (CSQLDataSource::get("sae")) {
+      $um->loadMatchingObject();
+    }
+    return $this->_ref_um = $um;
 
   }
 

@@ -94,8 +94,11 @@ if ($use_uf != null) {
   $uf->loadRefsNotes();
 
   // Récupération des Unités Médicales (pmsi)
-  $ums = new CUniteMedicale();
-  $ums = $ums->loadList();
+  $ums = array ();
+  $um  = new CUniteMedicale();
+  if (CSQLDataSource::get("sae")) {
+    $ums = $um->loadListUm();
+  }
 
   // Récupération des ufs
   $order = "group_id, code";

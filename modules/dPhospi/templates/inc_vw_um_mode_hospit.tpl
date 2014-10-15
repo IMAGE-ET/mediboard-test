@@ -8,9 +8,9 @@
  * @link     http://www.mediboard.org*}}
 
 
-<select name="type_autorisation_mode_hospitalisation">
-  <option disabled selected>{{tr}}Choose{{/tr}}</option>
+<select name="type_autorisation_mode_hospi">
+  <option value="">{{tr}}Choose{{/tr}}</option>
   {{foreach from=$um->_mode_hospitalisation item=_um_mode_hospit}}
-    <option value="{{$_um_mode_hospit}}" {{if $uf->type_autorisation_mode_hospitalisation == $_um_mode_hospit}}selected{{/if}} >{{$_um_mode_hospit}}</option>
+    <option value="{{$_um_mode_hospit}}" {{if $uf->type_autorisation_mode_hospi == $_um_mode_hospit}}selected{{/if}} >{{$_um_mode_hospit}}</option>
   {{/foreach}}
 </select>
