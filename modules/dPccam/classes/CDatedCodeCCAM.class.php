@@ -367,6 +367,11 @@ class CDatedCodeCCAM {
     }
     $modifsConvergence = array();
     foreach ($listModificateurs as $modificateur) {
+      /* Verification de la date de fin d'effet des modificateurs */
+      if ($modificateur->date_fin != "00000000" && $this->_date > $modificateur->date_fin) {
+        continue;
+      }
+
       // Cas d'un modificateur de convergence
       $_modif = new CObject();
       $_modif->code    = $modificateur->modificateur;
