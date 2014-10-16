@@ -111,15 +111,15 @@
           </table>
         </fieldset>
       </td>
-      <!-- Fieldset de tri par Utilisateurs -->
+      <!-- Fieldset de tri par Intervenants -->
 
       <td class="narrow">
         <fieldset>
-          <legend> Utilisateurs</legend>
+          <legend> Intervenants</legend>
           <table class="layout">
             <tr>
               <td>
-                <input type="text" name="user_view" class="autocomplete" value="" placeholder="&mdash; Choisir un utilisateur"/>
+                <input type="text" name="user_view" class="autocomplete" value="" placeholder="&mdash; Choisir un intervenant"/>
                 <input type="hidden" name="user_id" value="" />
 
                 <button type="button" class="user notext"

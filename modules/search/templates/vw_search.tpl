@@ -120,23 +120,22 @@
             </table>
           </fieldset>
         </td>
-        <!-- Fieldset de tri par Utilisateurs -->
+        <!-- Fieldset de tri par Intervenants -->
         <td  style="width: 33%">
           <fieldset>
-            <legend> Utilisateurs</legend>
+            <legend> Intervenants</legend>
             <table class="layout">
               <tr>
                 <td>
-                  <input type="text" name="user_view" class="autocomplete" value="" placeholder="&mdash; Choisir un utilisateur"/>
+                  <input type="text" name="user_view" class="autocomplete" value="" placeholder="&mdash; Choisir un intervenant"/>
                   <input type="hidden" name="user_id" {{if $app->_ref_user->isPraticien()}}value="{{$app->user_id}}"{{/if}} />
 
                   <button type="button" class="user notext" title="Mon compte"
                           onclick="window.user_tag_token.add('{{$app->user_id}}'); insertTag('{{$app->_ref_user->_guid}}', '{{$app->_ref_user}}')">
                   </button>
-                  <button type="button" class="erase notext" onclick="$V(this.form.elements.user_id, '');
+                  <button type="button" title="Effacer le champ" class="erase notext" onclick="$V(this.form.elements.user_id, '');
                           $V(this.form.elements.user_view, ''); $$('li.tag').each(function(elt) { elt.remove(); });">
                   </button>
-                  {{*<input type="checkbox" name="prat_only" title="Filtrer uniquement sur les praticiens" onchange="getAutocomplete();" checked/>*}}
                 </td>
               </tr>
               <tr>
