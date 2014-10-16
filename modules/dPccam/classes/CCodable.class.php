@@ -1084,7 +1084,14 @@ class CCodable extends CMbObject {
           else {
             // Récupération des modificateurs codés
             foreach ($phase->_modificateurs as $modificateur) {
-              $position = strpos($listModificateurs, $modificateur->code);
+              /* Dans le cas des modificateurs doubles, les 2 composantes peuvent être séparées (IJKO dans le cas de IO par exemple) */
+              if ($modificateur->_double == "2") {
+                $position = strpos($listModificateurs, $modificateur->code[0]) !== false && strpos($listModificateurs, $modificateur->code[1]) !== false;
+              }
+              else {
+                $position = strpos($listModificateurs, $modificateur->code);
+              }
+
               if ($position !== false) {
                 if ($modificateur->_double == "1") {
                   $modificateur->_checked = $modificateur->code;
