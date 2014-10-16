@@ -23,6 +23,7 @@
 class CActiviteModificateurCCAM extends CCCAM {
 
   public $date_effet;
+  public $date_fin;
   public $modificateur;
 
   public $_libelle;
@@ -36,6 +37,7 @@ class CActiviteModificateurCCAM extends CCCAM {
    */
   function map($row) {
     $this->date_effet   = $row["DATEEFFET"];
+    $this->date_fin     = $row["DATEFIN"];
     $this->modificateur = $row["MODIFICATEUR"];
   }
 
@@ -50,8 +52,9 @@ class CActiviteModificateurCCAM extends CCCAM {
   static function loadListFromCodeActivite($code, $activite) {
     $ds = self::$spec->ds;
 
-    $query = "SELECT p_activite_modificateur.*
+    $query = "SELECT p_activite_modificateur.*, t_modificateurinfooc.DATEFIN
       FROM p_activite_modificateur
+      LEFT JOIN t_modificateurinfooc ON t_modificateurinfooc.CODE = p_activite_modificateur.MODIFICATEUR
       WHERE p_activite_modificateur.CODEACTE = %1
       AND p_activite_modificateur.CODEACTIVITE = %2
       ORDER BY p_activite_modificateur.DATEEFFET DESC, p_activite_modificateur.MODIFICATEUR";
