@@ -617,7 +617,7 @@ PlanSoins = {
     var url = new Url("dPprescription", "httpreq_add_multiple_administrations");
     url.addParam("mode_dossier", $V(document.mode_dossier_soin.mode_dossier));
     url.addParam("refresh_popup", "1");
-    url.requestModal(700, 600);
+    url.popup(700, 600);
   },
   
   addInscription: function(datetime, prescription_id){
