@@ -1074,7 +1074,9 @@ class CCodable extends CMbObject {
           $possible_acte->updateFormFields();
           $possible_acte->loadRefExecutant();
           $possible_acte->loadRefCodeCCAM();
-          $possible_acte->loadRefCodageCCAM();
+          if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+            $possible_acte->loadRefCodageCCAM();
+          }
           $possible_acte->getAnesthAssocie();
 
           // Affect a loaded acte if exists
