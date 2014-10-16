@@ -1809,7 +1809,13 @@ class CSetupdPplanningOp extends CSetup {
     $query = "SHOW TABLES LIKE 'type_autorisation_um'";
     $this->addDatasource("sae", $query);
 
-    $query = "SELECT * FROM `type_autorisation_um` WHERE `code_concat` = '07A';";
-    $this->addDatasource("sae", $query);
+    if (array_key_exists('sae', CAppUI::conf('db'))) {
+      $dsn = CSQLDataSource::get('sae');
+      $test = $dsn->exec('SHOW TABLES LIKE \'type_autorisation_um\';');
+      if ($test && $dsn->fetchRow($test)) {
+        $query = "SELECT * FROM `type_autorisation_um` WHERE `code_concat` = '07A';";
+        $this->addDatasource("sae", $query);
+      }
+    }
   }
 }
