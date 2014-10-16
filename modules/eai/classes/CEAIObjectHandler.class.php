@@ -238,7 +238,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
       return false;
     }
 
-    if (!$mbObject->_fusion) {
+    if (isset($mbObject->_fusion) && !$mbObject->_fusion) {
       return false;
     }
 
