@@ -917,6 +917,7 @@ class CFacture extends CMbObject {
    * @return void
    **/
   function loadTotaux() {
+    $this->_ref_items = array();
     $this->loadRefsItems();
     if ($this->cloture && count($this->_ref_items)) {
       foreach ($this->_ref_actes_tarmed as $acte_tarmed) {
