@@ -268,7 +268,7 @@ class CViewSender extends CMbObject {
               }
               
               $compressed = $_sender_source->_ref_source->archive;
-              $extension = ".".$_file["extension"];
+              $extension = ".".$source_ftp->fileextension ? $source_ftp->fileextension : $_file["extension"];
   
               $file_name = $destination_basename.($compressed ? ".zip" : $extension);
               
