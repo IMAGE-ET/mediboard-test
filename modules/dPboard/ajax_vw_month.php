@@ -153,11 +153,7 @@ foreach ($prats as $_prat) {
   foreach ($hps as $_hp) {
     $guid = "hps_".$_hp["date"].$_prat->_id;
     $event = new CPlanningEvent($guid, $_hp["date"]." ".$_hp["first_time"], CMbDT::minutesRelative($_hp["date"]." 00:00:00", $_hp["date"]." ".$_hp["accumulated_time"]));
-    $event->title = "<strong>".CMbDT::format($_hp["first_time"], '%H:%M')." - ".CMbDT::format($_hp["last_time"], "%H:%M")."</strong> ".$_hp["nb_op"]." ".CAppUI::tr("CIntervHorsPlage");
-    if ($_hp["nb_op"] > 1) {
-      $event->title.= "s";
-    }
-    $event->title.= "<small>";
+    $event->title = "<strong>".CMbDT::format($_hp["first_time"], '%H:%M')." - ".CMbDT::format($_hp["last_time"], "%H:%M")."</strong> ".$_hp["nb_op"]." ".CAppUI::tr("CIntervHorsPlage")."<small>";
     if ($function_id) {
       $event->title .= " - ".$_prat->_shortview;
     }
