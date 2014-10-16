@@ -394,6 +394,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       $movement->movement_type         = $sejour->getMovementType($code);
       $movement->original_trigger_code = $code;
       $movement->start_of_movement     = $this->getStartOfMovement($code, $sejour, $affectation);
+      $movement->loadMatchingObject();
       $movement->store();
 
       return $sejour->_ref_hl7_movement = $movement;
