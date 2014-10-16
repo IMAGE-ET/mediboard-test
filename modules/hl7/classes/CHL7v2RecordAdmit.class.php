@@ -2102,6 +2102,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $mode_entree           = new CModeEntreeSejour();
       $mode_entree->code     = $admit_source;
       $mode_entree->group_id = $sender->group_id;
+      $mode_entree->actif    = 1;
       $mode_entree->loadMatchingObject();
 
       $newVenue->mode_entree_id = $mode_entree->_id;
@@ -2262,6 +2263,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $mode_sortie           = new CModeSortieSejour();
       $mode_sortie->code     = $discharge_disposition;
       $mode_sortie->group_id = $sender->group_id;
+      $mode_sortie->actif    = 1;
       $mode_sortie->loadMatchingObject();
 
       $newVenue->mode_sortie_id = $mode_sortie->_id;
