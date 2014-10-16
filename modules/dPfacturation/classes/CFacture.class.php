@@ -794,7 +794,7 @@ class CFacture extends CMbObject {
   /**
    * Chargement des items de la facture
    *
-   * @return object
+   * @return CFactureItem[]
    **/
   function loadRefsItems(){
     if (count($this->_ref_items)) {
@@ -917,6 +917,7 @@ class CFacture extends CMbObject {
    * @return void
    **/
   function loadTotaux() {
+    $this->_ref_items = array();
     $this->loadRefsItems();
     if ($this->cloture && count($this->_ref_items)) {
       foreach ($this->_ref_actes_tarmed as $acte_tarmed) {
