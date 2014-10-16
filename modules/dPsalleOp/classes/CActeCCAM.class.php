@@ -182,9 +182,11 @@ class CActeCCAM extends CActe {
    * @see parent::checkCoded()
    */
   function checkCoded() {
-    $this->loadRefCodageCCAM();
-    if ($this->_ref_codage_ccam->_id && $this->_ref_codage_ccam->locked) {
-      return "Codage CCAM verrouillé, impossible de modifier l'acte";
+    if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+      $this->loadRefCodageCCAM();
+      if ($this->_ref_codage_ccam->_id && $this->_ref_codage_ccam->locked) {
+        return "Codage CCAM verrouillé, impossible de modifier l'acte";
+      }
     }
     return parent::checkCoded();
   }
@@ -205,15 +207,18 @@ class CActeCCAM extends CActe {
    * @see parent::delete()
    */
   function delete() {
-    $this->loadRefCodageCCAM();
     if ($msg = parent::delete()) {
       return $msg;
     }
-    if (isset($this->_ref_codage_ccam)) {
-      if ($this->_ref_codage_ccam->_id) {
-        $this->_ref_codage_ccam->updateRule(true);
+    if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+      $this->loadRefCodageCCAM();
+
+      if (isset($this->_ref_codage_ccam)) {
+        if ($this->_ref_codage_ccam->_id) {
+          $this->_ref_codage_ccam->updateRule(true);
+        }
+        $this->_ref_codage_ccam->store();
       }
-      $this->_ref_codage_ccam->store();
     }
 
     return null;
@@ -252,11 +257,13 @@ class CActeCCAM extends CActe {
       return $msg;
     }
 
-    $codage_ccam = CCodageCCAM::get($this->_ref_object, $this->executant_id, $this->code_activite);
-    if (!$codage_ccam->_id) {
-      $codage_ccam->store();
+    if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+      $codage_ccam = CCodageCCAM::get($this->_ref_object, $this->executant_id, $this->code_activite);
+      if (!$codage_ccam->_id) {
+        $codage_ccam->store();
+      }
     }
-     
+
     return parent::check(); 
     // datetime_execution: attention à rester dans la plage de l'opération
   }
@@ -599,7 +606,9 @@ class CActeCCAM extends CActe {
 
     $this->loadRefExecutant();
     $this->loadRefCodeCCAM();
-    $this->loadRefCodageCCAM();
+    if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+      $this->loadRefCodageCCAM();
+    }
   }
 
   /**
