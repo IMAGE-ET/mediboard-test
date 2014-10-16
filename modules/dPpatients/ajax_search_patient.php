@@ -166,6 +166,7 @@ else {
 
     $where[] = $whereLimited[]  = "`id_sante400`.`object_class` = 'CSejour'";
     $where["id_sante400.id400"] = " = '$patient_nda'";
+    $where["id_sante400.tag"]   = " = '".CSejour::getTagNDA()."'";
   }
 
   /** @var CPatient[] $patients */
