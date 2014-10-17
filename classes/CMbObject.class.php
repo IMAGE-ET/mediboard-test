@@ -354,27 +354,27 @@ class CMbObject extends CStoredObject {
   /**
    * Count the exchanges for the all sejours
    *
-   * @param CSejour[] $sejours Sejour
-   * @param String    $type    Type
-   * @param String    $subtype Sous type
+   * @param CMbObject[] $objects Sejour
+   * @param String      $type    Type
+   * @param String      $subtype Sous type
    *
    * @return void
    */
-  function massCountExchanges($sejours, $type = null, $subtype = null) {
-    if (!count($sejours)) {
+  function massCountExchanges($objects, $type = null, $subtype = null) {
+    if (!count($objects)) {
       return null;
     }
 
-    $sejour_ids = CMbArray::pluck($sejours, "sejour_id");
-    $sejour_ids = array_unique($sejour_ids);
-    CMbArray::removeValue("", $sejour_ids);
+    $object_ids = CMbArray::pluck($objects, $this->_spec->key);
+    $object_ids = array_unique($object_ids);
+    CMbArray::removeValue("", $object_ids);
 
-    if (!count($sejour_ids)) {
+    if (!count($object_ids)) {
       return null;
     }
 
     $where = array(
-      "object_id"    => CSQLDataSource::prepareIn($sejour_ids),
+      "object_id"    => CSQLDataSource::prepareIn($object_ids),
       "object_class" => "= '$this->_class'",
     );
 
@@ -401,13 +401,13 @@ class CMbObject extends CStoredObject {
     foreach ($count_exchanges as $_exchange => $_counts) {
       foreach ($_counts as $_value) {
         $total     = $_value["total"];
-        $sejour_id = $_value["object_id"];
-        if (!isset($sejours[$sejour_id]->_nb_exchanges_by_format[$_exchange])) {
-          $sejours[$sejour_id]->_nb_exchanges_by_format[$_exchange] = 0;
+        $object_id = $_value["object_id"];
+        if (!isset($objects[$object_id]->_nb_exchanges_by_format[$_exchange])) {
+          $objects[$object_id]->_nb_exchanges_by_format[$_exchange] = 0;
         }
 
-        $sejours[$sejour_id]->_nb_exchanges_by_format[$_exchange] += $total;
-        $sejours[$sejour_id]->_nb_exchanges                       += $total;
+        $objects[$object_id]->_nb_exchanges_by_format[$_exchange] += $total;
+        $objects[$object_id]->_nb_exchanges                       += $total;
       }
     }
   }
