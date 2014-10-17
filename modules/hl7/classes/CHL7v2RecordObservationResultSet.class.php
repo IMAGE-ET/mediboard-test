@@ -120,11 +120,25 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
       return $exchange_hl7v2->setAckAR($ack, "E606", null, $patient);
     }
 
+    $change_filler = $sender->_configs["change_filler_placer"];
+
     // Récupération des observations
     foreach ($data["observations"] as $_observation) {
       // Récupération de la date du relevé
       $observation_dt = $this->getOBRObservationDateTime($_observation["OBR"]);
       $name           = $this->getOBRServiceIdentifier($_observation["OBR"]);
+      $filler_number  = $this->getOBRFillerNumber($_observation["OBR"]);
+      $placer_number  = $this->getOBRPlacerNumber($_observation["OBR"]);
+
+      //recherche de la consultation grâce à son identifiant
+      //$idex = CIdSante400::getMatch("Cconsultation", $sender->_tag_consultation, $change_filler ? $placer_number : $filler_number);
+
+      /** @var CConsultation $object */
+      /*$object = $idex->loadTargetObject();
+
+      if ($placer_number && $object && $object->_id && $object->_id != $placer_number) {
+        return $exchange_hl7v2->setAckAR($ack, "E608", null, $patient);
+      }*/
 
       foreach ($_observation["OBX"] as $key => $_OBX) {
         // OBX.2 : Value type
@@ -132,7 +146,10 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
         $date         = $observation_dt ? $observation_dt : $this->getOBXObservationDateTime($_OBX);
         $praticien_id = $this->getObservationAuthor($_OBX);
 
-        $object = $this->getObjectWithDate($date, $patient, $praticien_id, $sejour);
+        //if (!$object || $object && !$object->_id) {
+          $object = $this->getObjectWithDate($date, $patient, $praticien_id, $sejour);
+        //}
+
         if (!$object) {
           return $exchange_hl7v2->setAckAR($ack, "E301", null, $patient);
         }
@@ -172,6 +189,28 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     }
     
     return $exchange_hl7v2->setAckAA($ack, $this->codes, $comment, $object);
+  }
+
+  /**
+   * Filler number
+   *
+   * @param DOMNode $node node
+   *
+   * @return string
+   */
+  function getOBRFillerNumber(DOMNode $node) {
+    return $this->queryTextNode("OBR.2/EI.1", $node);
+  }
+
+  /**
+   * Placer number
+   *
+   * @param DOMNode $node node
+   *
+   * @return string
+   */
+  function getOBRPlacerNumber(DOMNode $node) {
+    return $this->queryTextNode("OBR.3/EI.1", $node);
   }
 
   /**
@@ -471,6 +510,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
         $file_type = "application/pdf";
         break;
       default:
+        $file_type = "unknown/unknown";
     }
 
     return $file_type;
@@ -589,6 +629,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $source = $sender_link->_ref_exchanges_sources[0];
 
     $path = $filename = $pointer;
+    $path = basename($path);
 
     if ($source instanceof CSourceFileSystem) {
       $path = $source->getFullPath()."/$path";

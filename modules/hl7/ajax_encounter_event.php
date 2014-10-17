@@ -43,8 +43,6 @@ switch ($event) {
       /** @var Csejour $_sejour */
       $_sejour->_ref_curr_affectation = $_sejour->getCurrAffectation($_sejour->sortie);
     }
-
-    //todo récupérer la dernière affectation
     break;
   case "A03":
     $sejours = $patient->loadRefsSejours(array("sortie_reelle" => "IS NULL"));

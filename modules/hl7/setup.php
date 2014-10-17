@@ -1391,7 +1391,13 @@ class CSetuphl7 extends CSetup {
                 ADD `build_PV1_3_1` ENUM ('UF','service') DEFAULT 'UF';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.05";
+    $this->makeRevision("1.05");
+
+    $query = "ALTER TABLE `hl7_config`
+                ADD `change_filler_placer` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.06";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

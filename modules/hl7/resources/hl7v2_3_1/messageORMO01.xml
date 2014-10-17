@@ -42,5 +42,6 @@
             <segment minOccurs="0" maxOccurs="unbounded">CTI</segment>
             <segment minOccurs="0">BLG</segment>
         </group>
+      <segment minOccurs="0">ZDS</segment>
     </segments>
 </message>

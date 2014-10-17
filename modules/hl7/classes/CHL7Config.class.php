@@ -67,6 +67,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "search_master_NDA",
     "ins_integrated",
     "manage_npa",
+    "change_filler_placer",
 
     // Send
     "send_assigning_authority",
@@ -130,6 +131,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
   public $search_master_NDA;
   public $ins_integrated;
   public $manage_npa;
+  public $change_filler_placer;
 
   // Send
   public $send_assigning_authority;
@@ -197,6 +199,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
       "search_master_NDA",
       "ins_integrated",
       "manage_npa",
+      "change_filler_placer",
     ),
 
     "send" => array(
@@ -272,6 +275,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["search_master_NDA"]       = "bool default|0";
     $props["ins_integrated"]          = "bool default|0";
     $props["manage_npa"]              = "bool default|0";
+    $props["change_filler_placer"]    = "bool default|0";
     
     // => PID
     $props["handle_NDA"]    = "enum list|PID_18|PV1_19 default|PID_18";
