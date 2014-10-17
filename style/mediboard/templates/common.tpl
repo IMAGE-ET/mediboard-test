@@ -154,8 +154,8 @@
       <tr>
         <th></th>
         <td>
-          <button type="submit" class="tick">{{tr}}Unlock{{/tr}}</button>
-          <button type="button" class="cancel" onclick="Session.close()">{{tr}}Logout{{/tr}}</button>
+          <button type="submit" class="unlock">{{tr}}Unlock{{/tr}}</button>
+          <button type="button" class="logout" onclick="Session.close()">{{tr}}Logout{{/tr}}</button>
         </td>
       </tr>
       <tr>
@@ -175,31 +175,41 @@
 </div>
 
 <div id="userSwitch" style="display: none;">
-  <form name="userSwitchForm" method="post" action="?" onsubmit="return UserSwitch.login(this)">
-    <input type="hidden" name="m" value="admin" />
-    <input type="hidden" name="dosql" value="do_login_as" />
-    <table class="main form">
-      <tr>
-        <th><label for="username">{{tr}}User{{/tr}}</label></th>
-        <td><input name="username" tabIndex="1000" type="text" class="notNull" /></td>
-      </tr>
-      
-      {{if ($app->user_type != 1) || ($conf.admin.LDAP.ldap_connection && !$conf.admin.LDAP.allow_login_as_admin)}}
-      <tr>
-        <th><label for="password">{{tr}}Password{{/tr}}</label></th>
-        <td><input name="password" tabIndex="1001" type="password" /></td>
-      </tr>
-      {{/if}}
-      
-      <tr>
-        <th></th>
-        <td>
-          <button type="submit" class="tick">{{tr}}Switch{{/tr}}</button>
-        </td>
-      </tr>
-    </table>
-    <div class="login-message"></div>
-  </form>
+  {{if $m == "admin" && $tab == "chpwd"}}
+    <div class="big-error">
+      Vous ne pourrez vous substituer qu'après avoir changé votre mot de passe.
+    </div>
+
+    <div style="text-align: center;">
+      <button type="button" class="logout" onclick="Session.close()">{{tr}}Logout{{/tr}}</button>
+    </div>
+  {{else}}
+    <form name="userSwitchForm" method="post" action="?" onsubmit="return UserSwitch.login(this)">
+      <input type="hidden" name="m" value="admin" />
+      <input type="hidden" name="dosql" value="do_login_as" />
+      <table class="main form">
+        <tr>
+          <th><label for="username">{{tr}}User{{/tr}}</label></th>
+          <td><input name="username" tabIndex="1000" type="text" class="notNull" /></td>
+        </tr>
+
+        {{if ($app->user_type != 1) || ($conf.admin.LDAP.ldap_connection && !$conf.admin.LDAP.allow_login_as_admin)}}
+          <tr>
+            <th><label for="password">{{tr}}Password{{/tr}}</label></th>
+            <td><input name="password" tabIndex="1001" type="password" /></td>
+          </tr>
+        {{/if}}
+
+        <tr>
+          <th></th>
+          <td>
+            <button type="submit" class="tick">{{tr}}Switch{{/tr}}</button>
+          </td>
+        </tr>
+      </table>
+      <div class="login-message"></div>
+    </form>
+  {{/if}}
 </div>
 
 <!-- Javascript Console -->
