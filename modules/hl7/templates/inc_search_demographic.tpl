@@ -14,32 +14,32 @@
   <input type="hidden" name="a" value="ajax_list_demographic" />
   <input type="hidden" name="page" value="0" />
 
-  <table class="form">
-    <tr>
-      <th class="title" colspan="2">Critères de recherche</th>
-    </tr>
-    <tr>
-      <th>{{mb_title class="CPatient" field=nom}}</th>
-      <td>{{mb_field class="CPatient" field=nom}}</td>
-    </tr>
-    <tr>
-      <th>{{mb_title class="CPatient" field=prenom}}</th>
-      <td>{{mb_field class="CPatient" field=prenom}}</td>
-    </tr>
-    <tr>
-      <th>{{mb_title class="CPatient" field=nom_jeune_fille}}</th>
-      <td>{{mb_field class="CPatient" field=nom_jeune_fille}}</td>
-    </tr>
-    <tr>
-      <th>{{mb_title class="CPatient" field=sexe emptyLabel="All"}}</th>
-      <td>{{mb_field class="CPatient" field=sexe emptyLabel="All"}}</td>
-    </tr>
-    <tr>
-      <td class="button" colspan="2">
-        <button type="submit" class="search">{{tr}}Search{{/tr}}</button>
-      </td>
-    </tr>
-  </table>
+  <fieldset>
+    <legend>Critères de recherche</legend>
+    <table class="form">
+      <tr>
+        <th>{{mb_title class="CPatient" field=nom}}</th>
+        <td>{{mb_field class="CPatient" field=nom}}</td>
+      </tr>
+      <tr>
+        <th>{{mb_title class="CPatient" field=prenom}}</th>
+        <td>{{mb_field class="CPatient" field=prenom}}</td>
+      </tr>
+      <tr>
+        <th>{{mb_title class="CPatient" field=nom_jeune_fille}}</th>
+        <td>{{mb_field class="CPatient" field=nom_jeune_fille}}</td>
+      </tr>
+      <tr>
+        <th>{{mb_title class="CPatient" field=sexe emptyLabel="All"}}</th>
+        <td>{{mb_field class="CPatient" field=sexe emptyLabel="All"}}</td>
+      </tr>
+      <tr>
+        <td class="button" colspan="2">
+          <button type="submit" class="search">{{tr}}Search{{/tr}}</button>
+        </td>
+      </tr>
+    </table>
+  </fieldset>
 </form>
 <br/>
 <div id="list_demographic"></div>

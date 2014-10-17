@@ -98,5 +98,24 @@ TestHL7 = {
       addParam("objects_class", "CPatient").
       addParam("objects_id", [patient1_id, patient2_id].join('-'));
     url.pop(900, 800);
+  },
+
+  selectPatient : function(patient_id) {
+    new Url("hl7", "ajax_encounter_action")
+      .addParam("patient_id", patient_id)
+      .requestUpdate("search_encounter");
+  },
+
+  searchPatient : function() {
+    new Url("hl7", "ajax_encounter_search_patient")
+      .requestUpdate("search_encounter");
+  },
+
+  sendTest : function(form) {
+    new Url("hl7", "ajax_encounter_event")
+      .addFormData(form)
+      .requestModal();
+
+    return false;
   }
 };

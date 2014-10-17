@@ -45,7 +45,11 @@
         {{mb_include module="hl7" template="inc_search_demographic"}}
       </div>
       <div id="search_encounter" style="display: none;">
-        {{mb_include module="hl7" template="inc_search_encounter"}}
+        <script>
+          Main.add(function() {
+            TestHL7.searchPatient();
+          });
+        </script>
       </div>
     </td>
     <td id="generate" style="display: none;"></td>

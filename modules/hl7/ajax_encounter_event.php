@@ -1,0 +1,103 @@
+<?php
+
+/**
+ * $Id$
+ *
+ * @category HL7
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
+ */
+
+CCanDo::checkAdmin();
+
+$patient_id = CValue::getOrSession("patient_id");
+$event      = CValue::get("event");
+$event_type = CValue::get("event_type");
+
+$patient = new CPatient();
+$patient->load($patient_id);
+$patient->loadIPP();
+
+$smarty = new CSmartyDP();
+$smarty->assign("event_type", $event_type);
+$smarty->assign("event"     , $event);
+$smarty->assign("patient"   , $patient);
+
+switch ($event) {
+  case "A02":
+    $leftjoin = array(
+      "affectation" => "affectation.sejour_id = sejour.sejour_id"
+    );
+    $where = array(
+      "patient_id"     => "= '$patient->_id'",
+      "entree_reelle"  => "IS NOT NULL",
+      "affectation_id" => "IS NOT NULL"
+    );
+    $sejour  = new CSejour();
+    $patient->_ref_sejours = $sejour->loadList($where, "entree DESC", null, null, $leftjoin);
+    CSejour::massLoadNDA($patient->_ref_sejours);
+    foreach ($patient->_ref_sejours as $_sejour) {
+      /** @var Csejour $_sejour */
+      $_sejour->_ref_curr_affectation = $_sejour->getCurrAffectation($_sejour->sortie);
+    }
+
+    //todo récupérer la dernière affectation
+    break;
+  case "A03":
+    $sejours = $patient->loadRefsSejours(array("sortie_reelle" => "IS NULL"));
+    CSejour::massLoadNDA($sejours);
+    break;
+  case "A11":
+    $where = array();
+    if ($event_type == "register_outpatient") {
+      $where["type"] = "= 'urg'";
+    }
+    $sejours = $patient->loadRefsSejours($where);
+    CSejour::massLoadNDA($sejours);
+    break;
+  case "A12":
+    $leftjoin = array(
+      "affectation" => "affectation.sejour_id = sejour.sejour_id"
+    );
+    $where = array(
+      "patient_id"     => "= '$patient->_id'",
+      "entree_reelle"  => "IS NOT NULL",
+      "affectation_id" => "IS NOT NULL"
+    );
+    $sejour  = new CSejour();
+    /** @var CSejour[] $sejours */
+    $sejours = $sejour->loadList($where, "entree DESC", null, null, $leftjoin);
+    $patient->_ref_sejours = $sejours;
+    CSejour::massLoadNDA($sejours);
+    CSejour::massLoadBackRefs($sejours, "affectations");
+    foreach ($sejours as $_sejour) {
+      $_sejour->_ref_affectations = $_sejour->_back["affectations"];
+    }
+    break;
+  case "A13":
+    $sejours = $patient->loadRefsSejours(array("sortie_reelle" => "IS NOT NULL"));
+    CSejour::massLoadNDA($sejours);
+    break;
+  case "A38":
+    $sejours = $patient->loadRefsSejours(array("sortie_reelle" => "IS NULL", "entree_reelle" => "IS NULL"));
+    CSejour::massLoadNDA($sejours);
+    break;
+  case "INSERT":
+    $where = array("entree_reelle" => "IS NOT NULL");
+    if ($event_type == "event_change_class_inpatient") {
+      $where["type"] = "= 'urg'";
+    }
+    if ($event_type == "event_change_class_outpatient") {
+      $where["type"] = "= 'comp'";
+    }
+    $sejours = $patient->loadRefsSejours($where);
+    CSejour::massLoadNDA($sejours);
+    break;
+  default:
+}
+
+$smarty->display("test_hl7/inc_encounter_event_$event.tpl");
+

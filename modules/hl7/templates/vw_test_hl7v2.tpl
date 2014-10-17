@@ -10,6 +10,7 @@
 *}}
 
 {{mb_script module=hl7          script=test_hl7}}
+{{mb_script module=dPhospi      script=affectation}}
 {{mb_script module=dPpatients   script=patient}}
 {{mb_script module=dPpatients   script="autocomplete"}}
 
