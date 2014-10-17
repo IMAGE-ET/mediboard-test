@@ -258,6 +258,7 @@ class CCodageCCAM extends CMbObject {
   function guessActesAssociation() {
     $this->completeField("association_rule");
     $this->getActsByTarif();
+    call_user_func(array($this, "checkRule$this->association_rule"));
     foreach ($this->_ref_actes_ccam as $_act) {
       $_act->_position = array_search($_act->_id, array_keys($this->_ordered_acts));
       $this->guessActeAssociation($this->association_rule, $_act);
@@ -1681,10 +1682,29 @@ class CCodageCCAM extends CMbObject {
    * @return bool
    */
   protected function checkRuleEG7() {
+    $chapters_dentaire = array(
+      '06.02.03.01.',
+      '07.01.04.01',
+      '07.01.08.01',
+      '07.01.14.',
+      '07.02.02.',
+      '07.02.03.',
+      '07.02.05.',
+      '07.02.06.10.',
+      '11.02.05.',
+      '11.05.02.',
+      '18.02.07.01.',
+      '18.02.07.06.'
+    );
+    $exclude_codes = array('HJQD001');
+
     $nb_bucco_dentaires = 0;
     foreach ($this->_ref_actes_ccam_facturables as $_act) {
-      $classif = reset($_act->_ref_code_ccam->_ref_code_ccam->_ref_activites[$_act->code_activite]->_ref_classif);
-      if ($classif->code_regroupement == 'DEN') {
+      $chapters = $_act->_ref_code_ccam->chapitres;
+      if (
+        !in_array($_act->code_acte, $exclude_codes) && ((isset($chapters[2]) && in_array($chapters[2]['rang'], $chapters_dentaire)) ||
+          (isset($chapters[3]) && in_array($chapters[3]['rang'], $chapters_dentaire)))
+      ) {
         $nb_bucco_dentaires++;
       }
     }
@@ -1708,9 +1728,28 @@ class CCodageCCAM extends CMbObject {
    */
   protected function applyRuleEG7(&$act) {
     $ordered_acts_eg7 = $this->_ordered_acts;
+    $chapters_dentaire = array(
+      '06.02.03.01.',
+      '07.01.04.01',
+      '07.01.08.01',
+      '07.01.14.',
+      '07.02.02.',
+      '07.02.03.',
+      '07.02.05.',
+      '07.02.06.10.',
+      '11.02.05.',
+      '11.05.02.',
+      '18.02.07.01.',
+      '18.02.07.06.'
+    );
+    $exclude_codes = array('HJQD001');
+
     foreach ($this->_ref_actes_ccam_facturables as $_act) {
       $chapters = $_act->_ref_code_ccam->chapitres;
-      if ($_act->_ref_code_ccam->_activite[$_act->code_activite]->_ref_classif->code_regroupement == 'DEN') {
+      if (
+        !in_array($_act->code_acte, $exclude_codes) && ((isset($chapters[2]) && in_array($chapters[2]['rang'], $chapters_dentaire)) ||
+          (isset($chapters[3]) && in_array($chapters[3]['rang'], $chapters_dentaire)))
+      ) {
         unset($ordered_acts_eg7[$_act->_id]);
         if ($_act->_id == $act->_id) {
           $act->_position = -1;
@@ -1730,7 +1769,7 @@ class CCodageCCAM extends CMbObject {
     }
 
     $nb_bucco_dentaires = $this->_check_rules['EG7']['nb_bucco_dentaires'];
-    if ($nb_bucco_dentaires == 2 || count($ordered_acts_eg7) == 1) {
+    if (($nb_bucco_dentaires == 2 && !count($ordered_acts_eg7)) || (count($ordered_acts_eg7) == 1)) {
       $act->_guess_facturable = '1';
       $act->_guess_association = '4';
       $act->_guess_regle_asso = 'EG7';
