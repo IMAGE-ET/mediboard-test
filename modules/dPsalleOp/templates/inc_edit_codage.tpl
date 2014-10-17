@@ -95,13 +95,13 @@
             </td>
             <td
               {{if $acte->_id && ($acte->code_association != $acte->_guess_association)}}style="background-color: #fc9"{{/if}}>
-              {{if $acte->_id}}
-              <form name="codageActeCodeAssociation-{{$view}}" action="?" method="post" onsubmit="return false;">
-                {{mb_field object=$acte field=code_association emptyLabel="CActeCCAM.code_association." onchange="syncCodageField(this, '$view');"}}
-              </form>
-              {{if $acte->code_association != $acte->_guess_association}}
-                ({{$acte->_guess_association}})
-              {{/if}}
+                {{if $acte->_id}}
+                  <form name="codageActeCodeAssociation-{{$view}}" action="?" method="post" onsubmit="return false;">
+                    {{mb_field object=$acte field=code_association emptyLabel="CActeCCAM.code_association." onchange="syncCodageField(this, '$view');"}}
+                  </form>
+                {{if $acte->code_association != $acte->_guess_association}}
+                  ({{$acte->_guess_association}})
+                {{/if}}
               {{/if}}
             </td>
             <td {{if $acte->_id && !$acte->facturable}}style="background-color: #fc9"{{/if}}>
