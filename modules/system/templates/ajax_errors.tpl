@@ -12,8 +12,10 @@
   {{if !$app->user_id}}
     User = {};
     AjaxResponse.onDisconnected();
-    if (AjaxResponse.onCompleteDisconnected) {
-      AjaxResponse.onCompleteDisconnected();
+    if (Object.isFunction(AjaxResponse.onCompleteDisconnected)) {
+      var onCompleteDisconnected = AjaxResponse.onCompleteDisconnected;
+      AjaxResponse.onCompleteDisconnected = null;
+      onCompleteDisconnected();
     }
   {{else}}
     {{assign var=user value=$app->_ref_user}}
@@ -24,8 +26,10 @@
     User = {};
     {{/if}}
 
-    if (AjaxResponse.onComplete) {
-      AjaxResponse.onComplete();
+    if (Object.isFunction(AjaxResponse.onComplete)) {
+      var onComplete = AjaxResponse.onComplete;
+      AjaxResponse.onComplete = null;
+      onComplete();
     }
     AjaxResponse.onLoaded({{"utf8_encode"|array_map_recursive:$smarty.get|@json}}, {{$performance|@json}});
   {{/if}}
