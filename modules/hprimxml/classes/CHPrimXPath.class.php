@@ -62,6 +62,6 @@ class CHPrimXPath extends CMbXPath {
     foreach ($nodeList as $n) {
       $array[] = utf8_decode($n->nodeValue);
     }
-    return $implode ? implode(" ", $array) : $array;
+    return $implode ? implode("\n", $array) : $array;
   }
 }
