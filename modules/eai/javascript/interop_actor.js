@@ -112,6 +112,12 @@ InteropActor = {
       .addParam("object_configs_guid", object_configs_guid)
       .requestUpdate("actor_config_"+object_id);
   },
+
+  refreshHL7Transformations : function(actor_guid) {
+    new Url("eai", "ajax_refresh_hl7_transformations")
+      .addParam("actor_guid", actor_guid)
+      .requestUpdate("actor_hl7_transformations_"+actor_guid);
+  },
   
   refreshTags : function(actor_guid) {
     new Url("eai", "ajax_refresh_tags")

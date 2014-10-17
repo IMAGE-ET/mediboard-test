@@ -813,7 +813,6 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       return "A53";
     }
     
-    $send_change_medical_responsibility = $configs["send_change_medical_responsibility"];
     /* Changement d'UF Médicale */
     if ($affectation->_old->uf_medicale_id && $affectation->fieldModified("uf_medicale_id")) {
       /* @todo Gérer le cas où : création d'une nouvelle affectation && UM1 # UM2 */

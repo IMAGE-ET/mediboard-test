@@ -31,6 +31,12 @@
                 InteropActor.refreshConfigObjectValues('{{$actor->_id}}', '{{$actor->_ref_object_configs->_guid}}');
                 break;
               {{/if}}
+
+              {{if $actor instanceof CReceiverHL7v2}}
+              case "actor_hl7_transformations_{{$actor->_guid}}" :
+                InteropActor.refreshHL7Transformations('{{$actor->_guid}}');
+                break;
+              {{/if}}
             }
           }
       });
@@ -51,6 +57,14 @@
           <li>
             <a href="#actor_config_{{$actor->_id}}">{{tr}}{{$actor->_parent_class}}_config{{/tr}}</a></li>
           {{/if}}
+
+          {{if $actor instanceof CReceiverHL7v2}}
+            <li>
+              <a class="{{if !$actor->_ref_hl7_transformations}}empty{{else}}wrong{{/if}}" href="#actor_hl7_transformations_{{$actor->_guid}}">
+                {{tr}}{{$actor->_class}}_hl7_transformations{{/tr}} {{if $actor->_ref_hl7_transformations}}({{$actor->_ref_hl7_transformations|@count}}){{/if}}
+              </a>
+            </li>
+          {{/if}}
         </ul>
         
         <hr class="control_tabs" />
@@ -63,6 +77,10 @@
         
         {{if $actor->_ref_object_configs}}
           <div id="actor_config_{{$actor->_id}}" style="display: none;"></div>
+        {{/if}}
+
+        {{if $actor instanceof CReceiverHL7v2}}
+          <div id="actor_hl7_transformations_{{$actor->_guid}}" style="display: none;"></div>
         {{/if}}
       </td>
     </tr>

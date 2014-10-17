@@ -17,7 +17,10 @@ $actor_guid = CValue::getOrSession("actor_guid");
 $formats_xml  = $formats_tabular  = $formats_binary  = array();
 $messages_xml = $messages_tabular = $messages_binary = array();
 
+/** @var CInteropActor $actor */
 $actor = CMbObject::loadFromGuid($actor_guid);
+$actor->loadRefsHL7Transformations();
+
 // Expéditeur d'intégration
 if ($actor instanceof CInteropSender) {
   $formats_xml = CExchangeDataFormat::getAll("CEchangeXML");
@@ -55,7 +58,7 @@ else if ($actor instanceof CInteropReceiver) {
     $temp = $data_format->getMessagesSupported($actor_guid, false, null, true);
     $messages_tabular = array_merge($messages_tabular, $temp);
   }
-  
+
   if ($data_format instanceof CEchangeXML) {
     $formats_xml [] = $data_format;
     $temp = $data_format->getMessagesSupported($actor_guid, false, null, true);
@@ -65,6 +68,7 @@ else if ($actor instanceof CInteropReceiver) {
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("actor"           , $actor);
 $smarty->assign("actor_guid"      , $actor_guid);
 $smarty->assign("formats_xml"     , $formats_xml);
 $smarty->assign("messages_xml"    , $messages_xml);

@@ -89,7 +89,10 @@ class CInteropActor extends CMbObject {
   /** @var array */
   public $_ref_msg_supported_family = array();
 
+  /** @var CHL7Transformation[] */
+  public $_ref_hl7_transformations;
 
+  /** @var string */
   public $_type_echange;
 
   /**
@@ -154,10 +157,11 @@ class CInteropActor extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     
-    $backProps["messages_supported"] = "CMessageSupported object_id";
-    $backProps["domains"]            = "CDomain actor_id";
-    $backProps["dicom_exchanges"]    = "CExchangeDicom receiver_id";
-    $backProps["routes_receiver"]    = "CEAIRoute receiver_id";
+    $backProps["messages_supported"]  = "CMessageSupported object_id";
+    $backProps["domains"]             = "CDomain actor_id";
+    $backProps["dicom_exchanges"]     = "CExchangeDicom receiver_id";
+    $backProps["routes_receiver"]     = "CEAIRoute receiver_id";
+    $backProps["hl7_transformations"] = "CHL7Transformation actor_id";
     $backProps["mvsante_exchange"]   = "CExchangeMVSante receiver_id";
 
     return $backProps;
@@ -248,6 +252,19 @@ class CInteropActor extends CMbObject {
    * @return void
    */
   function loadRefsExchangesSources() {
+  }
+
+  /**
+   * Load object links
+   *
+   * @return CHL7Transformation[]
+   */
+  function loadRefsHL7Transformations() {
+    if ($this->_ref_hl7_transformations) {
+      return $this->_ref_hl7_transformations;
+    }
+
+    return $this->_ref_hl7_transformations = $this->loadBackRefs("hl7_transformations");
   }
 
   /**

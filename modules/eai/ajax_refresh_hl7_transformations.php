@@ -1,6 +1,6 @@
 <?php
 /**
- * Details interop receiver EAI
+ * Formats available
  *
  * @category EAI
  * @package  Mediboard
@@ -12,22 +12,13 @@
 
 CCanDo::checkRead();
 
-$actor_guid  = CValue::getOrSession("actor_guid");
+$actor_guid = CValue::getOrSession("actor_guid");
 
 /** @var CInteropActor $actor */
 $actor = CMbObject::loadFromGuid($actor_guid);
-if ($actor->_id) {
-  $actor->loadRefGroup();
-  $actor->loadRefUser();
-  $actor->loadRefObjectConfigs();
-  $actor->loadRefsHL7Transformations();
-
-  if ($actor instanceof CInteropSender) {
-    $actor->countBackRefs("routes_sender");
-  }
-}
+$actor->loadRefsHL7Transformations();
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("actor" , $actor);
-$smarty->display("inc_view_actor.tpl");
+$smarty->display("inc_list_hl7_transformations.tpl");

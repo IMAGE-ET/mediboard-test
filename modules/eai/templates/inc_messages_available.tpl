@@ -20,10 +20,18 @@
         {{tr}}{{$_message_supported->message}}-desc{{/tr}}
 
         {{if $_message_supported->_data_format instanceof CExchangeHL7v2}}
+          <div>
+            {{foreach from=$actor->_ref_hl7_transformations item=_hl7_transformation}}
+              {{if $message == $_hl7_transformation->profil}}
+                <!--<span class="circled">{{$_hl7_transformation->component}}</span>-->
+              {{/if}}
+            {{/foreach}}
+          </div>
+
           {{mb_script module=hl7 script=hl7_transformation ajax=true}}
 
           <button style="float: right" title="{{tr}}CHL7v2Transformation{{/tr}}" class="target notext"
-                  onclick="HL7_Transformation.viewSegments('{{$actor_guid}}', '{{$_message_supported->message}}')">
+                  onclick="HL7_Transformation.viewSegments('{{$actor_guid}}', '{{$message}}', '{{$_message_supported->message}}')">
             {{tr}}CHL7v2Transformation{{/tr}}</button>
         {{/if}}
       </td>

@@ -102,7 +102,7 @@ class CInteropSender extends CInteropActor {
    * @return CEAIRoute[]
    */
   function loadRefsRoutes($where = array()) {
-    return $this->_ref_routes = $this->loadBackRefs("routes", null, null, null, null, null, null, $where);
+    return $this->_ref_routes = $this->loadBackRefs("routes_sender", null, null, null, null, null, null, $where);
   }
   
   /**

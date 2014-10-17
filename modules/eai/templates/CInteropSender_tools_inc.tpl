@@ -41,7 +41,7 @@
     });
   </script>
 
-  {{assign var=count_routes value=$actor->_count.routes}}
+  {{assign var=count_routes value=$actor->_count.routes_sender}}
 
   <table class="main">
     <tr>

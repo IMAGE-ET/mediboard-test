@@ -71,7 +71,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
           /** @var CEAIRoute[] $routes */
           $where = array();
           $where["active"] = " = '1'";
-          $routes = $sender->loadBackRefs("routes", null, null, null, null, null, null, $where);
+          $routes = $sender->loadBackRefs("routes_sender", null, null, null, null, null, null, $where);
 
           foreach ($routes as $_route) {
             if (!$_route->active) {
@@ -238,7 +238,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
       return false;
     }
 
-    if (!$mbObject->_fusion) {
+    if (isset($mbObject->_fusion) && !$mbObject->_fusion) {
       return false;
     }
 

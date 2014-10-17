@@ -1397,7 +1397,25 @@ class CSetuphl7 extends CSetup {
                 ADD `change_filler_placer` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.06";
+    $this->makeRevision("1.06");
+    $query = "CREATE TABLE `hl7_transformation` (
+                `hl7_transformation_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `actor_id` INT (11) UNSIGNED,
+                `actor_class` VARCHAR (80),
+                `profil` VARCHAR (255),
+                `message` VARCHAR (255),
+                `version` VARCHAR (255),
+                `extension` VARCHAR (255),
+                `component` VARCHAR (255),
+                `action` ENUM ('add','modify','move','delete')
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `hl7_transformation`
+                ADD INDEX (`actor_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.07";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

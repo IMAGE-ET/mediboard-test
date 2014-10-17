@@ -27,7 +27,7 @@ class CHL7v2Transformation {
     $this->messageName = $messageName;
   }
 
-  function getSegmentTree() {
+  function getSegments() {
     $message_schema = $this->message->getSchema("message", $this->messageName);
 
     $xpath = new CHL7v2MessageXPath($message_schema);
@@ -36,18 +36,48 @@ class CHL7v2Transformation {
 
     $tree = array();
 
-    foreach ($segment->childNodes as $_element) {
-      $segment_schema = $this->message->getSchema("segment", $_element->nodeValue);
-      $xpath = new CHL7v2MessageXPath($segment_schema);
-
-      $tree[] = array(
-        "name"        => $_element->nodeValue,
-        "description" => $xpath->queryTextNode("description"),
-        "forbidden"   => $_element->getAttribute("forbidden") == "true"
-      );
-    }
+    $this->getSegmentTree($segment, $tree);
 
     return $tree;
+  }
+
+  function getSegmentTree(DOMElement $element, &$tree) {
+    foreach ($element->childNodes as $_element) {
+      /** @var DOMElement $_element */
+      switch ($_element->nodeName) {
+        case "segment":
+          $segment_schema = $this->message->getSchema("segment", $_element->nodeValue);
+          $xpath          = new CHL7v2MessageXPath($segment_schema);
+
+          $tree[$_element->nodeValue] = array(
+            "type"        => $_element->nodeName,
+            "name"        => $_element->nodeValue,
+            "fullpath"    => $_element->nodeValue,
+            "description" => $xpath->queryTextNode("description"),
+            "forbidden"   => $_element->getAttribute("forbidden") == "true"
+          );
+
+          break;
+        case "group":
+          $subtree = array();
+          $this->getSegmentTree($_element, $subtree);
+
+          $group_name = $_element->getAttribute("name");
+
+          $tree[$group_name] = array(
+            "type"        => $_element->nodeName,
+            "name"        => $group_name,
+            "fullpath"    => $group_name,
+            "description" => $xpath->queryTextNode("description"),
+            "children"    => $subtree,
+            "forbidden"   => $_element->getAttribute("forbidden") == "true"
+          );
+          break;
+
+        default:
+      }
+    }
+
   }
 
   function getFieldsTree($segment) {
@@ -95,7 +125,7 @@ class CHL7v2Transformation {
       );
     }
 
-    $tree[] = array(
+    $tree = array(
       "type"      => "segment",
       "name"      => $segment,
       "fullpath"  => $segment,

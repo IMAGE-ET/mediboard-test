@@ -162,8 +162,13 @@ ul.hl7-tree,
   list-style-type: none;
 }
 
-.hl7-tree .type {
+.hl7-tree .type,
+.hl7-tree .type-segment{
   color: #2D9A00;
+}
+
+.hl7-tree .type-group{
+  color: #04054d;
 }
 
 /*

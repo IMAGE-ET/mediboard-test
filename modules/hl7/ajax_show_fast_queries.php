@@ -32,9 +32,11 @@ $hl7_message->parse($er7);
 /** @var CHL7v2MessageXML $xml */
 $xml = $hl7_message->toXML(null ,false);
 
+$MSH = $xml->queryNode("MSH");
 $PID = $xml->queryNode("PID");
 $PV1 = $xml->queryNode("PV1");
 $PV2 = $xml->queryNode("PV2");
+$ZBE = $xml->queryNode("ZBE");
 
 $IPP = $NDA = null;
 
@@ -57,6 +59,10 @@ foreach ($PID5 as $_PID5) {
 }      
 
 $queries = array(
+  "Message" => array(
+    "control_id" => $xml->queryTextNode("MSH.10", $MSH),
+    "datetime"   => CMbDT::dateToLocale($xml->queryTextNode("MSH.7/TS.1", $MSH)),
+  ),
   "CPatient" => array(
     "nom"             => $names["nom"],
     "nom_jeune_fille" => $names["nom_jeune_fille"],
@@ -74,14 +80,25 @@ $queries = array(
   )
 );
 
+if ($ZBE) {
+  $queries_ZBE = array(
+    "CMovement" => array(
+      "movement_id"       => $xml->queryTextNode("ZBE.1/EI.1", $ZBE),
+      "start_of_movement" => CMbDT::dateToLocale($xml->queryTextNode("ZBE.2/TS.1", $ZBE)),
+    )
+  );
+
+  $queries = array_merge($queries, $queries_ZBE);
+}
+
 function getNames(CHL7v2MessageXML $xml, DOMNode $node, DOMNodeList $PID5, &$names = array()) {
   $fn1 = $xml->queryTextNode("XPN.1/FN.1", $node);
   
   switch ($xml->queryTextNode("XPN.7", $node)) {
-    case "D" :
+    case "D":
       $names["nom"] = $fn1;
       break;
-    case "L" :
+    case "L":
       // Dans le cas où l'on a pas de nom de nom de naissance le legal name
       // est le nom du patient
       if ($PID5->length > 1) {
@@ -91,6 +108,7 @@ function getNames(CHL7v2MessageXML $xml, DOMNode $node, DOMNodeList $PID5, &$nam
         $names["nom"] = $fn1;
       }
       break;
+    default:
   }  
 }
 
