@@ -366,6 +366,10 @@ a.button.big.notext {
   padding-top: 6px;
 }
 
+button.logout:before, a.button.logout:before {
+  content: url(images/icons/logout.png);
+}
+
 button.thumb:before, a.button.thumb:before {
   content: url(images/buttons/thumb.png);
 }
