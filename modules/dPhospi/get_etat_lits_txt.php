@@ -85,6 +85,8 @@ foreach ($affectations as $key => $_affectation) {
   }
 }
 
+header("Content-Type: text/plain;");
+
 // Création du template
 $smarty = new CSmartyDP();
 
