@@ -914,7 +914,6 @@ class CConstantesMedicales extends CMbObject {
     $props['_ta_diastole']           = 'num pos max|50';
 
     $props['_tam']                   = 'str maxLength|10';
-    $props['__tam']                  = 'num pos max|50';
 
     $props['ta_gauche']              = 'str maxLength|10';
     $props['_ta_gauche_systole']     = 'num pos max|50';
