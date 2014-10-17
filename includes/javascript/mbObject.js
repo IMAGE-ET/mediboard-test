@@ -66,11 +66,11 @@ var MbObject = {
     url.popup(800, 600, "merge objects "+object_class);
   },
   toggleColumn: function(toggler, column) {
-    column.toggle();
-    
     var visible = column.visible();
     toggler.toggleClassName("expand", visible);
-    
+
+    column.toggle();
+
     document.fire("ui:reflow");
   }
 };
