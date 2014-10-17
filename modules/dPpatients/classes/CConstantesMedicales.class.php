@@ -107,12 +107,13 @@ class CConstantesMedicales extends CMbObject {
     '_tam' => array(
       'type' => 'physio',
       'unit' => 'cmHg',
-      'formfields' => array('__tam'),
+      'formfields' => array('_tam'),
       'min' => 2, 'max' => 16,
       'norm_min' => 8, 'norm_max' => 16,
       'conversion' => array('mmHg' => 10),
       'unit_config' => 'unite_ta',
-      'orig_unit' => 'cmHg'
+      'orig_unit' => 'cmHg',
+      "readonly" => true
     ),
     "ta_gauche"         => array(
       "type" => "physio",
@@ -179,12 +180,14 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "ml",
       "min" => 5000,
       "max" => 7000,
+      "readonly" => true
     ),
     "_imc"              => array(
       "type" => "physio",
       "unit" => "",
       "min" => 12, "max" => 40,
       "plot" => true,
+      "readonly" => true
     ),
     "temperature"       => array(
       "type" => "physio",

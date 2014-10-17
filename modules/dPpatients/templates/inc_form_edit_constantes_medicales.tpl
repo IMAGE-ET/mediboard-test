@@ -191,7 +191,7 @@ Main.add(function () {
                   </th>
 
                   {{assign var=_readonly value=null}}
-                  {{if array_key_exists("formfields", $_params)}}
+                  {{if array_key_exists("formfields", $_params) && !array_key_exists("readonly", $_params)}}
                     {{if $can_edit}}
                       <td>
                         {{foreach from=$_params.formfields item=_formfield_name key=_key name=_formfield}}
