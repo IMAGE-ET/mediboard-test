@@ -33,7 +33,7 @@
         </button>
         {{mb_value object=$_cpi field=code}}
       </td>
-      <td style="background-color: #{{$_cpi->color}};">#{{$_cpi->color}}</td>
+      <td style="background-color: #{{$_cpi->color}}; color:#{{$_cpi->_font_color}};">#{{$_cpi->color}}</td>
       <td>{{mb_value object=$_cpi field=libelle}}</td>
       <td>{{mb_value object=$_cpi field=type}}</td>
       <td>{{mb_value object=$_cpi field=type_pec}}</td>
