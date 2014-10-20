@@ -29,6 +29,22 @@
 </td>
 
 <td class="text">
+  {{if $lite_view && "pharmacie Display show_risq_population"|conf:"CGroups-$g"}}
+    <span class="compact" style="float:right">
+    {{if $patient->naissance}}
+      {{if $patient->_annees <= 16}}
+        < 16 ans
+      {{elseif $patient->_annees >= 65}}
+        > 65 ans
+      {{/if}}
+    {{/if}}
+      {{if $patient->_ref_last_grossesse && $patient->_ref_last_grossesse->terme_prevu >= $smarty.now}}
+        <img onmouseover="ObjectTooltip.createEx(this, '{{$patient->_ref_last_grossesse->_guid}}')"
+             src="style/mediboard/images/icons/grossesse.png" style="background-color: rgb(255, 215, 247);"/>
+      {{/if}}
+    </span>
+  {{/if}}
+
   {{assign var=statut value="present"}}
 
   {{if !$sejour->entree_reelle || ($sejour->_ref_prev_affectation->_id && $sejour->_ref_prev_affectation->effectue == 0)}}
