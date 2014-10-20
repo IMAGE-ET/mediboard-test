@@ -1703,7 +1703,7 @@ class CConstantesMedicales extends CMbObject {
             $query = new CRequest();
             $query->addSelect("SUM(`$_name`)");
             $query->addTable('constantes_medicales');
-            $query->addWhere(array("`datetime` >= '$cumul_begin'", "`datetime` <= '$cumul_end'", "$_name IS NOT NULL"));
+            $query->addWhere(array("`datetime` >= '$cumul_begin'", "`datetime` <= '$cumul_end'", "`$_name` IS NOT NULL", "`patient_id` = $patient_id"));
             $ds = CSQLDataSource::get('std');
             $constante->$cumul_field = $ds->loadResult($query->makeSelect());
           }
