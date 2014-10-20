@@ -39,26 +39,32 @@
   };
 </script>
 
-<div id="browser_graphs" style="clear: both;">
-  {{foreach from=$graphs key=_id item=_graph}}
-    <div id="browser_graph_{{$_id}}" style="display: inline-block;">
-      <table class="layout">
-        <tr>
-          <td>
-            <p style="text-align: center">
-              <strong>{{tr}}{{$_graph.title}}{{/tr}}</strong>
-            </p>
+<table class="main layout">
+  <tr>
+    <td class="separator expand" onclick="MbObject.toggleColumn(this, $(this).next())"></td>
 
-            {{if $_graph.title == "CUserAuthentication"}}
-              <div id="placeholder_{{$_graph.title}}" style="width: 800px; height: 300px;"></div>
-            {{elseif $_graph.title == "CUserAgent-browser_version"}}
-              <div id="placeholder_{{$_graph.title}}" style="width: 700px; height: 250px;"></div>
-            {{else}}
-              <div id="placeholder_{{$_graph.title}}" style="width: 300px; height: 200px;"></div>
-            {{/if}}
-          </td>
-        </tr>
-      </table>
-    </div>
-  {{/foreach}}
-</div>
+    <td>
+      {{foreach from=$graphs key=_id item=_graph}}
+        <div id="browser_graph_{{$_id}}" style="display: inline-block;">
+          <table class="layout">
+            <tr>
+              <td>
+                <p style="text-align: center">
+                  <strong>{{tr}}{{$_graph.title}}{{/tr}}</strong>
+                </p>
+
+                {{if $_graph.title == "CUserAuthentication"}}
+                  <div id="placeholder_{{$_graph.title}}" style="width: 800px; height: 300px;"></div>
+                {{elseif $_graph.title == "CUserAgent-browser_version"}}
+                  <div id="placeholder_{{$_graph.title}}" style="width: 700px; height: 250px;"></div>
+                {{else}}
+                  <div id="placeholder_{{$_graph.title}}" style="width: 300px; height: 200px;"></div>
+                {{/if}}
+              </td>
+            </tr>
+          </table>
+        </div>
+      {{/foreach}}
+    </td>
+  </tr>
+</table>
