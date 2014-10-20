@@ -58,6 +58,7 @@ class CFacture extends CMbObject {
   public $_secteur1 = 0.0;
   public $_secteur2 = 0.0;
   public $_secteur3 = 0.0;
+  public $_montant_dh = 0.0;
   //Champ à supprimer
   public $_montant_total;
 
@@ -182,6 +183,7 @@ class CFacture extends CMbObject {
     $props["_secteur1"]                 = "currency";
     $props["_secteur2"]                 = "currency";
     $props["_secteur3"]                 = "currency";
+    $props["_montant_dh"]               = "currency";
     $props["_montant_total"]            = "currency";
     $props["_total"]                    = "currency";
     $props["_montant_retrocession"]     = "currency";
@@ -493,6 +495,7 @@ class CFacture extends CMbObject {
     $this->_secteur1  = 0;
     $this->_secteur2  = 0;
     $this->_secteur3  = 0;
+    $this->_montant_dh  = 0;
     if (!count($this->_ref_items)) {
       $this->loadRefsItems();
     }
@@ -547,6 +550,14 @@ class CFacture extends CMbObject {
           $this->du_tiers   = $this->_secteur2;
         }
       }
+
+      if (count($this->_ref_consults) && !CAppUI::conf("dPccam CCodeCCAM use_cotation_ccam")) {
+        foreach ($this->_ref_consults as $_consult) {
+          if ($_consult->secteur2) {
+            $this->_montant_dh += $_consult->secteur2;
+          }
+        }
+      }
     }
   }
 
@@ -560,7 +571,13 @@ class CFacture extends CMbObject {
       $this->remise = sprintf("%.2f", (10*(($this->du_patient+$this->du_tiers)*$this->_coeff))/100);
     }
     $this->_montant_factures   = array();
-    $this->_montant_factures[] = $this->du_patient + $this->du_tiers;
+    if (!$this->_montant_dh) {
+      $this->_montant_factures[] = $this->du_patient + $this->du_tiers;
+    }
+    else {
+      $this->_montant_factures[] = $this->_secteur1 + $this->du_tiers;
+      $this->_montant_factures[] = $this->_montant_dh;
+    }
     $this->loadNumerosBVR();
   }
 
@@ -615,6 +632,9 @@ class CFacture extends CMbObject {
 
     if (!$this->_montant_sans_remise) {
       $this->_montant_sans_remise = $this->du_patient  + $this->du_tiers;
+      if ($this->_montant_dh) {
+        $this->_montant_sans_remise += $this->_montant_dh;
+      }
       $this->_montant_avec_remise = $this->_montant_sans_remise - $this->remise;
     }
 
@@ -695,12 +715,12 @@ class CFacture extends CMbObject {
     $this->loadRefsSejour();
     $this->loadRefCoeffFacture();
 
+    $this->updateMontants();
     // Eclatement des factures
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
       $this->eclatementTarmed();
     }
 
-    $this->updateMontants();
   }
   /**
    * Chargement de toutes les consultations de la facture
