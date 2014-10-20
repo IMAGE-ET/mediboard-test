@@ -29,15 +29,10 @@ class CEAIMbObject {
 
     if ($object->_ref_current_log && is_array($object->_ref_current_log->_fields)) {
       $fields = $object->_ref_current_log->_fields;
-      
-      if (count($fields) > 1) {
-        $modified_fields = $fields[0];
-      }
-      foreach ($fields as $_field) {
-        $modified_fields .= "$_field, ";
-      }
-    } 
-    
+
+      $modified_fields = implode(", ", $fields);
+    }
+
     return $modified_fields;
   }
   
