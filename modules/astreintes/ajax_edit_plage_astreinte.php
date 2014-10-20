@@ -36,6 +36,8 @@ if (!$plageastreinte->_id) {
   // phone
   $plageastreinte->phone_astreinte = $user->_user_astreinte;
 
+  $plageastreinte->group_id = CGroups::loadCurrent()->_id;
+
   // date & hour
   if ($plage_date && $plage_hour) {
     $plageastreinte->start = "$plage_date $plage_hour:$plage_minutes:00";
@@ -46,6 +48,8 @@ if (!$plageastreinte->_id) {
     $plageastreinte->user_id = $user->_id;
   }
 }
+
+$plageastreinte->loadRefGroup();
 
 // Création du template
 $smarty = new CSmartyDP();

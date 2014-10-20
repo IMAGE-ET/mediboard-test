@@ -13,6 +13,7 @@
   <input type="hidden" name="dosql" value="do_plageastreinte_aed" />
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$a}}" />
+  <input type="hidden" name="group_id" value="{{$plageastreinte->group_id}}" />
   <table class="form">
     {{if $plageastreinte->_id}}
       <tr>
@@ -29,6 +30,7 @@
         </th>
       </tr>
     {{/if}}
+
     <tr>
       <th>
         {{mb_label object=$plageastreinte field="user_id"}}
@@ -44,22 +46,31 @@
       <th>{{mb_label object=$plageastreinte field="libelle"}}</th>
       <td>{{mb_field object=$plageastreinte field="libelle"}}</td>
     </tr>
-      <tr>
-        <th>{{mb_label object=$plageastreinte field="type"}}</th>
-        <td>{{mb_field object=$plageastreinte field="type"}}</td>
-      </tr>
+    <tr>
+      <th>{{mb_label object=$plageastreinte field="group_id"}}</th>
+      <td>{{$plageastreinte->_ref_group}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$plageastreinte field="type"}}</th>
+      <td>{{mb_field object=$plageastreinte field="type"}}</td>
+    </tr>
+
     <tr>
       <th>{{mb_label object=$plageastreinte field="start"}}</th>
       <td>{{mb_field object=$plageastreinte field="start" form="editplage" register="true"}}</td>
     </tr>
+
     <tr>
       <th>{{mb_label object=$plageastreinte field="end"}}</th>
       <td>{{mb_field object=$plageastreinte field="end" form="editplage" register="true"}}</td>
     </tr>
-      <tr>
-        <th>{{mb_label object=$plageastreinte field="phone_astreinte"}}</th>
-        <td>{{mb_field object=$plageastreinte field="phone_astreinte" form="editplage"}}</td>
-      </tr>
+
+    <tr>
+      <th>{{mb_label object=$plageastreinte field="phone_astreinte"}}</th>
+      <td>{{mb_field object=$plageastreinte field="phone_astreinte" form="editplage"}}</td>
+    </tr>
+
     <tr>
       <td colspan="6" class="button">
         <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>

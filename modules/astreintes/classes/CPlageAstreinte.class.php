@@ -17,20 +17,23 @@ class CPlageAstreinte extends CPlageCalendaire {
   // DB Fields
   public $libelle;
   public $user_id;
+  public $group_id;
   public $type;
   public $phone_astreinte;
 
-
+  // available types
   static $astreintes_type = array(
     "medical",
     "admin",
     "personnelsoignant"
   );
+
   // Object References
   public $_num_astreinte;
   /** @var CMediusers $_ref_user */
   public $_ref_user;
   public $_type;
+  public $_ref_group;
 
 
   // Form fields
@@ -62,8 +65,13 @@ class CPlageAstreinte extends CPlageCalendaire {
     $specs["user_id"]         = "ref class|CMediusers notNull";
     $specs["type"]           = "enum list|".implode("|", self::$astreintes_type)." notNull";
     $specs["libelle"]         = "str";
+    $specs["group_id"]        = "ref class|CGroups notNull";
     $specs["phone_astreinte"] = "phone notNull";
     return $specs;
+  }
+
+  function loadRefGroup() {
+    return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
 
   /**

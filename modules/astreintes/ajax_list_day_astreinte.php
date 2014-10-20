@@ -11,12 +11,14 @@
 CCanDo::checkRead();
 
 $date = CValue::get("date", CMbDT::date());
+$group = CGroups::loadCurrent();
 
 // Plages d'astreinte pour l'utilisateur
 $plage_astreinte = new CPlageAstreinte();
 $where = array();
 $where["start"] = "< '$date 23:59:00'";
 $where["end"]   = "> '$date 00:00:00'";
+$where["group_id"] = " = '$group->_id' ";
 $plages_astreinte = $plage_astreinte->loadList($where);
 
 /** @var $plages_astreinte CPlageAstreinte[] */

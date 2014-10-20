@@ -48,6 +48,13 @@ class CSetupastreintes extends CSetup {
                 ADD INDEX (`end`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.4";
+    $this->makeRevision("0.4");
+    $query = "ALTER TABLE `astreinte_plage`
+      ADD `group_id` INT (11) UNSIGNED NOT NULL;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `astreinte_plage`
+      ADD INDEX (`group_id`);";
+
+    $this->mod_version = "0.5";
   }
 }
