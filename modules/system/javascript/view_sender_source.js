@@ -14,7 +14,7 @@ ViewSenderSource = {
   edit: function(sender_source_id) {
     var url = new Url('system', 'ajax_form_view_sender_source');
     url.addParam('sender_source_id', sender_source_id);
-    url.requestModal(700);
+    url.requestModal(700, 900);
     ViewSenderSource.modal = url.modalObject;
     ViewSenderSource.modal.observe("afterClose", function(){ ViewSenderSource.refreshList(); });
   },
