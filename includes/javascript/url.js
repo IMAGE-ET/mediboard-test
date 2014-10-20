@@ -1024,12 +1024,6 @@ var Url = Class.create({
       } catch(e) {}
 
       this.container.fire("modal:loaded");
-
-      // Form focus
-      var form = this.container.down('form');
-      if (form) {
-        form.focusFirstElement();
-      }
     }).bind(this.modalObject);
 
     this.requestUpdate(modalContainer.down(".content"), options);
