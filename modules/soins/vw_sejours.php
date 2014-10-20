@@ -350,6 +350,10 @@ foreach ($sejours as $sejour) {
   $patient->loadRefPhotoIdentite();
   $patient->loadRefDossierMedical(false);
 
+  if (CAppUI::conf("pharmacie Display show_risq_population", CGroups::loadCurrent()) && $lite_view && $patient->sexe == "f") {
+    $patient->loadLastGrossesse();
+  }
+
   $dossier_medical = $patient->_ref_dossier_medical;
   if ($dossier_medical->_id) {
     $dossiers[$dossier_medical->_id] = $dossier_medical;
