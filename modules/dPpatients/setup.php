@@ -2706,7 +2706,13 @@ class CSetupdPpatients extends CSetup {
                 ADD `motricite_g` FLOAT;";
     $this->addQuery($query);
 
-    $this->mod_version = '2.21';
+    $this->makeRevision('2.21');
+
+    $query = "ALTER TABLE `constantes_medicales`
+                ADD `perimetre_brachial` FLOAT UNSIGNED AFTER `perimetre_abdo`;";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.22';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
