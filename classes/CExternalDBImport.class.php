@@ -50,7 +50,7 @@ class CExternalDBImport {
   protected $_import_dsn;
 
   /** @var string External patient class name to import */
-  static $_patient_class;
+  protected $_patient_class;
 
   /**
    * Get external software import tag
@@ -179,6 +179,13 @@ class CExternalDBImport {
 
     $order_by = $object->getOrderBy();
 
+    $key_name  = $object->_key;
+    $key_multi = strpos($key_name, "|") !== false;
+
+    if ($key_multi) {
+      $key_multi = explode("|", $key_name);
+    }
+
     if ($date || $id) {
       if ($object->_sql_restriction) {
         $query .= " AND ";
@@ -201,13 +208,13 @@ class CExternalDBImport {
       }
 
       if ($id) {
-        $query .= " $object->_key > '$id'";
+        $query .= ($key_multi) ? " CONCAT(" . implode(",'|',", $key_multi) . ") > '$id'" : " $object->_key > '$id'";
       }
     }
 
     if ($order && $order_by || $id) {
       if ($id) {
-        $query .= " ORDER BY $object->_key ASC";
+        $query .= ($key_multi) ? " ORDER BY CONCAT(" . implode(",'|',", $key_multi) . ") ASC" : " ORDER BY $object->_key ASC";
       }
       else {
         $query .= " ORDER BY $order_by DESC";
@@ -216,13 +223,6 @@ class CExternalDBImport {
 
     if (!$reimport) {
       $ids = array_flip($object->getDbIds($id));
-    }
-
-    $key_name  = $object->_key;
-    $key_multi = strpos($key_name, "|") !== false;
-
-    if ($key_multi) {
-      $key_multi = explode("|", $key_name);
     }
 
     $oracle = $ds instanceof COracleDataSource;
@@ -312,22 +312,22 @@ class CExternalDBImport {
   }
 
   function getDbIds($min_id = null) {
-    $ds = CSQLDataSource::get("std");
-    
+    $ds  = CSQLDataSource::get("std");
+
     $request = new CRequest();
     $request->addColumn("DISTINCT id400");
     $request->addTable("id_sante400");
     $tag = $this->getImportTag();
-    
+
     $where = array(
       "object_class" => "= '$this->_class'",
       "tag"          => "= '$tag'",
     );
-    
+
     if ($min_id) {
       $where["id400"] = $ds->prepare("> ?", $min_id);
     }
-    
+
     $request->addWhere($where);
 
     return $ds->loadColumn($request->makeSelect());
@@ -375,7 +375,7 @@ class CExternalDBImport {
   static function getOrImportObject($class, $id) {
     /** @var self $import_object */
     $import_object = new $class;
-    $object = $import_object->getMbObjectByClass($import_object->_class, $id);
+    $object        = $import_object->getMbObjectByClass($import_object->_class, $id);
 
     if (!$object->_id) {
       $import_object->importObject($id);
@@ -410,7 +410,7 @@ class CExternalDBImport {
     }
 
     // Trouver ou importer le patient
-    $patient = $this->getOrImportObject(self::$_patient_class, $patient_id);
+    $patient = $this->getOrImportObject($this->_patient_class, $patient_id);
     if (!$patient || !$patient->_id) {
       CAppUI::setMsg("Patient non retrouvé et non importé : $patient_id", UI_MSG_WARNING);
 
@@ -451,9 +451,9 @@ class CExternalDBImport {
     return $sejour;
   }
 
-  static function findConsult($patient_id, $prat, $date) {
+  function findConsult($patient_id, $prat, $date, $store = true) {
     // Trouver ou importer le patient
-    $patient = self::getOrImportObject(self::$_patient_class, $patient_id);
+    $patient = $this->getOrImportObject($this->_patient_class, $patient_id);
 
     if (!$patient || !$patient->_id) {
       CAppUI::setMsg("Patient non retrouvé et non importé : $patient_id", UI_MSG_WARNING);
@@ -462,7 +462,7 @@ class CExternalDBImport {
     }
 
     // Trouver le praticien de la consult
-    $mediuser = self::getMbObjectByClass("CMediusers", $prat);
+    $mediuser = $this->getMbObjectByClass("CMediusers", $prat);
     if (!$mediuser->_id) {
       CAppUI::setMsg("Praticien de la consult non retrouvé : $prat", UI_MSG_WARNING);
 
@@ -487,13 +487,13 @@ class CExternalDBImport {
 
     $consult->loadObject($where, null, null, $ljoin);
     if (!$consult->_id) {
-      $consult = self::makeConsult($patient->_id, $mediuser->_id, $date);
+      $consult = $this->makeConsult($patient->_id, $mediuser->_id, $date, $store);
     }
 
     return $consult;
   }
 
-  static function makeConsult($patient_id, $chir_id, $date) {
+  static function makeConsult($patient_id, $chir_id, $date, $store = true) {
     $consult = new CConsultation;
     $date    = CMbDT::date($date);
 
@@ -523,14 +523,16 @@ class CExternalDBImport {
     $consult->heure           = "09:00:00"; // FIXME
     $consult->chrono          = ($date < CMbDT::date() ? CConsultation::TERMINE : CConsultation::PLANIFIE);
 
-    if ($msg = $consult->store()) {
-      return $msg;
-    }
+    if ($store) {
+      if ($msg = $consult->store()) {
+        return $msg;
+      }
 
-    if (!$consult->_id) {
-      CAppUI::setMsg("Consultation non trouvée et non importée : $patient_id / $chir_id / $date", UI_MSG_WARNING);
+      if (!$consult->_id) {
+        CAppUI::setMsg("Consultation non trouvée et non importée : $patient_id / $chir_id / $date", UI_MSG_WARNING);
 
-      return false;
+        return false;
+      }
     }
 
     return $consult;
@@ -629,7 +631,7 @@ class CExternalDBImport {
     $query = $this->getSelectQuery($where);
     $hash  = $this->_ds->loadHash($query);
 
-    if ($key_multi) {
+    if ($hash && $key_multi) {
       $hash[$key] = $values_multi;
     }
 
