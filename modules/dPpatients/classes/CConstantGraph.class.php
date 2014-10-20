@@ -680,6 +680,19 @@ class CConstantGraph {
             $x = $_period['start'];
             $bar_width = $_period['end'] - $_period['start'];
           }
+
+          if ($this->widget) {
+            $first_value = reset($constant_values);
+            $start_date = strftime('%Y-%m-%d %H:%M:%S', $_period['start_time']);
+            $end_date = strftime('%Y-%m-%d %H:%M:%S', $_period['end_time']);
+            $query = new CRequest();
+            $query->addSelect("SUM(`$constant_name`)");
+            $query->addTable('constantes_medicales');
+            $query->addWhere(array("`datetime` >= '$start_date'", "`datetime` <= '$end_date'", "`$constant_name` IS NOT NULL", "`patient_id` = $first_value->patient_id"));
+            $ds = CSQLDataSource::get('std');
+            $_period['value'] = $ds->loadResult($query->makeSelect());
+          }
+
           $cumul_datas[]  = array(
             $x,
             $_period['value'],
