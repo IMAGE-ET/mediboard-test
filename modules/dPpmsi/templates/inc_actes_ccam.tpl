@@ -281,7 +281,7 @@
                   {{mb_field object=$acte field=facturable hidden=true}}
 
                   {{foreach from=$_phase->_modificateurs item=_mod name=modificateurs}}
-                    <input type="checkbox" name="modificateur_{{$_mod->code}}{{$_mod->_double}}" {{if $_mod->_checked}}checked{{/if}} hidden />
+                    <input type="checkbox" name="modificateur_{{$_mod->code}}{{$_mod->_double}}" {{if $_mod->_checked}}checked{{/if}} class="hidden" />
                   {{/foreach}}
 
                   {{if !$acte->_id}}
