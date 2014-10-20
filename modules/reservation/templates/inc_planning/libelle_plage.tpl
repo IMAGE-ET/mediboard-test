@@ -19,7 +19,7 @@
     {{/if}}
 
     {{if "dPplanningOp CSejour use_charge_price_indicator"|conf:"CGroups-$g" != "no" && $charge->_id}}
-      <strong style='color:blue; background: white;padding:2px'>{{$charge->code}}</strong>
+      <strong style='background: #{{$charge->color}}; padding:2px; color:#{{$charge->_font_color}};'>{{$charge->code}}</strong>
     {{/if}}
   {{/if}}
 

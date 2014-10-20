@@ -27,6 +27,8 @@ class CChargePriceIndicator extends CMbObject {
   public $color;
   public $actif;
 
+  public $_font_color;
+
   /**
    * @see parent::getSpec()
    */
@@ -72,5 +74,7 @@ class CChargePriceIndicator extends CMbObject {
     
     $this->_view      = $this->libelle ? $this->libelle : $this->code;
     $this->_shortview = $this->code;
+
+    $this->_font_color = CColorSpec::get_text_color($this->color) > 130 ? '000000' : "ffffff";
   }
 }

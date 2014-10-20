@@ -89,4 +89,19 @@ class CColorSpec extends CMbFieldSpec {
     parent::getLitteralDescription();
   }
 
+  /**
+   * return a font color following the hexa color given (background)
+   *
+   * @param $hex_value
+   *
+   * @return float
+   */
+  static function get_text_color($hex_value) {
+    $hex = str_replace('#', '', $hex_value);
+    $c_r = hexdec(substr($hex, 0, 2));
+    $c_g = hexdec(substr($hex, 2, 2));
+    $c_b = hexdec(substr($hex, 4, 2));
+    return (($c_r * 299) + ($c_g * 587) + ($c_b * 114)) / 1000;
+  }
+
 }
