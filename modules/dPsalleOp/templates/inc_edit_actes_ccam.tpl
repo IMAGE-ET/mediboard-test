@@ -7,6 +7,20 @@
     element.form.elements[element.name+"_da"].value = "Maintenant";
   }
 
+  syncDentField = function(input) {
+    var dents = $V(input.form.position_dentaire);
+    var num_dent = input.getAttribute('data-localisation');
+    dents = dents.split('|');
+
+    if (input.checked) {
+      dents.push(num_dent);
+    }
+    else if (!input.checked && dents.indexOf(num_dent) != -1) {
+      dents.splice(dents.indexOf(num_dent), 1);
+    }
+
+    $V(input.form.position_dentaire, dents.join('|'));
+  }
 </script>
 
 {{assign var=confCCAM value=$conf.dPsalleOp.CActeCCAM}}
@@ -241,8 +255,8 @@
                     {{/foreach}}
                     {{if $dent_ok}}
                       <span style="border: 1px solid #abe; background-color: #eee; border-radius: 3px; margin: 1px; vertical-align: middle;">
-                        <input type="checkbox" name="dent_{{$_dent->localisation}}"
-                          {{if in_array($_dent->localisation, $acte->_dents)}}checked="checked"{{/if}} />
+                        <input type="checkbox" name="dent_{{$_dent->localisation}}" data-localisation="{{$_dent->localisation}}"
+                          {{if in_array($_dent->localisation, $acte->_dents)}}checked="checked"{{/if}} onchange="syncDentField(this);" />
                         <label for="dent_{{$_dent->localisation}}" title="Localisation : {{$_dent->localisation}}">{{$_dent->_libelle}}</label>
                       </span>
                     {{else}}
@@ -251,6 +265,7 @@
                       </span>
                     {{/if}}
                   {{/foreach}}
+                  {{mb_field object=$acte field=position_dentaire hidden=true}}
                 </td>
               </tr>
               {{/if}}
