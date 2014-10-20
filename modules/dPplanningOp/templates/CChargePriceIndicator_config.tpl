@@ -23,7 +23,7 @@
     <th>{{mb_title class=CChargePriceIndicator field=libelle}}</th>
     <th>{{mb_title class=CChargePriceIndicator field=type}}</th>
     <th>{{mb_title class=CChargePriceIndicator field=type_pec}}</th>
-    <th>{{mb_title class=CChargePriceIndicator field=actif}}</th>
+    <th class="narrow">{{mb_title class=CChargePriceIndicator field=actif}}</th>
   </tr>
   {{foreach from=$list_cpi item=_cpi}}
     <tr>
@@ -43,6 +43,7 @@
           {{mb_class object=$_cpi}}
           {{mb_field object=$_cpi field="actif" onchange=this.form.onsubmit()}}
         </form>
+        <span></span>
       </td>
     </tr>
   {{foreachelse}}
