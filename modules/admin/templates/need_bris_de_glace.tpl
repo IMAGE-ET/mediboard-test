@@ -10,21 +10,35 @@
 *}}
 
 <script>
-  // @TODO vérifier si il existe une demande de bris de glace en cour
+  afterSuccessB2G = function() {
+    Url.queueRequests = false;
+    var pendings_requests = $H(Url.pendingRequests).values();
+    Url.pendingRequests = {}; // empty the list
+    if (pendings_requests.length) {
+      pendings_requests.each(function(_url) {
+        _url.url.requestUpdate(_url.ioTarget, _url.oOptions);
+      });
+    }
+    else {
+      window.location.reload();
+    }
+  };
 
-  Main.add(function() {
-    var url = new Url("admin", "ajax_need_bris_de_glace");
-    url.addParam("sejour_id", "{{$sejour->_id}}");
-    url.requestModal();
-    url.modalObject.observe("afterClose", function() {
-      {{if $callback}}
-        {{$callback}}();
-      {{else}}
-        window.location.reload();
-      {{/if}}
+  if (!Url.queueRequests) {
+    Main.add(function () {
+      var url = new Url("admin", "ajax_need_bris_de_glace");
+      url.addParam("sejour_id", "{{$sejour->_id}}");
+      url.requestModal(null, null, {
+        onClose : function() {
+          Url.queueRequests = false;
+        },
+        dontQueue : true
+      });
     });
-    //url.registerCalls();
-  });
+  }
+
+  // we request the save of nexts ajax
+  Url.queueRequests = true;
 
 </script>
 

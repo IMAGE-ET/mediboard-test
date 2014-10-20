@@ -425,5 +425,6 @@ if (!$suppressHeaders) {
 if ($ajax) {
   $tplAjax = new CSmartyDP("modules/system");
   $tplAjax->assign("performance", CApp::$performance);
+  $tplAjax->assign("requestID"            , CValue::get("__requestID"));
   $tplAjax->display("ajax_errors.tpl");
 }

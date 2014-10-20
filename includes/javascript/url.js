@@ -14,14 +14,16 @@ Ajax.__uniqueID = 1;
 Ajax.Responders.register({
   onCreate: function(e) {
     Url.activeRequests[e.method]++;
-
+    var add;
     if (MbPerformance.profiling) {
       var uniqueID = Ajax.__uniqueID++;
       e.transport.__uniqueID = uniqueID;
 
-      var add = (e.url.indexOf("?") > -1) ? "&" : "?";
+      add = (e.url.indexOf("?") > -1) ? "&" : "?";
       e.url += add+"__uniqueID=|"+uniqueID+"|";
     }
+    add = (e.url.indexOf("?") > -1) ? "&" : "?";
+    e.url += add+"__requestID="+Url.requestId;
   },
   onLoading: function(e){
     e.__start = performance.now();
@@ -1060,6 +1062,10 @@ var Url = Class.create({
    * @return {Url}
    */
   requestUpdate: function(ioTarget, oOptions) {
+    Url.requestId++;
+    if (!oOptions || (!oOptions.dontQueue && oOptions.method === 'get')) {
+      Url.pendingRequests[Url.requestId] = {"url" : this, "ioTarget": ioTarget, "oOptions": oOptions};
+    }
     this.addParam("ajax", 1);
 
     // onComplete callback definition shortcut
@@ -1156,7 +1162,7 @@ var Url = Class.create({
     var getParams = oOptions.getParameters ? "?" + $H(oOptions.getParameters).toQueryString() : '';
 
     // Abort previous request
-    if (oOptions.abortPrevious) {
+    /*if (oOptions.abortPrevious) {
       var currentURL = element.retrieve("currentURL");
       if (currentURL && currentURL.currentAjax) {
         if (Preferences.INFOSYSTEM == 1) {
@@ -1167,7 +1173,7 @@ var Url = Class.create({
 
         currentURL.currentAjax.abort();
       }
-    }
+    }*/
 
     this.currentAjax = new Ajax.Updater(element, oOptions.urlBase + "index.php" + getParams, oOptions);
     element.store("currentURL", this);
@@ -1451,6 +1457,13 @@ Url.go = function(params, hash) {
   location.assign(href);
   return false;
 };
+
+// list of pending
+Url.pendingRequests = {};
+
+Url.queueRequests = false;
+
+Url.requestId = 0;
 
 Progress = {
   init: function(id, max) {

@@ -10,7 +10,6 @@
  * @version  $Revision$
  * @link     http://www.mediboard.org
  */
-
 $bris = new CBrisDeGlace();
 $bris->date = CMbDT::dateTime();
 $bris->user_id = CMediusers::get()->_id;
@@ -23,6 +22,9 @@ if ($msg = $bris->store()) {
 }
 else {
   CAppUI::setMsg($bris->_class."-store", UI_MSG_OK);
+  CAppUI::js("afterSuccessB2G()");
 }
 
 echo CAppUI::getMsg();
+
+CApp::rip();
