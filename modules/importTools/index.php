@@ -11,4 +11,4 @@
 
 $module = CModule::getInstalled(basename(__DIR__));
 
-//$module->registerTab('vw_idx_my_tab',        TAB_READ);
+$module->registerTab('vw_database_explorer', TAB_ADMIN);
