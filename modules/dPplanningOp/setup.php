@@ -1801,7 +1801,13 @@ class CSetupdPplanningOp extends CSetup {
                 ADD INDEX (`completion_sortie`);";
     $this->addQuery($query);
 
-    $this->mod_version = '1.93';
+    $this->makeRevision("1.93");
+    $query = "ALTER TABLE `charge_price_indicator`
+                CHANGE `group_id` `group_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                ADD `color` VARCHAR (6) NOT NULL DEFAULT 'ffffff';";
+    $this->addQuery($query);
+
+    $this->mod_version = '1.94';
 
 
     // Data source query

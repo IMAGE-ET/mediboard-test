@@ -16,6 +16,12 @@
       <th>{{mb_label object=$charge field=libelle}}</th>
       <td>{{mb_field object=$charge field=libelle}}</td>
     </tr>
+
+    <tr>
+      <th>{{mb_label object=$charge field=color}}</th>
+      <td>{{mb_field object=$charge field=color form="edit-cpi"}}</td>
+    </tr>
+
     <tr>
       <th>{{mb_label object=$charge field=type}}</th>
       <td>{{mb_field object=$charge field=type}}</td>

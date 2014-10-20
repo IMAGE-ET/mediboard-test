@@ -24,6 +24,7 @@ class CChargePriceIndicator extends CMbObject {
   public $type_pec;
   public $group_id;
   public $libelle;
+  public $color;
   public $actif;
 
   /**
@@ -42,11 +43,10 @@ class CChargePriceIndicator extends CMbObject {
   function getProps() {
     $props = parent::getProps();
     $props["code"]     = "str notNull";
-    
     $sejour = new CSejour();
     $props["type"]     = $sejour->_props["type"];
     $props["type_pec"] = $sejour->_props["type_pec"];
-    
+    $props["color"]    = "color default|ffffff notNull";
     $props["group_id"] = "ref notNull class|CGroups";
     $props["libelle"]  = "str";
     $props["actif"]    = "bool default|0";
