@@ -42,12 +42,7 @@ class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
             }
           }
         }
-        $matches = null;
-        if (preg_match("/dent_(.{1,2})/", $propName, $matches)) {
-          $dents[] = $matches[1];
-        }
       }
-      $this->_obj->position_dentaire = implode("|", $dents);
     }
     $this->_obj->loadRefObject();
     $this->_ref_object = $this->_obj->_ref_object;
