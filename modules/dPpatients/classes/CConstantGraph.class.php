@@ -568,15 +568,14 @@ class CConstantGraph {
         }
         else {
           /* If not, we add the cumuled value to the periods array, and initialize the current period */
-          if ($current_value != 0) {
-            $periods[] = array(
-              'start' => $start_tick,
-              'end'   => $tick,
-              'start_time'  => $current_period['start'],
-              'end_time'    => $current_period['end'],
-              'value' => $current_value
-            );
-          }
+          $periods[] = array(
+            'start' => $start_tick,
+            'end'   => $tick,
+            'start_time'  => $current_period['start'],
+            'end_time'    => $current_period['end'],
+            'value' => $current_value
+          );
+
           $current_value = $_value->$constant_name;
           $start_tick = $tick;
           $start = $current_period['end'];
@@ -663,15 +662,13 @@ class CConstantGraph {
       $cumul_datas = array();
 
       if (!empty($constant_values)) {
-        if ($current_value != 0) {
-          $periods[] = array(
-            'start' => $start_tick,
-            'end'   => $tick,
-            'start_time'  => $current_period['start'],
-            'end_time'    => $current_period['end'],
-            'value' => $current_value
-          );
-        }
+        $periods[] = array(
+          'start' => $start_tick,
+          'end'   => $tick,
+          'start_time'  => $current_period['start'],
+          'end_time'    => $current_period['end'],
+          'value' => $current_value
+        );
 
         $cumul_datas = array();
         $dtz = new DateTimeZone('Europe/Paris');
