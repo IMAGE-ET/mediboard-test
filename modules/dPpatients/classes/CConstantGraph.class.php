@@ -690,7 +690,12 @@ class CConstantGraph {
             $query = new CRequest();
             $query->addSelect("SUM(`$constant_name`)");
             $query->addTable('constantes_medicales');
-            $query->addWhere(array("`datetime` >= '$start_date'", "`datetime` <= '$end_date'", "`$constant_name` IS NOT NULL", "`patient_id` = $first_value->patient_id"));
+            $query->addWhere(array(
+              "`patient_id` = $first_value->patient_id",
+              "`context_class` = '$first_value->context_class'",
+              "`context_id` = $first_value->context_id",
+              "`datetime` >= '$start_date'", "`datetime` <= '$end_date'", "`$constant_name` IS NOT NULL"
+            ));
             $ds = CSQLDataSource::get('std');
             $_period['value'] = $ds->loadResult($query->makeSelect());
           }
