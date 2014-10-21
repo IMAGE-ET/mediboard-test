@@ -12,6 +12,10 @@
         GestionDA.edit();
       });
   {{/if}}
+
+  {{if $consult->sejour_id && !$consult_anesth->operation_id}}
+    DossierMedical.sejour_id = '{{$consult->sejour_id}}';
+  {{/if}}
 </script>
 
 <table class="form main" style="display: none;" id="evenement-chooser-modal">
