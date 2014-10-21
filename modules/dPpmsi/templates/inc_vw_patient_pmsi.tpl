@@ -10,7 +10,7 @@
 
 <table class="main layout">
   <tr>
-    <td class="halfPane">
+    <td>
       {{mb_include module=patients template=inc_vw_identite_patient}}
       <!-- Champ cmu et ALD -->
       <table class="main form">
@@ -39,15 +39,6 @@
           </td>
         </tr>
       </table>
-    </td>
-    <td class="halfPane" rowspan="2">
-      {{if $sejour->_id}}
-        {{mb_include module=patients template=inc_vw_dossier_sejour object=$sejour}}
-      {{else}}
-        <div class="big-info">
-          Vous devez séléctionner un séjour pour accéder au dossier
-        </div>
-      {{/if}}
     </td>
   </tr>
   <tr>

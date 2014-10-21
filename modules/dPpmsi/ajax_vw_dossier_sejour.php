@@ -1,32 +1,21 @@
-<?php
+<?php 
+
 /**
  * $Id$
- *
- * @package    Mediboard
- * @subpackage PMSI
- * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
- */
+ *  
+ * @category Pmsi
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @link     http://www.mediboard.org */
 
 CCanDo::checkEdit();
 
 $group = CGroups::loadCurrent();
-$patient_id = CValue::get("patient_id");
-
-// Chargement du séjour
-$sejour  = new CSejour();
-$sejour->load(CValue::get("sejour_id"));
 
 // Chargement du patient
 $patient = new CPatient();
-if ($patient_id) {
-  $patient = $patient->load($patient_id);
-}
-else {
-  $patient = $sejour->loadRelPatient();
-}
-
+$patient->load(CValue::get("patient_id"));
 $patient->loadIPP();
 $patient->loadRefsCorrespondants();
 $patient->loadRefPhotoIdentite();
@@ -63,12 +52,13 @@ else {
 }
 
 // Création du template
-$smarty = new CSmartyDP();
+$smarty = new CSmartyDP("modules/dPpmsi");
 
 $smarty->assign("canPatients"     , CModule::getCanDo("dPpatients"));
 $smarty->assign("hprim21installed", CModule::getActive("hprim21"));
-$smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
+$smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC($group)));
 $smarty->assign("patient"         , $patient);
 $smarty->assign("sejour"          , $sejour);
 
-$smarty->display("inc_vw_patient_pmsi.tpl");
+
+$smarty->display("inc_vw_dossier_sejour.tpl");

@@ -8,6 +8,7 @@ $locales['GHS'] = 'GHS';
 $locales['PMSI'] = 'PMSI';
 $locales['PMSI.Diagnostics'] = 'Diagnostics';
 $locales['PMSI.DossierPatient'] = 'Dossier Patient';
+$locales['PMSI.DossierSejour'] = 'Dossier du séjour';
 $locales['PMSI.Groupage'] = 'Groupage';
 $locales['PMSI.RSS'] = 'RSS';
 $locales['RSS-desc'] = 'Résumé de Sortie Standardisé';

@@ -125,6 +125,9 @@
         </div>
       </td>
     </tr>
+    <tr>
+      <th class="title" colspan="4" style="text-align: center">{{$sejour}}</th>
+    </tr>
   </table>
 </form>
 
@@ -134,8 +137,8 @@
   {{*mb_include module=pmsi template=inc_view_dossier_pmsi*}}
 
   <ul id="tabs-pmsi" class="control_tabs">
-    <li onmousedown="PMSI.loadPatient('{{$patient->_id}}', '{{$sejour->_id}}'); this.onmousedown='';">
-      <a href="#tab-patient">{{tr}}PMSI.DossierPatient{{/tr}}</a>
+    <li onmousedown="PMSI.loadDossierSejour('{{$patient->_id}}', '{{$sejour->_id}}'); this.onmousedown='';">
+      <a href="#tab-dossier-sejour">{{tr}}PMSI.DossierSejour{{/tr}}</a>
     </li>
     <li onmousedown="PMSI.loadActes('{{$sejour->_id}}'); this.onmousedown=''">
       <a href="#tab-actes">{{tr}}CCodable-actes{{/tr}} et {{tr}}PMSI.Diagnostics{{/tr}}</a>
@@ -175,7 +178,7 @@
     {{/if}}
   </ul>
 
-  <div id="tab-patient" style="display:none;"></div>
+  <div id="tab-dossier-sejour" style="display:none;"></div>
   <div id="tab-actes" style="display: none;"></div>
   <div id="tab-documents" style="display: none;"></div>
   {{if "dmi"|module_active}}
