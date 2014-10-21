@@ -117,6 +117,11 @@
     {{assign var=patient value=$consult->_ref_patient}}
     {{assign var=sejour value=$consult->_ref_sejour}}
     <tr>
+      {{if $all_prats}}
+        <td class="text">
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$consult->_ref_chir}}
+        </td>
+      {{/if}}
       <td class="text">
         <a href="{{$patient->_dossier_cabinet_url}}">
           <strong class="{{if !$consult->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}}"
@@ -173,7 +178,7 @@
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="5" class="empty">{{tr}}CConsultation.none_non_cotee{{/tr}}</td>
+      <td colspan="6" class="empty">{{tr}}CConsultation.none_non_cotee{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>
