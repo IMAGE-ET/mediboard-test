@@ -1,74 +1,38 @@
-<script type="text/javascript">
-
-Main.add(function () {
-  Calendar.regField(getForm("changeDate").date, null, {noView: true});
-});
-
+{{*
+ * $Id$
+ *
+ * @category Pmsi
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @link     http://www.mediboard.org
+ *}}
+{{mb_script module=pmsi script=PMSI}}
+<script>
+  Main.add(function () {
+    var form = getForm("changeDate");
+    window.calendar_date = Calendar.regField(form.date);
+    form.onsubmit();
+  });
 </script>
-<script type="text/javascript">
-Main.add(function () {
-  Control.Tabs.create('tabs-category', true);
-});
-</script>
 
-<ul id="tabs-category" class="control_tabs">
-  {{foreach from=$counts key=category item=count}}
-  <li>
-    <a href="#{{$category}}"
-      {{if !$count.total}}class="empty"{{/if}} 
-      {{if $count.facturees != $count.total}}class="wrong"{{/if}}>
-      {{tr}}COperation-{{$category}}{{/tr}}
-      <small>
-       {{if $count.facturees == $count.total}}
-      ({{$count.total}})
-       {{else}}
-      ({{$count.facturees}}/{{$count.total}})
-       {{/if}}
-     </small>
-    </a>
-  </li>
-  {{/foreach}}
-</ul>
+<form method="get" name="changeDate" action="?m=dPpmsi" class="watched prepared" onsubmit="return PMSI.listInterv(this);">
+  <input type="hidden" name="pageOp" value="0">
+  <input type="hidden" name="pageUrg" value="0">
+  <table class="form">
+    <tr>
+      <th>Sélectionner le jour</th>
+      <td>
+        <input type="hidden" class="datetime" id="date" name="date" onchange="$V(this.form.pageOp, '0'); $V(this.form.pageUrg, '0')" value="{{$date}}">
+      </td>
+    </tr>
+    <tr>
+      <td class="button" colspan="2">
+        <button type="submit" class="search">{{tr}}Search{{/tr}}</button>
+      </td>
+    </tr>
+  </table>
+</form>
 
-<hr class="control_tabs" />
-
-<table class="tbl">
-  <tr>
-    <th class="title" colspan="9">
-      {{$date|date_format:$conf.longdate}}
-      <form action="?" name="changeDate" method="get">
-        <input type="hidden" name="m" value="{{$m}}" />
-        <input type="hidden" name="tab" value="{{$tab}}" />
-        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
-      </form>
-    </th>
-  </tr>
-  <tr>
-    <th>{{mb_title class=$operation field=facture}}</th>
-    <th class="narrow">{{mb_title class=CSejour field=_NDA}}</th>
-    <th>{{mb_label object=$operation field=chir_id}}</th>
-    <th>{{mb_label class=CSejour field=patient_id}}</th>
-    <th>{{mb_label class=$operation field=time_operation}}</th>
-    <th>
-      {{mb_label object=$operation field=libelle}} +
-      {{mb_label object=$operation field=codes_ccam}}
-    </th>
-    <th>Docs</th>
-    <th>{{mb_title object=$operation field=labo}}</th>
-    <th>{{mb_title object=$operation field=anapath}}</th>
-  </tr>
-  
-  <tbody id="operations" style="display: none;">
-  {{foreach from=$plages item=_plage}}
-  {{foreach from=$_plage->_ref_operations item=_operation}}
-  {{mb_include template=inc_list_interv}}
-  {{/foreach}}
-  {{/foreach}}
-  </tbody>
-  
-  <tbody id="urgences" style="display: none;">
-  {{foreach from=$urgences item=_operation}}
-  {{mb_include template=inc_list_interv}}
-  {{/foreach}}
-  </tbody>
-</table>
+<br/>
+<div id="list-interv"></div>

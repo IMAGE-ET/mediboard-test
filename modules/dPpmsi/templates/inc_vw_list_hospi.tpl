@@ -8,7 +8,7 @@
  * @link     http://www.mediboard.org
  *}}
 
-{{mb_include module=system template=inc_pagination total=$count current=$page change_page="PMSI.changePage" step=$step}}
+{{mb_include module=system template=inc_pagination total=$count current=$page change_page="PMSI.changePageHospi" step=$step}}
 <table class="tbl">
   <tr>
     <th class="title" colspan="8">

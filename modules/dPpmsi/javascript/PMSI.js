@@ -131,7 +131,7 @@ PMSI = {
     var url = new Url("pmsi", "ajax_view_patient_pmsi");
     url.addParam("patient_id", patient_id);
     url.addParam("sejour_id" , sejour_id);
-    url.requestUpdate("tab-patient");
+    url.requestUpdate("div_patient");
   },
 
   loadDiagnostics: function(sejour_id) {
@@ -238,7 +238,51 @@ PMSI = {
     return false;
   },
 
-  changePage : function (page) {
-      PMSI.listHospi(null, page);
+  listInterv: function (form) {
+    var url = new Url("pmsi", "ajax_list_interv");
+    url.addFormData(form);
+    url.requestUpdate("list-interv");
+    return false;
+  },
+
+  loadOperations: function (form , change_page) {
+    if (form) {
+      $V(form.pageOp, change_page);
+    }
+    else {
+      form = getForm("changeDate");
+      $V(form.pageOp, change_page);
+    }
+
+    var url = new Url("pmsi", "ajax_list_operations");
+    url.addFormData(form);
+    url.requestUpdate("operations");
+    return false;
+  },
+
+  loadUrgences: function (form, change_page) {
+    if (form) {
+      $V(form.pageUrg, change_page);
+    }
+    else {
+      form = getForm("changeDate");
+      $V(form.pageUrg, change_page);
+    }
+
+    var url = new Url("pmsi", "ajax_list_urgences");
+    url.addFormData(form);
+    url.requestUpdate("urgences");
+    return false;
+  },
+
+  changePageHospi : function (page) {
+    PMSI.listHospi(null, page);
+  },
+
+  loadDossierSejour : function(patient_id, sejour_id) {
+    var url = new Url("pmsi", "ajax_vw_dossier_sejour");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("patient_id", patient_id);
+    url.requestUpdate("tab-dossier-sejour");
   }
 };
