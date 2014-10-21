@@ -62,7 +62,7 @@ try {
   $client_index->_index->optimize(array("max_num_segments" =>"5"));
 } catch (Exception $e) {
   mbLog($e->getMessage());
-  CAppUI::displayAjaxMsg("L'indexation a recontré un problème", UI_MSG_ERROR);
+  CAppUI::displayAjaxMsg("L'indexation a recontré un problème", UI_MSG_WARNING);
   $error = "index";
 }
 
