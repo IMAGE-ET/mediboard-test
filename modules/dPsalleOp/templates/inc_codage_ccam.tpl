@@ -18,24 +18,44 @@
 <table class="form">
   {{if $subject->_coded}}
     {{if $subject->_class == "CConsultation"}}
-    <tr>
-      <td colspan="10">
-        <div class="small-info">
-         La cotation des actes est terminée.<br />
-         Pour pouvoir coder des actes, veuillez dévalider la cotation.
-         </div>
-       </td>
-    </tr> 
+      <tr>
+        <td colspan="10">
+          <div class="small-info">
+           La cotation des actes est terminée.<br />
+           Pour pouvoir coder des actes, veuillez dévalider la cotation.
+           </div>
+         </td>
+      </tr>
     {{else}}
-    <tr>
-      <td colspan="10" class="text">
-        <div class="small-info">
-          Les actes ne peuvent plus être modifiés pour la raison suivante : {{tr}}config-dPsalleOp-COperation-modif_actes-{{$conf.dPsalleOp.COperation.modif_actes}}{{/tr}}
-          <br />
-          Veuillez contacter le PMSI pour toute modification.
-        </div>
-      </td>
-    </tr>
+      <tr>
+        <td {{if $conf.dPsalleOp.CActeCCAM.envoi_actes_salle && $conf.dPsalleOp.COperation.modif_actes == 'facturation'}}
+              colspan="5" class="halfPane text"
+            {{else}}
+              colspan="10" class="text"
+            {{/if}}>
+          <div class="small-info">
+            Les actes ne peuvent plus être modifiés pour la raison suivante : {{tr}}config-dPsalleOp-COperation-modif_actes-{{$conf.dPsalleOp.COperation.modif_actes}}{{/tr}}
+            <br />
+            Veuillez contacter le PMSI pour toute modification.
+          </div>
+        </td>
+        {{if $conf.dPsalleOp.CActeCCAM.envoi_actes_salle && $conf.dPsalleOp.COperation.modif_actes == 'facturation'}}
+          <script>
+            Main.add(function () {
+              PMSI.loadExportActes('{{$subject->_id}}', '{{$subject->_class}}', 1, 'dPsalleOp');
+            });
+          </script>
+
+          <td class="halfPane">
+            <fieldset>
+              <legend>Validation du codage</legend>
+              <div id="export_{{$subject->_class}}_{{$subject->_id}}">
+
+              </div>
+            </fieldset>
+          </td>
+        {{/if}}
+      </tr>
     {{/if}}
   {{/if}}
   {{if !$subject->_canRead}}
