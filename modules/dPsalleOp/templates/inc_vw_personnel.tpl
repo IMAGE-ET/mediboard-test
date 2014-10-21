@@ -133,6 +133,13 @@
               {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_debut_dt}}
               {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_fin_dt disabled=$affectation->_debut|default:'yes'}}
             {{/if}}
+            {{if $affectation->_id}}
+              <td>
+                <button type="button" class="cancel notext" onclick="$V(this.form.del, 1); submitPersonnel(this.form)">
+                  {{tr}}Cancel{{/tr}}
+                </button>
+              </td>
+            {{/if}}
           </tr>
         </table>
        </form>
