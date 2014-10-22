@@ -313,20 +313,20 @@
                   {{if $gestion_tp}}
                     <fieldset style="display: inline-block">
                       <legend>Ajouter et ...  <button type="button" class="search notext" onclick="modal('legend_actions_tp')">Légende</button></legend>
-                      <button type="button" class="stop" onclick="submitAndCallback(this.form, 'stopLineTP');">
+                      <button type="button" class="stop" onclick="addToTokenPoso{{$addform}}(0);submitAndCallback(this.form, 'stopLineTP');">
                         Arrêter
                       </button>
-                      <button type="button" class="edit" onclick="submitAndCallback(this.form, 'modifyLineTP');">
+                      <button type="button" class="edit" onclick="addToTokenPoso{{$addform}}(0);submitAndCallback(this.form, 'modifyLineTP');">
                         Represcrire
                       </button>
                       {{if $sejour_id}}
-                        <button type="button" class="right" onclick="submitAndCallback(this.form, 'poursuivreLineTP');">
+                        <button type="button" class="right" onclick="addToTokenPoso{{$addform}}(0);submitAndCallback(this.form, 'poursuivreLineTP');">
                           Poursuivre
                         </button>
-                        <button type="button" class="hslip" onclick="submitAndCallback(this.form, 'relaiLineDialog');">
+                        <button type="button" class="hslip" onclick="addToTokenPoso{{$addform}}(0);submitAndCallback(this.form, 'relaiLineDialog');">
                           Relai
                         </button>
-                        <button type="button" class="pause" onclick="submitAndCallback(this.form, 'pauseLineDialog')">
+                        <button type="button" class="pause" onclick="addToTokenPoso{{$addform}}(0);submitAndCallback(this.form, 'pauseLineDialog')">
                           Pause
                         </button>
                       {{/if}}
