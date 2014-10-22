@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage soins
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 $sejour_id    = CValue::get("sejour_id");
@@ -23,34 +24,37 @@ if (CModule::getActive("dPprescription")) {
 }
 
 $sejour->loadRefPraticien();
-$sejour->loadRefPrescriptionSejour();
+$prescription_sejour = $sejour->loadRefPrescriptionSejour();
 $sejour->loadJourOp($date);
-$sejour->_ref_prescription_sejour->loadJourOp($date);
-$sejour->_ref_prescription_sejour->loadRefCurrentPraticien();
+$prescription_sejour->loadJourOp($date);
+$prescription_sejour->loadRefCurrentPraticien();
+$prescription_sejour->loadLinesElementImportant();
+
 $patient = $sejour->loadRefPatient();
 $patient->countINS();
 $sejour->loadRefsOperations();
 $sejour->loadRefCurrAffectation();
-$sejour->loadRefDossierMedical();
-if ($sejour->_ref_dossier_medical->_id) {
-  $sejour->_ref_dossier_medical->loadRefsAllergies();
-  $sejour->_ref_dossier_medical->loadRefsAntecedents();
-  $sejour->_ref_dossier_medical->countAntecedents(false);
-  $sejour->_ref_dossier_medical->countAllergies();
+
+$dossier_medical_sejour = $sejour->loadRefDossierMedical();
+if ($dossier_medical_sejour->_id) {
+  $dossier_medical_sejour->loadRefsAllergies();
+  $dossier_medical_sejour->loadRefsAntecedents();
+  $dossier_medical_sejour->countAntecedents(false);
+  $dossier_medical_sejour->countAllergies();
 }
 $patient->loadRefPhotoIdentite();
-$patient->loadRefDossierMedical();
+$dossier_medical_patient = $patient->loadRefDossierMedical();
 $patient->loadRefConstantesMedicales(null, array("poids", "taille"));
-if ($patient->_ref_dossier_medical->_id) {
-  $patient->_ref_dossier_medical->loadRefsAllergies();
-  $patient->_ref_dossier_medical->loadRefsAntecedents();
-  $patient->_ref_dossier_medical->countAntecedents(false);
-  $patient->_ref_dossier_medical->countAllergies();
+if ($dossier_medical_patient->_id) {
+  $dossier_medical_patient->loadRefsAllergies();
+  $dossier_medical_patient->loadRefsAntecedents();
+  $dossier_medical_patient->countAntecedents(false);
+  $dossier_medical_patient->countAllergies();
 }
 
 /* Suppression des antecedents du dossier medical du patients présent dans le dossier medical du sejour */
-if ($patient->_ref_dossier_medical->_id && $sejour->_ref_dossier_medical->_id) {
-  CDossierMedical::cleanAntecedentsSignificatifs($sejour->_ref_dossier_medical, $patient->_ref_dossier_medical);
+if ($dossier_medical_patient->_id && $dossier_medical_sejour->_id) {
+  CDossierMedical::cleanAntecedentsSignificatifs($dossier_medical_sejour, $dossier_medical_patient);
 }
 
 $operation = new COperation();
@@ -80,7 +84,7 @@ $smarty->assign("operation_id"    , $operation_id);
 $smarty->assign("mode_pharma"     , $mode_pharma);
 $smarty->assign("is_praticien"    , $is_praticien);
 $smarty->assign("mode_protocole"  , CValue::getOrSession("mode_protocole", 0));
-$smarty->assign("operation", $operation);
+$smarty->assign("operation"       , $operation);
 $smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("isPrescriptionInstalled" , CModule::getActive("dPprescription"));
 

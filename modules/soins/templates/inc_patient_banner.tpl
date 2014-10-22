@@ -74,6 +74,11 @@
               {{$sejour->_ref_curr_affectation->_ref_lit}}
             </span>
           {{/if}}
+
+          {{if $prescription->_ref_lines_important|@count}}
+            <br/>
+            {{mb_include module=prescription template=vw_line_important lines=$prescription->_ref_lines_important}}
+          {{/if}}
         </h2>
       </form>
     </th>
