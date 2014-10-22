@@ -240,6 +240,20 @@
       </div>
     </td>
   </tr>
+
+  <tr>
+    <td class="button" style="width: 50%">
+      <div class="small-info" style="text-align: center">
+        <strong>{{tr}}New{{/tr}}</strong>:
+          Anticipation de la programmation des interventions
+        <br />
+        <button type="button" class="stats"
+                onclick="DisplayGraph.launchStats('workflowoperation')">
+          {{tr}}View{{/tr}}
+        </button>
+      </div>
+    </td>
+  </tr>
   <tr>
     <th colspan="2">
       <hr />
