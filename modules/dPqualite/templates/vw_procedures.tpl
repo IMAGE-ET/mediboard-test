@@ -79,7 +79,7 @@ Main.add(refreshProceduresList);
             <td>
               <select name="chapitre_id" onchange="resetFirst(); this.form.onsubmit();">
                 <option value="0">&mdash; {{tr}}CChapitreDoc.all{{/tr}}</option>
-                {{mb_include module=qualite tmplate=inc_options_chapitres chapitres=$listChapitres chapitre_id=$chapitre_id}}
+                {{mb_include module=qualite template=inc_options_chapitres chapitres=$listChapitres chapitre_id=$chapitre_id}}
               </select>
             </td>
           <tr>
