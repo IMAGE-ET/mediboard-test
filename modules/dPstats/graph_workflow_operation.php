@@ -69,13 +69,23 @@ function graphWorkflowOperation(
   $query->addColumn("AVG(DATEDIFF(ow.date_operation, ow.date_creation_consult_anesth))", "creation_consult_anesth");
   $query->addTable("operations");
   $query->addLJoin("operation_workflow AS ow ON ow.operation_id = operations.operation_id");
+
+  // Prévention des données négatives aberrantes
+  $tolerance_in_days = 4;
+  $query->addWhere("ow.date_creation                IS NULL OR DATEDIFF(ow.date_operation, ow.date_creation               ) > -$tolerance_in_days");
+  $query->addWhere("ow.date_consult_chir            IS NULL OR DATEDIFF(ow.date_operation, ow.date_consult_chir           ) > -$tolerance_in_days");
+  $query->addWhere("ow.date_consult_anesth          IS NULL OR DATEDIFF(ow.date_operation, ow.date_consult_anesth         ) > -$tolerance_in_days");
+  $query->addWhere("ow.date_visite_anesth           IS NULL OR DATEDIFF(ow.date_operation, ow.date_visite_anesth          ) > -$tolerance_in_days");
+  $query->addWhere("ow.date_creation_consult_chir   IS NULL OR DATEDIFF(ow.date_operation, ow.date_creation_consult_chir  ) > -$tolerance_in_days");
+  $query->addWhere("ow.date_creation_consult_anesth IS NULL OR DATEDIFF(ow.date_operation, ow.date_creation_consult_anesth) > -$tolerance_in_days");
+
   $query->addWhereClause("date_operation", "BETWEEN '$date_min' AND '$date_max'");
   $query->addWhereClause("salle_id", CSQLDataSource::prepareIn(array_keys($salles)));
   $query->addGroup("mois");
   $query->addOrder("mois");
 
   // Filtre sur hors plage
-  if ($hors_plage) {
+  if (!$hors_plage) {
     $query->addWhereClause("plageop_id", "IS NOT NULL");
   }
 
