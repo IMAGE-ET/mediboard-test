@@ -86,12 +86,12 @@ $ljoin = array("users_mediboard" => "users_mediboard.user_id = transmission_medi
 $group_by = "users_mediboard.function_id";
 $transmission = new CTransmissionMedicale();
 $transmissions = $transmission->loadList($where, "date DESC", null, $group_by, $ljoin);
-
+CStoredObject::massLoadFwdRef($transmissions, "user_id");
 
 $ljoin = array("users_mediboard" => "users_mediboard.user_id = observation_medicale.user_id");
 $observation  = new CObservationMedicale();
 $observations = $observation->loadList($where, "date DESC", null, $group_by, $ljoin);
-
+CStoredObject::massLoadFwdRef($observations, "user_id");
 
 $ljoin = array(
   "plageconsult"    => "plageconsult.plageconsult_id = consultation.plageconsult_id",
@@ -151,7 +151,7 @@ foreach ($sejours as $_sejour) {
 
 
   // Observations
-  $_sejour->loadRefObsEntree();
+  $_sejour->loadRefObsEntree()->loadRefPraticien()->loadRefFunction();
 
   $patients_offline[$patient->_guid]["observations"] = array();
 
@@ -159,7 +159,7 @@ foreach ($sejours as $_sejour) {
     if ($_observation->sejour_id != $_sejour->_id || CMbDT::daysRelative($_observation->date, $date) > $delay_trans_obs_consult) {
       continue;
     }
-    $_observation->loadRefUser();
+    $_observation->loadRefUser()->loadRefFunction();
     $_observation->loadTargetObject();
     $patients_offline[$patient->_guid]["observations"][$_observation->_ref_user->function_id] = $_observation;
   }
@@ -172,7 +172,7 @@ foreach ($sejours as $_sejour) {
     if ($_consultation->sejour_id != $_sejour->_id || $_consultation->type == "entree") {
       continue;
     }
-    $_consultation->loadRefPlageConsult();
+    $_consultation->loadRefPraticien()->loadRefFunction();
     if (CMbDT::daysRelative($_consultation->_datetime, $date) > $delay_trans_obs_consult) {
       continue;
     }
@@ -184,6 +184,10 @@ foreach ($sejours as $_sejour) {
   // Constantes
   //$patient->loadRefConstantesMedicales();
   $cstes = array_reverse($_sejour->loadListConstantesMedicales($where_cste));
+  CStoredObject::massLoadFwdRef($cstes, "user_id");
+  foreach ($cstes as $_cste) {
+    $_cste->loadRefUser();
+  }
   $smarty_cstes->assign("constantes_medicales_grid", CConstantesMedicales::buildGrid($cstes, false));
   $smarty_cstes->assign("sejour", $_sejour);
   $patients_offline[$patient->_guid]["constantes"] = $smarty_cstes->fetch("print_constantes.tpl", '', '', 0);
