@@ -32,14 +32,14 @@ chooseProtocole = function(protocole_id) {
   if(protocole_id == 0 || !protocole_id) {
     var url =  new Url('planningOp', 'vw_edit_protocole');
     url.addParam('protocole_id', protocole_id);
-    var protocoleModal = url.requestModal(800);
+    var protocoleModal = url.requestModal(900, 700);
   } else {
     setClose(protocole_id);
   }
   {{else}}
   var url =  new Url('planningOp', 'vw_edit_protocole');
   url.addParam('protocole_id', protocole_id);
-  url.requestModal(800);
+  url.requestModal(900, 700);
   {{/if}}
 }
 
