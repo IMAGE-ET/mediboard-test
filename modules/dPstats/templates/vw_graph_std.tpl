@@ -38,7 +38,7 @@
 
 <table class="layout">
   <tr>
-    <td style="vertical-align: top;"><div style="width: 600px; height: 400px; float: left; margin: 1em;" id="display-graph-{{$type_graph}}"></div></td>
+    <td style="vertical-align: top;"><div style="width: 800px; height: 500px; float: left; margin: 1em;" id="display-graph-{{$type_graph}}"></div></td>
     <td style="vertical-align: top;" id="display-legend-{{$type_graph}}"></td>
   </tr>
 </table>

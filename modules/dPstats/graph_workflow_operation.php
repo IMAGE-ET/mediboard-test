@@ -23,7 +23,7 @@
  *
  * @return array
  */
-function graphOpAnnulees(
+function graphWorkflowOperation(
     $date_min = null, $date_max = null, $prat_id = null, $salle_id = null, $bloc_id = null,
     $code_ccam = null, $type_sejour = null, $hors_plage = false
 ) {
@@ -44,26 +44,36 @@ function graphOpAnnulees(
   $prat = new CMediusers;
   $prat->load($prat_id);
 
-  $serie_total = array(
-    'label' => 'Total',
-    'data' => array(),
-    'markers' => array('show' => true),
-    'bars' => array('show' => false)
+  // Series declarations
+  $labels = array(
+    "op_count"           => utf8_encode("Nombre d'interventions"),
+    "creation"           => utf8_encode("Planification intervention"),
+    "consult_chir"       => utf8_encode("Consultation chirurgicale"),
+    "consult_anesth"     => utf8_encode("Consultation anesthésiste"),
+    "visite_anesth"      => utf8_encode("Visite anesthésiste"),
+    "creation_consult_chir"   => utf8_encode("RDV de consultation chirurgicale"),
+    "creation_consult_anesth" => utf8_encode("RDV de consultation anesthésiste"),
   );
+
 
   $salles = CSalle::getSallesStats($salle_id, $bloc_id);
 
   $query = new CRequest();
-  $query->addColumn("salle_id");
   $query->addColumn("DATE_FORMAT(date_operation, '%Y-%m')", "mois");
-  $query->addColumn("COUNT(DISTINCT(operations.operation_id))", "total");
+  $query->addColumn("COUNT(operations.operation_id)", "op_count");
+  $query->addColumn("AVG(DATEDIFF(ow.date_operation, ow.date_creation      ))", "creation"               );
+  $query->addColumn("AVG(DATEDIFF(ow.date_operation, ow.date_consult_chir  ))", "consult_chir"           );
+  $query->addColumn("AVG(DATEDIFF(ow.date_operation, ow.date_consult_anesth))", "consult_anesth"         );
+  $query->addColumn("AVG(DATEDIFF(ow.date_operation, ow.date_visite_anesth ))", "visite_anesth"          );
+  $query->addColumn("AVG(DATEDIFF(ow.date_operation, ow.date_creation_consult_chir  ))", "creation_consult_chir"  );
+  $query->addColumn("AVG(DATEDIFF(ow.date_operation, ow.date_creation_consult_anesth))", "creation_consult_anesth");
   $query->addTable("operations");
-  $query->addLJoinClause("operation_workflow", "operation_workflow.operation_id = operations.operation_id");
-  $query->addWhere("DATE(date_cancellation) = DATE(date_operation)");
+  $query->addLJoin("operation_workflow AS ow ON ow.operation_id = operations.operation_id");
   $query->addWhereClause("date_operation", "BETWEEN '$date_min' AND '$date_max'");
+  $query->addWhereClause("date_consult_chir", "IS NOT NULL");
   $query->addWhereClause("salle_id", CSQLDataSource::prepareIn(array_keys($salles)));
-  $query->addGroup("mois, salle_id");
-  $query->addOrder("mois, salle_id");
+  $query->addGroup("mois");
+  $query->addOrder("mois");
 
   // Filtre sur hors plage
   if ($hors_plage) {
@@ -88,7 +98,7 @@ function graphOpAnnulees(
 
   // Query result
   $ds = CSQLDataSource::get("std");
-  $tree = $ds->loadTree($query->makeSelect());
+  $all_values = $ds->loadHashAssoc($query->makeSelect());
 
   // Build horizontal ticks
   $months = array();
@@ -97,34 +107,39 @@ function graphOpAnnulees(
     $count_ticks = count($ticks);
     $ticks[] = array($count_ticks, CMbDT::format($_date, "%m/%Y"));
     $months[CMbDT::format($_date, "%Y-%m")] = $count_ticks;
-    $serie_total['data'][] = array(count($serie_total['data']), 0);
   }
 
-  // Build series
+  // Series building
   $series = array();
+  foreach ($labels as $_label_name => $_label_title) {
+    $series[$_label_name] = array(
+      "label" => $_label_title,
+      "data" => array(),
+      "yaxis" => 2
+    );
+  }
+
+  $series["op_count"]["markers"]["show"] = true;
+  $series["op_count"]["yaxis"] = 1;
+  $series["op_count"]["lines"]["show"] = false;
+  $series["op_count"]["points"]["show"] = false;
+  $series["op_count"]["bars"]["show"] = true;;
+  $series["op_count"]["bars"]["fillColor"] = "#ccc";
+  $series["op_count"]["color"] = "#888";
+
   $total = 0;
 
-  foreach ($salles as $_salle) {
-    $_serie = array(
-      "label" => utf8_encode($bloc_id ? $_salle->nom : $_salle->_view),
-    );
-
-    $data = array();
-    foreach ($months as $_month => $_tick) {
-      $value =  isset($tree[$_salle->_id][$_month]) ? $tree[$_salle->_id][$_month] : 0;
-      $data[] = array($_tick, $value);
-      $serie_total["data"][$_tick][1] += $value;
-      $total += $value;
+  foreach ($months as $_month => $_tick) {
+    $values =  isset($all_values[$_month]) ? $all_values[$_month] : array_fill_keys(array_keys($labels), null);
+    unset($values["mois"]);
+    foreach ($values as $_name => $_value) {
+      $series[$_name]["data"][] = array($_tick, $_value);
     }
-
-    $_serie["data"] = $data;
-    $series[] = $_serie;
+    $total += $values["op_count"];
   }
 
-  $series[] = $serie_total;
-
   // Set up the title for the graph
-  $title = "Interventions annulées le jour même";
+  $title = "Anticipation de la programmation des interventions";
   $subtitle = "$total interventions";
   if ($prat_id) {
     $subtitle   .= " - Dr $prat->_view";
@@ -140,16 +155,15 @@ function graphOpAnnulees(
     $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_sejour");
   }
 
-  mbTrace($ticks);
-  mbTrace($series);
-  mbTrace($total);
-
   $options = array(
     'title' => utf8_encode($title),
     'subtitle' => utf8_encode($subtitle),
     'xaxis' => array('labelsAngle' => 45, 'ticks' => $ticks),
-    'yaxis' => array('autoscaleMargin' => 1),
-    'bars' => array('show' => true, 'stacked' => true, 'barWidth' => 0.8),
+    'yaxis'  => array('autoscaleMargin' => 1, "title" => utf8_encode("Quantité d'interventions"), "titleAngle" => 90),
+    'y2axis' => array('autoscaleMargin' => 1, "title" => utf8_encode("Anticipation moyenne en jours vs la date d'intervention"), "titleAngle" => 90),
+    "points" => array("show" => true, "radius" => 2, "lineWidth" => 1),
+    "lines" => array("show" => true, "lineWidth" => 1),
+    'bars' => array('show' => false, 'stacked' => false, 'barWidth' => 0.8),
     'HtmlText' => false,
     'legend' => array('show' => true, 'position' => 'nw'),
     'grid' => array('verticalLines' => false),
@@ -164,7 +178,7 @@ function graphOpAnnulees(
     )
   );
 
-  return array('series' => $series, 'options' => $options);
+  return array('series' => array_values($series), 'options' => $options);
 }
 
 

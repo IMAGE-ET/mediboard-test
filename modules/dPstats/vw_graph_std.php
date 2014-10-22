@@ -22,6 +22,7 @@ CAppUI::requireModuleFile("dPstats", "graph_activite_zoom");
 CAppUI::requireModuleFile("dPstats", "graph_pratdiscipline");
 CAppUI::requireModuleFile("dPstats", "graph_patjoursalle");
 CAppUI::requireModuleFile("dPstats", "graph_op_annulees");
+CAppUI::requireModuleFile("dPstats", "graph_workflow_operation");
 CAppUI::requireModuleFile("dPstats", "graph_occupation_salle_total");
 CAppUI::requireModuleFile("dPstats", "graph_temps_salle");
 
@@ -105,6 +106,13 @@ switch ($type_graph) {
     break;
   case "opannulees":
     $graph = graphOpAnnulees(
+      $_date_min, $_date_max,
+      $prat_id, $salle_id, $bloc_id,
+      $codes_ccam, $type, $hors_plage
+    );
+    break;
+  case "workflowoperation":
+    $graph = graphWorkflowOperation(
       $_date_min, $_date_max,
       $prat_id, $salle_id, $bloc_id,
       $codes_ccam, $type, $hors_plage
