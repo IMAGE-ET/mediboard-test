@@ -213,6 +213,10 @@ class CSearch {
       $object->load($datum['object_id']);
       //On récupère les champs à indexer.
       $datum_to_index = $object->getFieldsSearch();
+
+      if (!$datum_to_index["date"]) {
+        $datum_to_index["date"] = str_replace("-", "/", CMbDT::dateTime());
+      }
     }
     else {
       $datum_to_index["id"]          = $datum['object_id'];
