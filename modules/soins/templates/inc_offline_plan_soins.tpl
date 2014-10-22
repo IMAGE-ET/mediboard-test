@@ -20,7 +20,6 @@
   {{mb_return}}
 {{/if}}
 
-{{math equation="4*x" x=$period assign=colspan}}
 {{math equation="75/x" x=$colspan assign=width_th}}
 
 {{if $mode_dupa}}
@@ -36,7 +35,7 @@
       <td colspan="{{$th_chap_colspan}}">
         <table class="main">
           <tr>
-            <th colspan="3">
+            <th colspan="4">
               <h1 style="page-break-after: auto; text-align: center;">
                 <a href="#" onclick="window.print()">
                   Impression du {{$now|date_format:$conf.longdate}} à {{$now|date_format:$conf.time}} <br />
@@ -68,6 +67,11 @@
               NDA : {{$sejour->_NDA}}
               <br />
               Date d'entrée : {{$sejour->entree|date_format:$conf.date}} à {{$sejour->entree|date_format:$conf.time}}
+            </td>
+            <td class="text">
+              {{if $sejour->libelle}}
+                Motif : {{$sejour->libelle}}
+              {{/if}}
             </td>
           </tr>
         </table>
@@ -108,20 +112,37 @@
           Commentaires
         </th>
       {{/if}}
-      {{foreach from=$dates item=_date}}
-        <th colspan="4">
-          {{$_date|date_format:"%a"|substr:0:1|strtoupper}} <br />
-          {{$_date|date_format:"%d/%m"}}
-        </th>
-      {{/foreach}}
+      {{if $moments|@count == 4}}
+        {{foreach from=$dates item=_date}}
+          <th colspan="4">
+            {{$_date|date_format:"%a"|substr:0:1|strtoupper}} <br />
+            {{$_date|date_format:"%d/%m"}}
+          </th>
+        {{/foreach}}
+      {{else}}
+        {{foreach from=$dates_plan_soin item=_date key=_date_key}}
+          <th colspan="{{$_date|@count}}">
+            {{$_date_key|date_format:"%a"|substr:0:1|strtoupper}} <br />
+            {{$_date_key|date_format:"%d/%m"}}
+          </th>
+        {{/foreach}}
+      {{/if}}
     </tr>
     <tr>
-      {{foreach from=$dates item=_date}}
-        <th style="width: {{$width_th}}%">M</th>
-        <th style="width: {{$width_th}}%">M</th>
-        <th style="width: {{$width_th}}%">S</th>
-        <th style="width: {{$width_th}}%">N</th>
-      {{/foreach}}
+      {{if $moments|@count == 4}}
+        {{foreach from=$dates item=_date}}
+          <th style="width: {{$width_th}}%">M</th>
+          <th style="width: {{$width_th}}%">M</th>
+          <th style="width: {{$width_th}}%">S</th>
+          <th style="width: {{$width_th}}%">N</th>
+        {{/foreach}}
+      {{else}}
+        {{foreach from=$dates_plan_soin item=_dates}}
+          {{foreach from=$_dates item=_heure}}
+            <th style="width: {{$width_th}}%">{{$_heure|str_pad:2:"0":$smarty.const.STR_PAD_LEFT}}h</th>
+          {{/foreach}}
+        {{/foreach}}
+      {{/if}}
     </tr>
   </thead>
   <tfoot>
@@ -129,8 +150,8 @@
     <tr>
       <td colspan="{{if $mode_dupa}}4{{else}}3{{/if}}" style="text-align: right;">Initiales :</td>
       {{assign var=prescription_id value=$prescription->_id}}
-      {{foreach from=$dates item=_date}}
-        {{foreach from=$moments item=_moment name=moment}}
+      {{foreach from=$dates_plan_soin item=_moments key=_date}}
+        {{foreach from=$_moments item=_moment name=moment}}
           <td class="{{if $smarty.foreach.moment.first}}left_day{{elseif $smarty.foreach.moment.last}}right_day{{/if}}">
             {{if @isset($initiales.$prescription_id.$_date.$_moment|smarty:nodefaults)}}
               {{foreach from=$initiales.$prescription_id.$_date.$_moment item=_initiales name=initiales}}
@@ -146,29 +167,6 @@
   <tbody>
     {{* Parcours des lignes *}}
 
-    {{if $prescription->_ref_lines_med_for_plan|@count || $prescription->_ref_injections_for_plan|@count}}
-      <tr>
-        <th colspan="{{$th_chap_colspan}}" class="section">Médicaments</th>
-      </tr>
-      {{* Lignes de médicament *}}
-      {{foreach from=$prescription->_ref_lines_med_for_plan item=_cat_ATC key=_key_cat_ATC}}
-        {{foreach from=$_cat_ATC item=lines}}
-          {{foreach from=$lines key=unite_prise item=line}}
-            {{mb_include module=soins template=inc_offline_vw_line}}
-          {{/foreach}}
-        {{/foreach}}
-      {{/foreach}}
-
-      {{* Lignes de médicament (injectables) *}}
-      {{foreach from=$prescription->_ref_injections_for_plan item=_cat_ATC key=_key_cat_ATC}}
-        {{foreach from=$_cat_ATC item=lines}}
-          {{foreach from=$lines key=unite_prise item=line}}
-            {{mb_include module=soins template=inc_offline_vw_line}}
-          {{/foreach}}
-        {{/foreach}}
-      {{/foreach}}
-    {{/if}}
-
     {{* Lignes de perfusion *}}
     {{if $prescription->_ref_prescription_line_mixes_for_plan|@count}}
       <tr>
@@ -177,6 +175,53 @@
       {{foreach from=$prescription->_ref_prescription_line_mixes_for_plan item=line}}
         {{mb_include module=soins template=inc_offline_vw_line}}
       {{/foreach}}
+
+      {{if $empty_lines}}
+        {{foreach from=1|range:$empty_lines item=i}}
+          {{mb_include module=soins template=inc_offline_vw_line_empty}}
+        {{/foreach}}
+      {{/if}}
+    {{/if}}
+
+    {{if $prescription->_ref_injections_for_plan|@count}}
+      <tr>
+        <th colspan="{{$th_chap_colspan}}" class="section">Injections</th>
+      </tr>
+
+      {{* Lignes de médicaments (injectables) *}}
+      {{foreach from=$prescription->_ref_injections_for_plan item=_cat_ATC key=_key_cat_ATC}}
+        {{foreach from=$_cat_ATC item=lines}}
+          {{foreach from=$lines key=unite_prise item=line}}
+            {{mb_include module=soins template=inc_offline_vw_line}}
+          {{/foreach}}
+        {{/foreach}}
+      {{/foreach}}
+
+      {{if $empty_lines}}
+        {{foreach from=1|range:$empty_lines item=i}}
+          {{mb_include module=soins template=inc_offline_vw_line_empty}}
+        {{/foreach}}
+      {{/if}}
+    {{/if}}
+
+    {{if $prescription->_ref_lines_med_for_plan|@count}}
+      <tr>
+        <th colspan="{{$th_chap_colspan}}" class="section">Médicaments</th>
+      </tr>
+      {{* Lignes de médicaments *}}
+      {{foreach from=$prescription->_ref_lines_med_for_plan item=_cat_ATC key=_key_cat_ATC}}
+        {{foreach from=$_cat_ATC item=lines}}
+          {{foreach from=$lines key=unite_prise item=line}}
+            {{mb_include module=soins template=inc_offline_vw_line}}
+          {{/foreach}}
+        {{/foreach}}
+      {{/foreach}}
+
+      {{if $empty_lines}}
+        {{foreach from=1|range:$empty_lines item=i}}
+          {{mb_include module=soins template=inc_offline_vw_line_empty}}
+        {{/foreach}}
+      {{/if}}
     {{/if}}
 
     {{* Lignes d'éléments *}}
@@ -193,6 +238,28 @@
           {{/foreach}}
         {{/foreach}}
       {{/foreach}}
+
+      {{if $empty_lines}}
+        {{foreach from=1|range:$empty_lines item=i}}
+          {{mb_include module=soins template=inc_offline_vw_line_empty}}
+        {{/foreach}}
+      {{/if}}
+    {{/if}}
+
+    {{* Inscriptions *}}
+    {{if $prescription->_ref_inscriptions_for_plan|@count}}
+      <tr>
+        <th colspan="{{$th_chap_colspan}}" class="section">Inscriptions</th>
+      </tr>
+      {{foreach from=$prescription->_ref_inscriptions_for_plan item=line}}
+        {{mb_include module=soins template=inc_offline_vw_line}}
+      {{/foreach}}
+
+      {{if $empty_lines}}
+        {{foreach from=1|range:$empty_lines item=i}}
+          {{mb_include module=soins template=inc_offline_vw_line_empty}}
+        {{/foreach}}
+      {{/if}}
     {{/if}}
   </tbody>
 </table>

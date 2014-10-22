@@ -32,7 +32,7 @@
   }
 </style>
 
-{{assign var=print_gemsa value="CAppUI::conf"|static_call:"dPurgences Print gemsa":"CGroups-$g"}}
+{{assign var=print_gemsa value="dPurgences Print gemsa"|conf:"CGroups-$g"}}
 
 <div id="main-courante-container">
   <table class="main">
@@ -55,121 +55,9 @@
     <tr>
       <td>
         <table class="tbl">
-          <tr>
-            <th class="narrow text">{{mb_title class=CRPU field=_entree}}</th>
-            <th>{{mb_title class=CRPU field=_patient_id}}</th>
-            <th style="width: 8em;">{{mb_title class=CRPU field=ccmu}}</th>
-            <th>{{mb_title class=CRPU field=diag_infirmier}}</th>
-            <th class="narrow">Heure PeC</th>
-            <th style="width: 8em;">{{mb_title class=CRPU field=_responsable_id}}</th>
-            <th class="narrow">
-              {{mb_title class=CSejour field=mode_sortie}}
-              <br/> &amp;
-              {{mb_title class=CRPU field=orientation}}
-            </th>
-            {{if $print_gemsa}}
-              <th class="narrow">{{mb_title class=CRPU field=gemsa}}</th>
-            {{/if}}
-            <th class="narrow">{{mb_title class=CRPU field=_sortie}}</th>
-          </tr>
-
+          {{mb_include module=urgences template=inc_print_header_main_courante}}
           {{foreach from=$sejours item=sejour}}
-          {{assign var=rpu value=$sejour->_ref_rpu}}
-          {{assign var=patient value=$sejour->_ref_patient}}
-          {{assign var=consult value=$rpu->_ref_consult}}
-          <tr>
-            <td style="text-align: right;">
-              {{mb_value object=$sejour field=entree}}
-              {{if $sejour->_veille}}
-                <br/> Admis la veille
-              {{/if}}
-            </td>
-            <td class="text">
-              {{if $offline && $rpu->_id}}
-                <button class="search notext not-printable" onclick="$('modal-{{$sejour->_id}}').up('tr').show(); modalwindow = Modal.open($('modal-{{$sejour->_id}}'));">
-                  {{tr}}Show{{/tr}}
-                </button>
-               {{/if}}
-              {{assign var=rpu_link value="#`$patient->_guid`"}}
-              {{mb_include template=inc_rpu_patient}}
-            </td>
-          {{if $rpu->_id}}
-            <td class="ccmu-{{$rpu->ccmu}} text">
-              {{if $rpu->ccmu}}
-                {{mb_value object=$rpu field="ccmu"}}
-              {{/if}}
-            </td>
-            <td class="text">
-              {{if $rpu->date_at}}
-              <img src="images/icons/accident_travail.png" />
-              {{/if}}
-              <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
-                {{$rpu->diag_infirmier|nl2br}}
-              </span>
-            </td>
-            <td>{{mb_value object=$consult field="heure"}}</td>
-            <td>
-              {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
-              {{if $rpu->_ref_ide_responsable->_id}}
-                <br/>
-                <strong>{{mb_label class="CRPU" field="ide_responsable_id"}}</strong> :
-                <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_ref_ide_responsable->_guid}};')">
-                  {{$rpu->_ref_ide_responsable->_view}}
-                </span>
-              {{/if}}
-            </td>
-            <td>
-              {{if $sejour->sortie_reelle}}
-                {{mb_value object=$sejour field="mode_sortie"}}
-              {{/if}}
-              {{if $sejour->mode_sortie == "transfert"}}
-                <br />
-                &gt; <strong>{{mb_value object=$sejour field=etablissement_sortie_id}}</strong>
-              {{/if}}
-              {{if $sejour->mode_sortie == "mutation"}}
-                <br />
-                &gt; <strong>{{mb_value object=$sejour field=service_sortie_id}}</strong>
-              {{/if}}
-              {{if $rpu->orientation}}
-                <br />
-                {{mb_value object=$rpu field="orientation"}}
-              {{/if}}
-              <em>{{mb_value object=$sejour field=commentaires_sortie}}</em>
-            </td>
-
-            {{if $print_gemsa}}
-              <td>{{mb_value object=$rpu field=gemsa}}</td>
-            {{/if}}
-
-            {{if $sejour->type != "urg" && !$sejour->UHCD}}
-              <td colspan="2" class="text arretee">
-                <strong>{{mb_value object=$sejour field=type}}</strong>
-              </td>
-
-            {{elseif $sejour->annule}}
-            <td class="cancelled" colspan="2">
-              {{tr}}Cancelled{{/tr}}
-            </td>
-
-            {{elseif $rpu->mutation_sejour_id}}
-            {{mb_include template=inc_dossier_mutation colspan=2}}
-
-            {{else}}
-              {{if !$sejour->sortie_reelle}}
-                <td></td>
-              {{else}}
-                <td style="text-align: right;">{{mb_value object=$sejour field=_sortie}}</td>
-              {{/if}}
-            {{/if}}
-          {{else}}
-            <!-- Pas de RPU pour ce séjour d'urgence -->
-            <td colspan="10">
-              <div class="small-warning">
-                Ce séjour d'urgence n'est pas associé à un RPU.
-              </div>
-            </td>
-          {{/if}}
-          </tr>
+            {{mb_include module=urgences template=inc_print_main_courante}}
           {{/foreach}}
         </table>
       </td>
@@ -245,8 +133,8 @@
 
 {{if $offline}}
   {{foreach from=$sejours item=sejour}}
+    {{assign var=rpu value=$sejour->_ref_rpu}}
     {{if $rpu->_id}}
-      {{assign var=rpu value=$sejour->_ref_rpu}}
       {{assign var=patient value=$sejour->_ref_patient}}
       {{assign var=consult value=$rpu->_ref_consult}}
       {{assign var=sejour_id value=$sejour->_id}}

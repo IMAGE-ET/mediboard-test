@@ -20,6 +20,7 @@ $sejours_ids  = CValue::get("sejours_ids", null);
 $service_id   = CValue::get("service_id");
 $date         = CValue::get("date", CMbDT::date());
 $mode_dupa    = CValue::get("mode_dupa", 0);
+$empty_lines  = CValue::get("empty_lines", 0);
 
 $sejours = array();
 
@@ -34,9 +35,10 @@ if ($mode_dupa) {
   $datetime_max = CMbDT::date("+ $period days", $date) . " 23:59:59";
 }
 else {
-  $period = 4;
-  $datetime_min = CMbDT::date("-1 day", $date) . " 00:00:00";
-  $datetime_max = CMbDT::date("+ 3 days", $date) . " 23:59:59";
+  $hours_before = CAppUI::conf("soins plan_soins hours_before", $group->_guid);
+  $hours_after  = CAppUI::conf("soins plan_soins hours_after" , $group->_guid);
+  $datetime_min = CMbDT::dateTime("-$hours_before hour", "$date 00:00:00");
+  $datetime_max = CMbDT::dateTime("+$hours_after  hour", "$date 00:00:00");
 }
 
 if ($sejours_ids) {
@@ -77,35 +79,69 @@ $date_max = CMbDT::date($datetime_max);
 CPrescription::$mode_plan_soins = true;
 CPrescription::$show_inactive = false;
 
+$freq_poste = CAppUI::conf("soins plan_soins freq_postes", $group->_guid);
+
+$postes = array();
+$periods = array();
+$moments = array();
+$dates_plan_soin = array();
+$periods = "";
+
 while ($date_temp < $date_max) {
   $dates[$date_temp] = $date_temp;
   $date_temp = CMbDT::date("+1 day", $date_temp);
 }
 
-$postes = array(
-  "Poste 1" => CAppUI::conf("soins plan_soins hour_matin", $group->_guid),
-  "Poste 2" => CAppUI::conf("soins plan_soins hour_midi" , $group->_guid),
-  "Poste 3" => CAppUI::conf("soins plan_soins hour_soir" , $group->_guid),
-  "Poste 4" => CAppUI::conf("soins plan_soins hour_nuit" , $group->_guid));
+$colspan = 0;
 
-$dates_postes = array();
+switch ($freq_poste) {
+  case "1":
+  case "2":
+  case "4":
+    $count = 1;
+    for ($i = 0 ; $i < 24 ; $i += $freq_poste) {
+      $postes["Poste $count"] = $i;
+      $moments["poste-$count"] = $i;
+      $count++;
+      $periods[] = $i;
+    }
+    $date_temp = CMbDT::transform(null, $datetime_min, "%Y-%m-%d %H:00:00");
+    while ($date_temp < CMbDT::transform(null, $datetime_max, "%Y-%m-%d %H:00:00")) {
+      @$dates_plan_soin[CMbDT::date($date_temp)][CMbDT::time($date_temp)] = trim(CMbDT::transform(null, $date_temp, "%k"));
+      $date_temp = CMbDT::addDateTime("$freq_poste:00:00", $date_temp);
+      $colspan++;
+    }
+    break;
+  case "poste":
+  default:
+    $postes = array(
+      "Poste 1" => CAppUI::conf("soins plan_soins hour_matin", $group->_guid),
+      "Poste 2" => CAppUI::conf("soins plan_soins hour_midi" , $group->_guid),
+      "Poste 3" => CAppUI::conf("soins plan_soins hour_soir" , $group->_guid),
+      "Poste 4" => CAppUI::conf("soins plan_soins hour_nuit" , $group->_guid));
 
-$dates_postes[CMbDT::date("-1 day", $date)] = CAdministration::getTimingPlanSoins(CMbDT::date("-1 day", $date), $postes, null, 1, 2);
-foreach ($dates as $_date) {
-  $dates_postes[$_date] = CAdministration::getTimingPlanSoins($_date, $postes, null, 1, 2);
+    $moments = array(
+      "poste-1" => "matin",
+      "poste-2" => "midi" ,
+      "poste-3" => "soir" ,
+      "poste-4" => "nuit"
+    );
+
+    foreach ($dates as $_date) {
+      $dates_plan_soin[$_date] = $moments;
+      $colspan += 4;
+    }
+    break;
 }
-$dates_postes[CMbDT::date("+1 day", $date)] = CAdministration::getTimingPlanSoins(CMbDT::date("+1 day", $date), $postes, null, 1, 2);
-
-$postes_by_date = array();
-$moments = array(
-  "poste-1" => "matin",
-  "poste-2" => "midi" ,
-  "poste-3" => "soir" ,
-  "poste-4" => "nuit"
-);
 
 $moments_reverse = array_flip($moments);
 
+$dates_postes = array();
+foreach ($dates as $_date) {
+  $dates_postes[$_date] = CAdministration::getTimingPlanSoins($_date, $postes, $periods, 15, 15);
+}
+
+$postes_by_date = array();
 foreach ($dates_postes as $_dates_postes) {
   foreach ($_dates_postes as $day => $__dates_postes) {
     foreach ($__dates_postes as $poste => $_dates) {
@@ -130,6 +166,7 @@ foreach ($sejours as $_sejour) {
   $prescription->loadRefsLinesMedByCat("1", "1", "", "0", "1");
   $prescription->loadRefsLinesElementByCat("1", "1", "", "", "", "", "0", "1");
   $prescription->loadRefsPrescriptionLineMixes("", "0", "1", "", "0", "1");
+  $prescription->loadRefsLinesInscriptions();
 
   // Si aucune ligne, on retire le séjour
   if (!count($prescription->_ref_prescription_lines) &&
@@ -163,6 +200,7 @@ foreach ($sejours as $_sejour) {
     $line->_quantity_by_date_moment = array();
     $line->_administrations_moment  = array();
 
+    $line->countPlanifications();
     $line->loadRefLogSignee();
 
     if (count($line->_quantity_by_date)) {
@@ -217,6 +255,7 @@ foreach ($sejours as $_sejour) {
     $line->_prises_prevues_moment = array();
     $line->loadRefPraticien();
     $line->loadRefLogSignaturePrat();
+    $line->countPlanifications();
 
     if (count($line->_prises_prevues)) {
       foreach ($line->_prises_prevues as $_date => $_prises_by_date) {
@@ -256,6 +295,7 @@ foreach ($sejours as $_sejour) {
     $line->_administrations_moment  = array();
 
     $line->loadRefLogSignee();
+    $line->countPlanifications();
 
     if (count($line->_quantity_by_date)) {
       foreach ($line->_quantity_by_date as $_unite => $_quantites_by_unite) {
@@ -303,6 +343,45 @@ foreach ($sejours as $_sejour) {
       }
     }
   }
+
+  if (count($prescription->_count_inscriptions)) {
+    foreach ($prescription->_ref_lines_inscriptions as $lines_by_type) {
+      foreach ($lines_by_type as $line) {
+        $line->loadRefLogSignee();
+        $line->countPlanifications();
+
+        $line->_quantity_by_date_moment = array();
+        $line->_administrations_moment  = array();
+
+        if (count($line->_administrations)) {
+          foreach ($line->_administrations as $_key => $_administrations) {
+            foreach ($_administrations as $_date => $_administrations_by_date) {
+              foreach ($_administrations_by_date as $_hour => $_administrations_by_hour) {
+                if ($_hour == "list") {
+                  $adm_ids = explode("|", $_administrations_by_hour);
+                  foreach ($adm_ids as $_adm_id) {
+                    $adm = $line->_ref_administrations[$_adm_id];
+                    if (!isset($postes_by_date[$_date][$adm->_heure])) {
+                      continue;
+                    }
+                    $key = $postes_by_date[$_date][$adm->_heure];
+                    @$initiales[$prescription->_id][$_date][$key["moment"]][] = $adm->loadRefAdministrateur()->_shortview;
+                  }
+                  continue;
+                }
+                if (!isset($postes_by_date[$_date][$_hour])) {
+                  continue;
+                }
+                $key = $postes_by_date[$_date][$_hour];
+                @$line->_administrations_moment[$_key][$key["day"]][$key["moment"]]['quantite'] += $_administrations_by_hour['quantite'];
+                @$line->_administrations_moment[$_key][$key["day"]][$key["moment"]]['quantite_planifiee'] += $_administrations_by_hour['quantite_planifiee'];
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 // Dédoublonne les initiales
@@ -314,22 +393,26 @@ foreach ($initiales as $prescription_id => $_initiales) {
   }
 }
 
-$current_moment = $postes_by_date[$now_date][CMbDT::transform(null, CMbDT::time(), "%H")]["moment"];
+$current_moment =
+  isset($postes_by_date[$now_date]) ?
+    $postes_by_date[$now_date][CMbDT::transform(null, CMbDT::time(), "%H")]["moment"] : "";
 
 $smarty = new CSmartyDP();
 
-$smarty->assign("now"      , $now);
-$smarty->assign("now_date" , $now_date);
-$smarty->assign("sejours"  , $sejours);
-if ($service_id) {
-  $smarty->assign("service"  , $service);
+$smarty->assign("now"            , $now);
+$smarty->assign("now_date"       , $now_date);
+$smarty->assign("sejours"        , $sejours);
+if ($service_id && !$sejours_ids) {
+  $smarty->assign("service"      , $service);
 }
-$smarty->assign("period"   , $period);
-$smarty->assign("dates"    , $dates);
-$smarty->assign("moments"  , $moments);
-$smarty->assign("mode_dupa", $mode_dupa);
-$smarty->assign("initiales", $initiales);
-$smarty->assign("current_moment", $current_moment);
+$smarty->assign("dates"          , $dates);
+$smarty->assign("moments"        , $moments);
+$smarty->assign("mode_dupa"      , $mode_dupa);
+$smarty->assign("initiales"      , $initiales);
+$smarty->assign("current_moment" , $current_moment);
 $smarty->assign("moments_reverse", $moments_reverse);
+$smarty->assign("empty_lines"    , $empty_lines);
+$smarty->assign("dates_plan_soin", $dates_plan_soin);
+$smarty->assign("colspan"        , $colspan);
 
 $smarty->display("offline_plan_soins.tpl");

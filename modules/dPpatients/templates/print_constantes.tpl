@@ -1,4 +1,6 @@
 {{mb_default var=offline value=0}}
+{{mb_default var=empty_lines value=0}}
+
 {{unique_id var=uniq_ditto}}
 {{assign var=cste_grid value=$constantes_medicales_grid}}
 
@@ -73,13 +75,20 @@
         {{/foreach}}
       </tr>
     {{/foreach}}
-  
+    {{if $empty_lines}}
+      {{foreach from=1|range:$empty_lines item=i}}
+        <tr>
+          <td style="height: 30px;"></td>
+          {{foreach from=$cste_grid.names item=_cste_name}}
+            <td></td>
+          {{/foreach}}
+        </tr>
+      {{/foreach}}
+    {{/if}}
   {{else}}
-  
     <tr>
       <td></td>
       <td class="empty">{{tr}}CConstantesMedicales.none{{/tr}}</td>
     </tr>
-    
   {{/if}}
 </table>

@@ -25,11 +25,14 @@ CConfiguration::register(
           "period" => "num min|0 default|72"
         ),
         "plan_soins" => array(
-          "period"     => "num min|1 default|7",
-          "hour_matin" => "num min|0 max|23 default|8",
-          "hour_midi"  => "num min|0 max|23 default|12",
-          "hour_soir"  => "num min|0 max|23 default|18",
-          "hour_nuit"  => "num min|0 max|23 default|22"
+          "period"       => "num min|1 default|7",
+          "hour_matin"   => "num min|0 max|23 default|8",
+          "hour_midi"    => "num min|0 max|23 default|12",
+          "hour_soir"    => "num min|0 max|23 default|18",
+          "hour_nuit"    => "num min|0 max|23 default|22",
+          "freq_postes"  => "enum list|poste|1|2|4 default|poste",
+          "hours_before" => "enum list|12|24 default|24",
+          "hours_after"  => "enum list|24|48|72 default|48",
         ),
         "synthese" => array(
           "transmission_date_limit" => "bool default|0"
