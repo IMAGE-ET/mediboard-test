@@ -98,7 +98,7 @@
   </tr>
   {{if !$read_only}}
     <tr>
-      <th class="title" colspan="11" style="border-top: none;">
+      <th class="title" colspan="12" style="border-top: none;">
         {{foreach from=$subject->_ext_codes_ccam item=_code}}
           <span id="action-{{$_code->code}}" class="circled" style="background-color: #eeffee; color: black; font-weight: normal; font-size: 0.8em;">
          {{$_code->code}}
@@ -137,7 +137,6 @@
     </tr>
   {{/if}}
   <tr>
-    <th class="narrow">{{mb_title class=CActeCCAM field=code_acte}}</th>
     <th colspan="2" class="narrow">{{mb_title class=CActeCCAM field=code_activite}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=executant_id}}</th>
     <th>{{mb_title class=CActeCCAM field=modificateurs}}</th>
@@ -152,6 +151,17 @@
     {{/if}}
   </tr>
   {{foreach from=$subject->_ext_codes_ccam item=_code key=_key}}
+    <tr>
+      <th colspan="12" style="text-align: left;">
+        <span onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class}}')"
+              style="cursor: pointer;{{if $_code->type == 2}} color: #444;{{/if}}">
+          {{$_code->code}} : {{$_code->libelleLong}}
+        </span>
+        {{if $_code->forfait}}
+          <small style="color: #f00">({{tr}}CDatedCodeCCAM.remboursement.{{$_code->forfait}}{{/tr}})</small>
+        {{/if}}
+      </th>
+    </tr>
     {{foreach from=$_code->activites item=_activite}}
       {{foreach from=$_activite->phases item=_phase}}
         {{assign var="acte" value=$_phase->_connected_acte}}
@@ -159,25 +169,10 @@
           {{assign var="view" value='PMSI-'|cat:$acte->_id|default:$acte->_view}}
           {{assign var="key" value="$_key$view"}}
           <tr>
-            <td {{if !$acte->_id}}class="error"{{/if}}>
-              <a href="#" onclick="CodeCCAM.show('{{$acte->code_acte}}', '{{$subject->_class}}')">
-                {{if $_code->type != 2}}
-                  <strong>
-                    {{mb_value object=$acte field=code_acte}}
-                  </strong>
-                {{else}}
-                  <em>{{mb_value object=$acte field=code_acte}}</em>
-                {{/if}}
-              </a>
-              {{if $_code->forfait}}
-                <br />
-                <small style="color: #f00">({{tr}}CDatedCodeCCAM.remboursement.{{$_code->forfait}}{{/tr}})</small>
-              {{/if}}
-            </td>
-            <td class="narrow">
-                      <span class="circled {{if $acte->_id}}ok{{else}}error{{/if}}">
-                        {{mb_value object=$acte field=code_activite}}-{{mb_value object=$acte field=code_phase}}
-                      </span>
+            <td class="narrow" style="padding-left: 10px;">
+              <span class="circled {{if $acte->_id}}ok{{else}}error{{/if}}">
+                {{mb_value object=$acte field=code_activite}}-{{mb_value object=$acte field=code_phase}}
+              </span>
             </td>
             <td>
               {{mb_value object=$acte field=_tarif_base}}
@@ -186,7 +181,7 @@
               {{if $read_only}}
                 {{mb_value object=$acte field=executant_id}}
               {{else}}
-                {{mb_field object=$acte field=executant_id options=$listPrats onchange="CCodageCCAM.syncCodageField(this, '$view');"}}
+                {{mb_field object=$acte field=executant_id options=$listPrats onchange="CCodageCCAM.syncCodageField(this, '$view');" style="width: 12em;"}}
                 {{if $conf.dPccam.CCodeCCAM.use_new_association_rules && $acte->executant_id && $acte->_id}}
                   <button type="button" class="notext edit" onclick="editCodage('{{$subject->_class}}', {{$subject->_id}}, {{$acte->executant_id}})"
                           title="Modifier le codage">
@@ -195,7 +190,7 @@
                 {{/if}}
               {{/if}}
             </td>
-            <td class="greedyPane text">
+            <td class="greedyPane text{{if !$_phase->_modificateurs|@count}} empty{{/if}}">
               {{assign var=nb_modificateurs value=$acte->modificateurs|strlen}}
               {{foreach from=$_phase->_modificateurs item=_mod name=modificateurs}}
                 <span class="circled {{if $_mod->_state == 'prechecked'}}ok{{elseif $_mod->_checked && in_array($_mod->_state, array('not_recommended', 'forbidden'))}}error{{elseif in_array($_mod->_state, array('not_recommended', 'forbidden'))}}warning{{/if}}"
@@ -226,7 +221,7 @@
                 {{mb_value object=$acte field=montant_depassement}}
               {{else}}
                 <form name="codageActeMontantDepassement-{{$view}}" action="?" method="post" onsubmit="return false;">
-                  {{mb_field object=$acte field=montant_depassement onchange="CCodageCCAM.syncCodageField(this, '$view');"}}
+                  {{mb_field object=$acte field=montant_depassement onchange="CCodageCCAM.syncCodageField(this, '$view');" size=4}}
                 </form>
               {{/if}}
             </td>
@@ -235,7 +230,7 @@
                 {{mb_value object=$acte field=motif_depassement}}
               {{else}}
                 <form name="codageActeMotifDepassement-{{$view}}" action="?" method="post" onsubmit="return false;">
-                  {{mb_field object=$acte field=motif_depassement emptyLabel="CActeCCAM-motif_depassement" onchange="CCodageCCAM.syncCodageField(this, '$view');"}}
+                  {{mb_field object=$acte field=motif_depassement emptyLabel="CActeCCAM-motif_depassement" onchange="CCodageCCAM.syncCodageField(this, '$view');" style="width: 13em;"}}
                 </form>
               {{/if}}
             </td>
@@ -263,7 +258,7 @@
                 {{/if}}
               {{/if}}
             </td>
-            <td {{if $acte->_id && !$acte->facturable}}style="background-color: #fc9"{{/if}}>
+            <td style="text-align: right;{{if $acte->_id && !$acte->facturable}} background-color: #fc9{{/if}}">
               {{mb_value object=$acte field=_tarif}}
             </td>
             {{if !$read_only}}
