@@ -144,6 +144,10 @@ function graphOpAnnulees(
     $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_sejour");
   }
 
+  mbTrace($ticks);
+  mbTrace($series);
+  mbTrace($total);
+
   $options = array(
     'title' => utf8_encode($title),
     'subtitle' => utf8_encode($subtitle),
