@@ -454,7 +454,7 @@ updateListCPI = function(form) {
             
             <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$protocole->DP}}" style="width: 12em;" />
             <input type="hidden" name="DP" value="{{$protocole->DP}}" onchange="$V(this.form.keywords_code, this.value)"/>
-            <button type="button" class="cancel notext" onclick="$V(this.form.DP, '');" />
+            <button type="button" class="cancel notext" onclick="$V(this.form.DP, '');"></button>
             <button type="button" class="search notext" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
               <script>
                 CIM10Selector.init = function(){
@@ -541,7 +541,7 @@ updateListCPI = function(form) {
                     autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
                 },
                 callback: function(input, queryString){
-                  return (queryString + "&praticien_id=" + $V(form.chir_id));
+                  return (queryString + "&praticien_id=" + $V(form.chir_id) + "&function_id=" + $V(form.function_id));
                 }
               });
             });
