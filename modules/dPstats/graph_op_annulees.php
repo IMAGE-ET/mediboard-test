@@ -66,7 +66,7 @@ function graphOpAnnulees(
   $query->addOrder("mois, salle_id");
 
   // Filtre sur hors plage
-  if ($hors_plage) {
+  if (!$hors_plage) {
     $query->addWhereClause("plageop_id", "IS NOT NULL");
   }
 
@@ -139,10 +139,6 @@ function graphOpAnnulees(
   if ($type_sejour) {
     $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_sejour");
   }
-
-  mbTrace($ticks);
-  mbTrace($series);
-  mbTrace($total);
 
   $options = array(
     'title' => utf8_encode($title),
