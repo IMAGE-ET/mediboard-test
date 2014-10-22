@@ -67,7 +67,9 @@ class COperationWorkflow extends COperationMiner {
     $this->date_visite_anesth = $operation->date_visite_anesth;
     if ($operation->annulee) {
       $log = $operation->loadFirstLogForField("annulee");
-      $this->date_cancellation = $log->date;
+      if (CMbDT::daysRelative($operation->_datetime, $log->date) < $days_tolerance) {
+        $this->date_cancellation = $log->date;
+      }
     }
 
     // Consult anesthesie
