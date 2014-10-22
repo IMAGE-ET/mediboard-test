@@ -66,7 +66,7 @@ class CSalle extends CMbObject {
     $backProps["commentaires"] = "CCommentairePlanning salle_id";
     $backProps["check_list_categories"] = "CDailyCheckItemCategory target_id";
     $backProps["check_list_type_links"] = "CDailyCheckListTypeLink object_id";
-    $backProps["monitoring_concentrator"] = "CMonitoringConcentrator salle_id";
+    $backProps["monitoring_concentrators"] = "CMonitoringConcentrator salle_id";
     return $backProps;
   }
 
