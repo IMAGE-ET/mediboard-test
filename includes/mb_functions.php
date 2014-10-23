@@ -109,7 +109,7 @@ function mbPortalURL($module, $action = null) {
   }
 
   $url = CAppUI::conf("help_page_url");
-  if (!$url || strpos($url, "%m") === false || strpos($url, "%a") === false) {
+  if (!$url && (strpos($url, "%m") === false || strpos($url, "%a") === false)) {
     return "";
   }
 
