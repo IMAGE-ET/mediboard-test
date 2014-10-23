@@ -245,10 +245,6 @@ $list_constantes = array_reverse($list_constantes, true);
 $graph = new CConstantGraph($host, $context_guid);
 $graph->formatGraphDatas($list_constantes);
 
-if (!$constantes->_id && !$constantes->datetime) {
-  $constantes->datetime = CMbDT::dateTime();
-}
-
 // On récupère dans tous les cas le poids et la taille du patient
 $patient->loadRefConstantesMedicales(null, array("poids", "taille"), null, false);
 

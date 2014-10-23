@@ -85,9 +85,6 @@ if (is_null($can_edit)) {
   }
 }
 
-if (!$constantes->_id && !$constantes->datetime) {
-  $constantes->datetime = CMbDT::dateTime();
-}
 $patient_id = $constantes->patient_id ? $constantes->patient_id : $patient_id;
 $latest_constantes = CConstantesMedicales::getLatestFor($patient_id, null, array(), $context, false);
 // Création du template
