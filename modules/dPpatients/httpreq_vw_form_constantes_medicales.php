@@ -22,7 +22,7 @@ $can_edit      = CValue::get('can_edit');
 $selection     = CValue::get('selection');
 $host_guid     = CValue::get('host_guid');
 $display_graph = CValue::get('display_graph', 1);
-$tri_rpu       = CValue::get('tri_rpu', '');
+$unique_id     = CValue::get('unique_id', '');
 
 $context = null;
 if ($context_guid) {
@@ -102,7 +102,7 @@ $smarty->assign('can_create'            , $can_create);
 $smarty->assign('can_edit'              , $can_edit);
 $smarty->assign('modif_timeout'         , $modif_timeout);
 $smarty->assign('display_graph'         , $display_graph);
-$smarty->assign('tri_rpu'               , $tri_rpu);
+$smarty->assign('unique_id'             , $unique_id);
 $smarty->assign('show_cat_tabs'         , $show_cat_tabs);
 $smarty->assign('show_enable_all_button', $show_enable_all_button);
 

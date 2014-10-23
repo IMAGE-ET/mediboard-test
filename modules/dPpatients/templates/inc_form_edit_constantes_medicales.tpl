@@ -1,7 +1,7 @@
 {{mb_default var=hide_save_button value=0}}
 {{mb_default var=callback_administration value=0}}
 {{mb_default var=display_graph value=1}}
-{{mb_default var=tri_rpu value=""}}
+{{mb_default var=unique_id value=""}}
 {{mb_default var=can_create value=0}}
 {{mb_default var=show_cat_tabs value="CConstantesMedicales::getConfig"|static_call:"show_cat_tabs"}}
 {{mb_default var=show_enable_all_button value="CConstantesMedicales::getConfig"|static_call:"show_enable_all_button"}}
@@ -27,7 +27,7 @@ submitConstantesMedicales = function(oForm) {
 };
 
 updateInfosPatient = function() {
-  var form = getForm("edit-constantes-medicales{{$tri_rpu}}");
+  var form = getForm("edit-constantes-medicales{{$unique_id}}");
   var url = new Url('soins', 'ajax_update_infos_patient');
   url.addParam('patient_id', $V(form.patient_id));
   url.requestJSON(function(data) {
@@ -75,7 +75,7 @@ calculImcVst = function(form) {
   $V(form._vst, vst);
   $V(form._imc, imc);
   
-  var element = $('constantes_medicales_imc{{$tri_rpu}}');
+  var element = $('constantes_medicales_imc{{$unique_id}}');
   if (element) {
     element.update(imcInfo);
   }
@@ -87,30 +87,30 @@ calculImcVst = function(form) {
 };
 
 emptyAndSubmit = function(const_name) {
-  var form = getForm("edit-constantes-medicales{{$tri_rpu}}");
+  var form = getForm("edit-constantes-medicales{{$unique_id}}");
   const_name.each(function(elem) {$V(form[elem], '');});
   return submitConstantesMedicales(form);
 };
 
 Main.add(function () {
-  var oForm = getForm('edit-constantes-medicales{{$tri_rpu}}');
+  var oForm = getForm('edit-constantes-medicales{{$unique_id}}');
   calculImcVst(oForm);
   if (window.toggleAllGraphs) {
     toggleAllGraphs();
   }
   
   {{if $show_cat_tabs}}
-    Control.Tabs.create("constantes-by-type{{$tri_rpu}}");
+    Control.Tabs.create("constantes-by-type{{$unique_id}}");
   {{/if}}
-  {{if $tri_rpu == ''}}
+  {{if $unique_id == ''}}
     ViewPort.SetAvlHeight('constant_form', 0.98);
   {{/if}}
   ViewPort.SetAvlHeight('graphs', 1);
 });
 </script>
 
-<div id="constant_form{{$tri_rpu}}" style="position:relative; min-height: 290px; width: 100%;">
-  <form name="edit-constantes-medicales{{$tri_rpu}}" action="?" method="post" onsubmit="return {{if $can_edit}}checkForm(this){{else}}false{{/if}}">
+<div id="constant_form{{$unique_id}}" style="position:relative; min-height: 290px; width: 100%;">
+  <form name="edit-constantes-medicales{{$unique_id}}" action="?" method="post" onsubmit="return {{if $can_edit}}checkForm(this){{else}}false{{/if}}">
     <input type="hidden" name="m" value="dPpatients" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="dosql" value="do_constantes_medicales_aed" />
@@ -136,18 +136,18 @@ Main.add(function () {
     <input type="hidden" name="_poids" value="{{$const->poids}}" />
 
     {{if $show_cat_tabs}}
-    <ul id="constantes-by-type{{$tri_rpu}}" class="control_tabs small" style="min-width: 200px;">
+    <ul id="constantes-by-type{{$unique_id}}" class="control_tabs small" style="min-width: 200px;">
       {{foreach from=$all_constantes key=_type item=_list}}
         {{if array_key_exists($_type, $selection)}}
           <li>
-            <a href="#type-{{$_type}}{{$tri_rpu}}">{{tr}}CConstantesMedicales.type.{{$_type}}{{/tr}}</a>
+            <a href="#type-{{$_type}}{{$unique_id}}">{{tr}}CConstantesMedicales.type.{{$_type}}{{/tr}}</a>
           </li>
         {{/if}}
       {{/foreach}}
     </ul>
     {{/if}}
 
-    <div id="constantes_{{$constantes->_id}}{{$tri_rpu}}" style="height: 72%; overflow-y: auto; width: 100%;">
+    <div id="constantes_{{$constantes->_id}}{{$unique_id}}" style="height: 72%; overflow-y: auto; width: 100%;">
       {{if $modif_timeout}}
         <div class="small-warning">
           {{tr var1=$modif_timeout}}CConstantes-Medicales-msg-modif-timeout-%s{{/tr}}
@@ -170,7 +170,7 @@ Main.add(function () {
         {{assign var=constants_list value="CConstantesMedicales"|static:"list_constantes"}}
 
         {{foreach from=$selection key=_type item=_ranks}}
-          <tbody id="type-{{$_type}}{{$tri_rpu}}" {{if $show_cat_tabs}} {{if $_type != "vital"}} style="display: none;" {{/if}} {{/if}}>
+          <tbody id="type-{{$_type}}{{$unique_id}}" {{if $show_cat_tabs}} {{if $_type != "vital"}} style="display: none;" {{/if}} {{/if}}>
             {{foreach from=$_ranks key=_rank item=_constants}}
               {{foreach from=$_constants item=_constant}}
                 <tr {{if $_rank == "hidden" && ($const->$_constant == "" || !$display_graph)}}
@@ -237,7 +237,7 @@ Main.add(function () {
                         {{mb_field object=$constantes field=$_constant size="3" onchange=$_callback|ternary:"$_callback(this.form)":null readonly=$_readonly hidden=$_hidden}}
 
                         {{if $_constant == "_imc"}}
-                          <div id="constantes_medicales_imc{{$tri_rpu}}" style="color:#F00;"></div>
+                          <div id="constantes_medicales_imc{{$unique_id}}" style="color:#F00;"></div>
                         {{/if}}
                       </td>
                     {{/if}}
@@ -276,15 +276,15 @@ Main.add(function () {
       </table>
     </div>
 
-    <div style="{{if $tri_rpu == ''}}position: absolute; bottom:0;{{/if}} text-align:center; height:20%; width: 100%;" id="buttons_form_const{{$tri_rpu}}">
+    <div style="{{if $unique_id == ''}}position: absolute; bottom:0;{{/if}} text-align:center; height:20%; width: 100%;" id="buttons_form_const-{{$unique_id}}">
       {{if $can_edit && !$modif_timeout}}
         {{if $constantes->_id}}
-          {{mb_field object=$constantes field=datetime form="edit-constantes-medicales$tri_rpu" register=true}}
+          {{mb_field object=$constantes field=datetime form="edit-constantes-medicales$unique_id" register=true}}
           <button style="display:inline-block;" class="trash notext" type="button" onclick="if (confirm('Etes-vous sûr de vouloir supprimer ce relevé ?')) {$V(this.form.del, 1); return submitConstantesMedicales(this.form);}">
             {{tr}}CConstantesMedicales.delete_all{{/tr}}
           </button>
         {{elseif $constantes->datetime}}
-          {{mb_field object=$constantes field=datetime form="edit-constantes-medicales$tri_rpu" register=true}}
+          {{mb_field object=$constantes field=datetime form="edit-constantes-medicales$unique_id" register=true}}
         {{else}}
           <input type="hidden" name="datetime" value="now"/>
         {{/if}}

@@ -1,4 +1,7 @@
-<script>  
+{{* Unique id pour le formulaire des constantes medicales *}}
+{{assign var=unique_id value="-"|uniqid}}
+
+<script>
   function requestInfoPatTri() {
     var oForm = getForm("editRPUtri");
     var iPatient_id = $V(oForm._patient_id);
@@ -20,9 +23,9 @@
       url.addParam("context_guid", context_guid);
       url.addParam("patient_id"   , iPatient_id);
       url.addParam('display_graph', 0);
-      url.addParam('tri_rpu', '-tri_rpu');
+      url.addParam('unique_id', '{{$unique_id}}');
       url.requestUpdate('constantes-tri');
-      if (getForm("edit-constantes-medicales-tri_rpu")) {
+      if (getForm("edit-constantes-medicales{{$unique_id}}")) {
         toggleAllGraphs();
       }
     }
