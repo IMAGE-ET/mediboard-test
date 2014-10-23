@@ -342,7 +342,7 @@
     </tr>
     {{foreach from=$sejour->_ref_transmissions item=_suivi}}
       <tr>
-        {{mb_include module=hospi template=inc_line_suivi show_type=false show_patient=false readonly=true}}
+        {{mb_include module=hospi template=inc_line_suivi show_type=false show_patient=false readonly=true show_link=false}}
       </tr>
     {{/foreach}}
   </table>
