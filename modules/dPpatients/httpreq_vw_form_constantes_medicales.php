@@ -89,10 +89,6 @@ if (is_null($can_edit)) {
   }
 }
 
-if (!$constantes->_id && !$constantes->datetime) {
-  $constantes->datetime = CMbDT::dateTime();
-}
-
 $latest_constantes = CConstantesMedicales::getLatestFor($patient_id, null, array(), $context, false);
 // Création du template
 $smarty = new CSmartyDP();

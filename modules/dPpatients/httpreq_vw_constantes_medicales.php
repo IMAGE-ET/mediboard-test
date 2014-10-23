@@ -274,10 +274,6 @@ $list_constantes = array_reverse($list_constantes, true);
 $graph = new CConstantGraph($host, $context_guid);
 $graph->formatGraphDatas($list_constantes);
 
-if (!$constantes->_id && !$constantes->datetime) {
-  $constantes->datetime = CMbDT::dateTime();
-}
-
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign('constantes',                 $constantes);

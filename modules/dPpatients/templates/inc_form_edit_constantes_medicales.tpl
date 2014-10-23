@@ -278,6 +278,8 @@ Main.add(function () {
           <button style="display:inline-block;" class="trash notext" type="button" onclick="if (confirm('Etes-vous sûr de vouloir supprimer ce relevé ?')) {$V(this.form.del, 1); return submitConstantesMedicales(this.form);}">
             {{tr}}CConstantesMedicales.delete_all{{/tr}}
           </button>
+        {{elseif $constantes->datetime}}
+          {{mb_field object=$constantes field=datetime form="edit-constantes-medicales$tri_rpu" register=true}}
         {{else}}
           <input type="hidden" name="datetime" value="now"/>
         {{/if}}
