@@ -77,6 +77,12 @@ if ($preview) {
   $ex_object->_preview = true;
 }
 
+$creation_date = $ex_object->getCreateDate();
+
+if ($object->_id && $object instanceof CSejour) {
+  $_affectation = $object->loadRefCurrAffectation($creation_date);
+}
+
 $printer_id = null;
 $printers = CMediusers::get()->loadRefFunction()->loadBackRefs("printers");
 if (count($printers)) {
@@ -212,8 +218,7 @@ foreach ($ref_objects as $_object) {
 
   if ($_object instanceof CSejour) {
     $_object->loadNDA();
-    $date = $ex_object->getCreateDate();
-    $_object->loadRefCurrAffectation($date);
+    $_object->loadRefCurrAffectation($creation_date);
     continue;
   }
 }
