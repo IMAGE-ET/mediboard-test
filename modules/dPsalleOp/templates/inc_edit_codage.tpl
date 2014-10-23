@@ -19,12 +19,13 @@
   <tr>
     <th class="narrow">{{mb_title class=CActeCCAM field=code_activite}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=_tarif_base}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=facturable}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=code_association}}</th>
     <th>{{mb_title class=CActeCCAM field=modificateurs}}</th>
+    <th>{{mb_title class=CActeCCAM field=_tarif}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=execution}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=montant_depassement}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=motif_depassement}}</th>
-    <th class="narrow">{{mb_title class=CActeCCAM field=code_association}}</th>
-    <th>{{mb_title class=CActeCCAM field=_tarif}}</th>
     <th class="narrow">Actions</th>
   </tr>
 
@@ -63,6 +64,22 @@
             <td>
               {{mb_value object=$acte field=_tarif_base}}
             </td>
+            <td>
+              <form name="codageActeFacturable-{{$view}}" action="?" method="post" onsubmit="return false;">
+                {{mb_field object=$acte field=facturable typeEnum="select" onchange="syncCodageField(this, '$view');"}}
+              </form>
+            </td>
+            <td
+              {{if $acte->_id && ($acte->code_association != $acte->_guess_association)}}style="background-color: #fc9"{{/if}}>
+              {{if $acte->_id}}
+                <form name="codageActeCodeAssociation-{{$view}}" action="?" method="post" onsubmit="return false;">
+                  {{mb_field object=$acte field=code_association emptyLabel="CActeCCAM.code_association." onchange="syncCodageField(this, '$view');"}}
+                </form>
+                {{if $acte->code_association != $acte->_guess_association}}
+                  ({{$acte->_guess_association}})
+                {{/if}}
+              {{/if}}
+            </td>
             <td class="greedyPane{{if !$_phase->_modificateurs|@count}} empty{{/if}}">
               {{assign var=nb_modificateurs value=$acte->modificateurs|strlen}}
               {{foreach from=$_phase->_modificateurs item=_mod name=modificateurs}}
@@ -80,6 +97,9 @@
                 <em>{{tr}}None{{/tr}}</em>
               {{/foreach}}
             </td>
+            <td style="text-align: right;{{if $acte->_id && !$acte->facturable}} background-color: #fc9;{{/if}}">
+              {{mb_value object=$acte field=_tarif}}
+            </td>
             <td>
               <form name="codageActeExecution-{{$view}}" action="?" method="post" onsubmit="return false;">
                 {{mb_field object=$acte field=execution form="codageActeExecution-$view" register=true onchange="syncCodageField(this, '$view');"}}
@@ -94,20 +114,6 @@
               <form name="codageActeMotifDepassement-{{$view}}" action="?" method="post" onsubmit="return false;">
                 {{mb_field object=$acte field=motif_depassement emptyLabel="CActeCCAM-motif_depassement" onchange="syncCodageField(this, '$view');" style="width: 13em;"}}
               </form>
-            </td>
-            <td
-              {{if $acte->_id && ($acte->code_association != $acte->_guess_association)}}style="background-color: #fc9"{{/if}}>
-                {{if $acte->_id}}
-                  <form name="codageActeCodeAssociation-{{$view}}" action="?" method="post" onsubmit="return false;">
-                    {{mb_field object=$acte field=code_association emptyLabel="CActeCCAM.code_association." onchange="syncCodageField(this, '$view');"}}
-                  </form>
-                {{if $acte->code_association != $acte->_guess_association}}
-                  ({{$acte->_guess_association}})
-                {{/if}}
-              {{/if}}
-            </td>
-            <td style="text-align: right;{{if $acte->_id && !$acte->facturable}} background-color: #fc9;{{/if}}">
-              {{mb_value object=$acte field=_tarif}}
             </td>
             <td class="button">
               <form name="codageActe-{{$view}}" action="?" method="post"
@@ -130,6 +136,7 @@
                 {{mb_field object=$acte field=execution hidden=true}}
                 {{mb_field object=$acte field=montant_depassement hidden=true}}
                 {{mb_field object=$acte field=motif_depassement hidden=true emptyLabel="CActeCCAM-motif_depassement"}}
+                {{mb_field object=$acte field=facturable hidden=true}}
 
                 {{foreach from=$_phase->_modificateurs item=_mod name=modificateurs}}
                   <input type="checkbox" name="modificateur_{{$_mod->code}}{{$_mod->_double}}" {{if $_mod->_checked}}checked="checked"{{/if}} hidden="hidden" />
@@ -189,50 +196,50 @@
         <th class="category" colspan="2">Pour les interventions chirurgicales</th>
       </tr>
       {{if isset($codage->_possible_rules.EA|smarty:nodefaults)}}
-      <tr>
-        <th class="narrow {{if $codage->_possible_rules.EA}}ok{{/if}}">
-          <input type="radio" name="_association_question" value="EA"
-                 {{if $codage->association_rule == "EA"}}checked="checked"{{/if}}
-                 onchange="setRule(this, {{$codage->_id}});"/>
-        </th>
-        <td>
-          Les actes portent sur :
-          <ul>
-            <li><strong>des membres différents ou</strong></li>
-            <li><strong>le tronc et un membre ou</strong></li>
-            <li><strong>la tête et un membre.</strong></li>
-          </ul>
-        </td>
-      </tr>
+        <tr>
+          <th class="narrow {{if $codage->_possible_rules.EA}}ok{{/if}}">
+            <input type="radio" name="_association_question" value="EA"
+                   {{if $codage->association_rule == "EA"}}checked="checked"{{/if}}
+                   onchange="setRule(this, {{$codage->_id}});"/>
+          </th>
+          <td>
+            Les actes portent sur :
+            <ul>
+              <li><strong>des membres différents ou</strong></li>
+              <li><strong>le tronc et un membre ou</strong></li>
+              <li><strong>la tête et un membre.</strong></li>
+            </ul>
+          </td>
+        </tr>
       {{/if}}
       {{if isset($codage->_possible_rules.EB|smarty:nodefaults)}}
-      <tr>
-        <th class="narrow {{if $codage->_possible_rules.EB}}ok{{/if}}">
-          <input type="radio" name="_association_question" value="EB"
-                 {{if $codage->association_rule == "EB"}}checked="checked"{{/if}}
-                 onchange="setRule(this, {{$codage->_id}});"/>
-        </th>
-        <td>
-          Les actes visent à traiter des <strong>lésions traumatiques multiples et récentes</strong>
-        </td>
-      </tr>
+        <tr>
+          <th class="narrow {{if $codage->_possible_rules.EB}}ok{{/if}}">
+            <input type="radio" name="_association_question" value="EB"
+                   {{if $codage->association_rule == "EB"}}checked="checked"{{/if}}
+                   onchange="setRule(this, {{$codage->_id}});"/>
+          </th>
+          <td>
+            Les actes visent à traiter des <strong>lésions traumatiques multiples et récentes</strong>
+          </td>
+        </tr>
       {{/if}}
       {{if isset($codage->_possible_rules.EC|smarty:nodefaults)}}
-      <tr>
-        <th class="narrow {{if $codage->_possible_rules.EC}}ok{{/if}}">
-          <input type="radio" name="_association_question" value="EC"
-                 {{if $codage->association_rule == "EC"}}checked="checked"{{/if}}
-                 onchange="setRule(this, {{$codage->_id}});"/>
-        </th>
-        <td>
-          Les actes décrivent une intervention de <strong>carcinologie ORL</strong> comprenant :
-          <ul>
-            <li>une exérèse et</li>
-            <li>un curage et</li>
-            <li>une reconstruction.</li>
-          </ul>
-        </td>
-      </tr>
+        <tr>
+          <th class="narrow {{if $codage->_possible_rules.EC}}ok{{/if}}">
+            <input type="radio" name="_association_question" value="EC"
+                   {{if $codage->association_rule == "EC"}}checked="checked"{{/if}}
+                   onchange="setRule(this, {{$codage->_id}});"/>
+          </th>
+          <td>
+            Les actes décrivent une intervention de <strong>carcinologie ORL</strong> comprenant :
+            <ul>
+              <li>une exérèse et</li>
+              <li>un curage et</li>
+              <li>une reconstruction.</li>
+            </ul>
+          </td>
+        </tr>
       {{/if}}
       {{if isset($codage->_possible_rules.EH|smarty:nodefaults)}}
         <tr>
@@ -251,40 +258,40 @@
         <th class="category" colspan="2">Pour les actes d'imagerie</th>
       </tr>
       {{if isset($codage->_possible_rules.ED|smarty:nodefaults)}}
-      <tr>
-        <th class="narrow {{if $codage->_possible_rules.ED}}ok{{/if}}">
-          <input type="radio" name="_association_question" value="ED"
-                 {{if $codage->association_rule == "ED"}}checked="checked"{{/if}}
-                 onchange="setRule(this, {{$codage->_id}});"/>
-        </th>
-        <td>
-          Les actes sont des actes d'<strong>échographie</strong> portant sur <strong>plusieurs régions anatomiques</strong>.
-        </td>
-      </tr>
+        <tr>
+          <th class="narrow {{if $codage->_possible_rules.ED}}ok{{/if}}">
+            <input type="radio" name="_association_question" value="ED"
+                   {{if $codage->association_rule == "ED"}}checked="checked"{{/if}}
+                   onchange="setRule(this, {{$codage->_id}});"/>
+          </th>
+          <td>
+            Les actes sont des actes d'<strong>échographie</strong> portant sur <strong>plusieurs régions anatomiques</strong>.
+          </td>
+        </tr>
       {{/if}}
       {{if isset($codage->_possible_rules.EE|smarty:nodefaults)}}
-      <tr>
-        <th class="narrow {{if $codage->_possible_rules.EE}}ok{{/if}}">
-          <input type="radio" name="_association_question" value="EE"
-                 {{if $codage->association_rule == "EE"}}checked="checked"{{/if}}
-                 onchange="setRule(this, {{$codage->_id}});"/>
-        </th>
-        <td>
-          Les actes sont des actes d'<strong>électromyographie</strong>, de <strong>mesure des vitesses de conduction</strong>, d'<strong>étude des latences et des réflexes</strong> portant sur <strong>plusieurs régions anatomiques</strong>.
-        </td>
-      </tr>
+        <tr>
+          <th class="narrow {{if $codage->_possible_rules.EE}}ok{{/if}}">
+            <input type="radio" name="_association_question" value="EE"
+                   {{if $codage->association_rule == "EE"}}checked="checked"{{/if}}
+                   onchange="setRule(this, {{$codage->_id}});"/>
+          </th>
+          <td>
+            Les actes sont des actes d'<strong>électromyographie</strong>, de <strong>mesure des vitesses de conduction</strong>, d'<strong>étude des latences et des réflexes</strong> portant sur <strong>plusieurs régions anatomiques</strong>.
+          </td>
+        </tr>
       {{/if}}
       {{if isset($codage->_possible_rules.EF|smarty:nodefaults)}}
-      <tr>
-        <th class="narrow {{if $codage->_possible_rules.EF}}ok{{/if}}">
-          <input type="radio" name="_association_question" value="EF"
-                 {{if $codage->association_rule == "EF"}}checked="checked"{{/if}}
-                 onchange="setRule(this, {{$codage->_id}});"/>
-        </th>
-        <td>
-          Les actes sont des actes de <strong>scanographie</strong> portant sur <strong>plusieurs régions anatomiques</strong>.
-        </td>
-      </tr>
+        <tr>
+          <th class="narrow {{if $codage->_possible_rules.EF}}ok{{/if}}">
+            <input type="radio" name="_association_question" value="EF"
+                   {{if $codage->association_rule == "EF"}}checked="checked"{{/if}}
+                   onchange="setRule(this, {{$codage->_id}});"/>
+          </th>
+          <td>
+            Les actes sont des actes de <strong>scanographie</strong> portant sur <strong>plusieurs régions anatomiques</strong>.
+          </td>
+        </tr>
       {{/if}}
     </table>
   </form>
