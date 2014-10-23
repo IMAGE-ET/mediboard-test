@@ -80,7 +80,7 @@ if ($preview) {
 $creation_date = $ex_object->getCreateDate();
 
 if ($object->_id && $object instanceof CSejour) {
-  $_affectation = $object->loadRefCurrAffectation($creation_date);
+  $object->loadRefCurrAffectation($creation_date);
 }
 
 $printer_id = null;
