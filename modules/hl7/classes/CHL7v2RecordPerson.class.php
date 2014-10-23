@@ -791,6 +791,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $xcn2  = $this->queryTextNode("XCN.2/FN.1", $node);
     $xcn3  = $this->queryTextNode("XCN.3", $node);
 
+    $sender = $this->_ref_sender;
+
     $medecin = new CMedecin();
     
     switch ($this->queryTextNode("XCN.13", $node)) {
