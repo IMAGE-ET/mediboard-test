@@ -812,13 +812,21 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
 
       default:
     }
-    
+
+    if ($xcn3 == "") {
+      $xcn3 = null;
+    }
+
     // Si pas retrouvé par son identifiant
     if (!$medecin->_id) {
       $medecin->nom    = $xcn2;
       $medecin->prenom = $xcn3;
+
       $medecin->loadMatchingObjectEsc();
-      
+
+      // Notifier les autres destinataires autre que le sender
+      $medecin->_eai_sender_guid = $sender->_guid;
+
       // Dans le cas où il n'est pas connu dans MB on le créé
       $medecin->store();
     }
