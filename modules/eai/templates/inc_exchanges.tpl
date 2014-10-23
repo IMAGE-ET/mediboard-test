@@ -19,13 +19,15 @@ orderColonne = function(order_col, order_way) {
 }
 </script>
 
-{{if $total_exchanges != 0}}
-  {{mb_include module=system template=inc_pagination total=$total_exchanges current=$page change_page='ExchangeDataFormat.changePage' jumper='10' step=25}}
-{{/if}}
+{{mb_include module=system template=inc_pagination total=$total_exchanges current=$page change_page='ExchangeDataFormat.changePage' jumper='10' step=25}}
+
+<form name="search-exchange_id" action="" method="get"
+      onsubmit="return ExchangeDataFormat.doesExchangeExist('{{$exchange->_class}}', $V($('exchange_id')));" style="float: right; clear: both;">
+  <input type="search" id="exchange_id" name="exchange_id" required placeholder="{{tr}}CExchangeDataFormat-exchange_id{{/tr}}" />
+  <button type="submit" class="lookup notext">{{tr}}search_exchange_by_id-button{{/tr}}</button>
+</form>
+
 <table class="tbl">
-  <tr>
-    <th class="title" colspan="21">{{tr}}{{$exchange->_class}}{{/tr}} - {{$exchange->_ref_group}} {{if $type}}- {{tr}}{{$mod_name}}-msg-{{$type}}{{/tr}}{{/if}}</th>
-  </tr>
   <tr>
     <th></th>
     <th>{{tr}}Actions{{/tr}}</th>

@@ -30,8 +30,10 @@
       <td>{{mb_value object=$_hl7_transformation field="message"}}</td>
       <td>{{mb_value object=$_hl7_transformation field="version"}}</td>
       <td>{{mb_value object=$_hl7_transformation field="extension"}}</td>
-      <td>{{mb_value object=$_hl7_transformation field="component"}}</td>
-      <td>{{mb_value object=$_hl7_transformation field="action"}}</td>
+      <td class="text compact">{{mb_value object=$_hl7_transformation field="component"}}</td>
+      <td class="narrow button">
+        <span class="hl7-transformation-{{$_hl7_transformation->action}}" title="{{mb_value object=$_hl7_transformation field="action"}}"></span>
+      </td>
     </tr>
   {{/foreach}}
 </table>

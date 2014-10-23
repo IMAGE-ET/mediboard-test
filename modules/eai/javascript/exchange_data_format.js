@@ -113,5 +113,24 @@ ExchangeDataFormat = {
     }
     url.requestUpdate("exchanges");
     return false;
+  },
+
+  doesExchangeExist : function(exchange_class, exchange_id) {
+    if (exchange_id) {
+      var url = new Url('eai', 'ajax_does_exchange_exist');
+      url.addParam('exchange_class', exchange_class);
+      url.addParam('exchange_id'   , exchange_id);
+      url.requestJSON(
+        function(id) {
+          if (id) {
+            ExchangeDataFormat.viewExchange(exchange_class+"-"+id);
+          }
+          else {
+            SystemMessage.notify("<div class='error'>"+$T('CExchangeDataFormat-doesnt-exist')+"</div>");
+          }
+        });
+    }
+
+    return false;
   }
 }

@@ -24,11 +24,16 @@ $_date_max = CValue::getOrSession('_date_max', CMbDT::dateTime("+1 day"));
 $page      = CValue::getOrSession('value', 0);
 
 // Types filtres qu'on peut prendre en compte
-$filtre_types = array('no_date_echange', 'emetteur', 'destinataire', 'message_invalide', 'acquittement_invalide');
+$filtre_types = array(
+  'ok'    => array('emetteur', 'destinataire'),
+  'error' => array('no_date_echange','message_invalide', 'acquittement_invalide')
+);
 
 $types = array();
-foreach ($filtre_types as $type) {
-  $types[$type] = !isset($t) || in_array($type, $t);
+foreach ($filtre_types as $status_type => $_type) {
+  foreach ($_type as $type) {
+    $types[$status_type][$type] = !isset($t) || in_array($type, $t);
+  }
 }
 
 $exchange = new $exchange_class;

@@ -1,0 +1,15 @@
+span.hl7-transformation-add:before {
+  content: url("../../../style/mediboard/images/buttons/add.png");
+}
+
+span.hl7-transformation-modify:before {
+  content: url("../../../style/mediboard/images/buttons/edit.png");
+}
+
+span.hl7-transformation-move:before {
+  content: url("../../../style/mediboard/images/buttons/hslip.png");
+}
+
+span.hl7-transformation-delete:before {
+  content: url("../../../style/mediboard/images/buttons/remove.png");
+}

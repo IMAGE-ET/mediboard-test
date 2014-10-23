@@ -20,11 +20,12 @@
   });
 </script>
 
-<table class="main">
+<table class="main layout">
   <tr>
     <td style="width:5%" rowspan="6" id="exchange_data_format">
       {{mb_include template=inc_exchange_data_format}}
     </td>
+
     <td class="halfPane" id="exchanges">
     </td> 
   </tr>

@@ -15,7 +15,7 @@
     if (!window.autoRefresh) {
       window.autoRefresh = setInterval(function(){
         getForm("filterExchange").onsubmit();
-      }, 5000);
+      }, 10000);
       $("auto-refresh-toggler").style.borderColor = "red";
     }
     else {
@@ -50,87 +50,93 @@
         <input type="hidden" name="exchange_class" value="{{$exchange->_class}}" />
         <input type="hidden" name="order_col" value="date_production" />
         <input type="hidden" name="order_way" value="DESC" />
-        
-        <table class="form">
+
+        <table class="main layout">
           <tr>
-            <th class="category" colspan="4">Choix de la date d'échange</th>
-          </tr>
-          <tr>
-            <th style="width:50%">{{mb_label object=$exchange field="_date_min"}}</th>
-            <td class="narrow">{{mb_field object=$exchange field="_date_min" form="filterExchange" register=true onchange="\$V(this.form.page, 0)"}} </td>
-            <th class="narrow">{{mb_label object=$exchange field="_date_max"}}</th>
-            <td style="width:50%">{{mb_field object=$exchange field="_date_max" form="filterExchange" register=true onchange="\$V(this.form.page, 0)"}} </td>
-          </tr>
-          <tr>
-            <th class="category" colspan="4">{{tr}}filter-criteria{{/tr}}</th>
-          </tr>
-          <tr>
-            <th colspan="2">{{mb_label object=$exchange field="group_id"}}</th>
-            <td colspan="2">{{mb_field object=$exchange field="group_id" canNull=true form="filterExchange" autocomplete="true,1,50,true,true"}}</td>
-          </tr>
-          <tr>
-            <th colspan="2">{{mb_label object=$exchange field=$exchange->_spec->key}}</th>
-            <td colspan="2">{{mb_field object=$exchange field=$exchange->_spec->key}}</td>
-          </tr>
-          <tr>
-            <th colspan="2">{{mb_label object=$exchange field="object_id"}}</th>
-            <td colspan="2">{{mb_field object=$exchange field="object_id"}}</td>
-          </tr>
-          <tr>
-            <th colspan="2">{{mb_label object=$exchange field="id_permanent"}}</th>
-            <td colspan="2">{{mb_field object=$exchange field="id_permanent"}}</td>
-          </tr>
-          
-          <tr>
-            <th colspan="2">Type de message</th>
-            <td colspan="2">
-              <select class="str" name="type" onchange="ExchangeDataFormat.fillSelect(this, this.form.elements.evenement, '{{$mod_name}}')">
-                <option value="">&mdash; Messages &mdash;</option>
-                {{foreach from=$messages key=_message item=_class_message}}
-                  <option value="{{$_message}}" {{if $exchange->type == $_message}}selected="selected"{{/if}}> {{tr}}{{$mod_name}}-msg-{{$_message}}{{/tr}}</option>
-                {{/foreach}}
-              </select>
-            </td>
-          </tr> 
-          <tr>
-            <th colspan="2">Types d'événements</th>
-            <td colspan="2">
-              <select class="str" name="evenement">
-                <option value="">&mdash; Événements &mdash;</option>
-              </select>
-            </td>
-          </tr>
-          
-          <tr>
-            <th colspan="2">Mots-clés dans le contenu du message</th>
-            <td colspan="2">
-              <input type="text" name="keywords_msg" value="{{$keywords_msg}}" />
-            </td>
-          </tr>
-          
-          <tr>
-            <th colspan="2">Mots-clés dans le contenu de l'acquittement</th>
-            <td colspan="2">
-              <input type="text" name="keywords_ack" value="{{$keywords_ack}}" />
-            </td>
-          </tr>
-          
-          {{mb_include module=$mod_name template="`$exchange->_class`_filter_inc"}}
-          
-          <tr>
-            <td colspan="4" style="text-align: center">
-              {{foreach from=$types key=type item=value}}
-                <label>
-                  <input onclick="$V(this.form.page, 0)" type="checkbox" name="types[{{$type}}]"/> 
-                  {{tr}}CExchange-type-{{$type}}{{/tr}}
-                </label>
-              {{/foreach}}
-            </td>
-          </tr>
-          
-          <tr>
-            <td colspan="4" style="text-align: center">
-              <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
+            <td class="separator expand" onclick="MbObject.toggleColumn(this, $(this).next())"></td>
+
+            <td>
+              <table class="main form">
+                <tr>
+                  <th>{{mb_label object=$exchange field=date_echange}}</th>
+                  <td class="text">
+                    {{mb_field object=$exchange field=_date_min register=true form="filterExchange" prop=dateTime onchange="\$V(this.form.elements.start, 0)"}}
+                    <b>&raquo;</b>
+                    {{mb_field object=$exchange field=_date_max register=true form="filterExchange" prop=dateTime onchange="\$V(this.form.elements.start, 0)"}}
+                  </td>
+
+                  <th>{{mb_label object=$exchange field="group_id"}}</th>
+                  <td>
+                    {{mb_field object=$exchange field="group_id" canNull=true form="filterExchange" autocomplete="true,1,50,true,true"
+                    placeholder="Tous les établissements"}}
+                  </td>
+                </tr>
+
+                <tr>
+                  <th>{{mb_label object=$exchange field="object_id"}}</th>
+                  <td>{{mb_field object=$exchange field="object_id" placeholder="Identifiant de l'objet"}}</td>
+
+                  <th>{{mb_label object=$exchange field="id_permanent"}}</th>
+                  <td>{{mb_field object=$exchange field="id_permanent" placeholder="IPP/NDA"}}</td>
+                </tr>
+
+
+                <tr>
+                  <th>{{mb_label object=$exchange field=type}}</th>
+                  <td>
+                    <select class="str" name="type" onchange="ExchangeDataFormat.fillSelect(this, this.form.elements.evenement, '{{$mod_name}}')">
+                      <option value="">&mdash; Messages &mdash;</option>
+                      {{foreach from=$messages key=_message item=_class_message}}
+                        <option value="{{$_message}}" {{if $exchange->type == $_message}}selected="selected"{{/if}}> {{tr}}{{$mod_name}}-msg-{{$_message}}{{/tr}}</option>
+                      {{/foreach}}
+                    </select>
+                  </td>
+
+                  <th>{{mb_label object=$exchange field=sous_type}}</th>
+                  <td>
+                    <select class="str" name="evenement">
+                      <option value="">&mdash; Événements &mdash;</option>
+                    </select>
+                  </td>
+                </tr>
+
+                <tr>
+                  <th>{{mb_label object=$exchange field=_message}}</th>
+                  <td>
+                    <input type="text" name="keywords_msg" value="{{$keywords_msg}}" placeholder="Mots-clés dans le message" size="30px"/>
+                  </td>
+
+                  <th>{{mb_label object=$exchange field=_acquittement}}</th>
+                  <td>
+                    <input type="text" name="keywords_ack" value="{{$keywords_ack}}" placeholder="Mots-clés dans l'acquittement" size="30px"/>
+                  </td>
+                </tr>
+
+                {{mb_include module=$mod_name template="`$exchange->_class`_filter_inc"}}
+
+                <tr>
+                  <th>{{tr}}Filter{{/tr}}</th>
+                  <td colspan="3">
+                    {{foreach from=$types key=status_type item=_type}}
+                      <fieldset style="display: inline-block;
+                        background-color: {{if $status_type == "error"}}rgba(255, 102, 102, 0.4){{else}}rgba(148, 221, 137, 0.4){{/if}} !important; margin-top: 0;">
+                        {{foreach from=$_type key=type item=value}}
+                          <label>
+                            <input onclick="$V(this.form.page, 0)" type="checkbox" name="types[{{$type}}]"/>
+                            {{tr}}CExchange-type-{{$type}}{{/tr}}
+                          </label>
+                        {{/foreach}}
+                      </fieldset>
+                    {{/foreach}}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td colspan="4">
+                    <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
         </table>
