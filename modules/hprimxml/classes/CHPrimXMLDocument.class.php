@@ -1621,19 +1621,30 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       "m" => "M",
       "f" => "F",
     );
+
     $sexe = $mbPatient->assure_sexe ? $sexeConversion[$mbPatient->assure_sexe] : "I";
     $this->addAttribute($personne, "sexe", $sexe);
-    $this->addTexte($personne, "nomUsuel", $mbPatient->assure_nom);
-    $this->addTexte($personne, "nomNaissance", $mbPatient->assure_nom_jeune_fille);
+
+    if (isset($this->_ref_receiver->_id) && $this->_ref_receiver->_configs["uppercase_fields"]) {
+      $this->addTexte($personne, "nomUsuel"    , CMbString::upper($mbPatient->assure_nom));
+      $this->addTexte($personne, "nomNaissance", CMbString::upper($mbPatient->assure_nom_jeune_fille));
+    }
+
     $prenoms = $this->addElement($personne, "prenoms");
-    $this->addTexte($prenoms, "prenom", $mbPatient->assure_prenom);
-    $this->addTexte($prenoms, "prenom", $mbPatient->assure_prenom_2);
-    $this->addTexte($prenoms, "prenom", $mbPatient->assure_prenom_3);
-    $this->addTexte($prenoms, "prenom", $mbPatient->assure_prenom_4);
+    if (isset($this->_ref_receiver->_id) && $this->_ref_receiver->_configs["uppercase_fields"]) {
+      $this->addTexte($prenoms, "prenom", CMbString::upper($mbPatient->assure_prenom));
+      $this->addTexte($prenoms, "prenom", CMbString::upper($mbPatient->assure_prenom_2));
+      $this->addTexte($prenoms, "prenom", CMbString::upper($mbPatient->assure_prenom_3));
+      $this->addTexte($prenoms, "prenom", CMbString::upper($mbPatient->assure_prenom_4));
+    }
+
     $adresses = $this->addElement($personne, "adresses");
     $adresse = $this->addElement($adresses, "adresse");
-    $this->addTexte($adresse, "ligne", substr($mbPatient->assure_adresse, 0, 35));
-    $this->addTexte($adresse, "ville", $mbPatient->assure_ville);
+    if (isset($this->_ref_receiver->_id) && $this->_ref_receiver->_configs["uppercase_fields"]) {
+      $this->addTexte($adresse, "ligne", substr($mbPatient->assure_adresse, 0, 35));
+      $this->addTexte($adresse, "ville", $mbPatient->assure_ville);
+    }
+
     if ($mbPatient->assure_pays_insee) {
       $this->addElement($adresse, "pays", str_pad($mbPatient->assure_pays_insee, 3, '0', STR_PAD_LEFT));
     }
