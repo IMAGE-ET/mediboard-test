@@ -474,6 +474,7 @@ class CActeCCAM extends CActe {
     // Si acte non facturable on met le code d'asso à aucun
     if (!$this->facturable) {
       $this->code_association = "";
+      $this->modificateurs = "";
     }
 
     // Si on repasse le facturable à 1 on remet à la montant base à la valeur de l'acte et le dépassement à 0
