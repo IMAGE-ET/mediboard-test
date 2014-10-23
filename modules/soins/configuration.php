@@ -46,6 +46,7 @@ CConfiguration::register(
         ),
         "CConstantesMedicales"  => array(
           "constantes_show" => "bool default|1",
+          'constante_date_administration' => 'bool default|0',
         ),
         "Pancarte"  => array(
           "transmissions_hours"           => "enum list|12|24|36|48 default|24",

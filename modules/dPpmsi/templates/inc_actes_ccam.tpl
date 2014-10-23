@@ -139,13 +139,13 @@
   <tr>
     <th colspan="2" class="narrow">{{mb_title class=CActeCCAM field=code_activite}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=executant_id}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=facturable}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=code_association}}</th>
     <th>{{mb_title class=CActeCCAM field=modificateurs}}</th>
+    <th>{{mb_title class=CActeCCAM field=_tarif}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=execution}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=montant_depassement}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=motif_depassement}}</th>
-    <th class="narrow">{{mb_title class=CActeCCAM field=facturable}}</th>
-    <th class="narrow">{{mb_title class=CActeCCAM field=code_association}}</th>
-    <th>{{mb_title class=CActeCCAM field=_tarif}}</th>
     {{if !$read_only}}
       <th class="narrow">Actions</th>
     {{/if}}
@@ -190,6 +190,30 @@
                 {{/if}}
               {{/if}}
             </td>
+            <td>
+              {{if $read_only}}
+                {{mb_value object=$acte field=facturable}}
+              {{else}}
+                <form name="codageActeFacturable-{{$view}}" action="?" method="post" onsubmit="return false;">
+                  {{mb_field object=$acte field=facturable typeEnum="select" onchange="CCodageCCAM.syncCodageField(this, '$view');"}}
+                </form>
+              {{/if}}
+            </td>
+            <td
+              {{if $acte->_id && ($acte->code_association != $acte->_guess_association)}}style="background-color: #fc9"{{/if}}>
+              {{if $read_only}}
+                {{mb_value object=$acte field=code_association}}
+              {{else}}
+                {{if $acte->_id}}
+                  <form name="codageActeCodeAssociation-{{$view}}" action="?" method="post" onsubmit="return false;">
+                    {{mb_field object=$acte field=code_association emptyLabel="CActeCCAM.code_association." onchange="CCodageCCAM.syncCodageField(this, '$view');"}}
+                  </form>
+                  {{if $acte->code_association != $acte->_guess_association}}
+                    ({{$acte->_guess_association}})
+                  {{/if}}
+                {{/if}}
+              {{/if}}
+            </td>
             <td class="greedyPane text{{if !$_phase->_modificateurs|@count}} empty{{/if}}">
               {{assign var=nb_modificateurs value=$acte->modificateurs|strlen}}
               {{foreach from=$_phase->_modificateurs item=_mod name=modificateurs}}
@@ -206,6 +230,9 @@
                 {{foreachelse}}
                 <em>{{tr}}None{{/tr}}</em>
               {{/foreach}}
+            </td>
+            <td style="text-align: right;{{if $acte->_id && !$acte->facturable}} background-color: #fc9{{/if}}">
+              {{mb_value object=$acte field=_tarif}}
             </td>
             <td>
               {{if $read_only}}
@@ -233,33 +260,6 @@
                   {{mb_field object=$acte field=motif_depassement emptyLabel="CActeCCAM-motif_depassement" onchange="CCodageCCAM.syncCodageField(this, '$view');" style="width: 13em;"}}
                 </form>
               {{/if}}
-            </td>
-            <td>
-              {{if $read_only}}
-                {{mb_value object=$acte field=facturable}}
-              {{else}}
-                <form name="codageActeFacturable-{{$view}}" action="?" method="post" onsubmit="return false;">
-                  {{mb_field object=$acte field=facturable typeEnum="select" onchange="CCodageCCAM.syncCodageField(this, '$view');"}}
-                </form>
-              {{/if}}
-            </td>
-            <td
-              {{if $acte->_id && ($acte->code_association != $acte->_guess_association)}}style="background-color: #fc9"{{/if}}>
-              {{if $read_only}}
-                {{mb_value object=$acte field=code_association}}
-              {{else}}
-                {{if $acte->_id}}
-                  <form name="codageActeCodeAssociation-{{$view}}" action="?" method="post" onsubmit="return false;">
-                    {{mb_field object=$acte field=code_association emptyLabel="CActeCCAM.code_association." onchange="CCodageCCAM.syncCodageField(this, '$view');"}}
-                  </form>
-                  {{if $acte->code_association != $acte->_guess_association}}
-                    ({{$acte->_guess_association}})
-                  {{/if}}
-                {{/if}}
-              {{/if}}
-            </td>
-            <td style="text-align: right;{{if $acte->_id && !$acte->facturable}} background-color: #fc9{{/if}}">
-              {{mb_value object=$acte field=_tarif}}
             </td>
             {{if !$read_only}}
               <td class="button">
