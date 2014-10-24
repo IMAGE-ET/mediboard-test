@@ -75,7 +75,7 @@
             </span>
           {{/if}}
 
-          {{if $prescription->_ref_lines_important|@count}}
+          {{if $prescription && $prescription->_ref_lines_important|@count}}
             <br/>
             {{mb_include module=prescription template=vw_line_important lines=$prescription->_ref_lines_important}}
           {{/if}}
