@@ -76,24 +76,24 @@ class CSearch {
     }
     if (!$params) {
       $params = array(
-                      'number_of_shards' => 5,
-                      'number_of_replicas' =>1,
-                      "analysis" => array(
-                        "analyzer" => array(
-                          "default" => array(
-                            "type" => "custom",
-                            'tokenizer' => 'standard',
-                            'filter' => array('standard', 'lowercase', 'mySnowball')
-                          )
-                        ),
-                        'filter' => array(
-                          'mySnowball' => array(
-                            'type' => 'snowball',
-                            'language' => 'French'
-                          )
-                        )
-                      )
-                    );
+        'number_of_shards'   => 5,
+        'number_of_replicas' => 1,
+        "analysis"           => array(
+          "analyzer" => array(
+            "default" => array(
+              "type"      => "custom",
+              'tokenizer' => 'standard',
+              'filter'    => array('standard', 'lowercase', 'mySnowball')
+            )
+          ),
+          'filter'   => array(
+            'mySnowball' => array(
+              'type'     => 'snowball',
+              'language' => 'French'
+            )
+          )
+        )
+      );
     }
     $this->_index = $this->_client->getIndex($name);
     $this->_index->create($params, $bool);
@@ -124,8 +124,10 @@ class CSearch {
       $name = CAppUI::conf("db std dbname");
 
     }
+
     return $this->getIndex($name);
   }
+
   /**
    * Creates a new Type object
    *
@@ -210,12 +212,28 @@ class CSearch {
   function constructDatum ($datum) {
     if ($datum['type'] != 'delete') {
       $object = new $datum['object_class']();
-      $object->load($datum['object_id']);
+
+      if (!$object->load($datum['object_id'])) {
+        $datum_to_index["id"]               = $datum['object_id'];
+        $datum_to_index["author_id"]        = "";
+        $datum_to_index["prat_id"]          = "";
+        $datum_to_index["title"]            = "";
+        $datum_to_index["body"]             = "";
+        $datum_to_index["date"]             = CMbDT::format(null, "%Y/%m/%d %H:%M:%S");
+        $datum_to_index["function_id"]      = "";
+        $datum_to_index["group_id"]         = "";
+        $datum_to_index["patient_id"]       = "";
+        $datum_to_index["object_ref_id"]    = "";
+        $datum_to_index["object_ref_class"] = "";
+
+        return $datum_to_index;
+      }
+
       //On récupère les champs à indexer.
       $datum_to_index = $object->getFieldsSearch();
 
       if (!$datum_to_index["date"]) {
-        $datum_to_index["date"] = str_replace("-", "/", CMbDT::dateTime());
+        $datum_to_index["date"] = CMbDT::format(null, "%Y/%m/%d %H:%M:%S");;
       }
     }
     else {
@@ -223,7 +241,7 @@ class CSearch {
       $datum_to_index["author_id"]   = '';
       $datum_to_index["title"]       = '';
       $datum_to_index["body"]        = '';
-      $datum_to_index["date"]        = '';
+      $datum_to_index["date"]        = CMbDT::format(null, "%Y/%m/%d %H:%M:%S");
       $datum_to_index["patient_id"]  = '';
       $datum_to_index["function_id"] = '';
       $datum_to_index["group_id"]    = $datum['group_id'];
@@ -256,7 +274,7 @@ class CSearch {
    */
   function indexingDatum ($datum, $type) {
     $datum_to_index = $this->constructDatum($datum);
-    $document = $type->createDocument($datum['object_id'], $datum_to_index);
+    $document       = $type->createDocument($datum['object_id'], $datum_to_index);
     switch ($datum['type']) {
       case 'create':
         $type->addDocument($document);
@@ -414,6 +432,7 @@ class CSearch {
     }
     return $words;
   }
+
   /**
    * HTML cleaning method
    *
