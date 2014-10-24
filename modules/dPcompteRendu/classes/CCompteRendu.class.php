@@ -1824,6 +1824,9 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
    */
   function getFieldsSearch () {
     $prat = $this->getFieldPraticien();
+    if (!$prat) {
+      $prat = new CMediusers();
+    }
     $array["id"]          = $this->_id;
     $array["author_id"]   = $this->author_id;
     $array["prat_id"]     = $prat->_id;
@@ -1904,6 +1907,9 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
    */
   function getFieldPraticien () {
     $object = $this->loadTargetObject();
+    if (!$object || !$object->_id) {
+      return null;
+    }
     if ($object instanceof CConsultAnesth) {
       $prat = $object->loadRefConsultation()->loadRefPraticien();
     }
