@@ -2611,6 +2611,7 @@ $locales['mod-system-tab-ajax_form_view_sender_source'] = 'Formulaire de la sour
 $locales['mod-system-tab-ajax_manage_files'] = 'Gestion des fichiers';
 $locales['mod-system-tab-ajax_send_mail_diskfull'] = 'Envoi de mail pour le disque plein';
 $locales['mod-system-tab-ajax_send_views'] = 'Export de vues';
+$locales['mod-system-tab-ajax_show_markdown_help'] = 'Aide syntaxique Markdown';
 $locales['mod-system-tab-ajax_tag_manager'] = 'Gestionnaire d\'étiquette';
 $locales['mod-system-tab-ajax_vw_aggregation_board'] = 'Tableau de bord';
 $locales['mod-system-tab-ajax_vw_content_file'] = 'Vue du fichier';

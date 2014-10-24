@@ -240,6 +240,14 @@ document.observe("keydown", function(e){
         Event.stop(e);
         UAInfo.show();
         break;
+
+    /**
+     * Autofocus on module search input
+     */
+      case 65: // a
+        Event.stop(e);
+        $("module_search").focus();
+        break;
     }
   }
 });
@@ -2086,6 +2094,11 @@ App.fullscreen = function(element) {
       element.msRequestFullscreen();
     }
   }
+};
+
+App.openMarkdownHelp = function() {
+  var url = new Url('system', 'ajax_show_markdown_help');
+  url.popup(1024, 800);
 };
 
 /**
