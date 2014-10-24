@@ -43,17 +43,17 @@ class CSearch {
   /**
    * Create client for indexing
    *
-   * @param Array $hosts [optional] needs an array like
-   *               array(
+   * @param Array $hosts   [optional] needs an array like
+   *                       array(
    *                       'host' => 'mydomain.org',
    *                       'port' => 12345
-   *                     )
+   *                       )
    *
    * @return void
    */
-  function createClient ($hosts = null) {
+  function createClient($hosts = null) {
     if (!$hosts) {
-      $hosts = array (
+      $hosts = array(
         'host' => CAppUI::conf("search client_host"),
         'port' => CAppUI::conf("search client_port"),
       );
@@ -70,33 +70,34 @@ class CSearch {
    *
    * @return Elastica\Index
    */
-  function createIndex ($name, $params, $bool=false) {
+  function createIndex($name, $params, $bool = false) {
     if (!$name) {
       $name = CAppUI::conf("db std dbname");
     }
     if (!$params) {
       $params = array(
-                      'number_of_shards' => 5,
-                      'number_of_replicas' =>1,
-                      "analysis" => array(
-                        "analyzer" => array(
-                          "default" => array(
-                            "type" => "custom",
-                            'tokenizer' => 'standard',
-                            'filter' => array('standard', 'lowercase', 'mySnowball')
-                          )
-                        ),
-                        'filter' => array(
-                          'mySnowball' => array(
-                            'type' => 'snowball',
-                            'language' => 'French'
-                          )
-                        )
-                      )
-                    );
+        'number_of_shards'   => 5,
+        'number_of_replicas' => 1,
+        "analysis"           => array(
+          "analyzer" => array(
+            "default" => array(
+              "type"      => "custom",
+              'tokenizer' => 'standard',
+              'filter'    => array('standard', 'lowercase', 'mySnowball')
+            )
+          ),
+          'filter'   => array(
+            'mySnowball' => array(
+              'type'     => 'snowball',
+              'language' => 'French'
+            )
+          )
+        )
+      );
     }
     $this->_index = $this->_client->getIndex($name);
     $this->_index->create($params, $bool);
+
     return $this->_index;
   }
 
@@ -107,9 +108,10 @@ class CSearch {
    *
    * @return Elastica\Index
    */
-  function getIndex ($name) {
+  function getIndex($name) {
     $this->_index = $this->_client->getIndex($name);
-    return  $this->_index;
+
+    return $this->_index;
   }
 
   /**
@@ -119,13 +121,14 @@ class CSearch {
    *
    * @return \Elastica\Index
    */
-  function loadIndex ($name = null) {
+  function loadIndex($name = null) {
     if (!$name) {
       $name = CAppUI::conf("db std dbname");
-
     }
+
     return $this->getIndex($name);
   }
+
   /**
    * Creates a new Type object
    *
@@ -134,8 +137,9 @@ class CSearch {
    *
    * @return Elastica\Type
    */
-  function createType ($index, $name) {
+  function createType($index, $name) {
     $type = $index->getType($name);
+
     return $type;
   }
 
@@ -147,7 +151,7 @@ class CSearch {
    *
    * @return Elastica\Type
    */
-  function createMapping ($type, $array) {
+  function createMapping($type, $array) {
     // Define mapping
     $mapping = new Mapping();
     $mapping->setType($type);
@@ -166,12 +170,13 @@ class CSearch {
    *
    * @return array  The Result of the query
    */
-  function getDataTemporaryTable ($limit, $object_class = null) {
-    $ds = CSQLDataSource::get("std");
+  function getDataTemporaryTable($limit, $object_class = null) {
+    $ds    = CSQLDataSource::get("std");
     $query = ($object_class) ?
       "SELECT * FROM `search_indexing` WHERE `object_class` = '$object_class' ORDER BY `type`, `search_indexing_id` LIMIT $limit"
       :
       "SELECT * FROM `search_indexing` ORDER BY `object_class` ,`type`, `search_indexing_id` LIMIT $limit";
+
     return $ds->loadList($query);
   }
 
@@ -182,9 +187,10 @@ class CSearch {
    *
    * @return bool  The Result of the query
    */
-  function deleteDataTemporaryTable ($array) {
-    $ds = CSQLDataSource::get("std");
-    $query = "DELETE FROM `search_indexing` WHERE `search_indexing_id` ". $ds->prepareIn($array);
+  function deleteDataTemporaryTable($array) {
+    $ds    = CSQLDataSource::get("std");
+    $query = "DELETE FROM `search_indexing` WHERE `search_indexing_id` " . $ds->prepareIn($array);
+
     return $ds->exec($query);
   }
 
@@ -195,11 +201,13 @@ class CSearch {
    *
    * @return bool  The Result of the query
    */
-  function deleteDatumTemporaryTable ($id) {
-    $ds = CSQLDataSource::get("std");
+  function deleteDatumTemporaryTable($id) {
+    $ds    = CSQLDataSource::get("std");
     $query = "DELETE FROM `search_indexing` WHERE `object_id` = \"$id\";";
+
     return $ds->exec($query);
   }
+
   /**
    * Construit les données afin que celles-ci soient indexées (avec les fields corrects)
    *
@@ -207,10 +215,26 @@ class CSearch {
    *
    * @return array
    */
-  function constructDatum ($datum) {
+  function constructDatum($datum) {
     if ($datum['type'] != 'delete') {
       $object = new $datum['object_class']();
-      $object->load($datum['object_id']);
+
+      if (!$object->load($datum['object_id'])) {
+        $datum_to_index["id"]               = $datum['object_id'];
+        $datum_to_index["author_id"]        = "";
+        $datum_to_index["prat_id"]          = "";
+        $datum_to_index["title"]            = "";
+        $datum_to_index["body"]             = "";
+        $datum_to_index["date"]             = CMbDT::dateTime();
+        $datum_to_index["function_id"]      = "";
+        $datum_to_index["group_id"]         = "";
+        $datum_to_index["patient_id"]       = "";
+        $datum_to_index["object_ref_id"]    = "";
+        $datum_to_index["object_ref_class"] = "";
+
+        return $datum_to_index;
+      }
+
       //On récupère les champs à indexer.
       $datum_to_index = $object->getFieldsSearch();
 
@@ -223,11 +247,12 @@ class CSearch {
       $datum_to_index["author_id"]   = '';
       $datum_to_index["title"]       = '';
       $datum_to_index["body"]        = '';
-      $datum_to_index["date"]        = '';
+      $datum_to_index["date"]        = CMbDT::dateTime();
       $datum_to_index["patient_id"]  = '';
       $datum_to_index["function_id"] = '';
       $datum_to_index["group_id"]    = $datum['group_id'];
     }
+
     return $datum_to_index;
   }
 
@@ -238,11 +263,12 @@ class CSearch {
    *
    * @return array
    */
-  function constructBulkData ($data) {
+  function constructBulkData($data) {
     $data_to_index = array();
     foreach ($data as $key => $_datum) {
       $data_to_index[$_datum['object_class']][$_datum['type']][$key] = $this->constructDatum($_datum);;
     }
+
     return $data_to_index;
   }
 
@@ -254,9 +280,9 @@ class CSearch {
    *
    * @return array
    */
-  function indexingDatum ($datum, $type) {
+  function indexingDatum($datum, $type) {
     $datum_to_index = $this->constructDatum($datum);
-    $document = $type->createDocument($datum['object_id'], $datum_to_index);
+    $document       = $type->createDocument($datum['object_id'], $datum_to_index);
     switch ($datum['type']) {
       case 'create':
         $type->addDocument($document);
@@ -275,6 +301,7 @@ class CSearch {
     }
     $type->getIndex()->refresh();
     $this->deleteDatumTemporaryTable($datum['search_indexing_id']);
+
     return true;
   }
 
@@ -338,22 +365,22 @@ class CSearch {
    */
   function searchQueryString($operator, $words, $start = 0, $limit = 30, $names_types = null, $aggregation = false) {
     // Define a Query. We want a string query.
-    $elasticaQueryString  = new QueryString();
+    $elasticaQueryString = new QueryString();
 
     //'And' or 'Or' default : 'Or'
     $elasticaQueryString->setDefaultOperator($operator);
     $elasticaQueryString->setQuery($words);
 
     // Create the actual search object with some data.
-    $elasticaQuery        = new Query();
+    $elasticaQuery = new Query();
     $elasticaQuery->setQuery($elasticaQueryString);
 
     //create aggregation
     if ($aggregation) {
-       // on aggrège d'abord par class d'object référents
+      // on aggrège d'abord par class d'object référents
       // on effectue un sous aggrégation par id des objets référents.
-      $agg_by_class = new CSearchAggregation("Terms", "ref_class", "object_ref_class", 10);
-      $sub_agg_by_id = new CSearchAggregation("Terms", "sub_ref_id", "object_ref_id", 100);
+      $agg_by_class    = new CSearchAggregation("Terms", "ref_class", "object_ref_class", 10);
+      $sub_agg_by_id   = new CSearchAggregation("Terms", "sub_ref_id", "object_ref_id", 100);
       $sub_agg_by_type = new CSearchAggregation("Terms", "sub_ref_type", "_type", 10);
       $sub_agg_by_id->_aggregation->addAggregation($sub_agg_by_type->_aggregation);
       $agg_by_class->_aggregation->addAggregation($sub_agg_by_id->_aggregation);
@@ -375,20 +402,21 @@ class CSearch {
     $elasticaQuery->setHighlight(
       array(
         "fields" => array("body" => array(
-          "pre_tags" => array(" <em> <strong> "),
-          "post_tags" => array(" </strong> </em>"),
-          "fragment_size" => 80,
+          "pre_tags"            => array(" <em> <strong> "),
+          "post_tags"           => array(" </strong> </em>"),
+          "fragment_size"       => 80,
           "number_of_fragments" => 3,
         )),
       ));
 
     //Search on the index.
     $this->_index = $this->loadIndex();
-    $search = new \Elastica\Search($this->_client);
+    $search       = new \Elastica\Search($this->_client);
     $search->addIndex($this->_index);
     if ($names_types) {
       $search->addTypes($names_types);
     }
+
     return $search->search($elasticaQuery);
   }
 
@@ -404,16 +432,18 @@ class CSearch {
    */
   function constructWordsWithDate($words, $_date, $_min_date, $_max_date) {
     if ($_date) {
-      $words .= " date:[".$_date." TO ".$_date."]";
+      $words .= " date:[" . $_date . " TO " . $_date . "]";
     }
     else {
       $_min_date = ($_min_date) ? $_min_date : "*";
       $_max_date = ($_max_date) ? $_max_date : "*";
 
-      $words .= " date:[".$_min_date." TO ".$_max_date."]";
+      $words .= " date:[" . $_min_date . " TO " . $_max_date . "]";
     }
+
     return $words;
   }
+
   /**
    * HTML cleaning method
    *
@@ -477,7 +507,7 @@ class CSearch {
    *
    * @return void
    */
-  function firstIndexingMapping ($names_types , $index) {
+  function firstIndexingMapping($names_types, $index) {
     if (!$index) {
       $this->_index = $this->createIndex(null, null, false);
     }
@@ -485,19 +515,19 @@ class CSearch {
     foreach ($names_types as $name_type) {
       $type  = $this->createType($this->_index, $name_type);
       $array = array(
-        "id"          => array('type' => 'integer', 'include_in_all' => true),
-        "author_id"   => array('type' => 'integer', 'include_in_all' => true),
-        "prat_id"     => array('type' => 'integer', 'include_in_all' => true),
-        "title"       => array('type' => 'string', 'include_in_all' => false),
-        "body"        => array('type' => 'string', 'include_in_all' => true),
-        "date"        => array('type'           => 'date',
-                               'format'         => 'yyyy/MM/dd HH:mm:ss||yyyy/MM/dd',
-                               'include_in_all' => true),
-        "patient_id"  => array('type' => 'integer', 'include_in_all' => true),
-        "function_id" => array('type' => 'integer', 'include_in_all' => true),
-        "group_id"    => array('type' => 'integer', 'include_in_all' => true),
-        "object_ref_id"=> array('type' => 'integer', 'include_in_all' => true),
-        "object_ref_class"=> array('type' => 'string', 'include_in_all' => true)
+        "id"               => array('type' => 'integer', 'include_in_all' => true),
+        "author_id"        => array('type' => 'integer', 'include_in_all' => true),
+        "prat_id"          => array('type' => 'integer', 'include_in_all' => true),
+        "title"            => array('type' => 'string', 'include_in_all' => false),
+        "body"             => array('type' => 'string', 'include_in_all' => true),
+        "date"             => array('type'           => 'date',
+                                    'format'         => 'yyyy/MM/dd HH:mm:ss||yyyy/MM/dd',
+                                    'include_in_all' => true),
+        "patient_id"       => array('type' => 'integer', 'include_in_all' => true),
+        "function_id"      => array('type' => 'integer', 'include_in_all' => true),
+        "group_id"         => array('type' => 'integer', 'include_in_all' => true),
+        "object_ref_id"    => array('type' => 'integer', 'include_in_all' => true),
+        "object_ref_class" => array('type' => 'string', 'include_in_all' => true)
       );
       $this->createMapping($type, $array);
     }
