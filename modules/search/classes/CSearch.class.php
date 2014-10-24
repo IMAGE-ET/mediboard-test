@@ -216,7 +216,7 @@ class CSearch {
         $datum_to_index["prat_id"] = "";
         $datum_to_index["title"] = "";
         $datum_to_index["body"] = "";
-        $datum_to_index["date"] = CMbDT::dateTime();
+        $datum_to_index["date"] = CMbDT::format(CMbDT::dateTime(),"%Y%m%d");
         $datum_to_index["function_id"] = "";
         $datum_to_index["group_id"] = "";
         $datum_to_index["patient_id"] = "";
@@ -236,7 +236,7 @@ class CSearch {
       $datum_to_index["author_id"]   = '';
       $datum_to_index["title"]       = '';
       $datum_to_index["body"]        = '';
-      $datum_to_index["date"]        = CMbDT::dateTime();
+      $datum_to_index["date"]        = CMbDT::format(CMbDT::dateTime(),"%Y%m%d");
       $datum_to_index["patient_id"]  = '';
       $datum_to_index["function_id"] = '';
       $datum_to_index["group_id"]    = $datum['group_id'];
