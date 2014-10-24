@@ -199,7 +199,16 @@ class CSetupdPccam extends CSetup {
       ADD UNIQUE INDEX uk_codage_ccam (`codable_class`, `codable_id`, `praticien_id`, `activite_anesth`);";
     $this->addQuery($query);
 
-    $this->mod_version = '0.26';
+    $this->makeRevision('0.26');
+
+    $this->addPrefQuery('actes_comp_supp_favoris', '1');
+
+    $query = "ALTER TABLE `acte_ccam`
+                ADD `accord_prealable` ENUM ('0', '1') DEFAULT '0',
+                ADD `date_demande_accord` DATE;";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.27';
 
     // Data source query
 

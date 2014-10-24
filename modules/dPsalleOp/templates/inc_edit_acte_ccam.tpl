@@ -1,4 +1,5 @@
 
+{{assign var="view" value=$acte->_id}}
 <script type="text/javascript">
   checkModificateurs = function(input, acte) {
     var exclusive_modifiers = ['F', 'P', 'S', 'U'];
@@ -56,9 +57,23 @@
 
     $V(input.form.position_dentaire, dents.join('|'));
   }
+
+  toggleDateDAP = function(input) {
+    if (input.value == 1) {
+      input.form.date_demande_accord_da.enable();
+    }
+    else {
+      input.form.date_demande_accord_da.disable();
+    }
+  }
+
+  {{if !$acte->accord_prealable}}
+    Main.add(function() {
+      getForm('formEditFullActe-{{$view}}').date_demande_accord_da.disable();
+    });
+  {{/if}}
 </script>
 
-{{assign var="view" value=$acte->_id}}
 <form name="formEditFullActe-{{$view}}" action="?" method="post"
       onsubmit="return onSubmitFormAjax(this, {onComplete: function() { window.urlEditActe.modalObject.close() }});">
 
@@ -214,6 +229,24 @@
         {{else}}
           {{mb_field object=$acte field=facturable}}
         {{/if}}
+      </td>
+    </tr>
+
+    <tr>
+      <th>
+        {{mb_label object=$acte field=accord_prealable}}
+      </th>
+      <td>
+        {{mb_field object=$acte field=accord_prealable onchange="toggleDateDAP(this);"}}
+      </td>
+    </tr>
+
+    <tr>
+      <th>
+        {{mb_label object=$acte field=date_demande_accord}}
+      </th>
+      <td>
+        {{mb_field object=$acte field=date_demande_accord form="formEditFullActe-$view" register=true}}
       </td>
     </tr>
 

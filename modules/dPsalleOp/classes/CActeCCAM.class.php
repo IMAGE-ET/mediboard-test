@@ -47,6 +47,8 @@ class CActeCCAM extends CActe {
   public $numero_forfait_technique;
   public $numero_agrement;
   public $rapport_exoneration;
+  public $accord_prealable;
+  public $date_demande_accord;
 
   // Derived fields
   public $_modificateurs = array();
@@ -122,6 +124,8 @@ class CActeCCAM extends CActe {
     $props["numero_forfait_technique"] = "num min|1 max|99999";
     $props["numero_agrement"]          = "num min|1 max|99999999999999";
     $props["rapport_exoneration"]      = "enum list|4|7|C|R";
+    $props['accord_prealable']         = 'bool default|0';
+    $props['date_demande_accord']      = 'date';
 
     // Derived fields
     $props["_rembex"]          = "bool";

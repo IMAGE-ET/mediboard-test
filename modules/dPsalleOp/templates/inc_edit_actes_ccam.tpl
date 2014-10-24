@@ -21,6 +21,15 @@
 
     $V(input.form.position_dentaire, dents.join('|'));
   }
+
+  toggleDateDAP = function(input) {
+    if (input.value == 1) {
+      input.form.date_demande_accord_da.enable();
+    }
+    else {
+      input.form.date_demande_accord_da.disable();
+    }
+  }
 </script>
 
 {{assign var=confCCAM value=$conf.dPsalleOp.CActeCCAM}}
@@ -312,6 +321,32 @@
                   {{/if}}
                 </td>
               </tr>
+
+              <tr>
+                <th>
+                  {{mb_label object=$acte field=accord_prealable}}
+                </th>
+                <td>
+                  {{mb_field object=$acte field=accord_prealable onchange="toggleDateDAP(this);"}}
+                </td>
+              </tr>
+
+              <tr>
+                <th>
+                  {{mb_label object=$acte field=date_demande_accord}}
+                </th>
+                <td>
+                  {{mb_field object=$acte field=date_demande_accord form="formActe-$view$unique_id_acte" register=true}}
+                </td>
+              </tr>
+
+              {{if !$acte->accord_prealable}}
+                <script type="text/javascript">
+                  Main.add(function() {
+                    getForm('formActe-{{$view}}{{$unique_id_acte}}').date_demande_accord_da.disable();
+                  });
+                </script>
+              {{/if}}
 
               {{if ($acte->facturable || !$acte->_id) && $acte->_tarif_base != 0 && $can_view_dh
               && ($confCCAM.tarif || $subject->_class == "CConsultation" || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1))}}
