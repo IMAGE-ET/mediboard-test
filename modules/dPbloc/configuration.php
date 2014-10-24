@@ -17,7 +17,11 @@ CConfiguration::register(
       "dPbloc" => array(
         "CPlageOp" => array(
           "original_owner" => "bool default|0"
-        )
+        ),
+        "mode_presentation" => array(
+          "salles_count"   => "num default|4",
+          "refresh_period" => "num default|30",
+        ),
       )
     )
   )
