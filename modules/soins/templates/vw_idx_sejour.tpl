@@ -306,7 +306,7 @@
         {{/if}}
         <tr>
           <td style="padding: 0;">
-            <div style="{{if $smarty.session.browser.name == 'msie' && $smarty.session.browser.majorver < 8}}overflow:visible; overflow-x:hidden; overflow-y:auto; padding-right:15px;{{else}}overflow: auto;{{/if}} height: 500px;" class="scroller">
+            <div style="overflow: auto; height: 500px; position: relative;" class="scroller">
             <table class="tbl" id="list_sejours">
             {{foreach from=$sejoursParService key=_service_id item=service}}
               {{if array_key_exists($_service_id, $services)}}
