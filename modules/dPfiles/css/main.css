@@ -1,5 +1,5 @@
 #modal-yoplet td.warning, td.cross {
-  background: url(images/buttons/cancel.png) no-repeat 6px;
+  background: url(../../../style/mediboard/images/buttons/cancel.png) no-repeat 6px;
 }
 
 img#thumb {
@@ -9,4 +9,8 @@ img#thumb {
 .preview {
   border: 1px solid #aaa;
   background: #fff;
+}
+
+.thumb_selected {
+  outline: 2px solid black;
 }
