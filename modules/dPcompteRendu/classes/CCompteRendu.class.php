@@ -1879,6 +1879,10 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
   function getFieldPatient () {
     $object = $this->loadTargetObject();
 
+    if (!$object || !$object->_id) {
+      return null;
+    }
+
     if ($object instanceof CPatient) {
       return $object->_id;
     }
