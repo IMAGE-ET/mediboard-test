@@ -17,4 +17,5 @@ CPreferences::$modules["dPccam"] = array (
   "new_search_ccam",
   "multiple_select_ccam",
   "user_executant",
+  'actes_comp_supp_favoris',
 );

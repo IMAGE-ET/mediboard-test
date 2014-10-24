@@ -63,8 +63,14 @@ foreach ($profiles as $profile => $_user_id) {
 
       foreach ($codes as $key => $value) {
         // Attention à bien cloner le code CCAM car on rajoute une champ à la volée
-        $list[$value["favoris_code"]] = CDatedCodeCCAM::get($value["favoris_code"]);
-        $list[$value["favoris_code"]]->occ = "0";
+        $code = CDatedCodeCCAM::get($value["favoris_code"]);
+        if (
+          CAppUI::pref('actes_comp_supp_favoris', 0) ||
+          (!CAppUI::pref('actes_comp_supp_favoris', 0) && !in_array($code->chapitres[0]['db'], array('18.', '19.')))
+        ) {
+          $code->occ = "0";
+          $list[$value["favoris_code"]] = $code;
+        }
       }
 
       sort($list);
@@ -82,8 +88,14 @@ foreach ($profiles as $profile => $_user_id) {
 
       foreach ($codes as $key => $value) {
         // Attention à bien cloner le code CCAM car on rajoute une champ à la volée
-        $list[$value["code_acte"]] = CDatedCodeCCAM::get($value["code_acte"]);
-        $list[$value["code_acte"]]->occ = $value["nb_acte"];
+        $code = CDatedCodeCCAM::get($value["code_acte"]);
+        if (
+          CAppUI::pref('actes_comp_supp_favoris', 0) ||
+          (!CAppUI::pref('actes_comp_supp_favoris', 0) && !in_array($code->chapitres[0]['db'], array('18.', '19.')))
+        ) {
+          $code->occ = $value["nb_acte"];
+          $list[$value["code_acte"]] = $code;
+        }
       }
 
       if ($order == "alpha") {
