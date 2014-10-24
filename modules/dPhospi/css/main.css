@@ -229,20 +229,20 @@ table#diagramme td.expect {
 }
 
 table#diagramme td.ray {
-  background-image: url(../../../images/icons/ray.gif);
+  background-image: url(../../../style/mediboard/images/icons/ray.gif);
   background-repeat: repeat;
 }
 
 table#diagramme td.arrowdown {
   height: 40px;
-  background-image: url(../../../images/icons/downarrow.png);
+  background-image: url(../../../style/mediboard/images/icons/downarrow.png);
   background-repeat: no-repeat;
   background-position: center;
 }
 
 table#diagramme td.arrowup {
   height: 40px;
-  background-image: url(../../../images/icons/uparrow.png);
+  background-image: url(../../../style/mediboard/images/icons/uparrow.png);
   background-repeat: no-repeat;
   background-position: center;
 }
