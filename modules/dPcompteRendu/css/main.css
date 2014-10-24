@@ -19,5 +19,5 @@ div.oldThumbs {
   width: 160px;
   height: 100%;
   cursor: pointer;
-  background: url(images/buttons/change.png) no-repeat 50% 40% #aaa;
+  background: url(../../../style/mediboard/images/buttons/change.png) no-repeat 50% 40% #aaa;
 }

@@ -91,7 +91,7 @@
   display: block;
   position: absolute;
   bottom: 0;
-  background: url(../../images/buttons/drag-n-white.png) no-repeat center center;
+  background: url(../../../images/buttons/drag-n-white.png) no-repeat center center;
   width: 100%;
   height: 6px;
   cursor: s-resize;
@@ -107,7 +107,7 @@
   cursor: move;
   /*opacity: 0.5;*/
   border: 1px solid #666;
-  background: #fff url(../../images/buttons/move-black.png) no-repeat center center;
+  background: #fff url(../../../images/buttons/move-black.png) no-repeat center center;
   border-bottom-right-radius: 6px;
 }
 
@@ -221,27 +221,27 @@
 }
 
 .planning .kine {
-  background: #aaa url(../../images/icons/evtKine.png) no-repeat bottom right;
+  background: #aaa url(../../../images/icons/evtKine.png) no-repeat bottom right;
 }
 
 .planning .equipement {
-  background: #aaa url(../../images/icons/evtEquipement.png) no-repeat bottom right;
+  background: #aaa url(../../../images/icons/evtEquipement.png) no-repeat bottom right;
 }
 
 .planning .zero-actes {
-  background: #aaa url(../../images/icons/evtWarning.png) no-repeat bottom right;
+  background: #aaa url(../../../images/icons/evtWarning.png) no-repeat bottom right;
 }
 
 .planning .seance {
-  background: #aaa url(../../images/icons/user-function.png) no-repeat bottom right;
+  background: #aaa url(../../../images/icons/user-function.png) no-repeat bottom right;
 }
 
 .planning .realise {
-  background-image: url(../../images/icons/ray.gif);
+  background-image: url(../../../images/icons/ray.gif);
 }
 
 .planning .annule {
-  background-image: url(../../images/icons/ray_cancelled.gif);
+  background-image: url(../../../images/icons/ray_cancelled.gif);
 }
 
 .planning .hours td {
@@ -290,11 +290,11 @@
 
 .planning td.unavailable,
 .planning th.unavailable {
-  background-image: url(./images/pictures/unavailable.png);
+  background-image: url(../../../style/mediboard/images/pictures/unavailable.png);
 }
 
 .planning .event.disabled {
-  background: url(./images/pictures/unavailable.png);
+  background: url(../../../style/mediboard/images/pictures/unavailable.png);
 }
 
 .planning.load .hours td {
@@ -477,7 +477,7 @@ table.tbl td.hour-plan {
 }
 
 table.tbl td.hour-plan.partial {
-  background-image: url(images/icons/ray.gif);
+  background-image: url(../../../style/mediboard/images/icons/ray.gif);
 }
 
 table.tbl td.hour-plan.active {

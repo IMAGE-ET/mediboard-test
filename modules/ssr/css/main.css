@@ -6,7 +6,7 @@
 table.tbl tr.ssr-kine-conges td,
 table.tbl tr.ssr-kine-conges th {
   text-align: center;
-  background-image: url(./style/mediboard/images/pictures/unavailable.png);
+  background-image: url(../../../style/mediboard/images/pictures/unavailable.png);
 }
 
 table.tbl tr  td.ssr-far {
@@ -61,7 +61,7 @@ table.tbl tr.ssr-annule td {
 }
 
 table.tbl tr.ssr-termine td {
-  background-image: url(./style/mediboard/images/icons/ray.gif);
+  background-image: url(../../../style/mediboard/images/icons/ray.gif);
 }
 
 table.tbl tr.ssr-prevu td {
