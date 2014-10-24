@@ -57,7 +57,7 @@
     this.sAnesth = "_anesth";
     {{/if}}
     this.sDate = '{{$subject->_datetime}}';
-    this.sView = "_codes_ccam";
+    this.sView = "_new_code_ccam";
     this.pop();
   };
 
@@ -243,11 +243,9 @@
           <button id="didac_actes_ccam_tr_modificateurs" class="search" type="button" onclick="CCAMSelector.init()">
             {{tr}}Search{{/tr}}
           </button>
+          <input type="hidden" name="_new_code_ccam" value="" onchange="$V(this.form._codes_ccam, this.value); ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}');"/>
           <span id="didac_actes_ccam_ext_doc"></span>
           <input type="text" size="10" name="_codes_ccam" />
-          <button class="add" name="addCode" type="button" onclick="ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}')">
-            {{tr}}Add{{/tr}}
-          </button>
         </form>
         <table class="tbl">
           <tr>
@@ -361,6 +359,7 @@
             <button id="didac_actes_ccam_tr_modificateurs" class="search" type="button" onclick="CCAMSelector.init()">
               {{tr}}Search{{/tr}}
             </button>
+            <input type="hidden" name="_new_code_ccam" value="" onchange="$V(this.form._codes_ccam, this.value); ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}');"/>
             <span id="didac_actes_ccam_ext_doc"></span>
             <input type="text" size="10" name="_codes_ccam" />
             <button class="add" name="addCode" type="button" onclick="ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}')">

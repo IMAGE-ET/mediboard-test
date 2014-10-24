@@ -90,6 +90,19 @@
       CCAMField{{$subject->_class}}{{$subject->_id}}.options.onChange = on_change;
     }
   }
+
+  CCAMSelector.init = function() {
+    this.sForm = "addActes-{{$subject->_guid}}";
+    this.sClass = "_class";
+    this.sChir = "_chir";
+    {{if ($subject->_class=="COperation")}}
+    this.sAnesth = "_anesth";
+    {{/if}}
+    this.sDate = '{{$subject->_datetime}}';
+    this.sView = "_new_code_ccam";
+    this.pop();
+  };
+
 {{if $codages|@count != 1}}
   Main.add(function() {
     Control.Tabs.create('codages-tab', true);
@@ -114,30 +127,40 @@
           {{/if}}
           {{mb_key object=$subject}}
 
-            {{mb_field object=$subject field="codes_ccam" hidden=true onchange="this.form.onsubmit()"}}
-            <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" style="width: 12em" value="" class="autocomplete" placeholder="Ajoutez un acte" />
-            <div style="text-align: left; color: #000; display: none; width: 200px !important; font-weight: normal; font-size: 11px; text-shadow: none;"
-                 class="autocomplete" id="_ccam_autocomplete_{{$subject->_guid}}"></div>
-            <script>
-              Main.add(function() {
-                var form = getForm("addActes-{{$subject->_guid}}");
-                var url = new Url("ccam", "httpreq_do_ccam_autocomplete");
-                url.autoComplete(form._codes_ccam, "_ccam_autocomplete_{{$subject->_guid}}", {
-                  minChars: 1,
-                  dropdown: true,
-                  width: "250px",
-                  updateElement: function(selected) {
-                    CCAMField{{$subject->_class}}{{$subject->_id}}.add(selected.down("strong").innerHTML, true);
-                  }
-                });
-                CCAMField{{$subject->_class}}{{$subject->_id}} = new TokenField(form.elements["codes_ccam"], {
-                  onChange : function() {
-                    return onSubmitFormAjax(form, window.urlCodage.refreshModal.bind(window.urlCodage));
-                  },
-                  sProps : "notNull code ccam"
-                } );
-              })
-            </script>
+          <input type="hidden" name="_class" value="{{$subject->_class}}" />
+          <input type="hidden" name="_chir" value="{{$subject->_praticien_id}}" />
+          {{if ($subject->_class=="COperation")}}
+            <input type="hidden" name="_anesth" value="{{$subject->_ref_plageop->anesth_id}}" />
+          {{/if}}
+          {{mb_field object=$subject field="codes_ccam" hidden=true}}
+          <input type="hidden" name="_new_code_ccam" value="" onchange="CCAMField{{$subject->_class}}{{$subject->_id}}.add(this.value, true);"/>
+
+          <button id="didac_actes_ccam_tr_modificateurs" class="search" type="button" onclick="CCAMSelector.init()">
+            {{tr}}Search{{/tr}}
+          </button>
+          <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" style="width: 12em" value="" class="autocomplete" placeholder="Ajoutez un acte" />
+          <div style="text-align: left; color: #000; display: none; width: 200px !important; font-weight: normal; font-size: 11px; text-shadow: none;"
+               class="autocomplete" id="_ccam_autocomplete_{{$subject->_guid}}"></div>
+          <script>
+            Main.add(function() {
+              var form = getForm("addActes-{{$subject->_guid}}");
+              var url = new Url("ccam", "httpreq_do_ccam_autocomplete");
+              url.autoComplete(form._codes_ccam, "_ccam_autocomplete_{{$subject->_guid}}", {
+                minChars: 1,
+                dropdown: true,
+                width: "250px",
+                updateElement: function(selected) {
+                  CCAMField{{$subject->_class}}{{$subject->_id}}.add(selected.down("strong").innerHTML, true);
+                }
+              });
+              CCAMField{{$subject->_class}}{{$subject->_id}} = new TokenField(form.elements["codes_ccam"], {
+                onChange : function() {
+                  return onSubmitFormAjax(form, window.urlCodage.refreshModal.bind(window.urlCodage));
+                },
+                sProps : "notNull code ccam"
+              } );
+            })
+          </script>
         </form>
       </div>
 

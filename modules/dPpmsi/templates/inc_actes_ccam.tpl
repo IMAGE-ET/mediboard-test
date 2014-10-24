@@ -11,8 +11,9 @@
 
 {{assign var=obj_guid value=$subject->_guid}}
 
-<script>
+{{mb_script module=planningOp script=ccam_selector ajax=true}}
 
+<script>
   editCodage = function(codable_class, codable_id, praticien_id) {
     var url = new Url("salleOp", "ajax_edit_codages_ccam");
     url.addParam('codable_class', codable_class);
@@ -34,6 +35,18 @@
       CCAMField{{$subject->_class}}{{$subject->_id}}.options.onChange = on_change;
     }
   }
+
+  CCAMSelector.init = function() {
+    this.sForm = "addActes-{{$subject->_guid}}";
+    this.sClass = "_class";
+    this.sChir = "_chir";
+    {{if ($subject->_class=="COperation")}}
+    this.sAnesth = "_anesth";
+    {{/if}}
+    this.sDate = '{{$subject->_datetime}}';
+    this.sView = "_new_code_ccam";
+    this.pop();
+  };
 
   Main.add(function() {
     // Mise à jour du compteur et de la classe du volet correspondant
@@ -64,8 +77,20 @@
         {{/if}}
         {{mb_key object=$subject}}
 
+        <input type="hidden" name="_class" value="{{$subject->_class}}" />
+        <input type="hidden" name="_chir" value="{{$subject->_praticien_id}}" />
+        {{if ($subject->_class=="COperation")}}
+          <input type="hidden" name="_anesth" value="{{$subject->_ref_plageop->anesth_id}}" />
+        {{/if}}
+
         {{if !$read_only}}
           <div style="float: left">
+            <input type="hidden" name="_new_code_ccam" value="" onchange="CCAMField{{$subject->_class}}{{$subject->_id}}.add(this.value, true);"/>
+
+            <button id="didac_actes_ccam_tr_modificateurs" class="search" type="button" onclick="CCAMSelector.init()">
+              {{tr}}Search{{/tr}}
+            </button>
+
             {{mb_field object=$subject field="codes_ccam" hidden=true onchange="this.form.onsubmit()"}}
             <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" style="width: 12em" value="" class="autocomplete" placeholder="Ajoutez un acte" />
             <div style="text-align: left; color: #000; display: none; width: 200px !important; font-weight: normal; font-size: 11px; text-shadow: none;"
