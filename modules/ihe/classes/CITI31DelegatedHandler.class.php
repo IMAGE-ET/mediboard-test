@@ -435,7 +435,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         }
         $affectation->load($movement->affectation_id);
       }
-      $movement->start_of_movement = $this->getStartOfMovement($movement->original_trigger_code, $sejour, $affectation);
+      $movement->start_of_movement = $this->getStartOfMovement($movement->original_trigger_code, $sejour, $affectation, $movement);
     }
     
     // on annule un mouvement sauf dans le cas d'une annulation de mutation et que 
@@ -461,7 +461,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
    *
    * @return null|string
    */
-  function getStartOfMovement($code, CSejour $sejour, CAffectation $affectation = null) {
+  function getStartOfMovement($code, CSejour $sejour, CAffectation $affectation = null, CMovement $movement = null) {
     switch ($code) {
       // Admission hospitalisé / externe
       case 'A01':
@@ -479,18 +479,29 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       case 'A06':
         // Changement de statut hospitalisé ou urgence vers externe
       case 'A07':
-        // Absence provisoire (permission) et mouvement de transfert vers un plateau technique pour acte (<48h)
-      case 'A21':
-        // Retour d'absence provisoire (permission) et mouvement de transfert vers un plateau technique pour acte (<48h)
-      case 'A22': 
         // Changement de médecin responsable
       case 'A54':
+        // Dans le cas d'une modification d'un mouvement, l'heure du mouvement est celle du mouvement initiateur
+        if ($movement) {
+          return $movement->start_of_movement;
+        }
+
+        // Date du transfert
+        return CMbDT::dateTime();
+
+      // Absence provisoire (permission) et mouvement de transfert vers un plateau technique pour acte (<48h)
+      case 'A21':
+        // Retour d'absence provisoire (permission) et mouvement de transfert vers un plateau technique pour acte (<48h)
+      case 'A22':
         // Changement d'UF médicale
       case 'Z80':
         // Changement d'UF de soins
       case 'Z84':
-        // Date du transfert
-        return CMbDT::dateTime();
+        if (!$affectation) {
+          return CMbDT::dateTime();
+        }
+
+        return $affectation->entree;
       // Sortie définitive
       case 'A03':
         // Date de la sortie
