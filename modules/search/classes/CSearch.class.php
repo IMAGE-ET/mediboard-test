@@ -225,7 +225,7 @@ class CSearch {
         $datum_to_index["prat_id"]          = "";
         $datum_to_index["title"]            = "";
         $datum_to_index["body"]             = "";
-        $datum_to_index["date"]             = CMbDT::dateTime();
+        $datum_to_index["date"]             = CMbDT::format(null, "%Y/%m/%d %H:%M:%S");
         $datum_to_index["function_id"]      = "";
         $datum_to_index["group_id"]         = "";
         $datum_to_index["patient_id"]       = "";
@@ -239,7 +239,7 @@ class CSearch {
       $datum_to_index = $object->getFieldsSearch();
 
       if (!$datum_to_index["date"]) {
-        $datum_to_index["date"] = str_replace("-", "/", CMbDT::dateTime());
+        $datum_to_index["date"] = CMbDT::format(null, "%Y/%m/%d %H:%M:%S");;
       }
     }
     else {
@@ -247,7 +247,7 @@ class CSearch {
       $datum_to_index["author_id"]   = '';
       $datum_to_index["title"]       = '';
       $datum_to_index["body"]        = '';
-      $datum_to_index["date"]        = CMbDT::dateTime();
+      $datum_to_index["date"]        = CMbDT::format(null, "%Y/%m/%d %H:%M:%S");
       $datum_to_index["patient_id"]  = '';
       $datum_to_index["function_id"] = '';
       $datum_to_index["group_id"]    = $datum['group_id'];
