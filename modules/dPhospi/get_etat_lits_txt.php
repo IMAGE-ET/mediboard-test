@@ -25,6 +25,7 @@
 // Date actuelle
 $date       = CValue::get("date", CMbDT::dateTime());
 $detail_lit = CValue::get("detail_lit", 0);
+$with_ambu  = CValue::get("with_ambu", 1);
 
 // Affectation a la date $date
 $affectation = new CAffectation();
@@ -38,6 +39,9 @@ $whereAffect["affectation.sortie"]    = ">= '$date'";
 $whereAffect["affectation.sejour_id"] = "!= '0'";
 $whereAffect["sejour.group_id"]       = "= '".CGroups::loadCurrent()->_id."'";
 $whereAffect["sejour.annule"]         = "= '0'";
+if (!$with_ambu) {
+  $whereAffect["sejour.type"]         = "!= 'ambu'";
+}
 
 $groupAffect = "sejour_id";
 
