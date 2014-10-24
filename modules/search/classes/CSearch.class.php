@@ -210,7 +210,20 @@ class CSearch {
   function constructDatum ($datum) {
     if ($datum['type'] != 'delete') {
       $object = new $datum['object_class']();
-      $object->load($datum['object_id']);
+      if (!$object->load($datum['object_id'])) {
+        $datum_to_index["id"]  = "";
+        $datum_to_index["author_id"] = "";
+        $datum_to_index["prat_id"] = "";
+        $datum_to_index["title"] = "";
+        $datum_to_index["body"] = "";
+        $datum_to_index["date"] = CMbDT::dateTime();
+        $datum_to_index["function_id"] = "";
+        $datum_to_index["group_id"] = "";
+        $datum_to_index["patient_id"] = "";
+        $datum_to_index["object_ref_id"]  = "";
+        $datum_to_index["object_ref_class"] = "";
+          return $datum_to_index;
+      }
       //On récupère les champs à indexer.
       $datum_to_index = $object->getFieldsSearch();
 
@@ -223,7 +236,7 @@ class CSearch {
       $datum_to_index["author_id"]   = '';
       $datum_to_index["title"]       = '';
       $datum_to_index["body"]        = '';
-      $datum_to_index["date"]        = '';
+      $datum_to_index["date"]        = CMbDT::dateTime();
       $datum_to_index["patient_id"]  = '';
       $datum_to_index["function_id"] = '';
       $datum_to_index["group_id"]    = $datum['group_id'];
