@@ -30,6 +30,7 @@ function popPlanning() {
   {{/if}}
   url.addParam("_ccam_libelle", $V(form._ccam_libelle));
   url.addParam("_coordonnees", $V(form._coordonnees));
+  url.addParam('_notes', $V(form._notes));
   url.popup(850, 600, "Planning");
   return;
 }
@@ -195,6 +196,10 @@ function toggleMultiple(select, multiple) {
         <tr>
           <th>{{mb_label object=$filter field="_coordonnees"}}</th>
           <td colspan="2">{{mb_field object=$filter field="_coordonnees"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$filter field=_notes}}</th>
+          <td colspan="2">{{mb_field object=$filter field=_notes}}</td>
         </tr>
       </table>
 

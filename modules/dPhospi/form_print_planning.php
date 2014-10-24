@@ -26,6 +26,7 @@ $filter->_specialite   = CValue::getOrSession("_specialite");
 $filter->_filter_type  = CValue::getOrSession("_filter_type");
 $filter->_ccam_libelle = CValue::getOrSession("_ccam_libelle", "1");
 $filter->_coordonnees  = CValue::getOrSession("_coordonnees");
+$filter->_notes        = CValue::getOrSession("_notes");
 
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);

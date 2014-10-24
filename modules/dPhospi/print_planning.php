@@ -28,6 +28,7 @@ $filter->consult_accomp = CValue::get("consult_accomp", 0);
 $filter->_admission     = CValue::get("_admission", "heure");
 $filter->_ccam_libelle  = CValue::get("_ccam_libelle", "1");
 $filter->_coordonnees   = CValue::get("_coordonnees", 0);
+$filter->_notes         = CValue::get("_notes", 0);
 $filter->_nb_days       = CValue::get("_nb_days", 0);
 
 if ($filter->_nb_days) {
@@ -150,6 +151,10 @@ foreach ($sejours as $key => &$sejour) {
 
   foreach ($sejour->_ref_operations as $operation) {
     $operation->loadRefsFwd();
+  }
+
+  if ($filter->_notes) {
+    $sejour->loadRefsNotes();
   }
 
   $curr_date = CMbDT::date(null, $sejour->{$filter->_horodatage});

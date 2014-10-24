@@ -30,7 +30,7 @@
     </td>
   </tr>
   <tr>
-    <th colspan="{{if $prestation->_id}}7{{else}}6{{/if}}"><strong>Séjour</strong></th>
+    <th colspan="{{if $prestation->_id && $filter->_notes}}8{{elseif $prestation->_id || $filter->_notes}}7{{else}}6{{/if}}"><strong>Séjour</strong></th>
     <th colspan="5"><strong>Intervention(s)</strong></th>
     <th colspan="5"><strong>Patient</strong></th>
   </tr>
@@ -44,6 +44,9 @@
       <th>{{mb_value object=$prestation field=nom}}</th>
     {{/if}}
     <th>Remarques</th>
+    {{if $filter->_notes}}
+      <th>Notes</th>
+    {{/if}}
     <th>Date</th>
     <th>Dénomination</th>
     <th>Côté</th>
@@ -81,6 +84,19 @@
       </td>
     {{/if}}
     <td class="text compact">{{$curr_sejour->rques|nl2br}}</td>
+    {{if $filter->_notes}}
+      <td class="text compact">
+        {{if $curr_sejour->_ref_notes|@count}}
+          <ul>
+            {{foreach from=$curr_sejour->_ref_notes item=_note}}
+              <li>
+                <span style="color: #333">{{$_note->libelle}} :</span> {{$_note->text}}
+              </li>
+            {{/foreach}}
+          </ul>
+        {{/if}}
+      </td>
+    {{/if}}
     <td class="text">
       {{foreach from=$curr_sejour->_ref_operations item=curr_operation}}
         {{$curr_operation->_datetime|date_format:"%d/%m/%Y"}}
