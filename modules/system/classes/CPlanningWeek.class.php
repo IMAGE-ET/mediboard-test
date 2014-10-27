@@ -232,7 +232,7 @@ class CPlanningWeek{
           /** @var CPlanningEvent $event */
           $event = $events[$guid];
           $event->offset =  $_line["start"] / $_line["total"];
-          $event->width = ($_line["end"] - $_line["start"]) / $_line["total"];
+          $event->width = ( ($_line["end"] - $_line["start"]) / $_line["total"] ) - 0.1;
         }
       }
       else {
