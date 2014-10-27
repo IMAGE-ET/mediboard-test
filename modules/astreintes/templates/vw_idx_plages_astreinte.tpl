@@ -12,6 +12,11 @@
 <button class="new" type="button" onclick="PlageAstreinte.modal(null, null, null, null, PlageAstreinte.refreshList)">
 {{tr}}CPlageAstreinte-title-create{{/tr}}
 </button>
+
+{{if $plages|@count >= 100}}
+  <div class="info">Sont affichés les 100 dernières astreintes de l'utilisateur</div>
+{{/if}}
+
 <table class="main">
   <tr>
      <td>
@@ -57,7 +62,7 @@
               <td class="{{$class}}">
                 {{mb_include module=system template=inc_vw_duration duration=$_plage->_duration}}
               </td>
-              <td style="background-color: #{{$_plage->_color}}">
+              <td style="background-color: #{{$_plage->_color}}; color:#{{$_plage->_font_color}}">
                 {{tr}}CPlageAstreinte.type.{{$_plage->type}}{{/tr}}
               </td>
             </tr>

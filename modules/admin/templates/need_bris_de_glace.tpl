@@ -24,16 +24,22 @@
     }
   };
 
+  initModal = function(sejour_id) {
+    var url = new Url("admin", "ajax_need_bris_de_glace");
+    url.addParam("sejour_id", "{{$sejour->_id}}");
+    url.requestModal(null, null, {
+      onClose : function() {
+        Url.queueRequests = false;
+      },
+      dontQueue : true
+    });
+  };
+
   if (!Url.queueRequests) {
     Main.add(function () {
-      var url = new Url("admin", "ajax_need_bris_de_glace");
-      url.addParam("sejour_id", "{{$sejour->_id}}");
-      url.requestModal(null, null, {
-        onClose : function() {
-          Url.queueRequests = false;
-        },
-        dontQueue : true
-      });
+      {{if $modale}}
+        initModal();
+      {{/if}}
     });
   }
 
@@ -42,5 +48,10 @@
 
 </script>
 
-
-<div class="small-info">Bris de glace requis pour cette vue</div>
+{{if $modale}}
+  <div class="small-info">
+      Bris de glace requis pour cette vue
+  </div>
+{{else}}
+  {{mb_include module=admin template=inc_vw_form_bris_de_glace sejour_id=$sejour->_id}}
+{{/if}}

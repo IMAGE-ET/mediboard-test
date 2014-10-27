@@ -58,11 +58,12 @@ class CBrisDeGlace extends CMbMetaObject {
    *
    * @return bool
    */
-  static function checkForSejour($sejour, $callback = null) {
+  static function checkForSejour($sejour, $modal = true) {
     if (!self::canAccess($sejour)) {
       $smarty = new CSmartyDP("modules/admin");
       $smarty->assign("sejour", $sejour);
-      $smarty->assign("callback", $callback);
+      $smarty->assign("bris", new CBrisDeGlace());
+      $smarty->assign("modale", $modal);
       $smarty->display("need_bris_de_glace.tpl");
       CApp::rip();
     }

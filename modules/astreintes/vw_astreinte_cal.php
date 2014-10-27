@@ -16,12 +16,13 @@ CCanDo::checkEdit();
 
 $date = CValue::getOrSession("date", CMbDT::date());
 $mode = CValue::getOrSession("mode", "week");
+$group = CGroups::loadCurrent();
 
 $user = CMediusers::get();
-$group = CGroups::loadCurrent();
 
 $astreinte = new CPlageAstreinte;
 $where = array();
+$where["group_id"] = " = '$group->_id' ";
 $order = "start ASC,end ASC";
 
 switch ($mode) {
@@ -69,10 +70,6 @@ foreach ($astreintes as $_astreinte) {
 
   //not in the current group
   $_astreinte->loadRefUser();
-  if ($_astreinte->_ref_user->_group_id != $group->_id) {
-    continue;
-  }
-
   $_astreinte->loadRefColor();
 
   $libelle = "<span style=\"text-align:center;\">";

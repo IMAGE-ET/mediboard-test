@@ -243,7 +243,7 @@ class CMediusers extends CPerson {
     $props["_user_last_name"]        = "str notNull confidential reported show|1";
     $props["_user_email"]            = "str confidential reported";
     $props["_user_phone"]            = "phone confidential reported";
-    $props["_user_astreinte"]        = "phone confidential reported";
+    $props["_user_astreinte"]        = "str confidential reported";
     $props["_user_adresse"]          = "str confidential reported";
     $props["_user_last_login"]       = "dateTime reported";
     $props["_user_cp"]               = "num length|5 confidential reported";
@@ -572,8 +572,9 @@ class CMediusers extends CPerson {
     $this->_ref_user = $user;
 
     $this->mapPerson();
-
     $this->updateSpecs();
+
+    return $this->_ref_user;
   }
 
   /**

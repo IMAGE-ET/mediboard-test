@@ -10,7 +10,7 @@
 *}}
 
 
-<form method="post" name="bris_de_glace_{{$bris->_guid}}" onsubmit="return onSubmitFormAjax(this, {onComplete : Control.Modal.close});">
+<form method="post" name="bris_de_glace_{{$sejour->_guid}}" onsubmit="return onSubmitFormAjax(this, {onComplete : Control.Modal.close});">
   <input type="hidden" name="m" value="admin"/>
   <input type="hidden" name="dosql" value="do_bris_de_glace" />
   <input type="hidden" name="object_class" value="{{$sejour->_class}}" />

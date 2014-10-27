@@ -50,10 +50,12 @@ class CSetupastreintes extends CSetup {
 
     $this->makeRevision("0.4");
     $query = "ALTER TABLE `astreinte_plage`
+      CHANGE `phone_astreinte` `phone_astreinte` VARCHAR (30) NOT NULL,
       ADD `group_id` INT (11) UNSIGNED NOT NULL;";
     $this->addQuery($query);
     $query = "ALTER TABLE `astreinte_plage`
       ADD INDEX (`group_id`);";
+    $this->addQuery($query);
 
     $this->mod_version = "0.5";
   }

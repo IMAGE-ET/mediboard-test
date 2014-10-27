@@ -8,7 +8,7 @@ PlageAstreinte = {
   showForUser: function(user_id) {
     new Url("astreintes", "ajax_plage_astreinte").
       addParam("user_id", user_id).
-      popup(600, 300);  //popup is better
+      popup(800, 300);  //popup is better
   },
 
   loadUser: function(user_id, plage_id) {
@@ -54,7 +54,7 @@ PlageAstreinte = {
     url.addParam("date", date);
     url.addParam("hour", hourstart);
     url.addParam("minutes", minutestart);
-    url.requestModal(500,300);
+    url.requestModal(700,300);
     url.modalObject.observe("afterClose", function() {
       if (callback) {
         callback();
@@ -70,6 +70,6 @@ PlageAstreinte = {
     if (date) {
       url.addParam("date", date);
     }
-    url.requestModal(600);
+    url.requestModal(700);
   }
 };

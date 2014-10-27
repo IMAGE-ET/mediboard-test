@@ -11,12 +11,14 @@
 // Get filter
 $filter = new CPlageAstreinte;
 $year   = date("Y");
+$group  = CGroups::loadCurrent();
+$today  = CMbDT::dateTime();
+
 
 $filter->user_id    = CValue::get("user_id", CAppUI::$user->_id);
-$filter->_id = CValue::get("plage_id", "");
-$filter->start = CValue::get("start", "$year-01-01");
-$filter->end   = CValue::get("end"  , "$year-12-31");
-$today = CMbDT::dateTime();
+$filter->_id        = CValue::get("plage_id", "");
+$filter->start      = CValue::get("start", "$year-01-01");
+$filter->end        = CValue::get("end"  , "$year-12-31");
 
 // load available users
 $mediuser  = new CMediusers();
@@ -25,13 +27,14 @@ $mediusers = $mediuser->loadListFromType();
 $user = CMediusers::get($filter->user_id);
 
 // load ref function
-foreach ($mediusers as $_medius) {
+foreach ($mediusers as $mid => $_medius) {
   $_medius->loadRefFunction();
 }
 
 // Query
 $where = array();
 $where["user_id"] = CSQLDataSource::prepareIn(array_keys($mediusers), $filter->user_id);
+$where["group_id"] = " = '$group->_id'";
 
 $debut = CValue::first($filter->start, $filter->end);
 $fin   = CValue::first($filter->end, $filter->start);
@@ -42,12 +45,15 @@ if ($fin || $debut) {
 }
 
 /** @var CPlageAstreinte[] $plages */
-$plages = $filter->loadList($where, "start DESC");
+$plages = $filter->loadList($where, "start DESC", "0,100");
 
 // Regrouper par utilisateur
 $found_users = array();
 $plages_per_user = array();
 foreach ($plages as $_plage) {
+  if (!isset($found_users[$_plage->user_id])) {
+    $found_users[$_plage->user_id] = null;
+  }
   $found_users[$_plage->user_id] = $mediusers[$_plage->user_id];
   $_plage->_ref_user = $_plage->loadRefUser();
   $_plage->loadRefColor();

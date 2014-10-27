@@ -15,10 +15,12 @@ CCanDo::checkEdit();
 
 $date = CValue::getOrSession("date", CMbDT::date());
 $mode = CValue::getOrSession("mode", "day");
+$group = CGroups::loadCurrent();
 
 
 $astreinte = new CPlageAstreinte;
 $where = array();
+$where["group_id"] = " = '$group->_id' ";
 $order = "start DESC,end";
 
 switch ($mode) {

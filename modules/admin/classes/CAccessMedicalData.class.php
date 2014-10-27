@@ -21,11 +21,11 @@ class CAccessMedicalData extends CMbObject {
    *
    * @param string|CMbObject $sejour
    */
-  static function checkForSejour($sejour) {
+  static function checkForSejour($sejour, $modal = true) {
     if (is_string($sejour)) {
       $sejour = CMbObject::loadFromGuid($sejour);
     }
-    CBrisDeGlace::checkForSejour($sejour);
+    CBrisDeGlace::checkForSejour($sejour, $modal);
     CLogAccessMedicalData::logForSejour($sejour);
   }
 

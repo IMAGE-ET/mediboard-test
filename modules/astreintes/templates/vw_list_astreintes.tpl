@@ -42,8 +42,10 @@
   </tr>
   {{foreach from=$astreintes item=_astreinte}}
     <tr>
-      <td style="width:40px;"><button type="button" class="edit notext" onclick="PlageAstreinte.modal('{{$_astreinte->_id}}')">{{tr}}Modify{{/tr}}</button></td>
-      <td style="background:#{{$_astreinte->_color}}; text-shadow:0 0 4px white;">{{$_astreinte->libelle}}</td>
+      <td style="width:40px;">
+        <button type="button" class="edit notext" onclick="PlageAstreinte.modal('{{$_astreinte->_id}}')">{{tr}}Modify{{/tr}}</button>
+      </td>
+      <td style="background:#{{$_astreinte->_color}}; color:#{{$_astreinte->_font_color}}">{{$_astreinte->libelle}}</td>
       <td>{{mb_value object=$_astreinte->_ref_user field=_user_last_name}}<br/>
         <strong>{{mb_value object=$_astreinte field=phone_astreinte}}</strong></td>
       <td>

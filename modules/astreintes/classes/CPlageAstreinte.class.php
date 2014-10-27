@@ -41,6 +41,7 @@ class CPlageAstreinte extends CPlageCalendaire {
   public $_hours;   // 29.5 hours
   public $_duration;
   public $_color;
+  public $_font_color;
 
   /** Behaviour fields
    *
@@ -66,7 +67,7 @@ class CPlageAstreinte extends CPlageCalendaire {
     $specs["type"]           = "enum list|".implode("|", self::$astreintes_type)." notNull";
     $specs["libelle"]         = "str";
     $specs["group_id"]        = "ref class|CGroups notNull";
-    $specs["phone_astreinte"] = "phone notNull";
+    $specs["phone_astreinte"] = "str notNull";
     return $specs;
   }
 
@@ -171,6 +172,7 @@ class CPlageAstreinte extends CPlageCalendaire {
    * @return mixed
    */
   function loadRefColor() {
+    $this->_font_color = CColorSpec::get_text_color(CAppUI::conf("astreintes astreinte_".$this->type."_color")) > 130 ? '000000' :  'ffffff';
     return $this->_color = CAppUI::conf("astreintes astreinte_".$this->type."_color");
   }
 

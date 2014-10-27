@@ -159,7 +159,7 @@ class CUser extends CPerson {
     $props["user_email"]                = "str maxLength|255";
     $props["user_phone"]                = "phone";
     $props["user_mobile"]               = "phone";
-    $props["user_astreinte"]            = "phone";
+    $props["user_astreinte"]            = "str";
     $props["user_address1"]             = "str";
     $props["user_city"]                 = "str maxLength|30";
     $props["user_zip"]                  = "str maxLength|11";

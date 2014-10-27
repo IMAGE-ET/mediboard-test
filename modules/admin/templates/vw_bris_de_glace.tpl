@@ -27,7 +27,7 @@
 
   <select name="object_class" onchange="this.form.onsubmit();">
     <option value="">&mdash; Types</option>
-    <option value="CSejour">Séjours</option>
+    <option value="CSejour" selected="selected">Séjours</option>
   </select>
 
   <label>Début :
