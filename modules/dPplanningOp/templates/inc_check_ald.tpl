@@ -9,9 +9,15 @@
 *}}
 
 {{mb_default var=onchange value=""}}
+{{mb_default var=display value=""}}
+{{mb_default var=circled value=true}}
+
 
 <tr>
-  <td colspan="3">
+  {{if $display == 'form'}}
+    <th></th>
+  {{/if}}
+  <td {{if $display != 'form'}}colspan="3"{{/if}}>
     <script type="text/javascript">
       setAldCmu = function(oCurrForm) {
         oSejourForm   = getForm("editSejour");
@@ -52,7 +58,7 @@
     </script>
 
     <!-- Patient sous CMU -->
-   <span class="circled">
+   <span{{if $circled}} class="circled"{{/if}}>
      <label for="__cmu_pat" title="Patient bénéficiant du régime dde couverture maladie universelle">
        Patient sous CMU
      </label>
@@ -66,7 +72,7 @@
    </span>
 
     <!-- Patient sous ALD -->
-   <span class="circled">
+   <span{{if $circled}} class="circled"{{/if}}>
      <label for="__ald_pat" title="Patient bénéficiant du régime d'affection longue durée">
        Patient sous ALD
      </label>
@@ -80,7 +86,7 @@
    </span>
 
     <!-- Séjour concerné par ALD -->
-   <span class="circled">
+   <span{{if $circled}} class="circled"{{/if}}>
      {{mb_label object=$sejour field=ald}}
      {{if $patient && $patient->ald}}
        {{mb_field object=$sejour typeEnum=checkbox field=ald onchange=$onchange|smarty:nodefaults}}
