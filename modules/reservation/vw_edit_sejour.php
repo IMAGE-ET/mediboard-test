@@ -9,4 +9,12 @@
  * @version    $Revision$
  */
 
-CAppUI::requireModuleFile("dPplanningOp", "vw_edit_sejour");
+
+// right on reservation
+CCanDo::checkEdit();
+
+// right on dPplanningOp
+$pl_op = CModule::getActive("dPplanningOp");
+if ($pl_op->canDo()->edit) {
+  CAppUI::requireModuleFile("dPplanningOp", "vw_edit_sejour");
+}
