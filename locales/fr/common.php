@@ -273,6 +273,7 @@ $locales['Period.day'] = 'Quotidien';
 $locales['Period.month'] = 'Mensuel';
 $locales['Period.week'] = 'Hebdomadaire';
 $locales['Permission'] = 'Autorisation';
+$locales['Phone.none'] = 'Aucun téléphone';
 $locales['Pictures'] = 'Images';
 $locales['Popup blocker alert'] = 'Il semblerait que votre navigateur ait bloqué la popup "%s", veuillez la débloquer.';
 $locales['Preferences'] = 'Préférences';
