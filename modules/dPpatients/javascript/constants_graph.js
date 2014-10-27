@@ -182,7 +182,11 @@ ConstantsGraph = Class.create({
   plotClick: function(event, pos, item) {
 
     if (item) {
-      editConstants(item.series.data[item.dataIndex].id, window.oGraphs.contextGuid);
+      var context_guid = window.oGraphs.contextGuid;
+      if (item.series.data[item.dataIndex].context_guid) {
+        context_guid = item.series.data[item.dataIndex].context_guid;
+      }
+      editConstants(item.series.data[item.dataIndex].id, context_guid);
     }
   },
 

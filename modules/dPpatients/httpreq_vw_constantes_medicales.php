@@ -51,7 +51,7 @@ if (is_null($can_edit)) {
   }
 }
 
-if ($selected_context_guid != $context_guid) {
+if ($selected_context_guid != 'all' && $selected_context_guid != $context_guid) {
   $context_guid = $selected_context_guid;
 }
 
@@ -246,7 +246,11 @@ foreach ($list_constantes as $_cst) {
 
 $list_constantes = array_reverse($list_constantes, true);
 
-$graph = new CConstantGraph($host, $context_guid);
+$context_guid_graph = $context_guid;
+if ($selected_context_guid == 'all') {
+  $context_guid_graph = $selected_context_guid;
+}
+$graph = new CConstantGraph($host, $context_guid_graph);
 $graph->formatGraphDatas($list_constantes);
 
 // On récupère dans tous les cas le poids et la taille du patient

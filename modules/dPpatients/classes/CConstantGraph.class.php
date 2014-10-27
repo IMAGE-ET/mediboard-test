@@ -349,7 +349,7 @@ class CConstantGraph {
         $style .= 'color: red';
       }
       if (!$this->widget) {
-        $str = '<span style="' . $style . '" onclick="editConstants(' . $_cst->_id . ', \'' . $this->context_guid . '\')">';
+        $str = "<span style=\"$style\" onclick=\"editConstants('$_cst->_id', '$_cst->context_class-$_cst->context_id')\">";
         $str .= '<strong>' . CMbDT::format($_cst->datetime, '%Hh%M') . '</strong><br/>'.
           CMbDT::format($_cst->datetime, '%d/%m') . '</span>';
       }
@@ -645,6 +645,9 @@ class CConstantGraph {
         $entry['users'] = $users_logs;
         if ($_value->comment) {
           $entry['comment'] = utf8_encode($_value->comment);
+        }
+        if ("$_value->context_class-$_value->context_id" !== $this->context_guid) {
+          $entry['context_guid'] = "$_value->context_class-$_value->context_id";
         }
 
         $datas['values'][] = $entry;
