@@ -18,6 +18,7 @@
       onCompleteDisconnected();
     }
   {{else}}
+    delete Url.pendingRequests['{{$requestID}}'];
     {{assign var=user value=$app->_ref_user}}
 
     {{if $user}} 
