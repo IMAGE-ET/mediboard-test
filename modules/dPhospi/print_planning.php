@@ -155,6 +155,11 @@ foreach ($sejours as $key => &$sejour) {
 
   if ($filter->_notes) {
     $sejour->loadRefsNotes();
+    foreach ($sejour->_ref_notes as $_id => $_note) {
+      if (!$_note->public) {
+        unset($sejour->_ref_notes[$_id]);
+      }
+    }
   }
 
   $curr_date = CMbDT::date(null, $sejour->{$filter->_horodatage});
