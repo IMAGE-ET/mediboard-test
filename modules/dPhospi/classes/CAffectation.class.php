@@ -372,7 +372,8 @@ class CAffectation extends CMbObject {
     // Mise à jour vs l'entrée
     if (!$prev->_id) {
       if ($this->entree != $sejour->entree) {
-        $sejour->entree = $this->entree;
+        $field = $sejour->entree_reelle ? "entree_reelle" : "entree_prevue";
+        $sejour->$field = $this->entree;
         $changeSejour = 1;
       }
     }
@@ -384,7 +385,8 @@ class CAffectation extends CMbObject {
     // Mise à jour vs la sortie
     if (!$next->_id) {
       if ($this->sortie != $sejour->sortie) {
-        $sejour->sortie = $this->sortie;
+        $field = $sejour->sortie_reelle ? "sortie_reelle" : "sortie_prevue";
+        $sejour->$field = $this->sortie;
         $changeSejour = 1;
       }
     }
