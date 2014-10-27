@@ -70,7 +70,7 @@
                 <input type="hidden" name="patient_id" value="{{$sejour->patient_id}}">
                 {{mb_key object=$sejour}}
                 <table class="main">
-                  {{mb_include module=planningOp template=inc_check_ald patient=$subject->_ref_patient onchange="this.form.onsubmit()"}}
+                  {{mb_include module=planningOp template=inc_check_ald patient=$subject->_ref_patient onchange="this.form.onsubmit()" circled=false}}
                 </table>
               </form>
             </td>
