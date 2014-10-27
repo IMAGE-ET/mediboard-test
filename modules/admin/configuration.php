@@ -20,7 +20,7 @@ CConfiguration::register(
         ),
         "CLogAccessMedicalData" => array(
           "enable_log_access"      => "bool default|0",
-          "round_datetime"         => "enum list|1m|10m|1h|1d default|1h",
+          "round_datetime"         => "enum list|1m|10m|1h|1d default|1h localize",
         ),
       )
     )
