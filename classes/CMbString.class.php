@@ -1562,13 +1562,17 @@ abstract class CMbString {
 
       $config = HTMLPurifier_Config::createDefault();
       // App encoding (in order to prevent from removing diacritics)
-      $config->set('Core.Encoding', CApp::$encoding);
+      $config->set('Core.Encoding', "utf-8");
       $config->set('Cache.SerializerPath', "$root/tmp");
 
       $purifier = new HTMLPurifier($config);
     }
 
-    $purified = $purifier->purify($html);
+    $purified = $purifier->purify(mb_convert_encoding($html, "UTF-8", "Windows-1252"));
+
+    if ($purified) {
+      $purified = mb_convert_encoding($purified, "Windows-1252", "UTF-8");
+    }
 
     if (isset($purified[5])) {
       $cache[$html] = $purified;
