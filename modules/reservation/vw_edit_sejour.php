@@ -9,5 +9,10 @@
  * @version    $Revision$
  */
 
-$smarty = new CSmartyDP();
-$smarty->display("vw_edit_sejour.tpl");
+// right on reservation
+CCanDo::checkEdit();
+
+// right on dPplanningOp
+$pl_op = CModule::getActive("dPplanningOp");
+if ($pl_op->canDo()->edit) {
+  CAppUI::requireModuleFile("dPplanningOp", "vw_edit_sejour");
