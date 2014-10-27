@@ -51,6 +51,10 @@ if (is_null($can_edit)) {
   }
 }
 
+if ($selected_context_guid != $context_guid) {
+  $context_guid = $selected_context_guid;
+}
+
 if (!$start) {
   $start = 0;
 }
