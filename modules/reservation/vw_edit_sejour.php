@@ -16,3 +16,4 @@ CCanDo::checkEdit();
 $pl_op = CModule::getActive("dPplanningOp");
 if ($pl_op->canDo()->edit) {
   CAppUI::requireModuleFile("dPplanningOp", "vw_edit_sejour");
+}
