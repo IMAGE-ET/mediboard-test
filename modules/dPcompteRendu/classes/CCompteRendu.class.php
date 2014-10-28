@@ -52,6 +52,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
   public $purgeable;
   public $fields_missing;
   public $version;
+  public $creation_date;
 
   // Form fields
   public $_is_document    = false;
@@ -255,6 +256,8 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     $props["_entire_doc"]      = "html";
     $props["_ids_corres"]      = "str";
     $props["_date"]            = "dateTime show|1";
+    $props["creation_date"]    = "dateTime";
+
     return $props;
   }
 
@@ -967,6 +970,13 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
    */
   function store() {
     $this->completeField("content_id", "_source", "language", "version");
+
+    if (!$this->creation_date) {
+      $this->creation_date = CMbDT::dateTime();
+      if ($this->_id) {
+        $this->creation_date = $this->loadFirstLog()->date;
+      }
+    }
 
     // Prevent source modified wben sending, comparison is working when editing
     $this->loadContent($this->_send);

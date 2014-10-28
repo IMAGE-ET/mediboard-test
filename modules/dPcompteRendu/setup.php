@@ -980,6 +980,11 @@ class CSetupdPcompteRendu extends CSetup {
     $this->makeRevision("1.01");
     $this->addPrefQuery("show_old_print", 1);
 
-    $this->mod_version = "1.02";
+    $this->makeRevision("1.02");
+    $query = "ALTER TABLE `compte_rendu`
+                ADD `creation_date` DATETIME;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.03";
   }
 }
