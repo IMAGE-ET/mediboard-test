@@ -463,7 +463,7 @@ class CPatient extends CPerson {
     $props["profession"]           = "str autocomplete";
     $props["csp" ]                 = "numchar length|2";
     $props["patient_link_id"]      = "ref class|CPatient";
-    $props["status"]               = "enum list|PROV|VALI|DPOT|ANOM|CACH";
+    $props["status"]               = "enum list|PROV|VALI|ANOM";
 
     $props["assure_nom"]                  = "str confidential";
     $props["assure_prenom"]               = "str";
@@ -608,10 +608,6 @@ class CPatient extends CPerson {
 
     CPatientLink::deleteDoubloon();
 
-    $this->status = $this->countPatientLinks() ? "DPOT" : "PROV";
-    if ($this->vip) {
-      $this->status = "CACH";
-    }
     $this->store();
 
     // Merge them

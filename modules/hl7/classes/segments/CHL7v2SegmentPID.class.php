@@ -391,7 +391,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     if (CAppUI::conf("dPpatients CPatient manage_identity_status", $receiver->_ref_group)) {
       $data[] =  array (
         $patient->status,
-        $patient->vip && $patient->status != "CACH" ? "CACH": null,
+        $patient->vip ? "CACH": null,
       );
     }
     else {

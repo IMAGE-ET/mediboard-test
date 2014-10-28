@@ -27,6 +27,9 @@ $patient = new CPatient();
 $count_patient = $patient->countList();
 $count_status  = $patient->countMultipleList(array("status" => "IS NOT NULL"), null, "status", null, array("status"));
 
+$patient_link = new CPatientLink();
+$count_status[] = array("total" => $patient_link->countList(), "status" => "DPOT");
+
 //répartition total
 $series = CPatientStateTools::createGraphPie($count_status);
 foreach ($series["datum"] as $_k => $_serie) {

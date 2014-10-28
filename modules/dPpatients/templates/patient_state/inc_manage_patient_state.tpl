@@ -63,14 +63,14 @@
 
 <ul id="tabs-patient_state" class="control_tabs">
   <li><a href="#patient_prov">{{tr}}CPatientState.state.PROV{{/tr}}</a></li>
-  <li><a href="#patient_dpot">{{tr}}CPatientState.state.DPOT{{/tr}}</a></li>
   <li><a href="#patient_anom">{{tr}}CPatientState.state.ANOM{{/tr}}</a></li>
   <li><a href="#patient_cach">{{tr}}CPatientState.state.CACH{{/tr}}</a></li>
   <li><a href="#patient_vali">{{tr}}CPatientState.state.VALI{{/tr}}</a></li>
+  <li><a href="#patient_dpot">{{tr}}CPatientState.state.DPOT{{/tr}}</a></li>
 </ul>
 
 <div id="patient_prov"></div>
-<div id="patient_dpot"></div>
 <div id="patient_anom"></div>
 <div id="patient_cach"></div>
 <div id="patient_vali"></div>
+<div id="patient_dpot"></div>

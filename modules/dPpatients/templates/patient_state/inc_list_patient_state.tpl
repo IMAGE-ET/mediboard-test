@@ -22,7 +22,7 @@
 {{mb_include module=system template=inc_pagination total=$count current=$page change_page="PatientState.changePage.$state" step=30}}
 <table class="tbl">
   <tr>
-    <th class="title" colspan="7">{{tr}}CPatient.data{{/tr}}</th>
+    <th class="title" colspan="{{if $state == "dpot"}}8{{else}}7{{/if}}">{{tr}}CPatient.data{{/tr}}</th>
     <th class="title" colspan="3">{{tr}}CPatetientState.data{{/tr}}</th>
     <th class="title" rowspan="2">{{tr}}Action{{/tr}}</th>
   </tr>
@@ -33,6 +33,9 @@
     <th>{{mb_label class="CPatient" field="prenom"}}</th>
     <th>{{mb_label class="CPatient" field="naissance"}}</th>
     <th>{{mb_label class="CPatient" field="sexe"}}</th>
+    {{if $state == "dpot"}}
+      <th>{{mb_label class="CPatient" field="status"}}</th>
+    {{/if}}
     <th>{{tr}}CPatient.link_list{{/tr}}</th>
     <th>{{mb_label class="CPatientState" field="datetime"}}</th>
     <th>{{mb_label class="CPatientState" field="mediuser_id"}}</th>
@@ -56,6 +59,9 @@
       <td>{{mb_value object=$_patient field="prenom"}}</td>
       <td>{{mb_value object=$_patient field="naissance"}}</td>
       <td>{{mb_value object=$_patient field="sexe"}}</td>
+      {{if $state == "dpot"}}
+        <td>{{mb_value object=$_patient field="status"}}</td>
+      {{/if}}
       <td>
         {{foreach from=$_patient->_ref_patient_links item=_link}}
           {{if $_link->_ref_patient_doubloon}}
@@ -99,9 +105,6 @@
               <button type="submit" class="tick">{{tr}}CPatientState.validate_identity{{/tr}}</button>
             {{else}}
               {{assign var=state_value value="PROV"}}
-              {{if $_patient->vip}}
-                {{assign var=state_value value="CACH"}}
-              {{/if}}
               {{mb_field object=$_patient field="status" value=$state_value hidden=true}}
               <button type="submit" class="cancel">{{tr}}CPatientState.unvalidate_identity{{/tr}}</button>
             {{/if}}
@@ -110,6 +113,6 @@
       </td>
     </tr>
   {{foreachelse}}
-    <tr><td colspan="11" class="empty">{{tr}}CPatient.none{{/tr}}</td></tr>
+    <tr><td colspan="12" class="empty">{{tr}}CPatient.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>
