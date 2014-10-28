@@ -8,6 +8,10 @@
       ImedsResultsWatcher.loadResults();
     {{/if}}
   });
+
+  orderTabops = function(col, way) {
+    orderTabReveil(col, way, 'ops');
+  };
   
   // faire le submit de formOperation dans le onComplete de l'ajax
   checkPersonnel = function(oFormAffectation, oFormOperation) {
@@ -27,9 +31,9 @@
 
 <table class="tbl">
   <tr>
-    <th>{{tr}}SSPI.Salle{{/tr}}</th>
-    <th>{{tr}}SSPI.Praticien{{/tr}}</th>
-    <th>{{tr}}SSPI.Patient{{/tr}}</th>
+    <th>{{mb_colonne class="COperation" field="salle_id" order_col=$order_col order_way=$order_way function=orderTabops}}</th>
+    <th>{{mb_colonne class="COperation" field="chir_id" order_col=$order_col order_way=$order_way function=orderTabops}}</th>
+    <th>{{mb_title class="COperation" field="_patient_id"}}</th>
     <th class="narrow"></th>
     {{if $use_poste}}
       <th>{{tr}}SSPI.Poste{{/tr}}</th>
@@ -37,8 +41,8 @@
     {{if $isbloodSalvageInstalled}}
       <th>{{tr}}SSPI.RSPO{{/tr}}</th>
     {{/if}}
-    <th>{{tr}}SSPI.SortieSalle{{/tr}}</th>
-    <th>{{tr}}SSPI.EntreeReveil{{/tr}}</th>
+    <th>{{mb_colonne class="COperation" field="sortie_salle" order_col=$order_col order_way=$order_way function=orderTabops}}</th>
+    <th>{{mb_colonne class="COperation" field="entree_reveil" order_col=$order_col order_way=$order_way function=orderTabops}}</th>
     <th>Sortie sans SSPI</th>
     <th class="narrow"></th>
   </tr>    

@@ -6,16 +6,20 @@
       ImedsResultsWatcher.loadResults();
     {{/if}}
   });
+
+  orderTabencours = function(col, way) {
+    orderTabReveil(col, way, 'encours');
+  };
 </script>
 
 <table class="tbl">
   <tr>
-    <th>{{tr}}SSPI.Salle{{/tr}}</th>
-    <th>{{tr}}SSPI.Praticien{{/tr}}</th>
-    <th>{{tr}}SSPI.Patient{{/tr}}</th>
+    <th>{{mb_colonne class="COperation" field="salle_id" order_col=$order_col order_way=$order_way function=orderTabencours}}</th>
+    <th>{{mb_colonne class="COperation" field="chir_id" order_col=$order_col order_way=$order_way function=orderTabencours}}</th>
+    <th>{{mb_title class="COperation" field="_patient_id"}}</th>
     <th class="narrow"></th>
-    <th>{{mb_title class=COperation field=entree_salle}}</th>
-		<th>{{mb_title class=COperation field=debut_op}}</th>
+    <th>{{mb_colonne class="COperation" field="entree_salle" order_col=$order_col order_way=$order_way function=orderTabencours}}</th>
+		<th>{{mb_colonne class="COperation" field="debut_op" order_col=$order_col order_way=$order_way function=orderTabencours}}</th>
     <th class="narrow"></th>
   </tr>    
   {{foreach from=$listOperations item=_operation}}

@@ -10,116 +10,122 @@
       ImedsResultsWatcher.loadResults();
     {{/if}}
   });
+
+  orderTabpreop = function(col, way) {
+    orderTabReveil(col, way, 'preop');
+  };
 </script>
 
 <table class="tbl">
   <tr>
-    <th>Heure</th>
-    <th>Salle</th>
-    <th>Praticien</th>
-    <th>Patient</th>
+    <th>{{mb_colonne class="COperation" field="time_operation" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
+    <th>{{mb_colonne class="COperation" field="salle_id" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
+    <th>{{mb_colonne class="COperation" field="chir_id" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
+    <th>{{mb_title class="COperation" field="_patient_id"}}</th>
     <th class="narrow"></th>
-    <th>Interv</th>
-    <th>Coté</th>
+    <th>{{mb_colonne class="COperation" field="libelle" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
+    <th>{{mb_colonne class="COperation" field="cote" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
     {{if @$modules.brancardage->_can->read}}
       <th>{{tr}}CBrancardage{{/tr}}</th>
     {{/if}}
-    <th class="narrow">Début</th>
-    <th class="narrow">Fin</th>
+    <th class="narrow">{{mb_colonne class="COperation" field="debut_op" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
+    <th class="narrow">{{mb_colonne class="COperation" field="fin_op" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
     <th class="narrow"></th>
   </tr>
-{{foreach from=$listOperations item=_operation}}
-  {{assign var=_operation_id value=$_operation->_id}}
-  <tr>
-    <td class="text">
-      {{if $_operation->rank}}
-        {{$_operation->_datetime|date_format:$conf.time}}
-      {{else}}
-        NP
-      {{/if}}
-    </td>
-    <td>{{$_operation->_ref_salle->_shortview}}</td>
-    <td class="text">
-      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}
-    </td>
-    <td class="text">
-        <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
-              onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}');">
-          {{$_operation->_ref_patient}}
-        </span>
-    </td>
-    <td>
-      <button class="button soins notext" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">
-        Dossier séjour
-      </button>
-      {{if $isImedsInstalled}}
-        {{mb_include module=Imeds template=inc_sejour_labo link="#1" sejour=$_operation->_ref_sejour float="none"}}
-      {{/if}}
-      <button type="button" class="injection notext" onclick="Operation.dossierBloc('{{$_operation->_id}}', true);">Dossier de bloc</button>
-    </td>
-    <td class="text">
-      <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
-        {{if $_operation->libelle}}
-          {{$_operation->libelle}}
+  {{foreach from=$listOperations item=_operation}}
+    {{assign var=_operation_id value=$_operation->_id}}
+    <tr>
+      <td class="text">
+        {{if $_operation->rank}}
+          {{$_operation->_datetime|date_format:$conf.time}}
         {{else}}
-          {{foreach from=$_operation->_ext_codes_ccam item=curr_code}}
-            {{$curr_code->code}}
-          {{/foreach}}
+          NP
         {{/if}}
-      </span>
-    </td>
-    <td class="text">{{mb_value object=$_operation field="cote"}}</td>
-    {{if @$modules.brancardage->_can->read}}
-      <td>
-         <span id="demandebrancard-{{$_operation->sejour_id}}">
-           {{mb_include module=brancardage template=inc_exist_brancard brancardage=$_operation->_ref_brancardage id="demandebrancard"
-             sejour_id=$_operation->sejour_id salle_id=$_operation->salle_id operation_id=$_operation->_id
-             opid=$_operation->_id reveil="preop" }}
-         </span>
       </td>
-    {{/if}}
-    <td class="button">
-      {{if $modif_operation}}
-        <form name="editDebutPreopFrm{{$_operation->_id}}" action="?" method="post">
-          <input type="hidden" name="m" value="planningOp" />
-          <input type="hidden" name="dosql" value="do_planning_aed" />
-          {{mb_key object=$_operation}}
-          <input type="hidden" name="del" value="0" />
-          {{if $_operation->debut_prepa_preop}}
-            {{mb_field object=$_operation field=debut_prepa_preop form="editDebutPreopFrm$_operation_id" onchange="submitPrepaForm(this.form);"}}
+      <td>{{$_operation->_ref_salle->_shortview}}</td>
+      <td class="text">
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}
+      </td>
+      <td class="text">
+          <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
+                onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}');">
+            {{$_operation->_ref_patient}}
+          </span>
+      </td>
+      <td>
+        <button class="button soins notext" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">
+          Dossier séjour
+        </button>
+        {{if $isImedsInstalled}}
+          {{mb_include module=Imeds template=inc_sejour_labo link="#1" sejour=$_operation->_ref_sejour float="none"}}
+        {{/if}}
+        <button type="button" class="injection notext" onclick="Operation.dossierBloc('{{$_operation->_id}}', true);">Dossier de bloc</button>
+      </td>
+      <td class="text">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
+          {{if $_operation->libelle}}
+            {{$_operation->libelle}}
           {{else}}
-            <input type="hidden" name="debut_prepa_preop" value="now" />
-            <button class="tick notext" type="button" onclick="submitPrepaForm(this.form);">{{tr}}Modify{{/tr}}</button>
+            {{foreach from=$_operation->_ext_codes_ccam item=curr_code}}
+              {{$curr_code->code}}
+            {{/foreach}}
           {{/if}}
-        </form>
-      {{else}}
-        {{mb_value object=$_operation field="debut_prepa_preop"}}
+        </span>
+      </td>
+      <td class="text">{{mb_value object=$_operation field="cote"}}</td>
+      {{if @$modules.brancardage->_can->read}}
+        <td>
+           <span id="demandebrancard-{{$_operation->sejour_id}}">
+             {{mb_include module=brancardage template=inc_exist_brancard brancardage=$_operation->_ref_brancardage id="demandebrancard"
+               sejour_id=$_operation->sejour_id salle_id=$_operation->salle_id operation_id=$_operation->_id
+               opid=$_operation->_id reveil="preop" }}
+           </span>
+        </td>
       {{/if}}
-    </td>
-    <td class="button">
-      {{if $modif_operation}}
-        <form name="editFinPreopFrm{{$_operation->_id}}" action="?" method="post">
-          <input type="hidden" name="m" value="planningOp" />
-          <input type="hidden" name="dosql" value="do_planning_aed" />
-          {{mb_key object=$_operation}}
-          <input type="hidden" name="del" value="0" />
-          {{if $_operation->fin_prepa_preop}}
-            {{mb_field object=$_operation field=fin_prepa_preop form="editFinPreopFrm$_operation_id" onchange="submitPrepaForm(this.form);"}}
-          {{else}}
-            <input type="hidden" name="fin_prepa_preop" value="now" />
-            <button class="tick notext" type="button" onclick="submitPrepaForm(this.form);">{{tr}}Modify{{/tr}}</button>
-          {{/if}}
-        </form>
-      {{else}}
-        {{mb_value object=$_operation field="fin_prepa_preop"}}
-      {{/if}}
-    </td>
-    <td>
-      <button type="button" class="print notext"
-        onclick="printDossier('{{$_operation->sejour_id}}', '{{$_operation->_id}}')"></button>
-    </td>
-  </tr>
+      <td class="button">
+        {{if $modif_operation}}
+          <form name="editDebutPreopFrm{{$_operation->_id}}" action="?" method="post">
+            <input type="hidden" name="m" value="planningOp" />
+            <input type="hidden" name="dosql" value="do_planning_aed" />
+            {{mb_key object=$_operation}}
+            <input type="hidden" name="del" value="0" />
+            {{if $_operation->debut_prepa_preop}}
+              {{mb_field object=$_operation field=debut_prepa_preop form="editDebutPreopFrm$_operation_id" onchange="submitPrepaForm(this.form);"}}
+            {{else}}
+              <input type="hidden" name="debut_prepa_preop" value="now" />
+              <button class="tick notext" type="button" onclick="submitPrepaForm(this.form);">{{tr}}Modify{{/tr}}</button>
+            {{/if}}
+          </form>
+        {{else}}
+          {{mb_value object=$_operation field="debut_prepa_preop"}}
+        {{/if}}
+      </td>
+      <td class="button">
+        {{if $modif_operation}}
+          <form name="editFinPreopFrm{{$_operation->_id}}" action="?" method="post">
+            <input type="hidden" name="m" value="planningOp" />
+            <input type="hidden" name="dosql" value="do_planning_aed" />
+            {{mb_key object=$_operation}}
+            <input type="hidden" name="del" value="0" />
+            {{if $_operation->fin_prepa_preop}}
+              {{mb_field object=$_operation field=fin_prepa_preop form="editFinPreopFrm$_operation_id" onchange="submitPrepaForm(this.form);"}}
+            {{else}}
+              <input type="hidden" name="fin_prepa_preop" value="now" />
+              <button class="tick notext" type="button" onclick="submitPrepaForm(this.form);">{{tr}}Modify{{/tr}}</button>
+            {{/if}}
+          </form>
+        {{else}}
+          {{mb_value object=$_operation field="fin_prepa_preop"}}
+        {{/if}}
+      </td>
+      <td>
+        <button type="button" class="print notext"
+          onclick="printDossier('{{$_operation->sejour_id}}', '{{$_operation->_id}}')"></button>
+      </td>
+    </tr>
   {{foreachelse}}
-  <tr><td colspan="20" class="empty">{{tr}}COperation.none{{/tr}}</td></tr>
+    <tr>
+      <td colspan="20" class="empty">{{tr}}COperation.none{{/tr}}</td>
+    </tr>
   {{/foreach}}
 </table>

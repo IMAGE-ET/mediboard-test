@@ -13,7 +13,7 @@
 
   submitReveilForm = function(oFormOperation) {
     onSubmitFormAjax(oFormOperation, refreshTabsReveil);
-  }
+  };
 
   submitReveil = function(form) {
     {{if $password_sortie && (!$is_anesth || !$app->user_prefs.autosigne_sortie)}}
@@ -36,35 +36,39 @@
       $V(form.sortie_locker_id, '{{$app->user_id}}');
       submitReveilForm(form);
     {{/if}}
-  }
+  };
+
+  orderTabreveil = function(col, way) {
+    orderTabReveil(col, way, 'reveil');
+  };
 </script>
 
 <table class="tbl">
   <tr>
-    <th>{{tr}}SSPI.Salle{{/tr}}</th>
-    <th>{{tr}}SSPI.Praticien{{/tr}}</th>
+    <th>{{mb_colonne class="COperation" field="salle_id" order_col=$order_col order_way=$order_way function=orderTabreveil}}</th>
+    <th>{{mb_colonne class="COperation" field="chir_id" order_col=$order_col order_way=$order_way function=orderTabreveil}}</th>
     <th>{{tr}}SSPI.Patient{{/tr}}</th>
     <th class="narrow"></th>
     {{if $use_poste}}
-      <th>{{tr}}SSPI.Poste{{/tr}}</th>
+      <th>{{mb_colonne class="COperation" field="poste_sspi_id" order_col=$order_col order_way=$order_way function=orderTabreveil}}</th>
     {{/if}}
     <th>{{tr}}SSPI.Chambre{{/tr}}</th>    
     {{if $isbloodSalvageInstalled}}
       <th>{{tr}}SSPI.RSPO{{/tr}}</th>
     {{/if}}
     {{if $personnels !== null}}
-    <th>{{tr}}SSPI.SortieSalle{{/tr}}</th>
+    <th>{{mb_colonne class="COperation" field="sortie_salle" order_col=$order_col order_way=$order_way function=orderTabreveil}}</th>
     {{/if}}
     <th>{{tr}}SSPI.Responsable{{/tr}}</th>
-    <th>{{tr}}SSPI.EntreeReveil{{/tr}}</th>
+    <th>{{mb_colonne class="COperation" field="entree_reveil" order_col=$order_col order_way=$order_way function=orderTabreveil}}</th>
     {{if @$modules.brancardage->_can->read}}
       <th>{{tr}}CBrancardage{{/tr}}</th>
     {{/if}}
     {{if $use_sortie_reveil_reel}}
-      <th>{{tr}}SSPI.SortieReveilPossible{{/tr}}</th>
-      <th style="width: 15%">{{tr}}SSPI.SortieReveilReel{{/tr}}</th>
+      <th>{{mb_colonne class="COperation" field="sortie_reveil_possible" order_col=$order_col order_way=$order_way function=orderTabreveil}}</th>
+      <th style="width: 15%">{{mb_colonne class="COperation" field="sortie_reveil_reel" order_col=$order_col order_way=$order_way function=orderTabreveil}}</th>
     {{else}}
-      <th>{{tr}}SSPI.SortieReveil{{/tr}}</th>
+      <th>{{mb_colonne class="COperation" field="sortie_reveil_reel" order_col=$order_col order_way=$order_way function=orderTabreveil}}</th>
     {{/if}}
     <th class="narrow"></th>
   </tr>    

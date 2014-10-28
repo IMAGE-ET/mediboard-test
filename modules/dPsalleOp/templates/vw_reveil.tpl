@@ -93,6 +93,16 @@
     url.requestUpdate(type);
   }
 
+  orderTabReveil = function(col, way, type) {
+    var url = new Url("dPsalleOp", "httpreq_reveil");
+    url.addParam("bloc_id", "{{$bloc->_id}}");
+    url.addParam("date", "{{$date}}");
+    url.addParam("type", type);
+    url.addParam("order_col", col);
+    url.addParam("order_way", way);
+    url.requestUpdate(type);
+  };
+
   showDossierSoins = function(sejour_id, operation_id, default_tab) {
     {{if "dPprescription"|module_active}}
       var url = new Url("soins", "ajax_vw_dossier_sejour");
@@ -105,14 +115,14 @@
       url.modal({width: "95%", height: "95%"});
       modalWindow = url.modalObject;
     {{/if}}
-  }
+  };
 
   printDossier = function(sejour_id, operation_id) {
     var url = new Url("hospi", "httpreq_documents_sejour");
     url.addParam("sejour_id", sejour_id);
     url.addParam("operation_id", operation_id);
     url.requestModal(700, 400);
-  }
+  };
 
   callbackSortie = function(user_id) {
     if (!window.current_form) {
@@ -122,7 +132,7 @@
     $V(form.sortie_locker_id, form.sortie_reveil_possible.value ? user_id : '');
     submitReveilForm(form);
     Control.Modal.close();
-  }
+  };
 </script>
 
 <ul id="reveil_tabs" class="control_tabs">
