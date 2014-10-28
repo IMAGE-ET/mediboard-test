@@ -1844,7 +1844,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     $this->loadContent(false);
     $content              = $this->_ref_content;
     $array["body"]        = utf8_encode($this->redesignBody($content->content));
-    $date = $this->loadFirstLog()->date;
+    $date = $this->creation_date;
     if (!$date) {
       $date = CMbDT::dateTime();
     }
