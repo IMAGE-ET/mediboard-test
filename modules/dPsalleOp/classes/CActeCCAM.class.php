@@ -496,7 +496,7 @@ class CActeCCAM extends CActe {
    * @return null|string
    */
   function checkExclusiveModifiers() {
-    $this->getLinkedActes();
+    $this->getLinkedActes(1, 1, 1);
 
     $exclusive_modifiers = array('F', 'U', 'P', 'S');
 
@@ -670,10 +670,11 @@ class CActeCCAM extends CActe {
    *
    * @param bool $same_executant  Seulement les actes du même exécutant si vrai
    * @param bool $only_facturable Seulement les actes facturables si vrai
+   * @param bool $same_activite   Seulement les actes ayant la même activité (4 ou (1,2,3,5))
    *
    * @return CActeCCAM[]
    */
-  function getLinkedActes($same_executant = true, $only_facturable = true) {
+  function getLinkedActes($same_executant = true, $only_facturable = true, $same_activite = false) {
     $acte = new CActeCCAM();
     
     $where = array();
@@ -685,6 +686,14 @@ class CActeCCAM extends CActe {
     }
     if ($same_executant) {
       $where["executant_id"]  = "= '$this->executant_id'";
+    }
+    if ($same_activite) {
+      if ($this->code_activite == 4) {
+        $where['code_activite'] = " = 4";
+      }
+      else {
+        $where['code_activite'] = " IN(1, 2, 3, 5)";
+      }
     }
 
     $this->_linked_actes = $acte->loadList($where);

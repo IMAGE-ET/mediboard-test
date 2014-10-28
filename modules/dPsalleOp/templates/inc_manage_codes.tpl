@@ -310,7 +310,9 @@
                         dropdown: true,
                         width: "250px",
                         updateElement: function(selected) {
-                          setCodeTemp(selected.down("strong").innerHTML);
+                          var form = getForm('manageCodes');
+                          $V(form._codes_ccam, selected.down("strong").innerHTML);
+                          ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}');
                         }
                       });
                     });

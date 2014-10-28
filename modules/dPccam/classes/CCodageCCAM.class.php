@@ -374,7 +374,7 @@ class CCodageCCAM extends CMbObject {
    * @return integer
    */
   public static function countExclusiveModifiers(&$act) {
-    $act->getLinkedActes();
+    $act->getLinkedActes(1, 1, 1);
     $exclusive_modifiers = array('F', 'U', 'P', 'S');
     $count_exclusive_modifiers = count(array_intersect($act->_modificateurs, $exclusive_modifiers));
 

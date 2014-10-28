@@ -168,6 +168,7 @@
     <th class="narrow">{{mb_title class=CActeCCAM field=code_association}}</th>
     <th>{{mb_title class=CActeCCAM field=modificateurs}}</th>
     <th>{{mb_title class=CActeCCAM field=_tarif}}</th>
+    <th class="narrow"></th>
     <th class="narrow">{{mb_title class=CActeCCAM field=execution}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=montant_depassement}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=motif_depassement}}</th>
@@ -258,6 +259,11 @@
             </td>
             <td style="text-align: right;{{if $acte->_id && !$acte->facturable}} background-color: #fc9{{/if}}">
               {{mb_value object=$acte field=_tarif}}
+            </td>
+            <td class="narrow">
+              {{if $acte->commentaire}}
+                <img src="style/mediboard/images/buttons/comment.png" title="{{$acte->commentaire}}">
+              {{/if}}
             </td>
             <td>
               {{if $read_only}}

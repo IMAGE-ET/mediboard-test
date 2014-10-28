@@ -18,7 +18,7 @@ $codage = new CCodageCCAM();
 $codage->codable_class = $codable_class;
 $codage->codable_id = $codable_id;
 $codage->praticien_id = $praticien_id;
-$codages = $codage->loadMatchingList('activite_anesth asc');
+$codages = $codage->loadMatchingList('activite_anesth desc');
 
 foreach ($codages as $_codage) {
   $_codage->canDo();
