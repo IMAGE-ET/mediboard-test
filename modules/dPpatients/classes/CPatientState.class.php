@@ -142,6 +142,18 @@ class CPatientState extends CMbObject {
 
     foreach (self::$list_state as $_state) {
       $patients_count[CMbString::lower($_state)] = CMbArray::get($state_count, $_state, 0);
+      if ($_state == "CACH") {
+        $where = array(
+          "vip"    => "= '1'",
+          "status" => "!= 'VALI'",
+        );
+        $patient = new CPatient();
+        $patients_count[CMbString::lower($_state)] = $patient->countList($where, null, $leftjoin);
+      }
+      if ($_state == "DPOT") {
+        $patient_link = new CPatientLink();
+        $patients_count[CMbString::lower($_state)] = $patient_link->countList($where, null, $leftjoin);
+      }
     }
 
     return $patients_count;
@@ -164,7 +176,7 @@ class CPatientState extends CMbObject {
 
     $last_state = $patient->loadLastState();
 
-    if ($patient->status == "DPOT") {
+    if ($patient->_doubloon_ids) {
       $doubloons = is_array($patient->_doubloon_ids) ? $patient->_doubloon_ids : explode("|", $patient->_doubloon_ids);
       foreach ($doubloons as $_id) {
         $patient_link = new CPatientLink();
@@ -172,11 +184,6 @@ class CPatientState extends CMbObject {
         $patient_link->patient_id2 = $_id;
         $patient_link->loadMatchingObject();
         $patient_link->store();
-
-        $patient_doubloon = new CPatient();
-        $patient_doubloon->load($_id);
-        $patient_doubloon->status = "DPOT";
-        $patient_doubloon->store();
       }
     }
 
@@ -215,33 +222,15 @@ class CPatientState extends CMbObject {
       return $patient->status;
     }
 
-    if (!$patient->_id && $patient->vip) {
-      return "CACH";
-    }
-
-    if ($patient->_id && $patient->fieldModified("vip")) {
-      if ($patient->status != "VALI") {
-        return $patient->vip == "1" ? "CACH" : "PROV";
-      }
-    }
-
-    if ($patient->_merging && $patient->countPatientLinks() == 0) {
-      return "PROV";
+    if ($patient->status == "VALI") {
+      return "VALI";
     }
 
     if ($patient->_anonyme) {
       return "ANOM";
     }
 
-    if (!$patient->_id && !$patient->_doubloon_ids) {
-      return "PROV";
-    }
-
-    if ($patient->_doubloon_ids) {
-      return "DPOT";
-    }
-
-    return null;
+    return "PROV";
   }
 
   /**

@@ -40,9 +40,29 @@ $patients_count = CPatientState::getAllNumberPatient($date_min, $date_max);
 if ($patients_count[$state] > 0) {
   /** @var CPatient[] $patients */
   $where["status"] = " = '$state'";
-  $patients = $patient->loadList($where, "nom, prenom", "$page, 30", null, $leftjoin);
-  CPatient::massLoadIPP($patients);
 
+  if ($state != "vali") {
+    $where["vip"] = "= '0'";
+  }
+
+  if ($state == "cach") {
+    $where["vip"]    = "= '1'";
+    $where["status"] = "!= 'VALI'";
+  }
+
+  if ($state == "dpot") {
+    $patient_link = new CPatientLink();
+    $patient_links = $patient_link->loadList(null, null, "$page, 30");
+    $patient_ids1 = CMbArray::pluck($patient_links, "patient_id1");
+    $patient_ids2 = CMbArray::pluck($patient_links, "patient_id2");
+    $where = array("patient_id" => CSQLDataSource::prepareIn(array_merge($patient_ids1, $patient_ids2)));
+    $patients = $patient->loadList($where);
+  }
+  else {
+    $patients = $patient->loadList($where, "nom, prenom", "$page, 30", null, $leftjoin);
+  }
+
+  CPatient::massLoadIPP($patients);
   /** @var CPatientState $patients_state */
   $patients_state = CPatient::massLoadBackRefs($patients, "patient_state", "datetime DESC");
   $mediusers      = CPatientState::massLoadFwdRef($patients_state, "mediuser_id");

@@ -389,9 +389,10 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     // HOMD  - Homonyme detecté
     // HOMA  - Homonyme avéré
     if (CAppUI::conf("dPpatients CPatient manage_identity_status", $receiver->_ref_group)) {
+      //todo voir pour DPOT
       $data[] =  array (
         $patient->status,
-        $patient->vip && $patient->status != "CACH" ? "CACH": null,
+        $patient->vip ? "CACH": null,
       );
     }
     else {
