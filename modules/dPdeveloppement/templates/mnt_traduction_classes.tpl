@@ -63,7 +63,7 @@ Main.add(function () {
 <!-- Modification des items -->
 {{foreach from=$items key=class item=_item}}
 
-<form action="?m=developpement" name="translate-{{$class}}" method="post" class="prepared">
+<form action="?m=developpement" name="translate-{{$class}}" method="post" class="prepared" onsubmit="return onSubmitFormAjax(this);">
 
 <input type="hidden" name="m" value="developpement" />
 <input type="hidden" name="tab" value="mnt_traduction_classes" />
@@ -99,7 +99,7 @@ Main.add(function () {
       {{/if}}
     </td>
   </tr>
-  
+
   <tr>
     <th colspan="3" class="title">
      {{$class}}
@@ -115,7 +115,7 @@ Main.add(function () {
     <th>{{tr}}language.{{$language}}{{/tr}}</th>
     <th>{{tr}}Save{{/tr}}</th>
   </tr>
-  
+
   {{foreach from=$_item key=nom item=tabTrad}}
   <tbody class="hoverable">
     {{foreach from=$tabTrad key=chaine item=trad name=trad}}
@@ -134,7 +134,7 @@ Main.add(function () {
       </td>
     </tr>
     {{/foreach}}
-  </tbody>  
+  </tbody>
   {{/foreach}}
 
   {{if array_key_exists($class, $archives)}}
