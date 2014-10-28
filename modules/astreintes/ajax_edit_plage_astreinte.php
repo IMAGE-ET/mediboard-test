@@ -17,11 +17,19 @@ $plage_hour = CValue::get("hour");
 $plage_minutes = CValue::get("minutes");
 $user_id = CValue::get("user_id");
 $user = CMediusers::get($user_id);
+$group = CGroups::loadCurrent();
 
 $users = array($user);
 
-$where = array("actif" => "= '1' ");
-$users = $user->loadListWithPerms(PERM_EDIT, $where);
+$ljoin = array(
+  "users" => "users.user_id = users_mediboard.user_id",
+  "functions_mediboard" => "functions_mediboard.function_id = users_mediboard.function_id"
+);
+$where = array(
+  "users_mediboard.actif" => "= '1' ",
+  "group_id" => " = '$group->_id' "
+);
+$users = $user->loadListWithPerms(PERM_EDIT, $where, "users.user_last_name", null, null, $ljoin);
 
 $plageastreinte = new CPlageAstreinte();
 
