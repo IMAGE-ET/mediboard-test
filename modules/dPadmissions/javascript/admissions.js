@@ -334,6 +334,8 @@ Admissions = {
       if (!confirm('Confirmez-vous le décès de '+$V(form.view_patient)+' le '+$V(form._date_deces_da)+' ?')) {
         return false;
       }
+      $V(form.sortie_reelle   , $V(form._date_deces));
+      $V(form.sortie_reelle_da, $V(form._date_deces_da));
     }
 
     if (form._sejours_enfants_ids) {

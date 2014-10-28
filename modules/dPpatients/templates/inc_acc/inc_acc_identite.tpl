@@ -153,7 +153,7 @@ Main.add(function() {
         <tr>
           <th style="width:30%">{{mb_label object=$patient field="nom"}}</th>
           <td>
-            {{if $identity_status && $patient->_id && $patient->status == "VALI" && !$allowed_modify}}
+            {{if $identity_status && $patient->_id && !$allowed_modify && $naissance_obligatoire == "0" && $patient->status == "VALI"}}
               {{mb_value object=$patient field="nom"}}
             {{else}}
               {{mb_field object=$patient field="nom" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}}
