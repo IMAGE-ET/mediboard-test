@@ -33,6 +33,8 @@
     url.addParam("type"      , $V(form._type_admission));
     url.addParam("service_id", [$V(form.service_id)].flatten().join(","));
     url.addParam("period"    , $V(form.period));
+    url.addParam("group_by_prat", $V(form.group_by_prat));
+    url.addParam("order_by", $V(form.order_print_way));
     url.popup(700, 550, "Entrees");
   }
 
@@ -192,6 +194,11 @@
       <input type="hidden" name="selSaisis" value="{{$selSaisis}}" />
       <input type="hidden" name="order_col" value="{{$order_col}}" />
       <input type="hidden" name="order_way" value="{{$order_way}}" />
+      <!-- print -->
+      <input type="hidden" name="order_print_way" value="" />
+      <input type="hidden" name="group_by_prat" value="1">
+
+
       <select name="period" onchange="reloadAdmission();">
         <option value=""      {{if !$period          }}selected{{/if}}>&mdash; Toute la journée</option>
         <option value="matin" {{if $period == "matin"}}selected{{/if}}>Matin</option>
@@ -210,7 +217,32 @@
         {{mb_include module=mediusers template=inc_options_mediuser list=$prats selected=$sejour->praticien_id}}
       </select>
     </form>
-    <a href="#" onclick="printPlanning()" class="button print">{{tr}}Print{{/tr}}</a>
+
+    <button type="button" onclick="Modal.open('preparePrintPlanning', {width: '500px', height: '150px'});" class="button print">{{tr}}Print{{/tr}}</button>
+
+    <div id="preparePrintPlanning" style="display: none;">
+      <form name="print_filter_option" method="get" style="text-align: center">
+        <h2>Options de l'impression</h2>
+        <p>
+            Grouper par praticien
+          <label><input type="radio" name="group_by_prat" value="1" checked="checked" onchange="$V(getForm('selType').group_by_prat, this.value);"/>Oui</label>
+          <label><input type="radio" name="group_by_prat" value="0" onchange="$V(getForm('selType').group_by_prat, this.value);"/>Non</label>
+        </p>
+        <p>
+          <label>
+            Ordonner par :
+            <select name="order_by" onchange="$V(getForm('selType').order_print_way, this.value);">
+              <option value="">Nom du Praticien</option>
+              <option value="patient_name">Nom du patient</option>
+              <option value="entree_prevue">Heure d'admission prévue</option>
+              <option value="entre_reelle">Heure d'admission réelle</option>
+            </select>
+          </label>
+        </p>
+        <p><button type="button" onclick="printPlanning()" class="button print">{{tr}}Print{{/tr}}</button><button class="cancel" type="button" onclick="Control.Modal.close();">{{tr}}Cancel{{/tr}}</button> </p>
+      </form>
+    </div>
+
     <a href="#" onclick="Admissions.choosePrintForSelection()" class="button print">{{tr}}CCompteRendu-print_for_select{{/tr}}</a>
     {{if "web100T"|module_active}}
       {{mb_include module=web100T template=inc_button_send_all_prestations type=admissions}}
