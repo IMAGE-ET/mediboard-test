@@ -14,6 +14,7 @@ $sejour_id = CValue::get("sejour_id");
 // Chargement du sejour
 $sejour = new CSejour();
 $sejour->load($sejour_id);
+CAccessMedicalData::checkForSejour($sejour);
 $sejour->loadComplete();
 
 $sejour->canDo();
