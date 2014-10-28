@@ -56,6 +56,9 @@ if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
   }
 }
 
+$user = CMediusers::get();
+$user->isPraticien();
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("listAnesths"      , $listAnesths);
@@ -65,4 +68,5 @@ $smarty->assign("subject"          , $codable);
 $smarty->assign("module"           , $module);
 $smarty->assign("do_subject_aed"   , $do_subject_aed);
 $smarty->assign("chir_id"          , $chir_id);
+$smarty->assign('user'         , $user);
 $smarty->display("inc_codage_ccam.tpl");

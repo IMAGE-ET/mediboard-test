@@ -122,6 +122,10 @@ class CCodageCCAM extends CMbObject {
   }
 
   public function store() {
+    /* Set the default value for activite_anesth because the framework doesn't set it before checking the uniques constraints */
+    if (!$this->_id && !$this->activite_anesth) {
+      $this->activite_anesth = '0';
+    }
     /* Create the CCodageCCAM for the anesthesia activity if the practitioner is an anesthesist */
     if (!$this->_id && !$this->activite_anesth) {
       $this->loadPraticien();

@@ -93,10 +93,17 @@
           <input type="hidden" name="codage_ccam_id" value="" />
           <input type="hidden" name="codable_class" value="{{$subject->_class}}" />
           <input type="hidden" name="codable_id" value="{{$subject->_id}}" />
-          <select name="praticien_id" style="width: 20em;" onchange="this.form.onsubmit();">
+          <select name="praticien_id" style="width: 20em; float: left;" onchange="this.form.onsubmit();">
             <option value="">&mdash; Choisir un professionnel de santé</option>
             {{mb_include module=mediusers template=inc_options_mediuser list=$listChirs}}
           </select>
+
+          {{if $user->_is_praticien && !$user->_id|@array_key_exists:$subject->_ref_codages_ccam}}
+            <div style="float: right;">
+              {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$user}}
+              <button class="add notext" type="button" title="Ajouter un codage" onclick="$V(this.form.praticien_id, {{$user->_id}});"></button>
+            </div>
+          {{/if}}
         </form>
         <table class="tbl">
           <tr>

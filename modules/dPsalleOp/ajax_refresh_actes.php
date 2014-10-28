@@ -52,6 +52,9 @@ $acte_ngap = CActeNGAP::createEmptyFor($operation);
 // Liste des dents CCAM
 $liste_dents = reset(CDentCCAM::loadList());
 
+$user = CMediusers::get();
+$user->isPraticien();
+
 // Création du template
 $smarty = new CSmartyDP("modules/dPsalleOp");
 
@@ -60,6 +63,7 @@ $smarty->assign("liste_dents"  , $liste_dents);
 $smarty->assign("subject"      , $operation);
 $smarty->assign("listAnesths"  , $listAnesths);
 $smarty->assign("listChirs"    , $listChirs);
+$smarty->assign('user'         , $user);
 $smarty->assign("_is_dentiste" , $operation->_ref_chir->isDentiste());
 
 $smarty->display("inc_codage_actes.tpl");
