@@ -207,8 +207,6 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_ref_prev_affectation;
   /** @var CAffectation */
   public $_ref_next_affectation;
-  /** @var CGHM */
-  public $_ref_GHM;
   /** @var CGroups */
   public $_ref_group;
   /** @var CEtabExterne */
@@ -403,7 +401,6 @@ class CSejour extends CFacturable implements IPatientRelated {
     $backProps["rpu_mute"]              = "CRPU mutation_sejour_id";
     $backProps["transmissions"]         = "CTransmissionMedicale sejour_id";
     $backProps["dossier_medical"]       = "CDossierMedical object_id";
-    $backProps["ghm"]                   = "CGHM sejour_id";
     $backProps["rss"]                   = "CRSS sejour_id";
     $backProps["planifications"]        = "CPlanificationSysteme sejour_id";
     $backProps["rhss"]                  = "CRHS sejour_id";
@@ -3474,27 +3471,6 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->loadRefsAffectations();
     $this->loadRefsOperations();
     $this->loadRefsActesCCAM();
-  }
-
-  /**
-   * Charge le GHM du séjour
-   *
-   * @return CGHM
-   */
-  function loadRefGHM() {
-    /** @var CGHM $GHM */
-    $GHM = new CGHM();
-    /**
-    $GHM = $this->loadUniqueBackRef("ghm");
-
-    if (!$GHM->_id) {
-      $GHM->sejour_id = $this->sejour_id;
-    }
-    $GHM->_ref_sejour = $this;
-    $GHM->bindInfos();
-    $GHM->getGHM();
-    **/
-    $this->_ref_GHM = $GHM;
   }
 
   /**

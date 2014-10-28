@@ -54,10 +54,13 @@ class CSetupdPpmsi extends CSetup {
       CHANGE `ghm_id` `ghm_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
       CHANGE `sejour_id` `sejour_id` int(11) unsigned NOT NULL DEFAULT '0';";
     $this->addQuery($query);
-    
-    $this->mod_version = "0.14";
 
-    $query = "SHOW TABLES LIKE 'arbre'";
-    $this->addDatasource("GHS1010", $query);
+    $this->makeRevision("0.14");
+    $query = "DROP TABLE IF EXISTS `ghm`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.15";
+
+
   }
 }

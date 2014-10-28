@@ -9,7 +9,6 @@
 
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#PMSI">{{tr}}PMSI{{/tr}}</a></li>
-  <li><a href="#Export">{{tr}}GHS{{/tr}}</a></li>
   <li><a href="#Repair">{{tr}}config_facture_hprim{{/tr}}</a></li>
   <li onmousedown="Configuration.edit('dPpmsi', 'CGroups', $('CConfigEtab'))">
     <a href="#CConfigEtab">Config par établissement</a>
@@ -20,10 +19,6 @@
 
 <div id="PMSI" style="display: none;">
 {{mb_include template=inc_config_pmsi}}
-</div>
-
-<div id="Export" style="display: none;">
-{{mb_include template=inc_config_ghs}}
 </div>
 
 <div id="Repair" style="display: none;">

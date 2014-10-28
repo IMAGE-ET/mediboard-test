@@ -10,15 +10,10 @@
 
 <table class="form">
 <tr>
-  <td class="text halfPane">
+  <td class="text">
     <div id="cim-{{$sejour->_id}}">
     {{assign var="sejour" value=$sejour}}
     {{mb_include module=pmsi template=inc_diagnostic}}
-    </div>
-  </td>
-  <td class="text halfPane">
-    <div id="GHM-{{$sejour->_id}}">
-      {{mb_include module=pmsi template=inc_vw_GHM}}
     </div>
   </td>
 </tr>
