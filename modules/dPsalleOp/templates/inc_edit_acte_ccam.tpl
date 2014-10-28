@@ -272,7 +272,7 @@
     <!-- Commentaires -->
     <tr>
       <th>{{mb_label object=$acte field=commentaire}}</th>
-      <td>{{mb_field object=$acte field=commentaire}}</td>
+      <td>{{mb_field object=$acte field=commentaire class="autocomplete" form="formEditFullActe-$view"}}</td>
     </tr>
 
     <tr>
