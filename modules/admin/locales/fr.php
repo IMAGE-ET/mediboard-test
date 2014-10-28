@@ -202,6 +202,7 @@ $locales['CUser-title-modify'] = 'Modifier l\'utilisateur';
 $locales['CUser-user_address1'] = 'Adresse';
 $locales['CUser-user_address1-court'] = 'Adr.';
 $locales['CUser-user_address1-desc'] = 'Veuillez saisir votre adresse';
+$locales['CUser-user_astreinte'] = 'Numéro astreinte';
 $locales['CUser-user_birthday'] = 'Naissance';
 $locales['CUser-user_birthday-court'] = 'Nais.';
 $locales['CUser-user_birthday-desc'] = 'Date de naissance';
