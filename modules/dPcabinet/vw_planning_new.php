@@ -11,7 +11,7 @@
 
 CCanDo::checkRead();
 
-CGroups::loadCurrent();
+$group = CGroups::loadCurrent();
 
 // L'utilisateur est-il praticien ?
 $chir = null;
