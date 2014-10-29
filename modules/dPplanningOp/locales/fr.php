@@ -478,6 +478,7 @@ $locales['COperation-position'] = 'Position';
 $locales['COperation-position-court'] = 'Pos.';
 $locales['COperation-position-desc'] = 'Veuillez choisir la position du patient';
 $locales['COperation-poste_sspi_id'] = 'Poste SSPI';
+$locales['COperation-poste_sspi_id-court'] = 'Poste SSPI';
 $locales['COperation-poste_sspi_id-desc'] = 'Poste SSPI';
 $locales['COperation-prat_visite_anesth_id'] = 'Praticien';
 $locales['COperation-prat_visite_anesth_id-court'] = 'Prat.';
