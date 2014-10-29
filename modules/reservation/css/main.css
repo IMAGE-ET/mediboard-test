@@ -44,6 +44,10 @@
   border:solid 3px black!important;
 }
 
+.plage_planning {
+  z-index: 2;
+}
+
 .planning .minutes {
   position:relative;
   float:left;
