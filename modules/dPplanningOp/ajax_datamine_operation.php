@@ -14,7 +14,7 @@ CCanDo::checkAdmin();
 /** @var int $limit */
 $limit  = CView::get("limit", "num default|1", true);
 /** @var bool $remine */
-$remine = CView::get("remine", "bool default|0", true);
+$phase = CView::get("phase", "enum list|mine|remine|postmine default|mine", true);
 /** @var string $miner_class */
 $miner_class  = CView::get("miner_class", "str", true);
 // Important for session board reloading
@@ -28,7 +28,7 @@ if (!$miner instanceof COperationMiner) {
   return;
 }
 
-$report = $miner->mineSome($limit, $remine);
+$report = $miner->mineSome($limit, $phase);
 
 CAppUI::stepAjax("Miner: %s. Success mining count is '%s'", UI_MSG_OK, $miner_class, $report["success"]);
 

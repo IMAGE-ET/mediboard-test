@@ -13,7 +13,9 @@
  * Operation daily miner
  */
 class COperationMiner extends CStoredObject {
-  static $remine_delay = "-4 weeks";
+  static $mine_delay     = "+4 weeks";
+  static $remine_delay   = "+0 weeks";
+  static $postmine_delay = "-4 weeks";
 
   // Table key
   public $miner_id;
@@ -22,10 +24,12 @@ class COperationMiner extends CStoredObject {
   public $operation_id;
   public $date;
   public $remined;
+  public $postmined;
 
   // Count fields
   public $_count_unmined;
   public $_count_unremined;
+  public $_count_unpostmined;
 
   /**
    * @see parent::getSpec()
@@ -46,6 +50,7 @@ class COperationMiner extends CStoredObject {
     $props["operation_id"] = "ref class|COperation notNull";
     $props["date"]         = "date notNull";
     $props["remined"]      = "bool notNull default|0";
+    $props["postmined"]    = "bool notNull default|0";
     return $props;
   }
 
@@ -74,9 +79,10 @@ class COperationMiner extends CStoredObject {
    */
   static function makeOperationCounts() {
     return array(
-      "overall"     => self::countOperations(),
-      "tobemined"   => self::countOperations(CMbDT::date()),
-      "toberemined" => self::countOperations(CMbDT::date(self::$remine_delay)),
+      "overall"       => self::countOperations(),
+      "tobemined"     => self::countOperations(CMbDT::date(self::$mine_delay)),
+      "toberemined"   => self::countOperations(CMbDT::date(self::$remine_delay)),
+      "tobepostmined" => self::countOperations(CMbDT::date(self::$postmine_delay)),
     );
   }
 
@@ -84,6 +90,7 @@ class COperationMiner extends CStoredObject {
     return array(
       "unmined"     => $this->countUnmined(),
       "unremined"   => $this->countUnremined(),
+      "unpostmined" => $this->countUnpostmined(),
     );
   }
 
@@ -93,13 +100,14 @@ class COperationMiner extends CStoredObject {
    * @return int
    */
   function countUnmined() {
-    $today = CMbDT::date();
+    $date = CMbDT::date(self::$mine_delay);
     $operation = new COperation;
     $table = $this->_spec->table;
     $ljoin[$table] = "$table.operation_id = operations.operation_id";
     $where["$table.operation_id"] = "IS NULL";
-    $where[] = "operations.date < '$today'";
+    $where[] = "operations.date < '$date'";
     return $this->_count_unmined = $operation->countList($where, null, $ljoin);
+
   }
 
   /**
@@ -108,21 +116,33 @@ class COperationMiner extends CStoredObject {
    * @return int
    */
   function countUnremined() {
-    $date = CMbDT::date(self::$remine_delay);
-    $where["date"] = "< '$date'";
+    $date             = CMbDT::date(self::$remine_delay);
+    $where["date"]    = "< '$date'";
     $where["remined"] = "= '0'";
     return $this->_count_unremined = $this->countList($where);
   }
 
   /**
+   * Count mining that have not been remined yet
+   *
+   * @return int
+   */
+  function countUnpostmined() {
+    $date               = CMbDT::date(self::$postmine_delay);
+    $where["date"]      = "< '$date'";
+    $where["postmined"] = "= '0'";
+    return $this->_count_unpostmined = $this->countList($where);
+  }
+
+  /**
    * Mine or remine the first available operations
    *
-   * @param int  $limit
-   * @param bool $remine
+   * @param int    $limit
+   * @param string $phase
    *
    * @return array Success/failure counts report
    */
-  function mineSome($limit = 100, $remine = false) {
+  function mineSome($limit = 100, $phase = "mine") {
     $report = array(
       "success" => 0,
       "failure" => 0,
@@ -135,19 +155,30 @@ class COperationMiner extends CStoredObject {
     $operation = new COperation;
     /** @var COperation[] $operations */
     $operations = array();
-    if ($remine) {
-      $date = CMbDT::date(self::$remine_delay);
-      $where["date"] = "< '$date'";
+
+    if ($phase == "remine") {
+      $date             = CMbDT::date(self::$remine_delay);
+      $where["date"]    = "< '$date'";
       $where["remined"] = "= '0'";
       $mined = $this->loadList($where, null, $limit);
       $operation_ids = CMbArray::pluck($mined, "operation_id");
       $operations = $operation->loadAll($operation_ids);
     }
-    else {
-      $today = CMbDT::date();
-      $table = $this->_spec->table;
-      $ljoin[$table]     = "$table.operation_id = operations.operation_id";
-      $where[] = "operations.date < '$today'";
+
+    if ($phase == "postmine") {
+      $date               = CMbDT::date(self::$postmine_delay);
+      $where["date"]      = "< '$date'";
+      $where["postmined"] = "= '0'";
+      $mined = $this->loadList($where, null, $limit);
+      $operation_ids = CMbArray::pluck($mined, "operation_id");
+      $operations = $operation->loadAll($operation_ids);
+    }
+
+    if ($phase == "mine") {
+      $date          = CMbDT::date(self::$mine_delay);
+      $table         = $this->_spec->table;
+      $ljoin[$table] = "$table.operation_id = operations.operation_id";
+      $where[] = "operations.date < '$date'";
       $where["$table.operation_id"] = "IS NULL";
       $operations = $operation->loadList($where, null, $limit, null, $ljoin);
     }
@@ -174,15 +205,22 @@ class COperationMiner extends CStoredObject {
   /**
    * Mine the operation
    *
-   * @param COperation $operation
+   * @param COperation $operation Operation
+   *
+   * @return null
    */
   function mine(COperation $operation) {
     $this->nullifyProperties();
     $this->operation_id = $operation->_id;
     $this->loadMatchingObject();
     $this->date = CMbDT::date($operation->_datetime);
+
     if ($this->date < CMbDT::date(self::$remine_delay)) {
-     $this->remined = 1;
+      $this->remined = 1;
+    };
+
+    if ($this->date < CMbDT::date(self::$postmine_delay)) {
+      $this->postmined = 1;
     };
   }
 
@@ -195,7 +233,7 @@ class COperationMiner extends CStoredObject {
       $warn ? UI_MSG_OK : UI_MSG_WARNING,
       "COperationMiner-warnusage-$warn",
       CAppUI::tr("$that->_class"),
-      $that->date)
-    ;
+      $that->date
+    );
   }
 }

@@ -1807,7 +1807,12 @@ class CSetupdPplanningOp extends CSetup {
                 ADD `color` VARCHAR (6) NOT NULL DEFAULT 'ffffff';";
     $this->addQuery($query);
 
-    $this->mod_version = '1.94';
+    $this->makeRevision("1.94");
+    $query = "ALTER TABLE `operation_workflow`
+                ADD `postmined` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = '1.95';
 
 
     // Data source query

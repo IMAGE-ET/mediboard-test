@@ -67,13 +67,13 @@
       this.url.requestModal('800', '600');
     },
 
-    mine: function(miner_class, remine) {
-      var url = new Url('planningOp', 'ajax_datamine_operation');
-      url.addNotNullParam('miner_class', miner_class);
-      url.addNotNullParam('remine', remine);
-      url.addParam('automine', $('automine').checked ? 1 : 0);
-      url.addParam('limit', $V('limit'));
-      url.requestUpdate(SystemMessage.id, this.url.refreshModal.bind(this.url));
+    mine: function(miner_class, phase) {
+      new Url('planningOp', 'ajax_datamine_operation')
+        .addNotNullParam('miner_class', miner_class)
+        .addNotNullParam('phase', phase)
+        .addParam('automine', $('automine').checked ? 1 : 0)
+        .addParam('limit', $V('limit'))
+        .requestUpdate(SystemMessage.id, this.url.refreshModal.bind(this.url));
     },
 
     auto: function() {

@@ -13,19 +13,21 @@ Main.add(function() {
 
 <table class="tbl" style="text-align: center;">
   <tr>
-    <th class="title" colspan="3">Décomptes des opérations</th>
+    <th class="title" colspan="4">Décomptes des opérations</th>
   </tr>
 
   <tr>
-    <th style="width: 33%;">Toutes</th>
-    <th style="width: 33%;">A miner (< J)</th>
-    <th style="width: 33%;">A consolider (< J-28)</th>
+    <th style="width: 25%;">Toutes</th>
+    <th style="width: 25%;">A miner (< J-28)</th>
+    <th style="width: 25%;">A consolider (< J)</th>
+    <th style="width: 25%;">A consolider (< J+28)</th>
   </tr>
 
   <tr>
     <td><strong>{{$counts.overall|integer    }}</strong></td>
     <td><strong>{{$counts.tobemined|integer  }}</strong></td>
-    <td><strong>{{$counts.toberemined|integer}}</strong></td>
+    <td><strong>{{$counts.toberemined|integer  }}</strong></td>
+    <td><strong>{{$counts.tobepostmined|integer}}</strong></td>
   </tr>
 </table>
 
@@ -48,8 +50,9 @@ Main.add(function() {
   <tr>
     <th>Mineur</th>
     <th>Dernière exploration</th>
-    <th colspan="2">Non encore explorées</th>
-    <th colspan="2">Non encore consolidées</th>
+    <th colspan="2">Non encore explorées (< J-28)</th>
+    <th colspan="2">Non encore consolidées (< J)</th>
+    <th colspan="2">Non encore consolidées (< J+28)</th>
   </tr>
 
   {{foreach from=$miners item=_miner}}
@@ -64,7 +67,7 @@ Main.add(function() {
       {{$_miner->_count_unmined|integer}}
     </td>
     <td class="narrow">
-      <button type="button" class="change notext compact oneclick" onclick="Datamining.mine('{{$_miner->_class}}', 0)">
+      <button type="button" class="change notext compact oneclick" onclick="Datamining.mine('{{$_miner->_class}}', 'mine')">
         {{tr}}Do{{/tr}}
       </button>
     </td>
@@ -72,7 +75,15 @@ Main.add(function() {
       {{$_miner->_count_unremined|integer}}
     </td>
     <td class="narrow">
-      <button type="button" class="change notext compact oneclick" onclick="Datamining.mine('{{$_miner->_class}}', 1)">
+      <button type="button" class="change notext compact oneclick" onclick="Datamining.mine('{{$_miner->_class}}', 'remine')">
+        {{tr}}Do{{/tr}}
+      </button>
+    </td>
+    <td>
+      {{$_miner->_count_unpostmined|integer}}
+    </td>
+    <td class="narrow">
+      <button type="button" class="change notext compact oneclick" onclick="Datamining.mine('{{$_miner->_class}}', 'postmine')">
         {{tr}}Do{{/tr}}
       </button>
     </td>
