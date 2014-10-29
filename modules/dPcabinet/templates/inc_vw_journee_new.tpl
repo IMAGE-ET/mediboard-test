@@ -11,9 +11,8 @@
 
 <script>
   Main.add(function() {
-    var height_planning = '{{$height_planning_journee}}';
     ViewPort.SetAvlHeight("planningInterventions", 1);
-    $('planningWeek').setStyle({height : "2000px"});
+    $('planningWeek').setStyle({height : "{{$height_calendar}}px"});
   });
 
   $("previous_day").setAttribute("data-date", '{{$pday}}');

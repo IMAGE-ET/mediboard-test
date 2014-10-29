@@ -23,6 +23,7 @@
 <tr><th class="category" colspan="6">Planning</th></tr>
 {{mb_include template=inc_pref spec=bool var=allow_plage_holiday}}
 {{mb_include template=inc_pref spec=bool var=new_semainier}}
+{{mb_include template=inc_pref spec=enum var=height_calendar values="2000|4000|6000" value_locale_prefix="height_calendar."}}
 {{mb_include template=inc_pref spec=bool var=showIntervPlanning}}
 {{mb_include template=inc_pref spec=enum var=AFFCONSULT values="0|1"}}
 {{mb_include template=inc_pref spec=enum var=DefaultPeriod values="day|week|month|weekly" value_locale_prefix="Period."}}

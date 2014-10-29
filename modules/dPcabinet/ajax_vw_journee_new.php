@@ -253,5 +253,5 @@ $smarty->assign("date", $date);
 $smarty->assign("nday", CMbDT::date("+1 DAY", $date));
 $smarty->assign("pday", CMbDT::date("-1 DAY", $date));
 $smarty->assign("planning", $planning);
-$smarty->assign("height_planning_journee", 4500);
+$smarty->assign("height_calendar"     , CAppUI::pref("height_calendar", "2000"));
 $smarty->display("inc_vw_journee_new.tpl");

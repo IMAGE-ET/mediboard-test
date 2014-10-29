@@ -2199,16 +2199,19 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("2.39");
-
     $this->addDefaultConfig("dPcabinet CPrescription view_prescription_externe", "dPcabinet CPrescription view_prescription");
-    $this->makeRevision("2.40");
 
+    $this->makeRevision("2.40");
     $query = "ALTER TABLE `consultation_anesth`
                 ADD `piercing` ENUM ('0','1') DEFAULT '0' AFTER `ronflements`;";
     $this->addQuery($query);
-    $this->makeRevision("2.41");
 
+    $this->makeRevision("2.41");
     $this->addPrefQuery("take_consult_for_dieteticien", "0");
-    $this->mod_version = '2.42';
+
+    $this->makeRevision("2.42");
+    $this->addPrefQuery("height_calendar", "2000");
+
+    $this->mod_version = '2.43';
   }
 }

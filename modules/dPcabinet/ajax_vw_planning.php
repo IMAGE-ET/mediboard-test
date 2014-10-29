@@ -383,6 +383,7 @@ $smarty->assign("conges"              , $conges_day);
 $smarty->assign("function_id"         , $function_id);
 $smarty->assign("user"                , $user);
 $smarty->assign("today"               , $today);
+$smarty->assign("height_calendar"     , CAppUI::pref("height_calendar", "2000"));
 $smarty->assign("bank_holidays"       , $bank_holidays);
 $smarty->assign("count_si_desistement", $count_si_desistement);
 

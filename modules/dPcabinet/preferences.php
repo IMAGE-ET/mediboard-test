@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 // Préférences par Module
@@ -33,6 +33,7 @@ CPreferences::$modules["dPcabinet"] = array (
   "viewAutreResult",
   "empty_form_atcd",
   "new_semainier",
+  "height_calendar",
   "order_mode_grille",
   "create_dossier_anesth",
   "showIntervPlanning",

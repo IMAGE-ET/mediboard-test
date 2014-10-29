@@ -11,7 +11,7 @@
 <script type="text/javascript">
   Main.add(function() {
     ViewPort.SetAvlHeight("planning-plages", 1);
-    $('planningWeek').setStyle({height : "2000px"});
+    $('planningWeek').setStyle({height : '{{$height_calendar}}px' });
     Calendar.regField(getForm("changeDate").debut, null, {noView: true});
     window.save_dates = {
       prev: '{{$prev}}',
