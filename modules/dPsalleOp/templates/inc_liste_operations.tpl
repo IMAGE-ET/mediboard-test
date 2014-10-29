@@ -277,7 +277,7 @@
       {{if $conf.dPsalleOp.COperation.modif_salle && !($_operation->_deplacee && $_operation->salle_id != $salle->_id) && @$allow_moves|default:1}}
         <tr {{if $_operation->_id == $operation_id}}class="selected"{{/if}}>
           <td colspan="5" class="not-printable">
-            <form name="changeSalle{{$_operation->_id}}" action="?m={{$m}}" method="post" {{if $ajax_salle}}onsubmit="return onSubmitFormAjax(this, {onComplete: updateSuiviSalle});" {{/if}}>
+            <form name="changeSalle{{$_operation->_id}}" action="?m={{$m}}" method="post" {{if $ajax_salle}}onsubmit="return onSubmitFormAjax(this, {onComplete: window.updateSuiviSalle || window.refreshListOp});" {{/if}}>
             <input type="hidden" name="dosql" value="do_planning_aed" />
             <input type="hidden" name="m" value="dPplanningOp" />
             <input type="hidden" name="del" value="0" />

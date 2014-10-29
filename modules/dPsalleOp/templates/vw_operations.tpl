@@ -16,6 +16,10 @@
     }
   }
 
+  refreshListOp = function(){
+    window.listOpUrl.requestUpdate('listplages');
+  }
+
   Main.add(function() {
     {{if $conf.dPsalleOp.COperation.mode || ($currUser->_is_praticien && !$currUser->_is_anesth)}}
       var url = new Url("dPsalleOp", "httpreq_liste_op_prat");
@@ -24,6 +28,9 @@
     {{/if}}
     url.addParam("date"         , "{{$date}}");
     url.addParam("hide_finished", "{{$hide_finished}}");
+
+    window.listOpUrl = url;
+
     url.periodicalUpdate('listplages', { frequency: 90 });
 
     loadOperation('{{$operation_id}}', null);
