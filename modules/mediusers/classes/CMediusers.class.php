@@ -93,6 +93,7 @@ class CMediusers extends CPerson {
   public $_group_id;
 
   public $_color; // color following this or function
+  public $_font_color;
 
   // Behaviour fields
   static $user_autoload = true;
@@ -608,7 +609,9 @@ class CMediusers extends CPerson {
 
   function updateColor() {
     $function_color = $this->_ref_function ? $this->_ref_function->color : null;
-    return $this->_color = $this->color ? $this->color : $function_color;
+    $this->_color = $this->color ? $this->color : $function_color;
+    $this->_font_color = CColorSpec::get_text_color($this->_color) > 130 ? "000000" : "ffffff";
+    return $this->_color;
   }
 
   /**

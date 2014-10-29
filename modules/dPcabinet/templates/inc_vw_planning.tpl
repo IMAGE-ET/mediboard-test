@@ -32,6 +32,7 @@
 <style>
   #CMediusers-{{$chirSel}} table.tbl th.title {
     background-color: #{{$user->_color}};
+    color: #{{$user->_font_color}};
   }
 </style>
 
