@@ -85,7 +85,7 @@ foreach ($musers as $_user) {
 
   // add prat to the calendar
   $planning->addDayLabel(
-    $i, "<span style=\"$style\">".$_user->_view."</span>", null, "#".$_user->_color, null, false, array("user_id" => $user_id));
+    $i, "<span style=\"$style\">".$_user->_view."</span>", null, "#".$_user->_color, "ObjectTooltip.createEx(this, '".$_user->_guid."');", false, array("user_id" => $user_id));
 
   $plage = new CPlageconsult();
   $plage->chir_id = $user_id;
