@@ -282,7 +282,7 @@ class CMbDate {
         $calendar[CMbDT::date("+50 DAYS", $paques)] = "Lundi de pentecôte";   // Lundi de pentecôte
         $calendar["$year-07-14"] = "Fête Nationnale";                         // Fête nationnale
         $calendar["$year-08-15"] = "Assomption";                              // Assomption
-        $calendar["$year-11-01"] = "Toussain";                                // Toussaint
+        $calendar["$year-11-01"] = "Toussaint";                                // Toussaint
         $calendar["$year-11-11"] = "Armistice 1918";                          // Armistice 1918
         $calendar["$year-12-25"] = "Noël";                                    // Noël
         $calendar["$next_year-01-01"] = "Jour de l'an";
