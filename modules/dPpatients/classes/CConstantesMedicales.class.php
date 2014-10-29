@@ -1289,17 +1289,21 @@ class CConstantesMedicales extends CMbObject {
       return $msg;
     }
 
-    // Verifie si au moins une des valeurs est remplie
-    $ok = false;
-    foreach (CConstantesMedicales::$list_constantes as $const => $params) {
-      $this->completeField($const);
-      if ($this->$const !== "" && $this->$const !== null) {
-        $ok = true;
-        break;
+    /* Check if the object has been properly loaded,
+     to avoid blocking the merges of a context (CSejour, COperation, CPatient, CConsultation) */
+    if($this->_id && $this->datetime) {
+      // Verifie si au moins une des valeurs est remplie
+      $ok = false;
+      foreach (CConstantesMedicales::$list_constantes as $const => $params) {
+        $this->completeField($const);
+        if ($this->$const !== "" && $this->$const !== null) {
+          $ok = true;
+          break;
+        }
       }
-    }
-    if (!$ok) {
-      return CAppUI::tr("CConstantesMedicales-min_one_constant");
+      if (!$ok) {
+        return CAppUI::tr("CConstantesMedicales-min_one_constant");
+      }
     }
 
     return null;
@@ -1320,7 +1324,6 @@ class CConstantesMedicales extends CMbObject {
     }
 
     if ($this->_id) {
-      $ok = false;
       $this->loadOldObject();
 
       /* Pour permettre la suppression du poids et de _poids_g */
@@ -1332,25 +1335,6 @@ class CConstantesMedicales extends CMbObject {
       }
       if ($this->poids != $this->_old->poids && $this->_poids_g != $this->poids * 1000) {
         $this->_poids_g = $this->poids * 1000;
-      }
-
-      foreach (CConstantesMedicales::$list_constantes as $const => $params) {
-        $this->completeField($const);
-        if (array_key_exists('formfields', $params)) {
-          foreach ($params['formfields'] as $_formfield) {
-            if ($this->$_formfield !== "" && $this->$_formfield !== null) {
-              $ok = true;
-              break 2;
-            }
-          }
-        }
-        elseif ($this->$const !== "" && $this->$const !== null) {
-          $ok = true;
-          break;
-        }
-      }
-      if (!$ok) {
-        return parent::delete();
       }
     }
 
