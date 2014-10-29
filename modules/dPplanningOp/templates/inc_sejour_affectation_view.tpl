@@ -9,7 +9,7 @@
       {{mb_include module=system template=inc_interval_date from=$object->entree to=$object->sortie}}
     {{/if}}
     {{if $app->_ref_user->isAdmin() }}
-      <button onclick="guid_access_medical('{{$object->_guid}}')" style="float:right;" class="clock"></button>
+      <a href="#" onclick="guid_access_medical('{{$object->_guid}}')" style="float:right;" ><img src="images/icons/planning.png" alt="" /></a>
     {{/if}}
   </th>
 </tr>
