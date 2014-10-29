@@ -11,11 +11,13 @@
 
 CCanDo::checkRead();
 
+
 $sejour_id    = CValue::getOrSession("sejour_id");
 $patient_id   = CValue::get("patient_id");
 $praticien_id = CValue::get("praticien_id");
 $grossesse_id = CValue::get("grossesse_id");
 $dialog       = CValue::get("dialog", 0);
+
 
 // Liste des Etablissements selon Permissions
 $etablissements = new CMediusers();
@@ -44,7 +46,10 @@ $sejour = new CSejour();
 $sejour->_ref_patient = $patient;
 if ($sejour_id) {
   $sejour->load($sejour_id);
-  
+
+  CAccessMedicalData::checkForSejour($sejour);
+
+
   // On vérifie que l'utilisateur a les droits sur le sejour
   if (!$sejour->canDo()->read) {
     global $m, $tab;

@@ -71,6 +71,7 @@ if ($patient_id && !$operation_id && !$sejour_id) {
 $sejour = new CSejour();
 if ($sejour_id && !$operation_id) {
   $sejour->load($sejour_id);
+  CAccessMedicalData::checkForSejour($sejour);
   $sejour->loadRefsFwd();
   $sejour->loadRefCurrAffectation()->loadRefService();
   if (!$chir_id) {
@@ -108,6 +109,7 @@ if ($op->_id) {
   }
   
   $sejour = $op->_ref_sejour;
+  CAccessMedicalData::checkForSejour($sejour);
   $sejour->loadRefsFwd();
   $sejour->loadRefCurrAffectation()->loadRefService();
   $sejour->_ref_praticien->canDo();
