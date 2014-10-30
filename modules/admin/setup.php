@@ -206,7 +206,12 @@ class CSetupadmin extends CSetup {
 
     $this->makeRevision("1.0.39");
     $query = "ALTER TABLE `bris_de_glace`
-                ADD `comment` TEXT NOT NULL;";
+                ADD `comment` TEXT NOT NULL,
+                ADD `group_id` INT (11) UNSIGNED NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `bris_de_glace`
+                ADD INDEX (`group_id`)";
     $this->addQuery($query);
 
 
