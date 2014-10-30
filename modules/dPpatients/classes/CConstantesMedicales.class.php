@@ -1258,7 +1258,7 @@ class CConstantesMedicales extends CMbObject {
 
           // Si le champ n'a pas de valeur, on regarde en config
           if (!$_unite) {
-            $_unite = CAppUI::conf('dPpatients CConstantesMedicales '.$_params["unit_config"], $group);
+            continue;
           }
 
           $conv = self::getConv($_constant, $_unite);
@@ -1363,12 +1363,24 @@ class CConstantesMedicales extends CMbObject {
 
     /* Check if the object has been properly loaded,
      to avoid blocking the merges of a context (CSejour, COperation, CPatient, CConsultation) */
-    if($this->_id && $this->datetime) {
+    if ($this->_id && $this->datetime) {
       // Verifie si au moins une des valeurs est remplie
       $ok = false;
       foreach (CConstantesMedicales::$list_constantes as $const => $params) {
+        if ($const[0] == '_') {
+          continue;
+        }
+
         $this->completeField($const);
-        if ($this->$const !== "" && $this->$const !== null) {
+        if (array_key_exists('formfields', $params)) {
+          foreach ($params['formfields'] as $_formfield) {
+            if ($this->$_formfield !== "" && $this->$_formfield !== null) {
+              $ok = true;
+              break 2;
+            }
+          }
+        }
+        elseif ($this->$const !== "" && $this->$const !== null) {
           $ok = true;
           break;
         }
