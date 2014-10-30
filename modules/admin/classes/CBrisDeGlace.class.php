@@ -83,7 +83,11 @@ class CBrisDeGlace extends CMbMetaObject {
     $user = CMediusers::get();
 
     //check for config and elements
-    if (!$sejour->_id || !CAppUI::conf("admin CBrisDeGlace enable_bris_de_glace", $group) || ($sejour->praticien_id == $user->_id)) {
+    if (
+      !$sejour->_id ||
+      !CAppUI::conf("admin CBrisDeGlace enable_bris_de_glace", $group) ||
+      ($sejour->praticien_id == $user->_id) ||
+      !$user->use_bris_de_glace) {
       return true;
     }
 
