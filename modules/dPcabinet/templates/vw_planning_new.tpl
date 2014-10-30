@@ -212,34 +212,36 @@
 </form>
 
 
-<form name="func_planning" method="get">
-  <input type="hidden" name="m" value="{{$m}}" />
-  <input type="hidden" name="tab" value="{{$tab}}" />
-  <select name="function_id" style="width: 11em; float:left;" onchange="this.form.submit();">
-    <option value="">&mdash; {{tr}}CFunctions{{/tr}}</option>
-    {{foreach from=$listFnc item=_fnc}}
-      <option value="{{$_fnc->_id}}" {{if $_fnc->_id == $function_id}}selected="selected" {{/if}}>{{$_fnc}}</option>
-    {{/foreach}}
-  </select>
-  {{if $multiple}}
-    <ul class="control_tabs small" id="tabs_prats">
-      {{foreach from=$listChirs item=_chir}}
-        <li>
-          <a href="#planning-plages_{{$_chir->_id}}">
-            {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_chir}}
-            <div id="planning-plages_{{$_chir->_id}}" data-chir_id="{{$_chir->_id}}"></div>
-          </a>
-        </li>
-      {{/foreach}}
-    </ul>
-  {{/if}}
-</form>
-
   <form action="?" name="changeDate" method="get">
     <input type="hidden" name="m" value="{{$m}}" />
     <input type="hidden" name="tab" value="{{$tab}}" />
     <input type="hidden" name="plageconsult_id" value="0" />
-    <input type="hidden" name="function_id" value="{{$function_id}}" />
+    <table>
+      <tr>
+        <td class="narrow" style="vertical-align: top;">
+          <select name="function_id" style="width: 11em; float:left;" onchange="this.form.submit();">
+            <option value="">&mdash; {{tr}}CFunctions{{/tr}}</option>
+            {{foreach from=$listFnc item=_fnc}}
+              <option value="{{$_fnc->_id}}" {{if $_fnc->_id == $function_id}}selected="selected" {{/if}}>{{$_fnc}}</option>
+            {{/foreach}}
+          </select>
+        </td>
+        <td colspan="3">
+          {{if $multiple}}
+            <ul class="control_tabs small" id="tabs_prats">
+              {{foreach from=$listChirs item=_chir}}
+                <li>
+                  <a href="#planning-plages_{{$_chir->_id}}">
+                    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_chir}}
+                    <div id="planning-plages_{{$_chir->_id}}" data-chir_id="{{$_chir->_id}}"></div>
+                  </a>
+                </li>
+              {{/foreach}}
+            </ul>
+          {{/if}}
+        </td>
+      </tr>
+    </table>
     <table class="main">
       <tr>
         <th style="width: 25%; text-align: left;">
