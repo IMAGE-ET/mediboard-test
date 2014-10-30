@@ -2276,3 +2276,21 @@ isEmpty = function(obj) {
 
   return true;
 };
+
+filterModule = function(input, classe, table) {
+  table = $(table);
+  table.select(classe).invoke("show");
+  var terms = $V(input);
+
+  if (!terms) return;
+
+  table.select(classe).invoke("hide");
+  terms = terms.split(" ");
+  table.select(classe).each(function(e) {
+    terms.each(function(term){
+      if (e.getText().like(term)) {
+        e.show();
+      }
+    });
+  });
+};

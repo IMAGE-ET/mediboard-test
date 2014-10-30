@@ -1,24 +1,6 @@
 {{mb_include style=mediboard template=common nodebug=true}}
 
 <script>
-  filterModule = function(input, classe, table) {
-    table = $(table);
-    table.select("li").invoke("show");
-    var terms = $V(input);
-
-    if (!terms) return;
-
-    table.select("li").invoke("hide");
-    terms = terms.split(" ");
-    table.select(classe).each(function(e) {
-      terms.each(function(term){
-        if (e.getText().like(term)) {
-          e.show();
-        }
-      });
-    });
-  };
-
   OnSearch = function(input) {
     if (input.value == "") {
       // Click on the clearing button
@@ -57,7 +39,14 @@
           {{assign var=style value="max-width: 140px;"}}
           {{mb_include style=mediboard template=change_group}}
 
-          {{if $modules|@count > 10}}
+          {{assign var=modules_count value=0}}
+          {{foreach from=$modules key=mod_name item=currModule}}
+            {{if $currModule->mod_ui_active && $currModule->_can->view}}
+              {{assign var=modules_count value=$modules_count+1}}
+            {{/if}}
+          {{/foreach}}
+
+          {{if $modules_count > 10}}
             <fieldset style="margin-bottom: 2px;">
               <input type="search" id="module_search" placeholder="Recherche de module..." style="width: 180px;"
                      title="{{tr}}Press Alt+A to get the focus{{/tr}}"

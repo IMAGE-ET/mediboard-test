@@ -22,28 +22,10 @@ var Menu = {
   }
 };
 
-filterModule = function(input, classe, table) {
-  table = $(table);
-  table.select("a.textNonSelected").invoke("show");
-  var terms = $V(input);
-
-  if (!terms) return;
-
-  table.select("a.textNonSelected").invoke("hide");
-  terms = terms.split(" ");
-  table.select(classe).each(function(e) {
-    terms.each(function(term){
-      if (e.getText().like(term)) {
-        e.show();
-      }
-    });
-  });
-};
-
 OnSearch = function(input) {
   if (input.value == "") {
     // Click on the clearing button
-    filterModule(input, '.textNonSelected', 'leftMenu');
+    filterModule(input, '.textNonSelected, .textSelected', 'leftMenu');
   }
 }
 </script>
@@ -106,12 +88,19 @@ OnSearch = function(input) {
       </a>
     </div>
 
-    {{if $modules|@count > 10}}
+    {{assign var=modules_count value=0}}
+    {{foreach from=$modules key=mod_name item=_module}}
+      {{if $_module->mod_ui_active && $_module->_can->view}}
+        {{assign var=modules_count value=$modules_count+1}}
+      {{/if}}
+    {{/foreach}}
+
+    {{if $modules_count > 10}}
       <hr />
       <div>
         <input type="search" id="module_search" placeholder="Recherche de module..." style="width: 125px;"
                title="{{tr}}Press Alt+A to get the focus{{/tr}}"
-               onkeyup="filterModule(this, '.textNonSelected', 'leftMenu')" onsearch="OnSearch(this);" />
+               onkeyup="filterModule(this, '.textNonSelected, .textSelected', 'leftMenu')" onsearch="OnSearch(this);" />
       </div>
     {{/if}}
     
