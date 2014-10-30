@@ -234,6 +234,15 @@ foreach ($musers as $_user) {
         $event->hour_divider = 60 / CMbDT::transform($_plage->freq, null, "%M");
       }
 
+      if ($_consult->canDo()->edit) {
+        if ($_consult->chrono == 16) {
+          $event->addMenuItem("tick", "Notifier l'arrivée");
+        }
+        if ($_consult->chrono == 32) {
+          $event->addMenuItem("tick_cancel", "Annuler l'arrivée");
+        }
+      }
+
       //Ajout de l'évènement au planning
       $event->plage["color"] = $_plage->color;
       $planning->addEvent($event);

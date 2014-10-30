@@ -35,6 +35,11 @@
 
   // Clic sur une consultation
   setClose = function(heure, plage_id, date, chir_id, consult_id, element) {
+    if (window.action_in_progress) {
+      window.action_in_progress = false;
+      return;
+    }
+
     if (consult_id) {
       modalPriseRDV(consult_id);
     }
@@ -75,6 +80,13 @@
   });
 </script>
 
+<form name="chronoPatient" method="post">
+  <input type="hidden" name="m" value="dPcabinet"/>
+  <input type="hidden" name="dosql" value="do_consultation_aed" />
+  <input type="hidden" name="consultation_id" />
+  <input type="hidden" name="chrono" />
+</form>
+
 <form method="get" name="filter_day" onsubmit="return onSubmitFormAjax(this, {}, 'planning')">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="a" value="ajax_vw_journee_new" />
@@ -100,7 +112,6 @@
 
     <button class="change notext"></button>
   </fieldset>
-
 </form>
 
 

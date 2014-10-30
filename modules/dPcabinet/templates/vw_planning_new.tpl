@@ -208,7 +208,6 @@
   <input type="hidden" name="dosql" value="do_consultation_aed" />
   <input type="hidden" name="consultation_id" />
   <input type="hidden" name="chrono" />
-
 </form>
 
 
