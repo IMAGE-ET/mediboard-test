@@ -678,7 +678,7 @@ var Calendar = {
         datesH.push(year+"-05-08");  // victoire de 45
         datesH.push(year+"-07-14");  // 14 juillet, fete nat.
         datesH.push(year+"-08-15");  // Assomption
-        datesH.push(year+"-11-01");  // toussain
+        datesH.push(year+"-11-01");  // toussaint
         datesH.push(year+"-11-11");  // Armistice 1918
         datesH.push(year+"-12-25");  // noel
 
