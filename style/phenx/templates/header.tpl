@@ -69,7 +69,7 @@
         </ul>
       </td>
 
-      <td class="separator" style="background-color: #FFBA8C !important; color: black !important" onclick="MbObject.toggleColumn(this, $(this).previous())"></td>
+      {{*<td class="separator" style="background-color: #FFBA8C !important; color: black !important" onclick="MbObject.toggleColumn(this, $(this).previous())"></td>*}}
     {{/if}}
     <td id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
       {{mb_include style=mediboard template=obsolete_module}}

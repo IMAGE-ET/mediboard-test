@@ -132,7 +132,7 @@ OnSearch = function(input) {
   
 </td>
 
-<td class="separator" style="background-color: #6688CC !important; color: black !important; width: 5px;" onclick="MbObject.toggleColumn(this, $(this).previous())"></td>
+{{*<td class="separator" style="background-color: #6688CC !important; color: black !important; width: 5px;" onclick="MbObject.toggleColumn(this, $(this).previous())"></td>*}}
   
 {{else}}
 <td id="topMenu">
