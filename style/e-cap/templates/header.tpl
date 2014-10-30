@@ -20,8 +20,32 @@ var Menu = {
     var oCNs = Element.classNames("menubar");
     oCNs.load("menubar");
   }
-}
+};
 
+filterModule = function(input, classe, table) {
+  table = $(table);
+  table.select("a.textNonSelected").invoke("show");
+  var terms = $V(input);
+
+  if (!terms) return;
+
+  table.select("a.textNonSelected").invoke("hide");
+  terms = terms.split(" ");
+  table.select(classe).each(function(e) {
+    terms.each(function(term){
+      if (e.getText().like(term)) {
+        e.show();
+      }
+    });
+  });
+};
+
+OnSearch = function(input) {
+  if (input.value == "") {
+    // Click on the clearing button
+    filterModule(input, '.textNonSelected', 'leftMenu');
+  }
+}
 </script>
 
 {{if !$dialog}}
@@ -55,7 +79,7 @@ var Menu = {
 
   <div id="menubar" class="iconed">
     <div id="menuTools">
-      <a id="toggleIcons" href="#1" onclick="Menu.toggle()" title="{{tr}}menu-toggleIcons{{/tr}}"></a>
+      <a id="toggleIcons" href="#1" onclick="Menu.toggle()" title="{{tr}}menu-toggleIcons{{/tr}}" {{if $modules|@count > 10}}style="top: 56px !important;"{{/if}}></a>
 
       {{mb_include style=mediboard template=inc_help}}
 
@@ -81,6 +105,15 @@ var Menu = {
         <img src="style/{{$uistyle}}/images/icons/logout.png" alt="{{tr}}menu-logout{{/tr}}" />
       </a>
     </div>
+
+    {{if $modules|@count > 10}}
+      <hr />
+      <div>
+        <input type="search" id="module_search" placeholder="Recherche de module..." style="width: 125px;"
+               title="{{tr}}Press Alt+A to get the focus{{/tr}}"
+               onkeyup="filterModule(this, '.textNonSelected', 'leftMenu')" onsearch="OnSearch(this);" />
+      </div>
+    {{/if}}
     
     {{foreach from=$placeholders item=placeholder}}
       <hr />
@@ -109,6 +142,8 @@ var Menu = {
   </div>
   
 </td>
+
+<td class="separator" style="background-color: #6688CC !important; color: black !important; width: 5px;" onclick="MbObject.toggleColumn(this, $(this).previous())"></td>
   
 {{else}}
 <td id="topMenu">

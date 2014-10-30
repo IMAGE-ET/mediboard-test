@@ -277,6 +277,7 @@ $locales['Phone.none'] = 'Aucun téléphone';
 $locales['Pictures'] = 'Images';
 $locales['Popup blocker alert'] = 'Il semblerait que votre navigateur ait bloqué la popup "%s", veuillez la débloquer.';
 $locales['Preferences'] = 'Préférences';
+$locales['Press Alt+A to get the focus'] = 'Appuyez sur Alt+A pour placer le curseur';
 $locales['Preview'] = 'Aperçu';
 $locales['Previous'] = 'Précédent';
 $locales['Print'] = 'Imprimer';
