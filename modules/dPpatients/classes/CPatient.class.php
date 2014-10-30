@@ -733,6 +733,9 @@ class CPatient extends CPerson {
     if (!$IPP = CIncrementer::generateIdex($this, self::getTagIPP($group->_id), $group->_id)) {
       return CAppUI::tr("CIncrementer_undefined");
     }
+
+    $this->_IPP = $IPP->id400;
+
     return null;
   }
 

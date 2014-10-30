@@ -157,6 +157,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
         }
 
         // On store le patient
+        $newPatient->_IPP = $IPP->id400;
         if ($msgPatient = CEAIPatient::storePatient($newPatient, $sender)) {
           return $exchange_hl7v2->setAckAR($ack, "E101", $msgPatient, $newPatient);
         }

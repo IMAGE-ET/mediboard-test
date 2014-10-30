@@ -180,13 +180,15 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
      
     if (!$patient->_IPP) {
       // Génération de l'IPP dans le cas de la création, ce dernier n'était pas créé
-      if ($msg = $patient->generateIPP()) {
-        CAppUI::setMsg($msg, UI_MSG_ERROR);
-      }
+        if ($msg = $patient->generateIPP()) {
+          CAppUI::setMsg($msg, UI_MSG_ERROR);
+        }
 
-      $IPP = new CIdSante400();
-      $IPP->loadLatestFor($patient, $receiver->_tag_patient);
-      $patient->_IPP = $IPP->id400;
+      if (!$patient->_IPP) {
+        $IPP = new CIdSante400();
+        $IPP->loadLatestFor($patient, $receiver->_tag_patient);
+        $patient->_IPP = $IPP->id400;
+      }
     }
 
     // Envoi pas les patients qui n'ont pas d'IPP
