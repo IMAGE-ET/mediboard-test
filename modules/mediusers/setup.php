@@ -629,6 +629,11 @@ class CSetupmediusers extends CSetup {
               ADD `color` VARCHAR (6);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.55";
+    $this->makeRevision("0.55");
+    $query = "ALTER TABLE `users_mediboard`
+                ADD `use_bris_de_glace` ENUM ('0','1') NOT NULL DEFAULT '0' AFTER `actif`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.56";
   }
 }

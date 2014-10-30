@@ -33,6 +33,7 @@ class CMediusers extends CPerson {
   public $compta_deleguee;
   public $last_ldap_checkout;
   public $other_specialty_id;
+  public $use_bris_de_glace;
 
   // DB References
   public $function_id;
@@ -215,6 +216,7 @@ class CMediusers extends CPerson {
     $props["titres"]                 = "text";
     $props["initials"]               = "str";
     $props["color"]                  = "color";
+    $props["use_bris_de_glace"]      = "bool default|0";
     $props["commentaires"]           = "text";
     $props["actif"]                  = "bool default|1";
     $props["deb_activite"]           = "date";

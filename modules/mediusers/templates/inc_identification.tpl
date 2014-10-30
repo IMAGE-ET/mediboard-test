@@ -62,6 +62,11 @@
 </tr>
 
 <tr>
+  <th>{{mb_label object=$object field="use_bris_de_glace"}}</th>
+  <td>{{mb_field object=$object field="use_bris_de_glace"}}</td>
+</tr>
+
+<tr>
   <th>{{mb_label object=$object field="remote"}}</th>
   <td>{{mb_field object=$object field="remote" onchange="changeRemote(this)"}}</td>
 </tr>
