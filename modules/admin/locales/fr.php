@@ -22,6 +22,7 @@ $locales['CBrisDeGlace-date-court'] = 'Date';
 $locales['CBrisDeGlace-date-desc'] = 'Date et heure du bris de glace';
 $locales['CBrisDeGlace-object_id-court'] = 'Cible';
 $locales['CBrisDeGlace-object_id-desc'] = 'Cible du bris de glace';
+$locales['CBrisDeGlace-store'] = 'Bris de Glace enregistré';
 $locales['CBrisDeGlace-user_id-court'] = 'Utilisateur';
 $locales['CBrisDeGlace-user_id-desc'] = 'Utilisateur mediboard';
 $locales['CBrisDeGlace.none'] = 'Aucun bris de glace';
