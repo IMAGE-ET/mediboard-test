@@ -204,6 +204,12 @@ class CSetupadmin extends CSetup {
                 ADD INDEX (`object_class`);";
     $this->addQuery($query);
 
-    $this->mod_version = "1.0.39";
+    $this->makeRevision("1.0.39");
+    $query = "ALTER TABLE `bris_de_glace`
+                ADD `comment` TEXT NOT NULL;";
+    $this->addQuery($query);
+
+
+    $this->mod_version = "1.0.40";
   }
 }
