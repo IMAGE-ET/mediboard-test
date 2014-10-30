@@ -202,6 +202,7 @@ foreach ($sejours as $_sejour) {
 
     $line->countPlanifications();
     $line->loadRefLogSignee();
+    $line->loadActiveDates();
 
     if (count($line->_quantity_by_date)) {
       foreach ($line->_quantity_by_date as $_unite => $_quantites_by_unite) {
@@ -256,6 +257,7 @@ foreach ($sejours as $_sejour) {
     $line->loadRefPraticien();
     $line->loadRefLogSignaturePrat();
     $line->countPlanifications();
+    $line->loadActiveDates();
 
     if (count($line->_prises_prevues)) {
       foreach ($line->_prises_prevues as $_date => $_prises_by_date) {
@@ -296,6 +298,7 @@ foreach ($sejours as $_sejour) {
 
     $line->loadRefLogSignee();
     $line->countPlanifications();
+    $line->loadActiveDates();
 
     if (count($line->_quantity_by_date)) {
       foreach ($line->_quantity_by_date as $_unite => $_quantites_by_unite) {

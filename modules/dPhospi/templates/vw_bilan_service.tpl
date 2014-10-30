@@ -496,7 +496,7 @@
           {{if $line_class == "CPrescriptionLineMix"}}
             {{foreach from=$prises key=prescription_line_mix_id item=lines}}
             {{assign var=prescription_line_mix value=$list_lines.$line_class.$prescription_line_mix_id}}   
-              {{if $prescription_line_mix->_active || $show_inactive}}
+              {{if !$prescription_line_mix->conditionnel || $prescription_line_mix->_active_dates.$date.$hour || $show_inactive}}
                 <tr>
                   <td>{{$hour}}h</td>
                    <td colspan="5" class="text"><strong>{{$prescription_line_mix->_view}}</strong> {{if $prescription_line_mix->conditionnel}} - <strong>Conditionnel</strong>{{/if}}
@@ -561,7 +561,7 @@
           {{else}}
             {{foreach from=$prises key=line_id item=quantite}}
              {{assign var=line value=$list_lines.$line_class.$line_id}} 
-             {{if $line->_active || $show_inactive}}       
+             {{if !$line->conditionnel || $line->_active_dates.$date.$hour || $show_inactive}}
                 <tr>
                   <td>{{$hour}}h</td>
                   <td style="width: 250px;" class="text">{{$line->_view}} {{if $line->conditionnel}} - <strong>Conditionnel</strong>{{/if}}

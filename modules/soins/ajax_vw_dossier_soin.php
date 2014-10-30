@@ -237,6 +237,7 @@ if (CModule::getActive("dPprescription")) {
     if (in_array($line->jour_decalage, array("ER", "R"))) {
       $line->loadRefOperation();
     }
+    $line->loadActiveDates();
   }
   else {
     // Calcul du dossier de soin complet
@@ -262,6 +263,7 @@ if (CModule::getActive("dPprescription")) {
             $_line_med->loadRefLastAdministration();
           }
           $_line_med->updateAlerteAntibio();
+          $_line_med->loadActiveDates();
         }
 
         // Chargement des prescription_line_mixes
@@ -284,18 +286,21 @@ if (CModule::getActive("dPprescription")) {
             $_prescription_line_mix->loadRefLogValidationPharma()->loadRefUser()->loadRefMediuser();
           }
           $_prescription_line_mix->updateAlerteAntibio();
+          $_prescription_line_mix->loadActiveDates();
         }
         // Chargement des lignes d'éléments
         if ($chapitre == "all_chaps") {
           $prescription->loadRefsLinesElementByCat("1", "1", null, null, null, null, $hide_old_lines);
           foreach ($prescription->_ref_prescription_lines_element as $_line_elt) {
             $_line_elt->countPlanifications();
+            $_line_elt->loadActiveDates();
           }
         }
         elseif ($chapitre == "all_med" && CAppUI::pref("regroupement_med_plan_soins") && CAppUI::conf("soins suivi group_hors_amm_med", $group)) {
           $prescription->loadRefsLinesElementByCat("1", "1", "med_elt", null, null, null, $hide_old_lines);
           foreach ($prescription->_ref_prescription_lines_element as $_line_elt) {
             $_line_elt->countPlanifications();
+            $_line_elt->loadActiveDates();
           }
         }
       }
@@ -317,6 +322,7 @@ if (CModule::getActive("dPprescription")) {
           if (in_array($_line_med->jour_decalage, array("ER", "R"))) {
             $_line_med->loadRefOperation();
           }
+          $_line_med->loadActiveDates();
         }
       }
       elseif ($chapitre == "perfusion" || $chapitre == "aerosol" || $chapitre == "alimentation" || $chapitre == "oxygene") {
@@ -340,6 +346,7 @@ if (CModule::getActive("dPprescription")) {
             $_prescription_line_mix->loadRefLogValidationPharma()->loadRefUser()->loadRefMediuser();
           }
           $_prescription_line_mix->updateAlerteAntibio();
+          $_prescription_line_mix->loadActiveDates();
         }
       }
       elseif ($chapitre == "inscription") {
@@ -409,6 +416,7 @@ if (CModule::getActive("dPprescription")) {
         $prescription->loadRefsLinesElementByCat("1", "1", $chapitre, null, null, null, $hide_old_lines);
         foreach ($prescription->_ref_prescription_lines_element as $_line_elt) {
           $_line_elt->countPlanifications();
+          $_line_elt->loadActiveDates();
         }
       }
 

@@ -45,7 +45,7 @@
       {{/if}}
       <div>
         {{if $line->conditionnel}}
-          {{if $line->condition_active}}
+          {{if $line->_current_active}}
             <img src="images/icons/cond.png" />
           {{else}}
             <img src="images/icons/cond_barre.png" />
@@ -77,7 +77,7 @@
     {{/if}}
     {{assign var=chap_sans_planif value=$line->_chapitre}}
     {{if ($line->_class == "CPrescriptionLineMedicament" || $conf.dPprescription.CCategoryPrescription.$chap_sans_planif.alert_sans_planif) &&
-         (!$line->conditionnel || $line->condition_active) && !$line->sans_planif && !$line->inscription && !$line->_count_planifications &&
+         !$line->_current_active && !$line->sans_planif && !$line->inscription && !$line->_count_planifications &&
          ($line->signee || $line->_class != "CPrescriptionLineMedicament" || !"dPprescription CPrescription show_unsigned_med_msg"|conf:"CGroups-$g")}}
       <td colspan="{{$colspan}}" class="left_day right_day">
       <div class="small-warning">
@@ -138,7 +138,7 @@
                       {{if $administrations_in_hour.quantite != $quantite}}
                         {{if !$line->sans_planif}}/{{$quantite}}{{/if}}
                       {{/if}}
-                    {{elseif $line->_active && !$line->sans_planif}}
+                    {{elseif (!$line->conditionnel || $line->_active_dates.$_date) && !$line->sans_planif}}
                       {{if $quantite}}0/{{$quantite}}{{/if}}
                     {{/if}}
                   {{/if}}
@@ -194,7 +194,7 @@
       {{/if}}
       <div>
         {{if $line->conditionnel}}
-          {{if $line->condition_active}}
+          {{if $line->_current_active}}
             <img src="images/icons/cond.png" />
           {{else}}
             <img src="images/icons/cond_barre.png" />
@@ -246,7 +246,7 @@
     {{if $mode_dupa}}
       <td rowspan="{{$nb_lines}}"></td>
     {{/if}}
-    {{if (!$line->conditionnel || $line->condition_active) &&
+    {{if !$line->_current_active &&
          ($line->mode_bolus != "bolus") &&
          ($line->continuite != "continue" || "CAppUI::conf"|static_call:"dPprescription CPrescription perf_continue_manuelle":"CGroups-$g" == '0') &&
          !$line->_count_planifications}}
@@ -298,14 +298,14 @@
                 {{if $text_align == "left"}}
                   {{if $nb_adm}}
                     {{$nb_adm}}
-                  {{elseif $nb_prevue && $line->_active}}
+                  {{elseif $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date)}}
                     0
                   {{/if}}
 
-                  {{if $nb_prevue && $line->_active && ($nb_prevue != $nb_adm)}}/{{$nb_prevue}}{{/if}}
+                  {{if $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date) && ($nb_prevue != $nb_adm)}}/{{$nb_prevue}}{{/if}}
                 {{else}}
                   {{* Que les planifications *}}
-                  {{if $nb_prevue && $line->_active}}{{$nb_prevue}}{{/if}}
+                  {{if $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date)}}{{$nb_prevue}}{{/if}}
                 {{/if}}
               </div>
             </td>

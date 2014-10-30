@@ -406,6 +406,7 @@ class CMediusers extends CPerson {
     $backProps["dmp_log"]                         = "CDMPLogUser user_id";
     $backProps["patient_state"]                   = "CPatientState mediuser_id";
     $backProps["ide_responsable"]                 = "CRPU ide_responsable_id";
+    $backProps["segments"]                        = "CPrescriptionLineSegment user_id";
     return $backProps;
   }
 

@@ -269,6 +269,7 @@ if ($do) {
                 continue;
               }
 
+              $_prescription_line_mix->loadActiveDates();
               $list_lines[$_prescription_line_mix->_class][$_prescription_line_mix->_id] = $_prescription_line_mix;
               // Prises prevues
               if (is_array($_prescription_line_mix->_prises_prevues)) {
@@ -369,6 +370,7 @@ if ($do) {
                     if (!$_line_med->stupefiant && $do_stupefiants) {
                       continue;
                     }
+                    $_line_med->loadActiveDates();
                     $list_lines[$_line_med->_class][$_line_med->_id] = $_line_med;
                     // Prises prevues
                     if (is_array($_line_med->_quantity_by_date)) {
@@ -466,6 +468,7 @@ if ($do) {
             }
             foreach ($elements_cat as &$_element) {
               foreach ($_element as &$_line_elt) {
+                $_line_elt->loadActiveDates();
                 $list_lines[$_line_elt->_class][$_line_elt->_id] = $_line_elt;
                 // Prises prevues
                 if (is_array($_line_elt->_quantity_by_date)) {

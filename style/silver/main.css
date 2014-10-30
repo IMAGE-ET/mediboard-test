@@ -91,3 +91,7 @@ table.tabview td.tabox {
     display: none;
   }
 }
+
+span.circled.color-th{
+  border-color:#888;
+}

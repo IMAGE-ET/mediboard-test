@@ -322,3 +322,8 @@ ul.control_tabs li a.active:hover,
 ul.control_tabs_vertical li a.active:hover {
   background-color: #fdd;
 }
+
+
+span.circled.color-th{
+  border-color:#ae0040;
+}

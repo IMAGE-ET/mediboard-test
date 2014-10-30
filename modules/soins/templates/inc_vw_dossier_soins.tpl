@@ -94,6 +94,18 @@
     url.requestUpdate("semaine");
   }
 
+  viewSegments = function(chapitre, line_guid){
+    var url = new Url("prescription", "vw_segments_line");
+    url.addParam("line_guid", line_guid);
+    url.requestModal(500, null, { onClose: function() {
+      if (window.refreshDossierSoin) {
+        refreshDossierSoin('',chapitre, true);
+      }
+      if (window.updatePlanSoinsPatients) {
+        updatePlanSoinsPatients();
+      }} } );
+  }
+
   // Initialisation
   window.periodicalBefore = null;
   window.periodicalAfter = null;

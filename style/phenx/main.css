@@ -783,3 +783,7 @@ ul.control_tabs_vertical li a.active {
     border: none;
   }
 }
+
+span.circled.color-th{
+  border-color:#bbb;
+}
