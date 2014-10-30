@@ -97,7 +97,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
             $no_group = $sender->group_id;
           }
 
-          $receivers = $receiver->getObjects(true, $no_group);
+          //$receivers = $receiver->getObjects(true, $no_group);
         }
       }
     }
