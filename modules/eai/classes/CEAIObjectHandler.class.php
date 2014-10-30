@@ -97,7 +97,8 @@ class CEAIObjectHandler extends CMbObjectHandler {
             $no_group = $sender->group_id;
           }
 
-          $receivers = $receiver->getObjects(true, $no_group);
+          /* @todo ATTENTION PROBLEMATIQUE SI PATIENT != CASSE */
+          //$receivers = $receiver->getObjects(true, $no_group);
         }
       }
     }
