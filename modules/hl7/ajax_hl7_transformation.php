@@ -27,8 +27,20 @@ if (CMbArray::get($temp, 1)) {
 }
 
 $message = str_replace("CHL7Event", "", $event_name);
+
+/** @var CInteropActor $actor */
+$actor = CMbObject::loadFromGuid($actor_guid);
+$where = array(
+  "message"     => " = '$message'",
+  "profil"      => " = '$profil'"
+);
+
+if ($extension) {
+  $where["extension"] = " = '$extension'";
+}
+
 $trans = new CHL7v2Transformation($version, $extension, $message);
-$tree = $trans->getSegments();
+$tree = $trans->getSegments($actor);
 
 $smarty = new CSmartyDP();
 $smarty->assign("profil"    , $profil);
@@ -37,5 +49,6 @@ $smarty->assign("extension" , $extension);
 $smarty->assign("message"   , $message);
 $smarty->assign("tree"      , $tree);
 $smarty->assign("actor_guid", $actor_guid);
+$smarty->assign("actor"     , $actor);
 
 $smarty->display("inc_transformation_hl7.tpl");

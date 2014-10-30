@@ -26,6 +26,8 @@ class CMessageSupported extends CMbMetaObject {
   /** @var  CExchangeDataFormat */
   public $_data_format;
 
+  public $_event = null;
+
   /**
    * @see parent::getSpec
    */
@@ -50,5 +52,20 @@ class CMessageSupported extends CMbMetaObject {
     $props["transaction"]  = "str";
     
     return $props;
+  }
+
+  /**
+   * Load event by name
+   *
+   * @return mixed
+   */
+  function loadEventByName() {
+    $classname = $this->message;
+
+    if (preg_match_all('/ADT|QBP|ORU|QCN|QBP|ORM|SIU@/', $classname)) {
+      $classname = str_replace("CHL7Event", "CHL7v2Event", $classname);
+    }
+
+    return $this->_event = new $classname;
   }
 }

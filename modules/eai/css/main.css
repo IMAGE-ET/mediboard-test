@@ -1,15 +1,27 @@
 span.hl7-transformation-add:before {
   content: url("../../../style/mediboard/images/buttons/add.png");
+  transform: scale(0.8);
+  display: inline-block;
+  vertical-align: middle
 }
 
 span.hl7-transformation-modify:before {
   content: url("../../../style/mediboard/images/buttons/edit.png");
+  transform: scale(0.8);
+  display: inline-block;
+  vertical-align: middle
 }
 
 span.hl7-transformation-move:before {
   content: url("../../../style/mediboard/images/buttons/hslip.png");
+  transform: scale(0.8);
+  display: inline-block;
+  vertical-align: middle
 }
 
 span.hl7-transformation-delete:before {
-  content: url("../../../style/mediboard/images/buttons/remove.png");
+  content: url("../../../style/mediboard/images/buttons/eraser.png");
+  transform: scale(0.8);
+  display: inline-block;
+  vertical-align: middle
 }

@@ -12,7 +12,7 @@
  */
 
 /**
- * Description
+ * HL7v2 Transformation
  */
 class CHL7v2Transformation {
   protected $message;
@@ -27,7 +27,8 @@ class CHL7v2Transformation {
     $this->messageName = $messageName;
   }
 
-  function getSegments() {
+
+  function getSegments(CInteropActor $actor = null) {
     $message_schema = $this->message->getSchema("message", $this->messageName);
 
     $xpath = new CHL7v2MessageXPath($message_schema);
@@ -133,94 +134,6 @@ class CHL7v2Transformation {
     );
 
     return $tree;
-  }
-
-  function getTree() {
-    $message_schema = $this->message->getSchema("message", $this->messageName);
-
-    $xpath = new CHL7v2MessageXPath($message_schema);
-
-    $segment = $xpath->queryUniqueNode("//segments");
-
-    $tree = array();
-    $this->readMessageSchema($segment, $tree);
-
-    return $tree;
-  }
-
-  function readMessageSchema(DOMElement $element, &$tree) {
-    foreach ($element->childNodes as $_element) {
-      /** @var DOMElement $_element */
-      switch ($_element->nodeName) {
-        case "segment":
-          $segment_schema = $this->message->getSchema("segment", $_element->nodeValue);
-          $xpath = new CHL7v2MessageXPath($segment_schema);
-
-          $children = array();
-          $fields = $xpath->query("//field");
-          foreach ($fields as $_field) {
-            $segment_name = $xpath->queryTextNode("name", $_field);
-            $segment_datatype = $xpath->queryTextNode("datatype", $_field);
-
-            $_fields = array();
-
-            $field_schema = $this->message->getSchema("composite", $segment_datatype);
-            $field_xpath = new CHL7v2MessageXPath($field_schema);
-
-            $components = $field_xpath->query("//field");
-            foreach ($components as $_component) {
-              $component_name     = $field_xpath->queryTextNode("name"    , $_component);
-              $component_datatype = $field_xpath->queryTextNode("datatype", $_component);
-
-              $fullpath_component = "$_element->nodeValue/$segment_name/$component_name";
-
-              $_datatypes = array();
-              $this->readDataTypeSchema($_datatypes, $segment_datatype, $fullpath_component);
-
-              $_fields[] = array(
-                "name"      => $component_name,
-                "fullpath"  => $fullpath_component,
-                "forbidden" => $_field->getAttribute("forbidden") == "true",
-                "datatype"  => $component_datatype,
-                "children"  => $_datatypes
-              );
-            }
-
-            $fullpath_segment = "$_element->nodeValue/$segment_name";
-
-            $children[] = array(
-              "name"      => $segment_name,
-              "fullpath"  => $fullpath_segment,
-              "forbidden" => $_field->getAttribute("forbidden") == "true",
-              "datatype"  => $segment_datatype,
-              "children"  => $_fields,
-            );
-          }
-
-          $tree[] = array(
-            "type"      => $_element->nodeName,
-            "name"      => $_element->nodeValue,
-            "fullpath"  => $_element->nodeValue,
-            "forbidden" => $_element->getAttribute("forbidden") == "true",
-            "children"  => $children,
-          );
-          break;
-
-        case "group":
-          $subtree = array();
-          $this->readMessageSchema($_element, $subtree);
-
-          $tree[] = array(
-            "type"     => $_element->nodeName,
-            "name"     => $_element->getAttribute("name"),
-            "fullpath" => $_element->getAttribute("name"),
-            "children" => $subtree,
-          );
-          break;
-
-        default:
-      }
-    }
   }
 
   function readDataTypeSchema(&$_datatypes, $datatype_name, $fullpath_component) {

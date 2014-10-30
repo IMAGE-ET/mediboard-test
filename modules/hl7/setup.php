@@ -1415,7 +1415,12 @@ class CSetuphl7 extends CSetup {
                 ADD INDEX (`actor_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "1.07";
+    $this->makeRevision("1.07");
+
+    $query = "DROP TABLE `hl7_transformation`";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.08";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

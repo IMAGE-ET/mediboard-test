@@ -58,15 +58,15 @@
             <td>
               <table class="main form">
                 <tr>
-                  <th>{{mb_label object=$exchange field=date_echange}}</th>
-                  <td class="text">
+                  <th style="width: 15%">{{mb_label object=$exchange field=date_echange}}</th>
+                  <td class="text" style="width: 35%">
                     {{mb_field object=$exchange field=_date_min register=true form="filterExchange" prop=dateTime onchange="\$V(this.form.elements.start, 0)"}}
                     <b>&raquo;</b>
                     {{mb_field object=$exchange field=_date_max register=true form="filterExchange" prop=dateTime onchange="\$V(this.form.elements.start, 0)"}}
                   </td>
 
-                  <th>{{mb_label object=$exchange field="group_id"}}</th>
-                  <td>
+                  <th style="width: 15%">{{mb_label object=$exchange field="group_id"}}</th>
+                  <td style="width: 35%">
                     {{mb_field object=$exchange field="group_id" canNull=true form="filterExchange" autocomplete="true,1,50,true,true"
                     placeholder="Tous les établissements"}}
                   </td>
@@ -103,12 +103,12 @@
                 <tr>
                   <th>{{mb_label object=$exchange field=_message}}</th>
                   <td>
-                    <input type="text" name="keywords_msg" value="{{$keywords_msg}}" placeholder="Mots-clés dans le message" size="30px"/>
+                    <input type="text" name="keywords_msg" value="{{$keywords_msg}}" placeholder="Mots-clés dans le message" size="40px"/>
                   </td>
 
                   <th>{{mb_label object=$exchange field=_acquittement}}</th>
                   <td>
-                    <input type="text" name="keywords_ack" value="{{$keywords_ack}}" placeholder="Mots-clés dans l'acquittement" size="30px"/>
+                    <input type="text" name="keywords_ack" value="{{$keywords_ack}}" placeholder="Mots-clés dans l'acquittement" size="40px"/>
                   </td>
                 </tr>
 

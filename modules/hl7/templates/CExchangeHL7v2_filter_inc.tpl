@@ -9,8 +9,8 @@
 *}}
 
 <tr>
-  <th colspan="2">Choix du statut d'acquittement </th>
-  <td colspan="2">
+  <th>{{mb_label object=$exchange field=statut_acquittement}}</th>
+  <td colspan="3">
     <select class="str" name="statut_acquittement" onchange="$V(this.form.page, 0)">
       <option value="">&mdash; Liste des statuts &mdash;</option>
       <option value="AA">OK</option>

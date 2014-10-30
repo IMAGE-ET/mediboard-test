@@ -33,4 +33,5 @@ $smarty->assign("message"      , $message);
 $smarty->assign("tree_fields"  , $tree_fields);
 $smarty->assign("tree_segments", $tree_segments);
 $smarty->assign("actor_guid"   , $actor_guid);
-$smarty->display("vw_hl7v2_transformation.tpl");
+
+$smarty->display("inc_hl7v2_transformation_fields.tpl");

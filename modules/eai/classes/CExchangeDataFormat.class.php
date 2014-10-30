@@ -302,6 +302,7 @@ class CExchangeDataFormat extends CMbMetaObject {
         if ($evenement && ($evenement != $_evt)) {
           continue;
         }
+
         $message_supported = new CMessageSupported();
         $message_supported->object_class = $object_class;
         $message_supported->object_id    = $object_id;
@@ -315,6 +316,7 @@ class CExchangeDataFormat extends CMbMetaObject {
           continue;
         }
 
+        $message_supported->loadEventByName();
         $message_supported->_data_format = $this;
 
         $this->_messages_supported_class[] = $message_supported->message;

@@ -20,7 +20,6 @@ if ($actor->_id) {
   $actor->loadRefGroup();
   $actor->loadRefUser();
   $actor->loadRefObjectConfigs();
-  $actor->loadRefsHL7Transformations();
 
   if ($actor instanceof CInteropSender) {
     $actor->countBackRefs("routes_sender");

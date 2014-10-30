@@ -19,12 +19,12 @@ $messages_xml = $messages_tabular = $messages_binary = array();
 
 /** @var CInteropActor $actor */
 $actor = CMbObject::loadFromGuid($actor_guid);
-$actor->loadRefsHL7Transformations();
 
 // Expéditeur d'intégration
 if ($actor instanceof CInteropSender) {
   $formats_xml = CExchangeDataFormat::getAll("CEchangeXML");
   foreach ($formats_xml as &$_format_xml) {
+    /** @var CEchangeXML $_format_xml */
     $_format_xml = new $_format_xml;
 
     $temp = $_format_xml->getMessagesSupported($actor_guid, false, null, true);
@@ -33,6 +33,7 @@ if ($actor instanceof CInteropSender) {
   
   $formats_tabular = CExchangeDataFormat::getAll("CExchangeTabular");
   foreach ($formats_tabular as &$_format_tabular) {
+    /** @var CExchangeTabular $_format_tabular */
     $_format_tabular = new $_format_tabular;
 
     $temp = $_format_tabular->getMessagesSupported($actor_guid, false, null, true);
@@ -41,6 +42,7 @@ if ($actor instanceof CInteropSender) {
 
   $formats_binary = CExchangeDataFormat::getAll("CExchangeBinary");
   foreach ($formats_binary as &$_format_binary) {
+    /** @var CExchangeBinary $_format_binary */
     $_format_binary = new $_format_binary;
     
     $temp = $_format_binary->getMessagesSupported($actor_guid, false, null, true);

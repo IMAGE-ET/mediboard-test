@@ -410,7 +410,58 @@ class CSetupeai extends CSetup {
                 ADD `description` TEXT;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.23";
+    $this->makeRevision("0.23");
+
+    $query = "CREATE TABLE `eai_transformation_ruleset` (
+                `eai_transformation_ruleset_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `name` VARCHAR (255) NOT NULL
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "CREATE TABLE `eai_transformation_rule` (
+                `eai_transformation_rule_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `name` VARCHAR (255) NOT NULL,
+                `profil` VARCHAR (255),
+                `message` VARCHAR (255),
+                `transaction` VARCHAR (255),
+                `version` VARCHAR (255),
+                `extension` VARCHAR (255),
+                `component_from` VARCHAR (255),
+                `component_to` VARCHAR (255),
+                `action` VARCHAR (255),
+                `value` VARCHAR (255),
+                `active` ENUM ('0','1') DEFAULT '0',
+                `rank` INT (11) UNSIGNED,
+                `eai_transformation_ruleset_id` INT (11) UNSIGNED
+              )/*! ENGINE=MyISAM */;;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `eai_transformation_rule`
+                ADD INDEX (`eai_transformation_ruleset_id`);";
+    $this->addQuery($query);
+
+    $query = "CREATE TABLE `eai_transformation` (
+                `eai_transformation_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `actor_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `actor_class` VARCHAR (80) NOT NULL,
+                `profil` VARCHAR (255),
+                `message` VARCHAR (255),
+                `transaction` VARCHAR (255),
+                `version` VARCHAR (255),
+                `extension` VARCHAR (255),
+                `active` ENUM ('0','1') DEFAULT '0',
+                `rank` INT (11) UNSIGNED,
+                `eai_transformation_rule_id` INT (11) UNSIGNED
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `eai_transformation`
+                ADD INDEX (`actor_id`),
+                ADD INDEX (`actor_class`),
+                ADD INDEX (`eai_transformation_rule_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.24";
 
     $query = "SELECT * FROM `authorspecialty_20121112` WHERE `code` = 'G15_10/PAC00';";
 
