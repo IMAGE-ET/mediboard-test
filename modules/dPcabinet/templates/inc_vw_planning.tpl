@@ -85,6 +85,16 @@
           modalPriseRDV(null, date, hour, plageconsult_id)
         }
 
+        if (action == "tick" || action == "tick_cancel") {
+          var oform = getForm('chronoPatient');
+          $V(oform.consultation_id, consultation_id);
+          $V(oform.chrono, action == "tick" ? 32 : 16);
+          onSubmitFormAjax(oform, {onComplete: refreshPlanning });
+          // clean up
+          $V(oform.consultation_id, "");
+          $V(oform.chrono, 0);
+        }
+
         window.save_elt = elt;
       }
       

@@ -203,6 +203,14 @@
   <input type="hidden" name="heure" />
 </form>
 
+<form name="chronoPatient" method="post">
+  <input type="hidden" name="m" value="dPcabinet"/>
+  <input type="hidden" name="dosql" value="do_consultation_aed" />
+  <input type="hidden" name="consultation_id" />
+  <input type="hidden" name="chrono" />
+
+</form>
+
 
 <form name="func_planning" method="get">
   <input type="hidden" name="m" value="{{$m}}" />

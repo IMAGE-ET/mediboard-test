@@ -355,6 +355,12 @@ for ($i = 0; $i < $nbDays; $i++) {
           $event->addMenuItem("copy", "Copier cette consultation");
           $event->addMenuItem("cut" , "Couper cette consultation");
           $event->addMenuItem("add" , "Ajouter une consultation");
+          if ($_consult->chrono == CConsultation::PLANIFIE) {
+            $event->addMenuItem("tick", "Notifier l'arrivée");
+          }
+          if ($_consult->chrono == CConsultation::PATIENT_ARRIVE) {
+            $event->addMenuItem("tick_cancel", "Annuler l'arrivée");
+          }
         }
       }
       
