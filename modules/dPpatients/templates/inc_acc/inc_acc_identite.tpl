@@ -218,7 +218,13 @@ Main.add(function() {
         </tr>
         <tr>
           <th>{{mb_label object=$patient field="sexe"}}</th>
-          <td>{{mb_field object=$patient field="sexe" canNull=false typeEnum=radio onchange="toggleNomNaissance(this); copyIdentiteAssureValues(this); changeCiviliteForSexe(this);"}}</td>
+          <td>
+            {{if $identity_status && $patient->_id && $patient->status == "VALI" && !$allowed_modify}}
+              {{mb_value object=$patient field="sexe"}}
+            {{else}}
+              {{mb_field object=$patient field="sexe" canNull=false typeEnum=radio onchange="toggleNomNaissance(this); copyIdentiteAssureValues(this); changeCiviliteForSexe(this);"}}
+            {{/if}}
+          </td>
         </tr>
         <tr>
           <th>{{mb_label object=$patient field="naissance"}}</th>
