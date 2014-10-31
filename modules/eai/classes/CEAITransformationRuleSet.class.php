@@ -22,6 +22,15 @@ class CEAITransformationRuleSet extends CMbObject {
 
   // DB fields
   public $name;
+  public $description;
+
+  // Counts
+  /** @var int */
+  public $_count_transformation_rules;
+  /** @var int */
+  public $_count_active_transformation_rules;
+  /** @var int */
+  public $_count_inactive_transformation_rules;
 
   /**
    * @see parent::getSpec()
@@ -41,7 +50,13 @@ class CEAITransformationRuleSet extends CMbObject {
   function getProps() {
     $props = parent::getProps();
 
-    $props["name"] = "str notNull";
+    $props["name"]        = "str notNull seekable autocomplete";
+    $props["description"] = "text";
+
+    // Derived fields
+    $props["_count_transformation_rules"]          = "num";
+    $props["_count_active_transformation_rules"]   = "num";
+    $props["_count_inactive_transformation_rules"] = "num";
 
     return $props;
   }
@@ -55,5 +70,21 @@ class CEAITransformationRuleSet extends CMbObject {
     $backProps["eai_transformation_rules"] = "CEAITransformationRule eai_transformation_ruleset_id";
 
     return $backProps;
+  }
+
+  /**
+   * Count transformation rules
+   *
+   * @param bool $onlyActive Only active
+   *
+   * @return int
+   */
+  function countRefsEAITransformationRules($onlyActive = false) {
+    $where = array();
+    if ($onlyActive) {
+      $where["active"] = " = '1'";
+    }
+
+    return $this->_count_transformation_rules = $this->countBackRefs("eai_transformation_rules", $where); //only actives
   }
 }

@@ -461,7 +461,13 @@ class CSetupeai extends CSetup {
                 ADD INDEX (`eai_transformation_rule_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.24";
+    $this->makeRevision("0.24");
+
+    $query = "ALTER TABLE `eai_transformation_ruleset`
+                ADD `description` TEXT;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.25";
 
     $query = "SELECT * FROM `authorspecialty_20121112` WHERE `code` = 'G15_10/PAC00';";
 

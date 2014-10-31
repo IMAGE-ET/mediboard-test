@@ -12,6 +12,12 @@
 
 CCanDo::checkAdmin();
 
+$transformation_ruleset_id = CValue::getOrSession("transformation_ruleset_id");
+
+$transf_ruleset = new CEAITransformationRuleSet();
+$transf_ruleset->load($transformation_ruleset_id);
+
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->display("vw_routers.tpl");
+$smarty->assign("transf_ruleset", $transf_ruleset);
+$smarty->display("inc_edit_transformation_ruleset.tpl");
