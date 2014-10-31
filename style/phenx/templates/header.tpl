@@ -9,7 +9,7 @@
   }
 </script>
 
-<table class="layout" style="width: 100%;">
+<table style="width: 100%;">
   <tr>
     {{if !$offline && !$dialog}}
       <td style="vertical-align: top; width: 1%; padding-right: 0; text-align: center" id="leftMenu">
