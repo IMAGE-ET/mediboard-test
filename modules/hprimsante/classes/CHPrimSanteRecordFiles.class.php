@@ -80,12 +80,14 @@ class CHPrimSanteRecordFiles extends CHPrimSanteMessageXML {
               $result_parts = explode("\\S\\", $result);
               $name_editor  = CMbArray::get($result_parts, 0);
               $file_name    = CMbArray::get($result_parts, 1);
+              $file_type    = $this->getFileType(CMbArray::get($result_parts, 2));
+
               if (!$file_name) {
                 $erreur[] = new CHPrimSanteError($exchange_hpr, "P", "16", array("OBX", $loop, $identifier), "10.6");
                 continue;
               }
               $this->loop = $loop;
-              $this->storeFile($name_editor, $file_name, $sejour, $erreur);
+              $this->storeFile($name_editor, $file_name, $file_type, $sejour, $erreur);
               break;
             default:
           }
@@ -94,6 +96,25 @@ class CHPrimSanteRecordFiles extends CHPrimSanteMessageXML {
     }
 
     return $exchange_hpr->setAck($ack, $erreur, $patient);
+  }
+
+  /**
+   * Get the mediboard file type
+   *
+   * @param String $file_type Type file
+   *
+   * @return null|string
+   */
+  function getFileType($file_type) {
+    switch ($file_type) {
+      case "PDF":
+        $result = "application/pdf";
+        break;
+      default:
+        $result = null;
+    }
+
+    return $result;
   }
 
   /**
@@ -125,12 +146,13 @@ class CHPrimSanteRecordFiles extends CHPrimSanteMessageXML {
    *
    * @param String  $prefix    Prefix for the name of file
    * @param String  $file_name Name of file
+   * @param String  $file_type Type file
    * @param CSejour $sejour    Sejour
    * @param Array   &$erreur   Error
    *
    * @return bool
    */
-  function storeFile($prefix, $file_name, $sejour, &$erreur) {
+  function storeFile($prefix, $file_name, $file_type, $sejour, &$erreur) {
     /** @var CInteropSender $sender */
     $sender       = $this->_ref_sender;
     $exchange_hpr = $this->_ref_exchange_hpr;
@@ -151,6 +173,7 @@ class CHPrimSanteRecordFiles extends CHPrimSanteMessageXML {
         }
         $file = new CFile();
         $file->file_name = "$prefix $file_name";
+        $file->file_type = $file_type;
         $file->fillFields();
         $file->setObject($sejour);
         $file->putContent($data);
