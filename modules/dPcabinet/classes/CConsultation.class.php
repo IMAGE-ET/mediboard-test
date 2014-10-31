@@ -1116,19 +1116,6 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
       }
     }
 
-    // Changement du patient pour la consult
-    if ($this->sejour_id && $patient_modified) {
-      $this->loadRefSejour();
-
-      // Si patient est différent alors on met a jour le sejour
-      if ($this->_ref_sejour->patient_id != $this->patient_id) {
-        $this->_ref_sejour->patient_id = $this->patient_id;
-        if ($msg = $this->_ref_sejour->store()) {
-          return $msg;
-        }
-      }
-    }
-
     if ($this->_adjust_sejour && ($this->_ref_sejour->type === "consult") && $sejour->_id) {
       $consultations = $this->_ref_sejour->countBackRefs("consultations");
       if ($consultations < 1) {
