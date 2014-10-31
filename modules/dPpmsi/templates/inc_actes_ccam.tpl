@@ -166,7 +166,8 @@
       {{foreach from=$_activite->phases item=_phase}}
         {{assign var="acte" value=$_phase->_connected_acte}}
         {{if !$read_only || ($read_only && $acte->_id)}}
-          {{assign var="view" value='PMSI-'|cat:$acte->_id|default:$acte->_view}}
+          {{assign var=view value=$acte->_id|default:$acte->_view}}
+          {{assign var="view" value='PMSI-'|cat:$view}}
           {{assign var="key" value="$_key$view"}}
           <tr>
             <td class="narrow" style="padding-left: 10px;">
@@ -284,6 +285,7 @@
                   {{mb_field object=$acte field=montant_depassement hidden=true}}
                   {{mb_field object=$acte field=motif_depassement hidden=true emptyLabel="CActeCCAM-motif_depassement"}}
                   {{mb_field object=$acte field=facturable hidden=true}}
+                  {{mb_field object=$acte field=extension_documentaire hidden=true}}
 
                   {{foreach from=$_phase->_modificateurs item=_mod name=modificateurs}}
                     <input type="checkbox" name="modificateur_{{$_mod->code}}{{$_mod->_double}}" {{if $_mod->_checked}}checked{{/if}} class="hidden" />
