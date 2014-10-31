@@ -114,10 +114,10 @@
           {{foreach from=$patient->_ref_sejours item=_sejour}}
             <input type="radio" name="_sejour_id" value="{{$_sejour->_id}}" {{if $_sejour->_id == $sejour->_id}}checked="checked"{{/if}}
                    onchange="PMSI.setSejour({{$_sejour->_id}});" />
-            <span class="circled{{if $_sejour->_id == $sejour->_id}} ok{{/if}}"
+            <label for="_sejour_id_{{$_sejour->_id}}" class="circled{{if $_sejour->_id == $sejour->_id}} ok{{/if}}"
                   onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
               {{$_sejour}}
-            </span>
+            </label>
             <br />
             {{foreachelse}}
             <span>{{tr}}CSejour.none{{/tr}}</span>
