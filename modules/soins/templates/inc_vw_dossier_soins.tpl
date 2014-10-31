@@ -441,11 +441,11 @@
 
     {{if "soins suivi hide_old_line"|conf:"CGroups-$g" && $date == $smarty.now|date_format:'%Y-%m-%d'}}
       {{if $hide_old_lines}}
-        <button type="button" class="search" style="float: right;margin-top: -4px;" onclick="PlanSoins.reloadSuiviSoin('{{$sejour->_id}}', '{{$date}}', 0);">
+        <button type="button" class="search" style="float: right;{{if !"soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}margin-top: -4px;{{/if}}" onclick="PlanSoins.reloadSuiviSoin('{{$sejour->_id}}', '{{$date}}', 0);">
           Afficher les prescriptions terminées ({{$hidden_lines_count}})
         </button>
       {{else}}
-        <button type="button" class="search" style="float: right;margin-top: -4px;" onclick="PlanSoins.reloadSuiviSoin('{{$sejour->_id}}', '{{$date}}', 1);">
+        <button type="button" class="search" style="float: right;{{if !"soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}margin-top: -4px;{{/if}}" onclick="PlanSoins.reloadSuiviSoin('{{$sejour->_id}}', '{{$date}}', 1);">
           Masquer les prescriptions terminées
         </button>
       {{/if}}
