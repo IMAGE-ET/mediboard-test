@@ -174,7 +174,7 @@
                   dropdown: true,
                   width: "250px",
                   updateElement: function(selected) {
-                    CCAMField{{$subject->_class}}{{$subject->_id}}.add(selected.down("strong").innerHTML);
+                    CCAMField{{$subject->_class}}{{$subject->_id}}.add(selected.down("strong").innerHTML, true);
                   }
                 });
               });
