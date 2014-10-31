@@ -1,14 +1,12 @@
 <?php
-
 /**
- * dPbloc
+ * $Id:$
  *
- * @category Bloc
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage Bloc
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 /**
@@ -21,9 +19,10 @@ class CPosteSSPI extends CMbObject {
   // DB References
   public $group_id;
   public $bloc_id;
-  
+
   // DB Fields
   public $nom;
+  public $type;
   
   /** @var CBlocOperatoire */
   public $_ref_bloc;
@@ -46,6 +45,7 @@ class CPosteSSPI extends CMbObject {
     $props["bloc_id"]  = "ref class|CBlocOperatoire";
     $props["group_id"] = "ref class|CGroups notNull";
     $props["nom"]      = "str notNull seekable";
+    $props["type"]     = "enum list|sspi|preop default|sspi";
     return $props;
   }
 
@@ -55,6 +55,7 @@ class CPosteSSPI extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["operations"] = "COperation poste_sspi_id";
+    $backProps["operations_preop"] = "COperation poste_preop_id";
     return $backProps;
   }
 

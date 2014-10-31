@@ -1,3 +1,4 @@
+{{assign var=use_poste value=$conf.dPplanningOp.COperation.use_poste}}
 <script>
   submitPrepaForm = function(oFormPrepa) {
     onSubmitFormAjax(oFormPrepa, refreshTabsReveil);
@@ -22,6 +23,9 @@
     <th>{{mb_colonne class="COperation" field="salle_id" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
     <th>{{mb_colonne class="COperation" field="chir_id" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
     <th>{{mb_title class="COperation" field="_patient_id"}}</th>
+    {{if $use_poste}}
+      <th>{{mb_colonne class="COperation" field="poste_preop_id" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
+    {{/if}}
     <th class="narrow"></th>
     <th>{{mb_colonne class="COperation" field="libelle" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
     <th>{{mb_colonne class="COperation" field="cote" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
@@ -52,6 +56,11 @@
             {{$_operation->_ref_patient}}
           </span>
       </td>
+      {{if $use_poste}}
+        <td>
+          {{mb_include module=dPsalleOp template=inc_form_toggle_poste_preop}}
+        </td>
+      {{/if}}
       <td>
         <button class="button soins notext" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">
           Dossier séjour

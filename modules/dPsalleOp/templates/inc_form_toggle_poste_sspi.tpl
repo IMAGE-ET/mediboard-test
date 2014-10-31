@@ -26,6 +26,7 @@
       url.addParam('show_view', true);
       url.addParam("input_field", "_poste_sspi_id_autocomplete");
       url.addParam("where[group_id]", "{{$g}}");
+      url.addParam("where[type]", "sspi");
       url.autoComplete(form.elements._poste_sspi_id_autocomplete, null, {
         minChars: 2,
         method: "get",

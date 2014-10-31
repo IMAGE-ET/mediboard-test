@@ -1812,7 +1812,12 @@ class CSetupdPplanningOp extends CSetup {
                 ADD `postmined` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = '1.95';
+    $this->makeRevision("1.95");
+    $query = "ALTER TABLE `operations`
+                ADD `poste_preop_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+
+    $this->mod_version = '1.96';
 
 
     // Data source query

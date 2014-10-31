@@ -431,6 +431,11 @@ class CSetupdPbloc extends CSetup {
       ADD INDEX (`original_function_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.45";
+    $this->makeRevision("0.45");
+    $query = "ALTER TABLE `poste_sspi`
+                ADD `type` ENUM ('sspi','preop') DEFAULT 'sspi';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.46";
   }
 }

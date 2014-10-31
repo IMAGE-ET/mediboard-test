@@ -100,6 +100,7 @@ CMbObject::massLoadFwdRef($chirs, "function_id");
 CMbObject::massLoadFwdRef($listOperations, "plageop_id");
 if ($use_poste) {
   CMbObject::massLoadFwdRef($listOperations, "poste_sspi_id");
+  CMbObject::massLoadFwdRef($listOperations, "poste_preop_id");
 }
 
 $anesths = CMbObject::massLoadFwdRef($listOperations, "sortie_locker_id");
@@ -133,6 +134,7 @@ foreach ($listOperations as $op) {
   
   if ($use_poste) {
     $op->loadRefPoste();
+    $op->loadRefPostePreop();
   }
   $op->loadRefSortieLocker()->loadRefFunction();
 

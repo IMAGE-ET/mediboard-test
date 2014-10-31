@@ -34,6 +34,7 @@ class COperation extends CCodable implements IPatientRelated {
   public $plageop_id;
   public $salle_id;
   public $poste_sspi_id;
+  public $poste_preop_id;
   public $examen_operation_id;
   public $graph_pack_id;
 
@@ -166,6 +167,8 @@ class COperation extends CCodable implements IPatientRelated {
   public $_ref_chir_4;
   /** @var CPosteSSPI */
   public $_ref_poste;
+  /** @var CPosteSSPI */
+  public $_ref_poste_preop;
   /** @var CPlageOp */
   public $_ref_plageop;
   /** @var CSalle */
@@ -278,6 +281,7 @@ class COperation extends CCodable implements IPatientRelated {
     $props["pause"]                = "time show|0";
     $props["salle_id"]             = "ref class|CSalle";
     $props["poste_sspi_id"]        = "ref class|CPosteSSPI";
+    $props["poste_preop_id"]       = "ref class|CPosteSSPI";
     $props["examen_operation_id"]  = "ref class|CExamenOperation";
     $props["graph_pack_id"]        = "ref class|CSupervisionGraphPack";
     $props["date"]                 = "date";
@@ -1109,8 +1113,22 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
 
+  /**
+   * Charge le poste sspi
+   *
+   * @return CPosteSSPI
+   */
   function loadRefPoste() {
     return $this->_ref_poste = $this->loadFwdRef("poste_sspi_id");
+  }
+
+  /**
+   * Charge le poste préop
+   *
+   * @return CPosteSSPI
+   */
+  function loadRefPostePreop() {
+    return $this->_ref_poste_preop = $this->loadFwdRef("poste_preop_id");
   }
 
   /**

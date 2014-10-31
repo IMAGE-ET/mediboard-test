@@ -441,6 +441,7 @@ refreshFunction = function(chir_id) {
             url.addParam("object_class", "CPosteSSPI");
             url.addParam('show_view', true);
             url.addParam("input_field", "_poste_sspi_id_autocomplete");
+            url.addParam("where[type]", "sspi");
             url.autoComplete(form.elements._poste_sspi_id_autocomplete, null, {
               minChars: 2,
               method: "get",
@@ -457,6 +458,39 @@ refreshFunction = function(chir_id) {
         </script>
         <button type="button" class="cancel notext"
           onclick="$V(this.form.poste_sspi_id, ''); $V(this.form._poste_sspi_id_autocomplete, '')"></button>
+      </td>
+    </tr>
+    <tr>
+      <th>
+        {{mb_label object=$op field=poste_preop_id}}
+      </th>
+      <td colspan="3">
+        <input type="hidden" name="poste_preop_id" value="{{$op->poste_preop_id}}"/>
+        <input type="text" name="_poste_preop_id_autocomplete" value="{{$op->_ref_poste_preop}}"/>
+        <script>
+          Main.add(function() {
+            var form=getForm("editOp");
+            var url = new Url("system", "ajax_seek_autocomplete");
+            url.addParam("object_class", "CPosteSSPI");
+            url.addParam('show_view', true);
+            url.addParam("input_field", "_poste_preop_id_autocomplete");
+            url.addParam("where[type]", "preop");
+            url.autoComplete(form.elements._poste_preop_id_autocomplete, null, {
+              minChars: 2,
+              method: "get",
+              select: "view",
+              dropdown: true,
+              afterUpdateElement: function(field,selected) {
+                var guid = selected.getAttribute('id');
+                if (guid) {
+                  $V(field.form['poste_preop_id'], guid.split('-')[2]);
+                }
+              }
+            });
+          });
+        </script>
+        <button type="button" class="cancel notext"
+                onclick="$V(this.form.poste_preop_id, ''); $V(this.form._poste_preop_id_autocomplete, '')"></button>
       </td>
     </tr>
   {{/if}}

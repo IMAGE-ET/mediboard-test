@@ -192,6 +192,7 @@ Main.add(function () {
             <tr>
               <th>{{tr}}CPosteSSPI-nom{{/tr}}</th>
               <th>{{tr}}CPosteSSPI-back-bloc{{/tr}}</th>
+              <th>{{tr}}CPosteSSPI-type{{/tr}}</th>
             </tr>
             {{foreach from=$postes_list item=_poste}}
             <tr {{if $_poste->_id == $poste->_id}}class="selected"{{/if}}>
@@ -203,6 +204,7 @@ Main.add(function () {
                   <div class="empty">{{tr}}CBlocOperatoire.none{{/tr}}</div>
                 {{/if}}
              </td>
+              <td>{{mb_value object=$_poste field=type}}</td>
             </tr>
             {{foreachelse}}
               <tr>
@@ -237,6 +239,11 @@ Main.add(function () {
                     {{/foreach}}
                   </select>
                 </td>
+              </tr>
+              <tr>
+                <th>{{mb_label object=$poste field=type}}</th>
+                <td>{{mb_field object=$poste field=type}}</td>
+              </tr>
               <tr>
                 <td class="button" colspan="2">
                   {{if $poste->_id}}
