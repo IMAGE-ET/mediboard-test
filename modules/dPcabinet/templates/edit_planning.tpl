@@ -420,20 +420,25 @@
                 {{mb_label object=$consult field="patient_id"}}
               </th>
               <td>
+                {{assign var=can_edit_pat value=1}}
                 {{if $consult->sejour_id && $consult->patient_id && $consult->_id}}
-                  <strong>{{$consult->_ref_patient}}</strong>
-                  (Consultation de sejour, dissocier pour changer de patient)
-                {{else}}
-                  {{mb_field object=$pat field="patient_id" hidden=1 ondblclick="PatSelector.init()" onchange="requestInfoPat(); $('button-edit-patient').setVisible(this.value);"}}
-                  <input type="text" name="_patient_view" style="width: 15em;" value="{{$pat->_view}}" readonly="readonly" onfocus="PatSelector.init()" onchange="checkCorrespondantMedical()"/>
+                  {{assign var=can_edit_pat value=0}}
+                {{/if}}
+
+                {{mb_field object=$pat field="patient_id" hidden=1}}
+                <input type="text" name="_patient_view" style="width: 15em;" value="{{$pat->_view}}" readonly="readonly" {{if $can_edit_pat}}onfocus="PatSelector.init()"{{/if}} onchange="checkCorrespondantMedical()"/>
+
+                {{if $can_edit_pat}}
                   <button class="search notext" id="add_edit_button_pat_selector" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
                   <button id="button-edit-patient" type="button" onclick="Patient.editModal(this.form.patient_id.value, 0, 'window.parent.afterEditPatient')"
                           class="edit notext" {{if !$pat->_id}}style="display: none;"{{/if}}>
                     {{tr}}Edit{{/tr}}
                   </button>
-                  <br />
-                  <input type="text" name="_seek_patient" style="width: 13em;" placeholder="{{tr}}fast-search{{/tr}}" "autocomplete" onblur="$V(this, '')" />
+                {{else}}
+                  <div class="info" style="display:inline;">(Consultation de sejour, dissocier du séjour pour changer le patient ou changer le patient du séjour)</div>
                 {{/if}}
+                  <br />
+                  <input type="text" name="_seek_patient" style="width: 13em; {{if !$can_edit_pat}}display:none;{{/if}}" placeholder="{{tr}}fast-search{{/tr}}" "autocomplete" onblur="$V(this, '')"  />
               </td>
             </tr>
 

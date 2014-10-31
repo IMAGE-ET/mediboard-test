@@ -998,12 +998,16 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     $patient_modified = $this->fieldModified("patient_id");
 
-    // Si le patient est modifié et qu'il y a plus d'une consult dans le sejour, on empeche le store
+    // Si le patient est modifié et qu'il y a des consultations, on cascade les consultations
     if (!$this->_forwardRefMerging && $this->sejour_id && $patient_modified) {
-
-      $consultations = $this->countBackRefs("consultations");
-      if ($consultations > 1) {
-        return "D'autres consultations sont prévues dans ce séjour, impossible de changer le patient.";
+      /** @var CConsultation[] $consultations */
+      $consultations = $this->loadBackRefs("consultations");
+      foreach ($consultations as $_consult) {
+        $_consult->_sync_consults_from_sejour = true;
+        $_consult->patient_id = $this->patient_id;
+        if ($msg = $_consult->store()) {
+          return $msg;
+        }
       }
     }
 

@@ -198,6 +198,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
   public $_handler_external_booking;
   public $_list_forms = array();
   public $_skip_count = false;
+  public $_sync_consults_from_sejour = false;     // used to allow CSejour::store to avoid consultation's sejour patient check
 
   /**
    * @see parent::getSpec()
@@ -970,13 +971,13 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $patient_modified = $this->fieldModified("patient_id");
 
     // Si le patient est modifié et qu'il y a plus d'une consult dans le sejour, on empeche le store
-    if (!$this->_forwardRefMerging && $this->sejour_id && $patient_modified && !$this->_skip_count) {
+    if (!$this->_forwardRefMerging && $this->sejour_id && $patient_modified && !$this->_skip_count && !$this->_sync_consults_from_sejour) {
       $this->loadRefSejour();
-
       $consultations = $this->_ref_sejour->countBackRefs("consultations");
       if ($consultations > 1) {
-        return "D'autres consultations sont prévues dans ce séjour, impossible de changer le patient.";
+        return "Vous ne pouvez changer le patient d'une consultation si celle ci est contenue dans un séjour. Dissociez la consultation ou modifier le patient du séjour.";
       }
+
     }
 
     // Synchronisation AT
