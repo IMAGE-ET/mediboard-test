@@ -31,6 +31,7 @@ class CProductOrder extends CMbMetaObject {
 
   /** @var CProductOrderItem[] */
   public $_ref_order_items;
+  public $_ref_order_items_add;
 
   /** @var CProductReception[] */
   public $_ref_receptions;
@@ -578,10 +579,10 @@ class CProductOrder extends CMbMetaObject {
    * @return CProductOrderItem[]
    */
   function loadRefsOrderItems($force = false) {
-    if ($this->_ref_order_items && !$force) {
+    if (count($this->_ref_order_items) && !$force) {
       return $this->_ref_order_items;
     }
-    
+
     $ljoin = array(
       "product_reference" => "product_reference.reference_id = product_order_item.reference_id",
       "product"           => "product.product_id = product_reference.product_id",
@@ -592,6 +593,35 @@ class CProductOrder extends CMbMetaObject {
     return $this->_ref_order_items = $this->loadBackRefs('order_items', $order, null, null, $ljoin);
   }
 
+  /**
+   * Load order items
+   *
+   * @param object $reception reception
+   *
+   * @return CProductOrderItem[]
+   */
+  function loadRefsaddItems() {
+    $_reception = new CProductReception();
+    $where = array();
+    $where["reference"] = "LIKE '$this->order_number%'";
+    $receptions = $_reception->loadIds($where);
+
+    $where = array();
+    $where["product_order_item_reception.reception_id"] = CSQLDataSource::prepareIn(array_values($receptions));
+    $ljoin = array();
+    $ljoin["product_order_item_reception"]  = "product_order_item_reception.order_item_id = product_order_item.order_item_id";
+
+    $order_item = new CProductOrderItem();
+    /* @var CProductOrderItem[] $order_items*/
+    $order_items = $order_item->loadList($where, "order_item_id", null, null, $ljoin);
+    foreach ($order_items as $_order) {
+      if (!$_order->order_id) {
+        $_order->quantity = 0;
+      }
+      $_order->updatePriceTVA();
+    }
+    return $this->_ref_order_items_add = $order_items;
+  }
   /**
    * Load postal address object
    *
@@ -612,30 +642,30 @@ class CProductOrder extends CMbMetaObject {
    */
   function updatePlainFields() {
     $this->updateFormFields();
-    
+
     if ($this->_autofill) {
       $this->_autofill = null;
       $this->autofill();
     }
-    
+
     if ($this->_order && !$this->date_ordered) {
       if (count($this->_ref_order_items) != 0) {
         $this->date_ordered = CMbDT::dateTime();
       }
       $this->_order = null;
     }
-    
+
     // If the flag _receive is true, and if not every item has been received, we mark all them as received
     if ($this->_receive && !$this->_received) {
       $this->_receive = null;
       $this->receive();
     }
-    
+
     if ($this->_redo) {
       $this->_redo = null;
       $this->redo();
     }
-    
+
     if ($this->_reset) {
       $this->_reset = null;
       $this->reset();

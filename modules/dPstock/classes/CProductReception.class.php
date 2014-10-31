@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  * 
  * @package    Mediboard
  * @subpackage stock
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 /**
@@ -27,6 +27,8 @@ class CProductReception extends CMbObject {
 
   /** @var CProductOrderItemReception[] */
   public $_ref_reception_items;
+  /** @var CProductOrder */
+  public $_ref_order;
 
   /** @var int */
   public $_count_reception_items;
@@ -173,6 +175,22 @@ class CProductReception extends CMbObject {
     }
     
     return parent::store();
+  }
+
+  /**
+   * Load order
+   *
+   * @return CProductOrder
+   */
+  function loadRefOrder(){
+    $order_id = explode("-", $this->reference);
+
+    $where = array();
+    $where["order_number"] = " = '$order_id[0]'";
+
+    $order = new CProductOrder();
+    $order->loadObject($where);
+    return $this->_ref_order = $order;
   }
 
   /**

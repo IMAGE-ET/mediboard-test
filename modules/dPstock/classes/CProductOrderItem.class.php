@@ -47,7 +47,8 @@ class CProductOrderItem extends CMbObject {
   public $_quantity_received;
   public $_id_septic;
   public $_update_reference;
-  
+  public $_price_tva;
+
   // #TEMP#
   public $units_fixed;
   public $orig_quantity;
@@ -79,6 +80,7 @@ class CProductOrderItem extends CMbObject {
     $specs['renewal']            = 'bool notNull default|1';
     $specs['septic']             = 'bool notNull default|0';
     $specs['_price']             = 'currency';
+    $specs['_price_tva']         = 'currency';
     $specs['_quantity_received'] = 'num';
     $specs['_update_reference']  = 'bool';
     
@@ -331,4 +333,14 @@ class CProductOrderItem extends CMbObject {
 
     return null;
   }
+
+  /**
+   * Update total price
+   *
+   * @return void
+   */
+  function updatePriceTVA(){
+    $this->_price_tva = ($this->_price * $this->tva / 100);
+  }
+
 }
