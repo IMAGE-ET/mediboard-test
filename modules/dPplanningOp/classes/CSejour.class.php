@@ -1016,9 +1016,6 @@ class CSejour extends CFacturable implements IPatientRelated {
 
       if ($this->fieldModified("mode_sortie")) {
         if ("deces" == $this->mode_sortie) {
-          if (!$this->_date_deces) {
-            return "La date de décès n'est pas renseignée";
-          }
           $patient->deces = $this->_date_deces;
         }
         else if ($this->_old->mode_sortie == "deces") {
