@@ -17,11 +17,12 @@
 class CPatientStateTools {
 
   static $color = array(
-    "PROV" => "#33B1FF",
-    "VALI" => "#CC9900",
-    "DPOT" => "#9999CC",
-    "ANOM" => "#FF66FF",
-    "CACH" => "#b2b2b3",
+    "PROV"   => "#33B1FF",
+    "VALI"   => "#CC9900",
+    "DPOT"   => "#9999CC",
+    "ANOM"   => "#FF66FF",
+    "CACH"   => "#B2B2B3",
+    "merged" => "#EEA072"
   );
 
   /**
@@ -68,6 +69,31 @@ class CPatientStateTools {
     $request->addTable("patient_state");
     $request->addWhere("DATE(datetime) BETWEEN '$before' AND '$now'");
     $request->addGroup("DAY(datetime), state");
+
+    return $ds->loadList($request->makeSelect());
+  }
+
+  /**
+   * Get the patient merge by date
+   *
+   * @param Date $before before date
+   * @param Date $now    now date
+   *
+   * @return array
+   */
+  static function getPatientMergeByDate($before, $now) {
+    $where = array(
+      "date >= '$before 00:00:00'",
+      "date <= '$now 23:59:59'",
+      "type = 'merge'",
+      "object_class = 'CPatient'"
+    );
+    $ds = CSQLDataSource::get("std");
+    $request = new CRequest();
+    $request->addSelect("DATE(date) AS 'date', COUNT(*) AS 'total'");
+    $request->addTable("user_log");
+    $request->addWhere($where);
+    $request->addGroup("DATE(date)");
 
     return $ds->loadList($request->makeSelect());
   }

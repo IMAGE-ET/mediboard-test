@@ -90,6 +90,10 @@
             <td>{{mb_field class=CpatientState field=_number_day value=$_number_day}}</td>
           </tr>
           <tr>
+            <th>{{mb_label class=CPatientState field=_merge_patient}}</th>
+            <td>{{mb_field class=CpatientState field=_merge_patient value=$_merge_patient}}</td>
+          </tr>
+          <tr>
             <td colspan="2" class="button">
               <button class="search" type="submit">{{tr}}Filter{{/tr}}</button>
               <button class="download" type="button" onclick="PatientState.downloadCSV()">{{tr}}Download{{/tr}}</button>

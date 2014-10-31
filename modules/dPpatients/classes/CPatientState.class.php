@@ -31,6 +31,7 @@ class CPatientState extends CMbObject {
   public $_date_max;
   public $_number_day;
   public $_date_end;
+  public $_merge_patient;
 
   /** @var CPatient */
   public $_ref_patient;
@@ -60,10 +61,11 @@ class CPatientState extends CMbObject {
     $props["reason"]      = "text";
 
     //filter
-    $props["_date_min"]    = "dateTime";
-    $props["_date_max"]    = "dateTime";
-    $props["_date_end"]    = "date";
-    $props["_number_day"]  = "num";
+    $props["_date_min"]      = "dateTime";
+    $props["_date_max"]      = "dateTime";
+    $props["_date_end"]      = "date";
+    $props["_number_day"]    = "num";
+    $props["_merge_patient"] = "bool default|0";
 
     return $props;
   }
