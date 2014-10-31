@@ -182,7 +182,11 @@ var ExObject = {
       search_mode: null,
       onComplete: function(){},
       other_container: null,
-      readonly: false
+      readonly: false,
+      cross_context_class: null,
+      cross_context_id: null,
+      creation_context_class: null,
+      creation_context_id: null
     }, options);
 
     target = $(target);
@@ -204,6 +208,16 @@ var ExObject = {
 
     if (options.other_container) {
       url.addParam("other_container", options.other_container.identify());
+    }
+
+    if (options.cross_context_class && options.cross_context_id) {
+      url.addParam("cross_context_class", options.cross_context_class);
+      url.addParam("cross_context_id",    options.cross_context_id);
+    }
+
+    if (options.creation_context_class && options.creation_context_id) {
+      url.addParam("creation_context_class", options.creation_context_class);
+      url.addParam("creation_context_id",    options.creation_context_id);
     }
 
     url.requestUpdate(target, {onComplete: options.onComplete});

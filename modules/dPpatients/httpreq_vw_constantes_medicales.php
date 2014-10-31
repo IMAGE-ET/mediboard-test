@@ -51,10 +51,6 @@ if (is_null($can_edit)) {
   }
 }
 
-if ($selected_context_guid != 'all' && $selected_context_guid != $context_guid) {
-  $context_guid = $selected_context_guid;
-}
-
 if (!$start) {
   $start = 0;
 }
@@ -286,6 +282,7 @@ $graph->formatGraphDatas($list_constantes);
 $smarty = new CSmartyDP();
 $smarty->assign('constantes',                 $constantes);
 $smarty->assign('context',                    $context);
+$smarty->assign('current_context',            $current_context);
 $smarty->assign('context_guid',               $context_guid);
 $smarty->assign('list_contexts',              $list_contexts);
 $smarty->assign('all_contexts',               $selected_context_guid == 'all');

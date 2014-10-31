@@ -11,18 +11,22 @@
 
 CCanDo::checkRead();
 
-$reference_class = CValue::get("reference_class");
-$reference_id    = CValue::get("reference_id");
-$detail          = CValue::get("detail", 1);
-$ex_class_id     = CValue::get("ex_class_id");
-$target_element  = CValue::get("target_element");
-$other_container = CValue::get("other_container");
-$print           = CValue::get("print");
-$start           = CValue::get("start", 0);
-$limit           = CValue::get("limit");
-$only_host       = CValue::get("only_host");
-$readonly        = CValue::get("readonly");
+$reference_class     = CValue::get("reference_class");
+$reference_id        = CValue::get("reference_id");
+$cross_context_class = CValue::get("cross_context_class");
+$cross_context_id    = CValue::get("cross_context_id");
+$creation_context_class = CValue::get("creation_context_class");
+$creation_context_id    = CValue::get("creation_context_id");
 
+$detail              = CValue::get("detail", 1);
+$ex_class_id         = CValue::get("ex_class_id");
+$target_element      = CValue::get("target_element");
+$other_container     = CValue::get("other_container");
+$print               = CValue::get("print");
+$start               = CValue::get("start", 0);
+$limit               = CValue::get("limit");
+$only_host           = CValue::get("only_host");
+$readonly            = CValue::get("readonly");
 // Search mode
 $search_mode     = CValue::get("search_mode", 0);
 $date_min        = CValue::get("date_min");
@@ -135,6 +139,19 @@ if ($ex_class_id) {
 
 $ljoin = array();
 
+$creation_context = null;
+
+if (!$creation_context_class || !$creation_context_id) {
+  $creation_context_class = $reference_class;
+  $creation_context_id    = $reference_id;
+}
+
+if ($creation_context_class) {
+  /** @var CSejour|CPatient|CConsultation $creation_context */
+  $creation_context = new $creation_context_class;
+  $creation_context->load($creation_context_id);
+}
+
 if ($search_mode) {
   $where["ex_link.level"]    = "= 'object'";
   $where["user_log.date"]    = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
@@ -160,8 +177,16 @@ if ($search_mode) {
   }
 }
 else {
-  $where["ex_link.object_class"] = "= '$reference_class'";
-  $where["ex_link.object_id"]    = "= '$reference_id'";
+  if ($cross_context_class && $cross_context_id) {
+    $where["ex_link.object_class"] = "= '$cross_context_class'";
+    $where["ex_link.object_id"]    = "= '$cross_context_id'";
+
+    $where["ex_class.cross_context_class"] = "= '$cross_context_class'";
+  }
+  else {
+    $where["ex_link.object_class"] = "= '$reference_class'";
+    $where["ex_link.object_id"]    = "= '$reference_id'";
+  }
 
   if ($only_host) {
     $where["ex_link.level"] = " = 'object'";
@@ -190,8 +215,10 @@ foreach ($counts as $_count) {
 
   // Formula results
   $ex_objects_results[$_ex_class_id] = null;
-  if ($_ex_class->_formula_field) {
-    $ex_objects_results[$_ex_class_id] = $_ex_class->getFormulaResult($_ex_class->_formula_field, $where);
+  if ($_ex_class->_formula_field && !$search_mode) {
+    $where_formula = $where;
+    unset($where_formula["ex_class.cross_context_class"]);
+    $ex_objects_results[$_ex_class_id] = $_ex_class->getFormulaResult($_ex_class->_formula_field, $where_formula);
   }
 
   if ($detail < 1) {
@@ -258,7 +285,7 @@ if ($detail <= 0.5) {
     $ex_class_events = array();
 
     foreach (CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
-      if (!$_ex_class->conditional) {
+      if (!$_ex_class->conditional && (!$cross_context_class || $cross_context_class == $_ex_class->cross_context_class)) {
         $_ex_class_creation[] = $_ex_class_id;
       }
     }
@@ -286,16 +313,16 @@ if ($detail <= 0.5) {
   }
 
   foreach ($_ex_class_creation as $_ex_class_id) {
-    if (!isset($ex_class_events["$reference_class/$_ex_class_id"])) {
+    if (!isset($ex_class_events["$creation_context->_class/$_ex_class_id"])) {
       continue;
     }
 
-    $_ex_class_events = $ex_class_events["$reference_class/$_ex_class_id"];
+    $_ex_class_events = $ex_class_events["$creation_context->_class/$_ex_class_id"];
 
     // TODO canCreateNew
-    if ($reference) {
+    if ($creation_context) {
       foreach ($_ex_class_events as $_id => $_ex_class_event) {
-        if (!$_ex_class_event->checkConstraints($reference)) {
+        if (!$_ex_class_event->checkConstraints($creation_context)) {
           unset($_ex_class_events[$_id]);
         }
       }
@@ -339,23 +366,26 @@ ksort($ex_objects);
 
 // Création du template
 $smarty = new CSmartyDP("modules/forms");
-$smarty->assign("reference_class", $reference_class);
-$smarty->assign("reference_id",    $reference_id);
-$smarty->assign("reference",       $reference);
-$smarty->assign("ex_objects",      $ex_objects);
-$smarty->assign("ex_objects_counts", $ex_objects_counts);
-$smarty->assign("ex_objects_results", $ex_objects_results);
-$smarty->assign("limit",           $limit);
-$smarty->assign("step",            $step);
-$smarty->assign("total",           $total);
+$smarty->assign("reference_class",     $reference_class);
+$smarty->assign("reference_id",        $reference_id);
+$smarty->assign("cross_context_class", $cross_context_class);
+$smarty->assign("cross_context_id",    $cross_context_id);
+$smarty->assign("creation_context",    $creation_context);
+$smarty->assign("reference",           $reference);
+$smarty->assign("ex_objects",          $ex_objects);
+$smarty->assign("ex_objects_counts",   $ex_objects_counts);
+$smarty->assign("ex_objects_results",  $ex_objects_results);
+$smarty->assign("limit",               $limit);
+$smarty->assign("step",                $step);
+$smarty->assign("total",               $total);
 $smarty->assign("ex_classes_creation", $ex_classes_creation);
-$smarty->assign("ex_classes",      CExClass::$_list_cache);
-$smarty->assign("detail",          $detail);
-$smarty->assign("ex_class_id",     $ex_class_id);
-$smarty->assign("target_element",  $target_element);
-$smarty->assign("other_container", $other_container);
-$smarty->assign("print",           $print);
-$smarty->assign("start",           $start);
-$smarty->assign("search_mode",     $search_mode);
-$smarty->assign("readonly",        $readonly);
+$smarty->assign("ex_classes",          CExClass::$_list_cache);
+$smarty->assign("detail",              $detail);
+$smarty->assign("ex_class_id",         $ex_class_id);
+$smarty->assign("target_element",      $target_element);
+$smarty->assign("other_container",     $other_container);
+$smarty->assign("print",               $print);
+$smarty->assign("start",               $start);
+$smarty->assign("search_mode",         $search_mode);
+$smarty->assign("readonly",            $readonly);
 $smarty->display("inc_list_ex_object.tpl");

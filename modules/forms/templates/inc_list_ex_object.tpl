@@ -7,15 +7,30 @@
 
 ExObject.refreshSelf['{{$self_guid}}'] = function(start){
   start = start || 0;
-  var options = {start: start};
+  var options = {
+    start: start,
+    readonly: {{$readonly|ternary:1:0}}
+  };
+
   var form = getForm('filter-ex_object');
   
   if (form) {
     options = Object.extend(getForm('filter-ex_object').serialize(true), {
       start: start, 
-      a: 'ajax_list_ex_object'
+      a: 'ajax_list_ex_object',
+      readonly: {{$readonly|ternary:1:0}}
     });
   }
+
+  {{if $cross_context_class && $cross_context_id}}
+    options.cross_context_class = '{{$cross_context_class}}';
+    options.cross_context_id    = '{{$cross_context_id}}';
+  {{/if}}
+
+  {{if $creation_context && $creation_context->_id}}
+    options.creation_context_class = '{{$creation_context->_class}}';
+    options.creation_context_id    = '{{$creation_context->_id}}';
+  {{/if}}
   
   ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', '{{$target_element}}', '{{$detail}}', '{{$ex_class_id}}', options);
 };
@@ -70,5 +85,10 @@ ExObject.refreshSelf['{{$self_guid}}'] = function(start){
   
 {{* NO DETAIL *}}
 {{else}}
+  {{if $cross_context_class && $cross_context_id}}
+    <div class="small-info">
+      Seuls les formulaires paramétrés en <em>Type de contexte transversal "{{tr}}{{$cross_context_class}}{{/tr}}"</em> sont affichés
+    </div>
+  {{/if}}
   {{mb_include module=forms template=inc_list_ex_object_detail_0}}
 {{/if}}

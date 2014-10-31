@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage soins
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 $sejour_id    = CValue::get("sejour_id");
@@ -32,6 +32,8 @@ $prescription_sejour->loadLinesElementImportant();
 
 $patient = $sejour->loadRefPatient();
 $patient->countINS();
+$patient->loadRefsNotes();
+
 $sejour->loadRefsOperations();
 $sejour->loadRefCurrAffectation();
 

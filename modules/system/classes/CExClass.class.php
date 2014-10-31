@@ -19,7 +19,8 @@ class CExClass extends CMbObject {
   public $conditional;
   public $group_id;
   public $native_views;
-  
+  public $cross_context_class;
+
   public $pixel_positionning;
 
   /** @var CExClassField[] */
@@ -134,11 +135,12 @@ class CExClass extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["name"]         = "str notNull seekable";
-    $props["conditional"]  = "bool notNull default|0";
-    $props["pixel_positionning"] = "bool notNull default|0";
-    $props["group_id"]     = "ref class|CGroups";
-    $props["native_views"] = "set vertical list|".implode("|", array_keys(self::$_native_views));
+    $props["name"]                = "str notNull seekable";
+    $props["conditional"]         = "bool notNull default|0";
+    $props["pixel_positionning"]  = "bool notNull default|0";
+    $props["group_id"]            = "ref class|CGroups";
+    $props["native_views"]        = "set vertical list|" . implode("|", array_keys(self::$_native_views));
+    $props["cross_context_class"] = "enum list|CPatient";
     return $props;
   }
 

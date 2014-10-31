@@ -70,6 +70,13 @@ Main.add(function(){
               <td colspan="2"></td>
             </tr>
           {{/if}}
+
+          <tr>
+            <td colspan="2"></td>
+
+            <th>{{mb_label object=$object field=cross_context_class}}</th>
+            <td>{{mb_field object=$object field=cross_context_class emptyLabel=" "}}</td>
+          </tr>
           
           <tr>
             <td colspan="2" style="vertical-align: bottom; text-align: right;">

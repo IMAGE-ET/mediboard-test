@@ -61,7 +61,7 @@ refreshFiches = function(sejour_id) {
         {{$context}}
       {{else}}
         <select name="context" onchange="loadConstantesMedicales($V(this));">
-          <option value="all" {{if $all_contexts}}selected="selected"{{/if}}>Tous les contextes</option> 
+          <option value="all" {{if $all_contexts}} selected {{/if}}>Tous les contextes du patient</option>
           {{foreach from=$list_contexts item=curr_context}}
             <option value="{{$curr_context->_guid}}" 
             {{if !$all_contexts && $curr_context->_guid == $context->_guid}}selected="selected"{{/if}}
@@ -93,7 +93,10 @@ refreshFiches = function(sejour_id) {
   {{if !$_context}}
     {{assign var=_context value=$patient}}
   {{/if}}
-  
+
+  {{* Contexte de la page  : $current_context *}}
+  {{* Contexte sélectionné : $_context *}}
+
   <script type="text/javascript">
     Main.add(function () {
       Control.Tabs.create("surveillance-tab", true, {
@@ -104,13 +107,21 @@ refreshFiches = function(sejour_id) {
             
             case "tab-ex_class-list":
               ExObject.loadExObjects(
-                '{{$_context->_class}}', 
-                '{{$_context->_id}}', 
+                '{{$_context->_class}}',
+                '{{$_context->_id}}',
                 'tab-ex_class-list', 
                 0, 
                 null, 
                 {
-                  readonly: {{$_readonly|ternary:1:0}}
+                  readonly: {{$_readonly|ternary:1:0}},
+                  creation_context_class: "{{$current_context->_class}}",
+                  creation_context_id:    "{{$current_context->_id}}"
+
+                  {{if $_context instanceof CPatient}}
+                  ,
+                  cross_context_class: "{{$_context->_class}}",
+                  cross_context_id:    "{{$_context->_id}}"
+                  {{/if}}
                 }
               );
               break;
