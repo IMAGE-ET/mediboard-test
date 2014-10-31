@@ -1574,26 +1574,24 @@ class CStoredObject extends CModelObject {
 
         return $msg;
       }
-      
+
+      $object_id = $object->_id;
       $object->_mergeDeletion = true;
       if ($msg = $object->delete()) {
         return $msg;
       }
-    }
 
-    // If external IDs are available, we save old objects' id as external IDs
-    // This must not be done after the objects deletion !
-    if (CModule::getInstalled("dPsante400")) {
-      foreach ($objects as $object) {
+      // If external IDs are available, we save old objects' id as external IDs
+      if (CModule::getInstalled("dPsante400")) {
         $idex = new CIdSante400;
-        $idex->tag = "merged";
         $idex->setObject($this);
-        $idex->id400 = $object->_id;
+        $idex->tag         = "merged";
+        $idex->id400       = $object_id;
         $idex->last_update = CMbDT::dateTime();
         $idex->store();
       }
     }
-    
+
     // Trigger after event
     $this->notify("AfterMerge");
     
