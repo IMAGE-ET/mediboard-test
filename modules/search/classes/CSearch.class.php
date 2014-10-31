@@ -173,7 +173,14 @@ class CSearch {
     $query = ($object_class) ?
       "SELECT * FROM `search_indexing` WHERE `object_class` = '$object_class' ORDER BY `type`, `search_indexing_id` LIMIT $limit"
       :
-      "SELECT * FROM `search_indexing` ORDER BY `object_class` ,`type`, `search_indexing_id` LIMIT $limit";
+      "SELECT * FROM `search_indexing` ORDER BY `object_class` ,
+                                                CASE `type`
+                                                  WHEN 'create' THEN '1_create'
+                                                  WHEN 'store'  THEN '2_store'
+                                                  WHEN 'delete' THEN '3_delete'
+                                                  END,
+                                                `search_indexing_id`
+                                                LIMIT $limit";
     return $ds->loadList($query);
   }
 
