@@ -30,6 +30,7 @@ foreach ($files as $_file) {
 }
 
 $where["file_type"] = " LIKE '%svg%' ";
+/** @var CFile[] $files_svg */
 $files_svg = $file->loadList($where, "file_date DESC");
 foreach ($files_svg as $_file) {
   $_file->loadTargetObject();
