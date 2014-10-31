@@ -500,12 +500,14 @@ class COperation extends CCodable implements IPatientRelated {
     $sejour = $this->loadRefSejour();
     $this->loadRefPlageOp();
 
-    if ($this->plageop_id !== null && !$sejour->entree_reelle) {
-      $date = CMbDT::date($this->_datetime);
-      $entree = CMbDT::date($sejour->entree_prevue);
-      $sortie = CMbDT::date($sejour->sortie_prevue);
-      if (!CMbRange::in($date, $entree, $sortie)) {
-         $msg .= "Intervention du $date en dehors du séjour du $entree au $sortie";
+    if ($this->_check_bounds) {
+      if ($this->plageop_id !== null && !$sejour->entree_reelle) {
+        $date   = CMbDT::date($this->_datetime);
+        $entree = CMbDT::date($sejour->entree_prevue);
+        $sortie = CMbDT::date($sejour->sortie_prevue);
+        if (!CMbRange::in($date, $entree, $sortie)) {
+          $msg .= "Intervention du $date en dehors du séjour du $entree au $sortie";
+        }
       }
     }
 

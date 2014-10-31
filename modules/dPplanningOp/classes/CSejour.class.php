@@ -171,7 +171,6 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_jour_op = array();
 
   // Behaviour fields
-  public $_check_bounds  = true;
   public $_en_mutation;
   public $_unique_lit_id;
   public $_no_synchro;

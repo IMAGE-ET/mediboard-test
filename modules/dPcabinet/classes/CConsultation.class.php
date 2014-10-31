@@ -460,19 +460,19 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
 
     $this->completeField("sejour_id", "plageconsult_id");
 
-    if ($this->sejour_id && !$this->_forwardRefMerging) {
-      $this->loadRefPlageConsult();
-      $sejour = $this->loadRefSejour();
+    if ($this->_check_bounds) {
+      if ($this->sejour_id && !$this->_forwardRefMerging) {
+        $this->loadRefPlageConsult();
+        $sejour = $this->loadRefSejour();
 
-      if (
-          $sejour->type != "consult" &&
+        if ($sejour->type != "consult" &&
           ($this->_date < CMbDT::date($sejour->entree) || CMbDT::date($this->_date) > $sejour->sortie)
-      ) {
-        $msg .= "Consultation en dehors du séjour<br />";
-        return $msg . parent::check();
+        ) {
+          $msg .= "Consultation en dehors du séjour<br />";
+          return $msg . parent::check();
+        }
       }
     }
-
 
     /** @var self $old */
     $old = $this->_old;
