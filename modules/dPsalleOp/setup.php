@@ -1613,6 +1613,16 @@ class CSetupdPsalleOp extends CSetup {
 
     $this->makeRevision('0.63');
     $this->addPrefQuery("default_salles_id", "{}");
-    $this->mod_version = '0.64';
+    $this->makeRevision('0.64');
+
+    $query = "ALTER TABLE `daily_check_list_type`
+                ADD `type` ENUM ('salle','op','preop') NOT NULL DEFAULT 'salle';";
+    $this->addQuery($query);
+    $query = "UPDATE `daily_check_list_type`
+                SET `type` = 'op'
+                WHERE `object_class` = 'CBlocOperatoire'";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.65';
   }
 }
