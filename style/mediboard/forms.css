@@ -764,6 +764,10 @@ button.pause:before, a.button.pause:before {
   content: url(images/buttons/pause.png);
 }
 
+button.media_stop:before, a.button.media_stop:before {
+  content: url(images/buttons/media_stop.png);
+}
+
 button.comment:before, a.button.comment:before {
   content: url(images/buttons/comment.png);
 }

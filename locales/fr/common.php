@@ -114,6 +114,7 @@ $locales['CPlageHoraire-collision_keys'] = 'La classe \'%s\' qui dérive de CPlag
 $locales['CSS-cache-ok'] = 'Cache de CSS vidé (%d fichiers)';
 $locales['Call'] = 'Appel';
 $locales['Cancel'] = 'Annuler';
+$locales['Cancel event'] = 'Annuler l\'événement';
 $locales['Cancelled'] = 'Annulé';
 $locales['Category'] = 'Catégorie';
 $locales['Change'] = 'Changer';
