@@ -1,5 +1,5 @@
 /**
- * $Id$
+ * Transformation ruleset
  *
  * @category EAI
  * @package  Mediboard
@@ -20,12 +20,14 @@ EAITransformationRuleSet = {
     return onSubmitFormAjax(form, Control.Modal.close);
   },
 
-  onSelect: function(transformation_ruleset_id, selected_tr) {
-
-  },
-
   refreshList: function() {
     new Url("eai", "ajax_refresh_list_transformation_ruleset")
       .requestUpdate("list-transformation-ruleset");
+  },
+
+  refreshTransformationRuleList : function (transformation_ruleset_id) {
+    new Url("eai", "ajax_refresh_list_transformation_rules")
+      .addParam("transformation_ruleset_id", transformation_ruleset_id)
+      .requestUpdate("transformation_rules");
   }
 }

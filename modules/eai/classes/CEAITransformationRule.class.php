@@ -93,4 +93,18 @@ class CEAITransformationRule extends CMbObject {
 
     return $backProps;
   }
+
+  /**
+   * @see parent::store
+   */
+  function store() {
+    if (!$this->_id) {
+      $transf_rule = new CEAITransformationRule();
+      $transf_rule->eai_transformation_ruleset_id = $this->eai_transformation_ruleset_id;
+
+      $this->rank = $transf_rule->countMatchingList() + 1;
+    }
+
+    return parent::store();
+  }
 }

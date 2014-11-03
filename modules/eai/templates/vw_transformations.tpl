@@ -19,10 +19,10 @@
 
 <table class="main tbl">
   <tr>
-      <th colspan="6" class="title">
-          {{tr}}CEAITransformationRuleSet.all{{/tr}}
-        </th>
-    </tr>
+    <th colspan="6" class="title">
+        {{tr}}CEAITransformationRuleSet.all{{/tr}}
+      </th>
+  </tr>
   <tr>
     <th></th>
     <th class="category">
@@ -38,3 +38,9 @@
     {{mb_include template=inc_list_transformation_ruleset}}
   </tbody>
 </table>
+
+<br/>
+<hr />
+<br/>
+
+<div id="transformation_rules"></div>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Edit transformaiton ruleset EAI
+ * View transformation rules EAI
  *
  * @category EAI
  * @package  Mediboard
@@ -16,8 +16,10 @@ $transformation_ruleset_id = CValue::getOrSession("transformation_ruleset_id");
 
 $transf_ruleset = new CEAITransformationRuleSet();
 $transf_ruleset->load($transformation_ruleset_id);
+$transf_rules = $transf_ruleset->loadRefsEAITransformationRules();
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("transf_ruleset", $transf_ruleset);
-$smarty->display("inc_edit_transformation_ruleset.tpl");
+$smarty->assign("transf_rules"  , $transf_rules);
+$smarty->display("inc_list_transformation_rules.tpl");

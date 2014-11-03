@@ -24,6 +24,9 @@ class CEAITransformationRuleSet extends CMbObject {
   public $name;
   public $description;
 
+  // Form fields
+  public $_ref_eai_transformation_rules;
+
   // Counts
   /** @var int */
   public $_count_transformation_rules;
@@ -70,6 +73,15 @@ class CEAITransformationRuleSet extends CMbObject {
     $backProps["eai_transformation_rules"] = "CEAITransformationRule eai_transformation_ruleset_id";
 
     return $backProps;
+  }
+
+  /**
+   * Load rules
+   *
+   * @return CEAITransformationRule[]
+   */
+  function loadRefsEAITransformationRules() {
+    return $this->_ref_eai_transformation_rules = $this->loadBackRefs("eai_transformation_rules", array("rank ASC"));
   }
 
   /**

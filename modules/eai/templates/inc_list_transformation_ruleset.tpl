@@ -15,10 +15,10 @@
       <button class="button edit notext compact" onclick="EAITransformationRuleSet.edit('{{$_transformation_ruleset->_id}}');"></button>
     </td>
     <td class="text compact">
-      <a href="#" onclick="EAITransformationRuleSet.onSelect('{{$_transformation_ruleset->_id}}', this.up('tr'));">
-        {{$_transformation_ruleset->name}}
+      <a href="#" onclick="EAITransformationRuleSet.refreshTransformationRuleList('{{$_transformation_ruleset->_id}}', this.up('tr'));">
+        {{mb_value object=$_transformation_ruleset field="name"}}
       </a>
-      <span>{{$_transformation_ruleset->description}}</span>
+      <span>{{mb_value object=$_transformation_ruleset field="description"}}</span>
     </td>
     <td>{{mb_value object=$_transformation_ruleset field="_count_active_transformation_rules"}}</td>
     <td>{{mb_value object=$_transformation_ruleset field="_count_inactive_transformation_rules"}}</td>
