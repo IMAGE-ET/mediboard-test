@@ -251,7 +251,7 @@ class CSearch {
       $datum_to_index["date"]        = CMbDT::format(null, "%Y/%m/%d %H:%M:%S");
       $datum_to_index["patient_id"]  = '';
       $datum_to_index["function_id"] = '';
-      $datum_to_index["group_id"]    = $datum['group_id'];
+      $datum_to_index["group_id"]    = '';
     }
     return $datum_to_index;
   }

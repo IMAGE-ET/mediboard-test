@@ -132,7 +132,7 @@ class CSearchObjectHandler extends CMbObjectHandler {
    */
   static function requesthandler(CMbObject $object, $type = null) {
     self::checkHandled($object);
-    if ((($object instanceof CConsultation) || ($object instanceof CConsultAnesth))  && !$object->sejour_id) {
+    if ($object instanceof CCompteRendu && !$object->object_id) {
       return false;
     }
 
