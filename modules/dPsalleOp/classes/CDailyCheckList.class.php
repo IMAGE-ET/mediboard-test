@@ -118,10 +118,11 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
    *
    * @param CMbObject $object Object to get the check lists of
    * @param string    $date   The reference date
+   * @param string    $type   type de checklist
    *
    * @return array
    */
-  static function getCheckLists(CMbObject $object, $date) {
+  static function getCheckLists(CMbObject $object, $date, $type = "ouverture_salle") {
     $daily_check_list_type = new CDailyCheckListType();
     $where = array(
       "daily_check_list_type_link.object_class" => "= '$object->_class'",
@@ -129,6 +130,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
       OR
      daily_check_list_type_link.object_id = '$object->_id'",
     );
+    $where["type"] = " = '$type'";
     $ljoin = array(
       "daily_check_list_type_link" => "daily_check_list_type_link.list_type_id = daily_check_list_type.daily_check_list_type_id",
     );

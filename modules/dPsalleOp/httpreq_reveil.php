@@ -172,8 +172,61 @@ if (in_array($type, array("ops", "reveil")) && Cmodule::getActive("dPpersonnel")
   $personnels = $personnel->loadListPers("reveil");
 }
 
+// Vérification de la check list journalière
+$daily_check_lists = array();
+$daily_check_list_types = array();
+$require_check_list = 0;
+$listChirs   = array();
+$listAnesths = array();
+
+if ($type == "reveil" || $type == "preop") {
+  $bloc = new CBlocOperatoire();
+  if (!$bloc->load($bloc_id) && count($listSalles)) {
+    $salle = reset($listSalles);
+    $bloc = $salle->loadRefBloc();
+  }
+  $require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active_salle_reveil") && $date >= CMbDT::date();
+  $type_checklist = $type == "reveil" ? "ouverture_sspi" : "ouverture_preop";
+  if ($require_check_list) {
+    list($check_list_not_validated, $daily_check_list_types, $daily_check_lists) = CDailyCheckList::getCheckLists($bloc, $date, $type_checklist);
+    if ($check_list_not_validated == 0) {
+      $require_check_list = false;
+    }
+  }
+
+  if ($require_check_list) {
+    // Chargement de la liste du personnel pour le reveil
+    if (CModule::getActive("dPpersonnel")) {
+      $type_personnel = array("reveil");
+      if (count($daily_check_list_types)) {
+        $type_personnel = array();
+        foreach ($daily_check_list_types as $check_list_type) {
+          $validateurs = explode("|", $check_list_type->type_validateur);
+          foreach ($validateurs as $validateur) {
+            $type_personnel[] = $validateur;
+          }
+        }
+      }
+      $personnel  = new CPersonnel();
+      $personnels = $personnel->loadListPers(array_unique(array_values($type_personnel)));
+    }
+    $curr_user = CMediusers::get();
+    // Chargement des praticiens
+    $listChirs = $curr_user->loadPraticiens(PERM_DENY);
+    // Chargement des anesths
+    $listAnesths = $curr_user->loadAnesthesistes(PERM_DENY);
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
+
+// Daily check lists
+$smarty->assign("require_check_list"    , $require_check_list);
+$smarty->assign("daily_check_lists"     , $daily_check_lists);
+$smarty->assign("daily_check_list_types", $daily_check_list_types);
+$smarty->assign("listChirs"             , $listChirs);
+$smarty->assign("listAnesths"           , $listAnesths);
 
 $smarty->assign("personnels"              , $personnels);
 $smarty->assign("order_way"               , $order_way);

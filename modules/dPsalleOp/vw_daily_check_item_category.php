@@ -24,7 +24,7 @@ if ($item_category->load($item_category_id)) {
 }
 else {
   $item_category->list_type_id = $list_type_id;
-  $item_category->target_class = $list_type->object_class;
+  $item_category->target_class = $list_type->type == "ouverture_salle" ? "CSalle" : "CBlocOperatoire";
 }
 
 foreach (CDailyCheckList::$_HAS_classes as $_class) {

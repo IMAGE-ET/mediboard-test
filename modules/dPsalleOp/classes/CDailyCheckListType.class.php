@@ -15,9 +15,10 @@
 class CDailyCheckListType extends CMbObject {
   public $daily_check_list_type_id;
 
-  public $object_class;
+  //public $object_class;// @todo REMOVE
   //public $object_id; // @todo REMOVE
   public $group_id;
+  public $type;
   public $title;
   public $type_validateur;
   public $description;
@@ -54,9 +55,11 @@ class CDailyCheckListType extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props['object_class'] = 'enum notNull list|CSalle|CBlocOperatoire default|CSalle';
+    //$props['object_class'] = 'enum notNull list|CSalle|CBlocOperatoire default|CSalle';
     //$props['object_id']    = 'ref class|CMbObject meta|object_class autocomplete';
+
     $props['group_id']     = 'ref notNull class|CGroups';
+    $props['type']         = 'enum notNull list|ouverture_salle|ouverture_sspi|ouverture_preop default|ouverture_salle';
     $props['title']        = 'str notNull';
     $props['type_validateur'] = "set vertical list|chir|anesth|op|op_panseuse|reveil|service|iade|brancardier|sagefemme|manipulateur";
     $props['description']  = 'text';
@@ -120,13 +123,13 @@ class CDailyCheckListType extends CMbObject {
 
     if ($this->_links) {
       $current_links = $this->loadRefTypeLinks();
-      $this->completeField("object_class");
 
-      // Suppression des liens ayant un object class different de $this->object_class ou dont l'ID n'est pas dans la liste
+      // Suppression des liens ayant un object class pas cohérent ou dont l'ID n'est pas dans la liste
       foreach ($current_links as $_link_object) {
         if (
-            $_link_object->object_class != $this->object_class ||
-            !in_array("$_link_object->object_class-$_link_object->object_id", $this->_links)
+          (($this->type == "ouverture_salle" && $_link_object->object_class != "CSalle") ||
+          (($this->type == "ouverture_sspi" || $this->type == "ouverture_preop") && $_link_object->object_class != "CBlocOperatoire"))
+          || !in_array("$_link_object->object_class-$_link_object->object_id", $this->_links)
         ) {
           $_link_object->delete();
         }
@@ -135,9 +138,9 @@ class CDailyCheckListType extends CMbObject {
       // Creation des liens manquants
       foreach ($this->_links as $_object_guid) {
         list($_object_class, $_object_id) = explode("-", $_object_guid);
-
         // Exclude types from other class
-        if ($_object_class !== $this->object_class) {
+        if (($this->type == "ouverture_salle" && $_object_class != "CSalle") ||
+          (($this->type == "ouverture_sspi" || $this->type == "ouverture_preop") && $_object_class != "CBlocOperatoire")) {
           continue;
         }
 
@@ -159,7 +162,7 @@ class CDailyCheckListType extends CMbObject {
    * @return CDailyCheckListTypeLink[]
    */
   function loadRefTypeLinks(){
-    return $this->_ref_type_links = $this->loadBackRefs("daily_check_list_type_links", "object_class, object_id+0");
+    return $this->_ref_type_links = $this->loadBackRefs("daily_check_list_type_links");
   }
 
   /**
@@ -186,32 +189,30 @@ class CDailyCheckListType extends CMbObject {
    */
   static function getListTypesTree(){
     $object = new self();
-
-    $target_classes = CDailyCheckList::getNonHASClasses();
     $group_id = CGroups::loadCurrent()->_id;
 
     $targets = array();
-    $by_class = array();
+    $by_type = array();
 
-    foreach ($target_classes as $_class) {
+    foreach ($object->_specs["type"]->_locales as $type => $trad) {
       /** @var CSalle|CBlocOperatoire $_object */
-      $_object = new $_class;
+      $_object = $type == "ouverture_salle" ?  new CSalle() : new CBlocOperatoire();
       $_targets = $_object->loadGroupList();
       array_unshift($_targets, $_object);
 
-      $targets[$_class] = array_combine(CMbArray::pluck($_targets, "_id"), $_targets);
+      $targets[$type] = array_combine(CMbArray::pluck($_targets, "_id"), $_targets);
 
       $where = array(
-        "object_class" => "= '$_class'",
-        "group_id"     => "= '$group_id'",
+        "type"    => "= '$type'",
+        "group_id"=> "= '$group_id'",
       );
 
-      $by_class[$_class] = $object->loadList($where, "title");
+      $by_type[$type] = $object->loadList($where, "title");
     }
 
     return array(
       $targets,
-      $by_class,
+      $by_type,
     );
   }
 
@@ -222,7 +223,7 @@ class CDailyCheckListType extends CMbObject {
    */
   function duplicate(){
     $checklist = new CDailyCheckListType();
-    $checklist->object_class  = $this->object_class;
+    $checklist->type          = $this->type;
     $checklist->group_id      = $this->group_id;
     $checklist->title         = $this->title." dupliqué";
     $checklist->type_validateur = $this->type_validateur;

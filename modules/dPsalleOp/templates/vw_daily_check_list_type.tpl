@@ -8,18 +8,18 @@ Main.add(Control.Tabs.create.curry("list_type_tabs", true));
   <tr>
     <td style="width: 50%;">
       <ul class="control_tabs" id="list_type_tabs">
-        {{foreach from=$by_class key=_class item=_list_by_object}}
+        {{foreach from=$by_type key=_type item=_list_by_object}}
           <li>
-            <a href="#tab-{{$_class}}">
-              {{tr}}CDailyCheckItemCategory.target_class.{{$_class}}{{/tr}}
+            <a href="#tab-{{$_type}}">
+              {{tr}}CDailyCheckListType.type.{{$_type}}{{/tr}}
             </a>
           </li>
         {{/foreach}}
       </ul>
 
-      {{foreach from=$by_class key=_class item=_lists}}
-        <div id="tab-{{$_class}}" style="display: none;">
-          <a class="button new" href="?m=salleOp&amp;tab=vw_daily_check_list_type&amp;list_type_id=0&amp;target_class={{$_class}}&amp;dialog={{$dialog}}">
+      {{foreach from=$by_type key=_type item=_lists}}
+        <div id="tab-{{$_type}}" style="display: none;">
+          <a class="button new" href="?m=salleOp&amp;tab=vw_daily_check_list_type&amp;list_type_id=0&amp;type={{$_type}}&amp;dialog={{$dialog}}">
             {{tr}}CDailyCheckListType-title-create{{/tr}}
           </a>
 
@@ -77,20 +77,20 @@ Main.add(Control.Tabs.create.curry("list_type_tabs", true));
             <td>{{mb_field object=$list_type field="title"}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$list_type field="object_class"}}</th>
+            <th>{{mb_label object=$list_type field="type"}}</th>
             <td>
-              <select name="object_class" class="str notNull" onchange="$$('.object_id-list').invoke('hide'); $('object_class-'+$V(this)).show();">
-                {{foreach from=$targets key=_class item=_targets}}
-                  <option value="{{$_class}}" {{if $_class == $list_type->object_class}} selected {{/if}}>
-                    {{tr}}CDailyCheckItemCategory.target_class.{{$_class}}{{/tr}}
+              <select name="type" class="str notNull" onchange="$$('.object_id-list').invoke('hide'); $('type_view-'+$V(this)).show();">
+                {{foreach from=$targets key=_type item=_targets}}
+                  <option value="{{$_type}}" {{if $_type == $list_type->type}} selected {{/if}}>
+                    {{tr}}CDailyCheckListType.type.{{$_type}}{{/tr}}
                   </option>
                 {{/foreach}}
               </select>
 
               <input type="hidden" name="_links[dummy]" value="dummy-dummy" />
 
-              {{foreach from=$targets key=_class item=_targets}}
-                <table clas="main layout object_id-list" id="object_class-{{$_class}}" {{if $_class != $list_type->object_class}} style="display: none;" {{/if}}>
+              {{foreach from=$targets key=_type item=_targets}}
+                <table clas="main layout object_id-list" id="type_view-{{$_type}}" {{if $_type != $list_type->type}} style="display: none;" {{/if}}>
                   {{foreach from=$_targets key=_id item=_target}}
                     <tr>
                       <td>

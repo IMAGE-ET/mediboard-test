@@ -12,7 +12,7 @@
 CCanDo::checkAdmin();
 
 $list_type_id = CValue::getOrSession('list_type_id');
-$target_class = CValue::get('target_class');
+$type         = CValue::get('type', "ouverture_salle");
 
 $list_type = new CDailyCheckListType();
 if ($list_type->load($list_type_id)) {
@@ -21,19 +21,14 @@ if ($list_type->load($list_type_id)) {
 }
 else {
   $list_type->group_id = CGroups::loadCurrent()->_id;
-  $list_type->object_class = $target_class;
+  $list_type->type = $type;
 }
 
 $list_type->makeLinksArray();
 
-foreach (CDailyCheckList::$_HAS_classes as $_class) {
-  unset($list_type->_specs["object_class"]->_locales[$_class]);
-}
+list($targets, $by_type) = CDailyCheckListType::getListTypesTree();
 
-list($targets, $by_class) = CDailyCheckListType::getListTypesTree();
-
-foreach ($by_class as $_class => $_list_types) {
-  /** @var CDailyCheckListType[] $_list_types */
+foreach ($by_type as $type => $_list_types) {
   foreach ($_list_types as $_list_type) {
     $_type_links = $_list_type->loadRefTypeLinks();
     foreach ($_type_links as $_type_link) {
@@ -52,6 +47,6 @@ foreach ($targets as $_targets) {
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("list_type", $list_type);
-$smarty->assign("by_class",  $by_class);
+$smarty->assign("by_type",  $by_type);
 $smarty->assign("targets",   $targets);
 $smarty->display("vw_daily_check_list_type.tpl");
