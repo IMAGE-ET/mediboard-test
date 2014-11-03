@@ -31,6 +31,7 @@ $copies = array(
   //  ||       object_class       ||        field       ||      target_field       ||
   array("CConstantesMedicales",     "user_id",            "user_id"),
   array("CAlert",                   "date",               "creation_date"),
+  array("CCompteRendu",             "date",               "creation_date"),
 );
 
 // Ajout des classes de formulaires
