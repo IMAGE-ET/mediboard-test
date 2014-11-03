@@ -145,7 +145,7 @@ for ($i = 0; $i < $nbDays; $i++) {
         $_horsplage->_guid,
         $jour." ".$_horsplage->time_operation,
         $lenght,
-        $_horsplage,
+        CMbString::htmlEntities($_horsplage->_view),
         "3c75ea",
         "horsplage"
       );
@@ -182,7 +182,7 @@ for ($i = 0; $i < $nbDays; $i++) {
   foreach ($conges as $_conge) {
     $libelle = '<h3 style="text-align: center">
     CONGES</h3>
-    <p style="text-align: center">'.$_conge->libelle.'</p>';
+    <p style="text-align: center">'.CMbString::htmlEntities($_conge->libelle).'</p>';
     $event = new CPlanningEvent(
       $_conge->_guid.$jour,
       $jour." 00:00:00",
@@ -211,7 +211,7 @@ for ($i = 0; $i < $nbDays; $i++) {
       $_plage->_guid,
       $jour." ".$_plage->debut,
       CMbDT::minutesRelative($_plage->debut, $_plage->fin),
-      $_plage->libelle,
+      CMbString::htmlEntities($_plage->libelle),
       $_plage->color
     );
     $range->type = "plageconsult";
@@ -308,7 +308,7 @@ for ($i = 0; $i < $nbDays; $i++) {
           $title .= "<span style=\"float:right;\">$nb / $of</span>";
         }
         $title .= "<span style=\"$style\">";
-        $title .= $_consult->_ref_patient->_view . "\n" . $motif;
+        $title .= CMbString::htmlEntities($_consult->_ref_patient->_view) . "\n" . CMbString::htmlEntities($motif);
         $title .= "</span>";
 
         $event = new CPlanningEvent(
