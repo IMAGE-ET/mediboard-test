@@ -84,7 +84,7 @@
     $V(form._assure_pays_naissance_insee, $V(form._pays_naissance_insee));
     $V(form.assure_lieu_naissance, $V(form.lieu_naissance));
     $V(form.assure_profession    , $V(form.profession));
-    $V(form.assure_adresse       , $V(form.adresse))
+    $V(form.assure_adresse       , $V(form.adresse));
   };
 
   confirmCreation = function(oForm) {
