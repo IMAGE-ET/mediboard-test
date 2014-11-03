@@ -90,7 +90,7 @@ Main.add(Control.Tabs.create.curry("list_type_tabs", true));
               <input type="hidden" name="_links[dummy]" value="dummy-dummy" />
 
               {{foreach from=$targets key=_type item=_targets}}
-                <table clas="main layout object_id-list" id="type_view-{{$_type}}" {{if $_type != $list_type->type}} style="display: none;" {{/if}}>
+                <table class="main layout object_id-list" id="type_view-{{$_type}}" {{if $_type != $list_type->type}} style="display: none;" {{/if}}>
                   {{foreach from=$_targets key=_id item=_target}}
                     <tr>
                       <td>
@@ -106,7 +106,7 @@ Main.add(Control.Tabs.create.curry("list_type_tabs", true));
                       </td>
                       <td>
                         {{if $_target->_id}}
-                          <button type="button" class="compact lookup notext" onclick="CheckList.preview('{{$_target->_class}}', '{{$_target->_id}}')">
+                          <button type="button" class="compact lookup notext" onclick="CheckList.preview('{{$_target->_class}}', '{{$_target->_id}}', '{{$_type}}')">
                             {{tr}}Preview{{/tr}}
                           </button>
                         {{/if}}

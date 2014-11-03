@@ -57,6 +57,7 @@ $list_check_lists = $check_list->loadList($where, 'date DESC, object_class, obje
 $count_check_lists = $check_list->countList($where);
 
 foreach ($list_check_lists as $_check_list) {
+  $_check_list->loadRefListType();
   if ($_check_list->_ref_object) {
     $_check_list->_ref_object->loadRefsFwd();
   }

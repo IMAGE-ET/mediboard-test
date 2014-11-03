@@ -60,7 +60,13 @@ changePage = function(start) {
               {{mb_value object=$curr_list field=date}}
             </a>
           </td>
-          <td>{{mb_value object=$curr_list field=object_class}}</td>
+          <td>
+            {{if $curr_list->list_type_id}}
+              {{mb_value object=$curr_list->_ref_list_type field=type}}
+            {{else}}
+              {{mb_value object=$curr_list field=object_class}}
+            {{/if}}
+          </td>
           <td class="text">
             <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_list->_ref_object->_guid}}')">
               {{$curr_list->_ref_object}}
