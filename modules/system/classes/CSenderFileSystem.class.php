@@ -47,7 +47,8 @@ class CSenderFileSystem extends CInteropSender {
   }
   
   function loadRefsExchangesSources() {
-    $this->_ref_exchanges_sources[] = CExchangeSource::get("$this->_guid", "file_system", true, $this->_type_echange, false);
+    $source_fs = CExchangeSource::get("$this->_guid", "file_system", true, $this->_type_echange, false);
+    $this->_ref_exchanges_sources[$source_fs->_guid] = $source_fs;
   }
   
   function read() {

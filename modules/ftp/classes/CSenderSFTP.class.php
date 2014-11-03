@@ -37,7 +37,8 @@ class CSenderSFTP extends CInteropSender {
    * @see parent::loadRefsExchangesSources
    */
   function loadRefsExchangesSources() {
-    $this->_ref_exchanges_sources[] = CExchangeSource::get("$this->_guid", "sftp", true, $this->_type_echange, false);
+    $source_sftp = CExchangeSource::get("$this->_guid", "sftp", true, $this->_type_echange, false);
+    $this->_ref_exchanges_sources[$source_sftp->_guid] = $source_sftp;
   }
 
   /**

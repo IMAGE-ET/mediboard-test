@@ -483,15 +483,16 @@ class CDicomSession extends CMbObject {
    * @return null
    */
   function setActor(CInteropActor $actor) {
+    $source = $actor->getFirstExchangesSources();
     if (get_class($actor) == "CDicomSender" ) {
       $actor->loadRefsExchangesSources();
-      $this->sender = $actor->_ref_exchanges_sources[0]->host . ":" . $actor->_ref_exchanges_sources[0]->port;
+      $this->sender = $source->host . ":" . $source->port;
       $this->receiver = "[SELF]";
       $this->sender_id = $actor->_id;
     }
     elseif (get_class($actor) == "CDicomReceiver" ) {
       $actor->loadRefsExchangesSources();
-      $this->receiver = $actor->_ref_exchanges_sources[0]->host . ":" . $actor->_ref_exchanges_sources[0]->port;
+      $this->receiver = $source->host . ":" . $source->port;
       $this->sender = "[SELF]";
       $this->receiver_id = $actor->_id;
     } 

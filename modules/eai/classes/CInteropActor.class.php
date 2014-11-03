@@ -251,6 +251,20 @@ class CInteropActor extends CMbObject {
   }
 
   /**
+   * Return the fisrt element of exchangesSources
+   *
+   * @return mixed|null
+   */
+  function getFirstExchangesSources() {
+    $this->loadRefsExchangesSources();
+    if (!$this->_ref_exchanges_sources) {
+      return null;
+    }
+
+    return reset($this->_ref_exchanges_sources);
+  }
+
+  /**
    * Sender is reachable ?
    * 
    * @return boolean reachable

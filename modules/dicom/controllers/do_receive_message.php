@@ -60,11 +60,12 @@ CApp::rip();
  */
 function getSession($addr, $port) {
   $dicom_sender = new CDicomSender();
+  /** @var CDicomSender[] $dicom_senders */
   $dicom_senders = $dicom_sender->loadMatchingList();
   $dicom_sender = null;
   foreach ($dicom_senders as $_sender) {
-    $_sender->loadRefsExchangesSources();
-    if ($_sender->_ref_exchanges_sources[0]->host == $addr /*&& $_sender->_ref_exchanges_sources[0]->port == $port*/) {
+    $source = $_sender->getFirstExchangesSources();
+    if ($source->host == $addr /*&& $_sender->_ref_exchanges_sources[0]->port == $port*/) {
       $dicom_sender = $_sender;
       break;
     }

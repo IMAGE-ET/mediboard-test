@@ -626,7 +626,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
       return false;
     }
 
-    $source = $sender_link->_ref_exchanges_sources[0];
+    $source = $sender_link->getFirstExchangesSources();
 
     $path = $filename = $pointer;
     $path = basename($path);

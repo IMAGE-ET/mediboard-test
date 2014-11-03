@@ -9,4 +9,4 @@
  * @link     http://www.mediboard.org
 *}}
 
-{{mb_include module=system template=inc_config_exchange_source source=$actor->_ref_exchanges_sources.0}}
+{{mb_include module=system template=inc_config_exchange_source source=$actor->_ref_exchanges_sources|@reset}}

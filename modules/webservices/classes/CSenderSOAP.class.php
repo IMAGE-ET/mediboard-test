@@ -66,6 +66,7 @@ class CSenderSOAP extends CInteropSender {
    * @return void
    */
   function loadRefsExchangesSources() {
-    $this->_ref_exchanges_sources[] = CExchangeSource::get("$this->_guid", "soap", true, $this->_type_echange, false);
+    $source_soap = CExchangeSource::get("$this->_guid", "soap", true, $this->_type_echange, false);
+    $this->_ref_exchanges_sources[$source_soap->_guid] = $source_soap;
   }
 }
