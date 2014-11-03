@@ -279,12 +279,12 @@ Main.add(function () {
             {{tr}}CConstantesMedicales.delete_all{{/tr}}
           </button>
         {{else}}
-          {{mb_field object=$constantes field=datetime form="edit-constantes-medicales$unique_id" register=true}}
+          {{mb_field object=$constantes field=datetime form="edit-constantes-medicales$tri_rpu" register=true}}
 
           {{if !$constantes->datetime}}
             <script type="text/javascript">
               Main.add(function() {
-                var form = getForm('edit-constantes-medicales{{$unique_id}}');
+                var form = getForm('edit-constantes-medicales{{$tri_rpu}}');
                 form.datetime.value = "now";
                 form.datetime_da.value = "Maintenant";
               });
