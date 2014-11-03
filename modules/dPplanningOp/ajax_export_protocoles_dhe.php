@@ -21,7 +21,6 @@ $chir->load($chir_id);
 $protocole = new CProtocole();
 $protocole->chir_id = $chir_id ? $chir_id : null;
 $protocole->function_id = $function_id ? $function_id : null;
-$protocole->for_sejour = 0;
 
 /** @var CProtocole[] $protocoles */
 $protocoles = $protocole->loadMatchingList("libelle");
@@ -37,6 +36,7 @@ $line = array(
   "Nom du praticien",
   "Prénom du praticien",
   "Motif d'hospitalisation",
+  "Libellé du séjour",
   "Durée d'intervention",
   "Actes CCAM",
   "Type d'hospitalisation",
@@ -66,6 +66,7 @@ foreach ($protocoles as $_protocole) {
     $_protocole->_ref_chir->_user_last_name,
     $_protocole->_ref_chir->_user_first_name,
     $_protocole->libelle,
+    $_protocole->libelle_sejour,
     CMbDT::transform($_protocole->temp_operation, null, "%H:%M"),
     $_protocole->codes_ccam,
     $_protocole->type,
