@@ -13,6 +13,7 @@ CCanDo::checkEdit();
 
 $object_class = CValue::get("object_class");
 $object_id    = CValue::get("object_id");
+$type         = CValue::get("type", "ouverture_salle");
 
 $object = CMbObject::loadFromGuid("$object_class-$object_id");
 
@@ -20,7 +21,7 @@ $object = CMbObject::loadFromGuid("$object_class-$object_id");
 $daily_check_lists = array();
 $daily_check_list_types = array();
 
-list($check_list_not_validated, $daily_check_list_types, $daily_check_lists) = CDailyCheckList::getCheckLists($object, "1970-01-01");
+list($check_list_not_validated, $daily_check_list_types, $daily_check_lists) = CDailyCheckList::getCheckLists($object, "1970-01-01", $type);
 
 $validateur = new CPersonnel();
 $validateur->_ref_user = new CMediusers();
@@ -32,6 +33,6 @@ $listValidateurs = array(
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("daily_check_lists", $daily_check_lists);
-$smarty->assign("listValidateurs", $listValidateurs);
+$smarty->assign("daily_check_lists" , $daily_check_lists);
+$smarty->assign("listValidateurs"   , $listValidateurs);
 $smarty->display("vw_daily_check_list_preview.tpl");

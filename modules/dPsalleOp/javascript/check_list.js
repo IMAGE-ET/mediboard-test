@@ -56,10 +56,11 @@ CheckList = {
     CheckList.urlItemType = url;
   },
 
-  preview: function(object_class, object_id) {
+  preview: function(object_class, object_id, type) {
     var url = new Url("dPsalleOp", 'vw_daily_check_list_preview');
-    url.addParam("object_class", object_class);
-    url.addParam("object_id",    object_id);
+    url.addParam("object_class" , object_class);
+    url.addParam("object_id"    , object_id);
+    url.addParam("type"         , type);
     url.requestModal(900, 700);
   }
 };
