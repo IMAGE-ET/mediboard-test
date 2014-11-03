@@ -1917,6 +1917,27 @@ class CSetupsystem extends CSetup {
               WHERE `aggregate` > '10';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.74";
+    $this->makeRevision("1.1.74");
+    $query = "ALTER TABLE `ex_class`
+                ADD `cross_context_class` ENUM ('CPatient'),
+                DROP `host_class`,
+                DROP `event`,
+                DROP `disabled`,
+                DROP `required`,
+                DROP `unicity`;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_constraint`
+                DROP `ex_class_id`;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_field`
+                DROP `ex_class_id`,
+                DROP `report_level`;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_host_field`
+                DROP `ex_class_id`,
+                DROP `host_type`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.75";
   }
 }
