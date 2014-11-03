@@ -288,8 +288,11 @@ for ($i = 0; $i < $nbDays; $i++) {
           if ($_consult->premiere) {
             $color = "#faa";
           }
-          if ($_consult->derniere) {
+          elseif ($_consult->derniere) {
             $color = "#faf";
+          }
+          elseif ($_consult->sejour_id) {
+            $color = "#CFFFAD";
           }
         }
 
