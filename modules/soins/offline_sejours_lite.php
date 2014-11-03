@@ -110,6 +110,10 @@ $delay_trans_obs_consult = 3;
 // Constantes des 12 dernières heures
 $where_cste = array("datetime" => "BETWEEN '" . CMbDT::subDateTime("12:00:00", $datetime_avg) . "' AND '$datetime_avg'");
 
+CPrescriptionLine::$_offline_lite = true;
+CPrescriptionLineMix::$_offline_lite = true;
+CPrescription::$_offline_lite = true;
+
 foreach ($sejours as $_sejour) {
   $patient = $_sejour->loadRefPatient();
 
@@ -182,7 +186,6 @@ foreach ($sejours as $_sejour) {
 
 
   // Constantes
-  //$patient->loadRefConstantesMedicales();
   $cstes = array_reverse($_sejour->loadListConstantesMedicales($where_cste));
   CStoredObject::massLoadFwdRef($cstes, "user_id");
   foreach ($cstes as $_cste) {

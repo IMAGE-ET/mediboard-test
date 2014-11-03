@@ -88,7 +88,7 @@
         {{foreach from=$_moments item=_moment name=moment}}
 
           {{assign var="text_align" value="right"}}
-          {{if $_date < $now_date || ($_date <= $now_date && $moments_reverse.$_moment < $moments_reverse.$current_moment)}}
+          {{if $_date < $now_date || ($_date <= $now_date && $_moment < $current_moment)}}
             {{assign var="text_align" value="left"}}
           {{/if}}
 
@@ -260,7 +260,7 @@
         {{foreach from=$dates_plan_soin item=_moments key=_date}}
           {{foreach from=$_moments item=_moment name=moment}}
             {{assign var="text_align" value="right"}}
-            {{if $_date < $now_date || ($_date <= $now_date && $moments_reverse.$_moment < $moments_reverse.$current_moment)}}
+            {{if $_date < $now_date || ($_date <= $now_date && $_moment < $current_moment)}}
               {{assign var="text_align" value="left"}}
             {{/if}}
 

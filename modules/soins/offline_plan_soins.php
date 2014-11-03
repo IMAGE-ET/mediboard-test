@@ -87,7 +87,7 @@ $moments = array();
 $dates_plan_soin = array();
 $periods = "";
 
-while ($date_temp < $date_max) {
+while ($date_temp <= $date_max) {
   $dates[$date_temp] = $date_temp;
   $date_temp = CMbDT::date("+1 day", $date_temp);
 }
@@ -134,8 +134,6 @@ switch ($freq_poste) {
     break;
 }
 
-$moments_reverse = array_flip($moments);
-
 $dates_postes = array();
 foreach ($dates as $_date) {
   $dates_postes[$_date] = CAdministration::getTimingPlanSoins($_date, $postes, $periods, 15, 15);
@@ -176,6 +174,10 @@ foreach ($sejours as $_sejour) {
     continue;
   }
 
+  CStoredObject::massLoadBackRefs($prescription->_ref_prescription_lines, "prise_posologie", "moment_unitaire_id, prise_posologie_id");
+  CStoredObject::massLoadBackRefs($prescription->_ref_prescription_lines_element, "prise_posologie", "moment_unitaire_id, prise_posologie_id");
+  CPrescription::massLoadAdministrations($prescription, $dates);
+
   $prescription->calculAllPlanifSysteme();
   $prescription->calculPlanSoin($dates, 0, null, null, null, true);
 
@@ -184,6 +186,8 @@ foreach ($sejours as $_sejour) {
     unset ($sejours[$_sejour->_id]);
     continue;
   }
+
+  CPrescription::massCountPlanifications($prescription);
 
   $_sejour->loadRefCurrAffectation($now);
 
@@ -200,7 +204,6 @@ foreach ($sejours as $_sejour) {
     $line->_quantity_by_date_moment = array();
     $line->_administrations_moment  = array();
 
-    $line->countPlanifications();
     $line->loadRefLogSignee();
     $line->loadActiveDates();
 
@@ -256,7 +259,6 @@ foreach ($sejours as $_sejour) {
     $line->_prises_prevues_moment = array();
     $line->loadRefPraticien();
     $line->loadRefLogSignaturePrat();
-    $line->countPlanifications();
     $line->loadActiveDates();
 
     if (count($line->_prises_prevues)) {
@@ -297,7 +299,6 @@ foreach ($sejours as $_sejour) {
     $line->_administrations_moment  = array();
 
     $line->loadRefLogSignee();
-    $line->countPlanifications();
     $line->loadActiveDates();
 
     if (count($line->_quantity_by_date)) {
@@ -351,7 +352,6 @@ foreach ($sejours as $_sejour) {
     foreach ($prescription->_ref_lines_inscriptions as $lines_by_type) {
       foreach ($lines_by_type as $line) {
         $line->loadRefLogSignee();
-        $line->countPlanifications();
 
         $line->_quantity_by_date_moment = array();
         $line->_administrations_moment  = array();
@@ -413,7 +413,6 @@ $smarty->assign("moments"        , $moments);
 $smarty->assign("mode_dupa"      , $mode_dupa);
 $smarty->assign("initiales"      , $initiales);
 $smarty->assign("current_moment" , $current_moment);
-$smarty->assign("moments_reverse", $moments_reverse);
 $smarty->assign("empty_lines"    , $empty_lines);
 $smarty->assign("dates_plan_soin", $dates_plan_soin);
 $smarty->assign("colspan"        , $colspan);
