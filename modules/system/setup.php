@@ -350,6 +350,32 @@ class CSetupsystem extends CSetup {
 
     return true;
   }
+  
+  protected function removeDuplicatePreferences(){
+    $ds = $this->ds;
+
+    // Changement des preferences groupées par user_id
+    $query = "SELECT 
+                COUNT(*) AS `total`, 
+                `key`,
+                CAST(GROUP_CONCAT(`pref_id` SEPARATOR ',') AS CHAR) AS `pref_ids`
+                FROM `user_preferences` 
+                WHERE `user_id` IS NULL 
+                GROUP BY `key` 
+                HAVING `total` > 1;";
+    $list = $ds->loadList($query);
+
+    foreach ($list as $_row) {
+      $_pref_ids = explode(",", $_row["pref_ids"]);
+      array_pop($_pref_ids);
+      
+      $query = "DELETE FROM `user_preferences`
+                    WHERE `pref_id` ".$ds->prepareIn($_pref_ids);
+      $ds->exec($query);
+    }
+
+    return true;
+  }
 
   function __construct() {
     parent::__construct();
@@ -1917,6 +1943,27 @@ class CSetupsystem extends CSetup {
               WHERE `aggregate` > '10';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.74";
+    $this->makeRevision("1.1.74");
+    $query = "ALTER TABLE `ex_class`
+                ADD `cross_context_class` ENUM ('CPatient'),
+                DROP `host_class`,
+                DROP `event`,
+                DROP `disabled`,
+                DROP `required`,
+                DROP `unicity`;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_constraint`
+                DROP `ex_class_id`;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_field`
+                DROP `ex_class_id`,
+                DROP `report_level`;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_host_field`
+                DROP `ex_class_id`,
+                DROP `host_type`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.75";
   }
 }
