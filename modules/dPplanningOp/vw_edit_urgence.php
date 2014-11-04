@@ -41,6 +41,7 @@ $min_urgence  = CValue::get("min_urgence");
 $date_urgence = CValue::get("date_urgence");
 $salle_id     = CValue::get("salle_id");
 $patient_id   = CValue::get("pat_id");
+$grossesse_id = CValue::get("grossesse_id");
 
 // L'utilisateur est-il un praticien
 $user = $chir = CMediusers::get();
@@ -81,6 +82,14 @@ if ($sejour_id && !$operation_id) {
   $sejour->_ref_praticien->canDo();
   $prat    = $sejour->_ref_praticien;
   $patient = $sejour->_ref_patient;
+}
+
+$grossesse = new CGrossesse();
+if ($grossesse_id && !$sejour_id && !$operation_id) {
+  $grossesse->load($grossesse_id);
+  $sejour->grossesse_id = $grossesse->_id;
+  $sejour->_ref_grossesse = $grossesse;
+  $patient = $grossesse->loadRefParturiente();
 }
 
 // On récupère l'opération
