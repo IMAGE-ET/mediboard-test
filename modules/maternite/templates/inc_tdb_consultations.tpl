@@ -8,21 +8,47 @@
  * @version    $Revision$
  *}}
 
-<table class="tbl">
+<table class="tbl" id="consultations_tab">
   <tr>
-    <th class="title" colspan="10">{{$listConsults|@count}} Consultation(s) le {{$date|date_format:$conf.date}}</th>
+    <th class="title" colspan="10">
+      <button style="float:left;" class="new notext" onclick="Tdb.editConsult();">{{tr}}CConsultation-title-create{{/tr}}</button>
+      {{if $listConsults|@count}}{{$listConsults|@count}}{{else}}Aucune{{/if}} Consultation{{if $listConsults|@count > 1}}s{{/if}} le {{$date|date_format:$conf.date}}
+    </th>
   </tr>
   <tr>
     <th class="narrow">{{mb_title class=CConsultation field=heure}}</th>
     <th>{{mb_title class=CConsultation field=_praticien_id}}</th>
     <th>{{mb_title class=CGrossesse field=parturiente_id}}</th>
+    <th class="narrow">{{tr}}Action{{/tr}}</th>
   </tr>
-
   {{foreach from=$listConsults item=_consult}}
     <tr>
-      <td>{{mb_value object=$_consult field=heure}}</td>
-      <td>{{mb_value object=$_consult->_ref_plageconsult field=chir_id}}</td>
-      <td>{{mb_value object=$_consult->_ref_grossesse field=parturiente_id}}</td>
+      <td>
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}');">
+          {{mb_value object=$_consult field=heure}}
+        </span>
+        {{if $_consult->chrono == 16}}
+          <button class="tick notext">Notifier l'arrivée</button>
+        {{elseif $_consult->chrono == 32}}
+          <button class="tick_cancel notext">Annuler l'arrivée</button>
+        {{/if}}
+      </td>
+      <td>
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_ref_plageconsult->_ref_chir->_guid}}');">
+          {{mb_value object=$_consult->_ref_plageconsult field=chir_id}}
+        </span>
+      </td>
+      <td><span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_ref_grossesse->_ref_parturiente->_guid}}');">{{mb_value object=$_consult->_ref_grossesse field=parturiente_id}}</span></td>
+      <td>
+        <button class="edit notext" onclick="Tdb.editConsult('{{$_consult->_id}}');"></button>
+        <button class="new notext" onclick="Tdb.editConsult(0, '{{$_consult->_ref_grossesse->parturiente_id}}');">Nouvelle consultation</button>
+        <button class="new notext" onclick="Tdb.editSejour(0, '{{$_consult->_ref_grossesse->_id}}','{{$_consult->_ref_grossesse->parturiente_id}}');">Nouveau séjour</button>
+        <button class="new notext" onclick="Tdb.editAccouchement(0, '{{$_consult->sejour_id}}','{{$_consult->_ref_grossesse->_id}}', '{{$_consult->_ref_grossesse->parturiente_id}}');">Nouvel accouchement</button>
+      </td>
+    </tr>
+  {{foreachelse}}
+    <tr>
+      <td colspan="4" class="empty">{{tr}}CConsultation.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

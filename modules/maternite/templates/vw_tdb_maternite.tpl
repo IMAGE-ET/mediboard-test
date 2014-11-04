@@ -12,69 +12,35 @@
 
 {{mb_script module="cabinet" script="edit_consultation"}}
 {{mb_script module="planningOp" script="operation"}}
-
 {{mb_script module="soins" script="plan_soins"}}
+{{mb_script module="maternite" script="tdb"}}
+{{mb_script module="dPpatients" script="pat_selector"}}
+{{mb_script module="maternite" script="grossesse"}}
 
-{{if "dPprescription"|module_active}}
-  {{mb_script module="prescription" script="prescription"}}
-  {{mb_script module="prescription" script="element_selector"}}
-{{/if}}
-
-{{if "dPmedicament"|module_active}}
-  {{mb_script module="medicament" script="medicament_selector"}}
-  {{mb_script module="medicament" script="equivalent_selector"}}
-{{/if}}
-
-{{if "messagerie"|module_active}}
-  {{mb_script module="messagerie" script="UserEmail"}}
-{{/if}}
-
-<script type="text/javascript">
-
+<script>
   Consultation.useModal();
   Operation.useModal();
-
-  initListGrossesses = function() {
-    var url = new Url("maternite", "ajax_tdb_grossesses");
-    url.addParam("date", '{{$date_tdb}}');
-    url.periodicalUpdate("grossesses", { frequency: 120 } );
-  };
-
-  initListConsultations = function() {
-    var url = new Url("maternite", "ajax_tdb_consultations");
-    url.addParam("date", '{{$date_tdb}}');
-    url.periodicalUpdate("consultations", { frequency: 120 } );
-  };
-
-  initListHospitalisations = function() {
-    var url = new Url("maternite", "ajax_tdb_hospitalisations");
-    url.addParam("date", '{{$date_tdb}}');
-    url.periodicalUpdate("hospitalisations", { frequency: 120 } );
-  };
-
-  initListAccouchements = function() {
-    var url = new Url("maternite", "ajax_tdb_accouchements");
-    url.addParam("date", '{{$date_tdb}}');
-    url.periodicalUpdate("accouchements", { frequency: 120 } );
+  Grossesse.afterEditGrossesse = function() {
+    Control.Modal.close();
   };
 
   Main.add(function () {
-    initListGrossesses();
-    initListConsultations();
-    initListHospitalisations();
-    initListAccouchements();
     ViewPort.SetAvlHeight("grossesses"      , 0.5);
     ViewPort.SetAvlHeight("consultations"   , 0.5);
     ViewPort.SetAvlHeight("hospitalisations", 1.0);
     ViewPort.SetAvlHeight("accouchements"   , 1.0);
+    Tdb.views.initListGrossesses();
     Calendar.regField(getForm("changeDate").date_tdb, null, {noView: true});
   });
-
 </script>
 
 <table class="main">
   <tr>
     <th colspan="2">
+      <div style="float:left;">
+        <input type="text" name="fast_search" placeholder="recherche rapide" id="_seek_patient" onkeyup="filterByText();" onchange="filterByText()"><button class="cleanup notext" onclick="$V('_seek_patient', '', true);"></button>
+      </div>
+
       <a id="vw_day_date_a" href="?m={{$m}}&amp;tab={{$tab}}&amp;date_tdb={{$prec}}">&lt;&lt;&lt;</a>
       <form name="changeDate" action="?m={{$m}}" method="get">
         <input type="hidden" name="m" value="{{$m}}" />

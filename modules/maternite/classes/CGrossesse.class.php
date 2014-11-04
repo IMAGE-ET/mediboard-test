@@ -44,11 +44,14 @@ class CGrossesse extends CMbObject {
 
   /** @var CSejour[] */
   public $_ref_sejours = array();
+  public $_nb_ref_sejours;
 
   /** @var CConsultation[] */
   public $_ref_consultations = array();
+  public $_nb_ref_consultations;
 
   /** @var CConsultation */
+  public $_ref_consultations_anesth = array();
   public $_ref_last_consult_anesth;
 
   /** @var  CAllaitement[] */
@@ -171,15 +174,35 @@ class CGrossesse extends CMbObject {
   }
 
   /**
+   * sejour count for this grossesse
+   *
+   * @return int
+   */
+  function countRefSejours() {
+    return $this->_nb_ref_sejours = $this->countBackRefs("sejours");
+  }
+
+  /**
    * Chargement des consultations associées à la grossesse
    *
    * @return CConsultation[]
    */
-  function loadRefsConsultations() {
-    if ($this->_ref_consultations) {
-      return $this->_ref_consultations;
+  function loadRefsConsultations($with_anesth = false) {
+    if (!$this->_ref_consultations) {
+      $this->_ref_consultations = $this->loadBackRefs("consultations");
     }
-    return $this->_ref_consultations = $this->loadBackRefs("consultations");
+
+    if ($with_anesth) {
+      /** @var CConsultation $_consultation */
+      foreach ($this->_ref_consultations as $_consultation) {
+        $consult_anesth = $_consultation->loadRefConsultAnesth();
+        if ($consult_anesth->_id) {
+          $this->_ref_consultations_anesth[$consult_anesth->_id] = $consult_anesth;
+        }
+      }
+    }
+
+    return $this->_ref_consultations;
   }
 
   /**

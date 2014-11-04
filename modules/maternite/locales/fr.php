@@ -182,5 +182,6 @@ $locales['mod-maternite-tab-vw_admissions'] = 'Validation séjours';
 $locales['mod-maternite-tab-vw_consultations'] = 'Consultations';
 $locales['mod-maternite-tab-vw_grossesses'] = 'Grossesses';
 $locales['mod-maternite-tab-vw_placement'] = 'Accouchements';
+$locales['mod-maternite-tab-vw_tdb_maternite'] = 'Tableau de bord';
 $locales['module-maternite-court'] = 'Maternité';
 $locales['module-maternite-long'] = 'Maternité';

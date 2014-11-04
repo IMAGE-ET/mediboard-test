@@ -21,6 +21,7 @@ $grossesse->loadRefsNotes();
 if (!$grossesse->_id) {
   $grossesse->parturiente_id = $parturiente_id;
 }
+$grossesse->loadRefParturiente();
 
 $smarty = new CSmartyDP();
 

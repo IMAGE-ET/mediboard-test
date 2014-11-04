@@ -8,19 +8,38 @@
  * @version    $Revision$
  *}}
 
+<script>
+  PatSelector.init = function() {
+    this.sForm      = "editFormGrossesse";
+    this.sId        = "parturiente_id";
+    this.sView      = "_patient_view";
+    this.sSexe      = "_patient_sexe";
+    this.pop();
+  };
+</script>
+
 <form name="editFormGrossesse" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="maternite"/>
   {{mb_class object=$grossesse}}
   {{mb_key   object=$grossesse}}
   <input type="hidden" name="callback" value="Grossesse.afterEditGrossesse" />
   <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="_patient_sexe" value="f" />
 
-  {{mb_field object=$grossesse field=parturiente_id hidden=true}}
-  
+
   <table class="form">
     <tr>
       {{mb_include module=system template=inc_form_table_header object=$grossesse}}
     </tr>
+
+    <tr>
+      <th>{{mb_label object=$grossesse field=parturiente_id}}</th>
+      <td>
+        {{mb_field object=$grossesse field=parturiente_id hidden=1}}
+        <input type="text" style="cursor: pointer" name="_patient_view" value="{{$grossesse->_ref_parturiente}}" readonly="readonly" {{if !$grossesse->_id}}onclick="PatSelector.init();"{{/if}}/>
+      </td>
+    </tr>
+
     <tr>
       <th>
         {{mb_label object=$grossesse field=terme_prevu}}

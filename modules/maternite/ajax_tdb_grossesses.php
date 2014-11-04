@@ -34,8 +34,11 @@ CMbObject::massCountBackRefs($grossesses, "consultations");
 /** @var CGrossesse[] $grossesses */
 foreach ($grossesses as $_grossesse) {
   $_grossesse->loadRefParturiente();
-  $_grossesse->loadLastConsultAnesth();
-  $_grossesse->_ref_last_consult_anesth->loadRefPlageConsult();
+  $_grossesse->countRefSejours();
+  $_grossesse->loadRefsConsultations(true);
+  foreach ($_grossesse->_ref_consultations_anesth as $_anesth) {
+    $_anesth->loadRefPlageConsult();
+  }
 }
 
 $smarty = new CSmartyDP();

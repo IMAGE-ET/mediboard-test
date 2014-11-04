@@ -30,12 +30,11 @@ $listConsults = $consultation->loadList($where, $order, null, null, $ljoin);
 
 foreach ($listConsults as $_consult) {
   $_consult->loadRefPraticien();
+  $_consult->loadRefSejour()->loadRefGrossesse();
   $_consult->loadRefGrossesse()->loadRefParturiente();
 }
 
 $smarty = new CSmartyDP();
-
 $smarty->assign("date"        , $date);
 $smarty->assign("listConsults", $listConsults);
-
 $smarty->display("inc_tdb_consultations.tpl");
