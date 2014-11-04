@@ -42,5 +42,5 @@ catch (Exception $e) {
 
 $smarty = new CSmartyDP();
 $smarty->assign("error", $error);
-$smarty->display("inc_configure_serveur.tpl");
+$smarty->display("inc_configure_es.tpl");
 
