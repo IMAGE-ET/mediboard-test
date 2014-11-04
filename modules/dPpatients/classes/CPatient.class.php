@@ -2079,6 +2079,7 @@ class CPatient extends CPerson {
     $this->loadRefsFwd();
     $this->loadRefConstantesMedicales(null, array(), null, false);
     $this->loadIPP();
+    $this->loadLastINS();
 
     $this->notify("BeforeFillLimitedTemplate", $template);
 
@@ -2110,6 +2111,7 @@ class CPatient extends CPerson {
     $template->addProperty("Patient - Numéro de sécurité sociale", $this->getFormattedValue("matricule"));
     $template->addBarcode("Patient - Code barre ID"     , $this->_id   );
     $template->addBarcode("Patient - Code barre IPP"    , $this->_IPP  );
+    $template->addBarcode("Patient - Code barre INS"    , $this->_ref_last_ins ? $this->_ref_last_ins->ins : "");
 
     if ($this->sexe === "m") {
       $template->addProperty("Patient - il/elle"         , "il"              );
