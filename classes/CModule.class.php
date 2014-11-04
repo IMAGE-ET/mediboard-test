@@ -107,10 +107,10 @@ class CModule extends CMbObject {
     $tabClass = array();
     foreach ($listClass as $class) {
       $object = new $class;
-      if (!$object->_ref_module) {
+      if (!is_object($object->_ref_module)) {
         continue;
       }
-      
+
       if ($object->_ref_module->mod_name == $module) {
         $tabClass[] = $object->_class;
       }

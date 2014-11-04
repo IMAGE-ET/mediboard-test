@@ -71,14 +71,16 @@ foreach ($localesDirs as $locale => $path) {
 }
 
 
-global $items, $completions, $all_locales;
+global $items, $completions, $all_locales, $total_count, $local_count;
 $items = array();
 $completions = array();
 $all_locales = $contenu_file[$language];
+$total_count = 0;
+$local_count = 0;
 
 // Ajoute un item de localisation
 function addLocale($class, $cat, $name) {
-  global $trans, $items, $completions, $language, $all_locales;
+  global $trans, $items, $completions, $language, $all_locales, $total_count, $local_count;
   
   $items[$class][$cat][$name] = array_key_exists($name, $trans) ? @$trans[$name][$language] : "";
   $items[$class][$cat][$name] = str_replace(array('\n', '\t'), array("\n", "\t"), $items[$class][$cat][$name]);
@@ -87,10 +89,12 @@ function addLocale($class, $cat, $name) {
   
   // Stats
   @$completions[$class]["total"]++;
+  $total_count++;
   if ($items[$class][$cat][$name]) {
     @$completions[$class]["count"]++;
+    $local_count++;
   }
-  
+
   @$completions[$class]["percent"] = round(100 * $completions[$class]["count"] / $completions[$class]["total"]);
 }
 
@@ -238,9 +242,14 @@ foreach ($all_locales as &$_locale) {
   $_locale = str_replace(array('\n', '\t'), array("\n", "\t"), $_locale);
 }
 
+$completion = round(100 * $local_count / $total_count);
+
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("total_count"  , $total_count);
+$smarty->assign("local_count"  , $local_count);
+$smarty->assign("completion"   , $completion);
 $smarty->assign("items"        , $items);
 $smarty->assign("archives"     , $archives);
 $smarty->assign("completions"  , $completions);

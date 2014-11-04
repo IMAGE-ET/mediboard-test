@@ -35,6 +35,44 @@ Main.add(function () {
 
 </script>
 
+<!-- Encouragements -->
+{{if $completion == 0}}
+  <div class="small-error">
+    <strong>Attention...</strong>
+    <div>Ce module n'est absolument pas localisé, on ne peut lui garantir un affichage utilisable.</div>
+    <div>
+      Il compte un total de <strong>{{$local_count|integer}}</strong> termes à traduire.
+    </div>
+  </div>
+{{elseif $completion < 50}}
+  <div class="small-warning">
+    <strong>Important</strong>
+    <div>Ce module est peu traduit, cela va probablement poser des problèmes d'affichage.</div>
+    <div>
+      Il compte <strong>{{$total_count|integer}}</strong> localisations
+      sur un total de <strong>{{$local_count|integer}}</strong> termes,
+      soit une complétude de <strong>{{$completion}}%</strong>.
+    </div>
+  </div>
+{{elseif $completion < 100}}
+  <div class="small-info">
+    <strong>Important</strong>
+    <div>Ce module est en cours de traduction, c'est un bon début, il reste encore des efforts à faire !</div>
+    <div>
+      Il compte <strong>{{$total_count|integer}}</strong> localisations
+      sur un total de <strong>{{$local_count|integer}}</strong> termes,
+      soit une complétude de <strong>{{$completion}}%</strong>.
+    </div>
+  </div>
+{{else}}
+  <div class="small-success">
+    <strong>Félicitations !</strong>
+    <div>Ce module est totalement traduit, ce qui est un gage de qualité manifeste !</div>
+    <div>Il compte un total de <strong>{{$local_count|integer}}</strong> termes parfaitement traduits.</div>
+  </div>
+{{/if}}
+
+
 <!-- Control tabs -->
 <ul id="tab-classes" class="control_tabs small">
   {{foreach from=$items key=class item=_item}}
@@ -72,33 +110,6 @@ Main.add(function () {
 <input type="hidden" name="dosql" value="do_translate_aed" />
 
 <table class="form" id="class-{{$class}}" class="tbl" style="display: none;">
-
-  <!-- Encouragements -->
-  <tr>
-    <td colspan="10">
-      {{if $completions.$class.percent == 0}}
-      <div class="small-error">
-        <strong>Attention...</strong>
-        <p>Cette classe n'est absolument pas traduite, on ne peut garantir un affichage utilisable pour cette classe. Merci d'y remédier au plus vite.</p>
-      </div>
-      {{elseif $completions.$class.percent < 50}}
-      <div class="small-warning">
-        <strong>Important</strong>
-        <p>Cette classe est peu traduite, cela va probablement poser des problèmes d'affichage.</p>
-      </div>
-      {{elseif $completions.$class.percent < 100}}
-      <div class="small-info">
-        <strong>Important</strong>
-        <p>Cette classe est en cours de traduction, c'est un bon début, il reste encore des efforts à faire !</p>
-      </div>
-      {{else}}
-      <div class="small-success">
-        <strong>Félicitations !</strong>
-        <p>Cette classe est totalement traduite, ce qui est un gage de qualité manifeste !</p>
-      </div>
-      {{/if}}
-    </td>
-  </tr>
 
   <tr>
     <th colspan="3" class="title">
