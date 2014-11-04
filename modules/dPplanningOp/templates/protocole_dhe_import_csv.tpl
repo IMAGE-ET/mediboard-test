@@ -15,8 +15,10 @@
   <li>{{mb_label class=CProtocole field=chir_id         }} ({{mb_label class=CMediusers field=_user_last_name }})</li>
   <li>{{mb_label class=CProtocole field=chir_id         }} ({{mb_label class=CMediusers field=_user_first_name}})</li>
   <li><strong>{{mb_label class=CProtocole field=libelle}}</strong> (mise à jour du protocole ayant exactement le même libellé)</li>
+  <li><strong>{{mb_label class=CProtocole field=libelle_sejour}}</strong> (mise à jour du protocole de séjour ayant exactement le même libellé)</li>
   <li><strong>{{mb_label class=CProtocole field=temp_operation}}</strong> (<code>HH:MM</code>)</li>
   <li>{{mb_label class=CProtocole field=codes_ccam}} (séparés par des barres verticales <code>|</code>)</li>
+  <li>{{mb_label class=CProtocole field=DP}} (séparés par des barres verticales <code>|</code>)</li>
   <li>
     <strong>{{mb_label class=CProtocole field=type}}</strong> 
     (parmi <code>comp</code>, <code>ambu</code>, <code>exte</code>, <code>seances</code>, <code>ssr</code>, <code>psy</code>, <code>urg</code> ou <code>consult</code>)
@@ -29,6 +31,8 @@
   <li>{{mb_label class=CProtocole field=uf_hebergement_id}}</li>
   <li>{{mb_label class=CProtocole field=uf_medicale_id}}</li>
   <li>{{mb_label class=CProtocole field=uf_soins_id}}</li>
+  <li>{{mb_label class=CProtocole field=facturable}}</li>
+  <li><strong>{{mb_label class=CProtocole field=for_sejour}}</strong> (<code>0</code> pour un protocole d'intervention, <code>1</code> pour un protocole de séjour uniquement)</li>
 {{mb_include module=system template=inc_import_csv_info_outro}}
 
 <form method="post" action="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog=1&amp;" name="import" enctype="multipart/form-data">
@@ -44,7 +48,7 @@
 {{if $results|@count}}
 <table class="tbl">
   <tr>
-    <th class="title" colspan="16">{{$results|@count}} protocoles trouvés</th>
+    <th class="title" colspan="20">{{$results|@count}} protocoles trouvés</th>
   </tr>
   <tr>
     <th>Etat</th>
@@ -52,8 +56,10 @@
     <th>{{mb_title class=CProtocole field=chir_id}} <br />{{mb_title class=CMediusers field=_user_last_name }}</th>
     <th>{{mb_title class=CProtocole field=chir_id}} <br />{{mb_title class=CMediusers field=_user_first_name}}</th>
     <th>{{mb_title class=CProtocole field=libelle}}</th>
+    <th>{{mb_title class=CProtocole field=libelle_sejour}}</th>
     <th>{{mb_title class=CProtocole field=temp_operation}}</th>
     <th>{{mb_title class=CProtocole field=codes_ccam}}</th>
+    <th>{{mb_title class=CProtocole field=DP}}</th>
     <th>{{mb_title class=CProtocole field=type}}</th>
     <th>{{mb_title class=CProtocole field=duree_hospi}}</th>
     <th>{{mb_title class=CProtocole field=duree_uscpo}}</th>
@@ -63,6 +69,8 @@
     <th>{{mb_title class=CProtocole field=uf_hebergement_id}}</th>
     <th>{{mb_title class=CProtocole field=uf_medicale_id}}</th>
     <th>{{mb_title class=CProtocole field=uf_soins_id}}</th>
+    <th>{{mb_title class=CProtocole field=facturable}}</th>
+    <th>{{mb_title class=CProtocole field=for_sejour}}</th>
   </tr>
   {{foreach from=$results item=_protocole}}
   <tr>
@@ -82,8 +90,10 @@
     <td class="text">{{$_protocole.praticien_lastname}}</td>
     <td class="text">{{$_protocole.praticien_firstname}}</td>
     <td class="text">{{$_protocole.motif}}</td>
+    <td class="text">{{$_protocole.libelle_sejour}}</td>
     <td class="text">{{$_protocole.temp_operation}}</td>
     <td class="text">{{$_protocole.codes_ccam}}</td>
+    <td class="text">{{$_protocole.DP}}</td>
     <td class="text">{{$_protocole.type_hospi}}</td>
     <td class="text">{{$_protocole.duree_hospi}}</td>
     <td class="text">{{$_protocole.duree_uscpo}}</td>
@@ -93,6 +103,8 @@
     <td class="text">{{$_protocole.uf_hebergement}}</td>
     <td class="text">{{$_protocole.uf_medicale}}</td>
     <td class="text">{{$_protocole.uf_soins}}</td>
+    <td class="text">{{$_protocole.facturable}}</td>
+    <td class="text">{{$_protocole.for_sejour}}</td>
   </tr>
   {{/foreach}}
 </table>

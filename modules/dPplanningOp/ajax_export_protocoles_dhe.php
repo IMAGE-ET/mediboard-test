@@ -39,6 +39,7 @@ $line = array(
   "Libellé du séjour",
   "Durée d'intervention",
   "Actes CCAM",
+  "Diagnostic",
   "Type d'hospitalisation",
   "Durée d'hospitalisation",
   "Durée USCPO",
@@ -48,6 +49,8 @@ $line = array(
   "UF d'hébergement",
   "UF de soins",
   "UF médicale",
+  "Facturable",
+  "Médical",
 );
 $csv->writeLine($line);
 
@@ -69,6 +72,7 @@ foreach ($protocoles as $_protocole) {
     $_protocole->libelle_sejour,
     CMbDT::transform($_protocole->temp_operation, null, "%H:%M"),
     $_protocole->codes_ccam,
+    $_protocole->DP,
     $_protocole->type,
     $_protocole->duree_hospi,
     $_protocole->duree_uscpo,
@@ -78,6 +82,8 @@ foreach ($protocoles as $_protocole) {
     $_protocole->_ref_uf_hebergement->code,
     $_protocole->_ref_uf_medicale->code,
     $_protocole->_ref_uf_soins->code,
+    $_protocole->facturable,
+    $_protocole->for_sejour,
   );
   $csv->writeLine($_line);
 }
