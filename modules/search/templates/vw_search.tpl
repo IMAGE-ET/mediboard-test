@@ -1,7 +1,7 @@
 {{*
  * $Id$
  *  
- * @category ${Module}
+ * @category Search
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  OXOL, see http://www.mediboard.org/public/OXOL
@@ -82,6 +82,7 @@
 
 <form method="get" name="esSearch" action="?m=search" class="watched prepared" onsubmit="return Search.displayResults(this);" onchange="onchange=$V(this.form, '0')">
   <input type="hidden" name="start" value="0">
+  <input type="hidden" name="accept_utf8" value="1">
   <table class="main layout">
     <tbody>
       <tr>
@@ -110,11 +111,11 @@
             <table>
               <tr>
                 <td>
-                  <input type="hidden" class="datetime" id="_min_date" name="_min_date" onchange="$V(this.form.start, '0')" >
+                  <input type="hidden" class="date" id="_min_date" name="_min_date" onchange="$V(this.form.start, '0')" value="{{$date}}">
                   <b>&raquo;</b>
-                  <input type="hidden" class="datetime" id="_max_date" name="_max_date" onchange="$V(this.form.start, '0')" >
+                  <input type="hidden" class="date" id="_max_date" name="_max_date" onchange="$V(this.form.start, '0')" >
                   <strong>{{tr}}or{{/tr}}</strong>
-                  Jour seul : <input type="hidden" class="datetime" id="_date" name="_date" onchange="$V(this.form.start, '0')" >
+                  Jour seul : <input type="hidden" class="date" id="_date" name="_date" onchange="$V(this.form.start, '0')" >
                 </td>
               </tr>
             </table>
@@ -168,14 +169,24 @@
                   <input type="checkbox" name="names_types[]" id="CCompteRendu" value="CCompteRendu"/>
                   <label for="CCompteRendu">Compte rendu</label>
                 </td>
-              </tr>
-              <tr>
                 <td>
-                  <input type="checkbox" name="names_types[]" id="CTransmissionMedicale" value="CTransmissionMedicale">
-                  <label for="CTransmissionMedicale"> Transmission Médicale</label>
+                  <input type="checkbox" name="names_types[]" id="CConsultation" value="CConsultation">
+                  <label for="CConsultation"> Consultation</label>
                 </td>
-                </tr>
+              </tr>
+
               <tr>
+                <td colspan="2">
+                  <input type="checkbox" name="names_types[]" id="CConsultAnesth" value="CConsultAnesth">
+                  <label for="CConsultAnesth"> Consultation anesthésique</label>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="halfPane">
+                  <input type="checkbox" name="names_types[]" id="CFile" value="CFile">
+                  <label for="CFile"> Fichier</label>
+                </td>
                 <td>
                   <input type="checkbox" name="names_types[]" id="CObservationMedicale" value="CObservationMedicale">
                   <label for="CObservationMedicale"> Observation Médicale</label>
@@ -183,20 +194,13 @@
               </tr>
               <tr>
                 <td>
-                  <input type="checkbox" name="names_types[]" id="CConsultation" value="CConsultation">
-                  <label for="CConsultation"> Consultation</label>
+                  <input type="checkbox" name="names_types[]" id="CPrescription" value="CPrescriptionLineMix">
+                  <input type="hidden" name="names_types[]" value="CPrescriptionLineMedicament">
+                  <label for="CPrescription"> Prescription</label>
                 </td>
-              </tr>
-              <tr>
                 <td>
-                  <input type="checkbox" name="names_types[]" id="CConsultAnesth" value="CConsultAnesth">
-                  <label for="CConsultAnesth"> Consultation anesthésique</label>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <input type="checkbox" name="names_types[]" id="CFile" value="CFile">
-                  <label for="CFile"> Fichier</label>
+                  <input type="checkbox" name="names_types[]" id="CTransmissionMedicale" value="CTransmissionMedicale">
+                  <label for="CTransmissionMedicale"> Transmission Médicale</label>
                 </td>
               </tr>
             </table>

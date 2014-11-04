@@ -149,14 +149,24 @@
                 <input type="checkbox" name="names_types[]" id="CCompteRendu" value="CCompteRendu"/>
                 <label for="CCompteRendu">Compte rendu</label>
               </td>
-            </tr>
-            <tr>
               <td>
-                <input type="checkbox" name="names_types[]" id="CTransmissionMedicale" value="CTransmissionMedicale">
-                <label for="CTransmissionMedicale"> Transmission Médicale</label>
+                <input type="checkbox" name="names_types[]" id="CConsultation" value="CConsultation">
+                <label for="CConsultation"> Consultation</label>
               </td>
             </tr>
+
             <tr>
+              <td colspan="2">
+                <input type="checkbox" name="names_types[]" id="CConsultAnesth" value="CConsultAnesth">
+                <label for="CConsultAnesth"> Consultation anesthésique</label>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="halfPane">
+                <input type="checkbox" name="names_types[]" id="CFile" value="CFile" checked>
+                <label for="CFile"> Fichier</label>
+              </td>
               <td>
                 <input type="checkbox" name="names_types[]" id="CObservationMedicale" value="CObservationMedicale">
                 <label for="CObservationMedicale"> Observation Médicale</label>
@@ -164,14 +174,12 @@
             </tr>
             <tr>
               <td>
-                <input type="checkbox" name="names_types[]" id="CConsultation" value="CConsultation">
-                <label for="CConsultation"> Consultation de séjour</label>
+                <input type="checkbox" name="names_types[]" id="CPrescription" value="CPrescriptionLineMedicament CPrescriptionLineMix">
+                <label for="CPrescription"> Prescription</label>
               </td>
-            </tr>
-            <tr>
               <td>
-                <input type="checkbox" name="names_types[]" id="CConsultAnesth" value="CConsultAnesth">
-                <label for="CConsultAnesth"> Consultation anesthésique de séjour</label>
+                <input type="checkbox" name="names_types[]" id="CTransmissionMedicale" value="CTransmissionMedicale">
+                <label for="CTransmissionMedicale"> Transmission Médicale</label>
               </td>
             </tr>
           </table>

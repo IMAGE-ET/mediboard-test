@@ -11,7 +11,10 @@
 
 CCanDo::checkRead();
 
+$date = CMbDT::date("-1 month");
+
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("date", $date);
 $smarty->display("vw_search.tpl");
 
