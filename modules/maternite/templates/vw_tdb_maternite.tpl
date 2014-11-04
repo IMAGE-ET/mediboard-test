@@ -25,6 +25,7 @@
   };
 
   Main.add(function () {
+    Tdb.views.date = '{{$date_tdb}}';
     ViewPort.SetAvlHeight("grossesses"      , 0.5);
     ViewPort.SetAvlHeight("consultations"   , 0.5);
     ViewPort.SetAvlHeight("hospitalisations", 1.0);

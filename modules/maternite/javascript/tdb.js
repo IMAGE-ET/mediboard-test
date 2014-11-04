@@ -23,7 +23,7 @@ Tdb = {
     url.addParam('parturiente_id', patient_id);
     url.requestModal();
     url.modalObject.observe('afterClose', function() {
-      listGrossesses();
+      Tdb.views.listGrossesses();
     });
   },
 
@@ -34,7 +34,7 @@ Tdb = {
     url.addParam('patient_id', patiente_id);
     url.requestModal();
     url.modalObject.observe('afterClose', function() {
-      listGrossesses();
+      Tdb.views.listGrossesses();
     });
   },
 
@@ -48,33 +48,34 @@ Tdb = {
   },
 
   views : {
+    date : '',
     initListGrossesses : function() {
       var url = new Url("maternite", "ajax_tdb_grossesses");
-      url.addParam("date", '{{$date_tdb}}');
+      url.addParam("date", Tdb.views.date);
       url.periodicalUpdate("grossesses", { frequency: 10, onSuccess: Tdb.views.listConsultations } );
     },
 
     listGrossesses : function() {
       var url = new Url("maternite", "ajax_tdb_grossesses");
-      url.addParam("date", '{{$date_tdb}}');
+      url.addParam("date", Tdb.views.date);
       url.requestUpdate("grossesses", {onSuccess: Tdb.views.listConsultations } );
     },
 
     listConsultations : function() {
       var url = new Url("maternite", "ajax_tdb_consultations");
-      url.addParam("date", '{{$date_tdb}}');
+      url.addParam("date", Tdb.views.date);
       url.requestUpdate("consultations", { onSuccess: Tdb.views.listHospitalisations } );
     },
 
     listHospitalisations : function() {
       var url = new Url("maternite", "ajax_tdb_hospitalisations");
-      url.addParam("date", '{{$date_tdb}}');
+      url.addParam("date", Tdb.views.date);
       url.requestUpdate("hospitalisations", { onSuccess: Tdb.views.listAccouchements } );
     },
 
     listAccouchements : function() {
       var url = new Url("maternite", "ajax_tdb_accouchements");
-      url.addParam("date", '{{$date_tdb}}');
+      url.addParam("date", Tdb.views.date);
       url.requestUpdate("accouchements", { onSuccess: Tdb.views.filterByText} );
     },
 
