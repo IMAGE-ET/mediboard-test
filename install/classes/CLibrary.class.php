@@ -299,8 +299,8 @@ $library->fileName = "kcfinder-2.51.tar.gz";
 $library->description = "Gestionnaire de fichier en ajax";
 $library->sourceDir = "kcfinder-2.51";
 $library->targetDir = "kcfinder";
-$library->versionFile = "js/browser/settings.js";
-$library->versionString = "if ($('#view";
+$library->versionFile = "config.php";
+$library->versionString = "%";
 
 $patch = new CLibraryPatch;
 $patch->dirName     = "kcfinder";
