@@ -228,7 +228,7 @@ if ($module != "common") {
   foreach ($files as $_file) {
     $_tab = substr($_file, 0, -4);
     
-    if (in_array($_tab, array("setup", "index", "config", "preferences"))) {
+    if (in_array($_tab, array("setup", "index", "config", "preferences", "configuration"))) {
       continue;
     }
     
