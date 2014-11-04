@@ -127,6 +127,7 @@
         <a class="button new" href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id=0">
           {{tr}}CRPU-title-create{{/tr}}
         </a>
+        {{if "myHug"|module_active}}{{mb_include module="myHug" template="inc_button_set_number_doctor"}}{{/if}}
       </td>
 
       <td style="text-align: left; padding-left: 2em;">
