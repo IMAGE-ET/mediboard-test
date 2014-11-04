@@ -11,7 +11,7 @@
  */
 CCanDo::checkRead();
 // Récupération des valeurs nécessaires
-$words         = utf8_encode(CValue::get("words"));
+$words         = CValue::get("words");
 $_min_date     = str_replace("-", "/", CValue::get("_min_date", "*"));
 $_max_date     = str_replace("-", "/", CValue::get("_max_date", "*"));
 $_date         = str_replace("-", "/", CValue::get("_date"));
@@ -20,6 +20,11 @@ $start         = (int)CValue::get("start", 0);
 $names_types   = CValue::get("names_types");
 $aggregate     = CValue::get("aggregate");
 $sejour_id     = CValue::get("sejour_id");
+
+// Ajout du group_id pour imperméabiliser les données au niveau établissement.
+$current_group = CGroups::loadCurrent()->_id;
+$words .= "group_id:(". $current_group . ")";
+
 /**
  * Traitement des utilisateurs spécifiques ou globaux
  */
@@ -130,16 +135,34 @@ try {
           $_object_ref['object']->loadRefConsultation()->loadRefPraticien();
           $_object_ref['object']->loadRefConsultation()->loadRelPatient();
           $_object_ref['object']->loadRefConsultation()->loadRefPlageConsult();
+          $_object_ref['object']->loadRefSejour();
+          if ($_object_ref['object']->_ref_sejour->_id) {
+            $_object_ref['object']->_ref_sejour->loadNDA();
+          }
         }
         else {
           if ($_object_ref['object'] instanceof CConsultation) {
             $_object_ref['object']->loadRefPraticien();
             $_object_ref['object']->loadRelPatient();
             $_object_ref['object']->loadRefPlageConsult();
+            $_object_ref['object']->loadRefSejour();
+            if ($_object_ref['object']->_ref_sejour->_id) {
+              $_object_ref['object']->_ref_sejour->loadNDA();
+            }
+
+          }
+          if ($_object_ref['object'] instanceof CSejour) {
+            $_object_ref['object']->loadRefPraticien();
+            $_object_ref['object']->loadRelPatient();
+            $_object_ref['object']->loadNDA();
           }
           else {
             $_object_ref['object']->loadRefPraticien();
             $_object_ref['object']->loadRelPatient();
+            $_object_ref['object']->loadRefSejour();
+            if ($_object_ref['object']->_ref_sejour->_id) {
+              $_object_ref['object']->_ref_sejour->loadNDA();
+            }
           }
         }
       }
@@ -148,7 +171,7 @@ try {
 }
 catch (Exception $e) {
   CAppUI::displayAjaxMsg("La requête est mal formée", UI_MSG_ERROR);
-  echo $e->getMessage();
+  mbLog($e->getMessage());
 }
 //mbTrace($words);
 $smarty = new CSmartyDP();

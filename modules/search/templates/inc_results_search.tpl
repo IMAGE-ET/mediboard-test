@@ -20,6 +20,8 @@
       <th class="title" colspan="6">Résultats ({{$nbresult}} obtenus en {{$time}}ms)</th>
     </tr>
       <tr>
+      <th class="narrow">{{tr}}NDA{{/tr}}</th>
+      <th class="narrow">Durée séjour</th>
       <th>
         <span>Contexte</span>
         <input type="text" id="filter-contexte" size="20" onkeyup="Search.filter(this, 'contextes', 'results')" />
@@ -33,6 +35,29 @@
     </tr>
       {{foreach from=$objects_refs key=_key item=_object_ref}}
       <tr>
+
+        <!-- NDA -->
+        <td>
+          {{if $_object_ref.object->_class == "CSejour"}}
+            {{$_object_ref.object->_NDA}}
+          {{elseif $_object_ref.object->_ref_sejour->_id}}
+            {{$_object_ref.object->_ref_sejour->_NDA}}
+          {{else}}
+            <span class="text compact empty">{{tr}}NDA.none{{/tr}}</span>
+          {{/if}}
+        </td>
+
+        <!-- Durée du séjour -->
+        <td>
+          {{if $_object_ref.object->_class == "CSejour"}}
+            {{$_object_ref.object->_duree}} jours
+          {{elseif $_object_ref.object->_ref_sejour->_id}}
+            {{$_object_ref.object->_ref_sejour->_duree}} jours
+          {{else}}
+            <span class="text compact empty">{{tr}}Duree.none{{/tr}}</span>
+          {{/if}}
+        </td>
+
         <td class="text contextes" style="width:40%">
           {{if $_object_ref.object->_class == "CSejour"}}
             <span onmouseover="ObjectTooltip.createEx(this, '{{$_object_ref.object->_guid}}')">{{$_object_ref.object->_view}}</span>
