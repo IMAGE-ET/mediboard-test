@@ -55,9 +55,11 @@ class CModuleAction extends CStoredObject {
    * @see parent::getBackProps()
    */
   function getBackProps() {
-    $backProps                    = parent::getBackProps();
-    $backProps["access_logs"]     = "CAccessLog module_action_id";
-    $backProps["datasource_logs"] = "CDataSourceLog module_action_id";
+    $backProps                            = parent::getBackProps();
+    $backProps["access_logs"]             = "CAccessLog module_action_id";
+    $backProps["datasource_logs"]         = "CDataSourceLog module_action_id";
+    $backProps["access_logs_archive"]     = "CAccessLogArchive module_action_id";
+    $backProps["datasource_logs_archive"] = "CDataSourceLogArchive module_action_id";
 
     return $backProps;
   }
@@ -121,10 +123,11 @@ class CModuleAction extends CStoredObject {
       $request->addColumn("module");
       $request->addColumn("action");
       $request->addColumn("module_action_id");
-      $self = new self;
-      $ds = $self->_spec->ds;
+      $self            = new self;
+      $ds              = $self->_spec->ds;
       $modules_actions = $ds->loadTree($request->makeSelect($self));
     }
+
     return $modules_actions[$module];
   }
 }

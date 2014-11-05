@@ -119,7 +119,7 @@ class CMediusers extends CPerson {
   /** @var CUser */
   public $_ref_profile;
 
-  /** @var CUser*/
+  /** @var CUser */
   public $_ref_user;
 
   /** @var CIntervenantCdARR */
@@ -146,7 +146,7 @@ class CMediusers extends CPerson {
 
   /** @var CSourcePOP[] */
   public $_refs_source_pop;
-  
+
   /** @var CRetrocession[] */
   public $_ref_retrocessions;
 
@@ -163,6 +163,7 @@ class CMediusers extends CPerson {
   static function get($user_id = null) {
     if ($user_id) {
       $user = new self;
+
       return $user->getCached($user_id);
     }
 
@@ -174,13 +175,13 @@ class CMediusers extends CPerson {
    * @return CFunctions[]
    */
   static function loadCurrentFunctions() {
-    $user = CMediusers::get();
-    $group_id = CGroups::loadCurrent()->_id;
-    $secondary_function = new CSecondaryFunction();
-    $ljoin = array();
-    $where = array();
-    $where["group_id"] = "= '$group_id'";
-    $where["user_id"]  = "= '$user->_id'";
+    $user                         = CMediusers::get();
+    $group_id                     = CGroups::loadCurrent()->_id;
+    $secondary_function           = new CSecondaryFunction();
+    $ljoin                        = array();
+    $where                        = array();
+    $where["group_id"]            = "= '$group_id'";
+    $where["user_id"]             = "= '$user->_id'";
     $ljoin["functions_mediboard"] = "functions_mediboard.function_id = secondary_function.function_id";
 
     return $user->_ref_current_functions = $secondary_function->loadList($where, null, null, null, $ljoin);
@@ -190,9 +191,10 @@ class CMediusers extends CPerson {
    * @see parent::getSpec()
    */
   function getSpec() {
-    $spec = parent::getSpec();
+    $spec        = parent::getSpec();
     $spec->table = 'users_mediboard';
     $spec->key   = 'user_id';
+
     return $spec;
   }
 
@@ -204,7 +206,7 @@ class CMediusers extends CPerson {
 
     // Note: notamment utile pour les seeks
     // Dans les faits c'est plus logique puisque la classe n'est pas autoincremented
-    $props["user_id"]                = "ref class|CUser seekable show|0";
+    $props["user_id"] = "ref class|CUser seekable show|0";
 
     $props["remote"]                 = "bool default|1 show|0";
     $props["adeli"]                  = "numchar length|9 confidential mask|99S9S99999S9 control|luhn";
@@ -238,28 +240,28 @@ class CMediusers extends CPerson {
     $props["compta_deleguee"]        = "bool default|0";
     $props["last_ldap_checkout"]     = "date";
 
-    $props["_group_id"]              = "ref notNull class|CGroups";
+    $props["_group_id"] = "ref notNull class|CGroups";
 
-    $props["_user_username"]         = "str notNull minLength|3 reported";
-    $props["_user_password2"]        = "password sameAs|_user_password reported";
-    $props["_user_first_name"]       = "str reported show|1";
-    $props["_user_last_name"]        = "str notNull confidential reported show|1";
-    $props["_user_email"]            = "str confidential reported";
-    $props["_user_phone"]            = "phone confidential reported";
-    $props["_user_astreinte"]        = "str confidential reported";
-    $props["_user_adresse"]          = "str confidential reported";
-    $props["_user_last_login"]       = "dateTime reported";
-    $props["_user_cp"]               = "num length|5 confidential reported";
-    $props["_user_ville"]            = "str confidential reported";
-    $props["_profile_id"]            = "ref reported class|CUser";
-    $props["_user_type"]             = "num notNull min|0 max|21 reported";
-    $props["_user_type_view"]        = "str";
+    $props["_user_username"]   = "str notNull minLength|3 reported";
+    $props["_user_password2"]  = "password sameAs|_user_password reported";
+    $props["_user_first_name"] = "str reported show|1";
+    $props["_user_last_name"]  = "str notNull confidential reported show|1";
+    $props["_user_email"]      = "str confidential reported";
+    $props["_user_phone"]      = "phone confidential reported";
+    $props["_user_astreinte"]  = "str confidential reported";
+    $props["_user_adresse"]    = "str confidential reported";
+    $props["_user_last_login"] = "dateTime reported";
+    $props["_user_cp"]         = "num length|5 confidential reported";
+    $props["_user_ville"]      = "str confidential reported";
+    $props["_profile_id"]      = "ref reported class|CUser";
+    $props["_user_type"]       = "num notNull min|0 max|21 reported";
+    $props["_user_type_view"]  = "str";
 
     // The different levels of security are stored to be usable in JS
-    $props["_user_password_weak"]    = "password minLength|4";
-    $props["_user_password_strong"]  = "password minLength|6 notContaining|_user_username notNear|_user_username alphaAndNum";
+    $props["_user_password_weak"]   = "password minLength|4";
+    $props["_user_password_strong"] = "password minLength|6 notContaining|_user_username notNear|_user_username alphaAndNum";
 
-    $props["_user_password"]         = $props["_user_password_weak"]." reported";
+    $props["_user_password"] = $props["_user_password_weak"] . " reported";
 
     return $props;
   }
@@ -275,14 +277,14 @@ class CMediusers extends CPerson {
       && (($this->remote == 0) || CAppUI::conf("admin CUser apply_all_users")));
 
     // If the global strong password config is set to TRUE
-    $this->_specs['_user_password'] = $strongPassword?
-      $this->_specs['_user_password_strong']:
+    $this->_specs['_user_password'] = $strongPassword ?
+      $this->_specs['_user_password_strong'] :
       $this->_specs['_user_password_weak'];
 
     $this->_specs['_user_password']->fieldName = $oldSpec->fieldName;
 
-    $this->_props['_user_password'] = $strongPassword?
-      $this->_props['_user_password_strong']:
+    $this->_props['_user_password'] = $strongPassword ?
+      $this->_props['_user_password_strong'] :
       $this->_props['_user_password_weak'];
   }
 
@@ -290,124 +292,141 @@ class CMediusers extends CPerson {
    * @see parent::getBackProps()
    */
   function getBackProps() {
-    $backProps = parent::getBackProps();
-    $backProps["secondary_functions"]             = "CSecondaryFunction user_id";
-    $backProps["actes_ccam_executes"]             = "CActeCCAM executant_id";
-    $backProps["actes_ngap_executes"]             = "CActeNGAP executant_id";
-    $backProps["actes_tarmed_executes"]           = "CActeTarmed executant_id";
-    $backProps["actes_caisse_executes"]           = "CActeCaisse executant_id";
-    $backProps["administrations"]                 = "CAdministration administrateur_id";
-    $backProps["aides_saisie"]                    = "CAideSaisie user_id";
-    $backProps["handled_alerts"]                  = "CAlert handled_user_id";
-    $backProps["modeles"]                         = "CCompteRendu user_id";
-    $backProps["documents_ged"]                   = "CDocGed user_id";
-    $backProps["suivis__ged"]                     = "CDocGedSuivi user_id";
-    $backProps["examens"]                         = "CExamenLabo realisateur";
-    $backProps["users"]                           = "CFicheEi user_id";
-    $backProps["valid_users"]                     = "CFicheEi valid_user_id";
-    $backProps["service_valid_users"]             = "CFicheEi service_valid_user_id";
-    $backProps["qualite_users"]                   = "CFicheEi qualite_user_id";
-    $backProps["owned_files"]                     = "CFile author_id";
-    $backProps["forum_messages"]                  = "CForumMessage user_id";
-    $backProps["forum_threads"]                   = "CForumThread user_id";
-    $backProps["hprim21_medecins"]                = "CHprim21Medecin user_id";
-    $backProps["listes_choix"]                    = "CListeChoix user_id";
-    $backProps["owned_notes"]                     = "CNote user_id";
-    $backProps["observations"]                    = "CObservationMedicale user_id";
-    $backProps["operations_chir"]                 = "COperation chir_id";
-    $backProps["operations_chir2"]                = "COperation chir_2_id";
-    $backProps["operations_chir3"]                = "COperation chir_3_id";
-    $backProps["operations_chir4"]                = "COperation chir_4_id";
-    $backProps["operations_anesth"]               = "COperation anesth_id";
-    $backProps["packs"]                           = "CPack user_id";
-    $backProps["prescription_line_mixes"]         = "CPrescriptionLineMix praticien_id";
-    $backProps["prescription_line_mixes_0"]       = "CPrescriptionLineMix creator_id";
-    $backProps["personnels"]                      = "CPersonnel user_id";
-    $backProps["plages_op_chir"]                  = "CPlageOp chir_id";
-    $backProps["plages_op_anesth"]                = "CPlageOp anesth_id";
-    $backProps["plages_consult"]                  = "CPlageconsult chir_id";
-    $backProps["plages_conge"]                    = "CPlageConge user_id";
-    $backProps["consults_anesth"]                 = "CConsultAnesth chir_id";
-    $backProps["plages_ressource"]                = "CPlageressource prat_id";
-    $backProps["prescriptions"]                   = "CPrescription praticien_id";
-    $backProps["prescriptions_labo"]              = "CPrescriptionLabo praticien_id";
-    $backProps["prescription_comments"]           = "CPrescriptionLineComment praticien_id";
-    $backProps["prescription_comments_crees"]     = "CPrescriptionLineComment creator_id";
-    $backProps["prescription_comments_executes"]  = "CPrescriptionLineComment user_executant_id";
-    $backProps["prescription_elements"]           = "CPrescriptionLineElement praticien_id";
-    $backProps["prescription_elements_crees"]     = "CPrescriptionLineElement creator_id";
-    $backProps["prescription_elements_executes"]  = "CPrescriptionLineElement user_executant_id";
-    $backProps["prescription_medicaments"]        = "CPrescriptionLineMedicament praticien_id";
-    $backProps["prescription_medicaments_crees"]  = "CPrescriptionLineMedicament creator_id";
-    $backProps["prescription_protocole_packs"]    = "CPrescriptionProtocolePack praticien_id";
-    $backProps["prescription_dmis"]               = "CPrescriptionLineDMI praticien_id";
-    $backProps["protocoles"]                      = "CProtocole chir_id";
-    $backProps["remplacements"]                   = "CPlageConge replacer_id";
-    $backProps["sejours"]                         = "CSejour praticien_id";
-    $backProps["services"]                        = "CService responsable_id";
-    $backProps["tarifs"]                          = "CTarif chir_id";
-    $backProps["techniciens"]                     = "CTechnicien kine_id";
-    $backProps["temps_hospi"]                     = "CTempsHospi praticien_id";
-    $backProps["temps_chir"]                      = "CTempsOp chir_id";
-    $backProps["temps_prepa"]                     = "CTempsPrepa chir_id";
-    $backProps["transmissions"]                   = "CTransmissionMedicale user_id";
-    $backProps["visites_anesth"]                  = "COperation prat_visite_anesth_id";
-    $backProps["checked_lists"]                   = "CDailyCheckList validator_id";
-    $backProps["evenements_ssr"]                  = "CEvenementSSR therapeute_id";
-    $backProps["activites_rhs"]                   = "CLigneActivitesRHS executant_id";
-    $backProps["replacements"]                    = "CReplacement replacer_id";
-    $backProps["frais_divers"]                    = "CFraisDivers executant_id";
-    $backProps["expediteur_ftp"]                  = "CSenderFTP user_id";
-    $backProps["expediteur_sftp"]                 = "CSenderSFTP user_id";
-    $backProps["expediteur_soap"]                 = "CSenderSOAP user_id";
-    $backProps["expediteur_mllp"]                 = "CSenderMLLP user_id";
-    $backProps["expediteur_fs"]                   = "CSenderFileSystem user_id";
-    $backProps["ufs"]                             = "CAffectationUniteFonctionnelle object_id";
-    $backProps["documents_crees"]                 = "CCompteRendu author_id";
-    $backProps["devenirs_dentaires"]              = "CDevenirDentaire etudiant_id";
-    $backProps["plages_remplacees"]               = "CPlageconsult remplacant_id";
-    $backProps["plages_pour_compte_de"]           = "CPlageconsult pour_compte_id";
-    $backProps["poses_disp_vasc_operateur"]       = "CPoseDispositifVasculaire operateur_id";
-    $backProps["poses_disp_vasc_encadrant"]       = "CPoseDispositifVasculaire encadrant_id";
-    $backProps["praticien_facture_cabinet"]       = "CFactureCabinet praticien_id";
-    $backProps["praticien_facture_etab"]          = "CFactureEtablissement praticien_id";
-    $backProps["tokens"]                          = "CViewAccessToken user_id";
-    $backProps["didacticiel_avancement"]          = "CDidacticielAvancement user_id";
-    $backProps['etape_didacticiel']               = 'CEtapeDidacticiel user_id';
-    $backProps["astreintes"]                      = "CPlageAstreinte user_id";
-    $backProps["dicom_sender"]                    = "CDicomSender user_id";
-    $backProps["cps_pyxvital"]                    = "CPvCPS id_mediuser";
-    $backProps["affectation"]                     = "CAffectation praticien_id";
-    $backProps["regles_sectorisation_mediuser"]   = "CRegleSectorisation praticien_id";
-    $backProps["retrocession"]                    = "CRetrocession praticien_id";
-    $backProps["user_debiteur"]                   = "CDebiteurOX user_id";
-    $backProps["user_bioserveur"]                 = "CUserBioserveur user_id";
-    $backProps["bioserveur_account"]              = "CBioServeurAccount user_id";
-    $backProps["compte_rendu"]                    = "CCompteRendu locker_id";
-    $backProps["long_request_log"]                = "CLongRequestLog user_id";
-    $backProps["tasking_assigned_to"]             = "CTaskingTicket assigned_to_id";
-    $backProps["tasking_supervisor"]              = "CTaskingTicket supervisor_id";
-    $backProps["tasking_message_author"]          = "CTaskingTicketMessage user_id";
-    $backProps["tasking_contact_interlocutor"]    = "CTaskingContactEvent interlocutor_user_id";
-    $backProps["usermessage_created"]             = "CUserMessage creator_id";
-    $backProps["usermessage_dest_to"]             = "CUserMessageDest to_user_id";
-    $backProps["usermessage_dest_from"]           = "CUserMessageDest from_user_id";
-    $backProps["constantes"]                      = "CConstantesMedicales user_id";
-    $backProps["sejours_sortie_confirmee"]        = "CSejour confirme_user_id";
-    $backProps["ops_sortie_validee"]              = "COperation sortie_locker_id";
-    $backProps["ticket_requests_referer"]         = "CRequestTicket user_referer_id";
-    $backProps["notification_praticien"]          = "CNotification praticien_id";
-    $backProps["mbhost_installations"]            = "CMbHostInstallation user_id";
-    $backProps["plages_op_owner"]                 = "CPlageOp original_owner_id";
-    $backProps["documents_sisra_receiver"]        = "CSisraDocument account_id";
-    $backProps["bris_de_glace_user"]                   = "CBrisDeGlace user_id";
-    $backProps["log_access_user"]                 = "CLogAccessMedicalData user_id";
-    $backProps["dmp_documents_sent"]              = "CDMPFile author_id";
-    $backProps["dmp_log"]                         = "CDMPLogUser user_id";
-    $backProps["patient_state"]                   = "CPatientState mediuser_id";
-    $backProps["ide_responsable"]                 = "CRPU ide_responsable_id";
-    $backProps["segments"]                        = "CPrescriptionLineSegment user_id";
-    $backProps["favoris_protocoles"]              = "CFavoriProtocole user_id";
+    $backProps                                     = parent::getBackProps();
+    $backProps["secondary_functions"]              = "CSecondaryFunction user_id";
+    $backProps["actes_ccam_executes"]              = "CActeCCAM executant_id";
+    $backProps["actes_ngap_executes"]              = "CActeNGAP executant_id";
+    $backProps["actes_tarmed_executes"]            = "CActeTarmed executant_id";
+    $backProps["actes_caisse_executes"]            = "CActeCaisse executant_id";
+    $backProps["administrations"]                  = "CAdministration administrateur_id";
+    $backProps["aides_saisie"]                     = "CAideSaisie user_id";
+    $backProps["handled_alerts"]                   = "CAlert handled_user_id";
+    $backProps["modeles"]                          = "CCompteRendu user_id";
+    $backProps["documents_ged"]                    = "CDocGed user_id";
+    $backProps["suivis__ged"]                      = "CDocGedSuivi user_id";
+    $backProps["examens"]                          = "CExamenLabo realisateur";
+    $backProps["users"]                            = "CFicheEi user_id";
+    $backProps["valid_users"]                      = "CFicheEi valid_user_id";
+    $backProps["service_valid_users"]              = "CFicheEi service_valid_user_id";
+    $backProps["qualite_users"]                    = "CFicheEi qualite_user_id";
+    $backProps["owned_files"]                      = "CFile author_id";
+    $backProps["forum_messages"]                   = "CForumMessage user_id";
+    $backProps["forum_threads"]                    = "CForumThread user_id";
+    $backProps["hprim21_medecins"]                 = "CHprim21Medecin user_id";
+    $backProps["listes_choix"]                     = "CListeChoix user_id";
+    $backProps["owned_notes"]                      = "CNote user_id";
+    $backProps["observations"]                     = "CObservationMedicale user_id";
+    $backProps["operations_chir"]                  = "COperation chir_id";
+    $backProps["operations_chir2"]                 = "COperation chir_2_id";
+    $backProps["operations_chir3"]                 = "COperation chir_3_id";
+    $backProps["operations_chir4"]                 = "COperation chir_4_id";
+    $backProps["operations_anesth"]                = "COperation anesth_id";
+    $backProps["packs"]                            = "CPack user_id";
+    $backProps["prescription_line_mixes"]          = "CPrescriptionLineMix praticien_id";
+    $backProps["prescription_line_mixes_0"]        = "CPrescriptionLineMix creator_id";
+    $backProps["personnels"]                       = "CPersonnel user_id";
+    $backProps["plages_op_chir"]                   = "CPlageOp chir_id";
+    $backProps["plages_op_anesth"]                 = "CPlageOp anesth_id";
+    $backProps["plages_consult"]                   = "CPlageconsult chir_id";
+    $backProps["plages_conge"]                     = "CPlageConge user_id";
+    $backProps["consults_anesth"]                  = "CConsultAnesth chir_id";
+    $backProps["plages_ressource"]                 = "CPlageressource prat_id";
+    $backProps["prescriptions"]                    = "CPrescription praticien_id";
+    $backProps["prescriptions_labo"]               = "CPrescriptionLabo praticien_id";
+    $backProps["prescription_comments"]            = "CPrescriptionLineComment praticien_id";
+    $backProps["prescription_comments_crees"]      = "CPrescriptionLineComment creator_id";
+    $backProps["prescription_comments_executes"]   = "CPrescriptionLineComment user_executant_id";
+    $backProps["prescription_elements"]            = "CPrescriptionLineElement praticien_id";
+    $backProps["prescription_elements_crees"]      = "CPrescriptionLineElement creator_id";
+    $backProps["prescription_elements_executes"]   = "CPrescriptionLineElement user_executant_id";
+    $backProps["prescription_medicaments"]         = "CPrescriptionLineMedicament praticien_id";
+    $backProps["prescription_medicaments_crees"]   = "CPrescriptionLineMedicament creator_id";
+    $backProps["prescription_protocole_packs"]     = "CPrescriptionProtocolePack praticien_id";
+    $backProps["prescription_dmis"]                = "CPrescriptionLineDMI praticien_id";
+    $backProps["protocoles"]                       = "CProtocole chir_id";
+    $backProps["remplacements"]                    = "CPlageConge replacer_id";
+    $backProps["sejours"]                          = "CSejour praticien_id";
+    $backProps["services"]                         = "CService responsable_id";
+    $backProps["tarifs"]                           = "CTarif chir_id";
+    $backProps["techniciens"]                      = "CTechnicien kine_id";
+    $backProps["temps_hospi"]                      = "CTempsHospi praticien_id";
+    $backProps["temps_chir"]                       = "CTempsOp chir_id";
+    $backProps["temps_prepa"]                      = "CTempsPrepa chir_id";
+    $backProps["transmissions"]                    = "CTransmissionMedicale user_id";
+    $backProps["visites_anesth"]                   = "COperation prat_visite_anesth_id";
+    $backProps["checked_lists"]                    = "CDailyCheckList validator_id";
+    $backProps["evenements_ssr"]                   = "CEvenementSSR therapeute_id";
+    $backProps["activites_rhs"]                    = "CLigneActivitesRHS executant_id";
+    $backProps["replacements"]                     = "CReplacement replacer_id";
+    $backProps["frais_divers"]                     = "CFraisDivers executant_id";
+    $backProps["expediteur_ftp"]                   = "CSenderFTP user_id";
+    $backProps["expediteur_sftp"]                  = "CSenderSFTP user_id";
+    $backProps["expediteur_soap"]                  = "CSenderSOAP user_id";
+    $backProps["expediteur_mllp"]                  = "CSenderMLLP user_id";
+    $backProps["expediteur_fs"]                    = "CSenderFileSystem user_id";
+    $backProps["ufs"]                              = "CAffectationUniteFonctionnelle object_id";
+    $backProps["documents_crees"]                  = "CCompteRendu author_id";
+    $backProps["devenirs_dentaires"]               = "CDevenirDentaire etudiant_id";
+    $backProps["plages_remplacees"]                = "CPlageconsult remplacant_id";
+    $backProps["plages_pour_compte_de"]            = "CPlageconsult pour_compte_id";
+    $backProps["poses_disp_vasc_operateur"]        = "CPoseDispositifVasculaire operateur_id";
+    $backProps["poses_disp_vasc_encadrant"]        = "CPoseDispositifVasculaire encadrant_id";
+    $backProps["praticien_facture_cabinet"]        = "CFactureCabinet praticien_id";
+    $backProps["praticien_facture_etab"]           = "CFactureEtablissement praticien_id";
+    $backProps["tokens"]                           = "CViewAccessToken user_id";
+    $backProps["didacticiel_avancement"]           = "CDidacticielAvancement user_id";
+    $backProps['etape_didacticiel']                = 'CEtapeDidacticiel user_id';
+    $backProps["astreintes"]                       = "CPlageAstreinte user_id";
+    $backProps["dicom_sender"]                     = "CDicomSender user_id";
+    $backProps["cps_pyxvital"]                     = "CPvCPS id_mediuser";
+    $backProps["affectation"]                      = "CAffectation praticien_id";
+    $backProps["regles_sectorisation_mediuser"]    = "CRegleSectorisation praticien_id";
+    $backProps["retrocession"]                     = "CRetrocession praticien_id";
+    $backProps["user_debiteur"]                    = "CDebiteurOX user_id";
+    $backProps["user_bioserveur"]                  = "CUserBioserveur user_id";
+    $backProps["bioserveur_account"]               = "CBioServeurAccount user_id";
+    $backProps["compte_rendu"]                     = "CCompteRendu locker_id";
+    $backProps["long_request_log"]                 = "CLongRequestLog user_id";
+    $backProps["tasking_assigned_to"]              = "CTaskingTicket assigned_to_id";
+    $backProps["tasking_supervisor"]               = "CTaskingTicket supervisor_id";
+    $backProps["tasking_message_author"]           = "CTaskingTicketMessage user_id";
+    $backProps["tasking_contact_interlocutor"]     = "CTaskingContactEvent interlocutor_user_id";
+    $backProps["usermessage_created"]              = "CUserMessage creator_id";
+    $backProps["usermessage_dest_to"]              = "CUserMessageDest to_user_id";
+    $backProps["usermessage_dest_from"]            = "CUserMessageDest from_user_id";
+    $backProps["constantes"]                       = "CConstantesMedicales user_id";
+    $backProps["sejours_sortie_confirmee"]         = "CSejour confirme_user_id";
+    $backProps["ops_sortie_validee"]               = "COperation sortie_locker_id";
+    $backProps["ticket_requests_referer"]          = "CRequestTicket user_referer_id";
+    $backProps["notification_praticien"]           = "CNotification praticien_id";
+    $backProps["mbhost_installations"]             = "CMbHostInstallation user_id";
+    $backProps["plages_op_owner"]                  = "CPlageOp original_owner_id";
+    $backProps["documents_sisra_receiver"]         = "CSisraDocument account_id";
+    $backProps["bris_de_glace_user"]               = "CBrisDeGlace user_id";
+    $backProps["log_access_user"]                  = "CLogAccessMedicalData user_id";
+    $backProps["dmp_documents_sent"]               = "CDMPFile author_id";
+    $backProps["dmp_log"]                          = "CDMPLogUser user_id";
+    $backProps["patient_state"]                    = "CPatientState mediuser_id";
+    $backProps["ide_responsable"]                  = "CRPU ide_responsable_id";
+    $backProps["segments"]                         = "CPrescriptionLineSegment user_id";
+    $backProps["ox_operations_as_requester"]       = "COXOperation requester_id";
+    $backProps["ox_updates_as_requester"]          = "COXUpdate requester_id";
+    $backProps["ox_prod_updates_as_requester"]     = "COXProdUpdate requester_id";
+    $backProps["ox_training_updates_as_requester"] = "COXTrainingUpdate requester_id";
+    $backProps["ox_testing_updates_as_requester"]  = "COXTestingUpdate requester_id";
+    $backProps["ox_operations_as_main"]            = "COXOperation main_executor_id";
+    $backProps["ox_updates_as_main"]               = "COXUpdate main_executor_id";
+    $backProps["ox_prod_updates_as_main"]          = "COXProdUpdate main_executor_id";
+    $backProps["ox_training_updates_as_main"]      = "COXTrainingUpdate main_executor_id";
+    $backProps["ox_testing_updates_as_main"]       = "COXTestingUpdate main_executor_id";
+    $backProps["ox_operations_as_secondary"]       = "COXOperation secondary_executor_id";
+    $backProps["ox_updates_as_secondary"]          = "COXUpdate secondary_executor_id";
+    $backProps["ox_prod_updates_as_secondary"]     = "COXProdUpdate secondary_executor_id";
+    $backProps["ox_training_updates_as_secondary"] = "COXTrainingUpdate secondary_executor_id";
+    $backProps["ox_testing_updates_as_secondary"]  = "COXTestingUpdate secondary_executor_id";
+    $backProps["request_tickets_as_supervisor"]    = "CRequestTicket supervisor_id";
+    $backProps["favoris_protocoles"]               = "CFavoriProtocole user_id";
+
     return $backProps;
   }
 
@@ -417,30 +436,31 @@ class CMediusers extends CPerson {
    * @return CUser
    */
   function createUser() {
-    $user = new CUser();
-    $user->user_id = ($this->_user_id) ? $this->_user_id : $this->user_id;
-    $user->user_type        = $this->_user_type;
-    $user->user_username    = $this->_user_username;
+    $user                = new CUser();
+    $user->user_id       = ($this->_user_id) ? $this->_user_id : $this->user_id;
+    $user->user_type     = $this->_user_type;
+    $user->user_username = $this->_user_username;
 
     if (isset($this->_ldap_store)) {
-      $user->user_password     = $this->_user_password;
+      $user->user_password = $this->_user_password;
     }
     else {
-      $user->_user_password    = $this->_user_password;
+      $user->_user_password = $this->_user_password;
     }
 
-    $user->user_first_name  = $this->_user_first_name;
-    $user->user_last_name   = $this->_user_last_name;
-    $user->user_email       = $this->_user_email;
-    $user->user_phone       = $this->_user_phone;
-    $user->user_astreinte   = $this->_user_astreinte;
-    $user->user_address1    = $this->_user_adresse;
-    $user->user_zip         = $this->_user_cp;
-    $user->user_city        = $this->_user_ville;
-    $user->profile_id       = $this->_profile_id;
-    $user->template         = 0;
+    $user->user_first_name = $this->_user_first_name;
+    $user->user_last_name  = $this->_user_last_name;
+    $user->user_email      = $this->_user_email;
+    $user->user_phone      = $this->_user_phone;
+    $user->user_astreinte  = $this->_user_astreinte;
+    $user->user_address1   = $this->_user_adresse;
+    $user->user_zip        = $this->_user_cp;
+    $user->user_city       = $this->_user_ville;
+    $user->profile_id      = $this->_profile_id;
+    $user->template        = 0;
 
     $user->_merging = $this->_merging;
+
     return $user;
   }
 
@@ -468,10 +488,12 @@ class CMediusers extends CPerson {
   /**
    * @see parent::merge()
    */
-  function merge($objects = array/*<CMbObject>*/(), $fast = false) {
+  function merge($objects = array/*<CMbObject>*/
+    (), $fast = false) {
     if ($this->_force_merge) {
       return parent::merge($objects, $fast);
     }
+
     return CAppUI::tr("CMediusers-merge-impossible");
   }
 
@@ -503,7 +525,7 @@ class CMediusers extends CPerson {
   function loadQueryList($query) {
     /** @var self[] $mediusers */
     CMediusers::$user_autoload = false;
-    $mediusers = parent::loadQueryList($query);
+    $mediusers                 = parent::loadQueryList($query);
     CMediusers::$user_autoload = true;
 
     if (!count($mediusers)) {
@@ -521,6 +543,7 @@ class CMediusers extends CPerson {
 
     return $mediusers;
   }
+
   /**
    * Chargement de l'utilisateur système
    *
@@ -551,8 +574,8 @@ class CMediusers extends CPerson {
 
       // Encrypt this datas
       $this->checkConfidential();
-      $this->_view            = "$this->_user_last_name $this->_user_first_name";
-      $this->_shortview       = "";
+      $this->_view      = "$this->_user_last_name $this->_user_first_name";
+      $this->_shortview = "";
 
       // Initiales
       if (!$this->_shortview = $this->initials) {
@@ -569,7 +592,7 @@ class CMediusers extends CPerson {
           }
         }
       }
-      $this->_shortview = strtoupper($this->_shortview);
+      $this->_shortview      = strtoupper($this->_shortview);
       $this->_user_type_view = CValue::read(CUser::$types, $this->_user_type);
     }
 
@@ -593,7 +616,7 @@ class CMediusers extends CPerson {
    *
    * @return CUser
    */
-  function loadRefProfile(){
+  function loadRefProfile() {
     return $this->_ref_profile = $this->loadFwdRef("_profile_id", true);
   }
 
@@ -604,17 +627,19 @@ class CMediusers extends CPerson {
    */
   function loadRefFunction() {
     /** @var CFunctions $function */
-    $function = $this->loadFwdRef("function_id", true);
-    $this->_group_id = $function ? $function->group_id : null;
+    $function            = $this->loadFwdRef("function_id", true);
+    $this->_group_id     = $function ? $function->group_id : null;
     $this->_ref_function = $function;
     $this->updateColor();
+
     return $this->_ref_function;
   }
 
   function updateColor() {
-    $function_color = $this->_ref_function ? $this->_ref_function->color : null;
-    $this->_color = $this->color ? $this->color : $function_color;
+    $function_color    = $this->_ref_function ? $this->_ref_function->color : null;
+    $this->_color      = $this->color ? $this->color : $function_color;
     $this->_font_color = CColorSpec::get_text_color($this->_color) > 130 ? "000000" : "ffffff";
+
     return $this->_color;
   }
 
@@ -632,7 +657,7 @@ class CMediusers extends CPerson {
    *
    * @return CSpecCPAM
    */
-  function loadRefSpecCPAM(){
+  function loadRefSpecCPAM() {
     return $this->_ref_spec_cpam = $this->loadFwdRef("spec_cpam_id", true);
   }
 
@@ -641,7 +666,7 @@ class CMediusers extends CPerson {
    *
    * @return CSpecialtyAsip
    */
-  function loadRefOtherSpec(){
+  function loadRefOtherSpec() {
     return $this->_ref_other_spec = $this->loadFwdRef("other_specialty_id", true);
   }
 
@@ -670,7 +695,7 @@ class CMediusers extends CPerson {
       return true;
     }
     $this->loadRefFunction();
-    if($perm = CPermObject::getPermObject($this, $permType, $this->_ref_function)) {
+    if ($perm = CPermObject::getPermObject($this, $permType, $this->_ref_function)) {
       return $perm;
     }
 
@@ -679,7 +704,7 @@ class CMediusers extends CPerson {
       /** @var  CSecondaryFunction $_link */
       $fonction = $_link->loadRefFunction();
       $fonction->load($_link->function_id);
-      if($perm = $perm || CPermObject::getPermObject($this, $permType, $fonction)) {
+      if ($perm = $perm || CPermObject::getPermObject($this, $permType, $fonction)) {
         return $perm;
       }
     }
@@ -702,7 +727,7 @@ class CMediusers extends CPerson {
       $functions[] = $curr_sec_func->function_id;
     }
     $list_functions = implode(",", $functions);
-    $where = array(
+    $where          = array(
       "protocole.chir_id = '$this->_id' OR protocole.function_id IN ($list_functions)"
     );
 
@@ -710,7 +735,7 @@ class CMediusers extends CPerson {
       $where["type"] = "= '$type'";
     }
 
-    $protocole = new CProtocole();
+    $protocole             = new CProtocole();
     $this->_ref_protocoles = $protocole->loadList($where, "libelle_sejour, libelle, codes_ccam");
   }
 
@@ -722,7 +747,7 @@ class CMediusers extends CPerson {
       $functions[] = $curr_sec_func->function_id;
     }
     $list_functions = implode(",", $functions);
-    $where = array(
+    $where          = array(
       "protocole.chir_id = '$this->_id' OR protocole.function_id IN ($list_functions)"
     );
 
@@ -730,7 +755,7 @@ class CMediusers extends CPerson {
       $where["type"] = "= '$type'";
     }
 
-    $protocole = new CProtocole();
+    $protocole               = new CProtocole();
     $this->_count_protocoles = $protocole->countList($where);
   }
 
@@ -742,6 +767,7 @@ class CMediusers extends CPerson {
   function getOwners() {
     $func = $this->loadRefFunction();
     $etab = $func->loadRefGroup();
+
     return array(
       "prat" => $this,
       "func" => $func,
@@ -815,8 +841,8 @@ class CMediusers extends CPerson {
 
     if (CAppUI::conf("readonly")) {
       return CAppUI::tr($this->_class) .
-        CAppUI::tr("CMbObject-msg-store-failed") .
-        CAppUI::tr("Mode-readonly-msg");
+      CAppUI::tr("CMbObject-msg-store-failed") .
+      CAppUI::tr("Mode-readonly-msg");
     }
 
     if ($msg = $this->check()) {
@@ -859,20 +885,20 @@ class CMediusers extends CPerson {
     // Can't use parent::store cuz user_id don't auto-increment
     if ($this->user_id) {
       $vars = $this->getPlainFields();
-      $ret = $spec->ds->updateObject($spec->table, $vars, $spec->key, $spec->nullifyEmptyStrings);
+      $ret  = $spec->ds->updateObject($spec->table, $vars, $spec->key, $spec->nullifyEmptyStrings);
     }
     else {
       $this->user_id = $user->user_id;
-      $vars = $this->getPlainFields();
-      $keyToUpdate = $spec->incremented ? $spec->key : null;
-      $ret = $spec->ds->insertObject($spec->table, $this, $vars, $keyToUpdate);
+      $vars          = $this->getPlainFields();
+      $keyToUpdate   = $spec->incremented ? $spec->key : null;
+      $ret           = $spec->ds->insertObject($spec->table, $this, $vars, $keyToUpdate);
     }
     /// </diff>
 
     if (!$ret) {
       return CAppUI::tr($this->_class) .
-        CAppUI::tr("CMbObject-msg-store-failed") .
-        $spec->ds->error();
+      CAppUI::tr("CMbObject-msg-store-failed") .
+      $spec->ds->error();
     }
 
     /// <diff>
@@ -900,11 +926,12 @@ class CMediusers extends CPerson {
     $this->notify("AfterStore");
 
     $this->_old = null;
+
     return null;
   }
 
   function delFunctionPermission() {
-    $where = array();
+    $where                 = array();
     $where["user_id"]      = "= '$this->user_id'";
     $where["object_class"] = "= 'CFunctions'";
     $where["object_id"]    = "= '$this->function_id'";
@@ -921,14 +948,14 @@ class CMediusers extends CPerson {
    * @return void
    */
   function insFunctionPermission() {
-    $where = array();
+    $where                 = array();
     $where["user_id"]      = "= '$this->user_id'";
     $where["object_class"] = "= 'CFunctions'";
     $where["object_id"]    = "= '$this->function_id'";
 
     $perm = new CPermObject;
     if (!$perm->loadObject($where)) {
-      $perm = new CPermObject;
+      $perm               = new CPermObject;
       $perm->user_id      = $this->user_id;
       $perm->object_class = "CFunctions";
       $perm->object_id    = $this->function_id;
@@ -945,14 +972,14 @@ class CMediusers extends CPerson {
   function insGroupPermission() {
     $function = new CFunctions;
     $function->load($this->function_id);
-    $where = array();
+    $where                 = array();
     $where["user_id"]      = "= '$this->user_id'";
     $where["object_class"] = "= 'CGroups'";
     $where["object_id"]    = "= '$function->group_id'";
 
     $perm = new CPermObject;
     if (!$perm->loadObject($where)) {
-      $perm = new CPermObject;
+      $perm               = new CPermObject;
       $perm->user_id      = $this->user_id;
       $perm->object_class = "CGroups";
       $perm->object_id    = $function->group_id;
@@ -975,8 +1002,8 @@ class CMediusers extends CPerson {
    * @return CMediusers[]
    */
   function loadListFromType(
-      $user_types = null, $permType = PERM_READ, $function_id = null,
-      $name = null, $actif = true, $secondary = false, $reverse = false
+    $user_types = null, $permType = PERM_READ, $function_id = null,
+    $name = null, $actif = true, $secondary = false, $reverse = false
   ) {
     $where = array();
     $ljoin = array();
@@ -993,8 +1020,8 @@ class CMediusers extends CPerson {
     }
 
     $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
-    $ljoin["secondary_function"] = "secondary_function.user_id = users_mediboard.user_id";
-    $ljoin[] = "functions_mediboard AS sec_fnc_mb ON sec_fnc_mb.function_id = secondary_function.function_id";
+    $ljoin["secondary_function"]  = "secondary_function.user_id = users_mediboard.user_id";
+    $ljoin[]                      = "functions_mediboard AS sec_fnc_mb ON sec_fnc_mb.function_id = secondary_function.function_id";
 
     if ($function_id) {
       if ($secondary) {
@@ -1006,7 +1033,7 @@ class CMediusers extends CPerson {
     }
 
     // Filter on current group or users in secondaries functions
-    $group = CGroups::loadCurrent();
+    $group   = CGroups::loadCurrent();
     $where[] = "functions_mediboard.group_id = '$group->_id' OR sec_fnc_mb.group_id = '$group->_id'";
 
     // Filter on user type
@@ -1021,7 +1048,7 @@ class CMediusers extends CPerson {
         CSQLDataSource::prepareIn($user_types);
     }
 
-    $order = "`users`.`user_last_name`, `users`.`user_first_name`";
+    $order    = "`users`.`user_last_name`, `users`.`user_first_name`";
     $group_by = array("user_id");
 
     // Get all users
@@ -1069,7 +1096,7 @@ class CMediusers extends CPerson {
   function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
     $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
     // Filtre sur l'établissement
-    $group = CGroups::loadCurrent();
+    $group                                 = CGroups::loadCurrent();
     $where["functions_mediboard.group_id"] = "= '$group->_id'";
 
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
@@ -1087,8 +1114,8 @@ class CMediusers extends CPerson {
   static function loadFonctions($permType = PERM_READ, $group_id = null, $type = null) {
     $group = CGroups::loadCurrent();
 
-    $function = new CFunctions();
-    $function->actif = 1;
+    $function           = new CFunctions();
+    $function->actif    = 1;
     $function->group_id = CValue::first($group_id, $group->_id);
 
     if ($type) {
@@ -1183,6 +1210,7 @@ class CMediusers extends CPerson {
     if (CAppUI::pref("take_consult_for_dieteticien")) {
       $list[] = "Diététicien";
     }
+
     return $this->loadListFromType($list, $permType, $function_id, $name, $actif, $secondary);
   }
 
@@ -1327,7 +1355,7 @@ class CMediusers extends CPerson {
    *
    * @return bool
    */
-  function isSecretaire () {
+  function isSecretaire() {
     return $this->_is_secretaire = $this->isFromType(array("Secrétaire", "Administrator"));
   }
 
@@ -1378,7 +1406,7 @@ class CMediusers extends CPerson {
    *
    * @return bool
    */
-  function isUrgentiste () {
+  function isUrgentiste() {
     return $this->_is_urgentiste = ($this->function_id == CGroups::loadCurrent()->service_urgences_id);
   }
 
@@ -1396,26 +1424,26 @@ class CMediusers extends CPerson {
     $this->loadRefSpecCPAM();
     $this->loadRefDiscipline();
     $this->_ref_function->fillTemplate($template);
-    $template->addProperty("Praticien - Nom"            , $this->_user_last_name );
-    $template->addProperty("Praticien - Prénom"         , $this->_user_first_name);
-    $template->addProperty("Praticien - Initiales"      , $this->_shortview);
-    $template->addProperty("Praticien - Discipline"     , $this->_ref_discipline->_view);
-    $template->addProperty("Praticien - Spécialité"     , $this->_ref_spec_cpam->_view);
-    $template->addProperty("Praticien - CAB"            , $this->cab);
-    $template->addProperty("Praticien - CONV"           , $this->conv);
-    $template->addProperty("Praticien - ZISD"           , $this->zisd);
-    $template->addProperty("Praticien - IK"             , $this->ik);
+    $template->addProperty("Praticien - Nom", $this->_user_last_name);
+    $template->addProperty("Praticien - Prénom", $this->_user_first_name);
+    $template->addProperty("Praticien - Initiales", $this->_shortview);
+    $template->addProperty("Praticien - Discipline", $this->_ref_discipline->_view);
+    $template->addProperty("Praticien - Spécialité", $this->_ref_spec_cpam->_view);
+    $template->addProperty("Praticien - CAB", $this->cab);
+    $template->addProperty("Praticien - CONV", $this->conv);
+    $template->addProperty("Praticien - ZISD", $this->zisd);
+    $template->addProperty("Praticien - IK", $this->ik);
 
-    $template->addProperty("Praticien - Titres"         , $this->titres);
-    $template->addProperty("Praticien - ADELI"          , $this->adeli);
+    $template->addProperty("Praticien - Titres", $this->titres);
+    $template->addProperty("Praticien - ADELI", $this->adeli);
     $template->addBarcode("Praticien - Code barre ADELI", $this->adeli, array("barcode" => array(
       "title" => CAppUI::tr("{$this->_class}-adeli")
     )));
-    $template->addProperty("Praticien - RPPS"           , $this->rpps);
-    $template->addBarcode("Praticien - Code barre RPPS" , $this->rpps, array("barcode" => array(
+    $template->addProperty("Praticien - RPPS", $this->rpps);
+    $template->addBarcode("Praticien - Code barre RPPS", $this->rpps, array("barcode" => array(
       "title" => CAppUI::tr("{$this->_class}-rpps")
     )));
-    $template->addProperty("Praticien - E-mail"         , $this->_user_email);
+    $template->addProperty("Praticien - E-mail", $this->_user_email);
     $template->addProperty("Praticien - E-mail Apicrypt", $this->mail_apicrypt);
 
     // Identité
@@ -1442,15 +1470,15 @@ class CMediusers extends CPerson {
       /** @var CSecondaryFunction $_sec_spec */
       $_sec_spec->loadRefFunction();
       $_sec_spec->loadRefUser();
-      $_function = $_sec_spec->_ref_function;
+      $_function                        = $_sec_spec->_ref_function;
       $secondary_specs[$_function->_id] = $_function;
     }
     // Plages d'intervention
-    $plage = new CPlageOp();
-    $where = array();
-    $where["date"] = "= '$date'";
-    $where[] = "plagesop.chir_id = '$this->_id' OR plagesop.spec_id = '$this->function_id' OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($secondary_specs));
-    $order = "debut";
+    $plage             = new CPlageOp();
+    $where             = array();
+    $where["date"]     = "= '$date'";
+    $where[]           = "plagesop.chir_id = '$this->_id' OR plagesop.spec_id = '$this->function_id' OR plagesop.spec_id " . CSQLDataSource::prepareIn(array_keys($secondary_specs));
+    $order             = "debut";
     $this->_ref_plages = $plage->loadList($where, $order);
 
     // Chargement d'optimisation
@@ -1503,17 +1531,17 @@ class CMediusers extends CPerson {
     }
 
     // Interventions déplacés
-    $deplacee = new COperation();
-    $ljoin = array();
-    $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
-    $where = array();
+    $deplacee                       = new COperation();
+    $ljoin                          = array();
+    $ljoin["plagesop"]              = "operations.plageop_id = plagesop.plageop_id";
+    $where                          = array();
     $where["operations.plageop_id"] = "IS NOT NULL";
     $where["operations.annulee"]    = "= '0'";
     $where["plagesop.salle_id"]     = "!= operations.salle_id";
     $where["plagesop.date"]         = "= '$date'";
     $where["plagesop.chir_id"]      = "= '$this->_id'";
-    $order = "operations.time_operation";
-    $this->_ref_deplacees = $deplacee->loadList($where, $order, null, null, $ljoin);
+    $order                          = "operations.time_operation";
+    $this->_ref_deplacees           = $deplacee->loadList($where, $order, null, null, $ljoin);
 
     // Chargement d'optimisation
     CMbObject::massLoadFwdRef($this->_ref_deplacees, "chir_id");
@@ -1528,8 +1556,8 @@ class CMediusers extends CPerson {
     }
 
     // Urgences
-    $urgence = new COperation();
-    $where = array();
+    $urgence             = new COperation();
+    $where               = array();
     $where["plageop_id"] = "IS NULL";
     $where["date"]       = "= '$date'";
     $where["chir_id"]    = "= '$this->_id'";
@@ -1555,7 +1583,7 @@ class CMediusers extends CPerson {
    *
    * @return array|null
    */
-  function getBasicInfo(){
+  function getBasicInfo() {
     if (!$this->_ref_module) {
       return null;
     }
@@ -1563,18 +1591,18 @@ class CMediusers extends CPerson {
     $this->updateFormFields();
     $this->loadRefFunction()->loadRefGroup();
 
-    return $this->_basic_info = array (
-      'id'    => $this->_id,
-      'guid'  => $this->_guid,
-      'view'  => $this->_view,
-      'login' => $this->_user_username,
-      'function' => array (
-        'id' => $this->_ref_function->_id,
+    return $this->_basic_info = array(
+      'id'       => $this->_id,
+      'guid'     => $this->_guid,
+      'view'     => $this->_view,
+      'login'    => $this->_user_username,
+      'function' => array(
+        'id'    => $this->_ref_function->_id,
         'guid'  => $this->_ref_function->_guid,
         'view'  => $this->_ref_function->_view,
         'color' => $this->_ref_function->color
       ),
-      'group' => array (
+      'group'    => array(
         'guid' => $this->_ref_function->_ref_group->_guid,
         'id'   => $this->_ref_function->_ref_group->_id,
         'view' => $this->_ref_function->_ref_group->_view,
@@ -1583,18 +1611,18 @@ class CMediusers extends CPerson {
   }
 
   function makeUsernamePassword($first_name, $last_name, $id = null, $number = false, $prepass = "mdp") {
-    $length = 20 - strlen($id);
-    $this->_user_username = substr(preg_replace($number ? "/[^a-z0-9]/i" : "/[^a-z]/i", "", strtolower(CMbString::removeDiacritics(($first_name ? $first_name[0] : '').$last_name))), 0, $length) . $id;
+    $length               = 20 - strlen($id);
+    $this->_user_username = substr(preg_replace($number ? "/[^a-z0-9]/i" : "/[^a-z]/i", "", strtolower(CMbString::removeDiacritics(($first_name ? $first_name[0] : '') . $last_name))), 0, $length) . $id;
     $this->_user_password = $prepass . substr(preg_replace($number ? "/[^a-z0-9]/i" : "/[^a-z]/i", "", strtolower(CMbString::removeDiacritics($last_name))), 0, $length) . $id;
   }
 
-  function getNbJoursPlanningSSR($date){
-    $sunday = CMbDT::date("next sunday", CMbDT::date("- 1 DAY", $date));
+  function getNbJoursPlanningSSR($date) {
+    $sunday   = CMbDT::date("next sunday", CMbDT::date("- 1 DAY", $date));
     $saturday = CMbDT::date("-1 DAY", $sunday);
 
-    $_evt = new CEvenementSSR();
-    $where = array();
-    $where["debut"] = "BETWEEN '$sunday 00:00:00' AND '$sunday 23:59:59'";
+    $_evt               = new CEvenementSSR();
+    $where              = array();
+    $where["debut"]     = "BETWEEN '$sunday 00:00:00' AND '$sunday 23:59:59'";
     $where["sejour_id"] = " = '$this->_id'";
     $count_event_sunday = $_evt->countList($where);
 
@@ -1602,14 +1630,15 @@ class CMediusers extends CPerson {
 
     // Si aucun evenement le dimanche
     if (!$count_event_sunday) {
-      $nb_days = 6;
-      $where["debut"] = "BETWEEN '$saturday 00:00:00' AND '$saturday 23:59:59'";
-      $count_event_saturday= $_evt->countList($where);
+      $nb_days              = 6;
+      $where["debut"]       = "BETWEEN '$saturday 00:00:00' AND '$saturday 23:59:59'";
+      $count_event_saturday = $_evt->countList($where);
       // Aucun evenement le samedi et aucun le dimanche
       if (!$count_event_saturday) {
         $nb_days = 5;
       }
     }
+
     return $nb_days;
   }
 
@@ -1640,6 +1669,7 @@ class CMediusers extends CPerson {
     if ($idex->tag == self::getTagSoftware()) {
       return "software";
     }
+
     return null;
   }
 
@@ -1714,6 +1744,7 @@ class CMediusers extends CPerson {
     if (!$this->_ref_user || !$this->_ref_user->_id) {
       $this->loadRefUser();
     }
+
     return $this->_ref_user->dont_log_connection;
   }
 
@@ -1731,12 +1762,12 @@ class CMediusers extends CPerson {
     $this->_p_first_name     = $this->_user_first_name;
     $this->_p_last_name      = $this->_user_last_name;
   }
-  
+
   /**
    * Fonction récupérant les rétrocessions du praticien
-   * 
+   *
    * @return $this->_ref_retrocessions
-  **/
+   **/
   function loadRefsRetrocessions() {
     return $this->_ref_retrocessions = $this->loadBackRefs("retrocession");
   }
@@ -1747,15 +1778,15 @@ class CMediusers extends CPerson {
       return CFunctionCache::get($context);
     }
 
-    $mediuser = new CMediusers();
-    $where = array();
+    $mediuser                       = new CMediusers();
+    $where                          = array();
     $where["users_mediboard.adeli"] = " = '$adeli'";
     $mediuser->loadObject($where);
 
     return CFunctionCache::set($context, $mediuser);
   }
 
-  function getLastLogin(){
+  function getLastLogin() {
     return $this->_user_last_login = $this->_ref_user->getLastLogin();
   }
 
