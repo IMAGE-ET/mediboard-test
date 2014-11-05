@@ -53,10 +53,10 @@ foreach ($musers as $_user) {
 
     $libelle = '<h3 style="text-align: center">
     CONGES</h3>
-    <p style="text-align: center">'.$conge->libelle.'</p>';
+    <p style="text-align: center">'.CMbString::htmlEntities($conge->libelle).'</p>';
     if ($conge->replacer_id) {
       $replacer = $conge->loadRefReplacer();
-      $libelle .= '<p style="text-align: center">Remplacé par : '.$replacer->_view.'</p>';
+      $libelle .= '<p style="text-align: center">Remplacé par : '.CMbString::htmlEntities($replacer->_view).'</p>';
     }
 
     $event = new CPlanningEvent(
@@ -85,7 +85,7 @@ foreach ($musers as $_user) {
 
   // add prat to the calendar
   $planning->addDayLabel(
-    $i, "<span style=\"$style\">".$_user->_view."</span>", null, "#".$_user->_color, null, false, array("user_id" => $user_id));
+    $i, "<span style=\"$style\">".CMbString::htmlEntities($_user->_view)."</span>", null, "#".$_user->_color, null, false, array("user_id" => $user_id));
 
   $plage = new CPlageconsult();
   $plage->chir_id = $user_id;
@@ -99,7 +99,7 @@ foreach ($musers as $_user) {
       $_plage->_guid,
       $i." ".$_plage->debut,
       CMbDT::minutesRelative($_plage->debut, $_plage->fin),
-      $_plage->libelle,
+      CMbString::htmlEntities($_plage->libelle),
       $_plage->color
     );
     $range->type = "plageconsult";
@@ -188,7 +188,7 @@ foreach ($musers as $_user) {
         if ($_consult->_consult_sejour_out_of_nb) {
           $title.= "<span style='float:right;'>$_consult->_consult_sejour_nb/ $_consult->_consult_sejour_out_of_nb</span>";
         }
-        $title .= "<strong>$heure</strong> ".$_consult->_ref_patient->_view . "\n" . $motif;
+        $title .= "<strong>$heure</strong> ".CMbString::htmlEntities($_consult->_ref_patient->_view). "\n" . CMbString::htmlEntities($motif);
 
         $event = new CPlanningEvent(
           $_consult->_guid,
@@ -209,7 +209,7 @@ foreach ($musers as $_user) {
         $event = new CPlanningEvent(
           $_consult->_guid,
           $debute, $_consult->duree * $_plage->_freq,
-          $motif ? $motif : "[PAUSE]",
+          $motif ? CMbString::htmlEntities($motif) : "[PAUSE]",
           $color,
           true,
           null,
