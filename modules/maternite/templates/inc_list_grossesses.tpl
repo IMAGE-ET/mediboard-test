@@ -16,6 +16,7 @@
     {{if $show_checkbox && $object->_id && !$object->grossesse_id && $grossesses|@count == 1}}
       Grossesse.formFrom.unique_grossesse_id.checked = true;
     {{/if}}
+    Grossesse.editGrossesse($V(Grossesse.formFrom.unique_grossesse_id));
   });
 </script>
 <form name="bindFormGrossesse" method="get">
