@@ -426,6 +426,8 @@ class CMediusers extends CPerson {
     $backProps["ox_testing_updates_as_secondary"]  = "COXTestingUpdate secondary_executor_id";
     $backProps["request_tickets_as_supervisor"]    = "CRequestTicket supervisor_id";
     $backProps["favoris_protocoles"]               = "CFavoriProtocole user_id";
+    $backProps['codage_ccam']                      = 'CCodageCCAM praticien_id';
+    $backProps['remboursement_noemie']             = 'CPvRemboursementNoemie praticien_id';
 
     return $backProps;
   }
