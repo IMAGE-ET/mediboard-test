@@ -162,25 +162,9 @@ showModalTP = function() {
     <strong>Motif des séjours précédents</strong>
     <ul>
       {{foreach from=$sejours item=_sejour}}
-        {{if !$_sejour->annule}}
-          <li>
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
-            {{if $_sejour->_motif_complet}}
-              {{$_sejour->_motif_complet|nl2br}}
-            {{else}}
-              {{assign var=motif_see value=true}}
-              {{foreach from=$_sejour->_ref_operations item=_operation}}
-                {{if $motif_see && $_operation->libelle}}
-                  {{assign var=motif_see value=false}}
-                {{/if}}
-              {{/foreach}}
-              {{if $motif_see}}
-                {{$_sejour}}
-              {{/if}}
-            {{/if}}
-          </span>
-          </li>
-        {{/if}}
+        <li>
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">{{$_sejour->_motif_complet|nl2br}}</span>
+        </li>
       {{/foreach}}
     </ul>
   {{/if}}

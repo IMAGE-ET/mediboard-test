@@ -35,6 +35,11 @@ $_sejour = new CSejour();
 $sejours = $_sejour->loadList($where, 'entree DESC');
 foreach ($sejours as $_sejour) {
   $_sejour->loadRefsOperations();
+
+  if (!$_sejour->_motif_complet || $_sejour->annule) {
+    unset($sejours[$_sejour->_id]);
+    continue;
+  }
 }
 
 $prescription_sejour = $sejour->loadRefPrescriptionSejour();
