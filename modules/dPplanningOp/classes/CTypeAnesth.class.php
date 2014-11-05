@@ -56,8 +56,9 @@ class CTypeAnesth extends CMbObject {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["operations"] = "COperation type_anesth";
-    $backProps["protocole"]  = "CProtocole type_anesth";
+    $backProps["operations"]      = "COperation type_anesth";
+    $backProps["protocole"]       = "CProtocole type_anesth";
+    $backProps["consult_anesth"]  = "CConsultAnesth type_anesth";
 
     return $backProps;
   }
