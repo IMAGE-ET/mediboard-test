@@ -10,9 +10,11 @@
  */
 
 EAITransformationRule = {
-  edit: function(transformation_rule_id) {
+  edit: function(transformation_rule_id, transformation_ruleset_id, mode_duplication) {
     new Url("eai", "ajax_edit_transformation_rule")
       .addParam("transformation_rule_id", transformation_rule_id)
+      .addParam("transformation_ruleset_id", transformation_ruleset_id)
+      .addParam("mode_duplication", mode_duplication)
       .requestModal(600);
   },
 

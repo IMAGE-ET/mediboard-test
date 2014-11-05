@@ -40,9 +40,15 @@
   </tr>
 
   {{foreach from=$transf_rules item=_transformation_rule}}
-    <tr {{if $_transformation_rule->active}}class="opacity-30"{{/if}}>
+    <tr {{if !$_transformation_rule->active}}class="opacity-30"{{/if}}>
       <td class="narrow">
-        <button class="button edit notext compact" onclick="EAITransformationRule.edit('{{$_transformation_rule->_id}}');"></button>
+        <button class="button edit notext compact" onclick="EAITransformationRule.edit('{{$_transformation_rule->_id}}');"
+                title="{{tr}}Edit{{/tr}}">
+          {{tr}}Edit{{/tr}}
+        </button>
+        <button onclick="EAITransformationRule.edit('{{$_transformation_rule->_id}}',
+                          '{{$_transformation_rule->eai_transformation_ruleset_id}}', true)"
+                class="button notext compact duplicate" type="button" title="{{tr}}Duplicate{{/tr}}">{{tr}}Duplicate{{/tr}}</button>
       </td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="name"}}</td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="profil"}}</td>
@@ -65,6 +71,9 @@
           <input type="hidden" name="ajax" value="1" />
           <input type="hidden" name="transformation_rule_id_move" value="{{$_transformation_rule->_id}}" />
           <input type="hidden" name="direction" value="" />
+
+          <input type="hidden" name="callback"
+                 value="EAITransformationRuleSet.refreshTransformationRuleList.curry('{{$_transformation_rule->eai_transformation_ruleset_id}}')" />
 
           <img src="./images/icons/updown.gif" usemap="#map-{{$_transformation_rule->_id}}" />
           <map name="map-{{$_transformation_rule->_id}}">

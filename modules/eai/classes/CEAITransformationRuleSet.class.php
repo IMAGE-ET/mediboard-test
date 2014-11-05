@@ -87,16 +87,27 @@ class CEAITransformationRuleSet extends CMbObject {
   /**
    * Count transformation rules
    *
-   * @param bool $onlyActive Only active
+   * @return int
+   */
+  function countRefsEAITransformationRules() {
+    return $this->_count_transformation_rules = $this->countBackRefs("eai_transformation_rules");
+  }
+
+  /**
+   * Count transformation rules
    *
    * @return int
    */
-  function countRefsEAITransformationRules($onlyActive = false) {
-    $where = array();
-    if ($onlyActive) {
-      $where["active"] = " = '1'";
-    }
+  function countRefsEAITransformationRulesOnlyActive() {
+    return $this->_count_active_transformation_rules = $this->countBackRefs("eai_transformation_rules", array("active" => " = '1'"));
+  }
 
-    return $this->_count_transformation_rules = $this->countBackRefs("eai_transformation_rules", $where); //only actives
+  /**
+   * Count transformation rules
+   *
+   * @return int
+   */
+  function countRefsEAITransformationRulesOnlyInactive() {
+    return $this->_count_inactive_transformation_rules = $this->countBackRefs("eai_transformation_rules", array("active" => " = '0'"));
   }
 }

@@ -52,6 +52,6 @@ if ($transf_rule_to_move->_id) {
 
 $transf_rule->store();
 
-CAppUI::stepAjax("eai-msg-CEAITransformationRule--Move rank done");
+CAppUI::stepAjax("CEAITransformationRule-msg-Move rank done");
 
 CApp::rip();

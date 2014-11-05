@@ -28,6 +28,6 @@ EAITransformationRuleSet = {
   refreshTransformationRuleList : function (transformation_ruleset_id) {
     new Url("eai", "ajax_refresh_list_transformation_rules")
       .addParam("transformation_ruleset_id", transformation_ruleset_id)
-      .requestUpdate("transformation_rules");
+      .requestUpdate("transformation_rules",  EAITransformationRuleSet.refreshList);
   }
 }
