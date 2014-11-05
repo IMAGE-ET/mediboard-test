@@ -41,7 +41,7 @@
   refreshDossierSoin = function(mode_dossier, chapitre, force_refresh){
     PlanSoins.toggleAnciennete(chapitre);
     if(!window[chapitre+'SoinLoaded'] || force_refresh) {
-      PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}',PlanSoins.nb_decalage, mode_dossier, null, null, null, chapitre, null, null, '{{$hide_old_lines}}');
+      PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}',PlanSoins.nb_decalage, mode_dossier, null, null, null, chapitre, null, null, '{{$hide_old_lines}}', '{{$hide_line_inactive}}');
       window[chapitre+'SoinLoaded'] = true;
     }
   }
@@ -453,12 +453,24 @@
 
     {{if "soins suivi hide_old_line"|conf:"CGroups-$g" && $date == $smarty.now|date_format:'%Y-%m-%d'}}
       {{if $hide_old_lines}}
-        <button type="button" class="search" style="float: right;{{if !"soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}margin-top: -4px;{{/if}}" onclick="PlanSoins.reloadSuiviSoin('{{$sejour->_id}}', '{{$date}}', 0);">
+        <button type="button" class="search" style="float: right;{{if !"soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}margin-top: -4px;{{/if}}" onclick="PlanSoins.reloadSuiviSoin('{{$sejour->_id}}', '{{$date}}', 0, '{{$hide_line_inactive}}');">
           Afficher les prescriptions terminées ({{$hidden_lines_count}})
         </button>
       {{else}}
-        <button type="button" class="search" style="float: right;{{if !"soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}margin-top: -4px;{{/if}}" onclick="PlanSoins.reloadSuiviSoin('{{$sejour->_id}}', '{{$date}}', 1);">
+        <button type="button" class="search" style="float: right;{{if !"soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}margin-top: -4px;{{/if}}" onclick="PlanSoins.reloadSuiviSoin('{{$sejour->_id}}', '{{$date}}', 1, '{{$hide_line_inactive}}');">
           Masquer les prescriptions terminées
+        </button>
+      {{/if}}
+    {{/if}}
+
+    {{if $app->user_prefs.hide_line_inactive && $date == $smarty.now|date_format:'%Y-%m-%d'}}
+      {{if $hide_line_inactive}}
+        <button type="button" class="search" style="float: right;{{if !"soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}margin-top: -4px;{{/if}}" onclick="PlanSoins.reloadSuiviSoin('{{$sejour->_id}}', '{{$date}}', '{{$hide_old_lines}}', 0);">
+          Afficher les lignes inactives ({{$hide_inactive_count}})
+        </button>
+      {{else}}
+        <button type="button" class="search" style="float: right;{{if !"soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}margin-top: -4px;{{/if}}" onclick="PlanSoins.reloadSuiviSoin('{{$sejour->_id}}', '{{$date}}', '{{$hide_old_lines}}', 1);">
+          Masquer les lignes inactives
         </button>
       {{/if}}
     {{/if}}

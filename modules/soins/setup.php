@@ -134,6 +134,9 @@ class CSetupsoins extends CSetup {
       AND `user_id` IS NOT NULL
       GROUP BY user_id ;";
     $this->addQuery($query);
-    $this->mod_version = '0.24';
+    $this->makeRevision("0.24");
+
+    $this->addPrefQuery("hide_line_inactive", "0");
+    $this->mod_version = '0.25';
   }
 }

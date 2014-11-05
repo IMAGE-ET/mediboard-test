@@ -25,6 +25,7 @@ $hide_close         = CValue::get("hide_close", 0);
 $with_navigation    = CValue::get("with_navigation");
 $regroup_lines      = CValue::get("regroup_lines");
 $hide_old_lines     = CValue::get("hide_old_lines", CAppUI::conf("soins suivi hide_old_line", $group->_guid));
+$hide_line_inactive = CValue::get("hide_line_inactive", CAppUI::pref("hide_line_inactive"));
 
 if (!$date) {
   $date = CMbDT::date();
@@ -32,6 +33,7 @@ if (!$date) {
 
 if ($date != CMbDT::date()) {
   $hide_old_lines = 0;
+  $hide_line_inactive = 0;
 }
 
 CPrescription::$mode_plan_soins = true;
@@ -86,6 +88,7 @@ $poids = $const_med->poids;
 $risques_cis = array();
 
 $hidden_lines_count = 0;
+$hide_inactive_count = 0;
 if (CModule::getActive("dPprescription")) {
 
   // Chargement des cis à risque
@@ -246,7 +249,7 @@ if (CModule::getActive("dPprescription")) {
 
       // Chargement des lignes de medicament
       if (in_array($chapitre, array("all_med", "all_chaps"))) {
-        $prescription->loadRefsLinesMedByCat("1", "1", '', $hide_old_lines);
+        $prescription->loadRefsLinesMedByCat("1", "1", '', $hide_old_lines, null, null, $hide_line_inactive);
         foreach ($prescription->_ref_prescription_lines as $_line_med) {
           $_line_med->loadRefLogSignee();
           $_line_med->countVariantes();
@@ -267,7 +270,7 @@ if (CModule::getActive("dPprescription")) {
         }
 
         // Chargement des prescription_line_mixes
-        $prescription->loadRefsPrescriptionLineMixes("", "1", 1, '', $hide_old_lines);
+        $prescription->loadRefsPrescriptionLineMixes("", "1", 1, '', $hide_old_lines, null, null, $hide_line_inactive);
         foreach ($prescription->_ref_prescription_line_mixes as $_prescription_line_mix) {
           $_prescription_line_mix->countVariantes();
           $_prescription_line_mix->loadRefsVariantes();
@@ -290,14 +293,14 @@ if (CModule::getActive("dPprescription")) {
         }
         // Chargement des lignes d'éléments
         if ($chapitre == "all_chaps") {
-          $prescription->loadRefsLinesElementByCat("1", "1", null, null, null, null, $hide_old_lines);
+          $prescription->loadRefsLinesElementByCat("1", "1", null, null, null, null, $hide_old_lines, null, null, $hide_line_inactive);
           foreach ($prescription->_ref_prescription_lines_element as $_line_elt) {
             $_line_elt->countPlanifications();
             $_line_elt->loadActiveDates();
           }
         }
         elseif ($chapitre == "all_med" && CAppUI::pref("regroupement_med_plan_soins") && CAppUI::conf("soins suivi group_hors_amm_med", $group)) {
-          $prescription->loadRefsLinesElementByCat("1", "1", "med_elt", null, null, null, $hide_old_lines);
+          $prescription->loadRefsLinesElementByCat("1", "1", "med_elt", null, null, null, $hide_old_lines, null, null, $hide_line_inactive);
           foreach ($prescription->_ref_prescription_lines_element as $_line_elt) {
             $_line_elt->countPlanifications();
             $_line_elt->loadActiveDates();
@@ -305,7 +308,7 @@ if (CModule::getActive("dPprescription")) {
         }
       }
       elseif ($chapitre == "med" || $chapitre == "inj") {
-        $prescription->loadRefsLinesMedByCat("1", "1", '', $hide_old_lines);
+        $prescription->loadRefsLinesMedByCat("1", "1", '', $hide_old_lines, null, null, $hide_line_inactive);
         foreach ($prescription->_ref_prescription_lines as $_line_med) {
           $_line_med->loadRefLogSignee();
           if ($show_initiales_pharma) {
@@ -327,7 +330,7 @@ if (CModule::getActive("dPprescription")) {
       }
       elseif ($chapitre == "perfusion" || $chapitre == "aerosol" || $chapitre == "alimentation" || $chapitre == "oxygene") {
         // Chargement des prescription_line_mixes
-        $prescription->loadRefsPrescriptionLineMixes($chapitre, "1", 1, '', $hide_old_lines);
+        $prescription->loadRefsPrescriptionLineMixes($chapitre, "1", 1, '', $hide_old_lines, null, null, $hide_line_inactive);
         foreach ($prescription->_ref_prescription_line_mixes as $_prescription_line_mix) {
           $_prescription_line_mix->countVariantes();
           $_prescription_line_mix->loadRefsVariantes();
@@ -405,6 +408,51 @@ if (CModule::getActive("dPprescription")) {
             }
           }
         }
+
+        if ($hide_line_inactive) {
+          $date_time = CMbDT::date()." 00:00:00";
+          $first_date = CMbDT::date();
+
+          if (count($prescription->_ref_prescription_line_mixes)) {
+            foreach ($prescription->_ref_prescription_line_mixes as $key_line_mix => $_line_mix) {
+              $_line_mix->loadActiveDates();
+              if (($_line_mix->conditionnel && (!$_line_mix->debut_activation || ($_line_mix->fin_activation && $_line_mix->fin_activation <= $date_time))
+                && isset($_line_mix->_active_dates[$first_date])) || ($_line_mix->sans_planif && !$_line_mix->countAdministrations())) {
+                unset($prescription->_ref_prescription_line_mixes[$key_line_mix]);
+                if (!$_line_mix->next_line_id || $_line_mix->countAdministrations()) {
+                  $hide_inactive_count++;
+                }
+              }
+            }
+          }
+          if (count($prescription->_ref_prescription_lines)) {
+            foreach ($prescription->_ref_prescription_lines as $_key_line_med => $_line_med) {
+              $_line_med->loadActiveDates();
+              if (($_line_med->conditionnel && (!$_line_med->debut_activation || ($_line_med->fin_activation && $_line_med->fin_activation <= $date_time))
+                && isset($_line_med->_active_dates[$first_date])) || ($_line_med->sans_planif && !$_line_med->countAdministrations())) {
+                unset($prescription->_ref_prescription_lines[$_key_line_med]);
+                if (!$_line_med->child_id || $_line_med->countAdministrations()) {
+                  $hide_inactive_count++;
+                }
+              }
+            }
+          }
+          if (count($prescription->_ref_prescription_lines_element)) {
+            foreach ($prescription->_ref_prescription_lines_element as $_key_line => $_line_elt) {
+              $_line_elt->loadActiveDates();
+              if (($_line_elt->conditionnel && (!$_line_elt->debut_activation || ($_line_elt->fin_activation && $_line_elt->fin_activation <= $date_time))
+                && isset($_line_elt->_active_dates[$first_date])) || ($_line_elt->sans_planif && !$_line_elt->countAdministrations())) {
+                unset($prescription->_ref_prescription_lines_element[$_key_line]);
+                $category = $_line_elt->_ref_element_prescription->_ref_category_prescription;
+                unset($prescription->_ref_prescription_lines_element_by_chap[$category->chapitre][$_line_elt->_id]);
+                unset($prescription->_ref_prescription_lines_element_by_cat[$category->chapitre][$category->_id]["element"][$_line_elt->_id]);
+                if (!$_line_elt->child_id || $_line_elt->countAdministrations()) {
+                  $hide_inactive_count++;
+                }
+              }
+            }
+          }
+        }
         if (@!CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
           // Calcul des modifications recentes par chapitre
           $prescription->countRecentModif();
@@ -413,7 +461,7 @@ if (CModule::getActive("dPprescription")) {
       }
       else {
         // Chargement des lignes d'elements  avec pour chapitre $chapitre
-        $prescription->loadRefsLinesElementByCat("1", "1", $chapitre, null, null, null, $hide_old_lines);
+        $prescription->loadRefsLinesElementByCat("1", "1", $chapitre, null, null, null, $hide_old_lines, null, null, $hide_line_inactive);
         foreach ($prescription->_ref_prescription_lines_element as $_line_elt) {
           $_line_elt->countPlanifications();
           $_line_elt->loadActiveDates();
@@ -529,6 +577,8 @@ $smarty->assign("manual_planif"       , $planif_manuelle);
 $smarty->assign("regroup_lines"       , $regroup_lines);
 $smarty->assign("hide_old_lines"      , $hide_old_lines);
 $smarty->assign("hidden_lines_count"  , $hidden_lines_count);
+$smarty->assign("hide_line_inactive"  , $hide_line_inactive);
+$smarty->assign("hide_inactive_count" , $hide_inactive_count);
 
 // Affichage d'une ligne
 if ($object_id && $object_class) {

@@ -272,11 +272,11 @@ PlanSoins = {
     }
   },
 
-  reloadSuiviSoin: function(sejour_id, date, hide_old_lines) {
-    PlanSoins.loadTraitement(sejour_id, date, null, null, null, null, null, null, null, null, hide_old_lines);
+  reloadSuiviSoin: function(sejour_id, date, hide_old_lines, hide_cond_lines) {
+    PlanSoins.loadTraitement(sejour_id, date, null, null, null, null, null, null, null, null, hide_old_lines, hide_cond_lines);
   },
 
-  loadTraitement: function(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre, without_check_date, hide_close, hide_old_lines) {
+  loadTraitement: function(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre, without_check_date, hide_close, hide_old_lines, hide_line_inactive) {
     var url = new Url("soins", "ajax_vw_dossier_soin");
     url.addParam("sejour_id", sejour_id);
     
@@ -298,6 +298,9 @@ PlanSoins = {
     }
     if (hide_old_lines >= 0) {
       url.addParam("hide_old_lines", hide_old_lines);
+    }
+    if (hide_line_inactive >= 0) {
+      url.addParam("hide_line_inactive", hide_line_inactive);
     }
 
     if (PlanSoins.regroup_lines !== null) {
