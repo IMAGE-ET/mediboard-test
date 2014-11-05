@@ -504,7 +504,7 @@ class COperation extends CCodable implements IPatientRelated {
     $sejour = $this->loadRefSejour();
     $this->loadRefPlageOp();
 
-    if ($this->_check_bounds) {
+    if ($this->_check_bounds && !$this->_forwardRefMerging) {
       if ($this->plageop_id !== null && !$sejour->entree_reelle) {
         $date   = CMbDT::date($this->_datetime);
         $entree = CMbDT::date($sejour->entree_prevue);
