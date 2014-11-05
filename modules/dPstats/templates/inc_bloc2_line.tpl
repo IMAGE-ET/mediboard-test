@@ -50,6 +50,9 @@
   <td class="text">{{$_operation->_lu_type_anesth}}</td>
   <td class="text">{{$_operation->ASA}}</td>
   <td class="text">{{$_operation->_ref_workflow->date_creation|date_format:$conf.datetime}}</td>
+  {{if $conf.dPsalleOp.COperation.use_entree_bloc}}
+  <td class="text">{{$_operation->entree_bloc|date_format:$conf.time}}</td>
+  {{/if}}
   <td class="text">{{$_operation->entree_salle|date_format:$conf.time}}</td>
   <td class="text">{{$_operation->induction_debut|date_format:$conf.time}}</td>
   <td class="text">{{$_operation->induction_fin|date_format:$conf.time}}</td>

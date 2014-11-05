@@ -25,6 +25,14 @@ Main.add(function () {
   Calendar.regField(getForm("bloc").finlistbloc);
 });
 </script>
+{{assign var=colspan_th value=9}}
+{{if $conf.dPsalleOp.COperation.use_entree_bloc}}
+  {{assign var=colspan_th value=$colspan_th+1}}
+{{/if}}
+{{assign var=colspan_td value=30}}
+{{if $conf.dPsalleOp.COperation.use_entree_bloc}}
+  {{assign var=colspan_td value=$colspan_td+1}}
+{{/if}}
 
 <form name="bloc" action="?" method="get" onsubmit="return checkForm(this)">
 <input type="hidden" name="m" value="dPstats" />
@@ -95,8 +103,8 @@ Main.add(function () {
     <th rowspan="2">Type<br />anesthésie</th>
     <th rowspan="2">Code<br />ASA</th>
     <th rowspan="2">Placement<br />programme</th>
-    <th colspan="9">Timings intervention</th>
-    <th colspan="2">Timings reveil</th>
+    <th colspan="{{$colspan_th}}">Timings intervention</th>
+    <th colspan="3">Timings reveil</th>
   </tr>
   <tr>
     <th>Prévu</th>
@@ -111,6 +119,9 @@ Main.add(function () {
     <th>libelle</th>
     <th>DP</th>
     <th>Actes</th>
+    {{if $conf.dPsalleOp.COperation.use_entree_bloc}}
+      <th>entrée<br />bloc</th>
+    {{/if}}
     <th>entrée<br />salle</th>
     <th>debut<br />induction</th>
     <th>fin<br />induction</th>
@@ -126,7 +137,7 @@ Main.add(function () {
   {{if $type == "prevue"}}
     {{foreach from=$plages item=_plage}}
     <tr>
-      <th colspan="30" class="section">
+      <th colspan="{{$colspan_td}}" class="section">
         {{$_plage}} 
         &mdash; {{$_plage->_ref_salle}}
         &mdash; {{$_plage->_ref_owner}}
@@ -137,13 +148,13 @@ Main.add(function () {
       {{mb_include template=inc_bloc2_line}}
     {{foreachelse}}
       <tr>
-        <td colspan="30" class="empty">{{tr}}COperation.none{{/tr}}</td>
+        <td colspan="{{$colspan_td}}" class="empty">{{tr}}COperation.none{{/tr}}</td>
       </tr>
     {{/foreach}}
 
     {{foreachelse}}
       <tr>
-        <td colspan="30" class="empty">{{tr}}CPlageOp.none{{/tr}}</td>
+        <td colspan="{{$colspan_td}}" class="empty">{{tr}}CPlageOp.none{{/tr}}</td>
       </tr>
     {{/foreach}}
 
@@ -152,7 +163,7 @@ Main.add(function () {
       {{mb_include template=inc_bloc2_line}}
     {{foreachelse}}
       <tr>
-        <td colspan="30" class="empty">{{tr}}COperation.none{{/tr}}</td>
+        <td colspan="{{$colspan_td}}" class="empty">{{tr}}COperation.none{{/tr}}</td>
       </tr>
     {{/foreach}}
   {{/if}}
