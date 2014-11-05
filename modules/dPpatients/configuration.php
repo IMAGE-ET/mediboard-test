@@ -55,11 +55,18 @@ CConfiguration::register(
           'auto_selected_patient'     => "bool default|0",
           'default_value_allow_sms'   => "bool default|0",
         ),
+        'identitovigilance' => array(
+          'merge_only_admin'          => "bool default|0",
+          'show_patient_link'         => "bool default|0",
+        ),
         'CConstantesMedicales' => array(
           'unite_ta'          => 'enum list|cmHg|mmHg default|' . CAppUI::conf('dPpatients CConstantesMedicales unite_ta'),
           'unite_glycemie'    => 'enum list|g/l|mmol/l default|' . CAppUI::conf('dPpatients CConstantesMedicales unite_glycemie'),
           'unite_cetonemie'   => 'enum list|g/l|mmol/l default|' . CAppUI::conf('dPpatients CConstantesMedicales unite_cetonemie'),
           'unite_hemoglobine' => 'enum list|g/dl|g/l default|g/dl',
+        ),
+        'CTraitement' => array(
+          'enabled' => "bool default|0",
         )
       )
     ),

@@ -437,8 +437,7 @@ class CPatient extends CPerson {
     $props["ATNC"]              = "bool";
     $props["avs"]               = "str maxLength|16";// mask|999.99.999.999";
 
-    $conf = CAppUI::conf("dPpatients CPatient identitovigilence");
-    $props["naissance"] = $conf === "date" || $conf === "doublons" ? "birthDate notNull" : "birthDate";
+    $props["naissance"]         = "birthDate notNull";
 
     $props["deces"]             = "dateTime";
     $props["rques"]             = "text";

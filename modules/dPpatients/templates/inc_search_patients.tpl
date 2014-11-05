@@ -28,18 +28,20 @@
   </div>
 {{/if}}
 
+{{assign var=merge_only_admin value="CAppUI::conf"|static_call:"dPpatients identitovigilance merge_only_admin":"CGroups-$g"}}
+{{assign var=show_patient_link value="CAppUI::conf"|static_call:"dPpatients identitovigilance show_patient_link":"CGroups-$g"}}
+
 <form name="fusion" action="?" method="get" onsubmit="return false;">
   <table class="tbl" id="list_patients">
     <tr>
-      {{if (((!$conf.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit) ||
-      $conf.dPpatients.CPatient.show_patient_link == 1}}
+      {{if (((!$merge_only_admin || $can->admin)) && $can->edit) || $show_patient_link}}
         <th class="narrow">
-          {{if ((!$conf.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit}}
+          {{if ((!$merge_only_admin || $can->admin)) && $can->edit}}
             <button type="button" class="merge notext compact" title="{{tr}}Merge{{/tr}}" onclick="doMerge(this.form);">
               {{tr}}Merge{{/tr}}
             </button>
           {{/if}}
-          {{if $conf.dPpatients.CPatient.show_patient_link}}
+          {{if $show_patient_link}}
             <button type="button" class="link notext compact" title="{{tr}}Link{{/tr}}" onclick="Patient.doLink(this.form);">
               {{tr}}Link{{/tr}}
             </button>

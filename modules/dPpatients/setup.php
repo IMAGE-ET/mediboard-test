@@ -2712,7 +2712,13 @@ class CSetupdPpatients extends CSetup {
                 ADD `perimetre_brachial` FLOAT UNSIGNED AFTER `perimetre_abdo`;";
     $this->addQuery($query);
 
-    $this->mod_version = '2.22';
+    $this->makeRevision('2.22');
+
+    $this->addDefaultConfig("dPpatients identitovigilance merge_only_admin" , "dPpatients CPatient merge_only_admin");
+    $this->addDefaultConfig("dPpatients identitovigilance show_patient_link" , "dPpatients CPatient show_patient_link");
+    $this->addDefaultConfig("dPpatients CTraitement enabled" , "dPpatients CTraitement enabled");
+
+    $this->mod_version = '2.23';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

@@ -9,14 +9,13 @@
  * @link     http://www.mediboard.org
 *}}
 
-{{assign var=identitovigilence value=$conf.dPpatients.CPatient.identitovigilence}}
 {{assign var=identity_status value="CAppUI::conf"|static_call:"dPpatients CPatient manage_identity_status":"CGroups-$g"}}
 
 <script>
   SiblingsChecker.running = false;
   SiblingsChecker.submit  = 0;
   $V(SiblingsChecker.form._reason_state, "");
-  {{if $identitovigilence == "doublons" && !$identity_status && $doubloon}}
+  {{if !$identity_status && $doubloon}}
     $("submit-patient").disabled = true;
   {{else}}
     $("submit-patient").disabled = false;
@@ -34,7 +33,7 @@
     Un doublon <span onmouseover="ObjectTooltip.createEx(this, '{{$patient_match->_guid}}')">{{$patient_match->_view}}</span>
     a été détecté.
     <br/>
-    {{if $identitovigilence == "doublons" && !$identity_status}}
+    {{if !$identity_status}}
       Vous ne pouvez pas sauvegarder le patient.
     {{elseif $submit}}
       Voulez-vous tout de même sauvegarder ?

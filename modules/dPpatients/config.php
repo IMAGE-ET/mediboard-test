@@ -15,15 +15,12 @@ $dPconfig["dPpatients"] = array (
     "tag_ipp_group_idex"=> "",
     "tag_ipp_trash"     => "trash_",
     "tag_conflict_ipp"  => "conflict_",
-    "identitovigilence" => "doublons",
     "multi_group"       => "limited",
     "function_distinct" => "0",
-    "merge_only_admin"  => "0",
     "extended_print"    => "0",
     "adult_age"         => "15",
     "limit_char_search" => "0",
     "check_code_insee"  => "1",
-    "show_patient_link" => "0"
   ),
 
   "CConstantesMedicales" => array(

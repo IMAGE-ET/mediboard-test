@@ -28,7 +28,9 @@
   <td>
     {{mb_include module=cabinet template=inc_ant_allergie}}
 
-    {{if "dPprescription"|module_active || $conf.dPpatients.CTraitement.enabled}}
+    {{assign var=traitement_enabled value="CAppUI::conf"|static_call:"dPpatients CTraitement enabled":"CGroups-$g"}}
+
+    {{if "dPprescription"|module_active || $traitement_enabled}}
       {{mb_include module=cabinet template=inc_traitement}}
     {{/if}}
 

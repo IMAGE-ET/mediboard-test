@@ -1,5 +1,7 @@
+{{assign var=merge_only_admin value="CAppUI::conf"|static_call:"dPpatients identitovigilance merge_only_admin":"CGroups-$g"}}
+
 <tr class="{{if $patient->_id == $_patient->_id}}selected{{/if}} {{if $_patient->deces != null}}hatching{{/if}}">
-  {{if (!$conf.dPpatients.CPatient.merge_only_admin || $can->admin) && $can->edit || $conf.dPpatients.CPatient.show_patient_link}}
+  {{if (!$merge_only_admin || $can->admin) && $can->edit || $conf.dPpatients.CPatient.show_patient_link}}
     <td style="text-align: center;">
       <input type="checkbox" name="objects_id[]" value="{{$_patient->_id}}" class="merge"
              {{if $conf.alternative_mode}}onclick="checkOnlyTwoSelected(this)"{{/if}} />

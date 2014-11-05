@@ -136,30 +136,11 @@ Main.add(function(){
 })
 </script>
 
-{{assign var=class value=CMedecin}}
-<form name="EditConfig-{{$class}}" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return onSubmitFormAjax(this)">
-
-<input type="hidden" name="m" value="system" />
-<input type="hidden" name="dosql" value="do_configure" />
-
-<table class="form">  
-  {{mb_include module=system template=inc_config_bool var=medecin_strict}}
-
-  <tr>
-    <td class="button" colspan="6">
-      <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-    </td>
-  </tr>
-
-</table>
-
-</form>
-
 <ul class="control_tabs small" id="CMedecin-tab">
   <li><a href="#CMedecin-import">Importation de base</a></li>
   <li><a href="#CMedecin-install_trigger">Trigger medecin-patient</a></li>
-  <li><a href="#CMedecin-maintenance">Maintenance</a></li>
   <li><a href="#sex_medecins">Table des sexes de Medecins</a></li>
+  <li><a href="#CMedecin-tools">Outils</a></li>
 </ul>
 
 <div id="CMedecin-import" style="display: none;">
@@ -175,13 +156,13 @@ Main.add(function(){
       <td colspan="3">
         <form name="importMedecinForm" action="#" method="get" onsubmit="return false">
           <label>
-            <input type="radio" name="mode" value="get" />Import distant
+            <input type="radio" name="mode" value="get" /> Import distant
           </label>
           <label>
-            <input type="radio" name="mode" value="xml" />Fichiers XML
+            <input type="radio" name="mode" value="xml" /> Fichiers XML
           </label>
           <label>
-            <input type="radio" name="mode" value="csv" checked="checked" />Fichiers CSV
+            <input type="radio" name="mode" value="csv" checked="checked" /> Fichiers CSV
           </label>
 
           <input type="checkbox" name="auto" />
@@ -299,8 +280,8 @@ Main.add(function(){
 
   <table class="tbl">
     <tr>
-      <th style="width: 50%">{{tr}}Action{{/tr}}</th>
-      <th style="width: 50%">{{tr}}Status{{/tr}}</th>
+      <th class="narrow">{{tr}}Action{{/tr}}</th>
+      <th>{{tr}}Status{{/tr}}</th>
     </tr>
     <tr>
       <td>
@@ -311,64 +292,75 @@ Main.add(function(){
   </table>
 </div>
 
-<div id="CMedecin-maintenance" style="display: none;">
-  <h2>Nettoyage des correspondants médicaux</h2>
-
-  <table class="main layout" style="table-layout: fixed;">
-    <tr>
-      <td>
-        <div class="small-info">
-          Cet outil permet d'effectuer une épuration des doublons de correspondants médicaux dûs à des importations en supprimant les doublons.
-        </div>
-
-        <form name="cleanup-correspondant" method="post" onsubmit="return onSubmitFormAjax(this, {}, 'cleanup-correspondant-log')">
-          <input type="hidden" name="m" value="patients" />
-          <input type="hidden" name="dosql" value="do_cleanup_correspondant" />
-
-          <table class="main form">
-            <tr>
-              <th>
-                <label for="count_min">
-                  Traiter les doublons qui sont plus de
-                </label>
-              </th>
-
-              <td>
-                <input type="number" name="count_min" value="50" size="5" />
-              </td>
-
-              <td rowspan="3">
-                <button type="submit" class="tick">{{tr}}Clean up{{/tr}}</button>
-              </td>
-            </tr>
-
-            <tr>
-              <th>
-                <label for="dry_run">
-                  Dry run (n'effectue pas de suppression)
-                </label>
-              </th>
-              <td>
-                <input type="checkbox" name="dry_run" value="1" checked />
-              </td>
-            </tr>
-          </table>
-        </form>
-      </td>
-      <td id="cleanup-correspondant-log"></td>
-    </tr>
-  </table>
-</div>
-
 <div id="sex_medecins" style="display: none;">
   <div class="small-info">Tâche de réparation des sexes des correspondants Médecins</div>
+
   <form name="guess-medecin" method="post" onsubmit="return onSubmitFormAjax(this, {}, 'sex-medecin-log')">
     <input type="hidden" name="m" value="patients" />
     <input type="hidden" name="dosql" value="do_guess_massive_sex" />
     <input type="hidden" name="target_class" value="CMedecin"/>
-    <label><input type="checkbox" name="callback" value="guess-medecin"/>Automatique</label>
-    <label><input type="checkbox" name="reset" value="1"/>Recommencer de zéro</label>
-    <button>GO</button>
+
+    <table class="tbl">
+      <tr>
+        <th class="section">{{tr}}Action{{/tr}}</th>
+        <th class="section">{{tr}}Status{{/tr}}</th>
+      </tr>
+
+      <tr>
+        <td style="width: 20%">
+          <table class="layout">
+            <tr>
+              <td><label> Automatique <input type="checkbox" name="callback" value="guess-medecin"/> </label></td>
+            </tr>
+            <tr>
+              <td><label> Recommencer de zéro <input type="checkbox" name="reset" value="1"/> </label></td>
+            </tr>
+            <tr>
+              <td><button type="submit" class="tick">{{tr}}Go{{/tr}}</button></td>
+            </tr>
+          </table>
+        </td>
+
+        <td id="sex-medecin-log"></td>
+      </tr>
+    </table>
   </form>
-  <div id="sex-medecin-log"></div>
+</div>
+
+<div id="CMedecin-tools" style="display: none;">
+  <h2>Nettoyage des correspondants médicaux</h2>
+
+  <div class="small-info">
+    Cet outil permet d'effectuer une épuration des doublons de correspondants médicaux dûs à des importations en supprimant les doublons.
+  </div>
+
+  <form name="cleanup-correspondant" method="post" onsubmit="return onSubmitFormAjax(this, {}, 'cleanup-correspondant-log')">
+    <input type="hidden" name="m" value="patients" />
+    <input type="hidden" name="dosql" value="do_cleanup_correspondant" />
+
+    <table class="tbl">
+      <tr>
+        <th class="section">{{tr}}Action{{/tr}}</th>
+        <th class="section">{{tr}}Status{{/tr}}</th>
+      </tr>
+
+      <tr>
+        <td style="width: 20%">
+          <table class="layout">
+            <tr>
+              <td><label> Traiter les doublons qui sont plus de <input type="number" name="count_min" value="50" size="5" /> </label></td>
+            </tr>
+            <tr>
+              <td><label> Dry run (n'effectue pas de suppression) <input type="checkbox" name="dry_run" value="1" checked /> </label></td>
+            </tr>
+            <tr>
+              <td><button type="submit" class="tick">{{tr}}Clean up{{/tr}}</button></td>
+            </tr>
+          </table>
+        </td>
+
+        <td id="cleanup-correspondant-log"></td>
+      </tr>
+    </table>
+  </form>
 </div>

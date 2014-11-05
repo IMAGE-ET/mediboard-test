@@ -40,36 +40,17 @@ $departements[] = "WF"; // Wallis et Futuna
 $patient = new CPatient();
 $nb_patients = $patient->countList();
 
-// import
-$patient = new CPatient();
-$patient_specs = CModelObjectFieldDescription::getSpecList($patient);
-CModelObjectFieldDescription::addBefore($patient->_specs["_IPP"], $patient_specs);
-
-// import temp file
-$start_pat = 0;
-$count_pat = 20;
-if ($data = @file_get_contents(CAppUI::conf("root_dir")."/tmp/import_patient.txt", "r")) {
-  $nb = explode(";", $data);
-  $start_pat = $nb[0];
-  $count_pat = $nb[1];
-}
-
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign("nb_patients"  , $nb_patients);
 
 $smarty->assign("active_types"    , $active_types);
 $smarty->assign("active_appareils", $active_appareils);
 $smarty->assign("all_types"       , $all_types);
 $smarty->assign("all_appareils"   , $all_appareils);
 
-$smarty->assign("start_pat", $start_pat);
-$smarty->assign("count_pat", $count_pat);
-
 $smarty->assign("pass"        , CValue::get("pass"));
 $smarty->assign("departements", $departements);
-
-$smarty->assign("patient_specs"       , $patient_specs );
-
-$smarty->assign("nb_patients", $nb_patients);
 
 $smarty->display("configure.tpl");

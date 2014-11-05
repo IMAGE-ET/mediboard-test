@@ -29,46 +29,37 @@ editAntecedent = function(mode) {
   url.addParam("mode", mode);
   url.requestUpdate("ajax_check_dossier");
 }
+Main.add(function () {
+  var tabs = Control.Tabs.create('tabs-actions', true);
+});
 </script>
 
-<h2>Actions de maintenances</h2>
+<table>
+  <tr>
+    <td style="vertical-align: top;">
+      <ul id="tabs-actions" class="control_tabs_vertical small">
+        <li><a href="#CPatient-maintenance">{{tr}}CPatient{{/tr}}</a></li>
+        <li><a href="#CMedecin-maintenance">{{tr}}CMedecin{{/tr}}</a></li>
+        <li><a href="#CCorrespondantPatient-maintenance">{{tr}}CCorrespondantPatient{{/tr}}</a></li>
+        <li><a href="#INSEE-maintenance">{{tr}}INSEE{{/tr}}</a></li>
+      </ul>
+    </td>
+    <td style="vertical-align: top; width: 100%">
+      <div id="CPatient-maintenance" style="display: none;">
+        {{mb_include template=CPatient_maintenance}}
+      </div>
 
-<table class="tbl">
-  <tr>
-    <th style="width: 50%">{{tr}}Action{{/tr}}</th>
-    <th style="width: 50%">{{tr}}Status{{/tr}}</th>
-  </tr>
-    
-  <tr>
-    <td>
-      <button class="search" onclick="Actions.civilite('check')">
-        Vérifier les civilités
-      </button>
-      <br />
-      <button class="change" onclick="Actions.civilite('repair')">
-        Corriger les civilités
-      </button>
+      <div id="CMedecin-maintenance" style="display: none;">
+        {{mb_include template=CMedecin_maintenance}}
+      </div>
+
+      <div id="CCorrespondantPatient-maintenance" style="display: none;">
+        {{mb_include template=CCorrespondantPatient_maintenance}}
+      </div>
+
+      <div id="INSEE-maintenance" style="display: none;">
+        {{mb_include template=INSEE_maintenance}}
+      </div>
     </td>
-    <td id="ajax_civilite">
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <button class="search" type="button" onclick="editAntecedent('check');">Vérifier les dossiers médicaux</button>
-      <button class="change" type="button" onclick="editAntecedent('repair');">Corriger les dossiers médicaux</button>
-    </td>
-    <td id="ajax_check_dossier"></td>
-  </tr>
-  <tr>
-    <td>
-      <label><input type="radio" name="state" value="PROV" checked>{{tr}}CPatient.status.PROV{{/tr}}</label>
-      <label><input type="radio" name="state" value="VALI">{{tr}}CPatient.status.VALI{{/tr}}</label><br/>
-      <button type="button" class="search" onclick="Actions.patientState('verifyStatus')">
-        Vérifier le nombre de patients sans statut
-      </button>
-      <button type="button" class="send" onclick="Actions.patientState('createStatus')">
-        Placer le statut provisoire pour les patients sans statut
-      </button></td>
-    <td id="result_tools_patient_state"></td>
   </tr>
 </table>

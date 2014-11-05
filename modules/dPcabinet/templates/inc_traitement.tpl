@@ -194,6 +194,8 @@
   </table>
 </div>
 
+{{assign var=traitement_enabled value="CAppUI::conf"|static_call:"dPpatients CTraitement enabled":"CGroups-$g"}}
+
 <fieldset id="inc_ant_consult_fieldset_trt_perso{{$addform}}">
   <legend>Traitements personnels</legend>
   <table class="layout main">
@@ -203,7 +205,7 @@
           {{if "dPprescription"|module_active && "dPprescription show_chapters med"|conf:"CGroups-$g"}}
             <li><a href="#tp_base_med{{$addform}}">Base de données de médicaments</a></li>
           {{/if}}
-          {{if $conf.dPpatients.CTraitement.enabled && $vw_traitement_texte_libre}}
+          {{if $traitement_enabled && $vw_traitement_texte_libre}}
             <li><a href="#tp_texte_simple{{$addform}}">Texte libre</a></li>
           {{/if}}
           {{if "dPprescription"|module_active && "dPprescription CPrescription show_element_tp"|conf:"CGroups-$g"}}
@@ -342,7 +344,7 @@
     {{/if}}
 
     <!-- Traitements -->
-    {{if $conf.dPpatients.CTraitement.enabled && $vw_traitement_texte_libre}}
+    {{if $traitement_enabled && $vw_traitement_texte_libre}}
       <tr id="tp_texte_simple{{$addform}}">
         <td class="text">
           <form name="editTrmtFrm{{$addform}}" action="?m=dPcabinet" method="post" onsubmit="return onSubmitTraitement(this);">

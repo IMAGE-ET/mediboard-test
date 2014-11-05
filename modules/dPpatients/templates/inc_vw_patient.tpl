@@ -20,7 +20,9 @@ Document.refreshList = function() {
   {{mb_return}}
 {{/if}}
 
-{{if $conf.dPpatients.CPatient.show_patient_link && $patient->_ref_patient_links|@count}}
+{{assign var=show_patient_link value="CAppUI::conf"|static_call:"dPpatients identitovigilance show_patient_link":"CGroups-$g"}}
+
+{{if $show_patient_link && $patient->_ref_patient_links|@count}}
   <div class="small-info">
     Patient associé avec le(s) patient(s) suivant(s) : 
     <ul>
