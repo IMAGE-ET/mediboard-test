@@ -18,7 +18,7 @@ Tdb = {
   },
 
   editGrossesse : function(_id, patient_id) {
-    var url = new Url('maternite', 'ajax_edit_grossesse');
+    var url = new Url('maternite', 'ajax_edit_grossesse', "action");
     url.addParam('grossesse_id', _id);
     url.addParam('parturiente_id', patient_id);
     url.requestModal();
@@ -32,10 +32,22 @@ Tdb = {
     url.addParam('sejour_id', _id);
     url.addParam('grossesse_id', grossesse_id);
     url.addParam('patient_id', patiente_id);
-    url.requestModal();
-    url.modalObject.observe('afterClose', function() {
-      Tdb.views.listGrossesses();
+    url.addParam("dialog", 1);
+    url.modal({
+      width     : "95%",
+      height    : "95%",
+      afterClose: function() {
+        Tdb.views.listGrossesses();
+      }
     });
+  },
+
+  editD2S : function(sejour_id, op_id) {
+    var url = new Url("soins", "ajax_vw_dossier_sejour");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("operation_id", op_id);
+    url.addParam("modal", 0);
+    url.modal({width: "95%", height: "95%"});
   },
 
   editAccouchement : function(_id, sejour_id, grossesse_id, patiente_id) {
@@ -83,7 +95,7 @@ Tdb = {
       var input = $('_seek_patient');
       var value = $V(input);
 
-      var tables = ['grossesses_tab', 'consultations_tab'];
+      var tables = ['grossesses_tab', 'consultations_tab', 'hospitalisation_tab', 'accouchements_tab'];
       for (var a = 0; a < tables.length; a++) {
         if (!value) {
           $(tables[a]).select(".CPatient-view").each(function(e) {

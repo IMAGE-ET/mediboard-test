@@ -12,10 +12,28 @@
 
 {{mb_script module="cabinet" script="edit_consultation"}}
 {{mb_script module="planningOp" script="operation"}}
+{{mb_script module="planningOp" script="protocole_selector"}}
+{{mb_script module="planningOp" script="cim10_selector"}}
+{{mb_script module="planningOp" script="cim10_selector"}}
 {{mb_script module="soins" script="plan_soins"}}
 {{mb_script module="maternite" script="tdb"}}
 {{mb_script module="dPpatients" script="pat_selector"}}
 {{mb_script module="maternite" script="grossesse"}}
+
+<style>
+  .gender_f, .gender_m {
+    padding-left:3px;
+    list-style: none;
+  }
+
+  .gender_m {
+    border-left:solid 4px #6aa3ff;
+  }
+
+  .gender_f {
+    border-left:solid 4px #ff9485;
+  }
+</style>
 
 <script>
   Consultation.useModal();
@@ -39,7 +57,7 @@
   <tr>
     <th colspan="2">
       <div style="float:left;">
-        <input type="text" name="fast_search" placeholder="recherche rapide" id="_seek_patient" onkeyup="filterByText();" onchange="filterByText()"><button class="cleanup notext" onclick="$V('_seek_patient', '', true);"></button>
+        <input type="text" name="fast_search" placeholder="recherche rapide" id="_seek_patient" onkeyup="Tdb.views.filterByText();" onchange="filterByText()"><button class="cleanup notext" onclick="$V('_seek_patient', '', true);"></button>
       </div>
 
       <a id="vw_day_date_a" href="?m={{$m}}&amp;tab={{$tab}}&amp;date_tdb={{$prec}}">&lt;&lt;&lt;</a>

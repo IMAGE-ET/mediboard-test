@@ -16,25 +16,26 @@ CCanDo::checkRead();
 $date  = CValue::get("date", CMbDT::date());
 
 $sejour = new CSejour();
-
 $where = array();
 $where["sejour.grossesse_id"] = "IS NOT NULL";
-$where["sejour.entree"] = "<= '$date'";
-$where["sejour.sortie"] = ">= '$date'";
-
+$where["sejour.entree"] = "<= '$date 23:59:59' ";
+$where["sejour.sortie"] = ">= '$date 00:00:00' ";
 $order = "sejour.entree DESC";
 
 /** @var CSejour[] $listSejours */
 $listSejours = $sejour->loadList($where, $order, null, null, null);
 
 foreach ($listSejours as $_sejour) {
-  $_sejour->loadRefGrossesse()->loadRefParturiente();
+  $grossesse = $_sejour->loadRefGrossesse();
+  $grossesse->loadRefParturiente();
+  $naissances = $grossesse->loadRefsNaissances();
+  foreach ($naissances as $_naissance) {
+    $enfant = $_naissance->loadRefSejourEnfant()->loadRefPatient();
+  }
   $_sejour->loadRefCurrAffectation($date);
 }
 
 $smarty = new CSmartyDP();
-
 $smarty->assign("date", $date);
 $smarty->assign("listSejours", $listSejours);
-
 $smarty->display("inc_tdb_hospitalisations.tpl");
