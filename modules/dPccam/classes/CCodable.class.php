@@ -1062,7 +1062,7 @@ class CCodable extends CMbObject {
             $depassement_anesth_affecte = true;
           }
 
-          if (!$executant_id) {
+          if (!$praticien_id) {
             $executant_id = CAppUI::pref("user_executant") ? CMediusers::get()->_id : $this->getExecutantId($possible_acte->code_activite);
           }
           $possible_acte->executant_id = $executant_id;
