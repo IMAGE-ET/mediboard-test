@@ -49,8 +49,8 @@ Main.add(function () {
     <strong>Important</strong>
     <div>Ce module est peu traduit, cela va probablement poser des problèmes d'affichage.</div>
     <div>
-      Il compte <strong>{{$total_count|integer}}</strong> localisations
-      sur un total de <strong>{{$local_count|integer}}</strong> termes,
+      Il compte <strong>{{$local_count|integer}}</strong> localisations
+      sur un total de <strong>{{$total_count|integer}}</strong> termes,
       soit une complétude de <strong>{{$completion}}%</strong>.
     </div>
   </div>
@@ -59,8 +59,8 @@ Main.add(function () {
     <strong>Important</strong>
     <div>Ce module est en cours de traduction, c'est un bon début, il reste encore des efforts à faire !</div>
     <div>
-      Il compte <strong>{{$total_count|integer}}</strong> localisations
-      sur un total de <strong>{{$local_count|integer}}</strong> termes,
+      Il compte <strong>{{$local_count|integer}}</strong> localisations
+      sur un total de <strong>{{$total_count|integer}}</strong> termes,
       soit une complétude de <strong>{{$completion}}%</strong>.
     </div>
   </div>
