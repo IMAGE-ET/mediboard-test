@@ -412,7 +412,7 @@ class COperation extends CCodable implements IPatientRelated {
   function getExecutantId($code_activite) {
     $this->loadRefChir();
     $this->loadRefPlageOp();
-    return ($code_activite == 4 ? $this->anesth_id : $this->chir_id);
+    return ($code_activite == 4 ? $this->_ref_anesth->_id : $this->chir_id);
   }
 
   /**
