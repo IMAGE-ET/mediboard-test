@@ -796,6 +796,10 @@ button.drawing:before, a.button.drawing:before {
     content: url(images/buttons/drawing.png);
 }
 
+button.magic_wand:before, a.button.magic_wand:before {
+  content: url(images/buttons/magic_wand.png);
+}
+
 /** dossier de soins **/
 button.soins:before, a.button.soins:before {
   content: url(images/buttons/soins.png);
