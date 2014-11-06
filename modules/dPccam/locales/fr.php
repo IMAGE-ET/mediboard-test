@@ -209,6 +209,7 @@ $locales['config-dPccam-CCodable-add_acte_comp_anesth_auto-desc'] = 'Ajout autom
 $locales['config-dPccam-CCodable-precode_modificateur_7'] = 'Précodage du modificateur 7';
 $locales['config-dPccam-CCodable-precode_modificateur_7-desc'] = 'Codage automatique du modificateur indiquant la présence d\'un anesthésiste pendant toute l\'intervention';
 $locales['config-dPccam-CCodable-precode_modificateur_J'] = 'Précodage du modificateur J';
+$locales['config-dPccam-CCodable-precode_modificateur_J-desc'] = 'Codage automatique du modificateur de majoration transitoire de chirurgie';
 $locales['config-dPccam-CCodable-use_frais_divers'] = 'Utilisation des frais divers';
 $locales['config-dPccam-CCodable-use_frais_divers-CConsultation'] = 'Frais divers pour une consultation';
 $locales['config-dPccam-CCodable-use_frais_divers-COperation'] = 'Frais divers pour une opération';
