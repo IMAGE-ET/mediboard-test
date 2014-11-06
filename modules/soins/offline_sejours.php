@@ -57,7 +57,7 @@ foreach ($sejours as $sejour) {
 $sorter_affectation = CMbArray::pluck($sejours, "_ref_curr_affectation", "_ref_lit", "_view");
 $sorter_patient     = CMbArray::pluck($sejours, "_ref_patient", "nom");
 
-@array_multisort(
+array_multisort(
   $sorter_affectation, SORT_ASC,
   $sorter_patient, SORT_ASC,
   $sejours
