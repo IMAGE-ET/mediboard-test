@@ -362,7 +362,7 @@ class CViewSender extends CMbObject {
       rsort($files);
       $list_files = array_slice($files, $this->max_archives);
       foreach ($list_files as $_file) {
-        $ftp->delFile($_file);
+        $ftp->delFile($directory . "/".basename($_file));
       }
     }
     catch (CMbException $e) {
