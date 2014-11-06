@@ -400,10 +400,10 @@ class CDatedCodeCCAM {
         foreach ($modifsConvergence as $_modif_convergence) {
           $mod_simple = 'mod' . $_modif_convergence->modificateur;
           $mod_double = 'mod' . $_modif_convergence->modificateur . $_modif_convergence->modificateur;
-          if (isset($convergence->$mod_simple)) {
+          if ($convergence->$mod_simple) {
             $mod_convergence_text .= $_modif_convergence->modificateur;
           }
-          elseif (isset($convergence->$mod_double)) {
+          elseif ($convergence->$mod_double) {
             $mod_convergence_text .= $_modif_convergence->modificateur . $_modif_convergence->modificateur;
           }
         }
