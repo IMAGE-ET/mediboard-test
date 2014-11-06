@@ -42,6 +42,31 @@ class CActiviteModificateurCCAM extends CCCAM {
   }
 
   /**
+   * Retourne la liste des dates d'effet disponible pour les modificateurs d'un acte
+   *
+   * @param string $code Code CCAM
+   *
+   * @return array
+   */
+  static function loadDateEffetList($code) {
+    $ds = self::$spec->ds;
+
+    $query = "SELECT DATEEFFET
+      FROM p_activite_modificateur
+      WHERE p_activite_modificateur.CODEACTE = %1
+      GROUP BY p_activite_modificateur.DATEEFFET
+      ORDER BY p_activite_modificateur.DATEEFFET DESC";
+    $query = $ds->prepare($query, $code);
+    $result = $ds->exec($query);
+    $listDates = array();
+    while ($row = $ds->fetchArray($result)) {
+      $listDates[] = $row["DATEEFFET"];
+    }
+
+    return $listDates;
+  }
+
+  /**
    * Chargement de a liste des modificateurs pour une activité
    *
    * @param string $code     Code CCAM
@@ -62,6 +87,11 @@ class CActiviteModificateurCCAM extends CCCAM {
     $result = $ds->exec($query);
 
     $list_modifs = array();
+    $listDatesEffet = self::loadDateEffetList($code);
+
+    foreach ($listDatesEffet as $date) {
+      $list_modifs[$date] = array();
+    }
     while ($row = $ds->fetchArray($result)) {
       $modif = new CActiviteModificateurCCAM();
       $modif->map($row);
