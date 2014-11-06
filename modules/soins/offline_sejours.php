@@ -73,7 +73,7 @@ if ($service_id == "NP") {
 }
 else {
   $sorter_affectation = CMbArray::pluck($sejours, "_ref_curr_affectation", "_ref_lit", "_view");
-  @array_multisort(
+  array_multisort(
     $sorter_affectation, SORT_ASC,
     $sorter_patient, SORT_ASC,
     $sejours
