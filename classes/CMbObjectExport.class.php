@@ -13,7 +13,7 @@
  * Object exporting utility class
  */
 class CMbObjectExport {
-  const DEFAULT_DEPTH = 6;
+  const DEFAULT_DEPTH = 10;
   
   /** @var CMbXMLDocument */
   public $doc;
@@ -136,9 +136,7 @@ class CMbObjectExport {
         $_object = $object->_fwd[$key];
         
         if ($_object && $_object->_id) {
-          if ($key !== $object->_spec->key) {
-            $this->_toDOM($_object, $depth-1);
-          }
+          $this->_toDOM($_object, $depth-1);
 
           $guid = $_object->_guid;
         }
