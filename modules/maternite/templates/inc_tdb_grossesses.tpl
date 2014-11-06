@@ -11,10 +11,13 @@
 <table class="tbl" id="grossesses_tab">
   <tr>
     <th class="title" colspan="4">
-      <button class="new notext" onclick="Tdb.editGrossesse(0);" style="float: left;">
+      <button type="button" class="change notext" onclick="Tdb.views.listGrossesses(false);" style="float: right;">
+        {{tr}}Refresh{{/tr}}
+      </button>
+      <button class="grossesse_create notext" onclick="Tdb.editGrossesse(0);" style="float: left;">
         {{tr}}CGrossesse-title-create{{/tr}}
       </button>
-      <button class="search notext" onclick="searchDossier();" style="float: left;">
+      <button class="search notext" onclick="Tdb.searchGrossesse();" style="float: left;">
         {{tr}}Rechercher{{/tr}}
       </button>
       {{if !$grossesses|@count}}Aucun{{else}}{{$grossesses|@count}}{{/if}}
@@ -47,8 +50,8 @@
       </td>
       <td>
         <button class="edit notext" onclick="Tdb.editGrossesse('{{$_grossesse->_id}}');">{{tr}}CGrossesse.edit{{/tr}}</button>
-        <button class="new notext" onclick="Tdb.editConsult(null, '{{$_grossesse->_ref_parturiente->_id}}');">{{tr}}CConsultation-action-create{{/tr}}</button>
-        <button class="new notext" onclick="Tdb.editSejour(null, '{{$_grossesse->_id}}','{{$_grossesse->_ref_parturiente->_id}}');">{{tr}}CSejour-action-create{{/tr}}</button>
+        <button class="consultation_create notext" onclick="Tdb.editConsult(null, '{{$_grossesse->_ref_parturiente->_id}}');">{{tr}}CConsultation-action-create{{/tr}}</button>
+        <button class="sejour_create notext" onclick="Tdb.editSejour(null, '{{$_grossesse->_id}}','{{$_grossesse->_ref_parturiente->_id}}');">{{tr}}CSejour-action-create{{/tr}}</button>
       </td>
     </tr>
     {{foreachelse}}

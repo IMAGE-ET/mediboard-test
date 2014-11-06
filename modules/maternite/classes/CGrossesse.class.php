@@ -137,7 +137,7 @@ class CGrossesse extends CMbObject {
   /**
    * Chargement de la parturiente
    *
-   * @return CMediusers
+   * @return CPatient
    */
   function loadRefParturiente() {
     return $this->_ref_parturiente = $this->loadFwdRef("parturiente_id", true);

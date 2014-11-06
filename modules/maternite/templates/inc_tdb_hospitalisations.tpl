@@ -10,7 +10,14 @@
 
 <table class="tbl" id="hospitalisation_tab">
   <tr>
-    <th class="title" colspan="10">{{$listSejours|@count}} hospitalisation(s) au {{$date|date_format:$conf.date}}</th>
+    <th class="title" colspan="10">
+      <button type="button" class="change notext" onclick="Tdb.views.listHospitalisations(false);" style="float: right;">
+        {{tr}}Refresh{{/tr}}
+      </button>
+      <button class="sejour_create notext" onclick="Tdb.editSejour(null);" style="float: left;">
+        {{tr}}CGrossesse-title-create{{/tr}}
+      </button>
+      {{$listSejours|@count}} hospitalisation(s) au {{$date|date_format:$conf.date}}</th>
   </tr>
   <tr>
     <th class="narrow">{{mb_title class=CAffectation field=lit_id}}</th>
@@ -54,7 +61,7 @@
       <td>
         <button type="button" class="edit notext" onclick="Tdb.editSejour('{{$_sejour->_id}}')">{{tr}}CSejour{{/tr}}</button>
         <button type="button" class="soins notext" onclick="Tdb.editD2S('{{$_sejour->_id}}')">{{tr}}dossier_soins{{/tr}}</button>
-        <button type="button" class="new notext" onclick="Tdb.editAccouchement(null, '{{$_sejour->_id}}', '{{$_sejour->_ref_grossesse->_id}}', '')">Accouchement</button>
+        <button type="button" class="accouchement_create notext" onclick="Tdb.editAccouchement(null, '{{$_sejour->_id}}', '{{$_sejour->_ref_grossesse->_id}}', '')">Accouchement</button>
       </td>
     </tr>
   {{foreachelse}}

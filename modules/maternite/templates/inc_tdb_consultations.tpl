@@ -11,7 +11,10 @@
 <table class="tbl" id="consultations_tab">
   <tr>
     <th class="title" colspan="10">
-      <button style="float:left;" class="new notext" onclick="Tdb.editConsult();">{{tr}}CConsultation-title-create{{/tr}}</button>
+      <button style="float:left;" class="consultation_create notext" onclick="Tdb.editConsult();">{{tr}}CConsultation-title-create{{/tr}}</button>
+      <button type="button" class="change notext" onclick="Tdb.views.listConsultations(false);" style="float: right;">
+        {{tr}}Refresh{{/tr}}
+      </button>
       {{if $listConsults|@count}}{{$listConsults|@count}}{{else}}Aucune{{/if}} Consultation{{if $listConsults|@count > 1}}s{{/if}} le {{$date|date_format:$conf.date}}
     </th>
   </tr>
@@ -40,10 +43,10 @@
       </td>
       <td><span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_ref_grossesse->_ref_parturiente->_guid}}');">{{mb_value object=$_consult->_ref_grossesse field=parturiente_id}}</span></td>
       <td>
-        <button class="edit notext" onclick="Tdb.editConsult('{{$_consult->_id}}');"></button>
-        <button class="new notext" onclick="Tdb.editConsult(0, '{{$_consult->_ref_grossesse->parturiente_id}}');">Nouvelle consultation</button>
-        <button class="new notext" onclick="Tdb.editSejour(0, '{{$_consult->_ref_grossesse->_id}}','{{$_consult->_ref_grossesse->parturiente_id}}');">Nouveau séjour</button>
-        <button class="new notext" onclick="Tdb.editAccouchement(0, '{{$_consult->sejour_id}}','{{$_consult->_ref_grossesse->_id}}', '{{$_consult->_ref_grossesse->parturiente_id}}');">Nouvel accouchement</button>
+        <button class="edit notext" onclick="Tdb.editConsult('{{$_consult->_id}}');">{{tr}}Edit{{/tr}}</button>
+        <button class="consultation_create notext" onclick="Tdb.editConsult(0, '{{$_consult->_ref_grossesse->parturiente_id}}');">Nouvelle consultation</button>
+        <button class="sejour_create notext" onclick="Tdb.editSejour(0, '{{$_consult->_ref_grossesse->_id}}','{{$_consult->_ref_grossesse->parturiente_id}}');">Nouveau séjour</button>
+        <button class="accouchement_create notext" onclick="Tdb.editAccouchement(0, '{{$_consult->sejour_id}}','{{$_consult->_ref_grossesse->_id}}', '{{$_consult->_ref_grossesse->parturiente_id}}');">Nouvel accouchement</button>
       </td>
     </tr>
   {{foreachelse}}

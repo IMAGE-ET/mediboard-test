@@ -11,13 +11,14 @@
  *}}
 
 {{mb_script module="cabinet" script="edit_consultation"}}
+{{mb_script module="dPpatients" script="pat_selector"}}
 {{mb_script module="planningOp" script="operation"}}
 {{mb_script module="planningOp" script="protocole_selector"}}
 {{mb_script module="planningOp" script="cim10_selector"}}
-{{mb_script module="planningOp" script="cim10_selector"}}
+{{mb_script module="planningOp" script="ccam_selector"}}
+{{mb_script module="planningOp" script="plage_selector"}}
 {{mb_script module="soins" script="plan_soins"}}
 {{mb_script module="maternite" script="tdb"}}
-{{mb_script module="dPpatients" script="pat_selector"}}
 {{mb_script module="maternite" script="grossesse"}}
 
 <style>
@@ -38,8 +39,9 @@
 <script>
   Consultation.useModal();
   Operation.useModal();
-  Grossesse.afterEditGrossesse = function() {
+  Grossesse.afterEditGrossesse = function(_id) {
     Control.Modal.close();
+    Tdb.editGrossesse(_id);
   };
 
   Main.add(function () {

@@ -10,10 +10,17 @@
  */
 
 Tdb = {
+  searchGrossesse : function() {
+    var url = new Url('maternite', 'ajax_modal_search_grossesse');
+    url.addParam("lastname", $V('_seek_patient'));
+    url.requestModal("1000", "600");
+  },
+
   editConsult : function(_id, patient_id) {
     var url = new Url('dPcabinet', 'edit_planning');
     url.addParam('consultation_id', _id);
     url.addParam('pat_id', patient_id);
+    url.addParam("dialog", 1);
     url.requestModal();
   },
 
@@ -21,6 +28,7 @@ Tdb = {
     var url = new Url('maternite', 'ajax_edit_grossesse', "action");
     url.addParam('grossesse_id', _id);
     url.addParam('parturiente_id', patient_id);
+    url.addParam('with_buttons', 1);
     url.requestModal();
     url.modalObject.observe('afterClose', function() {
       Tdb.views.listGrossesses();
@@ -56,7 +64,13 @@ Tdb = {
     url.addParam("sejour_id", sejour_id);
     url.addParam("grossesse_id", grossesse_id);
     url.addParam("pat_id", patiente_id);
-    url.requestModal("-40","-40");
+    url.modal({
+      width     : "95%",
+      height    : "95%",
+      afterClose: function() {
+        Tdb.views.listGrossesses();
+      }
+    });
   },
 
   views : {
@@ -64,25 +78,41 @@ Tdb = {
     initListGrossesses : function() {
       var url = new Url("maternite", "ajax_tdb_grossesses");
       url.addParam("date", Tdb.views.date);
-      url.periodicalUpdate("grossesses", { frequency: 10, onSuccess: Tdb.views.listConsultations } );
+      url.periodicalUpdate("grossesses", { frequency: 120, onSuccess: Tdb.views.listConsultations.curry(true) } );
     },
 
-    listGrossesses : function() {
+    listGrossesses : function(fwd) {
       var url = new Url("maternite", "ajax_tdb_grossesses");
       url.addParam("date", Tdb.views.date);
-      url.requestUpdate("grossesses", {onSuccess: Tdb.views.listConsultations } );
+      url.requestUpdate("grossesses", {onSuccess: function() {
+        if (fwd) {
+          Tdb.views.listConsultations(fwd);
+        }
+        }
+      });
     },
 
-    listConsultations : function() {
+    listConsultations : function(fwd) {
       var url = new Url("maternite", "ajax_tdb_consultations");
       url.addParam("date", Tdb.views.date);
-      url.requestUpdate("consultations", { onSuccess: Tdb.views.listHospitalisations } );
+      url.requestUpdate("consultations", { onSuccess: function() {
+          if (fwd) {
+            Tdb.views.listHospitalisations(fwd);
+          }
+        }
+      });
     },
 
-    listHospitalisations : function() {
+    listHospitalisations : function(fwd) {
       var url = new Url("maternite", "ajax_tdb_hospitalisations");
       url.addParam("date", Tdb.views.date);
-      url.requestUpdate("hospitalisations", { onSuccess: Tdb.views.listAccouchements } );
+      url.requestUpdate("hospitalisations", {
+        onSuccess: function () {
+          if (fwd) {
+            Tdb.views.listAccouchements(fwd);
+          }
+        }
+      });
     },
 
     listAccouchements : function() {

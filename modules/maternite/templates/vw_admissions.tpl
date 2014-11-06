@@ -52,19 +52,19 @@
         <tr>
           <th class="text">
             <a class="{{if $view == "all"}}selected{{else}}selectable{{/if}}" title="Toutes les admissions"
-              href="?m=maternite&&tab=vw_idx_admission&view=all">
+              href="?m=maternite&&tab=vw_admissions&view=all">
               Adm.
             </a>
           </th>
           <th class="text">
             <a class="{{if $view == "non_prep"}}selected{{else}}selectable{{/if}}" title="Admissions non préparées"
-              href="?m=maternite&&tab=vw_idx_admission&view=non_prep">
+              href="?m=maternite&&tab=vw_admissions&view=non_prep">
               Non prép.
             </a>
           </th>
           <th class="text">
             <a class="{{if $view == "non_eff"}}selected{{else}}selectable{{/if}}" title="Admissions non effectuées"
-              href="?m=maternite&&tab=vw_idx_admission&view=non_eff">
+              href="?m=maternite&&tab=vw_admissions&view=non_eff">
               Non eff.
             </a>
           </th>
@@ -79,7 +79,7 @@
             {{elseif $day_number == '0' || $day_number == '6'}}
               style="background-color: #ccc;"
             {{/if}}>
-            <a href="?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$day|iso_date}}" title="{{$day|date_format:$conf.longdate}}">
+            <a href="?m={{$m}}&amp;tab=vw_admissions&amp;date={{$day|iso_date}}" title="{{$day|date_format:$conf.longdate}}">
               <strong>
                 {{$day|date_format:"%a"|upper|substr:0:1}}
                 {{$day|date_format:"%d"}}

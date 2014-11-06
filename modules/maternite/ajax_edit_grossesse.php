@@ -13,6 +13,7 @@
 
 $grossesse_id   = CValue::get('grossesse_id');
 $parturiente_id = CValue::getOrSession("parturiente_id");
+$with_buttons = CValue::get("with_buttons", false);
 
 $grossesse = new CGrossesse();
 $grossesse->load($grossesse_id);
@@ -24,7 +25,6 @@ if (!$grossesse->_id) {
 $grossesse->loadRefParturiente();
 
 $smarty = new CSmartyDP();
-
 $smarty->assign("grossesse" , $grossesse);
-
+$smarty->assign("with_buttons", $with_buttons);
 $smarty->display("inc_edit_grossesse.tpl");
