@@ -17,7 +17,9 @@ class CSourceHTTP extends CExchangeSource {
   public $_filename;
   public $_fieldname;
   public $_mimetype;
-  
+  public $_authorization = "";
+  public $_disposition = "";
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'source_http';
@@ -26,26 +28,30 @@ class CSourceHTTP extends CExchangeSource {
   }
   
   function send($evenement_name = null, $tab_data = null) {
+    if ($this->_filename) {
+      $this->_disposition = "Content-Disposition: form-data; name=\"txtDocument\"; filename=\"$this->_filename\"\r\n";
+    }
     $boundary = "-------MB-BOUNDARY-".uniqid();
     $content =  "--$boundary\r\n".
-                "Content-Disposition: form-data; name=\"txtDocument\"; filename=\"$this->_filename\"\r\n".
+                $this->_disposition.
                 "Content-Type: $this->_mimetype\r\n\r\n".
                 $this->_data."\r\n";
-                
-    foreach ($tab_data as $key=>$value) {
-      $content .= "--$boundary\r\n".
-            "Content-Disposition: form-data; name=\"$key\"\r\n\r\n".
-            "$value\r\n";
+    if ($tab_data) {
+      foreach ($tab_data as $key => $value) {
+        $content .= "--$boundary\r\n" .
+          "Content-Disposition: form-data; name=\"$key\"\r\n\r\n" .
+          "$value\r\n";
+      }
     }
-    
     $content .= "--$boundary--\r\n";
-    
+
     $context = stream_context_create(
       array(
         'http' => array(
               'method' => 'POST',
-              'header' => "Content-Type: multipart/form-data; boundary=$boundary\r\n".
-                          "Content-Length: ".strlen($content)."\r\n",
+              'header' => "Content-Type: $this->_mimetype"."\r\n".
+                          "Content-Length: ".strlen($content)."\r\n".
+                          $this->_authorization,
               'content' => $content,
         ),
       )

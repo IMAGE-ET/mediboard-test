@@ -51,6 +51,8 @@ class CProductOrder extends CMbMetaObject {
   public $_status;
   public $_count_received;
   public $_count_renewed;
+  public $_quantity_received;
+  public $_quantity_renewed;
   public $_date_received;
   public $_received;
   public $_partial;
@@ -132,12 +134,15 @@ class CProductOrder extends CMbMetaObject {
   function countReceivedItems() {
     $this->loadRefsOrderItems();
     $count = 0;
-    
+    $quantity = 0;
+
     foreach ($this->_ref_order_items as $item) {
       if ($item->isReceived()) {
         $count++;
       }
+      $quantity += $item->_quantity_received;
     }
+    $this->_quantity_received = $quantity;
     return $this->_count_received = $count;
   }
 
@@ -149,12 +154,15 @@ class CProductOrder extends CMbMetaObject {
   function countRenewedItems(){
     $this->loadRefsOrderItems();
     $count = 0;
+    $quantity = 0;
     
     foreach ($this->_ref_order_items as $item) {
       if ($item->renewal) {
         $count++;
+        $quantity += $item->quantity;
       }
     }
+    $this->_quantity_renewed = $quantity;
     return $this->_count_renewed = $count;
   }
 
@@ -603,11 +611,11 @@ class CProductOrder extends CMbMetaObject {
   function loadRefsaddItems() {
     $_reception = new CProductReception();
     $where = array();
-    $where["reference"] = "LIKE '$this->order_number%'";
+    $where["reference"] = "LIKE '$this->order_number-%'";
     $receptions = $_reception->loadIds($where);
-
     $where = array();
-    $where["product_order_item_reception.reception_id"] = CSQLDataSource::prepareIn(array_values($receptions));
+    $where[] = "product_order_item_reception.reception_id ".CSQLDataSource::prepareIn(array_values($receptions)).
+        " OR product_order_item.order_id = '$this->_id'";
     $ljoin = array();
     $ljoin["product_order_item_reception"]  = "product_order_item_reception.order_item_id = product_order_item.order_item_id";
 
@@ -622,6 +630,7 @@ class CProductOrder extends CMbMetaObject {
     }
     return $this->_ref_order_items_add = $order_items;
   }
+
   /**
    * Load postal address object
    *
