@@ -13,7 +13,7 @@
  * Object exporting utility class
  */
 class CMbObjectExport {
-  const DEFAULT_DEPTH = 6;
+  const DEFAULT_DEPTH = 10;
   
   /** @var CMbXMLDocument */
   public $doc;
