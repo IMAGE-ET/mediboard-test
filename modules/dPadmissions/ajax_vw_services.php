@@ -13,7 +13,7 @@
 
 CCanDo::checkRead();
 
-// Chargement su séjour s'il y en a un
+// Chargement du séjour s'il y en a un
 $sejour = new CSejour();
 $sejour->load(CValue::get("sejour_id"));
 $service_id = $sejour->service_sortie_id;
