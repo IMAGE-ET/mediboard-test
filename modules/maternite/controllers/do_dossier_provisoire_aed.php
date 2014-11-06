@@ -53,6 +53,7 @@ $terme_prevu = $grossesse->terme_prevu;
 $patient = new CPatient();
 $patient->nom = $nom ? $nom : $parturiente->nom;
 $patient->prenom = $prenom ? $prenom : "provi";
+$patient->civilite = "enf";
 $patient->naissance = $terme_prevu;
 storeObject($patient);
 

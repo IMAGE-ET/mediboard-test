@@ -74,6 +74,7 @@ if (!$naissance_id) {
   $patient->nom = $nom;
   $patient->prenom = $prenom;
   $patient->sexe = $sexe;
+  $patient->civilite = "enf";
   $patient->naissance = $date;
   storeObject($patient);
 
