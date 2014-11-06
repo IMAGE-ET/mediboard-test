@@ -436,6 +436,22 @@ button.submit:before, a.button.submit:before {
   content: url(images/buttons/save.png);
 }
 
+button.consultation_create:before, a.button.consultation_create:before  {
+  content: url(images/buttons/consultation_create.png);
+}
+
+button.sejour_create:before, a.button.sejour_create:before  {
+  content: url(images/buttons/sejour_create.png);
+}
+
+button.accouchement_create:before, a.button.accouchement_create:before  {
+  content: url(images/buttons/accouchement_create.png);
+}
+
+button.grossesse_create:before, a.button.grossesse_create:before{
+  content: url(images/buttons/grossesse_create.png);
+}
+
 button.new:before, a.button.new:before {
   content: url(images/buttons/new.png);
 }
