@@ -31,6 +31,10 @@ Main.add(function () {
   window.oGraphs = new ConstantsGraph(graphs_data, {{$min_x_index}}, {{$min_x_value}}, false, '{{$context_guid}}', '{{$display.mode}}', {{$display.time}}, {{$hidden_graphs|@json}}, {{$graphs_structure|@json}});
   window.oGraphs.draw();
   ViewPort.SetAvlHeight('tab-constantes-medicales', 1.0);
+
+  if (window.tabsConsult || window.tabsConsultAnesth) {
+    Control.Tabs.setTabCount("constantes-medicales", '{{$total_constantes}}');
+  }
 });
 
 loadConstantesMedicales  = function(context_guid) {

@@ -1,3 +1,19 @@
+<script>
+  Main.add(function() {
+    if (window.tabsConsult) {
+      var count_tab = 0;
+      var fields = ["motif", "rques", "examen", "histoire_maladie", "conclusion"];
+      fields.each(function(field) {
+        if (consult[field]) {
+          count_tab++
+        }
+      });
+      count_tab += $("examDialog-"+consult_id).select("li:not(.empty)").length;
+      Control.Tabs.setTabCount("Examens", count_tab);
+    }
+  });
+</script>
+
 <fieldset>
   <legend>Fiches d'examens</legend>
   <form name="newExamen" action="?m=dPcabinet" method="get">
@@ -14,7 +30,7 @@
     {{if $consult->_is_anesth}}
       <input type="hidden" name="dossier_anesth_id" value="{{$dossier_anesth_id}}" />
     {{/if}}
-    <script type="text/javascript">
+    <script>
        ExamDialog.init = function(type_exam){
          this.sForm      = "newExamen";
          this.sConsultId = "consultation_id";

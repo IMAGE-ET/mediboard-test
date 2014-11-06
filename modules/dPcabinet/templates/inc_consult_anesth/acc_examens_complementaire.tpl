@@ -2,7 +2,7 @@
 {{mb_default var=view_prescription value=1}}
 
 <script>
-  function calculClairance () {
+  function calculClairance() {
     var oFormExam  = document.forms["editExamCompFrm"];
     var oFormConst = document.forms["edit-constantes-medicales"];
 
@@ -19,7 +19,7 @@
     }
   }
 
-  function calculPSA () {
+  function calculPSA() {
     var oFormExam     = getForm("editExamCompFrm");
     var oFormConst    = getForm("edit-constantes-medicales");
 
@@ -46,7 +46,23 @@
     return onSubmitFormAjax(formDossier);
   }
 
-  Main.add(function () {
+  function callbackExamComp() {
+    if (!window.tabsConsultAnesth) {
+      return;
+    }
+    var count = 0;
+    count += $("listExamComp").select("button.trash").length;
+    var form = getForm("editExamCompFrm");
+    if ($V(form.result_ecg)) {
+      count ++;
+    }
+    if ($V(form.result_rp)) {
+      count ++;
+    }
+    Control.Tabs.setTabCount("ExamsComp", count);
+  }
+
+  Main.add(function() {
     ExamComp.refresh();
   });
 </script>
@@ -54,11 +70,12 @@
 <table class="form" style="width: 100%">
   <tr>
     <td class="text">
-      <form name="addExamCompFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
+      <form name="addExamCompFrm" method="post">
       <input type="hidden" name="m" value="cabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_examcomp_aed" />
-      {{mb_field object=$consult field="consultation_id" hidden=1}}
+      {{mb_key object=$consult}}
+
       <fieldset>
         <legend>{{tr}}CExamComp{{/tr}}</legend>
           <table class="layout main">
@@ -85,7 +102,7 @@
       </fieldset>
       </form>
       {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
-      <form name="dossier_medical_patient" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
+      <form name="dossier_medical_patient" method="post" onsubmit="return onSubmitFormAjax(this);">
         {{mb_key   object=$dossier_medical}}
         <input type="hidden" name="m"     value="patients" />
         <input type="hidden" name="del"     value="0" />
@@ -97,10 +114,11 @@
         <input type="hidden" name="groupe_ok"       value="{{$dossier_medical->groupe_ok}}" />
       </form>
 
-      <form name="editExamCompFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+      <form name="editExamCompFrm" method="post">
       <input type="hidden" name="m" value="cabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+      <input type="hidden" name="callback" value="callbackExamComp" />
       {{mb_key object=$consult_anesth}}
       {{if $app->user_prefs.displayResultsConsult}}
         <fieldset>

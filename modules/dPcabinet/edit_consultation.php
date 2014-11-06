@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *  
  * @category Cabinet
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision:$
+ * @version  $Revision$
  * @link     http://www.mediboard.org
  */
 
@@ -195,7 +195,7 @@ foreach ($tabs_count as $_tab => $_count) {
       }
       $dossier_medical->countTraitements();
       $dossier_medical->countAntecedents();
-      $tabs_count[$_tab] = $dossier_medical->_count_antecedents + $dossier_medical->_count_traitements + $count_meds;
+      $tabs_count[$_tab] = $dossier_medical->_count_antecedents + $dossier_medical->_count_traitements + $count_meds + count($dossier_medical->_ext_codes_cim);
       break;
     case "Constantes":
       if ($sejour->_ref_rpu && $sejour->_ref_rpu->_id) {
@@ -258,7 +258,7 @@ foreach ($tabs_count as $_tab => $_count) {
       if ($consultAnesth->_id) {
         break;
       }
-      $fields = array("motif", "rques", "examen", "traitement");
+      $fields = array("motif", "rques", "examen", "histoire_maladie", "conclusion");
       foreach ($fields as $_field) {
         if ($consult->$_field) {
           $count++;
@@ -304,12 +304,16 @@ foreach ($tabs_count as $_tab => $_count) {
       if (!$consultAnesth->_id) {
         break;
       }
-      $fields = array("mallampati", "bouche", "distThyro");
+      $fields = array(
+        "mallampati", "bouche", "distThyro", "etatBucco", "conclusion",
+        "plus_de_55_ans", "edentation", "barbe", "imc_sup_26", "ronflements", "piercing"
+      );
       foreach ($fields as $_field) {
         if ($consultAnesth->$_field) {
           $count++;
         }
       }
+      $count += count(array_filter($list_etat_dents));
       $tabs_count[$_tab] = $count;
       break;
     case "InfoAnesth":
@@ -318,11 +322,7 @@ foreach ($tabs_count as $_tab => $_count) {
       }
       $op = $consultAnesth->loadRefOperation();
 
-      if (!$op->_id) {
-        break;
-      }
-
-      $fields_anesth = array("prepa_preop", "premedication");
+      $fields_anesth = array("prepa_preop", "premedication", "apfel_femme", "apfel_non_fumeur", "apfel_atcd_nvp", "apfel_morphine");
       $fields_op = array("passage_uscpo", "type_anesth", "ASA", "position");
 
       foreach ($fields_anesth as $_field) {
@@ -330,9 +330,11 @@ foreach ($tabs_count as $_tab => $_count) {
           $count++;
         }
       }
-      foreach ($fields_op as $_field) {
-        if ($op->$_field) {
-          $count++;
+      if ($op->_id) {
+        foreach ($fields_op as $_field) {
+          if ($op->$_field) {
+            $count++;
+          }
         }
       }
 

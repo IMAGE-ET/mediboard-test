@@ -3,7 +3,7 @@
 {{/if}}
 
 <script>
-  Main.add(function () {
+  Main.add(function() {
      // UpdateFields de l'autocomplete des traitements
     updateFieldTraitement = function(selected) {
       var dn = selected.childElements();
@@ -14,7 +14,7 @@
 
     // Autocomplete des medicaments
     var oForm = getForm('editFrmExams');
-    if(oForm && oForm.produit) {
+    if (oForm && oForm.produit) {
       var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
       urlAuto.autoComplete(oForm.produit, "_traitement_auto_complete", {
         minChars: 3,
@@ -25,6 +25,20 @@
       } );
     }
   });
+
+  callbackExam = function(consult_id, consult) {
+    if (window.tabsConsult) {
+      var count_tab = 0;
+      var fields = ["motif", "rques", "examen", "histoire_maladie", "conclusion"];
+      fields.each(function(field) {
+        if (consult[field]) {
+          count_tab++
+        }
+      });
+      count_tab += $("examDialog-"+consult_id).select("li:not(.empty)").length;
+      Control.Tabs.setTabCount("Examens", count_tab);
+    }
+  }
 </script>
 
 {{mb_default var=readonly value=0}}
@@ -55,22 +69,22 @@
 <table class="form">
   <tr>
     <td>
-    	<table class="main layout">
+      <table class="main layout">
         <tr>
           <td style="width: 50%;">
-			      <!-- Fiches d'examens -->
-			      {{mb_script module="cabinet" script="exam_dialog" ajax=1}}
+            <!-- Fiches d'examens -->
+            {{mb_script module="cabinet" script="exam_dialog" ajax=1}}
             <div id="examDialog-{{$consult->_id}}"></div>
-			      <script>
-			        {{if !$readonly}}
-			          ExamDialog.register('{{$consult->_id}}');
-			        {{/if}}
-			      
-			        onExamComplete = function(){
-			          FormObserver.changes = 0;
-			        }
-			      </script>
-			    </td>
+            <script>
+              {{if !$readonly}}
+                ExamDialog.register('{{$consult->_id}}');
+              {{/if}}
+            
+              onExamComplete = function() {
+                FormObserver.changes = 0;
+              }
+            </script>
+          </td>
           
           {{if "forms"|module_active}}
             <td>
@@ -92,10 +106,11 @@
       </table>
       
       {{if $consult->_id}}
-      <form name="editFrmExams" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: onExamComplete})">
+      <form name="editFrmExams" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, onExamComplete)">
       <input type="hidden" name="m" value="cabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consultation_aed" />
+      <input type="hidden" name="callback" value="callbackExam" />
       {{mb_key object=$consult}}
       
       {{assign var=exam_count value=$consult->_exam_fields|@count}}

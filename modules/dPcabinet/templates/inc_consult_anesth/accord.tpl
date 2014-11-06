@@ -44,7 +44,7 @@
       if (window.oGraphs) {
         url.addParam('hidden_graphs', JSON.stringify(window.oGraphs.getHiddenGraphs()));
       }
-      url.requestUpdate("Constantes");
+      url.requestUpdate("constantes-medicales");
       constantesMedicalesDrawn = true;
     }
   }
@@ -114,33 +114,47 @@
 <!-- Tab titles -->
 <ul id="tab-consult-anesth" class="control_tabs">
   <li>
-    <a id="acc_consultation_a_Atcd" href="#AntTrait">{{tr}}CAntecedent.more{{/tr}}</a>
+    <a id="acc_consultation_a_Atcd" href="#AntTrait" {{if $tabs_count.AntTrait == 0}}class="empty"{{/if}}>
+      {{tr}}CAntecedent.more{{/tr}} <small>({{$tabs_count.AntTrait}})</small>
+    </a>
   </li>
   <li onmousedown="refreshConstantesMedicales();">
-    <a href="#Constantes">
-      Constantes
+    <a href="#constantes-medicales" {{if $tabs_count.Constantes == 0}}class="empty"{{/if}}>
+      Constantes <small>({{$tabs_count.Constantes}})</small>
     </a>
   </li>
   <li onmousedown="this.onmousedown = ''; loadExams()">
-    <a href="#Exams">Exam. Clinique</a>
+    <a href="#Exams" {{if $tabs_count.Exams == 0}}class="empty"{{/if}}>
+      Exam. Clinique <small>({{$tabs_count.Exams}})</small>
+    </a>
   </li>
   <li>
-    <a href="#Intub">Intubation</a>
+    <a href="#Intub" {{if $tabs_count.Intub == 0}}class="empty"{{/if}}>
+      Intubation <small>({{$tabs_count.Intub}})</small>
+    </a>
   </li>
   <li>
-    <a href="#ExamsComp">Exam. Comp.</a>
+    <a href="#ExamsComp" {{if $tabs_count.ExamsComp == 0}}class="empty"{{/if}}>
+      Exam. Comp. <small>({{$tabs_count.ExamsComp}})</small>
+    </a>
   </li>
   <li onmousedown="this.onmousedown = ''; loadInfosAnesth()">
-    <a href="#InfoAnesth">Infos. Anesth.</a>
+    <a href="#InfoAnesth" {{if $tabs_count.InfoAnesth == 0}}class="empty"{{/if}}>
+      Infos. Anesth. <small>({{$tabs_count.InfoAnesth}})</small>
+    </a>
   </li>
   {{if $isPrescriptionInstalled && "dPcabinet CPrescription view_prescription"|conf:"CGroups-$g"}}
     <li onmousedown="this.onmousedown = ''; Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null,'', null, false);">
-      <a href="#prescription_sejour">Prescription</a>
+      <a href="#prescription_sejour" {{if $tabs_count.prescription_sejour == 0}}class="empty"{{/if}}>
+        Prescription <small>({{$tabs_count.prescription_sejour}})</small>
+      </a>
     </li>
   {{/if}}
   {{if $conf.dPcabinet.CConsultAnesth.show_facteurs_risque}}
     <li onmousedown="refreshFacteursRisque();">
-      <a href="#facteursRisque">Facteurs de risque</a>
+      <a href="#facteursRisque" {{if $tabs_count.facteursRisque == 0}}class="empty"{{/if}}>
+        Facteurs de risque <small>({{$tabs_count.facteursRisque}})</small>
+      </a>
     </li>
   {{/if}}
   {{if $app->user_prefs.ccam_consultation == 1}}
@@ -149,17 +163,21 @@
     </li>
   {{/if}}
   <li onmousedown="this.onmousedown = ''; loadDocs()">
-    <a href="#fdrConsult">Documents</a>
+    <a href="#fdrConsult" {{if $tabs_count.fdrConsult == 0}}class="empty"{{/if}}>
+      Documents <small>({{$tabs_count.fdrConsult}})</small>
+    </a>
   </li>
   <li onmousedown="Reglement.reload(true);">
-    <a id="a_reglements_consult" href="#reglement">Réglements</a>
+    <a id="a_reglements_consult" href="#reglement" {{if $tabs_count.reglement == 0}}class="empty"{{/if}}>
+      Réglements <small>({{$tabs_count.reglement}})</small>
+    </a>
   </li>
 </ul>
 
 <!-- Tabs -->
 <div id="AntTrait" style="display: none;"></div>
 
-<div id="Constantes" style="display: none;">
+<div id="constantes-medicales" style="display: none;">
   <!-- We put a fake form for the ExamCompFrm form, before we insert the real one -->
   <form name="edit-constantes-medicales" action="?" method="post" onsubmit="return false">
     <input type="hidden" name="_last_poids" value="{{$consult->_ref_patient->_ref_constantes_medicales->poids}}" />

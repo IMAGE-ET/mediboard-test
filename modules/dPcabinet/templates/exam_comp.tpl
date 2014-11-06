@@ -14,7 +14,8 @@
             <input type="hidden" name="dosql" value="do_examcomp_aed" />
             {{mb_key object=$_examen}}
             {{mb_field object=$_examen field=fait hidden=1}}
-            
+            <input type="hidden" name="callback" value="callbackExamComp" />
+
             <button class="trash notext" type="button" onclick="ExamComp.del(this.form)">
               {{tr}}Delete{{/tr}}
             </button>
