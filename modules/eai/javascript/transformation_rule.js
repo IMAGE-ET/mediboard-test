@@ -18,6 +18,12 @@ EAITransformationRule = {
       .requestModal(600);
   },
 
+  stats: function(transformation_rule_id) {
+    new Url("eai", "ajax_show_stats_transformations")
+      .addParam("transformation_rule_id", transformation_rule_id)
+      .requestModal(600);
+  },
+
   onSubmit: function(form) {
     return onSubmitFormAjax(form, Control.Modal.close);
   },

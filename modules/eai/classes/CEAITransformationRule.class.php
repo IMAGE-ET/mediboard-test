@@ -38,6 +38,10 @@ class CEAITransformationRule extends CMbObject {
   /** @var CEAITransformationRuleSet */
   public $_ref_eai_transformation_ruleset;
 
+  /** @var CEAITransformation[] */
+  public $_ref_eai_transformations;
+  public $_count_transformations;
+
   /**
    * @see parent::getSpec()
    */
@@ -71,7 +75,21 @@ class CEAITransformationRule extends CMbObject {
 
     $props["eai_transformation_ruleset_id"] = "ref class|CEAITransformationRuleSet autocomplete|text";
 
+    // Derived fields
+    $props["_count_transformations"] = "num";
+
     return $props;
+  }
+
+  /**
+   * @see parent::getBackProps
+   */
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+
+    $backProps["eai_transformations"] = "CEAITransformation eai_transformation_rule_id";
+
+    return $backProps;
   }
 
   /**
@@ -84,14 +102,21 @@ class CEAITransformationRule extends CMbObject {
   }
 
   /**
-   * @see parent::getBackProps
+   * Load transformation
+   *
+   * @return CEAITransformationRule[]
    */
-  function getBackProps() {
-    $backProps = parent::getBackProps();
+  function loadRefsEAITransformation() {
+    return $this->_ref_eai_transformations = $this->loadBackRefs("eai_transformations");
+  }
 
-    $backProps["eai_transformations"] = "CEAITransformation eai_transformation_id";
-
-    return $backProps;
+  /**
+   * Count transformation
+   *
+   * @return int
+   */
+  function countRefsEAITransformation() {
+    return $this->_count_transformations = $this->countBackRefs("eai_transformations");
   }
 
   /**

@@ -18,6 +18,10 @@ $transf_ruleset = new CEAITransformationRuleSet();
 $transf_ruleset->load($transformation_ruleset_id);
 $transf_rules = $transf_ruleset->loadRefsEAITransformationRules();
 
+foreach ($transf_rules as $_transf_rule) {
+  $_transf_rule->countRefsEAITransformation();
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("transf_ruleset", $transf_ruleset);

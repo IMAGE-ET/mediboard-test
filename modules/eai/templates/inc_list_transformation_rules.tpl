@@ -23,29 +23,30 @@
 
 <table class="main tbl">
   <tr>
-    <th colspan="13" class="title">
+    <th colspan="14" class="title">
       {{tr}}CEAITransformationRule.all{{/tr}}
     </th>
   </tr>
   <tr>
-    <th class="narrow"></th>
-    <th class="category narrow"> {{mb_title class=CEAITransformationRule field=name}}</th>
+    <th class="narrow button"></th>
+    <th class="category"> {{mb_title class=CEAITransformationRule field=name}}</th>
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=profil}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=message}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=transaction}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=version}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=extension}} </th>
-    <th class="category narrow"> {{mb_title class=CEAITransformationRule field=component_from}} </th>
-    <th class="category narrow"> {{mb_title class=CEAITransformationRule field=component_to}} </th>
+    <th class="category"> {{mb_title class=CEAITransformationRule field=component_from}} </th>
+    <th class="category"> {{mb_title class=CEAITransformationRule field=component_to}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=action}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=value}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=active}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=rank}} </th>
+    <th class="category narrow"> {{mb_title class=CEAITransformationRule field=_count_transformations}} </th>
   </tr>
 
   {{foreach from=$transf_rules item=_transformation_rule}}
     <tr {{if !$_transformation_rule->active}}class="opacity-30"{{/if}}>
-      <td class="narrow">
+      <td>
         <button class="button edit notext compact" onclick="EAITransformationRule.edit('{{$_transformation_rule->_id}}');"
                 title="{{tr}}Edit{{/tr}}">
           {{tr}}Edit{{/tr}}
@@ -88,8 +89,12 @@
           </map>
         </form>
       </td>
+      <td class="button">
+        <button onclick="EAITransformationRule.stats('{{$_transformation_rule->_id}}');" class="stats notext compact" type="button"
+                title="{{tr}}Details{{/tr}}">{{tr}}Details{{/tr}}</button>
+      </td>
     </tr>
     {{foreachelse}}
-    <tr><td class="emtpy" colspan="13">{{tr}}CEAITransformationRule.none{{/tr}}</td></tr>
+    <tr><td class="emtpy" colspan="14">{{tr}}CEAITransformationRule.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>
