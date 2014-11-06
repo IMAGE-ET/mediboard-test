@@ -15,6 +15,10 @@
   <button onclick="EAITransformationRule.edit('0');" class="button new">
     {{tr}}CEAITransformationRule-title-create{{/tr}}
   </button>
+
+  <button onclick="EAITransformationRule.edit('','{{$transf_ruleset->_id}}',true);" class="button duplicate">
+    {{tr}}CEAITransformationRule-button-Duplicate all{{/tr}}
+  </button>
 </div>
 
 <table class="main tbl">

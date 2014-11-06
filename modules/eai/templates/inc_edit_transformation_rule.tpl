@@ -65,6 +65,7 @@
           <input type="hidden" name="m" value="eai" />
           <input type="hidden" name="dosql" value="do_duplicate_transformation_rule_aed" />
           <input type="hidden" name="eai_transformation_rule_id" value="{{$transf_rule->_id}}" />
+          <input type="hidden" name="eai_transformation_ruleset_id" value="{{$transformation_ruleset_id}}" />
 
           <input type="hidden" name="callback"
                  value="EAITransformationRuleSet.refreshTransformationRuleList.curry({{$transf_rule->eai_transformation_ruleset_id}})" />

@@ -204,6 +204,7 @@ $locales['CEAITransformationRule-active-court'] = 'Active';
 $locales['CEAITransformationRule-active-desc'] = 'Règle de transformation active';
 $locales['CEAITransformationRule-back-'] = 'Aucune règle de transformation';
 $locales['CEAITransformationRule-back-.empty'] = 'Règles de transformation';
+$locales['CEAITransformationRule-button-Duplicate all'] = 'Duplication de toutes les règles';
 $locales['CEAITransformationRule-component_from'] = 'Élément source';
 $locales['CEAITransformationRule-component_from-court'] = 'Élément source';
 $locales['CEAITransformationRule-component_from-desc'] = 'Élément source de la règle';

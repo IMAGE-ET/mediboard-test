@@ -11,19 +11,31 @@
  * @link     http://www.mediboard.org
  */
 
+CCanDo::checkAdmin();
+
 $eai_transformation_rule_id     = CValue::post("eai_transformation_rule_id");
+$eai_transformation_ruleset_id  = CValue::post("eai_transformation_ruleset_id");
 $transformation_ruleset_dest_id = CValue::post("transformation_ruleset_dest_id");
 
-$trans_rule = new CEAITransformationRule();
-$trans_rule->load($eai_transformation_rule_id);
-$trans_rule->_id = '';
+$transf_rule = new CEAITransformationRule();
 
-if ($transformation_ruleset_dest_id == $trans_rule->eai_transformation_ruleset_id) {
-  $trans_rule->name .= CAppUI::tr("copy_suffix");
+// On duplique toutes les règles de la catégorie
+if ($eai_transformation_ruleset_id) {
+  $transf_rule->eai_transformation_ruleset_id = $eai_transformation_ruleset_id;
+  /** @var $transf_rules CEAITransformationRule[] */
+  $transf_rules = $transf_rule->loadMatchingList();
+
+  foreach ($transf_rules as $_transf_rule) {
+    $msg = $_transf_rule->duplicate($transformation_ruleset_dest_id);
+    CAppUI::displayMsg($msg, "CEAITransformationRule-msg-create");
+  }
 }
-$trans_rule->eai_transformation_ruleset_id = $transformation_ruleset_dest_id;
+// On duplique une seule règle
+else {
+  $transf_rule->load($eai_transformation_rule_id);
 
-$msg = $trans_rule->store();
-CAppUI::displayMsg($msg, "CEAITransformationRule-msg-create");
+  $msg = $transf_rule->duplicate($transformation_ruleset_dest_id);
+  CAppUI::displayMsg($msg, "CEAITransformationRule-msg-create");
+}
 
 CAppUI::js(CValue::post("callback")."()");

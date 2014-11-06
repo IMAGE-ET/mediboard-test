@@ -28,7 +28,8 @@ $transf_rulesets = $transf_ruleset->loadList();
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("transf_rule"     , $transf_rule);
-$smarty->assign("mode_duplication", $mode_duplication);
-$smarty->assign("transf_rulesets" , $transf_rulesets);
+$smarty->assign("transf_rule"              , $transf_rule);
+$smarty->assign("mode_duplication"         , $mode_duplication);
+$smarty->assign("transf_rulesets"          , $transf_rulesets);
+$smarty->assign("transformation_ruleset_id", $transformation_ruleset_id);
 $smarty->display("inc_edit_transformation_rule.tpl");

@@ -107,4 +107,22 @@ class CEAITransformationRule extends CMbObject {
 
     return parent::store();
   }
+
+  /**
+   * Duplicate an transformation to another (or the same) category
+   *
+   * @param int $transformation_ruleset_dest_id RuleSet destination
+   *
+   * @return string
+   */
+  function duplicate($transformation_ruleset_dest_id) {
+    $this->_id = '';
+
+    if ($transformation_ruleset_dest_id == $this->eai_transformation_ruleset_id) {
+      $this->name .= CAppUI::tr("copy_suffix");
+    }
+    $this->eai_transformation_ruleset_id = $transformation_ruleset_dest_id;
+
+    return $this->store();
+  }
 }
