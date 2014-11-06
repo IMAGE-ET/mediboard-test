@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  * 
  * @package    Mediboard
  * @subpackage stock
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
@@ -184,9 +184,15 @@ class CProductReception extends CMbObject {
    */
   function loadRefOrder(){
     $order_id = explode("-", $this->reference);
+    $order_number = $order_id[0];
+
+    if (count($order_id) > 2) {
+      $longeur = strlen($this->reference)-strlen(end($order_id))-1;
+      $order_number = substr($this->reference, 0, $longeur);
+    }
 
     $where = array();
-    $where["order_number"] = " = '$order_id[0]'";
+    $where["order_number"] = " = '$order_number'";
 
     $order = new CProductOrder();
     $order->loadObject($where);
