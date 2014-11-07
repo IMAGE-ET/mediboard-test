@@ -53,10 +53,10 @@ foreach ($musers as $_user) {
 
     $libelle = '<h3 style="text-align: center">
     CONGES</h3>
-    <p style="text-align: center">'.$conge->libelle.'</p>';
+    <p style="text-align: center">'.CMbString::htmlEntities($conge->libelle).'</p>';
     if ($conge->replacer_id) {
       $replacer = $conge->loadRefReplacer();
-      $libelle .= '<p style="text-align: center">Remplacé par : '.$replacer->_view.'</p>';
+      $libelle .= '<p style="text-align: center">Remplacé par : '.CMbString::htmlEntities($replacer->_view).'</p>';
     }
 
     $event = new CPlanningEvent(
@@ -85,7 +85,7 @@ foreach ($musers as $_user) {
 
   // add prat to the calendar
   $planning->addDayLabel(
-    $i, "<span style=\"$style\">".$_user->_view."</span>", null, "#".$_user->_color, "ObjectTooltip.createEx(this, '".$_user->_guid."');", false, array("user_id" => $user_id));
+    $i, "<span style=\"$style\">".CMbString::htmlEntities($_user->_view)."</span>", null, "#".$_user->_color, "ObjectTooltip.createEx(this, '".$_user->_guid."');", false, array("user_id" => $user_id));
 
   $plage = new CPlageconsult();
   $plage->chir_id = $user_id;
@@ -169,7 +169,7 @@ foreach ($musers as $_user) {
       }
 
       $debute = "$i $_consult->heure";
-      $motif = $_consult->motif;
+      $motif = CMbString::htmlEntities($_consult->motif);
       $heure = CMbDT::format($_consult->heure, "%H:%M");
 
       if ($_consult->patient_id) {
@@ -191,7 +191,7 @@ foreach ($musers as $_user) {
         if ($_consult->_consult_sejour_out_of_nb) {
           $title.= "<span style='float:right;'>$_consult->_consult_sejour_nb/ $_consult->_consult_sejour_out_of_nb</span>";
         }
-        $title .= "<strong>$heure</strong> ".$_consult->_ref_patient->_view . "\n" . $motif;
+        $title .= "<strong>$heure</strong> ".CMbString::htmlEntities($_consult->_ref_patient->_view) . "\n" . $motif;
 
         $event = new CPlanningEvent(
           $_consult->_guid,
@@ -239,10 +239,10 @@ foreach ($musers as $_user) {
 
       if ($_consult->canDo()->edit) {
         if ($_consult->chrono == 16) {
-          $event->addMenuItem("tick", "Notifier l'arrivée");
+          $event->addMenuItem("tick", CMbString::htmlEntities("Notifier l'arrivée"));
         }
         if ($_consult->chrono == 32) {
-          $event->addMenuItem("tick_cancel", "Annuler l'arrivée");
+          $event->addMenuItem("tick_cancel", CMbString::htmlEntities("Annuler l'arrivée"));
         }
       }
 
