@@ -282,6 +282,7 @@ $locales['config-dicom-implementation_version-desc'] = 'Nom de version';
 $locales['config-source-dicom'] = 'Configuration d\'une source Dicom';
 $locales['dicom-msg-Echo'] = 'Echo';
 $locales['dicom-msg-Find'] = 'Find';
+$locales['mod-dicom-tab-ajax_refresh_session_list'] = 'Sessions';
 $locales['mod-dicom-tab-ajax_vw_session_details'] = 'Détails d\'une session';
 $locales['mod-dicom-tab-configure'] = 'Configurer';
 $locales['mod-dicom-tab-vw_idx_sessions'] = 'Sessions';
