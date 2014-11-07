@@ -160,7 +160,7 @@ $i                      = 0;
 $today                  = CMbDT::date();
 
 foreach ($salles as $_salle) {
-  $label_day = $bloc_id ? $_salle->_shortview : str_replace("-", "<br/>", $_salle->_view);
+  $label_day = $bloc_id ? CMBString::htmlEntities($_salle->_shortview) : str_replace("-", "<br/>", CMBString::htmlEntities($_salle->_view));
   $planning->addDayLabel($i, $label_day, null, null, null, true, array("salle_id" => $_salle->_id));
 
   if ($today == $date_planning) {
