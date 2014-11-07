@@ -78,7 +78,7 @@ $user = new CMediusers();
 $user->load($chirSel);
 if ($user->_id) {
   $user->loadRefFunction();
-  $planning->title = $user->_view;
+  $planning->title = CMbString::htmlEntities($user->_view);
 }
 else {
   $planning->title = "";
@@ -280,7 +280,7 @@ for ($i = 0; $i < $nbDays; $i++) {
 
       $_consult->loadPosition();
       $debute = "$jour $_consult->heure";
-      $motif = $_consult->motif;
+      $motif = CMbString::htmlEntities($_consult->motif);
       if ($_consult->patient_id) {
         $_consult->loadRefPatient();
         if ($color = "#cfc") {
@@ -308,7 +308,7 @@ for ($i = 0; $i < $nbDays; $i++) {
           $title .= "<span style=\"float:right;\">$nb / $of</span>";
         }
         $title .= "<span style=\"$style\">";
-        $title .= CMbString::htmlEntities($_consult->_ref_patient->_view) . "\n" . CMbString::htmlEntities($motif);
+        $title .= CMbString::htmlEntities($_consult->_ref_patient->_view) . "\n" . $motif;
         $title .= "</span>";
 
         $event = new CPlanningEvent(
@@ -359,10 +359,10 @@ for ($i = 0; $i < $nbDays; $i++) {
           $event->addMenuItem("cut" , "Couper cette consultation");
           $event->addMenuItem("add" , "Ajouter une consultation");
           if ($_consult->chrono == CConsultation::PLANIFIE) {
-            $event->addMenuItem("tick", "Notifier l'arrivée");
+            $event->addMenuItem("tick", CMbString::htmlEntities("Notifier l'arrivée"));
           }
           if ($_consult->chrono == CConsultation::PATIENT_ARRIVE) {
-            $event->addMenuItem("tick_cancel", "Annuler l'arrivée");
+            $event->addMenuItem("tick_cancel", CMbString::htmlEntities("Annuler l'arrivée"));
           }
         }
       }
