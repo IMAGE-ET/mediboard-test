@@ -436,6 +436,17 @@ class CSetupdPbloc extends CSetup {
                 ADD `type` ENUM ('sspi','preop') DEFAULT 'sspi';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.46";
+    $this->makeRevision("0.46");
+    $query = "UPDATE `plagesop`
+      SET `original_owner_id` = `chir_id`
+      WHERE `original_owner_id` IS NULL";
+    $this->addQuery($query);
+
+    $query = "UPDATE `plagesop`
+      SET `original_function_id` = `spec_id`
+      WHERE `original_function_id` IS NULL";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.47";
   }
 }
