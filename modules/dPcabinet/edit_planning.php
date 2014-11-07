@@ -9,11 +9,20 @@
 
 CCanDO::checkRead();
 
-$user = CUser::get();
+// params
+$consult_urgence_id = CValue::get("consult_urgence_id");  // Recuperation de l'id de la consultation du passage en urgence
+$dialog             = CValue::get("dialog", 0);
+$modal              = CValue::get("modal", 0);
+$callback           = CValue::get("callback");
+$consultation_id    = CValue::getOrSession("consultation_id");
+$plageconsult_id    = CValue::get("plageconsult_id", null);
+$line_element_id    = CValue::get("line_element_id");
+$sejour_id          = CValue::get("sejour_id");
+$date_planning      = CValue::get("date_planning", null);
+$heure              = CValue::get("heure", null);
+$grossesse_id       = CValue::get("grossesse_id");
 
-// Recuperation de l'id de la consultation du passage en urgence
-$consult_urgence_id = CValue::get("consult_urgence_id");
-$dialog = CValue::get("dialog", 0);
+$user = CUser::get();
 
 $consult      = new CConsultation();
 $chir         = new CMediusers();
@@ -31,13 +40,6 @@ $listPraticiens = CConsultation::loadPraticiens(PERM_EDIT);
 
 $function       = new CFunctions();
 $listFunctions  = $function->loadSpecialites(PERM_EDIT);
-
-$consultation_id = CValue::getOrSession("consultation_id");
-$plageconsult_id = CValue::get("plageconsult_id", null);
-$line_element_id = CValue::get("line_element_id");
-$sejour_id       = CValue::get("sejour_id");
-$date_planning   = CValue::get("date_planning", null);
-$heure           = CValue::get("heure", null);
 
 $correspondantsMedicaux = array();
 $medecin_adresse_par = "";
@@ -63,6 +65,8 @@ if (!$consultation_id) {
       $chir->load($chir_id);
     }
   }
+
+  // assign patient if defined in get
   if ($pat_id = CValue::get("pat_id")) {
     // On a fourni l'id du patient
     $pat->load($pat_id);
@@ -76,6 +80,17 @@ if (!$consultation_id) {
     $consult->heure = $heure;
     $consult->plageconsult_id = $plageconsult_id;
     $chir->load($plageConsult->chir_id);
+  }
+
+  // grossesse
+  if (!$consult->grossesse_id && $grossesse_id) {
+    $consult->grossesse_id = $grossesse_id;
+  }
+  if (CModule::getActive("maternite")) {
+    $grossesse = $consult->loadRefGrossesse();
+    if (!$consult->patient_id) {
+      $consult->patient_id = $grossesse->parturiente_id;
+    }
   }
 
   if ($line_element_id) {
@@ -198,10 +213,6 @@ if ($chir->_id) {
   $_functions = $chir->loadBackRefs("secondary_functions");
 }
 
-if (CModule::getActive("maternite")) {
-  $consult->loadRefGrossesse();
-}
-
 // Consultation suivantes, en cas de suppression ou annulation
 $following_consultations = array();
 if ($pat->_id) {
@@ -262,6 +273,8 @@ $smarty->assign("_function_id"           , $_function_id);
 $smarty->assign("line_element_id"        , $line_element_id);
 $smarty->assign("nb_plages"              , $nb_plages);
 $smarty->assign("dialog"                 , $dialog);
+$smarty->assign("modal"                  , $modal);
+$smarty->assign("callback"               , $callback);
 $smarty->assign("next_consult"           , $count_next_plage);
 $smarty->assign("display_elt"            , $display_elt);
 

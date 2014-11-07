@@ -281,12 +281,17 @@
   </a>
 {{/if}}
 
-<form name="editFrm" action="?m={{$m}}" class="watched" method="post" onsubmit="return checkFormRDV(this)">
+<form name="editFrm" action="?m={{$m}}" class="watched" method="post" onsubmit="return {{if $modal}}onSubmitFormAjax(this);{{else}}checkFormRDV(this);{{/if}}">
+  <input type="hidden" name="m" value="cabinet" />
   <input type="hidden" name="dosql" value="do_consultation_aed" />
   <input type="hidden" name="del" value="0" />
   {{mb_key object=$consult}}
   {{if $dialog}}
-    <input type="hidden" name="postRedirect" value="m=cabinet&a=edit_planning&dialog=1" />
+    {{if $callback}}
+      <input type="hidden" name="callback" value="{{$callback}}" />
+    {{else}}
+      <input type="hidden" name="postRedirect" value="m=cabinet&a=edit_planning&dialog=1" />
+    {{/if}}
   {{/if}}
   <input type="hidden" name="adresse_par_prat_id" value="{{$consult->adresse_par_prat_id}}" />
   <input type="hidden" name="consultation_ids" value="" />
