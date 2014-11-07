@@ -42,13 +42,13 @@ CCAMSelector.init = function(){
 addBesoins = function(types_ressources_ids) {
   var form = getForm("addBesoinOp");
   types_ressources_ids = types_ressources_ids.split(",");
-  
+
   types_ressources_ids.each(function(type_ressource_id) {
     $V(form.type_ressource_id, type_ressource_id);
     onSubmitFormAjax(form, function() {
     // C'est après l'ajout du dernier besoin que l'on actualise la couleur du bouton Matériel
       if (types_ressources_ids.indexOf(type_ressource_id) == (types_ressources_ids.length - 1)) {
-       checkRessources.curry('{{$op->_id}}');
+       checkRessources('{{$op->_id}}');
       }
     });
   });
@@ -516,7 +516,7 @@ refreshFunction = function(chir_id) {
     <tr>
       <td></td>
       <td>
-        {{mb_include module=dPbloc template=inc_button_besoins_ressources object_id=$op->_id type=operation_id}}
+        {{mb_include module=dPbloc template=inc_button_besoins_ressources object_id=$op->_id type=operation_id from_dhe=1}}
       </td>
       <td></td>
     </tr>

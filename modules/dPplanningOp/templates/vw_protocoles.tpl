@@ -91,15 +91,17 @@ reloadPage = function(form) {
   form.submit();
 }
 
+{{if !$dialog}}
 addBesoins = function(types_ressources_ids) {
   var form = getForm("addBesoinProtocole");
   types_ressources_ids = types_ressources_ids.split(",");
-  
+
   types_ressources_ids.each(function(type_ressource_id) {
     $V(form.type_ressource_id, type_ressource_id);
     onSubmitFormAjax(form);
   });
 }
+{{/if}}
 
 Main.add(function(){
   var oForm = getForm('selectFrm');

@@ -1,5 +1,6 @@
 <?php
 $locales['CBesoinRessource'] = 'Besoin';
+$locales['CBesoinRessource-_missing_materiel'] = 'Attention, vous n\'avez suffisament de matériel !';
 $locales['CBesoinRessource-back-usages'] = 'Usages';
 $locales['CBesoinRessource-back-usages.empty'] = 'Aucun usage';
 $locales['CBesoinRessource-besoin_ressource_id'] = 'Identifiant';

@@ -10,6 +10,8 @@
 
 {{mb_default var=type value=operation_id}}
 {{mb_default var=usage value=0}}
+{{mb_default var=from_dhe value=0}}
+
 {{unique_id var=uniq_id}}
 
 <script>
@@ -73,6 +75,12 @@
         button.setStyle({border: "2px solid #"+object.color});
         {{if $object_id}}
           button.down('span').update("("+object.count+")");
+        {{/if}}
+
+        {{if $from_dhe}}
+          if (object.color == "a00") {
+            alert($T("CBesoinRessource-_missing_materiel"));
+          }
         {{/if}}
       });
     });
