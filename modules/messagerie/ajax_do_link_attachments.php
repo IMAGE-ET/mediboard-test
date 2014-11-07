@@ -101,9 +101,11 @@ foreach ($attachments as $_attachment) {
 
 //text link
 if ($text_html || $text_plain) {
+  $content_type = "text/plain";
   if ($text_html) {
     $text = new CContentHTML();
     $text->load($text_html);
+    $content_type = "text/html";
   }
   else {
     $text = new CContentAny();
@@ -114,7 +116,7 @@ if ($text_html || $text_plain) {
   $file->setObject($object);
   $file->author_id = CAppUI::$user->_id;
   $file->file_name  = $mail->subject ? $mail->subject : "sans_titre";
-  $file->file_type = "text/html";
+  $file->file_type = $content_type;
   $file->fillFields();
   $file->putContent($text->content);
   if ($str = $file->store()) {
