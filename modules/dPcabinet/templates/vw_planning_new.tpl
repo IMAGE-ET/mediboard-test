@@ -107,19 +107,19 @@
     url.addParam("function_id", $V(form.function_id));
     if (type_date == "prev") {
       url.addParam("debut", window.save_dates.prev);
-      $V(form.debut, window.save_dates.prev);
+      $V(form.debut, window.save_dates.prev, false);
     }
     else if (type_date == "next") {
       url.addParam("debut", window.save_dates.next);
-      $V(form.debut, window.save_dates.next);
+      $V(form.debut, window.save_dates.next, false);
     }
     else if (type_date == "today") {
       url.addParam("debut", window.save_dates.today);
-      $V(form.debut, window.save_dates.today);
+      $V(form.debut, window.save_dates.today, false);
     }
     else if (date) {
       url.addParam("debut", date);
-      $V(form.debut, date);
+      $V(form.debut, date, false);
     }
 
     // filters
