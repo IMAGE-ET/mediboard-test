@@ -1,7 +1,7 @@
-<?php 
+<?php
 /**
  * $Id$
- * 
+ *
  * @package    Mediboard
  * @subpackage dPcabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
@@ -64,7 +64,7 @@ if (!$listPlage->countList($where)) {
   $nbDays--;
   // Aucune plage le dimanche, on peut donc tester le samedi.
   $dateArr = CMbDT::date("+5 day", $debut);
-  $where["date"] = "= '$dateArr'"; 
+  $where["date"] = "= '$dateArr'";
   if (!$listPlage->countList($where)) {
     $nbDays--;
   }
@@ -78,7 +78,7 @@ $user = new CMediusers();
 $user->load($chirSel);
 if ($user->_id) {
   $user->loadRefFunction();
-  $planning->title = $user->_view;
+  $planning->title = CMbString::htmlEntities($user->_view);
 }
 else {
   $planning->title = "";
@@ -280,7 +280,7 @@ for ($i = 0; $i < $nbDays; $i++) {
 
       $_consult->loadPosition();
       $debute = "$jour $_consult->heure";
-      $motif = $_consult->motif;
+      $motif = CMbString::htmlEntities($_consult->motif);
       if ($_consult->patient_id) {
         $_consult->loadRefPatient();
         if ($color = "#cfc") {
@@ -308,7 +308,7 @@ for ($i = 0; $i < $nbDays; $i++) {
           $title .= "<span style=\"float:right;\">$nb / $of</span>";
         }
         $title .= "<span style=\"$style\">";
-        $title .= CMbString::htmlEntities($_consult->_ref_patient->_view) . "\n" . CMbString::htmlEntities($motif);
+        $title .= CMbString::htmlEntities($_consult->_ref_patient->_view) . "\n" . $motif;
         $title .= "</span>";
 
         $event = new CPlanningEvent(
@@ -325,7 +325,7 @@ for ($i = 0; $i < $nbDays; $i++) {
       }
       else {
         if ($color = "#cfc") {
-           $color = "#faa";
+          $color = "#faa";
         }
         $event = new CPlanningEvent(
           $_consult->_guid,
@@ -343,30 +343,30 @@ for ($i = 0; $i < $nbDays; $i++) {
       if ($_plage->locked == 1) {
         $event->disabled = true;
       }
-      
+
       $_consult->loadRefCategorie();
       if ($_consult->categorie_id) {
         $event->icon = "./modules/dPcabinet/images/categories/".$_consult->_ref_categorie->nom_icone;
         $event->icon_desc = CMbString::htmlEntities($_consult->_ref_categorie->nom_categorie);
       }
-      
+
       if ($_consult->patient_id) {
         $event->draggable /*= $event->resizable */ = $can_edit;
         $event->hour_divider = 60 / CMbDT::transform($_plage->freq, null, "%M");
-        
+
         if ($can_edit) {
           $event->addMenuItem("copy", "Copier cette consultation");
           $event->addMenuItem("cut" , "Couper cette consultation");
           $event->addMenuItem("add" , "Ajouter une consultation");
           if ($_consult->chrono == CConsultation::PLANIFIE) {
-            $event->addMenuItem("tick", "Notifier l'arrivée");
+            $event->addMenuItem("tick", CMbString::htmlEntities("Notifier l'arrivée"));
           }
           if ($_consult->chrono == CConsultation::PATIENT_ARRIVE) {
-            $event->addMenuItem("tick_cancel", "Annuler l'arrivée");
+            $event->addMenuItem("tick_cancel", CMbString::htmlEntities("Annuler l'arrivée"));
           }
         }
       }
-      
+
       //Ajout de l'évènement au planning 
       $event->plage["color"] = $_plage->color;
       $planning->addEvent($event);
