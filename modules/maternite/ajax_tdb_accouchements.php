@@ -15,27 +15,37 @@ CCanDo::checkRead();
 
 $date  = CValue::get("date", CMbDT::date());
 
+$date_min = CMbDT::date("-1 DAY", $date);
+
 $op = new COperation();
-$ljoin = array("sejour" => "sejour.sejour_id = operations.sejour_id");
+$ljoin = array(
+  "sejour" => "sejour.sejour_id = operations.sejour_id",
+  "grossesse" => "sejour.grossesse_id = grossesse.grossesse_id");
 $where = array(
   "sejour.grossesse_id" => " IS NOT NULL",
-  "sejour.entree" => "<= '$date 23:59:59' "
+  " date BETWEEN '$date_min' AND '$date' "
 );
 
-$where[] = "(sejour.sortie >= '$date 00:00:00' OR sejour.sortie IS NULL)";
 
 /** @var COperation[] $ops */
-$ops = $op->loadList($where, "date, time_operation", null, null, $ljoin);
+$ops = $op->loadList($where, "date DESC, time_operation", null, null, $ljoin);
+
+CMbObject::massLoadFwdRef($ops, "sejour_id");
+CMbObject::massLoadFwdRef($ops, "sejour_id");
+CMbObject::massLoadFwdRef($ops, "anesth_id");
+$chirs = CMbObject::massLoadFwdRef($ops, "chir_id");
+CMbObject::massLoadFwdRef($chirs, "function_id");
 
 foreach ($ops as $_op) {
   $_op->loadRefChir()->loadRefFunction();
   $_op->loadRefAnesth();
   $_op->loadRefSalle();
+  $_op->loadRefPlageOp();
   $sejour = $_op->loadRefSejour();
   $grossesse = $sejour->loadRefGrossesse();
   $grossesse->loadRefsNaissances();
   $grossesse->loadRefParturiente();
-
+  $_op->updateDatetimes();
 }
 
 $smarty = new CSmartyDP();
