@@ -276,7 +276,8 @@ class CViewSender extends CMbObject {
               if ($compressed && !file_exists($_file["name_zip"])) {
                 $this->_files_list[$_i]["name_zip"] = $_file["name_raw"].".zip";
                 $_file["name_zip"] = $this->_files_list[$_i]["name_zip"];
-                
+                $this->_file_compressed = $this->_file.".zip";
+
                 $archive = new ZipArchive();
                 $archive->open($this->_files_list[$_i]["name_zip"], ZIPARCHIVE::CREATE);
                 $archive->addFile($_file["name_raw"], $destination_basename.$extension);
