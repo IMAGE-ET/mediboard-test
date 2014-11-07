@@ -78,54 +78,60 @@ Tdb = {
     initListGrossesses : function() {
       var url = new Url("maternite", "ajax_tdb_grossesses");
       url.addParam("date", Tdb.views.date);
-      url.periodicalUpdate("grossesses", { frequency: 120, onSuccess: Tdb.views.listConsultations.curry(true) } );
+      url.periodicalUpdate("grossesses", { frequency: 120, onSuccess: function() {
+        Tdb.views.listConsultations(true);
+        }
+      });
     },
 
-    listGrossesses : function(fwd) {
+    listGrossesses : function(cascade) {
       var url = new Url("maternite", "ajax_tdb_grossesses");
       url.addParam("date", Tdb.views.date);
       url.requestUpdate("grossesses", {onSuccess: function() {
-        if (fwd) {
-          Tdb.views.listConsultations(fwd);
+        if (cascade) {
+          Tdb.views.listConsultations(cascade);
         }
-        }
+      }
       });
     },
 
-    listConsultations : function(fwd) {
+    listConsultations : function(cascade) {
       var url = new Url("maternite", "ajax_tdb_consultations");
       url.addParam("date", Tdb.views.date);
       url.requestUpdate("consultations", { onSuccess: function() {
-          if (fwd) {
-            Tdb.views.listHospitalisations(fwd);
+          if (cascade) {
+            Tdb.views.listHospitalisations(cascade);
           }
-        }
+      }
       });
     },
 
-    listHospitalisations : function(fwd) {
+    listHospitalisations : function(cascade) {
       var url = new Url("maternite", "ajax_tdb_hospitalisations");
       url.addParam("date", Tdb.views.date);
       url.requestUpdate("hospitalisations", {
         onSuccess: function () {
-          if (fwd) {
-            Tdb.views.listAccouchements(fwd);
+          if (cascade) {
+            Tdb.views.listAccouchements(cascade);
           }
         }
       });
     },
 
-    listAccouchements : function() {
+    listAccouchements : function(cascade) {
       var url = new Url("maternite", "ajax_tdb_accouchements");
       url.addParam("date", Tdb.views.date);
-      url.requestUpdate("accouchements", { onSuccess: Tdb.views.filterByText} );
+      url.requestUpdate("accouchements");
     },
 
-    filterByText : function() {
+    filterByText : function(target) {
       var input = $('_seek_patient');
       var value = $V(input);
 
       var tables = ['grossesses_tab', 'consultations_tab', 'hospitalisation_tab', 'accouchements_tab'];
+      if (target) {
+        tables = [target];
+      }
       for (var a = 0; a < tables.length; a++) {
         if (!value) {
           $(tables[a]).select(".CPatient-view").each(function(e) {
@@ -136,6 +142,9 @@ Tdb = {
           $(tables[a]).select(".CPatient-view").each(function (e) {
             if (!e.innerHTML.like(value)) {
               e.up("tr").hide();
+            }
+            else {
+              e.up("tr").show();
             }
           });
         }

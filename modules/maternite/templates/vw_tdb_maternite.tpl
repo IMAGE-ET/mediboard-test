@@ -59,7 +59,7 @@
   <tr>
     <th colspan="2">
       <div style="float:left;">
-        <input type="text" name="fast_search" placeholder="recherche rapide" id="_seek_patient" onkeyup="Tdb.views.filterByText();" onchange="filterByText()"><button class="cleanup notext" onclick="$V('_seek_patient', '', true);"></button>
+        <input type="text" name="fast_search" placeholder="recherche rapide" value="" id="_seek_patient" onkeyup="Tdb.views.filterByText();" onchange="Tdb.views.filterByText()"><button class="cleanup notext" onclick="$V('_seek_patient', '', true);"></button>
       </div>
 
       <a id="vw_day_date_a" href="?m={{$m}}&amp;tab={{$tab}}&amp;date_tdb={{$prec}}">&lt;&lt;&lt;</a>

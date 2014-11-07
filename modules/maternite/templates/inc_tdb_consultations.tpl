@@ -8,6 +8,12 @@
  * @version    $Revision$
  *}}
 
+<script>
+  Main.add(function() {
+    Tdb.views.filterByText('consultations_tab');
+  });
+</script>
+
 <table class="tbl" id="consultations_tab">
   <tr>
     <th class="title" colspan="10">
