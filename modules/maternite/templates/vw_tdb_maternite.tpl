@@ -37,6 +37,11 @@
 </style>
 
 <script>
+  afterEditConsultMater = function() {
+    Control.Modal.close();
+    Tdb.views.listConsultations();
+  };
+
   Consultation.useModal();
   Operation.useModal();
   Grossesse.afterEditGrossesse = function(_id) {

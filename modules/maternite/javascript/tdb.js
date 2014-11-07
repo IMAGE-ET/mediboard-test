@@ -16,11 +16,14 @@ Tdb = {
     url.requestModal("1000", "600");
   },
 
-  editConsult : function(_id, patient_id) {
+  editConsult : function(_id, grossesse_id, patient_id) {
     var url = new Url('dPcabinet', 'edit_planning');
     url.addParam('consultation_id', _id);
+    url.addParam('grossesse_id', grossesse_id);
     url.addParam('pat_id', patient_id);
     url.addParam("dialog", 1);
+    url.addParam("modal", 1);
+    url.addParam("callback", 'afterEditConsultMater');
     url.requestModal();
   },
 

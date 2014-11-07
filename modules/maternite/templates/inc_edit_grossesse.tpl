@@ -130,7 +130,7 @@
               <button type="button" class="sejour_create" onclick="Tdb.editSejour('', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}')">
                 {{tr}}CSejour-title-create{{/tr}}
               </button>
-              <button type="button" class="consultation_create" onclick="Tdb.editConsult('', '{{$grossesse->parturiente_id}}')">
+              <button type="button" class="consultation_create" onclick="Tdb.editConsult('', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}')">
                 {{tr}}CConsultation-title-create{{/tr}}
               </button>
             </td>
