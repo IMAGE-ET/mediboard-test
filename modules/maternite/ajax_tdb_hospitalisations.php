@@ -14,16 +14,21 @@
 CCanDo::checkRead();
 
 $date  = CValue::get("date", CMbDT::date());
-
+$group = CGroups::loadCurrent();
 $sejour = new CSejour();
 $where = array();
 $where["sejour.grossesse_id"] = "IS NOT NULL";
 $where["sejour.entree"] = "<= '$date 23:59:59' ";
 $where["sejour.sortie"] = ">= '$date 00:00:00' ";
+$where["sejour.group_id"] = " = '$group->_id' ";
 $order = "sejour.entree DESC";
 
 /** @var CSejour[] $listSejours */
 $listSejours = $sejour->loadList($where, $order, null, null, null);
+
+$grossesses = CMbObject::massLoadFwdRef($listSejours, "grossesse_id");
+CMbObject::massLoadFwdRef($grossesses, "parturiente_id");
+CMbObject::massLoadBackRefs($grossesses, "naissances");
 
 foreach ($listSejours as $_sejour) {
   $grossesse = $_sejour->loadRefGrossesse();

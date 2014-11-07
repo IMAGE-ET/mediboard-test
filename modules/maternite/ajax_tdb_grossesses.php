@@ -17,16 +17,18 @@ $date  = CValue::get("date", CMbDT::date());
 
 $date_min = CMbDT::date("-7 days", $date);
 $date_max = CMbDT::date("+21 days", $date);
+$group = CGroups::loadCurrent();
 
 $where = array();
 $ljoin = array();
 $where["terme_prevu"] = "BETWEEN '$date_min' AND '$date_max'";
+$where["group_id"] = " = '$group->_id' ";
 $ljoin["patients"]    = "patients.patient_id = grossesse.parturiente_id";
 
 $grossesse = new CGrossesse();
+/** @var CStoredObject[] $grossesses */
 $grossesses = $grossesse->loadGroupList($where, "terme_prevu ASC, nom ASC", null, null, $ljoin);
 
-/** @var CStoredObject[] $grossesses */
 CMbObject::massLoadFwdRef($grossesses, "parturiente_id");
 CMbObject::massCountBackRefs($grossesses, "sejours");
 CMbObject::massCountBackRefs($grossesses, "consultations");

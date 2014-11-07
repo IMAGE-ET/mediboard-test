@@ -14,8 +14,8 @@
 CCanDo::checkRead();
 
 $date  = CValue::get("date", CMbDT::date());
-
 $date_min = CMbDT::date("-1 DAY", $date);
+$group = CGroups::loadCurrent();
 
 $op = new COperation();
 $ljoin = array(
@@ -23,6 +23,7 @@ $ljoin = array(
   "grossesse" => "sejour.grossesse_id = grossesse.grossesse_id");
 $where = array(
   "sejour.grossesse_id" => " IS NOT NULL",
+  "sejour.group_id" => " = '$group->_id' ",
   " date BETWEEN '$date_min' AND '$date' "
 );
 
