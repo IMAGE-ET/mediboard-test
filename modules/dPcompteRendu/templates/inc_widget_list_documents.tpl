@@ -1,3 +1,13 @@
+<script>
+  Main.add(function() {
+    if (window.tabsConsult || window.tabsConsultAnesth) {
+      var count_items = {{$object->_ref_documents|@count}};
+      count_items += $("files-fdr").select("a[class=action]").length;
+      Control.Tabs.setTabCount("fdrConsult", count_items);
+    }
+  });
+</script>
+
 {{assign var=doc_count value=$object->_ref_documents|@count}}
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 {{mb_default var=object_class value=$object->_class}}
@@ -10,7 +20,7 @@
       {{tr}}{{$object->_class}}{{/tr}} :
       {{$doc_count}} document(s)
 
-      <script type="text/javascript">
+      <script>
         Main.add(function () {
           new PairEffect("DocsEffect-{{$object->_guid}}", { 
             bStoreInCookie: true

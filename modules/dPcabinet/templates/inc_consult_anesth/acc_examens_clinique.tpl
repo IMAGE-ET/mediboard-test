@@ -1,3 +1,36 @@
+<script>
+  callbackExam = function(consult_id, consult) {
+    if (!window.tabsConsultAnesth) {
+      return;
+    }
+    var count_tab = 0;
+    switch (consult._class) {
+      case "CConsultAnesth":
+        var fields = ["examenCardio", "examenPulmo", "examenDigest", "examenAutre"];
+        fields.each(function(field) {
+          if (consult[field]) {
+            count_tab++
+          }
+        });
+        if ($V(getForm("editFrmExamenConsult").examen)) {
+          count_tab++;
+        }
+        break;
+      case "CConsultation":
+        if (consult.examen) {
+          count_tab++;
+        }
+        getForm("editAnesthExamenClinique").select("textarea").each(function(textarea) {
+          if ($V(textarea)) {
+            count_tab++;
+          }
+        });
+      default:
+    }
+    count_tab += $("examDialog-" + consult.consultation_id).select("li:not(.empty)").length;
+    Control.Tabs.setTabCount("Exams", count_tab);
+  }
+</script>
 <table class="main form">
   <tr>
     <td>
@@ -35,6 +68,7 @@
         <input type="hidden" name="m" value="cabinet" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+        <input type="hidden" name="callback" value="callbackExam" />
         {{mb_key object=$consult_anesth}}
         <table class="layout main">
           <tr>
@@ -76,6 +110,7 @@
         <input type="hidden" name="m" value="cabinet" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_consultation_aed" />
+        <input type="hidden" name="callback" value="callbackExam" />
         {{mb_key object=$consult}}
         <fieldset>
           <legend>{{mb_label object=$consult field="examen"}}</legend>

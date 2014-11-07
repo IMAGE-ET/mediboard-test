@@ -13,13 +13,13 @@ var ExamComp = {
 
   submit: function(form) {
     if (form.examen) {
-      var examen = form.examen.value;
-      var realisation = form.realisation.value;
+      var examen = $V(form.examen);
+      var realisation = $V(form.realisation);
     }
     
-    onSubmitFormAjax(form, { onComplete : ExamComp.refresh} );
+    onSubmitFormAjax(form, ExamComp.refresh);
     form.reset();
-    if (form.examen){
+    if (form.examen) {
       form._hidden_examen.value = examen;
       form.realisation.value = realisation;
     }
@@ -27,8 +27,8 @@ var ExamComp = {
   
   refresh: function () {
     var url = new Url("dPcabinet", "httpreq_vw_list_exam_comp");
-    url.addParam("selConsult", document.editFrmFinish.consultation_id.value);
-    url.requestUpdate('listExamComp');
+    url.addParam("selConsult", $V(getForm("editFrmFinish").consultation_id));
+    url.requestUpdate('listExamComp', callbackExamComp);
   }
 
 };

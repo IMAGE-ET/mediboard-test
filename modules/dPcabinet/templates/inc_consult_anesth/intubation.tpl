@@ -9,31 +9,82 @@
     url.addParam("patient_id", "{{$consult->patient_id}}");
     url.addParam("consult_id", "{{$consult_anesth->_id}}");
     url.requestUpdate("ventilation_area", function() {
-      return onSubmitFormAjax(getForm('editFrmIntubation'));
+      getForm('editFrmIntubation').onsubmit();
     });
   };
 
   Main.add(function() {
     var states = ['', 'defaut', 'absence', 'bridge', 'pivot', 'mobile', 'appareil', 'app-partiel', 'implant'];
     SchemaDentaire.initialize("dents-schema", states);
-  } );
+  });
+
+  callbackIntub = function(consult_id, consult) {
+    if (!window.tabsConsultAnesth) {
+      return;
+    }
+
+    var count_tab = 0;
+    var fields = [
+      "mallampati", "bouche", "distThyro", "etatBucco", "conclusion",
+      "plus_de_55_ans", "edentation", "barbe", "imc_sup_26", "ronflements", "piercing"
+    ];
+
+    fields.each(function(field) {
+      if (consult[field] && consult[field] != "0") {
+        count_tab++
+      }
+    });
+
+    var classesDents = ["defaut", "absence", "bridge", "pivot", "mobile", "appareil", "app-partiel", "implant"];
+    var schemaDent = $("dents-schema");
+    classesDents.each(function(classe) {
+      count_tab += schemaDent.select("div." + classe).length;
+    });
+
+    Control.Tabs.setTabCount("Intub", count_tab);
+  }
+
+  callbackEtatDent = function() {
+    var count_tab = 0;
+    var fields = [
+      "mallampati", "bouche", "distThyro", "etatBucco", "conclusion",
+      "plus_de_55_ans", "edentation", "barbe", "imc_sup_26", "ronflements", "piercing"
+    ];
+    var form = getForm("editFrmIntubation");
+
+    fields.each(function(field) {
+      if ($V(form.elements[field]) && $V(form.elements[field]) != 0) {
+        count_tab++
+      }
+    });
+
+    var classesDents = ["defaut", "absence", "bridge", "pivot", "mobile", "appareil", "app-partiel", "implant"];
+    var schemaDent = $("dents-schema");
+    classesDents.each(function(classe) {
+      count_tab += schemaDent.select("div." + classe).length;
+    });
+
+    Control.Tabs.setTabCount("Intub", count_tab);
+  };
 </script>
 
-<form name="etat-dent-edit" action="?" method="post">
-  <input type="hidden" name="m" value="dPpatients" />
+<form name="etat-dent-edit" method="post">
+  <input type="hidden" name="m" value="patients" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="do_etat_dent_aed" />
   <input type="hidden" name="etat_dent_id" value="" />
   <input type="hidden" name="_patient_id" value="{{$consult->_ref_patient->_id}}" />
   <input type="hidden" name="dent" value="" />
   <input type="hidden" name="etat" value="" />
+  <input type="hidden" name="callback" value="callbackEtatDent" />
 </form>
 
 {{if !$_is_dentiste}}
-<form name="editFrmIntubation" action="?m=dPcabinet" method="post">
-<input type="hidden" name="m" value="dPcabinet" />
+<form name="editFrmIntubation" method="post" onsubmit="return onSubmitFormAjax(this)">
+<input type="hidden" name="m" value="cabinet" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+<input type="hidden" name="callback" value="callbackIntub" />
 {{mb_key object=$consult_anesth}}
 {{mb_field object=$consult_anesth field=intub_difficile hidden=true}}
 {{/if}}
@@ -121,7 +172,7 @@
                     <label for="mallampati_{{$curr_mallampati}}" title="Mallampati de {{$trans_mallampati}}">
                       <img src="images/pictures/{{$curr_mallampati}}.png?build={{$version.build}}" />
                       <br />
-                      <input type="radio" name="mallampati" value="{{$curr_mallampati}}" {{if $consult_anesth->mallampati == $curr_mallampati}}checked="checked" {{/if}} onclick="$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);" />
+                      <input type="radio" name="mallampati" value="{{$curr_mallampati}}" {{if $consult_anesth->mallampati == $curr_mallampati}}checked{{/if}} onclick="$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);" />
                       {{$trans_mallampati}}
                     </label>
                     </div>
@@ -129,7 +180,7 @@
                   {{/foreach}}
                 </tr>
               </table>
-              <input type="radio" style="display: none;" name="mallampati" value="" {{if !$consult_anesth->mallampati}}checked="checked" {{/if}} onclick="$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);" />
+              <input type="radio" style="display: none;" name="mallampati" value="" {{if !$consult_anesth->mallampati}}checked{{/if}} onclick="$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);" />
             </td>
           </tr>
           <tr>
@@ -137,14 +188,14 @@
               <fieldset>
                 <legend>{{mb_label object=$consult_anesth field="bouche" defaultFor="bouche_m20"}}</legend>
                 {{mb_field object=$consult_anesth field="bouche" typeEnum="radio" separator="<br />" onclick="\$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);"}}
-                <input type="radio" style="display: none;" name="bouche" value="" {{if !$consult_anesth->bouche}}checked="checked"{{/if}} onclick="$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);" />
+                <input type="radio" style="display: none;" name="bouche" value="" {{if !$consult_anesth->bouche}}checked{{/if}} onclick="$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);" />
               </fieldset>
             </td>
             <td>
               <fieldset>
                 <legend>{{mb_label object=$consult_anesth field="distThyro" defaultFor="distThyro_m65"}}</legend>
                 {{mb_field object=$consult_anesth field="distThyro" typeEnum="radio" separator="<br />" onclick="\$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);"}}
-                <input type="radio" style="display: none;" name="distThyro" value="" {{if !$consult_anesth->distThyro}}checked="checked"{{/if}} onclick="$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);" />
+                <input type="radio" style="display: none;" name="distThyro" value="" {{if !$consult_anesth->distThyro}}checked{{/if}} onclick="$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);" />
               </fieldset>
             </td>
           </tr>
@@ -171,7 +222,7 @@
           </tr>
           <tr>
             <td colspan="2">
-              {{mb_field object=$consult_anesth field="etatBucco" onchange="submitFormAjax(this.form, 'systemMsg')" form="editFrmIntubation"
+              {{mb_field object=$consult_anesth field="etatBucco" onchange="this.form.onsubmit()" form="editFrmIntubation"
                 aidesaisie="validateOnBlur: 0"}}
             </td>
           </tr>
@@ -182,7 +233,7 @@
           </tr>
           <tr>
             <td colspan="2">
-              {{mb_field object=$consult_anesth field="conclusion" onchange="submitFormAjax(this.form, 'systemMsg')" form="editFrmIntubation"
+              {{mb_field object=$consult_anesth field="conclusion" onchange="this.form.onsubmit()" form="editFrmIntubation"
                 aidesaisie="validateOnBlur: 0"}}
             </td>
           </tr>

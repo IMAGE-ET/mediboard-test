@@ -1,5 +1,5 @@
-<form name="editScoreApfel" method="post" action="?" onsubmit="return onSubmitFormAjax(this);">
-  <input type="hidden" name="m" value="dPcabinet" />
+<form name="editScoreApfel" method="post" onsubmit="return onSubmitFormAjax(this);">
+  <input type="hidden" name="m" value="cabinet" />
   <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
   <input type="hidden" name="callback" value="afterStoreScore" />
   {{mb_key object=$consult_anesth}}

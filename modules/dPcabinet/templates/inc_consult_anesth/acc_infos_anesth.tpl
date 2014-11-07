@@ -7,14 +7,14 @@
       oForm.reset();
     }
     return false;
-  }
+  };
 
   reloadListTech = function() {
     var UrllistTech = new Url("dPcabinet", "httpreq_vw_list_techniques_comp");
     UrllistTech.addParam("selConsult", "{{$consult->_id}}");
     UrllistTech.addParam("dossier_anesth_id", "{{$consult_anesth->_id}}");
-    UrllistTech.requestUpdate('listTech');
-  }
+    UrllistTech.requestUpdate('listTech', callbackInfoAnesth);
+  };
 
   guessScoreApfel = function() {
     var url = new Url("cabinet", "ajax_guess_score_apfel");
@@ -27,6 +27,7 @@
 
   afterStoreScore = function(id, obj) {
     $("score_apfel").update(obj._score_apfel);
+    callbackInfoAnesth();
   };
 
   toggleUSCPO = function(status) {
@@ -50,7 +51,44 @@
     }
 
     return true;
-  }
+  };
+
+  callbackInfoAnesth = function() {
+    if (!window.tabsConsultAnesth) {
+      return;
+    }
+
+    var count = 0;
+
+    var form = getForm("editOpAnesthFrm");
+    var fields = ["rques", "passage_uscpo", "type_anesth", "ASA", "position"];
+
+    fields.each(function(field) {
+      if ($V(form.elements[field])) {
+        count++;
+      }
+    });
+
+    if ($V(getForm("editInfosAnesthFrm").prepa_preop)) {
+      count++;
+    }
+
+    count += $("listTech").select("button.trash").length;
+
+    if ($V(getForm("editRquesConsultFrm").rques)) {
+      count++;
+    }
+
+    var form = getForm("editScoreApfel");
+
+    form.select("input[type=checkbox").each(function(input) {
+      if (input.checked) {
+        count++;
+      }
+    });
+
+    Control.Tabs.setTabCount("InfoAnesth", count);
+  };
 </script>
 
 {{assign var=operation value=$consult_anesth->_ref_operation}}
@@ -63,10 +101,11 @@
         {{mb_ternary var=object test=$operation->_id value=$operation other=$consult_anesth}}
         {{mb_ternary var=dosql test=$operation->_id value='do_planning_aed' other='do_consult_anesth_aed'}}
         {{mb_ternary var=module test=$operation->_id value='planningOp' other='cabinet'}}
-        <form name="editOpAnesthFrm" action="?m=dPcabinet" method="post" onsubmit="{{if $conf.dPplanningOp.COperation.show_duree_preop == 2}}if (checkUSCPO()) {{/if}} return onSubmitFormAjax(this);"">
+        <form name="editOpAnesthFrm" method="post" onsubmit="{{if $conf.dPplanningOp.COperation.show_duree_preop == 2}}if (checkUSCPO()) {{/if}} return onSubmitFormAjax(this);"">
           <input type="hidden" name="m" value="{{$module}}" />
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="dosql" value="{{$dosql}}" />
+          <input type="hidden" name="callback" value="callbackInfoAnesth" />
           {{mb_key object=$object}}
 
           <div style="width: 50%; float: left;">
@@ -112,6 +151,7 @@
           <input type="hidden" name="m" value="dPcabinet" />
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+          <input type="hidden" name="callback" value="callbackInfoAnesth" />
           {{mb_key object=$consult_anesth}}
           <table class="layout main">
             <tr>
@@ -157,7 +197,7 @@
                 {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1}}
                 {{mb_field object=$techniquesComp field="technique" rows="4" form="addEditTechCompFrm"
                   aidesaisie="validateOnBlur: 0"}}
-                <button class="add">{{tr}}Add{{/tr}}</button>
+                <button class="add" type="button" onclick="if ($V(this.form.technique)) { this.form.onsubmit() }">{{tr}}Add{{/tr}}</button>
               </form>
             </td>
             <td class="halfPane text" id="listTech">
@@ -170,17 +210,17 @@
   </tr>
   <tr>
     <td style="width: 50%;">
-      <form name="editRquesConsultFrm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
-
-      <input type="hidden" name="m" value="dPcabinet" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_consultation_aed" />
-      {{mb_key object=$consult}}
-      <fieldset>
-        <legend>{{mb_label object=$consult field="rques"}}</legend>
-        {{mb_field object=$consult field="rques" rows="4" onblur="this.form.onsubmit()" form="editRquesConsultFrm"
-                  aidesaisie="validateOnBlur: 0"}}
-      </fieldset>
+      <form name="editRquesConsultFrm" method="post" onsubmit="return onSubmitFormAjax(this);">
+        <input type="hidden" name="m" value="cabinet" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="dosql" value="do_consultation_aed" />
+        <input type="hidden" name="callback" value="callbackInfoAnesth" />
+        {{mb_key object=$consult}}
+        <fieldset>
+          <legend>{{mb_label object=$consult field="rques"}}</legend>
+          {{mb_field object=$consult field="rques" rows="4" onblur="this.form.onsubmit()" form="editRquesConsultFrm"
+                    aidesaisie="validateOnBlur: 0"}}
+        </fieldset>
       </form>
     </td>
     <td>

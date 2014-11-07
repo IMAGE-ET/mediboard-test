@@ -157,6 +157,10 @@ Main.add(function() {
   {{if $modAmeli}}
     loadArretTravail();
   {{/if}}
+
+  if (window.tabsConsult || window.tabsConsultAnesth) {
+    Control.Tabs.setTabCount("reglement", "{{$facture->_ref_reglements|@count}}");
+  }
 });
 </script>
 
