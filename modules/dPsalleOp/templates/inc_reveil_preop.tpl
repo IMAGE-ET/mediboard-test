@@ -56,8 +56,8 @@
     {{if @$modules.brancardage->_can->read}}
       <th>{{tr}}CBrancardage{{/tr}}</th>
     {{/if}}
-    <th class="narrow">{{mb_colonne class="COperation" field="debut_op" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
-    <th class="narrow">{{mb_colonne class="COperation" field="fin_op" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
+    <th class="narrow">{{mb_colonne class="COperation" field="debut_prepa_preop" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
+    <th class="narrow">{{mb_colonne class="COperation" field="fin_prepa_preop" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
     <th class="narrow"></th>
   </tr>
   {{foreach from=$listOperations item=_operation}}
