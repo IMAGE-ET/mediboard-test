@@ -482,6 +482,7 @@ foreach ($plages_by_salle as $salle_id => $_plages) {
     $smarty = new CSmartyDP("modules/reservation");
     $smarty->assign("plageop", $_plage);
     $smarty_plageop = $smarty->fetch("inc_planning/libelle_plageop.tpl");
+    $smarty_plageop = htmlspecialchars_decode(CMbString::htmlEntities($smarty_plageop, ENT_NOQUOTES), ENT_NOQUOTES);
 
     $event = new CPlanningEvent($_plage->_guid, $debut, $duree, $smarty_plageop, "#efbf99", true, null, $_plage->_guid, false);
 
@@ -490,8 +491,8 @@ foreach ($plages_by_salle as $salle_id => $_plages) {
     $event->plage["id"] = $_plage->_id;
 
     if ($can_edit) {
-      $event->addMenuItem("edit", utf8_encode("Modifier cette plage"));
-      $event->addMenuItem("list", utf8_encode("Gestion des interventions"));
+      $event->addMenuItem("edit", CMbString::htmlEntities("Modifier cette plage"));
+      $event->addMenuItem("list", CMbString::htmlEntities("Gestion des interventions"));
     }
 
     $planning->addEvent($event);
