@@ -246,7 +246,11 @@ document.observe("keydown", function(e){
      */
       case 65: // a
         Event.stop(e);
-        $("module_search").focus();
+        var module_search = $("module_search");
+
+        if (module_search) {
+          module_search.focus();
+        }
         break;
     }
   }
