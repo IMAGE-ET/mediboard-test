@@ -48,7 +48,7 @@
 
           {{if $modules_count > 10}}
             <fieldset style="margin-bottom: 2px;">
-              <input type="search" id="module_search" placeholder="Recherche de module..." style="width: 180px;"
+              <input type="search" id="module_search" placeholder="Recherche de module..." style="width: 135px;"
                      title="{{tr}}Press Alt+A to get the focus{{/tr}}"
                      onkeyup="filterModule(this, 'li', 'nav')" onsearch="OnSearch(this);" />
             </fieldset>
