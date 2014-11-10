@@ -83,6 +83,8 @@
         </td>
         <td>
           <button class="edit notext" onclick="Tdb.editAccouchement('{{$_op->_id}}');"></button>
+          <button onclick="Tdb.dossierAccouchement('{{$_op->_id}}');">Acc</button>
+
         </td>
       </tr>
     {{foreachelse}}

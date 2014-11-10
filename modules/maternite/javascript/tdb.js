@@ -61,6 +61,16 @@ Tdb = {
     url.modal({width: "95%", height: "95%"});
   },
 
+  dossierAccouchement : function(op_id) {
+    var url = new Url("salleOp", "ajax_vw_operation");
+    url.addParam("operation_id", op_id);
+    url.modal({
+      width     : "95%",
+      height    : "95%",
+      afterClose: Tdb.views.listAccouchements
+    });
+  },
+
   editAccouchement : function(_id, sejour_id, grossesse_id, patiente_id) {
     var url = new Url('dPplanningOp', 'vw_edit_urgence');
     url.addParam("operation_id", _id);
