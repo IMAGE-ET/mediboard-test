@@ -17,6 +17,8 @@
     </tr>
 
     {{mb_include module=system template=inc_config_enum var=patient_id values=$patient_ids}}
+    {{mb_include module=system template=inc_config_bool var=show_confirm_change_patient}}
+
     {{mb_include module=system template=inc_config_enum var=check_collisions values="no|date|datetime"}}
     {{mb_include module=system template=inc_config_bool var=entree_modifiee}}
 

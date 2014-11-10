@@ -112,6 +112,8 @@ $dPconfig["dPplanningOp"]= array(
     "use_custom_mode_entree" => "0",
     "use_custom_mode_sortie" => "0",
     "specified_output_mode"  => "1",
+
+    "show_confirm_change_patient" => "1",
   ),
   "CProtocole" => array(
     "nicer" => "0",

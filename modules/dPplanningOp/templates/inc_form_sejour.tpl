@@ -692,19 +692,28 @@ Main.add( function(){
   </th>
   <td colspan="3">
     {{assign var=patient_id_config value=$conf.dPplanningOp.CSejour.patient_id}}
+    {{assign var=show_confirm_change_patient value=$conf.dPplanningOp.CSejour.show_confirm_change_patient}}
 
     <input type="text" name="_patient_view" style="width: 15em" value="{{$patient->_view}}" readonly="readonly"
            onfocus="
       {{if !$sejour->_id}}
         PatSelector.init();
       {{elseif !($patient_id_config == 0 && $sejour->_id) && !($patient_id_config == 2 && $sejour->entree_reelle)}}
-        confirmChangePatient();
+        {{if !$show_confirm_change_patient}}
+          PatSelector.init();
+        {{else}}
+          confirmChangePatient();
+       {{/if}}
       {{/if}}"/>
     <button id="didac_button_pat_selector" type="button" class="search notext" onclick="
       {{if !$sejour->_id}}
         PatSelector.init();
       {{elseif !($patient_id_config == 0 && $sejour->_id) && !($patient_id_config == 2 && $sejour->entree_reelle)}}
-        confirmChangePatient();
+        {{if !$show_confirm_change_patient}}
+          PatSelector.init();
+        {{else}}
+          confirmChangePatient();
+        {{/if}}
     {{/if}}">
       Choisir un patient
     </button>
