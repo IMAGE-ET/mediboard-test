@@ -125,7 +125,9 @@ if ($selOp->_id) {
 
   $patient = $sejour->_ref_patient;
   $patient->loadRefPhotoIdentite();
-  $patient->loadRefDossierMedical();
+  $dossier_medical = $patient->loadRefDossierMedical();
+  $dossier_medical->loadRefsAllergies();
+  $dossier_medical->countAllergies();
 
   $selOp->_ref_plageop->loadRefsFwd();
   $selOp->_ref_consult_anesth->_ref_consultation->loadRefsBack();

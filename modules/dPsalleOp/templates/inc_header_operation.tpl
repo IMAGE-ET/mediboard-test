@@ -1,14 +1,3 @@
-{{*
- * $Id$
- *  
- * @category SalleOp
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision$
- * @link     http://www.mediboard.org
-*}}
-
 <table class="tbl">
   <tr>
     <th class="title text" colspan="2">
@@ -51,6 +40,9 @@
       {{else}}
         {{mb_value object=$sejour field=sortie_prevue}}
       {{/if}}
+      <span id="atcd_allergies">
+        {{mb_include module=soins template=inc_antecedents_allergies patient_guid=$patient->_guid dossier_medical=$patient->_ref_dossier_medical}}
+      </span>
     </th>
   </tr>
 
