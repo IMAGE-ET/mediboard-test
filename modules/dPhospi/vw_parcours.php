@@ -35,7 +35,8 @@ function cmp_dateAsc($arrA, $arrB) {
 $sejour = new CSejour;
 $sejour->load($sejour_id);
 $sejour->loadRefs();
-$sejour->loadRefsAffectations();   
+$sejour->loadRefService();
+$sejour->loadRefsAffectations();
 $operations = $sejour->_ref_operations;
 $affectations = $sejour->_ref_affectations;
 $datesOperation = array();

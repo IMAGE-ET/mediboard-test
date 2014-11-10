@@ -688,6 +688,7 @@ $locales['CService-is_soins_continue-desc'] = 'Ce service est un service de soin
 $locales['CService-msg-create'] = 'Service créé';
 $locales['CService-msg-delete'] = 'Service supprimé';
 $locales['CService-msg-modify'] = 'Service modifié';
+$locales['CService-msg.is_soins_continue'] = 'Ce patient est dans un service de soins continus';
 $locales['CService-neonatalogie'] = 'Néonatalogie';
 $locales['CService-neonatalogie-court'] = 'Néonatalogie';
 $locales['CService-neonatalogie-desc'] = 'Néonatalogie';
