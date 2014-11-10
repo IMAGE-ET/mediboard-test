@@ -62,7 +62,7 @@ class CMessageSupported extends CMbMetaObject {
   function loadEventByName() {
     $classname = $this->message;
 
-    if (preg_match_all('/ADT|QBP|ORU|QCN|QBP|ORM|SIU@/', $classname)) {
+    if (preg_match_all('/ADT|QBP|ORU|QCN|QBP|ORM|SIU/', $classname)) {
       $classname = str_replace("CHL7Event", "CHL7v2Event", $classname);
     }
 
