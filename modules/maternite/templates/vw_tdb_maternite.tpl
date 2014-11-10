@@ -92,15 +92,16 @@
   </tr>
 
   <tr>
+    <!-- Accouchements -->
+    <td id="vw_day_accouchements_td" class="viewport" style="width: 50%">
+      <div id="accouchements" style="overflow: auto"></div>
+    </td>
+
     <!-- Hospitalisations -->
     <td id="vw_day_hospitalisations_td" class="viewport" style="width: 50%">
       <div id="hospitalisations" style="overflow: auto"></div>
     </td>
 
-    <!-- Accouchements -->
-    <td id="vw_day_accouchements_td" class="viewport" style="width: 50%">
-      <div id="accouchements" style="overflow: auto"></div>
-    </td>
   </tr>
   </tbody>
 </table>
