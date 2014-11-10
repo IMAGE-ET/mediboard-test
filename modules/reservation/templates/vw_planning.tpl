@@ -437,7 +437,7 @@ Main.add(function () {
            onclick="window.calendar_planning.datePicked(new Date(new Date(window.calendar_planning.altElement.defaultValue).setHours('-24')))">
           &lt;&lt;&lt;</a>
         <label>
-          Date <input name="date_planning" type="hidden" value="{{$date_planning}}" class="date"
+          Date <input name="date_planning" type="hidden" value="{{$date_planning}}" class="date notNull"
                       onchange="updateSession('date_planning', this.value);" />
         </label>
         <a href="#nothing" id="next_day"
