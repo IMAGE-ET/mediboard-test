@@ -1,5 +1,4 @@
 <?php
-$locales[0] = 'Actes';
 $locales['CActe'] = 'Actes';
 $locales['CActeCCAM-title-modify'] = 'Modification Acte CCAM';
 $locales['CCAM'] = 'CCAM';
@@ -203,7 +202,7 @@ $locales['CMediusers-back-frais_divers.empty'] = 'Pas d\'exécutant';
 $locales['CUser-back-favoris_CCAM'] = 'Favoris de l\'utilisateur';
 $locales['CUser-back-favoris_CCAM.empty'] = 'Pas de favoris pour cet utilisateur';
 $locales['NGAP'] = 'NGAP';
-$locales['associations'] = 'Associations des actes CCAM';
+$locales['config-dPccam-associations'] = 'Associations des actes CCAM';
 $locales['config-dPccam-CCodable-add_acte_comp_anesth_auto'] = 'Ajout automatique des actes d\'anesthésie complémentaires';
 $locales['config-dPccam-CCodable-add_acte_comp_anesth_auto-desc'] = 'Ajout automatique des actes d\'anesthésie complémentaires (pour les actes pouvant être associés à ces actes)';
 $locales['config-dPccam-CCodable-precode_modificateur_7'] = 'Précodage du modificateur 7';
@@ -298,4 +297,4 @@ $locales['pref-new_search_ccam'] = 'Nouvelle recherche de code CCAM';
 $locales['pref-new_search_ccam-desc'] = 'Nouvelle ergonomie de recherche de code CCAM';
 $locales['pref-user_executant'] = 'Utilisateur exécutant';
 $locales['pref-user_executant-desc'] = 'L\'utilisateur connecté est toujours pré-sélectionné en tant qu\'exécutant';
-$locales['rules'] = 'Règles';
+$locales['config-dPccam-associations-rules'] = 'Règles';

@@ -89,14 +89,14 @@ Main.add(function() {
 
       {{if $sections.1 != $level_1}}
         <tr>
-          <th class="category" colspan="{{$cols}}">{{tr}}{{$sections.1}}{{/tr}}</th>
+          <th class="category" colspan="{{$cols}}">{{tr}}config-{{$sections.0}}-{{$sections.1}}{{/tr}}</th>
         </tr>
         {{assign var=level_1 value=$sections.1}}
       {{/if}}
 
       {{if $sections.2 != $level_2 && $sections|@count > 3}}
         <tr>
-          <th class="section" colspan="{{$cols}}">{{tr}}{{$sections.2}}{{/tr}}</th>
+          <th class="section" colspan="{{$cols}}">{{tr}}config-{{$sections.0}}-{{$sections.1}}-{{$sections.2}}{{/tr}}</th>
         </tr>
         {{assign var=level_2 value=$sections.2}}
       {{/if}}

@@ -15,6 +15,7 @@ $locales['RSS-desc'] = 'Résumé de Sortie Standardisé';
 $locales['Result'] = 'Résultat';
 $locales['Services'] = 'Services';
 $locales['apply_facture_hprim_intervention'] = 'Passer les factures en H\'XML';
+$locales['config-dPpmsi-display'] = 'Affichage';
 $locales['config-dPpmsi-display-see_recept_dossier'] = 'Afficher l\'onglet de réception des dossiers';
 $locales['config-dPpmsi-display-see_recept_dossier-desc'] = 'Afficher l\'onglet de réception des dossiers';
 $locales['config-dPpmsi-passage_facture'] = 'Passage du séjour en facturé';

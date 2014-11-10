@@ -1804,6 +1804,7 @@ $locales['config-dPcabinet-CPlageconsult-hours_stop'] = 'Heure de fin';
 $locales['config-dPcabinet-CPlageconsult-hours_stop-desc'] = 'Heure de fin affichée des plages de consultation';
 $locales['config-dPcabinet-CPlageconsult-minutes_interval'] = 'Intervales en minutes';
 $locales['config-dPcabinet-CPlageconsult-minutes_interval-desc'] = 'Intervales par dégaut des plages de consultation en minutes';
+$locales['config-dPcabinet-CPrescription'] = 'Prescription';
 $locales['config-dPcabinet-CPrescription-view_prescription'] = 'Affichage des prescriptions de séjour';
 $locales['config-dPcabinet-CPrescription-view_prescription-desc'] = 'Afficher les prescription de séjour dans la consultation';
 $locales['config-dPcabinet-CPrescription-view_prescription_externe'] = 'Affichage de la prescription externe';
