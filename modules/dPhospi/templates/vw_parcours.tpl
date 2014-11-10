@@ -39,7 +39,7 @@ function editIntervention(op_id) {
 
 <div id="parcour" style="display: none;">
   {{if $sejour->_ref_service->is_soins_continue}}
-    <div class="small-warning">{{tr}}CService-msg.is_soins_continue{{/tr}}</div>
+    <div class="small-info">{{tr}}CService-msg.is_soins_continue{{/tr}}</div>
   {{/if}}
   <table id="diagramme">
     <tr> 
