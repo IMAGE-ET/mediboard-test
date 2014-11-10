@@ -22,7 +22,7 @@ $modeles = array();
 
 switch ($compte_rendu->type) {
   case "header":
-    $modeles = $compte_rendu->loadBackRefs("modeles_headed", "nom");
+    $modeles = $compte_rendu->loadBackRefs("modeles_headed", "nom", null, null, null, null, null, array("object_id" => "IS NULL"));
     break;
   case "preface":
     $modeles = $compte_rendu->loadBackRefs("modeles_prefaced", "nom");
@@ -35,7 +35,7 @@ switch ($compte_rendu->type) {
     $modeles = $compte_rendu->loadBackRefs("modeles_ended", "nom");
     break;
   case "footer":
-    $modeles = $compte_rendu->loadBackRefs("modeles_footed", "nom");
+    $modeles = $compte_rendu->loadBackRefs("modeles_footed", "nom", null, null, null, null, null, array("object_id" => "IS NULL"));
     break;
 }
 
