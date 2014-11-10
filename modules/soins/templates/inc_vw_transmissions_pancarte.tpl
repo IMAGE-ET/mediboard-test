@@ -42,7 +42,11 @@ tri_transmissions = function(order_col, order_way){
 		      </select>
 	      </span>
       </form>
-      Dernieres transmissions (du {{$date_min|date_format:$conf.datetime}} au {{$date_max|date_format:$conf.datetime}})
+      {{if $real_time}}
+        Transmission des affectations en cours
+      {{else}}
+        Dernieres transmissions (du {{$date_min|date_format:$conf.datetime}} au {{$date_max|date_format:$conf.datetime}})
+      {{/if}}
     </th>
   </tr>
 </table>

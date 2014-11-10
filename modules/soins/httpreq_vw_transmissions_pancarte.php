@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @category Soins
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision:$
+ * @version  $Revision$
  * @link     http://www.mediboard.org
  */
 
@@ -18,6 +18,7 @@ $degre      = CValue::get("degre");
 $load_transmissions = CValue::get("transmissions");
 $load_observations = CValue::get("observations");
 $refresh = CValue::get("refresh");
+$real_time = CValue::getOrSession('real_time', 0);
 
 if ($date == CMbDT::date()) {
   $date_max = CMbDT::dateTime();
@@ -42,7 +43,14 @@ $ljoin = array();
 $where = array();
 $where["affectation.service_id"] = " = '$service_id'";
 
-$where[] = "date >= '$date_min' AND date <= '$date_max'";
+if ($real_time) {
+  $time = CMbDT::time();
+  $where["affectation.entree"] = " <= '$date $time'";
+  $where["affectation.sortie"] = " >= '$date $time'";
+}
+else {
+  $where[] = "date >= '$date_min' AND date <= '$date_max'";
+}
 if ($user_id) {
   $where["user_id"] = " = '$user_id'";
 }
@@ -148,6 +156,7 @@ $smarty->assign("users"         , $users);
 $smarty->assign("with_filter"   , "1");
 $smarty->assign("date_min"      , $date_min);
 $smarty->assign("date_max"      , $date_max);
+$smarty->assign('real_time'     , $real_time);
 
 if ($user_id || $degre || $refresh) {
   $smarty->display('../../dPprescription/templates/inc_vw_transmissions.tpl'); 
