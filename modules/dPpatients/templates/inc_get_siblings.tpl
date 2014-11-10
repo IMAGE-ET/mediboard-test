@@ -52,7 +52,7 @@
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_sibling->_guid}}')">
             {{$_sibling->nom}} {{if $_sibling->nom_jeune_fille}}({{$_sibling->nom_jeune_fille}}){{/if}} {{$_sibling->prenom}}
           </span>
-          né(e) le {{$_sibling->naissance}}<br/>
+          né(e) le {{mb_value object=$_sibling field="naissance"}}<br/>
           {{if $_sibling->cp || $_sibling->ville || $_sibling->adresse}}
             <span class="compact" style="white-space: normal">
               <span style="white-space: nowrap">
