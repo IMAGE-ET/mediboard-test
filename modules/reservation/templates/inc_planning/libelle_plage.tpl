@@ -48,10 +48,11 @@
 
 </span>
 
-<br/><span onmouseover='ObjectTooltip.createEx(this, "{{$patient->_guid}}")'>{{$patient->_view}} ({{$patient->sexe}})<br/>
-  [{{mb_value object=$patient field=naissance}}] {{$lit}}</span>
-
-
+<br/>
+<span onmouseover='ObjectTooltip.createEx(this, "{{$patient->_guid}}")'>
+  <span class="{{if !$sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $sejour->septique}}septique{{/if}}">{{$patient->_view}} ({{$patient->sexe}})<br/></span>
+  [{{mb_value object=$patient field=naissance}}] {{$lit}}
+</span>
 
 {{if $interv_en_urgence}}
   <span style='float: right' title='Intervention en urgence'><img src='images/icons/attente_fourth_part.png' /></span>
