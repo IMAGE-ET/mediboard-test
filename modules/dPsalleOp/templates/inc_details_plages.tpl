@@ -2,7 +2,8 @@
 
 <!-- Plages -->
 {{foreach from=$salle->_ref_plages item=_plage}}
-  {{if $conf.dPbloc.CPlageOp.view_empty_plage_op || ($_plage->_ref_operations || $_plage->_unordered_operations)}}
+  {{if $conf.dPbloc.CPlageOp.view_empty_plage_op ||
+    ($_plage->_ref_operations || $_plage->_unordered_operations || $_plage->_count_affectations_personnel > 0)}}
     <hr />
 
     <form name="anesth{{$_plage->_id}}" action="?" method="post" class="{{$_plage->_spec}}">
