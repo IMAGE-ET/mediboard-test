@@ -41,7 +41,7 @@ class CTechniqueComp extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["consultation_anesth_id"] = "ref notNull class|CConsultAnesth";
+    $props["consultation_anesth_id"] = "ref notNull class|CConsultAnesth cascade";
     $props["technique"]              = "text helped";
     return $props;
   }
