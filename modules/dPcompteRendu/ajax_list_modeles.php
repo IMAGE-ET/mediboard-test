@@ -75,10 +75,10 @@ foreach ($modeles as $key => &$_modeles) {
         $_modele->loadComponents();
         break;
       case "header":
-        $_modele->countBackRefs("modeles_headed");
+        $_modele->countBackRefs("modeles_headed", array("object_id" => "IS NULL"));
         break;
       case "footer":
-        $_modele->countBackRefs("modeles_footed");
+        $_modele->countBackRefs("modeles_footed", array("object_id" => "IS NULL"));
         break;
       case "preface":
         $_modele->countBackRefs("modeles_prefaced");
