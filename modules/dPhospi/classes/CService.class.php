@@ -35,6 +35,7 @@ class CService extends CMbObject {
   public $radiologie;
   public $default_orientation;
   public $default_destination;
+  public $is_soins_continue;
 
   /** @var CChambre[] */
   public $_ref_chambres;
@@ -104,6 +105,7 @@ class CService extends CMbObject {
     $props["radiologie"]          = "bool default|0";
     $props["default_orientation"] = "enum list|".implode("|", CRPU::$orientation_value);
     $props["default_destination"] = "enum list|".implode("|", CSejour::$destination_values);
+    $props["is_soins_continue"]   = "bool default|0 notNull";
 
     return $props;
   }

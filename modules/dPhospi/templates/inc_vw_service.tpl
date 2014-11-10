@@ -17,6 +17,11 @@
       <th>{{mb_label object=$service field=nom}}</th>
       <td>{{mb_field object=$service field=nom}}</td>
     </tr>
+
+    <tr>
+      <th>{{mb_label object=$service field=is_soins_continue}}</th>
+      <td>{{mb_field object=$service field=is_soins_continue}}</td>
+    </tr>
   
     <tr>
       <th>{{mb_label object=$service field=cancelled}}</th>

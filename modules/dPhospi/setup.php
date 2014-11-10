@@ -813,6 +813,11 @@ class CSetupdPhospi extends CSetup {
                 CHANGE `type_autorisation_mode_hospitalisation` `type_autorisation_mode_hospi` CHAR (10);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.91";
+    $this->makeRevision("0.91");
+    $query = "ALTER TABLE `service`
+                ADD `is_soins_continue` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.92";
   }
 }
