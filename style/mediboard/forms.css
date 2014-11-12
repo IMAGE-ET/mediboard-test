@@ -448,6 +448,10 @@ button.accouchement_create:before, a.button.accouchement_create:before  {
   content: url(images/buttons/accouchement_create.png);
 }
 
+button.grossesse:before, a.button.grossesse:before{
+  content: url(images/icons/grossesse.png);
+}
+
 button.grossesse_create:before, a.button.grossesse_create:before{
   content: url(images/buttons/grossesse_create.png);
 }
