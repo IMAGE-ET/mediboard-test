@@ -32,7 +32,7 @@ Tdb = {
     url.addParam('grossesse_id', _id);
     url.addParam('parturiente_id', patient_id);
     url.addParam('with_buttons', 1);
-    url.requestModal(800);
+    url.requestModal(800, 350);
     url.modalObject.observe('afterClose', function() {
       Tdb.views.listGrossesses();
     });
@@ -84,7 +84,7 @@ Tdb = {
         if (callback) {
           callback();
         }
-        Tdb.views.listGrossesses();
+        Tdb.views.listGrossesses(true);
       }
     });
   },
@@ -100,6 +100,13 @@ Tdb = {
     var form = getForm('changeAnesthForOp');
     $V(form.operation_id, op_id);
     $V(form.anesth_id, anesth_id);
+    form.onsubmit();
+  },
+
+  changeStatusConsult : function(consult_id, status) {
+    var form = getForm('changeStatusConsult');
+    $V(form.consultation_id, consult_id);
+    $V(form.chrono, status);
     form.onsubmit();
   },
 

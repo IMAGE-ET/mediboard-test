@@ -35,6 +35,15 @@
     $V(form.entree_reelle, 'now');
     form.onsubmit();
   };
+
+  consultNow = function(prat_id, grossesse_id) {
+    var form = getForm('editConsultImm');
+    $V(form.prat_id, prat_id);
+    $V(form.grossesse_id, grossesse_id);
+    form.onsubmit();
+    $V("selector_prat_imm", '', false);
+    return false;
+  };
 </script>
 
 <form name="admitSejour" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: reloadHistorique})">
@@ -42,6 +51,14 @@
   <input type="hidden" name="dosql" value="do_sejour_aed" />
   <input type="hidden" name="sejour_id" value="" />
   <input type="hidden" name="entree_reelle" value="" />
+</form>
+
+<form name="editConsultImm" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: reloadHistorique})">
+  <input type="hidden" name="m" value="dPcabinet" />
+  <input type="hidden" name="dosql" value="do_consult_now" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="grossesse_id" value="" />
+  <input type="hidden" name="prat_id" value="" />
 </form>
 
 <form name="editFormGrossesse" method="post" onsubmit="return onSubmitFormAjax(this)">
@@ -52,7 +69,7 @@
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="_patient_sexe" value="f" />
 
-  <table class="main">
+  <table class="main" style="height:100%;">
     <tr>
       <td class="narrow">
         <table class="form">
@@ -161,12 +178,16 @@
               <button type="button" class="consultation_create" onclick="Tdb.editConsult('', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}')">
                 {{tr}}CConsultation-title-create{{/tr}}
               </button><br/>
-              <button type="button" class="consultation_create" onclick="Tdb.editConsult('', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}')">
-                {{tr}}mod-dPcabinet-tab-ajax_short_consult{{/tr}}
-              </button><br/>
               <button type="button" class="accouchement_create" onclick="Tdb.editAccouchement('', '', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}', reloadHistorique)">
                 {{tr}}CAccouchement-title-create{{/tr}}
               </button>
+              <hr/>
+              <select name="prat_id" id="selector_prat_imm" onchange="consultNow($V(this), '{{$grossesse->_id}}');" style="width:130px;">
+                <option value="">&mdash; {{tr}}mod-dPcabinet-tab-ajax_short_consult{{/tr}}</option>
+                {{foreach from=$prats item=_prat}}
+                  <option value="{{$_prat->_id}}">{{$_prat}}</option>
+                {{/foreach}}
+              </select>
             </td>
           </tr>
         </table>

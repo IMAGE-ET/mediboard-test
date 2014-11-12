@@ -170,7 +170,7 @@ class CGrossesse extends CMbObject {
    * @return CSejour[]
    */
   function loadRefsSejours() {
-    return $this->_ref_sejours = $this->loadBackRefs("sejours");
+    return $this->_ref_sejours = $this->loadBackRefs("sejours" ,"entree_prevue DESC");
   }
 
   /**
@@ -189,7 +189,7 @@ class CGrossesse extends CMbObject {
    */
   function loadRefsConsultations($with_anesth = false) {
     if (!$this->_ref_consultations) {
-      $this->_ref_consultations = $this->loadBackRefs("consultations");
+      $this->_ref_consultations = $this->loadBackRefs("consultations", "date DESC, heure DESC", null, null, array('plageconsult' => 'plageconsult.plageconsult_id = consultation.plageconsult_id'));
     }
 
     if ($with_anesth) {

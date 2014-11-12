@@ -74,6 +74,13 @@
   <input type="hidden" name="anesth_id" value="" />
 </form>
 
+<form name="changeStatusConsult" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: Tdb.views.listConsultations})">
+  <input type="hidden" name="m" value="dPcabinet" />
+  <input type="hidden" name="dosql" value="do_consultation_aed" />
+  <input type="hidden" name="consultation_id" value="" />
+  <input type="hidden" name="chrono" value="" />
+</form>
+
 <table class="main">
   <tr>
     <th colspan="2">

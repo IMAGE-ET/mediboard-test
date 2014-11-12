@@ -37,9 +37,9 @@
           {{mb_value object=$_consult field=heure}}
         </span>
         {{if $_consult->chrono == 16}}
-          <button class="tick notext">Notifier l'arrivée</button>
+          <button type="button" class="tick notext" onclick="Tdb.changeStatusConsult('{{$_consult->_id}}', '32');">Notifier l'arrivée</button>
         {{elseif $_consult->chrono == 32}}
-          <button class="tick_cancel notext">Annuler l'arrivée</button>
+          <button type="button" class="tick_cancel notext" onclick="Tdb.changeStatusConsult('{{$_consult->_id}}', '16');">Annuler l'arrivée</button>
         {{/if}}
       </td>
       <td><span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_ref_grossesse->_ref_parturiente->_guid}}');">{{mb_value object=$_consult->_ref_grossesse field=parturiente_id}}</span></td>

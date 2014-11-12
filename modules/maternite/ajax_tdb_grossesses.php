@@ -38,8 +38,8 @@ foreach ($grossesses as $_grossesse) {
   $_grossesse->loadRefParturiente();
   $_grossesse->countRefSejours();
   $_grossesse->loadRefsConsultations(true);
-  foreach ($_grossesse->_ref_consultations_anesth as $_anesth) {
-    $_anesth->loadRefPlageConsult();
+  foreach ($_grossesse->_ref_consultations as $_consult) {
+    $_consult->loadRefPlageConsult();
   }
 }
 

@@ -24,7 +24,10 @@ if (!$grossesse->_id) {
 }
 $grossesse->loadRefParturiente();
 
+$listPrat = CConsultation::loadPraticiens(PERM_EDIT);
+
 $smarty = new CSmartyDP();
 $smarty->assign("grossesse" , $grossesse);
 $smarty->assign("with_buttons", $with_buttons);
+$smarty->assign("prats", $listPrat);
 $smarty->display("inc_edit_grossesse.tpl");
