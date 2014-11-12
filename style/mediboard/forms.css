@@ -436,6 +436,10 @@ button.submit:before, a.button.submit:before {
   content: url(images/buttons/save.png);
 }
 
+button.consultation:before, a.button.consultation:before  {
+  content: url(images/buttons/consultation.png);
+}
+
 button.consultation_create:before, a.button.consultation_create:before  {
   content: url(images/buttons/consultation_create.png);
 }
