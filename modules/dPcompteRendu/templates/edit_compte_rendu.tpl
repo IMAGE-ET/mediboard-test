@@ -748,8 +748,8 @@ Main.add(function() {
           </td>
         </tr>
       </table>
-    {{/if}}
-  </div>
+    </div>
+  {{/if}}
 
   <table class="form">
     <tr>
