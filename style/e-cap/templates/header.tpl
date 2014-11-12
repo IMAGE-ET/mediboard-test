@@ -61,7 +61,14 @@ OnSearch = function(input) {
 
   <div id="menubar" class="iconed">
     <div id="menuTools">
-      <a id="toggleIcons" href="#1" onclick="Menu.toggle()" title="{{tr}}menu-toggleIcons{{/tr}}" {{if $modules|@count > 10}}style="top: 56px !important;"{{/if}}></a>
+      {{assign var=modules_count value=0}}
+      {{foreach from=$modules key=mod_name item=_module}}
+        {{if $_module->mod_ui_active && $_module->_can->view}}
+          {{assign var=modules_count value=$modules_count+1}}
+        {{/if}}
+      {{/foreach}}
+
+      <a id="toggleIcons" href="#1" onclick="Menu.toggle()" title="{{tr}}menu-toggleIcons{{/tr}}" {{if $modules_count > 10}}style="top: 56px !important;"{{/if}}></a>
 
       {{mb_include style=mediboard template=inc_help}}
 
@@ -87,13 +94,6 @@ OnSearch = function(input) {
         <img src="style/{{$uistyle}}/images/icons/logout.png" alt="{{tr}}menu-logout{{/tr}}" />
       </a>
     </div>
-
-    {{assign var=modules_count value=0}}
-    {{foreach from=$modules key=mod_name item=_module}}
-      {{if $_module->mod_ui_active && $_module->_can->view}}
-        {{assign var=modules_count value=$modules_count+1}}
-      {{/if}}
-    {{/foreach}}
 
     {{if $modules_count > 10}}
       <hr />
