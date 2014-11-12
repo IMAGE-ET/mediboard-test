@@ -249,16 +249,16 @@ if ($show_operations) {
   foreach ($operations_by_salle as $salle_id => $_operations) {
     $i = array_search($salle_id, $salles_ids);
 
-    //en plage & non validé, skip
-    if ($_operation->plageop_id && !$_operation->rank) {
-      continue;
-    }
-
     $types_antecedent = CAntecedent::$types;
     $types_antecedent = array_diff($types_antecedent, array("alle"));
 
     foreach ($_operations as $_operation) {
       //CSQLDataSource::$trace = true;
+
+      //en plage & non validé, skip
+      if ($_operation->plageop_id && !$_operation->rank) {
+        continue;
+      }
 
       $_operation->_ref_salle = $salles[$_operation->salle_id];
 
