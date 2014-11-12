@@ -28,6 +28,12 @@ Search = window.Search || {
     url.requestUpdate("CConfigServeur");
   },
 
+  configES : function () {
+    var url    = new Url('search', 'ajax_configure_es');
+    url.requestUpdate("CConfigES");
+    return false;
+  },
+
   toggleElement : function (elt) {
     if (elt.hasClassName('down') || elt.hasClassName('up')){
       elt.toggleClassName('down');
@@ -58,19 +64,16 @@ Search = window.Search || {
     });
   },
 
-  firstIndexing: function (table, mapping, input) {
-    var values = [];
-    input.each(function(item) {
-      values.push($F(item));
-    });
+  firstIndexing: function (table, mapping, types) {
+
     if (table) {
       Modal.confirm(" Voulez-vous remplir la table ? Si cette action a déjà été effectuée, cela entraînera une nouvelle indexation des données. ATTENTION : l'opération sera irréversible. ",
         {onOK: function() {
           var url = new Url('search',  'first_indexing');
           url.addParam("table" , table);
           url.addParam("mapping" , mapping);
-          url.addParam("names_types" , Object.toJSON(values));
-          url.requestUpdate("table_main");
+          url.addParam("names_types[]" , types, true);
+          url.requestUpdate("tab_config_es");
         }
       });
     }
@@ -78,14 +81,14 @@ Search = window.Search || {
       var url = new Url('search',  'first_indexing');
       url.addParam("table" , table);
       url.addParam("mapping" , mapping);
-      url.addParam("names_types" , Object.toJSON(values));
-      url.requestUpdate("table_main");
+      url.addParam("names_types[]" ,types, true);
+      url.requestUpdate("tab_config_es");
     }
   },
 
   routineIndexing: function () {
     var url = new Url('search',  'routine_indexing');
-    url.requestUpdate("table_main");
+    url.requestUpdate("tab_config_es");
   },
 
   updateListStats: function () {
@@ -120,6 +123,15 @@ Search = window.Search || {
       .requestUpdate(id);
   },
 
+  searchMoreDetailsLog: function (date, user_id, type) {
+    new Url('search',  'ajax_result_search_log_details')
+      .addParam("date", date)
+      .addParam("type", type)
+      .addParam("user_id", user_id)
+      .addParam("words", this.words_request)
+      .requestModal("60%","60%", {title: 'Liste détaillée des recherches'});
+  },
+
   filter: function (input, classe, table) {
     table = $(table);
     table.select("tr").invoke("show");
@@ -134,5 +146,33 @@ Search = window.Search || {
         }
       });
     });
+  },
+
+  addItemToRss : function (id, type, object_id, rmq) {
+    new Url('search',  'vw_search_item')
+      .addParam("search_item_id", id)
+      .addParam("object_id", object_id)
+      .addParam("object_type", type)
+      .addParam("rmq", rmq)
+      .requestModal("40%", "40%", {title:"Ajout/Édition d'un élément au RSS"});
+  },
+
+  updateIndex : function (types) {
+    new Url('search',  'update_index')
+      .addParam("types[]",  types, true)
+      .requestUpdate($('tab_config_es'));
+  },
+
+  createLogMapping : function () {
+   new Url('search',  'first_indexing')
+    .addParam("log" , true)
+    .requestUpdate("tab_config_es");
+  },
+
+  displayLogResults : function (form) {
+    var url = new Url('search',  'ajax_result_log_search');
+    url.addFormData(form);
+    url.requestUpdate('list_log_result');
+    return false;
   }
 };
