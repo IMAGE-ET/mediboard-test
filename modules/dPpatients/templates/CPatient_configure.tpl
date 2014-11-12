@@ -1,5 +1,6 @@
+{{assign var=class value=CPatient}}
 
-<form name="EditConfig-{{$class}}" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return onSubmitFormAjax(this)">
+<form name="EditConfig-{{$class}}" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="dosql" value="do_configure" />
 
