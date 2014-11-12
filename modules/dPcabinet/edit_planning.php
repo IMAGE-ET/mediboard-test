@@ -136,13 +136,18 @@ else {
   foreach ($correspondants as $_correspondant) {
     $correspondantsMedicaux["correspondants"][] = $_correspondant->_ref_medecin;
   }
-  
+
   if ($pat->_ref_medecin_traitant->_id) {
     $correspondantsMedicaux["traitant"] = $pat->_ref_medecin_traitant;
   }
   
   if ($consult->adresse_par_prat_id && ($consult->adresse_par_prat_id != $pat->_ref_medecin_traitant->_id)) {
     $consult->loadRefAdresseParPraticien();
+  }
+
+  // grossesse
+  if (CModule::getActive("maternite")) {
+    $consult->loadRefGrossesse();
   }
 
   $sejour = new CSejour();
