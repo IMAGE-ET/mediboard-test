@@ -38,6 +38,8 @@ class CSearchObjectHandler extends CMbObjectHandler {
         $group = $object->_ref_chir->loadRefFunction()->loadRefGroup();
         break;
       case 'CConsultation':
+      //case 'CPrescriptionLineMedicament':
+      //case 'CPrescriptionLineMix':
         /** @var CConsultation $object */
         $object->loadRefPraticien();
         $group = $object->_ref_praticien->loadRefFunction()->loadRefGroup();
@@ -132,7 +134,7 @@ class CSearchObjectHandler extends CMbObjectHandler {
    */
   static function requesthandler(CMbObject $object, $type = null) {
     self::checkHandled($object);
-    if ((($object instanceof CConsultation) || ($object instanceof CConsultAnesth))  && !$object->sejour_id) {
+    if ($object instanceof CCompteRendu && !$object->object_id) {
       return false;
     }
 
@@ -164,6 +166,8 @@ class CSearchObjectHandler extends CMbObjectHandler {
         $group = $object->_ref_chir->loadRefFunction()->loadRefGroup();
         break;
       case 'CConsultation':
+      //case 'CPrescriptionLineMedicament':
+      //case 'CPrescriptionLineMix':
         /** @var CConsultation $object */
         $object->loadRefPraticien();
         $group = $object->_ref_praticien->loadRefFunction()->loadRefGroup();

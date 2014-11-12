@@ -77,6 +77,7 @@
 <form method="get" name="esSearch" action="?m=search" class="watched prepared" onsubmit="return Search.displayResults(this);" onchange="onchange=$V(this.form, '0')">
   <input type="hidden" name="start" value="0">
   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}"/>
+  <input type="hidden" name="contexte" value="pmsi">
   <table class="main layout">
     <tbody>
     <tr>
@@ -164,7 +165,7 @@
 
             <tr>
               <td class="halfPane">
-                <input type="checkbox" name="names_types[]" id="CFile" value="CFile" checked>
+                <input type="checkbox" name="names_types[]" id="CFile" value="CFile">
                 <label for="CFile"> Fichier</label>
               </td>
               <td>

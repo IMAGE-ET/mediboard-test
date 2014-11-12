@@ -13,10 +13,6 @@
 
 CAppUI::requireLibraryFile("elastica/autoloader", false);
 
-// The autoloader must be triggered, so the second argument must be true
-if (!class_exists("CSearch", true)) {
-  return;
-}
 use Elastica\Type;
 use Elastica\Client;
 use Elastica\Document;
@@ -39,6 +35,111 @@ class CSearch {
   public $_index;
   /** @var  Elastica\Type\Mapping _mapping */
   public $_mapping;
+
+  // static settings
+  static $settings = array(
+    "analysis" => array(
+      "analyzer" => array(
+        "custom_analyzer" => array(
+          "type" => "custom",
+          'tokenizer' => 'nGram',
+          'filter' => array("stopwords", "asciifolding", "lowercase", "snowball", "worddelimiter", "elision")
+        ),
+        "custom_search_analyzer" => array(
+          "type" => "custom",
+          "tokenizer" => "standard",
+          "filter" => array("stopwords", "asciifolding", "lowercase", "snowball", "worddelimiter", "elision")
+        )
+      ),
+      "tokenizer" => array (
+        "nGram" => array(
+          "type" => "nGram",
+          "min_gram" => "3",
+          "max_gram" => "20"
+        )
+      ),
+      "filter" => array(
+        "snowball" => array (
+          "type"=> "snowball",
+          "language"=> "French"
+        ),
+        "stopwords" => array (
+          "type" => "stop",
+          "stopwords"=> array ("_french_"),
+          "ignore_case" => "true"
+        ),
+        "elision" => array (
+          "type" => "elision",
+          "articles" => array("l", "m", "t", "qu", "n", "s", "j", "d")
+        ),
+        "worddelimiter" => array(
+          "type" => "word_delimiter"
+        )
+      )
+    )
+  );
+
+  static $mapping_default =  array(
+    "id" => array(
+      'type' => 'integer',
+      'include_in_all' => true
+    ),
+
+    "author_id" => array(
+      'type' => 'integer',
+      'include_in_all' => true
+    ),
+
+    "prat_id" => array(
+      'type' => 'integer',
+      'include_in_all' => true
+    ),
+
+    "title" => array(
+      'type' => 'string',
+      'include_in_all' => false,
+      'index_analyzer' => 'custom_analyzer',
+      'search_analyzer' => 'custom_search_analyzer'
+    ),
+
+    "body" => array(
+      'type' => 'string',
+      'include_in_all' => true,
+      'index_analyzer' => 'custom_analyzer',
+      'search_analyzer' => 'custom_search_analyzer'
+    ),
+
+    "date" => array(
+      'type' => 'date',
+      'format' => 'yyyy/MM/dd HH:mm:ss||yyyy/MM/dd',
+      'include_in_all' => true
+    ),
+
+    "patient_id"  => array(
+      'type' => 'integer',
+      'include_in_all' => true
+    ),
+
+    "function_id" => array(
+      'type' => 'integer',
+      'include_in_all' => true
+    ),
+
+    "group_id" => array(
+      'type' => 'integer',
+      'include_in_all' => true
+    ),
+
+    "object_ref_id" => array(
+      'type' => 'integer',
+      'include_in_all' => true
+    ),
+
+    "object_ref_class"=> array(
+      'type' => 'string',
+      'include_in_all' => true
+    )
+  );
 
   /**
    * Create client for indexing
@@ -75,29 +176,28 @@ class CSearch {
       $name = CAppUI::conf("db std dbname");
     }
     if (!$params) {
-      $params = array(
-                      'number_of_shards' => 5,
-                      'number_of_replicas' =>1,
-                      "analysis" => array(
-                        "analyzer" => array(
-                          "default" => array(
-                            "type" => "custom",
-                            'tokenizer' => 'standard',
-                            'filter' => array('standard', 'lowercase', 'mySnowball')
-                          )
-                        ),
-                        'filter' => array(
-                          'mySnowball' => array(
-                            'type' => 'snowball',
-                            'language' => 'French'
-                          )
-                        )
-                      )
-                    );
+      $params = self::$settings;
     }
     $this->_index = $this->_client->getIndex($name);
     $this->_index->create($params, $bool);
     return $this->_index;
+  }
+
+  /** Update an index settings
+   *
+   * @param string $name Name of the index
+   * @param array $settings the settings you want to apply
+   *
+   * @return void
+   */
+  function updateIndexSettings ($name, $settings = null) {
+    if (!$settings) {
+      $settings = self::$settings;
+    }
+
+    $this->_index = $name;
+    $this->_index->setSettings($settings);
+
   }
 
   /**
@@ -151,7 +251,7 @@ class CSearch {
     // Define mapping
     $mapping = new Mapping();
     $mapping->setType($type);
-    $mapping->setParam('search_analyzer', 'default');
+    $mapping->setParam('search_analyzer', 'custom_search_analyzer');
     // Set mapping
     $mapping->setProperties($array);
     // Send mapping to type
@@ -171,7 +271,14 @@ class CSearch {
     $query = ($object_class) ?
       "SELECT * FROM `search_indexing` WHERE `object_class` = '$object_class' ORDER BY `type`, `search_indexing_id` LIMIT $limit"
       :
-      "SELECT * FROM `search_indexing` ORDER BY `object_class` ,`type`, `search_indexing_id` LIMIT $limit";
+      "SELECT * FROM `search_indexing` ORDER BY `object_class` ,
+                                                CASE `type`
+                                                  WHEN 'create' THEN '1_create'
+                                                  WHEN 'store'  THEN '2_store'
+                                                  WHEN 'delete' THEN '3_delete'
+                                                  END,
+                                                `search_indexing_id`
+                                                LIMIT $limit";
     return $ds->loadList($query);
   }
 
@@ -184,7 +291,8 @@ class CSearch {
    */
   function deleteDataTemporaryTable ($array) {
     $ds = CSQLDataSource::get("std");
-    $query = "DELETE FROM `search_indexing` WHERE `search_indexing_id` ". $ds->prepareIn($array);
+    $query = 'DELETE FROM `search_indexing` WHERE `search_indexing_id` ';
+    $query.= $ds->prepareIn($array);
     return $ds->exec($query);
   }
 
@@ -211,17 +319,8 @@ class CSearch {
     if ($datum['type'] != 'delete') {
       $object = new $datum['object_class']();
       if (!$object->load($datum['object_id'])) {
-        $datum_to_index["id"]  = "";
-        $datum_to_index["author_id"] = "";
-        $datum_to_index["prat_id"] = "";
-        $datum_to_index["title"] = "";
-        $datum_to_index["body"] = "";
-        $datum_to_index["date"] = CMbDT::format(CMbDT::dateTime(),"%Y%m%d");
-        $datum_to_index["function_id"] = "";
-        $datum_to_index["group_id"] = "";
-        $datum_to_index["patient_id"] = "";
-        $datum_to_index["object_ref_id"]  = "";
-        $datum_to_index["object_ref_class"] = "";
+        $datum_to_index["id"]  = $datum['object_id'];
+        $datum_to_index["date"] = CMbDT::format(CMbDT::dateTime(), "%Y%m%d");
           return $datum_to_index;
       }
       //On récupère les champs à indexer.
@@ -233,14 +332,14 @@ class CSearch {
     }
     else {
       $datum_to_index["id"]          = $datum['object_id'];
-      $datum_to_index["author_id"]   = '';
-      $datum_to_index["title"]       = '';
-      $datum_to_index["body"]        = '';
-      $datum_to_index["date"]        = CMbDT::format(CMbDT::dateTime(),"%Y%m%d");
-      $datum_to_index["patient_id"]  = '';
-      $datum_to_index["function_id"] = '';
-      $datum_to_index["group_id"]    = $datum['group_id'];
+      $datum_to_index["date"]        = CMbDT::format(CMbDT::dateTime(), "%Y%m%d");
     }
+
+    $datum_to_index['body'] = mb_convert_encoding($datum_to_index['body'], "UTF-8", "Windows-1252");
+    $datum_to_index['title'] = mb_convert_encoding($datum_to_index['title'], "UTF-8", "Windows-1252");
+    $datum_to_index['body'] = CMbString::normalizeUtf8($datum_to_index['body']);
+    $datum_to_index['title'] = CMbString::normalizeUtf8($datum_to_index['title']);
+
     return $datum_to_index;
   }
 
@@ -350,11 +449,14 @@ class CSearch {
    * @return \Elastica\ResultSet
    */
   function searchQueryString($operator, $words, $start = 0, $limit = 30, $names_types = null, $aggregation = false) {
+
+    $words = CmbString::normalizeUtf8($words);
     // Define a Query. We want a string query.
     $elasticaQueryString  = new QueryString();
 
     //'And' or 'Or' default : 'Or'
     $elasticaQueryString->setDefaultOperator($operator);
+    $elasticaQueryString->setAnalyzer("custom_search_analyzer");
     $elasticaQueryString->setQuery($words);
 
     // Create the actual search object with some data.
@@ -416,17 +518,161 @@ class CSearch {
    * @return string
    */
   function constructWordsWithDate($words, $_date, $_min_date, $_max_date) {
+
     if ($_date) {
+      $_date = CMbDT::format($_date, "%Y/%m/%d");
       $words .= " date:[".$_date." TO ".$_date."]";
     }
     else {
-      $_min_date = ($_min_date) ? $_min_date : "*";
-      $_max_date = ($_max_date) ? $_max_date : "*";
+      $_min_date = ($_min_date) ? CMbDT::format($_min_date, "%Y/%m/%d") : "*";
+      $_max_date = ($_max_date) ? CMbDT::format($_max_date, "%Y/%m/%d") : "*";
 
       $words .= " date:[".$_min_date." TO ".$_max_date."]";
     }
     return $words;
   }
+
+  /**
+   * * Construct query with prat informations
+   *
+   * @param string $words         the words query
+   * @param string $specific_user the id of the specific user
+   * @param string $sejour_id     the id of the sejour
+   *
+   * @return string
+   */
+  function constructWordsWithPrat($words, $specific_user, $sejour_id) {
+    $users_id = array();
+    if (!$specific_user) {
+      $user = new CMediusers();
+      if ($sejour_id) {
+        $users = $user->loadPraticiens(PERM_READ);
+      }
+      else {
+        $users = $user->loadPraticiens(PERM_EDIT);
+      }
+
+      foreach ($users as $_user) {
+        $users_id[] = $_user->_id;
+      }
+      $user_req = implode(' || ', $users_id);
+      $words    = $words . " prat_id:(" . $user_req . ")";
+    }
+    else {
+      $users_id = explode('|', $specific_user);
+      $user_req = implode(' || ', $users_id);
+      $words    = $words . " prat_id:(" .$user_req . ")";
+    }
+
+    return $words;
+  }
+
+  /**
+   * Construct query with sejour informations (PMSI)
+   *
+   * @param string $words  the words query
+   * @param string $sejour_id the id of the sejour
+   *
+   * @return string
+   */
+  function constructWordsWithSejour($words, $sejour_id) {
+
+    if ($sejour_id) {
+      $words = $words." object_ref_class:(CSejour) object_ref_id:(".$sejour_id.")";
+    }
+
+    return $words;
+  }
+
+  /**
+   * Load the aggregation and format array to display in the search template
+   *
+   * @param $aggregation
+   */
+  function loadAggregationObject ($aggregation) {
+    $objects_refs = array ();
+    $agg_ref_class     = $aggregation['ref_class']['buckets'];
+    foreach ($agg_ref_class as $_agg) {
+      if ($_agg['key'] == "cconsult" || $_agg['key'] == "cconsultation") {
+        $_agg['key'] = "CConsultation";
+      }
+      if ($_agg['key'] == "coper" || $_agg['key'] == "coperation") {
+        $_agg['key'] = "COperation";
+      }
+      if ($_agg['key'] == "cconsultanesth") {
+        $_agg['key'] = "CConsultAnesth";
+      }
+      $name_object = $_agg['key'];
+      $agg_ref_id  = $_agg['sub_ref_id']['buckets'];
+
+      foreach ($agg_ref_id as $__agg) {
+        $id_object                          = $__agg['key'];
+        $objects_refs[$id_object]["object"] = CMbObject::loadFromGuid("$name_object-$id_object");
+        $agg_ref_type                       = $__agg['sub_ref_type']['buckets'];
+
+        foreach ($agg_ref_type as $_key => $___agg) {
+          $key                                              = $___agg['key'];
+          $count                                            = $___agg['doc_count'];
+          $objects_refs[$id_object]['type'][$_key]['key']   = $key;
+          $objects_refs[$id_object]['type'][$_key]['count'] = $count;
+        }
+      }
+    }
+    // chargement des contextes référents
+    $this->loadObjectRef($objects_refs);
+
+    return $objects_refs;
+  }
+
+  /**
+   * Load objects for the aggregation view.
+   *
+   * @param array $objects_refs
+   *
+   * @return void
+   */
+  function loadObjectRef ($objects_refs) {
+
+    foreach ($objects_refs as $_object_ref) {
+      if ($_object_ref['object'] instanceof CMbObject) {
+        if ($_object_ref['object'] instanceof CConsultAnesth) {
+          $_object_ref['object']->loadRefConsultation()->loadRefPraticien();
+          $_object_ref['object']->loadRefConsultation()->loadRelPatient();
+          $_object_ref['object']->loadRefConsultation()->loadRefPlageConsult();
+          $_object_ref['object']->loadRefSejour();
+          if ($_object_ref['object']->_ref_sejour->_id) {
+            $_object_ref['object']->_ref_sejour->loadNDA();
+          }
+        }
+        else {
+          if ($_object_ref['object'] instanceof CConsultation) {
+            $_object_ref['object']->loadRefPraticien();
+            $_object_ref['object']->loadRelPatient();
+            $_object_ref['object']->loadRefPlageConsult();
+            $_object_ref['object']->loadRefSejour();
+            if ($_object_ref['object']->_ref_sejour->_id) {
+              $_object_ref['object']->_ref_sejour->loadNDA();
+            }
+
+          }
+          if ($_object_ref['object'] instanceof CSejour) {
+            $_object_ref['object']->loadRefPraticien();
+            $_object_ref['object']->loadRelPatient();
+            $_object_ref['object']->loadNDA();
+          }
+          else {
+            $_object_ref['object']->loadRefPraticien();
+            $_object_ref['object']->loadRelPatient();
+            $_object_ref['object']->loadRefSejour();
+            if ($_object_ref['object']->_ref_sejour->_id) {
+              $_object_ref['object']->_ref_sejour->loadNDA();
+            }
+          }
+        }
+      }
+    }
+  }
+
   /**
    * HTML cleaning method
    *
@@ -466,14 +712,18 @@ class CSearch {
 
       $config = HTMLPurifier_Config::createDefault();
       // App encoding (in order to prevent from removing diacritics)
-      $config->set('Core.Encoding', CApp::$encoding);
+      $config->set('Core.Encoding', "UTF-8");
       $config->set('Cache.SerializerPath', "$root/tmp");
       $config->set('HTML.Allowed', "");
 
       $purifier = new HTMLPurifier($config);
     }
 
-    $purified = $purifier->purify($html);
+    $purified = $purifier->purify(mb_convert_encoding($html, "UTF-8", "Windows-1252"));
+
+    if ($purified) {
+      $purified = mb_convert_encoding($purified, "Windows-1252", "UTF-8");
+    }
 
     if (isset($purified[5])) {
       $cache[$html] = $purified;
@@ -497,22 +747,24 @@ class CSearch {
     /** @var Elastica\Type $elasticaType */
     foreach ($names_types as $name_type) {
       $type  = $this->createType($this->_index, $name_type);
-      $array = array(
-        "id"          => array('type' => 'integer', 'include_in_all' => true),
-        "author_id"   => array('type' => 'integer', 'include_in_all' => true),
-        "prat_id"     => array('type' => 'integer', 'include_in_all' => true),
-        "title"       => array('type' => 'string', 'include_in_all' => false),
-        "body"        => array('type' => 'string', 'include_in_all' => true),
-        "date"        => array('type'           => 'date',
-                               'format'         => 'yyyy/MM/dd HH:mm:ss||yyyy/MM/dd',
-                               'include_in_all' => true),
-        "patient_id"  => array('type' => 'integer', 'include_in_all' => true),
-        "function_id" => array('type' => 'integer', 'include_in_all' => true),
-        "group_id"    => array('type' => 'integer', 'include_in_all' => true),
-        "object_ref_id"=> array('type' => 'integer', 'include_in_all' => true),
-        "object_ref_class"=> array('type' => 'string', 'include_in_all' => true)
-      );
-      $this->createMapping($type, $array);
+      $this->createMapping($type, self::$mapping_default);
     }
+  }
+
+  /**
+   * Update settings of the index
+   *
+   * @param Elastica/Index $index
+   *
+   * @return void
+   */
+  function updateIndex ($index) {
+    if (!$index) {
+      $this->_index = $this->createIndex(null, null, false);
+    }
+    $index = $this->loadIndex();
+    $index->close();
+    $this->updateIndexSettings($this->_index);
+    $index->open();
   }
 }
