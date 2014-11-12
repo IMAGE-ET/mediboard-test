@@ -27,6 +27,23 @@ $where = array(
   " date BETWEEN '$date_min' AND '$date' "
 );
 
+//blocs
+$bloc = new CBlocOperatoire();
+$bloc->type = "obst";
+$bloc->group_id = $group->_id;
+/** @var CBlocOperatoire[] $blocs */
+$blocs = $bloc->loadMatchingList();
+$salles = array();
+foreach($blocs as $_bloc) {
+  $salles = $_bloc->loadRefsSalles();
+  foreach ($salles as $_salle) {
+    $salles[$_salle->_id] = $_salle->_id;
+  }
+}
+
+// anesth
+$anesth = new CMediusers();
+$anesths = $anesth->loadListFromType(array("Anesthésiste"), PERM_READ);
 
 /** @var COperation[] $ops */
 $ops = $op->loadList($where, "date DESC, time_operation", null, null, $ljoin);
@@ -52,4 +69,7 @@ foreach ($ops as $_op) {
 $smarty = new CSmartyDP();
 $smarty->assign("date", $date);
 $smarty->assign("ops", $ops);
+$smarty->assign("blocs", $blocs);
+$smarty->assign("salles", $salles);
+$smarty->assign("anesths", $anesths);
 $smarty->display("inc_tdb_accouchements.tpl");

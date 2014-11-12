@@ -16,12 +16,12 @@
 
 <table class="tbl" id="hospitalisation_tab">
   <tr>
-    <th class="title" colspan="10">
+    <th class="title" colspan="7">
       <button type="button" class="change notext" onclick="Tdb.views.listHospitalisations(false);" style="float: right;">
         {{tr}}Refresh{{/tr}}
       </button>
       <button class="sejour_create notext" onclick="Tdb.editSejour(null);" style="float: left;">
-        {{tr}}CGrossesse-title-create{{/tr}}
+        {{tr}}CSejour-title-create{{/tr}}
       </button>
       {{$listSejours|@count}} hospitalisation(s) au {{$date|date_format:$conf.date}}</th>
   </tr>
@@ -29,50 +29,57 @@
     <th class="narrow">{{mb_title class=CAffectation field=lit_id}}</th>
     <th>{{mb_title class=CGrossesse field=parturiente_id}}</th>
     <th class="narrow">{{mb_title class=CSejour field=entree}}</th>
-    <th>Accouchement</th>
-    <th>Naissances</th>
-    <th class="narrow">{{tr}}Action{{/tr}}</th>
+    <th>Acc.</th>
+    <th class="narrow">Act. Mère</th>
+    <th class="narrow">Naissances</th>
+    <th class="narrow">Act. Enf.</th>
   </tr>
   {{foreach from=$listSejours item=_sejour}}
-    <tr>
-      <td>
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_ref_curr_affectation->_guid}}');">
-          {{mb_value object=$_sejour->_ref_curr_affectation field=lit_id}}
-        </span>
-      </td>
-      <td>
-        <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_ref_grossesse->_ref_parturiente->_guid}}');">{{mb_value object=$_sejour->_ref_grossesse field=parturiente_id}}</span>
-      </td>
-      <td>
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">{{mb_value object=$_sejour field=entree}}</span>
-      </td>
-      <td>
-        {{if $_sejour->_ref_grossesse->datetime_debut_travail}}
-          Démarré à {{mb_value object=$_sejour->_ref_grossesse field=datetime_debut_travail}}
-        {{/if}}
+    {{assign var=nb_naissance value=$_sejour->_ref_grossesse->_ref_naissances|@count}}
+    {{foreach from=$_sejour->_ref_grossesse->_ref_naissances item=_naissance name=loop_naissance}}
+      <tr>
+        {{if $smarty.foreach.loop_naissance.first}}
+          <td rowspan="{{$nb_naissance}}">
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_ref_curr_affectation->_guid}}');">
+              {{mb_value object=$_sejour->_ref_curr_affectation field=lit_id}}
+            </span>
+          </td>
+          <td rowspan="{{$nb_naissance}}">
+            <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_ref_grossesse->_ref_parturiente->_guid}}');">
+              {{mb_value object=$_sejour->_ref_grossesse field=parturiente_id}}
+            </span>
+          </td>
+          <td rowspan="{{$nb_naissance}}">
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">{{mb_value object=$_sejour field=entree}}</span>
+          </td>
+          <td rowspan="{{$nb_naissance}}">
+            {{if $_sejour->_ref_grossesse->datetime_debut_travail}}
+              Démarré à {{mb_value object=$_sejour->_ref_grossesse field=datetime_debut_travail}}
+            {{/if}}
 
-        {{if $_sejour->_ref_grossesse->datetime_accouchement}}
-          Terminé à {{mb_value object=$_sejour->_ref_grossesse field=datetime_accouchement}}
+            {{if $_sejour->_ref_grossesse->datetime_accouchement}}
+              Terminé à {{mb_value object=$_sejour->_ref_grossesse field=datetime_accouchement}}
+            {{/if}}
+          </td>
+          <td rowspan="{{$nb_naissance}}">
+            <button type="button" class="edit notext" onclick="Tdb.editSejour('{{$_sejour->_id}}')">{{tr}}CSejour{{/tr}}</button>
+            <button type="button" class="soins notext" onclick="Tdb.editD2S('{{$_sejour->_id}}')">{{tr}}dossier_soins{{/tr}}</button>
+            <button type="button" class="accouchement_create notext" onclick="Tdb.editAccouchement(null, '{{$_sejour->_id}}', '{{$_sejour->_ref_grossesse->_id}}', '')">Accouchement</button>
+          </td>
         {{/if}}
-      </td>
-      <td>
-        <ul>
-        {{foreach from=$_sejour->_ref_grossesse->_ref_naissances item=_naissance}}
-          <li class="gender_{{$_naissance->_ref_sejour_enfant->_ref_patient->sexe}}">
-            <span onmouseover="ObjectTooltip.createEx(this, '{{$_naissance->_ref_sejour_enfant->_guid}}');">{{$_naissance->_ref_sejour_enfant->_ref_patient}} {{if $_naissance->heure}}({{$_naissance->heure|date_format:$conf.time}}){{/if}}</span>
-          </li>
-        {{/foreach}}
-        </ul>
-      </td>
-      <td>
-        <button type="button" class="edit notext" onclick="Tdb.editSejour('{{$_sejour->_id}}')">{{tr}}CSejour{{/tr}}</button>
-        <button type="button" class="soins notext" onclick="Tdb.editD2S('{{$_sejour->_id}}')">{{tr}}dossier_soins{{/tr}}</button>
-        <button type="button" class="accouchement_create notext" onclick="Tdb.editAccouchement(null, '{{$_sejour->_id}}', '{{$_sejour->_ref_grossesse->_id}}', '')">Accouchement</button>
-      </td>
-    </tr>
+        <td>
+          <span class="gender_{{$_naissance->_ref_sejour_enfant->_ref_patient->sexe}}" onmouseover="ObjectTooltip.createEx(this, '{{$_naissance->_ref_sejour_enfant->_guid}}');">
+            {{$_naissance->_ref_sejour_enfant->_ref_patient}} {{if $_naissance->heure}}<strong>(J{{$_naissance->_day_relative}})</strong>{{/if}}
+          </span>
+        </td>
+        <td>
+          <button class="soins notext" onclick="Tdb.editD2S('{{$_naissance->_ref_sejour_enfant->_id}}');">{{tr}}dossier_soins{{/tr}}</button>
+        </td>
+      </tr>
+    {{/foreach}}
   {{foreachelse}}
     <tr>
-      <td colspan="6" class="empty">{{tr}}CSejour.none{{/tr}}</td>
+      <td colspan="7" class="empty">{{tr}}CSejour.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

@@ -26,8 +26,8 @@
   </tr>
   <tr>
     <th class="narrow">{{mb_title class=CConsultation field=heure}}</th>
-    <th>{{mb_title class=CConsultation field=_praticien_id}}</th>
     <th>{{mb_title class=CGrossesse field=parturiente_id}}</th>
+    <th>{{mb_title class=CConsultation field=_praticien_id}}</th>
     <th class="narrow">{{tr}}Action{{/tr}}</th>
   </tr>
   {{foreach from=$listConsults item=_consult}}
@@ -42,12 +42,12 @@
           <button class="tick_cancel notext">Annuler l'arrivée</button>
         {{/if}}
       </td>
+      <td><span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_ref_grossesse->_ref_parturiente->_guid}}');">{{mb_value object=$_consult->_ref_grossesse field=parturiente_id}}</span></td>
       <td>
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_ref_plageconsult->_ref_chir->_guid}}');">
           {{mb_value object=$_consult->_ref_plageconsult field=chir_id}}
         </span>
       </td>
-      <td><span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_ref_grossesse->_ref_parturiente->_guid}}');">{{mb_value object=$_consult->_ref_grossesse field=parturiente_id}}</span></td>
       <td>
         <button class="edit notext" onclick="Tdb.editConsult('{{$_consult->_id}}');">{{tr}}Edit{{/tr}}</button>
         <button class="consultation_create notext" onclick="Tdb.editConsult(0, '{{$_consult->_ref_grossesse->_id}}', '{{$_consult->_ref_grossesse->parturiente_id}}');">Nouvelle consultation</button>

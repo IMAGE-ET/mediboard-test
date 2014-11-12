@@ -30,10 +30,9 @@
       <th>{{tr}}CPatient{{/tr}}e</th>
       <th>Prat / anesth</th>
       <th class="narrow">{{mb_title class=COperation field=_datetime}}</th>
-      <th>{{tr}}CSalle{{/tr}}</th>
+      <th class="narrow">{{tr}}CSalle{{/tr}}</th>
       <th>Tavail</th>
-      <th>{{tr}}CIntervHorsPlage{{/tr}}</th>
-      <th>Rques</th>
+      <th>Op</th>
       <th class="narrow"></th>
     </tr>
   </thead>
@@ -44,8 +43,13 @@
           <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_sejour->_ref_grossesse->_ref_parturiente->_guid}}');">{{$_op->_ref_sejour->_ref_grossesse->_ref_parturiente}}</span>
         </td>
         <td>
-          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_op->_ref_chir}}
-          {{if $_op->anesth_id}} <img src="" alt="/" />{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_op->_ref_anesth}}{{/if}}
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_op->_ref_chir}}<br/>
+          <select name="anesth_id" onchange="Tdb.changeAnesthFor('{{$_op->_id}}', $V(this));" style="width:6em;">
+            <option value="">&mdash;</option>
+            {{foreach from=$anesths item=_anesth}}
+              <option value="{{$_anesth->_id}}" {{if $_op->anesth_id == $_anesth->_id}}selected="selected" {{/if}}>{{$_anesth}}</option>
+            {{/foreach}}
+          </select>
         </td>
         <td>
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}');">
@@ -55,7 +59,20 @@
         </td>
         <td>
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_salle->_guid}}');">
-            {{$_op->_ref_salle}}
+            {{if $_op->_ref_salle->_id && !$_op->_ref_salle->_id|@in_array:$salles }}
+              {{$_op->_ref_salle}}
+            {{else}}
+              <select name="salle_id" style="width:6em;" onchange="Tdb.changeSalleFor('{{$_op->_id}}', $V(this));">
+                <option value="">&mdash;</option>
+                {{foreach from=$blocs item=_bloc}}
+                  <optgroup label="{{$_bloc}}">
+                  {{foreach from=$_bloc->_ref_salles item=_salle}}
+                    <option value="{{$_salle->_id}}" {{if $_op->_ref_salle->_id == $_salle->_id}}selected="selected" {{/if}}>{{$_salle->nom}}</option>
+                  {{/foreach}}
+                  </optgroup>
+                {{/foreach}}
+              </select>
+            {{/if}}
           </span>
         </td>
         <td>
@@ -74,11 +91,6 @@
             {{foreach from=$_op->_ext_codes_ccam item=_code}}
               <strong>{{$_code->code}}</strong> : {{$_code->libelleLong}}<br />
             {{/foreach}}
-          </span>
-        </td>
-        <td>
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_sejour->_ref_grossesse->_guid}}');">
-            {{$_op->_ref_sejour->_ref_grossesse->rques}}
           </span>
         </td>
         <td>

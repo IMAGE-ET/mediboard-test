@@ -60,6 +60,20 @@
   });
 </script>
 
+<form name="changeSalleForOp" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: Tdb.views.listAccouchements})">
+  <input type="hidden" name="m" value="dPplanningOp" />
+  <input type="hidden" name="dosql" value="do_operation_aed" />
+  <input type="hidden" name="operation_id" value="" />
+  <input type="hidden" name="salle_id" value="" />
+</form>
+
+<form name="changeAnesthForOp" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: Tdb.views.listAccouchements})">
+  <input type="hidden" name="m" value="dPplanningOp" />
+  <input type="hidden" name="dosql" value="do_operation_aed" />
+  <input type="hidden" name="operation_id" value="" />
+  <input type="hidden" name="anesth_id" value="" />
+</form>
+
 <table class="main">
   <tr>
     <th colspan="2">

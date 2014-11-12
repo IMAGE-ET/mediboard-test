@@ -35,7 +35,8 @@ foreach ($listSejours as $_sejour) {
   $grossesse->loadRefParturiente();
   $naissances = $grossesse->loadRefsNaissances();
   foreach ($naissances as $_naissance) {
-    $enfant = $_naissance->loadRefSejourEnfant()->loadRefPatient();
+    $_naissance->loadRefSejourEnfant()->loadRefPatient();
+    $_naissance->loadRefOperation();
   }
   $_sejour->loadRefCurrAffectation($date);
 }
