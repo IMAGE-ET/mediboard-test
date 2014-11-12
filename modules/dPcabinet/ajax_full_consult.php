@@ -267,6 +267,7 @@ $smarty->assign("examComp"       , $examComp);
 $smarty->assign("_is_anesth"     , $consult->_is_anesth);
 $smarty->assign("_is_dentiste"   , $consult->_is_dentiste);
 $smarty->assign("list_etat_dents", $list_etat_dents);
+$smarty->assign("tabs_count"     , CConsultation::makeTabsCount($consult, $dossier_medical, $consultAnesth, $sejour, $list_etat_dents));
 
 if (CModule::getActive("dPprescription")) {
   $smarty->assign("line"           , new CPrescriptionLineMedicament());
