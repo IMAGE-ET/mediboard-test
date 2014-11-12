@@ -58,10 +58,9 @@
           </span>
         </td>
         <td>
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_salle->_guid}}');">
             {{if $_op->_ref_salle->_id && !$_op->_ref_salle->_id|@in_array:$salles }}
-              {{$_op->_ref_salle}}
-            {{else}}
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_salle->_guid}}');">{{$_op->_ref_salle}}</span>
+          {{else}}
               <select name="salle_id" style="width:6em;" onchange="Tdb.changeSalleFor('{{$_op->_id}}', $V(this));">
                 <option value="">&mdash;</option>
                 {{foreach from=$blocs item=_bloc}}
@@ -73,7 +72,6 @@
                 {{/foreach}}
               </select>
             {{/if}}
-          </span>
         </td>
         <td>
           {{if $_op->_ref_sejour->_ref_grossesse->datetime_debut_travail}}

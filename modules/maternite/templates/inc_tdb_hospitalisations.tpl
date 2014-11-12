@@ -76,6 +76,37 @@
           <button class="soins notext" onclick="Tdb.editD2S('{{$_naissance->_ref_sejour_enfant->_id}}');">{{tr}}dossier_soins{{/tr}}</button>
         </td>
       </tr>
+    {{foreachelse}}
+      <tr>
+        <td rowspan="{{$nb_naissance}}">
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_ref_curr_affectation->_guid}}');">
+              {{mb_value object=$_sejour->_ref_curr_affectation field=lit_id}}
+            </span>
+        </td>
+        <td rowspan="{{$nb_naissance}}">
+            <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_ref_grossesse->_ref_parturiente->_guid}}');">
+              {{mb_value object=$_sejour->_ref_grossesse field=parturiente_id}}
+            </span>
+        </td>
+        <td rowspan="{{$nb_naissance}}">
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">{{mb_value object=$_sejour field=entree}}</span>
+        </td>
+        <td rowspan="{{$nb_naissance}}">
+          {{if $_sejour->_ref_grossesse->datetime_debut_travail}}
+            Démarré à {{mb_value object=$_sejour->_ref_grossesse field=datetime_debut_travail}}
+          {{/if}}
+
+          {{if $_sejour->_ref_grossesse->datetime_accouchement}}
+            Terminé à {{mb_value object=$_sejour->_ref_grossesse field=datetime_accouchement}}
+          {{/if}}
+        </td>
+        <td rowspan="{{$nb_naissance}}">
+          <button type="button" class="edit notext" onclick="Tdb.editSejour('{{$_sejour->_id}}')">{{tr}}CSejour{{/tr}}</button>
+          <button type="button" class="soins notext" onclick="Tdb.editD2S('{{$_sejour->_id}}')">{{tr}}dossier_soins{{/tr}}</button>
+          <button type="button" class="accouchement_create notext" onclick="Tdb.editAccouchement(null, '{{$_sejour->_id}}', '{{$_sejour->_ref_grossesse->_id}}', '')">Accouchement</button>
+        </td>
+        <td colspan="2"></td>
+      </tr>
     {{/foreach}}
   {{foreachelse}}
     <tr>
