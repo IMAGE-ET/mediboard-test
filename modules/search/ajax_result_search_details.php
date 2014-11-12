@@ -8,9 +8,8 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
-CCanDo::checkRead();
-CApp::setTimeLimit(0);
-CApp::setMemoryLimit("1024M");
+CCanDo::checkAdmin();
+
 $object_ref_id  = CValue::get("object_ref_id");
 $object_ref_class  = CValue::get("object_ref_class");
 $type = CValue::get("type");
@@ -28,8 +27,11 @@ try {
     $var = $result->getHit();
     $array_results[] = $var;
     $highlights = $result->getHighlights();
-    if ($highlights) {
+    if (count($highlights) != 0) {
       $array_highlights[] = utf8_decode(implode(" [...] ", $highlights['body']));
+    }
+    else {
+      $array_highlights[] = "";
     }
   }
 } catch (Exception $e) {

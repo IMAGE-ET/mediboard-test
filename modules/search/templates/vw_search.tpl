@@ -83,6 +83,7 @@
 <form method="get" name="esSearch" action="?m=search" class="watched prepared" onsubmit="return Search.displayResults(this);" onchange="onchange=$V(this.form, '0')">
   <input type="hidden" name="start" value="0">
   <input type="hidden" name="accept_utf8" value="1">
+  <input type="hidden" name="contexte" value="generique">
   <table class="main layout">
     <tbody>
       <tr>
@@ -195,7 +196,6 @@
               <tr>
                 <td>
                   <input type="checkbox" name="names_types[]" id="CPrescription" value="CPrescriptionLineMix">
-                  <input type="hidden" name="names_types[]" value="CPrescriptionLineMedicament">
                   <label for="CPrescription"> Prescription</label>
                 </td>
                 <td>

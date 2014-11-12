@@ -21,6 +21,7 @@ CConfiguration::register(
         ),
         "indexing" => array(
           "active_indexing"          => "bool default|0",
+          "active_indexing_log"      => "bool default|0",
         )
       )
     )
