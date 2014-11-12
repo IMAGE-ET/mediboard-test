@@ -16,7 +16,7 @@ Tdb = {
     url.requestModal("1000", "600");
   },
 
-  editConsult : function(_id, grossesse_id, patient_id) {
+  editRdvConsult : function(_id, grossesse_id, patient_id) {
     var url = new Url('dPcabinet', 'edit_planning');
     url.addParam('consultation_id', _id);
     url.addParam('grossesse_id', grossesse_id);
@@ -25,6 +25,17 @@ Tdb = {
     url.addParam("modal", 1);
     url.addParam("callback", 'afterEditConsultMater');
     url.requestModal("900", "600");
+  },
+
+
+  editConsult : function(consultation_id) {
+    var url = new Url("dPcabinet", "ajax_full_consult");
+    url.addParam("consult_id", consultation_id);
+    url.modal({
+      width: "95%",
+      height: "95%"
+    });
+
   },
 
   editGrossesse : function(_id, patient_id) {

@@ -57,10 +57,10 @@
             dont {{$_grossesse->_ref_consultations_anesth|@count}} {{tr}}CConsultAnesth{{/tr}}
           {{/if}}
         </td>
-        <td>
-          <button class="edit notext" onclick="Tdb.editGrossesse('{{$_grossesse->_id}}');">{{tr}}CGrossesse.edit{{/tr}}</button>
-          <button class="consultation_create notext" onclick="Tdb.editConsult(null,'{{$_grossesse->_id}}', '{{$_grossesse->_ref_parturiente->_id}}');">{{tr}}CConsultation-title-create{{/tr}}</button>
-          <button class="sejour_create notext" onclick="Tdb.editSejour(null, '{{$_grossesse->_id}}','{{$_grossesse->_ref_parturiente->_id}}');">{{tr}}CSejour-title-create{{/tr}}</button>
+        <td class="button">
+          <button class="grossesse notext" onclick="Tdb.editGrossesse('{{$_grossesse->_id}}');">{{tr}}CGrossesse.edit{{/tr}}</button>
+          {{*<button class="consultation_create notext" onclick="Tdb.editConsult(null,'{{$_grossesse->_id}}', '{{$_grossesse->_ref_parturiente->_id}}');">{{tr}}CConsultation-title-create{{/tr}}</button>
+          <button class="sejour_create notext" onclick="Tdb.editSejour(null, '{{$_grossesse->_id}}','{{$_grossesse->_ref_parturiente->_id}}');">{{tr}}CSejour-title-create{{/tr}}</button>*}}
         </td>
       </tr>
       {{foreachelse}}

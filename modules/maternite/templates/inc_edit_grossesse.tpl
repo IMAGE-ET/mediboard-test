@@ -175,7 +175,7 @@
               <button type="button" class="sejour_create" onclick="Tdb.editSejour('', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}')">
                 {{tr}}CSejour-title-create{{/tr}}
               </button><br/>
-              <button type="button" class="consultation_create" onclick="Tdb.editConsult('', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}')">
+              <button type="button" class="consultation_create" onclick="Tdb.editRdvConsult('', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}')">
                 {{tr}}CConsultation-title-create{{/tr}}
               </button><br/>
               <button type="button" class="accouchement_create" onclick="Tdb.editAccouchement('', '', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}', reloadHistorique)">

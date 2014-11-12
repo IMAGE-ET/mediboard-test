@@ -9,7 +9,7 @@
  * @link     http://www.mediboard.org
 *}}
 
-<table class="main" style="height:100%;">
+<table class="main">
   <tr>
     <th class="title" colspan="2">{{tr}}History{{/tr}}</th>
   </tr>
