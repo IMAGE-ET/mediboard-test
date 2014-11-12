@@ -52,13 +52,9 @@
           <td rowspan="{{$nb_naissance}}">
             <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">{{mb_value object=$_sejour field=entree}}</span>
           </td>
-          <td rowspan="{{$nb_naissance}}">
-            {{if $_sejour->_ref_grossesse->datetime_debut_travail}}
-              Démarré à {{mb_value object=$_sejour->_ref_grossesse field=datetime_debut_travail}}
-            {{/if}}
-
-            {{if $_sejour->_ref_grossesse->datetime_accouchement}}
-              Terminé à {{mb_value object=$_sejour->_ref_grossesse field=datetime_accouchement}}
+          <td rowspan="{{$nb_naissance}}" style="text-align: center; font-weight: bold">
+            {{if $_sejour->_ref_grossesse->_days_relative_acc != ''}}
+              {{$_sejour->_ref_grossesse->_days_relative_acc}}J
             {{/if}}
           </td>
           <td rowspan="{{$nb_naissance}}">
@@ -91,13 +87,9 @@
         <td rowspan="{{$nb_naissance}}">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">{{mb_value object=$_sejour field=entree}}</span>
         </td>
-        <td rowspan="{{$nb_naissance}}">
-          {{if $_sejour->_ref_grossesse->datetime_debut_travail}}
-            Démarré à {{mb_value object=$_sejour->_ref_grossesse field=datetime_debut_travail}}
-          {{/if}}
-
-          {{if $_sejour->_ref_grossesse->datetime_accouchement}}
-            Terminé à {{mb_value object=$_sejour->_ref_grossesse field=datetime_accouchement}}
+        <td rowspan="{{$nb_naissance}}" style="text-align: center; font-weight: bold">
+          {{if $_sejour->_ref_grossesse->_days_relative_acc != ''}}
+            {{$_sejour->_ref_grossesse->_days_relative_acc}}J
           {{/if}}
         </td>
         <td rowspan="{{$nb_naissance}}">

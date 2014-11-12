@@ -46,6 +46,11 @@ class CGrossesse extends CMbObject {
   public $_ref_sejours = array();
   public $_nb_ref_sejours;
 
+  /** @var CSejour|null */
+  public $_ref_sejour;
+
+  public $_ref_last_operation;
+
   /** @var CConsultation[] */
   public $_ref_consultations = array();
   public $_nb_ref_consultations;
@@ -68,6 +73,7 @@ class CGrossesse extends CMbObject {
   public $_operation_id;
   public $_allaitement_en_cours;
   public $_last_consult_id;
+  public $_days_relative_acc;
 
   /**
    * @see parent::getSpec()
@@ -221,6 +227,16 @@ class CGrossesse extends CMbObject {
     return $this->_ref_last_consult_anesth = new CConsultation();
   }
 
+  function loadRefLastOperation() {
+    $sejour = $this->_ref_sejour;
+    if ($sejour && $sejour->_id) {
+      $ops = $sejour->loadRefsOperations(null, 'date DESC');
+      if (count($ops)) {
+        $this->_ref_last_operation = reset($ops);
+      }
+    }
+  }
+
   /**
    * @see parent::loadView()
    */
@@ -245,6 +261,25 @@ class CGrossesse extends CMbObject {
     parent::loadComplete();
 
     $this->loadLastConsult();
+  }
+
+  function getDateAccouchement() {
+    if ($this->datetime_accouchement) {
+      return $this->_days_relative_acc = CMbDT::daysRelative($this->datetime_accouchement, CMbDT::date());
+    }
+
+    if (count($this->_ref_naissances)) {
+      /** @var CNaissance $first_naissance */
+      $first_naissance = reset($this->_ref_naissances);
+      if ($first_naissance->_day_relative !== null) {
+        return $this->_days_relative_acc = $first_naissance->_day_relative;
+      }
+    }
+
+    if ($this->_ref_last_operation && $this->_ref_last_operation->_id) {
+      return $this->_days_relative_acc = CMbDT::daysRelative($this->_ref_last_operation->date, CMbDT::date());
+    }
+    return null;
   }
 
   /**

@@ -34,11 +34,14 @@ foreach ($listSejours as $_sejour) {
   $grossesse = $_sejour->loadRefGrossesse();
   $grossesse->loadRefParturiente();
   $naissances = $grossesse->loadRefsNaissances();
+  $grossesse->_ref_sejour = $_sejour;
+  $grossesse->loadRefLastOperation();
   foreach ($naissances as $_naissance) {
     $_naissance->loadRefSejourEnfant()->loadRefPatient();
     $_naissance->loadRefOperation();
   }
   $_sejour->loadRefCurrAffectation($date);
+  $grossesse->getDateAccouchement();
 }
 
 $smarty = new CSmartyDP();

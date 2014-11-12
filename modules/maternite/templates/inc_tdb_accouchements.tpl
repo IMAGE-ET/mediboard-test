@@ -75,10 +75,10 @@
         </td>
         <td>
           {{if $_op->_ref_sejour->_ref_grossesse->datetime_debut_travail}}
-            {{mb_value object=$_op->_ref_sejour->_ref_grossesse field=datetime_debut_travail}}
+            Deb. {{mb_value object=$_op->_ref_sejour->_ref_grossesse field=datetime_debut_travail}}
           {{/if}}
           {{if $_op->_ref_sejour->_ref_grossesse->datetime_accouchement}}
-           - {{mb_value object=$_op->_ref_sejour->_ref_grossesse field=datetime_accouchement}}
+            <br/>Fin {{mb_value object=$_op->_ref_sejour->_ref_grossesse field=datetime_accouchement}}
           {{/if}}
         </td>
         <td class="text compact">
