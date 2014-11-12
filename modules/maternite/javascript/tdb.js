@@ -32,7 +32,7 @@ Tdb = {
     url.addParam('grossesse_id', _id);
     url.addParam('parturiente_id', patient_id);
     url.addParam('with_buttons', 1);
-    url.requestModal();
+    url.requestModal(800);
     url.modalObject.observe('afterClose', function() {
       Tdb.views.listGrossesses();
     });
@@ -71,7 +71,7 @@ Tdb = {
     });
   },
 
-  editAccouchement : function(_id, sejour_id, grossesse_id, patiente_id) {
+  editAccouchement : function(_id, sejour_id, grossesse_id, patiente_id, callback) {
     var url = new Url('dPplanningOp', 'vw_edit_urgence');
     url.addParam("operation_id", _id);
     url.addParam("sejour_id", sejour_id);
@@ -81,9 +81,26 @@ Tdb = {
       width     : "95%",
       height    : "95%",
       afterClose: function() {
+        if (callback) {
+          callback();
+        }
         Tdb.views.listGrossesses();
       }
     });
+  },
+
+  changeSalleFor : function(op_id, salle_id) {
+    var form = getForm('changeSalleForOp');
+    $V(form.operation_id, op_id);
+    $V(form.salle_id, salle_id);
+    form.onsubmit();
+  },
+
+  changeAnesthFor : function(op_id, anesth_id) {
+    var form = getForm('changeAnesthForOp');
+    $V(form.operation_id, op_id);
+    $V(form.anesth_id, anesth_id);
+    form.onsubmit();
   },
 
   views : {

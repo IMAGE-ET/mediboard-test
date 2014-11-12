@@ -33,6 +33,9 @@ class CNaissance extends CMbObject {
   public $fausse_couche;
   public $rques;
 
+  // dates
+  public $_day_relative;
+
   /** @var COperation */
   public $_ref_operation;
 
@@ -130,7 +133,11 @@ class CNaissance extends CMbObject {
    * @return COperation
    */
   function loadRefOperation() {
-    return $this->_ref_operation = $this->loadFwdRef("operation_id", true);
+    $this->_ref_operation = $this->loadFwdRef("operation_id", true);
+    if ($this->_ref_operation->date) {
+      $this->_day_relative = CMbDT::daysRelative($this->_ref_operation->date, CMbDT::date());
+    }
+    return $this->_ref_operation;
   }
 
   /**
@@ -148,7 +155,8 @@ class CNaissance extends CMbObject {
    * @return CSejour
    */
   function loadRefSejourEnfant() {
-    return $this->_ref_sejour_enfant = $this->loadFwdRef("sejour_enfant_id", true);
+    $this->_ref_sejour_enfant = $this->loadFwdRef("sejour_enfant_id", true);
+    return $this->_ref_sejour_enfant;
   }
 
   /**

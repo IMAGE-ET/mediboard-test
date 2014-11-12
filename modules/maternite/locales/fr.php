@@ -1,4 +1,5 @@
 <?php
+$locales['CAccouchement-title-create'] = 'Créer accouchement';
 $locales['CAllaitement'] = 'Allaitement';
 $locales['CAllaitement-allaitement_id'] = 'Identifiant';
 $locales['CAllaitement-allaitement_id-court'] = 'Identifiant';
@@ -168,6 +169,7 @@ $locales['config-maternite-duree_sejour'] = 'Durée d\'un nouveau séjour';
 $locales['config-maternite-duree_sejour-desc'] = 'Durée d\'un nouveau séjour';
 $locales['config-object_handlers-CAffectationHandler'] = 'Handler des affectations';
 $locales['config-object_handlers-CAffectationHandler-desc'] = 'Les affectations des bébés suivent automatiquement l\'affectation de la maman lors d\'un changement de lit';
+$locales['mod-dPmaternite-tab-ajax_modal_search_grossesse'] = 'Recherche de grossesse';
 $locales['mod-maternite-tab-ajax_bind_allaitement'] = 'Gestion des allaitements';
 $locales['mod-maternite-tab-ajax_bind_grossesse'] = 'Modification de grossesse';
 $locales['mod-maternite-tab-ajax_edit_allaitement'] = 'Modification d\'allaitement';
@@ -175,6 +177,7 @@ $locales['mod-maternite-tab-ajax_edit_grossesse'] = 'Modification de grossesse';
 $locales['mod-maternite-tab-ajax_edit_naissance'] = 'Naissance';
 $locales['mod-maternite-tab-ajax_list_allaitements'] = 'Liste des naissances';
 $locales['mod-maternite-tab-ajax_list_grossesses'] = 'Liste des grossesses';
+$locales['mod-maternite-tab-ajax_modal_search_grossesse'] = 'Recherche de grossesse';
 $locales['mod-maternite-tab-ajax_vw_grossesse'] = 'Vue de la grossesse';
 $locales['mod-maternite-tab-ajax_vw_naissances'] = 'Vue des naissances';
 $locales['mod-maternite-tab-configure'] = 'Configurer';

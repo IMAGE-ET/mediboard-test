@@ -22,7 +22,7 @@
       <table class="tbl">
         {{foreach from=$grossesse->_ref_sejours item=_sejour}}
           <tr>
-            <td>
+            <td class="text compact">
               {{if !$_sejour->entree_reelle}}
                 <button onclick="admitForSejour('{{$_sejour->_id}}')" type="button" class="tick notext">{{tr}}CSejour-admit{{/tr}}</button>
               {{/if}}
@@ -40,8 +40,8 @@
       <table class="tbl">
         {{foreach from=$grossesse->_ref_consultations item=_consultation}}
           <tr>
-            <td>
-              <span onmouseover="ObjectTooltip.createEx(this, '{{$_consultation->_guid}}');">{{$_consultation}}</span>
+            <td class="text compact">
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$_consultation->_guid}}');">{{$_consultation}} {{if $_consultation->_ref_consult_anesth->_id}}<img src="images/icons/anesth.png" alt="" />{{/if}}</span>
             </td>
           </tr>
         {{foreachelse}}
