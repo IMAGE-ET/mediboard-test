@@ -23,6 +23,7 @@ $_datetime     = CValue::post("_datetime");
 $callback      = CValue::post("callback");
 $type          = CValue::post("type");
 $_in_suivi     = CValue::post("_in_suivi", 0);
+$grossesse_id  = CValue::post("grossesse_id");
 
 if (!$_datetime || $_datetime == "now") {
   $_datetime = CMbDT::dateTime();
@@ -120,11 +121,20 @@ if (!$plage->_id) {
 
 $plage->loadRefsFwd();
 
+if ($grossesse_id) {
+  $grossesse = new CGrossesse();
+  $grossesse->load($grossesse_id);
+  if ($grossesse->_id) {
+    $patient_id = $grossesse->parturiente_id;
+  }
+}
+
 $ref_chir = $plage->_ref_chir;
 
 $consult = new CConsultation;
 $consult->plageconsult_id = $plage->_id;
 $consult->sejour_id = $sejour->_id;
+$consult->grossesse_id = $grossesse_id;
 $consult->patient_id = $patient_id;
 $consult->heure = $time_now;
 $consult->arrivee = "$day_now $time_now";
