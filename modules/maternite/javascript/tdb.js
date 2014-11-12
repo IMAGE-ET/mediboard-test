@@ -24,7 +24,7 @@ Tdb = {
     url.addParam("dialog", 1);
     url.addParam("modal", 1);
     url.addParam("callback", 'afterEditConsultMater');
-    url.requestModal();
+    url.requestModal("900", "600");
   },
 
   editGrossesse : function(_id, patient_id) {
