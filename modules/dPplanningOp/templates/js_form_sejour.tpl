@@ -27,7 +27,7 @@ var Value = {
   }
 };
 
-function modifPrat(){
+modifPrat = function() {
   var oForm = document.editSejour;
 
   if (oForm._protocole_prescription_chir_id) {
@@ -37,17 +37,17 @@ function modifPrat(){
   if (libelle) {
     libelle.value = "";
   }
-}
+};
 
-function refreshViewProtocoleAnesth(prescription_id) {
+refreshViewProtocoleAnesth = function(prescription_id) {
   if($("prot_anesth_view")) {
     var url = new Url("dPplanningOp", "httpreq_vw_protocole_anesth");
     url.addParam("prescription_id", prescription_id);
     url.requestUpdate("prot_anesth_view");
   }
-}
+};
 
-function checkDureeHospi(sType) {
+checkDureeHospi = function(sType) {
   var oForm = document.editSejour;
   oTypeField  = oForm.type;
   oDureeField = oForm._duree_prevue;
@@ -74,16 +74,16 @@ function checkDureeHospi(sType) {
     }
     return true;
   }
-}
+};
 
-function reinitDureeSejour(){
+reinitDureeSejour = function() {
   var form = document.editSejour;
   field2 = form._duree_prevue;
   field2.value = '0';
   form._duree_prevue_heure.value = '0';
 }
 
-function removePlageOp(bIgnoreGroup){
+removePlageOp = function(bIgnoreGroup){
   var oFormOp = document.editOp;  
   var oFormSejour = document.editSejour;
   if(oFormOp){
@@ -96,11 +96,11 @@ function removePlageOp(bIgnoreGroup){
       {{/if}}
     }
   }
-}
+};
 
 CanBloc = {{$modules.dPbloc->_can|json}};  
 
-function checkCancelAlerts() {
+checkCancelAlerts = function() {
    var msg = "Vous êtes sur le point d'annuler ce séjour, ceci entraîne :";
    msg += "\n\n1. Tous les placements dans les lits seront supprimés.";
    
@@ -132,9 +132,9 @@ function checkCancelAlerts() {
   {{/if}}     
   
   return true;
-}
+};
 
-function cancelSejour() {
+cancelSejour = function() {
   var oForm = document.editSejour;
   var oElement = oForm.annule;
   
@@ -157,7 +157,7 @@ function cancelSejour() {
   }
 }
 
-function modifSejour() {
+modifSejour = function() {
   var oForm = document.editSejour;
   {{if $conf.dPplanningOp.CSejour.entree_modifiee}}
   if (oForm.entree_preparee.value == '1') {
@@ -167,9 +167,9 @@ function modifSejour() {
   {{/if}}
   canNullOK(oForm._date_entree_prevue);
   canNullOK(oForm._date_sortie_prevue);
-}
+};
 
-function updateSortiePrevue() {
+updateSortiePrevue = function() {
   var oForm = document.editSejour;
 
   if (!oForm._duree_prevue.value) {
@@ -197,9 +197,9 @@ function updateSortiePrevue() {
   if (nDuree == 0 && oForm._duree_prevue.value == 0){
     oForm._hour_sortie_prevue.value = Math.max(oForm._hour_sortie_prevue.value, parseInt(oForm._hour_entree_prevue.value,10)+1);
   }
-}
+};
 
-function updateDureePrevue() {
+updateDureePrevue = function() {
   var oForm = document.editSejour;
 
   if(oForm._date_entree_prevue.value) {
@@ -209,9 +209,9 @@ function updateDureePrevue() {
     var iDaysDelta = iSecondsDelta / (24 * 60 * 60 * 1000);
     $V(oForm._duree_prevue, Math.round(iDaysDelta));
   }
-}
+};
 
-function updateHeureSortie() {
+updateHeureSortie = function() {
   var oForm = document.editSejour;
 
   duree_prevu  = oForm._duree_prevue; 
@@ -252,9 +252,9 @@ function updateHeureSortie() {
   }
 
   min_sortie.value = "0";
-}
+};
 
-function checkSejoursToReload() {
+checkSejoursToReload = function() {
   if(!$("selectSejours")) {
     return;
   }
@@ -274,9 +274,9 @@ function checkSejoursToReload() {
     }
     window.bOldPat = 1;
   }
-}
+};
 
-function reloadListSejours() {
+reloadListSejours = function() {
 
   
   var oForm = document.editSejour;
@@ -289,9 +289,9 @@ function reloadListSejours() {
   if (window.PrescriptionEditor) {
     PrescriptionEditor.refresh($V(oForm.sejour_id), "CSejour", $V(oForm.praticien_id));
   }
-}
+};
 
-function reloadSejour() {
+reloadSejour = function() {
   var oFormSejour    = document.editSejour;
   var oFormOp        = document.editOp;
   
@@ -318,9 +318,9 @@ function reloadSejour() {
   sejoursUrl.requestUpdate('inc_form_sejour', { onComplete: function() { 
     checkNewSejour(sDP,  sDateEntree, sHeureEntree, sMinutesEntree, sDateSortie, sHeureSortie, sMinutesSortie);} 
   } );
-}
+};
 
-function checkNewSejour(sDP,  sDateEntree, sHeureEntree, sMinutesEntree, sDateSortie, sHeureSortie, sMinutesSortie) {
+checkNewSejour = function(sDP,  sDateEntree, sHeureEntree, sMinutesEntree, sDateSortie, sHeureSortie, sMinutesSortie) {
   var oFormSejour       = getForm('editSejour');
   var oSejourChooserFrm = getForm('sejourChooserFrm');
   $V(oSejourChooserFrm.majDP    , 0);
@@ -367,9 +367,9 @@ function checkNewSejour(sDP,  sDateEntree, sHeureEntree, sMinutesEntree, sDateSo
   if($V(oSejourChooserFrm.majDP) == 1 || $V(oSejourChooserFrm.majEntree) == 1 || $V(oSejourChooserFrm.majSortie) == 1) {
     changeSejourModal = Modal.open($('sejour-value-chooser'));
   }
-}
+};
 
-function applyNewSejour() {
+applyNewSejour = function() {
   var oFormSejour       = getForm('editSejour');
   var oSejourChooserFrm = getForm('sejourChooserFrm');
   if($V(oSejourChooserFrm.majDP) == 1) {
@@ -390,14 +390,14 @@ function applyNewSejour() {
     $V(oFormSejour._min_sortie_prevue    , oSortie.getMinutes());
   }
   changeSejourModal.close();
-}
+};
 
-function changePat() {
+changePat = function() {
   window.bChangePat = 1;
   checkSejoursToReload();
   checkCorrespondantMedical();
   checkAld();
-}
+};
 
 checkCorrespondantMedical = function(){
   var oForm = getForm("editSejour");
