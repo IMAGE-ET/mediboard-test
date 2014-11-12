@@ -171,7 +171,14 @@ class CSearch {
     $query = ($object_class) ?
       "SELECT * FROM `search_indexing` WHERE `object_class` = '$object_class' ORDER BY `type`, `search_indexing_id` LIMIT $limit"
       :
-      "SELECT * FROM `search_indexing` ORDER BY `object_class` ,`type`, `search_indexing_id` LIMIT $limit";
+      "SELECT * FROM `search_indexing` ORDER BY `object_class` ,
+                                                CASE `type`
+                                                  WHEN 'create' THEN '1_create'
+                                                  WHEN 'store'  THEN '2_store'
+                                                  WHEN 'delete' THEN '3_delete'
+                                                  END,
+                                                `search_indexing_id`
+                                                LIMIT $limit";
     return $ds->loadList($query);
   }
 
@@ -228,7 +235,7 @@ class CSearch {
       $datum_to_index = $object->getFieldsSearch();
 
       if (!$datum_to_index["date"]) {
-        $datum_to_index["date"] = str_replace("-", "/", CMbDT::dateTime());
+        $datum_to_index["date"] = CMbDT::format(CMbDT::dateTime(),"%Y/%m/%d");
       }
     }
     else {
@@ -236,10 +243,10 @@ class CSearch {
       $datum_to_index["author_id"]   = '';
       $datum_to_index["title"]       = '';
       $datum_to_index["body"]        = '';
-      $datum_to_index["date"]        = CMbDT::format(CMbDT::dateTime(),"%Y%m%d");
+      $datum_to_index["date"]        = CMbDT::format(CMbDT::dateTime(),"%Y/%m/%d");
       $datum_to_index["patient_id"]  = '';
       $datum_to_index["function_id"] = '';
-      $datum_to_index["group_id"]    = $datum['group_id'];
+      $datum_to_index["group_id"]    = '';
     }
     return $datum_to_index;
   }
