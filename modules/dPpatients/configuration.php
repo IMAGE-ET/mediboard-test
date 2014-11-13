@@ -100,6 +100,7 @@ CConfiguration::register(
           "sonde_nephro_cumul_reset_hour"       => "num min|0 max|23 default|8",
           "sonde_vesicale_cumul_reset_hour"     => "num min|0 max|23 default|8",
           "sonde_rectale_cumul_reset_hour"      => "num min|0 max|23 default|8",
+          'urine_effective_24_reset_hour'       => 'num min|o max|23 default|8',
 
           "selection" => $selection
         ),

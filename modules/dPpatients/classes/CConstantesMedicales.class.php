@@ -51,6 +51,7 @@ class CConstantesMedicales extends CMbObject {
   public $_imc_valeur;
   public $_vst;
   public $_tam;
+  public $_urine_effective;
   public $_new_constantes_medicales;
   public $_unite_ta;
   public $_unite_glycemie;
@@ -814,6 +815,18 @@ class CConstantesMedicales extends CMbObject {
       'unit' => '',
       'min' => 0, 'max' => 2
     ),
+    '_urine_effective' => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 1000,
+      "plot" => true,
+      "color" => "#00A8F0",
+      "cumul_reset_config" => "urine_effective_24_reset_hour",
+      "formula" => array(
+        "sonde_vesicale"     => "+",
+        "entree_lavage"      => "-",
+      )
+    ),
   );
 
   /** @var bool Used for making the params conversion (min, max and standard) only once */
@@ -1071,6 +1084,7 @@ class CConstantesMedicales extends CMbObject {
     $props['tonus_g']                = 'float min|0 max|2';
     $props['motricite_d']            = 'float min|0 max|2';
     $props['motricite_g']            = 'float min|0 max|2';
+    $props['_urine_effective']       = 'float min|0';
     return $props;
   }
 
@@ -1126,6 +1140,14 @@ class CConstantesMedicales extends CMbObject {
     foreach (self::$list_constantes["_diurese"]["formula"] as $_field => $_sign) {
       if ($this->{$_field} && $this->_diurese == null) {
         $this->_diurese = " ";
+        break;
+      }
+    }
+
+    // Afficher le champ urine effective dans le formulaire si une des valeurs n'est pas vide
+    foreach (self::$list_constantes["_urine_effective"]["formula"] as $_field => $_sign) {
+      if ($this->{$_field} && $this->_urine_effective == null) {
+        $this->_urine_effective = " ";
         break;
       }
     }
