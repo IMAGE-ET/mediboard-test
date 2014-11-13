@@ -11,9 +11,7 @@
         {{$_datetime|substr:0:18|date_format:$conf.datetime}}
         
         {{if $_constante.comment}}
-          <div style="min-width: 120px; font-weight: normal; background: #eee; background: rgba(255,255,255,0.6); white-space: normal; text-align: left; padding: 2px; border: 1px solid #ddd;">
-            {{$_constante.comment}}
-          </div>
+          <img src="style/mediboard/images/buttons/comment.png" title="{{$_constante.comment}}">
         {{/if}}
       </th>
     {{/foreach}}

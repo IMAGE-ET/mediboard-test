@@ -40,12 +40,10 @@
       {{assign var=_datetime value=$_datetime|substr:0:18}}
       
       <tr class="comment-line">
-        <th>
+        <th style="text-align: left;">
           {{$_datetime|date_format:$conf.datetime}}
           {{if $_constante.comment}}
-            <div style="min-width: 120px; font-weight: normal; background: #eee; background: rgba(255,255,255,0.6); white-space: normal; text-align: left; padding: 2px; border: 1px solid #ddd;">
-              {{$_constante.comment|nl2br}}
-            </div>
+            <img style="float:rigth;" src="style/mediboard/images/buttons/comment.png" title="{{$_constante.comment}}">
           {{/if}}
         </th>
         {{foreach from=$cste_grid.names item=_cste_name}}
