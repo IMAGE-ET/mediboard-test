@@ -16,99 +16,57 @@
 <table class="main" id="cartographie_systeme">
   <tbody>
   <tr>
-    <th class="title" colspan="2"> Statut de l'index {{$name_index}}</th>
+    {{if $infos_index|@count !==0}}
+      <th class="title" colspan="2"> Statut de l'index {{$infos_index.name_index}}</th>
+    {{/if}}
   </tr>
   <tr>
     <td class="halfPane">
       <table class="tbl" id="table-stats">
-        <tr>
-          <th class="category"> État de l'index</th>
-          <th class="narrow"></th>
-        </tr>
-        <tr>
-          <td class="text">
-            <label>Test connexion</label>
-          </td>
-          <td class="text">
-            {{if $connexion === "1"}}
-              <img title="CONNECTÉ" src="images/icons/note_green.png">
-            {{else}}
-              <img title="NON CONNECTÉ" src="images/icons/note_red.png">
-            {{/if}}
-          </td>
-        </tr>
-        <tr>
-          <td class="text">
-            <label>Nombre de documents indexés</label>
-          </td>
-          <td class="text">
-            {{$nbDocs_indexed}}
-          </td>
-        </tr>
-        <tr>
-          <td class="text">
-            <label>Nombre de documents à indexer au total</label>
-          </td>
-          <td class="text">
-            {{$nbdocs_to_index}}
-          </td>
-        </tr>
-        {{foreach from=$nbdocs_to_index_by_type item=_object_to_index}}
-          <tr>
-            <td class="empty">
-              <label>Nombre de documents à indexer de type {{$_object_to_index.object_class}}</label>
-            </td>
-            <td class="empty">
-              {{$_object_to_index.total}}
-            </td>
-          </tr>
-        {{/foreach}}
-        <tr>
-          <td class="text">
-            <label>Statut du cluster</label>
-          </td>
-          <td class="text">
-            {{if $status !== ""}}
-              <img title="{{$status}}" src="images/icons/note_{{$status}}.png">
-            {{/if}}
-          </td>
-        </tr>
-        <tr>
-          <td class="text">
-            <label>Taille des indexes en base NoSQL</label>
-          </td>
-          <td class="text">
-            {{$size}}
-          </td>
-        </tr>
+        <tbody>
+          {{if $infos_index|@count !==0}}
+            <!-- Etat général du service ES -->
+            {{mb_include module=search template=inc_carto_general_infos}}
+            <!-- Etat de l'index -->
+            <br/>
+            {{mb_include module=search template=inc_carto_index_infos}}
+          {{/if}}
+          {{if $infos_log|@count !== 0}}
+            <!-- Etat de l'index des journaux utilisateurs -->
+            <br/>
+            {{mb_include module=search template=inc_carto_log_infos}}
+          {{/if}}
+        </tbody>
       </table>
     </td>
     <td class="halfPane">
-      <table class="tbl" id="table-mapping">
-        <tr>
-          <th class="category"> Visualisation du mapping</th>
-        </tr>
-        <tr>
-          <td class="text compact" style="background-color:#FAF6D9 " id="mapping">
-            {{$mapping|@mbTrace}}
-          </td>
-        </tr>
-        <tr>
-          <th class="category"> Modification du mapping</th>
-        </tr>
-        <tr>
-          <td>
-            <textarea name="mappingjson" id="mappingjson">
-              {{$mappingjson}}
-            </textarea>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <button class="new" onclick="Search.showdiff('{{$mappingjson}}', $V($('mappingjson')))">Prévisualiser</button>
-          </td>
-        </tr>
-      </table>
+      {{if $infos_index|@count !==0}}
+        <table class="tbl" id="table-mapping">
+          <tr>
+            <th class="category"> Visualisation du mapping</th>
+          </tr>
+          <tr>
+            <td class="text compact" style="background-color:#FAF6D9 " id="mapping">
+              {{$infos_index.mapping|@mbTrace}}
+            </td>
+          </tr>
+          <tr>
+            <th class="category"> Modification du mapping</th>
+          </tr>
+          <tr>
+            <td>
+              <textarea name="mappingjson" id="mappingjson">
+                {{$infos_index.mappingjson}}
+              </textarea>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <button class="new" onclick="Search.showdiff('{{$infos_index.mappingjson}}', $V($('mappingjson')))">Prévisualiser</button>
+            </td>
+          </tr>
+        </table>
+      {{/if}}
     </td>
   </tr>
   </tbody>

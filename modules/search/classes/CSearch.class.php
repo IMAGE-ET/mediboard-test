@@ -22,6 +22,7 @@ use Elastica\Filter\Term;
 use Elastica\Filter\Terms;
 use Elastica\Filter\BoolOr;
 use Elastica\Query\QueryString;
+use Elastica\Request;
 
 /**
  * Class CSearch
@@ -767,4 +768,54 @@ class CSearch {
     $this->updateIndexSettings($this->_index);
     $index->open();
   }
+
+  /**
+   * @return array
+   */
+  function loadCartoInfos() {
+    $result = array();
+    $search = new CSearchIndexing();
+
+    // récupération de l'index, cluster
+    $index      = $this->loadIndex();
+    $cluster    = $this->_client->getCluster();
+
+    // statistiques du cluster
+    $path = '_cluster/stats';
+    $response = $this->_client->request($path, Request::GET);
+    $data = $response->getData();
+    $result['stats']['cluster']["nbIndex"] = $data["indices"]["count"];
+    $result['stats']['cluster']["nbDocsTotal"] = $data["indices"]["docs"]["count"];
+
+    // récupération du mapping et du name_index
+    $result['mapping']      = $index->getMapping();
+    $result['mappingjson']  = json_encode($result['mapping'] );
+    $result['name_index']   = $index->getName();
+
+    // récupération de la taille totale des indexes et de statistiques
+    $stats = $index->getStats()->getData();
+    $result['size'] = CMbString::toDecaBinary($stats ["_all"]["primaries"]["store"]["size_in_bytes"]);
+
+    // récupération de l'état des shards
+    $result['stats']['shards']["total"]      = $stats["_shards"]['total'];
+    $result['stats']['shards']["successful"] = $stats["_shards"]['successful'];
+    $result['stats']['shards']["failed"]     = $stats["_shards"]['failed'];
+
+    // récupération de statistiques
+    $name = CAppUI::conf("db std dbname");
+    $result['stats']["search"]['total']        = $stats["indices"][$name]["primaries"]["search"]["query_total"];
+    $result['stats']["search"]['average_time'] = $stats["indices"][$name]["primaries"]["search"]["query_time_in_millis"];
+
+    // récupération du nombre de docs "indexés",  "à indexer" et récupération des types d'éléments restant à indexer.
+    $result['nbDocs_indexed']          = $index->count();;
+    $result['nbdocs_to_index']         = $search->countList();;
+    $result['nbdocs_to_index_by_type'] = $search->countMultipleList(null, null, "object_class", null, "`object_class`, COUNT(`object_class`) AS `total`");
+
+    // récupération du statut de la connexion et du cluster
+    $result['status']    = $cluster->getHealth()->getStatus();
+    $result['connexion'] = $this->_client->hasConnection();
+
+    return $result;
+  }
+
 }

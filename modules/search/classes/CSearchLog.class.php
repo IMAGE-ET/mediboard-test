@@ -301,5 +301,17 @@ class CSearchLog extends CSearch {
     return $objects_refs;
   }
 
+  /**
+   * @return array
+   */
+  function loadCartoInfos() {
+    $index      = $this->loadIndex(CAppUI::conf("db std dbname") . "_log");
+
+    // récupération du nombre de docs "indexés"
+    $nbdocs_indexed      = $index->count();
+    $result ["nbdocs_indexed"] = $nbdocs_indexed;
+
+    return $result;
+  }
 
 }
