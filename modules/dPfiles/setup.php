@@ -275,6 +275,21 @@ class CSetupdPfiles extends CSetup {
     $this->makeRevision("0.36");
     $this->addPrefQuery("show_file_view", "0");
 
-    $this->mod_version = "0.37";
+    $this->makeRevision("0.37");
+    $query = "CREATE TABLE `files_user_view` (
+                `view_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `user_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `file_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `read_datetime` DATETIME NOT NULL
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `files_user_view`
+                ADD INDEX (`user_id`),
+                ADD INDEX (`file_id`),
+                ADD INDEX (`read_datetime`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.38";
   }
 }
