@@ -369,22 +369,17 @@ if ($show_operations) {
 
       // couleurs
       $color     = CAppUI::conf("hospi colors default");
+      if ($charge->color) {
+        $color = $charge->color;
+      }
       $important = true;
       $css       = null;
       if ($sejour->annule) {
         $css       = "hatching";
         $important = false;
       }
-      else {
-        switch ($sejour->recuse) {
-          case "0":
-            $color = CAppUI::conf("hospi colors $sejour->type");
-            break;
-          case "-1" :
-            $color = CAppUI::conf("hospi colors recuse");
-            $css   = "recuse";
-            break;
-        }
+      elseif ($sejour->recuse == "-1") {
+        $css   = "recuse";
       }
 
       $event = new CPlanningEvent($_operation->_guid, $debut, $duree, $smartyL, "#$color", $important, $css, $_operation->_guid, false);
@@ -516,7 +511,6 @@ $smarty->assign("bank_holidays", $bank_holidays);
 $smarty->assign("bloc_id", $bloc_id);
 $smarty->assign("prestations", $prestations_journalieres);
 $smarty->assign("height_planning_resa", CAppUI::pref("planning_resa_height", 1500));
-
 $smarty->assign("nbIntervNonPlacees", $nbIntervNonPlacees);
 $smarty->assign("nbIntervHorsPlage", $nbIntervHorsPlage);
 $smarty->assign("nbAlertesInterv", $nbAlertesInterv);

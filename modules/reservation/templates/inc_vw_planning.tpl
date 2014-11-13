@@ -35,7 +35,6 @@
 
 <style type="text/css">
   .planning .event .body{
-    color: #000 !important;
     line-height: 120% !important;
   }
 
