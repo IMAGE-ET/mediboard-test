@@ -54,7 +54,7 @@
           </td>
           <td rowspan="{{$nb_naissance}}" style="text-align: center; font-weight: bold">
             {{if $_sejour->_ref_grossesse->_days_relative_acc != ''}}
-              {{$_sejour->_ref_grossesse->_days_relative_acc}}J
+              J{{$_sejour->_ref_grossesse->_days_relative_acc}}
             {{/if}}
           </td>
           <td rowspan="{{$nb_naissance}}">
@@ -89,7 +89,7 @@
         </td>
         <td rowspan="{{$nb_naissance}}" style="text-align: center; font-weight: bold">
           {{if $_sejour->_ref_grossesse->_days_relative_acc != ''}}
-            {{$_sejour->_ref_grossesse->_days_relative_acc}}J
+            J{{$_sejour->_ref_grossesse->_days_relative_acc}}
           {{/if}}
         </td>
         <td rowspan="{{$nb_naissance}}">
