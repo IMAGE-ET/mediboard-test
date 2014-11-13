@@ -14,5 +14,6 @@
 CPreferences::$modules["dPfiles"] = array(
   "directory_to_watch",
   "debug_yoplet",
-  "mozaic_disposition"
+  "mozaic_disposition",
+  "show_file_view",
 );

@@ -272,6 +272,9 @@ class CSetupdPfiles extends CSetup {
                 ADD `eligible_file_view` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.36";
+    $this->makeRevision("0.36");
+    $this->addPrefQuery("show_file_view", "0");
+
+    $this->mod_version = "0.37";
   }
 }

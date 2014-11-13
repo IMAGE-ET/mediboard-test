@@ -375,3 +375,5 @@ $locales['pref-mozaic_disposition-2x3'] = '3 lignes, 2 colonnes';
 $locales['pref-mozaic_disposition-3x2'] = '2 lignes, 3 colonnes';
 $locales['pref-mozaic_disposition-3x3'] = '3 lignes, 3 colonnes';
 $locales['pref-mozaic_disposition-desc'] = 'Disposition de la mosaïque par défaut';
+$locales['pref-show_file_view'] = 'Remonter des alertes sur les nouveaux fichiers';
+$locales['pref-show_file_view-desc'] = 'Remonter des alertes sur les nouveaux fichiers dans les dossiers à surveiller';
