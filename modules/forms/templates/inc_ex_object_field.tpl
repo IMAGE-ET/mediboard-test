@@ -68,9 +68,12 @@
   
   {{elseif $_spec instanceof CTextSpec || ($_spec instanceof CEnumSpec && $_spec->typeEnum == "select")}}
     {{mb_include module=forms template=inc_ex_object_field_two_lines}}
-  
-  {{elseif $ex_class->pixel_positionning && !$is_predicate && ($_spec instanceof CDateSpec || $_spec instanceof CDateTimeSpec || $_spec instanceof CTimeSpec)}}
+
+    {{* Custom handling of date fields is obsolete : the checkbox is pissing off everybody *}}
+    {{*
+    {{elseif $ex_class->pixel_positionning && !$is_predicate && ($_spec instanceof CDateSpec || $_spec instanceof CDateTimeSpec || $_spec instanceof CTimeSpec)}}
     {{mb_include module=forms template=inc_ex_object_field_date}}
+    *}}
   
   {{else}}
     {{mb_include module=forms template=inc_ex_object_field_standard}}
