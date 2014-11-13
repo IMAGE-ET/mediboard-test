@@ -267,6 +267,11 @@ class CSetupdPfiles extends CSetup {
                 ADD `type_doc_sisra` VARCHAR(10);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.35";
+    $this->makeRevision("0.35");
+    $query = "ALTER TABLE `files_category`
+                ADD `eligible_file_view` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.36";
   }
 }
