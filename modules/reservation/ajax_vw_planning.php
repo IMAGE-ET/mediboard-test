@@ -88,7 +88,7 @@ $ljoin = array();
 
 $where["operations.date"] = "= '$date_planning'";
 if (!$show_cancelled) {
-  $where["operations.annulee"] = "= '0'";
+  $where["operations.annulee"] = " != '1'";
 }
 //$where["operations.plageop_id"] = "IS NULL";
 if ($bloc_id) {
@@ -103,7 +103,7 @@ $praticiens = $praticien->loadPraticiens();
 
 $where["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($praticiens), $praticien_id);
 /** @var COperation[] $operations */
-$operations = $operation->loadList($where, null, null, "operations.operation_id", $ljoin);
+$operations = $operation->loadListWithPerms(PERM_READ, $where, null, null, "operations.operation_id", $ljoin);
 
 $nbIntervHorsPlage = CIntervHorsPlage::countForDates($date_planning, null, array($praticien_id));
 
@@ -130,7 +130,7 @@ $where       = array();
 $where["debut"]    = " <= '$date_planning 23:59:59'";
 $where["fin"]      = " >= '$date_planning 00:00:00'";
 $where["salle_id"] = CSQLDataSource::prepareIn($salles_ids);
-$commentaires = $commentaire->loadList($where);
+$commentaires = $commentaire->loadListWithPerms(PERM_READ, $where);
 
 // Récupération des plages opératoires
 $plageop = new CPlageOp();
@@ -139,7 +139,7 @@ $where   = array();
 $where["date"]     = " = '$date_planning'";
 $where["salle_id"] = CSQLDataSource::prepareIn($salles_ids);
 
-$plages = $plageop->loadList($where);
+$plages = $plageop->loadListWithPerms(PERM_READ, $where);
 
 // Création du planning
 $planning        = new CPlanningWeek(0, 0, count($salles), count($salles), false, "auto");
