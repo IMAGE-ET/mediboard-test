@@ -10,7 +10,7 @@
  */
 
 // right on reservation
-CCanDo::checkEdit();
+CCanDo::checkRead();
 
 // right on dPplanningOp
 $pl_op = CModule::getActive("dPplanningOp");
