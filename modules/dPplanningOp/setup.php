@@ -1817,7 +1817,12 @@ class CSetupdPplanningOp extends CSetup {
                 ADD `poste_preop_id` INT (11) UNSIGNED;";
     $this->addQuery($query);
 
-    $this->mod_version = '1.96';
+    $this->makeRevision("1.96");
+    $query = "ALTER TABLE `sejour`
+                ADD `technique_reanimation` TEXT;";
+    $this->addQuery($query);
+
+    $this->mod_version = '1.97';
 
 
     // Data source query

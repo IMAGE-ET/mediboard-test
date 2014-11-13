@@ -109,6 +109,13 @@
       {{/if}}
     </th>
   </tr>
+  {{if $conf.ref_pays == "2" && $sejour->technique_reanimation}}
+    <tr>
+      <td colspan="3">
+        <div title="{{tr}}CSejour-technique_reanimation-desc{{/tr}}" class="small-warning">{{$sejour->technique_reanimation}}</div>
+      </td>
+    </tr>
+  {{/if}}
 </table>
 
 <table class="tbl">

@@ -1284,17 +1284,26 @@ Main.add( function(){
 </tr>
 <tr>
   <td class="text">{{mb_label object=$sejour field="convalescence"}}</td>
-  <td class="text" colspan="3">{{mb_label object=$sejour field="rques"}}</td>
+  <td class="text" {{if $conf.ref_pays != "2"}}colspan="3"{{/if}}>{{mb_label object=$sejour field="rques"}}</td>
+  {{if $conf.ref_pays == "2"}}
+    <td class="text" colspan="2">{{mb_label object=$sejour field="technique_reanimation"}}</td>
+  {{/if}}
 </tr>
 <tr>
   <td>
     {{mb_field object=$sejour field="convalescence" rows="3" form="editSejour"
         aidesaisie="validateOnBlur: 0"}}
   </td>
-  <td colspan="3">
+  <td {{if $conf.ref_pays != "2"}}colspan="3"{{/if}}>
     {{mb_field object=$sejour field="rques" rows="3" form="editSejour"
         aidesaisie="validateOnBlur: 0"}}
   </td>
+  {{if $conf.ref_pays == "2"}}
+    <td colspan="2">
+      {{mb_field object=$sejour field="technique_reanimation" rows="3" form="editSejour"
+        aidesaisie="validateOnBlur: 0"}}
+    </td>
+  {{/if}}
 </tr>
 
 {{if $conf.dPplanningOp.CSejour.assurances}}

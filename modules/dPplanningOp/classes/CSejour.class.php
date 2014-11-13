@@ -119,6 +119,8 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $reception_sortie;
   public $completion_sortie;
 
+  public $technique_reanimation;
+
   // Form Fields
   /** @deprecated */
   public $_entree;
@@ -522,6 +524,8 @@ class CSejour extends CFacturable implements IPatientRelated {
     // Clôture des actes
     $props["cloture_activite_1"]    = "bool default|0";
     $props["cloture_activite_4"]    = "bool default|0";
+
+    $props["technique_reanimation"] = "text helped";
 
     $props["_rques_assurance_maladie"]  = "text helped";
     $props["_rques_assurance_accident"] = "text helped";
