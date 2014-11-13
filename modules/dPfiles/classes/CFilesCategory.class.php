@@ -19,6 +19,7 @@ class CFilesCategory extends CMbObject {
   public $nom;
   public $class;
   public $send_auto;
+  public $eligible_file_view;
 
   public $_count_documents;
   public $_count_files;
@@ -57,6 +58,7 @@ class CFilesCategory extends CMbObject {
     $props["nom"]   = "str notNull seekable";
     $props["class"] = "str";
     $props["send_auto"] = "bool";
+    $props["eligible_file_view"] = "bool notNull default|0";
     return $props;
   }
 

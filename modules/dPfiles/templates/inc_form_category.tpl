@@ -33,6 +33,11 @@
     </tr>
 
     <tr>
+      <th>{{mb_label object=$category field=eligible_file_view}}</th>
+      <td>{{mb_field object=$category field=eligible_file_view}}</td>
+    </tr>
+
+    <tr>
       <th>{{mb_label object=$category field=class}}</th>
       <td>
         {{if $category->_count_doc_items}}
