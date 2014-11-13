@@ -93,6 +93,13 @@ if (CModule::getActive("tasking")) {
   $smarty->assign("request_ticket", $tasking["request_ticket"]);
 }
 
+// oxExploitation
+if (CModule::getActive("oxExploitation")) {
+  $customers = COXOperation::getPrefs($prefs, $user);
+
+  $smarty->assign("customers", $customers);
+}
+
 $smarty->assign("user"                 , $user);
 $smarty->assign("prof"                 , $prof);
 $smarty->assign("user_id"              , $user_id);
