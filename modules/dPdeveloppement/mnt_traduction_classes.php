@@ -56,6 +56,7 @@ $translateModule->sourcePath = null;
 $contenu_file = array();
 foreach ($localesDirs as $locale => $path) {
   $translateModule->options = array("name" => "locales");
+  //$translateModule->sourcePath = $path;
   $translateModule->targetPath = $path;
   $translateModule->load();
   $contenu_file[$locale] = $translateModule->values;
@@ -190,20 +191,50 @@ foreach ($classes as $class) {
 }
 
 // Parcours des variables de configuration
-function addConfigConfigCategory($chapter, $category, $values) {
+function addConfigConfigCategory($chapter, $category, $values, $add_desc = true) {
   $prefix = $chapter ? "$chapter-$category" : $category;
   
   if (!is_array($values)) {
     addLocale("Config", "global", "config-$prefix");
-    addLocale("Config", "global", "config-$prefix-desc");
+    if ($add_desc) {
+      addLocale("Config", "global", "config-$prefix-desc");
+    }
     return;
   }
   
   foreach ($values as $key => $value) {
     addLocale("Config", $category, "config-$prefix-$key");
-    addLocale("Config", $category, "config-$prefix-$key-desc");
+    if ($add_desc) {
+      addLocale("Config", $category, "config-$prefix-$key-desc");
+    }
   }
 }
+
+if ($module && $module != "common") {
+  $model = CConfiguration::getModel();
+  $features = array();
+  foreach ($model as $_model) {
+    foreach ($_model as $_feature => $_submodel) {
+      if (strpos($_feature, $module) === 0) {
+        $parts = explode(" ", $_feature);
+        array_shift($parts); // Remove module name
+        $item = array_pop($parts);   // Remove config name
+        $prefix = implode("-", $parts);
+        if (!isset($features[$prefix])) {
+          $features[$prefix] = array();
+        }
+
+        $features[$prefix][$item] = $item;
+      }
+    }
+  }
+
+  foreach ($features as $_prefix => $values) {
+    addConfigConfigCategory($module, $_prefix, null, false);
+    addConfigConfigCategory($module, $_prefix, $values);
+  }
+}
+
 
 if ($categories = @CAppUI::conf($module)) {
   foreach ($categories as $category => $values) {
