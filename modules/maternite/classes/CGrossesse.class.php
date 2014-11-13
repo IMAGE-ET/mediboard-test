@@ -265,7 +265,7 @@ class CGrossesse extends CMbObject {
 
   function getDateAccouchement() {
     if ($this->datetime_accouchement) {
-      return $this->_days_relative_acc = CMbDT::daysRelative($this->datetime_accouchement, CMbDT::date());
+      return $this->_days_relative_acc = abs(CMbDT::daysRelative($this->datetime_accouchement, CMbDT::date()));
     }
 
     if (count($this->_ref_naissances)) {
@@ -276,8 +276,9 @@ class CGrossesse extends CMbObject {
       }
     }
 
+    //@TODO : A revoir !
     if ($this->_ref_last_operation && $this->_ref_last_operation->_id) {
-      return $this->_days_relative_acc = CMbDT::daysRelative($this->_ref_last_operation->date, CMbDT::date());
+      return $this->_days_relative_acc = abs(CMbDT::daysRelative($this->_ref_last_operation->date, CMbDT::date()));
     }
     return null;
   }
