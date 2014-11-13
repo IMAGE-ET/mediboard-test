@@ -134,7 +134,7 @@ foreach ($sejours as $_sejour) {
     "hours_after"  => "2",
     "empty_lines"  => "2",
     "dialog"       => 1,
-    "offline"      => 1,
+    "mode_lite"    => 1
   );
 
   $patients_offline[$patient->_guid]["plan_soins"] = CApp::fetch("soins", "offline_plan_soins", $params);
@@ -186,14 +186,17 @@ foreach ($sejours as $_sejour) {
 
 
   // Constantes
+  $patients_offline[$patient->_guid]["constantes"] = "";
   $cstes = array_reverse($_sejour->loadListConstantesMedicales($where_cste));
-  CStoredObject::massLoadFwdRef($cstes, "user_id");
-  foreach ($cstes as $_cste) {
-    $_cste->loadRefUser();
+  if (count($cstes)) {
+    CStoredObject::massLoadFwdRef($cstes, "user_id");
+    foreach ($cstes as $_cste) {
+      $_cste->loadRefUser();
+    }
+    $smarty_cstes->assign("constantes_medicales_grid", CConstantesMedicales::buildGrid($cstes, false));
+    $smarty_cstes->assign("sejour", $_sejour);
+    $patients_offline[$patient->_guid]["constantes"] = $smarty_cstes->fetch("print_constantes.tpl", '', '', 0);
   }
-  $smarty_cstes->assign("constantes_medicales_grid", CConstantesMedicales::buildGrid($cstes, false));
-  $smarty_cstes->assign("sejour", $_sejour);
-  $patients_offline[$patient->_guid]["constantes"] = $smarty_cstes->fetch("print_constantes.tpl", '', '', 0);
 }
 
 if ($service_id != "urgence") {

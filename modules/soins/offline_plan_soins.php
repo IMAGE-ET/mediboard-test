@@ -21,6 +21,7 @@ $service_id   = CValue::get("service_id");
 $date         = CValue::get("date", CMbDT::date());
 $mode_dupa    = CValue::get("mode_dupa", 0);
 $empty_lines  = CValue::get("empty_lines", 0);
+$mode_lite    = CValue::get("mode_lite", 0);
 
 $sejours = array();
 
@@ -61,15 +62,23 @@ else {
 
   $where["sejour.entree"]          = "<= '$datetime_max'";
   $where["sejour.sortie"]          = " >= '$datetime_min'";
-  $where["affectation.entree"]     = "<= '$datetime_max'";
-  $where["affectation.sortie"]     = ">= '$datetime_min'";
-  $where["affectation.service_id"] = " = '$service_id'";
+  if ($service->_id) {
+    $where["affectation.entree"]     = "<= '$datetime_max'";
+    $where["affectation.sortie"]     = ">= '$datetime_min'";
+    $where["affectation.service_id"] = " = '$service_id'";
+  }
+  else {
+    $where["affectation.affectation_id"] = "IS NULL";
+    $where["sejour.group_id"] = "= '$group->_id'";
+
+  }
   $where["prescription.type"]      = "= 'sejour'";
 
   $sejours = $sejour->loadList($where, null, null, "sejour.sejour_id", $ljoin);
 }
 
-CMbObject::massLoadFwdRef($sejours, "patient_id");
+CStoredObject::massLoadFwdRef($sejours, "patient_id");
+CStoredObject::massLoadBackRefs($sejours, "operations", "date ASC");
 
 $dates = array();
 
@@ -166,26 +175,12 @@ foreach ($sejours as $_sejour) {
   $prescription->loadRefsPrescriptionLineMixes("", "0", "1", "", "0", "1");
   $prescription->loadRefsLinesInscriptions();
 
-  // Si aucune ligne, on retire le séjour
-  if (!count($prescription->_ref_prescription_lines) &&
-    !count($prescription->_ref_prescription_line_mixes) &&
-    !count($prescription->_ref_prescription_lines_element)) {
-    unset($sejours[$_sejour->_id]);
-    continue;
-  }
-
   CStoredObject::massLoadBackRefs($prescription->_ref_prescription_lines, "prise_posologie", "moment_unitaire_id, prise_posologie_id");
   CStoredObject::massLoadBackRefs($prescription->_ref_prescription_lines_element, "prise_posologie", "moment_unitaire_id, prise_posologie_id");
   CPrescription::massLoadAdministrations($prescription, $dates);
 
   $prescription->calculAllPlanifSysteme();
   $prescription->calculPlanSoin($dates, 0, null, null, null, true);
-
-  // Si aucune ligne à afficher après calcul du plan de soins, on retire le séjour
-  if (array_sum($prescription->_nb_lines_plan_soins) == 0) {
-    unset ($sejours[$_sejour->_id]);
-    continue;
-  }
 
   CPrescription::massCountPlanifications($prescription);
 
@@ -195,8 +190,12 @@ foreach ($sejours as $_sejour) {
     $_sejour->_ref_curr_affectation->loadRefService();
   }
 
-  $_sejour->loadRefPatient();
+  $patient = $_sejour->loadRefPatient();
+  $patient->loadRefConstantesMedicales(null, array("poids"));
   $_sejour->loadNDA();
+  $_sejour->loadRefsOperations();
+  $_sejour->loadJourOp($date);
+  $_sejour->_ref_last_operation->loadRefPlageOp();
 
   $initiales[$prescription->_id] = array();
 
@@ -252,6 +251,16 @@ foreach ($sejours as $_sejour) {
           }
         }
       }
+
+      if ($mode_lite) {
+        $line->_ref_last_administration = reset($line->_ref_administrations);
+        foreach ($line->_ref_administrations as $_adm) {
+          if ($_adm->dateTime > $line->_ref_last_administration->dateTime) {
+            $line->_ref_last_administration = $_adm;
+          }
+        }
+        $line->_ref_last_administration->loadRefAdministrateur();
+      }
     }
   }
 
@@ -288,6 +297,16 @@ foreach ($sejours as $_sejour) {
               $key = $postes_by_date[$_date][$_hour];
               @$_line_item->_administrations_moment[$_date][$key["moment"]] += $_quantite;
             }
+          }
+
+          if ($mode_lite) {
+            $_line_item->_ref_last_administration = reset($_line_item->_ref_administrations);
+            foreach ($_line_item->_ref_administrations as $_adm) {
+              if ($_adm->dateTime > $_line_item->_ref_last_administration->dateTime) {
+                $_line_item->_ref_last_administration = $_adm;
+              }
+            }
+            $_line_item->_ref_last_administration->loadRefAdministrateur();
           }
         }
       }
@@ -345,6 +364,16 @@ foreach ($sejours as $_sejour) {
           }
         }
       }
+
+      if ($mode_lite) {
+        $line->_ref_last_administration = reset($line->_ref_administrations);
+        foreach ($line->_ref_administrations as $_adm) {
+          if ($_adm->dateTime > $line->_ref_last_administration->dateTime) {
+            $line->_ref_last_administration = $_adm;
+          }
+        }
+        $line->_ref_last_administration->loadRefAdministrateur();
+      }
     }
   }
 
@@ -381,6 +410,16 @@ foreach ($sejours as $_sejour) {
               }
             }
           }
+
+          if ($mode_lite) {
+            $line->_ref_last_administration = reset($line->_ref_administrations);
+            foreach ($line->_ref_administrations as $_adm) {
+              if ($_adm->dateTime > $line->_ref_last_administration) {
+                $line->_ref_last_administration = $_adm;
+              }
+            }
+            $line->_ref_last_administration->loadRefAdministrateur();
+          }
         }
       }
     }
@@ -400,6 +439,11 @@ $current_moment =
   isset($postes_by_date[$now_date]) ?
     $postes_by_date[$now_date][CMbDT::transform(null, CMbDT::time(), "%H")]["moment"] : "";
 
+// Chargement des cis à risque
+$where = array();
+$where["risque"]    = " = '1'";
+$risques_cis = CProduitLivretTherapeutique::getCISList($where);
+
 $smarty = new CSmartyDP();
 
 $smarty->assign("now"            , $now);
@@ -416,5 +460,7 @@ $smarty->assign("current_moment" , $current_moment);
 $smarty->assign("empty_lines"    , $empty_lines);
 $smarty->assign("dates_plan_soin", $dates_plan_soin);
 $smarty->assign("colspan"        , $colspan);
+$smarty->assign("risques_cis"    , $risques_cis);
+$smarty->assign("mode_lite"      , $mode_lite);
 
 $smarty->display("offline_plan_soins.tpl");

@@ -12,18 +12,12 @@
 {{assign var=patient value=$sejour->_ref_patient}}
 {{assign var=prescription value=$sejour->_ref_prescription_sejour}}
 
-{{if !$prescription->_ref_lines_med_for_plan|@count &&
-     !$prescription->_ref_injections_for_plan|@count &&
-     !$prescription->_ref_prescription_line_mixes_for_plan|@count &&
-     !$prescription->_ref_lines_elt_for_plan|@count}}
-  Pas de plan de soins pour {{$sejour}}
-  {{mb_return}}
-{{/if}}
-
 {{math equation="75/x" x=$colspan assign=width_th}}
 
 {{if $mode_dupa}}
   {{math equation="4+x" x=$colspan assign=th_chap_colspan}}
+{{elseif $mode_lite}}
+  {{math equation="5+x" x=$colspan assign=th_chap_colspan}}
 {{else}}
   {{math equation="3+x" x=$colspan assign=th_chap_colspan}}
 {{/if}}
@@ -44,7 +38,7 @@
             </th>
           </tr>
           <tr>
-            <td class="text" style="width: 30%">
+            <td class="text" style="width: 25%; vertical-align: top;">
               <h2>
                 <strong>SERVICE :</strong>
 
@@ -58,26 +52,41 @@
                 {{/if}}
               </h2>
             </td>
-            <td style="width: 30%">
-              Civilité : {{mb_value object=$patient field=nom}} ({{mb_value object=$patient field=nom_jeune_fille}}) {{mb_value object=$patient field=prenom}}
+            <td style="width: 25%; vertical-align: top;">
+              Civilité : {{mb_value object=$patient field=civilite}} {{mb_value object=$patient field=nom}} ({{mb_value object=$patient field=nom_jeune_fille}}) {{mb_value object=$patient field=prenom}}
+               ({{$patient->_annees}} ans) {{if $patient->_ref_constantes_medicales->poids}}({{$patient->_ref_constantes_medicales->poids}} kg){{/if}}
               <br />
               Né(e) le : {{mb_value object=$patient field=naissance}}
             </td>
-            <td>
+            <td style="vertical-align: top;">
               NDA : {{$sejour->_NDA}}
               <br />
-              Date d'entrée : {{$sejour->entree|date_format:$conf.date}} à {{$sejour->entree|date_format:$conf.time}}
-            </td>
-            <td class="text">
               {{if $sejour->libelle}}
                 Motif : {{$sejour->libelle}}
+                <br />
+              {{/if}}
+              Date d'entrée : {{$sejour->entree|date_format:$conf.date}} à {{$sejour->entree|date_format:$conf.time}}
+              <br />
+              Date de sortie : {{$sejour->sortie|date_format:$conf.date}} à {{$sejour->sortie|date_format:$conf.time}}
+            </td>
+            <td class="text" style="vertical-align: top">
+              {{if $sejour->_ref_last_operation->_id}}
+                {{assign var=last_op value=$sejour->_ref_last_operation}}
+                {{assign var=last_op_id value=$last_op->_id}}
+
+                Date d'intervention : {{$last_op->_datetime_best|date_format:$conf.date}} à {{$last_op->_datetime_best|date_format:$conf.time}}
+                (J{{$sejour->_jour_op.$last_op_id.jour_op}})
+                <br />
+                Côté : {{mb_value object=$last_op field=cote}}
+                <br />
+                Libellé : {{mb_value object=$last_op field=libelle}}
               {{/if}}
             </td>
           </tr>
         </table>
       </td>
     </tr>
-      <th class="title" style="width: 20%" colspan="{{if $mode_dupa}}2{{else}}3{{/if}}">
+      <th class="title" style="width: 20%" colspan="{{if $mode_dupa}}2{{elseif $mode_lite}}4{{else}}3{{/if}}">
         {{tr}}soins.dupa_prescriptions{{/tr}}
       </th>
       {{if $mode_dupa}}
@@ -108,9 +117,15 @@
           Signature médecin
         </th>
       {{else}}
-        <th style="width: 10%" rowspan="2">
+        <th style="width: {{if $mode_lite}}5{{else}}10%{{/if}}" rowspan="2">
           Commentaires
         </th>
+        {{if $mode_lite}}
+          <th style="width: 5%" rowspan="2">
+            Dernière <br />
+            administration
+          </th>
+        {{/if}}
       {{/if}}
       {{if $moments|@count == 4}}
         {{foreach from=$dates item=_date}}
@@ -139,7 +154,7 @@
       {{else}}
         {{foreach from=$dates_plan_soin item=_dates}}
           {{foreach from=$_dates item=_heure}}
-            <th style="width: {{$width_th}}%">{{$_heure|str_pad:2:"0":$smarty.const.STR_PAD_LEFT}}h</th>
+            <th style="width: {{$width_th}}%">{{$_heure}}h</th>
           {{/foreach}}
         {{/foreach}}
       {{/if}}
@@ -148,7 +163,7 @@
   <tfoot>
     {{* Dernière ligne avec les initiales *}}
     <tr>
-      <td colspan="{{if $mode_dupa}}4{{else}}3{{/if}}" style="text-align: right;">Initiales :</td>
+      <td colspan="{{if $mode_dupa || $mode_lite}}4{{else}}3{{/if}}" style="text-align: right;">Initiales :</td>
       {{assign var=prescription_id value=$prescription->_id}}
       {{foreach from=$dates_plan_soin item=_moments key=_date}}
         {{foreach from=$_moments item=_moment name=moment}}

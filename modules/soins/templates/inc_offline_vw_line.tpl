@@ -26,7 +26,7 @@
         {{if $line->_class == "CPrescriptionLineElement"}}
           {{$line}}
         {{else}}
-          {{$line->_ucd_view}}
+          {{$line->_ucd_view}} {{if @in_array($line->code_cis, $risques_cis)}}<span style="color: red">(A risque)</span>{{/if}}
         {{/if}}
       </strong>
       <br />
@@ -57,6 +57,9 @@
         {{if $line->premedication}}
           <img src="images/icons/premed.png" />
         {{/if}}
+        {{if $line->_class == "CPrescriptionLineMedicament" && $line->_ref_produit->_is_stupefiant}}
+          <img src="images/icons/stup.png" />
+        {{/if}}
       </div>
     </td>
     <td style="vertical-align: top" class="text">
@@ -74,6 +77,16 @@
     </td>
     {{if $mode_dupa}}
       <td></td>
+    {{/if}}
+    {{if $mode_lite}}
+      <td class="text">
+        {{if $line->_ref_last_administration}}
+          {{$line->_ref_last_administration->quantite}} {{$line->_ref_last_administration->unite_prise}}
+          le {{$line->_ref_last_administration->dateTime|date_format:$conf.date}} à {{$line->_ref_last_administration->dateTime|date_format:$conf.time}}
+        {{elseif !$line->_ref_administrations|@count}}
+          <div class="empty">{{tr}}CAdministration.none{{/tr}}</div>
+        {{/if}}
+      </td>
     {{/if}}
     {{assign var=chap_sans_planif value=$line->_chapitre}}
     {{if ($line->_class == "CPrescriptionLineMedicament" || $conf.dPprescription.CCategoryPrescription.$chap_sans_planif.alert_sans_planif) &&
@@ -180,6 +193,9 @@
       {{foreach from=$line->_ref_lines item=_line_item}}
         <div>
           {{$_line_item->_ucd_view}}
+          {{if $_line_item->_ref_produit->_is_stupefiant}}
+            <img src="images/icons/stup.png" />
+          {{/if}}
           <br />
           <strong>
             {{$_line_item->_posologie}}
@@ -257,6 +273,16 @@
       </td>
     {{else}}
       {{foreach from=$line->_ref_lines item=_line}}
+        {{if $mode_lite}}
+          <td class="text">
+            {{if isset($_line->_ref_last_administration|smarty:nodefaults)}}
+              {{$_line->_ref_last_administration->quantite}} {{$_line->_ref_last_administration->unite_prise}}
+              le {{$_line->_ref_last_administration->dateTime|date_format:$conf.date}} à {{$_line->_ref_last_administration->dateTime|date_format:$conf.time}}
+            {{elseif !$_line->_ref_administrations|@count}}
+              <div class="empty">{{tr}}CAdministration.none{{/tr}}</div>
+            {{/if}}
+          </td>
+        {{/if}}
         {{foreach from=$dates_plan_soin item=_moments key=_date}}
           {{foreach from=$_moments item=_moment name=moment}}
             {{assign var="text_align" value="right"}}
