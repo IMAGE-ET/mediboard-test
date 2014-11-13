@@ -14,7 +14,7 @@
     }
     table {
       width: 100% !important;
-      font-size: inherit; !important
+      font-size: inherit !important;
     }
   }
   @media screen {
