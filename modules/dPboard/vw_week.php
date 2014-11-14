@@ -127,29 +127,31 @@ foreach ($plagesOp as $_op) {
 }
 
 // plages conge
-$conge = new CPlageConge();
-$where_conge = array();
-$where_conge["date_debut"] = " <= '$fin' ";
-$where_conge["date_fin"] = " >= '$debut' ";
-$where_conge["user_id"] = " = '$chirSel' ";
-/** @var CPlageConge[] $conges */
-$conges = $conge->loadList($where_conge);
-foreach ($conges as $_conge) {
-  $_dates = array();
-  $_dates[] = $_conge->date_debut;
-  $_date = $_conge->date_debut;
-  if ($_conge->date_debut != $_conge->date_fin) {
-    while($_date != $_conge->date_fin) {
-      $_date = CMbDT::date("+1 DAY", $_date);
-      $_dates[] = $_date;
+if (CModule::getActive("dPpersonnel")) {
+  $conge = new CPlageConge();
+  $where_conge = array();
+  $where_conge["date_debut"] = " <= '$fin' ";
+  $where_conge["date_fin"] = " >= '$debut' ";
+  $where_conge["user_id"] = " = '$chirSel' ";
+  /** @var CPlageConge[] $conges */
+  $conges = $conge->loadList($where_conge);
+  foreach ($conges as $_conge) {
+    $_dates = array();
+    $_dates[] = $_conge->date_debut;
+    $_date = $_conge->date_debut;
+    if ($_conge->date_debut != $_conge->date_fin) {
+      while ($_date != $_conge->date_fin) {
+        $_date = CMbDT::date("+1 DAY", $_date);
+        $_dates[] = $_date;
+      }
     }
-  }
-  $libelle = '<h3 style="text-align: center">
+    $libelle = '<h3 style="text-align: center">
     CONGES</h3>
-    <p style="text-align: center">'.CMbString::htmlEntities($_conge->libelle).'</p>';
-  foreach ($_dates as $_date) {
-    $event = new CPlanningEvent($_conge->_guid.$_date, $_date, 1430 , $libelle, "#ddd", true, "hatching", null, false );
-    $planning->addEvent($event);
+    <p style="text-align: center">' . CMbString::htmlEntities($_conge->libelle) . '</p>';
+    foreach ($_dates as $_date) {
+      $event = new CPlanningEvent($_conge->_guid . $_date, $_date, 1430, $libelle, "#ddd", true, "hatching", null, false);
+      $planning->addEvent($event);
+    }
   }
 }
 
