@@ -30,6 +30,7 @@ CView::checkin();
 $copies = array(
   //  ||       object_class       ||        field       ||      target_field       ||
   array("CConstantesMedicales",     "user_id",            "user_id"),
+  array("CConstantesMedicales",     "date",               "creation_date"),
   array("CAlert",                   "date",               "creation_date"),
   array("CCompteRendu",             "date",               "creation_date"),
 );
