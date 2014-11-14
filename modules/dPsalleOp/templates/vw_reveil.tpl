@@ -122,7 +122,7 @@
         e.up('tr').show();
       }
       else {
-        if (!e.textContent.like(value)) {
+        if (!e.getText().like(value)) {
           e.up('tr').hide();
         }
         else {
