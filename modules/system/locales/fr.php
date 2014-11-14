@@ -2040,6 +2040,7 @@ $locales['CTagItem-title-modify'] = 'Modifier l\'association';
 $locales['CTagItem.all'] = 'Toutes les associations';
 $locales['CTagItem.none'] = 'Aucune association';
 $locales['CTagItem.one'] = 'association d\'étiquette';
+$locales['CTag|pl'] = 'Étiquettes';
 $locales['CTaskingObjectHandler'] = 'Gestionnaire de tâches';
 $locales['CTaskingObjectHandler-desc'] = 'Gestionnaire de tâches';
 $locales['CTranslationOverwrite'] = 'Traductions de remplacement';
