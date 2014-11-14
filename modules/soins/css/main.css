@@ -6,6 +6,14 @@ table.tbl td.right_day {
   border-right: 2px solid grey;
 }
 
+table.tbl td.first_perf {
+  border-top: 1px solid grey !important;
+}
+
+table.tbl td.last_perf {
+  border-bottom: 1px solid grey !important;
+}
+
 tr.in_progress_before, tr.in_progress_after {
   display: none !important;
 }

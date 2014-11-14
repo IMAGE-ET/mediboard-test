@@ -26,31 +26,32 @@
   {{* Entête *}}
   <thead>
     <tr class="clear">
+      <td colspan="{{$th_chap_colspan}}" class="button">
+        <h3>
+          <a href="#" onclick="window.print()">
+            {{$patient}}
+           </a>
+        </h3>
+      </td>
+    </tr>
+    <tr class="clear">
       <td colspan="{{$th_chap_colspan}}">
         <table class="main">
           <tr>
-            <th colspan="4">
-              <h1 style="page-break-after: auto; text-align: center;">
-                <a href="#" onclick="window.print()">
-                  Impression du {{$now|date_format:$conf.longdate}} à {{$now|date_format:$conf.time}} <br />
-                </a>
-              </h1>
-            </th>
-          </tr>
-          <tr>
             <td class="text" style="width: 25%; vertical-align: top;">
-              <h2>
-                <strong>SERVICE :</strong>
+              Impression du {{$now|date_format:$conf.longdate}} à {{$now|date_format:$conf.time}} <br />
 
-                {{if isset($service|smarty:nodefaults)}}
-                  {{mb_value object=$service field=nom}}
-                {{elseif $sejour->_ref_curr_affectation->_id}}
-                  {{mb_value object=$sejour->_ref_curr_affectation->_ref_service field=nom}}
-                {{/if}}
-                {{if $sejour->_ref_curr_affectation->_id}}
-                  &mdash; <strong>LIT : </strong> {{$sejour->_ref_curr_affectation}}
-                {{/if}}
-              </h2>
+              <br />
+              <strong>SERVICE :</strong>
+
+              {{if isset($service|smarty:nodefaults)}}
+                {{mb_value object=$service field=nom}}
+              {{elseif $sejour->_ref_curr_affectation->_id}}
+                {{mb_value object=$sejour->_ref_curr_affectation->_ref_service field=nom}}
+              {{/if}}
+              {{if $sejour->_ref_curr_affectation->_id}}
+                &mdash; <strong>LIT : </strong> {{$sejour->_ref_curr_affectation}}
+              {{/if}}
             </td>
             <td style="width: 25%; vertical-align: top;">
               Civilité : {{mb_value object=$patient field=civilite}} {{mb_value object=$patient field=nom}} ({{mb_value object=$patient field=nom_jeune_fille}}) {{mb_value object=$patient field=prenom}}
@@ -86,6 +87,7 @@
         </table>
       </td>
     </tr>
+    <tr>
       <th class="title" style="width: 20%" colspan="{{if $mode_dupa}}2{{elseif $mode_lite}}4{{else}}3{{/if}}">
         {{tr}}soins.dupa_prescriptions{{/tr}}
       </th>
@@ -160,33 +162,16 @@
       {{/if}}
     </tr>
   </thead>
-  <tfoot>
-    {{* Dernière ligne avec les initiales *}}
-    <tr>
-      <td colspan="{{if $mode_dupa || $mode_lite}}4{{else}}3{{/if}}" style="text-align: right;">Initiales :</td>
-      {{assign var=prescription_id value=$prescription->_id}}
-      {{foreach from=$dates_plan_soin item=_moments key=_date}}
-        {{foreach from=$_moments item=_moment name=moment}}
-          <td class="{{if $smarty.foreach.moment.first}}left_day{{elseif $smarty.foreach.moment.last}}right_day{{/if}}">
-            {{if @isset($initiales.$prescription_id.$_date.$_moment|smarty:nodefaults)}}
-              {{foreach from=$initiales.$prescription_id.$_date.$_moment item=_initiales name=initiales}}
-                {{$_initiales}}
-                {{if !$smarty.foreach.initiales.last}} - {{/if}}
-              {{/foreach}}
-            {{/if}}
-          </td>
-        {{/foreach}}
-      {{/foreach}}
-    </tr>
-  </tfoot>
-  <tbody>
-    {{* Parcours des lignes *}}
 
-    {{* Lignes de perfusion *}}
+  {{* Parcours des lignes *}}
+
+  {{* Lignes de perfusion *}}
     {{if $prescription->_ref_prescription_line_mixes_for_plan|@count}}
-      <tr>
-        <th colspan="{{$th_chap_colspan}}" class="section">Perfusions</th>
-      </tr>
+      <tbody>
+        <tr>
+          <th colspan="{{$th_chap_colspan}}" class="section">Perfusions</th>
+        </tr>
+      </tbody>
       {{foreach from=$prescription->_ref_prescription_line_mixes_for_plan item=line}}
         {{mb_include module=soins template=inc_offline_vw_line}}
       {{/foreach}}
@@ -199,10 +184,11 @@
     {{/if}}
 
     {{if $prescription->_ref_injections_for_plan|@count}}
-      <tr>
-        <th colspan="{{$th_chap_colspan}}" class="section">Injections</th>
-      </tr>
-
+      <tbody>
+        <tr>
+          <th colspan="{{$th_chap_colspan}}" class="section">Injections</th>
+        </tr>
+      </tbody>
       {{* Lignes de médicaments (injectables) *}}
       {{foreach from=$prescription->_ref_injections_for_plan item=_cat_ATC key=_key_cat_ATC}}
         {{foreach from=$_cat_ATC item=lines}}
@@ -220,9 +206,11 @@
     {{/if}}
 
     {{if $prescription->_ref_lines_med_for_plan|@count}}
-      <tr>
-        <th colspan="{{$th_chap_colspan}}" class="section">Médicaments</th>
-      </tr>
+      <tbody>
+        <tr>
+          <th colspan="{{$th_chap_colspan}}" class="section">Médicaments</th>
+        </tr>
+      </tbody>
       {{* Lignes de médicaments *}}
       {{foreach from=$prescription->_ref_lines_med_for_plan item=_cat_ATC key=_key_cat_ATC}}
         {{foreach from=$_cat_ATC item=lines}}
@@ -241,9 +229,11 @@
 
     {{* Lignes d'éléments *}}
     {{if $prescription->_ref_lines_elt_for_plan|@count}}
-      <tr>
-        <th colspan="{{$th_chap_colspan}}" class="section">Elements</th>
-      </tr>
+      <tbody>
+        <tr>
+          <th colspan="{{$th_chap_colspan}}" class="section">Elements</th>
+        </tr>
+      </tbody>
       {{foreach from=$prescription->_ref_lines_elt_for_plan item=elements_chap}}
         {{foreach from=$elements_chap item=elements_cat}}
           {{foreach from=$elements_cat item=_element}}
@@ -263,9 +253,11 @@
 
     {{* Inscriptions *}}
     {{if $prescription->_ref_inscriptions_for_plan|@count}}
-      <tr>
-        <th colspan="{{$th_chap_colspan}}" class="section">Inscriptions</th>
-      </tr>
+      <tbody>
+        <tr>
+          <th colspan="{{$th_chap_colspan}}" class="section">Inscriptions</th>
+        </tr>
+      </tbody>
       {{foreach from=$prescription->_ref_inscriptions_for_plan item=line}}
         {{mb_include module=soins template=inc_offline_vw_line}}
       {{/foreach}}
@@ -276,5 +268,24 @@
         {{/foreach}}
       {{/if}}
     {{/if}}
-  </tbody>
+
+  <tfoot>
+  {{* Dernière ligne avec les initiales *}}
+  <tr>
+    <td colspan="{{if $mode_dupa || $mode_lite}}4{{else}}3{{/if}}" style="text-align: right;">Initiales :</td>
+    {{assign var=prescription_id value=$prescription->_id}}
+    {{foreach from=$dates_plan_soin item=_moments key=_date}}
+      {{foreach from=$_moments item=_moment name=moment}}
+        <td class="{{if $smarty.foreach.moment.first}}left_day{{elseif $smarty.foreach.moment.last}}right_day{{/if}}">
+          {{if @isset($initiales.$prescription_id.$_date.$_moment|smarty:nodefaults)}}
+            {{foreach from=$initiales.$prescription_id.$_date.$_moment item=_initiales name=initiales}}
+              {{$_initiales}}
+              {{if !$smarty.foreach.initiales.last}} - {{/if}}
+            {{/foreach}}
+          {{/if}}
+        </td>
+      {{/foreach}}
+    {{/foreach}}
+  </tr>
+  </tfoot>
 </table>

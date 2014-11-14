@@ -9,10 +9,6 @@
  * @link     http://www.mediboard.org
 *}}
 
-<script>
-
-</script>
-
 <style>
   @media print {
     div.modal_view {
@@ -27,7 +23,7 @@
 
     table {
       width: 100% !important;
-      font-size: inherit; !important
+      font-size: inherit !important;
     }
   }
 </style>
