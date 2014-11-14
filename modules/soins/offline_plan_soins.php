@@ -291,11 +291,11 @@ foreach ($sejours as $_sejour) {
         if (count($_line_item->_administrations)) {
           foreach ($_line_item->_administrations as $date => $_administrations_by_date) {
             foreach ($_administrations_by_date as $_hour => $_quantite) {
-              if (!isset($postes_by_date[$_date][$_hour])) {
+              if (!isset($postes_by_date[$date][$_hour])) {
                 continue;
               }
-              $key = $postes_by_date[$_date][$_hour];
-              @$_line_item->_administrations_moment[$_date][$key["moment"]] += $_quantite;
+              $key = $postes_by_date[$date][$_hour];
+              @$_line_item->_administrations_moment[$date][$key["moment"]] += $_quantite;
             }
           }
 

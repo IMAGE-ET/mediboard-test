@@ -9,6 +9,7 @@
  * @link     http://www.mediboard.org
 *}}
 
+<tbody>
 {{if $line->_class == "CPrescriptionLineMedicament" || $line->_class == "CPrescriptionLineElement"}}
   <tr>
     <td class="text" style="vertical-align: top">
@@ -177,56 +178,71 @@
   </tr>
 {{else}}
   {{* Ligne de perfusion *}}
-  {{assign var=nb_lines value=$line->_ref_lines|@count}}
-  <tr>
-    <td class="text" rowspan="{{$nb_lines}}" style="vertical-align: top">
-      {{if $line->_ref_log_signature_prat->_id}}
-        {{$line->_ref_log_signature_prat|date_format:$conf.date}} <br />
-      {{/if}}
-      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$line->_ref_praticien}}
-      <div class="compact">
-        Du {{$line->_debut|date_format:$conf.date}} à {{$line->_debut|date_format:$conf.time}} au
-        {{$line->_fin|date_format:$conf.date}} à {{$line->_fin|date_format:$conf.time}}
-      </div>
-    </td>
-    <td class="text" rowspan="{{$nb_lines}}" style="vertical-align: top">
-      {{foreach from=$line->_ref_lines item=_line_item}}
-        <div>
-          {{$_line_item->_ucd_view}}
-          {{if $_line_item->_ref_produit->_is_stupefiant}}
-            <img src="images/icons/stup.png" />
+  {{foreach from=$line->_ref_lines item=_line_item name=lines_items}}
+    <tr>
+      <td class="text {{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}" style="vertical-align: top;">
+        {{if $smarty.foreach.lines_items.first}}
+          {{if $line->_ref_log_signature_prat->_id}}
+            {{$line->_ref_log_signature_prat|date_format:$conf.date}} <br />
           {{/if}}
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$line->_ref_praticien}}
+          <div class="compact">
+            Du {{$line->_debut|date_format:$conf.date}} à {{$line->_debut|date_format:$conf.time}} au
+            {{$line->_fin|date_format:$conf.date}} à {{$line->_fin|date_format:$conf.time}}
+          </div>
+        {{/if}}
+      </td>
+      <td class="text {{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}" style="vertical-align: top;">
+        {{$_line_item->_ucd_view}}
+        {{if $_line_item->_ref_produit->_is_stupefiant}}
+          <img src="images/icons/stup.png" />
+        {{/if}}
+        <br />
+        <strong>
+          {{$_line_item->_posologie}}
+          {{if $_line_item->_unite_administration && $_line_item->_unite_administration != "ml"}}
+            [{{$_line_item->_unite_administration}}]
+          {{/if}}
+        </strong>
+        {{if $line->voie}}
           <br />
-          <strong>
-            {{$_line_item->_posologie}}
-            {{if $_line_item->_unite_administration && $_line_item->_unite_administration != "ml"}}
-              [{{$_line_item->_unite_administration}}]
+          {{mb_value object=$line field=voie}}
+        {{/if}}
+        <div>
+          {{if $line->conditionnel}}
+            {{if $line->_current_active}}
+              <img src="images/icons/cond.png" />
+            {{else}}
+              <img src="images/icons/cond_barre.png" />
             {{/if}}
-          </strong>
-        </div>
-      {{/foreach}}
-      {{if $line->voie}}
-        {{mb_value object=$line field=voie}}
-      {{/if}}
-      <div>
-        {{if $line->conditionnel}}
-          {{if $line->_current_active}}
-            <img src="images/icons/cond.png" />
-          {{else}}
-            <img src="images/icons/cond_barre.png" />
           {{/if}}
+          {{if $line->traitement_personnel}}
+            <img src="images/icons/tp.png" />
+          {{/if}}
+          {{if $line->premedication}}
+            <img src="images/icons/premed.png" />
+          {{/if}}
+        </div>
+        {{if $mode_dupa}}
+          <hr style="width: 70%; border-color: #aaa; margin: 1px auto;">
+          <div class="compact">
+            <div style="white-space: nowrap;">
+              {{if $line->_frequence}}
+                {{if $line->type_line == "perfusion"}}Débit initial: {{/if}}
+                {{$line->_frequence}}
+                {{if $line->volume_debit && $line->duree_debit && $line->type_line != "oxygene"}}
+                  <br />
+                  ({{mb_value object=$line field=volume_debit}} ml en {{mb_value object=$line field=duree_debit}} h)
+                {{/if}}
+              {{/if}}
+            </div>
+            <em>{{mb_value object=$line field=commentaire}}</em>
+          </div>
         {{/if}}
-        {{if $line->traitement_personnel}}
-          <img src="images/icons/tp.png" />
-        {{/if}}
-        {{if $line->premedication}}
-          <img src="images/icons/premed.png" />
-        {{/if}}
-      </div>
-      {{if $mode_dupa}}
-        <hr style="width: 70%; border-color: #aaa; margin: 1px auto;">
-        <div class="compact">
-          <div style="white-space: nowrap;">
+      </td>
+      <td style="vertical-align: top;" class="text {{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}">
+        {{if !$mode_dupa}}
+          <div class="compact">
             {{if $line->_frequence}}
               {{if $line->type_line == "perfusion"}}Débit initial: {{/if}}
               {{$line->_frequence}}
@@ -235,52 +251,35 @@
                 ({{mb_value object=$line field=volume_debit}} ml en {{mb_value object=$line field=duree_debit}} h)
               {{/if}}
             {{/if}}
-          </div>
-          <em>{{mb_value object=$line field=commentaire}}</em>
-        </div>
-      {{/if}}
-    </td>
-    <td rowspan="{{$nb_lines}}" style="vertical-align: top" class="text">
-      {{if !$mode_dupa}}
-        <div class="compact">
-          {{if $line->_frequence}}
-            {{if $line->type_line == "perfusion"}}Débit initial: {{/if}}
-            {{$line->_frequence}}
-            {{if $line->volume_debit && $line->duree_debit && $line->type_line != "oxygene"}}
+            <em>
+              {{mb_value object=$line field=commentaire}}
               <br />
-              ({{mb_value object=$line field=volume_debit}} ml en {{mb_value object=$line field=duree_debit}} h)
-            {{/if}}
-          {{/if}}
-          <em>
-            {{mb_value object=$line field=commentaire}}
-            <br />
-            {{mb_value object=$line field=commentaire_pharma}}
-          </em>
-        </div>
-      {{/if}}
-    </td>
-    {{if $mode_dupa}}
-      <td rowspan="{{$nb_lines}}"></td>
-    {{/if}}
-    {{if !$line->_current_active &&
-         ($line->mode_bolus != "bolus") &&
-         ($line->continuite != "continue" || "CAppUI::conf"|static_call:"dPprescription CPrescription perf_continue_manuelle":"CGroups-$g" == '0') &&
-         !$line->_count_planifications}}
-      <td colspan="{{$colspan}}" rowspan="{{$nb_lines}}" class="left_day right_day">
-        <div class="small-warning">
-          <strong>{{tr}}CPrescription-no_planif{{/tr}}</strong>
-        </div>
+              {{mb_value object=$line field=commentaire_pharma}}
+            </em>
+          </div>
+        {{/if}}
       </td>
-    {{else}}
-      {{foreach from=$line->_ref_lines item=_line}}
+      {{if $mode_dupa}}
+        <td class="{{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}"></td>
+      {{/if}}
+      {{if !$line->_current_active &&
+           ($line->mode_bolus != "bolus") &&
+           ($line->continuite != "continue" || "CAppUI::conf"|static_call:"dPprescription CPrescription perf_continue_manuelle":"CGroups-$g" == '0') &&
+           !$line->_count_planifications}}
+        <td colspan="{{$colspan}}" class="left_day right_day {{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}">
+          <div class="small-warning">
+            <strong>{{tr}}CPrescription-no_planif{{/tr}}</strong>
+          </div>
+        </td>
+      {{else}}
         {{if $mode_lite}}
-          <td class="text">
-            {{if isset($_line->_ref_last_administration|smarty:nodefaults)}}
-              {{$_line->_ref_last_administration->quantite}} {{$_line->_ref_last_administration->unite_prise}}
-              le {{$_line->_ref_last_administration->dateTime|date_format:$conf.date}} à {{$_line->_ref_last_administration->dateTime|date_format:$conf.time}}
-            {{elseif !$_line->_ref_administrations|@count}}
-              <div class="empty">{{tr}}CAdministration.none{{/tr}}</div>
-            {{/if}}
+          <td class="text {{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}" style="vertical-align: top;">
+              {{if isset($_line_item->_ref_last_administration|smarty:nodefaults)}}
+                {{$_line_item->_ref_last_administration->quantite}} {{$_line_item->_ref_last_administration->unite_prise}}
+                le {{$_line_item->_ref_last_administration->dateTime|date_format:$conf.date}} à {{$_line_item->_ref_last_administration->dateTime|date_format:$conf.time}}
+              {{elseif !$_line_item->_ref_administrations|@count}}
+                <div class="empty">{{tr}}CAdministration.none{{/tr}}</div>
+              {{/if}}
           </td>
         {{/if}}
         {{foreach from=$dates_plan_soin item=_moments key=_date}}
@@ -292,52 +291,53 @@
 
             <td style="vertical-align: top; text-align: center;"
                 class="{{if $text_align == "left"}}hatching{{/if}}
-                {{if $smarty.foreach.moment.first}}left_day{{elseif $smarty.foreach.moment.last}}right_day{{/if}}">
-              {{if isset($_line->_administrations_moment.$_date.$_moment|smarty:nodefaults)}}
-                {{assign var=nb_adm value=$_line->_administrations_moment.$_date.$_moment}}
-              {{else}}
-                {{assign var=nb_adm value=""}}
-              {{/if}}
-              {{assign var=original_dateTime value=""}}
-              {{if isset($line->_prises_prevues_moment.$_date.$_moment|smarty:nodefaults)}}
-                {{if array_key_exists('real_hour', $line->_prises_prevues_moment.$_date.$_moment)}}
-                  {{assign var=count_prises value=$line->_prises_prevues_moment.$_date.$_moment.real_hour|@count}}
-                  {{assign var=nb_prevue value=$_line->_quantite_administration*$count_prises}}
-                  {{assign var=hour_prevue value=$line->_prises_prevues_moment.$_date.$_moment.real_hour}}
-                  {{if array_key_exists('original_dateTime', $line->_prises_prevues_moment.$_date.$_moment)}}
-                    {{assign var=original_dateTime value=$line->_prises_prevues_moment.$_date.$_moment.original_dateTime}}
-                  {{/if}}
+                {{if $smarty.foreach.moment.first}}left_day{{elseif $smarty.foreach.moment.last}}right_day{{/if}}
+                {{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}">
+                {{if isset($_line_item->_administrations_moment.$_date.$_moment|smarty:nodefaults)}}
+                  {{assign var=nb_adm value=$_line_item->_administrations_moment.$_date.$_moment}}
                 {{else}}
-                  {{assign var=perf_line_id value=$_line->_id}}
-                  {{if array_key_exists($perf_line_id, $line->_prises_prevues_moment.$_date.$_moment.manual)}}
-                    {{assign var=nb_prevue value=$line->_prises_prevues_moment.$_date.$_moment.manual.$perf_line_id}}
+                  {{assign var=nb_adm value=""}}
+                {{/if}}
+                {{assign var=original_dateTime value=""}}
+                {{if isset($line->_prises_prevues_moment.$_date.$_moment|smarty:nodefaults)}}
+                  {{if array_key_exists('real_hour', $line->_prises_prevues_moment.$_date.$_moment)}}
+                    {{assign var=count_prises value=$line->_prises_prevues_moment.$_date.$_moment.real_hour|@count}}
+                    {{assign var=nb_prevue value=$_line_item->_quantite_administration*$count_prises}}
+                    {{assign var=hour_prevue value=$line->_prises_prevues_moment.$_date.$_moment.real_hour}}
+                    {{if array_key_exists('original_dateTime', $line->_prises_prevues_moment.$_date.$_moment)}}
+                      {{assign var=original_dateTime value=$line->_prises_prevues_moment.$_date.$_moment.original_dateTime}}
+                    {{/if}}
                   {{else}}
-                    {{assign var=nb_prevue value=""}}
+                    {{assign var=perf_line_id value=$_line_item->_id}}
+                    {{if array_key_exists($perf_line_id, $line->_prises_prevues_moment.$_date.$_moment.manual)}}
+                      {{assign var=nb_prevue value=$line->_prises_prevues_moment.$_date.$_moment.manual.$perf_line_id}}
+                    {{else}}
+                      {{assign var=nb_prevue value=""}}
+                    {{/if}}
                   {{/if}}
-                {{/if}}
-              {{else}}
-                {{assign var=nb_prevue value=""}}
-                {{assign var=hour_prevue value=""}}
-              {{/if}}
-
-              <div class="compact">
-                {{if $text_align == "left"}}
-                  {{if $nb_adm}}
-                    {{$nb_adm}}
-                  {{elseif $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date)}}
-                    0
-                  {{/if}}
-
-                  {{if $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date) && ($nb_prevue != $nb_adm)}}/{{$nb_prevue}}{{/if}}
                 {{else}}
-                  {{* Que les planifications *}}
-                  {{if $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date)}}{{$nb_prevue}}{{/if}}
+                  {{assign var=nb_prevue value=""}}
+                  {{assign var=hour_prevue value=""}}
                 {{/if}}
-              </div>
+
+
+                  {{if $text_align == "left"}}
+                    {{if $nb_adm}}
+                      {{$nb_adm}}
+                    {{elseif $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date)}}
+                      0
+                    {{/if}}
+
+                    {{if $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date) && ($nb_prevue != $nb_adm)}}/{{$nb_prevue}}{{/if}}
+                  {{else}}
+                    {{* Que les planifications *}}
+                    {{if $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date)}}{{$nb_prevue}}{{/if}}
+                  {{/if}}
             </td>
           {{/foreach}}
         {{/foreach}}
-        </tr>
-      {{/foreach}}
+      </tr>
     {{/if}}
+  {{/foreach}}
 {{/if}}
+</tbody>
