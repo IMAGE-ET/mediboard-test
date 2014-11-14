@@ -314,9 +314,16 @@ function checkLock(oCheckbox) {
 
 function toggleLock(user_id) {
   var form = getForm('editFrm');
+  var formLock = getForm("LockDocOwner");
+
   $V(form.valide, $V(form.valide) == '1' ? 0 : 1);
   $V(form.locker_id, user_id);
   $V(form.callback, "afterLock");
+
+  if ($V(form.valide) == '1' && formLock.change_owner.checked) {
+    $V(form.author_id, '{{$app->user_id}}');
+  }
+
   form.onsubmit();
   Control.Modal.close();
 }
@@ -541,6 +548,17 @@ Main.add(function() {
           </th>
         </tr>
         <tr>
+          <td colspan="2" class="button">
+            <label>
+              <input type="checkbox" name="change_owner" {{if $app->_ref_user->isPraticien()}}checked{{/if}}/>
+              <strong>Devenir propriétaire du document</strong>
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+        </tr>
+        <tr>
           <td class="text button" colspan="2">
             <strong>Souhaitez-vous réellement verrouiller ce document sous votre nom ?</strong>
           </td>
@@ -670,6 +688,7 @@ Main.add(function() {
   {{mb_field object=$compte_rendu field="valide" hidden=1}}
   {{mb_field object=$compte_rendu field="locker_id" hidden=1}}
   {{mb_field object=$compte_rendu field="factory" hidden=1}}
+  {{mb_field object=$compte_rendu field="author_id" hidden=1}}
   {{if $header_footer_fly}}
     <div id="header_footer_fly" style="display: none">
       <table class="tbl">
