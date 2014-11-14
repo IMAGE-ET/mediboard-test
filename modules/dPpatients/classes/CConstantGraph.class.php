@@ -597,19 +597,10 @@ class CConstantGraph {
         /* Get the last 5 user logs of the CConstantesMedicales object */
         $users_logs = array();
         if ($constant_name[0] !== "_") {
-          $_value->loadLogs();
-          $logs = $_value->_ref_logs;
+          $_value->loadRefUser();
 
-          if (count($logs) > 5) {
-            array_splice($logs, 5);
-          }
-
-          foreach ($logs as $_log) {
-            $_user = $_log->loadRefUser();
-
-            if ($_user) {
-              $users_logs[] = utf8_encode(CMbDT::format($_log->date, '%d/%m/%y %H:%M') . ' - ' . $_user->_view);
-            }
+          if ($_value->_ref_user) {
+            $users_logs[] = utf8_encode(CMbDT::format($_value->getCreationDate(), '%d/%m/%y %H:%M') . ' - ' . $_value->_ref_user->_view);
           }
         }
 

@@ -2718,7 +2718,13 @@ class CSetupdPpatients extends CSetup {
     $this->addDefaultConfig("dPpatients identitovigilance show_patient_link" , "dPpatients CPatient show_patient_link");
     $this->addDefaultConfig("dPpatients CTraitement enabled" , "dPpatients CTraitement enabled");
 
-    $this->mod_version = '2.23';
+    $this->makeRevision('2.23');
+
+    $query = "ALTER TABLE `constantes_medicales`
+                ADD `creation_date` DATETIME AFTER `user_id`;";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.24';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

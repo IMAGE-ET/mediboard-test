@@ -31,6 +31,7 @@ class CConstantesMedicales extends CMbObject {
 
   // DB Fields
   public $user_id;
+  public $creation_date;
   public $patient_id;
   public $datetime;
   public $context_class;
@@ -917,6 +918,7 @@ class CConstantesMedicales extends CMbObject {
   function getProps() {
     $props = parent::getProps();
     $props['user_id']                = 'ref class|CMediusers';
+    $props['creation_date']          = 'dateTime';
     $props['patient_id']             = 'ref notNull class|CPatient';
     $props['datetime']               = 'dateTime notNull';
     $props['context_class']          = 'enum list|CConsultation|CSejour|CPatient';
@@ -1375,6 +1377,16 @@ class CConstantesMedicales extends CMbObject {
     return $this->_ref_user;
   }
 
+  function getCreationDate() {
+    if (!$this->creation_date) {
+      $log = $this->loadCreationLog();
+      $this->creation_date = $log->date;
+      $this->store();
+    }
+
+    return $this->creation_date;
+  }
+
   /**
    * @see parent::check()
    */
@@ -1446,8 +1458,9 @@ class CConstantesMedicales extends CMbObject {
 
     if (!$this->_id) {
       $this->user_id = CMediusers::get()->_id;
+      $this->creation_date = CMbDT::dateTime();
       if ($this->datetime == 'now') {
-        $this->datetime = CMbDT::dateTime();
+        $this->datetime = $this->creation_date;
       }
     }
 
