@@ -9,6 +9,12 @@
  * @link     http://www.mediboard.org
 *}}
 
+<style>
+  table tbody.line_print {
+    page-break-inside: avoid;
+  }
+</style>
+
 {{foreach from=$sejours item=sejour name=sejour}}
   {{mb_include module=soins template=inc_offline_plan_soins}}
 

@@ -9,7 +9,7 @@
  * @link     http://www.mediboard.org
 *}}
 
-<tbody>
+<tbody class="line_print">
 {{if $line->_class == "CPrescriptionLineMedicament" || $line->_class == "CPrescriptionLineElement"}}
   <tr>
     <td class="text" style="vertical-align: top">
