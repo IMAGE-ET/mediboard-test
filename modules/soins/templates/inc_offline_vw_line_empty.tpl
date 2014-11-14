@@ -9,7 +9,7 @@
  * @link     http://www.mediboard.org
 *}}
 
-<tbody>
+<tbody class="line_print">
   <tr>
     <td style="height: 75px"></td>
     <td></td>

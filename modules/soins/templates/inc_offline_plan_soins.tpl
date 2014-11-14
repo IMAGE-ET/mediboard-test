@@ -167,7 +167,7 @@
 
   {{* Lignes de perfusion *}}
     {{if $prescription->_ref_prescription_line_mixes_for_plan|@count}}
-      <tbody>
+      <tbody class="line_print">
         <tr>
           <th colspan="{{$th_chap_colspan}}" class="section">Perfusions</th>
         </tr>
@@ -184,7 +184,7 @@
     {{/if}}
 
     {{if $prescription->_ref_injections_for_plan|@count}}
-      <tbody>
+      <tbody class="line_print">
         <tr>
           <th colspan="{{$th_chap_colspan}}" class="section">Injections</th>
         </tr>
@@ -206,7 +206,7 @@
     {{/if}}
 
     {{if $prescription->_ref_lines_med_for_plan|@count}}
-      <tbody>
+      <tbody class="line_print">
         <tr>
           <th colspan="{{$th_chap_colspan}}" class="section">Médicaments</th>
         </tr>
@@ -229,7 +229,7 @@
 
     {{* Lignes d'éléments *}}
     {{if $prescription->_ref_lines_elt_for_plan|@count}}
-      <tbody>
+      <tbody class="line_print">
         <tr>
           <th colspan="{{$th_chap_colspan}}" class="section">Elements</th>
         </tr>
@@ -253,7 +253,7 @@
 
     {{* Inscriptions *}}
     {{if $prescription->_ref_inscriptions_for_plan|@count}}
-      <tbody>
+      <tbody class="line_print">
         <tr>
           <th colspan="{{$th_chap_colspan}}" class="section">Inscriptions</th>
         </tr>

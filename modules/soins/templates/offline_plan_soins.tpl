@@ -9,18 +9,9 @@
  * @link     http://www.mediboard.org
 *}}
 
-{{mb_include style=$style template=open_printable}}
-
 <style>
-  @media print {
-    table {
-      border-collapse: collapse !important;
-    }
-
-    table tbody {
-      page-break-inside: avoid;
-      display: table-row-group !important;
-    }
+  table tbody.line_print {
+    page-break-inside: avoid;
   }
 </style>
 
@@ -33,5 +24,3 @@
 {{foreachelse}}
   <h2>Pas de plan de soins à afficher.</h2>
 {{/foreach}}
-
-{{mb_include style=$style template=close_printable}}
