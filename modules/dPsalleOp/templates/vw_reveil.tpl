@@ -25,6 +25,12 @@
   {{mb_script module="Imeds" script="Imeds_results_watcher"}}
 {{/if}}
 
+<style>
+  input.seek_patient {
+    float:right;
+  }
+</style>
+
 <script>
   Main.add(function () {
     Control.Tabs.create('reveil_tabs', true);
@@ -105,6 +111,25 @@
     $V(form.sortie_locker_id, form.sortie_reveil_possible.value ? user_id : '');
     submitReveilForm(form);
     Control.Modal.close();
+  };
+
+  seekPatient = function(input) {
+    var value = $V(input);
+    var field = $(input).up('table').select('span.CPatient-view');
+
+    field.each(function(e) {
+      if (!value) {
+        e.up('tr').show();
+      }
+      else {
+        if (!e.innerText.like(value)) {
+          e.up('tr').hide();
+        }
+        else {
+          e.up('tr').show();
+        }
+      }
+    });
   };
 </script>
 
