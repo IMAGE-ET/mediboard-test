@@ -219,9 +219,10 @@
 
       {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}
         $('jour').show();
-    $('semaine').hide();
+        $('semaine').hide();
         $('tab_dossier_soin').down('li.jour').onmousedown();
-      {{else}}
+      {{/if}}
+      {{if "dPprescription general show_perop_suivi_soins"|conf:"CGroups-$g" || !"soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}
         var tab_dossier_soin = Control.Tabs.create('tab_dossier_soin', true);
         tab_dossier_soin.activeLink.up('li').onmousedown();
       {{/if}}
@@ -392,7 +393,8 @@
 <ul id="tab_dossier_soin" class="control_tabs" style="text-align: left; {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}border-bottom: none;{{/if}}">
   {{if "dPprescription"|module_active}}
     <!-- Plan de soins journée -->
-    <li onmousedown="refreshTabState();" {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}style="display: none;"{{/if}} class="jour">
+    <li onmousedown="refreshTabState();" {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g" && !"dPprescription general show_perop_suivi_soins"|conf:"CGroups-$g"}}style="display: none;"{{/if}}
+        class="jour">
       <a href="#jour">{{tr}}Soin-tabSuivi-tabViewDay{{/tr}}</a>
     </li>
 
@@ -401,7 +403,7 @@
       <a href="#semaine">{{tr}}Soin-tabSuivi-tabViewWeek{{/tr}}</a>
     </li>
     {{if "dPprescription general show_perop_suivi_soins"|conf:"CGroups-$g"}}
-      <li onmousedown="PlanSoins.showPeropAdministrations('{{$prescription_id}}')" {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}style="display: none;"{{/if}}>
+      <li onmousedown="PlanSoins.showPeropAdministrations('{{$prescription_id}}')">
         <a href="#perop_adm" {{if $count_perop_adm == 0}}class="empty"{{/if}}>
           Perop {{if $count_perop_adm}}<small>({{$count_perop_adm}})</small>{{/if}}
         </a>
