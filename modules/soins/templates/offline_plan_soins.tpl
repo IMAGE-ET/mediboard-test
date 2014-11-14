@@ -9,21 +9,6 @@
  * @link     http://www.mediboard.org
 *}}
 
-{{mb_include style=$style template=open_printable}}
-
-<style>
-  @media print {
-    table {
-      border-collapse: collapse !important;
-    }
-
-    table tbody {
-      page-break-inside: avoid;
-      display: table-row-group !important;
-    }
-  }
-</style>
-
 {{foreach from=$sejours item=sejour name=sejour}}
   {{mb_include module=soins template=inc_offline_plan_soins}}
 
@@ -33,5 +18,3 @@
 {{foreachelse}}
   <h2>Pas de plan de soins à afficher.</h2>
 {{/foreach}}
-
-{{mb_include style=$style template=close_printable}}
