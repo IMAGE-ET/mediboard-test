@@ -9,7 +9,11 @@
   Main.add(function(){
     Configuration.edit(
       'dPpatients',
-      ['CService CGroups.group_id', 'CFunctions CGroups.group_id', 'CGroups'],
+      [
+        'constantes / CService CGroups.group_id',
+        'constantes / CFunctions CGroups.group_id',
+        'constantes / CGroups'
+      ],
       'configuration-CConstantesMedicales'
     );
   });

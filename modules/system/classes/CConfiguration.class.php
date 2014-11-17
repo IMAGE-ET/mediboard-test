@@ -535,6 +535,8 @@ class CConfiguration extends CMbMetaObject {
 
     foreach ($model as $_inherit => $_configs) {
       foreach ($patterns as $_patt) {
+        $_inherit = self::_simplifyInherit($_inherit);
+
         // Faster than preg_match
         if ($_inherit === $class || strpos($_inherit, $_patt) !== false) {
           if ($flatten) {
@@ -597,11 +599,24 @@ class CConfiguration extends CMbMetaObject {
    */
   static function getObjectTree($inherit){
     $tree = array();
+
+    $inherit = self::_simplifyInherit($inherit);
     $classes = explode(" ", $inherit);
 
     self::_getObjectTree($tree, $classes);
 
     return $tree;
+  }
+
+  /**
+   * Simplify an inheritance schema, removing the prefix
+   *
+   * @param string $inherit The inheritance schema
+   *
+   * @return string
+   */
+  static protected function _simplifyInherit($inherit) {
+    return preg_replace('@([\w ]+ / )@', "", $inherit);
   }
 
   /**
