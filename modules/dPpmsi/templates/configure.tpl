@@ -1,9 +1,16 @@
+{{mb_script module=pmsi script=PMSI}}
+
 <script>
   Main.add(function() {
     var tabs = Control.Tabs.create('tabs-configure', true);
     if (tabs.activeLink.key == "CConfigEtab") {
       Configuration.edit('dPpmsi', ['CGroups', 'CService CGroups.group_id'], $('CConfigEtab'));
     }
+    {{if "atih"|module_active}}
+      if (tabs.activeLink.key == "Config-UM") {
+        PMSI.loadConfigUms('{{$g}}');
+      }
+    {{/if}}
   });
 </script>
 
@@ -13,6 +20,9 @@
   <li onmousedown="Configuration.edit('dPpmsi', 'CGroups', $('CConfigEtab'))">
     <a href="#CConfigEtab">Config par établissement</a>
   </li>
+  {{if "atih"|module_active}}
+    <li onmousedown="PMSI.loadConfigUms('{{$g}}')"><a href="#Config-UM">{{tr}}config_atih_um{{/tr}}</a></li>
+  {{/if}}
 </ul>
 
 <hr class="control_tabs" />
@@ -26,3 +36,7 @@
 </div>
 
 <div id="CConfigEtab" style="display: none"></div>
+
+{{if "atih"|module_active}}
+  <div id="Config-UM" style="display:none"></div>
+{{/if}}

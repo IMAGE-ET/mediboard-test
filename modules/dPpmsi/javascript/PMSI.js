@@ -284,5 +284,18 @@ PMSI = {
     url.addParam("sejour_id", sejour_id);
     url.addParam("patient_id", patient_id);
     url.requestUpdate("tab-dossier-sejour");
+  },
+
+  loadConfigUms : function (group_id) {
+    new Url("atih", "ajax_vw_config_ums")
+      .addParam("group_id", group_id)
+      .requestUpdate($('Config-UM'));
+  },
+
+  refreshUmLine : function(id) {
+    var path = "CUniteMedicaleInfos"+id;
+    new Url("atih", "ajax_refresh_um_line")
+      .addParam("um_id", id)
+      .requestUpdate(path);
   }
 };

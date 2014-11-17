@@ -818,6 +818,16 @@ class CSetupdPhospi extends CSetup {
                 ADD `is_soins_continue` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.92";
+    $this->makeRevision("0.92");
+    $query= "ALTER TABLE `uf`
+              DROP `nb_lits_um`,
+              DROP `type_autorisation_mode_hospi`;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `uf`
+                CHANGE `type_autorisation_um` `type_autorisation_um` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.93";
   }
 }

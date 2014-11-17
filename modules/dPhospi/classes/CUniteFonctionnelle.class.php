@@ -26,8 +26,6 @@ class CUniteFonctionnelle extends CMbObject {
   public $date_debut;
   public $date_fin;
   public $type_autorisation_um;
-  public $type_autorisation_mode_hospi;
-  public $nb_lits_um;
 
   /** @var CGroups */
   public $_ref_group;
@@ -73,9 +71,7 @@ class CUniteFonctionnelle extends CMbObject {
     $props["type_sejour"]           = "enum list|comp|ambu|exte|seances|ssr|psy|urg|consult";
     $props["date_debut"]            = "date";
     $props["date_fin"]              = "date";
-    $props["type_autorisation_um"]  = "str maxLength|3";
-    $props["type_autorisation_mode_hospi"] = "str maxLength|10";
-    $props["nb_lits_um"]                   = "num maxLength|3";
+    $props["type_autorisation_um"]  = "ref class|CUniteMedicaleInfos";
 
     return $props;
   }
@@ -122,15 +118,6 @@ class CUniteFonctionnelle extends CMbObject {
     }
     return $this->_ref_um = $um;
 
-  }
-
-  /**
-   * Compte le nombre de lits pour l'UF
-   *
-   * @return int
-   */
-  function countLits () {
-    return $this->nb_lits_um;
   }
 
   /**

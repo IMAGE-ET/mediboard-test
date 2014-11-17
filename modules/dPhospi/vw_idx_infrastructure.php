@@ -88,9 +88,17 @@ $ufs = array(
 
 // Récupération des Unités Médicales (pmsi)
 $ums = array ();
+$ums_infos = array ();
 $um  = new CUniteMedicale();
+$um_infos  = new CUniteMedicaleInfos();
+
 if (CSQLDataSource::get("sae")) {
   $ums = $um->loadListUm();
+  $group = CGroups::loadCurrent();
+  $where["group_id"] = " = '$group->_id'";
+  $where["mode_hospi"] = " IS NOT NULL";
+  $where["nb_lits"] = " IS NOT NULL";
+  $ums_infos = $um_infos->loadList($where);
 }
 
 // Chargement de la prestation à ajouter/éditer
@@ -122,6 +130,7 @@ $smarty->assign("tag_lit"       , CLit::getTagLit($group->_id));
 $smarty->assign("ufs"           , $ufs);
 $smarty->assign("uf"            , $uf);
 $smarty->assign("ums"           , $ums);
+$smarty->assign("ums_infos"     , $ums_infos);
 $smarty->assign("prestations"   , $prestations);
 $smarty->assign("prestation"    , $prestation);
 $smarty->assign("praticiens"    , $praticiens);

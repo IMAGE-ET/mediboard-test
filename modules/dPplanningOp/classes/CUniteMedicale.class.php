@@ -66,6 +66,5 @@ class CUniteMedicale extends CMbObject {
 
   function loadListUm() {
     return $this->loadList();
-
   }
 }

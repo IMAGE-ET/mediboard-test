@@ -113,14 +113,22 @@ if ($type_name == "UF") {
 
   // Récupération des Unités Médicales (pmsi)
   $ums = array ();
+  $ums_infos = array ();
   $um  = new CUniteMedicale();
+  $um_infos  = new CUniteMedicaleInfos();
   if (CSQLDataSource::get("sae")) {
     $ums = $um->loadListUm();
+    $group = CGroups::loadCurrent();
+    $where["group_id"] = " = '$group->_id'";
+    $where["mode_hospi"] = " IS NOT NULL";
+    $where["nb_lits"] = " IS NOT NULL";
+    $ums_infos = $um_infos->loadList($where);
   }
 
   $smarty->assign("ufs", $ufs);
   $smarty->assign("uf", $uf);
   $smarty->assign("ums", $ums);
+  $smarty->assign("ums_infos", $ums_infos);
   $smarty->display("inc_vw_idx_ufs.tpl");
 }
 

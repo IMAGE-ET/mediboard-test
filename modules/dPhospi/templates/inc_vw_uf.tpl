@@ -1,12 +1,3 @@
-<script>
-  refreshUM = function(form) {
-      var url = new Url('dPhospi',  'ajax_refresh_um');
-      url.addParam("um_id", $V(form.elements.type_autorisation_um));
-      url.addParam("uf_id", $V(form.elements.uf_id));
-      url.requestUpdate('um_mode_hospi');
-  }
-</script>
-
 <!-- Formulaire d'une unité fonctionnelle -->
 <form name="Edit-CUniteFonctionnelle" action="" method="post" onsubmit="return submit_Ajax(this, 'UF')">
   <input type="hidden" name="m" value="hospi" />
@@ -32,27 +23,20 @@
       <th>{{mb_label object=$uf field=code}}</th>
       <td>{{mb_field object=$uf field=code}}</td>
     </tr>
-    <tr>
-      <th>{{mb_label object=$uf field=type_autorisation_um}}</th>
-      <td>
-        <select name="type_autorisation_um" onchange="refreshUM(this.form)" style="width:14em;">
-          <option value="">{{tr}}Choose{{/tr}}</option>
-          {{foreach from=$ums item=_um}}
-            <option value="{{$_um->_id}}" {{if $uf->type_autorisation_um == $_um->_id}}selected{{/if}}>{{$_um}}</option>
-          {{/foreach}}
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <th>{{mb_label object=$uf field=type_autorisation_mode_hospi}}</th>
-      <td id="um_mode_hospi">
-        {{mb_include module=dPhospi template=inc_vw_um_mode_hospit um=$uf->_ref_um}}
-      </td>
-    </tr>
-    <tr>
-      <th>{{mb_label object=$uf field=nb_lits_um}}</th>
-      <td>{{mb_field object=$uf field=nb_lits_um}}</td>
-    </tr>
+    {{if "atih"|module_active}}
+      <tr>
+        <th>{{mb_label object=$uf field=type_autorisation_um}}</th>
+        <td>
+          <select name="type_autorisation_um" style="width:14em;">
+            <option value="">{{tr}}Choose{{/tr}}</option>
+            {{foreach from=$ums_infos item=_um}}
+              {{assign var=code value=$_um->um_code}}
+              <option value="{{$_um->_id}}" {{if $uf->type_autorisation_um == $_um->_id}}selected{{/if}}>{{$code}} - {{$ums.$code->libelle}}</option>
+            {{/foreach}}
+          </select>
+        </td>
+      </tr>
+    {{/if}}
     <tr>
       <th>{{mb_label object=$uf field=libelle}}</th>
       <td>{{mb_field object=$uf field=libelle}}</td>
