@@ -24,6 +24,12 @@ foreach ($consult->_refs_dossiers_anesth as $consult_anesth) {
   $consultation = $consult_anesth->_ref_consultation;
   $consultation->_ref_patient->loadRefConstantesMedicales(null, array("poids"), $consultation);
 
+  if (!$consultation->_ref_patient->_ref_constantes_medicales->poids && $consultation->loadRefSejour()->_id) {
+    $date = $consultation->_ref_plageconsult->date;
+    $cte = CConstantesMedicales::getRelated(array("poids"), $patient, $consultation->_ref_sejour, $date." 00:00:00", $date." 23:59:00");
+    $consultation->_ref_patient->_ref_constantes_medicales->poids = count($cte) ? reset($cte)->poids : false;
+  }
+
   $consult_anesth->loadRefOperation()->loadRefSejour();
   $consult_anesth->_ref_operation->_ref_sejour->loadRefDossierMedical();
 
