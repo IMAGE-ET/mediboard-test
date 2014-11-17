@@ -41,6 +41,11 @@ $operations = $sejour->_ref_operations;
 $affectations = $sejour->_ref_affectations;
 $datesOperation = array();
 
+// load service for affectations
+if ($sejour->_ref_last_affectation) {
+  $sejour->_ref_last_affectation->loadRefService();
+}
+
 foreach ($operations as $key) {
   $key->loadRefPlageOp();
   $datesOperation[$key->operation_id]['id'] = $key->operation_id;

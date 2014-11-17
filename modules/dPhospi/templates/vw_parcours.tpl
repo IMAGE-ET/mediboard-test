@@ -38,7 +38,7 @@ function editIntervention(op_id) {
 <hr class="control_tabs" />
 
 <div id="parcour" style="display: none;">
-  {{if $sejour->_ref_service->is_soins_continue}}
+  {{if $sejour->_ref_service->is_soins_continue || $sejour->_ref_last_affectation->_ref_service->is_soins_continue}}
     <div class="small-info">{{tr}}CService-msg.is_soins_continue{{/tr}}</div>
   {{/if}}
   <table id="diagramme">
