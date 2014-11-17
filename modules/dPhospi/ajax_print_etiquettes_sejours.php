@@ -26,7 +26,7 @@ $sejour = new CSejour();
 $where = array();
 $where["sejour_id"] = CSQLDataSource::prepareIn($sejours_ids);
 
-$sejours = $sejour->loadList($where);
+$sejours = $sejour->loadList($where, "FIELD(sejour_id, " . implode(",", $sejours_ids) . ")");
 
 CStoredObject::massLoadFwdRef($sejours, "patient_id");
 
