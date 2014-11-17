@@ -278,6 +278,11 @@ $source = preg_replace("/<link\s*[^>]*\s*>/", '', $source);
 $pdf_thumbnails = CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails");
 $pdf_and_thumbs = CAppUI::pref("pdf_and_thumbs");
 
+// Chargement du
+if ($compte_rendu->_id) {
+  $compte_rendu->loadModele();
+}
+
 if (CValue::get("reloadzones") == 1) {
   $smarty->display("inc_zones_fields.tpl");
 }

@@ -868,6 +868,14 @@ Main.add(function() {
           Modifier en-tête et pied de page
         </button>
       {{/if}}
+
+      {{if $compte_rendu->_id && $compte_rendu->_ref_modele->object_id}}
+        {{assign var=modele value=$compte_rendu->_ref_modele}}
+        Version précédente :
+        <a onmouseover="ObjectTooltip.createEx(this, '{{$modele->_guid}}')" href="#1" onclick="Document.edit('{{$modele->_id}}')">
+          {{$compte_rendu}}
+        </a>
+      {{/if}}
     </th>
   </tr>
 
