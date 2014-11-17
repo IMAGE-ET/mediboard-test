@@ -130,6 +130,7 @@
                 {{mb_field object=$acte field=execution hidden=true}}
                 {{mb_field object=$acte field=montant_depassement hidden=true}}
                 {{mb_field object=$acte field=motif_depassement hidden=true emptyLabel="CActeCCAM-motif_depassement"}}
+                {{mb_field object=$acte field=facturable hidden=true}}
                 {{mb_field object=$acte field=extension_documentaire hidden=true}}
 
                 {{foreach from=$_phase->_modificateurs item=_mod name=modificateurs}}
