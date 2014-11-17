@@ -19,8 +19,8 @@
         {{tr}}Upload{{/tr}}
       </button>
     {{/if}}
-    {{if $object && $object->_nb_cancelled_files}}
-      <button class="hslip" onclick="showCancelled(this)">Voir / Masquer {{$object->_nb_cancelled_files}} fichier(s) annulé(s)</button>
+    {{if $object && ($object->_nb_cancelled_files || $object->_nb_cancelled_docs)}}
+      <button class="hslip" onclick="showCancelled(this)">Voir / Masquer {{math equation=x+y x=$object->_nb_cancelled_files y=$object->_nb_cancelled_docs}} fichier(s) annulé(s)</button>
     {{/if}}
   {{/if}}
   {{if $canDoc}}
