@@ -196,7 +196,7 @@ class CMbObject extends CStoredObject {
       return null;
     }
 
-    $this->_nb_cancelled_files = 0;
+    $this->_nb_cancelled_docs = 0;
     foreach ($this->_ref_documents as $_doc) {
       /** @var CCompteRendu $_doc */
       if (!$_doc->canRead()) {
