@@ -26,14 +26,17 @@
     {{if "atih"|module_active}}
       <tr>
         <th>{{mb_label object=$uf field=type_autorisation_um}}</th>
-        <td>
-          <select name="type_autorisation_um" style="width:14em;">
+        <td >
+          <select name="type_autorisation_um" style="width:14em; vertical-align: top">
             <option value="">{{tr}}Choose{{/tr}}</option>
             {{foreach from=$ums_infos item=_um}}
               {{assign var=code value=$_um->um_code}}
               <option value="{{$_um->_id}}" {{if $uf->type_autorisation_um == $_um->_id}}selected{{/if}}>{{$code}} - {{$ums.$code->libelle}}</option>
             {{/foreach}}
           </select>
+          {{if $ums_infos|@count == 0}}
+          <div class="warning" style="display:inline-block"> Vous devez d'abord configurer les UM <br/> dans le module pmsi pour y avoir accés</div>
+          {{/if}}
         </td>
       </tr>
     {{/if}}
