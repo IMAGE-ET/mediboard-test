@@ -2169,7 +2169,7 @@ $locales['config-dPpatients-CConstantesMedicales-drain_sinus_cumul_reset_hour-de
 $locales['config-dPpatients-CConstantesMedicales-drain_thoracique_cumul_reset_hour'] = 'Heure RAZ Drain thoracique';
 $locales['config-dPpatients-CConstantesMedicales-drain_thoracique_cumul_reset_hour-desc'] = 'Heure RAZ Drain thoracique';
 $locales['config-dPpatients-CConstantesMedicales-graphs_display_mode'] = 'Mode d\'affichage des graphiques de constantes';
-$locales['config-dPpatients-CConstantesMedicales-graphs_display_mode-desc'] = 'Choix du mode d\'affichage des graphiques de constantes';
+$locales['config-dPpatients-CConstantesMedicales-graphs_display_mode-desc'] = 'Classique : affiche les 15 dernières saisies de constantes, Temporel : affiche les saisies sur les X dernières heures (X étant l\'intervalle de temps choisi)';
 $locales['config-dPpatients-CConstantesMedicales-graphs_display_mode-mode'] = 'Mode d\'affichage';
 $locales['config-dPpatients-CConstantesMedicales-graphs_display_mode-mode-classic'] = 'Classique';
 $locales['config-dPpatients-CConstantesMedicales-graphs_display_mode-mode-court'] = 'Mode';
@@ -2178,8 +2178,6 @@ $locales['config-dPpatients-CConstantesMedicales-graphs_display_mode-mode-time']
 $locales['config-dPpatients-CConstantesMedicales-graphs_display_mode-time'] = 'Intervalle de temps';
 $locales['config-dPpatients-CConstantesMedicales-graphs_display_mode-time-court'] = 'Temps';
 $locales['config-dPpatients-CConstantesMedicales-graphs_display_mode-time-desc'] = 'Intervalle de temps affiché dans les graphiques en mode temporel, en heure';
-$locales['config-dPpatients-CConstantesMedicales-important_constantes'] = 'Paramètres par défaut';
-$locales['config-dPpatients-CConstantesMedicales-important_constantes-desc'] = 'Paramètres par défaut';
 $locales['config-dPpatients-CConstantesMedicales-lame_cumul_reset_hour'] = 'Heure RAZ Lame';
 $locales['config-dPpatients-CConstantesMedicales-lame_cumul_reset_hour-desc'] = 'Heure RAZ Lame';
 $locales['config-dPpatients-CConstantesMedicales-redon_accordeon_cumul_reset_hour'] = 'Heure RAZ Redon accordeon';
@@ -2849,10 +2847,9 @@ $locales['config-dPpatients-CConstantesMedicales-selection_cabinet-vision_oeil_d
 $locales['config-dPpatients-CConstantesMedicales-selection_cabinet-vision_oeil_gauche'] = 'Vision oeil gauche';
 $locales['config-dPpatients-CConstantesMedicales-selection_cabinet-vision_oeil_gauche-desc'] = 'Vision oeil gauche';
 $locales['config-dPpatients-CConstantesMedicales-show_cat_tabs'] = 'Catégories en volets';
-$locales['config-dPpatients-CConstantesMedicales-show_cat_tabs-court'] = 'Catégories en volets';
-$locales['config-dPpatients-CConstantesMedicales-show_cat_tabs-desc'] = 'Afficher les catégories de constantes sous forme de volet';
+$locales['config-dPpatients-CConstantesMedicales-show_cat_tabs-desc'] = 'Afficher les catégories de constantes sous forme de volets : Physiologie / Drainage / Biologie';
 $locales['config-dPpatients-CConstantesMedicales-show_enable_all_button'] = 'Afficher le bouton "Afficher toutes les valeurs"';
-$locales['config-dPpatients-CConstantesMedicales-show_enable_all_button-desc'] = 'Afficher le bouton "Afficher toutes les valeurs"';
+$locales['config-dPpatients-CConstantesMedicales-show_enable_all_button-desc'] = 'Permet d\'accéder aux constantes non paramétrées par défaut';
 $locales['config-dPpatients-CConstantesMedicales-sng_cumul_reset_hour'] = 'Heure RAZ SNG';
 $locales['config-dPpatients-CConstantesMedicales-sng_cumul_reset_hour-desc'] = 'Heure RAZ SNG';
 $locales['config-dPpatients-CConstantesMedicales-sonde_nephro_cumul_reset_hour'] = 'Heure RAZ Sonde de néphrostomie';
@@ -2864,7 +2861,7 @@ $locales['config-dPpatients-CConstantesMedicales-sonde_ureterale_cumul_reset_hou
 $locales['config-dPpatients-CConstantesMedicales-sonde_vesicale_cumul_reset_hour'] = 'Heure RAZ Sonde vésicale';
 $locales['config-dPpatients-CConstantesMedicales-sonde_vesicale_cumul_reset_hour-desc'] = 'Heure RAZ Sonde vésicale';
 $locales['config-dPpatients-CConstantesMedicales-stacked_graphs'] = 'Graphiques superposés';
-$locales['config-dPpatients-CConstantesMedicales-stacked_graphs-desc'] = 'Active la superposition des graphiques pour les constantes ayant le même rang. Le nombre maximum de constantes pouvant être sperposées est de 5.';
+$locales['config-dPpatients-CConstantesMedicales-stacked_graphs-desc'] = 'Active la superposition des graphiques pour les constantes ayant le même rang. Le nombre maximum de constantes pouvant être superposées est de 5';
 $locales['config-dPpatients-CConstantesMedicales-unite_cetonemie'] = 'Unité cétonémie';
 $locales['config-dPpatients-CConstantesMedicales-unite_cetonemie-desc'] = 'Unité cétonémie';
 $locales['config-dPpatients-CConstantesMedicales-unite_glycemie'] = 'Unité glycémie';
