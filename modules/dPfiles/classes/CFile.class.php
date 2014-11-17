@@ -30,7 +30,6 @@ class CFile extends CDocumentItem implements IIndexableObject {
   public $file_date;
   public $file_size;
   public $rotation;
-  public $annule;
   public $language;
 
   // Form fields
@@ -105,7 +104,6 @@ class CFile extends CDocumentItem implements IIndexableObject {
     $props["file_type"]          = "str";
     $props["file_name"]          = "str notNull show|0";
     $props["rotation"]           = "num default|0 show|0";
-    $props["annule"]             = "bool default|0 show|0";
     $props["language"]           = "enum list|en-EN|es-ES|fr-CH|fr-FR default|fr-FR show|0";
 
     // Form Fields

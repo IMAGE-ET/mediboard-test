@@ -25,6 +25,7 @@ class CMbObject extends CStoredObject {
   public $_nb_files_docs;
   public $_nb_files;
   public $_nb_cancelled_files;
+  public $_nb_cancelled_docs;
   public $_nb_docs;
   public $_nb_exchanges;
   public $_nb_exchanges_by_format = array();
@@ -194,11 +195,16 @@ class CMbObject extends CStoredObject {
     if (null == $this->_ref_documents = $this->loadBackRefs("documents", "nom")) {
       return null;
     }
+
+    $this->_nb_cancelled_files = 0;
     foreach ($this->_ref_documents as $_doc) {
       /** @var CCompteRendu $_doc */
       if (!$_doc->canRead()) {
         unset($this->_ref_documents[$_doc->_id]);
         continue;
+      }
+      if ($_doc->annule) {
+        $this->_nb_cancelled_docs++;
       }
     }
 

@@ -29,6 +29,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
   public $preface_id;
   public $ending_id;
   public $modele_id;
+  public $parent_doc_id;
 
   // DB fields
   public $nom;
@@ -234,6 +235,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     $props["preface_id"]       = "ref class|CCompteRendu";
     $props["ending_id"]        = "ref class|CCompteRendu";
     $props["modele_id"]        = "ref class|CCompteRendu nullify show|0";
+    $props["parent_doc_id"]    = "ref class|CCompteRendu";
     $props["height"]           = "float min|0 show|0";
     $props["margin_top"]       = "float notNull min|0 default|2 show|0";
     $props["margin_bottom"]    = "float notNull min|0 default|2 show|0";
@@ -299,8 +301,8 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_extensioned = "$this->nom.htm";
-    $this->_view = $this->object_id ? "" : "Modèle : ";
-    $this->_view.= $this->nom;
+    $this->_view        = $this->object_id ? "" : "Modèle : ";
+    $this->_view .= $this->nom;
 
     if ($this->object_id) {
       $modele = $this->loadModele();
@@ -327,9 +329,9 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
     $this->_page_format = "";
 
-    foreach (CCompteRendu::$_page_formats as $_key=>$_format) {
+    foreach (CCompteRendu::$_page_formats as $_key => $_format) {
       if (($_format[0] == $this->page_width && $_format[1] == $this->page_height) ||
-          ($_format[1] == $this->page_width && $_format[0] == $this->page_height)
+        ($_format[1] == $this->page_width && $_format[0] == $this->page_height)
       ) {
         $this->_page_format = $_key;
         break;
@@ -338,8 +340,8 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
     // Formatage de la page  
     if (!$this->_page_format) {
-      $page_width  = round((72 / 2.54) * $this->page_width, 2);
-      $page_height = round((72 / 2.54) * $this->page_height, 2);
+      $page_width         = round((72 / 2.54) * $this->page_width, 2);
+      $page_height        = round((72 / 2.54) * $this->page_height, 2);
       $this->_page_format = array(0, 0, $page_width, $page_height);
     }
 
@@ -351,12 +353,10 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
     // Le champ valide stocke le user_id de la personne qui l'a verrouillé
     if ($this->_id && $this->valide && !$this->locker_id) {
-      $log = $this->loadLastLogForField("valide");
+      $log             = $this->loadLastLogForField("valide");
       $this->locker_id = $log->user_id;
     }
   }
-
-
 
   /**
    * Load locker
@@ -1014,6 +1014,22 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     }
 
     $this->_ref_content->content = $this->_source;
+
+    if (!$this->_id) {
+      $parent_modele = $this->loadModele();
+      $parent_modele->loadContent(false);
+      // Si issu d'une duplication depuis un document existant, alors on reprend la version du document d'origine
+      // L'incrément de version se fait en fin de store
+      if ($parent_modele->object_id) {
+        $this->version = $parent_modele->version;
+
+        // Si le document existant est verrouillé, alors on l'archive
+        if ($parent_modele->valide) {
+          $parent_modele->annule = 1;
+          $parent_modele->store();
+        }
+      }
+    }
 
     if ($msg = $this->_ref_content->store()) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
@@ -1937,7 +1953,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
   }
 }
 
-// Ajout des en-têtes de bons pour chacuns des chapitres
+// Ajout des en-têtes de bons pour chacun des chapitres
 foreach (CCompteRendu::$_chap_bons as $chapitre) {
   $maj_chap = strtoupper($chapitre);
   CCompteRendu::$special_names["CPrescription"]["[ENTETE BON $maj_chap]"] = "header";

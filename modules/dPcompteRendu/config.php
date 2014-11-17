@@ -44,6 +44,7 @@ $dPconfig["dPcompteRendu"] = array(
     "access_group" => "1",
     "access_function" => "1",
     "font_dir" => "",
+    "unlock_doc" => "1"
   ),
   "CAideSaisie" => array(
     "access_group" => "1",

@@ -34,8 +34,8 @@
   <tbody id="DocsEffect-{{$object->_guid}}" {{if $mode == "collapse" && $doc_count}}style="display: none;"{{/if}}>
   
   {{foreach from=$object->_ref_documents item=document}}
-  <tr>
-    <td class="text">
+  <tr {{if $document->annule}}style="display: none;" class="doc_cancelled"{{/if}}>
+    <td class="text {{if $document->annule}}cancelled{{/if}}">
       {{if $document->_can->read}}
         <a href="#{{$document->_guid}}" onclick="Document.edit({{$document->_id}}); return false;" style="display: inline;">
       {{/if}}

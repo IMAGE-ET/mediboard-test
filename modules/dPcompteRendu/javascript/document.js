@@ -266,6 +266,10 @@ Document = {
       onComplete: Document.refreshList.curry(null, object_guid[0], object_guid[1])
     };
     confirmDeletion(oButton.form, oOptions, oAjaxOptions);
+  },
+
+  showCancelled: function(button, table) {
+    table.select("tr.doc_cancelled").invoke("toggle");
   }
 };
 

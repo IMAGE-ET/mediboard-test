@@ -206,6 +206,9 @@ $can_unclock   = $compte_rendu->canUnlock();
 $can_duplicate = $compte_rendu->canDuplicate();
 $compte_rendu->isLocked();
 $lock_bloked = $compte_rendu->_is_locked ? !$can_unclock : !$can_lock;
+if ($compte_rendu->valide && !CAppUI::conf("dPcompteRendu CCompteRendu unlock_doc")) {
+  $lock_bloked = 1;
+}
 $compte_rendu->canDo();
 $read_only = $compte_rendu->_is_locked || !$compte_rendu->_can->edit;
 

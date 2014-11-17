@@ -92,12 +92,12 @@
 {{/if}}
 
 {{foreach from=$list item=_doc_item}}
-  <div style="float: left; width: 220px; position: relative; {{if $_doc_item instanceof CFile && $_doc_item->annule}}display: none;{{/if}}"
-  class="{{if $_doc_item instanceof CFile && $_doc_item->annule}}file_cancelled{{/if}} {{if $_doc_item->_count_dmp_document}}dmp-sent{{/if}}">
-    <table class="tbl {{if $_doc_item instanceof CFile && $_doc_item->annule}}hatching{{/if}}">
+  <div style="float: left; width: 220px; position: relative; {{if $_doc_item->annule}}display: none;{{/if}}"
+  class="{{if $_doc_item->annule}}file_cancelled{{/if}} {{if $_doc_item->_count_dmp_document}}dmp-sent{{/if}}">
+    <table class="tbl {{if $_doc_item->annule}}hatching{{/if}}">
       <tbody class="hoverable">
         <tr>
-          <td rowspan="2" style="width: 70px; height: 112px; text-align: center" class="{{if $_doc_item instanceof CFile && $_doc_item->annule}}cancelled{{/if}}">
+          <td rowspan="2" style="width: 70px; height: 112px; text-align: center" class="{{if $_doc_item->annule}}cancelled{{/if}}">
             <div></div>
             {{assign var="elementId" value=$_doc_item->_id}}
             {{if $_doc_item->_class=="CCompteRendu"}}
@@ -117,7 +117,7 @@
           </td>
 
           <!-- Tooltip -->
-          <td class="text {{if $_doc_item instanceof CFile && $_doc_item->annule}}cancelled{{/if}}" style="height: 35px; overflow: auto">
+          <td class="text {{if $_doc_item->annule}}cancelled{{/if}}" style="height: 35px; overflow: auto">
             {{if $_doc_item instanceof CCompteRendu && $_doc_item->_is_locked}}
               <img src="style/mediboard/images/buttons/lock.png" onmouseover="ObjectTooltip.createEx(this, '{{$_doc_item->_guid}}', 'locker')"/>
             {{/if}}
@@ -131,7 +131,7 @@
         </tr>
         <tr>
           <!-- Toolbar -->
-          <td class="button {{if $_doc_item instanceof CFile && $_doc_item->annule}}cancelled{{/if}}" style="height: 1px;">
+          <td class="button {{if $_doc_item->annule}}cancelled{{/if}}" style="height: 1px;">
             {{mb_include module=files template=inc_file_toolbar notext=notext}}
           </td>
         </tr>

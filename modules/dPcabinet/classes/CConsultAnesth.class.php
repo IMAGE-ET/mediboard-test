@@ -348,6 +348,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
       $this->_ref_consultation->_docitems_from_dossier_anesth = true;
       $this->_ref_consultation->loadRefsFiles();
       $this->_nb_cancelled_files += $this->_ref_consultation->_nb_cancelled_files;
+      $this->_nb_cancelled_docs += $this->_ref_consultation->_nb_cancelled_docs;
       $this->_ref_files = $this->_ref_files + $this->_ref_consultation->_ref_files;
     }
   }

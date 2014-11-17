@@ -95,6 +95,10 @@
     {{mb_include module=system template=inc_config_str}}
   </tr>
   <tr>
+    {{assign var="var" value="unlock_doc"}}
+    {{mb_include module=system template=inc_config_bool}}
+  </tr>
+  <tr>
     <th class="category" colspan="2">
       Horodatage pour les aides à la saisie
     </th>

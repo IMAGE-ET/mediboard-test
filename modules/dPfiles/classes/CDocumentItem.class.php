@@ -19,6 +19,7 @@ class CDocumentItem extends CMbMetaObject {
   public $etat_envoi;
   public $author_id;
   public $private;
+  public $annule;
   public $type_doc;
   public $type_doc_sisra;
 
@@ -50,6 +51,7 @@ class CDocumentItem extends CMbMetaObject {
     $props["etat_envoi"]       = "enum notNull list|oui|non|obsolete default|non";
     $props["author_id"]        = "ref class|CMediusers";
     $props["private"]          = "bool default|0";
+    $props["annule"]             = "bool default|0 show|0";
     $type_doc = "";
     if (CModule::getActive("cda")) {
       $jdv_type = CCdaTools::loadJV("CI-SIS_jdv_typeCode.xml");

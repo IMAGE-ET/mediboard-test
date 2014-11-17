@@ -162,7 +162,13 @@
       onclick="ModeleEtiquette.chooseModele('{{$object_class}}', '{{$object_id}}', '{{$unique_id}}')"
     {{/if}}>Etiquettes</button>
 {{/if}}
- 
+
+{{if $object->_nb_cancelled_docs && $mode != "hide"}}
+  <button class="hslip" style="float: right;" data-show="" onclick="Document.showCancelled(this, $('docs_{{$object->_class}}{{$object->_id}}'))">
+    Afficher / Masquer {{$object->_nb_cancelled_docs}} document(s) annulé(s)
+  </button>
+{{/if}}
+
 <table class="form" id="docs_{{$object_class}}{{$object_id}}">
   {{mb_include module="compteRendu" template="inc_widget_list_documents"}}
 </table>

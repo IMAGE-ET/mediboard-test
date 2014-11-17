@@ -985,6 +985,11 @@ class CSetupdPcompteRendu extends CSetup {
                 ADD `creation_date` DATETIME;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.03";
+    $this->makeRevision("1.03");
+    $query = "ALTER TABLE `compte_rendu`
+      ADD `annule` ENUM ('0','1') DEFAULT '0' AFTER `modele_id`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.04";
   }
 }
