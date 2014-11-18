@@ -118,6 +118,7 @@
     window['oxygeneSoinLoaded'] = false;
     window['aerosolSoinLoaded'] = false;
     window['alimentationSoinLoaded'] = false;
+    window['preparationSoinLoaded'] = false;
     window['inscriptionSoinLoaded'] = false;
     window['all_medSoinLoaded'] = false;
     window['all_chapsSoinLoaded'] = false;

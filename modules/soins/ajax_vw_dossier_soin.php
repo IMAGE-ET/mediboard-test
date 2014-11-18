@@ -328,7 +328,7 @@ if (CModule::getActive("dPprescription")) {
           $_line_med->loadActiveDates();
         }
       }
-      elseif ($chapitre == "perfusion" || $chapitre == "aerosol" || $chapitre == "alimentation" || $chapitre == "oxygene") {
+      elseif ($chapitre == "perfusion" || $chapitre == "aerosol" || $chapitre == "alimentation" || $chapitre == "oxygene" || $chapitre == "preparation") {
         // Chargement des prescription_line_mixes
         $prescription->loadRefsPrescriptionLineMixes($chapitre, "1", 1, '', $hide_old_lines, null, null, $hide_line_inactive);
         foreach ($prescription->_ref_prescription_line_mixes as $_prescription_line_mix) {

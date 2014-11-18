@@ -361,9 +361,10 @@ PlanSoins = {
            chapitre == "perfusion" || 
            chapitre == "oxygene" || 
            chapitre == "alimentation" ||
+           chapitre == "preparation" ||
            chapitre == "aerosol" ||
            chapitre == "inj" ||
-           chapitre == "inscription") {
+          chapitre == "inscription") {
           chapitre = "_"+chapitre;
         }
         else {
