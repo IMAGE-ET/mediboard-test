@@ -144,36 +144,14 @@
             <label for="SearchAll">Types</label>
           </legend>
           <table class="layout" id="first_indexing">
-            <tr>
-              <td>
-                <input type="checkbox" name="names_types[]" id="CCompteRendu" value="CCompteRendu"/>
-                <label for="CCompteRendu">Compte rendu</label>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="names_types[]" id="CTransmissionMedicale" value="CTransmissionMedicale">
-                <label for="CTransmissionMedicale"> Transmission Médicale</label>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="names_types[]" id="CObservationMedicale" value="CObservationMedicale">
-                <label for="CObservationMedicale"> Observation Médicale</label>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="names_types[]" id="CConsultation" value="CConsultation">
-                <label for="CConsultation"> Consultation de séjour</label>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="names_types[]" id="CConsultAnesth" value="CConsultAnesth">
-                <label for="CConsultAnesth"> Consultation anesthésique de séjour</label>
-              </td>
-            </tr>
+            {{foreach from=$types item=_types}}
+              <tr>
+                <td>
+                  <input type="checkbox" name="names_types[]" id="{{$_types}}" value="{{$_types}}">
+                  <label for="{{$_types}}">{{tr}}{{$_types}}{{/tr}}</label>
+                </td>
+              </tr>
+            {{/foreach}}
           </table>
         </fieldset>
       </td>
