@@ -36,7 +36,7 @@ class CPHPVersion extends CPrerequisite {
 
     // Do not use $version which is a Mediboard global
     $php = new CPHPVersion;
-    $php->name = "5.3";
+    $php->name = "5.4";
     $php->mandatory = true;
     $php->description = "Version de PHP5 récente";
     $php->reasons[] = "Conception objet évoluée";
