@@ -41,7 +41,7 @@ $ljoin["users"] = "sejour.praticien_id = users.user_id";
 
 // Filtre sur les services
 if (count($service_id)) {
-  $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
+  $ljoin["affectation"] = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie_reelle";
   $in_services = CSQLDataSource::prepareIn($service_id);
   $where[] = "(sejour.service_id $in_services OR affectation.service_id $in_services)";
 }
@@ -81,7 +81,7 @@ if ($tri_complet) {
 }
 
 $where["sejour.group_id"] = "= '$group->_id'";
-$where["sejour.sortie"]   = "BETWEEN '$date_min' AND '$date_max'";
+$where["sejour.sortie_reelle"]   = "BETWEEN '$date_min' AND '$date_max'";
 $where["sejour.annule"]   = "= '0'";
 
 if ($order_col != "patient_id" && $order_col != "sortie_reelle" && $order_col != "praticien_id") {
