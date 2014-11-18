@@ -170,7 +170,7 @@ class CObservationResultSet extends CMbObject {
    * @return array
    */
   static function getLimitTimes(COperation $interv) {
-    $round_minutes = 5;
+    $round_minutes = 10;
     $round = $round_minutes * 60000; // FIXME
 
     $sejour = $interv->loadRefSejour();
@@ -204,6 +204,11 @@ class CObservationResultSet extends CMbObject {
       $time_max = CMbDT::time("+".CMbDT::minutesRelative("00:00:00", $interv->temp_operation)." MINUTES", $interv->entree_salle);
 
       $date = CMbDT::date($interv->_datetime);
+
+      $fin = CValue::first($interv->sortie_salle, $interv->fin_op, $interv->retrait_garrot);
+      if ($fin) {
+        $time_max = max($time_max, $fin);
+      }
 
       $time_debut_op_iso = "$date $time_min";
       $time_fin_op_iso   = "$date $time_max";
@@ -257,6 +262,10 @@ class CObservationResultSet extends CMbObject {
       elseif ($_go instanceof CSupervisionTimedPicture) {
         $_go->loadTimedPictures($results, $time_min, $time_max);
       }
+      /*elseif ($_go instanceof CSupervisionInstantData) {
+        $_go->loadRefValueType();
+        $_go->loadRefValueUnit();
+      }*/
     }
 
     /*
