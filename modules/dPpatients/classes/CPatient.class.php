@@ -705,7 +705,7 @@ class CPatient extends CPerson {
     }
 
     if ($this->_vitale_nir_certifie) {
-      if ($msg = CInscTools::createINSC($this)) {
+      if ($msg = CINSPatient::createINSC($this)) {
         return $msg;
       }
     }
@@ -2525,100 +2525,6 @@ class CPatient extends CPerson {
       case 2:
         $fields["AVS"] = $this->getFormattedValue("avs");
     }
-  }
-
-  /**
-   * Calculation the INSC (Use the data of the vital card (clean the data before!!!))
-   *
-   * @param String $nir        nir certified
-   * @param String $nir_key    key nir
-   * @param String $first_name firstname
-   * @param String $birth_date birth date
-   *
-   * @return null|string
-   */
-  static function calculInsc($nir, $nir_key, $first_name = " ", $birth_date = "000000") {
-    $nir_complet = $nir.$nir_key;
-
-    //on vérifie que le nir est valide
-    if (CCodeSpec::checkInsee($nir_complet)) {
-      return null;
-    }
-
-    //on vérifie que le nir n'est pas un nir temporaire
-    if (!preg_match("/^([12][0-9]{2}[0-9]{2}[0-9][0-9ab][0-9]{3}[0-9]{3})([0-9]{2})$/i", $nir_complet, $matches)) {
-      return null;
-    }
-
-    if (empty($first_name)) {
-      $first_name = " ";
-    }
-
-    if (empty ($birth_date)) {
-      $birth_date = "000000";
-    }
-
-    $first_name = str_replace(" ", "", $first_name);
-
-    if (strlen($first_name) > 10) {
-      $first_name = mb_strimwidth($first_name, 0, 10);
-    }
-    else {
-      $first_name = str_pad($first_name, 10);
-    }
-
-    $birth_date_length = strlen($birth_date);
-
-    switch ($birth_date_length) {
-      case 6:
-        list($year, $month, $day) = str_split($birth_date, 2);
-        break;
-      case 8:
-        list($day, $month, $year2, $year) = str_split($birth_date, 2);
-        $birth_date = $year.$month.$day;
-        break;
-      default:
-        return null;
-    }
-
-    if (!checkdate($month, $day, $year) && $birth_date !== "000000" && strlen($birth_date) !== 6) {
-      return null;
-    }
-
-    $seed = $first_name.$birth_date.$nir;
-
-    $sha256 = hash("SHA256", $seed);
-    $sha256_hex = substr($sha256, 0, 16);
-    $insc = self::bchexdec($sha256_hex);
-
-    if (strlen($insc) < 20) {
-      $insc = str_pad($insc, 20, 0, STR_PAD_LEFT);
-    }
-
-    $insc_key = 97 - bcmod($insc, 97);
-    $insc_key = str_pad($insc_key, 2, 0, STR_PAD_LEFT);
-
-    return $insc.$insc_key;
-  }
-
-  /**
-   * Transform the hexadecimal to decimal
-   *
-   * @param String $hex String
-   *
-   * @return int|string
-   */
-  static function bchexdec($hex) {
-    $dec = 0;
-    $len = strlen($hex);
-    for ($i = 1; $i <= $len; $i++) {
-      $dec = bcadd($dec, bcmul(hexdec($hex[$i - 1]), bcpow('16', $len - $i)));
-    }
-    if (strpos($dec, ".") !== false) {
-      $array = explode(".", $dec);
-      $dec = $array[0];
-    }
-    return $dec;
   }
 
   /**

@@ -27,8 +27,8 @@ while ($line = $csv->readLine()) {
     $insc_csv_Key,
     ) = $line;
 
-  $firstName = CInscTools::formatString($firstName);
-  $insc = CPatient::calculInsc($nir, $nirKey, $firstName, $birthDate);
+  $firstName = CINSPatient::formatString($firstName);
+  $insc = CINSPatient::calculInsc($nir, $nirKey, $firstName, $birthDate);
   if ($insc === $insc_csv.$insc_csv_Key) {
     $resultat["correct"]++;
   }

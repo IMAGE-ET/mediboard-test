@@ -17,13 +17,13 @@ $list_person = json_decode(stripslashes($list_person));
 foreach ($list_person as $_person) {
 
   $birthDate = $_person->date;
-  $firstName = CInscTools::formatString($_person->prenom);
+  $firstName = CINSPatient::formatString($_person->prenom);
   if (!$_person->nirCertifie) {
     $_person->insc = "Impossible de calculer";
     continue;
   }
   list($nir, $nirKey) = explode(" ", $_person->nirCertifie);
-  $_person->insc = CPatient::calculInsc($nir, $nirKey, $firstName, $birthDate);
+  $_person->insc = CINSPatient::calculInsc($nir, $nirKey, $firstName, $birthDate);
 }
 
 $smarty = new CSmartyDP();

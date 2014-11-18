@@ -19,8 +19,8 @@ $nirKey    = CValue::get("nirKey"   , "");
 $insc      = "";
 
 if ($nir && $nirKey) {
-  $firstName = CInscTools::formatString($firstName);
-  $insc      = CPatient::calculInsc($nir, $nirKey, $firstName, $birthDate);
+  $firstName = CINSPatient::formatString($firstName);
+  $insc      = CINSPatient::calculInsc($nir, $nirKey, $firstName, $birthDate);
 }
 
 $smarty = new CSmartyDP();
