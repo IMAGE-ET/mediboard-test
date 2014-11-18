@@ -546,6 +546,13 @@ class CFacture extends CMbObject {
           $this->du_patient = $this->_secteur1;
           $this->du_tiers   = $this->_secteur2;
         }
+        else {
+          foreach ($this->_ref_consults as $_consult) {
+            if ($_consult->secteur3) {
+              $this->_secteur3 += $_consult->secteur3;
+            }
+          }
+        }
       }
     }
   }
