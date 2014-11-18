@@ -25,6 +25,9 @@ class CExLink extends CMbMetaObject {
   public $level;
   public $group_id;
 
+  public $datetime_create;
+  public $owner_id;
+
   /**
    * @var CExObject
    */
@@ -52,8 +55,11 @@ class CExLink extends CMbMetaObject {
     $props["object_id"]    = "ref notNull class|CMbObject meta|object_class cascade";
     $props["ex_class_id"]  = "ref notNull class|CExClass";
     $props["ex_object_id"] = "ref notNull class|CExObject";
-    $props["group_id"]     = "ref notNull class|CGroups";
     $props["level"]        = "enum notNull list|object|ref1|ref2|add default|object";
+    $props["group_id"]     = "ref notNull class|CGroups";
+
+    $props["datetime_create"] = "dateTime";
+    $props["owner_id"]        = "ref class|CMediusers";
     return $props;
   }
 
@@ -92,6 +98,18 @@ class CExLink extends CMbMetaObject {
     }
 
     return parent::loadFwdRef($field, $cached);
+  }
+
+  /**
+   * @see parent::store()
+   */
+  function store() {
+    if (!$this->_id) {
+      $this->datetime_create = CMbDT::dateTime();
+      $this->owner_id        = CMediusers::get()->_id;
+    }
+
+    return parent::store();
   }
 
   /**

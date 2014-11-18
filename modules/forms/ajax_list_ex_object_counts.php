@@ -35,14 +35,22 @@ if ($concept_search) {
 
 $ex_link = new CExLink();
 
-$where["user_log.date"] = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
-$where["user_log.type"] = "= 'create'";
-$where["user_log.object_class"] = "LIKE 'CExObject%'";
+$use_user_logs = $date_min < CExObject::DATE_LIMIT;
+
+if ($use_user_logs) {
+  $where["user_log.date"] = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
+  $where["user_log.type"] = "= 'create'";
+  $where["user_log.object_class"] = "LIKE 'CExObject%'";
+
+  $ljoin["user_log"] =
+    "user_log.object_id = ex_link.ex_object_id AND user_log.object_class = CONCAT('CExObject_',ex_link.ex_class_id)";
+}
+else {
+  $where["ex_link.datetime_create"] = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
+}
 
 $where["ex_link.level"] = "= 'object'";
 
-$ljoin["user_log"] =
-  "user_log.object_id = ex_link.ex_object_id AND user_log.object_class = CONCAT('CExObject_',ex_link.ex_class_id)";
 $ljoin["ex_class"] = "ex_class.ex_class_id = ex_link.ex_class_id";
 
 $fields = array(
@@ -72,7 +80,12 @@ foreach ($counts as $_row) {
     $_ex_class = new CExClass();
     $_ex_class->load($_ex_class_id);
 
-    $ljoin["user_log"] = "user_log.object_id = ex_link.ex_object_id AND user_log.object_class = 'CExObject_$_ex_class_id'";
+    if ($use_user_logs) {
+      $ljoin["user_log"] = "user_log.object_id = ex_link.ex_object_id AND user_log.object_class = 'CExObject_$_ex_class_id'";
+    }
+    else {
+      $where["ex_link.ex_class_id"] = "= '$_ex_class_id'";
+    }
 
     $ljoin_orig = $ljoin;
     $where_orig = $where;

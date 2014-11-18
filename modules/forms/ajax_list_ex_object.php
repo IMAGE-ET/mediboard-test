@@ -153,18 +153,33 @@ if ($creation_context_class) {
 }
 
 if ($search_mode) {
+  $use_user_logs = $date_min < CExObject::DATE_LIMIT;
+
   $where["ex_link.level"]    = "= 'object'";
-  $where["user_log.date"]    = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
-  $where["user_log.type"]    = "= 'create'";
 
-  if (!$ex_class_id) {
-    $where["user_log.object_class"] = "LIKE 'CExObject%'";
-
-    $ljoin["user_log"] =
-      "user_log.object_id = ex_link.ex_object_id AND user_log.object_class = CONCAT('CExObject_',ex_link.ex_object_id)";
+  if ($use_user_logs) {
+    $where["user_log.date"]    = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
+    $where["user_log.type"]    = "= 'create'";
   }
   else {
-    $ljoin["user_log"] = "user_log.object_id = ex_link.ex_object_id AND user_log.object_class = 'CExObject_$ex_class_id'";
+    $where["ex_link.datetime_create"] = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
+  }
+
+  if (!$ex_class_id) {
+    if ($use_user_logs) {
+      $where["user_log.object_class"] = "LIKE 'CExObject%'";
+
+      $ljoin["user_log"] =
+        "user_log.object_id = ex_link.ex_object_id AND user_log.object_class = CONCAT('CExObject_',ex_link.ex_object_id)";
+    }
+  }
+  else {
+    if ($use_user_logs) {
+      $ljoin["user_log"] = "user_log.object_id = ex_link.ex_object_id AND user_log.object_class = 'CExObject_$ex_class_id'";
+    }
+    else {
+      $where["ex_link.ex_class_id"] = "= '$ex_class_id'";
+    }
   }
 
   if (!empty($search)) {

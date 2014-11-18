@@ -42,6 +42,16 @@ if (CModule::getActive("forms")) {
   foreach ($ex_class_ids as $_id) {
     $copies[] = array("CExObject_$_id", "user_id", "owner_id");
     $copies[] = array("CExObject_$_id", "date",    "datetime_create");
+    $copies[] = array("CExObject_$_id", "date",    function (CSQLDataSource $ds, $log) use ($_id) {
+      $query = "UPDATE `ex_link`
+                  SET `datetime_create` = ?1,
+                      `owner_id` = ?2
+                  WHERE
+                      `ex_object_id` = ?3 AND
+                      `ex_class_id`  = ?4 AND
+                      `datetime_create` IS NULL;";
+      return $ds->prepare($query, $log["date"], $log["user_id"], $log["object_id"], $_id);
+    });
   }
 }
 
@@ -179,11 +189,17 @@ if ($execute) {
       list($object_class, $field, $target) = $_copy;
 
       if ($object_class === $_object_class) {
-        $_query = "UPDATE $_table
+        if (is_callable($target)) {
+          $_query = $target($ds, $_row);
+        }
+        else {
+          $_query = "UPDATE $_table
                    SET `$target` = ?1
                    WHERE `$_key` = ?2
                    AND `$target` IS NULL;";
-        $_query = $ds->prepare($_query, $_row[$field], $_row["object_id"]);
+          $_query = $ds->prepare($_query, $_row[$field], $_row["object_id"]);
+        }
+
         $ds->exec($_query);
       }
     }

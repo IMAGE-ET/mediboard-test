@@ -13,6 +13,8 @@
  * Form data
  */
 class CExObject extends CMbMetaObject {
+  const DATE_LIMIT = "2014-06-01";
+
   public $ex_object_id;
   
   public $group_id;

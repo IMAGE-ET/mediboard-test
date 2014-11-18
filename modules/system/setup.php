@@ -377,6 +377,33 @@ class CSetupsystem extends CSetup {
     return true;
   }
 
+  /**
+   * Fill in CExLink date and owner fields
+   *
+   * @return bool
+   */
+  protected function addExLinkDates() {
+    $ds = $this->ds;
+
+    // Changement des ExClasses
+    $query = "SELECT ex_class_id FROM ex_class;";
+    $list_ex_class = $ds->loadColumn($query);
+
+    foreach ($list_ex_class as $ex_class_id) {
+      $query = "UPDATE `ex_link`
+                  LEFT JOIN `ex_object_$ex_class_id` ON `ex_object_$ex_class_id`.`ex_object_id` = `ex_link`.`ex_object_id` AND `ex_link`.`ex_class_id` = '$ex_class_id'
+                  SET
+                    `ex_link`.`datetime_create` = `ex_object_$ex_class_id`.`datetime_create`,
+                    `ex_link`.`owner_id`        = `ex_object_$ex_class_id`.`owner_id`
+                  WHERE
+                    `ex_object_$ex_class_id`.`datetime_create` IS NOT NULL AND
+                    `ex_link`.`datetime_create` IS NULL;";
+      $ds->exec($query);
+    }
+
+    return true;
+  }
+
   function __construct() {
     parent::__construct();
 
@@ -1964,6 +1991,16 @@ class CSetupsystem extends CSetup {
                 DROP `host_type`;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.75";
+    $this->makeRevision("1.1.75");
+    $query = "ALTER TABLE `ex_link`
+                    ADD `datetime_create` DATETIME,
+                    ADD `owner_id`        INT(11) UNSIGNED,
+                    ADD INDEX (`owner_id`),
+                    ADD INDEX (`datetime_create`);";
+    $this->addQuery($query);
+
+    $this->addMethod("addExLinkDates");
+
+    $this->mod_version = "1.1.76";
   }
 }
