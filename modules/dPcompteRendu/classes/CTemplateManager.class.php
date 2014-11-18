@@ -249,7 +249,7 @@ class CTemplateManager {
       $_field = &$this->sections[$section][$item][$sub_item];
       $data = $options["data"];
       $view = $_field['field'];
-      $_field["field"] = "<span data-data=\"$data\">$view</span>";
+      $_field["field"] = "[<span data-data=\"$data\">$view</span>]";
     }
 
     // Image (from a CFile object)

@@ -1205,14 +1205,14 @@ class CExObject extends CMbMetaObject {
     $params["limit"] = 1;
     if ($object->_id) {
       $formulaires = CApp::fetch("forms", "ajax_list_ex_object", $params);
-      $formulaires = preg_replace("/\s+/", " ", $formulaires); // Remove CRLF which CKEditor transform to <br />
+      $formulaires = preg_replace('/\s+/', " ", $formulaires); // Remove CRLF which CKEditor transform to <br />
     }
     $template->addProperty("$name - Formulaires - Dernier", $formulaires, null, false);
 
     $params["limit"] = 5;
     if ($object->_id) {
       $formulaires = CApp::fetch("forms", "ajax_list_ex_object", $params);
-      $formulaires = preg_replace("/\s+/", " ", $formulaires); // Remove CRLF which CKEditor transform to <br />
+      $formulaires = preg_replace('/\s+/', " ", $formulaires); // Remove CRLF which CKEditor transform to <br />
     }
     $template->addProperty("$name - Formulaires - 5 derniers", $formulaires, null, false);
 
@@ -1220,7 +1220,7 @@ class CExObject extends CMbMetaObject {
     $params["only_host"] = 1;
     if ($object->_id) {
       $formulaires = CApp::fetch("forms", "ajax_list_ex_object", $params);
-      $formulaires = preg_replace("/\s+/", " ", $formulaires); // Remove CRLF which CKEditor transform to <br />
+      $formulaires = preg_replace('/\s+/', " ", $formulaires); // Remove CRLF which CKEditor transform to <br />
     }
     $template->addProperty("$name - Formulaires - Liés", $formulaires, null, false);
 
@@ -1244,7 +1244,6 @@ class CExObject extends CMbMetaObject {
       /** @var CExClass[] $ex_classes */
       $ex_classes = $ex_class->loadList($where, "name", null, "ex_class.ex_class_id", $ljoin);
 
-
       foreach ($ex_classes as $_ex_class) {
         $_ex_class->_all_fields = $_ex_class->loadRefsAllFields();
       }
@@ -1263,6 +1262,9 @@ class CExObject extends CMbMetaObject {
       if ($template->valueMode && (!$_ex_object || !$_ex_object->_id)) {
         continue;
       }
+
+      $template->addDateProperty("Sejour - $_name - Date de saisie du form.",  $_ex_object ? $_ex_object->datetime_create : null);
+      $template->addTimeProperty("Sejour - $_name - Heure de saisie du form.", $_ex_object ? $_ex_object->datetime_create : null);
 
       foreach ($fields as $_field) {
         if (!$_field->in_doc_template) {
