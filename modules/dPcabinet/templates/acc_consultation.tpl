@@ -116,6 +116,9 @@
     tabsConsult = Control.Tabs.create('tab-consult', false);
     {{if $rpu}}
       loadRPU();
+    {{elseif $app->user_prefs.dPcabinet_displayFirstTab == "Examens"}}
+    tabsConsult.setActiveTab("Examens");
+    loadExams();
     {{else}}
     loadAntTrait();
     {{/if}}

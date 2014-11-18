@@ -2212,6 +2212,9 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("2.42");
     $this->addPrefQuery("height_calendar", "2000");
 
-    $this->mod_version = '2.43';
+    $this->makeRevision("2.43");
+    $this->addPrefQuery("dPcabinet_displayFirstTab", "AntTrait");
+
+    $this->mod_version = '2.44';
   }
 }
