@@ -32,7 +32,7 @@
 
 <table class="tbl">
   <tr>
-    <th class="title" colspan="{{if $service_id == "urgence"}}8{{else}}6{{/if}}">
+    <th class="title" colspan="{{if $service_id == "urgence"}}8{{else}}7{{/if}}">
       <button type="button" class="not-printable print" style="float: right;" onclick="window.print()">{{tr}}Print{{/tr}}</button>
       {{$date|date_format:$conf.date}} - {{if $service->_id}}{{$service}}{{else}}Non placés{{/if}} - {{$patients_offline|@count}} patient(s)
     </th>
@@ -46,7 +46,8 @@
       <th>Lit</th>
       <th>Prat.</th>
       <th>Motif</th>
-      <th>Durée du séjour</th>
+      <th>Entrée prévue</th>
+      <th>Sortie prévue</th>
       <th>J. opératoire <br /> Intervention</th>
     </tr>
   {{/if}}
@@ -62,22 +63,24 @@
       {{assign var=curr_prat value=$sejour->_ref_praticien}}
       <tr>
         <td class="text">
-          <button type="button" class="search compact notext not-printable" onclick="Modal.open('content_{{$patient->_guid}}', {showClose: true});">Voir le dossier</button>
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+          <button type="button" class="print compact notext not-printable" onclick="$('content_{{$patient->_guid}}').print();">{{tr}}Print{{/tr}}</button>
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')"
+                style="{{if $sejour->entree > $dtnow}}color: #A33; font-style: italic;{{elseif $sejour->sortie < $dtnow}}text-decoration: line-through{{/if}}">
             {{$patient}}
           </span>
         </td>
         <td class="text">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_aff->_guid}}')">
-            {{$curr_aff}}
+            {{$curr_aff->_ref_lit->nom}}
           </span>
         </td>
         <td class="text">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_prat}}</td>
         <td class="text">{{mb_value object=$sejour field=libelle}}</td>
-        <td class="text">{{$sejour->_duree}} jour(s)</td>
+        <td class="text">{{mb_value object=$sejour field=entree}}</td>
+        <td class="text">{{mb_value object=$sejour field=sortie}}</td>
         <td class="text">
           {{foreach from=$sejour->_jour_op item=_jour_op key=op_id name=jour_op}}
-            <span onmouseover="ObjectTooltip.createEx(this, '{{$_jour_op.operation_guid}}')">{{$sejour->_ref_operations.$op_id}} (J{{$_jour_op.jour_op}})</span>
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$_jour_op.operation_guid}}')">{{$sejour->_ref_operations.$op_id->libelle}} (J{{$_jour_op.jour_op}})</span>
             {{if !$smarty.foreach.jour_op.last}}&mdash;{{/if}}
           {{/foreach}}
         </td>
@@ -85,7 +88,7 @@
     {{/if}}
   {{foreachelse}}
     <tr>
-      <td colspan="7" class="empty">{{tr}}CSejour.none{{/tr}}</td>
+      <td colspan="{{if $service_id == "urgence"}}8{{else}}7{{/if}}" class="empty">{{tr}}CSejour.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

@@ -32,9 +32,21 @@
       </strong>
       <br />
       <div class="compact">
-        {{foreach from=$line->_ref_prises item=_prise}}
-          {{$_prise}} <br />
-        {{/foreach}}
+        {{if $line->sans_planif}}
+          {{if $line->max_par_prise}}
+            {{mb_label object=$line field=max_par_prise}} : {{mb_value object=$line field=max_par_prise}} {{mb_value object=$line field=unite_prise}} <br />
+          {{/if}}
+          {{if $line->max_par_jour}}
+            {{mb_label object=$line field=max_par_jour}} : {{mb_value object=$line field=max_par_jour}} {{mb_value object=$line field=unite_prise}}<br />
+          {{/if}}
+          {{if $line->delay_prise}}
+            {{mb_label object=$line field=delay_prise}} : {{mb_value object=$line field=delay_prise}} h<br />
+          {{/if}}
+        {{else}}
+          {{foreach from=$line->_ref_prises item=_prise}}
+            {{$_prise}}<br />
+          {{/foreach}}
+        {{/if}}
       </div>
       {{if $line->_class == "CPrescriptionLineMedicament" && $line->voie}}
         {{mb_value object=$line field=voie}}
@@ -82,7 +94,7 @@
     {{if $mode_lite}}
       <td class="text">
         {{if $line->_ref_last_administration}}
-          {{$line->_ref_last_administration->quantite}} {{$line->_ref_last_administration->unite_prise}}
+          {{$line->_ref_last_administration->quantite}} {{if $line->inscription}}{{$line->_ref_produit->libelle_unite_presentation}}{{else}}{{$line->_ref_last_administration->unite_prise}}{{/if}}
           le {{$line->_ref_last_administration->dateTime|date_format:$conf.date}} à {{$line->_ref_last_administration->dateTime|date_format:$conf.time}}
         {{elseif !$line->_ref_administrations|@count}}
           <div class="empty">{{tr}}CAdministration.none{{/tr}}</div>
@@ -208,6 +220,27 @@
           <br />
           {{mb_value object=$line field=voie}}
         {{/if}}
+        {{if $line->type == "PCA"}}
+          <div class="compact">
+            {{if $line->mode_bolus}}
+              <br />
+              {{mb_value object=$line field=mode_bolus}}
+            {{/if}}
+            {{if $line->quantite_dose_max && $line->duree_dose_max}}
+              <br />
+              Dose max {{$line->quantite_dose_max}} mg en {{$line->duree_dose_max}} h
+            {{/if}}
+            {{if $line->mode_bolus != "sans_bolus"}}
+              <br />
+              {{if $line->dose_bolus}}
+                {{mb_label object=$line field=dose_bolus}} {{mb_value object=$line field=dose_bolus}} mg &mdash;
+              {{/if}}
+              {{if $line->periode_interdite}}
+                {{mb_label object=$line field=periode_interdite}} {{mb_value object=$line field=periode_interdite}} min
+              {{/if}}
+            {{/if}}
+          </div>
+        {{/if}}
         <div>
           {{if $line->conditionnel}}
             {{if $line->_current_active}}
@@ -241,7 +274,7 @@
         {{/if}}
       </td>
       <td style="vertical-align: top;" class="text {{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}">
-        {{if !$mode_dupa}}
+        {{if !$mode_dupa && $smarty.foreach.lines_items.first}}
           <div class="compact">
             {{if $line->_frequence}}
               {{if $line->type_line == "perfusion"}}Débit initial: {{/if}}
