@@ -109,6 +109,11 @@
       <div class="small-warning">
         <strong>{{tr}}CPrescription-no_planif{{/tr}}</strong>
       </div>
+    {{elseif !$line->inscription && !$line->signee}}
+      <td colspan="{{$colspan}}" class="left_day right_day">
+      <div class="small-warning">
+        <strong>{{tr}}CPrescription-no_signee{{/tr}}</strong>
+      </div>
     {{else}}
       {{foreach from=$dates_plan_soin item=_moments key=_date}}
         {{foreach from=$_moments item=_moment name=moment}}
@@ -295,6 +300,16 @@
       {{if $mode_dupa}}
         <td class="{{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}"></td>
       {{/if}}
+      {{if $mode_lite}}
+        <td class="text {{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}" style="vertical-align: top;">
+          {{if isset($_line_item->_ref_last_administration|smarty:nodefaults)}}
+            {{$_line_item->_ref_last_administration->quantite}} {{$_line_item->_ref_last_administration->unite_prise}}
+            le {{$_line_item->_ref_last_administration->dateTime|date_format:$conf.date}} à {{$_line_item->_ref_last_administration->dateTime|date_format:$conf.time}}
+          {{elseif !$_line_item->_ref_administrations|@count}}
+            <div class="empty">{{tr}}CAdministration.none{{/tr}}</div>
+          {{/if}}
+        </td>
+      {{/if}}
       {{if !$line->_current_active &&
            ($line->mode_bolus != "bolus") &&
            ($line->continuite != "continue" || "CAppUI::conf"|static_call:"dPprescription CPrescription perf_continue_manuelle":"CGroups-$g" == '0') &&
@@ -304,17 +319,13 @@
             <strong>{{tr}}CPrescription-no_planif{{/tr}}</strong>
           </div>
         </td>
+      {{elseif !$line->signature_prat}}
+        <td colspan="{{$colspan}}" class="left_day right_day {{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}">
+          <div class="small-warning">
+            <strong>{{tr}}CPrescription-no_signee{{/tr}}</strong>
+          </div>
+        </td>
       {{else}}
-        {{if $mode_lite}}
-          <td class="text {{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}" style="vertical-align: top;">
-              {{if isset($_line_item->_ref_last_administration|smarty:nodefaults)}}
-                {{$_line_item->_ref_last_administration->quantite}} {{$_line_item->_ref_last_administration->unite_prise}}
-                le {{$_line_item->_ref_last_administration->dateTime|date_format:$conf.date}} à {{$_line_item->_ref_last_administration->dateTime|date_format:$conf.time}}
-              {{elseif !$_line_item->_ref_administrations|@count}}
-                <div class="empty">{{tr}}CAdministration.none{{/tr}}</div>
-              {{/if}}
-          </td>
-        {{/if}}
         {{foreach from=$dates_plan_soin item=_moments key=_date}}
           {{foreach from=$_moments item=_moment name=moment}}
             {{assign var="text_align" value="right"}}
