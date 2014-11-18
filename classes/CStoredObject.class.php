@@ -1487,7 +1487,7 @@ class CStoredObject extends CModelObject {
     }
     else {
       $keyToUpdate = $spec->incremented ? $spec->key : null;
-      $ret = $spec->ds->insertObject($spec->table, $this, $vars, $keyToUpdate/*, count($spec->uniques) > 0*/);
+      $ret = $spec->ds->insertObject($spec->table, $this, $vars, $keyToUpdate, $spec->insert_delayed/*, count($spec->uniques) > 0*/);
     }
 
     if (!$ret) {
@@ -1527,7 +1527,7 @@ class CStoredObject extends CModelObject {
     }
     else {
       $key = $spec->incremented ? $spec->key : null;
-      return $spec->ds->insertObject($spec->table, $this, $vars, $key);
+      return $spec->ds->insertObject($spec->table, $this, $vars, $key, $spec->insert_delayed);
     }
   }
 

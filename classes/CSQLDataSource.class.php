@@ -718,14 +718,15 @@ abstract class CSQLDataSource {
    * Insert a row matching object fields
    * null and underscored vars are skipped
    * 
-   * @param string $table   The table name
-   * @param object $object  The object with fields
-   * @param array  $vars    The array containing the object's values
-   * @param string $keyName The variable name of the key to set
-   * 
+   * @param string $table          The table name
+   * @param object $object         The object with fields
+   * @param array  $vars           The array containing the object's values
+   * @param string $keyName        The variable name of the key to set
+   * @param bool   $insert_delayed Parameter of INSERT
+   *
    * @return bool job done
    */
-  function insertObject($table, $object, $vars, $keyName = null/*, $updateDuplicate = false*/) {
+  function insertObject($table, $object, $vars, $keyName = null, $insert_delayed = false/*, $updateDuplicate = false*/) {
     if (CAppUI::conf("readonly")  || $this->dsn === "readonly") {
       return false;
     }
@@ -761,8 +762,8 @@ abstract class CSQLDataSource {
 
     $fields_str = implode(",", $fields);
     $values_str = implode(",", $values);
-
-    $query = "INSERT INTO $table ($fields_str) VALUES ($values_str)";
+    $delayed    = $insert_delayed ? " DELAYED " : "";
+    $query = "INSERT $delayed INTO $table ($fields_str) VALUES ($values_str)";
 
     // Update object on duplicate key
     /*if ($updateDuplicate) {

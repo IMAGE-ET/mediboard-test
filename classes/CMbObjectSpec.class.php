@@ -27,6 +27,8 @@ class CMbObjectSpec {
   public $archive             = false;
 
   public $measureable         = false;
+  public $insert_delayed      = false;
+
   public $uniques             = array();
   public $xor                 = array();
   public $events              = array();
