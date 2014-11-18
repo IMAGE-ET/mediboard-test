@@ -55,7 +55,9 @@
             </td>
             <td style="width: 25%; vertical-align: top;">
               Civilité : {{mb_value object=$patient field=civilite}} {{mb_value object=$patient field=nom}} ({{mb_value object=$patient field=nom_jeune_fille}}) {{mb_value object=$patient field=prenom}}
-               ({{$patient->_annees}} ans) {{if $patient->_ref_constantes_medicales->poids}}({{$patient->_ref_constantes_medicales->poids}} kg){{/if}}
+               ({{$patient->_annees}} ans)
+               {{if $patient->_ref_constantes_medicales->poids}}({{$patient->_ref_constantes_medicales->poids}} kg){{/if}}
+               {{if $patient->_ref_constantes_medicales->taille}}({{$patient->_ref_constantes_medicales->taille}} cm){{/if}}
               <br />
               Né(e) le : {{mb_value object=$patient field=naissance}}
             </td>
