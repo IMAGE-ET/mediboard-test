@@ -115,8 +115,8 @@ if ($type_name == "UF") {
   $ums = array ();
   $ums_infos = array ();
   $um  = new CUniteMedicale();
-  $um_infos  = new CUniteMedicaleInfos();
-  if (CSQLDataSource::get("sae")) {
+  if (CSQLDataSource::get("sae") && CModule::getActive("atih")) {
+    $um_infos  = new CUniteMedicaleInfos();
     $ums = $um->loadListUm();
     $group = CGroups::loadCurrent();
     $where["group_id"] = " = '$group->_id'";
