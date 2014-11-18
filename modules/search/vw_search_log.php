@@ -13,6 +13,14 @@ CCanDo::checkAdmin();
 
 $date = CMbDT::date("-1 week");
 
+$types = array();
+$group = CGroups::loadCurrent();
+if (CAppUI::conf("search active_handler active_handler_search_types", $group)) {
+  $types = explode("|", CAppUI::conf("search active_handler active_handler_search_types", $group));
+}
+
+
 $smarty = new CSmartyDP();
 $smarty->assign("date", $date);
+$smarty->assign("types", $types);
 $smarty->display("vw_search_log.tpl");
