@@ -613,6 +613,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
        $this->addAttribute($acteNGAP, "executionDimancheJourFerie", "oui");
     }
 
+    $this->addAttribute($acteNGAP, "gratuit", $mbActeNGAP->gratuit ? "oui" : "non");
+
     $identifiant = $this->addElement($acteNGAP, "identifiant");
     $this->addElement($identifiant, "emetteur", "acte{$mbActeNGAP->_id}");
 
