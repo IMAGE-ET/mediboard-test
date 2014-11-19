@@ -36,6 +36,7 @@ class CHPrimSanteRecordFiles extends CHPrimSanteMessageXML {
     $erreur = array();
 
     foreach ($data["//ORU.PATIENT_RESULT"] as $_i => $_data_patient) {
+      //Permet d'identifier le numéro de ligne
       $this->loop               = $_i;
       $patient_node             = $this->queryNode("P", $_data_patient);
       $identifier               = $this->getPersonIdentifiers($patient_node);
@@ -68,12 +69,15 @@ class CHPrimSanteRecordFiles extends CHPrimSanteMessageXML {
       //Récupération des demandes
       $orders_node = $this->queryNodes("ORU.ORDER_OBSERVATION", $_data_patient);
       foreach ($orders_node as $_j => $_order) {
+        //Permet d'identifier le numéro de ligne
         $loop = $_i+$_j+2;
         //Récupération des résultats
         $observations_node = $this->queryNodes("ORU.OBSERVATION", $_order);
         foreach ($observations_node as $_k => $_observation) {
+          //Permet d'identifier le numéro de ligne
           $loop += $_k+1;
           $type_observation = $this->getObservationType($_observation);
+          //On ne traite que les OBX qui contiennent les fichiers
           switch ($type_observation) {
             case "FIC":
               $result       = $this->getObservationResult($_observation);
