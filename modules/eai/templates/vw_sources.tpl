@@ -56,7 +56,7 @@
 <ul id="tabs-configure" class="control_tabs small">
 {{foreach from=$all_sources key=name item=_sources}}
   <li>
-    <a href="#tab{{$name}}">
+    <a href="#tab{{$name}}" {{if $_sources|@count == 0}}class="empty"{{/if}}>
       {{tr}}{{$name}}{{/tr}} ({{$_sources|@count}})
     </a>
   </li>
