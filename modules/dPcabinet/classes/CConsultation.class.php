@@ -2012,7 +2012,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
       $this->heure   = $time_now;
       $this->arrivee = "$day_now $time_now";
       $this->duree   = 1;
-      $this->chrono  = CConsultation::TERMINE;
+      $this->chrono  = CConsultation::PLANIFIE;
     }
 
     return $this->store();

@@ -12,5 +12,7 @@
  */
 
 $dPconfig["ihe"] = array(
-  "function_ids" => "",
+  "RAD-3" => array(
+    "function_ids" => "",
+  )
 );

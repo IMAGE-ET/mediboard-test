@@ -53,7 +53,7 @@ class CRAD3DelegatedHandler extends CITIDelegatedHandler {
       return false;
     }
 
-    $functions = CAppUI::conf("ihe function_ids");
+    $functions = CAppUI::conf("ihe RAD-3 function_ids");
     $functions = explode("|", $functions);
 
     if (!in_array($function->_id, $functions)) {

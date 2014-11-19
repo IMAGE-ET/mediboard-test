@@ -17,7 +17,7 @@ IHE = {
     }
 
     var form = getForm("editiheConfig");
-    var tokenfield = new TokenField(form.elements["ihe[function_ids]"]);
+    var tokenfield = new TokenField(form.elements["ihe[RAD-3][function_ids]"]);
 
     if (tokenfield.contains(value)) {
       return false;
@@ -33,7 +33,7 @@ IHE = {
 
   delFunction : function (element, id) {
     var form = getForm("editiheConfig");
-    var tokenfield = new TokenField(form.elements["ihe[function_ids]"]);
+    var tokenfield = new TokenField(form.elements["ihe[RAD-3][function_ids]"]);
     tokenfield.remove(id);
     Element.remove(element.up());
   },

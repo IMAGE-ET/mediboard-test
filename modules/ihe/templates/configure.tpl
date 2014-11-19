@@ -14,7 +14,7 @@
 <script>
   Main.add(function () {
     var form       = getForm("editiheConfig");
-    var tokenfield = new TokenField(form.elements["ihe[function_ids]"]);
+    var tokenfield = new TokenField(form.elements["ihe[RAD-3][function_ids]"]);
     tokenfield.getValues().each(function (value) {
       var list = $("listFunctions");
       var select = $("selectihe_functions");
@@ -27,15 +27,23 @@
   });
 </script>
 
-<form name="editiheConfig" method="post" action="?m={{$m}}&amp;{{$actionType}}=configure" onsubmit="return checkForm(this)">
+<form name="editiheConfig" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
-  <input type="hidden" name="ihe[function_ids]" value="{{$conf.$m.function_ids}}">
+
   <table class="form">
     <tr><th colspan="2" class="title">{{tr}}Config{{/tr}}</th></tr>
+
+    {{assign var=transaction value="RAD-3"}}
+    <tr><th class="category" colspan="2">{{tr}}{{$transaction}}{{/tr}}</th></tr>
     <tr>
-      <th><label title="{{tr}}config-ihe-function_ids-desc{{/tr}}">{{tr}}config-ihe-function_ids{{/tr}}</label></th>
+      <th>
+        <label title="{{tr}}config-ihe-{{$transaction}}-function_ids-desc{{/tr}}">
+          {{tr}}config-ihe-{{$transaction}}-function_ids{{/tr}}
+        </label>
+      </th>
       <td>
+        <input type="hidden" name="ihe[RAD-3][function_ids]" value="{{$conf.$m.$transaction.function_ids}}">
         <select id="selectihe_functions" onchange="IHE.addFunction(this)">
           <option value="" selected>{{tr}}Choose{{/tr}}</option>
           {{foreach from=$functions item=_function}}
