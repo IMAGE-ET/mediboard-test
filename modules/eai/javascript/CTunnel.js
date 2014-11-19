@@ -16,9 +16,14 @@ CTunnel = {
   },
 
   proxyAction : function(action, id) {
+    var param = "";
+    if (action == "setlog") {
+      param = prompt("Saisissez le niveau de debug :");
+    }
     new Url("eai", "ajax_result_proxy")
       .addParam("action", action)
       .addParam("idTunnel", id)
+      .addParam("param", param)
       .requestUpdate("result_action");
   },
 

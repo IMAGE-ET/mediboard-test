@@ -40,8 +40,11 @@
              title="{{$_tunnel->address}}"/>
       </td>
       <td>
-        <button type="button" class="reboot compact notext" onclick="CTunnel.proxyAction('restart', '{{$_tunnel->_id}}')">
-          {{tr}}Restart{{/tr}}
+        <button type="button" class="bug compact notext" onclick="CTunnel.proxyAction('setlog', '{{$_tunnel->_id}}')">
+          {{tr}}Debug{{/tr}}
+        </button>
+        <button type="button" class="tick compact notext" onclick="CTunnel.proxyAction('test', '{{$_tunnel->_id}}')">
+          {{tr}}Test{{/tr}}
         </button>
         <button type="button" class="stop compact notext" onclick="CTunnel.proxyAction('stop', '{{$_tunnel->_id}}')">
           {{tr}}Stop{{/tr}}

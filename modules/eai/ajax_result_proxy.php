@@ -13,6 +13,7 @@
 
 $action = CValue::get("action", null);
 $id     = CValue::get("idTunnel", null);
+$param  = CValue::get("param", null);
 
 $tunnel = new CHTTPTunnelObject();
 $tunnel->load($id);
@@ -34,6 +35,15 @@ switch ($action) {
     break;
   case "stat":
     $http_client->setOption(CURLOPT_CUSTOMREQUEST, "CMD STAT");
+    $result = $http_client->executeRequest();
+    $result = json_decode($result, true);
+    break;
+  case "test":
+    $http_client->setOption(CURLOPT_HEADER, true);
+    $result = $http_client->executeRequest();
+    break;
+  case "setlog":
+    $http_client->setOption(CURLOPT_CUSTOMREQUEST, "CMD SETLOG $param");
     $result = $http_client->executeRequest();
     $result = json_decode($result, true);
     break;
