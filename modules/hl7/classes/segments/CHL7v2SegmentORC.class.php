@@ -36,8 +36,8 @@ class CHL7v2SegmentORC extends CHL7v2Segment {
 
     // ORC-1: Order Control (ID)
     //NW - add; CA - delete; xo - modify;
-
     $log = $object->_ref_last_log;
+    $orc5 = "SC";
     switch ($log->type) {
       case "create":
         $orc1 = "NW";
@@ -45,6 +45,7 @@ class CHL7v2SegmentORC extends CHL7v2Segment {
       case "store":
         $orc1 = "XO";
         if ($object->fieldModified("annule", "1")) {
+          $orc5 = "CA";
           $orc1 = "CA";
         }
         if ($object->fieldModified("annule", "0")) {
@@ -52,6 +53,7 @@ class CHL7v2SegmentORC extends CHL7v2Segment {
         }
         break;
       case "delete":
+        $orc5 = "CA";
         $orc1 = "CA";
         break;
       default:
@@ -70,7 +72,7 @@ class CHL7v2SegmentORC extends CHL7v2Segment {
     $data[] = null;
 
     // ORC-5: Order Status (ID) (optional table 0038)
-    $data[] = "SC";
+    $data[] = $orc5;
 
     // ORC-6: Response Flag (ID) (optional table 0121)
     $data[] = null;
@@ -99,9 +101,7 @@ class CHL7v2SegmentORC extends CHL7v2Segment {
     $data[] = null;
 
     // ORC-12: Ordering Provider (XCN)
-    $object->loadRefPraticien();
-    $orc12 = $this->getXCN($object->_ref_praticien, $event->_receiver);
-    $data[] = $orc12;
+    $data[] = $this->getXCN($object->_ref_praticien, $event->_receiver);
 
     // ORC-13: Enterer's Location (PL) (optional)
     $data[] = null;
@@ -117,13 +117,12 @@ class CHL7v2SegmentORC extends CHL7v2Segment {
 
     // ORC-17: Entering Organization (CE)
     $group = $event->_receiver->_ref_group;
-    $orc17 = array(
+    $data[] = array(
       array(
         $group->_id,
         $group->raison_sociale,
       )
     );
-    $data[] = $orc17;
 
     // ORC-18: Entering Device (CE) (optional)
     $data[] = null;

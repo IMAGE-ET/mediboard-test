@@ -73,12 +73,12 @@ class CHL7v2Acknowledgment implements CHL7Acknowledgment {
   /**
    * Generate acknowledgment
    *
-   * @param string $ack_code       Acknowledgment code
-   * @param string $mb_error_codes Mediboard error code
-   * @param null   $hl7_error_code HL7 error code
-   * @param string $severity       Severity
-   * @param null   $comments       Comments
-   * @param null   $object         Object
+   * @param string       $ack_code       Acknowledgment code
+   * @param string|array $mb_error_codes Mediboard error code
+   * @param null         $hl7_error_code HL7 error code
+   * @param string       $severity       Severity
+   * @param null         $comments       Comments
+   * @param null         $object         Object
    *
    * @return null|string
    */

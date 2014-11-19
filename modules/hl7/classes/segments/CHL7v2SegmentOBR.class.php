@@ -16,7 +16,7 @@
  * OBR - Represents an HL7 OBR message segment (Observation Request)
  */
 class CHL7v2SegmentOBR extends CHL7v2Segment {
-
+  public $set_id;
   /** @var string */
   public $name = "OBR";
 
@@ -35,7 +35,7 @@ class CHL7v2SegmentOBR extends CHL7v2Segment {
     $object = $this->object;
 
     // OBR-1: Set ID - Observation Request (SI) (optional)
-    $data[] = "1";
+    $data[] = $this->set_id;
 
     // OBR-2: Placer Order Number (EI)
     $data[] = $object->_id;
@@ -45,7 +45,7 @@ class CHL7v2SegmentOBR extends CHL7v2Segment {
 
     // OBR-4: Universal Service ID (CE)
     $obr4 = null;
-    $element = $object->element_prescription_id ? $object->_ref_element_prescription: $object->_old->_ref_element_prescription;
+    $element = $object->_ref_element_prescription;
     if ($element) {
       $obr4 = array(
         array(
@@ -90,9 +90,7 @@ class CHL7v2SegmentOBR extends CHL7v2Segment {
     $data[] = null;
 
     // OBR-16: Ordering Provider (XCN)
-    $object->loadRefPraticien();
-    $obr16 = $this->getXCN($object->_ref_praticien, $event->_receiver);
-    $data[] = $obr16;
+    $data[] = $this->getXCN($object->_ref_praticien, $event->_receiver);
 
     // OBR-17: Order Callback Phone Number (XTN) (optional repeating)
     $data[] = null;

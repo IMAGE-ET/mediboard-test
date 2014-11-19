@@ -32,7 +32,7 @@ class CHL7v2EventORMO01 extends CHL7v2EventORM implements CHL7EventORMO01 {
   function build($object) {
     parent::build($object);
     /** @var Cconsultation $object */
-    //cas de suppression de consutlation
+    //cas de suppression de consultation
     if (!$object->_id) {
       $object = $object->_old;
     }
@@ -41,14 +41,9 @@ class CHL7v2EventORMO01 extends CHL7v2EventORM implements CHL7EventORMO01 {
     $object->loadRefPlageConsult();
     $object->loadRefPraticien();
     $object->loadRefElementPrescription();
-    //cas de modification de consultation en suppression d'élément
-    if (!$object->element_prescription_id) {
-      $object->_old->loadRefElementPrescription();
-    }
 
     $patient = $object->loadRefPatient();
     $sejour  = $object->loadRefSejour();
-    $sejour  = $sejour->_id ? $sejour : null;
 
     $this->addPID($patient, $sejour);
     $this->addPV1($sejour);

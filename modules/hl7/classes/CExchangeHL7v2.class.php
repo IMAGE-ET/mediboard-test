@@ -435,7 +435,7 @@ class CExchangeHL7v2 extends CExchangeTabular {
    * Generate ORR 'Error' acknowledgment
    *
    * @param CHL7Acknowledgment $ack            Acknowledgment
-   * @param array              $mb_error_codes Mediboard errors codes
+   * @param string|array       $mb_error_codes Mediboard errors codes
    * @param string             $comments       Comments
    * @param CMbObject          $mbObject       Object
    *

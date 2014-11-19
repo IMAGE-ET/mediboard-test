@@ -116,12 +116,14 @@ class CHL7v2EventORM extends CHL7v2Event implements CHL7EventORM {
    * Represents an HL7 OBR message segment (Observation Request)
    *
    * @param CMbObject $object object
+   * @param int       $set_id Set ID
    *
    * @return void
    */
-  function addOBR($object) {
+  function addOBR($object, $set_id = 1) {
     $OBR = CHL7v2Segment::create("OBR", $this->message);
     $OBR->object = $object;
+    $OBR->set_id = $set_id;
     $OBR->build($this);
   }
 

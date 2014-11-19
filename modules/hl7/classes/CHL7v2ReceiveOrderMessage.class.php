@@ -99,26 +99,22 @@ class CHL7v2ReceiveOrderMessage extends CHL7v2MessageXML {
 
         $medisuer_id = $this->getDoctor($orc12, $mediuser);
         if (!$medisuer_id) {
-          //todo faire une erreur
+          return $exchange_hl7v2->setORRError($ack, "E801");
         }
         $consultation->createByDatetime($datetime, $medisuer_id, $patient->_id);
-        //todo chrono à terminer -> à véfifier
+
         if (!$consultation->_id) {
-          //todo faire erreur
+          return $exchange_hl7v2->setORRError($ack, "E802");
         }
 
         $idex        = new CIdSante400();
         $idex->id400 = $filler_id;
-        //todo tag consutlation
-        $idex->tag   = "";
+        $idex->tag   = $sender->_tag_consultation;
         $idex->setObject($consultation);
         $idex->store();
         break;
       //Modification
       case "SC":
-        //todo tag consultation
-        $idex = CIdSante400::getMatch("CConsultation", $sender->_tag_consultation, $filler_id);
-        //todo vérification entre idex et placer_id -> doit être identique sinon lequel prendre?
         $consultation->load($placer_id);
         $status_code = $this->getStatusCode($orc);
         switch ($status_code) {
@@ -132,30 +128,37 @@ class CHL7v2ReceiveOrderMessage extends CHL7v2MessageXML {
             $status = CConsultation::EN_COURS;
             break;
           default:
-            //todo erreur
-            return;
+            return $exchange_hl7v2->setORRError($ack, "E803");
         }
         $consultation->chrono = $status;
 
         if ($msg = $consultation->store()) {
-          //todo retour
+          return $exchange_hl7v2->setORRError($ack, "E804", $msg);
         }
 
         $obr4        = $this->getExamen("OBR.4", $obr, $data);
+
+        //Identifiant de l'élément de prescription
         $examen_id   = $this->getExamenID($obr4);
         $examen_name = $this->getExamenName($obr4);
 
-        //todo voir pour table de mappage pour récupérer l'élément voulut
+        //todo gérer avec l'élément de prescription
 
         break;
       // cancel order request
       case "OC":
         $consultation->annule = "1";
         if ($msg = $consultation->store()) {
-          //todo return error
+          return $exchange_hl7v2->setORRError($ack, "E804", $msg);
+        }
+
+        $idex = CIdSante400::getMatchFor($consultation, $sender->_tag_consultation);
+        $idex->id400 = "trash_$idex->id400";
+        if ($msg = $idex->store()) {
+          return $exchange_hl7v2->setORRError($ack, "E805", $msg);
         }
         break;
-      default :
+      default:
         return $exchange_hl7v2->setORRError($ack, "E205");
     }
 
@@ -173,34 +176,100 @@ class CHL7v2ReceiveOrderMessage extends CHL7v2MessageXML {
     return $this->queryTextNode("ORC.1", $node);
   }
 
+  /**
+   * Get the placer number
+   *
+   * @param DOMNode $node ORC node
+   *
+   * @return string
+   */
   function getPlacerNumber($node) {
-    return $this->queryTextNode("ORC.2/EI.1", $node);
+    $placer = "ORC.2/EI.1";
+    if ($this->_ref_sender->_configs["change_filler_placer"]) {
+      $placer = "ORC.3/EI.1";
+    }
+    return $this->queryTextNode($placer, $node);
   }
 
+  /**
+   * Get the filler number
+   *
+   * @param DOMNode $node ORC node
+   *
+   * @return string
+   */
   function getFillerNumber($node) {
-    return $this->queryTextNode("ORC.3/EI.1", $node);
+    $filler = "ORC.3/EI.1";
+    if ($this->_ref_sender->_configs["change_filler_placer"]) {
+      $filler = "ORC.2/EI.1";
+    }
+    return $this->queryTextNode($filler, $node);
   }
 
+  /**
+   * Get the status code
+   *
+   * @param DOMNode $node ORC node
+   *
+   * @return string
+   */
   function getStatusCode($node) {
     return $this->queryTextNode("ORC.5", $node);
   }
 
+  /**
+   * Get the date
+   *
+   * @param DOMNode $node ORC node
+   *
+   * @return string
+   */
   function getDate($node) {
     return $this->queryTextNode("ORC.9/TS.1", $node);
   }
 
+  /**
+   * Get the doctor information
+   *
+   * @param DOMNode $node ORC node
+   * @param array   $data array of data
+   *
+   * @return string
+   */
   function getDoctorNode($node, $data) {
     return $this->queryNode("ORC.12", $node, $data);
   }
 
+  /**
+   * Get the examen
+   *
+   * @param DOMNode $node ORC node
+   * @param array   $data array of data
+   *
+   * @return string
+   */
   function getExamen($node, $data) {
     return $this->queryNode("OBR.4", $node, $data);
   }
 
+  /**
+   * Get the examen identifiant
+   *
+   * @param DOMNode $node ORC node
+   *
+   * @return string
+   */
   function getExamenID($node) {
     return $this->queryTextNode("CE.1", $node);
   }
 
+  /**
+   * Get the examen name
+   *
+   * @param DOMNode $node ORC node
+   *
+   * @return string
+   */
   function getExamenName($node) {
     return $this->queryTextNode("CE.2", $node);
   }
