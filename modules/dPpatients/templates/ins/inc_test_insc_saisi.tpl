@@ -12,22 +12,22 @@
 <form name="Insc_test_saisie" method="post" onsubmit="return Ccda.submitSaisieInsc(this);">
   <table class="form">
     <tr>
-      <th class="title" colspan="4">{{tr}}Informations carte{{/tr}}</th>
+      <th class="title" colspan="4">{{tr}}common-Information of vital card{{/tr}}</th>
     </tr>
       <tr>
-        <th>{{tr}}firstName{{/tr}}</th>
+        <th>{{tr}}CPatient-prenom{{/tr}}</th>
         <td><input name="firstName" type="input" value="{{$firstName}}"></td>
       </tr>
       <tr>
-        <th>{{tr}}birthDate{{/tr}}</th>
+        <th>{{tr}}CPatient-naissance{{/tr}}</th>
         <td><input name="birthDate" type="input" value="{{$birthDate}}"></td>
       </tr>
       <tr>
-        <th>{{tr}}nir{{/tr}}</th>
+        <th>{{tr}}CPatient-_vitale_nir_certifie{{/tr}}</th>
         <td><input name="nir" type="input" value="{{$nir}}"></td>
       </tr>
       <tr>
-        <th>{{tr}}nirKey{{/tr}}</th>
+        <th>{{tr}}CPatient-_vitale_nir_certifie_key{{/tr}}</th>
         <td><input name="nirKey" type="input" value="{{$nirKey}}"></td>
       </tr>
       <tr>

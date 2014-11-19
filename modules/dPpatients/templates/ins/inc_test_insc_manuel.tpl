@@ -12,13 +12,13 @@
 
 <table class="tbl">
   <tr>
-    <th class="title" colspan="4">{{tr}}Informations carte{{/tr}}</th>
+    <th class="title" colspan="4">{{tr}}common-Information of vital card{{/tr}}</th>
   </tr>
   <tr>
-    <th>{{tr}}firstName{{/tr}}</th>
-    <th>{{tr}}birthDate{{/tr}}</th>
-    <th>{{tr}}nir{{/tr}}</th>
-    <th>{{tr}}insc{{/tr}}</th>
+    <th>{{tr}}CPatient-prenom{{/tr}}</th>
+    <th>{{tr}}CPatient-naissance{{/tr}}</th>
+    <th>{{tr}}CPatient-_vitale_nir_certifie{{/tr}}</th>
+    <th>{{tr}}CPatient-INSC{{/tr}}</th>
   </tr>
   {{foreach from=$list_person item=_person}}
   <tr>

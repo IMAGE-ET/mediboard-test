@@ -28,4 +28,4 @@ foreach ($list_person as $_person) {
 
 $smarty = new CSmartyDP();
 $smarty->assign("list_person", $list_person);
-$smarty->display("inc_test_insc_manuel.tpl");
+$smarty->display("ins/inc_test_insc_manuel.tpl");

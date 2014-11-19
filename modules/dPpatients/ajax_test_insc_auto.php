@@ -11,7 +11,7 @@
  * @link     http://www.mediboard.org
  */
 
-$csv = new CCSVFile("modules/cda/resources/insc/Echantillon_de_test_INSC.csv", CCSVFile::PROFILE_EXCEL);
+$csv = new CCSVFile("modules/dPpatients/resources/insc/Echantillon_de_test_INSC.csv", CCSVFile::PROFILE_EXCEL);
 $csv->jumpLine(2);
 $resultat = array("correct" => 0,
                   "incorrect" => 0,
@@ -40,4 +40,4 @@ while ($line = $csv->readLine()) {
 
 $smarty = new CSmartyDP();
 $smarty->assign("result", $resultat);
-$smarty->display("inc_test_insc_auto.tpl");
+$smarty->display("ins/inc_test_insc_auto.tpl");

@@ -42,6 +42,7 @@ Main.add(function () {
         <li><a href="#CMedecin-maintenance">{{tr}}CMedecin{{/tr}}</a></li>
         <li><a href="#CCorrespondantPatient-maintenance">{{tr}}CCorrespondantPatient{{/tr}}</a></li>
         <li><a href="#INSEE-maintenance">{{tr}}INSEE{{/tr}}</a></li>
+        <li><a href="#INSC-maintenance">{{tr}}CPatient-INSC{{/tr}}</a></li>
       </ul>
     </td>
     <td style="vertical-align: top; width: 100%">
@@ -59,6 +60,10 @@ Main.add(function () {
 
       <div id="INSEE-maintenance" style="display: none;">
         {{mb_include template=INSEE_maintenance}}
+      </div>
+
+      <div id="INSC-maintenance" style="display: none;">
+        {{mb_include template="ins/insc_maintenance"}}
       </div>
     </td>
   </tr>

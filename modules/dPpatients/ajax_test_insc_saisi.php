@@ -31,4 +31,4 @@ $smarty->assign("nir"      , $nir);
 $smarty->assign("nirKey"   , $nirKey);
 $smarty->assign("insc"     , $insc);
 
-$smarty->display("inc_test_insc_saisi.tpl");
+$smarty->display("ins/inc_test_insc_saisi.tpl");

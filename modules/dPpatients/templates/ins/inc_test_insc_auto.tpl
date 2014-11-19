@@ -13,15 +13,15 @@
 <table class="tbl">
   <tr>
     <th colspan="2" class="title">
-      {{tr}}result{{/tr}} {{tr}}sur{{/tr}} {{$result.total}}
+      {{tr}}Total{{/tr}} : {{$result.total}}
     </th>
   </tr>
   <tr>
     <th>
-      {{tr}}correct{{/tr}}
+      {{tr}}OK{{/tr}}
     </th>
     <th>
-      {{tr}}incorrect{{/tr}}
+      {{tr}}Error{{/tr}}
     </th>
   </tr>
   <tr>
