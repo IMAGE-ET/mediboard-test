@@ -691,12 +691,15 @@ class CHL7v2Segment extends CHL7v2Entity {
     $names = array();
 
     if ($object instanceof CPatient) {
-      $nom    = CPatient::applyModeIdentitoVigilance($object->nom, false, $receiver->_configs["mode_identito_vigilance"]);
+      $anonyme                 = is_numeric($object->nom);
+      $mode_identito_vigilance = $receiver->_configs["mode_identito_vigilance"];
 
-      $prenom   = CPatient::applyModeIdentitoVigilance($object->prenom, true, $receiver->_configs["mode_identito_vigilance"]);
-      $prenom_2 = CPatient::applyModeIdentitoVigilance($object->prenom_2, true, $receiver->_configs["mode_identito_vigilance"]);
-      $prenom_3 = CPatient::applyModeIdentitoVigilance($object->prenom_3, true, $receiver->_configs["mode_identito_vigilance"]);
-      $prenom_4 = CPatient::applyModeIdentitoVigilance($object->prenom_4, true, $receiver->_configs["mode_identito_vigilance"]);
+      $nom    = CPatient::applyModeIdentitoVigilance($object->nom, false, $mode_identito_vigilance, $anonyme);
+
+      $prenom   = CPatient::applyModeIdentitoVigilance($object->prenom, true, $mode_identito_vigilance, $anonyme);
+      $prenom_2 = CPatient::applyModeIdentitoVigilance($object->prenom_2, true, $mode_identito_vigilance, $anonyme);
+      $prenom_3 = CPatient::applyModeIdentitoVigilance($object->prenom_3, true, $mode_identito_vigilance, $anonyme);
+      $prenom_4 = CPatient::applyModeIdentitoVigilance($object->prenom_4, true, $mode_identito_vigilance, $anonyme);
 
       $prenoms = array($prenom_2, $prenom_3, $prenom_4);
       CMbArray::removeValue("", $prenoms);
@@ -734,8 +737,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       $patient_birthname = array();
       // Cas nom de naissance
       if ($object->nom_jeune_fille) {
-        $nom_jeune_fille =
-          CPatient::applyModeIdentitoVigilance($object->nom_jeune_fille, true, $receiver->_configs["mode_identito_vigilance"]);
+        $nom_jeune_fille = CPatient::applyModeIdentitoVigilance($object->nom_jeune_fille, true, $mode_identito_vigilance, $anonyme);
 
         $patient_birthname    = $patient_usualname;
         $patient_birthname[0] = $nom_jeune_fille;

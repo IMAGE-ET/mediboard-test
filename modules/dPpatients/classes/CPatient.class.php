@@ -773,9 +773,10 @@ class CPatient extends CPerson {
     parent::updateFormFields();
 
     // Noms
-    $this->nom = self::applyModeIdentitoVigilance($this->nom);
-    $this->nom_jeune_fille = self::applyModeIdentitoVigilance($this->nom_jeune_fille);
-    $this->prenom = self::applyModeIdentitoVigilance($this->prenom, true);
+    $anonyme = is_numeric($this->nom);
+    $this->nom             = self::applyModeIdentitoVigilance($this->nom, false, null, $anonyme);
+    $this->nom_jeune_fille = self::applyModeIdentitoVigilance($this->nom_jeune_fille, false, null, $anonyme);
+    $this->prenom          = self::applyModeIdentitoVigilance($this->prenom, true, null, $anonyme);
 
     $this->_nom_naissance = $this->nom_jeune_fille ? $this->nom_jeune_fille : $this->nom;
     $this->_prenoms = array($this->prenom, $this->prenom_2, $this->prenom_3, $this->prenom_4);
@@ -951,18 +952,19 @@ class CPatient extends CPerson {
     parent::updatePlainFields();
 
     $soundex2 = new soundex2;
+    $anonyme = is_numeric($this->nom);
     if ($this->nom) {
-      $this->nom = self::applyModeIdentitoVigilance($this->nom);
+      $this->nom = self::applyModeIdentitoVigilance($this->nom, false, null, $anonyme);
       $this->nom_soundex2 = $soundex2->build($this->nom);
     }
 
     if ($this->nom_jeune_fille) {
-      $this->nom_jeune_fille = self::applyModeIdentitoVigilance($this->nom_jeune_fille);
+      $this->nom_jeune_fille = self::applyModeIdentitoVigilance($this->nom_jeune_fille, false, null, $anonyme);
       $this->nomjf_soundex2 = $soundex2->build($this->nom_jeune_fille);
     }
 
     if ($this->prenom) {
-      $this->prenom = self::applyModeIdentitoVigilance($this->prenom, true);
+      $this->prenom = self::applyModeIdentitoVigilance($this->prenom, true, null, $anonyme);
       $this->prenom_soundex2 = $soundex2->build($this->prenom);
     }
 
@@ -2533,20 +2535,21 @@ class CPatient extends CPerson {
    * @param String $string                  String
    * @param Bool   $firstname               Apply the lower and the capitalize
    * @param string $mode_identito_vigilance Identito-vigilance mode
+   * @param bool   $anonyme                 Is anonyme
    *
    * @return string
    */
-  static function applyModeIdentitoVigilance($string, $firstname = false, $mode_identito_vigilance = null) {
+  static function applyModeIdentitoVigilance($string, $firstname = false, $mode_identito_vigilance = null, $anonyme = false) {
     $mode = $mode_identito_vigilance ?
       $mode_identito_vigilance : CAppUI::conf("dPpatients CPatient mode_identito_vigilance", CGroups::loadCurrent());
 
     switch ($mode) {
       case "medium":
-        $result = CMbString::removeBanCharacter($string);
+        $result = CMbString::removeBanCharacter($string, true);
         $result = $firstname ? CMbString::capitalize(CMbString::lower($result)) : CMbString::upper($result);
         break;
       case "strict":
-        $result = CMbString::upper(CMbString::removeBanCharacter($string));
+        $result = CMbString::upper(CMbString::removeBanCharacter($string, $anonyme));
         break;
       default:
         $result = $firstname ? CMbString::capitalize(CMbString::lower($string)) : CMbString::upper($string);

@@ -190,14 +190,20 @@ abstract class CMbString {
   /**
    * Replace the ban character with a escape
    *
-   * @param String $string String to normalyze
+   * @param String $string         String to normalyze
+   * @param bool   $allowed_number Delete the number in the string
    *
    * @return mixed
    */
-  static function removeBanCharacter($string) {
-    $String_no_accent = self::removeAccents($string);
+  static function removeBanCharacter($string, $allowed_number = false) {
+    $string_no_accent = self::removeAccents($string);
 
-    return preg_replace("/([^A-Za-z0-9])/", " ", $String_no_accent);
+    $pattern = "/([^A-Za-z])/";
+    if ($allowed_number) {
+      $pattern = "/([^A-Za-z0-9])/";
+    }
+
+    return preg_replace($pattern, " ", $string_no_accent);
   }
 
   /**
