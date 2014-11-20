@@ -23,8 +23,7 @@
       &mdash; {{mb_label object=$selOp field=temp_operation}} : {{mb_value object=$selOp field=temp_operation}}
       <br />
 
-      {{tr}}CSejour{{/tr}}
-      du {{mb_value object=$sejour field=entree}}
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}');">{{tr}}CSejour{{/tr}} du {{mb_value object=$sejour field=entree}}</span>
       au
       {{if $sejour->canEdit() || $currUser->_is_praticien}}
         {{assign var=sejour_guid value=$sejour->_guid}}
