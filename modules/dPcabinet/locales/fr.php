@@ -1458,6 +1458,7 @@ $locales['CPlageConsult-errror-plage_blocked_by_holidays'] = 'Impossible de crée
 $locales['CPlageConsult_planning_disponibility_-1'] = 'Pause(s)';
 $locales['CPlageConsult_planning_disponibility_0'] = 'Libre(s)';
 $locales['CPlageConsult_planning_disponibility_1'] = 'Pris';
+$locales['CPlageConsult_planning_disponibility_surbooking'] = 'Surbooking';
 $locales['CPlageconsult'] = 'Plage de consultation';
 $locales['CPlageconsult-_date_max'] = 'Jusque';
 $locales['CPlageconsult-_date_max-court'] = 'Jusque';

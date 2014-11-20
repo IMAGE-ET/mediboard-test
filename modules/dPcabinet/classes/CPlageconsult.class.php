@@ -297,7 +297,7 @@ class CPlageconsult extends CPlageHoraire {
           $temp_time = $time;
           for ($b=0; $b<$_consult->duree; $b++) {
             if ($status != 0) {
-              $fill[$temp_time] = $status;
+              $fill[$temp_time] = $fill[$temp_time]+$status;
               $nb_plage_prise++;
             }
 

@@ -46,15 +46,19 @@ div.progressBar_dispo div.disponibility_bar {
 }
 
 div.progressBar_dispo div.disponibility_planning_0 {
-  background: #80b859;
+  background-color: #80b859;
 }
 
 div.progressBar_dispo div.disponibility_planning_-1 {
-  background: #ffb670;
+  background-color: transparent;
 }
 
 div.progressBar_dispo div.disponibility_planning_1 {
-  background: #ff7b66;
+  background-color: #ff7b66;
+}
+
+div.progressBar_dispo div.disponibility_planning_more {
+  background-color: #800000;
 }
 
 .schema-dentaire {
