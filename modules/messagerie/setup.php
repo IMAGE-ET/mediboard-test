@@ -48,7 +48,7 @@ class CSetupmessagerie extends CSetup {
     $this->mod_name = "messagerie";
     $this->makeRevision("all");
 
-    $query = "CREATE TABLE `mbmail` (
+    $query = "CREATE TABLE `usermessage` (
               `mbmail_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `from` INT (11) UNSIGNED NOT NULL,
               `to` INT (11) UNSIGNED NOT NULL,
@@ -56,30 +56,21 @@ class CSetupmessagerie extends CSetup {
               `source` MEDIUMTEXT,
               `date_sent` DATETIME,
               `date_read` DATETIME,
-              `date_archived` DATETIME,
+              `archived` ENUM ('0','1') NOT NULL DEFAULT '0',
               `starred` ENUM ('0','1') NOT NULL DEFAULT '0'
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 
-    $query = "ALTER TABLE `mbmail` 
+    $query = "ALTER TABLE `usermessage`
               ADD INDEX (`from`),
               ADD INDEX (`to`),
               ADD INDEX (`date_sent`),
               ADD INDEX (`date_read`);";
     $this->addQuery($query);
-    
-    $this->makeRevision("0.10");
-    $query = "ALTER TABLE `mbmail` CHANGE `date_archived` `archived` ENUM ('0','1') NOT NULL DEFAULT '0';";
-    $this->addQuery($query);
-    
-    $this->makeRevision("0.11");
-    $query = "RENAME TABLE `mbmail` TO `usermessage`;";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `usermessage` CHANGE `mbmail_id` `usermessage_id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT;";
-    $this->addQuery($query);
 
     $this->makeRevision("0.12");
-
+    $query = "ALTER TABLE `usermessage` CHANGE `mbmail_id` `usermessage_id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT;";
+    $this->addQuery($query);
     $this->addPrefQuery("ViewMailAsHtml", 1);
 
     $this->makeRevision("0.13");
