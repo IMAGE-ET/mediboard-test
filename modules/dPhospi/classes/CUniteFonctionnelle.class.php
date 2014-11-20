@@ -62,6 +62,10 @@ class CUniteFonctionnelle extends CMbObject {
    * @see parent::getProps()
    */
   function getProps() {
+    static $atih_active = null;
+    if ($atih_active === null) {
+      $atih_active = CModule::getActive("atih") != null;
+    }
     $props = parent::getProps();
     $props["group_id"]              = "ref class|CGroups notNull";
     $props["code"]                  = "str notNull seekable";
@@ -71,7 +75,9 @@ class CUniteFonctionnelle extends CMbObject {
     $props["type_sejour"]           = "enum list|comp|ambu|exte|seances|ssr|psy|urg|consult";
     $props["date_debut"]            = "date";
     $props["date_fin"]              = "date";
-    $props["type_autorisation_um"]  = "ref class|CUniteMedicaleInfos";
+    if ($atih_active) {
+      $props["type_autorisation_um"]  = "ref class|CUniteMedicaleInfos";
+    }
 
     return $props;
   }
@@ -108,14 +114,16 @@ class CUniteFonctionnelle extends CMbObject {
   }
 
   /**
-   * @return CUniteMedicale
+   * @return CUniteMedicaleInfos
    */
   function loadRefUm() {
-    $um  = new CUniteMedicale();
-    $um->code_concat = $this->type_autorisation_um;
-    if (CSQLDataSource::get("sae")) {
-      $um->loadMatchingObject();
+    if (!CModule::getActive("atih")) {
+      return null;
     }
+    $um  = new CUniteMedicaleInfos();
+    $um->um_code = $this->type_autorisation_um;
+    $um->loadMatchingObject();
+
     return $this->_ref_um = $um;
 
   }
