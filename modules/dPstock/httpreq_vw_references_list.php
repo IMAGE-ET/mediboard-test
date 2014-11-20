@@ -17,7 +17,7 @@ $keywords     = CValue::getOrSession('keywords');
 $reference_id = CValue::getOrSession('reference_id');
 $mode         = CValue::get('mode');
 $start        = CValue::get('start', 0);
-$letter       = CValue::get('letter', "%");
+$letter       = CValue::getOrSession('letter', "%");
 $show_all     = CValue::get('show_all');
 
 // Don't user getOrSession as we don't want to get it from session

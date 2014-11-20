@@ -11,10 +11,8 @@
 
 CCanDo::checkEdit();
 
-$stock_id    = CValue::getOrSession('stock_id');
-$category_id = CValue::getOrSession('category_id');
+$stock_id    = CValue::get('stock_id');
 $product_id  = CValue::get('product_id');
-$letter      = CValue::getOrSession('letter', "%");
 
 // Loads the stock in function of the stock ID or the product ID
 $stock = new CProductStockGroup();
@@ -26,7 +24,6 @@ if ($stock_id) {
   $stock->loadRefsFwd();
   $stock->_ref_product->loadRefsFwd();
 }
-
 // else, if a product_id has been provided, we load the associated stock
 else if ($product_id) {
   $product = new CProduct();
@@ -40,17 +37,26 @@ else {
 }
 $stock->updateFormFields();
 
-// Loads the required Category and the complete list
-$category = new CProductCategory();
-$list_categories = $category->loadList(null, 'name');
+$list_services = CProductStockGroup::getServicesList();
+
+foreach ($list_services as $_service) {
+  $stock_service = new CProductStockService;
+  $stock_service->object_id = $_service->_id;
+  $stock_service->object_class = $_service->_class;
+  $stock_service->product_id = $stock->product_id;
+  if (!$stock_service->loadMatchingObject()) {
+    $stock_service->quantity = $stock->_ref_product->quantity;
+    $stock_service->order_threshold_min = $stock->_ref_product->quantity;
+    $stock_service->order_threshold_optimum = max($stock->getOptimumQuantity(), $stock_service->quantity);
+  }
+  $_service->_ref_stock = $stock_service;
+}
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign('stock',           $stock);
-$smarty->assign('category_id',     $category_id);
-$smarty->assign('list_categories', $list_categories);
-$smarty->assign('letter',          $letter);
+$smarty->assign('stock',          $stock);
+$smarty->assign('list_services',  $list_services);
 
-$smarty->display('vw_idx_stock_group.tpl');
+$smarty->display('inc_edit_stock_group.tpl');
 

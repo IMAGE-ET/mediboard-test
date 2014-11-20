@@ -15,7 +15,7 @@ $category_id         = CValue::get('category_id');
 $stock_id            = CValue::getOrSession('stock_id');
 $keywords            = CValue::get('keywords');
 $start               = CValue::get('start');
-$letter              = CValue::get('letter', "%");
+$letter              = CValue::getOrSession('letter', "%");
 $only_ordered_stocks = CValue::get('only_ordered_stocks');
 
 CValue::setSession('category_id', $category_id);
