@@ -853,6 +853,10 @@ button.dice:before, a.button.dice:before {
   content: url(images/buttons/dice.png);
 }
 
+button.checklist:before, a.button.checklist:before {
+  content: url(images/buttons/checklist.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }
