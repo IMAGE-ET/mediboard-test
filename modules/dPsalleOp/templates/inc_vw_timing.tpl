@@ -22,6 +22,9 @@
           sejour_id=$selOp->sejour_id salle_id=$selOp->salle_id operation_id=$selOp->_id opid=$opid reveil=false}}
         </td>
       {{/if}}
+      {{if $app->user_prefs.allowed_check_entry}}
+        {{mb_include module="salleOp" template="inc_field_timing" object=$selOp field=entree_chir}}
+      {{/if}}
       {{if $conf.dPsalleOp.COperation.use_entree_bloc}}
         {{mb_include module="salleOp" template="inc_field_timing" object=$selOp field=entree_bloc}}
       {{/if}}
@@ -42,6 +45,9 @@
       {{/if}}
     </tr>
     <tr>
+      {{if $app->user_prefs.allowed_check_entry}}
+        {{mb_include module="salleOp" template="inc_field_timing" object=$selOp field=entree_anesth}}
+      {{/if}}
       {{if $conf.dPsalleOp.COperation.use_entree_bloc}}
         <td></td>
       {{/if}}

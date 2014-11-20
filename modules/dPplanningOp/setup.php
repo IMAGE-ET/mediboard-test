@@ -1822,11 +1822,17 @@ class CSetupdPplanningOp extends CSetup {
                 ADD `technique_reanimation` TEXT;";
     $this->addQuery($query);
 
-    $this->mod_version = '1.97';
+    $this->makeRevision("1.97");
+    $query = "ALTER TABLE `operations`
+                ADD `entree_chir` TIME AFTER induction_debut,
+                ADD `entree_anesth` TIME AFTER entree_chir;";
+    $this->addQuery($query);
+    $this->makeRevision("1.98");
 
+    $this->addFunctionalPermQuery("allowed_check_entry", "0");
+    $this->mod_version = '1.99';
 
     // Data source query
-
     $query = "SHOW TABLES LIKE 'type_autorisation_um'";
     $this->addDatasource("sae", $query);
 
