@@ -1986,22 +1986,22 @@ class CSejour extends CFacturable implements IPatientRelated {
   /**
    * Compte les observations de visite du praticien responsable
    *
-   * @param date $date A une date donnée, maintenant si null
+   * @param date       $date A une date donnée, maintenant si null
+   * @param CMediusers $user User courant
    *
    * @return int
    */
-  function countNotificationVisite($date = null) {
+  function countNotificationVisite($date = null, $user) {
     if (!$date) {
       $date = CMbDT::date();
     }
 
-    $this->completeField("praticien_id");
     $observation = new CObservationMedicale();
     $where = array();
-    $where["sejour_id"]  = " = '$this->_id'";
-    $where["user_id"]  = " = '$this->praticien_id'";
-    $where["degre"]  = " = 'info'";
-    $where["date"]  = " LIKE '$date%'";
+    $where["sejour_id"] = " = '$this->_id'";
+    $where["user_id"]   = " = '$user->user_id'";
+    $where["degre"]     = " = 'info'";
+    $where["date"]      = " LIKE '$date%'";
     return $observation->countList($where);
   }
 

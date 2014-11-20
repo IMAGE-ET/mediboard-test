@@ -256,50 +256,48 @@
           <tr>
             <td class="button">
               <script>
-              function createNotifications(){
-                var sejours = {{$visites.non_effectuee|@json}};
-                var url = new Url("soins", "httpreq_notifications_visite");
-                url.addParam("sejours[]", sejours);
-                url.requestUpdate("systemMsg", { onComplete: function() { 
-                  $("tooltip-visite-{{$app->user_id}}-{{$date}}").update(DOM.div( {className: 'small-info'}, "Visites validées"));
-                } } );
-              }
+                function createNotifications(){
+                  var sejours = {{$visites.non_effectuee|@json}};
+                  var url = new Url("soins", "httpreq_notifications_visite");
+                  url.addParam("sejours[]", sejours);
+                  url.requestUpdate("systemMsg", { onComplete: function() {
+                    $("tooltip-visite-{{$app->user_id}}-{{$date}}").update(DOM.div( {className: 'small-info'}, "Visites validées"));
+                  } } );
+                }
               </script>
               
-            <a href="#Create-Notifications" class="button search" onmouseover='ObjectTooltip.createDOM(this, "tooltip-visite-{{$app->user_id}}-{{$date}}")'>
+            <a href="#Create-Notifications" class="button search" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-visite-{{$app->user_id}}-{{$date}}')";>
               Mes visites
             </a>
             
             <table class="form" id="tooltip-visite-{{$app->user_id}}-{{$date}}" style="display: none;">
-
               {{if $visites.effectuee|@count}}
-              <tr>
-                <th>Visites effectuée(s)</th>
-                <td>{{$visites.effectuee|@count}}</td>
-              </tr>
+                <tr>
+                  <th>Visites effectuée(s)</th>
+                  <td>{{$visites.effectuee|@count}}</td>
+                </tr>
               {{/if}}
               
               {{if $visites.non_effectuee|@count}}
-              <tr>
-                <th>Visites à effectuer</th>
-                <td>{{$visites.non_effectuee|@count}}</td>
-              </tr>
-              
-              <tr>
-                <td colspan="2" class="button">
-                  <button type="button tick" class="tick" onclick="createNotifications();">
-                    Valider les visites
-                  </button>
-                </td>
-              </tr>
+                <tr>
+                  <th>Visites à effectuer</th>
+                  <td>{{$visites.non_effectuee|@count}}</td>
+                </tr>
+
+                <tr>
+                  <td colspan="2" class="button">
+                    <button type="button tick" class="tick" onclick="createNotifications();">
+                      Valider les visites
+                    </button>
+                  </td>
+                </tr>
               {{/if}} 
               
               {{if !$visites.effectuee|@count && !$visites.non_effectuee|@count}}
-              <tr>
-                <td colspan="2" class="empty">Aucune visite dans la sélection courante</td>
-              </tr>
+                <tr>
+                  <td colspan="2" class="empty">Aucune visite dans la sélection courante</td>
+                </tr>
               {{/if}}
-              
             </table>
           </td>
         </tr>

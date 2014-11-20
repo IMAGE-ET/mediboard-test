@@ -65,6 +65,7 @@ if (CModule::getActive("dPprescription")) {
 }
 
 $_is_praticien = $userCourant->isPraticien();
+$_is_anesth    = $userCourant->isAnesth();
 
 // Preselection du praticien_id
 if ($_is_praticien && !$service_id && !$praticien_id) {
@@ -155,7 +156,7 @@ if ($praticien_id && !$service_id) {
 
   foreach ($sejours as $_sejour) {
     /* @var CSejour $_sejour*/
-    if ($_is_praticien && $_sejour->praticien_id == $userCourant->user_id) {
+    if ($_is_anesth || ($_is_praticien && $_sejour->praticien_id == $userCourant->user_id)) {
       $tab_sejour[$_sejour->_id]= $_sejour;
     }
     $affectations = array();
@@ -202,7 +203,7 @@ foreach ($sejoursParService as $key => $_service) {
           $_affectation->loadRefsAffectations();
           $_affectation->loadRefSejour();
           $_sejour = $_affectation->_ref_sejour;
-          if ($_is_praticien && $_sejour->praticien_id == $userCourant->user_id) {
+          if ($_is_anesth || ($_is_praticien && $_sejour->praticien_id == $userCourant->user_id)) {
             $tab_sejour[$_sejour->_id]= $_sejour;
           }
           $_sejour->loadRefsPrescriptions();
@@ -289,10 +290,10 @@ if ($service_id) {
 
     $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where, $order, $praticien_id);
 
-    if ($_is_praticien) {
+    if ($_is_praticien || $_is_anesth) {
       foreach ($groupSejourNonAffectes as $sejours_by_moment) {
         foreach ($sejours_by_moment as $_sejour) {
-          if ($_sejour->praticien_id == $userCourant->user_id) {
+          if (($_sejour->praticien_id == $userCourant->user_id) || $_is_anesth) {
             $tab_sejour[$_sejour->_id] = $_sejour;
           }
         }
@@ -308,7 +309,7 @@ if ($service_id) {
     foreach ($service->_ref_chambres as $_chambre) {
       foreach ($_chambre->_ref_lits as $_lits) {
         foreach ($_lits->_ref_affectations as $_affectation) {
-          if ($_is_praticien && $_affectation->_ref_sejour->praticien_id == $userCourant->user_id) {
+          if ($_is_anesth || ($_is_praticien && $_affectation->_ref_sejour->praticien_id == $userCourant->user_id)) {
             $tab_sejour[$_affectation->_ref_sejour->_id]= $_affectation->_ref_sejour;
           }
           $_affectation->_ref_sejour->loadRefsPrescriptions();
@@ -342,7 +343,7 @@ $visites = array(
 
 if (count($tab_sejour)) {
   foreach ($tab_sejour as $_sejour) {
-    if ($_sejour->countNotificationVisite($date)) {
+    if ($_sejour->countNotificationVisite($date, $userCourant)) {
       $visites["effectuee"][] = $_sejour->_id;
     }
     else {
@@ -429,7 +430,6 @@ if (CModule::getActive("dPprescription")) {
 }
 $smarty->assign("service_id"              , $service_id);
 $smarty->assign("groupSejourNonAffectes"  , $groupSejourNonAffectes);
-$smarty->assign("tab_sejour"              , $tab_sejour);
 $smarty->assign("visites"                 , $visites);
 $smarty->assign("current_date"            , CMbDT::date());
 
