@@ -12,6 +12,7 @@
 // Récupération des paramètres
 $date     = CValue::getOrSession("date", CMbDT::date());
 $salle_id = CValue::getOrSession("salle_id");
+$type     = CValue::getOrSession("type", "ouverture_salle");
 
 // Récupération de l'utilisateur courant
 $user = CUser::get();
@@ -20,7 +21,7 @@ $currUser->load($user->_id);
 $currUser->isAnesth();
 $currUser->isPraticien();
 
-$salle = new CSalle;
+$salle = new CSalle();
 $salle->load($salle_id);
 
 // Vérification de la check list journalière
@@ -29,7 +30,7 @@ $daily_check_list_types = array();
 $require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active") && $date >= CMbDT::date() && !$currUser->_is_praticien;
 
 if ($require_check_list) {
-  list($check_list_not_validated, $daily_check_list_types, $daily_check_lists) = CDailyCheckList::getCheckLists($salle, $date);
+  list($check_list_not_validated, $daily_check_list_types, $daily_check_lists) = CDailyCheckList::getCheckLists($salle, $date, $type);
 
   if ($check_list_not_validated == 0) {
     $require_check_list = false;
@@ -56,15 +57,40 @@ if (count($daily_check_list_types) && $require_check_list) {
 $listValidateurs = CPersonnel::loadListPers(array_unique(array_values($type_personnel)), true, true);
 $operateurs_disp_vasc = implode("-", array_merge(CMbArray::pluck($listChirs, "_id"), CMbArray::pluck($listValidateurs, "user_id")));
 
+$nb_op_no_close = 0;
+if ($type == "fermeture_salle") {
+  $salle->loadRefsForDay($date);
+
+// Calcul du nombre d'actes codé dans les interventions
+  if ($salle->_ref_plages) {
+    foreach ($salle->_ref_plages as $_plage) {
+      foreach ($_plage->_ref_operations as $_operation) {
+        if (!$_operation->sortie_salle) {
+          $nb_op_no_close++;
+        }
+      }
+      foreach ($_plage->_unordered_operations as $_operation) {
+        if (!$_operation->sortie_salle) {
+          $nb_op_no_close++;
+        }
+      }
+    }
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
 // Daily check lists
-$smarty->assign("require_check_list"      , $require_check_list);
-$smarty->assign("daily_check_lists"       , $daily_check_lists);
-$smarty->assign("daily_check_list_types"  , $daily_check_list_types);
-$smarty->assign("listValidateurs"         , $listValidateurs);
-$smarty->assign("listChirs"               , $listChirs);
-$smarty->assign("listAnesths"             , $listAnesths);
+$smarty->assign("salle"                 , $salle);
+$smarty->assign("type"                  , $type);
+$smarty->assign("date"                  , $date);
+$smarty->assign("nb_op_no_close"        , $nb_op_no_close);
+$smarty->assign("require_check_list"    , $require_check_list);
+$smarty->assign("daily_check_lists"     , $daily_check_lists);
+$smarty->assign("daily_check_list_types", $daily_check_list_types);
+$smarty->assign("listValidateurs"       , $listValidateurs);
+$smarty->assign("listChirs"             , $listChirs);
+$smarty->assign("listAnesths"           , $listAnesths);
 
 $smarty->display("vw_edit_checklist.tpl");

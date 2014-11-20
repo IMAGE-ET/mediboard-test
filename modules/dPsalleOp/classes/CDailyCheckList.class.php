@@ -42,6 +42,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   public $_readonly;
   public $_date_min;
   public $_date_max;
+  public $_type;
 
   static $types = array(
     // Secu patient
@@ -146,6 +147,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
       $daily_check_list = CDailyCheckList::getList($object, $date, null, $_list_type->_id);
       $daily_check_list->loadItemTypes();
       $daily_check_list->loadBackRefs('items');
+      $daily_check_list->loadRefListType();
 
       if (!$daily_check_list->_id || !$daily_check_list->validator_id) {
         $check_list_not_validated++;
@@ -187,6 +189,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     $props['_validator_password'] = 'password notNull';
     $props['_date_min']    = 'date';
     $props['_date_max']    = 'date';
+    $props['_type']        = 'enum list|ouverture_salle|ouverture_sspi|ouverture_preop|fermeture_salle';
     return $props;
   }
 
@@ -402,4 +405,40 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
 
     return $this->_ref_item_types;
   }
+
+  /**
+   * Get date last checklist for a type
+   *
+   * @param CMbObject $object Object to get the check lists of
+   * @param string    $type   type de checklist
+   *
+   * @return date
+   */
+  static function getDateLastChecklist(CMbObject $object, $type) {
+    $date_last_checklist = null;
+
+    $ljoin = array();
+    $ljoin["daily_check_list_type"]      = "daily_check_list_type.daily_check_list_type_id = daily_check_list.list_type_id";
+
+    $where = array();
+    $where["daily_check_list.object_class"] = " = '$object->_class'";
+    $where["daily_check_list.object_id"]    = " = '$object->_id'";
+    $where["daily_check_list_type.type"]= " = '$type'";
+
+    $checklist = new self;
+    $checklist->loadObject($where, "date DESC", null, $ljoin);
+
+    if ($checklist->_id) {
+      $log = new CUserLog();
+      $log->object_id     = $checklist->_id;
+      $log->object_class  = $checklist->_class;
+      $log->loadMatchingObject("date DESC");
+      $date_last_checklist = $log->date;
+    }
+    else {
+      $date_last_checklist = $checklist->date;
+    }
+    return $date_last_checklist;
+  }
+
 }

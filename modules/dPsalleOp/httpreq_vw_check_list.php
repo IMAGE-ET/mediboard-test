@@ -10,7 +10,6 @@
  */
 
 CCanDo::checkRead();
-
 $check_list_id = CValue::get("check_list_id");
 
 $check_list = new CDailyCheckList();
@@ -18,6 +17,7 @@ $check_list->load($check_list_id);
 $check_list->loadItemTypes();
 $check_list->loadRefsFwd();
 $check_list->loadBackRefs('items');
+$check_list->loadRefListType();
 
 $anesth_id = null;
 
@@ -30,7 +30,6 @@ $anesth->load($anesth_id);
 
 $type_personnel = array("op", "op_panseuse");
 if (!$check_list->validator_id && $check_list->_id) {
-  $check_list->loadRefListType();
   $validateurs = explode("|", $check_list->_ref_list_type->type_validateur);
   $type_personnel = array();
   foreach ($validateurs as $valid) {
@@ -48,8 +47,13 @@ $listAnesths = new CMediusers();
 $listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);
 
 $check_item_category = new CDailyCheckItemCategory;
-$check_item_category->target_class = $check_list->object_class;
-$check_item_category->type = $check_list->type;
+if ($check_list->_ref_list_type->type == "fermeture_salle") {
+  $check_item_category->list_type_id = $check_list->list_type_id;
+}
+else {
+  $check_item_category->target_class = $check_list->object_class;
+  $check_item_category->type = $check_list->type;
+}
 $check_item_categories = $check_item_category->loadMatchingList("title");
 
 // Création du template

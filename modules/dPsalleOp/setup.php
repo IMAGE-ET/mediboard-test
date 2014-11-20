@@ -1622,7 +1622,6 @@ class CSetupdPsalleOp extends CSetup {
                 SET `type` = 'op'
                 WHERE `object_class` = 'CBlocOperatoire'";
     $this->addQuery($query);
-
     $this->makeRevision('0.65');
 
     $query = "ALTER TABLE `daily_check_list_type`
@@ -1636,7 +1635,11 @@ class CSetupdPsalleOp extends CSetup {
                 SET `type` = 'ouverture_salle'
                 WHERE `object_class` = 'CSalle'";
     $this->addQuery($query);
+    $this->makeRevision('0.66');
 
-    $this->mod_version = '0.66';
+    $query = "ALTER TABLE `daily_check_list_type`
+                CHANGE `type` `type` ENUM ('ouverture_salle','ouverture_sspi','ouverture_preop', 'fermeture_salle') NOT NULL DEFAULT 'ouverture_salle';";
+    $this->addQuery($query);
+    $this->mod_version = '0.67';
   }
 }

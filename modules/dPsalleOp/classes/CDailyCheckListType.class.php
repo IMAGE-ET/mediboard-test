@@ -59,7 +59,7 @@ class CDailyCheckListType extends CMbObject {
     //$props['object_id']    = 'ref class|CMbObject meta|object_class autocomplete';
 
     $props['group_id']     = 'ref notNull class|CGroups';
-    $props['type']         = 'enum notNull list|ouverture_salle|ouverture_sspi|ouverture_preop default|ouverture_salle';
+    $props['type']         = 'enum notNull list|ouverture_salle|ouverture_sspi|ouverture_preop|fermeture_salle default|ouverture_salle';
     $props['title']        = 'str notNull';
     $props['type_validateur'] = "set vertical list|chir|anesth|op|op_panseuse|reveil|service|iade|brancardier|sagefemme|manipulateur";
     $props['description']  = 'text';
@@ -127,7 +127,7 @@ class CDailyCheckListType extends CMbObject {
       // Suppression des liens ayant un object class pas cohérent ou dont l'ID n'est pas dans la liste
       foreach ($current_links as $_link_object) {
         if (
-          (($this->type == "ouverture_salle" && $_link_object->object_class != "CSalle") ||
+          ((($this->type == "ouverture_salle"|| $this->type == "fermeture_salle") && $_link_object->object_class != "CSalle") ||
           (($this->type == "ouverture_sspi" || $this->type == "ouverture_preop") && $_link_object->object_class != "CBlocOperatoire"))
           || !in_array("$_link_object->object_class-$_link_object->object_id", $this->_links)
         ) {
@@ -136,7 +136,7 @@ class CDailyCheckListType extends CMbObject {
       }
 
       // Creation des liens manquants
-      foreach ($this->_links as $_object_guid) {
+      foreach ($this->_links[$this->type] as $_object_guid) {
         list($_object_class, $_object_id) = explode("-", $_object_guid);
         // Exclude types from other class
         if (($this->type == "ouverture_salle" && $_object_class != "CSalle") ||
@@ -196,7 +196,7 @@ class CDailyCheckListType extends CMbObject {
 
     foreach ($object->_specs["type"]->_locales as $type => $trad) {
       /** @var CSalle|CBlocOperatoire $_object */
-      $_object = $type == "ouverture_salle" ?  new CSalle() : new CBlocOperatoire();
+      $_object = ($type == "ouverture_salle" || $type == "fermeture_salle") ?  new CSalle() : new CBlocOperatoire();
       $_targets = $_object->loadGroupList();
       array_unshift($_targets, $_object);
 

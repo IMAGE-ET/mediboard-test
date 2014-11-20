@@ -19,6 +19,20 @@
   Main.add(function () {
     Calendar.regField(getForm("selectSalle").date, null, {noView: true});
   });
+
+  EditCheckList = {
+    url: null,
+    edit: function(salle_id, date, type) {
+      var url = new Url('salleOp', 'ajax_edit_checklist');
+      url.addParam('date'    , date);
+      url.addParam('salle_id', salle_id);
+      url.addParam('type', type);
+      url.requestModal();
+      url.modalObject.observe("afterClose", function(){
+        location.reload();
+      });
+    }
+  };
 </script>
 
 <form action="?" name="selectSalle" method="get">
@@ -92,9 +106,20 @@
       <tr>
         <td colspan="2" class="button">
           {{if $date_last_checklist|date_format:$conf.date != $date|date_format:$conf.date}}
-            <button class="add" type="button" onclick="loadOperation(null, null, 1)">Validation de checklist</button>
+            <button class="checklist" type="button" onclick="loadOperation(null, null, 1)">Validation de checklist</button>
           {{/if}}
           <div class="info">Dernière validation: {{$date_last_checklist|date_format:$conf.datetime}}</div>
+        </td>
+      </tr>
+    {{/if}}
+
+    {{if $require_check_list_close && $date_close_checklist|date_format:$conf.date != $date|date_format:$conf.date}}
+      <tr>
+        <td colspan="2" class="button">
+          <button class="checklist" type="button" onclick="EditCheckList.edit('{{$salle->_id}}', '{{$date}}', 'fermeture_salle');">Fermeture de salle</button>
+          {{if $date_close_checklist}}
+            <div class="info">Dernière validation: {{$date_close_checklist|date_format:$conf.datetime}}</div>
+          {{/if}}
         </td>
       </tr>
     {{/if}}

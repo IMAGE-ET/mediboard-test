@@ -4,6 +4,25 @@
 changePage = function(start) {
   $V(getForm("filter-check-lists").start, start);
 }
+
+changeObject = function() {
+  var form = getForm("filter-check-lists");
+  $('filter-check-lists__type').hide();
+  $('filter-check-lists_type').hide();
+
+  if (form.object_guid.value == "COperation-") {
+    $('filter-check-lists_type').show();
+    $V(form._type, '');
+  }
+  else {
+    $('filter-check-lists__type').show();
+    $V(form.type, '');
+  }
+}
+
+Main.add(function () {
+  changeObject();
+});
 </script>
 <table class="main layout">
   <tr>
@@ -17,12 +36,9 @@ changePage = function(start) {
           <tr>
             <th>{{mb_label object=$check_list_filter field=_date_min}}</th>
             <td>{{mb_field object=$check_list_filter field=_date_min register=true form="filter-check-lists" onchange="this.form.start.value=0"}}</td>
-            <th>{{mb_label object=$check_list_filter field=_date_max}}</th>
-            <td>{{mb_field object=$check_list_filter field=_date_max register=true form="filter-check-lists" onchange="this.form.start.value=0"}}</td>
-
             <th>{{mb_label object=$check_list_filter field=object_id}}</th>
             <td>
-              <select name="object_guid" onchange="this.form.start.value=0">
+              <select name="object_guid" onchange="this.form.start.value=0;changeObject();">
                 {{foreach from=$list_rooms item=list key=class}}
                   <optgroup label="{{if $class == "CBlocOperatoire"}}Salle de réveil{{else}}{{tr}}{{$class}}{{/tr}}{{/if}}">
                     {{foreach from=$list item=room}}
@@ -31,6 +47,15 @@ changePage = function(start) {
                   </optgroup>
                 {{/foreach}}
               </select>
+            </td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$check_list_filter field=_date_max}}</th>
+            <td>{{mb_field object=$check_list_filter field=_date_max register=true form="filter-check-lists" onchange="this.form.start.value=0"}}</td>
+            <th>{{mb_label object=$check_list_filter field=_type}}</th>
+            <td >
+              {{mb_field object=$check_list_filter field=_type emptyLabel="All"}}
+              {{mb_field object=$check_list_filter field=type emptyLabel="All"}}
             </td>
           </tr>
           <tr>

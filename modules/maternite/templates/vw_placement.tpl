@@ -1,13 +1,3 @@
-{{*
- * $Id:$
- *
- * @package    Mediboard
- * @subpackage Maternite
- * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
- *}}
-
 {{mb_script module="planningOp" script="operation"}}
 
 <script>
@@ -21,6 +11,7 @@
       var url = new Url('salleOp', 'ajax_edit_checklist');
       url.addParam('date', '{{$date}}');
       url.addParam('salle_id', salle_id);
+      url.addParam('type', 'ouverture_salle');
       url.requestModal();
       url.modalObject.observe("afterClose", function(){
         location.reload();
@@ -130,7 +121,7 @@
               <br/>
               <div class="info">Dernière validation: {{$date_last_checklist.$salle_id|date_format:$conf.datetime}}</div>
               {{if $date_last_checklist.$salle_id|date_format:$conf.date != $date|date_format:$conf.date}}
-                <button class="add" type="button" onclick="EditCheckList.edit('{{$salle_id}}');">Validation de checklist</button>
+                <button class="checklist" type="button" onclick="EditCheckList.edit('{{$salle_id}}');">Validation de checklist</button>
               {{/if}}
             {{/if}}
 

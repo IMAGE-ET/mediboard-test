@@ -9,27 +9,27 @@
     {{foreach from=$check_list->_ref_item_types item=curr_type}}
       {{assign var=curr_cat value=$curr_type->category_id}}
       {{if array_key_exists($curr_cat, $check_item_categories)}}
-      {{if $curr_type->category_id != $category_id}}
+        {{if $curr_type->category_id != $category_id}}
+          <tr>
+            <th colspan="2" class="text category" style="text-align: left;">
+              <strong>{{$check_item_categories.$curr_cat->title}}</strong>
+              {{if $check_item_categories.$curr_cat->desc}}
+                &ndash; {{$check_item_categories.$curr_cat->desc}}
+              {{/if}}
+            </th>
+          </tr>
+        {{/if}}
         <tr>
-          <th colspan="2" class="text category" style="text-align: left;">
-            <strong>{{$check_item_categories.$curr_cat->title}}</strong>
-            {{if $check_item_categories.$curr_cat->desc}}
-              &ndash; {{$check_item_categories.$curr_cat->desc}}
+          <td style="padding-left: 1em;" class="text">
+            {{mb_value object=$curr_type field=title}}
+            {{if $curr_type->desc}}
+              <div class="compact" style="margin-top: 0.5em;">{{mb_value object=$curr_type field=desc}}</div>
             {{/if}}
-          </th>
+          </td>
+          <td class="text">
+            {{$curr_type->_answer}}
+          </td>
         </tr>
-      {{/if}}
-      <tr>
-        <td style="padding-left: 1em;" class="text">
-          {{mb_value object=$curr_type field=title}}
-          {{if $curr_type->desc}}
-            <div class="compact" style="margin-top: 0.5em;">{{mb_value object=$curr_type field=desc}}</div>
-          {{/if}}
-        </td>
-        <td class="text">
-          {{$curr_type->_answer}}
-        </td>
-      </tr>
       {{/if}}
       {{assign var=category_id value=$curr_type->category_id}}
     {{foreachelse}}
@@ -64,7 +64,7 @@ confirmCheckList = function(form) {
     confirm('Tous les points ont-ils été bien vérifiés ?') &&
     onSubmitFormAjax(form, {
       onComplete: function(){
-        if (HAS_classes.indexOf($V(form.object_class)) == -1) {
+        if (HAS_classes.indexOf($V(form.object_class)) == -1 && $V(form.ref_type_list) != "fermeture_salle") {
           location.reload();
         }
       }
@@ -75,7 +75,9 @@ refreshCheckList{{$check_list->type}}_{{$check_list->list_type_id}} = function(i
   var form = getForm("edit-CDailyCheckList-{{$check_list->object_class}}-{{$check_list->object_id}}-{{$check_list->type}}-{{$check_list->list_type_id}}");
 
   if ($V(form.validator_id) && $V(form._validator_password) && !$("systemMsg").select(".warning, .error").length) {
-    $("{{$check_list->type}}-title").down("img").src = "images/icons/tick.png";
+    if ($("{{$check_list->type}}-title")) {
+      $("{{$check_list->type}}-title").down("img").src = "images/icons/tick.png";
+    }
     var url = new Url("dPsalleOp", "httpreq_vw_check_list");
     url.addParam("check_list_id", id);
     url.requestUpdate("check_list_{{$check_list->type}}_{{$check_list->list_type_id}}");
@@ -126,10 +128,11 @@ Main.add(function(){
   <input type="hidden" name="object_id" value="{{$check_list->object_id}}" />
   <input type="hidden" name="type" value="{{$check_list->type}}" />
   <input type="hidden" name="list_type_id" value="{{$check_list->list_type_id}}" />
+  <input type="hidden" name="ref_type_list" value="{{$check_list->_ref_list_type->type}}" />
   <input type="hidden" name="date" value="{{$check_list->date|ternary:$check_list->date:"now"}}" />
   <input type="hidden" name="group_id" value="{{$check_list->group_id|ternary:$check_list->group_id:$g}}" />
 
-  {{if in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes)}}
+  {{if in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes) || $check_list->_ref_list_type->type == "fermeture_salle"}}
     <input type="hidden" name="callback" value="refreshCheckList{{$check_list->type}}_{{$check_list->list_type_id}}" />
   {{else}}
     <input type="hidden" name="callback" value="saveCheckListIdCallback{{$check_list->type}}_{{$check_list->list_type_id}}" />

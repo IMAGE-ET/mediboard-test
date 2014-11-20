@@ -10,14 +10,13 @@
  */
 
 CCanDo::checkRead();
-
 $salle_id      = CValue::getOrSession("salle");
 $bloc_id       = CValue::getOrSession("bloc_id");
 $date          = CValue::getOrSession("date", CMbDT::date());
 $operation_id  = CValue::getOrSession("operation_id");
 $hide_finished = CValue::getOrSession("hide_finished", 0);
 
-// récuperation du service par défaut dans les préférences utilisateur
+// Récuperation du service par défaut dans les préférences utilisateur
 $group_id = CGroups::loadCurrent()->_id;
 $default_salles_id = CAppUI::pref("default_salles_id");
 // Récuperation de la salle à afficher par défaut
@@ -94,20 +93,21 @@ if ($salle->_ref_urgences) {
 
 $date_last_checklist = null;
 if ($salle->cheklist_man) {
-  $checklist = new CDailyCheckList();
-  $checklist->object_class = $salle->_class;
-  $checklist->object_id = $salle->_id;
-  $checklist->loadMatchingObject("date DESC");
-  if ($checklist->_id) {
-    $log = new CUserLog();
-    $log->object_id     = $checklist->_id;
-    $log->object_class  = $checklist->_class;
-    $log->loadMatchingObject("date DESC");
-    $date_last_checklist = $log->date;
+  $date_last_checklist = CDailyCheckList::getDateLastChecklist($salle, "ouverture_salle");
+}
+
+// Checklist_fermeture bloc
+$date_close_checklist = null;
+$currUser = CMediusers::get();
+$require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active") && $date >= CMbDT::date() && !$currUser->isPraticien();
+
+if ($require_check_list) {
+  list($check_list_not_validated, $daily_check_list_types, $daily_check_lists) = CDailyCheckList::getCheckLists($salle, $date, "fermeture_salle");
+
+  if ($check_list_not_validated == 0) {
+    $require_check_list = false;
   }
-  else {
-    $date_last_checklist = $checklist->date;
-  }
+  $date_close_checklist = CDailyCheckList::getDateLastChecklist($salle, "fermeture_salle");
 }
 
 // Création du template
@@ -124,5 +124,7 @@ $smarty->assign("listAnesths"   , $listAnesths);
 $smarty->assign("date"          , $date);
 $smarty->assign("operation_id"  , $operation_id);
 $smarty->assign("date_last_checklist", $date_last_checklist);
+$smarty->assign("require_check_list_close", $require_check_list);
+$smarty->assign("date_close_checklist", $date_close_checklist);
 
 $smarty->display("inc_liste_plages.tpl");

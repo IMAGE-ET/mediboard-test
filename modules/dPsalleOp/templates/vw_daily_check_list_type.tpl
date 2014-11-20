@@ -95,7 +95,7 @@ Main.add(Control.Tabs.create.curry("list_type_tabs", true));
                     <tr>
                       <td>
                         <label>
-                          <input type="checkbox" name="_links[{{$_target->_guid}}]" value="{{$_target->_guid}}"
+                          <input type="checkbox" name="_links[{{$_type}}][{{$_target->_guid}}]" value="{{$_target->_guid}}"
                             {{if array_key_exists($_target->_guid,$list_type->_links)}} checked {{/if}}/>
                           {{if $_id == 0}}
                             {{tr}}All{{/tr}}
