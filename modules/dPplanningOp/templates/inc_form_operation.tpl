@@ -442,6 +442,7 @@ refreshFunction = function(chir_id) {
             url.addParam('show_view', true);
             url.addParam("input_field", "_poste_sspi_id_autocomplete");
             url.addParam("where[type]", "sspi");
+            url.addParam("whereComplex[bloc_id]", "IS NOT NULL");
             url.autoComplete(form.elements._poste_sspi_id_autocomplete, null, {
               minChars: 2,
               method: "get",
@@ -475,6 +476,7 @@ refreshFunction = function(chir_id) {
             url.addParam('show_view', true);
             url.addParam("input_field", "_poste_preop_id_autocomplete");
             url.addParam("where[type]", "preop");
+            url.addParam("whereComplex[bloc_id]", "IS NOT NULL");
             url.autoComplete(form.elements._poste_preop_id_autocomplete, null, {
               minChars: 2,
               method: "get",
