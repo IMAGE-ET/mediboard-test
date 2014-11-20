@@ -16,13 +16,21 @@ $start       = intval(CValue::getOrSession('start'));
 $keywords    = CValue::getOrSession('keywords');
 $letter      = CValue::getOrSession('letter', "%");
 
+$group_id = CGroups::loadCurrent()->_id;
+
 $where = array(
-  "name" => ($letter === "#" ? "RLIKE '^[^A-Z]'" : "LIKE '$letter%'")
+  "product_endowment.name" => ($letter === "#" ? "RLIKE '^[^A-Z]'" : "LIKE '$letter%'"),
+  "service.group_id"       => "= '$group_id'",
+);
+
+$ljoin = array(
+  "service" => "service.service_id = product_endowment.service_id",
 );
 
 $endowment = new CProductEndowment();
 $endowment->load($endowment_id);
-$list = $endowment->seek($keywords, $where, "$start,20", true, null, "service_id, name");
+
+$list = $endowment->seek($keywords, $where, "$start,25", true, $ljoin, "service.nom, product_endowment.name");
 $total = $endowment->_totalSeek;
 
 foreach ($list as $_item) {
