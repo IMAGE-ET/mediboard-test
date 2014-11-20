@@ -33,7 +33,6 @@
    */
   listDocuments = function(account_id, mode, page_start) {
     page_start = page_start ? page_start : 0;
-    var url = new Url("messagerie", "ajax_list_external_document");
     if (account_id) {
       last_account_id = account_id;
     }
@@ -43,7 +42,11 @@
     if (page_start && page_start != last_start) {
       last_start = page_start;
     }
-
+    if ('{{$_script}}.listDocuments') {
+      {{$_script}}.listDocuments(account_id, mode, page_start);
+      return false;
+    }
+    var url = new Url("messagerie", "ajax_list_external_document");
     url.addParam("start", last_start);
     url.addParam("mode", last_mode_calendar);
     url.addParam("account_id", last_account_id);

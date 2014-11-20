@@ -34,7 +34,7 @@ foreach ($documents as $_doc) {
   $_doc->loadRefFile(true);
 }
 
-$smarty = new CSmartyDP();
+$smarty = new CSmartyDP("modules/messagerie");
 $smarty->assign("nb_total_documents", $nb_documents);
 $smarty->assign("nb_unlinked", $nb_total_unlinked);
 $smarty->assign("account_id", $account_id);
