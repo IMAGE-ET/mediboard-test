@@ -684,6 +684,7 @@ $locales['CService-hospit_jour'] = 'Hospitalisation de jour';
 $locales['CService-hospit_jour-court'] = 'Jour';
 $locales['CService-hospit_jour-desc'] = 'Hospitalisation de jour';
 $locales['CService-is_soins_continue'] = 'Est un service de soins continus';
+$locales['CService-is_soins_continue-court'] = 'Soins continus';
 $locales['CService-is_soins_continue-desc'] = 'Ce service est un service de soins continus';
 $locales['CService-msg-create'] = 'Service créé';
 $locales['CService-msg-delete'] = 'Service supprimé';
