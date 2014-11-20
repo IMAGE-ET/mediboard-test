@@ -79,6 +79,21 @@
             </tr>
 
             <tr>
+              <th>{{mb_label object=$source field="is_private"}}</th>
+              <td>{{mb_field object=$source field="is_private" }}</td>
+            </tr>
+
+            <tr>
+              <th>{{mb_label object=$source field="cron_update"}}</th>
+              <td>{{mb_field object=$source field="cron_update" }}</td>
+            </tr>
+
+            <tr>
+              <th>{{mb_label object=$source field="extension"}}</th>
+              <td>{{mb_field object=$source field="extension" }}</td>
+            </tr>
+
+            <tr>
               <td class="button" colspan="2">
               {{if $source->_id}}
                 <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
