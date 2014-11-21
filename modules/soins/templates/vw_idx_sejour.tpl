@@ -365,10 +365,13 @@
                   {{/if}}
                 </td>
 
-                <td style="padding: 1px;" onclick="loadViewSejour('{{$sejour->_id}}', '{{$date}}', this, 'Imeds');">
+                <td style="padding: 1px;" >
                   {{if $isImedsInstalled}}
-                    {{mb_include module=Imeds template=inc_sejour_labo link="#"}}
+                    <div class="Imeds_button" onclick="loadViewSejour('{{$sejour->_id}}', '{{$date}}', this, 'Imeds');">
+                      {{mb_include module=Imeds template=inc_sejour_labo link="#"}}
+                    </div>
                   {{/if}}
+                  {{mb_include module=dPfiles template=inc_icon_category_check object=$sejour}}
                 </td>
                 
                 <td class="action" style="padding: 1px;">
