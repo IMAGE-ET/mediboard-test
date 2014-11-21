@@ -732,6 +732,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $ljoin["service"]     = "service.service_id = chambre.service_id";
     $where["chambre.nom"] = " = '$nom_chambre'";
     $where["group_id"]    = " = '$sender->group_id'";
+    $where["chambre.annule"] = " = '0'";
 
     $chambre->escapeValues();
     $chambre->loadObject($where, null, null, $ljoin);
@@ -742,6 +743,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $ljoin["chambre"]  = "chambre.chambre_id = lit.chambre_id";
     $ljoin["service"]  = "service.service_id = chambre.service_id";
     $where["lit.nom"]      = " = '$nom_lit'";
+    $where["lit.annule"]        = " = '0'";
+    $where["service.cancelled"] = " = '0'";
     $where["group_id"] = " = '$sender->group_id'";
     if ($chambre->_id) {
       $where["chambre.chambre_id"] = " = '$chambre->_id'";
