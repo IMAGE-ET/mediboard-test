@@ -264,49 +264,54 @@ foreach ($sejours as $_sejour) {
     }
   }
 
-  foreach ($prescription->_ref_prescription_line_mixes as $line) {
-    $line->_prises_prevues_moment = array();
-    $line->loadRefPraticien();
-    $line->loadRefLogSignaturePrat();
-    $line->loadActiveDates();
+  if (count($prescription->_ref_prescription_line_mixes)) {
+    CStoredObject::massLoadBackRefs($prescription->_ref_prescription_line_mixes, "variations", "dateTime");
 
-    if (count($line->_prises_prevues)) {
-      foreach ($line->_prises_prevues as $_date => $_prises_by_date) {
-        foreach ($_prises_by_date as $_hour => $_prise) {
-          if (!isset($postes_by_date[$_date][$_hour])) {
-            continue;
-          }
-          $key = $postes_by_date[$_date][$_hour];
-          if (isset($_prise["real_hour"]) && is_array($_prise["real_hour"])) {
-            foreach ($_prise["real_hour"] as $_real_hour) {
-              @$line->_prises_prevues_moment[$key["day"]][$key["moment"]]["real_hour"][] = $_real_hour;
+    foreach ($prescription->_ref_prescription_line_mixes as $line) {
+      $line->_prises_prevues_moment = array();
+      $line->loadRefPraticien();
+      $line->loadRefLogSignaturePrat();
+      $line->loadActiveDates();
+      $line->loadRefsVariations();
+
+      if (count($line->_prises_prevues)) {
+        foreach ($line->_prises_prevues as $_date => $_prises_by_date) {
+          foreach ($_prises_by_date as $_hour => $_prise) {
+            if (!isset($postes_by_date[$_date][$_hour])) {
+              continue;
+            }
+            $key = $postes_by_date[$_date][$_hour];
+            if (isset($_prise["real_hour"]) && is_array($_prise["real_hour"])) {
+              foreach ($_prise["real_hour"] as $_real_hour) {
+                @$line->_prises_prevues_moment[$key["day"]][$key["moment"]]["real_hour"][] = $_real_hour;
+              }
             }
           }
         }
       }
-    }
-    if (count($line->_ref_lines)) {
-      foreach ($line->_ref_lines as $_line_item) {
-        $_line_item->_administrations_moment = array();
-        if (count($_line_item->_administrations)) {
-          foreach ($_line_item->_administrations as $date => $_administrations_by_date) {
-            foreach ($_administrations_by_date as $_hour => $_quantite) {
-              if (!isset($postes_by_date[$date][$_hour])) {
-                continue;
+      if (count($line->_ref_lines)) {
+        foreach ($line->_ref_lines as $_line_item) {
+          $_line_item->_administrations_moment = array();
+          if (count($_line_item->_administrations)) {
+            foreach ($_line_item->_administrations as $date => $_administrations_by_date) {
+              foreach ($_administrations_by_date as $_hour => $_quantite) {
+                if (!isset($postes_by_date[$date][$_hour])) {
+                  continue;
+                }
+                $key = $postes_by_date[$date][$_hour];
+                @$_line_item->_administrations_moment[$date][$key["moment"]] += $_quantite;
               }
-              $key = $postes_by_date[$date][$_hour];
-              @$_line_item->_administrations_moment[$date][$key["moment"]] += $_quantite;
             }
-          }
 
-          if ($mode_lite) {
-            $_line_item->_ref_last_administration = reset($_line_item->_ref_administrations);
-            foreach ($_line_item->_ref_administrations as $_adm) {
-              if ($_adm->dateTime > $_line_item->_ref_last_administration->dateTime) {
-                $_line_item->_ref_last_administration = $_adm;
+            if ($mode_lite) {
+              $_line_item->_ref_last_administration = reset($_line_item->_ref_administrations);
+              foreach ($_line_item->_ref_administrations as $_adm) {
+                if ($_adm->dateTime > $_line_item->_ref_last_administration->dateTime) {
+                  $_line_item->_ref_last_administration = $_adm;
+                }
               }
+              $_line_item->_ref_last_administration->loadRefAdministrateur();
             }
-            $_line_item->_ref_last_administration->loadRefAdministrateur();
           }
         }
       }

@@ -31,8 +31,11 @@
         {{/if}}
       </strong>
       <br />
+      {{if $line->_class == "CPrescriptionLineMedicament" && $line->voie}}
+        {{mb_value object=$line field=voie}}
+      {{/if}}
       <div class="compact">
-        {{if $line->sans_planif}}
+        {{if $line->sans_planif && $line->_class == "CPrescriptionLineMedicament"}}
           {{if $line->max_par_prise}}
             {{mb_label object=$line field=max_par_prise}} : {{mb_value object=$line field=max_par_prise}} {{mb_value object=$line field=unite_prise}} <br />
           {{/if}}
@@ -48,9 +51,6 @@
           {{/foreach}}
         {{/if}}
       </div>
-      {{if $line->_class == "CPrescriptionLineMedicament" && $line->voie}}
-        {{mb_value object=$line field=voie}}
-      {{/if}}
       {{if $mode_dupa}}
         <div class="compact">
           <em>{{mb_value object=$line field=commentaire}}</em>
@@ -124,19 +124,19 @@
           {{/if}}
 
           {{assign var=administrations_in_hour value=""}}
-          {{if isset($line->_administrations_moment.$unite_prise.$_date.$_moment|smarty:nodefaults)}}
+          {{if @isset($line->_administrations_moment.$unite_prise.$_date.$_moment|smarty:nodefaults)}}
             {{assign var=administrations_in_hour value=$line->_administrations_moment.$unite_prise.$_date.$_moment}}
           {{/if}}
 
           {{* Initialisations *}}
           {{assign var=quantite value="-"}}
           {{assign var=quantite_depart value="-"}}
-          {{assign var=heure_reelle value=""}}
+          {{assign var=heure_reelle value=""}}source
 
           {{* Quantite planifiée *}}
           {{if @$administrations_in_hour.quantite_planifiee}}
             {{assign var=quantite value=$administrations_in_hour.quantite_planifiee}}
-          {{elseif @array_key_exists($_moment, @$line->_quantity_by_date_moment.$unite_prise.$_date)}}
+          {{elseif @array_key_exists($_moment, @$line->_quantity_by_date_moment.$unite_prise.$_date.$_moment)}}
             {{assign var=quantite value=$line->_quantity_by_date_moment.$unite_prise.$_date.$_moment.total}}
           {{/if}}
 
@@ -160,7 +160,7 @@
                       /{{$administrations_in_hour.quantite_planifiee}}
                     {{/if}}
                   {{else}}
-                    {{if isset($administrations_in_hour.quantite|smarty:nodefaults)}}
+                    {{if @isset($administrations_in_hour.quantite|smarty:nodefaults)}}
                       {{if $administrations_in_hour.quantite == 0}}
                         a
                       {{else}}
@@ -224,7 +224,11 @@
         {{if $line->voie}}
           <br />
           {{mb_value object=$line field=voie}}
+        {{elseif $line->type_line == "aerosol" && $line->interface}}
+          <br />
+          {{mb_label object=$line field=interface}} {{tr}}CPrescriptionLineMix.interface.{{$line->interface}}{{/tr}}
         {{/if}}
+
         {{if $line->type == "PCA"}}
           <div class="compact">
             {{if $line->mode_bolus}}
@@ -266,11 +270,15 @@
           <div class="compact">
             <div style="white-space: nowrap;">
               {{if $line->_frequence}}
-                {{if $line->type_line == "perfusion"}}Débit initial: {{/if}}
+                {{if $line->type_line == "perfusion"}}Débit initial : {{/if}}
                 {{$line->_frequence}}
                 {{if $line->volume_debit && $line->duree_debit && $line->type_line != "oxygene"}}
                   <br />
                   ({{mb_value object=$line field=volume_debit}} ml en {{mb_value object=$line field=duree_debit}} h)
+                {{/if}}
+                {{if $line->type_line == "perfusion" && $line->_last_variation->_debit}}
+                  <br />
+                  Dernier débit : {{$line->_last_variation->_debit}} ml/h
                 {{/if}}
               {{/if}}
             </div>
@@ -287,6 +295,10 @@
               {{if $line->volume_debit && $line->duree_debit && $line->type_line != "oxygene"}}
                 <br />
                 ({{mb_value object=$line field=volume_debit}} ml en {{mb_value object=$line field=duree_debit}} h)
+              {{/if}}
+              {{if $line->type_line == "perfusion" && $line->_last_variation->debit}}
+                <br />
+                Dernier débit : {{$line->_last_variation->debit}} ml/h
               {{/if}}
             {{/if}}
             <em>
