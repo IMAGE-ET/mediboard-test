@@ -71,6 +71,7 @@ $patients_offline = array();
 /** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, null, null, "sejour.sejour_id", $ljoin);
 
+CSejour::massLoadSurrAffectation($sejours, $datetime_avg);
 CSejour::massLoadCurrAffectation($sejours, $datetime_avg, $service_id);
 CSejour::massLoadNDA($sejours);
 /** @var CPatient[] $patients */

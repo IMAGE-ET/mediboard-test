@@ -61,11 +61,22 @@
       {{assign var=curr_aff value=$sejour->_ref_curr_affectation}}
       {{assign var=patient value=$sejour->_ref_patient}}
       {{assign var=curr_prat value=$sejour->_ref_praticien}}
+
+      {{if !$sejour->entree_reelle || ($sejour->_ref_prev_affectation->_id && $sejour->_ref_prev_affectation->effectue == 0)}}
+        {{assign var=statut value="attente"}}
+      {{/if}}
+
+      {{if $sejour->sortie_reelle || $curr_aff->effectue == 1}}
+        {{assign var=statut value="sorti"}}
+      {{/if}}
+
       <tr>
         <td class="text">
           <button type="button" class="print compact notext not-printable" onclick="$('content_{{$patient->_guid}}').print();">{{tr}}Print{{/tr}}</button>
           <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')"
-                style="{{if $sejour->entree > $dtnow}}color: #A33; font-style: italic;{{elseif $sejour->sortie < $dtnow}}text-decoration: line-through{{/if}}">
+                class="{{if $statut == "attente"}}patient-not-arrived{{/if}}"
+                style="{{if $statut == "sorti"}}background-image:url(images/icons/ray.gif); background-repeat:repeat;{{/if}}
+                       {{if $statut == "attente"}}font-style: italic;{{/if}}">
             {{$patient}}
           </span>
         </td>
