@@ -360,18 +360,18 @@ class CMbObject extends CStoredObject {
   /**
    * Count the exchanges for the all sejours
    *
-   * @param CMbObject[] $objects Sejour
+   * @param CMbObject[] $objects CMbObject
    * @param String      $type    Type
    * @param String      $subtype Sous type
    *
    * @return void
    */
-  function massCountExchanges($objects, $type = null, $subtype = null) {
+  static function massCountExchanges($objects, $type = null, $subtype = null) {
     if (!count($objects)) {
       return null;
     }
-
-    $object_ids = CMbArray::pluck($objects, $this->_spec->key);
+    $object = current($objects);
+    $object_ids = CMbArray::pluck($objects, $object->_spec->key);
     $object_ids = array_unique($object_ids);
     CMbArray::removeValue("", $object_ids);
 
@@ -381,7 +381,7 @@ class CMbObject extends CStoredObject {
 
     $where = array(
       "object_id"    => CSQLDataSource::prepareIn($object_ids),
-      "object_class" => "= '$this->_class'",
+      "object_class" => "= '$object->_class'",
     );
 
     if ($type) {
