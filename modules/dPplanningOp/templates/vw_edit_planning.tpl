@@ -279,8 +279,11 @@ modeExpertDisplay = function() {
       {{if !$op->_ref_sejour->sortie_reelle || $modules.dPbloc->_can->edit || $modules.dPhospi->_can->edit}}
         <button class="submit" type="button" onclick="submitForms();">{{tr}}Save{{/tr}}</button>
         {{if $op->annulee}}
-        <button class="change" type="button" onclick="cancelObjects();">{{tr}}Restore{{/tr}}</button>
+          <button class="change" type="button" onclick="cancelObjects();">{{tr}}Restore{{/tr}}</button>
         {{else}}
+          {{if !$op->_ref_sejour->entree_preparee}}
+            <button class="tick" type="button" onclick="$V(getForm('editSejour').entree_preparee, '1'); submitForms();">{{tr}}CSejour-entree_preparee{{/tr}}</button>
+          {{/if}}
           {{if !$conf.dPplanningOp.COperation.cancel_only_for_resp_bloc || $modules.dPbloc->_can->edit || (!$op->_ref_sejour->entree_reelle && !$op->rank)}}
             <button class="cancel" type="button" onclick="cancelObjects();">{{tr}}Cancel{{/tr}}</button>
           {{/if}}

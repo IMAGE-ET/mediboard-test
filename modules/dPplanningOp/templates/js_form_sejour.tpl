@@ -159,12 +159,6 @@ cancelSejour = function() {
 
 modifSejour = function() {
   var oForm = document.editSejour;
-  {{if $conf.dPplanningOp.CSejour.entree_modifiee}}
-  if (oForm.entree_preparee.value == '1') {
-    oForm.entree_modifiee.value = '1';
-    oForm.entree_preparee.value = '0';
-  }
-  {{/if}}
   canNullOK(oForm._date_entree_prevue);
   canNullOK(oForm._date_sortie_prevue);
 };

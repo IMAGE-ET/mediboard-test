@@ -1601,7 +1601,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $this->sortie_prevue.= ":00";
     }
 
-    $this->completeField('entree_prevue', 'sortie_prevue', 'entree_reelle', 'sortie_reelle', 'type');
+    $this->completeField('entree_prevue', 'entree_preparee', 'sortie_prevue', 'entree_reelle', 'sortie_reelle', 'type');
 
     // Signaler l'action de validation de la sortie
     if ($this->_modifier_sortie === '1') {
@@ -1619,6 +1619,17 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     if ($this->_modifier_entree === '0') {
       $this->entree_reelle = "";
+    }
+
+    /* entree preparée => modifiée */
+    // si modification d'entree prévue et config et que le séjour était préparé
+    if ($this->fieldModified("entree_prevue") && CAppUI::conf("dPplanningOp CSejour entree_modifiee") && ($this->_old->entree_preparee == 1) ) {
+      $this->entree_preparee = 0;
+      $this->entree_modifiee = 1;
+    }
+    // si le séjour était préparé et qu'on le dé-prépare
+    elseif( ($this->_old->entree_preparee == 1) && ($this->entree_preparee == 0) ) {
+      $this->entree_modifiee = 0;
     }
 
     // Affectation de la date d'entrée prévue si on a la date d'entrée réelle

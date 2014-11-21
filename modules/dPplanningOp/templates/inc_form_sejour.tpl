@@ -1354,6 +1354,9 @@ Main.add( function(){
     {{if $sejour->sejour_id}}
       {{if !$sejour->sortie_reelle || $can->admin}}
         <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
+        {{if !$sejour->entree_preparee}}
+          <button class="tick" type="submit" onclick="$V(this.form.entree_preparee, 1)">{{tr}}CSejour-entree_preparee{{/tr}}</button>
+        {{/if}}
         {{mb_ternary var=annule_text test=$sejour->annule value="Restore" other="Cancel"}}
         {{mb_ternary var=annule_class test=$sejour->annule value="change" other="cancel"}}
         <button class="{{$annule_class}}" type="button" onclick="cancelSejour();">
