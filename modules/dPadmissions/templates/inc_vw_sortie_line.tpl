@@ -112,6 +112,13 @@
     {{/foreach}}
   {{/if}}
 </td>
+<td>
+  {{if $_sejour->sortie_preparee}}
+    <button type="button" class="cancel" onclick="sortie_preparee('{{$_sejour->_id}}', '0');">{{tr}}Cancel{{/tr}}</button>
+  {{else}}
+    <button type="button" class="tick" onclick="sortie_preparee('{{$_sejour->_id}}', '1');">{{tr}}CSejour-sortie_preparee{{/tr}}</button>
+  {{/if}}
+</td>
 {{if $conf.dPadmissions.show_dh}}
   <td>
     {{foreach from=$_sejour->_ref_operations item=curr_op}}

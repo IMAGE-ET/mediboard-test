@@ -70,6 +70,21 @@
       {{mb_colonne class="CSejour" field="sortie_prevue" order_col=$order_col order_way=$order_way function=sortBy}}
     </th>
     <th>Chambre</th>
+    <th class="narrow">
+      {{if $canAdmissions->edit && $sejours|@count}}
+        <form name="Multiple-CSejour-sortie_preparee" action="?" method="post" onsubmit="return submitMultiple(this);">
+          <input type="hidden" name="m" value="planningOp" />
+          <input type="hidden" name="dosql" value="do_sejour_aed" />
+          <input type="hidden" name="sejour_ids" value="{{$sejours|@array_keys|@join:"-"}}" />
+          <input type="hidden" name="sortie_preparee" value="1" />
+          <button class="tick oneclick" type="submit">
+            {{tr}}CSejour-sortie_preparee-all{{/tr}}
+          </button>
+        </form>
+      {{else}}
+        {{tr}}CSejour-sortie_preparee-all{{/tr}}
+      {{/if}}
+    </th>
     {{if $conf.dPadmissions.show_dh}}
       <th>DH</th>
     {{/if}}

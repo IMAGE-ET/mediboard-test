@@ -51,6 +51,17 @@
     submitSortie(form, type);
   };
 
+  function submitMultiple(form) {
+    return onSubmitFormAjax(form, reloadFullSorties);
+  }
+
+  sortie_preparee = function(sejour_id, value) {
+    var form = getForm("edit_sejour_sortie_preparee");
+    $V(form.sejour_id, sejour_id);
+    $V(form.sortie_preparee, ''+value);
+    form.onsubmit();
+  };
+
   function reloadFullSorties() {
     var form = getForm("selType");
     var url = new Url("admissions", "httpreq_vw_all_sorties");
@@ -199,6 +210,13 @@
 <div style="display: none" id="area_prompt_modele">
   {{mb_include module=admissions template=inc_prompt_modele type=sortie}}
 </div>
+
+<form name="edit_sejour_sortie_preparee" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: reloadFullSorties})">
+  <input type="hidden" name="m" value="dPplanningOp" />
+  <input type="hidden" name="dosql" value="do_sejour_aed" />
+  <input type="hidden" name="sejour_id" value="" />
+  <input type="hidden" name="sortie_preparee" value="" />
+</form>
 
 <table class="main">
   <tr>

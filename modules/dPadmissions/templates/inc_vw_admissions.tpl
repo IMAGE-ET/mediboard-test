@@ -77,11 +77,11 @@
           <input type="hidden" name="sejour_ids" value="{{$sejours|@array_keys|@join:"-"}}" />
           <input type="hidden" name="entree_preparee" value="1" />
           <button class="tick oneclick" type="submit">
-            {{tr}}CSejour-entree_preparee-tous{{/tr}}
+            {{tr}}CSejour-entree_preparee-all{{/tr}}
           </button>
         </form>
       {{else}}
-        {{tr}}CSejour-entree_preparee-tous{{/tr}}
+        {{tr}}CSejour-entree_preparee-all{{/tr}}
       {{/if}}
     </th>
     <th>Anesth.</th>
