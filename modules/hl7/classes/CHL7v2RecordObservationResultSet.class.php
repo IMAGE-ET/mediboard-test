@@ -127,18 +127,6 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
       // Récupération de la date du relevé
       $observation_dt = $this->getOBRObservationDateTime($_observation["OBR"]);
       $name           = $this->getOBRServiceIdentifier($_observation["OBR"]);
-      $filler_number  = $this->getOBRFillerNumber($_observation["OBR"]);
-      $placer_number  = $this->getOBRPlacerNumber($_observation["OBR"]);
-
-      //recherche de la consultation grâce à son identifiant
-      //$idex = CIdSante400::getMatch("Cconsultation", $sender->_tag_consultation, $change_filler ? $placer_number : $filler_number);
-
-      /** @var CConsultation $object */
-      /*$object = $idex->loadTargetObject();
-
-      if ($placer_number && $object && $object->_id && $object->_id != $placer_number) {
-        return $exchange_hl7v2->setAckAR($ack, "E608", null, $patient);
-      }*/
 
       foreach ($_observation["OBX"] as $key => $_OBX) {
         // OBX.2 : Value type
@@ -146,9 +134,8 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
         $date         = $observation_dt ? $observation_dt : $this->getOBXObservationDateTime($_OBX);
         $praticien_id = $this->getObservationAuthor($_OBX);
 
-        //if (!$object || $object && !$object->_id) {
-          $object = $this->getObjectWithDate($date, $patient, $praticien_id, $sejour);
-        //}
+        //Recherche de l'objet avec la date correspondante fourni dans l'observation
+        $object = $this->getObjectWithDate($date, $patient, $praticien_id, $sejour);
 
         if (!$object) {
           return $exchange_hl7v2->setAckAR($ack, "E301", null, $patient);
@@ -158,15 +145,15 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
 
         switch ($value_type) {
           // Reference Pointer to External Report
-          case "RP" :
+          case "RP":
             if (!$this->getReferencePointerToExternalReport($_OBX, $object, $name)) {
               return $exchange_hl7v2->setAckAR($ack, $this->codes, null, $object);
             }
 
             break;
 
-          // Encapsulated PDF
-          case "ED" :
+          // Encapsulated Data
+          case "ED":
             if (!$this->getEncapsulatedData($_OBX, $object, $name)) {
               return $exchange_hl7v2->setAckAR($ack, $this->codes, null, $object);
             }
@@ -174,7 +161,11 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
             break;
 
           // Pulse Generator and Lead Observation Results
-          case "ST" :  case "CWE" :  case "DTM" :  case "NM" :  case "SN" :
+          case "ST":
+          case "CWE":
+          case "DTM":
+          case "NM":
+          case "SN":
             if (!$this->getPulseGeneratorAndLeadObservationResults($_OBX, $patient, $object)) {
               return $exchange_hl7v2->setAckAR($ack, $this->codes, null, $object);
             }
@@ -182,7 +173,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
             break;
 
           // Not supported
-          default :
+          default:
             return $exchange_hl7v2->setAckAR($ack, "E302", null, $object);
         }
       }
@@ -526,9 +517,8 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
    * @return bool
    */
   function getEncapsulatedData($OBX, $object, $name) {
-
+    //Récupération de le fichier et du type du fichier (basename)
     $observation  = $this->getObservationValue($OBX);
-    $date         = $this->getOBXObservationDateTime($OBX);
 
     $ed      = explode("^", $observation);
     $subtype = CMbArray::get($ed, 2);
@@ -546,7 +536,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $file->file_type = $file_type;
     $file->loadMatchingObject();
 
-    $file->file_date = $date;
+    $file->file_date = $this->getOBXObservationDateTime($OBX);
     $file->file_size = strlen($content);
 
     $file->fillFields();
@@ -575,12 +565,14 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
     $sender         = $exchange_hl7v2->_ref_sender;
 
+    //Récupération de l'emplacement et du type du fichier (full path)
     $observation  = $this->getObservationValue($OBX);
 
     $rp      = explode("^", $observation);
     $pointer = CMbArray::get($rp, 0);
     $type    = CMbArray::get($rp, 2);
 
+    //Création d'un lien Hypertext sur l'objet
     if ($type == "HTML") {
       $hyperlink = new CHyperTextLink();
       $hyperlink->setObject($object);
