@@ -21,7 +21,7 @@
   })
 </script>
 
-{{if $consult->_ref_consult_anesth->_id}}
+{{if $consult->_id && $consult->_ref_consult_anesth->_id}}
   {{assign var=operation value=$consult->_ref_consult_anesth->_ref_operation}}
   {{if $operation->_id}}
     <form name="addOpFrm" action="?m={{$m}}" method="post">
