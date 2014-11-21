@@ -42,6 +42,21 @@ class CSetupsearch extends CSetup {
               ADD INDEX `index_order` (`object_class`, `type`, `search_indexing_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.04";
+   
+    $this->makeRevision("0.04");
+    $query = "CREATE TABLE `search_thesaurus_entry` (
+              `search_thesaurus_entry_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `entry` TEXT NOT NULL,
+              `types` TEXT,
+              `titre` VARCHAR (255),
+              `contextes` ENUM('generique','pharmacie','pmsi','bloc') NOT NULL DEFAULT 'generique',
+              `agregation` ENUM('0','1') NOT NULL DEFAULT '0',
+              `group_id` INT(11) UNSIGNED ,
+              `function_id` INT(11) UNSIGNED ,
+              `user_id` INT(11) UNSIGNED
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.05";
   }
 }

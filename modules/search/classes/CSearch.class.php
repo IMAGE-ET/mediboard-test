@@ -375,7 +375,7 @@ class CSearch {
         $type->addDocument($document);
         break;
       case 'store' :
-        $type->updateDocument($document);
+            $type->updateDocument($document);
         break;
       case 'delete':
         $type->deleteDocument($document);

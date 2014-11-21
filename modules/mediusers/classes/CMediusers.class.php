@@ -428,6 +428,7 @@ class CMediusers extends CPerson {
     $backProps["favoris_protocoles"]               = "CFavoriProtocole user_id";
     $backProps['codage_ccam']                      = 'CCodageCCAM praticien_id';
     $backProps['remboursement_noemie']             = 'CPvRemboursementNoemie praticien_id';
+    $backProps["search_thesaurus_entry"]           = "CSearchThesaurusEntry user_id";
 
     return $backProps;
   }

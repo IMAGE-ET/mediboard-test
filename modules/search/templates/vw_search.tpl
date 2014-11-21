@@ -15,6 +15,7 @@
     window.calendar_planning_fin = Calendar.regField(form._max_date);
     window.calendar_planning_fin = Calendar.regField(form._date);
     getAutocomplete();
+    getAutocompleteFavoris();
   });
 
   function changePage(start) {
@@ -78,6 +79,38 @@
     window.user_tag_token = tokenField;
 
   }
+
+  function getAutocompleteFavoris() {
+    var form = getForm("esSearch");
+    var element = form.elements.words_favoris,
+      tokenWords = new TokenField(element, {
+        onChange: function () {
+        }.bind(element)
+      });
+
+    var element_input = form.elements.words;
+    var url = new Url("system", "ajax_seek_autocomplete");
+    url.addParam("object_class", "CSearchThesaurusEntry");
+    url.addParam("input_field", element_input.name);
+    url.addParam("where[user_id]", '{{$app->_ref_user->_id}}');
+    url.addParam("where[contextes]", $V(form.elements.contexte));
+    url.autoComplete(element_input, null, {
+      minChars: 2,
+      method: "get",
+      dropdown: true,
+      updateElement: function (selected) {
+        console.log(selected);
+        var _name = selected.down("span", "1").getText();
+        var element_input = form.elements.words;
+        $V(element_input, _name);
+        $V(form.elements.aggregate, selected.down().get("aggregation"));
+        var types = selected.down().get("types").split("|");
+        $V(form.elements["names_types[]"], types);
+      }
+    });
+
+    window.words_tag_token = tokenWords;
+  }
 </script>
 
 <form method="get" name="esSearch" action="?m=search" class="watched prepared" onsubmit="return Search.displayResults(this);" onchange="onchange=$V(this.form, '0')">
@@ -88,9 +121,26 @@
     <tbody>
       <tr>
         <td id="td_container_search">
-          <input type="search" id="words" name="words" value="" placeholder="Saisissez les termes de votre recherche ici..." style="width:50em; height:1.5em; font-size:medium;" onchange="$V(this.form.start, '0')" autofocus>
-          <button type="submit" id="button_search" class="button lookup">Démarrer la recherche</button>
+          <input type="search" id="words" name="words" value=""  class="autocomplete" placeholder="Saisissez les termes de votre recherche ici..." style="width:50em; font-size:medium;" onchange="$V(this.form.start, '0'); $V(this.form.words_favoris, this.value)" autofocus>
+          <input type="hidden" name="words_favoris"/>
+
           {{mb_include module=search template=inc_tooltip_help}}
+          <button type="submit" id="button_search" class="button lookup">Démarrer la recherche</button>
+          <button class="add" type="button"
+                  onclick="
+                    if($V(form.words)){
+                    Search.addeditThesaurusEntry(
+                    this.form.aggregate.value,
+                    $V(form.words),
+                    '{{$app->user_id}}',
+                    $V(form.elements['names_types[]']),
+                    $V(form.contexte),
+                    null);
+                    }
+                    else {
+                    Modal.alert('Pour ajouter un favoris il faut que votre recherche contienne au moins un mot.');
+                    }
+                    ">{{tr}}CSearch-addToThesaurus{{/tr}}</button>
         </td>
       </tr>
       <tr>

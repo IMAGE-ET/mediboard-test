@@ -314,4 +314,10 @@ class CSearchLog extends CSearch {
     return $result;
   }
 
+  /**
+   * @return array
+   */
+  function loadContextes () {
+    return self::$names_mapping;
+  }
 }

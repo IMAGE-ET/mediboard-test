@@ -16,6 +16,13 @@ Search = window.Search || {
     return false;
   },
 
+  displayResultsThesaurus: function(form){
+    var url = new Url('search',  'ajax_result_thesaurus');
+    url.addFormData(form);
+    url.requestUpdate('list_log_result');
+    return false;
+  },
+
   showdiff: function (before, after) {
     var url = new Url('search',  'ajax_show_diff_mapping');
     url.addParam("before" , before);
@@ -174,5 +181,21 @@ Search = window.Search || {
     url.addFormData(form);
     url.requestUpdate('list_log_result');
     return false;
+  },
+
+  addeditThesaurusEntry : function (search_agregation, search_body, search_user_id, search_types, search_contexte, thesaurus_entry) {
+    window.parent.console.log(search_types);
+    var url = new Url('search',  'ajax_addedit_thesaurus_entry');
+    url.addParam("search_agregation" , search_agregation);
+    url.addParam("search_body"       , search_body);
+    url.addParam("search_user_id"    , search_user_id);
+    url.addParam("search_types[]"    , search_types, true);
+    url.addParam("search_contexte"   , search_contexte);
+    url.addParam("thesaurus_entry"   , thesaurus_entry);
+    url.requestModal("60%", "60%", {title:'Ajout/Édition d\'un favori',
+      onClose: function () {
+        document.location.reload();
+      }
+    });
   }
 };
