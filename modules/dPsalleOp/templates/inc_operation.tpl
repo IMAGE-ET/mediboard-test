@@ -156,16 +156,19 @@
   refreshConstantesHack = function(sejour_id) {
     (function() {
       if (constantesMedicalesDrawn == false && $('constantes-medicales').visible() && sejour_id) {
-        refreshConstantesMedicales('CSejour-'+sejour_id);
+        refreshConstantesMedicales('CSejour-'+sejour_id, "{{$selOp->_ref_salle->_ref_bloc->_guid}}");
         constantesMedicalesDrawn = true;
       }
     }).delay(0.5);
   };
 
-  refreshConstantesMedicales = function(context_guid) {
+  refreshConstantesMedicales = function(context_guid, host_guid) {
     if (context_guid) {
       var url = new Url("patients", "httpreq_vw_constantes_medicales");
       url.addParam("context_guid", context_guid);
+      if (host_guid) {
+        url.addParam("host_guid", host_guid);
+      }
       if (window.oGraphs) {
         url.addParam('hidden_graphs', JSON.stringify(window.oGraphs.getHiddenGraphs()));
       }

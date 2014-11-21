@@ -2071,10 +2071,19 @@ class CConstantesMedicales extends CMbObject {
   static function getHostConfig($name, $host) {
     $host = self::guessHost($host);
 
-    if (in_array($name, array('selection', 'show_cat_tabs', 'stacked_graphs')) && $host instanceof CFunctions) {
+    if (
+        in_array($name, array('selection', 'show_cat_tabs', 'stacked_graphs')) &&
+        ($host instanceof CFunctions || $host instanceof CBlocOperatoire)
+    ) {
       if ($name === 'selection') {
-        $name = 'selection_cabinet';
+        if ($host instanceof CFunctions) {
+          $name = 'selection_cabinet';
+        }
+        elseif ($host instanceof CBlocOperatoire) {
+          $name = 'selection_bloc';
+        }
       }
+
       return CAppUI::conf("dPpatients CConstantesMedicales $name", $host);
     }
 
@@ -2118,7 +2127,8 @@ class CConstantesMedicales extends CMbObject {
     if (
         $context instanceof CGroups ||
         $context instanceof CService ||
-        $context instanceof CFunctions
+        $context instanceof CFunctions ||
+        $context instanceof CBlocOperatoire
     ) {
       return $context;
     }

@@ -12,6 +12,7 @@
       [
         'constantes / CService CGroups.group_id',
         'constantes / CFunctions CGroups.group_id',
+        'constantes / CBlocOperatoire CGroups.group_id',
         'constantes / CGroups'
       ],
       'configuration-CConstantesMedicales'
