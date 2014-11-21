@@ -75,6 +75,11 @@
       }
     }
 
+    if ({{$_script}}.do_multi_action) {
+      {{$_script}}.do_multi_action(type, ids, listDocuments);
+      return false;
+    }
+
     var url = new Url("messagerie", "do_document_multi_action", "dosql");
     url.addParam("type", type);
     url.addParam("document", ids.length > 0 ? ids.join() : '');
@@ -98,9 +103,16 @@
    * @param document_guid
    */
   linkDocument = function(document_guid) {
+    if ({{$_script}}.linkDocument) {
+      {{$_script}}.linkDocument(document_guid);
+      return false;
+    }
     var url = new Url("messagerie", "ajax_do_move_file");
     url.addParam("document_guid", document_guid);
     url.requestModal(-40, -40);
+    url.modalObject.observe('afterClose', function(){
+      listDocuments();
+    });
   };
 
   unlinkDocument = function(document_guid) {

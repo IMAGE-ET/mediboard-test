@@ -41,7 +41,7 @@ $file->loadTargetObject();
 $patient = $document->findPatient();
 
 //smarty
-$smarty = new CSmartyDP();
+$smarty = new CSmartyDP("modules/messagerie");
 $smarty->assign("file", $file);
 $smarty->assign("file_categories", $cats);
 //$smarty->assign("praticien", $praticien);
