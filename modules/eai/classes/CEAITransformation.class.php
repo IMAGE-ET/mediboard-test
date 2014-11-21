@@ -93,4 +93,24 @@ class CEAITransformation extends CMbObject {
   function loadRefActor() {
     return $this->_ref_actor = $this->loadFwdRef("actor_id", true);
   }
+
+  /**
+   * Bind event
+   *
+   * @param CHL7Event|CHPrimXMLEvenements|CHPrimSanteEvent $event Event
+   *
+   * @return bool|void
+   */
+  function bindObject($event, CInteropActor $actor) {
+    $this->actor_id    = $actor->_id;
+    $this->actor_class = $actor->_class;
+
+    if ($event instanceof CHL7Event) {
+      $this->profil      = $event->profil;
+      $this->message     = $event->event_type.$event->code;
+      $this->transaction = $event->transaction;
+      $this->version     = $event->version;
+      $this->extension   = $event->_is_i18n;
+    }
+  }
 }

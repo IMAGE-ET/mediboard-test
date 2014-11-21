@@ -20,7 +20,7 @@ $evenements = array(
   'evt_serveuretatspatient' => array("1.04", "1.05", "1.06", "1.07"),
   'evt_frais_divers'        => array("1.05", "1.06", "1.07"),
   'evt_serveurintervention' => array("1.072"),
-  'evt_patients'            => array("1.05", "1.052", "1.053", "1.06", "1.07"),
+  'evt_patients'            => array("1.05", "1.052", "1.053", "1.06", "1.07", "2.00"),
   'evt_mvtStock'            => array("1.01", "1.02"),
 );
 

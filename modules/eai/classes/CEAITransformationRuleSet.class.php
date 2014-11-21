@@ -81,7 +81,7 @@ class CEAITransformationRuleSet extends CMbObject {
    * @return CEAITransformationRule[]
    */
   function loadRefsEAITransformationRules() {
-    return $this->_ref_eai_transformation_rules = $this->loadBackRefs("eai_transformation_rules", array("rank ASC"));
+    return $this->_ref_eai_transformation_rules = $this->loadBackRefs("eai_transformation_rules", "rank ASC");
   }
 
   /**

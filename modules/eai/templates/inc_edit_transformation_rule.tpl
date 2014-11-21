@@ -9,9 +9,12 @@
  * @link     http://www.mediboard.org
 *}}
 
+<script>
+
+</script>
+
 {{if !$mode_duplication}}
-<form name="edit-{{$transf_rule->_guid}}{{$transf_rule->_guid}}" action="?m={{$m}}" method="post"
-      onsubmit="return EAITransformationRule.onSubmit(this)">
+<form name="edit-{{$transf_rule->_guid}}{{$transf_rule->_guid}}" method="post" onsubmit="return EAITransformationRule.onSubmit(this)">
   {{mb_key object=$transf_rule}}
   {{mb_class object=$transf_rule}}
   <input type="hidden" name="del" value="0" />
@@ -31,6 +34,25 @@
     <tr>
       <th>{{mb_label object=$transf_rule field="active"}}</th>
       <td>{{mb_field object=$transf_rule field="active"}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$transf_rule field="action_type"}}</th>
+      <td>
+        <input type="hidden" name="action_type" value="" onchange="EAITransformationRule.selectedActionType(this, this.value)" />
+
+        {{foreach from=$transf_rule->_specs.action_type->_locales key=_type item=_locale}}
+          <button class="transformation-{{$_type}} notext {{if $_type == $transf_rule->action_type}}selected{{/if}}" title="{{$_locale}}" type="button"
+                  onclick="$V(this.form.elements.action_type, '{{$_type}}');">
+            {{$_locale}}
+          </button>
+        {{/foreach}}
+      </td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$transf_rule field="value"}}</th>
+      <td>{{mb_field object=$transf_rule field="value"}}</td>
     </tr>
 
     <tr>

@@ -1,27 +1,43 @@
-span.hl7-transformation-add:before {
+span.transformation-add:before {
   content: url("../../../style/mediboard/images/buttons/add.png");
   transform: scale(0.8);
   display: inline-block;
   vertical-align: middle
 }
 
-span.hl7-transformation-modify:before {
+span.transformation-modify:before {
   content: url("../../../style/mediboard/images/buttons/edit.png");
   transform: scale(0.8);
   display: inline-block;
   vertical-align: middle
 }
 
-span.hl7-transformation-move:before {
+span.transformation-move:before {
   content: url("../../../style/mediboard/images/buttons/hslip.png");
   transform: scale(0.8);
   display: inline-block;
   vertical-align: middle
 }
 
-span.hl7-transformation-delete:before {
+span.transformation-delete:before {
   content: url("../../../style/mediboard/images/buttons/eraser.png");
   transform: scale(0.8);
   display: inline-block;
   vertical-align: middle
+}
+
+button.transformation-add:before {
+  content: url("../../../style/mediboard/images/buttons/add.png");
+}
+
+button.transformation-modify:before {
+  content: url("../../../style/mediboard/images/buttons/edit.png");
+}
+
+button.transformation-move:before {
+  content: url("../../../style/mediboard/images/buttons/hslip.png");
+}
+
+button.transformation-delete:before {
+  content: url("../../../style/mediboard/images/buttons/eraser.png");
 }

@@ -119,7 +119,7 @@ class CSmpObjectHandler extends CEAIObjectHandler {
       foreach (CGroups::loadGroups() as $_group) {
         $sender = CMbObject::loadFromGuid($mbObject->_eai_sender_guid);
 
-        if ($sender->group_id == $_group->_id) {
+        if ($sender && $sender->group_id == $_group->_id) {
           continue;
         }
         

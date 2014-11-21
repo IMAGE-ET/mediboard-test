@@ -37,7 +37,8 @@ switch ($evenement) {
     }
     break;
 
-  case "evt_serveuretatspatient":  case "evt_frais_divers":
+  case "evt_serveuretatspatient":
+  case "evt_frais_divers":
     $version = str_replace(".", "", $version);
     extractFiles("serveurActivitePmsi_v$version" , "schemaServeurActivitePmsi_v$version.zip", true);
     break;
@@ -97,14 +98,14 @@ function extractFiles($schemaDir, $schemaFile, $delOldDir = false) {
     
     foreach ($rootFiles as $rootFile) {
       $xsd = new CHPrimXMLSchema();
-      $xsd->loadXML(utf8_decode(file_get_contents($rootFile)));
+      $xsd->loadXML(file_get_contents($rootFile));
       $xpath = new DOMXPath($xsd);
       
       $importFiles = array();
       
       foreach ($includeFiles as $includeFile) {
         $include = new DOMDOcument();
-        $include->loadXML(utf8_decode(file_get_contents($includeFile)));
+        $include->loadXML(file_get_contents($includeFile));
         
         $isImport = false;
         foreach ($importFiles as $key => $value) {
@@ -137,7 +138,7 @@ function extractFiles($schemaDir, $schemaFile, $delOldDir = false) {
       $xsd->purgeImportedNamespaces();
       $xsd->purgeIncludes();
       
-      file_put_contents(substr($rootFile, 0, -4).".xml", utf8_encode($xsd->saveXML()));
+      file_put_contents(substr($rootFile, 0, -4).".xml", $xsd->saveXML());
       
       echo "<div class='info'>Schéma concatené</div>";
     }

@@ -2270,7 +2270,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     $sender = $this->_ref_sender;
 
-    // Mode d'entrée personnalisable
+    // Mode de sortie personnalisable
     if (CAppUI::conf("dPplanningOp CSejour use_custom_mode_sortie")) {
       $mode_sortie           = new CModeSortieSejour();
       $mode_sortie->code     = $discharge_disposition;

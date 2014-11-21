@@ -40,5 +40,9 @@ EAITransformationRule = {
     if (row.next()) {
       row.next().insert({after: row});
     }
+  },
+
+  selectedActionType: function(element, value) {
+    element.next('.transformation-'+value).addUniqueClassName('selected');
   }
 }

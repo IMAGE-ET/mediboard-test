@@ -37,7 +37,7 @@
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=extension}} </th>
     <th class="category"> {{mb_title class=CEAITransformationRule field=component_from}} </th>
     <th class="category"> {{mb_title class=CEAITransformationRule field=component_to}} </th>
-    <th class="category narrow"> {{mb_title class=CEAITransformationRule field=action}} </th>
+    <th class="category narrow"> {{mb_title class=CEAITransformationRule field=action_type}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=value}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=active}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=rank}} </th>
@@ -63,7 +63,9 @@
       <td class="text compact">{{mb_value object=$_transformation_rule field="extension"}}</td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="component_from"}}</td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="component_to"}}</td>
-      <td class="text compact">{{mb_value object=$_transformation_rule field="action"}}</td>
+      <td class="button compact">
+        <span class="transformation-{{$_transformation_rule->action_type}}"></span>
+      </td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="value"}}</td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="active"}}</td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="rank"}}

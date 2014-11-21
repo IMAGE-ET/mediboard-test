@@ -29,7 +29,7 @@ class CEAITransformationRule extends CMbObject {
   public $extension;
   public $component_from;
   public $component_to;
-  public $action;
+  public $action_type;
   public $value;
   public $active;
   public $rank;
@@ -68,7 +68,7 @@ class CEAITransformationRule extends CMbObject {
     $props["extension"]      = "str";
     $props["component_from"] = "str";
     $props["component_to"]   = "str";
-    $props["action"]         = "str";
+    $props["action_type"]    = "enum list|add|modify|move|delete";
     $props["value"]          = "str";
     $props["active"]         = "bool default|0";
     $props["rank"]           = "num min|1 show|0";
@@ -149,5 +149,22 @@ class CEAITransformationRule extends CMbObject {
     $this->eai_transformation_ruleset_id = $transformation_ruleset_dest_id;
 
     return $this->store();
+  }
+
+  /**
+   * Bind event
+   *
+   * @param CHL7Event|CHPrimXMLEvenements|CHPrimSanteEvent $event Event
+   *
+   * @return bool|void
+   */
+  function bindObject($event) {
+    if ($event instanceof CHL7Event) {
+      $this->profil      = $event->profil;
+      $this->message     = $event->event_type.$event->code;
+      $this->transaction = $event->transaction;
+      $this->version     = $event->version;
+      $this->extension   = $event->_is_i18n;
+    }
   }
 }
