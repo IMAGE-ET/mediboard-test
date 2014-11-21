@@ -268,3 +268,19 @@ SchemaDentaire = {
     return false;
   }
 };
+
+assignDataOldConsultAnesth = function (mallampati, bouche, distThyro) {
+  var oform = getForm("editFrmIntubation");
+  $V(oform.elements.mallampati, mallampati);
+  $V(oform.elements.bouche, bouche);
+  $V(oform.elements.distThyro, distThyro);
+  verifIntubDifficileAndSave(oform);
+  Control.Modal.close();
+};
+
+loadOldConsultsIntubation = function (patient_id, consult_anesth_id) {
+  var url = new Url("dPcabinet", "ajax_old_consult_intubation");
+  url.addParam("patient_id", patient_id);
+  url.addParam("consult_anesth_id", consult_anesth_id);
+  url.requestModal("50%", "50%");
+};

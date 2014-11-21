@@ -163,7 +163,12 @@
         <table class="layout main">
           <tr>
             <td colspan="2">
+              <button class="change" type="button" onclick="loadOldConsultsIntubation('{{$consult->_ref_patient->_id}}', '{{$consult_anesth->_id}}')">Dossiers d'anesth. précédents</button>
               <button class="cancel" type="button" style="float: right;" onclick="resetIntubation(this.form)">{{tr}}Reset{{/tr}}</button>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
               <table class="layout main">
                 <tr>
                   {{foreach from=$consult_anesth->_specs.mallampati->_locales key=curr_mallampati item=trans_mallampati}}
