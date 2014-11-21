@@ -10,9 +10,31 @@
  */
 
 FilesCategory = {
+  modal_cat : null,
+
   loadList : function() {
     var url = new Url("files", "ajax_list_categories");
     url.requestUpdate('list_file_category');
+  },
+
+  openInfoReadFilesGuid : function(object_guid) {
+    var url = new Url('files', "ajax_modal_object_files_category");
+    url.addParam('object_guid', object_guid);
+    url.requestModal("700", "500");
+    url.modalObject.observe('afterClose', FilesCategory.iconInfoReadFilesGuid.curry(object_guid));
+    FilesCategory.modal_cat = url;
+  },
+
+  reloadModal : function() {
+    if (FilesCategory.modal_cat) {
+      FilesCategory.modal_cat.refreshModal();
+    }
+  },
+
+  iconInfoReadFilesGuid : function(object_guid) {
+    var url = new Url('files', "ajax_check_object_files_category");
+    url.addParam('object_guid', object_guid);
+    url.requestUpdate(object_guid+"_check_category");
   },
 
   edit : function(category_id) {

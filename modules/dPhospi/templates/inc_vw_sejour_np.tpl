@@ -18,10 +18,13 @@
     </a>
   </td>
 
-  <td style="padding: 1px;" onclick="markAsSelected(this); addSejourIdToSession('{{$curr_sejour->_id}}'); loadViewSejour('{{$curr_sejour->_id}}', '{{$date}}'); tab_sejour.setActiveTab('Imeds')">
-    {{if $isImedsInstalled}}
-      {{mb_include module=Imeds template=inc_sejour_labo sejour=$curr_sejour link="#"}}
-    {{/if}}
+  <td style="padding: 1px;">
+    <div class="imeds_alert" onclick="markAsSelected(this); addSejourIdToSession('{{$curr_sejour->_id}}'); loadViewSejour('{{$curr_sejour->_id}}', '{{$date}}'); tab_sejour.setActiveTab('Imeds')">
+      {{if $isImedsInstalled}}
+        {{mb_include module=Imeds template=inc_sejour_labo sejour=$curr_sejour link="#"}}
+      {{/if}}
+    </div>
+    {{mb_include module=dPfiles template=inc_icon_category_check object=$curr_sejour}}
   </td>
   
   <td class="action" style="padding: 1px;">

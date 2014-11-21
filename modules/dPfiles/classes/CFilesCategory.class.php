@@ -29,6 +29,9 @@ class CFilesCategory extends CMbObject {
   public $_count_unsent_files;
   public $_count_unsent_doc_items;
 
+  public $_nb_files_read;
+
+
   /**
    * @see parent::getSpec()
    */
@@ -87,6 +90,23 @@ class CFilesCategory extends CMbObject {
     $document = new CCompteRendu();
     $this->_count_unsent_documents = $document->countList($where);
     $this->_count_unsent_doc_items = $this->_count_unsent_documents + $this->_count_unsent_files;
+  }
+
+  /**
+   * @param null $user_id
+   * @return null
+   */
+  function countReadFiles($user_id = null) {
+    if (!$this->eligible_file_view) {
+      return $this->_nb_files_read = null;
+    }
+    $user_id = $user_id ? $user_id : CAppUI::$user->_id;
+    $where = array();
+    $where["file_category_id"] = " = '$this->_id' ";
+    $where["files_user_view.user_id"] = " = '$user_id' ";
+    $ljoin = array("files_mediboard" => "files_mediboard.file_id = files_user_view.file_id");
+    $file = new CFileUserView();
+    return $this->_nb_files_read = $file->countList($where, null, $ljoin);
   }
 
   /**

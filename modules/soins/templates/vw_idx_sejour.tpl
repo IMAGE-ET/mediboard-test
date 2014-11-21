@@ -7,6 +7,9 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
+
+{{mb_script module=dPfiles script=file_category}}
+
 {{if $conf.dPhospi.CLit.alt_icons_sortants}}
   {{assign var=suffixe_icons value="2"}}
 {{else}}

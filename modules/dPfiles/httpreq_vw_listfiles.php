@@ -76,7 +76,8 @@ foreach ($affichageFile as $_cat) {
   foreach ($_cat["items"] as $_item) {
     /** @var CDocumentItem $_item */
     $nbItems++;
-    $_item->loadRefCategory();
+    $category = $_item->loadRefCategory();
+    $category->countReadFiles();
     $_item->canDo();
 
     if ($_item->_class === "CCompteRendu") {

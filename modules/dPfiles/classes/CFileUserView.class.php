@@ -54,7 +54,7 @@ class CFileUserView extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["user_id"] = "ref class|CUser notNull";
+    $props["user_id"] = "ref class|CMediusers notNull";
     $props["file_id"] = "ref class|CFile notNull";
     $props["read_datetime"] = "dateTime notNull";
     return $props;

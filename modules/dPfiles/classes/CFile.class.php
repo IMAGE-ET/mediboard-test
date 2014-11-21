@@ -44,6 +44,8 @@ class CFile extends CDocumentItem implements IIndexableObject {
   public $_data_uri;
   public $_binary_content;
 
+  public $_ref_read_status;
+
   // Behavior fields
   public $_rotate;
   public $_rename;
@@ -88,6 +90,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
     $backProps["xds_submission_lot"]  = "CXDSSubmissionLotToDocument object_id";
     $backProps["bioserver_document"]  = "CBioserveurDocument file_id";
     $backProps["dmp_documents_sent"]  = "CDMPFile file_id";
+    $backProps["file_read_status"]    = "CFileUserView file_id";
 
     return $backProps;
   }
@@ -270,6 +273,16 @@ class CFile extends CDocumentItem implements IIndexableObject {
         $this->file_real_filename = uniqid(rand());
       }
     }
+  }
+
+  function loadRefReadStatus($user_id = null) {
+    $user_id = $user_id ? $user_id : CAppUI::$user->_id;
+
+    $object = new CFileUserView();
+    $object->file_id = $this->_id;
+    $object->user_id = $user_id;
+    $object->loadMatchingObject();
+    return $this->_ref_read_status = $object;
   }
 
   /**
