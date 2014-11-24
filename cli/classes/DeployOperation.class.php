@@ -243,7 +243,7 @@ abstract class DeployOperation extends MediboardCommand {
       $this->out($output, "<comment>Particular files:</comment>");
 
       foreach ($matches[1] as $_file) {
-        $output->writeln("? <b>$_file</b>");
+        $output->writeln("- <b>$_file</b>");
       }
     }
   }
