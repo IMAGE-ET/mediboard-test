@@ -148,7 +148,7 @@
   }
 
   if (!window.loadSuivi) {
-    loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
+    loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const, show_header) {
       if (!sejour_id) {
         return;
       }
@@ -169,6 +169,9 @@
       }
       if (!Object.isUndefined(show_const)) {
         url.addParam("_show_const", show_const);
+      }
+      if (!Object.isUndefined(show_header)) {
+        url.addParam("show_header", show_header);
       }
       url.requestUpdate("dossier_suivi");
     }

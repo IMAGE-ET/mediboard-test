@@ -779,7 +779,7 @@ PlanSoins = {
   },
 
    showModalAllTrans: function(sejour_id) {
-    loadSuivi(sejour_id);
+    loadSuivi(sejour_id, null, null, null, null, null, 1);
     var modal_suivi_lite = Modal.open("dossier_suivi", { showClose: true, width: 800, height: 600 });
     modal_suivi_lite.observe("afterClose", PlanSoins.loadLiteSuivi.curry(sejour_id));
   },

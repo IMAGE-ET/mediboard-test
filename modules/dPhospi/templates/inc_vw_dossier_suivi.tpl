@@ -289,9 +289,11 @@
         </a>
 
         <h2 style="color: #fff; font-weight: bold;">
-          {{$patient}}
+          <span style="font-size: 0.7em;" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+            {{$patient->_view}}
+          </span>
           {{if isset($sejour|smarty:nodefaults)}}
-            <span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
+            <span style="font-size: 0.7em;" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
           {{/if}}
         </h2>
       </th>
