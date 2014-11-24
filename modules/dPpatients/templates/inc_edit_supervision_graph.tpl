@@ -6,7 +6,7 @@ Main.add(function(){
 
   var item = $("list-{{$graph->_guid}}");
   if (item) {
-    item.addUniqueClassName("selected");
+    item.addUniqueClassName("selected", ".list-container");
   }
 });
 </script>
@@ -21,7 +21,7 @@ Main.add(function(){
   {{mb_key object=$graph}}
 
   <table class="main form">
-  {{mb_include module=system template=inc_form_table_header object=$graph colspan=7}}
+  {{mb_include module=system template=inc_form_table_header object=$graph colspan=9}}
 
     <tr>
       <th>{{mb_label object=$graph field=title}}</th>
@@ -32,6 +32,11 @@ Main.add(function(){
 
       <th>{{mb_label object=$graph field=height}}</th>
       <td>{{mb_field object=$graph field=height form="edit-supervision-graph" increment=true}}</td>
+
+      {{if "patientMonitoring"|module_active}}
+        <th>{{mb_label object=$graph field=automatic_protocol}}</th>
+        <td>{{mb_field object=$graph field=automatic_protocol typeEnum=select emptyLabel="None"}}</td>
+      {{/if}}
 
       <td>
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

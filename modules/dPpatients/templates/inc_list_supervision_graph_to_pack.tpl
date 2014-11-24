@@ -14,8 +14,10 @@
           <img src="images/icons/text.png" title="{{tr}}CSupervisionTimedData{{/tr}}" />
         {{elseif $_link->graph_class == "CSupervisionGraph"}}
           <img src="images/icons/chart.png" title="{{tr}}CSupervisionGraph{{/tr}}" />
-        {{else}}
+        {{elseif $_link->graph_class == "CSupervisionTimedPicture"}}
           <img src="images/icons/image.png" title="{{tr}}CSupervisionTimedPicture{{/tr}}" />
+        {{elseif $_link->graph_class == "CSupervisionInstantData"}}
+          <img src="images/icons/info.png" title="{{tr}}CSupervisionInstantData{{/tr}}" />
         {{/if}}
       </td>
       <td class="narrow">{{$_link->rank}}</td>
@@ -44,6 +46,13 @@
         <img src="images/icons/image.png" title="{{tr}}CSupervisionTimedPicture{{/tr}}" />
         {{tr}}CSupervisionTimedPicture{{/tr}}
       </button>
+
+      {{if "patientMonitoring"|module_active}}
+        <button class="compact" onclick="SupervisionGraph.editGraphToPack(0, '{{$pack->_id}}', 'CSupervisionInstantData')">
+          <img src="images/icons/info.png" title="{{tr}}CSupervisionInstantData{{/tr}}" />
+          {{tr}}CSupervisionInstantData{{/tr}}
+        </button>
+      {{/if}}
     </td>
   </tr>
 </table>

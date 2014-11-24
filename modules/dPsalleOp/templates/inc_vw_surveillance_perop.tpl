@@ -38,7 +38,7 @@ enChantier = function(){
 };
   
 Main.add(function(){
-  var width = $("surveillance_perop").getWidth();
+  var width = $("surveillance_cell").getWidth();
 
   $$(".graph-placeholder").invoke("setStyle", {width: width+"px"});
 
@@ -287,7 +287,17 @@ printSurveillance = function(operation_id) {
 
 <button class="print" onclick="printSurveillance({{$interv->_id}})">Imprimer surveillance</button>
 
+{{assign var=require_right_col value=false}}
+{{foreach from=$graphs item=_graph key=i}}
+  {{if $_graph instanceof CSupervisionInstantData}}
+    {{assign var=require_right_col value=true}}
+  {{/if}}
+{{/foreach}}
+
 <div style="position: relative;" class="supervision">
+  <table class="main layout">
+    <tr>
+      <td style="{{if $require_right_col}}width: 75%;{{/if}}" id="surveillance_cell">
   {{foreach from=$graphs item=_graph key=i}}
     {{if $_graph instanceof CSupervisionGraph}}
       {{assign var=_graph_data value=$_graph->_graph_data}}
@@ -374,6 +384,11 @@ printSurveillance = function(operation_id) {
             <button class="new notext compact" style="float: right;"
                     onclick="return editEvenementPerop('CAnesthPerop-0', '{{$interv->_id}}')"></button>
           {{/if}}
+
+          {{if $_label == "CPrescription._chapitres.med"}}
+            <button class="add notext compact" style="float: right;"
+                    onclick="new Url('dPsalleOp', 'ajax_vw_surveillance_perop_administration').addParam('operation_id', '{{$interv->_id}}').modal({onClose: reloadSurveillancePerop})"></button>
+          {{/if}}
         </th>
         <td>
         {{foreach from=$_evenements item=_evenement}}
@@ -417,13 +432,36 @@ printSurveillance = function(operation_id) {
     
     {{if $now <= 100}}
     <tr>
-      <th></th>
-      <td style="padding: 1px;">
+      <th style="padding: 0; border: none;"></th>
+      <td style="padding: 0; border: none;">
         <div class="now opacity-50" style="padding-left: {{$now}}%;">
           <div class="marking"></div>
         </div>
       </td>
     </tr>
     {{/if}}
+  </table>
+      </td>
+
+      {{if $require_right_col}}
+      <td>
+        {{foreach from=$graphs item=_graph key=i}}
+          {{if $_graph instanceof CSupervisionInstantData}}
+            <div id="container-{{$_graph->_guid}}">
+              {{$_graph->_ref_value_type}}
+
+              <div style="line-height: 1; color: #{{$_graph->color}};">
+                <span style="font-size: {{$_graph->size}}px;">
+                  -
+                </span>
+                <span style="font-size: 1.2em">{{$_graph->_ref_value_unit}}</span>
+              </div>
+            </div>
+            <hr />
+          {{/if}}
+        {{/foreach}}
+      </td>
+      {{/if}}
+    </tr>
   </table>
 </div>

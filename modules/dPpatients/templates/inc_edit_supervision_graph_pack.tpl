@@ -2,7 +2,7 @@
   Main.add(function(){
     var item = $("list-{{$pack->_guid}}");
     if (item) {
-      item.addUniqueClassName("selected");
+      item.addUniqueClassName("selected", ".list-container");
     }
 
     SupervisionGraph.listGraphToPack({{$pack->_id}});

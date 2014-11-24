@@ -19,6 +19,11 @@ class CObservationValueCodingSystem extends CMbObject {
   public $desc;
   public $coding_system;
 
+  static $_list = array(
+    "MB"                  => "Standard Mediboard",
+    "MDIL"                => "MDIL",
+  );
+
   /**
    * @see parent::getProps()
    */
@@ -76,4 +81,8 @@ class CObservationValueCodingSystem extends CMbObject {
     
     return $this->_id;
   }
+}
+
+if (CModule::getActive("patientMonitoring")) {
+  CObservationValueCodingSystem::$_list["Kheops-Concentrator"] = "Concentrateur Kheops";
 }

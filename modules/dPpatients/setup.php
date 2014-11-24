@@ -2724,7 +2724,28 @@ class CSetupdPpatients extends CSetup {
                 ADD `creation_date` DATETIME AFTER `user_id`;";
     $this->addQuery($query);
 
-    $this->mod_version = '2.24';
+    $this->makeRevision("2.24");
+    $query = "ALTER TABLE `supervision_graph`
+                ADD `automatic_protocol` ENUM ('Kheops-Concentrator');";
+    $this->addQuery($query);
+
+    $query = "CREATE TABLE `supervision_instant_data` (
+                `supervision_instant_data_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `value_type_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `value_unit_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `size` TINYINT (4) UNSIGNED NOT NULL DEFAULT '0',
+                `color` VARCHAR (6),
+                `owner_class` ENUM ('CGroups') NOT NULL,
+                `owner_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `title` VARCHAR (255) NOT NULL,
+                `disabled` ENUM ('0','1') NOT NULL DEFAULT '1',
+                INDEX (`value_type_id`),
+                INDEX (`value_unit_id`),
+                INDEX `owner` (`owner_class`, `owner_id`)
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.25';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

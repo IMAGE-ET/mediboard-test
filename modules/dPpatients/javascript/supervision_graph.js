@@ -77,6 +77,20 @@ SupervisionGraph = {
     });
   },
 
+  editInstantData: function(id) {
+    var url = new Url("dPpatients", "ajax_edit_supervision_instant_data");
+    url.addParam("supervision_instant_data_id", id);
+    url.requestUpdate("supervision-graph-editor");
+
+    return false;
+  },
+
+  callbackEditInstantData: function(id) {
+    SupervisionGraph.list(function(){
+      SupervisionGraph.editInstantData(id);
+    });
+  },
+
   // Series
   listSeries: function(axis_id) {
     var url = new Url("dPpatients", "ajax_list_supervision_graph_series");

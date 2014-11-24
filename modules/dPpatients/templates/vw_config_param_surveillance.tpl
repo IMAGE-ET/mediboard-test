@@ -57,7 +57,17 @@ Main.add(function(){
           {{mb_include module=system template=inc_form_table_header css_class="text" object=$type}}
           <tr>
             <th>{{mb_label object=$type field=coding_system}}</th>
-            <td>{{mb_field object=$type field=coding_system}}</td>
+            <td>
+              {{mb_field object=$type field=coding_system list="edit-value-type-coding_systems"}}
+
+              {{if "patientMonitoring"|module_active}}
+                <datalist id="edit-value-type-coding_systems">
+                  {{foreach from="CObservationValueCodingSystem"|static:"_list" item=_name key=_key}}
+                    <option value="{{$_key}}">{{$_name}}</option>
+                  {{/foreach}}
+                </datalist>
+              {{/if}}
+            </td>
           </tr>
           <tr>
             <th>{{mb_label object=$type field=label}}</th>
@@ -134,7 +144,17 @@ Main.add(function(){
           {{mb_include module=system template=inc_form_table_header css_class="text" object=$unit}}
           <tr>
             <th>{{mb_label object=$unit field=coding_system}}</th>
-            <td>{{mb_field object=$unit field=coding_system}}</td>
+            <td>
+              {{mb_field object=$unit field=coding_system list="edit-value-unit-coding_systems"}}
+
+              {{if "patientMonitoring"|module_active}}
+                <datalist id="edit-value-unit-coding_systems">
+                  {{foreach from="CObservationValueCodingSystem"|static:"_list" item=_name key=_key}}
+                    <option value="{{$_key}}">{{$_name}}</option>
+                  {{/foreach}}
+                </datalist>
+              {{/if}}
+            </td>
           </tr>
           <tr>
             <th>{{mb_label object=$unit field=label}}</th>

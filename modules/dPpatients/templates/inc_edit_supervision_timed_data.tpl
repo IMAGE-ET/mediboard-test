@@ -2,7 +2,7 @@
   Main.add(function(){
     var item = $("list-{{$timed_data->_guid}}");
     if (item) {
-      item.addUniqueClassName("selected");
+      item.addUniqueClassName("selected", ".list-container");
     }
   });
 </script>

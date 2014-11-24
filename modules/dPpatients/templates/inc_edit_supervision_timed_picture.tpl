@@ -2,7 +2,7 @@
   Main.add(function(){
     var item = $("list-{{$picture->_guid}}");
     if (item) {
-      item.addUniqueClassName("selected");
+      item.addUniqueClassName("selected", ".list-container");
     }
   });
 

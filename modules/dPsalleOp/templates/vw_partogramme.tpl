@@ -388,8 +388,8 @@
   });
 </script>
 
+{{assign var=images value="CPrescription"|static:"images"}}
 {{assign var=width value=750}}
-
 {{assign var=right_margin value=5}}
 {{assign var=yaxis_width value=75}}
 {{assign var=dummy_yaxis_width value=12}}

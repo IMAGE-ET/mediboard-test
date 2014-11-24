@@ -16,6 +16,7 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
   public $supervision_graph_id;
 
   public $height;
+  public $automatic_protocol;
 
   /** @var CSupervisionGraphAxis[] */
   public $_ref_axes;
@@ -35,7 +36,8 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["height"] = "num notNull min|20 default|200";
+    $props["height"]             = "num notNull min|20 default|200";
+    $props["automatic_protocol"] = "enum list|Kheops-Concentrator";
     return $props;
   }
 

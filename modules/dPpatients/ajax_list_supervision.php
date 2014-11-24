@@ -15,7 +15,8 @@ $group = CGroups::loadCurrent();
 
 $graphs        = CSupervisionGraph::getAllFor($group);
 $timed_data    = CSupervisionTimedData::getAllFor($group);
-$timed_picture = CSupervisionTimedPicture::getAllFor($group);
+$timed_pictures = CSupervisionTimedPicture::getAllFor($group);
+$instant_data  = CSupervisionInstantData::getAllFor($group);
 $packs         = CSupervisionGraphPack::getAllFor($group, true);
 
 foreach ($graphs as $_graph) {
@@ -27,8 +28,9 @@ foreach ($graphs as $_graph) {
 }
 
 $smarty = new CSmartyDP();
-$smarty->assign("graphs",        $graphs);
-$smarty->assign("packs",         $packs);
-$smarty->assign("timed_data",    $timed_data);
-$smarty->assign("timed_picture", $timed_picture);
+$smarty->assign("graphs",         $graphs);
+$smarty->assign("packs",          $packs);
+$smarty->assign("timed_data",     $timed_data);
+$smarty->assign("timed_pictures", $timed_pictures);
+$smarty->assign("instant_data",   $instant_data);
 $smarty->display("inc_list_supervision_graph.tpl");

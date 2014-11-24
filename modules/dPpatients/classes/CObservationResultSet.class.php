@@ -262,10 +262,10 @@ class CObservationResultSet extends CMbObject {
       elseif ($_go instanceof CSupervisionTimedPicture) {
         $_go->loadTimedPictures($results, $time_min, $time_max);
       }
-      /*elseif ($_go instanceof CSupervisionInstantData) {
+      elseif ($_go instanceof CSupervisionInstantData) {
         $_go->loadRefValueType();
         $_go->loadRefValueUnit();
-      }*/
+      }
     }
 
     /*
@@ -430,8 +430,9 @@ class CObservationResultSet extends CMbObject {
     // ---------------------------------------------------
     // Gestes, Medicaments, Perfusions peranesth
     $evenements = array(
-      "CAnesthPerop" => array(),
-      "CAffectationPersonnel" => array(),
+      "CAnesthPerop"                 => array(),
+      "CAffectationPersonnel"        => array(),
+      "CPrescription._chapitres.med" => array(),
     );
 
     // Personnel de l'interv

@@ -10,7 +10,7 @@ Main.add(function(){
 
 <table class="main layout">
   <tr>
-    <td style="width: 15%" id="supervision-list"></td>
+    <td style="width: 350px;" id="supervision-list"></td>
     <td id="supervision-graph-editor">&nbsp;</td>
   </tr>
 </table>
