@@ -81,6 +81,12 @@ ExList = {
     url.addParam("object_guid", "CExList-0");
     url.addParam("hide_tree", 1);
     url.modal({width: 800, height: 600});
+  },
+  editInModal: function(ex_list_id){
+    var url = new Url("forms", "view_ex_list");
+    url.addParam("object_guid", "CExList-"+ex_list_id);
+    url.addParam("hide_tree", 1);
+    url.modal({width: 800, height: 600});
   }
 };
 
