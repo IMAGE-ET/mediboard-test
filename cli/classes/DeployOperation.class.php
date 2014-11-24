@@ -181,6 +181,8 @@ abstract class DeployOperation extends MediboardCommand {
   }
 
   /**
+   * Checks remote instances state
+   *
    * @param string          $master_branch Current MASTER branch
    * @param array           $instances     Selected instances
    * @param OutputInterface $output        Output
