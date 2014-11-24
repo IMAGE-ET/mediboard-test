@@ -62,10 +62,10 @@ moveListItem = function(e, way){
   <tr>
     <th colspan="5" class="title">
       {{tr}}CExList-back-list_items{{/tr}}
-      
-      <a class="button edit" href="?m=forms&amp;tab=view_ex_list&amp;object_guid={{$list_owner->_guid}}">
+
+      <button class="edit" type="button" onclick="App.dialog == 1 ? ExList.editInModal('{{$list_owner->_id}}') : document.location.assign('?m=forms&amp;tab=view_ex_list&amp;object_guid={{$list_owner->_guid}}')">
         {{tr}}CExList-title-modify{{/tr}}
-      </a>
+      </button>
     </th>
   </tr>
   
