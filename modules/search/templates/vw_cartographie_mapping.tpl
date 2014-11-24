@@ -13,31 +13,24 @@
     Search.updateListStats();
   });
 </script>
-<table class="main" id="cartographie_systeme">
-  <tbody>
+<table class="main tbl" id="cartographie_systeme">
   <tr>
     {{if $infos_index|@count !==0}}
       <th class="title" colspan="2"> Statut de l'index {{$infos_index.name_index}}</th>
     {{/if}}
   </tr>
   <tr>
-    <td class="halfPane">
-      <table class="tbl" id="table-stats">
-        <tbody>
-          {{if $infos_index|@count !==0}}
-            <!-- Etat général du service ES -->
-            {{mb_include module=search template=inc_carto_general_infos}}
-            <!-- Etat de l'index -->
-            <br/>
-            {{mb_include module=search template=inc_carto_index_infos}}
-          {{/if}}
-          {{if $infos_log|@count !== 0}}
-            <!-- Etat de l'index des journaux utilisateurs -->
-            <br/>
-            {{mb_include module=search template=inc_carto_log_infos}}
-          {{/if}}
-        </tbody>
-      </table>
+    <td class="halfPane" id="table-stats">
+      {{if $infos_index|@count !==0}}
+        <!-- Etat général du service ES -->
+        {{mb_include module=search template=inc_carto_general_infos}}
+        <!-- Etat de l'index -->
+        {{mb_include module=search template=inc_carto_index_infos}}
+      {{/if}}
+      {{if $infos_log|@count !== 0}}
+        <!-- Etat de l'index des journaux utilisateurs -->
+        {{mb_include module=search template=inc_carto_log_infos}}
+      {{/if}}
     </td>
     <td class="halfPane">
       {{if $infos_index|@count !==0}}
@@ -69,5 +62,4 @@
       {{/if}}
     </td>
   </tr>
-  </tbody>
 </table>

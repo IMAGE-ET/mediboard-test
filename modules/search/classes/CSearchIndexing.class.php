@@ -34,6 +34,7 @@ class CSearchIndexing extends CStoredObject {
     $spec->table = "search_indexing";
     $spec->key   = "search_indexing_id";
     $spec->loggable = false;
+    $spec->insert_delayed = true;
     return $spec;
   }
 
@@ -56,7 +57,7 @@ class CSearchIndexing extends CStoredObject {
   function getProps() {
     $props = parent::getProps();
     $props["object_class"] = "str notNull maxLength|50";
-    $props["object_id"] = "ref class meta|object_class notNull unlink";
+    $props["object_id"] = "ref class|CMbObject meta|object_class notNull unlink";
     $props["type"] = "enum list|create|store|delete|merge default|create";
     $props["date"] = "dateTime notNull";
 
@@ -125,10 +126,26 @@ class CSearchIndexing extends CStoredObject {
           SELECT 'CFile', `files_mediboard`.`file_id`, 'create', '$date'
           FROM `files_mediboard`
           WHERE `files_mediboard`.`object_class` != 'CCompteRendu'
-          AND `files_mediboard`.`file_type` NOT LIKE 'image/%'
           AND `files_mediboard`.`file_type` NOT LIKE 'video/%'
           AND `files_mediboard`.`file_type` NOT LIKE 'audio/%'";
         break;
+      case 'CPrescriptionLineMedicament':
+        $query = "INSERT INTO `search_indexing` (`object_class`, `object_id`, `type`, `date`)
+          SELECT 'CPrescriptionLineMedicament', `prescription_line_medicament`.`prescription_line_medicament_id`, 'create', '$date'
+          FROM `prescription_line_medicament`, `prescription`
+          WHERE  `prescription_line_medicament`.`prescription_id` = `prescription`.`prescription_id`
+           AND `prescription`.`object_class` != 'CDossierMedical'
+          AND `prescription`.`object_id` IS NOT NULL";
+        break;
+      case 'CPrescriptionLineMix':
+        $query = "INSERT INTO `search_indexing` (`object_class`, `object_id`, `type`, `date`)
+          SELECT 'CPrescriptionLineMix', `prescription_line_mix`.`prescription_line_mix_id`, 'create', '$date'
+          FROM `prescription_line_mix`, `prescription`
+          WHERE  `prescription_line_mix`.`prescription_id` = `prescription`.`prescription_id`
+          AND `prescription`.`object_class` != 'CDossierMedical'
+          AND `prescription`.`object_id` IS NOT NULL";
+        break;
+
       default: $query ="";
     }
     return $query;
