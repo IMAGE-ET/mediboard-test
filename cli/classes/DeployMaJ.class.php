@@ -19,7 +19,7 @@ use Symfony\Component\Process\Exception\InvalidArgumentException;
 /**
  * deploy:maj command
  */
-class DeployMaJ extends DeployOXOperation {
+class DeployMaJ extends DeployOperation {
   /**
    * @see parent::configure()
    */
@@ -65,9 +65,34 @@ EOT
    * @see paret::rsync()
    */
   protected function rsync($path, $files, $instance, OutputInterface $output, $dry_run = false) {
+    $dialog = $this->getHelperSet()->get('dialog');
+
     $result = parent::rsync($path, $files, $instance, $output, true);
 
-    $this->checkFilePresence(implode("\n", $result), $output);
+    if ($result) {
+      $this->out($output, "<comment>These files will be updated:</comment>");
+
+      foreach ($result as $_line) {
+        $output->writeln(" > $_line");
+      }
+
+      $this->checkFilePresence(implode("\n", $result), $output);
+
+      if (!$dialog->askConfirmation(
+        $output,
+        '<question>Confirm? [Y/n]</question>',
+        true
+      )
+      ) {
+        return false;
+      }
+
+      $result = parent::rsync($path, $files, $instance, $output);
+      $this->checkFilePresence(implode("\n", $result), $output);
+    }
+    else {
+      $this->out($output, "<comment>No file to update</comment>");
+    }
 
     return $result;
   }
@@ -106,7 +131,7 @@ EOT
         $to_perform[] = $_instance["path"];
       }
 
-      $output->writeln("? <$perform>" . $_instance["release_code"] . "</$perform> " . $_instance["path"]);
+      $output->writeln("- <$perform>" . $_instance["release_code"] . "</$perform> " . $_instance["path"]);
     }
 
     if (!$to_perform) {
@@ -144,13 +169,13 @@ EOT
     $instances = $this->checkBranches($current_branch, $instances, $output);
 
     foreach ($instances as $_instance) {
-      $perform = "info";
+      $perform = "error";
 
       if ($_instance["perform"]) {
-        $perform = "error";
+        $perform = "info";
       }
 
-      $output->writeln("? <$perform>" . $_instance["release_code"] . "</$perform> " . $_instance["path"]);
+      $output->writeln("- <$perform>" . $_instance["release_code"] . "</$perform> " . $_instance["path"]);
     }
   }
 }

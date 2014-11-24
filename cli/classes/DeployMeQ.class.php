@@ -19,7 +19,7 @@ use Symfony\Component\Process\Exception\InvalidArgumentException;
 /**
  * deploy:meq command
  */
-class DeployMeQ extends DeployOXOperation {
+class DeployMeQ extends DeployOperation {
   /**
    * @see parent::configure()
    */
@@ -95,7 +95,7 @@ EOT
         $to_perform[] = $_instance["path"];
       }
 
-      $output->writeln("? <$perform>" . $_instance["release_code"] . "</$perform> " . $_instance["path"]);
+      $output->writeln("- <$perform>" . $_instance["release_code"] . "</$perform> " . $_instance["path"]);
     }
 
     if (!$to_perform) {
@@ -139,7 +139,7 @@ EOT
         $perform = "error";
       }
 
-      $output->writeln("? <$perform>" . $_instance["release_code"] . "</$perform> " . $_instance["path"]);
+      $output->writeln("- <$perform>" . $_instance["release_code"] . "</$perform> " . $_instance["path"]);
     }
   }
 }

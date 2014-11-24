@@ -1,7 +1,7 @@
 <?php
 
 /**
- * $Id: DeployRSyncUpdate.class.php 21950 2014-02-06 15:42:21Z phenxdesign $
+ * $Id: DeployOperation.class.php 21950 2014-02-06 15:42:21Z phenxdesign $
  *
  * @category CLI
  * @package  Mediboard
@@ -13,7 +13,6 @@
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Process\Exception\InvalidArgumentException;
 
 use SVNClient\WorkingCopy;
@@ -21,7 +20,7 @@ use SVNClient\WorkingCopy;
 /**
  * deploy:mep command
  */
-abstract class DeployOXOperation extends MediboardCommand {
+abstract class DeployOperation extends MediboardCommand {
   protected $patterns_to_check = array(
     ".*/setup\.php"
   );
@@ -88,11 +87,10 @@ abstract class DeployOXOperation extends MediboardCommand {
    *
    * @param string          $path   Current root path
    * @param OutputInterface $output Output
-   * @param DialogHelper    $dialog Dialog helper
    *
    * @return array
    */
-  protected function promptInstances($path, OutputInterface $output, DialogHelper $dialog) {
+  protected function promptInstances($path, OutputInterface $output) {
     $dialog = $this->getHelperSet()->get('dialog');
 
     $rsyncupdate_conf = "$path/cli/conf/rsyncupdate.xml";
@@ -235,14 +233,14 @@ abstract class DeployOXOperation extends MediboardCommand {
   }
 
   /**
-   * Checks is particular files have been updated
+   * Checks particular files
    *
    * @param string          $result RSYNC command result
    * @param OutputInterface $output Output
    */
   protected function checkFilePresence($result, OutputInterface $output) {
     if (preg_match_all("#(" . implode("|", $this->patterns_to_check) . ")#m", $result, $matches)) {
-      $this->out($output, "<comment>These particular files have been updated:</comment>");
+      $this->out($output, "<comment>Particular files:</comment>");
 
       foreach ($matches[1] as $_file) {
         $output->writeln("? <b>$_file</b>");
@@ -259,14 +257,14 @@ abstract class DeployOXOperation extends MediboardCommand {
    * @param OutputInterface $output   Output
    * @param boolean         $dry_run  Dry run mode toggle
    *
-   * @return bool
+   * @return array|bool
    */
   protected function rsync($path, $files, $instance, OutputInterface $output, $dry_run = false) {
     if ($dry_run) {
       $dry_run = "-n ";
     }
 
-    $cmd = "rsync -avpgzC $dry_run" . escapeshellarg($path . "/") . " --delete " . escapeshellarg($instance) . " " . $files["excluded"] . " " . $files["included"];
+    $cmd = "rsync -apgzC --out-format='%n%L' $dry_run" . escapeshellarg($path . "/") . " --delete " . escapeshellarg($instance) . " " . $files["excluded"] . " " . $files["included"];
 
     // Executes RSYNC
     $result = array();
@@ -274,6 +272,7 @@ abstract class DeployOXOperation extends MediboardCommand {
 
     if ($state !== 0) {
       $this->out($output, "<error>Error occurred during $instance RSYNC...</error>");
+
       return false;
     }
     else {
@@ -282,13 +281,14 @@ abstract class DeployOXOperation extends MediboardCommand {
 
     // Log files RSYNC
     foreach ($files["included_logfiles"] as $_file) {
-      $cmd = "rsync -avzp $dry_run" . escapeshellarg($path . "/" . $_file["file"]) . " " . escapeshellarg($instance . $_file["dest"]);
+      $cmd = "rsync -azp --out-format='%n%L' $dry_run" . escapeshellarg($path . "/" . $_file["file"]) . " " . escapeshellarg($instance . $_file["dest"]);
 
       $log = array();
       exec($cmd, $log, $log_state);
 
       if ($log_state !== 0) {
         $this->out($output, "<error>Error occurred during log files RSYNC...</error>");
+
         return false;
       }
 

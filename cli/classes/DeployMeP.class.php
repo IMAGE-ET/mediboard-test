@@ -19,7 +19,7 @@ use Symfony\Component\Process\Exception\InvalidArgumentException;
 /**
  * deploy:mep command
  */
-class DeployMeP extends DeployOXOperation {
+class DeployMeP extends DeployOperation {
   /**
    * @see parent::configure()
    */
@@ -43,7 +43,7 @@ class DeployMeP extends DeployOXOperation {
   protected function showHeader(OutputInterface $output) {
     $output->writeln(
       <<<EOT
-      <fg=red;bg=black>
+<fg=red;bg=black>
        __  __  _____  ____
       |  \/  || ____||  _ \
       | |\/| ||  _|  | |_) |
@@ -95,7 +95,7 @@ EOT
         $to_perform[] = $_instance["path"];
       }
 
-      $output->writeln("? <$perform>" . $_instance["release_code"] . "</$perform> " . $_instance["path"]);
+      $output->writeln("- <$perform>" . $_instance["release_code"] . "</$perform> " . $_instance["path"]);
     }
 
     if (!$to_perform) {
@@ -139,7 +139,7 @@ EOT
         $perform = "error";
       }
 
-      $output->writeln("? <$perform>" . $_instance["release_code"] . "</$perform> " . $_instance["path"]);
+      $output->writeln("- <$perform>" . $_instance["release_code"] . "</$perform> " . $_instance["path"]);
     }
   }
 }
