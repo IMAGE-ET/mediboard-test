@@ -25,12 +25,25 @@
       width: 100% !important;
       font-size: inherit !important;
     }
+
+    table.break_before {
+      page-break-before: always;
+    }
   }
 </style>
 
+<script>
+  // La div du dossier qui a été passé dans la fonction Modal.open()
+  // a du style supplémentaire, qu'il faut écraser lors de l'impression
+  // d'un dossier seul.
+  printOneDossier = function(patient_id) {
+    Element.print($("content_"+patient_id).childElements());
+  }
+</script>
+
 {{assign var=print_gemsa value="dPurgences Print gemsa"|conf:"CGroups-$g"}}
 
-<table class="tbl">
+<table class="tbl" style="page-break-after: always;">
   <tr>
     <th class="title" colspan="{{if $service_id == "urgence"}}8{{else}}7{{/if}}">
       <button type="button" class="not-printable print" style="float: right;" onclick="window.print()">{{tr}}Print{{/tr}}</button>
@@ -72,7 +85,7 @@
 
       <tr>
         <td class="text">
-          <button type="button" class="print compact notext not-printable" onclick="$('content_{{$patient->_guid}}').print();">{{tr}}Print{{/tr}}</button>
+          <button type="button" class="print compact notext not-printable" onclick="printOneDossier('{{$patient->_guid}}')">{{tr}}Print{{/tr}}</button>
           <button type="button" class="search compact notext not-printable" onclick="Modal.open('content_{{$patient->_guid}}', {showClose: true});">Voir le dossier</button>
           <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')"
                 class="{{if $statut == "attente"}}patient-not-arrived{{/if}}"
@@ -105,20 +118,18 @@
   {{/foreach}}
 </table>
 
-{{foreach from=$patients_offline item=_patient_data key=patient_guid}}
+{{foreach from=$patients_offline item=_patient_data key=patient_guid name=patients}}
   {{assign var=sejour value=$_patient_data.sejour}}
   {{assign var=patient value=$sejour->_ref_patient}}
 
-  <div id="content_{{$patient_guid}}" style="display: none; page-break-before: always;" class="modal_view">
+  <div id="content_{{$patient_guid}}" style="display: none;" class="modal_view">
 
     {{* Plan de soins *}}
     {{$_patient_data.plan_soins|smarty:nodefaults}}
 
-    <hr style="page-break-after: always; border: 0;" />
-
     {{* Transmissions *}}
     {{if $_patient_data.transmissions|@count}}
-      <table class="tbl">
+      <table class="tbl break_before">
         <tr>
           <th class="title" colspan="9">
             Transmissions - {{$patient}}
@@ -130,13 +141,11 @@
           </tr>
         {{/foreach}}
       </table>
-
-      <hr style="page-break-after: always; border: 0;" />
     {{/if}}
 
     {{* Observations *}}
     {{if $_patient_data.observations|@count || $sejour->_ref_obs_entree->_id}}
-      <table class="tbl">
+      <table class="tbl break_before">
         <tr>
           <th class="title" colspan="7">
             Observations - {{$patient}}
@@ -154,13 +163,11 @@
           </tr>
         {{/foreach}}
       </table>
-
-      <hr style="page-break-after: always; border: 0;" />
     {{/if}}
 
     {{* Consultations *}}
     {{if $_patient_data.consultations|@count}}
-      <table class="tbl">
+      <table class="tbl break_before">
         <tr>
           <th class="title" colspan="7">
             Consultations - {{$patient}}
@@ -172,11 +179,16 @@
           </tr>
         {{/foreach}}
       </table>
-
-      <hr style="page-break-after: always; border: 0;" />
     {{/if}}
 
     {{* Constantes *}}
-    {{$_patient_data.constantes|smarty:nodefaults}}
+    {{if $_patient_data.constantes}}
+      <hr style="border: 0; page-break-after: always;" />
+      {{$_patient_data.constantes|smarty:nodefaults}}
+    {{/if}}
   </div>
+
+  {{if !$smarty.foreach.patients.last}}
+    <hr style="border: 0; page-break-after: always;" />
+  {{/if}}
 {{/foreach}}

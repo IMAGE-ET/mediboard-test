@@ -73,7 +73,7 @@
               Date de sortie : {{$sejour->sortie|date_format:$conf.date}} à {{$sejour->sortie|date_format:$conf.time}}
             </td>
             <td class="text" style="vertical-align: top">
-              {{if $sejour->_ref_last_operation->_id}}
+              {{if $sejour->_ref_last_operation->_id && !$sejour->_ref_last_operation->annulee}}
                 {{assign var=last_op value=$sejour->_ref_last_operation}}
                 {{assign var=last_op_id value=$last_op->_id}}
 
