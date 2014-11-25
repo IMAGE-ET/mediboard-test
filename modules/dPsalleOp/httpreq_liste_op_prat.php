@@ -10,11 +10,10 @@
  */
 
 CCanDo::checkRead();
-
-$date  = CValue::getOrSession("date", CMbDT::date());
-$operation_id = CValue::getOrSession("operation_id");
-$hide_finished = CValue::getOrSession("hide_finished", 0);
-$praticien_id = CValue::getOrSession("praticien_id");
+$date           = CValue::getOrSession("date", CMbDT::date());
+$operation_id   = CValue::getOrSession("operation_id");
+$hide_finished  = CValue::getOrSession("hide_finished", 0);
+$praticien_id   = CValue::getOrSession("praticien_id");
 
 // Chargement de l'utilisateur courant
 $user = CMediusers::get();
@@ -46,7 +45,7 @@ asort($listPrats);
 // Selection des plages opératoires de la journée
 $praticien = new CMediusers;
 if ($praticien->load($praticien_id)) {
-  $praticien->loadRefsForDay($date); 
+  $praticien->loadRefsForDay($date, true);
   foreach ($praticien->_ref_plages as $plage) {
     $plage->loadRefsNotes();
   }

@@ -140,10 +140,11 @@ class CSalle extends CMbObject {
    * Analogue à CMediusers::loadRefsForDay
    *
    * @param string $date Date to look for
+   * @param bool   $second_chir Use chir_2, chir_3 and chir_4
    *
    * @return void
    */
-  function loadRefsForDay($date) {
+  function loadRefsForDay($date, $second_chir = false) {
     // Liste des utilisateurs
     $user      = new CMediusers();
     $listPrats = $user->loadPraticiens(PERM_READ);
@@ -153,13 +154,23 @@ class CSalle extends CMbObject {
     // Plages d'opérations
     $plage = new CPlageOp();
     $conf_chambre_operation = $plage->conf("chambre_operation");
+    $ljoin = array();
+    $add_where = "";
+    $add_or_where = "";
+    if ($second_chir) {
+      $ljoin["operations"] = "plagesop.plageop_id = operations.plageop_id";
+      $prepare_prats = CSQLDataSource::prepareIn(array_keys($listPrats));
+      $add_where = "operations.chir_id ".$prepare_prats." OR operations.chir_2_id ".$prepare_prats
+                ." OR operations.chir_3_id ".$prepare_prats." OR operations.chir_4_id ".$prepare_prats;
+      $add_or_where = " OR $add_where";
+    }
     $where = array();
     $where["plagesop.date"]     = "= '$date'";
     $where["plagesop.salle_id"] = "= '$this->_id'";
     $where[]                    = "`plagesop`.`chir_id` ".CSQLDataSource::prepareIn(array_keys($listPrats)).
-      " OR `plagesop`.`spec_id` ".CSQLDataSource::prepareIn(array_keys($listFunctions));
+      " OR `plagesop`.`spec_id` ".CSQLDataSource::prepareIn(array_keys($listFunctions)).$add_or_where;
     $order = "debut";
-    $this->_ref_plages = $plage->loadList($where, $order);
+    $this->_ref_plages = $plage->loadList($where, $order, null, "plageop_id", $ljoin);
 
     // Chargement d'optimisation
 
@@ -218,9 +229,9 @@ class CSalle extends CMbObject {
     $where["plagesop.date"]         = "= '$date'";
     $where["operations.salle_id"]   = "= '$this->_id'";
     $where[]                        = "`plagesop`.`chir_id` ".CSQLDataSource::prepareIn(array_keys($listPrats)).
-      " OR `plagesop`.`spec_id` ".CSQLDataSource::prepareIn(array_keys($listFunctions));
+      " OR `plagesop`.`spec_id` ".CSQLDataSource::prepareIn(array_keys($listFunctions)).$add_or_where;
     $order = "operations.time_operation";
-    $this->_ref_deplacees = $deplacee->loadList($where, $order, null, null, $ljoin);
+    $this->_ref_deplacees = $deplacee->loadList($where, $order, null, "operation_id", $ljoin);
 
     // Chargement d'optimisation
     CMbObject::massLoadFwdRef($this->_ref_deplacees, "chir_id");
@@ -243,9 +254,14 @@ class CSalle extends CMbObject {
     $where["operations.date"]     = "= '$date'";
     $where["operations.plageop_id"] = "IS NULL";
     $where["operations.salle_id"] = "= '$this->_id'";
-    $where["operations.chir_id"]  = CSQLDataSource::prepareIn(array_keys($listPrats));
+    if ($second_chir) {
+      $where[]  = $add_where;
+    }
+    else {
+      $where["operations.chir_id"]  = CSQLDataSource::prepareIn(array_keys($listPrats));
+    }
     $order = "time_operation, chir_id";
-    $this->_ref_urgences = $urgence->loadList($where, $order);
+    $this->_ref_urgences = $urgence->loadList($where, $order, null, "operation_id");
 
     // Chargement d'optimisation
     CMbObject::massLoadFwdRef($this->_ref_urgences, "chir_id");

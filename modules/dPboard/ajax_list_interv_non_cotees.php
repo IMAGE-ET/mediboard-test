@@ -34,17 +34,20 @@ $where["operations.annulee"] = "= '0'";
 if ($all_prats) {
   $prats = $user->loadPraticiens(PERM_READ);
   $in_prats = CSQLDataSource::prepareIn(array_keys($prats));
-  $where["operations.chir_id"] = "$in_prats";
+  $where[] = "operations.chir_id ".$in_prats." OR operations.chir_2_id ".$in_prats
+      ." OR operations.chir_3_id ".$in_prats." OR operations.chir_4_id ".$in_prats;
   $where[] = "operations.anesth_id IS NULL OR operations.anesth_id $in_prats";
 }
 else {
+  $where_chir = "operations.chir_id = '$user->_id' OR operations.chir_2_id = '$user->_id'
+                    OR operations.chir_3_id = '$user->_id' OR operations.chir_4_id = '$user->_id'";
   if ($user->isAnesth()) {
-    $where[] = "operations.chir_id = '$user->_id' OR
+    $where[] = "$where_chir OR
       operations.anesth_id = '$user->_id' OR
       (operations.anesth_id IS NULL && plagesop.anesth_id = '$user->_id')";
   }
   else {
-    $where["operations.chir_id"] = "= '$user->_id'";
+    $where[] = $where_chir;
   }
 }
 

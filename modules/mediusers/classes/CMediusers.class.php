@@ -1462,11 +1462,12 @@ class CMediusers extends CPerson {
    * Charge la liste de plages et interventions pour un jour donné
    * Analogue à CSalle::loadRefsForDay
    *
-   * @param string $date Date to look for
+   * @param string $date        Date to look for
+   * @param bool   $second_chir Use chir_2, chir_3 and chir_4
    *
    * @return void
    */
-  function loadRefsForDay($date) {
+  function loadRefsForDay($date, $second_chir = false) {
     $this->loadBackRefs("secondary_functions");
     $secondary_specs = array();
     foreach ($this->_back["secondary_functions"] as $_sec_spec) {
@@ -1478,11 +1479,18 @@ class CMediusers extends CPerson {
     }
     // Plages d'intervention
     $plage             = new CPlageOp();
-    $where             = array();
-    $where["date"]     = "= '$date'";
-    $where[]           = "plagesop.chir_id = '$this->_id' OR plagesop.spec_id = '$this->function_id' OR plagesop.spec_id " . CSQLDataSource::prepareIn(array_keys($secondary_specs));
-    $order             = "debut";
-    $this->_ref_plages = $plage->loadList($where, $order);
+    $ljoin = array();
+    $add_where = "";
+    if ($second_chir) {
+      $ljoin["operations"] = "plagesop.plageop_id = operations.plageop_id";
+      $add_where = " OR operations.chir_id = '$this->_id' OR operations.chir_2_id = '$this->_id'
+                    OR operations.chir_3_id = '$this->_id' OR operations.chir_4_id = '$this->_id'";
+    }
+    $where                  = array();
+    $where["plagesop.date"] = "= '$date'";
+    $where[]                = "plagesop.chir_id = '$this->_id' OR plagesop.spec_id = '$this->function_id' OR plagesop.spec_id " . CSQLDataSource::prepareIn(array_keys($secondary_specs)).$add_where;
+    $order                  = "debut";
+    $this->_ref_plages = $plage->loadList($where, $order, null, "plageop_id", $ljoin);
 
     // Chargement d'optimisation
 
@@ -1512,7 +1520,7 @@ class CMediusers extends CPerson {
       CMbObject::massLoadFwdRef($sejours, "patient_id");
 
       foreach ($_plage->_ref_operations as $_operation) {
-        if ($_operation->chir_id != $this->_id) {
+        if ($_operation->chir_id != $this->_id && (!$second_chir || ($_operation->chir_2_id != $this->_id && $_operation->chir_3_id != $this->_id && $_operation->chir_4_id != $this->_id))) {
           unset($_plage->_ref_operations[$_operation->_id]);
         }
         else {
@@ -1542,9 +1550,9 @@ class CMediusers extends CPerson {
     $where["operations.annulee"]    = "= '0'";
     $where["plagesop.salle_id"]     = "!= operations.salle_id";
     $where["plagesop.date"]         = "= '$date'";
-    $where["plagesop.chir_id"]      = "= '$this->_id'";
+    $where[]                        = "plagesop.chir_id = '$this->_id'".$add_where;
     $order                          = "operations.time_operation";
-    $this->_ref_deplacees           = $deplacee->loadList($where, $order, null, null, $ljoin);
+    $this->_ref_deplacees           = $deplacee->loadList($where, $order, null, "operation_id", $ljoin);
 
     // Chargement d'optimisation
     CMbObject::massLoadFwdRef($this->_ref_deplacees, "chir_id");
@@ -1563,10 +1571,15 @@ class CMediusers extends CPerson {
     $where               = array();
     $where["plageop_id"] = "IS NULL";
     $where["date"]       = "= '$date'";
-    $where["chir_id"]    = "= '$this->_id'";
+    if ($second_chir) {
+      $where[] = "chir_id = '$this->_id' OR chir_2_id = '$this->_id' OR chir_3_id = '$this->_id' OR chir_4_id = '$this->_id'";
+    }
+    else {
+      $where["chir_id"]  = "= '$this->_id'";
+    }
     $where["annulee"]    = "= '0'";
 
-    $this->_ref_urgences = $urgence->loadList($where);
+    $this->_ref_urgences = $urgence->loadList($where, null, null, "operation_id");
 
     // Chargement d'optimisation
     CMbObject::massLoadFwdRef($this->_ref_urgences, "chir_id");

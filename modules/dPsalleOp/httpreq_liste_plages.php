@@ -39,7 +39,7 @@ $listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
 // Selection des plages opératoires de la journée
 $salle = new CSalle();
 if ($salle->load($salle_id)) {
-  $salle->loadRefsForDay($date);
+  $salle->loadRefsForDay($date, true);
 }
 
 if ($hide_finished == 1 && $salle->_ref_plages) {
