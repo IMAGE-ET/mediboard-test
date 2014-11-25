@@ -194,8 +194,12 @@
                       {{elseif $is_aff && $object->effectue}}
                         text-decoration: line-through;
                       {{/if}} margin-bottom: 1px;">
+                      {{if $mode_vue_reelle == "compacte"}}
+                        <span onmouseover="ObjectTooltip.createEx(this, '{{$praticien->_guid}}')">({{$praticien->_shortview}})</span>
+                      {{/if}}
                       <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}');" class="CPatient-view {{if $sejour->recuse == "-1"}}opacity-70{{/if}}">
-                        {{if $sejour->recuse == "-1"}}[Att] {{/if}}{{$patient}}
+                        {{if $sejour->recuse == "-1"}}[Att] {{/if}}
+                        {{$patient}}
                         {{if "dPImeds"|module_active}}
                           {{mb_include module=Imeds template=inc_sejour_labo link="#1" float="none"}}
                           <script>
