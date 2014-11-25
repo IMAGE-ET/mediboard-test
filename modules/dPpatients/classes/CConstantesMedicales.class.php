@@ -50,6 +50,7 @@ class CConstantesMedicales extends CMbObject {
   // Forms fields
   public $_poids_g;
   public $_imc_valeur;
+  public $_poids_ideal;
   public $_vst;
   public $_tam;
   public $_urine_effective;
@@ -188,6 +189,13 @@ class CConstantesMedicales extends CMbObject {
       "type" => "physio",
       "unit" => "",
       "min" => 12, "max" => 40,
+      "plot" => true,
+      "readonly" => true
+    ),
+    "_poids_ideal"              => array(
+      "type" => "physio",
+      "unit" => "",
+      "min" => 0, "max" => 150,
       "plot" => true,
       "readonly" => true
     ),
@@ -990,6 +998,7 @@ class CConstantesMedicales extends CMbObject {
     $props['hauteur_uterine']        = 'float min|0';
     $props['peak_flow']              = 'float min|0';
     $props['_imc']                   = 'float pos';
+    $props['_poids_ideal']           = 'float pos';
     $props['_vst']                   = 'float pos';
 
     $props['injection']              = 'str maxLength|10';
@@ -1172,6 +1181,15 @@ class CConstantesMedicales extends CMbObject {
       elseif ($this->_imc > 40) {
         $this->_imc_valeur = 'Obésité morbide';
       }
+    }
+
+    // Calcul du poids ideal
+    if ($this->taille) {
+      $factor = 4;
+      if ($this->_ref_patient->sexe == 'f') {
+        $factor = 2;
+      }
+      $this->_poids_ideal = $this->taille - 100 - (($this->taille - 150) / $factor);
     }
 
     // Calcul du Volume Sanguin Total
