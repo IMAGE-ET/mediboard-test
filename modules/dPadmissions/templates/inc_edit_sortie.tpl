@@ -287,12 +287,12 @@
 
             <span id="trajectoire_button"></span>
           {{/if}}
-          <button type="button" class="close singleclick"
+          <button type="button" class="close oneclick"
                 onclick="Admissions.annulerSortie(this.form, function() { document.fire('mb:valider_sortie'); document.stopObserving('mb:valider_sortie'); Control.Modal.close();})">
             {{tr}}Cancel{{/tr}}
             {{mb_label object=$sejour field=sortie}}
           </button>
-          <button type="submit" class="save singleclick">
+          <button type="submit" class="save oneclick">
             {{tr}}Validate{{/tr}}
             {{mb_label object=$sejour field=sortie}}
           </button>
@@ -306,7 +306,7 @@
             {{tr}}Save{{/tr}}
           </button>
           {{if $sejour->confirme}}
-            <button type="button" class="cancel singleclick"
+            <button type="button" class="cancel oneclick"
                     onclick="{{if !$is_praticien}}
                                 $V(this.form.action_confirm, 0);
                                 Admissions.askconfirm('{{$sejour->_id}}');
@@ -316,7 +316,7 @@
               {{tr}}canceled_exit{{/tr}}
             </button>
           {{else}}
-            <button type="button" class="tick singleclick"
+            <button type="button" class="tick oneclick"
                     onclick="{{if !$is_praticien}}
                       $V(this.form.action_confirm, 1);
                       Admissions.askconfirm('{{$sejour->_id}}');
@@ -441,8 +441,8 @@
       </tr>
       <tr>
         <td colspan="2" class="button">
-          <button type="submit" class="tick singleclick">{{tr}}Validate{{/tr}}</button>
-          <button type="button" class="cancel singleclick" onclick="Control.Modal.close();">{{tr}}Cancel{{/tr}}</button>
+          <button type="submit" class="tick oneclick">{{tr}}Validate{{/tr}}</button>
+          <button type="button" class="cancel oneclick" onclick="Control.Modal.close();">{{tr}}Cancel{{/tr}}</button>
         </td>
       </tr>
     </table>
