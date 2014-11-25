@@ -444,7 +444,11 @@
         {{assign var="_is_anesth" value="0"}}
         {{assign var=sejour_id    value=""}}
 
-        {{mb_include module=cabinet template=inc_ant_consult chir_id=$app->user_id show_header=0}}
+        {{if $patient->_ref_dossier_medical && !$patient->_ref_dossier_medical->_canEdit}}
+          {{mb_include module=dPpatients template=CDossierMedical_complete object=$patient->_ref_dossier_medical}}
+        {{else}}
+          {{mb_include module=cabinet template=inc_ant_consult chir_id=$app->user_id show_header=0}}
+        {{/if}}
       </div>
 
       <div id="constantes-medicales" style="display:none"></div>

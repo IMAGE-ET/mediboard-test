@@ -34,6 +34,8 @@ $consult->_ref_chir->loadRefFunction();
 $list_etat_dents = array();
 
 if ($dossier_medical->_id) {
+  $dossier_medical->canDo();
+
   $etat_dents = $dossier_medical->loadRefsEtatsDents();
   foreach ($etat_dents as $etat) {
     $list_etat_dents[$etat->dent] = $etat->etat;

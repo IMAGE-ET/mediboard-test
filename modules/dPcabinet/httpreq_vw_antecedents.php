@@ -29,6 +29,18 @@ else if ($patient_id) {
 $patient->loadRefPhotoIdentite();
 $patient->loadRefDossierMedical();
 
+// Read-only view if user cannot edit
+if ($patient->_ref_dossier_medical && $patient->_ref_dossier_medical->_id) {
+  $patient->_ref_dossier_medical->canDo();
+
+  if (!$patient->_ref_dossier_medical->_canEdit) {
+    $smarty = new CSmartyDP("modules/dPpatients");
+    $smarty->assign("object", $patient->_ref_dossier_medical);
+    $smarty->display("CDossierMedical_complete.tpl");
+    return;
+  }
+}
+
 if (CModule::getActive("maternite")) {
   $patient->loadLastGrossesse();
   $patient->loadLastAllaitement();

@@ -101,7 +101,12 @@
 <hr class="control_tabs" />
 
 <div id="antecedents" style="display: none">
-  {{mb_include module=cabinet template="inc_ant_consult"}}
+  {{if $patient->_ref_dossier_medical && !$patient->_ref_dossier_medical->_canEdit}}
+    {{mb_include module=dPpatients template=CDossierMedical_complete object=$patient->_ref_dossier_medical}}
+  {{else}}
+    {{mb_include module=cabinet template="inc_ant_consult"}}
+  {{/if}}
+
 </div>
 {{if !$consult_anesth->_id}}
   <div id="exams" style="display: none;">
