@@ -131,7 +131,7 @@
           {{* Initialisations *}}
           {{assign var=quantite value="-"}}
           {{assign var=quantite_depart value="-"}}
-          {{assign var=heure_reelle value=""}}source
+          {{assign var=heure_reelle value=""}}
 
           {{* Quantite planifiée *}}
           {{if @$administrations_in_hour.quantite_planifiee}}
