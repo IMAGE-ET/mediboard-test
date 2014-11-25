@@ -262,8 +262,10 @@ abstract class DeployOperation extends MediboardCommand {
    * @return array|bool
    */
   protected function rsync($path, $files, $instance, OutputInterface $output, $dry_run = false) {
+    $msg = "";
     if ($dry_run) {
       $dry_run = "-n ";
+      $msg     = "(DRY RUN)";
     }
 
     $cmd = "rsync -apgzC --out-format='%n%L' $dry_run" . escapeshellarg($path . "/") . " --delete " . escapeshellarg($instance) . " " . $files["excluded"] . " " . $files["included"];
@@ -278,7 +280,7 @@ abstract class DeployOperation extends MediboardCommand {
       return false;
     }
     else {
-      $this->out($output, "<b>$instance rsync-ed!</b>");
+      $this->out($output, "<b>$instance rsync-ed! $msg</b>");
     }
 
     // Log files RSYNC
