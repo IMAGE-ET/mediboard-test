@@ -63,6 +63,16 @@
       {{$object->_ref_group}}
     </td>
   </tr>
+
+  {{if $object->rques}}
+    <tr>
+      <td class="text" colspan="3">
+        <strong>{{mb_label object=$object field=rques}}</strong>
+        <br />
+        {{mb_value object=$object field=rques}}
+      </td>
+    </tr>
+  {{/if}}
 {{/if}}
 
 {{if $affectations|@count}}
