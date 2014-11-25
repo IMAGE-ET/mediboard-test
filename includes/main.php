@@ -243,8 +243,12 @@ if ($user->_id && !$user->isRobot() && (!($m == "admin" && $tab == "chpwd") && !
     CAppUI::redirect("m=admin&tab=chpwd&forceChange=1");
   }
   // If we want to force user to periodically change password
-  if (CAppUI::conf("admin CUser force_changing_password")) {
+  if (CAppUI::conf("admin CUser force_changing_password") || $user->_ref_user->force_change_password) {
     // Need to change
+    if ($user->_ref_user->force_change_password) {
+      CAppUI::redirect("m=admin&tab=chpwd&forceChange=1");
+    }
+
     if (CMbDT::dateTime("-".CAppUI::conf("admin CUser password_life_duration")) > $user->_ref_user->user_password_last_change) {
       CAppUI::redirect("m=admin&tab=chpwd&forceChange=1&lifeDuration=1");
     }

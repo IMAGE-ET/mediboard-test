@@ -34,6 +34,9 @@ class CUser extends CPerson {
   public $user_birthday;
   public $user_last_login;
 
+  /** @var bool Does the password need to be changed */
+  public $force_change_password;
+
   /** @deprecated */
   public $user_login_errors;
   public $template;
@@ -171,6 +174,7 @@ class CUser extends CPerson {
     $props["profile_id"]                = "ref class|CUser";
     $props["dont_log_connection"]       = "bool default|0";
     $props["user_password_last_change"] = "dateTime notNull";
+    $props["force_change_password"]     = "bool default|0";
 
     // The different levels of security are stored to be usable in JS
     $props["_user_password_weak"]   = "password minLength|4";

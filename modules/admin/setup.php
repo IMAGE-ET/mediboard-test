@@ -129,7 +129,7 @@ class CSetupadmin extends CSetup {
 
     $query = "ALTER TABLE `users` ADD `user_astreinte` VARCHAR (20)";
     $this->addQuery($query);
-    
+
     $this->makeRevision("1.0.28");
     $query = "ALTER TABLE `user_preferences`
       CHANGE `value` `value` TEXT;";
@@ -214,7 +214,11 @@ class CSetupadmin extends CSetup {
                 ADD INDEX (`group_id`)";
     $this->addQuery($query);
 
+    $this->makeRevision("1.0.40");
+    $query = "ALTER TABLE `users`
+      ADD `force_change_password` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
 
-    $this->mod_version = "1.0.40";
+    $this->mod_version = "1.0.41";
   }
 }

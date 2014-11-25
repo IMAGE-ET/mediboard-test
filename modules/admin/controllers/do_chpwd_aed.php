@@ -44,6 +44,12 @@ if ($new_pwd1 != $new_pwd2) {
 // Enregistrement
 $user->_user_password = $new_pwd1;
 $user->_is_changing   = true;
+
+// If user was obliged to change and successfully changed, remove flag
+if ($user->force_change_password) {
+  $user->force_change_password = false;
+}
+
 if ($msg = $user->store()) {
   CAppUI::stepAjax($msg, UI_MSG_ERROR);
 }
