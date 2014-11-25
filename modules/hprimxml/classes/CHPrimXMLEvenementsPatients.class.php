@@ -423,7 +423,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
 
     $dateHeure = "$date $heure";
 
-    if ($mbVenue->entree_reelle && CAppUI::conf("hprimxml notifier_entree_reelle")) {
+    if (CAppUI::conf("hprimxml notifier_entree_reelle") &&
+          (self::getEtatVenue($node) == "encours" || self::getEtatVenue($node) == "clôturée")
+    ) {
       $mbVenue->entree_reelle = $dateHeure;
     }
     else {
@@ -552,7 +554,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     }
 
     // Cas dans lequel on ne récupère pas de sortie tant que l'on a pas la sortie réelle
-    if ($mbVenue->sortie_reelle && CAppUI::conf("hprimxml notifier_sortie_reelle")) {
+    if (CAppUI::conf("hprimxml notifier_sortie_reelle") && self::getEtatVenue($node) == "clôturée") {
       $mbVenue->sortie_reelle = $dateHeure;
     }
     else {
