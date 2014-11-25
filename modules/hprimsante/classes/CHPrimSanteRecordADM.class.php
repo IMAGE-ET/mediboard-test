@@ -260,7 +260,7 @@ class CHPrimSanteRecordADM extends CHPrimSanteMessageXML {
     /** @var CInteropSender $sender */
     $sender               = $this->_ref_sender;
     $mediuser             = $this->getDoctor($node);
-    if ($mediuser && !$mediuser->_id) {
+    if (!$mediuser || $mediuser && !$mediuser->_id) {
       return new CHPrimSanteError($this->_ref_exchange_hpr, "P", "15",  array("P", $this->loop, $this->identifier_patient), "8.14");
     }
     $sejour->praticien_id = $mediuser->_id;
