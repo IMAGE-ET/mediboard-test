@@ -276,7 +276,7 @@ abstract class DeployOperation extends MediboardCommand {
     exec($cmd, $result, $state);
 
     if ($state !== 0) {
-      $this->out($output, "<error>Error occurred during $instance RSYNC... $dry_run</error>");
+      $this->out($output, "<error>Error occurred during $instance RSYNC... $msg</error>");
 
       return false;
     }
