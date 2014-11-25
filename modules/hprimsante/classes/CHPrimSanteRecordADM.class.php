@@ -207,6 +207,7 @@ class CHPrimSanteRecordADM extends CHPrimSanteMessageXML {
     $patient->nom             = $person["name"];
     $patient->prenom          = $person["firstname"];
     $patient->prenom_2        = $person["secondname"];
+    $patient->civilite        = CMbString::lower($person["civilite"]);
     $patient->naissance       = $this->getBirthdate($node);
     $patient->sexe            = CMbString::lower($this->getSexPerson($node));
 
