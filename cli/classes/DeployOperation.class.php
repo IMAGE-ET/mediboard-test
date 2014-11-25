@@ -13,6 +13,7 @@
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Process\Exception\InvalidArgumentException;
 
 use SVNClient\WorkingCopy;
@@ -181,6 +182,8 @@ abstract class DeployOperation extends MediboardCommand {
   }
 
   /**
+   * Checks remote instances state
+   *
    * @param string          $master_branch Current MASTER branch
    * @param array           $instances     Selected instances
    * @param OutputInterface $output        Output
@@ -243,7 +246,7 @@ abstract class DeployOperation extends MediboardCommand {
       $this->out($output, "<comment>Particular files:</comment>");
 
       foreach ($matches[1] as $_file) {
-        $output->writeln("? <b>$_file</b>");
+        $output->writeln("- <b>$_file</b>");
       }
     }
   }
@@ -260,8 +263,10 @@ abstract class DeployOperation extends MediboardCommand {
    * @return array|bool
    */
   protected function rsync($path, $files, $instance, OutputInterface $output, $dry_run = false) {
+    $msg = "";
     if ($dry_run) {
       $dry_run = "-n ";
+      $msg     = "(DRY RUN)";
     }
 
     $cmd = "rsync -apgzC --out-format='%n%L' $dry_run" . escapeshellarg($path . "/") . " --delete " . escapeshellarg($instance) . " " . $files["excluded"] . " " . $files["included"];
@@ -271,12 +276,14 @@ abstract class DeployOperation extends MediboardCommand {
     exec($cmd, $result, $state);
 
     if ($state !== 0) {
-      $this->out($output, "<error>Error occurred during $instance RSYNC...</error>");
+      $this->out($output, "<error>Error occurred during $instance RSYNC... $msg</error>");
 
       return false;
     }
     else {
-      $this->out($output, "<b>$instance rsync-ed!</b>");
+      if (!$dry_run) {
+        $this->out($output, "<b>$instance rsync-ed!</b>");
+      }
     }
 
     // Log files RSYNC
@@ -296,6 +303,27 @@ abstract class DeployOperation extends MediboardCommand {
     }
 
     return $result;
+  }
+
+  /**
+   * Ask and validate operation by typing MASTER release_code
+   *
+   * @param string          $current_branch Current MASTER branch
+   * @param DialogHelper    $dialog         Dialog helper
+   * @param OutputInterface $output         Output
+   */
+  protected function confirmOperation($current_branch, DialogHelper $dialog, OutputInterface $output) {
+    $bundle = $dialog->askAndValidate(
+      $output,
+      "\nConfirm operation by typing MASTER release code: ",
+      function ($answer) use ($current_branch) {
+        if ($current_branch !== trim($answer)) {
+          throw new \RunTimeException("Wrong release code: $answer");
+        }
+
+        return $answer;
+      }
+    );
   }
 
   /**
