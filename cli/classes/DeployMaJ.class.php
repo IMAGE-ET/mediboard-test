@@ -140,16 +140,8 @@ EOT
       return;
     }
 
-    $branch = $dialog->ask(
-      $output,
-      "\nConfirm operation by typing MASTER release code: "
-    );
-
-    if (!$branch || $branch !== $current_branch) {
-      $output->writeln("<error>Wrong release code: $branch</error>");
-
-      return;
-    }
+    // Ask confirmation by typing MASTER release code
+    $this->confirmOperation($current_branch, $dialog, $output);
 
     $this->out($output, "<info>Confirmation OK</info>");
     $this->out($output, "Performing operation...");
