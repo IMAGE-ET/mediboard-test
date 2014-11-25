@@ -538,6 +538,12 @@ class CHPrimSanteMessageXML extends CMbXMLDocument {
         $mediuser->adeli = $code;
         break;
       default:
+        if (strlen($code) == 9 && luhn($code)) {
+          $mediuser->adeli = $code;
+        }
+        if (strlen($code) == 11 && luhn($code)) {
+          $mediuser->rpps  = $code;
+        }
     }
 
     // Cas où l'on a aucune information sur le médecin
