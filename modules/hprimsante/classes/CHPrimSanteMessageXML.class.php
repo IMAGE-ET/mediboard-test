@@ -476,7 +476,7 @@ class CHPrimSanteMessageXML extends CMbXMLDocument {
           return new CHPrimSanteError($this->_ref_exchange_hpr, "P", "06", array("P", $this->loop+1, $this->identifier_patient), "8.24");
         }
 
-        $sejour->entree_reelle = $entree;
+        $sejour->entree_prevue = $entree;
         $sejour->sortie_prevue = $sortie;
         //Création d'affectation
 
