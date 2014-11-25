@@ -426,6 +426,7 @@ class CHPrimSanteMessageXML extends CMbXMLDocument {
    * @return CSejour|CHPrimSanteError
    */
   function getSejour($patient, $identifier, $node, $create = false) {
+    /** @var CInteropSender $sender */
     $sender     = $this->_ref_sender;
     $patient_id = $patient->_id;
 
@@ -476,7 +477,13 @@ class CHPrimSanteMessageXML extends CMbXMLDocument {
           return new CHPrimSanteError($this->_ref_exchange_hpr, "P", "06", array("P", $this->loop+1, $this->identifier_patient), "8.24");
         }
 
-        $sejour->entree_reelle = $entree;
+        if ($sender->_configs["notifier_entree_reelle"]) {
+          $sejour->entree_reelle = $entree;
+        }
+        else {
+          $sejour->entree_prevue = $entree;
+        }
+
         $sejour->sortie_prevue = $sortie;
         //Création d'affectation
 

@@ -23,7 +23,8 @@ class CHPrimSanteConfig extends CExchangeDataFormatConfig {
     "segment_terminator",
 
     //handle
-    "action"
+    "action",
+    "notifier_entree_reelle",
   );
 
   /** @var integer Primary key */
@@ -35,6 +36,7 @@ class CHPrimSanteConfig extends CExchangeDataFormatConfig {
   public $segment_terminator;
 
   public $action;
+  public $notifier_entree_reelle;
 
   /**
    * @var array Categories
@@ -46,7 +48,8 @@ class CHPrimSanteConfig extends CExchangeDataFormatConfig {
       "segment_terminator",
     ),
     "handle" => array(
-      "action"
+      "action",
+      "notifier_entree_reelle",
     ),
   );
 
@@ -78,6 +81,7 @@ class CHPrimSanteConfig extends CExchangeDataFormatConfig {
 
     //handle
     $props["action"]                    = "enum list|IPP_NDA|Patient|Sejour|Patient_Sejour default|IPP_NDA";
+    $props["notifier_entree_reelle"]     = "bool default|1";
 
     return $props;
   }

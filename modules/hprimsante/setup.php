@@ -118,6 +118,12 @@ class CSetuphprimsante extends CSetup {
                 ADD `monitor_sources` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.6";
+    $this->makeRevision("0.6");
+
+    $query = "ALTER TABLE `hprimsante_config`
+                ADD `notifier_entree_reelle` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.7";
   }
 }
