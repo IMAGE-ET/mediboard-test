@@ -218,7 +218,7 @@ class CHPrimSanteMessageXML extends CMbXMLDocument {
     $xpath = new CHPrimSanteMessageXPath($node ? $node->ownerDocument : $this);
     $date = $xpath->queryTextNode("P.33/TS.1", $node);
     if ($date) {
-      $date = CMbDT::transform(null, $date, "%Y-%m-%d %H:%i:%s");
+      $date = CMbDT::dateTime($date);
     }
     return $date;
   }
