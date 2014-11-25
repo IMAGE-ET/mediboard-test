@@ -73,6 +73,7 @@
       <tr>
         <td class="text">
           <button type="button" class="print compact notext not-printable" onclick="$('content_{{$patient->_guid}}').print();">{{tr}}Print{{/tr}}</button>
+          <button type="button" class="search compact notext not-printable" onclick="Modal.open('content_{{$patient->_guid}}', {showClose: true});">Voir le dossier</button>
           <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')"
                 class="{{if $statut == "attente"}}patient-not-arrived{{/if}}"
                 style="{{if $statut == "sorti"}}background-image:url(images/icons/ray.gif); background-repeat:repeat;{{/if}}
