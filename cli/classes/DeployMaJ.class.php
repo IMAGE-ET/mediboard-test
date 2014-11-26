@@ -62,36 +62,23 @@ EOT
   }
 
   /**
-   * @see paret::rsync()
+   * @see parent::rsync()
    */
-  protected function rsync($path, $files, $instance, OutputInterface $output, $dry_run = false) {
+  protected function rsync($path, $files, $instance, OutputInterface $output, $dry_run = false, &$merged_result = false) {
     $dialog = $this->getHelperSet()->get('dialog');
 
-    $result = parent::rsync($path, $files, $instance, $output, true);
+    $result = parent::rsync($path, $files, $instance, $output, $dry_run, $merged_result);
 
     if ($result) {
-      $this->out($output, "<comment>These files will be updated:</comment>");
-
       foreach ($result as $_line) {
-        $output->writeln(" > $_line");
+        if (is_array($merged_result)) {
+          if (!isset($merged_result[$_line])) {
+            $merged_result[$_line] = array();
+          }
+
+          $merged_result[$_line][] = $instance;
+        }
       }
-
-      $this->checkFilePresence(implode("\n", $result), $output);
-
-      if (!$dialog->askConfirmation(
-        $output,
-        '<question>Confirm? [Y/n]</question>',
-        true
-      )
-      ) {
-        return false;
-      }
-
-      $result = parent::rsync($path, $files, $instance, $output);
-      $this->checkFilePresence(implode("\n", $result), $output);
-    }
-    else {
-      $this->out($output, "<comment>No file to update</comment>");
     }
 
     return $result;
@@ -151,9 +138,28 @@ EOT
 
     $files = $this->getIncludedAndExcluded($path, $output);
 
+    $merged_result = array();
+    foreach ($to_perform as $_instance) {
+      // RSYNC with dry run
+      $this->rsync($path, $files, $_instance, $output, true, $merged_result);
+    }
+
+    // RSYNC file diff table output
+    $this->showFileDiffTable($to_perform, $merged_result, $output);
+
+    if (!$dialog->askConfirmation(
+      $output,
+      '<question>Confirm? [Y/n]</question> ',
+      true
+    )
+    ) {
+      return false;
+    }
+
     foreach ($to_perform as $_instance) {
       // RSYNC
-      $this->rsync($path, $files, $_instance, $output);
+      $result = parent::rsync($path, $files, $_instance, $output);
+      $this->checkFilePresence(implode("\n", $result), $output);
     }
 
     // Re-check remote release

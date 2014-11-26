@@ -22,6 +22,8 @@ use SVNClient\WorkingCopy;
  * deploy:mep command
  */
 abstract class DeployOperation extends MediboardCommand {
+  protected $all_instances = array();
+
   protected $patterns_to_check = array(
     ".*/setup\.php"
   );
@@ -121,6 +123,9 @@ abstract class DeployOperation extends MediboardCommand {
       foreach ($instance_nodes as $_instance) {
         $_path                        = $_instance->getAttribute("path");
         $all_instances[$group_name][] = $_path;
+
+        $_shortname                  = $_instance->getAttribute("shortname");
+        $this->all_instances[$_path] = $_shortname;
       }
     }
 
@@ -246,7 +251,7 @@ abstract class DeployOperation extends MediboardCommand {
       $this->out($output, "<comment>Particular files:</comment>");
 
       foreach ($matches[1] as $_file) {
-        $output->writeln("- <b>$_file</b>");
+        $output->writeln("- <fg=red;>$_file</fg=red;>");
       }
     }
   }
@@ -262,7 +267,7 @@ abstract class DeployOperation extends MediboardCommand {
    *
    * @return array|bool
    */
-  protected function rsync($path, $files, $instance, OutputInterface $output, $dry_run = false) {
+  protected function rsync($path, $files, $instance, OutputInterface $output, $dry_run = false, &$merged_result = false) {
     $msg = "";
     if ($dry_run) {
       $dry_run = "-n ";
@@ -282,7 +287,7 @@ abstract class DeployOperation extends MediboardCommand {
     }
     else {
       if (!$dry_run) {
-        $this->out($output, "<b>$instance rsync-ed!</b>");
+        $this->out($output, "<info>RSYNC-ED: $instance</info>");
       }
     }
 
@@ -450,6 +455,81 @@ abstract class DeployOperation extends MediboardCommand {
           }
         }
       }
+    }
+  }
+
+  /**
+   * RSYNC file diff table output
+   *
+   * @param array           $instances List of all treated instances, for headers initialisation
+   * @param array           $files     List of all treated files as keys, with all concerned instances as values ([file] => (instance, instance))
+   * @param OutputInterface $output    Output
+   */
+  protected function showFileDiffTable($instances, $files, OutputInterface $output) {
+    // Headers initialisation
+    $headers = array(str_pad("File", 50));
+    foreach ($instances as $_instance) {
+      $headers[] = $this->all_instances[$_instance];
+    }
+
+    /**
+     * Rows initialisation
+     *
+     * For each file, init "file" column
+     * Then, for each header, except file, init cell value
+     * Finally, for each instance associated with file, set cell value, with array index
+     **/
+    $rows               = array();
+    $rows_deleted_files = array();
+    foreach ($files as $_file => $_instances) {
+      $_row = array("file" => $_file);
+
+      foreach ($instances as $_header) {
+        $_row[$_header] = "";
+
+        foreach ($_instances as $_k => $_instance) {
+          if ($_header == $_instance) {
+            $_row[$_instance] = "X";
+          }
+        }
+      }
+
+      if (substr($_file, 0, 9) == "deleting ") {
+        $_row["file"]               = substr($_row["file"], 9);
+        $rows_deleted_files[$_file] = $_row;
+      }
+      else {
+        $rows[$_file] = $_row;
+      }
+    }
+
+    if ($rows) {
+      $this->out($output, "<info>Added or modified files:</info>");
+      $table = $this->getHelperSet()->get('table');
+      $table
+        ->setHeaders($headers)
+        ->setRows($rows)
+        ->setCellHeaderFormat('<b>%s</b>')
+        ->setCellRowFormat('%s');
+      $table->render($output);
+    }
+    else {
+      $this->out($output, "<comment>No added or modified files</comment>");
+    }
+
+    if ($rows_deleted_files) {
+      $this->out($output, "<fg=red;>Deleted files:</fg=red;>");
+
+      $table = $this->getHelperSet()->get('table');
+      $table
+        ->setHeaders($headers)
+        ->setRows($rows_deleted_files)
+        ->setCellHeaderFormat('<b>%s</b>')
+        ->setCellRowFormat('<fg=red;>%s</fg=red;>');
+      $table->render($output);
+    }
+    else {
+      $this->out($output, "<comment>No deleted files</comment>");
     }
   }
 }
