@@ -85,7 +85,7 @@ class CSearchQuery {
 
     //'And' or 'Or' default : 'Or'
     $elasticaQueryString->setDefaultOperator($operator);
-    $elasticaQueryString->setAnalyzer("custom_search_analyzer");
+    //$elasticaQueryString->setAnalyzer("custom_search_analyzer");
     $elasticaQueryString->setQuery($words);
 
     // Create the actual search object with some data.
