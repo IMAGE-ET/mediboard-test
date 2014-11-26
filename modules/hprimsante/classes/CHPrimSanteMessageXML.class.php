@@ -429,13 +429,16 @@ class CHPrimSanteMessageXML extends CMbXMLDocument {
     $sender     = $this->_ref_sender;
     $patient_id = $patient->_id;
 
+    if (!$identifier) {
+      return new CHPrimSanteError($this->_ref_exchange_hpr, "T", "16", array("P", $this->loop+1, $this->identifier_patient), "8.4");
+    }
+
     $sejour = new CSejour();
-    if ($identifier) {
-      $idex = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $identifier);
-      $sejour->load($idex->object_id);
-      if ($sejour->patient_id != $patient_id) {
-        return new CHPrimSanteError($this->_ref_exchange_hpr, "T", "13", array("P", $this->loop+1, $this->identifier_patient), "8.5");
-      }
+
+    $idex = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $identifier);
+    $sejour->load($idex->object_id);
+    if ($sejour->patient_id != $patient_id) {
+      return new CHPrimSanteError($this->_ref_exchange_hpr, "T", "13", array("P", $this->loop+1, $this->identifier_patient), "8.5");
     }
 
     $sejour->patient_id = $patient_id;
