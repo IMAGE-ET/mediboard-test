@@ -36,6 +36,16 @@ plothover = function (event, pos, item) {
 enChantier = function(){
   Modal.alert("Fonctionnalité en cours de développement");
 };
+
+editPeropAdministration = function(operation_id) {
+  var url = new Url('dPsalleOp', 'ajax_vw_surveillance_perop_administration');
+  url.addParam('operation_id', operation_id);
+  url.modal({
+    width: 1000,
+    height: 600,
+    onClose: reloadSurveillancePerop
+  });
+};
   
 Main.add(function(){
   var width = $("surveillance_cell").getWidth();
@@ -376,6 +386,62 @@ printSurveillance = function(operation_id) {
     <col style="width: {{$left_col_width}}px;" />
     
     {{foreach from=$evenements key=_label item=_evenements}}
+      {{if @$_evenements.subitems}}
+        <tr>
+          <th colspan="2">
+            <strong>
+              {{tr}}{{$_label}}{{/tr}}
+            </strong>
+
+            {{if $_evenements.icon}}
+              {{assign var=_icon value=$_evenements.icon}}
+              <img src="{{$images.$_icon}}" />
+            {{/if}}
+
+            {{if $_label == "CPrescription._chapitres.med"}}
+              <button class="add notext compact" onclick="editPeropAdministration('{{$interv->_id}}')"></button>
+            {{/if}}
+          </th>
+        </tr>
+        {{foreach from=$_evenements.subitems key=_subkey item=_subitem}}
+          <tr>
+            <th style="text-align: right; padding: 2px;">
+              <strong onmouseover="ObjectTooltip.createEx(this, '{{$_subitem.line->_guid}}');">
+                {{$_subitem.label}}
+              </strong>
+  {{*
+              <button class="add notext compact" style="float: right;" disabled
+                      onclick="alert('Fonctionnalité pas encore implémentée')">
+                Administrer
+              </button>
+*}}
+            </th>
+            <td>
+              {{foreach from=$_subitem.items item=_evenement}}
+                {{if $_evenement.position <= 100}}
+                  {{assign var=evenement_width value=""}}
+                  {{if array_key_exists('width', $_evenement)}}
+                    {{assign var=evenement_width value="width: `$_evenement.width`%;"}}
+                  {{/if}}
+
+                  <div style="padding-left: {{$_evenement.position}}%; margin-left: -1px; {{if $_evenement.alert}} color: red; {{/if}} {{if array_key_exists('width', $_evenement)}} margin-bottom: 2px; {{/if}}" class="evenement">
+                    <div onmouseover="ObjectTooltip.createEx(this, '{{$_evenement.object->_guid}}');" style="{{$evenement_width}}; {{if $_evenement.alert}} background: red; {{/if}}">
+                      <div class="marking"></div>
+                      <div class="label" title="{{$_evenement.datetime|date_format:$conf.datetime}} - {{if $_evenement.unit}}{{$_evenement.unit}}{{/if}} {{$_evenement.label}}">
+                        {{if $_evenement.unit}}
+                          {{$_evenement.unit}} <strong>{{$_evenement.label|truncate:40}}</strong>
+                        {{else}}
+                          {{$_evenement.label|truncate:40}}
+                        {{/if}}
+                      </div>
+                    </div>
+                  </div>
+                {{/if}}
+              {{/foreach}}
+            </td>
+          </tr>
+        {{/foreach}}
+      {{else}}
       <tr>
         <th>
           {{tr}}{{$_label}}{{/tr}}
@@ -383,11 +449,6 @@ printSurveillance = function(operation_id) {
           {{if $_label == "CAnesthPerop"}}
             <button class="new notext compact" style="float: right;"
                     onclick="return editEvenementPerop('CAnesthPerop-0', '{{$interv->_id}}')"></button>
-          {{/if}}
-
-          {{if $_label == "CPrescription._chapitres.med"}}
-            <button class="add notext compact" style="float: right;"
-                    onclick="new Url('dPsalleOp', 'ajax_vw_surveillance_perop_administration').addParam('operation_id', '{{$interv->_id}}').modal({onClose: reloadSurveillancePerop})"></button>
           {{/if}}
         </th>
         <td>
@@ -407,7 +468,7 @@ printSurveillance = function(operation_id) {
                      onclick="return editEvenementPerop('{{$_evenement.object->_guid}}', '{{$interv->_id}}')"
                     {{if $_evenement.alert}} style="color: red;" {{/if}}>
                 {{/if}}
-                
+
                   {{if $_evenement.icon}}
                     {{assign var=_icon value=$_evenement.icon}}
                     <img src="{{$images.$_icon}}" />
@@ -428,6 +489,7 @@ printSurveillance = function(operation_id) {
         {{/foreach}}
         </td>
       </tr>
+      {{/if}}
     {{/foreach}}
     
     {{if $now <= 100}}

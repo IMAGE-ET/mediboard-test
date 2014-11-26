@@ -478,6 +478,50 @@
           <col style="width: {{$left_col_width}}px;" />
 
           {{foreach from=$evenements key=_label item=_evenements}}
+            {{if @$_evenements.subitems}}
+            <tr>
+              <th colspan="2" style="text-align: center;">
+                <strong>
+                  {{tr}}{{$_label}}{{/tr}}
+                </strong>
+
+                {{if $_evenements.icon}}
+                  {{assign var=_icon value=$_evenements.icon}}
+                  <img src="{{$images.$_icon}}" />
+                {{/if}}
+              </th>
+            </tr>
+            {{foreach from=$_evenements.subitems key=_subkey item=_subitem}}
+              <tr>
+                <th style="text-align: right; padding: 2px;">
+                  {{$_subitem.label}}
+                </th>
+                <td>
+                  {{foreach from=$_subitem.items item=_evenement}}
+                    {{if $_evenement.position <= 100}}
+                      {{assign var=evenement_width value=""}}
+                      {{if array_key_exists('width', $_evenement)}}
+                        {{assign var=evenement_width value="width: `$_evenement.width`%;"}}
+                      {{/if}}
+
+                      <div style="padding-left: {{$_evenement.position}}%; margin-left: -1px; {{if $_evenement.alert}} color: red; {{/if}} {{if array_key_exists('width', $_evenement)}} margin-bottom: 2px; {{/if}}" class="evenement">
+                        <div onmouseover="ObjectTooltip.createEx(this, '{{$_evenement.object->_guid}}');" style="{{$evenement_width}}; {{if $_evenement.alert}} background: red; {{/if}}">
+                          <div class="marking"></div>
+                          <div class="label" title="{{$_evenement.datetime|date_format:$conf.datetime}} - {{if $_evenement.unit}}{{$_evenement.unit}}{{/if}} {{$_evenement.label}}">
+                            {{if $_evenement.unit}}
+                              {{$_evenement.unit}} <strong>{{$_evenement.label|truncate:40}}</strong>
+                            {{else}}
+                              {{$_evenement.label|truncate:40}}
+                            {{/if}}
+                          </div>
+                        </div>
+                      </div>
+                    {{/if}}
+                  {{/foreach}}
+                </td>
+              </tr>
+            {{/foreach}}
+            {{else}}
             <tr>
               <th>
                 {{tr}}{{$_label}}{{/tr}}
@@ -509,6 +553,7 @@
                 {{/foreach}}
               </td>
             </tr>
+            {{/if}}
           {{/foreach}}
         </table>
       </div>

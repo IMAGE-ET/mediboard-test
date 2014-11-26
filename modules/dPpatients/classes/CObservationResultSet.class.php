@@ -432,7 +432,6 @@ class CObservationResultSet extends CMbObject {
     $evenements = array(
       "CAnesthPerop"                 => array(),
       "CAffectationPersonnel"        => array(),
-      "CPrescription._chapitres.med" => array(),
     );
 
     // Personnel de l'interv
@@ -505,10 +504,22 @@ class CObservationResultSet extends CMbObject {
       foreach ($lines as $_line_array) {
         $_line = $_line_array["object"];
 
-        $_view = "";
+        $key = "CPrescription._chapitres.$_line->_chapitre";
+        if (!isset($evenements[$key])) {
+          $evenements[$key] = array(
+            "subitems" => array(),
+            "icon"     => $_line->_chapitre
+          );
+        }
 
+        // Build view
+        $_subkey = array(
+          "line"  => $_line,
+          "label" => "",
+        );
+        $_view = "";
         if ($_line instanceof CPrescriptionLineElement) {
-          $_view = $_line->_view;
+          $_view = $_line->_chapitre;
         }
         elseif ($_line instanceof CPrescriptionLineMix) {
           foreach ($_line->_ref_lines as $_mix_item) {
@@ -519,36 +530,16 @@ class CObservationResultSet extends CMbObject {
           $_view = $_line->_ucd_view;
         }
 
-        $key = "CPrescription._chapitres.$_line->_chapitre";
-        if (!isset($evenements[$key])) {
-          $evenements[$key] = array();
+        $_subkey["label"] = $_view;
+
+        $_subkey_guid = $_subkey["line"]->_guid;
+        if (!isset($evenements[$key]["subitems"][$_subkey_guid])) {
+          $evenements[$key]["subitems"][$_subkey_guid] = array(
+            "label" => $_subkey["label"],
+            "line"  => $_line,
+            "items" => array(),
+          );
         }
-
-        /*
-        foreach($_line_array["planifications"] as $_planifs) {
-          foreach($_planifs as $_planif) {
-            if ($_planif->_ref_object instanceof CPrescriptionLineMixItem) {
-              $quantite = $_planif->_ref_object->_quantite_administration;
-            }
-            else {
-              $quantite = $_planif->_ref_prise->_quantite_administrable;
-            }
-
-            if ($_line instanceof CPrescriptionLineMedicament || $_line instanceof CPrescriptionLineMix) {
-              $unite = $_planif->_ref_object->_ref_produit->libelle_unite_presentation;
-            }
-            else {
-              $unite = $_line->_unite_prise;
-            }
-
-            $evenements[$_line->_class][] = array(
-              "label" => "$quantite $unite",
-              "alert" => false,
-              "datetime" => $_planif->dateTime,
-              "position" => 100 * (CMbDate::toUTCTimestamp($_planif->dateTime) - $time_min) / ($time_max - $time_min),
-            );
-          }
-        }*/
 
         foreach ($_line_array["administrations"] as $_adms) {
           $_adms = CModelObject::naturalSort($_adms, array("dateTime"));
@@ -559,14 +550,13 @@ class CObservationResultSet extends CMbObject {
               $unite = $_adm->_ref_object->_ref_produit->libelle_unite_presentation;
             }
 
-            $evenements[$key][] = array(
-              "icon"  => $_line->_chapitre,
-              "label" => $_view,
+            $evenements[$key]["subitems"][$_subkey_guid]["items"][] = array(
+              "label" => "",
               "unit"  => "$_adm->quantite $unite",
               "alert" => false,
               "datetime" => $_adm->dateTime,
               "position" => CSupervisionTimedEntity::getPosition($_adm->dateTime, $time_min, $time_max),
-              "object"   => $_line,
+              "object"   => $_adm,
               "editable" => false,
             );
           }
