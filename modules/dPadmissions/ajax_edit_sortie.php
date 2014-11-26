@@ -37,10 +37,6 @@ if (CModule::getActive("dPurgences")) {
 
 $patient = $sejour->loadRefPatient();
 
-if (!$modify_sortie_prevue && !$sejour->sortie_reelle) {
-  $sejour->sortie_reelle = CMbDT::dateTime();
-}
-
 if (CModule::getActive("maternite") && $sejour->grossesse_id) {
   $sejour->loadRefsNaissances();
   foreach ($sejour->_ref_naissances as $_naissance) {

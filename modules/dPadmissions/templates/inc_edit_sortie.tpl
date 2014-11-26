@@ -28,11 +28,27 @@
 {{assign var=modify_sortie_reelle value=false}}
 
 {{if $modify_sortie_prevue}}
-  {{assign var=class_sortie_autorise value="inform-field"}}
+  {{if $module == "dPurgences"}}
+    {{if $rpu->sortie_autorise}}
+      {{assign var=class_sortie_autorise value="valid-field"}}
+    {{else}}
+      {{assign var=class_sortie_autorise value="inform-field"}}
+    {{/if}}
+  {{else}}
+    {{if $sejour->confirme}}
+      {{assign var=class_sortie_autorise value="valid-field"}}
+    {{else}}
+      {{assign var=class_sortie_autorise value="inform-field"}}
+    {{/if}}
+  {{/if}}
 {{else}}
   {{assign var=modify_sortie_reelle value=true}}
   {{assign var=class_mode_sortie value="notNull"}}
-  {{assign var=class_sortie_reelle value="inform-field"}}
+  {{if $sejour->sortie_reelle}}
+    {{assign var=class_sortie_reelle value="valid-field"}}
+  {{else}}
+    {{assign var=class_sortie_reelle value="inform-field"}}
+  {{/if}}
 {{/if}}
 
 {{if $rpu && $rpu->_id}}
@@ -79,8 +95,15 @@
             {{mb_label object=$sejour field="sortie_reelle"}}
           {{/if}}
         </th>
-        <td>{{mb_field object=$sejour field="sortie_reelle" form=$form_name register=$modify_sortie_reelle class=$class_sortie_reelle
-                      onchange="Admissions.updateLitMutation(this.form);"}}</td>
+
+        <td>
+          {{assign var=date_time value=$sejour->sortie_reelle}}
+          {{if (!$modify_sortie_prevue && !$sejour->sortie_reelle)}}
+            {{assign var=date_time value=$dtnow}}
+          {{/if}}
+
+          {{mb_field object=$sejour field="sortie_reelle" form=$form_name register=$modify_sortie_reelle class=$class_sortie_reelle
+                      onchange="Admissions.updateLitMutation(this.form);" value="$date_time"}}</td>
       {{else}}
         <th></th>
         <td></td>

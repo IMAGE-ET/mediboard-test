@@ -12,6 +12,10 @@
   background-color: #fc0 !important;
 }
 
+.valid-field {
+  background-color: #8f8 !important;
+}
+
 .merge-selected {
   outline: 3px solid #88f;
 }
