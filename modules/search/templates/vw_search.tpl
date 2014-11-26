@@ -99,7 +99,6 @@
       method: "get",
       dropdown: true,
       updateElement: function (selected) {
-        console.log(selected);
         var _name = selected.down("span", "1").getText();
         var element_input = form.elements.words;
         $V(element_input, _name);

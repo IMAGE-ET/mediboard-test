@@ -13,7 +13,7 @@ CCanDo::checkAdmin();
 $table       = CValue::get("table");
 $mapping     = CValue::get("mapping");
 $log         = CValue::get("log", "");
-$names_types = json_decode(stripslashes(CValue::get("names_types")));
+$names_types = CValue::get("names_types");
 $error       = "";
 
 if ($table) {

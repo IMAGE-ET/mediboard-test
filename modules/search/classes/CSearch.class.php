@@ -18,6 +18,7 @@ use Elastica\Client;
 use Elastica\Document;
 use Elastica\Type\Mapping;
 use Elastica\Query;
+use Elastica\Request;
 
 /**
  * Class CSearch
@@ -31,111 +32,6 @@ class CSearch {
   public $_index;
   /** @var  Elastica\Type\Mapping _mapping */
   public $_mapping;
-
-  // static settings
-  static $settings = array(
-    "analysis" => array(
-      "analyzer" => array(
-        "custom_analyzer" => array(
-          "type" => "custom",
-          'tokenizer' => 'nGram',
-          'filter' => array("stopwords", "asciifolding", "lowercase", "snowball", "worddelimiter", "elision")
-        ),
-        "custom_search_analyzer" => array(
-          "type" => "custom",
-          "tokenizer" => "standard",
-          "filter" => array("stopwords", "asciifolding", "lowercase", "snowball", "worddelimiter", "elision")
-        )
-      ),
-      "tokenizer" => array (
-        "nGram" => array(
-          "type" => "nGram",
-          "min_gram" => "3",
-          "max_gram" => "20"
-        )
-      ),
-      "filter" => array(
-        "snowball" => array (
-          "type"=> "snowball",
-          "language"=> "French"
-        ),
-        "stopwords" => array (
-          "type" => "stop",
-          "stopwords"=> array ("_french_"),
-          "ignore_case" => "true"
-        ),
-        "elision" => array (
-          "type" => "elision",
-          "articles" => array("l", "m", "t", "qu", "n", "s", "j", "d")
-        ),
-        "worddelimiter" => array(
-          "type" => "word_delimiter"
-        )
-      )
-    )
-  );
-
-  static $mapping_default =  array(
-    "id" => array(
-      'type' => 'integer',
-      'include_in_all' => true
-    ),
-
-    "author_id" => array(
-      'type' => 'integer',
-      'include_in_all' => true
-    ),
-
-    "prat_id" => array(
-      'type' => 'integer',
-      'include_in_all' => true
-    ),
-
-    "title" => array(
-      'type' => 'string',
-      'include_in_all' => false,
-      'index_analyzer' => 'custom_analyzer',
-      'search_analyzer' => 'custom_search_analyzer'
-    ),
-
-    "body" => array(
-      'type' => 'string',
-      'include_in_all' => true,
-      'index_analyzer' => 'custom_analyzer',
-      'search_analyzer' => 'custom_search_analyzer'
-    ),
-
-    "date" => array(
-      'type' => 'date',
-      'format' => 'yyyy/MM/dd HH:mm:ss||yyyy/MM/dd',
-      'include_in_all' => true
-    ),
-
-    "patient_id"  => array(
-      'type' => 'integer',
-      'include_in_all' => true
-    ),
-
-    "function_id" => array(
-      'type' => 'integer',
-      'include_in_all' => true
-    ),
-
-    "group_id" => array(
-      'type' => 'integer',
-      'include_in_all' => true
-    ),
-
-    "object_ref_id" => array(
-      'type' => 'integer',
-      'include_in_all' => true
-    ),
-
-    "object_ref_class"=> array(
-      'type' => 'string',
-      'include_in_all' => true
-    )
-  );
 
   /**
    * Create client for indexing
@@ -172,7 +68,7 @@ class CSearch {
       $name = CAppUI::conf("db std dbname");
     }
     if (!$params) {
-      $params = self::$settings;
+      $params = self::$settings_default;
     }
     $this->_index = $this->_client->getIndex($name);
     $this->_index->create($params, $bool);
@@ -191,25 +87,23 @@ class CSearch {
       $this->_index = $this->createIndex(null, null, false);
     }
     $index = $this->loadIndex();
-    $index->close();
-    $this->updateIndexSettings($this->_index);
-    $index->open();
+    $this->updateIndexSettings($index);
   }
 
   /** Update an index settings
    *
-   * @param string $name Name of the index
+   * @param Elastica\Index $index the index
    * @param array $settings the settings you want to apply
    *
    * @return void
    */
-  function updateIndexSettings ($name, $settings = null) {
+  function updateIndexSettings ($index, $settings = null) {
     if (!$settings) {
-      $settings = self::$settings;
+      $settings = self::$settings_default;
     }
-
-    $this->_index = $name;
-    $this->_index->setSettings($settings);
+    $index->close();
+    $index->setSettings($settings);
+    $index->open();
   }
 
   /**
@@ -345,6 +239,7 @@ class CSearch {
       $datum_to_index = $object->getFieldsSearch();
 
       if (!$datum_to_index["date"]) {
+        $datum_to_index["id"]          = $datum['object_id'];
         $datum_to_index["date"] = str_replace("-", "/", CMbDT::dateTime());
       }
     }
@@ -417,7 +312,6 @@ class CSearch {
    */
   function bulkIndexing($data) {
     $data_to_index = $this->constructBulkData($data);
-
     foreach ($data_to_index as $type_name => $_type) {
       $typeES = $this->_index->getType($type_name);
       foreach ($_type as $action => $_data) {
@@ -600,4 +494,133 @@ class CSearch {
 
     return $purified;
   }
+
+  function getSettings($default = true) {
+    if(!$default) {
+      return self::$settings;
+    }
+    return self::$settings_default;
+  }
+
+  // static settings
+  static $settings = array(
+    "analysis" => array(
+      "analyzer" => array(
+        "custom_analyzer" => array(
+          "type" => "custom",
+          'tokenizer' => 'nGram',
+          'filter' => array("stopwords", "asciifolding", "lowercase", "snowball", "worddelimiter", "elision")
+        ),
+        "custom_search_analyzer" => array(
+          "type" => "custom",
+          "tokenizer" => "standard",
+          "filter" => array("stopwords", "asciifolding", "lowercase", "snowball", "worddelimiter", "elision")
+        )
+      ),
+      "tokenizer" => array (
+        "nGram" => array(
+          "type" => "nGram",
+          "min_gram" => "3",
+          "max_gram" => "20"
+        )
+      ),
+      "filter" => array(
+        "snowball" => array (
+          "type"=> "snowball",
+          "language"=> "French"
+        ),
+        "stopwords" => array (
+          "type" => "stop",
+          "stopwords"=> array ("_french_"),
+          "ignore_case" => "true"
+        ),
+        "elision" => array (
+          "type" => "elision",
+          "articles" => array("l", "m", "t", "qu", "n", "s", "j", "d")
+        ),
+        "worddelimiter" => array(
+          "type" => "word_delimiter"
+        )
+      )
+    )
+  );
+
+  static $settings_default = array(
+    'number_of_shards'   => 5,
+    'number_of_replicas' => 1,
+    "analysis"           => array(
+      "analyzer" => array(
+        "default" => array(
+          "type"      => "custom",
+          'tokenizer' => 'standard',
+          'filter'    => array('standard', 'lowercase', 'mySnowball',  'asciifolding')
+        )
+      ),
+      'filter'   => array(
+        'mySnowball' => array(
+          'type'     => 'snowball',
+          'language' => 'French'
+        )
+      )
+    )
+  );
+
+  static $mapping_default =  array(
+    "id" => array(
+      'type' => 'integer',
+      'include_in_all' => true
+    ),
+
+    "author_id" => array(
+      'type' => 'integer',
+      'include_in_all' => true
+    ),
+
+    "prat_id" => array(
+      'type' => 'integer',
+      'include_in_all' => true
+    ),
+
+    "title" => array(
+      'type' => 'string',
+      'include_in_all' => false,
+    ),
+
+    "body" => array(
+      'type' => 'string',
+      'include_in_all' => true,
+    ),
+
+    "date" => array(
+      'type' => 'date',
+      'format' => 'yyyy/MM/dd HH:mm:ss||yyyy/MM/dd',
+      'include_in_all' => true
+    ),
+
+    "patient_id"  => array(
+      'type' => 'integer',
+      'include_in_all' => true
+    ),
+
+    "function_id" => array(
+      'type' => 'integer',
+      'include_in_all' => true
+    ),
+
+    "group_id" => array(
+      'type' => 'integer',
+      'include_in_all' => true
+    ),
+
+    "object_ref_id" => array(
+      'type' => 'integer',
+      'include_in_all' => true
+    ),
+
+    "object_ref_class"=> array(
+      'type' => 'string',
+      'include_in_all' => true
+    )
+  );
+
 }

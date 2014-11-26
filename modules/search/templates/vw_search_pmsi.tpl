@@ -81,8 +81,8 @@
   <table class="main layout">
     <tbody>
     <tr>
-      <td id="td_container_search">
-        <input type="search" id="words" name="words" value="" placeholder="Saisissez les termes de votre recherche ici..." style="width:100%; height:1.5em; font-size:medium;" onchange="$V(this.form.start, '0')" autofocus>
+      <td id="td_container_search" style="box-sizing : border-box;">
+        <input type="search" id="words" name="words" value="" placeholder="Saisissez les termes de votre recherche ici..." style="width:100%; height:1.5em; font-size:1.5em;" onchange="$V(this.form.start, '0')" autofocus>
         <input type="checkbox" name="aggregate" id="aggregate" value="1">
         <label for="aggregate"> Agrégation des résultats</label>
         {{mb_include module=search template=inc_tooltip_help}}
@@ -157,7 +157,7 @@
         </fieldset>
       </td>
     <tr>
-      <td type="button">
+      <td class="button">
         <button type="submit" id="button_search" class="button lookup">Démarrer la recherche</button>
       </td>
     </tr>

@@ -24,12 +24,6 @@
     form.onsubmit();
   }
 
-  filterContextes = function () {
-    var form = getForm("esSearchFavoris");
-    var contextes = form.elements['contextes[]'];
-
-
-  }
 </script>
 <form method="get" name="esSearchFavoris" action="?m=search" class="watched prepared" onsubmit="return Search.displayResultsThesaurus(this);" onchange="onchange=$V(this.form, '0')">
   <input type="hidden" name="start" value="0">

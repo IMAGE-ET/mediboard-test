@@ -18,48 +18,6 @@ use Elastica\Query;
  */
 class CSearchLog extends CSearch {
 
-  static $settings = array(
-    "analysis" => array(
-      "analyzer"  => array(
-        "custom_analyzer"        => array(
-          "type"      => "custom",
-          'tokenizer' => 'nGram',
-          'filter'    => array("stopwords", "asciifolding", "lowercase", "snowball", "worddelimiter", "elision")
-        ),
-        "custom_search_analyzer" => array(
-          "type"      => "custom",
-          "tokenizer" => "standard",
-          "filter"    => array("stopwords", "asciifolding", "lowercase", "snowball", "worddelimiter", "elision")
-        )
-      ),
-      "tokenizer" => array(
-        "nGram" => array(
-          "type"     => "nGram",
-          "min_gram" => "3",
-          "max_gram" => "20"
-        )
-      ),
-      "filter"    => array(
-        "snowball"      => array(
-          "type"     => "snowball",
-          "language" => "French"
-        ),
-        "stopwords"     => array(
-          "type"        => "stop",
-          "stopwords"   => array("_french_"),
-          "ignore_case" => "true"
-        ),
-        "elision"       => array(
-          "type"     => "elision",
-          "articles" => array("l", "m", "t", "qu", "n", "s", "j", "d")
-        ),
-        "worddelimiter" => array(
-          "type" => "word_delimiter"
-        )
-      )
-    )
-  );
-
   static $names_mapping = array("generique", "pharmacie", "pmsi", "bloc");
 
   static $mapping_log = array(
@@ -196,7 +154,7 @@ class CSearchLog extends CSearch {
 
     //'And' or 'Or' default : 'Or'
     $elasticaQueryString->setDefaultOperator($operator);
-    $elasticaQueryString->setAnalyzer("custom_search_analyzer");
+    //$elasticaQueryString->setAnalyzer("custom_search_analyzer");
     $elasticaQueryString->setQuery($words);
 
     // Create the actual search object with some data.

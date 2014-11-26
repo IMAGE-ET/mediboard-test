@@ -19,7 +19,7 @@ $specific_user = CValue::get("user_id");
 $start         = (int)CValue::get("start", 0);
 $names_types   = CValue::get("names_types", array());
 $aggregate     = CValue::get("aggregate");
-$sejour_id     = CValue::get("sejour_id");
+$sejour_id     = CValue::get("sejour_id", null);
 $contexte      = CValue::get("contexte");
 $user          = CMediusers::get();
 
@@ -34,7 +34,8 @@ $client_index->createClient();
 $client_log->createClient();
 
 // Journalisation de la recherche
-if ($words) {
+$group = CGroups::loadCurrent();
+if ($words && CAppUI::conf("search indexing active_indexing_log", $group)) {
   try {
     $client_log->log($names_types, $contexte, $user->_id, $words, $aggregate);
   }
@@ -58,6 +59,7 @@ $array_aggregation = array();
 $objects_refs      = array();
 $authors           = array();
 $author_ids        = array();
+$patients          = array();
 
 try {
   $results_query = $client_index->searchQueryString('AND', $words, $start, 30, $names_types, $aggregate);
@@ -66,6 +68,7 @@ try {
   $nbresult      = $results_query->getTotalHits();
 
   // traitement des résultats
+  $patient_ids       = array();
   foreach ($results as $result) {
     $var             = $result->getHit();
     $author_ids[]    = $var["_source"]["author_id"];
@@ -89,8 +92,6 @@ try {
   }
 
   // traitement des patients
-  $patient_ids       = array();
-  $patients          = array();
   foreach ($patient_ids as $_patient) {
     $patients[$_patient] = CMbObject::loadFromGuid("CPatient-$_patient");
   }
@@ -115,5 +116,7 @@ $smarty->assign("objects_refs", $objects_refs);
 $smarty->assign("time", $time);
 $smarty->assign("nbresult", $nbresult);
 $smarty->assign("words", $words);
+$smarty->assign("contexte", $contexte);
+$smarty->assign("sejour_id", $sejour_id);
 
 $smarty->display("inc_results_search.tpl");

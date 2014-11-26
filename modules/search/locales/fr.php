@@ -51,4 +51,4 @@ $locales['mod-search-tab-vw_search'] = 'Recherche';
 $locales['mod-search-tab-vw_search_log'] = 'Recherche journaux utilisateur';
 $locales['mod-search-tab-vw_search_thesaurus'] = 'Gestion des favoris';
 $locales['module-search-court'] = 'Recherche';
-$locales['module-search-long'] = 'Recherche d\'information';
+$locales['module-search-long'] = 'Recherche d\'informations';

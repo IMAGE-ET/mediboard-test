@@ -155,9 +155,10 @@ Search = window.Search || {
     });
   },
 
-  addItemToRss : function (id, type, object_id, rmq) {
+  addItemToRss : function (id, rss_id, type, object_id, rmq) {
     new Url('search',  'vw_search_item')
       .addParam("search_item_id", id)
+      .addParam("rss_id", rss_id)
       .addParam("object_id", object_id)
       .addParam("object_type", type)
       .addParam("rmq", rmq)
@@ -184,7 +185,6 @@ Search = window.Search || {
   },
 
   addeditThesaurusEntry : function (search_agregation, search_body, search_user_id, search_types, search_contexte, thesaurus_entry) {
-    window.parent.console.log(search_types);
     var url = new Url('search',  'ajax_addedit_thesaurus_entry');
     url.addParam("search_agregation" , search_agregation);
     url.addParam("search_body"       , search_body);
@@ -197,5 +197,11 @@ Search = window.Search || {
         document.location.reload();
       }
     });
+  },
+
+  loadSearchItems: function (rss_id) {
+    var url = new Url('search', 'ajax_load_search_items');
+    url.addParam("rss_id", rss_id);
+    url.requestUpdate($('div_search_items'));
   }
 };
