@@ -481,6 +481,7 @@ abstract class DeployOperation extends MediboardCommand {
      **/
     $rows               = array();
     $rows_deleted_files = array();
+    $particular_files   = array();
     foreach ($files as $_file => $_instances) {
       $_row = array("file" => $_file);
 
@@ -500,6 +501,10 @@ abstract class DeployOperation extends MediboardCommand {
       }
       else {
         $rows[$_file] = $_row;
+      }
+
+      if (preg_match("#(" . implode("|", $this->patterns_to_check) . ")#", $_file, $matches)) {
+        $particular_files[$_file] = $_row;
       }
     }
 
@@ -530,6 +535,18 @@ abstract class DeployOperation extends MediboardCommand {
     }
     else {
       $this->out($output, "<comment>No deleted files</comment>");
+    }
+
+    if ($particular_files) {
+      $this->out($output, "<comment>Particular files:</comment>");
+
+      $table = $this->getHelperSet()->get('table');
+      $table
+        ->setHeaders($headers)
+        ->setRows($particular_files)
+        ->setCellHeaderFormat('<b>%s</b>')
+        ->setCellRowFormat('<fg=red;>%s</fg=red;>');
+      $table->render($output);
     }
   }
 }

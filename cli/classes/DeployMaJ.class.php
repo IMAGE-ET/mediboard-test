@@ -163,7 +163,7 @@ EOT
     foreach ($to_perform as $_instance) {
       // RSYNC
       $result = parent::rsync($path, $files, $_instance, $output);
-      $this->checkFilePresence(implode("\n", $result), $output);
+      //$this->checkFilePresence(implode("\n", $result), $output);
 
       // Next progress bar step
       $progress->advance();
