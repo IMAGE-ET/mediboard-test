@@ -118,7 +118,7 @@
       <th class="narrow">Auteur</th>
       <th class="narrow">Patient</th>
       <th class="narrow">Pertinence</th>
-      {{if $contexte == "pmsi"}}<th></th>{{/if}}
+      {{if $contexte == "pmsi" && "atih"|module_active}}<th></th>{{/if}}
     </tr>
     <tr>
       <th colspan="6" class="section">Triés par pertinence</th>
@@ -168,7 +168,7 @@
             </div>
           </meter>
         </td>
-        {{if $contexte == "pmsi"}}
+        {{if $contexte == "pmsi" && "atih"|module_active}}
           <td class="button narrow">
             <button class="add notext" onclick="Search.addItemToRss(null, '{{$sejour_id}}','{{$_result._type}}','{{$_result._id}}', null)"></button>
           </td>
