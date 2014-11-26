@@ -295,6 +295,8 @@ printSurveillance = function(operation_id) {
   {{tr}}CObservationResultSet-title-create{{/tr}}
 </button>
 
+<button class="injection" onclick="editPeropAdministration('{{$interv->_id}}')">Administrer</button>
+
 <button class="print" onclick="printSurveillance({{$interv->_id}})">Imprimer surveillance</button>
 
 {{assign var=require_right_col value=false}}
