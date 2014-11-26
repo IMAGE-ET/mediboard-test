@@ -1,11 +1,5 @@
 {{mb_default var=editRights value=0}}
 
-<style>
-  .border-bold {
-    border:solid 2px black;
-  }
-</style>
-
 <script>
   uncheckPrestation = function(elts) {
     elts.each(function(elt) {
@@ -44,7 +38,18 @@
   switchToNew = function(input) {
     input.name = input.name.replace("[temp]", "[new]");
   };
-  
+
+  switchToNewSousItem = function(input) {
+    var input_item = input.up('fieldset').down('legend').down('input');
+    input_item.checked = true;
+    input.up('td').select('.sous_item').each(function(input) {
+      input.checked = false;
+    });
+    input.checked = true;
+    switchToNew(input_item);
+    switchToNew(input);
+  };
+
   onSubmitLiaisons = function(form) {
     return onSubmitFormAjax(form, function() {
       form.up('div.modal').down('button.change').click();
@@ -171,22 +176,7 @@
                       Souhait
                     </th>
                     <td>
-                      {{foreach from=$_prestation->_ref_items item=_item}}
-                        <label>
-                          <input type="radio"
-                            name="liaisons_j[{{$prestation_id}}][{{$_date}}][souhait][{{$liaison->_id}}]"
-                              onclick="
-                              {{if $liaison->_id == "temp"}}
-                                switchToNew(this);
-                              {{/if}}
-                              {{if $_prestation->desire}}
-                                autoRealiser(this);
-                              {{/if}}"
-                            
-                            {{if $liaison->item_souhait_id == $_item->_id}}checked="checked"{{/if}} value="{{$_item->_id}}"/>
-                          <span {{if $_item->color}}class="mediuser" style="border-left-color: #{{$_item->color}}"{{/if}}>{{$_item->nom}}</span>
-                        </label>
-                      {{/foreach}}
+                      {{mb_include module=planningOp template=inc_vw_prestations_line}}
                     </td>
                   </tr>
                   <tr {{if $context != "all"}} style="display: none;" {{/if}}>
@@ -194,17 +184,7 @@
                       Réalisé
                     </th>
                     <td>
-                      {{foreach from=$_prestation->_ref_items item=_item}}
-                        <label>
-                          <input type="radio"
-                            name="liaisons_j[{{$prestation_id}}][{{$_date}}][realise][{{$liaison->_id}}]"
-                            {{if $liaison->_id == "temp"}}
-                              onclick="switchToNew(this)"
-                            {{/if}}
-                            {{if $liaison->item_realise_id == $_item->_id}}checked="checked"{{/if}} value="{{$_item->_id}}"/>
-                          <span {{if $_item->color}}class="mediuser" style="border-left-color: #{{$_item->color}}"{{/if}}>{{$_item->nom}}</span>
-                        </label>
-                      {{/foreach}}
+                      {{mb_include module=planningOp template=inc_vw_prestations_line type=realise}}
                     </td>
                   </tr>
                 {{/foreach}}
@@ -224,20 +204,32 @@
             {{else}}
               {{assign var=liaison value=$empty_liaison}}
             {{/if}}
+            {{assign var=next_date value="CMbDT::date"|static_call:"+1 day":$_date}}
+            {{if isset($liaisons_j.$next_date.$prestation_id|smarty:nodefaults)}}
+              {{assign var=next_liaison value=$liaisons_j.$next_date.$prestation_id}}
+            {{else}}
+              {{assign var=next_liaison value=$empty_liaison}}
+            {{/if}}
+
             {{assign var=item_presta value=$liaison->_ref_item}}
             {{assign var=item_presta_realise value=$liaison->_ref_item_realise}}
-            
+
+            {{assign var=next_item_presta value=$next_liaison->_ref_item}}
+            {{assign var=next_item_presta_realise value=$next_liaison->_ref_item_realise}}
+
+            {{assign var=sous_item value=$liaison->_ref_sous_item}}
+
             <td style="text-align: center;" class="
               {{if $item_presta->_id && $item_presta_realise->_id}}
-                {{if $item_presta->rank == $item_presta_realise->rank}}
-                  item_egal
-                {{elseif $item_presta->rank > $item_presta_realise->rank}}
-                  item_inferior
-                {{else}}
+                {{if ($_prestation->niveau == "jour" && $item_presta->rank < $item_presta_realise->rank) ||
+                     ($_prestation->niveau == "nuit" && $next_item_presta->_id && $next_item_presta->_id && $next_item_presta->_id != $item_presta_realise->_id)}}
                   item_superior
+                {{elseif $item_presta->rank == $item_presta_realise->rank}}
+                  item_egal
+                {{else}}
+                  item_inferior
                 {{/if}}
               {{/if}}">
-
               {{if $item_presta->_id}}
                 {{if $item_presta_realise->_id && $item_presta->nom != $item_presta_realise->nom}}
                   <span {{if $item_presta_realise->color}}class="mediuser" style="border-left-color: #{{$item_presta_realise->color}}"{{/if}}>
@@ -245,16 +237,16 @@
                   </span> <br />
                   vs. <br />
                   <span {{if $item_presta->color}}class="mediuser" style="border-left-color: #{{$item_presta->color}}"{{/if}}>
-                    {{$item_presta->nom}}
+                    {{if $sous_item->item_prestation_id == $item_presta->_id}}{{$sous_item->nom}}{{else}}{{$item_presta->nom}}{{/if}}
                   </span>
                 {{else}}
                   <span {{if $item_presta->color}}class="mediuser" style="border-left-color: #{{$item_presta->color}}"{{/if}}>
-                    {{$item_presta->nom}}
+                    {{if $sous_item->item_prestation_id == $item_presta->_id}}{{$sous_item->nom}}{{else}}{{$item_presta->nom}}{{/if}}
                   </span>
                 {{/if}}
               {{elseif $item_presta_realise->_id}}
                 <span {{if $item_presta_realise->color}}class="mediuser" style="border-left-color: #{{$item_presta_realise->color}}"{{/if}}>
-                  {{$item_presta_realise->nom}}
+                  {{if $sous_item->item_prestation_id == $item_presta_realise->_id}}{{$sous_item->nom}}{{else}}{{$item_presta_realise->nom}}{{/if}}
                 </span>
               {{/if}}
             </td>

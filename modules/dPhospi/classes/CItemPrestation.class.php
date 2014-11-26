@@ -24,8 +24,13 @@ class CItemPrestation extends CMbMetaObject {
   // Form field
   public $_quantite;
 
+  // References
   /** @var CPrestationPonctuelle|CPrestationJournaliere */
   public $_ref_object;
+
+  // Distant fields
+  /** @var  CSousItemPrestation[] */
+  public $_refs_sous_items;
 
   /**
    * @see parent::getSpec()
@@ -59,6 +64,8 @@ class CItemPrestation extends CMbMetaObject {
     $backProps["liaisons_souhaits"] = "CItemLiaison item_souhait_id";
     $backProps["liaisons_realises"] = "CItemLiaison item_realise_id";
     $backProps["liaisons_lits"]     = "CLitLiaisonItem item_prestation_id";
+    $backProps["sous_items"]        = "CSousItemPrestation item_prestation_id";
+
     return $backProps;
   }
 
@@ -78,5 +85,14 @@ class CItemPrestation extends CMbMetaObject {
   function loadRefObject() {
     $this->_ref_object = new $this->object_class;
     return $this->_ref_object = $this->_ref_object->getCached($this->object_id);
+  }
+
+  /**
+   * Charge les sous-items
+   *
+   * @return CSousItemPrestation[]
+   */
+  function loadRefsSousItems() {
+    return $this->_refs_sous_items = $this->loadBackRefs("sous_items", "nom");
   }
 }

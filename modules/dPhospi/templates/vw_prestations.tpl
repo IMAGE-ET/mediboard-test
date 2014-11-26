@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
   editPrestation = function(prestation_id, object_class) {
     var url = new Url('dPhospi', 'ajax_edit_prestation');
     url.addParam("prestation_id", prestation_id);
@@ -59,27 +59,48 @@
   };
   
   reorderItem = function(item_id_move, direction) {
-    var url = new Url("dPhospi", "ajax_reorder_item");
+    var url = new Url("hospi", "ajax_reorder_item");
     url.addParam("item_id_move", item_id_move);
     url.addParam("direction", direction);
     url.requestUpdate("list_items");
   };
-  
+
+  editSousItem = function(sous_item_id, item_prestation_id) {
+    var url = new Url("hospi", "ajax_edit_sous_item");
+    url.addParam("sous_item_id", sous_item_id);
+    url.addParam("item_prestation_id", item_prestation_id);
+    url.requestModal();
+  };
+
+  delSousItem = function(sous_item_prestation_id, object_class, object_id, item_id) {
+    var form = getForm("delSousItemForm");
+    $V(form.sous_item_prestation_id, sous_item_prestation_id);
+    onSubmitFormAjax(form, refreshItems.curry(object_class, object_id, item_id));
+  };
+
   Main.add(function() {
     editPrestation('{{$prestation_id}}', '{{$object_class}}');
     refreshList('{{$object_class}}-{{$prestation_id}}');
   });
 </script>
 
+{{* Formulaire pour la suppression de sous-items *}}
+<form name="delSousItemForm" method="post">
+  <input type="hidden" name="m" value="hospi" />
+  {{mb_class class=CSousItemPrestation}}
+  <input type="hidden" name="del" value="1" />
+  <input type="hidden" name="sous_item_prestation_id" />
+</form>
+
 {{mb_include template=inc_warning_config_prestations wanted=expert}}
 
-<!-- Formulaire fictif pour récupérer le type de prestation -->
+{{* Formulaire fictif pour récupérer le type de prestation *}}
 <form name="new_prestation" method="get">
   <button type="button" class="new" onclick="removeSelected('prestation'); editPrestation(0, $V(this.form.type_prestation))">
     Création de prestation
   </button>
   <label>
-    <input type="radio" name="type_prestation" id="type_prestation" value="CPrestationPonctuelle" checked="checked" /> Ponctuelle
+    <input type="radio" name="type_prestation" id="type_prestation" value="CPrestationPonctuelle" checked /> Ponctuelle
   </label>
   <label>
     <input type="radio" name="type_prestation" id="type_prestation" value="CPrestationJournaliere" /> Journalière

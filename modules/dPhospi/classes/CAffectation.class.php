@@ -298,7 +298,16 @@ class CAffectation extends CMbObject {
     $old = new CAffectation();
     if ($this->_id) {
       $old->load($this->_id);
-      $old->loadRefsAffectations();
+      // Si ce n'est pas la première affectation de la série, alors la ref_prev et la ref_next sont erronées
+      // si prises depuis l'affectation old
+      if (isset($this->_is_prev) || isset($this->_is_next)) {
+        $this->loadRefsAffectations();
+        $old->_ref_prev = $this->_ref_prev;
+        $old->_ref_next = $this->_ref_next;
+      }
+      else {
+        $old->loadRefsAffectations();
+      }
     }
 
     // Gestion du service_id
@@ -323,13 +332,59 @@ class CAffectation extends CMbObject {
       }
     }
 
+    $store_prestations = false;
+
+    if (!$this->_id) {
+      $store_prestations = true;
+    }
+
     // Enregistrement standard
     if ($msg = parent::store()) {
       return $msg;
     }
 
-    if ($create_affectations) {
+    // Niveaux de prestations réalisées à créer
+    // pour une nouvelle affectation (par rapport aux niveaux de prestations du lit)
+    if ($store_prestations) {
+      $lit = $this->_ref_lit;
+      $liaisons_lit = $lit->loadRefsLiaisonsItems();
+      CMbObject::massLoadFwdRef($liaisons_lit, "item_prestation_id");
 
+      foreach ($liaisons_lit as $_liaison) {
+        // Chercher une éventuelle liaison, sinon la créer.
+        $_item = $_liaison->loadRefItemPrestation();
+
+        $item_liaison = new CItemLiaison();
+        $where = array();
+        $ljoin = array();
+
+        $where["sejour_id"] = " = '$sejour->_id'";
+        $where["item_prestation.object_class"] = " = 'CPrestationJournaliere'";
+        $where["item_prestation.object_id"] = "= '$_item->object_id'";
+
+        // On teste également le réalisé, si une affectation avait déjà été faite puis supprimée.
+        $ljoin["item_prestation"] =
+          "  item_prestation.item_prestation_id = item_liaison.item_souhait_id
+      OR item_prestation.item_prestation_id = item_liaison.item_realise_id";
+
+        $item_liaison->loadObject($where, null, null, $ljoin);
+
+        if (!$item_liaison->_id) {
+          $item_liaison = new CItemLiaison();
+          $item_liaison->sejour_id = $sejour->_id;
+          $item_liaison->date = CMbDT::date($sejour->entree);
+          $item_liaison->quantite = 0;
+        }
+
+        $item_liaison->item_realise_id = $_liaison->item_prestation_id;
+
+        if ($msg = $item_liaison->store()) {
+          CAppUI::setMsg($msg, UI_MSG_ERROR);
+        }
+      }
+    }
+
+    if ($create_affectations) {
       $grossesse = $this->_ref_sejour->loadRefGrossesse();
       $naissances = $grossesse->loadRefsNaissances();
 
@@ -398,10 +453,12 @@ class CAffectation extends CMbObject {
     }
 
     if ($changePrev) {
+      $prev->_is_prev = 1;
       $prev->store();
     }
 
     if ($changeNext) {
+      $next->_is_next = 1;
       $next->store();
     }
 

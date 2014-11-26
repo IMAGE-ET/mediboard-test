@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
   /* Après avoir réordonné, rafraîchir si nécessaire
     le rank dans le formulaire d'édition d'item */
   Main.add(function() {
@@ -13,15 +13,19 @@
 {{else}}
   {{assign var=is_journaliere value=0}}
 {{/if}}
+
 <table class="tbl">
   <tr>
-    <th colspan="3" class="title">{{tr}}CItemPrestation.all{{/tr}}</th>
+    <th colspan="4" class="title">{{tr}}CItemPrestation.all{{/tr}}</th>
   </tr>
   <tr>
     {{if $is_journaliere}}
     <th class="category narrow" colspan="2">{{mb_label class=CItemPrestation field=rank}}</th>
-  {{/if}}
+    {{/if}}
     <th class="category">{{mb_label class=CItemPrestation field=nom}}</th>
+    {{if $is_journaliere}}
+    <th class="category">{{tr}}CItemPrestation-back-sous_items{{/tr}}</th>
+    {{/if}}
   </tr>
   {{foreach from=$items item=_item}}
     <tr id="item_{{$_item->_id}}" class="item {{if $_item->_id == $item_id}}selected{{/if}}">
@@ -43,6 +47,18 @@
           {{mb_value object=$_item field=nom}}
         </a>
       </td>
+      {{if $is_journaliere}}
+        <td style="vertical-align: top;">
+          <button type="button" class="add notext" style="float: right;" onclick="editSousItem('', '{{$_item->_id}}')"></button>
+
+          {{foreach from=$_item->_refs_sous_items item=_sous_item}}
+            <div>
+              <button class="remove notext" onclick="delSousItem('{{$_sous_item->_id}}', '{{$_item->object_class}}', '{{$_item->object_id}}', '{{$_item->_id}}')"></button>
+              <a style="display: inline-block;" href="#1" onclick="editSousItem('{{$_sous_item->_id}}')">{{$_sous_item}}</a>
+            </div>
+          {{/foreach}}
+        </td>
+      {{/if}}
     </tr>
   {{foreachelse}}
     <tr>

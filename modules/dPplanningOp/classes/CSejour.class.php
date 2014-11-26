@@ -4299,27 +4299,91 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->_ref_prestations = array();
 
     /** @var CItemLiaison[] $items_liaisons */
-    $items_liaisons = $this->loadBackRefs("items_liaisons");
+    $items_liaisons = $this->loadBackRefs("items_liaisons", "date");
 
     CMbObject::massLoadFwdRef($items_liaisons, "item_souhait_id");
     CMbObject::massLoadFwdRef($items_liaisons, "item_realise_id");
+
+
+    $date_temp = CMbDT::date($this->entree);
+    $dates = array();
+    while ($date_temp <= CMbDT::date($this->sortie)) {
+        $dates[$date_temp] = '';
+      $date_temp = CMbDT::date("+1 day", $date_temp);
+    }
+
+    $liaisons_j = array();
 
     foreach ($items_liaisons as $_item_liaison) {
       $_item_souhait = $_item_liaison->loadRefItem();
       $_item_realise = $_item_liaison->loadRefItemRealise();
 
-      if ($_item_realise->_id) {
-        $this->_ref_prestations[$_item_liaison->date][] = $_item_realise;
-        $_item_realise->_quantite = 1;
-        $_item_realise->loadRefObject();
-      }
-      elseif ($_item_souhait->object_class == "CPrestationPonctuelle") {
+      if ($_item_souhait->object_class == "CPrestationPonctuelle") {
         $this->_ref_prestations[$_item_liaison->date][] = $_item_souhait;
         $_item_souhait->_quantite = $_item_liaison->quantite;
         $_item_souhait->loadRefObject();
       }
+      else {
+        $liaisons_j[$_item_realise->object_id ? : $_item_souhait->object_id][$_item_liaison->date] = $_item_liaison;
+      }
     }
 
+    $dates = array();
+
+    // Calcul des dates de début et fin par liaison
+    foreach ($liaisons_j as $prestation_id => $_liaisons) {
+      $last_liaison = end($_liaisons);
+
+      unset($prev_liaison_id);
+
+      foreach ($_liaisons as $date => $_liaison) {
+        if (isset($prev_liaison_id) || $_liaison->_id == $last_liaison->_id) {
+          // Utilisation du début de la liaison courante pour indiquer la fin de la liaison précédente
+          if (isset($prev_liaison_id)) {
+            $dates[$prev_liaison_id]["fin"] = CmbDT::date("-1 day", $date);
+          }
+          if ($_liaison->_id == $last_liaison->_id) {
+            $dates[$_liaison->_id]["debut"] = $date;
+            $dates[$_liaison->_id]["fin"] = CMbDT::date($this->sortie);
+            continue;
+          }
+        }
+
+        $prev_liaison_id = $_liaison->_id;
+        $dates[$_liaison->_id]["debut"] = $date;
+      }
+    }
+
+    // Calcul du niveau de réalisation (_quantite)
+    $prestations_j = CPrestationJournaliere::loadCurrentList();
+
+    foreach ($liaisons_j as $prestation_id => $_liaisons) {
+      foreach ($_liaisons as $date => $_liaison) {
+        $_item_souhait = $_liaison->loadRefItem();
+        $_item_realise = $_liaison->loadRefItemRealise();
+        $sous_item = $_liaison->loadRefSousItem();
+
+        $prestation = $prestations_j[$prestation_id];
+
+        if (!$_item_realise->_id || ($_item_realise->_id && $_item_souhait->_id && $_item_realise->_id != $_item_souhait->_id)) {
+          continue;
+        }
+
+        $dates_liaison = $dates[$_liaison->_id];
+
+        $_item_realise->_quantite = CMbDT::daysRelative($dates_liaison["debut"], $dates_liaison["fin"]);
+        if ($prestation->niveau == "jour") {
+          $_item_realise->_quantite += 1;
+        }
+
+        // On prend le nom du sous-item si présent et s'il fait partie des sous-items de l'item réalisé.
+        if ($sous_item->item_prestation_id == $_item_realise->_id) {
+          $_item_realise->nom = $sous_item->nom;
+        }
+
+        $this->_ref_prestations[$_item_liaison->date][] = $_item_realise;
+      }
+    }
     return $this->_ref_prestations;
   }
 

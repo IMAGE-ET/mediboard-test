@@ -10,9 +10,9 @@
  */
 
 /**
- * Prestation journaliere
+ * Prestation journalière
  */
-class CPrestationJournaliere extends CMbObject{
+class CPrestationJournaliere extends CMbObject {
   // DB Table key
   public $prestation_journaliere_id;
   
@@ -20,7 +20,8 @@ class CPrestationJournaliere extends CMbObject{
   public $nom;
   public $group_id;
   public $desire;
-  
+  public $niveau;
+
   // Form fields
   public $_count_items = 0;
   public $_ref_items   = 0;
@@ -39,12 +40,13 @@ class CPrestationJournaliere extends CMbObject{
    * @see parent::getProps()
    */
   function getProps() {
-    $specs = parent::getProps();
-    $specs["nom"]       = "str notNull";
-    $specs["group_id"]  = "ref notNull class|CGroups";
-    $specs["desire"]    = "bool default|0";
-    
-    return $specs;
+    $props = parent::getProps();
+    $props["nom"]       = "str notNull";
+    $props["group_id"]  = "ref notNull class|CGroups";
+    $props["desire"]    = "bool default|0";
+    $props["niveau"]    = "enum list|jour|nuit";
+
+    return $props;
   }
 
   /**
@@ -85,5 +87,14 @@ class CPrestationJournaliere extends CMbObject{
     $prestation = new self();
     $prestation->group_id = CGroups::loadCurrent()->_id;
     return $prestation->countMatchingList();
+  }
+
+  /**
+   * Charge les items de la prestation
+   *
+   * @return CItemPrestation[]
+   */
+  function loadRefsItems() {
+    return $this->_ref_items = $this->loadBackRefs("items", "rank");
   }
 }

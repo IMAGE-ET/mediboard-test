@@ -439,3 +439,7 @@ span.listeCurrent a {
 div.effectue, td.effectue{
   text-decoration: line-through;
 }
+
+tr.border-bold {
+  border: solid 2px black;
+}

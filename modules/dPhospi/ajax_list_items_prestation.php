@@ -14,10 +14,16 @@ $item_id    = CValue::getOrSession("item_id");
 
 $items = $prestation->loadBackRefs("items", "rank");
 
-$item = new CItemPrestation;
+CStoredObject::massLoadBackRefs($items, "sous_items");
+
+foreach ($items as $_item) {
+  $_item->loadRefsSousItems();
+}
+
+$item = new CItemPrestation();
 $item->load($item_id);
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 
 $smarty->assign("item"      , $item);
 $smarty->assign("items"     , $items);

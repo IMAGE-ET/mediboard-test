@@ -20,6 +20,7 @@ class CItemLiaison extends CMbObject{
   public $sejour_id;
   public $item_souhait_id;
   public $item_realise_id;
+  public $sous_item_id;
   public $date;
   public $quantite;
   
@@ -31,6 +32,9 @@ class CItemLiaison extends CMbObject{
 
   /** @var CItemPrestation */
   public $_ref_item_realise;
+
+  /** @var CSousItemPrestation */
+  public $_ref_sous_item;
 
   /** @var CSejour */
   public $_ref_sejour;
@@ -49,14 +53,15 @@ class CItemLiaison extends CMbObject{
    * @see parent::getProps()
    */
   function getProps() {
-    $specs = parent::getProps();
-    $specs["sejour_id"]       = "ref notNull class|CSejour cascade";
-    $specs["item_souhait_id"] = "ref class|CItemPrestation cascade";
-    $specs["item_realise_id"] = "ref class|CItemPrestation cascade";
-    $specs["date"]            = "date";
-    $specs["quantite"]        = "num default|0";
+    $props = parent::getProps();
+    $props["sejour_id"]       = "ref notNull class|CSejour cascade";
+    $props["item_souhait_id"] = "ref class|CItemPrestation cascade";
+    $props["item_realise_id"] = "ref class|CItemPrestation cascade";
+    $props["sous_item_id"]    = "ref class|CSousItemPrestation cascade";
+    $props["date"]            = "date";
+    $props["quantite"]        = "num default|0";
     
-    return $specs;
+    return $props;
   }
 
   /**
@@ -75,6 +80,15 @@ class CItemLiaison extends CMbObject{
    */
   function loadRefItemRealise() {
     return $this->_ref_item_realise = $this->loadFwdRef("item_realise_id", true);
+  }
+
+  /**
+   * Charge le sous-item
+   *
+   * @return CSousItemPrestation
+   */
+  function loadRefSousItem() {
+    return $this->_ref_sous_item = $this->loadFwdRef("sous_item_id", true);
   }
 
   /**

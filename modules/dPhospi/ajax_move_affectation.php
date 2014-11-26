@@ -61,47 +61,4 @@ foreach ($affectations_enfant as $_affectation) {
   }
 }
 
-// Niveaux de prestations réalisées à créer
-// pour une nouvelle affectation (par rapport aux niveaux de prestations du lit)
-if (!$affectation_id && isset($sejour)) {
-  $lit = new CLit();
-  $lit->load($lit_id);
-  $liaisons_lit = $lit->loadRefsLiaisonsItems();
-  CMbObject::massLoadFwdRef($liaisons_lit, "item_prestation_id");
-  
-  foreach ($liaisons_lit as $_liaison) {
-    // Chercher une éventuelle liaison, sinon la créer.
-    
-    $_item = $_liaison->loadRefItemPrestation();
-    
-    $item_liaison = new CItemLiaison();
-    $where = array();
-    $ljoin = array();
-    
-    $where["sejour_id"] = " = '$sejour->_id'";
-    $where["item_prestation.object_class"] = " = 'CPrestationJournaliere'";
-    $where["item_prestation.object_id"] = "= '$_item->object_id'";
-    
-    // On teste également le réalisé, si une affectation avait déjà été faite puis supprimée.
-    $ljoin["item_prestation"] = 
-      "  item_prestation.item_prestation_id = item_liaison.item_souhait_id
-      OR item_prestation.item_prestation_id = item_liaison.item_realise_id";
-    
-    $item_liaison->loadObject($where, null, null, $ljoin);
-    
-    if (!$item_liaison->_id) {
-      $item_liaison = new CItemLiaison();
-      $item_liaison->sejour_id = $sejour->_id;
-      $item_liaison->date = CMbDT::date($sejour->entree);
-      $item_liaison->quantite = 0;
-    }
-    
-    $item_liaison->item_realise_id = $_liaison->item_prestation_id;
-    
-    if ($msg = $item_liaison->store()) {
-      CAppUI::setMsg($msg, UI_MSG_ERROR);
-    }
-  }
-}
-
 echo CAppUI::getMsg();

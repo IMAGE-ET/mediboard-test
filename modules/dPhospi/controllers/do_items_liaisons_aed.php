@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPhospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 $liaisons_j = CValue::post("liaisons_j");
@@ -31,11 +31,14 @@ if (is_array($liaisons_p)) {
 }
 
 if (is_array($liaisons_j)) {
+  mbLog($liaisons_j);
   foreach ($liaisons_j as $prestation_id => $by_date) {
     foreach ($by_date as $date=>$liaison) {
       $souhait_id = null;
       $realise_id = null;
-      $item_liaison = new CItemLiaison;
+      $sous_item_id = null;
+
+      $item_liaison = new CItemLiaison();
       
       // Liaison utilisée pour l'affichage
       // Pas de store
@@ -46,26 +49,31 @@ if (is_array($liaisons_j)) {
       
       if (isset($liaison['souhait'])) {
         if (isset($liaison['souhait']['new'])) {
-          $souhait_id = $liaison['souhait']['new'];
+          $souhait_id = $liaison['souhait']['new']['item_souhait_id'];
+          $sous_item_id = @$liaison['souhait']['new']['sous_item_id'];
         }
         else {
-          $souhait_id = reset($liaison['souhait']);
+          $souhait_id = reset($liaison['souhait'])['item_souhait_id'];
+          $sous_item_id = @reset($liaison['souhait'])['sous_item_id'];
+          if ($sous_item_id === null) {
+            $sous_item_id = "";
+          }
           $item_liaison->load(reset(array_keys($liaison['souhait'])));
-          
         }
       }
       
       if (isset($liaison['realise'])) {
         if (isset($liaison['realise']['new'])) {
-          $realise_id = $liaison['realise']['new'];
+          $realise_id = $liaison['realise']['new']['item_realise_id'];
         }
         else {
-          $realise_id = reset($liaison['realise']);
+          $realise_id = reset($liaison['realise'])['item_realise_id'];
           if (!$item_liaison->_id) {
             $item_liaison->load(reset(array_keys($liaison['realise'])));
           }
         }
       }
+
       if (!$item_liaison->_id) {
         $item_liaison->date = $date;
         $item_liaison->sejour_id = $sejour_id;
@@ -73,9 +81,14 @@ if (is_array($liaisons_j)) {
       
       // On ne store que si c'est nouvelle liaison
       // ou un changement de niveau
-      if (!$item_liaison->_id || $item_liaison->item_souhait_id != $souhait_id || $item_liaison->item_realise_id != $realise_id) {
+      if (!$item_liaison->_id ||
+          $item_liaison->item_souhait_id != $souhait_id ||
+          $item_liaison->item_realise_id != $realise_id ||
+          $item_liaison->sous_item_id != $sous_item_id) {
+
         $item_liaison->item_souhait_id = $souhait_id;
         $item_liaison->item_realise_id = $realise_id;
+        $item_liaison->sous_item_id = $sous_item_id;
         $item_liaison->store();
       }
     }

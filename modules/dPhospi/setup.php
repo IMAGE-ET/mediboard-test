@@ -828,6 +828,26 @@ class CSetupdPhospi extends CSetup {
                 CHANGE `type_autorisation_um` `type_autorisation_um` INT (11) UNSIGNED;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.93";
+    $this->makeRevision("0.93");
+    $query = "ALTER TABLE `prestation_journaliere`
+      ADD `niveau` ENUM ('jour','nuit');";
+    $this->addQuery($query);
+
+    $query = "CREATE TABLE `sous_item_prestation` (
+      `sous_item_prestation_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `nom` VARCHAR (255),
+      `item_prestation_id` INT (11) UNSIGNED
+    )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `sous_item_prestation`
+      ADD INDEX (`item_prestation_id`);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `item_liaison`
+      ADD `sous_item_id` INT (11) UNSIGNED AFTER `item_realise_id`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.94";
   }
 }
