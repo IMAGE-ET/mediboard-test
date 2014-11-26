@@ -81,7 +81,7 @@
   <table class="main layout">
     <tbody>
     <tr>
-      <td id="td_container_search" style="box-sizing : border-box;">
+      <td id="td_container_search" style="box-sizing : border-box; padding: 2em 6em 0.5em;">
         <input type="search" id="words" name="words" value="" placeholder="Saisissez les termes de votre recherche ici..." style="width:100%; height:1.5em; font-size:1.5em;" onchange="$V(this.form.start, '0')" autofocus>
         <input type="checkbox" name="aggregate" id="aggregate" value="1">
         <label for="aggregate"> Agrégation des résultats</label>
@@ -139,25 +139,24 @@
 
       <!-- Fieldset de tri par Types -->
       <td class="narrow">
-        <fieldset>
+        <fieldset >
           <legend>
             <input type="checkbox" name="searchAll" id="SearchAll" value="SearchAll" onclick="Search.checkAllCheckboxes(this, 'names_types[]')">
             <label for="SearchAll">Types</label>
           </legend>
-          <table class="layout" id="first_indexing">
+          <div class="columns-2">
             {{foreach from=$types item=_types}}
-              <tr>
-                <td>
-                  <input type="checkbox" name="names_types[]" id="{{$_types}}" value="{{$_types}}">
-                  <label for="{{$_types}}">{{tr}}{{$_types}}{{/tr}}</label>
-                </td>
-              </tr>
+              <label>
+                <input type="checkbox" name="names_types[]" id="{{$_types}}" value="{{$_types}}">
+                {{tr}}{{$_types}}{{/tr}}
+              </label>
+              <br/>
             {{/foreach}}
-          </table>
+          </div>
         </fieldset>
       </td>
     <tr>
-      <td class="button">
+      <td class="button" colspan="3">
         <button type="submit" id="button_search" class="button lookup">Démarrer la recherche</button>
       </td>
     </tr>
