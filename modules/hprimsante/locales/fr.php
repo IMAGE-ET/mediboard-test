@@ -166,6 +166,7 @@ $locales['CHPrimSanteEvent-ADM-C-12'] = 'Fusion des patients impossible';
 $locales['CHPrimSanteEvent-ADM-C-13'] = 'Le patient fournit ne correspond pas avec le patient du séjour';
 $locales['CHPrimSanteEvent-ADM-C-14'] = 'Enregistrement du séjour échoué : ';
 $locales['CHPrimSanteEvent-ADM-C-15'] = 'Le médecin n\'a pas été retrouvé ou créé';
+$locales['CHPrimSanteEvent-ADM-C-16'] = 'L\'identifiant du séjour n\'est pas présent dans le message';
 $locales['CHPrimSanteEvent-REG-C-01'] = 'Aucune consultation n\'a été retrouvée sur le séjour';
 $locales['CHPrimSanteEvent-REG-C-02'] = 'Aucune facture n\'a été saisie sur la consultation dans Mediboard';
 $locales['CHPrimSanteEvent-REG-C-03'] = 'Erreur lors de l\'enregistrement du règlement';
