@@ -59,7 +59,7 @@ class CSetupsearch extends CSetup {
 
     $this->makeRevision("0.05");
     $query =  "
-        CREATE TABLE `rss_search_items` (
+        CREATE TABLE IF NOT EXISTS `rss_search_items` (
           `rss_search_item_id` BIGINT NOT NULL AUTO_INCREMENT ,
           `rss_id` BIGINT NOT NULL ,
           `search_id` BIGINT NOT NULL,
