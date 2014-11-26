@@ -122,14 +122,10 @@ class CSearchLog extends CSearch {
    * @return string
    */
   function constructWordsWithUser($words, $specific_user) {
-    if (!$specific_user) {
-      return $words;
-    }
-    else {
-      $users_id = explode('|', $specific_user);
-      $user_req = implode(' || ', $users_id);
-      $words    = $words . " user_id:(" .$user_req . ")";
-    }
+
+    $users_id = explode('|', $specific_user);
+    $user_req = implode(' || ', $users_id);
+    $words    = $words . " user_id:(" .$user_req . ")";
 
     return $words;
   }

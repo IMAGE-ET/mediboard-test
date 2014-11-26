@@ -22,7 +22,7 @@ $client_index = new CSearchLog();
 $client_index->createClient();
 
 $words = $client_index->constructWordsWithDate($words, $_date, $_min_date, $_max_date);
-$words = $client_index->constructWordsWithUser($words, $specific_user);
+$words = $client_index->constructWordsWithUser($words, CMediusers::get()->_id);
 
 // Recherche fulltext
 $time              = 0;
