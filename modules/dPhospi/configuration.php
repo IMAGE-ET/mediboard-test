@@ -17,8 +17,17 @@ CConfiguration::register(
       'dPhospi' => array(
         'CAffectation' => array(
           "create_affectation_tolerance" => "num min|2 max|120 default|2",
-        )
+        ),
       )
-    )
+    ),
+
+    'CService CGroups.group_id' => array(
+      'dPhospi' => array(
+        'vue_temporelle' => array(
+          "hour_debut_day" => "num min|0 max|23 default|0",
+          "hour_fin_day"   => "num min|0 max|23 default|23",
+        ),
+      )
+    ),
   )
 );

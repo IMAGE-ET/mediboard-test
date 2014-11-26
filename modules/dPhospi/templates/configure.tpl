@@ -12,7 +12,7 @@
   Main.add(Control.Tabs.create.curry('tabs-configure', true, {
     afterChange: function(container) {
       if (container.id == "CConfigEtab") {
-        Configuration.edit('dPhospi', 'CGroups', $('CConfigEtab'));
+        Configuration.edit('dPhospi', ['CGroups', 'CService CGroups.group_id'], $('CConfigEtab'));
       }
     }
   }));

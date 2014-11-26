@@ -40,14 +40,31 @@ $datetimes = array();
 $change_month = array();
 $granularites = array("day", "week", "4weeks");
 
+$group = CGroups::loadCurrent();
+
 switch ($granularite) {
   case "day":
+    $service_id = count($services_ids) == 1 ? reset($services_ids) : "";
+
+    $hour_debut = 0;
+    $hour_fin   = 23;
+
+    if ($service_id) {
+      $hour_debut = CAppUI::conf("dPhospi vue_temporelle hour_debut_day", "CService-$service_id");
+      $hour_fin   = CAppUI::conf("dPhospi vue_temporelle hour_fin_day"  , "CService-$service_id");
+    }
+
+    // Inversion si l'heure de début est supérieure à celle de fin
+    if ($hour_debut > $hour_fin) {
+      list($hour_debut, $hour_fin) = array($hour_fin, $hour_debut);
+    }
+
     $unite = "hour";
     $nb_unite = 1;
-    $nb_ticks = 24;
+    $nb_ticks = $hour_fin - $hour_debut + 1;
     $step = "+1 hour";
     $period = "1hour";
-    $date_min = CMbDT::dateTime($date);
+    $date_min = "$date ".str_pad($hour_debut, 2, "0", STR_PAD_LEFT) . ":00:00";
     $date_before = CMbDT::date("-1 day", $date);
     $date_after  = CMbDT::date("+1 day", $date);
     break;
@@ -75,6 +92,11 @@ switch ($granularite) {
 $current = CMbDate::dirac("hour", CMbDT::dateTime());
 $offset = $nb_ticks * $nb_unite;
 $date_max = CMbDT::dateTime("+ $offset $unite", $date_min);
+
+if ($granularite == "day") {
+  $date_max = CMbDT::dateTime("-1 second", $date_max);
+}
+
 $temp_datetime = CMbDT::dateTime(null, $date_min);
 
 for ($i = 0 ; $i < $nb_ticks ; $i++) {
@@ -131,10 +153,9 @@ if ($granularite == "4weeks" && count($days) == 5) {
 }
 
 // Chargement des lits
-$group_id = CGroups::loadCurrent()->_id;
 $where = array();
 $where["chambre.service_id"] = CSQLDataSource::prepareIn($services_ids);
-$where["service.group_id"] = " = '$group_id'";
+$where["service.group_id"] = " = '$group->_id'";
 $where["chambre.annule"] = "= '0'";
 $where["lit.annule"] = "= '0'";
 $ljoin = array();
@@ -202,7 +223,7 @@ if ($nb_days_prolongation) {
     "sortie_reelle"   => "IS NULL",
     "sortie_prevue"   => "BETWEEN '$min' AND '$max'",
     "sejour.confirme" => "IS NULL",
-    "group_id"        => "= '$group_id'"
+    "group_id"        => "= '$group->_id'"
   );
 
   $sejours_prolonges = $sejour->loadList($where);

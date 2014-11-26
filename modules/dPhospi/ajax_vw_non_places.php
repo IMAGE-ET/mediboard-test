@@ -74,11 +74,26 @@ $nb_unite = 0;
 
 switch ($granularite) {
   case "day":
+    $service_id = count($services_ids) == 1 ? reset($services_ids) : "";
+
+    $hour_debut = 0;
+    $hour_fin   = 23;
+
+    if ($service_id) {
+      $hour_debut = CAppUI::conf("dPhospi vue_temporelle hour_debut_day", "CService-$service_id");
+      $hour_fin   = CAppUI::conf("dPhospi vue_temporelle hour_fin_day"  , "CService-$service_id");
+    }
+
+    // Inversion si l'heure de début est supérieure à celle de fin
+    if ($hour_debut > $hour_fin) {
+      list($hour_debut, $hour_fin) = array($hour_fin, $hour_debut);
+    }
+
     $period = "1hour";
     $unite = "hour";
     $nb_unite = 1;
-    $nb_ticks = 24;
-    $date_min = CMbDT::dateTime($date);
+    $nb_ticks = $hour_fin - $hour_debut + 1;
+    $date_min = "$date ".str_pad($hour_debut, 2, "0", STR_PAD_LEFT) . ":00:00";
     break;
   case "week":
     $period = "6hours";
