@@ -156,11 +156,21 @@ EOT
       return false;
     }
 
+    // Progress bar
+    $progress = $this->getHelperSet()->get('progress');
+    $progress->start($output, count($to_perform));
+
     foreach ($to_perform as $_instance) {
       // RSYNC
       $result = parent::rsync($path, $files, $_instance, $output);
       $this->checkFilePresence(implode("\n", $result), $output);
+
+      // Next progress bar step
+      $progress->advance();
+      $output->writeln("");
     }
+
+    $progress->finish();
 
     // Re-check remote release
     $this->out($output, "Current instances release:");

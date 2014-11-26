@@ -108,17 +108,27 @@ EOT
     $this->confirmOperation($current_branch, $dialog, $output);
 
     $this->out($output, "<info>Confirmation OK</info>");
-    $this->out($output, "Performing operation...");
+    $this->out($output, "Performing operation...\n");
 
     // External libraries installation
     $this->installLibraries($output);
 
     $files = $this->getIncludedAndExcluded($path, $output);
 
+    // Progress bar
+    $progress = $this->getHelperSet()->get('progress');
+    $progress->start($output, count($to_perform));
+
     foreach ($to_perform as $_instance) {
       // RSYNC
       $this->rsync($path, $files, $_instance, $output);
+
+      // Next progress bar step
+      $progress->advance();
+      $output->writeln("");
     }
+
+    $progress->finish();
 
     // Re-check remote release
     $this->out($output, "Current instances release:");
