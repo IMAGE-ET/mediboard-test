@@ -48,7 +48,7 @@ class CHPrimSanteRecordADM extends CHPrimSanteMessageXML {
     $erreur = array();
     //parcours des patients
     foreach ($data["//P"] as $_i => $_patient) {
-      $this->loop = $_i;
+      $this->loop = $_i+1;
       $identifier = $this->identifier_patient = $this->getPersonIdentifiers($_patient);
 
       if (!$identifier["identifier"]) {
@@ -225,6 +225,8 @@ class CHPrimSanteRecordADM extends CHPrimSanteMessageXML {
     $patient->situation_famille = $this->getMaritalStatus($node);
 
     $patient->deces = $this->getDeathDate($node);
+
+    $patient->repair();
 
     if ($msg = $patient->store()) {
       return new CHPrimSanteError($this->_ref_exchange_hpr, "P", "08", array("P", $this->loop, $this->identifier_patient), "8.3", $msg);
