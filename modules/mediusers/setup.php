@@ -633,7 +633,23 @@ class CSetupmediusers extends CSetup {
     $query = "ALTER TABLE `users_mediboard`
                 ADD `use_bris_de_glace` ENUM ('0','1') NOT NULL DEFAULT '0' AFTER `actif`;";
     $this->addQuery($query);
+    
+    $this->makeRevision('0.56');
 
-    $this->mod_version = "0.56";
+    $query = "ALTER TABLE `users_mediboard`
+                ADD `contrat_acces_soins` ENUM('0', '1'),
+                ADD `option_coordination` ENUM('0', '1');";
+    $this->addQuery($query);
+
+    $query = "INSERT IGNORE INTO `spec_cpam` (`spec_cpam_id`, `text`, `actes`) VALUES
+                (20, 'Réanimation médicale', ''),
+                (34, 'Gériatrie', ''),
+                (51, 'Pharmacien mutualiste', ''),
+                (53, 'Chirurgie dentaire orale', ''),
+                (78, 'Génétique médicale', ''),
+                (79, 'Gynécologie obstétrique et gynécologie médicale', '');";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.57';
   }
 }

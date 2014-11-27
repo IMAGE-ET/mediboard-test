@@ -467,7 +467,8 @@ class CCodageCCAM extends CMbObject {
           $_modifier->_state = $checked ? 'prechecked' : null;
           break;
         case 'K':
-          $checked = !$act->montant_depassement && ($act->_ref_executant->secteur == 1 || ($act->_ref_executant->secteur == 2 && $patient->cmu));
+          $checked = !$act->montant_depassement && ($act->_ref_executant->secteur == 1 || ($act->_ref_executant->secteur == 2 && $patient->cmu) ||
+              $act->_ref_executant->contrat_acces_soins || $act->_ref_executant->option_coordination);
           if ($checked) {
             $_modifier->_state = 'prechecked';
           }

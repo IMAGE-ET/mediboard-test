@@ -50,6 +50,16 @@
     <th>{{mb_label object=$object field="secteur"}}</th>
     <td>{{mb_field object=$object field="secteur" emptyLabel="Choose"}}</td>
   </tr>
+
+  <tr>
+    <th>{{mb_label object=$object field=contrat_acces_soins}}</th>
+    <td>{{mb_field object=$object field=contrat_acces_soins}}</td>
+  </tr>
+
+  <tr>
+    <th>{{mb_label object=$object field=option_coordination}}</th>
+    <td>{{mb_field object=$object field=option_coordination}}</td>
+  </tr>
   
   <tr>
     <th>{{mb_label object=$object field="cab"}}</th>

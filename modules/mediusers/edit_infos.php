@@ -32,7 +32,7 @@ $banques = $banque->loadList(null, $order);
 
 // Récupération des spécialités CPAM
 $spec_cpam = new CSpecCPAM();
-$spec_cpam = $spec_cpam->loadList();
+$spec_cpam = $spec_cpam->loadList(null, 'spec_cpam_id ASC');
 
 $affiche_nom = CValue::get("affiche_nom", 0);
 

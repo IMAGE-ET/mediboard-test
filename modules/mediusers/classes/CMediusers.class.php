@@ -43,6 +43,8 @@ class CMediusers extends CPerson {
   public $code_intervenant_cdarr;
 
   public $secteur;
+  public $contrat_acces_soins;
+  public $option_coordination;
   // Champs utilisés pour l'affichage des ordonnances ALD
   public $cab;
   public $conv;
@@ -228,6 +230,8 @@ class CMediusers extends CPerson {
     $props["banque_id"]              = "ref class|CBanque show|0";
     $props["code_intervenant_cdarr"] = "str length|2";
     $props["secteur"]                = "enum list|1|2";
+    $props['contrat_acces_soins']    = "bool";
+    $props['option_coordination']    = "bool";
     $props["cab"]                    = "str";
     $props["conv"]                   = "str";
     $props["zisd"]                   = "str";

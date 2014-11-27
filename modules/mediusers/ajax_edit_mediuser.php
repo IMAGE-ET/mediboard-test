@@ -58,7 +58,7 @@ $disciplines = $discipline->loadList();
 
 // Récupération des spécialités CPAM
 $spec_cpam = new CSpecCPAM();
-$spec_cpam = $spec_cpam->loadList();
+$spec_cpam = $spec_cpam->loadList(null, 'spec_cpam_id ASC');
   
 // Récupération des profils
 $profile = new CUser();
