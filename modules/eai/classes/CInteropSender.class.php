@@ -20,6 +20,11 @@ class CInteropSender extends CInteropActor {
   public $save_unsupported_message;
   public $create_ack_file;
   public $delete_file;
+
+  // Form fields
+  public $_tag_hprimxml;
+  public $_tag_phast;
+  public $_tag_hl7;
   
   // Forward references
   /** @var CMediusers $_ref_user */
@@ -36,6 +41,18 @@ class CInteropSender extends CInteropActor {
     parent::updateFormFields();
        
     $this->_parent_class = "CInteropSender";
+
+    if (CModule::getActive("hprimxml")) {
+      $this->_tag_hprimxml = CHPrimXML::getObjectTag($this->group_id);
+    }
+
+    if (CModule::getActive("phast")) {
+      $this->_tag_phast    = CPhast::getTagPhast($this->group_id);
+    }
+
+    if (CModule::getActive("hl7")) {
+      $this->_tag_hl7      = CHL7::getObjectTag($this->group_id);
+    }
   }
 
   /**
@@ -47,6 +64,10 @@ class CInteropSender extends CInteropActor {
     $props["save_unsupported_message"] = "bool default|1";
     $props["create_ack_file"]          = "bool default|1";
     $props["delete_file"]              = "bool default|1";
+
+    $props["_tag_hprimxml"] = "str";
+    $props["_tag_phast"]    = "str";
+    $props["_tag_hl7"]      = "str";
     
     return $props;
   }
