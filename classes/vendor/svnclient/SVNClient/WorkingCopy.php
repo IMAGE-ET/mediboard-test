@@ -68,34 +68,33 @@ class WorkingCopy {
 
     $xml = $this->info();
 
-    $data = Util::parseXML($xml);
-    $this->url = (string)$data->url;
+    $data           = Util::parseXML($xml);
+    $this->url      = (string)$data->url;
     $this->revision = (int)$data->commit->attributes()->revision;
 
-    $repo = $data->repository;
+    $repo             = $data->repository;
     $this->repository = new Repository((string)$repo->root, (string)$repo->uuid);
   }
 
   // Get folders
-  function getBranches(){
+  function getBranches() {
     return $this->repository->getBranches();
   }
 
-  function getTags(){
+  function getTags() {
     return $this->repository->getTags();
   }
 
   // Commands
   function checkout($url) {
-
   }
 
   function add($files) {
     return Util::exec("add", $files, array(), $this->path, true);
   }
 
-  function revert($files) {
-
+  function revert(array $files = array()) {
+    return Util::exec("revert", $files, array(), $this->path, true);
   }
 
   function sw($to) {
@@ -103,26 +102,28 @@ class WorkingCopy {
   }
 
   function commit($files, $message) {
-
   }
 
-  function update(array $paths = array(), $revision = "HEAD") {
+  function update(array $paths = array(), $revision = "HEAD", $ignore_externals = false) {
     $options = array(
       "--revision" => $revision,
     );
+
+    if ($ignore_externals) {
+      $options["--ignore-externals"] = true;
+    }
 
     return Util::exec("update", $paths, $options, $this->path, true);
   }
 
   function cleanup($path) {
-
   }
 
   function log($path = "", $limit = null, $verbose = false, $stopOnCopy = true) {
     $options = array(
-      "--xml"     => true,
-      "--verbose" => $verbose,
-      "--limit"   => (int)$limit,
+      "--xml"          => true,
+      "--verbose"      => $verbose,
+      "--limit"        => (int)$limit,
       "--stop-on-copy" => $stopOnCopy,
     );
 
@@ -130,7 +131,6 @@ class WorkingCopy {
   }
 
   function blame($file) {
-
   }
 
   function info($file = ".") {
@@ -139,6 +139,18 @@ class WorkingCopy {
     );
 
     return Util::exec("info", $file, $options, $this->path);
+  }
+
+  function status($file = ".", $ignore_externals = false) {
+    $options = array(
+      "--xml" => true,
+    );
+
+    if ($ignore_externals) {
+      $options["--ignore-externals"] = true;
+    }
+
+    return Util::exec("status", $file, $options, $this->path);
   }
 
   // Properties
@@ -177,7 +189,7 @@ class WorkingCopy {
       "--verbose" => true,
     );
 
-    $xml = Util::exec("proplist", $path, $options, $this->path);
+    $xml  = Util::exec("proplist", $path, $options, $this->path);
     $data = DOM::parse($xml);
 
     $properties = $data->xpath("//property");

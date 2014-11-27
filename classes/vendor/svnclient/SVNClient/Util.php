@@ -10,6 +10,9 @@
 
 namespace SVNClient;
 
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\RuntimeException;
+
 class Util {
 
   /**
@@ -27,13 +30,8 @@ class Util {
     if (!is_array($arguments)) {
       $arguments = array($arguments);
     }
-    $arguments = array_map("escapeshellarg", $arguments);
 
-    $opts = array(
-      0 => array("pipe", "r"), // stdin
-      1 => array("pipe", "w"), // stdout
-      2 => array("pipe", "a"), // stderr
-    );
+    $arguments = array_map("escapeshellarg", $arguments);
 
     $new_options = array();
     foreach ($options as $key => $value) {
@@ -46,35 +44,18 @@ class Util {
 
     $cmdline = "svn $cmd " . implode(" ", $arguments) . " " . implode(" ", $new_options);
 
-    $pipes   = array();
-    $process = proc_open($cmdline, $opts, $pipes, $path);
+    $process = new Process($cmdline, $path);
+    $process->run();
 
-    if (is_resource($process)) {
-      $err = stream_get_contents($pipes[2]);
-      fclose($pipes[2]);
-      if ($err) {
-        throw new Exception($err);
-      }
-
-      stream_get_contents($pipes[0]);
-      //fwrite($pipes[0], 'Init OK');
-      fclose($pipes[0]);
-
-      if ($output) {
-        if ($fout = fopen("php://output", "w")) {
-          stream_copy_to_stream($pipes[1], $fout);
-          fclose($fout);
-        }
-      }
-
-      $out = stream_get_contents($pipes[1]);
-
-      proc_close($process);
-
-      return $out;
+    if (!$process->isSuccessful()) {
+      throw new RuntimeException($process->getErrorOutput());
     }
 
-    throw new Exception("'$cmdline' could not be executed");
+    if ($output) {
+      return $process->getOutput();
+    }
+
+    return null;
   }
 
   /**
