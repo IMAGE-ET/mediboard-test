@@ -220,6 +220,14 @@ if (CModule::getActive("dPprescription")) {
         $line->calculAdministrations();
         $line->updateAlerteAntibio();
 
+        if ($line->sans_planif) {
+          foreach ($line->_ref_lines as $_line_mix) {
+            if ($_line_mix->delay_prise) {
+              $_line_mix->loadRefLastAdministration();
+            }
+          }
+        }
+
         // Chargement des transmissions de la prescription_line_mix
         $transmission = new CTransmissionMedicale();
         $transmission->object_class = "CPrescriptionLineMix";
@@ -290,6 +298,12 @@ if (CModule::getActive("dPprescription")) {
           }
           $_prescription_line_mix->updateAlerteAntibio();
           $_prescription_line_mix->loadActiveDates();
+
+          if ($_prescription_line_mix->sans_planif) {
+            foreach ($_prescription_line_mix->_ref_lines as $_line_mix_item) {
+              $_line_mix_item->loadRefLastAdministration();
+            }
+          }
         }
         // Chargement des lignes d'éléments
         if ($chapitre == "all_chaps") {
@@ -350,6 +364,12 @@ if (CModule::getActive("dPprescription")) {
           }
           $_prescription_line_mix->updateAlerteAntibio();
           $_prescription_line_mix->loadActiveDates();
+
+          if ($_prescription_line_mix->sans_planif) {
+            foreach ($_prescription_line_mix->_ref_lines as $_line_mix_item) {
+              $_line_mix_item->loadRefLastAdministration();
+            }
+          }
         }
       }
       elseif ($chapitre == "inscription") {
