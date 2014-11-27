@@ -24,7 +24,7 @@ $nbPays  = 0;
 $matches = array();
 
 // Needle
-$keyword = reset($_POST);
+$keyword = CValue::post($column == "code_postal" ? "cp" : "ville");
 $needle  = $column == "code_postal" ? "$keyword%" : "%$keyword%";
 
 // Query
@@ -52,6 +52,12 @@ if (CAppUI::conf("dPpatients INSEE suisse")) {
 }
 
 array_multisort(CMbArray::pluck($matches, "code_postal"), SORT_ASC, CMbArray::pluck($matches, "commune"), SORT_ASC, $matches);
+
+foreach ($matches as $key => $_match) {
+  $matches[$key]["commune"] = CMbString::capitalize(CMbString::lower($matches[$key]["commune"]));
+  $matches[$key]["departement"] = CMbString::capitalize(CMbString::lower($matches[$key]["departement"]));
+  $matches[$key]["pays"] = CMbString::capitalize(CMbString::lower($matches[$key]["pays"]));
+}
 
 // Template
 $smarty = new CSmartyDP();
