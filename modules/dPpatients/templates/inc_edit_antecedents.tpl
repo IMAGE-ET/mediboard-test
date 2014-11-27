@@ -31,7 +31,7 @@
     <input type="hidden" name="callback" value="editAntecedent" />
   </form>
 
-  <form name="editAntFrm" method="post" onsubmit="return submitAntecedent(this)">
+  <form name="editAntFrm-{{$antecedent->_guid}}" method="post" onsubmit="return submitAntecedent(this)">
     <input type="hidden" name="m" value="patients" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="dosql" value="do_antecedent_aed" />
@@ -60,12 +60,12 @@
       <tr>
         {{if $app->user_prefs.showDatesAntecedents}}
           <th style="height: 20px">{{mb_label object=$antecedent field=date}}</th>
-          <td>{{mb_field object=$antecedent field=date form=editAntFrm register=true}}</td>
+          <td>{{mb_field object=$antecedent field=date form="editAntFrm-`$antecedent->_guid`" register=true}}</td>
         {{else}}
           <td colspan="2"></td>
         {{/if}}
         <td rowspan="{{$type|ternary:2:3}}" style="width: 60%">
-          {{mb_field object=$antecedent field="rques" rows="4" form="editAntFrm"
+          {{mb_field object=$antecedent field="rques" rows="4" form="editAntFrm-`$antecedent->_guid`"
             aidesaisie="filterWithDependFields: false, validateOnBlur: 0"}}
         </td>
         {{if $type}}
