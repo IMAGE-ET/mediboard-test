@@ -52,10 +52,11 @@ class Util {
     }
 
     if ($output) {
-      return $process->getOutput();
+      echo $process->getOutput();
+      return null;
     }
 
-    return null;
+    return $process->getOutput();
   }
 
   /**
