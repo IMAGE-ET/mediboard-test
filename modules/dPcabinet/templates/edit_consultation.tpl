@@ -9,6 +9,7 @@
  * @link     http://www.mediboard.org
 *}}
 
+{{mb_script module="cabinet" script="dossier_medical"}}
 {{assign var=auto_refresh_frequency value=$conf.dPcabinet.CConsultation.auto_refresh_frequency}}
 
 {{if $current_m == "dPurgences"}}
