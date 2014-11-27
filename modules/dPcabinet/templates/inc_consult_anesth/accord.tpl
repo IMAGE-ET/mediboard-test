@@ -51,8 +51,8 @@
 
   function loadAntTrait() {
     var url = new Url("cabinet", "httpreq_vw_antecedents");
-    {{if $consult->_ref_consult_anesth->sejour_id}}
-      url.addParam("sejour_id", "{{$consult->_ref_consult_anesth->sejour_id}}");
+    {{if $consult->sejour_id && !$consult->_ref_consult_anesth->_ref_operation->_id}}
+      url.addParam("sejour_id", "{{$consult->sejour_id}}");
     {{else}}
       url.addParam("sejour_id", "{{$consult->_ref_consult_anesth->_ref_operation->sejour_id}}");
     {{/if}}
