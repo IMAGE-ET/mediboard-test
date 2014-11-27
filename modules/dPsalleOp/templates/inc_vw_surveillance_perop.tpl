@@ -309,7 +309,7 @@ printSurveillance = function(operation_id) {
 <div style="position: relative;" class="supervision">
   <table class="main layout">
     <tr>
-      <td style="{{if $require_right_col}}width: 75%;{{/if}}" id="surveillance_cell">
+      <td id="surveillance_cell">
   {{foreach from=$graphs item=_graph key=i}}
     {{if $_graph instanceof CSupervisionGraph}}
       {{assign var=_graph_data value=$_graph->_graph_data}}
@@ -508,7 +508,7 @@ printSurveillance = function(operation_id) {
       </td>
 
       {{if $require_right_col}}
-      <td>
+      <td style="{{if $require_right_col}}width: 200px;{{/if}}">
         {{foreach from=$graphs item=_graph key=i}}
           {{if $_graph instanceof CSupervisionInstantData}}
             <div id="container-{{$_graph->_guid}}">

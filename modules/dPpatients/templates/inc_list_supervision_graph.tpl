@@ -49,7 +49,7 @@
           {{tr}}CSupervisionGraph-title-create{{/tr}}
         </button>
 
-        <table class="main tbl">
+        <table class="main tbl" style="clear: both;">
           {{foreach from=$graphs item=_graph}}
             <tr id="list-{{$_graph->_guid}}" class="{{if $_graph->disabled}} opacity-50 {{/if}}">
               <td>
@@ -82,7 +82,7 @@
           {{tr}}CSupervisionTimedData-title-create{{/tr}}
         </button>
 
-        <table class="main tbl">
+        <table class="main tbl" style="clear: both;">
           {{foreach from=$timed_data item=_timed_data}}
             <tr id="list-{{$_timed_data->_guid}}" class="{{if $_timed_data->disabled}} opacity-50 {{/if}}">
               <td>
@@ -104,7 +104,7 @@
           {{tr}}CSupervisionTimedPicture-title-create{{/tr}}
         </button>
 
-        <table class="main tbl">
+        <table class="main tbl" style="clear: both;">
           {{foreach from=$timed_pictures item=_timed_picture}}
             <tr id="list-{{$_timed_picture->_guid}}" class="{{if $_timed_picture->disabled}} opacity-50 {{/if}}">
               <td>
@@ -126,7 +126,7 @@
           {{tr}}CSupervisionInstantData-title-create{{/tr}}
         </button>
 
-        <table class="main tbl">
+        <table class="main tbl" style="clear: both;">
           {{foreach from=$instant_data item=_instant_data}}
             <tr id="list-{{$_instant_data->_guid}}" class="{{if $_instant_data->disabled}} opacity-50 {{/if}}">
               <td>
@@ -148,7 +148,7 @@
           {{tr}}CSupervisionGraphPack-title-create{{/tr}}
         </button>
 
-        <table class="main tbl">
+        <table class="main tbl" style="clear: both;">
           {{foreach from=$packs item=_pack}}
             <tr id="list-{{$_pack->_guid}}" class="{{if $_pack->disabled}} opacity-50 {{/if}}">
               <td colspan="2">
