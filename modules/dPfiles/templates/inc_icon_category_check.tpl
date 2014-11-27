@@ -1,6 +1,6 @@
 {{*
  * $Id$
- *  
+ *
  * @category Files
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -8,6 +8,10 @@
  * @version  $Revision$
  * @link     http://www.mediboard.org
 *}}
+
+{{if !$app->user_prefs.show_file_view}}
+  {{mb_return}}
+{{/if}}
 
 <script>
   Main.add(function() {
