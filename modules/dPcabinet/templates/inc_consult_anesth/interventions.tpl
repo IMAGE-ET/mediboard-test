@@ -14,7 +14,9 @@
   {{/if}}
 
   {{if $consult->sejour_id && !$consult_anesth->operation_id}}
-    DossierMedical.sejour_id = '{{$consult->sejour_id}}';
+    Main.add(function () {
+      DossierMedical.sejour_id = '{{$consult->sejour_id}}';
+    });
   {{/if}}
 </script>
 
