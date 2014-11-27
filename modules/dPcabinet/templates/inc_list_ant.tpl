@@ -383,14 +383,16 @@ showModalTP = function() {
       });
     }
 
-    if (window.tabsConsult || window.tabsConsultAnesth) {
-      var count_tab = '{{math equation=w+x+y+z
-        w=$dossier_medical->_all_antecedents|@count
-        x=$dossier_medical->_ref_traitements|@count
-        y=$dossier_medical->_ext_codes_cim|@count
-        z=$dossier_medical->_ref_prescription->_ref_prescription_lines|@count}}';
-      Control.Tabs.setTabCount("AntTrait", count_tab);
-    }
+    {{if $dossier_medical->_id}}
+      if (window.tabsConsult || window.tabsConsultAnesth) {
+        var count_tab = '{{math equation=w+x+y+z
+          w=$dossier_medical->_all_antecedents|@count
+          x=$dossier_medical->_ref_traitements|@count
+          y=$dossier_medical->_ext_codes_cim|@count
+          z=$dossier_medical->_ref_prescription->_ref_prescription_lines|@count}}';
+        Control.Tabs.setTabCount("AntTrait", count_tab);
+      }
+    {{/if}}
   });
   </script>
 {{/if}}
