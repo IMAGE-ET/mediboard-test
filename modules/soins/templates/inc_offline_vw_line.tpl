@@ -13,8 +13,8 @@
 {{if $line->_class == "CPrescriptionLineMedicament" || $line->_class == "CPrescriptionLineElement"}}
   <tr>
     <td class="text" style="vertical-align: top">
-      {{if $line->_ref_log_signee->_id}}
-        {{$line->_ref_log_signee->date|date_format:$conf.date}} <br />
+      {{if $line->date_signature}}
+        {{$line->date_signature|date_format:$conf.date}} <br />
       {{/if}}
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$line->_ref_praticien}}
       <div class="compact">
@@ -199,8 +199,8 @@
     <tr>
       <td class="text {{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}" style="vertical-align: top;">
         {{if $smarty.foreach.lines_items.first}}
-          {{if $line->_ref_log_signature_prat->_id}}
-            {{$line->_ref_log_signature_prat|date_format:$conf.date}} <br />
+          {{if $line->date_signature}}
+            {{$line->date_signature|date_format:$conf.date}} <br />
           {{/if}}
           {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$line->_ref_praticien}}
           <div class="compact">
