@@ -18,6 +18,8 @@ use Symfony\Component\Process\Exception\InvalidArgumentException;
 
 use SVNClient\WorkingCopy;
 
+use Symfony\Component\Process\Process;
+
 /**
  * deploy:mep command
  */
@@ -96,10 +98,10 @@ abstract class DeployOperation extends MediboardCommand {
   protected function promptInstances($path, OutputInterface $output) {
     $dialog = $this->getHelperSet()->get('dialog');
 
-    $rsyncupdate_conf = "$path/cli/conf/rsyncupdate.xml";
+    $rsyncupdate_conf = "$path/cli/conf/deploy.xml";
 
     if (!is_readable($rsyncupdate_conf)) {
-      throw new InvalidArgumentException("'$rsyncupdate_conf' is not readable");
+      throw new Exception("'$rsyncupdate_conf' is not readable");
     }
 
     $dom = new DOMDocument();
@@ -212,7 +214,7 @@ abstract class DeployOperation extends MediboardCommand {
           $dom->load($release_file);
         }
         else {
-          throw new InvalidArgumentException("'$release_file' is not readable");
+          throw new Exception("'$release_file' is not readable");
         }
       }
       else {
@@ -223,7 +225,7 @@ abstract class DeployOperation extends MediboardCommand {
           $dom->loadXML($result);
         }
         else {
-          throw new InvalidArgumentException("$release_file[0]:$release_file[1] is empty");
+          throw new Exception("$release_file[0]:$release_file[1] is empty");
         }
       }
 
@@ -334,16 +336,16 @@ abstract class DeployOperation extends MediboardCommand {
   /**
    * Get excluded and included files
    *
-   * @param string          $path   Root path
-   * @param OutputInterface $output Output
+   * @param string $path Root path
    *
    * @return array
+   * @throws Exception
    */
-  protected function getIncludedAndExcluded($path, OutputInterface $output) {
-    $file = "$path/cli/conf/rsyncupdate_exclude.xml";
+  protected function getIncludedAndExcluded($path) {
+    $file = "$path/cli/conf/exclude.xml";
 
     if (!is_readable($file)) {
-      throw new InvalidArgumentException("'$file' is not readable");
+      throw new Exception("'$file' is not readable");
     }
 
     $dom = new DOMDocument();
@@ -381,6 +383,37 @@ abstract class DeployOperation extends MediboardCommand {
 
     $files["excluded"] = implode(" ", $files["excluded"]);
     $files["included"] = implode(" ", $files["included"]);
+
+    return $files;
+  }
+
+  /**
+   * Get excluded files
+   *
+   * @param string          $path   Root path
+   * @param OutputInterface $output Output
+   *
+   * @return array
+   */
+  protected function getExcluded($path, OutputInterface $output) {
+    $file = "$path/cli/conf/exclude.xml";
+
+    if (!is_readable($file)) {
+      throw new Exception("'$file' is not readable");
+    }
+
+    $dom = new DOMDocument();
+    $dom->load($file);
+
+    $xpath = new DOMXPath($dom);
+
+    $files = array();
+
+    /** @var DOMNodeList $excluded */
+    $excluded = $xpath->query("//exclude");
+    foreach ($excluded as $_excluded) {
+      $files[] = $_excluded->nodeValue;
+    }
 
     return $files;
   }
@@ -547,6 +580,191 @@ abstract class DeployOperation extends MediboardCommand {
         ->setCellHeaderFormat('<b>%s</b>')
         ->setCellRowFormat('<fg=red;>%s</fg=red;>');
       $table->render($output);
+    }
+  }
+
+  /**
+   * Get locally modified files from SVN status XML output
+   *
+   * @param string          $xml    XML output
+   * @param string          $path   Root
+   * @param OutputInterface $output Output
+   *
+   * @return array
+   * @throws Exception
+   */
+  protected function getModifiedFilesByXML($xml, $path, OutputInterface $output) {
+    $modified_files = array();
+
+    $dom = new DOMDocument();
+    if (!$dom->loadXML($xml)) {
+      throw new Exception("Cannot parse XML.");
+    }
+
+    $files_to_exclude = $this->getExcluded($path, $output);
+
+    $xpath = new DOMXPath($dom);
+
+    // Get all 'entry' nodes whom 'wc-status' child node has 'item' attribute different from 'normal' or from 'external'
+    $nodes = $xpath->query("//entry[wc-status[@item != 'normal' or @item != 'external']]");
+
+    if ($nodes) {
+      foreach ($nodes as $_node) {
+        $_path                  = $_node->getAttribute("path");
+        $modified_files[$_path] = $_path;
+      }
+
+      // Unset specific configuration files which MUST NOT be reverted
+      if (preg_match_all("#(" . implode("|", $files_to_exclude) . ")#m", implode("\n", $modified_files), $matches)) {
+        foreach ($matches[1] as $_file) {
+          unset($modified_files[$_file]);
+        }
+      }
+    }
+
+    return $modified_files;
+  }
+
+  /**
+   * Get current revision from SVN info XML output
+   *
+   * @param string $xml XML output
+   *
+   * @return null
+   * @throws Exception
+   */
+  protected function getRevisionByXML($xml) {
+    $revision = null;
+
+    $dom = new DOMDocument();
+    if (!$dom->loadXML($xml)) {
+      throw new Exception("Cannot parse XML.");
+    }
+
+    $xpath    = new DOMXPath($dom);
+    $revision = $xpath->query("/info/entry/@revision");
+
+    // Cause query returns a list
+    foreach ($revision as $_revision) {
+      if ($_revision->value) {
+        return $revision = $_revision->value;
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Performs an SVN update
+   *
+   * @param string          $path             Root
+   * @param OutputInterface $output           Output
+   * @param bool            $ignore_externals Does the externals have to been ignored?
+   *
+   * @throws Exception
+   */
+  protected function update($path, OutputInterface $output, $ignore_externals = false) {
+    $wc = new WorkingCopy($path);
+
+    $this->out($output, "Checking SVN status...");
+    $out = $wc->status(".", $ignore_externals);
+
+    if ($out) {
+      $this->out($output, "<info>SVN status checked</info>");
+
+      $modified_files = $this->getModifiedFilesByXML($out, $path, $output);
+
+      if ($modified_files) {
+        $this->out($output, "<comment>These files are modified locally:</comment>");
+
+        foreach ($modified_files as $_file) {
+          $output->writeln("- <fg=red;>$_file</fg=red;>");
+        }
+
+        $dialog = $this->getHelperSet()->get('dialog');
+        if (!$dialog->askConfirmation(
+          $output,
+          '<question>Revert? [Y/n]</question> ',
+          true
+        )
+        ) {
+          return false;
+        }
+
+        // Files have to be reverted
+        $this->out($output, "Reverting files...");
+        // /!\ Long list may handle an exception
+        $wc->revert($modified_files);
+        $this->out($output, "<info>Files reverted</info>");
+      }
+    }
+
+    // SVN update
+    $this->out($output, "SVN update in progress...");
+    $wc->update(array(), "HEAD", $ignore_externals);
+    $this->out($output, "<info>SVN update completed</info>\n");
+
+    // SVN status file writing
+    $this->writeSVNStatusFile($wc, $output);
+  }
+
+  /**
+   * Write status files
+   *
+   * @param WorkingCopy     $wc     Working copy
+   * @param OutputInterface $output Output
+   *
+   * @throws Exception
+   */
+  protected function writeSVNStatusFile(WorkingCopy $wc, OutputInterface $output) {
+    $path   = $wc->getPath();
+    $status = "$path/tmp/svnstatus.txt";
+    $event  = "$path/tmp/monitevent.txt";
+
+    $this->out($output, "Checking SVN info...");
+    $out = $wc->info();
+
+    if ($out) {
+      $revision = $this->getRevisionByXML($out);
+
+      if (!$revision) {
+        $this->out($output, "<error>Unable to check revision!</error>");
+
+        return;
+      }
+
+      if (!is_readable($status)) {
+        $this->out($output, "<error>'$status' is not readable</error>");
+      }
+      else {
+        $status_file = fopen($status, "w");
+        fwrite($status_file, "Révision : $revision\n");
+        fwrite($status_file, "Date: " . strftime("%Y-%m-%dT%H:%M:%S") . "\n");
+
+        if (fclose($status_file)) {
+          $this->out($output, "<info>'$status' updated</info>");
+        }
+        else {
+          $this->out($output, "<error>Unable to write '$status'</error>");
+        }
+      }
+
+      if (!is_readable($event)) {
+        $this->out($output, "<error>'$event' is not readable</error>");
+      }
+      else {
+        $event_file = fopen($event, "a+");
+        fwrite($event_file, "#" . strftime("%Y-%m-%dT%H:%M:%S") . "\n");
+        fwrite($event_file, "Mise a jour. Révision : $revision\n");
+
+
+        if (fclose($event_file)) {
+          $this->out($output, "<info>'$event' updated</info>");
+        }
+        else {
+          $this->out($output, "<error>Unable to write '$event'</error>");
+        }
+      }
     }
   }
 }

@@ -7,6 +7,10 @@
     <exclude>/files</exclude>
     <exclude>images/pictures/logo_custom.png</exclude>
     <exclude>modules/hprimxml/xsd</exclude>
+    <exclude>cli/conf/deploy.xml</exclude>
+    <exclude>cli/conf/exclude.xml</exclude>
+    <exclude>shell/rsyncupdate.conf</exclude>
+    <exclude>shell/rsyncupdate.exclude</exclude>
   </excludes>
 
   <includes>

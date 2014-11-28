@@ -29,6 +29,18 @@ class DeployMaJ extends DeployOperation {
       ->setDescription('Synchronize MB with RSYNC')
       ->setHelp('Performs an RSYNC command from MB Master')
       ->addOption(
+        'update',
+        'u',
+        InputOption::VALUE_NONE,
+        'Performs an SVN update'
+      )
+      ->addOption(
+        'update-ignore-externals',
+        'i',
+        InputOption::VALUE_NONE,
+        'Performs an SVN update ignoring externals'
+      )
+      ->addOption(
         'path',
         'p',
         InputOption::VALUE_OPTIONAL,
@@ -99,6 +111,13 @@ EOT
     $current_branch = $this->getMasterBranch($path, $output);
     if (!$current_branch) {
       return;
+    }
+
+    $ignore_externals = $input->getOption("update-ignore-externals");
+    $update           = $input->getOption("update");
+
+    if ($ignore_externals || $update) {
+      $this->update($path, $output, $ignore_externals);
     }
 
     $dialog    = $this->getHelperSet()->get('dialog');
