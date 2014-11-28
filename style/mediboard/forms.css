@@ -857,6 +857,10 @@ button.checklist:before, a.button.checklist:before {
   content: url(images/buttons/checklist.png);
 }
 
+button.favoris:before, a.button.favoris:before {
+  content: url(images/buttons/favoris.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }
