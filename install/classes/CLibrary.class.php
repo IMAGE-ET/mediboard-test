@@ -558,3 +558,27 @@ $library->versionFile = "README.md";
 $library->versionString = "1.0.3 (2013-11-23)";
 
 CLibrary::$all[$library->name] = $library;
+
+$library = new CLibrary;
+$library->name = "d3";
+$library->url = "https://github.com/mbostock/d3";
+$library->fileName = "d3-3.4.13.tar.gz";
+$library->description = "A JavaScript visualization library for HTML and SVG";
+$library->sourceDir = "d3-3.4.13";
+$library->targetDir = "d3-3.4.13";
+$library->versionFile = "d3.js";
+$library->versionString = "3.4.13";
+
+CLibrary::$all[$library->name] = $library;
+
+$library = new CLibrary;
+$library->name = "dagre-d3";
+$library->url = "https://github.com/cpettitt/dagre-d3";
+$library->fileName = "dagre-d3-0.3.2.tar.gz";
+$library->description = "A D3-based renderer for Dagre";
+$library->sourceDir = "dagre-d3-0.3.2";
+$library->targetDir = "dagre-d3-0.3.2";
+$library->versionFile = "dagre-d3.js";
+$library->versionString = "0.3.2";
+
+CLibrary::$all[$library->name] = $library;
