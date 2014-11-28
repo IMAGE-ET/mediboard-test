@@ -61,6 +61,7 @@ class DeployMaJ extends DeployOperation {
       | |\/| |  / _ \  _  | |
       | |  | | / ___ \| |_| |
       |_|  |_|/_/   \_\\\___/
+
 </fg=blue;bg=black>
 EOT
     );

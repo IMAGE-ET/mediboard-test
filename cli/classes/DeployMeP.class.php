@@ -61,6 +61,7 @@ class DeployMeP extends DeployOperation {
       | |\/| ||  _|  | |_) |
       | |  | || |___ |  __/
       |_|  |_||_____||_|
+
 </fg=red;bg=black>
 EOT
     );

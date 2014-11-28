@@ -61,6 +61,7 @@ class DeployMeQ extends DeployOperation {
       | |\/| ||  _|  | | | |
       | |  | || |___ | |_| |
       |_|  |_||_____| \__\_\
+
 </fg=green;bg=black>
 EOT
     );
