@@ -31,7 +31,6 @@ if (is_array($liaisons_p)) {
 }
 
 if (is_array($liaisons_j)) {
-  mbLog($liaisons_j);
   foreach ($liaisons_j as $prestation_id => $by_date) {
     foreach ($by_date as $date=>$liaison) {
       $souhait_id = null;
@@ -53,8 +52,14 @@ if (is_array($liaisons_j)) {
           $sous_item_id = @$liaison['souhait']['new']['sous_item_id'];
         }
         else {
-          $souhait_id = reset($liaison['souhait'])['item_souhait_id'];
-          $sous_item_id = @reset($liaison['souhait'])['sous_item_id'];
+          $souhait_id = reset($liaison['souhait']);
+          if ($souhait_id) {
+            $souhait_id = @$souhait_id['item_souhait_id'];
+          }
+          $sous_item_id = @reset($liaison['souhait']);
+          if ($sous_item_id) {
+            $sous_item_id = @$sous_item_id['sous_item_id'];
+          }
           if ($sous_item_id === null) {
             $sous_item_id = "";
           }
@@ -67,7 +72,10 @@ if (is_array($liaisons_j)) {
           $realise_id = $liaison['realise']['new']['item_realise_id'];
         }
         else {
-          $realise_id = reset($liaison['realise'])['item_realise_id'];
+          $realise_id = reset($liaison['realise']);
+          if ($realise_id) {
+            $realise_id = @$realise_id['item_realise_id'];
+          }
           if (!$item_liaison->_id) {
             $item_liaison->load(reset(array_keys($liaison['realise'])));
           }
