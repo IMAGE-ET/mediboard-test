@@ -203,7 +203,6 @@ foreach ($sejours as $_sejour) {
     $line->_quantity_by_date_moment = array();
     $line->_administrations_moment  = array();
 
-    $line->loadRefLogSignee();
     $line->loadActiveDates();
 
     if (count($line->_quantity_by_date)) {
@@ -270,7 +269,6 @@ foreach ($sejours as $_sejour) {
     foreach ($prescription->_ref_prescription_line_mixes as $line) {
       $line->_prises_prevues_moment = array();
       $line->loadRefPraticien();
-      $line->loadRefLogSignaturePrat();
       $line->loadActiveDates();
       $line->loadRefsVariations();
 
@@ -322,7 +320,6 @@ foreach ($sejours as $_sejour) {
     $line->_quantity_by_date_moment = array();
     $line->_administrations_moment  = array();
 
-    $line->loadRefLogSignee();
     $line->loadActiveDates();
 
     if (count($line->_quantity_by_date)) {
@@ -385,8 +382,6 @@ foreach ($sejours as $_sejour) {
   if (count($prescription->_count_inscriptions)) {
     foreach ($prescription->_ref_lines_inscriptions as $lines_by_type) {
       foreach ($lines_by_type as $line) {
-        $line->loadRefLogSignee();
-
         $line->_quantity_by_date_moment = array();
         $line->_administrations_moment  = array();
 
