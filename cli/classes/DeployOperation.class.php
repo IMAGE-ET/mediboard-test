@@ -605,8 +605,8 @@ abstract class DeployOperation extends MediboardCommand {
 
     $xpath = new DOMXPath($dom);
 
-    // Get all 'entry' nodes whom 'wc-status' child node has 'item' attribute different from 'normal' or from 'external'
-    $nodes = $xpath->query("//entry[wc-status[@item != 'normal' or @item != 'external']]");
+    // Get all 'entry' nodes whom 'wc-status' child node has 'item' attribute different from 'normal' and from 'external'
+    $nodes = $xpath->query("//entry[wc-status[@item != 'normal' and @item != 'external']]");
 
     if ($nodes) {
       foreach ($nodes as $_node) {
