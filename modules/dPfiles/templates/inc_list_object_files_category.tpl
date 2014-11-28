@@ -38,7 +38,7 @@
       <tr>
         <td><span onmouseover="ObjectTooltip.createEx(this, '{{$_file->_guid}}');">{{$_file}}</span></td>
         <td class="narrow">
-          <button type="button" onclick="submitStatus('{{$_file->_id}}');" class="tick">{{tr}}Read{{/tr}}</button>
+          <button type="button" onclick="submitStatus('{{$_file->_id}}');" class="tick">{{tr}}CFilesCategory-read{{/tr}}</button>
         </td>
       </tr>
     {{/foreach}}

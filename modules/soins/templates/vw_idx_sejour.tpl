@@ -79,6 +79,10 @@
     {{if $isImedsInstalled}}
       ImedsResultsWatcher.loadResults();
     {{/if}}
+
+    {{if $app->user_prefs.show_file_view}}
+      FilesCategory.showUnreadFiles();
+    {{/if}}
   });
 
   function markAsSelected(element) {

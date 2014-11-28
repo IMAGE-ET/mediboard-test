@@ -63,6 +63,10 @@
       {{if "dPImeds"|module_active}}
       ImedsResultsWatcher.loadResults();
       {{/if}}
+
+      {{if $app->user_prefs.show_file_view}}
+        FilesCategory.iconInfoReadFilesGuid('CSejour', ['{{$sejour_id}}']);
+      {{/if}}
     } });
   }
 
@@ -121,6 +125,10 @@
   Main.add(function() {
     {{if "dPImeds"|module_active}}
       ImedsResultsWatcher.loadResults();
+    {{/if}}
+
+    {{if $app->user_prefs.show_file_view}}
+    FilesCategory.showUnreadFiles();
     {{/if}}
 
     {{if !$ecap && $auto_refresh_frequency != 'disabled'}}

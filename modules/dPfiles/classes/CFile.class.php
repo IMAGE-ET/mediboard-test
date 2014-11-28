@@ -282,6 +282,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
     $object->file_id = $this->_id;
     $object->user_id = $user_id;
     $object->loadMatchingObject();
+
     return $this->_ref_read_status = $object;
   }
 

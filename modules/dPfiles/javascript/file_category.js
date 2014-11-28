@@ -10,7 +10,8 @@
  */
 
 FilesCategory = {
-  modal_cat : null,
+  modal_cat    : null,
+  object_guids : [],
 
   loadList : function() {
     var url = new Url("files", "ajax_list_categories");
@@ -18,10 +19,15 @@ FilesCategory = {
   },
 
   openInfoReadFilesGuid : function(object_guid) {
+    var parts = object_guid.split("-");
+    var  object_class = parts[0];
+    var  object_id    = parts[1];
+
     var url = new Url('files', "ajax_modal_object_files_category");
     url.addParam('object_guid', object_guid);
     url.requestModal("700", "500");
-    url.modalObject.observe('afterClose', FilesCategory.iconInfoReadFilesGuid.curry(object_guid));
+    url.modalObject.observe('afterClose',
+      FilesCategory.iconInfoReadFilesGuid.curry(object_class, [object_id]));
     FilesCategory.modal_cat = url;
   },
 
@@ -31,10 +37,41 @@ FilesCategory = {
     }
   },
 
-  iconInfoReadFilesGuid : function(object_guid) {
-    var url = new Url('files', "ajax_check_object_files_category");
-    url.addParam('object_guid', object_guid);
-    url.requestUpdate(object_guid+"_check_category");
+  addObjectGuid : function(object_guid) {
+    FilesCategory.object_guids.push(object_guid);
+  },
+
+  showUnreadFiles : function() {
+    var tab = {};
+
+    FilesCategory.object_guids.each(function (object_guid) {
+      var parts = object_guid.split("-");
+      var  object_class = parts[0];
+      var  object_id    = parts[1];
+
+      if (!tab[object_class]) {
+        tab[object_class] = [];
+      }
+
+      tab[object_class].push(object_id);
+    });
+
+    $H(tab).each(function(pair) {
+      FilesCategory.iconInfoReadFilesGuid(pair.key, pair.value);
+    });
+  },
+
+  iconInfoReadFilesGuid : function(object_class, object_ids) {
+    new Url('files', "ajax_check_object_files_category")
+      .addParam('object_class', object_class)
+      .addParam('object_ids'  , object_ids.join("-"))
+      .requestJSON(function(obj) {
+        $H(obj).each(function(pair) {
+          var element = $(pair.key+"_check_category");
+          element.setVisible(pair.value > 0);
+          element.down("span").update(pair.value);
+        });
+      });
   },
 
   edit : function(category_id) {
