@@ -24,13 +24,15 @@
   {{/if}}
   </li>
 {{foreachelse}}
-  <li>
-    {{if isset($ref_spec|smarty:nodefaults)}}
-      <span class="view"></span>
-    {{else}}
-      <span class="view" style="display: none;">{{$input}}</span>
-    {{/if}}
-    <span style="font-style: italic;">{{tr}}No result{{/tr}}</span>
-  </li>
+    <li>
+      <span class="informal">
+        {{if isset($ref_spec|smarty:nodefaults)}}
+          <span class="view"></span>
+        {{else}}
+          <span class="view" style="display: none;">{{$input}}</span>
+        {{/if}}
+        <span style="font-style: italic;">{{tr}}No result{{/tr}}</span>
+      </span>
+    </li>
 {{/foreach}}
 </ul>
