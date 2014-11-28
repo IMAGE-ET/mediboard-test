@@ -36,12 +36,13 @@ try {
 
   foreach ($results as $result) {
     $var = $result->getHit();
+    $var["_source"]["body"] = mb_convert_encoding($var["_source"]["body"], "WINDOWS-1252",  "UTF-8");
     $array_results[] = $var;
     $author_ids[]    = $var["_source"]["user_id"];
 
     $highlights = $result->getHighlights();
     if (count($highlights) != 0) {
-      $array_highlights[] = utf8_decode(implode(" [...] ", $highlights['body']));
+      $array_highlights[] = mb_convert_encoding(implode(" [...] ", $highlights['body']), "WINDOWS-1252",  "UTF-8");
     }
     else {
       $array_highlights[] = "";
@@ -66,4 +67,4 @@ $smarty->assign("time", $time);
 $smarty->assign("nbresult", $nbresult);
 $smarty->assign("date_log_details", $date);
 
-$smarty->display("inc_results_log_search.tpl");
+$smarty->display("inc_results_log_details.tpl");

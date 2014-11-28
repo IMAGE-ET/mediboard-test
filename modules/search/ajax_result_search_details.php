@@ -26,9 +26,10 @@ try {
   foreach ($results as $result) {
     $var = $result->getHit();
     $array_results[] = $var;
+    $var["_source"]["body"] = CMbString::normalizeUtf8($var["_source"]["body"]);
     $highlights = $result->getHighlights();
     if (count($highlights) != 0) {
-      $array_highlights[] = utf8_decode(implode(" [...] ", $highlights['body']));
+      $array_highlights[] = mb_convert_encoding(implode(" [...] ", $highlights['body']), "WINDOWS-1252",  "UTF-8");
     }
     else {
       $array_highlights[] = "";

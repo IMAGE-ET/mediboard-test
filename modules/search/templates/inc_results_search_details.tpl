@@ -24,7 +24,7 @@
                 <span onmouseover="ObjectTooltip.createEx(this, '{{$_result._type}}-{{$_result._id}}')" class="compact empty"> &mdash; Passez la souris pour visualiser le document &mdash;</span>
               {{/if}}
             </td>
-            {{if $m != "dPpmsi"}}
+            {{if $m == "dPpmsi" && "atih"|module_active}}
               <td class="button">
                 <button class="add notext" onclick="Search.addItemToRss(null,'{{$_result._type}}','{{$_result._id}}', null)"></button>
               </td>

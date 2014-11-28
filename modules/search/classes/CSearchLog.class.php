@@ -80,7 +80,7 @@ class CSearchLog extends CSearch {
 
     $document                 = array();
     $document['aggregation']  = $aggregation;
-    $document['body']         = $words;
+    $document['body']         = CMbString::normalizeUtf8($words);
     $document['user_id']      = $user_id;
     $document['types']        = implode(" ", $names_types);
     $document['date']         = CMbDT::format(null, "%Y/%m/%d");

@@ -99,12 +99,17 @@
       method: "get",
       dropdown: true,
       updateElement: function (selected) {
-        var _name = selected.down("span", "1").getText();
-        var element_input = form.elements.words;
-        $V(element_input, _name);
-        $V(form.elements.aggregate, selected.down().get("aggregation"));
-        var types = selected.down().get("types").split("|");
-        $V(form.elements["names_types[]"], types);
+        if(selected.down("span", "1").getText() != "") {
+          var _name = selected.down("span", "1").getText();
+          var element_input = form.elements.words;
+          $V(element_input, _name);
+          $V(form.elements.aggregate, selected.down().get("aggregation"));
+          var types = selected.down().get("types");
+            if (types) {
+            types = types.split("|");
+            }
+          $V(form.elements["names_types[]"], types);
+        }
       }
     });
 
@@ -116,16 +121,13 @@
   <input type="hidden" name="start" value="0">
   <input type="hidden" name="accept_utf8" value="1">
   <input type="hidden" name="contexte" value="generique">
-  <table class="main layout">
+  <table class="main layout" id="search_print">
     <tbody>
       <tr>
         <td id="td_container_search">
           <input type="search" id="words" name="words" value=""  class="autocomplete" placeholder="Saisissez les termes de votre recherche ici..." style="width:50em; font-size:medium;" onchange="$V(this.form.start, '0'); $V(this.form.words_favoris, this.value)" autofocus>
           <input type="hidden" name="words_favoris"/>
-
-          {{mb_include module=search template=inc_tooltip_help}}
-          <button type="submit" id="button_search" class="button lookup">Démarrer la recherche</button>
-          <button class="add" type="button"
+          <button class="favoris notext" type="button"
                   onclick="
                     if($V(form.words)){
                     Search.addeditThesaurusEntry(
@@ -139,7 +141,10 @@
                     else {
                     Modal.alert('Pour ajouter un favoris il faut que votre recherche contienne au moins un mot.');
                     }
-                    ">{{tr}}CSearch-addToThesaurus{{/tr}}</button>
+                    " title="{{tr}}CSearch-addToThesaurus{{/tr}}"></button>
+          {{mb_include module=search template=inc_tooltip_help}}
+          <button type="submit" id="button_search" class="button lookup">Démarrer la recherche</button>
+
         </td>
       </tr>
       <tr>

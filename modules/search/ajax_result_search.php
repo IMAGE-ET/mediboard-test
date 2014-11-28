@@ -73,12 +73,13 @@ try {
     $var             = $result->getHit();
     $author_ids[]    = $var["_source"]["author_id"];
     $patient_ids[]   = $var["_source"]["patient_id"];
+    $var["_source"]["body"] = CMbString::normalizeUtf8($var["_source"]["body"]);
     $array_results[] = $var;
 
     // Traitement des highlights
-    $highlights = $result->getHighlights();
+    $highlights =$result->getHighlights();
     if (count($highlights) != 0) {
-      $array_highlights[] = utf8_decode(implode(" [...] ", $highlights['body']));
+      $array_highlights[] = mb_convert_encoding(implode(" [...] ", $highlights['body']), "WINDOWS-1252",  "UTF-8");
     }
     else {
       $array_highlights[] = "";

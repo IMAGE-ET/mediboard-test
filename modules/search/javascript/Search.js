@@ -9,6 +9,7 @@
 
 Search = window.Search || {
   words_request : null,
+  export_csv : null,
   displayResults: function (form){
     var url = new Url('search',  'ajax_result_search');
     url.addFormData(form);
@@ -203,5 +204,12 @@ Search = window.Search || {
     var url = new Url('search', 'ajax_load_search_items');
     url.addParam("rss_id", rss_id);
     url.requestUpdate($('div_search_items'));
+  },
+
+  downloadCSV: function() {
+    console.log(this.export_csv);
+    var url = new Url('search', 'download_search_results', 'raw');
+    url.pop(10,10, "export_recherches", null, null,
+      {"results" : this.export_csv, "accept_utf8" : "1"});
   }
 };
