@@ -2277,7 +2277,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $array["id"]          = $this->_id;
     $array["author_id"]   = $this->_praticien_id;
     $array["prat_id"]     = $prat->_id;
-    $array["title"]       = utf8_encode($this->type);
+    $array["title"]       = $this->type;
     $array["body"]        = $this->redesignBody("");
     $array["date"]        = str_replace("-", "/", $this->loadRefPlageConsult()->date);
     $array["function_id"] = $prat->function_id;
@@ -2339,7 +2339,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
    */
   function redesignBody ($content) {
     $content = $this->motif." ".$this->rques." ".$this->examen." ".$this->histoire_maladie." ".$this->conclusion;
-    return utf8_encode($content);
+    return $content;
   }
   /**
    * Get the praticien_id of CMbobject

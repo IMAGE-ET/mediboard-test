@@ -254,8 +254,8 @@ class CTransmissionMedicale extends CMbMetaObject implements IIndexableObject {
     $array["id"]          = $this->_id;
     $array["author_id"]   = $this->user_id;
     $array["prat_id"]     = $prat->_id;
-    $array["title"]       = utf8_encode($this->type);
-    $array["body"]        = utf8_encode($this->text);
+    $array["title"]       = $this->type;
+    $array["body"]        = $this->text;
     $array["date"]        = str_replace("-", "/", $this->date);
     $array["function_id"] = $prat->function_id;
     $array["group_id"]    = $prat->loadRefFunction()->group_id;

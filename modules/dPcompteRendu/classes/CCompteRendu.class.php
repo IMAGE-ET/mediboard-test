@@ -1856,10 +1856,10 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     $array["id"]          = $this->_id;
     $array["author_id"]   = $this->author_id;
     $array["prat_id"]     = $prat->_id;
-    $array["title"]       = utf8_encode($this->nom);
+    $array["title"]       = $this->nom;
     $this->loadContent(false);
     $content              = $this->_ref_content;
-    $array["body"]        = utf8_encode($this->redesignBody($content->content));
+    $array["body"]        = $this->redesignBody($content->content);
     $date = $this->creation_date;
     if (!$date) {
       $date = CMbDT::dateTime();

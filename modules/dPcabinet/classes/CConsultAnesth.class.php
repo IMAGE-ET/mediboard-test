@@ -724,7 +724,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
     $array["id"]          = $this->_id;
     $array["author_id"]   = $prat->_id;
     $array["prat_id"]     = $prat->_id;
-    $array["title"]       = utf8_encode($consult->type);
+    $array["title"]       = $consult->type;
     $array["body"]        = $this->redesignBody("");
     $array["date"]        = str_replace("-", "/", $consult->loadRefPlageConsult()->date);
     $array["function_id"] = $prat->function_id;
@@ -757,7 +757,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
       " ".$this->_ref_consultation->examen." ".$this->_ref_consultation->histoire_maladie.
       " ".$this->_ref_consultation->conclusion;
 
-    return utf8_encode($content);
+    return $content;
   }
 
   /**
