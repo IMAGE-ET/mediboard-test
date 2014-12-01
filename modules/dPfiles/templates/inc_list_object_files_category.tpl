@@ -9,6 +9,8 @@
  * @link     http://www.mediboard.org
 *}}
 
+{{mb_script module=dPfiles script=files ajax=true}}
+
 <script>
   submitStatus = function(file_id) {
     var form = getForm('edit_status_file');
@@ -36,7 +38,9 @@
     </tr>
     {{foreach from=$_category->_ref_files item=_file}}
       <tr>
-        <td><span onmouseover="ObjectTooltip.createEx(this, '{{$_file->_guid}}');">{{$_file}}</span></td>
+        <td>
+          <span onclick="popFile('{{$_file->object_class}}','{{$_file->object_id}}','{{$_file->_class}}','{{$_file->_id}}');" onmouseover="ObjectTooltip.createEx(this, '{{$_file->_guid}}');">{{$_file}}</span>
+        </td>
         <td class="narrow">
           <button type="button" onclick="submitStatus('{{$_file->_id}}');" class="tick">{{tr}}CFilesCategory-read{{/tr}}</button>
         </td>
