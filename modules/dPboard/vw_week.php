@@ -150,6 +150,7 @@ if (CModule::getActive("dPpersonnel")) {
     <p style="text-align: center">' . CMbString::htmlEntities($_conge->libelle) . '</p>';
     foreach ($_dates as $_date) {
       $event = new CPlanningEvent($_conge->_guid . $_date, $_date, 1430, $libelle, "#ddd", true, "hatching", null, false);
+      $event->below = 1;
       $planning->addEvent($event);
     }
   }
