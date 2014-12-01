@@ -32,6 +32,7 @@ class CAntecedent extends CMbObject {
 
   // Distant fields
   public $_count_rques_aides;
+  public $_count_rques_aides_appareil;
 
   /** @var CDossierMedical */
   public $_ref_dossier_medical;

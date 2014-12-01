@@ -19,11 +19,11 @@ $patient_id = CValue::get("patient_id");
 $consult_id = CValue::get("consult_id");
 
 // On charge le praticien
-$user = CAppUI::$user;
+$user = CMediusers::get();
 $user->loadRefs();
 $canUser = $user->canDo();
 
-$consult = new CConsultation;
+$consult = new CConsultation();
 if ($consult_id) {
   $consult->load($consult_id);
   $consult->loadRefsFwd();
@@ -36,7 +36,7 @@ $antecedent->loadAides($user->_id);
 $aides_antecedent = $antecedent->_aides_all_depends["rques"] ? $antecedent->_aides_all_depends["rques"] : array();
 
 // On charge le patient pour connaitre ses antécedents et traitements actuels
-$patient = new CPatient;
+$patient = new CPatient();
 $patient->load($patient_id);
 $patient->loadRefDossierMedical();
 
@@ -111,6 +111,26 @@ foreach ($aides_antecedent as $_depend_1 => $_aides_by_depend_1) {
   }
 }
 
+foreach ($aides_antecedent as $type => $_aides_by_type) {
+  foreach ($_aides_by_type as $appareil => $_aides_by_appareil) {
+    $i = 0;
+    $temp_count = 0;
+    $count = round(count($_aides_by_appareil) / 4);
+    $aides = array();
+    foreach ($_aides_by_appareil as $_aide) {
+      $aides[$i][] = $_aide;
+      $temp_count ++;
+      if ($temp_count > $count) {
+        $temp_count = 0;
+        $i ++;
+      }
+    }
+    $antecedent->_count_rques_aides_appareil[$type][$appareil] = count($_aides_by_appareil);
+    $aides = CMbArray::transpose($aides);
+    $aides_antecedent[$type][$appareil] = $aides;
+  }
+}
+
 $applied_traitements = array();
 foreach ($dossier_medical->_ref_traitements as $a) {
   $applied_traitements[$a->traitement] = true;
@@ -121,14 +141,15 @@ $traitement->loadAides($user->_id);
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("aides_antecedent", $aides_antecedent);
-$smarty->assign("antecedent", $antecedent);
-$smarty->assign("traitement", $traitement);
+
+$smarty->assign("aides_antecedent"   , $aides_antecedent);
+$smarty->assign("antecedent"         , $antecedent);
+$smarty->assign("traitement"         , $traitement);
 $smarty->assign("applied_antecedents", $applied_antecedents);
 $smarty->assign("applied_traitements", $applied_traitements);
-$smarty->assign("patient", $patient);
-$smarty->assign("consult", $consult);
-$smarty->assign("user_id", $user->_id);
-$smarty->assign("order_mode_grille", $order_mode_grille);
+$smarty->assign("patient"            , $patient);
+$smarty->assign("consult"            , $consult);
+$smarty->assign("user_id"            , $user->_id);
+$smarty->assign("order_mode_grille"  , $order_mode_grille);
 
 $smarty->display("vw_ant_easymode.tpl");

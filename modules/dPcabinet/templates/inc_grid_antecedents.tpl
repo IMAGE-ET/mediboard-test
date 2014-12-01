@@ -176,11 +176,10 @@
       {{/foreach}}
       </ul>
     </td>
-
-    {{foreach from=$antecedent->_count_rques_aides item=count key=type}}
-      {{if $count}}
-        <td id="antecedents_{{$type}}" style="display: none; vertical-align: top">
-          <table class="main" style="border: none;">
+    <td>
+      {{foreach from=$antecedent->_count_rques_aides item=count key=type}}
+        {{if $count}}
+          <table id="antecedents_{{$type}}" class="main" style="border: none;">
             <tr>
               <td class="narrow text" style="background-color: transparent; border: none;">
                 <script>
@@ -189,16 +188,18 @@
                   });
                 </script>
 
-                <ul id="tab-{{$type}}" class="control_tabs_vertical">
+                <ul id="tab-{{$type}}" class="control_tabs">
                   {{foreach from=$aides_antecedent.$type item=_aides key=appareil}}
                     <li class="draggable droppable">
                       <a href="#{{$type}}-{{$appareil}}"style="white-space: nowrap;" data-appareil="{{$appareil}}">
-                        {{tr}}CAntecedent.appareil.{{$appareil}}{{/tr}} <small>({{$_aides|@count}})</small>
+                        {{tr}}CAntecedent.appareil.{{$appareil}}{{/tr}} <small>({{$antecedent->_count_rques_aides_appareil.$type.$appareil}})</small>
                       </a>
                     </li>
                   {{/foreach}}
                 </ul>
               </td>
+            </tr>
+            <tr>
               <td>
                 {{if $count}}
                   {{mb_include module=cabinet template=inc_grid_list_antecedents}}
@@ -206,8 +207,8 @@
               </td>
             </tr>
           </table>
-        </td>
-      {{/if}}
-    {{/foreach}}
+        {{/if}}
+      {{/foreach}}
+    </td>
   </tr>
 </table>
