@@ -21,20 +21,20 @@
       <tr>
         <td class="text">
           <strong>Grossesse : </strong>
-          {{if $grossesse->_id}}
+          {{if $grossesse && $grossesse->_id}}
             {{$grossesse}}
           {{else}}
             &mdash;
           {{/if}}
         </td>
         <td class="narrow">
-          <button type="button" class="add notext" style="float: right;" onclick="Grossesse.viewGrossesses('{{$patient->_id}}', null, null, 0)"></button>
+          <button type="button" class="grossesse_create notext" style="float: right;" onclick="Grossesse.viewGrossesses('{{$patient->_id}}', null, null, 0)"></button>
         </td>
       </tr>
       <tr>
         <td class="text">
           <strong>Allaitement :</strong>
-          {{if $allaitement->_id}}
+          {{if $allaitement && $allaitement->_id}}
             {{$allaitement}}
           {{else}}
             &mdash;

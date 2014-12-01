@@ -11,7 +11,6 @@
  *}}
 
 {{mb_script module="cabinet" script="edit_consultation"}}
-{{mb_script module="dPpatients" script="pat_selector"}}
 {{mb_script module="planningOp" script="operation"}}
 {{mb_script module="planningOp" script="protocole_selector"}}
 {{mb_script module="planningOp" script="cim10_selector"}}

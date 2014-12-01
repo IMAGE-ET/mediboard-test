@@ -7,6 +7,7 @@
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  *}}
+{{mb_script module="dPpatients" script="pat_selector" ajax=1}}
 
 <script>
   PatSelector.init = function() {
