@@ -32,7 +32,7 @@
 
 
   <tr>
-    <th>Statut des rdv facturées</th>
+    <th>Statut des consultations facturées</th>
     <td>
       <select name="facturated">
         <option value="">Tout voir</option>
@@ -43,7 +43,7 @@
   </tr>
 
   <tr>
-    <th>Statut des rdvs</th>
+    <th>Statut des rdv</th>
     <td>
       <select name="finished">
         <option value="">&mdash; {{tr}}All{{/tr}}</option>

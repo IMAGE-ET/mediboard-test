@@ -33,7 +33,7 @@
     <tr>
       <td></td>
       <td style="background: #fee;" class="color"></td>
-      <td>Créneau réservée</td>
+      <td>Créneau réservé</td>
     </tr>
     <tr>
       <td></td>
@@ -48,7 +48,7 @@
     <tr>
       <td></td>
       <td style="background: #faa;" class="color"></td>
-      <td>pause</td>
+      <td>Pause</td>
     </tr>
     <tr>
       <td></td>
@@ -58,7 +58,7 @@
     <tr>
       <td></td>
       <td style="background: #fda;" class="color"></td>
-      <td>remplace un autre praticien</td>
+      <td>Remplace un autre praticien</td>
     </tr>
     {{if $view_operations}}
       <tr>
