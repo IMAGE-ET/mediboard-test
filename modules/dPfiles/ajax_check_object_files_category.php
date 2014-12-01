@@ -45,6 +45,10 @@ foreach ($object_ids as $_object_id) {
     /** @var CFile[] $files */
     $files = $file->loadMatchingList();
     foreach ($files as $_file) {
+      if (!$_file->getPerm(PERM_READ)) {
+        continue;
+      }
+
       $_file->loadRefReadStatus($user->_id);
       if (!$_file->_ref_read_status->_id) {
         $_nb_unread ++;
