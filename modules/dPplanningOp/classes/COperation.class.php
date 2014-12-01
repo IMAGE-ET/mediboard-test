@@ -1331,10 +1331,11 @@ class COperation extends CCodable implements IPatientRelated {
    */
   public function loadRefConsultChir() {
     $sejour = $this->loadRefSejour();
+    $entree = CMbDT::date($sejour->entree);
     $ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id";
     $where["patient_id"] = "= '$sejour->patient_id'";
     $where["chir_id"]    = "= '$this->chir_id'";
-    $where["date"]       = "< '$sejour->entree'";
+    $where["date"]       = "< '$entree'";
     $where[] = "sejour_id IS NULL OR sejour_id != '$this->sejour_id'";
     $order = "date DESC";
     $consult = new CConsultation;
