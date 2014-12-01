@@ -21,7 +21,7 @@ $cible       = CValue::getOrSession("cible", "");
 $_show_obs   = CValue::getOrSession("_show_obs", 1);
 $_show_trans = CValue::getOrSession("_show_trans", 1);
 $_show_const = CValue::getOrSession("_show_const", 0);
-$show_header = CValue::get("show_header", 0);
+$show_header = CValue::getOrSession("show_header", 0);
 
 if ($cible != "") {
   $_show_obs = $_show_const = 0;
