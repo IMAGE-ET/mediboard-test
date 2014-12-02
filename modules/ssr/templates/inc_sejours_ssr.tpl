@@ -186,7 +186,7 @@ printOffline = function(element) {
     <td class="text">
       {{mb_include module=system template=inc_get_notes_image object=$_sejour mode=view float=right}}
       {{mb_value object=$_sejour field=libelle}}
-      {{assign var=libelle value=$_sejour->libelle|upper}}
+      {{assign var=libelle value=$_sejour->libelle|upper|smarty:nodefaults}}
       {{assign var=color value=$colors.$libelle}}
       {{if $color->color}}
         <div class="motif-color" style="background-color: #{{$color->color}};" />

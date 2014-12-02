@@ -194,7 +194,8 @@ array_multisort(CMbArray::pluck($services  , "_view"), SORT_ASC, $services);
 array_multisort(CMbArray::pluck($praticiens, "_view"), SORT_ASC, $praticiens);
 
 // Couleurs
-$colors = CColorLibelleSejour::loadAllFor(CMbArray::pluck($sejours, "libelle"));
+$libelles = CMbArray::pluck($sejours, "libelle");
+$colors = CColorLibelleSejour::loadAllFor($libelles);
 
 // Création du template
 $smarty = new CSmartyDP();

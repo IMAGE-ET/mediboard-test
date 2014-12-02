@@ -13,7 +13,7 @@
       <td class="text">{{$libelle}}</td>
       <td>{{$count}}</td>
       <td>
-        {{assign var=libelle value=$libelle|upper}}
+        {{assign var=libelle value=$libelle|upper|smarty:nodefaults}}
         {{assign var=color value=$colors.$libelle}}
         <form name="Edit-Color-{{$index}}" action="?" onsubmit="return onSubmitFormAjax(this);" method="post">
           <input type="hidden" name="m" value="dPplanningOp" />
