@@ -1,11 +1,12 @@
 {{*
- * $Id$
- *  
- * @category ${Module}
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @link     http://www.mediboard.org*}}
+* $Id$
+*
+* @category dPcabinet
+* @package Mediboard
+* @author SARL OpenXtrem <dev@openxtrem.com>
+* @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+* @link http://www.mediboard.org
+*}}
 
 <table class="main tbl" id="old_consult">
   <tr>
@@ -19,24 +20,25 @@
     <th class="category">{{mb_label class=CConsultAnesth field="distThyro"}}</th>
     <th></th>
   </tr>
-  {{foreach from=$consultations_anesth item=_consult_anesth}}
+  {{foreach from=$dossiers_anesth item=_dossier_anesth}}
     <tr>
-      <td>{{$_consult_anesth->_ref_consultation->_ref_plageconsult->date|date_format:'%d/%m/%Y'}}</td>
+      {{assign var=consultation value=$_dossier_anesth->_ref_consultation}}
+      <td>{{mb_value object=$consultation field="_date"}}</td>
       <td>
-        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_consult_anesth->_ref_consultation->_ref_praticien}}
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$consultation->_ref_praticien}}
       </td>
-      <td>{{mb_value object=$_consult_anesth field="mallampati"}}</td>
-      <td>{{mb_value object=$_consult_anesth field="bouche"}}</td>
-      <td>{{mb_value object=$_consult_anesth field="distThyro"}}</td>
+      <td>{{mb_value object=$_dossier_anesth field="mallampati"}}</td>
+      <td>{{mb_value object=$_dossier_anesth field="bouche"}}</td>
+      <td>{{mb_value object=$_dossier_anesth field="distThyro"}}</td>
       <td class="button">
         <button class="tick" type="submit"
-                {{if !$_consult_anesth->mallampati && !$_consult_anesth->bouche && !$_consult_anesth->distThyro}}disabled{{/if}}
-                onclick="assignDataOldConsultAnesth('{{$_consult_anesth->mallampati}}', '{{$_consult_anesth->bouche}}', '{{$_consult_anesth->distThyro}}');">{{tr}}common-action-Get{{/tr}}</button>
+                {{if !$_dossier_anesth->mallampati && !$_dossier_anesth->bouche && !$_dossier_anesth->distThyro}}disabled{{/if}}
+                onclick="assignDataOldConsultAnesth('{{$_dossier_anesth->mallampati}}', '{{$_dossier_anesth->bouche}}', '{{$_dossier_anesth->distThyro}}');">{{tr}}common-action-Get{{/tr}}</button>
       </td>
     </tr>
-  {{foreachelse}}
+    {{foreachelse}}
     <tr>
-      <td class="empty">{{tr}}CConsultAnesth.none{{/tr}}</td>
+      <td class="empty" colspan="6">{{tr}}CConsultAnesth.none{{/tr}}</td>
     </tr>
   {{/foreach}}
-</table>
+</table> 
