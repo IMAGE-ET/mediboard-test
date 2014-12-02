@@ -14,9 +14,9 @@
   <tr>
     <th class="category"></th>
     <th class="category"></th>
-    <th class="category">{{mb_label object=$consult_anesth field="mallampati"}}</th>
-    <th class="category">{{mb_label object=$consult_anesth field="bouche"}}</th>
-    <th class="category">{{mb_label object=$consult_anesth field="distThyro"}}</th>
+    <th class="category">{{mb_label class=CConsultAnesth field="mallampati"}}</th>
+    <th class="category">{{mb_label class=CConsultAnesth field="bouche"}}</th>
+    <th class="category">{{mb_label class=CConsultAnesth field="distThyro"}}</th>
     <th></th>
   </tr>
   {{foreach from=$consultations_anesth item=_consult_anesth}}
@@ -33,6 +33,10 @@
                 {{if !$_consult_anesth->mallampati && !$_consult_anesth->bouche && !$_consult_anesth->distThyro}}disabled{{/if}}
                 onclick="assignDataOldConsultAnesth('{{$_consult_anesth->mallampati}}', '{{$_consult_anesth->bouche}}', '{{$_consult_anesth->distThyro}}');">{{tr}}common-action-Get{{/tr}}</button>
       </td>
+    </tr>
+  {{foreachelse}}
+    <tr>
+      <td class="empty">{{tr}}CConsultAnesth.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>
