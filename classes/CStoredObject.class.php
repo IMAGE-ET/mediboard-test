@@ -783,18 +783,21 @@ class CStoredObject extends CModelObject {
   function loadObject($where = null, $order = null, $group = null, $ljoin = null, $index = null) {
     $list = $this->loadList($where, $order, '0,1', $group, $ljoin, $index);
 
-    if ($list) {
-      foreach ($list as $object) {
-        $fields = $object->getPlainFields();
-        foreach ($fields as $key => $value) {
-          $this->$key = $value;
-        }
-        $this->updateFormFields();
-        return true;
-      }
+    if (!$list) {
+      return false;
     }
 
-    return false;
+    foreach ($list as $object) {
+      $fields = $object->getPlainFields();
+      foreach ($fields as $key => $value) {
+        $this->$key = $value;
+      }
+      $this->updateFormFields();
+      return true;
+    }
+
+    return true;
+
   }
 
   /**
