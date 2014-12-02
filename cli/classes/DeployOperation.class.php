@@ -259,7 +259,7 @@ abstract class DeployOperation extends MediboardCommand {
   }
 
   /**
-   * Performs rsync
+   * Performs RSYNC
    *
    * @param string          $path     Root path
    * @param array           $files    Files to include and files to exclude from RSYNC
@@ -276,7 +276,17 @@ abstract class DeployOperation extends MediboardCommand {
       $msg     = "(DRY RUN)";
     }
 
-    $cmd = "rsync -apgzC --out-format='%n%L' $dry_run" . escapeshellarg($path . "/") . " --delete " . escapeshellarg($instance) . " " . $files["excluded"] . " " . $files["included"];
+    $os = $this->getOSVersion($output);
+    $os = explode(" ", $os[0]);
+    $os = $os[0];
+
+    $log_cmd = "--out-format";
+    // Old CentOS 5.6 tweak
+    if ($os == "CentOS") {
+      $log_cmd = "--log-format";
+    }
+
+    $cmd = "rsync -apgzC $log_cmd='%n%L' $dry_run" . escapeshellarg($path . "/") . " --delete " . escapeshellarg($instance) . " " . $files["excluded"] . " " . $files["included"];
 
     // Executes RSYNC
     $result = array();
@@ -766,5 +776,25 @@ abstract class DeployOperation extends MediboardCommand {
         }
       }
     }
+  }
+
+  /**
+   * Get OS version
+   *
+   * @param OutputInterface $output
+   *
+   * @return array|bool
+   */
+  protected function getOSVersion(OutputInterface $output) {
+    $result = array();
+    exec("cat /etc/issue", $result, $state);
+
+    if ($state !== 0) {
+      $this->out($output, "<error>Unable to check OS version</error>");
+
+      return false;
+    }
+
+    return $result;
   }
 }
