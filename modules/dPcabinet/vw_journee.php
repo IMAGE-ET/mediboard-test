@@ -100,7 +100,7 @@ foreach ($praticiens as $prat) {
   $order = "debut";
   $listPlage = $listPlage->loadList($where, $order);
   if (!count($listPlage)) {
-    //unset($praticiens[$prat->_id]);
+    unset($praticiens[$prat->_id]);
   }
   else {
     $listPlages[$prat->_id]["prat"] = $prat;
@@ -226,13 +226,14 @@ if (!$prats_selected) {
 }
 else {
   $prats_selected = explode("-", $prats_selected);
-  $diff = array_diff(array_keys($praticiens), $prats_selected);
-  foreach($diff as $_key) {
-    if (isset($praticiens[$_key])) {
-      unset($praticiens[$_key]);
-    }
+}
+$diff = array_diff(array_keys($praticiens), $prats_selected);
+foreach($diff as $_key) {
+  if (isset($praticiens[$_key])) {
+    unset($praticiens[$_key]);
   }
 }
+mbTrace($prats_selected);
 
 // Création du template
 $smarty = new CSmartyDP();
