@@ -81,9 +81,13 @@ $queries = array(
 );
 
 if ($ZBE) {
+  $movement_id = null;
+  foreach ($xml->queryNodes("ZBE.1", $ZBE) as $ZBE_1) {
+    $movement_id .= $xml->queryTextNode("EI.1", $ZBE_1) . "\n";
+  }
   $queries_ZBE = array(
     "CMovement" => array(
-      "movement_id"       => $xml->queryTextNode("ZBE.1/EI.1", $ZBE),
+      "movement_id"       => $movement_id,
       "start_of_movement" => CMbDT::dateToLocale($xml->queryTextNode("ZBE.2/TS.1", $ZBE)),
     )
   );
