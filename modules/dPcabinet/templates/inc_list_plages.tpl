@@ -66,7 +66,7 @@
         {{$_plage->_nb_patients}}
       </td>
       <td style="text-align: center;"  class="{{if $_plage->date < $today}}hatching{{/if}}">
-        {{if !$_plage->_nb_free_freq}}<strong style="color:red">{{$_plage->_nb_free_freq}}</strong>{{else}}{{$_plage->_nb_free_freq}}{{/if}} / {{$_plage->_total}}
+        {{if !$_plage->_nb_free_freq}}<strong style="color:red">{{$_plage->_nb_free_freq}}</strong>{{else}}{{$_plage->_nb_free_freq|floor}}{{/if}} / {{$_plage->_total}}
       </td>
       <td>
         {{if $_plage->_consult_by_categorie|@count}}
