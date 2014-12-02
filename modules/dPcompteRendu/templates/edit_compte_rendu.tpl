@@ -314,8 +314,11 @@ function checkLock(oCheckbox) {
 
 function toggleLock(user_id) {
   var form = getForm('editFrm');
+  {{if $conf.dPcompteRendu.CCompteRendu.pass_lock}}
+  var formLock = getForm("LockDocOther");
+  {{else}}
   var formLock = getForm("LockDocOwner");
-
+  {{/if}}
   $V(form.valide, $V(form.valide) == '1' ? 0 : 1);
   $V(form.locker_id, user_id);
   $V(form.callback, "afterLock");
@@ -588,6 +591,14 @@ Main.add(function() {
           <th class="title" colspan="2">
             Verrouillage du document
           </th>
+        </tr>
+        <tr>
+          <td colspan="2" class="button">
+            <label>
+              <input type="checkbox" name="change_owner" {{if $app->_ref_user->isPraticien()}}checked{{/if}}/>
+              <strong>Devenir propriétaire du document</strong>
+            </label>
+          </td>
         </tr>
       {{/if}}
       <tr>
