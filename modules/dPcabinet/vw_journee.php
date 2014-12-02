@@ -231,9 +231,9 @@ $diff = array_diff(array_keys($praticiens), $prats_selected);
 foreach($diff as $_key) {
   if (isset($praticiens[$_key])) {
     unset($praticiens[$_key]);
+    unset($listPlages[$key_prat]);
   }
 }
-mbTrace($prats_selected);
 
 // Création du template
 $smarty = new CSmartyDP();
