@@ -16,20 +16,20 @@ $consult_anesth_id = CValue::get("consult_anesth_id");
 $patient = new CPatient();
 $patient->load($patient_id);
 
-$consultations_anesth = array();
+$dossiers_anesth = array();
 
 foreach ($patient->loadRefsConsultations() as $_consult) {
-  $_consult->loadRefPraticien()->loadRefFunction();
-  $_consult->loadRefPlageConsult(true);
-
-  $consult_anesth = $_consult->loadRefConsultAnesth();
-  if ($consult_anesth->_id && $consult_anesth->_id != $consult_anesth_id) {
-    $consultations_anesth[] = $consult_anesth;
+  foreach ($_consult->loadRefsDossiersAnesth() as $_dossier) {
+    if ($_dossier->_id != $consult_anesth_id) {
+      $_dossier->_ref_consultation = $_consult;
+      $_consult->loadRefPraticien()->loadRefFunction();
+      $_consult->loadRefPlageConsult(true);
+      $dossiers_anesth[] = $_dossier;
+    }
   }
 }
 
 $smarty = new CSmartyDP;
-$smarty->assign("consultations_anesth", $consultations_anesth);
-$smarty->assign("patient"             , $patient);
+$smarty->assign("dossiers_anesth", $dossiers_anesth);
+$smarty->assign("patient", $patient);
 $smarty->display("inc_consult_anesth/vw_old_consult_anesth.tpl");
-
