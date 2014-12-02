@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -159,7 +159,7 @@ foreach ($sejours as $_sejour) {
   $bilan->loadRefPraticienDemandeur();
 
   // Chargement du lit
-  $_sejour->loadRefCurrAffectation();
+  $_sejour->loadRefCurrAffectation()->loadRefLit();;
 }
 
 if ($order_col == "lit_id") {
