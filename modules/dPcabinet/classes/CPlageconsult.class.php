@@ -230,7 +230,7 @@ class CPlageconsult extends CPlageHoraire {
     $chir->load($chir_id);
     $where["date"] = $date_end ? ("BETWEEN '$date_start' AND '$date_end' ") : " = '$date_start'";
     $where[] = " chir_id = '$chir_id' OR remplacant_id = '$chir_id'";
-    return $plage->loadList($where);
+    return $plage->loadList($where, "debut ASC, fin ASC, chir_id");
   }
 
   /**

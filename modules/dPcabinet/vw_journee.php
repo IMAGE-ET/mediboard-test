@@ -32,6 +32,7 @@ $immediate      = CValue::getOrSession("immediate", true);
 $mode_vue       = CValue::getOrSession("mode_vue" , "vertical");
 $matin          = CValue::getOrSession("matin"    , true);
 $apres_midi     = CValue::getOrSession("apres_midi", true);
+$prats_selected = CValue::getOrSession("prats_selected");
 
 $mode_urgence = CValue::get("mode_urgence", false);
 $offline      = CValue::get("offline"     , false);
@@ -99,7 +100,7 @@ foreach ($praticiens as $prat) {
   $order = "debut";
   $listPlage = $listPlage->loadList($where, $order);
   if (!count($listPlage)) {
-    unset($praticiens[$prat->_id]);
+    //unset($praticiens[$prat->_id]);
   }
   else {
     $listPlages[$prat->_id]["prat"] = $prat;
@@ -218,6 +219,21 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
   }
 }
 
+$prat_available = $praticiens;
+
+if (!$prats_selected) {
+  $prats_selected = array_keys($praticiens);
+}
+else {
+  $prats_selected = explode("-", $prats_selected);
+  $diff = array_diff(array_keys($praticiens), $prats_selected);
+  foreach($diff as $_key) {
+    if (isset($praticiens[$_key])) {
+      unset($praticiens[$_key]);
+    }
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("offline"       , $offline);
@@ -234,6 +250,8 @@ $smarty->assign("immediate"     , $immediate);
 $smarty->assign("date"          , $date);
 $smarty->assign("hour"          , $hour);
 $smarty->assign("praticiens"    , $praticiens);
+$smarty->assign("praticiens_av" , $prat_available);
+$smarty->assign("prats_selected", $prats_selected);
 $smarty->assign("nb_anesth"     , $nb_anesth);
 $smarty->assign("all_prats"     , $all_prats);
 $smarty->assign("cabinets"      , $cabinets);
