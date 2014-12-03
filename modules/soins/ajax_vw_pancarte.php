@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @category Soins
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision:$
+ * @version  $Revision$
  * @link     http://www.mediboard.org
  */
 
@@ -266,7 +266,7 @@ foreach ($planifs_systeme as $_planif) {
     if(!isset($cond[$_prescription_id]["$_date $time"][$type_line])){
       $cond[$_prescription_id]["$_date $time"][$type_line] = true;
     }
-    if($line->_current_active){
+    if($line->_ref_prescription_line_mix->_current_active){
       $cond[$_prescription_id]["$_date $time"][$type_line] = false;
     }
 
