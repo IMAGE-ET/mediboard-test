@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 /**
  * $Id$
- *  
+ *
  * @category EAI
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -135,10 +135,23 @@ foreach ($exchanges as $_exchange) {
     $PV1 = $xml->queryNode("PV1");
     $nda = $xml->queryNode("PV1.19", $PV1);
 
+    if ((!$ipp || $ipp && $ipp->nodeValue == "waiting") || (!$nda || $nda && $nda->nodeValue == "waiting")) {
+      CHL7v2Message::setBuildMode($receiver->_configs["build_mode"]);
+      $data_format->build($object);
+      CHL7v2Message::resetBuildMode();
+
+      $data_format->flatten();
+      if (!$data_format->message->isOK(CHL7v2Error::E_ERROR)) {
+        $_exchange->date_echange = "";
+        $_exchange->store();
+        continue;
+      }
+    }
+
     if ($_exchange->code != "A40" &&
-        (((!$ipp && !$ipp->nodeValue) || $ipp->nodeValue == "0") ||
+      (((!$ipp && !$ipp->nodeValue) || $ipp->nodeValue == "0") ||
         (($_exchange->sous_type != "ITI30" ||
-        ($_exchange->sous_type == "ITI30" && $_exchange->code == "A08"))  && !$nda && empty($nda->nodeValue)))
+            ($_exchange->sous_type == "ITI30" && $_exchange->code == "A08")) && !$nda && empty($nda->nodeValue)))
     ) {
 
       CHL7v2Message::setBuildMode($receiver->_configs["build_mode"]);
@@ -166,7 +179,13 @@ foreach ($exchanges as $_exchange) {
     }
 
     $source->setData($msg, null, $_exchange);
-    $source->send();
+    try {
+      $source->send();
+    }
+    catch (CMbException $e) {
+      //Si un problème survient lors de l'envoie, on arrête le script pour ne aps rompre la séquentialité
+      $e->stepAjax(UI_MSG_ERROR);
+    }
   }
   catch (Exception $e) {
     $_exchange->date_echange = "";
