@@ -261,18 +261,22 @@
 
   
   {{if $prescription->_ref_prescription_line_mixes|@count}}
-  <tr>
-    <th>Perfusions et oxygènes</th>
-  </tr>
-  {{/if}}
-  {{foreach from=$prescription->_ref_prescription_line_mixes item=_prescription_line_mix}}
+  {{foreach from=$prescription->_ref_prescription_line_mixes_by_type key=type item=_prescription_line_mixes}}
+    <tr>
+      <th>{{tr}}CPrescriptionLineMix.type_line.{{$type}}{{/tr}}</th>
+    </tr>
+  {{foreach from=$_prescription_line_mixes item=_prescription_line_mix}}
+  {{foreach from=$_prescription_line_mixes item=_prescription_line_mix}}
   <tr>
     <td class="text">
       {{mb_include module="dPprescription" template="inc_print_prescription_line_mix" perf=$_prescription_line_mix nodebug=true}}
     </td>
   </tr>
   {{/foreach}}
-  
+  {{/foreach}}
+  {{/if}}
+
+
   {{foreach from=$prescription->_ref_lines_elements_comments key=_chap item=_lines_by_chap}}
     {{if $_lines_by_chap|@count}}
       <tr>
