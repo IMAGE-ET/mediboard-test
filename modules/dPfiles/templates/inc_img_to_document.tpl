@@ -215,7 +215,7 @@
 
 
 <div id="document_tab" style="float:left;">
-  <form name="_document_to_create" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close});">
+  <form name="_document_to_create" method="post" target="_blank" onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close});">
     <input type="hidden" name="m" value="dPfiles"/>
     <input type="hidden" name="dosql" value="do_mozaic_doc"/>
     <input type="hidden" name="suppressHeaders" value="0"/>
@@ -232,7 +232,7 @@
     <label>
       {{tr}}CFilesCategory{{/tr}}
       <select name="category_id">
-        <option value="">{{tr}}CFilesCategory.none{{/tr}}</option>
+        <option value="" style="width: 15em;">{{tr}}CFilesCategory.none{{/tr}}</option>
         {{foreach from=$categories item=_category}}
           <option value="{{$_category->_id}}">{{$_category}}</option>
         {{/foreach}}

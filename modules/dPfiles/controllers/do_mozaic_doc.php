@@ -163,7 +163,7 @@ $content.= "
 </body>
 </html>";
 
-$htmltopdf = new CHtmlToPDF();
+$htmltopdf = new CHtmlToPDF("CWkHtmlToPDFConverter");
 $htmltopdf->generatePDF($content, $print, $cr, $file);
 
 if ($file->_id) {
