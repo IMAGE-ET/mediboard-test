@@ -269,6 +269,15 @@
           {{if $line->volume_debit && $line->duree_debit && $line->type_line != "oxygene"}}
             <br />
             ({{mb_value object=$line field=volume_debit}} ml en {{mb_value object=$line field=duree_debit}} h)
+            {{if $line->_frequence}}
+              <br />
+              {{if $line->type_line == "perfusion"}}Débit initial: {{/if}}
+              {{$line->_frequence}}
+              {{if $line->type_line == "perfusion" && $line->_last_variation->debit}}
+                <br />
+                Dernier débit : {{$line->_last_variation->debit}} ml/h
+              {{/if}}
+            {{/if}}
           {{/if}}
         {{/if}}
         {{if $mode_dupa}}
@@ -295,14 +304,6 @@
       <td style="vertical-align: top;" class="text {{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}">
         {{if !$mode_dupa && $smarty.foreach.lines_items.first}}
           <div class="compact">
-            {{if $line->_frequence}}
-              {{if $line->type_line == "perfusion"}}Débit initial: {{/if}}
-              {{$line->_frequence}}
-              {{if $line->type_line == "perfusion" && $line->_last_variation->debit}}
-                <br />
-                Dernier débit : {{$line->_last_variation->debit}} ml/h
-              {{/if}}
-            {{/if}}
             <em>
               {{mb_value object=$line field=commentaire}}
               <br />
