@@ -183,6 +183,8 @@ foreach ($exchanges as $_exchange) {
       $source->send();
     }
     catch (CMbException $e) {
+      $_exchange->date_echange = "";
+      $_exchange->store();
       //Si un problème survient lors de l'envoie, on arrête le script pour ne aps rompre la séquentialité
        $e->stepAjax(UI_MSG_ERROR);
     }
