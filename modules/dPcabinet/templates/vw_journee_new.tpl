@@ -1,12 +1,12 @@
 {{*
- * $Id$
- *  
- * @category Cabinet
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision$
- * @link     http://www.mediboard.org
+* $Id$
+*
+* @category Cabinet
+* @package  Mediboard
+* @author   SARL OpenXtrem <dev@openxtrem.com>
+* @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+* @version  $Revision$
+* @link     http://www.mediboard.org
 *}}
 
 {{mb_script module=ssr script=planning}}
@@ -85,6 +85,7 @@
   <input type="hidden" name="dosql" value="do_consultation_aed" />
   <input type="hidden" name="consultation_id" />
   <input type="hidden" name="chrono" />
+  <input type="hidden" name="arrivee" />
 </form>
 
 <form method="get" name="filter_day" onsubmit="return onSubmitFormAjax(this, {}, 'planning')">
@@ -96,7 +97,7 @@
     <label>Cabinet
       <select name="function_id" onchange="refreshPlanning();">
         {{foreach from=$functions item=_function}}
-          <option value="{{$_function->_id}}" {{if $function_id == $_function->_id}}selected="selected" {{/if}}>{{$_function}}</option>
+        <option value="{{$_function->_id}}" {{if $function_id == $_function->_id}}selected="selected" {{/if}}>{{$_function}}</option>
         {{/foreach}}
       </select>
     </label>
