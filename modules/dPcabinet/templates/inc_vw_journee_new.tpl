@@ -35,6 +35,7 @@
         var oform = getForm('chronoPatient');
         $V(oform.consultation_id, consultation_id);
         $V(oform.chrono, action == "tick" ? 32 : 16);
+        $V(oform.arrivee,  action == "tick" ? new Date().toDATETIME(true) : '');
         onSubmitFormAjax(oform, {onComplete: refreshPlanning });
         // clean up
         $V(oform.consultation_id, "");
