@@ -69,7 +69,7 @@ $ds = $salle->getDS();
 $where = array();
 $where["bloc_id"] = $ds->prepareIn(array_keys($blocs));
 $ljoin["bloc_operatoire"] = "bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id";
-$order = "bloc_operatoire.nom, sallesbloc.salle_id";
+$order = "bloc_operatoire.nom, sallesbloc.nom";
 $salles = $salle->loadList($where, $order, null, null, $ljoin);
 $salles_ids = array_keys($salles);
 
