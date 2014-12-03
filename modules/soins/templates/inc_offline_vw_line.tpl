@@ -149,7 +149,7 @@
                   {{assign var=quantite value="0"}}
                 {{/if}}
 
-                {{if $text_align == "left"}}
+                {{if $text_align == "left" || $mode_lite}}
                   {{if @$administrations_in_hour.quantite_planifiee}}
                     {{if @$administrations_in_hour.quantite}}
                       {{$administrations_in_hour.quantite}}
@@ -265,6 +265,12 @@
             <img src="images/icons/premed.png" />
           {{/if}}
         </div>
+        {{if $mode_lite && $smarty.foreach.lines_items.first}}
+          {{if $line->volume_debit && $line->duree_debit && $line->type_line != "oxygene"}}
+            <br />
+            ({{mb_value object=$line field=volume_debit}} ml en {{mb_value object=$line field=duree_debit}} h)
+          {{/if}}
+        {{/if}}
         {{if $mode_dupa}}
           <hr style="width: 70%; border-color: #aaa; margin: 1px auto;">
           <div class="compact">
@@ -292,10 +298,6 @@
             {{if $line->_frequence}}
               {{if $line->type_line == "perfusion"}}Débit initial: {{/if}}
               {{$line->_frequence}}
-              {{if $line->volume_debit && $line->duree_debit && $line->type_line != "oxygene"}}
-                <br />
-                ({{mb_value object=$line field=volume_debit}} ml en {{mb_value object=$line field=duree_debit}} h)
-              {{/if}}
               {{if $line->type_line == "perfusion" && $line->_last_variation->debit}}
                 <br />
                 Dernier débit : {{$line->_last_variation->debit}} ml/h
@@ -354,41 +356,39 @@
                 {{else}}
                   {{assign var=nb_adm value=""}}
                 {{/if}}
-                {{assign var=original_dateTime value=""}}
-                {{if isset($line->_prises_prevues_moment.$_date.$_moment|smarty:nodefaults)}}
-                  {{if array_key_exists('real_hour', $line->_prises_prevues_moment.$_date.$_moment)}}
-                    {{assign var=count_prises value=$line->_prises_prevues_moment.$_date.$_moment.real_hour|@count}}
-                    {{assign var=nb_prevue value=$_line_item->_quantite_administration*$count_prises}}
-                    {{assign var=hour_prevue value=$line->_prises_prevues_moment.$_date.$_moment.real_hour}}
-                    {{if array_key_exists('original_dateTime', $line->_prises_prevues_moment.$_date.$_moment)}}
-                      {{assign var=original_dateTime value=$line->_prises_prevues_moment.$_date.$_moment.original_dateTime}}
-                    {{/if}}
-                  {{else}}
-                    {{assign var=perf_line_id value=$_line_item->_id}}
-                    {{if array_key_exists($perf_line_id, $line->_prises_prevues_moment.$_date.$_moment.manual)}}
-                      {{assign var=nb_prevue value=$line->_prises_prevues_moment.$_date.$_moment.manual.$perf_line_id}}
-                    {{else}}
-                      {{assign var=nb_prevue value=""}}
-                    {{/if}}
+              {{assign var=original_dateTime value=""}}
+              {{if isset($line->_prises_prevues_moment.$_date.$_moment|smarty:nodefaults)}}
+                {{if array_key_exists('real_hour', $line->_prises_prevues_moment.$_date.$_moment)}}
+                  {{assign var=count_prises value=$line->_prises_prevues_moment.$_date.$_moment.real_hour|@count}}
+                  {{assign var=nb_prevue value=$_line_item->_quantite_administration*$count_prises}}
+                  {{assign var=hour_prevue value=$line->_prises_prevues_moment.$_date.$_moment.real_hour}}
+                  {{if array_key_exists('original_dateTime', $line->_prises_prevues_moment.$_date.$_moment)}}
+                    {{assign var=original_dateTime value=$line->_prises_prevues_moment.$_date.$_moment.original_dateTime}}
                   {{/if}}
                 {{else}}
-                  {{assign var=nb_prevue value=""}}
-                  {{assign var=hour_prevue value=""}}
-                {{/if}}
-
-
-                  {{if $text_align == "left"}}
-                    {{if $nb_adm}}
-                      {{$nb_adm}}
-                    {{elseif $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date)}}
-                      0
-                    {{/if}}
-
-                    {{if $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date) && ($nb_prevue != $nb_adm)}}/{{$nb_prevue}}{{/if}}
+                  {{assign var=perf_line_id value=$_line_item->_id}}
+                  {{if array_key_exists($perf_line_id, $line->_prises_prevues_moment.$_date.$_moment.manual)}}
+                    {{assign var=nb_prevue value=$line->_prises_prevues_moment.$_date.$_moment.manual.$perf_line_id}}
                   {{else}}
-                    {{* Que les planifications *}}
-                    {{if $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date)}}{{$nb_prevue}}{{/if}}
+                    {{assign var=nb_prevue value=""}}
                   {{/if}}
+                {{/if}}
+              {{else}}
+                {{assign var=nb_prevue value=""}}
+                {{assign var=hour_prevue value=""}}
+              {{/if}}
+
+              {{if $text_align == "left" || $mode_lite}}
+                {{if $nb_adm}}
+                  {{$nb_adm}}
+                {{elseif $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date)}}
+                  0
+                {{/if}}
+                {{if $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date) && ($nb_prevue != $nb_adm)}}/{{$nb_prevue}}{{/if}}
+              {{else}}
+                {{* Que les planifications *}}
+                {{if $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date)}}{{$nb_prevue}}{{/if}}
+              {{/if}}
             </td>
           {{/foreach}}
         {{/foreach}}
