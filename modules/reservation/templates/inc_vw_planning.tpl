@@ -27,8 +27,10 @@
     var height_planning = '{{$height_planning_resa}}';
     ViewPort.SetAvlHeight("planningInterventions", 1.0);
     $('planningWeek').style.height = height_planning+"px";
+
+    // used for hover event
     $$(".body").each(function(elt) {
-      elt.setStyle({backgroundColor: elt.up().getStyle("backgroundColor")});
+      //elt.setStyle({backgroundColor: elt.up().getStyle("backgroundColor"), backgroundImage: elt.up().getStyle("backgroundImage")});
     });
   });
 </script>
@@ -46,7 +48,6 @@
   .planning td {
     border:solid 1px #bbb!important;
   }
-
 
   .planning div.minute-30 {
     border-top:solid 1px #ccc!important;
@@ -81,6 +82,10 @@
   Main.add(function() {
     var planning = window["planning-{{$planning->guid}}"];
     planning.salles_ids = {{$salles_ids|@json}};
+
+    $$(".event").each(function(elt) {
+      elt.setStyle({minHeight : elt.getStyle("height")});
+    });
     
     planning.onMenuClick = function(event, object_id, elem) {
 
@@ -163,7 +168,7 @@
           else {
             window.copy_operation_id = object_id;
           }
-          var span_infos = elem.up('div.toolbar').next('div.body').down('span').down('span');
+          var span_infos = elem.up('div.toolbar').next('div.body').down('span.data');
           window.save_entree_prevue = span_infos.get("entree_prevue");
           window.save_sortie_prevue = span_infos.get("sortie_prevue");
           window.save_sejour_id     = span_infos.get("sejour_id");

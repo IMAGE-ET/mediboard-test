@@ -16,8 +16,9 @@
 
 
 <style>
-  .draggable {
-    opacity:1!important;
+
+  .plage_recuse {
+    background-image: linear-gradient(135deg, transparent 30%, #{{$conf.dPhospi.colors.recuse}} 30%, #{{$conf.dPhospi.colors.recuse}} 70%, transparent 70%);
   }
 </style>
 
@@ -142,6 +143,7 @@ pasteCommentaire = function (date_planning, salle_id, hour_debut, hour_fin, colo
 pasteIntervention = function (operation_id, salle_id, time, sejour_id, duree) {
   var date = window.calendar_planning.altElement.defaultValue;
   var datetime_interv = date + " " + time;
+
 
   // Mode copier
   // Ouverture de modale pour modifier éventuellement les dates du séjour
