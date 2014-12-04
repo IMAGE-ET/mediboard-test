@@ -83,9 +83,9 @@ Pack = {
   makeGuid: function(form) {
     var object_guid = '';
 
-    if ($V(form.user_id    ) != '') object_guid = 'CMediUsers-' + $V(form.user_id    );
-    if ($V(form.function_id) != '') object_guid = 'CFunctions-' + $V(form.function_id);
-    if ($V(form.group_id   ) != '') object_guid = 'CGroups-'    + $V(form.group_id   );
+    if (form.user_id && $V(form.user_id    ) != '') object_guid = 'CMediUsers-' + $V(form.user_id    );
+    if (form.function_id && $V(form.function_id) != '') object_guid = 'CFunctions-' + $V(form.function_id);
+    if (form.group_id && $V(form.group_id   ) != '') object_guid = 'CGroups-'    + $V(form.group_id   );
 
     return object_guid;
   },
