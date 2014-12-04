@@ -22,7 +22,7 @@ PlanningEvent = Class.create({
     container.style.top    = (this.minutes * height)+"px";
     container.style.left   = (this.offset * 100)+"%";
     container.style.width  = (this.width * 100)+"%";
-    container.style.height = ((this.length * height) || 1)+"px";
+    container.style.height =  container.style.minHeight = ((this.length * height) || 1)+"px";
   },
   getElement: function(){
     return $(this.internal_id);
