@@ -69,7 +69,7 @@ $ds = $salle->getDS();
 $where = array();
 $where["bloc_id"] = $ds->prepareIn(array_keys($blocs));
 $ljoin["bloc_operatoire"] = "bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id";
-$order = "bloc_operatoire.nom, sallesbloc.salle_id";
+$order = "bloc_operatoire.nom, sallesbloc.nom";
 $salles = $salle->loadList($where, $order, null, null, $ljoin);
 $salles_ids = array_keys($salles);
 
@@ -368,18 +368,26 @@ if ($show_operations) {
       $smartyL = htmlspecialchars_decode(CMbString::htmlEntities($smartyL, ENT_NOQUOTES), ENT_NOQUOTES);
 
       // couleurs
-      $color     = CAppUI::conf("hospi colors default");
-      if ($charge->color) {
-        $color = $charge->color;
-      }
+      $color     = CAppUI::conf("hospi colors ".$sejour->type);
       $important = true;
       $css       = null;
-      if ($sejour->annule) {
-        $css       = "hatching";
-        $important = false;
+      if ($charge->_id) {
+        $color = $charge->color;
       }
-      elseif ($sejour->recuse == "-1") {
-        $css   = "recuse";
+
+      // font color
+      if (CColorSpec::get_text_color($color) < 130) {
+        $css .= "invert_color";
+      }
+
+
+      if (CAppUI::conf("dPplanningOp CSejour use_recuse") && $sejour->recuse == -1) {
+        $css       .= "plage_recuse ";
+      }
+
+      if ($sejour->annule || $_operation->annulee) {
+        $css       .= "hatching ";
+        $important = false;
       }
 
       $event = new CPlanningEvent($_operation->_guid, $debut, $duree, $smartyL, "#$color", $important, $css, $_operation->_guid, false);

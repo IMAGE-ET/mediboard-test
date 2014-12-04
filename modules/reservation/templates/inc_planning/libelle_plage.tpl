@@ -8,9 +8,9 @@
  * @version  $Revision$
  * @link     http://www.mediboard.org
 *}}
-<span style="{{if $charge->_id}}color:#{{$charge->_font_color}};{{/if}}">
+<span>
 
-  <span style="display: none;" data-duree="{{$sejour->_duree}}" data-entree_prevue='{{$sejour->entree_prevue}}' data-sortie_prevue='{{$sejour->sortie_prevue}}' data-sejour_id='{{$sejour->_id}}' data-preop='{{if $operation->presence_preop}}{{$operation->presence_preop|date_format:"%H:%M"}}{{else}}00:00{{/if}}' data-postop='{{if $operation->presence_postop}}{{$operation->presence_postop|date_format:"%H:%M"}}{{else}}00:00{{/if}}' data-traitement='{{$charge->_id}}' data-pec='{{$sejour->type_pec}}'></span>
+  <span class="data" style="display: none;" data-duree="{{$sejour->_duree}}" data-entree_prevue='{{$sejour->entree_prevue}}' data-sortie_prevue='{{$sejour->sortie_prevue}}' data-sejour_id='{{$sejour->_id}}' data-preop='{{if $operation->presence_preop}}{{$operation->presence_preop|date_format:"%H:%M"}}{{else}}00:00{{/if}}' data-postop='{{if $operation->presence_postop}}{{$operation->presence_postop|date_format:"%H:%M"}}{{else}}00:00{{/if}}' data-traitement='{{$charge->_id}}' data-pec='{{$sejour->type_pec}}'></span>
   <!-- CADRE DROIT -->
   <span style="float:right; text-align: right">
     <!-- only switzerland -->
