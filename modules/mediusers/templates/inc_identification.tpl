@@ -72,6 +72,11 @@
 </tr>
 
 <tr>
+  <th>{{mb_label object=$object field=_force_change_password}}</th>
+  <td>{{mb_field object=$object field=_force_change_password}}</td>
+</tr>
+
+<tr>
   <th>{{mb_label object=$object field="function_id"}}</th>
   <td>
     <select name="function_id" style="width: 150px;" class="{{$object->_props.function_id}}">
