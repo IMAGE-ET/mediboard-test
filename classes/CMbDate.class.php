@@ -273,7 +273,6 @@ class CMbDate {
       // France
       case '1':
         $paques = CMbDT::getEasterDate($date);
-        $calendar["$previous_year-12-31"] = "Fête du travail";
         $calendar["$year-01-01"] = "Jour de l'an";                            // Jour de l'an
         $calendar["$year-05-01"] = "Fête du travail";                         // Fête du travail
         $calendar["$year-05-08"] = "Victoire de 1945";                        // Victoire de 1945
