@@ -1628,7 +1628,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $this->entree_modifiee = 1;
     }
     // si le séjour était préparé et qu'on le dé-prépare
-    elseif( ($this->_old->entree_preparee == 1) && ($this->entree_preparee == 0) ) {
+    elseif( $this->fieldModified("entree_preparee", "0")) {
       $this->entree_modifiee = 0;
     }
 
