@@ -14,6 +14,7 @@
   .month_calendar {
     border-collapse: collapse;
     height: 100%;
+    width:100%;
     table-layout: fixed;
   }
 
@@ -25,13 +26,11 @@
   .month_calendar th {
     text-align: center;
     vertical-align: middle!important;
-    width: 1%;
   }
 
   .month_calendar td.month_day {
     vertical-align: top;
     border:solid 1px #b6b6b6;
-    width: 12.5%;
     background-color: white;
   }
 
@@ -114,16 +113,8 @@
         {{assign var=_week_nb value=$_week_nb+1}}
       {{/if}}
     {{/foreach}}
-
-  {{if $calendar->title}}
-    <tr>
-      <th colspan="{{if $_week_end_filled}}8{{else}}6{{/if}}" class="title">
-        {{$calendar->title|smarty:nodefaults}}
-      </th>
-    </tr>
-  {{/if}}
-  <tr>
-    <th></th>
+  <tr class="week_name">
+    <th style="width:30px;"></th>
     <th>{{tr}}Monday{{/tr}}</th>
     <th>{{tr}}Tuesday{{/tr}}</th>
     <th>{{tr}}Wednesday{{/tr}}</th>
@@ -143,7 +134,7 @@
 
       {{* week number *}}
       {{if $_day|date_format:"%u" == 1 || $smarty.foreach.loop.first}}
-        <th class="narrow">{{$week_nb+1}}</th>
+        <th style="width:30px;">{{$week_nb+1}}</th>
       {{/if}}
       {{* /week number *}}
 
