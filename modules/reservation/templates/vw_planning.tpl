@@ -16,8 +16,9 @@
 
 
 <style>
-  .draggable {
-    opacity:1!important;
+
+  .plage_recuse {
+    background-image: linear-gradient(135deg, transparent 30%, #{{$conf.dPhospi.colors.recuse}} 30%, #{{$conf.dPhospi.colors.recuse}} 70%, transparent 70%);
   }
 </style>
 
@@ -142,6 +143,7 @@ pasteCommentaire = function (date_planning, salle_id, hour_debut, hour_fin, colo
 pasteIntervention = function (operation_id, salle_id, time, sejour_id, duree) {
   var date = window.calendar_planning.altElement.defaultValue;
   var datetime_interv = date + " " + time;
+
 
   // Mode copier
   // Ouverture de modale pour modifier éventuellement les dates du séjour
@@ -437,7 +439,7 @@ Main.add(function () {
            onclick="window.calendar_planning.datePicked(new Date(new Date(window.calendar_planning.altElement.defaultValue).setHours('-24')))">
           &lt;&lt;&lt;</a>
         <label>
-          Date <input name="date_planning" type="hidden" value="{{$date_planning}}" class="date"
+          Date <input name="date_planning" type="hidden" value="{{$date_planning}}" class="date notNull"
                       onchange="updateSession('date_planning', this.value);" />
         </label>
         <a href="#nothing" id="next_day"
