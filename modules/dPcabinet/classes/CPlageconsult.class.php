@@ -281,7 +281,7 @@ class CPlageconsult extends CPlageHoraire {
 
       //there is something ...
       foreach ($this->_ref_consultations as $_consult) {
-        if ($_consult->heure == $time) {
+        if ($_consult->heure >= $time && $_consult->heure < CMbDT::addTime($this->freq, $time)) {
           $status = 0;
 
           // pause
