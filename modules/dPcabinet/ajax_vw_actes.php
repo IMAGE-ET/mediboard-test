@@ -55,6 +55,9 @@ if ($sejour->_id) {
 $listPrats = $listChirs = CConsultation::loadPraticiens(PERM_EDIT);
 $listAnesths = CMediusers::get()->loadAnesthesistes();
 
+$user = CMediusers::get();
+$user->isPraticien();
+
 $smarty = new CSmartyDP();
 
 $smarty->assign("consult"       , $consult);
@@ -62,5 +65,6 @@ $smarty->assign("acte_ngap"     , $acte_ngap);
 $smarty->assign("listPrats"     , $listPrats);
 $smarty->assign("listChirs"     , $listChirs);
 $smarty->assign("listAnesths"   , $listAnesths);
+$smarty->assign('user'         , $user);
 
 $smarty->display("inc_vw_actes.tpl");
