@@ -70,6 +70,8 @@ class CMediusers extends CPerson {
   public $_user_ville;
   public $_user_last_login;
   public $_user_template;
+  /** @var bool Does the password need to be changed */
+  public $_force_change_password;
 
   // Other fields
   public $_profile_id;
@@ -246,20 +248,21 @@ class CMediusers extends CPerson {
 
     $props["_group_id"] = "ref notNull class|CGroups";
 
-    $props["_user_username"]   = "str notNull minLength|3 reported";
-    $props["_user_password2"]  = "password sameAs|_user_password reported";
-    $props["_user_first_name"] = "str reported show|1";
-    $props["_user_last_name"]  = "str notNull confidential reported show|1";
-    $props["_user_email"]      = "str confidential reported";
-    $props["_user_phone"]      = "phone confidential reported";
-    $props["_user_astreinte"]  = "str confidential reported";
-    $props["_user_adresse"]    = "str confidential reported";
-    $props["_user_last_login"] = "dateTime reported";
-    $props["_user_cp"]         = "num length|5 confidential reported";
-    $props["_user_ville"]      = "str confidential reported";
-    $props["_profile_id"]      = "ref reported class|CUser";
-    $props["_user_type"]       = "num notNull min|0 max|21 reported";
-    $props["_user_type_view"]  = "str";
+    $props["_user_username"]         = "str notNull minLength|3 reported";
+    $props["_user_password2"]        = "password sameAs|_user_password reported";
+    $props["_user_first_name"]       = "str reported show|1";
+    $props["_user_last_name"]        = "str notNull confidential reported show|1";
+    $props["_user_email"]            = "str confidential reported";
+    $props["_user_phone"]            = "phone confidential reported";
+    $props["_user_astreinte"]        = "str confidential reported";
+    $props["_user_adresse"]          = "str confidential reported";
+    $props["_user_last_login"]       = "dateTime reported";
+    $props["_user_cp"]               = "num length|5 confidential reported";
+    $props["_user_ville"]            = "str confidential reported";
+    $props["_profile_id"]            = "ref reported class|CUser";
+    $props["_user_type"]             = "num notNull min|0 max|21 reported";
+    $props["_user_type_view"]        = "str";
+    $props["_force_change_password"] = "bool default|0";
 
     // The different levels of security are stored to be usable in JS
     $props["_user_password_weak"]   = "password minLength|4";
@@ -455,16 +458,17 @@ class CMediusers extends CPerson {
       $user->_user_password = $this->_user_password;
     }
 
-    $user->user_first_name = $this->_user_first_name;
-    $user->user_last_name  = $this->_user_last_name;
-    $user->user_email      = $this->_user_email;
-    $user->user_phone      = $this->_user_phone;
-    $user->user_astreinte  = $this->_user_astreinte;
-    $user->user_address1   = $this->_user_adresse;
-    $user->user_zip        = $this->_user_cp;
-    $user->user_city       = $this->_user_ville;
-    $user->profile_id      = $this->_profile_id;
-    $user->template        = 0;
+    $user->user_first_name       = $this->_user_first_name;
+    $user->user_last_name        = $this->_user_last_name;
+    $user->user_email            = $this->_user_email;
+    $user->user_phone            = $this->_user_phone;
+    $user->user_astreinte        = $this->_user_astreinte;
+    $user->user_address1         = $this->_user_adresse;
+    $user->user_zip              = $this->_user_cp;
+    $user->user_city             = $this->_user_ville;
+    $user->profile_id            = $this->_profile_id;
+    $user->force_change_password = $this->_force_change_password;
+    $user->template              = 0;
 
     $user->_merging = $this->_merging;
 
@@ -565,19 +569,20 @@ class CMediusers extends CPerson {
     }
 
     if ($user->_id) {
-      $this->_user_type       = $user->user_type;
-      $this->_user_username   = $user->user_username;
-      $this->_user_password   = $user->user_password;
-      $this->_user_first_name = CMbString::capitalize($user->user_first_name);
-      $this->_user_last_name  = CMbString::upper($user->user_last_name);
-      $this->_user_email      = $user->user_email;
-      $this->_user_phone      = $user->user_phone;
-      $this->_user_astreinte  = $user->user_astreinte;
-      $this->_user_adresse    = $user->user_address1;
-      $this->_user_cp         = $user->user_zip;
-      $this->_user_ville      = $user->user_city;
-      $this->_user_template   = $user->template;
-      $this->_profile_id      = $user->profile_id;
+      $this->_user_type             = $user->user_type;
+      $this->_user_username         = $user->user_username;
+      $this->_user_password         = $user->user_password;
+      $this->_user_first_name       = CMbString::capitalize($user->user_first_name);
+      $this->_user_last_name        = CMbString::upper($user->user_last_name);
+      $this->_user_email            = $user->user_email;
+      $this->_user_phone            = $user->user_phone;
+      $this->_user_astreinte        = $user->user_astreinte;
+      $this->_user_adresse          = $user->user_address1;
+      $this->_user_cp               = $user->user_zip;
+      $this->_user_ville            = $user->user_city;
+      $this->_user_template         = $user->template;
+      $this->_profile_id            = $user->profile_id;
+      $this->_force_change_password = $user->force_change_password;
 
       // Encrypt this datas
       $this->checkConfidential();
@@ -1482,19 +1487,19 @@ class CMediusers extends CPerson {
       $secondary_specs[$_function->_id] = $_function;
     }
     // Plages d'intervention
-    $plage             = new CPlageOp();
-    $ljoin = array();
+    $plage     = new CPlageOp();
+    $ljoin     = array();
     $add_where = "";
     if ($second_chir) {
       $ljoin["operations"] = "plagesop.plageop_id = operations.plageop_id";
-      $add_where = " OR operations.chir_id = '$this->_id' OR operations.chir_2_id = '$this->_id'
+      $add_where           = " OR operations.chir_id = '$this->_id' OR operations.chir_2_id = '$this->_id'
                     OR operations.chir_3_id = '$this->_id' OR operations.chir_4_id = '$this->_id'";
     }
     $where                  = array();
     $where["plagesop.date"] = "= '$date'";
-    $where[]                = "plagesop.chir_id = '$this->_id' OR plagesop.spec_id = '$this->function_id' OR plagesop.spec_id " . CSQLDataSource::prepareIn(array_keys($secondary_specs)).$add_where;
+    $where[]                = "plagesop.chir_id = '$this->_id' OR plagesop.spec_id = '$this->function_id' OR plagesop.spec_id " . CSQLDataSource::prepareIn(array_keys($secondary_specs)) . $add_where;
     $order                  = "debut";
-    $this->_ref_plages = $plage->loadList($where, $order, null, "plageop_id", $ljoin);
+    $this->_ref_plages      = $plage->loadList($where, $order, null, "plageop_id", $ljoin);
 
     // Chargement d'optimisation
 
@@ -1554,7 +1559,7 @@ class CMediusers extends CPerson {
     $where["operations.annulee"]    = "= '0'";
     $where["plagesop.salle_id"]     = "!= operations.salle_id";
     $where["plagesop.date"]         = "= '$date'";
-    $where[]                        = "plagesop.chir_id = '$this->_id'".$add_where;
+    $where[]                        = "plagesop.chir_id = '$this->_id'" . $add_where;
     $order                          = "operations.time_operation";
     $this->_ref_deplacees           = $deplacee->loadList($where, $order, null, "operation_id", $ljoin);
 
@@ -1579,9 +1584,9 @@ class CMediusers extends CPerson {
       $where[] = "chir_id = '$this->_id' OR chir_2_id = '$this->_id' OR chir_3_id = '$this->_id' OR chir_4_id = '$this->_id'";
     }
     else {
-      $where["chir_id"]  = "= '$this->_id'";
+      $where["chir_id"] = "= '$this->_id'";
     }
-    $where["annulee"]    = "= '0'";
+    $where["annulee"] = "= '0'";
 
     $this->_ref_urgences = $urgence->loadList($where, null, null, "operation_id");
 
