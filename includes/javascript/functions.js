@@ -1598,12 +1598,19 @@ window.scrollReset = function(){
   document.body.scrollTop = window.scrollTopSave;
 };
 
-// Multiple mocals
+// Multiple modals
 Object.extend(Control.Modal,{
   stack: [],
   close: function() {
     if (!Control.Modal.stack.length) return;
     Control.Modal.stack.last().close();
+  },
+
+  closeAll: function() {
+    var stack = Control.Modal.stack;
+    while (stack.length) {
+      stack.last().close();
+    }
   },
   
   position: function() {
