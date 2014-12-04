@@ -35,18 +35,18 @@
                   </tr>
                   {{foreach from=$consultations.consult item=consultation}}
                     <tr>
-                      <td class="text">
+                      <td class="text {{if $consultation->annule}}cancelled{{/if}}">
                         {{assign var=prat_id value=$consultation->_ref_chir->_id}}
                         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$listPrat.$prat_id}}
                       </td>
-                      <td class="text">
+                      <td class="text {{if $consultation->annule}}cancelled{{/if}}">
                         {{assign var=patient value=$consultation->_ref_patient}}
                         <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">{{$patient}}</span>
                       </td>
-                      <td class="text">
+                      <td class="text {{if $consultation->annule}}cancelled{{/if}}">
                         {{mb_value object=$consultation->_ref_plageconsult field=date}}
                       </td>
-                      <td>{{mb_value object=$consultation field=heure}}</td>
+                      <td class="{{if $consultation->annule}}cancelled{{/if}}">{{mb_value object=$consultation field=heure}}</td>
                     </tr>
                   {{/foreach}}
                </table>
