@@ -8,6 +8,7 @@
   <input type="hidden" name="_annule" value="{{$rpu->_annule|default:"0"}}" />
 
   <input type="hidden" name="_bind_sejour" value="1" />
+  <input type="hidden" name="_entree_preparee" value="{{$sejour->entree_preparee}}"/>
   <table class="form">
     <colgroup>
       <col class="narrow" />
@@ -397,6 +398,10 @@
           <button class="{{$annule_class}}" type="button" onclick="cancelRPU();">
             {{$annule_text}}
           </button>
+
+          {{if !$sejour->entree_preparee}}
+            <button class="tick" type="submit" onclick="$V(this.form._entree_preparee, 1)">{{tr}}CSejour-entree_preparee{{/tr}}</button>
+          {{/if}}
 
           {{if $can->admin}}
             <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'urgence ',objName:'{{$rpu->_view|smarty:nodefaults|JSAttribute}}'})">

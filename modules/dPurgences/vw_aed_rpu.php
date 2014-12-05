@@ -54,6 +54,7 @@ if ($rpu->_id || $rpu->sejour_id) {
   $patient = $sejour->_ref_patient;
   $patient->loadRefConstantesMedicales(null, array('poids', 'taille'));
   $patient->loadRefDossierMedical();
+  $patient->loadRefsNotes();
   if ($patient->_ref_dossier_medical->_id) {
     $patient->_ref_dossier_medical->canDo();
     $patient->_ref_dossier_medical->loadRefsAllergies();

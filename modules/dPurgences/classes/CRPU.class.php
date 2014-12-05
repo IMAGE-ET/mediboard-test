@@ -79,6 +79,7 @@ class CRPU extends CMbObject {
   public $_service_id;
   public $_mode_entree_id;
   public $_UHCD;
+  public $_entree_preparee;
   public $_etablissement_sortie_id;
   public $_etablissement_entree_id;
   public $_service_entree_id;
@@ -426,6 +427,7 @@ class CRPU extends CMbObject {
     $sejour->destination             = $this->_destination;
     $sejour->transport               = $this->_transport;
     $sejour->UHCD                    = $this->_UHCD;
+    $sejour->entree_preparee         = $this->_entree_preparee;
     // Le patient est souvent chargé à vide ce qui pose problème
     // dans le onAfterStore(). Ne pas supprimer.
     $sejour->_ref_patient = null;
