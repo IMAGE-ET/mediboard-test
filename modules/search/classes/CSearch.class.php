@@ -232,7 +232,7 @@ class CSearch {
       $object = new $datum['object_class']();
       if (!$object->load($datum['object_id'])) {
         $datum_to_index["id"]  = $datum['object_id'];
-        $datum_to_index["date"] = CMbDT::format(CMbDT::dateTime(), "%Y%m%d");
+        $datum_to_index["date"] = CMbDT::format(CMbDT::dateTime(), "%Y/%m/%d");
           return $datum_to_index;
       }
       //On récupère les champs à indexer.
@@ -245,7 +245,7 @@ class CSearch {
     }
     else {
       $datum_to_index["id"]          = $datum['object_id'];
-      $datum_to_index["date"]        = CMbDT::format(CMbDT::dateTime(), "%Y%m%d");
+      $datum_to_index["date"]        = CMbDT::format(CMbDT::dateTime(), "%Y/%m/%d");
     }
 
     $datum_to_index['body'] = mb_convert_encoding($datum_to_index['body'], "UTF-8", "Windows-1252");
