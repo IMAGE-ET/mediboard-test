@@ -540,108 +540,110 @@ Main.add(function() {
 <!-- Zone de confirmation de verrouillage du document -->
 <div id="lock_area" style="display: none;">
   {{if !$conf.dPcompteRendu.CCompteRendu.pass_lock}}
-    <form name="LockDocOwner" method="post" action="?m=system&a=ajax_password_action"
+    <fieldset>
+      <form name="LockDocOwner" method="post" action="?m=system&a=ajax_password_action"
+            onsubmit="return onSubmitFormAjax(this, {useFormAction: true})">
+        <input type="hidden" name="user_id" class="notNull" value="{{$app->user_id}}" />
+        <input type="hidden" name="callback" value="toggleLock" />
+        <table class="form">
+          <tr>
+            <th class="title" colspan="2">
+              <button type="button" class="cancel notext" style="float: right;"
+                      onclick="$V(getForm('editFrm')._is_locked, 0, false);
+                        $V(getForm('editFrm').___is_locked, 0, false);
+                        Control.Modal.close();">
+                {{tr}}Cancel{{/tr}}
+              </button>
+              Verrouillage du document
+            </th>
+          </tr>
+          <tr>
+            <td colspan="2" class="button" {{if $app->_ref_user->_id == $compte_rendu->author_id}}style="display: none;"{{/if}}>
+              <label>
+                <input type="checkbox" name="change_owner" {{if $app->_ref_user->isPraticien()}}checked{{/if}}/>
+                <strong>Devenir propriétaire du document</strong>
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="text button" colspan="2">
+              <strong>Souhaitez-vous réellement verrouiller ce document sous votre nom ?</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class="button" colspan="2">
+              <button type="button" class="tick" onclick="this.form.onsubmit();">Ok</button>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </fieldset>
+  {{/if}}
+  <fieldset>
+    <form name="LockDocOther" method="post" action="?m=system&a=ajax_password_action"
           onsubmit="return onSubmitFormAjax(this, {useFormAction: true})">
-      <input type="hidden" name="user_id" class="notNull" value="{{$app->user_id}}" />
+      <input type="hidden" name="user_id" class="notNull"
+             {{if $conf.dPcompteRendu.CCompteRendu.pass_lock}}value="{{$curr_user->_id}}"{{/if}} />
       <input type="hidden" name="callback" value="toggleLock" />
       <table class="form">
+        {{if $conf.dPcompteRendu.CCompteRendu.pass_lock}}
+          <tr>
+            <th class="title" colspan="2">
+              <button type="button" class="cancel notext" style="float: right;"
+                      onclick="$V(getForm('editFrm')._is_locked, 0, false);
+                        $V(getForm('editFrm').___is_locked, 0, false);
+                        Control.Modal.close();">
+                {{tr}}Cancel{{/tr}}
+              </button>
+              Verrouillage du document
+            </th>
+          </tr>
+          <tr>
+            <td colspan="2" class="button" {{if $app->_ref_user->_id == $compte_rendu->author_id}}style="display: none;"{{/if}}>
+              <label>
+                <input type="checkbox" name="change_owner" {{if $app->_ref_user->isPraticien()}}checked{{/if}}/>
+                <strong>Devenir propriétaire du document</strong>
+              </label>
+            </td>
+          </tr>
+        {{/if}}
         <tr>
-          <th class="title" colspan="2" >
-            Verrouillage du document
-          </th>
-        </tr>
-        <tr>
-          <td colspan="2" class="button">
-            <label>
-              <input type="checkbox" name="change_owner" {{if $app->_ref_user->isPraticien()}}checked{{/if}}/>
-              <strong>Devenir propriétaire du document</strong>
-            </label>
+          <td class="text button" colspan="2">
+            <strong>
+              {{if $conf.dPcompteRendu.CCompteRendu.pass_lock}}
+                Pour verrouiller ce document sous votre nom, saisissez votre mot de passe ou choisissez un autre nom dans la liste.
+              {{else}}
+                Souhaitez-vous verrouiller ce document pour un autre utilisateur ?
+              {{/if}}
+            </strong>
           </td>
         </tr>
         <tr>
-          <td></td>
+          <th>Utilisateur</th>
+          <td>
+            <input type="text" name="_user_view" class="autocomplete"
+                   {{if $conf.dPcompteRendu.CCompteRendu.pass_lock}}value="{{$curr_user}}"{{/if}} />
+          </td>
         </tr>
         <tr>
-          <td class="text button" colspan="2">
-            <strong>Souhaitez-vous réellement verrouiller ce document sous votre nom ?</strong>
+          <th>
+            <label for="user_password">Mot de passe</label>
+          </th>
+          <td>
+            <input type="password" name="user_password" class="notNull password str" />
           </td>
         </tr>
         <tr>
           <td class="button" colspan="2">
-            <button type="button" class="tick" onclick="this.form.onsubmit();">Ok</button>
-            <button type="button" class="cancel"
-                    onclick="$V(getForm('editFrm')._is_locked, 0, false);
-                      $V(getForm('editFrm').___is_locked, 0, false);
-                      Control.Modal.close();">
-              Annuler
-            </button>
+            <button class="tick singleclick" onclick="return this.form.onsubmit();">Ok</button>
           </td>
         </tr>
       </table>
     </form>
-  {{/if}}
-  <form name="LockDocOther" method="post" action="?m=system&a=ajax_password_action"
-        onsubmit="return onSubmitFormAjax(this, {useFormAction: true})">
-    <input type="hidden" name="user_id" class="notNull"
-           {{if $conf.dPcompteRendu.CCompteRendu.pass_lock}}value="{{$curr_user->_id}}"{{/if}} />
-    <input type="hidden" name="callback" value="toggleLock" />
-    <table class="form">
-      {{if $conf.dPcompteRendu.CCompteRendu.pass_lock}}
-        <tr>
-          <th class="title" colspan="2">
-            Verrouillage du document
-          </th>
-        </tr>
-        <tr>
-          <td colspan="2" class="button">
-            <label>
-              <input type="checkbox" name="change_owner" {{if $app->_ref_user->isPraticien()}}checked{{/if}}/>
-              <strong>Devenir propriétaire du document</strong>
-            </label>
-          </td>
-        </tr>
-      {{/if}}
-      <tr>
-        <td class="text button" colspan="2">
-          <strong>
-            {{if $conf.dPcompteRendu.CCompteRendu.pass_lock}}
-              Pour verrouiller ce document sous votre nom, saisissez votre mot de passe ou choisissez un autre nom dans la liste.
-            {{else}}
-              Souhaitez-vous verrouiller ce document pour un autre utilisateur ?
-            {{/if}}
-          </strong>
-        </td>
-      </tr>
-      <tr>
-        <th>Utilisateur</th>
-        <td>
-          <input type="text" name="_user_view" class="autocomplete"
-                 {{if $conf.dPcompteRendu.CCompteRendu.pass_lock}}value="{{$curr_user}}"{{/if}} />
-        </td>
-      </tr>
-      <tr>
-        <th>
-          <label for="user_password">Mot de passe</label>
-        </th>
-        <td>
-          <input type="password" name="user_password" class="notNull password str" />
-        </td>
-      </tr>
-      <tr>
-        <td class="button" colspan="2">
-          <button class="tick singleclick" onclick="return this.form.onsubmit();">Ok</button>
-          {{if $conf.dPcompteRendu.CCompteRendu.pass_lock}}
-            <button type="button" class="cancel"
-                    onclick="$V(getForm('editFrm')._is_locked, 0, false);
-                        $V(getForm('editFrm').___is_locked, 0, false);
-                        Control.Modal.close();">
-              Annuler
-            </button>
-          {{/if}}
-        </td>
-      </tr>
-    </table>
-  </form>
+  </fieldset>
 </div>
 <!-- Formulaire pour streamer le pdf -->
 <form style="display: none;" name="download-pdf-form" target="{{if $compte_rendu->factory == "CDomPDFConverter"}}download_pdf{{else}}_blank{{/if}}" method="post"
