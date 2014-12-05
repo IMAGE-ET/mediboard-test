@@ -102,10 +102,6 @@ else {
     $bilan = $sejour->loadRefBilanSSR();
     $referent = $bilan->loadRefKineReferent();
     
-    // Ugly hack du m_post
-    global $m;
-    $m = $m_post;
-    
     $date = CValue::getOrSession("date", CMbDT::date());
 
     $monday = CMbDT::date("last monday", CMbDT::date("+1 day", $date));

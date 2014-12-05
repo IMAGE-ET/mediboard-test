@@ -15,7 +15,7 @@ if (CAppUI::conf("readonly")) {
   return;
 }
 
-global $m, $m_post, $action, $dosql;
+global $m, $action, $dosql;
 
 if (!$action) {
   $action = $dosql;
@@ -30,7 +30,7 @@ if (!$action) {
 $ds = CSQLDataSource::get("std");
 
 $ma         = new CModuleAction();
-$ma->module = isset($m_post) ? $m_post : $m;
+$ma->module = $m;
 $ma->action = $action;
 
 $module_action_id = $ma->getID();

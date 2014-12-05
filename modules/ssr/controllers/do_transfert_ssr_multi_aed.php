@@ -17,10 +17,6 @@ $replacer_id = CValue::post("replacer_id");
 $conge = new CPlageConge();
 $conge->load($conge_id);
 
-// Ugly hack du m_post
-global $m;
-$m = $m_post;
-
 // Week dates
 $date = CValue::getOrSession("date", CMbDT::date());
 $monday = CMbDT::date("last monday", CMbDT::date("+1 DAY", $date));

@@ -181,8 +181,14 @@ if (!CAppUI::$instance->user_id) {
 }
 
 $tab = 1;
-// Set the module and action from the url
-if (null == $m = CAppUI::checkFileName(CValue::get("m", 0))) {
+
+$m = CValue::get("m");
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  $m = CValue::post("m") ?: $m;
+}
+
+$m = CAppUI::checkFileName($m);
+if (null == $m) {
   $m = CPermModule::getFirstVisibleModule();
   $parts = explode("-", CAppUI::pref("DEFMODULE"), 2);
   
@@ -217,7 +223,6 @@ $can = $module->canDo();
 $a      = CAppUI::checkFileName(CValue::get("a"      , $index));
 $u      = CAppUI::checkFileName(CValue::get("u"      , ""));
 $dosql  = CAppUI::checkFileName(CValue::post("dosql" , ""));
-$m_post = CAppUI::checkFileName(CValue::post("m"     , $m));
 $class  = CAppUI::checkFileName(CValue::post("@class", ""));
 
 $tab = $a == "index" ? 
@@ -235,7 +240,7 @@ if ($indexGroup->load($g) && !$indexGroup->canRead()) {
 $user = CAppUI::$user;
 // Check whether the password is strong enough
 // If account is not a robot
-if ($user->_id && !$user->isRobot() && (!($m == "admin" && $tab == "chpwd") && !($m_post == "admin" && $dosql == "do_chpwd_aed"))) {
+if ($user->_id && !$user->isRobot() && (!($m == "admin" && $tab == "chpwd") && !($m == "admin" && $dosql == "do_chpwd_aed"))) {
   if (
       CAppUI::$instance->weak_password
       && (!CAppUI::$instance->user_remote || CAppUI::conf("admin CUser apply_all_users"))
@@ -261,16 +266,16 @@ CCSRF::checkProtection();
 // do some db work if dosql is set
 if ($dosql) {
   // dP remover super hack
-  if (!CModule::getInstalled($m_post)) {
-    if (!CModule::getInstalled("dP$m_post")) {
-      CAppUI::redirect("m=system&a=module_missing&mod=$m_post");
+  if (!CModule::getInstalled($m)) {
+    if (!CModule::getInstalled("dP$m")) {
+      CAppUI::redirect("m=system&a=module_missing&mod=$m");
     }
-    $m_post = "dP$m_post";
+    $m = "dP$m";
   }  
   
   // controller in controllers/ directory
-  if (is_file("./modules/$m_post/controllers/$dosql.php")) {
-    include "./modules/$m_post/controllers/$dosql.php";
+  if (is_file("./modules/$m/controllers/$dosql.php")) {
+    include "./modules/$m/controllers/$dosql.php";
   }
 }
 
