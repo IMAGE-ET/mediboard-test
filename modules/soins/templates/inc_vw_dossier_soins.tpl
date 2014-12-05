@@ -36,7 +36,7 @@
     submitFormAjax(oForm, 'systemMsg', { onComplete: function(){
       PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}',PlanSoins.nb_decalage, 'planification', object_id, object_class, key_tab);
     } } );
-  }
+  };
 
   refreshDossierSoin = function(mode_dossier, chapitre, force_refresh){
     PlanSoins.toggleAnciennete(chapitre);
@@ -44,11 +44,11 @@
       PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}',PlanSoins.nb_decalage, mode_dossier, null, null, null, chapitre, null, null, '{{$hide_old_lines}}', '{{$hide_line_inactive}}');
       window[chapitre+'SoinLoaded'] = true;
     }
-  }
+  };
 
   addCibleTransmission = function(sejour_id, object_class, object_id, libelle_ATC) {
     addTransmission(sejour_id, '{{$app->user_id}}', null, object_id, object_class, libelle_ATC);
-  }
+  };
 
 
   editPerf = function(prescription_line_mix_id, date, mode_dossier, sejour_id){
@@ -58,7 +58,7 @@
     url.addParam("mode_dossier", mode_dossier);
     url.addParam("sejour_id", sejour_id);
     url.popup(800,600,"Pefusion");
-  }
+  };
 
   submitPosePerf = function(oFormPerf){
     if(confirm('Etes vous sur de vouloir poser la perfusion ?')){
@@ -68,7 +68,7 @@
         PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}', PlanSoins.nb_decalage,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
       } } )
     }
-  }
+  };
 
 
   submitRetraitPerf = function(oFormPerf){
@@ -79,20 +79,20 @@
         PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}', PlanSoins.nb_decalage,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
       } } )
     }
-  }
+  };
 
 
   viewLegend = function(){
     var url = new Url("dPhospi", "vw_legende_dossier_soin");
     url.modal({width: 400, height: 200});
-  }
+  };
 
   calculSoinSemaine = function(date, prescription_id){
     var url = new Url("prescription", "httpreq_vw_dossier_soin_semaine");
     url.addParam("date", date);
     url.addParam("prescription_id", prescription_id);
     url.requestUpdate("semaine");
-  }
+  };
 
   viewSegments = function(chapitre, line_guid){
     var url = new Url("prescription", "vw_segments_line");
@@ -104,7 +104,7 @@
       if (window.updatePlanSoinsPatients) {
         updatePlanSoinsPatients();
       }} } );
-  }
+  };
 
   // Initialisation
   window.periodicalBefore = null;
@@ -140,19 +140,19 @@
         }
       }
     }
-  }
+  };
 
   updateTasks = function(sejour_id){
     var url = new Url("soins", "ajax_vw_tasks_sejour");
     url.addParam("sejour_id", sejour_id);
     url.requestUpdate("tasks");
-  }
+  };
 
   showDebit = function(div, color){
     $(div.up('tr').up('tr')).select("."+div.down().className).each(function(elt){
       elt.setStyle( { backgroundColor: '#'+color } );
     });
-  }
+  };
 
   submitSuivi = function(oForm, del) {
     sejour_id = oForm.sejour_id.value;
@@ -177,12 +177,18 @@
       }
       updateNbTrans(sejour_id);
     } });
-  }
+  };
 
   openSurveillanceTab = function() {
     var elt = $$('a[href="#constantes-medicales"]')[0];
     elt.click();
-  }
+  };
+
+  openModalTP = function() {
+    window.modalUrlTp = new Url("prescription", "ajax_vw_traitements_personnels");
+    window.modalUrlTp.addParam("object_guid", '{{$prescription->_ref_object->_guid}}');
+    window.modalUrlTp.requestModal("80%", "80%", {onClose: loadSuiviSoins });
+  };
 
   // Cette fonction est dupliquée
   function updateNbTrans(sejour_id) {
@@ -516,6 +522,8 @@
           </button>
           {{/if}}
           <button type="button" class="tick" onclick="PlanSoins.applyAdministrations();" id="button_administration">
+          <button type="button" class="new" onclick="openModalTP()">
+            Gestion des traitements personnels ({{$prescription->_count_lines_tp}}/{{$prescription->_count_dossier_medical_tp}})</button>
           </button>
         </td>
         <td style="text-align: center">

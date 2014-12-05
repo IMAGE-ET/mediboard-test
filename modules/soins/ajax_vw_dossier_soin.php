@@ -255,6 +255,19 @@ if (CModule::getActive("dPprescription")) {
     if ($prescription->_id) {
       $show_initiales_pharma = CAppUI::conf("dPprescription CPrescription show_initiales_pharma", $group->_guid);
 
+      // Pour le bouton de gestion des traitements personnels
+      $patient = $prescription->loadRefPatient();
+      $prescription_tp = $patient->loadRefDossierMedical()->loadUniqueBackRef("prescription");
+      $prescription->_count_dossier_medical_tp = 0;
+      $_line_tp = new CPrescriptionLineMedicament();
+      $where = array();
+      if ($prescription_tp->_id) {
+        $where["prescription_id"] = " = '$prescription_tp->_id'";
+        $where[] = "fin IS NULL OR fin > '".CMbDT::date()."'";
+        $prescription->_count_dossier_medical_tp = $_line_tp->countList($where);
+      }
+      $prescription->countLinesTP();
+
       // Chargement des lignes de medicament
       if (in_array($chapitre, array("all_med", "all_chaps"))) {
         $prescription->loadRefsLinesMedByCat("1", "1", '', $hide_old_lines, null, null, $hide_line_inactive);
