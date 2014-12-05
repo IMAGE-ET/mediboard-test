@@ -265,8 +265,8 @@ class CMediusers extends CPerson {
     $props["_force_change_password"] = "bool default|0";
 
     // The different levels of security are stored to be usable in JS
-    $props["_user_password_weak"]   = "password minLength|4";
-    $props["_user_password_strong"] = "password minLength|6 notContaining|_user_username notNear|_user_username alphaAndNum";
+    $props["_user_password_weak"]   = "password minLength|4 randomizable";
+    $props["_user_password_strong"] = "password minLength|6 notContaining|_user_username notNear|_user_username alphaAndNum randomizable";
 
     $props["_user_password"] = $props["_user_password_weak"] . " reported";
 

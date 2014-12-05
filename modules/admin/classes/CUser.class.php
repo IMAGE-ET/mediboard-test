@@ -177,8 +177,8 @@ class CUser extends CPerson {
     $props["force_change_password"]     = "bool default|0";
 
     // The different levels of security are stored to be usable in JS
-    $props["_user_password_weak"]   = "password minLength|4";
-    $props["_user_password_strong"] = "password minLength|6 notContaining|user_username notNear|user_username alphaAndNum";
+    $props["_user_password_weak"]   = "password minLength|4 randomizable";
+    $props["_user_password_strong"] = "password minLength|6 notContaining|user_username notNear|user_username alphaAndNum randomizable";
 
     // The actuel config level
     $props["_user_password"] = CAppUI::conf("admin CUser strong_password") ?

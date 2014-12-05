@@ -1,11 +1,11 @@
-<?php 
+<?php
 /**
  * $Id$
- * 
+ *
  * @package    Mediboard
  * @subpackage classes
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -15,6 +15,9 @@
 class CPasswordSpec extends CMbFieldSpec {
   public $minLength;
   public $revealable;
+
+  /** @var boolean Can we generate random password? */
+  public $randomizable;
 
   /**
    * @see parent::getSpecType()
@@ -26,20 +29,21 @@ class CPasswordSpec extends CMbFieldSpec {
   /**
    * @see parent::getDBSpec()
    */
-  function getDBSpec(){
+  function getDBSpec() {
     return "VARCHAR(50)";
   }
 
   /**
    * @see parent::getOptions()
    */
-  function getOptions(){
+  function getOptions() {
     return array(
-      'minLength' => 'num',
-      'revealable' => 'bool',
+      'minLength'    => 'num',
+      'revealable'   => 'bool',
+      'randomizable' => 'bool',
     ) + parent::getOptions();
   }
-  
+
   // TODO: Factoriser les check
   function checkProperty($object) {
     $propValue = $object->{$this->fieldName};
@@ -48,37 +52,38 @@ class CPasswordSpec extends CMbFieldSpec {
     if ($this->minLength) {
       if (!$length = $this->checkLengthValue($this->minLength)) {
         trigger_error("Spécification de longueur minimale invalide (longueur = $this->minLength)", E_USER_WARNING);
+
         return "Erreur système";
       }
-      
+
       if (strlen($propValue) < $length) {
         return "Le mot de passe n'a pas la bonne longueur '$propValue' (longueur minimale souhaitée : $length)'";
       }
     }
-    
+
     // notContaining
     if ($field = $this->notContaining) {
       if ($msg = $this->checkTargetPropValue($object, $field)) {
         return $msg;
       }
-      
-      $targetPropValue = $object->$field;  
+
+      $targetPropValue = $object->$field;
       if (stristr($propValue, $targetPropValue)) {
         return "Le mot de passe ne doit pas contenir '$field->fieldName'";
       }
     }
-    
+
     // notNear
     if ($field = $this->notNear) {
       if ($msg = $this->checkTargetPropValue($object, $field)) {
         return $msg;
       }
-      $targetPropValue = $object->$field;  
+      $targetPropValue = $object->$field;
       if (levenshtein($propValue, $targetPropValue) < 3) {
         return "Le mot de passe ressemble trop à '$field->fieldName'";
       }
     }
-    
+
     // alphaAndNum
     if ($this->alphaAndNum) {
       if (!preg_match("/[A-z]/", $propValue) || !preg_match("/\d+/", $propValue)) {
@@ -92,23 +97,30 @@ class CPasswordSpec extends CMbFieldSpec {
   /**
    * @see parent::getFormHtmlElement()
    */
-  function getFormHtmlElement($object, $params, $value, $className){
-    $form         = CMbArray::extract($params, "form"); // needs to be extracted
-    $field        = CMbString::htmlSpecialChars($this->fieldName);
-    $extra        = CMbArray::makeXmlAttributes($params);
-    $sHtml        = '<input type="password" name="'.$field.'" class="'.CMbString::htmlSpecialChars(trim($className.' '.$this->prop)).' styled-element" ';
-    
+  function getFormHtmlElement($object, $params, $value, $className) {
+    $form  = CMbArray::extract($params, "form"); // needs to be extracted
+    $field = CMbString::htmlSpecialChars($this->fieldName);
+    $extra = CMbArray::makeXmlAttributes($params);
+    $sHtml = '<input type="password" name="' . $field . '" class="' . CMbString::htmlSpecialChars(trim($className . ' ' . $this->prop)) . ' styled-element" ';
+
     if ($this->revealable) {
-      $sHtml       .= ' value="'.CMbString::htmlSpecialChars($value).'" ';
+      $sHtml .= ' value="' . CMbString::htmlSpecialChars($value) . '" ';
     }
-    
-    $sHtml       .= $extra.' />';
-    
+
+    $sHtml .= $extra . ' />';
+
     if ($this->revealable) {
-      $sHtml       .= '<button class="lookup notext" type="button" onclick="var i=$(this).previous(\'input\');i.type=(i.type==\'password\')?\'text\':\'password\'"></button>';
+      $sHtml .= '<button class="lookup notext" type="button" onclick="var i=$(this).previous(\'input\');i.type=(i.type==\'password\')?\'text\':\'password\'"></button>';
     }
-    
-    $sHtml       .= '<span id="'.$field.'_message"></span>';
+
+    if ($this->randomizable) {
+      $random_call = "getRandomPassword('$object->_class', '$field');";
+      $title       = CAppUI::tr("common-action-Get random password");
+      $sHtml .= '<button class="change notext" type="button" onclick="' . $random_call . '" title="' . $title . '"></button>';
+    }
+
+    $sHtml .= '<span id="' . $field . '_message"></span>';
+
     return $sHtml;
   }
 
@@ -124,7 +136,7 @@ class CPasswordSpec extends CMbFieldSpec {
    * @see parent::getLitteralDescription()
    */
   function getLitteralDescription() {
-    return "Mot de passe. ".
+    return "Mot de passe. " .
     parent::getLitteralDescription();
   }
 }
