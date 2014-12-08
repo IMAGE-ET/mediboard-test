@@ -503,7 +503,7 @@ class CHPrimSanteMessageXML extends CMbXMLDocument {
     if ($count > 1) {
       return new CHPrimSanteError($this->_ref_exchange_hpr, "P", "04", array("P", $this->loop+1, $this->identifier_patient), "8.25");
     }
-    //si on est en modification et qu'aucun séjour n'a été retrouvé
+    //si on est en mode IPP_NDA(récupération du nda) et qu'aucun séjour n'a été retrouvé
     if (!$create && !$sejour->_id) {
       return new CHPrimSanteError($this->_ref_exchange_hpr, "P", "06", array("P", $this->loop+1, $this->identifier_patient), "8.25");
     }
