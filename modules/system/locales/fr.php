@@ -2542,6 +2542,7 @@ $locales['config-readonly-desc'] = 'Passe l\'application en lecture seule. Aucun
 $locales['config-ref_pays'] = 'Pays de référence';
 $locales['config-ref_pays-1'] = 'France';
 $locales['config-ref_pays-2'] = 'Suisse';
+$locales['config-ref_pays-3'] = 'Belgique';
 $locales['config-ref_pays-desc'] = 'Pays de référence';
 $locales['config-root_dir'] = 'Répertoire racine de l\'application';
 $locales['config-root_dir-desc'] = 'Répertoire racine de l\'application pour rendre absolus les chemins d\'accès aux fichiers';
