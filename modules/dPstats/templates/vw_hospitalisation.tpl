@@ -29,6 +29,13 @@
     DisplayGraph.addFiltersParam(url);
     url.modal();
   };
+
+  DisplayGraph.statsPatientsParTypeHospiParService = function() {
+    var form = getForm("stats_params");
+    var url = new Url("stats", "ajax_patients_by_type_by_service");
+    url.addFormData(form);
+    url.modal();
+  }
 </script>
 
 <form name="stats_params" action="?" method="get" onsubmit="return false;">
@@ -120,7 +127,7 @@
   <tr>
     <td class="button" style="width: 50%">
       <div class="small-info" style="text-align: center">
-        Répartition par service du nombre de patient
+        Répartition par service du nombre de patients
         <br />
         <button type="button" class="stats"
                 onclick="DisplayGraph.launchStats('patparservice')">
@@ -156,6 +163,18 @@
         <br />
         <button type="button" class="list"
                 onclick="DisplayGraph.qualiteHospi()">
+          {{tr}}View{{/tr}}
+        </button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <div class="small-info" style="text-align: center">
+        Répartition du nombre de patients par type d'hospitalisation par service
+        <br />
+        <button type="button" class="list"
+                onclick="DisplayGraph.statsPatientsParTypeHospiParService()">
           {{tr}}View{{/tr}}
         </button>
       </div>
