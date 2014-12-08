@@ -188,7 +188,7 @@ class CCdaTools {
     }
 
     if ($returnErrors !== true || $validateSchematron) {
-      mbTrace($returnErrors);
+      mbLog($returnErrors);
       throw new CMbException("Problème de conformité, vérifiez les informations nécessaires pour le CDA");
     }
   }

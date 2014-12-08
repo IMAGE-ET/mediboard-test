@@ -16,7 +16,7 @@ CCanDo::checkAdmin();
 $cr  = new CCompteRendu();
 $cr->load($cr->getRandomValue("compte_rendu_id", true));
 
-$factory = new CCDAFactory($cr);
+$factory = CCDAFactory::factory($cr);
 $message = $factory->generateCDA();
 
 $treecda = CCdaTools::parse($message);

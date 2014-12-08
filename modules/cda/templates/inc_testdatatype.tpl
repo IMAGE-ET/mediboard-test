@@ -23,7 +23,7 @@
   </tr>
   {{foreach from=$result key=name item=_test}}
     <tr>
-      <th colspan="3" class="title">
+      <th colspan="3" class="section">
         <A NAME="{{$name}}">{{$name}}</A>
       </th>
     </tr>

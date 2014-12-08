@@ -23,8 +23,13 @@ class CCDAActRelationshipCDA extends CCDADocumentCDA {
    */
   function setComponent2() {
     $component2 = new CCDAPOCD_MT000040_Component2();
+    if (parent::$cda_factory->level == 1) {
+      $component2->setNonXMLBody(parent::$act->setNonXMLBody());
+    }
+    else {
+      $component2->setStructuredBody(parent::$act->setStructuredBody());
+    }
 
-    $component2->setNonXMLBody(parent::$act->setNonXMLBody());
     return $component2;
   }
 
@@ -50,6 +55,11 @@ class CCDAActRelationshipCDA extends CCDADocumentCDA {
     return $documentationOf;
   }
 
+  /**
+   * Création du relatedDocument
+   *
+   * @return CCDAPOCD_MT000040_RelatedDocument
+   */
   function appendRelatedDocument() {
     $related = new CCDAPOCD_MT000040_RelatedDocument();
     if (parent::$cda_factory->old_version) {

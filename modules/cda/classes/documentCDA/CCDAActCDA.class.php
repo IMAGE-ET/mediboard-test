@@ -99,18 +99,26 @@ class CCDAActCDA extends CCDADocumentCDA {
     /**
      * Création des éléments obligatoire constituant le document
      */
+    //Ajout des patients
     $clinicaldocument->appendRecordTarget($participation->setRecordTarget());
+    //Ajout de l'établissement
     $clinicaldocument->setCustodian($participation->setCustodian());
+    //Ajout des auteurs
     $clinicaldocument->appendAuthor($participation->setAuthor());
+    //Ajout de l'auteur legal
     $clinicaldocument->setLegalAuthenticator($participation->setLegalAuthenticator());
+    //Ajout des actes médicaux(ccam et cim10)
     $clinicaldocument->appendDocumentationOf($actRelationship->setDocumentationOF());
+    //Ajout de la rencontre(Contexte : séjour, consultation, opération)
     $clinicaldocument->setComponentOf($actRelationship->setComponentOf());
+    //Ajout du document parent
     $clinicaldocument->appendRelatedDocument($actRelationship->appendRelatedDocument());
 
     /**
      * Création du corp du document
      */
     $clinicaldocument->setComponent($actRelationship->setComponent2());
+
     return $clinicaldocument;
   }
 
@@ -171,6 +179,7 @@ class CCDAActCDA extends CCDADocumentCDA {
         $object->loadRefPlageConsult();
         $ivl = $this->createIvlTs($object->_datetime, $object->_date_fin, true);
         break;
+      default:
     }
     $encompassingEncounter->setEffectiveTime($ivl);
 
@@ -217,5 +226,14 @@ class CCDAActCDA extends CCDADocumentCDA {
     $ii->setRoot(parent::$cda_factory->old_version);
     $parent->appendId($ii);
     return $parent;
+  }
+
+  /**
+   * Création d'un contenu structuré
+   *
+   * @return CCDAPOCD_MT000040_StructuredBody
+   */
+  function setStructuredBody() {
+    $structured = new CCDAPOCD_MT000040_StructuredBody();
   }
 }
