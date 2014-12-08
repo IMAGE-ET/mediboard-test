@@ -130,11 +130,13 @@
              {{elseif !$statut_acq || 
                       ($statut_acq == 'erreur') || 
                       ($statut_acq == 'AR') || 
-                      ($statut_acq == 'err')}}
+                      ($statut_acq == 'err') ||
+                      ($statut_acq == 'T')}}
                error 
              {{elseif ($statut_acq == 'avertissement') || 
                       ($statut_acq == 'avt') || 
-                      ($statut_acq == 'AE')}}
+                      ($statut_acq == 'AE') ||
+                      ($statut_acq == 'P')}}
                warning
              {{/if}} 
              narrow">

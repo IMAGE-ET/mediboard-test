@@ -85,7 +85,9 @@
         </ul>
       </div>
     {{else}}
-      <div class="small-info">{{tr}}CExchange-no-acquittement{{/tr}}</div>
+      <div class="small-warning">{{tr}}CExchange-no-acquittement-or-invalid{{/tr}}
+      </div>
+      <pre>{{mb_value object=$exchange field="_acquittement" advanced=true}}</pre>
     {{/if}}
   {{/if}}
 </div>
