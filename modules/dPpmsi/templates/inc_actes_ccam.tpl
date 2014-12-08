@@ -43,7 +43,11 @@
     {{if ($subject->_class=="COperation")}}
     this.sAnesth = "_anesth";
     {{/if}}
-    this.sDate = '{{$subject->_datetime}}';
+    {{if $subject->_class == 'CSejour'}}
+      this.sDate = '{{$subject->_sortie}}';
+    {{else}}
+      this.sDate = '{{$subject->_datetime}}';
+    {{/if}}
     this.sView = "_new_code_ccam";
     this.pop();
   };
@@ -99,6 +103,11 @@
               Main.add(function() {
                 var form = getForm("addActes-{{$obj_guid}}");
                 var url = new Url("ccam", "httpreq_do_ccam_autocomplete");
+                {{if $subject->_class == 'CSejour'}}
+                  url.addParam("date", '{{$subject->_sortie}}');
+                {{else}}
+                  url.addParam("date", '{{$subject->_datetime}}');
+                {{/if}}
                 url.autoComplete(form._codes_ccam, "_ccam_autocomplete_{{$obj_guid}}", {
                   minChars: 1,
                   dropdown: true,
