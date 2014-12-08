@@ -27,16 +27,25 @@ class CSSLCertificate {
   /**
    * Construct
    *
-   * @param String $path_certificate P12 file
-   * @param String $passphrase       Passphrase for the certificate
+   * @param String $certificate P12 file
+   * @param String $passphrase  Passphrase for the certificate
+   * @param bool   $path        The certificate variable is a path
    */
-  function __construct($path_certificate, $passphrase = null) {
+  function __construct($certificate, $passphrase = null, $path = true) {
+    if ($path) {
+      $this->certificate_path = $certificate;
+      $certificate            = file_get_contents($certificate);
+      //Il est important que le certificat soit en p12
+      openssl_pkcs12_read($certificate, $array_cert, $passphrase);
+      $this->certificate = $array_cert["cert"];
+      $this->pivate_key  = $array_cert["pkey"];
+      $this->chain       = $array_cert["extracerts"];
+    }
+    else {
+      $this->certificate = $certificate;
+    }
+
     $this->passphrase = $passphrase;
-    $this->certificate_path = $path_certificate;
-    openssl_pkcs12_read(file_get_contents($path_certificate), $array_cert, $passphrase);
-    $this->certificate = $array_cert["cert"];
-    $this->pivate_key = $array_cert["pkey"];
-    $this->chain = $array_cert["extracerts"];
   }
 
   /**
@@ -63,7 +72,12 @@ class CSSLCertificate {
    */
   static function deleteHeader($certificate) {
     preg_match_all("#(?<=-{5})[^-]+(?=-{5}\\w)#", $certificate, $matches);
-    return $matches[0][0];
+
+    //On supprime les retour chariot potentielle pour un certificat avec la bonne forme
+    $certificate = str_replace("\n", "", $matches[0][0]);
+    $certificate = wordwrap($certificate, 64, "\n", true);
+
+    return $certificate;
   }
 
   /**
