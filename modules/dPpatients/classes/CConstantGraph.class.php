@@ -648,9 +648,11 @@ class CConstantGraph {
         }
         if ("$_value->context_class-$_value->context_id" !== $this->context_guid) {
           $_value->loadRefContext();
-          $_value->_ref_context->loadRefsFwd();
-          $entry['context'] = utf8_encode($_value->_ref_context->_view);
-          $entry['context_guid'] = "$_value->context_class-$_value->context_id";
+          if ($_value->_ref_context->_id) {
+            $_value->_ref_context->loadRefsFwd();
+            $entry['context']      = utf8_encode($_value->_ref_context->_view);
+            $entry['context_guid'] = "$_value->context_class-$_value->context_id";
+          }
         }
 
         $datas['values'][] = $entry;
