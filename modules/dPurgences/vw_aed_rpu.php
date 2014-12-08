@@ -75,10 +75,8 @@ if ($rpu->_id || $rpu->sejour_id) {
   $praticien = $sejour->_ref_praticien;
   $listResponsables[$praticien->_id] = $praticien;
 
-  if (CModule::getActive("maternite")) {
-    $patient->loadLastGrossesse();
-    $patient->loadLastAllaitement();
-  }
+  $patient->loadLastGrossesse();
+  $patient->loadLastAllaitement();
 }
 else {
   $rpu->_responsable_id = $user->_id;

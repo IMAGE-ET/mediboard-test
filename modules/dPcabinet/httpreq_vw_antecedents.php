@@ -41,10 +41,8 @@ if ($patient->_ref_dossier_medical && $patient->_ref_dossier_medical->_id) {
   }
 }
 
-if (CModule::getActive("maternite")) {
-  $patient->loadLastGrossesse();
-  $patient->loadLastAllaitement();
-}
+$patient->loadLastGrossesse();
+$patient->loadLastAllaitement();
 
 $isPrescriptionInstalled = CModule::getActive("dPprescription");
 

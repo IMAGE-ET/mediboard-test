@@ -70,9 +70,7 @@ if (CModule::getActive("dPprescription")) {
   CPrescription::$_load_lite = false;
 }
 
-if (CModule::getActive("maternite")) {
-  $patient->loadLastGrossesse();
-}
+$patient->loadLastGrossesse();
 
 $smarty = new CSmartyDP();
 

@@ -2029,6 +2029,9 @@ class CPatient extends CPerson {
   }
 
   function loadLastGrossesse() {
+    if (!CModule::getActive("maternite")) {
+      return;
+    }
     $grossesse = new CGrossesse();
     $grossesse->parturiente_id = $this->_id;
     $grossesse->active = 1;
@@ -2037,6 +2040,9 @@ class CPatient extends CPerson {
   }
 
   function loadLastAllaitement() {
+    if (!CModule::getActive("maternite")) {
+      return;
+    }
     $allaitement = new CAllaitement();
     $where = array();
     $where["patient_id"] = "= '$this->_id'";
