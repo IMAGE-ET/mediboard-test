@@ -122,6 +122,11 @@
               Main.add(function() {
                 var form = getForm("addActes-{{$subject->_guid}}");
                 var url = new Url("ccam", "httpreq_do_ccam_autocomplete");
+                {{if $subject->_class == 'CSejour'}}
+                  url.addParam("date", '{{$subject->_sortie}}');
+                {{else}}
+                  url.addParam("date", '{{$subject->_datetime}}');
+                {{/if}}
                 url.autoComplete(form._codes_ccam, "_ccam_autocomplete_{{$subject->_guid}}", {
                   minChars: 1,
                   dropdown: true,

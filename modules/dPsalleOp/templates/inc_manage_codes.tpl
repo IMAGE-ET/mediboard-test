@@ -56,7 +56,11 @@
     {{if ($subject->_class=="COperation")}}
     this.sAnesth = "_anesth";
     {{/if}}
-    this.sDate = '{{$subject->_datetime}}';
+    {{if $subject->_class == 'CSejour'}}
+      this.sDate = '{{$subject->_sortie}}';
+    {{else}}
+      this.sDate = '{{$subject->_datetime}}';
+    {{/if}}
     this.sView = "_codes_ccam";
     this.pop();
   };
@@ -64,7 +68,11 @@
   Main.add(function() {
     var oForm = getForm("manageCodes");
     var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
-    url.addParam("date", '{{$subject->_datetime}}');
+    {{if $subject->_class == 'CSejour'}}
+      url.addParam("date", '{{$subject->_sortie}}');
+    {{else}}
+      url.addParam("date", '{{$subject->_datetime}}');
+    {{/if}}
     url.autoComplete(oForm._codes_ccam, '', {
       minChars: 1,
       dropdown: true,
