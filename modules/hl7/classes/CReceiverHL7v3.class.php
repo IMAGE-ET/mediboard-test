@@ -80,16 +80,16 @@ class CReceiverHL7v3 extends CInteropReceiver {
   /**
    * Send event
    *
-   * @param CHL7v3Event $evenement Event type
-   * @param CMbObject   $mbObject  Object
-   * @param array       $headers   Headers
-   * @param boolean     $soapVar   XML message ?
+   * @param CHL7v3Event                            $evenement      Event type
+   * @param CMbObject|CXDSQueryRegistryStoredQuery $mbObject       Object
+   * @param array                                  $headers        Headers
+   * @param boolean                                $soapVar        XML message ?
+   * @param bool                                   $message_return No Send the message
    *
    * @throws Exception
-   *
    * @return null|string
    */
-  function sendEvent($evenement, CMbObject $mbObject, $headers, $soapVar = false) {
+  function sendEvent($evenement, CMbObject $mbObject, $headers, $soapVar = false, $message_return = false) {
     $evenement->_receiver = $this;
 
     if (!$this->isMessageSupported(get_class($evenement))) {
@@ -107,6 +107,10 @@ class CReceiverHL7v3 extends CInteropReceiver {
 
     if (!$this->synchronous) {
       return null;
+    }
+
+    if ($message_return) {
+      return $evenement->message;
     }
 
     $source = CExchangeSource::get("$this->_guid-C{$evenement->event_type}");
@@ -142,8 +146,7 @@ class CReceiverHL7v3 extends CInteropReceiver {
       return null;
     }
 
-    $class_name = "C{$evenement->event_type}";
-    if (!$ack = $class_name::getAcknowledgment($ack_data)) {
+    if (!$ack = self::createAcknowledgment($evenement->event_type, $ack_data)) {
       $exchange->store();
       return null;
     }
@@ -161,5 +164,18 @@ class CReceiverHL7v3 extends CInteropReceiver {
     $ack->_exchange_hl7v3 = $exchange;
 
     return $ack;
+  }
+
+  /**
+   * Create the acknowledgment
+   *
+   * @param String $event_type evenment type
+   * @param String $ack_data   acknowledgment message
+   *
+   * @return CHL7v3AcknowledgmentPRPA|CHL7v3AcknowledgmentXDSb
+   */
+  static function createAcknowledgment($event_type, $ack_data) {
+    $class_name = "C$event_type";
+    return $class_name::getAcknowledgment($ack_data);
   }
 }

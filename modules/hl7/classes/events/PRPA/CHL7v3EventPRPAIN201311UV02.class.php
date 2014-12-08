@@ -161,7 +161,12 @@ class CHL7v3EventPRPAIN201311UV02 extends CHL7v3EventPRPA implements CHL7EventPR
     $dom->addElement($name, "given", $mediuser->_p_first_name);
 
     // representedOrganization
-    $group = $mediuser->loadRefFunction()->loadRefGroup();
-    $this->addRepresentedOrganization($assignedEntity, $group);
+    if ($mediuser->_id) {
+      $group = $mediuser->loadRefFunction()->loadRefGroup();
+      $this->addRepresentedOrganizationGroup($assignedEntity, $group);
+    }
+    else {
+      $this->addRepresentedOrganization($assignedEntity, $mediuser->_struct_id_nat, $mediuser->_struct_name);
+    }
   }
 }

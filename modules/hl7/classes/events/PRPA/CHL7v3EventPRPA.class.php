@@ -508,22 +508,38 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
    *
    * @return void
    */
-  function addRepresentedOrganization(DOMNode $elParent, CGroups $group) {
+  function addRepresentedOrganizationGroup(DOMNode $elParent, CGroups $group) {
+    $identifiant = null;
+    if ($group->siret) {
+      $identifiant = "3$group->siret";
+    }
+
+    if ($group->finess) {
+      $identifiant = "1$group->finess";
+    }
+
+    $this->addRepresentedOrganization($elParent, $identifiant, $group->text);
+  }
+
+  /**
+   * Add represented organization
+   *
+   * @param DOMNode $elParent    Parent element
+   * @param String  $identifiant Identifiant
+   * @param String  $name        Name
+   *
+   * @return void
+   */
+  function addRepresentedOrganization(DOMNode $elParent, $identifiant, $name) {
     $dom = $this->dom;
 
     $representedOrganization = $dom->addElement($elParent, "representedOrganization");
     $this->setClassDeterminerCode($representedOrganization, "ORG", "INSTANCE");
 
     $id = $dom->addElement($representedOrganization, "id");
-    if ($group->siret) {
-      $this->setII($id, "3".$group->siret, "1.2.250.1.71.4.2.2");
-    }
+    $this->setII($id, $identifiant, "1.2.250.1.71.4.2.2");
 
-    if ($group->finess) {
-      $this->setII($id, "1".$group->finess, "1.2.250.1.71.4.2.2");
-    }
-
-    $dom->addElement($representedOrganization, "name", $group->text);
+    $dom->addElement($representedOrganization, "name", $name);
 
     $contactParty = $dom->addElement($representedOrganization, "contactParty");
     $this->setClassCode($contactParty, "CON");

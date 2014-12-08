@@ -25,6 +25,11 @@ class CHL7v3EventXDSbProvideAndRegisterDocumentSetRequest
   public $type;
   public $uuid;
   public $hide;
+  public $xcn_mediuser;
+  public $xon_etablissement;
+  public $specialty;
+  public $pratice_setting;
+  public $healtcare;
 
   /**
    * Build ProvideAndRegisterDocumentSetRequest event
@@ -43,7 +48,7 @@ class CHL7v3EventXDSbProvideAndRegisterDocumentSetRequest
 
     $message = $xml->createDocumentRepositoryElement($xml, "ProvideAndRegisterDocumentSetRequest");
 
-    $factory = new CCDAFactory($object);
+    $factory = CCDAFactory::factory($object);
     $factory->old_version = $this->old_version;
     $factory->old_id      = $this->old_id;
     $factory->receiver    = $this->_receiver;
@@ -55,21 +60,26 @@ class CHL7v3EventXDSbProvideAndRegisterDocumentSetRequest
       throw $e;
     }
 
-    $xds = new CXDSMappingCDA($factory);
-    $xds->type = $this->type;
+    $xds           = CXDSFactory::factory($factory);
+    $xds->type     = $this->type;
     $xds->doc_uuid = $this->uuid;
     switch ($this->hide) {
-      case "hide_ps":
+      case "0":
         $xds->hide_ps = true;
         break;
-
-      case "hide_patient":
+      case "1":
         $xds->hide_patient = true;
         break;
-
       default:
         $xds->hide_patient = false;
     }
+    $xds->extractData();
+    $xds->xcn_mediuser         = $this->xcn_mediuser      ? $this->xcn_mediuser      : $xds->xcn_mediuser;
+    $xds->xon_etablissement    = $this->xon_etablissement ? $this->xon_etablissement : $xds->xon_etablissement;
+    $xds->specialty            = $this->specialty         ? $this->specialty         : $xds->specialty;
+    $xds->practice_setting     = $this->pratice_setting   ? $this->pratice_setting   : $xds->practice_setting;
+    $xds->health_care_facility = $this->healtcare         ? $this->healtcare         : $xds->health_care_facility;
+
     $header_xds = $xds->generateXDS41();
     $xml->importDOMDocument($message, $header_xds);
 

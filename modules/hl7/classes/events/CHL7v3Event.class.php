@@ -22,6 +22,8 @@ class CHL7v3Event extends CHL7Event {
   /** @var string */
   public $interaction_id = null;
   public $version = "2009";
+  /** @var string */
+  public $_event_name;
 
   /**
    * Build event

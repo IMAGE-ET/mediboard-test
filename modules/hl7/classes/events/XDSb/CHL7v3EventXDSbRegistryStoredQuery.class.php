@@ -29,11 +29,14 @@ class CHL7v3EventXDSbRegistryStoredQuery extends CHL7v3EventXDSb implements CHL7
    * @return void
    */
   function build($object) {
-    parent::build($object);
+    //Récupération de l'objet mediboard concerné par la requête à effectuer(présence du loadLastLog dans le parent)
+    $document_item = $object->document_item;
+
+    parent::build($document_item);
 
     $xml = new CXDSXmlDocument();
-    $oid = CMbOID::getOIDFromClass($object, $this->_receiver);
-    $oid = $oid.".".$object->_id.".".$object->version;
+    $oid = CMbOID::getOIDFromClass($document_item, $this->_receiver);
+    $oid = $oid.".".$document_item->_id.".".$document_item->version;
     $message = $xml->createQueryElement($xml, "AdhocQueryRequest");
     $response_option = $xml->createQueryElement($message, "ResponseOption");
     $xml->addAttribute($response_option, "returnComposedObjects", "false");

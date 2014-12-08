@@ -33,8 +33,8 @@ class CHL7v3EventXDSbUpdateDocumentSet extends CHL7v3EventXDSb implements CHL7Ev
     parent::build($object);
     $uuid = $this->uuid;
 
-    $factory = new CCDAFactory($object);
-    $cda = $factory->generateCDA();
+    $factory = CCDAFactory::factory($object);
+    $cda     = $factory->generateCDA();
     try {
       CCdaTools::validateCDA($cda);
     }
@@ -44,8 +44,9 @@ class CHL7v3EventXDSbUpdateDocumentSet extends CHL7v3EventXDSb implements CHL7Ev
 
     $xml = new CXDSXmlDocument();
 
-    $xds = new CXDSMappingCDA($factory);
+    $xds = CXDSFactory::factory($factory);
     $xds->type = $this->type;
+    $xds->extractData();
     $header_xds = $xds->generateXDS57($uuid, $this->action);
 
     $xml->importDOMDocument($xml, $header_xds);
