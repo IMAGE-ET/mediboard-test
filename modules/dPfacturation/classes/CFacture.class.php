@@ -628,7 +628,8 @@ class CFacture extends CMbObject {
       foreach ($this->_montant_factures as $_montant) {
         $this->_montant_sans_remise += $_montant;
       }
-      $this->_montant_avec_remise = $this->_montant_sans_remise - $this->remise;
+      $this->_montant_avec_remise = $this->_montant_sans_remise;
+      $this->_montant_sans_remise += $this->remise;
     }
 
     $this->loadRefsRelances();
@@ -827,10 +828,7 @@ class CFacture extends CMbObject {
     if (count($this->_ref_items)) {
       return $this->_ref_items;
     }
-    $item =  new CFactureItem();
-    $item->object_id   = $this->_id;
-    $item->object_class = $this->_class;
-    $this->_ref_items = $item->loadMatchingList("code ASC");
+    $this->_ref_items = $this->loadBackRefs("items", 'code ASC');
     if (count($this->_ref_items)) {
       $this->_ref_actes_tarmed = array();
       $this->_ref_actes_caisse = array();

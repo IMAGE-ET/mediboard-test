@@ -248,6 +248,32 @@
   {{/foreach}}
 {{/if}}
 <tbody class="hoverable">
+  <tr>
+    <td colspan="4"></td>
+    <td colspan="2"><b>{{mb_label object=$facture field="remise"}}</b></td>
+    <td style="text-align: right;">
+      <form name="modif_remise" method="post" onsubmit="Facture.modifCloture(this.form);">
+        {{mb_class object=$facture}}
+        {{mb_key   object=$facture}}
+        <input type="hidden" name="patient_id" value="{{$facture->patient_id}}" />
+        <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
+
+        {{if $facture->cloture}}
+          {{mb_value object=$facture field="remise"}}
+        {{else}}
+          <input name="remise" type="text" value="{{$facture->remise}}" onchange="Facture.modifCloture(this.form);" size="4" />
+        {{/if}}
+
+        <br/>soit
+        {{if $facture->_montant_sans_remise!=0 && $facture->remise}}
+          <strong>{{math equation="(y/x)*100" x=$facture->_montant_sans_remise y=$facture->remise format="%.2f"}} %</strong>
+        {{else}}
+          <strong>0 %</strong>
+        {{/if}}
+      </form>
+    </td>
+  </tr>
+
   {{assign var="nb_montants" value=$facture->_montant_factures|@count}}
   {{foreach from=$facture->_montant_factures item=_montant key=key name=montants}}
     <tr>
@@ -258,35 +284,7 @@
       <td style="text-align:right;">{{$_montant|string_format:"%0.2f"|currency}}</td>
     </tr>
   {{/foreach}}
-  
-  <tr>
-    {{if !$facture->_montant_factures|count}}
-      <td colspan="4" rowspan="2"></td>
-    {{/if}}
-    <td colspan="2"><b>{{mb_label object=$facture field="remise"}}</b></td>
-    <td style="text-align: right;"> 
-      <form name="modif_remise" method="post" onsubmit="Facture.modifCloture(this.form);">
-        {{mb_class object=$facture}}
-        {{mb_key   object=$facture}}
-        <input type="hidden" name="patient_id" value="{{$facture->patient_id}}" />
-        <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />                
-        
-        {{if $facture->cloture}}
-          {{mb_value object=$facture field="remise"}} 
-        {{else}}
-          <input name="remise" type="text" value="{{$facture->remise}}" onchange="Facture.modifCloture(this.form);" size="4" />
-        {{/if}}
-        
-        <br/>soit 
-        {{if $facture->_montant_sans_remise!=0 && $facture->remise}}
-          <strong>{{math equation="(y/x)*100" x=$facture->_montant_sans_remise y=$facture->remise format="%.2f"}} %</strong>
-        {{else}}
-          <strong>0 %</strong>
-        {{/if}}
-      </form>
-    </td>
-  </tr>
-  
+
   <tr>
     <td colspan="2"><b>Montant Total</b></td>
     <td style="text-align:right;"><b>{{mb_value object=$facture field="_montant_avec_remise"}}</b></td>
