@@ -36,13 +36,13 @@
     <a class="actionPat" title="Modifier la consultation" href="?m=cabinet&tab=edit_planning&consultation_id={{$_consult->_id}}">
       <img src="images/icons/planning.png" alt="modifier" />
     </a>
-    <a class="iconed-text {{$_consult->_type}}" 
+    <a class="iconed-text {{$_consult->_type}}"
       href="?m=cabinet&tab=edit_consultation&selConsult={{$_consult->_id}}&chirSel={{$_consult->_ref_plageconsult->chir_id}}">
     {{else}}
     <a href="#nothing" class="iconed-text {{$_consult->_type}}">
     {{/if}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
-      Consultation le {{$_consult->_datetime|date_format:$conf.date}}
+      Consultation le {{$_consult->_datetime|date_format:$conf.datetime}}
       {{if $_consult->_nb_files_docs}}
         - ({{$_consult->_nb_files_docs}} Doc.)
       {{/if}}
