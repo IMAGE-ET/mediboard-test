@@ -1,4 +1,6 @@
-<script type="text/javascript">
+{{mb_script module="dPplanningOp" script="operation"}}
+
+<script>
 function printFicheAnesth(dossier_anesth_id) {
   var url = new Url("cabinet", "print_fiche");
   url.addParam("dossier_anesth_id", dossier_anesth_id);
@@ -86,7 +88,7 @@ Main.add(function(){
         </tr>
         {{if $count_ops_by_type == 0}}
           <tr>
-            <td colspan="8" class="empty">
+            <td colspan="10" class="empty">
               {{tr}}COperation.none{{/tr}}
             </td>
           </tr>
@@ -172,6 +174,7 @@ Main.add(function(){
                 </td>
                 <td {{if $_operation->annulee}}class="cancelled"{{/if}}>
                   <button type="button" class="edit notext" onclick="editVisite({{$_operation->_id}});">{{tr}}Edit{{/tr}}</button>
+                  <button type="button" class="injection" onclick="Operation.dossierBloc('{{$_operation->_id}}')">Dossier bloc</button>
                   {{if $_operation->_ref_consult_anesth->_id}}
                     <button type="button" class="print notext" onclick="printFicheAnesth('{{$_operation->_ref_consult_anesth->_id}}');">{{tr}}Print{{/tr}}</button>
                   {{/if}}
