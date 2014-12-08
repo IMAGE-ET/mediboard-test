@@ -1,0 +1,58 @@
+1.2.250.1.213.2.20;1.2.250.1.213.1.1.5.2;contentTypeCode
+1.2.250.1.213.2.21;1.2.250.1.213.1.1.5.2;20130123
+1.2.250.1.213.2.22;1.2.250.1.213.1.1.5.2;Jeu de valeurs pour contentTypeCode
+1.2.250.1.71.4.2.4;SA07;Cabinet individuel
+1.2.250.1.71.4.2.4;SA08;Cabinet de groupe
+1.2.250.1.71.4.2.4;SA09;Exercice en Société
+1.2.250.1.71.4.2.4;SA10;Transport sanitaire
+1.2.250.1.71.4.2.4;SA11;Entreprise d'intérim
+1.2.250.1.71.4.2.4;SA13;Prévention et Soins en Entreprise
+1.2.250.1.71.4.2.4;SA14;Etablissement scolaire ou universitaire
+1.2.250.1.71.4.2.4;SA15;P.M.I. Planification familiale
+1.2.250.1.71.4.2.4;SA24;Organisme de Sécurité Sociale
+1.2.250.1.71.4.2.4;SA25;Laboratoire de Biologie Médicale
+1.2.250.1.71.4.2.4;SA26;Ministère ou Service déconcentré
+1.2.250.1.71.4.2.4;SA27;Collectivité Territoriale
+1.2.250.1.71.4.2.4;SA28;Association ou organisme humanitaire
+1.2.250.1.71.4.2.4;SA29;Laboratoire d'Analyses et de Biologie Médicale
+1.2.250.1.71.4.2.4;SA31;Répart. Distrib. de Médicaments et Dispositifs Médicaux
+1.2.250.1.71.4.2.4;SA32;Fab. Exploit. Import de Médicaments et Dispositifs Médicaux
+1.2.250.1.71.4.2.4;SA33;Pharmacie d'officine
+1.2.250.1.71.4.2.4;SA34;Centre de dialyse
+1.2.250.1.71.4.2.4;SA35;Para-pharmacie
+1.2.250.1.71.4.2.4;SA50;Structure d'urgence, hors établissement hospitalier
+1.2.250.1.71.4.2.4;SA51;Réseau de santé
+1.2.250.1.71.4.2.4;SA52;Maison de santé, Pôle de santé
+1.2.250.1.71.4.2.4;SA53;Siège administratif d'un établissement de santé
+1.2.250.1.71.4.2.4;SA54;Organisme de dépistage et de prévention
+1.2.250.1.213.2.2;03;Hospitalisation complète (non compris hospitalisation de semaine)
+1.2.250.1.213.2.2;04;Hospitalisation de jour
+1.2.250.1.213.2.2;05;Hospitalisation de nuit
+1.2.250.1.213.2.2;06;Hospitalisation à domicile
+1.2.250.1.213.2.2;07;Consultations, soins externes
+1.2.250.1.213.2.2;08;Bloc opératoire (y compris obstétrical et gynécologique)
+1.2.250.1.213.2.2;09;Autres unités médico-techniques (anesthésiologie, explorations fonctionnelles, rééducation et réadaptation fonctionnelles, pharmacie)
+1.2.250.1.213.2.2;10;Accueil des urgences
+1.2.250.1.213.2.2;11;Hébergement complet ou internat (non compris internat de semaine)
+1.2.250.1.213.2.2;12;Hébergement de nuit en structure regroupée
+1.2.250.1.213.2.2;13;Semi-internat
+1.2.250.1.213.2.2;14;Externat
+1.2.250.1.213.2.2;15;Placement en famille d'accueil (strictement social)
+1.2.250.1.213.2.2;16;Prestations sur le lieu de vie (non compris placement familial)
+1.2.250.1.213.2.2;17;Internat de semaine
+1.2.250.1.213.2.2;18;Hébergement de nuit en structure éclatée
+1.2.250.1.213.2.2;19;Traitements et cures ambulatoires
+1.2.250.1.213.2.2;20;Hospitalisation de semaine
+1.2.250.1.213.2.2;21;Accueil de jour
+1.2.250.1.213.2.2;23;Anesthésie ou chirurgie ambulatoires
+1.2.250.1.213.2.2;24;Accueil et prise en charge en service d'accueil familial thérapeutique psychiatrique
+1.2.250.1.213.2.2;25;Hébergement temporaire de week-end ou de vacances
+1.2.250.1.213.2.2;26;Analyses médicales biologiques
+1.2.250.1.213.2.2;28;Consultations dentaires et soins dentaires
+1.2.250.1.213.2.2;32;Radiologie (radiodiagnostic et radiothérapie), imagerie médicale
+1.2.250.1.213.2.2;33;Recherche
+1.2.250.1.213.2.2;37;Accueil et prise en charge en appartement thérapeutique psychiatrique
+1.2.250.1.213.2.2;38;Accueil et prise en charge en centre de postcure psychiatrique
+1.2.250.1.213.2.2;39;Accueil et prise en charge en centre de crise psychiatrique
+1.2.250.1.213.2.2;97;Autre type d'activité
+1.2.250.1.213.1.1.4.6;EXP_PATIENT;Expression personnelle du patient

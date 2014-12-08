@@ -152,20 +152,19 @@ class CXDSTools {
   /**
    * Retourne les informations de l'etablissement sous la forme HL7v2 XON
    *
-   * @param CGroups $etablissement etablissement
+   * @param String $libelle     Libelle
+   * @param String $identifiant Identifiant
    *
    * @return string
    */
-  static function getXONetablissement($etablissement = null) {
-    if (!$etablissement) {
-      $etablissement = CGroups::loadCurrent();
-    }
+  static function getXONetablissement($libelle, $identifiant) {
 
-    $comp1  = $etablissement->text;
+    $comp1  = $libelle;
     $comp6  = "&1.2.250.1.71.4.2.2&ISO";
     $comp7  = "IDNST";
-    $comp10 = self::getIdEtablissement(false, $etablissement);
-    $xon = "$comp1^^^^^$comp6^$comp7^^^$comp10";
+    $comp10 = $identifiant;
+    $xon    = "$comp1^^^^^$comp6^$comp7^^^$comp10";
+
     return $xon;
   }
 
@@ -200,14 +199,16 @@ class CXDSTools {
   /**
    * Retourne les informations du Mediuser sous la forme HL7v2 XCN
    *
+   * @param String $identifiant Identifiant
+   * @param String $lastname    Last name
+   * @param String $firstname   First name
+   *
    * @return string
    */
-  static function getXCNMediuser() {
-    $mediuser = CMediusers::get();
-    $group = $mediuser->loadRefFunction()->loadRefGroup();
-    $comp1  = self::getIdEtablissement(true, $group)."/$mediuser->_id";
-    $comp2  = $mediuser->_p_last_name;
-    $comp3  = $mediuser->_p_first_name;
+  static function getXCNMediuser($identifiant, $lastname, $firstname) {
+    $comp1  = $identifiant;
+    $comp2  = $lastname;
+    $comp3  = $firstname;
     $comp9  = "&1.2.250.1.71.4.2.1&ISO";
     $comp10 = "D";
     $comp13 = "EI";

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jeuxValeurs>
+  <line id="SA07" oid="1.2.250.1.71.4.2.4" name="Cabinet individuel"/>
+  <line id="SA08" oid="1.2.250.1.71.4.2.4" name="Cabinet de groupe"/>
+  <line id="SA09" oid="1.2.250.1.71.4.2.4" name="Exercice en Société"/>
+  <line id="SA10" oid="1.2.250.1.71.4.2.4" name="Transport sanitaire"/>
+  <line id="SA11" oid="1.2.250.1.71.4.2.4" name="Entreprise d'intérim"/>
+  <line id="SA13" oid="1.2.250.1.71.4.2.4" name="Prévention et Soins en Entreprise"/>
+  <line id="SA14" oid="1.2.250.1.71.4.2.4" name="Etablissement scolaire ou universitaire"/>
+  <line id="SA15" oid="1.2.250.1.71.4.2.4" name="P.M.I. Planification familiale"/>
+  <line id="SA24" oid="1.2.250.1.71.4.2.4" name="Organisme de Sécurité Sociale"/>
+  <line id="SA25" oid="1.2.250.1.71.4.2.4" name="Laboratoire de Biologie Médicale"/>
+  <line id="SA26" oid="1.2.250.1.71.4.2.4" name="Ministère ou Service déconcentré"/>
+  <line id="SA27" oid="1.2.250.1.71.4.2.4" name="Collectivité Territoriale"/>
+  <line id="SA28" oid="1.2.250.1.71.4.2.4" name="Association ou organisme humanitaire"/>
+  <line id="SA29" oid="1.2.250.1.71.4.2.4" name="Laboratoire d'Analyses et de Biologie Médicale"/>
+  <line id="SA31" oid="1.2.250.1.71.4.2.4" name="Répart. Distrib. de Médicaments et Dispositifs Médicaux"/>
+  <line id="SA32" oid="1.2.250.1.71.4.2.4" name="Fab. Exploit. Import de Médicaments et Dispositifs Médicaux"/>
+  <line id="SA33" oid="1.2.250.1.71.4.2.4" name="Pharmacie d'officine"/>
+  <line id="SA34" oid="1.2.250.1.71.4.2.4" name="Centre de dialyse"/>
+  <line id="SA35" oid="1.2.250.1.71.4.2.4" name="Para-pharmacie"/>
+  <line id="SA50" oid="1.2.250.1.71.4.2.4" name="Structure d'urgence, hors établissement hospitalier"/>
+  <line id="SA51" oid="1.2.250.1.71.4.2.4" name="Réseau de santé"/>
+  <line id="SA52" oid="1.2.250.1.71.4.2.4" name="Maison de santé, Pôle de santé"/>
+  <line id="SA53" oid="1.2.250.1.71.4.2.4" name="Siège administratif d'un établissement de santé"/>
+  <line id="SA54" oid="1.2.250.1.71.4.2.4" name="Organisme de dépistage et de prévention"/>
+  <line id="03" oid="1.2.250.1.213.2.2" name="Hospitalisation complète (non compris hospitalisation de semaine)"/>
+  <line id="04" oid="1.2.250.1.213.2.2" name="Hospitalisation de jour"/>
+  <line id="05" oid="1.2.250.1.213.2.2" name="Hospitalisation de nuit"/>
+  <line id="06" oid="1.2.250.1.213.2.2" name="Hospitalisation à domicile"/>
+  <line id="07" oid="1.2.250.1.213.2.2" name="Consultations, soins externes"/>
+  <line id="08" oid="1.2.250.1.213.2.2" name="Bloc opératoire (y compris obstétrical et gynécologique)"/>
+  <line id="09" oid="1.2.250.1.213.2.2" name="Autres unités médico-techniques (anesthésiologie, explorations fonctionnelles, rééducation et réadaptation fonctionnelles, pharmacie)"/>
+  <line id="10" oid="1.2.250.1.213.2.2" name="Accueil des urgences"/>
+  <line id="11" oid="1.2.250.1.213.2.2" name="Hébergement complet ou internat (non compris internat de semaine)"/>
+  <line id="12" oid="1.2.250.1.213.2.2" name="Hébergement de nuit en structure regroupée"/>
+  <line id="13" oid="1.2.250.1.213.2.2" name="Semi-internat"/>
+  <line id="14" oid="1.2.250.1.213.2.2" name="Externat"/>
+  <line id="15" oid="1.2.250.1.213.2.2" name="Placement en famille d'accueil (strictement social)"/>
+  <line id="16" oid="1.2.250.1.213.2.2" name="Prestations sur le lieu de vie (non compris placement familial)"/>
+  <line id="17" oid="1.2.250.1.213.2.2" name="Internat de semaine"/>
+  <line id="18" oid="1.2.250.1.213.2.2" name="Hébergement de nuit en structure éclatée"/>
+  <line id="19" oid="1.2.250.1.213.2.2" name="Traitements et cures ambulatoires"/>
+  <line id="20" oid="1.2.250.1.213.2.2" name="Hospitalisation de semaine"/>
+  <line id="21" oid="1.2.250.1.213.2.2" name="Accueil de jour"/>
+  <line id="23" oid="1.2.250.1.213.2.2" name="Anesthésie ou chirurgie ambulatoires"/>
+  <line id="24" oid="1.2.250.1.213.2.2" name="Accueil et prise en charge en service d'accueil familial thérapeutique psychiatrique"/>
+  <line id="25" oid="1.2.250.1.213.2.2" name="Hébergement temporaire de week-end ou de vacances"/>
+  <line id="26" oid="1.2.250.1.213.2.2" name="Analyses médicales biologiques"/>
+  <line id="28" oid="1.2.250.1.213.2.2" name="Consultations dentaires et soins dentaires"/>
+  <line id="32" oid="1.2.250.1.213.2.2" name="Radiologie (radiodiagnostic et radiothérapie), imagerie médicale"/>
+  <line id="33" oid="1.2.250.1.213.2.2" name="Recherche"/>
+  <line id="37" oid="1.2.250.1.213.2.2" name="Accueil et prise en charge en appartement thérapeutique psychiatrique"/>
+  <line id="38" oid="1.2.250.1.213.2.2" name="Accueil et prise en charge en centre de postcure psychiatrique"/>
+  <line id="39" oid="1.2.250.1.213.2.2" name="Accueil et prise en charge en centre de crise psychiatrique"/>
+  <line id="97" oid="1.2.250.1.213.2.2" name="Autre type d'activité"/>
+  <line id="EXP_PATIENT" oid="1.2.250.1.213.1.1.4.6" name="Expression personnelle du patient"/>
+</jeuxValeurs>

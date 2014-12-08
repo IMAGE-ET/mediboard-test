@@ -36,22 +36,27 @@ class CXDSQueryRegistryStoredQuery {
   public $returnComposedObjects;
   public $returnType;
   public $values = array();
+  public $document_item;
 
 
   /**
    * set the EntryId query of the mediboard document
    *
-   * @param CCompteRendu|CFile $object   Mediboard document
-   * @param CInteropReceiver   $receiver Receiver
+   * @param CDocumentItem    $object   Mediboard document
+   * @param CInteropReceiver $receiver Receiver
    *
    * @return void
    */
-  function getEntryIDbyDocument($object, $receiver) {
+  function setEntryIDbyDocument($object, $receiver) {
     $oid = CMbOID::getOIDFromClass($object, $receiver);
-    $oid = $oid.".".$object->_id.".".$object->version;
+    $oid = "$oid.$object->_id.$object->version";
+
+    $this->document_item = $object;
+    //Pour l'authentification indirecte, les valeurs ne doivent pas être changées
     $this->returnComposedObjects = "false";
-    $this->returnType = "ObjectRef";
-    $this->query = "urn:uuid:5c4f972b-d56b-40ac-a5fc-c8ca9b40b9d4";
+    $this->returnType            = "ObjectRef";
+    //GetDocuments
+    $this->query                 = "urn:uuid:5c4f972b-d56b-40ac-a5fc-c8ca9b40b9d4";
     $this->values = array(
       "\$XDSDocumentEntryUniqueId" => array("$oid")
     );

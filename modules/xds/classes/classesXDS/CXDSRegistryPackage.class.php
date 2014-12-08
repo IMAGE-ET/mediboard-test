@@ -100,9 +100,9 @@ class CXDSRegistryPackage extends CXDSExtrinsicPackage {
   /**
    * Setter SubmissionSet
    *
-   * @param String $id                 String
-   * @param String $classifiedObject   String
-   * @param bool   $classificationNode bool
+   * @param String $id                 id
+   * @param String $classifiedObject   classified Object
+   * @param bool   $classificationNode Folder ou submissionset
    *
    * @return void
    */

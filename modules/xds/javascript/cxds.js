@@ -11,14 +11,6 @@
 
 Cxds = {
 
-  showXds : function(form) {
-    var getParameters = form.action.toQueryParams();
-    new Url("xds", "ajax_entete_cda_xds")
-      .addFormData(form)
-      .requestUpdate("enteteXds", {method: "post", getParameters :  getParameters});
-    return false;
-  },
-
   action : function(action) {
     new Url("xds", "vw_tools_xds")
       .addParam("action", action)
