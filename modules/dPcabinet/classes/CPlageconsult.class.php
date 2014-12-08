@@ -49,6 +49,11 @@ class CPlageconsult extends CPlageHoraire {
   public $_propagation;
   public $_nb_free_freq;
 
+  public $_update_pause;
+  public $_pause_id;
+  public $_pause;
+  public $_pause_repeat_time;
+
   // Filter fields
   public $_date_min;
   public $_date_max;
@@ -126,6 +131,10 @@ class CPlageconsult extends CPlageHoraire {
     $props["_fill_rate"]   = "";
     $props["_type_repeat"] = "enum list|simple|double|triple|quadruple|quintuple|sextuple|septuple|octuple|sameweek";
     $props["_propagation"] = "bool default|0";
+    $props["_update_pause"] = "bool default|0";
+    $props["_pause_id"]    = "ref class|CConsultation";
+    $props["_pause"]       = "time";
+    $props["_pause_repeat_time"] = "num default|1";
 
     // Filter fields
     $props["_date_min"]          = "date";
@@ -296,7 +305,13 @@ class CPlageconsult extends CPlageHoraire {
           // repetition
           $temp_time = $time;
           for ($b=0; $b<$_consult->duree; $b++) {
-            if ($status != 0) {
+            // pause
+            if ($status < 0) {
+              $fill[$temp_time] = $status;
+            }
+
+            // rdv pris
+            if ($status > 0) {
               $fill[$temp_time] = $fill[$temp_time]+$status;
               $nb_plage_prise++;
             }
@@ -661,6 +676,25 @@ class CPlageconsult extends CPlageHoraire {
         $facture = $_consult->loadRefFacture();
         $facture->praticien_id = ($this->pour_compte_id ? $this->pour_compte_id : $this->chir_id);
         $facture->store();
+      }
+    }
+
+
+    // pause
+    if ($this->_update_pause && $this->_pause && $this->_pause_repeat_time) {
+      $consult = new CConsultation();
+      $where = array();
+      $where["plageconsult_id"] = " = '$this->_id' ";
+      $where["patient_id"] = " IS NULL";
+      $consult->loadObject($where);
+      $consult->plageconsult_id = $this->_id;
+      $consult->heure = $this->_pause;
+      $consult->duree = $this->_pause_repeat_time;
+      $consult->chrono = 16;
+      $consult->_hour = null;
+      $consult->_min = null;
+      if ($msg = $consult->store()) {
+        CAppUI::stepAjax($msg, UI_MSG_WARNING);
       }
     }
     return null;

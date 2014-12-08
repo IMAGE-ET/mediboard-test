@@ -1,4 +1,29 @@
 <script>
+  updateFreq = function(elt) {
+    var _val = $V(elt);
+
+    var form = getForm('editFrm');
+    var selector = $(form._pause_repeat_time);
+    selector.select("option").each(function(elt) {
+      var val = $(elt).readAttribute('value');
+      var _str = "";
+      var minutes_total = val*_val;
+      var _hour = Math.floor(minutes_total/60);
+      var _minutes = minutes_total % 60;
+      if (_hour > 0) {
+        _str = _str+_hour+"h";
+      }
+      if (_minutes > 0) {
+        _str = _str+" "+_minutes+" min";
+      }
+
+      elt.update(_str);
+    });
+
+
+    var hour = '{{tr}}hour{{/tr}}';
+  };
+
   modifEtatDesistement = function(valeur){
     if(valeur != 0){
       $('remplacant_plage').setVisible(valeur);
@@ -49,10 +74,15 @@
     {{if !$can->admin && $plageSel->_id && !$plageSel->_canEdit}}
       makeReadOnly(form);
     {{/if}}
-    
+
+
+    updateFreq(form._freq);
+
     Calendar.regField(form.debut);
     Calendar.regField(form.fin  );
-    
+
+    Calendar.regField(form._pause);
+
     form._repeat.addSpinner({min: 0});
   });
 </script>
@@ -124,7 +154,7 @@
             <tr>
               <th>{{mb_label object=$plageSel field="_freq"}}</th>
               <td>
-                <select name="_freq">
+                <select name="_freq" onchange="updateFreq(this);">
                   <option value="05" {{if ($plageSel->_freq == "05")}} selected="selected" {{/if}}>05</option>
                   <option value="10" {{if ($plageSel->_freq == "10")}} selected="selected" {{/if}}>10</option>
                   <option value="15" {{if ($plageSel->_freq == "15") || (!$plageSel->_id)}} selected="selected" {{/if}}>15</option>
@@ -146,6 +176,29 @@
                 <input type='hidden' name='nbaffected' value='{{$plageSel->_affected}}' />
                 <input type='hidden' name='_firstconsult_time' value='{{$_firstconsult_time}}' />
                 <input type='hidden' name='_lastconsult_time' value='{{$_lastconsult_time}}' />
+              </td>
+            </tr>
+          </table>
+        </fieldset>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <fieldset>
+          <legend>
+            <label><input type="checkbox" name="_update_pause" value="1" {{if $plageSel->_pause_id}}checked="checked"{{/if}} onchange="$(this).up(1).next(0).toggle();" /> avec une pause</label>
+          </legend>
+          <table class="form" {{if !$plageSel->_pause_id}}style="display: none"{{/if}}>
+            <tr>
+              <th>{{mb_label object=$plageSel field="_pause"}}</th>
+              <td>{{mb_field object=$plageSel field="_pause"}}</td>
+              <th>{{mb_label object=$plageSel field="_pause_repeat_time"}}</th>
+              <td>
+                <select name="_pause_repeat_time">
+                {{foreach from=1|range:10 item=i}}
+                  <option {{if $plageSel->_pause_repeat_time == $i}}selected="selected"{{/if}} value="{{$i}}">{{$i}}x</option>
+                {{/foreach}}
+                </select>
               </td>
             </tr>
           </table>

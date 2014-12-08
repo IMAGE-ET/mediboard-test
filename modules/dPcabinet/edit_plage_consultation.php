@@ -60,6 +60,22 @@ if (CModule::getActive("3333tel")) {
   C3333TelTools::checkPlagesConsult($plageSel, $plageSel->_ref_chir->function_id);
 }
 
+$pause = new CConsultation();
+//find the unique pause;
+if ($plageSel->_id) {
+  $where_p = array();
+  $where_p["plageconsult_id"] = " = '$plageSel->_id' ";
+  $where_p["patient_id"] = " IS NULL";
+  $list = $pause->loadList($where_p);
+  if (count($list) == 1) {
+    /** @var CConsultation $pause */
+    $pause = reset($list);
+    $plageSel->_pause = $pause->heure;
+    $plageSel->_pause_id = $pause->_id;
+    $plageSel->_pause_repeat_time = $pause->duree;
+  }
+}
+
 if ($plageSel->_affected) {
   $firstconsult = reset($plageSel->_ref_consultations);
   $_firstconsult_time = substr($firstconsult->heure, 0, 5);
@@ -145,6 +161,7 @@ $smarty->assign("user"              , CMediusers::get());
 $smarty->assign("chirSel"           , $chirSel);
 $smarty->assign("plageSel"          , $plageSel);
 $smarty->assign("listChirs"         , $listChirs);
+$smarty->assign("pause"             , $pause);
 $smarty->assign("listDaysSelect"    , $listDaysSelect);
 $smarty->assign("holidays"          , $holidays);
 $smarty->assign("listHours"         , $hours);
