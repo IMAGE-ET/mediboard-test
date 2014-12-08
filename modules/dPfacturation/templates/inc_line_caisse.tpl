@@ -24,15 +24,10 @@
     <td  {{if $_acte_caisse->code}} class="acte-{{$_acte_caisse->_class}}">{{mb_value object=$_acte_caisse field="code"}}{{else}}>{{/if}}</td>
     <td style="white-space: pre-line;" class="compact">{{$_acte_caisse->_ref_prestation_caisse->libelle}}</td>
     <td style="text-align:right;">
-      {{if $_acte_caisse->quantite}}
-        {{$_acte_caisse->montant_base|string_format:"%0.2f"}}
-      {{else}}
-        {{$_acte_caisse->montant_base|string_format:"%0.2f"}}
-      {{/if}}
+      {{$_acte_caisse->montant_base|string_format:"%0.2f"}} Pts
     </td>
     <td style="text-align:right;">{{mb_value object=$_acte_caisse field="quantite"}}</td>
-    <td style="text-align:right;">{{$coeff_caisse}}
-    </td>
+    <td style="text-align:right;">{{$coeff_caisse}}</td>
     <td style="text-align:right;">{{$_acte_caisse->montant_base*$coeff_caisse*$_acte_caisse->quantite|string_format:"%0.2f"|currency}}</td>
   </tr>
 {{/if}}

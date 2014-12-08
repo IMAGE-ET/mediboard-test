@@ -31,11 +31,7 @@
       {{/if}}
     </td>
     <td style="text-align:right;">
-      {{if $_acte_tarmed->quantite}}
-        {{$_acte_tarmed->montant_base|string_format:"%0.2f"}}
-      {{else}}
-        {{$_acte_tarmed->montant_base|string_format:"%0.2f"}}
-      {{/if}}
+      {{$_acte_tarmed->montant_base|string_format:"%0.2f"}} Pts
     </td>
     <td style="text-align:right;">{{mb_value object=$_acte_tarmed field="quantite"}}</td>
     <td style="text-align:right;">{{$facture->_coeff}}</td>
