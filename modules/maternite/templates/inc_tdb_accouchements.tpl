@@ -21,6 +21,10 @@
         <button type="button" class="accouchement_create notext" onclick="Tdb.editAccouchement(null);" style="float: left;">
           {{tr}}CNaissance-title-create{{/tr}}
         </button>
+        <label style="float: left;">
+          <input type="checkbox" {{if $see_finished}}checked="checked"{{/if}} name="see_finished" value="1" onchange="Tdb.views.toggleFinished();" />
+          Voir terminés
+        </label>
         <button type="button" class="change notext" onclick="Tdb.views.listAccouchements();" style="float: right;">
           {{tr}}Refresh{{/tr}}
         </button>
@@ -40,7 +44,8 @@
     {{foreach from=$ops item=_op}}
       <tr>
         <td>
-          <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_sejour->_ref_grossesse->_ref_parturiente->_guid}}');">{{$_op->_ref_sejour->_ref_grossesse->_ref_parturiente}}</span>
+          <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_sejour->_ref_grossesse->_ref_parturiente->_guid}}');">{{$_op->_ref_sejour->_ref_grossesse->_ref_parturiente}}</span><br/>
+          <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_sejour->_ref_curr_affectation->_guid}}');">{{$_op->_ref_sejour->_ref_curr_affectation}}</span>
         </td>
         <td>
           {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_op->_ref_chir}}<br/>

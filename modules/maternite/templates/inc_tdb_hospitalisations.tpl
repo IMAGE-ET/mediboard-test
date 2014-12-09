@@ -36,6 +36,10 @@
   </tr>
   {{foreach from=$listSejours item=_sejour}}
     {{assign var=nb_naissance value=$_sejour->_ref_grossesse->_ref_naissances|@count}}
+    {{if  $nb_naissance == 0}}
+      {{assign var=nb_naissance value=1}}
+    {{/if}}
+
     {{foreach from=$_sejour->_ref_grossesse->_ref_naissances item=_naissance name=loop_naissance}}
       <tr>
         {{if $smarty.foreach.loop_naissance.first}}
@@ -53,9 +57,15 @@
             <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">{{mb_value object=$_sejour field=entree}}</span>
           </td>
           <td rowspan="{{$nb_naissance}}" style="text-align: center; font-weight: bold">
-            {{if $_sejour->_ref_grossesse->_days_relative_acc != ''}}
-              J{{$_sejour->_ref_grossesse->_days_relative_acc}}
-            {{/if}}
+              {{if $_sejour->_ref_grossesse->_days_relative_acc != ''}}
+                J{{$_sejour->_ref_grossesse->_days_relative_acc}}
+              {{/if}}
+
+              {{if $_sejour->_ref_last_operation}}
+                <button onclick="Tdb.dossierAccouchement('{{$_sejour->_ref_last_operation->_id}}');" type="button">
+              acc
+                </button>
+              {{/if}}
           </td>
           <td rowspan="{{$nb_naissance}}">
             <button type="button" class="edit notext" onclick="Tdb.editSejour('{{$_sejour->_id}}')">{{tr}}CSejour{{/tr}}</button>

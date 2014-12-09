@@ -235,6 +235,7 @@ class CGrossesse extends CMbObject {
         $this->_ref_last_operation = reset($ops);
       }
     }
+    return $this->_ref_last_operation;
   }
 
   /**
