@@ -436,27 +436,27 @@ button.submit:before, a.button.submit:before {
   content: url(images/buttons/save.png);
 }
 
-button.consultation:before, a.button.consultation:before  {
+button.consultation:before, a.button.consultation:before {
   content: url(images/buttons/consultation.png);
 }
 
-button.consultation_create:before, a.button.consultation_create:before  {
+button.consultation_create:before, a.button.consultation_create:before {
   content: url(images/buttons/consultation_create.png);
 }
 
-button.sejour_create:before, a.button.sejour_create:before  {
+button.sejour_create:before, a.button.sejour_create:before {
   content: url(images/buttons/sejour_create.png);
 }
 
-button.accouchement_create:before, a.button.accouchement_create:before  {
+button.accouchement_create:before, a.button.accouchement_create:before {
   content: url(images/buttons/accouchement_create.png);
 }
 
-button.grossesse:before, a.button.grossesse:before{
+button.grossesse:before, a.button.grossesse:before {
   content: url(images/icons/grossesse.png);
 }
 
-button.grossesse_create:before, a.button.grossesse_create:before{
+button.grossesse_create:before, a.button.grossesse_create:before {
   content: url(images/buttons/grossesse_create.png);
 }
 
