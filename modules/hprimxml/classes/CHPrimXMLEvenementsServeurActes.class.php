@@ -445,7 +445,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     $ccam->modificateurs            = implode($data["modificateur"]);
     $ccam->commentaire              = $data["commentaire"];
     $ccam->signe                    = $data["signe"]       ? $data["signe"]       == "oui" ? "1" : "0" : null;
-    $ccam->facturable               = $data["facturable"]  ? $data["facturable"]  == "oui" ? "1" : "0" : null;
+    $ccam->facturable               = $data["facturable"]  ? $data["facturable"]  == "non" ? "0" : "1" : "1";
     $ccam->rembourse                = $data["rembourse"]   ? $data["rembourse"]   == "oui" ? "1" : "0" : null;
     $ccam->charges_sup              = $data["charges_sup"] ? $data["charges_sup"] == "c"   ? "1" : "0" : null;
     $ccam->montant_depassement      = $data["montantDepassement"];
@@ -489,7 +489,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     $ngap->minor_pct                = $data["minor_pct"];
     $ngap->major_coef               = $data["major_coef"];
     $ngap->major_pct                = $data["major_pct"];
-    $ngap->facturable               = $data["facturable"] ? $data["facturable"] == "non" ? "0" : "1" : null ;
+    $ngap->facturable               = $data["facturable"] ? $data["facturable"] == "non" ? "0" : "1" : "1";
     $ngap->rapport_exoneration      = $data["rapportExoneration"];
 
     $date  = $data["date"];
