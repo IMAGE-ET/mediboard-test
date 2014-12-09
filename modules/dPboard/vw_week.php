@@ -27,11 +27,14 @@ $fin   = CMbDT::date("next sunday", $debut);
 $chir = null;
 $mediuser = CMediusers::get();
 if ($mediuser->isPraticien()) {
-  $chir = $mediuser->createUser();
+  $chir = $mediuser;
 }
 
 // Praticien selectionné
-$chirSel = CValue::getOrSession("praticien_id", $chir ? $chir->user_id : null);
+$chirSel = CValue::get("praticien_id");
+if (!$chirSel) {
+  $chirSel = $chir ? $chir->user_id : null;
+}
 $prat = new CMediusers();
 $prat->load($chirSel);
 $function_prat = $prat->loadRefFunction();

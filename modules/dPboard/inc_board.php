@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -17,6 +17,7 @@ global $prat;
 
 // Chargement de l'utilisateur courant
 $user = CMediusers::get();
+$perm_fonct = CAppUI::pref("allow_other_users_board");
 
 if (!$user->isPraticien() && !$user->isSecretaire()) {
   CAppUI::redirect("m=system&a=access_denied");
@@ -25,15 +26,46 @@ if (!$user->isPraticien() && !$user->isSecretaire()) {
 $praticiens = null;
 $prat = new CMediusers();
 
-// Si le user est secretaire
-if ($user->_is_secretaire) {
-  // Chargement de la liste de praticien
-  $praticiens = $user->loadPraticiens(PERM_EDIT);
-  $prat->load(CValue::getOrSession("praticien_id"));
-}
-
 // Si le user est un praticien
 if ($user->_is_praticien) {
+  if ($perm_fonct == "only_me") {
+    $praticiens = array($user);
+  }
+
+  if ($perm_fonct == "same_function") {
+    $praticiens = $user->loadPraticiens(PERM_READ, $user->function_id);
+  }
+
+  if ($perm_fonct == "write_right") {
+    $praticiens = $user->loadPraticiens(PERM_EDIT);
+  }
+
+  if($perm_fonct == "read_right") {
+    $praticiens = $user->loadPraticiens(PERM_READ);
+  }
+
+  $prat = $user;
+}
+else {
+  if ($perm_fonct == "only_me" || $perm_fonct == "write_right") {
+    $praticiens = $user->loadPraticiens(PERM_EDIT);
+  }
+
+  if($perm_fonct == "read_right") {
+    $praticiens = $user->loadPraticiens(PERM_READ);
+  }
+
+  if ($perm_fonct == "same_function") {
+    $praticiens = $user->loadPraticiens(PERM_READ, $user->function_id);
+  }
+
+}
+
+$prat_selected = CValue::getOrSession("praticien_id");
+if ($prat_selected) {
+  $prat->load($prat_selected);
+}
+elseif($user->isPraticien()) {
   $prat = $user;
 }
 

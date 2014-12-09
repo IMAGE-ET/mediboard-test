@@ -14,6 +14,8 @@
 CCanDo::checkRead();
 
 $user = CMediusers::get();
+$perm_fonct = CAppUI::pref("allow_other_users_board");
+
 $user->isSecretaire();
 $user->isPraticien();
 
@@ -21,22 +23,37 @@ $date = CValue::getOrSession('date', CMbDT::date());
 $prat_id = CValue::getOrSession('prat_id');
 $function_id = CValue::get("function_id");
 
-
 $prat = new CMediusers();
 $prat->load($prat_id);
 
 $function = new CFunctions();
-$listFunc = CMediusers::loadFonctions(PERM_EDIT);
+$listFunc = array();
+if ($perm_fonct == "only_me" || $perm_fonct == "same_function") {
+  $listFunc[$user->function_id] = $user->loadRefFunction();
+}
+elseif($perm_fonct == "write_right") {
+  $listFunc = CMediusers::loadFonctions(PERM_EDIT);
+}
+else {
+  $listFunc = CMediusers::loadFonctions(PERM_READ);
+}
+
 
 /** @var CMediusers[] $listPrat */
-$listPrat = $prat->loadProfessionnelDeSante(PERM_EDIT, null);
 
-foreach ($listPrat as $_prat_id => $_prat) {
-  if (!$_prat->isPraticien()) {
-    unset($listPrat[$_prat_id]);
-    continue;
-  }
+if ($perm_fonct == 'only_me') {
+  $listPrat[$user->function_id] = $user->loadRefFunction();
 }
+elseif($perm_fonct == "same_function") {
+  $listPrat = $prat->loadProfessionnelDeSante(PERM_READ, $user->function_id);
+}
+elseif ($perm_fonct == "write_right") {
+  $listPrat = $prat->loadProfessionnelDeSante(PERM_EDIT, null);
+}
+else {
+  $listPrat = $prat->loadProfessionnelDeSante(PERM_READ, null);
+}
+
 
 usort(
   $listPrat, function ($a, $b) {

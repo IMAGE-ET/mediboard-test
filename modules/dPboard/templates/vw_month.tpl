@@ -36,20 +36,20 @@
 <form name="selectFrm" action="?" method="get" onsubmit="return false">
   <input type="hidden" name="m" value="{{$m}}" />
 
-  {{if $user->_is_secretaire}}
+  {{if $listPrat|@count}}
     <label for="chir_id">Praticien</label>
-      <select name="chir_id" style="width: 20em;" onchange="if (this.form.function_id) {this.form.function_id.selectedIndex=0;} refreshList();">
-        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-        {{foreach from=$listPrat item=curr_prat}}
-          <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};"
-            value="{{$curr_prat->user_id}}" {{if ($prat->_id == $curr_prat->user_id) && !$function_id}} selected="selected" {{/if}}>
-            {{$curr_prat->_view}}
-          </option>
-        {{/foreach}}
-      </select>
+    <select name="chir_id" style="width: 20em;" onchange="if (this.form.function_id) {this.form.function_id.selectedIndex=0;} refreshList();">
+      <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+      {{foreach from=$listPrat item=curr_prat}}
+        <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};"
+          value="{{$curr_prat->user_id}}" {{if ($prat->_id == $curr_prat->user_id) && !$function_id}} selected="selected" {{/if}}>
+          {{$curr_prat->_view}}
+        </option>
+      {{/foreach}}
+    </select>
   {{/if}}
 
-  {{if $user->_is_secretaire}}
+  {{if $listFunc|@count}}
     <label for="function_id" title="Filtrer les protocoles d'une fonction">Fonction</label>
       <select name="function_id" style="width: 20em;" onchange="if (this.form.chir_id) { this.form.chir_id.selectedIndex=0; } refreshList();">
         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
