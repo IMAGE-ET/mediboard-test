@@ -1,5 +1,6 @@
 {{mb_script module=cabinet script=exam_comp}}
 {{mb_default var=view_prescription value=1}}
+{{mb_script module=soins script=plan_soins}}
 
 <script>
   function calculClairance() {
@@ -274,6 +275,15 @@
       {{if $isPrescriptionInstalled && "dPcabinet CPrescription view_prescription"|conf:"CGroups-$g" && $view_prescription}}
         <button class="tick" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour');
           tabsConsultAnesth.activeLink.up('li').onmousedown()">Accéder à la prescription</button>
+        {{assign var=sejour value=$consult->_ref_sejour}}
+        {{if $consult_anesth->_ref_sejour->_id}}
+          {{assign var=sejour value=$consult_anesth->_ref_sejour}}
+        {{/if}}
+        {{assign var=prescription value=$sejour->_ref_prescription_sejour}}
+        {{if $prescription->_id}}
+          <br />
+          <button class="print" onclick="PlanSoins.printBons('{{$prescription->_id}}')">Bons</button>
+        {{/if}}
       {{/if}}
 
       {{if $app->user_prefs.displayDocsConsult}}

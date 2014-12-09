@@ -174,6 +174,11 @@ $smarty->assign("listPrats"      , $listPrats);
 
 if ($isPrescriptionInstalled) {
   $smarty->assign("line"         , new CPrescriptionLineMedicament());
+
+  CPrescription::$_load_lite = true;
+  $consult->_ref_sejour->loadRefPrescriptionSejour();
+  $consultAnesth->loadRefSejour()->loadRefPrescriptionSejour();
+  CPrescription::$_load_lite = false;
 }
 
 $smarty->assign("date"           , $date);
