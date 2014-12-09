@@ -39,7 +39,9 @@
                       </div>
                     </div>
                     <div>{{$rpu->diag_infirmier|spancate:60:"..."|lower}}</div>
-                    <div>{{$rpu->_ref_motif_sfmu->libelle}}</div>
+                    {{if $rpu->motif_sfmu && $rpu->diag_infirmier != $rpu->_ref_motif_sfmu->libelle}}
+                      <div>{{$rpu->_ref_motif_sfmu->libelle}}</div>
+                    {{/if}}
                   </div>
                  
                   {{if $rpu->radio_debut}}
