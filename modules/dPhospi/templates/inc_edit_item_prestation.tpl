@@ -19,6 +19,10 @@
       <td>{{mb_field object=$item field=color form="edit_item"}}</td>
     </tr>
     <tr>
+      <th>{{mb_label object=$item field=facturable}}</th>
+      <td>{{mb_field object=$item field=facturable}}</td>
+    </tr>
+    <tr>
       <td colspan="2" class="button">
         <button type="button" class="save" onclick="this.form.onsubmit()">
           {{tr}}{{if $item->_id}}Save{{else}}Create{{/if}}{{/tr}}

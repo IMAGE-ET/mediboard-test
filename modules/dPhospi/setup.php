@@ -857,6 +857,11 @@ class CSetupdPhospi extends CSetup {
       ADD `niveau` ENUM ('jour','nuit') DEFAULT 'jour';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.95";
+    $this->makeRevision("0.95");
+    $query = "ALTER TABLE `item_prestation`
+      ADD `facturable` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.96";
   }
 }

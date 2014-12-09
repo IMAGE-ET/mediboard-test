@@ -20,6 +20,7 @@ class CItemPrestation extends CMbMetaObject {
   public $nom;
   public $rank;
   public $color;
+  public $facturable;
 
   // Form field
   public $_quantite;
@@ -56,6 +57,7 @@ class CItemPrestation extends CMbMetaObject {
     $props["object_class"] = "enum list|CPrestationPonctuelle|CPrestationJournaliere";
     $props["rank"]         = "num pos default|1";
     $props["color"]        = "color show|0";
+    $props["facturable"]   = "bool default|1";
 
     return $props;
   }

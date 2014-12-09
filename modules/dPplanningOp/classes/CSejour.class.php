@@ -4361,7 +4361,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         $_item_realise = $_liaison->loadRefItemRealise();
         $sous_item = $_liaison->loadRefSousItem();
 
-        if (!$_item_realise->_id) {
+        if (!$_item_realise->_id || !$_item_realise->facturable) {
           continue;
         }
 
