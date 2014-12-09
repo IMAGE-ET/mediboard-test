@@ -100,20 +100,20 @@
 <hr class="control_tabs" />
 
 {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
-  <div id="ccam_tab" style="display:none">
+  <div id="ccam_tab" style="display:none; clear: both;">
     <div id="ccam">
       {{mb_include module=salleOp template=inc_codage_ccam}}
     </div>
   </div>
 
-  <div id="ngap_tab" style="display:none">
+  <div id="ngap_tab" style="display:none; clear: both;">
     <div id="listActesNGAP">
       {{mb_include module=cabinet template=inc_codage_ngap}}
     </div>
   </div>
 
   {{if $conf.dPccam.CCodable.use_frais_divers.$subject_class}}
-    <div id="fraisdivers" style="display: none;">
+    <div id="fraisdivers" style="display: none; clear: both;">
       {{mb_include module=ccam template=inc_frais_divers object=$subject}}
     </div>
   {{/if}}
@@ -126,10 +126,10 @@
       ActesCaisse.loadList('{{$subject->_id}}', '{{$subject->_class}}', '{{$subject->_ref_chir->_id}}');
     });
   </script>
-  <div id="tarmed_tab" style="display:none">
+  <div id="tarmed_tab" style="display:none; clear: both;">
     <div id="listActesTarmed"></div>
   </div>
-  <div id="caisse_tab" style="display:none">
+  <div id="caisse_tab" style="display:none; clear: both;">
     <div id="listActesCaisse"></div>
   </div>
 {{/if}}
