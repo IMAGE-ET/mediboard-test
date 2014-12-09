@@ -20,7 +20,6 @@ class CPrestationJournaliere extends CMbObject {
   public $nom;
   public $group_id;
   public $desire;
-  public $niveau;
 
   // Form fields
   public $_count_items = 0;
@@ -44,7 +43,6 @@ class CPrestationJournaliere extends CMbObject {
     $props["nom"]       = "str notNull";
     $props["group_id"]  = "ref notNull class|CGroups";
     $props["desire"]    = "bool default|0";
-    $props["niveau"]    = "enum list|jour|nuit";
 
     return $props;
   }

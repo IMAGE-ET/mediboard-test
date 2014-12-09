@@ -848,6 +848,15 @@ class CSetupdPhospi extends CSetup {
       ADD `sous_item_id` INT (11) UNSIGNED AFTER `item_realise_id`;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.94";
+    $this->makeRevision("0.94");
+    $query = "ALTER TABLE `prestation_journaliere`
+      DROP COLUMN `niveau`";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `sous_item_prestation`
+      ADD `niveau` ENUM ('jour','nuit') DEFAULT 'jour';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.95";
   }
 }

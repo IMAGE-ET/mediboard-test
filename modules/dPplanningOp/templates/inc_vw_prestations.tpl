@@ -221,8 +221,7 @@
 
             <td style="text-align: center;" class="
               {{if $item_presta->_id && $item_presta_realise->_id}}
-                {{if ($_prestation->niveau == "jour" && $item_presta->rank < $item_presta_realise->rank) ||
-                     ($_prestation->niveau == "nuit" && $next_item_presta->_id && $next_item_presta->_id && $next_item_presta->_id != $item_presta_realise->_id)}}
+                {{if $item_presta->rank < $item_presta_realise->rank}}
                   item_superior
                 {{elseif $item_presta->rank == $item_presta_realise->rank}}
                   item_egal

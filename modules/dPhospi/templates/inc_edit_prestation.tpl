@@ -31,14 +31,6 @@
     {{if $prestation instanceof CPrestationJournaliere}}
     <tr>
       <th>
-        {{mb_label object=$prestation field=niveau}}
-      </th>
-      <td>
-        {{mb_field object=$prestation field=niveau}}
-      </td>
-    </tr>
-    <tr>
-      <th>
         {{mb_label object=$prestation field=desire}}
       </th>
       <td>
