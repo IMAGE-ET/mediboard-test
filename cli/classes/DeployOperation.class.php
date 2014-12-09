@@ -694,7 +694,7 @@ abstract class DeployOperation extends MediboardCommand {
         $dialog = $this->getHelperSet()->get('dialog');
         if (!$dialog->askConfirmation(
           $output,
-          '<question>Revert? [Y/n]</question> ',
+          '<question>In order to update, you need to revert these files, otherwise update will be skipped.\nRevert? [Y/n]</question> ',
           true
         )
         ) {
