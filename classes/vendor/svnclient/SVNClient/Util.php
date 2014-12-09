@@ -18,15 +18,16 @@ class Util {
   /**
    * Execute an SVN command
    *
-   * @param string $cmd       Command name (update, info, etc)
-   * @param array  $arguments An array of argument (path, url, etc)
-   * @param array  $options   An array of options
-   * @param string $path      Working directory
+   * @param string  $cmd       Command name (update, info, etc)
+   * @param array   $arguments An array of argument (path, url, etc)
+   * @param array   $options   An array of options
+   * @param string  $path      Working directory
+   * @param integer $timeout   Timeout
    *
    * @return string
    * @throws \Exception
    */
-  public static function exec($cmd, $arguments = array(), $options = array(), $path = null, $output = false) {
+  public static function exec($cmd, $arguments = array(), $options = array(), $path = null, $output = false, $timeout = null) {
     if (!is_array($arguments)) {
       $arguments = array($arguments);
     }
@@ -44,7 +45,7 @@ class Util {
 
     $cmdline = "svn $cmd " . implode(" ", $arguments) . " " . implode(" ", $new_options);
 
-    $process = new Process($cmdline, $path);
+    $process = new Process($cmdline, $path, null, null, $timeout);
     $process->run();
 
     if (!$process->isSuccessful()) {

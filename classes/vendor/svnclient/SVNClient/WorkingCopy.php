@@ -104,7 +104,7 @@ class WorkingCopy {
   function commit($files, $message) {
   }
 
-  function update(array $paths = array(), $revision = "HEAD", $ignore_externals = false) {
+  function update(array $paths = array(), $revision = "HEAD", $ignore_externals = false, $timeout = 1800) {
     $options = array(
       "--revision" => $revision,
     );
@@ -113,7 +113,7 @@ class WorkingCopy {
       $options["--ignore-externals"] = true;
     }
 
-    return Util::exec("update", $paths, $options, $this->path, true);
+    return Util::exec("update", $paths, $options, $this->path, true, $timeout);
   }
 
   function cleanup($path) {
