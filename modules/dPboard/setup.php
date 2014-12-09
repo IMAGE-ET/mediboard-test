@@ -29,7 +29,7 @@ class CSetupdPboard extends CSetup {
     $this->makeRevision("0.1");
 
     // user authorization to see others user in TDB
-    $this->addFunctionalPermQuery("allow_other_users_board", 'only_me');
+    $this->addFunctionalPermQuery("allow_other_users_board", 'write_right');
 
     $this->mod_version = "0.2";
   }
