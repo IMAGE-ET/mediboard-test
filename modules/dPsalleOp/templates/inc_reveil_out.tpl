@@ -81,6 +81,9 @@
       </td>
       <td>
         <button class="notext button soins" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">Dossier de soins</button>
+        {{if $isImedsInstalled}}
+          <button class="labo button notext" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}','Imeds');">Labo</button>
+        {{/if}}
         <button type="button" class="injection notext" onclick="Operation.dossierBloc('{{$_operation->_id}}', true)">Dossier de bloc</button>
       </td>
 

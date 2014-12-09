@@ -870,6 +870,10 @@ a.button.compact {
   margin: -1px !important;
 }
 
+button.labo:before, a.button.labo:before {
+  content: url(../../images/icons/labo.png);
+}
+
 optgroup.group {
   text-align: center;
   font-variant: small-caps;
