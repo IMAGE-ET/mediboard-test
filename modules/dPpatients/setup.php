@@ -2745,7 +2745,13 @@ class CSetupdPpatients extends CSetup {
               )/*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 
-    $this->mod_version = '2.25';
+    $this->makeRevision('2.25');
+
+    $query = "ALTER TABLE `constantes_medicales`
+                ADD `echelle_confort` INT(2);";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.26';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

@@ -397,6 +397,9 @@ $locales['CConstantesMedicales-drain_thoracique_4-desc'] = 'Drain thoracique 4';
 $locales['CConstantesMedicales-drain_thoracique_flow'] = 'Flow drain thoracique';
 $locales['CConstantesMedicales-drain_thoracique_flow-court'] = 'Flow';
 $locales['CConstantesMedicales-drain_thoracique_flow-desc'] = 'Flow drain thoracique';
+$locales['CConstantesMedicales-echelle_confort'] = 'Echelle de confort';
+$locales['CConstantesMedicales-echelle_confort-court'] = 'Ech. confort';
+$locales['CConstantesMedicales-echelle_confort-desc'] = 'Echelle de confort';
 $locales['CConstantesMedicales-ecpa_apres'] = 'ECPA pendant soin';
 $locales['CConstantesMedicales-ecpa_apres-court'] = 'ECPA pendant';
 $locales['CConstantesMedicales-ecpa_apres-desc'] = 'ECPA pendant soin';
@@ -2726,6 +2729,8 @@ $locales['config-dPpatients-CConstantesMedicales-selection-drain_thoracique_4'] 
 $locales['config-dPpatients-CConstantesMedicales-selection-drain_thoracique_4-desc'] = 'Drain thoracique 4';
 $locales['config-dPpatients-CConstantesMedicales-selection-drain_thoracique_flow'] = 'Flow drain thoracique';
 $locales['config-dPpatients-CConstantesMedicales-selection-drain_thoracique_flow-desc'] = 'Flow drain thoracique';
+$locales['config-dPpatients-CConstantesMedicales-selection-echelle_confort'] = 'Echelle de confort';
+$locales['config-dPpatients-CConstantesMedicales-selection-echelle_confort-desc'] = 'Echelle de confort';
 $locales['config-dPpatients-CConstantesMedicales-selection-ecpa_apres'] = 'ECPA pendant soin';
 $locales['config-dPpatients-CConstantesMedicales-selection-ecpa_apres-desc'] = 'ECPA pendant soin';
 $locales['config-dPpatients-CConstantesMedicales-selection-ecpa_avant'] = 'ECPA avant soin';
@@ -3060,6 +3065,8 @@ $locales['config-dPpatients-CConstantesMedicales-selection_bloc-drain_thoracique
 $locales['config-dPpatients-CConstantesMedicales-selection_bloc-drain_thoracique_4-desc'] = 'Drain thoracique 4';
 $locales['config-dPpatients-CConstantesMedicales-selection_bloc-drain_thoracique_flow'] = 'Flow drain thoracique';
 $locales['config-dPpatients-CConstantesMedicales-selection_bloc-drain_thoracique_flow-desc'] = 'Flow drain thoracique';
+$locales['config-dPpatients-CConstantesMedicales-selection_bloc-echelle_confort'] = 'Echelle de confort';
+$locales['config-dPpatients-CConstantesMedicales-selection_bloc-echelle_confort-desc'] = 'Echelle de confort';
 $locales['config-dPpatients-CConstantesMedicales-selection_bloc-ecpa_apres'] = 'ECPA pendant soin';
 $locales['config-dPpatients-CConstantesMedicales-selection_bloc-ecpa_apres-desc'] = 'ECPA pendant soin';
 $locales['config-dPpatients-CConstantesMedicales-selection_bloc-ecpa_avant'] = 'ECPA avant soin';
@@ -3394,6 +3401,8 @@ $locales['config-dPpatients-CConstantesMedicales-selection_cabinet-drain_thoraci
 $locales['config-dPpatients-CConstantesMedicales-selection_cabinet-drain_thoracique_4-desc'] = 'Drain thoracique 4';
 $locales['config-dPpatients-CConstantesMedicales-selection_cabinet-drain_thoracique_flow'] = 'Flow drain thoracique';
 $locales['config-dPpatients-CConstantesMedicales-selection_cabinet-drain_thoracique_flow-desc'] = 'Flow drain thoracique';
+$locales['config-dPpatients-CConstantesMedicales-selection_cabinet-echelle_confort'] = 'Echelle de confort';
+$locales['config-dPpatients-CConstantesMedicales-selection_cabinet-echelle_confort-desc'] = 'Echelle de confort';
 $locales['config-dPpatients-CConstantesMedicales-selection_cabinet-ecpa_apres'] = 'ECPA pendant soin';
 $locales['config-dPpatients-CConstantesMedicales-selection_cabinet-ecpa_apres-desc'] = 'ECPA pendant soin';
 $locales['config-dPpatients-CConstantesMedicales-selection_cabinet-ecpa_avant'] = 'ECPA avant soin';
