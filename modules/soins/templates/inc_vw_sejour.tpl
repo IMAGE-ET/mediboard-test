@@ -8,16 +8,16 @@
 {{if ($service_id && $service_id != "NP") || $show_affectation || $function->_id || $praticien->_id}}
   {{assign var=affectation value=$sejour->_ref_curr_affectation}}
   <td class="text {{if $sejour->isolement}}isolement{{/if}} {{if !$affectation->_id}}compact{{/if}}">
-    {{if $affectation->_id}}
+    {{if $affectation->_id && $affectation->lit_id}}
       {{if $show_full_affectation}}
         {{$affectation->_ref_lit->_view}}
-      {{elseif $affectation->lit_id}}
+      {{else}}
         {{mb_value object=$affectation->_ref_lit field=nom}}
       {{/if}}
-    {{elseif $sejour->_ref_next_affectation->_id}}
+    {{elseif $sejour->_ref_next_affectation->_id && $sejour->_ref_next_affectation->lit_id}}
       {{if $show_full_affectation}}
         {{$sejour->_ref_next_affectation->_ref_lit->_view}}
-      {{elseif $affectation->lit_id}}
+      {{else}}
         {{mb_value object=$sejour->_ref_next_affectation->_ref_lit field=nom}}
       {{/if}}
     {{/if}}
