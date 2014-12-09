@@ -11,13 +11,13 @@
     {{if $affectation->_id}}
       {{if $show_full_affectation}}
         {{$affectation->_ref_lit->_view}}
-      {{else}}
+      {elseif $affectation->lit_id}}
         {{mb_value object=$affectation->_ref_lit field=nom}}
       {{/if}}
     {{elseif $sejour->_ref_next_affectation->_id}}
       {{if $show_full_affectation}}
         {{$sejour->_ref_next_affectation->_ref_lit->_view}}
-      {{else}}
+      {{elseif $affectation->lit_id}}
         {{mb_value object=$sejour->_ref_next_affectation->_ref_lit field=nom}}
       {{/if}}
     {{/if}}
