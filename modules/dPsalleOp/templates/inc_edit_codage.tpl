@@ -9,6 +9,12 @@
  * @link       http://www.mediboard.org
 *}}
 
+<style>
+  #test a {
+    float: none!important;
+  }
+</style>
+
 <script type="text/javascript">
   Main.add(function() {
     Control.Tabs.create('rules-tab_codage-{{$codage->_id}}', true);
@@ -22,11 +28,11 @@
     <th class="narrow">{{mb_title class=CActeCCAM field=facturable}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=code_association}}</th>
     <th>{{mb_title class=CActeCCAM field=modificateurs}}</th>
-    <th>{{mb_title class=CActeCCAM field=_tarif}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=_tarif}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=execution}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=montant_depassement}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=motif_depassement}}</th>
-    <th class="narrow">Actions</th>
+    <th colspan="2">Actions</th>
   </tr>
 
   {{assign var=count_codes_codage value=0}}
@@ -38,13 +44,13 @@
         {{assign var="acte" value=$_phase->_connected_acte}}
         {{assign var="view" value=$acte->_id|default:$acte->_view}}
         {{assign var="key" value="$_key$view"}}
-        {{if ((!$acte->_id) || ($acte->executant_id == $codage->praticien_id)) &&
+        {{if (!$acte->_id || ($acte->executant_id == $codage->praticien_id && $acte->_id|@array_key_exists:$codage->_ref_actes_ccam)) &&
              (($_activite->numero != '4' && !$codage->activite_anesth) || ($_activite->numero == '4' && $codage->activite_anesth))}}
           {{math assign=count_codes_codage equation="x+1" x=$count_codes_codage}}
           {{if $display_code}}
             {{assign var=display_code value=0}}
             <tr>
-              <th colspan="12" style="text-align: left;">
+              <th colspan="13" style="text-align: left;">
                 <span onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class}}')"
                       style="cursor: pointer;{{if $_code->type == 2}} color: #444;{{/if}}">
                   {{$_code->code}} : {{$_code->libelleLong}}
@@ -97,7 +103,7 @@
                 <em>{{tr}}None{{/tr}}</em>
               {{/foreach}}
             </td>
-            <td style="text-align: right;{{if $acte->_id && !$acte->facturable}} background-color: #fc9;{{/if}}">
+            <td class="narrow" style="text-align: right;{{if $acte->_id && !$acte->facturable}} background-color: #fc9;{{/if}}">
               {{mb_value object=$acte field=_tarif}}
             </td>
             <td>
@@ -115,7 +121,7 @@
                 {{mb_field object=$acte field=motif_depassement emptyLabel="CActeCCAM-motif_depassement" onchange="syncCodageField(this, '$view');" style="width: 13em;"}}
               </form>
             </td>
-            <td class="button">
+            <td>
               <form name="codageActe-{{$view}}" action="?" method="post"
                     onsubmit="return onSubmitFormAjax(this, {onComplete: function() {window.urlCodage.refreshModal()}});">
                 <input type="hidden" name="m" value="salleOp" />
@@ -157,6 +163,9 @@
                   </button>
                 {{/if}}
               </form>
+            </td>
+            <td class="narrow">
+              {{mb_include module=system template=inc_object_history object=$acte}}
             </td>
           </tr>
         {{/if}}

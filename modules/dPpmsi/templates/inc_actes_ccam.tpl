@@ -132,7 +132,7 @@
   </tr>
   {{if !$read_only}}
     <tr>
-      <th class="title" colspan="12" style="border-top: none;">
+      <th class="title" colspan="13" style="border-top: none;">
         {{foreach from=$subject->_ext_codes_ccam item=_code}}
           <span id="action-{{$_code->code}}" class="circled" style="background-color: #eeffee; color: black; font-weight: normal; font-size: 0.8em;">
          {{$_code->code}}
@@ -171,7 +171,8 @@
     </tr>
   {{/if}}
   <tr>
-    <th colspan="2" class="narrow">{{mb_title class=CActeCCAM field=code_activite}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=code_activite}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=_tarif_base}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=executant_id}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=facturable}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=code_association}}</th>
@@ -181,13 +182,11 @@
     <th class="narrow">{{mb_title class=CActeCCAM field=execution}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=montant_depassement}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=motif_depassement}}</th>
-    {{if !$read_only}}
-      <th class="narrow">Actions</th>
-    {{/if}}
+    <th colspan="2" class="narrow">Actions</th>
   </tr>
   {{foreach from=$subject->_ext_codes_ccam item=_code key=_key}}
     <tr>
-      <th colspan="12" style="text-align: left;">
+      <th colspan="13" style="text-align: left;">
         <span onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class}}')"
               style="cursor: pointer;{{if $_code->type == 2}} color: #444;{{/if}}">
           {{$_code->code}} : {{$_code->libelleLong}}
@@ -303,7 +302,7 @@
               {{/if}}
             </td>
             {{if !$read_only}}
-              <td class="button">
+              <td>
                 <form name="codageActe-{{$view}}" action="?" method="post"
                       onsubmit="return onSubmitFormAjax(this, PMSI.reloadActesCCAM.curry('{{$obj_guid}}'))">
                   <input type="hidden" name="m" value="salleOp" />
@@ -347,6 +346,9 @@
                 </form>
               </td>
             {{/if}}
+            <td class="narrow">
+              {{mb_include module=system template=inc_object_history object=$acte}}
+            </td>
           </tr>
         {{/if}}
       {{/foreach}}
