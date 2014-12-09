@@ -200,9 +200,12 @@ Admissions = {
 
   validerSortie : function (sejour_id, modify_sortie_prevue, callback, callback_close) {
     // Envoi de prestations si le bouton existe
-    var button_prestation = $("CSejour-"+sejour_id).down("button.prestation");
-    if (button_prestation) {
-      button_prestation.onclick();
+    var tr_sejour = $("CSejour-"+sejour_id);
+    if (tr_sejour) {
+      var button_prestation = tr_sejour.down("button.prestation");
+      if (button_prestation) {
+        button_prestation.onclick();
+      }
     }
 
     new Url("admissions", "ajax_edit_sortie")
