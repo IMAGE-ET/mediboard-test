@@ -23,6 +23,7 @@ class CSousItemPrestation extends CMbObject {
   // DB Fields
   public $nom;
   public $item_prestation_id;
+  public $niveau;
 
   // References
   /** @var CItemPrestation */
@@ -54,6 +55,7 @@ class CSousItemPrestation extends CMbObject {
     $props = parent::getProps();
     $props["nom"] = "str";
     $props["item_prestation_id"] = "ref class|CItemPrestation";
+    $props["niveau"]    = "enum list|jour|nuit";
 
     return $props;
   }

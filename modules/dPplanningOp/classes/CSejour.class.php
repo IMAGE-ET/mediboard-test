@@ -4355,33 +4355,36 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     // Calcul du niveau de réalisation (_quantite)
-    $prestations_j = CPrestationJournaliere::loadCurrentList();
-
     foreach ($liaisons_j as $prestation_id => $_liaisons) {
       foreach ($_liaisons as $date => $_liaison) {
         $_item_souhait = $_liaison->loadRefItem();
         $_item_realise = $_liaison->loadRefItemRealise();
         $sous_item = $_liaison->loadRefSousItem();
 
-        $prestation = $prestations_j[$prestation_id];
-
-        if (!$_item_realise->_id || ($_item_realise->_id && $_item_souhait->_id && $_item_realise->_id != $_item_souhait->_id)) {
+        if (!$_item_realise->_id) {
           continue;
+        }
+
+        $item_facture = $_item_realise;
+
+        // Si ce qui est réalisé est supérieur au demandé, c'est le souhait qui est facturé
+        if ($_item_realise->rank > $_item_souhait->rank) {
+          $item_facture = $_item_souhait;
         }
 
         $dates_liaison = $dates[$_liaison->_id];
 
-        $_item_realise->_quantite = CMbDT::daysRelative($dates_liaison["debut"], $dates_liaison["fin"]);
-        if ($prestation->niveau == "jour") {
-          $_item_realise->_quantite += 1;
+        $item_facture->_quantite = CMbDT::daysRelative($dates_liaison["debut"], $dates_liaison["fin"]);
+        if (!$sous_item->_id || $sous_item->niveau == "jour") {
+          $item_facture->_quantite += 1;
         }
 
-        // On prend le nom du sous-item si présent et s'il fait partie des sous-items de l'item réalisé.
-        if ($sous_item->item_prestation_id == $_item_realise->_id) {
-          $_item_realise->nom = $sous_item->nom;
+        // On prend le nom du sous-item et son id400 si présent et s'il fait partie des sous-items de l'item facturé.
+        if ($sous_item->item_prestation_id == $item_facture->_id) {
+          $item_facture->_sous_item_facture = $sous_item;
         }
 
-        $this->_ref_prestations[$_item_liaison->date][] = $_item_realise;
+        $this->_ref_prestations[$date][] = $item_facture;
       }
     }
     return $this->_ref_prestations;

@@ -54,7 +54,7 @@
           {{foreach from=$_item->_refs_sous_items item=_sous_item}}
             <div>
               <button class="remove notext" onclick="delSousItem('{{$_sous_item->_id}}', '{{$_item->object_class}}', '{{$_item->object_id}}', '{{$_item->_id}}')"></button>
-              <a style="display: inline-block;" href="#1" onclick="editSousItem('{{$_sous_item->_id}}')">{{$_sous_item}}</a>
+              <a style="display: inline-block;" href="#1" onclick="editSousItem('{{$_sous_item->_id}}')">{{$_sous_item}} ({{$_sous_item->niveau}})</a>
             </div>
           {{/foreach}}
         </td>

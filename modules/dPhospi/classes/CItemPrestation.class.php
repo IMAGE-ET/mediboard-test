@@ -32,6 +32,10 @@ class CItemPrestation extends CMbMetaObject {
   /** @var  CSousItemPrestation[] */
   public $_refs_sous_items;
 
+
+  // Form fields
+  public $_sous_item_facture;
+
   /**
    * @see parent::getSpec()
    */

@@ -199,7 +199,13 @@ Admissions = {
   },
 
   validerSortie : function (sejour_id, modify_sortie_prevue, callback, callback_close) {
-    new Url("dPadmissions", "ajax_edit_sortie")
+    // Envoi de prestations si le bouton existe
+    var button_prestation = $("CSejour-"+sejour_id).down("button.prestation");
+    if (button_prestation) {
+      button_prestation.onclick();
+    }
+
+    new Url("admissions", "ajax_edit_sortie")
       .addParam("sejour_id"           , sejour_id)
       .addParam("module"              , App.m)
       .addParam("modify_sortie_prevue", modify_sortie_prevue ? 1 : 0)

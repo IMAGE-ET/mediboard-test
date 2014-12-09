@@ -358,8 +358,9 @@ class CAffectation extends CMbObject {
         $where = array();
         $ljoin = array();
 
-        $where["sejour_id"] = " = '$sejour->_id'";
-        $where["item_prestation.object_class"] = " = 'CPrestationJournaliere'";
+        $where["sejour_id"] = "= '$sejour->_id'";
+        $where["date"] = "= '".CMbDT::date($this->entree)."'";
+        $where["item_prestation.object_class"] = "= 'CPrestationJournaliere'";
         $where["item_prestation.object_id"] = "= '$_item->object_id'";
 
         // On teste également le réalisé, si une affectation avait déjà été faite puis supprimée.
@@ -372,10 +373,17 @@ class CAffectation extends CMbObject {
         if (!$item_liaison->_id) {
           $item_liaison = new CItemLiaison();
           $item_liaison->sejour_id = $sejour->_id;
-          $item_liaison->date = CMbDT::date($sejour->entree);
+          $item_liaison->date = CMbDT::date($this->entree);
           $item_liaison->quantite = 0;
         }
 
+        // Recherche d'une précédente liaison pour appliquer l'item souhaité s'il existe
+        unset($where["date"]);
+        $ljoin["item_prestation"] = "item_prestation.item_prestation_id = item_liaison.item_souhait_id";
+        $_item_liaison_souhait = new CItemLiaison();
+        $_item_liaison_souhait->loadObject($where, "date DESC", null, $ljoin);
+
+        $item_liaison->item_souhait_id = $_item_liaison_souhait->item_souhait_id;
         $item_liaison->item_realise_id = $_liaison->item_prestation_id;
 
         if ($msg = $item_liaison->store()) {

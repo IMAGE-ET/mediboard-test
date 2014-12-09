@@ -32,8 +32,6 @@ foreach ($prestations_j as $_prestation) {
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 
-$sejour->getPrestations();
-
 //droits d'édition
 $editRights = CModule::getCanDo("dPhospi")->edit;
 

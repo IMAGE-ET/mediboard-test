@@ -24,6 +24,10 @@
       <td>{{mb_field object=$sous_item field="nom"}}</td>
     </tr>
     <tr>
+      <th>{{mb_label object=$sous_item field="niveau"}}</th>
+      <td>{{mb_field object=$sous_item field="niveau"}}</td>
+    </tr>
+    <tr>
       <td class="button" colspan="2">
         <button type="button" class="save" onclick="onSubmitFormAjax(this.form, function() {
           Control.Modal.close();
