@@ -20,13 +20,13 @@
       </tr>
     </table>
   {{/if}}
-  
+
   {{if $print && !@$multi}}
     <script>
       Main.add(window.print);
-    </script> 
+    </script>
   {{/if}}
-  
+
   {{assign var=tbl_class value="print"}}
 {{else}}
   {{assign var=tbl_class value="main form"}}
@@ -238,10 +238,10 @@
           {{/if}}
         {{/foreach}}
       {{/if}}
-      </table>    
+      </table>
     </td>
   </tr>
-  
+
   {{assign var=const_med value=$patient->_ref_constantes_medicales}}
   {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
   {{assign var=ant value=$dossier_medical->_ref_antecedents_by_type}}
@@ -252,7 +252,10 @@
           <th class="category" colspan="2">Informations sur le patient</th>
         </tr>
         <tr>
-          <td colspan="2">{{$patient->_view}}</td>
+          <td colspan="2">
+            {{$patient->_view}}
+            {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}
+          </td>
         </tr>
         {{if $patient->nom_jeune_fille}}
         <tr>
@@ -265,7 +268,7 @@
             Né{{if $patient->sexe != "m"}}e{{/if}} le {{mb_value object=$patient field=naissance}}
             ({{$patient->_age}})
             - sexe {{tr}}CPatient.sexe.{{$patient->sexe}}{{/tr}}<br />
-            {{if $patient->profession}}Profession : {{$patient->profession}}<br />{{/if}} 
+            {{if $patient->profession}}Profession : {{$patient->profession}}<br />{{/if}}
             {{if $const_med->poids}}<strong>{{$const_med->poids}} kg</strong> - {{/if}}
             {{if $const_med->taille}}<strong>{{$const_med->taille}} cm</strong> - {{/if}}
             {{if $const_med->_imc}}IMC : <strong>{{$const_med->_imc}}</strong>
@@ -333,7 +336,7 @@
                   {{if $currAnt->date}}
                     {{mb_value object=$currAnt field=date}} :
                   {{/if}}
-                  {{$currAnt->rques}} 
+                  {{$currAnt->rques}}
                 </li>
               </ul>
             {{/foreach}}
@@ -364,11 +367,11 @@
                 {{foreach from=$currTypeAnt item=currAnt}}
                 <ul>
                   <li>
-                    {{if $currAnt->appareil}}<strong>{{tr}}CAntecedent.appareil.{{$currAnt->appareil}}{{/tr}}</strong>{{/if}} 
+                    {{if $currAnt->appareil}}<strong>{{tr}}CAntecedent.appareil.{{$currAnt->appareil}}{{/tr}}</strong>{{/if}}
                     {{if $currAnt->date}}
                       {{mb_value object=$currAnt field=date}} :
                     {{/if}}
-                    {{$currAnt->rques}} 
+                    {{$currAnt->rques}}
                   </li>
                 </ul>
                 {{/foreach}}
@@ -383,7 +386,7 @@
         </tr>
       </table>
     </td>
-    
+
     {{if is_array($dossier_medical->_ref_traitements) || $dossier_medical->_ref_prescription}}
     <!-- Traitements -->
     <td class="halfPane text">
@@ -398,7 +401,7 @@
               {{foreach from=$dossier_medical->_ref_traitements item=curr_trmt}}
               <li>
                 {{if $curr_trmt->fin}}
-                  Depuis {{mb_value object=$curr_trmt field=debut}} 
+                  Depuis {{mb_value object=$curr_trmt field=debut}}
                   jusqu'à {{mb_value object=$curr_trmt field=fin}} :
                 {{elseif $curr_trmt->debut}}
                   Depuis {{mb_value object=$curr_trmt field=debut}} :
@@ -447,7 +450,7 @@
     {{/if}}
     </tr>
     <tr>
-    
+
     <!-- Examens cliniques -->
     <td class="halfPane text">
       <table style="width: 100%">
@@ -484,7 +487,7 @@
             {{/if}}
           </td>
         </tr>
-        
+
         <tr>
           <th style="font-weight: normal;">Examen cardiovasculaire</th>
           <td colspan="5" style="font-weight: bold;" class="text">{{$dossier_anesth->examenCardio}}</td>
@@ -501,7 +504,7 @@
           <th style="font-weight: normal;">Examen autre</th>
           <td colspan="5" style="font-weight: bold;" class="text">{{$dossier_anesth->examenAutre}}</td>
         </tr>
-        
+
         {{if $consult->examen}}
         <tr>
           <th style="font-weight: normal;">Examens</th>
@@ -510,7 +513,7 @@
         {{/if}}
       </table>
     </td>
-    
+
   </tr>
 </table>
 
@@ -525,15 +528,15 @@
         <tr>
           <th colspan="3" class="category">Conditions d'intubation</th>
         </tr>
-    
-          
+
+
         {{if !$conf.dPcabinet.CConsultAnesth.show_mallampati}}
         <tr>
           <th style="font-weight: normal;">Mallampati</th>
           <td style="font-weight: bold;">
            {{mb_value object=$dossier_anesth field="mallampati"}}
           </td>
-        </tr>  
+        </tr>
         {{/if}}
         <tr>
           {{if $dossier_anesth->mallampati && $conf.dPcabinet.CConsultAnesth.show_mallampati}}
@@ -583,10 +586,10 @@
         {{else}}
           <td colspan="3" style="font-weight: bold; text-align:center;">
             Pas d'intubation difficile prévisible
-          </td>        
+          </td>
         {{/if}}
         </tr>
-      </table>    
+      </table>
 
       <table style="width: 100%">
         <tr>
@@ -594,7 +597,7 @@
             Examens Complémentaires
           </th>
         </tr>
-        
+
         <tr>
         {{foreach from=$listChamps item=aChamps}}
           <td>
@@ -687,7 +690,7 @@
       </tr>
       {{/foreach}}
       </table>
-      
+
       <table style="width: 100%">
       {{if $consult->_ref_exampossum->_id}}
         <tr>
@@ -698,12 +701,12 @@
           </td>
         </tr>
       {{/if}}
-      
+
       {{if $consult->_ref_examnyha->_id}}
         <tr>
           <th>Clasification NYHA</th>
           <td>{{mb_value object=$consult->_ref_examnyha field="_classeNyha"}}</td>
-        </tr>   
+        </tr>
       {{/if}}
       </table>
 
@@ -735,7 +738,7 @@
             Prémédication
           </th>
         </tr>
-        
+
         {{if $dossier_anesth->premedication}}
           <tr>
             <td>
@@ -805,7 +808,7 @@
         </tr>
       </table>
       {{/if}}
-      
+
       {{if $dossier_medical->_ext_codes_cim}}
       <table style="width: 100%">
         <tr>
@@ -848,7 +851,7 @@
           </td>
           <td style="text-align: center;">
             {{mb_value object=$dossier_medical_sejour field="risque_thrombo_chirurgie"}}
-          </td> 
+          </td>
         </tr>
         <tr>
           <th>MCJ</th>
@@ -857,21 +860,21 @@
           </td>
           <td style="text-align: center;">
             {{mb_value object=$dossier_medical_sejour field="risque_MCJ_chirurgie"}}
-          </td> 
+          </td>
         </tr>
         <tr>
           <th>Risque Anesthesique - Antibioprophylaxie</th>
           <td style="text-align: center;">&mdash;</td>
           <td style="text-align: center;">
             {{mb_value object=$dossier_medical_sejour field="risque_antibioprophylaxie"}}
-          </td> 
+          </td>
         </tr>
         <tr>
           <th>Risque Anesthesique - Prophylaxie</th>
           <td style="text-align: center;">&mdash;</td>
           <td style="text-align: center;">
             {{mb_value object=$dossier_medical_sejour field="risque_prophylaxie"}}
-         </td>  
+         </td>
         </tr>
         <tr>
           <th>{{tr}}{{mb_label object=$dossier_medical field="facteurs_risque"}}{{/tr}}</th>
@@ -884,7 +887,7 @@
    </td>
   </tr>
   {{/if}}
-  
+
   <tr>
     <th class="category">Visite de pré-anesthésie {{if $operation->date_visite_anesth}}- {{$operation->date_visite_anesth|date_format:$conf.date}}{{/if}}</th>
   </tr>

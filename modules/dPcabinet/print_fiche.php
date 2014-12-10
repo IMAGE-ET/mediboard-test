@@ -181,6 +181,8 @@ if (CModule::getActive("dPprescription")) {
 $praticien =& $consult->_ref_chir;
 $patient   =& $consult->_ref_patient;
 $patient->loadRefDossierMedical();
+$patient->loadIPP();
+
 $dossier_medical =& $patient->_ref_dossier_medical;
 
 $patient->loadRefsConsultations();

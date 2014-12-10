@@ -26,7 +26,10 @@
         </tr>
         <tr>
           <th>Patient </th>
-          <td style="font-size: 1.3em;">{{$patient->_view}}</td>
+          <td style="font-size: 1.3em;">
+            {{$patient->_view}}
+            {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}
+          </td>
           {{if $operation->_id}}
             <th>{{mb_label object=$dossier_anesth->_ref_operation field=chir_id}}</th>
             <td style="font-size: 1.3em;">{{mb_value object=$operation field=chir_id}}</td>
