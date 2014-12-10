@@ -231,7 +231,7 @@ class CPlanningWeek{
         foreach ($lines as $guid => $_line) {
           /** @var CPlanningEvent $event */
           $event = $events[$guid];
-          $event->offset =  $_line["start"] / $_line["total"];
+          $event->offset =  ($_line["start"] / $_line["total"])+.1;
           $event->width = ( ($_line["end"] - $_line["start"]) / $_line["total"] ) - 0.1;
         }
       }
