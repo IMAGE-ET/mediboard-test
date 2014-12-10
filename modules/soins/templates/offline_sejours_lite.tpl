@@ -74,6 +74,7 @@
       {{assign var=curr_aff value=$sejour->_ref_curr_affectation}}
       {{assign var=patient value=$sejour->_ref_patient}}
       {{assign var=curr_prat value=$sejour->_ref_praticien}}
+      {{assign var=statut value=""}}
 
       {{if !$sejour->entree_reelle || ($sejour->_ref_prev_affectation->_id && $sejour->_ref_prev_affectation->effectue == 0)}}
         {{assign var=statut value="attente"}}
