@@ -15,21 +15,21 @@
 class CPlanningWeek{
   public $guid;
   public $title;
-  
+
   public $date;
   public $selectable;
   public $height;
   public $large;
   public $adapt_range;
-  
+
   public $date_min; // Monday
   public $date_max; // Sunday
-  
+
   public $date_min_active;
   public $date_max_active;
 
   public $allow_superposition = false;
-  
+
   public $hour_min = "09";
   public $hour_max = "16";
   public $hour_divider = 6;
@@ -40,28 +40,28 @@ class CPlanningWeek{
   public $dragndrop = 0;
   public $resizable = 0;
   public $no_dates  = 0;
-  
+
   public $events = array();
   public $events_sorted = array();
   public $ranges = array();
   public $ranges_sorted = array();
 
   public $_nb_collisions_ranges_sorted = array();
-  
+
   public $pauses = array("08", "12", "16");
   public $unavailabilities = array();
   public $day_labels = array();
   public $load_data = array();
-  
+
   public $_date_min_planning;
   public $_date_max_planning;
-  
+
   // Periods
   public $hours = array(
-    "00", "01", "02", "03", "04", "05", 
-    "06", "07", "08", "09", "10", "11", 
-    "12", "13", "14", "15", "16", "17", 
-    "18", "19", "20", "21", "22", "23", 
+    "00", "01", "02", "03", "04", "05",
+    "06", "07", "08", "09", "10", "11",
+    "12", "13", "14", "15", "16", "17",
+    "18", "19", "20", "21", "22", "23",
   );
 
   public $days = array();
@@ -79,14 +79,14 @@ class CPlanningWeek{
    * @param bool   $adapt_range [optional] can the planning adapt the range
    */
   function __construct(
-      $date,
-      $date_min = null,
-      $date_max = null,
-      $nb_days = 7,
-      $selectable = false,
-      $height = "auto",
-      $large = false,
-      $adapt_range = false
+    $date,
+    $date_min = null,
+    $date_max = null,
+    $nb_days = 7,
+    $selectable = false,
+    $height = "auto",
+    $large = false,
+    $adapt_range = false
   ) {
     $this->date = $date;
     $this->selectable = $selectable;
@@ -94,12 +94,12 @@ class CPlanningWeek{
     $this->large = $large;
     $this->nb_days = $nb_days;
     $this->adapt_range = $adapt_range;
-    
+
     if (is_int($date) || is_int($date_min) || is_int($date_max)) {
       $this->no_dates = true;
       $this->date_min = $this->date_min_active = $this->_date_min_planning = $date_min;
       $this->date_max = $this->date_max_active = $this->_date_max_planning = $date_max;
-      
+
       for ($i = 0 ; $i < $this->nb_days ; $i++) {
         $this->days[$i] = array();
         $this->load_data[$i] = array();
@@ -108,23 +108,23 @@ class CPlanningWeek{
     }
     else {
       $days = array("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday");
-      
+
       $last_day = $days[$this->nb_days - 1];
-      
-      
+
+
       $monday = CMbDT::date("last monday", CMbDT::date("+1 day", $this->date));
       $sunday = CMbDT::date("next $last_day", CMbDT::date("-1 DAY", $this->date));
-      
+
       if (CMbDT::daysRelative($monday, $sunday) > 7) {
         $sunday = CMbDT::date("-7 DAYS", $sunday);
       }
-      
+
       $this->date_min_active = $date_min ? max($monday, CMbDT::date($date_min)) : $monday;
       $this->date_max_active = $date_max ? min($sunday, CMbDT::date($date_max)) : $sunday;
-      
+
       $this->date_min = $monday;
       $this->date_max = $sunday;
-      
+
       // Days period
       for ($i = 0; $i < $this->nb_days; $i++) {
         $_day = CMbDT::date("+$i day", $monday);
@@ -132,7 +132,7 @@ class CPlanningWeek{
         $this->load_data[$_day] = array();
         $this->_nb_collisions_ranges_sorted[$_day] = 0;
       }
-      
+
       $this->_date_min_planning = reset(array_keys($this->days));
       $this->_date_max_planning = end(array_keys($this->days));
     }
@@ -149,15 +149,15 @@ class CPlanningWeek{
     if ($event->day < $this->date_min || $event->day > $this->date_max) {
       return;
     }
-      
+
     if ( $event->day < $this->date_min_active || $event->day > $this->date_max_active) {
       $event->disabled = true;
     }
-    
+
     $this->events[] = $event;
     $this->days[$event->day][] = $event;
     $this->events_sorted[$event->day][$event->hour][] = $event;
-    
+
     $colliding = array($event);
     foreach ($this->days[$event->day] as $_event) {
       /** @var CPlanningEvent $_event */
@@ -170,22 +170,22 @@ class CPlanningWeek{
             }
             $min = min($event->start, $_event->start);
             $max = max($event->end  , $_event->end);
-            
+
             if (($__event->start < $min && $__event->end <= $min) || ($__event->start >= $max && $__event->end > $max)) {
               continue;
-            } 
-            
+            }
+
             $colliding[] = $__event;
           }
         }
       }
     }
-    
+
     $event->offset = 0.0;
     $event->width = 1.0;
-    
+
     $count = count($colliding);
-    
+
     if ($count) {
       foreach ($colliding as $_key => $_event) {
         $_event->width = 1 / $count;
@@ -231,7 +231,7 @@ class CPlanningWeek{
         foreach ($lines as $guid => $_line) {
           /** @var CPlanningEvent $event */
           $event = $events[$guid];
-          $event->offset =  $_line["start"] / $_line["total"];
+          $event->offset =  ($_line["start"] / $_line["total"])+.1;
           $event->width = ( ($_line["end"] - $_line["start"]) / $_line["total"] ) - 0.1;
         }
       }
@@ -276,7 +276,7 @@ class CPlanningWeek{
     if ($range->day < $this->date_min || $range->day > $this->date_max) {
       return;
     }
-    
+
     $this->has_range = true;
 
     foreach ($this->ranges as $_range) {
@@ -305,7 +305,7 @@ class CPlanningWeek{
   function showNow($color = "red") {
     $this->addEvent(new CPlanningEvent(null, CMbDT::dateTime(), null, null, $color, null, "now"));
   }
-  
+
   /**
    * Add an unavailability event to the planning
    *
@@ -316,19 +316,19 @@ class CPlanningWeek{
    */
   function addUnavailability($min, $max = null) {
     $min = CMbDT::date($min);
-    
+
     $max = $max ? CMbDT::date($max) : $min;
-    
+
     if ($min > $max) {
       list($min, $max) = array($max, $min);
     }
-    
+
     while ($min <= $max) {
       $this->unavailabilities[$min] = true;
       $min = CMbDT::date("+1 DAY", $min);
     }
   }
-  
+
   /**
    * Tell wether given day is active in planning
    *
@@ -363,7 +363,7 @@ class CPlanningWeek{
       "datas"       => $datas
     );
   }
-  
+
   /**
    * Add a load event
    *
@@ -374,7 +374,7 @@ class CPlanningWeek{
    */
   function addLoad($start, $length = null) {
     $this->has_load = true;
-    
+
     if ($start instanceof CPlanningEvent) {
       $event = $start;
       if ($this->no_dates) {
@@ -393,28 +393,28 @@ class CPlanningWeek{
       }
       $event = new CPlanningEvent(null, $start, $length);
     }
-    
+
     $start = $event->start;
     $end   = $event->end;
-    
+
     $div_size = 60 / $this->hour_divider;
-    
+
     $min = round(CMbDT::minutesRelative($day, $start) / $div_size) - 1;
     $max = round(CMbDT::minutesRelative($day, $end)   / $div_size) + 1;
 
     for ($i = $min; $i <= $max; $i++) {
       $div_min = CMbDT::dateTime("+".($i*$div_size)." MINUTES", $day);
       //$div_max = CMbDT::dateTime("+".(($i+1)*$div_size)." MINUTES", $day);
-      
+
       // FIXME: ameliorer ce calcul
       if ($div_min >= $start && $div_min < $end) {
         $hour = CMbDT::format($div_min, "%H");
         $min = CMbDT::format($div_min, "%M");
-        
+
         if (!isset($this->load_data[$day][$hour][$min])) {
           $this->load_data[$day][$hour][$min] = 0;
         }
-        
+
         $this->load_data[$day][$hour][$min]++;
       }
     }
