@@ -218,8 +218,8 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
       $height = (25.4*$this->height)/72;
       $options .= "--page-width ". escapeshellarg($width). " --page-height ". escapeshellarg($height)." ";
     }
-    
-    $options .= escapeshellarg($this->file) . " " . escapeshellarg($result);
+
+    $options .= escapeshellarg($this->file) . " " . escapeshellarg($result) . " 2> /dev/null";
     
     exec($command.$options);
     
