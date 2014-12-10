@@ -36,6 +36,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $group_id;
   public $grossesse_id;
   public $confirme_user_id;
+  public $consult_related_id;
 
   public $uf_hebergement_id; // UF de responsabilité d'hébergement
   public $uf_medicale_id; // UF de responsabilité médicale
@@ -443,6 +444,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $props["praticien_id"]             = "ref notNull class|CMediusers seekable autocomplete|nom";
     $props["group_id"]                 = "ref notNull class|CGroups";
     $props["grossesse_id"]             = "ref class|CGrossesse unlink";
+    $props["consult_related_id"]       = "ref class|CConsultation show|0";
     $props["uf_hebergement_id"]        = "ref class|CUniteFonctionnelle seekable";
     $props["uf_medicale_id"]           = "ref class|CUniteFonctionnelle seekable";
     $props["uf_soins_id"]              = "ref class|CUniteFonctionnelle seekable";

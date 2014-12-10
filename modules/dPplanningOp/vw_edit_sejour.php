@@ -17,7 +17,7 @@ $patient_id   = CValue::get("patient_id");
 $praticien_id = CValue::get("praticien_id");
 $grossesse_id = CValue::get("grossesse_id");
 $dialog       = CValue::get("dialog", 0);
-
+$consult_related_id = CValue::get("consult_related_id");
 
 // Liste des Etablissements selon Permissions
 $etablissements = new CMediusers();
@@ -44,6 +44,8 @@ if ($patient_id) {
 // On récupére le séjour
 $sejour = new CSejour();
 $sejour->_ref_patient = $patient;
+$sejour->consult_related_id = $consult_related_id;
+
 if ($sejour_id) {
   $sejour->load($sejour_id);
 

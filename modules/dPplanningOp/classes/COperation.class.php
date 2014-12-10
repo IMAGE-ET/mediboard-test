@@ -287,6 +287,7 @@ class COperation extends CCodable implements IPatientRelated {
     $props["poste_preop_id"]       = "ref class|CPosteSSPI";
     $props["examen_operation_id"]  = "ref class|CExamenOperation";
     $props["graph_pack_id"]        = "ref class|CSupervisionGraphPack";
+    $props["consult_related_id"]   = "ref class|CConsultation show|0";
     $props["date"]                 = "date";
     $props["code_uf"]              = "str length|3";
     $props["libelle_uf"]           = "str maxLength|35";

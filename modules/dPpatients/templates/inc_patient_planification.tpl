@@ -13,31 +13,34 @@
     modal('sejour-buttons', options);
   };
 
-  newOperation = function(chir_id, pat_id) {
+  newOperation = function(chir_id, pat_id, consult_id) {
     var url = new Url;
     url.setModuleTab('planningOp', 'vw_edit_planning');
     url.addParam('chir_id', chir_id);
     url.addParam('pat_id', pat_id);
+    url.addParam('consult_related_id', consult_id);
     url.addParam('operation_id', 0);
     url.addParam('sejour_id', 0);
     url.redirect();
   };
 
-  newHorsPlage = function(chir_id, pat_id) {
+  newHorsPlage = function(chir_id, pat_id, consult_id) {
     var url = new Url;
     url.setModuleTab('planningOp', 'vw_edit_urgence');
     url.addParam('chir_id', chir_id);
     url.addParam('pat_id', pat_id);
+    url.addParam('consult_related_id', consult_id);
     url.addParam('operation_id', 0);
     url.addParam('sejour_id', 0);
     url.redirect();
   };
 
-  newSejour = function(chir_id, pat_id) {
+  newSejour = function(chir_id, pat_id, consult_id) {
     var url = new Url;
     url.setModuleTab('planningOp', 'vw_edit_sejour');
     url.addParam('praticien_id', chir_id);
     url.addParam('patient_id', pat_id);
+    url.addParam('consult_related_id', consult_id);
     url.addParam('sejour_id', 0);
     url.redirect();
   };
@@ -74,15 +77,15 @@
       </button>
 
       <div id="sejour-buttons" style="display: none;">
-        <button class="big" type="button" onclick="newOperation({{$praticien_id}},{{$patient_id}})" style="width: 20em;">
+        <button class="big" type="button" onclick="newOperation('{{$praticien_id}}', '{{$patient_id}}', '{{$consult->_id}}')" style="width: 20em;">
           {{tr}}COperation-title-create{{/tr}}
         </button>
         <br/>
-        <button class="big" type="button" onclick="newHorsPlage({{$praticien_id}},{{$patient_id}})" style="width: 20em;">
+        <button class="big" type="button" onclick="newHorsPlage('{{$praticien_id}}', '{{$patient_id}}', '{{$consult->_id}}')" style="width: 20em;">
           {{tr}}COperation-title-create-horsplage{{/tr}}
         </button>
         <br/>
-        <button class="big" type="button" onclick="newSejour({{$praticien_id}},{{$patient_id}})" style="width: 20em;">
+        <button class="big" type="button" onclick="newSejour('{{$praticien_id}}', '{{$patient_id}}', '{{$consult->_id}}')" style="width: 20em;">
           {{tr}}CSejour-title-create{{/tr}}
         </button>
       </div>

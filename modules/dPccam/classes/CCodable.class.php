@@ -20,6 +20,7 @@ class CCodable extends CMbObject {
   public $facture;
   public $tarif;
   public $exec_tarif;
+  public $consult_related_id;
 
   // Form fields
   public $_acte_execution;
@@ -70,7 +71,8 @@ class CCodable extends CMbObject {
   public $_ext_codes_ccam;
   /** @var CDatedCodeCCAM[] */
   public $_ext_codes_ccam_princ;
-
+  /** @var  CConsultation */
+  public $_ref_consult_related;
 
   // Back references
   /** @var CActe[] */
@@ -1230,5 +1232,9 @@ class CCodable extends CMbObject {
       }
     }
     return null;
+  }
+
+  function loadRefConsultRelated() {
+    return $this->_ref_consult_related = $this->loadFwdRef("consult_related_id", true);
   }
 }

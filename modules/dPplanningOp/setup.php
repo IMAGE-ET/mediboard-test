@@ -1829,8 +1829,17 @@ class CSetupdPplanningOp extends CSetup {
     $this->addQuery($query);
     $this->makeRevision("1.98");
 
+    $this->makeRevision("1.99");
+    $query = "ALTER TABLE `sejour`
+      ADD `consult_related_id` INT (11) UNSIGNED AFTER `group_id`;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `operations`
+      ADD `consult_related_id` INT (11) UNSIGNED AFTER `salle_id`;";
+    $this->addQuery($query);
+
     $this->addFunctionalPermQuery("allowed_check_entry", "0");
-    $this->mod_version = '1.99';
+    $this->mod_version = '2.00';
 
     // Data source query
     $query = "SHOW TABLES LIKE 'type_autorisation_um'";

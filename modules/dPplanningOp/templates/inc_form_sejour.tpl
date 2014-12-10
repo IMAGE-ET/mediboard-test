@@ -540,6 +540,7 @@ Main.add( function(){
 {{/if}}
 
 {{mb_field object=$sejour field="codes_ccam" hidden=1}}
+{{mb_field object=$sejour field="consult_related_id" hidden=1}}
 
 {{if !$sejour->annule}}
   <input type="hidden" name="recuse" value="{{if $conf.dPplanningOp.CSejour.use_recuse && !$sejour->_id}}-1{{else}}{{$sejour->recuse}}{{/if}}"/>

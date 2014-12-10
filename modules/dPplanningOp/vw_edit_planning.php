@@ -25,6 +25,7 @@ $sejour_id    = CValue::get("sejour_id");
 $patient_id   = CValue::get("pat_id");
 $today        = CMbDT::date();
 $tomorow      = CMbDT::date("+1 DAY");
+$consult_related_id = CValue::get("consult_related_id");
 
 // L'utilisateur est-il un praticien
 $user = CMediusers::get();
@@ -104,6 +105,10 @@ if ($op->_id) {
   $prat =& $sejour->_ref_praticien;
   
   $patient =& $sejour->_ref_patient;
+}
+
+if (!$op->_id) {
+  $op->consult_related_id = $consult_related_id;
 }
 
 CValue::setSession("chir_id", $chir->_id);

@@ -2215,6 +2215,11 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("2.43");
     $this->addPrefQuery("dPcabinet_displayFirstTab", "AntTrait");
 
-    $this->mod_version = '2.44';
+    $this->makeRevision("2.44");
+    $query = "ALTER TABLE `consultation`
+      ADD `consult_related_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.45';
   }
 }

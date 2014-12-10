@@ -242,6 +242,9 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $backProps["identifiants"]      = "CIdSante400 object_id cascade";
     $backProps["contextes_constante"] = "CConstantesMedicales context_id";
     $backProps["arret_travail"]     = "CAvisArretTravail consult_id";
+    $backProps["sejours_lies"]      = "CSejour consult_related_id";
+    $backProps["intervs_liees"]     = "COperation consult_related_id";
+    $backProps["consults_liees"]    = "CConsultation consult_related_id";
 
     return $backProps;
   }
@@ -258,7 +261,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $props["categorie_id"]      = "ref class|CConsultationCategorie show|1";
     $props["grossesse_id"]      = "ref class|CGrossesse show|0 unlink";
     $props["element_prescription_id"] = "ref class|CElementPrescription";
-
+    $props["consult_related_id"] = "ref class|CConsultation show|0";
     $props["motif"]             = "text helped seekable";
     $props["type"]              = "enum list|classique|entree|chimio default|classique";
     $props["heure"]             = "time notNull show|0";
@@ -1831,7 +1834,49 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     if (CModule::getActive("forms")) {
       CExObject::addFormsToTemplate($template, $this, "Consultation");
     }
-    
+
+    // Séjour et/ou intervention créés depuis la consultation
+    $sejour_relie  = reset($this->loadBackRefs("sejours_lies"));
+    $interv_reliee = reset($this->loadBackRefs("intervs_liees"));
+
+    if ($interv_reliee) {
+      $sejour_relie = $interv_reliee->loadRefSejour();
+    }
+    else {
+      if (!$sejour_relie) {
+        $sejour_relie = new CSejour();
+      }
+      if (!$interv_reliee) {
+        $interv_reliee = new COperation();
+      }
+    }
+
+    $interv_reliee->loadRefChir();
+    $interv_reliee->loadRefPlageOp();
+    $interv_reliee->loadRefSalle();
+    $sejour_relie->loadRefPraticien();
+
+    // Intervention reliée
+    $template->addProperty("Consultation - Opération reliée - Chirurgien", $interv_reliee->_ref_chir->_view);
+    $template->addProperty("Consultation - Opération reliée - Libellé"   , $interv_reliee->libelle);
+    $template->addProperty("Consultation - Opération reliée - Salle"     , $interv_reliee->_ref_salle->nom);
+    $template->addDateProperty("Consultation - Opération reliée - Date"  , $interv_reliee->_datetime_best);
+
+    // Séjour relié
+    $template->addDateProperty("Consultation - Séjour relié - Date entrée"         , $sejour_relie->entree);
+    $template->addLongDateProperty("Consultation - Séjour relié - Date entrée (longue)", $sejour_relie->entree);
+    $template->addTimeProperty("Consultation - Séjour relié - Heure entrée"        , $sejour_relie->entree);
+    $template->addDateProperty("Consultation - Séjour relié - Date sortie"         , $sejour_relie->sortie);
+    $template->addLongDateProperty("Consultation - Séjour relié - Date sortie (longue)", $sejour_relie->sortie);
+    $template->addTimeProperty("Consultation - Séjour relié - Heure sortie"        , $sejour_relie->sortie);
+
+    $template->addDateProperty("Consultation - Séjour relié - Date entrée réelle"  , $sejour_relie->entree_reelle);
+    $template->addTimeProperty("Consultation - Séjour relié - Heure entrée réelle" , $sejour_relie->entree_reelle);
+    $template->addDateProperty("Consultation - Séjour relié - Date sortie réelle"  , $sejour_relie->sortie_reelle);
+    $template->addTimeProperty("Consultation - Séjour relié - Heure sortie réelle" , $sejour_relie->sortie_reelle);
+    $template->addProperty("Consultation - Séjour relié - Praticien"               , "Dr ".$sejour_relie->_ref_praticien->_view);
+    $template->addProperty("Consultation - Séjour relié - Libelle"                 , $sejour_relie->getFormattedValue("libelle"));
+
     $this->notify("AfterFillLimitedTemplate", $template);
   }
 

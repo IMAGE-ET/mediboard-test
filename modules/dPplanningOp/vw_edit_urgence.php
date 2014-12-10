@@ -42,6 +42,7 @@ $date_urgence = CValue::get("date_urgence");
 $salle_id     = CValue::get("salle_id");
 $patient_id   = CValue::get("pat_id");
 $grossesse_id = CValue::get("grossesse_id");
+$consult_related_id = CValue::get("consult_related_id");
 
 // L'utilisateur est-il un praticien
 $user = $chir = CMediusers::get();
@@ -134,6 +135,7 @@ else {
     $op->_time_urgence = "$hour:$min:00";
   }
 
+  $op->consult_related_id = $consult_related_id;
   $op->date = $op->_datetime = $date_urgence ? $date_urgence : CMbDT::date();
   $op->salle_id = $salle_id;
 }
