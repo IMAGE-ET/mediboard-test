@@ -70,6 +70,7 @@ foreach ($musers as $_user) {
       null,
       false
     );
+    $event->below = 1;
     $planning->addEvent($event);
   }
 
@@ -103,6 +104,7 @@ foreach ($musers as $_user) {
       $_plage->color
     );
     $range->type = "plageconsult";
+
     $planning->addRange($range);
 
     //colors
@@ -255,7 +257,7 @@ foreach ($musers as $_user) {
 
   $i++;
 }
-$planning->allow_superposition =1 ;
+//$planning->allow_superposition = 1 ;
 $planning->rearrange(true);
 
 

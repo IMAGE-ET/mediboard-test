@@ -194,6 +194,7 @@ for ($i = 0; $i < $nbDays; $i++) {
       null,
       false
     );
+    $event->below = 1;
     $planning->addEvent($event);
   }
 
@@ -243,6 +244,7 @@ for ($i = 0; $i < $nbDays; $i++) {
           }
           $event->plage["color"] = $_plage->color;
           //Ajout de l'évènement au planning
+          $event->below = 1;
           $planning->addEvent($event);
         }
       }
@@ -369,6 +371,7 @@ for ($i = 0; $i < $nbDays; $i++) {
 
       //Ajout de l'évènement au planning 
       $event->plage["color"] = $_plage->color;
+      $event->below = 1;
       $planning->addEvent($event);
     }
   }
