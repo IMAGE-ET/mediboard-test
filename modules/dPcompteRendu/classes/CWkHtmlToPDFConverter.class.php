@@ -184,7 +184,7 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     if ($arch != "i386" && $arch != "amd64") {
       $arch = "i386";
     }
-    $command = "$root_dir/lib/wkhtmltopdf/wkhtmltopdf-".$arch." -q ";
+    $command = "$root_dir/lib/wkhtmltopdf/wkhtmltopdf-$arch -q ";
     $result = tempnam("./tmp", "result");
     $options = "--print-media-type ";
 
@@ -199,7 +199,7 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
       $this->margins["bottom"] += ((25.4*$this->footer_height)/96 + $this->footer_spacing); 
       $options .= "--footer-html ".escapeshellarg($this->footer)." --footer-spacing ".escapeshellarg($this->footer_spacing)." ";
     }
-    
+
     // Marges
     if ($this->margins) {
       foreach ($this->margins as $key=>$_marge) {
@@ -211,18 +211,18 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     if ($this->format && $this->orientation) {
       $options .= "--page-size ".escapeshellarg($this->format)." --orientation ". escapeshellarg($this->orientation)." ";
     }
-    
+
     if ($this->width && $this->height) {
       // Conversion en mm
       $width = (25.4*$this->width)/72;
       $height = (25.4*$this->height)/72;
       $options .= "--page-width ". escapeshellarg($width). " --page-height ". escapeshellarg($height)." ";
     }
-    
-    $options .= escapeshellarg($this->file) . " " . escapeshellarg($result);
-    
+
+    $options .= escapeshellarg($this->file) . " " . escapeshellarg($result) . " 2> /dev/null";
+
     exec($command.$options);
-    
+
     $this->result = file_get_contents($result);
     
     // Supression des fichiers temporaires
