@@ -36,27 +36,27 @@
     var url = new Url("Imeds", "httpreq_vw_sejour_results");
     url.addParam("sejour_id", sejour_id);
     url.requestUpdate('Imeds');
-  }
+  };
 
   loadSuiviClinique = function() {
     var url = new Url("soins", "ajax_vw_suivi_clinique");
     url.addParam("sejour_id", '{{$sejour->_id}}');
     url.requestUpdate("suivi_clinique");
-  }
+  };
 
   loadSuiviSoins = function() {
     PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration', null, null, null, null, null, 1);
-  }
+  };
 
   loadPrescription = function() {
     $('prescription_sejour').update('');
     Prescription.hide_header = true;
     Prescription.reloadPrescSejour('{{$prescription_id}}','{{$sejour->_id}}');
-  }
+  };
 
   loadLabo = function() {
     loadResultLabo('{{$sejour->_id}}');
-  }
+  };
   
   loadConstantes = function() {
     var url = new Url("patients", "httpreq_vw_constantes_medicales");
@@ -66,20 +66,29 @@
       url.addParam('hidden_graphs', JSON.stringify(window.oGraphs.getHiddenGraphs()));
     }
     url.requestUpdate("constantes-medicales");
-  }
+  };
 
   loadDocuments = function() {
     var url = new Url("hospi", "httpreq_documents_sejour");
     url.addParam("sejour_id" , '{{$sejour->_id}}');
     url.requestUpdate("docs");
-  }
+  };
 
   loadAntecedents = function() {
     var url = new Url("cabinet","httpreq_vw_antecedents");
     url.addParam("sejour_id", '{{$sejour->_id}}');
     url.addParam("show_header", 0);
     url.requestUpdate('antecedents')
-  }
+  };
+
+  loadGrossesse = function() {
+    var url = new Url('maternite', 'ajax_edit_grossesse', "action");
+    url.addParam('grossesse_id', '{{$sejour->_ref_grossesse->_id}}');
+    url.addParam('parturiente_id', '{{$patient->_id}}');
+    url.addParam('with_buttons', 1);
+    url.addParam('standalone', 1);
+    url.requestUpdate("grossesse");
+  };
 
   loadActes = function(sejour_id, praticien_id) {
     if($('listActesNGAP')){
@@ -100,27 +109,27 @@
     if ($('caisse')) {
       ActesCaisse.refreshListSejour(sejour_id, praticien_id);
     }
-  }
+  };
 
   loadActesNGAP = function (sejour_id){
     var url = new Url("dPcabinet", "httpreq_vw_actes_ngap");
     url.addParam("object_id", sejour_id);
     url.addParam("object_class", "CSejour");
     url.requestUpdate('listActesNGAP');
-  }
+  };
 
   loadTarifsSejour = function (sejour_id) {
     var url = new Url("soins", "ajax_tarifs_sejour");
     url.addParam("sejour_id", sejour_id);
     url.requestUpdate("tarif");
-  }
+  };
 
   reloadDiagnostic = function (sejour_id, modeDAS) {
     var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
     url.addParam("sejour_id", sejour_id);
     url.addParam("modeDAS", modeDAS);
     url.requestUpdate("cim");
-  }
+  };
 
   closeModal = function() {
     modalWindow.close();
@@ -130,7 +139,7 @@
     if(window.refreshLineSejour){ 
       refreshLineSejour('{{$sejour->_id}}'); 
     }
-  }
+  };
 
   refreshConstantesMedicales = function(context_guid, paginate, count) {
     if(context_guid) {
@@ -145,7 +154,7 @@
       }
       url.requestUpdate("constantes-medicales");
     }
-  }
+  };
 
   if (!window.loadSuivi) {
     loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const, show_header) {
@@ -184,32 +193,32 @@
     url.requestJSON(function(count)  {
       Control.Tabs.setTabCount('dossier_suivi', count);
     });
-  }
+  };
   
   printDossierSoins = function(){
     var url = new Url;
     url.setModuleAction("soins", "print_dossier_soins");
     url.addParam("sejour_id", "{{$sejour->_id}}");
     url.popup("850", "500", "Dossier complet");
-  }
+  };
 
   printPlanSoins = function() {
     var url = new Url("soins", "offline_plan_soins");
     url.addParam("sejours_ids", "{{$sejour->_id}}");
     url.addParam("mode_dupa", 1);
     url.pop(1000, 600);
-  }
+  };
 
   reloadAtcd = function() {
     var url = new Url('soins', 'httpreq_vw_antecedent_allergie');
     url.addParam('sejour_id', "{{$sejour->_id}}");
     url.requestUpdate('atcd_allergies');
-  }
+  };
 
   toggleListSejour = function() {
     $('left-column').toggle();
     ViewPort.SetAvlSize('content-dossier-soins', 1.0);
-  }
+  };
 
   Main.add(function() {
     Prescription.mode_pharma = "{{$mode_pharma}}";
@@ -241,6 +250,10 @@
             break;
           case 'antecedents':
             loadAntecedents();
+            break;
+
+          case 'grossesse':
+            loadGrossesse();
             break;
         }
       }
@@ -294,6 +307,11 @@
     <li>
       <a href="#antecedents">{{tr}}soins.tab.antecedent_and_treatment{{/tr}}</a>
     </li>
+    {{if $sejour->_ref_grossesse && $sejour->_ref_grossesse->_id}}
+      <li>
+        <a href="#grossesse">{{tr}}soins.tab.grossesse{{/tr}}</a>
+      </li>
+    {{/if}}
     <li style="float: right">
       {{if "telemis"|module_active}}
         {{mb_include module=telemis template=inc_viewer_link patient=$sejour->_ref_patient label="Imagerie" button=true class="imagerie"}}
@@ -384,4 +402,5 @@
   {{/if}}
   <div id="docs" style="display: none;"></div>
   <div id="antecedents" style="display: none;"></div>
+  <div id="grossesse" style="display: none"></div>
 </div>

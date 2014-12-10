@@ -7,6 +7,9 @@
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  *}}
+{{mb_default var=standalone value=0}}
+{{mb_default var=with_buttons value=0}}
+
 {{mb_script module="dPpatients" script="pat_selector" ajax=1}}
 
 <script>
@@ -25,9 +28,12 @@
   });
 
   reloadHistorique = function() {
-    var url = new Url('maternite', 'ajax_grossesse_history');
-    url.addParam('grossesse_id', '{{$grossesse->_id}}');
-    url.requestUpdate('list_historique');
+    var target = $('list_historique');
+    if (target){
+      var url = new Url('maternite', 'ajax_grossesse_history');
+      url.addParam('grossesse_id', '{{$grossesse->_id}}');
+      url.requestUpdate('list_historique');
+    }
   };
 
   admitForSejour = function(sejour_id) {
@@ -44,6 +50,47 @@
     form.onsubmit();
     $V("selector_prat_imm", '', false);
     return false;
+  };
+
+  editSejour = function(_id, grossesse_id, patiente_id) {
+    var url = new Url('dPplanningOp', 'vw_edit_sejour');
+    url.addParam('sejour_id', _id);
+    url.addParam('grossesse_id', grossesse_id);
+    url.addParam('patient_id', patiente_id);
+    url.addParam("dialog", 1);
+    url.modal({
+      width     : "95%",
+      height    : "95%",
+      afterClose: function() {
+        reloadHistorique();
+      }
+    });
+  };
+
+  editRdvConsult = function(_id, grossesse_id, patient_id) {
+    var url = new Url('dPcabinet', 'edit_planning');
+    url.addParam('consultation_id', _id);
+    url.addParam('grossesse_id', grossesse_id);
+    url.addParam('pat_id', patient_id);
+    url.addParam("dialog", 1);
+    url.addParam("modal", 1);
+    url.addParam("callback", 'reloadHistorique');
+    url.requestModal("900", "600");
+  };
+
+  editAccouchement = function(_id, sejour_id, grossesse_id, patiente_id) {
+    var url = new Url('dPplanningOp', 'vw_edit_urgence');
+    url.addParam("operation_id", _id);
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("grossesse_id", grossesse_id);
+    url.addParam("pat_id", patiente_id);
+    url.modal({
+      width     : "95%",
+      height    : "95%",
+      afterClose: function() {
+        reloadHistorique();
+      }
+    });
   };
 </script>
 
@@ -66,11 +113,11 @@
   <input type="hidden" name="m" value="maternite"/>
   {{mb_class object=$grossesse}}
   {{mb_key   object=$grossesse}}
-  <input type="hidden" name="callback" value="Grossesse.afterEditGrossesse" />
+  <input type="hidden" name="callback" value="{{if !$standalone}}Grossesse.afterEditGrossesse{{else}}reloadHistorique{{/if}}" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="_patient_sexe" value="f" />
 
-  <table class="main" style="height:100%;">
+  <table class="main">
     <tr>
       <td class="narrow">
         <table class="form">
@@ -173,13 +220,13 @@
           </tr>
           <tr>
             <td>
-              <button type="button" class="sejour_create" onclick="Tdb.editSejour('', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}')">
+              <button type="button" class="sejour_create" onclick="editSejour('', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}')">
                 {{tr}}CSejour-title-create{{/tr}}
               </button><br/>
-              <button type="button" class="consultation_create" onclick="Tdb.editRdvConsult('', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}')">
+              <button type="button" class="consultation_create" onclick="editRdvConsult('', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}')">
                 {{tr}}CConsultation-title-create{{/tr}}
               </button><br/>
-              <button type="button" class="accouchement_create" onclick="Tdb.editAccouchement('', '', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}', reloadHistorique)">
+              <button type="button" class="accouchement_create" onclick="editAccouchement('', '', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}', reloadHistorique)">
                 {{tr}}CAccouchement-title-create{{/tr}}
               </button>
               <hr/>

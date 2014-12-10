@@ -282,6 +282,7 @@ $locales['soins.tab.examens'] = 'Examens';
 $locales['soins.tab.examens_comp'] = 'Exam. Comp.';
 $locales['soins.tab.facteurs_risque'] = 'Facteurs de risque';
 $locales['soins.tab.formulaires'] = 'Formulaires';
+$locales['soins.tab.grossesse'] = 'Grossesse';
 $locales['soins.tab.infos_anesth'] = 'Infos. Anesth.';
 $locales['soins.tab.intubation'] = 'Intubation';
 $locales['soins.tab.labo'] = 'Labo';
