@@ -38,8 +38,8 @@ if ($mode_dupa) {
 else {
   $hours_before = CAppUI::conf("soins plan_soins hours_before", $group->_guid);
   $hours_after  = CAppUI::conf("soins plan_soins hours_after" , $group->_guid);
-  $datetime_min = CMbDT::dateTime("-$hours_before hour", "$date 00:00:00");
-  $datetime_max = CMbDT::dateTime("+$hours_after  hour", "$date 00:00:00");
+  $datetime_min = CMbDT::dateTime("-$hours_before hour", isset($_GET["date"]) ? "$date 00:00:00" : $now);
+  $datetime_max = CMbDT::dateTime("+$hours_after  hour", isset($_GET["date"]) ? "$date 00:00:00" : $now);
 }
 
 if ($sejours_ids) {
