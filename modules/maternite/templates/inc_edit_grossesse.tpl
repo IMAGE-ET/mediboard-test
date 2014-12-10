@@ -178,7 +178,7 @@
               {{mb_label object=$grossesse field=fausse_couche}}
             </th>
             <td>
-              {{mb_field object=$grossesse field=fausse_couche emptyLabel="Aucune"}}
+              {{mb_field object=$grossesse field=fausse_couche emptyLabel="None"}}
             </td>
           </tr>
           <tr>
@@ -210,37 +210,38 @@
           </tr>
         </table>
       </td>
-    {{if $grossesse->_id && $with_buttons}}
-      <td id="list_historique">
-      </td>
-      <td class="narrow">
-        <table class="tbl">
-          <tr>
-            <th class="title">Actions</th>
-          </tr>
-          <tr>
-            <td>
-              <button type="button" class="sejour_create" onclick="editSejour('', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}')">
-                {{tr}}CSejour-title-create{{/tr}}
-              </button><br/>
-              <button type="button" class="consultation_create" onclick="editRdvConsult('', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}')">
-                {{tr}}CConsultation-title-create{{/tr}}
-              </button><br/>
-              <button type="button" class="accouchement_create" onclick="editAccouchement('', '', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}', reloadHistorique)">
-                {{tr}}CAccouchement-title-create{{/tr}}
-              </button>
-              <hr/>
-              <select name="prat_id" id="selector_prat_imm" onchange="consultNow($V(this), '{{$grossesse->_id}}');" style="width:130px;">
-                <option value="">&mdash; {{tr}}mod-dPcabinet-tab-ajax_short_consult{{/tr}}</option>
-                {{foreach from=$prats item=_prat}}
-                  <option value="{{$_prat->_id}}">{{$_prat}}</option>
-                {{/foreach}}
-              </select>
-            </td>
-          </tr>
-        </table>
-        <div id="list_historique"></div>
-      </td>
-    {{/if}}
-  </tr></table>
+      {{if $grossesse->_id && $with_buttons}}
+        <td id="list_historique">
+        </td>
+        <td class="narrow">
+          <table class="tbl">
+            <tr>
+              <th class="title">Actions</th>
+            </tr>
+            <tr>
+              <td>
+                <button type="button" class="sejour_create" onclick="editSejour('', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}')">
+                  {{tr}}CSejour-title-create{{/tr}}
+                </button><br/>
+                <button type="button" class="consultation_create" onclick="editRdvConsult('', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}')">
+                  {{tr}}CConsultation-title-create{{/tr}}
+                </button><br/>
+                <button type="button" class="accouchement_create" onclick="editAccouchement('', '', '{{$grossesse->_id}}', '{{$grossesse->parturiente_id}}', reloadHistorique)">
+                  {{tr}}CAccouchement-title-create{{/tr}}
+                </button>
+                <hr/>
+                <select name="prat_id" id="selector_prat_imm" onchange="consultNow($V(this), '{{$grossesse->_id}}');" style="width:130px;">
+                  <option value="">&mdash; {{tr}}mod-dPcabinet-tab-ajax_short_consult{{/tr}}</option>
+                  {{foreach from=$prats item=_prat}}
+                    <option value="{{$_prat->_id}}">{{$_prat}}</option>
+                  {{/foreach}}
+                </select>
+              </td>
+            </tr>
+          </table>
+          <div id="list_historique"></div>
+        </td>
+      {{/if}}
+    </tr>
+  </table>
 </form>
