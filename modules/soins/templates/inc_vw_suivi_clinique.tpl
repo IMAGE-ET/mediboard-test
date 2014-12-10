@@ -14,7 +14,7 @@
 
   popEtatSejour = function(sejour_id) {
     var url = new Url("hospi", "vw_parcours");
-    url.addParam("sejour_id", '{{$sejour->_id}}');
+    url.addParam("sejour_id", sejour_id);
     url.requestModal(700, 550);
   }
 
@@ -159,7 +159,7 @@
               <button type="button" class="search" onclick="modalViewComplete('{{$patient->_guid}}', 'Détail du patient')">Patient</button>
             </span>
             <span style="float: left;">
-              <button class="lookup notext" style="margin: 0;" onclick="popEtatSejour();">Etat du séjour</button>
+              <button class="lookup notext" style="margin: 0;" onclick="popEtatSejour('{{$sejour->_id}}');">Etat du séjour</button>
             </span>
       Coordonnées
     </th>
