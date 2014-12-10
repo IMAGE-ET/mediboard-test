@@ -57,7 +57,7 @@
     </tr>
     
     <tr>
-      <th rowspan="2" colspan="2"><b>Heure</b></th>
+      <th rowspan="2" colspan="2" class="narrow"><b>Heure</b></th>
       <th colspan="{{$patient_colspan}}"><b>Patient</b></th>
       <th colspan="3"><b>Consultation</b></th>
     </tr>
@@ -76,7 +76,7 @@
       {{/if}}
       <th style="width: 20%;">Motif</th>
       <th style="width: 20%;">Remarques</th>
-      <th>Durée</th>
+      <th class="narrow">Durée</th>
     </tr>
   
     {{foreach from=$curr_plage->listPlace item =_place}}
