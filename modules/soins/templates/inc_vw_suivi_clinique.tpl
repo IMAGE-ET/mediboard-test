@@ -298,10 +298,30 @@
         <strong>{{mb_label object=$sejour field="sortie"}}{{if $sejour->sortie_reelle}} (effectuée){{/if}}</strong>
         {{mb_value object=$sejour field="sortie"}}
         <br/>
-              <span {{if $sejour->confirme}}class="ok"{{/if}}>
+              <span {{if $sejour->confirme}}class="ok" onmouseover="ObjectTooltip.createDOM(this, 'confirme_sortie_{{$sejour->_id}}')"{{/if}}>
                 {{if $sejour->confirme}}
                   <strong>Sortie autorisée</strong> pour le {{mb_value object=$sejour field="confirme"}} <br/>
                   Par {{$sejour->_ref_confirme_user->_view}}
+                  <div id="confirme_sortie_{{$sejour->_id}}" style="display: none">
+                    <table class="tbl main">
+                      <tr>
+                        <th>{{mb_label object=$sejour field="rques_transport_sortie"}}</th>
+                        {{if !$sejour->rques_transport_sortie}}
+                          <td class="empty">Aucune remarque</td>
+                        {{else}}
+                          <td>{{mb_value object=$sejour field="rques_transport_sortie"}}</td>
+                        {{/if}}
+                      </tr>
+                      <tr>
+                        <th>{{mb_label object=$sejour field="commentaires_sortie"}}</th>
+                        {{if !$sejour->commentaires_sortie}}
+                          <td class="empty">Aucun commentaire</td>
+                        {{else}}
+                          <td>{{mb_value object=$sejour field="commentaires_sortie"}}</td>
+                        {{/if}}
+                      </tr>
+                    </table>
+                  </div>
                 {{/if}}
               </span>
       </td>
