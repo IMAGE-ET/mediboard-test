@@ -12,6 +12,8 @@
 @import url(vertical.css);
 @import url(ie.css);
 
+@import url(fonts/font-awesome-4.2.0/css/font-awesome.min.css);
+
 /** 
 z-index ordering (foreground to background) :
  1500 div#console, #profiler-toolbar, #profiler-toggle
