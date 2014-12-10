@@ -44,6 +44,7 @@ class CSousItemPrestation extends CMbObject {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
+    $backProps["liaisons"] = "CItemLiaison sous_item_id";
 
     return $backProps;
   }
@@ -56,7 +57,6 @@ class CSousItemPrestation extends CMbObject {
     $props["nom"] = "str";
     $props["item_prestation_id"] = "ref class|CItemPrestation";
     $props["niveau"]    = "enum list|jour|nuit";
-
     return $props;
   }
 

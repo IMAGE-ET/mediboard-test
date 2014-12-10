@@ -205,6 +205,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     $backProps["correspondants_courrier"] = "CCorrespondantCourrier compte_rendu_id";
     $backProps["echanges_hl7v3"]          = "CExchangeHL7v3 object_id cascade";
     $backProps["xds_submission_lot"]      = "CXDSSubmissionLotToDocument object_id";
+    $backProps["document_child"]          = "CCompteRendu parent_doc_id";
     return $backProps;
   }
 
