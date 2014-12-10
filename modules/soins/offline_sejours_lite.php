@@ -139,7 +139,8 @@ foreach ($sejours as $_sejour) {
   );
 
   $patients_offline[$patient->_guid]["plan_soins"] = CApp::fetch("soins", "offline_plan_soins", $params);
-
+  // Pour IE9 qui a des soucis avec les espaces entre une fermeture et une ouverture de td
+  $patients_offline[$patient->_guid]["plan_soins"] = preg_replace('/>\s+<(t[dh])/mi', "><\\1", $patients_offline[$patient->_guid]["plan_soins"]);
 
   // Transmissions
   $patients_offline[$patient->_guid]["transmissions"] = array();
