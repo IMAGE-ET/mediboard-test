@@ -9,29 +9,22 @@
  * @version    $Revision$
  */
 
-CCanDo::checkEdit();
+CCanDo::checkRead();
 
-$reference_class = CValue::getOrSession("reference_class");
-$reference_id    = CValue::getOrSession("reference_id");
+$ex_class_id  = CValue::get("ex_class_id");
+$ex_object_id = CValue::get("ex_object_id");
 
-$reference_classes = array(
-  "CSejour", "CPatient",
-);
-
-if ($reference_class) {
-  $reference = new $reference_class;
-  if ($reference->load($reference_id)) {
-    $reference->loadComplete();
-  }
+if (!$ex_class_id) {
+  $msg = "Impossible d'afficher le formulaire sans connaître la classe de base";
+  CAppUI::stepAjax($msg, UI_MSG_WARNING);
+  trigger_error($msg, E_USER_ERROR);
+  return;
 }
-else {
-  $reference = new CMbObject;
-}
+
+$ex_object = new CExObject($ex_class_id);
+$ex_object->load($ex_object_id);
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("reference_classes", $reference_classes);
-$smarty->assign("reference_class",   $reference_class);
-$smarty->assign("reference_id",      $reference_id);
-$smarty->assign("reference",         $reference);
+$smarty->assign("ex_object", $ex_object);
 $smarty->display("view_ex_object.tpl");
