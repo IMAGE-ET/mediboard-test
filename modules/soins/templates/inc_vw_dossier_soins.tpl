@@ -549,11 +549,18 @@
     {{assign var=count_urgence value=$prescription->_count_urgence}}
     <table class="main">
       <tr>
+        {{assign var=horizontal_chapters value="soins dossier_soins horizontal_chapters"|conf:"CGroups-$g"}}
+
+        {{if !$horizontal_chapters}}
         <td style="white-space: nowrap;" class="narrow">
           <!-- Affichage des onglets du dossier de soins -->
           {{mb_include module="prescription" template="inc_vw_tab_dossier_soins"}}
         </td>
+        {{/if}}
         <td>
+          {{if $horizontal_chapters}}
+            {{mb_include module="prescription" template="inc_vw_tab_dossier_soins"}}
+          {{/if}}
           <!-- Affichage du contenu du dossier de soins -->
           {{mb_include module="prescription" template="inc_vw_content_dossier_soins"}}
         </td>
