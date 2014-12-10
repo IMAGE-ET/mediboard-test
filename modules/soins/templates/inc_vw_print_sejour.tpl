@@ -9,7 +9,7 @@
         <td style="width: 80px;">
           {{if ($service_id && $service_id != "NP") || $show_affectation}}
             {{assign var=affectation value=$sejour->_ref_curr_affectation}}
-            {{if $affectation->_id}}
+            {{if $affectation->_id && $affectation->lit_id}}
               {{mb_value object=$affectation->_ref_lit field=nom}}
             {{/if}}
             {{if $sejour->isolement}}<br /><small>(isolement)</small>{{/if}}
