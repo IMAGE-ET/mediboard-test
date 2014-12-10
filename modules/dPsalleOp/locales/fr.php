@@ -1,5 +1,4 @@
 <?php
-$locales['Brancardage-patient-pret'] = 'Pre';
 $locales['CActeCCAM'] = 'Actes CCAM';
 $locales['CActeCCAM-_already_coded'] = 'Cet acte a déjà été codé sur cette intervention. Souhaitez-vous en coder un second ?';
 $locales['CActeCCAM-_montant_facture'] = 'Montant facturé';
