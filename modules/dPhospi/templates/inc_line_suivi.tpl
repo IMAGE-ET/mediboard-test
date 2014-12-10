@@ -481,15 +481,17 @@
                         callback: function() { submitSuivi(getForm('Del-{{$_suivi[0]->_guid}}'), 1); } })"></button>
             </form>
             {{if $nb_trans == 1}}
-              <button type="button" class="edit notext" onclick="addTransmission('{{$_suivi.data[0]->sejour_id}}', null, '{{$_suivi.data[0]->_id}}', null, null, null, 1)"></button>
+              <button type="button" class="edit notext" onclick="addTransmission('{{$_suivi[0]->sejour_id}}', null, '{{$_suivi[0]->_id}}', null, null, null, 1)"></button>
             {{else}}
               <button type="button" class="edit notext" onclick="addTransmission('{{$_suivi[0]->sejour_id}}', null, {
+              {{assign var=is_first_trans value=1}}
               {{foreach from=$_suivi item=_trans_by_type key=type_trans name=_trans}}
                 {{if $type_trans != "0" && isset($_trans_by_type.0|smarty:nodefaults)}}
                   {{assign var=first_trans value=$_trans_by_type.0}}
-                  {{if !$smarty.foreach._trans.first}},{{/if}}
+                  {{if !$is_first_trans}},{{/if}}
                   {{$first_trans->type}}_id: '{{$first_trans->_id}}'
-                  {{/if}}
+                  {{assign var=is_first_trans value=0}}
+                {{/if}}
               {{/foreach}}
                 })"></button>
             {{/if}}
