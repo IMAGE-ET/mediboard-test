@@ -106,14 +106,16 @@
          !$line->sans_planif && !$line->inscription && !$line->_count_planifications &&
          ($line->signee || $line->_class != "CPrescriptionLineMedicament" || !"dPprescription CPrescription show_unsigned_med_msg"|conf:"CGroups-$g")}}
       <td colspan="{{$colspan}}" class="left_day right_day">
-      <div class="small-warning">
-        <strong>{{tr}}CPrescription-no_planif{{/tr}}</strong>
-      </div>
+        <div class="small-warning">
+          <strong>{{tr}}CPrescription-no_planif{{/tr}}</strong>
+        </div>
+      </td>
     {{elseif !$line->inscription && !$line->signee}}
       <td colspan="{{$colspan}}" class="left_day right_day">
-      <div class="small-warning">
-        <strong>{{tr}}CPrescription-no_signee{{/tr}}</strong>
-      </div>
+        <div class="small-warning">
+          <strong>{{tr}}CPrescription-no_signee{{/tr}}</strong>
+        </div>
+      </td>
     {{else}}
       {{foreach from=$dates_plan_soin item=_moments key=_date}}
         {{foreach from=$_moments item=_moment name=moment}}
