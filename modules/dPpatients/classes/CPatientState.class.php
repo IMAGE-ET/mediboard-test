@@ -232,6 +232,10 @@ class CPatientState extends CMbObject {
       return "ANOM";
     }
 
+    if (is_numeric($patient->nom)) {
+      return "ANOM";
+    }
+
     return "PROV";
   }
 
