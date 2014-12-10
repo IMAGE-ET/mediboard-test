@@ -12,7 +12,7 @@
 /**
  * Form data
  */
-class CExObject extends CMbMetaObject {
+class CExObject extends CMbMetaObject implements IPatientRelated, IIndexableObject {
   const DATE_LIMIT = "2014-06-01";
 
   public $ex_object_id;
@@ -53,9 +53,12 @@ class CExObject extends CMbMetaObject {
 
   /** @var CMediusers */
   public $_ref_owner;
-  
+
   /** @var CGroups */
   public $_ref_group;
+
+  /** @var CPatient */
+  public $_rel_patient;
   
   public $_reported_fields = array();
   public $_fields_display = array();
@@ -1497,5 +1500,101 @@ class CExObject extends CMbMetaObject {
     $ds->exec($query);
 
     $this->datetime_edit = $log->date;
+  }
+
+  /**
+   * @see parent::loadRelPatient
+   */
+  function loadRelPatient() {
+    $this->_rel_patient = null;
+    $target = $this->loadTargetObject();
+
+    if (in_array("IPatientRelated", class_implements($target))) {
+      if ($target->_id) {
+        $rel_patient = $target->loadRelPatient();
+      }
+      else {
+        $rel_patient = new CPatient;
+      }
+
+      $this->_rel_patient = $rel_patient;
+    }
+
+    return $this->_rel_patient;
+  }
+
+  /**
+   * Get the patient_id of CMbobject
+   *
+   * @return string
+   */
+  function getFieldPatient() {
+    $this->loadRelPatient()->_id;
+  }
+
+  /**
+   * Get the praticien_id of CMbobject
+   *
+   * @return CMediusers
+   */
+  function getFieldPraticien() {
+    return $this->loadRefOwner();
+  }
+
+  /**
+   * Loads the related fields for indexing datum
+   *
+   * @return array
+   */
+  function getFieldsSearch() {
+    $prat = $this->getFieldPraticien();
+    if (!$prat) {
+      $prat = new CMediusers();
+    }
+    $array["id"]          = $this->_id;
+    $array["author_id"]   = $this->getOwnerId();
+    $array["prat_id"]     = $prat->_id;
+    $array["title"]       = $this->loadRefExClass()->name;
+
+    $content = CApp::fetch(
+      "forms",
+      "view_ex_object",
+      array(
+        "ex_class_id"  => $this->_ex_class_id,
+        "ex_object_id" => $this->_id,
+      )
+    );
+
+    $array["body"]        = $this->redesignBody($content);
+    $date = $this->getCreateDate();
+    if (!$date) {
+      $date = CMbDT::dateTime();
+    }
+    $array["date"]             = str_replace("-", "/", $date);
+    $array["function_id"]      = $prat->function_id;
+    $array["group_id"]         = $this->group_id;
+    $array["patient_id"]       = $this->getFieldPatient();
+    $array["object_ref_id"]    = $this->loadTargetObject()->_id;
+    $array["object_ref_class"] = $this->loadTargetObject()->_class;
+
+    return $array;
+  }
+
+  /**
+   * @see parent::redesignBody()
+   */
+  function redesignBody($content) {
+    $content = strtr(
+      $content,
+      array(
+        "<"      => " <",
+        "&nbsp;" => " ",
+      )
+    );
+    $content = CSearch::purifyHTML($content);
+    $content = preg_replace("/\s+/", ' ', $content);
+    $content = html_entity_decode($content);
+    $content = trim($content);
+    return $content;
   }
 }

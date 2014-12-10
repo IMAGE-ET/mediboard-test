@@ -229,6 +229,7 @@ class CSearch {
    */
   function constructDatum ($datum) {
     if ($datum['type'] != 'delete') {
+      /** @var IIndexableObject|CStoredObject $object */
       $object = new $datum['object_class']();
       if (!$object->load($datum['object_id'])) {
         $datum_to_index["id"]  = $datum['object_id'];
