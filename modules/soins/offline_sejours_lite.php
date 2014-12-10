@@ -85,6 +85,7 @@ $sejours_ids = CMbArray::pluck($sejours, "_id");
 $where = array("sejour_id" => CSQLDataSource::prepareIn($sejours_ids));
 $ljoin = array("users_mediboard" => "users_mediboard.user_id = transmission_medicale.user_id");
 $group_by = "users_mediboard.function_id";
+
 $transmission = new CTransmissionMedicale();
 $transmissions = $transmission->loadList($where, "date DESC", null, $group_by, $ljoin);
 CStoredObject::massLoadFwdRef($transmissions, "user_id");
@@ -146,7 +147,7 @@ foreach ($sejours as $_sejour) {
   $patients_offline[$patient->_guid]["transmissions"] = array();
 
   foreach ($transmissions as $_trans) {
-    if ($_trans->sejour_id != $_sejour->_id || $_trans->locked || CMbDT::daysRelative($_trans->date, $date) > $delay_trans_obs_consult) {
+    if ($_trans->sejour_id != $_sejour->_id && ($_trans->locked || CMbDT::daysRelative($_trans->date, $date) > $delay_trans_obs_consult)) {
       continue;
     }
     $_trans->loadTargetObject();
@@ -162,7 +163,7 @@ foreach ($sejours as $_sejour) {
   $patients_offline[$patient->_guid]["observations"] = array();
 
   foreach ($observations as $_observation) {
-    if ($_observation->sejour_id != $_sejour->_id || CMbDT::daysRelative($_observation->date, $date) > $delay_trans_obs_consult) {
+    if ($_observation->sejour_id != $_sejour->_id && CMbDT::daysRelative($_observation->date, $date) > $delay_trans_obs_consult) {
       continue;
     }
     $_observation->loadRefUser()->loadRefFunction();
@@ -175,7 +176,7 @@ foreach ($sejours as $_sejour) {
   $patients_offline[$patient->_guid]["consultations"] = array();
 
   foreach ($consultations as $_consultation) {
-    if ($_consultation->sejour_id != $_sejour->_id || $_consultation->type == "entree") {
+    if ($_consultation->sejour_id != $_sejour->_id && $_consultation->type == "entree") {
       continue;
     }
     $_consultation->loadRefPraticien()->loadRefFunction();
