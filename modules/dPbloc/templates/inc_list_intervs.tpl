@@ -1,4 +1,6 @@
 <script>
+  operationEditCallback = function() { window.url_edit_planning.refreshModal();};
+
   ObjectTooltip.modes.allergies = {  
     module: "patients",
     action: "ajax_vw_allergies",
