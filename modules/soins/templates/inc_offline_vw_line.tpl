@@ -293,9 +293,9 @@
                   <br />
                   ({{mb_value object=$line field=volume_debit}} ml en {{mb_value object=$line field=duree_debit}} h)
                 {{/if}}
-                {{if $line->type_line == "perfusion" && $line->_last_variation->_debit}}
+                {{if $line->type_line == "perfusion" && $line->_last_variation->debit}}
                   <br />
-                  Dernier débit : {{$line->_last_variation->_debit}} ml/h
+                  Dernier débit : {{$line->_last_variation->debit}} ml/h
                 {{/if}}
               {{/if}}
             </div>
