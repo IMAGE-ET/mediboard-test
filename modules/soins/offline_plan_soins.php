@@ -109,7 +109,7 @@ switch ($freq_poste) {
   case "4":
     $date_temp = CMbDT::transform(null, $datetime_min, "%Y-%m-%d %H:00:00");
     while ($date_temp < CMbDT::transform(null, $datetime_max, "%Y-%m-%d %H:00:00")) {
-      @$dates_plan_soin[CMbDT::date($date_temp)][CMbDT::time($date_temp)] = trim(CMbDT::transform(null, $date_temp, "%H"));
+      @$dates_plan_soin[CMbDT::date($date_temp)][CMbDT::time($date_temp)] = CMbDT::transform(null, $date_temp, "%H");
       $date_temp = CMbDT::addDateTime("$freq_poste:00:00", $date_temp);
       $colspan++;
     }

@@ -146,7 +146,7 @@
           {{* Quantite planifiée *}}
           {{if @$administrations_in_hour.quantite_planifiee}}
             {{assign var=quantite value=$administrations_in_hour.quantite_planifiee}}
-          {{elseif @array_key_exists($_moment, @$line->_quantity_by_date_moment.$unite_prise.$_date.$_moment)}}
+          {{elseif @isset($line->_quantity_by_date_moment.$unite_prise.$_date.$_moment|smarty:nodefaults)}}
             {{assign var=quantite value=$line->_quantity_by_date_moment.$unite_prise.$_date.$_moment.total}}
           {{/if}}
 
