@@ -107,19 +107,25 @@ switch ($freq_poste) {
   case "1":
   case "2":
   case "4":
-    $count = 1;
-    for ($i = 0 ; $i < 24 ; $i += $freq_poste) {
-      $postes["Poste $count"] = str_pad($i, 2, "0", STR_PAD_LEFT);
-      $moments["poste-$count"] = str_pad($i, 2, "0", STR_PAD_LEFT);
-      $count++;
-      $periods[] = $i;
-    }
     $date_temp = CMbDT::transform(null, $datetime_min, "%Y-%m-%d %H:00:00");
     while ($date_temp < CMbDT::transform(null, $datetime_max, "%Y-%m-%d %H:00:00")) {
       @$dates_plan_soin[CMbDT::date($date_temp)][CMbDT::time($date_temp)] = trim(CMbDT::transform(null, $date_temp, "%H"));
       $date_temp = CMbDT::addDateTime("$freq_poste:00:00", $date_temp);
       $colspan++;
     }
+
+    // Il faut tester la parité de l'heure de début.
+    $count = 1;
+    $first_key = reset($dates_plan_soin);
+    $first_key  = reset($first_key);
+
+    for ($i = intval($first_key) % $freq_poste ; $i < 24 ; $i += $freq_poste) {
+      $postes["Poste $count"] = str_pad($i, 2, "0", STR_PAD_LEFT);
+      $moments["poste-$count"] = str_pad($i, 2, "0", STR_PAD_LEFT);
+      $count++;
+      $periods[] = $i;
+    }
+
     break;
   case "poste":
   default:

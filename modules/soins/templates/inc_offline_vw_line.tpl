@@ -165,9 +165,8 @@
                       {{$administrations_in_hour.quantite}}
                     {{else}}
                       0
-                    {{/if}}
-                    {{if @$administrations_in_hour.quantite != $administrations_in_hour.quantite_planifiee}}
-                      /{{$administrations_in_hour.quantite_planifiee}}
+                    {{/if}}{{if @$administrations_in_hour.quantite != $administrations_in_hour.quantite_planifiee}}
+                      / {{$administrations_in_hour.quantite_planifiee}}
                     {{/if}}
                   {{else}}
                     {{if @isset($administrations_in_hour.quantite|smarty:nodefaults)}}
@@ -177,10 +176,10 @@
                         {{$administrations_in_hour.quantite}}
                       {{/if}}
                       {{if $administrations_in_hour.quantite != $quantite}}
-                        {{if !$line->sans_planif}}/{{$quantite}}{{/if}}
+                        {{if !$line->sans_planif}} / {{$quantite}}{{/if}}
                       {{/if}}
                     {{elseif (!$line->conditionnel || $line->_active_dates.$_date) && !$line->sans_planif}}
-                      {{if $quantite}}0/{{$quantite}}{{/if}}
+                      {{if $quantite}}0 / {{$quantite}}{{/if}}
                     {{/if}}
                   {{/if}}
                 {{else}}
@@ -335,8 +334,7 @@
           {{/if}}
         </td>
       {{/if}}
-      {{if !$line->_current_active &&
-           ($line->mode_bolus != "bolus") &&
+      {{if ($line->mode_bolus != "bolus") &&
            ($line->continuite != "continue" || "CAppUI::conf"|static_call:"dPprescription CPrescription perf_continue_manuelle":"CGroups-$g" == '0') &&
            !$line->_count_planifications}}
         <td colspan="{{$colspan}}" class="left_day right_day {{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}">
@@ -362,44 +360,46 @@
                 class="{{if $text_align == "left"}}hatching{{/if}}
                 {{if $smarty.foreach.moment.first}}left_day{{elseif $smarty.foreach.moment.last}}right_day{{/if}}
                 {{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}">
+              <div class="compact">
                 {{if isset($_line_item->_administrations_moment.$_date.$_moment|smarty:nodefaults)}}
                   {{assign var=nb_adm value=$_line_item->_administrations_moment.$_date.$_moment}}
                 {{else}}
                   {{assign var=nb_adm value=""}}
                 {{/if}}
-              {{assign var=original_dateTime value=""}}
-              {{if isset($line->_prises_prevues_moment.$_date.$_moment|smarty:nodefaults)}}
-                {{if array_key_exists('real_hour', $line->_prises_prevues_moment.$_date.$_moment)}}
-                  {{assign var=count_prises value=$line->_prises_prevues_moment.$_date.$_moment.real_hour|@count}}
-                  {{assign var=nb_prevue value=$_line_item->_quantite_administration*$count_prises}}
-                  {{assign var=hour_prevue value=$line->_prises_prevues_moment.$_date.$_moment.real_hour}}
-                  {{if array_key_exists('original_dateTime', $line->_prises_prevues_moment.$_date.$_moment)}}
-                    {{assign var=original_dateTime value=$line->_prises_prevues_moment.$_date.$_moment.original_dateTime}}
+                {{assign var=original_dateTime value=""}}
+                {{if isset($line->_prises_prevues_moment.$_date.$_moment|smarty:nodefaults)}}
+                  {{if array_key_exists('real_hour', $line->_prises_prevues_moment.$_date.$_moment)}}
+                    {{assign var=count_prises value=$line->_prises_prevues_moment.$_date.$_moment.real_hour|@count}}
+                    {{assign var=nb_prevue value=$_line_item->_quantite_administration*$count_prises}}
+                    {{assign var=hour_prevue value=$line->_prises_prevues_moment.$_date.$_moment.real_hour}}
+                    {{if array_key_exists('original_dateTime', $line->_prises_prevues_moment.$_date.$_moment)}}
+                      {{assign var=original_dateTime value=$line->_prises_prevues_moment.$_date.$_moment.original_dateTime}}
+                    {{/if}}
+                  {{else}}
+                    {{assign var=perf_line_id value=$_line_item->_id}}
+                    {{if array_key_exists($perf_line_id, $line->_prises_prevues_moment.$_date.$_moment.manual)}}
+                      {{assign var=nb_prevue value=$line->_prises_prevues_moment.$_date.$_moment.manual.$perf_line_id}}
+                    {{else}}
+                      {{assign var=nb_prevue value=""}}
+                    {{/if}}
                   {{/if}}
                 {{else}}
-                  {{assign var=perf_line_id value=$_line_item->_id}}
-                  {{if array_key_exists($perf_line_id, $line->_prises_prevues_moment.$_date.$_moment.manual)}}
-                    {{assign var=nb_prevue value=$line->_prises_prevues_moment.$_date.$_moment.manual.$perf_line_id}}
-                  {{else}}
-                    {{assign var=nb_prevue value=""}}
-                  {{/if}}
+                  {{assign var=nb_prevue value=""}}
+                  {{assign var=hour_prevue value=""}}
                 {{/if}}
-              {{else}}
-                {{assign var=nb_prevue value=""}}
-                {{assign var=hour_prevue value=""}}
-              {{/if}}
 
-              {{if $text_align == "left" || $mode_lite}}
-                {{if $nb_adm}}
-                  {{$nb_adm}}
-                {{elseif $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date)}}
-                  0
+                {{if $text_align == "left" || $mode_lite}}
+                  {{if $nb_adm}}
+                    {{$nb_adm}}
+                  {{elseif $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date)}}
+                    0
+                  {{/if}}
+                  {{if $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date) && ($nb_prevue != $nb_adm)}} / {{$nb_prevue}}{{/if}}
+                {{else}}
+                  {{* Que les planifications *}}
+                  {{if $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date)}} {{$nb_prevue}}{{/if}}
                 {{/if}}
-                {{if $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date) && ($nb_prevue != $nb_adm)}}/{{$nb_prevue}}{{/if}}
-              {{else}}
-                {{* Que les planifications *}}
-                {{if $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date)}}{{$nb_prevue}}{{/if}}
-              {{/if}}
+              </div>
             </td>
           {{/foreach}}
         {{/foreach}}
