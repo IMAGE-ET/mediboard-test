@@ -291,7 +291,7 @@
               {{/if}}
               <tr>
                 <th style="font-weight: normal;">ASA</th>
-                <td style="font-weight: bold;">{{if $operation->_id}}{{tr}}COperation.ASA.{{$operation->ASA}}{{/tr}}{{/if}}</td>
+                <td style="font-weight: bold;">{{if $operation->_id}}{{mb_value object=$operation field=ASA}}{{else}}{{mb_value object=$dossier_anesth field=ASA}}{{/if}}</td>
               </tr>
               <tr>
                 <th style="font-weight: normal;">VST</th>
