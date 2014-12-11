@@ -19,7 +19,7 @@
       {{/if}}
     </strong>
   </td>
-  <td class="narrow">
+  <td class="narrow text">
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi->_ref_user}}
     <br />
     {{mb_value object=$_suivi field=date}}
@@ -59,7 +59,7 @@
   <td style="text-align: center;">
     <label title="Constantes">Cst</label>
   </td>
-  <td class="narrow">
+  <td class="narrow text">
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi->_ref_user}}
     <br />
     {{mb_value object=$_suivi field=datetime}}
@@ -92,7 +92,7 @@
       <strong>Presc</strong>
     </label>
   </td>
-  <td class="narrow">
+  <td class="narrow  text">
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi->_ref_praticien}}
     <br />
     {{mb_field object=$_suivi field=debut}}
@@ -139,7 +139,7 @@
       {{/if}}
     </strong>
   </td>
-  <td class="narrow">
+  <td class="narrow text">
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi->_ref_praticien}}
     <br />
     {{mb_value object=$_suivi field=_datetime}}
@@ -228,7 +228,7 @@
   <td class="narrow" style="text-align: center;">
     <label title="Transmission">TC</label>
   </td>
-  <td class="narrow">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi->_ref_user initials=border}}</td>
+  <td class="narrow text">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi->_ref_user initials=border}}</td>
   <td style="text-align: center;" class="narrow">
     {{mb_ditto name=date value=$_suivi->date|date_format:$conf.date}}
   </td>
@@ -347,7 +347,7 @@
       <label title="Transmission">TC</label>
     </td>
   {{/if}}
-  <td class="{{$locked}}" style="width: 10%">
+  <td class="{{$locked}} text" style="width: 10%">
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi[0]->_ref_user}}
     <br />
     {{mb_value object=$_suivi[0] field=date}}
