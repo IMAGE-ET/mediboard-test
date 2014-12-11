@@ -14,6 +14,7 @@
 CCanDo::checkRead();
 
 $date  = CValue::get("date", CMbDT::date());
+$see_finished  = CValue::get("see_finished", true);
 $date_min = CMbDT::date("-1 DAY", $date);
 $group = CGroups::loadCurrent();
 
@@ -21,11 +22,13 @@ $op = new COperation();
 $ljoin = array(
   "sejour" => "sejour.sejour_id = operations.sejour_id",
   "grossesse" => "sejour.grossesse_id = grossesse.grossesse_id");
-$where = array(
-  "sejour.grossesse_id" => " IS NOT NULL",
-  "sejour.group_id" => " = '$group->_id' ",
-  " date BETWEEN '$date_min' AND '$date' "
-);
+$where = array();
+$where["sejour.grossesse_id"] = " IS NOT NULL";
+$where["sejour.group_id"] = " = '$group->_id' ";
+$where[] = " date BETWEEN '$date_min' AND '$date' ";
+if (!$see_finished) {
+  $where["grossesse.datetime_accouchement"] = " IS NOT NULL";
+}
 
 //blocs
 $bloc = new CBlocOperatoire();
@@ -49,7 +52,6 @@ $anesths = $anesth->loadListFromType(array("Anesthésiste"), PERM_READ);
 $ops = $op->loadList($where, "date DESC, time_operation", null, null, $ljoin);
 
 CMbObject::massLoadFwdRef($ops, "sejour_id");
-CMbObject::massLoadFwdRef($ops, "sejour_id");
 CMbObject::massLoadFwdRef($ops, "anesth_id");
 $chirs = CMbObject::massLoadFwdRef($ops, "chir_id");
 CMbObject::massLoadFwdRef($chirs, "function_id");
@@ -60,6 +62,7 @@ foreach ($ops as $_op) {
   $_op->loadRefSalle();
   $_op->loadRefPlageOp();
   $sejour = $_op->loadRefSejour();
+  $sejour->loadRefCurrAffectation();
   $grossesse = $sejour->loadRefGrossesse();
   $grossesse->loadRefsNaissances();
   $grossesse->loadRefParturiente();
@@ -68,6 +71,7 @@ foreach ($ops as $_op) {
 
 $smarty = new CSmartyDP();
 $smarty->assign("date", $date);
+$smarty->assign("see_finished", $see_finished);
 $smarty->assign("ops", $ops);
 $smarty->assign("blocs", $blocs);
 $smarty->assign("salles", $salles);

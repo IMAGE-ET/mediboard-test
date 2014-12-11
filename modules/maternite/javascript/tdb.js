@@ -122,7 +122,14 @@ Tdb = {
   },
 
   views : {
+    see_finished : 1,
     date : '',
+
+    toggleFinished : function() {
+      Tdb.views.see_finished = +!Tdb.views.see_finished;
+      Tdb.views.listAccouchements();
+    },
+
     initListGrossesses : function() {
       var url = new Url("maternite", "ajax_tdb_grossesses");
       url.addParam("date", Tdb.views.date);
@@ -169,6 +176,7 @@ Tdb = {
     listAccouchements : function(cascade) {
       var url = new Url("maternite", "ajax_tdb_accouchements");
       url.addParam("date", Tdb.views.date);
+      url.addParam("see_finished", Tdb.views.see_finished);
       url.requestUpdate("accouchements");
     },
 

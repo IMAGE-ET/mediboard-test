@@ -22,7 +22,8 @@ $grossesse->loadRefsSejours();
 $grossesse->loadRefsConsultations(true);
 
 foreach ($grossesse->_ref_consultations as $_cons) {
-
+  $prat = $_cons->loadRefPraticien();
+  $prat->loadRefFunction();
 }
 
 foreach ($grossesse->_ref_sejours as $_sejour) {
