@@ -47,15 +47,18 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     $receiver = $mbObject->_receiver;
     
     if ($mbObject instanceof CCorrespondantPatient) {
-      $mbObject = $mbObject->loadRefPatient();
-      $mbObject->_receiver = $receiver;
+      $patient = $mbObject->loadRefPatient();
+      $patient->_receiver = $receiver;
     }
-    
+    else {
+      $patient = $mbObject;
+    }
+
     // Si Serveur
     if (CAppUI::conf('sip server')) {  
       $echange_hprim = new CEchangeHprim();
-      if (isset($mbObject->_eai_exchange_initiator_id)) {
-        $echange_hprim->load($mbObject->_eai_exchange_initiator_id);
+      if (isset($patient->_eai_exchange_initiator_id)) {
+        $echange_hprim->load($patient->_eai_exchange_initiator_id);
       }
 
       $initiateur = ($receiver->_id == $echange_hprim->sender_id) ? $echange_hprim->_id : null;
@@ -67,13 +70,13 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       if (!$initiateur && !$group->_configs["sip_notify_all_actors"]) {
         return false;
       }
-      
-      $mbObject->_id400 = null;
+
+      $patient->_id400 = null;
       $idexPatient = new CIdSante400();
-      $idexPatient->loadLatestFor($mbObject, $receiver->_tag_patient);
-      $mbObject->_id400 = $idexPatient->id400;
+      $idexPatient->loadLatestFor($patient, $receiver->_tag_patient);
+      $patient->_id400 = $idexPatient->id400;
       
-      $this->generateTypeEvenement("CHPrimXMLEnregistrementPatient", $mbObject, true, $initiateur);
+      $this->generateTypeEvenement("CHPrimXMLEnregistrementPatient", $patient, true, $initiateur);
     }
     // Si Client
     else {
@@ -81,25 +84,69 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
         return false;
       }
 
-      if (!$mbObject->_IPP) {
+      if (!$patient->_IPP) {
         // Génération de l'IPP dans le cas de la création, ce dernier n'était pas créé
-        if ($msg = $mbObject->generateIPP()) {
+        if ($msg = $patient->generateIPP()) {
           CAppUI::setMsg($msg, UI_MSG_ERROR);
         }
 
         $IPP = new CIdSante400();
-        $IPP->loadLatestFor($mbObject, $receiver->_tag_patient);
-        $mbObject->_IPP = $IPP->id400;
+        $IPP->loadLatestFor($patient, $receiver->_tag_patient);
+        $patient->_IPP = $IPP->id400;
       }
 
       // Envoi pas les patients qui n'ont pas d'IPP
-      if (!$receiver->_configs["send_all_patients"] && !$mbObject->_IPP) {
+      if (!$receiver->_configs["send_all_patients"] && !$patient->_IPP) {
         return false;
       }
 
-      $this->sendEvenementPatient("CHPrimXMLEnregistrementPatient", $mbObject);
-      
-      $mbObject->_IPP = null;
+      $this->sendEvenementPatient("CHPrimXMLEnregistrementPatient", $patient);
+
+      if ($receiver->_configs["send_insured_without_admit"]) {
+        if (!$receiver->isMessageSupported("CHPrimXMLDebiteursVenue")) {
+          return false;
+        }
+
+        $sejour = new CSejour();
+        $where = array();
+        $where["patient_id"] = "= '$patient->_id'";
+        $where["group_id"]   = "= '$receiver->group_id'";
+
+        $datetime = CMbDT::dateTime();
+        $where["sortie"]    = ">= '$datetime'";
+
+        /** @var CSejour[] $sejours */
+        $sejours = $sejour->loadList($where);
+
+        // On va transmettre les informations sur le débiteur pour le séjour en cours, et ceux à venir
+        foreach ($sejours as $_sejour) {
+          if (!$patient->code_regime) {
+            continue;
+          }
+
+          $_sejour->_receiver = $receiver;
+          $_sejour->loadLastLog();
+
+          $_sejour->loadRefPatient();
+
+          if (!$_sejour->_NDA) {
+            // Génération du NDA dans le cas de la création, ce dernier n'était pas créé
+            if ($msg = $_sejour->generateNDA()) {
+              CAppUI::setMsg($msg, UI_MSG_ERROR);
+            }
+
+            $NDA = new CIdSante400();
+            $NDA->loadLatestFor($_sejour, $receiver->_tag_sejour);
+            $sejour->_NDA = $NDA->id400;
+          }
+
+          if ($receiver->isMessageSupported("CHPrimXMLDebiteursVenue")) {
+            $this->sendEvenementPatient("CHPrimXMLDebiteursVenue", $_sejour);
+          }
+        }
+      }
+
+      $patient->_IPP = null;
     }
 
     return true;

@@ -494,6 +494,12 @@ class CSetuphprimxml extends CSetup {
                 ADD `monitor_sources` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.57";
+    $this->makeRevision("0.57");
+
+    $query = "ALTER TABLE `destinataire_hprim_config`
+                ADD `send_insured_without_admit` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.58";
   }
 }
