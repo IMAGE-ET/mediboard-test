@@ -48,7 +48,7 @@ var ObjectTooltip = Class.create({
     
     if (App.touchDevice) {
       var that = this;
-      document.observe("touchstart", function(event){
+      document.observe(Event.pointerEvents.start, function(event){
         var element = Event.element(event);
         var eTooltip = $(that.sTooltip);
         

@@ -595,8 +595,16 @@ Element.addMethods({
   },
 
   /** Add a class name to an element, and removing this class name to all of it's siblings */
-  addUniqueClassName: function(element, className) {
-    $(element).siblings().invoke('removeClassName', className);
+  addUniqueClassName: function(element, className, parentSelector) {
+    element = $(element);
+
+    if (parentSelector) {
+      element.up(parentSelector).select("."+className).invoke('removeClassName', className);
+    }
+    else {
+      $(element).siblings().invoke('removeClassName', className);
+    }
+
     return element.addClassName(className);
   },
 
@@ -657,11 +665,11 @@ Element.addMethods({
     }
 
     var eventsHandled = $H({
-      onmouseover: 300, 
+      onmouseover: 300,
       ondblclick:  500
     });
 
-    document.observe("touchstart", function(event){
+    document.observe(Event.pointerEvents.start, function(event){
       var element = Event.element(event);
 
       eventsHandled.each(function(pair){
@@ -680,7 +688,7 @@ Element.addMethods({
       });
     });
 
-    document.observe("touchmove", function(event){
+    document.observe(Event.pointerEvents.move, function(event){
       var element = Event.element(event);
 
       eventsHandled.each(function(pair){
@@ -692,7 +700,7 @@ Element.addMethods({
       });
     });
 
-    document.observe("touchend", function(event){
+    document.observe(Event.pointerEvents.end, function(event){
       var element = Event.element(event);
 
       eventsHandled.each(function(pair){
@@ -898,6 +906,21 @@ Object.extend(Event, {
     return Math.round(delta); //Safari Round
   }
 });
+
+if (window.navigator.msPointerEnabled) {
+  Event.pointerEvents = {
+    start: "MSPointerDown",
+    move:  "MSPointerMove",
+    end:   "MSPointerUp"
+  };
+}
+else {
+  Event.pointerEvents = {
+    start: "touchstart",
+    move:  "touchmove",
+    end:   "touchend"
+  };
+}
 
 Object.extend(String, {
   allographs: {

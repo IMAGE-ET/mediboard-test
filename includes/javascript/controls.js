@@ -744,8 +744,8 @@ Element.addMethods('input', {
     }
 
     if (App.touchDevice) {
-      table.down(".up").observe('touchstart', element.spinner.inc);
-      table.down(".down").observe('touchstart', element.spinner.dec);
+      table.down(".up").observe(Event.pointerEvents.start, element.spinner.inc);
+      table.down(".down").observe(Event.pointerEvents.start, element.spinner.dec);
     }
     else {
       table.down(".up").observe('click', element.spinner.inc.curry(true));
