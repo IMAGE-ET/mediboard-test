@@ -191,7 +191,7 @@
           </td>
         </tr>
         <tr>
-          <th class="category">Code ASA : {{if $operation->_id}}{{tr}}COperation.ASA.{{$operation->ASA}}{{/tr}}{{/if}}</th>
+          <th class="category">Code ASA : {{if $operation->_id}}{{mb_value object=$operation field=ASA}}{{else}}{{mb_value object=$dossier_anesth field=ASA}}{{/if}}</th>
         </tr>
       </table>
     </td>
