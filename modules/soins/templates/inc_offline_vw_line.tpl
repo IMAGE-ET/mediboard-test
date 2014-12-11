@@ -93,8 +93,16 @@
     {{/if}}
     {{if $mode_lite}}
       <td class="text">
-        {{if $line->_ref_last_administration}}
-          {{$line->_ref_last_administration->quantite}} {{if $line->inscription}}{{$line->_ref_produit->libelle_unite_presentation}}{{else}}{{$line->_ref_last_administration->unite_prise}}{{/if}}
+        {{if $line->_ref_last_administration->_id}}
+          {{$line->_ref_last_administration->quantite}}
+          {{if $line instanceof CPrescriptionLineElement}}
+            {{assign var=chap value=$line->_chapitre}}
+            {{$conf.dPprescription.CCategoryPrescription.$chap.unite_prise}}
+          {{elseif $line->inscription}}
+            {{$line->_ref_produit->libelle_unite_presentation}}
+          {{else}}
+            {{$line->_ref_last_administration->unite_prise}}
+          {{/if}}
           le {{$line->_ref_last_administration->dateTime|date_format:$conf.date}} à {{$line->_ref_last_administration->dateTime|date_format:$conf.time}}
         {{elseif !$line->_ref_administrations|@count}}
           <div class="empty">{{tr}}CAdministration.none{{/tr}}</div>
@@ -319,7 +327,7 @@
       {{/if}}
       {{if $mode_lite}}
         <td class="text {{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}" style="vertical-align: top;">
-          {{if isset($_line_item->_ref_last_administration|smarty:nodefaults)}}
+          {{if $_line_item->_ref_last_administration->_id}}
             {{$_line_item->_ref_last_administration->quantite}} {{$_line_item->_ref_last_administration->unite_prise}}
             le {{$_line_item->_ref_last_administration->dateTime|date_format:$conf.date}} à {{$_line_item->_ref_last_administration->dateTime|date_format:$conf.time}}
           {{elseif !$_line_item->_ref_administrations|@count}}

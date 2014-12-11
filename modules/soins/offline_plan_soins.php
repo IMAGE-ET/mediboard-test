@@ -250,16 +250,6 @@ foreach ($sejours as $_sejour) {
           }
         }
       }
-
-      if ($mode_lite) {
-        $line->_ref_last_administration = reset($line->_ref_administrations);
-        foreach ($line->_ref_administrations as $_adm) {
-          if ($_adm->dateTime > $line->_ref_last_administration->dateTime) {
-            $line->_ref_last_administration = $_adm;
-          }
-        }
-        $line->_ref_last_administration->loadRefAdministrateur();
-      }
     }
   }
 
@@ -299,16 +289,6 @@ foreach ($sejours as $_sejour) {
                 $key = $postes_by_date[$date][$_hour];
                 @$_line_item->_administrations_moment[$date][$key["moment"]] += $_quantite;
               }
-            }
-
-            if ($mode_lite) {
-              $_line_item->_ref_last_administration = reset($_line_item->_ref_administrations);
-              foreach ($_line_item->_ref_administrations as $_adm) {
-                if ($_adm->dateTime > $_line_item->_ref_last_administration->dateTime) {
-                  $_line_item->_ref_last_administration = $_adm;
-                }
-              }
-              $_line_item->_ref_last_administration->loadRefAdministrateur();
             }
           }
         }
@@ -366,16 +346,6 @@ foreach ($sejours as $_sejour) {
           }
         }
       }
-
-      if ($mode_lite) {
-        $line->_ref_last_administration = reset($line->_ref_administrations);
-        foreach ($line->_ref_administrations as $_adm) {
-          if ($_adm->dateTime > $line->_ref_last_administration->dateTime) {
-            $line->_ref_last_administration = $_adm;
-          }
-        }
-        $line->_ref_last_administration->loadRefAdministrateur();
-      }
     }
   }
 
@@ -410,19 +380,13 @@ foreach ($sejours as $_sejour) {
               }
             }
           }
-
-          if ($mode_lite) {
-            $line->_ref_last_administration = reset($line->_ref_administrations);
-            foreach ($line->_ref_administrations as $_adm) {
-              if ($_adm->dateTime > $line->_ref_last_administration) {
-                $line->_ref_last_administration = $_adm;
-              }
-            }
-            $line->_ref_last_administration->loadRefAdministrateur();
-          }
         }
       }
     }
+  }
+
+  if ($mode_lite) {
+    CPrescription::massLoadLastAdministration($prescription);
   }
 }
 
