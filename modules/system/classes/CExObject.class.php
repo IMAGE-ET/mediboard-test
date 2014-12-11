@@ -201,8 +201,8 @@ class CExObject extends CMbMetaObject implements IPatientRelated, IIndexableObje
       ));
       $request->addSelect(array(
         "ex_class_field_translation.std",
-        "IF(ex_class_field_translation.desc, ex_class_field_translation.desc, ex_class_field_translation.std) AS `desc`",
-        "IF(ex_class_field_translation.court, ex_class_field_translation.court, ex_class_field_translation.std) AS `court`",
+        "IF(ex_class_field_translation.desc  IS NOT NULL, ex_class_field_translation.desc,  ex_class_field_translation.std) AS `desc`",
+        "IF(ex_class_field_translation.court IS NOT NULL, ex_class_field_translation.court, ex_class_field_translation.std) AS `court`",
         "ex_class_field.ex_class_field_id AS field_id",
         "ex_class_field.name",
         "ex_class_field.prop",
