@@ -60,17 +60,15 @@
               {{if $_sejour->_ref_grossesse->_days_relative_acc != ''}}
                 J{{$_sejour->_ref_grossesse->_days_relative_acc}}
               {{/if}}
-
-              {{if $_sejour->_ref_last_operation}}
-                <button onclick="Tdb.dossierAccouchement('{{$_sejour->_ref_last_operation->_id}}');" type="button">
-              acc
-                </button>
-              {{/if}}
           </td>
           <td rowspan="{{$nb_naissance}}">
             <button type="button" class="edit notext" onclick="Tdb.editSejour('{{$_sejour->_id}}')">{{tr}}CSejour{{/tr}}</button>
             <button type="button" class="soins notext" onclick="Tdb.editD2S('{{$_sejour->_id}}')">{{tr}}dossier_soins{{/tr}}</button>
+            {{if $_sejour->_ref_last_operation}}
+              <button onclick="Tdb.dossierAccouchement('{{$_sejour->_ref_last_operation->_id}}');" type="button">acc</button>
+            {{else}}
             <button type="button" class="accouchement_create notext" onclick="Tdb.editAccouchement(null, '{{$_sejour->_id}}', '{{$_sejour->_ref_grossesse->_id}}', '')">Accouchement</button>
+            {{/if}}
           </td>
         {{/if}}
         <td>
