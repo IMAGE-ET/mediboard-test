@@ -9,6 +9,7 @@
  * @link     http://www.mediboard.org
 *}}
 
+{{mb_default var=represcription value=0}}
 {{assign var="chir_id"        value=$consult->_ref_plageconsult->_ref_chir->_id}}
 {{assign var="do_subject_aed" value="do_consultation_aed"}}
 {{assign var="module"         value="cabinet"}}
@@ -78,6 +79,7 @@
     var consultUrl = new Url("cabinet", "httpreq_vw_consult_anesth");
     consultUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
     consultUrl.addParam("dossier_anesth_id", document.editFrmFinish._consult_anesth_id.value);
+    consultUrl.addParam("represcription", '{{$represcription}}');
     consultUrl.requestUpdate('consultAnesth');
   }
 

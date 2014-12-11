@@ -181,6 +181,7 @@ if ($isPrescriptionInstalled) {
   CPrescription::$_load_lite = false;
 }
 
+$smarty->assign("represcription" , CValue::get("represcription", 0));
 $smarty->assign("date"           , $date);
 $smarty->assign("hour"           , $hour);
 $smarty->assign("vue"            , $vue);

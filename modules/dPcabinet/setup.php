@@ -2219,7 +2219,10 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `consultation`
       ADD `consult_related_id` INT (11) UNSIGNED;";
     $this->addQuery($query);
+    $this->makeRevision("2.45");
 
-    $this->mod_version = '2.45';
+    $this->addPrefQuery("show_replication_duplicate", "0");
+
+    $this->mod_version = '2.46';
   }
 }

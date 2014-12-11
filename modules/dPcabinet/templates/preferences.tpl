@@ -21,6 +21,8 @@
 {{mb_include template=inc_pref spec=bool var=use_acte_date_now}}
 {{mb_include template=inc_pref spec=bool var=multi_popups_resume}}
 {{mb_include template=inc_pref spec=enum var=dPcabinet_displayFirstTab values="AntTrait|Examens"}}
+{{mb_include template=inc_pref spec=bool var=show_replication_duplicate}}
+
 <tr><th class="category" colspan="6">Planning</th></tr>
 {{mb_include template=inc_pref spec=bool var=allow_plage_holiday}}
 {{mb_include template=inc_pref spec=bool var=new_semainier}}
@@ -28,9 +30,11 @@
 {{mb_include template=inc_pref spec=bool var=showIntervPlanning}}
 {{mb_include template=inc_pref spec=enum var=AFFCONSULT values="0|1"}}
 {{mb_include template=inc_pref spec=enum var=DefaultPeriod values="day|week|month|weekly" value_locale_prefix="Period."}}
+
 <tr><th class="category" colspan="6">Consultations multiples</th></tr>
 {{mb_include template=inc_pref spec=enum var=NbConsultMultiple values="2|3|4|5|6|7|8|9|10|11|12"}}
 {{mb_include template=inc_pref spec=enum var=today_ref_consult_multiple values="0|1"}}
+
 <tr><th class="category" colspan="6">Prise de RDV personnalisée :</th></tr>
 {{mb_include template=inc_pref spec=bool var=take_consult_for_chirurgien}}
 {{mb_include template=inc_pref spec=bool var=take_consult_for_anesthesiste}}

@@ -87,6 +87,7 @@ $listChirs = $userSel->loadPraticiens(PERM_READ);
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("represcription"        , CValue::get("represcription", 0));
 $smarty->assign("consult"               , $consult);
 $smarty->assign("consult_anesth"        , $consult_anesth);
 $smarty->assign("patient"               , $patient);

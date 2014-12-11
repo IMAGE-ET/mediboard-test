@@ -7,10 +7,34 @@
     var oForm = getForm("addOpFrm");
     $V(oForm.sejour_id, sejour_id);
   }
+  selectSejourReprescription = function(sejour_id) {
+    var url = new Url("prescription", "ajax_select_sejour_represcription");
+    url.addParam("sejour_id", sejour_id);
+    url.requestModal(500);
+  };
+
+  modalRePrescriptions = function(sejour_id, prescription_id, current_prat_id) {
+    var url = new Url("prescription", "ajax_vw_represcription_sejour");
+    url.addParam("sejour_id"      , sejour_id);
+    url.addParam("prescription_id", prescription_id);
+    {{if "dPprescription general role_propre"|conf:"CGroups-$g"}}
+      url.addParam("praticien_id", '{{$app->user_id}}');
+    {{else}}
+      url.addParam("praticien_id", current_prat_id);
+    {{/if}}
+    url.requestModal('85%', '80%',
+      {showReload: true});
+  };
+
   {{if !$consult_anesth->libelle_interv && !$consult_anesth->sejour_id && !$consult_anesth->operation_id && ($nextSejourAndOperation.COperation->_id || $nextSejourAndOperation.CSejour->_id)}}
     Main.add(function () {
         GestionDA.edit();
       });
+  {{/if}}
+  {{if $represcription && $consult_anesth->sejour_id}}
+    Main.add(function () {
+      selectSejourReprescription('{{$consult_anesth->sejour_id}}');
+    });
   {{/if}}
 
   {{if $consult->sejour_id && !$consult_anesth->operation_id}}

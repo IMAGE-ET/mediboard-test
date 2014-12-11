@@ -43,6 +43,7 @@ CPreferences::$modules["dPcabinet"] = array (
   "allow_plage_holiday",
   "today_ref_consult_multiple",
   "dPcabinet_displayFirstTab",
+  "show_replication_duplicate",
 
   // take consultation for :
   "take_consult_for_chirurgien",    // 1

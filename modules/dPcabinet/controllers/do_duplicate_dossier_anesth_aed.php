@@ -31,11 +31,26 @@ if ($operation_id) {
 
 $msg = $consult_anesth->store();
 
+$represcription = 0;
 if ($msg) {
   CAppUI::setMsg($msg);
 }
 else {
   CAppUI::setMsg(CAppUI::tr("CConsultAnesth-msg-duplicate"));
+
+  //Création de la prescription de séjour selon pref user
+  if ($consult_anesth->sejour_id && CAppUI::pref("show_replication_duplicate")) {
+    $prescription = new CPrescription();
+    $prescription->object_class = 'CSejour';
+    $prescription->object_id = $consult_anesth->sejour_id;
+    $prescription->type = 'sejour';
+    if (!$prescription->loadMatchingObject()) {
+      if ($msg = $prescription->store()) {
+        CAppUI::setMsg($msg, UI_MSG_ERROR);
+      }
+    }
+    $represcription = 1;
+  }
 }
 
 echo CAppUI::getMsg();
@@ -43,7 +58,7 @@ echo CAppUI::getMsg();
 if ($redirect) {
   CAppUI::redirect(
     "m=cabinet&tab=edit_consultation&selConsult=".
-    $consult_anesth->consultation_id."&dossier_anesth_id=".$consult_anesth->_id
+    $consult_anesth->consultation_id."&dossier_anesth_id=".$consult_anesth->_id."&represcription=$represcription"
   );
 }
 
