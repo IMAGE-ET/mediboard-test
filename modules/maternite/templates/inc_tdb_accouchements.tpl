@@ -45,7 +45,7 @@
       <tr>
         <td>
           <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_sejour->_ref_grossesse->_ref_parturiente->_guid}}');">{{$_op->_ref_sejour->_ref_grossesse->_ref_parturiente}}</span><br/>
-          <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_sejour->_ref_curr_affectation->_guid}}');">{{$_op->_ref_sejour->_ref_curr_affectation}}</span>
+          <span class="compact" onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_sejour->_ref_curr_affectation->_guid}}');">{{$_op->_ref_sejour->_ref_curr_affectation}}</span>
         </td>
         <td>
           {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_op->_ref_chir}}<br/>

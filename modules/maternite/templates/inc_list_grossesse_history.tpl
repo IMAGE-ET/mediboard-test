@@ -47,7 +47,9 @@
           {{foreach from=$grossesse->_ref_consultations item=_consultation}}
             <tr>
               <td class="text compact">
-                <span onmouseover="ObjectTooltip.createEx(this, '{{$_consultation->_guid}}');">{{$_consultation}} {{if $_consultation->_ref_consult_anesth->_id}}<img src="images/icons/anesth.png" alt="" />{{/if}}</span>
+                <span onmouseover="ObjectTooltip.createEx(this, '{{$_consultation->_guid}}');">
+                  {{tr}}{{$_consultation->_class}}{{/tr}} du {{$_consultation->_date|date_format:$conf.date}} - {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_consultation->_ref_praticien}} {{if $_consultation->_ref_consult_anesth->_id}}<img src="images/icons/anesth.png" alt="" />{{/if}}
+                </span>
               </td>
             </tr>
           {{foreachelse}}
