@@ -70,6 +70,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   public $mode_identito_vigilance;
   public $send_no_facturable;
   public $send_a42_onmerge;
+  public $send_expected_discharge_with_affectation;
 
   // Build
   public $build_mode;
@@ -177,6 +178,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       "mode_identito_vigilance",
       "send_no_facturable",
       "send_a42_onmerge",
+      "send_expected_discharge_with_affectation",
     ),
     "PID" => array(
       "build_PID_3_4",
@@ -267,27 +269,28 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["iti31_historic_movement"]                   = "bool default|1";
 
     // Send
-    $props["modification_admit_code"]            = "enum list|A08|Z99 default|Z99";
-    $props["modification_before_admit"]          = "bool default|1";
-    $props["send_assigning_authority"]           = "bool default|1";
-    $props["send_change_medical_responsibility"] = "enum list|A02|Z80|Z99 default|Z80";
-    $props["send_change_nursing_ward"]           = "enum list|A02|Z84|Z99 default|Z84";
-    $props["send_change_attending_doctor"]       = "enum list|A54|Z99 default|A54";
-    $props["send_all_patients"]                  = "bool default|0";
-    $props["send_default_affectation"]           = "bool default|0";
-    $props["send_first_affectation"]             = "enum list|A02|Z99 default|Z99";
-    $props["send_provisional_affectation"]       = "bool default|0";
-    $props["send_transfer_patient"]              = "enum list|A02|Z99 default|A02";
-    $props["send_own_identifier"]                = "bool default|1";
-    $props["send_self_identifier"]               = "bool default|0";
-    $props["send_actor_identifier"]              = "bool default|0";
-    $props["send_update_patient_information"]    = "enum list|A08|A31 default|A31";
-    $props["send_change_after_admit"]            = "bool default|1";
-    $props["send_patient_with_visit"]            = "bool default|0";
-    $props["send_patient_with_current_admit"]    = "bool default|0";
-    $props["mode_identito_vigilance"]            = "enum list|light|medium|strict default|light";
-    $props["send_no_facturable"]                 = "bool default|1";
-    $props["send_a42_onmerge"]                   = "bool default|0";
+    $props["modification_admit_code"]                  = "enum list|A08|Z99 default|Z99";
+    $props["modification_before_admit"]                = "bool default|1";
+    $props["send_assigning_authority"]                 = "bool default|1";
+    $props["send_change_medical_responsibility"]       = "enum list|A02|Z80|Z99 default|Z80";
+    $props["send_change_nursing_ward"]                 = "enum list|A02|Z84|Z99 default|Z84";
+    $props["send_change_attending_doctor"]             = "enum list|A54|Z99 default|A54";
+    $props["send_all_patients"]                        = "bool default|0";
+    $props["send_default_affectation"]                 = "bool default|0";
+    $props["send_first_affectation"]                   = "enum list|A02|Z99 default|Z99";
+    $props["send_provisional_affectation"]             = "bool default|0";
+    $props["send_transfer_patient"]                    = "enum list|A02|Z99 default|A02";
+    $props["send_own_identifier"]                      = "bool default|1";
+    $props["send_self_identifier"]                     = "bool default|0";
+    $props["send_actor_identifier"]                    = "bool default|0";
+    $props["send_update_patient_information"]          = "enum list|A08|A31 default|A31";
+    $props["send_change_after_admit"]                  = "bool default|1";
+    $props["send_patient_with_visit"]                  = "bool default|0";
+    $props["send_patient_with_current_admit"]          = "bool default|0";
+    $props["mode_identito_vigilance"]                  = "enum list|light|medium|strict default|light";
+    $props["send_no_facturable"]                       = "bool default|1";
+    $props["send_a42_onmerge"]                         = "bool default|0";
+    $props["send_expected_discharge_with_affectation"] = "bool default|1";
 
     // Build
     $props["build_mode"]                   = "enum list|normal|simple default|normal";

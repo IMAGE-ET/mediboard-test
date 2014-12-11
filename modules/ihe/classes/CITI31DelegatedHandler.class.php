@@ -288,6 +288,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if (($service->uhcd || $service->radiologie || $service->urgence) && $affectation->sortie < $curr_affectation->sortie) {
         return;
       }
+
+      // Ne pas envoyer la sortie si le séjour a une entrée réelle et si on modifie ou créé un affectation
+      if (!$receiver->_configs["send_expected_discharge_with_affectation"] && $sejour->entree_reelle) {
+        $sejour->sortie_prevue = null;
+      }
    
       // Envoi de l'événement
       $this->sendITI($this->profil, $this->transaction, $this->message, $code, $mbObject);
