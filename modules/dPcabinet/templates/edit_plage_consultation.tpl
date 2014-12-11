@@ -46,10 +46,14 @@
 
   extendPlage = function (plage_id, repetition_type, nb_repeat) {
     if (confirm("Prolonger la plage sur "+nb_repeat+" semaines de type "+ repetition_type)) {
+      var _update_pause = $(getForm('editFrm')._update_pause);
       var url = new Url("cabinet", "controllers/do_extend_plage");
       url.addParam("plage_id", plage_id);
       url.addParam("_type_repeat", repetition_type);
       url.addParam("_repeat", nb_repeat);
+      url.addParam("_update_pause", _update_pause.checked ? 1 : 0);
+      url.addParam("_pause", $V(getForm('editFrm')._pause));
+      url.addParam("_pause_repeat_time", $V(getForm('editFrm')._pause_repeat_time));
       url.requestUpdate("systemMsg");
     }
 

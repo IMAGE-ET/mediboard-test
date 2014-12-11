@@ -13,9 +13,12 @@
 
 CCanDo::checkEdit();
 
-$plage_id     = CValue::get("plage_id");
-$repeat       = min(CValue::get("_repeat", 0), 100);
-$repeat_mode  = CValue::get("_type_repeat");
+$plage_id           = CValue::get("plage_id");
+$repeat             = min(CValue::get("_repeat", 0), 100);
+$repeat_mode        = CValue::get("_type_repeat");
+$_update_pause      = CValue::get("_update_pause");
+$_pause             = CValue::get("_pause");
+$_pause_repeat_time = CValue::get("_pause_repeat_time");
 
 // because of current plage
 $nb_extend = $repeat++;
@@ -24,11 +27,16 @@ $nb_extend = $repeat++;
 $plage_consult = new CPlageconsult();
 $plage_consult->load($plage_id);
 $plage_consult->_type_repeat = $repeat_mode;
+$plage_consult->_update_pause = $_update_pause;
+$plage_consult->_pause = $_pause;
+$plage_consult->_pause_repeat_time = $_pause_repeat_time;
 
 //behaviour
 $skipped = 0;
 $created = 0;
 $failed = 0;
+
+$pause = 0;
 
 //do the repeat work (2 = startng next week)
 while (1 <= $nb_extend) {
@@ -36,6 +44,7 @@ while (1 <= $nb_extend) {
   $nb_extend -= $plage_consult->becomeNext();
 
   //plage doesn't exist
+
   if (!$plage_consult->_id) {
     if ($msg = $plage_consult->store()) {
       $failed++;
@@ -46,6 +55,11 @@ while (1 <= $nb_extend) {
   }
   //exist = skipped
   else {
+    if ($_update_pause) {
+      if ($msg = $plage_consult->store()) {
+        $pause++;
+      }
+    }
     $skipped++;
   }
 }
@@ -61,6 +75,10 @@ if ($skipped) {
 
 if ($failed) {
   CAppUI::setMsg('Cplageconsult-msg-creation_failed_nb%d', UI_MSG_ERROR, $failed);
+}
+
+if ($pause) {
+  CAppUI::setMsg('Cplageconsult_pause-msg-creation_failed_nb%d', UI_MSG_ERROR, $pause);
 }
 
 echo CAppUI::getMsg();
