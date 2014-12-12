@@ -164,6 +164,8 @@
       {{else}}
         -
       {{/if}}
+
+      {{mb_include module=forms template=inc_widget_ex_class_register object=$_operation event_name=entree_reveil cssStyle="display: inline-block;"}}
     </td>
     <td class="button">
       {{if $modif_operation}}

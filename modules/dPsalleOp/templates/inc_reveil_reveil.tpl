@@ -244,7 +244,7 @@
       </form>
       {{else}}-{{/if}}
       
-      {{mb_include module=forms template=inc_widget_ex_class_register object=$_operation event_name=sortie_reveil cssStyle="display: inline-block; font-size: 0.8em;"}}
+      {{mb_include module=forms template=inc_widget_ex_class_register object=$_operation event_name=sortie_reveil cssStyle="display: inline-block;"}}
     </td>
     {{if $use_sortie_reveil_reel}}
       <td class="button">

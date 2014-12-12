@@ -410,6 +410,7 @@ $locales['COperation-event-checklist'] = 'Check list';
 $locales['COperation-event-dhe'] = 'DHE';
 $locales['COperation-event-liaison'] = 'Liaison';
 $locales['COperation-event-perop'] = 'Peropératoire';
+$locales['COperation-event-entree_reveil'] = 'Entrée réveil';
 $locales['COperation-event-sortie_reveil'] = 'Sortie réveil';
 $locales['COperation-exam_extempo'] = 'Exam. extempo. prévu';
 $locales['COperation-exam_extempo-court'] = 'Extempo';
