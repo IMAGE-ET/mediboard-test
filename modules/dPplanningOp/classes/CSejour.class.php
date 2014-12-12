@@ -4346,7 +4346,8 @@ class CSejour extends CFacturable implements IPatientRelated {
         if (isset($prev_liaison_id) || $_liaison->_id == $last_liaison->_id) {
           // Utilisation du début de la liaison courante pour indiquer la fin de la liaison précédente
           if (isset($prev_liaison_id)) {
-            $dates[$prev_liaison_id]["fin"] = CmbDT::date("-1 day", $date);
+            $_sous_item = $_liaison->loadRefSousItem();
+            $dates[$prev_liaison_id]["fin"] = CmbDT::date($_sous_item->niveau == "nuit" ? "-1 day" : "", $date);
           }
           if ($_liaison->_id == $last_liaison->_id) {
             $dates[$_liaison->_id]["debut"] = $date;
