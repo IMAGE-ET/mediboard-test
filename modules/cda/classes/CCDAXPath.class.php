@@ -71,6 +71,46 @@ class CCDAXPath extends CMbXPath {
   }
 
   /**
+   * Get the telecom of node
+   *
+   * @param DOMNode $node Node
+   *
+   * @return array
+   */
+  function getTelecom($node) {
+    $telecoms = array();
+    $nodes = $this->query("./cda:assignedAuthor/cda:telecom", $node);
+
+    foreach ($nodes as $_node) {
+      $telecoms[] = $this->queryAttributNode(".", $_node, "value");
+    }
+
+    return $telecoms;
+  }
+
+  /**
+   * Get the last name and the firstname
+   *
+   * @param DOMNode $node Node
+   *
+   * @return string
+   */
+  function getName($node) {
+    $name = $this->queryTextNode("./cda:family[not(@*)]", $node);
+    if (!$name) {
+      $name = $this->queryTextNode("./cda:family[@qualifier='SP']", $node);
+    }
+
+    $node_given = $this->query("./cda:given");
+    $given = "";
+    if ($node_given->length > 0) {
+      $given = $this->queryTextNode(".", $node_given->item(0));
+    }
+
+    return "$name $given";
+  }
+
+  /**
    * Return the list of patients
    *
    * @return DOMNodeList
