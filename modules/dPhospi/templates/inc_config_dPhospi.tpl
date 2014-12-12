@@ -10,7 +10,6 @@
   {{mb_include module=system template=inc_config_str  var=hour_limit}}
   {{mb_include module=system template=inc_config_bool var=show_age_patient}}
   {{mb_include module=system template=inc_config_str  var=max_affectations_view}}
-  {{mb_include module=system template=inc_config_enum var=systeme_prestations values=standard|expert}}
   {{mb_include module=system template=inc_config_bool var=use_vue_topologique}}
   {{mb_include module=system template=inc_config_str  var=nb_colonnes_vue_topologique}}
   {{mb_include module=system template=inc_config_bool var=stats_for_all}}

@@ -25,7 +25,7 @@
       style="border: 2px solid #{{if $item_presta_realise->_id}}{{$item_presta_realise->color}}{{else}}{{$item_presta->color}}{{/if}}; margin-right: 1px;">
 
     <!-- display -->
-    {{if $item_presta->_id == $item_presta_realise->_id}}
+    {{if $item_presta->_id == $item_presta_realise->_id || $conf.dPhospi.show_souhait_placement}}
       {{$item_presta->nom}}
     {{else}}
       {{if $item_presta_realise->nom}}{{$item_presta_realise->nom}}{{else}}{{$item_presta->nom}}{{/if}}

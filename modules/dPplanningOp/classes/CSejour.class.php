@@ -4373,8 +4373,8 @@ class CSejour extends CFacturable implements IPatientRelated {
 
         $item_facture = $_item_realise;
 
-        // Si ce qui est réalisé est supérieur au demandé, c'est le souhait qui est facturé
-        if ($_item_realise->rank > $_item_souhait->rank) {
+        // Si ce qui est réalisé est supérieur au demandé (rank inférieur), c'est le souhait qui est facturé
+        if ($_item_realise->rank < $_item_souhait->rank) {
           $item_facture = $_item_souhait;
         }
 
@@ -4486,6 +4486,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     if (($date_min && !$date_max) || (($date_min == $date_max) && $date_min)) {
       $where['date'] = "<= '$date_min'";  //get the last prestation for sejour (current day might not be defined)
       $order = "date DESC";
+      $groupby = "item_prestation.object_id";
     }
 
     /** @var  CItemLiaison[] _liaisons_for_prestation */
