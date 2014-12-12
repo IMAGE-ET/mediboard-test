@@ -215,4 +215,20 @@ class CXDSTools {
 
     return "$comp1^$comp2^$comp3^^^^^^$comp9^$comp10^^^$comp13";
   }
+
+  /**
+   * Retourne l'INS sous la forme HL7v2
+   *
+   * @param String $ins  INS
+   * @param String $type Type d'INS
+   *
+   * @return string
+   */
+  static function getINSPatient($ins, $type) {
+    $comp1 = $ins;
+    $comp4 = "1.2.250.1.213.1.4.2";
+    $comp5 = "INS-$type";
+
+    return "$comp1^^^&$comp4&ISO^$comp5";
+  }
 }

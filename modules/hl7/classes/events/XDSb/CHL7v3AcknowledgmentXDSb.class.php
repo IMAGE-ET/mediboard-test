@@ -16,6 +16,7 @@
 class CHL7v3AcknowledgmentXDSb extends CHL7v3EventXDSb {
   public $acknowledgment;
   public $status;
+  /** @var  CMbXPath */
   public $xpath;
 
   /**
@@ -65,5 +66,53 @@ class CHL7v3AcknowledgmentXDSb extends CHL7v3EventXDSb {
     }
 
     return $ack;
+  }
+
+  /**
+   * Return the result count
+   *
+   * @return string
+   */
+  function getResultCount() {
+    return $this->xpath->queryAttributNode(".", null, "totalResultCount");
+  }
+
+  /**
+   * Get the entryUUID of document in the association
+   *
+   * @return String[]
+   */
+  function getDocumentUUIDAssociation() {
+    $xpath     = $this->xpath;
+    $nodes     = $xpath->query("//rim:Association");
+    $entryUUID = array();
+
+    foreach ($nodes as $_node) {
+      $type = $xpath->queryAttributNode(".", $_node, "associationType");
+
+      if ($type != "urn:oasis:names:tc:ebxml-regrep:AssociationType:HasMember") {
+        continue;
+      }
+      $entryUUID[] = $xpath->queryAttributNode(".", $_node, "targetObject");
+    }
+
+    return $entryUUID;
+  }
+
+  /**
+   * Return the extrinsic object
+   *
+   * @return DOMElement[]
+   */
+  function getDocuments() {
+    $xpath     = $this->xpath;
+    $nodes     = $xpath->query("//rim:ExtrinsicObject");
+
+    $documents = array();
+    foreach ($nodes as $_node) {
+      $documents[] = $_node;
+    }
+
+    return $documents;
   }
 }

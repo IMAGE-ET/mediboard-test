@@ -37,7 +37,16 @@ class CXDSQueryRegistryStoredQuery {
   public $returnType;
   public $values = array();
   public $document_item;
+  public $patient;
 
+
+  static $multivalued_field = array(
+    "\$XDSDocumentEntryClassCode", "\$XDSDocumentEntryTypeCode", "\$XDSDocumentEntryPracticeSettingCode",
+    "\$XDSDocumentEntryHealthcareFacilityTypeCode", "\$XDSDocumentEntryEventCodeList", "\$XDSDocumentEntryConfidentialityCode",
+    "\$XDSDocumentEntryAuthorPerson", "\$XDSDocumentEntryFormatCode", "\$XDSDocumentEntryStatus", "\$XDSDocumentEntryType",
+    "\$XDSSubmissionSetSourceId", "\$XDSSubmissionSetContentType", "\$XDSSubmissionSetStatus", "\$XDSDocumentEntryEntryUUID",
+    "\$XDSDocumentEntryUniqueId", "\$uuid",
+  );
 
   /**
    * set the EntryId query of the mediboard document
@@ -61,6 +70,29 @@ class CXDSQueryRegistryStoredQuery {
       "\$XDSDocumentEntryUniqueId" => array("$oid")
     );
   }
+
+  /**
+   * Set the value for the queries with UUID
+   *
+   * @param String   $query       Query
+   * @param CPatient $patient     Patient
+   * @param String[] $uuid_array  UUID to search
+   * @param String   $return_type Type return(ObjectRef/LeafClass)
+   *
+   * @return void
+   */
+  function setQueryUUID($query, $patient, $uuid_array, $return_type) {
+    $this->returnType            = $return_type;
+    $this->returnComposedObjects = "false";
+    $this->patient               = $patient;
+    $this->query                 = $query;
+    $field = "\$uuid";
+    if ($query == "urn:uuid:5c4f972b-d56b-40ac-a5fc-c8ca9b40b9d4") {
+      $field = "\$XDSDocumentEntryEntryUUID";
+    }
+    $this->values[$field]      = $uuid_array;
+  }
+
   /**
    * Create the XDS query
    *
@@ -79,7 +111,8 @@ class CXDSQueryRegistryStoredQuery {
       //And statement
       if (is_array($_values)) {
         foreach ($_values as $_value) {
-          $slot = new CXDSSlot("$_name", array("('$_value')"));
+          $data = self::formatData($_value, $_name);
+          $slot = new CXDSSlot("$_name", array($data));
           $xml->importDOMDocument($adhocQuery, $slot->toXML());
         }
       }
@@ -88,7 +121,8 @@ class CXDSQueryRegistryStoredQuery {
         $parts = explode("|", $_values);
         $value = "";
         foreach ($parts as $_part) {
-          $value .= "'$_part',";
+          $data = self::formatData($_part, $_name, true);
+          $value .= "$data,";
         }
         $value = rtrim($value, ",");
         $slot = new CXDSSlot("$_name", array("($value)"));
@@ -97,5 +131,34 @@ class CXDSQueryRegistryStoredQuery {
     }
 
     return $xml->saveXML();
+  }
+
+  /**
+   * Format the data
+   *
+   * @param String $value        Value to format
+   * @param String $_param       Name of the param
+   * @param bool   $bypass_multi Bypass the check multi
+   *
+   * @return string
+   */
+  static function formatData($value, $_param, $bypass_multi=false) {
+    /**
+     * ?Children??s Hospital? ? a single quote is inserted in a string by specifying two single quotes
+     */
+    if (strpos($value, "'") !== false) {
+      $value = substr_replace($value, "'", strpos($value, "'"), 0);
+    }
+    //?urn:oasis:names:tc:ebxml-regrep:StatusType:Approved? - in single quotes for strings.
+    if (!is_numeric($value)) {
+      $value = "'$value'";
+    }
+
+    //Format for multiple values is(value, value, value, ?) OR(value)if only one value is to be specified.
+    if (!$bypass_multi && in_array($_param, self::$multivalued_field)) {
+      $value = "($value)";
+    }
+
+    return $value;
   }
 }

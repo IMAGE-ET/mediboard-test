@@ -34,12 +34,17 @@ class CXDSb extends CIHE {
     "UpdateDocumentSet"
   );
 
+  static $interaction_ITI43 = array(
+    "RetrieveDocumentSet"
+  );
+
   /** @var array */
   static $evenements = array (
     // Patient Registry Get Demographics Query
     "ProvideAndRegisterDocumentSetRequest" => "CHL7v3EventXDSbProvideAndRegisterDocumentSetRequest",
     "RegistryStoredQuery"                  => "CHL7v3EventXDSbRegistryStoredQuery",
     "UpdateDocumentSet"                    => "CHL7v3EventXDSbUpdateDocumentSet",
+    "RetrieveDocumentSet"                  => "CHL7v3EventXDSbRetrieveDocumentSet",
   );
 
   /**
@@ -55,6 +60,7 @@ class CXDSb extends CIHE {
       "ITI-41" => self::$interaction_ITI41,
       "ITI-18" => self::$interaction_ITI18,
       "ITI-57" => self::$interaction_ITI57,
+      "ITI-43" => self::$interaction_ITI43,
     );
   }
 
@@ -91,7 +97,21 @@ class CXDSb extends CIHE {
     $dom = new CXDSXmlDocument();
     $dom->loadXMLSafe($ack_data);
 
-    $hl7event = new CHL7v3AcknowledgmentXDSb();
+    $element = $dom->documentElement;
+    $localName = $element->localName;
+
+    $name_event = str_replace("Response", "", $localName);
+
+    $class_name = "CHL7v3Acknowledgment$name_event";
+
+    switch ($class_name) {
+      case "CHL7v3AcknowledgmentRetrieveDocumentSet":
+        $hl7event = new $class_name();
+        break;
+      default:
+        $hl7event = new CHL7v3AcknowledgmentXDSb();
+    }
+
     $hl7event->dom = $dom;
 
     return $hl7event;
