@@ -39,29 +39,27 @@
     </tr>
     
     {{mb_include module=system template=inc_config_bool var=use_last_consult}}
-    
+
     {{mb_include module=system template=inc_config_bool var=show_examen}}
-    
+
     {{mb_include module=system template=inc_config_bool var=show_histoire_maladie}}
-    
+
     {{mb_include module=system template=inc_config_bool var=show_conclusion}}
 
     {{mb_include module=system template=inc_config_bool var=show_motif_consult_immediate}}
 
     {{mb_include module=system template=inc_config_bool var=attach_consult_sejour onchange="showCreateSejour(this)"}}
-    
+
     {{mb_include module=system template=inc_config_bool var=search_sejour_all_groups}}
-    
+
     {{mb_include module=system template=inc_config_bool var=create_consult_sejour}}
-    
+
     {{mb_include module=system template=inc_config_str var=minutes_before_consult_sejour size="3" suffix="min"}}
-    
+
     {{mb_include module=system template=inc_config_str var=hours_after_changing_prat size="3" suffix="h"}}
-    
-    {{mb_include module=system template=inc_config_bool var=consult_readonly}}
-    
+
     {{mb_include module=system template=inc_config_bool var=fix_doc_edit}}
-    
+
     {{mb_include module=system template=inc_config_bool var=surbooking_readonly}}
 
     {{mb_include module=system template=inc_config_bool var=show_IPP_print_consult}}
