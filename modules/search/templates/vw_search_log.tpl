@@ -111,7 +111,7 @@
           <table>
             <tr>
               <td>
-                <input type="hidden" class="date" id="_min_date" name="_min_date" onchange="$V(this.form.start, '0')" value="{{$date}}">
+                <input type="hidden" class="date" id="_min_date" name="_min_date" onchange="$V(this.form.start, '0')" value="">
                 <b>&raquo;</b>
                 <input type="hidden" class="date" id="_max_date" name="_max_date" onchange="$V(this.form.start, '0')" >
                 <strong>{{tr}}or{{/tr}}</strong>

@@ -13,15 +13,16 @@ CCanDo::checkAdmin();
 $object_ref_id  = CValue::get("object_ref_id");
 $object_ref_class  = CValue::get("object_ref_class");
 $type = CValue::get("type");
-$words = CValue::get("words");
+$fuzzy_search = CValue::get("fuzzy_search", null);
+$words = html_entity_decode(CValue::get("words"));
 
 $client_index  = new CSearch();
 $client_index->createClient();
-$words = $words." object_ref_class:".$object_ref_class." "."object_ref_id:".$object_ref_id;
+$details = " object_ref_class:".$object_ref_class." "."object_ref_id:".$object_ref_id;
 $array_results = array();
 $array_highlights = array();
 try {
-  $results_query = $client_index->searchQueryString('AND', $words, 0, 30, array($type), false);
+  $results_query = $client_index->searchQueryString($words, 0, 30, array($type), false, null, null, $details, null, $fuzzy_search);
   $results       = $results_query->getResults();
   foreach ($results as $result) {
     $var = $result->getHit();

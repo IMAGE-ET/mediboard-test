@@ -8,6 +8,7 @@
  * @link     http://www.mediboard.org*}}
 
 {{mb_script module="search" script="Search" ajax=true}}
+{{mb_script module="search" script="Thesaurus" ajax=true}}
 <script>
   Main.add(function () {
     var form = getForm("esSearch");
@@ -130,7 +131,7 @@
           <button class="favoris notext" type="button"
                   onclick="
                     if($V(form.words)){
-                    Search.addeditThesaurusEntry(
+                    Thesaurus.addeditThesaurusEntry(
                     this.form.aggregate.value,
                     $V(form.words),
                     '{{$app->user_id}}',
@@ -149,8 +150,14 @@
       </tr>
       <tr>
         <td>
-          <input type="checkbox" name="aggregate" id="aggregate" value="1" checked>
-          <label for="aggregate"> Agrégation des résultats</label>
+          <span class="circled">
+            <input type="checkbox" name="aggregate" id="aggregate" value="1" checked>
+            <label for="aggregate"> Agrégation des résultats</label>
+          </span>
+          <span class="circled">
+            <input type="checkbox" name="fuzzy" id="fuzzy" value="1">
+            <label for="fuzzy">{{tr}}CSearch-Fuzzy Search{{/tr}}</label>
+          </span>
         </td>
       </tr>
     </tbody>

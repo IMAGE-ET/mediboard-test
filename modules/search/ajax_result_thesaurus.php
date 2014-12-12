@@ -12,7 +12,7 @@ CCanDo::checkRead();
 
 $_min_date     = CValue::get("_min_date", "*");
 $_max_date     = CValue::get("_max_date", "*");
-$_date         = CValue::get("_date");
+$_date         = CValue::get("_date", null);
 $specific_user = CValue::get("user_id");
 $start         = (int)CValue::get("start", 0);
 $words = " ";
@@ -21,7 +21,7 @@ new CSearch();
 $client_index = new CSearchLog();
 $client_index->createClient();
 
-$words = $client_index->constructWordsWithDate($words, $_date, $_min_date, $_max_date);
+$words = $client_index->constructWordsWithDate($_date, $_min_date, $_max_date);
 $words = $client_index->constructWordsWithUser($words, CMediusers::get()->_id);
 
 // Recherche fulltext
@@ -30,7 +30,7 @@ $nbresult          = 0;
 $array_results     = array();
 
 try {
-  $results_query = $client_index->searchQueryString('AND', $words, $start, 30, null, null);
+  $results_query = $client_index->searchQueryString('AND', $words, $start, 20, null, null);
   $results       = $results_query->getResults();
   $time          = $results_query->getTotalTime();
   $nbresult      = $results_query->getTotalHits();
@@ -38,6 +38,7 @@ try {
   // traitement des résultats
   foreach ($results as $result) {
     $var = $result->getHit();
+    $var["_source"]["body"] = mb_convert_encoding($var["_source"]["body"], "WINDOWS-1252",  "UTF-8");
     $author_ids[]    = $var["_source"]["user_id"];
     $array_results[] = $var;
   }

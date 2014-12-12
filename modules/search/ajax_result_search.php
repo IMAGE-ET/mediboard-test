@@ -19,6 +19,7 @@ $specific_user = CValue::get("user_id");
 $start         = (int)CValue::get("start", 0);
 $names_types   = CValue::get("names_types", array());
 $aggregate     = CValue::get("aggregate");
+$fuzzy_search  = CValue::get("fuzzy", null);
 $sejour_id     = CValue::get("sejour_id", null);
 $contexte      = CValue::get("contexte");
 $user          = CMediusers::get();
@@ -45,11 +46,6 @@ if ($words && CAppUI::conf("search indexing active_indexing_log", $group)) {
   }
 }
 
-// Initialisation des mots pour la recherche
-$words = $client_index->constructWordsWithPrat($words, $specific_user, $sejour_id);
-$words = $client_index->constructWordsWithSejour($words, $sejour_id);
-$words = $client_index->constructWordsWithDate($words, $_date, $_min_date, $_max_date);
-
 // Recherche fulltext
 $time              = 0;
 $nbresult          = 0;
@@ -62,7 +58,8 @@ $author_ids        = array();
 $patients          = array();
 
 try {
-  $results_query = $client_index->searchQueryString('AND', $words, $start, 30, $names_types, $aggregate);
+  $date = $client_index->constructWordsWithDate($_date, $_min_date, $_max_date);
+  $results_query = $client_index->searchQueryString($words, $start, 30, $names_types, $aggregate, $sejour_id, $specific_user, null, $date, $fuzzy_search);
   $results       = $results_query->getResults();
   $time          = $results_query->getTotalTime();
   $nbresult      = $results_query->getTotalHits();
@@ -119,5 +116,6 @@ $smarty->assign("nbresult", $nbresult);
 $smarty->assign("words", $words);
 $smarty->assign("contexte", $contexte);
 $smarty->assign("sejour_id", $sejour_id);
+$smarty->assign("fuzzy_search", $fuzzy_search);
 
 $smarty->display("inc_results_search.tpl");

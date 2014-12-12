@@ -233,7 +233,7 @@ class CSearch {
       $object = new $datum['object_class']();
       if (!$object->load($datum['object_id'])) {
         $datum_to_index["id"]  = $datum['object_id'];
-        $datum_to_index["date"] = CMbDT::format(CMbDT::dateTime(), "%Y%m%d");
+        $datum_to_index["date"] = CMbDT::format(CMbDT::dateTime(), "%Y/%m/%d");
           return $datum_to_index;
       }
       //On récupère les champs à indexer.
@@ -241,12 +241,12 @@ class CSearch {
 
       if (!$datum_to_index["date"]) {
         $datum_to_index["id"]          = $datum['object_id'];
-        $datum_to_index["date"] = str_replace("-", "/", CMbDT::dateTime());
+        $datum_to_index["date"] = CMbDT::format(CMbDT::dateTime(), "%Y/%m/%d");
       }
     }
     else {
       $datum_to_index["id"]          = $datum['object_id'];
-      $datum_to_index["date"]        = CMbDT::format(CMbDT::dateTime(), "%Y%m%d");
+      $datum_to_index["date"]        = CMbDT::format(CMbDT::dateTime(), "%Y/%m/%d");
     }
 
     $datum_to_index['body'] = mb_convert_encoding($datum_to_index['body'], "UTF-8", "Windows-1252");
@@ -361,9 +361,9 @@ class CSearch {
    *
    * @return \Elastica\ResultSet
    */
-  function searchQueryString($operator, $words, $start = 0, $limit = 30, $names_types = null, $aggregation = false) {
+  function searchQueryString($words, $start = 0, $limit = 30, $names_types = null, $aggregation = false, $sejour_id = null, $specific_user=null, $details=null, $date=null, $fuzzy_search = null) {
     $query = new CSearchQuery();
-    $query_string =  $query->searchQueryString($operator, $words, $start, $limit, $names_types, $aggregation);
+    $query_string =  $query->searchQueryString($words, $start, $limit, $names_types, $aggregation, $sejour_id, $specific_user, $details, $date, $fuzzy_search);
 
     //Search on the index.
     $this->_index = $this->loadIndex();
@@ -385,9 +385,9 @@ class CSearch {
    *
    * @return string
    */
-  function constructWordsWithDate($words, $_date, $_min_date, $_max_date) {
+  function constructWordsWithDate($_date, $_min_date, $_max_date) {
     $query = new CSearchQuery();
-    return $query->constructWordsWithDate($words, $_date, $_min_date, $_max_date);
+    return $query->constructWordsWithDate($_date, $_min_date, $_max_date);
   }
 
   /**

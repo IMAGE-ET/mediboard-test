@@ -97,7 +97,7 @@
           {{foreach from=$_object_ref.type key=_key item=_sejour_type}}
             <span>{{$_sejour_type.count}} {{tr}}{{$_sejour_type.key}}{{/tr}} trouvée(s)</span>
             <button class="search notext not-printable" type="button" style="float:right"
-               onclick="Search.searchMoreDetails('{{$_object_ref.object->_id}}', '{{$_object_ref.object->_class}}', '{{$_sejour_type.key}}')">
+               onclick="Search.searchMoreDetails('{{$_object_ref.object->_id}}', '{{$_object_ref.object->_class}}', '{{$_sejour_type.key}}', '{{$fuzzy_search}}')">
             </button>
             <div id="details-{{$_sejour_type.key}}-{{$_object_ref.object->_id}}"></div>
             <hr/>

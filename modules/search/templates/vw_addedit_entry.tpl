@@ -8,6 +8,7 @@
  * @link     http://www.mediboard.org*}}
 
 <script>
+  targetEditCallback = function() { window.url_addeditThesaurusEntry.refreshModal();};
   var form = getForm("addeditFavoris");
   var cont_type = $('cont_types'),
     element_type = form.types;
@@ -16,13 +17,59 @@
 </script>
 
 
-<form method="post" name="addeditFavoris" action="?m=search&tab=vw_search_thesaurus" onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close.curry()});">
+<form method="post" name="addeditFavoris" onsubmit="return Thesaurus.submitThesaurusEntry(this);">
   {{mb_key   object=$thesaurus_entry}}
   {{mb_class object=$thesaurus_entry}}
   <input type="hidden" id="user_id" name="user_id" value="{{$thesaurus_entry->user_id}}"/>
   <input type="hidden" id="types" name="types" value="{{"|"|implode:$search_types}}"/>
   <input type="hidden"  name="del" value="0"/>
+  {{if !$thesaurus_entry->_id}}
+    <input type="hidden"  name="callback" value="Thesaurus.addeditThesaurusCallback"/>
+  {{/if}}
   <table class="main form">
+    {{if $thesaurus_entry->_id}}
+      <tr>
+        <td>
+          <button type="button" class="new" onclick="Thesaurus.addeditTargetEntry('{{$thesaurus_entry->_id}}', window.targetEditCallback)">{{tr}}CSearchCibleEntry-action-add edit{{/tr}}</button>
+        </td>
+        <td>
+          <table>
+            <tr>
+              <td class="halfPane">
+                <fieldset>
+                  <legend>Codes CIM10 : </legend>
+                  <ul class="tags">
+                    {{foreach from=$thesaurus_entry->_cim_targets item=_target}}
+                      <li class="tag" title="{{$_target->_ref_target->libelle}}">
+                        {{$_target->_ref_target->code}} - {{$_target->_ref_target->libelle}}
+                      </li>
+                      <br/>
+                      {{foreachelse}}
+                      <li><span class="empty">{{tr}}CSearchCibleEntry.none{{/tr}}</span></li>
+                    {{/foreach}}
+                  </ul>
+                </fieldset>
+              </td>
+              <td class="halfPane">
+                <fieldset>
+                  <legend>Codes CCAM : </legend>
+                  <ul class="tags">
+                    {{foreach from=$thesaurus_entry->_ccam_targets item=_target}}
+                      <li class="tag" title="{{$_target->_ref_target->libelle_long}}">
+                        {{$_target->_ref_target->code}} - {{$_target->_ref_target->libelle_court}}
+                      </li>
+                      <br/>
+                      {{foreachelse}}
+                      <li><span class="empty">{{tr}}CSearchCibleEntry.none{{/tr}}</span></li>
+                    {{/foreach}}
+                  </ul>
+                </fieldset>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    {{/if}}
     <tr>
       <td colspan="2">
         <span class="circled">
@@ -48,6 +95,20 @@
       </td>
     </tr>
     <tr>
+      <td class="text narrow">
+        {{tr}}CSearchThesaurusEntry-Pattern{{/tr}}
+      </td>
+      <td>
+        <button type="button" title="{{tr}}CSearchThesaurusEntry-Pattern-title and{{/tr}}" onclick="Thesaurus.addPatternToEntry('add')">{{tr}}CSearchThesaurusEntry-Pattern and{{/tr}}</button>
+        <button type="button" title="{{tr}}CSearchThesaurusEntry-Pattern-title or{{/tr}}" onclick="Thesaurus.addPatternToEntry('or')">{{tr}}CSearchThesaurusEntry-Pattern or{{/tr}}</button>
+        <button type="button" title="{{tr}}CSearchThesaurusEntry-Pattern-title not{{/tr}}" onclick="Thesaurus.addPatternToEntry('not')">{{tr}}CSearchThesaurusEntry-Pattern not{{/tr}}</button>
+        <button type="button" title="{{tr}}CSearchThesaurusEntry-Pattern-title like{{/tr}}" onclick="Thesaurus.addPatternToEntry('like')">{{tr}}CSearchThesaurusEntry-Pattern like{{/tr}}</button>
+        <button type="button" title="{{tr}}CSearchThesaurusEntry-Pattern-title obligation{{/tr}}" onclick="Thesaurus.addPatternToEntry('obligation')">{{tr}}CSearchThesaurusEntry-Pattern obligation{{/tr}}</button>
+        <button type="button" title="{{tr}}CSearchThesaurusEntry-Pattern-title prohibition{{/tr}}" onclick="Thesaurus.addPatternToEntry('prohibition')">{{tr}}CSearchThesaurusEntry-Pattern prohibition{{/tr}}</button>
+        <button type="button" title="{{tr}}CSearchThesaurusEntry-Pattern-title without negatif{{/tr}}" onclick="Thesaurus.addPatternToEntry('without_negatif')">{{tr}}CSearchThesaurusEntry-Pattern without negatif{{/tr}}</button>
+      </td>
+    </tr>
+    <tr>
       <td>
         {{mb_label object=$thesaurus_entry field=entry}}
       </td>
@@ -59,14 +120,14 @@
       <td>
         {{mb_label object=$thesaurus_entry field=types}}
       </td>
-      <td id="cont_types">
+      <td id="cont_types" class="columns-2">
         {{foreach from=$types item=_type}}
-          <input type="checkbox" name="addeditFavoris_{{$_type}}" id="{{$_type}}" value="{{$_type}}" {{if in_array($_type, $search_types)}}checked{{/if}}
+          <label> <input type="checkbox" name="addeditFavoris_{{$_type}}" id="{{$_type}}" value="{{$_type}}" {{if in_array($_type, $search_types)}}checked{{/if}}
                  onclick="window.types.toggle(this.value, this.checked);">
-          <label for="{{$_type}}">{{tr}}{{$_type}}{{/tr}}</label>
+          {{tr}}{{$_type}}{{/tr}}</label>
           <br/>
         {{/foreach}}
-      </td>
+        </td>
     </tr>
     <tr>
       <td>

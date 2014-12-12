@@ -15,7 +15,6 @@ $date     = CValue::get("date");
 $user_id  = CValue::get("user_id");
 $type     = CValue::get("type");
 $words    = CValue::get("words");
-$start    = (int)CValue::get("start", 0);
 
 $client_index  = new CSearchLog();
 $client_index->createClient();
@@ -29,7 +28,7 @@ $time              = 0;
 $nbresult          = 0;
 
 try {
-  $results_query = $client_index->searchQueryLogDetails('AND', $words, 0, 30, array($type), false);
+  $results_query = $client_index->searchQueryLogDetails('AND', $words, array($type));
   $results       = $results_query->getResults();
   $time          = $results_query->getTotalTime();
   $nbresult      = $results_query->getTotalHits();
@@ -58,7 +57,6 @@ try {
 }
 
 $smarty = new CSmartyDP();
-$smarty->assign("start", $start);
 $smarty->assign("authors", $authors);
 $smarty->assign("results", $array_results);
 $smarty->assign("highlights", $array_highlights);

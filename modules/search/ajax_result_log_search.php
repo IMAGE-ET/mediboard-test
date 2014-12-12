@@ -30,7 +30,7 @@ new CSearch();
 $client_index = new CSearchLog();
 $client_index->createClient();
 
-$words = $client_index->constructWordsWithDate($words, $_date, $_min_date, $_max_date);
+$words .= $client_index->constructWordsWithDate($_date, $_min_date, $_max_date);
 $words = $client_index->constructWordsWithType($words, $names_types);
 $words = $client_index->constructWordsWithUser($words, $specific_user);
 
@@ -74,7 +74,7 @@ try {
 
   //traitement des contextes référents si aggregation est cochée
   if ($aggregate) {
-    $objects_refs = $client_index->loadAggregationLog($results_query->getAggregations("user_id"));
+    $objects_refs = $client_index->loadAggregationLog($results_query->getAggregations("date_log"));
   }
 }
 catch (Exception $e) {

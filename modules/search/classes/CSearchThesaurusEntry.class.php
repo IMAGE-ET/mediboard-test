@@ -29,6 +29,10 @@ class CSearchThesaurusEntry extends CMbObject {
   public $function_id;
   public $user_id;
 
+  public $_refs_targets;
+  public $_cim_targets;
+  public $_ccam_targets;
+  public $_ngap_targets;
   /**
    * Initialize the class specifications
    *
@@ -49,7 +53,7 @@ class CSearchThesaurusEntry extends CMbObject {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-
+    $backProps["target_entry"] = "CSearchTargetEntry search_thesaurus_entry_id";
     return $backProps;
   }
 
@@ -60,7 +64,7 @@ class CSearchThesaurusEntry extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["entry"]         = "str notNull maxLength|255 seekable";
+    $props["entry"]         = "text";
     $props["types"]         = "str maxLength|255";
     $props["titre"]         = "str maxLength|255 seekable";
     $props["contextes"]     = "enum list|".implode("|", CSearchLog::$names_mapping);
@@ -71,4 +75,35 @@ class CSearchThesaurusEntry extends CMbObject {
 
     return $props;
   }
+
+  /**
+   *
+   * @return array
+   */
+  function loadRefsTargets() {
+    $this->_cim_targets  = $this->_ccam_targets = $this->_ngap_targets = array();
+    $this->_refs_targets = $this->loadBackRefs("target_entry");
+    /** @var CSearchTargetEntry $_target */
+
+    foreach ($this->_refs_targets as $_target) {
+      $_target->loadRefTarget();
+
+      switch ($_target->object_class) {
+        case "CCodeCIM10" :
+          $this->_cim_targets[] = $_target;
+          break;
+        case "CCodeCCAM" :
+          $this->_ccam_targets[] = $_target;
+          break;
+        case "CActeNGAP" :
+          $this->_ngap_targets[] = $_target;
+          break;
+        default:
+          break;
+      }
+    }
+
+    return $this->_refs_targets;
+  }
+
 }

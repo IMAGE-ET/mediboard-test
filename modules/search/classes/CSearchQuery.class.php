@@ -68,7 +68,6 @@ class CSearchQuery {
   /**
    * simple search with an operator and words
    *
-   * @param string  $operator    'And' or 'Or' default : 'Or'
    * @param string  $words       data
    * @param integer $start       the begining of the paging
    * @param integer $limit       the interval of the paging
@@ -77,21 +76,66 @@ class CSearchQuery {
    *
    * @return \Elastica\Query
    */
-  function searchQueryString($operator, $words, $start = 0, $limit = 30, $names_types = null, $aggregation = false) {
+  function searchQueryString($words, $start = 0, $limit = 30, $names_types = null, $aggregation = false, $sejour_id = null, $specific_user =null, $details=null, $date=null, $fuzzy_search =null) {
 
-    $words = CmbString::normalizeUtf8($words);
-    // Define a Query. We want a string query.
-    $elasticaQueryString  = new QueryString();
+    // Initialisation des mots pour la recherche
+    $prats = $this->constructWordsWithPrat($specific_user, $sejour_id);
+    $sejour = $this->constructWordsWithSejour($sejour_id);
+    $words = CmbString::normalizeUtf8(stripcslashes($words));
+    $query_bool = new Elastica\Query\Bool();
 
-    //'And' or 'Or' default : 'Or'
-    $elasticaQueryString->setDefaultOperator($operator);
-    //$elasticaQueryString->setAnalyzer("custom_search_analyzer");
-    $elasticaQueryString->setQuery($words);
+    //query date
+    if ($date) {
+      $query_date = new Elastica\Query\QueryString();
+      $query_date->setQuery($date);
+      $query_date->setDefaultOperator("and");
+      $query_bool->addMust($query_date);
+    }
 
-    // Create the actual search object with some data.
-    $elasticaQuery        = new Query();
-    $elasticaQuery->setQuery($elasticaQueryString);
+    //query mots
+    if ($words) {
+      if ($fuzzy_search) {
+        $query_fuzzy = new Elastica\Query\FuzzyLikeThis();
+        $query_fuzzy->addFields(array("body", "title"));
+        $query_fuzzy->setLikeText($words);
+        $query_fuzzy->setMinSimilarity(0.3);
+        $query_fuzzy->setMaxQueryTerms(3);
+        $query_bool->addMust($query_fuzzy);
+      }
+      else {
+        $query_words = new Elastica\Query\QueryString();
+        $query_words->setQuery($words);
+        $query_words->setFields(array("body", "title"));
+        $query_words->setDefaultOperator("and");
+        $query_bool->addMust($query_words);
+      }
+    }
 
+    //query détails
+    if ($details) {
+      $query_details = new Elastica\Query\QueryString();
+      $query_details->setQuery($details);
+      $query_details->setDefaultOperator("and");
+      $query_bool->addMust($query_details);
+    }
+    else {
+      // query prat_id
+      $query_prat = new Elastica\Query\MultiMatch();
+      $query_prat->setQuery($prats);
+      $query_prat->setFields(array("prat_id"));
+      $query_prat->setOperator(Query\MultiMatch::OPERATOR_OR);
+      $query_prat->setMinimumShouldMatch(1);
+      $query_bool->addMust($query_prat);
+
+      //query sejour
+      if ($sejour) {
+        $query_sejour = new Elastica\Query\QueryString();
+        $query_sejour->setQuery($sejour);
+        $query_sejour->setDefaultOperator("and");
+        $query_bool->addMust($query_sejour);
+      }
+    }
+    $query = new Query($query_bool);
     //create aggregation
     if ($aggregation) {
       // on aggrège d'abord par class d'object référents
@@ -101,32 +145,42 @@ class CSearchQuery {
       $sub_agg_by_type = new CSearchAggregation("Terms", "sub_ref_type", "_type", 10);
       $sub_agg_by_id->_aggregation->addAggregation($sub_agg_by_type->_aggregation);
       $agg_by_class->_aggregation->addAggregation($sub_agg_by_id->_aggregation);
-      $elasticaQuery->addAggregation($agg_by_class->_aggregation);
-
-      // Nuage de mots clés pour recherche automatique.
-//      $agg_cloud = new CSearchAggregation("Terms", "cloud", "body", 400);
-//      $agg_cloud->_aggregation->setMinimumDocumentCount(10);
-//      $agg_cloud->_aggregation->setExclude("(\\b\\w{1,4}\\b|\\d*)", "CANON_EQ|CASE_INSENSITIVE");
-//      $elasticaQuery->addAggregation($agg_cloud->_aggregation);
+      $query->addAggregation($agg_by_class->_aggregation);
     }
     else {
       //  Pagination
-      $elasticaQuery->setFrom($start);    // Where to start
-      $elasticaQuery->setLimit($limit);
+      $query->setFrom($start);    // Where to start
+      $query->setLimit($limit);
     }
 
     //Highlight
-    $elasticaQuery->setHighlight(
-      array(
-        "fields" => array("body" => array(
+    if ($words) {
+      $query->setHighlight(
+        array(
           "pre_tags" => array(" <em> <strong> "),
           "post_tags" => array(" </strong> </em>"),
-          "fragment_size" => 80,
-          "number_of_fragments" => 3,
-        )),
-      ));
-
-    return $elasticaQuery;
+          "fields" => array(
+            "body" => array(
+              "fragment_size" => 50,
+              "number_of_fragments" => 3,
+              "highlight_query" => array(
+                "bool" => array(
+                  "must" => array(
+                    "match"=> array(
+                      "body"=> array(
+                        "query"=> $words
+                      )
+                    )
+                  ),
+                  "minimum_should_match" => 1
+                )
+              )
+            )
+          )
+        )
+      );
+    }
+    return $query;
   }
 
   /**
@@ -139,70 +193,57 @@ class CSearchQuery {
    *
    * @return string
    */
-  function constructWordsWithDate($words, $_date, $_min_date, $_max_date) {
+  function constructWordsWithDate($_date, $_min_date, $_max_date) {
     if ($_date) {
       $_date = CMbDT::format($_date, "%Y/%m/%d");
-      $words .= " date:[".$_date." TO ".$_date."]";
+      return "date:[".$_date." TO ".$_date."]";
     }
     else {
       $_min_date = ($_min_date) ? CMbDT::format($_min_date, "%Y/%m/%d") : "*";
       $_max_date = ($_max_date) ? CMbDT::format($_max_date, "%Y/%m/%d") : "*";
-
-      $words .= " date:[".$_min_date." TO ".$_max_date."]";
+      return "date:[".$_min_date." TO ".$_max_date."]";
     }
-    return $words;
   }
 
   /**
    * * Construct query with prat informations
    *
-   * @param string $words         the words query
    * @param string $specific_user the id of the specific user
    * @param string $sejour_id     the id of the sejour
    *
    * @return string
    */
-  function constructWordsWithPrat($words, $specific_user, $sejour_id) {
+  function constructWordsWithPrat($specific_user, $sejour_id) {
     $users_id = array();
     if (!$specific_user) {
       $user = new CMediusers();
-      if ($sejour_id) {
-        $users = $user->loadPraticiens(PERM_READ);
-      }
-      else {
-        $users = $user->loadPraticiens(PERM_EDIT);
-      }
-
+      $users = ($sejour_id) ? $user->loadPraticiens(PERM_READ) : $user->loadPraticiens(PERM_EDIT);
       foreach ($users as $_user) {
         $users_id[] = $_user->_id;
       }
-      $user_req = implode(' || ', $users_id);
-      $words    = $words . " prat_id:(" . $user_req . ")";
+      $user_req = implode(' ', $users_id);
     }
     else {
       $users_id = explode('|', $specific_user);
-      $user_req = implode(' || ', $users_id);
-      $words    = $words . " prat_id:(" .$user_req . ")";
+      $user_req = implode(' ', $users_id);
     }
 
-    return $words;
+    return $user_req;
   }
 
   /**
    * Construct query with sejour informations (PMSI)
    *
-   * @param string $words  the words query
    * @param string $sejour_id the id of the sejour
    *
    * @return string
    */
-  function constructWordsWithSejour($words, $sejour_id) {
-
+  function constructWordsWithSejour($sejour_id) {
     if ($sejour_id) {
-      $words = $words." object_ref_class:(CSejour) object_ref_id:(".$sejour_id.")";
+      return " object_ref_class:(CSejour) object_ref_id:(".$sejour_id.")";
     }
 
-    return $words;
+    return null;
   }
 
   /**

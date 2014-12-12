@@ -199,13 +199,12 @@ class CSearchLog extends CSearch {
   }
 
   function searchQueryLogDetails ($operator, $words, $names_types = null) {
-    $words = CmbString::normalizeUtf8($words);
+    $words = CmbString::normalizeUtf8(stripcslashes($words));
     // Define a Query. We want a string query.
     $elasticaQueryString  = new QueryString();
 
     //'And' or 'Or' default : 'Or'
     $elasticaQueryString->setDefaultOperator($operator);
-    $elasticaQueryString->setAnalyzer("custom_search_analyzer");
     $elasticaQueryString->setQuery($words);
 
     // Create the actual search object with some data.
@@ -220,6 +219,8 @@ class CSearchLog extends CSearch {
     if ($names_types) {
       $search->addTypes($names_types);
     }
+    $elasticaQuery->setFrom(0);    // Where to start
+    $elasticaQuery->setLimit(1000);
 
     return $search->search($elasticaQuery);
 
@@ -234,13 +235,15 @@ class CSearchLog extends CSearch {
     $objects_refs = array ();
     $agg_user_date     = $aggregation['date_log']['buckets'];
     foreach ($agg_user_date as $_agg) {
+
+      $date = ($_agg["key_as_string"] != "") ? CMbDT::format($_agg["key_as_string"], "%Y-%m-%d 00:00:00"): "";
       $agg_ref_user_id  = $_agg['user_id']['buckets'];
 
       foreach ($agg_ref_user_id as $__agg) {
-        $id_object = $__agg['key'];
+        $id_object = $__agg['key']." ".$date;
         $object    = CMbObject::loadFromGuid("CMediusers-$id_object");
         $object->loadRefFunction();
-        $objects_refs[$id_object]["date_log"] = CMbDT::format($_agg["key_as_string"], "%Y-%m-%d");
+        $objects_refs[$id_object]["date_log"] = $date;
         $objects_refs[$id_object]["object"] = $object;
         $agg_contexte                       = $__agg['contexte']['buckets'];
         foreach ($agg_contexte as $_key => $___agg) {
