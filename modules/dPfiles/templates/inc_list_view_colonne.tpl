@@ -95,16 +95,21 @@
 {{/foreach}}
 
 {{if "dmp"|module_active}}
-  <div id="Category-dmp" style="display: none; clear: both;">
-    <script>
-      Main.add(function(){
-        var form = getForm("FrmClass");
-        new Url("dmp", "vw_consultation")
-          .addParam("object_class", $V(form.selClass))
-          .addParam("object_id", $V(form.selKey))
-          .requestUpdate("Category-dmp");
-      });
-    </script>
-  </div>
+  {{if "mbHost"|module_active}}
+    {{mb_script module="dmp" script="cdmp"}}
+    <div id="Category-dmp" style="display: none; clear: both;">
+      {{mb_include module="dmp" template="inc_default_action_document" consultation=true}}
+      <div id="result_consultation">
+        <script>
+          Main.add(function(){
+            Cdmp.actionConsultation();
+          });
+        </script>
+      </div>
+      <button id="activities_send" type="button" class="save" onclick="getForm('activity_choose').onsubmit()" style="display: none">
+        {{tr}}Save{{/tr}}
+      </button>
+    </div>
+  {{/if}}
 {{/if}}
 <hr style="clear: both;" />
