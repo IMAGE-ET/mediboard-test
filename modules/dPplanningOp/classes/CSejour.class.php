@@ -2506,6 +2506,10 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     $this->_ref_prescription_sejour = new CPrescription();
+    if (!$this->_id) {
+      return $this->_ref_prescription_sejour;
+    }
+
     $this->_ref_prescription_sejour->object_class = "CSejour";
     $this->_ref_prescription_sejour->object_id = $this->_id;
     $this->_ref_prescription_sejour->type = "sejour";
