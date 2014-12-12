@@ -17,13 +17,6 @@ Search = window.Search || {
     return false;
   },
 
-  displayResultsThesaurus: function(form){
-    var url = new Url('search',  'ajax_result_thesaurus');
-    url.addFormData(form);
-    url.requestUpdate('list_log_result');
-    return false;
-  },
-
   showdiff: function (before, after) {
     var url = new Url('search',  'ajax_show_diff_mapping');
     url.addParam("before" , before);
@@ -121,13 +114,14 @@ Search = window.Search || {
     }
   },
 
-  searchMoreDetails: function (object_id, object_ref, type) {
+  searchMoreDetails: function (object_id, object_ref, type, fuzzy_search) {
     var id = "details-"+type+"-"+object_id;
     new Url('search',  'ajax_result_search_details')
       .addParam("object_ref_id", object_id)
       .addParam("object_ref_class",object_ref)
       .addParam("type", type)
       .addParam("words", this.words_request)
+      .addParam("fuzzy_search", fuzzy_search)
       .requestUpdate(id);
   },
 
@@ -163,7 +157,7 @@ Search = window.Search || {
       .addParam("object_id", object_id)
       .addParam("object_type", type)
       .addParam("rmq", rmq)
-      .requestModal("40%", "40%", {title:"Ajout/Édition d'un élément au RSS"});
+      .requestModal("40%", "40%");
   },
 
   updateIndex : function (types) {
@@ -185,21 +179,6 @@ Search = window.Search || {
     return false;
   },
 
-  addeditThesaurusEntry : function (search_agregation, search_body, search_user_id, search_types, search_contexte, thesaurus_entry) {
-    var url = new Url('search',  'ajax_addedit_thesaurus_entry');
-    url.addParam("search_agregation" , search_agregation);
-    url.addParam("search_body"       , search_body);
-    url.addParam("search_user_id"    , search_user_id);
-    url.addParam("search_types[]"    , search_types, true);
-    url.addParam("search_contexte"   , search_contexte);
-    url.addParam("thesaurus_entry"   , thesaurus_entry);
-    url.requestModal("60%", "60%", {title:'Ajout/Édition d\'un favori',
-      onClose: function () {
-        document.location.reload();
-      }
-    });
-  },
-
   loadSearchItems: function (rss_id) {
     var url = new Url('search', 'ajax_load_search_items');
     url.addParam("rss_id", rss_id);
@@ -207,7 +186,6 @@ Search = window.Search || {
   },
 
   downloadCSV: function() {
-    console.log(this.export_csv);
     var url = new Url('search', 'download_search_results', 'raw');
     url.pop(10,10, "export_recherches", null, null,
       {"results" : this.export_csv, "accept_utf8" : "1"});

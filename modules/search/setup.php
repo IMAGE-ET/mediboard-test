@@ -70,6 +70,19 @@ class CSetupsearch extends CSetup {
           ) /*! ENGINE=MyISAM */ COMMENT = 'Table des Search Items';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.06";
+    $this->makeRevision("0.06");
+    $query =  "
+        CREATE TABLE  `search_thesaurus_entry_target` (
+          `search_thesaurus_entry_target_id` BIGINT NOT NULL AUTO_INCREMENT ,
+          `search_thesaurus_entry_id` BIGINT NOT NULL ,
+          `object_class` VARCHAR(50),
+          `object_id`  VARCHAR(50),
+          PRIMARY KEY (`search_thesaurus_entry_target_id`),
+          INDEX (`search_thesaurus_entry_id`),
+          INDEX (`object_id`, `object_class`)
+          ) /*! ENGINE=MyISAM */ COMMENT = 'Table des cibles de favoris';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.07";
   }
 }

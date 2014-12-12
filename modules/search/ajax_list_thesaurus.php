@@ -9,14 +9,17 @@
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
 
-$date  = CMbDT::date("-1 month");
 $user  = CMediusers::get();
 $user->loadRefFunction()->loadRefGroup();
-
+$start         = (int)CValue::get("start_thesaurus", 0);
 
 $entry = new CSearchThesaurusEntry();
+$where ["user_id"] = " = $user->_id";
+$step = 10;
+$limit = "$start , $step";
 $entry->user_id =  "$user->_id";
-$thesaurus = $entry->loadMatchingList();
+$thesaurus = $entry->loadList($where, null, $limit);
+$nbThesaurus = $entry->countList($where);
 foreach ($thesaurus as $_thesaurus) {
   /** @var $_thesaurus  CSearchThesaurusEntry*/
   $_thesaurus->loadRefsTargets();
@@ -28,19 +31,11 @@ if (CAppUI::conf("search active_handler active_handler_search_types", $group)) {
   $types = explode("|", CAppUI::conf("search active_handler active_handler_search_types", $group));
 }
 
-$log = new CSearchLog();
-$contextes = $log->loadContextes();
-
-// Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("date", $date);
-$smarty->assign("start", 0);
-$smarty->assign("results", array());
-$smarty->assign("time", 0);
-$smarty->assign("nbresult", 0);
 $smarty->assign("thesaurus", $thesaurus);
+$smarty->assign("start_thesaurus", $start);
 $smarty->assign("entry", $entry);
 $smarty->assign("types", $types);
 $smarty->assign("user", $user);
-$smarty->assign("contextes", $contextes);
-$smarty->display("vw_search_thesaurus.tpl");
+$smarty->assign("nbThesaurus", $nbThesaurus);
+$smarty->display("inc_search_thesaurus_entry.tpl");

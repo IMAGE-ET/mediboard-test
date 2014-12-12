@@ -8,14 +8,15 @@
  * @link     http://www.mediboard.org*}}
 
 {{mb_script module=search script=Search}}
+{{mb_script module=search script=Thesaurus ajax=true}}
 <script>
   Main.add(function () {
     var form = getForm("esSearchFavoris");
-    window.calendar_date = Calendar.regField(form._min_date);
-    window.calendar_date = Calendar.regField(form._max_date);
+    window.calendar_min_date = Calendar.regField(form._min_date);
+    window.calendar_max_date = Calendar.regField(form._max_date);
     window.calendar_date = Calendar.regField(form._date);
     form.onsubmit();
-    filterContextes();
+    Thesaurus.updateListThesaurus();
   });
 
   function changePage(start) {
@@ -23,15 +24,21 @@
     $V(form.elements.start, start);
     form.onsubmit();
   }
+  function changePageThesaurus(start) {
+    var form = getForm("esSearchFavoris");
+    $V(form.elements.start_thesaurus, start);
+    Thesaurus.updateListThesaurus(start);
+  }
 
 </script>
-<form method="get" name="esSearchFavoris" action="?m=search" class="watched prepared" onsubmit="return Search.displayResultsThesaurus(this);" onchange="onchange=$V(this.form, '0')">
+<form method="get" name="esSearchFavoris" action="?m=search" class="watched prepared" onsubmit="return Thesaurus.displayResultsThesaurus(this);" onchange="onchange=$V(this.form.start, '0'); $V(this.form.start_thesaurus, '0')">
   <input type="hidden" name="start" value="0">
+  <input type="hidden" name="start_thesaurus" value="0">
   <input type="hidden" name="user_id" value="{{$app->_ref_user->_id}}">
   <table class="main layout">
     <tr>
       <!-- Fieldset de tri par date -->
-      <td class="halfPane">
+      <td style="width: 30%">
         <fieldset>
           <legend>Intervalle de date </legend>
           <table>
@@ -87,7 +94,8 @@
             </tr>
           </table>
         </fieldset>
-        {{mb_include module=search template=inc_search_thesaurus_entry}}
+        <div id="list_thesaurus_entry">
+        </div>
       </td>
     </tr>
   </table>

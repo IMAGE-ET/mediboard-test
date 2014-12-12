@@ -11,12 +11,12 @@
   <tr>
     <th class="title" colspan="4">Liste des Résultats  <br/> ({{$nbresult}} obtenus en {{$time}}ms)</th>
   </tr>
-  {{mb_include module=system template=inc_pagination change_page="changePage" total=$nbresult current=$start step=30}}
+  {{mb_include module=system template=inc_pagination change_page="changePage" total=$nbresult current=$start step=20}}
   <tr>
     <th class="narrow">Date <br /> Type</th>
     <th>Document</th>
     <th class="narrow">Pertinence</th>
-    <th class="narrow"></th>
+    <th class="text narrow">Ajouter aux favoris</th>
   </tr>
   <tr>
     <th colspan="6" class="section">Triés par pertinence</th>
@@ -41,7 +41,7 @@
       </td>
       <td class="button">
         <button class="favoris notext" title="Ajouter aux favoris"
-                onclick="Search.addeditThesaurusEntry('{{$_result._source.aggregation}}', '{{$_result._source.body}}', '{{$_result._source.user_id}}', '{{$_result._source.types}}', '{{$_result._type}}', null)"></button>
+                onclick="Thesaurus.addeditThesaurusEntry('{{$_result._source.aggregation}}', '{{$_result._source.body}}', '{{$_result._source.user_id}}', '{{$_result._source.types}}', '{{$_result._type}}', null)"></button>
       </td>
     </tr>
   {{foreachelse}}

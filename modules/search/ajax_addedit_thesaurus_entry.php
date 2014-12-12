@@ -21,6 +21,7 @@ $thesaurus_entry = new CSearchThesaurusEntry();
 if ($thesaurus_entry_id) {
   $thesaurus_entry->load($thesaurus_entry_id);
   $search_types = explode("|", $thesaurus_entry->types);
+  $thesaurus_entry->loadRefsTargets();
 }
 else {
   $thesaurus_entry->agregation = $search_agregation;
