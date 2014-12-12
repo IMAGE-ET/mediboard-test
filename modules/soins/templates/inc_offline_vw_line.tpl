@@ -18,8 +18,17 @@
       {{/if}}
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$line->_ref_praticien}}
       <div class="compact">
-        Du {{mb_value object=$line field=debut}} {{if $line->time_debut}}à {{mb_value object=$line field=time_debut}}{{/if}} au
-          {{$line->_fin_reelle|date_format:$conf.date}} à {{$line->_fin_reelle|date_format:$conf.time}}
+        Du {{$line->_debut_reel|date_format:$conf.date}} {{$line->_debut_reel|date_format:$conf.time}}
+        {{if $line->duree && $line->unite_duree}}
+          au {{$line->_fin_reelle|date_format:$conf.date}} {{$line->_fin_reelle|date_format:$conf.time}}
+        {{else}}
+          {{assign var=_line_chapitre value=$line->_chapitre}}
+          {{if $line->_class == "CPrescriptionLineMedicament" || $conf.dPprescription.CCategoryPrescription.$_line_chapitre.fin_sejour}}
+            à Fin du séjour
+          {{else}}
+            au {{$line->_fin_reelle|date_format:$conf.date}} {{$line->_fin_reelle|date_format:$conf.time}}
+          {{/if}}
+        {{/if}}
       </div>
     </td>
     <td class="text" style="vertical-align: top">

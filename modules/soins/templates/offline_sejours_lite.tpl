@@ -25,10 +25,6 @@
       width: 100% !important;
       font-size: inherit !important;
     }
-
-    table.break_before {
-      page-break-before: always;
-    }
   }
 </style>
 
@@ -128,9 +124,17 @@
     {{* Plan de soins *}}
     {{$_patient_data.plan_soins|smarty:nodefaults}}
 
+    {{if $_patient_data.transmissions|@count ||
+         $_patient_data.observations|@count  ||
+         $sejour->_ref_obs_entree->_id       ||
+         $_patient_data.consultations|@count ||
+         $_patient_data.constantes}}
+      <hr style="border: 0; page-break-after: always;" />
+    {{/if}}
+
     {{* Transmissions *}}
     {{if $_patient_data.transmissions|@count}}
-      <table class="tbl break_before">
+      <table class="tbl">
         <tr>
           <th class="title" colspan="9">
             Transmissions - {{$patient}}
@@ -146,7 +150,8 @@
 
     {{* Observations *}}
     {{if $_patient_data.observations|@count || $sejour->_ref_obs_entree->_id}}
-      <table class="tbl break_before">
+      <br />
+      <table class="tbl">
         <tr>
           <th class="title" colspan="7">
             Observations - {{$patient}}
@@ -168,7 +173,8 @@
 
     {{* Consultations *}}
     {{if $_patient_data.consultations|@count}}
-      <table class="tbl break_before">
+      <br />
+      <table class="tbl">
         <tr>
           <th class="title" colspan="7">
             Consultations - {{$patient}}
@@ -184,7 +190,7 @@
 
     {{* Constantes *}}
     {{if $_patient_data.constantes}}
-      <hr style="border: 0; page-break-after: always;" />
+      <br />
       {{$_patient_data.constantes|smarty:nodefaults}}
     {{/if}}
   </div>
