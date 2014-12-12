@@ -26,6 +26,7 @@
   <li><a href="#CMovement">{{tr}}CMovement{{/tr}}</a></li>
   <li><a href="#config-synchro_sejour_affectation">{{tr}}config-synchro_sejour_affectation{{/tr}}</a></li>
   <li><a href="#config-colors">{{tr}}config-color_type_hospi{{/tr}}</a></li>
+  <li><a href="#config-prestations">Prestations</a></li>
   <li><a href="#CConfigEtab">Config par établissement</a>
   </li>
 </ul>
@@ -56,6 +57,10 @@
 
 <div id="config-colors" style="display: none">
   {{mb_include template=inc_config_color_type_hospi}}
+</div>
+
+<div id="config-prestations" style="display: none;">
+  {{mb_include template=inc_config_prestations}}
 </div>
 
 <div id="CConfigEtab" style="display: none"></div>

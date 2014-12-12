@@ -11,6 +11,12 @@
 
 {{mb_default var=type value="souhait"}}
 
+<input type="radio" style="display: none;" value=""
+       name="liaisons_j[{{$prestation_id}}][{{$_date}}][{{$type}}][{{$liaison->_id}}][item_{{$type}}_id]"
+       onclick="this.up('td').select('.sous_item').each(function(input) {
+                 input.checked = false;
+               });" />
+
 {{foreach from=$_prestation->_ref_items item=_item}}
   {{if $_item->_refs_sous_items|@count && $type == "souhait"}}
     <fieldset style="display: inline-block;">

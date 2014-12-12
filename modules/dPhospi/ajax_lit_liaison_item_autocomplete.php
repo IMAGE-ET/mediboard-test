@@ -24,10 +24,15 @@ $items_prestations_ids = CMbArray::pluck($items_prestations, "object_id");
 $where = array();
 $where["object_id"] = CSQLDataSource::prepareNotIn($items_prestations_ids);
 $where["object_class"] = " = 'CPrestationJournaliere'";
-$item_prestation = new CItemPrestation;
+$where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+
+$ljoin = array();
+$ljoin["prestation_journaliere"] = "prestation_journaliere.prestation_journaliere_id = item_prestation.object_id";
+
+$item_prestation = new CItemPrestation();
 
 /** @var CItemPrestation[] $items_prestations */
-$items_prestations = $item_prestation->seek($keywords, $where);
+$items_prestations = $item_prestation->seek($keywords, $where, null, null, $ljoin);
 
 $items_by_prestation = array();
 $prestations = array();
@@ -47,7 +52,7 @@ foreach ($items_by_prestation as &$_items) {
   ksort($_items);
 }
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 
 $smarty->assign("items_by_prestation", $items_by_prestation);
 $smarty->assign("prestations", $prestations);

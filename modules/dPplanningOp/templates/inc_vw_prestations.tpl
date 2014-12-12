@@ -55,7 +55,15 @@
       form.up('div.modal').down('button.change').click();
     });
   };
-  
+
+  emptyLiaison = function(button) {
+    var tr_souhait = button.up("tr").next("tr");
+    var tr_realise = tr_souhait.next("tr");
+    tr_souhait.down("input[type=radio]").checked = "checked";
+    tr_souhait.down("input[type=radio]").onclick();
+    tr_realise.down("input[type=radio]").checked = "checked";
+    tr_realise.down("input[type=radio]").onclick();
+  }
 </script>
 {{math equation=x+2 x=$dates|@count assign="colspan"}}
 
@@ -168,6 +176,7 @@
                   <tr>
                     <th class="category" colspan="2">
                       {{mb_include module=system template=inc_object_history object=$liaison}}
+                      <button type="button" class="cancel notext compact" onclick="emptyLiaison(this)" style="float: left;"></button>
                       {{$_prestation}}
                     </th>
                   </tr>
@@ -179,7 +188,7 @@
                       {{mb_include module=planningOp template=inc_vw_prestations_line}}
                     </td>
                   </tr>
-                  <tr {{if $context != "all"}} style="display: none;" {{/if}}>
+                  <tr {{if $context != "all" || !$conf.dPhospi.show_realise}}style="display: none;"{{/if}}>
                     <th>
                       Réalisé
                     </th>

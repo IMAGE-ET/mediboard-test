@@ -39,6 +39,9 @@ $dPconfig["dPhospi"] = array (
   "show_sortie_mvt"       => "0",
   "show_uf"               => "1",
   "nb_days_prolongation"  => "30",
+  "show_realise"          => "1",
+  "show_souhait_placement" => "0",
+
   "CLit" => array(
     "prefixe"         => "",
     "show_in_tableau" => 0,
