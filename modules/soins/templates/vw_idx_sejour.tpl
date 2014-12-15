@@ -352,23 +352,24 @@
                   </a>
                 </td>
 
-                <td>
-                  {{if $sejour->_ref_prescriptions && array_key_exists('sejour', $sejour->_ref_prescriptions)}}
-                    {{assign var=prescription value=$sejour->_ref_prescriptions.sejour}}
-                    {{if $prescription->_id}}
-                      {{if @$conf.object_handlers.CPrescriptionAlerteHandler}}
-                        {{mb_script module=system script=alert}}
-                        {{mb_include module=system template=inc_icon_alerts object=$prescription nb_alerts=$prescription->_count_alertes}}
-                        {{mb_include module=system template=inc_icon_alerts object=$prescription level="high"
-                        nb_alerts=$prescription->_count_urgences}}
-                      {{elseif $prescription->_count_fast_recent_modif}}
-                        <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
-                        {{mb_include module=system template=inc_vw_counter_tip count=$prescription->_count_fast_recent_modif top="-5px" right="-15px"}}
+                {{if "soins dossier_soins show_ampoule_patient"|conf:"CGroups-$g"}}
+                  <td>
+                    {{if $sejour->_ref_prescriptions && array_key_exists('sejour', $sejour->_ref_prescriptions)}}
+                      {{assign var=prescription value=$sejour->_ref_prescriptions.sejour}}
+                      {{if $prescription->_id}}
+                        {{if @$conf.object_handlers.CPrescriptionAlerteHandler}}
+                          {{mb_script module=system script=alert}}
+                          {{mb_include module=system template=inc_icon_alerts object=$prescription nb_alerts=$prescription->_count_alertes}}
+                          {{mb_include module=system template=inc_icon_alerts object=$prescription level="high"
+                          nb_alerts=$prescription->_count_urgences}}
+                        {{elseif $prescription->_count_fast_recent_modif}}
+                          <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
+                          {{mb_include module=system template=inc_vw_counter_tip count=$prescription->_count_fast_recent_modif top="-5px" right="-15px"}}
+                        {{/if}}
                       {{/if}}
                     {{/if}}
-                  {{/if}}
-                </td>
-
+                  </td>
+                {{/if}}
                 <td style="padding: 1px;" >
                   {{if $isImedsInstalled}}
                     <div class="Imeds_button" onclick="loadViewSejour('{{$sejour->_id}}', '{{$date}}', this, 'Imeds');">
