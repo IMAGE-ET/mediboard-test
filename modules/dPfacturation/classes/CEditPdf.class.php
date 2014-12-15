@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPfacturation
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
@@ -212,8 +212,8 @@ class CEditPdf{
   
       $this->function_prat = $this->praticien->loadRefFunction();
       $this->group = $this->function_prat->loadRefGroup();
-      $this->adherent = $this->praticien->adherent;
-      
+      $this->adherent = $this->facture->loadNumAdherent($this->praticien->adherent)["compte"];
+
       if ($this->type_pdf == "BVR") {
         $this->loadTotaux();
         $this->acompte = 0;
@@ -805,8 +805,11 @@ class CEditPdf{
     $genre = "01";
     $montant = sprintf('%010d', $montant_facture*100);
     $cle = $this->facture->getNoControle($genre.$montant);
-    $this->adherent2 = str_replace(' ', '', $this->praticien->adherent);
-    $this->adherent2 = str_replace('-', '', $this->adherent2);
+    $num_adherent = $this->facture->loadNumAdherent($this->praticien->adherent);
+    $this->adherent2  = $num_adherent["bvr"];
+    if (!$this->adherent) {
+      $this->adherent = $num_adherent["compte"];
+    }
     $_num_reference = str_replace(' ', '', $this->facture->num_reference);
     $bvr = $genre.$montant.$cle.">".$_num_reference."+ ".$this->adherent2.">";
     

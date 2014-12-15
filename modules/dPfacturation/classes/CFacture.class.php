@@ -914,19 +914,20 @@ class CFacture extends CMbObject {
         $this->loadRefPraticien();
       }
 
-      // Le numéro de référence doit comporter 16 ou 27 chiffres
+      // Le numéro de référence doit comporter 16 ou 27 chiffres avec la clé de controle
       $num = $this->_id;
-      $nbcolonnes = 27 - strlen($this->_ref_praticien->debut_bvr);
+      $nbcolonnes = 26 - strlen($this->_ref_praticien->debut_bvr);
       $num = sprintf("%0".$nbcolonnes."s", $num);
       $num = $this->_ref_praticien->debut_bvr.$num;
+      $cle_ref = $this->getNoControle($num);
+      $num = $num.$cle_ref;
       if ((!$this->num_reference || $num != $this->num_reference)) {
         $this->num_reference = $num;
         $this->store();
       }
 
       $genre = "01";
-      $adherent2 = str_replace(' ', '', $this->_ref_praticien->adherent);
-      $adherent2 = str_replace('-', '', $adherent2);
+      $adherent2 = $this->loadNumAdherent($this->_ref_praticien->adherent)["bvr"];
       foreach ($this->_montant_factures_caisse as $montant_facture) {
         $montant = sprintf('%010d', $montant_facture*100);
         $cle = $this->getNoControle($genre.$montant);
@@ -1312,5 +1313,26 @@ class CFacture extends CMbObject {
       $template->addProperty("Facture - Rétrocessions - Montant total", $this->_montant_retrocession);
     }
     $this->notify("AfterFillLimitedTemplate", $template);
+  }
+
+
+  function loadNumAdherent($num) {
+    $adherent_first = str_replace(' ', '-', $num);
+    $adherent = explode('-', $adherent_first);
+    $num_adherent = 0;
+    if (count($adherent) == 1){
+      $num_adherent = $adherent[0];
+    }
+    elseif (count($adherent) >= 2){
+      $nbcolonnes = 8- strlen($adherent[0]);
+      $adherent_first = $adherent[0]."-".$adherent[1];
+      $num_adherent = $adherent[0].sprintf("%0".$nbcolonnes."s", $adherent[1]);
+    }
+
+    $cle_adherent = $this->getNoControle($num_adherent);
+    $numero_adherent = $adherent_first."-$cle_adherent";
+
+    return array("compte"=>$numero_adherent,
+                 "bvr" => $num_adherent.$cle_adherent);
   }
 }
