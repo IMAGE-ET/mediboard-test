@@ -13,7 +13,9 @@
 
   Main.add(function(){
     graph.options.legend.container = $('display-legend-{{$type_graph}}');
-    graph.options.mouse.trackFormatter = eval(graph.options.mouse.trackFormatter);
+    if (graph.options.mouse) {
+      graph.options.mouse.trackFormatter = eval(graph.options.mouse.trackFormatter);
+    }
     Flotr.draw($('display-graph-{{$type_graph}}'), graph.series, graph.options);
     {{if $can_zoom}}
       var select = DOM.select({},
