@@ -423,9 +423,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
 
     $dateHeure = "$date $heure";
 
-    if (CAppUI::conf("hprimxml notifier_entree_reelle") &&
-        (self::getEtatVenue($node) == "encours" || self::getEtatVenue($node) == "clôturée")
-    ) {
+    if ($mbVenue->entree_reelle && CAppUI::conf("hprimxml notifier_entree_reelle")) {
       $mbVenue->entree_reelle = $dateHeure;
     }
     else {
