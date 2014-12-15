@@ -16,6 +16,7 @@ CConfiguration::register(
       "soins" => array(
         "dossier_soins" => array(
           "show_bouton_plan_soins" => "bool default|1",
+          "show_ampoule_patient"   => "bool default|1"
         ),
         "bilan" => array(
           "hour_before" => "num min|0 default|12",
