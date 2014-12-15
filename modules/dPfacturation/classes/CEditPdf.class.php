@@ -212,7 +212,8 @@ class CEditPdf{
   
       $this->function_prat = $this->praticien->loadRefFunction();
       $this->group = $this->function_prat->loadRefGroup();
-      $this->adherent = $this->facture->loadNumAdherent($this->praticien->adherent)["compte"];
+      $adherent = $this->facture->loadNumAdherent($this->praticien->adherent);
+      $this->adherent = $adherent["compte"];
 
       if ($this->type_pdf == "BVR") {
         $this->loadTotaux();
