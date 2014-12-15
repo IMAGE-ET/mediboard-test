@@ -39,16 +39,21 @@
         afterUpdateElement: function(field,selected){
           var id = selected.getAttribute("data-id");
           var name = selected.down('span.view').innerHTML;
-          addDest(id, name);
+          var function_color = selected.down('div', 0).getStyle('border-left');
+          addDest(id, name, function_color);
           $V(element, '');
         }
       });
     });
   {{/if}}
 
-  addDest = function(id, name) {
+  addDest = function(id, name, style) {
     var dest_list = $('list_dest');
-    dest_list.insert('<li id="dest_'+id+'">'+name+'<input type="hidden" name="dest[]" value="'+id+'"/><button class="delete notext" type="button" style="display: inline;" onclick="removeDest(\''+id+'\');"></button></li>');
+    var existing = $("dest_"+id);
+    if (existing) {
+      return;
+    }
+    dest_list.insert('<li id="dest_'+id+'" style="border-left:'+style+';">'+name+'<input type="hidden" name="dest[]" value="'+id+'"/><button class="delete notext" type="button" style="display: inline;" onclick="removeDest(\''+id+'\');"></button></li>');
   };
 
   removeDest = function(id) {
