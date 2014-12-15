@@ -210,7 +210,6 @@ function graphWorkflowOperation(
           var label = obj.series.label;
           var total = obj.nearest.allSeries[0].data[obj.index][1];
           var date = graph.options.xaxis.ticks[obj.index][1];
-          console.log(obj);
 
           // Barre des nombres d'interventions
           if (obj.series.bars.show) {
