@@ -53,13 +53,13 @@ else {
 $where[] = "operations.plageop_id ".CSQLDataSource::prepareIn(array_keys($plages))." OR (operations.plageop_id IS NULL AND operations.date = '$date')";
 
 // orders & filters
-$order_col         = CValue::get("order_col");
-if ($order_col) {
+$order_col = CValue::get("order_col");
+if ($order_col && $type) {
   CValue::setSession("order_col_" . $type, $order_col);
 }
 
 //order way
-$order_way         = CValue::get("order_way");
+$order_way = CValue::get("order_way");
 if ($order_way && $type) {
   CValue::setSession("order_way_" . $type, $order_way);
 }
@@ -72,12 +72,14 @@ switch ($type) {
     // $order = "operations.time_operation";
     $order_col = CValue::getOrSession("order_col_$type", "time_operation");
     break;
+
   case 'encours':
     $where["operations.entree_salle"] = "IS NOT NULL";
     $where["operations.sortie_salle"] = "IS NULL";
     // $order = "operations.entree_salle";
     $order_col = CValue::getOrSession("order_col_$type", "entree_salle");
     break;
+
   case 'ops':
     $where["operations.sortie_salle"] = "IS NOT NULL";
     $where["operations.entree_reveil"] = "IS NULL";
@@ -85,18 +87,24 @@ switch ($type) {
     // $order = "operations.sortie_salle";
     $order_col = CValue::getOrSession("order_col_$type", "sortie_salle");
     break;
+
   case 'reveil':
     $where["operations.entree_reveil"] = "IS NOT NULL";
     $where["operations.sortie_reveil_reel"] = "IS NULL";
     // $order = "operations.entree_reveil";
     $order_col = CValue::getOrSession("order_col_$type", "entree_reveil");
     break;
-  case 'out':
-    $where["operations.sortie_reveil_reel"] = "IS NOT NULL";
+
+  default:
+    $_where["operations.sortie_reveil_reel"] = "IS NOT NULL";
     // $order = "operations.sortie_reveil_possible DESC";
     $order_col = CValue::getOrSession("order_col_$type", "sortie_reveil_possible");
     $order_way = CValue::getOrSession("order_way_$type", "DESC");
     break;
+}
+
+if ($order_col == "_patient") {
+  $order_col = "entree_salle";
 }
 
 // Chargement des interventions    
@@ -225,6 +233,13 @@ if ($type == "reveil" || $type == "preop") {
     // Chargement des anesths
     $listAnesths = $curr_user->loadAnesthesistes(PERM_DENY);
   }
+}
+
+//tri par patient
+if (CValue::getOrSession("order_col_" . $type) == "_patient") {
+  $sorter = CMbArray::pluck($listOperations, "_ref_patient", "nom");
+  array_multisort($sorter, $order_way_final == "ASC" ? SORT_ASC : SORT_DESC, $listOperations);
+  $order_col = CValue::getOrSession("order_col_" . $type);
 }
 
 // Création du template

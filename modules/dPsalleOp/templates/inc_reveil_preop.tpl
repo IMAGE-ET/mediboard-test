@@ -46,7 +46,7 @@
     <th>{{mb_colonne class="COperation" field="time_operation" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
     <th>{{mb_colonne class="COperation" field="salle_id" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
     <th>{{mb_colonne class="COperation" field="chir_id" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
-    <th>{{mb_title class="COperation" field="_patient_id"}} <input type="text" name="_seek_patient_preop" value="" class="seek_patient" onkeyup="seekPatient(this);" onchange="seekPatient(this);" /> </th>
+    <th>{{mb_colonne class="COperation" field="_patient" order_col=$order_col order_way=$order_way function=orderTabpreop}} <input type="text" name="_seek_patient_preop" value="" class="seek_patient" onkeyup="seekPatient(this);" onchange="seekPatient(this);" /> </th>
     {{if $use_poste}}
       <th>{{mb_colonne class="COperation" field="poste_preop_id" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
     {{/if}}

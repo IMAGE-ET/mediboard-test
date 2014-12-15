@@ -70,7 +70,7 @@
   <tr>
     <th>{{mb_colonne class="COperation" field="salle_id" order_col=$order_col order_way=$order_way function=orderTabreveil}}</th>
     <th>{{mb_colonne class="COperation" field="chir_id" order_col=$order_col order_way=$order_way function=orderTabreveil}}</th>
-    <th>{{tr}}SSPI.Patient{{/tr}} <input type="text" name="_seek_patient_preop" value="" class="seek_patient" onkeyup="seekPatient(this);" onchange="seekPatient(this);" /></th>
+    <th>{{mb_colonne class="COperation" field="_patient" order_col=$order_col order_way=$order_way function=orderTabreveil}} <input type="text" name="_seek_patient_preop" value="" class="seek_patient" onkeyup="seekPatient(this);" onchange="seekPatient(this);" /></th>
     <th class="narrow"></th>
     {{if $use_poste}}
       <th>{{mb_colonne class="COperation" field="poste_sspi_id" order_col=$order_col order_way=$order_way function=orderTabreveil}}</th>
