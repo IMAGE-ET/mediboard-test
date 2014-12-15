@@ -368,7 +368,9 @@
                 </tr>
                 {{if $conf.dPccam.CCodable.use_frais_divers.CSejour}}
                   <tr id="fraisdivers" style="display: none;">
-                    {{mb_include module=ccam template=inc_frais_divers}}
+                    <td>
+                      {{mb_include module=ccam template=inc_frais_divers}}
+                    </td>
                   </tr>
                 {{/if}}
                 <tr id="three" style="display: none;">
