@@ -60,23 +60,28 @@ function graphWorkflowOperation(
   $query = new CRequest();
   $query->addColumn("DATE_FORMAT(date_operation, '%Y-%m')", "mois");
   $query->addColumn("COUNT(operations.operation_id)", "op_count");
-  $query->addColumn("AVG(DATEDIFF(ow.date_operation, ow.date_creation      ))", "creation"               );
-  $query->addColumn("AVG(DATEDIFF(ow.date_operation, ow.date_consult_chir  ))", "consult_chir"           );
-  $query->addColumn("AVG(DATEDIFF(ow.date_operation, ow.date_consult_anesth))", "consult_anesth"         );
-  $query->addColumn("AVG(DATEDIFF(ow.date_operation, ow.date_visite_anesth ))", "visite_anesth"          );
-  $query->addColumn("AVG(DATEDIFF(ow.date_operation, ow.date_creation_consult_chir  ))", "creation_consult_chir"  );
-  $query->addColumn("AVG(DATEDIFF(ow.date_operation, ow.date_creation_consult_anesth))", "creation_consult_anesth");
-  $query->addTable("operations");
-  $query->addLJoin("operation_workflow AS ow ON ow.operation_id = operations.operation_id");
 
   // Prévention des données négatives aberrantes
   $tolerance_in_days = 4;
-  $query->addWhere("ow.date_creation                IS NULL OR DATEDIFF(ow.date_operation, ow.date_creation               ) > -$tolerance_in_days");
-  $query->addWhere("ow.date_consult_chir            IS NULL OR DATEDIFF(ow.date_operation, ow.date_consult_chir           ) > -$tolerance_in_days");
-  $query->addWhere("ow.date_consult_anesth          IS NULL OR DATEDIFF(ow.date_operation, ow.date_consult_anesth         ) > -$tolerance_in_days");
-  $query->addWhere("ow.date_visite_anesth           IS NULL OR DATEDIFF(ow.date_operation, ow.date_visite_anesth          ) > -$tolerance_in_days");
-  $query->addWhere("ow.date_creation_consult_chir   IS NULL OR DATEDIFF(ow.date_operation, ow.date_creation_consult_chir  ) > -$tolerance_in_days");
-  $query->addWhere("ow.date_creation_consult_anesth IS NULL OR DATEDIFF(ow.date_operation, ow.date_creation_consult_anesth) > -$tolerance_in_days");
+  $columns = array(
+    "creation",
+    "consult_chir",
+    "consult_anesth",
+    "visite_anesth",
+    "creation_consult_chir",
+    "creation_consult_anesth",
+  );
+
+  foreach ($columns as $_column) {
+    $field = "date_$_column";
+    $diff = "DATEDIFF(ow.date_operation, ow.$field)";
+    $query->addColumn("AVG  (IF($diff > -$tolerance_in_days, $diff, NULL))", $_column);
+    $query->addColumn("COUNT(IF($diff > -$tolerance_in_days, $diff, NULL))", "count_$_column");
+  }
+
+  $query->addTable("operations");
+  $query->addLJoin("operation_workflow AS ow ON ow.operation_id = operations.operation_id");
+
 
   $query->addWhereClause("date_operation", "BETWEEN '$date_min' AND '$date_max'");
   $query->addWhereClause("salle_id", CSQLDataSource::prepareIn(array_keys($salles)));
@@ -136,52 +141,101 @@ function graphWorkflowOperation(
   $series["op_count"]["color"] = "#888";
 
   $total = 0;
-
+  $counts = array();
   foreach ($months as $_month => $_tick) {
     $values =  isset($all_values[$_month]) ? $all_values[$_month] : array_fill_keys(array_keys($labels), null);
     unset($values["mois"]);
+
+    $_counts = array();
     foreach ($values as $_name => $_value) {
+      $parts = explode("_", $_name, 2);
+      if ($parts[0] == "count") {
+        $_counts[$labels[$parts[1]]] = $_value;
+        continue;
+      }
+
       $series[$_name]["data"][] = array($_tick, $_value);
     }
+
     $total += $values["op_count"];
+    $counts[] = $_counts;
   }
 
   // Set up the title for the graph
   $title = "Anticipation de la programmation des interventions";
   $subtitle = "$total interventions";
+
   if ($prat_id) {
     $subtitle   .= " - Dr $prat->_view";
   }
+
   if ($salle_id) {
     $salle = reset($salles);
     $subtitle   .= " - $salle->_view";
   }
+
   if ($code_ccam) {
     $subtitle   .= " - CCAM : $code_ccam";
   }
+
+  if (!$hors_plage) {
+    $subtitle   .= " - sans hors plage";
+  }
+
   if ($type_sejour) {
     $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_sejour");
   }
 
   $options = array(
-    'title' => utf8_encode($title),
+    'title'    => utf8_encode($title),
     'subtitle' => utf8_encode($subtitle),
-    'xaxis' => array('labelsAngle' => 45, 'ticks' => $ticks),
-    'yaxis'  => array('autoscaleMargin' => 1, "title" => utf8_encode("Quantité d'interventions"), "titleAngle" => 90),
-    'y2axis' => array('autoscaleMargin' => 1, "title" => utf8_encode("Anticipation moyenne en jours vs la date d'intervention"), "titleAngle" => 90),
-    "points" => array("show" => true, "radius" => 2, "lineWidth" => 1),
-    "lines" => array("show" => true, "lineWidth" => 1),
-    'bars' => array('show' => false, 'stacked' => false, 'barWidth' => 0.8),
+    'xaxis'    => array('labelsAngle' => 45, 'ticks' => $ticks),
+    'yaxis'    => array('autoscaleMargin' => 1, "title" => utf8_encode("Quantité d'interventions"), "titleAngle" => 90),
+    'y2axis'   => array('autoscaleMargin' => 1, "title" => utf8_encode("Anticipation moyenne en jours vs la date d'intervention"), "titleAngle" => 90),
+    "points"   => array("show" => true, "radius" => 2, "lineWidth" => 1),
+    "lines"    => array("show" => true, "lineWidth" => 1),
+    'bars'     => array('show' => false, 'stacked' => false, 'barWidth' => 0.8),
     'HtmlText' => false,
-    'legend' => array('show' => true, 'position' => 'nw'),
-    'grid' => array('verticalLines' => false),
+    'legend'   => array('show' => true, 'position' => 'nw'),
+    'grid'     => array('verticalLines' => false),
+    'mouse'    => array(
+      "track"          => true,
+      "position"       => "ne",
+      "relative"       =>  true,
+      "sensibility"    => 2,
+      "trackDecimals"  => 3,
+      // Keep parenthesis wrapping to allow JS closure evaluation
+      "trackFormatter" => utf8_encode("(
+        function(obj) {
+          var label = obj.series.label;
+          var total = obj.nearest.allSeries[0].data[obj.index][1];
+          var date = graph.options.xaxis.ticks[obj.index][1];
+          console.log(obj);
+
+          // Barre des nombres d'interventions
+          if (obj.series.bars.show) {
+            var format = '%s <br />%s en %s';
+            return printf(format, label, total, date);
+          }
+
+          // Courbes d'anticipation
+          var count = graph.options.counts[obj.index][label];
+          var value = obj.series.data[obj.index][1];
+          var percent = Math.round(100*count/total) + '%';
+          var format = '%s <br />%d jours en %s<br />%s des interventions concernées (%s/%s)';
+          return printf(format, label, value, date, percent, count, total);
+        }
+      )")
+    ),
+    'counts' => $counts,
+
     'spreadsheet' => array(
       'show' => true,
       'csvFileSeparator' => ';',
       'decimalSeparator' => ',',
-      'tabGraphLabel' => utf8_encode('Graphique'),
-      'tabDataLabel' => utf8_encode('Données'),
-      'toolbarDownload' => utf8_encode('Fichier CSV'),
+      'tabGraphLabel'    => utf8_encode('Graphique'),
+      'tabDataLabel'     => utf8_encode('Données'),
+      'toolbarDownload'  => utf8_encode('Fichier CSV'),
       'toolbarSelectAll' => utf8_encode('Sélectionner tout le tableau')
     )
   );
