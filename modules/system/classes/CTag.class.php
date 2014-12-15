@@ -74,8 +74,9 @@ class CTag extends CMbObject {
     parent::updateFormFields();
     $parent = $this->loadRefParent();
     $this->_view = ($parent->_id ? "$parent->_view &raquo; " : "").$this->name;
-    if ($this->color) {
-      $this->_font_color = CColorSpec::get_text_color($this->color) > 130 ? "000000" : "ffffff";
+    $this->_font_color = "000000";
+    if ($this->color && (CColorSpec::get_text_color($this->color) < 130)) {
+      $this->_font_color = "ffffff";
     }
   }
 
