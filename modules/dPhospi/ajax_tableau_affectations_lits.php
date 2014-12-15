@@ -85,6 +85,12 @@ foreach ($services as &$service) {
   $totalLits += $service->_nb_lits_dispo;
 }
 
+foreach ($services as $key => $_service) {
+  if (!count($_service->_ref_chambres)) {
+    unset($services[$key]);
+  }
+}
+
 // Nombre de patients à placer pour la semaine qui vient (alerte)
 $today   = CMbDT::date()." 01:00:00";
 $endWeek = CMbDT::dateTime("+7 days", $today);
