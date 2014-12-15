@@ -929,7 +929,8 @@ class CFacture extends CMbObject {
       }
 
       $genre = "01";
-      $adherent2 = $this->loadNumAdherent($this->_ref_praticien->adherent)["bvr"];
+      $adherent = $this->facture->loadNumAdherent($this->praticien->adherent);
+      $adherent2 = $adherent["bvr"];
       foreach ($this->_montant_factures_caisse as $montant_facture) {
         $montant = sprintf('%010d', $montant_facture*100);
         $cle = $this->getNoControle($genre.$montant);
