@@ -27,9 +27,9 @@ $compute_mode               = CValue::get("compute_mode");
 $csv                        = CValue::get("csv");
 $page                       = (int)CValue::get("page", 0);
 
-$limit = 500;
+$limit = 1000;
 if ($csv) {
-  $limit = 5000;
+  $limit = 10000;
 }
 
 $group_id = CGroups::loadCurrent()->_id;
@@ -38,7 +38,7 @@ $ds = $filter->getDS();
 $list = array();
 
 if ($compute_mode == "adresse_par") {
-  $query = $ds->prepare("SELECT
+  $query = "SELECT
               consultation.adresse_par_prat_id,
               COUNT(consultation.consultation_id) AS total
             FROM consultation
@@ -47,7 +47,8 @@ if ($compute_mode == "adresse_par") {
             LEFT JOIN functions_mediboard ON functions_mediboard.function_id = users_mediboard.function_id
             WHERE
               functions_mediboard.group_id = ?1 AND
-              consultation.adresse_par_prat_id IS NOT NULL", $group_id);
+              consultation.adresse_par_prat_id IS NOT NULL";
+  $query = $ds->prepare($query, $group_id);
 
   if ($filter->_date_min) {
     $query .= $ds->prepare(" AND plageconsult.date >= ?", $filter->_date_min);
@@ -75,7 +76,8 @@ if ($compute_mode == "adresse_par") {
 elseif ($compute_mode == "correspondants") {
   $tag = CPatient::getTagIPP();
 
-  $query = $ds->prepare("SELECT
+  if ($tag) {
+    $query = "SELECT
               medecin.medecin_id,
               COUNT(DISTINCT(patients.patient_id)) AS total
 
@@ -88,9 +90,64 @@ elseif ($compute_mode == "correspondants") {
               correspondant.medecin_id IS NOT NULL
             GROUP BY correspondant.medecin_id
             ORDER BY total DESC
-            LIMIT $page, $limit;", $tag);
+            LIMIT $page, $limit;";
+    $query_corresp = $ds->prepare($query, $tag);
 
-  $list = $ds->loadHashList($query);
+    $query = "SELECT
+              patients.medecin_traitant,
+              COUNT(DISTINCT(patients.patient_id)) AS total
+
+            FROM patients
+            LEFT JOIN id_sante400 ON id_sante400.object_id = patients.patient_id AND id_sante400.object_class = 'CPatient'
+            WHERE
+              id_sante400.tag = ?1 AND
+              patients.medecin_traitant IS NOT NULL
+            GROUP BY patients.medecin_traitant
+            ORDER BY total DESC
+            LIMIT $page, $limit;";
+    $query_traitant = $ds->prepare($query, $tag);
+  }
+  else {
+    $query_corresp = "SELECT
+              medecin.medecin_id,
+              COUNT(DISTINCT(patients.patient_id)) AS total
+
+            FROM patients
+            LEFT JOIN correspondant ON correspondant.patient_id = patients.patient_id
+            LEFT JOIN medecin       ON medecin.medecin_id = correspondant.medecin_id
+            WHERE
+              correspondant.medecin_id IS NOT NULL
+            GROUP BY correspondant.medecin_id
+            ORDER BY total DESC
+            LIMIT $page, $limit;";
+
+    $query = "SELECT
+              patients.medecin_traitant,
+              COUNT(DISTINCT(patients.patient_id)) AS total
+
+            FROM patients
+            WHERE
+              patients.medecin_traitant IS NOT NULL
+            GROUP BY patients.medecin_traitant
+            ORDER BY total DESC
+            LIMIT $page, $limit;";
+    $query_traitant = $ds->prepare($query, $tag);
+  }
+
+  $list_corresp  = $ds->loadHashList($query_corresp);
+  $list_traitant = $ds->loadHashList($query_traitant);
+
+  foreach ($list_traitant as $_medecin_id => $_count) {
+    if (array_key_exists($_medecin_id, $list_corresp)) {
+      $list_corresp[$_medecin_id] += $_count;
+    }
+    else {
+      $list_corresp[$_medecin_id] = $_count;
+    }
+  }
+
+  arsort($list_corresp);
+  $list = $list_corresp;
 }
 
 $where = array(
