@@ -182,8 +182,10 @@ if (!CAppUI::$instance->user_id) {
 
 $tab = 1;
 
-$m = CValue::get("m");
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+$m = $m_get = CValue::get("m");
+$post_request = $_SERVER['REQUEST_METHOD'] == 'POST';
+
+if ($post_request) {
   $m = CValue::post("m") ?: $m;
 }
 
@@ -277,6 +279,11 @@ if ($dosql) {
   if (is_file("./modules/$m/controllers/$dosql.php")) {
     include "./modules/$m/controllers/$dosql.php";
   }
+}
+
+// Permissions checked on POST $m, but we redirect to GET $m
+if ($post_request && $m_get && $m != $m_get && $m != "dP$m_get") {
+  $m = $m_get;
 }
 
 if ($class) {
