@@ -60,7 +60,6 @@ if ($_date_min) {
       $facture_pdf->facture->loadRefAssurance();
       $facture_pdf->function_prat = $facture_pdf->praticien->loadRefFunction();
       $facture_pdf->group = $facture_pdf->function_prat->loadRefGroup();
-      $facture_pdf->adherent = $facture_pdf->praticien->adherent;
 
       $facture_pdf->relance = $relance;
       $facture_pdf->editRelanceEntete();
