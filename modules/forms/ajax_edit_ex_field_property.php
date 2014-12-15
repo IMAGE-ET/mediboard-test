@@ -25,7 +25,10 @@ if (!$ex_field_property->load($ex_field_property_id)) {
   $ex_field_property->object_class = $object_class;
 }
 $ex_field_property->loadTargetObject();
-$ex_field_property->loadRefPredicate();
+$predicate = $ex_field_property->loadRefPredicate();
+if ($predicate) {
+  $predicate->loadView();
+}
 
 $ex_class = $ex_field_property->_ref_object->loadRefExClass();
 

@@ -33,7 +33,11 @@ else {
 }
 
 $ex_field->loadRefExClass();
-$ex_field->loadRefProperties();
+$properties = $ex_field->loadRefProperties();
+foreach ($properties as $_property) {
+  $_property->loadRefPredicate()->loadView();
+}
+
 $ex_field->loadRefPredicate()->loadView();
 $predicates = $ex_field->loadRefPredicates();
 
