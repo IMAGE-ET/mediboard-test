@@ -55,13 +55,13 @@
       {{/if}}">
         {{if $online}}
           {{*mb_include module=system template=inc_object_notes object=$plage*}}
-        {{/if}}
         <select name="chir_id" onchange="changePlageChir($V(this), '{{$plage->date}}', this); return false;">
           {{foreach from=$list_users item=_user}}
             <option value="{{$_user->_id}}" {{if $plage->chir_id == $_user->_id}}selected="selected" {{/if}}>{{$_user}}</option>
           {{/foreach}}
         </select>
         <br />
+        {{/if}}
         {{if $online && $consultation->_id}}
           <img src="http://localhost/mediboard/style/mediboard/images/buttons/edit.png" alt="" />
         {{/if}}
