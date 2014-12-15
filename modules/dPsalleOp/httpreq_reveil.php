@@ -53,46 +53,55 @@ else {
 $where[] = "operations.plageop_id ".CSQLDataSource::prepareIn(array_keys($plages))." OR (operations.plageop_id IS NULL AND operations.date = '$date')";
 
 // orders & filters
+$order_col         = CValue::get("order_col");
+if ($order_col) {
+  CValue::setSession("order_col_" . $type, $order_col);
+}
 
-$order_col         = CValue::get("order_col", "chir_id");
-$order_way         = CValue::get("order_way", "ASC");
+//order way
+$order_way         = CValue::get("order_way");
+if ($order_way && $type) {
+  CValue::setSession("order_way_" . $type, $order_way);
+}
+
+$order_way_final = CValue::getOrSession("order_way_".$type, CValue::get("order_way"));
 
 switch ($type) {
   case 'preop':
     $where["operations.entree_salle"] = "IS NULL";
     // $order = "operations.time_operation";
-    $order_col = CValue::get("order_col", "time_operation");
+    $order_col = CValue::getOrSession("order_col_$type", "time_operation");
     break;
   case 'encours':
     $where["operations.entree_salle"] = "IS NOT NULL";
     $where["operations.sortie_salle"] = "IS NULL";
     // $order = "operations.entree_salle";
-    $order_col = CValue::get("order_col", "entree_salle");
+    $order_col = CValue::getOrSession("order_col_$type", "entree_salle");
     break;
   case 'ops':
     $where["operations.sortie_salle"] = "IS NOT NULL";
     $where["operations.entree_reveil"] = "IS NULL";
     $where["operations.sortie_reveil_possible"] = "IS NULL";
     // $order = "operations.sortie_salle";
-    $order_col = CValue::get("order_col", "sortie_salle");
+    $order_col = CValue::getOrSession("order_col_$type", "sortie_salle");
     break;
   case 'reveil':
     $where["operations.entree_reveil"] = "IS NOT NULL";
     $where["operations.sortie_reveil_reel"] = "IS NULL";
     // $order = "operations.entree_reveil";
-    $order_col = CValue::get("order_col", "entree_reveil");
+    $order_col = CValue::getOrSession("order_col_$type", "entree_reveil");
     break;
   case 'out':
     $where["operations.sortie_reveil_reel"] = "IS NOT NULL";
     // $order = "operations.sortie_reveil_possible DESC";
-    $order_col = CValue::get("order_col", "sortie_reveil_possible");
-    $order_way = CValue::get("order_way", "DESC");
+    $order_col = CValue::getOrSession("order_col_$type", "sortie_reveil_possible");
+    $order_way = CValue::getOrSession("order_way_$type", "DESC");
     break;
 }
 
 // Chargement des interventions    
 $operation = new COperation();
-$listOperations = $operation->loadList($where, "$order_col $order_way", null, null, $ljoin);
+$listOperations = $operation->loadList($where, "$order_col $order_way_final", null, null, $ljoin);
 
 // Optimisations de chargement
 $chirs = CMbObject::massLoadFwdRef($listOperations, "chir_id");
@@ -227,6 +236,7 @@ $smarty->assign("daily_check_lists"     , $daily_check_lists);
 $smarty->assign("daily_check_list_types", $daily_check_list_types);
 $smarty->assign("listChirs"             , $listChirs);
 $smarty->assign("listAnesths"           , $listAnesths);
+$smarty->assign("type"                  , $type);
 
 $smarty->assign("personnels"              , $personnels);
 $smarty->assign("order_way"               , $order_way);

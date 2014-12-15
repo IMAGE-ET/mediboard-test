@@ -14,6 +14,12 @@
   </div>
 {{/if}}
 
+{{if !$sejour->_id}}
+  <div class="small-warning">
+    Un nouveau séjour sera créé.
+  </div>
+{{/if}}
+
 <script type="text/javascript">
   checkDates = function(form) {
     if ($V(form.sortie_prevue) < '{{$date_move}}' || $V(form.entree_prevue) > '{{$date_move}}') {
