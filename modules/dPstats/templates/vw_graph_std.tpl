@@ -13,6 +13,9 @@
 
   Main.add(function(){
     graph.options.legend.container = $('display-legend-{{$type_graph}}');
+    if (graph.options.mouse) {
+      graph.options.mouse.trackFormatter = eval(graph.options.mouse.trackFormatter);
+    }
     Flotr.draw($('display-graph-{{$type_graph}}'), graph.series, graph.options);
     {{if $can_zoom}}
       var select = DOM.select({},
@@ -30,6 +33,7 @@
         url.requestModal();
       });
 
+
       $('display-graph-{{$type_graph}}').down('.flotr-tabs-group').insert(select);
     {{/if}}
   });
@@ -38,7 +42,7 @@
 
 <table class="layout">
   <tr>
-    <td style="vertical-align: top;"><div style="width: 600px; height: 400px; float: left; margin: 1em;" id="display-graph-{{$type_graph}}"></div></td>
+    <td style="vertical-align: top;"><div style="width: 800px; height: 500px; float: left; margin: 1em;" id="display-graph-{{$type_graph}}"></div></td>
     <td style="vertical-align: top;" id="display-legend-{{$type_graph}}"></td>
   </tr>
 </table>

@@ -1,0 +1,245 @@
+<?php
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPstats
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
+
+/**
+ * Récuparation du graphique du nombre d'interventions annulées le jour même
+ *
+ * @param string $date_min    Date de début
+ * @param string $date_max    Date de fin
+ * @param int    $prat_id     Identifiant du praticien
+ * @param int    $salle_id    Identifiant de la salle
+ * @param int    $bloc_id     Identifiant du bloc
+ * @param string $code_ccam   Code CCAM
+ * @param string $type_sejour Type de séjour
+ * @param bool   $hors_plage  Prise en charge des hors plage
+ *
+ * @return array
+ */
+function graphWorkflowOperation(
+  $date_min = null, $date_max = null, $prat_id = null, $salle_id = null, $bloc_id = null,
+  $code_ccam = null, $type_sejour = null, $hors_plage = false
+) {
+  $miner = new COperationWorkflow();
+  $miner->warnUsage();
+
+  if (!$date_min) {
+    $date_min = CMbDT::date("-1 YEAR");
+  }
+
+  if (!$date_max) {
+    $date_max = CMbDT::date();
+  }
+
+  $date_min = CMbDT::format($date_min, "%Y-%m-01");
+  $date_max = CMbDT::transform("+1 MONTH", $date_max, "%Y-%m-01");
+
+  $prat = new CMediusers;
+  $prat->load($prat_id);
+
+  // Series declarations
+  $labels = array(
+    "op_count"           => utf8_encode("Nombre d'interventions"),
+    "creation"           => utf8_encode("Planification intervention"),
+    "consult_chir"       => utf8_encode("Consultation chirurgicale"),
+    "consult_anesth"     => utf8_encode("Consultation anesthésiste"),
+    "visite_anesth"      => utf8_encode("Visite anesthésiste"),
+    "creation_consult_chir"   => utf8_encode("RDV de consultation chirurgicale"),
+    "creation_consult_anesth" => utf8_encode("RDV de consultation anesthésiste"),
+  );
+
+  $salles = CSalle::getSallesStats($salle_id, $bloc_id);
+
+  $query = new CRequest();
+  $query->addColumn("DATE_FORMAT(date_operation, '%Y-%m')", "mois");
+  $query->addColumn("COUNT(operations.operation_id)", "op_count");
+
+  // Prévention des données négatives aberrantes
+  $tolerance_in_days = 4;
+  $columns = array(
+    "creation",
+    "consult_chir",
+    "consult_anesth",
+    "visite_anesth",
+    "creation_consult_chir",
+    "creation_consult_anesth",
+  );
+
+  foreach ($columns as $_column) {
+    $field = "date_$_column";
+    $diff = "DATEDIFF(ow.date_operation, ow.$field)";
+    $query->addColumn("AVG  (IF($diff > -$tolerance_in_days, $diff, NULL))", $_column);
+    $query->addColumn("COUNT(IF($diff > -$tolerance_in_days, $diff, NULL))", "count_$_column");
+  }
+
+  $query->addTable("operations");
+  $query->addLJoin("operation_workflow AS ow ON ow.operation_id = operations.operation_id");
+
+
+  $query->addWhereClause("date_operation", "BETWEEN '$date_min' AND '$date_max'");
+  $query->addWhereClause("salle_id", CSQLDataSource::prepareIn(array_keys($salles)));
+  $query->addGroup("mois");
+  $query->addOrder("mois");
+
+  // Filtre sur hors plage
+  if (!$hors_plage) {
+    $query->addWhereClause("plageop_id", "IS NOT NULL");
+  }
+
+  // Filtre sur le praticien
+  if ($prat_id) {
+    $query->addWhereClause("operations.chir_id", "= '$prat_id'");
+  }
+
+  // Filtre sur les codes CCAM
+  if ($code_ccam) {
+    $query->addWhereClause("operations.codes_ccam", "LIKE '%$code_ccam%'");
+  }
+
+  // Filtre sur le type d'hospitalisation
+  if ($type_sejour) {
+    $query->addLJoinClause("sejour", "sejour.sejour_id = operations.sejour_id");
+    $query->addWhereClause("sejour.type", "= '$type_sejour'");
+  }
+
+  // Query result
+  $ds = CSQLDataSource::get("std");
+  $all_values = $ds->loadHashAssoc($query->makeSelect());
+
+  // Build horizontal ticks
+  $months = array();
+  $ticks = array();
+  for ($_date = $date_min; $_date < $date_max; $_date = CMbDT::date("+1 MONTH", $_date)) {
+    $count_ticks = count($ticks);
+    $ticks[] = array($count_ticks, CMbDT::format($_date, "%m/%Y"));
+    $months[CMbDT::format($_date, "%Y-%m")] = $count_ticks;
+  }
+
+  // Series building
+  $series = array();
+  foreach ($labels as $_label_name => $_label_title) {
+    $series[$_label_name] = array(
+      "label" => $_label_title,
+      "data" => array(),
+      "yaxis" => 2
+    );
+  }
+
+  $series["op_count"]["markers"]["show"] = true;
+  $series["op_count"]["yaxis"] = 1;
+  $series["op_count"]["lines"]["show"] = false;
+  $series["op_count"]["points"]["show"] = false;
+  $series["op_count"]["bars"]["show"] = true;;
+  $series["op_count"]["bars"]["fillColor"] = "#ccc";
+  $series["op_count"]["color"] = "#888";
+
+  $total = 0;
+  $counts = array();
+  foreach ($months as $_month => $_tick) {
+    $values =  isset($all_values[$_month]) ? $all_values[$_month] : array_fill_keys(array_keys($labels), null);
+    unset($values["mois"]);
+
+    $_counts = array();
+    foreach ($values as $_name => $_value) {
+      $parts = explode("_", $_name, 2);
+      if ($parts[0] == "count") {
+        $_counts[$labels[$parts[1]]] = $_value;
+        continue;
+      }
+
+      $series[$_name]["data"][] = array($_tick, $_value);
+    }
+
+    $total += $values["op_count"];
+    $counts[] = $_counts;
+  }
+
+  // Set up the title for the graph
+  $title = "Anticipation de la programmation des interventions";
+  $subtitle = "$total interventions";
+
+  if ($prat_id) {
+    $subtitle   .= " - Dr $prat->_view";
+  }
+
+  if ($salle_id) {
+    $salle = reset($salles);
+    $subtitle   .= " - $salle->_view";
+  }
+
+  if ($code_ccam) {
+    $subtitle   .= " - CCAM : $code_ccam";
+  }
+
+  if (!$hors_plage) {
+    $subtitle   .= " - sans hors plage";
+  }
+
+  if ($type_sejour) {
+    $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_sejour");
+  }
+
+  $options = array(
+    'title'    => utf8_encode($title),
+    'subtitle' => utf8_encode($subtitle),
+    'xaxis'    => array('labelsAngle' => 45, 'ticks' => $ticks),
+    'yaxis'    => array('autoscaleMargin' => 1, "title" => utf8_encode("Quantité d'interventions"), "titleAngle" => 90),
+    'y2axis'   => array('autoscaleMargin' => 1, "title" => utf8_encode("Anticipation moyenne en jours vs la date d'intervention"), "titleAngle" => 90),
+    "points"   => array("show" => true, "radius" => 2, "lineWidth" => 1),
+    "lines"    => array("show" => true, "lineWidth" => 1),
+    'bars'     => array('show' => false, 'stacked' => false, 'barWidth' => 0.8),
+    'HtmlText' => false,
+    'legend'   => array('show' => true, 'position' => 'nw'),
+    'grid'     => array('verticalLines' => false),
+    'mouse'    => array(
+      "track"          => true,
+      "position"       => "ne",
+      "relative"       =>  true,
+      "sensibility"    => 2,
+      "trackDecimals"  => 3,
+      // Keep parenthesis wrapping to allow JS closure evaluation
+      "trackFormatter" => utf8_encode("(
+        function(obj) {
+          var label = obj.series.label;
+          var total = obj.nearest.allSeries[0].data[obj.index][1];
+          var date = graph.options.xaxis.ticks[obj.index][1];
+
+          // Barre des nombres d'interventions
+          if (obj.series.bars.show) {
+            var format = '%s <br />%s en %s';
+            return printf(format, label, total, date);
+          }
+
+          // Courbes d'anticipation
+          var count = graph.options.counts[obj.index][label];
+          var value = obj.series.data[obj.index][1];
+          var percent = Math.round(100*count/total) + '%';
+          var format = '%s <br />%d jours en %s<br />%s des interventions concernées (%s/%s)';
+          return printf(format, label, value, date, percent, count, total);
+        }
+      )")
+    ),
+    'counts' => $counts,
+
+    'spreadsheet' => array(
+      'show' => true,
+      'csvFileSeparator' => ';',
+      'decimalSeparator' => ',',
+      'tabGraphLabel'    => utf8_encode('Graphique'),
+      'tabDataLabel'     => utf8_encode('Données'),
+      'toolbarDownload'  => utf8_encode('Fichier CSV'),
+      'toolbarSelectAll' => utf8_encode('Sélectionner tout le tableau')
+    )
+  );
+
+  return array('series' => array_values($series), 'options' => $options);
+}
+
+

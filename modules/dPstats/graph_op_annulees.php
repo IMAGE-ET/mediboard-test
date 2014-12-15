@@ -66,7 +66,7 @@ function graphOpAnnulees(
   $query->addOrder("mois, salle_id");
 
   // Filtre sur hors plage
-  if ($hors_plage) {
+  if (!$hors_plage) {
     $query->addWhereClause("plageop_id", "IS NOT NULL");
   }
 
