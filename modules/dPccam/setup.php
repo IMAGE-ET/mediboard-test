@@ -247,11 +247,10 @@ class CSetupdPccam extends CSetup {
     $query = "SHOW TABLES LIKE 'p_acte';";
     $this->addDatasource("ccamV2", $query);
 
-    // Version 37 de la CCAM
+    // Version 38 de la CCAM
     $query = "SELECT *
       FROM p_acte
-      WHERE CODE = 'YYYY600'
-      AND  LIBELLELONG LIKE '%mammographie%'";
+      WHERE CODE = 'EJSF008'";
     $this->addDatasource("ccamV2", $query);
   }
 }
