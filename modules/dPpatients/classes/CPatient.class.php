@@ -2028,6 +2028,9 @@ class CPatient extends CPerson {
   }
 
   function loadLastGrossesse() {
+    if (!CModule::getActive("maternite")) {
+      return;
+    }
     $grossesse = new CGrossesse();
     $grossesse->parturiente_id = $this->_id;
     $grossesse->active = 1;
