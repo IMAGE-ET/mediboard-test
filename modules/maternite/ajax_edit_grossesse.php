@@ -26,7 +26,19 @@ $grossesse->loadRefsNotes();
 if (!$grossesse->_id) {
   $grossesse->parturiente_id = $parturiente_id;
 }
+
 $grossesse->loadRefParturiente();
+
+// sejour & last grossesse
+$sejour_id = CValue::get("sejour_id");
+$sejour = new CSejour();
+$sejour->load($sejour_id);
+$grossesse->_ref_sejour = $sejour;
+
+if ($operation = $grossesse->loadRefLastOperation()) {
+  $grossesse->_semaine_grossesse = ceil(CMbDT::daysRelative($grossesse->_date_fecondation, CMbDT::date($operation->_datetime)) / 7);
+  $grossesse->_terme_vs_operation = CMbDT::daysRelative($grossesse->terme_prevu, CMbDT::date($operation->_datetime));
+}
 
 $listPrat = CConsultation::loadPraticiens(PERM_EDIT);
 

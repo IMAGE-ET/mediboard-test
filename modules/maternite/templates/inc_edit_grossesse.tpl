@@ -109,6 +109,9 @@
   <input type="hidden" name="prat_id" value="" />
 </form>
 
+{{if $grossesse->_id && $grossesse->_ref_last_operation}}
+  <h2>Semaine {{$grossesse->_semaine_grossesse}} &mdash; Terme {{if $grossesse->_terme_vs_operation >= 0}}+{{/if}}{{$grossesse->_terme_vs_operation}}j</h2>
+{{/if}}
 <form name="editFormGrossesse" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="maternite"/>
   {{mb_class object=$grossesse}}
