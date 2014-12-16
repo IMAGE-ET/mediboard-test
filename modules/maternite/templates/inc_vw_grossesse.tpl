@@ -7,19 +7,27 @@
   Main.add(function() {
     Naissance.reloadNaissances('{{$operation->_id}}');
 
-    {{if $conf.dPsalleOp.enable_surveillance_perop}}
       Control.Tabs.create("tab-grossesse", true, {
         afterChange: function(container) {
           switch (container.id) {
-            case "surveillance_perop":
-              var url = new Url("salleOp", "ajax_vw_surveillance_perop");
-              url.addParam("operation_id","{{$operation->_id}}");
-              url.requestUpdate("surveillance_perop");
+              {{if $conf.dPsalleOp.enable_surveillance_perop}}
+                case "surveillance_perop":
+                  var url = new Url("salleOp", "ajax_vw_surveillance_perop");
+                  url.addParam("operation_id","{{$operation->_id}}");
+                  url.requestUpdate("surveillance_perop");
+                  break;
+              {{/if}}
+
+            case 'grossesse-data':
+              var url = new Url('maternite', 'ajax_edit_grossesse', "action");
+              url.addParam('grossesse_id', '{{$grossesse->_id}}');
+              url.addParam('with_buttons', 1);
+              url.addParam('standalone', 1);
+              url.requestUpdate("grossesse-data");
               break;
           }
         }
       });
-    {{/if}}
   });
 </script>
 
@@ -29,68 +37,16 @@
   </div>
 {{/if}}
 
-{{if $conf.dPsalleOp.enable_surveillance_perop}}
 <ul class="control_tabs small" id="tab-grossesse">
   <li><a href="#grossesse-data">{{tr}}CGrossesse{{/tr}}</a></li>
+  <li><a href="#naissance_area">{{tr}}CNaissance{{/tr}}(s)</a></li>
+  {{if $conf.dPsalleOp.enable_surveillance_perop}}
   <li><a href="#surveillance_perop">Partogramme</a></li>
+  {{/if}}
 </ul>
-{{/if}}
 
-<div  id="grossesse-data">
-  <h1 style="text-align: center;">
-    Semaine {{$grossesse->_semaine_grossesse}} &mdash; Terme {{if $grossesse->_terme_vs_operation >= 0}}+{{/if}}{{$grossesse->_terme_vs_operation}}j
-  </h1>
+<div id="grossesse-data"></div>
 
-  <table class="main">
-    <tr>
-      <td style="width: 50%;">
-        <table class="tbl">
-          <tr>
-            <th class="category">
-              {{tr}}CSejour.all{{/tr}}
-            </th>
-          </tr>
-          {{foreach from=$grossesse->_ref_sejours item=object}}
-            <tr>
-              <td>
-                {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$object}}
-                <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
-                  {{$object->_shortview}}
-                </span>
-              </td>
-            </tr>
-          {{foreachelse}}
-            <tr>
-              <td class="empty">
-                {{tr}}CSejour.none{{/tr}}
-              </td>
-            </tr>
-          {{/foreach}}
-          <tr>
-            <th class="category">
-              {{tr}}CConsultation.all{{/tr}}
-            </th>
-          </tr>
-          {{foreach from=$grossesse->_ref_consultations item=object}}
-            <tr>
-              <td>
-                <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
-                  Consultation le {{$object->_datetime|date_format:$conf.date}}
-                </span>
-              </td>
-            </tr>
-          {{foreachelse}}
-            <tr>
-              <td class="empty">
-                {{tr}}CConsultation.none{{/tr}}
-              </td>
-            </tr>
-          {{/foreach}}
-        </table>
-      </td>
-      <td style="width: 50%;" id="naissance_area"></td>
-    </tr>
-  </table>
-</div>
+<div id="naissance_area" style="display: none;"></div>
 
 <div id="surveillance_perop" style="display: none;"></div>
