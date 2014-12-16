@@ -7,6 +7,11 @@
       <a style="float: left" href="?m=patients&tab=vw_full_patients&patient_id={{$patient->_id}}">
         {{mb_include module=patients template=inc_vw_photo_identite patient=$patient size=42}}
       </a>
+      {{if $sejour->_ref_grossesse && "maternite"|module_active}}
+        <a href="#" style="float:left;" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_ref_grossesse->_guid}}');">
+          <img src="modules/maternite/images/icon.png" alt="" style="width:42px; height:42px; margin-left:5px; background-color: white" />
+        </a>
+      {{/if}}
       <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&tab=vw_edit_patients&patient_id={{$patient->_id}}">
         <img src="images/icons/edit.png" />
       </a>

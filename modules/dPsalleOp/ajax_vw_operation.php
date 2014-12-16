@@ -122,6 +122,11 @@ if ($selOp->_id) {
   $sejour->_ref_consult_anesth->loadRefsFwd();
   $sejour->loadRefCurrAffectation();
 
+  if (CModule::getActive("maternite")) {
+    $grossesse = $sejour->loadRefGrossesse();
+    $grossesse->_ref_last_operation = $selOp;
+  }
+
   $patient = $sejour->_ref_patient;
   $patient->loadRefPhotoIdentite();
   $dossier_medical = $patient->loadRefDossierMedical();
