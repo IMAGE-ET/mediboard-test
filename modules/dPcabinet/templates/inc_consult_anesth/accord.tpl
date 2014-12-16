@@ -58,6 +58,7 @@
       url.addParam("sejour_id", "{{$consult->_ref_consult_anesth->_ref_operation->sejour_id}}");
     {{/if}}
     url.addParam("patient_id", "{{$consult->patient_id}}");
+    url.addParam("dossier_anesth_id", "{{$consult->_ref_consult_anesth->_id}}");
     url.addParam("show_header", 0);
     url.requestUpdate("AntTrait");
   }

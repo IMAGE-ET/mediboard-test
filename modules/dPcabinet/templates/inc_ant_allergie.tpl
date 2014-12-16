@@ -22,6 +22,7 @@
       DossierMedical.sejour_id  = '{{$sejour_id}}';
       DossierMedical._is_anesth = '{{$_is_anesth}}';
       DossierMedical.patient_id = '{{$patient->_id}}';
+      DossierMedical.dossier_anesth_id = '{{$dossier_anesth_id}}';
     }
     {{if $type_see}}
       DossierMedical.reloadDossierPatient(null, '{{$type_see}}');

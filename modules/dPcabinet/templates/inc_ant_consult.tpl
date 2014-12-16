@@ -32,6 +32,7 @@
       DossierMedical.sejour_id  = '{{$sejour_id}}';
       DossierMedical._is_anesth = '{{$_is_anesth}}';
       DossierMedical.patient_id = '{{$patient->_id}}';
+      DossierMedical.dossier_anesth_id = '{{$dossier_anesth_id}}';
     }
     {{if $conf.ref_pays == 2 && $m == "dPurgences"}}
       DossierMedical.reload_dbl = true;

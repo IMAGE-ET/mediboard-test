@@ -10,10 +10,12 @@
  */
 
 CCanDo::check();
-$patient_id     = CValue::getOrSession("patient_id", 0);
-$_is_anesth     = CValue::getOrSession("_is_anesth", null);
-$sejour_id      = CValue::getOrSession("sejour_id");
-$sort_by_date   = CValue::getOrSession("sort_by_date");
+
+$patient_id        = CValue::getOrSession("patient_id", 0);
+$_is_anesth        = CValue::getOrSession("_is_anesth", null);
+$sejour_id         = CValue::getOrSession("sejour_id");
+$sort_by_date      = CValue::getOrSession("sort_by_date");
+$dossier_anesth_id = CValue::get("dossier_anesth_id");
 
 $patient = new CPatient();
 $patient->load($patient_id);
@@ -87,5 +89,6 @@ $smarty->assign("_is_anesth"  , $_is_anesth);
 $smarty->assign("user"        , $user);
 $smarty->assign("sort_by_date", $sort_by_date);
 $smarty->assign("type_see"    , CValue::getOrSession("type_see", ""));
+$smarty->assign("dossier_anesth_id", $dossier_anesth_id);
 
 $smarty->display("inc_list_ant.tpl");

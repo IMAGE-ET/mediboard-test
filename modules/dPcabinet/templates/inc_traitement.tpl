@@ -112,6 +112,7 @@
         DossierMedical._is_anesth = '{{$_is_anesth}}';
       {{/if}}
       DossierMedical.patient_id = '{{$patient->_id}}';
+      DossierMedical.dossier_anesth_id = '{{$dossier_anesth_id}}';
     }
     {{if $reload}}
     DossierMedical.reloadDossierPatient('{{$reload}}', '{{$type_see}}');

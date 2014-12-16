@@ -59,6 +59,7 @@ showModalTP = function() {
   window.modalUrlTp = new Url("prescription", "ajax_vw_traitements_personnels");
   window.modalUrlTp.addParam("object_guid", '{{$sejour->_guid}}');
   window.modalUrlTp.addParam("refresh_prescription", true);
+  window.modalUrlTp.addParam("dossier_anesth_id", "{{$dossier_anesth_id}}");
   window.modalUrlTp.requestModal("80%", "80%", {
     onClose: function() {
       if (window.DossierMedical) {
@@ -77,7 +78,7 @@ showModalTP = function() {
 
 <!--  Formulaire de création de prescription si inexistante -->
 <form name="prescription-sejour-{{$patient->_id}}" method="post" onsubmit="return false;">
-  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="m" value="prescription" />
   <input type="hidden" name="prescription_id" value="" />
   <input type="hidden" name="dosql" value="do_prescription_aed" />
   <input type="hidden" name="type" value="sejour" />
@@ -91,7 +92,7 @@ showModalTP = function() {
 
 <!--  Formulaire de duplication de traitement -->
 <form name="transfert_line_TP-{{$patient->_id}}" action="?" method="post" onsubmit="return false;">
-  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="m" value="prescription" />
   <input type="hidden" name="dosql" value="do_transfert_line_tp_aed" />
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
   <input type="hidden" name="prescription_line_medicament_id" value="" />

@@ -52,6 +52,7 @@ onSubmitAnt = function (form, type_see) {
 DossierMedical = {
   sejour_id: null,
   patient_id: null,
+  dossier_anesth_id: null,
   _is_anesth: null,
   reload_dbl: false,
   sort_by_date : Preferences.sort_atc_by_date,
@@ -78,6 +79,7 @@ DossierMedical = {
     antUrl.addParam("patient_id"  , DossierMedical.patient_id);
     antUrl.addParam("_is_anesth"  , DossierMedical._is_anesth);
     antUrl.addParam("sort_by_date", DossierMedical.sort_by_date);
+    antUrl.addParam("dossier_anesth_id", DossierMedical.dossier_anesth_id);
     antUrl.addParam("type_see", type_see);
     if (DossierMedical._is_anesth) {
       antUrl.addParam("sejour_id", DossierMedical.sejour_id);

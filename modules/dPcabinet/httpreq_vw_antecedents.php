@@ -11,9 +11,10 @@
 
 CCanDo::check();
 
-$sejour_id   = CValue::getOrSession("sejour_id");
-$patient_id  = CValue::getOrSession("patient_id");
-$show_header = CValue::getOrSession("show_header", 0);
+$sejour_id         = CValue::getOrSession("sejour_id");
+$patient_id        = CValue::getOrSession("patient_id");
+$show_header       = CValue::getOrSession("show_header", 0);
+$dossier_anesth_id = CValue::getOrSession("dossier_anesth_id");
 
 $sejour  = new CSejour();
 $patient = new CPatient();
@@ -64,5 +65,6 @@ $smarty->assign("today"      , CMbDT::date());
 $smarty->assign("isPrescriptionInstalled", $isPrescriptionInstalled);
 $smarty->assign("sejour"     , $sejour);
 $smarty->assign("show_header", $show_header);
+$smarty->assign("dossier_anesth_id", $dossier_anesth_id);
 
 $smarty->display("inc_ant_consult.tpl");
