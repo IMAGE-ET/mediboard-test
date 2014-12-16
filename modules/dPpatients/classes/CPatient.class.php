@@ -669,6 +669,11 @@ class CPatient extends CPerson {
       DSHM::remKeys("alertes-*-CPatient-".$this->_id);
     }
 
+    // Si changement de sexe on essaie de retrouver la civilité
+    if ($this->fieldModified("sexe") && !$this->fieldModified("civilite")) {
+      $this->civilite = "guess";
+    }
+
     $this->_anonyme = $this->checkAnonymous();
 
     if ($state = CPatientState::getState($this)) {
