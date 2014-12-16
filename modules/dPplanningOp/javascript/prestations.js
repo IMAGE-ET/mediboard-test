@@ -13,7 +13,7 @@ Prestations = {
     if (relative_date) {
       url.addParam('relative_date', relative_date);
     }
-    Prestations.urlPresta = url.requestModal(800, 600, {
+    Prestations.urlPresta = url.requestModal("70%", "70%", {
       onClose: Prestations.refreshAfterEdit,
       showReload: true
     });
