@@ -62,30 +62,44 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     }
 
     // User
-    $user = new CMediusers();
-    $user->_user_last_name  = $results[$i]["lastname"];
-    $user->_user_first_name = $results[$i]["firstname"];
-    $user->_user_type       = $results[$i]["type"];
+    $mediuser = new CMediusers();
+    $mediuser->_user_last_name  = $results[$i]["lastname"];
+    $mediuser->_user_first_name = $results[$i]["firstname"];
+    $mediuser->_user_type       = $results[$i]["type"];
+
+    if (!is_numeric($mediuser->_user_type) || !array_key_exists($mediuser->_user_type, CUser::$types)) {
+      $unfound["user_type"][$mediuser->_user_type] = true;
+    }
+
     if (CAppUI::conf("ref_pays") == 1) {
-      $user->adeli            = $results[$i]["adeli"];
-      $user->rpps             = $results[$i]["rpps"];
+      $mediuser->adeli            = $results[$i]["adeli"];
+      $mediuser->rpps             = $results[$i]["rpps"];
     }
     else {
-      $user->ean              = $results[$i]["ean"];
-      $user->rcc              = $results[$i]["rcc"];
+      $mediuser->ean              = $results[$i]["ean"];
+      $mediuser->rcc              = $results[$i]["rcc"];
     }
-    $user->actif  = 1;
-    $user->remote = $results[$i]["remote"];
+    $mediuser->actif  = 1;
+    $mediuser->remote = $results[$i]["remote"];
+
+    // On force la regénération du mot de passe
+    $mediuser->_force_change_password = true;
 
     // Password
-    $user->makeUsernamePassword($results[$i]["firstname"], $results[$i]["lastname"]);
+    $mediuser->makeUsernamePassword($results[$i]["firstname"], $results[$i]["lastname"]);
     if ($results[$i]["password"]) {
-      $user->_user_password = $results[$i]["password"];
+      $mediuser->_user_password = $results[$i]["password"];
     }
 
     // Username
     if ($results[$i]["username"]) {
-      $user->_user_username = $results[$i]["username"];
+      $mediuser->_user_username = $results[$i]["username"];
+    }
+
+    $user = new CUser();
+    $user->user_username = $mediuser->_user_username;
+    if ($user->loadMatchingObject()) {
+      $unfound["user"][$mediuser->_user_last_name] = true;
     }
 
     // Profil
@@ -94,7 +108,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $profil->user_username = $profil_name;
       $profil->loadMatchingObject();
       if ($profil->_id) {
-        $user->_profile_id = $profil->_id;
+        $mediuser->_profile_id = $profil->_id;
       }
       else {
         $unfound["profil_name"][$profil_name] = true;
@@ -128,14 +142,14 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       }
     }
 
-    $user->function_id = $function->_id;
+    $mediuser->function_id = $function->_id;
     
     // Spécialité CCAM
     if ($spec_cpam_code = $results[$i]["spec_cpam_code"]) {
       $spec_cpam = new CSpecCPAM();
       $spec_cpam->load(intval($spec_cpam_code));
       if ($spec_cpam->_id) {
-        $user->spec_cpam_id = $spec_cpam->_id;
+        $mediuser->spec_cpam_id = $spec_cpam->_id;
       }
       else {
         $unfound["spec_cpam_code"][$spec_cpam_code] = true;
@@ -148,20 +162,20 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $discipline->text = strtoupper($discipline_name);
       $discipline->loadMatchingObject();
       if ($discipline->_id) {
-        $user->discipline_id = $discipline->_id;
+        $mediuser->discipline_id = $discipline->_id;
       }
       else {
         $unfound["discipline_name"][$discipline_name] = true;
       }
     }
-    
+
     // Dry run to check references
     if ($dryrun) {
       continue;
     }
     
-    $user->unescapeValues();
-    $msg = $user->store();
+    $mediuser->unescapeValues();
+    $msg = $mediuser->store();
     if ($msg) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
       $results[$i]["error"] = $msg;
@@ -170,11 +184,11 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       continue;
     }
     CAppUI::setMsg("Utilisateur créé", UI_MSG_OK);
-    $user->insFunctionPermission();
-    $user->insGroupPermission();
+    $mediuser->insFunctionPermission();
+    $mediuser->insGroupPermission();
     $results[$i]["result"] = 0;
-    $results[$i]["username"] = $user->_user_username;
-    $results[$i]["password"] = $user->_user_password;
+    $results[$i]["username"] = $mediuser->_user_username;
+    $results[$i]["password"] = $mediuser->_user_password;
 
     $number_idex = $results[$i]["idex"];
     if (!$number_idex) {
@@ -189,7 +203,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       CAppUI::setMsg("Identifiant déjà existant", UI_MSG_WARNING);
       continue;
     }
-    $idex->setObject($user);
+    $idex->setObject($mediuser);
     $msg = $idex->store();
     if ($msg) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
