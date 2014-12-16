@@ -281,7 +281,7 @@ class CPlageconsult extends CPlageHoraire {
 
       //there is something ...
       foreach ($this->_ref_consultations as $_consult) {
-        if ($_consult->heure == $time) {
+        if ($_consult->heure >= $time && $_consult->heure < CMbDT::addTime($this->freq, $time)) {
           $status = 0;
 
           // pause
@@ -296,7 +296,17 @@ class CPlageconsult extends CPlageHoraire {
           // repetition
           $temp_time = $time;
           for ($b=0; $b<$_consult->duree; $b++) {
-            if ($status != 0) {
+            if (!isset($fill[$temp_time])) {
+              $fill[$temp_time] = "";
+            }
+
+            // pause
+            if ($status < 0) {
+              $fill[$temp_time] = $status;
+            }
+
+            // rdv pris
+            if ($status > 0) {
               $fill[$temp_time] = $fill[$temp_time]+$status;
               $nb_plage_prise++;
             }
@@ -308,7 +318,7 @@ class CPlageconsult extends CPlageHoraire {
       $time = CMbDT::addTime($this->freq, $time);
     }
 
-    // get the datas
+    // get the data
     $dispo = 0;
     $occupied = 0;
     foreach ($fill as $_fill) {
@@ -322,7 +332,7 @@ class CPlageconsult extends CPlageHoraire {
 
     $this->_affected = $occupied;
     $this->_nb_free_freq = $dispo;
-    $this->_fill_rate = round(($occupied/$nb_place_consult)*100);
+    $this->_fill_rate = $nb_place_consult != 0 ? round(($occupied/$nb_place_consult)*100) : 0;
     return $this->_disponibilities = $fill;
   }
 
