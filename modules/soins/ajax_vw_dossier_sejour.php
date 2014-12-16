@@ -73,8 +73,6 @@ if (CModule::getActive("dPprescription")) {
   CPrescription::$_load_lite = false;
 }
 
-$patient->loadLastGrossesse();
-
 $smarty = new CSmartyDP();
 
 $smarty->assign("sejour"          , $sejour);
