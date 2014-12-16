@@ -10,10 +10,10 @@
 
 {{mb_script module=maternite script=grossesse ajax=true}}
 
-{{if $object->_class == "CSejour"}}
-  {{assign var=grossesse value=$object->_ref_grossesse}}
+{{if $object->_class == "CPatient"}}
+  {{assign var=grossesse value=$object->_ref_last_grossesse}}
 {{else}}
-  {{mb_return}}
+  {{assign var=grossesse value=$object->_ref_grossesse}}
 {{/if}}
 {{mb_default var=submit value=0}}
 {{mb_default var=large_icon value=0}}
