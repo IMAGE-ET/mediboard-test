@@ -127,6 +127,8 @@ Main.add(function(){
                       {{$curr_code->code}}
                     {{/foreach}}
                   {{/if}}
+
+                  ({{mb_label object=$_operation field=cote}} {{mb_value object=$_operation field=cote}})
                   </span>
                 </td>
                 <td class="button {{if $_operation->annulee}}cancelled{{/if}}" style="text-align: center;">
