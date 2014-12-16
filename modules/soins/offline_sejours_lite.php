@@ -147,7 +147,10 @@ foreach ($sejours as $_sejour) {
   $patients_offline[$patient->_guid]["transmissions"] = array();
 
   foreach ($transmissions as $_trans) {
-    if ($_trans->sejour_id != $_sejour->_id && ($_trans->locked || CMbDT::daysRelative($_trans->date, $date) > $delay_trans_obs_consult)) {
+    if ($_trans->sejour_id != $_sejour->_id) {
+      continue;
+    }
+    if ($_trans->locked || CMbDT::daysRelative($_trans->date, $date) > $delay_trans_obs_consult) {
       continue;
     }
     $_trans->loadTargetObject();
@@ -163,7 +166,10 @@ foreach ($sejours as $_sejour) {
   $patients_offline[$patient->_guid]["observations"] = array();
 
   foreach ($observations as $_observation) {
-    if ($_observation->sejour_id != $_sejour->_id && CMbDT::daysRelative($_observation->date, $date) > $delay_trans_obs_consult) {
+    if ($_observation->sejour_id != $_sejour->_id) {
+      continue;
+    }
+    if (CMbDT::daysRelative($_observation->date, $date) > $delay_trans_obs_consult) {
       continue;
     }
     $_observation->loadRefUser()->loadRefFunction();
@@ -176,7 +182,10 @@ foreach ($sejours as $_sejour) {
   $patients_offline[$patient->_guid]["consultations"] = array();
 
   foreach ($consultations as $_consultation) {
-    if ($_consultation->sejour_id != $_sejour->_id && $_consultation->type == "entree") {
+    if ($_consultation->sejour_id != $_sejour->_id) {
+      continue;
+    }
+    if ($_consultation->type == "entree") {
       continue;
     }
     $_consultation->loadRefPraticien()->loadRefFunction();
