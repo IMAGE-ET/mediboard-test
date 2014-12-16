@@ -108,6 +108,7 @@ switch ($period) {
     break;
 
   default:
+    $minDate = $maxDate = $refDate = CMbDT::date(null, $date);
     $ndate = CMbDT::date("+1 day", $date);
     $pdate = CMbDT::date("-1 day", $date);
     trigger_error("Période '$period' inconnue");
