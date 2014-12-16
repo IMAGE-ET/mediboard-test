@@ -225,14 +225,6 @@
         {{/foreach}}
       {{/foreach}}
     {{/if}}
-          <tr>
-            <td class="text">
-              {{mb_include module="dPprescription" template="inc_print_prescription_line_mix" perf=$_prescription_line_mix nodebug=true}}
-            </td>
-          </tr>
-        {{/foreach}}
-      {{/foreach}}
-    {{/if}}
     
     {{foreach from=$prescription->_ref_lines_elements_comments key=_chap item=_lines_by_chap}}
       {{if $_lines_by_chap|@count}}
