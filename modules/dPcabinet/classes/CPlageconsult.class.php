@@ -308,8 +308,21 @@ class CPlageconsult extends CPlageHoraire {
       $time = CMbDT::addTime($this->freq, $time);
     }
 
-    $this->_affected = $nb_plage_prise;
-    $this->_nb_free_freq = $nb_place_consult-$this->_affected;
+    // get the datas
+    $dispo = 0;
+    $occupied = 0;
+    foreach ($fill as $_fill) {
+      if ($_fill == 0) {
+        $dispo++;
+      }
+      if ($_fill != 0) {
+        $occupied++;
+      }
+    }
+
+    $this->_affected = $occupied;
+    $this->_nb_free_freq = $dispo;
+    $this->_fill_rate = round(($occupied/$nb_place_consult)*100);
     return $this->_disponibilities = $fill;
   }
 

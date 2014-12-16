@@ -140,7 +140,8 @@ foreach ($listPlage as $currPlage) {
   $currPlage->loadCategorieFill();
   $currPlage->loadRefsNotes();
   $currPlage->countPatients();
-  $currPlage->loadFillRate();
+  $currPlage->loadRefsConsultations(false);
+  $currPlage->loadDisponibilities();
 }
 // Création du template
 $smarty = new CSmartyDP();
