@@ -307,7 +307,12 @@ class CPlageconsult extends CPlageHoraire {
 
             // rdv pris
             if ($status > 0) {
-              $fill[$temp_time] = $fill[$temp_time]+$status;
+              if (!isset($fill[$temp_time])) {
+                $fill[$temp_time] = $status;
+              }
+              else {
+                $fill[$temp_time] = $fill[$temp_time] + $status;
+              }
               $nb_plage_prise++;
             }
 
