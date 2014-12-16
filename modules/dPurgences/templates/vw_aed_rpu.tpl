@@ -444,7 +444,7 @@
         {{assign var="_is_anesth" value="0"}}
         {{assign var=sejour_id    value=""}}
 
-        {{if $patient->_ref_dossier_medical && !$patient->_ref_dossier_medical->_canEdit}}
+        {{if $patient->_ref_dossier_medical && $patient->_ref_dossier_medical->_id && !$patient->_ref_dossier_medical->_canEdit}}
           {{mb_include module=dPpatients template=CDossierMedical_complete object=$patient->_ref_dossier_medical}}
         {{else}}
           {{mb_include module=cabinet template=inc_ant_consult chir_id=$app->user_id show_header=0}}
