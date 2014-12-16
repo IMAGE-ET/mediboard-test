@@ -187,7 +187,10 @@ foreach ($sejours as $_sejour) {
     if ($_consultation->type == "entree") {
       continue;
     }
-
+    $_consultation->loadRefPraticien()->loadRefFunction();
+    if (CMbDT::daysRelative($_consultation->_datetime, $date) > $delay_trans_obs_consult) {
+      continue;
+    }
     $patients_offline[$patient->_guid]["consultations"][$_consultation->_ref_chir->function_id] = $_consultation;
   }
 
