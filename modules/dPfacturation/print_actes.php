@@ -15,13 +15,13 @@ $date   = CValue::get("date");
 $filter = new CPlageconsult();
 $filter->_date_min = CValue::getOrSession("_date_min", CMbDT::date());
 $filter->_date_max = CValue::getOrSession("_date_max", CMbDT::date());
-$filter->_type_affichage = CValue::getOrSession("_type_affichage", 1);
+$filter->_type_affichage = CValue::getOrSession("typeVue", 1);
 
 // Traduction pour le passage d'un enum en bool pour les requetes sur la base de donnee
-if ($filter->_type_affichage == "complete") {
+if ($filter->_type_affichage == "1") {
   $filter->_type_affichage = 1;
 }
-elseif ($filter->_type_affichage == "totaux") {
+elseif ($filter->_type_affichage == "2") {
   $filter->_type_affichage = 0;
 }
 $ljoin = array();
@@ -140,6 +140,9 @@ foreach ($listFactures as $_facture) {
   
   // Classement par plage
   $plage = $_facture->_ref_last_sejour;
+  if (!$plage->_id) {
+    $plage = $_facture->_ref_last_consult->loadRefSejour();
+  }
   if ($plage->_id) {
     $debut_plage = CMbDT::date($plage->sortie);
     if (!isset($listPlages["$debut_plage"])) {
