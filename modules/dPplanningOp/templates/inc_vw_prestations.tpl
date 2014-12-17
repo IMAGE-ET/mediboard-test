@@ -104,27 +104,20 @@
           <th>
               {{if $editRights}}
                 <input type="hidden" name="date" class="date" value="{{$today}}"/>
-                <input type="text" class="autocomplete" name="prestation_ponctuelle_view"/>
+                <input type="text" class="autocomplete" name="keywords"/>
                 <div class="autocomplete" id="prestation_autocomplete" style="display: none; color: #000; text-align: left;"></div>
               {{/if}}
               <script>
                 Main.add(function() {
                   var form = getForm("edit_prestations");
-                  var url = new Url("system", "httpreq_field_autocomplete");
-                  url.addParam("class","CItemPrestation");
-                  url.addParam("field", "nom");
-                  url.addParam("limit", 30);
-                  url.addParam("view_field", "name");
-                  url.addParam("show_view", true);
-                  url.addParam("input_field", "prestation_ponctuelle_view");
-                  url.addParam("where[object_class]", "CPrestationPonctuelle");
-                  url.autoComplete(form.prestation_ponctuelle_view, "prestation_autocomplete", {
+                  var url = new Url("hospi", "ajax_item_prestation_autocomplete");
+                  url.autoComplete(form.keywords, "prestation_autocomplete", {
                     minChars: 3,
                     method: "get",
                     select: "view",
                     dropdown: true,
-                    afterUpdateElement: function(field,selected){
-                      var item_prestation_id = selected.id.split("-").last();
+                    afterUpdateElement: function(field,selected) {
+                      var item_prestation_id = selected.get("id");
                       var form_prestation = getForm("add_prestation_ponctuelle");
                       $V(form_prestation.item_prestation_id, item_prestation_id);
                       $V(form_prestation.date, $V(form.date));
@@ -261,26 +254,25 @@
           {{/foreach}}
           
           {{if $context == "all"}}
-            <td>
+            <td class="text">
               {{if isset($liaisons_p.$_date|smarty:nodefaults)}}
                 {{foreach from=$liaisons_p.$_date item=_liaisons_by_prestation key=prestation_id}}
                     {{assign var=prestation value=$prestations_p.$prestation_id}}
                     {{foreach from=$_liaisons_by_prestation item=_liaison}}
                       {{assign var=_item value=$_liaison->_ref_item}}
-                      <div style="float: left; width: 8em;">
-                        <span onmouseover="ObjectTooltip.createEx(this, '{{$_item->_guid}}');"
-                              {{if $_item->color}}class="mediuser" style="border-left-color: #{{$_item->color}}"{{/if}}>
-                          {{$_item}}
-                        </span> :
-                      </div>
-                      <div style="float: left; width: 4em; padding-right: 2em;">
-                        <input type="text" class="ponctuelle" name="liaisons_p[{{$_liaison->_id}}]" value="{{$_liaison->quantite}}" size="1" onchange="this.form.onsubmit()"/>
-                        <script type="text/javascript">
+                      <div style="height: 2em; display: inline-block;">
+                        <input type="text" name="liaisons_p[{{$_liaison->_id}}]" value="{{$_liaison->quantite}}"
+                               class="ponctuelle" size="1" onchange="this.form.onsubmit()"/>
+                        <script>
                           Main.add(function() {
                              getForm('edit_prestations').elements['liaisons_p[{{$_liaison->_id}}]'].addSpinner(
                              {step: 1, min: 0});
                           });
                         </script>
+                        <span onmouseover="ObjectTooltip.createEx(this, '{{$_item->_guid}}');"
+                              {{if $_item->color}}class="mediuser" style="border-left-color: #{{$_item->color}}"{{/if}}>
+                          {{$_item}}
+                        </span>
                       </div>
                     {{/foreach}}
                 {{/foreach}}

@@ -384,6 +384,7 @@ class CAffectation extends CMbObject {
         $_item_liaison_souhait->loadObject($where, "date DESC", null, $ljoin);
 
         $item_liaison->item_souhait_id = $_item_liaison_souhait->item_souhait_id;
+        $item_liaison->sous_item_id = $_item_liaison_souhait->sous_item_id;
         $item_liaison->item_realise_id = $_liaison->item_prestation_id;
 
         if ($msg = $item_liaison->store()) {
