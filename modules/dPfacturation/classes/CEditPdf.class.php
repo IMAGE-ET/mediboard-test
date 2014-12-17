@@ -868,7 +868,7 @@ class CEditPdf{
     $decalage = $left_offset; // 7.36 // 8;
     
     //Ecriture de la reference
-    $num_reference = preg_replace("/^(\d{2})(\d{5})(\d{5})(\d{5})(\d{5})$/", '\\1 \\2 \\3 \\4 \\5 \\6', $this->facture->num_reference);
+    $num_reference = preg_replace('/(\d{2})(\d{5})(\d{5})(\d{5})(\d{5})/', '\1 \2 \3 \4 \5 \6', $this->facture->num_reference);
     $this->pdf->setFont($this->font, '', 11);
     $this->pdf->Text(50*$l_colonne, $h_ligne*8.75+$haut_doc , $num_reference);
     
