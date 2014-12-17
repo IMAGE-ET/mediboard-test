@@ -440,9 +440,10 @@
                     {{tr}}Edit{{/tr}}
                   </button>
                 {{else}}
-                  <div class="info" style="display:inline;">(Consultation de sejour, dissocier du séjour pour changer le patient ou changer le patient du séjour)</div>
+                  <div class="info text">
+                    Consultation de sejour, dissocier du séjour pour changer le patient ou changer le patient du séjour
+                  </div>
                 {{/if}}
-                  <br />
                   <input type="text" name="_seek_patient" style="width: 13em; {{if !$can_edit_pat}}display:none;{{/if}}" placeholder="{{tr}}fast-search{{/tr}}" "autocomplete" onblur="$V(this, '')"  />
               </td>
             </tr>
