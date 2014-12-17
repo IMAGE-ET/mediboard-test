@@ -430,7 +430,7 @@
                   {{assign var=can_edit_pat value=0}}
                 {{/if}}
 
-                {{mb_field object=$pat field="patient_id" hidden=1}}
+                {{mb_field object=$pat field="patient_id" hidden=1 onchange="requestInfoPat(); $('button-edit-patient').setVisible(this.value);"}}
                 <input type="text" name="_patient_view" style="width: 15em;" value="{{$pat->_view}}" readonly="readonly" {{if $can_edit_pat}}onfocus="PatSelector.init()"{{/if}} onchange="checkCorrespondantMedical()"/>
 
                 {{if $can_edit_pat}}
