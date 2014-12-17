@@ -10,7 +10,7 @@
 <table class="form">
   <tr>
     <th class="category" colspan="3">Catégories de documents
-      <input type="checkbox" name="check_all" id="check_all" onclick="Search.checkAllCheckboxes(this, 'names_types')"/>
+      <label><input type="checkbox" name="check_all" id="check_all" onclick="Search.checkAllCheckboxes(this, 'names_types')"/></label>
     </th>
   </tr>
   <tr>
@@ -49,6 +49,10 @@
     <td>
       <input type="checkbox" name="names_types" id="CPrescriptionLineMix" value="CPrescriptionLineMix">
       <label for="CPrescriptionLineMix">Prescriptions Mixtes</label>
+    </td>
+    <td>
+      <input type="checkbox" name="names_types" id="CExObject" value="CExObject">
+      <label for="CExObject"> Formulaires</label>
     </td>
   </tr>
   <tr>

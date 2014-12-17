@@ -9,6 +9,10 @@
 
 Thesaurus = window.Thesaurus || {
 
+  /**
+   * Method to update the list of the thesaurus
+   * @param {Integer} start
+   */
   updateListThesaurus: function (start) {
     var url = new Url('search',  'ajax_list_thesaurus');
     url.addParam("start_thesaurus", start);
@@ -16,6 +20,10 @@ Thesaurus = window.Thesaurus || {
 
   },
 
+  /**
+   * Method to display the list of the thesaurus
+   * @param {Integer} start
+   */
   displayResultsThesaurus: function(form){
     var url = new Url('search',  'ajax_result_thesaurus');
     url.addFormData(form);
@@ -23,8 +31,18 @@ Thesaurus = window.Thesaurus || {
     return false;
   },
 
+  /**
+   * Method to display the list of the thesaurus
+   * @param {Boolean} search_agregation
+   * @param {String} search_body
+   * @param {Integer} search_user_id
+   * @param {Element} search_types
+   * @param {String} search_contexte
+   * @param {String} thesaurus_entry
+   * @param {Function} callback
+   */
   addeditThesaurusEntry: function (search_agregation, search_body, search_user_id, search_types, search_contexte, thesaurus_entry, callback) {
-   var callback = callback ||  function () {Thesaurus.updateListThesaurus();};
+    callback = callback ||  function () {Thesaurus.updateListThesaurus();};
     var url = new Url('search', 'ajax_addedit_thesaurus_entry');
     url.addParam("search_agregation", search_agregation);
     url.addParam("search_body", search_body);
@@ -40,17 +58,23 @@ Thesaurus = window.Thesaurus || {
     this.modal = url.modalObject;
   },
 
+  /**
+   * Method to display the list of the thesaurus
+   * @param {String} pattern
+   */
   addPatternToEntry : function (pattern) {
     var token = "";
     var oform = getForm('addeditFavoris');
     var value = oform.entry.value;
-    var startPos = oform.entry.selectionStart;
-    var endPos = oform.entry.selectionEnd;
+    var entry = oform.entry;
+    var caret = entry.caret();
+    var startPos = caret.begin;
+    var endPos = caret.end;
     var text = value.substring(startPos,endPos);
     if (!text) {
       var debchaine = value.substring(0 , startPos);
       var finchaine = value.substring(startPos);
-      text ="MOT";
+      text = "MOT";
       value = debchaine + text + finchaine;
     }
 
@@ -97,6 +121,11 @@ Thesaurus = window.Thesaurus || {
     oform.entry.caret(deb_selection, fin_selection);
   },
 
+  /**
+   * Method to display the list of the thesaurus
+   * @param {Integer} thesaurus_entry_id
+   * @param {Function} callback
+   */
   addeditTargetEntry : function (thesaurus_entry_id, callback) {
     var url = new Url('search',  'ajax_addedit_target_entry');
     url.addParam("thesaurus_entry_id", thesaurus_entry_id);
@@ -108,6 +137,13 @@ Thesaurus = window.Thesaurus || {
   },
 
   name_code : null,
+
+  /**
+   * Method callback after addTarget
+   *
+   * @param {Integer} id
+   * @param {Element} obj
+   */
   addTargetCallback : function (id, obj) {
     var form = getForm("cibleTarget");
 
@@ -117,10 +153,23 @@ Thesaurus = window.Thesaurus || {
     }
   },
 
+  /**
+   * Method callback after addeditTarget
+   *
+   * @param {Integer} id
+   * @param {Element} obj
+   */
   addeditThesaurusCallback : function(id, obj) {
     this.addeditThesaurusEntry(null, null,null,null,null, id);
   },
 
+  /**
+   * Method callback after addTarget
+   *
+   * @param {Integer} id
+   * @param {String} name
+   * @param {String} obj_class
+   */
   insertTag : function (id, name, obj_class) {
     var tag = $(obj_class + "-" + id);
 
@@ -139,8 +188,16 @@ Thesaurus = window.Thesaurus || {
     }
   },
 
+  /**
+   * Method to submit thesaurus entry
+   *
+   * @param form
+   * @param callback
+   *
+   * @returns {Boolean}
+   */
   submitThesaurusEntry : function (form, callback) {
-    var callback = callback ||  function () {console.log ("toto"); Control.Modal.close();};
+    callback = callback ||  function () {Control.Modal.close();};
     return onSubmitFormAjax(form, {onComplete: callback});
   }
 };

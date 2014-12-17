@@ -226,3 +226,4 @@ $locales['mod-search-tab-vw_search_pmsi'] = 'Recherche';
 $locales['mod-search-tab-vw_search_thesaurus'] = 'Gestion des favoris';
 $locales['module-search-court'] = 'Recherche';
 $locales['module-search-long'] = 'Recherche d\'informations';
+$locales['search-not-connected'] = 'Le serveur de recherche n\'est pas connecté';

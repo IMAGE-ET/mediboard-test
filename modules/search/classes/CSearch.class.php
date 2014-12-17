@@ -78,7 +78,7 @@ class CSearch {
   /**
    * Update settings of the index
    *
-   * @param Elastica/Index $index
+   * @param Elastica/Index $index the index
    *
    * @return void
    */
@@ -92,8 +92,8 @@ class CSearch {
 
   /** Update an index settings
    *
-   * @param Elastica\Index $index the index
-   * @param array $settings the settings you want to apply
+   * @param Elastica\Index $index    the index
+   * @param array          $settings the settings you want to apply
    *
    * @return void
    */
@@ -114,6 +114,9 @@ class CSearch {
    * @return Elastica\Index
    */
   function getIndex ($name) {
+    if ($this->_index) {
+      return  $this->_index;
+    }
     $this->_index = $this->_client->getIndex($name);
     return  $this->_index;
   }
@@ -157,7 +160,6 @@ class CSearch {
     // Define mapping
     $mapping = new Mapping();
     $mapping->setType($type);
-    $mapping->setParam('search_analyzer', 'custom_search_analyzer');
     // Set mapping
     $mapping->setProperties($array);
     // Send mapping to type
@@ -230,14 +232,14 @@ class CSearch {
   function constructDatum ($datum) {
     if ($datum['type'] != 'delete') {
       /** @var IIndexableObject|CStoredObject $object */
-      $object = new $datum['object_class']();
+      $object = CModelObject::getInstance($datum["object_class"]);
       if (!$object->load($datum['object_id'])) {
         $datum_to_index["id"]  = $datum['object_id'];
         $datum_to_index["date"] = CMbDT::format(CMbDT::dateTime(), "%Y/%m/%d");
           return $datum_to_index;
       }
       //On récupère les champs à indexer.
-      $datum_to_index = $object->getFieldsSearch();
+      $datum_to_index = $object->getIndexableData();
 
       if (!$datum_to_index["date"]) {
         $datum_to_index["id"]          = $datum['object_id'];
@@ -249,10 +251,8 @@ class CSearch {
       $datum_to_index["date"]        = CMbDT::format(CMbDT::dateTime(), "%Y/%m/%d");
     }
 
-    $datum_to_index['body'] = mb_convert_encoding($datum_to_index['body'], "UTF-8", "Windows-1252");
-    $datum_to_index['title'] = mb_convert_encoding($datum_to_index['title'], "UTF-8", "Windows-1252");
-    $datum_to_index['body'] = CMbString::normalizeUtf8($datum_to_index['body']);
-    $datum_to_index['title'] = CMbString::normalizeUtf8($datum_to_index['title']);
+    $datum_to_index['body'] = $this->normalizeEncoding($datum_to_index['body']);
+    $datum_to_index['title'] = $this->normalizeEncoding($datum_to_index['title']);
 
     return $datum_to_index;
   }
@@ -287,13 +287,14 @@ class CSearch {
       case 'create':
         $type->addDocument($document);
         break;
-      case 'store' :
+      case 'store':
             $type->updateDocument($document);
         break;
       case 'delete':
         $type->deleteDocument($document);
         break;
-      case 'merge' :
+      case 'merge':
+        //nothing to do
         /* supprimer un des deux et faire un update de l'autre.*/
         break;
       default:
@@ -314,7 +315,7 @@ class CSearch {
   function bulkIndexing($data) {
     $data_to_index = $this->constructBulkData($data);
     foreach ($data_to_index as $type_name => $_type) {
-      $typeES = $this->_index->getType($type_name);
+      $typeES = (strpos($type_name, 'CExObject') === 0 ) ? $this->_index->getType("CExObject") : $this->_index->getType($type_name);
       foreach ($_type as $action => $_data) {
         $documents = array();
         foreach ($_data as $_datum) {
@@ -350,20 +351,24 @@ class CSearch {
   }
 
   /**
-   * simple search with an operator and words
+   *  search with words and options
    *
-   * @param string  $operator    'And' or 'Or' default : 'Or'
-   * @param string  $words       data
-   * @param integer $start       the begining of the paging
-   * @param integer $limit       the interval of the paging
-   * @param array   $names_types the restrictive type(s) where the search take place.
-   * @param bool    $aggregation parameter the search to be aggregated or not.
+   * @param string  $words         data
+   * @param integer $start         the begining of the paging
+   * @param integer $limit         the interval of the paging
+   * @param array   $names_types   the restrictive type(s) where the search take place.
+   * @param bool    $aggregation   parameter the search to be aggregated or not.
+   * @param integer $sejour_id     the id of the sejour
+   * @param string  $specific_user the ids of users selected
+   * @param bool    $details       details of query
+   * @param string  $date          date of query
+   * @param bool    $fuzzy_search  fuzzy the query
    *
    * @return \Elastica\ResultSet
    */
   function searchQueryString($words, $start = 0, $limit = 30, $names_types = null, $aggregation = false, $sejour_id = null, $specific_user=null, $details=null, $date=null, $fuzzy_search = null) {
     $query = new CSearchQuery();
-    $query_string =  $query->searchQueryString($words, $start, $limit, $names_types, $aggregation, $sejour_id, $specific_user, $details, $date, $fuzzy_search);
+    $query_string =  $query->searchQueryString($words, $start, $limit, $aggregation, $sejour_id, $specific_user, $details, $date, $fuzzy_search);
 
     //Search on the index.
     $this->_index = $this->loadIndex();
@@ -376,9 +381,69 @@ class CSearch {
   }
 
   /**
+   * simple search
+   *
+   * @param string  $words     data
+   * @param integer $start     the begining of the paging
+   * @param integer $limit     the interval of the paging
+   * @param integer $sejour_id the id of the sejour
+   *
+   * @return \Elastica\ResultSet
+   */
+  function searchQueryStringManual($words, $start, $limit, $sejour_id) {
+    $query = new CSearchQuery();
+    $query_string =  $query->searchQueryStringManual($words, $start, $limit, $sejour_id);
+
+    //Search on the index.
+    $this->_index = $this->loadIndex();
+    $search = new \Elastica\Search($this->_client);
+    $search->addIndex($this->_index);
+
+    return $search->search($query_string);
+  }
+
+  /**
+   * The auto search from favoris
+   *
+   * @param array   $favoris the favoris
+   * @param CSejour $sejour  the sejour
+   *
+   * @return array
+   */
+  function searchAuto ($favoris, $sejour) {
+    $query = new CSearchQuery();
+    $tab_search = array();
+
+    //Search on the index.
+    $this->createClient();
+    $this->_index = $this->loadIndex();
+    $search = new \Elastica\Search($this->_client);
+    $search->addIndex($this->_index);
+
+    foreach ($favoris as $_favori) {
+      if ($_favori->types) {
+        $search->addTypes(explode("|", $_favori->types));
+      }
+      $sub_query = $query->querySearchAuto($_favori, $sejour);
+      $results_query = $search->search($sub_query);
+      $tab_search[$_favori->_id]["titre"] = $_favori->titre;
+      $tab_search[$_favori->_id]["entry"] = $_favori->entry;
+      $tab_search[$_favori->_id]["time"] = $results_query->getTotalTime();
+      $tab_search[$_favori->_id]["nb_results"] = $results_query->getTotalHits();
+      foreach ($results_query->getResults() as $_result) {
+        $item = $_result->getHit();
+        if (isset($item["highlight"]["body"][0])) {
+          $item["highlight"]["body"][0] = mb_convert_encoding($item["highlight"]["body"][0], "WINDOWS-1252",  "UTF-8");
+        }
+        $tab_search[$_favori->_id]["results"][] = $item;
+      }
+    }
+
+    return $tab_search;
+  }
+  /**
    * Construct query with date informations
    *
-   * @param string $words     the words query
    * @param string $_date     type of interval date
    * @param string $_min_date begining date
    * @param string $_max_date final date
@@ -430,6 +495,8 @@ class CSearch {
   }
 
   /**
+   * Method to load infos about serveur ES
+   *
    * @return array
    */
   function loadCartoInfos() {
@@ -496,11 +563,31 @@ class CSearch {
     return $purified;
   }
 
+  /**
+   * Method to get the setting of the index
+   *
+   * @param bool $default the setting by default
+   *
+   * @return array
+   */
   function getSettings($default = true) {
-    if(!$default) {
+    if (!$default) {
       return self::$settings;
     }
     return self::$settings_default;
+  }
+
+  /**
+   * Method to normalize text
+   *
+   * @param String $text The text to normalize
+   *
+   * @return String
+   */
+  function normalizeEncoding($text) {
+    $text = mb_convert_encoding($text, "UTF-8", "Windows-1252");
+    $text = CMbString::normalizeUtf8($text);
+    return $text;
   }
 
   // static settings

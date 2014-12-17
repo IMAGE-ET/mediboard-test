@@ -20,8 +20,10 @@ if ($table) {
   $ds    = CSQLDataSource::get("std");
   $search_indexing = new CSearchIndexing();
   foreach ($names_types as $name_type) {
-    $query = $search_indexing->firstIndexingStore($name_type);
-    $ds->exec($query);
+    $queries = $search_indexing->firstIndexingStore($name_type);
+    foreach ($queries as $query) {
+      $ds->exec($query);
+    }
   }
   CAppUI::displayAjaxMsg("l'opération en base s'est déroulée avec succès ", UI_MSG_OK);
 }

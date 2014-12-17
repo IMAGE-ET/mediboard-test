@@ -20,7 +20,8 @@ class CSearchObjectHandler extends CMbObjectHandler {
 
   /**
    * Check the types which are handled.
-   * @param $object
+   *
+   * @param CMbObject $object the object
    *
    * @return bool
    */
@@ -38,8 +39,8 @@ class CSearchObjectHandler extends CMbObjectHandler {
         $group = $object->_ref_chir->loadRefFunction()->loadRefGroup();
         break;
       case 'CConsultation':
-      //case 'CPrescriptionLineMedicament':
-      //case 'CPrescriptionLineMix':
+      case 'CPrescriptionLineMedicament':
+      case 'CPrescriptionLineMix':
         /** @var CConsultation $object */
         $object->loadRefPraticien();
         $group = $object->_ref_praticien->loadRefFunction()->loadRefGroup();
@@ -58,9 +59,15 @@ class CSearchObjectHandler extends CMbObjectHandler {
         $object->loadRefAuthor();
         $group       = $object->_ref_author->loadRefFunction()->loadRefGroup();
         break;
-      default: return false;
+      default:
+        if ($object->_class instanceof CExObject) {
+          $group = $object->loadRefGroup();
+        }
+        else {
+          return false;
+        }
     }
-    if(CAppUI::conf("search active_handler active_handler_search_types", $group)) {
+    if (CAppUI::conf("search active_handler active_handler_search_types", $group)) {
       self::$handled = explode("|", CAppUI::conf("search active_handler active_handler_search_types", $group));
     }
     return true;
@@ -166,15 +173,13 @@ class CSearchObjectHandler extends CMbObjectHandler {
         $group = $object->_ref_chir->loadRefFunction()->loadRefGroup();
         break;
       case 'CConsultation':
-      //case 'CPrescriptionLineMedicament':
-      //case 'CPrescriptionLineMix':
-        /** @var CConsultation $object */
+      case 'CPrescriptionLineMedicament':
+      case 'CPrescriptionLineMix':
         $object->loadRefPraticien();
         $group = $object->_ref_praticien->loadRefFunction()->loadRefGroup();
         break;
       case 'CObservationMedicale':
       case 'CTransmissionMedicale':
-        /** @var CTransmissionMedicale $object */
         $object->completeField("user_id");
         $object->loadRefUser();
         $group       = $object->_ref_user->loadRefFunction()->loadRefGroup();
@@ -186,7 +191,13 @@ class CSearchObjectHandler extends CMbObjectHandler {
         $group       = $object->_ref_author->loadRefFunction()->loadRefGroup();
         break;
       default:
-        return false;
+        if ($object->_class instanceof CExObject) {
+          $group = $object->loadRefGroup();
+        }
+        else {
+          return false;
+        }
+
     }
     if (!CAppUI::conf("search active_handler active_handler_search", $group)) {
       return false;

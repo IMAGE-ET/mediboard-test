@@ -20,8 +20,8 @@
 <form method="post" name="addeditFavoris" onsubmit="return Thesaurus.submitThesaurusEntry(this);">
   {{mb_key   object=$thesaurus_entry}}
   {{mb_class object=$thesaurus_entry}}
-  <input type="hidden" id="user_id" name="user_id" value="{{$thesaurus_entry->user_id}}"/>
-  <input type="hidden" id="types" name="types" value="{{"|"|implode:$search_types}}"/>
+  <input type="hidden" name="user_id" value="{{$thesaurus_entry->user_id}}"/>
+  <input type="hidden" name="types" value="{{"|"|implode:$search_types}}"/>
   <input type="hidden"  name="del" value="0"/>
   {{if !$thesaurus_entry->_id}}
     <input type="hidden"  name="callback" value="Thesaurus.addeditThesaurusCallback"/>
@@ -74,15 +74,15 @@
       <td colspan="2">
         <span class="circled">
           <img src="images/icons/user.png" title="Favori pour {{mb_value object=$thesaurus_entry field=user_id}}">
-          <input type="checkbox" name="user_id" value="{{$user->_id}}" checked>
+          <label><input type="checkbox" name="user_id" value="{{$user->_id}}" checked></label>
         </span>
         <span class="circled">
           <img src="images/icons/user-function.png" title="Favori pour {{$user->_ref_function}}">
-          <input type="checkbox" name="function_id" value="{{$user->_ref_function->_id}}">
+           <label><input type="checkbox" name="function_id" value="{{$user->_ref_function->_id}}"></label>
         </span>
         <span class="circled">
           <img src="images/icons/group.png" title="Favori pour {{$user->_ref_function->_ref_group}}">
-          <input type="checkbox" name="group_id" value="{{$user->_ref_function->_ref_group->_id}}">
+          <label><input type="checkbox" name="group_id" value="{{$user->_ref_function->_ref_group->_id}}"></label>
         </span>
       </td>
     </tr>

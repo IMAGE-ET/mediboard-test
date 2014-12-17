@@ -11,9 +11,9 @@
 <script>
   Main.add(function () {
     var form = getForm("esLogSearch");
-    window.calendar_planning_fin = Calendar.regField(form._min_date);
-    window.calendar_planning_fin = Calendar.regField(form._max_date);
-    window.calendar_planning_fin = Calendar.regField(form._date);
+    Calendar.regField(form._min_date);
+    Calendar.regField(form._max_date);
+    Calendar.regField(form._date);
     getAutocomplete();
     window.user_tag_token.add('{{$app->user_id}}');
     insertTag('{{$app->_ref_user->_guid}}', '{{$app->_ref_user}}');
@@ -111,11 +111,11 @@
           <table>
             <tr>
               <td>
-                <input type="hidden" class="date" id="_min_date" name="_min_date" onchange="$V(this.form.start, '0')" value="">
+                <input type="hidden" class="date" name="_min_date" onchange="$V(this.form.start, '0')" value="">
                 <b>&raquo;</b>
-                <input type="hidden" class="date" id="_max_date" name="_max_date" onchange="$V(this.form.start, '0')" >
+                <input type="hidden" class="date" name="_max_date" onchange="$V(this.form.start, '0')" >
                 <strong>{{tr}}or{{/tr}}</strong>
-                Jour seul : <input type="hidden" class="date" id="_date" name="_date" onchange="$V(this.form.start, '0')" >
+                Jour seul : <input type="hidden" class="date" name="_date" onchange="$V(this.form.start, '0')" >
               </td>
             </tr>
           </table>

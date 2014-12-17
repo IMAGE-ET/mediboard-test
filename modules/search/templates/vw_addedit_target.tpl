@@ -78,8 +78,8 @@
     <tr>
       <td>
         <ul id="tabs-codes" class="control_tabs">
-          <li onmousedown="this.onmousedown=''"><a href="#tab-CIM">Codes Cim10</a></li>
-          <li onmousedown="this.onmousedown=''"><a href="#tab-CCAM">Codes CCAM</a></li>
+          <li><a href="#tab-CIM">Codes Cim10</a></li>
+          <li><a href="#tab-CCAM">Codes CCAM</a></li>
         </ul>
       </td>
     </tr>
@@ -92,8 +92,8 @@
           <table class="layout">
             <tr>
               <td style="vertical-align: top;">
-                <input type="search" id="keywords_code" name="keywords_code" value="" class="autocomplete" />
-                <input type="hidden" name="_CCodeCIM10"/>
+                <label><input type="search" id="keywords_code" name="keywords_code" value="" class="autocomplete" /></label>
+                  <label><input type="hidden" name="_CCodeCIM10"/></label>
               </td>
               <td>
                 <ul id="CCodeCIM10_tags" class="tags">
@@ -118,8 +118,8 @@
           <table class="layout">
             <tr>
               <td style="vertical-align: top;">
-                <input type="search" id="_codes_ccam" name="_codes_ccam" value="" class="autocomplete" />
-                <input type="hidden" name="_CCodeCCAM"/>
+                <label><input type="search" id="_codes_ccam" name="_codes_ccam" value="" class="autocomplete" /></label>
+                <label><input type="hidden" name="_CCodeCCAM"/></label>
               </td>
               <td>
                 <ul id="CCodeCCAM_tags" class="tags">

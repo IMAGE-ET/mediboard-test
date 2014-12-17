@@ -20,8 +20,8 @@ class CSearchFileWrapper {
   /**
    * Constructor
    *
-   * @param string  $fichier  Le fichier dont on doit extraire le contenu
-   * @param integer $file_id  L'id du fichier dont on doit extraire le contenu
+   * @param string  $fichier Le fichier dont on doit extraire le contenu
+   * @param integer $file_id L'id du fichier dont on doit extraire le contenu
    *
    */
   function __construct ($fichier, $file_id) {

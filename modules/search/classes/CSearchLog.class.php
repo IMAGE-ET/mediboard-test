@@ -3,7 +3,7 @@
 /**
  * $Id$
  *
- * @category ${Module}
+ * @category Search
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -51,11 +51,9 @@ class CSearchLog extends CSearch {
   /**
    * Create the mapping for logging
    *
-   * @param Elastica /Index $index
-   *
    * @return void
    */
-  function createLogMapping($index) {
+  function createLogMapping() {
     $index = $this->createIndex(CAppUI::conf("db std dbname") . "_log", null, false);
     foreach (self::$names_mapping as $names) {
       $type  = $this->createType($index, $names);
@@ -67,17 +65,19 @@ class CSearchLog extends CSearch {
   /**
    * Construct the datum for logging
    *
-   * @param array   $names_types  Types
-   * @param string  $contexte     Contexte
-   * @param integer $user_id      User who have make the search
-   * @param string  $words        the words of the search
-   * @param bool    $aggregation  aggregation or not
+   * @param array   $names_types Types
+   * @param string  $contexte    Contexte
+   * @param integer $user_id     User who have make the search
+   * @param string  $words       the words of the search
+   * @param bool    $aggregation aggregation or not
    *
    * @return void
    */
 
   function log($names_types, $contexte, $user_id, $words, $aggregation) {
-
+    if (!$names_types) {
+      $names_types = array();
+    }
     $document                 = array();
     $document['aggregation']  = $aggregation;
     $document['body']         = CMbString::normalizeUtf8($words);
@@ -183,8 +183,10 @@ class CSearchLog extends CSearch {
           "post_tags" => array(" </strong> </em>"),
           "fragment_size" => 80,
           "number_of_fragments" => 10,
-        )),
-      ));
+         )
+        ),
+      )
+    );
 
     //Search on the index.
     $index = CAppUI::conf("db std dbname")."_log";
@@ -198,6 +200,15 @@ class CSearchLog extends CSearch {
     return $search->search($elasticaQuery);
   }
 
+  /**
+   * method to search log details
+   *
+   * @param string $operator    the operator for the query
+   * @param string $words       the words
+   * @param string $names_types the types to search
+   *
+   * @return \Elastica\ResultSet
+   */
   function searchQueryLogDetails ($operator, $words, $names_types = null) {
     $words = CmbString::normalizeUtf8(stripcslashes($words));
     // Define a Query. We want a string query.
@@ -228,7 +239,9 @@ class CSearchLog extends CSearch {
   /**
    * Load the aggregation and format array to display in the search template
    *
-   * @param $aggregation
+   * @param array $aggregation the aggregation
+   *
+   * @return array
    */
   function loadAggregationLog ($aggregation) {
 
@@ -247,8 +260,8 @@ class CSearchLog extends CSearch {
         $objects_refs[$id_object]["object"] = $object;
         $agg_contexte                       = $__agg['contexte']['buckets'];
         foreach ($agg_contexte as $_key => $___agg) {
-          $key                                              = $___agg['key'];
-          $count                                            = $___agg['doc_count'];
+          $key = $___agg['key'];
+          $count = $___agg['doc_count'];
           $objects_refs[$id_object]['contexte'][$_key]['key']   = $key;
           $objects_refs[$id_object]['contexte'][$_key]['count'] = $count;
         }
@@ -259,6 +272,8 @@ class CSearchLog extends CSearch {
   }
 
   /**
+   * method to load infos about search
+   *
    * @return array
    */
   function loadCartoInfos() {
@@ -272,6 +287,8 @@ class CSearchLog extends CSearch {
   }
 
   /**
+   * method to load static contextes
+   *
    * @return array
    */
   function loadContextes () {

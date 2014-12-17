@@ -3,7 +3,7 @@
 /**
  * $Id$
  *
- * @category ${Module}
+ * @category Search
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -50,6 +50,13 @@ class CSearchQuery {
     return $ds->loadList($query);
   }
 
+  /**
+   * Method to delete temporary data
+   *
+   * @param array $array array of data
+   *
+   * @return resource
+   */
   function deleteDataTemporaryTable($array) {
     $ds    = CSQLDataSource::get("std");
     $query = 'DELETE FROM `search_indexing` WHERE `search_indexing_id` ';
@@ -58,9 +65,16 @@ class CSearchQuery {
     return $ds->exec($query);
   }
 
+  /**
+   * Method to delete temporary data
+   *
+   * @param integer $id the id of the datum
+   *
+   * @return resource
+   */
   function deleteDatumTemporaryTable($id) {
     $ds    = CSQLDataSource::get("std");
-    $query = "DELETE FROM `search_indexing` WHERE `object_id` = \"$id\";";
+    $query = $ds->prepare("DELETE FROM `search_indexing` WHERE `object_id` = ?;", $id);
 
     return $ds->exec($query);
   }
@@ -68,15 +82,19 @@ class CSearchQuery {
   /**
    * simple search with an operator and words
    *
-   * @param string  $words       data
-   * @param integer $start       the begining of the paging
-   * @param integer $limit       the interval of the paging
-   * @param array   $names_types the restrictive type(s) where the search take place.
-   * @param bool    $aggregation parameter the search to be aggregated or not.
+   * @param string  $words         data
+   * @param integer $start         the begining of the paging
+   * @param integer $limit         the interval of the paging
+   * @param bool    $aggregation   parameter the search to be aggregated or not.
+   * @param integer $sejour_id     the id of the sejour
+   * @param string  $specific_user the ids of users selected
+   * @param bool    $details       details of query
+   * @param string  $date          date of query
+   * @param bool    $fuzzy_search  fuzzy the query
    *
    * @return \Elastica\Query
    */
-  function searchQueryString($words, $start = 0, $limit = 30, $names_types = null, $aggregation = false, $sejour_id = null, $specific_user =null, $details=null, $date=null, $fuzzy_search =null) {
+  function searchQueryString($words, $start = 0, $limit = 30, $aggregation = false, $sejour_id = null, $specific_user =null, $details=null, $date=null, $fuzzy_search =null) {
 
     // Initialisation des mots pour la recherche
     $prats = $this->constructWordsWithPrat($specific_user, $sejour_id);
@@ -184,9 +202,71 @@ class CSearchQuery {
   }
 
   /**
+   * simple search
+   *
+   * @param string  $words     data
+   * @param integer $start     the begining of the paging
+   * @param integer $limit     the interval of the paging
+   * @param integer $sejour_id the id of the sejour
+   *
+   * @return \Elastica\Query
+   */
+  function searchQueryStringManual($words, $start, $limit, $sejour_id) {
+    $words = CmbString::normalizeUtf8(stripcslashes($words));
+    $sejour = $this->constructWordsWithSejour($sejour_id);
+    $query_bool = new Elastica\Query\Bool();
+
+    // Query words
+    $query_words = new Elastica\Query\QueryString();
+    $query_words->setQuery($words);
+    $query_words->setFields(array("body", "title"));
+    $query_words->setDefaultOperator("and");
+    $query_bool->addMust($query_words);
+
+    // Query Séjour
+    $query_sejour = new Elastica\Query\QueryString();
+    $query_sejour->setQuery($sejour);
+    $query_sejour->setDefaultOperator("and");
+    $query_bool->addMust($query_sejour);
+
+    $query = new Query($query_bool);
+
+    //Pagination
+    $query->setFrom($start);    // Where to start
+    $query->setLimit($limit);
+
+    //Highlight
+    if ($words) {
+      $query->setHighlight(
+        array(
+          "pre_tags" => array(" <em> <strong> "),
+          "post_tags" => array(" </strong> </em>"),
+          "fields" => array(
+            "body" => array(
+              "fragment_size" => 50,
+              "number_of_fragments" => 3,
+              "highlight_query" => array(
+                "bool" => array(
+                  "must" => array(
+                    "match"=> array(
+                      "body"=> array(
+                        "query"=> $words
+                      )
+                    )
+                  ),
+                  "minimum_should_match" => 1
+                )
+              )
+            )
+          )
+        )
+      );
+    }
+    return $query;
+  }
+  /**
    * Construct query with date informations
    *
-   * @param string $words     the words query
    * @param string $_date     type of interval date
    * @param string $_min_date begining date
    * @param string $_max_date final date
@@ -249,7 +329,9 @@ class CSearchQuery {
   /**
    * Load the aggregation and format array to display in the search template
    *
-   * @param $aggregation
+   * @param array $aggregation The aggregation
+   *
+   * @return array
    */
   function loadAggregationObject ($aggregation) {
     $objects_refs = array ();
@@ -289,45 +371,47 @@ class CSearchQuery {
   /**
    * Load objects for the aggregation view.
    *
-   * @param array $objects_refs
+   * @param array $objects_refs the array of ref objects
    *
    * @return void
    */
   function loadObjectRef ($objects_refs) {
 
     foreach ($objects_refs as $_object_ref) {
-      if ($_object_ref['object'] instanceof CMbObject) {
-        if ($_object_ref['object'] instanceof CConsultAnesth) {
-          $_object_ref['object']->loadRefConsultation()->loadRefPraticien();
-          $_object_ref['object']->loadRefConsultation()->loadRelPatient();
-          $_object_ref['object']->loadRefConsultation()->loadRefPlageConsult();
-          $_object_ref['object']->loadRefSejour();
-          if ($_object_ref['object']->_ref_sejour->_id) {
-            $_object_ref['object']->_ref_sejour->loadNDA();
+      $_object = $_object_ref['object'];
+      if ($_object instanceof CMbObject) {
+        if ($_object instanceof CConsultAnesth) {
+          $consult = $_object->loadRefConsultation();
+          $consult->loadRefPraticien();
+          $consult->loadRelPatient();
+          $consult->loadRefPlageConsult();
+          $_object->loadRefSejour();
+          if ($_object->_ref_sejour->_id) {
+            $_object->_ref_sejour->loadNDA();
           }
         }
         else {
-          if ($_object_ref['object'] instanceof CConsultation) {
-            $_object_ref['object']->loadRefPraticien();
-            $_object_ref['object']->loadRelPatient();
-            $_object_ref['object']->loadRefPlageConsult();
-            $_object_ref['object']->loadRefSejour();
-            if ($_object_ref['object']->_ref_sejour->_id) {
-              $_object_ref['object']->_ref_sejour->loadNDA();
+          if ($_object instanceof CConsultation) {
+            $_object->loadRefPraticien();
+            $_object->loadRelPatient();
+            $_object->loadRefPlageConsult();
+            $_object->loadRefSejour();
+            if ($_object->_ref_sejour->_id) {
+              $_object->_ref_sejour->loadNDA();
             }
 
           }
-          if ($_object_ref['object'] instanceof CSejour) {
-            $_object_ref['object']->loadRefPraticien();
-            $_object_ref['object']->loadRelPatient();
-            $_object_ref['object']->loadNDA();
+          if ($_object instanceof CSejour) {
+            $_object->loadRefPraticien();
+            $_object->loadRelPatient();
+            $_object->loadNDA();
           }
           else {
-            $_object_ref['object']->loadRefPraticien();
-            $_object_ref['object']->loadRelPatient();
-            $_object_ref['object']->loadRefSejour();
-            if ($_object_ref['object']->_ref_sejour->_id) {
-              $_object_ref['object']->_ref_sejour->loadNDA();
+            $_object->loadRefPraticien();
+            $_object->loadRelPatient();
+            $_object->loadRefSejour();
+            if ($_object->_ref_sejour->_id) {
+              $_object->_ref_sejour->loadNDA();
             }
           }
         }
@@ -336,8 +420,10 @@ class CSearchQuery {
   }
 
   /**
+   * Method to load cartos infos
    *
-   * @param CSearch $c_search
+   * @param CSearch $c_search the csearch
+   *
    * @return array
    */
   function loadCartoInfos($c_search) {
@@ -376,7 +462,9 @@ class CSearchQuery {
     // récupération du nombre de docs "indexés",  "à indexer" et récupération des types d'éléments restant à indexer.
     $result['nbDocs_indexed']          = $index->count();;
     $result['nbdocs_to_index']         = $search->countList();;
-    $result['nbdocs_to_index_by_type'] = $search->countMultipleList(null, null, "object_class", null, "`object_class`, COUNT(`object_class`) AS `total`");
+
+    $order = "`object_class`, COUNT(`object_class`) AS `total`";
+    $result['nbdocs_to_index_by_type'] = $search->countMultipleList(null, null, "object_class", null, $order);
 
     // récupération du statut de la connexion et du cluster
     $result['status']    = $cluster->getHealth()->getStatus();
@@ -385,4 +473,63 @@ class CSearchQuery {
     return $result;
   }
 
+  /**
+   * Query to search auto
+   *
+   * @param CSearchThesaurusEntry $favori The favori
+   * @param CSejour               $sejour The sejour
+   *
+   * @return Query
+   */
+  function querySearchAuto ($favori, $sejour) {
+    $query_bool = new Elastica\Query\Bool();
+
+    // query des séjours
+    $query_sejour = new Elastica\Query\QueryString();
+    $query_sejour->setQuery($this->constructWordsWithSejour($sejour->_id));
+    $query_sejour->setDefaultOperator("and");
+    $query_bool->addMust($query_sejour);
+
+    // query du favoris
+    $query_words = new Elastica\Query\QueryString();
+    $query_words->setQuery($favori->entry);
+    $query_words->setFields(array("body", "title"));
+    $query_words->setDefaultOperator("and");
+    $query_bool->addMust($query_words);
+
+
+    $query = new Query($query_bool);
+
+    //  Pagination
+    $query->setFrom(0);    // Where to start
+    $query->setLimit(30);
+
+    //Highlight
+    $query->setHighlight(
+      array(
+        "pre_tags" => array(" <em> <strong> "),
+        "post_tags" => array(" </strong> </em>"),
+        "fields" => array(
+          "body" => array(
+            "fragment_size" => 50,
+            "number_of_fragments" => 3,
+            "highlight_query" => array(
+              "bool" => array(
+                "must" => array(
+                  "match"=> array(
+                    "body"=> array(
+                      "query"=> $favori->entry
+                    )
+                  )
+                ),
+                "minimum_should_match" => 1
+              )
+            )
+          )
+        )
+      )
+    );
+
+    return $query;
+  }
 }

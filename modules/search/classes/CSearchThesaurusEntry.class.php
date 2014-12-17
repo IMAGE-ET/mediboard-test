@@ -77,6 +77,7 @@ class CSearchThesaurusEntry extends CMbObject {
   }
 
   /**
+   * method to load targets
    *
    * @return array
    */
@@ -89,16 +90,17 @@ class CSearchThesaurusEntry extends CMbObject {
       $_target->loadRefTarget();
 
       switch ($_target->object_class) {
-        case "CCodeCIM10" :
+        case "CCodeCIM10":
           $this->_cim_targets[] = $_target;
           break;
-        case "CCodeCCAM" :
+        case "CCodeCCAM":
           $this->_ccam_targets[] = $_target;
           break;
-        case "CActeNGAP" :
+        case "CActeNGAP":
           $this->_ngap_targets[] = $_target;
           break;
         default:
+          // nothing to do
           break;
       }
     }

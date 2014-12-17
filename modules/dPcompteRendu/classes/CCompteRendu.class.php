@@ -1849,8 +1849,8 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
    *
    * @return array
    */
-  function getFieldsSearch () {
-    $prat = $this->getFieldPraticien();
+  function getIndexableData () {
+    $prat = $this->getIndexablePraticien();
     if (!$prat) {
       $prat = new CMediusers();
     }
@@ -1860,7 +1860,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     $array["title"]       = $this->nom;
     $this->loadContent(false);
     $content              = $this->_ref_content;
-    $array["body"]        = $this->redesignBody($content->content);
+    $array["body"]        = $this->getIndexableBody($content->content);
     $date = $this->creation_date;
     if (!$date) {
       $date = CMbDT::dateTime();
@@ -1868,7 +1868,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     $array["date"]        = str_replace("-", "/", $date);
     $array["function_id"] = $prat->function_id;
     $array["group_id"]    = $this->loadRefAuthor()->loadRefFunction()->group_id;
-    $array["patient_id"]  = $this->getFieldPatient();
+    $array["patient_id"]  = $this->getIndexablePatient()->_id;
     $array["object_ref_id"] = $this->loadTargetObject()->_id;
     $array["object_ref_class"] = $this->loadTargetObject()->_class;
 
@@ -1878,12 +1878,11 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
   /**
    * Redesign the content of the body you will index
    *
-   * @param string $contenu The content you want to redesign
+   * @param string $content The content you want to redesign
    *
    * @return string
    */
-  function redesignBody($contenu) {
-    $content = $contenu;
+  function getIndexableBody($content) {
     $content = strtr(
       $content,
       array(
@@ -1901,9 +1900,9 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
   /**
    * Get the patient_id of CMbobject
    *
-   * @return string
+   * @return CPatient
    */
-  function getFieldPatient () {
+  function getIndexablePatient () {
     $object = $this->loadTargetObject();
 
     if (!$object || !$object->_id) {
@@ -1911,7 +1910,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     }
 
     if ($object instanceof CPatient) {
-      return $object->_id;
+      return $object;
     }
 
     if (!method_exists($this, "loadRelPatient")) {
@@ -1923,12 +1922,12 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
     switch ($this->object_class) {
       case "CConsultAnesth":
-        return $object->_ref_consultation->_ref_patient->_id;
+        return $object->_ref_consultation->_ref_patient;
 
         break;
 
       default:
-        return $object->_ref_patient->_id;
+        return $object->_ref_patient;
     }
   }
   /**
@@ -1936,7 +1935,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
    *
    * @return CMediusers
    */
-  function getFieldPraticien () {
+  function getIndexablePraticien () {
     $object = $this->loadTargetObject();
     if (!$object || !$object->_id) {
       return null;

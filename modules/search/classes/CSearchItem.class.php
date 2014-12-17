@@ -3,7 +3,7 @@
 /**
  * $Id$
  *
- * @category ${Module}
+ * @category Search
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  OXOL, see http://www.mediboard.org/public/OXOL
@@ -33,17 +33,6 @@ class CSearchItem extends CMbObject {
     $spec->key   = "rss_search_item_id";
 
     return $spec;
-  }
-
-  /**
-   * Get collections specifications
-   *
-   * @return array
-   */
-  function getBackProps() {
-    $backProps = parent::getBackProps();
-
-    return $backProps;
   }
 
   /**

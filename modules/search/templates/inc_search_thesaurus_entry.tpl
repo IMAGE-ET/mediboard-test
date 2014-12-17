@@ -1,7 +1,7 @@
 {{*
  * $Id$
  *  
- * @category ${Module}
+ * @category Search
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -16,9 +16,9 @@
   </tr>
   <tr>
     <th class="category narrow"></th>
-    <th class="category"> {{mb_label object=$entry field=titre}}</th>
-    <th class="category"> {{mb_label object=$entry field=entry}}</th>
-    <th class="category">  {{mb_label object=$entry field=types}}</th>
+    <th class="category">{{mb_label object=$entry field=titre}}</th>
+    <th class="category">{{mb_label object=$entry field=entry}}</th>
+    <th class="category">{{mb_label object=$entry field=types}}</th>
     <th class="category">{{tr}}CSearchTargetEntry{{/tr}} <br/> Codes CCAM | Codes CIM10</th>
     <th class="category narrow"></th>
   </tr>

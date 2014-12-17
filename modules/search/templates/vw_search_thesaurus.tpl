@@ -44,13 +44,13 @@
           <table>
             <tr>
               <td>
-                <input type="hidden" class="datetime" id="_min_date" name="_min_date" onchange="$V(this.form.start, '0')" value="{{$date}}">
+                <input type="hidden" class="datetime" name="_min_date" onchange="$V(this.form.start, '0')" value="{{$date}}">
                 <b>&raquo;</b>
-                <input type="hidden" class="datetime" id="_max_date" name="_max_date" onchange="$V(this.form.start, '0')" >
+                <input type="hidden" class="datetime" name="_max_date" onchange="$V(this.form.start, '0')" >
               </td>
               <td>
                 <strong>{{tr}}or{{/tr}}</strong>
-                Jour seul : <input type="hidden" class="datetime" id="_date" name="_date" onchange="$V(this.form.start, '0')" >
+                Jour seul : <input type="hidden" class="datetime" name="_date" onchange="$V(this.form.start, '0')" >
               </td>
             </tr>
             <tr>
@@ -72,22 +72,22 @@
               <td class="halfPane">
                 <span class="circled">
                   <img src="images/icons/user.png" title="Favoris pour l'utilisateur">
-                  <input type="checkbox" name="user_id" value="" checked>
+                  <label><input type="checkbox" name="user_id" value="" checked></label>
                 </span>
                 <span class="circled">
                   <img src="images/icons/user-function.png" title="Favoris pour la fonction utilisateur">
-                  <input type="checkbox" name="function_id" value="" checked>
+                  <label><input type="checkbox" name="function_id" value="" checked></label>
                 </span>
                 <span class="circled">
                       <img src="images/icons/group.png" title="Favoris pour l'établissement">
-                      <input type="checkbox" name="group_id" value="" checked>
+                       <label><input type="checkbox" name="group_id" value="" checked></label>
                 </span>
               </td>
               <td>
                 {{foreach from=$contextes item=_contexte}}
                    <span class="circled">
                       <label for="{{$_contexte}}"> {{$_contexte}}</label>
-                      <input type="checkbox" name="contextes[]" id="{{$_contexte}}" value="{{$_contexte}}" onclick="filterContextes()" checked>
+                      <input type="checkbox" name="contextes[]" id="{{$_contexte}}" value="{{$_contexte}}" onclick="" checked>
                    </span>
                 {{/foreach}}
               </td>

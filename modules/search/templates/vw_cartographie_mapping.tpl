@@ -48,9 +48,9 @@
           </tr>
           <tr>
             <td>
-              <textarea name="mappingjson" id="mappingjson">
+             <label><textarea name="mappingjson" id="mappingjson">
                 {{$infos_index.mappingjson}}
-              </textarea>
+              </textarea></label>
             </td>
           </tr>
           <tr>

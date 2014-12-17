@@ -10,13 +10,42 @@
 Search = window.Search || {
   words_request : null,
   export_csv : null,
-  displayResults: function (form){
+
+  /**
+   * Method to display result from search
+   *
+   * @param {Element} form The form
+   *
+   * @return bool
+   */
+  displayResults: function (form) {
     var url = new Url('search',  'ajax_result_search');
     url.addFormData(form);
     url.requestUpdate('list_result');
     return false;
   },
 
+  /**
+   * Method to display result from search in mode manual
+   *
+   * @param {Element} form The form
+   *
+   * @return bool
+   */
+  displayResultsManual: function (form) {
+    var url = new Url('search',  'ajax_result_search_manual');
+    url.addFormData(form);
+    url.requestUpdate('list_result');
+    return false;
+  },
+
+  /**
+   * Method to show the différence between two mapping
+   *
+   * @param {Element} before the mapping before
+   * @param {Element} after  the mapping after
+   *
+   */
   showdiff: function (before, after) {
     var url = new Url('search',  'ajax_show_diff_mapping');
     url.addParam("before" , before);
@@ -24,17 +53,28 @@ Search = window.Search || {
     url.requestModal("85%","50%");
   },
 
+  /**
+   * Method to configure the serveur
+   */
   configServeur : function () {
     var url    = new Url('search', 'ajax_configure_serveur');
     url.requestUpdate("CConfigServeur");
   },
 
+  /**
+   * Method to configure the serveur
+   */
   configES : function () {
     var url    = new Url('search', 'ajax_configure_es');
     url.requestUpdate("CConfigES");
     return false;
   },
 
+  /**
+   * Method to toggle élément
+   *
+   * @param {Element} elt
+   */
   toggleElement : function (elt) {
     if (elt.hasClassName('down') || elt.hasClassName('up')){
       elt.toggleClassName('down');
@@ -45,6 +85,12 @@ Search = window.Search || {
     }
   },
 
+  /**
+   * Method to select a praticien
+   *
+   * @param {Element} element2
+   * @param {Element} element
+   */
   selectPraticien : function (element2, element) {
     // Autocomplete des users
     var url = new Url("mediusers", "ajax_users_autocomplete");
@@ -65,6 +111,13 @@ Search = window.Search || {
     });
   },
 
+  /**
+   * Method use in first indexing
+   *
+   * @param {Element} table
+   * @param {Element} mapping
+   * @param {Element} types
+   */
   firstIndexing: function (table, mapping, types) {
 
     if (table) {
@@ -87,11 +140,17 @@ Search = window.Search || {
     }
   },
 
+  /**
+   * Method to index in mode routine
+   */
   routineIndexing: function () {
     var url = new Url('search',  'routine_indexing');
     url.requestUpdate("tab_config_es");
   },
 
+  /**
+   * Method to update stats in cartographie mapping
+   */
   updateListStats: function () {
     var url = new Url('search', 'vw_cartographie_mapping');
     setInterval(function() {
@@ -99,21 +158,29 @@ Search = window.Search || {
     }, 300000);
   },
 
-  checkAllCheckboxes: function (form, name) {
-    var oform = form;
+  /**
+   * Method to check checkboxes
+   *
+   * @param {Element} input
+   * @param {string} name
+   */
+  checkAllCheckboxes: function (input, name) {
+    var oform = input.form;
+    var elements = oform.select('input[name="'+name+'"]');
 
-    while (oform.parentNode && oform.nodeName.toLowerCase() != 'form'){
-      oform = oform.parentNode;
-    }
-    var elements = oform.getElementsByTagName('input');
-
-    for (var i = 0; i < elements.length; i++) {
-      if (elements[i].type == 'checkbox' && elements[i].name == name) {
-        elements[i].checked = form.checked;
-      }
-    }
+    elements.each(function(element) {
+      element.checked = input.checked;
+    });
   },
 
+  /**
+   * Method to search more details about an item
+   *
+   * @param {Integer} object_id
+   * @param {String}  object_ref
+   * @param {String}  type
+   * @param {bool}    fuzzy_search
+   */
   searchMoreDetails: function (object_id, object_ref, type, fuzzy_search) {
     var id = "details-"+type+"-"+object_id;
     new Url('search',  'ajax_result_search_details')
@@ -125,15 +192,29 @@ Search = window.Search || {
       .requestUpdate(id);
   },
 
+  /**
+   * Method to search more details about an item
+   * @param {string} date
+   * @param {Integer} user_id
+   * @param {String} type
+   */
   searchMoreDetailsLog: function (date, user_id, type) {
     new Url('search',  'ajax_result_search_log_details')
       .addParam("date", date)
       .addParam("type", type)
       .addParam("user_id", user_id)
       .addParam("words", this.words_request)
-      .requestModal("60%","60%", {title: 'Liste détaillée des recherches'});
+      .requestModal("60%","60%");
   },
 
+  /**
+   * Method to filter term
+   *
+   * @param {Element} input
+   * @param {String}  classe
+   * @param {Element} table
+   *
+   */
   filter: function (input, classe, table) {
     table = $(table);
     table.select("tr").invoke("show");
@@ -143,13 +224,23 @@ Search = window.Search || {
     terms= terms.split(" ");
     table.select(nameClass).each(function(e) {
       terms.each(function(term){
-        if (!e.innerHTML.like(term)) {
+        if (!e.getText().like(term)) {
           e.up("tr").hide();
         }
       });
     });
   },
 
+  /**
+   * Method to add an item to an rss
+   *
+   * @param {Integer} id
+   * @param {Integer} rss_id
+   * @param {String}  type
+   * @param {Integer} object_id
+   * @param {String}  rmq
+   *
+   */
   addItemToRss : function (id, rss_id, type, object_id, rmq) {
     new Url('search',  'vw_search_item')
       .addParam("search_item_id", id)
@@ -160,18 +251,31 @@ Search = window.Search || {
       .requestModal("40%", "40%");
   },
 
+  /**
+   * Method to update index
+   *
+   * @param {Element} types
+   *
+   */
   updateIndex : function (types) {
     new Url('search',  'update_index')
       .addParam("types[]",  types, true)
       .requestUpdate($('tab_config_es'));
   },
 
+  /**
+   * Method to create mapping for logs
+   */
   createLogMapping : function () {
    new Url('search',  'first_indexing')
     .addParam("log" , true)
     .requestUpdate("tab_config_es");
   },
 
+  /**
+   * Method to display logs results
+   * @param {Element} form
+   */
   displayLogResults : function (form) {
     var url = new Url('search',  'ajax_result_log_search');
     url.addFormData(form);
@@ -179,12 +283,19 @@ Search = window.Search || {
     return false;
   },
 
+  /**
+   * Method to load search items added to an rss
+   * @param {Integer} rss_id
+   */
   loadSearchItems: function (rss_id) {
     var url = new Url('search', 'ajax_load_search_items');
     url.addParam("rss_id", rss_id);
     url.requestUpdate($('div_search_items'));
   },
 
+  /**
+   * Method to generate a csv file
+   */
   downloadCSV: function() {
     var url = new Url('search', 'download_search_results', 'raw');
     url.pop(10,10, "export_recherches", null, null,

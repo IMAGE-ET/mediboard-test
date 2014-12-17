@@ -2307,27 +2307,27 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
   /**
    * Get the patient_id of CMbobject
    *
-   * @return string
+   * @return CPatient
    */
-  function getFieldPatient () {
-    return $this->loadRelPatient()->_id;
+  function getIndexablePatient () {
+    return $this->loadRelPatient();
   }
   /**
    * Loads the related fields for indexing datum (patient_id et date)
    *
    * @return array
    */
-  function getFieldsSearch () {
-    $prat = $this->getFieldPraticien();
+  function getIndexableData () {
+    $prat = $this->getIndexablePraticien();
     $array["id"]          = $this->_id;
     $array["author_id"]   = $this->_praticien_id;
     $array["prat_id"]     = $prat->_id;
     $array["title"]       = $this->type;
-    $array["body"]        = $this->redesignBody("");
+    $array["body"]        = $this->getIndexableBody("");
     $array["date"]        = str_replace("-", "/", $this->loadRefPlageConsult()->date);
     $array["function_id"] = $prat->function_id;
     $array["group_id"]    = $prat->loadRefFunction()->group_id;
-    $array["patient_id"]  = $this->getFieldPatient();
+    $array["patient_id"]  = $this->getIndexablePatient()->_id;
     $sejour_id = $this->loadRefSejour()->_id;
     if ($sejour_id) {
       $array["object_ref_id"]  = $sejour_id;
@@ -2382,7 +2382,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
    *
    * @return string
    */
-  function redesignBody ($content) {
+  function getIndexableBody ($content) {
     $content = $this->motif." ".$this->rques." ".$this->examen." ".$this->histoire_maladie." ".$this->conclusion;
     return $content;
   }
@@ -2391,7 +2391,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
    *
    * @return CMediusers
    */
-  function getFieldPraticien () {
+  function getIndexablePraticien () {
     return $this->loadRefPraticien();
   }
 

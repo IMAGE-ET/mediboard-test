@@ -708,28 +708,29 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
   /**
    * Get the patient_id of CMbobject
    *
-   * @return string
+   * @return CPatient
    */
-  function getFieldPatient () {
-    return $this->loadRelPatient()->_id;
+  function getIndexablePatient () {
+    return $this->loadRelPatient();
   }
   /**
    * Loads the related fields for indexing datum (patient_id et date)
    *
    * @return array
    */
-  function getFieldsSearch () {
+  function getIndexableData () {
     $consult = $this->loadRefConsultation();
-    $prat = $this->getFieldPraticien();
+    $prat    = $this->getIndexablePraticien();
+    $patient = $this->getIndexablePatient();
     $array["id"]          = $this->_id;
     $array["author_id"]   = $prat->_id;
     $array["prat_id"]     = $prat->_id;
     $array["title"]       = $consult->type;
-    $array["body"]        = $this->redesignBody("");
+    $array["body"]        = $this->getIndexableBody("");
     $array["date"]        = str_replace("-", "/", $consult->loadRefPlageConsult()->date);
     $array["function_id"] = $prat->function_id;
     $array["group_id"]    = $prat->loadRefFunction()->group_id;
-    $array["patient_id"]  = $this->getFieldPatient();
+    $array["patient_id"]  = $patient->_id;
     $sejour_id = $this->loadRefSejour()->_id;
     if ($sejour_id) {
       $array["object_ref_id"]  = $sejour_id;
@@ -749,7 +750,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
    *
    * @return string
    */
-  function redesignBody ($content) {
+  function getIndexableBody ($content) {
     $this->loadRefConsultation();
     $content = $this->etatBucco." ".$this->examenCardio." ".$this->examenPulmo.
       " ".$this->examenDigest. " ".$this->examenAutre.
@@ -765,7 +766,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
    *
    * @return CMediusers
    */
-  function getFieldPraticien () {
+  function getIndexablePraticien () {
     $consult = $this->loadRefConsultation();
     $prat = $consult->loadRefPraticien();
     return $prat;

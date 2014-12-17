@@ -142,21 +142,21 @@ class CObservationMedicale extends CMbMetaObject implements IIndexableObject{
   /**
    * Get the patient_id of CMbobject
    *
-   * @return string
+   * @return CPatient
    */
-  function getFieldPatient () {
+  function getIndexablePatient () {
     $sejour = $this->loadRefSejour();
     $sejour->loadRelPatient();
-    return $sejour->_ref_patient->_id;
+    return $sejour->_ref_patient;
   }
   /**
    * Loads the related fields for indexing datum (patient_id et date)
    *
    * @return array
    */
-  function getFieldsSearch () {
+  function getIndexableData () {
     /**@var $user CMediusers**/
-    $prat = $this->getFieldPraticien();
+    $prat = $this->getIndexablePraticien();
     $array["id"]          = $this->_id;
     $array["author_id"]   = $this->user_id;
     $array["prat_id"]     = $prat->_id;
@@ -165,7 +165,7 @@ class CObservationMedicale extends CMbMetaObject implements IIndexableObject{
     $array["date"]        = str_replace("-", "/", $this->date);
     $array["function_id"] = $prat->function_id;
     $array["group_id"]    = $prat->loadRefFunction()->group_id;
-    $array["patient_id"]  = $this->getFieldPatient();
+    $array["patient_id"]  = $this->getIndexablePatient()->_id;
     $array["object_ref_id"]  = $this->loadRefSejour()->_id;
     $array["object_ref_class"]  = $this->loadRefSejour()->_class;
 
@@ -179,7 +179,7 @@ class CObservationMedicale extends CMbMetaObject implements IIndexableObject{
    *
    * @return string
    */
-  function redesignBody ($content) {
+  function getIndexableBody ($content) {
     return $content;
   }
   /**
@@ -187,7 +187,7 @@ class CObservationMedicale extends CMbMetaObject implements IIndexableObject{
    *
    * @return CMediusers
    */
-  function getFieldPraticien () {
+  function getIndexablePraticien () {
     return $this->loadRefSejour()->loadRefPraticien();
   }
 }

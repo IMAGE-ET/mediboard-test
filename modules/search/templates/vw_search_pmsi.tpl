@@ -101,12 +101,12 @@
           <table>
             <tr>
               <td>
-                <input type="hidden" class="datetime" id="_min_date" name="_min_date" onchange="$V(this.form.start, '0')" >
+                <input type="hidden" class="datetime" name="_min_date" onchange="$V(this.form.start, '0')" >
                 <b>&raquo;</b>
-                <input type="hidden" class="datetime" id="_max_date" name="_max_date" onchange="$V(this.form.start, '0')" >
+                <input type="hidden" class="datetime" name="_max_date" onchange="$V(this.form.start, '0')" >
                 <br/>
                 <strong>{{tr}}or{{/tr}}</strong>
-                Jour seul : <input type="hidden" class="datetime" id="_date" name="_date" onchange="$V(this.form.start, '0')" >
+                Jour seul : <input type="hidden" class="datetime" name="_date" onchange="$V(this.form.start, '0')" >
               </td>
             </tr>
           </table>

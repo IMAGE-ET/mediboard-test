@@ -3,7 +3,7 @@
 /**
  * $Id$
  *
- * @category ${Module}
+ * @category Search
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -39,17 +39,6 @@ class CSearchTargetEntry extends CMbObject {
   }
 
   /**
-   * Get collections specifications
-   *
-   * @return array
-   */
-  function getBackProps() {
-    $backProps = parent::getBackProps();
-
-    return $backProps;
-  }
-
-  /**
    * Get the properties of our class as strings
    *
    * @return array
@@ -63,27 +52,33 @@ class CSearchTargetEntry extends CMbObject {
     return $props;
   }
 
-  function loadRefTarget () {
+  /**
+   * Method to load the target object of thesaurus target
+   *
+   * @return CActeNGAP|CCodeCCAM|CCodeCIM10
+   */
+  function loadRefTarget() {
     if ($this->object_class && $this->object_id) {
       switch ($this->object_class) {
-        case "CCodeCIM10" :
-          $object = new CCodeCIM10();
+        case "CCodeCIM10":
+          $object       = new CCodeCIM10();
           $object->code = $this->object_id;
           $object->loadLite();
           $this->_ref_target = $object;
           break;
-        case "CCodeCCAM" :
+        case "CCodeCCAM":
           $object = new CCodeCCAM($this->object_id);
           $object->load();
           $this->_ref_target = $object;
           break;
-        case "CActeNGAP" :
-          $object = new CActeNGAP();
+        case "CActeNGAP":
+          $object       = new CActeNGAP();
           $object->code = $this->object_id;
           $object->loadMatchingObject();
           $this->_ref_target = $object;
           break;
         default:
+          // nothing to do
           break;
       }
     }

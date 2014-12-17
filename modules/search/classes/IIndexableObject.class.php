@@ -15,25 +15,25 @@
 interface IIndexableObject {
 
   /**
-   * Get the patient_id of CMbobject
+   * Get the patient of CMbobject
    *
-   * @return string
+   * @return CPatient
    */
-  function getFieldPatient ();
+  function getIndexablePatient ();
 
   /**
    * Get the praticien_id of CMbobject
    *
    * @return CMediusers
    */
-  function getFieldPraticien();
+  function getIndexablePraticien();
 
   /**
    * Loads the related fields for indexing datum
    *
    * @return array
    */
-  function getFieldsSearch ();
+  function getIndexableData ();
 
   /**
    * Redesign the content of the body you will index
@@ -42,6 +42,6 @@ interface IIndexableObject {
    *
    * @return string
    */
-  function redesignBody ($content);
+  function getIndexableBody ($content);
 }
 

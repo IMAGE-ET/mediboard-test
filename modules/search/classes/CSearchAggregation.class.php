@@ -26,9 +26,10 @@ class CSearchAggregation {
   /**
    * Constructor
    *
-   * @param string $type  The type of the aggregation
-   * @param string $name  The name of the aggregation
-   * @param string $field The index field where you want to make the aggregation.
+   * @param string  $type  The type of the aggregation
+   * @param string  $name  The name of the aggregation
+   * @param string  $field The index field where you want to make the aggregation.
+   * @param integer $size  The size of the aggregation
    *
    * @return Elastica\Aggregation\Terms |mixed
    */
