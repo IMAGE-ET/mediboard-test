@@ -48,7 +48,6 @@ $sejour = $consult->loadRefSejour();
 
 if ($sejour->_id) {
   $sejour->loadExtDiagnostics();
-  $sejour->loadRefDossierMedical();
   $sejour->loadDiagnosticsAssocies();
 }
 

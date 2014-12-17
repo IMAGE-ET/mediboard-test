@@ -55,7 +55,6 @@ if (count($rpus) == 0) {
 foreach ($rpus as $_rpu) {
   $sejour = $_rpu->_ref_sejour;
   $sejour->loadExtDiagnostics();
-  $sejour->loadRefDossierMedical();
   $sejour->loadDiagnosticsAssocies(false);
   $sejour->loadRefsConsultations();
 }

@@ -19,7 +19,6 @@ $sejour = new CSejour();
 $sejour->load($sejour_id);
 
 $sejour->loadExtDiagnostics();
-$sejour->loadRefDossierMedical();
 $sejour->loadDiagnosticsAssocies();
 
 $smarty = new CSmartyDP();

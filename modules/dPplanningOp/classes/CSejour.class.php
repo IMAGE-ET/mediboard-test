@@ -2071,6 +2071,7 @@ class CSejour extends CFacturable implements IPatientRelated {
    */
   function loadDiagnosticsAssocies($split = true) {
     $this->_diagnostics_associes = array();
+    $this->loadRefDossierMedical();
     if ($this->_ref_dossier_medical->_id) {
       foreach ($this->_ref_dossier_medical->_codes_cim as $code) {
         if ($split && strlen($code) >= 4) {
