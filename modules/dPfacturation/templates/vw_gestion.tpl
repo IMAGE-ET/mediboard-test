@@ -24,6 +24,7 @@
     url.addElement(oFormcompta._etat_reglement_tiers);
     url.addElement(oFormcompta.mode);
     url.addElement(oFormcompta._type_affichage);
+    url.addElement(oFormcompta.typeVue);
     url.addParam("cs", $V(oFormcompta.cs));
     if(compta == 1){
       url.popup(950, 600, "Rapport Comptabilité");
