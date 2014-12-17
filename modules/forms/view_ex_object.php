@@ -25,6 +25,6 @@ $ex_object = new CExObject($ex_class_id);
 $ex_object->load($ex_object_id);
 
 // Création du template
-$smarty = new CSmartyDP();
+$smarty = new CSmartyDP("modules/forms");
 $smarty->assign("ex_object", $ex_object);
 $smarty->display("view_ex_object.tpl");

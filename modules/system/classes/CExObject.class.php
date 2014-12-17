@@ -1526,10 +1526,10 @@ class CExObject extends CMbMetaObject implements IPatientRelated, IIndexableObje
   /**
    * Get the patient_id of CMbobject
    *
-   * @return string
+   * @return CPatient
    */
-  function getFieldPatient() {
-    $this->loadRelPatient()->_id;
+  function getIndexablePatient() {
+    return $this->loadRelPatient();
   }
 
   /**
@@ -1537,7 +1537,7 @@ class CExObject extends CMbMetaObject implements IPatientRelated, IIndexableObje
    *
    * @return CMediusers
    */
-  function getFieldPraticien() {
+  function getIndexablePraticien() {
     return $this->loadRefOwner();
   }
 
@@ -1546,8 +1546,8 @@ class CExObject extends CMbMetaObject implements IPatientRelated, IIndexableObje
    *
    * @return array
    */
-  function getFieldsSearch() {
-    $prat = $this->getFieldPraticien();
+  function getIndexableData() {
+    $prat = $this->getIndexablePraticien();
     if (!$prat) {
       $prat = new CMediusers();
     }
@@ -1565,7 +1565,7 @@ class CExObject extends CMbMetaObject implements IPatientRelated, IIndexableObje
       )
     );
 
-    $array["body"]        = $this->redesignBody($content);
+    $array["body"]        = $this->getIndexableBody($content);
     $date = $this->getCreateDate();
     if (!$date) {
       $date = CMbDT::dateTime();
@@ -1573,17 +1573,26 @@ class CExObject extends CMbMetaObject implements IPatientRelated, IIndexableObje
     $array["date"]             = str_replace("-", "/", $date);
     $array["function_id"]      = $prat->function_id;
     $array["group_id"]         = $this->group_id;
-    $array["patient_id"]       = $this->getFieldPatient();
-    $array["object_ref_id"]    = $this->loadTargetObject()->_id;
-    $array["object_ref_class"] = $this->loadTargetObject()->_class;
+    $array["patient_id"]       = $this->getIndexablePatient()->_id;
 
+    $ref_object = $this->getReferenceObject("CSejour");
+    if ($ref_object) {
+      $array["object_ref_id"]    = $ref_object->_id;
+      $array["object_ref_class"] = $ref_object->_class;
+    }
+    else {
+      $ref_object = $this->getReferenceObject("CConsultation");
+      $array["object_ref_id"]    = $ref_object->_id;
+      $array["object_ref_class"] = $ref_object->_class;
+    }
+    $array["ex_class_id"] = $this->_ex_class_id;
     return $array;
   }
 
   /**
    * @see parent::redesignBody()
    */
-  function redesignBody($content) {
+  function getIndexableBody($content) {
     $content = strtr(
       $content,
       array(
