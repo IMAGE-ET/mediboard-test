@@ -212,7 +212,7 @@ class CDatedCodeCCAM {
    */
   function getTarification() {
     foreach ($this->_ref_code_ccam->_ref_infotarif as $dateeffet => $infotarif) {
-      if ($this->_date > $dateeffet) {
+      if ($this->_date >= $dateeffet) {
         $this->remboursement = $infotarif->admission_rbt;
         return $this->remboursement;
       }
@@ -360,7 +360,7 @@ class CDatedCodeCCAM {
     $modificateurs =& $activite->modificateurs;
     $listModificateurs = array();
     foreach ($this->_ref_code_ccam->_ref_activites[$activite->numero]->_ref_modificateurs as $dateEffet => $liste) {
-      if ($dateEffet < $this->_date) {
+      if ($dateEffet <= $this->_date) {
         $listModificateurs = $liste;
         break;
       }
@@ -434,7 +434,7 @@ class CDatedCodeCCAM {
     $infoPhase = null;
     foreach ($this->_ref_code_ccam->_ref_activites[$activite->numero]->_ref_phases as $phase) {
       foreach ($phase->_ref_classif as $dateEffet => $info) {
-        if ($dateEffet < $this->_date) {
+        if ($dateEffet <= $this->_date) {
           $infoPhase = $info;
           break;
         }
@@ -499,7 +499,7 @@ class CDatedCodeCCAM {
     }
     $listeAsso = array();
     foreach ($this->_ref_code_ccam->_ref_activites[$activite->numero]->_ref_associations as $dateEffet => $liste) {
-      if ($dateEffet < $this->_date) {
+      if ($dateEffet <= $this->_date) {
         $listeAsso = $liste;
         break;
       }
@@ -543,7 +543,7 @@ class CDatedCodeCCAM {
     $incomps    = array();
     $listIncomp = array();
     foreach ($this->_ref_code_ccam->_ref_incompatibilites as $dateEffet => $liste) {
-      if ($dateEffet < $this->_date) {
+      if ($dateEffet <= $this->_date) {
         $listIncomp = $liste;
         break;
       }
@@ -566,7 +566,7 @@ class CDatedCodeCCAM {
   function getProcedure() {
     $listProc = array();
     foreach ($this->_ref_code_ccam->_ref_procedures as $dateEffet => $liste) {
-      if ($dateEffet < $this->_date) {
+      if ($dateEffet <= $this->_date) {
         $listProc = $liste;
         break;
       }
