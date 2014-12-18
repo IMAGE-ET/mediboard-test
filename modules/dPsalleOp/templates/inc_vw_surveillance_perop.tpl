@@ -142,6 +142,14 @@ editEvenementPerop = function(guid, operation_id, datetime) {
   return false;
 }
 
+quickEvenementPerop = function(operation_id) {
+  var url = new Url("dPsalleOp", "ajax_quick_evenement_perop");
+  url.addParam("operation_id", operation_id);
+  url.requestModal(700, 400, {onClose: reloadSurveillancePerop});
+
+  return false;
+}
+
 printSurveillance = function(operation_id) {
   var url = new Url("dPsalleOp", "vw_partogramme");
   url.addParam("operation_id", operation_id);
@@ -170,6 +178,22 @@ printSurveillance = function(operation_id) {
           {{/foreach}}
         </select>
       </form>
+
+      {{*
+      {{if $interv->graph_pack_id && $concentrators !== null}}
+        {{mb_include module=patientMonitoring template=inc_concentrator_js ajax=true}}
+
+        <select name="concentrator_id" onchange="Concentrator.selectConcentrator($V(this))">
+          <option value="">&ndash; {{tr}}CMonitoringConcentrator.none{{/tr}}</option>
+
+          {{foreach from=$concentrators item=_concentrator}}
+            <option value="{{$_concentrator->_id}}">
+              {{$_concentrator}}
+            </option>
+          {{/foreach}}
+        </select>
+      {{/if}}
+      *}}
     </td>
     <td>
       <strong>
@@ -449,8 +473,13 @@ printSurveillance = function(operation_id) {
           {{tr}}{{$_label}}{{/tr}}
 
           {{if $_label == "CAnesthPerop"}}
-            <button class="new notext compact" style="float: right;"
-                    onclick="return editEvenementPerop('CAnesthPerop-0', '{{$interv->_id}}')"></button>
+            <div style="float: right;">
+              <button class="new notext compact"
+                      onclick="return editEvenementPerop('CAnesthPerop-0', '{{$interv->_id}}')"></button>
+
+              <button class="new-lightning notext compact"
+                      onclick="return quickEvenementPerop('{{$interv->_id}}')"></button>
+            </div>
           {{/if}}
         </th>
         <td>

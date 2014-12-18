@@ -15,6 +15,7 @@ $datetime       = CValue::get("datetime");
 
 $interv = new COperation;
 $interv->load($operation_id);
+$interv->loadRefAnesth();
 
 if (!$datetime) {
   $datetime = CMbDT::date($interv->_datetime)." ".CMbDT::time();
@@ -37,5 +38,6 @@ $evenement->operation_id = $interv->_id;
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("evenement", $evenement);
-$smarty->assign("datetime", $datetime);
+$smarty->assign("datetime",  $datetime);
+$smarty->assign("operation", $interv);
 $smarty->display("inc_edit_evenement_perop.tpl");

@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage SalleOp
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -39,6 +39,12 @@ $now = 100 * (CMbDate::toUTCTimestamp(CMbDT::dateTime()) - $time_min) / ($time_m
 
 $graph_packs = CSupervisionGraphPack::getAllFor($group);
 
+$concentrators = null;
+if (CModule::getActive("patientMonitoring")) {
+  $concentrator = new CMonitoringConcentrator();
+  $concentrators = $concentrator->loadList();
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -54,6 +60,7 @@ $smarty->assign("now",          $now);
 $smarty->assign("time_debut_op_iso", $time_debut_op_iso);
 $smarty->assign("time_fin_op_iso",   $time_fin_op_iso);
 $smarty->assign("graph_packs",  $graph_packs);
+$smarty->assign("concentrators",  $concentrators);
 $smarty->assign("nb_minutes", CMbDT::minutesRelative($time_debut_op_iso, $time_fin_op_iso));
 
 $smarty->display("inc_vw_surveillance_perop.tpl");

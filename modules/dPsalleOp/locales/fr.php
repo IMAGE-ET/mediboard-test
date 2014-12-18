@@ -631,6 +631,7 @@ $locales['mod-dPsalleOp-tab-ajax_edit_object_check_lists'] = 'Check list';
 $locales['mod-dPsalleOp-tab-ajax_info_anapath'] = 'Information sur les prélèvements anapath';
 $locales['mod-dPsalleOp-tab-ajax_info_bacterio'] = 'Information sur les prélèvements bactério';
 $locales['mod-dPsalleOp-tab-ajax_lock_sortie'] = 'Validation de la sortie SSPI';
+$locales['mod-dPsalleOp-tab-ajax_quick_evenement_perop'] = 'Saisie rapide d\'événement péropératoire';
 $locales['mod-dPsalleOp-tab-ajax_vw_operation'] = 'Dossier bloc';
 $locales['mod-dPsalleOp-tab-ajax_vw_surveillance_perop_administration'] = 'Administration pérop';
 $locales['mod-dPsalleOp-tab-configure'] = 'Configuration';

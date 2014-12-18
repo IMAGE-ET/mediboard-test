@@ -14,7 +14,18 @@
       </tr>
       <tr>
         <th>{{mb_label object=$evenement field=libelle}}</th>
-        <td>{{mb_field object=$evenement field=libelle}}</td>
+        <td>
+          {{if $operation->_ref_anesth->_id}}
+            {{assign var=contextUserId value=$operation->_ref_anesth->_id}}
+            {{assign var=contextUserView value=$operation->_ref_anesth->_view|smarty:nodefaults:JSAttribute}}
+          {{else}}
+            {{assign var=contextUserId value=$app->_ref_user->_id}}
+            {{assign var=contextUserView value=$app->_ref_user->_view|smarty:nodefaults:JSAttribute}}
+          {{/if}}
+
+          {{mb_field object=$evenement field=libelle form="edit-evenement-`$evenement->_guid`"
+                     aidesaisie="contextUserId: '$contextUserId', contextUserView: '$contextUserView'"}}
+        </td>
       </tr>
       <tr>
         <th>{{mb_label object=$evenement field=incident}}</th>
