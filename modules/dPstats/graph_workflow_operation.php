@@ -61,7 +61,7 @@ function graphWorkflowOperation(
   $query->addColumn("COUNT(operations.operation_id)", "op_count");
 
   // Prévention des données négatives aberrantes
-  $tolerance_in_days = 4;
+  $tolerance_in_days = 0;
   $columns = array(
     "creation",
     "consult_chir",
@@ -74,8 +74,8 @@ function graphWorkflowOperation(
   foreach ($columns as $_column) {
     $field = "date_$_column";
     $diff = "DATEDIFF(ow.date_operation, ow.$field)";
-    $query->addColumn("AVG  (IF($diff > -$tolerance_in_days, $diff, NULL))", $_column);
-    $query->addColumn("COUNT(IF($diff > -$tolerance_in_days, $diff, NULL))", "count_$_column");
+    $query->addColumn("AVG  (IF($diff > $tolerance_in_days, $diff, NULL))", $_column);
+    $query->addColumn("COUNT(IF($diff > $tolerance_in_days, $diff, NULL))", "count_$_column");
   }
 
   $query->addTable("operations");
