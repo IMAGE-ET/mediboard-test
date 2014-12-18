@@ -913,7 +913,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
    *
    * @return string
    */
-  function getFieldPatient() {
+  function getIndexablePatient() {
     $object = $this->loadTargetObject();
 
     if ($object instanceof CPatient) {
@@ -929,12 +929,12 @@ class CFile extends CDocumentItem implements IIndexableObject {
 
     switch ($this->object_class) {
       case "CConsultAnesth":
-        return $object->_ref_consultation->_ref_patient->_id;
+        return $object->_ref_consultation->_ref_patient;
 
         break;
 
       default:
-        return $object->_ref_patient->_id;
+        return $object->_ref_patient;
     }
   }
 
@@ -943,7 +943,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
    *
    * @return CMediusers
    */
-  function getFieldPraticien() {
+  function getIndexablePraticien() {
     $object = $this->loadTargetObject();
     if ($object instanceof CConsultAnesth) {
       $prat = $object->loadRefConsultation()->loadRefPraticien();
@@ -960,19 +960,19 @@ class CFile extends CDocumentItem implements IIndexableObject {
    *
    * @return array
    */
-  function getFieldsSearch() {
+  function getIndexableData() {
 
-    $prat               = $this->getFieldPraticien();
+    $prat               = $this->getIndexablePraticien();
     $array["id"]        = $this->_id;
     $array["author_id"] = $this->author_id;
     $array["prat_id"]   = $prat->_id;
     $array["title"]     = utf8_encode($this->file_name);
-    $array["body"]             = $this->redesignBody($this->_absolute_dir);
+    $array["body"]             = $this->getIndexableBody($this->_absolute_dir);
     $date                      = $this->file_date;
     $array["date"]             = str_replace("-", "/", $date);
     $array["function_id"]      = $prat->function_id;
     $array["group_id"]         = "";
-    $array["patient_id"]       = $this->getFieldPatient();
+    $array["patient_id"]       = $this->getIndexablePatient()->_id;
     $array["object_ref_id"]    = $this->loadTargetObject()->_id;
     $array["object_ref_class"] = $this->loadTargetObject()->_class;
     $array["path"]             = $this->_file_path;
@@ -987,26 +987,31 @@ class CFile extends CDocumentItem implements IIndexableObject {
    *
    * @return string
    */
-  function redesignBody($content) {
-    $body = "";
-    switch ($this->file_type) {
-      case 'text/osoft' :
-        $body = $this->getBinaryContent();
-        $osoft_histo      = new COsoftHistorique(false);
-        $body = $osoft_histo->toHTML($body);
-        $body = strip_tags($body);
-        break;
-      case 'application/osoft' :
-        $body = $this->getBinaryContent();
-        $osoft_dossier    = new COsoftDossier(false);
-        $body = $osoft_dossier->toHTML($body);
-        $body = strip_tags($body);
-        break;
-
-      default : $body = new CSearchFileWrapper($content, $this->_id);
-                $body = $body->getPlainText();
-
+  function getIndexableBody($content) {
+    if (substr($this->file_type, 0, 6) == 'image/') {
+      $body = $this->file_name;
     }
+    else {
+      switch ($this->file_type) {
+        case 'text/osoft' :
+          $body = $this->getBinaryContent();
+          $osoft_histo      = new COsoftHistorique(false);
+          $body = $osoft_histo->toHTML($body);
+          $body = strip_tags($body);
+          break;
+        case 'application/osoft' :
+          $body = $this->getBinaryContent();
+          $osoft_dossier    = new COsoftDossier(false);
+          $body = $osoft_dossier->toHTML($body);
+          $body = strip_tags($body);
+          break;
+
+        default : $body = new CSearchFileWrapper($content, $this->_id);
+        $body = $body->getPlainText();
+
+      }
+    }
+
     return $body;
   }
 }
