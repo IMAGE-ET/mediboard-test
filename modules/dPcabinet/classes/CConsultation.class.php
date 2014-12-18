@@ -2425,21 +2425,23 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
           if (!$consultAnesth) {
             break;
           }
-          $fields = array(
-            "risque_antibioprophylaxie", "risque_MCJ_chirurgie", "risque_MCJ_patient",
-            "risque_prophylaxie", "risque_thrombo_chirurgie", "risque_thrombo_patient"
-          );
 
-          foreach ($fields as $_field) {
-            if ($dossier_medical->$_field != "NR") {
+          if ($dossier_medical->_id) {
+            $fields = array(
+              "risque_antibioprophylaxie", "risque_MCJ_chirurgie", "risque_MCJ_patient",
+              "risque_prophylaxie", "risque_thrombo_chirurgie", "risque_thrombo_patient"
+            );
+
+            foreach ($fields as $_field) {
+              if ($dossier_medical->$_field != "NR") {
+                $count++;
+              }
+            }
+
+            if ($dossier_medical->facteurs_risque) {
               $count++;
             }
           }
-
-          if ($dossier_medical->facteurs_risque) {
-            $count++;
-          }
-
           $tabs_count[$_tab] = $count;
           break;
         case "Examens":
