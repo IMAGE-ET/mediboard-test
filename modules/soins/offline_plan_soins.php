@@ -22,6 +22,7 @@ $date         = CValue::get("date", CMbDT::date());
 $mode_dupa    = CValue::get("mode_dupa", 0);
 $empty_lines  = CValue::get("empty_lines", 0);
 $mode_lite    = CValue::get("mode_lite", 0);
+$page_break   = CValue::get("page_break", 0);
 
 $sejours = array();
 
@@ -432,5 +433,6 @@ $smarty->assign("dates_plan_soin", $dates_plan_soin);
 $smarty->assign("colspan"        , $colspan);
 $smarty->assign("risques_cis"    , $risques_cis);
 $smarty->assign("mode_lite"      , $mode_lite);
+$smarty->assign("page_break"     , $page_break);
 
 $smarty->display("offline_plan_soins.tpl");

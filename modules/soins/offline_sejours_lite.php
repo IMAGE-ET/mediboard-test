@@ -80,33 +80,53 @@ CPatient::massLoadIPP($patients);
 CStoredObject::massCountBackRefs($sejours, "operations");
 
 // Recherche de transmissions // observations // consultations
+$datetime_delta = CMbDT::date("-3 days", $datetime_avg);
 $sejours_ids = CMbArray::pluck($sejours, "_id");
 
 $where = array("sejour_id" => CSQLDataSource::prepareIn($sejours_ids));
-$ljoin = array("users_mediboard" => "users_mediboard.user_id = transmission_medicale.user_id");
-$group_by = "users_mediboard.function_id";
-$transmission = new CTransmissionMedicale();
-$transmissions = $transmission->loadList($where, "date DESC", null, $group_by, $ljoin);
-CStoredObject::massLoadFwdRef($transmissions, "user_id");
 
-$ljoin = array("users_mediboard" => "users_mediboard.user_id = observation_medicale.user_id");
+// Transmissions
+$whereTrans = $where;
+$whereTrans["libelle_atc"] = "IS NOT NULL";
+$whereTrans["date"] = "BETWEEN '$datetime_delta' AND '$datetime_avg'";
+$transmission = new CTransmissionMedicale();
+$transmissions = $transmission->loadList($whereTrans, "date");
+
+$whereTrans = $where;
+$whereTrans["date"] = "BETWEEN '$datetime_delta' AND '$datetime_avg'";
+$whereTrans["object_id"] = "IS NOT NULL";
+$transmission = new CTransmissionMedicale();
+$transmissions = array_merge($transmissions, $transmission->loadList($whereTrans, "date"));
+
+$whereTrans = $where;
+$whereTrans["date"] = "BETWEEN '$datetime_delta' AND '$datetime_avg'";
+$whereTrans[] = "object_id IS NULL and libelle_atc IS NULL";
+$transmission = new CTransmissionMedicale();
+$transmissions = array_merge($transmissions, $transmission->loadList($whereTrans, "date"));
+CStoredObject::massLoadFwdRef($transmissions, "user_id");
+array_multisort(CMbArray::pluck($transmissions, "date"), SORT_ASC, $transmissions);
+
+// Observations
 $observation  = new CObservationMedicale();
-$observations = $observation->loadList($where, "date DESC", null, $group_by, $ljoin);
+$whereObs = $where;
+$whereObs["date"] = "BETWEEN '$datetime_delta' AND '$datetime_avg'";
+$observations = $observation->loadList($whereObs, "date");
 CStoredObject::massLoadFwdRef($observations, "user_id");
 
-$ljoin = array(
-  "plageconsult"    => "plageconsult.plageconsult_id = consultation.plageconsult_id",
-  "users_mediboard" => "users_mediboard.user_id = plageconsult.chir_id"
-);
+// Consultations
 $consultation = new CConsultation();
-$consultations = $consultation->loadList($where, "plageconsult.date", null, $group_by, $ljoin);
+$whereConsult = $where;
+$whereConsult["plageconsult.date"] = "BETWEEN '$datetime_delta' AND '$datetime_avg'";
+$ljoin = array(
+  "plageconsult"    => "plageconsult.plageconsult_id = consultation.plageconsult_id"
+);
+$consultations = $consultation->loadList($whereConsult, "plageconsult.date", null, null, $ljoin);
 CStoredObject::massLoadFwdRef($consultations, "plageconsult_id");
+
 
 $smarty_cstes = new CSmartyDP("modules/dPpatients");
 $smarty_cstes->assign("empty_lines", 2);
 $smarty_cstes->assign("offline", 1);
-
-$delay_trans_obs_consult = 3;
 
 // Constantes des 12 dernières heures
 $where_cste = array("datetime" => "BETWEEN '" . CMbDT::subDateTime("12:00:00", $datetime_avg) . "' AND '$datetime_avg'");
@@ -127,48 +147,69 @@ foreach ($sejours as $_sejour) {
   }
   $patients_offline[$patient->_guid]["sejour"] = $_sejour;
 
-  // Plan de soins
-  $params = array(
-    "sejours_ids"  => $_sejour->_id,
-    "date"         => $date,
-    "hours_before" => "2",
-    "hours_after"  => "2",
-    "empty_lines"  => "2",
-    "dialog"       => 1,
-    "mode_lite"    => 1
-  );
-
-  $patients_offline[$patient->_guid]["plan_soins"] = CApp::fetch("soins", "offline_plan_soins", $params);
-  // Pour IE9 qui a des soucis avec les espaces entre une fermeture et une ouverture de td
-  $patients_offline[$patient->_guid]["plan_soins"] = preg_replace('/>\s+<(t[dh])/mi', "><\\1", $patients_offline[$patient->_guid]["plan_soins"]);
-
   // Transmissions
   $patients_offline[$patient->_guid]["transmissions"] = array();
 
+  // Regroupement par cible
+  $trans_sejour = array();
   foreach ($transmissions as $_trans) {
     if ($_trans->sejour_id != $_sejour->_id) {
-      continue;
-    }
-    if ($_trans->locked || CMbDT::daysRelative($_trans->date, $date) > $delay_trans_obs_consult) {
       continue;
     }
     $_trans->loadTargetObject();
     $_trans->calculCibles();
     $_trans->loadRefUser();
-    $patients_offline[$patient->_guid]["transmissions"][$_trans->_ref_user->function_id] = $_trans;
+
+    $sort_key = $_trans->date;
+    $sort_key_before = CMbDT::dateTime("-1 SECOND", $_trans->date);
+    $sort_key_after  = CMbDT::dateTime("+1 SECOND", $_trans->date);
+
+    if (!isset($trans_sejour[$_trans->_cible][$sort_key])) {
+      $trans_sejour[$_trans->_cible][$sort_key] = array("data" => array(), "action" => array(), "result" => array());
+    }
+    if (!isset($trans_sejour[$_trans->_cible][$sort_key][0])) {
+      $trans_sejour[$_trans->_cible][$sort_key][0] = $_trans;
+    }
+    if (isset($trans_sejour[$_trans->_cible][$sort_key_before])) {
+      $trans_sejour[$_trans->_cible][$sort_key_before][$_trans->type][] = $_trans;
+    }
+    elseif (isset($trans_sejour[$_trans->_cible][$sort_key_after])) {
+      $trans_sejour[$_trans->_cible][$sort_key_after][$_trans->type][] = $_trans;
+    }
+    else {
+      $trans_sejour[$_trans->_cible][$sort_key][$_trans->type][] = $_trans;
+    }
   }
 
+  // On garde la dernière transmission par cible
+  // et suppression des transmissions verrouillées
+  foreach ($trans_sejour as $cible => $_trans_by_date) {
+    $trans = end($_trans_by_date);
+    $locked = false;
+    foreach ($trans as $key => $_trans) {
+      if ($key == "0") {
+        continue;
+      }
+      foreach ($_trans as $key_ => $__trans) {
+        if ($__trans->locked) {
+          $locked = true;
+        }
+      }
+    }
+    if ($locked) {
+      continue;
+    }
+    $patients_offline[$patient->_guid]["transmissions"][end(array_keys($_trans_by_date))] = $trans;
+  }
+
+  // Tri par date décroissante
+  krsort($patients_offline[$patient->_guid]["transmissions"]);
 
   // Observations
-  $_sejour->loadRefObsEntree()->loadRefPraticien()->loadRefFunction();
-
   $patients_offline[$patient->_guid]["observations"] = array();
 
   foreach ($observations as $_observation) {
     if ($_observation->sejour_id != $_sejour->_id) {
-      continue;
-    }
-    if (CMbDT::daysRelative($_observation->date, $date) > $delay_trans_obs_consult) {
       continue;
     }
     $_observation->loadRefUser()->loadRefFunction();
@@ -176,6 +217,28 @@ foreach ($sejours as $_sejour) {
     $patients_offline[$patient->_guid]["observations"][$_observation->_ref_user->function_id] = $_observation;
   }
 
+  // Ajout de l'observation d'entrée si besoin
+  $obs_entree = $_sejour->loadRefObsEntree();
+  if ($obs_entree->_id) {
+    $obs_entree->loadRefPraticien()->loadRefFunction();
+    if ($obs_entree->_datetime >= $datetime_delta && $obs_entree->_datetime <= $datetime_avg) {
+      $obs_entree->date = $obs_entree->_datetime;
+      if (isset($patients_offline[$patient->_guid]["observations"][$obs_entree->_ref_praticien->function_id])) {
+        $obs = $patients_offline[$patient->_guid]["observations"][$obs_entree->_ref_praticien->function_id];
+        if ($obs_entree->_datetime > $obs->date) {
+          $patients_offline[$patient->_guid]["observations"][$obs_entree->_ref_praticien->function_id] = $obs_entree;
+        }
+      }
+      else {
+        $patients_offline[$patient->_guid]["observations"][$obs_entree->_ref_praticien->function_id] = $obs_entree;
+      }
+    }
+  }
+
+  array_multisort(
+    CMbArray::pluck($patients_offline[$patient->_guid]["observations"], "date"), SORT_DESC,
+    $patients_offline[$patient->_guid]["observations"]
+  );
 
   // Consultations
   $patients_offline[$patient->_guid]["consultations"] = array();
@@ -188,13 +251,14 @@ foreach ($sejours as $_sejour) {
       continue;
     }
     $_consultation->loadRefPraticien()->loadRefFunction();
-    if (CMbDT::daysRelative($_consultation->_datetime, $date) > $delay_trans_obs_consult) {
-      continue;
-    }
 
     $patients_offline[$patient->_guid]["consultations"][$_consultation->_ref_chir->function_id] = $_consultation;
   }
 
+  array_multisort(
+    CMbArray::pluck($patients_offline[$patient->_guid]["consultations"], "_datetime"), SORT_DESC,
+    $patients_offline[$patient->_guid]["consultations"]
+  );
 
   // Constantes
   $patients_offline[$patient->_guid]["constantes"] = "";
@@ -208,6 +272,29 @@ foreach ($sejours as $_sejour) {
     $smarty_cstes->assign("sejour", $_sejour);
     $patients_offline[$patient->_guid]["constantes"] = $smarty_cstes->fetch("print_constantes.tpl", '', '', 0);
   }
+
+  // Plan de soins
+  $page_break = 0;
+  if (count($patients_offline[$patient->_guid]["transmissions"]) ||
+      count($patients_offline[$patient->_guid]["observations"])  ||
+      count($patients_offline[$patient->_guid]["consultations"]) ||
+      $patients_offline[$patient->_guid]["constantes"]) {
+    $page_break = 1;
+  }
+  $params = array(
+    "sejours_ids"  => $_sejour->_id,
+    "date"         => $date,
+    "hours_before" => "2",
+    "hours_after"  => "2",
+    "empty_lines"  => "2",
+    "dialog"       => 1,
+    "mode_lite"    => 1,
+    "page_break"   => $page_break
+  );
+
+  $patients_offline[$patient->_guid]["plan_soins"] = CApp::fetch("soins", "offline_plan_soins", $params);
+  // Pour IE9 qui a des soucis avec les espaces entre une fermeture et une ouverture de td
+  $patients_offline[$patient->_guid]["plan_soins"] = preg_replace('/>\s+<(t[dh])/mi', "><\\1", $patients_offline[$patient->_guid]["plan_soins"]);
 }
 
 if ($service_id != "urgence") {

@@ -40,26 +40,28 @@
 {{assign var=print_gemsa value="dPurgences Print gemsa"|conf:"CGroups-$g"}}
 
 <table class="tbl" style="page-break-after: always;">
-  <tr>
-    <th class="title" colspan="{{if $service_id == "urgence"}}8{{else}}7{{/if}}">
-      <button type="button" class="not-printable print" style="float: right;" onclick="window.print()">{{tr}}Print{{/tr}}</button>
-      {{$date|date_format:$conf.date}} - {{if $service->_id}}{{$service}}{{else}}Non placés{{/if}} - {{$patients_offline|@count}} patient(s)
-    </th>
-  </tr>
-
-  {{if $service_id == "urgence"}}
-    {{mb_include module=urgences template=inc_print_header_main_courante}}
-  {{else}}
+  <thead>
     <tr>
-      <th>Patient</th>
-      <th>Lit</th>
-      <th>Prat.</th>
-      <th>Motif</th>
-      <th>Entrée prévue</th>
-      <th>Sortie prévue</th>
-      <th>J. opératoire <br /> Intervention</th>
+      <th class="title" colspan="{{if $service_id == "urgence"}}8{{else}}7{{/if}}">
+        <button type="button" class="not-printable print" style="float: right;" onclick="window.print()">{{tr}}Print{{/tr}}</button>
+        {{$date|date_format:$conf.date}} - {{if $service->_id}}{{$service}}{{else}}Non placés{{/if}} - {{$patients_offline|@count}} patient(s)
+      </th>
     </tr>
-  {{/if}}
+
+    {{if $service_id == "urgence"}}
+      {{mb_include module=urgences template=inc_print_header_main_courante}}
+    {{else}}
+      <tr>
+        <th>Patient</th>
+        <th>Lit</th>
+        <th>Prat.</th>
+        <th>Motif</th>
+        <th>Entrée prévue</th>
+        <th>Sortie prévue</th>
+        <th>J. opératoire <br /> Intervention</th>
+      </tr>
+    {{/if}}
+  </thead>
 
   {{foreach from=$patients_offline item=_patient_data}}
     {{if $service_id == "urgence"}}
@@ -81,7 +83,7 @@
       {{/if}}
 
       <tr>
-        <td class="text">
+        <td class="text" style="page-break-inside: avoid;">
           <button type="button" class="print compact notext not-printable" onclick="printOneDossier('{{$patient->_guid}}')">{{tr}}Print{{/tr}}</button>
           <button type="button" class="search compact notext not-printable" onclick="Modal.open('content_{{$patient->_guid}}', {showClose: true});">Voir le dossier</button>
           <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')"
@@ -92,9 +94,13 @@
           </span>
         </td>
         <td class="text">
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_aff->_guid}}')">
-            {{$curr_aff->_ref_lit->nom}}
-          </span>
+          {{if $curr_aff->lit_id}}
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_aff->_guid}}')">
+              {{$curr_aff->_ref_lit->nom}}
+            </span>
+          {{else}}
+            {{$curr_aff}}
+          {{/if}}
         </td>
         <td class="text">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_prat}}</td>
         <td class="text">{{mb_value object=$sejour field=libelle}}</td>
@@ -120,26 +126,30 @@
   {{assign var=patient value=$sejour->_ref_patient}}
 
   <div id="content_{{$patient_guid}}" style="display: none;" class="modal_view">
-
     {{* Plan de soins *}}
     {{$_patient_data.plan_soins|smarty:nodefaults}}
-
-    {{if $_patient_data.transmissions|@count ||
-         $_patient_data.observations|@count  ||
-         $sejour->_ref_obs_entree->_id       ||
-         $_patient_data.consultations|@count ||
-         $_patient_data.constantes}}
-      <hr style="border: 0; page-break-after: always;" />
-    {{/if}}
 
     {{* Transmissions *}}
     {{if $_patient_data.transmissions|@count}}
       <table class="tbl">
-        <tr>
-          <th class="title" colspan="9">
-            Transmissions - {{$patient}}
-          </th>
-        </tr>
+        <thead>
+          <tr>
+            <th class="title" colspan="9">
+              Transmissions - {{$patient}}
+            </th>
+          </tr>
+          <tr>
+            <th rowspan="2">{{tr}}Type{{/tr}}</th>
+            <th rowspan="2">{{tr}}User{{/tr}} / {{tr}}Date{{/tr}}</th>
+            <th rowspan="2">{{mb_title class=CTransmissionMedicale field=object_class}}</th>
+            <th colspan="3" style="width: 50%">{{mb_title class=CTransmissionMedicale field=text}}</th>
+          </tr>
+          <tr>
+            <th class="section" style="width: 17%">{{tr}}CTransmissionMedicale.type.data{{/tr}}</th>
+            <th class="section" style="width: 17%">{{tr}}CTransmissionMedicale.type.action{{/tr}}</th>
+            <th class="section" style="width: 17%">{{tr}}CTransmissionMedicale.type.result{{/tr}}</th>
+          </tr>
+        </thead>
         {{foreach from=$_patient_data.transmissions item=_suivi}}
           <tr>
             {{mb_include module=hospi template=inc_line_suivi readonly=1}}
@@ -149,19 +159,22 @@
     {{/if}}
 
     {{* Observations *}}
-    {{if $_patient_data.observations|@count || $sejour->_ref_obs_entree->_id}}
+    {{if $_patient_data.observations|@count}}
       <br />
       <table class="tbl">
-        <tr>
-          <th class="title" colspan="7">
-            Observations - {{$patient}}
-          </th>
-        </tr>
-        {{if $sejour->_ref_obs_entree->_id}}
+        <thead>
           <tr>
-            {{mb_include module=hospi template=inc_line_suivi _suivi=$sejour->_ref_obs_entree readonly=1}}
+            <th class="title" colspan="7">
+              Observations - {{$patient}}
+            </th>
           </tr>
-        {{/if}}
+          <tr>
+            <th>{{tr}}Type{{/tr}}</th>
+            <th>{{tr}}User{{/tr}} / {{tr}}Date{{/tr}}</th>
+            <th>{{mb_title class=CTransmissionMedicale field=object_class}}</th>
+            <th colspan="4" style="width: 50%">{{mb_title class=CTransmissionMedicale field=text}}</th>
+          </tr>
+        </thead>
 
         {{foreach from=$_patient_data.observations item=_suivi}}
           <tr>
@@ -175,11 +188,19 @@
     {{if $_patient_data.consultations|@count}}
       <br />
       <table class="tbl">
-        <tr>
-          <th class="title" colspan="7">
-            Consultations - {{$patient}}
-          </th>
-        </tr>
+        <thead>
+          <tr>
+            <th class="title" colspan="7">
+              Consultations - {{$patient}}
+            </th>
+          </tr>
+          <tr>
+            <th>{{tr}}Type{{/tr}}</th>
+            <th>{{tr}}User{{/tr}} / {{tr}}Date{{/tr}}</th>
+            <th>{{mb_title class=CTransmissionMedicale field=object_class}}</th>
+            <th colspan="4" style="width: 50%">{{mb_title class=CTransmissionMedicale field=text}}</th>
+          </tr>
+        </thead>
         {{foreach from=$_patient_data.consultations item=_suivi}}
           <tr>
             {{mb_include module=hospi template=inc_line_suivi readonly=1}}

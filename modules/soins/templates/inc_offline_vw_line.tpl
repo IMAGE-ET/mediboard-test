@@ -17,16 +17,16 @@
         {{$line->date_signature|date_format:$conf.date}} <br />
       {{/if}}
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$line->_ref_praticien}}
-      <div class="compact">
-        Du {{$line->_debut_reel|date_format:$conf.date}} {{$line->_debut_reel|date_format:$conf.time}}
+      <div class="compact" style="white-space: nowrap !important;">
+        <div>Du {{$line->_debut_reel|date_format:$conf.date}} à {{$line->_debut_reel|date_format:$conf.time}}</div>
         {{if $line->duree && $line->unite_duree}}
-          au {{$line->_fin_reelle|date_format:$conf.date}} {{$line->_fin_reelle|date_format:$conf.time}}
+          <div>au {{$line->_fin_reelle|date_format:$conf.date}} à {{$line->_fin_reelle|date_format:$conf.time}}</div>
         {{else}}
           {{assign var=_line_chapitre value=$line->_chapitre}}
           {{if $line->_class == "CPrescriptionLineMedicament" || $conf.dPprescription.CCategoryPrescription.$_line_chapitre.fin_sejour}}
-            à Fin du séjour
+            <div>à Fin du séjour</div>
           {{else}}
-            au {{$line->_fin_reelle|date_format:$conf.date}} {{$line->_fin_reelle|date_format:$conf.time}}
+            <div>au {{$line->_fin_reelle|date_format:$conf.date}} à {{$line->_fin_reelle|date_format:$conf.time}}</div>
           {{/if}}
         {{/if}}
       </div>
@@ -103,18 +103,22 @@
     {{if $mode_lite}}
       <td class="text">
         {{if $line->_ref_last_administration->_id}}
-          {{$line->_ref_last_administration->quantite}}
-          {{if $line instanceof CPrescriptionLineElement}}
-            {{assign var=chap value=$line->_chapitre}}
-            {{$conf.dPprescription.CCategoryPrescription.$chap.unite_prise}}
-          {{elseif $line->inscription}}
-            {{$line->_ref_produit->libelle_unite_presentation}}
-          {{else}}
-            {{$line->_ref_last_administration->unite_prise}}
-          {{/if}}
-          le {{$line->_ref_last_administration->dateTime|date_format:$conf.date}} à {{$line->_ref_last_administration->dateTime|date_format:$conf.time}}
+          <div class="compact">
+            {{$line->_ref_last_administration->quantite}}
+            {{if $line instanceof CPrescriptionLineElement}}
+              {{assign var=chap value=$line->_chapitre}}
+              {{$conf.dPprescription.CCategoryPrescription.$chap.unite_prise}}
+            {{elseif $line->inscription}}
+              {{$line->_ref_produit->libelle_unite_presentation}}
+            {{else}}
+              {{$line->_ref_last_administration->unite_prise}}
+            {{/if}}
+            <br />
+            le {{$line->_ref_last_administration->dateTime|date_format:$conf.date}} <br />
+            à {{$line->_ref_last_administration->dateTime|date_format:$conf.time}}
+          </div>
         {{elseif !$line->_ref_administrations|@count}}
-          <div class="empty">{{tr}}CAdministration.none{{/tr}}</div>
+          <div class="empty">{{tr}}CAdministration.none_short{{/tr}}</div>
         {{/if}}
       </td>
     {{/if}}
@@ -221,9 +225,9 @@
             {{$line->date_signature|date_format:$conf.date}} <br />
           {{/if}}
           {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$line->_ref_praticien}}
-          <div class="compact">
-            Du {{$line->_debut|date_format:$conf.date}} à {{$line->_debut|date_format:$conf.time}} au
-            {{$line->_fin|date_format:$conf.date}} à {{$line->_fin|date_format:$conf.time}}
+          <div class="compact" style="white-space: nowrap !important;">
+            <div>Du {{$line->_debut|date_format:$conf.date}} à {{$line->_debut|date_format:$conf.time}}</div>
+            <div>au {{$line->_fin|date_format:$conf.date}} à {{$line->_fin|date_format:$conf.time}}</div>
           </div>
         {{/if}}
       </td>
@@ -336,10 +340,13 @@
       {{if $mode_lite}}
         <td class="text {{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}" style="vertical-align: top;">
           {{if $_line_item->_ref_last_administration->_id}}
-            {{$_line_item->_ref_last_administration->quantite}} {{$_line_item->_ref_last_administration->unite_prise}}
-            le {{$_line_item->_ref_last_administration->dateTime|date_format:$conf.date}} à {{$_line_item->_ref_last_administration->dateTime|date_format:$conf.time}}
+            <div class="compact">
+              {{$_line_item->_ref_last_administration->quantite}} {{$_line_item->_ref_last_administration->unite_prise}} <br />
+              le {{$_line_item->_ref_last_administration->dateTime|date_format:$conf.date}} <br />
+              à {{$_line_item->_ref_last_administration->dateTime|date_format:$conf.time}}
+            </div>
           {{elseif !$_line_item->_ref_administrations|@count}}
-            <div class="empty">{{tr}}CAdministration.none{{/tr}}</div>
+            <div class="empty">{{tr}}CAdministration.none_short{{/tr}}</div>
           {{/if}}
         </td>
       {{/if}}
