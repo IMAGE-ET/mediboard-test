@@ -2438,26 +2438,27 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
           }
           break;
         case "prescription_sejour":
-          if (!$consultAnesth->_id) {
-            break;
+          $_sejour = $sejour;
+          if ($consultAnesth->_id && $consultAnesth->operation_id) {
+            $_sejour = $consultAnesth->loadRefOperation()->loadRefSejour();
           }
-          $sejour = $consultAnesth->loadRefSejour();
-          if ($sejour->_id) {
-            $sejour->loadRefsPrescriptions();
-            foreach ($sejour->_ref_prescriptions as $key => $_prescription) {
+
+          if ($_sejour->_id) {
+            $_sejour->loadRefsPrescriptions();
+            foreach ($_sejour->_ref_prescriptions as $key => $_prescription) {
               if (!$_prescription->_id) {
-                unset($sejour->_ref_prescriptions[$key]);
+                unset($_sejour->_ref_prescriptions[$key]);
                 continue;
               }
 
-              $sejour->_ref_prescriptions[$_prescription->_id] = $_prescription;
-              unset($sejour->_ref_prescriptions[$key]);
+              $_sejour->_ref_prescriptions[$_prescription->_id] = $_prescription;
+              unset($_sejour->_ref_prescriptions[$key]);
             }
 
-            if (count($sejour->_ref_prescriptions)) {
+            if (count($_sejour->_ref_prescriptions)) {
               $prescription = new CPrescription();
-              $prescription->massCountMedsElements($sejour->_ref_prescriptions);
-              foreach ($sejour->_ref_prescriptions as $_prescription) {
+              $prescription->massCountMedsElements($_sejour->_ref_prescriptions);
+              foreach ($_sejour->_ref_prescriptions as $_prescription) {
                 $count += array_sum($_prescription->_counts_by_chapitre);
               }
             }
