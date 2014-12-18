@@ -1,4 +1,6 @@
 <?php
+$locales['COperation-_func_id'] = 'Cabinet';
+$locales['COperation-_func_id-desc'] = 'Afficher en fonction du cabinet';
 $locales['COperation-title-horsPlage'] = 'Interventions hors plage';
 $locales['COperation-title-inPlage'] = 'Interventions dans une plage';
 $locales['COperationMiner-warnusage-0'] = 'L\'explorateur de données utilisé \'%s\' datant du \'%s\' n\'est pas à jour.';

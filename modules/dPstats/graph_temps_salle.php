@@ -27,7 +27,7 @@
  * @return array
  */
 function graphTempsSalle(
-    $debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = null,
+    $debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $func_id = 0, $discipline_id = null,
     $codeCCAM = "", $type_hospi = "", $hors_plage = true, $type_duree = "MONTH"
 ) {
 

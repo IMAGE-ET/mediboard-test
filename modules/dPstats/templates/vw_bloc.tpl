@@ -20,6 +20,7 @@
     url.addParam("codes_ccam"   , $V(oForm.codes_ccam));
     url.addParam("type"         , $V(oForm.type));
     url.addParam("prat_id"      , $V(oForm.prat_id));
+    url.addParam("func_id"      , $V(oForm.func_id));
     url.addParam("discipline_id", $V(oForm.discipline_id));
     url.addParam("bloc_id"      , $V(oForm.bloc_id));
     url.addParam("salle_id"     , $V(oForm.salle_id));
@@ -76,17 +77,15 @@
   <tr>
     <th>{{mb_label object=$filter field="_date_max"}}</th>
     <td>{{mb_field object=$filter field="_date_max" form="stats_params" canNull="false" register=true}} </td>
+
     <th>{{mb_label object=$filter field="_prat_id"}}</th>
     <td>
       <select name="prat_id" style="width: 15em;">
-        <option value="0">&mdash; Tous les praticiens</option>
-        {{foreach from=$listPrats item=curr_prat}}
-        <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $filter->_prat_id}}selected="selected"{{/if}}>
-          {{$curr_prat->_view}}
-        </option>
-        {{/foreach}}
+        <option value="">&mdash; Tous les praticiens</option>
+        {{mb_include module=mediusers template=inc_options_mediuser list=$listPrats selected=$filtre->_prat_id}}
       </select>
     </td>
+
     <th>{{mb_label object=$filter field="salle_id"}}</th>
     <td>
       <select name="salle_id" style="width: 15em;">
@@ -105,6 +104,21 @@
       </select>
     </td>
   </tr>
+
+  <tr>
+    <th></th>
+    <td></td>
+    <th>{{mb_label object=$filter field="_func_id"}}</th>
+    <td>
+      <select name="func_id" style="width: 15em;">
+        <option value="">&mdash; Tous les cabinets</option>
+        {{mb_include module=mediusers template=inc_options_mediuser list=$listFuncs selected=$filtre->_func_id}}
+      </select>
+    </td>
+    <th></th>
+    <td></td>
+  </tr>
+
   <tr>
     <th>{{mb_label object=$filter field="codes_ccam"}}</th>
     <td>
