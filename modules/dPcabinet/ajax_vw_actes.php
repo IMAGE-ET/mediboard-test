@@ -18,6 +18,7 @@ $consult_id = CValue::get("consult_id");
 $consult = new CConsultation();
 $consult->load($consult_id);
 
+$consult->countActes();
 $consult->loadExtCodesCCAM();
 $consult->getAssociationCodesActes();
 $consult->loadPossibleActes();

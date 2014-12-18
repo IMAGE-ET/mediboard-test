@@ -33,6 +33,7 @@ $codable = new $object_class;
 $codable->load($object_id);
 $codable->isCoded();
 
+$codable->countActes();
 $codable->loadRefPatient();
 $codable->loadRefPraticien();
 $codable->loadExtCodesCCAM();
@@ -41,6 +42,10 @@ $codable->loadPossibleActes();
 $codable->canDo();
 if ($codable->_class == "COperation") {
   $codable->countExchanges();
+}
+
+if ($codable->_class == "CConsultation") {
+  $codable->loadRefSejour()->loadDiagnosticsAssocies();
 }
 
 if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {

@@ -72,9 +72,10 @@
     onSubmitFormAjax(getForm("addOpFrm"), { onComplete: reloadConsultAnesth } );
   };
 
-  reloadDiagnostic = function(sejour_id, modeDAS) {
+  reloadDiagnostic = function(sejour_id, modeDAS, consult_id) {
     var url = new Url("salleOp", "httpreq_diagnostic_principal");
     url.addParam("sejour_id", sejour_id);
+    url.addParam("consult_id", consult_id);
     url.addParam("modeDAS", modeDAS);
     url.requestUpdate("cim");
   };

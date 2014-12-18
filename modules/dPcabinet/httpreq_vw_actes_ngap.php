@@ -17,12 +17,17 @@ $object_class = CValue::getOrSession("object_class");
 /** @var CCodable $object */
 $object = new $object_class;
 $object->load($object_id);
+$object->countActes();
 $object->loadRefsActesNGAP();
 $object->loadRefPraticien();
 $object->loadRefPatient();
 
 $date            = CValue::getOrSession("date", CMbDT::date());
 $date_now        = CMbDT::date();
+
+if ($object instanceof CConsultation) {
+  $object->loadRefSejour()->loadDiagnosticsAssocies();
+}
 
 // Initialisation d'un acte NGAP
 $acte_ngap = CActeNGAP::createEmptyFor($object);

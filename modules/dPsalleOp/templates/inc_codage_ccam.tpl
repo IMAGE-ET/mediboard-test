@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
   signerActes = function(object_id, object_class){
     var url = new Url("dPsalleOp", "vw_signature_actes");
     url.addParam("object_id", object_id);
@@ -13,6 +13,23 @@
     url.addParam("object_class", object_class);
     url.requestModal(500, 300);
   };
+
+  {{if $subject->_class == "CConsultation"}}
+    {{assign var=sejour value=$subject->_ref_sejour}}
+    Main.add(function() {
+      if (window.tabsConsult || window.tabsConsultAnesth) {
+        var count_items = {{$subject->_count_actes}};
+        {{if $sejour->DP}}
+        count_items++;
+        {{/if}}
+        {{if $sejour->DR}}
+        count_items++;
+        {{/if}}
+        count_items += {{$sejour->_diagnostics_associes|@count}};
+        Control.Tabs.setTabCount("Actes", count_items);
+      }
+    });
+  {{/if}}
 </script>
 
 <table class="form">

@@ -2,7 +2,7 @@
 
 <script>
   onSubmitDiag = function(oForm) {
-    return onSubmitFormAjax(oForm, reloadDiagnostic.curry({{$sejour->_id}}, {{$modeDAS}}));
+    return onSubmitFormAjax(oForm, reloadDiagnostic.curry('{{$sejour->_id}}', '{{$modeDAS}}', '{{$consult->_id}}'));
   }
 
   deleteDiag = function(form, field) {
@@ -45,6 +45,20 @@
           $V(getForm("editDA")._added_code_cim, oHidden.value);
         }
       });
+    {{/if}}
+
+    {{if $consult->_id}}
+      if (window.tabsConsult || window.tabsConsultAnesth) {
+        var count_items = {{$consult->_count_actes}};
+        {{if $sejour->DP}}
+        count_items++;
+        {{/if}}
+        {{if $sejour->DR}}
+        count_items++;
+        {{/if}}
+        count_items += {{$sejour->_diagnostics_associes|@count}};
+        Control.Tabs.setTabCount("Actes", count_items);
+      }
     {{/if}}
   });
 </script>

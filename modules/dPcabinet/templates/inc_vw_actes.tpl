@@ -9,15 +9,27 @@
  * @link     http://www.mediboard.org
 *}}
 
-<script>
-  Main.add(function() {
-    var tabsActes = Control.Tabs.create('tab-actes', false);
-  });
-</script>
-
 {{assign var="sejour" value=$consult->_ref_sejour}}
 {{assign var="do_subject_aed" value="do_consultation_aed"}}
 {{assign var="object" value=$consult}}
+
+<script>
+  Main.add(function() {
+    var tabsActes = Control.Tabs.create('tab-actes', false);
+
+    if (window.tabsConsult || window.tabsConsultAnesth) {
+      var count_items = {{$consult->_count_actes}};
+      {{if $sejour->DP}}
+        count_items++;
+      {{/if}}
+      {{if $sejour->DR}}
+        count_items++;
+      {{/if}}
+      count_items += {{$sejour->_diagnostics_associes|@count}};
+      Control.Tabs.setTabCount("Actes", count_items);
+    }
+  });
+</script>
 
 <ul id="tab-actes" class="control_tabs">
   {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}

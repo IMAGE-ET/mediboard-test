@@ -73,6 +73,23 @@ ActesNGAP = {
     }
   }
 }
+
+{{if $object instanceof CConsultation}}
+  {{assign var=sejour value=$object->_ref_sejour}}
+  Main.add(function() {
+    if (window.tabsConsult || window.tabsConsultAnesth) {
+      var count_items = {{$object->_count_actes}};
+      {{if $sejour->DP}}
+      count_items++;
+      {{/if}}
+      {{if $sejour->DR}}
+      count_items++;
+      {{/if}}
+      count_items += {{$sejour->_diagnostics_associes|@count}};
+      Control.Tabs.setTabCount("Actes", count_items);
+    }
+  });
+{{/if}}
 </script>
 
 {{mb_default var=_is_dentiste value=false}}

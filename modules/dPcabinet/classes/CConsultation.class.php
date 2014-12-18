@@ -2470,21 +2470,22 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
           if (!$consultAnesth) {
             break;
           }
-          $fields = array(
-            "risque_antibioprophylaxie", "risque_MCJ_chirurgie", "risque_MCJ_patient",
-            "risque_prophylaxie", "risque_thrombo_chirurgie", "risque_thrombo_patient"
-          );
+          if ($dossier_medical->_id) {
+            $fields = array(
+              "risque_antibioprophylaxie", "risque_MCJ_chirurgie", "risque_MCJ_patient",
+              "risque_prophylaxie", "risque_thrombo_chirurgie", "risque_thrombo_patient"
+            );
 
-          foreach ($fields as $_field) {
-            if ($dossier_medical->$_field != "NR") {
+            foreach ($fields as $_field) {
+              if ($dossier_medical->$_field != "NR") {
+                $count++;
+              }
+            }
+
+            if ($dossier_medical->facteurs_risque) {
               $count++;
             }
           }
-
-          if ($dossier_medical->facteurs_risque) {
-            $count++;
-          }
-
           $tabs_count[$_tab] = $count;
           break;
         case "Examens":
@@ -2586,6 +2587,17 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
         case "Actes":
           $consult->countActes();
           $tabs_count[$_tab] = $consult->_count_actes;
+
+          if ($sejour->_id) {
+            if ($sejour->DP) {
+              $tabs_count[$_tab]++;
+            }
+            if ($_sejour->DR) {
+              $tabs_count[$_tab]++;
+            }
+            $sejour->loadDiagnosticsAssocies();
+            $tabs_count[$_tab] += count($sejour->_diagnostics_associes);
+          }
           break;
         case "fdrConsult":
           $consult->countDocs();

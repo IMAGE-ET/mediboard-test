@@ -162,7 +162,9 @@
   {{/if}}
   {{if $app->user_prefs.ccam_consultation == 1}}
     <li onmousedown="this.onmousedown = ''; loadActes()">
-      <a id="acc_consultation_a_Actes" href="#Actes">{{tr}}CCodable-actes{{/tr}}</a>
+      <a id="acc_consultation_a_Actes" href="#Actes" {{if $tabs_count.Actes == 0}}class="empty"{{/if}}>
+        {{tr}}CCodable-actes{{/tr}} <small>({{$tabs_count.Actes}})</small>
+      </a>
     </li>
   {{/if}}
   <li onmousedown="this.onmousedown = ''; loadDocs()">
