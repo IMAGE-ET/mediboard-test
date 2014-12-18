@@ -191,7 +191,7 @@
                       {{if $administrations_in_hour.quantite != $quantite}}
                         {{if !$line->sans_planif}} / {{$quantite}}{{/if}}
                       {{/if}}
-                    {{elseif (!$line->conditionnel || $line->_active_dates.$_date) && !$line->sans_planif}}
+                    {{elseif (!$line->conditionnel || (isset($line->_active_dates.$_date|smarty:nodefaults) && $line->_active_dates.$_date)) && !$line->sans_planif}}
                       {{if $quantite}}0 / {{$quantite}}{{/if}}
                     {{/if}}
                   {{/if}}
@@ -407,13 +407,13 @@
                 {{if $text_align == "left" || $mode_lite}}
                   {{if $nb_adm}}
                     {{$nb_adm}}
-                  {{elseif $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date)}}
+                  {{elseif $nb_prevue && (!$line->conditionnel || (isset($line->_active_dates.$_date|smarty:nodefaults) && $line->_active_dates.$_date))}}
                     0
                   {{/if}}
-                  {{if $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date) && ($nb_prevue != $nb_adm)}} / {{$nb_prevue}}{{/if}}
+                  {{if $nb_prevue && (!$line->conditionnel || (isset($line->_active_dates.$_date|smarty:nodefaults) && $line->_active_dates.$_date)) && ($nb_prevue != $nb_adm)}} / {{$nb_prevue}}{{/if}}
                 {{else}}
                   {{* Que les planifications *}}
-                  {{if $nb_prevue && (!$line->conditionnel || $line->_active_dates.$_date)}} {{$nb_prevue}}{{/if}}
+                  {{if $nb_prevue && (!$line->conditionnel || (isset($line->_active_dates.$_date|smarty:nodefaults) && $line->_active_dates.$_date))}} {{$nb_prevue}}{{/if}}
                 {{/if}}
               </div>
             </td>
