@@ -230,7 +230,8 @@
   </td>
   <td class="narrow text">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi->_ref_user initials=border}}</td>
   <td style="text-align: center;" class="narrow">
-    {{mb_ditto name=date value=$_suivi->date|date_format:$conf.date}}
+    {{assign var=sejour_id_ditto value=$_suivi->sejour_id}}
+    {{mb_ditto name="date-$sejour_id_ditto" value=$_suivi->date|date_format:$conf.date}}
   </td>
   <td class="narrow">{{$_suivi->date|date_format:$conf.time}}</td>
   {{if $show_target}}
@@ -431,7 +432,7 @@
   {{else}}
     {{foreach from=$_suivi item=_trans_by_type key=type_trans}}
       {{if $type_trans != "0"}}
-        <td style="width: 18%">
+        <td style="width: 18%; page-break-inside: avoid;">
           {{if is_array($_trans_by_type)}}
             {{* Fusion de transmissions médicales *}}
             {{if $_trans_by_type|@count > 1}}

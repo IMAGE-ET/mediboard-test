@@ -14,27 +14,46 @@
           {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
         </th>
       </tr>
-    </thead>
-  {{/if}}
-
-  {{if $cste_grid.grid|@count}}
-    {{assign var=list_constantes value="CConstantesMedicales"|static:list_constantes}}
-    <tr>
-      <th class="narrow"></th>
-      {{foreach from=$cste_grid.names item=_cste_name}}
-        <th class="narrow" style="vertical-align: bottom; font-weight: normal;">
-          {{vertical}}
+      <tr>
+        <th class="narrow" style="page-break-inside: avoid;"></th>
+        {{assign var=list_constantes value="CConstantesMedicales"|static:list_constantes}}
+        {{foreach from=$cste_grid.names item=_cste_name}}
+          <th class="narrow" style="vertical-align: bottom; font-weight: normal;">
+            {{vertical}}
             {{if array_key_exists("cumul_for", $list_constantes.$_cste_name)}}
               Cumul {{tr}}CConstantesMedicales-{{$list_constantes.$_cste_name.cumul_for}}-court{{/tr}}
             {{else}}
               {{tr}}CConstantesMedicales-{{$_cste_name}}-court{{/tr}}
             {{/if}}
-              
+
             {{if $list_constantes.$_cste_name.unit}} ({{$list_constantes.$_cste_name.unit}}){{/if}}
-          {{/vertical}}
-        </th>
-      {{/foreach}}
-    </tr>
+            {{/vertical}}
+          </th>
+        {{/foreach}}
+      </tr>
+    </thead>
+  {{/if}}
+
+  {{if $cste_grid.grid|@count}}
+    {{assign var=list_constantes value="CConstantesMedicales"|static:list_constantes}}
+    {{if !$offline}}
+      <tr>
+        <th class="narrow" style="page-break-inside: avoid;"></th>
+        {{foreach from=$cste_grid.names item=_cste_name}}
+          <th class="narrow" style="vertical-align: bottom; font-weight: normal;">
+            {{vertical}}
+              {{if array_key_exists("cumul_for", $list_constantes.$_cste_name)}}
+                Cumul {{tr}}CConstantesMedicales-{{$list_constantes.$_cste_name.cumul_for}}-court{{/tr}}
+              {{else}}
+                {{tr}}CConstantesMedicales-{{$_cste_name}}-court{{/tr}}
+              {{/if}}
+
+              {{if $list_constantes.$_cste_name.unit}} ({{$list_constantes.$_cste_name.unit}}){{/if}}
+            {{/vertical}}
+          </th>
+        {{/foreach}}
+      </tr>
+    {{/if}}
     
     {{foreach from=$cste_grid.grid item=_constante key=_datetime}}
       {{assign var=_datetime value=$_datetime|substr:0:18}}

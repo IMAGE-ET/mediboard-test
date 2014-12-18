@@ -22,7 +22,7 @@
   {{math equation="3+x" x=$colspan assign=th_chap_colspan}}
 {{/if}}
 
-<table class="tbl">
+<table class="tbl" {{if $page_break}}style="page-break-after: always;"{{/if}}>
   {{* Entête *}}
   <thead>
     <tr class="clear">
@@ -127,7 +127,8 @@
         {{if $mode_lite}}
           <th style="width: 5%" rowspan="2">
             Dernière <br />
-            administration
+            adminis- <br />
+            tration
           </th>
         {{/if}}
       {{/if}}
