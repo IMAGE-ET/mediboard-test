@@ -75,7 +75,7 @@ if ($rpu->_id || $rpu->sejour_id) {
   $praticien = $sejour->_ref_praticien;
   $listResponsables[$praticien->_id] = $praticien;
 
-  $patient->loadLastGrossesse();
+  $sejour->_ref_grossesse = $patient->loadLastGrossesse();
   $patient->loadLastAllaitement();
 }
 else {
