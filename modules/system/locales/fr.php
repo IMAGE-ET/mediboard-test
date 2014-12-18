@@ -1662,6 +1662,7 @@ $locales['CNote.no_author'] = 'Sans utilisateur';
 $locales['CNote.none'] = 'Aucune note';
 $locales['CNote.one'] = 'note';
 $locales['CNote.select'] = 'Choisir une note';
+$locales['CNote|pl'] = 'Notes';
 $locales['CObjectToInteropSender-title-modify'] = 'Modifier le lien';
 $locales['CPreferences'] = 'Préférences Utilisateur';
 $locales['CPreferences-failed-uniques'] = 'La préférence n\'est pas unique pour cet utilisateur';
