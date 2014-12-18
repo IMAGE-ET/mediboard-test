@@ -436,6 +436,12 @@ class CRPU extends CMbObject {
     $sejour->loadOldObject();
     $this->_old_service_id = $sejour->_old->service_id;
 
+    /* TODO Supprimer ceci après l'ajout des times picker */
+    $sejour->_hour_entree_prevue = null;
+    $sejour->_min_entree_prevue  = null;
+    $sejour->_hour_sortie_prevue = null;
+    $sejour->_min_sortie_prevue  = null;
+
     if ($msg = $sejour->store()) {
       return $msg;
     }
