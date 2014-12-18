@@ -17,6 +17,7 @@
  * @param int    $prat_id       Filtre sur un praticien
  * @param int    $service_id    Filtre sur un service
  * @param string $type_adm      Filtre sur le type d'admission
+ * @param int    $func_id       Filtre sur un cabinet
  * @param int    $discipline_id Filtre sur une discipline
  * @param int    $septique      Filtre sur les patients septiques
  * @param string $type_data     Choix du type de données
@@ -26,7 +27,7 @@
 function graphPatParService(
     $debut = null, $fin = null,
     $prat_id = 0, $service_id = 0,
-    $type_adm = "", $discipline_id = 0,
+    $type_adm = "", $func_id = 0, $discipline_id = 0,
     $septique = 0, $type_data = "prevue"
 ) {
   if (!$debut) {
@@ -89,7 +90,8 @@ function graphPatParService(
       WHERE
         sejour.annule = '0' AND
         sejour.group_id = '$group_id' AND
-        affectation.entree BETWEEN '$debut 00:00:00' AND '$fin 23:59:59' AND
+        affectation.entree < '$fin 23:59:59' AND
+        affectation.sortie > '$debut 00:00:00' AND
         service.service_id = '$service->_id'";
 
     if ($type_data == "reelle") {
@@ -152,7 +154,9 @@ function graphPatParService(
       WHERE 
         sejour.annule = '0' AND
         sejour.group_id = '$group_id' AND
-        sejour.entree_$type_data BETWEEN  '$debut 00:00:00' AND '$fin 23:59:59' AND 
+        sejour.entree_$type_data < '$fin 23:59:59' AND
+        sejour.sortie_$type_data > '$debut 00:00:00' AND
+
         affectation.affectation_id IS NULL";
 
     if ($prat_id) {

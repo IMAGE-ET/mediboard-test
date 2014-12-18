@@ -27,7 +27,7 @@
  */
 function graphActivite(
     $debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0,
-    $discipline_id = 0, $codes_ccam = "", $type_hospi = "", $hors_plage = true
+    $func_id = 0, $discipline_id = 0, $codes_ccam = "", $type_hospi = "", $hors_plage = true
 ) {
   if (!$debut) {
     $debut = CMbDT::date("-1 YEAR");

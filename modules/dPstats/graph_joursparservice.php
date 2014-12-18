@@ -26,7 +26,7 @@
  */
 function graphJoursParService(
     $debut = null, $fin = null, $prat_id = 0, $service_id = 0,
-    $type_adm = 0, $discipline_id = 0, $septique = 0, $type_data = "prevue"
+    $type_adm = 0, $func_id = 0, $discipline_id = 0, $septique = 0, $type_data = "prevue"
 ) {
   if (!$debut) {
     $debut = CMbDT::date("-1 YEAR");

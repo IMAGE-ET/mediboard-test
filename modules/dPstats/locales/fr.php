@@ -1,4 +1,6 @@
 <?php
+$locales['COperation-_func_id'] = 'Cabinet';
+$locales['COperation-_func_id-desc'] = 'Afficher en fonction du cabinet';
 $locales['COperation-title-horsPlage'] = 'Interventions hors plage';
 $locales['COperation-title-inPlage'] = 'Interventions dans une plage';
 $locales['COperationMiner-warnusage-0'] = 'L\'explorateur de données utilisé \'%s\' datant du \'%s\' n\'est pas à jour.';
@@ -25,6 +27,5 @@ $locales['mod-dPstats-tab-vw_prescriptions'] = 'Prescriptions';
 $locales['mod-dPstats-tab-vw_reveil'] = 'Salle de réveil';
 $locales['mod-dPstats-tab-vw_time_op'] = 'Durée opératoire';
 $locales['mod-dPstats-tab-vw_user_logs'] = 'Activité utilisateurs';
-$locales['mod-dPstats-tab-vw_graph_std'] = 'Affichage des statistiques';
 $locales['module-dPstats-court'] = 'Stats';
 $locales['module-dPstats-long'] = 'Reporting';

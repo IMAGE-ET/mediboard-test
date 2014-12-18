@@ -217,6 +217,7 @@ class COperation extends CCodable implements IPatientRelated {
   public $_specialite;
   public $_scodes_ccam;
   public $_prat_id;
+  public $_func_id;
   public $_bloc_id;
   public $_ccam_libelle;
   public $_planning_perso;
@@ -392,7 +393,8 @@ class COperation extends CCodable implements IPatientRelated {
     $props["_ranking"]                = "enum list|ok|ko";
     $props["_cotation"]               = "enum list|ok|ko";
 
-    $props["_prat_id"]                = "text"; // ?? misdefined
+    $props["_prat_id"]                = "ref class|CMediusers";
+    $props["_func_id"]                = "ref class|CFunctions";
     $props["_patient_id"]             = "ref class|CPatient show|1";
     $props["_bloc_id"]                = "ref class|CBlocOperatoire";
     $props["_specialite"]             = "text";
