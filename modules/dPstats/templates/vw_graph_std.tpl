@@ -12,6 +12,10 @@
   graph = {{$graph|@json}};
 
   Main.add(function(){
+    if (graph.options.mouse) {
+      graph.options.mouse.trackFormatter = eval(graph.options.mouse.trackFormatter);
+    }
+
     graph.options.legend.container = $('display-legend-{{$type_graph}}');
     Flotr.draw($('display-graph-{{$type_graph}}'), graph.series, graph.options);
     {{if $can_zoom}}
@@ -29,6 +33,7 @@
         url.addParam("date_zoom", $V(Event.element(event)));
         url.requestModal();
       });
+
 
       $('display-graph-{{$type_graph}}').down('.flotr-tabs-group').insert(select);
     {{/if}}
