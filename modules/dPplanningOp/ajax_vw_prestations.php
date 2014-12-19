@@ -199,9 +199,17 @@ $empty_liaison->_id = "temp";
 $empty_liaison->loadRefItem();
 $empty_liaison->loadRefItemRealise();
 
+// La date pour l'ajout d'une prestation ponctuelle doit être dans les dates du séjour
+// Si la date actuelle est hors des bornes, alors réinitialisation à la date d'entrée du séjour
+$today_ponctuelle = CMbDT::date();
+if ($today_ponctuelle < CMbDT::date($sejour->entree) || $today_ponctuelle > CMbDT::date($sejour->sortie)) {
+  $today_ponctuelle = CMbDT::date($sejour->entree);
+}
+
 $smarty = new CSmartyDP();
 
 $smarty->assign("today"        , CMbDT::date());
+$smarty->assign("today_ponctuelle", $today_ponctuelle);
 $smarty->assign("dates"        , $dates);
 $smarty->assign("relative_date", $relative_date);
 $smarty->assign("sejour"       , $sejour);

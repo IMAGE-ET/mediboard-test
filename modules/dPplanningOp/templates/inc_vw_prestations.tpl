@@ -103,7 +103,7 @@
         {{if $context == "all"}}
           <th>
               {{if $editRights}}
-                <input type="hidden" name="date" class="date" value="{{$today}}"/>
+                <input type="hidden" name="date" class="date" value="{{$today_ponctuelle}}"/>
                 <input type="text" class="autocomplete" name="keywords"/>
                 <div class="autocomplete" id="prestation_autocomplete" style="display: none; color: #000; text-align: left;"></div>
               {{/if}}
