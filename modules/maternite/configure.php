@@ -14,5 +14,7 @@
 CCanDo::checkAdmin();
 
 $smarty = new CSmartyDP();
+$smarty->assign("start", CMbDT::date());
+$smarty->assign("end", CMbDT::date());
 
 $smarty->display("configure.tpl");

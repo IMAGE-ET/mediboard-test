@@ -203,12 +203,12 @@
                 {{if !$smarty.foreach.foreach_naissance.first}}
                   <tr>
                 {{/if}}
-                <td {{if !$_naissance->heure}}class="empty"{{/if}}>
+                <td {{if !$_naissance->date_time}}class="empty"{{/if}}>
                   <button class="edit notext" onclick="Naissance.edit('{{$_naissance->_id}}', null, null, 0, 'document.location.reload')">
                     {{tr}}Edit{{/tr}}
                   </button>
-                  {{if $_naissance->heure}}
-                    Le {{$enfant->naissance|date_format:$conf.date}} à {{$_naissance}}
+                  {{if $_naissance->date_time}}
+                    Le {{$_naissance->date_time|date_format:$conf.date}} à {{$_naissance->date_time|date_format:$conf.time}}
                   {{else}}
                    {{$_naissance}}
                   {{/if}}

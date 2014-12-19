@@ -19,6 +19,10 @@
 {{mb_default var=large_icon value=0}}
 {{mb_default var=modify_grossesse value=1}}
 
+{{if !$grossesse}}
+  {{mb_return}}
+{{/if}}
+
 <script>
   Main.add(function() {
     Grossesse.parturiente_id = '{{$patient->_id}}';

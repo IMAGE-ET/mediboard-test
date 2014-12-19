@@ -109,7 +109,12 @@
       <td>
         {{mb_field object=$patient field="nom"}}
       </td>
-      <td colspan="2"></td>
+      <th>
+        {{mb_label object=$naissance field="by_caesarean"}}
+      </th>
+      <td>
+        {{mb_field object=$naissance field="by_caesarean"}}
+      </td>
     </tr>
     
     {{if !$provisoire}}
@@ -131,15 +136,27 @@
         </td>
         <td colspan="2"></td>
       </tr>
-      <tr>
-        <th>
-         {{mb_label object=$naissance field="heure"}}
-        </th>
-        <td>
-          {{mb_field object=$naissance field="heure" form="newNaissance" register="true"}}
-        </td>
-        <td colspan="2"></td>
-      </tr>
+      {{if $naissance->_id}}
+        <tr>
+          <th>
+            {{mb_label object=$naissance field="date_time"}}
+          </th>
+          <td>
+            {{mb_field object=$naissance field="date_time" form="newNaissance" register="true"}}
+          </td>
+          <td colspan="2"></td>
+        </tr>
+      {{else}}
+        <tr>
+          <th>
+           {{mb_label object=$naissance field="_heure"}}
+          </th>
+          <td>
+            {{mb_field object=$naissance field="_heure" form="newNaissance" register="true"}}
+          </td>
+          <td colspan="2"></td>
+        </tr>
+      {{/if}}
     {{/if}}
     <tr>
       <th>

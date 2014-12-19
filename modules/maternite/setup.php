@@ -159,7 +159,30 @@ class CSetupmaternite extends CSetup {
       DROP `date_fin_allaitement`;";
     $this->addQuery($query);
 
+    $this->makeRevision("0.14");
+    $query = "ALTER TABLE `naissance`
+                ADD `date_time` DATETIME AFTER `heure`,
+                ADD `by_caesarean` ENUM ('0','1') DEFAULT '0' NOT NULL;";
+    $this->addQuery($query);
 
-    $this->mod_version = "0.14";
+    $query = "ALTER TABLE `naissance` ADD INDEX (`date_time`)";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.15");
+    $query = "
+      UPDATE naissance
+      INNER JOIN sejour ON sejour.sejour_id = naissance.sejour_enfant_id
+      INNER JOIN patients ON sejour.patient_id = patients.patient_id
+      SET naissance.date_time = CONCAT(patients.naissance, ' ', naissance.heure)
+      WHERE naissance.heure IS NOT NULL
+        AND patients.naissance IS NOT NULL";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.16");
+    $query = "ALTER TABLE `naissance` DROP `heure`";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.17";
+
   }
 }

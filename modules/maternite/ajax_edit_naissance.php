@@ -42,8 +42,8 @@ if ($naissance_id) {
   
   // Heure courante sur la naissance et date courante sur le patient
   // pour transformer le dossier provisoire en naissance
-  if (!$naissance->heure) {
-    $naissance->heure = CMbDT::time();
+  if (!$naissance->date_time) {
+    $naissance->date_time = CMbDT::dateTime();
     $patient->naissance = CMbDT::date();
   }
   
@@ -52,11 +52,19 @@ else {
   if (!$provisoire) {
     $grossesse = $sejour->loadRefGrossesse();
     $naissance->rang = $grossesse->countBackRefs("naissances") + 1;
-    $naissance->heure = CMbDT::time();
+    $naissance->date_time = CMbDT::dateTime();
   }
   
   $naissance->sejour_maman_id = $sejour_id;
   $naissance->operation_id = $operation_id;
+
+  // guess cesarienne
+  $op = new COperation();
+  $op->load($operation_id);
+  $bloc = $op->loadRefSalle()->loadRefBloc();
+  if ($bloc->_id && $bloc->type != "obst") {
+    $naissance->by_caesarean = "1";
+  }
 
   $num_naissance = CAppUI::conf("maternite CNaissance num_naissance");
   $naissance->num_naissance = $num_naissance + CNaissance::countNaissances();
@@ -66,19 +74,19 @@ else {
   }
 }
 
+
+
 $sejour->loadRefPraticien();
 
 $smarty = new CSmartyDP();
-
-$smarty->assign("naissance"  , $naissance);
-$smarty->assign("patient"    , $patient);
-$smarty->assign("constantes" , $constantes);
-$smarty->assign("parturiente", $parturiente);
-$smarty->assign("provisoire" , $provisoire);
-$smarty->assign("sejour_id"  , $sejour_id);
-$smarty->assign("callback"   , $callback);
-$smarty->assign("sejour"     , $sejour);
-$smarty->assign("operation_id", $operation_id);
-$smarty->assign("list_constantes", CConstantesMedicales::$list_constantes);
-
+$smarty->assign("naissance"       , $naissance);
+$smarty->assign("patient"         , $patient);
+$smarty->assign("constantes"      , $constantes);
+$smarty->assign("parturiente"     , $parturiente);
+$smarty->assign("provisoire"      , $provisoire);
+$smarty->assign("sejour_id"       , $sejour_id);
+$smarty->assign("callback"        , $callback);
+$smarty->assign("sejour"          , $sejour);
+$smarty->assign("operation_id"    , $operation_id);
+$smarty->assign("list_constantes" , CConstantesMedicales::$list_constantes);
 $smarty->display("inc_edit_naissance.tpl");

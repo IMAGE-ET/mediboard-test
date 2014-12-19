@@ -30,8 +30,6 @@ foreach ($naissances as $_naissance) {
 }
 
 $smarty = new CSmartyDP();
-
 $smarty->assign("grossesse", $grossesse);
 $smarty->assign("operation", $operation);
-
 $smarty->display("inc_vw_naissances.tpl");

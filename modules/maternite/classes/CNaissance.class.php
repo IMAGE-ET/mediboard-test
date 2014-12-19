@@ -26,9 +26,12 @@ class CNaissance extends CMbObject {
   
   // DB Fields
   public $hors_etab;
-  public $heure;
+  public $date_time;
   public $rang;
   public $num_naissance;
+  public $by_caesarean;
+
+  public $_heure;
 
   public $fausse_couche;
   public $rques;
@@ -68,11 +71,14 @@ class CNaissance extends CMbObject {
     $props["sejour_maman_id" ]  = "ref notNull class|CSejour";
     $props["sejour_enfant_id"]  = "ref notNull class|CSejour";
     $props["hors_etab"]         = "bool default|0";
-    $props["heure"]             = "time";
+    $props["date_time"]         = "dateTime";
     $props["rang"]              = "num pos";
     $props["num_naissance"]     = "num pos";
     $props["fausse_couche"]     = "enum list|inf_15|sup_15";
     $props["rques"]             = "text helped";
+    $props["by_caesarean"]      = "bool notNull default|0";
+
+    $props["_heure"]            = "time";
     return $props;
   }
 
@@ -108,8 +114,8 @@ class CNaissance extends CMbObject {
    */
   function updateFormFields() {
     parent::updateFormFields();
-    if ($this->heure) {
-      $this->_view = $this->getFormattedValue("heure");
+    if ($this->date_time) {
+      $this->_view = $this->getFormattedValue("date_time");
     }
     else {
       $this->_view = "Dossier provisoire";

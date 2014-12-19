@@ -51,7 +51,7 @@ Main.add(function(){
   </tr>
   <tr>
     <th class="category"></th>
-    <th class="category">{{mb_label class=CNaissance field=rang}} / {{mb_label class=CNaissance field=heure}}</th>
+    <th class="category">{{mb_label class=CNaissance field=rang}} / {{mb_label class=CNaissance field=date_time}}</th>
     <th class="category">{{tr}}CPatient{{/tr}}</th>
     <th class="category">{{tr}}CSejour{{/tr}}</th>
   </tr>
@@ -63,8 +63,8 @@ Main.add(function(){
         <button type="button" class="edit notext" onclick="Naissance.edit('{{$_naissance->_id}}', '{{$operation->_id}}')"></button>
       </td>
       <td>
-        {{if $_naissance->heure}}
-          Le {{$enfant->naissance|date_format:$conf.date}} à {{$_naissance}}
+        {{if $_naissance->date_time}}
+          Le {{$_naissance->date_time|date_format:$conf.date}} à {{$_naissance->date_time|date_format:$conf.time}}
         {{else}}
           {{$_naissance}}
         {{/if}}

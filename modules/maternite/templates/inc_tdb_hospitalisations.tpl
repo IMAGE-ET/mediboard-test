@@ -72,7 +72,7 @@
         {{/if}}
         <td>
           <span class="gender_{{$_naissance->_ref_sejour_enfant->_ref_patient->sexe}}" onmouseover="ObjectTooltip.createEx(this, '{{$_naissance->_ref_sejour_enfant->_guid}}');">
-            {{$_naissance->_ref_sejour_enfant->_ref_patient}} {{if $_naissance->heure}}<strong>(J{{$_naissance->_day_relative}})</strong>{{/if}}
+            {{$_naissance->_ref_sejour_enfant->_ref_patient}} {{if $_naissance->date_time}}<strong>(J{{$_naissance->_day_relative}})</strong>{{/if}}
           </span>
         </td>
         <td>

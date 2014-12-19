@@ -17,7 +17,8 @@ $patient_id        = CValue::post("patient_id");
 $praticien_id      = CValue::post("praticien_id");
 $hors_etab         = CValue::post("hors_etab");
 $sexe              = CValue::post("sexe");
-$heure             = CValue::post("heure");
+$heure             = CValue::post("_heure");
+$date_time         = CValue::post("date_time");
 $rang              = CValue::post("rang");
 $date_naissance    = CValue::post("naissance");
 $nom               = CValue::post("nom");
@@ -70,7 +71,6 @@ function storeObject($object) {
 if (!$naissance_id) {
   // Etape 1 (patient)
   $patient = new CPatient();
-  
   $patient->nom = $nom;
   $patient->prenom = $prenom;
   $patient->sexe = $sexe;
@@ -121,7 +121,8 @@ if (!$naissance_id) {
   $naissance->operation_id      = $operation_id;
   $naissance->grossesse_id      = $grossesse->_id;
   $naissance->rang              = $rang;
-  $naissance->heure             = $heure;
+  $naissance->_heure            = $heure;
+  $naissance->date_time         = "$date $heure";
   $naissance->hors_etab         = $hors_etab;
   $naissance->num_naissance     = $num_naissance;
   $naissance->fausse_couche     = $fausse_couche;
@@ -139,12 +140,12 @@ else {
   $naissance->fausse_couche     = $fausse_couche;
   $naissance->rques             = $rques;
 
-  if (!$naissance->heure && $heure) {
+  if (!$naissance->date_time && $heure) {
     $validation_naissance = true;
     $naissance->operation_id = $operation_id;
   }
   
-  $naissance->heure = $heure;
+  $naissance->date_time = $date_time;
   storeObject($naissance);
   
   $sejour = $naissance->loadRefSejourEnfant();
