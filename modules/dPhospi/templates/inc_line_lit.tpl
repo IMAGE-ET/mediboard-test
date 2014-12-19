@@ -222,8 +222,12 @@
                     {{if $mode_vue_reelle == "classique"}}
                       <div class="compact" style="width: 10px;">
                         {{if $systeme_presta == "expert"}}
-                          {{if $prestation_id && $sejour->_liaisons_for_prestation|@count}}
-                            {{mb_include module=hospi template=inc_vw_liaisons_prestation liaisons=$sejour->_liaisons_for_prestation}}
+                          {{if $prestation_id && $object->_liaisons_for_prestation|@count}}
+                            {{if $is_aff}}
+                              {{mb_include module=hospi template=inc_vw_liaisons_prestation liaisons=$object->_liaisons_for_prestation}}
+                            {{else}}
+                              {{mb_include module=hospi template=inc_vw_liaisons_prestation liaisons=$sejour->_liaisons_for_prestation}}
+                            {{/if}}
                           {{/if}}
                         {{else}}
                           <em style="color: #f00;" title="Chambre {{if $sejour->chambre_seule}}seule{{else}}double{{/if}}">

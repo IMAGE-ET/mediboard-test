@@ -87,6 +87,9 @@ class CAffectation extends CMbObject {
   /** @var CAffectation[] */
   public $_ref_affectations_enfant;
 
+  /** @var CItemLiaison[] */
+  public $_liaisons_for_prestation;
+
   /** @var CMediusers */
   public $_ref_praticien;
 
