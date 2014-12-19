@@ -22,6 +22,8 @@ class CEAITransformationRule extends CMbObject {
 
   // DB fields
   public $name;
+  public $standard;
+  public $domain;
   public $profil;
   public $message;
   public $transaction;
@@ -61,6 +63,8 @@ class CEAITransformationRule extends CMbObject {
     $props = parent::getProps();
 
     $props["name"]           = "str notNull";
+    $props["standard"]       = "str";
+    $props["domain"]         = "str";
     $props["profil"]         = "str";
     $props["message"]        = "str";
     $props["transaction"]    = "str";

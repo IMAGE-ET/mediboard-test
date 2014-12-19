@@ -65,6 +65,8 @@ class CPRPA extends CHL7v3Messaging {
     $this->_categories = array(
       "ST201317UV" => self::$interaction_ST201317UV,
     );
+
+    parent::__construct();
   }
 
   /**

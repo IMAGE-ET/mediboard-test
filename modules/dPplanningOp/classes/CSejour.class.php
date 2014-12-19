@@ -1625,7 +1625,8 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     /* entree preparée => modifiée */
     // si modification d'entree prévue et config et que le séjour était préparé
-    if ($this->fieldModified("entree_prevue") && CAppUI::conf("dPplanningOp CSejour entree_modifiee") && ($this->_old->entree_preparee == 1) ) {
+    if ($this->fieldModified("entree_prevue") && CAppUI::conf("dPplanningOp CSejour entree_modifiee")
+      && ($this->_old->entree_preparee == 1) ) {
       $this->entree_preparee = 0;
       $this->entree_modifiee = 1;
     }

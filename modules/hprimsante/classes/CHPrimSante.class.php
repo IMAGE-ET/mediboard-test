@@ -27,6 +27,15 @@ class CHPrimSante extends CInteropNorm {
   );
 
   /**
+   * @see parent::__construct
+   */
+  function __construct() {
+    $this->name = "CHPrimSante";
+
+    parent::__construct();
+  }
+
+  /**
    * Retrieve handlers list
    *
    * @return array Handlers list

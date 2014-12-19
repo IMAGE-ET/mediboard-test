@@ -26,7 +26,7 @@
   </tr>
   {{foreach from=$exchanges_classes key=sub_classes item=_child_classes}}
     <tr>
-      <th class="category" colspan="6">
+      <th class="section" colspan="6">
         {{tr}}{{$sub_classes}}{{/tr}}
       </th>
     </tr>
@@ -37,9 +37,9 @@
           {{tr}}{{$_class->_class}}{{/tr}}
         </a>
       </td>
-      <td>{{mb_value object=$_class field="_count_exchanges"}}</td>
-      <td>{{mb_value object=$_class field="_count_msg_invalide"}}</td>
-      <td>{{mb_value object=$_class field="_count_ack_invalide"}}</td>
+      <td>{{$_class->_count_exchanges|integer}}</td>
+      <td>{{$_class->_count_msg_invalide|integer}}</td>
+      <td>{{$_class->_count_ack_invalide|integer}}</td>
     </tr>
     {{/foreach}}
   {{/foreach}}

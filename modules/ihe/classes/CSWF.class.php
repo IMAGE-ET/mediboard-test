@@ -64,6 +64,8 @@ class CSWF extends CIHE {
       "RAD-3"  => self::$transaction_rad3,
       "RAD-48" => self::$transaction_rad48,
     );
+
+    parent::__construct();
   }
   
   /**

@@ -299,7 +299,7 @@ class CApp {
       // Require all modules classes
       // Don't include classes in subdirectories (there are a lot !)
       "modules/*/classes/*.class.php",
-      //"modules/*/classes/*/*.class.php",
+      "modules/*/classes/*/*.class.php",
       //"modules/*/classes/*/*/*.class.php",
 
       // Require all modules setups 

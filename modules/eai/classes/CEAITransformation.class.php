@@ -24,6 +24,8 @@ class CEAITransformation extends CMbObject {
   public $actor_id;
   public $actor_class;
 
+  public $standard;
+  public $domain;
   public $profil;
   public $message;
   public $transaction;
@@ -62,6 +64,8 @@ class CEAITransformation extends CMbObject {
     $props["actor_id"]    = "ref notNull class|CInteropActor meta|actor_class";
     $props["actor_class"] = "str notNull class maxLength|80";
 
+    $props["standard"]    = "str";
+    $props["domain"]      = "str";
     $props["profil"]      = "str";
     $props["message"]     = "str";
     $props["transaction"] = "str";
@@ -95,9 +99,25 @@ class CEAITransformation extends CMbObject {
   }
 
   /**
+   * @see parent::store
+   */
+  function store() {
+    if (!$this->_id) {
+      $transformation = new CEAITransformation();
+      $transformation->actor_id    = $this->actor_id;
+      $transformation->actor_class = $this->actor_class;
+
+      $this->rank = $transformation->countMatchingList() + 1;
+    }
+
+    return parent::store();
+  }
+
+  /**
    * Bind event
    *
    * @param CHL7Event|CHPrimXMLEvenements|CHPrimSanteEvent $event Event
+   * @param CInteropACtor                                  $actor Actor
    *
    * @return bool|void
    */
@@ -107,10 +127,31 @@ class CEAITransformation extends CMbObject {
 
     if ($event instanceof CHL7Event) {
       $this->profil      = $event->profil;
-      $this->message     = $event->event_type.$event->code;
+      $this->message     = $event->event_type . $event->code;
       $this->transaction = $event->transaction;
       $this->version     = $event->version;
       $this->extension   = $event->_is_i18n;
     }
+  }
+
+  /**
+   * Bind transformation rule
+   *
+   * @param CEAITransformationRule $transformation_rule Transformation rule
+   * @param CInteropACtor          $actor               Actor
+   *
+   * @return bool|void
+   */
+  function bindTransformationRule(CEAITransformationRule $transformation_rule, CInteropActor $actor) {
+    $this->eai_transformation_rule_id = $transformation_rule->_id;
+
+    $this->actor_id    = $actor->_id;
+    $this->actor_class = $actor->_class;
+
+    $this->profil      = $transformation_rule->profil;
+    $this->message     = $transformation_rule->message;
+    $this->transaction = $transformation_rule->transaction;
+    $this->version     = $transformation_rule->version;
+    $this->extension   = $transformation_rule->extension;
   }
 }

@@ -36,7 +36,9 @@ class CHPrimXML extends CInteropNorm {
    * @see parent::__construct
    */
   function __construct() {
-    $this->domain = "HPRIM_XML";
+    $this->name = "CHPrimXML";
+
+    parent::__construct();
   }
 
   /**

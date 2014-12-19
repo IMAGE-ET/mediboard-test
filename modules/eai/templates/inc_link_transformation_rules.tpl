@@ -9,35 +9,56 @@
  * @link     http://www.mediboard.org
 *}}
 
-<table class="main tbl">
-  <tr>
-    <th colspan="14" class="title">
-      {{tr}}CEAITransformationRule.all{{/tr}}
-    </th>
-  </tr>
-  <tr>
-    <th class="narrow button"></th>
-    <th class="category"> {{mb_title class=CEAITransformationRule field=name}}</th>
-    <th class="category"> {{mb_title class=CEAITransformationRule field=component_from}} </th>
-    <th class="category"> {{mb_title class=CEAITransformationRule field=component_to}} </th>
-    <th class="category narrow"> {{mb_title class=CEAITransformationRule field=action_type}} </th>
-    <th class="category narrow"> {{mb_title class=CEAITransformationRule field=value}} </th>
-  </tr>
+<form name="edit-{{$transformation->_guid}}" method="post" onsubmit="return EAITransformation.onSubmit(this)">
+  <input type="hidden" name="m" value="eai" />
+  <input type="hidden" name="dosql" value="do_link_transformation_aed" />
 
-  {{foreach from=$transf_rules item=_transformation_rule}}
-    <tr {{if !$_transformation_rule->active}}class="opacity-30"{{/if}}>
-      <td> <input type="checkbox" name="transformation_rules[]" value="" /></td>
-      <td class="text compact">{{mb_value object=$_transformation_rule field="name"}}</td>
-      <td class="text compact">{{mb_value object=$_transformation_rule field="component_from"}}</td>
-      <td class="text compact">{{mb_value object=$_transformation_rule field="component_to"}}</td>
-      <td class="button compact">
-        <span class="transformation-{{$_transformation_rule->action_type}}"></span>
-      </td>
-      <td class="text compact">
-        {{mb_value object=$_transformation_rule field="value"}}
+  {{assign var=event_name value=$event|get_class}}
+
+  <input type="hidden" name="actor_guid" value="{{$actor->_guid}}" />
+  <input type="hidden" name="event_name" value="{{$event_name}}" />
+  <input type="hidden" name="del" value="0" />
+
+  <input type="hidden" name="callback" value="" />
+
+  <table class="main tbl">
+    <tr>
+      <th colspan="14" class="title">
+        {{tr}}CEAITransformationRule.all{{/tr}}
+      </th>
+    </tr>
+    <tr>
+      <th class="narrow button"></th>
+      <th class="category"> {{mb_title class=CEAITransformationRule field=name}}</th>
+      <th class="category"> {{mb_title class=CEAITransformationRule field=component_from}} </th>
+      <th class="category"> {{mb_title class=CEAITransformationRule field=component_to}} </th>
+      <th class="category narrow"> {{mb_title class=CEAITransformationRule field=action_type}} </th>
+      <th class="category narrow"> {{mb_title class=CEAITransformationRule field=value}} </th>
+    </tr>
+
+    {{foreach from=$transf_rules item=_transformation_rule}}
+      <tr {{if !$_transformation_rule->active}}class="opacity-30"{{/if}}>
+        <td>
+          <input type="checkbox" name="transformation_rules[{{$_transformation_rule->_id}}]" value="{{$_transformation_rule->_id}}" />
+        </td>
+        <td class="text compact">{{mb_value object=$_transformation_rule field="name"}}</td>
+        <td class="text compact">{{mb_value object=$_transformation_rule field="component_from"}}</td>
+        <td class="text compact">{{mb_value object=$_transformation_rule field="component_to"}}</td>
+        <td class="button compact">
+          <span class="transformation-{{$_transformation_rule->action_type}}"></span>
+        </td>
+        <td class="text compact">
+          {{mb_value object=$_transformation_rule field="value"}}
+        </td>
+      </tr>
+      {{foreachelse}}
+      <tr><td class="emtpy" colspan="14">{{tr}}CEAITransformationRule.none{{/tr}}</td></tr>
+    {{/foreach}}
+
+    <tr>
+      <td colspan="14" class="button">
+        <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
       </td>
     </tr>
-    {{foreachelse}}
-    <tr><td class="emtpy" colspan="14">{{tr}}CEAITransformationRule.none{{/tr}}</td></tr>
-  {{/foreach}}
-</table>
+  </table>
+</form>

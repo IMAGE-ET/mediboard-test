@@ -9,9 +9,13 @@
  * @link     http://www.mediboard.org
 *}}
 
-<script>
-
-</script>
+<style>
+  .EAITransformationRule-select {
+    width: 100%;
+    height: 120px;
+    font-size: 10px;
+  }
+</style>
 
 {{if !$mode_duplication}}
 <form name="edit-{{$transf_rule->_guid}}{{$transf_rule->_guid}}" method="post" onsubmit="return EAITransformationRule.onSubmit(this)">
@@ -47,6 +51,128 @@
             {{$_locale}}
           </button>
         {{/foreach}}
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2">
+        <table class="form">
+          <tr>
+            <td>{{mb_label object=$transf_rule field="standard"}}</td>
+            <td>{{mb_label object=$transf_rule field="domain"}}</td>
+            <td>{{mb_label object=$transf_rule field="profil"}}</td>
+            <td>{{mb_label object=$transf_rule field="transaction"}}</td>
+            <td>{{mb_label object=$transf_rule field="message"}}</td>
+          </tr>
+
+          <tr>
+            <!-- NORME !-->
+            <td id="EAITransformationRule-standard" style="width: 20%">
+              <select size="10" name="standard" class="EAITransformationRule-select"
+                      onchange="EAITransformationRule.fillSelect(this, 'domain'); ">
+              {{foreach from=$standards item=_standards key=_standard_name}}
+                <option value="{{$_standard_name}}">
+                  {{tr}}{{$_standard_name}}{{/tr}}
+                </option>
+              {{/foreach}}
+              </select>
+            </td>
+
+            <!-- DOMAINE !-->
+            <td id="EAITransformationRule-domain" style="width: 20%">
+              <select size="10" name="domain" class="EAITransformationRule-select"
+                      onchange="EAITransformationRule.fillSelect(this, 'profil'); ">
+                {{foreach from=$standards item=_standards key=_standard_name}}
+                    {{foreach from=$_standards item=_domains key=_domain_name}}
+                      <option value="{{$_domain_name}}" style="display: none" data-parent="{{$_standard_name}}">
+                        {{if $_domain_name != "none"}}
+                          {{tr}}{{$_standard_name}}_{{$_domain_name}}-desc{{/tr}} ({{$_domain_name}})
+                        {{else}}
+                          {{tr}}EAITransformationRule-{{$_domain_name}}{{/tr}}
+                        {{/if}}
+                      </option>
+                    {{/foreach}}
+                {{/foreach}}
+              </select>
+            </td>
+
+            <!-- PROFIL !-->
+            <td id="EAITransformationRule-profil" style="width: 20%">
+              <select size="10" name="profil" class="EAITransformationRule-select"
+                      onchange="EAITransformationRule.fillSelect(this, 'transaction'); ">
+                {{foreach from=$standards item=_standards key=_standard_name}}
+                  {{foreach from=$_standards item=_domains key=_domain_name}}
+                    {{foreach from=$_domains item=_profils key=_profil_name}}
+                      <option value="{{$_profil_name}}" style="display: none" data-parent="{{$_standard_name}}-{{$_domain_name}}">
+                        {{if $_profil_name != "none"}}
+                          {{tr}}{{$_profil_name}}-desc{{/tr}} ({{$_profil_name}})
+                        {{else}}
+                          {{tr}}EAITransformationRule-{{$_profil_name}}{{/tr}}
+                        {{/if}}
+                      </option>
+                    {{/foreach}}
+                  {{/foreach}}
+                {{/foreach}}
+              </select>
+            </td>
+
+            <!-- TRANSACTION !-->
+            <td id="EAITransformationRule-transaction" style="width: 20%">
+              <select size="10" name="transaction" class="EAITransformationRule-select"
+                      onchange="EAITransformationRule.fillSelect(this, 'message'); ">
+                {{foreach from=$standards item=_standards key=_standard_name}}
+                  {{foreach from=$_standards item=_domains key=_domain_name}}
+                    {{foreach from=$_domains item=_profils key=_profil_name}}
+                      {{foreach from=$_profils item=_transactions key=_transaction_name}}
+                        <option value="{{$_transaction_name}}" style="display: none" data-parent="{{$_standard_name}}-{{$_domain_name}}-{{$_profil_name}}">
+                          {{if $_transaction_name != "none"}}
+                            {{tr}}{{$_transaction_name}}{{/tr}} ({{$_transaction_name}})
+                          {{else}}
+                            {{tr}}EAITransformationRule-{{$_transaction_name}}{{/tr}}
+                          {{/if}}
+                        </option>
+                      {{/foreach}}
+                    {{/foreach}}
+                  {{/foreach}}
+                {{/foreach}}
+              </select>
+            </td>
+
+            <!-- MESSAGE !-->
+            <td id="EAITransformationRule-message" style="width: 20%">
+              <select size="10" name="message" class="EAITransformationRule-select">
+                {{foreach from=$standards item=_standards key=_standard_name}}
+                  {{foreach from=$_standards item=_domains key=_domain_name}}
+                    {{foreach from=$_domains item=_profils key=_profil_name}}
+                      {{foreach from=$_profils item=_transactions key=_transaction_name}}
+                        {{foreach from=$_transactions item=_event key=_event_name}}
+                          <option value="{{$_event_name}}" style="display: none" data-parent="{{$_standard_name}}-{{$_domain_name}}-{{$_profil_name}}-{{$_transaction_name}}">
+                            {{tr}}{{$_event}}{{/tr}}
+                          </option>
+                        {{/foreach}}
+                      {{/foreach}}
+                    {{/foreach}}
+                  {{/foreach}}
+                {{/foreach}}
+              </select>
+            </td>
+          </tr>
+        </table>
+      </td>
+
+    <tr>
+      <th>{{mb_label object=$transf_rule field="version"}}</th>
+      <td id="EAITransformationRule-version">
+
+
+      </td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$transf_rule field="extension"}}</th>
+      <td id="EAITransformationRule-extension">
+
+
       </td>
     </tr>
 

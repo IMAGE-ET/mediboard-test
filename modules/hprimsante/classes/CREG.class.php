@@ -31,6 +31,8 @@ class CREG extends CHPrimSante {
    */
   function __construct() {
     $this->type = "REG";
+
+    parent::__construct();
   }
 
   /**

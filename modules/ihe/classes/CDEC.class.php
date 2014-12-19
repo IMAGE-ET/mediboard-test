@@ -50,6 +50,8 @@ class CDEC extends CIHE {
     $this->_categories = array(
       "PDC-01" => self::$transaction_pcdO1
     );
+
+    parent::__construct();
   }
 
   /**

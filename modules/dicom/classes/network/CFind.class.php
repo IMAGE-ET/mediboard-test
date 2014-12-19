@@ -12,7 +12,7 @@
 /**
  * The Find message family
  */
-class CFind extends CInteropNorm {
+class CFind extends CDicomMessage {
   static $evenements = array(
     "C-Find-RQ"         => "CDicomMessageCFindRQ",
     "C-Find-RSP"        => "CDicomMessageCFindRSP",
@@ -26,7 +26,10 @@ class CFind extends CInteropNorm {
    * @return \CFind
    */
   function __construct() {
-    $this->type = "Find";
+    $this->type   = "Find";
+    $this->domain = "CFind";
+
+    parent::__construct();
   }
   
   /**

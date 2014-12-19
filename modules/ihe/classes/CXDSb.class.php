@@ -62,6 +62,8 @@ class CXDSb extends CIHE {
       "ITI-57" => self::$interaction_ITI57,
       "ITI-43" => self::$interaction_ITI43,
     );
+
+    parent::__construct();
   }
 
   /**

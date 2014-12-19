@@ -15,57 +15,14 @@
  * Class CHL7v3Messaging
  * Patient Administration
  */
-class CHL7v3Messaging {
-
-  /** @var array */
-  static $object_handlers = array();
-
-  /** @var array */
-  static $versions    = array();
-
-
-  /** @var array */
-  static $evenements  = array();
-
-
-  /** @var array */
-  public $_categories = array();
-
+class CHL7v3Messaging extends CInteropNorm {
   /**
-   * Retrieve handlers list
-   *
-   * @return array Handlers list
+   * @see parent::__construct
    */
-  static function getObjectHandlers() {
-    return self::$object_handlers;
-  }
+  function __construct() {
+    $this->name = "CHL7v3Messaging";
 
-  /**
-   * Retrieve events list of data format
-   *
-   * @return array Events list
-   */
-  function getEvenements() {
-    return self::$evenements;
-  }
-
-  /**
-   * Retrieve document elements
-   *
-   * @return array
-   */
-  function getDocumentElements() {
-    return array();
-  }
-
-  /**
-   * Retrieve transaction name
-   *
-   * @param string $code Event code
-   *
-   * @return string Transaction name
-   */
-  static function getTransaction($code) {
+    parent::__construct();
   }
 
   /**

@@ -18,6 +18,10 @@ EAITransformation = {
       .requestModal(600);
   },
 
+  onSubmit: function(form) {
+    return onSubmitFormAjax(form, Control.Modal.close);
+  },
+
   link: function(event_name, actor_guid) {
     new Url("eai", "ajax_link_transformation_rules")
       .addParam("event_name", event_name)

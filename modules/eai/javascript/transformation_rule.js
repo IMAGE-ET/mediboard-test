@@ -15,7 +15,7 @@ EAITransformationRule = {
       .addParam("transformation_rule_id", transformation_rule_id)
       .addParam("transformation_ruleset_id", transformation_ruleset_id)
       .addParam("mode_duplication", mode_duplication)
-      .requestModal(600);
+      .requestModal("90%");
   },
 
   stats: function(transformation_rule_id) {
@@ -44,5 +44,21 @@ EAITransformationRule = {
 
   selectedActionType: function(element, value) {
     element.next('.transformation-'+value).addUniqueClassName('selected');
+  },
+
+  fillSelect : function(select, select_name) {
+    var selector = select.form[select_name];
+    var option   = select.options[select.selectedIndex];
+
+    selector.selectedIndex = -1;
+    selector.select('option').invoke('hide');
+
+    var parent = option && option.get("parent");
+    var data = parent ? parent+'-'+select.value : select.value;
+    selector.select('option[data-parent='+data+']').invoke('show');
+
+    if (selector.getAttribute("onchange")) {
+      selector.onchange();
+    }
   }
 }

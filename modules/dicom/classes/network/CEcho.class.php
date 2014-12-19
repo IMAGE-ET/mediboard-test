@@ -12,7 +12,7 @@
 /**
  * The Echo message family
  */
-class CEcho extends CInteropNorm {
+class CEcho extends CDicomMessage {
   static $evenements = array(
     "C-Echo-RQ"  => "CDicomMessageCEchoRQ",
     "C-Echo-RSP" => "CDicomMessageCEchoRSP",
@@ -24,7 +24,10 @@ class CEcho extends CInteropNorm {
    * @return self
    */
   function __construct() {
-    $this->type = "Echo";
+    $this->type   = "Echo";
+    $this->domain = "CEcho";
+
+    parent::__construct();
   }
   
   /**

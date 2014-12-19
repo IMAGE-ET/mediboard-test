@@ -16,6 +16,15 @@
  * Interoperability Norme
  */
 abstract class CInteropNorm {
+  /** @var string */
+  public $name;
+
+  /** @var string */
+  public $domain;
+
+  /** @var string */
+  public $type;
+
   /** @var array*/
   static $object_handlers = array();
 
@@ -28,8 +37,13 @@ abstract class CInteropNorm {
   /** @var array */
   public $_categories = array();
 
-  /** @var string */
-  public $domain;
+  /**
+   * Construct
+   *
+   * @return CInteropNorm
+   */
+  function __construct() {
+  }
 
   /**
    * Retrieve handlers list
@@ -81,12 +95,79 @@ abstract class CInteropNorm {
   }
 
   /**
-   * get tag
+   * Get tag
    *
    * @param String $group_id group id
    *
    * @return mixed|null
    */
   static function getTag($group_id = null) {
+  }
+
+  /**
+   * Retrieve profil
+   *
+   * @return string
+   */
+  function getDomain() {
+    return $this->domain ? $this->domain : "none";
+  }
+
+  /**
+   * Retrieve type
+   *
+   * @return string
+   */
+  function getType() {
+    return $this->type ? $this->type : "none";
+  }
+
+  /**
+   * Retrieve events
+   *
+   * @return array Events list
+   */
+  function getEvents() {
+    $events = $this->getEvenements();
+
+    $temp = array();
+    foreach ($this->_categories as $_transaction => $_events) {
+      foreach ($_events as $_event_name) {
+        if (array_key_exists($_event_name, $events)) {
+          $temp[$_transaction][$_event_name] = $events[$_event_name];
+        }
+      }
+    }
+
+    if (empty($temp)) {
+      $temp["none"] = $events;
+    }
+
+    return $temp;
+  }
+
+  /**
+   * Get objects
+   *
+   * @return array CInteropNorm collection
+   */
+  static function getObjects() {
+    $standards = array();
+    foreach (CApp::getChildClasses("CInteropNorm", array(), false) as $_interop_norm) {
+      /** @var CInteropNorm $norm */
+      $norm = new $_interop_norm;
+
+      if (!$norm->name || !$norm->type) {
+        continue;
+      }
+
+      $domain_name = $norm->getDomain();
+      $type        = $norm->getType();
+      $events      = $norm->getEvents();
+
+      $standards[$norm->name][$domain_name][$type] = $events;
+    }
+
+    return $standards;
   }
 }

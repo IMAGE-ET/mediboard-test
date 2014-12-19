@@ -23,13 +23,15 @@
 
 <table class="main tbl">
   <tr>
-    <th colspan="14" class="title">
+    <th colspan="16" class="title">
       {{tr}}CEAITransformationRule.all{{/tr}}
     </th>
   </tr>
   <tr>
     <th class="narrow button"></th>
     <th class="category"> {{mb_title class=CEAITransformationRule field=name}}</th>
+    <th class="category narrow"> {{mb_title class=CEAITransformationRule field=standard}} </th>
+    <th class="category narrow"> {{mb_title class=CEAITransformationRule field=domain}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=profil}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=message}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=transaction}} </th>
@@ -56,6 +58,8 @@
                 class="button notext compact duplicate" type="button" title="{{tr}}Duplicate{{/tr}}">{{tr}}Duplicate{{/tr}}</button>
       </td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="name"}}</td>
+      <td class="text compact">{{mb_value object=$_transformation_rule field="standard"}}</td>
+      <td class="text compact">{{mb_value object=$_transformation_rule field="domain"}}</td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="profil"}}</td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="message"}}</td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="transaction"}}</td>
@@ -97,6 +101,6 @@
       </td>
     </tr>
     {{foreachelse}}
-    <tr><td class="emtpy" colspan="14">{{tr}}CEAITransformationRule.none{{/tr}}</td></tr>
+    <tr><td class="emtpy" colspan="16">{{tr}}CEAITransformationRule.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>

@@ -101,6 +101,8 @@ class CPAM extends CIHE {
       "ITI-30" => self::$transaction_iti30,
       "ITI-31" => self::$transaction_iti31,
     );
+
+    parent::__construct();
   }
   
   /**

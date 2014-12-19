@@ -20,7 +20,10 @@
       <input type="hidden" name="group_domain_id" value="{{$group_domain->_id}}" />
       <input type="hidden" name="del" value="0" />
 
-      <button type="button" class="edit notext" onclick="Domain.editGroupDomain('{{$group_domain->_id}}', '{{$domain->_id}}')">{{tr}}Edit{{/tr}}</button> 
+      <button type="button" class="edit notext" onclick="Domain.editGroupDomain('{{$group_domain->_id}}', '{{$domain->_id}}')">
+        {{tr}}Edit{{/tr}}
+      </button>
+
       <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {
         ajax:1, 
         typeName:&quot;{{tr}}{{$group_domain->_class}}.one{{/tr}}&quot;,

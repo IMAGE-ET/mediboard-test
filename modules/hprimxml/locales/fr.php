@@ -690,3 +690,5 @@ $locales['mod-hprimxml-tab-vw_idx_dest_hprim'] = 'Destinataires H\'XML';
 $locales['mod-hprimxml-tab-vw_idx_echange_hprim'] = 'Echanges H\'XML';
 $locales['module-hprimxml-court'] = 'H.PR.I.M. XML';
 $locales['module-hprimxml-long'] = 'H.PR.I.M. XML';
+$locales['patients-desc'] = 'Événement Patients';
+$locales['pmsi-desc'] = 'Événement PMSI';

@@ -62,6 +62,8 @@ class CPDQ extends CIHE {
       "ITI-21" => self::$transaction_iti21,
       "ITI-22" => self::$transaction_iti22,
     );
+
+    parent::__construct();
   }
 
   /**

@@ -29,6 +29,15 @@ class CIHE extends CInteropNorm {
   );
 
   /**
+   * @see parent::__construct
+   */
+  function __construct() {
+    $this->name = "CIHE";
+
+    parent::__construct();
+  }
+
+  /**
    * Retrieve handlers list
    * 
    * @return array Handlers list
@@ -52,7 +61,7 @@ class CIHE extends CInteropNorm {
         return CPAM::getEvent($exchange);
 
       case "PAM_FR":
-        return CPAM::getEvent($exchange);
+        return CPAMFR::getEvent($exchange);
 
       case "DEC":
         return CDEC::getEvent($exchange);

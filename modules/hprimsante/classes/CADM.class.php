@@ -30,6 +30,8 @@ class CADM extends CHPrimSante {
    */
   function __construct() {
     $this->type = "ADM";
+
+    parent::__construct();
   }
 
   /**

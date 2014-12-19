@@ -21,19 +21,18 @@ $actor = CMbObject::loadFromGuid($actor_guid);
 $event = new $event_name;
 
 $transformation = new CEAITransformation();
-// On charge la liste des règles possibles en fonction des propriétés de l'évènement
-if (!$transformation->_id) {
-  $transf_rule = new CEAITransformationRule();
-//  $transf_rule->bindObject(($event));
 
-  $transf_rules = $transf_rule->loadMatchingList();
-}
+// On charge la liste des règles possibles en fonction des propriétés de l'évènement
+$transf_rule = new CEAITransformationRule();
+//  $transf_rule->bindObject(($event));
+$transf_rules = $transf_rule->loadMatchingList();
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("actor"       , $actor);
-$smarty->assign("event"       , $event);
-$smarty->assign("transf_rules", $transf_rules);
+$smarty->assign("actor"         , $actor);
+$smarty->assign("event"         , $event);
+$smarty->assign("transf_rules"  , $transf_rules);
+$smarty->assign("transformation", $transformation);
 
 $smarty->display("inc_link_transformation_rules.tpl");

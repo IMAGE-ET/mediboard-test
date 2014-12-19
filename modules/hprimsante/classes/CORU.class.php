@@ -31,6 +31,8 @@ class CORU extends CHPrimSante{
    */
   function __construct() {
     $this->type = "ORU";
+
+    parent::__construct();
   }
 
   /**
