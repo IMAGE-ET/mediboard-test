@@ -323,7 +323,10 @@ function loadVueTempo(&$objects = array(), $suivi_affectation, $lits = array(), 
 
     if ($prestation_id) {
       $sejour->loadRefFirstLiaisonForPrestation($prestation_id);
-      $sejour->loadLiaisonsForPrestation($prestation_id, CMbDT::date($date_min), CMbDT::date($date_max));
+      $sejour->loadLiaisonsForPrestation($prestation_id, CMbDT::date(max($date_min, $_object->_entree)), CMbDT::date(min($date_max, $_object->_sortie)));
+      if ($_object->_class == "CAffectation") {
+        $_object->_liaisons_for_prestation = $sejour->_liaisons_for_prestation;
+      }
     }
 
     if ($maternite_active && $sejour->grossesse_id) {
