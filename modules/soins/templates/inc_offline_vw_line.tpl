@@ -19,16 +19,20 @@
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$line->_ref_praticien}}
       <div class="compact" style="white-space: nowrap !important;">
         <div>Du {{$line->_debut_reel|date_format:$conf.date}} à {{$line->_debut_reel|date_format:$conf.time}}</div>
-        {{if $line->duree && $line->unite_duree}}
-          <div>au {{$line->_fin_reelle|date_format:$conf.date}} à {{$line->_fin_reelle|date_format:$conf.time}}</div>
-        {{else}}
-          {{assign var=_line_chapitre value=$line->_chapitre}}
-          {{if $line->_class == "CPrescriptionLineMedicament" || $conf.dPprescription.CCategoryPrescription.$_line_chapitre.fin_sejour}}
-            <div>à Fin du séjour</div>
+        <div>
+          {{if $line->date_arret && $line->time_arret}}
+            au {{$line->date_arret|date_format:$conf.date}} à {{$line->time_arret|date_format:$conf.time}}
+          {{elseif $line->duree && $line->unite_duree}}
+            au {{$line->_fin_reelle|date_format:$conf.date}} à {{$line->_fin_reelle|date_format:$conf.time}}
           {{else}}
-            <div>au {{$line->_fin_reelle|date_format:$conf.date}} à {{$line->_fin_reelle|date_format:$conf.time}}</div>
+            {{assign var=_line_chapitre value=$line->_chapitre}}
+            {{if $line->_class == "CPrescriptionLineMedicament" || $conf.dPprescription.CCategoryPrescription.$_line_chapitre.fin_sejour}}
+              à Fin du séjour
+            {{else}}
+              au {{$line->_fin_reelle|date_format:$conf.date}} à {{$line->_fin_reelle|date_format:$conf.time}}
+            {{/if}}
           {{/if}}
-        {{/if}}
+        </div>
       </div>
     </td>
     <td class="text" style="vertical-align: top">
@@ -102,7 +106,8 @@
     {{/if}}
     {{if $mode_lite}}
       <td class="text">
-        {{if $line->_ref_last_administration->_id}}
+        {{assign var=last_adm value=$line->_ref_last_administration}}
+        {{if $last_adm->_id && ($last_adm->unite_prise == $unite_prise || $last_adm->prise_id == $unite_prise)}}
           <div class="compact">
             {{$line->_ref_last_administration->quantite}}
             {{if $line instanceof CPrescriptionLineElement}}
@@ -111,7 +116,7 @@
             {{elseif $line->inscription}}
               {{$line->_ref_produit->libelle_unite_presentation}}
             {{else}}
-              {{$line->_ref_last_administration->unite_prise}}
+              {{$line->_ref_produit->_unite_administration}}
             {{/if}}
             <br />
             le {{$line->_ref_last_administration->dateTime|date_format:$conf.date}} <br />
@@ -163,8 +168,16 @@
             {{assign var=quantite value=$line->_quantity_by_date_moment.$unite_prise.$_date.$_moment.total}}
           {{/if}}
 
+          {{* Hatching de la case si arrêt et que la case est dans les bornes de l'arrêt *}}
+          {{assign var=hatching_arret value=""}}
+          {{if $line->date_arret && $line->time_arret}}
+            {{if "$_date $_moment:00:00" >= "`$line->date_arret` `$line->time_arret`"}}
+              {{assign var=hatching_arret value="1"}}
+            {{/if}}
+          {{/if}}
+
           <td style="vertical-align: top; text-align: center;"
-              class="{{if $text_align == "left"}}hatching{{/if}}
+              class="{{if $text_align == "left" || $hatching_arret}}hatching{{/if}}
                      {{if $smarty.foreach.moment.first}}left_day{{elseif $smarty.foreach.moment.last}}right_day{{/if}}">
             <div class="compact">
               {{if $quantite!="-" || @array_key_exists($_moment, $line->_administrations_moment.$unite_prise.$_date)}}
@@ -227,7 +240,13 @@
           {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$line->_ref_praticien}}
           <div class="compact" style="white-space: nowrap !important;">
             <div>Du {{$line->_debut|date_format:$conf.date}} à {{$line->_debut|date_format:$conf.time}}</div>
-            <div>au {{$line->_fin|date_format:$conf.date}} à {{$line->_fin|date_format:$conf.time}}</div>
+            <div>
+              {{if $line->date_arret && $line->time_arret}}
+                au {{$line->date_arret|date_format:$conf.date}} à {{$line->time_arret|date_format:$conf.time}}
+              {{else}}
+                au {{$line->_fin|date_format:$conf.date}} à {{$line->_fin|date_format:$conf.time}}
+              {{/if}}
+            </div>
           </div>
         {{/if}}
       </td>
@@ -372,8 +391,16 @@
               {{assign var="text_align" value="left"}}
             {{/if}}
 
+            {{* Hatching de la case si arrêt et que la case est dans les bornes de l'arrêt *}}
+            {{assign var=hatching_arret value=""}}
+            {{if $line->date_arret && $line->time_arret}}
+              {{if "$_date $_moment:00:00" >= "`$line->date_arret` `$line->time_arret`"}}
+                {{assign var=hatching_arret value="1"}}
+              {{/if}}
+            {{/if}}
+
             <td style="vertical-align: top; text-align: center;"
-                class="{{if $text_align == "left"}}hatching{{/if}}
+                class="{{if $text_align == "left" || $hatching_arret}}hatching{{/if}}
                 {{if $smarty.foreach.moment.first}}left_day{{elseif $smarty.foreach.moment.last}}right_day{{/if}}
                 {{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}">
               <div class="compact">
