@@ -12,20 +12,22 @@
 /**
  * Récuparation du graphique du nombre d'interventions annulées le jour même
  *
- * @param string $date_min    Date de début
- * @param string $date_max    Date de fin
- * @param int    $prat_id     Identifiant du praticien
- * @param int    $salle_id    Identifiant de la salle
- * @param int    $bloc_id     Identifiant du bloc
- * @param string $code_ccam   Code CCAM
- * @param string $type_sejour Type de séjour
- * @param bool   $hors_plage  Prise en charge des hors plage
+ * @param string $date_min      Date de début
+ * @param string $date_max      Date de fin
+ * @param int    $prat_id       Filtre du praticien
+ * @param int    $salle_id      Filtre de la salle
+ * @param int    $bloc_id       Filtre du bloc
+ * @param int    $func_id       Filtre sur un cabinet
+ * @param int    $discipline_id Filtre sur une discipline
+ * @param string $code_ccam     Code CCAM
+ * @param string $type_sejour   Type de séjour
+ * @param bool   $hors_plage    Prise en charge des hors plage
  *
  * @return array
  */
 function graphWorkflowOperation(
     $date_min = null, $date_max = null, $prat_id = null, $salle_id = null, $bloc_id = null,
-    $code_ccam = null, $type_sejour = null, $hors_plage = false
+    $func_id = null, $discipline_id = null, $code_ccam = null, $type_sejour = null, $hors_plage = false
 ) {
   $miner = new COperationWorkflow();
   $miner->warnUsage();
@@ -40,9 +42,6 @@ function graphWorkflowOperation(
 
   $date_min = CMbDT::format($date_min, "%Y-%m-01");
   $date_max = CMbDT::transform("+1 MONTH", $date_max, "%Y-%m-01");
-
-  $prat = new CMediusers;
-  $prat->load($prat_id);
 
   // Series declarations
   $labels = array(
@@ -82,31 +81,61 @@ function graphWorkflowOperation(
   $query->addTable("operations");
   $query->addLJoin("operation_workflow AS ow ON ow.operation_id = operations.operation_id");
 
-
   $query->addWhereClause("date_operation", "BETWEEN '$date_min' AND '$date_max'");
   $query->addWhereClause("salle_id", CSQLDataSource::prepareIn(array_keys($salles)));
   $query->addGroup("mois");
   $query->addOrder("mois");
 
+  $subtitle = "";
+
   // Filtre sur hors plage
   if (!$hors_plage) {
     $query->addWhereClause("plageop_id", "IS NOT NULL");
+    $subtitle .= " - sans hors plage";
   }
 
+  // Filtre sur le salle (pas besoin de clause supplémentaire)
+  if ($salle_id) {
+    $salle = reset($salles);
+    $subtitle .= " - $salle->_view";
+  }
   // Filtre sur le praticien
   if ($prat_id) {
     $query->addWhereClause("operations.chir_id", "= '$prat_id'");
+    $prat = new CMediusers;
+    $prat->load($prat_id);
+    $subtitle .= " - Dr $prat->_view";
+  }
+
+  // Filtre sur le cabinet
+  if ($func_id) {
+    $query->addLJoinClause("users_mediboard", "operations.chir_id = users_mediboard.user_id");
+    $query->addWhereClause("users_mediboard.function_id", "= '$func_id'");
+    $func = new CFunctions;
+    $func->load($func_id);
+    $subtitle .= " - $func->_view";
+  }
+
+  // Filtre sur la discipline
+  if ($discipline_id) {
+    $discipline = new CDiscipline;
+    $discipline->load($discipline_id);
+    $query->addLJoinClause("users_mediboard", "operations.chir_id = users_mediboard.user_id");
+    $query->addWhereClause("users_mediboard.discipline_id", "= '$discipline_id'");
+    $subtitle .= " - $discipline->_view";
   }
 
   // Filtre sur les codes CCAM
   if ($code_ccam) {
     $query->addWhereClause("operations.codes_ccam", "LIKE '%$code_ccam%'");
+    $subtitle .= " - CCAM: $code_ccam";
   }
 
   // Filtre sur le type d'hospitalisation
   if ($type_sejour) {
     $query->addLJoinClause("sejour", "sejour.sejour_id = operations.sejour_id");
     $query->addWhereClause("sejour.type", "= '$type_sejour'");
+    $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_sejour");
   }
 
   // Query result
@@ -163,28 +192,7 @@ function graphWorkflowOperation(
 
   // Set up the title for the graph
   $title = "Anticipation de la programmation des interventions";
-  $subtitle = "$total interventions";
-
-  if ($prat_id) {
-    $subtitle   .= " - Dr $prat->_view";
-  }
-
-  if ($salle_id) {
-    $salle = reset($salles);
-    $subtitle   .= " - $salle->_view";
-  }
-
-  if ($code_ccam) {
-    $subtitle   .= " - CCAM : $code_ccam";
-  }
-
-  if (!$hors_plage) {
-    $subtitle   .= " - sans hors plage";
-  }
-
-  if ($type_sejour) {
-    $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_sejour");
-  }
+  $subtitle = "$total interventions" . $subtitle;
 
   $options = array(
     'title'    => utf8_encode($title),

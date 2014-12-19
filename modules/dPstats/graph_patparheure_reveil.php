@@ -24,7 +24,7 @@
  */
 function graphPatParHeureReveil(
     $debut = null, $fin = null, $prat_id = 0, $bloc_id = 0,
-    $discipline_id = null, $codeCCAM = ''
+    $func_id = 0, $discipline_id = null, $codeCCAM = ''
 ) {
   $ds = CSQLDataSource::get("std");
   if (!$debut) {

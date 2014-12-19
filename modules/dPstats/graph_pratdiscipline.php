@@ -17,6 +17,7 @@
  * @param int    $prat_id       Identifiant du praticien
  * @param int    $salle_id      Identifiant de la salle
  * @param int    $bloc_id       Identifiant du bloc
+ * @param int    $func_id       Identifiant du cabinet
  * @param int    $discipline_id Identifiant de la discipline
  * @param string $codeCCAM      Code CCAM
  * @param string $type_hospi    Type d'hospitalisation
@@ -26,7 +27,7 @@
  */
 function graphPraticienDiscipline(
     $debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0,
-    $discipline_id = 0, $codeCCAM = "", $type_hospi = "", $hors_plage = true
+    $func_id = 0, $discipline_id = 0, $codeCCAM = "", $type_hospi = "", $hors_plage = true
 ) {
   if (!$debut) {
     $debut = CMbDT::date("-1 YEAR");

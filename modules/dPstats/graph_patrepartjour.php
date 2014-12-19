@@ -24,7 +24,7 @@
  */
 function graphPatRepartJour(
     $debut = null, $fin = null, $prat_id = 0, $bloc_id = 0,
-    $discipline_id = null, $codeCCAM = ''
+    $func_id = 0, $discipline_id = null, $codeCCAM = ''
 ) {
   if (!$debut) {
     $debut = CMbDT::date("-1 YEAR");
