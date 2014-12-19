@@ -25,6 +25,7 @@ else {
 
 $nb_sejours_annules = 0;
 $nb_ops_annulees = 0;
+$nb_consults_annulees = 0;
 
 if ($patient->_id) {
   $patient->loadDossierComplet(null, false);
@@ -55,6 +56,7 @@ if ($patient->_id) {
     foreach ($patient->_ref_consultations as $consult) {
       if ($consult->annule) {
         unset($patient->_ref_consultations[$consult->_id]);
+        $nb_consults_annulees++;
       }
     }
   }
@@ -73,6 +75,7 @@ $smarty->assign("canPlanningOp"   , CModule::getCanDo("dPplanningOp"));
 $smarty->assign("canCabinet"      , CModule::getCanDo("dPcabinet"));
 $smarty->assign("nb_sejours_annules"  , $nb_sejours_annules);
 $smarty->assign("nb_ops_annulees"     , $nb_ops_annulees);
+$smarty->assign("nb_consults_annulees", $nb_consults_annulees);
 $smarty->assign("vw_cancelled"        , $vw_cancelled);
 
 $smarty->display("inc_vw_patient.tpl");

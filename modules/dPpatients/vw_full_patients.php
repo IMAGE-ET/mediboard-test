@@ -44,10 +44,13 @@ $patient->countINS();
 $dossier_medical = $patient->loadRefDossierMedical();
 $dossier_medical->loadComplete();
 
+$nb_consults_annulees = 0;
+
 // Suppression des consultations d'urgences
 foreach ($patient->_ref_consultations as $consult) {
   if ($consult->motif == "Passage aux urgences" || ($consult->annule && !$vw_cancelled)) {
     unset($patient->_ref_consultations[$consult->_id]);
+    $nb_consults_annulees++;
   }
 }
 
@@ -93,6 +96,7 @@ $smarty->assign("object"                  , $patient);
 $smarty->assign("isImedsInstalled"        , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("nb_sejours_annules"      , $nb_sejours_annules);
 $smarty->assign("nb_ops_annulees"         , $nb_ops_annulees);
+$smarty->assign("nb_consults_annulees"    , $nb_consults_annulees);
 $smarty->assign("vw_cancelled"            , $vw_cancelled);
 
 $smarty->display("vw_full_patients.tpl");
