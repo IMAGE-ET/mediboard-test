@@ -172,9 +172,18 @@ Document.refreshList = function() {
   {{/foreach}}
   {{/if}}
 
-  {{if $patient->_ref_consultations}}
+  {{if $patient->_ref_consultations || $nb_consults_annulees}}
   <tr>
-    <th id="inc_vw_patient_th_consult" colspan="2" class="category">Consultations</th>
+    <th id="inc_vw_patient_th_consult" colspan="2" class="category">
+      Consultations {{if $nb_consults_annulees}}({{$nb_consults_annulees}} consultation(s) annulée(s)){{/if}}
+      {{if $nb_consults_annulees}}
+        <br />
+        <a class="button search" style="float: right" onclick="reloadPatient('{{$patient->_id}}', null, 1)"
+           title="Voir {{$nb_consults_annulees}} consultation(s) annulée(s))">
+          Afficher les annulées
+        </a>
+      {{/if}}
+    </th>
   </tr>
   {{foreach from=$patient->_ref_consultations item=object}}
     {{mb_include module=patients template=inc_vw_elem_dossier}}

@@ -263,6 +263,13 @@
     <th colspan="4">
       {{tr}}CPatient-back-consultations{{/tr}}
       <small>({{$patient->_ref_consultations|@count}})</small>
+      {{if !$vw_cancelled && $nb_consults_annulees}}
+        <br />
+        <a class="button search" style="float: right" href="?m=patients&tab=vw_full_patients&patient_id={{$patient->_id}}&vw_cancelled=1"
+           title="Voir {{$nb_consults_annulees}} consultation(s) annulée(s)">
+          Afficher les annulées
+        </a>
+      {{/if}}
     </th>
   </tr>
 
