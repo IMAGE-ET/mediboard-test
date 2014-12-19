@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 /**
  * $Id$
- *  
+ *
  * @category Soins
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -299,7 +299,12 @@ foreach ($sejours as $_sejour) {
 }
 
 if ($service_id != "urgence") {
-  array_multisort(CMbArray::pluck($patients_offline, "sejour", "_ref_patient", "nom"), SORT_ASC, $patients_offline);
+  if ($service_id == "NP") {
+    array_multisort(CMbArray::pluck($patients_offline, "sejour", "_ref_patient", "nom"), SORT_ASC, $patients_offline);
+  }
+  else {
+    array_multisort(CMbArray::pluck($patients_offline, "sejour", "_ref_curr_affectation", "_ref_lit", "_view"), SORT_ASC, $patients_offline);
+  }
 }
 
 $smarty = new CSmartyDP();
