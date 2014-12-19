@@ -27,7 +27,7 @@
       <th>{{mb_title object=$domain field=_count_objects}}</th>
     </tr>
     {{foreach from=$domains item=_domain}}
-      <tr {{if $_domain->_id == $domain->_id}}class="selected"{{/if}}>
+      <tr class="{{if $_domain->_id == $domain->_id}}selected{{/if}} {{if !$_domain->active}}opacity-30{{/if}}">
         <td class="narrow">
           <input type="checkbox" name="domains_id[]" value="{{$_domain->_id}}" class="merge" style="float: left;" onclick="checkOnlyTwoSelected(this)" />
         </td>

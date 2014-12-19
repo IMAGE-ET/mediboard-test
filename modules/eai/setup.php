@@ -473,7 +473,33 @@ class CSetupeai extends CSetup {
                 CHANGE `action` `action_type` ENUM ('add','modify','move','delete');";
     $this->addQuery($query);
 
-    $this->mod_version = "0.26";
+    $this->makeRevision("0.26");
+
+    $query = "ALTER TABLE `eai_transformation_rule`
+                ADD `domain` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `eai_transformation`
+                ADD `domain` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.27");
+
+    $query = "ALTER TABLE `eai_transformation_rule`
+                ADD `standard` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `eai_transformation`
+                ADD `standard` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.28");
+
+    $query = "ALTER TABLE `domain`
+                ADD `active` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.29";
 
     $query = "SELECT * FROM `authorspecialty_20121112` WHERE `code` = 'G15_10/PAC00';";
 

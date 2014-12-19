@@ -29,6 +29,7 @@ class CDomain extends CMbObject {
   public $namespace_id;
   public $derived_from_idex;
   public $OID;
+  public $active;
   
   // Form fields 
   public $_is_master_ipp;
@@ -36,13 +37,14 @@ class CDomain extends CMbObject {
   public $_count_objects;
   public $_detail_objects = array();
   public $_force_merge    = false;
-  
 
-  /** @var CIncrementer */
+  /** @var CInteropActor */
   public $_ref_actor; 
 
   /** @var CIncrementer */
   public $_ref_incrementer;
+
+  /** @var CGroupDomain[] */
   public $_ref_group_domains;
 
   /**
@@ -76,6 +78,7 @@ class CDomain extends CMbObject {
     $props["namespace_id"]      = "str";
     $props["derived_from_idex"] = "bool";
     $props["OID"]               = "str";
+    $props["active"]            = "bool default|1";
     
     $props["_is_master_ipp"] = "bool";
     $props["_is_master_nda"] = "bool";
@@ -95,6 +98,21 @@ class CDomain extends CMbObject {
     $backProps["group_domains"] = "CGroupDomain domain_id";
     
     return $backProps;
+  }
+
+  /**
+   * @see parent::store()
+   */
+  function store() {
+    // On passe tous les domaines du groupe en "non master"
+    if ($this->fieldModified("active", 0)) {
+      foreach ($this->loadRefsGroupDomains() as $_group_domain) {
+        $_group_domain->master = "0";
+        $_group_domain->store();
+      }
+    }
+
+    parent::store();
   }
   
   /**

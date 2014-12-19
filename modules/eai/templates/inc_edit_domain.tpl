@@ -63,6 +63,11 @@
       <th>{{mb_label object=$domain field="OID"}}</th>
       <td>{{mb_field object=$domain field="OID" size=50}}</td>
     </tr>
+
+    <tr>
+      <th>{{mb_label object=$domain field="active"}}</th>
+      <td>{{mb_field object=$domain field="active"}}</td>
+    </tr>
     
     <tr>
       <td class="button" colspan="2">
