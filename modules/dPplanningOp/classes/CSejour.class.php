@@ -4485,10 +4485,12 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     //unique date, presta for the day
-    if (($date_min && !$date_max) || (($date_min == $date_max) && $date_min)) {
+    $unique_date = false;
+    if ($date_min && (!$date_max || $date_min == $date_max)) {
+      $unique_date = true;
       $where['date'] = "<= '$date_min'";  //get the last prestation for sejour (current day might not be defined)
+      $groupby = null;
       $order = "date DESC";
-      $groupby = "item_prestation.object_id";
     }
 
     /** @var  CItemLiaison[] _liaisons_for_prestation */
@@ -4501,6 +4503,25 @@ class CSejour extends CFacturable implements IPatientRelated {
     foreach ($this->_liaisons_for_prestation as $_liaison) {
       $_liaison->loadRefItem();
       $_liaison->loadRefItemRealise();
+    }
+
+    // Pour une date unique, tri de la dernière liaison a posteriori
+    if ($unique_date) {
+      $temp_liaisons = array();
+
+      foreach ($this->_liaisons_for_prestation as $_liaison) {
+        $key = $_liaison->_ref_item->object_id;
+        if ($_liaison->item_realise_id) {
+          $key = $_liaison->_ref_item_realise->object_id;
+        }
+        $temp_liaisons[$key][] = $_liaison;
+      }
+      $this->_liaisons_for_prestation = array();
+      foreach ($temp_liaisons as $_liaisons_by_prestation) {
+        // On prend la première liaison de la collection car tri par date décroissante
+        $first_liaison = reset($_liaisons_by_prestation);
+        $this->_liaisons_for_prestation[$first_liaison->_id] = $first_liaison;
+      }
     }
 
     return $this->_liaisons_for_prestation;
