@@ -152,9 +152,13 @@ class CSetupmaternite extends CSetup {
       FROM `grossesse`
       WHERE `date_fin_allaitement` IS NOT NULL;
     ";
+    $this->addQuery($query);
+
 
     $query = "ALTER TABLE `grossesse`
       DROP `date_fin_allaitement`;";
+    $this->addQuery($query);
+
 
     $this->mod_version = "0.14";
   }
