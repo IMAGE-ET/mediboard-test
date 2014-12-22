@@ -27,9 +27,17 @@ HyperTextLink = {
   },
 
   getListFor: function(object_id, object_class) {
-    var url = new Url('sante400', 'ajax_list_hypertextlinks');
-    url.addParam('object_id', object_id);
-    url.addParam('object_class', object_class);
+    var url = new Url('sante400'  , 'ajax_list_hypertextlinks');
+    url.addParam('object_id'      , object_id);
+    url.addParam('object_class'   , object_class);
     url.requestUpdate('list-hypertext_links');
+  },
+
+  getListForGuid: function(object_id, object_class, show_only, element_guid) {
+    var url = new Url('sante400'  , 'ajax_list_hypertextlinks');
+    url.addParam('object_id'      , object_id);
+    url.addParam('object_class'   , object_class);
+    url.addParam('show_only'    , show_only);
+    url.requestUpdate('list-hypertext_links-'+element_guid);
   }
 };
