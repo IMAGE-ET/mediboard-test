@@ -240,25 +240,26 @@ class COracleDataSource extends CSQLDataSource {
     return oci_server_version($this->link);
   }
   
-  function queriesForDSN($user, $pass, $base) {
+  function queriesForDSN($user, $pass, $base, $client_host) {
     $queries = array();
-    $host = "localhost";
-    
+
     // Create database
     $queries["create-db"] = "CREATE DATABASE `$base` ;";
 
     // Create user with global permissions
-    $queries["global-privileges"] = 
+    $queries["global-privileges"] = $this->prepare(
       "GRANT USAGE
-        ON * . * 
-        TO '$user'@'$host'
-        IDENTIFIED BY '$pass';";
-      
+        ON * . *
+        TO ?1@?2
+        IDENTIFIED BY ?3;", $user, $client_host, $pass
+    );
+
     // Grant user with database permissions
-    $queries["base-privileges"] = 
+    $queries["base-privileges"] = $this->prepare(
       "GRANT ALL PRIVILEGES
         ON `$base` . *
-        TO '$user'@'$host';";
+        TO ?1@?2;", $user, $client_host
+    );
     
     return $queries;
   }

@@ -271,17 +271,18 @@ abstract class CSQLDataSource {
    * @return string The prepared like clause
    */
   abstract function prepareLike($value);
-  
+
   /**
    * Get queries for creation of a base on the server and a user with access to it
-   * 
-   * @param string $user user name
-   * @param string $pass user password
-   * @param string $base database name
-   * 
+   *
+   * @param string $user        User name
+   * @param string $pass        User password
+   * @param string $base        database name
+   * @param string $client_host Client host name
+   *
    * @return array key-named queries
    */
-  abstract function queriesForDSN($user, $pass, $base); 
+  abstract function queriesForDSN($user, $pass, $base, $client_host);
   
   /**
    * Initialize a data source by creating the link to the data base
