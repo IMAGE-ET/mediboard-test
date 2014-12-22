@@ -140,9 +140,7 @@ if (CModule::getActive("fse")) {
   }
 }
 
-if (CModule::getActive("maternite")) {
-  $consult->loadRefGrossesse();
-}
+$consult->loadRefGrossesse();
 
 $patient->loadRefDossierMedical();
 $dossier_medical = $consult->_ref_patient->_ref_dossier_medical;

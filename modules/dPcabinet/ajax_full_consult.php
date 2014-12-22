@@ -230,9 +230,7 @@ if ($consult->_id) {
   }
 }
 
-if (CModule::getActive("maternite")) {
-  $consult->loadRefGrossesse();
-}
+$consult->loadRefGrossesse();
 
 // Tout utilisateur peut consulter en lecture seule une consultation de séjour
 $consult->canEdit();

@@ -82,12 +82,14 @@
   };
 
   loadGrossesse = function() {
-    var url = new Url('maternite', 'ajax_edit_grossesse', "action");
-    url.addParam('grossesse_id', '{{$sejour->_ref_grossesse->_id}}');
-    url.addParam('parturiente_id', '{{$patient->_id}}');
-    url.addParam('with_buttons', 1);
-    url.addParam('standalone', 1);
-    url.requestUpdate("grossesse");
+    {{if $sejour->_ref_grossesse}}
+      var url = new Url('maternite', 'ajax_edit_grossesse', "action");
+      url.addParam('grossesse_id', '{{$sejour->_ref_grossesse->_id}}');
+      url.addParam('parturiente_id', '{{$patient->_id}}');
+      url.addParam('with_buttons', 1);
+      url.addParam('standalone', 1);
+      url.requestUpdate("grossesse");
+    {{/if}}
   };
 
   loadActes = function(sejour_id, praticien_id) {

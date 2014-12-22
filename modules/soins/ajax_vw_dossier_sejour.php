@@ -22,9 +22,8 @@ $sejour->load($sejour_id);
 if (CModule::getActive("dPprescription")) {
   CPrescription::$_load_lite = true;
 }
-if (CModule::getActive("maternite")) {
-  $sejour->loadRefGrossesse();
-}
+
+$sejour->loadRefGrossesse();
 
 $sejour->loadRefPraticien();
 $prescription_sejour = $sejour->loadRefPrescriptionSejour();
