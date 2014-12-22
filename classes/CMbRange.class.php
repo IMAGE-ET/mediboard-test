@@ -150,17 +150,58 @@ abstract class CMbRange {
   }
 
   /**
-   * Crop a range with many another, resulting in 0 to n range fragments
+   * gather all ranges into englobling one
+   *
+   * @param array $ranges Array of ranges
+   *
+   * @return array
+   */
+  static function englobe($ranges) {
+    $fragment = array();
+    foreach ($ranges as $_range) {
+      if (!isset($fragment["lower"])) {
+        $fragment["lower"] = $_range["lower"];
+      }
+      if (!isset($fragment["upper"])) {
+        $fragment["upper"] = $_range["upper"];
+      }
+
+      $fragment["lower"] = min($_range["lower"], $fragment["lower"]);
+      $fragment["upper"] = max($_range["upper"], $fragment["upper"]);
+    }
+
+    return $fragment;
+  }
+
+  /**
+   * return the ranges Union a range
+   *
+   * @param array $ranges array of ranges
+   * @param array $range  range to add with key lower => data, upper => data
+   *
+   * @return array
+   */
+  static function union(&$ranges, $range) {
+    foreach ($ranges as $key => $_range) {
+      if (self::collide($range, $_range)) {
+        $range = self::englobe(array($range, $_range));
+        unset($ranges[$key]);
+      }
+    }
+    $ranges[] = $range;
+    return $ranges;
+  }
+
+  /**
+   * Crop many ranges with many others, resulting in 0 to n range fragments
    * Limitation: cropper has to be finite
    *
-   * @param mixed $lower    Cropped range
-   * @param mixed $upper    Cropped range
+   * @param array $fragments Array of ranges
    * @param array $croppers Array of cropper ranges
    *
    * @return array Array of range fragments, false on infinite cropper
    */
-  static function multiCrop($lower, $upper, $croppers) {
-    $fragments = array(array($lower, $upper));
+  static function multiCrop($fragments, $croppers) {
 
     foreach ($croppers as $_cropper) {
       $new_fragments = array();
