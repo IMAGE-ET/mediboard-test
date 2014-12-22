@@ -15,7 +15,7 @@ CCanDo::checkEdit();
 $sejour  = new CSejour();
 $sejour->load(CValue::get("sejour_id"));
 $patient = $sejour->loadRefPatient();
-$sejour->loadRefPraticien();
+$sejour->loadRefPraticien()->loadRefFunction();
 $sejour->loadRefsActes();
 $sejour->canDo();
 $sejour->countExchanges();
@@ -26,7 +26,7 @@ $patient->loadRefDossierMedical()->loadComplete();
 $sejour->loadRefsOperations();
 foreach ($sejour->_ref_operations as $_op) {
   $_op->loadRefPatient();
-  $_op->loadRefPraticien();
+  $_op->loadRefPraticien()->loadRefFunction();
   $_op->loadRefsActes();
   $_op->canDo();
   $_op->countExchanges();
@@ -37,7 +37,7 @@ foreach ($sejour->_ref_operations as $_op) {
 $sejour->loadRefsConsultations();
 foreach ($sejour->_ref_consultations as $_consult) {
   $_consult->loadRefPatient();
-  $_consult->loadRefPraticien();
+  $_consult->loadRefPraticien()->loadRefFunction();
   $_consult->loadRefsActes();
   $_consult->canDo();
   $_consult->countExchanges();

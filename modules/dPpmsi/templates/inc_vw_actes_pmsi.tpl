@@ -26,12 +26,16 @@
         <li>
           <a href="#{{$sejour->_guid}}" {{if $sejour->_count_actes == 0}}class="empty"{{/if}}
             >Sejour (<span id="count_actes_{{$sejour->_guid}}">{{$sejour->_count_actes}}</span>)
+            <br/>
+            <span>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}</span>
           </a>
         </li>
         {{foreach from=$sejour->_ref_operations item=_op}}
           <li>
             <a href="#{{$_op->_guid}}" {{if $_op->_count_actes == 0}}class="empty"{{/if}}
               >Intervention du {{$_op->_datetime|date_format:$conf.date}} (<span id="count_actes_{{$_op->_guid}}">{{$_op->_count_actes}}</span>)
+              <br/>
+              <span>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_op->_ref_praticien}}</span>
             </a>
           </li>
         {{/foreach}}
@@ -40,6 +44,8 @@
             <a href="#{{$_consult->_guid}}" {{if $_consult->_count_actes == 0}}class="empty"{{/if}}
               >Consultation du {{$_consult->_ref_plageconsult->date|date_format:$conf.date}}
                 (<span id="count_actes_{{$_consult->_guid}}">{{$_consult->_count_actes}}</span>)
+              <br/>
+              <span>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_consult->_ref_praticien}}</span>
             </a>
           </li>
         {{/foreach}}
