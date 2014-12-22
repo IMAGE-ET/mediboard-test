@@ -1,5 +1,6 @@
 {{mb_default var=addform value=""}}
 {{mb_default var=type_see value=""}}
+{{mb_default var=dossier_anesth_id value=""}}
 
 <script>
   updateFieldsComposant = function(selected) {

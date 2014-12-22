@@ -1,6 +1,8 @@
 {{mb_script module="dPplanningOp" script="cim10_selector" ajax=1}}
 {{mb_script module="cabinet" script="dossier_medical" ajax=1}}
 
+{{mb_default var=dossier_anesth_id value=""}}
+
 <script>
   var cim10url = new Url;
 

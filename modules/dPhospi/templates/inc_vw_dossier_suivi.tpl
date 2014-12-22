@@ -186,94 +186,10 @@
     url.requestModal(500, null, {showReload: false, showClose: false});
   }
 
-  modalConsult = function(consult_id) {
-    var url = new Url("cabinet", "ajax_short_consult");
-    url.addParam("sejour_id", "{{$sejour->_id}}");
-    url.addParam("consult_id", consult_id);
-    url.modal(600, 400);
-    url.modalObject.observe("afterClose", function() {
-      if (window.loadSuivi) {
-        loadSuivi("{{$sejour->_id}}");
-      }
-    });
-  }
-
-  createConsult = function() {
-    {{if $isAnesth}}
-      bindOperation('{{$sejour->_id}}');
-    {{else}}
-      onSubmitFormAjax(getForm('addConsultation'));
-    {{/if}}
-  }
-
-  createConsultEntree = function() {
-    var form = getForm('addConsultation');
-    $V(form.type, 'entree');
-    onSubmitFormAjax(getForm('addConsultation'));
-  }
-
-  toggleLockCible = function(transmission_id, lock) {
-    var form = getForm("lockTransmission");
-    $V(form.transmission_medicale_id, transmission_id);
-    $V(form.locked, lock);
-    onSubmitFormAjax(form, {onComplete: function() {
-      loadSuivi('{{$sejour->_id}}');
-    }});
-  }
-
-  showTrans = function(transmission_id, from_compact) {
-    var url = new Url("hospi", "ajax_list_locked_trans");
-    url.addParam("transmission_id", transmission_id);
-    url.addParam("from_compact", from_compact);
-    url.requestModal(850, null, {maxHeight: '550'});
-  }
-
-  mergeTrans = function(transmissions_ids) {
-    var url = new Url("system", "object_merger");
-    url.addParam("objects_class", "CTransmissionMedicale");
-    url.addParam("objects_id", transmissions_ids);
-    url.popup(800, 600, "merge_transmissions");
-  }
-
-  onMergeComplete = function() {
-    loadSuivi('{{$sejour->_id}}');
-  }
-
   {{if $count_trans > 0}}
     Main.add(showListTransmissions.curry(0, {{$count_trans}}));
   {{/if}}
 </script>
-
-<form name="lockTransmission" method="post" action="?">
-  <input type="hidden" name="m" value="hospi"/>
-  <input type="hidden" name="dosql" value="do_transmission_aed"/>
-  <input type="hidden" name="transmission_medicale_id" />
-  <input type="hidden" name="locked" value="1" />
-
-</form>
-
-<form name="addTransmissionFrm" method="post" action="?">
-  <input type="hidden" name="m" value="hospi" />
-  <input type="hidden" name="dosql" value="do_transmission_aed" />
-  <input type="hidden" name="object_id" />
-  <input type="hidden" name="object_class" />
-  <input type="hidden" name="text" />
-  <input type="hidden" name="user_id" value="{{$user->_id}}" />
-  <input type="hidden" name="date" value="now" />
-  <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
-</form>
-
-<form name="addConsultation" method="post" action="?">
-  <input type="hidden" name="m" value="cabinet" />
-  <input type="hidden" name="dosql" value="do_consult_now" />
-  <input type="hidden" name="prat_id" value="{{$user->_id}}" />
-  <input type="hidden" name="patient_id" value="{{$sejour->patient_id}}" />
-  <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
-  <input type="hidden" name="_operation_id" value="" />
-  <input type="hidden" name="type" value="" />
-  <input type="hidden" name="_in_suivi" value="1" />
-  <input type="hidden" name="callback" value="modalConsult" />
-</form>
 
 <div style="display: none;" id="legend_suivi">
   {{mb_include module=hospi template=inc_legend_suivi}}

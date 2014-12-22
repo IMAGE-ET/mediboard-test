@@ -4,7 +4,8 @@
 {{mb_default var=gestion_tp                value=""}}
 {{mb_default var=sejour_id                 value=""}}
 {{mb_default var=reload                    value=""}}
-{{mb_default var=type_see value=""}}
+{{mb_default var=type_see                  value=""}}
+{{mb_default var=dossier_anesth_id         value=""}}
 
 {{mb_script module="prescription" script="prescription" ajax=1}}
 {{mb_script module="dPmedicament" script="medicament_selector" ajax=1}}
