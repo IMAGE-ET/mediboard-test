@@ -105,6 +105,15 @@
     });
   }
 
+  checkPosos = function() {
+    var div = $("list_posogestion_tp");
+    if (div.select("button").length == 0) {
+      alert($T('CPrisePosologie-_poso_missing'));
+      return false;
+    }
+    return true;
+  }
+
   Main.add(function() {
     if (!DossierMedical.patient_id) {
       DossierMedical.sejour_id  = '{{$sejour_id}}';
@@ -323,7 +332,7 @@
                         Represcrire
                       </button>
                       {{if $sejour_id}}
-                        <button type="button" class="right" onclick="addToTokenPoso{{$addform}}(0);submitAndCallback(this.form, 'poursuivreLineTP');">
+                        <button type="button" class="right" onclick="if (checkPosos()) { addToTokenPoso{{$addform}}(0);submitAndCallback(this.form, 'poursuivreLineTP'); }">
                           Poursuivre
                         </button>
                         <button type="button" class="hslip" onclick="addToTokenPoso{{$addform}}(0);submitAndCallback(this.form, 'relaiLineDialog');">
