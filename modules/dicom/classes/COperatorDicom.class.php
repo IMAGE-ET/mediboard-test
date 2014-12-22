@@ -310,7 +310,12 @@ class COperatorDicom extends CEAIOperator {
             $chir_name = utf8_encode($chir_name);
             $time = utf8_encode($time);
           }
-          
+
+          $calling_ae_title = '';
+          if (array_key_exists(0x0040, $requested_datas) && array_key_exists(0x0001, $requested_datas[0x0040])) {
+            $calling_ae_title = $requested_datas[0x0040][0x0001];
+          }
+
           $find_rsp_datas = array(
             "PDVs" => array(
               array(
@@ -337,6 +342,7 @@ class COperatorDicom extends CEAIOperator {
                     0x0040 => array(
                       0x0100 => array(
                         array(
+                          array("group_number" => 0x0040, "element_number" => 0x0001, "value" => $calling_ae_title),
                           array("group_number" => 0x0040, "element_number" => 0x0002, "value" => $date),
                           array("group_number" => 0x0040, "element_number" => 0x0003, "value" => $time),
                           array("group_number" => 0x0040, "element_number" => 0x0006, "value" => $chir_name),
