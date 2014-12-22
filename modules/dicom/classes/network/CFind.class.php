@@ -27,7 +27,6 @@ class CFind extends CDicomMessage {
    */
   function __construct() {
     $this->type   = "Find";
-    $this->domain = "CFind";
 
     parent::__construct();
   }

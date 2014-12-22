@@ -25,7 +25,6 @@ class CEcho extends CDicomMessage {
    */
   function __construct() {
     $this->type   = "Echo";
-    $this->domain = "CEcho";
 
     parent::__construct();
   }
