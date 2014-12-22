@@ -23,8 +23,10 @@ abstract class CMbRange {
    *
    * @return boolean 
    */
-  static function void($lower, $upper) {
-    return ($upper < $lower && $lower !== null && $upper !== null);
+  static function void($lower, $upper, $permissive = true) {
+    return $permissive
+      ? ($upper < $lower && $lower !== null && $upper !== null)
+      : ($upper <= $lower && $lower !== null && $upper !== null);
   }
 
   /**
@@ -111,14 +113,15 @@ abstract class CMbRange {
    * Crop a range with another, resulting in 0 to 2 range fragments
    * Limitation: cropper has to be finite
    *
-   * @param mixed $lower1 Cropped range
-   * @param mixed $upper1 Cropped range
-   * @param mixed $lower2 Cropper range
-   * @param mixed $upper2 Cropper range
+   * @param mixed $lower1     Cropped range
+   * @param mixed $upper1     Cropped range
+   * @param mixed $lower2     Cropper range
+   * @param mixed $upper2     Cropper range
+   * @param bool  $permissive permissive mode
    *
    * @return array Array of range fragments, false on infinite cropper
    */
-  static function crop($lower1, $upper1, $lower2, $upper2) {
+  static function crop($lower1, $upper1, $lower2, $upper2, $permissive = true) {
     if (!self::finite($lower2, $upper2)) {
       return false;
     }
@@ -126,23 +129,23 @@ abstract class CMbRange {
     $fragments = array();
 
     // No collision: cropped intact
-    if (!self::collides($lower1, $upper1, $lower2, $upper2)) {
-      $fragments[] = array($lower1, $upper1);
+    if (!self::collides($lower1, $upper1, $lower2, $upper2, $permissive)) {
+      $fragments[] = array("lower" => $lower1, "upper" => $upper1);
       return $fragments;
     }
 
 
     // Right fragment
     if ($lower2 <= $upper1 || $upper1 === null) {
-      if (!self::void($lower1, $lower2)) {
-        $fragments[] = array($lower1, $lower2);
+      if (!self::void($lower1, $lower2, $permissive)) {
+        $fragments[] = array("lower" => $lower1, "upper" => $lower2);
       }
     }
 
     // Left fragment
     if ($upper2 >= $lower1 || $lower1 === null) {
-      if (!self::void($upper2, $upper1)) {
-        $fragments[] = array($upper2, $upper1);
+      if (!self::void($upper2, $upper1, $permissive)) {
+        $fragments[] = array("lower" => $upper2, "upper" => $upper1);
       }
     }
     
@@ -159,15 +162,16 @@ abstract class CMbRange {
   static function englobe($ranges) {
     $fragment = array();
     foreach ($ranges as $_range) {
-      if (!isset($fragment["lower"])) {
+      if (!array_key_exists("lower", $fragment)) {
         $fragment["lower"] = $_range["lower"];
       }
-      if (!isset($fragment["upper"])) {
+      if (!array_key_exists("upper", $fragment)) {
         $fragment["upper"] = $_range["upper"];
       }
 
       $fragment["lower"] = min($_range["lower"], $fragment["lower"]);
       $fragment["upper"] = max($_range["upper"], $fragment["upper"]);
+
     }
 
     return $fragment;
@@ -196,17 +200,18 @@ abstract class CMbRange {
    * Crop many ranges with many others, resulting in 0 to n range fragments
    * Limitation: cropper has to be finite
    *
-   * @param array $fragments Array of ranges
-   * @param array $croppers Array of cropper ranges
+   * @param array $fragments  Array of ranges
+   * @param array $croppers   Array of cropper ranges
+   * @param bool  $permissive permissive mode
    *
    * @return array Array of range fragments, false on infinite cropper
    */
-  static function multiCrop($fragments, $croppers) {
+  static function multiCrop($fragments, $croppers, $permissive = true) {
 
     foreach ($croppers as $_cropper) {
       $new_fragments = array();
       foreach ($fragments as $_fragment) {
-        $new_fragments = array_merge($new_fragments, self::crop($_fragment[0], $_fragment[1], $_cropper[0], $_cropper[1]));
+        $new_fragments = array_merge($new_fragments, self::crop($_fragment["lower"], $_fragment["upper"], $_cropper["lower"], $_cropper["upper"], $permissive));
       }
       $fragments = $new_fragments;
     }
