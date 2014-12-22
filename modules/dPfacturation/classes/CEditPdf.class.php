@@ -910,9 +910,8 @@ class CEditPdf{
     
     $_ref_assurance = "";
     $nom_entreprise = "";
-    if ($this->facture->type_facture == "accident" && $this->facture->assurance_maladie && $this->facture->_ref_assurance_maladie->employeur) {
-      $employeur = new CCorrespondantPatient();
-      $employeur->load($this->facture->_ref_assurance_maladie->employeur);
+    if ($this->facture->type_facture == "accident" && $this->facture->assurance_accident && $this->facture->_ref_assurance_accident->relation == "employeur") {
+      $employeur = $this->facture->_ref_assurance_accident;
       $_ref_assurance = $employeur->num_assure;
       $nom_entreprise = $employeur->nom;
     }
@@ -971,7 +970,7 @@ class CEditPdf{
       $date_rappel = CMbDT::format($this->facture->cloture, "%d.%m.%Y");
     }
     $ean2 = $this->group->ean;
-    if ($this->facture->_class == "CFactureEtablissement") {
+    if ($this->facture->_class == "CFactureEtablissement" && $this->facture->_ref_last_sejour->_ref_last_operation) {
       $ean2 = $this->facture->_ref_last_sejour->_ref_last_operation->_ref_anesth->ean;
     }
     $num_fact = $this->facture->_id;
