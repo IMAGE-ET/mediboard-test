@@ -229,7 +229,7 @@ class CReplacement extends CMbObject {
     }
 
     if (count($this->_ref_replacer_conges) > 0) {
-      $fragments = CMbRange::multiCrop($this->deb, $this->fin, $croppers);
+      $fragments = CMbRange::multiCrop(array(array($this->deb, $this->fin)), $croppers);
       foreach ($fragments as $key => $_fragment) {
         if (!CMbRange::collides($this->_min_deb, $this->_max_fin, $_fragment[0], $_fragment[1])) {
           unset($fragments[$key]);

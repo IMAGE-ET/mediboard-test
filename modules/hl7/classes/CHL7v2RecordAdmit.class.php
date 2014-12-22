@@ -1726,7 +1726,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         
     // On récupère l'entrée réelle ssi msg A01 pour indiquer l'heure de la naissance 
     if ($this->_ref_exchange_hl7v2->code == "A01") {
-      $naissance->heure = CMbDT::time($this->queryTextNode("PV1.44", $data["PV1"]));
+      $naissance->date_time = $this->queryTextNode("PV1.44", $data["PV1"]);
     }
     
     // Notifier les autres destinataires autre que le sender

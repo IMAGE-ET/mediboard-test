@@ -116,6 +116,7 @@ class CNaissance extends CMbObject {
     parent::updateFormFields();
     if ($this->date_time) {
       $this->_view = $this->getFormattedValue("date_time");
+      $this->_heure = CMbDT::time($this->date_time);
     }
     else {
       $this->_view = "Dossier provisoire";
