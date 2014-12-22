@@ -29,6 +29,12 @@ function submit_Ajax(form, update_name){
     }
   });
 }
+
+function viewStatUf(uf_id){
+  var url = new Url("hospi", "vw_stats_uf");
+  url.addParam("uf_id", uf_id);
+  url.requestModal(400, 300);
+}
 </script>
 
 {{mb_script module=hospi script=affectation_uf}}

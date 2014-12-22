@@ -32,6 +32,7 @@
               <th>{{mb_title class=CUniteFonctionnelle field=libelle}}</th>
               <th>{{mb_title class=CUniteFonctionnelle field=description}}</th>
               <th>{{mb_title class=CUniteFonctionnelle field=type_sejour}}</th>
+              <th class="narrow">{{tr}}Stats{{/tr}}</th>
             </tr>
 
             {{foreach from=$_ufs item=_uf}}
@@ -44,6 +45,9 @@
               <td class="text">{{mb_value object=$_uf field=libelle}}</td>
               <td class="text">{{mb_value object=$_uf field=description}}</td>
               <td class="text">{{if $_uf->type_sejour}}{{mb_value object=$_uf field=type_sejour}}{{/if}}</td>
+              <td class="button">
+                <button type="button" class="stats notext" onclick="viewStatUf('{{$_uf->_id}}');">{{tr}}Stats{{/tr}}</button>
+              </td>
             </tr>
             {{foreachelse}}
               <tr>
