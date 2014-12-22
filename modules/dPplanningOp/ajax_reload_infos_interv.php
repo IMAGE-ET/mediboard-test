@@ -1,13 +1,12 @@
-<?php 
-
+<?php
 /**
- * $Id$
+ * $Id:$
  *  
  * @category SalleOp
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision$
+ * @version  $Revision:$
  * @link     http://www.mediboard.org
  */
 
@@ -19,6 +18,7 @@ $operation = new COperation();
 $operation->load($operation_id);
 $operation->canDo();
 $operation->countAlertsNotHandled();
+$operation->loadLiaisonLibelle();
 
 $smarty = new CSmartyDP();
 

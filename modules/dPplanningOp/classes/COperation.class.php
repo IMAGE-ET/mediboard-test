@@ -206,6 +206,8 @@ class COperation extends CCodable implements IPatientRelated {
   public $_ref_graph_pack;
   /** @var COperationWorkflow */
   public $_ref_workflow;
+  /** @var CLiaisonLibelleInterv[] */
+  public $_ref_liaison_libelles;
 
   // Filter Fields
   public $_date_min;
@@ -1950,5 +1952,17 @@ class COperation extends CCodable implements IPatientRelated {
     $alert->tag = $tag;
     $this->_refs_alerts_not_handled = $alert->loadMatchingList();
     return $this->_refs_alerts_not_handled;
+  }
+
+  /**
+   * Load libelles mvsanté
+   *
+   * @return CLiaisonLibelleInterv[]
+   */
+  function loadLiaisonLibelle () {
+    if (CModule::getActive("mvsante")) {
+      /** @var CLiaisonLibelleInterv[] $liaisons_libelles */
+      return  $this->_ref_liaison_libelles = $this->loadBackRefs("liaison_libelle", "numero");
+    }
   }
 }

@@ -140,7 +140,7 @@ if ($selOp->_id) {
   if (!$selOp->prat_visite_anesth_id && $selOp->_ref_anesth->_id) {
     $selOp->prat_visite_anesth_id = $selOp->_ref_anesth->_id;
   }
-
+  $selOp->loadLiaisonLibelle();
   $listAnesthType = new CTypeAnesth();
   $listAnesthType = $listAnesthType->loadGroupList();
 

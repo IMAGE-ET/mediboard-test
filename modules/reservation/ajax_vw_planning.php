@@ -341,6 +341,7 @@ if ($show_operations) {
       //factures
       $sejour->loadRefsFactureEtablissement();
       $facture = $sejour->_ref_last_facture;
+      $_operation->loadLiaisonLibelle();
 
       //template de contenu
       $smarty = new CSmartyDP("modules/reservation");

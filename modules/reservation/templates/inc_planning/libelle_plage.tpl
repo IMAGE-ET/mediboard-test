@@ -55,10 +55,15 @@
     [{{mb_value object=$patient field=naissance}}] {{$lit}}
   </span>
 
+  {{if @$modules.mvsante->_can->read && "mvsante"|module_active}}
+    <span style="float: right">
+      {{mb_include module=planningOp template=inc_button_infos_interv operation_id=$operation->_id}}
+    </span>
+  {{/if}}
+
   {{if $interv_en_urgence}}
     <span style='float: right' title='Intervention en urgence'><img src='images/icons/attente_fourth_part.png' /></span>
   {{/if}}
-
 
   <br/>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$operation->_ref_chir}}
   <br/><span style='font-size: 11px; font-weight: bold;' onmouseover="ObjectTooltip.createEx(this, '{{$operation->_guid}}')">{{$debut_op|date_format:"%H:%M"}} - {{$fin_op|date_format:"%H:%M"}}<br/>
