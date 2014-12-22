@@ -201,14 +201,14 @@ class CDicomMessageCFindData {
     $requested_datas = array();
     foreach ($this->datasets as $_group_number => $_group) {
       foreach ($_group as $_element_number => $element) {
-        if ($_element_number == 0x000 || $element->getLength() != 0) {
+        if ($_element_number == 0x0000) {
           continue;
         }
 
         if (!array_key_exists($_group_number, $_group)) {
           $requested_datas[$_group_number] = array();
         }
-        $requested_datas[$_group_number][] = $_element_number;
+        $requested_datas[$_group_number][$_element_number] = $element->getValue();
       }
     }
 
