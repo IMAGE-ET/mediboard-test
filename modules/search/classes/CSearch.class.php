@@ -157,7 +157,6 @@ class CSearch {
     // Define mapping
     $mapping = new Mapping();
     $mapping->setType($type);
-    $mapping->setParam('search_analyzer', 'custom_search_analyzer');
     // Set mapping
     $mapping->setProperties($array);
     // Send mapping to type
