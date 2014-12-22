@@ -225,11 +225,11 @@ class CReplacement extends CMbObject {
     $fragments = array();
     $croppers = array();
     foreach ($this->_ref_replacer_conges as $_conge) {
-      $croppers[] = array(CMbDT::date("-1 DAY", $_conge->date_debut), CMbDT::date("+1 DAY", $_conge->date_fin));
+      $croppers[] = array("lower" => CMbDT::date("-1 DAY", $_conge->date_debut), "upper" => CMbDT::date("+1 DAY", $_conge->date_fin));
     }
 
     if (count($this->_ref_replacer_conges) > 0) {
-      $fragments = CMbRange::multiCrop(array(array($this->deb, $this->fin)), $croppers);
+      $fragments = CMbRange::multiCrop(array(array("lower" => $this->deb, "upper" => $this->fin)), $croppers);
       foreach ($fragments as $key => $_fragment) {
         if (!CMbRange::collides($this->_min_deb, $this->_max_fin, $_fragment[0], $_fragment[1])) {
           unset($fragments[$key]);
