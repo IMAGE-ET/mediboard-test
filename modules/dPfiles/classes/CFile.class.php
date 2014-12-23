@@ -881,6 +881,9 @@ class CFile extends CDocumentItem implements IIndexableObject {
       $request->addColumn("SUM(`doc_size`)", "weight");
       $date_min = CMbDT::dateTime("- $deeper $unit", $now);
       $request->addWhereClause("file_date", " > '$date_min'");
+      if (count($user_ids)) {
+        $request->addWhereClause("author_id", CSQLDataSource::prepareIn($user_ids));
+      }
       $request->addGroup("period");
       $results = $ds->loadHashAssoc($request->makeSelect($doc));
 

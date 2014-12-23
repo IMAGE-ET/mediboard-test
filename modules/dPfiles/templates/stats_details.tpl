@@ -36,16 +36,28 @@
   {{/foreach}}
   
   {{assign var=totals value=$category_totals.$_category_id}}
-  <td><strong>{{$totals.count|integer}}</strong><br /><strong>{{$totals.weight|decabinary}}</strong></td>
+  <td>
+    <strong>{{$totals.count|integer}}</strong><br /><strong>{{$totals.weight|decabinary}}</strong><br />
+    {{math equation=x/y x=$totals.weight y=$totals.count assign=mean_size}}
+    ~ {{$mean_size|decabinary}}
+  </td>
 </tr>
 {{/foreach}}
 <tr>
   <th>{{tr}}Total{{/tr}}</th>
   {{foreach from=$classes item=_class}}
   {{assign var=totals value=$class_totals.$_class}}
-  <td><strong>{{$totals.count|integer}}</strong><br /><strong>{{$totals.weight|decabinary}}</strong></td>
+  <td>
+    <strong>{{$totals.count|integer}}</strong><br /><strong>{{$totals.weight|decabinary}}</strong><br />
+    {{math equation=x/y x=$totals.weight y=$totals.count assign=mean_size}}
+    ~ {{$mean_size|decabinary}}
+  </td>
   {{/foreach}}
-  <td class="ok"><strong>{{$big_totals.count|integer}}</strong><br /><strong>{{$big_totals.weight|decabinary}}</strong></td>
+  <td class="ok">
+    <strong>{{$big_totals.count|integer}}</strong><br /><strong>{{$big_totals.weight|decabinary}}</strong><br />
+    {{math equation=x/y x=$big_totals.weight y=$big_totals.count assign=mean_size}}
+    ~ {{$mean_size|decabinary}}
+  </td>
 </tr>
 
 </table>

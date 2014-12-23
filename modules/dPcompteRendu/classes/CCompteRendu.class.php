@@ -1596,12 +1596,14 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
       $unit   = $_period_info["unit"];
 
       $request = new CRequest();
-      $request->addColumn("DATE_FORMAT(`date`, '$format')", "period");
-      $request->addColumn("COUNT(`file_id`)", "count");
-      $request->addColumn("SUM(LENGTH(`content_html`.`content`))", "weight");
-      $request->addLJoinClause("content_html", "`compte_rendu`.`content_id` = `content_html`.`content_id`");
+      $request->addColumn("DATE_FORMAT(`creation_date`, '$format')", "period");
+      $request->addColumn("COUNT(`compte_rendu_id`)", "count");
+      $request->addColumn("SUM(`doc_size`)", "weight");
       $date_min = CMbDT::dateTime("- $deeper $unit", $now);
-      $request->addWhereClause("file_date", " > '$date_min'");
+      $request->addWhereClause("creation_date", " > '$date_min'");
+      if (count($user_ids)) {
+        $request->addWhereClause("author_id", CSQLDataSource::prepareIn($user_ids));
+      }
       $request->addGroup("period");
       $results = $ds->loadHashAssoc($request->makeSelect($doc));
 
