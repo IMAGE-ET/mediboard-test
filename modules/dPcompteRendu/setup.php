@@ -990,6 +990,16 @@ class CSetupdPcompteRendu extends CSetup {
       ADD `annule` ENUM ('0','1') DEFAULT '0' AFTER `modele_id`;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.04";
+    $this->makeRevision("1.04");
+    $query = "ALTER TABLE `compte_rendu`
+      ADD `doc_size` INT (11) UNSIGNED DEFAULT '0';";
+    $this->addQuery($query);
+
+    $query = "UPDATE `compte_rendu`
+      JOIN `content_html` ON `content_html`.`content_id` = `compte_rendu`.`content_id`
+      SET `compte_rendu`.`doc_size` = LENGTH(`content_html`.`content`)";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.05";
   }
 }

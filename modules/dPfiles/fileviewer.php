@@ -200,7 +200,7 @@ if ($file_id = CValue::get("file_id")) {
     // END extra headers to resolve IE caching bug
 
     header("MIME-Version: 1.0");
-    header("Content-length: {$file->file_size}");
+    header("Content-length: {$file->doc_size}");
     header("Content-type: {$file->file_type}");
 
     header('Content-disposition: '.$disposition.'; filename="'.$file->file_name.'"');

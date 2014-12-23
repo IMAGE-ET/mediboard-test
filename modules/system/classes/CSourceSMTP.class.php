@@ -216,7 +216,7 @@ class CSourceSMTP extends CExchangeSource {
         $attachment->type = $attachment->getTypeInt($type);
         $attachment->part = 1;
         $attachment->subtype = $subtype;
-        $attachment->bytes = $file->file_size;
+        $attachment->bytes = $file->doc_size;
         list($file_name, $extension) = explode('.', $file->file_name);
         $attachment->name = $file_name;
         $attachment->extension = $extension;

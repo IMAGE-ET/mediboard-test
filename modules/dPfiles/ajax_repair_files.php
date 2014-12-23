@@ -46,7 +46,7 @@ if ($date_debut && $date_fin) {
   }
 }
 else {
-  $file->file_size = 0;
+  $file->doc_size = 0;
   $nb_files_size_zero = $file->countMatchingList();
   if ($nb_files == 0) {
     CAppUI::stepAjax("Nombre de fichiers avec une taille de 0 octets : " . $nb_files_size_zero);  
@@ -67,8 +67,8 @@ else {
           CAppUI::stepAjax("File id : " . $_file->_id . " - non existant ou vide - Suppression :" . $_file->delete());
         }
         else {
-          $_file->file_size = filesize($_file->_file_path);
-          CAppUI::stepAjax("File id : $_file->_id - mise à jour de la taille ({$_file->file_size} octets)- Update :".$_file->store());
+          $_file->doc_size = filesize($_file->_file_path);
+          CAppUI::stepAjax("File id : $_file->_id - mise à jour de la taille ({$_file->doc_size} octets)- Update :".$_file->store());
         }
       }
     }

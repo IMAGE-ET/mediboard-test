@@ -207,7 +207,7 @@ else {
     $htmltopdf = new CHtmlToPDF($compte_rendu->factory);
     $content = CCompteRendu::restoreId($content);
     $htmltopdf->generatePDF($content, 0, $compte_rendu, $file);
-    $file->file_size = filesize($file->_file_path);
+    $file->doc_size = filesize($file->_file_path);
   }
   
   // Il peut y avoir plusieurs cfiles pour un même compte-rendu, à cause 

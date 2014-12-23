@@ -59,7 +59,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
 
       $obj->file_name = $_rename == 'upload' ? $file_name : $_rename . $extension;
       $obj->_old_file_path = $this->request['_file_path'];
-      $obj->file_size = filesize($file_path);
+      $obj->doc_size = filesize($file_path);
       $obj->author_id = CAppUI::$user->_id;
       if (CModule::getActive("cda")) {
         $obj->type_doc = $this->request["type_doc"];
@@ -155,7 +155,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
             $other_file->bind($file);
             $other_file->file_name = $file["name"];
             $other_file->file_type = $file["type"];
-            $other_file->file_size = $file["size"];
+            $other_file->doc_size = $file["size"];
             $other_file->fillFields();
             $other_file->private = CValue::post("private");
 
@@ -192,7 +192,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
           $obj->forceDir();
           $tmpname = tempnam("/tmp", "pdf_");
           $pdf->merge('file', $tmpname);
-          $obj->file_size = strlen(file_get_contents($tmpname));
+          $obj->doc_size = strlen(file_get_contents($tmpname));
           $obj->moveFile($tmpname);
           //rename($tmpname, $obj->_file_path . "/" .$obj->file_real_filename);
 
@@ -229,7 +229,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
             $obj->file_type = CMbPath::guessMimeType($obj->file_name);
           }
 
-          $obj->file_size = $file["size"];
+          $obj->doc_size = $file["size"];
           $obj->fillFields();
           $obj->private   = CValue::post("private");
           if (false == $res = $obj->moveTemp($file)) {

@@ -73,12 +73,6 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
   /** @var CMediusers */
   public $_ref_user;
 
-  /** @var CMediusers */
-  public $_ref_author;
-
-  /** @var CFilesCategory */
-  public $_ref_category;
-
   /** @var CFunctions */
   public $_ref_function;
 
@@ -1006,6 +1000,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     if ($source_modified) {
       // Bug IE : delete id attribute
       $this->_source = CCompteRendu::restoreId($this->_source);
+      $this->doc_size = strlen($this->_source);
 
       // Send status to obsolete
       $this->completeField("etat_envoi");
@@ -1343,7 +1338,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     $content = $this->loadHTMLcontent($this->_source, '', $margins, CCompteRendu::$fonts[$this->font], $this->size, $auto_print);
     $htmltopdf = new CHtmlToPDF($this->factory);
     $htmltopdf->generatePDF($content, 0, $this, $file);
-    $file->file_size = filesize($file->_file_path);
+    $file->doc_size = filesize($file->_file_path);
     $this->_ref_file = $file;
 
     return $this->_ref_file->store();
@@ -1528,10 +1523,9 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     $query = "
       SELECT 
         COUNT(`compte_rendu_id`) AS `docs_count`, 
-        SUM(LENGTH(`content_html`.`content`)) AS `docs_weight`,
+        SUM(`doc_size`) AS `docs_weight`,
         `author_id` AS `owner_id`
-      FROM `compte_rendu` 
-      LEFT JOIN `content_html` ON `compte_rendu`.`content_id` = `content_html`.`content_id`
+      FROM `compte_rendu`
       GROUP BY `owner_id`
       ORDER BY `docs_weight` DESC";
     return $ds->loadList($query);

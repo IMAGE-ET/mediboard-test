@@ -20,11 +20,14 @@ class CDocumentItem extends CMbMetaObject {
   public $author_id;
   public $private;
   public $annule;
+  public $doc_size;
   public $type_doc;
   public $type_doc_sisra;
 
   // Derivated fields
   public $_extensioned;
+  public $_no_extension;
+  public $_file_size;
 
   public $_send_problem;
 
@@ -51,7 +54,8 @@ class CDocumentItem extends CMbMetaObject {
     $props["etat_envoi"]       = "enum notNull list|oui|non|obsolete default|non";
     $props["author_id"]        = "ref class|CMediusers";
     $props["private"]          = "bool default|0";
-    $props["annule"]             = "bool default|0 show|0";
+    $props["annule"]           = "bool default|0 show|0";
+    $props["doc_size"]         = "num pos show|0";
     $type_doc = "";
     if (CModule::getActive("cda")) {
       $jdv_type = CCdaTools::loadJV("CI-SIS_jdv_typeCode.xml");
@@ -68,6 +72,8 @@ class CDocumentItem extends CMbMetaObject {
     }
     $props["type_doc_sisra"] = (empty($sisra_types) ? "str" : "enum list|$sisra_types");
     $props["_extensioned"]   = "str notNull";
+    $props["_no_extension"]   = "str notNull";
+    $props["_file_size"]    = "str show|1";
     $props["_send_problem"]  = "text";
 
     return $props;

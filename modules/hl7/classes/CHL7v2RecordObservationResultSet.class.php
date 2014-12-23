@@ -537,7 +537,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $file->loadMatchingObject();
 
     $file->file_date = $this->getOBXObservationDateTime($OBX);
-    $file->file_size = strlen($content);
+    $file->doc_size = strlen($content);
 
     $file->fillFields();
     $file->updateFormFields();
@@ -643,7 +643,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $file->loadMatchingObject();
 
     $file->file_date = "now";
-    $file->file_size = strlen($content);
+    $file->doc_size = strlen($content);
 
     $file->fillFields();
     $file->updateFormFields();

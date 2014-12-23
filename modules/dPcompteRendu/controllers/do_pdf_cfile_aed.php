@@ -56,7 +56,7 @@ $file->author_id = CAppUI::$user->_id;
 $htmltopdf = new CHtmlToPDF($compte_rendu->factory);
 $htmltopdf->generatePDF($content, 0, $compte_rendu, $file);
 
-$file->file_size = filesize($file->_file_path);
+$file->doc_size = filesize($file->_file_path);
 $msg = $file->store();
 
 CAppUI::displayMsg($msg, "CCompteRendu-msg-create");

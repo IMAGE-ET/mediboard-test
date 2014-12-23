@@ -122,7 +122,7 @@ class CExtractPassages extends CMbObject {
     $file->setObject($this);
     $file->file_name = $filename;
     $file->file_type = "text/plain";
-    $file->file_size = strlen($filedata);
+    $file->doc_size = strlen($filedata);
     $file->author_id = CAppUI::$instance->user_id;
     $file->fillFields();
     if (!$file->putContent($filedata)) {

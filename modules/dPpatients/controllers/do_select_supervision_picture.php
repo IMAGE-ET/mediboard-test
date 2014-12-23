@@ -24,7 +24,7 @@ if (is_file($path) && strpos(CSupervisionTimedPicture::PICTURES_ROOT, $path) !==
   $file->setObject($timed_picture);
   $file->fillFields();
   $file->file_name = basename($path);
-  $file->file_size = filesize($path);
+  $file->doc_size = filesize($path);
   $file->file_type = CMbPath::guessMimeType($path);
   $file->moveFile($path, false, true);
   if ($msg = $file->store()) {

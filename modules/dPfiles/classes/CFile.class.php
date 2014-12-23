@@ -28,14 +28,11 @@ class CFile extends CDocumentItem implements IIndexableObject {
   public $file_name;
   public $file_type;
   public $file_date;
-  public $file_size;
   public $rotation;
   public $language;
+  public $compression;
 
   // Form fields
-  public $_extensioned;
-  public $_no_extension;
-  public $_file_size;
   public $_sub_dir;
   public $_absolute_dir;
   public $_file_path;
@@ -102,18 +99,17 @@ class CFile extends CDocumentItem implements IIndexableObject {
     $props = parent::getProps();
 
     $props["file_date"]          = "dateTime notNull";
-    $props["file_size"]          = "num pos show|0";
     $props["file_real_filename"] = "str notNull show|0";
     $props["file_type"]          = "str";
     $props["file_name"]          = "str notNull show|0";
     $props["rotation"]           = "num default|0 show|0";
     $props["language"]           = "enum list|en-EN|es-ES|fr-CH|fr-FR default|fr-FR show|0";
+    $props["compression"]        = "str";
 
     // Form Fields
     $props["_sub_dir"]      = "str";
     $props["_absolute_dir"] = "str";
     $props["_file_path"]    = "str";
-    $props["_file_size"]    = "str show|1";
     $props["_old_file_path"]= "str";
 
     // Behavior fields
@@ -199,7 +195,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
       return false;
     }
     $result = file_put_contents($this->_file_path, $filedata);
-    $this->file_size = filesize($this->_file_path);
+    $this->doc_size = filesize($this->_file_path);
     return $result;
   }
 
@@ -214,7 +210,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
     $last_point = strrpos($this->_extensioned, '.');
     $this->_no_extension = substr($this->_extensioned, 0, $last_point);
 
-    $this->_file_size = CMbString::toDecaBinary($this->file_size);
+    $this->_file_size = CMbString::toDecaBinary($this->doc_size);
     
     $this->completeField("object_id");
 
@@ -688,7 +684,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
     $res = file_get_contents($url, false, $ctx);
     
     if (isset($file) && $res == 1) {
-      $file->file_size = filesize($pdf_path);
+      $file->doc_size = filesize($pdf_path);
       if ($msg = $file->store()) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
         return 0;
@@ -796,7 +792,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
     header("Cache-Control: post-check=0, pre-check=0", false);
     // END extra headers to resolve IE caching bug
     header("MIME-Version: 1.0");
-    header("Content-length: {$this->file_size}");
+    header("Content-length: {$this->doc_size}");
     header("Content-type: $this->file_type");
     header("Content-disposition: inline; filename=\"".$this->file_name."\"");
     
@@ -811,7 +807,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
     $query = "
       SELECT 
         COUNT(`file_id`) AS `docs_count`, 
-        SUM(`file_size`) AS `docs_weight`,
+        SUM(`doc_size`) AS `docs_weight`,
         `author_id` AS `owner_id`
       FROM `files_mediboard` 
       GROUP BY `owner_id`
@@ -827,7 +823,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
 
     $query = new CRequest();
     $query->addColumn("COUNT(`file_id`)", "docs_count");
-    $query->addColumn("SUM(`file_size`)", "docs_weight");
+    $query->addColumn("SUM(`doc_size`)", "docs_weight");
     $query->addColumn("object_class");
     $query->addColumn("file_category_id", "category_id");
     $query->addTable("files_mediboard");
@@ -882,7 +878,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
       $request = new CRequest();
       $request->addColumn("DATE_FORMAT(`file_date`, '$format')", "period");
       $request->addColumn("COUNT(`file_id`)", "count");
-      $request->addColumn("SUM(`file_size`)", "weight");
+      $request->addColumn("SUM(`doc_size`)", "weight");
       $date_min = CMbDT::dateTime("- $deeper $unit", $now);
       $request->addWhereClause("file_date", " > '$date_min'");
       $request->addGroup("period");

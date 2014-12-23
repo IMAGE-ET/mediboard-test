@@ -290,6 +290,14 @@ class CSetupdPfiles extends CSetup {
                 ADD INDEX (`read_datetime`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.38";
+    $this->makeRevision("0.38");
+    $query = "ALTER TABLE `files_mediboard`
+      CHANGE `file_size` `doc_size` int(11) unsigned DEFAULT '0',
+      ADD `compression` VARCHAR (255),
+      ADD INDEX(`compression`),
+      ADD INDEX(`compression`, `object_class`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.39";
   }
 }
