@@ -138,11 +138,9 @@ class CSearchQuery {
     }
     else {
       // query prat_id
-      $query_prat = new Elastica\Query\MultiMatch();
-      $query_prat->setQuery($prats);
-      $query_prat->setFields(array("prat_id"));
-      $query_prat->setOperator(Query\MultiMatch::OPERATOR_OR);
-      $query_prat->setMinimumShouldMatch(1);
+      $query_prat = new Elastica\Query\QueryString();
+      $query_prat->setQuery("prat_id:($prats)");
+      $query_prat->setDefaultField("prat_id");
       $query_bool->addMust($query_prat);
 
       //query sejour
