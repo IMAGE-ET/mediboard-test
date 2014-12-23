@@ -94,20 +94,22 @@
   };
 </script>
 
-<form name="admitSejour" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: reloadHistorique})">
-  <input type="hidden" name="m" value="dPplanningOp" />
-  <input type="hidden" name="dosql" value="do_sejour_aed" />
-  <input type="hidden" name="sejour_id" value="" />
-  <input type="hidden" name="entree_reelle" value="" />
-</form>
+{{if $with_buttons}}
+  <form name="admitSejour" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: reloadHistorique})">
+    <input type="hidden" name="m" value="dPplanningOp" />
+    <input type="hidden" name="dosql" value="do_sejour_aed" />
+    <input type="hidden" name="sejour_id" value="" />
+    <input type="hidden" name="entree_reelle" value="" />
+  </form>
 
-<form name="editConsultImm" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: reloadHistorique})">
-  <input type="hidden" name="m" value="dPcabinet" />
-  <input type="hidden" name="dosql" value="do_consult_now" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="grossesse_id" value="" />
-  <input type="hidden" name="prat_id" value="" />
-</form>
+  <form name="editConsultImm" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: reloadHistorique})">
+    <input type="hidden" name="m" value="dPcabinet" />
+    <input type="hidden" name="dosql" value="do_consult_now" />
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="grossesse_id" value="" />
+    <input type="hidden" name="prat_id" value="" />
+  </form>
+{{/if}}
 
 {{if $grossesse->_id && $grossesse->_ref_last_operation}}
   <h2>Semaine {{$grossesse->_semaine_grossesse}} &mdash; Terme {{if $grossesse->_terme_vs_operation >= 0}}+{{/if}}{{$grossesse->_terme_vs_operation}}j</h2>
