@@ -286,7 +286,7 @@ class CMbXMLDocument extends DOMDocument {
     $file->object_class       = $object->_class;
     $file->file_name          = "$object->_guid.xml";
     $file->file_type          = "text/xml";
-    $file->file_size          = filesize($this->documentfilename);
+    $file->doc_size           = filesize($this->documentfilename);
     $file->file_date          = CMbDT::dateTime();
     $file->file_real_filename = uniqid(rand());
     $file->author_id          = $user->_id;
