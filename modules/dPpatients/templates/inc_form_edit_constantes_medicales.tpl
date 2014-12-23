@@ -12,11 +12,11 @@ submitConstantesMedicales = function(oForm) {
   return onSubmitFormAjax(oForm, {
     onComplete: function () {
       {{if $display_graph}}
-        refreshConstantesMedicales($V(oForm.context_class)+'-'+$V(oForm.context_id), 1);
+        refreshConstantesMedicales($V(oForm.context_class)+'-'+$V(oForm.context_id));
       {{/if}}
       {{if $conf.ref_pays == 2}}
-        refreshConstantesMedicalesTri($V(oForm.context_class)+'-'+$V(oForm.context_id), 1);
-        refreshConstantesMedicales($V(oForm.context_class)+'-'+$V(oForm.context_id), 1);
+        refreshConstantesMedicalesTri($V(oForm.context_class)+'-'+$V(oForm.context_id));
+        refreshConstantesMedicales($V(oForm.context_class)+'-'+$V(oForm.context_id));
       {{/if}}
 
       if ($$('.poids_patient').length && $$('.taille_patient').length && $$('.imc_patient').length) {
