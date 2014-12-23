@@ -34,9 +34,9 @@
         {{foreach from=$all_messages key=_domain item=_families}}
           <li style="width: 260px">
             <a href="#{{$_domain}}">
-              {{tr}}CInteropNorm_{{$_domain}}{{/tr}}
+              {{tr}}{{$_domain}}{{/tr}}
               <br />
-              <span class="compact">{{tr}}CInteropNorm_{{$_domain}}-desc{{/tr}}</span>
+              <span class="compact">{{tr}}{{$_domain}}-desc{{/tr}}</span>
             </a>
           </li>
         {{/foreach}}
@@ -69,7 +69,7 @@
             {{assign var=_family_name value=$_families|get_class}}
 
             <div id="{{$_family_name}}" style="display: none;">
-              <table class="tbl form" id>
+              <table class="tbl form">
                 {{foreach from=$_families->_categories key=_category_name item=_messages_supported}}
                   {{if $_category_name != "none"}}
                     <tr>

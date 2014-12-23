@@ -1,5 +1,6 @@
 <?php
 $locales['CDicomMessage'] = 'DICOM';
+$locales['CDicomMessage-desc'] = 'Digital imaging and communications in medicine';
 $locales['CDicomMessageCCancelFindRQ'] = 'C-Cancel-Find-RQ';
 $locales['CDicomMessageCEchoRQ'] = 'C-Echo-RQ';
 $locales['CDicomMessageCEchoRSP'] = 'C-Echo-RSP';

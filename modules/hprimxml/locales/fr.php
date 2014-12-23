@@ -328,6 +328,7 @@ $locales['CGroups-back-destinataires_hprim.empty'] = 'Pas de destinataire H\'XML
 $locales['CGroups-back-echanges_hprim'] = 'Echanges H\'XML';
 $locales['CGroups-back-echanges_hprim.empty'] = 'Pas d\'échange H\'XML';
 $locales['CHPrimXML'] = 'H.PR.I.M XML';
+$locales['CHPrimXML-desc'] = 'Harmoniser et PRomouvoir l\'Informatique Médicale Santé';
 $locales['CHPrimXMLDebiteursVenue'] = 'Debiteurs Venue';
 $locales['CHPrimXMLDebiteursVenue-desc'] = 'Données du bénéficiaire de soins';
 $locales['CHPrimXMLEnregistrementPatient'] = 'Enregistrement Patient';
