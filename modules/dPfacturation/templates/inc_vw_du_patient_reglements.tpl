@@ -146,7 +146,7 @@
           </select>
           {{mb_field object=$reglement field=banque_id options=$banques style="display: none"}}
           {{if isset($object->_num_bvr|smarty:nodefaults)}}
-            <select name="num_bvr" style="display:none;" onchange="modifMontantBVR(this, this.value);" >
+            <select name="num_bvr" style="display:none;" onchange="modifMontantBVR(this.form, this.value);" >
               <option value="0">&mdash; Choisir un numéro</option>
               {{foreach from=$object->_num_bvr item=num}}
                 <option value="{{$num}}">{{$num}}</option>
