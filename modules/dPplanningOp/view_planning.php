@@ -25,7 +25,7 @@ if ($sejour_id = CValue::get("sejour_id")) {
   $model = CCompteRendu::getSpecialModel($sejour->_ref_praticien, "COperation", "[FICHE DHE]");
 
   if ($model->_id) {
-    CCompteRendu::streamDocForObject($model, $sejour);
+    CCompteRendu::streamDocForObject($model, $sejour, "CDomPDFConverter");
   }
 }
 
@@ -42,7 +42,7 @@ if ($operation_id = CValue::get("operation_id")) {
   $model = CCompteRendu::getSpecialModel($sejour->_ref_praticien, "COperation", "[FICHE DHE]");
 
   if ($model->_id) {
-    CCompteRendu::streamDocForObject($model, $operation);
+    CCompteRendu::streamDocForObject($model, $operation, "CDomPDFConverter");
   }
 }
 
