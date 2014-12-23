@@ -1300,7 +1300,7 @@ class CConstantesMedicales extends CMbObject {
 
           // Si le champ n'a pas de valeur, on regarde en config
           if (!$_unite) {
-            continue;
+            $_unite = CAppUI::conf('dPpatients CConstantesMedicales '.$_params["unit_config"], $group);
           }
 
           $conv = self::getConv($_constant, $_unite);
