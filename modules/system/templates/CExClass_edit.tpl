@@ -18,6 +18,7 @@
 {{mb_script module=forms script=ex_class_layout_editor ajax=true}}
 {{mb_script module=forms script=ex_class_layout_editor_pixel ajax=true}}
 {{mb_script module=system script=object_selector ajax=true}}
+{{mb_script module=files script=file ajax=true}}
 
 <script type="text/javascript">
 Main.add(function(){
@@ -151,7 +152,6 @@ toggleGroupLabelEdit = function(link) {
   <li><a href="#fields-layout">{{tr}}CExClassField-layout{{/tr}}</a></li>
   <li><a href="#fields-events" {{if $object->_ref_events|@count == 0}} class="empty" {{/if}}>{{tr}}CExClass-back-events{{/tr}} <small>({{$object->_ref_events|@count}})</small></a></li>
 </ul>
-<hr class="control_tabs" />
 
 <div id="fields-specs">
 
@@ -244,10 +244,15 @@ toggleGroupLabelEdit = function(link) {
                 {{tr}}CExClassFieldGroup-back-class_messages{{/tr}} <small>({{$_group->_ref_messages|@count}})</small>
               </a>
             </li>
-            {{if !$object->_id || $object->pixel_positionning}}
+            {{if $object->pixel_positionning}}
               <li style="margin-right: 0;">
                 <a href="#list-subgroups-{{$_group->_guid}}" style="padding: 2px;">
                   {{tr}}CExClassFieldGroup-back-subgroups{{/tr}} <small>({{$_group->_ref_subgroups|@count}})</small>
+                </a>
+              </li>
+              <li style="margin-right: 0;">
+                <a href="#list-pictures-{{$_group->_guid}}" style="padding: 2px;">
+                  {{tr}}CExClassFieldGroup-back-class_pictures{{/tr}} <small>({{$_group->_ref_pictures|@count}})</small>
                 </a>
               </li>
             {{/if}}
@@ -370,6 +375,39 @@ toggleGroupLabelEdit = function(link) {
                   <td colspan="2" class="empty">{{tr}}CExClassFieldSubgroup.none{{/tr}}</td>
                 </tr>
               {{/foreach}}
+            </tbody>
+
+            <tbody id="list-pictures-{{$_group->_guid}}" style="display: none;">
+            <tr>
+              <td style="text-align: right;" colspan="2">
+                <button type="button" class="new" onclick="ExPicture.create('{{$_group->_id}}')">
+                  {{tr}}CExClassPicture-title-create{{/tr}}
+                </button>
+              </td>
+            </tr>
+            {{foreach from=$_group->_ref_pictures item=_picture}}
+              <tr class="ex-class-picture {{if $_picture->disabled}}opacity-30{{/if}}" data-ex_picture_id="{{$_picture->_id}}">
+                <td class="text">
+                  <span style="float: right;">
+                    {{if $_picture->predicate_id}}
+                      <img src="./images/icons/showhide.png" title="{{tr}}CExClassField-predicate_id{{/tr}}"/>
+                    {{/if}}
+                  </span>
+                  <a href="#1" onclick="ExPicture.edit('{{$_picture->_id}}', '{{$_group->_id}}'); return false;">
+                    {{$_picture}}
+                  </a>
+                </td>
+                <td class="narrow button" style="height: 48px; min-width: 48px;">
+                  {{if $_picture->_ref_file && $_picture->_ref_file->_id}}
+                    <img src="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id={{$_picture->_ref_file->_id}}&phpThumb=1&h=48" style="background: white;"/>
+                  {{/if}}
+                </td>
+              </tr>
+              {{foreachelse}}
+              <tr>
+                <td colspan="2" class="empty">{{tr}}CExClassPicture.none{{/tr}}</td>
+              </tr>
+            {{/foreach}}
             </tbody>
           </table>
         </div>

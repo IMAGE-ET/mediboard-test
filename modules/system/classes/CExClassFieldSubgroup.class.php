@@ -37,6 +37,9 @@ class CExClassFieldSubgroup extends CMbObject {
   /** @var CExClassMessage[] */
   public $_ref_children_messages;
 
+  /** @var CExClassPicture[] */
+  public $_ref_children_pictures;
+
   /** @var CExClassFieldProperty[] */
   public $_ref_properties;
 
@@ -78,6 +81,7 @@ class CExClassFieldSubgroup extends CMbObject {
     $backProps["children_groups"]   = "CExClassFieldSubgroup parent_id";
     $backProps["children_fields"]   = "CExClassField subgroup_id";
     $backProps["children_messages"] = "CExClassMessage subgroup_id";
+    $backProps["children_pictures"] = "CExClassPicture subgroup_id";
     $backProps["identifiants"]      = "CIdSante400 object_id cascade";
     $backProps["properties"]        = "CExClassFieldProperty object_id";
     return $backProps;
@@ -120,12 +124,11 @@ class CExClassFieldSubgroup extends CMbObject {
     if ($recurse) {
       $this->loadRefsChildrenFields();
       $this->loadRefsChildrenMessages();
+      $this->loadRefsChildrenPictures();
 
       foreach ($this->_ref_children_groups as $_subgroup) {
         $_subgroup->loadRefsChildrengroups($recurse);
       }
-
-      $this->loadRefsChildrenFields();
     }
 
     return $this->_ref_children_groups;
@@ -158,6 +161,19 @@ class CExClassFieldSubgroup extends CMbObject {
     }
 
     return $this->_ref_children_fields = $fields;
+  }
+
+  function loadRefsChildrenPictures($cache = true) {
+    $group = $this->getExGroup();
+    $pictures = $group->loadRefsPictures($cache);
+
+    foreach ($pictures as $_id => $_field) {
+      if ($_field->subgroup_id != $this->_id) {
+        unset($pictures[$_id]);
+      }
+    }
+
+    return $this->_ref_children_pictures = $pictures;
   }
 
   /**

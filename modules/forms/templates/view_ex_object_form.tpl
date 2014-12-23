@@ -165,7 +165,8 @@ Main.add(function(){
       {{if $_group->_ref_fields|@count ||
            $_group->_ref_messages|@count ||
            $_group->_ref_host_fields|@count ||
-           $_group->_ref_subgroups|@count
+           $_group->_ref_subgroups|@count ||
+           $_group->_ref_pictures|@count
       }}
       <li>
         <a href="#tab-{{$_group->_guid}}">{{$_group}}</a>
@@ -242,8 +243,8 @@ function switchMode(){
 
 {{* form used for predicates *}}
 <form name="editExObject_{{$ex_form_hash}}" onsubmit="return false" method="get" style="display: none;">
-  {{foreach from=$grid key=_group_id item=_grid}}
-    {{foreach from=$groups.$_group_id->_ref_fields item=_field}}
+  {{foreach from=$groups key=_group_id item=_group}}
+    {{foreach from=$_group->_ref_fields item=_field}}
       {{mb_field object=$ex_object field=$_field->name hidden=true}}
     {{/foreach}}
   {{/foreach}}
@@ -276,6 +277,14 @@ function switchMode(){
   </thead>
   {{/if}}
 
+  {{if $ex_object->_ref_ex_class->pixel_positionning && !$only_filled}}
+    <tr>
+      <td colspan="4">
+        {{mb_include module=forms template=inc_form_pixel_grid}}
+      </td>
+    </tr>
+  {{else}}
+
   {{if $only_filled}}
 
     <tr>
@@ -294,11 +303,6 @@ function switchMode(){
   {{else}}
 
     {{foreach from=$grid key=_group_id item=_grid}}
-      {{*if $groups.$_group_id->_ref_fields|@count ||
-           $groups.$_group_id->_ref_messages|@count ||
-           $groups.$_group_id->_ref_host_fields|@count ||
-           $groups.$_group_id->_ref_subgroups|@count
-      *}}
     <tbody id="tab-{{$groups.$_group_id->_guid}}">
       <tr>
         <th class="title" colspan="4">{{$groups.$_group_id}}</th>
@@ -416,7 +420,6 @@ function switchMode(){
     {{/foreach}}
 
     </tbody>
-    {{*/if*}}
     {{/foreach}}
 
     {{foreach from=$ex_object->_native_views item=_object key=_name}}
@@ -433,6 +436,8 @@ function switchMode(){
       </tbody>
       {{/if}}
     {{/foreach}}
+  {{/if}}
+
   {{/if}}
 
 </table>

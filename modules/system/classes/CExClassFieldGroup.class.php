@@ -25,6 +25,9 @@ class CExClassFieldGroup extends CMbObject {
   /** @var CExClassMessage[] */
   public $_ref_messages;
 
+  /** @var CExClassPicture[] */
+  public $_ref_pictures;
+
   /** @var CExClassHostField[] */
   public $_ref_host_fields;
 
@@ -36,6 +39,9 @@ class CExClassFieldGroup extends CMbObject {
 
   /** @var CExClassMessage[] */
   public $_ref_root_messages;
+
+  /** @var CExClassPicture[] */
+  public $_ref_root_pictures;
   
   public $_move;
 
@@ -72,6 +78,7 @@ class CExClassFieldGroup extends CMbObject {
     $backProps["class_fields"]   = "CExClassField ex_group_id";
     $backProps["host_fields"]    = "CExClassHostField ex_group_id";
     $backProps["class_messages"] = "CExClassMessage ex_group_id";
+    $backProps["class_pictures"] = "CExClassPicture ex_group_id";
     $backProps["subgroups"]      = "CExClassFieldSubgroup parent_id";
     $backProps["identifiants"]   = "CIdSante400 object_id cascade";
     return $backProps;
@@ -133,6 +140,23 @@ class CExClassFieldGroup extends CMbObject {
     }
 
     return $this->_ref_root_messages = $messages;
+  }
+
+  /**
+   * @param bool $cache
+   *
+   * @return CExClassPicture[]
+   */
+  function loadRefsRootPictures($cache = true){
+    $pictures = $this->loadRefsPictures($cache);
+
+    foreach ($pictures as $_id => $_picture) {
+      if ($_picture->subgroup_id) {
+        unset($pictures[$_id]);
+      }
+    }
+
+    return $this->_ref_root_pictures = $pictures;
   }
 
   /**
@@ -220,6 +244,25 @@ class CExClassFieldGroup extends CMbObject {
     }
 
     return $this->_ref_messages = $this->loadBackRefs("class_messages");
+  }
+
+  /**
+   * @param bool $cache
+   *
+   * @return CExClassPicture[]
+   */
+  function loadRefsPictures($cache = true){
+    if ($cache && $this->_ref_pictures) {
+      return $this->_ref_pictures;
+    }
+
+    $this->_ref_pictures = $this->loadBackRefs("class_pictures");
+
+    foreach ($this->_ref_pictures as $_picture) {
+      $_picture->loadRefFile();
+    }
+
+    return $this->_ref_pictures;
   }
 
   /**

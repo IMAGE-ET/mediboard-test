@@ -134,6 +134,26 @@ ExSubgroup = {
   }
 };
 
+ExPicture = {
+  edit: function(id, ex_group_id) {
+    if (window.exClassTabs) {
+      exClassTabs.setActiveTab("fields-specs");
+    }
+    var url = new Url("forms", "ajax_edit_ex_picture");
+    url.addParam("ex_picture_id", id);
+    url.addParam("ex_group_id", ex_group_id);
+    url.requestUpdate("exFieldEditor", function(){
+      $$("tr[data-ex_picture_id="+id+"]")[0].addUniqueClassName("selected");
+    });
+  },
+  editCallback: function(id, obj) {
+    // void
+  },
+  create: function(ex_group_id) {
+    this.edit("0", ex_group_id);
+  }
+};
+
 ExConcept = Object.clone(ExField);
 
 ExConcept.refreshList =  function(){
@@ -409,14 +429,43 @@ ExFieldPredicate = {
       }
     }
     
-
-    
     url.requestModal(600, 300);
     
     return false;
   },
   create: function(ex_field_id, exclude_ex_field_id, form) {
     this.edit("0", ex_field_id, exclude_ex_field_id, form);
+  },
+  initAutocomplete: function(form, ex_class_id) {
+    var url = new Url("forms", "ajax_autocomplete_ex_class_field_predicate");
+    url.autoComplete(form.elements.predicate_id_autocomplete_view, null, {
+      minChars: 2,
+      method: "get",
+      select: "view",
+      dropdown: true,
+      afterUpdateElement: function(field, selected){
+        var id = selected.get("id");
+
+        if (!id) {
+          $V(field.form.predicate_id, "");
+          $V(field.form.elements.predicate_id_autocomplete_view, "");
+          return;
+        }
+
+        $V(field.form.predicate_id, id);
+
+        if (id) {
+          showField(id, selected.down('.name').getText());
+        }
+
+        if ($V(field.form.elements.predicate_id_autocomplete_view) == "") {
+          $V(field.form.elements.predicate_id_autocomplete_view, selected.down('.view').getText());
+        }
+      },
+      callback: function(input, queryString){
+        return queryString + "&ex_class_id=" + ex_class_id;
+      }
+    });
   }
 };
 

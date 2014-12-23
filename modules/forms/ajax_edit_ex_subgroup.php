@@ -25,7 +25,7 @@ else {
   $ex_subgroup->parent_class = "CExClassFieldGroup";
 }
 
-$ex_subgroup->loadRefPredicate();
+$ex_subgroup->loadRefPredicate()->loadView();
 $ex_subgroup->loadRefProperties();
 
 $ex_group = $ex_subgroup->getExGroup();

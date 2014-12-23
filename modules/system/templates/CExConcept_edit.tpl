@@ -181,7 +181,6 @@ Main.add(function(){
   </li>
   {{/if}}
 </ul>
-<hr class="control_tabs" />
 
 <div id="ExConcept-spec-editor" style="display: none;"></div>
 

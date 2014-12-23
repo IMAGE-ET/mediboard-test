@@ -24,9 +24,12 @@ ExClass.initPixelLayoutEditor = function(){
         endeffect: function(){},
         onStart: function(draggable) {
           var element = draggable.element;
-          if (element.hasClassName("field-input") ||
+          if (
+              element.hasClassName("field-input") ||
               element.hasClassName("subgroup") ||
-              element.hasClassName("draggable-message")) {
+              element.hasClassName("draggable-message") ||
+              element.hasClassName("form-picture")
+          ) {
             draggable._subgroups = draggable.element.up(".group-layout").select(".subgroup, .pixel-grid").without(element);
 
             draggable._subgroups.each(function(subgroup) {
@@ -144,12 +147,21 @@ ExClass.initPixelLayoutEditor = function(){
           url.addParam("ex_class_field_id", field_id);
           url.addParam("subgroup_id", subgroup ? subgroup.get("subgroup_id") : "");
         }
-        
+
         // Message
         var message_id = box.get("message_id");
         if (message_id) {
           url.addParam("@class", "CExClassMessage");
           url.addParam("ex_class_message_id", message_id);
+          url.addParam("subgroup_id", subgroup ? subgroup.get("subgroup_id") : "");
+        }
+
+        // Picture
+        var picture_id = box.get("picture_id");
+        if (picture_id) {
+          url.addParam("@class", "CExClassPicture");
+          url.addParam("ex_class_picture_id", picture_id);
+          url.addParam("subgroup_id", subgroup ? subgroup.get("subgroup_id") : "");
         }
         
         // Subgroup

@@ -42,40 +42,49 @@
   {{/if}}
 {{/foreach}}
 
-{{assign var=field_readonly value=$ex_field->readonly}}
-{{if !$field_readonly}}
-  {{assign var=field_readonly value=null}}
-{{/if}}
-
-{{if $field_readonly && $mode == "normal"}}
-  {{mb_field object=$ex_object field=$_field_name form=$form hidden=true}}
-  
-  {{$ex_field->prefix}}
-  {{mb_value object=$ex_object field=$_field_name}}
-  {{$ex_field->suffix}}
-{{else}}
-  {{if $mode == "normal" && $_spec instanceof CRefSpec}}
-    {{mb_include module=forms template=inc_ex_object_field_autocomplete}}
-  
-  {{elseif ($_spec instanceof CEnumSpec && $_spec->typeEnum == "radio") || ($_spec instanceof CSetSpec && $_spec->typeEnum == "checkbox") || ($_spec instanceof CBoolSpec && $_spec->typeEnum == "radio")}}
-    {{mb_include module=forms template=inc_ex_object_field_fieldset}}
-  
-  {{elseif $ex_field->formula && !$is_predicate && !$_spec instanceof CDateSpec && !$_spec instanceof CTimeSpec && !$_spec instanceof CDateTimeSpec}}
-    {{mb_include module=forms template=inc_ex_object_field_formula}}
-  
-  {{elseif $_spec instanceof CSetSpec && $_spec->typeEnum == "select"}}
-    {{mb_include module=forms template=inc_ex_object_field_select_multiple}}
-  
-  {{elseif $_spec instanceof CTextSpec || ($_spec instanceof CEnumSpec && $_spec->typeEnum == "select")}}
-    {{mb_include module=forms template=inc_ex_object_field_two_lines}}
-
-    {{* Custom handling of date fields is obsolete : the checkbox is pissing off everybody *}}
-    {{*
-    {{elseif $ex_class->pixel_positionning && !$is_predicate && ($_spec instanceof CDateSpec || $_spec instanceof CDateTimeSpec || $_spec instanceof CTimeSpec)}}
-    {{mb_include module=forms template=inc_ex_object_field_date}}
-    *}}
-  
-  {{else}}
-    {{mb_include module=forms template=inc_ex_object_field_standard}}
+{{if @$readonly}}
+  {{if $show_label}}
+    {{mb_label object=$ex_object field=$_field_name}}:<br />
   {{/if}}
+  {{mb_value object=$ex_object field=$_field_name}}
+
+{{else}}
+  {{assign var=field_readonly value=$ex_field->readonly}}
+  {{if !$field_readonly}}
+    {{assign var=field_readonly value=null}}
+  {{/if}}
+
+  {{if $field_readonly && $mode == "normal"}}
+    {{mb_field object=$ex_object field=$_field_name form=$form hidden=true}}
+
+    {{$ex_field->prefix}}
+    {{mb_value object=$ex_object field=$_field_name}}
+    {{$ex_field->suffix}}
+  {{else}}
+    {{if $mode == "normal" && $_spec instanceof CRefSpec}}
+      {{mb_include module=forms template=inc_ex_object_field_autocomplete}}
+
+    {{elseif ($_spec instanceof CEnumSpec && $_spec->typeEnum == "radio") || ($_spec instanceof CSetSpec && $_spec->typeEnum == "checkbox") || ($_spec instanceof CBoolSpec && $_spec->typeEnum == "radio")}}
+      {{mb_include module=forms template=inc_ex_object_field_fieldset}}
+
+    {{elseif $ex_field->formula && !$is_predicate && !$_spec instanceof CDateSpec && !$_spec instanceof CTimeSpec && !$_spec instanceof CDateTimeSpec}}
+      {{mb_include module=forms template=inc_ex_object_field_formula}}
+
+    {{elseif $_spec instanceof CSetSpec && $_spec->typeEnum == "select"}}
+      {{mb_include module=forms template=inc_ex_object_field_select_multiple}}
+
+    {{elseif $_spec instanceof CTextSpec || ($_spec instanceof CEnumSpec && $_spec->typeEnum == "select")}}
+      {{mb_include module=forms template=inc_ex_object_field_two_lines}}
+
+      {{* Custom handling of date fields is obsolete : the checkbox is pissing off everybody *}}
+      {{*
+      {{elseif $ex_class->pixel_positionning && !$is_predicate && ($_spec instanceof CDateSpec || $_spec instanceof CDateTimeSpec || $_spec instanceof CTimeSpec)}}
+      {{mb_include module=forms template=inc_ex_object_field_date}}
+      *}}
+
+    {{else}}
+      {{mb_include module=forms template=inc_ex_object_field_standard}}
+    {{/if}}
+  {{/if}}
+
 {{/if}}

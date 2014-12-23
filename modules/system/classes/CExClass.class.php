@@ -161,6 +161,7 @@ class CExClass extends CMbObject {
 
       foreach ($this->_ref_groups as $_ex_group) {
         $_ex_group->loadRefsSubgroups(true);
+        $_ex_group->loadRefsPictures(true);
         $_subgroups = $_ex_group->loadRefsSubgroups(true);
         foreach ($_subgroups as $_subgroup) {
           $_subgroup->countBackRefs("children_groups");
@@ -522,6 +523,12 @@ class CExClass extends CMbObject {
 
       foreach ($_ex_group->_ref_messages as $_ex_message) {
         $_ex_message->getDefaultProperties();
+      }
+
+      // Pictures
+      $_pictures = $_ex_group->loadRefsRootPictures();
+      foreach ($_pictures as $_picture) {
+        $_picture->loadRefFile();
       }
 
       // Host fields

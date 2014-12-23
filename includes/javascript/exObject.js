@@ -368,6 +368,17 @@ var ExObject = {
       ExObject.toggleField(name, result, form.elements[name]);
     });
 
+    // Display pictures
+    predicate.display.pictures.each(function(guid){
+      var picture = $("picture-"+guid);
+
+      if (!picture) {
+        return;
+      }
+
+      picture.setVisible(result);
+    });
+
     // Display messages
     predicate.display.messages.each(function(guid){
       var message = $("message-"+guid);

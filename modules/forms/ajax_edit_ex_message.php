@@ -24,7 +24,7 @@ else {
   $ex_message->ex_group_id = $ex_group_id;
 }
 
-$ex_message->loadRefPredicate();
+$ex_message->loadRefPredicate()->loadView();
 $ex_message->loadRefExGroup()->loadRefExClass();
 $ex_message->loadRefProperties();
 

@@ -93,7 +93,7 @@ if (count($printers)) {
 $ex_object->_event_name = $event_name;
 
 // Layout grid
-if ($ex_object->_ref_ex_class->pixel_positionning && !$readonly) {
+if ($ex_object->_ref_ex_class->pixel_positionning && !$only_filled) {
   $grid = null;
   $out_of_grid = null;
   $groups = $ex_object->_ref_ex_class->getPixelGrid();
@@ -101,12 +101,6 @@ if ($ex_object->_ref_ex_class->pixel_positionning && !$readonly) {
 else {
   list($grid, $out_of_grid, $groups) = $ex_object->_ref_ex_class->getGrid();
 }
-
-/*foreach($groups as $_group) {
-  foreach($_group->_ref_fields as $_field) {
-    $_field->loadTriggeredData();
-  }
-}*/
 
 if ($ex_object_id || $ex_object->_id) {
   $ex_object->load($ex_object_id);

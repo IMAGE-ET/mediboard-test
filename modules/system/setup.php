@@ -2001,6 +2001,27 @@ class CSetupsystem extends CSetup {
 
     $this->addMethod("addExLinkDates");
 
-    $this->mod_version = "1.1.76";
+    $this->makeRevision("1.1.76");
+    $query = "CREATE TABLE `ex_class_picture` (
+                `ex_class_picture_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `ex_group_id` INT (11) UNSIGNED,
+                `subgroup_id` INT (11) UNSIGNED,
+                `name` VARCHAR (255) NOT NULL,
+                `disabled` ENUM ('0','1') NOT NULL DEFAULT '0',
+                `show_label` ENUM ('0','1') NOT NULL DEFAULT '1',
+                `predicate_id` INT (11) UNSIGNED,
+                `coord_left` INT (11),
+                `coord_top` INT (11),
+                `coord_width` INT (11) UNSIGNED,
+                `coord_height` INT (11) UNSIGNED
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_picture`
+                ADD INDEX (`ex_group_id`),
+                ADD INDEX (`subgroup_id`),
+                ADD INDEX (`predicate_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.77";
   }
 }

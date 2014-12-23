@@ -58,6 +58,7 @@ class CExClassFieldPredicate extends CMbObject {
     $backProps["display_fields"]    = "CExClassField predicate_id";
     $backProps["display_messages"]  = "CExClassMessage predicate_id";
     $backProps["display_subgroups"] = "CExClassFieldSubgroup predicate_id";
+    $backProps["display_pictures"]  = "CExClassPicture predicate_id";
     $backProps["properties"]        = "CExClassFieldProperty predicate_id";
     return $backProps;
   }

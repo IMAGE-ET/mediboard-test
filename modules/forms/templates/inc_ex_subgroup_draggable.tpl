@@ -13,6 +13,15 @@
         <legend>{{$_subgroup->title}}</legend>
       {{/if}}
 
+      {{* PICTURES *}}
+      {{foreach from=$_subgroup->_ref_children_pictures item=_picture}}
+        {{mb_include
+          module=forms
+          template=inc_ex_picture_draggable
+          _picture=$_picture
+        }}
+      {{/foreach}}
+
       {{* SUBGROUPS *}}
       {{foreach from=$_subgroup->_ref_children_groups item=_sub_subgroup}}
         {{mb_include

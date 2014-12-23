@@ -31,6 +31,15 @@ toggleList = function(select, ex_group_id) {
       <td class="narrow">
         <div style="height: 600px; /*overflow: auto;*/" class="scrollable">
           <div class="pixel-grid" unselectable>
+            {{* PICTURES *}}
+            {{foreach from=$_group->_ref_root_pictures item=_picture}}
+              {{mb_include
+                module=forms
+                template=inc_ex_picture_draggable
+                _picture=$_picture
+              }}
+            {{/foreach}}
+
             {{* SUBGROUPS *}}
             {{foreach from=$_group->_ref_subgroups item=_subgroup}}
               {{mb_include
@@ -57,11 +66,11 @@ toggleList = function(select, ex_group_id) {
                    style="left:{{$_message->coord_left}}px; top:{{$_message->coord_top}}px; width:{{$_message->coord_width}}px; height:{{$_message->coord_height}}px;">
                 {{mb_include module=forms template=inc_resizable_handles}}
                 {{mb_include
-                module=forms
-                template=inc_ex_message_draggable
-                _field=$_message
-                ex_group_id=$_group_id
-                _type=""
+                  module=forms
+                  template=inc_ex_message_draggable
+                  _field=$_message
+                  ex_group_id=$_group_id
+                  _type=""
                 }}
               </div>
             {{/foreach}}
@@ -75,11 +84,11 @@ toggleList = function(select, ex_group_id) {
                   {{assign var=_host_class value=$_host_field->host_class}}
 
                   {{mb_include module=forms template=inc_ex_host_field_draggable
-                  _host_field=$_host_field
-                  ex_group_id=$_group_id
-                  _field=$_host_field->field
-                  _type=$_host_field->type
-                  host_object=$ex_class->_host_objects.$_host_class}}
+                    _host_field=$_host_field
+                    ex_group_id=$_group_id
+                    _field=$_host_field->field
+                    _type=$_host_field->type
+                    host_object=$ex_class->_host_objects.$_host_class}}
                 </div>
               {{/if}}
             {{/foreach}}

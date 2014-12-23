@@ -14,6 +14,16 @@
       <legend>{{$_subgroup->title}}</legend>
     {{/if}}
 
+    {{* PICTURES *}}
+    {{foreach from=$_subgroup->_ref_children_pictures item=_picture}}
+      {{if !$_picture->disabled && $_picture->_ref_file && $_picture->_ref_file->_id}}
+        <div class="resizable draggable-picture" id="picture-{{$_picture->_guid}}"
+             style="left:{{$_picture->coord_left}}px; top:{{$_picture->coord_top}}px; width:{{$_picture->coord_width}}px; height:{{$_picture->coord_height}}px; pointer-events: none; text-align: center;">
+          {{mb_include module=forms template=inc_ex_picture}}
+        </div>
+      {{/if}}
+    {{/foreach}}
+
     {{* SUBGROUPS *}}
     {{foreach from=$_subgroup->_ref_children_groups item=_sub_subgroup}}
       {{mb_include

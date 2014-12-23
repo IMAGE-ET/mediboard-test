@@ -725,6 +725,7 @@ class CExObject extends CMbMetaObject implements IPatientRelated, IIndexableObje
     CStoredObject::massLoadBackRefs($all_predicates, "display_fields");
     CStoredObject::massLoadBackRefs($all_predicates, "display_messages");
     CStoredObject::massLoadBackRefs($all_predicates, "display_subgroups");
+    CStoredObject::massLoadBackRefs($all_predicates, "display_pictures");
 
     foreach ($fields as $_field) {
       if ($_field->disabled) {
@@ -746,6 +747,7 @@ class CExObject extends CMbMetaObject implements IPatientRelated, IIndexableObje
             "fields"    => array(),
             "messages"  => array(),
             "subgroups" => array(),
+            "pictures"  => array(),
           ),
           "style"    => array(
             "fields"    => array(),
@@ -755,6 +757,7 @@ class CExObject extends CMbMetaObject implements IPatientRelated, IIndexableObje
         );
 
         // Fields
+        /** @var CExClassField[] $_display_fields */
         $_display_fields = $_predicate->loadBackRefs("display_fields");
         foreach ($_display_fields as $_display) {
           $_struct["display"]["fields"][] = $_display->name;
@@ -770,6 +773,12 @@ class CExObject extends CMbMetaObject implements IPatientRelated, IIndexableObje
         $_display_subgroups = $_predicate->loadBackRefs("display_subgroups");
         foreach ($_display_subgroups as $_display) {
           $_struct["display"]["subgroups"][] = $_display->_guid;
+        }
+
+        // Pictures
+        $_display_pictures = $_predicate->loadBackRefs("display_pictures");
+        foreach ($_display_pictures as $_display) {
+          $_struct["display"]["pictures"][] = $_display->_guid;
         }
 
         $_styles = $_predicate->loadRefProperties();
@@ -821,6 +830,10 @@ class CExObject extends CMbMetaObject implements IPatientRelated, IIndexableObje
                 "type" => "subgroup",
                 "guid" => $_ref_object->_guid,
               );
+              break;
+
+            default:
+              // ignore
               break;
           }
         }

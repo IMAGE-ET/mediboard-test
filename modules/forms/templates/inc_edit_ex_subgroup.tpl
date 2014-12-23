@@ -11,38 +11,8 @@
 <script type="text/javascript">
 Main.add(function(){
   var form = getForm("editSubgroup");
-
   form.elements.title.select();
-
-  var url = new Url("forms", "ajax_autocomplete_ex_class_field_predicate");
-  url.autoComplete(form.elements.predicate_id_autocomplete_view, null, {
-    minChars: 2,
-    method: "get",
-    select: "view",
-    dropdown: true,
-    afterUpdateElement: function(field, selected){
-      var id = selected.get("id");
-
-      if (!id) {
-        $V(field.form.predicate_id, "");
-        $V(field.form.elements.predicate_id_autocomplete_view, "");
-        return;
-      }
-
-      $V(field.form.predicate_id, id);
-
-      if (id) {
-        showField(id, selected.down('.name').getText());
-      }
-
-      if ($V(field.form.elements.predicate_id_autocomplete_view) == "") {
-        $V(field.form.elements.predicate_id_autocomplete_view, selected.down('.view').getText());
-      }
-    },
-    callback: function(input, queryString){
-      return queryString + "&ex_class_id={{$ex_group->ex_class_id}}";
-    }
-  });
+  ExFieldPredicate.initAutocomplete(form, '{{$ex_group->ex_class_id}}');
 });
 </script>
 
@@ -60,7 +30,7 @@ Main.add(function(){
     
     <tr>
       <th>{{mb_label object=$ex_subgroup field=title}}</th>
-      <td>{{mb_field object=$ex_subgroup field=title size=50}}</td>
+      <td colspan="3">{{mb_field object=$ex_subgroup field=title size=50}}</td>
     </tr>
 
     <tr>
@@ -76,20 +46,16 @@ Main.add(function(){
     
     {{if $ex_group->_ref_ex_class->pixel_positionning}}
     <tr>
-      <th>{{mb_label object=$ex_subgroup field=coord_left}}</th>
-      <td colspan="3">{{mb_field object=$ex_subgroup field=coord_left increment=true form=editSubgroup}}</td>
-    </tr>
-    <tr>
-      <th>{{mb_label object=$ex_subgroup field=coord_top}}</th>
-      <td colspan="3">{{mb_field object=$ex_subgroup field=coord_top increment=true form=editSubgroup}}</td>
+      <th class="narrow">{{mb_label object=$ex_subgroup field=coord_left}}</th>
+      <td class="narrow">{{mb_field object=$ex_subgroup field=coord_left increment=true form=editSubgroup}}</td>
+      <th class="narrow">{{mb_label object=$ex_subgroup field=coord_top}}</th>
+      <td>{{mb_field object=$ex_subgroup field=coord_top increment=true form=editSubgroup}}</td>
     </tr>
     <tr>
       <th>{{mb_label object=$ex_subgroup field=coord_width}}</th>
-      <td colspan="3">{{mb_field object=$ex_subgroup field=coord_width increment=true form=editSubgroup}}</td>
-    </tr>
-    <tr>
+      <td>{{mb_field object=$ex_subgroup field=coord_width increment=true form=editSubgroup}}</td>
       <th>{{mb_label object=$ex_subgroup field=coord_height}}</th>
-      <td colspan="3">{{mb_field object=$ex_subgroup field=coord_height increment=true form=editSubgroup}}</td>
+      <td>{{mb_field object=$ex_subgroup field=coord_height increment=true form=editSubgroup}}</td>
     </tr>
     {{/if}}
     
