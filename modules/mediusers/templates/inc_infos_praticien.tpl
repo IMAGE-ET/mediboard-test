@@ -80,6 +80,11 @@
     <th>{{mb_label object=$object field="ik"}}</th>
     <td>{{mb_field object=$object field="ik"}}</td>
   </tr>
+{{elseif $conf.ref_pays == 3}}
+  <tr>
+    <th>{{mb_label object=$object field='inami'}}</th>
+    <td>{{mb_field object=$object field='inami'}}</td>
+  </tr>
 {{/if}}
 
 <tr>

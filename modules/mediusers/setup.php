@@ -650,6 +650,12 @@ class CSetupmediusers extends CSetup {
                 (79, 'Gynécologie obstétrique et gynécologie médicale', '');";
     $this->addQuery($query);
 
-    $this->mod_version = '0.57';
+    $this->makeRevision('0.57');
+
+    $query = "ALTER TABLE `users_mediboard`
+              ADD `inami` BIGINT (11) UNSIGNED ZEROFILL AFTER `rpps`;";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.58';
   }
 }

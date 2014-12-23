@@ -19,6 +19,7 @@ class CMediusers extends CPerson {
   public $remote;
   public $adeli;
   public $rpps;
+  public $inami;
   public $cps;
   public $titres;
   public $initials;
@@ -215,6 +216,7 @@ class CMediusers extends CPerson {
     $props["remote"]                 = "bool default|1 show|0";
     $props["adeli"]                  = "numchar length|9 confidential mask|99S9S99999S9 control|luhn";
     $props["rpps"]                   = "numchar length|11 confidential mask|99999999999 control|luhn";
+    $props['inami']                  = 'numchar length|11 confidential mask|99999999999';
     $props["cps"]                    = "str";
     $props["function_id"]            = "ref notNull class|CFunctions seekable";
     $props["discipline_id"]          = "ref class|CDiscipline";
