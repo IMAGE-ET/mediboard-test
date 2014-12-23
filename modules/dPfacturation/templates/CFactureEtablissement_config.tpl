@@ -52,20 +52,6 @@
     {{mb_include module=system template=inc_config_bool var=use_strict_cloture}}
     {{mb_include module=system template=inc_config_bool var=use_field_definitive}}
     {{mb_include module=system template=inc_config_bool var=edit_bill_alone}}
-
-    {{if $conf.ref_pays == 2}}
-      {{assign var=class value=CEditPdf}}
-      {{mb_include module=system template=inc_config_bool var=use_bill_etab}}
-      
-      {{mb_include module=system template=inc_config_str var=home_nom}}
-      {{mb_include module=system template=inc_config_str var=home_adresse}}
-      {{mb_include module=system template=inc_config_str var=home_cp}}
-      {{mb_include module=system template=inc_config_str var=home_ville}}
-      {{mb_include module=system template=inc_config_str var=home_EAN}}
-      {{mb_include module=system template=inc_config_str var=home_RCC}}
-      {{mb_include module=system template=inc_config_str var=home_tel}}
-      {{mb_include module=system template=inc_config_str var=home_fax}}
-    {{/if}}
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

@@ -569,7 +569,7 @@ class CEditPdf{
     }
     $this->editCell(20, $this->pdf->getY()+20, 35, CAppUI::tr("CRelance.statut.".$this->relance->statut), "C", 1, 4);
     $this->pdf->setX(110);
-    $this->pdf->Write(4, CAppUI::conf("dPfacturation CEditPdf home_ville").", le ".CMbDT::format(CMbDT::date(), "%d %B %Y"));
+    $this->pdf->Write(4, CAppUI::conf("dPfacturation CEditPdf home_ville", CGroups::loadCurrent()).", le ".CMbDT::format(CMbDT::date(), "%d %B %Y"));
 
     $frais = 0;
     $messages = array(0 => "", 1 => "");
@@ -624,7 +624,7 @@ class CEditPdf{
     $this->pdf->setXY(10, $this->pdf->getY()+14);
     $this->pdf->Write(4, $messages[1]);
     $this->pdf->setXY(120, $this->pdf->getY()+14);
-    $this->pdf->Write(4, CAppUI::conf("dPfacturation CEditPdf home_nom"));
+    $this->pdf->Write(4, CAppUI::conf("dPfacturation CEditPdf home_nom", CGroups::loadCurrent()));
     $this->pdf->setXY(120, $this->pdf->getY()+4);
     $this->pdf->Write(3, "Service comptabilité");
   }
@@ -834,7 +834,8 @@ class CEditPdf{
       //Adresse du patient
       $this->pdf->SetTextColor(0);
       $this->pdf->setFont($this->font, '', 8);
-      $this->auteur["nom"] = CAppUI::conf("dPfacturation CEditPdf home_nom");
+      $nom_auteur_conf = CAppUI::conf("dPfacturation CEditPdf home_nom", CGroups::loadCurrent());
+      $this->auteur["nom"] = $nom_auteur_conf ? $nom_auteur_conf : $this->auteur["nom"];
       
       if (!$this->fourn_presta["fct"]) {
         $this->pdf->Text($l_colonne + $decalage, $h_ligne*4+$haut_doc , $this->auteur["nom"]);
@@ -1132,7 +1133,9 @@ class CEditPdf{
       "tel"      =>  $this->group->tel,
       "fax"      =>  $this->group->fax,
     );
-    if (!CAppUI::conf("dPfacturation CEditPdf use_bill_etab")) {
+
+    $group = CGroups::loadCurrent()->_guid;
+    if (!CAppUI::conf("dPfacturation CEditPdf use_bill_etab", $group)) {
       $this->fourn_presta = array(
         "0"        =>  $this->function_prat,
         "nom_dr"   =>  "Dr. ".$this->praticien->_view,
@@ -1142,20 +1145,23 @@ class CEditPdf{
         "EAN"      =>  $this->praticien->ean,
         "RCC"      =>  $this->praticien->rcc
       );
+      if (CAppUI::conf("dPfacturation CEditPdf use_bill_fct", $group)) {
+        $this->fourn_presta["fct"] = "";
+      }
     }
     else {
       $this->fourn_presta = $this->auteur;
       $this->fourn_presta["nom_dr"] = $this->group->raison_sociale;
       $this->fourn_presta["fct"] = "";
-      $this->auteur["nom"]      = CAppUI::conf("dPfacturation CEditPdf home_nom");
-      $this->auteur["adresse1"] = CAppUI::conf("dPfacturation CEditPdf home_adresse");
+      $this->auteur["nom"]      = CAppUI::conf("dPfacturation CEditPdf home_nom", $group);
+      $this->auteur["adresse1"] = CAppUI::conf("dPfacturation CEditPdf home_adresse", $group);
       $this->auteur["adresse2"] = "";
-      $this->auteur["cp"]       = CAppUI::conf("dPfacturation CEditPdf home_cp");
-      $this->auteur["ville"]    = CAppUI::conf("dPfacturation CEditPdf home_ville");
-      $this->auteur["EAN"]      = CAppUI::conf("dPfacturation CEditPdf home_EAN");
-      $this->auteur["RCC"]      = CAppUI::conf("dPfacturation CEditPdf home_RCC");
-      $this->auteur["tel"]      = CAppUI::conf("dPfacturation CEditPdf home_tel");
-      $this->auteur["fax"]      = CAppUI::conf("dPfacturation CEditPdf home_fax"); 
+      $this->auteur["cp"]       = CAppUI::conf("dPfacturation CEditPdf home_cp", $group);
+      $this->auteur["ville"]    = CAppUI::conf("dPfacturation CEditPdf home_ville", $group);
+      $this->auteur["EAN"]      = CAppUI::conf("dPfacturation CEditPdf home_EAN", $group);
+      $this->auteur["RCC"]      = CAppUI::conf("dPfacturation CEditPdf home_RCC", $group);
+      $this->auteur["tel"]      = CAppUI::conf("dPfacturation CEditPdf home_tel", $group);
+      $this->auteur["fax"]      = CAppUI::conf("dPfacturation CEditPdf home_fax", $group);
     }
   }
 

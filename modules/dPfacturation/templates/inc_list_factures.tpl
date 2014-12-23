@@ -4,10 +4,10 @@
     {{mb_include module=system template=inc_pagination total=$total_factures current=$page step=25 change_page='changePage'}}
   {{/if}}
   <tr>
-    <th colspan="{{if $conf.dPfacturation.CEditPdf.use_bill_etab}}6{{else}}3{{/if}}" class="title">Factures</th>
+    <th colspan="{{if "dPfacturation CEditPdf use_bill_etab"|conf:"CGroups-$g"}}6{{else}}3{{/if}}" class="title">Factures</th>
   </tr>
   <tr>
-    {{if $conf.dPfacturation.CEditPdf.use_bill_etab}}
+    {{if "dPfacturation CEditPdf use_bill_etab"|conf:"CGroups-$g"}}
       {{if $facture->_class == "CFactureEtablissement"}}
         <th>Date séjour</th>
       {{/if}}
@@ -15,7 +15,7 @@
     {{/if}}
     <th>Date</th>
     <th>Patient</th>
-    {{if $conf.dPfacturation.CEditPdf.use_bill_etab}}
+    {{if "dPfacturation CEditPdf use_bill_etab"|conf:"CGroups-$g"}}
       <th>N° patient</th>
       {{if $facture->_class == "CFactureEtablissement"}}
         <th>Séjour</th>
@@ -41,7 +41,7 @@
         {{assign var="cloture" value="noncotee"}}
       {{/if}}
       {{assign var="classe" value=$facture->_class}}
-      {{if $conf.dPfacturation.CEditPdf.use_bill_etab}}
+      {{if "dPfacturation CEditPdf use_bill_etab"|conf:"CGroups-$g"}}
         {{if $facture->_class == "CFactureEtablissement"}}
           <td class="{{$reglee}} {{$cloture}}">{{$_facture->_ref_last_sejour->entree_prevue|date_format:"%d/%m/%Y"}}</td>
         {{/if}}
@@ -60,7 +60,7 @@
           {{$_facture->_ref_patient->_view|truncate:30:"...":true}}
         </a>
       </td>
-      {{if $conf.dPfacturation.CEditPdf.use_bill_etab}}
+      {{if "dPfacturation CEditPdf use_bill_etab"|conf:"CGroups-$g"}}
         <td style="text-align: right;" class="{{$reglee}} {{$cloture}}">{{$_facture->patient_id}}</td>
         {{if $facture->_class == "CFactureEtablissement"}}
           <td style="text-align: right;" class="{{$reglee}} {{$cloture}}">{{$_facture->_ref_last_sejour->_id}}</td>
@@ -71,7 +71,7 @@
     </tr>
     {{foreachelse}}
     <tr>
-      <td colspan="{{if $conf.dPfacturation.CEditPdf.use_bill_etab}}6{{else}}3{{/if}}" class="empty">
+      <td colspan="{{if "dPfacturation CEditPdf use_bill_etab"|conf:"CGroups-$g"}}6{{else}}3{{/if}}" class="empty">
         {{tr}}{{$facture->_class}}.none{{/tr}}
       </td>
     </tr>

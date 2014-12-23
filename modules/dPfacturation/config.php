@@ -44,17 +44,6 @@ $dPconfig["dPfacturation"] = array (
   "CRetrocession" => array(
     "use_retrocessions" => "0"
   ),
-  "CEditPdf" => array(
-    "use_bill_etab" => "0",
-    "home_nom"      => "",
-    "home_adresse"  => "",
-    "home_cp"       => "",
-    "home_ville"    => "",
-    "home_EAN"      => "",
-    "home_RCC"      => "",
-    "home_tel"      => "",
-    "home_fax"      => ""
-  ),
   "Other" => array(
     "use_search_easy"       => "0",
     "use_view_chainage"     => "0",
