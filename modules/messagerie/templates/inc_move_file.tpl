@@ -36,7 +36,7 @@
     File_Attach.setFile('{{$file->_id}}', '{{$file->_class}}');
     File_Attach.button_Attach = "save_button";
     {{if $patient->_id}}
-      requestInfoPat('{{$patient->_id}}');
+    requestInfoPat('{{$patient->_id}}');
     {{/if}}
 
     var form = getForm("moveFile_{{$file->_id}}");
@@ -76,61 +76,62 @@
   <input type="hidden" name="dosql" value="do_move_file"/>
   <input type="hidden" name="m" value="dPfiles"/>
   <input type="hidden" name="del" value="0"/>
-  <input type="hidden" name="_prat_id" value="{{$praticien->_id}}"/>
   <input type="hidden" name="_guess_date" value="{{$guessing_date}}"/>
-  <table class="main" id="main_move_file">
-    <tr>
-      <td id="file" style="width: 66%; text-align: center;">
-        <img src="?m=files&a=fileviewer&file_id={{$file->_id}}&phpThumb=1" alt="" style="
-        border:solid 1px black;" />
-      </td>
-      <td id="object" style="width: 33%;">
-        <input type="hidden" name="file_id" value="{{$file->_id}}"/>
-        <p>Renommer : <input type="text" name="file_name" value="{{$file->file_name}}" style="width:30em;"/></p>
-        <p>Catégorie :
-          <select name="category_id">
-            <option value="">{{tr}}None{{/tr}}</option>
-            {{foreach from=$file_categories item=_cat}}
-              <option value="{{$_cat->_id}}" {{if $file->file_category_id == $_cat->_id}}selected="selected" {{/if}}>{{$_cat}}</option>
-            {{/foreach}}
-          </select>
-        </p>
-        {{if $file->_ref_object->_guid != $document->_guid}}
-          <p><strong>Actuellement lié à :</strong> {{$file->_ref_object}}</p>
-        {{/if}}
-        <p><strong>Date du document : </strong>{{$document->document_date}}</p>
-        {{if !$patient->_id}}<div class="small-info">Patient non retrouvé, faites une recherche manuelle ci dessous</div>{{/if}}
-        <p><strong>Données patient : </strong>{{$document->patient_firstname}}, {{$document->patient_lastname}}, {{$document->patient_birthdate}}</p>
-        <hr/>
-        <input type="hidden" name="object_id" value=""/>
-        <input type="hidden" name="object_class" value=""/>
-        <div id="searchPat">
-          {{mb_field object=$patient field="patient_id" hidden=1 ondblclick="PatSelector.init()" onchange="requestInfoPat();"}}
-          <input type="text" name="_pat_name" style="width: 15em;" value="{{$patient}}" readonly="readonly" onclick="PatSelector.init()" />
-          <button class="search notext" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
-          <script>
-            PatSelector.init = function() {
-              this.sForm      = "moveFile_{{$file->_id}}";
-              this.sId        = "patient_id";
-              this.sView      = "_pat_name";
-              var seekResult  = $V(getForm(this.sForm)._seek_patient).split(" ");
-              this.sName      = seekResult[0] ? seekResult[0] : "{{$document->patient_lastname}}";
-              this.sFirstName = seekResult[1] ? seekResult[1] : "{{$document->patient_firstname}}";
-              this.pop();
-            }
-          </script>
-          <input type="text" name="_seek_patient" style="width: 13em;" placeholder="{{tr}}fast-search{{/tr}}" class="autocomplete" />
-          <div style="text-align: center">
-            <button onclick="this.form.onsubmit()" type="button" class="tick" id="save_button" disabled="disabled">
-              {{tr}}Lier{{/tr}}
-            </button>
-          </div>
 
-        </div>
-        <div id="resultSearch" style="height:570px; overflow-y: auto;">
+  <div id="main_move_file" style="position: relative;">
+    <div style="position:absolute; left:0; width:50%; height:99%; text-align: center;">
+      <a target="_blank" href="?m=files&a=fileviewer&file_id={{$file->_id}}&suppressHeaders=1&phpThumb=1">
+        <img src="?m=files&a=fileviewer&file_id={{$file->_id}}&phpThumb=1&suppressHeaders=1&h=800" alt="" style="
+        border:solid 1px black; height:100%" />
+      </a>
+    </div>
 
+    <div id="object" style="position:absolute; left:50%; height:99%; overflow-y: auto;">
+      <input type="hidden" name="file_id" value="{{$file->_id}}"/>
+      <p>Renommer : <input type="text" name="file_name" value="{{$file->file_name}}" style="width:30em;"/></p>
+      <p>Catégorie :
+        <select name="category_id">
+          <option value="">{{tr}}None{{/tr}}</option>
+          {{foreach from=$file_categories item=_cat}}
+            <option value="{{$_cat->_id}}" {{if $file->file_category_id == $_cat->_id}}selected="selected" {{/if}}>{{$_cat}}</option>
+          {{/foreach}}
+        </select>
+      </p>
+      {{if $file->_ref_object->_guid != $document->_guid}}
+        <p><strong>Actuellement lié à :</strong> {{$file->_ref_object}}</p>
+      {{/if}}
+      <p><strong>Date du document : </strong>{{$document->document_date}}</p>
+      {{if !$patient->_id}}<div class="small-info">Patient non retrouvé, faites une recherche manuelle ci dessous</div>{{/if}}
+      <p><strong>Données patient : </strong>{{$document->patient_firstname}}, {{$document->patient_lastname}}, {{$document->patient_birthdate}}</p>
+      <hr/>
+      <input type="hidden" name="object_id" value=""/>
+      <input type="hidden" name="object_class" value=""/>
+      <div id="searchPat">
+        {{mb_field object=$patient field="patient_id" hidden=1 ondblclick="PatSelector.init()" onchange="requestInfoPat();"}}
+        <input type="text" name="_pat_name" style="width: 15em;" value="{{$patient}}" readonly="readonly" onclick="PatSelector.init()" />
+        <button class="search notext" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
+        <script>
+          PatSelector.init = function() {
+            this.sForm      = "moveFile_{{$file->_id}}";
+            this.sId        = "patient_id";
+            this.sView      = "_pat_name";
+            var seekResult  = $V(getForm(this.sForm)._seek_patient).split(" ");
+            this.sName      = seekResult[0] ? seekResult[0] : "{{$document->patient_lastname}}";
+            this.sFirstName = seekResult[1] ? seekResult[1] : "{{$document->patient_firstname}}";
+            this.pop();
+          }
+        </script>
+        <input type="text" name="_seek_patient" style="width: 13em;" placeholder="{{tr}}fast-search{{/tr}}" class="autocomplete" />
+        <div style="text-align: center">
+          <button onclick="this.form.onsubmit()" type="button" class="tick" id="save_button" disabled="disabled">
+            {{tr}}Lier{{/tr}}
+          </button>
         </div>
-      </td>
-    </tr>
-  </table>
+
+      </div>
+      <div id="resultSearch">
+
+      </div>
+    </div>
+  </div>
 </form>
