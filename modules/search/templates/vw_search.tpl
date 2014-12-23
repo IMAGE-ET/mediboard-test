@@ -12,11 +12,11 @@
 <script>
   Main.add(function () {
     var form = getForm("esSearch");
-    window.calendar_planning_fin = Calendar.regField(form._min_date);
-    window.calendar_planning_fin = Calendar.regField(form._max_date);
-    window.calendar_planning_fin = Calendar.regField(form._date);
-    getAutocomplete();
-    getAutocompleteFavoris();
+    Calendar.regField(form._min_date);
+    Calendar.regField(form._max_date);
+    Calendar.regField(form._date);
+    Search.getAutocompleteUser(form);
+    Thesaurus.getAutocompleteFavoris(form);
   });
 
   function changePage(start) {
@@ -45,77 +45,6 @@
       $("user_tags").insert(li);
     }
   }
-
-  function getAutocomplete () {
-    var form = getForm("esSearch");
-    var element = form.elements.user_id,
-      tokenField = new TokenField(element, {onChange: function(){}.bind(element)});
-
-    var element_input = form.elements.user_view;
-    var url = new Url("mediusers", "ajax_users_autocomplete");
-    url.addParam("object_class", "CMediusers");
-    url.addParam("input_field", element_input.name);
-    url.addParam("edit", "1");
-    url.addParam("praticiens", "1");
-    url.autoComplete(element_input, null, {
-      minChars: 2,
-      method: "get",
-      dropdown: true,
-      updateElement: function(selected) {
-        var guid = selected.get("id");
-        var _name  = selected.down().down().getText();
-
-        var to_insert = !tokenField.contains(guid);
-        tokenField.add(guid);
-
-        if (to_insert) {
-          insertTag(guid, _name);
-        }
-
-        var element_input = form.elements.user_view;
-        $V(element_input, "");
-      }
-    });
-
-    window.user_tag_token = tokenField;
-
-  }
-
-  function getAutocompleteFavoris() {
-    var form = getForm("esSearch");
-    var element = form.elements.words_favoris,
-      tokenWords = new TokenField(element, {
-        onChange: function () {
-        }.bind(element)
-      });
-
-    var element_input = form.elements.words;
-    var url = new Url("system", "ajax_seek_autocomplete");
-    url.addParam("object_class", "CSearchThesaurusEntry");
-    url.addParam("input_field", element_input.name);
-    url.addParam("where[user_id]", '{{$app->_ref_user->_id}}');
-    url.addParam("where[contextes]", $V(form.elements.contexte));
-    url.autoComplete(element_input, null, {
-      minChars: 2,
-      method: "get",
-      dropdown: true,
-      updateElement: function (selected) {
-        if(selected.down("span", "1").getText() != "") {
-          var _name = selected.down("span", "1").getText();
-          var element_input = form.elements.words;
-          $V(element_input, _name);
-          $V(form.elements.aggregate, selected.down().get("aggregation"));
-          var types = selected.down().get("types");
-            if (types) {
-            types = types.split("|");
-            }
-          $V(form.elements["names_types[]"], types);
-        }
-      }
-    });
-
-    window.words_tag_token = tokenWords;
-  }
 </script>
 
 <form method="get" name="esSearch" action="?m=search" class="watched prepared" onsubmit="return Search.displayResults(this);" onchange="onchange=$V(this.form, '0')">
@@ -131,13 +60,7 @@
           <button class="favoris notext" type="button"
                   onclick="
                     if($V(form.words)){
-                    Thesaurus.addeditThesaurusEntry(
-                    this.form.aggregate.value,
-                    $V(form.words),
-                    '{{$app->user_id}}',
-                    $V(form.elements['names_types[]']),
-                    $V(form.contexte),
-                    null);
+                    Thesaurus.addeditThesaurusEntry(form, null, function(){});
                     }
                     else {
                     Modal.alert('Pour ajouter un favoris il faut que votre recherche contienne au moins un mot.');

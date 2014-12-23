@@ -21,6 +21,8 @@
   {{mb_key   object=$thesaurus_entry}}
   {{mb_class object=$thesaurus_entry}}
   <input type="hidden" name="user_id" value="{{$thesaurus_entry->user_id}}"/>
+  <input type="hidden" name="function_id" value="{{$thesaurus_entry->function_id}}"/>
+  <input type="hidden" name="group_id" value="{{$thesaurus_entry->group_id}}"/>
   <input type="hidden" name="types" value="{{"|"|implode:$search_types}}"/>
   <input type="hidden"  name="del" value="0"/>
   {{if !$thesaurus_entry->_id}}
@@ -73,16 +75,26 @@
     <tr>
       <td colspan="2">
         <span class="circled">
-          <img src="images/icons/user.png" title="Favori pour {{mb_value object=$thesaurus_entry field=user_id}}">
-          <label><input type="checkbox" name="user_id" value="{{$user->_id}}" checked></label>
+          <img src="images/icons/user.png" title="Favori pour {{$user_thesaurus->_id}}">
+          <label><input type="checkbox" name="_user_id" value="{{$user_thesaurus->_id}}" checked></label>
         </span>
+
         <span class="circled">
-          <img src="images/icons/user-function.png" title="Favori pour {{$user->_ref_function}}">
-           <label><input type="checkbox" name="function_id" value="{{$user->_ref_function->_id}}"></label>
+           <img src="images/icons/user-function.png" title="Favori pour {{$user_thesaurus->_ref_function}}">
+          {{if $thesaurus_entry->function_id}}
+            <label><input type="checkbox" name="_function_id" onclick="$V(form.elements.function_id, (this.checked) ? '{{$thesaurus_entry->function_id}}' : null)" checked></label>
+          {{else}}
+            <label><input type="checkbox" name="_function_id" onclick="$V(form.elements.function_id, (this.checked) ? '{{$user_thesaurus->_ref_function->_id}}' : null)"></label>
+          {{/if}}
         </span>
+
         <span class="circled">
-          <img src="images/icons/group.png" title="Favori pour {{$user->_ref_function->_ref_group}}">
-          <label><input type="checkbox" name="group_id" value="{{$user->_ref_function->_ref_group->_id}}"></label>
+          <img src="images/icons/group.png" title="Favori pour {{$user_thesaurus->_ref_function->_ref_group}}">
+          {{if $thesaurus_entry->group_id}}
+            <label><input type="checkbox" name="_group_id" onclick="$V(form.elements.group_id, (this.checked) ? '{{$thesaurus_entry->group_id}}' : null)" checked></label>
+          {{else}}
+            <label><input type="checkbox" name="_group_id" onclick="$V(form.elements.group_id, (this.checked) ? '{{$user_thesaurus->_ref_function->_ref_group->_id}}' : null)"></label>
+          {{/if}}
         </span>
       </td>
     </tr>

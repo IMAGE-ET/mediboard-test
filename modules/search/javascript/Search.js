@@ -300,5 +300,39 @@ Search = window.Search || {
     var url = new Url('search', 'download_search_results', 'raw');
     url.pop(10,10, "export_recherches", null, null,
       {"results" : this.export_csv, "accept_utf8" : "1"});
+  },
+
+  getAutocompleteUser: function (form) {
+    var element = form.elements.user_id,
+      tokenField = new TokenField(element, {onChange: function(){}.bind(element)});
+
+    var element_input = form.elements.user_view;
+    var url = new Url("mediusers", "ajax_users_autocomplete");
+    url.addParam("object_class", "CMediusers");
+    url.addParam("input_field", element_input.name);
+    url.addParam("edit", "1");
+    url.addParam("praticiens", "1");
+    url.autoComplete(element_input, null, {
+      minChars: 2,
+      method: "get",
+      dropdown: true,
+      updateElement: function(selected) {
+        var guid = selected.get("id");
+        var _name  = selected.down().down().getText();
+
+        var to_insert = !tokenField.contains(guid);
+        tokenField.add(guid);
+
+        if (to_insert) {
+          insertTag(guid, _name);
+        }
+
+        var element_input = form.elements.user_view;
+        $V(element_input, "");
+      }
+    });
+
+    window.user_tag_token = tokenField;
   }
+
 };

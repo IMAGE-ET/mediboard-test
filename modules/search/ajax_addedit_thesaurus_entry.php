@@ -46,5 +46,5 @@ $smarty = new CSmartyDP();
 $smarty->assign("thesaurus_entry", $thesaurus_entry);
 $smarty->assign("search_types", $search_types);
 $smarty->assign("types", $types);
-$smarty->assign("user", $user);
+$smarty->assign("user_thesaurus", $user);
 $smarty->display("vw_addedit_entry.tpl");

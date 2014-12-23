@@ -64,10 +64,10 @@ class CSearchThesaurusEntry extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["entry"]         = "text";
+    $props["entry"]         = "text seekable";
     $props["types"]         = "str maxLength|255";
     $props["titre"]         = "str maxLength|255 seekable";
-    $props["contextes"]     = "enum list|".implode("|", CSearchLog::$names_mapping);
+    $props["contextes"]     = "enum list|".implode("|", CSearchLog::$names_mapping) . " seekable";
     $props["group_id"]      = "ref class|CGroups";
     $props["function_id"]   = "ref class|CFunctions";
     $props["user_id"]       = "ref class|CMediusers notNull";

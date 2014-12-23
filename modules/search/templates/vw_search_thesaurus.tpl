@@ -16,7 +16,7 @@
     window.calendar_max_date = Calendar.regField(form._max_date);
     window.calendar_date = Calendar.regField(form._date);
     form.onsubmit();
-    Thesaurus.updateListThesaurus();
+    Thesaurus.updateListThesaurus($V(form.elements.start_thesaurus));
   });
 
   function changePage(start) {

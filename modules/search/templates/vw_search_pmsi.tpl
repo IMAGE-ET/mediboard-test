@@ -8,42 +8,17 @@
  * @link     http://www.mediboard.org*}}
 
 {{mb_script module="search" script="Search" ajax=true}}
+{{mb_script module="search" script="Thesaurus" ajax=true}}
 <script>
   Main.add(function () {
     var form = getForm("esSearch");
-    window.calendar_planning_fin = Calendar.regField(form._min_date);
-    window.calendar_planning_fin = Calendar.regField(form._max_date);
-    window.calendar_planning_fin = Calendar.regField(form._date);
+    Calendar.regField(form._min_date);
+    Calendar.regField(form._max_date);
+    Calendar.regField(form._date);
 
-    var element = form.elements.user_id,
-      tokenField = new TokenField(element, {onChange: function(){}.bind(element)});
+    Search.getAutocompleteUser(form);
+    Thesaurus.getAutocompleteFavoris(form);
 
-    var element_input = form.elements.user_view;
-    var url = new Url("system", "ajax_seek_autocomplete");
-    url.addParam("object_class", "CMediusers");
-    url.addParam("input_field", element_input.name);
-
-    url.autoComplete(element_input, null, {
-      minChars: 2,
-      method: "get",
-      dropdown: true,
-      updateElement: function(selected) {
-        var guid = selected.get("id");
-        var _name  = selected.down().down().getText();
-
-        var to_insert = !tokenField.contains(guid);
-        tokenField.add(guid);
-
-        if (to_insert) {
-          insertTag(guid, _name);
-        }
-
-        var element_input = form.elements.user_view;
-        $V(element_input, "");
-      }
-    });
-
-    window.user_tag_token = tokenField;
   });
 
   changePage = function(start) {
@@ -82,10 +57,32 @@
     <tbody>
     <tr>
       <td id="td_container_search" style="box-sizing : border-box; padding: 2em 6em 0.5em;">
-        <input type="search" id="words" name="words" value="" placeholder="Saisissez les termes de votre recherche ici..." style="width:100%; height:1.5em; font-size:1.5em;" onchange="$V(this.form.start, '0')" autofocus>
-        <input type="checkbox" name="aggregate" id="aggregate" value="1">
-        <label for="aggregate"> Agrégation des résultats</label>
+        <input type="search" id="words" class="autocomplete" name="words" placeholder="Saisissez les termes de votre recherche ici..." style="width:50em; height:1.5em; font-size:medium;" onchange="$V(this.form.start, '0'); $V(this.form.words_favoris, this.value)" autofocus>
+        <button class="favoris notext" type="button"
+                onclick="
+                    if($V(form.words)){
+                    Thesaurus.addeditThesaurusEntry(form, null, function(){});
+                    }
+                    else {
+                    Modal.alert('Pour ajouter un favoris il faut que votre recherche contienne au moins un mot.');
+                    }
+                    " title="{{tr}}CSearch-addToThesaurus{{/tr}}">
+
+        </button>
+        <input type="hidden" name="words_favoris"/>
         {{mb_include module=search template=inc_tooltip_help}}
+    </tr>
+    <tr>
+      <td>
+        <span class="circled">
+          <input type="checkbox" name="aggregate" id="aggregate" value="1">
+          <label for="aggregate"> Agrégation des résultats</label>
+        </span>
+        <span class="circled">
+          <input type="checkbox" name="fuzzy" id="fuzzy" value="1">
+          <label for="fuzzy">{{tr}}CSearch-Fuzzy Search{{/tr}}</label>
+        </span>
+
       </td>
     </tr>
     </tbody>
@@ -94,7 +91,7 @@
     <tbody>
     <tr>
       <!-- Fieldset de tri par date -->
-      <td class="narrow">
+      <td style="width:45%">
         <fieldset>
           <legend>Intervalle de date </legend>
           {{*{{mb_include module=search template=inc_tooltip_date}}*}}
@@ -104,7 +101,6 @@
                 <input type="hidden" class="datetime" name="_min_date" onchange="$V(this.form.start, '0')" >
                 <b>&raquo;</b>
                 <input type="hidden" class="datetime" name="_max_date" onchange="$V(this.form.start, '0')" >
-                <br/>
                 <strong>{{tr}}or{{/tr}}</strong>
                 Jour seul : <input type="hidden" class="datetime" name="_date" onchange="$V(this.form.start, '0')" >
               </td>
@@ -114,7 +110,7 @@
       </td>
       <!-- Fieldset de tri par Intervenants -->
 
-      <td class="narrow">
+      <td>
         <fieldset>
           <legend> Intervenants</legend>
           <table class="layout">
@@ -138,7 +134,7 @@
       </td>
 
       <!-- Fieldset de tri par Types -->
-      <td class="narrow">
+      <td style="width:30%">
         <fieldset >
           <legend>
             <input type="checkbox" name="searchAll" id="SearchAll" value="SearchAll" onclick="Search.checkAllCheckboxes(this, 'names_types[]')">

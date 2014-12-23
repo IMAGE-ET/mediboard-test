@@ -17,6 +17,13 @@ try{
   $client_index->createClient();
   $infos_index = $client_index->loadCartoInfos();
 
+} catch (Exception $e) {
+  $infos_index = array();
+  CAppUI::displayAjaxMsg("Le serveur de recherche n'est pas connecté", UI_MSG_WARNING);
+
+}
+
+try{
   // récupération des données pour les journaux utilisateur
   $client_log   = new CSearchLog();
   $client_log->createClient();
@@ -24,7 +31,6 @@ try{
 
 } catch (Exception $e) {
   $infos_log = array();
-  $infos_index = array();
   CAppUI::displayAjaxMsg("Le serveur de recherche n'est pas connecté", UI_MSG_WARNING);
 
 }

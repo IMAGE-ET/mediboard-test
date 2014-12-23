@@ -10,7 +10,7 @@
 <table class="main tbl">
   <tr>
   <th class="title" colspan="9">Liste des favoris pour {{$app->_ref_user}}
-      <button type="button" class="favoris rtl" onclick="Thesaurus.addeditThesaurusEntry(null, null, '{{$user->_id}}', null,null, null, function(){})"
+      <button type="button" class="favoris rtl" onclick="Thesaurus.addeditThesaurusEntryManual(null, null, '{{$user->_id}}', null,null, null, function(){})"
     >Nouveau favori</button>
   </th>
   </tr>
@@ -81,7 +81,7 @@
         </div>
       </td>
       <td class="button">
-        <button class="edit notext" onclick="Thesaurus.addeditThesaurusEntry(null, null, null, null, null, '{{$_entry->_id}}')"></button>
+        <button class="edit notext" onclick="Thesaurus.addeditThesaurusEntry(null, '{{$_entry->_id}}', null)"></button>
       </td>
     </tr>
   {{foreachelse}}

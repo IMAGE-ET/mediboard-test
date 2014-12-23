@@ -41,7 +41,7 @@
       </td>
       <td class="button">
         <button class="favoris notext" title="Ajouter aux favoris"
-                onclick="Thesaurus.addeditThesaurusEntry('{{$_result._source.aggregation}}', '{{$_result._source.body}}', '{{$_result._source.user_id}}', '{{$_result._source.types}}', '{{$_result._type}}', null)"></button>
+                onclick="Thesaurus.addeditThesaurusEntryManual('{{$_result._source.aggregation}}', '{{$_result._source.body}}', '{{$_result._source.user_id}}', '{{$_result._source.types}}', '{{$_result._type}}', null)"></button>
       </td>
     </tr>
   {{foreachelse}}

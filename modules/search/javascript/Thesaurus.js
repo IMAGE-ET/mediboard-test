@@ -41,12 +41,44 @@ Thesaurus = window.Thesaurus || {
    * @param {String} thesaurus_entry
    * @param {Function} callback
    */
-  addeditThesaurusEntry: function (search_agregation, search_body, search_user_id, search_types, search_contexte, thesaurus_entry, callback) {
+  addeditThesaurusEntryManual: function (search_agregation, search_body, search_user_id, search_types, search_contexte, thesaurus_entry, callback) {
     callback = callback ||  function () {Thesaurus.updateListThesaurus();};
+    var user_id = (search_user_id) ? search_user_id : User.id;
     var url = new Url('search', 'ajax_addedit_thesaurus_entry');
     url.addParam("search_agregation", search_agregation);
     url.addParam("search_body", search_body);
-    url.addParam("search_user_id", search_user_id);
+    url.addParam("search_user_id", user_id);
+    url.addParam("search_types[]", search_types, true);
+    url.addParam("search_contexte", search_contexte);
+    url.addParam("thesaurus_entry", thesaurus_entry);
+    url.requestModal("65%", "70%", {
+      onClose: callback
+    });
+
+    window.url_addeditThesaurusEntry = url;
+    this.modal = url.modalObject;
+  },
+
+  /**
+   * Method to display the list of the thesaurus
+   * @param {Element} form
+   * @param {String} thesaurus_entry
+   * @param {Function} callback
+   */
+  addeditThesaurusEntry: function (form, thesaurus_entry, callback) {
+    if(form) {
+      var search_agregation = (form.aggregate) ? form.aggregate.value : null;
+      var search_body = (form.words) ? $V(form.words) : "";
+      var search_types = (form.elements['names_types[]']) ? $V(form.elements['names_types[]']) : null;
+      var search_contexte = (form.contexte) ? $V(form.contexte) : "";
+      var start = (form.start) ? form.start : null;
+    }
+    callback = callback ||  function () {Thesaurus.updateListThesaurus(start);};
+
+    var url = new Url('search', 'ajax_addedit_thesaurus_entry');
+    url.addParam("search_agregation", search_agregation);
+    url.addParam("search_body", search_body);
+    url.addParam("search_user_id", User.id);
     url.addParam("search_types[]", search_types, true);
     url.addParam("search_contexte", search_contexte);
     url.addParam("thesaurus_entry", thesaurus_entry);
@@ -160,7 +192,7 @@ Thesaurus = window.Thesaurus || {
    * @param {Element} obj
    */
   addeditThesaurusCallback : function(id, obj) {
-    this.addeditThesaurusEntry(null, null,null,null,null, id);
+    this.addeditThesaurusEntry(null, id);
   },
 
   /**
@@ -199,5 +231,32 @@ Thesaurus = window.Thesaurus || {
   submitThesaurusEntry : function (form, callback) {
     callback = callback ||  function () {Control.Modal.close();};
     return onSubmitFormAjax(form, {onComplete: callback});
+  },
+
+  getAutocompleteFavoris : function (form) {
+    var element_input = form.elements.words;
+    var url = new Url("system", "ajax_seek_autocomplete");
+    url.addParam("object_class", "CSearchThesaurusEntry");
+    url.addParam("input_field", element_input.name);
+    url.addParam("where[user_id]", User.id);
+    url.addParam("where[contextes]", $V(form.elements.contexte));
+    url.autoComplete(element_input, null, {
+      minChars: 2,
+      method: "get",
+      dropdown: true,
+      updateElement: function (selected) {
+        if(selected.down("span", "1").getText() != "") {
+          var _name = selected.down("span", "1").getText();
+          var element_input = form.elements.words;
+          $V(element_input, _name);
+          $V(form.elements.aggregate, selected.down().get("aggregate"));
+          var types = selected.down().get("types");
+          if (types) {
+            types = types.split("|");
+          }
+          $V(form.elements["names_types[]"], types);
+        }
+      }
+    });
   }
 };
