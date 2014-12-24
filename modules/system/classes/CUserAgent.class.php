@@ -166,6 +166,15 @@ class CUserAgent extends CMbObject {
     $dir = __DIR__."/../../../classes/vendor/phpbrowscap/phpbrowscap/";
     include "$dir/Browscap.php";
 
+    // Update cache file (cache.php)
+    /*$detect = new \phpbrowscap\Browscap($dir);
+    $detect->cacheDir = __DIR__."/../../../tmp/";
+    $detect->localFile = $dir."browscap.ini";
+    $detect->updateMethod = "local";
+    $detect->getBrowser($ua_string, true);
+    return;
+    */
+
     $detect = new \phpbrowscap\Browscap("$dir/cache.php");
     $detect->doAutoUpdate = false;
     $detect->iniFilename  = "browscap.ini";
