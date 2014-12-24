@@ -3,484 +3,155 @@
 {{assign var=header_footer_fly value=$conf.dPcompteRendu.CCompteRendu.header_footer_fly}}
 
 {{mb_script module=compteRendu script=thumb}}
-
-<script type="text/javascript">
-window.same_print = {{$conf.dPcompteRendu.CCompteRendu.same_print}};
-window.pdf_thumbnails = {{$pdf_thumbnails|@json}} == 1;
-window.nb_printers = {{$nb_printers|@json}};
-window.modal_mode_play = null;
-window.documentGraphs = {{$templateManager->graphs|@json}};
-window.saving_doc = false;
-document.title = "{{$compte_rendu->_ref_object}} - {{$compte_rendu->nom}}";
-
-function openCorrespondants(compte_rendu_id, object_guid, show_modal, force_refresh) {
-  if (!$('correspondants_area') || force_refresh) {
-    var url = new Url("compteRendu", "ajax_edit_correspondants_courrier");
-    url.addParam("compte_rendu_id", compte_rendu_id);
-    url.addParam("object_guid", object_guid);
-    url.requestUpdate("correspondants_courrier", function() {
-      Control.Modal.position();
-    });
-  }
-  if (show_modal) {
-    Modal.open($("correspondants_courrier"));
-  }
-
-}
-
-function playField(element, class_name, editor_element, name) {
-  var modal = $("play_modal");
-  var field_area = modal.select("td.field_aera")[0];
-  field_area.update();
-  
-  if (class_name == "name") {
-    field_area.insert(new DOM.p({}, name));
-  }
-
-  field_area.insert(element);
-  modal.select(".tick")[0].onclick = function() { replaceField(element, class_name); };
-
-  // Ajout du double clic sur les options
-  if (class_name == "name") {
-    element.ondblclick = function() { replaceField(element, class_name); };
-  }
-  modal.select(".trash")[0].onclick = function() { replaceField(element, class_name, 1); };
-  modal.select(".cancel")[0].onclick = function() {
-    Control.Modal.close();
-    Element.setStyle(editor_element, {backgroundColor: ""});
-  };
-  
-  // Réouverture si la modale est fermée 
-  if (!window.modal_mode_play || !window.modal_mode_play.isOpen) {
-    window.modal_mode_play = Modal.open(modal, {draggable: modal.select(".title")[0], overlayOpacity: 0.3, width: "500", height: "350"});
-
-    var left = document.viewport.getDimensions().width - window.modal_mode_play.container.getDimensions().width;
-    modal_mode_play.container.setStyle({top: 0, left: left+"px"});
-  }
-}
-
-function submitCompteRendu(callback){
-  var editor = CKEDITOR.instances.htmlarea;
-
-  if (!editor.document || window.saving_doc) {
-    return;
-  }
-
-  window.saving_doc = true;
-
-  editor.document.getBody().setStyle("background", "#ddd");
-
-  var mess = null;
-  if (mess=$('mess')) {
-    mess.stopObserving("click");
-  }
-  (function(){
-    if (window.pdf_thumbnails && Prototype.Browser.IE) {
-      restoreStyle();
-    }
-    var html = editor.getData();
-    if (window.pdf_thumbnails && Prototype.Browser.IE) {
-      window.save_style = deleteStyle();
-    }
-    $V($("htmlarea"), html, false);
-    
-    var form = getForm("editFrm");
-    
-    if (checkForm(form) && User.id) {
-        if (editor.getCommand('save')) {
-          editor.getCommand('save').setState(CKEDITOR.TRISTATE_DISABLED);
-        }
-        if (editor.getCommand('mbprint')) {
-          editor.getCommand('mbprint').setState(CKEDITOR.TRISTATE_DISABLED);
-        }
-        if (editor.getCommand('mbprintPDF')) {
-          editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_DISABLED);
-        }
-        editor.on("key", loadOld);
-
-      form.onsubmit=function(){ return true; };
-      if (Thumb.modele_id && Thumb.contentChanged) {
-        emptyPDF();
-      }
-      clearTimeout(window.thumbs_timeout);
-      
-      var dests = $("destinataires");
-      
-      if (dests && dests.select("input:checked").length) {
-        $V(form.do_merge, 1);
-      }
-      
-      onSubmitFormAjax(form,{ useDollarV: true, onComplete: function() {
-        Thumb.contentChanged = false;
-        if ((!window.pdf_thumbnails || window.Preferences.pdf_and_thumbs == 0) && window.opener) {
-          if (window.opener.Document && window.opener.Document.refreshList) {
-            window.opener.Document.refreshList($V(form.file_category_id), $V(form.object_class), $V(form.object_id));
-          }
-          if (window.opener.reloadListFileEditPatient) {
-            window.opener.reloadListFileEditPatient("load");
-          }
-        }
-        window.callback = callback ? callback : null;
-      }},  $("systemMsg"));
-    }
-  }).defer();
-  
-}
-
-function refreshZones(id, obj) {
-  var editor = CKEDITOR.instances.htmlarea;
-  var form = getForm("editFrm");
-  $V(form.date_print, obj.date_print);
-  
-  if (Preferences.multiple_docs == "1" && id) {
-    window.name = "cr_"+id;
-  }
-  
-  var afterSetData = function() {
-    // Dans le cas de la génération d'un document par correspondant,
-    // mise à jour du nom du document dans la popup
-    $V(getForm("editFrm").nom, obj.nom);
-    $V(getForm("download-pdf-form")._ids_corres, obj._ids_corres);
-    $V(getForm("download-pdf-form").compte_rendu_id, id);
-    
-    var refresh = function(){};
-    if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
-      Thumb.compte_rendu_id = id;
-      Thumb.modele_id = 0;
-      refresh = function() { window.thumbs_timeout = setTimeout(function() {
-        Thumb.refreshThumbs(0, Thumb.print);
-      }, 0)};
-    }
-    
-    var url = new Url("compteRendu", "edit_compte_rendu");
-    url.addParam("compte_rendu_id", id);
-    url.addParam("reloadzones", 1);
-    url.requestUpdate("reloadzones", { onComplete:
-      function() {
-        refresh();
-        window.resizeEditor();
-        var form = getForm("editFrm");
-        $V(form.compte_rendu_id, id);
-        if (Thumb.print) {
-          pdfAndPrintServer(id);
-        }
-        else if (window.callback){
-          window.callback();
-        }
-        form.onsubmit = function() { Url.ping({onComplete: submitCompteRendu}); return false;};
-        if (editor.getCommand('save')) {
-          editor.getCommand('save').setState(CKEDITOR.TRISTATE_OFF);
-        }
-        if (editor.getCommand('mbprintPDF')) {
-          editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_OFF);
-        }
-        if (editor.getCommand('mbprint')) {
-          editor.getCommand('mbprint').setState(CKEDITOR.TRISTATE_OFF);
-        }
-      }
-    });
-  };
-
-  // Remise du content sauvegardé, avec le refresh des vignettes si dispo, et/ou l'impression en callback
-  editor.setData(obj._source, afterSetData);
-  window.saving_doc = false;
-}
-
-function openWindowMail() {
-  {{if $exchange_source->_id}}
-    var form = getForm("editFrm");
-    var url = new Url("compteRendu", "ajax_view_mail");
-    url.addParam("object_guid", "CCompteRendu-"+$V(form.compte_rendu_id));
-    url.requestModal(700, 320);
-  {{else}}
-    alert("Veuillez paramétrer votre compte mail (source smtp dans les préférences utilisateur).");
-  {{/if}}
-}
-
-function openWindowApicrypt() {
-  {{assign var=user value='CMediusers::get'|static_call:null}}
-  {{if ($user->isPraticien() && $exchange_source->_id) || !$user->isPraticien()}}
-    var form = getForm("editFrm");
-    var url = new Url("apicrypt", "ajax_view_apicrypt_mail");
-    url.addParam("object_id", '{{$compte_rendu->object_id}}');
-    url.addParam("object_class", '{{$compte_rendu->object_class}}');
-    url.addParam("doc_id", $V(form.compte_rendu_id));
-    url.requestModal(700, 320);
-  {{else}}
-    alert("Veuillez paramétrer votre compte mail (source smtp dans les préférences utilisateur).");
-  {{/if}}
-}
-
-function openModalPrinters() {
-  // Mise à jour de la date d'impression
-  $V(getForm("editFrm").date_print, "now");
-  window.modalPrinters = new Url("compteRendu", "ajax_choose_printer");
-  modalPrinters.requestModal(700, 400, {showReload: false});
-}
-
+{{mb_script module=compteRendu script=compte_rendu}}
 {{if $pdf_thumbnails && $pdf_and_thumbs}}
-
-  togglePageLayout = function() {
-    $("page_layout").toggle();
-  };
-  
-  completeLayout = function() {
-    var tab_margin = ["top", "right", "bottom", "left"];
-    var form = getForm("editFrm");
-    var dform = getForm('download-pdf-form');
-    for(var i=0; i < 4; i++) {
-      if ($("input_margin_"+tab_margin[i])) {
-        $("input_margin_"+tab_margin[i]).remove();
-      }
-      dform.insert({bottom: new Element("input",{id: "input_margin_"+tab_margin[i],type: 'hidden', name: 'margins[]', value: $("editFrm_margin_"+tab_margin[i]).value})});
-    }
-    $V(dform.orientation, $V(form._orientation));
-    $V(dform.page_format, form._page_format.value);
-  };
-  
-  save_page_layout = function() {
-    page_layout_save = { 
-      margin_top:    PageFormat.form.margin_top.value,
-      margin_left:   PageFormat.form.margin_left.value,
-      margin_right:  PageFormat.form.margin_right.value,
-      margin_bottom: PageFormat.form.margin_bottom.value,
-      page_format:   PageFormat.form._page_format.value,
-      page_width:    PageFormat.form.page_width.value,
-      page_height:   PageFormat.form.page_height.value,
-      orientation:   $V(PageFormat.form._orientation)
-    };
-  };
-  
-  cancel_page_layout = function() {
-    $V(PageFormat.form.margin_top,    page_layout_save.margin_top);
-    $V(PageFormat.form.margin_left,   page_layout_save.margin_left);
-    $V(PageFormat.form.margin_right,  page_layout_save.margin_right);
-    $V(PageFormat.form.margin_bottom, page_layout_save.margin_bottom);
-    $V(PageFormat.form._page_format,  page_layout_save.page_format);
-    $V(PageFormat.form.page_height,   page_layout_save.page_height);
-    $V(PageFormat.form.page_width,    page_layout_save.page_width);
-    $V(PageFormat.form._orientation,  page_layout_save.orientation);
-
-    if(Thumb.thumb_up2date && !Thumb.changed) {
-      Thumb.thumb_up2date = true;
-      $('mess').hide();
-      $('thumbs').setOpacity(1);
-    }
-    Control.Modal.close();
-  };
-
-  emptyPDF = function() {
-    Thumb.old();
-    
-    // La requête de vidage de pdf doit être faite dans le scope
-    // de la fenêtre principale, car on est en train de fermer la popup
-    var f = getForm("download-pdf-form");
-
-    if (Prototype.Browser.IE) {
-      var url = new Url();
-    }
-    else {
-      var url = new window.opener.Url();
-    }
-    url.addParam("m", "compteRendu");
-    url.addParam("dosql", "do_modele_aed");
-    url.addParam("_do_empty_pdf", 1);
-    url.addParam("compte_rendu_id", $V(f.compte_rendu_id));
-    
-    url.requestJSON(function(){}, {method: "post"});
-  };
+  {{mb_script module=compteRendu script=layout}}
 {{/if}}
 
-function saveAndMerge() {
-  Control.Modal.close();
-  var form = getForm('editFrm');
-  $V(form.do_merge, 1);
-  form.onsubmit();
-}
+<script>
+  window.same_print = {{$conf.dPcompteRendu.CCompteRendu.same_print}};
+  window.pdf_thumbnails = {{$pdf_thumbnails|@json}} == 1;
+  window.nb_printers = {{$nb_printers|@json}};
+  window.modal_mode_play = null;
+  window.documentGraphs = {{$templateManager->graphs|@json}};
+  window.saving_doc = false;
+  document.title = "{{$compte_rendu->_ref_object}} - {{$compte_rendu->nom}}";
 
-function checkLock(oCheckbox) {
-  if($V(oCheckbox) == 1) {
-    Modal.open('lock_area', {width: '400px', height: '330px'});
-    getForm('LockDocOther').user_password.focus()
-  }
-  else {
-    var form = oCheckbox.form;
-    $V(form.valide, 0);
-    $V(form.locker_id, "");
-    $V(form.callback, "afterLock");
-    form.onsubmit();
-  }
-}
-
-function toggleLock(user_id) {
-  var form = getForm('editFrm');
-  {{if $conf.dPcompteRendu.CCompteRendu.pass_lock}}
-  var formLock = getForm("LockDocOther");
-  {{else}}
-  var formLock = getForm("LockDocOwner");
-  {{/if}}
-  $V(form.valide, $V(form.valide) == '1' ? 0 : 1);
-  $V(form.locker_id, user_id);
-  $V(form.callback, "afterLock");
-
-  if ($V(form.valide) == '1' && formLock.change_owner.checked) {
-    $V(form.author_id, '{{$app->user_id}}');
+  function openWindowMail() {
+    {{if $exchange_source->_id}}
+      var form = getForm("editFrm");
+      var url = new Url("compteRendu", "ajax_view_mail");
+      url.addParam("object_guid", "CCompteRendu-"+$V(form.compte_rendu_id));
+      url.requestModal(700, 320);
+    {{else}}
+      alert("Veuillez paramétrer votre compte mail (source smtp dans les préférences utilisateur).");
+    {{/if}}
   }
 
-  form.onsubmit();
-  Control.Modal.close();
-}
-
-function afterLock() {
-  location.reload();
-}
-
-function modalHeaderFooter(state) {
-  var form = getForm("editFrm");
-  if (state) {
-    window.save_header_id = $V(form.header_id);
-    window.save_footer_id = $V(form.footer_id);
-    Modal.open("header_footer_fly");
-  }
-  else {
-    Control.Modal.close();
-    $V(form.header_id, window.save_header_id);
-    $V(form.footer_id, window.save_footer_id);
-  }
-}
-
-function duplicateDoc(form) {
-  var element = CKEDITOR.instances.htmlarea.element;
-  $V(form.modele_id, $V(form.compte_rendu_id));
-  $V(form.compte_rendu_id, '');
-  $V(form.private, 0);
-  $V(form.valide, 0);
-  $V(form.locker_id, "");
-  element.$.disabled=false;
-  element.$.contentEditable=true;
-  element.$.designMode="On";
-  $V(form.callback, "afterDuplicate");
-  form.onsubmit();
-}
-
-function afterDuplicate(cr_id) {
-  window.opener.Document.edit(cr_id);
-  if (Preferences.multiple_docs == "1") {
-    window.close();
-  }
-}
-
-Main.add(function() {
-  Thumb.instance = CKEDITOR.instances.htmlarea;
-
-  {{if $compte_rendu->valide}}
-    Thumb.doc_lock = true;
-  {{/if}}
-
-  if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
-    PageFormat.init(getForm("editFrm"));
-    Thumb.compte_rendu_id = '{{$compte_rendu->_id}}';
-    Thumb.modele_id = '{{$modele_id}}';
-    Thumb.user_id = '{{$user_id}}';
-    Thumb.mode = "doc";
-    Thumb.object_class = '{{$compte_rendu->object_class}}';
-    Thumb.object_id = '{{$compte_rendu->object_id}}';
+  function openWindowApicrypt() {
+    {{assign var=user value='CMediusers::get'|static_call:null}}
+    {{if ($user->isPraticien() && $exchange_source->_id) || !$user->isPraticien()}}
+      var form = getForm("editFrm");
+      var url = new Url("apicrypt", "ajax_view_apicrypt_mail");
+      url.addParam("object_id", '{{$compte_rendu->object_id}}');
+      url.addParam("object_class", '{{$compte_rendu->object_class}}');
+      url.addParam("doc_id", $V(form.compte_rendu_id));
+      url.requestModal(700, 320);
+    {{else}}
+      alert("Veuillez paramétrer votre compte mail (source smtp dans les préférences utilisateur).");
+    {{/if}}
   }
 
-  // Les correspondants doivent être présent pour le store du compte-rendu
-  // Chargement en arrière-plan de la modale
-  {{if $isCourrier && !$compte_rendu->valide}}
-    openCorrespondants('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}', 0);
-  {{/if}}
+  Main.add(function() {
+    Thumb.instance = CKEDITOR.instances.htmlarea;
 
-  {{if $compte_rendu->_id}}
-    window.onbeforeunload = function(e) {
-      e = e || window.event;
+    {{if $compte_rendu->valide}}
+      Thumb.doc_lock = true;
+    {{/if}}
 
-      if (Thumb.contentChanged == false) return;
+    if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
+      PageFormat.init(getForm("editFrm"));
+      Thumb.compte_rendu_id = '{{$compte_rendu->_id}}';
+      Thumb.modele_id = '{{$modele_id}}';
+      Thumb.user_id = '{{$user_id}}';
+      Thumb.mode = "doc";
+      Thumb.object_class = '{{$compte_rendu->object_class}}';
+      Thumb.object_id = '{{$compte_rendu->object_id}}';
+    }
 
-      if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1 && Thumb.contentChanged == true) {
-        emptyPDF();
-      }
+    // Les correspondants doivent être présent pour le store du compte-rendu
+    // Chargement en arrière-plan de la modale
+    {{if $isCourrier && !$compte_rendu->valide}}
+      openCorrespondants('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}', 0);
+    {{/if}}
 
-      if (e) {
-        e.returnValue = ' ';
-      }
+    {{if $compte_rendu->_id}}
+      window.onbeforeunload = function(e) {
+        e = e || window.event;
 
-      return ' ';
-    };
-  {{/if}}
+        if (Thumb.contentChanged == false) return;
 
-  var htmlarea = $('htmlarea');
-  
-  // documentGraphs est un tableau si vide ($H donnera les mauvaises clés), un objet sinon
-  if (documentGraphs.length !== 0) {
-    $H(documentGraphs).each(function(pair){
-      var g = pair.value;
-      $('graph-container').update();
-      g.options.fontSize = 14;
-      g.options.resolution = 2;
-      g.options.legend = {
-        labelBoxWidth: 28,
-        labelBoxHeight: 20
+        if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1 && Thumb.contentChanged == true) {
+          emptyPDF();
+        }
+
+        if (e) {
+          e.returnValue = ' ';
+        }
+
+        return ' ';
       };
-      g.options.pie.explode = 0;
-      var f = new Flotr.Graph($('graph-container'), g.data, g.options);
-      g.dataURL = f.canvas.toDataURL();
-      oFCKeditor.value = htmlarea.value = htmlarea.value.replace('<'+'span class="field">'+g.name+'</'+'span>', '<'+'img src="'+g.dataURL+'" width="450" height="300" /'+'>');
-    });
-  }
-  
-  {{if !$compte_rendu->_id && $switch_mode == 1}}
-    if (window.opener.saveFields) {
-      from = window.opener.saveFields;
-      var to = getForm("editFrm");
-      if (from[0].any(function(elt){ return elt.size > 1; })) {
-        toggleOptions();
-      }
-      from.each(function(elt) {
-        elt.each(function(select) {
-          if (select) {
-            $V(to[select.name], $V(select));
-          }
-        })
+    {{/if}}
+
+    var htmlarea = $('htmlarea');
+
+    // documentGraphs est un tableau si vide ($H donnera les mauvaises clés), un objet sinon
+    if (documentGraphs.length !== 0) {
+      $H(documentGraphs).each(function(pair){
+        var g = pair.value;
+        $('graph-container').update();
+        g.options.fontSize = 14;
+        g.options.resolution = 2;
+        g.options.legend = {
+          labelBoxWidth: 28,
+          labelBoxHeight: 20
+        };
+        g.options.pie.explode = 0;
+        var f = new Flotr.Graph($('graph-container'), g.data, g.options);
+        g.dataURL = f.canvas.toDataURL();
+        oFCKeditor.value = htmlarea.value = htmlarea.value.replace('<'+'span class="field">'+g.name+'</'+'span>', '<'+'img src="'+g.dataURL+'" width="450" height="300" /'+'>');
       });
     }
-  {{/if}}
 
-  {{if $compte_rendu->_id && $compte_rendu->valide}}
-    var form = getForm("editFrm");
-    if (window.opener.Document && window.opener.Document.refreshList) {
-      window.opener.Document.refreshList($V(form.file_category_id), $V(form.object_class), $V(form.object_id));
-    }
-    if (window.opener.reloadListFileEditPatient) {
-      window.opener.reloadListFileEditPatient("load");
-    }
-  {{/if}}
+    {{if !$compte_rendu->_id && $switch_mode == 1}}
+      if (window.opener.saveFields) {
+        from = window.opener.saveFields;
+        var to = getForm("editFrm");
+        if (from[0].any(function(elt){ return elt.size > 1; })) {
+          toggleOptions();
+        }
+        from.each(function(elt) {
+          elt.each(function(select) {
+            if (select) {
+              $V(to[select.name], $V(select));
+            }
+          })
+        });
+      }
+    {{/if}}
 
-  ObjectTooltip.modes.locker = {
-    module: "compteRendu",
-    action: "ajax_show_locker",
-    sClass: "tooltip"
-  };
+    {{if $compte_rendu->_id && $compte_rendu->valide}}
+      var form = getForm("editFrm");
+      if (window.opener.Document && window.opener.Document.refreshList) {
+        window.opener.Document.refreshList($V(form.file_category_id), $V(form.object_class), $V(form.object_id));
+      }
+      if (window.opener.reloadListFileEditPatient) {
+        window.opener.reloadListFileEditPatient("load");
+      }
+    {{/if}}
 
-  var form = getForm("LockDocOther");
-  var url = new Url("mediusers", "ajax_users_autocomplete");
-  url.addParam("input_field", form._user_view.name);
-  url.autoComplete(form._user_view, null, {
-    minChars: 0,
-    method: "get",
-    select: "view",
-    dropdown: true,
-    width: '200px',
-    afterUpdateElement: function(field, selected) {
-      $V(form._user_view, selected.down('.view').innerHTML);
-      var id = selected.getAttribute("id").split("-")[2];
-      $V(form.user_id, id);
-    }
+    ObjectTooltip.modes.locker = {
+      module: "compteRendu",
+      action: "ajax_show_locker",
+      sClass: "tooltip"
+    };
+
+    var form = getForm("LockDocOther");
+    var url = new Url("mediusers", "ajax_users_autocomplete");
+    url.addParam("input_field", form._user_view.name);
+    url.autoComplete(form._user_view, null, {
+      minChars: 0,
+      method: "get",
+      select: "view",
+      dropdown: true,
+      width: '200px',
+      afterUpdateElement: function(field, selected) {
+        $V(form._user_view, selected.down('.view').innerHTML);
+        var id = selected.getAttribute("id").split("-")[2];
+        $V(form.user_id, id);
+      }
+    });
   });
-});
-
 </script>
 
 <div style="position: absolute; top: -1500px;">
@@ -509,154 +180,13 @@ Main.add(function() {
   </table>
 </div>
 
-<!-- Formulaire d'ajout de correspondant courrier par autocomplete -->
-<form name="addCorrespondant" method="post">
-  {{mb_class class="CCorrespondantCourrier"}}
-  <input type="hidden" name="correspondant_courrier_id" />
-  <input type="hidden" name="compte_rendu_id" value="" />
-  <input type="hidden" name="object_class" value="CMedecin" />
-  <input type="hidden" name="tag" value="correspondant" />
-  <input type="hidden" name="object_id" />
-</form>
-
-
-<form name="addCorrespondantToDossier" method="post">
-  <input type="hidden" name="m" value="patients"/>
-  <input type="hidden" name="dosql" value="do_correspondant_aed" />
-  <input type="hidden" name="patient_id" value="" />
-  <input type="hidden" name="medecin_id" value="" />
-</form>
-
-
-<!-- Formulaire pour l'impression server side -->
-<form name="print-server" method="post" action="?m=compteRendu&ajax_print_server">
-  <input type="hidden" name="content" value=""/>
-  <input type="hidden" name=""/>
-</form>
+{{mb_include module=compteRendu template=inc_form_utils}}
 
 <!-- Zone cachée pour la génération PDF et l'impression server side -->
 <div id="pdf_area" style="display: none;"></div>
 
 <!-- Zone de confirmation de verrouillage du document -->
-<div id="lock_area" style="display: none;">
-  {{if !$conf.dPcompteRendu.CCompteRendu.pass_lock}}
-    <fieldset>
-      <form name="LockDocOwner" method="post" action="?m=system&a=ajax_password_action"
-            onsubmit="return onSubmitFormAjax(this, {useFormAction: true})">
-        <input type="hidden" name="user_id" class="notNull" value="{{$app->user_id}}" />
-        <input type="hidden" name="callback" value="toggleLock" />
-        <table class="form">
-          <tr>
-            <th class="title" colspan="2">
-              <button type="button" class="cancel notext" style="float: right;"
-                      onclick="$V(getForm('editFrm')._is_locked, 0, false);
-                        $V(getForm('editFrm').___is_locked, 0, false);
-                        Control.Modal.close();">
-                {{tr}}Cancel{{/tr}}
-              </button>
-              Verrouillage du document
-            </th>
-          </tr>
-          <tr>
-            <td colspan="2" class="button" {{if $app->_ref_user->_id == $compte_rendu->author_id}}style="display: none;"{{/if}}>
-              <label>
-                <input type="checkbox" name="change_owner" {{if $app->_ref_user->isPraticien()}}checked{{/if}}/>
-                <strong>Devenir propriétaire du document</strong>
-              </label>
-            </td>
-          </tr>
-          <tr>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="text button" colspan="2">
-              <strong>Souhaitez-vous réellement verrouiller ce document sous votre nom ?</strong>
-            </td>
-          </tr>
-          <tr>
-            <td class="button" colspan="2">
-              <button type="button" class="tick" onclick="this.form.onsubmit();">Ok</button>
-            </td>
-          </tr>
-        </table>
-      </form>
-    </fieldset>
-  {{/if}}
-  <fieldset>
-    <form name="LockDocOther" method="post" action="?m=system&a=ajax_password_action"
-          onsubmit="return onSubmitFormAjax(this, {useFormAction: true})">
-      <input type="hidden" name="user_id" class="notNull"
-             {{if $conf.dPcompteRendu.CCompteRendu.pass_lock}}value="{{$curr_user->_id}}"{{/if}} />
-      <input type="hidden" name="callback" value="toggleLock" />
-      <table class="form">
-        {{if $conf.dPcompteRendu.CCompteRendu.pass_lock}}
-          <tr>
-            <th class="title" colspan="2">
-              <button type="button" class="cancel notext" style="float: right;"
-                      onclick="$V(getForm('editFrm')._is_locked, 0, false);
-                        $V(getForm('editFrm').___is_locked, 0, false);
-                        Control.Modal.close();">
-                {{tr}}Cancel{{/tr}}
-              </button>
-              Verrouillage du document
-            </th>
-          </tr>
-          <tr>
-            <td colspan="2" class="button" {{if $app->_ref_user->_id == $compte_rendu->author_id}}style="display: none;"{{/if}}>
-              <label>
-                <input type="checkbox" name="change_owner" {{if $app->_ref_user->isPraticien()}}checked{{/if}}/>
-                <strong>Devenir propriétaire du document</strong>
-              </label>
-            </td>
-          </tr>
-        {{/if}}
-        <tr>
-          <td class="text button" colspan="2">
-            <strong>
-              {{if $conf.dPcompteRendu.CCompteRendu.pass_lock}}
-                Pour verrouiller ce document sous votre nom, saisissez votre mot de passe ou choisissez un autre nom dans la liste.
-              {{else}}
-                Souhaitez-vous verrouiller ce document pour un autre utilisateur ?
-              {{/if}}
-            </strong>
-          </td>
-        </tr>
-        <tr>
-          <th>Utilisateur</th>
-          <td>
-            <input type="text" name="_user_view" class="autocomplete"
-                   {{if $conf.dPcompteRendu.CCompteRendu.pass_lock}}value="{{$curr_user}}"{{/if}} />
-          </td>
-        </tr>
-        <tr>
-          <th>
-            <label for="user_password">Mot de passe</label>
-          </th>
-          <td>
-            <input type="password" name="user_password" class="notNull password str" />
-          </td>
-        </tr>
-        <tr>
-          <td class="button" colspan="2">
-            <button class="tick singleclick" onclick="return this.form.onsubmit();">Ok</button>
-          </td>
-        </tr>
-      </table>
-    </form>
-  </fieldset>
-</div>
-<!-- Formulaire pour streamer le pdf -->
-<form style="display: none;" name="download-pdf-form" target="{{if $compte_rendu->factory == "CDomPDFConverter"}}download_pdf{{else}}_blank{{/if}}" method="post"
-      action="?m=compteRendu&a=ajax_pdf" onsubmit="{{if $pdf_thumbnails && $pdf_and_thumbs}}completeLayout();{{/if}} this.submit();">
-  <input type="hidden" name="content" value=""/>
-  <input type="hidden" name="compte_rendu_id" value='{{if $compte_rendu->_id != ''}}{{$compte_rendu->_id}}{{else}}{{$modele_id}}{{/if}}' />
-  <input type="hidden" name="object_id" value="{{$compte_rendu->object_id}}"/>
-  <input type="hidden" name="suppressHeaders" value="1"/>
-  <input type="hidden" name="stream" value="1"/>
-  <input type="hidden" name="page_format" value=""/>
-  <input type="hidden" name="orientation" value=""/>
-  <input type="hidden" name="_ids_corres" value="" />
-</form>
+{{mb_include module=compteRendu template=inc_area_lock}}
 
 {{if $smarty.session.browser.name == "msie"}}
   <iframe name="download_pdf" style="width: 0; height: 0; position: absolute; top: -1000px;"></iframe>
@@ -702,6 +232,7 @@ Main.add(function() {
   {{mb_field object=$compte_rendu field="locker_id" hidden=1}}
   {{mb_field object=$compte_rendu field="factory" hidden=1}}
   {{mb_field object=$compte_rendu field="author_id" hidden=1}}
+
   {{if $header_footer_fly}}
     <div id="header_footer_fly" style="display: none">
       <table class="tbl">
@@ -813,13 +344,13 @@ Main.add(function() {
       {{else}}
         {{mb_field object=$compte_rendu field=nom}}
       {{/if}}
-      
+
       &mdash;
       {{mb_label object=$compte_rendu field=file_category_id}}
-      <select name="file_category_id" style="width: 8em;" {{if $read_only}}disabled="disabled"{{/if}}>
-        <option value=""{{if !$compte_rendu->file_category_id}} selected="selected"{{/if}}>&mdash; Aucune</option>
+      <select name="file_category_id" style="width: 8em;" {{if $read_only}}disabled{{/if}}>
+        <option value=""{{if !$compte_rendu->file_category_id}}selected{{/if}}>&mdash; Aucune</option>
         {{foreach from=$listCategory item=currCat}}
-          <option value="{{$currCat->file_category_id}}"{{if $currCat->file_category_id==$compte_rendu->file_category_id}} selected="selected"{{/if}}>{{$currCat->nom}}</option>
+          <option value="{{$currCat->file_category_id}}"{{if $currCat->file_category_id==$compte_rendu->file_category_id}}selected{{/if}}>{{$currCat->nom}}</option>
         {{/foreach}}
       </select>
 
