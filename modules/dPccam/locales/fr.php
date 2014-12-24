@@ -275,6 +275,7 @@ $locales['mod-dPccam-tab-ajax_do_add_ccam_ICR'] = 'Importer la base ccam_ICR';
 $locales['mod-dPccam-tab-ajax_do_add_ccam_convergence'] = 'Importer la base ccam_convergence';
 $locales['mod-dPccam-tab-ajax_do_add_ccam_ngap'] = 'Importer la base ccam_ngap';
 $locales['mod-dPccam-tab-ajax_do_add_ccam_radio'] = 'Importer la base ccam_radio';
+$locales['mod-ccam-tab-ajax_duplicate_codage'] = 'Duplication d\'un codage CCAM';
 $locales['mod-dPccam-tab-ajax_import_favoris'] = 'Import CSV de favoris CCAM';
 $locales['mod-dPccam-tab-ajax_refresh_add_frais_divers'] = 'Rafraîchissement des frais divers';
 $locales['mod-dPccam-tab-ajax_vw_detail_cccam'] = 'Détail du code';

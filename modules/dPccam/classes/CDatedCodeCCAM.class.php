@@ -396,26 +396,29 @@ class CDatedCodeCCAM {
         $_phase->_modificateurs = $activite->modificateurs;
         $convergence = $this->getConvergenceFromActivitePhase($activite, $_phase);
 
-        $mod_convergence_text = '';
-        foreach ($modifsConvergence as $_modif_convergence) {
-          $mod_simple = 'mod' . $_modif_convergence->modificateur;
-          $mod_double = 'mod' . $_modif_convergence->modificateur . $_modif_convergence->modificateur;
-          if ($convergence->$mod_simple) {
-            $mod_convergence_text .= $_modif_convergence->modificateur;
-          }
-          elseif ($convergence->$mod_double) {
-            $mod_convergence_text .= $_modif_convergence->modificateur . $_modif_convergence->modificateur;
-          }
-        }
+        if ($convergence) {
+          $mod_convergence_text = '';
+          foreach ($modifsConvergence as $_modif_convergence) {
+            $mod_simple = 'mod' . $_modif_convergence->modificateur;
+            $mod_double = 'mod' . $_modif_convergence->modificateur . $_modif_convergence->modificateur;
 
-        if ($mod_convergence_text != '') {
-          $_modif = new CObject();
-          $_modif->code = $mod_convergence_text;
-          $_modif->libelle = 'Modificateur transitoire de convergence vers la cible';
-          $_modif->_checked = null;
-          $_modif->_state = null;
-          $_modif->_double = strlen($_modif->code);
-          $_phase->_modificateurs[] = $_modif;
+            if ($convergence->$mod_simple) {
+              $mod_convergence_text .= $_modif_convergence->modificateur;
+            }
+            elseif ($convergence->$mod_double) {
+              $mod_convergence_text .= $_modif_convergence->modificateur . $_modif_convergence->modificateur;
+            }
+          }
+
+          if ($mod_convergence_text != '') {
+            $_modif = new CObject();
+            $_modif->code = $mod_convergence_text;
+            $_modif->libelle = 'Modificateur transitoire de convergence vers la cible';
+            $_modif->_checked = null;
+            $_modif->_state = null;
+            $_modif->_double = strlen($_modif->code);
+            $_phase->_modificateurs[] = $_modif;
+          }
         }
       }
     }
