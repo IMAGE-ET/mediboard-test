@@ -1543,7 +1543,7 @@ div.bullet.error {
   height: 100%;
 }
 
-.timeline {
+table.timeline {
   position: absolute !important;
   left: 0 !important;
   right: 0 !important;

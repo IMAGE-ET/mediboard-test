@@ -1,11 +1,11 @@
 <?php
 /**
  * Main URL dispatcher in non mobile case
- * 
+ *
  * @package    Mediboard
  * @subpackage includes
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Id$
  */
 
@@ -23,7 +23,7 @@ if (CAppUI::conf("http_redirections")) {
         $passThrough = $_redirect->applyRedirection();
       }
     }
-  }  
+  }
 }
 
 // Get the user's style
@@ -42,10 +42,10 @@ CJSLoader::$files = array(
   "includes/javascript/printf.js",
   "includes/javascript/stacktrace.js",
   //"lib/dshistory/dshistory.js",
-  
+
   "lib/scriptaculous/lib/prototype.js",
   "lib/scriptaculous/src/scriptaculous.js",
- 
+
   "includes/javascript/console.js",
 
   // We force the download of the dependencies 
@@ -67,17 +67,17 @@ CJSLoader::$files = array(
   "lib/livepipe/livepipe.js",
   "lib/livepipe/tabs.js",
   "lib/livepipe/window.js",
-  
+
   // Growler
   //"lib/growler/build/Growler-compressed.js",
-  
+
   // TreeView
   "includes/javascript/treeview.js",
 
   // Flotr
   "lib/flotr/flotr.js",
   "lib/flotr/lib/canvastext.js",
-  
+
   // JS Expression eval
   "lib/jsExpressionEval/parser.js",
 
@@ -118,7 +118,10 @@ CJSLoader::$files = array(
   "lib/flot/jquery.flot.bandwidth.js",
   "lib/flot/jquery.flot.gantt.js",
   "lib/flot/jquery.flot.time.min.js",
-  "lib/flot/jquery.flot.pie.min.js"
+  "lib/flot/jquery.flot.pie.min.js",
+
+  // Vis
+  "includes/javascript/vis.min.js"
 );
 
 $support = "modules/support/javascript/support.js";
@@ -130,15 +133,15 @@ $applicationVersion = CApp::getReleaseInfo();
 
 // Check if we are logged in
 if (!CAppUI::$instance->user_id) {
-  $redirect = CValue::get("logout") ?  "" : CValue::read($_SERVER, "QUERY_STRING"); 
+  $redirect = CValue::get("logout") ?  "" : CValue::read($_SERVER, "QUERY_STRING");
   $_SESSION["locked"] = null;
-  
+
   // HTTP 403 Forbidden header when RAW response expected
   if ($suppressHeaders && !$ajax) {
     header("HTTP/1.0 403 Forbidden");
     CApp::rip();
   }
-  
+
   // Ajax login alert
   if ($ajax) {
     $tplAjax = new CSmartyDP("modules/system");
@@ -148,10 +151,10 @@ if (!CAppUI::$instance->user_id) {
   else {
     $tplLogin = new CSmartyDP("style/$uistyle");
     $tplLogin->assign("localeInfo"           , $locale_info);
-    
+
     // Favicon
     $tplLogin->assign("mediboardShortIcon"   , CFaviconLoader::loadFile("style/$uistyle/images/icons/favicon.ico"));
-    
+
     // CSS
     $mediboardStyle = CCSSLoader::loadFiles();
     if ($uistyle != "mediboard") {
@@ -159,10 +162,10 @@ if (!CAppUI::$instance->user_id) {
     }
     $mediboardStyle .= CCSSLoader::loadFiles("modules");
     $tplLogin->assign("mediboardStyle"       , $mediboardStyle);
-    
+
     // JS
     $tplLogin->assign("mediboardScript"      , CJSLoader::loadFiles());
-    
+
     $tplLogin->assign("errorMessage"         , CAppUI::getMsg());
     $tplLogin->assign("time"                 , time());
     $tplLogin->assign("redirect"             , $redirect);
@@ -174,7 +177,7 @@ if (!CAppUI::$instance->user_id) {
     $tplLogin->assign("applicationVersion"   , $applicationVersion);
     $tplLogin->display("login.tpl");
   }
-  
+
   // Destroy the current session and output login page
   CSessionHandler::end(true);
   CApp::rip();
@@ -193,12 +196,12 @@ $m = CAppUI::checkFileName($m);
 if (null == $m) {
   $m = CPermModule::getFirstVisibleModule();
   $parts = explode("-", CAppUI::pref("DEFMODULE"), 2);
-  
+
   $pref_module = $parts[0];
   if ($pref_module && CPermModule::getViewModule(CModule::getInstalled($pref_module)->mod_id, PERM_READ)) {
     $m = $pref_module;
   }
-  
+
   if (count($parts) == 2) {
     $tab = $parts[1];
     CValue::setSession("tab", $tab);
@@ -227,7 +230,7 @@ $u      = CAppUI::checkFileName(CValue::get("u"      , ""));
 $dosql  = CAppUI::checkFileName(CValue::post("dosql" , ""));
 $class  = CAppUI::checkFileName(CValue::post("@class", ""));
 
-$tab = $a == "index" ? 
+$tab = $a == "index" ?
   CValue::getOrSession("tab", $tab) :
   CValue::get("tab");
 
@@ -273,8 +276,8 @@ if ($dosql) {
       CAppUI::redirect("m=system&a=module_missing&mod=$m");
     }
     $m = "dP$m";
-  }  
-  
+  }
+
   // controller in controllers/ directory
   if (is_file("./modules/$m/controllers/$dosql.php")) {
     include "./modules/$m/controllers/$dosql.php";
@@ -308,7 +311,7 @@ require "./modules/{$module->mod_name}/index.php";
 if ($tab !== null) {
   $module->addConfigureTab();
 }
-  
+
 if (!$a || $a === "index") {
   $tab = $module->getValidTab($tab);
 }
@@ -323,21 +326,21 @@ if (!$suppressHeaders) {
   // Messages
   $messages = new CMessage();
   $messages = $messages->loadPublications("present", $m, $g);
-  
+
   // Mails
   $mails = CUserMessageDest::loadNewMessages();
-  
+
   // Creation du Template
   $tplHeader = new CSmartyDP("style/$uistyle");
-  
+
   $tplHeader->assign("offline"              , false);
   $tplHeader->assign("nodebug"              , true);
   $tplHeader->assign("obsolete_module"      , $obsolete_module);
   $tplHeader->assign("localeInfo"           , $locale_info);
-  
+
   // Favicon
   $tplHeader->assign("mediboardShortIcon"   , CFaviconLoader::loadFile("style/$uistyle/images/icons/favicon.ico"));
-  
+
   // CSS
   $mediboardStyle = CCSSLoader::loadFiles();
   if ($uistyle != "mediboard") {
@@ -348,7 +351,7 @@ if (!$suppressHeaders) {
 
   //JS
   $tplHeader->assign("mediboardScript"      , CJSLoader::loadFiles());
-  
+
   $tplHeader->assign("dialog"               , $dialog);
   $tplHeader->assign("messages"             , $messages);
   $tplHeader->assign("mails"                , $mails);
@@ -360,7 +363,7 @@ if (!$suppressHeaders) {
   $tplHeader->assign("applicationVersion"   , $applicationVersion);
   $tplHeader->assign("allInOne"             , CValue::get("_aio"));
   $tplHeader->assign(
-    "portal", 
+    "portal",
     array (
       "help"    => mbPortalURL($m, $tab),
       "tracker" => mbPortalURL("tracker"),
@@ -427,7 +430,7 @@ if (!$suppressHeaders || $ajax) {
 // Inclusion du footer
 if (!$suppressHeaders) {
   //$address = get_remote_address();
-  
+
   $tplFooter = new CSmartyDP("style/$uistyle");
   $tplFooter->assign("offline"       , false);
   $tplFooter->assign("debugMode"     , $debug);
