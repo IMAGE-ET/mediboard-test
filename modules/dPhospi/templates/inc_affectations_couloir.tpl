@@ -83,7 +83,7 @@
                   <span style="float: right;">
                     {{mb_include module=patients template=inc_vw_antecedents type=deficience readonly=1}}
                   </span>
-                  {{if "dPImeds"|module_active}}
+                  {{if "dPImeds"|module_active && "dPhospi vue_tableau show_labo_results"|conf:"CGroups-$g"}}
                     {{mb_include module=Imeds template=inc_sejour_labo link="#1"}}
                     <script>
                       ImedsResultsWatcher.addSejour('{{$sejour->_id}}', '{{$sejour->_NDA}}');

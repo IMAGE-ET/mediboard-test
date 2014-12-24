@@ -34,7 +34,7 @@
         {{/if}}
       </td>
       <td class="patient" onclick="flipSejour({{$_sejour->_id}})">
-        {{if "dPImeds"|module_active}}
+        {{if "dPImeds"|module_active && "dPhospi vue_tableau show_labo_results"|conf:"CGroups-$g"}}
           {{mb_include module=Imeds template=inc_sejour_labo link="#1" sejour=$_sejour}}
           <script>
             ImedsResultsWatcher.addSejour('{{$_sejour->_id}}', '{{$_sejour->_NDA}}');

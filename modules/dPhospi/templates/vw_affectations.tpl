@@ -1,7 +1,7 @@
 {{mb_script module=hospi script=vw_affectations ajax=1}}
 {{mb_script module=planningOp script=prestations ajax=1}}
 
-{{if "dPImeds"|module_active}}
+{{if "dPImeds"|module_active && "dPhospi vue_tableau show_labo_results"|conf:"CGroups-$g"}}
   <script>
     Main.add(function() {
       ImedsResultsWatcher.loadResults();
