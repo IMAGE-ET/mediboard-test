@@ -581,4 +581,14 @@ $library->targetDir = "dagre-d3-0.3.2";
 $library->versionFile = "dagre-d3.js";
 $library->versionString = "0.3.2";
 
+$library = new CLibrary();
+$library->name = "visjs";
+$library->url = "http://visjs.org/";
+$library->fileName = "vis.zip";
+$library->description = "A visual interaction system";
+$library->sourceDir = "vis";
+$library->targetDir = "visjs";
+$library->versionFile = "vis.min.js";
+$library->versionString = "@version 3.7.2";
+
 CLibrary::$all[$library->name] = $library;

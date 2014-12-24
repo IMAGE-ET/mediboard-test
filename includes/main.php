@@ -118,10 +118,7 @@ CJSLoader::$files = array(
   "lib/flot/jquery.flot.bandwidth.js",
   "lib/flot/jquery.flot.gantt.js",
   "lib/flot/jquery.flot.time.min.js",
-  "lib/flot/jquery.flot.pie.min.js",
-
-  // Vis
-  "includes/javascript/vis.min.js"
+  "lib/flot/jquery.flot.pie.min.js"
 );
 
 $support = "modules/support/javascript/support.js";
