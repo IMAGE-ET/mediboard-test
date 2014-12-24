@@ -132,7 +132,7 @@
   </tr>
   {{if !$read_only}}
     <tr>
-      <th class="title" colspan="12" style="border-top: none;">
+      <th class="title" colspan="14" style="border-top: none;">
         {{foreach from=$subject->_ext_codes_ccam item=_code}}
           <span id="action-{{$_code->code}}" class="circled" style="background-color: #eeffee; color: black; font-weight: normal; font-size: 0.8em;">
          {{$_code->code}}
@@ -176,7 +176,8 @@
     <th class="narrow">{{mb_title class=CActeCCAM field=facturable}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=code_association}}</th>
     <th>{{mb_title class=CActeCCAM field=modificateurs}}</th>
-    <th>{{mb_title class=CActeCCAM field=_tarif}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=extension_documentaire}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=_tarif}}</th>
     <th class="narrow"></th>
     <th class="narrow">{{mb_title class=CActeCCAM field=execution}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=montant_depassement}}</th>
@@ -187,7 +188,7 @@
   </tr>
   {{foreach from=$subject->_ext_codes_ccam item=_code key=_key}}
     <tr>
-      <th colspan="12" style="text-align: left;">
+      <th colspan="14" style="text-align: left;">
         <span onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class}}')"
               style="cursor: pointer;{{if $_code->type == 2}} color: #444;{{/if}}">
           {{$_code->code}} : {{$_code->libelleLong}}
@@ -266,6 +267,17 @@
                 {{foreachelse}}
                 <em>{{tr}}None{{/tr}}</em>
               {{/foreach}}
+            </td>
+            <td class="narrow">
+              {{if $acte->code_activite == 4}}
+                {{if $read_only}}
+                  {{mb_value object=$acte field=extension_documentaire}}
+                {{else}}
+                  <form name="codageActeExtDoc-{{$view}}" action="?" method="post" onsubmit="return false;">
+                    {{mb_field object=$acte field=extension_documentaire emptyLabel="CActeCCAM.extension_documentaire." onchange="CCodageCCAM.syncCodageField(this, '$view');" style="width: 13em;"}}
+                  </form>
+                {{/if}}
+              {{/if}}
             </td>
             <td style="text-align: right;{{if $acte->_id && !$acte->facturable}} background-color: #fc9{{/if}}">
               {{mb_value object=$acte field=_tarif}}

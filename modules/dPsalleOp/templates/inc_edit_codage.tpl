@@ -22,7 +22,8 @@
     <th class="narrow">{{mb_title class=CActeCCAM field=facturable}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=code_association}}</th>
     <th>{{mb_title class=CActeCCAM field=modificateurs}}</th>
-    <th>{{mb_title class=CActeCCAM field=_tarif}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=extension_documentaire}}</th>
+    <th class="narrow">{{mb_title class=CActeCCAM field=_tarif}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=execution}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=montant_depassement}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=motif_depassement}}</th>
@@ -44,7 +45,7 @@
           {{if $display_code}}
             {{assign var=display_code value=0}}
             <tr>
-              <th colspan="12" style="text-align: left;">
+              <th colspan="14" style="text-align: left;">
                 <span onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class}}')"
                       style="cursor: pointer;{{if $_code->type == 2}} color: #444;{{/if}}">
                   {{$_code->code}} : {{$_code->libelleLong}}
@@ -96,6 +97,13 @@
                 {{foreachelse}}
                 <em>{{tr}}None{{/tr}}</em>
               {{/foreach}}
+            </td>
+            <td class="narrow">
+              {{if $acte->code_activite == 4}}
+                <form name="codageActeExtDoc-{{$view}}" action="?" method="post" onsubmit="return false;">
+                  {{mb_field object=$acte field=extension_documentaire emptyLabel="CActeCCAM.extension_documentaire." onchange="syncCodageField(this, '$view');" style="width: 13em;"}}
+                </form>
+              {{/if}}
             </td>
             <td style="text-align: right;{{if $acte->_id && !$acte->facturable}} background-color: #fc9;{{/if}}">
               {{mb_value object=$acte field=_tarif}}
