@@ -32,7 +32,8 @@ class CObservationValueUnit extends CObservationValueCodingSystem {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["observation_results"] = "CObservationResult unit_id";
-    $backProps["supervison_graph_series"] = "CSupervisionGraphSeries value_unit_id";
+    $backProps["supervision_graph_series"] = "CSupervisionGraphSeries value_unit_id";
+    $backProps["supervision_instant_data"] = "CSupervisionInstantData value_unit_id";
     return $backProps;
   }
 

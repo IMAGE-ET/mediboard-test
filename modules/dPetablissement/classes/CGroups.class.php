@@ -194,6 +194,8 @@ class CGroups extends CMbObject {
     $backProps["extension_produit_docs"]    = "CExtensionProduitDocument group_id";
     $backProps["group_um"]                  = "CUniteMedicaleInfos group_id";
     $backProps["search_thesaurus_entry"]    = "CSearchThesaurusEntry group_id";
+    $backProps["links_cat_chap"]            = "CLinkBonCatChap group_id";
+    $backProps["supervision_instant_data"]  = "CSupervisionInstantData owner_id";
     //$backProps["ex_object"]                 = "CExObject group_id"; // DO NOT ADD THIS BACK PROP
     return $backProps;
   }

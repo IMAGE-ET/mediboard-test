@@ -45,7 +45,16 @@ class CSourceSMTP extends CExchangeSource {
 
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["user_mails"] = "CUserMail account_id";
+    return $backProps;
+  }
+
   function updatePlainFields() {
     parent::updatePlainFields();
     $this->role = "prod";

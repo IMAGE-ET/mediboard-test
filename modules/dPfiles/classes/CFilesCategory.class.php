@@ -50,6 +50,7 @@ class CFilesCategory extends CMbObject {
     $backProps = parent::getBackProps();
     $backProps["categorized_documents"] = "CCompteRendu file_category_id";
     $backProps["categorized_files"]     = "CFile file_category_id";
+    $backProps["links_cat_chap"]        = "CLinkBonCatChap cat_id";
     return $backProps;
   }
 
