@@ -1761,9 +1761,6 @@ class COperation extends CCodable implements IPatientRelated {
     }
 
     $auto_validate = CAppUI::conf("dmi CDMI auto_validate");
-    if ($auto_validate) {
-      return $this->_dmi_alert = "ok";
-    }
 
     foreach ($lines as $_line) {
       if (!isset($this->_dmi_prescription_id)) {
@@ -1771,7 +1768,7 @@ class COperation extends CCodable implements IPatientRelated {
         $this->_dmi_praticien_id    = $_line->loadRefPrescription()->praticien_id;
       }
 
-      if ($_line->type != "purchase" && !$_line->isValidated()) {
+      if (!$auto_validate && $_line->type != "purchase" && !$_line->isValidated()) {
         return $this->_dmi_alert = "warning";
       }
     }
