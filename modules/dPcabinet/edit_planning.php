@@ -47,6 +47,11 @@ $_function_id = null;
 $nb_plages = 0;
 $count_next_plage = 0;
 
+// On a fourni l'id du praticien
+$chir_id = CAppUI::conf("dPcabinet keepchir") ?
+  CValue::getOrSession("chir_id") :
+  CValue::get("chir_id");
+
 // Nouvelle consultation
 if (!$consultation_id) {
 
@@ -55,11 +60,6 @@ if (!$consultation_id) {
     $plageConsult->load($plageconsult_id);
   }
   else {
-    // On a fourni l'id du praticien
-    $chir_id = CAppUI::conf("dPcabinet keepchir") ?
-      CValue::getOrSession("chir_id") : 
-      CValue::get("chir_id");
-    
     if ($chir_id) {
       $chir = new CMediusers();
       $chir->load($chir_id);
@@ -166,6 +166,36 @@ else {
   $whereN["date"] = " >= '$dateW'";
   $ljoin["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
   $count_next_plage = $consult->countList($whereN, null, $ljoin);
+}
+
+if (!$modal) {
+  // Save history
+  $params = array(
+    "consult_urgence_id" => $consult_urgence_id,
+    "consultation_id"    => $consultation_id,
+    "plageconsult_id"    => $plageconsult_id,
+    "sejour_id"          => $sejour_id,
+    "date_planning"      => $date_planning,
+    "grossesse_id"       => $grossesse_id,
+  );
+
+  $object = null;
+  $type = CViewHistory::TYPE_VIEW;
+
+  if ($consultation_id) {
+    $object = $consult;
+    $type = CViewHistory::TYPE_EDIT;
+  }
+  elseif ($plageconsult_id) {
+    $object = new CPlageconsult();
+    $object->load($plageconsult_id);
+    $type = CViewHistory::TYPE_NEW;
+  }
+  else {
+    $object = $chir;
+  }
+
+  CViewHistory::save($object, $type, $params);
 }
 
 // Chargement des categories

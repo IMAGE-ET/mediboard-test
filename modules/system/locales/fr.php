@@ -2719,6 +2719,8 @@ $locales['module-system-long'] = 'Administration système';
 $locales['module-templates-court'] = 'Modèle visuel';
 $locales['module-templates-long'] = 'Modèle visuel mediboard';
 $locales['object_handlers'] = 'Handlers d\'objets';
+$locales['pref-navigationHistoryLength'] = 'Taille de l\'historique de navigation';
+$locales['pref-navigationHistoryLength-desc'] = 'Nombre de pages mémorisées pour y revenir rapidement (0 = historique désactivé, limité à 20 max)';
 $locales['pref-notes_anonymous'] = 'Notes sans propriétaire par défaut';
 $locales['pref-notes_anonymous-desc'] = 'Notes sans propriétaire par défaut';
 $locales['pref-planning_hour_division'] = 'Division de l\'heure du planning';

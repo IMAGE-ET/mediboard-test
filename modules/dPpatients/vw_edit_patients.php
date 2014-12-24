@@ -38,6 +38,19 @@ if (CModule::getActive("fse")) {
   }
 }
 
+if (!$modal) {
+  // Save history
+  $params = array(
+    "patient_id"      => $patient_id,
+    "name"            => $name,
+    "firstName"       => $firstName,
+    "naissance_day"   => $naissance_day,
+    "naissance_month" => $naissance_month,
+    "naissance_year"  => $naissance_year,
+  );
+  CViewHistory::save($patient, $patient_id ? CViewHistory::TYPE_EDIT : CViewHistory::TYPE_NEW, $params);
+}
+
 if (!$patient_id) {
   $patient->nom    = $name;
   $patient->prenom = $firstName;

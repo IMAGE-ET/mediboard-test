@@ -44,6 +44,24 @@ $useCovercard        = CValue::get("usecovercard",  CModule::getActive("fse") &&
 $patient_nom_search    = null;
 $patient_prenom_search = null;
 
+// Save history
+$params = array(
+  "new"         => $new,
+  "patient_id"  => $patient_id,
+  "nom"         => $patient_nom,
+  "prenom"      => $patient_prenom,
+  "ville"       => $patient_ville,
+  "cp"          => $patient_cp,
+  "Date_Day"    => $patient_day,
+  "Date_Month"  => $patient_month,
+  "Date_Year"   => $patient_year,
+  "patient_ipp" => $patient_ipp,
+  "patient_nda" => $patient_nda,
+  "prat_id"     => $prat_id,
+  "sexe"        => $patient_sexe,
+);
+CViewHistory::save($patient, CViewHistory::TYPE_SEARCH, $params);
+
 $patVitale = new CPatient();
 
 // Liste des praticiens

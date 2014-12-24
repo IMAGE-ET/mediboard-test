@@ -2022,6 +2022,9 @@ class CSetupsystem extends CSetup {
                 ADD INDEX (`predicate_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.77";
+    $this->makeRevision("1.1.77");
+    $this->addPrefQuery("navigationHistoryLength", 0);
+
+    $this->mod_version = "1.1.78";
   }
 }

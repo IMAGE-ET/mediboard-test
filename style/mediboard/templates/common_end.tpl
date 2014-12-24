@@ -1,3 +1,5 @@
+{{mb_include style=mediboard template=navigation_history}}
+
 <script>
   {{assign var=end_app value="CMbPerformance::end"|static_call:""}}
 

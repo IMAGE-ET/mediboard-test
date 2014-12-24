@@ -119,6 +119,16 @@ $planning->hour_min = "07";
 $planning->hour_max = "20";
 $planning->pauses = array("07", "12", "19");
 
+// Save history
+$params = array(
+  "chirSel"         => $chirSel,
+  "debut"           => $debut,
+  "plageconsult_id" => $plageconsult_id,
+  "show_payees"     => $show_payees,
+  "show_annulees"   => $show_annulees,
+);
+CViewHistory::save($user, CViewHistory::TYPE_VIEW, $params);
+
 $where = array();
 $where[] = "chir_id = '$chirSel' OR remplacant_id = '$chirSel' OR pour_compte_id = '$chirSel'";
 

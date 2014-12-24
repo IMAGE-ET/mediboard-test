@@ -437,6 +437,7 @@ if (!$suppressHeaders) {
   $tplFooter->assign("performance"   , CApp::$performance);
   //$tplFooter->assign("userIP"        , $address["client"]);
   $tplFooter->assign("errorMessage"  , CAppUI::getMsg());
+  $tplFooter->assign("navigatory_history"   , CViewHistory::getHistory());
   $tplFooter->display("footer.tpl");
 }
 

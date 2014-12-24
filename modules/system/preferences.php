@@ -30,6 +30,7 @@ CPreferences::$modules["common"] = array (
   "planning_dragndrop",
   "planning_hour_division",
   "notes_anonymous",
+  "navigationHistoryLength",
 
   //mobile
   "MobileUI",

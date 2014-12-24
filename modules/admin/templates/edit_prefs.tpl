@@ -111,6 +111,7 @@
               {{mb_include template=inc_pref spec=enum var=sessionLifetime values=$session_lifetime_enum}}
             {{/if}}
             {{mb_include template=inc_pref spec=bool var=notes_anonymous}}
+            {{mb_include template=inc_pref spec=num var=navigationHistoryLength}}
           </tbody>
 
           {{if is_dir("./mobile")}}

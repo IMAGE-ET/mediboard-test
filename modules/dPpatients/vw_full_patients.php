@@ -32,6 +32,17 @@ if (!$patient->_id || $patient->_vip) {
   CAppUI::setMsg("Vous devez selectionner un patient", UI_MSG_ALERT);
   CAppUI::redirect("m=patients&tab=vw_idx_patients");
 }
+
+// Save history
+$params = array(
+  "patient_id"      => $patient_id,
+  "vw_cancelled"    => $vw_cancelled,
+  "consultation_id" => $consultation_id,
+  "sejour_id"       => $sejour_id,
+  "operation_id"    => $operation_id,
+);
+CViewHistory::save($patient, CViewHistory::TYPE_VIEW, $params);
+
 $patient->loadDossierComplet(PERM_READ, false);
 
 $patient->_nb_files_docs -= $patient->_nb_cancelled_files;
