@@ -1155,6 +1155,7 @@ $locales['mod-dPhospi-tab-vw_recherche'] = 'Etat des lits';
 $locales['mod-dPhospi-tab-vw_stats'] = 'Stats';
 $locales['mod-dPhospi-tab-vw_suivi_bloc'] = 'Suivi bloc';
 $locales['mod-hospi-tab-ajax_edit_modele_etiquette'] = 'Formulaire de modèle d\'étiquette';
+$locales['module-dPhospi-court'] = 'Hospitalisation';
 $locales['module-dPhospi-long'] = 'Gestion des hospitalisations';
 $locales['pref-ccam_sejour-desc'] = 'Gestion des actes CCAM des séjours';
 $locales['pref-prestation_id_hospi'] = 'Axe de prestation';
