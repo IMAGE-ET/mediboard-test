@@ -26,6 +26,7 @@ if ($ex_picture->load($ex_picture_id)) {
 }
 else {
   $ex_picture->ex_group_id = $ex_group_id;
+  $ex_picture->disabled = "0";
 }
 
 $ex_picture->loadRefPredicate()->loadView();
