@@ -96,7 +96,7 @@ switch ($type) {
     break;
 
   default:
-    $_where["operations.sortie_reveil_reel"] = "IS NOT NULL";
+    $where["operations.sortie_reveil_reel"] = "IS NOT NULL";
     // $order = "operations.sortie_reveil_possible DESC";
     $order_col = CValue::getOrSession("order_col_$type", "sortie_reveil_possible");
     $order_way = CValue::getOrSession("order_way_$type", "DESC");
