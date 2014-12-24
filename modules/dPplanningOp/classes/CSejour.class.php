@@ -2658,6 +2658,76 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
+   * Charge les éléments de codage CCAM
+   *
+   * @param date $from The begin date for the CCodageCCAM
+   * @param date $to   The end date for the CCodageCCAM
+   *
+   * @return CCodageCCAM[]
+   */
+  function loadRefsCodagesCCAM($from = null, $to = null) {
+    if ($this->_ref_codages_ccam && !$from && !$to) {
+      return $this->_ref_codages_ccam;
+    }
+
+    $codages = $this->loadBackRefs('codages_ccam', 'activite_anesth desc');
+    $this->_ref_codages_ccam = array();
+    foreach ($codages as $_codage) {
+      if (!array_key_exists($_codage->praticien_id, $this->_ref_codages_ccam)) {
+        $this->_ref_codages_ccam[$_codage->praticien_id] = array();
+      }
+      if (
+          ($from && $to && $_codage->date >= $from && $_codage->date <= $to) ||
+          ($from && !$to && $_codage->date >= $from) || (!$from && $to && $_codage->date <= $to)
+      ) {
+        if (!array_key_exists($_codage->date, $this->_ref_codages_ccam[$_codage->praticien_id])) {
+          $this->_ref_codages_ccam[$_codage->praticien_id][$_codage->date] = array();
+        }
+
+        $this->_ref_codages_ccam[$_codage->praticien_id][$_codage->date][] = $_codage;
+      }
+    }
+
+
+    return $this->_ref_codages_ccam;
+  }
+
+  /**
+   * Relie les actes aux codages pour calculer les règles d'association
+   *
+   * @return void
+   */
+  function guessActesAssociation() {
+    $this->loadRefsActesCCAM();
+    if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
+      $this->loadRefsCodagesCCAM();
+      foreach ($this->_ref_codages_ccam as $_codages_by_prat) {
+        foreach ($_codages_by_prat as $_codage_by_day) {
+          foreach ($_codage_by_day as $_codage) {
+            $_codage->_ref_actes_ccam = array();
+            foreach ($this->_ref_actes_ccam as $_acte) {
+              if (
+                $_codage->praticien_id == $_acte->executant_id &&
+                (($_acte->code_activite == 4 && $_codage->activite_anesth) || ($_acte->code_activite != 4 && !$_codage->activite_anesth)) &&
+                ($_acte->execution >= "$_codage->date 00:00:00" && $_acte->execution <= "$_codage->date 23:59:59")
+              ) {
+                $_codage->_ref_actes_ccam[$_acte->_id] = $_acte;
+              }
+            }
+
+            $_codage->guessActesAssociation();
+          }
+        }
+      }
+    }
+    else {
+      foreach ($this->_ref_actes_ccam as $_acte) {
+        $_acte->guessAssociation();
+      }
+    }
+  }
+
+  /**
    * @see parent::loadComplete()
    */
   function loadComplete() {

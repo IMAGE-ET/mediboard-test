@@ -155,6 +155,11 @@
                     {{tr}}Add{{/tr}}
                   </button>
                 {{else}}
+                  {{if $codage->codable_class == 'CSejour'}}
+                    <button type="button" class="notext copy compact" onclick="duplicateCodage({{$codage->_id}}, {{$acte->_id}});" title="{{tr}}CCodageCCAM-action-duplicate{{/tr}}">
+                      {{tr}}CCodageCCAM-action-duplicate{{/tr}}
+                    </button>
+                  {{/if}}
                   <button class="edit notext compact" type="button" onclick="ActesCCAM.edit({{$acte->_id}})">{{tr}}Edit{{/tr}}</button>
                   <button class="remove notext compact" type="button"
                           onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}', ajax: '1'},

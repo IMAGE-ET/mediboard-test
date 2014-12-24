@@ -1,6 +1,16 @@
 {{mb_script module="dPccam" script="code_ccam" ajax=$ajax}}
 
 <script>
+  duplicateCodage = function(codage_id, acte_id) {
+    var url = new Url('ccam', 'ajax_duplicate_codage');
+    if (codage_id) {
+      url.addParam('codage_id', codage_id);
+    }
+    if (acte_id) {
+      url.addParam('acte_id', acte_id);
+    }
+    url.requestModal();
+  }
 
   changeCodageMode = function(element, codage_id) {
     var codageForm = getForm("formCodageRules_codage-" + codage_id);

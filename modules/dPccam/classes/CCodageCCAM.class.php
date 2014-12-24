@@ -28,6 +28,7 @@ class CCodageCCAM extends CMbObject {
   public $praticien_id;
   public $locked;
   public $activite_anesth;
+  public $date;
 
   /**
    * @var CActeCCAM[]
@@ -63,10 +64,16 @@ class CCodageCCAM extends CMbObject {
    * @var CActeCCAM[]
    */
   public $_ref_actes_ccam;
+
   /**
    * @var CActeCCAM[]
    */
   public $_ref_actes_ccam_facturables;
+
+  /**
+   * @var CCodageCCAM
+   */
+  public $_codage_sibling;
 
   protected static $association_rules = array(
     'M'   => 'auto',
@@ -99,7 +106,7 @@ class CCodageCCAM extends CMbObject {
 
     $spec->table   = 'codage_ccam';
     $spec->key     = 'codage_ccam_id';
-    $spec->uniques['codable_praticien'] = array('codable_class', 'codable_id', 'praticien_id', 'activite_anesth');
+    $spec->uniques['codable_praticien'] = array('codable_class', 'codable_id', 'praticien_id', 'activite_anesth', 'date');
 
     return $spec;
   }
@@ -112,11 +119,12 @@ class CCodageCCAM extends CMbObject {
 
     $props['association_rule'] = 'enum list|G1|EA|EB|EC|ED|EE|EF|EG1|EG2|EG3|EG4|EG5|EG6|EG7|EH|EI|GA|GB|G2|M';
     $props['association_mode'] = 'enum list|auto|user_choice default|auto';
-    $props['codable_class'] = 'str notNull class';
-    $props['codable_id'] = 'ref notNull class|CCodable meta|codable_class';
-    $props['praticien_id'] = 'ref notNull class|CMediusers';
-    $props['locked'] = 'bool notNull default|0';
-    $props['activite_anesth'] = 'bool notNull default|0';
+    $props['codable_class']    = 'str notNull class';
+    $props['codable_id']       = 'ref notNull class|CCodable meta|codable_class';
+    $props['praticien_id']     = 'ref notNull class|CMediusers';
+    $props['locked']           = 'bool notNull default|0';
+    $props['activite_anesth']  = 'bool notNull default|0';
+    $props['date']             = 'date notNull';
 
     return $props;
   }
@@ -131,11 +139,49 @@ class CCodageCCAM extends CMbObject {
       $this->loadPraticien();
       if ($this->_ref_praticien->isAnesth()) {
         $this->loadCodable();
-        self::get($this->_ref_codable, $this->praticien_id, 4);
+        self::get($this->_ref_codable, $this->praticien_id, 4, $this->date);
       }
     }
 
     return parent::store();
+  }
+
+  public function loadView() {
+    parent::loadView();
+    $this->loadPraticien()->loadRefFunction();
+    $this->loadCodable();
+    $this->loadActesCCAM();
+    foreach ($this->_ref_actes_ccam as &$_acte) {
+      $_acte->getTarif();
+      $_activite = $_acte->_ref_code_ccam->activites[$_acte->code_activite];
+      $_phase = $_activite->phases[$_acte->code_phase];
+
+      /* Verification des modificateurs codés */
+      foreach ($_phase->_modificateurs as $modificateur) {
+        $position = strpos($_acte->modificateurs, $modificateur->code);
+        if ($position !== false) {
+          if ($modificateur->_double == "1") {
+            $modificateur->_checked = $modificateur->code;
+          }
+          elseif ($modificateur->_double == "2") {
+            $modificateur->_checked = $modificateur->code.$modificateur->_double;
+          }
+          else {
+            $modificateur->_checked = null;
+          }
+        }
+        else {
+          $modificateur->_checked = null;
+        }
+      }
+
+      self::precodeModifiers($_phase->_modificateurs, $_acte, $this->_ref_codable);
+    }
+
+    if ($this->_ref_praticien->isAnesth()) {
+      $this->_codage_sibling = self::get($this->_ref_codable, $this->praticien_id, $this->activite_anesth ? 1 : 4, $this->date);
+      $this->_codage_sibling->loadActesCCAM();
+    }
   }
 
   /**
@@ -144,16 +190,32 @@ class CCodageCCAM extends CMbObject {
    * @param CCodable $codable         The codable object
    * @param integer  $praticien_id    The practitioner id
    * @param integer  $activite        Is the CCodage concern anesthesia activities or other activities
+   * @param date     $date            The date
    *
    * @return CCodageCCAM
    */
-  public static function get($codable, $praticien_id, $activite = 1) {
+  public static function get($codable, $praticien_id, $activite = 1, $date = null) {
+    if (!$date) {
+      switch ($codable->_class) {
+        case 'CConsultation':
+          $codable->loadRefPlageConsult();
+          $date = $codable->_date;
+          break;
+        case 'COperation':
+          $date = $codable->date;
+          break;
+        case 'CSejour':
+          return new CCodageCCAM();
+      }
+    }
+
     $codage_ccam = new CCodageCCAM();
     $codage_ccam->codable_class = $codable->_class;
     $codage_ccam->codable_id = $codable->_id;
     $codage_ccam->praticien_id = $praticien_id;
     $codage_ccam->loadPraticien();
     $codage_ccam->activite_anesth = ($activite == 4 && $codage_ccam->_ref_praticien->isAnesth()) ? 1 : 0;
+    $codage_ccam->date = $date;
     $codage_ccam->loadMatchingObject();
 
     if (!$codage_ccam->_id) {
@@ -214,6 +276,7 @@ class CCodageCCAM extends CMbObject {
     $where['object_id'] = " = $this->codable_id";
     $where['executant_id'] = " = $this->praticien_id";
     $where['code_activite'] = $this->activite_anesth ? " = 4" : " != 4";
+    $where['execution'] = " BETWEEN '$this->date 00:00:00' AND '$this->date 23:59:59'";
     $this->_ref_actes_ccam = $act->loadList($where, "code_association");
 
     foreach ($this->_ref_actes_ccam as $_acte) {
@@ -744,7 +807,6 @@ class CCodageCCAM extends CMbObject {
       $act->_guess_facturable = '0';
       $act->_guess_association = '';
       $act->_guess_regle_asso = 'GA';
-
     }
   }
 

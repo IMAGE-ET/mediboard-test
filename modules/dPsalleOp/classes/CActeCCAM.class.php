@@ -211,6 +211,7 @@ class CActeCCAM extends CActe {
    * @see parent::delete()
    */
   function delete() {
+    $this->loadRefCodageCCAM();
     if ($msg = parent::delete()) {
       return $msg;
     }
@@ -221,8 +222,8 @@ class CActeCCAM extends CActe {
         if ($this->_ref_codage_ccam->_id) {
           $this->_ref_codage_ccam->updateRule(true);
         }
-        $this->_ref_codage_ccam->store();
       }
+      $this->_ref_codage_ccam->store();
     }
 
     return null;
@@ -262,7 +263,7 @@ class CActeCCAM extends CActe {
     }
 
     if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
-      $codage_ccam = CCodageCCAM::get($this->_ref_object, $this->executant_id, $this->code_activite);
+      $codage_ccam = CCodageCCAM::get($this->_ref_object, $this->executant_id, $this->code_activite, CMbDT::date(null, $this->execution));
       if (!$codage_ccam->_id) {
         $codage_ccam->store();
       }
@@ -350,7 +351,7 @@ class CActeCCAM extends CActe {
     $this->_anesth    = ($this->code_activite == 4);
     
     // Remboursement exceptionnel
-    $code = CDatedCodeCCAM::get($this->code_acte);
+    $code = CDatedCodeCCAM::get($this->code_acte, $this->execution);
     $this->_rembex = $this->rembourse && $code->remboursement == 3 ? '1' : '0';
   }
 
@@ -545,7 +546,11 @@ class CActeCCAM extends CActe {
 
     if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
       // Vérification de l'existence du codage
-      $codage = CCodageCCAM::get($this->loadRefObject(), $this->executant_id, $this->code_activite);
+      $date = null;
+      if ($this->object_class == 'CSejour') {
+        $date = CMbDT::date(null, $this->execution);
+      }
+      $codage = CCodageCCAM::get($this->loadRefObject(), $this->executant_id, $this->code_activite, $date);
       if (!$codage->_id) {
         if ($msg = $codage->store()) {
           return $msg;
@@ -598,7 +603,7 @@ class CActeCCAM extends CActe {
   function loadRefCodageCCAM() {
     $this->loadRefObject();
     if (isset($this->_ref_object)) {
-      return $this->_ref_codage_ccam = CCodageCCAM::get($this->_ref_object, $this->executant_id, $this->code_activite);
+      return $this->_ref_codage_ccam = CCodageCCAM::get($this->_ref_object, $this->executant_id, $this->code_activite, CMbDT::date(null, $this->execution));
     }
     return null;
   }

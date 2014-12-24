@@ -436,7 +436,7 @@ class COperation extends CCodable implements IPatientRelated {
     $extension_documentaire = null;
 
     if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
-      $codage_ccam = CCodageCCAM::get($this, $executant_id, 4);
+      $codage_ccam = CCodageCCAM::get($this, $executant_id, 4, $this->date);
       $actes = $codage_ccam->loadActesCCAM();
 
       foreach ($actes as $_acte) {

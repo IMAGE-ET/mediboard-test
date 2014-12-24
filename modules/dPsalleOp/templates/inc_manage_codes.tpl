@@ -101,6 +101,12 @@
           <input type="hidden" name="codage_ccam_id" value="" />
           <input type="hidden" name="codable_class" value="{{$subject->_class}}" />
           <input type="hidden" name="codable_id" value="{{$subject->_id}}" />
+          {{if $subject->_class == "COperation"}}
+            {{assign var=date_codable value=$subject->date}}
+          {{else}}
+            {{assign var=date_codable value=$subject->_date}}
+          {{/if}}
+          <input type="hidden" name="date" value="{{$date_codable}}"/>
           <select name="praticien_id" style="width: 20em; float: left;" onchange="this.form.onsubmit();">
             <option value="">&mdash; Choisir un professionnel de santé</option>
             {{mb_include module=mediusers template=inc_options_mediuser list=$listChirs}}
@@ -350,7 +356,7 @@
 </table>
 {{/if}}
 <!-- Pas d'affichage de inc_manage_codes si la consultation est deja validée -->
- {{*if $subject instanceof CConsultation && !$subject->_coded*}}  
+ {{*if $subject instanceof CConsultation && !$subject->_coded*}}
   <table class="main layout">
     <tr>
       {{if !$conf.dPccam.CCodeCCAM.use_new_association_rules}}

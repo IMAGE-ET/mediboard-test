@@ -97,7 +97,11 @@
       loadActesNGAP(sejour_id);
     }
     if($('ccam')){
-      ActesCCAM.refreshList(sejour_id, praticien_id);
+      {{if $conf.dPccam.CCodeCCAM.use_new_association_rules}}
+        loadCodagesCCAM(sejour_id);
+      {{else}}
+        ActesCCAM.refreshList(sejour_id, praticien_id);
+      {{/if}}
     }
     if($('cim')){
       reloadDiagnostic(sejour_id, '1');
@@ -112,6 +116,17 @@
       ActesCaisse.refreshListSejour(sejour_id, praticien_id);
     }
   };
+
+{{if $conf.dPccam.CCodeCCAM.use_new_association_rules}}
+  loadCodagesCCAM = function(sejour_id, date, from, to) {
+    var url = new Url('soins', 'ajax_codages_ccam_sejour');
+    url.addParam('sejour_id', sejour_id);
+    if (date) url.addParam('date', date);
+    if (from) url.addParam('from', from);
+    if (to) url.addParam('to', to);
+    url.requestUpdate('ccam');
+  }
+{{/if}}
 
   loadActesNGAP = function (sejour_id){
     var url = new Url("dPcabinet", "httpreq_vw_actes_ngap");
@@ -296,7 +311,7 @@
     {{/if}}
 
     {{if $app->user_prefs.ccam_sejour == 1 }}
-      <li><a href="#Actes">{{tr}}soins.tab.cotation-infirmiere{{/tr}}</a></li>
+      <li onmousedown="loadActes({{$sejour->_id}}, {{$sejour->_ref_praticien->_id}});"><a href="#Actes">{{tr}}soins.tab.cotation-infirmiere{{/tr}}</a></li>
     {{/if}}
 
     {{if $isImedsInstalled}}

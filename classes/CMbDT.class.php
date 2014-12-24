@@ -455,4 +455,25 @@ class CMbDT {
   static function dateTimeFromAD($dateAD) {
     return preg_replace("/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})\.0Z/", '$1-$2-$3 $4:$5:$6', $dateAD);
   }
+
+  /**
+   * Return an array containing the days between two dates
+   *
+   * @param string $from The begin date
+   * @param string $to   The end date
+   *
+   * @return array
+   */
+  static function getDays($from, $to) {
+    $count_between = self::daysRelative($from . '00:00:00', $to . '00:00:00');
+    $days = array($from);
+
+    for ($i = 1; $i < $count_between; $i++) {
+      $days[] = self::date("+ $i DAYS", $from);
+    }
+
+    $days[] = $to;
+
+    return $days;
+  }
 }

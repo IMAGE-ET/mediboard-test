@@ -14,6 +14,36 @@
  **/
 class CSetupdPccam extends CSetup {
 
+  protected function updateDateCodage() {
+    $ds = $this->ds;
+
+    $query = "SELECT * FROM `codage_ccam`;";
+    $rows = $ds->exec($query);
+    while ($_codage = $ds->fetchObject($rows, 'CCodageCCAM')) {
+      $_codage->loadCodable();
+
+      $date = null;
+      switch ($_codage->codable_class) {
+        case 'CConsultation':
+          $_codage->_ref_codable->loadRefPlageConsult();
+          $date = $_codage->_ref_codable->_date;
+          break;
+        case 'COperation':
+          $date = $_codage->_ref_codable->date;
+          break;
+        case 'CSejour':
+          $date = CMbDT::date('', $_codage->_ref_codable->entree);
+          break;
+      }
+
+      $query = "UPDATE `codage_ccam`
+                  SET `date` = '$date' WHERE `codage_ccam_id` = $_codage->_id;";
+
+      $ds->exec($query);
+    }
+
+    return true;
+  }
   /**
    * Construct
    **/
@@ -207,8 +237,21 @@ class CSetupdPccam extends CSetup {
                 ADD `accord_prealable` ENUM ('0', '1') DEFAULT '0',
                 ADD `date_demande_accord` DATE;";
     $this->addQuery($query);
+    
+    $this->makeRevision('0.27');
 
-    $this->mod_version = '0.27';
+    $query = "ALTER TABLE `codage_ccam`
+      ADD `date` DATE NOT NULL,
+      DROP INDEX uk_codage_ccam;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `frais_divers`
+                ADD `gratuit` ENUM('0', '1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->addMethod('updateDateCodage');
+
+    $this->mod_version = '0.28';
 
     // Data source query
 

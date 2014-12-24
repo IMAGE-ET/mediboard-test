@@ -615,4 +615,17 @@ abstract class CMbArray {
 
     return $tree;
   }
+
+  /**
+   * Count the occurrences of the given value
+   *
+   * @param mixed $needle The searched value
+   * @param array $haystack The array
+   * @param bool  $strict If true, strict comparison (===) will be used
+   *
+   * @return int
+   */
+  static function countValues($needle, $haystack, $strict = false) {
+    return count(array_keys($haystack, $needle, $strict));
+  }
 }

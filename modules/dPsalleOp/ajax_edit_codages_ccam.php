@@ -10,14 +10,18 @@
  */
 
 $codable_class = CValue::get('codable_class', '');
-$codable_id = CValue::get('codable_id');
-$praticien_id = CValue::get('praticien_id');
+$codable_id    = CValue::get('codable_id');
+$praticien_id  = CValue::get('praticien_id');
+$date          = CValue::get('date');
 
 $codage = new CCodageCCAM();
 
 $codage->codable_class = $codable_class;
 $codage->codable_id = $codable_id;
 $codage->praticien_id = $praticien_id;
+if ($date) {
+  $codage->date = $date;
+}
 $codages = $codage->loadMatchingList('activite_anesth desc');
 
 foreach ($codages as $_codage) {
@@ -45,7 +49,11 @@ $codable->isCoded();
 $codable->loadRefPatient();
 $codable->loadRefPraticien();
 $codable->loadExtCodesCCAM();
-$codable->getAssociationCodesActes();
+//$codable->getAssociationCodesActes();
+/* On charge les codages ccam du séjour en lui précisant une date pour ne pas qu'il charge tous les codages liés au sejour */
+if ($codable->_class == 'CSejour') {
+  $codable->loadRefsCodagesCCAM($date, $date);
+}
 $codable->loadPossibleActes($praticien_id);
 
 $praticien->loadRefFunction();
@@ -62,6 +70,16 @@ foreach ($codable->_ext_codes_ccam as $_code) {
     }
     else {
       $list_activites[$_activite->numero] = false;
+    }
+
+    if ($codable->_class == 'CSejour') {
+      foreach ($_activite->phases as $_phase) {
+        $_acte =& $_phase->_connected_acte;
+        /* On met la date d'execution des actes non cotés à la date du codage pour les séjours */
+        if (!$_acte->_id) {
+          $_acte->execution = CMbDT::format($codage->date, '%Y-%m-%d ') . CMbDT::format(CMbDT::dateTime(), '%T');
+        }
+      }
     }
   }
 }
