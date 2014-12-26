@@ -1879,18 +1879,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
    * @return string
    */
   function getIndexableBody($content) {
-    $content = strtr(
-      $content,
-      array(
-        "<"      => " <",
-        "&nbsp;" => " ",
-      )
-    );
-    $content = CSearch::purifyHTML($content);
-    $content = preg_replace("/\s+/", ' ', $content);
-    $content = html_entity_decode($content);
-    $content = trim($content);
-    return $content;
+    return CSearch::getRawText($content);
   }
 
   /**
@@ -1909,17 +1898,16 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
       return $object;
     }
 
-    if (!method_exists($this, "loadRelPatient")) {
-      $object->loadRefPatient();
+    if (in_array("IPatientRelated", class_implements($object))) {
+      $object->loadRelPatient();
     }
     else {
-      $object->loadRelPatient();
+      $object->loadRefPatient();
     }
 
     switch ($this->object_class) {
       case "CConsultAnesth":
         return $object->_ref_consultation->_ref_patient;
-
         break;
 
       default:

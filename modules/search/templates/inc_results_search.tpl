@@ -145,7 +145,11 @@
 
           <div class="compact">{{tr}}{{$_result._type}}{{/tr}}</div>
         </td>
+        {{if $_result._type == "CExObject"}}
+        <td class="text" onmouseover="ObjectTooltip.createEx(this, '{{$_result._type}}_{{$_result._source.ex_class_id}}-{{$_result._id}}')">
+        {{else}}
         <td class="text" onmouseover="ObjectTooltip.createEx(this, '{{$_result._type}}-{{$_result._id}}')">
+        {{/if}}
           {{if $_result._source.title != ""}}
             <span>{{$_result._source.title|utf8_decode}}</span>
           {{else}}

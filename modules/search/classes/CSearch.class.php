@@ -505,6 +505,28 @@ class CSearch {
   }
 
   /**
+   * cleaning text before indexing method
+   *
+   * @param string $content the content which have to be cleaned
+   *
+   * @return string The content cleaned
+   */
+  static function getRawText($content) {
+    $content = strtr(
+      $content,
+      array(
+        "<"      => " <",
+        "&nbsp;" => " ",
+      )
+    );
+    $content = self::purifyHTML($content);
+    $content = preg_replace("/\s+/", ' ', $content);
+    $content = html_entity_decode($content);
+
+    return trim($content);
+  }
+
+  /**
    * HTML cleaning method
    *
    * @param string $html HTML to purify

@@ -1120,7 +1120,7 @@ class CExObject extends CMbMetaObject implements IPatientRelated, IIndexableObje
   function getReferenceObject($class) {
     $fields = array(
       "object_class"     => "object_id", 
-      "reference_class"  => "reference_id", 
+      "reference_class"  => "reference_id",
       "reference2_class" => "reference2_id", 
     );
     
@@ -1551,6 +1551,13 @@ class CExObject extends CMbMetaObject implements IPatientRelated, IIndexableObje
    * @return CMediusers
    */
   function getIndexablePraticien() {
+    $ref_object = $this->getReferenceObject("CSejour");
+    if (!$ref_object) {
+      $ref_object = $this->getReferenceObject("CConsultation");
+    }
+    if ($ref_object->loadRefPraticien()) {
+      return $ref_object->_ref_praticien;
+    }
     return $this->loadRefOwner();
   }
 
@@ -1606,17 +1613,7 @@ class CExObject extends CMbMetaObject implements IPatientRelated, IIndexableObje
    * @see parent::redesignBody()
    */
   function getIndexableBody($content) {
-    $content = strtr(
-      $content,
-      array(
-        "<"      => " <",
-        "&nbsp;" => " ",
-      )
-    );
-    $content = CSearch::purifyHTML($content);
-    $content = preg_replace("/\s+/", ' ', $content);
-    $content = html_entity_decode($content);
-    $content = trim($content);
-    return $content;
+
+    return CSearch::getRawText($content);
   }
 }
