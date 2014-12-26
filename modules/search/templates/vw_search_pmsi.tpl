@@ -11,9 +11,9 @@
 <script>
   Main.add(function () {
     var form = getForm("esSearch");
-    window.calendar_planning_fin = Calendar.regField(form._min_date);
-    window.calendar_planning_fin = Calendar.regField(form._max_date);
-    window.calendar_planning_fin = Calendar.regField(form._date);
+    Calendar.regField(form._min_date);
+    Calendar.regField(form._max_date);
+    Calendar.regField(form._date);
 
     var element = form.elements.user_id,
       tokenField = new TokenField(element, {onChange: function(){}.bind(element)});
@@ -94,7 +94,7 @@
     <tbody>
     <tr>
       <!-- Fieldset de tri par date -->
-      <td class="narrow">
+      <td style="width:45%">
         <fieldset>
           <legend>Intervalle de date </legend>
           {{*{{mb_include module=search template=inc_tooltip_date}}*}}
@@ -104,7 +104,6 @@
                 <input type="hidden" class="datetime" id="_min_date" name="_min_date" onchange="$V(this.form.start, '0')" >
                 <b>&raquo;</b>
                 <input type="hidden" class="datetime" id="_max_date" name="_max_date" onchange="$V(this.form.start, '0')" >
-                <br/>
                 <strong>{{tr}}or{{/tr}}</strong>
                 Jour seul : <input type="hidden" class="datetime" id="_date" name="_date" onchange="$V(this.form.start, '0')" >
               </td>
@@ -114,7 +113,7 @@
       </td>
       <!-- Fieldset de tri par Intervenants -->
 
-      <td class="narrow">
+      <td>
         <fieldset>
           <legend> Intervenants</legend>
           <table class="layout">
@@ -138,7 +137,7 @@
       </td>
 
       <!-- Fieldset de tri par Types -->
-      <td class="narrow">
+      <td style="width: 30%">
         <fieldset >
           <legend>
             <input type="checkbox" name="searchAll" id="SearchAll" value="SearchAll" onclick="Search.checkAllCheckboxes(this, 'names_types[]')">
@@ -150,7 +149,6 @@
                 <input type="checkbox" name="names_types[]" id="{{$_types}}" value="{{$_types}}">
                 {{tr}}{{$_types}}{{/tr}}
               </label>
-              <br/>
             {{/foreach}}
           </div>
         </fieldset>
