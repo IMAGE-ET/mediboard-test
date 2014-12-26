@@ -57,6 +57,7 @@ $sejour = new CSejour();
 
 if ($sejour_id && !$operation_id) {
   $sejour->load($sejour_id);
+  CAccessMedicalData::checkForSejour($sejour);
   $sejour->loadRefsFwd();
   $sejour->loadRefCurrAffectation()->loadRefService();
 

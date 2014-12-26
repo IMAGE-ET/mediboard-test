@@ -9,6 +9,15 @@
  * @link     http://www.mediboard.org
 *}}
 
+<script>
+  mineSalleForDay = function(salle_id, date) {
+    var url = new Url('bloc', 'do_mine_salle_day', 'dosql');
+    url.addParam('salle_id', salle_id);
+    url.addParam('date', date);
+    url.requestUpdate("systemMsg", {ajax: true, method: 'post'});
+  };
+</script>
+
 <table class="main" id="suivi-salles">
   <tr>
     <th colspan="100">
@@ -38,7 +47,12 @@
       <td id="salle-{{$_salle->_id}}">
         <table class="tbl">
           <tr>
-            <th class="title">{{$_salle->nom}}</th>
+            <th class="title">
+              {{if $app->_ref_user->isAdmin()}}
+                <button style="float:right;" onclick="mineSalleForDay('{{$_salle->_id}}', '{{$date_suivi}}')" class="change notext"></button>
+              {{/if}}
+              {{$_salle->nom}}
+            </th>
           </tr>
         </table>
         {{mb_include module=salleOp template=inc_details_plages salle=$_salle redirect_tab=1}}

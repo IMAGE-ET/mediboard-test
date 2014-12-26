@@ -97,7 +97,27 @@
             url.addParam('objects_id', plage_ids);
             url.popup(800, 600);
           }
-        }
+        };
+
+        Datamining = {
+          board: function() {
+            this.url = new Url('bloc', 'ajax_mine_salle');
+            this.url.requestModal('800', '600');
+          },
+
+          mine: function(miner_class, phase, date) {
+            new Url('bloc', 'ajax_datamine_salle')
+                .addNotNullParam('miner_class', miner_class)
+                .addNotNullParam('phase', phase)
+                .addParam('date', date)
+                .requestUpdate('systemMsg', this.url.refreshModal.bind(this.url));
+          }
+        };
+
+        openMineCSalle = function() {
+          var url = new Url("bloc", "ajax_mine_salle");
+          url.requestModal();
+        };
 
       </script>
 
@@ -111,6 +131,13 @@
         <button class="search" onclick="CPlageOp.mergeDuplicate()">{{tr}}mod-bloc-tab-merge_duplicate_plagesop{{/tr}}</button>
       </div>
 
+    </td>
+  </tr>
+
+  <tr>
+    <td>{{tr}}CSalle{{/tr}}</td>
+    <td>
+      <button class="search" onclick="Datamining.board();">Exploration de données</button>
     </td>
   </tr>
 
