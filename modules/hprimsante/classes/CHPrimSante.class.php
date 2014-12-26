@@ -36,6 +36,13 @@ class CHPrimSante extends CInteropNorm {
   }
 
   /**
+   * @see parent::getVersions
+   */
+  function getVersions() {
+    return self::$versions;
+  }
+
+  /**
    * Retrieve handlers list
    *
    * @return array Handlers list

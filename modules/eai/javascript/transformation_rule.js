@@ -60,5 +60,13 @@ EAITransformationRule = {
     if (selector.getAttribute("onchange")) {
       selector.onchange();
     }
+  },
+
+  showVersions : function(transformation_rule_id, standard_name, profil_name) {
+    new Url("eai", "ajax_show_transformation_rule_versions")
+      .addParam("transformation_rule_id", transformation_rule_id)
+      .addParam("standard_name", standard_name)
+      .addParam("profil_name", profil_name)
+      .requestUpdate("EAITransformationRule-version");
   }
 }

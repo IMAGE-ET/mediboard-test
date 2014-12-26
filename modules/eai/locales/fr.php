@@ -237,6 +237,7 @@ $locales['CEAITransformationRule-extension-desc'] = 'Extension de la règle de tr
 $locales['CEAITransformationRule-message'] = 'Message';
 $locales['CEAITransformationRule-message-court'] = 'Message';
 $locales['CEAITransformationRule-message-desc'] = 'Message de la règle de transformation';
+$locales['CEAITransformationRule-msg-Move rank done'] = 'Changement du rang de la règle de transformation effectué';
 $locales['CEAITransformationRule-msg-create'] = 'Règle de transformation créée';
 $locales['CEAITransformationRule-msg-delete'] = 'Règle de transformation supprimée';
 $locales['CEAITransformationRule-msg-modify'] = 'Règle de transformation modifée';

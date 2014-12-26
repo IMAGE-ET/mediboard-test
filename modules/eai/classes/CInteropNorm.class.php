@@ -64,6 +64,15 @@ abstract class CInteropNorm {
   }
 
   /**
+   * Retrieve versions list of data format
+   *
+   * @return array Versions list
+   */
+  function getVersions() {
+    return self::$versions;
+  }
+
+  /**
    * Retrieve document elements
    *
    * @return array

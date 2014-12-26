@@ -70,12 +70,17 @@ class CPRPA extends CHL7v3Messaging {
   }
 
   /**
-   * Retrieve events list of data format
-   *
-   * @return array Events list
+   * @see parent::getEvenements
    */
   function getEvenements() {
     return self::$evenements;
+  }
+
+  /**
+   * @see parent::getVersions
+   */
+  function getVersions() {
+    return self::$versions;
   }
 
   /**

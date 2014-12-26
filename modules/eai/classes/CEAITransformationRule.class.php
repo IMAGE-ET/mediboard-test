@@ -165,10 +165,10 @@ class CEAITransformationRule extends CMbObject {
   function bindObject($event) {
     if ($event instanceof CHL7Event) {
       $this->profil      = $event->profil;
-      $this->message     = $event->event_type.$event->code;
-      $this->transaction = $event->transaction;
-      $this->version     = $event->version;
-      $this->extension   = $event->_is_i18n;
+      //$this->message     = $event->event_type.$event->code;
+      //$this->transaction = $event->transaction;
+      //$this->version     = $event->version;
+      //$this->extension   = $event->_is_i18n;
     }
   }
 }

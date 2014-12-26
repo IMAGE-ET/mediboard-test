@@ -17,6 +17,14 @@
   }
 </style>
 
+<script type="text/javascript">
+  Main.add(function () {
+    {{if $transf_rule && $transf_rule->_id}}
+      EAITransformationRule.showVersions('{{$transf_rule->_id}}', '{{$transf_rule->standard}}', '{{$transf_rule->profil}}');
+    {{/if}}
+  });
+</script>
+
 {{if !$mode_duplication}}
 <form name="edit-{{$transf_rule->_guid}}{{$transf_rule->_guid}}" method="post" onsubmit="return EAITransformationRule.onSubmit(this)">
   {{mb_key object=$transf_rule}}
@@ -43,8 +51,7 @@
     <tr>
       <th>{{mb_label object=$transf_rule field="action_type"}}</th>
       <td>
-        <input type="hidden" name="action_type" value="" onchange="EAITransformationRule.selectedActionType(this, this.value)" />
-
+        <input type="hidden" name="action_type" value="{{$transf_rule->action_type}}" onchange="EAITransformationRule.selectedActionType(this, this.value)" />
         {{foreach from=$transf_rule->_specs.action_type->_locales key=_type item=_locale}}
           <button class="transformation-{{$_type}} notext {{if $_type == $transf_rule->action_type}}selected{{/if}}" title="{{$_locale}}" type="button"
                   onclick="$V(this.form.elements.action_type, '{{$_type}}');">
@@ -69,9 +76,10 @@
             <!-- NORME !-->
             <td id="EAITransformationRule-standard" style="width: 20%">
               <select size="10" name="standard" class="EAITransformationRule-select"
-                      onchange="EAITransformationRule.fillSelect(this, 'domain'); ">
+                      onchange="EAITransformationRule.fillSelect(this, 'domain');"
+                      onclick="EAITransformationRule.showVersions('{{$transf_rule->_id}}', this.value)">
               {{foreach from=$standards item=_standards key=_standard_name}}
-                <option value="{{$_standard_name}}">
+                <option value="{{$_standard_name}}" {{if $_standard_name == $transf_rule->standard}}selected{{/if}}>
                   {{tr}}{{$_standard_name}}{{/tr}}
                 </option>
               {{/foreach}}
@@ -81,10 +89,12 @@
             <!-- DOMAINE !-->
             <td id="EAITransformationRule-domain" style="width: 20%">
               <select size="10" name="domain" class="EAITransformationRule-select"
-                      onchange="EAITransformationRule.fillSelect(this, 'profil'); ">
+                      onchange="EAITransformationRule.fillSelect(this, 'profil');">
                 {{foreach from=$standards item=_standards key=_standard_name}}
                     {{foreach from=$_standards item=_domains key=_domain_name}}
-                      <option value="{{$_domain_name}}" style="display: none" data-parent="{{$_standard_name}}">
+                      <option value="{{$_domain_name}}" data-parent="{{$_standard_name}}"
+                              {{if $_standard_name == $transf_rule->standard && $_domain_name == $transf_rule->domain}}selected
+                              {{else}}style="display: none" {{/if}}>
                         {{if $_domain_name != "none"}}
                           {{tr}}{{$_standard_name}}_{{$_domain_name}}-desc{{/tr}} ({{$_domain_name}})
                         {{else}}
@@ -99,11 +109,14 @@
             <!-- PROFIL !-->
             <td id="EAITransformationRule-profil" style="width: 20%">
               <select size="10" name="profil" class="EAITransformationRule-select"
-                      onchange="EAITransformationRule.fillSelect(this, 'transaction'); ">
+                      onchange="EAITransformationRule.fillSelect(this, 'transaction');"
+                      onclick="EAITransformationRule.showVersions('{{$transf_rule->_id}}', this.form.elements.standard.value, this.value)">
                 {{foreach from=$standards item=_standards key=_standard_name}}
                   {{foreach from=$_standards item=_domains key=_domain_name}}
                     {{foreach from=$_domains item=_profils key=_profil_name}}
-                      <option value="{{$_profil_name}}" style="display: none" data-parent="{{$_standard_name}}-{{$_domain_name}}">
+                      <option value="{{$_profil_name}}" data-parent="{{$_standard_name}}-{{$_domain_name}}"
+                              {{if $_domain_name == $transf_rule->domain && $_profil_name == $transf_rule->profil}}selected
+                              {{else}}style="display: none" {{/if}}>
                         {{if $_profil_name != "none"}}
                           {{tr}}{{$_profil_name}}-desc{{/tr}} ({{$_profil_name}})
                         {{else}}
@@ -124,7 +137,9 @@
                   {{foreach from=$_standards item=_domains key=_domain_name}}
                     {{foreach from=$_domains item=_profils key=_profil_name}}
                       {{foreach from=$_profils item=_transactions key=_transaction_name}}
-                        <option value="{{$_transaction_name}}" style="display: none" data-parent="{{$_standard_name}}-{{$_domain_name}}-{{$_profil_name}}">
+                        <option value="{{$_transaction_name}}" data-parent="{{$_standard_name}}-{{$_domain_name}}-{{$_profil_name}}"
+                              {{if $_profil_name == $transf_rule->profil && $_transaction_name == $transf_rule->transaction}}selected
+                              {{else}}style="display: none" {{/if}}>
                           {{if $_transaction_name != "none"}}
                             {{tr}}{{$_transaction_name}}{{/tr}} ({{$_transaction_name}})
                           {{else}}
@@ -146,7 +161,9 @@
                     {{foreach from=$_domains item=_profils key=_profil_name}}
                       {{foreach from=$_profils item=_transactions key=_transaction_name}}
                         {{foreach from=$_transactions item=_event key=_event_name}}
-                          <option value="{{$_event_name}}" style="display: none" data-parent="{{$_standard_name}}-{{$_domain_name}}-{{$_profil_name}}-{{$_transaction_name}}">
+                          <option value="{{$_event_name}}" data-parent="{{$_standard_name}}-{{$_domain_name}}-{{$_profil_name}}-{{$_transaction_name}}"
+                                  {{if $_profil_name == $transf_rule->profil && $_transaction_name == $transf_rule->transaction && $_event_name == $transf_rule->message}}selected
+                                  {{else}}style="display: none" {{/if}}>
                             {{tr}}{{$_event}}{{/tr}}
                           </option>
                         {{/foreach}}
@@ -163,22 +180,7 @@
     <tr>
       <th>{{mb_label object=$transf_rule field="version"}}</th>
       <td id="EAITransformationRule-version">
-
-
       </td>
-    </tr>
-
-    <tr>
-      <th>{{mb_label object=$transf_rule field="extension"}}</th>
-      <td id="EAITransformationRule-extension">
-
-
-      </td>
-    </tr>
-
-    <tr>
-      <th>{{mb_label object=$transf_rule field="value"}}</th>
-      <td>{{mb_field object=$transf_rule field="value"}}</td>
     </tr>
 
     <tr>

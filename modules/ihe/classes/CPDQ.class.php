@@ -67,12 +67,17 @@ class CPDQ extends CIHE {
   }
 
   /**
-   * Retrieve events list of data format
-   *
-   * @return array Events list
+   * @see parent::getEvenements
    */
   function getEvenements() {
     return self::$evenements;
+  }
+
+  /**
+   * @see parent::getVersions
+   */
+  function getVersions() {
+    return self::$versions;
   }
 
   /**

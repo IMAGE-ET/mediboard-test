@@ -24,7 +24,7 @@ $transformation = new CEAITransformation();
 
 // On charge la liste des règles possibles en fonction des propriétés de l'évènement
 $transf_rule = new CEAITransformationRule();
-//  $transf_rule->bindObject(($event));
+$transf_rule->bindObject(($event));
 $transf_rules = $transf_rule->loadMatchingList();
 
 // Création du template
