@@ -5,10 +5,8 @@
     <th colspan="{{$_materiel+$_extra+$_duree+$_coordonnees+12}}">
       <h1 style="margin: auto;">
         <a href="#" onclick="window.print()">
-          Planning du {{$filter->_date_min|date_format:$conf.date}}
-          {{if $filter->_date_min != $filter->_date_max}}
-          au {{$filter->_date_max|date_format:$conf.date}}
-          {{/if}}
+          Planning du {{$filter->_datetime_min|date_format:$conf.date}} {{$filter->_datetime_min|date_format:$conf.time}}
+          au {{$filter->_datetime_max|date_format:$conf.date}} {{$filter->_datetime_max|date_format:$conf.time}}
           -
           {{$numOp}} intervention(s)
           {{if $operations|@count && $_hors_plage}}

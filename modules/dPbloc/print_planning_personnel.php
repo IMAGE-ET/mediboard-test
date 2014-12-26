@@ -13,39 +13,21 @@
 
 CCanDo::checkRead();
 
-$date_min = CValue::get("_date_min");
-$date_max = CValue::get("_date_max");
-$salle_id = CValue::get("salle_id");
-$bloc_id  = CValue::get("_bloc_id");
-$prat_id  = CValue::get("_prat_id");
-$specialite = CValue::get("_specialite");
+$datetime_min = CValue::get("_datetime_min");
+$datetime_max = CValue::get("_datetime_max");
+$salle_id     = CValue::get("salle_id");
+$bloc_id      = CValue::get("_bloc_id");
+$prat_id      = CValue::get("_prat_id");
+$specialite   = CValue::get("_specialite");
 
 if (is_array($bloc_id)) {
   CMbArray::removeValue("0", $bloc_id);
 }
 
-$dates = array();
-$date_temp = $date_min;
-
-while ($date_temp < $date_max) {
-  $dates[] = $date_temp;
-  //$personnel[$date_temp] = array();
-  $date_temp = CMbDT::date("+ 1 day", $date_temp);
-}
-
-$hours = array();
-$hour_temp = CAppUI::conf("dPbloc CPlageOp hours_start");
-$hour_max = CAppUI::conf("dPbloc CPlageOp hours_stop");
-
-while ($hour_temp < $hour_max) {
-  $hours[] = $hour_temp;
-  $hour_temp = CMbDT::time("+1 hour", $hour_temp);
-}
-
-$plage = new CPlageOp;
+$plage = new CPlageOp();
 $where = array();
 
-$where["date"] = "BETWEEN '$date_min' AND '$date_max'";
+$where["date"] = "BETWEEN '".CMbDT::date($datetime_min)."' AND '".CMbDT::date($datetime_max)."'";
 
 if (!$prat_id && !$specialite) {
   $function = new CFunctions;
@@ -104,8 +86,13 @@ foreach ($plages as $_plage) {
   $praticiens = CMbObject::massLoadFwdRef($operations, "chir_id");
   CMbObject::massLoadFwdRef($praticiens, "function_id");
   
-  foreach ($operations as $_operation) {
+  foreach ($operations as $key => $_operation) {
     $_operation->loadRefPlageOp();
+    if ($_operation->_datetime_best < $datetime_min ||
+      $_operation->_datetime_best > $datetime_max) {
+      unset($operations[$key]);
+      continue;
+    }
     $_operation->loadRefPatient();
     $_operation->loadRefChir()->loadRefFunction();
     $_operation->updateSalle();
@@ -130,7 +117,6 @@ foreach ($plages as $_plage) {
     }
   }
   foreach ($operations as $_operation) {
-    
     // Personnels ajoutés
     $affectations = $_operation->loadAffectationsPersonnel();
     
@@ -157,10 +143,9 @@ array_multisort(array_keys($personnels), SORT_ASC, $planning);
 
 $smarty = new CSmartyDP;
 
-$smarty->assign("date_min"  , $date_min);
-$smarty->assign("date_max"  , $date_max);
-$smarty->assign("hours"     , $hours);
-$smarty->assign("planning"  , $planning);
-$smarty->assign("personnels", $personnels);
+$smarty->assign("datetime_min", $datetime_min);
+$smarty->assign("datetime_max", $datetime_max);
+$smarty->assign("planning"    , $planning);
+$smarty->assign("personnels"  , $personnels);
 
 $smarty->display("print_planning_personnel.tpl");

@@ -1,5 +1,5 @@
 {{if !$board}}
-<script type="text/javascript">
+<script>
   Main.add(function(){
     Calendar.regField(getForm("changeDate").date, null, {noView: true});
   });
@@ -24,7 +24,7 @@
 </form>
 {{/if}}
 
-<script type="text/javascript">
+<script>
   ObjectTooltip.modes.allergies = {  
     module: "patients",
     action: "ajax_vw_allergies",
@@ -33,8 +33,8 @@
 
   printPlanningChir = function(date, prat_id) {
     var url = new Url("dPbloc", "view_planning");
-    url.addParam("_date_min", date);
-    url.addParam("_date_max", date);
+    url.addParam("_datetime_min", date + " 00:00:00");
+    url.addParam("_datetime_max", date + " 23:59:59");
     url.addParam("_prat_id", prat_id);
     url.pop('800', '600');
   }

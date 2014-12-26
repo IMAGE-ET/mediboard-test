@@ -15,8 +15,8 @@ $ds = CSQLDataSource::get("std");
 
 $now    = CMbDT::date();
 $filter = new COperation();
-$filter->_date_min       = CValue::get("_date_min", $now);
-$filter->_date_max       = CValue::get("_date_max", $now);
+$filter->_datetime_min   = CValue::get("_datetime_min", "$now 00:00:00");
+$filter->_datetime_max   = CValue::get("_datetime_max", "$now 23:59:59");
 $filter->_prat_id        = CValue::get("_prat_id");
 $filter->_bloc_id        = CValue::get("_bloc_id");
 $filter->salle_id        = CValue::get("salle_id");
@@ -44,7 +44,7 @@ $_compact                = CValue::get('_compact', 0);
 $_show_identity          = CValue::get('_show_identity', 1);
 
 if ($filter->_nb_days) {
-  $filter->_date_max = CMbDT::date("+$filter->_nb_days days", CMbDT::date($filter->_date_min)) . " 21:00:00";
+  $filter->_datetime_max = CMbDT::date("+$filter->_nb_days days", CMbDT::date($filter->_datetime_min)) . " 21:00:00";
 }
 
 $no_consult_anesth       = CValue::get("no_consult_anesth");
@@ -68,8 +68,8 @@ $affectations_plage = array();
 $wherePlagesop   = array();
 $whereOperations = array();
 
-$wherePlagesop["plagesop.date"]     =  $ds->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter->_date_max);
-$whereOperations["operations.date"] =  $ds->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter->_date_max);
+$wherePlagesop["plagesop.date"]     =  $ds->prepare("BETWEEN %1 AND %2", CMbDT::date($filter->_datetime_min), CMbDT::date($filter->_datetime_max));
+$whereOperations["operations.date"] =  $ds->prepare("BETWEEN %1 AND %2", CMbDT::date($filter->_datetime_min), CMbDT::date($filter->_datetime_max));
 $whereOperations["operations.plageop_id"] = "IS NULL";
 
 $user = CMediusers::get();
@@ -229,8 +229,13 @@ foreach ($plagesop as $plage) {
   $sejours = CMbObject::massLoadFwdRef($listOp, "sejour_id");
   CMbObject::massLoadFwdRef($sejours, "patient_id");
 
-  foreach ($listOp as $operation) {
+  foreach ($listOp as $key=>$operation) {
     $operation->loadRefPlageOp();
+    if ($operation->_datetime_best < $filter->_datetime_min ||
+      $operation->_datetime_best > $filter->_datetime_max) {
+      unset($listOp[$key]);
+      continue;
+    }
     $operation->loadRefsConsultAnesth();
     if ($no_consult_anesth && $operation->_ref_consult_anesth->_id) {
       unset($listOp[$operation->_id]);
@@ -297,8 +302,14 @@ foreach ($plagesop as $plage) {
   $listDates[$plage->date][$plage->_id] = $plage;
 }
 
-foreach ($operations as $operation) {
+foreach ($operations as $key => $operation) {
   $operation->loadRefPlageOp();
+
+  if ($operation->_datetime_best < $filter->_datetime_min ||
+    $operation->_datetime_best > $filter->_datetime_max) {
+    unset($operations[$key]);
+    continue;
+  }
   $operation->loadRefsConsultAnesth();
   if ($no_consult_anesth && $operation->_ref_consult_anesth->_id) {
     unset($operations[$operation->_id]);

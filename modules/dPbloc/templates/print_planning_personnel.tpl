@@ -3,7 +3,8 @@
     <th colspan="4">
       <h1>
         <a href="#" onclick="window.print()">
-          Planning du {{$date_min|date_format:$conf.date}} au {{$date_max|date_format:$conf.date}}
+          Planning du {{$datetime_min|date_format:$conf.date}} {{$datetime_min|date_format:$conf.time}}
+          au {{$datetime_max|date_format:$conf.date}} {{$datetime_max|date_format:$conf.time}}
         </a>
       </h1>
     </th>

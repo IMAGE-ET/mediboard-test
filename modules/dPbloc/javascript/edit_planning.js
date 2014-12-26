@@ -6,7 +6,7 @@ EditPlanning = window.EditPlanning || {
   modal_gestion : null,
   
   edit: function(plageop_id, date, bloc_id) {
-    var url = new Url('dPbloc', 'inc_edit_planning');
+    var url = new Url('bloc', 'inc_edit_planning');
     url.addParam('plageop_id', plageop_id);
     url.addParam('date', date);
     url.addParam('bloc_id', bloc_id);
@@ -24,7 +24,7 @@ EditPlanning = window.EditPlanning || {
   },
 
   order: function(plageop_id) {
-    var url = new Url('dPbloc', 'vw_edit_interventions');
+    var url = new Url('bloc', 'vw_edit_interventions');
     url.addParam('plageop_id', plageop_id);
     EditPlanning.modal_gestion = url;
     url.requestModal("100%", "90%");
@@ -45,7 +45,7 @@ EditPlanning = window.EditPlanning || {
   },
   
   refreshList: function() {
-    var url = new Url('dPbloc', 'inc_edit_planning');
+    var url = new Url('bloc', 'inc_edit_planning');
     url.requestUpdate('modif_planning');
   },
   
@@ -64,15 +64,15 @@ EditPlanning = window.EditPlanning || {
   },
   
   popPlanning: function(date) {
-    var url = new Url("dPbloc", "view_planning");
-    url.addParam("_date_min", date);
-    url.addParam("_date_max", date);
+    var url = new Url("bloc", "view_planning");
+    url.addParam("_datetime_min", date + " 00:00:00");
+    url.addParam("_datetime_max", date + " 23:59:59");
     url.addParam("salle"    , 0);
     url.popup(900, 550, "Planning");
   },
   
   showAlerte: function(date, bloc_id, type) {
-    var url = new Url("dPbloc", "vw_alertes");
+    var url = new Url("bloc", "vw_alertes");
     url.addParam("date"   , date);
     url.addParam("type"   , type);
     url.addParam("bloc_id", bloc_id);

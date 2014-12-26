@@ -11,8 +11,8 @@
 
 CCanDo::checkRead();
 
-$date_min = CValue::get("_date_min", CMbDT::date());
-$date_max = CValue::get("_date_max");
+$date_min = CValue::get("_datetime_min", CMbDT::date());
+$date_max = CValue::get("_datetime_max");
 
 $bloc_id  = CValue::get("_bloc_id", null);
 

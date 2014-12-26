@@ -15,9 +15,9 @@ CCanDo::checkRead();
 
 $now = CMbDT::date();
 
-$filter = new COperation;
-$filter->_date_min     = CValue::get("_date_min", $now);
-$filter->_date_max     = CValue::get("_date_max", $now);
+$filter = new COperation();
+$filter->_datetime_min = CValue::getOrSession("_datetime_min", "$now 00:00:00");
+$filter->_datetime_max = CValue::getOrSession("_datetime_max", "$now 23:59:59");
 $filter->_prat_id      = CValue::getOrSession("_prat_id");
 $filter->salle_id      = CValue::getOrSession("salle_id");
 $filter->_plage        = CValue::getOrSession("_plage", CAppUI::conf("dPbloc CPlageOp plage_vide"));
@@ -26,7 +26,7 @@ $filter->_specialite   = CValue::getOrSession("_specialite");
 $filter->_codes_ccam   = CValue::getOrSession("_codes_ccam");
 $filter->_ccam_libelle = CValue::getOrSession("_ccam_libelle", CAppUI::conf("dPbloc CPlageOp libelle_ccam"));
 
-$filterSejour = new CSejour;
+$filterSejour = new CSejour();
 $filterSejour->type = CValue::getOrSession("type");
 
 $tomorrow  = CMbDT::date("+1 day", $now);
