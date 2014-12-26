@@ -221,8 +221,11 @@
 
 {{if !$isPraticien}}
   <button class="add" onclick="addTransmission('{{$sejour->_id}}', '{{$user->_id}}', null, null, null, null, 1);" style="display: inline !important;">Ajouter une transmission</button>
-{{else}}
+{{/if}}
+{{if $isPraticien || (($app->_ref_user->isInfirmiere() || $app->_ref_user->isAideSoignant()) && "soins suivi obs_infirmiere"|conf:"CGroups-$g")}}
   <button class="add" onclick="addObservation('{{$sejour->_id}}', '{{$user->_id}}');" style="display: inline !important;">Ajouter une observation</button>
+{{/if}}
+{{if $isPraticien}}
   {{if $sejour->type == "urg" && "dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g" && "dPprescription"|module_active}}
     <button class="add" onclick="addPrescription('{{$sejour->_id}}', '{{$user->_id}}')" style="display: inline !important;">Ajouter une prescription</button>
   {{/if}}
