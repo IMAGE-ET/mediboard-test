@@ -14,6 +14,7 @@
 
 CCanDo::checkRead();
 
+set_time_limit(120);
 ini_set("memory_limit", "2048M");
 
 $sejours_ids  = CValue::get("sejours_ids", null);
