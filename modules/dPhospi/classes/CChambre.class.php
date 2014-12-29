@@ -70,9 +70,11 @@ class CChambre extends CMbObject {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["lits"]         = "CLit chambre_id";
-    $backProps["ufs"]          = "CAffectationUniteFonctionnelle object_id";
-    $backProps["emplacement"]  = "CEmplacement chambre_id";
+    $backProps["lits"]                = "CLit chambre_id";
+    $backProps["ufs"]                 = "CAffectationUniteFonctionnelle object_id";
+    $backProps["emplacement"]         = "CEmplacement chambre_id";
+    $backProps["origine_brancardage"] = "CBrancardage origine_id";
+    $backProps["origine_item"]        = "CBrancardageItem destination_id";
     return $backProps;
   }
 

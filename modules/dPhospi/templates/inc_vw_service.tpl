@@ -89,6 +89,11 @@
     </tr>
 
     <tr>
+      <th>{{mb_label object=$service field=use_brancardage}}</th>
+      <td>{{mb_field object=$service field=use_brancardage}}</td>
+    </tr>
+
+    <tr>
       <td class="button" colspan="2">
         {{if $service->_id}}
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

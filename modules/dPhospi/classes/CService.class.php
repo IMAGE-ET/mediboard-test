@@ -36,6 +36,7 @@ class CService extends CMbObject {
   public $default_orientation;
   public $default_destination;
   public $is_soins_continue;
+  public $use_brancardage;
 
   /** @var CChambre[] */
   public $_ref_chambres;
@@ -78,6 +79,8 @@ class CService extends CMbObject {
     $backProps["ufs"]                    = "CAffectationUniteFonctionnelle object_id";
     $backProps["refus_dispensation"]     = "CRefusDispensation service_id";
     $backProps["regle_sectorisation_service"] = "CRegleSectorisation service_id";
+    $backProps["origine_brancardage"]    = "CBrancardage origine_id";
+    $backProps["origine_item"]           = "CBrancardageItem destination_id";
 
     return $backProps;
   }
@@ -106,6 +109,7 @@ class CService extends CMbObject {
     $props["default_orientation"] = "enum list|".implode("|", CRPU::$orientation_value);
     $props["default_destination"] = "enum list|".implode("|", CSejour::$destination_values);
     $props["is_soins_continue"]   = "bool default|0 notNull";
+    $props["use_brancardage"]     = "bool default|1";
 
     return $props;
   }

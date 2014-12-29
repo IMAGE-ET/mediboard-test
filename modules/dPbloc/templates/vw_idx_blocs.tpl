@@ -93,6 +93,10 @@ Main.add(function () {
               <td>{{mb_field object=$bloc field="days_locked"}}</td>
             </tr>
             <tr>
+              <th>{{mb_label object=$bloc field="use_brancardage"}}</th>
+              <td>{{mb_field object=$bloc field="use_brancardage"}}</td>
+            </tr>
+            <tr>
               <td class="button" colspan="2">
                 {{if $bloc->_id}}
                 <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>

@@ -25,6 +25,7 @@ class CBlocOperatoire extends CMbObject {
   public $days_locked;
   public $tel;
   public $fax;
+  public $use_brancardage;
 
   /** @var CSalle[] */
   public $_ref_salles;
@@ -55,12 +56,13 @@ class CBlocOperatoire extends CMbObject {
     $backProps = parent::getBackProps();
     $backProps["salles"]                  = "CSalle bloc_id";
     $backProps["check_lists"]             = "CDailyCheckList object_id";
-    $backProps["destination_brancardage"] = "CDestinationBrancardage object_id";
     $backProps["stock_locations"]         = "CProductStockLocation object_id";
     $backProps["postes"]                  = "CPosteSSPI bloc_id";
     $backProps["check_list_categories"]   = "CDailyCheckItemCategory target_id";
     $backProps["check_list_type_links"]   = "CDailyCheckListTypeLink object_id";
     $backProps["product_address_orders"]  = "CProductOrder address_id";
+    $backProps["origine_brancardage"]     = "CBrancardage origine_id";
+    $backProps["origine_item"]            = "CBrancardageItem destination_id";
     return $backProps;
   }
 
@@ -75,6 +77,7 @@ class CBlocOperatoire extends CMbObject {
     $props["days_locked"] = "num min|0 default|0";
     $props["tel"]         = "phone";
     $props["fax"]         = "phone";
+    $props["use_brancardage"] = "bool default|1";
     $props["_date_min"]   = "date";
     return $props;
   }

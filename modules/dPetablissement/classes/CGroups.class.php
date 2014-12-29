@@ -187,7 +187,6 @@ class CGroups extends CMbObject {
     $backProps["notifications"]             = "CNotification group_id";
     $backProps["notification_objects"]      = "CNotificationObject group_id";
     $backProps["type_anesth_group"]         = "CTypeAnesth group_id";
-    $backProps["dest_brancard"]             = "CDestinationBrancardage group_id";
     $backProps["bris_de_glace_group"]       = "CBrisDeGlace group_id";
     $backProps["log_access_medical_data"]   = "CLogAccessMedicalData group_id";
     $backProps["group_astreinte"]           = "CPlageAstreinte group_id";
@@ -196,6 +195,7 @@ class CGroups extends CMbObject {
     $backProps["search_thesaurus_entry"]    = "CSearchThesaurusEntry group_id";
     $backProps["links_cat_chap"]            = "CLinkBonCatChap group_id";
     $backProps["supervision_instant_data"]  = "CSupervisionInstantData owner_id";
+    $backProps["type_brancard_group"]       = "CBrancardageTransport group_id";
     //$backProps["ex_object"]                 = "CExObject group_id"; // DO NOT ADD THIS BACK PROP
     return $backProps;
   }

@@ -72,6 +72,8 @@ class CLit extends CMbObject {
     $backProps["affectations_rpu"] = "CRPU box_id";
     $backProps["ufs"]              = "CAffectationUniteFonctionnelle object_id";
     $backProps["liaisons_items"]   = "CLitLiaisonItem lit_id";
+    $backProps["origine_brancardage"] = "CBrancardage origine_id";
+    $backProps["origine_item"]        = "CBrancardageItem destination_id";
     return $backProps;
   }
 

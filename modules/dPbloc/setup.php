@@ -446,7 +446,11 @@ class CSetupdPbloc extends CSetup {
       SET `original_function_id` = `spec_id`
       WHERE `original_function_id` IS NULL";
     $this->addQuery($query);
+    $this->makeRevision("0.47");
+    $query = "ALTER TABLE `bloc_operatoire`
+                ADD `use_brancardage` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
 
-    $this->mod_version = "0.47";
+    $this->mod_version = "0.48";
   }
 }

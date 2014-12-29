@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 /**
@@ -57,7 +57,6 @@ class CPlateauTechnique extends CMbObject {
     $backProps = parent::getBackProps();
     $backProps["equipements"] = "CEquipement plateau_id";
     $backProps["techniciens"] = "CTechnicien plateau_id";
-    $backProps["destination_brancardage"]        = "CDestinationBrancardage object_id";
     return $backProps;
   }
 

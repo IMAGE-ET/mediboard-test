@@ -57,9 +57,8 @@ class CPersonnel extends CMbObject {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps['affectations']    = 'CAffectationPersonnel personnel_id';
-    $backProps['brancard_depart'] = 'CBrancardage pec_dep_user_id';
-    $backProps['brancard_retour'] = 'CBrancardage pec_ret_user_id';
+    $backProps['affectations'] = 'CAffectationPersonnel personnel_id';
+    $backProps['brancard_pec'] = 'CBrancardageItem pec_user_id';
     return $backProps;
   }
 
