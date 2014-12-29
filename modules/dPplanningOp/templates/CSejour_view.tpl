@@ -115,13 +115,6 @@
         {{tr}}module-dPurgences-long{{/tr}}
       </button>
       {{/if}}
-    
-      {{if @$modules.brancardage->_can->read}}
-        {{mb_script module=brancardage script=creation_brancardage ajax=true}}
-        <button type="button" class="edit" onclick="CreationBrancard.edit('{{$sejour->_id}}');" style="width:80px;">
-        {{tr}}module-Brancardage-long{{/tr}}
-        </button>
-      {{/if}}
 
       <br />
       <button type="button" class="print" onclick="printDossierSejour('{{$sejour->_id}}');">{{tr}}Print{{/tr}}</button>
