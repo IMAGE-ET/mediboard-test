@@ -451,6 +451,32 @@ class CSetupdPbloc extends CSetup {
                 ADD `use_brancardage` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.48";
+    $this->makeRevision("0.48");
+    $query = "
+    CREATE TABLE `salle_daily_occupation` (
+                `miner_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `salle_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `date` DATE NOT NULL,
+                `status` ENUM ('mined','remined','postmined'),
+                `cumulative_plages_planned` INT (11),
+                `nb_plages_planned` INT (11),
+                `nb_plages_planned_valid` INT (11),
+                `cumulative_real_interventions` INT (11),
+                `nb_real_interventions` INT (11),
+                `nb_real_intervention_valid` INT (11),
+                `cumulative_opened_patient` INT (11),
+                `nb_interventions_opened_patient` INT (11),
+                `nb_intervention_opened_patient_valid` INT (11),
+                `cumulative_plages_minus_interventions` INT (11),
+                `cumulative_interventions_minus_plages` INT (11)
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `salle_daily_occupation`
+                ADD INDEX (`salle_id`),
+                ADD INDEX (`date`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.49";
   }
 }
