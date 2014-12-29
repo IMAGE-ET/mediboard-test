@@ -13,13 +13,13 @@
   <table id="{{$type}}-{{$appareil}}" style="display: none; width: 100%" class="tbl">
     <tr>
       <th colspan="1000" class="title">
-        {{if !"dPcabinet CAntecedent show_form_add_atcd"|conf:"CGroups-$g"}}
+        {{if !"dPpatients CAntecedent show_form_add_atcd"|conf:"CGroups-$g"}}
           <button style="float: right" class="add notext" onclick="$('textarea-ant-{{$type}}-{{$appareil}}').toggle(); this.toggleClassName('remove').toggleClassName('add')">Ajouter</button>
         {{/if}}
         {{tr}}CAntecedent.appareil.{{$appareil}}{{/tr}}
       </th>
     </tr>
-    <tr id="textarea-ant-{{$type}}-{{$appareil}}" {{if !"dPcabinet CAntecedent show_form_add_atcd"|conf:"CGroups-$g"}}style="display: none;"{{/if}}>
+    <tr id="textarea-ant-{{$type}}-{{$appareil}}" {{if !"dPpatients CAntecedent show_form_add_atcd"|conf:"CGroups-$g"}}style="display: none;"{{/if}}>
       <td colspan="1000">
         <form name="addAnt-{{$type}}-{{$appareil}}" method="post">
           <input name="antecedent" size="60"/>

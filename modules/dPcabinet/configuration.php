@@ -18,9 +18,6 @@ CConfiguration::register(
           "view_prescription"         => "bool default|0",
           "view_prescription_externe"  => "bool default|0"
         ),
-        "CAntecedent" => array(
-          "show_form_add_atcd" => "bool default|0"
-        )
       )
     )
   )

@@ -61,6 +61,9 @@ CConfiguration::register(
         ),
         'CTraitement' => array(
           'enabled' => "bool default|0",
+        ),
+        'CAntecedent' => array(
+          'show_form_add_atcd' => 'bool default|0'
         )
       )
     ),
