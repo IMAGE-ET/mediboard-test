@@ -63,6 +63,12 @@
           <br/>
           <span style="font-size: 0.6em;">
             {{$sejour->_motif_complet|spancate:30:"...":false}}
+            {{if $sejour->libelle && $sejour->_ref_operations|@count}}
+              &mdash;
+              {{foreach from=$sejour->_ref_operations item=_op name=op}}
+                {{$_op->libelle|spancate:30:"...":false}} {{if !$smarty.foreach.op.last}};{{/if}}
+              {{/foreach}}
+            {{/if}}
           </span>
           {{if $sejour->_jour_op}}
             {{foreach from=$sejour->_jour_op item=_info_jour_op}}
