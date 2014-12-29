@@ -12,7 +12,7 @@
 /**
  * Facture générique
  */
-class CFacture extends CMbObject {
+class CFacture extends CMbObject implements IPatientRelated {
 
   // DB Fields
   public $group_id;
@@ -601,6 +601,15 @@ class CFacture extends CMbObject {
       $this->_ref_patient->loadRefsCorrespondantsPatient();
     }
     return $this->_ref_patient;
+  }
+
+  /**
+   * Chargement du patient concerné par la facture
+   *
+   * @return CPatient
+   **/
+  function loadRelPatient() {
+    return $this->loadRefPatient();
   }
 
   /**
