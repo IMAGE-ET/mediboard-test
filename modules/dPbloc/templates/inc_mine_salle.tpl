@@ -12,17 +12,22 @@
 <h2>Exploration de données</h2>
 
 <script>
-  Main.add(function() {
-    Calendar.regField(getForm('getDate').date);
-  });
+  submitMine = function() {
+    var form = getForm("mine");
+    form.onsubmit();
+  };
 </script>
 
-<form name="getDate" method="get">
-  <input type="text" name="date" value="{{$dnow}}" style="display: none;"/>
-</form>
+<form name="mine" method="get" onsubmit="return onSubmitFormAjax(this)">
+  <input type="hidden" name="m" value="dPbloc"/>
+  <input type="hidden" name="a" value="ajax_datamine_salle" />
+  <input type="hidden" name="miner_class" value="CDailySalleOccupation" />
+  <input type="hidden" name="phase" value="mine" />
+  <label>
+    <input type="checkbox" name="auto" value="1" />Auto
+  </label>
 
-<p>
-<button onclick="Datamining.mine('CDailySalleOccupation', 'mine', $V(getForm('getDate').date))" class="change">Mine</button>
-<button onclick="Datamining.mine('CDailySalleOccupation', 'remine', $V(getForm('getDate').date))" class="change">Remine</button>
-<button onclick="Datamining.mine('CDailySalleOccupation', 'postmine', $V(getForm('getDate').date))" class="change">Postmine</button>
-</p>
+  <button onclick="$V(this.form.phase, 'mine'); this.form.onsubmit();" class="change">Mine</button>
+  <button onclick="$V(this.form.phase, 'remine'); this.form.onsubmit();" class="change">ReMine</button>
+  <button onclick="$V(this.form.phase, 'postmine'); this.form.onsubmit();" class="change">PostMine</button>
+</form>

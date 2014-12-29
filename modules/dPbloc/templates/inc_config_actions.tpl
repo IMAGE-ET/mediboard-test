@@ -105,12 +105,8 @@
             this.url.requestModal('800', '600');
           },
 
-          mine: function(miner_class, phase, date) {
-            new Url('bloc', 'ajax_datamine_salle')
-                .addNotNullParam('miner_class', miner_class)
-                .addNotNullParam('phase', phase)
-                .addParam('date', date)
-                .requestUpdate('systemMsg', this.url.refreshModal.bind(this.url));
+          refresh : function() {
+            this.url.modalObject.refresh();
           }
         };
 

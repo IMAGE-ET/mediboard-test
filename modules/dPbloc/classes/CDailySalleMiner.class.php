@@ -62,12 +62,15 @@ class CDailySalleMiner extends CStoredObject {
     $salle = new CSalle();
     $nb_salles = $salle->countList();
 
-    // max de la premiere opération et du 01012001
-    $op = new COperation();
-    $op->loadObject(array('date' => ' IS NOT NULL'), "date ASC");
-    $first_date = max($op->date, "2000-01-01");
+    $first_date = self::getMinDate();
     $day_relative = CMbDT::daysRelative($first_date, CMbDT::date($before));
     return $nb_salles*$day_relative;
+  }
+
+  static function getMinDate() {
+    $op = new COperation();
+    $op->loadObject(array('date' => ' IS NOT NULL'), "date ASC");
+    return max($op->date, "2000-01-01");
   }
 
   /**
@@ -90,7 +93,7 @@ class CDailySalleMiner extends CStoredObject {
    * @return int
    */
   function countUnmined() {
-    return $this->_count_unmined = self::countSallesDaily(CMbDT::date(self::$mine_delay)) - $this->countList();
+    return $this->_count_unmined = (self::countSallesDaily(CMbDT::date(self::$mine_delay))) - $this->countList();
   }
 
   /**
@@ -125,20 +128,17 @@ class CDailySalleMiner extends CStoredObject {
    *
    * @return array Success/failure counts report
    */
-  function mineSome($limit = 100, $phase = "mine", $date = null) {
-    $date = CMbDT::date($date);
+  function mineSome($limit = 100, $phase = "mine") {
+    $date = CMbDT::date();
     $report = array(
       "success" => 0,
       "failure" => 0,
     );
 
-    if (!$limit) {
-      return $report;
-    }
-
     $salle = new CSalle();
     $ds = $salle->getDS();
-    $salle_ids = $salle->loadIds();
+
+    $min_date = self::getMinDate();
 
     $phases = array(
       "mine"      => array("mined", "remined", "postmined"),
@@ -147,31 +147,46 @@ class CDailySalleMiner extends CStoredObject {
     );
 
     $ref_dates = array(
-      "mine"      => CMbDT::date(self::$mine_delay, $date),
-      "remine"    => CMbDT::date(self::$remine_delay, $date),
-      "postmine"  => CMbDT::date(self::$postmine_delay, $date),
+      "mine"      => CMbDT::date(self::$mine_delay),
+      "remine"    => CMbDT::date(self::$remine_delay),
+      "postmine"  => CMbDT::date(self::$postmine_delay),
     );
 
-    $sql = "SELECT sallesbloc.salle_id, date, miner_id as occupation
-      FROM sallesbloc
+    $sql = "SELECT sallesbloc.salle_id, MAX(date) as date FROM sallesbloc
       LEFT JOIN salle_daily_occupation ON salle_daily_occupation.salle_id = sallesbloc.salle_id
-      WHERE salle_daily_occupation.date = '".$ref_dates[$phase]."'";
-    $result = $ds->loadList($sql);
-    $result_by_salle = CMbArray::pluck($result, "salle_id");
-    $to_do = array_diff($salle_ids, $result_by_salle);
-    $nb = 0;
-    foreach($to_do as $_to_do) {
-      if ($nb > $limit) {
-        continue;
+      WHERE (salle_daily_occupation.status ".$ds->prepareIn($phases[$phase])." OR salle_daily_occupation.status IS NULL)
+      GROUP BY salle_id
+      ";
+    if (!$result = $ds->loadList($sql)) {
+      return;
+    }
+
+    // cleanup
+    foreach ($result as &$_result) {
+      if (!$_result["date"]) {
+        $_result["date"] = $min_date;
       }
-      $this->mine($_to_do, $ref_dates[$phase]);
+    }
+
+    // iteration
+    $i = $limit;
+    while($i--) {
+      // sort
+      array_multisort(CMbArray::pluck($result, "date"), SORT_ASC, $result);
+
+      // first
+      $result[0]["date"] = CMbDT::date("+1 DAY", $result[0]["date"]);
+      if ($result[0]["date"] > $ref_dates[$phase]) {
+        break;
+      }
+
+      $this->mine($result[0]["salle_id"], $result[0]["date"]);
       if ($msg = $this->store()) {
         $report["failure"]++;
       }
       else {
         $report["success"]++;
       }
-      $nb++;
     }
 
     return $report;

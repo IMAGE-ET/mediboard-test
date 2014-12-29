@@ -24,6 +24,10 @@ class CDailySalleOccupation extends CDailySalleMiner {
   public $nb_real_interventions;
   public $nb_real_intervention_valid;
 
+  public $cumulative_opened_patient;
+  public $nb_interventions_opened_patient;
+  public $nb_intervention_opened_patient_valid;
+
   public $cumulative_plages_minus_interventions;    // temps utilisé en dehors des plages
   // nb element
 
@@ -65,6 +69,10 @@ class CDailySalleOccupation extends CDailySalleMiner {
     $props["cumulative_real_interventions"]         = "num";    // minutes
     $props["nb_real_interventions"]                 = "num";
     $props["nb_real_intervention_valid"]            = "num";
+
+    $props["cumulative_opened_patient"]             = "num";
+    $props["nb_interventions_opened_patient"]       = "num";
+    $props["nb_intervention_opened_patient_valid"]  = "num";
 
     $props["cumulative_plages_minus_interventions"] = "num";    // minutes
 
@@ -112,7 +120,7 @@ class CDailySalleOccupation extends CDailySalleMiner {
     $range_inter = array();
     foreach ($intervs as $ki => $_interv) {
       // cleanup invalid
-      if ($_interv->annulee || !$_interv->entree_salle || !$_interv->sortie_salle || ($_interv->entree_salle >= $_interv->sortie_salle)) {
+      if (!$_interv->entree_salle || !$_interv->sortie_salle || ($_interv->entree_salle >= $_interv->sortie_salle)) {
         continue;
       }
 
@@ -124,6 +132,25 @@ class CDailySalleOccupation extends CDailySalleMiner {
     $this->cumulative_real_interventions = 0;
     foreach ($range_inter as $_range) {
       $this->cumulative_real_interventions += CMbDT::minutesRelative($_range["lower"], $_range["upper"]);
+    }
+
+    // opening patient
+    $interv_to_use = array();
+    $range_inter_opened = array();
+    foreach ($intervs as $ki => $_interv) {
+      // cleanup invalid
+      if (!$_interv->debut_op || !$_interv->fin_op || ($_interv->debut_op >= $_interv->fin_op)) {
+        continue;
+      }
+
+      $interv_to_use[$ki] = $_interv;
+      CMbRange::union($range_inter_opened, array("lower" => $_interv->debut_op, "upper" => $_interv->fin_op));
+    }
+    $this->nb_interventions_opened_patient = count($intervs);
+    $this->nb_intervention_opened_patient_valid = count($interv_to_use);
+    $this->cumulative_opened_patient = 0;
+    foreach ($range_inter_opened as $_range) {
+      $this->cumulative_opened_patient += CMbDT::minutesRelative($_range["lower"], $_range["upper"]);
     }
 
     // range operation

@@ -13,7 +13,10 @@
 
 CCanDo::checkEdit();
 
-mbTrace(CDailySalleMiner::makeSalleDailyCounts());
+$miner = new CDailySalleOccupation();
+mbTrace($miner->countUnmined(), "unmined");
+mbTrace($miner->countUnremined(), "un-remined");
+mbTrace($miner->countUnpostmined(), "un-postmined");
 
 $smarty = new CSmartyDP();
 $smarty->display("inc_mine_salle.tpl");
