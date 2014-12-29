@@ -112,6 +112,9 @@ Main.add(function () {
                       {{foreach from=$_act->phases item=_phase}}
                       <li>
                         Phase {{$_phase->phase}} <em>({{$_phase->libelle}})</em> : {{$_phase->tarif|currency}}
+                        {{if $_phase->tarif != $_phase->tarif2}}
+                        / {{$_phase->tarif2|currency}}
+                        {{/if}}
                         {{if $_phase->charges}}
                           <br />Charges supplémentaires de cabinets possibles : {{$_phase->charges|currency}}
                         {{/if}}

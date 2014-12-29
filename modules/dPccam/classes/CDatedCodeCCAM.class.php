@@ -446,10 +446,12 @@ class CDatedCodeCCAM {
       $datedPhase->dents_incomp = $phase->_ref_dents_incomp;
       if ($infoPhase) {
         $datedPhase->tarif   = floatval($infoPhase->prix_unitaire)/100;
+        $datedPhase->tarif2   = floatval($infoPhase->prix_unitaire2)/100;
         $datedPhase->charges = floatval($infoPhase->charge_cab)/100;
       }
       else {
         $datedPhase->tarif   = 0;
+        $datedPhase->tarif2  = 0;
         $datedPhase->charges = 0;
       }
       // Ordre des tarifs décroissants pour l'activité 1

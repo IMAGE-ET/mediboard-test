@@ -30,6 +30,9 @@ class CPhaseInfoCCAM extends CCCAM {
   public $coeff_unite_oeuvre;
   public $code_paiement;
   public $prix_unitaire;
+  // Prix unitaire secteur 1 ou
+  // avec signature du contrat d'accès aux soins
+  public $prix_unitaire2;
   public $charge_cab;
   public $coeff_dom;
 
@@ -49,6 +52,7 @@ class CPhaseInfoCCAM extends CCCAM {
     $this->coeff_unite_oeuvre = $row["COEFFUOEUVRE"];
     $this->code_paiement      = $row["CODEPAIEMENT"];
     $this->prix_unitaire      = $row["PRIXUNITAIRE"];
+    $this->prix_unitaire2     = $row["PRIXUNITAIRE2"];
     $this->charge_cab         = $row["CHARGESCAB"];
     $this->coeff_dom          = array();
     $this->coeff_dom[]        = $row["COEFFDOM1"];
