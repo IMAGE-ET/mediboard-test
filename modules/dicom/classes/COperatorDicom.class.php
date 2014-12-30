@@ -422,7 +422,7 @@ class COperatorDicom extends CEAIOperator {
       'affectation.affectation_id' => ' IS NULL'
     );
 
-    $sejours = array_merge($sejours, $sejour->loadList($where, null, null, 'sejour.sejour_id', $ljoin));
+    $sejours = array_merge($sejours, $sejour->loadList($where, null, null, array('sejour.sejour_id'), $ljoin));
 
     CMbObject::massLoadFwdRef($sejours, 'patient_id');
     CMbObject::massLoadFwdRef($sejours, 'praticien_id');
