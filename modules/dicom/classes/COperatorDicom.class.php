@@ -13,7 +13,7 @@
  * The COperatorDicom class
  */
 class COperatorDicom extends CEAIOperator {
-  
+
   /**
    * Handle a message, and return the response
    * 
@@ -36,10 +36,12 @@ class COperatorDicom extends CEAIOperator {
       $dicom_exchange->date_production = CMbDT::dateTime();
       $dicom_exchange->date_echange = CMbDT::dateTime();
     }
+
     $last_pdvs = $dicom_exchange->_requests[count($dicom_exchange->_requests) - 1]->getPDVs();
 
     $response = array();
     $time_deb_pdv = microtime(true);
+
     foreach ($last_pdvs as $last_pdv) {
       if ($last_pdv->getMessageControlHeader() == 0 || $last_pdv->getMessageControlHeader() == 2) {
         $find_rq_pdv = null;
@@ -86,6 +88,7 @@ class COperatorDicom extends CEAIOperator {
         }
       }
     }
+
     $time_aft_pdv = microtime(true);
     $dicom_exchange->store();
     $response["exchange_id"] = $dicom_exchange->_id;
@@ -101,7 +104,7 @@ class COperatorDicom extends CEAIOperator {
    * 
    * @return array
    */
-  protected function handleCEchoRQ($pdv, $dicom_exchange) {
+  protected static function handleCEchoRQ($pdv, $dicom_exchange) {
     $msg = $pdv->getMessage();
     $datas = array(
       "PDVs" => array(
@@ -121,11 +124,13 @@ class COperatorDicom extends CEAIOperator {
         ),
       ),
     );
+
     $pdu = CDicomPDUFactory::encodePDU("04", $datas, $dicom_exchange->_presentation_contexts);
-    
+
     if (!$dicom_exchange->_responses) {
       $dicom_exchange->_responses = array();
     }
+
     $dicom_exchange->_responses[] = $pdu;
     $dicom_exchange->acquittement_valide = 1;
     $dicom_exchange->type = "Echo";
@@ -138,7 +143,7 @@ class COperatorDicom extends CEAIOperator {
    * 
    * @return array
    */
-  protected function handleCEchoRSP() {
+  protected static function handleCEchoRSP() {
     return array("event" => "AReleaseRQ_Prepared", "datas" => null);
   }
   
@@ -150,13 +155,14 @@ class COperatorDicom extends CEAIOperator {
    * 
    * @return array
    */
-  protected function handleCFindRQ($pdv, $dicom_exchange) {
+  protected static function handleCFindRQ($pdv, $dicom_exchange) {
     $msg = $pdv->getMessage();
     
     // if the message does not contains datas :
     if ($msg->getCommandDataSet()->getValue() == 0x0101 && $msg->getAffectedSopClass()->getValue() == '1.2.840.10008.5.1.4.31') {
       return array("event" => "AAbort_Prepared", "datas" => 5);
     }
+
     return array();
   }
   
@@ -165,7 +171,7 @@ class COperatorDicom extends CEAIOperator {
    * 
    * @return array
    */
-  protected function handleCFindRSP() {
+  protected static function handleCFindRSP() {
     return array("event" => "AAbort_Prepared", "datas" => 5);
   }
   
@@ -174,7 +180,7 @@ class COperatorDicom extends CEAIOperator {
    * 
    * @return array
    */
-  protected function handleCCancelFindRQ() {
+  protected static function handleCCancelFindRQ() {
     return array("event" => "AAbort_Prepared", "datas" => 5);
   }
   
@@ -189,12 +195,12 @@ class COperatorDicom extends CEAIOperator {
    *
    * @return array
    */
-  protected function handleCDatas($find_rq_pdv, $find_data_pdv, $dicom_exchange) {
+  protected static function handleCDatas($find_rq_pdv, $find_data_pdv, $dicom_exchange) {
     $msg_rq = $find_rq_pdv->getMessage();
     $msg_data = $find_data_pdv->getMessage();
 
+    /** If the message is a request : **/
     if (is_null($dicom_exchange->_responses)) {
-      /** The message is a request : **/
       $requested_datas = $msg_data->getRequestedDatas();
       $sender = $dicom_exchange->loadRefSender();
 
@@ -202,6 +208,7 @@ class COperatorDicom extends CEAIOperator {
         return array("event" => "AAbort_Prepared", "datas" => 5);
       }
 
+      /* Loading the objects linked to the Dicom sender */
       $linked_objects = CObjectToInteropSender::loadAllObjectsFor($sender->_id);
 
       $find_rsp_pending_datas = array(
@@ -223,98 +230,29 @@ class COperatorDicom extends CEAIOperator {
         ),
       );
 
+      /* Encoding the PDU that separate the patients data */
       $find_rsp_pending = CDicomPDUFactory::encodePDU(0x04, $find_rsp_pending_datas, $dicom_exchange->_presentation_contexts);
+
+      $calling_ae_title = self::getRequestedAETitle($requested_datas);
+      $modality = self::getRequestedModality($requested_datas);
+
+      /** Getting the requested encoding **/
+      $encoding = null;
+      $rq_datasets = $find_data_pdv->getMessage()->getDatasets();
+
+      if (isset($rq_datasets[0x0008][0x0005])) {
+        $encoding_dataset = $rq_datasets[0x0008][0x0005];
+        $encoding = $encoding_dataset->getValue();
+      }
 
       $responses = array();
 
-      foreach ($linked_objects as $linked_object) {
-        if ($linked_object->object_class != "CSalle") {
-          continue;
-        }
+      /* Loading the objects (CSejour or COperation) from the linked objects */
+      $objects = self::loadObjectsFromLinkedObjects($linked_objects);
 
-        $operation = new COperation;
-        $where = array(
-          'salle_id' => " = '$linked_object->object_id'",
-          'date'     => " = '" . CMbDT::date() . "'"
-        );
-
-        $unplanned_operations = $operation->loadList($where);
-
-        $ljoin = array(
-          "plagesop" => "`plagesop`.`plageop_id` = `operations`.`plageop_id`"
-        );
-
-        $where = array(
-          "plagesop.salle_id"   => " = '$linked_object->object_id'",
-          "operations.date"     => " = '" . CMbDT::date() . "'",
-          "operations.salle_id" => " = '$linked_object->object_id'"
-        );
-
-        $operations = $operation->loadList($where, null, null, null, $ljoin);
-
-        $operations = array_merge($operations, $unplanned_operations);
-        
-        /** Detection de l'encodage demandé **/
-        $encoding = null;
-        $rq_datasets = $find_data_pdv->getMessage()->getDatasets();
-        
-        if (isset($rq_datasets[0x0008][0x0005])) {
-          $encoding_dataset = $rq_datasets[0x0008][0x0005];
-          $encoding = $encoding_dataset->getValue();
-        }
-        
-        foreach ($operations as $_operation) {
+      if ($objects) {
+        foreach ($objects as $_object) {
           $responses[] = $find_rsp_pending;
-
-          $_patient = $_operation->loadRefPatient();
-          $_operation->updateFormFields();
-          $_operation->loadRefPlageOp();
-          $_sejour = $_operation->loadRefSejour();
-          $_chir = $_operation->loadRefChir();
-          $_patient->loadIPP();
-          $_sejour->loadNDA();
-
-          $libelle = "";
-          if ($_operation->libelle) {
-            $libelle = substr($_operation->libelle, 0, 64);
-          }
-          else {
-            $libelle = "Pas de libellé";
-          }
-
-          $date = "";
-          if ($_operation->date) {
-            $date = str_replace("-", "", $_operation->date);
-          }
-          else {
-            $date = str_replace("-", "", $_operation->_ref_plageop->date);
-          }
-          
-          $time = "";
-          if ($_operation->time_operation) {
-            $time = str_replace(":", "", $_operation->time_operation);
-            $time .= ".000000";
-          }
-          else {
-            $time = "000000.000000";
-          }
-          
-          $age = intval(substr(trim($_patient->_age), 0, 2));
-          
-          $chir_name = "$_chir->_user_last_name $_chir->_user_first_name";
-          
-          /** Encodage des données **/
-          if ($encoding == "ISO_IR 192") {
-            $libelle = utf8_encode($libelle);
-            $date = utf8_encode($date);
-            $chir_name = utf8_encode($chir_name);
-            $time = utf8_encode($time);
-          }
-
-          $calling_ae_title = '';
-          if (array_key_exists(0x0040, $requested_datas) && array_key_exists(0x0001, $requested_datas[0x0040])) {
-            $calling_ae_title = $requested_datas[0x0040][0x0001];
-          }
 
           $find_rsp_datas = array(
             "PDVs" => array(
@@ -323,36 +261,7 @@ class COperatorDicom extends CEAIOperator {
                 "message_control_header" => 0x02,
                 "message"                => array(
                   "type"  => "data",
-                  "datas" => array(
-                    0x0008 => array (
-                      0x0050 => $_sejour->_NDA
-                    ),
-                    0x0010 => array(
-                      0x0010 => "$_patient->nom^$_patient->prenom",
-                      0x0020 => "$_patient->_IPP",
-                      0x0030 => str_replace("-", "", $_patient->naissance),
-                      0x0040 => strtoupper($_patient->sexe)
-                    ),
-                    0x0020 => array(
-                      0x000D => $_sejour->_NDA
-                    ),
-                    0x0038 => array (
-                      0x0010 => $_sejour->_NDA
-                    ),
-                    0x0040 => array(
-                      0x0100 => array(
-                        array(
-                          array("group_number" => 0x0040, "element_number" => 0x0001, "value" => $calling_ae_title),
-                          array("group_number" => 0x0040, "element_number" => 0x0002, "value" => $date),
-                          array("group_number" => 0x0040, "element_number" => 0x0003, "value" => $time),
-                          array("group_number" => 0x0040, "element_number" => 0x0006, "value" => $chir_name),
-                          array("group_number" => 0x0040, "element_number" => 0x0007, "value" => $libelle),
-                          array("group_number" => 0x0040, "element_number" => 0x0009, "value" => $_sejour->_NDA),
-                        ),
-                      ),
-                      0x1001 => $_sejour->_NDA
-                    ),
-                  ),
+                  "datas" => self::getDataFromObject($_object, $encoding, $modality, $calling_ae_title),
                 )
               ),
             )
@@ -361,6 +270,7 @@ class COperatorDicom extends CEAIOperator {
           $responses[] = CDicomPDUFactory::encodePDU(0x04, $find_rsp_datas, $dicom_exchange->_presentation_contexts);
         }
       }
+
       $find_rsp_success_datas = array(
         "PDVs" => array(
           array(
@@ -379,6 +289,7 @@ class COperatorDicom extends CEAIOperator {
           ),
         ),
       );
+
       $responses[] = CDicomPDUFactory::encodePDU(0x04, $find_rsp_success_datas, $dicom_exchange->_presentation_contexts);
 
       if (!$dicom_exchange->_responses) {
@@ -394,5 +305,414 @@ class COperatorDicom extends CEAIOperator {
       /** The message is a response : **/
       return array("event" => "AAbort_Prepared", "datas" => 5);
     }
+  }
+
+  /**
+   * Load the objects to send from the linked objects
+   *
+   * @param CMbObject[] $linked_objects The linked objects
+   *
+   * @return array|CMbObject[]
+   */
+  protected static function loadObjectsFromLinkedObjects($linked_objects) {
+    $linked_object = reset($linked_objects);
+
+    switch($linked_object->object_class) {
+      case 'CSalle':
+        $objects = self::loadOperationsFromLinkedObjects($linked_objects);
+        break;
+      case 'CService':
+        $objects = self::loadSejoursFromLinkedObjects($linked_objects);
+        break;
+      default:
+        $objects = array();
+    }
+
+    return $objects;
+  }
+
+  /**
+   * Load the COperation to send from the linked CSalle objects
+   *
+   * @param CSalle[] $linked_objects The linked objects
+   *
+   * @return COperation[]
+   */
+  protected static function loadOperationsFromLinkedObjects($linked_objects) {
+    $salles = array();
+
+    foreach ($linked_objects as $_linked_object) {
+      $salles[] = $_linked_object->object_id;
+    }
+
+    $operation = new COperation;
+    $where = array(
+      'salle_id' => CMySQLDataSource::prepareIn($salles),
+      'date'     => " = '" . CMbDT::date() . "'",
+      'plageop_id' => ' IS NULL'
+    );
+
+    /* Loading the unplanned operations */
+    $unplanned_operations = $operation->loadList($where);
+
+    $ljoin = array(
+      "plagesop" => "plagesop.plageop_id = operations.plageop_id"
+    );
+
+    $where = array(
+      "plagesop.salle_id"   => CMySQLDataSource::prepareIn($salles),
+      "plagesop.date"       => " = '" . CMbDT::date() . "'",
+      "operations.salle_id" => CMySQLDataSource::prepareIn($salles)
+    );
+
+    /* Loading the planned operations */
+    $operations = $operation->loadList($where, null, null, null, $ljoin);
+
+    $operations = array_merge($operations, $unplanned_operations);
+
+    CMbObject::massLoadFwdRef($operations, 'plageop_id');
+    CMbObject::massLoadFwdRef($operations, 'chir_id');
+    CMbObject::massLoadFwdRef($operations, 'sejour_id');
+
+    return $operations;
+  }
+
+  /**
+   * Load the CSejour to send from the linked CService objects
+   *
+   * @param CService[] $linked_objects The linked CService objects
+   *
+   * @return CSejour[]
+   */
+  protected static function loadSejoursFromLinkedObjects($linked_objects) {
+    $services = array();
+
+    foreach ($linked_objects as $_linked_object) {
+      $services[] = $_linked_object->object_id;
+    }
+
+    $sejour = new CSejour();
+
+    $ljoin = array(
+      'affectation' => 'affectation.sejour_id = sejour.sejour_id'
+    );
+
+    $date = CMbDT::date();
+    $where = array(
+      'affectation.entree' => " <= '$date 23:59:59'",
+      'affectation.sortie' => " >= '$date 00:00:00'",
+      'affectation.service_id' => CMySQLDataSource::prepareIn($services),
+      'affectation.effectue' =>  " = '0'",
+      'sejour.type' => " != 'exte'",
+      'sejour.annule' => " = '0'"
+    );
+
+    $sejours = $sejour->loadList($where, null, null, array('sejour.sejour_id'), $ljoin);
+
+    $ljoin = array(
+      'affectation' => 'sejour.sejour_id = affectation.sejour_id'
+    );
+
+    $where = array(
+      'sejour.group_id' => " = '" . CGroups::loadCurrent()->_id . "'",
+      'sejour.entree_prevue' => " <= '$date 23:59:59'",
+      'sejour.sortie_prevue' => " >= '$date 00:00:00'",
+      'sejour.type' => " != 'exte'",
+      'sejour.annule' => " = '0'",
+      'affectation.affectation_id' => ' IS NULL'
+    );
+
+    $sejours = array_merge($sejours, $sejour->loadList($where, null, null, 'sejour.sejour_id', $ljoin));
+
+    CMbObject::massLoadFwdRef($sejours, 'patient_id');
+    CMbObject::massLoadFwdRef($sejours, 'praticien_id');
+
+    return $sejours;
+  }
+
+  /**
+   * Prepare the data to send from the given object
+   *
+   * @param CMbObject $object           The object
+   * @param string    $encoding         The encoding
+   * @param string    $modality         The target modality
+   * @param string    $calling_ae_title The AE title who requested the worklist
+   *
+   * @return array
+   */
+  protected static function getDataFromObject($object, $encoding, $modality, $calling_ae_title) {
+    switch ($object->_class) {
+      case 'COperation':
+        $data = self::getDataFromOperation($object, $encoding, $modality, $calling_ae_title);
+        break;
+      case 'CSejour':
+        $data = self::getDataFromSejour($object, $encoding, $modality, $calling_ae_title);
+        break;
+      default:
+        $data = array();
+    }
+
+    return $data;
+  }
+
+  /**
+   * Prepare the data to send from the given operation
+   *
+   * @param COperation $operation        The operation
+   * @param string     $encoding         The encoding
+   * @param string     $modality         The target modality
+   * @param string     $calling_ae_title The AE title who requested the worklist
+   *
+   * @return array
+   */
+  protected static function getDataFromOperation($operation, $encoding, $modality, $calling_ae_title) {
+    $patient = $operation->loadRefPatient();
+    $operation->updateFormFields();
+    $operation->loadRefPlageOp();
+    $sejour = $operation->loadRefSejour();
+    $chir   = $operation->loadRefChir();
+    $patient->loadIPP();
+    $sejour->loadNDA();
+
+    $libelle = "";
+    if ($operation->libelle) {
+      $libelle = substr($operation->libelle, 0, 64);
+    }
+    else {
+      $libelle = "Pas de libellé";
+    }
+
+    $date = "";
+    if ($operation->date) {
+      $date = str_replace("-", "", $operation->date);
+    }
+    else {
+      $date = str_replace("-", "", $operation->_ref_plageop->date);
+    }
+
+    $time = "";
+    if ($operation->time_operation) {
+      $time = str_replace(":", "", $operation->time_operation);
+      $time .= ".000000";
+    }
+    else {
+      $time = str_replace(':', '', CMbDT::time()) . '.000000';
+    }
+
+    $sejour_id = $sejour->_id;
+    if ($sejour->_NDA) {
+      $sejour_id = $sejour->_NDA;
+    }
+
+    $patient_id = $patient->_id;
+    if ($patient->_IPP) {
+      $patient_id = $patient->_IPP;
+    }
+
+    $age = intval(substr(trim($patient->_age), 0, 2));
+
+    $chir_name = "$chir->_user_last_name $chir->_user_first_name";
+
+    $data = array(
+      0x0008 => array (
+        0x0050 => self::encodeValue($sejour_id, $encoding)
+      ),
+      0x0010 => array(
+        0x0010 => self::encodeValue("$patient->nom^$patient->prenom", $encoding),
+        0x0020 => self::encodeValue("$patient_id", $encoding),
+        0x0030 => self::encodeValue(str_replace("-", "", $patient->naissance), $encoding),
+        0x0040 => self::encodeValue(strtoupper($patient->sexe), $encoding)
+      ),
+      0x0020 => array(
+        0x000D => self::encodeValue($sejour_id, $encoding)
+      ),
+      0x0038 => array (
+        0x0010 => self::encodeValue($sejour->_NDA, $encoding)
+      ),
+      0x0040 => array(
+        0x0100 => array(
+          array(
+            array("group_number" => 0x0008, "element_number" => 0x0060, "value" => self::encodeValue($modality, $encoding)),
+            array("group_number" => 0x0040, "element_number" => 0x0001, "value" => self::encodeValue($calling_ae_title, $encoding)),
+            array("group_number" => 0x0040, "element_number" => 0x0002, "value" => self::encodeValue($date, $encoding)),
+            array("group_number" => 0x0040, "element_number" => 0x0003, "value" => self::encodeValue($time, $encoding)),
+            array("group_number" => 0x0040, "element_number" => 0x0006, "value" => self::encodeValue($chir_name, $encoding)),
+            array("group_number" => 0x0040, "element_number" => 0x0007, "value" => self::encodeValue($libelle, $encoding)),
+            array("group_number" => 0x0040, "element_number" => 0x0009, "value" => self::encodeValue($sejour_id, $encoding)),
+          ),
+        ),
+        0x1001 => self::encodeValue($sejour_id, $encoding)
+      ),
+    );
+
+    return $data;
+  }
+
+  /**
+   * Prepare the data to send from the given sejour
+   *
+   * @param CSejour $sejour           The sejour
+   * @param string  $encoding         The encoding
+   * @param string  $modality         The target modality
+   * @param string  $calling_ae_title The AE title who requested the worklist
+   *
+   * @return array
+   */
+  protected function getDataFromSejour($sejour, $encoding, $modality, $calling_ae_title) {
+    $libelle = '';
+    $date = '';
+    $time = '';
+
+    $patient = $sejour->loadRefPatient();
+    $sejour->updateFormFields();
+    $operation = $sejour->loadRefCurrOperation(CMbDT::dateTime());
+    if ($operation->_id) {
+      $operation->updateFormFields();
+      $operation->loadRefPlageOp();
+
+      if ($operation->libelle) {
+        $libelle = substr($operation->libelle, 0, 64);
+      }
+      else {
+        $libelle = 'Pas de libellé';
+      }
+
+      if ($operation->date) {
+        $date = str_replace('-', '', $operation->date);
+      }
+      else {
+        $date = str_replace('-', '', $operation->_ref_plageop->date);
+      }
+
+      if ($operation->time_operation) {
+        $time = str_replace(':', '', $operation->time_operation) . '.000000';
+      }
+      else {
+        $time = str_replace(':', '', CMbDT::time()) . '.000000';
+      }
+    }
+    else {
+      $libelle = "Pas de libellé";
+      $date = str_replace('-', '', CMBDT::date());
+      $time = str_replace(':', '', CMbDT::time()) . '.000000';
+    }
+
+    $chir = $sejour->loadRefPraticien();
+    $patient->loadIPP();
+    $sejour->loadNDA();
+
+    $sejour_id = $sejour->_id;
+    if ($sejour->_NDA) {
+      $sejour_id = $sejour->_NDA;
+    }
+
+    $patient_id = $patient->_id;
+    if ($patient->_IPP) {
+      $patient_id = $patient->_IPP;
+    }
+
+    $age = intval(substr(trim($patient->_age), 0, 2));
+
+    $chir_name = "$chir->_user_last_name $chir->_user_first_name";
+
+    $data = array(
+      0x0008 => array (
+        0x0050 => self::encodeValue($sejour_id, $encoding)
+      ),
+      0x0010 => array(
+        0x0010 => self::encodeValue("$patient->nom^$patient->prenom", $encoding),
+        0x0020 => self::encodeValue("$patient_id", $encoding),
+        0x0030 => self::encodeValue(str_replace("-", "", $patient->naissance), $encoding),
+        0x0040 => self::encodeValue(strtoupper($patient->sexe), $encoding)
+      ),
+      0x0020 => array(
+        0x000D => self::encodeValue($sejour_id, $encoding)
+      ),
+      0x0038 => array (
+        0x0010 => self::encodeValue($sejour_id, $encoding)
+      ),
+      0x0040 => array(
+        0x0100 => array(
+          array(
+            array("group_number" => 0x0008, "element_number" => 0x0060, "value" => self::encodeValue($modality, $encoding)),
+            array("group_number" => 0x0040, "element_number" => 0x0001, "value" => self::encodeValue($calling_ae_title, $encoding)),
+            array("group_number" => 0x0040, "element_number" => 0x0002, "value" => self::encodeValue($date, $encoding)),
+            array("group_number" => 0x0040, "element_number" => 0x0003, "value" => self::encodeValue($time, $encoding)),
+            array("group_number" => 0x0040, "element_number" => 0x0006, "value" => self::encodeValue($chir_name, $encoding)),
+            array("group_number" => 0x0040, "element_number" => 0x0007, "value" => self::encodeValue($libelle, $encoding)),
+            array("group_number" => 0x0040, "element_number" => 0x0009, "value" => self::encodeValue($sejour_id, $encoding)),
+          ),
+        ),
+        0x1001 => self::encodeValue($sejour_id, $encoding)
+      ),
+    );
+
+    return $data;
+  }
+
+  /**
+   * Return the value of the ScheduledStationAETitle (dataset 0x0040,0x0001)
+   *
+   * @param array $requested_datas The the data of the CFind request
+   *
+   * @return string
+   */
+  protected static function getRequestedAETitle($requested_datas) {
+    $ae_title = '';
+
+    /* We check if the dataset is in the data */
+    if (array_key_exists(0x0040, $requested_datas) && array_key_exists(0x0001, $requested_datas[0x0040])) {
+      $ae_title = $requested_datas[0x0040][0x0001]->getValue();
+    }
+    /* Check if the dataset is in the sequence of the dataset 0x0040,0x0100 */
+    elseif (
+      array_key_exists(0x0040, $requested_datas) && array_key_exists(0x0100, $requested_datas[0x0040]) &&
+      $dataset = $requested_datas[0x0040][0x0100]->getSequenceDataSet(0x0040, 0x0001)
+    ) {
+      $ae_title = $dataset->getValue();
+    }
+
+    return $ae_title;
+  }
+
+  /**
+   * Return the value of the Modality (dataset 0x0008,0x0060)
+   *
+   * @param array $requested_datas The the data of the CFind request
+   *
+   * @return string
+   */
+  protected static function getRequestedModality($requested_datas) {
+    $modality = '';
+
+    /* We check if the dataset is in the data */
+    if (array_key_exists(0x0008, $requested_datas) && array_key_exists(0x0060, $requested_datas[0x0008])) {
+      $modality = $requested_datas[0x0008][0x0060]->getValue();
+    }
+    /* Check if the dataset is in the sequence of the dataset 0x0040,0x0100 */
+    elseif (
+      array_key_exists(0x0040, $requested_datas) && array_key_exists(0x0100, $requested_datas[0x0040]) &&
+      $dataset = $requested_datas[0x0040][0x0100]->getSequenceDataSet(0x0008, 0x0060)
+    ) {
+      $modality = $dataset->getValue();
+    }
+
+    return $modality;
+  }
+
+  /**
+   * Encode the value if a specific encoding is needed
+   *
+   * @param string $value    The value to encode
+   * @param string $encoding The encoding
+   *
+   * @return string The encoded value
+   */
+  protected static function encodeValue($value, $encoding) {
+    if ($encoding == "ISO_IR 192") {
+      $value = utf8_encode($value);
+    }
+
+    return $value;
   }
 }
