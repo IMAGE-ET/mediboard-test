@@ -24,6 +24,15 @@ if ($_lock_all_lits || $_lock_all_lits_urgences) {
   foreach ($lit->_ref_chambre->_ref_service->_ref_chambres as $chambre) {
     $chambre->loadRefsLits();
     foreach ($chambre->_ref_lits as $lit) {
+      // Recherche d'une ou plusieurs affectations existantes en collision avant de créer le blocage
+      $aff_temp = new CAffectation();
+      $where["lit_id"] = "= '$lit->_id'";
+      $where[] = "entree < '$sortie' AND sortie > '$entree'";
+
+      // Si collision, on passe au lit suivant
+      if ($aff_temp->countList($where)) {
+        continue;
+      }
       $affectation = new CAffectation();
       $affectation->lit_id = $lit->_id;
       $affectation->entree = $entree;
