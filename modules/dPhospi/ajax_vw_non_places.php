@@ -42,7 +42,7 @@ $where["sejour.service_id"] = "IS NULL " . (is_array($services_ids) && count($se
 $order = null;
 switch ($triAdm) {
   case "date_entree":
-    $order = "entree_prevue ASC";
+    $order = "entree ASC";
     break;
   case "praticien":
     $order = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
@@ -54,12 +54,12 @@ switch ($triAdm) {
 
 switch ($_type_admission) {
   case "ambucomp":
-    $where[] = "sejour.type = 'ambu' OR sejour.type = 'comp' OR sejour.type = 'ssr'";
+    $where["sejour.type"] = "IN ('ambu', 'comp', 'ssr')";
     break;
   case "0":
     break;
   default:
-    $where["sejour.type"] = "= '$_type_admission'"; 
+    $where["sejour.type"] = "= '$_type_admission'";
 }
 
 $sejour = new CSejour;
