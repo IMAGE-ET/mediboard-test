@@ -16,7 +16,6 @@ CConfiguration::register(
       "soins" => array(
         "dossier_soins" => array(
           "show_bouton_plan_soins" => "bool default|1",
-          "horizontal_chapters"    => "bool default|0",
           "show_ampoule_patient"   => "bool default|1"
         ),
         "bilan" => array(
@@ -42,7 +41,8 @@ CConfiguration::register(
         "suivi" => array(
           "hide_old_line"       => "bool default|0",
           "group_hors_amm_med"  => "bool default|0",
-          "obs_infirmiere"      => "bool default|0"
+          "obs_infirmiere"      => "bool default|0",
+          "horizontal_chapters" => "bool default|0",
         ),
         "CLit"  => array(
           "align_right"     => "bool default|1",

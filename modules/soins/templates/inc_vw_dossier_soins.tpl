@@ -633,7 +633,7 @@
     {{assign var=count_urgence value=$prescription->_count_urgence}}
     <table class="main">
       <tr>
-        {{assign var=horizontal_chapters value="soins dossier_soins horizontal_chapters"|conf:"CGroups-$g"}}
+        {{assign var=horizontal_chapters value="soins suivi horizontal_chapters"|conf:"CGroups-$g"}}
 
         {{if !$horizontal_chapters}}
         <td style="white-space: nowrap;" class="narrow">
