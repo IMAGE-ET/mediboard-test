@@ -213,6 +213,8 @@ class COperation extends CCodable implements IPatientRelated {
   public $_date_min;
   public $_date_max;
   public $_plage;
+  public $_datetime_min;
+  public $_datetime_max;
   public $_service;
   public $_ranking;
   public $_cotation;
@@ -391,6 +393,9 @@ class COperation extends CCodable implements IPatientRelated {
     $props["_date_min"]               = "date";
     $props["_date_max"]               = "date moreEquals|_date_min";
     $props["_plage"]                  = "bool";
+
+    $props["_datetime_min"]           = "dateTime";
+    $props["_datetime_max"]           = "dateTime moreEquals|_datetime_min";
 
     $props["_ranking"]                = "enum list|ok|ko";
     $props["_cotation"]               = "enum list|ok|ko";
