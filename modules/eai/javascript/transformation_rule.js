@@ -10,6 +10,9 @@
  */
 
 EAITransformationRule = {
+  standards_flat : [],
+  selects        : ["standard", "domain", "profil", "transaction", "message"],
+
   edit: function(transformation_rule_id, transformation_ruleset_id, mode_duplication) {
     new Url("eai", "ajax_edit_transformation_rule")
       .addParam("transformation_rule_id", transformation_rule_id)
@@ -46,20 +49,85 @@ EAITransformationRule = {
     element.next('.transformation-'+value).addUniqueClassName('selected');
   },
 
-  fillSelect : function(select, select_name) {
-    var selector = select.form[select_name];
-    var option   = select.options[select.selectedIndex];
+  fillSelect: function(select_name, traduction, value) {
+    var select = $("EAITransformationRule-"+select_name);
+    select.update();
 
-    selector.selectedIndex = -1;
-    selector.select('option').invoke('hide');
+    $A(EAITransformationRule.standards_flat).pluck(select_name).uniq().each(function(pair){
+      if (pair == "none") {
+        return;
+      }
 
-    var parent = option && option.get("parent");
-    var data = parent ? parent+'-'+select.value : select.value;
-    selector.select('option[data-parent='+data+']').invoke('show');
+      var option_text = traduction ? $T(pair+traduction)+' ('+pair+')' : $T(pair);
+      select.insert(
+        DOM.option({
+          value:   pair,
+          onclick: "EAITransformationRule.showFillSelect(this.up())",
+          selected: value == pair
+        }).update(option_text)
+      );
+    });
+  },
 
-    if (selector.getAttribute("onchange")) {
-      selector.onchange();
-    }
+  showFillSelect : function(select) {
+    var select_name  = select.name;
+
+    var selects = select.form.select("select[name != "+select_name+"][name != standard]");
+
+    EAITransformationRule.selects.each(function(selectname) {
+      if (selectname == select_name) {
+        return;
+      }
+
+      var other_select = select.form[selectname];
+
+      var old_selected_value = "";
+      if (other_select.selectedIndex != -1) {
+        old_selected_value = $V(other_select);
+      }
+
+      var filtered = EAITransformationRule.standards_flat.filter(EAITransformationRule.isValueExist.curry(select, selects)).pluck(other_select.name).uniq();
+
+      other_select.update();
+
+      filtered.each(function(option) {
+        var option_text = $T(option);
+        if (selectname == "domain" || selectname == "profil") {
+          option_text = $T(option+'-desc')+' ('+option+')'
+        }
+
+        if (option == "none") {
+          return;
+        }
+
+        other_select.insert(
+          DOM.option({
+              value: option,
+              onclick: "EAITransformationRule.showFillSelect(this.up())"}
+          ).update(option_text)
+        );
+      });
+
+      if (old_selected_value) {
+        $V(other_select, old_selected_value);
+      }
+    });
+  },
+
+  isValueExist : function(select, selects, element) {
+    var select_value = $V(select);
+    var select_name  = select.name;
+
+    var flag = true;
+    selects.each(function(other_select) {
+      var value_select = $V(other_select); /*|| (other_select.options.length == 1 ? other_select.options[0].value : "");*/
+
+      if (value_select && element[other_select.name] != value_select) {
+        flag = false;
+      }
+    });
+
+    return element[select_name] == select_value && flag;
   },
 
   showVersions : function(transformation_rule_id, standard_name, profil_name) {

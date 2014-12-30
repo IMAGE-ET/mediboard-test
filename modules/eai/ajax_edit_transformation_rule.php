@@ -25,6 +25,26 @@ if (!$transf_rule->_id) {
 
 $standards = CInteropNorm::getObjects();
 
+$standards_flat = array();
+foreach ($standards as $_standard_name => $_standards) {
+  foreach ($_standards as $_domain_name => $_domains) {
+    foreach ($_domains as $_profil_name => $_profils) {
+      foreach ($_profils as $_transaction_name => $_transactions) {
+        foreach ($_transactions as $_event_name => $_event) {
+          $standards_flat[]  = array(
+            "standard"      => $_standard_name,
+            "domain"        => $_domain_name,
+            "profil"        => $_profil_name,
+            "transaction"   => $_transaction_name,
+            "message"       => $_event_name,
+            "message_class" => $_event,
+          );
+        }
+      }
+    }
+  }
+}
+
 $transf_ruleset  = new CEAITransformationRuleSet();
 $transf_rulesets = $transf_ruleset->loadList();
 
@@ -35,5 +55,6 @@ $smarty->assign("mode_duplication"         , $mode_duplication);
 $smarty->assign("transf_rulesets"          , $transf_rulesets);
 $smarty->assign("transformation_ruleset_id", $transformation_ruleset_id);
 $smarty->assign("standards"                , $standards);
+$smarty->assign("standards_flat"           , $standards_flat);
 
 $smarty->display("inc_edit_transformation_rule.tpl");

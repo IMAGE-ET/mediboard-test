@@ -12,11 +12,11 @@
 {{mb_script module=eai script=transformation_rule ajax=true}}
 
 <div>
-  <button onclick="EAITransformationRule.edit('0');" class="button new">
+  <button onclick="EAITransformationRule.edit('0', '{{$transf_ruleset->_id}}');" class="button new">
     {{tr}}CEAITransformationRule-title-create{{/tr}}
   </button>
 
-  <button onclick="EAITransformationRule.edit('','{{$transf_ruleset->_id}}',true);" class="button duplicate">
+  <button onclick="EAITransformationRule.edit('', '{{$transf_ruleset->_id}}', true);" class="button duplicate">
     {{tr}}CEAITransformationRule-button-Duplicate all{{/tr}}
   </button>
 </div>
@@ -33,8 +33,8 @@
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=standard}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=domain}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=profil}} </th>
-    <th class="category narrow"> {{mb_title class=CEAITransformationRule field=message}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=transaction}} </th>
+    <th class="category narrow"> {{mb_title class=CEAITransformationRule field=message}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=version}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformationRule field=extension}} </th>
     <th class="category"> {{mb_title class=CEAITransformationRule field=component_from}} </th>
@@ -61,8 +61,8 @@
       <td class="text compact">{{mb_value object=$_transformation_rule field="standard"}}</td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="domain"}}</td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="profil"}}</td>
-      <td class="text compact">{{mb_value object=$_transformation_rule field="message"}}</td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="transaction"}}</td>
+      <td class="text compact">{{mb_value object=$_transformation_rule field="message"}}</td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="version"}}</td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="extension"}}</td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="component_from"}}</td>

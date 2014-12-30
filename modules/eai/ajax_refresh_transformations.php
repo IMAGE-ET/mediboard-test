@@ -1,6 +1,6 @@
 <?php
 /**
- * Link transformation rule
+ * Refresh transformations
  *
  * @category EAI
  * @package  Mediboard
@@ -29,7 +29,7 @@ $transformations = $transformation->loadMatchingList("rank");
 $smarty = new CSmartyDP();
 
 $smarty->assign("actor"          , $actor);
-$smarty->assign("event"          , $event);
+$smarty->assign("event_name"     , $event_name);
 $smarty->assign("transformations", $transformations);
 
-$smarty->display("inc_list_transformations.tpl");
+$smarty->display("inc_list_transformations_lines.tpl");

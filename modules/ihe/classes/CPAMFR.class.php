@@ -19,6 +19,13 @@ class CPAMFR extends CPAM {
   /**
    * @var array
    */
+  static $versions = array (
+    "2.1", "2.2", "2.3", "2.4", "2.5", "2.6"
+  );
+
+  /**
+   * @var array
+   */
   static $transaction_iti30 = array(
     "A24", "A37", "A28", "A31", "A40", "A47"
   );
@@ -78,6 +85,8 @@ class CPAMFR extends CPAM {
    * @return CPAMFR
    */
   function __construct() {
+    parent::__construct();
+
     $this->domain = "ITI";
     $this->type   = "PAM_FR";
 
@@ -85,8 +94,6 @@ class CPAMFR extends CPAM {
       "ITI-30" => self::$transaction_iti30,
       "ITI-31" => self::$transaction_iti31,
     );
-
-    parent::__construct();
   }
 
   /**

@@ -27,8 +27,8 @@ class CEAITransformation extends CMbObject {
   public $standard;
   public $domain;
   public $profil;
-  public $message;
   public $transaction;
+  public $message;
   public $version;
   public $extension;
 
@@ -67,8 +67,8 @@ class CEAITransformation extends CMbObject {
     $props["standard"]    = "str";
     $props["domain"]      = "str";
     $props["profil"]      = "str";
-    $props["message"]     = "str";
     $props["transaction"] = "str";
+    $props["message"]     = "str";
     $props["version"]     = "str";
     $props["extension"]   = "str";
 
@@ -127,10 +127,6 @@ class CEAITransformation extends CMbObject {
 
     if ($event instanceof CHL7Event) {
       $this->profil      = $event->profil;
-      $this->message     = $event->event_type . $event->code;
-      $this->transaction = $event->transaction;
-      $this->version     = $event->version;
-      $this->extension   = $event->_is_i18n;
     }
   }
 

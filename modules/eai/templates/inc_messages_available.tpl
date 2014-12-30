@@ -22,7 +22,7 @@
     <tr>
       <th class="section narrow" style="text-align: left">
         <button title="{{tr}}CEAITransformation{{/tr}}" class="magic_wand notext"
-                onclick="EAITransformation.list('0', '{{$event_name}}', '{{$actor_guid}}')">
+                onclick="EAITransformation.list('{{$event_name}}', '{{$actor_guid}}')">
           {{tr}}CEAITransformation{{/tr}}</button>
 
         {{tr}}{{$_message_supported->message}}{{/tr}}

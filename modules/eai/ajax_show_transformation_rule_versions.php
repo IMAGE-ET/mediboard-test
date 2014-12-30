@@ -25,6 +25,8 @@ $versions_standard = $standard->getVersions();
 
 $versions_profil = array();
 if ($profil_name && $profil_name != "none") {
+  $profil_name = str_replace("_", "", $profil_name);
+
   $classname= "C$profil_name";
 
   $profil = new $classname;

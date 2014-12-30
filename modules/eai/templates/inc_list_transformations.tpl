@@ -9,8 +9,6 @@
  * @link     http://www.mediboard.org
 *}}
 
-{{mb_script module=eai script=transformation ajax=true}}
-
 {{assign var=event_name value=$event|get_class}}
 
 <div>
@@ -27,6 +25,7 @@
   </tr>
   <tr>
     <th class="narrow button"></th>
+    <th class="category narrow"> {{mb_title class=CEAITransformation field=eai_transformation_id}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformation field=standard}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformation field=domain}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformation field=profil}} </th>
@@ -38,20 +37,7 @@
     <th class="category narrow"> {{mb_title class=CEAITransformation field=rank}} </th>
   </tr>
 
-  {{foreach from=$transformations item=_transformation}}
-    <tr>
-      <td></td>
-      <td>{{mb_value object=$_transformation field=standard}}</td>
-      <td>{{mb_value object=$_transformation field=domain}}</td>
-      <td>{{mb_value object=$_transformation field=profil}}</td>
-      <td>{{mb_value object=$_transformation field=message}}</td>
-      <td>{{mb_value object=$_transformation field=transaction}}</td>
-      <td>{{mb_value object=$_transformation field=version}}</td>
-      <td>{{mb_value object=$_transformation field=extension}}</td>
-      <td>{{mb_value object=$_transformation field=active}}</td>
-      <td>{{mb_value object=$_transformation field=rank}}</td>
-    </tr>
-    {{foreachelse}}
-    <tr><td class="emtpy" colspan="14">{{tr}}CEAITransformation.none{{/tr}}</td></tr>
-  {{/foreach}}
+  <tbody id="transformations">
+    {{mb_include template="inc_list_transformations_lines"}}
+  </tbody>
 </table>

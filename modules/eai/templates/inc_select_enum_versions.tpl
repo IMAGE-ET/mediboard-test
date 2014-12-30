@@ -11,7 +11,7 @@
 
 {{if $versions}}
   <select name="version">
-    <option>&mdash; {{tr}}Choose{{/tr}}</option>
+    <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
     {{foreach from=$versions item=_version}}
       <option value="{{$_version}}" {{if $transformation_rule->version == $_version}}selected{{/if}}>{{$_version}}</option>
     {{/foreach}}
