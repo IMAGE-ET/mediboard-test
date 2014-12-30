@@ -501,7 +501,13 @@ class CSearch {
    */
   function loadCartoInfos() {
     $query = new CSearchQuery();
-    return $query->loadCartoInfos($this);
+    $query_aggreg = $query->aggregCartoCountByType();
+    //Search on the index.
+    $this->_index = $this->loadIndex();
+    $search = new \Elastica\Search($this->_client);
+    $search->addIndex($this->_index);
+
+    return $query->loadCartoInfos($this, $search->search($query_aggreg));
   }
 
   /**

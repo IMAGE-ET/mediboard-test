@@ -277,11 +277,21 @@ class CSearchLog extends CSearch {
    * @return array
    */
   function loadCartoInfos() {
-    $index      = $this->loadIndex(CAppUI::conf("db std dbname") . "_log");
+    $search_query = new CSearchQuery();
+    $query_aggreg = $search_query->aggregCartoCountByType();
+    //Search on the index.
+    $index  = $this->loadIndex(CAppUI::conf("db std dbname") . "_log");
+    $search = new \Elastica\Search($this->_client);
+    $search->addIndex($index);
+    $aggreg = $search->search($query_aggreg);
 
     // récupération du nombre de docs "indexés"
     $nbdocs_indexed      = $index->count();
     $result ["nbdocs_indexed"] = $nbdocs_indexed;
+
+    // récupération des données de l'agregation
+    $aggreg = $aggreg->getAggregation("ref_type");
+    $result["aggregation"] = $aggreg["buckets"];
 
     return $result;
   }

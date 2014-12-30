@@ -1,7 +1,7 @@
 {{*
  * $Id$
  *  
- * @category ${Module}
+ * @category Search
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -45,11 +45,11 @@
   </tr>
   <tr>
     <td class="text">Nombre d'index du cluster</td>
-    <td>{{$infos_index.stats.cluster.nbIndex}}</td>
+    <td>{{$infos_index.stats.cluster.nbIndex|integer}}</td>
   </tr>
   <tr>
     <td class="text">Nombre Total de documents du cluster</td>
-    <td>{{$infos_index.stats.cluster.nbDocsTotal}}</td>
+    <td>{{$infos_index.stats.cluster.nbDocsTotal|integer}}</td>
   </tr>
 
   <!-- Taille totale des index -->

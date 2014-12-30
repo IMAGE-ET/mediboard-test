@@ -35,10 +35,16 @@ try{
 
 }
 
+$ds = CSQLDataSource::get("std");
+$query = "SELECT MIN(`date`) as oldest_datetime from `search_indexing`";
+$result = $ds->exec($query);
+$oldest_datetime = $ds->fetchObject($result)->oldest_datetime;
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("infos_index", $infos_index);
 $smarty->assign("infos_log", $infos_log);
+$smarty->assign("oldest_datetime", $oldest_datetime);
 
 $smarty->display("vw_cartographie_mapping.tpl");

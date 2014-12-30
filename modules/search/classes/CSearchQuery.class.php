@@ -262,6 +262,7 @@ class CSearchQuery {
     }
     return $query;
   }
+
   /**
    * Construct query with date informations
    *
@@ -421,10 +422,11 @@ class CSearchQuery {
    * Method to load cartos infos
    *
    * @param CSearch $c_search the csearch
+   * @param array   $aggreg   the aggreg
    *
    * @return array
    */
-  function loadCartoInfos($c_search) {
+  function loadCartoInfos($c_search, $aggreg) {
     $result = array();
     $search = new CSearchIndexing();
     // récupération de l'index, cluster
@@ -468,7 +470,25 @@ class CSearchQuery {
     $result['status']    = $cluster->getHealth()->getStatus();
     $result['connexion'] = $c_search->_client->hasConnection();
 
+    // récupération des données de l'agregation
+    $aggreg = $aggreg->getAggregation("ref_type");
+    $result["aggregation"] = $aggreg["buckets"];
+
     return $result;
+  }
+
+  /**
+   * Method to count by type document in index
+   *
+   * @return array
+   */
+  function aggregCartoCountByType () {
+    $query = new Query();
+
+    $agg_by_type = new CSearchAggregation("Terms", "ref_type", "_type", 100);
+    $query->addAggregation($agg_by_type->_aggregation);
+
+    return $query;
   }
 
   /**
