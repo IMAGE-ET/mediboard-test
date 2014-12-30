@@ -1,3 +1,12 @@
+{{if @$modules.brancardage->_can->read && $selOp->_ref_brancardage->_id}}
+<form name="changeItemBrancard" method="post" action="">
+  <input type="hidden" name="brancardage_item_id" value="" />
+  <input type="hidden" name="@class" value="CBrancardageItem" />
+  <input type="hidden" name="brancardage_id" value="{{$selOp->_ref_brancardage->_id}}" />
+  <input type="hidden" name="demande_brancard" value="now" />
+</form>
+{{/if}}
+
 <form name="timing{{$selOp->operation_id}}" action="?" method="post">
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="dosql" value="do_planning_aed" />
@@ -14,14 +23,17 @@
     {{assign var=submit value=submitTiming}}
     {{assign var=opid value=$selOp->operation_id}}
     {{assign var=form value=timing$opid}}
+
     <tr>
       {{if @$modules.brancardage->_can->read}}
+        {{assign var=bloc_brancard value=$selOp->_ref_salle->bloc_id}}
         {{mb_script module=brancardage script=creation_brancardage ajax=true}}
-        <td id="demandebrancard-{{$selOp->sejour_id}}" rowspan="2">
-          {{mb_include module=brancardage template=inc_exist_brancard brancardage=$selOp->_ref_brancardage id="demandebrancard"
-          sejour_id=$selOp->sejour_id salle_id=$selOp->salle_id operation_id=$selOp->_id opid=$opid reveil=false}}
+        <td id="demande_brancard-{{$selOp->sejour_id}}" rowspan="2">
+          {{mb_include module=brancardage template=inc_exist_brancard _operation=$selOp colonne="demande_brancard"
+            destination="CBlocOperatoire" destination_guid="CBlocOperatoire-$bloc_brancard"}}
         </td>
       {{/if}}
+
       {{if $app->user_prefs.allowed_check_entry}}
         {{mb_include module="salleOp" template="inc_field_timing" object=$selOp field=entree_chir}}
       {{/if}}

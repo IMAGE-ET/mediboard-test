@@ -109,10 +109,8 @@
       <td class="text">{{mb_value object=$_operation field="cote"}}</td>
       {{if @$modules.brancardage->_can->read}}
         <td>
-           <span id="demandebrancard-{{$_operation->sejour_id}}">
-             {{mb_include module=brancardage template=inc_exist_brancard brancardage=$_operation->_ref_brancardage id="demandebrancard"
-               sejour_id=$_operation->sejour_id salle_id=$_operation->salle_id operation_id=$_operation->_id
-               opid=$_operation->_id reveil="preop" }}
+           <span id="demande_brancard-{{$_operation->sejour_id}}">
+             {{mb_include module=brancardage template=inc_exist_brancard colonne="demande_brancard" reveil="preop" destination="CBlocOperatoire" destination_guid="CBlocOperatoire-$bloc_id"}}
            </span>
         </td>
       {{/if}}

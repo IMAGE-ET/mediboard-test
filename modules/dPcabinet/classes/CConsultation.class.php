@@ -135,6 +135,8 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
   public $_ref_task;
   /** @var CElementPrescription */
   public $_ref_element_prescription;
+  /** @var CBrancardage */
+  public $_ref_brancardage;
 
   // Collections
   /** @var CConsultAnesth[] */
@@ -424,6 +426,8 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $this->_coded = $this->valide;
     
     $this->_exam_fields = $this->getExamFields();
+    $this->loadRefBrancardage();
+    $this->loadRefSejour();
   }
 
   /**
@@ -2614,5 +2618,25 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     }
 
     return $tabs_count;
+  }
+
+  function loadRefBrancardage() {
+    if (!CModule::getActive("brancardage")) {
+      return null;
+    }
+
+    $this->loadRefPlageConsult();
+    $ljoin = array();
+    $ljoin["brancardage_item"] = "brancardage_item.brancardage_id = brancardage.brancardage_id";
+    $where = array();
+    $where["brancardage.sejour_id"] = " = '$this->sejour_id'";
+    $where["brancardage.date"] = " = '$this->_date'";
+    $where["brancardage_item.destination_class"] = " = 'CService'";
+
+    $brancardage = new CBrancardage();
+    $brancardage->loadObject($where, "brancardage_id DESC", null, $ljoin);
+    $brancardage->loadRefItems();
+
+    return $this->_ref_brancardage = $brancardage;
   }
 }

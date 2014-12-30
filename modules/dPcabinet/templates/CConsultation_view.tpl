@@ -87,7 +87,21 @@
             </button>
           </form>
         {{/if}}
+      {{/if}}
 
+      {{if @$modules.brancardage->_can->read && $consultation->sejour_id}}
+        {{mb_script module=brancardage script=creation_brancardage ajax="true"}}
+        {{assign var=service_id value=$consultation->_ref_sejour->service_id}}
+        <div id="demande_brancard-{{$consultation->sejour_id}}" style="float: right;">
+          <form name="changeItemBrancard" method="post" action="">
+            <input type="hidden" name="brancardage_item_id" value="" />
+            <input type="hidden" name="@class" value="CBrancardageItem" />
+            <input type="hidden" name="brancardage_id" value="{{$consultation->_ref_brancardage->_id}}" />
+            <input type="hidden" name="demande_brancard" value="now" />
+          </form>
+          {{mb_include module=brancardage template=inc_exist_brancard colonne="demande_brancard" sejour_id=$consultation->sejour_id
+          brancardage=$consultation->_ref_brancardage see_sejour=true destination="CService" destination_guid="CService-$service_id"}}
+        </div>
       {{/if}}
     </td>
   </tr>

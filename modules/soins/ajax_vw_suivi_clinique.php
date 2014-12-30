@@ -34,6 +34,11 @@ if ($dossier_medical->_id) {
 
 $sejour->loadRefPraticien();
 $sejour->loadRefsOperations();
+$sejour->loadRefsConsultations();
+foreach ($sejour->_ref_consultations as $_consult) {
+  $_consult->loadRefBrancardage();
+}
+
 $sejour->loadRefConfirmeUser()->loadRefFunction();
 
 $prescription_active = CModule::getInstalled("dPprescription");

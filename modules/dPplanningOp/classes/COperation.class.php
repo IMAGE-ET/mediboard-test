@@ -483,7 +483,6 @@ class COperation extends CCodable implements IPatientRelated {
     $backProps["echanges_dmp"]             = "CExchangeDMP object_id";
     $backProps["echanges_mvsante"]         = "CExchangeMVSante object_id";
     $backProps["product_orders"]           = "CProductOrder object_id";
-    $backProps["op_brancardardage"]        = "CBrancardage operation_id";
     $backProps["besoins_ressources"]       = "CBesoinRessource operation_id";
     $backProps["poses_disp_vasc"]          = "CPoseDispositifVasculaire operation_id";
     $backProps["check_list_categories"]    = "CDailyCheckItemCategory target_id";
@@ -1866,20 +1865,20 @@ class COperation extends CCodable implements IPatientRelated {
       return null;
     }
 
-    //Chargement de la destination
-    $salle = new CSalle();
-    $salle->load($this->salle_id);
+    $this->updateSalle();
+    $ljoin = array();
+    $ljoin["brancardage_item"] = "brancardage_item.brancardage_id = brancardage.brancardage_id";
+    $where = array();
+    $where["brancardage.sejour_id"] = " = '$this->sejour_id'";
+    $where["brancardage.date"] = " = '$this->date'";
+    if ($this->_ref_salle) {
+      $where["brancardage_item.destination_id"] = " = '".$this->_ref_salle->bloc_id."'";
+      $where["brancardage_item.destination_class"] = " = 'CBlocOperatoire'";
+    }
 
-    $destination = new CDestinationBrancardage();
-    $destination->object_id    = $salle->bloc_id;
-    $destination->object_class = "CBlocOperatoire";
-    $destination->loadMatchingObject();
-
-    //Chargement du brancardage s'il existe
     $brancardage = new CBrancardage();
-    $brancardage->operation_id              = $this->_id;
-    $brancardage->destinationBrancardage_id = $destination->_id;
-    $brancardage->loadMatchingObject("brancardage_id DESC");
+    $brancardage->loadObject($where, "brancardage_id DESC", null, $ljoin);
+    $brancardage->loadRefItems();
 
     return $this->_ref_brancardage = $brancardage;
   }

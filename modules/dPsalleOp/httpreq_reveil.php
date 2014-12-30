@@ -252,6 +252,7 @@ $smarty->assign("daily_check_list_types", $daily_check_list_types);
 $smarty->assign("listChirs"             , $listChirs);
 $smarty->assign("listAnesths"           , $listAnesths);
 $smarty->assign("type"                  , $type);
+$smarty->assign("bloc_id"               , $bloc_id);
 
 $smarty->assign("personnels"              , $personnels);
 $smarty->assign("order_way"               , $order_way);

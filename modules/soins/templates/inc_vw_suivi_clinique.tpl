@@ -347,6 +347,7 @@
 </form>
 
 {{mb_include module=planningOp template=inc_infos_operation alert=1}}
+{{mb_include module=cabinet template=inc_infos_consultation_sejour}}
 
 {{if $sejour->_ref_transmissions|@count}}
   <table class="tbl">

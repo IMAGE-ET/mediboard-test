@@ -208,13 +208,11 @@
       </form>
     </td>
     {{if @$modules.brancardage->_can->read}}
-    <td>
-       <span id="demandebrancard-{{$_operation->sejour_id}}">
-         {{mb_include module=brancardage template=inc_exist_brancard brancardage=$_operation->_ref_brancardage id="demandebrancard"
-           sejour_id=$_operation->sejour_id salle_id=$_operation->salle_id operation_id=$_operation_id
-           opid=$_operation_id reveil=true }}
-       </span>
-    </td>
+      <td>
+         <span id="demande_brancard-{{$_operation->sejour_id}}">
+           {{mb_include module=brancardage template=inc_exist_brancard colonne="demande_brancard" reveil=true origine="CBlocOperatoire" origine_guid="CBlocOperatoire-$bloc_id"}}
+         </span>
+      </td>
     {{/if}}
     <td class="button">
       {{if $modif_operation}}

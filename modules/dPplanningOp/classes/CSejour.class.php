@@ -4743,6 +4743,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   function loadRefService() {
     return $this->_ref_service = $this->loadFwdRef("service_id", true);
   }
+
 }
 
 if (CAppUI::conf("ref_pays") == 2) {

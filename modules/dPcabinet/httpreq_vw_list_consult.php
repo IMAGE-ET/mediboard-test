@@ -101,6 +101,7 @@ foreach ($listPlage as $_plage) {
     $_consultation->loadRefSejour();
     $_consultation->loadRefCategorie();
     $_consultation->countDocItems();
+    $_consultation->loadRefBrancardage();
   }
 }
 
