@@ -13,26 +13,44 @@
   checkSejourId = function(form) {
     if ($V(form.sejour_id) && $V(form.consultation_ids)) {
       $('button_for_linking').show();
+
+      // grossesse message check
+      if ($V(form._sejour_grosssesse_id)) {
+        $('msg_link_grossesse').show();
+      } else {
+        $('msg_link_grossesse').hide();
+      }
+
     } else {
       $('button_for_linking').hide();
     }
+
   };
 
   generateList = function() {
     var form = getForm("assign_sejour_to_consults");
     var ids = [];
+    var grossesse_consult_detected = 0;
     $$('input.consultation_to_link').each(function(elt){
       if (elt.checked) {
         ids.push(elt.value);
+
+        var grossesse_id = elt.get("grossesse_id");
+        if (grossesse_id) {
+          grossesse_consult_detected = grossesse_id;
+        }
       }
     });
     $V(form.consultation_ids, ids.join("-"));
+    if (grossesse_consult_detected && confirm("Une des consultation est liée à une grossesse, voulez-vous lier le séjour selectionné à cette grossesse ?")) {
+      $V(form._sejour_grosssesse_id, grossesse_consult_detected);
+    }
     checkSejourId(form);
   };
 
   Main.add(function() {
     generateList();
-  })
+  });
 </script>
 
 <style>
@@ -42,10 +60,13 @@
   }
 </style>
 
+<div id="msg_link_grossesse" class="small-info" style="display: none;">Le séjour sera lié à la grossesse <button class="undo" onclick="$V(getForm('assign_sejour_to_consults')._sejour_grosssesse_id, ''); $(this).up().toggle();">Ne plus vouloir</button>
+</div>
 <form method="post" name="assign_sejour_to_consults">
-  <input type="hidden" name="consultation_ids" value=""/>
   <input type="hidden" name="m" value="dPcabinet"/>
   <input type="hidden" name="dosql" value="do_consultation_aed" />
+  <input type="hidden" name="consultation_ids" value=""/>
+  <input type="hidden" name="_sejour_grosssesse_id" value="" />
   <table class="main">
     <tr>
       <td>
@@ -57,7 +78,7 @@
           {{foreach from=$next_consults item=_consult}}
             <tr>
               <td>
-                <input type="checkbox" class="consultation_to_link" name="consultation_id_{{$_consult->_id}}" value="{{$_consult->_id}}" {{if $consult->_id == $_consult->_id}}checked="checked"{{/if}} onclick="generateList();" />
+                <input type="checkbox" class="consultation_to_link" name="consultation_id_{{$_consult->_id}}" value="{{$_consult->_id}}" {{if $consult->_id == $_consult->_id}}checked="checked"{{/if}} onclick="generateList();" data-grossesse_id="{{$_consult->grossesse_id}}" />
               </td>
               <td>
                 <label for="consultation_id_{{$_consult->_id}}">
@@ -69,7 +90,7 @@
               </td>
             </tr>
             {{foreachelse}}
-            <td colspan="2" class="empty">{{tr}}CConsultation.none{{/tr}}</td>
+              <td colspan="2" class="empty">{{tr}}CConsultation.none{{/tr}}</td>
           {{/foreach}}
           </tbody>
         </table>
