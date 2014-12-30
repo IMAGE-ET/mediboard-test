@@ -115,6 +115,7 @@ if (CModule::getActive("dPprescription")) {
   $smarty->assign("line"           , new CPrescriptionLineMedicament());
 }
 $smarty->assign("userSel"        , $user);
+$smarty->assign("user"           , $user);
 $smarty->assign("sejour_id"      , $sejour_id);
 $smarty->assign("today"          , CMbDT::date());
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));

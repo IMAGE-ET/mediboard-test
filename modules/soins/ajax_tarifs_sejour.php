@@ -1,17 +1,18 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @category Soins
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision:$
+ * @version  $Revision$
  */
 
 CCanDo::checkEdit();
-$sejour_id = CValue::get("sejour_id", 0);
-$chir_id   = CValue::get("chir_id"  , 0);
+$consult_id = CValue::get("consult_id", 0);
+$sejour_id  = CValue::get("sejour_id", 0);
+$chir_id    = CValue::get("chir_id"  , 0);
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
@@ -59,8 +60,15 @@ if ($sejour->_id) {
     }
   }
 
+  $consult = new CConsultation();
+  if ($consult_id) {
+    $consult->load($consult_id);
+  }
+
   $smarty = new CSmartyDP();
-  $smarty->assign("sejour", $sejour);
-  $smarty->assign("tarifs", $tarifs);
+
+  $smarty->assign("consult" , $consult);
+  $smarty->assign("sejour"  , $sejour);
+  $smarty->assign("tarifs"  , $tarifs);
   $smarty->display("inc_tarifs_sejour.tpl");
 }

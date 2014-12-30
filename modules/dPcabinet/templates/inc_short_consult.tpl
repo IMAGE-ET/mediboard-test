@@ -44,13 +44,14 @@
     {{if ($app->user_prefs.ccam_consultation == 1)}}
       {{if !($consult->sejour_id && $mutation_id)}}
         var tabsActes = Control.Tabs.create('tab-actes', false);
-        loadTarifsConsult('{{$consult->sejour_id}}', '{{$consult->_ref_chir->_id}}');
+        loadTarifsConsult('{{$consult->sejour_id}}', '{{$consult->_ref_chir->_id}}', '{{$consult->_id}}');
       {{/if}}
     {{/if}}
   });
 
-  function loadTarifsConsult(sejour_id, chir_id) {
+  function loadTarifsConsult(sejour_id, chir_id, consult_id) {
     var url = new Url('soins', 'ajax_tarifs_sejour');
+    url.addParam('consult_id', consult_id);
     url.addParam('sejour_id', sejour_id);
     url.addParam('chir_id'  , chir_id);
     url.requestUpdate('tarif');
@@ -140,6 +141,7 @@
   {{/if}}
 {{/if}}
 {{if $app->user_prefs.ccam_consultation == 1}}
+  <span id="tarif" style="float: right;margin-bottom: -20px;"></span>
   <div id="Actes" style="display: none;">
     {{if $mutation_id}}
       <div class="small-info">
@@ -149,7 +151,6 @@
       {{assign var="sejour" value=$consult->_ref_sejour}}
       <ul id="tab-actes" class="control_tabs">
         {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
-          <li id="tarif" style="float: right;"></li>
           <li><a href="#ccam">Actes CCAM</a></li>
           <li><a href="#ngap">Actes NGAP</a></li>
         {{/if}}

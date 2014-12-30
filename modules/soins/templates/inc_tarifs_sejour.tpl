@@ -1,3 +1,21 @@
+<script>
+  submitTarifSejour = function(form) {
+    {{if $consult->_id}}
+      return onSubmitFormAjax(form, {onComplete: loadActes.curry({{$sejour->_id}}, {{$sejour->praticien_id}})});
+    {{else}}
+      return onSubmitFormAjax(form, {onComplete: loadActes.curry({{$sejour->_id}}, {{$sejour->praticien_id}})});
+    {{/if}}
+  }
+
+  {{if $consult->_id}}
+    function loadActes() {
+      var url = new Url("cabinet", "ajax_vw_actes");
+      url.addParam("consult_id", "{{$consult->_id}}");
+      url.requestUpdate("Actes");
+    }
+  {{/if}}
+</script>
+
 <table class="form">
   <tr>
     <th>{{mb_label object=$sejour field="exec_tarif"}}</th>
@@ -11,12 +29,18 @@
     </td>
     <th><label for="_tarif_id">Tarif</label></th>
     <td>
-      <form name="selectTarif" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: loadActes.curry({{$sejour->_id}}, {{$sejour->praticien_id}})});">
-        {{mb_class object=$sejour}}
-        {{mb_key   object=$sejour}}
+      <form name="selectTarif" action="?m={{$m}}" method="post" onsubmit="return submitTarifSejour(this);">
+        {{if $consult->_id}}
+          {{mb_class object=$consult}}
+          {{mb_key   object=$consult}}
+          <input type="hidden" name="_datetime" value="{{$consult->_datetime}}">
+        {{else}}
+          {{mb_class object=$sejour}}
+          {{mb_key   object=$sejour}}
+          <input type="hidden" name="_datetime" value="{{$sejour->_datetime}}">
+        {{/if}}
         <input type="hidden" name="_bind_tarif" value="1"/>
         <input type="hidden" name="_delete_actes" value="0"/>
-        <input type="hidden" name="_datetime" value="{{$sejour->_datetime}}">
         <input type="hidden" name="entree_prevue" value="{{$sejour->entree_prevue}}">
         <input type="hidden" name="sortie_prevue" value="{{$sejour->sortie_prevue}}">
 
