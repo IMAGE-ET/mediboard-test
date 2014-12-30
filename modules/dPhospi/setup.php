@@ -862,7 +862,7 @@ class CSetupdPhospi extends CSetup {
       ADD `facturable` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.96";
+    $this->makeRevision("0.96");
     $query = "ALTER TABLE `service`
                 ADD `use_brancardage` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
