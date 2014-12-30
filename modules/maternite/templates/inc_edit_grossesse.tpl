@@ -52,6 +52,12 @@
     return false;
   };
 
+  afterCreationConsultNow = function(_id) {
+    var url = new Url("dPcabinet", "edit_consultation", "tab");
+    url.addParam("selConsult", _id);
+    url.modal({width: '95%',height: '95%', onclose: reloadHistorique});
+  };
+
   editSejour = function(_id, grossesse_id, patiente_id) {
     var url = new Url('dPplanningOp', 'vw_edit_sejour');
     url.addParam('sejour_id', _id);
@@ -102,9 +108,10 @@
     <input type="hidden" name="entree_reelle" value="" />
   </form>
 
-  <form name="editConsultImm" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: reloadHistorique})">
+  <form name="editConsultImm" method="post" onsubmit="return onSubmitFormAjax(this)">
     <input type="hidden" name="m" value="dPcabinet" />
     <input type="hidden" name="dosql" value="do_consult_now" />
+    <input type="hidden" name="callback" value="afterCreationConsultNow"/>
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="grossesse_id" value="" />
     <input type="hidden" name="prat_id" value="" />
@@ -235,12 +242,13 @@
                   {{tr}}CAccouchement-title-create{{/tr}}
                 </button>
                 <hr/>
-                <select name="prat_id" id="selector_prat_imm" onchange="consultNow($V(this), '{{$grossesse->_id}}');" style="width:130px;">
-                  <option value="">&mdash; {{tr}}mod-dPcabinet-tab-ajax_short_consult{{/tr}}</option>
+                <select name="prat_id" id="selector_prat_imm" style="width:130px;">
+                  <option value="">&mdash; Choisir un praticien</option>
                   {{foreach from=$prats item=_prat}}
                     <option value="{{$_prat->_id}}">{{$_prat}}</option>
                   {{/foreach}}
-                </select>
+                </select><br/>
+                <button type="button" onclick="consultNow($V('selector_prat_imm'), '{{$grossesse->_id}}');" class="consultation_create">Consulter</button>
               </td>
             </tr>
           </table>
