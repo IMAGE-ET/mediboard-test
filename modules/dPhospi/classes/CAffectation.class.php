@@ -576,9 +576,13 @@ class CAffectation extends CMbObject {
    * @see parent::getPerm()
    */
   function getPerm($permType) {
-    $lit = $this->loadRefLit();
     $sejour = $this->loadRefSejour();
-
+    // Gestion dans le cas des affectations dans les couloirs (pas de lit_id)
+    if (!$this->lit_id) {
+      $service = $this->loadRefService();
+      return $service->getPerm($permType) && $sejour->getPerm($permType);
+    }
+    $lit = $this->loadRefLit();
     return $lit->getPerm($permType) && $sejour->getPerm($permType);
   }
 
