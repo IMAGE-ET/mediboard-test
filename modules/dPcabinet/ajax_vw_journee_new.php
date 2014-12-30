@@ -27,7 +27,7 @@ $actes      = CValue::get("actes");
 $function = new CFunctions();
 $function->load($function_id);
 $muser = new CMediusers();
-$musers = $muser->loadProfessionnelDeSanteByPref(PERM_READ, $function_id);
+$musers = $muser->loadProfessionnelDeSanteByPref(PERM_READ, $function_id, null, true);
 
 $planning               = new CPlanningWeek(0, 0, count($musers), count($musers), false, "auto");
 $planning->title        = "Planning du " . htmlentities(CMbDT::format($date, "%A %d %B %Y"));
