@@ -128,6 +128,12 @@
   {{else}}
   <div class="small-info">L'intervention n'est pas reliée à une consultation d'anesthésie, vous ne pouvez donc pas créer de documents</div>
   {{/if}}
+
+  <div style="text-align: center;">
+    {{if 'lifeline'|module_active}}
+      {{mb_include module=lifeline template=inc_get_lifeline_record patient_id=$selOp->_ref_patient->_id}}
+    {{/if}}
+  </div>
 </div>
 
 <div id="tab_preanesth" style="display: none;">
