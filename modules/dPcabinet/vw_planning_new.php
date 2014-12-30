@@ -32,7 +32,7 @@ $chirSel = CValue::getOrSession("chirSel", $chir ? $chir->user_id : null);
 $function_id = CValue::getOrSession("function_id");
 $listFnc = array();
 if ($function_id) {
-  $listChir = CConsultation::loadPraticiens(PERM_EDIT, $function_id);
+  $listChir = CConsultation::loadPraticiens(PERM_EDIT, $function_id, null, true);
   foreach ($listChir as $_chir) {
     $_chir->loadRefFunction();
   }
