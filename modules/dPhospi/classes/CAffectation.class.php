@@ -337,7 +337,7 @@ class CAffectation extends CMbObject {
 
     $store_prestations = false;
 
-    if (!$this->_id) {
+    if (!$this->_id || $this->fieldModified("lit_id")) {
       $store_prestations = true;
     }
 
