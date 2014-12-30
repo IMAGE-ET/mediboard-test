@@ -246,6 +246,30 @@ class CDicomDataSet {
       $this->name = $dataset[2];
     }
   }
+
+  /**
+   * Return the dataset with the given group and element numbers from a sequenced dataset
+   *
+   * @param integer $group_number   The group number
+   * @param integer $element_number The element number
+   *
+   * @return null|CDicomDataSet
+   */
+  public function getSequenceDataSet($group_number, $element_number) {
+    if ($this->vr != 'SQ' || !is_array($this->value)) {
+      return null;
+    }
+
+    foreach ($this->value as $_sequence) {
+      foreach ($_sequence as $_dataset) {
+        if ($_dataset->getGroupNumber() == $group_number && $_dataset->getElementNumber() == $element_number) {
+          return $_dataset;
+        }
+      }
+    }
+
+    return null;
+  }
   
   /**
    * Calculate the length of the value
@@ -620,6 +644,8 @@ class CDicomDataSet {
         break;
       case 'SQ' :
         $tmp_value = array();
+        $value_stream = new CDicomStreamReader();
+
         /** Sequence of items with undefined length **/
         if ($this->length == 0xFFFFFFFF) {
           $delimiter = new CDicomDataSet();
@@ -644,7 +670,7 @@ class CDicomDataSet {
               }
             }
             else {
-              $sequence_end = $value_stream->getPos() + $sequence_length;
+              $sequence_end = $value_stream->getPos();// + $sequence_length;
             
               while ($value_stream->getPos() < $sequence_end) {
                 $dataset = new CDicomDataSet();
@@ -662,8 +688,7 @@ class CDicomDataSet {
         /** Sequence of items with defined length **/
         else {
           $content = $stream_reader->read($this->length);
-          
-          $value_stream = new CDicomStreamReader();
+
           fwrite($value_stream->stream, $content, $this->length);
           $value_stream->rewind();
           

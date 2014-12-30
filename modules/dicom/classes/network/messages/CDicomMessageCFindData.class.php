@@ -208,7 +208,7 @@ class CDicomMessageCFindData {
         if (!array_key_exists($_group_number, $_group)) {
           $requested_datas[$_group_number] = array();
         }
-        $requested_datas[$_group_number][$_element_number] = $element->getValue();
+        $requested_datas[$_group_number][$_element_number] = $element;
       }
     }
 

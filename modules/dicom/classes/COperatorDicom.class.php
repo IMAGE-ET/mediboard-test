@@ -262,6 +262,9 @@ class COperatorDicom extends CEAIOperator {
           $encoding_dataset = $rq_datasets[0x0008][0x0005];
           $encoding = $encoding_dataset->getValue();
         }
+
+        $calling_ae_title = self::getRequestedAETitle($requested_datas);
+        $modality = self::getRequestedModality($requested_datas);
         
         foreach ($operations as $_operation) {
           $responses[] = $find_rsp_pending;
@@ -311,9 +314,14 @@ class COperatorDicom extends CEAIOperator {
             $time = utf8_encode($time);
           }
 
-          $calling_ae_title = '';
-          if (array_key_exists(0x0040, $requested_datas) && array_key_exists(0x0001, $requested_datas[0x0040])) {
-            $calling_ae_title = $requested_datas[0x0040][0x0001];
+          $sejour_id = $_sejour->_id;
+          if ($_sejour->_NDA) {
+            $sejour_id = $_sejour->_NDA;
+          }
+
+          $patient_id = $_patient->_id;
+          if ($_patient->_IPP) {
+            $patient_id = $_patient->_IPP;
           }
 
           $find_rsp_datas = array(
@@ -325,32 +333,33 @@ class COperatorDicom extends CEAIOperator {
                   "type"  => "data",
                   "datas" => array(
                     0x0008 => array (
-                      0x0050 => $_sejour->_NDA
+                      0x0050 => $sejour_id
                     ),
                     0x0010 => array(
                       0x0010 => "$_patient->nom^$_patient->prenom",
-                      0x0020 => "$_patient->_IPP",
+                      0x0020 => "$patient_id",
                       0x0030 => str_replace("-", "", $_patient->naissance),
                       0x0040 => strtoupper($_patient->sexe)
                     ),
                     0x0020 => array(
-                      0x000D => $_sejour->_NDA
+                      0x000D => $sejour_id
                     ),
                     0x0038 => array (
-                      0x0010 => $_sejour->_NDA
+                      0x0010 => $sejour_id
                     ),
                     0x0040 => array(
                       0x0100 => array(
                         array(
+                          array("group_number" => 0x0008, "element_number" => 0x0060, "value" => $modality),
                           array("group_number" => 0x0040, "element_number" => 0x0001, "value" => $calling_ae_title),
                           array("group_number" => 0x0040, "element_number" => 0x0002, "value" => $date),
                           array("group_number" => 0x0040, "element_number" => 0x0003, "value" => $time),
                           array("group_number" => 0x0040, "element_number" => 0x0006, "value" => $chir_name),
                           array("group_number" => 0x0040, "element_number" => 0x0007, "value" => $libelle),
-                          array("group_number" => 0x0040, "element_number" => 0x0009, "value" => $_sejour->_NDA),
+                          array("group_number" => 0x0040, "element_number" => 0x0009, "value" => $sejour_id),
                         ),
                       ),
-                      0x1001 => $_sejour->_NDA
+                      0x1001 => $sejour_id
                     ),
                   ),
                 )
@@ -394,5 +403,56 @@ class COperatorDicom extends CEAIOperator {
       /** The message is a response : **/
       return array("event" => "AAbort_Prepared", "datas" => 5);
     }
+  }
+
+  /**
+   * Return the value of the ScheduledStationAETitle (dataset 0x0040,0x0001)
+   *
+   * @param array $requested_datas The the data of the CFind request
+   *
+   * @return string
+   */
+  protected static function getRequestedAETitle($requested_datas) {
+    $ae_title = '';
+
+    /* We check if the dataset is in the data */
+    if (array_key_exists(0x0040, $requested_datas) && array_key_exists(0x0001, $requested_datas[0x0040])) {
+      $ae_title = $requested_datas[0x0040][0x0001]->getValue();
+    }
+    /* Check if the dataset is in the sequence of the dataset 0x0040,0x0100 */
+    elseif (
+      array_key_exists(0x0040, $requested_datas) && array_key_exists(0x0100, $requested_datas[0x0040]) &&
+      $dataset = $requested_datas[0x0040][0x0100]->getSequenceDataSet(0x0040, 0x0001)
+    ) {
+      $ae_title = $dataset->getValue();
+    }
+
+    return $ae_title;
+  }
+
+  /**
+   * Return the value of the Modality (dataset 0x0008,0x0060)
+   *
+   * @param array $requested_datas The the data of the CFind request
+   *
+   * @return string
+   */
+  protected static function getRequestedModality($requested_datas) {
+    $modality = '';
+
+    mb_dump($requested_datas);
+    /* We check if the dataset is in the data */
+    if (array_key_exists(0x0008, $requested_datas) && array_key_exists(0x0060, $requested_datas[0x0008])) {
+      $modality = $requested_datas[0x0008][0x0060]->getValue();
+    }
+    /* Check if the dataset is in the sequence of the dataset 0x0040,0x0100 */
+    elseif (
+      array_key_exists(0x0040, $requested_datas) && array_key_exists(0x0100, $requested_datas[0x0040]) &&
+      $dataset = $requested_datas[0x0040][0x0100]->getSequenceDataSet(0x0008, 0x0060)
+    ) {
+      $modality = $dataset->getValue();
+    }
+
+    return $modality;
   }
 }
