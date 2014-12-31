@@ -20,7 +20,7 @@
     }
 
     $V(input.form.position_dentaire, dents.join('|'));
-  }
+  };
 
   toggleDateDAP = function(input) {
     if (input.value == 1) {
@@ -178,7 +178,12 @@
                 Phase {{$_phase->phase}}
                 {{if $can_view_tarif && ($confCCAM.tarif || $subject->_class == "CConsultation")}}
                 <div style="font-weight: normal;">
-                  <span title="Tarif de base de l'acte">{{$acte->_tarif_base|currency}}</span>
+                  <span title="Tarif de base de l'acte">
+                    {{$acte->_tarif_base|currency}}
+                    {{if $acte->_tarif_base != $acte->_tarif_base2}}
+                      ({{$acte->_tarif_base2|currency}})
+                    {{/if}}
+                  </span>
                 </div>
                 {{/if}}
 

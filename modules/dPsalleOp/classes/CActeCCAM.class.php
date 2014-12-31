@@ -58,6 +58,8 @@ class CActeCCAM extends CActe {
   public $_anesth_associe;
   public $_tarif_base;
   public $_tarif_sans_asso;
+  public $_tarif_base2;
+  public $_tarif_sans_asso2;
   public $_tarif;
   public $_activite;
   public $_phase;
@@ -128,10 +130,12 @@ class CActeCCAM extends CActe {
     $props['date_demande_accord']      = 'date';
 
     // Derived fields
-    $props["_rembex"]          = "bool";
-    $props["_tarif_base"]      = "currency";
-    $props["_tarif_sans_asso"] = "currency";
-    $props["_tarif"]           = "currency";
+    $props["_rembex"]           = "bool";
+    $props["_tarif_base"]       = "currency";
+    $props["_tarif_sans_asso"]  = "currency";
+    $props["_tarif_base2"]      = "currency";
+    $props["_tarif_sans_asso2"] = "currency";
+    $props["_tarif"]            = "currency";
     
     return $props;
   }
@@ -1120,8 +1124,10 @@ class CActeCCAM extends CActe {
     // Tarif de base
     $code = $this->loadRefCodeCCAM();
     $phase = $code->activites[$this->code_activite]->phases[$this->code_phase];
-    $this->_tarif_base = $phase->tarif;
-    $this->_tarif_sans_asso = $phase->tarif;
+    $this->_tarif_base       = $phase->tarif;
+    $this->_tarif_sans_asso  = $phase->tarif;
+    $this->_tarif_base2      = $phase->tarif2;
+    $this->_tarif_sans_asso2 = $phase->tarif2;
 
     // Application des modificateurs
     $forfait     = 0;
@@ -1132,7 +1138,16 @@ class CActeCCAM extends CActe {
       $coefficient += $result["coefficient"] - 100;
     }
 
-    return $this->_tarif_sans_asso = ($this->_tarif_base * ($coefficient / 100) + $forfait);
+    $this->_tarif_sans_asso  = ($this->_tarif_base  * ($coefficient / 100) + $forfait);
+    $this->_tarif_sans_asso2 = ($this->_tarif_base2 * ($coefficient / 100) + $forfait);
+
+    if ($this->_id && $this->executant_id && $this->_tarif_sans_asso != $this->_tarif_sans_asso2) {
+      $this->loadRefExecutant();
+      if ($this->_ref_executant->secteur == 2 && !$this->_ref_executant->option_coordination) {
+        return $this->_tarif_sans_asso;
+      }
+    }
+    return $this->_tarif_sans_asso2;
   }
 
   /**
