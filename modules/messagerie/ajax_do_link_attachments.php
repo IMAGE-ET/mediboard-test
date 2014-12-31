@@ -8,13 +8,15 @@
  */
 
 CCanDo::checkRead();
-$user = CMediusers::get();
-$object_id = CValue::get("object_id");
-$object_class = CValue::get("object_class");
-$attach_list = CValue::get("attach_list");
-$text_plain = CValue::get("text_plain_id");
-$text_html = CValue::get("text_html_id");
-$mail_id = CValue::get("mail_id");
+$user           = CMediusers::get();
+$object_id      = CValue::get("object_id");
+$object_class   = CValue::get("object_class");
+$attach_list    = CValue::get("attach_list");
+$text_plain     = CValue::get("text_plain_id");
+$text_html      = CValue::get("text_html_id");
+$rename_text    = CValue::get("rename_text");
+$category_id    = CValue::get("category_id");
+$mail_id        = CValue::get("mail_id");
 
 //load object
 /** @var CMbObject $object */
@@ -115,7 +117,14 @@ if ($text_html || $text_plain) {
   $file = new CFile();
   $file->setObject($object);
   $file->author_id = CAppUI::$user->_id;
-  $file->file_name  = $mail->subject ? $mail->subject : "sans_titre";
+  $file->file_name = "sans_titre";
+  $file->file_category_id = $category_id;
+  if ($mail->subject) {
+    $file->file_name = $mail->subject;
+  }
+  if ($rename_text) {
+    $file->file_name = $rename_text;
+  }
   $file->file_type = $content_type;
   $file->fillFields();
   $file->putContent($text->content);

@@ -16,26 +16,42 @@
       <th><input type="checkbox" onclick="messagerie.toggleSelect('list_attach', this.checked, 'checkbox_att'); checkrelation()" checked="checked" value="0"/></th>
     </tr>
 
-  {{if $mail->_text_plain->_id && !$mail->_text_html->_id && $mail->_text_plain->content != ''}}
-    <tr>
-      <td {{if $mail->text_file_id}}class="ok"{{/if}}>
-        <textarea style="width:100%; height:100px;">{{$mail->_text_plain->content}}</textarea>
-        {{if $mail->text_file_id}}
-          <div style="text-align: center;" "><img src="style/mediboard/images/buttons/link.png" alt=""/>{{tr}}CMailAttachment-LinkedTo{{/tr}}<span onmouseover="ObjectTooltip.createEx(this, '{{$mail->_ref_file_linked->_ref_object->_guid}}')">{{$mail->_ref_file_linked->_ref_object->_view}}</span></div>
-        {{/if}}
-      </td>
-      <td class="plain"><input type="checkbox" name="attach_plain" class="check_att" {{if !$mail->text_file_id}}checked="checked"{{/if}} value="{{$mail->_text_plain->_id}}" onclick="checkrelation()"/></td>
-    </tr>
-  {{/if}}
+  {{if $mail->_text_plain->_id}}
 
-  {{if $mail->_text_plain->_id && $mail->_text_html->_id && $mail->_text_html->content != ''}}
+    {{if !$mail->_text_html->_id}}
+      <tr>
+        <td {{if $mail->text_file_id}}class="ok"{{/if}}>
+          <textarea style="width:100%; height:100px;">{{$mail->_text_plain->content}}</textarea>
+          {{if $mail->text_file_id}}
+            <div style="text-align: center;" "><img src="style/mediboard/images/buttons/link.png" alt=""/>{{tr}}CMailAttachment-LinkedTo{{/tr}}<span onmouseover="ObjectTooltip.createEx(this, '{{$mail->_ref_file_linked->_ref_object->_guid}}')">{{$mail->_ref_file_linked->_ref_object->_view}}</span></div>
+          {{/if}}
+        </td>
+        <td class="plain"><input type="checkbox" name="attach_plain" class="check_att" {{if !$mail->text_file_id}}checked="checked"{{/if}} value="{{$mail->_text_plain->_id}}" onclick="checkrelation()"/></td>
+      </tr>
+    {{elseif $mail->_text_html->_id}}
+      <tr>
+        <td {{if $mail->text_file_id}}class="ok"{{/if}}><iframe src="?m={{$m}}&amp;a=vw_html_content&amp;mail_id={{$mail->_id}}&amp;suppressHeaders=1" style="width:100%;"></iframe>
+          {{if $mail->text_file_id}}
+            <div><img src="style/mediboard/images/buttons/link.png" alt=""/>{{tr}}CMailAttachment-LinkedTo{{/tr}}<span onmouseover="ObjectTooltip.createEx(this, '{{$mail->_ref_file_linked->_ref_object->_guid}}')">{{$mail->_ref_file_linked->_ref_object->_view}}</span></div>
+          {{/if}}
+        </td>
+        <td class="html"><input type="checkbox" name="attach_html" class="check_att" {{if !$mail->text_file_id}}checked="checked"{{/if}} value="{{$mail->_text_html->_id}}" onclick="checkrelation()"/></td>
+      </tr>
+    {{/if}}
     <tr>
-      <td {{if $mail->text_file_id}}class="ok"{{/if}}><iframe src="?m={{$m}}&amp;a=vw_html_content&amp;mail_id={{$mail->_id}}&amp;suppressHeaders=1" style="width:100%;"></iframe>
-        {{if $mail->text_file_id}}
-          <div><img src="style/mediboard/images/buttons/link.png" alt=""/>{{tr}}CMailAttachment-LinkedTo{{/tr}}<span onmouseover="ObjectTooltip.createEx(this, '{{$mail->_ref_file_linked->_ref_object->_guid}}')">{{$mail->_ref_file_linked->_ref_object->_view}}</span></div>
-        {{/if}}
+      <td colspan="2">
+        <label>
+          Renommer : <input type="text" name="rename_text" value="sans_titre" onchange="checkrelation()" />
+        </label>
+        <label>
+          Catégorie : <select name="category_id" style="width:12em;" onchange="checkrelation()">
+            <option value="">&mdash; Sans catégorie</option>
+            {{foreach from=$cats item=_cat}}
+              <option value="{{$_cat->_id}}">{{$_cat}}</option>
+            {{/foreach}}
+          </select>
+        </label>
       </td>
-      <td class="html"><input type="checkbox" name="attach_html" class="check_att" {{if !$mail->text_file_id}}checked="checked"{{/if}} value="{{$mail->_text_html->_id}}" onclick="checkrelation()"/></td>
     </tr>
   {{/if}}
 

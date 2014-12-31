@@ -68,9 +68,10 @@ messagerie = {
    *
    * @param mail_id
    */
-  listAttachLink : function(mail_id) {
+  listAttachLink : function(mail_id, rename) {
     var url = new Url(messagerie.module, "ajax_list_attachments");
     url.addParam("mail_id", mail_id);
+    url.addParam("rename", rename);
     url.requestUpdate("list_attachments");
   },
 
@@ -140,6 +141,8 @@ messagerie = {
     url.addParam("attach_list", attach.files);
     url.addParam("text_plain_id", attach.plain);
     url.addParam("text_html_id", attach.html);
+    url.addParam("category_id", attach.category_id);
+    url.addParam("rename_text", attach.rename_text);
     url.addParam("mail_id", mail_id);
     url.requestUpdate("systemMsg", function() {
       messagerie.listAttachLink(mail_id);

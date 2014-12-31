@@ -38,6 +38,8 @@
   files: "",
   plain:null,
   html:null,
+  rename_text:null,
+  category_id:null,
 
   setObject: function(object_class, object_id) {
     this.object = object_class;
@@ -60,10 +62,14 @@
 
     if ($$(".plain input:checked").length > 0) {
       attach.plain = aform.attach_plain.value;
+      attach.rename_text = aform.rename_text.value;
+      attach.category_id = aform.category_id.value;
     }
 
     if ($$(".html input:checked").length > 0) {
       attach.html = aform.attach_html.value;
+      attach.rename_text = aform.rename_text.value;
+      attach.category_id = aform.category_id.value;
     }
 
     if (attach.object && attach.id && (attach.files.length > 0 || attach.plain || attach.html)) {
@@ -72,7 +78,7 @@
   };
 
   Main.add(function () {
-    messagerie.listAttachLink('{{$mail_id}}');
+    messagerie.listAttachLink('{{$mail_id}}', true);
     {{if $patient->_id}}
       requestInfoPat('{{$patient->_id}}','{{$dossier_id}}');
     {{/if}}
@@ -98,6 +104,13 @@
 
   <table class="main" id="linkAttachment">
     <tr><th colspan="2" class="title">Liaison à mediboard</th></tr>
+    <tr>
+      <td colspan="2" class="button">
+        <button id="do_link_attachments" {{if !$dossier_id}}style="display: none;"{{/if}} onclick="messagerie.dolinkAttachment(attach, '{{$mail_id}}')">
+          <img src="style/mediboard/images/buttons/down.png" alt=""/>{{tr}}Lier{{/tr}}<img src="style/mediboard/images/buttons/down.png" alt=""/>
+        </button>
+      </td>
+    </tr>
     <tr>
       <td style="width:50%;" id="list_attachments">
       </td>
@@ -127,12 +140,6 @@
         </form>
 
         <div id="recherche_patient"></div>
-        <div>
-          <button id="do_link_attachments" {{if !$dossier_id}}style="display: none;"{{/if}} onclick="messagerie.dolinkAttachment(attach, '{{$mail_id}}')">
-            <img src="style/mediboard/images/buttons/up.png" alt=""/>{{tr}}Lier{{/tr}}<img src="style/mediboard/images/buttons/up.png" alt=""/>
-          </button>
-        </div>
-
       </td>
     </tr>
   </table>
