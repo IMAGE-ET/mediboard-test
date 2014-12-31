@@ -27,7 +27,7 @@
               {{assign var=service_id value=$sejour->service_id}}
               <div id="patient_pret-{{$_consult->sejour_id}}">
                 {{mb_include module=brancardage template=inc_exist_brancard colonne="patient_pret" sejour_id=$sejour->_id
-                brancardage=$_consult->_ref_brancardage see_sejour=true destination="CService" destination_guid="CService-$service_id"}}
+                brancardage=$_consult->_ref_brancardage see_sejour=true destination="CService" destination_guid=""}}
               </div>
             </td>
           {{/if}}
