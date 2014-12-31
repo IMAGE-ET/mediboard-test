@@ -519,6 +519,8 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $this->loadRefCategorie();
     $this->loadRefPlageConsult(1);
     $this->_ref_chir->loadRefFunction();
+    $this->loadRefBrancardage();
+    $this->loadRefSejour();
   }
 
   /**
