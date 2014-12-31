@@ -42,7 +42,8 @@ else {
 /** @var CMediusers[] $listPrat */
 
 if ($perm_fonct == 'only_me') {
-  $listPrat[$user->function_id] = $user->loadRefFunction();
+  $listPrat[$user->_id] = $user;
+  $prat = $user;
 }
 elseif($perm_fonct == "same_function") {
   $listPrat = $prat->loadProfessionnelDeSante(PERM_READ, $user->function_id);
@@ -60,7 +61,6 @@ usort(
     return strcmp($a->_user_last_name, $b->_user_last_name);
   }
 );
-
 
 $calendar = new CPlanningMonth($date);
 
