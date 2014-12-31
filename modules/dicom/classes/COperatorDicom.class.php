@@ -440,7 +440,6 @@ class COperatorDicom extends CEAIOperator {
   protected static function getRequestedModality($requested_datas) {
     $modality = '';
 
-    mb_dump($requested_datas);
     /* We check if the dataset is in the data */
     if (array_key_exists(0x0008, $requested_datas) && array_key_exists(0x0060, $requested_datas[0x0008])) {
       $modality = $requested_datas[0x0008][0x0060]->getValue();
