@@ -426,8 +426,6 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $this->_coded = $this->valide;
     
     $this->_exam_fields = $this->getExamFields();
-    $this->loadRefBrancardage();
-    $this->loadRefSejour();
   }
 
   /**
