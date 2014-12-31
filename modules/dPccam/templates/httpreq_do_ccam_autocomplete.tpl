@@ -16,7 +16,11 @@
           {{foreach from=$_activite->phases item=_phase}}
              {{if $_phase->tarif}}
              <span title="activité {{$_activite->numero}}, phase {{$_phase->phase}}">
+               &bullet;
                {{$_phase->tarif|currency}}
+               {{if $_phase->tarif != $_phase->tarif2}}
+                 ({{$_phase->tarif2|currency}})
+               {{/if}}
              </span>
              {{/if}}
           {{/foreach}}
