@@ -1648,10 +1648,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     // Nouveau séjour relié à une grossesse
     // Si l'entrée prévue est à l'heure courante, alors on value également l'entrée réelle
     if (CModule::getActive("maternite") && !$this->_id && $this->grossesse_id) {
-      $current_hour = CMbDT::transform(CMbDT::time(), null, "%H");
-      $hour_sejour = $this->_hour_entree_prevue;
-
-      if (CMbDT::date() == $this->_date_entree_prevue && $current_hour == $hour_sejour) {
+      if (CMbDT::date() == $this->_date_entree_prevue) {
         $this->entree_reelle = CMbDT::dateTime();
       }
     }
