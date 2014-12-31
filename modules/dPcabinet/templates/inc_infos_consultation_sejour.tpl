@@ -1,17 +1,14 @@
 {{if $sejour->_canRead}}
   <table class="tbl">
     <tr>
-      <th class="title" colspan="{{if @$modules.brancardage->_can->read}}4{{else}}3{{/if}}">
-        {{tr}}CSejour-back-consultations{{/tr}}
+      <th class="title" colspan="3">
+        {{tr}}CSejour-back-consultations{{/tr}} de séjour
       </th>
     </tr>
     <tr>
       <th>{{mb_label class=CPlageConsult field="chir_id"}}</th>
       <th>{{tr}}Date{{/tr}}</th>
       <th>{{tr}}Hour{{/tr}}</th>
-      {{if @$modules.brancardage->_can->read}}
-        <th>{{tr}}CBrancardage{{/tr}}</th>
-      {{/if}}
     </tr>
     <tbody id="consults-sejour-{{$sejour->_guid}}">
       {{foreach from=$sejour->_ref_consultations item=_consult}}
@@ -21,23 +18,26 @@
           </td>
           <td>{{$_consult->_date|date_format:$conf.date}}</td>
           <td>{{mb_value object=$_consult field=heure}}</td>
-          {{if @$modules.brancardage->_can->read}}
-            <td class="button">
-              {{mb_script module=brancardage script=creation_brancardage ajax="true"}}
-              {{assign var=service_id value=$sejour->service_id}}
-              <div id="patient_pret-{{$_consult->sejour_id}}">
-                {{mb_include module=brancardage template=inc_exist_brancard colonne="patient_pret" sejour_id=$sejour->_id
-                brancardage=$_consult->_ref_brancardage see_sejour=true destination="CService" destination_guid=""}}
-              </div>
-            </td>
-          {{/if}}
+
         </tr>
       {{foreachelse}}
-        <tr><td colspan="{{if @$modules.brancardage->_can->read}}4{{else}}3{{/if}}" class="empty">{{tr}}CConsultation.none{{/tr}}</td></tr>
+        <tr><td colspan="3" class="empty">{{tr}}CConsultation.none{{/tr}}</td></tr>
       {{/foreach}}
     </tbody>
-  </table>
 
+    {{if @$modules.brancardage->_can->read}}
+      <tr>
+        <td class="button" colspan="3">
+          {{mb_script module=brancardage script=creation_brancardage ajax="true"}}
+          {{assign var=lit_id  value=$sejour->_ref_curr_affectation->lit_id}}
+          <div id="patient_pret-{{$sejour->_id}}">
+            {{mb_include module=brancardage template=inc_exist_brancard colonne="demande_brancard" sejour_id=$sejour->_id
+            brancardage=null see_sejour=true destination="CService" destination_guid="" origine_guid="CLit-$lit_id"}}
+          </div>
+        </td>
+      </tr>
+    {{/if}}
+  </table>
 {{elseif $sejour->_id}}
   <div class="small-info">Vous n'avez pas accès au détail des consultations.</div>
 {{/if}}
