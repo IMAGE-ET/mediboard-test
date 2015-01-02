@@ -4359,6 +4359,28 @@ class CSejour extends CFacturable implements IPatientRelated {
       }
     }
 
+    // Dans le cas de liaisons identiques qui se suivent, on les fusionne
+    // Résoud le cas des liaisons avec sous-item de niveau nuit
+    foreach ($liaisons_j as $prestation_id => $_liaisons) {
+      foreach ($_liaisons as $date => $_liaison) {
+        if (isset($_save_liaison)) {
+          if (($_save_liaison->item_souhait_id == $_liaison->item_souhait_id) &&
+            ($_save_liaison->item_realise_id == $_liaison->item_realise_id) &&
+            ($_save_liaison->sous_item_id == $_liaison->sous_item_id)) {
+            $old_fin = $dates[$_save_liaison->_id]["fin"];
+            $new_debut = $dates[$_liaison->_id]["debut"];
+            if (CMbDT::daysRelative($old_fin, $new_debut) == 1) {
+              $dates[$_save_liaison->_id]["fin"] = $dates[$_liaison->_id]["fin"];
+              unset($dates[$_liaison->_id]);
+              unset($liaisons_j[$prestation_id][$date]);
+              continue;
+            }
+          }
+        }
+        $_save_liaison = $_liaison;
+      }
+    }
+
     // Calcul du niveau de réalisation (_quantite)
     foreach ($liaisons_j as $prestation_id => $_liaisons) {
       foreach ($_liaisons as $date => $_liaison) {
