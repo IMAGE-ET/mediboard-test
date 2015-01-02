@@ -4437,7 +4437,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         $_item_realise = $_liaison->loadRefItemRealise();
         $sous_item = $_liaison->loadRefSousItem();
 
-        if (!$_item_realise->_id || !$_item_realise->facturable) {
+        if (!$_item_realise->_id) {
           continue;
         }
 
@@ -4446,6 +4446,10 @@ class CSejour extends CFacturable implements IPatientRelated {
         // Si ce qui est réalisé est supérieur au demandé (rank inférieur), c'est le souhait qui est facturé
         if ($_item_realise->rank < $_item_souhait->rank) {
           $item_facture = $_item_souhait;
+        }
+
+        if (!$item_facture->facturable) {
+          continue;
         }
 
         $dates_liaison = $dates[$_liaison->_id];
