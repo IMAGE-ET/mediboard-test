@@ -10,7 +10,7 @@
  */
 
 EAITransformation = {
-  modal          : null,
+  modal : null,
 
   edit: function(transformation_id, event_name) {
     new Url("eai", "ajax_edit_transformation")
@@ -40,17 +40,19 @@ EAITransformation = {
     }
   },
 
-  link: function(event_name, actor_guid) {
+  link: function(message_class, event_class, actor_guid) {
     new Url("eai", "ajax_link_transformation_rules")
-      .addParam("event_name", event_name)
+      .addParam("event_class"  , event_class)
+      .addParam("message_class", message_class)
       .addParam("actor_guid", actor_guid)
       .requestModal(600);
   },
 
-  list: function(event_name, actor_guid) {
+  list: function(message_class, event_class, actor_guid) {
     EAITransformation.modal = new Url("eai", "ajax_list_transformations")
-      .addParam("event_name", event_name)
-      .addParam("actor_guid", actor_guid)
+      .addParam("event_class"  , event_class)
+      .addParam("message_class", message_class)
+      .addParam("actor_guid"   , actor_guid)
       .requestModal(600);
   },
 

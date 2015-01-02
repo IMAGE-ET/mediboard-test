@@ -12,7 +12,7 @@
 {{assign var=event_name value=$event|get_class}}
 
 <div>
-  <button onclick="EAITransformation.link('{{$event_name}}', '{{$actor->_guid}}');" class="button new">
+  <button onclick="EAITransformation.link('{{$event_name}}', '{{$event_name}}', '{{$actor->_guid}}');" class="button new">
     {{tr}}CEAITransformation-title-create{{/tr}}
   </button>
 </div>

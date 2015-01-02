@@ -12,17 +12,21 @@
 
 CCanDo::checkAdmin();
 
-$event_name = CValue::getOrSession("event_name");
-$actor_guid = CValue::getOrSession("actor_guid");
+$event_class   = CValue::getOrSession("event_class");
+$message_class = CValue::getOrSession("message_class");
+$actor_guid    = CValue::getOrSession("actor_guid");
 
 /** @var CInteropActor $actor */
 $actor = CMbObject::loadFromGuid($actor_guid);
 
-$event = new $event_name;
+/** @var CInteropNorm $message */
+$message = new $message_class;
+
+$event  = new $event_class;
 
 // Chargement des transformations peut-être existantes pour cet évènement
 $transformation = new CEAITransformation();
-$transformation->bindObject($event, $actor);
+$transformation->bindObject($message, $event, $actor);
 $transformations = $transformation->loadMatchingList("rank");
 
 // Création du template
@@ -30,6 +34,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("actor"          , $actor);
 $smarty->assign("event"          , $event);
+$smarty->assign("message"        , $message);
 $smarty->assign("transformations", $transformations);
 
 $smarty->display("inc_list_transformations.tpl");

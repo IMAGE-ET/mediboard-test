@@ -116,18 +116,25 @@ class CEAITransformation extends CMbObject {
   /**
    * Bind event
    *
-   * @param CHL7Event|CHPrimXMLEvenements|CHPrimSanteEvent $event Event
-   * @param CInteropACtor                                  $actor Actor
+   * @param CInteropNorm                                   $message Standard
+   * @param CHL7Event|CHPrimXMLEvenements|CHPrimSanteEvent $event   Event
+   * @param CInteropACtor                                  $actor   Actor
    *
    * @return bool|void
    */
-  function bindObject($event, CInteropActor $actor) {
-    $this->actor_id    = $actor->_id;
-    $this->actor_class = $actor->_class;
+  function bindObject(CInteropNorm $message, $event, CInteropActor $actor) {
+    $where = array();
+
+    $where["actor_id"]    = " = '$actor->_id'";
+    $where["actor_class"] = " = '$actor->_class";
 
     if ($event instanceof CHL7Event) {
-      $this->profil      = $event->profil;
+      $where = array(
+        "profil = '$event->profil'"
+      );
     }
+
+    return $where;
   }
 
   /**

@@ -12,13 +12,17 @@
 
 CCanDo::checkAdmin();
 
-$actor_guid = CValue::getOrSession("actor_guid");
-$event_name = CValue::getOrSession("event_name");
+$actor_guid    = CValue::getOrSession("actor_guid");
+$event_class   = CValue::getOrSession("event_class");
+$message_class = CValue::getOrSession("message_class");
 
 /** @var CInteropActor $actor */
 $actor = CMbObject::loadFromGuid($actor_guid);
 
-$event = new $event_name;
+$event = new $event_class;
+
+/** @var CInteropNorm $message */
+$message = new $message_class;
 
 $transformation = new CEAITransformation();
 $transformation->actor_id    = $actor->_id;
@@ -26,9 +30,11 @@ $transformation->actor_class = $actor->_class;
 $transformations = $transformation->loadMatchingList();
 
 // On charge la liste des règles possibles en fonction des propriétés de l'évènement
-$transf_rule = new CEAITransformationRule();
-$transf_rule->bindObject(($event));
-$transf_rules = $transf_rule->loadMatchingList("rank");
+$transf_rule  = new CEAITransformationRule();
+$transf_rules = array();
+if ($where = $transf_rule->bindObject($message, $event)) {
+  $transf_rules = $transf_rule->loadList($where, "rank");
+}
 
 // Création du template
 $smarty = new CSmartyDP();

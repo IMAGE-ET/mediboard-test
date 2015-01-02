@@ -19,8 +19,6 @@
   <input type="hidden" name="event_name" value="{{$event_name}}" />
   <input type="hidden" name="del" value="0" />
 
-  <input type="hidden" name="callback" value="" />
-
   <table class="main tbl">
     <tr>
       <th colspan="14" class="title">
@@ -41,7 +39,11 @@
         <td>
           <input type="checkbox" name="transformation_rules[{{$_transformation_rule->_id}}]" value="{{$_transformation_rule->_id}}" />
         </td>
-        <td class="text compact">{{mb_value object=$_transformation_rule field="name"}}</td>
+        <td class="text compact">
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$_transformation_rule->_guid}}');">
+            {{mb_value object=$_transformation_rule field="name"}}
+          </span>
+        </td>
         <td class="text compact">{{mb_value object=$_transformation_rule field="component_from"}}</td>
         <td class="text compact">{{mb_value object=$_transformation_rule field="component_to"}}</td>
         <td class="button compact">

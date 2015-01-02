@@ -158,17 +158,27 @@ class CEAITransformationRule extends CMbObject {
   /**
    * Bind event
    *
-   * @param CHL7Event|CHPrimXMLEvenements|CHPrimSanteEvent $event Event
+   * @param CInteropNorm                                   $message Standard
+   * @param CHL7Event|CHPrimXMLEvenements|CHPrimSanteEvent $event   Event
    *
    * @return bool|void
    */
-  function bindObject($event) {
+  function bindObject(CInteropNorm $message, $event) {
+    $where_or = array();
+
     if ($event instanceof CHL7Event) {
-      $this->profil      = $event->profil;
-      //$this->message     = $event->event_type.$event->code;
-      //$this->transaction = $event->transaction;
-      //$this->version     = $event->version;
-      //$this->extension   = $event->_is_i18n;
+      $where_or = array(
+        "standard     = '$message->name'",
+        "standard     = '$message->name' AND domain = '$event->profil'",
+        "profil       = '$event->profil' ",
+        "transaction  = '$event->transaction'",
+        "message      = '$event->code'",
+      );
     }
+
+    $where = array();
+    $where[] = implode(' OR ', $where_or);
+
+    return $where;
   }
 }

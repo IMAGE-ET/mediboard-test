@@ -57,7 +57,11 @@
                           '{{$_transformation_rule->eai_transformation_ruleset_id}}', true)"
                 class="button notext compact duplicate" type="button" title="{{tr}}Duplicate{{/tr}}">{{tr}}Duplicate{{/tr}}</button>
       </td>
-      <td class="text compact">{{mb_value object=$_transformation_rule field="name"}}</td>
+      <td class="text compact">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_transformation_rule->_guid}}');">
+          {{mb_value object=$_transformation_rule field="name"}}
+        </span>
+      </td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="standard"}}</td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="domain"}}</td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="profil"}}</td>
@@ -75,16 +79,13 @@
       <td class="text compact">{{mb_value object=$_transformation_rule field="rank"}}
         <!-- Order -->
         <form name="formOrderRule-{{$_transformation_rule->_id}}" method="post"
-              onsubmit="return EAITransformationRule.onSubmit(this)">
+              onsubmit="return onSubmitFormAjax(this, EAITransformationRuleSet.refreshTransformationRuleList.curry('{{$_transformation_rule->eai_transformation_ruleset_id}}'))">
 
           <input type="hidden" name="dosql" value="do_manage_transformation_rule" />
           <input type="hidden" name="m" value="eai" />
           <input type="hidden" name="ajax" value="1" />
           <input type="hidden" name="transformation_rule_id_move" value="{{$_transformation_rule->_id}}" />
           <input type="hidden" name="direction" value="" />
-
-          <input type="hidden" name="callback"
-                 value="EAITransformationRuleSet.refreshTransformationRuleList.curry('{{$_transformation_rule->eai_transformation_ruleset_id}}')" />
 
           <img src="./images/icons/updown.gif" usemap="#map-{{$_transformation_rule->_id}}" />
           <map name="map-{{$_transformation_rule->_id}}">

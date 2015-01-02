@@ -16,26 +16,25 @@ CCanDo::checkAdmin();
 $transformation_id_move = CValue::post("transformation_id_move");
 $direction              = CValue::post("direction");
 
-$transf_rule = new CEAITransformation();
-$transf_rule->load($transformation_id_move);
+$transformation = new CEAITransformation();
+$transformation->load($transformation_id_move);
 
 switch ($direction) {
   case "up":
-    $transf_rule->rank--;
+    $transformation->rank--;
     break;
 
   case "down":
-    $transf_rule->rank++;
+    $transformation->rank++;
     break;
 
   default:
 }
 
 $transf_to_move = new CEAITransformation();
-$transf_to_move->actor_class = $transf_rule->actor_class;
-$transf_to_move->actor_id    = $transf_rule->actor_id;
-$transf_to_move->standard    = $transf_rule->standard;
-$transf_to_move->rank        = $transf_rule->rank;
+$transf_to_move->actor_class = $transformation->actor_class;
+$transf_to_move->actor_id    = $transformation->actor_id;
+$transf_to_move->rank        = $transformation->rank;
 $transf_to_move->loadMatchingObject();
 
 if ($transf_to_move->_id) {
@@ -43,11 +42,11 @@ if ($transf_to_move->_id) {
   $transf_to_move->store();
 }
 
-$transf_rule->store();
+$transformation->store();
 
 /** @var CInteropActor $actor */
-$actor = new $transf_rule->actor_class;
-$actor->load($transf_rule->actor_id);
+$actor = new $transformation->actor_class;
+$actor->load($transformation->actor_id);
 
 /** @var CEAITransformation[] $transformations */
 $transformations = $actor->loadBackRefs("transformations", "rank");
