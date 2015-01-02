@@ -10,5 +10,3 @@
 
 $do = new CDoObjectAddEdit("CIndiceCout");
 $do->doIt();
-
-?>
