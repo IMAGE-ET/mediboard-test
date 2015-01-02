@@ -93,6 +93,7 @@ $current = CMbDate::dirac("hour", CMbDT::dateTime());
 $offset = $nb_ticks * $nb_unite;
 $date_max = CMbDT::dateTime("+ $offset $unite", $date_min);
 
+// Pour l'affichage des prestations en mode journée
 if ($granularite == "day") {
   $date_max = CMbDT::dateTime("-1 second", $date_max);
 }
