@@ -19,25 +19,36 @@
 
 <script type="text/javascript">
   EAITransformationRule.standards_flat = {{$standards_flat|@json}};
-  initializeSelect = function() {
-    EAITransformationRule.fillSelect("standard", null, '{{$transf_rule->standard}}');
-    EAITransformationRule.fillSelect("domain", '-desc', '{{$transf_rule->domain}}');
-    EAITransformationRule.fillSelect("profil", '-desc', '{{$transf_rule->profil}}');
-    EAITransformationRule.fillSelect("transaction", null, '{{$transf_rule->transaction}}');
-    EAITransformationRule.fillSelect("message", null, '{{$transf_rule->message}}');
+  initializeSelect = function(create) {
+    EAITransformationRule.fillSelect("standard"   , null   , '{{$transf_rule->standard}}'   , create);
+    EAITransformationRule.fillSelect("domain"     , '-desc', '{{$transf_rule->domain}}'     , create);
+    EAITransformationRule.fillSelect("profil"     , '-desc', '{{$transf_rule->profil}}'     , create);
+    EAITransformationRule.fillSelect("transaction", null   , '{{$transf_rule->transaction}}', create);
+    EAITransformationRule.fillSelect("message"    , null   , '{{$transf_rule->message}}'    , create);
   };
 
   Main.add(function () {
-    {{if $transf_rule && $transf_rule->_id}}
-      EAITransformationRule.showVersions('{{$transf_rule->_id}}', '{{$transf_rule->standard}}', '{{$transf_rule->profil}}');
-    {{/if}}
+    initializeSelect(true);
 
-    initializeSelect();
+    {{if $transf_rule->_id}}
+      EAITransformationRule.showVersions('{{$transf_rule->_id}}', '{{$transf_rule->standard}}', '{{$transf_rule->profil}}');
+
+      var flag = false;
+      EAITransformationRule.selects.reverse().each(function(select_name) {
+        var select = $("EAITransformationRule-"+select_name);
+
+        if (!flag && $V(select)) {
+          select.options[select.selectedIndex].onclick();
+          flag = true;
+        }
+      });
+      EAITransformationRule.selects.reverse();
+    {{/if}}
   });
 </script>
 
 {{if !$mode_duplication}}
-<form name="edit-{{$transf_rule->_guid}}{{$transf_rule->_guid}}" method="post" onsubmit="return EAITransformationRule.onSubmit(this)">
+<form name="editEAITransformationRule" method="post" onsubmit="return EAITransformationRule.onSubmit(this)">
   {{mb_key object=$transf_rule}}
   {{mb_class object=$transf_rule}}
   <input type="hidden" name="del" value="0" />
@@ -45,6 +56,8 @@
   <input type="hidden" name="eai_transformation_ruleset_id" value="{{$transf_rule->eai_transformation_ruleset_id}}" />
   <input type="hidden" name="callback"
          value="EAITransformationRuleSet.refreshTransformationRuleList.curry({{$transf_rule->eai_transformation_ruleset_id}})" />
+
+  {{mb_field object=$transf_rule field="component_from" hidden="1"}}
 
   <table class="form">
     {{mb_include module=system template=inc_form_table_header object=$transf_rule}}
@@ -133,6 +146,28 @@
     <tr>
       <th>{{mb_label object=$transf_rule field="version"}}</th>
       <td id="EAITransformationRule-version">
+      </td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$transf_rule field="component_from"}}</th>
+      <td>
+        <button type="button" onclick="EAITransformationRule.target(this.form, 'from')"
+                class="target notext">{{tr}}Target{{/tr}}</button>
+        <span id="EAITransformationRule-component_from">
+          {{foreach from="|"|explode:$transf_rule->component_from item=_component}}
+            <span class="circled">{{$_component}}</span>
+          {{/foreach}}
+        </span>
+      </td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$transf_rule field="component_to"}}</th>
+      <td>
+        <button type="button" onclick="EAITransformationRule.target(this.form, 'to')"
+                class="target notext">{{tr}}Target{{/tr}}</button>
+        <span id="EAITransformationRule-component_to"></span>
       </td>
     </tr>
 

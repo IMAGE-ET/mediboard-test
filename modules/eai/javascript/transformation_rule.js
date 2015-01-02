@@ -10,6 +10,7 @@
  */
 
 EAITransformationRule = {
+  modal          : null,
   standards_flat : [],
   selects        : ["standard", "domain", "profil", "transaction", "message"],
 
@@ -49,9 +50,13 @@ EAITransformationRule = {
     element.next('.transformation-'+value).addUniqueClassName('selected');
   },
 
-  fillSelect: function(select_name, traduction, value) {
+  fillSelect: function(select_name, traduction, value, create) {
     var select = $("EAITransformationRule-"+select_name);
     select.update();
+
+    if (!create) {
+      value = null;
+    }
 
     $A(EAITransformationRule.standards_flat).pluck(select_name).uniq().each(function(pair){
       if (pair == "none") {
@@ -72,7 +77,7 @@ EAITransformationRule = {
   showFillSelect : function(select) {
     var select_name  = select.name;
 
-    var selects = select.form.select("select[name != "+select_name+"][name != standard]");
+    var selects = select.form.select("select.EAITransformationRule-select[name != "+select_name+"][name != standard]");
 
     EAITransformationRule.selects.each(function(selectname) {
       if (selectname == select_name) {
@@ -87,6 +92,12 @@ EAITransformationRule = {
       }
 
       var filtered = EAITransformationRule.standards_flat.filter(EAITransformationRule.isValueExist.curry(select, selects)).pluck(other_select.name).uniq();
+
+      if (filtered.length == 0) {
+        EAITransformationRule.fillSelect(selectname);
+
+        return;
+      }
 
       other_select.update();
 
@@ -127,7 +138,7 @@ EAITransformationRule = {
       }
     });
 
-    return element[select_name] == select_value && flag;
+    return (element[select_name] == select_value) && flag;
   },
 
   showVersions : function(transformation_rule_id, standard_name, profil_name) {
@@ -136,5 +147,24 @@ EAITransformationRule = {
       .addParam("standard_name", standard_name)
       .addParam("profil_name", profil_name)
       .requestUpdate("EAITransformationRule-version");
+  },
+
+  target: function(form, target) {
+    EAITransformationRule.modal = new Url("eai", "ajax_target_transformation_rule")
+      .addFormData(form)
+      .addParam("target", target)
+      .requestModal("90%");
+  },
+
+  refreshTarget: function(components) {
+    var container = $("EAITransformationRule-component_from");
+
+    components.split("|").each(function(value) {
+      container.insert(DOM.span({className:'circled'}, value));
+    });
+
+    $V(getForm("editEAITransformationRule").component_from, $A(container.select("span")).pluck("innerHTML").join("|"));
+
+    Control.Modal.close();
   }
 }

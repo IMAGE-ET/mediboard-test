@@ -27,25 +27,16 @@
   <div id="ignored_fields_text">
 
   </div>
+
+  <div>
+    <form name="editHL7Transformation" method="post">
+      <input type="hidden" name="components" value="" />
+
+      <button class="submit" type="submit" onclick="EAITransformationRule.refreshTarget($V(this.form.elements.components))">{{tr}}Validate{{/tr}}</button>
+    </form>
+  </div>
 </div>
 
 <ul id="hl7-transformation-tree" class="hl7-tree">
   {{mb_include module=hl7 template=inc_hl7v2_transformation tree=$tree_segments}}
 </ul>
-
-<div>
-  <form name="editHL7Transformation" method="post" onsubmit="return onSubmitFormAjax(this)">
-    <input type="hidden" name="dosql" value="do_hl7_transformation" />
-    <input type="hidden" name="m"     value="hl7" />
-
-    <input type="hidden" name="components" value="" />
-    <input type="hidden" name="action"     value="delete" />
-    <input type="hidden" name="profil"     value="{{$profil}}" />
-    <input type="hidden" name="version"    value="{{$version}}" />
-    <input type="hidden" name="extension"  value="{{$extension}}" />
-    <input type="hidden" name="message"    value="{{$message}}" />
-    <input type="hidden" name="actor_guid" value="{{$actor_guid}}" />
-
-    <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
-  </form>
-</div>

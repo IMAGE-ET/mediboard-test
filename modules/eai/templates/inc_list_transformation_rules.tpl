@@ -69,8 +69,20 @@
       <td class="text compact">{{mb_value object=$_transformation_rule field="message"}}</td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="version"}}</td>
       <td class="text compact">{{mb_value object=$_transformation_rule field="extension"}}</td>
-      <td class="text compact">{{mb_value object=$_transformation_rule field="component_from"}}</td>
-      <td class="text compact">{{mb_value object=$_transformation_rule field="component_to"}}</td>
+      <td class="text compact">
+        {{if $_transformation_rule->component_from}}
+          {{foreach from="|"|explode:$_transformation_rule->component_from item=_component}}
+            <span class="circled">{{$_component}}</span>
+          {{/foreach}}
+        {{/if}}
+      </td>
+      <td class="text compact">
+        {{if $_transformation_rule->component_to}}
+          {{foreach from="|"|explode:$_transformation_rule->component_to item=_component}}
+            <span class="circled">{{$_component}}</span>
+          {{/foreach}}
+        {{/if}}
+      </td>
       <td class="button compact">
         <span class="transformation-{{$_transformation_rule->action_type}}"></span>
       </td>

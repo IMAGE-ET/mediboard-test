@@ -1,19 +1,25 @@
 <?php
-
 /**
- * $Id$
+ * View transformation rules EAI
  *
- * @category HL7
+ * @category EAI
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision$
+ * @version  SVN: $Id:$
  * @link     http://www.mediboard.org
  */
 
 CCanDo::checkAdmin();
 
-$actor_guid    = CValue::get("actor_guid");
+$standard = CValue::get("standard");
+$domain   = CValue::get("domain");
+$profil   = CValue::get("profil");
+$message  = CValue::get("message");
+$version  = CValue::get("version");
+
+$target   = CValue::get("target");
+
 $profil        = CValue::get("profil", "PAM");
 $message_class = CValue::get("message_class", "CHL7EventADTA01");
 
@@ -28,27 +34,25 @@ if (CMbArray::get($temp, 1)) {
 
 $message = str_replace("CHL7Event", "", $event_name);
 
-/** @var CInteropActor $actor */
-$actor = CMbObject::loadFromGuid($actor_guid);
-$where = array(
-  "message"     => " = '$message'",
-  "profil"      => " = '$profil'"
-);
 
 if ($extension) {
   $where["extension"] = " = '$extension'";
 }
 
+$actor = new CReceiverHL7v2();
+$actor->load(1);
+$actor->_ref_hl7_transformations = array();
+
 $trans = new CHL7v2Transformation($version, $extension, $message);
 $tree = $trans->getSegments($actor);
 
-$smarty = new CSmartyDP();
+$smarty = new CSmartyDP("modules/hl7");
 $smarty->assign("profil"    , $profil);
 $smarty->assign("version"   , $version);
 $smarty->assign("extension" , $extension);
 $smarty->assign("message"   , $message);
 $smarty->assign("tree"      , $tree);
-$smarty->assign("actor_guid", $actor_guid);
-$smarty->assign("actor"     , $actor);
+$smarty->assign("actor"      , $actor);
+$smarty->assign("actor_guid"      , $actor->_guid);
 
 $smarty->display("inc_transformation_hl7.tpl");

@@ -36,8 +36,7 @@ foreach ($standards as $_standard_name => $_standards) {
             "domain"        => $_domain_name,
             "profil"        => $_profil_name,
             "transaction"   => $_transaction_name,
-            "message"       => $_event_name,
-            "message_class" => $_event,
+            "message"       => $_event,
           );
         }
       }
