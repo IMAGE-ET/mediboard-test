@@ -54,7 +54,7 @@ $fnc = new CFunctions();
 $listFnc = $fnc->loadListWithPerms(PERM_READ, array("group_id" => " = '$group->_id' "), 'text');
 $mediuser = new CMediusers();
 foreach ($listFnc as $id => $_fnc) {
-  $users = $mediuser->loadProfessionnelDeSanteByPref(PERM_READ, $_fnc->_id);
+  $users = $mediuser->loadProfessionnelDeSanteByPref(PERM_READ, $_fnc->_id, null, true);
   if (!count($users)) {
     unset($listFnc[$id]);
   }
