@@ -1138,7 +1138,7 @@ class CActeCCAM extends CActe {
 
     if ($this->_id && $this->executant_id && $this->_tarif_sans_asso != $this->_tarif_sans_asso2) {
       $this->loadRefExecutant();
-      if ($this->_ref_executant->secteur == 2 && !$this->_ref_executant->option_coordination) {
+      if ($this->_ref_executant->secteur == 2) {
         return $this->_tarif_sans_asso;
       }
     }
