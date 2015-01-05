@@ -98,7 +98,7 @@ class CMbSOAPClient extends SoapClient {
     }
     
     // Ajout des options personnalisées
-    $options = array_merge($options, array("connexion_timeout" => CAppUI::conf("webservices connection_timeout")));
+    $options = array_merge($options, array("connection_timeout" => CAppUI::conf("webservices connection_timeout")));
     if (CAppUI::conf("webservices trace")) {
       $options = array_merge($options, array("trace" => true));
     }
@@ -123,6 +123,7 @@ class CMbSOAPClient extends SoapClient {
     }
 
     // Délai maximal d'attente pour la lecture
+    $socket_timeout = $socket_timeout ? $socket_timeout : CAppUI::conf("webservices response_timeout");
     if ($socket_timeout) {
       ini_set("default_socket_timeout", $socket_timeout);
     }

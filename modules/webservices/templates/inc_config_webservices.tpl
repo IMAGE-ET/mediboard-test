@@ -14,6 +14,8 @@
   <table class="form">
       
     {{mb_include module=system template=inc_config_str var=connection_timeout}}
+    {{mb_include module=system template=inc_config_str var=response_timeout}}
+
     {{mb_include module=system template=inc_config_bool var=trace}}
 
     <tr>
