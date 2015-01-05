@@ -110,7 +110,8 @@
       {{if @$modules.brancardage->_can->read}}
         <td>
            <span id="demande_brancard-{{$_operation->sejour_id}}">
-             {{mb_include module=brancardage template=inc_exist_brancard colonne="demande_brancard" reveil="preop" destination="CBlocOperatoire" destination_guid="CBlocOperatoire-$bloc_id"}}
+             {{mb_include module=brancardage template=inc_exist_brancard colonne="demande_brancard" reveil="preop" destination="CBlocOperatoire"
+             destination_guid="CBlocOperatoire-$bloc_id" date_brancard=$_operation->_datetime|date_format:"%Y-%m-%d"}}
            </span>
         </td>
       {{/if}}

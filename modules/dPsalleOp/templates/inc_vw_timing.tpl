@@ -30,7 +30,7 @@
         {{mb_script module=brancardage script=creation_brancardage ajax=true}}
         <td id="demande_brancard-{{$selOp->sejour_id}}" rowspan="2">
           {{mb_include module=brancardage template=inc_exist_brancard _operation=$selOp colonne="demande_brancard"
-            destination="CBlocOperatoire" destination_guid="CBlocOperatoire-$bloc_brancard"}}
+            destination="CBlocOperatoire" destination_guid="CBlocOperatoire-$bloc_brancard" date_brancard=$selOp->_datetime|date_format:"%Y-%m-%d"}}
         </td>
       {{/if}}
 

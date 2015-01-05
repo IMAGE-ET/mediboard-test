@@ -35,7 +35,7 @@
       {{assign var=bloc_brancard value=$_operation->_ref_salle->bloc_id}}
       <div id="patient_pret-{{$_operation->sejour_id}}">
         {{mb_include module=brancardage template=inc_exist_brancard colonne="patient_pret" see_sejour=true destination="CBlocOperatoire"
-        destination_guid="CBlocOperatoire-$bloc_brancard" callback="refreshListIntervs"}}
+        destination_guid="CBlocOperatoire-$bloc_brancard" callback="refreshListIntervs" date_brancard=$_operation->_datetime|date_format:"%Y-%m-%d"}}
       </div>
     </td>  
   {{/if}}
