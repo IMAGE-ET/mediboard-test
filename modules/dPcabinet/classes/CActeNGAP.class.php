@@ -138,7 +138,8 @@ class CActeNGAP extends CActe {
       "-". $this->montant_base.
       "-". str_replace("-", "*", $this->montant_depassement).
       "-". $this->demi.
-      "-". $this->complement;
+      "-". $this->complement.
+      "-". $this->gratuit;
   }
 
   /**
@@ -166,6 +167,11 @@ class CActeNGAP extends CActe {
     if (count($details) >= 7) {
       $this->complement = $details[6];
     }
+
+    if (count($details) >= 8) {
+      $this->gratuit = $details[7];
+    }
+
     $this->getLibelle();
     if (!$this->lettre_cle) {
       $this->lettre_cle = 0;

@@ -288,7 +288,8 @@ class CActeCCAM extends CActe {
       "-". str_replace("-", "*", $this->montant_depassement).
       "-". $this->code_association.
       "-". $this->rembourse.
-      "-". $this->charges_sup;
+      "-". $this->charges_sup.
+      "-". $this->gratuit;
   }
 
   /**
@@ -328,6 +329,11 @@ class CActeCCAM extends CActe {
       // Charges sup
       if (count($details) > 7) {
         $this->charges_sup = $details[7];
+      }
+
+      // Gratuit
+      if (count($details) > 7) {
+        $this->gratuit = $details[7];
       }
       
       $this->updateFormFields();
