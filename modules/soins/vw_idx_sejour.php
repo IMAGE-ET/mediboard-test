@@ -29,6 +29,7 @@ $service_id     = CValue::getOrSession("service_id");
 $praticien_id   = CValue::getOrSession("praticien_id");
 $_active_tab    = CValue::get("_active_tab");
 $type_admission = CValue::getOrSession("type");
+$my_patient     = CValue::getOrSession("my_patient");
 
 // récuperation du service par défaut dans les préférences utilisateur
 $default_services_id = CAppUI::pref("default_services_id");
@@ -114,6 +115,7 @@ $praticiens = $prat->loadPraticiens(PERM_READ);
 // Restructuration minimal des services
 global $sejoursParService;
 $sejoursParService = array();
+$count_my_patient = 0;
 
 // Chargement du praticien
 if ($praticien_id) {
@@ -187,6 +189,7 @@ if ($praticien_id && !$service_id) {
       $_sejour->loadRefPraticien();
       $_sejour->_ref_praticien->loadRefFunction();
       $_sejour->loadNDA();
+      $count_my_patient += count($_sejour->loadRefsUserSejour($userCourant));
       $sejoursParService["NP"][$_sejour->_id] = $_sejour;
     }
   }
@@ -211,7 +214,7 @@ foreach ($sejoursParService as $key => $_service) {
           $_sejour->loadRefPraticien();
           $_sejour->_ref_praticien->loadRefFunction();
           $_sejour->loadNDA();
-      
+
           if ($_sejour->_ref_prescriptions) {
             if (array_key_exists('sejour', $_sejour->_ref_prescriptions)) {
                $prescription_sejour = $_sejour->_ref_prescriptions["sejour"];
@@ -275,7 +278,7 @@ if ($service_id) {
       "type" => $type_admission ? " = '$type_admission'" : "!= 'exte'",
       "annule" => "= '0'"
     );
-      
+
     $groupSejourNonAffectes["soir"] = loadSejourNonAffectes($where, $order, $praticien_id);
 
     // Admissions antérieures
@@ -312,8 +315,11 @@ if ($service_id) {
           if ($_is_anesth || ($_is_praticien && $_affectation->_ref_sejour->praticien_id == $userCourant->user_id)) {
             $tab_sejour[$_affectation->_ref_sejour->_id]= $_affectation->_ref_sejour;
           }
-          $_affectation->_ref_sejour->loadRefsPrescriptions();
-          $_affectation->_ref_sejour->_ref_praticien->loadRefFunction();
+          $sejour = $_affectation->_ref_sejour;
+          $sejour->loadRefsPrescriptions();
+          $sejour->_ref_praticien->loadRefFunction();
+          $count_my_patient += count($sejour->loadRefsUserSejour($userCourant));
+
           $_affectation->loadRefsAffectations();
           if ($_affectation->_ref_sejour->_ref_prescriptions) {
             if (array_key_exists('sejour', $_affectation->_ref_sejour->_ref_prescriptions)) {
@@ -334,6 +340,34 @@ if ($service_id) {
   }
   $sejoursParService[$service->_id] = $service;
 }
+
+if ($count_my_patient && $my_patient) {
+  foreach ($sejoursParService as $key => $_service) {
+    if ($key != "NP") {
+      foreach ($_service->_ref_chambres as $key_chambre => $_chambre) {
+        foreach ($_chambre->_ref_lits as $key_lit => $_lit) {
+          foreach ($_lit->_ref_affectations as $key_affectation => $_affectation) {
+            $_sejour = $_affectation->loadRefSejour();
+            if (!count($_sejour->_ref_users_sejour)) {
+              unset($_lit->_ref_affectations[$key_affectation]);
+            }
+          }
+        }
+      }
+    }
+    else {
+      foreach ($sejoursParService as $sejour_key => $_sejour) {
+        if (!count($_sejour->_ref_users_sejour)) {
+          unset($sejoursParService[$sejour_key]);
+        }
+      }
+    }
+  }
+}
+if (!$count_my_patient && $my_patient) {
+  $my_patient = 0;
+}
+
 
 // Chargement des visites pour les séjours courants
 $visites = array(
@@ -432,6 +466,8 @@ $smarty->assign("service_id"              , $service_id);
 $smarty->assign("groupSejourNonAffectes"  , $groupSejourNonAffectes);
 $smarty->assign("visites"                 , $visites);
 $smarty->assign("current_date"            , CMbDT::date());
+$smarty->assign("my_patient"              , $my_patient);
+$smarty->assign("count_my_patient"        , $count_my_patient);
 
 $smarty->assign("group_id"                , CGroups::loadCurrent()->_id);
 $smarty->display("vw_idx_sejour.tpl");

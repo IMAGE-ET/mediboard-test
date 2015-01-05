@@ -516,6 +516,10 @@ button.lookup:before, a.button.lookup:before {
   content: url(images/buttons/lookup.png);
 }
 
+button.mediuser_black:before, a.button.mediuser_black:before {
+  content: url(../../images/icons/personnel.png);
+}
+
 button.lock:before, a.button.lock:before {
   content: url(images/buttons/lock.png);
 }

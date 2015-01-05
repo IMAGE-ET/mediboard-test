@@ -311,6 +311,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_ref_uf_soins;
   /** @var CUniteFonctionnelle */
   public $_ref_uf_medicale;
+  /** @var CUserSejour[] */
+  public $_ref_users_sejour;
+  public $_ref_users_by_type;
 
   // External objects
   /** @var CCodeCIM10 */
@@ -430,7 +433,8 @@ class CSejour extends CFacturable implements IPatientRelated {
     $backProps["deliveries"]            = "CProductDelivery sejour_id";
     $backProps["stock_sejour"]          = "CStockSejour sejour_id";
     $backProps["refus_dispensation"]    = "CRefusDispensation sejour_id";
-    $backProps["contextes_constante"]    = "CConstantesMedicales context_id";
+    $backProps["contextes_constante"]   = "CConstantesMedicales context_id";
+    $backProps["user_sejour"]           = "CUserSejour sejour_id";
     return $backProps;
   }
 
@@ -4765,6 +4769,44 @@ class CSejour extends CFacturable implements IPatientRelated {
    */
   function loadRefService() {
     return $this->_ref_service = $this->loadFwdRef("service_id", true);
+  }
+
+  /**
+   * Return users for sejour
+   *
+   * @return CUserSejour[]
+   */
+  function loadRefsUserSejour($userCourant = null) {
+    $this->_ref_users_sejour = $this->loadBackRefs("user_sejour");
+    $this->_ref_users_by_type = array(
+      "infirmiere" => array(),
+      "AS" => array(),
+      "SF" => array(),
+    );
+    foreach ($this->_ref_users_sejour as $_user_sejour) {
+      $_user = $_user_sejour->loadRefUser();
+      if ($_user->isInfirmiere()) {
+        $this->_ref_users_by_type["infirmiere"][$_user->_id] = $_user_sejour;
+      }
+      elseif ($_user->isAideSoignant()) {
+        $this->_ref_users_by_type["AS"][$_user->_id] = $_user_sejour;
+      }
+      elseif ($_user->isSageFemme()) {
+        $this->_ref_users_by_type["SF"][$_user->_id] = $_user_sejour;
+      }
+    }
+
+    if ($userCourant && ($userCourant->isInfirmiere() || $userCourant->isAideSoignant() || $userCourant->isSageFemme())) {
+      $serached = $this->_ref_users_sejour;
+      $this->_ref_users_sejour = array();
+      foreach ($serached as $user_sejour) {
+        $user = $user_sejour->loadRefUser();
+        if ($user->_id == $userCourant->_id) {
+          $this->_ref_users_sejour[$user_sejour->_id] = $user_sejour;
+        }
+      }
+    }
+    return $this->_ref_users_sejour;
   }
 
 }

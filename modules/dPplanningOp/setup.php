@@ -1839,7 +1839,20 @@ class CSetupdPplanningOp extends CSetup {
     $this->addQuery($query);
 
     $this->addFunctionalPermQuery("allowed_check_entry", "0");
-    $this->mod_version = '2.00';
+    $this->makeRevision("2.00");
+
+    $query = "CREATE TABLE `sejour_affectation` (
+                `sejour_affectation_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `sejour_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `user_id` INT (11) UNSIGNED NOT NULL DEFAULT '0'
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `sejour_affectation`
+                ADD INDEX (`sejour_id`),
+                ADD INDEX (`user_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.01';
 
     // Data source query
     $query = "SHOW TABLES LIKE 'type_autorisation_um'";

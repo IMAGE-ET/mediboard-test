@@ -21,6 +21,12 @@
 {{/if}}
 
 <script>
+  function paramUserSejour(sejour_id) {
+    var url = new Url("planningOp", "vw_affectations_sejour");
+    url.addParam("sejour_id",sejour_id);
+    url.requestModal();
+  }
+
   function popEtatSejour(sejour_id) {
     var url = new Url("hospi", "vw_parcours");
     url.addParam("sejour_id",sejour_id);
@@ -232,7 +238,7 @@
                     </select>
                   </td>
                 </tr>
-                
+
                 <tr>
                   <th>{{mb_title class=CSejour field="type"}}</th>
                   <td>
@@ -247,6 +253,16 @@
                     </select>
                   </td>
                 </tr>
+
+                {{if $app->_ref_user->isInfirmiere() || $app->_ref_user->isAideSoignant() || $app->_ref_user->isSageFemme()}}
+                  <tr>
+                    <th>Mes patients ({{$count_my_patient}})</th>
+                    <td>
+                      <input type="hidden" name="my_patient" value="{{$my_patient}}" onchange="this.form.submit();"/>
+                      <input type="checkbox" name="change_patient" value="{{if $my_patient == 1}}0{{else}}1{{/if}}" {{if $my_patient == 1}}checked{{/if}} onchange="$V(this.form.my_patient, this.checked?1:0);"/>
+                    </td>
+                  </tr>
+                {{/if}}
               </table>
             </form>
 
@@ -333,11 +349,37 @@
               </tr> 
               {{foreach from=$curr_lit->_ref_affectations item=curr_affectation}}
               {{if $curr_affectation->_ref_sejour->_id != ""}}
-              <tr class="{{if $object->_id == $curr_affectation->_ref_sejour->_id}}selected{{/if}} {{$curr_affectation->_ref_sejour->type}}">
+                {{assign var=sejour value=$curr_affectation->_ref_sejour}}
+              <tr class="{{if $object->_id == $curr_affectation->_ref_sejour->_id}}selected{{/if}} {{$sejour->type}}">
                 <td style="padding: 0;">
-                  <button class="lookup notext" style="margin:0;" onclick="popEtatSejour({{$curr_affectation->_ref_sejour->_id}});">
+                  <button class="lookup notext" style="margin:0;" onclick="popEtatSejour({{$sejour->_id}});">
                     {{tr}}Lookup{{/tr}}
                   </button>
+                  {{if @$modules.dPplanningOp->_can->admin}}
+                    <button class="mediuser_black notext" onclick="paramUserSejour({{$curr_affectation->sejour_id}});"
+                            onmouseover="ObjectTooltip.createDOM(this, 'affectation_CSejour-{{$sejour->_id}}')";></button>
+                    <span class="countertip" style="margin-top:1px;margin-left: -5px;">
+                      {{$sejour->_ref_users_sejour|@count}}
+                    </span>
+                    <div style="display: none" id="affectation_CSejour-{{$curr_affectation->sejour_id}}">
+                      <table class="tbl">
+                        {{foreach from=$sejour->_ref_users_by_type item=_users key=type}}
+                          <tr>
+                            <th>{{tr}}CUserSejour.{{$type}}{{/tr}}</th>
+                          </tr>
+                          {{foreach from=$_users item=_user}}
+                            <tr>
+                              <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_user}}</td>
+                            </tr>
+                          {{foreachelse}}
+                            <tr>
+                              <td class="empty">{{tr}}CUserSejour.none{{/tr}}</td>
+                            </tr>
+                          {{/foreach}}
+                        {{/foreach}}
+                      </table>
+                    </div>
+                  {{/if}}
                 </td>
                 
                 <td class="text">
