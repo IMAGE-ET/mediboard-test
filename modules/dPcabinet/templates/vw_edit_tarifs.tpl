@@ -43,7 +43,8 @@
           {{if $prat->_id}}
             <tr>
               <th colspan="10">
-                <form name="recalculTarifs" method="post" action="?" style="float: right;">
+                <form name="recalculTarifsPraticien" method="post" action="?" style="float: right;"
+                      onsubmit="return onSubmitFormAjax(this, {onComplete:  function() {document.location.reload();} });">
                   <input type="hidden" name="m" value="{{$m}}" />
                   <input type="hidden" name="dosql" value="do_tarif_aed" />
                   <input type="hidden" name="reloadAlltarifs" value="1" />
@@ -67,7 +68,8 @@
         {{if $prat->function_id}}
           <tr>
             <th colspan="10">
-              <form name="recalculTarifs" method="post" action="?" style="float: right;">
+              <form name="recalculTarifsFunction" method="post" action="?" style="float: right;"
+                    onsubmit="return onSubmitFormAjax(this, {onComplete:  function() {document.location.reload();} });">
                 <input type="hidden" name="m" value="{{$m}}" />
                 <input type="hidden" name="dosql" value="do_tarif_aed" />
                 <input type="hidden" name="reloadAlltarifs" value="1" />
