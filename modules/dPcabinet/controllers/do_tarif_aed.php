@@ -11,7 +11,16 @@
 
 if (CValue::post("reloadAlltarifs")) {
   $tarif = new CTarif();
-  $tarifs = $tarif->loadList();
+  $where = array();
+  $praticien_id = CValue::post("praticien_id");
+  $function_id  = CValue::post("function_id");
+  if($praticien_id) {
+    $where["chir_id"] = "= '$praticien_id'";
+  }
+  if($function_id) {
+    $where["function_id"] = "= '$function_id'";
+  }
+  $tarifs = $tarif->loadList($where);
   foreach ($tarifs as $_tarif) {
     /* @var CTarif $_tarif*/
     $_tarif->_update_montants = 1;
