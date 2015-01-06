@@ -12,13 +12,19 @@
 
 CCanDo::checkAdmin();
 
-$standard = CValue::get("standard");
-$domain   = CValue::get("domain");
-$profil   = CValue::get("profil");
-$message  = CValue::get("message");
-$version  = CValue::get("version");
+$standard_name = CValue::get("standard");
+$domain_name   = CValue::get("domain");
+$profil_name   = CValue::get("profil");
+$message_name  = CValue::get("message");
 
-$target   = CValue::get("target");
+$version       = CValue::get("version");
+
+$target        = CValue::get("target");
+
+$standard = new $standard_name;
+
+$message  = new $message_name;
+mbTrace($message);
 
 $profil        = CValue::get("profil", "PAM");
 $message_class = CValue::get("message_class", "CHL7EventADTA01");

@@ -12,7 +12,7 @@
 <style>
   .EAITransformationRule-select {
     width: 100%;
-    height: 120px;
+    height: 250px;
     font-size: 10px;
   }
 </style>
@@ -152,12 +152,14 @@
     <tr>
       <th>{{mb_label object=$transf_rule field="component_from"}}</th>
       <td>
-        <button type="button" onclick="EAITransformationRule.target(this.form, 'from')"
-                class="target notext">{{tr}}Target{{/tr}}</button>
+        <!--<button type="button" onclick="EAITransformationRule.target(this.form, 'from')"
+                class="target notext">{{tr}}Target{{/tr}}</button>-->
         <span id="EAITransformationRule-component_from">
-          {{foreach from="|"|explode:$transf_rule->component_from item=_component}}
-            <span class="circled">{{$_component}}</span>
-          {{/foreach}}
+          {{if $transf_rule->component_from}}
+            {{foreach from="|"|explode:$transf_rule->component_from item=_component}}
+              <span class="circled">{{$_component}}</span>
+            {{/foreach}}
+          {{/if}}
         </span>
       </td>
     </tr>
@@ -165,9 +167,15 @@
     <tr>
       <th>{{mb_label object=$transf_rule field="component_to"}}</th>
       <td>
-        <button type="button" onclick="EAITransformationRule.target(this.form, 'to')"
-                class="target notext">{{tr}}Target{{/tr}}</button>
-        <span id="EAITransformationRule-component_to"></span>
+        <!--<button type="button" onclick="EAITransformationRule.target(this.form, 'to')"
+                class="target notext">{{tr}}Target{{/tr}}</button>-->
+        <span id="EAITransformationRule-component_to">
+          {{if $transf_rule->component_to}}
+            {{foreach from="|"|explode:$transf_rule->component_to item=_component}}
+              <span class="circled">{{$_component}}</span>
+            {{/foreach}}
+          {{/if}}
+        </span>
       </td>
     </tr>
 

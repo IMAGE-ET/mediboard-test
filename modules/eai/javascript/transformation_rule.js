@@ -19,7 +19,7 @@ EAITransformationRule = {
       .addParam("transformation_rule_id", transformation_rule_id)
       .addParam("transformation_ruleset_id", transformation_ruleset_id)
       .addParam("mode_duplication", mode_duplication)
-      .requestModal("90%");
+      .requestModal("90%", "75%");
   },
 
   stats: function(transformation_rule_id) {
