@@ -157,6 +157,7 @@ if ($praticien_id && !$service_id) {
   }
 
   foreach ($sejours as $_sejour) {
+    $count_my_patient += count($_sejour->loadRefsUserSejour($userCourant));
     /* @var CSejour $_sejour*/
     if ($_is_anesth || ($_is_praticien && $_sejour->praticien_id == $userCourant->user_id)) {
       $tab_sejour[$_sejour->_id]= $_sejour;
@@ -189,7 +190,6 @@ if ($praticien_id && !$service_id) {
       $_sejour->loadRefPraticien();
       $_sejour->_ref_praticien->loadRefFunction();
       $_sejour->loadNDA();
-      $count_my_patient += count($_sejour->loadRefsUserSejour($userCourant));
       $sejoursParService["NP"][$_sejour->_id] = $_sejour;
     }
   }
@@ -199,7 +199,7 @@ foreach ($sejoursParService as $key => $_service) {
   if ($key != "NP") {
     $sorter = CMbArray::pluck($_service->_ref_chambres, "nom");
     array_multisort($sorter, SORT_ASC, $_service->_ref_chambres);
-  
+
     foreach ($_service->_ref_chambres as $_chambre) {
       foreach ($_chambre->_ref_lits as $_lit) {
         foreach ($_lit->_ref_affectations as $_affectation) {
@@ -252,7 +252,7 @@ if ($service_id) {
   if ($service_id == "NP") {
     // Liste des patients à placer
     $order = "entree_prevue ASC";
-      
+
     // Admissions de la veille
     $dayBefore = CMbDT::date("-1 days", $date);
     $where = array(
@@ -260,18 +260,18 @@ if ($service_id) {
       "type" => $type_admission ? " = '$type_admission'" : "!= 'exte'",
       "annule" => "= '0'"
     );
-      
+
     $groupSejourNonAffectes["veille"] = loadSejourNonAffectes($where, $order, $praticien_id);
-      
+
     // Admissions du matin
     $where = array(
       "entree_prevue" => "BETWEEN '$date 00:00:00' AND '$date ".CMbDT::time("-1 second", $heureLimit)."'",
       "type" => $type_admission ? " = '$type_admission'" : "!= 'exte'",
       "annule" => "= '0'"
     );
-      
+
     $groupSejourNonAffectes["matin"] = loadSejourNonAffectes($where, $order, $praticien_id);
-      
+
     // Admissions du soir
     $where = array(
       "entree_prevue" => "BETWEEN '$date $heureLimit' AND '$date 23:59:59'",
@@ -307,7 +307,7 @@ if ($service_id) {
     $service->load($service_id);
     loadServiceComplet($service, $date, $mode, $praticien_id, $type_admission);
   }
-  
+
   if ($service->_id) {
     foreach ($service->_ref_chambres as $_chambre) {
       foreach ($_chambre->_ref_lits as $_lits) {
@@ -341,7 +341,7 @@ if ($service_id) {
   $sejoursParService[$service->_id] = $service;
 }
 
-if ($count_my_patient && $my_patient) {
+if ($count_my_patient && $my_patient && ($userCourant->isSageFemme() || $userCourant->isAideSoignant() || $userCourant->isInfirmiere())) {
   foreach ($sejoursParService as $key => $_service) {
     if ($key != "NP") {
       foreach ($_service->_ref_chambres as $key_chambre => $_chambre) {
@@ -356,9 +356,9 @@ if ($count_my_patient && $my_patient) {
       }
     }
     else {
-      foreach ($sejoursParService as $sejour_key => $_sejour) {
+      foreach ($_service as $_sejour) {
         if (!count($_sejour->_ref_users_sejour)) {
-          unset($sejoursParService[$sejour_key]);
+          unset($sejoursParService[$key][$_sejour->_id]);
         }
       }
     }
