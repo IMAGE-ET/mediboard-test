@@ -86,6 +86,10 @@ class CViewHistory {
       $this->object = CStoredObject::loadFromGuid($this->object_guid);
     }
 
+    if ($this->object) {
+      $this->object->loadComplete();
+    }
+
     return $this->object;
   }
 
