@@ -369,7 +369,7 @@
                           </tr>
                           {{foreach from=$_users item=_user}}
                             <tr>
-                              <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_user}}</td>
+                              <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_user->_ref_user}}</td>
                             </tr>
                           {{foreachelse}}
                             <tr>
