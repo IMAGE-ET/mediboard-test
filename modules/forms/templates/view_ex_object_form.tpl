@@ -332,7 +332,7 @@ function switchMode(){
                   </td>
                 {{/if}}
               {{elseif $_group.type == "field"}}
-                <td>
+                <td class="text">
                   <div class="field-{{$_field->name}} field-input" {{if $ex_object->_specs.$_field_name instanceof CTextSpec}} style="text-block" {{/if}}>
                     {{$_field->prefix}}
                     {{mb_value object=$ex_object field=$_field_name}}
@@ -365,7 +365,7 @@ function switchMode(){
                 </td>
               {{/if}}
             {{else}}
-              <td>
+              <td class="text">
                 {{mb_value object=$_host_field->_ref_host_object field=$_host_field->field}}
               </td>
             {{/if}}
@@ -408,7 +408,7 @@ function switchMode(){
               {{mb_label object=$ex_object field=$_field_name}}
             </div>
           </th>
-          <td colspan="2">
+          <td colspan="2" class="text">
             <div class="field-{{$_field->name}} field-label" {{if $ex_object->_specs.$_field_name instanceof CTextSpec}} class="text-block" {{/if}}>
               {{$_field->prefix}}
               {{mb_value object=$ex_object field=$_field_name}}
