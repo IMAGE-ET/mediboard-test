@@ -39,6 +39,15 @@
     display: inline-block;
     line-height: 1.5em;
   }
+
+  .note {
+    padding:5px;
+    border:solid 1px grey;
+    box-shadow: 0 0 3px grey;
+    border-radius: 5px;
+    margin-top:10px;
+    text-align:left;
+  }
 </style>
 
 <script>
@@ -165,7 +174,7 @@
         <li><a href="#draw_tools"><img src="modules/drawing/images/icon.png" alt="Dessin" style="width: 16px" /></a></li>
         <li><a href="#notes"><img src="style/mediboard/images/buttons/comment.png" alt="{{tr}}Help{{/tr}}" /></a></li>
         <li><a href="#ressources"><img src="modules/dPfiles/images/icon.png" alt="Fichiers" style="width: 16px" /></a></li>
-        <li><a href="#draw_help"><img src="style/mediboard/images/buttons/help.png" alt="{{tr}}Help{{/tr}}" /></a></li>
+        <!--<li><a href="#draw_help"><img src="style/mediboard/images/buttons/help.png" alt="{{tr}}Help{{/tr}}" /></a></li>-->
         <li><a href="#save"><img src="style/mediboard/images/buttons/save.png" alt="{{tr}}Save{{/tr}}" /></a></li>
       </ul>
       <div id="draw_tools">
@@ -174,7 +183,11 @@
 
       <div id="notes">
         {{foreach from=$draw->_ref_notes item=_note}}
-          {{$_note}}
+          <div class="note">
+            <p>{{$_note}}</p>
+            <p><strong>{{$_note->libelle}}</strong></p>
+            <p>{{$_note->libelle}}</p>
+          </div>
         {{/foreach}}
       </div>
 
