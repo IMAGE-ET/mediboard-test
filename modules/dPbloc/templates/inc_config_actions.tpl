@@ -8,7 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-
 <table class="tbl">
   <tr>
     <th>{{tr}}Classname{{/tr}}</th>
@@ -110,6 +109,27 @@
           }
         };
 
+        CBloc = {
+          purgeEmpty: function(form) {
+            var url = new Url('bloc', 'purge_empty_blocop');
+
+            if (form) {
+              url.addNotNullElement(form.purge);
+              url.addNotNullElement(form.max  );
+            }
+
+            var modal = Control.Modal.stack.last();
+            if (modal) {
+              url.requestUpdate(modal.container.down('.content'));
+            }
+            else {
+              url.requestModal(600);
+            }
+
+            return false;
+          }
+        };
+
         openMineCSalle = function() {
           var url = new Url("bloc", "ajax_mine_salle");
           url.requestModal();
@@ -137,5 +157,10 @@
     </td>
   </tr>
 
-
+  <tr>
+    <td>{{tr}}CBlocOperatoire{{/tr}}</td>
+    <td>
+      <button class="search" onclick="CBloc.purgeEmpty();">{{tr}}mod-bloc-tab-purge_empty_blocop{{/tr}}</button>
+    </td>
+  </tr>
 </table>
