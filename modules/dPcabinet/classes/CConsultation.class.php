@@ -1047,6 +1047,18 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
       }
     }
 
+    if ($this->fieldModified("annule", "1")) {
+      $this->loadRefConsultAnesth();
+      foreach ($this->_refs_dossiers_anesth as $_dossier_anesth) {
+        if ($_dossier_anesth->operation_id) {
+          $_dossier_anesth->operation_id = '';
+          if ($msg = $_dossier_anesth->store()) {
+            return $msg;
+          }
+        }
+      }
+    }
+
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
