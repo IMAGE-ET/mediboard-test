@@ -356,10 +356,10 @@
                     {{tr}}Lookup{{/tr}}
                   </button>
                   {{if @$modules.dPplanningOp->_can->admin}}
-                    <button class="mediuser_black notext" onclick="paramUserSejour({{$curr_affectation->sejour_id}});"
+                    <button class="mediuser_black notext" onclick="paramUserSejour({{$curr_affectation->sejour_id}});" style="margin-right: 5px;"
                             onmouseover="ObjectTooltip.createDOM(this, 'affectation_CSejour-{{$sejour->_id}}')";></button>
-                    <span class="countertip" style="margin-top:1px;margin-left: -5px;">
-                      {{$sejour->_ref_users_sejour|@count}}
+                    <span class="countertip" style="margin-top:1px;margin-left: -10px;">
+                      <span class="{{if !$sejour->_ref_users_sejour|@count}}empty{{/if}}">{{$sejour->_ref_users_sejour|@count}}</span>
                     </span>
                     <div style="display: none" id="affectation_CSejour-{{$curr_affectation->sejour_id}}">
                       <table class="tbl">
