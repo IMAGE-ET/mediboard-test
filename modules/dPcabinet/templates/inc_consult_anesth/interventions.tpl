@@ -22,6 +22,7 @@
     {{else}}
       url.addParam("praticien_id", current_prat_id);
     {{/if}}
+    url.addParam("origine_consult", 1);
     url.requestModal('85%', '80%',
       {showReload: true});
   };
