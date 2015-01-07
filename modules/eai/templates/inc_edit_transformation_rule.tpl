@@ -152,9 +152,10 @@
     <tr>
       <th>{{mb_label object=$transf_rule field="component_from"}}</th>
       <td>
-        <!--<button type="button" onclick="EAITransformationRule.target(this.form, 'from')"
-                class="target notext">{{tr}}Target{{/tr}}</button>-->
+        <button type="button" onclick="EAITransformationRule.target(this.form, 'from')"
+                class="target notext">{{tr}}Target{{/tr}}</button>
         <span id="EAITransformationRule-component_from">
+
           {{if $transf_rule->component_from}}
             {{foreach from="|"|explode:$transf_rule->component_from item=_component}}
               <span class="circled">{{$_component}}</span>
@@ -167,8 +168,8 @@
     <tr>
       <th>{{mb_label object=$transf_rule field="component_to"}}</th>
       <td>
-        <!--<button type="button" onclick="EAITransformationRule.target(this.form, 'to')"
-                class="target notext">{{tr}}Target{{/tr}}</button>-->
+        <button type="button" onclick="EAITransformationRule.target(this.form, 'to')"
+                class="target notext">{{tr}}Target{{/tr}}</button>
         <span id="EAITransformationRule-component_to">
           {{if $transf_rule->component_to}}
             {{foreach from="|"|explode:$transf_rule->component_to item=_component}}

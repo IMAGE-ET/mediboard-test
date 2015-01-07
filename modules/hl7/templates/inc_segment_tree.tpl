@@ -1,7 +1,7 @@
 {{foreach from=$tree item=_subtree}}
   <li>
   {{if $_subtree.type == "segment"}}
-    <a href="#" onclick="HL7_Transformation.viewFields('{{$actor_guid}}', '{{$profil}}', '{{$_subtree.name}}',
+    <a href="#" onclick="HL7_Transformation.viewFields('{{$profil}}', '{{$_subtree.name}}',
       '{{$version}}', '{{$extension}}', '{{$message}}')">
       <span class="type-{{$_subtree.type}}">{{$_subtree.name}}</span>
     </a>

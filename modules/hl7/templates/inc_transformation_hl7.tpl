@@ -7,22 +7,12 @@
   });
 </script>
 
-<div id="hl7-transformation-edit">
+<div id="hl7-transformation-edit" style="overflow: auto; height: 500px">
   <div id="hl7-transformation">
     <div class="small-info">
       L'arbre ci-dessous se base sur la version <strong>HL7 v.{{$version}} {{if $extension}}({{$extension}}){{/if}}</strong> et
       concerne le message <strong>{{$message}}</strong>. <br />
       Sélectionnez un segment pour sélectionner les champs à exclure. <br />
-
-      {{if $actor->_ref_hl7_transformations|@count > 0}}
-        Les champs déjà altérés sont :
-      {{/if}}
-      {{foreach from=$actor->_ref_hl7_transformations item=_hl7_transformation}}
-        <span class="circled">
-          <span class="hl7-transformation-{{$_hl7_transformation->action}}" title="{{mb_value object=$_hl7_transformation field="action"}}"></span>
-  {{$_hl7_transformation->component}}
-        </span>
-      {{/foreach}}
     </div>
 
     <ul id="hl7-transformation-tree" class="hl7-tree">

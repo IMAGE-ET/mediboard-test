@@ -10,19 +10,17 @@
  */
 
 HL7_Transformation = {
-  viewSegments : function (actor_guid, profil, message_class) {
+  viewSegments : function (profil, message_class) {
     new Url("hl7", "ajax_hl7_transformation")
-      .addParam("actor_guid"   , actor_guid)
       .addParam("profil"       , profil)
       .addParam("message_class", message_class)
-      .requestModal("80%", "80%");
+      .requestModal("90%", "90%");
 
     return false;
   },
 
-  viewFields : function (actor_guid, profil, segment_name, version, extension, message) {
+  viewFields : function (profil, segment_name, version, extension, message) {
     new Url("hl7", "ajax_hl7_transformation_fields")
-      .addParam("actor_guid"  , actor_guid)
       .addParam("profil"      , profil)
       .addParam("segment_name", segment_name)
       .addParam("version"     , version)

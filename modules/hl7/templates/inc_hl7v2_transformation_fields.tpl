@@ -25,7 +25,6 @@
 <div class="small-info">
   Sélectionnez les champs à exclure.
   <div id="ignored_fields_text">
-
   </div>
 
   <div>

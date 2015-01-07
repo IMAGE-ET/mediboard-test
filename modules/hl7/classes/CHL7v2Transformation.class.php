@@ -18,6 +18,13 @@ class CHL7v2Transformation {
   protected $message;
   protected $messageName;
 
+  /**
+   * Construct
+   *
+   * @param string $version     Version
+   * @param string $extension   Extension
+   * @param string $messageName Message name
+   */
   function __construct($version, $extension, $messageName) {
     $hl7v2 = new CHL7v2Message();
     $hl7v2->version = $version;
@@ -27,8 +34,13 @@ class CHL7v2Transformation {
     $this->messageName = $messageName;
   }
 
-
-  function getSegments(CInteropActor $actor = null) {
+  /**
+   * Get segments
+   *
+   * @return array
+   * @throws Exception
+   */
+  function getSegments() {
     $message_schema = $this->message->getSchema("message", $this->messageName);
 
     $xpath = new CHL7v2MessageXPath($message_schema);
@@ -42,6 +54,14 @@ class CHL7v2Transformation {
     return $tree;
   }
 
+  /**
+   * Get segment tree
+   *
+   * @param DOMElement $element Element
+   * @param array      &$tree   Tree
+   *
+   * @return void
+   */
   function getSegmentTree(DOMElement $element, &$tree) {
     foreach ($element->childNodes as $_element) {
       /** @var DOMElement $_element */
@@ -69,7 +89,7 @@ class CHL7v2Transformation {
             "type"        => $_element->nodeName,
             "name"        => $group_name,
             "fullpath"    => $group_name,
-            "description" => $xpath->queryTextNode("description"),
+            "description" => "",
             "children"    => $subtree,
             "forbidden"   => $_element->getAttribute("forbidden") == "true"
           );
@@ -78,9 +98,15 @@ class CHL7v2Transformation {
         default:
       }
     }
-
   }
 
+  /**
+   * Get fields tree
+   *
+   * @param string $segment Segment name
+   *
+   * @return array
+   */
   function getFieldsTree($segment) {
     $segment_schema = $this->message->getSchema("segment", $segment);
     $xpath = new CHL7v2MessageXPath($segment_schema);
@@ -136,6 +162,15 @@ class CHL7v2Transformation {
     return $tree;
   }
 
+  /**
+   * Get fields tree
+   *
+   * @param array  &$_datatypes        Datatypes
+   * @param string $datatype_name      Datatype name
+   * @param string $fullpath_component Fullpath
+   *
+   * @return array
+   */
   function readDataTypeSchema(&$_datatypes, $datatype_name, $fullpath_component) {
     if (array_key_exists($datatype_name, CHDataType::$typesMap)) {
       return array();

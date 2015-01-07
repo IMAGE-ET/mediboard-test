@@ -7,7 +7,7 @@
       {{mb_include template="inc_hl7v2_transformation_group" component=$tree_fields}}
     {{else}}
       {{if $_segment.type == "segment"}}
-        <a href="#" onclick="HL7_Transformation.viewFields('{{$actor_guid}}', '{{$profil}}', '{{$_segment.name}}',
+        <a href="#" onclick="HL7_Transformation.viewFields('{{$profil}}', '{{$_segment.name}}',
           '{{$version}}', '{{$extension}}', '{{$message}}')">
           <span class="type-{{$_segment.type}}">{{$_segment.name}}</span>
         </a>
