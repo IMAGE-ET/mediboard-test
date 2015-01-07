@@ -29,7 +29,7 @@ if (!in_array($file_class, $allowed)) {
 /** @var CFile|CCompteRendu $file */
 $file = new $file_class();
 $file->load($file_id);
-$file->file_category_id = ($category_id != $file->file_category_id) ? $category_id : $file->file_category_id;
+$file->file_category_id = ($category_id && $category_id != $file->file_category_id) ? $category_id : $file->file_category_id;
 if ($file instanceof CFile) {
   $file->file_name = $name ? $name : $file->file_name;
 }
@@ -40,6 +40,12 @@ if (($file->object_id == $destination->_id) && ($file->object_class == $destinat
 }
 $file->setObject($destination);
 
+// check category
+$cat = new CFilesCategory();
+$cat->load($file->file_category_id);
+if ($cat->class && $cat->class != $destination->_class) {
+  $file->file_category_id = "";
+}
 
 if ($msg = $file->store()) {
   CAppUI::setMsg($msg, UI_MSG_ERROR);
