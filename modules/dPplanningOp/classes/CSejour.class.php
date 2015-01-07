@@ -4490,7 +4490,7 @@ class CSejour extends CFacturable implements IPatientRelated {
           $item_facture->_sous_item_facture = $sous_item;
         }
 
-        $this->_ref_prestations[$date][] = array($item_facture->nom, $item_facture->_quantite);
+        $this->_ref_prestations[$date][] = $item_facture;
       }
     }
     return $this->_ref_prestations;
