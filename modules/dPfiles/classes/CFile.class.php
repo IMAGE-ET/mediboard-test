@@ -19,10 +19,10 @@
  */
 class CFile extends CDocumentItem implements IIndexableObject {
   static $directory = null;
-  
+
   // DB Table key
   public $file_id;
-  
+
   // DB Fields
   public $file_real_filename;
   public $file_name;
@@ -127,10 +127,10 @@ class CFile extends CDocumentItem implements IIndexableObject {
 
   /**
    * Load a file with a specific name associated with an object
-   * 
+   *
    * @param CMbObject $object Context object
    * @param string    $name   File name with extension
-   * 
+   *
    * @return CFile
    */
   static function loadNamed(CMbObject $object, $name) {
@@ -149,7 +149,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
     $file->setObject($object);
     $file->file_name = $name;
     $file->loadMatchingObject();
-    return $file;    
+    return $file;
   }
 
   /**
@@ -163,7 +163,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
       trigger_error("Files directory is not writable : " . self::$directory, E_USER_WARNING);
       return;
     }
-    
+
     // Checks complete file directory
     CMbPath::forceDir($this->_absolute_dir);
   }
@@ -188,9 +188,9 @@ class CFile extends CDocumentItem implements IIndexableObject {
     if (!$this->file_real_filename) {
       return false;
     }
-    
+
     $this->updateFormFields();
-    
+
     if ($this->forceDir() === false) {
       return false;
     }
@@ -204,14 +204,12 @@ class CFile extends CDocumentItem implements IIndexableObject {
    */
   function updateFormFields() {
     parent::updateFormFields();
-    
+
     $this->_extensioned = $this->file_name;
 
     $last_point = strrpos($this->_extensioned, '.');
     $this->_no_extension = substr($this->_extensioned, 0, $last_point);
 
-    $this->_file_size = CMbString::toDecaBinary($this->doc_size);
-    
     $this->completeField("object_id");
 
     // Computes complete file path
@@ -221,7 +219,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
       $this->_absolute_dir = self::$directory . "/$this->_sub_dir/$this->object_id";
       $this->_file_path    = "$this->_absolute_dir/$this->file_real_filename";
     }
-    
+
     $this->_shortview = $this->_view = str_replace("_", " ", $this->file_name);
   }
 
@@ -290,7 +288,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
       $this->_old->updateFormFields();
       $this->moveFile($this->_old->_file_path);
     }
-    
+
     // Make sure filename is unique for an object
     if (!$this->_id) {
       $this->completeField("file_name");
@@ -315,7 +313,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
         } while ($this->countList($where));
         $this->file_name = $file_name;
       }
-      
+
     }
     if (!$this->_id && $this->rotation === null) {
       $this->loadNbPages();
@@ -355,7 +353,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
     foreach ($this->_ref_files as $_file) {
       $_file->delete();
     }
-    
+
     if ($msg = parent::delete()) {
       return $msg;
     }
@@ -396,13 +394,13 @@ class CFile extends CDocumentItem implements IIndexableObject {
     if (!$uploaded && !is_file($file)) {
       return false;
     }
-      
+
     $this->updateFormFields();
-    
+
     if ($this->forceDir() === false) {
       return false;
     }
-  
+
     // Actually move any file
     if ($uploaded) {
       return move_uploaded_file($file["tmp_name"], $this->_file_path);
@@ -424,11 +422,11 @@ class CFile extends CDocumentItem implements IIndexableObject {
    */
   function oldImageMagick() {
     static $old = null;
-    
+
     if ($old !== null) {
       return $old;
     }
-    
+
     exec("convert --version", $ret);
     if (!isset($ret[0])) {
       return $old = false;
@@ -453,11 +451,11 @@ class CFile extends CDocumentItem implements IIndexableObject {
       if ($this->oldImageMagick() && preg_match("/\/Rotate ([0-9]+)/", $dataFile, $matches)) {
         $this->rotation = 360 - $matches[1];
       }
-      
+
       if (strpos($dataFile, "%PDF-1.4") !== false && $nb_count >= 2) {
         // Fichier PDF 1.4 avec plusieurs occurence
         $splitFile = preg_split("/obj\r<</", $dataFile);
-        
+
         foreach ($splitFile as $splitval) {
           if ($this->_nb_pages) {
             break;
@@ -470,9 +468,9 @@ class CFile extends CDocumentItem implements IIndexableObject {
           }
           $splitval = substr($splitval, 0, $position_fin);
           if (strpos($splitval, "/Title") === false
-              && strpos($splitval, "/Parent") === false
-              && strpos($splitval, "/Pages") !== false
-              && strpos($splitval, $string_recherche) !== false
+            && strpos($splitval, "/Parent") === false
+            && strpos($splitval, "/Pages") !== false
+            && strpos($splitval, $string_recherche) !== false
           ) {
             // Nombre de page ici
             $position_count = strripos($splitval, $string_recherche) + strlen($string_recherche);
@@ -487,7 +485,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
         $nombre_temp = explode(" ", trim(substr($dataFile, $position_count, strlen($dataFile)-$position_count)), 2);
         $this->_nb_pages = intval(trim($nombre_temp[0]));
       }
-      
+
       // Si les deux méthodes précédentes ne donnent pas de résultat
       if (is_null($this->_nb_pages)) {
         $this->_nb_pages = preg_match_all("/\/Page\W/", $dataFile, $matches);
@@ -509,7 +507,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
     if (!$object->_ref_documents) {
       $object->loadRefsDocs();
     }
-    
+
     //Création du tableau des catégorie pour l'affichage
     $affichageFile = array(
       array(
@@ -517,7 +515,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
         "items" => array(),
       )
     );
-    
+
     foreach (CFilesCategory::listCatClass($object->_class) as $_cat) {
       $affichageFile[$_cat->_id] = array(
         "name" => $_cat->nom,
@@ -533,7 +531,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
         $affichageFile[$cat_id]["name"] = '';
       }
     }
-    
+
     //Ajout des document dans le tableau
     foreach ($object->_ref_documents as &$_doc) {
       $_doc->isLocked();
@@ -543,7 +541,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
         $affichageFile[$cat_id]["name"] = '';
       }
     }
-    
+
     // Classement des Fichiers et des document par Ordre alphabétique
     foreach ($affichageFile as $keyFile => $currFile) {
       ksort($affichageFile[$keyFile]["items"]);
@@ -561,7 +559,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
     $this->completeField("file_type");
     $this->completeField("file_date");
     $this->updateFormFields();
-    
+
     return parent::handleSend();
   }
 
@@ -622,15 +620,15 @@ class CFile extends CDocumentItem implements IIndexableObject {
    */
   function convertToPDF($file_path = null, $pdf_path = null) {
     global $rootName;
-    
+
     // Vérifier si openoffice est lancé
     if (!CFile::openofficeLaunched()) {
       return 0;
     }
-    
+
     // Vérifier sa charge en mémoire
     CFile::openofficeOverload();
-    
+
     if (!$file_path && !$pdf_path) {
       $file = new CFile();
       $file->setObject($this);
@@ -642,7 +640,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
       $file->updateFormFields();
       $file->forceDir();
       $save_name = $this->_file_path;
-      
+
       if ($msg = $file->store()) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
         return 0;
@@ -650,39 +648,39 @@ class CFile extends CDocumentItem implements IIndexableObject {
       $file_path = $this->_file_path;
       $pdf_path  = $file->_file_path;
     }
-    
+
     // Requête post pour la conversion.
     // Cela permet de mettre un time limit afin de garder le contrôle de la conversion.
-    
+
     ini_set("default_socket_timeout", 10);
-    
+
     $fileContents = base64_encode(file_get_contents($file_path));
-    
+
     $url = CAppUI::conf("base_url")."/index.php?m=dPfiles&a=ajax_ooo_convert&suppressHeaders=1";
     $data = array (
       "file_data" => $fileContents,
       "pdf_path"  => $pdf_path
     );
-    
+
     // Fermeture de la session afin d'écrire dans le fichier de session
     CSessionHandler::writeClose();
-    
+
     // Le header Connection: close permet de forcer a couper la connexion lorsque la requête est effectuée
     $ctx = stream_context_create(
       array(
         'http' => array(
           'method'  => 'POST',
           'header'  => "Content-type: application/x-www-form-urlencoded charset=UTF-8\r\n".
-                       "Connection: close\r\n".
-                       "Cookie: mediboard=".session_id()."\r\n",
+            "Connection: close\r\n".
+            "Cookie: mediboard=".session_id()."\r\n",
           'content' => http_build_query($data),
         )
       )
     );
-    
+
     // La requête post réouvre la session
     $res = file_get_contents($url, false, $ctx);
-    
+
     if (isset($file) && $res == 1) {
       $file->doc_size = filesize($pdf_path);
       if ($msg = $file->store()) {
@@ -695,7 +693,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
     if ( $res != 1) {
       CFile::openofficeOverload(1);
     }
-    
+
     return $res;
   }
 
@@ -710,25 +708,25 @@ class CFile extends CDocumentItem implements IIndexableObject {
     if (!class_exists("FPDF")) {
       CAppUI::requireLibraryFile("PDFMerger/fpdf/fpdf");
     }
-    
+
     $pngs = array();
     foreach ($tif_files as $tif) {
       $pngs[] = self::convertTifToPng($tif); // "C:\\ImageMagick6.6.0-Q16\\"
     }
-    
+
     $pdf = new FPDF();
-    
+
     foreach ($pngs as $png) {
       $pdf->AddPage();
       $pdf->Image($png, 5, 5, 200); // millimeters
     }
-    
+
     $out = $pdf->Output("", 'S');
-    
+
     foreach ($pngs as $png) {
       unlink($png);
     }
-    
+
     return $out;
   }
 
@@ -742,15 +740,15 @@ class CFile extends CDocumentItem implements IIndexableObject {
   static function convertTifToPng($path) {
     $tmp_tmp = tempnam(sys_get_temp_dir(), "mb_");
     unlink($tmp_tmp);
-    
+
     $tmp  = "$tmp_tmp.png";
-    
+
     $from = escapeshellarg($path);
     $to   = escapeshellarg($tmp);
     $exec = "convert $from $to";
-    
+
     exec($exec, $yaks);
-    
+
     return $tmp;
   }
 
@@ -795,10 +793,10 @@ class CFile extends CDocumentItem implements IIndexableObject {
     header("Content-length: {$this->doc_size}");
     header("Content-type: $this->file_type");
     header("Content-disposition: inline; filename=\"".$this->file_name."\"");
-    
+
     echo file_get_contents($this->_file_path);
   }
-  
+
   /**
    * @see parent::getUsersStats();
    */
@@ -814,7 +812,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
       ORDER BY `docs_weight` DESC";
     return $ds->loadList($query);
   }
-  
+
   /**
    * @see parent::getUsersStatsDetails();
    */
@@ -894,7 +892,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
     }
 
     return $details;
-   }
+  }
 
   /**
    * check if this is an image

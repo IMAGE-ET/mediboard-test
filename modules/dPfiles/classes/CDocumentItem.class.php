@@ -15,7 +15,7 @@
  */
 class CDocumentItem extends CMbMetaObject {
   public $file_category_id;
-  
+
   public $etat_envoi;
   public $author_id;
   public $private;
@@ -49,7 +49,7 @@ class CDocumentItem extends CMbMetaObject {
    */
   function getProps() {
     $props = parent::getProps();
-    
+
     $props["file_category_id"] = "ref class|CFilesCategory";
     $props["etat_envoi"]       = "enum notNull list|oui|non|obsolete default|non";
     $props["author_id"]        = "ref class|CMediusers";
@@ -112,7 +112,7 @@ class CDocumentItem extends CMbMetaObject {
     }
     return $this->_count_dmp_document = $this->countBackRefs("dmp_documents");
   }
-  
+
   /**
    * Retrieve content as binary data
    *
@@ -139,12 +139,12 @@ class CDocumentItem extends CMbMetaObject {
     if (null == $system_sender = CAppUI::conf("dPfiles system_sender")) {
       return null;
     }
-    
+
     if (!is_subclass_of($system_sender, "CDocumentSender")) {
       trigger_error("Instanciation du Document Sender impossible.");
       return null;
     }
-    
+
     return new $system_sender;
   }
 
@@ -153,10 +153,13 @@ class CDocumentItem extends CMbMetaObject {
    */
   function updateFormFields() {
     parent::updateFormFields();
+
+    $this->_file_size = CMbString::toDecaBinary($this->doc_size);
+
     $this->getSendProblem();
     $this->loadRefCategory();
   }
-  
+
   /**
    * Retrieve send problem user friendly message
    *
@@ -182,23 +185,23 @@ class CDocumentItem extends CMbMetaObject {
 
     return parent::store();
   }
-  
+
   /**
    * Handle document sending store behaviour
    *
-   * @return string Store-like error message 
+   * @return string Store-like error message
    */
   function handleSend() {
     if (!$this->_send) {
       return null;
     }
-    
+
     $this->_send = false;
-    
+
     if (null == $sender = self::getDocumentSender()) {
       return "Document Sender not available";
     }
-    
+
     switch ($this->etat_envoi) {
       case "non" :
         if (!$sender->send($this)) {
@@ -210,7 +213,7 @@ class CDocumentItem extends CMbMetaObject {
         if (!$sender->cancel($this)) {
           return "Erreur lors de l'invalidation de l'envoi.";
         }
-        CAppUI::setMsg("Document annulé."); 
+        CAppUI::setMsg("Document annulé.");
         break;
       case "obsolete" :
         if (!$sender->resend($this)) {
@@ -275,7 +278,7 @@ class CDocumentItem extends CMbMetaObject {
 
     return $perm;
   }
-  
+
   /**
    * Load aggregated doc item ownership
    *
@@ -284,7 +287,7 @@ class CDocumentItem extends CMbMetaObject {
   function getUsersStats() {
     return array();
   }
-  
+
   /**
    * Advanced user stats on modeles
    *

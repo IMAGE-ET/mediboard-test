@@ -167,8 +167,8 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
       "[PIED DE PAGE FACT ETAB]"      => "footer"
     ),
     "CPatient" => array(
-     "[ENTETE MOZAIC]" => "header",
-     "[PIED DE PAGE MOZAIC]" => "footer"
+      "[ENTETE MOZAIC]" => "header",
+      "[PIED DE PAGE MOZAIC]" => "footer"
     )
   );
 
@@ -216,9 +216,9 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     $props["object_class"]     = "str notNull class show|0";
     $props["nom"]              = "str notNull show|0 seekable";
     $props["font"]             = "enum list|arial|calibri|comic|courier|georgia|lucida|symbol|".
-                                 "tahoma|times|trebuchet|verdana|zapfdingbats show|0";
+      "tahoma|times|trebuchet|verdana|zapfdingbats show|0";
     $props["size"]             = "enum list|xx-small|x-small|small|medium|large|x-large|xx-large|".
-                                 "8pt|9pt|10pt|11pt|12pt|14pt|16pt|18pt|20pt|22pt|24pt|26pt|28pt|36pt|48pt|72pt show|0";
+      "8pt|9pt|10pt|11pt|12pt|14pt|16pt|18pt|20pt|22pt|24pt|26pt|28pt|36pt|48pt|72pt show|0";
     $props["type"]             = "enum list|header|preface|body|ending|footer default|body";
     $props["factory"]          = "enum list|CDomPDFConverter|CWkHtmlToPDFConverter|CPrinceXMLConverter|none";
     $props["language"]         = "enum list|en-EN|es-ES|fr-CH|fr-FR default|fr-FR show|0";
@@ -261,7 +261,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
   /**
    * Génère et retourne le fichier PDF si possible,
    * la source html sinon.
-   * 
+   *
    * @return string
    */
   function getBinaryContent() {
@@ -279,8 +279,8 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
   /**
    * Retourne le nom du fichier associé
-   * 
-   * @return string 
+   *
+   * @return string
    */
   function getExtensioned() {
     $file = $this->loadFile();
@@ -364,9 +364,9 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
   /**
    * Charge le contenu html
-   * 
+   *
    * @param boolean $field_source [optional]
-   * 
+   *
    * @return void
    */
   function loadContent($field_source = true) {
@@ -432,8 +432,8 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
   /**
    * Charge les composants d'un modèle
-   * 
-   * @return void 
+   *
+   * @return void
    */
   function loadComponents() {
     $this->_ref_header = $this->loadFwdRef("header_id" , true);
@@ -443,8 +443,8 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
   /**
    * Charge l'introduction et la conclusion
-   * 
-   * @return void 
+   *
+   * @return void
    */
   function loadIntroConclusion() {
     $this->_ref_preface = $this->loadFwdRef("preface_id", true);
@@ -453,7 +453,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
   /**
    * Charge le modèle de référence du document
-   * 
+   *
    * @return CCompteRendu
    */
   function loadModele() {
@@ -462,7 +462,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
   /**
    * Charge le fichier unique d'un document / modèle
-   * 
+   *
    * @return CFile
    */
   function loadFile() {
@@ -534,12 +534,12 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
   /**
    * Charge les modèles par catégorie
-   * 
+   *
    * @param string  $catName nom de la catégorie
    * @param array   $where1  [optional]
    * @param string  $order   [optional]
    * @param boolean $horsCat [optional]
-   * 
+   *
    * @return array
    */
   static function loadModeleByCat($catName, $where1 = null, $order = "nom", $horsCat = null){
@@ -582,8 +582,8 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
   /**
    * Charge les correspondants d'un document
-   * 
-   * @return array 
+   *
+   * @return array
    */
   function loadRefsCorrespondantsCourrier() {
     return $this->_refs_correspondants_courrier = $this->loadBackRefs("correspondants_courrier");
@@ -591,8 +591,8 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
   /**
    * Charge les correspondants d'un document triés par tag puis par cible
-   * 
-   * @return array 
+   *
+   * @return array
    */
   function loadRefsCorrespondantsCourrierByTagGuid() {
     if (!$this->_refs_correspondants_courrier) {
@@ -606,9 +606,9 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
   /**
    * Fusion de correspondants
-   * 
+   *
    * @param array &$destinataires tableau de destinataires
-   * 
+   *
    * @return void
    */
   function mergeCorrespondantsCourrier(&$destinataires) {
@@ -679,7 +679,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     $where = array();
     $where["object_id"] = "IS NULL";
 
-    if ($object_class) {  
+    if ($object_class) {
       $where["object_class"] = "= '$object_class'";
     }
     if ($type) {
@@ -752,7 +752,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
         }
         break;
 
-      default: 
+      default:
         trigger_error("Wrong type '$owner'", E_WARNING);
     }
 
@@ -910,8 +910,8 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
   /**
    * Vérifie si l'enregistrement du modèle est possible.
-   * 
-   * @return string 
+   *
+   * @return string
    */
   function check() {
     $this->completeField("type", "header_id", "footer_id", "object_class");
@@ -920,8 +920,8 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     if (in_array($this->type, array("footer", "header"))) {
       $doc = new CCompteRendu;
       $where = 'object_class != "'. $this->object_class.
-          '" and ( header_id ="' . $this->_id .
-          '" or footer_id ="' . $this->_id . '")';;
+        '" and ( header_id ="' . $this->_id .
+        '" or footer_id ="' . $this->_id . '")';;
       if ($doc->countList($where)) {
         return "Des documents sont rattachés à ce pied de page (ou entête) et ils ont un type différent";
       }
@@ -960,8 +960,8 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
   /**
    * Enregistrement du document / modèle
-   * 
-   * @return string 
+   *
+   * @return string
    */
   function store() {
     $this->completeField("content_id", "_source", "language", "version");
@@ -973,20 +973,20 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
       }
     }
 
-    // Prevent source modified wben sending, comparison is working when editing
-    $this->loadContent($this->_send);
+    // Prevent source modification when not editing the doc
+    $this->loadContent($this->_send || $this->_source === null);
 
-    $source_modified = 
-      $this->_ref_content->content != $this->_source || 
-      $this->fieldModified("margin_top") || 
-      $this->fieldModified("margin_left") || 
-      $this->fieldModified("margin_right") || 
-      $this->fieldModified("margin_bottom") || 
-      $this->fieldModified("page_height") || 
-      $this->fieldModified("page_width") || 
+    $source_modified =
+      $this->_ref_content->content != $this->_source ||
+      $this->fieldModified("margin_top") ||
+      $this->fieldModified("margin_left") ||
+      $this->fieldModified("margin_right") ||
+      $this->fieldModified("margin_bottom") ||
+      $this->fieldModified("page_height") ||
+      $this->fieldModified("page_width") ||
       $this->fieldModified("header_id") ||
       $this->fieldModified("preface_id") ||
-      $this->fieldModified("ending_id") || 
+      $this->fieldModified("ending_id") ||
       $this->fieldModified("footer_id");
 
     if ($source_modified || $this->fieldModified("valide")) {
@@ -1064,7 +1064,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
   /**
    * Suppression de document / modèle
-   * 
+   *
    * @return string
    */
   function delete() {
@@ -1078,8 +1078,8 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
       $_file->delete();
     }
 
-    if ($msg = parent::delete()) { 
-      return $msg; 
+    if ($msg = parent::delete()) {
+      return $msg;
     }
 
     // Remove content
@@ -1088,7 +1088,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
   /**
    * Envoi de document
-   * 
+   *
    * @return string|null
    */
   function handleSend() {
@@ -1105,9 +1105,9 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
   /**
    * Tell whether object has a document with the same name has this one
-   * 
+   *
    * @param CMbObject $object Object to test with
-   * 
+   *
    * @return boolean
    */
   function existsFor(CMbObject $object) {
@@ -1120,7 +1120,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
   /**
    * Construit un tableau de traduction des classes pour lesquelles la fonction filltemplate existe
-   * 
+   *
    * @return array
    */
   static function getTemplatedClasses() {
@@ -1172,19 +1172,19 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
    * @return string
    */
   function loadHTMLcontent(
-      $htmlcontent,
-      $mode = "modele",
-      $margins = array(),
-      $font = "",
-      $size = "",
-      $auto_print = true,
-      $type = "body",
-      $header = "",
-      $sizeheader = 0,
-      $footer = "",
-      $sizefooter = 0,
-      $preface = "",
-      $ending = ""
+    $htmlcontent,
+    $mode = "modele",
+    $margins = array(),
+    $font = "",
+    $size = "",
+    $auto_print = true,
+    $type = "body",
+    $header = "",
+    $sizeheader = 0,
+    $footer = "",
+    $sizefooter = 0,
+    $preface = "",
+    $ending = ""
   ) {
     $default_font = $font;
     $default_size = $size;
@@ -1294,15 +1294,15 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
   /**
    * Generate a pdf preview for the document
-   * 
+   *
    * @param boolean $force_generating [optional]
    * @param boolean $auto_print       [optional]
-   * 
+   *
    * @return string|null
    */
   function makePDFpreview($force_generating = false, $auto_print = true) {
     if ((!CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") ||!CAppUI::pref("pdf_and_thumbs"))
-        && !$force_generating
+      && !$force_generating
     ) {
       return null;
     }
@@ -1328,9 +1328,9 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
     // Génération du contenu PDF 
     $margins = array(
-      $this->margin_top, 
-      $this->margin_right, 
-      $this->margin_bottom, 
+      $this->margin_top,
+      $this->margin_right,
+      $this->margin_bottom,
       $this->margin_left,
     );
 
@@ -1347,11 +1347,11 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
   /**
    * Generate the html source from a modele. Can use an optionnal header, footer
    * and another source.
-   * 
+   *
    * @param string $other_source [optional]
    * @param int    $header_id    [optional]
    * @param int    $footer_id    [optional]
-   * 
+   *
    * @return string
    */
   function generateDocFromModel($other_source = null, $header_id = null, $footer_id = null) {
@@ -1410,7 +1410,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
         $header->loadContent();
         $header->_source = "<div id=\"header\">$header->_source</div>";
 
-        if (!CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") || !CAppUI::pref("pdf_and_thumbs")) {      
+        if (!CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") || !CAppUI::pref("pdf_and_thumbs")) {
           $header->height += 20;
         }
       }
@@ -1453,15 +1453,15 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
   /**
    * Patch the disappearance of an html attribute
-   * 
+   *
    * @param string $source source to control
-   * 
-   * @return string 
+   *
+   * @return string
    */
   static function restoreId($source) {
     if (strpos($source, '<div id="body"') === false &&
-        strpos($source, "<div id='body'") === false &&
-        strpos($source, "@media dompdf")  !== false
+      strpos($source, "<div id='body'") === false &&
+      strpos($source, "@media dompdf")  !== false
     ) {
 
       $xml = new DOMDocument('1.0', 'iso-8859-1');
@@ -1507,14 +1507,14 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
       }
 
       // Substring to remove the header of the xml output, and div surrounded
-      $source = substr($xml->saveXML(), 27, -7); 
+      $source = substr($xml->saveXML(), 27, -7);
     }
     return $source;
   }
 
   /**
    * User stats on models
-   * 
+   *
    * @return array
    * @see parent::getUsersStats();
    */
@@ -1639,9 +1639,9 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
   function getFullContentFromModel() {
     $this->loadContent();
     $margins = array(
-      $this->margin_top, 
-      $this->margin_right, 
-      $this->margin_bottom, 
+      $this->margin_top,
+      $this->margin_right,
+      $this->margin_bottom,
       $this->margin_left);
     $content = $this->generateDocFromModel();
     return $this->loadHTMLcontent($content, '', $margins, CCompteRendu::$fonts[$this->font], $this->size);
@@ -1678,7 +1678,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
    */
   static function getSpecialModel($user, $object_class, $name) {
     if (!isset(self::$special_names[$object_class][$name])) {
-      self::error("no_special", $object_class, $name); 
+      self::error("no_special", $object_class, $name);
       return null;
     }
 
@@ -1772,7 +1772,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
           }
         }</style>
         <div id=\"body\">".
-          $source.
+        $source.
         "</div>";
     };
 
@@ -1821,7 +1821,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
         $footer->loadContent(true);
 
         if ($footer->_source) {
-            $footer->_source = "<div id=\"footer\">".$footer->_source."</div>";
+          $footer->_source = "<div id=\"footer\">".$footer->_source."</div>";
         }
         $height = $footer->height ? $footer->height : 0;
         $source = preg_replace("/(#footer\s*\{\s*footer:\s*)([0-9]+[\.0-9]*)px;/", '${1}'.$height.'px;',     $source);
