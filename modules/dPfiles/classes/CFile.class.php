@@ -209,8 +209,6 @@ class CFile extends CDocumentItem implements IIndexableObject {
 
     $last_point = strrpos($this->_extensioned, '.');
     $this->_no_extension = substr($this->_extensioned, 0, $last_point);
-
-    $this->_file_size = CMbString::toDecaBinary($this->doc_size);
     
     $this->completeField("object_id");
 

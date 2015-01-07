@@ -153,6 +153,9 @@ class CDocumentItem extends CMbMetaObject {
    */
   function updateFormFields() {
     parent::updateFormFields();
+
+    $this->_file_size = CMbString::toDecaBinary($this->doc_size);
+
     $this->getSendProblem();
     $this->loadRefCategory();
   }

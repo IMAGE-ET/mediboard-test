@@ -973,8 +973,8 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
       }
     }
 
-    // Prevent source modified wben sending, comparison is working when editing
-    $this->loadContent($this->_send);
+    // Prevent source modification when not editing the doc
+    $this->loadContent($this->_send || $this->_source === null);
 
     $source_modified = 
       $this->_ref_content->content != $this->_source || 
