@@ -217,11 +217,8 @@ class CTarif extends CMbObject {
   **/
   function updateMontants() {
     if (!$this->_update_montants) {
-      return null;
+      return $this->secteur1;
     }
-
-    $this->secteur1 = 0.00;
-    $secteur2 = $this->secteur2;
   
     $types_code = array(
       "codes_ccam" => "CActeCCAM",
@@ -235,8 +232,11 @@ class CTarif extends CMbObject {
     $this->loadRefsFwd();
     $this->completeField(array_keys($types_code));
     if (!$this->codes_ngap && !$this->codes_ccam && !$this->codes_tarmed && !$this->codes_caisse) {
-      return null;
+      return $this->secteur1;
     }
+
+    $this->secteur1 = 0.00;
+    $secteur2       = $this->secteur2;
 
     foreach ($types_code as $codes => $class_acte) {
       $_codes = "_".$codes;
@@ -283,7 +283,7 @@ class CTarif extends CMbObject {
       }
       $this->$codes = implode("|", $this->$_codes);
     }
-    
+
     return $this->secteur1;
   }
   

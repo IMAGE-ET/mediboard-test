@@ -327,12 +327,21 @@ class CActeCCAM extends CActe {
         $this->rembourse = $details[6];
       }
 
-      // Gratuit
+      // Charges supplémentaires
       if (count($details) > 7) {
-        $this->gratuit = $details[7];
+        $this->charges_sup = $details[7];
+      }
+
+      // Gratuit
+      if (count($details) > 8) {
+        $this->gratuit = $details[8];
       }
 
       $this->updateFormFields();
+
+      if ($this->facturable === null) {
+        $this->facturable = 1;
+      }
     }
   }
 
@@ -1142,9 +1151,9 @@ class CActeCCAM extends CActe {
     $this->_tarif_sans_asso  = ($this->_tarif_base  * ($coefficient / 100) + $forfait);
     $this->_tarif_sans_asso2 = ($this->_tarif_base2 * ($coefficient / 100) + $forfait);
 
-    if ($this->_id && $this->executant_id && $this->_tarif_sans_asso != $this->_tarif_sans_asso2) {
+    if ($this->executant_id && $this->_tarif_sans_asso != $this->_tarif_sans_asso2) {
       $this->loadRefExecutant();
-      if ($this->_ref_executant->secteur == 2 && !$this->_ref_executant->option_coordination) {
+      if ($this->_ref_executant->secteur == 2 && !$this->_ref_executant->contrat_acces_soins) {
         return $this->_tarif_sans_asso;
       }
     }
