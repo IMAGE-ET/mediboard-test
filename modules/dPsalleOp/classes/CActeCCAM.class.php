@@ -332,8 +332,8 @@ class CActeCCAM extends CActe {
       }
 
       // Gratuit
-      if (count($details) > 7) {
-        $this->gratuit = $details[7];
+      if (count($details) > 8) {
+        $this->gratuit = $details[8];
       }
       
       $this->updateFormFields();
