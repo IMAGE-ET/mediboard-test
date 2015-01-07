@@ -327,9 +327,14 @@ class CActeCCAM extends CActe {
         $this->rembourse = $details[6];
       }
 
-      // Gratuit
+      // Charges supplémentaires
       if (count($details) > 7) {
-        $this->gratuit = $details[7];
+        $this->charges_sup = $details[7];
+      }
+
+      // Gratuit
+      if (count($details) > 8) {
+        $this->gratuit = $details[8];
       }
 
       $this->updateFormFields();
