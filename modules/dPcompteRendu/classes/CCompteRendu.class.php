@@ -199,7 +199,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     $backProps["correspondants_courrier"] = "CCorrespondantCourrier compte_rendu_id";
     $backProps["echanges_hl7v3"]          = "CExchangeHL7v3 object_id cascade";
     $backProps["xds_submission_lot"]      = "CXDSSubmissionLotToDocument object_id";
-    $backProps["document_child"]          = "CCompteRendu parent_doc_id";
+
     return $backProps;
   }
 
@@ -230,7 +230,6 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     $props["preface_id"]       = "ref class|CCompteRendu";
     $props["ending_id"]        = "ref class|CCompteRendu";
     $props["modele_id"]        = "ref class|CCompteRendu nullify show|0";
-    $props["parent_doc_id"]    = "ref class|CCompteRendu";
     $props["height"]           = "float min|0 show|0";
     $props["margin_top"]       = "float notNull min|0 default|2 show|0";
     $props["margin_bottom"]    = "float notNull min|0 default|2 show|0";
