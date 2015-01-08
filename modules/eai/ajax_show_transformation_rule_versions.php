@@ -16,12 +16,12 @@ $transformation_rule_id = CValue::get("transformation_rule_id");
 $standard_name          = CValue::get("standard_name");
 $profil_name            = CValue::get("profil_name");
 
-if (!$standard_name) {
-  return;
-}
+$versions = array();
 
-$standard = new $standard_name;
-$versions_standard = $standard->getVersions();
+if ($standard_name) {
+  $standard = new $standard_name;
+  $versions = $standard->getVersions();
+}
 
 $versions_profil = array();
 if ($profil_name && $profil_name != "none") {
@@ -30,13 +30,16 @@ if ($profil_name && $profil_name != "none") {
   $classname= "C$profil_name";
 
   $profil = new $classname;
-  $versions_profil = $profil->getVersions();
+  $versions = $profil->getVersions();
 }
-
-$versions = $versions_profil ? $versions_profil : $versions_standard;
 
 $transformation_rule = new CEAITransformationRule();
 $transformation_rule->load($transformation_rule_id);
+
+if (empty($versions) && $transformation_rule->version) {
+  $versions = array ($transformation_rule->version);
+}
+
 
 $smarty = new CSmartyDP();
 $smarty->assign("versions"           , $versions);
