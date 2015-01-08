@@ -16,6 +16,7 @@
   Main.add(function() {
     var states = ['', 'defaut', 'absence', 'bridge', 'pivot', 'mobile', 'appareil', 'app-partiel', 'implant'];
     SchemaDentaire.initialize("dents-schema", states);
+    guessVentilation();
   });
 
   callbackIntub = function(consult_id, consult) {
@@ -42,7 +43,7 @@
     });
 
     Control.Tabs.setTabCount("Intub", count_tab);
-  }
+  };
 
   callbackEtatDent = function() {
     var count_tab = 0;
@@ -209,7 +210,6 @@
               <fieldset>
                 <legend>
                   Critères de ventilation
-                  <button type="button" class="tick" onclick="guessVentilation()">Evaluer</button>
                 </legend>
                 <div id="ventilation_area">
                   {{mb_include module="cabinet" template="inc_guess_ventilation"}}

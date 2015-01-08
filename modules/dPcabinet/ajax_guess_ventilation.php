@@ -23,11 +23,21 @@ $patient->load($patient_id);
 
 $constantes = reset($patient->loadRefConstantesMedicales(null, array("poids", "taille")));
 
-$consult_anesth->plus_de_55_ans = $patient->_annees > 55 ? 1 : 0;
-$consult_anesth->imc_sup_26 = $constantes->_imc > 26 ? 1 : 0;
+
+$auto_55 = false;
+$auto_imc26 = false;
+if ($patient->_annees) {
+  $consult_anesth->plus_de_55_ans = $patient->_annees > 55 ? 1 : 0;
+  $auto_55 = 1;
+}
+
+if ($constantes->_imc) {
+  $consult_anesth->imc_sup_26 = $constantes->_imc > 26 ? 1 : 0;
+  $auto_imc26 = 1;
+}
 
 $smarty = new CSmartyDP();
-
 $smarty->assign("consult_anesth", $consult_anesth);
-
+$smarty->assign("plus_de_55_ans", $auto_55);
+$smarty->assign("imc_sup_26", $auto_imc26);
 $smarty->display("inc_guess_ventilation.tpl");
