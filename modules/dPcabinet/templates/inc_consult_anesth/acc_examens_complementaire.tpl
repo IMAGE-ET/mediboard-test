@@ -280,7 +280,7 @@
           {{assign var=sejour value=$consult_anesth->_ref_sejour}}
         {{/if}}
         {{assign var=prescription value=$sejour->_ref_prescription_sejour}}
-        {{if $prescription->_id}}
+        {{if $prescription && $prescription->_id}}
           <br />
           <button class="print" onclick="PlanSoins.printBons('{{$prescription->_id}}')">Bons</button>
         {{/if}}
