@@ -9,7 +9,7 @@
     </th>
   <tr>
     <td class="narrow">
-      <button onclick="new Url('planningOp', 'ajax_import_sae_base').requestUpdate('import-log');" class="change">
+      <button onclick="new Url('dPetablissement', 'ajax_import_sae_base').requestUpdate('import-log');" class="change">
         {{tr}}Import{{/tr}}
       </button>
     </td>

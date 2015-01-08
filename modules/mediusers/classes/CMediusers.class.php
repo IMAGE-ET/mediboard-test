@@ -593,20 +593,10 @@ class CMediusers extends CPerson {
 
       // Initiales
       if (!$this->_shortview = $this->initials) {
-        foreach (explode("-", $this->_user_first_name) as $value) {
-          if ($value != '') {
-            $this->_shortview .= $value[0];
-          }
-        }
-
-        // Initiales du nom
-        foreach (explode(" ", $this->_user_last_name) as $value) {
-          if ($value != '') {
-            $this->_shortview .= $value[0];
-          }
-        }
+        $this->_shortview .= CMbString::makeInitials($this->_user_first_name, "-");
+        $this->_shortview .= CMbString::makeInitials($this->_user_last_name);
       }
-      $this->_shortview      = strtoupper($this->_shortview);
+
       $this->_user_type_view = CValue::read(CUser::$types, $this->_user_type);
     }
 

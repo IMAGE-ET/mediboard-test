@@ -12,10 +12,6 @@ Main.add(function () {
 });
 </script>
 
-<button class="new" onclick="editCEtabExterne('0')">
-  {{tr}}CEtabExterne-title-create{{/tr}}
-</button>
-
 <form name="etabExterne" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
   {{mb_class object=$etab_externe}}
   {{mb_key   object=$etab_externe}}

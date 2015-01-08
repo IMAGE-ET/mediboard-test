@@ -13,9 +13,9 @@ CCanDo::checkAdmin();
 
 $ds = CSQLDataSource::get("sae");
 
-$sourcePath = "modules/dPplanningOp/base/sae.tar.gz";
-$targetDir = "tmp/dPplanningOp";
-$targetPath = "tmp/dPplanningOp/sae.sql";
+$sourcePath = "modules/dPetablissement/base/sae.tar.gz";
+$targetDir = "tmp/dPetablissement";
+$targetPath = "tmp/dPetablissement/sae.sql";
 
 // Extract the SQL dump
 if (null == $nbFiles = CMbPath::extract($sourcePath, $targetDir)) {

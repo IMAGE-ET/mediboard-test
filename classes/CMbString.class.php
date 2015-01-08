@@ -1855,4 +1855,24 @@ abstract class CMbString {
 
     return self::$diff_html = self::purifyHTML($html);
   }
+
+  /**
+   * Making initials method from a string.
+   *
+   * @param string $text the text which we want to extract initials
+   * @param string $char the char which we want to explode the text
+   *
+   * @return string Initials
+   */
+  static function makeInitials ($text, $char = " ") {
+    $initials = "";
+
+    foreach (explode($char, $text) as $value) {
+      if ($value != '') {
+        $initials .= $value[0];
+      }
+    }
+
+    return self::upper($initials);
+  }
 }

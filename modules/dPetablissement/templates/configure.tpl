@@ -26,6 +26,7 @@
   <li>
     <a href="#CEtabExterne-import">Import {{tr}}CEtabExterne{{/tr}}</a>
   </li>
+  <li><a href="#config-sae-base"      >{{tr}}config-sae-base{{/tr}}</a></li>
 </ul>
 <hr class="control_tabs" />
 
@@ -39,4 +40,8 @@
 
 <div id="CEtabExterne-import" style="display: none;">
   {{mb_include module=etablissement template=inc_import_etab_externe}}
+</div>
+
+<div id="config-sae-base" style="display: none;">
+  {{mb_include template=inc_config_base_sae}}
 </div>

@@ -13,6 +13,31 @@
  * dPetablissement Setup class
  */
 class CSetupdPetablissement extends CSetup {
+
+  /**
+   * Ajout des codes pour les Groups
+   *
+   * @return bool
+   */
+  protected function addCodeToGroups () {
+    $ds = CSQLDataSource::get("std");
+
+    $request = new CRequest();
+    $request->addSelect(array("group_id", "code", "text"));
+    $request->addTable("groups_mediboard");
+
+    $query = $request->makeSelect();
+    $groups = $ds->loadList($query);
+
+    foreach ($groups as $_group) {
+      $group_id = $_group["group_id"];
+      $code = CMbString::makeInitials($_group["text"]);
+      $query = $ds->prepare("UPDATE `groups_mediboard` SET `code`=?1 WHERE `group_id`= ?2", $code, $group_id);
+      $ds->exec($query);
+    }
+    return true;
+  }
+
   /**
    * @see parent::__construct();
    */
@@ -128,6 +153,73 @@ class CSetupdPetablissement extends CSetup {
                 ADD `lon` FLOAT;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.33";
+    $this->makeRevision("0.33");
+
+    $query = "ALTER TABLE `groups_mediboard`
+                ADD `code` VARCHAR (80) NOT NULL,
+                ADD `short_name` VARCHAR (255),
+                ADD `description` TEXT,
+                ADD `user_id` INT (11) UNSIGNED,
+                ADD `legal_entity_id` INT (11) UNSIGNED,
+                ADD `opening_reason` TEXT,
+                ADD `opening_date` DATE,
+                ADD `closing_reason` TEXT,
+                ADD `closing_date` DATE,
+                ADD `activation_date` DATE,
+                ADD `inactivation_date` DATE
+               ;";
+    $this->addQuery($query);
+
+    $query="CREATE TABLE `legal_entity` (
+                `legal_entity_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `name` VARCHAR (255) NOT NULL,
+                `finess` INT (9) UNSIGNED ZEROFILL,
+                `rmess` INT (9) UNSIGNED ZEROFILL,
+                `address` TEXT,
+                `zip_code` VARCHAR (10),
+                `city` VARCHAR (50),
+                `country` INT (11),
+                `insee` MEDIUMINT (3) UNSIGNED ZEROFILL,
+                `siren` INT (9) UNSIGNED ZEROFILL,
+                `nic` INT (11),
+                `legal_status_code` INT (11) UNSIGNED,
+                `code` VARCHAR (80) NOT NULL,
+                `short_name` VARCHAR (255),
+                `description` TEXT,
+                `user_id` INT (11) UNSIGNED,
+                `opening_reason` TEXT,
+                `opening_date` DATE,
+                `closing_reason` TEXT,
+                `closing_date` DATE,
+                `activation_date` DATE,
+                `inactivation_date` DATE
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query="ALTER TABLE `legal_entity`
+                ADD INDEX (`legal_status_code`),
+                ADD INDEX (`mediuser_id`),
+                ADD INDEX (`opening_date`),
+                ADD INDEX (`closing_date`),
+                ADD INDEX (`activation_date`),
+                ADD INDEX (`inactivation_date`);";
+    $this->addQuery($query);
+
+    $this->addMethod("addCodeToGroups");
+
+    $this->mod_version = "0.34";
+
+    // Data source query
+    $query = "SHOW TABLES LIKE 'legal_status'";
+    $this->addDatasource("sae", $query);
+
+    if (array_key_exists('sae', CAppUI::conf('db'))) {
+      $dsn = CSQLDataSource::get('sae');
+      $test = $dsn->exec('SHOW TABLES LIKE \'legal_status\';');
+      if ($test && $dsn->fetchRow($test)) {
+        $query = "SELECT * FROM `legal_status` WHERE `status_code` = '1';";
+        $this->addDatasource("sae", $query);
+      }
+    }
   } 
 }

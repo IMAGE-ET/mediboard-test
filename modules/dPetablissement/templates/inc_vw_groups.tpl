@@ -1,12 +1,12 @@
 
-<script type="text/javascript">
+<script>
 Main.add(function () {
   InseeFields.initCPVille("group", "cp", "ville", "tel");
 });
 </script>
 
 
-<form name="group" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="group" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
 
 {{mb_class object=$group}}
 {{mb_key   object=$group}}
@@ -15,8 +15,16 @@ Main.add(function () {
   {{mb_include module=system template=inc_form_table_header object=$group}}
 
   <tr>
-    <th>{{mb_label object=$group field="text"}}</th>
-    <td>{{mb_field object=$group field="text"}}</td>
+    <th>{{mb_label object=$group field="_name"}}</th>
+    <td>{{mb_field object=$group field="_name"}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$group field="code"}}</th>
+    <td>{{mb_field object=$group field="code"}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$group field="description"}}</th>
+    <td>{{mb_field object=$group field="description"}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$group field="raison_sociale"}}</th>
@@ -126,7 +134,44 @@ Main.add(function () {
       <td>{{mb_field object=$group field="rcc"}}</td>
     </tr>
   {{/if}}
-  
+
+  <tr>
+    <th>{{mb_label object=$group field=legal_entity_id}}</th>
+    <td >
+      <select name="legal_entity_id" style="width:14em; vertical-align: top">
+        <option value="">{{tr}}Choose{{/tr}}</option>
+        {{foreach from=$legal_entities item=_legal_entity}}
+          <option value="{{$_legal_entity->_id}}" {{if $group->legal_entity_id == $_legal_entity->_id}}selected{{/if}}>{{$_legal_entity->name}}</option>
+        {{/foreach}}
+      </select>
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{mb_label object=$group field="opening_date"}}</th>
+    <td>{{mb_field object=$group field="opening_date" form=group register=true}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$group field="opening_reason"}}</th>
+    <td>{{mb_field object=$group field="opening_reason"}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$group field="closing_date"}}</th>
+    <td>{{mb_field object=$group field="closing_date" form=group register=true}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$group field="closing_reason"}}</th>
+    <td>{{mb_field object=$group field="closing_reason"}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$group field="activation_date"}}</th>
+    <td>{{mb_field object=$group field="activation_date" form=group register=true}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$group field="inactivation_date"}}</th>
+    <td>{{mb_field object=$group field="inactivation_date" form=group register=true}}</td>
+  </tr>
+
   <tr>
     <td class="button" colspan="2">
     {{if $group->_id}}

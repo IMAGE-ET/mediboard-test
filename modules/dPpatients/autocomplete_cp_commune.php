@@ -24,7 +24,8 @@ $nbPays  = 0;
 $matches = array();
 
 // Needle
-$keyword = CValue::post($column == "code_postal" ? "cp" : "ville");
+$name =  CValue::get("name_input");
+$keyword = CValue::post($name);
 $needle  = $column == "code_postal" ? "$keyword%" : "%$keyword%";
 
 // Query

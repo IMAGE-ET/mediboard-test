@@ -12,7 +12,7 @@
 /**
  * Group class (Etablissement)
  */
-class CGroups extends CMbObject {
+class CGroups extends CEntity {
   public $group_id;
 
   // DB Fields
@@ -39,6 +39,7 @@ class CGroups extends CMbObject {
   public $rcc;
   public $lat;
   public $lon;
+  public $legal_entity_id;
 
   // Form fields
   public $_cp_court;
@@ -68,6 +69,9 @@ class CGroups extends CMbObject {
 
   /** @var self */
   static $_ref_current = null;
+
+  /** @var CLegalEntity */
+  public $_ref_legal_entity;
 
   /**
    * @see parent::getSpec()
@@ -229,6 +233,7 @@ class CGroups extends CMbObject {
     $props["rcc"]                 = "str";
     $props["lat"]                 = "float";
     $props["lon"]                 = "float";
+    $props["legal_entity_id"]     = "ref class|CLegalEntity";
 
     $props["_cp_court"]           = "numchar length|2";
 
@@ -240,8 +245,8 @@ class CGroups extends CMbObject {
    */
   function updateFormFields () {
     parent::updateFormFields();
-    $this->_view = $this->text;
-    $this->_shortview = CMbString::truncate($this->text);
+    $this->_view = $this->_name;
+    $this->_shortview = CMbString::truncate($this->_name);
     $this->_cp_court = substr($this->cp, 0, 2);
   }
 
@@ -539,5 +544,28 @@ class CGroups extends CMbObject {
    */
   function isNDASupplier() {
     return $this->_is_nda_supplier = $this->isNumberSupplier("CSejour");
+  }
+
+  /**
+   * @see parent::mapEntityTo()
+   */
+  function mapEntityTo () {
+    $this->_name = $this->text;
+  }
+
+  /**
+   * @see parent::mapEntityFrom()
+   */
+  function mapEntityFrom () {
+    $this->text = $this->_name;
+  }
+
+  /**
+   * Method to load Legal Entity
+   *
+   * @return CLegalEntity
+   */
+  function loadRefLegalEntity () {
+    return $this->_ref_legal_entity = $this->loadFwdRef("legal_entity_id");
   }
 }
