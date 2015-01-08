@@ -47,7 +47,5 @@ if (count($dossier_medical->_codes_cim)) {
 }
 
 $smarty = new CSmartyDP;
-
 $smarty->assign("consult_anesth", $consult_anesth);
-
 $smarty->display("inc_guess_score_apfel.tpl");

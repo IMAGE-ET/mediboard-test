@@ -9,6 +9,10 @@
     return false;
   };
 
+  Main.add(function() {
+    guessScoreApfel();
+  });
+
   reloadListTech = function() {
     var UrllistTech = new Url("dPcabinet", "httpreq_vw_list_techniques_comp");
     UrllistTech.addParam("selConsult", "{{$consult->_id}}");
@@ -225,7 +229,7 @@
     </td>
     <td>
       <fieldset>
-        <legend>Score APFEL <button type="button" class="tick" onclick="guessScoreApfel()">Evaluer</button></legend>
+        <legend>Score APFEL</legend>
         <div id="score_apfel_area">
           {{mb_include module=cabinet template=inc_guess_score_apfel}}
         </div>

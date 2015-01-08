@@ -1,3 +1,6 @@
+{{mb_default var=plus_de_55_ans value=0}}
+{{mb_default var=imc_sup_26 value=0}}
+
 <table class="layout">
   <tr>
     <td>

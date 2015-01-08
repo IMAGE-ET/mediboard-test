@@ -105,7 +105,26 @@
   }
 
   Main.add(function () {
-    tabsConsultAnesth = Control.Tabs.create('tab-consult-anesth', false);
+    tabsConsultAnesth = Control.Tabs.create('tab-consult-anesth', false, {
+      afterChange: function (container) {
+        switch (container.id) {
+          case 'Intub':
+            if (window.guessVentilation) {
+              guessVentilation();
+            }
+            break;
+
+          case 'InfoAnesth':
+            if (window.guessScoreApfel) {
+              guessScoreApfel();
+            }
+            break;
+
+          default:
+            break;
+        }
+      }
+      });
     loadAntTrait();
     loadIntervention();
     if (tabsConsultAnesth.activeLink.key == "reglement") {

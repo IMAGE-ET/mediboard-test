@@ -16,7 +16,6 @@
   Main.add(function() {
     var states = ['', 'defaut', 'absence', 'bridge', 'pivot', 'mobile', 'appareil', 'app-partiel', 'implant'];
     SchemaDentaire.initialize("dents-schema", states);
-    guessVentilation();
   });
 
   callbackIntub = function(consult_id, consult) {
