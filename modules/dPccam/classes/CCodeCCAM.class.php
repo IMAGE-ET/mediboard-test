@@ -432,12 +432,12 @@ class CCodeCCAM extends CCCAM {
     if (!$date) {
       $date = CMbDT::date();
     }
-    $date = CMbDT::format($date, "%Y%M%D");
+    $date = CMbDT::format($date, "%Y%m%d");
     $ds = self::getSpec()->ds;
     $query = "SELECT `CODE`
       FROM  `t_modificateurforfait`
-     WHERE  (`DATEFIN` = '00000000' OR `DATEFIN` > '$date')
-       AND `DATEDEBUT` <= '$date';";
+      WHERE  (`DATEFIN` = '00000000' OR `DATEFIN` > '$date')
+        AND `DATEDEBUT` <= '$date';";
     $result = $ds->exec($query);
     $modifs = "";
     while ($row = $ds->fetchArray($result)) {
