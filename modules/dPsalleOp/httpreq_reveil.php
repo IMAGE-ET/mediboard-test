@@ -146,6 +146,8 @@ foreach ($listOperations as $op) {
   $op->loadRefChir()->loadRefFunction();
   $op->loadRefPlageOp();
   $op->loadRefPatient();
+  $dossier_med = $op->_ref_patient->loadRefDossierMedical();
+  $allergies = $dossier_med->loadRefsAllergies();
   $op->loadAffectationsPersonnel();
   $op->loadBrancardage();
   

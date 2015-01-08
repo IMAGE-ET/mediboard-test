@@ -94,6 +94,9 @@
           {{mb_include module=Imeds template=inc_sejour_labo link="#1" sejour=$_operation->_ref_sejour float="none"}}
         {{/if}}
         <button type="button" class="injection notext" onclick="Operation.dossierBloc('{{$_operation->_id}}', true);">Dossier de bloc</button>
+        {{if $_operation->_ref_patient->_ref_dossier_medical->_ref_allergies|@count}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_patient->_guid}}', 'allergies');"><img src="images/icons/allergies_warning.png" alt="" /></span>
+        {{/if}}
       </td>
       <td class="text">
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">

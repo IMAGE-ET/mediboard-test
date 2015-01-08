@@ -120,6 +120,9 @@
         <button class="labo button notext" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}','Imeds');">Labo</button>
       {{/if}}
       <button type="button" class="injection notext" onclick="Operation.dossierBloc('{{$_operation->_id}}', true)">Dossier de bloc</button>
+      {{if $_operation->_ref_patient->_ref_dossier_medical->_ref_allergies|@count}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_patient->_guid}}', 'allergies');"><img src="images/icons/allergies_warning.png" alt="" /></span>
+      {{/if}}
     </td>
     {{if $use_poste}}
       <td>

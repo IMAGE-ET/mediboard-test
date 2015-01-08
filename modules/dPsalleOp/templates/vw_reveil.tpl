@@ -33,6 +33,12 @@
 
 <script>
   Main.add(function () {
+    ObjectTooltip.modes.allergies = {
+      module: "patients",
+      action: "ajax_vw_allergies",
+      sClass: "tooltip"
+    };
+
     Control.Tabs.create('reveil_tabs', true);
 
     var url = new Url("salleOp", "httpreq_reveil");
