@@ -194,7 +194,7 @@
                 ({{$_operation->_ref_patient->_age}})
               {{/if}}
             </span>
-            {{if $_operation->_ref_affectation && $_operation->_ref_affectation->_ref_lit->_id && $conf.dPbloc.CPlageOp.chambre_operation == 1}}
+            {{if $_operation->_ref_affectation && $_operation->_ref_affectation->_ref_lit && $_operation->_ref_affectation->_ref_lit->_id && $conf.dPbloc.CPlageOp.chambre_operation == 1}}
               <div style="font-size: 0.9em; white-space: nowrap; border: none;">
                 {{$_operation->_ref_affectation->_ref_lit->_ref_chambre->_ref_service}} &rarr; {{$_operation->_ref_affectation->_ref_lit}}
               </div>
