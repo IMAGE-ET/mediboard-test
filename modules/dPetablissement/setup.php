@@ -198,7 +198,7 @@ class CSetupdPetablissement extends CSetup {
 
     $query="ALTER TABLE `legal_entity`
                 ADD INDEX (`legal_status_code`),
-                ADD INDEX (`mediuser_id`),
+                ADD INDEX (`user_id`),
                 ADD INDEX (`opening_date`),
                 ADD INDEX (`closing_date`),
                 ADD INDEX (`activation_date`),
