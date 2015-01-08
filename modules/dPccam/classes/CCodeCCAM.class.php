@@ -134,7 +134,7 @@ class CCodeCCAM extends CCCAM {
    * @return bool Existence ou pas du code CCAM
    */
   function load() {
-    $ds = self::$spec->ds;
+    $ds = self::getSpec()->ds;
 
     $query = "SELECT p_acte.*
       FROM p_acte
@@ -290,7 +290,7 @@ class CCodeCCAM extends CCCAM {
    * @return string Libellé du type
    */
   function loadTypeLibelle() {
-    $ds = self::$spec->ds;
+    $ds = self::getSpec()->ds;
     $query = "SELECT *
       FROM c_typeacte
       WHERE c_typeacte.CODE = %";
@@ -308,7 +308,7 @@ class CCodeCCAM extends CCCAM {
    * @return string Le forfait
    */
   function getForfaitSpec() {
-    $ds = self::$spec->ds;
+    $ds = self::getSpec()->ds;
     $query = "SELECT *
       FROM forfaits
       WHERE forfaits.CODE = %";
@@ -325,7 +325,7 @@ class CCodeCCAM extends CCCAM {
    * @return array Liste des assurances
    */
   function loadAssurance() {
-    $ds = self::$spec->ds;
+    $ds = self::getSpec()->ds;
     foreach ($this->assurance as &$assurance) {
       if (!$assurance["db"]) {
         continue;
@@ -347,7 +347,7 @@ class CCodeCCAM extends CCCAM {
    * @return array Arborescence complète
    */
   function loadArborescence() {
-    $ds = self::$spec->ds;
+    $ds = self::getSpec()->ds;
     $pere  = "000001";
     $track = "";
     foreach ($this->arborescence as &$chapitre) {
@@ -408,7 +408,7 @@ class CCodeCCAM extends CCCAM {
     }
 
     // Chargement
-    $ds = self::$spec->ds;
+    $ds = self::getSpec()->ds;
 
     $query = "SELECT p_acte.CODE, p_acte.LIBELLELONG, p_acte.TYPE
         FROM p_acte
@@ -422,6 +422,34 @@ class CCodeCCAM extends CCCAM {
   }
 
   /**
+   * Récupération des modificateurs actifs pour une date donnée
+   *
+   * @param null $date Date de référence
+   *
+   * @return string Liste des modificateurs actifs
+   */
+  static function getModificateursActifs($date = null) {
+    $ds = self::getSpec()->ds;
+
+    if (!$date) {
+      $date = CMbDT::date();
+    }
+    $date = CMbDT::format($date, "%Y%m%d");
+
+    $query = "SELECT `CODE`
+      FROM  `t_modificateurforfait`
+      WHERE  (`DATEFIN` = '00000000' OR `DATEFIN` > '$date')
+        AND `DATEDEBUT` <= '$date';";
+    $result = $ds->exec($query);
+
+    $modifs = "";
+    while ($row = $ds->fetchArray($result)) {
+      $modifs .= $row["CODE"];
+    }
+    return $modifs;
+  }
+
+  /**
    * Récupération du forfait d'un modificateur
    *
    * @param string $modificateur Lettre clé du modificateur
@@ -429,7 +457,7 @@ class CCodeCCAM extends CCCAM {
    * @return array forfait et coefficient
    */
   static function getForfait($modificateur) {
-    $ds = self::$spec->ds;
+    $ds = self::getSpec()->ds;
     $query = "SELECT *
         FROM t_modificateurforfait
         WHERE CODE = %
@@ -451,7 +479,7 @@ class CCodeCCAM extends CCCAM {
    * @return float
    */
   static function getCoeffAsso($code) {
-    $ds = self::$spec->ds;
+    $ds = self::getSpec()->ds;
 
     if ($code == "X") {
       return 0;
@@ -557,7 +585,7 @@ class CCodeCCAM extends CCCAM {
    * @return array Tableau des actes
    */
   static function getActeRadio($code) {
-    $ds = self::$spec->ds;
+    $ds = self::getSpec()->ds;
 
     $query = "SELECT code
         FROM ccam_radio
