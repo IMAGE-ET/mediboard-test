@@ -29,7 +29,6 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
   public $preface_id;
   public $ending_id;
   public $modele_id;
-  public $parent_doc_id;
 
   // DB fields
   public $nom;
