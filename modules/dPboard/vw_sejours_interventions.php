@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -41,7 +41,7 @@ $graphs = array(
   ),
   graphActivite(
     $filterSejour->_date_min_stat, $filterSejour->_date_max_stat, $filterSejour->praticien_id,
-    null, null, null, $filterOperation->_codes_ccam, null, 0
+    null, null, null, null, $filterOperation->_codes_ccam, null, 0
   ),
 );
 
