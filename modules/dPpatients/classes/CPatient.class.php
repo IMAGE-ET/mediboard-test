@@ -225,7 +225,9 @@ class CPatient extends CPerson {
 
   //ean (for switzerland)
   public $_assuranceCC_ean;
+  public $_assuranceCC_name;
   public $_assureCC_id;
+  public $_assure_end_date;
   public $_assuranceCC_id;
 
   // Navigation Fields
@@ -522,6 +524,8 @@ class CPatient extends CPerson {
     $props["_assuranceCC_id"]   = "str length|5";
     $props["_assureCC_id"]      = "str maxLength|20";
     $props["_assuranceCC_ean"]  = "str";
+    $props["_assure_end_date"]  = "date";
+    $props["_assuranceCC_name"] = "str";
 
     $props["_IPP"]              = "str show|1";
 

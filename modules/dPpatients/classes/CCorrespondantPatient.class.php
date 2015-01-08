@@ -155,7 +155,7 @@ class CCorrespondantPatient extends CPerson {
    * @see parent::store()
    */
   function store() {
-    if (!$this->_id) {
+    if (!$this->_id && !$this->date_fin && !$this->date_debut) {
       $this->date_debut = CMbDT::date();
     }
 
