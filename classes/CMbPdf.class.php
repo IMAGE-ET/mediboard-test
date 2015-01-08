@@ -62,6 +62,7 @@ class CMbPdf extends TCPDF {
   public function WriteBarcodeGrid($x, $y, $width, $height, $col_num, $row_num, $data) {
     $cell_width = $width / $col_num;
     $cell_height = $height / $row_num;
+    $margin_top = $y;
     $i = 0;
 
     $delta_x = 0;
@@ -76,6 +77,11 @@ class CMbPdf extends TCPDF {
       if ($i % $col_num == 0 && $i != 0) {
         $y += $cell_height;
         $delta_x = 0;
+      }
+
+      if ($i > 1 && $i % ($col_num * $row_num) == 0) {
+        $this->AddPage();
+        $y = $margin_top;
       }
       
       $line_height = ($cell_height - $barcode_height) / (count($cell));
