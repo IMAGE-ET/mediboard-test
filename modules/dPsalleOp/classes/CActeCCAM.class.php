@@ -309,7 +309,9 @@ class CActeCCAM extends CActe {
       
       // Modificateurs
       if (count($details) > 3) {
-        $this->modificateurs = $details[3];
+        $modificateurs       = str_split($details[3]);
+        $list_modifs_actifs  = str_split(CCodeCCAM::getModificateursActifs());
+        $this->modificateurs = implode('', array_intersect($modificateurs, $list_modifs_actifs));
       } 
       
       // Dépassement
