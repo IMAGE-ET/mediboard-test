@@ -31,6 +31,7 @@ $pdf->setFont("vera", '', "10");
 
 $pdf->setPrintHeader(false);
 $pdf->setPrintFooter(false);
+$pdf->SetAutoPageBreak(0);
 
 // Creation d'une nouvelle page
 $pdf->AddPage();
