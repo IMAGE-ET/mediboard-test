@@ -29,7 +29,6 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
   public $preface_id;
   public $ending_id;
   public $modele_id;
-  public $parent_doc_id;
 
   // DB fields
   public $nom;
@@ -235,7 +234,6 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     $props["preface_id"]       = "ref class|CCompteRendu";
     $props["ending_id"]        = "ref class|CCompteRendu";
     $props["modele_id"]        = "ref class|CCompteRendu nullify show|0";
-    $props["parent_doc_id"]    = "ref class|CCompteRendu";
     $props["height"]           = "float min|0 show|0";
     $props["margin_top"]       = "float notNull min|0 default|2 show|0";
     $props["margin_bottom"]    = "float notNull min|0 default|2 show|0";
