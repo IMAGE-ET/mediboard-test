@@ -365,18 +365,26 @@ Main.add(function() {
           </tr>
         {{/if}}
         {{if "covercard"|module_active}}
-        <tr style="display:none">
-          <th>{{mb_label object=$patient field="_assureCC_id"}}</th>
-          <td>{{mb_field object=$patient field="_assureCC_id"}}</td>
-        </tr>
-        <tr style="display:none;">
-          <th>{{mb_label object=$patient field="_assuranceCC_id"}}</th>
-          <td>{{mb_field object=$patient field="_assuranceCC_id"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="_assuranceCC_ean"}}</th>
-          <td>{{mb_field object=$patient field="_assuranceCC_ean"}}</td>
-        </tr>
+          <tr style="display:none">
+            <th>{{mb_label object=$patient field="_assureCC_id"}}</th>
+            <td>{{mb_field object=$patient field="_assureCC_id"}}</td>
+          </tr>
+          <tr style="display:none">
+            <th>{{mb_label object=$patient field="_assure_end_date"}}</th>
+            <td>{{mb_field object=$patient field="_assure_end_date"}}</td>
+          </tr>
+          <tr style="display:none">
+            <th>{{mb_label object=$patient field="_assuranceCC_name"}}</th>
+            <td>{{mb_field object=$patient field="_assuranceCC_name"}}</td>
+          </tr>
+          <tr style="display:none;">
+            <th>{{mb_label object=$patient field="_assuranceCC_id"}}</th>
+            <td>{{mb_field object=$patient field="_assuranceCC_id"}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$patient field="_assuranceCC_ean"}}</th>
+            <td>{{mb_field object=$patient field="_assuranceCC_ean"}}</td>
+          </tr>
         {{/if}}
       </table>
     </td>
