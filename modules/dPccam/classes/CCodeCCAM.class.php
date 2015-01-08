@@ -443,7 +443,6 @@ class CCodeCCAM extends CCCAM {
     while ($row = $ds->fetchArray($result)) {
       $modifs .= $row["CODE"];
     }
-    mbTrace($modifs);
     return $modifs;
   }
 
