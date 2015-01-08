@@ -299,7 +299,10 @@ $obsolete_module = false;
 if ($m && $m != "system" && (!$a || $a == "index") && (!$user || !$user->_id || $user->isAdmin())) {
   $setupclass = "CSetup$m";
   $setup = new $setupclass;
+
+  $module = new CModule();
   $module->compareToSetup($setup);
+
   $obsolete_module = $module->_upgradable;
 }
 
