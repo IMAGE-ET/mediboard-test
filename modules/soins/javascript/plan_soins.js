@@ -14,7 +14,7 @@ PlanSoins = {
   save_nb_decalage:    null,
   plan_soin_id:        null,// L'id de l'element plan de soin
   regroup_lines:       null,
-
+  urlModaleAdministration:null,
   init: function(options){
     Object.extend(PlanSoins, options);
   },
@@ -99,7 +99,7 @@ PlanSoins = {
     url.addParam("multiple_adm", multiple_adm);
     url.addParam("replanification", replanif);
     url.addParam("lock_hour", lock_hour);
-    url.requestModal(800,600);
+    PlanSoins.urlModaleAdministration = url.requestModal(800,600);
   },
   
   addAdministrationPerf: function(prescription_line_mix_id, date, hour, time_prevue, sejour_id, replanification){
@@ -116,7 +116,8 @@ PlanSoins = {
     if (mode_dossier == "planification" && replanification) {
       url.addParam("replanification", true);
     }
-    url.requestModal(800,600);
+    PlanSoins.urlModaleAdministration = url.requestModal(800,600);
+
   },
 
   addPlanification: function(date, time, key_tab, object_id, object_class, element_id, unite_sans_planif){
