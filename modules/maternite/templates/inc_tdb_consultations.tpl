@@ -42,7 +42,7 @@
           <button type="button" class="tick_cancel notext" onclick="Tdb.changeStatusConsult('{{$_consult->_id}}', '16');">Annuler l'arrivée</button>
         {{/if}}
       </td>
-      <td><span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_ref_grossesse->_ref_parturiente->_guid}}');">{{mb_value object=$_consult->_ref_grossesse field=parturiente_id}}</span></td>
+      <td class="text"><span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_ref_grossesse->_ref_parturiente->_guid}}');">{{mb_value object=$_consult->_ref_grossesse field=parturiente_id}}</span></td>
       <td>
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_ref_plageconsult->_ref_chir->_guid}}');">
           {{mb_value object=$_consult->_ref_plageconsult field=chir_id}}

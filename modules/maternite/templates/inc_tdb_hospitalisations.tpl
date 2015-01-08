@@ -29,9 +29,9 @@
     <th class="narrow">{{mb_title class=CAffectation field=lit_id}}</th>
     <th>{{mb_title class=CGrossesse field=parturiente_id}}</th>
     <th class="narrow">{{mb_title class=CSejour field=entree}}</th>
-    <th>Acc.</th>
+    <th class="narrow">Acc.</th>
     <th class="narrow">Act. Mère</th>
-    <th class="narrow">Naissances</th>
+    <th>Naissances</th>
     <th class="narrow">Act. Enf.</th>
   </tr>
   {{foreach from=$listSejours item=_sejour}}
@@ -48,7 +48,7 @@
               {{mb_value object=$_sejour->_ref_curr_affectation field=lit_id}}
             </span>
           </td>
-          <td rowspan="{{$nb_naissance}}">
+          <td rowspan="{{$nb_naissance}}" class="text">
             <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_ref_grossesse->_ref_parturiente->_guid}}');">
               {{mb_value object=$_sejour->_ref_grossesse field=parturiente_id}}
             </span>
@@ -70,7 +70,7 @@
             <button type="button" class="accouchement_create notext" onclick="Tdb.editAccouchement(null, '{{$_sejour->_id}}', '{{$_sejour->_ref_grossesse->_id}}', '')">Accouchement</button>
           </td>
         {{/if}}
-        <td>
+        <td class="text">
           <span class="gender_{{$_naissance->_ref_sejour_enfant->_ref_patient->sexe}}" onmouseover="ObjectTooltip.createEx(this, '{{$_naissance->_ref_sejour_enfant->_guid}}');">
             {{$_naissance->_ref_sejour_enfant->_ref_patient}} {{if $_naissance->date_time}}<strong>(J{{$_naissance->_day_relative}})</strong>{{/if}}
           </span>
@@ -86,7 +86,7 @@
               {{mb_value object=$_sejour->_ref_curr_affectation field=lit_id}}
             </span>
         </td>
-        <td rowspan="{{$nb_naissance}}">
+        <td rowspan="{{$nb_naissance}}" class="text">
             <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_ref_grossesse->_ref_parturiente->_guid}}');">
               {{mb_value object=$_sejour->_ref_grossesse field=parturiente_id}}
             </span>

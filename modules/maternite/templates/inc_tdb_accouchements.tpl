@@ -43,7 +43,7 @@
   <tbody id="tbody_accouchements_tab">
     {{foreach from=$ops item=_op}}
       <tr>
-        <td>
+        <td class="text">
           <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_sejour->_ref_grossesse->_ref_parturiente->_guid}}');">{{$_op->_ref_sejour->_ref_grossesse->_ref_parturiente}}</span><br/>
           <span class="compact" onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_sejour->_ref_curr_affectation->_guid}}');">{{$_op->_ref_sejour->_ref_curr_affectation}}</span>
         </td>
@@ -58,7 +58,7 @@
         </td>
         <td>
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}');">
-            {{if $_op->date != $date}}{{mb_value object=$_op field=date}}{{/if}}
+            {{if $_op->date != $date}}{{mb_value object=$_op field=date}}<br/>{{/if}}
             {{$_op->_datetime|date_format:$conf.time}}
           </span>
         </td>
