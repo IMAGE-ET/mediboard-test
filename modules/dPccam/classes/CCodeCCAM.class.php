@@ -422,6 +422,32 @@ class CCodeCCAM extends CCCAM {
   }
 
   /**
+   * Récupération des modificateurs actifs pour une date donnée
+   *
+   * @param null $date Date de référence
+   *
+   * @return string Liste des modificateurs actifs
+   */
+  static function getModificateursActifs($date = null) {
+    if (!$date) {
+      $date = CMbDT::date();
+    }
+    $date = CMbDT::format($date, "%Y%m%d");
+    $ds = self::getSpec()->ds;
+    $query = "SELECT `CODE`
+      FROM  `t_modificateurforfait`
+      WHERE  (`DATEFIN` = '00000000' OR `DATEFIN` > '$date')
+       AND `DATEDEBUT` <= '$date';";
+    $result = $ds->exec($query);
+    $modifs = "";
+    while ($row = $ds->fetchArray($result)) {
+      $modifs .= $row["CODE"];
+    }
+    mbTrace($modifs);
+    return $modifs;
+  }
+
+  /**
    * Récupération du forfait d'un modificateur
    *
    * @param string $modificateur Lettre clé du modificateur
