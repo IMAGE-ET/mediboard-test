@@ -2359,8 +2359,9 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $consultation = new self();
     $ds = $consultation->getDS();
     $where = array(
-      "plageconsult.date" => " > '$date'",
+      "plageconsult.date"           => " > '$date'",
       "consultation.si_desistement" => "= '1'",
+      "consultation.annule"         => "= '0'",
     );
     $where[] = "plageconsult.chir_id ".$ds->prepareIn($chir_ids)." OR plageconsult.remplacant_id ".$ds->prepareIn($chir_ids);
     $ljoin = array(

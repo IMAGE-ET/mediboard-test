@@ -30,9 +30,10 @@ else {
 // Liste des consultations a avancer si desistement
 $now = CMbDT::date();
 $where = array(
-  "plageconsult.date" => " > '$now'",
-  "plageconsult.chir_id" => $ds->prepareIn($list_chir_ids),
+  "plageconsult.date"           => " > '$now'",
+  "plageconsult.chir_id"        => $ds->prepareIn($list_chir_ids),
   "consultation.si_desistement" => "= '1'",
+  "consultation.annule"         => "= '0'",
 );
 $ljoin = array(
   "plageconsult" => "plageconsult.plageconsult_id = consultation.plageconsult_id",
