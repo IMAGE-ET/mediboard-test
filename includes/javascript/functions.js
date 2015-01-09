@@ -2381,3 +2381,88 @@ getRandomPassword = function (object_class, field) {
     }
   );
 };
+
+var ProgressMeter = {
+  colors: {
+    low:    '#F00',
+    medium: '#E8AC07',
+    high:   '#93D23F',
+    empty:  '#BBB'
+  },
+
+  thresholds: {
+    low:  25,
+    high: 75
+  },
+
+  options: {
+    series: {
+      pie:  {
+        innerRadius: 0.4,
+        show: true,
+        label: { show: false }
+      }
+    },
+    legend: { show: false }
+  },
+
+  /**
+   * Set custom colors options
+   *
+   * @param {Object} colors
+   */
+  setColors : function (colors) {
+    this.colors = Object.extend(this.colors, colors);
+  },
+
+  /**
+   * Set custom thresholds options
+   *
+   * @param {Object} thresholds
+   */
+  setThresholds : function (thresholds) {
+    this.thresholds = Object.extend(this.thresholds, thresholds);
+  },
+
+  /**
+   * Set custom graphic options
+   *
+   * @param {Object} options
+   */
+  setOptions : function (options) {
+    this.options = Object.extend(this.options, options);
+  },
+
+  /**
+   * Display JQuery Flot progress graphic
+   *
+   * @param {Element|String} element DOM element or element ID
+   * @param {Number}         score   Progress score
+   */
+  init : function (element, score) {
+    score = parseFloat(score).toFixed(3);
+
+    var container = $(element);
+
+    // Default color: Low level
+    var color = this.colors.low;
+
+    // Medium level
+    if (score > this.thresholds.low && score < this.thresholds.high) {
+      color = this.colors.medium;
+    }
+    // High level
+    else if (score >= this.thresholds.high) {
+      color = this.colors.high;
+    }
+
+    // Progress score
+    var data = [
+      { data: score, color: color },
+      { data: 100 - score, color: this.colors.empty }
+    ];
+
+    // Graphic rendering
+    jQuery.plot(container, data, this.options);
+  }
+};
