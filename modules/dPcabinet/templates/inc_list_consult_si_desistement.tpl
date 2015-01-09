@@ -90,7 +90,7 @@
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="6" class="empty">{{tr}}CConsultation.none{{/tr}}</td>
+    <td colspan="9" class="empty">{{tr}}CConsultation.none{{/tr}}</td>
   </tr>
   {{/foreach}}
 </table>
