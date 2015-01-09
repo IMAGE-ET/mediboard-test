@@ -56,6 +56,9 @@ if ($corres_nom) {
 if ($corres_prenom) {
   $where["prenom"] = $ds->prepareLike("%$corres_prenom%");
 }
+if ($corres_surnom) {
+  $where["surnom"] = $ds->prepareLike("%$corres_surnom");
+}
 
 if ($corres_relation) {
   $where["relation"] = " = '$corres_relation'";
