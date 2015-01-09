@@ -433,6 +433,7 @@ class CCodeCCAM extends CCCAM {
       $date = CMbDT::date();
     }
     $date = CMbDT::format($date, "%Y%m%d");
+
     $ds = self::getSpec()->ds;
     $query = "SELECT `CODE`
       FROM  `t_modificateurforfait`
@@ -443,6 +444,7 @@ class CCodeCCAM extends CCCAM {
     while ($row = $ds->fetchArray($result)) {
       $modifs .= $row["CODE"];
     }
+
     return $modifs;
   }
 
@@ -450,21 +452,29 @@ class CCodeCCAM extends CCCAM {
    * Récupération du forfait d'un modificateur
    *
    * @param string $modificateur Lettre clé du modificateur
+   * @param string $date         Date de référence
    *
    * @return array forfait et coefficient
    */
-  static function getForfait($modificateur) {
-    $ds = self::$spec->ds;
+  static function getForfait($modificateur, $date = null) {
+    if (!$date) {
+      $date = CMbDT::date();
+    }
+
+    $date = CMbDT::format($date, "%Y%m%d");
+    $ds = self::getSpec()->ds;
     $query = "SELECT *
         FROM t_modificateurforfait
-        WHERE CODE = %
-          AND DATEFIN = '00000000'";
-    $query = $ds->prepare($query, $modificateur);
+        WHERE CODE = %1
+          AND (DATEFIN = '00000000' OR DATEFIN > %2)
+          AND DATEDEBUT <= %2;";
+    $query = $ds->prepare($query, $modificateur, $date);
     $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
     $valeur = array();
     $valeur["forfait"] = $row["FORFAIT"] / 100;
     $valeur["coefficient"] = $row["COEFFICIENT"] / 10;
+
     return $valeur;
   }
 

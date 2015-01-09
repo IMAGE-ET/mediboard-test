@@ -593,11 +593,12 @@ class CDatedCodeCCAM {
    * Récupération du forfait d'un modificateur
    *
    * @param string $modificateur Lettre clé du modificateur
+   * @param string $date         Date de référence
    *
    * @return array forfait et coefficient
    */
-  function getForfait($modificateur) {
-    return CCodeCCAM::getForfait($modificateur);
+  function getForfait($modificateur, $date = null) {
+    return CCodeCCAM::getForfait($modificateur, $date);
   }
 
   /**
