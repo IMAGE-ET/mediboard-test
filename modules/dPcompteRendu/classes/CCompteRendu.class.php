@@ -1537,11 +1537,10 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
     $query = new CRequest();
     $query->addColumn("COUNT(`compte_rendu_id`)", "docs_count");
-    $query->addColumn("SUM(LENGTH(`content_html`.`content`))", "docs_weight");
+    $query->addColumn("SUM(`doc_size`)", "docs_weight");
     $query->addColumn("object_class");
     $query->addColumn("file_category_id", "category_id");
     $query->addTable("compte_rendu");
-    $query->addLJoinClause("content_html", "`compte_rendu`.`content_id` = `content_html`.`content_id`");
     $query->addGroup("object_class, category_id");
 
     if (is_array($user_ids)) {
