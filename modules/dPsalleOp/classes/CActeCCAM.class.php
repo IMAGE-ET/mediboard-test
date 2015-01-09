@@ -1134,7 +1134,7 @@ class CActeCCAM extends CActe {
     $forfait     = 0;
     $coefficient = 100;
     foreach ($this->_modificateurs as $modif) {
-      $result = $code->getForfait($modif);
+      $result = $code->getForfait($modif, $code->date);
       $forfait     += $result["forfait"];
       $coefficient += $result["coefficient"] - 100;
     }
@@ -1165,13 +1165,13 @@ class CActeCCAM extends CActe {
 
     foreach ($modificateurs as $_modificateur) {
       if ($_modificateur->_double == 1) {
-        $tarif_modif = $code->getForfait($_modificateur->code);
+        $tarif_modif = $code->getForfait($_modificateur->code, $code->date);
         $_modificateur->_montant = round($this->_tarif_base * ($tarif_modif['coefficient'] - 100) / 100 + $tarif_modif['forfait'], 2);
       }
       else {
         $_montant = 0;
         for ($i = 0; $i < strlen($_modificateur->code); $i++) {
-          $tarif_modif = $code->getForfait($_modificateur->code[$i]);
+          $tarif_modif = $code->getForfait($_modificateur->code[$i], $code->date);
           $_montant += round($this->_tarif_base * ($tarif_modif['coefficient'] - 100) / 100 + $tarif_modif['forfait'], 2);
         }
         $_modificateur->_montant = $_montant;
