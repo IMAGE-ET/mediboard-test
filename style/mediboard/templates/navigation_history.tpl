@@ -2,7 +2,7 @@
   {{mb_return}}
 {{/if}}
 
-<button class="history nav-history {{if $navigatory_history|@count == 0}} opacity-30 {{/if}}"
+<button class="history nav-history not-printable" {{if $navigatory_history|@count == 0}} disabled {{/if}}
         onmouseover="ObjectTooltip.createDOM(this, this.next(), {duration:0})">
   {{$navigatory_history|@count}}
 </button>
