@@ -938,9 +938,9 @@ class CConstantesMedicales extends CMbObject {
     $props['context_id']             = 'ref class|CMbObject meta|context_class cascade';
     $props['comment']                = 'text';
 
-    $props['poids']                  = 'float pos max|300';
-    $props['_poids_g']               = 'num pos min|300';
-    $props['taille']                 = 'float pos';
+    $props['poids']                  = 'float pos max|500';
+    $props['_poids_g']               = 'num pos min|300 max|500000';
+    $props['taille']                 = 'float pos min|20 max|300';
 
     $props['ta']                     = 'str maxLength|10';
     $props['_ta_systole']            = 'num pos max|50';
