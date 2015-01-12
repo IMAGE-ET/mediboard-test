@@ -89,6 +89,9 @@ class CInteropActor extends CMbObject {
   /** @var array */
   public $_ref_msg_supported_family = array();
 
+  /** @var CEAITransformation[] */
+  public $_ref_eai_transformations;
+
   /** @var string */
   public $_type_echange;
 
@@ -154,12 +157,12 @@ class CInteropActor extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     
-    $backProps["messages_supported"] = "CMessageSupported object_id";
-    $backProps["domains"]            = "CDomain actor_id";
-    $backProps["dicom_exchanges"]    = "CExchangeDicom receiver_id";
-    $backProps["routes_receiver"]    = "CEAIRoute receiver_id";
-    $backProps["mvsante_exchange"]   = "CExchangeMVSante receiver_id";
-    $backProps["transformations"]    = "CEAITransformation actor_id";
+    $backProps["messages_supported"]    = "CMessageSupported object_id";
+    $backProps["domains"]               = "CDomain actor_id";
+    $backProps["dicom_exchanges"]       = "CExchangeDicom receiver_id";
+    $backProps["routes_receiver"]       = "CEAIRoute receiver_id";
+    $backProps["mvsante_exchange"]      = "CExchangeMVSante receiver_id";
+    $backProps["actor_transformations"] = "CEAITransformation actor_id";
 
     return $backProps;
   }
@@ -263,6 +266,17 @@ class CInteropActor extends CMbObject {
     }
 
     return reset($this->_ref_exchanges_sources);
+  }
+
+  /**
+   * Load transformations
+   *
+   * @param array $where Additional where clauses
+   *
+   * @return CEAITransformationRule[]
+   */
+  function loadRefsEAITransformation($where = array()) {
+    return $this->_ref_eai_transformations = $this->loadBackRefs("actor_transformations", null, null, null, null, null, null, $where);
   }
 
   /**

@@ -156,5 +156,7 @@ class CEAITransformation extends CMbObject {
     $this->transaction = $transformation_rule->transaction;
     $this->version     = $transformation_rule->version;
     $this->extension   = $transformation_rule->extension;
+
+    $this->active      = $transformation_rule->active;
   }
 }

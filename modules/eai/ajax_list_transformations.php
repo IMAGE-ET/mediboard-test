@@ -22,12 +22,20 @@ $actor = CMbObject::loadFromGuid($actor_guid);
 /** @var CInteropNorm $message */
 $message = new $message_class;
 
-$event  = new $event_class;
+$event = null;
+$where = array();
 
-// Chargement des transformations peut-être existantes pour cet évènement
-$transformation = new CEAITransformation();
-$transformation->bindObject($message, $event, $actor);
-$transformations = $transformation->loadMatchingList("rank");
+if ($event_class) {
+  $event = new $event_class;
+
+  $where[] = "message IS NULL OR message = '$event_class'";
+}
+
+/** @var CEAITransformation[] $transformations */
+$transformations = $actor->loadRefsEAITransformation($where);
+foreach ($transformations as $_transformation) {
+  $_transformation->loadRefEAITransformationRule();
+}
 
 // Création du template
 $smarty = new CSmartyDP();

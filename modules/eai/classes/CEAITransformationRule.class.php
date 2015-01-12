@@ -106,12 +106,14 @@ class CEAITransformationRule extends CMbObject {
   }
 
   /**
-   * Load transformation
+   * Load transformations
+   *
+   * @param array|string $order Order SQL statement
    *
    * @return CEAITransformationRule[]
    */
-  function loadRefsEAITransformation() {
-    return $this->_ref_eai_transformations = $this->loadBackRefs("eai_transformations");
+  function loadRefsEAITransformation($order = null) {
+    return $this->_ref_eai_transformations = $this->loadBackRefs("eai_transformations", $order);
   }
 
   /**

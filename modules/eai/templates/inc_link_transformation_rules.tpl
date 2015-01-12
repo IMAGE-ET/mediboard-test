@@ -9,11 +9,11 @@
  * @link     http://www.mediboard.org
 *}}
 
+{{assign var=event_name value=$event|get_class}}
+
 <form name="edit-{{$transformation->_guid}}" method="post" onsubmit="return EAITransformation.onSubmit(this)">
   <input type="hidden" name="m" value="eai" />
   <input type="hidden" name="dosql" value="do_link_transformation_aed" />
-
-  {{assign var=event_name value=$event|get_class}}
 
   <input type="hidden" name="actor_guid" value="{{$actor->_guid}}" />
   <input type="hidden" name="event_name" value="{{$event_name}}" />

@@ -1,17 +1,25 @@
 {{foreach from=$transformations item=_transformation}}
+  {{assign var=eai_transformation_rule value=$_transformation->_ref_eai_transformation_rule}}
+
   <tr {{if !$_transformation->active}}class="opacity-30"{{/if}}>
     <td class="button">
-      <button class="button edit notext compact" onclick="EAITransformation.edit('{{$_transformation->_id}}', '{{$event_name}}');"
+      <button class="button edit notext compact"
+              onclick="EAITransformation.edit('{{$_transformation->_id}}', '{{$message_name}}', '{{$event_name}}');"
               title="{{tr}}Edit{{/tr}}">
         {{tr}}Edit{{/tr}}
       </button>
     </td>
     <td>{{mb_value object=$_transformation field=eai_transformation_id}}</td>
-    <td>{{mb_value object=$_transformation field=standard}}</td>
-    <td>{{mb_value object=$_transformation field=domain}}</td>
-    <td>{{mb_value object=$_transformation field=profil}}</td>
-    <td>{{mb_value object=$_transformation field=message}}</td>
-    <td>{{mb_value object=$_transformation field=transaction}}</td>
+    <td>
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$eai_transformation_rule->_guid}}');">
+         #{{$eai_transformation_rule->_id}}
+       </span>
+    </td>
+    <td class="text compact">{{mb_value object=$_transformation field=standard}}</td>
+    <td class="text compact">{{mb_value object=$_transformation field=domain}}</td>
+    <td class="text compact">{{mb_value object=$_transformation field=profil}}</td>
+    <td class="text compact">{{mb_value object=$_transformation field=message}}</td>
+    <td class="text compact">{{mb_value object=$_transformation field=transaction}}</td>
     <td>{{mb_value object=$_transformation field=version}}</td>
     <td>{{mb_value object=$_transformation field=extension}}</td>
     <td>{{mb_value object=$_transformation field=active}}</td>
@@ -36,5 +44,5 @@
     </td>
   </tr>
   {{foreachelse}}
-  <tr><td class="emtpy" colspan="14">{{tr}}CEAITransformation.none{{/tr}}</td></tr>
+  <tr><td class="empty" colspan="14">{{tr}}CEAITransformation.none{{/tr}}</td></tr>
 {{/foreach}}

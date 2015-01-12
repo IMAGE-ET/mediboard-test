@@ -25,7 +25,8 @@
   <input type="hidden" name="del" value="0" />
 
   <input type="hidden" name="eai_transformation_ruleset_id" value="{{$transformation->eai_transformation_ruleset_id}}" />
-  <input type="hidden" name="callback" value="EAITransformation.refreshList" />
+  <input type="hidden" name="callback"
+         value="EAITransformation.refreshList.curry('{{$message_class}}', '{{$event_class}}', '{{$actor->_guid}}')" />
 
   <table class="form">
     {{mb_include module=system template=inc_form_table_header object=$transformation}}
@@ -105,6 +106,7 @@
             objName:&quot;{{$transformation->_view|smarty:nodefaults|JSAttribute}}&quot;},
             { onComplete: function() {
               Control.Modal.close();
+              EAITransformation.refreshList('{{$message_class}}', '{{$event_class}}', '{{$actor->_guid}}');
             }})">
             {{tr}}Delete{{/tr}}
           </button>

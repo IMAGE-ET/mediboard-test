@@ -13,7 +13,8 @@
 CCanDo::checkAdmin();
 
 $transformation_id = CValue::getOrSession("transformation_id");
-$event_name        = CValue::getOrSession("event_name");
+$event_class       = CValue::getOrSession("event_class");
+$message_class     = CValue::getOrSession("message_class");
 
 $transformation = new CEAITransformation();
 $transformation->load($transformation_id);
@@ -22,6 +23,7 @@ $transformation->loadRefActor();
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("transformation", $transformation);
-$smarty->assign("event_name"    , $event_name);
+$smarty->assign("event_class"   , $event_class);
+$smarty->assign("message_class" , $message_class);
 
 $smarty->display("inc_edit_transformation.tpl");

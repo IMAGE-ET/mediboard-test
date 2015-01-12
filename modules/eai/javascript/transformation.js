@@ -12,10 +12,11 @@
 EAITransformation = {
   modal : null,
 
-  edit: function(transformation_id, event_name) {
+  edit: function(transformation_id, message_class, event_class) {
     new Url("eai", "ajax_edit_transformation")
       .addParam("transformation_id", transformation_id)
-      .addParam("event_name"       , event_name)
+      .addParam("message_class"    , message_class)
+      .addParam("event_class"      , event_class)
       .requestModal(600);
   },
 
@@ -45,7 +46,7 @@ EAITransformation = {
       .addParam("event_class"  , event_class)
       .addParam("message_class", message_class)
       .addParam("actor_guid", actor_guid)
-      .requestModal(600);
+      .requestModal(800);
   },
 
   list: function(message_class, event_class, actor_guid) {
@@ -53,13 +54,14 @@ EAITransformation = {
       .addParam("event_class"  , event_class)
       .addParam("message_class", message_class)
       .addParam("actor_guid"   , actor_guid)
-      .requestModal(600);
+      .requestModal(700);
   },
 
-  refreshList: function(event_name, actor_guid) {
+  refreshList: function(message_class, event_class, actor_guid) {
     new Url("eai", "ajax_refresh_transformations")
-      .addParam("event_name", event_name)
-      .addParam("actor_guid", actor_guid)
+      .addParam("message_class", message_class)
+      .addParam("event_class"  , event_class)
+      .addParam("actor_guid"   , actor_guid)
       .requestUpdate("transformations");
   }
 }

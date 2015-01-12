@@ -20,13 +20,14 @@
 
 <table class="main tbl">
   <tr>
-    <th colspan="14" class="title">
+    <th colspan="15" class="title">
       {{tr}}CEAITransformation.all{{/tr}}
     </th>
   </tr>
   <tr>
     <th class="narrow button"></th>
     <th class="category narrow"> {{mb_title class=CEAITransformation field=eai_transformation_id}} </th>
+    <th class="category narrow"> {{mb_title class=CEAITransformation field=eai_transformation_rule_id}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformation field=standard}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformation field=domain}} </th>
     <th class="category narrow"> {{mb_title class=CEAITransformation field=profil}} </th>

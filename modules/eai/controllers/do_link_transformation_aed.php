@@ -29,8 +29,7 @@ foreach ($transformation_rules as $_transf_rule_id) {
 
   $transformation = new CEAITransformation();
   $transformation->bindTransformationRule($transformation_rule, $actor);
-
-  $transformation->loadMatchingObject();
+  $transformation->message = $event_name;
 
   if ($msg = $transformation->store()) {
     CAppUI::setMsg($msg, UI_MSG_ERROR);
