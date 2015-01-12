@@ -721,7 +721,7 @@ class CRPU extends CMbObject {
    * @return null|string
    */
   function storeAffectation() {
-    $this->completeField("box_id", "sejour_id");
+    $this->completeField("box_id", "sejour_id", "mutation_sejour_id");
     $sejour = $this->loadRefSejour();
 
     $sejour->completeField("service_id");
