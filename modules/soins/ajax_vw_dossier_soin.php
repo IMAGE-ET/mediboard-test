@@ -43,7 +43,7 @@ $unite_prise = stripslashes(preg_replace('~&#0*([0-9]+);~e', 'chr(\\1)', $unite_
 
 // Recuperation du sejour_id si seulement l'object est passé
 if ($object_id && $object_class) {
-  $object = new $object_class;
+  $object = new $object_class();
   $object->load($object_id);
   $sejour_id = $object->_ref_prescription->object_id;
 }

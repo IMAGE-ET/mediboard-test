@@ -39,6 +39,7 @@ foreach ($sejour->_ref_consultations as $_consult) {
   $_consult->loadRefBrancardage();
 }
 
+// personne qui a autorisé la sortie
 $sejour->loadRefConfirmeUser()->loadRefFunction();
 
 $prescription_active = CModule::getInstalled("dPprescription");
