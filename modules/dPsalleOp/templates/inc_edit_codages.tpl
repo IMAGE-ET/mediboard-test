@@ -190,6 +190,10 @@
       {{/if}}
 
       Actes du Dr {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
+      {{if $subject->_class == 'CSejour'}}
+        {{assign var=codage value=$codages|@reset}}
+        le {{'CMbDT::format'|static_call:$codage->date:'%A %d/%m/%Y'}}
+      {{/if}}
     </th>
   </tr>
   <tr>

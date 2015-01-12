@@ -162,7 +162,7 @@
           <tr>
             {{foreach from=$days item=_day}}
               <th class="selected">
-                {{$_day|date_format:'%d/%m/%Y'}}
+                {{$_day|date_format:'%a %d/%m/%Y'}}
               </th>
             {{/foreach}}
           </tr>
@@ -203,8 +203,10 @@
                     {{/foreach}}
                   {{else}}
                     <form name="formCodage-{{$_praticien_id}}-{{$_day}}" action="?" method="post"
-                      onsubmit="return onSubmitFormAjax(this, {
-                                    onComplete: loadCodagesCCAM.curry({{$subject->_id}},'{{$_day}}')});">
+                          onsubmit="return onSubmitFormAjax(this, {
+                                      onComplete: function() {
+                                        loadCodagesCCAM({{$subject->_id}},'{{$_day}}');
+                                        editCodages('{{$subject->_class}}', {{$subject->_id}}, {{$_praticien_id}}, '{{$_day}}');}});">
                       <input type="hidden" name="m" value="ccam" />
                       <input type="hidden" name="dosql" value="do_codageccam_aed" />
                       <input type="hidden" name="del" value="0" />
