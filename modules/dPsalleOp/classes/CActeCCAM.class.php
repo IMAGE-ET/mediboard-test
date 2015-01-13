@@ -1141,8 +1141,12 @@ class CActeCCAM extends CActe {
     $coefficient = 100;
     foreach ($this->_modificateurs as $modif) {
       $result = $code->getForfait($modif, $code->date);
-      $forfait     += $result["forfait"];
-      $coefficient += $result["coefficient"] - 100;
+      if ($result['forfait'] > 0) {
+        $forfait     += $result["forfait"];
+      }
+      if ($result['coefficient'] > 100) {
+        $coefficient += $result["coefficient"] - 100;
+      }
     }
 
     $this->_tarif_sans_asso  = ($this->_tarif_base  * ($coefficient / 100) + $forfait);
