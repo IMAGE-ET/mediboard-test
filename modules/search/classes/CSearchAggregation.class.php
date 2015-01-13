@@ -9,11 +9,8 @@
 * @version    $Revision$
 */
 
-CAppUI::requireLibraryFile("elastica/autoloader", false);
-// The autoloader must be triggered, so the second argument must be true
-if (!class_exists("CSearch", true)) {
-  return;
-}
+CAppUI::requireLibraryFile("Elastica/autoloader", false);
+
 use Elastica\Aggregation;
 /**
  * Class CSearchAggregation

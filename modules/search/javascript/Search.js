@@ -26,20 +26,6 @@ Search = window.Search || {
   },
 
   /**
-   * Method to display result from search in mode manual
-   *
-   * @param {Element} form The form
-   *
-   * @return bool
-   */
-  displayResultsManual: function (form) {
-    var url = new Url('search',  'ajax_result_search_manual');
-    url.addFormData(form);
-    url.requestUpdate('list_result');
-    return false;
-  },
-
-  /**
    * Method to show the différence between two mapping
    *
    * @param {Element} before the mapping before
@@ -172,24 +158,34 @@ Search = window.Search || {
       element.checked = input.checked;
     });
   },
-
+  searchByType: function (date, user_id, object_id, object_ref, fuzzy_search, types) {
+    new Url('search',  'ajax_result_search_details_aggreg')
+      .addParam("date", date)
+      .addParam("user_id", user_id)
+      .addParam("words", this.words_request)
+      .addParam("object_ref_id", object_id)
+      .addParam("object_ref_class",object_ref)
+      .addParam("fuzzy_search", fuzzy_search)
+      .addParam("types", types, true)
+      .requestModal("60%","60%");
+  },
   /**
    * Method to search more details about an item
    *
    * @param {Integer} object_id
    * @param {String}  object_ref
-   * @param {String}  type
    * @param {bool}    fuzzy_search
+   * @param {String}  type
    */
-  searchMoreDetails: function (object_id, object_ref, type, fuzzy_search) {
-    var id = "details-"+type+"-"+object_id;
+  searchMoreDetails: function (object_id, object_ref, fuzzy_search, type) {
+    var container = "tab-"+type;
     new Url('search',  'ajax_result_search_details')
       .addParam("object_ref_id", object_id)
       .addParam("object_ref_class",object_ref)
       .addParam("type", type)
       .addParam("words", this.words_request)
       .addParam("fuzzy_search", fuzzy_search)
-      .requestUpdate(id);
+      .requestUpdate(container);
   },
 
   /**
@@ -199,12 +195,13 @@ Search = window.Search || {
    * @param {String} type
    */
   searchMoreDetailsLog: function (date, user_id, type) {
+    var container = "tab-"+type;
     new Url('search',  'ajax_result_search_log_details')
       .addParam("date", date)
       .addParam("type", type)
       .addParam("user_id", user_id)
       .addParam("words", this.words_request)
-      .requestModal("60%","60%");
+      .requestUpdate(container);
   },
 
   /**
@@ -333,6 +330,38 @@ Search = window.Search || {
     });
 
     window.user_tag_token = tokenField;
-  }
+  },
 
+  toggleColumn: function(toggler, column) {
+    var visible = column.visible();
+    toggler.toggleClassName("expand", visible);
+
+    column.toggle();
+  },
+
+  progressBar: function (id, score) {
+    var container = $('score_'+id);
+    var color = '#f00';
+    if (score > 25 && score < 75) {
+      color = '#E8AC07';
+    }
+    else if (score >= 75) {
+      color = '#93D23F';
+    }
+    var data = [
+      { data: score, color: color },
+      { data: 100 - score, color: '#BBB' }
+    ];
+
+    jQuery.plot(container, data, {
+      series: {
+        pie: {
+          innerRadius: 0.4,
+          show: true,
+          label: { show: false }
+        }
+      },
+      legend: { show: false }
+    });
+  }
 };

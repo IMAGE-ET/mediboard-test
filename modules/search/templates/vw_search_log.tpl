@@ -51,134 +51,17 @@
 <form method="get" name="esLogSearch" action="?m=search" class="watched prepared" onsubmit="return Search.displayLogResults(this);" onchange="onchange=$V(this.form, '0')">
   <input type="hidden" name="start" value="0">
   <input type="hidden" name="accept_utf8" value="1">
-  <table class="main layout">
-    <tbody>
-    <tr>
-      <td id="td_container_search">
-        <input type="search" id="words" name="words" value="" placeholder="Saisissez les termes de votre recherche ici..." style="width:50em; height:1.5em; font-size:medium;" onchange="$V(this.form.start, '0')" autofocus>
-        <button type="submit" id="button_search" class="button lookup">Démarrer la recherche</button>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <input type="checkbox" name="aggregate" id="aggregate" value="1" checked>
-        <label for="aggregate"> Agrégation des résultats</label>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-  <table class="main layout">
-    <tbody>
-    <tr>
-      <!-- Fieldset de tri par date -->
-      <td>
-        <fieldset>
-          <legend>Intervalle de date </legend>
-          {{*{{mb_include module=search template=inc_tooltip_date}}*}}
-          <table>
-            <tr>
-              <td>
-                <input type="hidden" class="date" name="_min_date" onchange="$V(this.form.start, '0')" value="">
-                <b>&raquo;</b>
-                <input type="hidden" class="date" name="_max_date" onchange="$V(this.form.start, '0')" >
-                <strong>{{tr}}or{{/tr}}</strong>
-                Jour seul : <input type="hidden" class="date" name="_date" onchange="$V(this.form.start, '0')" >
-              </td>
-            </tr>
-          </table>
-        </fieldset>
-      </td>
-      <!-- Fieldset de tri par Intervenants -->
-      <td  style="width: 33%">
-        <fieldset>
-          <legend> Intervenants</legend>
-          <table class="layout">
-            <tr>
-              <td>
-                <input type="text" name="user_view" class="autocomplete" value="" placeholder="&mdash; Choisir un intervenant"/>
-                <input type="hidden" name="user_id" value=""/>
 
-                <button type="button" class="user notext" title="Mon compte"
-                        onclick="window.user_tag_token.add('{{$app->user_id}}'); insertTag('{{$app->_ref_user->_guid}}', '{{$app->_ref_user}}')">
-                </button>
-                <button type="button" title="Effacer le champ" class="erase notext" onclick="$V(this.form.elements.user_id, '');
-                          $V(this.form.elements.user_view, ''); $$('li.tag').each(function(elt) { elt.remove(); });">
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <ul id="user_tags" class="tags" style="float: none;">
-                  {{if $app->_ref_user->_is_praticien}}
-                    <li data-tag_item_id="{{$app->_ref_user->_id}}" id="CTag-{{$app->_ref_user->_id}}" class="tag">
-                      {{$app->_ref_user->_view}}
-                      <button type="button" class="delete"
-                              onclick="window.user_tag_token.remove($(this).up('li').get('user_id')); this.up().remove(); $V(this.form.elements.user_id, '');"
-                              style="display: inline-block !important;"></button>
-                    </li>
-                  {{/if}}
-                </ul>
-              </td>
-            </tr>
-          </table>
-        </fieldset>
-      </td>
-      <!-- Fieldset de tri par Types -->
-      <td>
-        <fieldset>
-          <legend>
-            <input type="checkbox" name="searchAll" id="SearchAll" value="SearchAll" onclick="Search.checkAllCheckboxes(this, 'names_types[]')">
-            <label for="SearchAll">Types</label>
-          </legend>
-          <table class="layout" id="first_indexing">
-            {{foreach from=$types item=_types}}
-              <tr>
-                <td>
-                  <input type="checkbox" name="names_types[]" id="{{$_types}}" value="{{$_types}}">
-                  <label for="{{$_types}}">{{tr}}{{$_types}}{{/tr}}</label>
-                </td>
-              </tr>
-            {{/foreach}}
-          </table>
-        </fieldset>
-      </td>
-      <!-- Fieldset de tri par Contexte -->
-      <td>
-        <fieldset>
-          <legend>
-            <input type="checkbox" name="SearchAllContextes" id="SearchAllContextes" value="SearchAllContextes" onclick="Search.checkAllCheckboxes(this, 'contextes[]')">
-            <label for="SearchAllContextes">Contextes</label>
-          </legend>
-          <table class="layout" id="first_indexing">
-            <tr>
-              <td colspan="2">
-                <input type="checkbox" name="contextes[]" id="generique" value="generique"/>
-                <label for="generique">Générique</label>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2">
-                <input type="checkbox" name="contextes[]" id="pharmacie" value="pharmacie">
-                <label for="pharmacie"> Pharmacie</label>
-              </td>
-            </tr>
+  <div id="search_bar">
+    <!-- Barre de recherche -->
+    {{mb_include module=search template=inc_header_search}}
+  </div>
 
-            <tr>
-              <td>
-                <input type="checkbox" name="contextes[]" id="pmsi" value="pmsi">
-                <label for="pmsi"> PMSI</label>
-              </td>
-              <td>
-                <input type="checkbox" name="contextes[]" id="bloc" value="bloc">
-                <label for="bloc"> Bloc</label>
-              </td>
-            </tr>
-          </table>
-        </fieldset>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+  <div id="search_filter">
+    <!-- Filtres de recherche -->
+    {{mb_include module=search template=inc_header_filters_search display_contextes=true}}
+  </div>
+
   <div id="list_log_result">
     <!-- Résultats de la Recherche -->
   </div>

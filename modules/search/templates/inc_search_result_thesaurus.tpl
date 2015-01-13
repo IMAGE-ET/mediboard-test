@@ -15,8 +15,8 @@
   <tr>
     <th class="narrow">Date <br /> Type</th>
     <th>Document</th>
-    <th class="narrow">Pertinence</th>
-    <th class="text narrow">Ajouter aux favoris</th>
+    <th class="narrow"></th>
+    <th class="text narrow"></th>
   </tr>
   <tr>
     <th colspan="6" class="section">Triés par pertinence</th>
@@ -30,14 +30,16 @@
       <td class="text">
         <span> {{$_result._source.body}}</span>
       </td>
-      <td>
+      <td class="button">
         {{assign var=score value=$_result._score*100}}
-        <meter min="0" max="100" value="{{$score}}" low="50.0" optimum="101.0" high="70.0" style="width:100px;" title="{{$score}}%">
-          <div class="progressBar compact text">
-            <div class="bar normal" style="width:{{$score}}%;"></div>
-            <div class="text">{{$score}}%</div>
-          </div>
-        </meter>
+        <script>
+          Main.add (function () {
+            Search.progressBar('{{$_key}}', '{{$score}}');
+          });
+        </script>
+        <span title="Score de pertinence : {{$score|round}}%">
+          <div id="score_{{$_key}}" style="width: 25px; height: 25px; display: inline-block"></div>
+        </span>
       </td>
       <td class="button">
         <button class="favoris notext" title="Ajouter aux favoris"

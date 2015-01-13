@@ -10,7 +10,7 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireLibraryFile("elastica/autoloader", false);
+CAppUI::requireLibraryFile("Elastica/autoloader", false);
 
 use Elastica\Query;
 use Elastica\Filter\Term;
@@ -23,7 +23,7 @@ use Elastica\Request;
  * Class CSearchQuery
  * Manage Elastica Library in order to index documents
  */
-class CSearchQuery {
+class CSearchQuery extends CSearch{
 
   /**
    * Get data from the temporary table.
@@ -121,8 +121,7 @@ class CSearchQuery {
         $query_bool->addMust($query_fuzzy);
       }
       else {
-        $query_words = new Elastica\Query\QueryString();
-        $query_words->setQuery($words);
+        $query_words = new Elastica\Query\QueryString($words);
         $query_words->setFields(array("body", "title"));
         $query_words->setDefaultOperator("and");
         $query_bool->addMust($query_words);
@@ -153,20 +152,24 @@ class CSearchQuery {
     }
     $query = new Query($query_bool);
     //create aggregation
-    if ($aggregation) {
+    if ($aggregation && $aggregation != "by_type" ) {
       // on aggrège d'abord par class d'object référents
       // on effectue un sous aggrégation par id des objets référents.
       $agg_by_class = new CSearchAggregation("Terms", "ref_class", "object_ref_class", 10);
       $sub_agg_by_id = new CSearchAggregation("Terms", "sub_ref_id", "object_ref_id", 100);
-      $sub_agg_by_type = new CSearchAggregation("Terms", "sub_ref_type", "_type", 10);
+      $sub_agg_by_type = new CSearchAggregation("Terms", "sub_ref_type", "_type", 100);
       $sub_agg_by_id->_aggregation->addAggregation($sub_agg_by_type->_aggregation);
       $agg_by_class->_aggregation->addAggregation($sub_agg_by_id->_aggregation);
       $query->addAggregation($agg_by_class->_aggregation);
     }
-    else {
+    else if (!$aggregation) {
       //  Pagination
       $query->setFrom($start);    // Where to start
       $query->setLimit($limit);
+    }
+    else {
+      $agg_by_type = new CSearchAggregation("Terms", "ref_type", "_type", 100);
+      $query->addAggregation($agg_by_type->_aggregation);
     }
 
     //Highlight
@@ -275,12 +278,12 @@ class CSearchQuery {
   function constructWordsWithDate($_date, $_min_date, $_max_date) {
     if ($_date) {
       $_date = CMbDT::format($_date, "%Y/%m/%d");
-      return "date:[".$_date." TO ".$_date."]";
+      return " date:[".$_date." TO ".$_date."]";
     }
     else {
       $_min_date = ($_min_date) ? CMbDT::format($_min_date, "%Y/%m/%d") : "*";
       $_max_date = ($_max_date) ? CMbDT::format($_max_date, "%Y/%m/%d") : "*";
-      return "date:[".$_min_date." TO ".$_max_date."]";
+      return " date:[".$_min_date." TO ".$_max_date."]";
     }
   }
 
@@ -510,7 +513,7 @@ class CSearchQuery {
 
     // query du favoris
     $query_words = new Elastica\Query\QueryString();
-    $query_words->setQuery($favori->entry);
+    $query_words->setQuery($this->normalizeEncoding($favori->entry));
     $query_words->setFields(array("body", "title"));
     $query_words->setDefaultOperator("and");
     $query_bool->addMust($query_words);
@@ -536,7 +539,7 @@ class CSearchQuery {
                 "must" => array(
                   "match"=> array(
                     "body"=> array(
-                      "query"=> $favori->entry
+                      "query"=> $this->normalizeEncoding($favori->entry)
                     )
                   )
                 ),

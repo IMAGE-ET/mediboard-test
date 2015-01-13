@@ -157,7 +157,7 @@ PMSI = {
   },
 
   loadSearch: function(sejour_id) {
-    var url = new Url("search", "vw_search_pmsi");
+    var url = new Url("search", "vw_search_auto");
     url.addParam("sejour_id" , sejour_id);
     url.requestUpdate("tab-search");
   },

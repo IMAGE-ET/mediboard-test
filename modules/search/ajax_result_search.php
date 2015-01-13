@@ -3,7 +3,7 @@
 /**
  * $Id$
  *
- * @category search
+ * @category Search
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -24,8 +24,9 @@ $sejour_id     = CValue::get("sejour_id", null);
 $contexte      = CValue::get("contexte");
 $user          = CMediusers::get();
 
-if (in_array("CPrescriptionLineMix", $names_types)) {
-  $names_types[] = "CPrescriptionLineMedicament";
+if (in_array("CPrescriptionLineMedicament", $names_types)) {
+  $names_types[] = "CPrescriptionLineMix";
+  $names_types[] = "CPrescriptionLineElement";
 }
 
 // Données nécessaires pour la recherche

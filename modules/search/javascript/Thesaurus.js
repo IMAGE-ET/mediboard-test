@@ -8,7 +8,7 @@
  * @link     http://www.mediboard.org */
 
 Thesaurus = window.Thesaurus || {
-
+  url_addeditThesaurusEntry: null,
   /**
    * Method to update the list of the thesaurus
    * @param {Integer} start
@@ -17,7 +17,6 @@ Thesaurus = window.Thesaurus || {
     var url = new Url('search',  'ajax_list_thesaurus');
     url.addParam("start_thesaurus", start);
     url.requestUpdate('list_thesaurus_entry');
-
   },
 
   /**
@@ -42,7 +41,7 @@ Thesaurus = window.Thesaurus || {
    * @param {Function} callback
    */
   addeditThesaurusEntryManual: function (search_agregation, search_body, search_user_id, search_types, search_contexte, thesaurus_entry, callback) {
-    callback = callback ||  function () {Thesaurus.updateListThesaurus();};
+    callback = callback ||  function () {Thesaurus.updateListThesaurus(null);};
     var user_id = (search_user_id) ? search_user_id : User.id;
     var url = new Url('search', 'ajax_addedit_thesaurus_entry');
     url.addParam("search_agregation", search_agregation);
@@ -51,11 +50,11 @@ Thesaurus = window.Thesaurus || {
     url.addParam("search_types[]", search_types, true);
     url.addParam("search_contexte", search_contexte);
     url.addParam("thesaurus_entry", thesaurus_entry);
+    Thesaurus.url_addeditThesaurusEntry = url;
     url.requestModal("65%", "70%", {
       onClose: callback
     });
 
-    window.url_addeditThesaurusEntry = url;
     this.modal = url.modalObject;
   },
 
@@ -82,11 +81,11 @@ Thesaurus = window.Thesaurus || {
     url.addParam("search_types[]", search_types, true);
     url.addParam("search_contexte", search_contexte);
     url.addParam("thesaurus_entry", thesaurus_entry);
+    Thesaurus.url_addeditThesaurusEntry = url;
     url.requestModal("65%", "70%", {
       onClose: callback
     });
 
-    window.url_addeditThesaurusEntry = url;
     this.modal = url.modalObject;
   },
 
@@ -94,11 +93,11 @@ Thesaurus = window.Thesaurus || {
    * Method to display the list of the thesaurus
    * @param {String} pattern
    */
-  addPatternToEntry : function (pattern) {
+  addPatternToEntry : function (pattern, form) {
     var token = "";
-    var oform = getForm('addeditFavoris');
-    var value = oform.entry.value;
-    var entry = oform.entry;
+    var oform = (form) ? form : getForm('addeditFavoris');
+    var value = (form) ? oform.words.value : oform.entry.value;
+    var entry = (form) ? oform.words : oform.entry;
     var caret = entry.caret();
     var startPos = caret.begin;
     var endPos = caret.end;
@@ -149,8 +148,8 @@ Thesaurus = window.Thesaurus || {
         break;
     }
 
-    oform.entry.value = value.replace(text, token);
-    oform.entry.caret(deb_selection, fin_selection);
+    entry.value = value.replace(text, token);
+    entry.caret(deb_selection, fin_selection);
   },
 
   /**
@@ -161,10 +160,8 @@ Thesaurus = window.Thesaurus || {
   addeditTargetEntry : function (thesaurus_entry_id, callback) {
     var url = new Url('search',  'ajax_addedit_target_entry');
     url.addParam("thesaurus_entry_id", thesaurus_entry_id);
-    url.modal({
-      width     : "40%",
-      height    : "40%",
-      afterClose: callback
+    url.requestModal("40%", "40%", {
+      onClose: callback
     });
   },
 
@@ -204,7 +201,7 @@ Thesaurus = window.Thesaurus || {
    */
   insertTag : function (id, name, obj_class) {
     var tag = $(obj_class + "-" + id);
-
+    var color = (obj_class == "CCodeCIM10" )? "#CCFFCC" : "rgba(153, 204, 255, 0.6)";
     if (!tag) {
       var btn = DOM.button({
         "type": "submit",
@@ -213,7 +210,8 @@ Thesaurus = window.Thesaurus || {
         "onclick": "$V(this.form.elements.search_thesaurus_entry_target_id,"+ id +");$V(this.form.elements.del,'1');  this.form.onsubmit() ; this.up('li').next('br').remove(); this.up('li').remove();"
       });
       var li = DOM.li({
-        "className": "tag"
+        "className": "tag",
+        "style" : "background-color:"+color+"; cursor:auto"
       }, name, btn);
 
       $(obj_class+"_tags").insert(li).insert(DOM.br());
@@ -235,11 +233,13 @@ Thesaurus = window.Thesaurus || {
 
   getAutocompleteFavoris : function (form) {
     var element_input = form.elements.words;
-    var url = new Url("system", "ajax_seek_autocomplete");
+    var contextes = ["generique", $V(form.elements.contexte)];
+
+    var url = new Url("search", "ajax_seek_autocomplete_thesaurus_entry");
     url.addParam("object_class", "CSearchThesaurusEntry");
     url.addParam("input_field", element_input.name);
-    url.addParam("where[user_id]", User.id);
-    url.addParam("where[contextes]", $V(form.elements.contexte));
+    url.addParam("user_id", User.id);
+    url.addParam("contextes[]", contextes, true);
     url.autoComplete(element_input, null, {
       minChars: 2,
       method: "get",

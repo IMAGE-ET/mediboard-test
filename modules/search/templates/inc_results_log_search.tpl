@@ -1,7 +1,7 @@
 {{*
  * $Id$
  *  
- * @category ${Module}
+ * @category Search
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -20,6 +20,7 @@
       <th class="title" colspan="6">Résultats ({{$nbresult}} obtenus en {{$time}}ms)</th>
     </tr>
     <tr>
+      <th class="narrow"></th>
       <th class="narrow">Date</th>
       <th class="narrow">Utilisateur</th>
       <th>Détail des occurrences</th>
@@ -29,6 +30,11 @@
     </tr>
     {{foreach from=$objects_refs key=_key item=_object_ref}}
       <tr>
+        <td class="button">
+          <a href="#" class="button search notext" style="float:right"
+             onclick="Search.searchByType('{{$_object_ref.date_log}}', '{{$_object_ref.object->user_id}}')">
+          </a>
+        </td>
         {{assign var=date_log value=$_object_ref.date_log|substr:0:10|date_format:'%d/%m/%Y'}}
         <td><span>{{$date_log}}</span></td>
         <td style="width:15%">
@@ -37,9 +43,6 @@
         <td class="text">
           {{foreach from=$_object_ref.contexte key=_key item=_contexte}}
           <span>{{$_contexte.count}} recherches {{$_contexte.key}} trouvée(s)</span>
-            <a href="#" class="button search notext" style="float:right"
-               onclick="Search.searchMoreDetailsLog('{{$_object_ref.date_log}}', '{{$_object_ref.object->user_id}}', '{{$_contexte.key}}')">
-            </a>
             <hr/>
           {{/foreach}}
         </td>

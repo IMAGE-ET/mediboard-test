@@ -25,7 +25,7 @@
     <td class="narrow" style="vertical-align: top">
       <ul id="tabs-favoris" class="control_tabs_vertical" style="width: 15em">
         <li>
-          <a href="#tab-General" style="line-height: 1em"> Recherche Manuelle</a>
+          <a href="#tab-General" style="line-height: 1em">{{tr}}CSearch classic search{{/tr}}</a>
         </li>
         {{foreach from=$results key=_search item=_result}}
           <li title="mots recherchés : {{$_result.entry}}">

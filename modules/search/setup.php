@@ -83,6 +83,32 @@ class CSetupsearch extends CSetup {
           ) /*! ENGINE=MyISAM */ COMMENT = 'Table des cibles de favoris';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.07";
+    $this->makeRevision("0.07");
+
+    $query =  "
+        ALTER TABLE `search_thesaurus_entry`
+        CHANGE `contextes` `contextes` VARCHAR(255) NOT NULL DEFAULT 'generique';";
+    $this->addQuery($query);
+
+
+    $query =  "
+        ALTER TABLE `search_thesaurus_entry_target`
+        CHANGE `search_thesaurus_entry_target_id` `search_thesaurus_entry_target_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+        CHANGE `search_thesaurus_entry_id` `search_thesaurus_entry_id` INT(11) UNSIGNED
+        ;";
+    $this->addQuery($query);
+
+    $query = "UPDATE `search_thesaurus_entry` SET `contextes`='prescription' WHERE `contextes`= 'bloc'";
+    $this->addQuery($query);
+
+    $query = "
+        ALTER TABLE `rss_search_items`
+        CHANGE `rss_search_item_id` `rss_search_item_id` INT(11) UNSIGNED,
+        CHANGE `rss_id` `rss_id` INT(11) UNSIGNED,
+        CHANGE `search_id` `search_id` INT(11) UNSIGNED
+        ;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.08";
   }
 }

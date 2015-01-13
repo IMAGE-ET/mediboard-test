@@ -18,7 +18,7 @@ use Elastica\Query;
  */
 class CSearchLog extends CSearch {
 
-  static $names_mapping = array("generique", "pharmacie", "pmsi", "bloc");
+  static $names_mapping = array("generique", "pharmacie", "pmsi", "prescription", "classique");
 
   static $mapping_log = array(
     "date"         => array(
@@ -28,7 +28,7 @@ class CSearchLog extends CSearch {
     ),
 
     "user_id"      => array(
-      'type'           => 'integer',
+      'type'           => 'string',
       'include_in_all' => true
     ),
 
@@ -144,18 +144,13 @@ class CSearchLog extends CSearch {
    */
   function searchQueryString($operator, $words, $start = 0, $limit = 30, $names_types = null, $aggregation = false) {
 
-    $words = CmbString::normalizeUtf8($words);
+    $words = CSearch::normalizeEncoding($words);
     // Define a Query. We want a string query.
-    $elasticaQueryString  = new QueryString();
 
-    //'And' or 'Or' default : 'Or'
-    $elasticaQueryString->setDefaultOperator($operator);
-    //$elasticaQueryString->setAnalyzer("custom_search_analyzer");
-    $elasticaQueryString->setQuery($words);
+    $queryString  = new Elastica\Query\QueryString($words);
 
     // Create the actual search object with some data.
-    $elasticaQuery        = new Query();
-    $elasticaQuery->setQuery($elasticaQueryString);
+    $query        = new Elastica\Query($queryString);
 
     //create aggregation
     if ($aggregation) {
@@ -167,16 +162,16 @@ class CSearchLog extends CSearch {
       $sub_agg_by_user->_aggregation->addAggregation($sub_agg_by_contexte->_aggregation);
       $agg_by_date->_aggregation->addAggregation($sub_agg_by_user->_aggregation);
 
-      $elasticaQuery->addAggregation($agg_by_date->_aggregation);
+      $query->addAggregation($agg_by_date->_aggregation);
     }
     else {
       //  Pagination
-      $elasticaQuery->setFrom($start);    // Where to start
-      $elasticaQuery->setLimit($limit);
+      $query->setFrom($start);    // Where to start
+      $query->setLimit($limit);
     }
 
     //Highlight
-    $elasticaQuery->setHighlight(
+    $query->setHighlight(
       array(
         "fields" => array("body" => array(
           "pre_tags" => array(" <em> <strong> "),
@@ -190,14 +185,14 @@ class CSearchLog extends CSearch {
 
     //Search on the index.
     $index = CAppUI::conf("db std dbname")."_log";
-    $this->_index = $this->loadIndex($index);
+    $index = $this->loadIndex($index);
     $search = new \Elastica\Search($this->_client);
-    $search->addIndex($this->_index);
+    $search->addIndex($index);
     if ($names_types) {
       $search->addTypes($names_types);
     }
 
-    return $search->search($elasticaQuery);
+    return $search->search($query);
   }
 
   /**

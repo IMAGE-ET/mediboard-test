@@ -11,7 +11,7 @@
  */
 
 
-CAppUI::requireLibraryFile("elastica/autoloader", false);
+CAppUI::requireLibraryFile("Elastica/autoloader", false);
 
 use Elastica\Type;
 use Elastica\Client;
@@ -245,14 +245,13 @@ class CSearch {
         $datum_to_index["id"]          = $datum['object_id'];
         $datum_to_index["date"] = CMbDT::format(CMbDT::dateTime(), "%Y/%m/%d");
       }
+      $datum_to_index['body'] = $this->normalizeEncoding($datum_to_index['body']);
+      $datum_to_index['title'] = $this->normalizeEncoding($datum_to_index['title']);
     }
     else {
       $datum_to_index["id"]          = $datum['object_id'];
       $datum_to_index["date"]        = CMbDT::format(CMbDT::dateTime(), "%Y/%m/%d");
     }
-
-    $datum_to_index['body'] = $this->normalizeEncoding($datum_to_index['body']);
-    $datum_to_index['title'] = $this->normalizeEncoding($datum_to_index['title']);
 
     return $datum_to_index;
   }
@@ -312,7 +311,7 @@ class CSearch {
    *
    * @return bool
    */
-  function bulkIndexing($data) {
+  function bulkIndexing ($data) {
     $data_to_index = $this->constructBulkData($data);
     foreach ($data_to_index as $type_name => $_type) {
       $typeES = (strpos($type_name, 'CExObject') === 0 ) ? $this->_index->getType("CExObject") : $this->_index->getType($type_name);
@@ -327,7 +326,15 @@ class CSearch {
             break;
 
           case 'store':
-            $typeES->updateDocuments($documents);
+            try {
+              $typeES->updateDocuments($documents);
+            } catch (Exception $e) {
+              try {
+                $typeES->addDocuments($documents);
+              } catch (Exception $e) {
+                mbLog($e->getMessage());
+              }
+            }
             break;
 
           case 'delete':
@@ -427,7 +434,7 @@ class CSearch {
       $sub_query = $query->querySearchAuto($_favori, $sejour);
       $results_query = $search->search($sub_query);
       $tab_search[$_favori->_id]["titre"] = $_favori->titre;
-      $tab_search[$_favori->_id]["entry"] = $_favori->entry;
+      $tab_search[$_favori->_id]["entry"] =$_favori->entry;
       $tab_search[$_favori->_id]["time"] = $results_query->getTotalTime();
       $tab_search[$_favori->_id]["nb_results"] = $results_query->getTotalHits();
       foreach ($results_query->getResults() as $_result) {
@@ -440,6 +447,26 @@ class CSearch {
     }
 
     return $tab_search;
+  }
+
+  function queryByType ($words, $name, $types) {
+
+    $query_words = new Elastica\Query\QueryString();
+    $query_words->setQuery($words);
+    $query_words->setFields(array("body", "title"));
+    $query_words->setDefaultOperator("and");
+
+    $agg_by_type = new CSearchAggregation("Terms", "ref_type", "_type", 100);
+    $query = new Query($query_words);
+    $query->addAggregation($agg_by_type->_aggregation);
+
+    //Search on the index.
+    $this->_index = $this->loadIndex($name);
+    $search = new \Elastica\Search($this->_client);
+    $search->addIndex($this->_index);
+    $search->addTypes($types);
+
+    return $search->search($query);
   }
   /**
    * Construct query with date informations

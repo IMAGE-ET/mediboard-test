@@ -752,11 +752,21 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
    */
   function getIndexableBody ($content) {
     $this->loadRefConsultation();
-    $content = $this->etatBucco." ".$this->examenCardio." ".$this->examenPulmo.
-      " ".$this->examenDigest. " ".$this->examenAutre.
-      " ". $this->conclusion." ".$this->_ref_consultation->motif." ".$this->_ref_consultation->rques.
-      " ".$this->_ref_consultation->examen." ".$this->_ref_consultation->histoire_maladie.
-      " ".$this->_ref_consultation->conclusion;
+    $fields = $this->_ref_consultation->getTextcontent();
+    $fields_anesth = array();
+
+    foreach ($this->_specs as $_name => $_spec) {
+      if ($_spec instanceof CTextSpec) {
+        $fields_anesth[] = $_name;
+      }
+    }
+
+    foreach ($fields_anesth as $_field_anesth) {
+      $content .= " ".  $this->$_field_anesth;
+    }
+    foreach ($fields as $_field) {
+      $content .= " ".  $this->_ref_consultation->$_field;
+    }
 
     return $content;
   }

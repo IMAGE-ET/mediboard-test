@@ -42,43 +42,51 @@
         {{mb_value object=$_entry field=entry}}
       </td>
       <td class="compact empty">
+        {{if $_entry->types !== null}}
         {{assign var=values_search_types value="|"|@explode:$_entry->types}}
-        <div style=" overflow-y: scroll;" class="columns-1">
-          {{foreach from=$types item=_value}}
-            <label>
-              <input type="checkbox" name="{{$_value}}" value="{{$_value}}"
-                {{if in_array($_value, $values_search_types)}} checked="checked" {{/if}} disabled/>
-              {{tr}}{{$_value}}{{/tr}}
-            </label>
-            <br />
-          {{/foreach}}
-        </div>
+          <div style=" overflow-y: scroll;" class="columns-1">
+            {{foreach from=$types item=_value}}
+              {{if in_array($_value, $values_search_types)}}
+                <label>
+                  <input type="checkbox" name="{{$_value}}" value="{{$_value}}"
+                     checked="checked" disabled/>
+                  {{tr}}{{$_value}}{{/tr}}
+                </label>
+                <br />
+              {{/if}}
+            {{/foreach}}
+          </div>
+        {{else}}
+        <span>{{tr}}CSearchThesaurusEntry-all-types{{/tr}}</span>
+        {{/if}}
       </td>
       <td>
-        <div style="float: right;" >
-          <ul class="tags">
-            {{foreach from=$_entry->_cim_targets item=_target}}
-              <li class="tag" title="{{$_target->_ref_target->libelle}}">
-                <span class="empty">{{$_target->_ref_target->code}}</span>
-              </li>
-              <br/>
-              {{foreachelse}}
-              <li><span class="empty">{{tr}}CSearchCibleEntry.none{{/tr}}</span></li>
-            {{/foreach}}
-          </ul>
-        </div>
-        <div>
-          <ul class="tags">
-            {{foreach from=$_entry->_ccam_targets item=_target}}
-              <li class="tag" title="{{$_target->_ref_target->libelle_long}}">
-                <span class="empty">{{$_target->_ref_target->code}}</span>
-              </li>
-              <br/>
-              {{foreachelse}}
-              <li><span class="empty">{{tr}}CSearchCibleEntry.none{{/tr}}</span></li>
-            {{/foreach}}
-          </ul>
-        </div>
+        {{if $_entry->_cim_targets|@count > 0 || $_entry->_ccam_targets|@count > 0}}
+          <div style="float: right;" >
+            <ul class="tags">
+              {{foreach from=$_entry->_cim_targets item=_target}}
+                <li class="tag " title="{{$_target->_ref_target->libelle}}" style="background-color: #CCFFCC; cursor:auto">
+                  <span>{{$_target->_ref_target->code}}</span>
+                </li>
+                <br/>
+              {{/foreach}}
+            </ul>
+          </div>
+          <div>
+            <ul class="tags">
+              {{foreach from=$_entry->_ccam_targets item=_target}}
+                <li class="tag" title="{{$_target->_ref_target->libelle_long}}" style="background-color: rgba(153, 204, 255, 0.6); cursor:auto">
+                  <span>{{$_target->_ref_target->code}}</span>
+                </li>
+                <br/>
+              {{/foreach}}
+            </ul>
+          </div>
+        {{else}}
+          <div class="empty" colspan="7" style="text-align: center">
+            {{tr}}CSearchCibleEntry.none{{/tr}}
+          </div>
+        {{/if}}
       </td>
       <td class="button">
         <button class="edit notext" onclick="Thesaurus.addeditThesaurusEntry(null, '{{$_entry->_id}}', null)"></button>

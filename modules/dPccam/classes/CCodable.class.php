@@ -1237,4 +1237,19 @@ class CCodable extends CMbObject {
   function loadRefConsultRelated() {
     return $this->_ref_consult_related = $this->loadFwdRef("consult_related_id", true);
   }
+
+  /**
+   * Method to get text fields from Codable
+   *
+   * @return array
+   */
+  function getTextcontent () {
+    $fields = array();
+    foreach ($this->_specs as $_name => $_spec) {
+      if ($_spec instanceof CTextSpec) {
+        $fields[] = $_name;
+      }
+    }
+    return $fields;
+  }
 }

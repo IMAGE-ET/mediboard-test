@@ -39,27 +39,7 @@
     <tr>
       <!-- Fieldset de tri par date -->
       <td style="width: 30%">
-        <fieldset>
-          <legend>Intervalle de date </legend>
-          <table>
-            <tr>
-              <td>
-                <input type="hidden" class="datetime" name="_min_date" onchange="$V(this.form.start, '0')" value="{{$date}}">
-                <b>&raquo;</b>
-                <input type="hidden" class="datetime" name="_max_date" onchange="$V(this.form.start, '0')" >
-              </td>
-              <td>
-                <strong>{{tr}}or{{/tr}}</strong>
-                Jour seul : <input type="hidden" class="datetime" name="_date" onchange="$V(this.form.start, '0')" >
-              </td>
-            </tr>
-            <tr>
-              <td class="button" colspan="2">
-                <button type="submit" class="search">{{tr}}Search{{/tr}}</button>
-              </td>
-            </tr>
-          </table>
-        </fieldset>
+        {{mb_include module=search template=inc_header_filters_search display_user=false display_types=false query=false expand=false}}
         <div id="list_log_result">
           {{mb_include module=search template=inc_search_result_thesaurus}}
         </div>

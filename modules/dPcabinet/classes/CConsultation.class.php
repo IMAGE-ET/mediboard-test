@@ -2400,7 +2400,11 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
    * @return string
    */
   function getIndexableBody ($content) {
-    $content = $this->motif." ".$this->rques." ".$this->examen." ".$this->histoire_maladie." ".$this->conclusion;
+    $fields = $this->getTextcontent();
+    foreach ($fields as $_field) {
+      $content .= " ".  $this->$_field;
+    }
+
     return $content;
   }
   /**

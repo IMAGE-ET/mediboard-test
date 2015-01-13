@@ -3,7 +3,7 @@
 /**
  * $Id$
  *  
- * @category ${Module}
+ * @category Search
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -19,9 +19,9 @@ $words    = CValue::get("words");
 $client_index  = new CSearchLog();
 $client_index->createClient();
 $date = CMbDT::format($date, "%Y/%m/%d");
-$words = "date:[".$date." TO "."$date] user_id:(".$user_id.")";
-$array_results = array();
-$array_highlights = array();
+$words .= " date:[".$date." TO "."$date] user_id:(".$user_id.")";
+$array_results     = array();
+$array_highlights  = array();
 $authors           = array();
 $author_ids        = array();
 $time              = 0;

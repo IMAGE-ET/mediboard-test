@@ -1,19 +1,40 @@
 {{*
  * $Id$
  *  
- * @category ${Module}
+ * @category Search
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org*}}
 
 <script>
-  targetEditCallback = function() { window.url_addeditThesaurusEntry.refreshModal();};
+  targetEditCallback = function() { Thesaurus.url_addeditThesaurusEntry.refreshModal();};
   var form = getForm("addeditFavoris");
   var cont_type = $('cont_types'),
     element_type = form.types;
 
   window.types = new TokenField(element_type, {onChange: function(){}.bind(element_type)});
+
+  setValueUser = function () {
+    var form = getForm("addeditFavoris");
+    $V(form.elements.user_id, '{{$user_thesaurus->_id}}');
+    $V(form.elements.function_id, '');
+    $V(form.elements.group_id, '');
+  };
+
+  setValueFunction = function () {
+    var form = getForm("addeditFavoris");
+    $V(form.elements.user_id, '{{$user_thesaurus->_id}}');
+    $V(form.elements.function_id, '{{$user_thesaurus->_ref_function->_id}}');
+    $V(form.elements.group_id, '');
+  };
+
+  setValueGroup = function () {
+    var form = getForm("addeditFavoris");
+    $V(form.elements.user_id, '{{$user_thesaurus->_id}}');
+    $V(form.elements.group_id, '{{$user_thesaurus->_ref_function->_ref_group->_id}}');
+    $V(form.elements.function_id, '{{$user_thesaurus->_ref_function->_id}}');
+  }
 </script>
 
 
@@ -42,10 +63,9 @@
                   <legend>Codes CIM10 : </legend>
                   <ul class="tags">
                     {{foreach from=$thesaurus_entry->_cim_targets item=_target}}
-                      <li class="tag" title="{{$_target->_ref_target->libelle}}">
-                        {{$_target->_ref_target->code}} - {{$_target->_ref_target->libelle}}
+                      <li class="tag" title="{{$_target->_ref_target->libelle}}" style="background-color: #CCFFCC; cursor:auto">
+                        {{$_target->_ref_target->code}}
                       </li>
-                      <br/>
                       {{foreachelse}}
                       <li><span class="empty">{{tr}}CSearchCibleEntry.none{{/tr}}</span></li>
                     {{/foreach}}
@@ -57,10 +77,9 @@
                   <legend>Codes CCAM : </legend>
                   <ul class="tags">
                     {{foreach from=$thesaurus_entry->_ccam_targets item=_target}}
-                      <li class="tag" title="{{$_target->_ref_target->libelle_long}}">
-                        {{$_target->_ref_target->code}} - {{$_target->_ref_target->libelle_court}}
+                      <li class="tag" title="{{$_target->_ref_target->libelle_long}}" style="background-color: rgba(153, 204, 255, 0.6); cursor:auto">
+                        {{$_target->_ref_target->code}}
                       </li>
-                      <br/>
                       {{foreachelse}}
                       <li><span class="empty">{{tr}}CSearchCibleEntry.none{{/tr}}</span></li>
                     {{/foreach}}
@@ -75,26 +94,18 @@
     <tr>
       <td colspan="2">
         <span class="circled">
-          <img src="images/icons/user.png" title="Favori pour {{$user_thesaurus->_id}}">
-          <label><input type="checkbox" name="_user_id" value="{{$user_thesaurus->_id}}" checked></label>
+          <img src="images/icons/user.png" title="Favori pour {{$user_thesaurus->_view}}">
+          <label><input type="radio" name="_choose" value="{{$user_thesaurus->_id}}" onclick="setValueUser()" {{if $thesaurus_entry->user_id}}checked{{/if}}></label>
         </span>
 
         <span class="circled">
            <img src="images/icons/user-function.png" title="Favori pour {{$user_thesaurus->_ref_function}}">
-          {{if $thesaurus_entry->function_id}}
-            <label><input type="checkbox" name="_function_id" onclick="$V(form.elements.function_id, (this.checked) ? '{{$thesaurus_entry->function_id}}' : null)" checked></label>
-          {{else}}
-            <label><input type="checkbox" name="_function_id" onclick="$V(form.elements.function_id, (this.checked) ? '{{$user_thesaurus->_ref_function->_id}}' : null)"></label>
-          {{/if}}
+            <label><input id="function" type="radio" name="_choose" onclick="setValueFunction()" {{if $thesaurus_entry->function_id}}checked{{/if}}></label>
         </span>
 
         <span class="circled">
           <img src="images/icons/group.png" title="Favori pour {{$user_thesaurus->_ref_function->_ref_group}}">
-          {{if $thesaurus_entry->group_id}}
-            <label><input type="checkbox" name="_group_id" onclick="$V(form.elements.group_id, (this.checked) ? '{{$thesaurus_entry->group_id}}' : null)" checked></label>
-          {{else}}
-            <label><input type="checkbox" name="_group_id" onclick="$V(form.elements.group_id, (this.checked) ? '{{$user_thesaurus->_ref_function->_ref_group->_id}}' : null)"></label>
-          {{/if}}
+          <label><input id="group" type="radio" name="_choose" onclick="setValueGroup()" {{if $thesaurus_entry->group_id}}checked{{/if}}></label>
         </span>
       </td>
     </tr>
