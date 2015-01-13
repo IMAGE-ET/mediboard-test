@@ -528,9 +528,9 @@ $library->url           = "https://github.com/ruflin/Elastica";
 $library->fileName      = "Elastica.zip";
 $library->description   = "Client fulltext search for PHP.";
 $library->sourceDir     = "Elastica";
-$library->targetDir     = "elastica";
+$library->targetDir     = "Elastica";
 $library->versionFile   = "changes.txt";
-$library->versionString = "v1.2.1.0";
+$library->versionString = "1.4.2";
 
 CLibrary::$all[$library->name] = $library;
 
