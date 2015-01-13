@@ -1061,8 +1061,8 @@ class CMediusers extends CPerson {
     $mediusers = $mediuser->loadList($where, $order, null, $group_by, $ljoin);
 
     // Mass fonction standard preloading
-    CMbObject::massLoadFwdRef($mediusers, "function_id");
-    CMbObject::massCountBackRefs($mediusers, "secondary_functions");
+    self::massLoadFwdRef($mediusers, "function_id");
+    self::massCountBackRefs($mediusers, "secondary_functions");
 
     // Filter a posteriori to unable mass preloading of function
     self::filterByPerm($mediusers, $permType);

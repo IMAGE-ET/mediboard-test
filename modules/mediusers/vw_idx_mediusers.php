@@ -45,18 +45,6 @@ $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboa
 $where = array();
 $where["functions_mediboard.group_id"] = "= '$group->_id'";
 
-// FIXME: utiliser le seek
-if ($filter) {
-  $filters = explode(" ", $filter);
-
-  foreach ($filters as $_filter) {
-    $where[] = "functions_mediboard.text LIKE '%$_filter%' OR
-            users.user_last_name LIKE '$_filter%' OR
-            users.user_first_name LIKE '$_filter%' OR
-            users.user_username LIKE '$_filter%' ";
-  }
-}
-
 if ($pro_sante) {
   $user_types = array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Diététicien");
   $utypes_flip = array_flip(CUser::$types);
@@ -143,10 +131,10 @@ if ($order_col == "user_type") {
   $order = "users.user_type $order_way, users.user_last_name ASC, users.user_first_name ASC";
 }
 
-$total_mediuser = $mediuser->countList($where, null, $ljoin);
-
 /** @var CMediusers[] $mediusers */
-$mediusers = $mediuser->loadList($where, $order, "$page, $step", "users_mediboard.user_id", $ljoin);
+$limit = "$page, $step";
+$mediusers = $mediuser->seek($filter, $where, $limit, true, $ljoin, $order);
+$total_mediuser = $mediuser->_totalSeek;
 
 foreach ($mediusers as $_mediuser) {
   $_mediuser->loadRefFunction();
