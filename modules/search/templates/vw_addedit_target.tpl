@@ -12,8 +12,7 @@
   Main.add(function () {
     getAutocompleteCim();
     getAutocompleteCcam();
-    var tab = Control.Tabs.create('tabs-codes', true);
-    tab.activeLink.up().onmousedown();
+    Control.Tabs.create('tabs-codes', true);
   });
 
 
@@ -50,6 +49,7 @@
       minChars: 2,
       method: "post",
       dropdown: true,
+      width:"130%",
       updateElement: function (selected) {
         var _code = selected.down("strong").getText();
         var _name = selected.down("small").getText();
@@ -98,7 +98,7 @@
               <td>
                 <ul id="CCodeCIM10_tags" class="tags">
                   {{foreach from=$thesaurus_entry->_cim_targets item=_target}}
-                    <li class="tag" title="{{$_target->_ref_target->libelle}}">
+                    <li class="tag" title="{{$_target->_ref_target->libelle}}" style="background-color: #CCFFCC; cursor:auto">
                       {{$_target->_ref_target->code}}  {{$_target->_ref_target->libelle}}
                       <button type="submit" class="delete"
                               onclick="$V(this.form.elements.search_thesaurus_entry_target_id, '{{$_target->_id}}');$V(this.form.elements.del,'1');  this.form.onsubmit() ; this.up('li').next('br').remove(); this.up('li').remove();"
@@ -124,7 +124,7 @@
               <td>
                 <ul id="CCodeCCAM_tags" class="tags">
                   {{foreach from=$thesaurus_entry->_ccam_targets item=_target}}
-                    <li class="tag" title="{{$_target->_ref_target->libelle_long}}">
+                    <li class="tag" title="{{$_target->_ref_target->libelle_long}}" style="background-color: rgba(153, 204, 255, 0.6); cursor:auto">
                       {{$_target->_ref_target->code}}  {{$_target->_ref_target->libelle_court}}
                       <button type="submit" class="delete"
                               onclick="$V(this.form.elements.search_thesaurus_entry_target_id, '{{$_target->_id}}');$V(this.form.elements.del,'1');  this.form.onsubmit() ; this.up('li').next('br').remove(); this.up('li').remove();"

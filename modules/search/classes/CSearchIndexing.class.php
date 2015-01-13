@@ -108,6 +108,7 @@ class CSearchIndexing extends CStoredObject {
           SELECT 'CFile', `files_mediboard`.`file_id`, 'create', '$date'
           FROM `files_mediboard`
           WHERE `files_mediboard`.`object_class` != 'CCompteRendu'
+          AND `files_mediboard`.`object_class` != 'CPatient'
           AND `files_mediboard`.`file_type` NOT LIKE 'video/%'
           AND `files_mediboard`.`file_type` NOT LIKE 'audio/%'");
         break;
@@ -127,7 +128,15 @@ class CSearchIndexing extends CStoredObject {
           AND `prescription`.`object_class` != 'CDossierMedical'
           AND `prescription`.`object_id` IS NOT NULL");
         break;
-      case 'CExObject' :
+      case 'CPrescriptionLineElement':
+        $queries = array("INSERT INTO `search_indexing` (`object_class`, `object_id`, `type`, `date`)
+          SELECT 'CPrescriptionLineElement', `prescription_line_element`.`prescription_line_element_id`, 'create', '$date'
+          FROM `prescription_line_element`, `prescription`
+          WHERE  `prescription_line_element`.`prescription_id` = `prescription`.`prescription_id`
+          AND `prescription`.`object_class` != 'CDossierMedical'
+          AND `prescription`.`object_id` IS NOT NULL");
+        break;
+      case 'CExObject':
         $ds = $this->getDS();
         $ex_classes_ids = $ds->loadColumn("SELECT ex_class_id FROM ex_class");
         $queries = array();
