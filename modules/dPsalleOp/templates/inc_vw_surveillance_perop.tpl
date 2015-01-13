@@ -5,33 +5,6 @@
 
 <script>
 window.previousPoint = null;
-plothover = function (event, pos, item) {
-  if (item) {
-    var key = item.dataIndex+"-"+item.seriesIndex;
-
-    if (window.previousPoint != key) {
-      window.previousPoint = key;
-      jQuery("#flot-tooltip").remove();
-
-      var yaxis = item.series.yaxis.n;
-      event.target.select(".flot-y"+yaxis+"-axis, .flot-y"+yaxis+"-axis .flot-tick-label").invoke("addClassName", "axis-onhover");
-
-      var contents = SupervisionGraph.formatTrack(item);
-      
-      $$("body")[0].insert(DOM.div({className: "tooltip", id: "flot-tooltip"}, contents).setStyle({
-        position: 'absolute',
-        top:  item.pageY + 5 + "px",
-        left: item.pageX + 5 + "px"
-      }));
-    }
-  }
-  else {
-    $$(".axis-onhover").invoke("removeClassName", "axis-onhover");
-
-    jQuery("#flot-tooltip").remove();
-    window.previousPoint = null;
-  }
-};
 
 enChantier = function(){
   Modal.alert("Fonctionnalité en cours de développement");
@@ -87,6 +60,72 @@ Main.add(function(){
   };
   
   (function ($){
+    function plothover(event, pos, item) {
+      if (item) {
+        var key = item.dataIndex+"-"+item.seriesIndex;
+
+        if (window.previousPoint != key) {
+          window.previousPoint = key;
+          jQuery("#flot-tooltip").remove();
+
+          var yaxis = item.series.yaxis.n;
+          event.target.select(".flot-y"+yaxis+"-axis, .flot-y"+yaxis+"-axis .flot-tick-label").invoke("addClassName", "axis-onhover");
+
+          var contents = SupervisionGraph.formatTrack(item);
+
+          $$("body")[0].insert(DOM.div({className: "tooltip", id: "flot-tooltip"}, contents).setStyle({
+            position: 'absolute',
+            top:  item.pageY + 5 + "px",
+            left: item.pageX + 5 + "px"
+          }));
+        }
+      }
+      else {
+        $$(".axis-onhover").invoke("removeClassName", "axis-onhover");
+
+        jQuery("#flot-tooltip").remove();
+        window.previousPoint = null;
+      }
+    }
+
+    function plotclick(event, pos, item){
+      if (!item) {
+        return;
+      }
+
+      var data = item.series.data[item.dataIndex];
+      editObservationResultSet(data.set_id, '{{$pack->_id}}', data.result_id);
+    }
+
+    function getSeries(rawData, implied) {
+      var series = [];
+      console.log(rawData, implied);
+
+      $H(implied).each(function(pair){
+        var value = pair.value;
+        var type = $H(Concentrator.specs.valueTypes).find(function(pair) { return pair.value.id == value.type; });
+        var unit = $H(Concentrator.specs.valueUnits).find(function(pair) { return pair.value.id == value.unit; });
+
+        /*if (!type || !unit) {
+          return;
+        }*/
+
+        if (type) {
+          type = type.value;
+        }
+        if (unit) {
+          unit = unit.value;
+        }
+
+        console.log(type);
+        console.log(unit);
+
+        /*series.push({
+          label: Concentrator.
+        });*/
+      });
+    }
+
     var ph, series, xaxes;
     
     {{foreach from=$graphs item=_graph key=i name=graphs}}
@@ -100,14 +139,7 @@ Main.add(function(){
         xaxes[0].tickFormatter = xTickFormatter;
 
         ph.bind("plothover", plothover);
-        ph.bind("plotclick", function(event, pos, item){
-          if (!item) {
-            return;
-          }
-
-          var data = item.series.data[item.dataIndex];
-          editObservationResultSet(data.set_id, '{{$pack->_id}}', data.result_id);
-        });
+        ph.bind("plotclick", plotclick);
 
         var plot = $.plot(ph, series, {
           grid: {
@@ -127,6 +159,14 @@ Main.add(function(){
           xaxes: xaxes,
           yaxes: {{$_graph_data.yaxes|@json}}
         });
+
+        if (window.Concentrator) {
+          var implied = {{$_graph->getTypeUnitList()|@json}};
+
+          getSeries(Concentrator.rawData, implied);
+
+          Concentrator.impliedTypes = Object.merge(implied, Concentrator.impliedTypes);
+        }
       {{/if}}
     {{/foreach}}
   })(jQuery);
@@ -179,21 +219,27 @@ printSurveillance = function(operation_id) {
         </select>
       </form>
 
-      {{*
       {{if $interv->graph_pack_id && $concentrators !== null}}
         {{mb_include module=patientMonitoring template=inc_concentrator_js ajax=true}}
 
-        <select name="concentrator_id" onchange="Concentrator.selectConcentrator($V(this))">
+        <select name="concentrator_id" onchange="Concentrator.selectConcentrator(this)">
           <option value="">&ndash; {{tr}}CMonitoringConcentrator.none{{/tr}}</option>
 
           {{foreach from=$concentrators item=_concentrator}}
-            <option value="{{$_concentrator->_id}}">
+            <option value="{{$_concentrator->_id}}"
+                    data-host="{{$_concentrator->host_address}}"
+                    data-port="{{$_concentrator->host_port}}">
               {{$_concentrator}}
             </option>
           {{/foreach}}
         </select>
+
+        <span>
+          -
+        </span>
+
+        <button class="change notext" onclick="Concentrator.selectConcentrator(this.previous('select'))"></button>
       {{/if}}
-      *}}
     </td>
     <td>
       <strong>
@@ -544,7 +590,9 @@ printSurveillance = function(operation_id) {
               {{$_graph->_ref_value_type}}
 
               <div style="line-height: 1; color: #{{$_graph->color}};">
-                <span style="font-size: {{$_graph->size}}px;">
+                <span style="font-size: {{$_graph->size}}px;"
+                      data-value_type_id="{{$_graph->value_type_id}}"
+                      data-value_unit_id="{{$_graph->value_unit_id}}">
                   -
                 </span>
                 <span style="font-size: 1.2em">{{$_graph->_ref_value_unit}}</span>

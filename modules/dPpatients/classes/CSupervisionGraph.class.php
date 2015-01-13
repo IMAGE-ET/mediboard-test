@@ -212,6 +212,27 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
     return $this->_graph_data = $graph;
   }
 
+  function getTypeUnitList() {
+    $list = array();
+
+    $_axes = $this->loadRefsAxes();
+
+    foreach ($_axes as $_axis) {
+      $_series = $_axis->loadRefsSeries();
+
+      foreach ($_series as $_serie) {
+        $_unit_id = ($_serie->value_unit_id ? $_serie->value_unit_id : "none");
+
+        $list["$_serie->value_type_id-$_unit_id"] = array(
+          "type" => $_serie->value_type_id,
+          "unit" => $_unit_id,
+        );
+      }
+    }
+
+    return $list;
+  }
+
   /**
    * Get all the graphs from an object
    *
