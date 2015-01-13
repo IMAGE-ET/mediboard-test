@@ -466,7 +466,7 @@ class CCodeCCAM extends CCCAM {
     $query = "SELECT *
         FROM t_modificateurforfait
         WHERE CODE = %1
-          AND (DATEFIN = '00000000' OR DATEFIN > %2)
+          AND (DATEFIN = '00000000' OR DATEFIN >= %2)
           AND DATEDEBUT <= %2;";
     $query = $ds->prepare($query, $modificateur, $date);
     $result = $ds->exec($query);
