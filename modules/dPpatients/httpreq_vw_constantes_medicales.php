@@ -262,7 +262,7 @@ if ($date_max) {
 $list_constantes = $constantes->loadList($where, "datetime DESC", $limit);
 $total_constantes = $constantes->countList($where);
 
-$constantes_medicales_grid = CConstantesMedicales::buildGrid($list_constantes, false);
+$constantes_medicales_grid = CConstantesMedicales::buildGrid($list_constantes, false, true);
 
 $const_ids = array();
 foreach ($list_constantes as $_cst) {
