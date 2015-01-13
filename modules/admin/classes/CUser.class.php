@@ -153,7 +153,7 @@ class CUser extends CPerson {
     $props = parent::getProps();
 
     // Plain fields
-    $props["user_username"]             = "str notNull maxLength|20";
+    $props["user_username"]             = "str notNull maxLength|20 seekable|begin";
     $props["user_password"]             = "str maxLength|64 show|0 loggable|0";
     $props["user_salt"]                 = "str maxLength|64 show|0 loggable|0";
     $props["user_type"]                 = "num notNull min|0 max|21 default|0";
