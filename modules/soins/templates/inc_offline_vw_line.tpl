@@ -128,7 +128,8 @@
       </td>
     {{/if}}
     {{assign var=chap_sans_planif value=$line->_chapitre}}
-    {{if ($line->_class == "CPrescriptionLineMedicament" || $conf.dPprescription.CCategoryPrescription.$chap_sans_planif.alert_sans_planif) &&
+    {{if (($line->_class == "CPrescriptionLineMedicament" && !$line->substituted) ||
+        ($line->_class != "CPrescriptionLineMedicament" && $conf.dPprescription.CCategoryPrescription.$chap_sans_planif.alert_sans_planif) ) &&
          !$line->sans_planif && !$line->inscription && !$line->_count_planifications &&
          ($line->signee || $line->_class != "CPrescriptionLineMedicament" || !"dPprescription CPrescription show_unsigned_med_msg"|conf:"CGroups-$g")}}
       <td colspan="{{$colspan}}" class="left_day right_day">
