@@ -16,43 +16,49 @@
   <tr>
     <td>
       <input type="checkbox" name="names_types" id="CCompteRendu" value="CCompteRendu"/>
-      <label for="CCompteRendu">Compte rendu</label>
+      <label for="CCompteRendu">{{tr}}CCompteRendu{{/tr}}</label>
     </td>
     <td>
       <input type="checkbox" name="names_types" id="CTransmissionMedicale" value="CTransmissionMedicale">
-      <label for="CTransmissionMedicale"> Transmission Médicale</label>
+      <label for="CTransmissionMedicale">{{tr}}CTransmissionMedicale{{/tr}}</label>
     </td>
     <td>
       <input type="checkbox" name="names_types" id="CObservationMedicale" value="CObservationMedicale">
-      <label for="CObservationMedicale"> Observation Médicale</label>
+      <label for="CObservationMedicale">{{tr}}CObservationMedicale{{/tr}}</label>
     </td>
   </tr>
   <tr>
     <td>
       <input type="checkbox" name="names_types" id="CConsultation" value="CConsultation">
-      <label for="CConsultation"> Consultation de séjour</label>
+      <label for="CConsultation">{{tr}}CConsultation{{/tr}}</label>
     </td>
     <td>
       <input type="checkbox" name="names_types" id="CConsultAnesth" value="CConsultAnesth">
-      <label for="CConsultAnesth"> Consultation anesthésique de séjour</label>
+      <label for="CConsultAnesth">{{tr}}CConsultAnesth{{/tr}}</label>
     </td>
     <td>
       <input type="checkbox" name="names_types" id="CFile" value="CFile">
-      <label for="CFile"> Fichiers</label>
+      <label for="CFile">{{tr}}CFile{{/tr}}</label>
     </td>
   </tr>
   <tr>
     <td>
       <input type="checkbox" name="names_types" id="CPrescriptionLineMedicament" value="CPrescriptionLineMedicament">
-      <label for="CPrescriptionLineMedicament">Prescriptions Médicales</label>
+      <label for="CPrescriptionLineMedicament">{{tr}}CPrescriptionLineMedicament{{/tr}}</label>
     </td>
     <td>
       <input type="checkbox" name="names_types" id="CPrescriptionLineMix" value="CPrescriptionLineMix">
-      <label for="CPrescriptionLineMix">Prescriptions Mixtes</label>
+      <label for="CPrescriptionLineMix">{{tr}}CPrescriptionLineMix{{/tr}}</label>
     </td>
     <td>
+      <input type="checkbox" name="names_types" id="CPrescriptionLineElement" value="CPrescriptionLineElement">
+      <label for="CExObject">{{tr}}CPrescriptionLineElement{{/tr}}</label>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3">
       <input type="checkbox" name="names_types" id="CExObject" value="CExObject">
-      <label for="CExObject"> Formulaires</label>
+      <label for="CExObject">{{tr}}CExObject{{/tr}}</label>
     </td>
   </tr>
   <tr>

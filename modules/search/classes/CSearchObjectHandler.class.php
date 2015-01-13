@@ -39,9 +39,13 @@ class CSearchObjectHandler extends CMbObjectHandler {
         $group = $object->_ref_chir->loadRefFunction()->loadRefGroup();
         break;
       case 'CConsultation':
-      case 'CPrescriptionLineMedicament':
-      case 'CPrescriptionLineMix':
         /** @var CConsultation $object */
+      case 'CPrescriptionLineMedicament':
+        /** @var CPrescriptionLineMedicament $object */
+      case 'CPrescriptionLineMix':
+        /** @var CPrescriptionLineMix $object */
+      case 'CPrescriptionLineElement':
+        /** @var CPrescriptionLineElement $object */
         $object->loadRefPraticien();
         $group = $object->_ref_praticien->loadRefFunction()->loadRefGroup();
         break;
@@ -175,6 +179,7 @@ class CSearchObjectHandler extends CMbObjectHandler {
       case 'CConsultation':
       case 'CPrescriptionLineMedicament':
       case 'CPrescriptionLineMix':
+      case 'CPrescriptionLineElement':
         $object->loadRefPraticien();
         $group = $object->_ref_praticien->loadRefFunction()->loadRefGroup();
         break;
