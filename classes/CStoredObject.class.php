@@ -2591,7 +2591,7 @@ class CStoredObject extends CModelObject {
     }
     
     $seekables = $this->getSeekables();
-    
+
     $query = "FROM `{$this->_spec->table}` ";
     
     if ($ljoin && count($ljoin)) {
@@ -2622,20 +2622,20 @@ class CStoredObject extends CModelObject {
     
     // Add seek clauses
     if (count($keywords) && count($seekables)) {
-      foreach ($keywords as $keyword) {
+      foreach ($keywords as $index => $keyword) {
         $query .= "\nAND (0";
         foreach ($seekables as $field => $spec) {
-          // Note: a swith won't work du to boolean true value
-          if ($spec->seekable === "equal") {
+          // Note: a switch won't work du to boolean true value
+          if ($spec->seekable === "equal" AND $index == 0) {
             $query .= "\nOR `{$this->_spec->table}`.`$field` = '$keyword'";
           }
-          if ($spec->seekable === "begin") {
+          if ($spec->seekable === "begin" AND $index == 0) {
             $query .= "\nOR `{$this->_spec->table}`.`$field` LIKE '$keyword%'";
           }
-          if ($spec->seekable === "end") {
+          if ($spec->seekable === "end" AND $index == 0) {
             $query .= "\nOR `{$this->_spec->table}`.`$field` LIKE '%$keyword'";
           }
-          if ($spec->seekable === true) {
+          if ($spec->seekable === true OR $index != 0) {
             if ($spec instanceof CRefSpec) {
               $class = $spec->class;
               
