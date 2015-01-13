@@ -437,7 +437,7 @@ class CCodeCCAM extends CCCAM {
     $ds = self::getSpec()->ds;
     $query = "SELECT `CODE`
       FROM  `t_modificateurforfait`
-      WHERE  (`DATEFIN` = '00000000' OR `DATEFIN` > '$date')
+      WHERE  (`DATEFIN` = '00000000' OR `DATEFIN` >= '$date')
        AND `DATEDEBUT` <= '$date';";
     $result = $ds->exec($query);
     $modifs = "";
