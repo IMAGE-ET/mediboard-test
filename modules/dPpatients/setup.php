@@ -2751,7 +2751,13 @@ class CSetupdPpatients extends CSetup {
                 ADD `echelle_confort` INT(2);";
     $this->addQuery($query);
 
-    $this->mod_version = '2.26';
+    $this->makeRevision('2.26');
+
+    $query = "ALTER TABLE `constantes_medicales`
+                ADD `pres_artere_invasive` INT(3);";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.27';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

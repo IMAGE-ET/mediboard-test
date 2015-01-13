@@ -841,6 +841,11 @@ class CConstantesMedicales extends CMbObject {
       'unit' => '',
       'min' => 0, 'max' => 10
     ),
+    'pres_artere_invasive' => array(
+      'type' => 'physio',
+      'unit' => 'mmHg',
+      'min' => 20, 'max' => 200
+    ),
   );
 
   /** @var bool Used for making the params conversion (min, max and standard) only once */
@@ -1102,6 +1107,7 @@ class CConstantesMedicales extends CMbObject {
     $props['motricite_g']            = 'float min|0 max|2';
     $props['_urine_effective']       = 'float min|0';
     $props['echelle_confort']        = 'num min|0 max|10';
+    $props['pres_artere_invasive']   = 'num min|20 max|200';
     return $props;
   }
 
