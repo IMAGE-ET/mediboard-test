@@ -78,7 +78,7 @@ class CNaissance extends CMbObject {
     $props["rques"]             = "text helped";
     $props["by_caesarean"]      = "bool notNull default|0";
 
-    $props["_heure"]            = "time";
+    $props["_heure"]            = "time notNull";
     return $props;
   }
 
