@@ -51,7 +51,7 @@
   loadPrescription = function() {
     $('prescription_sejour').update('');
     Prescription.hide_header = true;
-    Prescription.reloadPrescSejour('{{$prescription_id}}','{{$sejour->_id}}');
+    Prescription.reloadPrescSejour('{{$prescription_id}}','{{$sejour->_id}}', null, null, null, null, null, null, null, null, null, '');
   };
 
   loadLabo = function() {
