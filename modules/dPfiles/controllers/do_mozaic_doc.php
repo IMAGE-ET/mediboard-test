@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 /**
  * $Id$
- *  
+ *
  * @category Patients
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -162,11 +162,13 @@ $content.= "
 <div id=\"footer\">$template_footer->document</div>
 </body>
 </html>";
-
-$htmltopdf = new CHtmlToPDF();
+ob_clean();
+$htmltopdf = new CHtmlToPDF("CWkHtmlToPDFConverter");
 $htmltopdf->generatePDF($content, $print, $cr, $file);
 
 if ($file->_id) {
   $file->file_size = filesize($file->_file_path);
   $file->store();
 }
+
+CApp::rip();
