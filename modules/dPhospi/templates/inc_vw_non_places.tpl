@@ -53,6 +53,7 @@
       {{mb_field object=$_sejour field="_type_admission" style="width: 16em;" onchange="this.form.onsubmit()"}}
     
       <select name="triAdm" style="width: 16em;" onchange="this.form.onsubmit()">
+        <option value=""> &mdash; {{tr}}Choose{{/tr}}</option>
         <option value="praticien"   {{if $triAdm == "praticien"}}  selected="selected"{{/if}}>Tri par praticien</option>
         <option value="date_entree" {{if $triAdm == "date_entree"}}selected="selected"{{/if}}>Tri par heure d'entrée</option>
         <option value="patient"     {{if $triAdm == "patient"}}    selected="selected"{{/if}}>Tri par patient</option>

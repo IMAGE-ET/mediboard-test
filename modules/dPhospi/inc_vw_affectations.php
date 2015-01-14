@@ -140,6 +140,7 @@ function loadSejourNonAffectes($where, $order = null, $praticien_id = null, $pre
   $leftjoin = array(
     "affectation"     => "sejour.sejour_id = affectation.sejour_id",
     "users_mediboard" => "sejour.praticien_id = users_mediboard.user_id",
+    "users"           => "users.user_id = users_mediboard.user_id",
     "patients"        => "sejour.patient_id = patients.patient_id"
   );
 
@@ -202,6 +203,7 @@ function loadAffectationsCouloirs($where, $order = null, $praticien_id = null, $
     "sejour"          => "affectation.sejour_id = sejour.sejour_id",
     "patients"        => "sejour.patient_id = patients.patient_id",
     "users_mediboard" => "sejour.praticien_id = users_mediboard.user_id",
+    "users"           => "users.user_id = users_mediboard.user_id",
   );
   
   if ($praticien_id) {

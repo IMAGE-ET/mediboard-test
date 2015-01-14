@@ -23,7 +23,7 @@ $heureLimit = CAppUI::conf("dPhospi hour_limit");
 $date            = CValue::getOrSession("date", CMbDT::date());
 $mode            = CValue::getOrSession("mode", 0); 
 $services_ids    = CValue::getOrSession("services_ids");
-$triAdm          = CValue::getOrSession("triAdm", "praticien");
+$triAdm          = CValue::getOrSession("triAdm");
 $_type_admission = CValue::getOrSession("_type_admission", "ambucomp");
 $filterFunction  = CValue::getOrSession("filterFunction");
 $prestation_id   = CValue::getOrSession("prestation_id", CAppUI::pref("prestation_id_hospi"));
@@ -115,24 +115,31 @@ if (CCanDo::edit()) {
 
   $order = null;
   switch ($triAdm) {
-    case "date_entree" :
+    case "date_entree":
       $order = "entree_prevue ASC";
       break;
-    case "praticien" :  
-      $order = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
+
+    case "praticien":
+      $order = "users_mediboard.function_id, users.user_last_name, users.user_first_name";
       break;
-    case "patient" :
+
+    case "patient":
       $order = "patients.nom, patients.prenom";
       break;
+
+    default:
+      $order = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
   }
   
   switch ($_type_admission) {
-    case "ambucomp" :
+    case "ambucomp":
       $where[] = "sejour.type = 'ambu' OR sejour.type = 'comp' OR sejour.type = 'ssr'";
       break;
-    case "0" :
+
+    case "0":
       break;
-    default :
+
+    default:
       $where["sejour.type"] = "= '$_type_admission'"; 
   }
   

@@ -12,7 +12,7 @@
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
 $services_ids    = CValue::getOrSession("services_ids");
-$triAdm          = CValue::getOrSession("triAdm", "praticien");
+$triAdm          = CValue::getOrSession("triAdm");
 $_type_admission = CValue::getOrSession("_type_admission", "ambucomp");
 $filter_function = CValue::getOrSession("filter_function");
 $date            = CValue::getOrSession("date");
@@ -37,27 +37,35 @@ $where = array();
 $where["annule"] = "= '0'";
 $where["sejour.group_id"] = "= '$group_id'";
 $where[] = "(sejour.type != 'seances' && affectation.affectation_id IS NULL) || sejour.type = 'seances'";
-$where["sejour.service_id"] = "IS NULL " . (is_array($services_ids) && count($services_ids) ? "OR `sejour`.`service_id` " . CSQLDataSource::prepareIn($services_ids) : "");
+$where["sejour.service_id"] = "IS NULL " . (is_array($services_ids) && count($services_ids) ?
+    "OR `sejour`.`service_id` " . CSQLDataSource::prepareIn($services_ids) : "");
 
 $order = null;
 switch ($triAdm) {
   case "date_entree":
     $order = "entree ASC";
     break;
+
   case "praticien":
-    $order = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
+    $order = "users_mediboard.function_id, users.user_last_name, users.user_first_name";
     break;
-  case "patient" :
+
+  case "patient":
     $order = "patients.nom, patients.prenom";
     break;
+
+  default:
+    $order = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
 }
 
 switch ($_type_admission) {
   case "ambucomp":
     $where["sejour.type"] = "IN ('ambu', 'comp', 'ssr')";
     break;
+
   case "0":
     break;
+
   default:
     $where["sejour.type"] = "= '$_type_admission'";
 }
@@ -66,6 +74,7 @@ $sejour = new CSejour;
 $ljoin = array(
   "affectation"     => "sejour.sejour_id = affectation.sejour_id",
   "users_mediboard" => "sejour.praticien_id = users_mediboard.user_id",
+  "users"           => "users_mediboard.user_id = users.user_id",
   "patients"        => "sejour.patient_id = patients.patient_id"
 );
 
@@ -95,6 +104,7 @@ switch ($granularite) {
     $nb_ticks = $hour_fin - $hour_debut + 1;
     $date_min = "$date ".str_pad($hour_debut, 2, "0", STR_PAD_LEFT) . ":00:00";
     break;
+
   case "week":
     $period = "6hours";
     $unite = "hour";
@@ -102,12 +112,15 @@ switch ($granularite) {
     $nb_ticks = 28;
     $date_min = CMbDT::dateTime("-2 days", $date);
     break;
+
   case "4weeks":
     $period = "1day";
     $unite = "day";
     $nb_unite = 1;
     $nb_ticks = 28;
     $date_min = CMbDT::dateTime("-1 week", CMbDate::dirac("week", $date));
+
+  default:
 }
 
 $offset = $nb_ticks * $nb_unite;
@@ -126,8 +139,8 @@ for ($i = 0 ; $i < $nb_ticks ; $i++) {
   $datetime = CMbDT::dateTime("+ $offset $unite", $date_min);
   $datetimes[] = $datetime;
   if ($granularite == "4weeks") {
-    if (CMbDT::date($current) == CMbDT::date($temp_datetime) &&
-      CMbDT::time($current) >= CMbDT::time($temp_datetime) && CMbDT::time($current) > CMbDT::time($datetime)) {
+    if (CMbDT::date($current) == CMbDT::date($temp_datetime) && CMbDT::time($current) >= CMbDT::time($temp_datetime)
+        && CMbDT::time($current) > CMbDT::time($datetime)) {
       $current = $temp_datetime;
     }
     $week_a = CMbDT::transform($temp_datetime, null, "%V");
@@ -138,7 +151,6 @@ for ($i = 0 ; $i < $nb_ticks ; $i++) {
     
     // On stocke le changement de mois s'il advient
    if (CMbDT::transform($datetime, null, "%m") != CMbDT::transform($temp_datetime, null, "%m")) {
-     
      // Entre deux semaines
      if ($i%7 == 0) {
        $change_month[$week_a] = array("right"=>$temp_datetime);
@@ -152,7 +164,8 @@ for ($i = 0 ; $i < $nb_ticks ; $i++) {
   }
   else {
     if ($granularite == "week" && CMbDT::date($current) == CMbDT::date($temp_datetime) &&
-        CMbDT::time($datetime) >= CMbDT::time($temp_datetime) && CMbDT::time($current) <= CMbDT::time($datetime)) {
+        CMbDT::time($datetime) >= CMbDT::time($temp_datetime) && CMbDT::time($current) <= CMbDT::time($datetime))
+    {
       $current = $temp_datetime;
     }
     // le datetime, pour avoir soit le jour soit l'heure
@@ -247,11 +260,18 @@ $praticiens = CMbObject::massLoadFwdRef($_sejours, "praticien_id");
 CMbObject::massLoadFwdRef($praticiens, "function_id");
 CMbObject::massCountBackRefs($affectations, "affectations_enfant");
 
-loadVueTempo($sejours, $suivi_affectation, null, $operations, $date_min, $date_max, $period, $prestation_id, $functions_filter, $filter_function, $sejours_non_affectes);
+loadVueTempo(
+  $sejours, $suivi_affectation, null, $operations, $date_min, $date_max, $period, $prestation_id, $functions_filter,
+  $filter_function, $sejours_non_affectes
+);
 $dossiers = CMbArray::pluck($sejours, "_ref_patient", "_ref_dossier_medical");
 CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
 
-loadVueTempo($affectations, $suivi_affectation, null, $operations, $date_min, $date_max, $period, $prestation_id, $functions_filter, $filter_function, $sejours_non_affectes);
+loadVueTempo(
+  $affectations, $suivi_affectation, null, $operations, $date_min, $date_max, $period, $prestation_id, $functions_filter,
+  $filter_function, $sejours_non_affectes
+);
+
 if (count($affectations)) {
   $dossiers = CMbArray::pluck($affectations, "_ref_sejour", "_ref_patient", "_ref_dossier_medical");
   CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
