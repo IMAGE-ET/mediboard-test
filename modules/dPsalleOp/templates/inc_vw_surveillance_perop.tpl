@@ -99,7 +99,6 @@ Main.add(function(){
 
     function getSeries(rawData, implied) {
       var series = [];
-      console.log(rawData, implied);
 
       $H(implied).each(function(pair){
         var value = pair.value;
@@ -590,7 +589,7 @@ printSurveillance = function(operation_id) {
               {{$_graph->_ref_value_type}}
 
               <div style="line-height: 1; color: #{{$_graph->color}};">
-                <span style="font-size: {{$_graph->size}}px;"
+                <span style="font-size: {{$_graph->size}}px;" class="supervision-instant-data"
                       data-value_type_id="{{$_graph->value_type_id}}"
                       data-value_unit_id="{{$_graph->value_unit_id}}">
                   -
