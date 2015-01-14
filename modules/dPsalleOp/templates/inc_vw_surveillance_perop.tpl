@@ -97,34 +97,6 @@ Main.add(function(){
       editObservationResultSet(data.set_id, '{{$pack->_id}}', data.result_id);
     }
 
-    function getSeries(rawData, implied) {
-      var series = [];
-
-      $H(implied).each(function(pair){
-        var value = pair.value;
-        var type = $H(Concentrator.specs.valueTypes).find(function(pair) { return pair.value.id == value.type; });
-        var unit = $H(Concentrator.specs.valueUnits).find(function(pair) { return pair.value.id == value.unit; });
-
-        /*if (!type || !unit) {
-          return;
-        }*/
-
-        if (type) {
-          type = type.value;
-        }
-        if (unit) {
-          unit = unit.value;
-        }
-
-        console.log(type);
-        console.log(unit);
-
-        /*series.push({
-          label: Concentrator.
-        });*/
-      });
-    }
-
     var ph, series, xaxes;
     
     {{foreach from=$graphs item=_graph key=i name=graphs}}
@@ -161,9 +133,6 @@ Main.add(function(){
 
         if (window.Concentrator) {
           var implied = {{$_graph->getTypeUnitList()|@json}};
-
-          getSeries(Concentrator.rawData, implied);
-
           Concentrator.impliedTypes = Object.merge(implied, Concentrator.impliedTypes);
         }
       {{/if}}
