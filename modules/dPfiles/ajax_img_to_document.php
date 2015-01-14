@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 /**
  * $Id$
- *  
+ *
  * @category Files
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -66,7 +66,7 @@ if (!$patient->_id) {
 $patient->loadRefsFiles();
 foreach ($patient->_ref_files as $_key => $_file) {
   $right = $_file->canDo();
-  if (!$_file->isImage() || !$_file->_can->read) {
+  if (!$_file->isImage() || !$_file->_can->read || $_file->annule) {
     unset($patient->_ref_files[$_key]);
     continue;
   }
@@ -79,7 +79,7 @@ foreach ($consults as $_consult) {
   $_consult->loadRefsFiles();
   foreach ($_consult->_ref_files as $_key => $_file) {
     $right = $_file->canDo();
-    if (!$_file->isImage() || !$_file->_can->read) {
+    if (!$_file->isImage() || !$_file->_can->read || $_file->annule) {
       unset($_consult->_ref_files[$_key]);
       continue;
     }
@@ -92,7 +92,7 @@ foreach ($sejours as $_sejour) {
   $_sejour->loadRefsFiles();
   foreach ($_sejour->_ref_files as $_key => $_file) {
     $right = $_file->canDo();
-    if (!$_file->isImage() || !$_file->_can->read) {
+    if (!$_file->isImage() || !$_file->_can->read || $_file->annule) {
       unset($_sejour->_ref_files[$_key]);
       continue;
     }
@@ -104,7 +104,7 @@ foreach ($sejours as $_sejour) {
     $_op->loadRefsFiles();
     foreach ($_op->_ref_files as $_key => $_file) {
       $right = $_file->canDo();
-      if (!$_file->isImage() || !$_file->_can->read) {
+      if (!$_file->isImage() || !$_file->_can->read || $_file->annule) {
         unset($_op->_ref_files[$_key]);
         continue;
       }
