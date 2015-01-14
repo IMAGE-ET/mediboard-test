@@ -33,7 +33,7 @@ if ($context_guid) {
   if ($object->_id) {
     $object->loadRefsFiles();
     foreach ($object->_ref_files as $file_id => $_file) {
-      if ( (strpos($_file->file_type, "image/") === false) || ($_file->file_type == "image/fabricjs") ) {
+      if ( (strpos($_file->file_type, "image/") === false) || ($_file->file_type == "image/fabricjs") || ($_file->annule) ) {
         unset($object->_ref_files[$file_id]);
       }
     }
