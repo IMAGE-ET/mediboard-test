@@ -112,7 +112,7 @@
             {{/if}}
 
             <a href="#" {{if !$app->touch_device}}ondblclick{{else}}onclick{{/if}}="popFile('{{$object->_class}}', '{{$object->_id}}', '{{$_doc_item->_class}}', '{{$elementId}}', '0');">
-              <img class="thumbnail {{if !$app->touch_device}}draggable{{/if}}" style="background: white;" src="{{$srcImg}}" data-id="{{$elementId}}" data-class="{{$_doc_item->_class}}" data-targetFrom="{{$_doc_item->object_class}}-{{$_doc_item->object_id}}"/>
+              <img class="thumbnail {{if !$app->touch_device}}draggable{{/if}}" style="background: white; max-width:64px; max-height:92px;" src="{{$srcImg}}" data-id="{{$elementId}}" data-class="{{$_doc_item->_class}}" data-targetFrom="{{$_doc_item->object_class}}-{{$_doc_item->object_id}}"/>
             </a>
           </td>
 
