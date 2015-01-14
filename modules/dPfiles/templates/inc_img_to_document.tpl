@@ -162,7 +162,7 @@
     <h3>{{tr}}{{$patient->_class}}{{/tr}}</h3>
     {{foreach from=$patient->_ref_files item=_file}}
       <div class="draggable"  data-file_id="{{$_file->_id}}" data-name="{{$_file->_no_extension}}">
-        <img data-src="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id={{$_file->_id}}" src="?m=dPfiles&a=fileviewer&file_id={{$_file->_id}}&phpThumb=1&w=60&h=60" alt="" /><br/>
+        <img data-src="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id={{$_file->_id}}" src="?m=dPfiles&a=fileviewer&file_id={{$_file->_id}}&phpThumb=1&w=60&h=60" alt="" style="max-width:80px; max-height: 60px;" /><br/>
         {{$_file}}
       </div>
     {{/foreach}}
