@@ -17,6 +17,10 @@
     Control.Tabs.setTabCount("patient_cach", {{$patients_count.cach}});
     Control.Tabs.setTabCount("patient_vali", {{$patients_count.vali}});
   });
+
+  window.onMergeComplete = function() {
+    PatientState.getListPatientByState('{{$state}}', '{{$page}}');
+  };
 </script>
 
 {{mb_include module=system template=inc_pagination total=$count current=$page change_page="PatientState.changePage.$state" step=30}}
