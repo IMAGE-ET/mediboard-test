@@ -124,7 +124,10 @@ function toggleList(list, button) {
 
   <tr>
     <th>{{mb_label object=$patient field="notes_amc"}}</th>
-    <td colspan="3">{{mb_value object=$patient field="notes_amc"}}</td>
+    <td>{{mb_value object=$patient field="notes_amc"}}</td>
+
+    <th>{{mb_label object=$patient field=ame}}</th>
+    <td>{{mb_value object=$patient field=ame}}</td>
   </tr>
 	
   {{if $patient->_ref_medecin_traitant->medecin_id || $patient->_ref_medecins_correspondants|@count}}

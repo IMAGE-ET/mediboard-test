@@ -2757,7 +2757,12 @@ class CSetupdPpatients extends CSetup {
                 ADD `pres_artere_invasive` INT(3);";
     $this->addQuery($query);
 
-    $this->mod_version = '2.27';
+    $this->makeRevision('2.27');
+    $query = "ALTER TABLE `patients`
+              ADD `ame` ENUM('0','1') DEFAULT '0' AFTER `cmu`;";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.28';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

@@ -217,6 +217,10 @@ Main.add(function() {
             Couverture Maladie Universelle<br/>
           {{/if}}
 
+          {{if $patient->ame}}
+            {{tr}}CPatient-AME{{/tr}}<br/>
+          {{/if}}
+
           {{if $conf.ref_pays == 1}}
             {{if $patient->ald}}
               Affection Longue Durée<br/>

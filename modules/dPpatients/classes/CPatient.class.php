@@ -127,6 +127,10 @@ class CPatient extends CPerson {
   public $regime_sante;
   public $rques;
   public $cmu;
+
+  /** @var  boolean "Aide médicale de l'État" */
+  public $ame;
+
   public $ald;
   public $code_exo;
   public $libelle_exo;
@@ -444,6 +448,7 @@ class CPatient extends CPerson {
     $props["deces"]             = "dateTime";
     $props["rques"]             = "text";
     $props["cmu"]               = "bool";
+    $props["ame"]               = "bool";
     $props["ald"]               = "bool";
     $props["code_exo"]          = "enum list|0|4|5|9 default|0";
     $props["libelle_exo"]        = "text";

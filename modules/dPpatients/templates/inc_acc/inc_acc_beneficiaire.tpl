@@ -104,6 +104,10 @@ Main.add(checkFinAmo);
     <td>{{mb_field object=$patient field="cmu" onchange="calculFinAmo();"}}</td>
   </tr>
   <tr>
+    <th>{{mb_label object=$patient field="ame"}}</th>
+    <td>{{mb_field object=$patient field="ame"}}</td>
+  </tr>
+  <tr>
     <th>{{mb_label object=$patient field="ATNC"}}</th>
     <td>{{mb_field object=$patient field="ATNC"}}</td>
   </tr>
