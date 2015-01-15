@@ -38,8 +38,24 @@
   </style>
 
   <script>
+
+    domUp = function(elt) {
+      var previous = elt.previous();
+      if (previous) {
+        previous.remove();
+        elt.insert({after:previous});
+      }
+    };
+
+    domDown = function(elt) {
+      var next = elt.next();
+      if (next) {
+        next.remove();
+        elt.insert({before:next});
+      }
+    };
+
     createLi = function(elt, target) {
-      var form = getForm("edit-configuration");
       var _id = ($$('li.line_config').length)+1;
       var title = '';
       var elts = [];
@@ -51,6 +67,8 @@
       }
 
       var _button = DOM.button({'type': 'button', 'className': 'trash', 'onclick': 'this.up().remove();'});
+      var _up = DOM.button({'type': 'button', 'className': 'up', 'onclick': 'domUp(this.up("li"));'});
+      var _down = DOM.button({'type': 'button', 'className': 'down', 'onclick': 'domDown(this.up("li"));'});
       var _input = DOM.input({'type': 'text', 'className':'title', 'name':'title', 'value': title});
 
       var _span_atc = DOM.span({'class': 'atc'});
@@ -62,7 +80,7 @@
 
       var _auto_cp = DOM.input({"id" : 'seek_'+_id, "type" : "text", "name" : 'keywords_atc', "placeholder": "Rercherche"});
       var _div_ac = DOM.div({"style" : "float:right"}, _auto_cp);
-      var _line = DOM.li({'className' : 'line_config'}, _button, _input, _span_atc, _div_ac);
+      var _line = DOM.li({'className' : 'line_config'}, _button, _up, _down, _input, _span_atc, _div_ac);
 
       $(target).insert(_line);
 
