@@ -154,7 +154,7 @@ class CPatientState extends CMbObject {
       }
       if ($_state == "DPOT") {
         $patient_link = new CPatientLink();
-        $patients_count[CMbString::lower($_state)] = $patient_link->countList($where, null, $leftjoin);
+        $patients_count[CMbString::lower($_state)] = $patient_link->countList($where, null, array("sejour" => "patient_link.patient_id1 = sejour.patient_id"));
       }
     }
 
