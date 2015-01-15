@@ -1,3 +1,5 @@
+{{assign var=configLDAP value=$conf.admin.LDAP.ldap_connection}}
+
 <table class="tbl">
   <tr>
     <th>
@@ -32,7 +34,7 @@
     {{if $_user->_ref_user->_id}}
 
      <td class="text">
-       <a href="#{{$_user->_guid}}" onclick="showMediuser('{{$_user->_id}}', this)" class="mediuser" style="border-left-color: #{{$_user->_ref_function->color}};">
+       <a href="#{{$_user->_guid}}" onclick="editMediuser('{{$_user->_id}}', this)" class="mediuser" style="border-left-color: #{{$_user->_ref_function->color}};">
          <span onmouseover="ObjectTooltip.createEx(this,'{{$_user->_guid}}', 'identifiers')">
            {{mb_value object=$_user field=_user_username}}
          </span>
@@ -40,13 +42,13 @@
      </td>
      
      <td class="text">
-       <a href="#{{$_user->_guid}}" onclick="showMediuser('{{$_user->_id}}', this)">
+       <a href="#{{$_user->_guid}}" onclick="editMediuser('{{$_user->_id}}', this)">
          {{mb_value object=$_user field=_user_last_name}}
        </a>
      </td>
      
      <td class="text">
-       <a href="#{{$_user->_guid}}" onclick="showMediuser('{{$_user->_id}}', this)">
+       <a href="#{{$_user->_guid}}" onclick="editMediuser('{{$_user->_id}}', this)">
          {{mb_value object=$_user field=_user_first_name}}
        </a>
      </td>
@@ -57,9 +59,7 @@
 
      <td class="text" style="text-align: center">
        {{assign var=type value=$_user->_user_type}}
-       {{if array_key_exists($type, $utypes)}}
-       {{mb_ditto name=type_name value=$utypes.$type}}
-       {{/if}}
+       {{mb_ditto name=type_name value=$type}}
      </td>
       
      <td class="text" style="text-align: center">
@@ -69,7 +69,7 @@
      <td class="text">{{mb_value object=$_user field=remote}}</td>
      
      {{if $configLDAP}}
-     <td>{{mb_value object=$_user->_ref_user field=_ldap_linked}}</td>
+      <td>{{mb_value object=$_user->_ref_user field=_ldap_linked}}</td>
      {{/if}}
       
      <td {{if !$_user->actif}} class="cancelled" {{/if}}>
@@ -82,7 +82,6 @@
      <td class="narrow">
        {{mb_include module=admin template=unlock _user=$_user->_ref_user}}
      </td>
-          
      {{else}}
        <td colspan="10" class="text">
          <div class="small-warning">

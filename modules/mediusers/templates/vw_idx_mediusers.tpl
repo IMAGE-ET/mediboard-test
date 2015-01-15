@@ -1,119 +1,141 @@
-<script type="text/javascript">
-
-popupImport = function () {
-  var url = new Url("mediusers", "user_import_csv");
-  url.popup(800, 600, "Import des utilisateurs");
-  return false;
-};
-
-showMediuser = function(user_id, element) {
-  if (element) {
-    element.up('tr').addUniqueClassName('selected');
-  }
-
-  var url = new Url("mediusers", "ajax_edit_mediuser");
-  url.addParam("user_id", user_id);
-  url.addParam("no_association", "{{$no_association}}");
-  url.addParam("ldap_user_actif", "{{$ldap_user_actif}}");
-  url.addParam("ldap_user_deb_activite", "{{$ldap_user_deb_activite}}");
-  url.addParam("ldap_user_fin_activite", "{{$ldap_user_fin_activite}}");
-  url.requestUpdate("vw_mediuser");
-};
-
-createUserFromLDAP = function(){
-  var url = new Url("admin", "ajax_choose_filter_ldap");
-  url.requestModal(800, 350);
-};
-
-function changePage(page) {
-  $V(getForm('listFilter').page,page);
-}
-
-Main.add(function() {
-  showMediuser('{{$user_id}}');
-});
-</script>
-
 {{assign var=configLDAP value=$conf.admin.LDAP.ldap_connection}}
 
-<table class="main">
-  {{if $can->edit}}
-  <tr>
-    <td style="width: 60%">
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id=0" class="button new">
-        {{tr}}CMediusers-title-create{{/tr}}
-      </a>
-    
-      {{if $configLDAP}}
-        <button class="new" onclick="createUserFromLDAP()">
-          {{tr}}CMediusers_create-ldap{{/tr}}
-        </button>
-      {{/if}}
-    </td>
-  </tr>
+<script>
+  popupImport = function () {
+    var url = new Url("mediusers", "user_import_csv");
+    url.popup(800, 600, "Import des utilisateurs");
+    return false;
+  };
+
+  editMediuser = function(user_id, element) {
+    if (element) {
+      element.up('tr').addUniqueClassName('selected');
+    }
+
+    var url = new Url("mediusers", "ajax_edit_mediuser");
+    url.addParam("user_id", user_id);
+    url.addParam("no_association", "{{$no_association}}");
+    url.addParam("ldap_user_actif", "{{$ldap_user_actif}}");
+    url.addParam("ldap_user_deb_activite", "{{$ldap_user_deb_activite}}");
+    url.addParam("ldap_user_fin_activite", "{{$ldap_user_fin_activite}}");
+    url.requestModal(800, 700);
+    url.modalObject.observe("afterClose", function() {
+      getForm('listFilter').onsubmit();
+    });
+  };
+
+  createUserFromLDAP = function(){
+    var url = new Url("admin", "ajax_choose_filter_ldap");
+    url.requestModal(800, 350);
+  };
+
+  changePage = function(page) {
+    $V(getForm('listFilter').page, page);
+  };
+
+  Main.add(function() {
+    {{if $user_id}}
+      editMediuser('{{$user_id}}');
+    {{/if}}
+    getForm('listFilter').onsubmit();
+  });
+</script>
+
+{{if $can->edit}}
+  <a href="#" onclick="editMediuser(0)" class="button new">
+    {{tr}}CMediusers-title-create{{/tr}}
+  </a>
+  {{if $configLDAP}}
+    <button class="new" onclick="createUserFromLDAP()">
+      {{tr}}CMediusers_create-ldap{{/tr}}
+    </button>
   {{/if}}
-  <tr>
-    <td>
-      <button type="button" style="float:right;" onclick="return popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button>
-      <form name="listFilter" action="?m={{$m}}" method="get">
-        <input type="hidden" name="m" value="{{$m}}" />
-        <input type="hidden" name="tab" value="{{$tab}}" />
-        <input type="hidden" name="page" value="{{$page}}" onchange="this.form.submit()"/>
-        <table class="form">
-          <tr>
-            <th class="title" colspan="10">
-              {{tr}}Filter{{/tr}}
-            </th>
-          </tr>
-          <tr>
-            <th>Champ de recherche</th>
-            <td>
-              <input type="text" name="filter" value="{{$filter}}" style="width: 15em;" onchange="$V(this.form.page, 0)" />
-            </td>
-          </tr>
-          <tr>
-            <th>{{mb_label class="CMediusers" field="_user_type"}}</th>
-            <td>
-              <select name="_user_type" style="width: 15em;">
-                <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-                {{foreach from=$utypes key=curr_key item=_type}}
-                  <option value="{{if $curr_key != 0}}{{$curr_key}}{{/if}}" {{if $type == $curr_key}}selected="selected"{{/if}}>
-                    {{$_type}}
-                  </option>
-                {{/foreach}}
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <th>Afficher seulement</th>
-            <td>
-              <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="pro_sante" {{if $pro_sante}}checked="checked"{{/if}} />
-              <label for="pro_sante">Professionnel de santé</label>
-              <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="inactif" {{if $inactif}}checked="checked"{{/if}} />
-              <label for="inactif">Inactif</label>
-              {{if $configLDAP}}
-                <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="ldap_bound" {{if $ldap_bound}}checked="checked"{{/if}} />
-                <label>Associé au LDAP</label>
-              {{/if}}
-              <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="human" {{if $human}}checked="checked"{{/if}} />
-              <label for="human">Humain</label>
-              <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="robot" {{if $robot}}checked="checked"{{/if}} />
-              <label for="robot">Robot</label>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2" style="text-align: center">
-              <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
-            </td>
-          </tr>
-        </table>        
-        {{if $total_mediuser != 0}}
-          {{mb_include module=system template=inc_pagination total=$total_mediuser current=$page change_page='changePage'}}
-        {{/if}}
-      </form>
-      {{mb_include template=vw_list_mediusers}}
-    </td>
-    <td style="width: 40%" id="vw_mediuser">
-    </td>
-  </tr>
-</table>
+{{/if}}
+
+<style>
+  fieldset.fieldset_search div {
+    display: inline-block;
+  }
+</style>
+
+<button type="button" style="float:right;" onclick="return popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button>
+<hr/>
+<form name="listFilter" action="?m={{$m}}" method="get" onsubmit="return onSubmitFormAjax(this, null, 'result_search_mb')">
+  <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="a" value="ajax_search_mediusers" />
+  <input type="hidden" name="page" value="0" onchange="this.form.onsubmit()"/>
+
+  <fieldset class="fieldset_search">
+      <legend>Recherche d'{{tr}}CMediusers{{/tr}}</legend>
+
+    <div>
+      <label>
+        Texte :
+        <input type="text" name="filter" value="{{$filter}}" style="width: 15em;" onchange="$V(this.form.page, 0)" />
+      </label>
+    </div>
+
+    <div>
+      <label>{{tr}}CFunctions{{/tr}}
+        <select name="function_id">
+          <option value="">&mdash; {{tr}}CFunctions.all{{/tr}}</option>
+          {{foreach from=$group->_ref_functions item=_function}}
+            <option value="{{$_function->_id}}">{{$_function}}</option>
+          {{/foreach}}
+        </select>
+      </label>
+    </div>
+
+    <div>
+      {{mb_label class="CMediusers" field="_user_type"}}
+      <select name="_user_type" style="width: 15em;">
+        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+        {{foreach from=$utypes key=curr_key item=_type}}
+          <option value="{{if $curr_key != 0}}{{$curr_key}}{{/if}}" {{if $type == $curr_key}}selected="selected"{{/if}}>
+            {{$_type}}
+          </option>
+        {{/foreach}}
+      </select>
+    </div>
+
+    <div>
+      <label>Verrouillage
+        <select name="locked">
+          <option value="">Tous</option>
+          <option value="1">Vérouillés seulement</option>
+          <option value="0">Non Vérouillés seulement</option>
+        </select>
+      </label>
+    </div>
+
+    <fieldset style="display:inline-block;">
+      <legend>Afficher seulement</legend>
+        <label>
+          <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="pro_sante" />
+          Professionnel de santé
+        </label>
+        <label>
+          <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="inactif" />
+          Inactif
+        </label>
+      {{if $configLDAP}}
+          <label>
+            <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="ldap_bound" />
+            Associé au LDAP
+          </label>
+      {{/if}}
+        <label>
+          <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="human" />
+          Humain
+        </label>
+        <label>
+          <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="robot" />
+          Robot
+        </label>
+    </fieldset>
+
+    <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
+  </fieldset>
+</form>
+
+<div id="result_search_mb" style="overflow: hidden"></div>

@@ -37,7 +37,4 @@
   </table>
 </form>
 
-<div id="search-results">
-
-
-</div>
+<div id="search-results"></div>

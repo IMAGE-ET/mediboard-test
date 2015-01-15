@@ -1,69 +1,69 @@
 {{mb_script module=hospi script=affectation_uf ajax=1}}
 
 <script type="text/javascript">
-searchUserLDAP = function(object_id) {
-  var url = new Url("admin", "ajax_search_user_ldap");
-  url.addParam("object_id", object_id);
-  url.requestModal(800, 350);
-  url.modalObject.observe("afterClose", function() { location.reload(); } );
-  window.ldapurl = url;
-};
+  searchUserLDAP = function(object_id) {
+    var url = new Url("admin", "ajax_search_user_ldap");
+    url.addParam("object_id", object_id);
+    url.requestModal(800, 350);
+    url.modalObject.observe("afterClose", function() { location.reload(); } );
+    window.ldapurl = url;
+  };
 
-showPratInfo = function(type) {
-  var ps_types = {{$ps_types|@json}};
-  Control.Tabs.getTabAnchor('infos_praticien').setClassName('wrong', !ps_types.include(type));
-};
+  showPratInfo = function(type) {
+    var ps_types = {{$ps_types|@json}};
+    Control.Tabs.getTabAnchor('infos_praticien').setClassName('wrong', !ps_types.include(type));
+  };
 
-loadProfil = function(type){
-  var tabProfil = {{$tabProfil|@json}};
+  loadProfil = function(type){
+    var tabProfil = {{$tabProfil|@json}};
 
-  // Liste des profils dispo pour le type selectionné
-  var listProfil = tabProfil[type] || [];
+    // Liste des profils dispo pour le type selectionné
+    var listProfil = tabProfil[type] || [];
 
-  $A(document.mediuser._profile_id).each( function(input) {
-    input.disabled = !listProfil.include(input.value) && input.value;
-    input.selected = input.selected && !input.disabled;
-  });  
-};
+    $A(document.mediuser._profile_id).each( function(input) {
+      input.disabled = !listProfil.include(input.value) && input.value;
+      input.selected = input.selected && !input.disabled;
+    });
+  };
 
-changeRemote = function(input) {
-  var oPassword = $(input.form._user_password);
+  changeRemote = function(input) {
+    var oPassword = $(input.form._user_password);
 
-  // can the user connect remotely ?
-  var canRemote = $V(input)==0;
+    // can the user connect remotely ?
+    var canRemote = $V(input)==0;
 
-  // we change the form element's spec 
-  oPassword.className = canRemote?
-    '{{$object->_props._user_password_strong}}':
-    '{{$object->_props._user_password_weak}}';
+    // we change the form element's spec
+    oPassword.className = canRemote?
+      '{{$object->_props._user_password_strong}}':
+      '{{$object->_props._user_password_weak}}';
 
-  {{if !$object->user_id}}oPassword.addClassName('notNull');{{/if}}
+    {{if !$object->user_id}}oPassword.addClassName('notNull');{{/if}}
 
-  // Admin user can force the remote field toggle
-  {{if !$is_admin}}
-    // Force to re-enter password
-    if (canRemote) {
-      oPassword.addClassName('notNull');
-    }
-  {{/if}}
+    // Admin user can force the remote field toggle
+    {{if !$is_admin}}
+      // Force to re-enter password
+      if (canRemote) {
+        oPassword.addClassName('notNull');
+      }
+    {{/if}}
 
-  // we check the field
-  checkFormElement(oPassword);
-};
+    // we check the field
+    checkFormElement(oPassword);
+  };
 
-unlinkOrUpdateUserLDAP = function(user_id, action) {
-  var url = new Url("admin", "ajax_unlink_update_user_ldap");
-  url.addParam("user_id", user_id);
-  url.addParam("action", action);
-  url.requestUpdate(SystemMessage.id, {onComplete: function() {showMediuser(user_id);}});
-};
+  unlinkOrUpdateUserLDAP = function(user_id, action) {
+    var url = new Url("admin", "ajax_unlink_update_user_ldap");
+    url.addParam("user_id", user_id);
+    url.addParam("action", action);
+    url.requestUpdate(SystemMessage.id, {onComplete: function() {showMediuser(user_id);}});
+  };
 
-Main.add(function () {
-  {{if $object->_id}}
-    showPratInfo("{{$object->_user_type}}");
-    loadProfil("{{$object->_user_type}}");
-  {{/if}}
-});
+  Main.add(function () {
+    {{if $object->_id}}
+      showPratInfo("{{$object->_user_type}}");
+      loadProfil("{{$object->_user_type}}");
+    {{/if}}
+  });
 </script>
 
 {{assign var=configLDAP value=$conf.admin.LDAP.ldap_connection}}
@@ -105,9 +105,9 @@ Main.add(function () {
   {{$pwd_info}}
 </div>
 
-<form name="mediuser" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+<form name="mediuser" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete : Control.Modal.close});">
   {{if !$can->edit}}
-  <input name="_locked" value="1" hidden="hidden" />
+    <input name="_locked" value="1" hidden="hidden" />
   {{/if}}
   <input type="hidden" name="dosql" value="do_mediusers_aed" />
   <input type="hidden" name="user_id" value="{{$object->_id}}" />
