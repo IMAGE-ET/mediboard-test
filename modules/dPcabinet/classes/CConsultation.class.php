@@ -2092,6 +2092,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     }
 
     // Création de la consultation d'anesthésie
+    $this->_count["consult_anesth"] = null;
     $consultAnesth = $this->loadRefConsultAnesth();
     $operation = new COperation();
     if (!$consultAnesth->_id || $this->_operation_id) {
