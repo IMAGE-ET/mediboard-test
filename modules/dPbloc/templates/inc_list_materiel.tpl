@@ -42,7 +42,7 @@
     
     <td class="text">
       {{if !$dialog}}
-        {{if $_operation->date}}
+        {{if !$_operation->plageop_id}}
           <a href="?m=planningOp&tab=vw_edit_urgence&operation_id={{$_operation->_id}}">
         {{else}}
           <a href="?m=planningOp&tab=vw_edit_planning&operation_id={{$_operation->_id}}">
