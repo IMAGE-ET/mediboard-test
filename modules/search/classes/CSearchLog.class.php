@@ -3,7 +3,7 @@
 /**
  * $Id$
  *
- * @category ${Module}
+ * @category Search
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -18,7 +18,7 @@ use Elastica\Query;
  */
 class CSearchLog extends CSearch {
 
-  static $names_mapping = array("generique", "pharmacie", "pmsi", "bloc");
+  static $names_mapping = array("generique", "pharmacie", "pmsi", "prescription", "classique");
 
   static $mapping_log = array(
     "date"         => array(
@@ -28,7 +28,7 @@ class CSearchLog extends CSearch {
     ),
 
     "user_id"      => array(
-      'type'           => 'integer',
+      'type'           => 'string',
       'include_in_all' => true
     ),
 
@@ -199,7 +199,7 @@ class CSearchLog extends CSearch {
   }
 
   function searchQueryLogDetails ($operator, $words, $names_types = null) {
-    $words = CmbString::normalizeUtf8($words);
+    $words = CmbString::normalizeUtf8(stripcslashes($words));
     // Define a Query. We want a string query.
     $elasticaQueryString  = new QueryString();
 
