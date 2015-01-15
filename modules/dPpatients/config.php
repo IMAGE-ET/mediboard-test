@@ -31,6 +31,7 @@ $dPconfig["dPpatients"] = array (
 
   "CAntecedent" => array (
     "types"     => "med|alle|trans|obst|chir|fam|anesth|gyn",
+    "mandatory_types" => "",
     "appareils" => "cardiovasculaire|digestif|endocrinien|neuro_psychiatrique|pulmonaire|uro_nephrologique",
   ),
 

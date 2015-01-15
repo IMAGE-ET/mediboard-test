@@ -13,9 +13,11 @@ CCanDo::checkAdmin();
 
 // Types et Appareils
 $active_types     = explode('|', CAppUI::conf("dPpatients CAntecedent types"));
+$mandatory_types  = explode('|', CAppUI::conf("dPpatients CAntecedent mandatory_types"));
 $active_appareils = explode('|', CAppUI::conf("dPpatients CAntecedent appareils"));
-$all_types     = array_unique(array_merge(CAntecedent::$types    , $active_types));
-$all_appareils = array_unique(array_merge(CAntecedent::$appareils, $active_appareils));
+$all_types            = array_unique(array_merge(CAntecedent::$types    , $active_types));
+$all_mandatory_types  = array_unique(array_merge(CAntecedent::$types    , $mandatory_types));
+$all_appareils        = array_unique(array_merge(CAntecedent::$appareils, $active_appareils));
 
 // Départements des correspondants
 $departements = array();
@@ -46,8 +48,10 @@ $smarty = new CSmartyDP();
 $smarty->assign("nb_patients"  , $nb_patients);
 
 $smarty->assign("active_types"    , $active_types);
+$smarty->assign("mandatory_types"    , $mandatory_types);
 $smarty->assign("active_appareils", $active_appareils);
 $smarty->assign("all_types"       , $all_types);
+$smarty->assign("all_mandatory_types"       , $all_types);
 $smarty->assign("all_appareils"   , $all_appareils);
 
 $smarty->assign("pass"        , CValue::get("pass"));

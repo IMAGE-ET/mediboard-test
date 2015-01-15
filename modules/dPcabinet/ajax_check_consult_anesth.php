@@ -50,6 +50,20 @@ $dossier_medical_patient->loadRefsAntecedents();
 $dossier_medical_patient->loadRefsTraitements();
 $dossier_medical_patient->loadRefPrescription();
 
+//antecedents oblogatoires
+$mandatories = array();
+$mandatory_types = explode('|', CAppUI::conf("dPpatients CAntecedent mandatory_types"));
+foreach ($mandatory_types as $_type) {
+  $mandatories[$_type] = array();
+}
+foreach ($dossier_medical_patient->_ref_antecedents_by_type as $type => $_atcs) {
+  if (count($_atcs) && in_array($type, $mandatory_types)) {
+    foreach($_atcs as $_atc) {
+      $mandatories[$type][$_atc->_id] = $_atc;
+    }
+  }
+}
+
 $op_sans_dossier_anesth = 0;
 // Chargement du patient
 $patient->countBackRefs("sejours");
@@ -82,10 +96,9 @@ foreach ($patient->_ref_sejours as $_key => $_sejour) {
 
 // Création du template
 $smarty = new CSmartyDP();
-
-$smarty->assign("consult"     , $consult);
-$smarty->assign("dm_patient"  , $dossier_medical_patient);
-$smarty->assign("tab_op"      , $tab_op);
-$smarty->assign("op_sans_dossier_anesth"      , $op_sans_dossier_anesth);
-
+$smarty->assign("consult"                   , $consult);
+$smarty->assign("mandatory_types"           , $mandatories);
+$smarty->assign("dm_patient"                , $dossier_medical_patient);
+$smarty->assign("tab_op"                    , $tab_op);
+$smarty->assign("op_sans_dossier_anesth"    , $op_sans_dossier_anesth);
 $smarty->display("inc_check_consult_anesth.tpl");
