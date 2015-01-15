@@ -40,6 +40,7 @@
   <script>
     createLi = function(elt, target) {
       var form = getForm("edit-configuration");
+      var _id = ($$('li.line_config').length)+1;
       var title = '';
       var elts = [];
 
@@ -59,23 +60,22 @@
         }
       });
 
-
-
-      var _auto_cp = DOM.input({"id" : 'seek_'+title, "type" : "text", "name" : /*"seek_"+title*/ 'keywords_atc', "placeholder": "Rercherche"});
+      var _auto_cp = DOM.input({"id" : 'seek_'+_id, "type" : "text", "name" : 'keywords_atc', "placeholder": "Rercherche"});
       var _div_ac = DOM.div({"style" : "float:right"}, _auto_cp);
-      var _line = DOM.li(null, _button, _input, _span_atc, _div_ac);
+      var _line = DOM.li({'className' : 'line_config'}, _button, _input, _span_atc, _div_ac);
 
       $(target).insert(_line);
 
       // ac
       var urlATC = new Url("medicament", "ajax_atc_autocomplete");
-      urlATC.autoComplete("seek_"+title, null, {
+      urlATC.autoComplete("seek_"+_id, null, {
         minChars: 1,
         dropdown: true,
         updateElement: function(selected) {
           var div = selected.up('li').down("span.atc");
           var name = selected.select(".view")[0].innerHTML.replace(/<em>|<\/em>/g, '');
           div.insert(DOM.span({'class' : "tag_tab", 'onclick': '$(this).remove();'}, name));
+          $V("seek"+_id, '');
         }
       });
 
