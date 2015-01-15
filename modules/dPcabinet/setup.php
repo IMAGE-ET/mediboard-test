@@ -2223,6 +2223,11 @@ class CSetupdPcabinet extends CSetup {
 
     $this->addPrefQuery("show_replication_duplicate", "0");
 
-    $this->mod_version = '2.46';
+    $this->makeRevision("2.46");
+    $query = "ALTER TABLE `consultation_anesth`
+              ADD `mob_cervicale` ENUM( 'm80', '80m100', 'p100' );";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.47';
   }
 }

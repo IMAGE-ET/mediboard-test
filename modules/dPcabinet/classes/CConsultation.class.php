@@ -2561,7 +2561,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
             break;
           }
           $fields = array(
-            "mallampati", "bouche", "distThyro", "etatBucco", "conclusion",
+            "mallampati", "bouche", "distThyro", "mob_cervicale", "etatBucco", "conclusion",
             "plus_de_55_ans", "edentation", "barbe", "imc_sup_26", "ronflements", "piercing"
           );
           foreach ($fields as $_field) {

@@ -9,7 +9,7 @@
 
 <table class="main tbl" id="old_consult">
   <tr>
-    <th class="title" colspan="6">Liste des consultations d'anésthésie pour {{$patient->_view}}</th>
+    <th class="title" colspan="7">Liste des consultations d'anésthésie pour {{$patient->_view}}</th>
   </tr>
   <tr>
     <th class="category"></th>
@@ -17,6 +17,7 @@
     <th class="category">{{mb_label class=CConsultAnesth field="mallampati"}}</th>
     <th class="category">{{mb_label class=CConsultAnesth field="bouche"}}</th>
     <th class="category">{{mb_label class=CConsultAnesth field="distThyro"}}</th>
+    <th class="category">{{mb_label class=CConsultAnesth field="mob_cervicale"}}</th>
     <th></th>
   </tr>
   {{foreach from=$dossiers_anesth item=_dossier_anesth}}
@@ -29,15 +30,16 @@
       <td>{{mb_value object=$_dossier_anesth field="mallampati"}}</td>
       <td>{{mb_value object=$_dossier_anesth field="bouche"}}</td>
       <td>{{mb_value object=$_dossier_anesth field="distThyro"}}</td>
+      <td>{{mb_value object=$_dossier_anesth field="mob_cervicale"}}</td>
       <td class="button">
         <button class="tick" type="submit"
-                {{if !$_dossier_anesth->mallampati && !$_dossier_anesth->bouche && !$_dossier_anesth->distThyro}}disabled{{/if}}
-                onclick="assignDataOldConsultAnesth('{{$_dossier_anesth->mallampati}}', '{{$_dossier_anesth->bouche}}', '{{$_dossier_anesth->distThyro}}');">{{tr}}common-action-Get{{/tr}}</button>
+                {{if !$_dossier_anesth->mallampati && !$_dossier_anesth->bouche && !$_dossier_anesth->distThyro && !$_dossier_anesth->mob_cervicale}}disabled{{/if}}
+                onclick="assignDataOldConsultAnesth('{{$_dossier_anesth->mallampati}}', '{{$_dossier_anesth->bouche}}', '{{$_dossier_anesth->distThyro}}', '{{$_dossier_anesth->mob_cervicale}}');">{{tr}}common-action-Get{{/tr}}</button>
       </td>
     </tr>
   {{foreachelse}}
     <tr>
-      <td class="empty" colspan="6">{{tr}}CConsultAnesth.none{{/tr}}</td>
+      <td class="empty" colspan="7">{{tr}}CConsultAnesth.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

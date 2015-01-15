@@ -111,7 +111,7 @@
       </td>
       {{foreach from=$consult->_refs_dossiers_anesth item=consult_anesth}}
         {{assign var="result" value=false}}
-        {{if ($consult_anesth->mallampati && $consult_anesth->bouche && $consult_anesth->distThyro) || $consult_anesth->conclusion}}
+        {{if ($consult_anesth->mallampati && $consult_anesth->bouche && $consult_anesth->distThyro && $consult_anesth->mob_cervicale) || $consult_anesth->conclusion}}
           {{assign var="result" value=true}}
         {{/if}}
         <td class="button"><img src="images/icons/note_{{if $result}}green{{else}}red{{/if}}.png"/></td>

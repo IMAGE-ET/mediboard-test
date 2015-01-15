@@ -14,7 +14,8 @@ verifIntubDifficileAndSave = function(oForm){
     ((oForm.mallampati[2].checked ||
     oForm.mallampati[3].checked || 
     oForm.bouche[0].checked || 
-    oForm.bouche[1].checked || 
+    oForm.bouche[1].checked ||
+    oForm.mob_cervicale[0].checked ||
     oForm.distThyro[0].checked) &&
     $V(oForm.intub_difficile) != '0');
    var div = $('divAlertIntubDiff');
@@ -48,7 +49,7 @@ verifIntubDifficileAndSave = function(oForm){
 };
 
 resetIntubation = function(form) {
-  var fields = ["mallampati", "bouche", "distThyro", "etatBucco", "conclusion"];
+  var fields = ["mallampati", "bouche", "distThyro", "mob_cervicale", "etatBucco", "conclusion"];
   fields.each(function(f){
     $V(form[f], '');
   });
@@ -269,11 +270,12 @@ SchemaDentaire = {
   }
 };
 
-assignDataOldConsultAnesth = function (mallampati, bouche, distThyro) {
+assignDataOldConsultAnesth = function (mallampati, bouche, distThyro, mob_cervicale) {
   var oform = getForm("editFrmIntubation");
   $V(oform.elements.mallampati, mallampati);
   $V(oform.elements.bouche, bouche);
   $V(oform.elements.distThyro, distThyro);
+  $V(oform.elements.mob_cervicale, mob_cervicale);
   verifIntubDifficileAndSave(oform);
   Control.Modal.close();
 };

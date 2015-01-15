@@ -25,7 +25,7 @@
 
     var count_tab = 0;
     var fields = [
-      "mallampati", "bouche", "distThyro", "etatBucco", "conclusion",
+      "mallampati", "bouche", "distThyro", "mob_cervicale", "etatBucco", "conclusion",
       "plus_de_55_ans", "edentation", "barbe", "imc_sup_26", "ronflements", "piercing"
     ];
 
@@ -47,7 +47,7 @@
   callbackEtatDent = function() {
     var count_tab = 0;
     var fields = [
-      "mallampati", "bouche", "distThyro", "etatBucco", "conclusion",
+      "mallampati", "bouche", "distThyro", "mob_cervicale", "etatBucco", "conclusion",
       "plus_de_55_ans", "edentation", "barbe", "imc_sup_26", "ronflements", "piercing"
     ];
     var form = getForm("editFrmIntubation");
@@ -205,7 +205,7 @@
             </td>
           </tr>
           <tr>
-            <td colspan="2">
+            <td>
               <fieldset>
                 <legend>
                   Critères de ventilation
@@ -213,6 +213,15 @@
                 <div id="ventilation_area">
                   {{mb_include module="cabinet" template="inc_guess_ventilation"}}
                 </div>
+              </fieldset>
+            </td>
+            <td>
+              <fieldset>
+                <legend>
+                  {{mb_label object=$consult_anesth field="mob_cervicale"}}
+                </legend>
+                {{mb_field object=$consult_anesth field="mob_cervicale" typeEnum="radio" separator="<br />" onclick="\$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);"}}
+                <input type="radio" style="display: none;" name="mob_cervicale" value="" {{if !$consult_anesth->mob_cervicale}}checked{{/if}} onclick="$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);" />
               </fieldset>
             </td>
           </tr>

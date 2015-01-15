@@ -551,6 +551,10 @@
           <td style="font-weight: bold;">{{tr}}CConsultAnesth.distThyro.{{$dossier_anesth->distThyro}}{{/tr}}</td>
         </tr>
         <tr>
+          <th style="font-weight: normal;">{{tr}}CConsultAnesth.mob_cervicale{{/tr}}</th>
+          <td style="font-weight: bold;">{{tr}}CConsultAnesth.mob_cervicale.{{$dossier_anesth->mob_cervicale}}{{/tr}}</td>
+        </tr>
+        <tr>
           <th style="font-weight: normal;">Critères de ventilation</th>
           <td style="font-weight: bold;" class="text">
             {{if $dossier_anesth->plus_de_55_ans}}{{mb_label object=$dossier_anesth field=plus_de_55_ans}}<br/>{{/if}}

@@ -178,7 +178,7 @@ newExam = function(sAction, consultation_id) {
     </td>
   </tr>
   
-  {{if $object->mallampati || $object->bouche || $object->distThyro || $object->etatBucco || 
+  {{if $object->mallampati || $object->bouche || $object->distThyro || $object->mob_cervicale || $object->etatBucco ||
        $object->examenCardio || $object->examenPulmo || $object->examenDigest || $object->examenAutre ||
        $object->conclusion}}
   <tr>
@@ -224,6 +224,12 @@ newExam = function(sAction, consultation_id) {
     <td class="text" colspan="2">
       <strong>Conclusion :</strong>
       <i>{{$object->conclusion|nl2br}}</i>
+    </td>
+  </tr>
+  <tr>
+    <td class="text" colspan="4">
+      <strong>Mobilité cervicale :</strong>
+      {{if $object->mob_cervicale}}<i>{{tr}}CConsultAnesth.mob_cervicale.{{$object->mob_cervicale}}{{/tr}}</i>{{/if}}
     </td>
   </tr>
   <tr>

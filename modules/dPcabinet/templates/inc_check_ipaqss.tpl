@@ -51,7 +51,7 @@
       6
     </div>
     {{assign var="result" value=false}}
-    {{if ($consult_anesth->mallampati && $consult_anesth->bouche && $consult_anesth->distThyro) || $consult_anesth->conclusion}}
+    {{if ($consult_anesth->mallampati && $consult_anesth->bouche && $consult_anesth->distThyro && $consult_anesth->mob_cervicale) || $consult_anesth->conclusion}}
       {{assign var="result" value=true}}
     {{/if}}
     <div onmouseover="ObjectTooltip.createDOM(this, 'DetailRank7');" class="rond {{if $result}}check{{else}}uncheck{{/if}}">7</div>

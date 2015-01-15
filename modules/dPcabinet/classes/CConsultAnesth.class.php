@@ -41,6 +41,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
   public $distThyro;
   public $etatBucco;
   public $intub_difficile;
+  public $mob_cervicale;
 
   // Criteres de ventilation
   public $plus_de_55_ans;
@@ -200,6 +201,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
     $props["distThyro"]        = "enum list|m65|p65";
     $props["etatBucco"]        = "text helped";
     $props["intub_difficile"]  = "bool";
+    $props["mob_cervicale"]    = "enum list|m80|80m100|p100";
     $props["plus_de_55_ans"]   = "bool";
     $props["imc_sup_26"]       = "bool";
     $props["edentation"]       = "bool";
@@ -246,7 +248,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
        $this->intub_difficile == '1' || 
        (($this->mallampati === "classe3" || $this->mallampati === "classe4" || 
        $this->bouche === "m20" || $this->bouche === "m35" || 
-       $this->distThyro === "m65") && $this->intub_difficile != '0');
+       $this->distThyro === "m65" || $this->mob_cervicale === "m80") && $this->intub_difficile != '0');
      
     $this->_sec_tsivy = intval(substr($this->tsivy, 6, 2));
     $this->_min_tsivy = intval(substr($this->tsivy, 3, 2));
@@ -655,6 +657,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
     $template->addProperty("Anesthésie - Critères de ventilation"   , $ventilation ? $ventilation : "Aucun", null, false);
 
     $template->addProperty("Anesthésie - Distance thyro-mentonnière", $this->getFormattedValue('distThyro'), null, false);
+    $template->addProperty("Anesthésie - Mobilité cervicale"        , $this->getFormattedValue('mob_cervicale'), null, false);
     $template->addProperty("Anesthésie - Etat bucco-dentaire"       , $this->etatBucco);
     $img = "";
     if ($this->mallampati) {

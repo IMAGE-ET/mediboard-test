@@ -225,6 +225,9 @@
             <strong>Distance thyro-mentonière :</strong>
             {{tr}}CConsultAnesth.distThyro.{{$dossier_anesth->distThyro}}{{/tr}}
             <br />
+            <strong>Mobilité cervicale :</strong>
+            {{tr}}CConsultAnesth.mob_cervicale.{{$dossier_anesth->mob_cervicale}}{{/tr}}
+            <br />
             <strong>Etat bucco-dentaire :</strong>
             {{$dossier_anesth->etatBucco|nl2br}}
             <br />

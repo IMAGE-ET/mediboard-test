@@ -15,12 +15,12 @@
       {{mb_field object=$consult_anesth field=edentation typeEnum=checkbox onchange="verifIntubDifficileAndSave(this.form);"}}
       {{mb_label object=$consult_anesth field=edentation}}
     </td>
+  </tr>
+  <tr>
     <td>
       {{mb_field object=$consult_anesth field=barbe typeEnum=checkbox onchange="verifIntubDifficileAndSave(this.form);"}}
       {{mb_label object=$consult_anesth field=barbe}}
     </td>
-  </tr>
-  <tr>
     <td>
       {{if $imc_sup_26}}
         {{mb_field object=$consult_anesth field=imc_sup_26 typeEnum=checkbox readonly=1}}
@@ -29,6 +29,8 @@
       {{/if}}
       {{mb_label object=$consult_anesth field=imc_sup_26}}
     </td>
+  </tr>
+  <tr>
     <td>
       {{mb_field object=$consult_anesth field=ronflements typeEnum=checkbox onchange="verifIntubDifficileAndSave(this.form);"}}
       {{mb_label object=$consult_anesth field=ronflements}}
