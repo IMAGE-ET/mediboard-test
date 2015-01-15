@@ -28,4 +28,5 @@ $smarty->assign('hypertext_links' , $hypertext_links);
 $smarty->assign('object_id'       , $object_id);
 $smarty->assign('object_class'    , $object_class);
 $smarty->assign('show_only'       , CValue::getOrSession('show_only', 0));
+$smarty->assign('count_links'     , CValue::get('count_links', 0));
 $smarty->display('inc_list_hypertext_links.tpl');

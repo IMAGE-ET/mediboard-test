@@ -1,13 +1,7 @@
-{{*
- * $Id:$
- *  
- * @package    Mediboard
- * @subpackage dPsante400
- * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
- * @link       http://www.mediboard.org
-*}}
+
+{{if $count_links && $show_only && $hypertext_links|@count}}
+  <span onmouseover="ObjectTooltip.createDOM(this, 'view_hypertext-link')";>{{$hypertext_links|@count}} {{tr}}CMbObject-back-hypertext_links{{/tr}}</span>
+{{/if}}
 
 {{if !$show_only}}
   <table class="form">
@@ -26,12 +20,35 @@
     </tr>
   </table>
 {{else}}
-  <td>
-    {{foreach from=$hypertext_links item=_hypertext_link name="loop_hyperlink"}}
-      <a href="#" onclick="HyperTextLink.accessLink('{{$_hypertext_link->name}}', '{{$_hypertext_link->link}}')"">{{$_hypertext_link->name}}</a>
-      {{if !$smarty.foreach.loop_hyperlink.first}}<br/>{{/if}}
-    {{foreachelse}}
-      {{tr}}CHyperTextLink.none{{/tr}}
-    {{/foreach}}
-  </td>
+  {{if $count_links}}
+    <div style="display: none;" id="view_hypertext-link">
+      <table class="tbl">
+        <tr>
+          <th>{{tr}}CHyperTextLink{{/tr}}</th>
+        </tr>
+        {{foreach from=$hypertext_links item=_hypertext_link name="loop_hyperlink"}}
+          <tr>
+            <td>
+              <a href="#" onclick="HyperTextLink.accessLink('{{$_hypertext_link->name}}', '{{$_hypertext_link->link}}')"">{{$_hypertext_link->name}}</a>
+            </td>
+          </tr>
+          {{foreachelse}}
+          <tr>
+            <td>
+            {{tr}}CHyperTextLink.none{{/tr}}
+            </td>
+          </tr>
+        {{/foreach}}
+      </table>
+    </div>
+  {{else}}
+    <td>
+      {{foreach from=$hypertext_links item=_hypertext_link name="loop_hyperlink"}}
+        <a href="#" onclick="HyperTextLink.accessLink('{{$_hypertext_link->name}}', '{{$_hypertext_link->link}}')"">{{$_hypertext_link->name}}</a>
+        {{if !$smarty.foreach.loop_hyperlink.first}}<br/>{{/if}}
+      {{foreachelse}}
+        {{tr}}CHyperTextLink.none{{/tr}}
+      {{/foreach}}
+    </td>
+  {{/if}}
 {{/if}}
