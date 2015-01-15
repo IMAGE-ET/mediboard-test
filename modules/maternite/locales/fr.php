@@ -86,6 +86,7 @@ $locales['CGrossesse-terme_prevu-desc'] = 'Terme prévu de la grossesse';
 $locales['CGrossesse-title-create'] = 'Nouvelle grossesse';
 $locales['CGrossesse-title-modify'] = 'Modifier la grossesse';
 $locales['CGrossesse.all'] = 'Toutes les grossesses';
+$locales['CGrossesse.edit'] = 'Modifier grossesse';
 $locales['CGrossesse.fausse_couche.'] = 'Aucune';
 $locales['CGrossesse.fausse_couche.inf_15'] = '&lt; 15 sem.';
 $locales['CGrossesse.fausse_couche.sup_15'] = '&gt; 15 sem.';

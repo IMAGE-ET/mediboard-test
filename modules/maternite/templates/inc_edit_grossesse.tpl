@@ -245,7 +245,7 @@
                 <select name="prat_id" id="selector_prat_imm" style="width:130px;">
                   <option value="">&mdash; Choisir un praticien</option>
                   {{foreach from=$prats item=_prat}}
-                    <option value="{{$_prat->_id}}">{{$_prat}}</option>
+                    <option value="{{$_prat->_id}}" {{if $_prat->_id == $user->_id && $user->_is_professionnel_sante}}selected="selected"{{/if}}>{{$_prat}}</option>
                   {{/foreach}}
                 </select><br/>
                 <button type="button" onclick="consultNow($V('selector_prat_imm'), '{{$grossesse->_id}}');" class="consultation_create">Consulter</button>

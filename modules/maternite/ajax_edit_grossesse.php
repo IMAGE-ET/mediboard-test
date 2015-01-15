@@ -11,6 +11,11 @@
  * @link     http://www.mediboard.org
  */
 
+$user = CMediusers::get();
+$user->isProfessionnelDeSante();
+
+
+
 // vars
 $grossesse_id   = CValue::get('grossesse_id');
 $parturiente_id = CValue::getOrSession("parturiente_id");
@@ -43,8 +48,9 @@ if ($operation = $grossesse->loadRefLastOperation()) {
 $listPrat = CConsultation::loadPraticiens(PERM_EDIT);
 
 $smarty = new CSmartyDP();
-$smarty->assign("grossesse" , $grossesse);
-$smarty->assign("with_buttons", $with_buttons);
-$smarty->assign("prats", $listPrat);
-$smarty->assign("standalone", $standalone);
+$smarty->assign("grossesse"     , $grossesse);
+$smarty->assign("with_buttons"  , $with_buttons);
+$smarty->assign("prats"         , $listPrat);
+$smarty->assign("user"          , $user);
+$smarty->assign("standalone"    , $standalone);
 $smarty->display("inc_edit_grossesse.tpl");

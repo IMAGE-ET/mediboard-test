@@ -26,6 +26,8 @@ $where = array();
 $where["sejour.grossesse_id"] = " IS NOT NULL";
 $where["sejour.group_id"] = " = '$group->_id' ";
 $where[] = " date BETWEEN '$date_min' AND '$date' ";
+
+// ne pas voir les terminés
 if (!$see_finished) {
   $where["grossesse.datetime_accouchement"] = " IS NOT NULL";
 }
