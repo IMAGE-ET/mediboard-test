@@ -11,6 +11,7 @@
 
 {{mb_script module="dPpmsi" script="PMSI" ajax=$ajax}}
 {{mb_script module="dPccam" script="code_ccam" ajax=$ajax}}
+{{mb_script module=planningOp script=ccam_selector ajax=true}}
 
 <script type="text/javascript">
   changeDateCodage = function(subject_id, date, direction) {
@@ -107,6 +108,16 @@
     });
   }
 
+  CCAMSelector.init = function() {
+    this.sForm = "manageCodes";
+    this.sClass = "_class";
+    this.sChir = "_chir";
+    this.sDate = '{{$subject->_sortie}}';
+    this.sView = "_codes_ccam";
+    this.pop();
+  };
+
+
   Main.add(function() {
     var dates = {};
     dates.limit = {
@@ -176,6 +187,7 @@
                   {{if array_key_exists($_day, $_codages_by_prat)}}
                     {{assign var=count_actes value=0}}
                     {{foreach from=$_codages_by_prat.$_day item=_codage name=codages_by_day}}
+                      {{assign var=codage_locked value=$_codage->locked}}
                       <form name="formCodage-{{$_praticien_id}}-{{$_day}}_{{$_codage}}" data-date="{{$_codage->date}}" data-praticien_id="{{$_codage->praticien_id}}" action="?" method="post"
                       onsubmit="return onSubmitFormAjax(this{{if $smarty.foreach.codages_by_day.first}}
                                     , {
@@ -186,21 +198,53 @@
                         <input type="hidden" name="locked" value="{{$_codage->locked}}"/>
                         {{mb_key object=$_codage}}
 
-                        <span onclick="editCodages('{{$subject->_class}}', {{$subject->_id}}, {{$_codage->praticien_id}}, '{{$_day}}');"
-                              onmouseover="ObjectTooltip.createEx(this, '{{$_codage->_guid}}');" style="font-size: 0.85em;">
-                          {{math assign=count_actes equation="x+y" x=$count_actes y=$_codage->_ref_actes_ccam|@count}}
-                          {{foreach from=$_codage->_ref_actes_ccam item=_act name=codages}}
-                            {{if !$smarty.foreach.codages.first || !$smarty.foreach.codages_by_day.first}}
-                              <br/>
-                            {{/if}}
-                            {{$_act->code_acte}} <span class="circled ok">{{$_act->code_activite}}-{{$_act->code_phase}}</span>
-                          {{/foreach}}
-                          {{if $smarty.foreach.codages_by_day.last && $count_actes == 0}}
-                            {{tr}}CActeCCAM.none{{/tr}}
-                          {{/if}}
-                        </span>
+                        <div style="position: relative; min-height: 22px; {{if $smarty.foreach.codages_by_day.first && !$smarty.foreach.codages_by_day.last}}border-bottom: 1pt dotted #93917e;{{/if}}">
+                          <span style="position: absolute; right: 0%; top: 50%; height: 20px; margin-top: -10px; float: right;">
+                            <button type="button" class="notext copy" onclick="duplicateCodage({{$_codage->_id}});" title="{{tr}}CCodageCCAM-action-duplicate{{/tr}}">
+                              {{tr}}CCodageCCAM-action-duplicate{{/tr}}
+                            </button>
+                          </span>
+                          <span onclick="editCodages('{{$subject->_class}}', {{$subject->_id}}, {{$_codage->praticien_id}}, '{{$_day}}');"
+                                onmouseover="ObjectTooltip.createEx(this, '{{$_codage->_guid}}');" style="font-size: 0.85em;">
+                            {{math assign=count_actes equation="x+y" x=$count_actes y=$_codage->_ref_actes_ccam|@count}}
+                              {{foreach from=$_codage->_ref_actes_ccam item=_act name=codages}}
+                                {{if !$smarty.foreach.codages.first || !$smarty.foreach.codages_by_day.first}}
+                                  <br/>
+                                {{/if}}
+                              {{$_act->code_acte}} <span class="circled ok">{{$_act->code_activite}}-{{$_act->code_phase}}</span>
+                              {{/foreach}}
+                              {{if $smarty.foreach.codages_by_day.last && $count_actes == 0}}
+                                {{tr}}CActeCCAM.none{{/tr}}
+                              {{/if}}
+                          </span>
+                        </div>
                       </form>
                     {{/foreach}}
+                    <div style="border-top: 1pt dotted #93917e;">
+                      {{if !$codage_locked}}
+                        <button type="button" class="notext edit" onclick="editCodages('{{$subject->_class}}', {{$subject->_id}}, {{$_praticien_id}}, '{{$_day}}')"
+                                title="{{tr}}Edit{{/tr}}">
+                          {{tr}}Edit{{/tr}}
+                        </button>
+                      {{/if}}
+
+                      {{if $codage_locked}}
+                        <button type="button" class="notext unlock" onclick="unlockCodages({{$_praticien_id}}, '{{$_day}}')">
+                          {{tr}}Unlock{{/tr}}
+                        </button>
+                      {{else}}
+                        <button type="button" class="notext lock" onclick="lockCodages({{$_praticien_id}}, '{{$_day}}')">
+                          {{tr}}Lock{{/tr}}
+                        </button>
+                      {{/if}}
+
+                      {{if $count_actes == 0}}
+                        <button type="button" class="notext trash"
+                                onclick="deleteCodages({{$_praticien_id}}, '{{$_day}}')">.
+                          {{tr}}Delete{{/tr}}
+                        </button>
+                      {{/if}}
+                    </div>
                   {{else}}
                     <form name="formCodage-{{$_praticien_id}}-{{$_day}}" action="?" method="post"
                           onsubmit="return onSubmitFormAjax(this, {
@@ -224,7 +268,7 @@
             </tr>
           {{foreachelse}}
             <tr>
-              <td class="empty" colspan="10">{{tr}}CCodageCCAM-none{{/tr}}</td>
+              <td class="empty" colspan="10">{{tr}}CCodageCCAM.none{{/tr}}</td>
             </tr>
           {{/foreach}}
         </table>
@@ -239,6 +283,13 @@
           <input name="_actes" type="hidden" value="" />
           <input name="_selCode" type="hidden" value="" />
           {{mb_key object=$subject}}
+
+          <input type="hidden" name="_class" value="{{$subject->_class}}" />
+          <input type="hidden" name="_chir" value="{{$subject->_praticien_id}}" />
+
+          <button id="didac_actes_ccam_tr_modificateurs" class="search" type="button" onclick="CCAMSelector.init()">
+            {{tr}}Search{{/tr}}
+          </button>
 
           {{mb_field object=$subject field="codes_ccam" hidden=true onchange="this.form.onsubmit()"}}
           <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" style="width: 12em" value="" class="autocomplete" placeholder="Ajoutez un acte" />

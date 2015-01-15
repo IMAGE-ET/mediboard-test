@@ -472,7 +472,9 @@ class CMbDT {
       $days[] = self::date("+ $i DAYS", $from);
     }
 
-    $days[] = $to;
+    if (!in_array($to, $days)) {
+      $days[] = $to;
+    }
 
     return $days;
   }

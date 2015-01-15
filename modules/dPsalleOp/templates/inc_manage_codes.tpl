@@ -236,7 +236,7 @@
             {{/foreach}}
           {{foreachelse}}
             <tr>
-              <td class="empty" colspan="10">{{tr}}CCodageCCAM-none{{/tr}}</td>
+              <td class="empty" colspan="10">{{tr}}CCodageCCAM.none{{/tr}}</td>
             </tr>
           {{/foreach}}
         </table>
