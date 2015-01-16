@@ -7,7 +7,7 @@
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org*}}
 
-
+{{mb_script module=search script=search}}
 <script>
   Main.add (function () {
     Search.words_request = '{{$words}}';
@@ -96,12 +96,14 @@
 
         <td>
           {{assign var=score value=$_result._score*100}}
-          <meter min="0" max="100" value="{{$score}}" low="50.0" optimum="101.0" high="70.0" style="width:100px;" title="{{$score}}%">
-            <div class="progressBar compact text">
-              <div class="bar normal" style="width:{{$score}}%;"></div>
-              <div class="text">{{$score}}%</div>
-            </div>
-          </meter>
+          <script>
+            Main.add (function () {
+              Search.progressBar('{{$_key}}', '{{$score}}');
+            });
+          </script>
+        <span title="Score de pertinence : {{$score|round}}%">
+          <div id="score_{{$_key}}" style="width: 25px; height: 25px; display: inline-block"></div>
+        </span>
         </td>
       </tr>
       {{foreachelse}}

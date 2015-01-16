@@ -363,5 +363,22 @@ Search = window.Search || {
       },
       legend: { show: false }
     });
+  },
+
+  manageThesaurus: function (sejour_id, contexte, callback) {
+    callback = callback || function() {Search.reloadSearchAuto(sejour_id, contexte)};
+    new Url('search',  'vw_search_thesaurus')
+      .requestModal("90%", "90%", {onClose: callback});
+  },
+
+  reloadSearchAuto : function(sejour_id, contexte) {
+    var container = 'table_main';
+    if (contexte == 'pmsi') {
+       container = "tab-search";
+    }
+    new Url('search',  'vw_search_auto')
+    .addParam("sejour_id", sejour_id)
+    .addParam("contexte", contexte)
+    .requestUpdate(container);
   }
 };

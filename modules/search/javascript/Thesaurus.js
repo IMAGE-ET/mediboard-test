@@ -142,7 +142,9 @@ Thesaurus = window.Thesaurus || {
         token = " -"+ text+ " ";
         break;
       case "without_negatif" :
-        token = "( -pas -aucun -sans -aucune -aucun -si +"+ text+ ") ";
+        token = " ++"+ text +" ";
+        deb_selection = startPos + 3;
+        fin_selection = deb_selection + text.length;
         break;
       default :
         break;

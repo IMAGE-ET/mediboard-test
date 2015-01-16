@@ -104,9 +104,11 @@
                           <br/>
                         {{/if}}
                       {{/foreach}}
-                      <input type="checkbox" name="names_types[]" id="CPrescriptionLineMedicament" value="CPrescriptionLineMedicament"/>
-                      <label for="precription">Prescription</label>
-                      <br/>
+                      {{if array_intersect(array("CPrescriptionLineMedicament", "CPrescriptionLineMix","CPrescriptionLineElement"), $types)}}
+                        <input type="checkbox" name="names_types[]" id="CPrescriptionLineMedicament" value="CPrescriptionLineMedicament"/>
+                        <label for="precription">Prescription</label>
+                        <br/>
+                      {{/if}}
                     </td>
                   </tr>
                 </table>

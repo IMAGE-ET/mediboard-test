@@ -6,6 +6,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org*}}
+{{mb_script module=search script=search}}
 <script>
   Main.add(function () {
     var tab = Control.Tabs.create('tabs-favoris', true, {
@@ -20,7 +21,12 @@
     });
   });
 </script>
-<table class="main layout">
+<table class="main layout" id="table_main">
+  <tr>
+    <td class="button">
+      <button type="button" class="favoris" onclick="Search.manageThesaurus('{{$sejour_id}}', '{{$contexte}}')">Gérer mes favoris</button>
+    </td>
+  </tr>
   <tr>
     <td class="narrow" style="vertical-align: top">
       <ul id="tabs-favoris" class="control_tabs_vertical" style="width: 15em">

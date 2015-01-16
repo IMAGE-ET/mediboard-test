@@ -34,7 +34,7 @@ $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $order = "sejour.entree ASC";
 
 /** @var CSejour[] $sejours */
-$sejours = $sejour->loadList($where, $order, null, null, $ljoin);
+$sejours = $sejour->loadList($where, $order, null, "sejour.sejour_id", $ljoin);
 
 $stats = array (
   "entree" => array (

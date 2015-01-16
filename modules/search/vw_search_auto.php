@@ -12,12 +12,17 @@ CCanDo::checkRead();
 
 $prescription_id = CValue::get("prescription_id", null);
 $sejour_id = CValue::get("sejour_id");
+$contexte = CValue::get("contexte");
+$user = CMediusers::get();
+
 $_ref_object = new CSejour();
 if ($sejour_id) {
   $sejour = new CSejour();
   $sejour->load($sejour_id);
   $_ref_object = $sejour;
-  $contexte = "pmsi";
+  if (!$contexte) {
+    $contexte = "pmsi";
+  }
 }
 
 if ($prescription_id) {
@@ -25,10 +30,11 @@ if ($prescription_id) {
   $prescription->load($prescription_id);
   $prescription->loadRefObject();
   $_ref_object = $prescription->_ref_object;
-  $contexte = "pharmacie";
+  if (!$contexte) {
+    $contexte = ($user->isPraticien()) ? "prescription" : "pharmacie";
+  }
 }
 
-$user = CMediusers::get();
 $favoris = new CSearchThesaurusEntry();
 $targets = new CSearchTargetEntry();
 $actes_ccam = array();
@@ -78,10 +84,25 @@ if ($_ref_object instanceof CSejour) {
       /** @var  $_target CSearchTargetEntry*/
       $tab_favoris_id[] = $_target->search_thesaurus_entry_id;
     }
-    $whereFavoris["search_thesaurus_entry_id"] = " ". CSQLDataSource::prepareIn(array_unique($tab_favoris_id));
+    $whereFavoris["search_thesaurus_entry_id"] = CSQLDataSource::prepareIn(array_unique($tab_favoris_id));
+    $whereFavoris["contextes"] = CSQLDataSource::prepareIn(array("generique", $contexte));
+
+    $whereFavoris["function_id"] = " IS NULL";
+    $whereFavoris["group_id"] = " IS NULL";
     $whereFavoris["user_id"] = "= '$user->_id'";
-    $whereFavoris["contextes"] = "= '$contexte'";
-    $tab_favoris = $favoris->loadList($whereFavoris);
+    $tab_favoris_user = $favoris->loadList($whereFavoris);
+
+    unset($whereFavoris["user_id"]);
+    $function_id = $user->loadRefFunction()->_id;
+    $whereFavoris["function_id"] = " = '$function_id'";
+    $tab_favoris_function =  $favoris->loadList($whereFavoris);
+
+    unset($whereFavoris["function_id"]);
+    $group_id = $user->loadRefFunction()->group_id;
+    $whereFavoris["group_id"] = " = '$group_id'";
+    $tab_favoris_group =  $favoris->loadList($whereFavoris);
+
+    $tab_favoris = $tab_favoris_user + $tab_favoris_function + $tab_favoris_group;
   }
 }
 

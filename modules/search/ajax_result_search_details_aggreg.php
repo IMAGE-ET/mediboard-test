@@ -18,17 +18,24 @@ $fuzzy_search = CValue::get("fuzzy_search", null);
 $fuzzy_search = CValue::get("fuzzy_search", null);
 $types = CValue::get("types", array());
 
+// Recherche par aggreg pour les logs
 if ($date || $user_id) {
   $client_index  = new CSearchLog();
   $client_index->createClient();
+  $client_index->loadIndex($client_index->loadNameIndex());
   $date = CMbDT::format($date, "%Y/%m/%d");
   $words .= "date:[".$date." TO "."$date] user_id:(".$user_id.")";
   $agregation = array();
   $tabActive = "";
+  if (!$types) {
+    $types = $client_index->loadContextes();
+  }
 }
-else{
+// Recherche par aggreg pour la recherche classique
+else {
   $client_index  = new CSearch();
   $client_index->createClient();
+  $client_index->loadIndex();
   $words .= " object_ref_class:".$object_ref_class." "."object_ref_id:".$object_ref_id;
   $results = $client_index->queryByType($words, null, $types);
   $agregation = $results->getAggregation("ref_type");
@@ -37,7 +44,7 @@ else{
 
 
 try {
-  $results = $client_index->queryByType($words, CAppUI::conf("db std dbname"), $types);
+  $results = $client_index->queryByType($words, $client_index->_index->getName(), $types);
   $agregation = $results->getAggregation("ref_type");
   $tabActive = $agregation["buckets"][0]["key"];
 } catch (Exception $e) {

@@ -25,20 +25,30 @@
     form.onsubmit();
   }
 </script>
-
-<form method="get" name="esSearch" action="?m=search" class="watched prepared" onsubmit="return Search.displayResults(this);" onchange="onchange=$V(this.form, '0')">
-  <input type="hidden" name="start" value="0">
-  <input type="hidden" name="accept_utf8" value="1">
-  <input type="hidden" name="contexte" value="classique">
-  <div>
-    <!-- Barre de recherche -->
-    {{mb_include module=search template=inc_header_search}}
-  </div>
-  <div>
-    <!-- Filtres de recherche -->
-    {{mb_include module=search template=inc_header_filters_search}}
-  </div>
-  <div id="list_result">
-    <!-- Résultats de la Recherche -->
-  </div>
-</form>
+<table>
+  <tr>
+    <td class="button">
+      <button type="button" class="favoris" onclick="Search.manageThesaurus()">Gérer mes favoris</button>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <form method="get" name="esSearch" action="?m=search" class="watched prepared" onsubmit="return Search.displayResults(this);" onchange="onchange=$V(this.form, '0')">
+        <input type="hidden" name="start" value="0">
+        <input type="hidden" name="accept_utf8" value="1">
+        <input type="hidden" name="contexte" value="classique">
+        <div>
+          <!-- Barre de recherche -->
+          {{mb_include module=search template=inc_header_search}}
+        </div>
+        <div>
+          <!-- Filtres de recherche -->
+          {{mb_include module=search template=inc_header_filters_search}}
+        </div>
+        <div id="list_result">
+          <!-- Résultats de la Recherche -->
+        </div>
+      </form>
+    </td>
+  </tr>
+</table>

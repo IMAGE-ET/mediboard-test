@@ -54,7 +54,7 @@ class CSearchLog extends CSearch {
    * @return void
    */
   function createLogMapping() {
-    $index = $this->createIndex(CAppUI::conf("db std dbname") . "_log", null, false);
+    $index = $this->createIndex($this->loadNameIndex(), null, false);
     foreach (self::$names_mapping as $names) {
       $type  = $this->createType($index, $names);
       $this->createMapping($type, self::$mapping_log);
@@ -86,7 +86,7 @@ class CSearchLog extends CSearch {
     $document['date']         = CMbDT::format(null, "%Y/%m/%d");
 
     $this->createClient();
-    $index = $this->loadIndex(CAppUI::conf("db std dbname") . "_log");
+    $index = $this->loadIndex($this->loadNameIndex());
     $type  = $index->getType($contexte);
     $log   = $type->createDocument('', $document);
 
@@ -275,7 +275,7 @@ class CSearchLog extends CSearch {
     $search_query = new CSearchQuery();
     $query_aggreg = $search_query->aggregCartoCountByType();
     //Search on the index.
-    $index  = $this->loadIndex(CAppUI::conf("db std dbname") . "_log");
+    $index  = $this->loadIndex($this->loadNameIndex());
     $search = new \Elastica\Search($this->_client);
     $search->addIndex($index);
     $aggreg = $search->search($query_aggreg);
@@ -298,5 +298,14 @@ class CSearchLog extends CSearch {
    */
   function loadContextes () {
     return self::$names_mapping;
+  }
+
+  /**
+   * method to load index name
+   *
+   * @return array
+   */
+  function loadNameIndex () {
+    return CAppUI::conf("db std dbname") . "_log";
   }
 }

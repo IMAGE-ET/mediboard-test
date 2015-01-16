@@ -19,12 +19,13 @@
     Thesaurus.updateListThesaurus($V(form.elements.start_thesaurus));
   });
 
-  function changePage(start) {
+  changePage = function(start) {
     var form = getForm("esSearchFavoris");
     $V(form.elements.start, start);
     form.onsubmit();
-  }
-  function changePageThesaurus(start) {
+  };
+
+  changePageThesaurus = function (start) {
     var form = getForm("esSearchFavoris");
     $V(form.elements.start_thesaurus, start);
     Thesaurus.updateListThesaurus(start);
