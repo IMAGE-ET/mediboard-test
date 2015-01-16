@@ -50,7 +50,7 @@
     {{if $use_poste}}
       <th>{{mb_colonne class="COperation" field="poste_preop_id" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
     {{/if}}
-    <th class="narrow"></th>
+    <th class="narrow">Dossier</th>
     <th>{{mb_colonne class="COperation" field="libelle" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
     <th>{{mb_colonne class="COperation" field="cote" order_col=$order_col order_way=$order_way function=orderTabpreop}}</th>
     {{if @$modules.brancardage->_can->read}}

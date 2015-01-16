@@ -43,7 +43,7 @@
     <th>{{mb_colonne class="COperation" field="salle_id" order_col=$order_col order_way=$order_way function=orderTabout}}</th>
     <th>{{mb_colonne class="COperation" field="chir_id" order_col=$order_col order_way=$order_way function=orderTabout}}</th>
     <th>{{mb_colonne class="COperation" field="_patient" order_col=$order_col order_way=$order_way function=orderTabout}} <input type="text" name="_seek_patient_preop" value="" class="seek_patient" onkeyup="seekPatient(this);" onchange="seekPatient(this);" /></th>
-    <th class="narrow"></th>
+    <th class="narrow">Dossier</th>
     {{if $use_poste}}
       <th>{{tr}}SSPI.Poste{{/tr}}</th>
     {{/if}}

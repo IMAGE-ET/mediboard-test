@@ -17,7 +17,7 @@
     <th>{{mb_colonne class="COperation" field="salle_id" order_col=$order_col order_way=$order_way function=orderTabencours}}</th>
     <th>{{mb_colonne class="COperation" field="chir_id" order_col=$order_col order_way=$order_way function=orderTabencours}}</th>
     <th>{{mb_colonne class="COperation" field="_patient" order_col=$order_col order_way=$order_way function=orderTabencours}} <input type="text" name="_seek_patient_preop" value="" class="seek_patient" onkeyup="seekPatient(this);" onchange="seekPatient(this);" /></th>
-    <th class="narrow"></th>
+    <th class="narrow">Dossier</th>
     <th>{{mb_colonne class="COperation" field="entree_salle" order_col=$order_col order_way=$order_way function=orderTabencours}}</th>
 		<th>{{mb_colonne class="COperation" field="debut_op" order_col=$order_col order_way=$order_way function=orderTabencours}}</th>
     <th class="narrow"></th>
