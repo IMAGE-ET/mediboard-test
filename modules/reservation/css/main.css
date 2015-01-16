@@ -5,7 +5,11 @@
 .planning .event:hover {
   box-shadow: none;
   opacity: 1;
-  height: auto!important;
+  overflow: visible;
+}
+
+.planning .event:hover .body {
+  background-color: white;
 }
 
 .draggable {
