@@ -16,6 +16,7 @@ verifIntubDifficileAndSave = function(oForm){
     oForm.bouche[0].checked || 
     oForm.bouche[1].checked ||
     oForm.mob_cervicale[0].checked ||
+    oForm.mob_cervicale[1].checked ||
     oForm.distThyro[0].checked) &&
     $V(oForm.intub_difficile) != '0');
    var div = $('divAlertIntubDiff');

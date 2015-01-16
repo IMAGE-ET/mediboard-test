@@ -248,7 +248,8 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
        $this->intub_difficile == '1' || 
        (($this->mallampati === "classe3" || $this->mallampati === "classe4" || 
        $this->bouche === "m20" || $this->bouche === "m35" || 
-       $this->distThyro === "m65" || $this->mob_cervicale === "m80") && $this->intub_difficile != '0');
+       $this->distThyro === "m65" || $this->mob_cervicale === "m80" || $this->mob_cervicale === "80m100")
+         && $this->intub_difficile != '0');
      
     $this->_sec_tsivy = intval(substr($this->tsivy, 6, 2));
     $this->_min_tsivy = intval(substr($this->tsivy, 3, 2));
