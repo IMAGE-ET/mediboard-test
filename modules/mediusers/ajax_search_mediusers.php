@@ -18,6 +18,7 @@ $step = 35;
 $group = CGroups::loadCurrent();
 
 //filters
+$user_id        = CValue::get("user_id");
 $page         = intval(CValue::getOrSession('page', 0));
 $filter       = CValue::getOrSession("filter",    "");
 $type         = CValue::getOrSession("_user_type");
@@ -163,6 +164,7 @@ foreach ($mediusers as $_mediuser) {
 
 $smarty = new CSmartyDP();
 $smarty->assign("mediusers", $mediusers);
+$smarty->assign("user_id"            , $user_id);
 $smarty->assign("total_mediuser", $total_mediuser);
 $smarty->assign("order_col", $order_col);
 $smarty->assign("order_way", $order_way);
