@@ -2503,6 +2503,7 @@ $locales['config-dPpatient-CConstantesMedicales-selection-norm_min-desc'] = 'Per
 $locales['config-dPpatients-CAntecedent'] = 'Antécédents';
 $locales['config-dPpatients-CAntecedent-appareils'] = 'Appareils';
 $locales['config-dPpatients-CAntecedent-appareils-desc'] = 'Appareils';
+$locales['config-dPpatients-CAntecedent-mandatory_types'] = 'Types d\'antécédents obligatoires pour la consultations ARE';
 $locales['config-dPpatients-CAntecedent-show_form_add_atcd'] = 'Afficher par défaut le formulaire d\'ajout d\'antécédent dans le mode grille';
 $locales['config-dPpatients-CAntecedent-show_form_add_atcd-desc'] = 'Afficher par défaut le formulaire d\'ajout d\'antécédent dans le mode grille';
 $locales['config-dPpatients-CAntecedent-types'] = 'Types';
