@@ -120,7 +120,7 @@ function changePratPec(prat_id) {
         Terminer
         </button>
       {{elseif $conf.dPcabinet.CConsultAnesth.check_close && $consult_anesth && $consult_anesth->_id}}
-        <button id="didac_button_IPAQSS" class="search" type="button" onclick="checkConsult();">IPAQSS</button>
+        <button id="didac_button_IPAQSS" class="search" type="button" onclick="checkConsult();">{{if !$conf.dPpatients.CAntecedent.mandatory_types}}IPAQSS{{else}}Prérequis{{/if}}</button>
       {{/if}})
     </th>
   </tr>
