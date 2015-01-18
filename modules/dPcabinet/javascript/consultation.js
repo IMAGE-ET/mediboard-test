@@ -22,7 +22,7 @@ Consultation = {
     url.addElement(form.period);
     url.addElement(form.date);
     url.addElement(form.type);
-    url.requestModal(950, 600);
+    url.requestModal(-100, -100);
   },
   
   checkParams: function() {

@@ -14,7 +14,7 @@ $type   = CValue::get("type", "RDV");
 $date   = CValue::get("date");
 $period = CValue::get("period", "month");
 
-$stats = new CMediusersStats($date, $period, "date");
+$stats = new CMediusersStats($date, $period, "date", 18);
 
 $consult = new CConsultation();
 $group = CGroups::loadCurrent();

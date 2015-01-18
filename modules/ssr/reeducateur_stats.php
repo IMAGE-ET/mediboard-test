@@ -15,7 +15,7 @@ $type   = CValue::get("type", "CEvenementSSR");
 $date   = CValue::get("date");
 $period = CValue::get("period", "month");
 
-$stats = new CMediusersStats($date, $period, "DATE(debut)", 12);
+$stats = new CMediusersStats($date, $period, "DATE(debut)", 18);
 
 $consult = new CConsultation();
 $ds = $consult->_spec->ds;
