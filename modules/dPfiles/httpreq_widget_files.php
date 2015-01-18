@@ -16,6 +16,8 @@ $only_files    = CValue::get("only_files", 0);
 $name_readonly = CValue::get("name_readonly", 0);
 $use_mozaic    = CValue::get("mozaic", 0);
 
+CSessionHandler::writeClose();
+
 // Chargement des fichiers
 $object->loadRefsFiles();
 $object->canDo();

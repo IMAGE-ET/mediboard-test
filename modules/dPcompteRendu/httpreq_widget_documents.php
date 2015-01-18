@@ -11,10 +11,14 @@
  * @link     http://www.mediboard.org
  */
 
+CCanDo::check();
+
 $object_class = CValue::getOrSession("object_class");
 $object_id    = CValue::getOrSession("object_id");
 $user_id      = CValue::getOrSession("praticien_id");
 $only_docs    = CValue::get("only_docs", 0);
+
+CSessionHandler::writeClose();
 
 // Chargement de l'objet cible
 $object = new $object_class;
