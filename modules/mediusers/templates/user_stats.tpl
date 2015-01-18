@@ -26,21 +26,61 @@
 
   {{foreach from=$groups item=_group}}
   <tr>
-    <th class="category" colspan="31">{{$_group}}</th>
+    <th class="category">{{$_group}}</th>
+
+  {{assign var=guid value=$_group->_guid}}
+  {{if isset($sections[$guid]|smarty:nodefaults)}}
+    {{assign var=_dates value=$sections[$guid]}}
+    {{foreach from=$dates item=_date}}
+      <th style="text-align: center;">
+      {{if array_key_exists($_date, $_dates)}}
+        {{foreach from=$_dates.$_date key=_part item=_value}}
+          {{mb_ternary var=value test=$_value|ctype_digit value=$_value|integer other=$_value}}
+          <strong class="{{$_part}}">{{$value}}</strong>
+        {{/foreach}}
+      {{/if}}
+      </th>
+    {{/foreach}}
+
+  {{else}}
+    <th class="section"></th>
+
+  {{/if}}
   </tr>
+
+
   {{foreach from=$_group->_ref_functions item=_function}}
   <tr>
-    <th class="section" colspan="31" style="text-align: left;">
+    <th class="section" style="text-align: left;">
       {{mb_include module=mediusers template=inc_vw_function function=$_function}}
     </th>
+
+  {{assign var=guid value=$_function->_guid}}
+  {{if isset($sections[$guid]|smarty:nodefaults)}}
+    {{assign var=_dates value=$sections[$guid]}}
+    {{foreach from=$dates item=_date}}
+      <th class="section" style="text-align: center;">
+        {{if array_key_exists($_date, $_dates)}}
+          {{foreach from=$_dates.$_date key=_part item=_value}}
+            {{mb_ternary var=value test=$_value|ctype_digit value=$_value|integer other=$_value}}
+            <strong class="{{$_part}}">{{$value}}</strong>
+          {{/foreach}}
+        {{/if}}
+      </th>
+    {{/foreach}}
+
+    {{else}}
+    <th class="section"></th>
+  {{/if}}
   </tr>
+
   {{foreach from=$_function->_ref_users key=user_id item=_user}}
   <tr>
     <td>
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_user}}
     </td>
-    {{assign var=_dates value=$totals.$user_id}}
-    {{foreach from=$dates item=_date}}
+     {{assign var=_dates value=$totals.$user_id}}
+     {{foreach from=$dates item=_date}}
 
       <td style="text-align: center;"
         {{if isset($cells[$user_id][$_date]|smarty:nodefaults)}}
@@ -48,8 +88,9 @@
         {{/if}}
         >
         {{if array_key_exists($_date, $_dates)}}
-          {{foreach from=$_dates.$_date key=_class item=_value}}
-            <strong class="{{$_class}}">{{$_value}}</strong>
+          {{foreach from=$_dates.$_date key=_part item=_value}}
+            {{mb_ternary var=value test=$_value|ctype_digit value=$_value|integer other=$_value}}
+            <strong class="{{$_part}}">{{$value}}</strong>
           {{/foreach}}
         {{/if}}
       </td>

@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
@@ -20,8 +20,9 @@ class CMediusersStats {
   public $period;
   public $php_period;
   public $sql_date;
-  public $totals  = array();
-  public $cells   = array();
+  public $totals   = array();
+  public $sections = array();
+  public $cells    = array();
 
   /**
    * Standard constructor
@@ -147,7 +148,7 @@ class CMediusersStats {
         
     foreach ($users as $_user) {
       $_user->loadRefFunction()->loadRefGroup();
-      
+
       // Function-users linkage
       $function = $functions[$_user->function_id];
       $function->_ref_users[$_user->_id] = $_user;
@@ -155,8 +156,19 @@ class CMediusersStats {
       // Group-functions linkage
       $group = $groups[$function->group_id];
       $group->_ref_functions[$function->_id] = $function;
+
+      $display_errors = ini_set("display_errors", false);
+      foreach ($this->totals[$_user->_id] as $_date => $_values) {
+        foreach($_values as $_part => $_value) {
+          if (is_numeric($_value)) {
+            $this->sections[$function->_guid][$_date][$_part] += $_value;
+            $this->sections[$group   ->_guid][$_date][$_part] += $_value;
+          }
+        }
+      }
+      ini_set("display_errors", $display_errors);
     }
-    
+
     // Display the template
     $smarty = new CSmartyDP();
     
@@ -165,8 +177,9 @@ class CMediusersStats {
     $smarty->assign("min_date" , $this->min_date);
     $smarty->assign("max_date" , $this->max_date);
     $smarty->assign("totals"   , $this->totals);
+    $smarty->assign("sections" , $this->sections);
     $smarty->assign("cells"    , $this->cells);
-    $smarty->assign("users"    , $users );
+    $smarty->assign("users"    , $users);
     $smarty->assign("functions", $functions);
     $smarty->assign("groups"   , $groups);
     $smarty->assign("title"    , $title);
