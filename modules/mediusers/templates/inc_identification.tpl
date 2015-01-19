@@ -1,5 +1,5 @@
 <tr>
-  <th>{{mb_label object=$object field="_user_username"}}</th>
+  <th style="width:40%;">{{mb_label object=$object field="_user_username"}}</th>
   <td>
     {{if !$readOnlyLDAP}}
       {{mb_field object=$object field="_user_username"}}
