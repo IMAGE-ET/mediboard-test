@@ -141,7 +141,7 @@ class CTag extends CMbObject {
     while ($tag->parent_id) {
       $parent = $tag->loadRefParent();
       if ($parent->_id == $this->_id) {
-        return "Récurcivité détectée, un des ancêtres du tag est lui-même";
+        return "Récursivité détectée, un des ancêtres du tag est lui-même";
       }
       $tag = $parent;
     }
