@@ -185,7 +185,13 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
 
         // On store l'idex de l'identifiant du système tiers
         $idex = new CIdSante400();
-        $idex->getMatch($object->_class, $sender->_tag_hl7, $OBR_identity_identifier, $object->_id);
+        $idex->object_class = $object->_class;
+        $idex->object_id    = $object->_id;
+        $idex->tag          = "OBR_$sender->_tag_hl7";
+        $idex->id400        = $OBR_identity_identifier;
+        $idex->loadMatchingObject();
+
+        $idex->store();
       }
     }
     
@@ -656,7 +662,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
       return false;
     }
 
-    if (!type) {
+    if (!$type) {
       $type = CMbPath::getExtension($path);
     }
 
@@ -670,7 +676,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $file->loadMatchingObject();
 
     $file->file_date = "now";
-    $file->doc_size = strlen($content);
+    $file->doc_size  = strlen($content);
 
     $file->fillFields();
     $file->updateFormFields();
