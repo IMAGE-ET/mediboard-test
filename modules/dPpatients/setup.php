@@ -2762,7 +2762,13 @@ class CSetupdPpatients extends CSetup {
               ADD `ame` ENUM('0','1') DEFAULT '0' AFTER `cmu`;";
     $this->addQuery($query);
 
-    $this->mod_version = '2.28';
+    $this->makeRevision('2.28');
+    $query = "ALTER TABLE `patient_state`
+                CHANGE `state` `state` ENUM ('PROV','VALI','DPOT','ANOM','CACH','DOUB','DESA','DOUA','COLP','COLV','FILI','HOMD',
+                'HOMA','USUR','IDRA','RECD','IDVER') NOT NULL;";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.29';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

@@ -18,7 +18,8 @@ class CPatientState extends CMbObject {
   /** @var integer Primary key */
   public $patient_state_id;
 
-  static $list_state = array("PROV", "VALI", "DPOT", "ANOM", "CACH");
+  static $list_state = array("PROV", "VALI", "DPOT", "ANOM", "CACH", "DOUB", "DESA", "DOUA", "COLP", "COLV", "FILI", "HOMD", "HOMA",
+    "USUR", "IDRA", "RECD", "IDVER");
 
   public $patient_id;
   public $mediuser_id;
@@ -154,7 +155,8 @@ class CPatientState extends CMbObject {
       }
       if ($_state == "DPOT") {
         $patient_link = new CPatientLink();
-        $patients_count[CMbString::lower($_state)] = $patient_link->countList($where, null, array("sejour" => "patient_link.patient_id1 = sejour.patient_id"));
+        $patients_count[CMbString::lower($_state)] =
+          $patient_link->countList($where, null, array("sejour" => "patient_link.patient_id1 = sejour.patient_id"));
       }
     }
 
