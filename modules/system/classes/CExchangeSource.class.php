@@ -23,14 +23,12 @@ class CExchangeSource extends CMbObject {
     "pop"         => "CSourcePOP",
     "file_system" => "CSourceFileSystem",
     "http"        => "CSourceHTTP",
-    "mssante"     => "CSourceMSSante"
   );
 
   //multi instance sources (more than one can run at the same time)
   static $multi_instance = array(
     "CSourcePOP",
     "CSourceSMTP",
-    "CSourceMSSante"
   );
   
   // DB Fields
@@ -423,9 +421,14 @@ class CExchangeSource extends CMbObject {
 }
 
 if (CModule::getActive("hl7")) {
-  CExchangeSource::$typeToClass = CExchangeSource::$typeToClass + array("mllp" => "CSourceMLLP");
+  CExchangeSource::$typeToClass["mllp"] = "CSourceMLLP";
 }
 
 if (CModule::getActive("dicom")) {
-  CExchangeSource::$typeToClass = CExchangeSource::$typeToClass + array("dicom" => "CSourceDicom");
+  CExchangeSource::$typeToClass["dicom"] = "CSourceDicom";
+}
+
+if (CModule::getActive("mssante")) {
+  CExchangeSource::$typeToClass["mssante"] = "CSourceMSSante";
+  CExchangeSource::$multi_instance[] = "CSourceMSSante";
 }
