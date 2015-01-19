@@ -336,11 +336,13 @@ if ($show_operations) {
         $duree           = $duree + $offset_bottom;
       }
 
-      $datetime_creation = $workflow->date_creation ? $workflow->date_creation : $operation->loadFirstLog()->date;
+      $datetime_creation = $workflow->date_creation ? $workflow->date_creation : $_operation->loadFirstLog()->date;
+      $interv_en_urgence = abs(CMbDT::hoursRelative($_operation->_datetime_best, $datetime_creation)) <= $diff_hour_urgence;
 
       //factures
       $sejour->loadRefsFactureEtablissement();
       $facture = $sejour->_ref_last_facture;
+      $_operation->loadLiaisonLibelle();
 
       //template de contenu
       $smarty = new CSmartyDP("modules/reservation");
@@ -360,9 +362,7 @@ if ($show_operations) {
       $smarty->assign("anesth", $anesth);
       $smarty->assign("count_atcd", $count_atcd);
       $smarty->assign("besoins", $besoins);
-      $smarty->assign("interv_en_urgence",
-        abs(CMbDT::hoursRelative($_operation->_datetime_best, $datetime_creation)) <= $diff_hour_urgence
-      );
+      $smarty->assign("interv_en_urgence", $interv_en_urgence);
       $smartyL = $smarty->fetch("inc_planning/libelle_plage.tpl");
       //@todo : UGLY, find a global better way !
       $smartyL = htmlspecialchars_decode(CMbString::htmlEntities($smartyL, ENT_NOQUOTES), ENT_NOQUOTES);
