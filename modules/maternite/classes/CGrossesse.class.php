@@ -281,6 +281,7 @@ class CGrossesse extends CMbObject {
     if ($this->_ref_last_operation && $this->_ref_last_operation->_id) {
       return $this->_days_relative_acc = abs(CMbDT::daysRelative($this->_ref_last_operation->date, CMbDT::date()));
     }
+
     return null;
   }
 

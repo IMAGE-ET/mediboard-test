@@ -42,9 +42,11 @@
   </thead>
   <tbody id="tbody_accouchements_tab">
     {{foreach from=$ops item=_op}}
-      <tr>
+      {{assign var=_grossesse value=$_op->_ref_sejour->_ref_grossesse}}
+
+      <tr {{if $_grossesse->datetime_accouchement}}class="opacity-50"{{/if}}>
         <td class="text">
-          <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_sejour->_ref_grossesse->_ref_parturiente->_guid}}');">{{$_op->_ref_sejour->_ref_grossesse->_ref_parturiente}}</span><br/>
+          <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$_grossesse->_ref_parturiente->_guid}}');">{{$_grossesse->_ref_parturiente}}</span><br/>
           <span class="compact" onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_sejour->_ref_curr_affectation->_guid}}');">{{$_op->_ref_sejour->_ref_curr_affectation}}</span>
         </td>
         <td>
@@ -79,11 +81,11 @@
             {{/if}}
         </td>
         <td>
-          {{if $_op->_ref_sejour->_ref_grossesse->datetime_debut_travail}}
-            Deb. {{mb_value object=$_op->_ref_sejour->_ref_grossesse field=datetime_debut_travail}}
+          {{if $_grossesse->datetime_debut_travail}}
+            Deb. {{mb_value object=$_grossesse field=datetime_debut_travail}}
           {{/if}}
-          {{if $_op->_ref_sejour->_ref_grossesse->datetime_accouchement}}
-            <br/>Fin {{mb_value object=$_op->_ref_sejour->_ref_grossesse field=datetime_accouchement}}
+          {{if $_grossesse->datetime_accouchement}}
+            <br/>Fin {{mb_value object=$_grossesse field=datetime_accouchement}}
           {{/if}}
         </td>
         <td class="text compact">
