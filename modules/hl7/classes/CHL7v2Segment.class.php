@@ -938,7 +938,10 @@ class CHL7v2Segment extends CHL7v2Entity {
         }
         
         return CIdSante400::getMatch("CService", $receiver->_tag_service, null, $service_id)->id400;
-        
+
+      case 'finess':
+        return $sejour->loadRefEtablissement()->finess;
+
       // Discipline médico-tarifaire
       default:
         return $sejour->discipline_id;

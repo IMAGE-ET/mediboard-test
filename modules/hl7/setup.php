@@ -1426,7 +1426,23 @@ class CSetuphl7 extends CSetup {
                 ADD `send_expected_discharge_with_affectation` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.09";
+    $this->makeRevision("1.09");
+
+    $query = "ALTER TABLE `hl7_config`
+                ADD `handle_OBR_identity_identifier` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $this->makeRevision("1.10");
+
+    $query = "ALTER TABLE `receiver_hl7v2_config`
+                CHANGE `build_PV1_10` `build_PV1_10` ENUM ('discipline','service','finess') DEFAULT 'discipline';";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `hl7_config`
+                CHANGE `handle_PV1_10` `handle_PV1_10` ENUM ('discipline','service','finess') DEFAULT 'discipline';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.11";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

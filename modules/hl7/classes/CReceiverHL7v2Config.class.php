@@ -317,7 +317,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["build_PV1_3_5"]                     = "enum list|bed_status|null default|bed_status";
     $props["build_PV1_5"]                       = "enum list|NPA|none default|NPA";
     $props["build_PV1_7"]                       = "enum list|unique|repeatable default|unique";
-    $props["build_PV1_10"]                      = "enum list|discipline|service default|discipline";
+    $props["build_PV1_10"]                      = "enum list|discipline|service|finess default|discipline";
     $props["build_PV1_11"]                      = "enum list|uf_medicale|none default|none";
     $props["build_PV1_14"]                      = "enum list|admit_source|ZFM default|admit_source";
     $props["build_PV1_17"]                      = "enum list|praticien|none default|praticien";

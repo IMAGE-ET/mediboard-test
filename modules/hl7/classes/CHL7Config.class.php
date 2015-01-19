@@ -68,6 +68,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "ins_integrated",
     "manage_npa",
     "change_filler_placer",
+    "handle_OBR_identity_identifier",
 
     // Send
     "send_assigning_authority",
@@ -132,6 +133,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
   public $ins_integrated;
   public $manage_npa;
   public $change_filler_placer;
+  public $handle_OBR_identity_identifier;
 
   // Send
   public $send_assigning_authority;
@@ -200,6 +202,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
       "ins_integrated",
       "manage_npa",
       "change_filler_placer",
+      "handle_OBR_identity_identifier"
     ),
 
     "send" => array(
@@ -266,16 +269,17 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["segment_terminator"] = "enum list|CR|LF|CRLF";
     
     // Handle
-    $props["handle_mode"]             = "enum list|normal|simple default|normal";
-    $props["handle_telephone_number"] = "enum list|XTN_1|XTN_12 default|XTN_12";
-    $props["ignore_fields"]           = "str";
-    $props["bypass_validating"]       = "bool default|0";
-    $props["create_grossesse"]        = "bool default|1";
-    $props["search_master_IPP"]       = "bool default|0";
-    $props["search_master_NDA"]       = "bool default|0";
-    $props["ins_integrated"]          = "bool default|0";
-    $props["manage_npa"]              = "bool default|0";
-    $props["change_filler_placer"]    = "bool default|0";
+    $props["handle_mode"]                    = "enum list|normal|simple default|normal";
+    $props["handle_telephone_number"]        = "enum list|XTN_1|XTN_12 default|XTN_12";
+    $props["ignore_fields"]                  = "str";
+    $props["bypass_validating"]              = "bool default|0";
+    $props["create_grossesse"]               = "bool default|1";
+    $props["search_master_IPP"]              = "bool default|0";
+    $props["search_master_NDA"]              = "bool default|0";
+    $props["ins_integrated"]                 = "bool default|0";
+    $props["manage_npa"]                     = "bool default|0";
+    $props["change_filler_placer"]           = "bool default|0";
+    $props["handle_OBR_identity_identifier"] = "str";
     
     // => PID
     $props["handle_NDA"]    = "enum list|PID_18|PV1_19 default|PID_18";
@@ -286,7 +290,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["handle_PV1_3"]      = "enum list|name|config_value|idex default|name";
     $props["handle_PV1_3_null"] = "str";
     $props["handle_PV1_7"]      = "bool default|1";
-    $props["handle_PV1_10"]     = "enum list|discipline|service default|discipline";
+    $props["handle_PV1_10"]     = "enum list|discipline|service|finess default|discipline";
     $props["handle_PV1_14"]     = "enum list|admit_source|ZFM default|admit_source";
     $props["handle_PV1_20"]     = "enum list|old_presta|none default|none";
     $props["handle_PV1_36"]     = "enum list|discharge_disposition|ZFM default|discharge_disposition";

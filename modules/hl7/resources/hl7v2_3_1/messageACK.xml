@@ -5,6 +5,6 @@
     <segments>
         <segment>MSH</segment>
         <segment>MSA</segment>
-        <segment minOccurs="0">ERR</segment>
+        <segment minOccurs="0" maxOccurs="unbounded">ERR</segment>
     </segments>
 </message>

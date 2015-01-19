@@ -2074,7 +2074,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $PV1_10 = $this->queryTextNode("PV1.10", $node);
     
     if (!$PV1_10) {
-      return;
+      return null;
     }
     
     // Hospital Service
@@ -2083,6 +2083,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       case 'service':
         $newVenue->service_id = CIdSante400::getMatch("CService", $sender->_tag_service, $PV1_10)->object_id;
         break;
+
+      // finess
+      case 'finess':
+        return null;
 
       // Discipline médico-tarifaire
       default:
