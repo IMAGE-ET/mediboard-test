@@ -105,10 +105,11 @@
   {{$pwd_info}}
 </div>
 
-<form name="mediuser" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete : Control.Modal.close});">
+<form name="mediuser" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete : Control.Modal.close});">
   {{if !$can->edit}}
     <input name="_locked" value="1" hidden="hidden" />
   {{/if}}
+  <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="dosql" value="do_mediusers_aed" />
   <input type="hidden" name="user_id" value="{{$object->_id}}" />
   <input type="hidden" name="del" value="0" />
@@ -133,8 +134,8 @@
     </tr>
   </table>
 
-  <script type="text/javascript">
-  Main.add(Control.Tabs.create.curry('tabs-form', true));
+  <script>
+    Main.add(Control.Tabs.create.curry('tabs-form', true));
   </script>
 
   <ul id="tabs-form" class="control_tabs">
@@ -146,15 +147,15 @@
   <hr class="control_tabs" />
 
   <table id="identification" class="form">
-  {{mb_include template=inc_identification}}
+    {{mb_include template=inc_identification}}
   </table>
 
   <table id="infos_praticien" class="form" style="display: none;">
-  {{mb_include template=inc_infos_praticien name_form="mediuser"}}
+    {{mb_include template=inc_infos_praticien name_form="mediuser"}}
   </table>
 
   <table id="iconographie" class="form" style="display: none;">
-  {{mb_include template=inc_iconographie}}
+    {{mb_include template=inc_iconographie}}
   </table>
 
   <table class="form">

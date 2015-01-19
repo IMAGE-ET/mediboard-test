@@ -2,6 +2,7 @@
 
 <table class="tbl">
   <tr>
+    <th class="narrow"></th>
     <th>
       {{mb_colonne class="CUser" field="user_username" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}
     </th>
@@ -30,27 +31,23 @@
 
   {{foreach from=$mediusers item=_user}}
   <tr class="{{if $_user->_id == $user_id}}selected{{/if}} {{if !$_user->actif}}hatching{{/if}}">
+    <td>
+      <button class="edit notext" onclick="editMediuser('{{$_user->_id}}', this)"></button>
+    </td>
 
     {{if $_user->_ref_user->_id}}
-
      <td class="text">
-       <a href="#{{$_user->_guid}}" onclick="editMediuser('{{$_user->_id}}', this)" class="mediuser" style="border-left-color: #{{$_user->_ref_function->color}};">
-         <span onmouseover="ObjectTooltip.createEx(this,'{{$_user->_guid}}', 'identifiers')">
+         <span onmouseover="ObjectTooltip.createEx(this,'{{$_user->_guid}}', 'identifiers')" class="mediuser" style="border-left-color: #{{$_user->_ref_function->color}};">
            {{mb_value object=$_user field=_user_username}}
          </span>
-       </a>
      </td>
      
      <td class="text">
-       <a href="#{{$_user->_guid}}" onclick="editMediuser('{{$_user->_id}}', this)">
          {{mb_value object=$_user field=_user_last_name}}
-       </a>
      </td>
      
      <td class="text">
-       <a href="#{{$_user->_guid}}" onclick="editMediuser('{{$_user->_id}}', this)">
          {{mb_value object=$_user field=_user_first_name}}
-       </a>
      </td>
     
      <td class="text" style="text-align: center">
@@ -59,7 +56,8 @@
 
      <td class="text" style="text-align: center">
        {{assign var=type value=$_user->_user_type}}
-       {{mb_ditto name=type_name value=$type}}
+       {{assign var=_type value="CUser"|static:"types"}}
+       {{mb_ditto name=type_name value=$_type.$type}}
      </td>
       
      <td class="text" style="text-align: center">

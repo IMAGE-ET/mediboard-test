@@ -70,7 +70,7 @@
 
     <div>
       <label>
-        Texte :
+        Mots clés :
         <input type="text" name="filter" value="{{$filter}}" style="width: 15em;" onchange="$V(this.form.page, 0)" />
       </label>
     </div>
@@ -102,8 +102,8 @@
       <label>Verrouillage
         <select name="locked">
           <option value="">Tous</option>
-          <option value="1">Vérouillés seulement</option>
-          <option value="0">Non Vérouillés seulement</option>
+          <option value="1">Verrouillés seulement</option>
+          <option value="0">Non Verrouillés seulement</option>
         </select>
       </label>
     </div>
