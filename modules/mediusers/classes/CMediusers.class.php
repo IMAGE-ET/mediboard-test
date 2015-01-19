@@ -439,6 +439,7 @@ class CMediusers extends CPerson {
     $backProps['remboursement_noemie']             = 'CPvRemboursementNoemie praticien_id';
     $backProps["search_thesaurus_entry"]           = "CSearchThesaurusEntry user_id";
     $backProps["files_user_view"]                  = "CFileUserView user_id";
+    $backProps['mssante_account']                  = 'CMSSanteUserAccount user_id';
     return $backProps;
   }
 

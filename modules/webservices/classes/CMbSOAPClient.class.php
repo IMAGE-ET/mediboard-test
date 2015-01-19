@@ -113,7 +113,13 @@ class CMbSOAPClient extends SoapClient {
       $options = array_merge($options, array("passphrase" => $passphrase));
     }
 
-    $context = stream_context_create();
+    if (array_key_exists('stream_context', $options)) {
+      $context = $options['stream_context'];
+    }
+    else {
+      $context = stream_context_create();
+    }
+
     // Authentification SSL
     if ($verify_peer && $cafile) {
       $this->ca_info = $cafile;
@@ -505,5 +511,24 @@ Content-ID: <rootpart@openxtrem.com>
         }
       }
     }
+  }
+
+  /**
+   * Check if the given function is an available SOAP function
+   *
+   * @param string $function_name
+   *
+   * @return bool
+   */
+  public function functionExist($function_name) {
+    $functions = $this->__getFunctions();
+
+    foreach ($functions as $_function) {
+      if (preg_match("/$function_name/", $_function) == 1) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }

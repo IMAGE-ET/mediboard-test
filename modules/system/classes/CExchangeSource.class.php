@@ -23,12 +23,14 @@ class CExchangeSource extends CMbObject {
     "pop"         => "CSourcePOP",
     "file_system" => "CSourceFileSystem",
     "http"        => "CSourceHTTP",
+    "mssante"     => "CSourceMSSante"
   );
 
   //multi instance sources (more than one can run at the same time)
   static $multi_instance = array(
     "CSourcePOP",
-    "CSourceSMTP"
+    "CSourceSMTP",
+    "CSourceMSSante"
   );
   
   // DB Fields
