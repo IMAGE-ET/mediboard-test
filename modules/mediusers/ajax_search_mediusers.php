@@ -142,11 +142,11 @@ if ($order_col == "user_type") {
 }
 
 if ($filter) {
-  $mediusers = $mediuser->seek($filter, $where, $step, true, $ljoin, $order);
+  $mediusers = $mediuser->seek($filter, $where, "$page, $step", true, $ljoin, $order);
   $total_mediuser = $mediuser->_totalSeek;
 }
 else {
-  $total_mediuser = $mediuser->countList($where, "users_mediboard.user_id", $ljoin);
+  $total_mediuser = $mediuser->countList($where, null, $ljoin);
   $mediusers = $mediuser->loadList($where, $order, "$page, $step", "users_mediboard.user_id", $ljoin);
 }
 
