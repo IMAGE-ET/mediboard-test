@@ -231,6 +231,17 @@ class CHTTPClient {
   }
 
   /**
+   * Get informations regarding the last request/response
+   *
+   * @param int|null $opt The information to return (see curl_getinfo for the differents values)
+   *
+   * @return mixed If an opt is provided, will return the wanted info only, otherwise, an array will be returned
+   */
+  function getInfo($opt = null) {
+    return curl_getinfo($this->handle, $opt);
+  }
+
+  /**
    * Check the URL disponibility
    *
    * @param String   $url         URL site
