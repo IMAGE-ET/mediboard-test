@@ -2772,5 +2772,14 @@ class CSetupdPpatients extends CSetup {
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
+
+    if (array_key_exists('INSEE', CAppUI::conf('db'))) {
+      $dsn = CSQLDataSource::get('INSEE');
+      if ($dsn->fetchRow($dsn->exec('SHOW TABLES LIKE \'communes_france\';'))) {
+
+        $query = "SELECT * FROM `communes_france` WHERE `code_postal` = 71000 AND `commune` = 'MACON';";
+        $this->addDatasource("INSEE", $query);
+      }
+    }
   }
 }
