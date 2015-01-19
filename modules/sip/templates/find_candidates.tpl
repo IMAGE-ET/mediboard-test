@@ -178,7 +178,7 @@ Main.add(function(){
 
     <tr>
       <td class="button">
-        <button class="search singleclick"onclick="$V(this.form.continue, 0)">
+        <button class="search singleclick" onclick="$V(this.form.continue, 0)">
           {{tr}}Search{{/tr}}
         </button>
         <button class="right singleclick" name="finder" {{if !$pointer}}disabled{{/if}} onclick="$V(this.form.continue, 1)">

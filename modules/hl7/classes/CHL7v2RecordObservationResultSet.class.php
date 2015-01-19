@@ -120,13 +120,19 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
       return $exchange_hl7v2->setAckAR($ack, "E606", null, $patient);
     }
 
-    $change_filler = $sender->_configs["change_filler_placer"];
-
     // Récupération des observations
     foreach ($data["observations"] as $_observation) {
       // Récupération de la date du relevé
       $observation_dt = $this->getOBRObservationDateTime($_observation["OBR"]);
       $name           = $this->getOBRServiceIdentifier($_observation["OBR"]);
+
+      // OBR identity identifier
+      $OBR_identity_identifier = null;
+
+      $handle_OBR_identity_identifier = $sender->_configs["handle_OBR_identity_identifier"];
+      if ($handle_OBR_identity_identifier) {
+        $OBR_identity_identifier = $this->queryTextNode($handle_OBR_identity_identifier, $_observation["OBR"]);
+      }
 
       foreach ($_observation["OBX"] as $key => $_OBX) {
         // OBX.2 : Value type
@@ -134,7 +140,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
         $date         = $observation_dt ? $observation_dt : $this->getOBXObservationDateTime($_OBX);
         $praticien_id = $this->getObservationAuthor($_OBX);
 
-        //Recherche de l'objet avec la date correspondante fourni dans l'observation
+        // Recherche de l'objet avec la date correspondante fourni dans l'observation
         $object = $this->getObjectWithDate($date, $patient, $praticien_id, $sejour);
 
         if (!$object) {
@@ -176,6 +182,10 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
           default:
             return $exchange_hl7v2->setAckAR($ack, "E302", null, $object);
         }
+
+        // On store l'idex de l'identifiant du système tiers
+        $idex = new CIdSante400();
+        $idex->getMatch($object->_class, $sender->_tag_hl7, $OBR_identity_identifier, $object->_id);
       }
     }
     
@@ -203,6 +213,8 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
   function getOBRPlacerNumber(DOMNode $node) {
     return $this->queryTextNode("OBR.3/EI.1", $node);
   }
+
+
 
   /**
    * Return the object for attach the document
@@ -589,8 +601,14 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
 
     // Chargement de la source associée à l'expéditeur
     /** @var CInteropSender $sender_link */
-    $sender_link = reset($sender->loadRefsObjectLinks())->_ref_object;
+    $object_links = $sender->loadRefsObjectLinks();
+    if (!$object_links) {
+      $this->codes[] = "E340";
 
+      return false;
+    }
+
+    $sender_link = reset($object_links)->_ref_object;
     // Aucun expéditeur permettant de récupérer les fichiers
     if (!$sender_link->_id) {
       $this->codes[] = "E340";
@@ -620,20 +638,29 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
 
     $source = $sender_link->getFirstExchangesSources();
 
-    $path = $filename = $pointer;
+    $path = str_replace("\\", "/", $pointer);
     $path = basename($path);
+
+    $filename = $path;
 
     if ($source instanceof CSourceFileSystem) {
       $path = $source->getFullPath()."/$path";
     }
 
-    $content = $source->getData("$path");
-
-    $file_type = $this->getFileType($type);
-    if (!$file_type) {
-      $this->codes[] = "E344";
+    // Exception déclenchée sur la lecture du fichier
+    try {
+      $content = $source->getData("$path");
+    }
+    catch (Exception $e) {
+      $this->codes[] = "E345";
       return false;
     }
+
+    if (!type) {
+      $type = CMbPath::getExtension($path);
+    }
+
+    $file_type = $this->getFileType($type);
 
     // Gestion du CFile
     $file = new CFile();

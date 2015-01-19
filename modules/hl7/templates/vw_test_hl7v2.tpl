@@ -21,17 +21,24 @@
 </script>
 
 <ul id="tabs-test_hl7v2" class="control_tabs">
-  <li><a href="#test_hl7v2_pam">PAM</a></li>
-  <li><a href="#test_hl7v2_pdq">PDQ</a></li>
-  <li><a href="#test_hl7v2_dec">DEC</a></li>
+  <li><a href="#test_hl7v2_pam">{{tr}}CPAM{{/tr}}</a></li>
+  <li><a href="#test_hl7v2_pdq">{{tr}}CPDQ{{/tr}}</a></li>
+  <li><a href="#test_hl7v2_dec">{{tr}}CDEC{{/tr}}</a></li>
+  <li><a href="#test_hl7v2_svs">{{tr}}CSVS{{/tr}}</a></li>
 </ul>
 
 <div id="test_hl7v2_pam" style="display: none">
   {{mb_include module=hl7 template=inc_vw_pam}}
 </div>
+
 <div id="test_hl7v2_pdq" style="display: none">
   {{mb_include module=hl7 template=inc_vw_pdq}}
 </div>
+
 <div id="test_hl7v2_dec" style="display: none">
   {{mb_include module=hl7 template=inc_vw_dec}}
+</div>
+
+<div id="test_hl7v2_svs" style="display: none">
+  {{mb_include module=hl7 template=inc_vw_svs}}
 </div>

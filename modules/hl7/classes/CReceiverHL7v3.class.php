@@ -22,6 +22,9 @@ class CReceiverHL7v3 extends CInteropReceiver {
   /** @var null */
   public $receiver_hl7v3_id;
 
+  /** @var null */
+  public $_i18n_code;
+
   /**
    * Initialize object specification
    *
@@ -34,6 +37,7 @@ class CReceiverHL7v3 extends CInteropReceiver {
     $spec->messages = array(
       "PRPA" => array ("CPRPA"),
       "XDSb" => array ("CXDSb"),
+      "SVS"  => array ("CSVS"),
     );
     
     return $spec;

@@ -10,7 +10,6 @@
  */
 
 TestHL7 = {
-
   refreshListDemographicSupplier : function (form) {
     return Url.update(form, "list_demographic");
   },
@@ -115,6 +114,14 @@ TestHL7 = {
     new Url("hl7", "ajax_encounter_event")
       .addFormData(form)
       .requestModal();
+
+    return false;
+  },
+
+  findValueSet : function(form) {
+    new Url("hl7", "ajax_find_value_set")
+      .addFormData(form)
+      .requestUpdate("search_value_set");
 
     return false;
   }

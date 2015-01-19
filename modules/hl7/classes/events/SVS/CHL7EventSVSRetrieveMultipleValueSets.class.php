@@ -1,13 +1,19 @@
 <?php
+
 /**
- * Index IHE
+ * $Id$
  *
- * @category IHE
+ * @category HL7
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  $Revision$
  * @link     http://www.mediboard.org
  */
 
-$module = CModule::getInstalled(basename(dirname(__FILE__)));
+/**
+ * CHL7EventSVSRetrieveMultipleValueSets
+ * Retrieve Multiple Value Sets
+ */
+interface CHL7EventSVSRetrieveMultipleValueSets extends CHL7EventSVS {
+}

@@ -131,7 +131,6 @@ class COperatorHL7v2 extends CEAIOperator {
       
       $ack = new CHL7v2Acknowledgment($evt);
       $ack->message_control_id = isset($data['identifiantMessage']) ? $data['identifiantMessage'] : "000000000";
-      
       $ack->_ref_exchange_hl7v2 = $exchange_hl7v2;
       $msgAck = $ack->generateAcknowledgment("AR", "E003", "207", "E", $e->getMessage());
 

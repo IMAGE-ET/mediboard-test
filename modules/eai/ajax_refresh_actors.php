@@ -21,6 +21,10 @@ $actors = $actor->getObjects();
 $count_actors       = 0;
 $count_actors_actif = 0;
 foreach ($actors as $_actors) {
+  if (!$_actors) {
+    continue;
+  }
+
   /** @var CInteropActor[] $_actors */
   $count_actors += count($_actors);
   foreach ($_actors as $_actor) {
