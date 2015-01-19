@@ -476,7 +476,14 @@ class CSetupdPbloc extends CSetup {
                 ADD INDEX (`salle_id`),
                 ADD INDEX (`date`);";
     $this->addQuery($query);
+    $this->makeRevision("0.49");
 
-    $this->mod_version = "0.49";
+    $query = "ALTER TABLE `plagesop`
+                ADD `entree_chir` TIME,
+                ADD `entree_anesth` TIME;";
+    $this->addQuery($query);
+
+    $this->addFunctionalPermQuery("allowed_check_entry_bloc", "0");
+    $this->mod_version = "0.50";
   }
 }

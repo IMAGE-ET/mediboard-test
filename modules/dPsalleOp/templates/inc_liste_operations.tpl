@@ -41,7 +41,7 @@
 
       {{if $intervalle_a < $intervalle_b}}
         <tr>
-          <th colspan="4" class="section">
+          <th colspan="5" class="section">
             {{assign var=time_pause value="CMbDT::timeRelative"|static_call:$intervalle_a:$intervalle_b:"%02dh%02d"}}
             [PAUSE] ({{$time_pause}})
           </th>

@@ -43,7 +43,9 @@ class CPlageOp extends CPlageHoraire {
   public $verrouillage;
   public $delay_repl;
   public $actes_locked;
-    
+  public $entree_chir;
+  public $entree_anesth;
+
   // Form Fields
   public $_day;
   public $_month;
@@ -130,6 +132,8 @@ class CPlageOp extends CPlageHoraire {
     $props["verrouillage"]     = "enum list|defaut|non|oui default|defaut";
     $props["delay_repl"]       = "num min|0";
     $props["actes_locked"]     = "bool";
+    $props["entree_chir"]      = "time show|0";
+    $props["entree_anesth"]    = "time show|0";
     
     $props["_type_repeat"]     = "enum list|simple|double|triple|quadruple|sameweek";
     return $props;

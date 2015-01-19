@@ -1851,8 +1851,13 @@ class CSetupdPplanningOp extends CSetup {
                 ADD INDEX (`sejour_id`),
                 ADD INDEX (`user_id`);";
     $this->addQuery($query);
+    $this->makeRevision("2.01");
 
-    $this->mod_version = '2.01';
+    $query = "ALTER TABLE `operations`
+              DROP `entree_chir`,
+              DROP `entree_anesth`;";
+    $this->addQuery($query);
+    $this->mod_version = '2.02';
 
   }
 }

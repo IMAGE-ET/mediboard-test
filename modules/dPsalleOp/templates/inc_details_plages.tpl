@@ -88,6 +88,20 @@
             </tr>
           {{/if}}
         {{/if}}
+
+        {{if $app->user_prefs.allowed_check_entry_bloc}}
+          {{assign var=plage_id value=$_plage->_id}}
+          <tr>
+            <td class="button">
+              {{mb_label object=$_plage field=entree_anesth}}
+              {{mb_field object=$_plage field=entree_anesth form="anesth$plage_id" register=true onchange="return onSubmitFormAjax(this.form);"}}
+            </td>
+            <td>
+              {{mb_label object=$_plage field=entree_chir}}
+              {{mb_field object=$_plage field=entree_chir form="anesth$plage_id" register=true onchange="return onSubmitFormAjax(this.form);"}}
+            </td>
+          </tr>
+        {{/if}}
       </table>
     </form>
 
