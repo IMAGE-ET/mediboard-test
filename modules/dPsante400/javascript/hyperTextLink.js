@@ -26,10 +26,14 @@ HyperTextLink = {
     return false;
   },
 
-  getListFor: function(object_id, object_class) {
+  getListFor: function(object_id, object_class, show_only) {
     var url = new Url('sante400'  , 'ajax_list_hypertextlinks');
     url.addParam('object_id'      , object_id);
     url.addParam('object_class'   , object_class);
+    if (Object.isUndefined(show_only)) {
+      show_only = 1;
+    }
+    url.addParam('show_only'      , show_only);
     url.requestUpdate('list-hypertext_links');
   },
 
@@ -37,7 +41,8 @@ HyperTextLink = {
     var url = new Url('sante400'  , 'ajax_list_hypertextlinks');
     url.addParam('object_id'      , object_id);
     url.addParam('object_class'   , object_class);
-    url.addParam('show_only'    , show_only);
+    url.addParam('show_only'      , show_only);
+    url.addParam('count_links'    , 1);
     url.requestUpdate('list-hypertext_links-'+element_guid);
   }
 };

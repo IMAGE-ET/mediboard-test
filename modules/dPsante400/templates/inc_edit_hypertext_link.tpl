@@ -11,10 +11,10 @@
 
 {{mb_script module=sante400 script=hyperTextLink ajax=true}}
 
-<script type="text/javascript">
+<script>
   reloadListHypertextLinks = function() {
     Control.Modal.close();
-    HyperTextLink.getListFor('{{$hypertext_link->object_id}}', '{{$hypertext_link->object_class}}');
+    HyperTextLink.getListFor('{{$hypertext_link->object_id}}', '{{$hypertext_link->object_class}}', 0);
     return false;
   }
 </script>
