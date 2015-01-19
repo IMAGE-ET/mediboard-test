@@ -178,7 +178,7 @@ Main.add(function () {
       <button class="modify" type="submit" name="modify">
         {{tr}}Save{{/tr}}
       </button>
-      <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form,{typeName:'l\'établissement', objName: $V(this.form.text)})">
+      <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form,{typeName:'l\'établissement', objName: $V(this.form._name)})">
         {{tr}}Delete{{/tr}}
       </button>
     {{else}}
