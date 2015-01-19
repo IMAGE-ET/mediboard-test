@@ -37,7 +37,7 @@
 
     {{if $_user->_ref_user->_id}}
      <td class="text">
-         <span onmouseover="ObjectTooltip.createEx(this,'{{$_user->_guid}}', 'identifiers')" class="mediuser" style="border-left-color: #{{$_user->_ref_function->color}};">
+         <span onmouseover="ObjectTooltip.createEx(this,'{{$_user->_guid}}', 'identifiers')" class="mediuser" style="border-left-color: #{{$_user->_color}};">
            {{mb_value object=$_user field=_user_username}}
          </span>
      </td>
