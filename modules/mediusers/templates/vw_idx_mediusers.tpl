@@ -33,6 +33,13 @@
     $V(getForm('listFilter').page, page);
   };
 
+  changeFilter = function(order, way) {
+    var form = getForm('listFilter');
+    $V(form.order_col, order);
+    $V(form.order_way, way);
+    form.onsubmit();
+  };
+
   Main.add(function() {
     {{if $user_id}}
       editMediuser('{{$user_id}}');
@@ -64,6 +71,8 @@
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="a" value="ajax_search_mediusers" />
   <input type="hidden" name="page" value="0" onchange="this.form.onsubmit()"/>
+  <input type="hidden" name="order_col" value="function_id"/>
+  <input type="hidden" name="order_way" value="ASC""/>
 
   <fieldset class="fieldset_search">
       <legend>Recherche d'{{tr}}CMediusers{{/tr}}</legend>

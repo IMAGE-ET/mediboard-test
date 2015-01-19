@@ -4,19 +4,19 @@
   <tr>
     <th class="narrow"></th>
     <th>
-      {{mb_colonne class="CUser" field="user_username" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}
+      {{mb_colonne class="CUser" field="user_username" order_col=$order_col order_way=$order_way function="changeFilter"}}
     </th>
     <th>
-      {{mb_colonne class="CUser" field="user_last_name" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}
+      {{mb_colonne class="CUser" field="user_last_name" order_col=$order_col order_way=$order_way function="changeFilter"}}
     </th>
     <th>
-      {{mb_colonne class="CUser" field="user_first_name" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}
+      {{mb_colonne class="CUser" field="user_first_name" order_col=$order_col order_way=$order_way function="changeFilter"}}
     </th>
     <th>
-      {{mb_colonne class="CMediusers" field="function_id" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}
+      {{mb_colonne class="CMediusers" field="function_id" order_col=$order_col order_way=$order_way function="changeFilter"}}
     </th>
     <th>
-      {{mb_colonne class="CUser" field="user_type" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}
+      {{mb_colonne class="CUser" field="user_type" order_col=$order_col order_way=$order_way function="changeFilter"}}
     </th>
     <th>{{mb_title class=CUser      field=profile_id}}</th>
     <th>{{mb_title class=CMediusers field=remote}}</th>
