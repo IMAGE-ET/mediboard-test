@@ -156,7 +156,7 @@
   refreshConstantesHack = function(sejour_id) {
     (function() {
       if (constantesMedicalesDrawn == false && $('constantes-medicales').visible() && sejour_id) {
-        refreshConstantesMedicales('CSejour-'+sejour_id, "{{$selOp->_ref_salle->_ref_bloc->_guid}}");
+        refreshConstantesMedicales('CSejour-'+sejour_id, "{{if $selOp->_ref_salle && $selOp->_ref_salle->_ref_bloc && $selOp->_ref_salle->_ref_bloc->_guid}}{{$selOp->_ref_salle->_ref_bloc->_guid}}{{else}}all{{/if}}");
         constantesMedicalesDrawn = true;
       }
     }).delay(0.5);
