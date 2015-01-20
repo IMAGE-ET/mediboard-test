@@ -333,7 +333,7 @@
                         Represcrire
                       </button>
                       {{if $sejour_id}}
-                        <button type="button" class="right" onclick="if (checkPosos()) { addToTokenPoso{{$addform}}(0);submitAndCallback(this.form, 'poursuivreLineTP'); }">
+                        <button type="button" class="right" onclick="addToTokenPoso{{$addform}}(0); if (checkPosos()) { submitAndCallback(this.form, 'poursuivreLineTP'); }">
                           Poursuivre
                         </button>
                         <button type="button" class="hslip" onclick="addToTokenPoso{{$addform}}(0);submitAndCallback(this.form, 'relaiLineDialog');">
