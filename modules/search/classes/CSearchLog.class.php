@@ -18,7 +18,7 @@ use Elastica\Query;
  */
 class CSearchLog extends CSearch {
 
-  static $names_mapping = array("generique", "pharmacie", "pmsi", "bloc");
+  static $names_mapping = array("generique", "pharmacie", "pmsi", "prescription", "classique");
 
   static $mapping_log = array(
     "date"         => array(
@@ -28,7 +28,7 @@ class CSearchLog extends CSearch {
     ),
 
     "user_id"      => array(
-      'type'           => 'integer',
+      'type'           => 'string',
       'include_in_all' => true
     ),
 

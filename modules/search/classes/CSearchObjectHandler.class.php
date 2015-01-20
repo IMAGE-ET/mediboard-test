@@ -127,7 +127,7 @@ class CSearchObjectHandler extends CMbObjectHandler {
     if (!$this->isHandled($object)) {
       return false;
     }
-    $object->_id = $object->_save_id;
+
     return self::requesthandler($object, 'delete');
   }
 
@@ -158,7 +158,7 @@ class CSearchObjectHandler extends CMbObjectHandler {
     $search_indexing->type         = $type;
     $search_indexing->date         = CMbDT::dateTime();
     $search_indexing->object_class = $object->_class;
-    $search_indexing->object_id    = $object->_id;
+    $search_indexing->object_id    = ($object->_id) ? $object->_id : $object->_save_id;
 
     switch ($object->_class) {
       case 'CCompteRendu':

@@ -327,7 +327,15 @@ class CSearch {
             break;
 
           case 'store':
-            $typeES->updateDocuments($documents);
+            try {
+              $typeES->updateDocuments($documents);
+            } catch (Exception $e) {
+              try {
+                $typeES->addDocuments($documents);
+              } catch (Exception $e) {
+                mbLog($e->getMessage());
+              }
+            }
             break;
 
           case 'delete':
