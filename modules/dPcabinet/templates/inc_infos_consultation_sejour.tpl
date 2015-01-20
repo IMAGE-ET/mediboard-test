@@ -25,7 +25,7 @@
       {{/foreach}}
     </tbody>
 
-    {{if @$modules.brancardage->_can->read}}
+    {{if @$modules.brancardage->_can->read && !"brancardage General see_round_trip_bloc"|conf:"CGroups-$g"}}
       <tr>
         <td class="button" colspan="3">
           {{mb_script module=brancardage script=creation_brancardage ajax="true"}}
