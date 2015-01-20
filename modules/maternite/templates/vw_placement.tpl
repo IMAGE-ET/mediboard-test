@@ -96,7 +96,7 @@
         </td>
         <td class="text">
           {{if !$_op->annulee}}
-            <form name="editSalleFrm{{$_op->_id}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this)">
+            <form name="editSalleFrm{{$_op->_id}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function(){window.location.reload();}})">
               <input type="hidden" name="m" value="dPplanningOp" />
               <input type="hidden" name="del" value="0" />
               <input type="hidden" name="dosql" value="do_planning_aed" />
