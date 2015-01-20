@@ -33,6 +33,10 @@
   .gender_f {
     border-left:solid 4px #ff9485;
   }
+
+  .width50 {
+    width:50%;
+  }
 </style>
 
 <script>
@@ -101,24 +105,24 @@
   <tbody class="viewported">
   <tr>
     <!--  Grossesses en cours -->
-    <td id="vw_grossesses_td" class="viewport" style="width: 50%">
+    <td id="vw_grossesses_td" class="viewport width50">
       <div id="grossesses"></div>
     </td>
 
     <!-- Consultations -->
-    <td id="vw_day_consultations_td" class="viewport" style="width: 50%">
+    <td id="vw_day_consultations_td" class="viewport width50">
       <div id="consultations"></div>
     </td>
   </tr>
 
   <tr>
     <!-- Accouchements -->
-    <td id="vw_day_accouchements_td" class="viewport" style="width: 50%">
+    <td id="vw_day_accouchements_td" class="viewport width50">
       <div id="accouchements" style="overflow: auto"></div>
     </td>
 
     <!-- Hospitalisations -->
-    <td id="vw_day_hospitalisations_td" class="viewport" style="width: 50%">
+    <td id="vw_day_hospitalisations_td" class="viewport width50">
       <div id="hospitalisations" style="overflow: auto"></div>
     </td>
 

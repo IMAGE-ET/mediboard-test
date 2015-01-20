@@ -147,15 +147,15 @@
           {{assign var=operation value=$_sejour->_ref_last_operation}}
           <tr>
             <td rowspan="{{$grossesse->_ref_naissances|@count}}">
-              <form name="editSejour-{{$_sejour->_id}}" method="post">
+              <form name="editSejour-{{$_sejour->_id}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function() {window.location.reload();}})">
                 <input type="hidden" name="m" value="dPplanningOp" />
                 <input type="hidden" name="dosql" value="do_sejour_aed" />
                 {{mb_key object=$_sejour}}
-                {{mb_field object=$_sejour field=entree_reelle hidden=true}}
+                {{mb_field object=$_sejour field=entree_reelle hidden=true onchange="this.form.onsubmit();"}}
                 {{if $_sejour->entree_reelle}}
-                  <button type="button" onclick="$V(this.form.entree_reelle, ''); this.form.submit();" class="cancel">{{tr}}Cancel{{/tr}}</button>
+                  <button type="button" onclick="$V(this.form.entree_reelle, '');" class="cancel">{{tr}}Cancel{{/tr}}</button>
                 {{else}}
-                  <button type="button" onclick="$V(this.form.entree_reelle, 'now'); this.form.submit();" class="tick">{{tr}}CSejour-admit{{/tr}}</button>
+                  <button type="button" onclick="$V(this.form.entree_reelle, 'now');" class="tick">{{tr}}CSejour-admit{{/tr}}</button>
                 {{/if}}
               </form>
             </td>

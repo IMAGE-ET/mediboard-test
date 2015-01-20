@@ -63,11 +63,11 @@
       </td>
       <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_op->_ref_chir}}</td>
       <td>
-        <form name="editPlageFrm{{$_op->_id}}" action="?m={{$m}}" method="post">
+        <form name="editPlageFrm{{$_op->_id}}" method="post" onsubmit="return onSubmitFormAjax(this)">
           <input type="hidden" name="m" value="dPplanningOp" />
           <input type="hidden" name="dosql" value="do_planning_aed" />
           <input type="hidden" name="operation_id" value="{{$_op->_id}}" />
-          <select name="anesth_id" style="width: 15em;" onchange="this.form.submit()">
+          <select name="anesth_id" style="width: 15em;" onchange="this.form.onsubmit()">
             <option value="">&mdash; Anesthésiste</option>
             {{foreach from=$anesths item=_anesth}}
               <option value="{{$_anesth->_id}}" {{if $_anesth->_id == $anesth->_id}}selected="selected"{{/if}}>{{$_anesth}}</option>
@@ -82,13 +82,13 @@
       {{else}}
         <td class="text">
           {{if !$_op->annulee}}
-            <form name="editTimeFrm{{$_op->_id}}" action="?m={{$m}}" method="post">
+            <form name="editTimeFrm{{$_op->_id}}" method="post" onsubmit="return onSubmitFormAjax(this)">
               <input type="hidden" name="m" value="dPplanningOp" />
               <input type="hidden" name="del" value="0" />
               <input type="hidden" name="dosql" value="do_planning_aed" />
               <input type="hidden" name="operation_id" value="{{$_op->_id}}" />
               {{assign var=_op_id value=$_op->_id}}
-              {{mb_field object=$_op field=time_operation form="editTimeFrm$_op_id" register=true onchange="onSubmitFormAjax(this.form)"}}
+              {{mb_field object=$_op field=time_operation form="editTimeFrm$_op_id" register=true onchange="this.form.onsubmit()"}}
             </form>
           {{else}}
             {{mb_value object=$_op field=time_operation}}
@@ -96,12 +96,12 @@
         </td>
         <td class="text">
           {{if !$_op->annulee}}
-            <form name="editSalleFrm{{$_op->_id}}" action="?m={{$m}}" method="post">
+            <form name="editSalleFrm{{$_op->_id}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this)">
               <input type="hidden" name="m" value="dPplanningOp" />
               <input type="hidden" name="del" value="0" />
               <input type="hidden" name="dosql" value="do_planning_aed" />
               <input type="hidden" name="operation_id" value="{{$_op->_id}}" />
-              <select  style="width: 15em;" name="salle_id" onchange="submit(this.form)">
+              <select  style="width: 15em;" name="salle_id" onchange="this.form.onsubmit()">
                 <option value="">&mdash; {{tr}}CSalle.select{{/tr}}</option>
                 {{foreach from=$listBlocs item=_bloc}}
                   <optgroup label="{{$_bloc}}">
