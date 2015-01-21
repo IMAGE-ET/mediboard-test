@@ -18,10 +18,11 @@
   });
 </script>
 
-<form name="find" action="?" method="get" onsubmit="return {{if $board}}updateListPatients();{{else}}onSubmitFormAjax(this, null, 'search_result_patient');{{/if}}">
+<form name="find" action="?" method="get" onsubmit="return onSubmitFormAjax(this, null, 'search_result_patient');">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="a" value="ajax_search_patient" />
   <input type="hidden" name="new" value="0" />
+  <input type="hidden" name="board" value="{{$board}}" />
   <input type="hidden" id="useVitale" name="useVitale" value="{{$useVitale}}" />
 
   <table class="form">

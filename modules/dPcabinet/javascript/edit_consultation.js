@@ -42,6 +42,15 @@ Consultation = {
     url.addParam("consultation_id", consult_id);
     url.redirect();
   },
+
+  editRDVModal: function(consult_id) {
+    var url = new Url("dPcabinet", "edit_planning");
+    url.addParam("consultation_id", consult_id);
+    url.modal({
+      width: "95%",
+      height: "95%"
+    });
+  },
   
   edit: function(consult_id) {
     var url = new Url("dPcabinet", "edit_consultation", "tab");
@@ -74,6 +83,7 @@ Consultation = {
     document.location.reload();
   },
   useModal: function() {
-    this.edit = this.editModal;
+    this.edit    = this.editModal;
+    this.editRDV = this.editRDVModal;
   }
 };

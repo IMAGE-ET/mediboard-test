@@ -15,10 +15,12 @@
     <td class="halfPane">
       {{mb_include template="inc_list_patient"}}
     </td>
+    {{if !$board}}
     <td class="halfPane" id="vwPatient">
       <div class="small-info">
         Veuillez sélectionner un patient sur la gauche pour pouvoir le visualiser
       </div>
 		</td>
+    {{/if}}
   </tr>
 </table>

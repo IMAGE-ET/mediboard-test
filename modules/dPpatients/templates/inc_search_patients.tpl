@@ -83,7 +83,7 @@
         emptyPat();
       {{/if}}
 
-      {{if $patient->_id}}
+      {{if $patient->_id && !$board}}
         reloadPatient('{{$patient->_id}}', 0);
       {{/if}}
 

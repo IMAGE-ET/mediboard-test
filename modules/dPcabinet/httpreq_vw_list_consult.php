@@ -19,7 +19,6 @@ $ds               = CSQLDataSource::get("std");
 
 // get
 $user             = CUser::get();
-$board            = CValue::get("board", 0);
 $boardItem        = CValue::get("boardItem", 0);
 $plageconsult_id  = CValue::get("plageconsult_id");
 
@@ -113,7 +112,8 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("boardItem", $boardItem);
 $smarty->assign("tab"      , "edit_consultation");
-$smarty->assign("board"    , $board);
+$smarty->assign("board"    , CValue::get("board"   , 0));
+$smarty->assign("leftView" , CValue::get("leftView", 0));
 $smarty->assign("date"     , $date);
 $smarty->assign("hour"     , CMbDT::time());
 $smarty->assign("vue"      , $vue);

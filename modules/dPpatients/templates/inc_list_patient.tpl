@@ -1,80 +1,71 @@
 {{assign var=modFSE value="fse"|module_active}}
 
-{{if !$board}}
-  {{if $app->user_prefs.LogicielLectureVitale == 'vitaleVision'}}
-    {{mb_include module="patients" template="inc_vitalevision" debug=false keepFiles=true}}
-  {{elseif $app->user_prefs.LogicielLectureVitale == 'none' && $modFSE && $modFSE->canRead()}}
-     <script>
-       var urlFSE = new Url;
-       urlFSE.setModuleTab("patients", "vw_idx_patients");
-       urlFSE.addParam("useVitale", 1);
-     </script>
-  {{/if}}
-  <script>
-    var Patient = {
-      create : function(form) {
-        var url = new Url("patients", "vw_edit_patients", "tab");
-        url.addParam("patient_id", 0);
-        url.addParam("useVitale", $V(form.useVitale));
-        url.addParam("name",      $V(form.nom));
-        url.addParam("firstName", $V(form.prenom));
-        url.addParam("naissance_day",  $V(form.Date_Day));
-        url.addParam("naissance_month",$V(form.Date_Month));
-        url.addParam("naissance_year", $V(form.Date_Year));
-        {{if "covercard"|module_active}}url.addParam("covercard", $V(form.covercard));{{/if}}
-        url.redirect();
-      },
-      search : function(from) {
-        $("useVitale").value = 0;
-        return true;
-      },
-
-      doLink : function(oForm) {
-        new Url("patients", "do_link", "dosql")
-          .addParam("objects_id", $V(oForm["objects_id[]"]).join("-"))
-          .requestUpdate("systemMsg", {
-            method: 'post'
-          });
-      }
-    };
-
-    doMerge = function(oForm) {
-      var url = new Url();
-      url.setModuleAction("system", "object_merger");
-      url.addParam("objects_class", "CPatient");
-      url.addParam("objects_id", $V(oForm["objects_id[]"]).join("-"));
-      url.popup(800, 600, "merge_patients");
-    };
-
-    onMergeComplete = function() {
-      location.reload();
-    };
-
-    window.checkedMerge = [];
-    checkOnlyTwoSelected = function(checkbox) {
-      checkedMerge = checkedMerge.without(checkbox);
-
-      if (checkbox.checked)
-        checkedMerge.push(checkbox);
-
-      if (checkedMerge.length > 2)
-        checkedMerge.shift().checked = false;
-    };
-  </script>
+{{if $app->user_prefs.LogicielLectureVitale == 'vitaleVision'}}
+  {{mb_include module="patients" template="inc_vitalevision" debug=false keepFiles=true}}
+{{elseif $app->user_prefs.LogicielLectureVitale == 'none' && $modFSE && $modFSE->canRead()}}
+   <script>
+     var urlFSE = new Url;
+     urlFSE.setModuleTab("patients", "vw_idx_patients");
+     urlFSE.addParam("useVitale", 1);
+   </script>
 {{/if}}
 
 <script>
-  reloadPatient = function(patient_id, link, vw_cancelled){
-    {{if $board}}
-      var url = new Url('patients', 'vw_full_patients');
-      url.addParam("patient_id", patient_id);
+  var Patient = {
+    create : function(form) {
+      var url = new Url("patients", "vw_edit_patients", "tab");
+      url.addParam("patient_id", 0);
+      url.addParam("useVitale", $V(form.useVitale));
+      url.addParam("name",      $V(form.nom));
+      url.addParam("firstName", $V(form.prenom));
+      url.addParam("naissance_day",  $V(form.Date_Day));
+      url.addParam("naissance_month",$V(form.Date_Month));
+      url.addParam("naissance_year", $V(form.Date_Year));
+      {{if "covercard"|module_active}}url.addParam("covercard", $V(form.covercard));{{/if}}
       url.redirect();
-    {{else}}
+    },
+    search : function(from) {
+      $("useVitale").value = 0;
+      return true;
+    },
+
+    doLink : function(oForm) {
+      new Url("patients", "do_link", "dosql")
+        .addParam("objects_id", $V(oForm["objects_id[]"]).join("-"))
+        .requestUpdate("systemMsg", {
+          method: 'post'
+        });
+    }
+  };
+
+  doMerge = function(oForm) {
+    var url = new Url();
+    url.setModuleAction("system", "object_merger");
+    url.addParam("objects_class", "CPatient");
+    url.addParam("objects_id", $V(oForm["objects_id[]"]).join("-"));
+    url.popup(800, 600, "merge_patients");
+  };
+
+  onMergeComplete = function() {
+    location.reload();
+  };
+
+  window.checkedMerge = [];
+  checkOnlyTwoSelected = function(checkbox) {
+    checkedMerge = checkedMerge.without(checkbox);
+
+    if (checkbox.checked)
+      checkedMerge.push(checkbox);
+
+    if (checkedMerge.length > 2)
+      checkedMerge.shift().checked = false;
+  };
+
+  reloadPatient = function(patient_id, link, vw_cancelled){
       var url = new Url('patients', 'httpreq_vw_patient');
       url.addParam('patient_id', patient_id);
       url.addParam("vw_cancelled", vw_cancelled);
       url.requestUpdate('vwPatient', { onComplete: markAsSelected.curry(link) } );
-    {{/if}}
   };
 
   toggleSearch = function() {

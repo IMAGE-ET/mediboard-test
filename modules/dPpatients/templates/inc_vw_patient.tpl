@@ -158,7 +158,6 @@ Document.refreshList = function() {
       {{/if}}
       {{if !$vw_cancelled}}
         {{if $nb_ops_annulees || $nb_sejours_annules}}
-          <br />
           <a class="button search" style="float: right" onclick="reloadPatient('{{$patient->_id}}', null, 1)"
              title="Voir {{if $nb_sejours_annules}}{{$nb_sejours_annules}} séjour(s) annulé(s){{if $nb_ops_annulees}} et {{/if}}{{/if}}{{if $nb_ops_annulees}}{{$nb_ops_annulees}} opération(s) annulée(s){{/if}}">
             Afficher les annulés
@@ -177,7 +176,6 @@ Document.refreshList = function() {
     <th id="inc_vw_patient_th_consult" colspan="2" class="category">
       Consultations {{if $nb_consults_annulees}}({{$nb_consults_annulees}} consultation(s) annulée(s)){{/if}}
       {{if $nb_consults_annulees}}
-        <br />
         <a class="button search" style="float: right" onclick="reloadPatient('{{$patient->_id}}', null, 1)"
            title="Voir {{$nb_consults_annulees}} consultation(s) annulée(s))">
           Afficher les annulées

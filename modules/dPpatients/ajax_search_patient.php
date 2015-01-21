@@ -255,7 +255,7 @@ $smarty->assign("patientsLimited"     , $patientsLimited);
 $smarty->assign("patientsSoundex"     , $patientsSoundex);
 
 $smarty->assign("patient"             , $patient);
-$smarty->assign("board"               , 0);
+$smarty->assign("board"               , CValue::get("board", 0));
 $smarty->assign("patient_ipp"         , $patient_ipp);
 $smarty->assign("patient_nda"         , $patient_nda);
 

@@ -1,6 +1,7 @@
 {{mb_script module="dPcabinet" script="icone_selector" ajax=true}}
 
 {{mb_default var=mode_vue value=vertical}}
+{{mb_default var=leftView value=0}}
 {{assign var=patient value=$_consult->_ref_patient}}
   
 {{if !$patient->_id}}
@@ -27,7 +28,8 @@
 
 <tr class="{{if $_consult->_id == $consult->_id}}selected{{/if}}">
   {{assign var=categorie value=$_consult->_ref_categorie}}
-  <td class="{{if $_consult->annule}}cancelled{{/if}} {{if $_consult->chrono == $_consult|const:'TERMINE'}}hatching{{/if}}" style="{{if $_consult->_id != $consult->_id}}{{$style}}{{/if}}" {{if $destinations || $_consult->motif}}rowspan="2"{{/if}} class="text">
+  <td class="{{if $_consult->annule}}cancelled{{/if}} {{if $_consult->chrono == $_consult|const:'TERMINE'}}hatching{{/if}}"
+      style="{{if $_consult->_id != $consult->_id}}{{$style}}{{/if}}" {{if $destinations || $_consult->motif}}rowspan="2"{{/if}} class="text">
     {{if $destinations && !@$offline && $mode_vue == "horizontal"}}
       <form name="ChangePlage-{{$_consult->_guid}}" action="?m={{$current_m}}" method="post">
         
@@ -55,7 +57,7 @@
         <br/>
     {{/if}}
     {{if $canCabinet->read && !@$offline}}
-      <a href="#1" onclick="Consultation.editRDV('{{$_consult->_id}}'); return false;" title="Modifier le RDV" {{if $mode_vue == "vertical"}}style="float: right;"{{/if}}>
+      <a href="#1" onclick="Consultation.editRDVModal('{{$_consult->_id}}'); return false;" title="Modifier le RDV" {{if $mode_vue == "vertical"}}style="float: right;"{{/if}}>
         <img src="images/icons/planning.png" title="{{tr}}Edit{{/tr}}" />
       </a>
       {{if $mode_vue == "horizontal"}}
@@ -131,6 +133,16 @@
       {{mb_include module=cabinet template=inc_icone_categorie_consult
         categorie=$categorie
         onclick="IconeSelector.changeCategory('$consult_id', this)"}}
+    </td>
+  {{/if}}
+
+  {{if $leftView}}
+    <td {{if $destinations || $_consult->motif}}rowspan="2"{{/if}} style="{{$style}}" class="narrow">
+      {{if $patient->_id}}
+        <button class="right notext" onclick="loadTdbPatient('{{$patient->_id}}');">
+          {{tr}}Show{{/tr}}
+        </button>
+      {{/if}}
     </td>
   {{/if}}
 
