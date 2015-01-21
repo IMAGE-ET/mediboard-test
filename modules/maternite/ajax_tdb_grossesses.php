@@ -15,8 +15,8 @@ CCanDo::checkRead();
 
 $date  = CValue::get("date", CMbDT::date());
 
-$date_min = CMbDT::date("-7 days", $date);
-$date_max = CMbDT::date("+21 days", $date);
+$date_min = CMbDT::date("-".CAppUI::conf("maternite CGrossesse min_check_terme", CGroups::loadCurrent())." DAYS", $date); //CMbDT::date("-7 days", $date);
+$date_max = CMbDT::date("+".CAppUI::conf("maternite CGrossesse max_check_terme", CGroups::loadCurrent())." DAYS", $date); //CMbDT::date("+21 days", $date);
 $group = CGroups::loadCurrent();
 
 $where = array();

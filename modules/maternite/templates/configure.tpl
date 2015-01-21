@@ -10,7 +10,14 @@
 
 <script>
   Main.add(function() {
-    var tabs = Control.Tabs.create('tabs-configure', true);
+    var tabs = Control.Tabs.create('tabs-configure', true ,
+        { afterChange: function(container) {
+          if (container.id == "config_etab") {
+            Configuration.edit('maternite', ['CGroups'], $('config_etab'));
+            }
+          }
+        });
+
 
     var oform = getForm('guess_caesarean');
     Calendar.regField(oform.start);
@@ -27,6 +34,7 @@
 
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#CGrossesse">{{tr}}CGrossesse{{/tr}}</a></li>
+  <li><a href="#config_etab">Config par établissement</a></li>
   <li><a href="#rattrapage_cesarienne">Rattrapage césariennes</a></li>
 </ul>
 
@@ -47,3 +55,5 @@
   </form>
   <div id="result_guess"></div>
 </div>
+
+<div id="config_etab" style="display: none;"></div>

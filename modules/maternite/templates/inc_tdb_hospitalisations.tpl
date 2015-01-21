@@ -23,7 +23,8 @@
       <button class="sejour_create notext" onclick="Tdb.editSejour(null);" style="float: left;">
         {{tr}}CSejour-title-create{{/tr}}
       </button>
-      {{$listSejours|@count}} hospitalisation(s) au {{$date|date_format:$conf.date}}</th>
+      <a onclick="zoomViewport(this);">{{$listSejours|@count}} hospitalisation(s) au {{$date|date_format:$conf.date}}</a>
+    </th>
   </tr>
   <tr>
     <th class="narrow">{{mb_title class=CAffectation field=lit_id}}</th>

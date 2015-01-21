@@ -28,7 +28,8 @@
         <button type="button" class="change notext" onclick="Tdb.views.listAccouchements();" style="float: right;">
           {{tr}}Refresh{{/tr}}
         </button>
-        {{$ops|@count}} accouchements en cours au {{$date|date_format:$conf.date}}</th>
+        <a onclick="zoomViewport(this);">{{$ops|@count}} accouchements en cours au {{$date|date_format:$conf.date}}</a>
+      </th>
     </tr>
     <tr>
       <th>{{tr}}CPatient{{/tr}}e</th>

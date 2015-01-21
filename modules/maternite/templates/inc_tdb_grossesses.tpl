@@ -27,8 +27,8 @@
         <button class="search notext" onclick="Tdb.searchGrossesse();" style="float: left;">
           {{tr}}Rechercher{{/tr}}
         </button>
-        {{if !$grossesses|@count}}Aucun{{else}}{{$grossesses|@count}}{{/if}}
-        terme{{if $grossesses|@count > 1}}s{{/if}} prévu{{if $grossesses|@count > 1}}s{{/if}} entre le {{$date_min|date_format:$conf.date}} et le {{$date_max|date_format:$conf.date}}
+        <a onclick="zoomViewport(this);">{{if !$grossesses|@count}}Aucun{{else}}{{$grossesses|@count}}{{/if}}
+        terme{{if $grossesses|@count > 1}}s{{/if}} prévu{{if $grossesses|@count > 1}}s{{/if}} entre le {{$date_min|date_format:$conf.date}} et le {{$date_max|date_format:$conf.date}}</a>
       </th>
     </tr>
     <tr>

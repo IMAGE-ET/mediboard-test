@@ -30,7 +30,8 @@ $where[] = " date BETWEEN '$date_min' AND '$date' ";
 // accouchement non terminé = datetime_accouche IS NULL
 // ne pas voir les terminés
 if (!$see_finished) {
-  $where["grossesse.datetime_accouchement"] = " IS NULL";
+  //$where["grossesse.datetime_accouchement"] = " IS NULL";
+  $where["grossesse.active"] = " = '1'";
 }
 
 //blocs

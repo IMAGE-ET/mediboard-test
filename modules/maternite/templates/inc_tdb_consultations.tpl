@@ -21,7 +21,7 @@
       <button type="button" class="change notext" onclick="Tdb.views.listConsultations(false);" style="float: right;">
         {{tr}}Refresh{{/tr}}
       </button>
-      {{if $listConsults|@count}}{{$listConsults|@count}}{{else}}Aucune{{/if}} Consultation{{if $listConsults|@count > 1}}s{{/if}} le {{$date|date_format:$conf.date}}
+      <a onclick="zoomViewport(this);">{{if $listConsults|@count}}{{$listConsults|@count}}{{else}}Aucune{{/if}} Consultation{{if $listConsults|@count > 1}}s{{/if}} le {{$date|date_format:$conf.date}}</a>
     </th>
   </tr>
   <tr>

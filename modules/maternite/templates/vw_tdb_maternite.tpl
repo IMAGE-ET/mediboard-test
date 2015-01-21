@@ -37,12 +37,28 @@
   .width50 {
     width:50%;
   }
+
+  .viewported th.title a {
+    cursor: pointer;
+  }
+
+  .width75 {
+    width:75%;
+  }
 </style>
 
 <script>
   afterEditConsultMater = function() {
     Control.Modal.close();
     Tdb.views.listConsultations();
+  };
+
+  zoomViewport = function(span) {
+    var _td = $(span).up('td.viewport');
+    $$('td.viewport').each(function(elt) {
+      $(elt).toggleClassName('width50');
+    });
+    _td.toggleClassName('width75');
   };
 
   Consultation.useModal();
