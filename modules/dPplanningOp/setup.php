@@ -1882,8 +1882,6 @@ class CSetupdPplanningOp extends CSetup {
       $this->addQuery($query, true);
     }
 
-
-
     $this->makeRevision("2.03");
     if (!$dsn->fetchRow($dsn->exec('SHOW TABLES LIKE \'liaison_libelle\';'))) {
       $query = "CREATE TABLE `liaison_libelle` (
@@ -1898,9 +1896,6 @@ class CSetupdPplanningOp extends CSetup {
                 ADD INDEX `operation_id` (`operation_id`);";
       $this->addQuery($query, true);
     }
-
-
-
 
     $this->mod_version = '2.04';
 
