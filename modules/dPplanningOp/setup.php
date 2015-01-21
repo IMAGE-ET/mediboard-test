@@ -1874,13 +1874,15 @@ class CSetupdPplanningOp extends CSetup {
                   `group_id` INT (11) UNSIGNED
                 )/*! ENGINE=MyISAM */;";
       $this->addQuery($query, true);
-    }
 
-    $query = "ALTER TABLE `libelleop`
+      $query = "ALTER TABLE `libelleop`
                 ADD INDEX `date_debut` (`date_debut`),
                 ADD INDEX `group_id` (`group_id`),
                 ADD INDEX `date_fin` (`date_fin`);";
-    $this->addQuery($query, true);
+      $this->addQuery($query, true);
+    }
+
+
 
     $this->makeRevision("2.03");
     if (!$dsn->fetchRow($dsn->exec('SHOW TABLES LIKE \'liaison_libelle\';'))) {
@@ -1890,12 +1892,14 @@ class CSetupdPplanningOp extends CSetup {
                 `operation_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
                 `numero` TINYINT (4) UNSIGNED DEFAULT '1')/*! ENGINE=MyISAM */;";
       $this->addQuery($query, true);
-    }
 
-    $query = "ALTER TABLE `liaison_libelle`
+      $query = "ALTER TABLE `liaison_libelle`
                 ADD INDEX `libelleop_id` (`libelleop_id`),
                 ADD INDEX `operation_id` (`operation_id`);";
-    $this->addQuery($query, true);
+      $this->addQuery($query, true);
+    }
+
+
 
 
     $this->mod_version = '2.04';
