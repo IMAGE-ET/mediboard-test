@@ -640,6 +640,30 @@ class CMediusers extends CPerson {
     return $this->_ref_function;
   }
 
+  /**
+   * Retourne la liste des fonctions secondaires dde l'utilisateur
+   *
+   * @return CFunctions[]
+   */
+  function loadRefsSecondaryFunctions() {
+    $this->loadBackRefs("secondary_functions");
+    $secondary_functions = array();
+    foreach ($this->_back["secondary_functions"] as $_sec_func) {
+      /** @var CSecondaryFunction $_sec_func */
+      $_sec_func->loadRefFunction();
+      $_sec_func->loadRefUser();
+      $_function                            = $_sec_func->_ref_function;
+      $secondary_functions[$_function->_id] = $_function;
+    }
+    return $secondary_functions;
+  }
+
+  /**
+   * Utilisation de la couleur de l'utilisateur si définie
+   * sinon de la fonction
+   *
+   * @return string User color
+   */
   function updateColor() {
     $function_color    = $this->_ref_function ? $this->_ref_function->color : null;
     $this->_color      = $this->color ? $this->color : $function_color;
@@ -770,13 +794,13 @@ class CMediusers extends CPerson {
    * @return CMbObject[]
    */
   function getOwners() {
-    $func = $this->loadRefFunction();
-    $etab = $func->loadRefGroup();
+    $func  = $this->loadRefFunction();
+    $etab  = $func->loadRefGroup();
 
     return array(
-      "prat" => $this,
-      "func" => $func,
-      "etab" => $etab,
+      "prat"  => $this,
+      "func"  => $func,
+      "etab"  => $etab,
     );
   }
 

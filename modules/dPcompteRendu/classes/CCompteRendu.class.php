@@ -702,7 +702,15 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
         $where["user_id"]     = "= '$prat->_id'";
         $where["function_id"] = "IS NULL";
         $where["group_id"]    = "IS NULL";
-        $modeles["prat"] = $modele->loadListWithPerms(PERM_READ, $where, $order);
+        $modeles["prat"]      = $modele->loadListWithPerms(PERM_READ, $where, $order);
+
+        $sec_func = $prat->loadRefsSecondaryFunctions();
+        foreach ($sec_func as $_func) {
+          $where["user_id"]              = "IS NULL";
+          $where["function_id"]          = "= '$_func->_id'";
+          $where["group_id"]             = "IS NULL";
+          $modeles["func" . $_func->_id] = $modele->loadListWithPerms(PERM_READ, $where, $order);
+        }
 
       case 'func': // Modèle de la fonction
         if (isset($modeles["func"])) {

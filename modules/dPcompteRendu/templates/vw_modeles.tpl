@@ -31,55 +31,59 @@
   {{tr}}CCompteRendu-title-create{{/tr}}
 </a>
 
+<fieldset>
+  <legend>
+    {{tr}}CCompteRendu-filter{{/tr}}
+  </legend>
+
+  <form name="filterModeles" method="get" onsubmit="return onSubmitFormAjax(this, null, 'modeles_area')">
+    <input type="hidden" name="m" value="compteRendu" />
+    <input type="hidden" name="a" value="ajax_list_modeles" />
+    <input type="hidden" name="order_col" value="{{$order_col}}" />
+    <input type="hidden" name="order_way" value="{{$order_way}}" />
+
+    <table class="form">
+      <tr>
+        <th>{{mb_label object=$filtre field=user_id}}</th>
+        <td>
+          <select name="user_id" onchange="$V(this.form.function_id, '', false); this.form.onsubmit()">
+            <option value="" {{if !$filtre->user_id}}selected{{/if}}>&mdash; Choisissez un utilisateur</option>
+            {{mb_include module=mediusers template=inc_options_mediuser list=$praticiens selected=$filtre->user_id}}
+          </select>
+        </td>
+        <th>{{mb_label object=$filtre field=object_class}}</th>
+        <td>
+          {{assign var=_spec value=$filtre->_specs.object_class}}
+          <select name="object_class" onchange="this.form.onsubmit()">
+            <option value="">&mdash; {{tr}}CCompteRendu-type-all{{/tr}}</option>
+            {{foreach from=$_spec->_locales item=_locale key=_object_class}}
+              <option value="{{$_object_class}}" {{if $filtre->object_class == $_object_class}}selected{{/if}}>{{$_locale}}</option>
+            {{/foreach}}
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th>{{mb_label object=$filtre field=function_id}}</th>
+        <td>
+          <select name="function_id" onchange="$V(this.form.user_id, '', false); this.form.onsubmit()">
+            <option value="" {{if !$filtre->function_id}}selected{{/if}}>&mdash; Choisissez une fonction</option>
+            {{mb_include module=mediusers template=inc_options_function list=$functions selected=$filtre->function_id}}
+          </select>
+        </td>
+
+        <th>{{mb_label object=$filtre field=type}}</th>
+        <td>{{mb_field object=$filtre field=type onchange="this.form.onsubmit()" canNull=true emptyLabel="All"}}</td>
+      </tr>
+    </table>
+  </form>
+</fieldset>
+
 <form name="deleteModele" method="post" class="prepared">
   <input type="hidden" name="m" value="compteRendu" />
   <input type="hidden" name="dosql" value="do_modele_aed" />
   <input type="hidden" name="callback" value="Modele.refresh" />
   <input type="hidden" name="del" value="1" />
   <input type="hidden" name="compte_rendu_id" />
-</form>
-
-<form name="filterModeles" method="get" onsubmit="return onSubmitFormAjax(this, null, 'modeles_area')">
-  <input type="hidden" name="m" value="compteRendu" />
-  <input type="hidden" name="a" value="ajax_list_modeles" />
-  <input type="hidden" name="order_col" value="{{$order_col}}" />
-  <input type="hidden" name="order_way" value="{{$order_way}}" />
-
-  <table class="form">
-    <tr>
-      <th class="category" colspan="10">{{tr}}CCompteRendu-filter{{/tr}}</th>
-    </tr>
-
-    <tr>
-      <th>{{mb_label object=$filtre field=user_id}}</th>
-      <td>
-        <select name="user_id" onchange="$V(this.form.function_id, '', false); this.form.onsubmit()">
-          <option value="" {{if !$filtre->user_id}}selected{{/if}}>&mdash; Choisissez un utilisateur</option>
-          {{mb_include module=mediusers template=inc_options_mediuser list=$praticiens selected=$filtre->user_id}}
-        </select>
-      </td>
-      <th>{{mb_label object=$filtre field=function_id}}</th>
-      <td>
-        <select name="function_id" onchange="$V(this.form.user_id, '', false); this.form.onsubmit()">
-          <option value="" {{if !$filtre->function_id}}selected{{/if}}>&mdash; Choisissez une fonction</option>
-          {{mb_include module=mediusers template=inc_options_function list=$functions selected=$filtre->function_id}}
-        </select>
-      </td>
-      <th>{{mb_label object=$filtre field=object_class}}</th>
-      <td>
-       {{assign var=_spec value=$filtre->_specs.object_class}}
-        <select name="object_class" onchange="this.form.onsubmit()">
-          <option value="">&mdash; {{tr}}CCompteRendu-type-all{{/tr}}</option>
-          {{foreach from=$_spec->_locales item=_locale key=_object_class}}
-            <option value="{{$_object_class}}" {{if $filtre->object_class == $_object_class}}selected{{/if}}>{{$_locale}}</option>
-          {{/foreach}}
-        </select>
-      </td>
-
-      <th>{{mb_label object=$filtre field=type}}</th>
-      <td>{{mb_field object=$filtre field=type onchange="this.form.onsubmit()" canNull=true emptyLabel="All"}}</td>
-    </tr>
-  </table>
 </form>
 
 <div id="modeles_area"></div>

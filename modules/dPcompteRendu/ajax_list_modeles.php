@@ -57,6 +57,11 @@ if ($filtre->function_id) {
     "func" => $func,
     "etab" => $func->loadRefGroup()
   );
+} else {
+  $sec_func = $user->loadRefsSecondaryFunctions();
+  foreach($sec_func as $_func) {
+    $owners["func" . $_func->_id] = $_func;
+  }
 }
 
 $modeles = CCompteRendu::loadAllModelesFor($owner_id, $owner, $filtre->object_class, $filtre->type, 1, $order);

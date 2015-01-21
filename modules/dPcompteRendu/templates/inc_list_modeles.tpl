@@ -21,6 +21,7 @@
   {{foreach from=$modeles key=owner item=_modeles}}
     <li>
       <a href="#owner-{{$owner}}" {{if !$_modeles|@count}}class="empty"{{/if}}>
+        <small>{{tr}}{{$owners.$owner->_class}}{{/tr}}</small><br />
         {{$owners.$owner}} <small>({{$_modeles|@count}})</small>
       </a>
     </li>
