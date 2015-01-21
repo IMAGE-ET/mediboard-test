@@ -1857,7 +1857,48 @@ class CSetupdPplanningOp extends CSetup {
               DROP `entree_chir`,
               DROP `entree_anesth`;";
     $this->addQuery($query);
-    $this->mod_version = '2.02';
+
+    $this->makeRevision("2.02");
+    $dsn = CSQLDataSource::get('std');
+    if (!$dsn->fetchRow($dsn->exec('SHOW TABLES LIKE \'libelleop\';'))) {
+      $query = "CREATE TABLE `libelleop` (
+                  `libelleop_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                  `statut` ENUM ('valide','no_valide','indefini'),
+                  `nom` VARCHAR (255) NOT NULL,
+                  `date_debut` DATETIME,
+                  `date_fin` DATETIME,
+                  `services` VARCHAR (255),
+                  `mots_cles` VARCHAR (255),
+                  `numero` INT (11) NOT NULL DEFAULT '0',
+                  `version` INT (11) DEFAULT '1',
+                  `group_id` INT (11) UNSIGNED
+                )/*! ENGINE=MyISAM */;";
+      $this->addQuery($query, true);
+    }
+
+    $query = "ALTER TABLE `libelleop`
+                ADD INDEX `date_debut` (`date_debut`),
+                ADD INDEX `group_id` (`group_id`),
+                ADD INDEX `date_fin` (`date_fin`);";
+    $this->addQuery($query, true);
+
+    $this->makeRevision("2.03");
+    if (!$dsn->fetchRow($dsn->exec('SHOW TABLES LIKE \'liaison_libelle\';'))) {
+      $query = "CREATE TABLE `liaison_libelle` (
+                `liaison_libelle_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `libelleop_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `operation_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `numero` TINYINT (4) UNSIGNED DEFAULT '1')/*! ENGINE=MyISAM */;";
+      $this->addQuery($query, true);
+    }
+
+    $query = "ALTER TABLE `liaison_libelle`
+                ADD INDEX `libelleop_id` (`libelleop_id`),
+                ADD INDEX `operation_id` (`operation_id`);";
+    $this->addQuery($query, true);
+
+
+    $this->mod_version = '2.04';
 
   }
 }

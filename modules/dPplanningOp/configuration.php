@@ -20,6 +20,9 @@ CConfiguration::register(
           'entree_pre_op_ambu'         => 'bool default|0',
           'use_charge_price_indicator' => 'enum list|no|opt|obl localize default|no',
           "required_destination"       => "bool default|0",
+        ),
+        "COperation" => array(
+          "multiple_label" => "bool default|0",
         )
       )
     )

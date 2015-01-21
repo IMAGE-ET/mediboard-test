@@ -3,6 +3,8 @@
 {{mb_script module="dPplanningOp" script="ccam_selector"}}
 {{mb_script module="dPplanningOp" script="plage_selector"}}
 {{mb_script module="dPpatients"   script="pat_selector"}}
+{{mb_script module="dPplanningOp"   script="operation"}}
+{{assign var=multi_label value="dPplanningOp COperation multiple_label"|conf:"CGroups-$g"}}
 
 <script>
 Main.add(function(){
@@ -217,8 +219,7 @@ refreshFunction = function(chir_id) {
               Choisir un protocole
             </button>
 
-            {{if @$modules.mvsante->_can->read && "mvsante"|module_active}}
-              {{mb_script module="mvsante" script="libelle"}}
+            {{if $multi_label}}
               <button class="edit notext" type="button" onclick="LiaisonOp.edit('{{$op->_id}}');"></button>
             {{/if}}
           </td>

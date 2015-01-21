@@ -8,6 +8,7 @@
  * @version  $Revision$
  * @link     http://www.mediboard.org
 *}}
+{{assign var=multi_label value="dPplanningOp COperation multiple_label"|conf:"CGroups-$g"}}
 
 <form name="infosInterv" action="?" method="post" onsubmit="onSubmitFormAjax(this, Control.Modal.close)">
   <input type="hidden" name="m" value="planningOp" />
@@ -33,11 +34,10 @@
    </tr>
   </table>
 </form>
-{{if @$modules.mvsante->_can->read && "mvsante"|module_active}}
-  {{mb_script module=mvsante script=libelle ajax=true}}
+{{if $multi_label}}
   <script>
     Main.add(function () {
-      var url = new Url('mvsante', 'ajax_vw_libelles_op');
+      var url = new Url('dPplanningOp', 'ajax_vw_libelles_op');
       url.addParam('operation_id', '{{$operation->_id}}');
       url.requestUpdate('libelles');
     });

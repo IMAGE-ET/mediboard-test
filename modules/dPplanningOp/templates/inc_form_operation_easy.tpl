@@ -1,5 +1,6 @@
 <!-- $Id$ -->
 
+{{assign var=multi_label value="dPplanningOp COperation multiple_label"|conf:"CGroups-$g"}}
 
 <form name="editOpEasy" action="?m={{$m}}" method="post" onsubmit="return checkFormOperation()">
 {{if $op->_id && $op->_ref_sejour->sortie_reelle && !$modules.dPbloc->_can->edit}}
@@ -117,7 +118,7 @@
               Choisir un protocole
             </button>
 
-            {{if @$modules.mvsante->_can->read && "mvsante"|module_active}}
+            {{if $multi_label}}
               <button class="edit notext" type="button" onclick="LiaisonOp.edit('{{$op->_id}}');"></button>
             {{/if}}
           </td>

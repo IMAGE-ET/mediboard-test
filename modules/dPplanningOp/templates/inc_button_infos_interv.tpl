@@ -9,6 +9,7 @@
  * @link     http://www.mediboard.org
 *}}
 
+{{assign var=multi_label value="dPplanningOp COperation multiple_label"|conf:"CGroups-$g"}}
 {{mb_default var=callback value=""}}
 
 <script>
@@ -25,7 +26,7 @@
 
 <button type="button" class="edit notext" onclick="editInfoInterv()"></button>
 
-{{if @$modules.mvsante->_can->read && "mvsante"|module_active}}
+{{if $multi_label}}
   <span class="countertip" style="margin-top:2px;">
     {{$operation->_ref_liaison_libelles|@count}}
   </span>&nbsp;

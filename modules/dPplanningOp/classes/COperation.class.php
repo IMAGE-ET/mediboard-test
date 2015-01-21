@@ -1957,9 +1957,6 @@ class COperation extends CCodable implements IPatientRelated {
    * @return CLiaisonLibelleInterv[]
    */
   function loadLiaisonLibelle () {
-    if (CModule::getActive("mvsante")) {
-      /** @var CLiaisonLibelleInterv[] $liaisons_libelles */
-      return  $this->_ref_liaison_libelles = $this->loadBackRefs("liaison_libelle", "numero");
-    }
+    return $this->_ref_liaison_libelles = $this->loadBackRefs("liaison_libelle", "numero");
   }
 }

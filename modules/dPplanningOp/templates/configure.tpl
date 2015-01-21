@@ -13,6 +13,7 @@
   <li><a href="#configure-COperation" >{{tr}}COperation{{/tr}}     </a></li>
   <li><a href="#configure-CSejour"    >{{tr}}CSejour{{/tr}}        </a></li>
   <li><a href="#configure-CProtocole" >{{tr}}CProtocole{{/tr}}     </a></li>
+  <li><a href="#configure-CLibelleOp" >{{tr}}CLibelleOp{{/tr}}     </a></li>
   {{if $conf.ref_pays == 2}}
     <li><a href="#configure-CFactureEtablissement"    >{{tr}}CFactureEtablissement{{/tr}} </a></li>
   {{/if}}
@@ -37,6 +38,10 @@
 
 <div id="configure-CProtocole" style="display: none;">
   {{mb_include template=CProtocole_config}}
+</div>
+
+<div id="configure-CLibelleOp" style="display: none;">
+  {{mb_include template=CLibelleOp_config}}
 </div>
 
 {{if $conf.ref_pays == 2}}

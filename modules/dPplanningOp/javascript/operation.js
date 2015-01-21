@@ -54,3 +54,44 @@ Operation = {
     }
   }
 };
+
+Libelle = {
+  modal: null,
+  edit: function(libelle_id) {
+    var url = new Url('dPplanningOp', 'ajax_edit_libelle');
+    url.addParam('libelle_id', libelle_id);
+    url.requestModal(500);
+    url.modalObject.observe('afterClose', function() {
+      getForm('search_libelle').onsubmit();
+    })
+  }
+};
+
+
+LiaisonOp = {
+  modal: null,
+  url: null,
+  edit: function(operation_id) {
+    var url = new Url('dPplanningOp', 'vw_libelles_op');
+    url.addParam('operation_id', operation_id);
+    url.requestModal(500, 300);
+    this.url = url;
+  },
+  onDeletion: function(form) {
+    if (!form.libelleop_id.value) {
+      form.libelleop_id.value = 1;
+    }
+    return confirmDeletion(form, { typeName: 'l\'affectation de libellé'},
+      { onComplete: function(){
+        LiaisonOp.url.refreshModal();
+      }}
+    );
+  },
+  submit: function(form) {
+    return onSubmitFormAjax(form, {
+      onComplete : function() {
+        LiaisonOp.url.refreshModal();
+      }
+    });
+  }
+};

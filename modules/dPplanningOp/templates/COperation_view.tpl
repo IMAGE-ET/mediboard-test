@@ -8,6 +8,7 @@
 {{assign var=operation value=$object}}
 {{assign var=sejour    value=$object->_ref_sejour}}
 {{assign var=patient   value=$sejour->_ref_patient}}
+{{assign var=multi_label value="dPplanningOp COperation multiple_label"|conf:"CGroups-$g"}}
 
 <table class="tbl tooltip">
   <tr>
@@ -137,8 +138,7 @@
         <button type="button" class="lookup" onmousedown="CreationBrancard.jumelles('{{$operation->_id}}', 'operation_id');">Brancardage</button>
       {{/if}}
 
-      {{if @$modules.mvsante->_can->read && "mvsante"|module_active}}
-        {{mb_script module=mvsante script=libelle ajax=true}}
+      {{if $multi_label}}
         <button class="edit" type="button" onclick="LiaisonOp.edit('{{$operation->_id}}');">Modifier les libellés</button>
       {{/if}}
     </td>
