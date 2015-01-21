@@ -1,7 +1,7 @@
 {{*
  * $Id$
  *  
- * @category ${Module}
+ * @category dPCabinet
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -9,7 +9,7 @@
 
 <table class="main tbl" id="old_consult">
   <tr>
-    <th class="title" colspan="7">Liste des consultations d'anésthésie pour {{$patient->_view}}</th>
+    <th class="title" colspan="7">Liste des consultations d'anesthésie pour {{$patient->_view}}</th>
   </tr>
   <tr>
     <th class="category"></th>

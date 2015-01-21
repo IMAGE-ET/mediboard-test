@@ -285,5 +285,5 @@ loadOldConsultsIntubation = function (patient_id, consult_anesth_id) {
   var url = new Url("dPcabinet", "ajax_old_consult_intubation");
   url.addParam("patient_id", patient_id);
   url.addParam("consult_anesth_id", consult_anesth_id);
-  url.requestModal("50%", "50%");
+  url.requestModal("70%", "70%");
 };
