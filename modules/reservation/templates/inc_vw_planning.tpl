@@ -53,8 +53,32 @@
     border-top:solid 1px #ccc!important;
   }
 
-  .plage_planning:hover {
-    z-index: 100;
+  .plage_planning {
+    position:relative;
+  }
+
+  div.hover_chir {
+    display: none;
+    position: absolute;
+    top:0;
+    white-space: nowrap;
+    background-color: white;
+    font-size: 1.4em;
+  }
+
+  .plage_planning:hover div.hover_chir {
+    display: block;
+    left:-.1em;
+
+    transform-origin: 100% 100%;
+    -webkit-transform-origin: 100% 100%;
+    -moz-transform-origin: 100% 100%;
+    -ms-transform-origin: 100% 100%;
+
+    transform: rotate(-90deg);
+    -webkit-transform: translate(-100%, 0) rotate(-90deg) ;
+    -moz-transform: translate(-100%, 0) rotate(-90deg);
+    -ms-transform: translate(-100%, 0) rotate(-90deg);
   }
 
 </style>
