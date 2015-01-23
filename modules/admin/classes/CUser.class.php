@@ -142,6 +142,7 @@ class CUser extends CPerson {
     $backProps["authentications_previous"] = "CUserAuthentication previous_user_id";
     $backProps['task_author']        = 'CSejourTask author_id';
     $backProps['task_author_realise']= 'CSejourTask author_realise_id';
+    $backProps["ox_message_items"]   = "COXMessageItem user_id";
 
     return $backProps;
   }

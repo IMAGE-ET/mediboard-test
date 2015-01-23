@@ -425,6 +425,7 @@ $locales['common-action-Get random password'] = 'Obtenir un mot de passe aléatoi
 $locales['common-action-Search'] = 'Rechercher';
 $locales['common-action-Search object'] = 'Rechercher un objet';
 $locales['common-action-Select'] = 'Sélectionner';
+$locales['common-action-Show read messages'] = 'Afficher les messages lus';
 $locales['common-action-Stop measurement'] = 'Arrêter la mesure';
 $locales['common-error-No search field for this object type'] = 'Aucun champ de recherche pour ce type d\'objet';
 $locales['common-error-Search by keywords is impossible'] = 'Recherche par mots clefs impossible';
