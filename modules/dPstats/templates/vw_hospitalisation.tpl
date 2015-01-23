@@ -15,7 +15,7 @@
     var oForm = DisplayGraph.filterForm;
     url.addElement(oForm._date_min);
     url.addElement(oForm._date_max);
-    url.addElement(oForm._service);
+    url.addElement(oForm.service_id);
     url.addElement(oForm.type);
     url.addElement(oForm.prat_id);
     url.addElement(oForm.discipline_id);
@@ -35,6 +35,15 @@
     var url = new Url("stats", "ajax_patients_by_type_by_service");
     url.addFormData(form);
     url.modal();
+  }
+
+  DisplayGraph.occupationParService = function() {
+    if (getForm("stats_params").service_id.value == 0) {
+      alert('Vous devez sélectionner un service pour visualiser ce graphique!');
+    }
+    else {
+      DisplayGraph.launchStats('occupationparservice')
+    }
   }
 </script>
 
@@ -175,6 +184,16 @@
         <br />
         <button type="button" class="list"
                 onclick="DisplayGraph.statsPatientsParTypeHospiParService()">
+          {{tr}}View{{/tr}}
+        </button>
+      </div>
+    </td>
+    <td>
+      <div class="small-info" style="text-align: center">
+        Répartition du nombre de patients par service, par heure, sur 24 heures.
+        <br />
+        <button type="button" class="stats"
+                onclick="DisplayGraph.occupationParService()">
           {{tr}}View{{/tr}}
         </button>
       </div>

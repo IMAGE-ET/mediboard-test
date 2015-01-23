@@ -15,6 +15,7 @@ CCanDo::checkRead();
 CAppUI::requireModuleFile("dPstats", "graph_patparservice");
 CAppUI::requireModuleFile("dPstats", "graph_patpartypehospi");
 CAppUI::requireModuleFile("dPstats", "graph_joursparservice");
+CAppUI::requireModuleFile("dPstats", "graph_occupationparservice");
 
 // map Graph Bloc
 CAppUI::requireModuleFile("dPstats", "graph_activite");
@@ -188,6 +189,9 @@ switch ($type_graph) {
       $prat_id, $bloc_id, $func_id, $discipline_id,
       $codes_ccam
     );
+    break;
+  case 'occupationparservice':
+    $graph = graphOccupationLitParService($date_min, $service_id);
     break;
   default:
     $graph = array();
