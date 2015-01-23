@@ -3,7 +3,7 @@
   <tr>
     <th colspan="4" class="title">
       {{if $target}}
-        Identifiants pour '{{$target->_view}}'
+        Identifiants pour '{{$target->_view}}' (#{{$target->_id}})
       {{else}}
         Identifiants
       {{/if}}
