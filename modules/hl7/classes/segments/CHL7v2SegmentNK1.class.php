@@ -49,14 +49,19 @@ class CHL7v2SegmentNK1 extends CHL7v2Segment {
     
     // NK1-3: Relationship (CE) (optional)
     // Table 0063 - Relationship
-    $data[] = array(
-      array(
-        CHL7v2TableEntry::mapTo("63", $correspondant->parente),
-        ($correspondant->parente == "autre") ? $correspondant->parente_autre : null,
-      )
+    $relationships = array (
+        CHL7v2TableEntry::mapTo("63", $correspondant->parente)
     );
-    
-    // NK1-4: Address (XAD) (optional repeating)
+
+    if ($correspondant->parente == "autre") {
+      $relationships[] = $correspondant->parente_autre;
+    }
+
+    $data[] = array (
+      $relationships
+    );
+
+      // NK1-4: Address (XAD) (optional repeating)
     $linesAdress = explode("\n", $correspondant->adresse, 2);
     $data[] = array(
       array(
