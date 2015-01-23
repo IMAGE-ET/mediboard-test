@@ -27,9 +27,8 @@ class CHL7v2EventQBP extends CHL7v2Event implements CHL7EventQBP {
    */
   function __construct() {
     parent::__construct();
-    
-    $this->profil      = "PDQ";
-    $this->msg_codes   = array ( 
+
+    $this->msg_codes   = array (
       array(
         $this->event_type, $this->code, "{$this->event_type}_{$this->struct_code}"
       )

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * K22 - Find Candidates response - HL7
+ * K23 - Query Response - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,13 +12,24 @@
  */
 
 /**
- * Class CHL7v2EventPDQK22
- * K22 - Find Candidates response
+ * Class CHL7v2EventQBPK23
+ * K23 - Query Response
  */
-class CHL7v2EventQBPK22 extends CHL7v2EventQBP implements CHL7EventQBPK22 {
+class CHL7v2EventQBPK23 extends CHL7v2EventQBP implements CHL7EventQBPK23 {
 
   /** @var string */
-  public $code = "K22";
+  public $code = "K23";
+
+  /**
+   * Construct
+   *
+   * @return \CHL7v2EventQBPK23
+   */
+  function __construct() {
+    parent::__construct();
+
+    $this->profil = "PIX";
+  }
 
   /**
    * Build K22 event
@@ -30,16 +41,5 @@ class CHL7v2EventQBPK22 extends CHL7v2EventQBP implements CHL7EventQBPK22 {
    * @return void
    */
   function build($patient) {
-  }
-
-  /**
-   * Construct
-   *
-   * @return \CHL7v2EventQBPK22
-   */
-  function __construct() {
-    parent::__construct();
-
-    $this->profil = "PDQ";
   }
 }

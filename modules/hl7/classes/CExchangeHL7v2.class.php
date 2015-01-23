@@ -23,7 +23,8 @@ class CExchangeHL7v2 extends CExchangeTabular {
     "PAM_FR" => "CPAMFR",
     "DEC"    => "CDEC",
     "SWF"    => "CSWF",
-    "PDQ"    => "CPDQ"
+    "PDQ"    => "CPDQ",
+    "PIX"    => "CPIX",
   );
   
   // DB Table key

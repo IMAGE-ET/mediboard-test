@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Q22 - Find Candidates - HL7
+ * Q23 - Query Message - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,13 +12,13 @@
  */
 
 /**
- * Class CHL7v2EventPDQQ22
- * Q22 - Find Candidates
+ * Class CHL7v2EventQBPQ23
+ * Q23 - Query Message
  */
-class CHL7v2EventQBPQ22 extends CHL7v2EventQBP implements CHL7EventQBPQ22 {
+class CHL7v2EventQBPQ23 extends CHL7v2EventQBP implements CHL7EventQBPQ23 {
 
   /** @var string */
-  public $code        = "Q22";
+  public $code        = "Q23";
 
 
   /** @var string */
@@ -27,16 +27,16 @@ class CHL7v2EventQBPQ22 extends CHL7v2EventQBP implements CHL7EventQBPQ22 {
   /**
    * Construct
    *
-   * @return \CHL7v2EventQBPQ22
+   * @return \CHL7v2EventQBPQ23
    */
   function __construct() {
     parent::__construct();
 
-    $this->profil = "PDQ";
+    $this->profil = "PIX";
   }
 
   /**
-   * Build Q22 event
+   * Build Q23 event
    *
    * @param CPatient $patient Person
    *
@@ -52,10 +52,5 @@ class CHL7v2EventQBPQ22 extends CHL7v2EventQBP implements CHL7EventQBPQ22 {
 
     // RCP
     $this->addRCP($patient);
-
-    // DSC
-    if (isset($patient->_pointer)) {
-      $this->addDSC($patient);
-    }
   }
 }

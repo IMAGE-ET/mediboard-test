@@ -27,12 +27,12 @@
   }
 </script>
 
-<table>
+<table class="form">
   <tr>
-    <td style="vertical-align: top;">
-      <ul id="tabs-interop-norm-domains" class="control_tabs_vertical">
+    <td style="vertical-align: top; width: 250px" >
+      <ul id="tabs-interop-norm-domains" class="control_tabs_vertical small">
         {{foreach from=$all_messages key=_domain item=_families}}
-          <li style="width: 260px">
+          <li>
             <a href="#{{$_domain}}">
               {{tr}}{{$_domain}}{{/tr}}
               <br />
@@ -42,18 +42,18 @@
         {{/foreach}}
       </ul>
     </td>
-    <td style="vertical-align: top; width: 100%">
+    <td style="vertical-align: top;">
       {{foreach from=$all_messages key=_domain_name item=_domains}}
         <div id="{{$_domain_name}}" style="display: none;">
           <script type="text/javascript">
             Control.Tabs.create('tabs-'+'{{$_domain_name}}'+'-families', true);
           </script>
 
-          <ul id="tabs-{{$_domain_name}}-families" class="control_tabs">
+          <ul id="tabs-{{$_domain_name}}-families" class="control_tabs small">
             {{foreach from=$_domains item=_families}}
               {{assign var=_family_name value=$_families|get_class}}
 
-              <li style="width: 260px">
+              <li>
                 <a href="#{{$_family_name}}">
                   {{tr}}{{$_family_name}}{{/tr}}
                   <br />

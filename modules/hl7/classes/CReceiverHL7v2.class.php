@@ -46,6 +46,7 @@ class CReceiverHL7v2 extends CInteropReceiver {
       "DEC"    => array ("CDEC"),
       "SWF"    => array ("CSWF"),
       "PDQ"    => array ("CPDQ"),
+      "PIX"    => array ("CPIX"),
     );
 
     return $spec;

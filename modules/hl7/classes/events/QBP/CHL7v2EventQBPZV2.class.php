@@ -21,6 +21,17 @@ class CHL7v2EventQBPZV2 extends CHL7v2EventQBP implements CHL7EventQBPK22 {
   public $code = "ZV2";
 
   /**
+   * Construct
+   *
+   * @return \CHL7v2EventQBPZV2
+   */
+  function __construct() {
+    parent::__construct();
+
+    $this->profil = "PDQ";
+  }
+
+  /**
    * Build ZV2 event
    *
    * @param CPatient $patient Person

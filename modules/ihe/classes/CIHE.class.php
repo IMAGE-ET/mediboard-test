@@ -72,6 +72,9 @@ class CIHE extends CInteropNorm {
       case "PDQ":
         return CPDQ::getEvent($exchange);
 
+      case "PIX":
+        return CPIX::getEvent($exchange);
+
       case "XDSb":
         return CXDSb::getEvent($exchange);
 
@@ -132,5 +135,17 @@ class CIHE extends CInteropNorm {
    */
   static function getPDQTransaction($code, $i18n = null) {
     return CPDQ::getTransaction($code);
+  }
+
+  /**
+   * Return Patient Demographics Query (PDQ) transaction
+   *
+   * @param string $code Event code
+   * @param string $i18n Internationalization
+   *
+   * @return object An instance of PDQ transaction
+   */
+  static function getPIXTransaction($code, $i18n = null) {
+    return CPIX::getTransaction($code);
   }
 }
