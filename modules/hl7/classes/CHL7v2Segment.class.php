@@ -331,7 +331,14 @@ class CHL7v2Segment extends CHL7v2Entity {
           null,
           "M"
         );
-        
+
+      case "INSEE":
+        return array(
+          "INSEE",
+          null,
+          "L"
+        );
+
       default:
         throw new CHL7v2Exception(CHL7v2Exception::UNKNOWN_AUTHORITY);
     }
@@ -1261,7 +1268,9 @@ class CHL7v2Segment extends CHL7v2Entity {
   function getModeTraitement(CSejour $sejour) {
     $charge = new CChargePriceIndicator();
     $charge->type     = $sejour->type;
-    $charge->type_pec = $sejour->type_pec;
+    if ($sejour->type_pec) {
+      $charge->type_pec = $sejour->type_pec;
+    }
     $charge->group_id = $sejour->group_id;
     $charge->actif    = 1;
     $charge->loadMatchingObject();
