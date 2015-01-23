@@ -90,6 +90,12 @@ class CHL7v2SegmentZFV extends CHL7v2Segment {
     // ZFV-7: NDA de l'établissement de provenance
     $data[] = null;
 
+    // ZFV-8: Numéros d'archives
+    $data[] = null;
+
+    // ZFV-9: Mode de sortie personnalisée
+    $data[] = CAppUI::conf("dPplanningOp CSejour use_custom_mode_sortie") ? $sejour->loadRefModeSortie()->code : null;
+
     $this->fill($data);
   }
 }
