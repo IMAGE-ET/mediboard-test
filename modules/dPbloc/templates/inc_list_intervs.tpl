@@ -104,7 +104,7 @@
           <select name="plageop_id" onchange="submitOrder(this.form);">
             {{foreach from=$listPlages item="_plage"}}
             <option value="{{$_plage->_id}}" {{if $plage->_id == $_plage->_id}} selected = "selected"{{/if}}>
-            {{$_plage->_ref_salle->nom}} / {{$_plage->debut|date_format:$conf.time}} à {{$plage->fin|date_format:$conf.time}}
+            {{$_plage->_ref_salle->nom}} / {{$_plage->debut|date_format:$conf.time}} à {{$_plage->fin|date_format:$conf.time}}
             </option>
             {{/foreach}}
           </select>
