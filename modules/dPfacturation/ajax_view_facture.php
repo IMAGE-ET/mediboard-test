@@ -19,7 +19,7 @@ if ($facture_id) {
   /* @var CFactureCabinet $facture */
   $facture->load($facture_id);
   $facture->loadRefPatient();
-  $facture->_ref_patient->loadRefsCorrespondantsPatient();
+  $facture->_ref_patient->loadRefsCorrespondantsPatient("date_debut DESC, date_fin DESC");
   $facture->loadRefPraticien();
   $facture->loadRefAssurance();
   $facture->loadRefsObjects();

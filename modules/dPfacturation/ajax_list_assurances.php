@@ -13,15 +13,16 @@ $facture_id     = CValue::get("facture_id");
 $facture_class  = CValue::get("facture_class");
 $patient_id     = CValue::get("patient_id");
 
+$order = "date_debut DESC, date_fin DESC";
 //Patient sélectionné
 $patient = new CPatient();
 $patient->load($patient_id);
-$patient->loadRefsCorrespondantsPatient();
+$patient->loadRefsCorrespondantsPatient($order);
 
 $facture = new $facture_class;
 $facture->load($facture_id);  
 $facture->loadRefPatient();
-$facture->_ref_patient->loadRefsCorrespondantsPatient();
+$facture->_ref_patient->loadRefsCorrespondantsPatient($order);
 $facture->loadRefPraticien();
 $facture->loadRefAssurance();
 $facture->loadRefsObjects();
@@ -36,4 +37,3 @@ $smarty->assign("patient"       , $patient);
 $smarty->assign("facture"       , $facture);
 
 $smarty->display("inc_vw_assurances.tpl");
-?>

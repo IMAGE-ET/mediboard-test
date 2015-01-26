@@ -1825,8 +1825,8 @@ class CPatient extends CPerson {
   }
 
   // Prévenir - Confiance - Employeur
-  function loadRefsCorrespondantsPatient() {
-    $this->_ref_correspondants_patient = $this->loadBackRefs("correspondants_patient");
+  function loadRefsCorrespondantsPatient($order = null) {
+    $this->_ref_correspondants_patient = $this->loadBackRefs("correspondants_patient", $order);
 
     $correspondant = new CCorrespondantPatient();
     $this->_ref_cp_by_relation = array();

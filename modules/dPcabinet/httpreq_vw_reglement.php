@@ -136,7 +136,7 @@ if (!$facture->_id && CAppUI::conf("ref_pays") == 2) {
 
 if ($facture->_id) {
   $facture->loadRefPatient();
-  $facture->_ref_patient->loadRefsCorrespondantsPatient();
+  $facture->_ref_patient->loadRefsCorrespondantsPatient("date_debut DESC, date_fin DESC");
   $facture->loadRefPraticien();
   $facture->loadRefAssurance();
   $facture->loadRefsObjects();
