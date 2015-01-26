@@ -25,6 +25,39 @@ class CDoExObjectAddEdit extends CDoObjectAddEdit {
     $this->_obj->setExClass($_ex_class_id);
     $this->_old->setExClass($_ex_class_id);
   }
+
+  function doStore() {
+    parent::doStore();
+
+    if (CModule::getActive("dPprescription") && !$this->_old->_id) {
+      $p_to_c = new CPrescriptionProtocoleToConcept();
+      $count_p_to_c = $p_to_c->countList();
+
+      if ($count_p_to_c > 0) {
+        /** @var CExObject $ex_object */
+        $ex_object = $this->_obj;
+
+        $all_fields = $ex_object->loadRefExClass()->loadRefsAllFields();
+        $bool_concept_ids = array();
+        foreach ($all_fields as $_field) {
+          if (strpos($_field->prop, "bool") === 0 && $_field->concept_id && $ex_object->{$_field->name} == "1") {
+            $bool_concept_ids[] = $_field->concept_id;
+          }
+        }
+
+        $bool_concept_ids = array_unique($bool_concept_ids);
+
+        $where = array(
+          "concept_id" => $p_to_c->getDS()->prepareIn($bool_concept_ids)
+        );
+        $protocole_ids = array_values(CMbArray::pluck($p_to_c->loadList($where), "protocole_id"));
+
+        if (count($protocole_ids)) {
+          CAppUI::callbackAjax("window.ExObject.launchProtocole", $protocole_ids);
+        }
+      }
+    }
+  }
 }
 
 $do = new CDoExObjectAddEdit("CExObject");

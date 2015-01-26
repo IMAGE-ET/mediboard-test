@@ -108,8 +108,9 @@ class CExConcept extends CExListItemsOwner {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["class_fields"] = "CExClassField concept_id";
-    $backProps["list_items"]   = "CExListItem concept_id";
+    $backProps["class_fields"]          = "CExClassField concept_id";
+    $backProps["list_items"]            = "CExListItem concept_id";
+    $backProps["protocoles_to_concept"] = "CPrescriptionProtocoleToConcept concept_id";
     return $backProps;
   }
 

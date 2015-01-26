@@ -538,6 +538,10 @@ var ExObject = {
     else {
       $V(form._ex_object_guid, ex_object_guid);
     }
+  },
+
+  launchProtocole: function(protocole_ids){
+    console.log(protocole_ids);
   }
 };
 
