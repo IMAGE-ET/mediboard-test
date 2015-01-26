@@ -33,11 +33,14 @@ CAppUI::requireModuleFile("dPstats", "graph_patrepartjour");
 
 // Bornes de date des statistiques
 $date_min = CValue::get("_date_min", CMbDT::date("-1 YEAR"));
-$date_min = CMbDT::date("FIRST DAY OF THIS MONTH", $date_min);
 
 $date_max = CValue::get("_date_max",  CMbDT::date());
-$date_max= CMbDT::date("FIRST DAY OF NEXT MONTH", $date_max);
-$date_max = CMbDT::date("-1 DAY", $date_max);
+mb_dump(CValue::get('_complete_months', 0), 'complete months');
+if (CValue::get('_complete_months', 0)) {
+  $date_min = CMbDT::date("FIRST DAY OF THIS MONTH", $date_min);
+  $date_max= CMbDT::date("FIRST DAY OF NEXT MONTH", $date_max);
+  $date_max = CMbDT::date("-1 DAY", $date_max);
+}
 
 $date_zoom = CValue::get("date_zoom", CMbDT::transform("+0 DAY", CMbDT::date(), "%m/%Y"));
 $debut_zoom = substr($date_zoom, 3, 7)."-".substr($date_zoom, 0, 2)."-01";

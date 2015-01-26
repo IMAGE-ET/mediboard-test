@@ -15,6 +15,7 @@
     var oForm = DisplayGraph.filterForm;
     url.addElement(oForm._date_min);
     url.addElement(oForm._date_max);
+    url.addElement(oForm._complete_months);
     url.addElement(oForm.service_id);
     url.addElement(oForm.type);
     url.addElement(oForm.prat_id);
@@ -85,17 +86,9 @@
   </tr>
 
   <tr>
-    <th>{{mb_label object=$filter field="type"}}</th>
+    <th><label for="_complete_months" title="Mois complets">Mois complets</label></th>
     <td>
-      <select name="type">
-        <option value="">&mdash; Tous les types d'hospi</option>
-        <option value="1" {{if $filter->type == "1"}}selected="selected"{{/if}}>Hospi complètes + ambu</option>
-        {{foreach from=$filter->_specs.type->_locales key=key_hospi item=curr_hospi}}
-        <option value="{{$key_hospi}}" {{if $key_hospi == $filter->type}}selected="selected"{{/if}}>
-          {{$curr_hospi}}
-        </option>
-        {{/foreach}}
-      </select>
+      <input type="checkbox" name="_complete_months"/>
     </td>
    
     <th>{{mb_label object=$filter field="_specialite"}}</th>
@@ -112,6 +105,23 @@
   </tr>
   
   <tr>
+    <th>{{mb_label object=$filter field="type"}}</th>
+    <td>
+      <select name="type">
+        <option value="">&mdash; Tous les types d'hospi</option>
+        <option value="1" {{if $filter->type == "1"}}selected="selected"{{/if}}>Hospi complètes + ambu</option>
+        {{foreach from=$filter->_specs.type->_locales key=key_hospi item=curr_hospi}}
+        <option value="{{$key_hospi}}" {{if $key_hospi == $filter->type}}selected="selected"{{/if}}>
+          {{$curr_hospi}}
+        </option>
+        {{/foreach}}
+      </select>
+    </td>
+    <th>Uniquement {{mb_label object=$filter field="septique"}}</th>
+    <td>{{mb_field object=$filter field="septique"}}</td>
+  </tr>
+
+  <tr>
     <th><label for="type_data" title="Type de données prises en compte">Type de données</th>
     <td>
       <select name="type_data">
@@ -119,8 +129,7 @@
         <option value="reelle" {{if $type_data == "reelle"}}selected="selected"{{/if}}>Réelles</option>
       </select>
     </td>
-    <th>Uniquement {{mb_label object=$filter field="septique"}}</th>
-    <td>{{mb_field object=$filter field="septique"}}</td>
+    <td colspan="2"></td>
   </tr>
 </table>
 
