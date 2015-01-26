@@ -205,6 +205,18 @@
 
   function loadTransfert(mode_entree){
     $('etablissement_entree_transfert').setVisible(mode_entree == 7);
+    {{if "dPplanningOp CSejour required_from_when_transfert"|conf:"CGroups-$g"}}
+      var oform = getForm('editRPU');
+      var provenance = $(oform._provenance);
+      if (mode_entree == 7) {
+        provenance.addClassName('notNull');
+        $('labelFor_editRPU__provenance').addClassName('notNull');
+      }
+      else {
+        provenance.removeClassName('notNull');
+        $('labelFor_editRPU__provenance').removeClassName('notNull');
+      }
+    {{/if}}
   }
 
   function loadServiceMutation(mode_entree){
