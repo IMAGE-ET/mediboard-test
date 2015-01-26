@@ -104,7 +104,8 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     // U - Unknown
     // A - Ambiguous  
     // N - Not applicable
-    $data[] = CHL7v2TableEntry::mapTo("1", $patient->sexe);
+    $sexe   = CHL7v2TableEntry::mapTo("1", $patient->sexe);
+    $data[] = $sexe ? : "U";
     
     // PID-9: Patient Alias (XPN) (optional repeating)
     $data[] = null;
