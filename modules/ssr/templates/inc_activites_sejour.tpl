@@ -9,6 +9,21 @@
 *}}
 
 <script>
+countCodesCsarr = function() {
+  var csarr_count = $V(oFormEvenementSSR.code_csarr) ? 1 : 0;
+  csarr_count += oFormEvenementSSR.select('input.checkbox-csarrs:checked').length;
+  csarr_count += oFormEvenementSSR.select('input.checkbox-other-csarrs').length;
+
+  $$("input[name='type_seance']").each(function(input){
+    if (csarr_count != 0) {
+      input.disabled = true;
+    }
+    else{
+      input.disabled = false;
+    }
+  });
+};
+
 selectActivite = function(activite) {
   $V(oFormEvenementSSR.prescription_line_element_id, '');
   $V(oFormEvenementSSR._element_id, '');
@@ -328,6 +343,9 @@ Main.add(function(){
       dropdown: true,
       minChars: 2,
       select: "value",
+      callback: function(input, queryString){
+        return (queryString + "&type_seance="+$V(oFormEvenementSSR.type_seance));
+      },
       updateElement: updateFieldCodeCsarr
     } );
   }
@@ -587,7 +605,7 @@ Main.add(function(){
                 <div id="csarrs-{{$_line->_id}}" style="display : none;">
                   {{foreach from=$_line->_ref_element_prescription->_ref_csarrs item=_csarr}}
                     <label>
-                      <input type="checkbox" class="checkbox-csarrs nocheck" name="csarrs[{{$_csarr->code}}]" value="{{$_csarr->code}}" /> 
+                      <input type="checkbox" class="checkbox-csarrs nocheck" name="csarrs[{{$_csarr->code}}]" value="{{$_csarr->code}}" onchange="countCodesCsarr();"/>
                       <span onmouseover="ObjectTooltip.createEx(this, '{{$_csarr->_guid}}')">
                         {{$_csarr->code}}
                       </span>
@@ -875,11 +893,13 @@ Main.add(function(){
       var input = $('editEvenementSSR_code_csarr');
       input.value = '';
       input.tryFocus();
+      countCodesCsarr();
     }
 
 
     deleteCode = function(elem) {
       $(elem).up().remove();
+      countCodesCsarr();
     }
 
     onSubmitSelectedEvents = function(form) {
