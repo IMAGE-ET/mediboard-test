@@ -251,7 +251,7 @@ $library->description = "Composant Javascript de sélecteur de date/heure";
 $library->sourceDir = "datepicker";
 $library->targetDir = "datepicker";
 $library->versionFile = "datepicker.js";
-$library->versionString = "r.2013-01-11";
+$library->versionString = "r.2015-01-27";
 
 CLibrary::$all[$library->name] = $library;
 
