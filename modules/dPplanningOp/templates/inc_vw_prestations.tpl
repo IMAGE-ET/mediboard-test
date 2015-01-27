@@ -59,25 +59,42 @@
   emptyLiaison = function(button) {
     var tr_souhait = button.up("tr").next("tr");
     var tr_realise = tr_souhait.next("tr");
-    tr_souhait.down("input[type=radio]").checked = "checked";
-    tr_souhait.down("input[type=radio]").onclick();
-    tr_realise.down("input[type=radio]").checked = "checked";
-    tr_realise.down("input[type=radio]").onclick();
-  }
+    var input_souhait = tr_souhait.down("input[type=radio]");
+    var input_realise = tr_realise.down("input[type=radio]");
+    input_souhait.checked = "checked";
+    input_souhait.onclick();
+    input_realise.checked = "checked";
+    input_realise.onclick();
+  };
+
+  removeLiaisons = function(date) {
+    var form = getForm("delLiaisons");
+    $V(form.date, date);
+    onSubmitFormAjax(form, function() {
+      Prestations.urlPresta.refreshModal();
+    });
+  };
 </script>
 {{math equation=x+2 x=$dates|@count assign="colspan"}}
 
 <form name="add_prestation_ponctuelle" method="post" action="?" onsubmit="return onSubmitLiaisons(this);">
-  <input type="hidden" name="m" value="dPhospi" />
+  <input type="hidden" name="m" value="hospi" />
   <input type="hidden" name="dosql" value="do_add_item_ponctuelle_aed" />
   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
   <input type="hidden" name="item_prestation_id" value="" />
   <input type="hidden" name="date" value="" />
 </form>
 
+<form name="delLiaisons" method="post">
+  <input type="hidden" name="m" value="hospi" />
+  <input type="hidden" name="dosql" value="do_remove_liaisons_for_date" />
+  <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+  <input type="hidden" name="date" />
+</form>
+
 <div style="height: 100%; overflow-y: auto;">
   <form name="edit_prestations" method="post" action="?" onsubmit="return onSubmitLiaisons(this);">
-    <input type="hidden" name="m" value="dPhospi"/>
+    <input type="hidden" name="m" value="hospi"/>
     <input type="hidden" name="dosql" value="do_items_liaisons_aed" />
     <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
     
@@ -169,7 +186,9 @@
                   <tr>
                     <th class="category" colspan="2">
                       {{mb_include module=system template=inc_object_history object=$liaison}}
-                      <button type="button" class="cancel notext compact" onclick="emptyLiaison(this)" style="float: left;"></button>
+                      {{if $liaison->_id|is_numeric}}
+                        <button type="button" class="cancel notext compact" onclick="emptyLiaison(this)" style="float: left;"></button>
+                      {{/if}}
                       {{$_prestation}}
                     </th>
                   </tr>
@@ -200,87 +219,35 @@
             </div>
           </td>
           
-          {{foreach from=$prestations_j item=_prestation key=prestation_id name=foreach_presta}}
-            {{if isset($liaisons_j.$_date.$prestation_id|smarty:nodefaults)}} 
-              {{assign var=liaison value=$liaisons_j.$_date.$prestation_id}}
-            {{else}}
-              {{assign var=liaison value=$empty_liaison}}
-            {{/if}}
-            {{assign var=next_date value="CMbDT::date"|static_call:"+1 day":$_date}}
-            {{if isset($liaisons_j.$next_date.$prestation_id|smarty:nodefaults)}}
-              {{assign var=next_liaison value=$liaisons_j.$next_date.$prestation_id}}
-            {{else}}
-              {{assign var=next_liaison value=$empty_liaison}}
-            {{/if}}
-
-            {{assign var=item_presta value=$liaison->_ref_item}}
-            {{assign var=item_presta_realise value=$liaison->_ref_item_realise}}
-
-            {{assign var=next_item_presta value=$next_liaison->_ref_item}}
-            {{assign var=next_item_presta_realise value=$next_liaison->_ref_item_realise}}
-
-            {{assign var=sous_item value=$liaison->_ref_sous_item}}
-
-            <td style="text-align: center;" class="
-              {{if $item_presta->_id && $item_presta_realise->_id}}
-                {{if $item_presta->rank < $item_presta_realise->rank}}
-                  item_superior
-                {{elseif $item_presta->rank == $item_presta_realise->rank}}
-                  item_egal
-                {{else}}
-                  item_inferior
-                {{/if}}
-              {{/if}}">
-              {{if $item_presta->_id}}
-                {{if $item_presta_realise->_id && $item_presta->nom != $item_presta_realise->nom}}
-                  <span {{if $item_presta_realise->color}}class="mediuser" style="border-left-color: #{{$item_presta_realise->color}}"{{/if}}>
-                    {{$item_presta_realise->nom}}
-                  </span> <br />
-                  vs. <br />
-                  <span {{if $item_presta->color}}class="mediuser" style="border-left-color: #{{$item_presta->color}}"{{/if}}>
-                    {{if $sous_item->item_prestation_id == $item_presta->_id}}{{$sous_item->nom}}{{else}}{{$item_presta->nom}}{{/if}}
-                  </span>
-                {{else}}
-                  <span {{if $item_presta->color}}class="mediuser" style="border-left-color: #{{$item_presta->color}}"{{/if}}>
-                    {{if $sous_item->item_prestation_id == $item_presta->_id}}{{$sous_item->nom}}{{else}}{{$item_presta->nom}}{{/if}}
-                  </span>
-                {{/if}}
-              {{elseif $item_presta_realise->_id}}
-                <span {{if $item_presta_realise->color}}class="mediuser" style="border-left-color: #{{$item_presta_realise->color}}"{{/if}}>
-                  {{if $sous_item->item_prestation_id == $item_presta_realise->_id}}{{$sous_item->nom}}{{else}}{{$item_presta_realise->nom}}{{/if}}
-                </span>
-              {{/if}}
-            </td>
-          {{/foreach}}
+          {{mb_include module=planningOp template=inc_vw_prestations_case_journaliere}}
           
           {{if $context == "all"}}
-            <td class="text">
-              {{if isset($liaisons_p.$_date|smarty:nodefaults)}}
-                {{foreach from=$liaisons_p.$_date item=_liaisons_by_prestation key=prestation_id}}
-                    {{assign var=prestation value=$prestations_p.$prestation_id}}
-                    {{foreach from=$_liaisons_by_prestation item=_liaison}}
-                      {{assign var=_item value=$_liaison->_ref_item}}
-                      <div style="height: 2em; display: inline-block;">
-                        <input type="text" name="liaisons_p[{{$_liaison->_id}}]" value="{{$_liaison->quantite}}"
-                               class="ponctuelle" size="1" onchange="this.form.onsubmit()"/>
-                        <script>
-                          Main.add(function() {
-                             getForm('edit_prestations').elements['liaisons_p[{{$_liaison->_id}}]'].addSpinner(
-                             {step: 1, min: 0});
-                          });
-                        </script>
-                        <span onmouseover="ObjectTooltip.createEx(this, '{{$_item->_guid}}');"
-                              {{if $_item->color}}class="mediuser" style="border-left-color: #{{$_item->color}}"{{/if}}>
-                          {{$_item}}
-                        </span>
-                      </div>
-                    {{/foreach}}
-                {{/foreach}}
-              {{/if}}
-            </td>
+            {{mb_include module=planningOp template=inc_vw_prestations_case_ponctuelle}}
           {{/if}}
         </tr>
       {{/foreach}}
+
+      {{if $dates_after|@count}}
+        <tr>
+          <th class="section" colspan="{{math equation=x+2 x=$prestations_j|@count}}">
+            Prestations hors séjour
+          </th>
+        </tr>
+        {{foreach from=$dates_after item=_date}}
+          <tr>
+            <td>
+              <button type="button" class="cancel notext" onclick="removeLiaisons('{{$_date}}')">{{tr}}Delete{{/tr}}</button>
+              <strong>{{$_date|date_format:"%d/%m"}} {{$day}}</strong>
+            </td>
+
+            {{mb_include module=planningOp template=inc_vw_prestations_case_journaliere}}
+
+            {{if $context == "all"}}
+              {{mb_include module=planningOp template=inc_vw_prestations_case_ponctuelle}}
+            {{/if}}
+          </tr>
+        {{/foreach}}
+      {{/if}}
     </table>
     <p style="text-align: center"><button type="button" class="cancel" onclick="Control.Modal.close();">{{tr}}Close{{/tr}}</button></p>
   </form>
