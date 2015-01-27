@@ -62,6 +62,9 @@ if (count($affectations)) {
   }
 }
 
+// Gestion des liaisons hors séjour
+$dates_after = array();
+
 /** @var CItemLiaison[] $items_liaisons */
 $items_liaisons = $sejour->loadBackRefs("items_liaisons");
 CMbObject::massLoadFwdRef($items_liaisons, "item_souhait_id");
@@ -69,6 +72,10 @@ CMbObject::massLoadFwdRef($items_liaisons, "item_realise_id");
 CMbObject::massLoadFwdRef($items_liaisons, "sous_item_id");
 
 foreach ($items_liaisons as $_item_liaison) {
+  if ($_item_liaison->date > CMbDT::date($sejour->sortie)) {
+    $dates_after[] = CMbDT::date($_item_liaison->date);
+  }
+
   $_item = $_item_liaison->loadRefItem();
   
   $_item_liaison->loadRefItemRealise();
@@ -211,6 +218,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("today"        , CMbDT::date());
 $smarty->assign("today_ponctuelle", $today_ponctuelle);
 $smarty->assign("dates"        , $dates);
+$smarty->assign("dates_after"  , $dates_after);
 $smarty->assign("relative_date", $relative_date);
 $smarty->assign("sejour"       , $sejour);
 $smarty->assign("affectations" , $affectations);
