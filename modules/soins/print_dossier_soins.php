@@ -111,7 +111,10 @@ if ($offline && CModule::getActive("forms")) {
 
 // L'appel à print_fiche écrase les interventions du dossier d'anesthésie.
 // Il faut charger le suivi médical à posteriori
-$sejour->loadSuiviMedical($datetime_min);
+$cibles = array();
+$last_trans_cible = array();
+$users = array();
+$sejour->loadSuiviMedical($datetime_min, null, $cibles, $last_trans_cible, $user_id = null, $users, 1);
 
 if ($embed) {
   // Fichiers et documents du sejour
