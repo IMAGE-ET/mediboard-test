@@ -256,6 +256,7 @@
 
     {{* Inscriptions *}}
     {{if $prescription->_ref_inscriptions_for_plan|@count}}
+      {{assign var=unite_prise value="aucune_prise"}}
       <tbody class="line_print">
         <tr>
           <th colspan="{{$th_chap_colspan}}" class="section">Inscriptions</th>
