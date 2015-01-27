@@ -180,57 +180,59 @@ class CSourceSMTP extends CExchangeSource {
   }
 
   function createUserMail($user_id, $object = null, $apicrypt = false) {
-    $mail =  new CUserMail();
-    $mail->account_id = $this->_id;
-    $mail->account_class = $this->_class;
-    $mail->sent = 1;
+    if (CModule::getActive('messagerie')) {
+      $mail =  new CUserMail();
+      $mail->account_id = $this->_id;
+      $mail->account_class = $this->_class;
+      $mail->sent = 1;
 
-    $mail->subject = $this->_mail->Subject;
-    $mail->from = $this->_mail->From;
-    $mail->to = $this->_to['address'];
-    $mail->date_inbox = CMbDT::dateTime();
+      $mail->subject = $this->_mail->Subject;
+      $mail->from = $this->_mail->From;
+      $mail->to = $this->_to['address'];
+      $mail->date_inbox = CMbDT::dateTime();
 
-    if ($this->_mail->ContentType == 'text/html') {
-      $mail->_text_html = $this->_mail->Body;
-      if ($apicrypt) {
-        $mail->_is_apicrypt = 'html';
+      if ($this->_mail->ContentType == 'text/html') {
+        $mail->_text_html = $this->_mail->Body;
+        if ($apicrypt) {
+          $mail->_is_apicrypt = 'html';
+        }
+        $mail->getHtmlText($user_id);
       }
-      $mail->getHtmlText($user_id);
-    }
-    else {
-      $mail->_text_plain = $this->_mail->Body;
-      if ($apicrypt) {
-        $mail->_is_apicrypt = 'plain';
-      }
-      $mail->getPlainText($user_id);
-    }
-
-    $mail->store();
-
-    if ($object) {
-      $file = null;
-      switch ($object->_class) {
-        case "CCompteRendu":
-          $file = $object->_ref_file;
-          break;
-        case "CFile":
-          $file = $object;
-          break;
+      else {
+        $mail->_text_plain = $this->_mail->Body;
+        if ($apicrypt) {
+          $mail->_is_apicrypt = 'plain';
+        }
+        $mail->getPlainText($user_id);
       }
 
-      if ($file && $file->_id) {
-        $attachment = new CMailAttachments();
-        $attachment->mail_id = $mail->_id;
-        list($type, $subtype) = explode('/', $file->file_type);
-        $attachment->type = $attachment->getTypeInt($type);
-        $attachment->part = 1;
-        $attachment->subtype = $subtype;
-        $attachment->bytes = $file->doc_size;
-        list($file_name, $extension) = explode('.', $file->file_name);
-        $attachment->name = $file_name;
-        $attachment->extension = $extension;
-        $attachment->file_id = $file->_id;
-        $attachment->store();
+      $mail->store();
+
+      if ($object) {
+        $file = null;
+        switch ($object->_class) {
+          case "CCompteRendu":
+            $file = $object->_ref_file;
+            break;
+          case "CFile":
+            $file = $object;
+            break;
+        }
+
+        if ($file && $file->_id) {
+          $attachment = new CMailAttachments();
+          $attachment->mail_id = $mail->_id;
+          list($type, $subtype) = explode('/', $file->file_type);
+          $attachment->type = $attachment->getTypeInt($type);
+          $attachment->part = 1;
+          $attachment->subtype = $subtype;
+          $attachment->bytes = $file->doc_size;
+          list($file_name, $extension) = explode('.', $file->file_name);
+          $attachment->name = $file_name;
+          $attachment->extension = $extension;
+          $attachment->file_id = $file->_id;
+          $attachment->store();
+        }
       }
     }
   }
