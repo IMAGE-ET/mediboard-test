@@ -92,6 +92,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $personnePhysique = $xpath->queryUniqueNode("hprim:personnePhysique", $node);
 
     $sexe = $xpath->queryAttributNode("hprim:personnePhysique", $node, "sexe");
+    if (!$sexe) {
+      $sexe = "M";
+    }
     $sexeConversion = array (
       "M" => "m",
       "F" => "f",
