@@ -110,14 +110,16 @@ Main.add(function(){
   {{mb_field object=$ex_object field=_event_name hidden=true}}
   {{mb_field object=$ex_object field=group_id hidden=true}}
 
-  {{mb_field object=$ex_object field=object_class hidden=true}}
-  {{mb_field object=$ex_object field=object_id hidden=true}}
+  {{if !$ex_object->_id}}
+    {{mb_field object=$ex_object field=object_class hidden=true}}
+    {{mb_field object=$ex_object field=object_id hidden=true}}
 
-  {{mb_field object=$ex_object field=reference_class hidden=true}}
-  {{mb_field object=$ex_object field=reference_id hidden=true}}
+    {{mb_field object=$ex_object field=reference_class hidden=true}}
+    {{mb_field object=$ex_object field=reference_id hidden=true}}
 
-  {{mb_field object=$ex_object field=reference2_class hidden=true}}
-  {{mb_field object=$ex_object field=reference2_id hidden=true}}
+    {{mb_field object=$ex_object field=reference2_class hidden=true}}
+    {{mb_field object=$ex_object field=reference2_id hidden=true}}
+  {{/if}}
 
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="callback" value="ExObjectForms.{{$ex_form_hash}}.closeOnSuccess" />
