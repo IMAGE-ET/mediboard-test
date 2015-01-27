@@ -2222,7 +2222,7 @@ class CSejour extends CFacturable implements IPatientRelated {
    *
    * @return array
    */
-  function loadSuiviMedical($datetime_min = null, $cible_trans = null, &$cibles = array(), &$last_trans_cible = array(), $user_id = null, &$users = array()) {
+  function loadSuiviMedical($datetime_min = null, $cible_trans = null, &$cibles = array(), &$last_trans_cible = array(), $user_id = null, &$users = array(), $print = 0) {
     if ($datetime_min) {
       $trans = new CTransmissionMedicale();
       $whereTrans = array();
@@ -2261,7 +2261,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     if (isset($this->_back["transmissions"])) {
-      $trans_compact = CAppUI::conf("soins Transmissions trans_compact", CGroups::loadCurrent());
+      $trans_compact = CAppUI::conf("soins Transmissions trans_compact", CGroups::loadCurrent()) && !$print;
       $list_trans = array();
       foreach ($this->_back["transmissions"] as $curr_trans) {
         $curr_trans->loadRefsFwd();
