@@ -256,7 +256,7 @@
                 <input type="hidden" name="m" value="dPplanningOp" />
                 <input type="hidden" name="dosql" value="do_planning_aed" />
                 {{mb_key object=$_operation}}
-                {{mb_field emptyLabel="COperation-cote_bloc" object=$_operation field="cote_bloc" onchange="this.form.submit();"}}
+                {{mb_field emptyLabel="COperation-cote_bloc" object=$_operation field="cote_bloc" onchange="return onSubmitFormAjax(this.form);"}}
               </form>
             {{else}}
             {{mb_value object=$_operation field="cote"}}
