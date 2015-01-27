@@ -940,6 +940,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   function store() {
     $this->completeField("entree_reelle", "entree", "patient_id", "type_pec", "grossesse_id", "mode_sortie");
 
+    /** @var CSejour $old */
+    $old =  $this->loadOldObject();
+
     // Vérification de la validité des codes CIM
     if ($this->DP != null) {
       $dp = CCodeCIM10::get($this->DP);
@@ -1137,8 +1140,6 @@ class CSejour extends CFacturable implements IPatientRelated {
     /** @var CNaissance[] $naissances */
     $naissances = array();
     if ($change_grossesse) {
-      /** @var CSejour $old */
-      $old =  $this->loadOldObject();
       $naissances = $old->loadRefGrossesse()->loadRefsNaissances();
     }
 
@@ -1164,6 +1165,23 @@ class CSejour extends CFacturable implements IPatientRelated {
         $_naissance->grossesse_id = $this->grossesse_id;
         if ($msg = $_naissance->store()) {
           return $msg;
+        }
+      }
+    }
+
+    // Changement des liaisons de prestations si besoin
+    // Seulement par rapport à l'entrée
+    if (CAppUI::conf("dPhospi systeme_prestations")) {
+      $decalage = CMbDT::daysRelative($old->entree, $this->entree);
+
+      if ($decalage != 0) {
+        $liaisons = $this->loadBackRefs("items_liaisons");
+
+        foreach ($liaisons as $_liaison) {
+          $_liaison->date = CMbDT::date("$decalage days", $_liaison->date);
+          if ($msg = $_liaison->store()) {
+            return $msg;
+          }
         }
       }
     }
