@@ -151,7 +151,7 @@
       debit_volumique = "-";
     }
     $("debit_volumique").update(debit_volumique);
-  }
+  };
   
   setValuesClassique = function() {
     var form = getForm("calculPerf");
@@ -163,16 +163,20 @@
 
       // Si on a choisi une unité/kg et que le poids du patient n'est pas dispo,
       // on ne peut que vider la quantité de produit et tagger la perfusion en sans poids
-      if ((/\/kg/.test(unite_choisie) && !poids) || (/\/m2/.test(unite_choisie) && !taille && !poids)) {
+      if ((/\/kg/.test(unite_choisie) && !poids) || (/\/m2/.test(unite_choisie) && (!taille || !poids))) {
         formLineItem.quantite.onchange();
-        tagLineSansTaillePoids(taille);
+        tagLineSansTaillePoids();
         return;
       }
-      
+
+      // Sinon, réinitialiser les flags sans_poids et sans_taille car ils ont pu être mis à 1
+      // (choix d'une unité/kg ou /m2 puis retour à une unité sans)
+      restoreFlags();
+
       var formPerf = getForm("editPerf-{{$line->_id}}");
       var formQteTotale = getForm("editQuantiteTotale-{{$line->_id}}");
       var quantite = parseFloat($("quantite_necessaire").innerHTML);
-    
+
       $V(formLineItem.quantite, quantite, false);
       onSubmitFormAjax(formLineItem, function() {
         Prescription.updateVolumeTotal('{{$line->_id}}', 1, null, null, null, function() {
@@ -184,25 +188,25 @@
         Control.Modal.close();
       });
     });
-  }
+  };
   
   setValuesOther = function() {
     var form = getForm("calculPerf");
     var unite_choisie = $V(form.unite_debit);
 
     onSubmitFormAjax(form, function() {
-      // Si on a choisi une unité/kg et que l'on n'a pas de poids
-      // on déclenche le onchange de la quantité et on enregistre la perfusion avec le flag sans poids
-      if ((/\/kg/.test(unite_choisie) && !poids) || (/\/m2/.test(unite_choisie) && !taille && !poids)) {
+      if ((/\/kg/.test(unite_choisie) && !poids) || (/\/m2/.test(unite_choisie) && (!taille || !poids))) {
         getForm("editLinePerf-{{$line_item->_id}}").quantite.onchange();
-        tagLineSansTaillePoids(taille);
+        tagLineSansTaillePoids();
         return;
       }
-      
+
+      restoreFlags();
+
       var duree = $("result_duree").down("strong").innerHTML;
       var formQteTotale = getForm("editQuantiteTotale-{{$line->_id}}");
       var formPerf = getForm("editPerf-{{$line->_id}}");
-      
+
       Prescription.updateVolumeTotal('{{$line->_id}}', 1, null, null, null, function() {
         $V(formPerf.volume_debit, $V(formQteTotale._quantite_totale), false);
         $V(formPerf.duree_debit, duree, false);
@@ -210,7 +214,7 @@
         Control.Modal.close();
       });
     });
-  }
+  };
   
   limitSelect = function(elt) {
     var form = elt.form;
@@ -231,16 +235,27 @@
     if (!show && temps.value > 24) {
       temps.selectedIndex = 0;
     }
-  }
+  };
 
-  tagLineSansTaillePoids = function(taille) {
+  tagLineSansTaillePoids = function() {
     var formTag = getForm("tagSansPoidsTaille");
+
+    if (!poids) {
+      $V(formTag.sans_poids, 1);
+    }
     if (!taille) {
       $V(formTag.sans_taille, 1);
     }
     onSubmitFormAjax(formTag, function() {
       Control.Modal.close();
     });
+  };
+
+  restoreFlags = function() {
+    var formTag = getForm("tagSansPoidsTaille");
+    $V(formTag.sans_taille, 0);
+    $V(formTag.sans_poids, 0);
+    onSubmitFormAjax(formTag);
   }
 </script>
 
@@ -261,8 +276,8 @@
   <input type="hidden" name="m" value="prescription" />
   <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
   {{mb_key object=$line}}
-  <input type="hidden" name="sans_poids" value="1" />
-  <input type="hidden" name="sans_taille" value="" />
+  <input type="hidden" name="sans_poids" />
+  <input type="hidden" name="sans_taille" />
 </form>
 
 <form name="calculPerf" method="post">
