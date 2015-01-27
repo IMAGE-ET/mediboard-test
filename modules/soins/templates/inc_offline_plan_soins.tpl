@@ -172,7 +172,7 @@
     {{if $prescription->_ref_prescription_line_mixes_for_plan|@count}}
       <tbody class="line_print">
         <tr>
-          <th colspan="{{$th_chap_colspan}}" class="section">Perfusions</th>
+          <th colspan="{{$th_chap_colspan}}" class="section">Perfusions / Aérosols / Oxygènes</th>
         </tr>
       </tbody>
       {{foreach from=$prescription->_ref_prescription_line_mixes_for_plan item=line}}
