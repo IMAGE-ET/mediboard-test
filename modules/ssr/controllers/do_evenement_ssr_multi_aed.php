@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 $sejour_id            = CValue::post("sejour_id");
@@ -18,8 +18,8 @@ $_cdarrs              = CValue::post("_cdarrs");
 $csarrs               = CValue::post("csarrs");
 $_csarrs              = CValue::post("_csarrs");
 $remarque             = CValue::post("remarque");
-$seance_collective    = CValue::post("seance_collective");    // Checkbox de la seance collective
-$seance_collective_id = CValue::post("seance_collective_id"); // Id de la seance collective
+$type_seance          = CValue::post("type_seance");
+$seance_collective_id = CValue::post("seance_collective_id");
 
 // Codes CdARR
 $codes_cdarrs = array();
@@ -66,7 +66,8 @@ if ($seance_collective_id) {
   $evenement->sejour_id = $sejour_id;
   $evenement->prescription_line_element_id = $line_id;
   $evenement->seance_collective_id = $seance_collective_id;
-  
+  $evenement->type_seance          = $type_seance;
+
   $evenement->loadMatchingObject();
   if ($evenement->_id) {
     CAppUI::displayMsg("Patient déjà présent dans la séance", "CEvenementSSR-title-create");
@@ -122,7 +123,8 @@ else {
       $evenement->duree         = $duree;
       $evenement->remarque      = $remarque;
       $evenement->therapeute_id = $therapeute_id;
-                
+      $evenement->type_seance   = $type_seance;
+
       // Transfert kiné référent => kiné remplaçant si disponible
       if ($therapeute_id == $referent->_id) {
         $conge = new CPlageConge();
@@ -150,7 +152,7 @@ else {
       }
 
       // Si l'evenement n'est pas une seance collective
-      if (!$seance_collective) {
+      if ($type_seance != "collective") {
         $evenement->prescription_line_element_id = $line_id;
         $evenement->sejour_id = $sejour_id;
       }
@@ -162,11 +164,12 @@ else {
       $evenement_actes_id = $evenement->_id;
             
       // Si une seance a ete créée, on crée l'evenement lié a la seance, et on crée les code cdarr sur l'evenement
-      if ($seance_collective) {
+      if ($type_seance == "collective") {
         $evt_ssr = new CEvenementSSR();
         $evt_ssr->sejour_id = $sejour_id;
         $evt_ssr->prescription_line_element_id = $line_id;
         $evt_ssr->seance_collective_id = $evenement->_id;
+        $evt_ssr->type_seance          = $type_seance;
         $msg = $evt_ssr->store();
         CAppUI::displayMsg($msg, "CEvenementSSR-msg-create");
         

@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-
+<script>
 selectActivite = function(activite) {
   $V(oFormEvenementSSR.prescription_line_element_id, '');
   $V(oFormEvenementSSR._element_id, '');
@@ -115,26 +114,23 @@ selectEquipement = function(equipement_id) {
   refreshSelectSeances();
 };
 
-refreshSelectSeances = function(){  
-  if($V(oFormEvenementSSR.equipement_id) && 
-     $V(oFormEvenementSSR.therapeute_id) &&
-     $V(oFormEvenementSSR.line_id)){
+refreshSelectSeances = function(){
+  if($V(oFormEvenementSSR.therapeute_id) &&
+     $V(oFormEvenementSSR.line_id)
+  && $V(oFormEvenementSSR.type_seance) == 'collective'){
 
     var url = new Url("ssr", "ajax_vw_select_seances");
     url.addParam("therapeute_id", $V(oFormEvenementSSR.therapeute_id));
     url.addParam("equipement_id", $V(oFormEvenementSSR.equipement_id));
     url.addParam("prescription_line_element_id", $V(oFormEvenementSSR.line_id));
-    url.requestUpdate("select-seances", { 
+    url.requestUpdate("select-seances", {
       onComplete: function(){ 
         $('seances').show();
-        if($V(oFormEvenementSSR.seance_collective)){
-          oFormEvenementSSR.seance_collective_id.show();
-        }
+        oFormEvenementSSR.seance_collective_id.show();
       }
     });
   } else {
     $('seances').hide();
-    $V(oFormEvenementSSR.seance_collective, false);
     $V(oFormEvenementSSR.seance_collective_id, '');
   }
 };
@@ -175,7 +171,7 @@ submitSSR = function(){
     return false;
   }
 
-  if(!$V(oFormEvenementSSR.seance_collective) || ($V(oFormEvenementSSR.seance_collective) && !$V(oFormEvenementSSR.seance_collective_id))){
+  if($V(oFormEvenementSSR.type_seance) != 'collective' || ($V(oFormEvenementSSR.type_seance) == 'collective' && !$V(oFormEvenementSSR.seance_collective_id))){
     if((oFormEvenementSSR.select('input.days:checked').length == 0)){
       alert("Veuillez selectionner au minimum un jour");
       return false;
@@ -209,7 +205,6 @@ submitSSR = function(){
     $V(oFormEvenementSSR._heure_fin, '');
     $V(oFormEvenementSSR._heure_fin_da, '');
     $V(oFormEvenementSSR.duree, $V(oFormEvenementSSR._default_duree));
-    $V(oFormEvenementSSR.seance_collective, '');
     $V(oFormEvenementSSR.seance_collective_id, '');
     if(oFormEvenementSSR.seance_collective_id){
       oFormEvenementSSR.seance_collective_id.hide();
@@ -431,6 +426,12 @@ Main.add(function(){
     <input type="hidden" name="_category_id" value="" />
 
     <table class="form">
+      <tr>
+        <th>{{mb_label object=$evenement field=type_seance}}</th>
+        <td>
+          {{mb_field object=$evenement field=type_seance type=checkbox typeEnum=radio onchange="refreshSelectSeances();"}}
+        </td>
+      </tr>
       {{if $prescription}}
       <tr>
         <th style="width: 94px">Catégories</th>
@@ -708,19 +709,12 @@ Main.add(function(){
       </tr>
       {{/if}}
 
+
       <tr id="seances" style="display: none;">
         <th>{{mb_label object=$evenement field="seance_collective_id"}}</th>
-        <td>
-          <table class="layout">
-            <tr>
-              <td>
-                <input type="checkbox" name="seance_collective" value="true" onclick="getForm(editEvenementSSR).seance_collective_id.toggle(); "/>
-              </td>
-              <td id="select-seances"></td>
-            </tr>
-          </table>
-        </td>
+        <td id="select-seances"></td>
       </tr>
+
       <tbody id="date-evenements">
         <tr>
           <th style="vertical-align: middle;">Jour</th>

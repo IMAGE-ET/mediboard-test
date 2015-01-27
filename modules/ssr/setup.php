@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 /**
@@ -508,8 +508,30 @@ class CSetupssr extends CSetup {
       ADD `modulateurs` VARCHAR (20),
       ADD `phases` VARCHAR (3);";
     $this->addQuery($query);
+    $this->makeRevision("0.47");
 
-    $this->mod_version = "0.47";
+    $query = "ALTER TABLE `evenement_ssr`
+                ADD `type_seance` ENUM ('dediee','non_dediee','collective');";
+    $this->addQuery($query);
+
+    $query = "UPDATE `evenement_ssr`
+        SET `evenement_ssr`.`type_seance` = 'non_dediee'
+        WHERE `evenement_ssr`.`equipement_id` IS NOT NULL";
+    $this->addQuery($query);
+
+    $query = "UPDATE `evenement_ssr`
+        SET `evenement_ssr`.`type_seance` = 'collective'
+        WHERE  `evenement_ssr`.`seance_collective_id` IS NOT NULL";
+    $this->addQuery($query);
+
+    $query = "UPDATE `evenement_ssr` e
+        INNER JOIN `evenement_ssr` s ON s.`seance_collective_id` = e.`evenement_ssr_id`
+        SET e.`type_seance` = 'collective'
+        WHERE e.`seance_collective_id` IS NULL
+        AND s.`type_seance` = 'collective'";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.48";
 
     // Data source query
     $query = "SHOW TABLES LIKE 'type_activite'";

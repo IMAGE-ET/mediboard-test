@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 CCando::checkRead();
@@ -42,13 +42,13 @@ $evenement = new CEvenementSSR();
 $where = array();
 $where["debut"] = "BETWEEN '$planning->_date_min_planning 00:00:00' AND '$planning->_date_max_planning 23:59:59'";
 $where["therapeute_id"] = " = '$kine->_id'";
-$where["equipement_id"] = $surveillance ? " IS NOT NULL" : " IS NULL";
+$where["type_seance"] = $surveillance ? " = 'non_dediee'" : " <> 'non_dediee'";
 
 /** @var CEvenementSSR[] $evenements */
 $evenements = $evenement->loadList($where);
 
 // Chargement des evenements SSR de "charge"
-$where["equipement_id"] = $surveillance ? " IS NULL" : " IS NOT NULL";
+$where["type_seance"] = $surveillance ? " <> 'non_dediee'" : " = 'non_dediee'";
 
 /** @var CEvenementSSR[] $evenements_charge */
 $evenements_charge = $evenement->loadList($where);
@@ -72,8 +72,8 @@ foreach ($evenements as $_evenement) {
   $sejour = $_evenement->loadRefSejour();
   $patient = $sejour->loadRefPatient();
   $equipement = $_evenement->loadRefEquipement();
-  
-  // Title  
+
+  // Title
   if ($_evenement->sejour_id) {
     $title = $patient->nom;
   }
@@ -86,23 +86,23 @@ foreach ($evenements as $_evenement) {
   if (!$sejour_id && $_evenement->remarque) {
     $title .= " - ".$_evenement->remarque;
   }
-  
+
   // Color
   $therapeute = $_evenement->loadRefTherapeute();
   $function = $therapeute->loadRefFunction();
   $color = "#$function->color";
-  
+
   // Classes
   $class= "";
   if (!$_evenement->countBackRefs("actes_cdarr") && !$_evenement->countBackRefs("actes_csarr")) {
     $class = "zero-actes";
   }
-  
+
   $_sejour = $_evenement->_ref_sejour;
   if (!CMbRange::in($_evenement->debut, CMbDT::date($_sejour->entree), CMbDT::date("+1 DAY", $_sejour->sortie))) {
     $class = "disabled";
   }
-  
+
   if ($_evenement->realise && $selectable) {
     $class = "realise";
   }
@@ -121,12 +121,12 @@ foreach ($evenements as $_evenement) {
     $element = $line->_ref_element_prescription;
     $category = $element->loadRefCategory();
     $title .= $category->_view;
-  
+
     // Color
     $color = $element->_color ? "#$element->_color" : null;
-    
+
     // CSS Class
-    $css_classes[] = $element->_guid; 
+    $css_classes[] = $element->_guid;
     $css_classes[] = $category->_guid;
   }
 
@@ -150,8 +150,8 @@ $query = "SELECT SUM(duree) as total, DATE(debut) as date
   FROM evenement_ssr
   WHERE therapeute_id = '$kine->_id'
   AND debut BETWEEN '$planning->_date_min_planning 00:00:00' AND '$planning->_date_max_planning 23:59:59'";
-          
-$query .= $surveillance ? "AND equipement_id IS NULL" : "AND equipement_id IS NOT NULL";
+
+$query .= $surveillance ? "AND type_seance = 'non_dediee'" : "AND type_seance <> 'non_dediee'";
 $query .= " GROUP BY DATE(debut)";
           
 $duree_occupation = $ds->loadList($query);
@@ -191,7 +191,6 @@ if ($kine->fin_activite) {
 // Heure courante
 $planning->showNow();
 $planning->rearrange(true);
-
 
 // Création du template
 $smarty = new CSmartyDP();

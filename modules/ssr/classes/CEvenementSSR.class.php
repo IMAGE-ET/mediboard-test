@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 /**
@@ -28,6 +28,7 @@ class CEvenementSSR extends CMbObject {
   public $annule;
   public $remarque;
   public $seance_collective_id; // Evenement lié a une seance collective
+  public $type_seance;
 
   // Seances collectives
   public $_ref_element_prescription;
@@ -100,7 +101,8 @@ class CEvenementSSR extends CMbObject {
     $props["annule"]        = "bool default|0";
     $props["remarque"]      = "str";
     $props["seance_collective_id"] = "ref class|CEvenementSSR";
-    
+    $props["type_seance"]   = "enum list|dediee|non_dediee|collective";
+
     $props["_traite"]       = "bool";
     $props["_nb_decalage_min_debut"]   = "num";
     $props["_nb_decalage_heure_debut"] = "num";
@@ -222,9 +224,7 @@ class CEvenementSSR extends CMbObject {
         $ligne->store();
       }
     }
-    
-    
-    
+
     return parent::check();
   }
 

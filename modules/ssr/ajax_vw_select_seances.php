@@ -1,14 +1,13 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
-
 
 CCanDo::checkRead();
 
@@ -36,7 +35,13 @@ $where = array();
 $where["evenement_ssr.sejour_id"] = " IS NULL";
 $where["evenement_ssr.debut"] = "BETWEEN '$monday 00:00:00' AND '$sunday 23:59:59'";
 $where["evenement_ssr.therapeute_id"] = " = '$therapeute_id'";
-$where["evenement_ssr.equipement_id"] = " = '$equipement_id'";
+
+if ($equipement_id) {
+  $where["evenement_ssr.equipement_id"] = " = '$equipement_id'";
+}
+else {
+  $where["evenement_ssr.equipement_id"] = " IS NULL";
+}
 $where["prescription_line_element.element_prescription_id"] = " = '$element_prescription_id'";
 
 $seances = $seance->loadList($where, null, null, null, $ljoin);
