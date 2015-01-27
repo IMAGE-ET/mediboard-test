@@ -437,7 +437,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     $return_movement = $this->mapAndStoreMovement($ack, $newVenue, $data);
     if (is_string($return_movement)) {
-      return $exchange_hl7v2->setAckAR($ack, "E206", $return_movement, $newVenue);
+      return $return_movement;
     }
     $movement = $return_movement;
 
@@ -1169,7 +1169,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Mapping du mouvement
     $return_movement = $this->mapAndStoreMovement($ack, $newVenue, $data);
     if (is_string($return_movement)) {
-      return $exchange_hl7v2->setAckAR($ack, "E206", $return_movement, $newVenue);
+      return $return_movement;
     }
     $movement = $return_movement;
 
