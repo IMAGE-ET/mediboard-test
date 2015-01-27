@@ -832,6 +832,7 @@ class COperation extends CCodable implements IPatientRelated {
 
     $sejour = $this->loadRefSejour();
     $do_store_sejour = false; // Flag pour storer le séjour une seule fois
+    $do_update_time = false;
 
     // Synchronisation des heures d'admission
     if (
@@ -839,14 +840,16 @@ class COperation extends CCodable implements IPatientRelated {
         $this->fieldModified('presence_preop') || $this->fieldModified('presence_postop') ||
         $this->fieldModified('date') || $this->fieldModified('time_operation')
     ) {
-      if ($sejour->checkUpdateTimeAmbu()) {
-        $do_store_sejour = true;
-      }
+      $do_update_time = true;
     }
 
     // Standard storage
     if ($msg = parent::store()) {
       return $msg;
+    }
+
+    if ($do_update_time) {
+      $do_store_sejour = $sejour->checkUpdateTimeAmbu();
     }
 
     // Création des besoins d'après le protocole sélectionné
