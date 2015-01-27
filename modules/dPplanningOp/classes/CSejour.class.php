@@ -1921,8 +1921,8 @@ class CSejour extends CFacturable implements IPatientRelated {
     foreach ($sejours as $_sejour) {
       if (!$_sejour->_ref_curr_affectation) {
         $_sejour->_ref_curr_affectation = new CAffectation();
-        $_sejour->_ref_curr_affectation->loadRefLit();
       }
+      $_sejour->_ref_curr_affectation->loadRefLit();
     }
   }
 
