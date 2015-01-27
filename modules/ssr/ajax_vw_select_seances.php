@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -44,7 +44,7 @@ else {
 }
 $where["prescription_line_element.element_prescription_id"] = " = '$element_prescription_id'";
 
-$seances = $seance->loadList($where, null, null, null, $ljoin);
+$seances = $seance->loadList($where, null, null, "evenement_ssr_id", $ljoin);
 
 // Création du template
 $smarty = new CSmartyDP();
