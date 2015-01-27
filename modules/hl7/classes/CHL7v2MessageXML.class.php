@@ -426,7 +426,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     }
     else {
       $assigning_authority_id = CAppUI::conf("hl7 assigning_authority_universal_id");
-      if (($this->queryTextNode("CX.5", $node) == "RI") && ($this->queryTextNode("CX.4/HD.2", $node) == $assigning_authority_id)) {
+      if (($this->queryTextNode("CX.5", $node) == "AN") && ($this->queryTextNode("CX.4/HD.2", $node) == $assigning_authority_id)) {
         $data["NPA"] = $this->queryTextNode("CX.1", $node);
       }
     }

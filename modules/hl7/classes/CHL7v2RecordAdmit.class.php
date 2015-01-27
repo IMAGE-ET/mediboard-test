@@ -60,6 +60,17 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $this->queryNodes("OBX", null, $data, true);
     
     $this->queryNodes("GT1", null, $data, true);
+
+    $root_element_name = $this->documentElement->nodeName;
+    $insurances = $this->queryNodes("$root_element_name.INSURANCE", null, $varnull, true);
+    foreach ($insurances as $_insurance) {
+      $tmp = array();
+
+      // IN1
+      $this->queryNode("IN1", $_insurance, $tmp, true);
+
+      $data["insurances"][] = $tmp;
+    }
     
     return $data;
   }
@@ -1302,6 +1313,13 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         $this->getGT1($_GT1, $newVenue);
       }
     }
+
+    // Couverture
+    if (array_key_exists("insurances", $data)) {
+      foreach ($data["insurances"] as $_insurance) {
+        $this->getIN1($_insurance["IN1"], $newVenue);
+      }
+    }
     
     // Constantes
     if (array_key_exists("OBX", $data)) {
@@ -1571,10 +1589,18 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     // Si pas d'UF/service/chambre/lit on retourne une affectation vide
     if (!$PV1_3) {
+      if ($msgVenue = self::storeUFMedicaleSoinsSejour($data, $newVenue)) {
+        return $msgVenue;
+      }
+
       return $affectation;
     }
 
     if ($this->queryTextNode("PL.1", $PV1_3) == $sender->_configs["handle_PV1_3_null"]) {
+      if ($msgVenue = self::storeUFMedicaleSoinsSejour($data, $newVenue)) {
+        return $msgVenue;
+      }
+
       return $affectation;
     }
 
@@ -1608,7 +1634,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $newVenue->_skip_date_consistencies = true;
       $newVenue->_eai_sender_guid = $sender->_guid;
 
-      if ($msgVenue = $newVenue->store()) {
+      if ($msgVenue = self::storeUFMedicaleSoinsSejour($data, $newVenue)) {
         return $msgVenue;
       }
 
@@ -1633,6 +1659,34 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
     
     return $affectation;
+  }
+
+  /**
+   * Enregistrement UF médicale et/ou soins sur le séjour
+   *
+   * @param CSejour $newVenue Admit
+   * @param array   $data     Datas
+   *
+   * @return null
+   */
+  function storeUFMedicaleSoinsSejour($data, $newVenue) {
+    $sender = $this->_ref_sender;
+
+    $uf_med = $this->mappingUFMedicale($data, $newVenue);
+    $newVenue->uf_medicale_id = $uf_med ? $uf_med->_id : null;
+
+    $uf_soins = $this->mappingUFSoins($data, $newVenue);
+    $newVenue->uf_soins_id  = $uf_soins ? $uf_soins->_id : null;
+
+    // On ne check pas la cohérence des dates des consults/intervs
+    $newVenue->_skip_date_consistencies = true;
+    $newVenue->_eai_sender_guid = $sender->_guid;
+
+    if ($msgVenue = $newVenue->store()) {
+      return $msgVenue;
+    }
+
+    return null;
   }
 
   /**
@@ -2349,7 +2403,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
     
     // On récupère l'entrée réelle ssi msg !A05
-    if ($event_code != "A05" && $event_code != "Z99") {
+    if ($event_code != "A05" && $event_code == "Z99" && $newVenue->entree_reelle) {
       $newVenue->entree_reelle = $PV1_44;
     }
     
@@ -2880,6 +2934,66 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $corres_patient->_eai_sender_guid = $sender->_guid;
 
       $corres_patient->store();
+    }
+  }
+
+  /**
+   * Récupération du segment IN1
+   *
+   * @param DOMNode $node     Node
+   * @param CSejour $newVenue Admit
+   *
+   * @return void
+   */
+  function getIN1(DOMNode $node, CSejour $newVenue) {
+    if (!$newVenue->_id) {
+      return;
+    }
+
+    $IN1_2 = $this->queryTextNode("IN1.2/CE.1", $node);
+    if ($IN1_2 != "AMO") {
+      return;
+    }
+
+    $sender  = $this->_ref_sender;
+    $patient = $newVenue->_ref_patient;
+
+    // AMO
+    $IN1_3_1 = $this->queryTextNode("IN1.3/CX.1", $node);
+    if ($IN1_3_1 != "") {
+      $patient->code_regime = substr($IN1_3_1, 0, 2);
+      $patient->caisse_gest = substr($IN1_3_1, 2, 3);
+      $patient->centre_gest = substr($IN1_3_1, -4  );
+    }
+
+    $IN1_3_6 = $this->queryTextNode("IN1.3/CX.6/HD.1", $node);
+    $patient->notes_amo .= " $IN1_3_6";
+
+    $IN1_12 = $this->queryTextNode("IN1.12", $node);
+    if ($IN1_12) {
+      $patient->deb_amo = CMbDT::date($IN1_12);
+    }
+
+    $IN1_13 = $this->queryTextNode("IN1.13", $node);
+    if ($IN1_13) {
+      $patient->fin_amo = CMbDT::date($IN1_13);
+    }
+
+    $patient->code_exo = $this->queryTextNode("IN1.15", $node);
+
+    $IN1_49 = $this->queryTextNode("IN1.49/CX.1", $node);
+    if ($IN1_49 != "") {
+      $patient->matricule = $IN1_49;
+    }
+
+    // Notifier les autres destinataires autre que le sender
+    $patient->_eai_sender_guid = $sender->_guid;
+    if ($msg = $patient->store()) {
+      $patient->repair();
+
+      $patient->_eai_sender_guid = $sender->_guid;
+
+      $patient->store();
     }
   }
 }

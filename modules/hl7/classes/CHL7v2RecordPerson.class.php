@@ -511,7 +511,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       $addresses[$adress_type]["cp"]           = $this->queryTextNode("XAD.5", $_PID11);
       $addresses[$adress_type]["pays_insee"]   = $this->queryTextNode("XAD.6", $_PID11);
     }
-    // Adresse  naissance
+
+    // Lieu de l'accouchement
     if (array_key_exists("BDL", $addresses)) {
       $newPatient->lieu_naissance       = CValue::read($addresses["BDL"], "ville");
       $newPatient->cp_naissance         = CValue::read($addresses["BDL"], "cp");
@@ -524,6 +525,21 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
 
       unset($addresses["BDL"]);
     }
+
+    // Adresse de naissance == Lieu de l'accouchement
+    if (array_key_exists("BR", $addresses)) {
+      $newPatient->lieu_naissance       = CValue::read($addresses["BR"], "ville");
+      $newPatient->cp_naissance         = CValue::read($addresses["BR"], "cp");
+
+      if ($alpha_3 = CValue::read($addresses["BR"], "pays_insee")) {
+        $pays = CPaysInsee::getPaysByAlpha($alpha_3);
+
+        $newPatient->pays_naissance_insee = $pays->numerique;
+      }
+
+      unset($addresses["BR"]);
+    }
+
     // Adresse
     if (array_key_exists("H", $addresses)) {
       $this->getAdress($addresses["H"], $newPatient);
