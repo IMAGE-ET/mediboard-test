@@ -498,8 +498,6 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
 
       // Absence provisoire (permission) et mouvement de transfert vers un plateau technique pour acte (<48h)
       case 'A21':
-        // Retour d'absence provisoire (permission) et mouvement de transfert vers un plateau technique pour acte (<48h)
-      case 'A22': 
         // Changement d'UF médicale
       case 'Z80':
         // Changement d'UF de soins
@@ -510,7 +508,15 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
 
         return $affectation->entree;
 
-      // Sortie définitive
+      // Retour d'absence provisoire (permission) et mouvement de transfert vers un plateau technique pour acte (<48h)
+      case 'A22':
+        if (!$affectation) {
+          return CMbDT::dateTime();
+        }
+
+        return $affectation->sortie;
+
+        // Sortie définitive
       case 'A03':
         // Date de la sortie
         return $sejour->sortie_reelle;
