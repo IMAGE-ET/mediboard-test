@@ -1411,6 +1411,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   function mapAndStoreAffectation(CSejour $newVenue, $data, CMovement $movement = null) {
     $sender = $this->_ref_sender;
 
+    if ($newVenue->annule) {
+      return null;
+    }
+
     $PV1_3 = $this->queryNode("PV1.3", $data["PV1"]);
         
     $affectation = new CAffectation();
