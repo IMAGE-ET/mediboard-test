@@ -33,7 +33,7 @@
       <tr>
         <td class="label-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
           {{foreach from=$out_of_grid.$_group_id.label item=_field}}
-            {{if !$_field->disabled}}
+            {{if !$_field->disabled && !$_field->hidden}}
               {{mb_include module=forms template=inc_ex_field_draggable _type="label"}}
             {{/if}}
           {{/foreach}}
@@ -41,7 +41,7 @@
     
         <td class="field-list" data-x="" data-y="" style="padding: 4px; vertical-align: top;">
           {{foreach from=$out_of_grid.$_group_id.field item=_field}}
-            {{if !$_field->disabled}}
+            {{if !$_field->disabled && !$_field->hidden}}
               {{mb_include module=forms template=inc_ex_field_draggable _type="field"}}
             {{/if}}
           {{/foreach}}

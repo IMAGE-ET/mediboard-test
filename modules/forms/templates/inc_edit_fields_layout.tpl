@@ -92,33 +92,12 @@ toggleList = function(select, ex_group_id) {
     <th style="padding: 4px; width: 2em; text-align: right; background: #ddd;">{{$_y}}</th>
     {{foreach from=$_line key=_x item=_group}}
       <td style="border: 1px dotted #aaa; min-width: 2em; padding: 0; vertical-align: middle;" class="cell">
-      
-        {{*
-        <div style="position: relative;" class="cell-layout-wrapper">
-          <table class="layout cell-layout">
-            <tr>
-              <td></td>
-              <td><a href="#">&#x25B2;</a><br /><a href="#">&#x25BC;</a></td>
-              <td></td>
-            </tr>
-            <tr class="middle">
-              <td><a href="#">&#x25C4;</a>&#x2005;<a href="#">&#x25BA;</a></td>
-              <td></td>
-              <td><a href="#">&#x25C4;</a>&#x2005;<a href="#">&#x25BA;</a></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td><a href="#">&#x25B2;<br /><a href="#">&#x25BC;</a></td>
-              <td></td>
-            </tr>
-          </table>
-        </div>
-        *}}
-      
         <div class="droppable grid" data-x="{{$_x}}" data-y="{{$_y}}">
           {{if $_group.object}}
             {{if $_group.object instanceof CExClassField}}
-              {{if !$_group.object->disabled}}
+              {{if $_group.object->disabled || $_group.object->hidden}}
+                &nbsp;
+              {{else}}
                 {{mb_include module=forms template=inc_ex_field_draggable
                              _field=$_group.object
                              _type=$_group.type}}

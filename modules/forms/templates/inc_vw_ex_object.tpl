@@ -1,26 +1,3 @@
-
-{{* 
-<table class="main tbl">
-  {{foreach from=$ex_object->_ref_ex_class->_ref_groups item=_ex_group}}
-    <tr>
-      <th colspan="2">{{$_ex_group}}</th>
-    </tr>
-    
-    {{foreach from=$_ex_group->_ref_fields item=_ex_field}}
-      <tr>
-        <th>
-          {{mb_label object=$ex_object field=$_ex_field->name}}
-        </th>
-        <td class="text">
-          {{mb_value object=$ex_object field=$_ex_field->name}}
-        </td>
-      </tr>
-    {{/foreach}}
-    
-  {{/foreach}}
-</table>
- *}}
- 
 {{mb_default var=hide_empty_groups value=false}}
 {{mb_default var=print value=false}}
  
@@ -42,7 +19,6 @@
   {{/if}}
   
   {{if $go}}
-    {{* <span style="color: #4086FF;">{{$_ex_group}}</span> *}}
     <h4 style="margin: 0.5em; border-bottom: 1px solid #666;">{{$_ex_group}}</h4>
     
     <ul>
@@ -50,8 +26,8 @@
     
     {{foreach from=$_ex_group->_ref_fields item=_ex_field}}
       {{assign var=field_name value=$_ex_field->name}}
-      
-      {{if $ex_object->$field_name !== null}}
+
+      {{if !$_ex_field->hidden && $ex_object->$field_name !== null}}
         {{assign var=any value=true}}
         <li>
           <span style="color: #666;">

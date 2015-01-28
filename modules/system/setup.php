@@ -2025,6 +2025,11 @@ class CSetupsystem extends CSetup {
     $this->makeRevision("1.1.77");
     $this->addPrefQuery("navigationHistoryLength", 0);
 
-    $this->mod_version = "1.1.78";
+    $this->makeRevision("1.1.78");
+    $query = "ALTER TABLE `ex_class_field`
+                ADD `hidden` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.79";
   }
 }

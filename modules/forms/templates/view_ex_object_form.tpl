@@ -318,7 +318,7 @@ function switchMode(){
             {{assign var=_field value=$_group.object}}
             {{assign var=_field_name value=$_field->name}}
 
-            {{if !$_field->disabled}}
+            {{if !$_field->disabled && !$_field->hidden}}
               {{if $_group.type == "label"}}
                 {{if $_field->coord_field_x == $_field->coord_label_x+1}}
                   <th style="font-weight: bold; vertical-align: middle; white-space: normal;">
@@ -403,7 +403,7 @@ function switchMode(){
     {{foreach from=$groups.$_group_id->_ref_fields item=_field}}
       {{assign var=_field_name value=$_field->name}}
 
-      {{if isset($out_of_grid.$_group_id.field.$_field_name|smarty:nodefaults) && (!$_field->disabled || $ex_object->_id && $ex_object->$_field_name !== null)}}
+      {{if isset($out_of_grid.$_group_id.field.$_field_name|smarty:nodefaults) && !$_field->hidden && (!$_field->disabled || $ex_object->_id && $ex_object->$_field_name !== null)}}
         <tr>
           <th style="font-weight: bold; width: 50%; vertical-align: middle; white-space: normal;" colspan="2">
             <div class="field-{{$_field->name}} field-label">

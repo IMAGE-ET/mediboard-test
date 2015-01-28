@@ -51,7 +51,7 @@ toggleList = function(select, ex_group_id) {
 
             {{* FIELDS *}}
             {{foreach from=$_group->_ref_root_fields item=_field}}
-              {{if !$_field->disabled}}
+              {{if !$_field->disabled && !$_field->hidden}}
                 {{mb_include
                   module=forms
                   template=inc_ex_field_draggable_children

@@ -30,6 +30,7 @@ class CExClassField extends CExListItemsOwner {
   public $show_label;
   public $tab_index;
   public $readonly;
+  public $hidden;
   public $in_doc_template;
 
   public $formula;
@@ -117,6 +118,7 @@ class CExClassField extends CExListItemsOwner {
     "suffix",
     "tab_index",
     "readonly",
+    "hidden",
     "show_label",
     "coord_left",
     "coord_top",
@@ -129,6 +131,7 @@ class CExClassField extends CExListItemsOwner {
     "suffix",
     "tab_index",
     "readonly",
+    "hidden",
   );
 
   static $_formula_token_re = '/\[([^\]]+)\]/';
@@ -310,6 +313,7 @@ class CExClassField extends CExListItemsOwner {
     $props["show_label"]  = "bool notNull default|1";
     $props["tab_index"]   = "num";
     $props["readonly"]    = "bool notNull default|0";
+    $props["hidden"]      = "bool notNull default|0";
     $props["in_doc_template"] = "bool notNull default|0";
 
     $props["formula"]     = "text"; // canonical tokens
@@ -836,7 +840,7 @@ class CExClassField extends CExListItemsOwner {
    * @see parent::updatePlainFields()
    */
   function updatePlainFields(){
-    $reset_position = $this->fieldModified("ex_group_id") || $this->fieldModified("disabled");
+    $reset_position = $this->fieldModified("ex_group_id") || $this->fieldModified("disabled") || $this->fieldModified("hidden");
 
     // If we change its group, we need to reset its coordinates
     if ($reset_position) {

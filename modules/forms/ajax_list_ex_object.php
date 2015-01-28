@@ -351,6 +351,7 @@ if ($detail <= 0.5) {
 
 if ($detail == 2) {
   foreach ($ex_objects as $_ex_class_id => $_ex_objects) {
+    /** @var CExObject $first */
     $first = reset($_ex_objects);
 
     if (!$first) {
@@ -364,6 +365,10 @@ if ($detail == 2) {
 
       foreach ($_ex_group->_ref_fields as $_ex_field) {
         $_ex_field->_empty = true;
+
+        if ($_ex_field->hidden) {
+          continue;
+        }
 
         foreach ($_ex_objects as $_ex_object) {
           if ($_ex_object->{$_ex_field->name} != "") {
