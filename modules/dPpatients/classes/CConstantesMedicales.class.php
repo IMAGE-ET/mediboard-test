@@ -1487,7 +1487,10 @@ class CConstantesMedicales extends CMbObject {
     }
 
     if (!$this->_id) {
-      $this->user_id = CMediusers::get()->_id;
+      if (!$this->user_id) {
+        $this->user_id = CMediusers::get()->_id;
+      }
+
       $this->creation_date = CMbDT::dateTime();
       if ($this->datetime == 'now') {
         $this->datetime = $this->creation_date;
