@@ -535,7 +535,14 @@ class CSetupssr extends CSetup {
     $query = "ALTER TABLE `evenement_ssr`
                 ADD `nb_patient_seance` INT (11);";
     $this->addQuery($query);
-    $this->mod_version = "0.49";
+    $this->makeRevision("0.49");
+
+    $query = "ALTER TABLE `ligne_activites_rhs`
+                ADD `modulateurs` VARCHAR (20),
+                ADD `phases` VARCHAR (3),
+                ADD `nb_patient_seance` INT (11);";
+    $this->addQuery($query);
+    $this->mod_version = "0.50";
 
     // Data source query
     $query = "SHOW TABLES LIKE 'type_activite'";

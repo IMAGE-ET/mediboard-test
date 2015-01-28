@@ -22,6 +22,9 @@
       {{mb_title class=CLigneActivitesRHS field=code_activite_cdarr}} /
       {{mb_title class=CLigneActivitesRHS field=code_activite_csarr}}
     </th>
+    <th>{{mb_title class=CLigneActivitesRHS field=modulateurs}}</th>
+    <th>{{mb_title class=CLigneActivitesRHS field=phases}}</th>
+    <th>{{mb_title class=CLigneActivitesRHS field=nb_patient_seance}}</th>
     <th>{{mb_title class=CActiviteCdARR field=libelle}}</th>
     
     {{foreach from=$days key=day item=litteral_day}}
@@ -33,7 +36,7 @@
   {{foreach from=$rhs->_ref_lines_by_executant key=executant_id item=_lines}}
     {{assign var=executant value=$rhs->_ref_executants.$executant_id}}
     <tr>
-      <th class="text section" colspan="12" style="text-align: left;">
+      <th class="text section" colspan="15" style="text-align: left;">
         {{mb_include module="mediusers" template="inc_vw_mediuser" mediuser=$executant}}
         &mdash;
         {{$executant->_ref_intervenant_cdarr}}
@@ -64,7 +67,11 @@
         {{if $_line->code_activite_cdarr}} {{$activite->_ref_type_activite->code}} {{/if}}
         {{if $_line->code_activite_csarr}} {{$activite->_ref_hierarchie->code}} {{/if}}
       </td>
-      
+
+      <td>{{mb_value object=$_line field=modulateurs}}</td>
+      <td>{{mb_value object=$_line field=phases}}</td>
+      <td>{{mb_value object=$_line field=nb_patient_seance}}</td>
+
       <td class="text">
         {{$activite->libelle}}
       </td>
@@ -82,7 +89,7 @@
     
   {{foreachelse}}
   <tr>
-    <td colspan="12" class="empty">{{tr}}CRHS-back-lines.empty{{/tr}}</td>
+    <td colspan="15" class="empty">{{tr}}CRHS-back-lines.empty{{/tr}}</td>
   </tr>
   {{/foreach}}
 </table>

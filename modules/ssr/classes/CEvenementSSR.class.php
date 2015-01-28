@@ -143,19 +143,15 @@ class CEvenementSSR extends CMbObject {
     }
     
     // Vérouillage d'un événement traité
-    $this->completeField("realise");
-    $this->completeField("annule");
+    $this->completeField("realise","annule", "nb_patient_seance");
     $this->_traite = $this->realise || $this->annule;
     if ($this->_traite && !$this->_traitement) {
       return "Evénément déjà traité (réalisé ou annulé)";
     }
 
     // Evénement dans les bornes du séjour
-    $this->completeField("sejour_id");
-    $this->loadRefSejour();
-    $sejour = $this->_ref_sejour;
-    
-    $this->completeField("debut");
+    $this->completeField("sejour_id", "debut");
+    $sejour = $this->loadRefSejour();
     
     // Vérifier seulement les jours car les sorties peuvent être imprécises pour les hospit de jours
     if ($sejour->_id && $this->debut) {
@@ -189,8 +185,7 @@ class CEvenementSSR extends CMbObject {
       }
       $therapeute->loadRefIntervenantCdARR();
       $code_intervenant_cdarr = $therapeute->_ref_intervenant_cdarr->code;
-      
-      
+
       // Création du RHS au besoins
       $rhs = $this->getRHS();
       if (!$rhs->_id) {
@@ -201,7 +196,7 @@ class CEvenementSSR extends CMbObject {
         CAppUI::stepAjax(CAppUI::tr("CRHS.charged"), UI_MSG_WARNING);
       }
       
-      // Complétion de la ligne RHS    
+      // Complétion de la ligne RHS
       foreach ($this->loadRefsActesCdARR() as $_acte_cdarr) {
         $ligne = new CLigneActivitesRHS();
         $ligne->rhs_id                 = $rhs->_id;
@@ -220,6 +215,9 @@ class CEvenementSSR extends CMbObject {
         $ligne->executant_id           = $therapeute->_id;
         $ligne->code_activite_csarr    = $_acte_csarr->code;
         $ligne->code_intervenant_cdarr = $code_intervenant_cdarr;
+        $ligne->modulateurs            = $_acte_csarr->modulateurs;
+        $ligne->phases                 = $_acte_csarr->phases;
+        $ligne->nb_patient_seance      = $this->nb_patient_seance;
         $ligne->loadMatchingObject();
         $ligne->crementDay($this->debut, $this->realise ? "inc" : "dec");
         $ligne->auto = "1";
@@ -239,8 +237,7 @@ class CEvenementSSR extends CMbObject {
     }
     
     // Impossible de supprmier un événement réalisé
-    $this->completeField("realise");
-    $this->completeField("annule");
+    $this->completeField("realise","annule");
     $this->_traite = $this->realise || $this->annule;
     if ($this->realise) {
       return "CEvenementSSR-msg-delete-failed-realise";

@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 /**
@@ -23,6 +23,9 @@ class CLigneActivitesRHS extends CMbObject {
   public $code_activite_cdarr;
   public $code_activite_csarr;
   public $code_intervenant_cdarr;
+  public $modulateurs;
+  public $phases;
+  public $nb_patient_seance;
 
   public $qty_mon;
   public $qty_tue;
@@ -78,6 +81,10 @@ class CLigneActivitesRHS extends CMbObject {
     $props["code_activite_cdarr"]    = "str length|4";
     $props["code_activite_csarr"]    = "str length|7";
     $props["code_intervenant_cdarr"] = "str length|2";
+    $props["modulateurs"]            = "str maxLength|20";
+    $props["phases"]                 = "str maxLength|3";
+    $props["nb_patient_seance"]      = "num";
+
     $props["qty_mon"]                = "num length|1 min|0 max|9 default|0";
     $props["qty_tue"]                = "num length|1 min|0 max|9 default|0";
     $props["qty_wed"]                = "num length|1 min|0 max|9 default|0";
