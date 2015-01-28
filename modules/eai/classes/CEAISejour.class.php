@@ -89,17 +89,19 @@ class CEAISejour extends CEAIMbObject {
       $sejour->loadNDA($sender->group_id);
       
       $ref_NDA = $sejour->_ref_NDA;
-      
-      // Si le NDA actuel est identique à celui qu'on reçoit on ne fait rien
-      if ($ref_NDA->id400 == $NDA->id400) {
-        return;
+
+      if ($ref_NDA) {
+        // Si le NDA actuel est identique à celui qu'on reçoit on ne fait rien
+        if ($ref_NDA->id400 == $NDA->id400) {
+          return;
+        }
+
+        // On passe le NDA courant en trash
+        $ref_NDA->tag = CAppUI::conf("dPplanningOp CSejour tag_dossier_trash").$ref_NDA->tag;
+        $ref_NDA->_eai_sender_guid = $sender->_guid;
+        $ref_NDA->store();
       }
-      
-      // On passe le NDA courant en trash
-      $ref_NDA->tag = CAppUI::conf("dPplanningOp CSejour tag_dossier_trash").$ref_NDA->tag;
-      $ref_NDA->_eai_sender_guid = $sender->_guid;
-      $ref_NDA->store();
-      
+
       // On sauvegarde le nouveau
       $NDA->tag          = $sender->_tag_sejour;
       $NDA->object_class = "CSejour";
@@ -169,7 +171,7 @@ class CEAISejour extends CEAIMbObject {
       return null;
     }
 
-    //L'expéditeur gère les NPA
+    // L'expéditeur gère les NPA
     $manage_npa = CMbArray::get($sender->_configs, "manage_npa");
     if (!$manage_npa) {
       return null;

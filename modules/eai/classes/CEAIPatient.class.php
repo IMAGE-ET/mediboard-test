@@ -74,20 +74,22 @@ class CEAIPatient extends CEAIMbObject {
     if ($sender->_configs && $sender->_configs["purge_idex_movements"]) {
       // On charge l'IPP courant du patient
       $patient->loadIPP($sender->group_id);
-      
-      $ref_IPP = $patient->_ref_IPP;
-      
-      // Si l'IPP actuel est identique à celui qu'on reçoit on ne fait rien
-      if ($ref_IPP->id400 == $IPP->id400) {
-        return;
-      }
-      
-      // On passe l'IPP courant en trash
-      $ref_IPP->tag = CAppUI::conf("dPpatients CPatient tag_ipp_trash").$ref_IPP->tag;
-      $ref_IPP->_eai_sender_guid = $sender->_guid;
-      $ref_IPP->store();
 
-      $patient->trashIPP($ref_IPP);
+      $ref_IPP = $patient->_ref_IPP;
+
+      if ($ref_IPP) {
+        // Si l'IPP actuel est identique à celui qu'on reçoit on ne fait rien
+        if ($ref_IPP->id400 == $IPP->id400) {
+          return;
+        }
+
+        // On passe l'IPP courant en trash
+        $ref_IPP->tag = CAppUI::conf("dPpatients CPatient tag_ipp_trash").$ref_IPP->tag;
+        $ref_IPP->_eai_sender_guid = $sender->_guid;
+        $ref_IPP->store();
+
+        $patient->trashIPP($ref_IPP);
+      }
 
       // On sauvegarde le nouveau
       $IPP->tag          = $sender->_tag_patient;
