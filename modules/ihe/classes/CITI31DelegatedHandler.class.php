@@ -314,7 +314,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return;
       }
       
-      $code = $this->getCodeSejour($sejour_enfant);
+      $code = $this->getCodeBirth($sejour_enfant);
         
       // Cas où : 
       // * on est l'initiateur du message 
@@ -648,7 +648,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Simple modification ?
       return $this->getModificationAdmitCode($sejour->_receiver);
     }
-    
+
     // Cas d'un séjour en cours (entrée réelle)
     if ($sejour->_etat == "encours") {
       // Admission faite
@@ -659,7 +659,8 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         // Patient externe
         if (in_array($sejour->type, self::$outpatient)) {
           return "A04";
-        } 
+        }
+
         // Admission hospitalisé
         return "A01";
       }
@@ -846,6 +847,28 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
  
     // Modifcation d'une affectation
     return $this->getModificationAdmitCode($affectation->_receiver);
+  }
+
+  /**
+   * Get birth HL7 event code
+   *
+   * @param CSejour $sejour Admit
+   *
+   * @return null|string
+   */
+  function getCodeBirth(CSejour $sejour) {
+    // Cas d'une pré-admission
+    if ($sejour->_etat == "preadmission") {
+      return "A05";
+    }
+
+    // Patient externe
+    if (in_array($sejour->type, self::$outpatient)) {
+      return "A04";
+    }
+
+    // Admission hospitalisé
+    return "A01";
   }
 
   /**
