@@ -16,67 +16,22 @@
         {{/if}}
       {{/foreach}}
     {{/if}}
-    <script>
-      Main.add(function() {
-        // Ceci doit rester ici !! prepareForm necessaire car pas appelé au premier refresh d'un periodical update
-        prepareForm("editAdmFrm{{$_sejour->_id}}");
-      });
-    </script>
-    <form name="editAdmFrm{{$_sejour->_id}}" action="?" method="post">
-      <input type="hidden" name="m" value="planningOp" />
-      <input type="hidden" name="dosql" value="do_sejour_aed" />
-      {{mb_key object=$_sejour}}
-      <input type="hidden" name="patient_id" value="{{$_sejour->patient_id}}" />
 
-      {{if !$_sejour->entree_reelle}}
-        <input type="hidden" name="entree_reelle" value="now" />
-        <input type="hidden" name="_modifier_entree" value="1" />
+    <button
+        class="{{if !$_sejour->entree_reelle}}tick{{else}}edit notext{{/if}}"
+            onclick="Admissions.validerEntree('{{$_sejour->_id}}',null, reloadAdmissionLine.curry('{{$_sejour->_id}}'))"
+        style="float:right;">
+      {{if !$_sejour->entree_reelle}}{{tr}}CSejour-admit{{/tr}}{{else}}Modifier Admission{{/if}}
+    </button>
 
-        {{if $conf.dPplanningOp.CSejour.use_custom_mode_entree && $list_mode_entree|@count}}
-          {{mb_field object=$_sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 0); submitAdmission(this.form);" hidden=true}}
-          <select name="mode_entree_id" class="{{$_sejour->_props.mode_entree_id}}" style="width: 15em;" onchange="updateModeEntree(this)">
-            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-            {{foreach from=$list_mode_entree item=_mode}}
-              <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $_sejour->mode_entree_id == $_mode->_id}}selected{{/if}}>
-                {{$_mode}}
-              </option>
-            {{/foreach}}
-          </select>
-        {{else}}
-          {{mb_field object=$_sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 0); submitAdmission(this.form);"}}
-        {{/if}}
-
-        <button class="tick" type="button" onclick="{{if (($date_actuelle > $_sejour->entree_prevue) || ($date_demain < $_sejour->entree_prevue))}}confirmation(this.form);{{else}}submitAdmission(this.form);{{/if}}">
-          {{tr}}CSejour-admit{{/tr}}
-        </button>
-        <div id="listEtabExterne-editAdmFrm{{$_sejour->_id}}" {{if $_sejour->mode_entree != "7"}} style="display: none;" {{/if}}>
-          {{mb_field object=$_sejour field="etablissement_entree_id" form="editAdmFrm`$_sejour->_id`"
-            autocomplete="true,1,50,true,true" onchange="changeEtablissementId(this.form)"}}
-        </div>
-      {{else}}
-        <input type="hidden" name="_modifier_entree" value="0" />
-        <input type="hidden" name="mode_entree" value="{{$_sejour->mode_entree}}" />
-        <input type="hidden" name="etablissement_entree_id" value="{{$_sejour->etablissement_entree_id}}" />
-
-        <input type="hidden" name="entree_reelle" value="" />
-        <button class="cancel" type="button" onclick="submitAdmission(this.form);">
-          {{tr}}CSejour-cancel_admit{{/tr}}
-        </button>
-        <br />
-
-        {{if ($_sejour->entree_reelle < $date_min) || ($_sejour->entree_reelle > $date_max)}}
-          {{$_sejour->entree_reelle|date_format:$conf.datetime}}
-          <br>
-        {{else}}
-          {{$_sejour->entree_reelle|date_format:$conf.time}}
-        {{/if}}
-        - {{tr}}CSejour.mode_entree.{{$_sejour->mode_entree}}{{/tr}}
-
-        {{if $_sejour->etablissement_entree_id}}
-          - {{$_sejour->_ref_etablissement_provenance}}
-        {{/if}}
+    {{if $_sejour->entree_reelle}}
+      Entrée réelle : {{mb_value object=$_sejour field=entree_reelle}}<br/>
+      {{if $_sejour->mode_sortie}}
+        {{tr}}CSejour.mode_entree.{{$_sejour->mode_entree}}{{/tr}}
       {{/if}}
-    </form>
+    {{/if}}
+
+
   {{elseif $_sejour->entree_reelle}}
     {{if ($_sejour->entree_reelle < $date_min) || ($_sejour->entree_reelle > $date_max)}}
       {{$_sejour->entree_reelle|date_format:$conf.datetime}}

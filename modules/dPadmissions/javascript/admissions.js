@@ -198,6 +198,16 @@ Admissions = {
     }, 120000);
   },
 
+  validerEntree : function(sejour_id, callback, callback_close) {
+    new Url("admissions", "ajax_edit_entree")
+      .addParam("sejour_id"           , sejour_id)
+      .addParam("module"              , App.m)
+      .requestModal("725px", "335px")
+      .modalObject.observe("afterClose", callback_close);
+    document.stopObserving("mb:valider_entree");
+    document.observe("mb:valider_entree", callback);
+  },
+
   validerSortie : function (sejour_id, modify_sortie_prevue, callback, callback_close) {
     new Url("admissions", "ajax_edit_sortie")
       .addParam("sejour_id"           , sejour_id)

@@ -59,13 +59,9 @@ if (CAppUI::conf("dPplanningOp CSejour use_custom_mode_sortie")) {
 
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign("callback"            , stripslashes($callback));
-
 $smarty->assign("modify_sortie_prevue", $modify_sortie_prevue);
 $smarty->assign("sejour"              , $sejour);
 $smarty->assign("module"              , $module);
 $smarty->assign("list_mode_sortie"    , $list_mode_sortie);
-$smarty->assign("list_mode_sortie"    , $list_mode_sortie);
-
 $smarty->display("inc_edit_sortie.tpl");
