@@ -51,9 +51,9 @@ $terme_prevu = $grossesse->terme_prevu;
 //   3. Créer la naissance
 
 $patient = new CPatient();
-$patient->nom = $nom ? $nom : $parturiente->nom;
-$patient->prenom = $prenom ? $prenom : "provi";
-$patient->civilite = "enf";
+$patient->nom       = $nom ? $nom : $parturiente->nom;
+$patient->prenom    = $prenom ? $prenom : "provi";
+$patient->civilite  = "enf";
 $patient->naissance = $terme_prevu;
 storeObject($patient);
 
@@ -63,20 +63,20 @@ if (!$prenom) {
 }
 
 $sejour_enfant = new CSejour();
-$sejour_enfant->patient_id = $patient->_id;
+$sejour_enfant->patient_id    = $patient->_id;
 $sejour_enfant->entree_prevue = CMbDT::dateTime();
 $sejour_enfant->sortie_prevue = max($sejour_enfant->entree_prevue, $sejour->sortie);
-$sejour_enfant->praticien_id = $praticien_id ? $praticien_id : $sejour->praticien_id;
-$sejour_enfant->group_id = $sejour->group_id;
-$sejour_enfant->_naissance = true;
+$sejour_enfant->praticien_id  = $praticien_id ? $praticien_id : $sejour->praticien_id;
+$sejour_enfant->group_id      = $sejour->group_id;
+$sejour_enfant->_naissance    = true;
 storeObject($sejour_enfant);
 
 $naissance = new CNaissance();
-$naissance->grossesse_id = $grossesse->_id;
-$naissance->sejour_maman_id = $sejour->_id;
+$naissance->grossesse_id     = $grossesse->_id;
+$naissance->sejour_maman_id  = $sejour->_id;
 $naissance->sejour_enfant_id = $sejour_enfant->_id;
 $naissance->operation_id     = $operation_id;
-$naissance->num_naissance = CAppUI::conf("maternite CNaissance num_naissance") + $naissance->countList();
+$naissance->num_naissance    = CAppUI::conf("maternite CNaissance num_naissance") + $naissance->countList();
 storeObject($naissance);
 
 echo CAppUI::getMsg();

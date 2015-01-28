@@ -1280,16 +1280,26 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if ($event_code == "A14") {
       $newVenue->recuse = -1;
     }
+
     // A27 : Annulation de la demande de pré-admission
     // A38 : Annulation du séjour
     if ($event_code == "A38" || $event_code == "A27") {
       $newVenue->annule = 1;
     }
 
+    // A11 : suppression de l'entrée et/ou annulation du séjour si on a pas de mouvement de pré-admission
+    if ($event_code == "A11") {
+      $movements = $newVenue->loadRefsMovements(array("original_trigger_code" => " = 'A05'"));
+      if ($movements) {
+        $newVenue->annule = 1;
+      }
+    }
+
     // A15 : Mutation prévisionnelle
     if ($event_code == "A15") {
       $newVenue->mode_sortie = "transfert";
     }
+
     // A26 : Annulation mutation prévisionnelle
     if ($event_code == "A26") {
       $newVenue->mode_sortie = "";
@@ -1299,6 +1309,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if ($event_code == "A16") {
       $newVenue->confirme = $newVenue->sortie;
     }
+
     // A25 : Annulation de la confirmation de la sortie définitive
     if ($event_code == "A25") {
       $newVenue->confirme = "";
