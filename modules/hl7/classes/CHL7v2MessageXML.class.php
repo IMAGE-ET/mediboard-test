@@ -415,18 +415,18 @@ class CHL7v2MessageXML extends CMbXMLDocument {
   /**
    * Get NPA identifiers
    *
-   * @param DOMNode $node  Node
-   * @param array   &$data Data
+   * @param DOMNode        $node   Node
+   * @param array          &$data  Data
+   * @param CInteropSender $sender Sender
    *
    * @return void
    */
-  function getNPAIdentifiers(DOMNode $node, &$data) {
+  function getNPAIdentifiers(DOMNode $node, &$data, CInteropSender $sender) {
     if (CHL7v2Message::$handle_mode == "simple") {
       $data["NPA"] = $this->queryTextNode("CX.1", $node);
     }
     else {
-      $assigning_authority_id = CAppUI::conf("hl7 assigning_authority_universal_id");
-      if (($this->queryTextNode("CX.5", $node) == "AN") && ($this->queryTextNode("CX.4/HD.2", $node) == $assigning_authority_id)) {
+      if (($this->queryTextNode("CX.5", $node) == "AN")) {
         $data["NPA"] = $this->queryTextNode("CX.1", $node);
       }
     }
@@ -519,7 +519,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
 
     // PA - Preadmit Number
     if ($PV1_5 = $this->queryNode("PV1.5", $contextNode)) {
-      $this->getNPAIdentifiers($PV1_5, $data);
+      $this->getNPAIdentifiers($PV1_5, $data, $sender);
     }
         
     return $data;

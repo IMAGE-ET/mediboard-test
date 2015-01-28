@@ -137,7 +137,7 @@ class CHL7v2Message extends CHMessage {
 
      // remove all chars before MSH
     $msh_pos = strpos($data, self::$header_segment_name);
-    
+
     if ($msh_pos === false) {
       throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $data);
     }

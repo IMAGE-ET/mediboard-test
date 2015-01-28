@@ -71,7 +71,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
       $data["insurances"][] = $tmp;
     }
-    
+
     return $data;
   }
 
@@ -232,11 +232,34 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $code_NDA = !$venueAN ? "I225" : "I222";
       
       $found = false;
-      
+
       // NPA fourni
       if (!$found && $venueNPA) {
-        /* @todo Gérer ce cas */
-        $venueRI = $venueNPA;
+        $manage_npa = CMbArray::get($sender->_configs, "manage_npa");
+        if ($manage_npa) {
+          $NPA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueNPA);
+          if ($NPA->_id) {
+            $found = true;
+          }
+
+          $newVenue->load($NPA->object_id);
+
+          // Mapping de la venue
+          $this->mappingVenue($data, $newVenue);
+
+          // Notifier les autres destinataires autre que le sender
+          $newVenue->_eai_sender_guid = $sender->_guid;
+          // On ne check pas la cohérence des dates des consults/intervs
+          $newVenue->_skip_date_consistencies = true;
+
+          if ($msgVenue = $newVenue->store()) {
+            if ($newVenue->_collisions) {
+              return $exchange_hl7v2->setAckAR($ack, "E213", $msgVenue, reset($newVenue->_collisions));
+            }
+
+            return $exchange_hl7v2->setAckAR($ack, "E201", $msgVenue, $newVenue);
+          }
+        }
       }
       
       // VN fourni
@@ -414,8 +437,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $comment = CEAISejour::getComment($newVenue);
     }
 
-    CEAISejour::storeNPA($venueNPA ? $venueNPA : $venueAN, $newVenue, $sender);
-    
     // Mapping du mouvement
     if ($sender_purge_idex_movements) {
       // On recherche un mouvement de l'event (A05/A01/A04)
@@ -1120,7 +1141,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $venueVN       = CValue::read($data['admitIdentifiers'], "VN");
     //$venueNPA      = CValue::read($data['admitIdentifiers'], "NPA");
     $venueAN       = $this->getVenueAN($sender, $data);
-    
+
     $NDA = new CIdSante400();
     if ($venueAN) {
       $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
@@ -1235,12 +1256,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Création du VN, voir de l'objet
     if ($msgVN = $this->createObjectByVisitNumber($newVenue, $data)) {
       return $exchange_hl7v2->setAckAR($ack, "E210", $msgVN, $newVenue);
-    }
-
-    if ($newVenue->_etat == "preadmission") {
-      $venueNPA = CValue::read($data['admitIdentifiers'], "NPA");
-      $venueAN  = CValue::read($data['admitIdentifiers'], "AN");
-      CEAISejour::storeNPA($venueNPA ? $venueNPA : $venueAN, $newVenue, $sender);
     }
     
     $codes   = array ("I202", "I226");
@@ -1364,6 +1379,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $movement = new CMovement();
     if (!$movement = $this->mappingMovement($data, $newVenue, $movement)) {
       return $exchange_hl7v2->setAckAR($ack, "E206", null, $newVenue);
+    }
+
+    if (is_string($movement)) {
+      return $exchange_hl7v2->setAckAR($ack, "E206", $movement, $newVenue);
     }
 
     return $movement;
@@ -2391,24 +2410,22 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $PV1_44 = $this->queryTextNode("PV1.44", $node);
     $PV1_45 = $this->queryTextNode("PV1.45", $node);
 
-    // Si on est sur une modification et que l'on a pas d'entrée et/ou de sortie réelle
-    if ($event_code == "Z99") {
-      if ($newVenue->entree_reelle) {
-        $newVenue->entree_reelle = $PV1_44;
-      }
-
-      if ($newVenue->sortie_reelle) {
-        $newVenue->sortie_reelle = $PV1_45;
-      }
-    }
-    
-    // On récupère l'entrée réelle ssi msg !A05
-    if ($event_code != "A05" && $event_code == "Z99" && $newVenue->entree_reelle) {
+    // On récupère l'entrée réelle ssi msg == A01 || A04
+    if ($event_code == "A01" || $event_code == "A04") {
       $newVenue->entree_reelle = $PV1_44;
     }
-    
-    // On récupére la sortie réelle ssi msg A03 / Z99
-    if ($event_code == "A03" && $event_code != "Z99") {
+
+    // On récupére la sortie réelle ssi msg == A03
+    if ($event_code == "A03") {
+      $newVenue->sortie_reelle = $PV1_45;
+    }
+
+    // Dans tous les autres cas on synchronise l'entrée et la sortie réelle ssi on a déjà la donnée dans Mediboard
+    if ($newVenue->entree_reelle) {
+      $newVenue->entree_reelle = $PV1_44;
+    }
+
+    if ($newVenue->sortie_reelle) {
       $newVenue->sortie_reelle = $PV1_45;
     }
       
@@ -2591,6 +2608,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $sender_movement = null;
     foreach ($this->queryNodes("ZBE.1", $node) as $ZBE_1) {
       $EI_1 = $this->queryTextNode("EI.1", $ZBE_1);
+      $EI_2 = $this->queryTextNode("EI.2", $ZBE_1);
       $EI_3 = $this->queryTextNode("EI.3", $ZBE_1);
 
       // Notre propre identifiant de mouvement
@@ -2600,7 +2618,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       }
 
       // L'identifiant de mouvement du sender
-      if ($EI_3 == $sender->_configs["assigning_authority_universal_id"]) {
+      if ($EI_3 == $sender->_configs["assigning_authority_universal_id"] ||
+          $EI_2 == $sender->_configs["assigning_authority_universal_id"]) {
         $sender_movement = $EI_1;
         continue;
       }    
