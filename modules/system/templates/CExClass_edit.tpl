@@ -285,7 +285,9 @@ toggleGroupLabelEdit = function(link) {
                         <img src="style/mediboard/images/buttons/formula.png" />
                       {{/if}}
 
-                      {{if $_field->predicate_id}}
+                      {{if $_field->hidden}}
+                        <img src="./images/icons/hidden.png" title="{{tr}}CExClassField-predicate_id{{/tr}}"/>
+                      {{elseif $_field->predicate_id}}
                         <img src="./images/icons/showhide.png" title="{{tr}}CExClassField-predicate_id{{/tr}}"/>
                       {{/if}}
 
