@@ -283,6 +283,11 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "cm",
       "min" => 20, "max" => 200
     ),
+    "perimetre_hanches"    => array(
+      "type" => "physio",
+      "unit" => "cm",
+      "min" => 45, "max" => 200
+    ),
     "perimetre_brachial"    => array(
       "type" => "physio",
       "unit" => "cm",
@@ -1000,6 +1005,7 @@ class CConstantesMedicales extends CMbObject {
 
     $props['PVC']                    = 'float min|0';
     $props['perimetre_abdo']         = 'float min|0';
+    $props['perimetre_hanches']      = 'float min|0';
     $props['perimetre_brachial']     = 'float min|0';
     $props['perimetre_cranien']      = 'float min|0';
     $props['perimetre_cuisse']       = 'float min|0';

@@ -2768,7 +2768,13 @@ class CSetupdPpatients extends CSetup {
                 'HOMA','USUR','IDRA','RECD','IDVER') NOT NULL;";
     $this->addQuery($query);
 
-    $this->mod_version = '2.29';
+    $this->makeRevision('2.29');
+
+    $query = "ALTER TABLE `constantes_medicales`
+                ADD perimetre_hanches FLOAT UNSIGNED;";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.30';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
