@@ -25,6 +25,7 @@ then
   echo "   [-f <lock_file>] lock file path"
   echo "   [-c <passphrase>] passphrase to encrypt the archive"
   echo "   [-e <cryptage>] cryptage method to use"
+  echo "   [-h] do not check mysqlhotcopy command"
   exit 1
 fi
 
@@ -34,7 +35,8 @@ binary_log=0
 lock=''
 passphrase=''
 cryptage='aes-128-cbc'
-args=$(getopt t:l:f:c:e:b $*)
+args=$(getopt t:l:f:c:e:bh $*)
+check_hotcopy=1
 
 if [ $? != 0 ] ; then
   echo "Invalid argument. Check your command line"; exit 0;
@@ -50,6 +52,7 @@ for i; do
     -c) passphrase=$2; shift 2;;
     -e) cryptage=$2; shift 2;;
     -b) binary_log=1; shift;;
+    -h) check_hotcopy=0; shift;;
     --) shift ; break ;;
   esac
 done
@@ -130,8 +133,11 @@ case $1 in
     result=$database/
     
     mysqlhotcopy --quiet -u $username -p $password $database $BASE_PATH
-    check_errs $? "Failed to create MySQL hot copy" "MySQL hot copy done!"
-    
+
+    if [ $check_hotcopy -eq 1 ]; then
+      check_errs $? "Failed to create MySQL hot copy" "MySQL hot copy done!"
+    fi
+
     if [ $binary_log -eq 1 ]; then
       databasebinlog=$database-${DATETIME}.binlog.position
       mysql --user=$username --password=$password $database < $BASH_PATH/mysql_show_master_status.sql > $BACKUP_PATH/binlog-${DATETIME}.index
