@@ -30,6 +30,7 @@ else {
   $ex_field->ex_group_id = $ex_group_id;
   $ex_field->disabled = 0;
   $ex_field->readonly = 0;
+  $ex_field->hidden = 0;
 }
 
 $ex_field->loadRefExClass();

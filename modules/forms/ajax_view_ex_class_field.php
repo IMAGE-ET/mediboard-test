@@ -29,6 +29,7 @@ if ($spec instanceof CEnumSpec) {
 }
 
 $ex_class_field->readonly = "0";
+$ex_class_field->hidden = "0";
 
 // Création du template
 $smarty = new CSmartyDP();
