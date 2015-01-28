@@ -23,6 +23,7 @@ $modify_entree_prevue = CValue::get("modify_entree_prevue", true);
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
+$sejour->loadNDA();
 
 $sejour->loadRefServiceMutation();
 $sejour->loadRefEtablissementTransfert();
@@ -33,6 +34,7 @@ if (CModule::getActive("dPurgences")) {
 }
 
 $patient = $sejour->loadRefPatient();
+$patient->loadIPP();
 
 // maternité
 if (CModule::getActive("maternite") && $sejour->grossesse_id) {

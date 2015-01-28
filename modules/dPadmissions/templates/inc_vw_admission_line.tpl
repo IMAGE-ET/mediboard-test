@@ -20,7 +20,7 @@
     <button
         class="{{if !$_sejour->entree_reelle}}tick{{else}}edit notext{{/if}}"
             onclick="Admissions.validerEntree('{{$_sejour->_id}}',null, reloadAdmissionLine.curry('{{$_sejour->_id}}'))"
-        style="float:right;">
+            {{if $_sejour->entree_reelle}}style="float:right;"{{/if}}>
       {{if !$_sejour->entree_reelle}}{{tr}}CSejour-admit{{/tr}}{{else}}Modifier Admission{{/if}}
     </button>
 

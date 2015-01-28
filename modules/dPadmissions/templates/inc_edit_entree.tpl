@@ -23,6 +23,37 @@
     form.onsubmit();
   };
 
+  admettre = function() {
+    var form = getForm('{{$form_name}}');
+
+    // with idex
+    var idex = $('idex_sejour_{{$sejour->_id}}');
+    var nb_idex_not_ok = 0;
+    if (idex) {
+      $(idex).select('form').each(function(elt) {
+        if (elt.id400 && !checkForm(elt)) {
+          nb_idex_not_ok = 1;
+          return false;
+        }
+        elt.onsubmit();
+      });
+    }
+
+    // do idex must defined ?
+    var must_be_define_idex = {{"dPsante400 CIdSante400 admit_ipp_nda_obligatory"|conf:"CGroups-$g"}};
+    if (nb_idex_not_ok && must_be_define_idex) {
+      return;
+    }
+
+    {{if !$entree_reelle && (($date_actuelle > $sejour->entree_prevue) || ($date_demain < $sejour->entree_prevue))}}
+      if (confirm('La date enregistrée d\'admission est différente de la date prévue, souhaitez vous confimer l\'admission du patient ?')) {
+        form.onsubmit();
+      }
+    {{else}}
+      form.onsubmit();
+    {{/if}}
+  };
+
   showSecondary = function() {
     $$('.togglisable_tr').each(function(elt) {
       elt.hide();
@@ -43,6 +74,7 @@
   });
 </script>
 
+<h2>Admission</h2>
 <form name="{{$form_name}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close})">
   <input type="hidden" name="m" value="planningOp" />
   <input type="hidden" name="dosql" value="do_sejour_aed" />
@@ -50,7 +82,6 @@
   <input type="hidden" name="patient_id" value="{{$sejour->patient_id}}" />
 
   <table class="form">
-
     <tr>
       <th>{{mb_label object=$sejour field=entree_reelle}}</th>
       <td>
@@ -85,7 +116,7 @@
     {{else}}
       <tr>
         <th>{{mb_label object=$sejour field=mode_entree}}</th>
-        <td>{{mb_field object=$sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 0); showSecondary();" typeEnum=radio}}</td>
+        <td>{{mb_field object=$sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 1); showSecondary();" typeEnum=radio}}</td>
       </tr>
 
 
@@ -107,19 +138,31 @@
         </td>
       </tr>
     {{/if}}
-
-    <tr>
-      <td colspan="4" class="button">
-        <button class="{{if !$entree_reelle}}tick{{else}}save{{/if}}" type="button" onclick="{{if !$entree_reelle && (($date_actuelle > $sejour->entree_prevue) || ($date_demain < $sejour->entree_prevue))}}confirmation(this.form); Control.Modal.close();{{else}}this.form.onsubmit();{{/if}}">
-          {{if !$entree_reelle}}{{tr}}CSejour-admit{{/tr}}{{else}}{{tr}}Save{{/tr}}{{/if}}
-        </button>
-        {{if $entree_reelle}}
-          <button class="cancel" type="button" onclick="emptyFields();">
-            {{tr}}CSejour-cancel_admit{{/tr}}
-          </button>
-        {{/if}}
-      </td>
-    </tr>
-
   </table>
 </form>
+
+{{if "dPsante400"|module_active && "dPsante400 CIdSante400 add_ipp_nda_manually"|conf:"CGroups-$g"}}
+  <hr/>
+  <h2>Identifiants externes</h2>
+  {{assign var=ipp value=$sejour->_ref_patient->_ref_IPP}}
+  {{assign var=nda value=$sejour->_ref_NDA}}
+  {{unique_id var=unique_ipp}}
+  {{unique_id var=unique_nda}}
+
+  <div id="idex_sejour_{{$sejour->_id}}">
+    {{mb_include module=dPsante400 template=inc_form_ipp_nda idex=$ipp object=$sejour->_ref_patient field=_IPP unique=$unique_ipp}}
+    {{mb_include module=dPsante400 template=inc_form_ipp_nda idex=$nda object=$sejour field=_NDA unique=$unique_nda}}
+  </div>
+{{/if}}
+
+<hr/>
+<p style="text-align: center">
+  <button class="{{if !$entree_reelle}}tick{{else}}save{{/if}}" type="button" onclick="admettre();">
+    {{if !$entree_reelle}}{{tr}}CSejour-admit{{/tr}}{{else}}{{tr}}Save{{/tr}}{{/if}}
+  </button>
+  {{if $entree_reelle}}
+    <button class="cancel" type="button" onclick="emptyFields();">
+      {{tr}}CSejour-cancel_admit{{/tr}}
+    </button>
+  {{/if}}
+</p>
