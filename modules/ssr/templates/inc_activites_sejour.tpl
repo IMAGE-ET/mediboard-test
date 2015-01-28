@@ -207,6 +207,7 @@ submitSSR = function(){
       return false;
     }
   }
+  $V(oFormEvenementSSR._type_seance, $V(oFormEvenementSSR.type_seance));
 
   return onSubmitFormAjax(oFormEvenementSSR, { onComplete: function(){
     refreshPlanningsSSR();
@@ -221,6 +222,10 @@ submitSSR = function(){
     $V(oFormEvenementSSR._heure_fin_da, '');
     $V(oFormEvenementSSR.duree, $V(oFormEvenementSSR._default_duree));
     $V(oFormEvenementSSR.seance_collective_id, '');
+    $V(oFormEvenementSSR.type_seance, '');
+    $$("input[name='type_seance']").each(function(input){
+      input.disabled = false;
+    });
     if(oFormEvenementSSR.seance_collective_id){
       oFormEvenementSSR.seance_collective_id.hide();
     }
@@ -442,6 +447,7 @@ Main.add(function(){
     <input type="hidden" name="line_id" value="" />
     <input type="hidden" name="_element_id" value="" />
     <input type="hidden" name="_category_id" value="" />
+    <input type="hidden" name="_type_seance" value="" />
 
     <table class="form">
       <tr>

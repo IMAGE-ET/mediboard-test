@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 $sejour_id            = CValue::post("sejour_id");
@@ -18,7 +18,7 @@ $_cdarrs              = CValue::post("_cdarrs");
 $csarrs               = CValue::post("csarrs");
 $_csarrs              = CValue::post("_csarrs");
 $remarque             = CValue::post("remarque");
-$type_seance          = CValue::post("type_seance");
+$type_seance          = CValue::post("_type_seance");
 $seance_collective_id = CValue::post("seance_collective_id");
 
 // Codes CdARR
