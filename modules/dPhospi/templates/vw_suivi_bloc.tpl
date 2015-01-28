@@ -108,7 +108,7 @@ Main.add(function () {
     <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$currOp->_ref_chir}}</td>
     <td>{{mb_include module=planningOp template=inc_vw_operation _operation=$currOp}}</td>
     <td>{{mb_value object=$currOp field="cote"}}</td>
-    <td>{{$currOp->_ref_affectation->_ref_lit->_view}}</td>
+    <td>{{if $currOp->_ref_affectation->lit_id}}{{$currOp->_ref_affectation->_ref_lit}}{{/if}}</td>
   </tr>
   {{/foreach}}
 {{/foreach}}
