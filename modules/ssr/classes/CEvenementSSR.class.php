@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
@@ -29,6 +29,7 @@ class CEvenementSSR extends CMbObject {
   public $remarque;
   public $seance_collective_id; // Evenement lié a une seance collective
   public $type_seance;
+  public $nb_patient_seance;
 
   // Seances collectives
   public $_ref_element_prescription;
@@ -102,6 +103,7 @@ class CEvenementSSR extends CMbObject {
     $props["remarque"]      = "str";
     $props["seance_collective_id"] = "ref class|CEvenementSSR";
     $props["type_seance"]   = "enum list|dediee|non_dediee|collective";
+    $props["nb_patient_seance"] = "num";
 
     $props["_traite"]       = "bool";
     $props["_nb_decalage_min_debut"]   = "num";

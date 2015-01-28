@@ -47,6 +47,7 @@ ModalValidation = {
     var annule_ids  = [];
     var modulateurs = [];
     var phases      = [];
+    var nb_patient  = [];
 
     $('list-evenements-modal').select('input[type="checkbox"]').each(function(checkbox) {
       if (checkbox.checked) {
@@ -57,11 +58,40 @@ ModalValidation = {
       }
     });
 
+    $('list-evenements-modal').select('input[type="text"]').each(function(input) {
+      if ($V(input)) {
+        if (input.hasClassName('nb_patient')) nb_patient.push(input.form.get('evenement_id')+"-"+input.value);
+      }
+    });
     var form = this.formModal();
     $V(form.realise_ids, realise_ids.join('|'));
     $V(form.annule_ids , annule_ids .join('|'));
     $V(form.modulateurs, modulateurs.join('|'));
     $V(form.phases     , phases     .join('|'));
+    $V(form.nb_patient , nb_patient     .join('|'));
+  },
+
+  checkedAllNbPatients: function () {
+    var result = true;
+    $('list-evenements-modal').select('input[type="text"]').each(function(input) {
+      if (!$V(input) ) {
+        var evenement_guid = "CEvenementSSR-"+input.form.get('evenement_id');
+        var annule = null;
+        $('list-evenements-modal').select('input[type="checkbox"]').each(function(evt) {
+          if (evt.hasClassName('annule') && evt.hasClassName(evenement_guid)) {
+            annule = evt;
+          }
+        });
+        if (annule && !annule.checked) {
+          //Si l'evenement n'est pas annulé
+          result = false;
+        }
+      }
+    });
+    if (!result) {
+      alert("Veuillez renseigner le nombre de patient pour les séances collectives");
+    }
+    return result;
   },
 
   set: function(values) {
@@ -78,10 +108,12 @@ ModalValidation = {
 
   submitModal: function() {
     this.selectCheckboxes();
-    return onSubmitFormAjax(this.formModal(), function() {
-      PlanningTechnicien.show(this.kine_id, null, null, 650, true);
-      ModalValidation.close();
-    });
+    if (this.checkedAllNbPatients() == true) {
+      return onSubmitFormAjax(this.formModal(), function() {
+        PlanningTechnicien.show(this.kine_id, null, null, 650, true);
+        ModalValidation.close();
+      });
+    }
   },
 
   update: function() {

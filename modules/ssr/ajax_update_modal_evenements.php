@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
@@ -52,7 +52,11 @@ foreach ($events as $_event) {
   if (!$_event->_count_actes) {
     $count_zero_actes++;
   }
-  
+
+  if ($_event->seance_collective_id) {
+    $_event->loadRefSeanceCollective()->loadRefsEvenementsSeance();
+  }
+
   $sejour = $_event->loadRefSejour();
   $sejour->loadRefPatient();
   $sejours[$sejour->_id] = $sejour;
@@ -69,7 +73,7 @@ foreach ($evenements as &$_evenements_by_sejour) {
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("evenements", $evenements);
-$smarty->assign("sejours", $sejours);
+$smarty->assign("evenements"      , $evenements);
+$smarty->assign("sejours"         , $sejours);
 $smarty->assign("count_zero_actes", $count_zero_actes);
 $smarty->display("inc_vw_modal_evenements.tpl");

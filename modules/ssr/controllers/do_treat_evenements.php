@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 // Ajustement des actes CsARR
@@ -94,6 +94,21 @@ foreach ($event_ids as $_event_id) {
   // Suppression des evenements SSR
   $evenement->realise = "0";
   $evenement->annule  = "1";
+  $evenement->_traitement = "1";
+  $msg = $evenement->store();
+  CAppUI::displayMsg($msg, "CEvenementSSR-msg-modify");
+}
+
+// Nombre de patient pour les séances collectives
+$nb_patients = CValue::post("nb_patient");
+$nb_patients = $nb_patients ? explode("|", $nb_patients) : array();
+foreach ($nb_patients as $_nb_patients) {
+  list($evenement_id, $nb_patient) = explode("-", $_nb_patients);
+  $evenement = new CEvenementSSR();
+  $evenement->load($evenement_id);
+
+  // Ajout du nombre de patient présent aux evenements SSR
+  $evenement->nb_patient_seance = $nb_patient;
   $evenement->_traitement = "1";
   $msg = $evenement->store();
   CAppUI::displayMsg($msg, "CEvenementSSR-msg-modify");

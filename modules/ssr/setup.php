@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
@@ -530,8 +530,12 @@ class CSetupssr extends CSetup {
         WHERE e.`seance_collective_id` IS NULL
         AND s.`type_seance` = 'collective'";
     $this->addQuery($query);
+    $this->makeRevision("0.48");
 
-    $this->mod_version = "0.48";
+    $query = "ALTER TABLE `evenement_ssr`
+                ADD `nb_patient_seance` INT (11);";
+    $this->addQuery($query);
+    $this->mod_version = "0.49";
 
     // Data source query
     $query = "SHOW TABLES LIKE 'type_activite'";

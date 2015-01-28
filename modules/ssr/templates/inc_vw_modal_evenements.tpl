@@ -7,16 +7,17 @@
   <input type="hidden" name="annule_ids"  value="" />
   <input type="hidden" name="modulateurs" value="" />
   <input type="hidden" name="phases"      value="" />
+  <input type="hidden" name="nb_patient"  value="" />
 </form>
 
 <table class="tbl" style="margin-right: 10px;" id="list-evenements-modal">
   <tr>
-    <th colspan="8" class="title">Evenements</th>
+    <th colspan="9" class="title">Evenements</th>
   </tr>
   {{foreach from=$evenements item=_evenements_by_sejour key=sejour_id}}
     {{assign var=sejour value=$sejours.$sejour_id}}
     <tr>
-      <th colspan="6">
+      <th colspan="7">
         {{assign var=patient value=$sejour->_ref_patient}}
         <big onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
           {{$patient}}
@@ -42,7 +43,7 @@
     {{/foreach}}
     {{if $count_traite}} 
     <tr>
-      <td colspan="8">
+      <td colspan="9">
         <div class="small-info">
           {{$count_traite}} événéments ont déjà été traités pour ce patient.
           <strong>Aucun ne sera donc pas pré-sélectionné</strong>.
@@ -74,47 +75,44 @@
         
         <td class="text">
           {{if $_evenement->_count_actes}}
-          <div>
-            {{foreach from=$_evenement->_ref_actes_cdarr item=_acte}}
-              <span onmouseover="ObjectTooltip.createEx(this, '{{$_acte->_guid}}')">
-                <code>{{$_acte->code}}</code>
-              </span> 
-            {{/foreach}}
-          </div>
-          
-          {{foreach from=$_evenement->_ref_actes_csarr item=_acte}}
-          <div>
-            <strong onmouseover="ObjectTooltip.createEx(this, '{{$_acte->_guid}}')">
-              <code>{{$_acte->code}}</code>
-            </strong>
-            {{foreach from=$_acte->_ref_activite_csarr->_ref_modulateurs item=_modulateur}}
-            <label title="{{$_modulateur->_libelle}}">
-              <input type="checkbox" class="modulateur"
-                {{if in_array($_modulateur->modulateur, $_acte->_modulateurs)}} checked="checked" {{/if}}
-                value="{{$_acte->_id}}-{{$_modulateur->modulateur}}" />
-              {{$_modulateur->modulateur}}
-            </label>
-            {{/foreach}}
-            {{if $_acte->_fabrication}}
-              &dash; Phases:
-              {{foreach from="-"|explode:"A-B-C" item=_phase}}
-                <label title="{{tr}}CActiviteCsARR-libelle_phase_{{$_phase}}{{/tr}}">
-                  <input type="checkbox" class="phase"
-                    {{if in_array($_phase, $_acte->_phases)}} checked="checked" {{/if}}
-                     value="{{$_acte->_id}}-{{$_phase}}" />
-                  {{$_phase}}
-                </label>
+            <div>
+              {{foreach from=$_evenement->_ref_actes_cdarr item=_acte}}
+                <span onmouseover="ObjectTooltip.createEx(this, '{{$_acte->_guid}}')">
+                  <code>{{$_acte->code}}</code>
+                </span>
               {{/foreach}}
-            {{/if}}
-
-          </div>
-          {{/foreach}}
+            </div>
+            {{foreach from=$_evenement->_ref_actes_csarr item=_acte}}
+              <div>
+                <strong onmouseover="ObjectTooltip.createEx(this, '{{$_acte->_guid}}')">
+                  <code>{{$_acte->code}}</code>
+                </strong>
+                {{foreach from=$_acte->_ref_activite_csarr->_ref_modulateurs item=_modulateur}}
+                  <label title="{{$_modulateur->_libelle}}">
+                    <input type="checkbox" class="modulateur"
+                      {{if in_array($_modulateur->modulateur, $_acte->_modulateurs)}} checked="checked" {{/if}}
+                      value="{{$_acte->_id}}-{{$_modulateur->modulateur}}" />
+                    {{$_modulateur->modulateur}}
+                  </label>
+                {{/foreach}}
+                {{if $_acte->_fabrication}}
+                  &dash; Phases:
+                  {{foreach from="-"|explode:"A-B-C" item=_phase}}
+                    <label title="{{tr}}CActiviteCsARR-libelle_phase_{{$_phase}}{{/tr}}">
+                      <input type="checkbox" class="phase"
+                        {{if in_array($_phase, $_acte->_phases)}} checked="checked" {{/if}}
+                         value="{{$_acte->_id}}-{{$_phase}}" />
+                      {{$_phase}}
+                    </label>
+                  {{/foreach}}
+                {{/if}}
+              </div>
+            {{/foreach}}
           
           {{else}}
-          <div class="small-warning">
-            {{tr}}CEvenementSSR-warning-no_code_ssr{{/tr}}
-          </div>
-          
+            <div class="small-warning">
+              {{tr}}CEvenementSSR-warning-no_code_ssr{{/tr}}
+            </div>
           {{/if}}
         </td> 
 
@@ -124,6 +122,18 @@
             {{$equipement}}
           {{/if}}
         </td>
+
+        <td class="narrow">
+          {{if $_evenement->seance_collective_id}}
+            {{assign var=evenement_guid value=$_evenement->_guid}}
+            <form name="changeNbPatient_{{$evenement_guid}}" method="post" action="?" data-evenement_id="{{$_evenement->_id}}">
+              {{mb_label object=$_evenement field=nb_patient_seance}}
+              {{mb_field object=$_evenement field=nb_patient_seance class="nb_patient notNull" size=3 form="changeNbPatient_$evenement_guid"}}
+            </form>
+            <span class="compact">{{$_evenement->_ref_seance_collective->_ref_evenements_seance|@count}} patient(s) prévu</span>
+          {{/if}}
+        </td>
+
         <td>
           <input class="{{$sejour->_guid}} {{$_evenement->_guid}} realise" type="checkbox" value="{{$_evenement->_id}}" 
             onchange="if (this.checked) $$('input.{{$_evenement->_guid}}.annule')[0].checked = false;"
@@ -144,9 +154,9 @@
     {{/foreach}}
     {{/foreach}}
   {{foreachelse}}
-  <tr>
-    <td class="empty">{{tr}}CEvenementSSR.none{{/tr}}</td>
-  </tr>
+    <tr>
+      <td class="empty">{{tr}}CEvenementSSR.none{{/tr}}</td>
+    </tr>
   {{/foreach}}
 </table>
 </div>
