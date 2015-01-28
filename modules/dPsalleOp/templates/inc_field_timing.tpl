@@ -20,10 +20,15 @@
     {{else}}
       {{$object->$field|date_format:$conf.time}}
     {{/if}}
+
+    {{if $field == "fin_op" && $object instanceof COperation}}
+      {{mb_include module=forms template=inc_widget_ex_class_register object=$object event_name=fin_intervention cssStyle="display: inline-block;"}}
+    {{/if}}
   
   {{elseif $modif_operation}}
     <input type="hidden" name="{{$field}}" value="" onchange="{{$submit}}(this.form);"/>
-    <button type="button" class="submit" onclick="$V(this.form.{{$field}}, 'current', true);" {{if $disabled == "yes"}}disabled="disabled"{{/if}}>
+    <input type="hidden" name="_set_{{$field}}" value="1" /> {{* Custom flag to tell we are setting the value (module formulaires) *}}
+    <button type="button" class="submit" onclick="$V(this.form.{{$field}}, 'current', true);" {{if $disabled == "yes"}}disabled{{/if}}>
     {{mb_label object=$object field=$field}}
     </button>
   {{else}}

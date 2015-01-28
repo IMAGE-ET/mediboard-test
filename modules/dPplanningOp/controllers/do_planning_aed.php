@@ -25,6 +25,12 @@ else {
   }
   
   $do->doStore();
+
+  if (CModule::getActive("forms") && CValue::post("_set_fin_op")) {
+    $ex_class_events = CExClassEvent::getForObject($do->_obj, "fin_intervention", "required");
+    echo CExClassEvent::getJStrigger($ex_class_events);
+  }
+
   if ($do->_obj->plageop_id && $do->_old->plageop_id && ($do->_old->plageop_id != $do->_obj->plageop_id)) {
     $plageop = new CPlageOp;
     $plageop->load($do->_old->plageop_id);

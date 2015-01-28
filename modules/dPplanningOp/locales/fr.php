@@ -479,6 +479,7 @@ $locales['COperation-entree_salle-desc'] = 'Heure d\'entrée en salle';
 $locales['COperation-event-checklist'] = 'Check list';
 $locales['COperation-event-dhe'] = 'DHE';
 $locales['COperation-event-entree_reveil'] = 'Entrée réveil';
+$locales['COperation-event-fin_intervention'] = 'Timing fin intervention';
 $locales['COperation-event-liaison'] = 'Liaison';
 $locales['COperation-event-perop'] = 'Peropératoire';
 $locales['COperation-event-sortie_reveil'] = 'Sortie réveil';
