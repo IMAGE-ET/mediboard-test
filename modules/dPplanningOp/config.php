@@ -52,6 +52,7 @@ $dPconfig["dPplanningOp"]= array(
     "check_collisions"    => "date",
     "easy_cim10"          => "0",
     "easy_service"        => "0",
+    "easy_uf_soins"       => "0",
     "easy_chambre_simple" => "1",
     "easy_ald_cmu"        => "0",
     "easy_atnc"           => "0",

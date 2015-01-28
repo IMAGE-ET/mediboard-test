@@ -832,6 +832,25 @@ Main.add( function(){
   </td>
 </tr>
 
+{{if "dPplanningOp CSejour required_uf_soins"|conf:"CGroups-$g"}}
+  <tr {{if !$conf.dPplanningOp.CSejour.easy_uf_soins}} class="modeExpert" {{/if}}>
+    <th>
+      {{mb_label object=$sejour field="uf_soins_id"}}
+    </th>
+    <td colspan="3">
+      <select name="uf_soins_id" class="ref notNull" style="width: 15em"
+              onchange="Value.synchronize(this, 'editSejour');">
+        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+        {{foreach from=$ufs.soins item=_uf}}
+          <option value="{{$_uf->_id}}" {{if $sejour->uf_soins_id == $_uf->_id}}selected="selected"{{/if}}>
+            {{mb_value object=$_uf field=libelle}}
+          </option>
+        {{/foreach}}
+      </select>
+    </td>
+  </tr>
+{{/if}}
+
 {{if $can->admin}}
 <tr>
   <th>

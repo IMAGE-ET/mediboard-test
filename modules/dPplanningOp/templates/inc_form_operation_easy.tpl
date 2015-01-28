@@ -83,24 +83,40 @@
       <button type="button" class="cancel notext" onclick="$V(this.form.chir_4_id, '');$V(this.form.chir_4_id_view, '');"></button>
     </td>
   </tr>
-  
+
   {{if $conf.dPplanningOp.CSejour.easy_service}}
-  <!-- Selection du service -->
-  <tr>
-    <th>{{mb_label object=$sejour field="service_id"}}</th>
-    <td colspan="2">
-      <select name="service_id" class="{{$sejour->_props.service_id}}" onchange="Value.synchronize(this, 'editSejour');" style="width: 15em;">
-        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-        {{foreach from=$listServices item=_service}}
-        <option value="{{$_service->_id}}" {{if $sejour->service_id == $_service->_id}} selected="selected" {{/if}}>
-          {{$_service->_view}}
-        </option>
-        {{/foreach}}
-      </select>
-    </td>
-  </tr>
+    <!-- Selection du service -->
+    <tr>
+      <th>{{mb_label object=$sejour field="service_id"}}</th>
+      <td colspan="2">
+        <select name="service_id" class="{{$sejour->_props.service_id}}" onchange="Value.synchronize(this, 'editSejour');" style="width: 15em;">
+          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+          {{foreach from=$listServices item=_service}}
+            <option value="{{$_service->_id}}" {{if $sejour->service_id == $_service->_id}} selected="selected" {{/if}}>
+              {{$_service->_view}}
+            </option>
+          {{/foreach}}
+        </select>
+      </td>
+    </tr>
   {{/if}}
-  
+
+  {{if $conf.dPplanningOp.CSejour.easy_uf_soins && "dPplanningOp CSejour required_uf_soins"|conf:"CGroups-$g"}}
+    <!-- Selection de l'unité de soins -->
+    <tr>
+      <th>{{mb_label object=$sejour field="uf_soins_id"}}</th>
+      <td colspan="2">
+        <select name="uf_soins_id" class="ref notNull" onchange="Value.synchronize(this, 'editSejour');" style="width: 15em;">
+          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+          {{foreach from=$ufs.soins item=_uf}}
+            <option value="{{$_uf->_id}}" {{if $sejour->uf_soins_id == $_uf->_id}}selected="selected"{{/if}}>
+              {{mb_value object=$_uf field=libelle}}
+            </option>
+          {{/foreach}}
+        </select>
+      </td>
+    </tr>
+  {{/if}}
   
   <!-- Affichage du libelle -->
   {{assign var=easy_length_input_label value=$conf.dPplanningOp.COperation.easy_length_input_label}}

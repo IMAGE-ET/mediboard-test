@@ -431,6 +431,22 @@ updateListCPI = function(form) {
             </select>
           </td>
         </tr>
+
+        {{if "dPplanningOp CSejour required_uf_soins"|conf:"CGroups-$g"}}
+          <tr>
+            <th>{{mb_label object=$protocole field="uf_soins_id"}}</th>
+            <td>
+              <select name="uf_soins_id" class="ref">
+                <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+                {{foreach from=$ufs.soins item=_uf}}
+                  <option value="{{$_uf->_id}}" {{if $protocole->uf_soins_id == $_uf->_id}}selected="selected"{{/if}}>
+                    {{mb_value object=$_uf field=libelle}}
+                  </option>
+                {{/foreach}}
+              </select>
+            </td>
+          </tr>
+        {{/if}}
         
         <tr>
           <th>

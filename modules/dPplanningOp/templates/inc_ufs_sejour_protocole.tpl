@@ -26,6 +26,8 @@
       </select>
     </td>
   </tr>
+
+  {{if !"dPplanningOp CSejour required_uf_soins"|conf:"CGroups-$g"}}
   <tr>
     <th>
       {{mb_label object=$object field=uf_soins_id}}
@@ -41,6 +43,8 @@
       </select>
     </td>
   </tr>
+  {{/if}}
+
   <tr>
     <th>
       {{mb_label object=$object field=uf_medicale_id}}
