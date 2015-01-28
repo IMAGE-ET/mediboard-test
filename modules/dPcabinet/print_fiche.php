@@ -136,8 +136,13 @@ if (CModule::getActive("dPprescription")) {
   $prescription->loadRefsPrescriptionLineMixes();
   $prescription->loadRefsLinesPerop();
 
+  $show_premed_chir_fiche = CAppUI::conf("dPprescription CPrescription show_premed_chir_fiche", CGroups::loadCurrent());
+
   foreach ($prescription->_ref_prescription_lines_element as $_line_elt) {
     if (!$_line_elt->premedication) {
+      continue;
+    }
+    if (!$show_premed_chir_fiche && !$_line_elt->_ref_praticien->isAnesth()) {
       continue;
     }
     $_line_elt->loadRefsPrises();
@@ -146,6 +151,9 @@ if (CModule::getActive("dPprescription")) {
 
   foreach ($prescription->_ref_prescription_lines as $_line_med) {
     if (!$_line_med->premedication) {
+      continue;
+    }
+    if (!$show_premed_chir_fiche && !$_line_med->_ref_praticien->isAnesth()) {
       continue;
     }
     $_line_med->loadRefsPrises();
@@ -158,6 +166,9 @@ if (CModule::getActive("dPprescription")) {
       continue;
     }
     $_line_mix->loadRefPraticien();
+    if (!$show_premed_chir_fiche && !$_line_mix->_ref_praticien->isAnesth()) {
+      continue;
+    }
     $_line_mix->loadRefsLines();
     $lines[] = $_line_mix;
   }
