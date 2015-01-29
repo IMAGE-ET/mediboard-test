@@ -26,14 +26,11 @@ HyperTextLink = {
     return false;
   },
 
-  getListFor: function(object_id, object_class, show_only) {
+  getListFor: function(object_id, object_class) {
     var url = new Url('sante400'  , 'ajax_list_hypertextlinks');
     url.addParam('object_id'      , object_id);
     url.addParam('object_class'   , object_class);
-    if (Object.isUndefined(show_only)) {
-      show_only = 1;
-    }
-    url.addParam('show_only'      , show_only);
+    url.addParam('show_only'      , 0);
     url.requestUpdate('list-hypertext_links');
   },
 

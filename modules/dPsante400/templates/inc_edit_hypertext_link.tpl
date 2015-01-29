@@ -14,7 +14,7 @@
 <script>
   reloadListHypertextLinks = function() {
     Control.Modal.close();
-    HyperTextLink.getListFor('{{$hypertext_link->object_id}}', '{{$hypertext_link->object_class}}', 0);
+    HyperTextLink.getListFor('{{$hypertext_link->object_id}}', '{{$hypertext_link->object_class}}');
     return false;
   }
 </script>
