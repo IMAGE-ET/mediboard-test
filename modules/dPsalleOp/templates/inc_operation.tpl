@@ -251,7 +251,7 @@ printFicheBloc = function(interv_id) {
   url.popup(700, 700, 'FeuilleBloc');
 };
 
-loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
+loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const, show_header) {
   if (sejour_id) {
     var urlSuivi = new Url("hospi", "httpreq_vw_dossier_suivi");
     urlSuivi.addParam("sejour_id", sejour_id);
@@ -265,6 +265,9 @@ loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const
     }
     if (!Object.isUndefined(show_const)) {
       urlSuivi.addParam("_show_const", show_const);
+    }
+    if (!Object.isUndefined(show_header)) {
+      urlSuivi.addParam("show_header", show_header);
     }
     urlSuivi.requestUpdate("dossier_suivi");
   }

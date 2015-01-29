@@ -88,7 +88,7 @@
   }
 
   // Cette fonction est dupliquée
-  loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
+  loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const, show_header) {
     if(!sejour_id) return;
 
     updateNbTrans(sejour_id);
@@ -108,6 +108,9 @@
 
     if (!Object.isUndefined(show_const)) {
       urlSuivi.addParam("_show_const", show_const);
+    }
+    if (!Object.isUndefined(show_header)) {
+      urlSuivi.addParam("show_header", show_header);
     }
 
     urlSuivi.requestUpdate("dossier_suivi");
