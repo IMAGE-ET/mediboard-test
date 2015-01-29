@@ -80,7 +80,19 @@
         {{tr}}Modify{{/tr}}
       </button>
 
-      {{if !$sejour->sortie_reelle}}
+      {{if !$sejour->entree_reelle}}
+        <button class="tick" type="button"
+                onclick='Admissions.validerEntree("{{$sejour->_id}}", false);'>
+          Valider l'entrée
+        </button>
+      {{else}}
+        <button class="cancel" type="button"
+                onclick='Admissions.validerEntree("{{$sejour->_id}}", false);'>
+          Valider l'entrée
+        </button>
+      {{/if}}
+
+      {{if !$sejour->sortie_reelle && $sejour->entree_reelle}}
         <button class="tick" type="button"
                 onclick='Admissions.validerSortie("{{$sejour->_id}}", false);'>
           Valider la sortie
