@@ -76,6 +76,7 @@ if (!$naissance_id) {
   $patient->sexe = $sexe;
   $patient->civilite = "enf";
   $patient->naissance = $date;
+  $patient->_naissance = true;
   storeObject($patient);
 
   // Etape 2 (séjour)
@@ -113,7 +114,7 @@ if (!$naissance_id) {
     $affectation->parent_affectation_id = $curr_affect->_id;
     storeObject($affectation);
   }
-  
+
   // Etape 5 (naissance)
   $naissance = new CNaissance();
   $naissance->sejour_maman_id   = $sejour_maman_id;

@@ -47,6 +47,19 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $group    = $receiver->loadRefGroup();
 
     $patient  = $this->patient;
+
+    $mother       = null;
+    $sejour_maman = null;
+    if ($patient->_naissance_id) {
+      $naissance = new CNaissance();
+      $naissance->load($patient->_naissance_id);
+
+      $sejour_maman = $naissance->loadRefSejourMaman();
+      $sejour_maman->loadNDA($group->_id);
+
+      $sejour_maman->loadRefPatient()->loadIPP($group->_id);
+      $mother = $sejour_maman->_ref_patient;
+    }
     
     $data = array();
     // PID-1: Set ID - PID (SI) (optional)
@@ -85,7 +98,8 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
       );
     }
     else {
-      $data[] = null;
+      // Dans le cas d'une naissance on va mettre l'identité de la mère
+      $data[] = $mother ? $this->getXPN($mother, $receiver) : null;
     }
     
     // PID-7: Date/Time of Birth (TS) (optional)
@@ -287,7 +301,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
 
     // PID-20: Driver's License Number - Patient (DLN) (optional)
     $data[] = null;
-    
+    mbLog($mother);
     // PID-21: Mother's Identifier (CX) (optional repeating)
     if ($this->sejour) {
       $naissance = new CNaissance();
@@ -328,6 +342,31 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
       else {
         $data[] = null;
       }        
+    }
+    else if ($mother) {
+      $identifiers = array();
+      if ($mother->_IPP) {
+        $identifiers[] = array(
+          $mother->_IPP,
+          null,
+          null,
+          // PID-3-4 Autorité d'affectation
+          $this->getAssigningAuthority("FINESS", $group->finess),
+          "PI"
+        );
+      }
+      if ($sejour_maman->_NDA) {
+        $identifiers[] = array(
+          $sejour_maman->_NDA,
+          null,
+          null,
+          // PID-3-4 Autorité d'affectation
+          $this->getAssigningAuthority("FINESS", $group->finess),
+          "AN"
+        );
+      }
+
+      $data[] = $identifiers;
     }
     else {
       $data[] = null;

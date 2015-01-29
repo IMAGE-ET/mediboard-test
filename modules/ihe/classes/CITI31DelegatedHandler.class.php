@@ -305,7 +305,40 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return;
       }
 
-      $sejour_enfant = $mbObject->loadRefSejourEnfant();
+      $naissance = $mbObject;
+
+      // Création du patient
+
+      // Sejour de l'enfant
+      $sejour_enfant = $naissance->loadRefSejourEnfant();
+      $sejour_maman  = $naissance->loadRefSejourMaman();
+
+      $patient = $sejour_enfant->_ref_patient;
+      $patient->loadIPP($receiver->group_id);
+      $patient->_receiver  = $receiver;
+
+      $patient->_naissance_id = $naissance->_id;
+
+      if (!$this->isMessageSupported($this->transaction, $this->message, "A28", $receiver)) {
+        return;
+      }
+
+      if (!$patient->_IPP) {
+        if ($msg = $patient->generateIPP()) {
+          CAppUI::setMsg($msg, UI_MSG_ERROR);
+        }
+      }
+
+      // Envoi pas les patients qui n'ont pas d'IPP
+      if (!$receiver->_configs["send_all_patients"] && !$patient->_IPP) {
+        return;
+      }
+
+      $this->sendITI($this->profil, $this->transaction, $this->message, "A28", $patient);
+
+      $patient->_IPP = null;
+
+      /*
       $sejour_enfant->loadRefPatient();
       $sejour_enfant->_receiver = $receiver;
 
@@ -351,7 +384,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       $this->createMovement($code, $sejour_enfant, $current_affectation);
 
       // Envoi de l'événement
-      $this->sendITI($this->profil, $this->transaction, $this->message, $code, $sejour_enfant);
+      $this->sendITI($this->profil, $this->transaction, $this->message, $code, $sejour_enfant);*/
     }
   }
 
