@@ -12,7 +12,7 @@
 duplicateEndowment = function(endowment_id){
   var url = new Url("stock", "ajax_duplicate_endowment");
   url.addParam("endowment_id", endowment_id);
-  url.requestModal(400, 300);
+  url.requestModal(600, 300);
 }
 
 Main.add(function(){

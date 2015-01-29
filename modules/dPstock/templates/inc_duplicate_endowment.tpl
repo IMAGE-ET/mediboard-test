@@ -18,7 +18,16 @@ endowmentDuplicateCallback = function(id){
     
     <tr>
       <th>{{mb_label object=$endowment field="_duplicate_to_service_id"}}</th>
-      <td>{{mb_field object=$endowment field="_duplicate_to_service_id" form="duplicate_endowment" autocomplete="true,1,50,false,true"}}</td>
+      <td>
+        <select name="_duplicate_to_service_id" class="{{$endowment->_props._duplicate_to_service_id}}">
+          {{foreach from=$groups item=_group}}
+            <optgroup label="{{$_group->_view}}">
+              {{foreach from=$_group->_ref_services item=_service}}
+                <option value="{{$_service->_id}}">{{$_service}}</option>
+              {{/foreach}}
+            </optgroup>
+          {{/foreach}}
+        </select>
     </tr>
     
     <tr>
