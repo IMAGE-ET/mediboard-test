@@ -59,7 +59,7 @@ if ($mode_maternite) {
   $praticiens = $mediuser->loadListFromType(array("Sage Femme"));
 }
 elseif ($cabinet_id) {
-  $praticiens = CConsultation::loadPraticiens(PERM_READ, $cabinet_id, null, true);
+  $praticiens = CConsultation::loadPraticiens(PERM_EDIT, $cabinet_id, null, true);
   $cabinet->load($cabinet_id);
 }
 
