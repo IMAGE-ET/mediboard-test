@@ -59,7 +59,7 @@ if ($mode_maternite) {
   $praticiens = $mediuser->loadListFromType(array("Sage Femme"));
 }
 elseif ($cabinet_id) {
-  $praticiens = CConsultation::loadPraticiens(PERM_READ, $cabinet_id, null, true);
+  $praticiens = CConsultation::loadPraticiens(PERM_EDIT, $cabinet_id, null, true);
   $cabinet->load($cabinet_id);
 }
 
@@ -137,7 +137,7 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
     $_plage->loadRefsConsultations($canceled, $finished);
     // Collection par référence susceptible d'être modifiée
     $consultations =& $_plage->_ref_consultations;
-    
+
     if (!$paid || !$immediate) {
       $_consult = new CConsultation();
       foreach ($consultations as $_consult) {
