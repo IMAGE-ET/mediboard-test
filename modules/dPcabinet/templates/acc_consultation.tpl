@@ -30,7 +30,7 @@
 {{mb_script module=soins script=plan_soins}}
 {{mb_script module=planningOp script=cim10_selector}}
 <script>
-  function loadSuivi(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
+  function loadSuivi(sejour_id, user_id, cible, show_obs, show_trans, show_const, show_header) {
     if (!sejour_id) {
       return;
     }
@@ -46,6 +46,9 @@
     }
     if (!Object.isUndefined(show_const)) {
       urlSuivi.addParam("_show_const", show_const);
+    }
+    if (!Object.isUndefined(show_header)) {
+      urlSuivi.addParam("show_header", show_header);
     }
     urlSuivi.requestUpdate("dossier_suivi");
   }
