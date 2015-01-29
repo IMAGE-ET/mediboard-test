@@ -3630,6 +3630,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $template->addProperty("Hospitalisation - Date sortie longue", $this->getFormattedValue("sortie_prevue"));
     $this->loadNDA();
     $template->addProperty("Sejour - Numéro de dossier"       , $this->_NDA);
+    $template->addProperty("Sejour - Concerné par l'ALD"      , $this->getFormattedValue("ald"));
     $template->addBarcode("Sejour - Code barre ID"            , $this->_id);
     $template->addBarcode("Sejour - Code barre NDOS"          , $this->_NDA);
 
