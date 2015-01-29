@@ -176,8 +176,8 @@ class CAntecedent extends CMbObject {
    * @return void
    */
   function checkCodeCim10(){
-    preg_match_all("/[A-Z]\d{2}\.?\d{0,2}/i", $this->rques, $matches);
-    
+    preg_match_all("/\b[A-Z]\d{2}\.?\d{0,2}\b/i", $this->rques, $matches);
+
     foreach ($matches as $match_) {
       foreach ($match_ as &$match) {
         // Transformation du code CIM pour le tester
