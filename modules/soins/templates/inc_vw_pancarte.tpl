@@ -45,7 +45,7 @@
     url.requestUpdate("pancarte_line_"+prescription_id, {onComplete: PlanSoins.moveDossierSoin.curry($('plan_soin_pancarte'))});
   }
 
-  loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
+  loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const, show_header) {
     if(!sejour_id) return;
     updateNbTrans(sejour_id);
     var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
@@ -60,6 +60,9 @@
     }
     if (!Object.isUndefined(show_const)) {
       urlSuivi.addParam("_show_const", show_const);
+    }
+    if (!Object.isUndefined(show_header)) {
+      urlSuivi.addParam("show_header", show_header);
     }
     urlSuivi.requestUpdate("dossier_suivi");
   }
