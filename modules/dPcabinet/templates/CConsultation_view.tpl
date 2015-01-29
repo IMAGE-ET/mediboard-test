@@ -64,16 +64,16 @@
   
   <tr>
     <td class="button" colspan="2">
-      {{mb_script module="dPcabinet" script="consultation" ajax="true"}}
-      <button type="button" class="change" onclick="Consultation.plan('{{$consultation->_id}}')">
+      {{mb_script module="dPcabinet" script="edit_consultation" ajax="true"}}
+      <button type="button" class="change" onclick="Consultation.editRDVModal('{{$consultation->_id}}')">
         {{tr}}Rendez-vous{{/tr}}
       </button>
 
       {{if $object->_can->edit}}
-        <button type="button" class="edit" onclick="Consultation.edit('{{$consultation->_id}}')">
+        <button type="button" class="edit" onclick="Consultation.editModal('{{$consultation->_id}}')">
           {{tr}}CConsultation{{/tr}}
         </button>
-        <button type="button" class="edit" onclick="Consultation.edit('{{$consultation->_id}}', 'reglement')">
+        <button type="button" class="edit" onclick="Consultation.editModal('{{$consultation->_id}}',  'reglement')">
           {{tr}}Reglement{{/tr}}
         </button>
 

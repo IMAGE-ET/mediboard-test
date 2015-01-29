@@ -18,7 +18,9 @@
       <strong>
       {{if $plageSel->_id}}
         <button class="print notext" onclick="printPlage({{$plageSel->_id}})" style="float:right">{{tr}}Print{{/tr}}</button>
-        <a class="button new" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plageSel->_id}}" style="float:right;">Planifier dans cette plage</a>
+        <a class="button new" href="#" onclick="Consultation.editRDVModal(0, '{{$plageSel->chir_id}}', '{{$plageSel->_id}}');" style="float:right;">
+          Planifier dans cette plage
+        </a>
         {{mb_include module=system template=inc_object_notes object=$plageSel}}
           Consultations du {{$plageSel->date|date_format:$conf.longdate}}<br/>
           {{if $plageSel->chir_id != $chirSel}}
@@ -66,7 +68,7 @@
       <td {{$style|smarty:nodefaults}}>
         <div style="float: left">
         {{if $patient->_id}}
-          <a href="{{$href_consult}}">
+          <a href="#" onclick="Consultation.edit('{{$_consult->_id}}');">
             <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
               {{$_consult->heure|date_format:$conf.time}}
             </span>
@@ -85,7 +87,7 @@
         {{else}}
           <button class="edit notext button" style="float: right;"  title="Modifier le dossier administratif" onclick="Patient.editModal('{{$patient->_id}}')">Modifier le patient
           </button>
-          <a href="{{$href_consult}}">
+          <a href="#" onclick="Consultation.edit('{{$_consult->_id}}');">
           {{mb_value object=$patient}}
           </a>
         {{/if}}
@@ -142,13 +144,13 @@
           <input type="hidden" name="annule" value="1" />
         </form>
 
-        <a class="action" href="{{$href_planning}}">
+        <a class="action" href="#" onclick="Consultation.editRDVModal('{{$_consult->_id}}')">
           <img src="images/icons/planning.png" title="Modifier le rendez-vous" />
         </a>
         {{if !$_consult->annule}}
           {{if $_consult->chrono == $_consult|const:'PLANIFIE' && $patient->_id}}
             <button class="tick button notext" type="button" onclick="putArrivee(document.etatFrm{{$_consult->_id}})">Notifier l'arrivée du patient</button>
-            <button type="button" class="cancel button notext" onclick="if(confirm('Voulez-vous vraiment annuler cette consultation ?')) {document.cancelFrm{{$_consult->_id}}.submit()}">
+            <button type="button" class="cancel button notext" onclick="cancelRdv(document.cancelFrm{{$_consult->_id}});">
               Annuler ce rendez-vous
             </button>
           {{elseif $patient->_id}}
@@ -158,17 +160,17 @@
               {{mb_key object=$_consult}}
               <input type="hidden" name="annule" value="0" />
               <input type="hidden" name="chrono" value="{{$_consult|const:'PLANIFIE'}}" />
-              <button class="tick_cancel button notext" type="submit">Annuler l'arrivée</button>
             </form>
+            <button type="button" class="tick_cancel notext" onclick="cancelArrivee(document.cancel_arrive_{{$_consult->_id}})">Annuler l'arrivée</button>
           {{/if}}
         {{else}}
-          <form name="cancel_arrive_{{$_consult->_id}}" action="?m=dPcabinet" method="post">
+          <form name="cancel_annulation_{{$_consult->_id}}" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
             {{mb_key object=$_consult}}
             <input type="hidden" name="annule" value="0" />
-            <button class="undo button notext" type="submit">Rétablir</button>
           </form>
+          <button class="undo button notext" type="button" onclick="undoCancellation(document.cancel_annulation_{{$_consult->_id}});">Rétablir</button>
         {{/if}}
       </td>
       <td {{$style|smarty:nodefaults}} {{if $_consult->annule}}class="error"{{/if}}>

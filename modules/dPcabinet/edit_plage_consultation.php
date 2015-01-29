@@ -13,6 +13,7 @@ CCanDo::checkRead();
 
 $_firstconsult_time  = null;
 $_lastconsult_time   = null;
+$today = CMbDT::date();
 
 // L'utilisateur est-il praticien ?
 $chir = null;
@@ -23,13 +24,10 @@ if ($mediuser->isPraticien()) {
 
 // Praticien selectionné
 $chirSel = CValue::getOrSession("chirSel", $chir ? $chir->user_id : null);
-
-// Période
-$today = CMbDT::date();
-$debut = CValue::getOrSession("debut", $today);
-$debut = CMbDT::date("last sunday", $debut);
-$fin   = CMbDT::date("next sunday", $debut);
-$debut = CMbDT::date("+1 day", $debut);
+$date   = CValue::getOrSession("debut", $today);
+$debut  = CMbDT::date("last sunday", $date);
+$fin    = CMbDT::date("next sunday", $debut);
+$debut  = CMbDT::date("+1 day", $debut);
 
 $is_in_period = ($today >= $debut) && ($today <= $fin);
 
@@ -162,6 +160,7 @@ $smarty->assign("chirSel"           , $chirSel);
 $smarty->assign("plageSel"          , $plageSel);
 $smarty->assign("listChirs"         , $listChirs);
 $smarty->assign("pause"             , $pause);
+$smarty->assign("debut"             , $date);
 $smarty->assign("listDaysSelect"    , $listDaysSelect);
 $smarty->assign("holidays"          , $holidays);
 $smarty->assign("listHours"         , $hours);

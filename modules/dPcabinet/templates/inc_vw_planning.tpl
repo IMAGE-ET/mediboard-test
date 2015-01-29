@@ -10,18 +10,32 @@
 
 <script type="text/javascript">
   Main.add(function() {
-    ViewPort.SetAvlHeight("planning-plages", 1);
+    if ($('planning-plages')) {
+      ViewPort.SetAvlHeight("planning-plages", 1);
+    }
     $('planningWeek').setStyle({height : '{{$height_calendar}}px' });
-    Calendar.regField(getForm("changeDate").debut, null, {noView: true});
+
+    var form = getForm("changeDate");
+    if (form) {
+      Calendar.regField(getForm("changeDate").debut, null, {noView: true});
+    }
+
     window.save_dates = {
       prev: '{{$prev}}',
       next: '{{$next}}'
     };
-    $("debut_periode").update("{{$debut|date_format:"%A %d %b %Y"}}");
-    $("fin_periode").update("{{$fin|date_format:"%A %d %b %Y"}}");
+
+    if ($('debut_periode')) {
+      $("debut_periode").update("{{$debut|date_format:"%A %d %b %Y"}}");
+    }
+    if ($('fin_periode')) {
+      $("fin_periode").update("{{$fin|date_format:"%A %d %b %Y"}}");
+    }
     var button_desistement = $("desistement_count");
-    button_desistement.writeAttribute("disabled" {{if $count_si_desistement}}, null{{/if}});
-    button_desistement.down("span").update("({{$count_si_desistement}})");
+    if (button_desistement) {
+      button_desistement.writeAttribute("disabled" {{if $count_si_desistement}}, null{{/if}});
+      button_desistement.down("span").update("({{$count_si_desistement}})");
+    }
     
     $$(".body").each(function(elt) {
       elt.setStyle({backgroundColor: elt.up().getStyle("backgroundColor")});

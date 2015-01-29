@@ -22,6 +22,8 @@ $facturated     = CValue::get("facturated");
 $status         = CValue::get("status");
 $actes          = CValue::get("actes");
 
+$min_hour = 23;
+
 // gathering prat ids
 $ids = array();
 $function = new CFunctions();
@@ -207,12 +209,16 @@ for ($i = 0; $i < $nbDays; $i++) {
     $_plage->loadRefsConsultations(false);
     $_plage->loadRefChir()->loadRefFunction();
 
+    if (CMbDT::format($_plage->debut, "%H") < $min_hour) {
+      $min_hour = CMbDT::format($_plage->debut, "%H");
+    }
+
     // Affichage de la plage sur le planning
     $range = new CPlanningRange(
       $_plage->_guid,
       $jour." ".$_plage->debut,
       CMbDT::minutesRelative($_plage->debut, $_plage->fin),
-      CMbString::htmlEntities($_plage->libelle),
+      $_plage->libelle,
       $_plage->color
     );
     $range->type = "plageconsult";
@@ -265,6 +271,10 @@ for ($i = 0; $i < $nbDays; $i++) {
     $consults = $consult->loadList($whereC, "heure");
 
     foreach ($consults as $_consult) {
+
+      if ($_consult->heure < $min_hour) {
+        $min_hour = CMbDT::format($_consult->heure, "%H");
+      }
 
       if ($actes != "") {
         $_actes = $_consult->loadRefsActes();
@@ -377,14 +387,16 @@ for ($i = 0; $i < $nbDays; $i++) {
   }
 }
 
+$planning->hour_min = $min_hour;
+
 // conges
 foreach ($conges_day as $key => $_day) {
   $conges_day[$key] = implode(", ", $_day);;
 }
 
 $planning->rearrange(true);
-$smarty = new CSmartyDP();
 
+$smarty = new CSmartyDP();
 $smarty->assign("planning"            , $planning);
 $smarty->assign("debut"               , $debut);
 $smarty->assign("fin"                 , $fin);
@@ -398,5 +410,4 @@ $smarty->assign("today"               , $today);
 $smarty->assign("height_calendar"     , CAppUI::pref("height_calendar", "2000"));
 $smarty->assign("bank_holidays"       , $bank_holidays);
 $smarty->assign("count_si_desistement", $count_si_desistement);
-
 $smarty->display("inc_vw_planning.tpl");

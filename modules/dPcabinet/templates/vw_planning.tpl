@@ -1,3 +1,5 @@
+{{mb_script module=cabinet script=edit_consultation}}
+
 <script>
   // default value
   var target_plage_consult = '{{$plageSel->_id}}';
@@ -28,6 +30,20 @@ putArrivee =function (oForm) {
   var today = new Date();
   oForm.arrivee.value = today.toDATETIME(true);
   oForm.submit();
+};
+
+cancelArrivee = function(oForm) {
+  oForm.submit();
+};
+
+undoCancellation = function(oForm) {
+  oForm.submit();
+};
+
+cancelRdv = function(oForm) {
+  if(confirm('Voulez-vous vraiment annuler cette consultation ?')) {
+    oForm.submit()
+  }
 };
 
 goToDate = function (oForm, date) {

@@ -36,31 +36,49 @@ ListConsults = {
   }
 };
 
-Consultation = {
-  editRDV: function(consult_id) {
+Consultation = window.Consultation || {
+  editRDV: function(consult_id, chir_id, plage_id) {
     var url = new Url("dPcabinet", "edit_planning", "tab");
     url.addParam("consultation_id", consult_id);
+    if (chir_id) {
+      url.addParam('chir_id', chir_id);
+    }
+    if (plage_id) {
+      url.addParam('plageconsult_id', plage_id);
+    }
     url.redirect();
   },
 
-  editRDVModal: function(consult_id) {
+  editRDVModal: function(consult_id, chir_id, plage_id) {
     var url = new Url("dPcabinet", "edit_planning");
     url.addParam("consultation_id", consult_id);
+    if (chir_id) {
+      url.addParam('chir_id', chir_id);
+    }
+    if (plage_id) {
+      url.addParam('plageconsult_id', plage_id);
+    }
     url.modal({
       width: "95%",
       height: "95%"
     });
   },
   
-  edit: function(consult_id) {
+  edit: function(consult_id, fragment) {
     var url = new Url("dPcabinet", "edit_consultation", "tab");
     url.addParam("selConsult", consult_id);
+    if (fragment) {
+      url.setFragment(fragment);
+    }
     url.redirect();
   },
   
-  editModal: function (consult_id) {
+  editModal: function (consult_id, fragment) {
     var url = new Url("dPcabinet", "ajax_full_consult");
     url.addParam("consult_id", consult_id);
+    if (fragment) {
+      url.setFragment(fragment);
+    }
     url.modal({
       width: "95%",
       height: "95%"
@@ -82,6 +100,7 @@ Consultation = {
   modalCallback: function() {
     document.location.reload();
   },
+
   useModal: function() {
     this.edit    = this.editModal;
     this.editRDV = this.editRDVModal;
