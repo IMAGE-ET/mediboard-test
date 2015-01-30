@@ -71,6 +71,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   public $send_no_facturable;
   public $send_a42_onmerge;
   public $send_expected_discharge_with_affectation;
+  public $send_child_admit;
 
   // Build
   public $build_mode;
@@ -179,6 +180,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       "send_no_facturable",
       "send_a42_onmerge",
       "send_expected_discharge_with_affectation",
+      "send_child_admit",
     ),
     "PID" => array(
       "build_PID_3_4",
@@ -291,6 +293,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["send_no_facturable"]                       = "bool default|1";
     $props["send_a42_onmerge"]                         = "bool default|0";
     $props["send_expected_discharge_with_affectation"] = "bool default|1";
+    $props["send_child_admit"]                         = "bool default|1";
 
     // Build
     $props["build_mode"]                   = "enum list|normal|simple default|normal";

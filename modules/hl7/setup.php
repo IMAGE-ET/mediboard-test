@@ -1442,7 +1442,13 @@ class CSetuphl7 extends CSetup {
                 CHANGE `handle_PV1_10` `handle_PV1_10` ENUM ('discipline','service','finess') DEFAULT 'discipline';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.11";
+    $this->makeRevision("1.11");
+
+    $query = "ALTER TABLE `receiver_hl7v2_config`
+                ADD `send_child_admit` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.12";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
