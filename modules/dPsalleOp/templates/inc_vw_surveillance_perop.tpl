@@ -3,6 +3,15 @@
 {{assign var=dummy_yaxis_width value=12}}
 {{math assign=left_col_width equation="$yaxes_count*$yaxis_width-$right_margin/2+$dummy_yaxis_width"}}
 
+{{assign var=_readonly value=false}}
+{{if "maternite"|module_active && $interv->_ref_sejour->grossesse_id}}
+  {{assign var=_grossesse value=$interv->_ref_sejour->loadRefGrossesse()}}
+
+  {{if "maternite CGrossesse lock_partogramme"|conf:"CGroups-$g" && $_grossesse->datetime_accouchement}}
+    {{assign var=_readonly value=true}}
+  {{/if}}
+{{/if}}
+
 <script>
 window.previousPoint = null;
 
@@ -89,12 +98,14 @@ Main.add(function(){
     }
 
     function plotclick(event, pos, item){
-      if (!item) {
-        return;
-      }
+      {{if !$_readonly}}
+        if (!item) {
+          return;
+        }
 
-      var data = item.series.data[item.dataIndex];
-      editObservationResultSet(data.set_id, '{{$pack->_id}}', data.result_id);
+        var data = item.series.data[item.dataIndex];
+        editObservationResultSet(data.set_id, '{{$pack->_id}}', data.result_id);
+      {{/if}}
     }
 
     var ph, series, xaxes;
@@ -115,7 +126,9 @@ Main.add(function(){
         var plot = $.plot(ph, series, {
           grid: {
             hoverable: true,
-            clickable: true,
+            {{if !$_readonly}}
+              clickable: true,
+            {{/if}}
             markings: [
               // Debut op
               {xaxis: {from: 0, to: {{$time_debut_op}}}, color: "rgba(0,0,0,0.05)"},
@@ -329,11 +342,11 @@ printSurveillance = function(operation_id) {
   {{mb_return}}
 {{/if}}
 
-<button class="new" onclick="createObservationResultSet('{{$interv->_guid}}', '{{$pack->_id}}')">
+<button class="new" onclick="createObservationResultSet('{{$interv->_guid}}', '{{$pack->_id}}')" {{if $_readonly}} disabled {{/if}}>
   {{tr}}CObservationResultSet-title-create{{/tr}}
 </button>
 
-<button class="injection" onclick="editPeropAdministration('{{$interv->_id}}')">Administrer</button>
+<button class="injection" onclick="editPeropAdministration('{{$interv->_id}}')" {{if $_readonly}} disabled {{/if}}>Administrer</button>
 
 <button class="print" onclick="printSurveillance({{$interv->_id}})">Imprimer surveillance</button>
 
@@ -379,7 +392,7 @@ printSurveillance = function(operation_id) {
                   <div class="marking"></div>
                   <div class="label" title="{{$_evenement.datetime|date_format:$conf.datetime}}
 {{$_evenement.value|JSAttribute|replace:"\\n":"\n"|replace:"\\r":""}}">
-                    <a href="#" onclick="editObservationResultSet('{{$_evenement.set_id}}', '{{$pack->_id}}', '{{$_evenement.result_id}}')">
+                    <a href="#" {{if !$_readonly}} onclick="editObservationResultSet('{{$_evenement.set_id}}', '{{$pack->_id}}', '{{$_evenement.result_id}}')" {{/if}}>
                       {{$_evenement.value|truncate:60|nl2br}}
                     </a>
                   </div>
@@ -404,7 +417,7 @@ printSurveillance = function(operation_id) {
                 {{if $_picture.file_id && $_picture.position <= 100}}
                   <div style="position: absolute; left: {{$_picture.position}}%; margin-left: -25px; text-align: center; padding-top: 5px; cursor: pointer;"
                        title="{{$_picture.datetime|date_format:$conf.datetime}}"
-                       onclick="editObservationResultSet('{{$_picture.set_id}}', '{{$pack->_id}}', '{{$_picture.result_id}}')"
+                       {{if !$_readonly}} onclick="editObservationResultSet('{{$_picture.set_id}}', '{{$pack->_id}}', '{{$_picture.result_id}}')" {{/if}}
                     >
                     <span style="position: absolute; left: 20px; top: -2px; width: 10px;">^</span>
                     <img style="height: 50px;"
@@ -438,7 +451,7 @@ printSurveillance = function(operation_id) {
               <img src="{{$images.$_icon}}" />
             {{/if}}
 
-            {{if $_label == "CPrescription._chapitres.med"}}
+            {{if $_label == "CPrescription._chapitres.med" && !$_readonly}}
               <button class="add notext compact" onclick="editPeropAdministration('{{$interv->_id}}')"></button>
             {{/if}}
           </th>
@@ -486,7 +499,7 @@ printSurveillance = function(operation_id) {
         <th>
           {{tr}}{{$_label}}{{/tr}}
 
-          {{if $_label == "CAnesthPerop"}}
+          {{if $_label == "CAnesthPerop" && !$_readonly}}
             <div style="float: right;">
               <button class="new notext compact"
                       onclick="return editEvenementPerop('CAnesthPerop-0', '{{$interv->_id}}')"></button>
@@ -508,7 +521,7 @@ printSurveillance = function(operation_id) {
             <div onmouseover="ObjectTooltip.createEx(this, '{{$_evenement.object->_guid}}');" style="{{$evenement_width}}; {{if $_evenement.alert}} background: red; {{/if}}">
               <div class="marking"></div>
               <div class="label" title="{{$_evenement.datetime|date_format:$conf.datetime}} - {{if $_evenement.unit}}{{$_evenement.unit}}{{/if}} {{$_evenement.label}}">
-                {{if $_evenement.editable}}
+                {{if $_evenement.editable && !$_readonly}}
                   <a href="#{{$_evenement.object->_guid}}"
                      onclick="return editEvenementPerop('{{$_evenement.object->_guid}}', '{{$interv->_id}}')"
                     {{if $_evenement.alert}} style="color: red;" {{/if}}>

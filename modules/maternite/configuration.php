@@ -16,8 +16,9 @@ CConfiguration::register(
     "CGroups" => array(
       "maternite" => array(
         "CGrossesse" => array(
-          "min_check_terme" => "num default|7",
-          "max_check_terme" => 'num default|21',
+          "min_check_terme"  => "num default|7",
+          "max_check_terme"  => "num default|21",
+          "lock_partogramme" => "bool default|0",
         )
       )
     )
