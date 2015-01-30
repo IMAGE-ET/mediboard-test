@@ -2774,7 +2774,15 @@ class CSetupdPpatients extends CSetup {
                 ADD perimetre_hanches FLOAT UNSIGNED;";
     $this->addQuery($query);
 
-    $this->mod_version = '2.30';
+    $this->makeRevision('2.30');
+
+    $query = "ALTER TABLE `constantes_medicales`
+                ADD `capnometrie` INT(3) UNSIGNED,
+                ADD `sortie_lavage` INT(3) UNSIGNED,
+                ADD `coloration` INT(1) UNSIGNED;";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.31';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

@@ -851,6 +851,21 @@ class CConstantesMedicales extends CMbObject {
       'unit' => 'mmHg',
       'min' => 20, 'max' => 200
     ),
+    'capnometrie' => array(
+      'type' => 'biolo',
+      'unit' => '%',
+      'min' => 0, 'max' => 100
+    ),
+    'sortie_lavage' => array(
+      'type' => 'drain',
+      'unit' => 'ml',
+      'min' => 0, 'max' => 200,
+    ),
+    'coloration' => array(
+      'type' => 'physio',
+      'unit' => '%',
+      'min' => 0, 'max' => 4
+    ),
   );
 
   /** @var bool Used for making the params conversion (min, max and standard) only once */
@@ -1114,6 +1129,9 @@ class CConstantesMedicales extends CMbObject {
     $props['_urine_effective']       = 'float min|0';
     $props['echelle_confort']        = 'num min|0 max|10';
     $props['pres_artere_invasive']   = 'num min|20 max|200';
+    $props['capnometrie']            = 'num min|0 max|100';
+    $props['sortie_lavage']          = 'num min|20 max|200';
+    $props['coloration']             = 'num min|0 max|4';
     return $props;
   }
 
