@@ -63,7 +63,6 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
   public $_page_format;
   public $_orientation;
   public $_list_classes;
-  public $_date;
   public $_count_utilisation;
 
   // Distant field
@@ -166,8 +165,8 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
       "[PIED DE PAGE FACT ETAB]"      => "footer"
     ),
     "CPatient" => array(
-     "[ENTETE MOZAIC]" => "header",
-     "[PIED DE PAGE MOZAIC]" => "footer"
+     "[ENTETE MOZAIC]"                => "header",
+     "[PIED DE PAGE MOZAIC]"          => "footer"
     )
   );
 
@@ -250,8 +249,8 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     $props["_source"]          = "html helped|_list_classes";
     $props["_entire_doc"]      = "html";
     $props["_ids_corres"]      = "str";
-    $props["_date"]            = "dateTime show|1";
     $props["creation_date"]    = "dateTime";
+    $props["_file_size"]       = "str show|0";
 
     return $props;
   }
@@ -772,7 +771,6 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     parent::loadView();
     $this->loadContent();
     $this->loadFile();
-    $this->_date = $this->loadFirstLog()->date;
   }
 
   /**
