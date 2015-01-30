@@ -144,7 +144,7 @@
         {{foreach from=$calendar->classes_for_days.$_day item=_class}}{{$_class}} {{/foreach}}
         {{if $_day >= $calendar->date_min && $_day <= $calendar->date_max}}date_in_month{{else}}date_not_in_month{{/if}}
         {{if $calendar->today == $_day}} today{{/if}}
-        {{if $oday->ferie}} ferie{{/if}}" style="height:{{math equation="100/a" a=$_week_nb}}%">
+        {{if $oday->ferie}} ferie{{/if}}" data-day="{{$_day}}" style="height:{{math equation="100/a" a=$_week_nb}}%">
 
             <div class="day_events">
               <p class="day_number">{{$_day|date_format:"%e"}}{{if $oday->ferie}} ({{$calendar->_ref_holidays.$_day}}){{/if}}</p>
