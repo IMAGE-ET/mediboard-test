@@ -1,7 +1,7 @@
 <?php /** $Id */
 
 /**
- * Class usef for calendar duration
+ * Class used for calendar duration
  *
  * @category Classes
  * @package  Mediboard
