@@ -2,6 +2,8 @@
 
 <script>
 
+  Consultation.useModal();
+
   see_consult_without_dhe = function(sdate) {
     var url = new Url("admissions", "httpreq_vw_preadmissions");
     url.addParam("filter", "dhe");
