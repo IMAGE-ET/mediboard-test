@@ -61,6 +61,7 @@ foreach ($sejours as $_sejour) {
   
   $templateManager = new CTemplateManager();
   $templateManager->isModele = false;
+  $templateManager->document = $source;
   $_sejour->fillTemplate($templateManager);
   $templateManager->applyTemplate($compte_rendu);
   $compte_rendu->_source = $templateManager->document;
