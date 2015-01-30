@@ -48,7 +48,7 @@ $calendar->title = htmlentities(CMbDT::format($date, "%B %Y"));
 foreach ($prats as $_prat) {
 
   // plages de congés (si mode prat)
-  if (!$function_id) {
+  if (!$function_id && CModule::getActive("dPpersonnel")) {
     $plage_cong = new CPlageConge();
     $plages_cong = $plage_cong->loadListForRange($_prat->_id, $calendar->date_min, $calendar->date_max);
     foreach ($plages_cong as $_conge) {
