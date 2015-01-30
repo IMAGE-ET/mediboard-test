@@ -217,6 +217,7 @@ class CPatient extends CPerson {
   public $_poids;
   public $_age_epoque;
   public $_naissance;
+  public $_naissance_id;
 
   // Vitale behaviour
   public $_bind_vitale;
@@ -269,9 +270,6 @@ class CPatient extends CPerson {
 
   /** @var CPatient */
   public $_patient_elimine; // fusion
-
-  /** @var CPatient */
-  public $_naissance_id;
 
   public $_nb_docs;
   public $_total_docs;

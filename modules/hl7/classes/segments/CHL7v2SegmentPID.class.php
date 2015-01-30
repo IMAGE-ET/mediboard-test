@@ -50,6 +50,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
 
     $mother       = null;
     $sejour_maman = null;
+    $naissance    = null;
     if ($patient->_naissance_id) {
       $naissance = new CNaissance();
       $naissance->load($patient->_naissance_id);
@@ -103,7 +104,10 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     }
     
     // PID-7: Date/Time of Birth (TS) (optional)
-    if ($patient->naissance) {
+    if ($patient->_naissance_id) {
+      $data[] = $naissance->date_time;
+    }
+    else if ($patient->naissance) {
       $data[] = CMbDT::isLunarDate($patient->naissance) ? null : $patient->naissance;
     }
     else {
@@ -301,20 +305,31 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
 
     // PID-20: Driver's License Number - Patient (DLN) (optional)
     $data[] = null;
-    mbLog($mother);
+
     // PID-21: Mother's Identifier (CX) (optional repeating)
     if ($this->sejour) {
       $naissance = new CNaissance();
       $naissance->sejour_enfant_id = $this->sejour->_id;
       $naissance->loadMatchingObject();
 
+      // Même traitement que pour l'IPP
+      switch ($receiver->_configs["build_PID_3_4"]) {
+        case 'actor':
+          $assigning_authority = $this->getAssigningAuthority("actor", null, $receiver);
+          break;
+
+        default:
+          $assigning_authority = $this->getAssigningAuthority("FINESS", $group->finess);
+          break;
+      }
+
       if ($naissance->_id) {
         $sejour_maman = $naissance->loadRefSejourMaman();
         $sejour_maman->loadNDA($group->_id);
-        
+
         $sejour_maman->loadRefPatient()->loadIPP($group->_id);
         $mother = $sejour_maman->_ref_patient;
-        
+
         $identifiers = array();
         if ($mother->_IPP) {
           $identifiers[] = array(
@@ -322,7 +337,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
             null,
             null,
             // PID-3-4 Autorité d'affectation
-            $this->getAssigningAuthority("FINESS", $group->finess),
+            $assigning_authority,
             "PI"
           );
         }
@@ -332,7 +347,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
             null,
             null,
             // PID-3-4 Autorité d'affectation
-            $this->getAssigningAuthority("FINESS", $group->finess),
+            $assigning_authority,
             "AN"
           );
         }
@@ -341,7 +356,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
       }
       else {
         $data[] = null;
-      }        
+      }
     }
     else if ($mother) {
       $identifiers = array();

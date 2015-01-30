@@ -1274,8 +1274,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
    */
   function mappingVenue($data, CSejour $newVenue) {
     $event_code = $this->_ref_exchange_hl7v2->code;
-    // Cas spécifique de certains segments
 
+    // Cas spécifique de certains segments
     // A14 : Demande de pré-admission
     if ($event_code == "A14") {
       $newVenue->recuse = -1;

@@ -308,10 +308,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       $naissance = $mbObject;
 
       // Création du patient
-
-      // Sejour de l'enfant
       $sejour_enfant = $naissance->loadRefSejourEnfant();
-      $sejour_maman  = $naissance->loadRefSejourMaman();
 
       $patient = $sejour_enfant->_ref_patient;
       $patient->loadIPP($receiver->group_id);
