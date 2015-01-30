@@ -368,7 +368,8 @@ for ($i = 0; $i < $nbDays; $i++) {
 
       if ($_consult->patient_id) {
         $event->draggable /*= $event->resizable */ = $can_edit;
-        $event->hour_divider = 60 / CMbDT::transform($_plage->freq, null, "%M");
+        $freq = $_plage->freq ? CMbDT::transform($_plage->freq, null, "%M") : 1 ;
+        $event->hour_divider = 60 / $freq;
 
         if ($can_edit) {
           $event->addMenuItem("copy", "Copier cette consultation");
