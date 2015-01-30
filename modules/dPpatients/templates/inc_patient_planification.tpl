@@ -21,7 +21,10 @@
     url.addParam('consult_related_id', consult_id);
     url.addParam('operation_id', 0);
     url.addParam('sejour_id', 0);
-    url.redirect();
+    url.modal({
+      width: "95%",
+      height: "95%"
+    });
   };
 
   newHorsPlage = function(chir_id, pat_id, consult_id) {
@@ -32,7 +35,10 @@
     url.addParam('consult_related_id', consult_id);
     url.addParam('operation_id', 0);
     url.addParam('sejour_id', 0);
-    url.redirect();
+    url.modal({
+      width: "95%",
+      height: "95%"
+    });
   };
 
   newSejour = function(chir_id, pat_id, consult_id) {
@@ -42,7 +48,10 @@
     url.addParam('patient_id', pat_id);
     url.addParam('consult_related_id', consult_id);
     url.addParam('sejour_id', 0);
-    url.redirect();
+    url.modal({
+      width: "95%",
+      height: "95%"
+    });
   };
 
   newConsultation = function(chir_id, pat_id, consult_urgence_id) {
@@ -52,7 +61,10 @@
     url.addParam('pat_id', pat_id);
     url.addParam('consult_urgence_id', consult_urgence_id);
     url.addParam('consultation_id', 0);
-    url.redirect();
+    url.modal({
+      width: "95%",
+      height: "95%"
+    });
   };
 </script>
 
