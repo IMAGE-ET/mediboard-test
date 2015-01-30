@@ -109,10 +109,12 @@ for ($i = 0; $i < $nbDays; $i++) {
 
   // conges dans le header
   if (count($users)) {
-    $_conges = CPlageConge::loadForIdsForDate(array_keys($users), $jour);
-    foreach ($_conges as $key => $_conge) {
-      $_conge->loadRefUser();
-      $conges_day[$i][] = $_conge->_ref_user->_shortview;
+    if (CModule::getInstalled("dPpersonnel")) {
+      $_conges = CPlageConge::loadForIdsForDate(array_keys($users), $jour);
+      foreach ($_conges as $key => $_conge) {
+        $_conge->loadRefUser();
+        $conges_day[$i][] = $_conge->_ref_user->_shortview;
+      }
     }
   }
   $where["date"] = $whereInterv["date"] = $whereHP["date"] = "= '$jour'";
@@ -172,29 +174,31 @@ for ($i = 0; $i < $nbDays; $i++) {
   }
 
   // PLAGES CONGE
-  $conge = new CPlageConge();
-  $where_conge = array();
-  $where_conge["date_debut"] = " <= '$jour' ";
-  $where_conge["date_fin"] = " >= '$jour' ";
-  $where_conge["user_id"] = "= '$chirSel'";
-  /** @var CPlageconge[] $conges */
-  $conges = $conge->loadList($where_conge);
-  foreach ($conges as $_conge) {
-    $libelle = '<h3 style="text-align: center">
+  if (CModule::getInstalled("dPpersonnel")) {
+    $conge = new CPlageConge();
+    $where_conge = array();
+    $where_conge["date_debut"] = " <= '$jour' ";
+    $where_conge["date_fin"] = " >= '$jour' ";
+    $where_conge["user_id"] = "= '$chirSel'";
+    /** @var CPlageconge[] $conges */
+    $conges = $conge->loadList($where_conge);
+    foreach ($conges as $_conge) {
+      $libelle = '<h3 style="text-align: center">
     CONGES</h3>
-    <p style="text-align: center">'.CMbString::htmlEntities($_conge->libelle).'</p>';
-    $event = new CPlanningEvent(
-      $_conge->_guid.$jour,
-      $jour." 00:00:00",
-      1440,       // 1440 min = 1 day
-      $libelle,
-      "#dddddd",
-      true,
-      "hatching",
-      null,
-      false
-    );
-    $planning->addEvent($event);
+    <p style="text-align: center">' . CMbString::htmlEntities($_conge->libelle) . '</p>';
+      $event = new CPlanningEvent(
+        $_conge->_guid . $jour,
+        $jour . " 00:00:00",
+        1440,       // 1440 min = 1 day
+        $libelle,
+        "#dddddd",
+        true,
+        "hatching",
+        null,
+        false
+      );
+      $planning->addEvent($event);
+    }
   }
 
   //PLAGES CONSULT
