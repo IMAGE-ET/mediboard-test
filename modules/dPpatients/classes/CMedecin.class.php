@@ -166,11 +166,13 @@ class CMedecin extends CPerson {
     $this->mapPerson();
 
     if ($this->type == 'medecin') {
-      $this->_view = "Dr $this->nom $this->prenom";
+      $this->_shortview    = "$this->nom $this->prenom";
+      $this->_view         = "Dr $this->nom $this->prenom";
       $this->_article_long = CAppUI::tr("CMedecin-_civilite_longue_article.$this->sexe");   // Mr le, Mme le
     }
     else {
-      $this->_view = "$this->nom $this->prenom";
+      $this->_shortview    = "$this->nom $this->prenom";
+      $this->_view         = "$this->nom $this->prenom";
       $this->_article_long = CAppUI::tr("CMedecin-_civilite_longue.$this->sexe");   // Mr, Mme
       if ($this->type) {
         $this->_view .= " ({$this->_specs['type']->_locales[$this->type]})";

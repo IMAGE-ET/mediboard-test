@@ -730,6 +730,17 @@ class CPatient extends CPerson {
   }
 
   /**
+   * @see parent::getPerm()
+   */
+  function getPerm($permType) {
+    if($this->_id && $this->function_id) {
+      $this->loadRefFunction();
+      return $this->_ref_function->getPerm($permType) && parent::getPerm($permType);
+    }
+    return parent::getPerm($permType);
+  }
+
+  /**
    * Génération de l'IPP du patient
    *
    * @return null|string
