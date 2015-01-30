@@ -20,7 +20,7 @@
       ({{$patient->_age}}
       {{if $patient->_annees != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
       &mdash; Dr {{$selOp->_ref_chir->_view}}
-      {{if $sejour->_ref_curr_affectation->_id}}- {{$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view}}{{/if}}
+      {{if $sejour->_ref_curr_affectation && $sejour->_ref_curr_affectation->_ref_lit && $sejour->_ref_curr_affectation->_ref_lit->_ref_chambre}}- {{$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view}}{{/if}}
       <br />
 
       {{mb_include module=planningOp template=inc_reload_infos_interv operation=$selOp}}
