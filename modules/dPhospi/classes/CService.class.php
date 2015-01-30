@@ -255,6 +255,45 @@ class CService extends CMbObject {
   }
 
   /**
+   * Charge les affectations situées dans un couloir du service
+   *
+   * @param string $date               Date
+   * @param bool   $with_effectue      Avec effectue
+   * @param bool   $with_sortie_reelle Avec sortie reelle
+   *
+   * @return CAffectation[]
+   */
+  function loadRefsAffectationsCouloir($date, $with_effectue = true, $with_sortie_reelle = false) {
+    $ljoin = array();
+    $where = array (
+      "affectation.service_id" => "= '$this->_id'",
+      "affectation.entree" => "<= '$date 23:59:59'",
+      "affectation.sortie" => ">= '$date 00:00:00'"
+    );
+
+    if (!$with_effectue) {
+      if ($with_sortie_reelle) {
+        $complement = "";
+        if ($date == CMbDT::date()) {
+          $ljoin["sejour"] = "affectation.sejour_id = sejour.sejour_id";
+          $complement = "OR (sejour.sortie_reelle >= '".CMbDT::dateTime()."' AND affectation.sortie >= '".CMbDT::dateTime()."')";
+        }
+        $where[] = "affectation.effectue = '0' $complement";
+      }
+      else {
+        $where["affectation.effectue"] = "= '0'";
+      }
+    }
+
+    $where["affectation.lit_id"] = "IS NULL";
+
+    $order = "affectation.sortie DESC";
+
+    $affectation = new CAffectation();
+    return $this->_ref_affectations_couloir = $affectation->loadList($where, $order, null, null, $ljoin);
+  }
+
+  /**
    * @return CGroups
    */
   function loadRefGroup() {

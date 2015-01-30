@@ -337,6 +337,37 @@ if ($service_id) {
         }
       }
     }
+
+    $service->loadRefsAffectationsCouloir($date, $mode, true);
+
+    foreach ($service->_ref_affectations_couloir as $_affectation) {
+      $_affectation->loadRefSejour();
+
+      if ($_is_anesth || ($_is_praticien && $_affectation->_ref_sejour->praticien_id == $userCourant->user_id)) {
+        $tab_sejour[$_affectation->_ref_sejour->_id]= $_affectation->_ref_sejour;
+      }
+      $sejour = $_affectation->_ref_sejour;
+      $sejour->loadRefPraticien();
+      $sejour->loadRefPatient();
+      $sejour->loadRefsPrescriptions();
+      $sejour->_ref_praticien->loadRefFunction();
+      $count_my_patient += count($sejour->loadRefsUserSejour($userCourant));
+
+      $_affectation->loadRefsAffectations();
+      if ($_affectation->_ref_sejour->_ref_prescriptions) {
+        if (array_key_exists('sejour', $_affectation->_ref_sejour->_ref_prescriptions)) {
+          $prescription_sejour = $_affectation->_ref_sejour->_ref_prescriptions["sejour"];
+          $prescription_sejour->countNoValideLines();
+          if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
+            $prescription_sejour->_count_alertes  = $prescription_sejour->countAlertsNotHandled("medium");
+            $prescription_sejour->_count_urgences = $prescription_sejour->countAlertsNotHandled("high");
+          }
+          else {
+            $prescription_sejour->countFastRecentModif();
+          }
+        }
+      }
+    }
   }
   $sejoursParService[$service->_id] = $service;
 }

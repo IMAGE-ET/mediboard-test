@@ -346,7 +346,7 @@
                   <span style="float: left;">{{$curr_chambre}} - {{$curr_lit->_shortview}}</span>
                   {{/if}}
                 </th>
-              </tr> 
+              </tr>
               {{foreach from=$curr_lit->_ref_affectations item=curr_affectation}}
               {{if $curr_affectation->_ref_sejour->_id != ""}}
                 {{assign var=sejour value=$curr_affectation->_ref_sejour}}
@@ -381,12 +381,12 @@
                     </div>
                   {{/if}}
                 </td>
-                
+
                 <td class="text">
                   {{assign var=aff_next value=$curr_affectation->_ref_next}}
                   {{assign var=sejour value=$curr_affectation->_ref_sejour}}
 
-                  <a class="text" href="#1" 
+                  <a class="text" href="#1"
                      onclick="loadViewSejour('{{$sejour->_id}}',  '{{$date}}', this);">
                     <span class="{{if !$sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $sejour->septique}}septique{{/if}}" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
                       {{$sejour->_ref_patient->_view}}
@@ -420,7 +420,7 @@
                   {{/if}}
                   {{mb_include module=dPfiles template=inc_icon_category_check object=$sejour}}
                 </td>
-                
+
                 <td class="action" style="padding: 1px;">
                   <span>
                     {{if $sejour->type == "ambu"}}
@@ -441,7 +441,7 @@
                   </span>
                   <div class="mediuser" style="border-color:#{{$sejour->_ref_praticien->_ref_function->color}}; display: inline;">
                     <label title="{{$sejour->_ref_praticien->_view}}">
-                    {{$sejour->_ref_praticien->_shortview}}          
+                    {{$sejour->_ref_praticien->_shortview}}
                     </label>
                   </div>
                 </td>
@@ -450,6 +450,114 @@
             {{/foreach}}
             {{/foreach}}
             {{/foreach}}
+            {{if $service->_ref_affectations_couloir && $service->_ref_affectations_couloir|@count != 0}}
+              <tr>
+                <th class="category" colspan="6">
+                  Couloir
+                </th>
+              </tr>
+              {{foreach from=$service->_ref_affectations_couloir item=curr_affectation}}
+                {{if $curr_affectation->_ref_sejour->_id != ""}}
+                {{assign var=sejour value=$curr_affectation->_ref_sejour}}
+              <tr class="{{if $object->_id == $curr_affectation->_ref_sejour->_id}}selected{{/if}} {{$sejour->type}}">
+                <td style="padding: 0;">
+                  <button class="lookup notext" style="margin:0;" onclick="popEtatSejour({{$sejour->_id}});">
+                    {{tr}}Lookup{{/tr}}
+                  </button>
+                  {{if @$modules.dPplanningOp->_can->admin}}
+                    <button class="mediuser_black notext" onclick="paramUserSejour({{$curr_affectation->sejour_id}});" style="margin-right: 5px;"
+                            onmouseover="ObjectTooltip.createDOM(this, 'affectation_CSejour-{{$sejour->_id}}')";></button>
+                    <span class="countertip" style="margin-top:1px;margin-left: -10px;">
+                      <span class="{{if !$sejour->_ref_users_sejour|@count}}empty{{/if}}">{{$sejour->_ref_users_sejour|@count}}</span>
+                    </span>
+                    <div style="display: none" id="affectation_CSejour-{{$curr_affectation->sejour_id}}">
+                      <table class="tbl">
+                        {{foreach from=$sejour->_ref_users_by_type item=_users key=type}}
+                          <tr>
+                            <th>{{tr}}CUserSejour.{{$type}}{{/tr}}</th>
+                          </tr>
+                          {{foreach from=$_users item=_user}}
+                            <tr>
+                              <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_user->_ref_user}}</td>
+                            </tr>
+                          {{foreachelse}}
+                            <tr>
+                              <td class="empty">{{tr}}CUserSejour.none{{/tr}}</td>
+                            </tr>
+                          {{/foreach}}
+                        {{/foreach}}
+                      </table>
+                    </div>
+                  {{/if}}
+                </td>
+
+                <td class="text">
+                  {{assign var=aff_next value=$curr_affectation->_ref_next}}
+                  {{assign var=sejour value=$curr_affectation->_ref_sejour}}
+
+                  <a class="text" href="#1"
+                     onclick="loadViewSejour('{{$sejour->_id}}',  '{{$date}}', this);">
+                    <span class="{{if !$sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $sejour->septique}}septique{{/if}}" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
+                      {{$sejour->_ref_patient->_view}}
+                    </span>
+                  </a>
+                </td>
+
+                {{if "soins dossier_soins show_ampoule_patient"|conf:"CGroups-$g"}}
+                  <td>
+                    {{if $sejour->_ref_prescriptions && array_key_exists('sejour', $sejour->_ref_prescriptions)}}
+                      {{assign var=prescription value=$sejour->_ref_prescriptions.sejour}}
+                      {{if $prescription->_id}}
+                        {{if @$conf.object_handlers.CPrescriptionAlerteHandler}}
+                          {{mb_script module=system script=alert}}
+                          {{mb_include module=system template=inc_icon_alerts object=$prescription nb_alerts=$prescription->_count_alertes}}
+                          {{mb_include module=system template=inc_icon_alerts object=$prescription level="high"
+                          nb_alerts=$prescription->_count_urgences}}
+                        {{elseif $prescription->_count_fast_recent_modif}}
+                          <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
+                          {{mb_include module=system template=inc_vw_counter_tip count=$prescription->_count_fast_recent_modif top="-5px" right="-15px"}}
+                        {{/if}}
+                      {{/if}}
+                    {{/if}}
+                  </td>
+                {{/if}}
+                <td style="padding: 1px;" >
+                  {{if $isImedsInstalled}}
+                    <div class="Imeds_button" onclick="loadViewSejour('{{$sejour->_id}}', '{{$date}}', this, 'Imeds');">
+                      {{mb_include module=Imeds template=inc_sejour_labo link="#"}}
+                    </div>
+                  {{/if}}
+                  {{mb_include module=dPfiles template=inc_icon_category_check object=$sejour}}
+                </td>
+
+                <td class="action" style="padding: 1px;">
+                  <span>
+                    {{if $sejour->type == "ambu"}}
+                      <img src="modules/dPhospi/images/X{{$suffixe_icons}}.png" alt="X" title="Ambulatoire" />
+                    {{elseif $curr_affectation->sortie|iso_date == $demain}}
+                      {{if $aff_next->_id}}
+                        <img src="modules/dPhospi/images/OC{{$suffixe_icons}}.png" alt="OC" title="Déplacé demain" />
+                      {{else}}
+                        <img src="modules/dPhospi/images/O{{$suffixe_icons}}.png" alt="O" title="Sortant demain" />
+                      {{/if}}
+                    {{elseif $curr_affectation->sortie|iso_date == $date}}
+                      {{if $aff_next->_id}}
+                        <img src="modules/dPhospi/images/OoC{{$suffixe_icons}}.png" alt="OoC" title="Déplacé aujourd'hui" />
+                      {{else}}
+                        <img src="modules/dPhospi/images/Oo{{$suffixe_icons}}.png" alt="Oo" title="Sortant aujourd'hui" />
+                      {{/if}}
+                    {{/if}}
+                  </span>
+                  <div class="mediuser" style="border-color:#{{$sejour->_ref_praticien->_ref_function->color}}; display: inline;">
+                    <label title="{{$sejour->_ref_praticien->_view}}">
+                    {{$sejour->_ref_praticien->_shortview}}
+                    </label>
+                  </div>
+                </td>
+              </tr>
+            {{/if}}
+            {{/foreach}}
+            {{/if}}
             {{/if}}
            {{/foreach}}
 
