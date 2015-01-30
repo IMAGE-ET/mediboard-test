@@ -18,7 +18,6 @@
           }
         });
 
-
     var oform = getForm('guess_caesarean');
     Calendar.regField(oform.start);
     Calendar.regField(oform.end);

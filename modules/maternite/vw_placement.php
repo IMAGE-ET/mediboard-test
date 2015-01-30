@@ -21,6 +21,7 @@ $listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ, true, "nom", array("ty
 $salle = new CSalle();
 $ljoin = array("bloc_operatoire" => "sallesbloc.bloc_id = bloc_operatoire.bloc_operatoire_id");
 $where = array("bloc_operatoire.type" => "= 'obst'");
+/** @var CSalle[] $listSalles */
 $listSalles = $salle->loadListWithPerms(PERM_READ, $where, null, null, null, $ljoin);
 
 // Chargement des Chirurgiens
