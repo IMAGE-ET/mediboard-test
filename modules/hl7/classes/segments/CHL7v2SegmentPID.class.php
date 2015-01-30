@@ -307,21 +307,21 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $data[] = null;
 
     // PID-21: Mother's Identifier (CX) (optional repeating)
+    // Même traitement que pour l'IPP
+    switch ($receiver->_configs["build_PID_3_4"]) {
+      case 'actor':
+        $assigning_authority = $this->getAssigningAuthority("actor", null, $receiver);
+        break;
+
+      default:
+        $assigning_authority = $this->getAssigningAuthority("FINESS", $group->finess);
+        break;
+    }
+
     if ($this->sejour) {
       $naissance = new CNaissance();
       $naissance->sejour_enfant_id = $this->sejour->_id;
       $naissance->loadMatchingObject();
-
-      // Même traitement que pour l'IPP
-      switch ($receiver->_configs["build_PID_3_4"]) {
-        case 'actor':
-          $assigning_authority = $this->getAssigningAuthority("actor", null, $receiver);
-          break;
-
-        default:
-          $assigning_authority = $this->getAssigningAuthority("FINESS", $group->finess);
-          break;
-      }
 
       if ($naissance->_id) {
         $sejour_maman = $naissance->loadRefSejourMaman();
@@ -366,7 +366,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
           null,
           null,
           // PID-3-4 Autorité d'affectation
-          $this->getAssigningAuthority("FINESS", $group->finess),
+          $assigning_authority,
           "PI"
         );
       }
@@ -376,7 +376,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
           null,
           null,
           // PID-3-4 Autorité d'affectation
-          $this->getAssigningAuthority("FINESS", $group->finess),
+          $assigning_authority,
           "AN"
         );
       }
