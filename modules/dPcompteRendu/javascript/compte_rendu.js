@@ -123,7 +123,12 @@ function saveAndMerge() {
 function checkLock(oCheckbox) {
   if ($V(oCheckbox) == 1) {
     Modal.open('lock_area', {width: '400px', height: '330px'});
-    getForm('LockDocOther').user_password.focus();
+
+    var lockForm = getForm('LockDocOther');
+    var editForm = getForm('editFrm');
+
+    lockForm.user_password.focus();
+    lockForm.down(".change-owner-container").setVisible($V(editForm.elements.private) == 1);
   }
   else {
     var form = oCheckbox.form;
