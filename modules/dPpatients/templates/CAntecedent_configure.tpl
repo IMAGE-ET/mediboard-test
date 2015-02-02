@@ -3,12 +3,28 @@
 <script>
   var oTokenTypes = null;
   var oTokenAppareils   = null;
+  checkAntecedents = function() {
+    var form = getForm('EditConfig-{{$class}}');
+    var fieldTypes      = $V(form["dPpatients[CAntecedent][types]"]).split('|');
+
+    $$('input.manda_types_class').each(function(_elt) {
+      var _val = _elt.value;
+      if (!fieldTypes.include(_val)) {
+        $(_elt).up('div').hide();
+      }
+      else {
+        $(_elt).up('div').show();
+      }
+    });
+  };
+
   Main.add(function () {
+    checkAntecedents();
     var form = getForm("EditConfig-{{$class}}");
     var fieldTypes      = form["dPpatients[CAntecedent][types]"];
     var fieldTypesManda = form["dPpatients[CAntecedent][mandatory_types]"];
     var fieldAppareils  = form["dPpatients[CAntecedent][appareils]"];
-    oTokenTypes       = new TokenField(fieldTypes);
+    oTokenTypes       = new TokenField(fieldTypes, {onChange : checkAntecedents});
     oTokenTypesManda  = new TokenField(fieldTypesManda);
     oTokenAppareils   = new TokenField(fieldAppareils);
   });
@@ -137,7 +153,7 @@
         {{foreach from=$all_mandatory_types item=_type}}
           <div {{if in_array($_type, $static_non_types)}}class="opacity-50"{{/if}} style="width: 16em; float: left;">
           <label>
-            <input type="checkbox" name="types_antecedents[]" value="{{$_type}}"
+            <input type="checkbox" name="types_antecedents[]" value="{{$_type}}" class="manda_types_class"
             onchange="oTokenTypesManda.toggle('{{$_type}}', this.checked)"
             {{if in_array($_type, $mandatory_types)}}checked="checked"{{/if}}
               />
