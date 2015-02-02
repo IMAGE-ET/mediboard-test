@@ -145,13 +145,13 @@ ProtocoleSelector = {
 
     $V(oSejourForm[this.sDuree_prevu_heure], protocole.duree_heure_hospi);
 
-    if (this.sUf_hebergement_id) {
+    if (this.sUf_hebergement_id && oSejourForm[this.sUf_hebergement_id] && !oSejourForm[this.sUf_hebergement_id].value) {
       $V(oSejourForm[this.sUf_hebergement_id], protocole.uf_hebergement_id);
     }
-    if (this.sUf_medicale_id) {
+    if (this.sUf_medicale_id && oSejourForm[this.sUf_medicale_id] && !oSejourForm[this.sUf_medicale_id].value) {
       $V(oSejourForm[this.sUf_medicale_id], protocole.uf_medicale_id);
     }
-    if (this.sUf_soins_id) {
+    if (this.sUf_soins_id && oSejourForm[this.sUf_soins_id] && !oSejourForm[this.sUf_soins_id].value) {
       $V(oSejourForm[this.sUf_soins_id], protocole.uf_soins_id);
     }
     if (this.sTypePec) {
