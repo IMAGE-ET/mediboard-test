@@ -132,6 +132,8 @@ CMbObject::massLoadFwdRef($sejours, "patient_id");
 $nb_sorties_non_realisees = 0;
 $now = CMbDT::time();
 
+$keywords = explode("|", CAppUI::conf("soins Other ignore_allergies", CGroups::loadCurrent()->_guid));
+
 /** @var $op COperation */
 foreach ($listOperations as $op) {
   $sejour = $op->loadRefSejour();
@@ -147,7 +149,16 @@ foreach ($listOperations as $op) {
   $op->loadRefPlageOp();
   $op->loadRefPatient();
   $dossier_med = $op->_ref_patient->loadRefDossierMedical();
-  $allergies = $dossier_med->loadRefsAllergies();
+
+  foreach ($keywords as $_keyword) {
+    foreach ($dossier_med->loadRefsAllergies() as $_key => $_allergie) {
+      if (preg_match('/^'.strtolower($_keyword).'$/', strtolower($_allergie->_view))) {
+        unset($dossier_med->_ref_allergies[$_key]);
+        continue;
+      }
+    }
+  }
+
   $op->loadAffectationsPersonnel();
   $op->loadBrancardage();
   
