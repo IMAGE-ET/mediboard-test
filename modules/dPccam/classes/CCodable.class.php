@@ -315,6 +315,7 @@ class CCodable extends CMbObject {
     $backProps["actes_tarmed"]  = "CActeTarmed object_id";
     $backProps["actes_caisse"]  = "CActeCaisse object_id";
     $backProps["frais_divers"]  = "CFraisDivers object_id";
+    $backProps['devis_codage']  = 'CDevisCodage codable_id';
     return $backProps;
   }
 

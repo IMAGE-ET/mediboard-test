@@ -8,6 +8,10 @@ ActesCCAM = {
     if (window.Reglement) {
       Reglement.reload(false);
     }
+
+    if (DevisCodage) {
+      DevisCodage.refresh('{{$object->_id}}');
+    }
   },
   refreshList: function(subject_id, chir_id) {
     if($('viewSejourHospi')){
@@ -20,6 +24,10 @@ ActesCCAM = {
     url_actes.addParam("object_id", subject_id);
     url_actes.setModuleAction("dPsalleOp", "httpreq_ccam");
     url_actes.requestUpdate('ccam');
+
+    if (DevisCodage) {
+      DevisCodage.refresh('{{$object->_id}}');
+    }
   },
   
   add: function(subject_id, chir_id, oOptions){

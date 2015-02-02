@@ -101,7 +101,7 @@
           <input type="hidden" name="codage_ccam_id" value="" />
           <input type="hidden" name="codable_class" value="{{$subject->_class}}" />
           <input type="hidden" name="codable_id" value="{{$subject->_id}}" />
-          {{if $subject->_class == "COperation"}}
+          {{if $subject->_class == "COperation" || $subject->_class == "CDevisCodage"}}
             {{assign var=date_codable value=$subject->date}}
           {{else}}
             {{assign var=date_codable value=$subject->_date}}
@@ -392,7 +392,7 @@
         </fieldset>
       </td>
       {{/if}}
-      {{if !$subject instanceof CConsultation}}
+      {{if !$subject instanceof CConsultation && !$subject instanceof CDevisCodage}}
       <td class="halfPane">
         <fieldset>
           <legend>Validation du codage</legend>

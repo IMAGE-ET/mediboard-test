@@ -1640,6 +1640,13 @@ class CSetupdPsalleOp extends CSetup {
     $query = "ALTER TABLE `daily_check_list_type`
                 CHANGE `type` `type` ENUM ('ouverture_salle','ouverture_sspi','ouverture_preop', 'fermeture_salle') NOT NULL DEFAULT 'ouverture_salle';";
     $this->addQuery($query);
-    $this->mod_version = '0.67';
+
+    $this->makeRevision('0.67');
+
+    $query = "ALTER TABLE `acte_ccam`
+                CHANGE `object_class` `object_class` ENUM('COperation','CSejour','CConsultation', 'CDevisCodage') NOT NULL;";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.68';
   }
 }

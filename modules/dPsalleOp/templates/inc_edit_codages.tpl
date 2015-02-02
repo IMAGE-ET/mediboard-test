@@ -135,6 +135,9 @@
           {{elseif $subject instanceof COperation}}
             <input type="hidden" name="m" value="planningOp" />
             <input type="hidden" name="dosql" value="do_planning_aed" />
+          {{elseif $subject instanceof CDevisCodage}}
+            <input type="hidden" name="m" value="ccam" />
+            <input type="hidden" name="dosql" value="do_devis_codage_aed" />
           {{else}}
             <input type="hidden" name="m" value="planningOp" />
             <input type="hidden" name="dosql" value="do_sejour_aed" />

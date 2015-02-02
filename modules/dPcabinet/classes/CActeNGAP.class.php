@@ -39,6 +39,9 @@ class CActeNGAP extends CActe {
   // Distant fields
   public $_libelle;
 
+  // Tarif final
+  public $_tarif;
+
   /**
    * @see parent::getSpec()
    */
@@ -73,6 +76,7 @@ class CActeNGAP extends CActe {
     $props["numero_forfait_technique"] = "num min|1 max|99999";
     $props["numero_agrement"]          = "num min|1 max|99999999999999";
     $props["rapport_exoneration"]      = "enum list|4|7|C|R";
+    $props['_tarif']                   = 'currency';
 
     return $props;
   }
@@ -97,6 +101,8 @@ class CActeNGAP extends CActe {
     if ($this->object_class && $this->object_id) {
       $this->_view .= " de $this->object_class-$this->object_id";
     }
+
+    $this->_tarif = round($this->montant_base + $this->montant_depassement, 2);
   }
 
   /**

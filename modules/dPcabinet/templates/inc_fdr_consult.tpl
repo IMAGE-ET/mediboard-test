@@ -28,7 +28,7 @@
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td class="halfPane">
       {{if "dPprescription"|module_active && "dPcabinet CPrescription view_prescription_externe"|conf:"CGroups-$g"}}
       <fieldset>
         <legend>{{tr}}CPrescription{{/tr}}</legend>
@@ -39,7 +39,19 @@
         </div>
       </fieldset>
       {{/if}}
-    </td>  
+    </td>
+    <td class="halfPane">
+      <fieldset>
+        <legend>{{tr}}CDevisCodage{{/tr}}</legend>
+        {{mb_script module=ccam script=DevisCodage ajax=1}}
+        <script>
+          Main.add(function() {
+            DevisCodage.list('{{$consult->_class}}', '{{$consult->_id}}');
+          });
+        </script>
+        <div id="view-devis"></div>
+      </fieldset>
+    </td>
   </tr>
   {{if $consult->sejour_id}} {{* Cas d'un RPU *}}
   {{assign var=sejour value=$consult->_ref_sejour}}

@@ -2228,6 +2228,12 @@ class CSetupdPcabinet extends CSetup {
               ADD `mob_cervicale` ENUM( 'm80', '80m100', 'p100' );";
     $this->addQuery($query);
 
-    $this->mod_version = '2.47';
+    $this->makeRevision('2.47');
+
+    $query = "ALTER TABLE `acte_ngap`
+                CHANGE `object_class` `object_class` ENUM('COperation','CSejour','CConsultation', 'CDevisCodage') NOT NULL default 'CConsultation';";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.48';
   }
 }

@@ -251,7 +251,41 @@ class CSetupdPccam extends CSetup {
 
     $this->addMethod('updateDateCodage');
 
-    $this->mod_version = '0.28';
+    $this->makeRevision('0.28');
+
+    $query = "CREATE TABLE `devis_codage` (
+      `devis_codage_id` INT(11) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
+      `codable_class` ENUM('CConsultation', 'COperation') NOT NULL,
+      `codable_id` INT(11) UNSIGNED NOT NULL,
+      `patient_id` INT(11) UNSIGNED NOT NULL,
+      `praticien_id` INT(11) UNSIGNED NOT NULL,
+      `creation_date` DATETIME NOT NULL,
+      `date` DATE,
+      `event_type` ENUM('CConsultation', 'COperation') DEFAULT 'CConsultation',
+      `libelle` VARCHAR (255),
+      `comment` TEXT,
+      `codes_ccam` VARCHAR(255),
+      `facture` ENUM ('0','1') DEFAULT '0',
+      `tarif` VARCHAR(50),
+      `exec_tarif` DATETIME,
+      `consult_related_id` INT (11) UNSIGNED,
+      `base` FLOAT(6),
+      `dh` FLOAT(6),
+      `ht` FLOAT(6),
+      `tax_rate` FLOAT
+    );";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `devis_codage`
+                ADD INDEX (`codable_class`),
+                ADD INDEX (`codable_id`);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `codage_ccam`
+                CHANGE `codable_class` `codable_class` ENUM('CConsultation', 'CSejour', 'COperation', 'CDevisCodage') NOT NULL;";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.29';
 
     // Data source query
 

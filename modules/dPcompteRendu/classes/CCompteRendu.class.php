@@ -167,6 +167,9 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     "CPatient" => array(
      "[ENTETE MOZAIC]"                => "header",
      "[PIED DE PAGE MOZAIC]"          => "footer"
+    ),
+    'CDevisCodage' => array(
+      '[DEVIS]' => 'body'
     )
   );
 
@@ -1134,7 +1137,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
 
     $all_classes = array(
       "CConsultAnesth", "CConsultation",
-      "COperation", "CPatient", "CSejour", "CFactureCabinet", "CFactureEtablissement"
+      "COperation", "CPatient", "CSejour", "CFactureCabinet", "CFactureEtablissement", 'CDevisCodage'
     );
 
     if (CModule::getActive("dPprescription")) {
