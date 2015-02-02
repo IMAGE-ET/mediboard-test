@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Bloc
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 $date_depart = CValue::get("date_depart");
@@ -19,9 +19,15 @@ $where["date"] = " = '".CMbDT::date($date_depart)."'";
 $where["annulee"] = " = '0'";
 
 $ljoin = array();
+$ljoin["sallesbloc"] = "sallesbloc.salle_id = operations.salle_id";
 if ($bloc_id) {
-  $ljoin["sallesbloc"] = "sallesbloc.salle_id = operations.salle_id";
   $where["sallesbloc.bloc_id"] = "= '$bloc_id'";
+}
+else {
+  $bloc = new CBlocOperatoire();
+  $where_bloc = array("group_id" => "= '".CGroups::loadCurrent()->_id."'");
+  $blocs = $bloc->loadListWithPerms(PERM_READ, $where_bloc, "nom");
+  $where["sallesbloc.bloc_id"] = CSQLDataSource::prepareIn(array_keys($blocs));
 }
 
 $operation = new COperation();
