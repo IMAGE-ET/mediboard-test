@@ -12,6 +12,7 @@
 {{foreach from=$liaisons item=liaison}}
   {{assign var=item_presta value=$liaison->_ref_item}}
   {{assign var=item_presta_realise value=$liaison->_ref_item_realise}}
+  {{assign var=sous_item value=$liaison->_ref_sous_item}}
   <strong title="{{if $item_presta->_id}}{{tr}}CItemLiaison-item_souhait_id{{/tr}} [{{$item_presta->nom}}]{{/if}} - {{if $item_presta_realise->_id}}{{tr}}CItemLiaison-item_realise_id{{/tr}} [{{$item_presta_realise->nom}}]{{/if}}"
     {{if $item_presta->_id && $item_presta_realise->_id}}
       class="{{if $item_presta->rank == $item_presta_realise->rank}}
@@ -26,9 +27,21 @@
 
     <!-- display -->
     {{if $item_presta->_id == $item_presta_realise->_id || $conf.dPhospi.show_souhait_placement}}
-      {{$item_presta->nom}}
+      {{if $sous_item->_id}}{{$sous_item->nom}}{{else}}{{$item_presta->nom}}{{/if}}
     {{else}}
-      {{if $item_presta_realise->nom}}{{$item_presta_realise->nom}}{{else}}{{$item_presta->nom}}{{/if}}
+      {{if $item_presta_realise->nom}}
+        {{if $sous_item->_id}}
+          {{$sous_item->nom}}
+        {{else}}
+          {{$item_presta_realise->nom}}
+        {{/if}}
+      {{else}}
+        {{if $sous_item->_id}}
+          {{$sous_item->nom}}
+        {{else}}
+          {{$item_presta->nom}}
+        {{/if}}
+      {{/if}}
     {{/if}}
 
   </strong>

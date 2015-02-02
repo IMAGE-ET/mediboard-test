@@ -186,9 +186,6 @@
                   <tr>
                     <th class="category" colspan="2">
                       {{mb_include module=system template=inc_object_history object=$liaison}}
-                      {{if $liaison->_id|is_numeric}}
-                        <button type="button" class="cancel notext compact" onclick="emptyLiaison(this)" style="float: left;"></button>
-                      {{/if}}
                       {{$_prestation}}
                     </th>
                   </tr>
