@@ -540,8 +540,11 @@ var ExObject = {
     }
   },
 
-  launchProtocole: function(protocole_ids){
-    console.log(protocole_ids);
+  launchProtocole: function(protocole_ids, prescription_id){
+    var url = new Url("prescription", "ajax_apply_protocole");
+    url.addParam("protocoles_ids", protocole_ids.join("-"));
+    url.addParam("prescription_id", prescription_id);
+    url.requestModal();
   }
 };
 
