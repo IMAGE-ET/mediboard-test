@@ -53,7 +53,24 @@ class CDoExObjectAddEdit extends CDoObjectAddEdit {
         $protocole_ids = array_values(CMbArray::pluck($p_to_c->loadList($where), "protocole_id"));
 
         if (count($protocole_ids)) {
-          CAppUI::callbackAjax("window.ExObject.launchProtocole", $protocole_ids);
+          /** @var CSejour $sejour */
+          $sejour = $ex_object->getReferenceObject("CSejour");
+          if ($sejour && $sejour->_id) {
+            $prescription = $sejour->loadRefPrescriptionSejour();
+
+            if (!$prescription->_id) {
+              $prescription = new CPrescription();
+              $prescription->object_id = $sejour->_id;
+              $prescription->object_class = $sejour->_class;
+              $prescription->type = "sejour";
+
+              if ($msg = $prescription->store()) {
+                CAppUI::setMsg($msg, UI_MSG_WARNING);
+              }
+            }
+
+            CAppUI::callbackAjax("window.opener.ExObject.launchProtocole", $protocole_ids, $prescription->_id);
+          }
         }
       }
     }
