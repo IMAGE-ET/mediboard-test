@@ -50,7 +50,7 @@ SiblingsChecker = {
     }
     else {
       url.requestUpdate("doublon-patient", {
-        waitingText: "Vérification des doublons"
+        waitingText: ""
       });
     }
   },
