@@ -35,7 +35,7 @@ CAppUI::requireModuleFile("dPstats", "graph_patrepartjour");
 $date_min = CValue::get("_date_min", CMbDT::date("-1 YEAR"));
 
 $date_max = CValue::get("_date_max",  CMbDT::date());
-mb_dump(CValue::get('_complete_months', 0), 'complete months');
+
 if (CValue::get('_complete_months', 0)) {
   $date_min = CMbDT::date("FIRST DAY OF THIS MONTH", $date_min);
   $date_max= CMbDT::date("FIRST DAY OF NEXT MONTH", $date_max);
