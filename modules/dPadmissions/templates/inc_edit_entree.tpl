@@ -62,10 +62,17 @@
     var form = getForm('{{$form_name}}');
     var val = $V(form.mode_entree);
     if (val == 7) {
+      $('empty_entree_id_{{$sejour->_id}}').hide();
       $('etablissement_entree_id_{{$sejour->_id}}').show();
     }
-    if (val == 6) {
-      $('service_entree_id_{{$sejour->_id}}').show();
+    else {
+      if (val == 6) {
+        $('empty_entree_id_{{$sejour->_id}}').hide();
+        $('service_entree_id_{{$sejour->_id}}').show();
+      }
+      else {
+        $('empty_entree_id_{{$sejour->_id}}').show();
+      }
     }
   };
 
@@ -119,6 +126,9 @@
         <td>{{mb_field object=$sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 1); showSecondary();" typeEnum=radio}}</td>
       </tr>
 
+      <tr id="empty_entree_id_{{$sejour->_id}}">
+        <td colspan="2">&nbsp;</td>
+      </tr>
 
       <tr style="display: none" id="etablissement_entree_id_{{$sejour->_id}}" class="togglisable_tr">
         <th>{{mb_label object=$sejour field=etablissement_entree_id}}</th>
@@ -143,7 +153,7 @@
 
 {{if "dPsante400"|module_active && "dPsante400 CIdSante400 add_ipp_nda_manually"|conf:"CGroups-$g"}}
   <hr/>
-  <h2>Identifiants externes</h2>
+  <h2>{{tr}}mod-dPsante400-tab-ajax_edit_manually_ipp_nda{{/tr}}</h2>
   {{assign var=ipp value=$sejour->_ref_patient->_ref_IPP}}
   {{assign var=nda value=$sejour->_ref_NDA}}
   {{unique_id var=unique_ipp}}
