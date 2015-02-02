@@ -87,14 +87,6 @@ if (is_array($liaisons_j)) {
         $item_liaison->sejour_id = $sejour_id;
       }
 
-      if ($item_liaison->_id) {
-        // Suppression de liaison
-        if (!$souhait_id && !$realise_id) {
-          $item_liaison->delete();
-          continue;
-        }
-      }
-
       // On ne store que si c'est nouvelle liaison
       // ou un changement de niveau
       if (!$item_liaison->_id ||

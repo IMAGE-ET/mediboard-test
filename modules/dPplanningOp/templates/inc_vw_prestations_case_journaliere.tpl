@@ -41,7 +41,7 @@
                 {{/if}}
               {{/if}}">
     {{if $item_presta->_id}}
-      {{if $item_presta_realise->_id && $item_presta->nom != $item_presta_realise->nom}}
+      {{if $item_presta_realise->_id && $item_presta->nom != $item_presta_realise->nom && $conf.dPhospi.show_realise}}
         <span {{if $item_presta_realise->color}}class="mediuser" style="border-left-color: #{{$item_presta_realise->color}}"{{/if}}>
                     {{$item_presta_realise->nom}}
                   </span> <br />
@@ -54,7 +54,7 @@
                     {{if $sous_item->item_prestation_id == $item_presta->_id}}{{$sous_item->nom}}{{else}}{{$item_presta->nom}}{{/if}}
                   </span>
       {{/if}}
-    {{elseif $item_presta_realise->_id}}
+    {{elseif $item_presta_realise->_id && $conf.dPhospi.show_realise}}
       <span {{if $item_presta_realise->color}}class="mediuser" style="border-left-color: #{{$item_presta_realise->color}}"{{/if}}>
                   {{if $sous_item->item_prestation_id == $item_presta_realise->_id}}{{$sous_item->nom}}{{else}}{{$item_presta_realise->nom}}{{/if}}
                 </span>
