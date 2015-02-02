@@ -197,8 +197,8 @@
     window.DMI_operation_id = "{{$selOp->_id}}";
 
     // Initialisation des onglets
-    Control.Tabs.create('main_tab_group', true);
-    var tabName = Control.Tabs.loadTab('main_tab_group');
+    var tabs = Control.Tabs.create('main_tab_group', true);
+    var tabName = tabs.activeContainer.id;
 
     switch (tabName) {
       case "disp_vasculaire":
