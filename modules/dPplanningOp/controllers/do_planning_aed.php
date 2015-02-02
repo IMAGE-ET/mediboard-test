@@ -26,7 +26,7 @@ else {
   
   $do->doStore();
 
-  if (CModule::getActive("forms") && CValue::post("_set_fin_op")) {
+  if (CModule::getActive("forms") && CValue::post("_set_fin_op") && CValue::post("fin_op") == "current") {
     $ex_class_events = CExClassEvent::getForObject($do->_obj, "fin_intervention", "required");
     echo CExClassEvent::getJStrigger($ex_class_events);
   }
