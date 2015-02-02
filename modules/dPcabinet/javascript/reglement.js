@@ -38,9 +38,13 @@ var Reglement = {
         refreshFraisDivers();
       }
 
-      if (reload_acts && Preferences.MODCONSULT == "1" && window.ActesTarmed){
+      if (window.ActesTarmed){
         ActesTarmed.refreshList();
         ActesCaisse.refreshList();
+      }
+
+      if (!window.ActesNGAP && !window.ActesTarmed && $('Actes')) {
+        loadActes();
       }
     }
   },
