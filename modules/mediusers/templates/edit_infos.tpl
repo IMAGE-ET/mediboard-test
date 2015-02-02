@@ -76,7 +76,7 @@
         url.requestUpdate('edit-factureox');
       }
     </script>
-    <li><a href="#edit-factureox" >{{tr}}CFactureOX{{/tr}}</a></li>
+    <li><a href="#edit-factureox" id="edit-factureox-count">{{tr}}CFactureOX{{/tr}}</a></li>
   {{/if}}
 
   {{if "ecap"|module_active}}
@@ -144,6 +144,11 @@
 {{if "oxFacturation"|module_active}}
   <div id="edit-factureox" style="display: none;">
   </div>
+  <script>
+    Main.add(function() {
+      factureUser();
+    });
+  </script>
 {{/if}}
 
 {{if "didacticiel"|module_active}}
