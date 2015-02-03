@@ -156,24 +156,34 @@ class CInteropReceiver extends CInteropActor {
    *
    * @return array Receivers supported
    */
-  static function getObjectsBySupportedEvents($events = array(), $receiver = null) {
+  static function getObjectsBySupportedEvents($events = array(), CInteropReceiver $receiver = null) {
     $receivers = array();
     foreach ($events as $_event) {
-      $msg_supported          = new CMessageSupported();
-      $msg_supported->message = $_event;
-      $msg_supported->active  = 1;
+      $msg_supported = new CMessageSupported();
 
-      if ($receiver && $receiver->_id) {
-        $msg_supported->setObject($receiver);
-        if (!$msg_supported->loadMatchingObject()) {
-          $receivers[$_event] = null;
-          return $receivers;
+      $where = array();
+      $where["message"] = " = '$_event'";
+      $where["active"]  = " = '1'";
+
+      $ljoin = array();
+      if ($receiver) {
+        $table = $receiver->_spec->table;
+        $ljoin[$table] = "$table.$table"."_id"." = message_supported.object_id";
+
+        $where["object_class"] = " = '$receiver->_class'";
+        if ($receiver->_id) {
+          $where["object_id"]  = " = '$receiver->_id'";
         }
-        $receivers[$_event] = $receiver;
+
+        $where["$table.actif"] = " = '1'";
+      }
+
+      if (!$msg_supported->loadObject($where, null, null, $ljoin)) {
+        $receivers[$_event] = null;
         return $receivers;
       }
 
-      $messages = $msg_supported->loadMatchingList(null, null, "object_class");
+      $messages = $msg_supported->loadList($where, "object_class", null, null, $ljoin);
 
       foreach ($messages as $_message) {
         /** @var CInteropReceiver $receiver */

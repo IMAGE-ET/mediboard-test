@@ -18,6 +18,7 @@ $patient_nom                 = CValue::request("nom");
 $patient_prenom              = CValue::request("prenom");
 $patient_jeuneFille          = CValue::request("nom_jeune_fille");
 $patient_sexe                = CValue::request("sexe");
+$patient_adresse             = CValue::request("adresse");
 $patient_ville               = CValue::request("ville");
 $patient_cp                  = CValue::request("cp");
 $patient_day                 = CValue::request("Date_Day");

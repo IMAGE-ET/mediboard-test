@@ -10,7 +10,7 @@
 
 SIP = {
   module: "sip",
-		
+
   doExport: function (sAction, type) {
     var url = new Url(this.module, "ajax_export_"+type);
     url.addParam("action", sAction);
@@ -19,5 +19,9 @@ SIP = {
 
   findCandidates: function(form) {
     return Url.update(form, "find_candidates");
+  },
+
+  patient_identity_consumer: function(form) {
+    return Url.update(form, "patient_identity_consumer");
   }
 }

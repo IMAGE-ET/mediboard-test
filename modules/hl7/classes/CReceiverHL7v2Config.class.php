@@ -26,10 +26,14 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   // Version
   public $ITI30_HL7_version;
   public $ITI31_HL7_version;
+
   public $RAD3_HL7_version;
   public $RAD48_HL7_version;
+
   public $ITI21_HL7_version;
   public $ITI22_HL7_version;
+
+  public $ITI9_HL7_version;
 
   // Application
   public $receiving_application;
@@ -131,6 +135,9 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       // PDQ
       "ITI21_HL7_version",
       "ITI22_HL7_version",
+
+      // PIX
+      "ITI9_HL7_version",
     ),
     "application" => array(
       "receiving_application",
@@ -248,8 +255,9 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     // Version
     $props["ITI30_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5|FR_2.1|FR_2.2|FR_2.3 default|2.5";
     $props["ITI31_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5|FR_2.1|FR_2.2|FR_2.3 default|2.5";
-    $props["RAD3_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5 default|2.5";
+    $props["RAD3_HL7_version"]  = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5 default|2.5";
     $props["RAD48_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5 default|2.5";
+    $props["ITI9_HL7_version"]  = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5 default|2.5";
     $props["ITI21_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5 default|2.5";
     $props["ITI22_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5 default|2.5";
 

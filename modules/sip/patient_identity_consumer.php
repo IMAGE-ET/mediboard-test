@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Find candidates
+ * Patient identity consumer
  *
  * @category SIP
  * @package  Mediboard
@@ -16,7 +16,7 @@ CCanDo::checkAdmin();
 $cn_receiver_guid = trim(CValue::getOrSessionAbs("cn_receiver_guid"));
 
 $receiver  = new CReceiverHL7v2();
-$objects = CReceiverHL7v2::getObjectsBySupportedEvents(array("CHL7EventQBPQ22", "CHL7EventQBPZV1"), $receiver);
+$objects = CReceiverHL7v2::getObjectsBySupportedEvents(array("CHL7EventQBPQ23"), $receiver);
 
 /** @var CInteropReceiver[] $receivers */
 $receivers = array();
@@ -35,10 +35,8 @@ foreach ($objects as $event => $_receivers) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("pointer"         , null);
 $smarty->assign("receivers"       , $receivers);
-$smarty->assign("sejour"          , new CSejour());
 $smarty->assign("patient"         , new CPatient());
 $smarty->assign("cn_receiver_guid", $cn_receiver_guid);
 
-$smarty->display("find_candidates.tpl");
+$smarty->display("patient_identity_consumer.tpl");

@@ -17,6 +17,8 @@ Main.add(function(){
 });
 </script>
 
+{{mb_include module="hl7" template="inc_form_session_receiver"}}
+
 <form name="find_candidates" action="?m=sip&a=ajax_find_candidates" method="post" onsubmit="return SIP.findCandidates(this)">
   <input type="hidden" name="pointer"  value="{{$pointer}}" />
   <input type="hidden" name="continue" value="" />
@@ -188,9 +190,5 @@ Main.add(function(){
     </tr>
   </table>
 </form>
-    </td>
-  </tr>
-  <tr>
-    <td id="find_candidates">
 
 <div id="find_candidates"></div>

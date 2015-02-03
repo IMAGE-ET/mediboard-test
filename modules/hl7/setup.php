@@ -1448,7 +1448,13 @@ class CSetuphl7 extends CSetup {
                 ADD `send_child_admit` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.12";
+    $this->makeRevision("1.12");
+
+    $query = "ALTER TABLE `receiver_hl7v2_config`
+                ADD `ITI9_HL7_version` ENUM ('2.1','2.2','2.3','2.3.1','2.4','2.5') DEFAULT '2.5';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.13";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
