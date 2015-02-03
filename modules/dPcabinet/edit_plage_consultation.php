@@ -50,6 +50,7 @@ if (!$plageSel->plageconsult_id) {
 else {
   $plageconsult_id = $plageSel->plageconsult_id;
 }
+
 $plageSel->loadRefsFwd(1);
 $plageSel->loadRefsNotes();
 $plageSel->loadRefsBack();
@@ -99,7 +100,7 @@ foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
   $consultation->countDocItems();    
 }
 
-if ($plageSel->chir_id != $chirSel) {
+if ($chirSel && $plageSel->chir_id != $chirSel) {
   $plageconsult_id = null;
   $plageSel = new CPlageconsult();
 }

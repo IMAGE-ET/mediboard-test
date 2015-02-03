@@ -20,6 +20,9 @@
  * @link     http://www.mediboard.org
 *}}
 
+{{mb_script module=cabinet script=edit_consultation ajax=1}}
+{{mb_script module=cabinet script=plage_consultation ajax=1}}
+
 <style>
   .barree {
     text-decoration: line-through;
@@ -35,6 +38,7 @@
         {{mb_include module=system template=inc_object_idsante400}}
         {{mb_include module=system template=inc_object_history}}
         {{if $object->locked}}<img src="images/icons/lock.png" alt="(Vérouillée)"/>{{/if}}
+        <button class="edit notext" type="button" onclick="PlageConsultation.edit('{{$object->_id}}')">{{tr}}CPlageconsult-title-modify{{/tr}}</button>
         {{tr}}{{$object->_class}}{{/tr}} - {{mb_value object=$object field=date}}
       </th>
     </tr>
@@ -61,7 +65,10 @@
   </table>
   <table class="tbl" style="max-height: 400px; overflow-y: auto;">
     <tr>
-      <th colspan="6" class="title">{{tr}}CConsultation{{/tr}}s {{mb_include module=system template=calendars/inc_week/inc_disponibilities mode=standard}}</th>
+      <th colspan="6" class="title">
+        <button class="new notext" style="float:right;" type="button" onclick="Consultation.editRDVModal(null, '{{$object->chir_id}}', '{{$object->_id}}')">{{tr}}CConsultation-title-create{{/tr}}</button>
+        {{tr}}CConsultation{{/tr}}s {{mb_include module=system template=calendars/inc_week/inc_disponibilities mode=standard}}
+      </th>
     </tr>
     <tr>
       <th class="narrow">{{mb_title class=CConsultation field=heure}}</th>
