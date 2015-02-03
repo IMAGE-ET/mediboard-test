@@ -46,6 +46,7 @@ class CItemLiaison extends CMbObject{
     $spec = parent::getSpec();
     $spec->table = "item_liaison";
     $spec->key   = "item_liaison_id";
+    $spec->uniques["unique"] = array("date", "sejour_id", "item_souhait_id");
     return $spec;
   }
 
@@ -60,7 +61,7 @@ class CItemLiaison extends CMbObject{
     $props["sous_item_id"]    = "ref class|CSousItemPrestation cascade";
     $props["date"]            = "date";
     $props["quantite"]        = "num default|0";
-    
+
     return $props;
   }
 
