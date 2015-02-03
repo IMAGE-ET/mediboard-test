@@ -13,7 +13,7 @@
   <tr>
     <td>
       <fieldset>
-        <legend>IPAQQS</legend>
+        <legend>IPAQSS</legend>
         <table class="tbl">
           <tr>
             <th id="didac_th_Critere">Critère</th>
