@@ -30,6 +30,21 @@ switch ($event) {
     }
     break;
   case "A02":
+    $sejour_id = CValue::post("sejour_id");
+    $unique_lit_id  = CValue::post("_unique_lit_id");
+
+    $sejour = new CSejour();
+    $sejour->load($sejour_id);
+
+    $affectation = new CAffectation();
+    $affectation->sejour_id = $sejour_id;
+    $affectation->lit_id = $unique_lit_id;
+    $affectation->entree = $sejour->entree;
+    $affectation->sortie = $sejour->sortie;
+
+    if ($msg = $affectation->store()) {
+      CAppUI::stepAjax($msg, UI_MSG_ERROR);
+    }
 
     break;
   case "A03":
@@ -102,6 +117,14 @@ switch ($event) {
     $sejour = new CSejour();
     $sejour->load($sejour_id);
     $sejour->type = CValue::post("type");
+
+    if ($sejour->type == "ambu") {
+      $sejour->sortie_prevue = CMbDT::addTime("+4 HOURS", $sejour->entree);
+
+      if ($sejour->sortie_reelle) {
+        $sejour->sortie_reelle = CMbDT::addTime("+4 HOURS", $sejour->entree_reelle);
+      }
+    }
 
     if ($msg = $sejour->store()) {
       CAppUI::stepAjax($msg, UI_MSG_ERROR);

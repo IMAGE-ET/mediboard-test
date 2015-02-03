@@ -48,9 +48,44 @@
           </label>
         </td>
         <td>
-          <button type="button" class="edit" onclick="Affectation.from_tempo=true; Affectation.edit('{{$_sejour->_ref_curr_affectation->_id}}')">
-            {{tr}}CAffectation{{/tr}}
-          </button>
+          {{if $_sejour->_ref_curr_affectation && $_sejour->_ref_curr_affectation->_id}}
+            <button type="button" class="edit" onclick="Affectation.from_tempo=true; Affectation.edit('{{$_sejour->_ref_curr_affectation->_id}}')">
+              {{tr}}CAffectation{{/tr}}
+            </button>
+          {{else}}
+            {{mb_field object=$_sejour field=_unique_lit_id hidden=true onchange="this.form.onsubmit()"}}
+            <input type="text" name="_unique_lit_id_view" style="width: 12em" value=""/>
+            <script>
+              Main.add(function(){
+                var form = getForm("{{$formName}}");
+
+                var url = new Url("system", "ajax_seek_autocomplete");
+                url.addParam("object_class", "CLit");
+                url.addParam("field", "lit_id");
+                url.addParam("input_field", "_unique_lit_id_view");
+                url.addParam("show_view", "true");
+                url.addParam("where[lit.annule]", "0");
+                url.autoComplete(form.elements._unique_lit_id_view, null, {
+                  minChars: 2,
+                  method: "get",
+                  select: "view",
+                  dropdown: true,
+                  afterUpdateElement: function(field, selected){
+                    var value = selected.id.split('-')[2];
+                    $V(form._unique_lit_id, value);
+                  },
+                  callback: function(input, queryString){
+                    var service_id = $V(form.service_id);
+                    if (service_id) {
+                      queryString += "&where[chambre.service_id]="+service_id;
+                      queryString += "&ljoin[chambre]=chambre.chambre_id=lit.chambre_id";
+                    }
+                    return queryString;
+                  }
+                });
+              });
+            </script>
+          {{/if}}
         </td>
       </tr>
     {{foreachelse}}
