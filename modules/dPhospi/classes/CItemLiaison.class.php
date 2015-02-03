@@ -46,6 +46,7 @@ class CItemLiaison extends CMbObject{
     $spec = parent::getSpec();
     $spec->table = "item_liaison";
     $spec->key   = "item_liaison_id";
+    $spec->uniques["unique"] = array("date", "sejour_id", "item_souhait_id");
     return $spec;
   }
 
