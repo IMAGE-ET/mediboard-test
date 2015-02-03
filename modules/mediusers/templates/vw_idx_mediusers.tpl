@@ -77,55 +77,79 @@
   <fieldset class="fieldset_search">
       <legend>Recherche d'{{tr}}CMediusers{{/tr}}</legend>
 
-    <div>
-      <label>
-        Mots clés :
-        <input type="text" name="filter" value="{{$filter}}" style="width: 15em;" onchange="$V(this.form.page, 0)" />
-      </label>
-    </div>
+    <table style="float:left;">
+      <tr>
+        <td><label>
+            Mots clés :
+            <input type="text" name="filter" value="{{$filter}}" style="width: 15em;" onchange="$V(this.form.page, 0)" />
+          </label>
+        </td>
+        <td>
+          <table class="form">
+            <tr>
+              <th>{{tr}}CFunctions{{/tr}}</th>
+              <td>
+                  <select name="function_id">
+                    <option value="">&mdash; {{tr}}CFunctions.all{{/tr}}</option>
+                    {{foreach from=$group->_ref_functions item=_function}}
+                      <option value="{{$_function->_id}}">{{$_function}}</option>
+                    {{/foreach}}
+                  </select>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                {{mb_label class="CMediusers" field="_user_type"}}
+              </th>
+              <td>
+                <select name="_user_type" style="width: 15em;">
+                  <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+                  {{foreach from=$utypes key=curr_key item=_type}}
+                    <option value="{{if $curr_key != 0}}{{$curr_key}}{{/if}}" {{if $type == $curr_key}}selected="selected"{{/if}}>
+                      {{$_type}}
+                    </option>
+                  {{/foreach}}
+                </select>
+              </td>
+            </tr>
+          </table>
+        </td>
 
-    <div>
-      <label>{{tr}}CFunctions{{/tr}}
-        <select name="function_id">
-          <option value="">&mdash; {{tr}}CFunctions.all{{/tr}}</option>
-          {{foreach from=$group->_ref_functions item=_function}}
-            <option value="{{$_function->_id}}">{{$_function}}</option>
-          {{/foreach}}
-        </select>
-      </label>
-    </div>
+        <td>
+          <table class="form">
+            <tr>
+              <th><label>Verrouillage</th></label>
+              <td>
+                <select name="locked">
+                  <option value="">Tous</option>
+                  <option value="1">Verrouillés seulement</option>
+                  <option value="0">Non Verrouillés seulement</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <label>Inactif</label>
+              </th>
+              <td>
+                <select name="inactif">
+                  <option value="">Tous</option>
+                  <option value="1">Inactifs seulement</option>
+                  <option value="0">Actifs seulement</option>
+                </select>
+              </td>
 
-    <div>
-      {{mb_label class="CMediusers" field="_user_type"}}
-      <select name="_user_type" style="width: 15em;">
-        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-        {{foreach from=$utypes key=curr_key item=_type}}
-          <option value="{{if $curr_key != 0}}{{$curr_key}}{{/if}}" {{if $type == $curr_key}}selected="selected"{{/if}}>
-            {{$_type}}
-          </option>
-        {{/foreach}}
-      </select>
-    </div>
-
-    <div>
-      <label>Verrouillage
-        <select name="locked">
-          <option value="">Tous</option>
-          <option value="1">Verrouillés seulement</option>
-          <option value="0">Non Verrouillés seulement</option>
-        </select>
-      </label>
-    </div>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
 
     <fieldset style="display:inline-block;">
       <legend>Afficher seulement</legend>
         <label>
           <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="pro_sante" />
           Professionnel de santé
-        </label>
-        <label>
-          <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="inactif" />
-          Inactif
         </label>
       {{if $configLDAP}}
           <label>
