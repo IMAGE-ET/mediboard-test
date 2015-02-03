@@ -193,9 +193,19 @@ if ($isolement) {
   $where["isolement"] = "= '1'";
 }
 
+$items_prestation = array();
+if ($prestation_id) {
+  $prestation = new CPrestationJournaliere;
+  $prestation->load($prestation_id);
+  $items_prestation = $prestation->loadBackRefs("items", "rank asc");
+}
+
 if ($item_prestation_id && $prestation_id) {
-  $ljoin["item_liaison"] = "sejour.sejour_id = item_liaison.sejour_id";
-  $where["item_liaison.item_souhait_id"] = " = '$item_prestation_id'";
+  // L'axe de prestation a pu changer, donc ne pas appliquer l'item de prestation s'il ne fait pas partie de l'axe choisi
+  if (isset($items_prestation[$item_prestation_id])) {
+    $ljoin["item_liaison"]                 = "sejour.sejour_id = item_liaison.sejour_id";
+    $where["item_liaison.item_souhait_id"] = " = '$item_prestation_id'";
+  }
 }
 
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
@@ -209,14 +219,7 @@ $services = CMbObject::massLoadFwdRef($sejours, "service_id");
 $sejours_non_affectes = array();
 $functions_filter = array();
 $operations = array();
-$items_prestation = array();
 $suivi_affectation = false;
-
-if ($prestation_id) {
-  $prestation = new CPrestationJournaliere;
-  $prestation->load($prestation_id);
-  $items_prestation = $prestation->loadBackRefs("items", "rank asc");
-}
 
 // Chargement des affectations dans les couloirs (sans lit_id)
 $where = array();
@@ -239,8 +242,10 @@ if ($isolement) {
 }
 
 if ($item_prestation_id && $prestation_id) {
-  $ljoin["item_liaison"] = "affectation.sejour_id = item_liaison.sejour_id";
-  $where["item_liaison.item_souhait_id"] = " = '$item_prestation_id'";
+  if (isset($items_prestation[$item_prestation_id])) {
+    $ljoin["item_liaison"]                 = "affectation.sejour_id = item_liaison.sejour_id";
+    $where["item_liaison.item_souhait_id"] = " = '$item_prestation_id'";
+  }
 }
 
 $affectation = new CAffectation();
