@@ -28,21 +28,13 @@ $smarty->assign("patient"   , $patient);
 
 switch ($event) {
   case "A02":
-    $leftjoin = array(
-      "affectation" => "affectation.sejour_id = sejour.sejour_id"
-    );
     $where = array(
       "patient_id"     => "= '$patient->_id'",
       "entree_reelle"  => "IS NOT NULL",
-      "affectation_id" => "IS NOT NULL"
     );
     $sejour  = new CSejour();
-    $patient->_ref_sejours = $sejour->loadList($where, "entree DESC", null, null, $leftjoin);
+    $patient->_ref_sejours = $sejour->loadList($where, "entree DESC");
     CSejour::massLoadNDA($patient->_ref_sejours);
-    foreach ($patient->_ref_sejours as $_sejour) {
-      /** @var Csejour $_sejour */
-      $_sejour->_ref_curr_affectation = $_sejour->getCurrAffectation($_sejour->sortie);
-    }
     break;
   case "A03":
     $sejours = $patient->loadRefsSejours(array("sortie_reelle" => "IS NULL"));

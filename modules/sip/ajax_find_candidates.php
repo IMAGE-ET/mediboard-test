@@ -55,7 +55,7 @@ $cancel                             = CValue::request("cancel");
 $domains_returned_namespace_id      = CValue::request("domains_returned_namespace_id");
 $domains_returned_universal_id      = CValue::request("domains_returned_universal_id");
 $domains_returned_universal_id_type = CValue::request("domains_returned_universal_id_type");
-$quantity_limited_request           = CValue::request("quantity_limited_request");
+$quantity_limited_request           = CValue::request("quantity_limited_request", "1");
 
 $patient_naissance = null;
 if ($patient_year || $patient_month || $patient_day) {
