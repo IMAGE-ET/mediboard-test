@@ -4686,6 +4686,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     foreach ($this->_liaisons_for_prestation as $_liaison) {
       $_liaison->loadRefItem();
       $_liaison->loadRefItemRealise();
+      $_liaison->loadRefSousItem();
 
       //@todo : find a better way to cleanup old prestas
       $cat_id = ($_liaison->_ref_item_realise->_id) ? $_liaison->_ref_item_realise->object_id : $_liaison->_ref_item->object_id;
