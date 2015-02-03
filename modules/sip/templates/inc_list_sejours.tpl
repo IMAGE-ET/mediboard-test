@@ -12,8 +12,11 @@
 <script>
   Main.add(function(){
     var form = getForm("find_candidates");
-    form.elements.finder.disabled = '{{$pointer}}' ? "" : "disabled";
-    $V(form.pointer, '{{$pointer}}');
+    form.select(".transaction").each(function(button) {
+      button.disabled = '{{$pointer}}' ? "" : "disabled";
+    });
+    $V(form.pointer,   '{{$pointer}}');
+    $V(form.query_tag, '{{$query_tag}}');
   });
 </script>
 

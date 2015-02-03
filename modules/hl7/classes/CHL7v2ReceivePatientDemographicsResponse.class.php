@@ -93,6 +93,10 @@ class CHL7v2ReceivePatientDemographicsResponse extends CHL7v2MessageXML {
       $objects["pointer"] = $this->getContinuationPointer($DSC);
     }
 
+    if ($QPD = $data["QPD"]) {
+      $objects["query_tag"] = $this->getQueryTag($QPD);
+    }
+
     return $objects;
   }
 
@@ -179,11 +183,22 @@ class CHL7v2ReceivePatientDemographicsResponse extends CHL7v2MessageXML {
   /**
    * Get continuation pointer
    *
-   * @param DOMNode $node QAK element
+   * @param DOMNode $node DSC element
    *
    * @return string
    */
   function getContinuationPointer(DOMNode $node) {
     return $this->queryTextNode("DSC.1", $node);
+  }
+
+  /**
+   * Get query tag
+   *
+   * @param DOMNode $node QPD element
+   *
+   * @return string
+   */
+  function getQueryTag(DOMNode $node) {
+    return $this->queryTextNode("QPD.2", $node);
   }
 }

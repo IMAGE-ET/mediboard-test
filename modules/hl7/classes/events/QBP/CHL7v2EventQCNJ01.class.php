@@ -36,6 +36,7 @@ class CHL7v2EventQCNJ01 extends CHL7v2EventQCN implements CHL7EventQCNJ01 {
   function build($patient) {
     parent::build($patient);
 
-
+    // QID
+    $this->addQID($patient);
   }
 }

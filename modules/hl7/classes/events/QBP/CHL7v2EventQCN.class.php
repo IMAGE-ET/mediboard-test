@@ -62,4 +62,20 @@ class CHL7v2EventQCN extends CHL7v2Event implements CHL7EventQCN {
     $MSH = CHL7v2Segment::create("MSH", $this->message);
     $MSH->build($this);
   }
+
+  /**
+   * QID - Represents an HL7 Query Identification Segment
+   *
+   * @param CPatient $patient
+   *
+   * @return void
+   */
+  function addQID(CPatient $patient) {
+    /** @var CHL7v2SegmentQID $QID */
+    $QID = CHL7v2Segment::create("QID", $this->message);
+    $QID->patient = $patient;
+    $QID->build($this);
+  }
+
+
 }

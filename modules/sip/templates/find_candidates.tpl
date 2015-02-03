@@ -20,8 +20,8 @@ Main.add(function(){
 {{mb_include module="hl7" template="inc_form_session_receiver"}}
 
 <form name="find_candidates" action="?m=sip&a=ajax_find_candidates" method="post" onsubmit="return SIP.findCandidates(this)">
-  <input type="hidden" name="pointer"  value="{{$pointer}}" />
   <input type="hidden" name="continue" value="" />
+  <input type="hidden" name="cancel" value="" />
 
   <table class="form">
     <tr>
@@ -172,6 +172,14 @@ Main.add(function(){
 
               <td colspan="2"></td>
             </tr>
+
+            <tr>
+              <th><label for="pointer">Pointeur de continuation</label></th>
+              <td><input type="text" name="pointer"  value="{{$pointer}}" size="60" readonly /></td>
+
+              <th><label for="query_tag" title="Query tag">Etiquette de requête</label></th>
+              <td><input type="text" name="query_tag"  value="{{$query_tag}}" size="60" readonly /></td>
+            </tr>
           </table>
 
         </fieldset>
@@ -180,11 +188,14 @@ Main.add(function(){
 
     <tr>
       <td class="button">
-        <button class="search singleclick" onclick="$V(this.form.continue, 0)">
+        <button class="search singleclick" onclick="$V(this.form.continue, 0); $V(this.form.cancel, 0);">
           {{tr}}Search{{/tr}}
         </button>
-        <button class="right singleclick" name="finder" {{if !$pointer}}disabled{{/if}} onclick="$V(this.form.continue, 1)">
+        <button class="right singleclick transaction" {{if !$pointer}}disabled{{/if}} onclick="$V(this.form.continue, 1); $V(this.form.cancel, 0);">
           {{tr}}Continue{{/tr}}
+        </button>
+        <button class="cancel singleclick transaction" {{if !$pointer}}disabled{{/if}} onclick="$V(this.form.continue, 0); $V(this.form.cancel, 1);">
+          Annuler la transaction
         </button>
       </td>
     </tr>

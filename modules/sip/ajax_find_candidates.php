@@ -26,6 +26,7 @@ $patient_month               = CValue::request("Date_Month");
 $patient_year                = CValue::request("Date_Year");
 $quantity_limited_request    = CValue::request("quantity_limited_request");
 $pointer                     = CValue::request("pointer");
+$query_tag                   = CValue::request("query_tag");
 
 $person_id_number            = CValue::request("person_id_number");
 $person_namespace_id         = CValue::request("person_namespace_id");
@@ -50,11 +51,11 @@ $admit_universal_id_type     = CValue::request("admit_universal_id_type");
 $admit_identifier_type_code  = CValue::request("admit_identifier_type_code");
 
 $continue                           = CValue::request("continue");
+$cancel                             = CValue::request("cancel");
 $domains_returned_namespace_id      = CValue::request("domains_returned_namespace_id");
 $domains_returned_universal_id      = CValue::request("domains_returned_universal_id");
 $domains_returned_universal_id_type = CValue::request("domains_returned_universal_id_type");
 $quantity_limited_request           = CValue::request("quantity_limited_request");
-$pointer                            = CValue::request("pointer");
 
 $patient_naissance = null;
 if ($patient_year || $patient_month || $patient_day) {
@@ -121,14 +122,20 @@ if (
   $code = "ZV1";
 }
 
+if ($cancel) {
+  $message     = "QCN";
+  $code        = "J01";
+}
+
 // PV1.17.2.1 = medecin ayant admis le patient (praticien_id=)
 // PV1.8.2.1 = medecin referent (adresse_par)
 
 $ack_data    = null;
 
-// Si on continue pas le pointer est réinitialisé
-if (!$continue) {
+// Si on continue pas, le pointer est réinitialisé
+if (!$continue && !$cancel) {
   $pointer = null;
+  $query_tag = null;
 }
 
 $iti_handler = new CITIDelegatedHandler();
@@ -161,13 +168,15 @@ foreach ($receivers as $_receiver) {
 
   $patient->_quantity_limited_request = $quantity_limited_request;
   $patient->_pointer                  = $pointer;
+  $patient->_query_tag                = $query_tag;
 
   // Envoi de l'évènement
   $ack_data = $iti_handler->sendITI($profil, $transaction, $message, $code, $patient);
 }
 
 $objects = array();
-$pointer  = null;
+$pointer = null;
+$query_tag = null;
 
 if ($ack_data) {
   if ($code == "Q22") {
@@ -183,7 +192,12 @@ if ($ack_data) {
     $pointer = $objects["pointer"];
   }
 
+  if (array_key_exists("query_tag", $objects)) {
+    $query_tag = $objects["query_tag"];
+  }
+
   unset($objects["pointer"]);
+  unset($objects["query_tag"]);
 }
 
 // Création du template
@@ -192,6 +206,7 @@ $smarty->assign("patient"                 , $patient);
 $smarty->assign("objects"                 , $objects);
 $smarty->assign("quantity_limited_request", $quantity_limited_request);
 $smarty->assign("pointer"                 , $pointer);
+$smarty->assign("query_tag"               , $query_tag);
 
 if ($code == "Q22") {
   $smarty->display("inc_list_patients.tpl");

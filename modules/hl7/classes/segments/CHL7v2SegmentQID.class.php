@@ -36,10 +36,10 @@ class CHL7v2SegmentQID extends CHL7v2Segment {
     parent::build($event);
 
     // QID-1: Query Tag (ST) (optional)
-    $data[] = null;
+    $data[] = $this->patient->_query_tag;
     
     // QID-2: Message Query Name (CE) (optional)
-    $data[] =  null;
+    $data[] = "IHE PDQ Query";
 
     $this->fill($data);
   }

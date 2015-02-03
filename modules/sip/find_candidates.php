@@ -36,6 +36,7 @@ foreach ($objects as $event => $_receivers) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("pointer"         , null);
+$smarty->assign("query_tag"       , null);
 $smarty->assign("receivers"       , $receivers);
 $smarty->assign("sejour"          , new CSejour());
 $smarty->assign("patient"         , new CPatient());
