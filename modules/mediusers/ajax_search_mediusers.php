@@ -23,7 +23,7 @@ $page         = intval(CValue::getOrSession('page', 0));
 $filter       = CValue::getOrSession("filter",    "");
 $type         = CValue::getOrSession("_user_type");
 $pro_sante    = CValue::get("pro_sante",  false);
-$inactif      = CValue::get("inactif",    false);
+$inactif      = CValue::get("inactif");
 $ldap_bound   = CValue::get("ldap_bound", false);
 $human        = CValue::get("human",      false);
 $robot        = CValue::get("robot",      false);
@@ -57,8 +57,11 @@ if ($pro_sante) {
   }
 }
 
-if ($inactif) {
-  $where["users_mediboard.actif"] = "!= '1'";
+if ($inactif == "1") {
+  $where["users_mediboard.actif"] = "= '0'";
+}
+if ($inactif == "0") {
+  $where["users_mediboard.actif"] = "= '1'";
 }
 
 if ($locked == "1") {
