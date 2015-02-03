@@ -75,11 +75,11 @@
 
     <!-- JS -->
     <script>
-      {{if $patients|@count == 1 && !$patient->_id}}
+      {{if $patients|@count == 1 && !$patient->_id && !$board}}
         reloadPatient('{{$_patient->_id}}', 0);
       {{/if}}
 
-      {{if ($patients|@count > 1 || $patients|@count == 0) && !$patient->_id}}
+      {{if ($patients|@count > 1 || $patients|@count == 0) && !$patient->_id && !$board}}
         emptyPat();
       {{/if}}
 

@@ -122,8 +122,13 @@
     <tr>
       <td class="button" colspan="4">
         <button type="button" class="erase" onclick="emptyForm();$('vw_idx_patient_button_create').hide();"
-                title="Vider les champs du formulaire">{{tr}}Empty{{/tr}}</button>
-        <button id="ins_list_patient_button_search" class="search" tabindex="10" type="submit" {{if !$board}}onclick="Patient.search(this.form);"{{/if}}>{{tr}}Search{{/tr}}</button>
+                title="Vider les champs du formulaire">
+          {{tr}}Empty{{/tr}}
+        </button>
+        <button id="ins_list_patient_button_search" class="search" tabindex="10"
+                type="submit" {{if !$board}}onclick="Patient.search(this.form);"{{/if}}>
+          {{tr}}Search{{/tr}}
+        </button>
 
         {{if !$board}}
           {{if $app->user_prefs.LogicielLectureVitale == 'vitaleVision'}}

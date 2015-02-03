@@ -330,6 +330,8 @@ class CPatient extends CPerson {
   public $_ref_vitale_idsante400;
   /** @var CConstantesMedicales */
   public $_ref_constantes_medicales;
+  /** @var CConstantesMedicales[] */
+  public $_refs_all_contantes_medicales;
   /** @var CDevenirDentaire[] */
   public $_refs_devenirs_dentaires;
   /** @var  CINSPatient[] */
@@ -1581,6 +1583,15 @@ class CPatient extends CPerson {
     $this->_ref_constantes_medicales->updateFormFields();
 
     return $latest;
+  }
+
+  /**
+   * Load all the backrefs constantes of a patient
+   *
+   * @return CConstantesMedicales[]
+   */
+  function loadRefsAllConstantesMedicales() {
+    return $this->_refs_all_contantes_medicales = $this->loadBackRefs("constantes");
   }
 
   function loadRefsGrossesses($order = "terme_prevu DESC") {
