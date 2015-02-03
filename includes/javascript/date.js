@@ -739,8 +739,10 @@ var Calendar = {
         }
 
         //get friday before easter
+        var temp_day = new Date();
+        temp_day.setDate(easter.getDate());
         for (var l=1; l<=6; l++) {
-          var dayl = easter.addDays(-1);
+          var dayl = temp_day.addDays(-1);
           if (dayl.getDay() == 5) {
             fridayBeforeSeptember = dayl;
             break;
