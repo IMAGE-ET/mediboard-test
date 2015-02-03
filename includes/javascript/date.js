@@ -722,7 +722,7 @@ var Calendar = {
       case 2: // Switzerland
         var canton = this.ref_cp+"";
         var cal_year = Calendar.getEasterDate(year);
-        canton = canton.substr(0,2);
+        canton = canton.substr(0, 2);
 
         var easter = Date.fromDATE(cal_year);
         var firstDaySeptember = Date.fromDATE(year+"-09-01");
@@ -738,9 +738,12 @@ var Calendar = {
           }
         }
 
+        // get friday before september
+        var temp_day = new Date();
+        temp_day.setDate(easter.getDate());
         //get friday before easter
         for (var l=1; l<=6; l++) {
-          var dayl = easter.addDays(-1);
+          var dayl = temp_day.addDays(-1);
           if (dayl.getDay() == 5) {
             fridayBeforeSeptember = dayl;
             break;
