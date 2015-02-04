@@ -13,31 +13,22 @@
 {{/if}}
 
 <script>
-window.previousPoint = null;
+SurveillancePerop = {
+  previousPoint: null,
+  lastDay: null,
+  graphs: [],
 
-enChantier = function(){
-  Modal.alert("Fonctionnalité en cours de développement");
-};
+  editPeropAdministration: function(operation_id) {
+    var url = new Url('dPsalleOp', 'ajax_vw_surveillance_perop_administration');
+    url.addParam('operation_id', operation_id);
+    url.modal({
+      width: 1000,
+      height: 600,
+      onClose: reloadSurveillancePerop
+    });
+  },
 
-editPeropAdministration = function(operation_id) {
-  var url = new Url('dPsalleOp', 'ajax_vw_surveillance_perop_administration');
-  url.addParam('operation_id', operation_id);
-  url.modal({
-    width: 1000,
-    height: 600,
-    onClose: reloadSurveillancePerop
-  });
-};
-  
-Main.add(function(){
-  var width = $("surveillance_cell").getWidth();
-
-  $$(".graph-placeholder").invoke("setStyle", {width: width+"px"});
-
-  $$(".supervision .evenements").invoke("setStyle", {width: (width-{{$right_margin}})+"px"});
-
-  var lastDay;
-  var xTickFormatter = function (val, axis) {
+  xTickFormatter: function (val, axis) {
     var date = new Date(val);
     var day = date.getUTCDate();
     var formatted;
@@ -46,7 +37,7 @@ Main.add(function(){
       return;
     }
 
-    if (!lastDay || lastDay != day) {
+    if (!SurveillancePerop.lastDay || SurveillancePerop.lastDay != day) {
       formatted = printf(
         "<strong>%02d:%02d</strong><br /> %02d/%02d",
         date.getUTCHours(),
@@ -63,52 +54,64 @@ Main.add(function(){
       );
     }
 
-    lastDay = day;
+    SurveillancePerop.lastDay = day;
 
     return formatted;
-  };
+  },
+
+  plothover: function (event, pos, item) {
+    if (item) {
+      var key = item.dataIndex+"-"+item.seriesIndex;
+
+      if (SurveillancePerop.previousPoint != key) {
+        SurveillancePerop.previousPoint = key;
+        jQuery("#flot-tooltip").remove();
+
+        var yaxis = item.series.yaxis.n;
+        event.target.select(".flot-y"+yaxis+"-axis, .flot-y"+yaxis+"-axis .flot-tick-label").invoke("addClassName", "axis-onhover");
+
+        var contents = SupervisionGraph.formatTrack(item);
+
+        $$("body")[0].insert(DOM.div({className: "tooltip", id: "flot-tooltip"}, contents).setStyle({
+          position: 'absolute',
+          top:  item.pageY + 5 + "px",
+          left: item.pageX + 5 + "px"
+        }));
+      }
+    }
+    else {
+      $$(".axis-onhover").invoke("removeClassName", "axis-onhover");
+
+      jQuery("#flot-tooltip").remove();
+      SurveillancePerop.previousPoint = null;
+    }
+  },
+
+  plotclick: function(event, pos, item){
+    {{if !$_readonly}}
+      if (!item) {
+        return;
+      }
+
+      var data = item.series.data[item.dataIndex];
+      editObservationResultSet(data.set_id, '{{$pack->_id}}', data.result_id);
+    {{/if}}
+  }
+};
+
+enChantier = function(){
+  Modal.alert("Fonctionnalité en cours de développement");
+};
+  
+Main.add(function(){
+  var width = $("surveillance_cell").getWidth();
+
+  $$(".graph-placeholder").invoke("setStyle", {width: width+"px"});
+
+  $$(".supervision .evenements").invoke("setStyle", {width: (width-{{$right_margin}})+"px"});
   
   (function ($){
-    function plothover(event, pos, item) {
-      if (item) {
-        var key = item.dataIndex+"-"+item.seriesIndex;
-
-        if (window.previousPoint != key) {
-          window.previousPoint = key;
-          jQuery("#flot-tooltip").remove();
-
-          var yaxis = item.series.yaxis.n;
-          event.target.select(".flot-y"+yaxis+"-axis, .flot-y"+yaxis+"-axis .flot-tick-label").invoke("addClassName", "axis-onhover");
-
-          var contents = SupervisionGraph.formatTrack(item);
-
-          $$("body")[0].insert(DOM.div({className: "tooltip", id: "flot-tooltip"}, contents).setStyle({
-            position: 'absolute',
-            top:  item.pageY + 5 + "px",
-            left: item.pageX + 5 + "px"
-          }));
-        }
-      }
-      else {
-        $$(".axis-onhover").invoke("removeClassName", "axis-onhover");
-
-        jQuery("#flot-tooltip").remove();
-        window.previousPoint = null;
-      }
-    }
-
-    function plotclick(event, pos, item){
-      {{if !$_readonly}}
-        if (!item) {
-          return;
-        }
-
-        var data = item.series.data[item.dataIndex];
-        editObservationResultSet(data.set_id, '{{$pack->_id}}', data.result_id);
-      {{/if}}
-    }
-
-    var ph, series, xaxes;
+    var ph, series, options, xaxes;
     
     {{foreach from=$graphs item=_graph key=i name=graphs}}
       {{if $_graph instanceof CSupervisionGraph}}
@@ -118,18 +121,18 @@ Main.add(function(){
         series = {{$_graph_data.series|@json}};
         xaxes  = {{$_graph_data.xaxes|@json}};
         xaxes[0].ticks = 10;
-        xaxes[0].tickFormatter = xTickFormatter;
+        xaxes[0].tickFormatter = SurveillancePerop.xTickFormatter;
 
-        ph.bind("plothover", plothover);
-        ph.bind("plotclick", plotclick);
+        ph.bind("plothover", SurveillancePerop.plothover);
+        ph.bind("plotclick", SurveillancePerop.plotclick);
 
-        var plot = $.plot(ph, series, {
+        options = {
           grid: {
             hoverable: true,
-            {{if !$_readonly}}
+              {{if !$_readonly}}
               clickable: true,
-            {{/if}}
-            markings: [
+              {{/if}}
+              markings: [
               // Debut op
               {xaxis: {from: 0, to: {{$time_debut_op}}}, color: "rgba(0,0,0,0.05)"},
               {xaxis: {from: {{$time_debut_op}}, to: {{$time_debut_op+1000}}}, color: "black"},
@@ -142,14 +145,19 @@ Main.add(function(){
           series: SupervisionGraph.defaultSeries,
           xaxes: xaxes,
           yaxes: {{$_graph_data.yaxes|@json}}
-        });
+        };
 
-        if (window.Concentrator) {
-          var implied = {{$_graph->getTypeUnitList()|@json}};
-          Concentrator.impliedTypes = Object.merge(implied, Concentrator.impliedTypes);
-        }
+        SurveillancePerop.graphs.push({
+          holder: ph,
+          series: series,
+          options: options
+        });
       {{/if}}
     {{/foreach}}
+
+    SurveillancePerop.graphs.each(function(graph){
+      $.plot(graph.holder, graph.series, graph.options);
+    });
   })(jQuery);
 });
 
@@ -346,7 +354,7 @@ printSurveillance = function(operation_id) {
   {{tr}}CObservationResultSet-title-create{{/tr}}
 </button>
 
-<button class="injection" onclick="editPeropAdministration('{{$interv->_id}}')" {{if $_readonly}} disabled {{/if}}>Administrer</button>
+<button class="injection" onclick="SurveillancePerop.editPeropAdministration('{{$interv->_id}}')" {{if $_readonly}} disabled {{/if}}>Administrer</button>
 
 <button class="print" onclick="printSurveillance({{$interv->_id}})">Imprimer surveillance</button>
 
@@ -452,7 +460,7 @@ printSurveillance = function(operation_id) {
             {{/if}}
 
             {{if $_label == "CPrescription._chapitres.med" && !$_readonly}}
-              <button class="add notext compact" onclick="editPeropAdministration('{{$interv->_id}}')"></button>
+              <button class="add notext compact" onclick="SurveillancePerop.editPeropAdministration('{{$interv->_id}}')"></button>
             {{/if}}
           </th>
         </tr>

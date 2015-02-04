@@ -182,6 +182,8 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
           $_series_data = $_serie->initSeriesData($yaxis_i);
           $_unit_id = ($_serie->value_unit_id ? $_serie->value_unit_id : "none");
 
+          $_series_data["key"] = "$_serie->value_type_id-$_serie->value_unit_id";
+
           if (!$graph_yaxis["color"]) {
             $graph_yaxis["color"] = "#$_serie->color";
           }
