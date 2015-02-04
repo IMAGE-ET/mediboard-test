@@ -148,7 +148,7 @@
       {{else}}
         <td colspan="4" class="button" style="{{$cell_style}}">
           {{if $type_event == "COperation"}}
-            Intervention non associé à la consultation
+            Intervention non associée à la consultation
             {{if $canAdmissions->edit}}
               <br />
               <form name="addOpFrm-{{$curr_consult->_id}}" action="?m={{$m}}" method="post">
@@ -158,6 +158,7 @@
               {{mb_key object=$_dossier}}
               <input type="hidden" name="operation_id" value="{{$curr_consult->_next_sejour_and_operation.COperation->_id}}" />
               <button type="submit" class="tick">
+              <input type="hidden" name="postRedirect" value="m={{$m}}" />
                 Associer l'intervention
               </button>
               </form>
@@ -172,6 +173,7 @@
               <input type="hidden" name="m" value="dPcabinet" />
               {{mb_key object=$_dossier}}
               <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
+              <input type="hidden" name="postRedirect" value="m={{$m}}" />
               <button type="submit" class="tick">
                 Associer le séjour
               </button>
