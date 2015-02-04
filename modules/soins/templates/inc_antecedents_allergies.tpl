@@ -1,4 +1,8 @@
-{{mb_include module=soins template=inc_vw_antecedents}}
+{{mb_default var=show_atcd value=1}}
+
+{{if $show_atcd}}
+  {{mb_include module=soins template=inc_vw_antecedents}}
+{{/if}}
 
 {{if $dossier_medical->_id}}
   {{if $dossier_medical->_count_allergies}}
