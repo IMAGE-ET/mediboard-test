@@ -19,19 +19,19 @@ $group = CGroups::loadCurrent();
 
 //filters
 $user_id        = CValue::get("user_id");
-$page         = intval(CValue::getOrSession('page', 0));
-$filter       = CValue::getOrSession("filter",    "");
-$type         = CValue::getOrSession("_user_type");
-$pro_sante    = CValue::get("pro_sante",  false);
-$inactif      = CValue::get("inactif");
-$ldap_bound   = CValue::get("ldap_bound", false);
-$human        = CValue::get("human",      false);
-$robot        = CValue::get("robot",      false);
-$locked       = CValue::get("locked");
-$function_id  = CValue::get("function_id");
-$order_way    = CValue::getOrSession("order_way", "ASC");
-$order_col    = CValue::getOrSession("order_col", "function_id");
-$user_id      = CValue::getOrSession("user_id");
+$page           = intval(CValue::getOrSession('page', 0));
+$filter         = CValue::getOrSession("filter",    "");
+$type           = CValue::getOrSession("_user_type");
+$inactif        = CValue::get("inactif");
+$ldap_bound     = CValue::get("ldap_bound", false);
+$user_loggable  = CValue::get("user_loggable");
+$human          = CValue::get("human",      false);
+$robot          = CValue::get("robot",      false);
+$locked         = CValue::get("locked");
+$function_id    = CValue::get("function_id");
+$order_way      = CValue::getOrSession("order_way", "ASC");
+$order_col      = CValue::getOrSession("order_col", "function_id");
+$user_id        = CValue::getOrSession("user_id");
 
 // search
 // Liste des utilisateurs
@@ -44,16 +44,22 @@ $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboa
 $where = array();
 $where["functions_mediboard.group_id"] = "= '$group->_id'";
 
-if ($pro_sante) {
-  $user_types = array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Diététicien");
-  $utypes_flip = array_flip(CUser::$types);
 
-  if (is_array($user_types)) {
-    foreach ($user_types as $key => $value) {
-      $user_types[$key] = $utypes_flip[$value];
+if ($type) {
+  if ($type == "ps") {
+    $user_types = array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Diététicien");
+    $utypes_flip = array_flip(CUser::$types);
+
+    if (is_array($user_types)) {
+      foreach ($user_types as $key => $value) {
+        $user_types[$key] = $utypes_flip[$value];
+      }
+
+      $where["users.user_type"] = CSQLDataSource::prepareIn($user_types);
     }
-
-    $where["users.user_type"] = CSQLDataSource::prepareIn($user_types);
+  }
+  else {
+    $where["users.user_type"] = "= '$type'";
   }
 }
 
@@ -75,10 +81,6 @@ if ($function_id) {
   $where["users_mediboard.function_id"] = " = '$function_id'";
 }
 
-if ($type) {
-  $where["users.user_type"] = "= '$type'";
-}
-
 if ($ldap_bound) {
   $ldap_tag = CAppUI::conf("admin LDAP ldap_tag");
 
@@ -89,11 +91,11 @@ if ($ldap_bound) {
   }
 }
 
-$tag = CMediusers::getTagSoftware();
-$ds  = CSQLDataSource::get("std");
-$robots = array();
 
-if (($human || $robot) && !($human && $robot)) {
+if ($user_loggable) {
+  $robots = array();
+  $ds  = CSQLDataSource::get("std");
+  $tag = CMediusers::getTagSoftware();
   if ($tag) {
     $query = "SELECT users.user_id
             FROM users
@@ -110,19 +112,20 @@ if (($human || $robot) && !($human && $robot)) {
             FROM users
             WHERE users.dont_log_connection = '1'";
   }
-
   $robots = $ds->loadColumn($query);
-}
 
-if ($human && !$robot) {
-  if (count($robots)) {
-    $where["users.user_id"] = $ds->prepareNotIn($robots);
+  if ($user_loggable == "robot") {
+    if (count($robots)) {
+      $where["users.user_id"] = $ds->prepareIn($robots);
+    }
+    else {
+      $where[] = " 1 = 0";
+    }
   }
-}
-
-if ($robot && !$human) {
-  if (count($robots)) {
-    $where["users.user_id"] = $ds->prepareIn($robots);
+  elseif ($user_loggable == "human") {
+    if (count($robots)) {
+      $where["users.user_id"] = $ds->prepareNotIn($robots);
+    }
   }
 }
 

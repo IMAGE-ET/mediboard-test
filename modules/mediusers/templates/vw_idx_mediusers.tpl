@@ -76,12 +76,12 @@
 
   <fieldset class="fieldset_search">
       <legend>Recherche d'{{tr}}CMediusers{{/tr}}</legend>
-
-    <table style="float:left;">
+    <table class="main">
       <tr>
-        <td><label>
+        <td style="vertical-align: middle">
+          <label>
             Mots clés :
-            <input type="text" name="filter" value="{{$filter}}" style="width: 15em;" onchange="$V(this.form.page, 0)" />
+            <input type="text" name="filter" value="{{$filter}}" style="width: 10em;" onchange="$V(this.form.page, 0)" />
           </label>
         </td>
         <td>
@@ -89,7 +89,7 @@
             <tr>
               <th>{{tr}}CFunctions{{/tr}}</th>
               <td>
-                  <select name="function_id">
+                  <select name="function_id" style="width: 15em;">
                     <option value="">&mdash; {{tr}}CFunctions.all{{/tr}}</option>
                     {{foreach from=$group->_ref_functions item=_function}}
                       <option value="{{$_function->_id}}">{{$_function}}</option>
@@ -103,7 +103,8 @@
               </th>
               <td>
                 <select name="_user_type" style="width: 15em;">
-                  <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+                  <option value="">&mdash; {{tr}}All{{/tr}}</option>
+                  <option value="ps"> > Professionnel de santé</option>
                   {{foreach from=$utypes key=curr_key item=_type}}
                     <option value="{{if $curr_key != 0}}{{$curr_key}}{{/if}}" {{if $type == $curr_key}}selected="selected"{{/if}}>
                       {{$_type}}
@@ -120,8 +121,8 @@
             <tr>
               <th><label>Verrouillage</th></label>
               <td>
-                <select name="locked">
-                  <option value="">Tous</option>
+                <select name="locked" onchange="$V(this.form.page, 0, false)" style="width: 15em;">
+                  <option value="">&mdash; {{tr}}All{{/tr}}</option>
                   <option value="1">Verrouillés seulement</option>
                   <option value="0">Non Verrouillés seulement</option>
                 </select>
@@ -132,42 +133,38 @@
                 <label>Inactif</label>
               </th>
               <td>
-                <select name="inactif">
-                  <option value="">Tous</option>
+                <select name="inactif" onchange="$V(this.form.page, 0, false)" style="width: 15em;">
+                  <option value="">&mdash; {{tr}}All{{/tr}}</option>
                   <option value="1">Inactifs seulement</option>
                   <option value="0">Actifs seulement</option>
                 </select>
               </td>
-
             </tr>
           </table>
         </td>
+        <td  style="vertical-align: middle">
+          <label>
+            Type d'utilisateur
+            <select name="user_loggable">
+              <option value="">&mdash; {{tr}}All{{/tr}}</option>
+              <option value="human">Humain</option>
+              <option value="robot">robot</option>
+            </select>
+          </label>
+        </td>
+        {{if $configLDAP}}
+          <td>
+            <label>
+              <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="ldap_bound" />
+              Associé au LDAP,
+            </label>
+          </td>
+        {{/if}}
+        <td  style="vertical-align: middle">
+          <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
+        </td>
       </tr>
     </table>
-
-    <fieldset style="display:inline-block;">
-      <legend>Afficher seulement</legend>
-        <label>
-          <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="pro_sante" />
-          Professionnel de santé
-        </label>
-      {{if $configLDAP}}
-          <label>
-            <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="ldap_bound" />
-            Associé au LDAP
-          </label>
-      {{/if}}
-        <label>
-          <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="human" />
-          Humain
-        </label>
-        <label>
-          <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="robot" />
-          Robot
-        </label>
-    </fieldset>
-
-    <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
   </fieldset>
 </form>
 
