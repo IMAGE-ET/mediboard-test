@@ -96,6 +96,10 @@
     <th class="narrow"></th>
   </tr>    
   {{foreach from=$listOperations key=key item=_operation}}
+    {{assign var=patient value=$_operation->_ref_patient}}
+    {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
+    {{assign var=antecedents value=$dossier_medical->_ref_antecedents_by_type}}
+    {{assign var=sejour_id value=$_operation->sejour_id}}
     {{assign var=_operation_id value=$_operation->_id}}
   <tr>
     <td>{{$_operation->_ref_salle->_shortview}}</td>
@@ -120,9 +124,7 @@
         <button class="labo button notext" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}','Imeds');">Labo</button>
       {{/if}}
       <button type="button" class="injection notext" onclick="Operation.dossierBloc('{{$_operation->_id}}', true)">Dossier de bloc</button>
-      {{if $_operation->_ref_patient->_ref_dossier_medical->_ref_allergies|@count}}
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_patient->_guid}}', 'allergies');"><img src="images/icons/allergies_warning.png" alt="" /></span>
-      {{/if}}
+      {{mb_include module=soins template=inc_antecedents_allergies patient_guid=$_operation->_ref_patient->_guid show_atcd=0}}
     </td>
     {{if $use_poste}}
       <td>

@@ -150,14 +150,10 @@ foreach ($listOperations as $op) {
   $op->loadRefPatient();
   $dossier_med = $op->_ref_patient->loadRefDossierMedical();
 
-  foreach ($keywords as $_keyword) {
-    foreach ($dossier_med->loadRefsAllergies() as $_key => $_allergie) {
-      if (preg_match('/^'.strtolower($_keyword).'$/', strtolower($_allergie->_view))) {
-        unset($dossier_med->_ref_allergies[$_key]);
-        continue;
-      }
-    }
-  }
+  $dossier_med->loadRefsAllergies();
+  $dossier_med->loadRefsAntecedents();
+  $dossier_med->countAntecedents(false);
+  $dossier_med->countAllergies();
 
   $op->loadAffectationsPersonnel();
   $op->loadBrancardage();
