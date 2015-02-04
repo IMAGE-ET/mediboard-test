@@ -89,7 +89,7 @@ class CTempsOp extends CMbObject {
    * @return CMediusers Le praticien lié
    */
   function loadRefPraticien() {
-    return $this->_ref_praticien = $this->loadFwdRef("praticien_id", 1);
+    return $this->_ref_praticien = $this->loadFwdRef("chir_id", 1);
   }
 
   /**
