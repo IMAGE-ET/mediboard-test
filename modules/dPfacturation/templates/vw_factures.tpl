@@ -39,15 +39,6 @@
   url.requestUpdate("factures");
 }
 
-printFacture = function(facture_id, type_pdf) {
-  var url = new Url('facturation', 'ajax_edit_bvr');
-  url.addParam('facture_class', '{{$facture->_class}}');
-  url.addParam('facture_id'   , facture_id);
-  url.addParam('type_pdf'     , type_pdf);
-  url.addParam('suppressHeaders', '1');
-  url.popup(1000, 600);
-}
-
 viewPatient = function() {
   var form = getForm("choice-facture");
   if (form.patient_id.value) {

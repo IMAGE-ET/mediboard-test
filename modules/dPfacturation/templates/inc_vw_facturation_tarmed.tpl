@@ -10,48 +10,7 @@
     url.addParam("facture_class", '{{$facture->_class}}');
     url.addParam("patient_id"   , '{{$facture->patient_id}}');
     url.requestUpdate("refresh-assurance");
-  }
-
-  printFacture = function(facture_id, type_pdf) {
-    var url = new Url('facturation', 'ajax_edit_bvr');
-    url.addParam('facture_class', '{{$facture->_class}}');
-    url.addParam('facture_id'   , facture_id);
-    url.addParam('type_pdf'     , type_pdf);
-    url.addParam('suppressHeaders', '1');
-
-    if (type_pdf == "impression") {
-      var urlbis = new Url('facturation', 'ajax_edit_definitive');
-      urlbis.addParam('facture_class', '{{$facture->_class}}');
-      urlbis.addParam('facture_id'   , facture_id);
-      urlbis.requestModal(300, 150);
-      urlbis.modalObject.observe('afterClose', function(){
-        url.requestUpdate(SystemMessage.id);
-      });
-    }
-    else {
-      url.popup(1000, 600);
-    }
-  }
-
-  dossierBloc = function(operation_id) {
-    var url = new Url("salleOp", "ajax_vw_operation");
-    url.addParam("op", operation_id);
-    url.requestModal('90%', '90%');
-    url.modalObject.observe("afterClose", function(){
-      Facture.reload('{{$facture->patient_id}}', null, 0, '{{$facture->_id}}', '{{$facture->_class}}');
-    });
-  }
-
-  viewInterv = function(operation_id, plageop_id) {
-    if (plageop_id) {
-      var url = new Url("planningOp", "vw_edit_planning", "tab");
-    }
-    else {
-      var url = new Url("planningOp", "vw_edit_urgence", "tab");
-    }
-    url.addParam("operation_id", operation_id);
-    url.redirect();
-  }
+  };
 
   {{if $facture->_ref_sejours|@count}}
     gestionFacture = function() {
@@ -61,7 +20,7 @@
       url.addParam('object_id'    , '{{$facture->_ref_last_sejour->_id}}');
       url.addParam('object_class' , '{{$facture->_ref_last_sejour->_class}}');
       url.requestModal();
-    }
+    };
   {{/if}}
 </script>
 
@@ -69,20 +28,20 @@
   <tr>
     <td colspan="8">
       {{if $conf.dPfacturation.Other.edit_bill_alone}}
-        <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 'bvr');">Edition des BVR</button>
-        <button class="print" onclick="printFacture('{{$facture->_id}}', 'justificatif');">Justificatif de remboursement</button>
+        <button class="printPDF" onclick="Facture.printFacture('{{$facture->_id}}', '{{$facture->_class}}', 'bvr');">Edition des BVR</button>
+        <button class="print" onclick="Facture.printFacture('{{$facture->_id}}', '{{$facture->_class}}', 'justificatif');">Justificatif de remboursement</button>
       {{else}}
-        <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 'impression');">Edition des documents</button>
+        <button class="printPDF" onclick="Facture.printFacture('{{$facture->_id}}', '{{$facture->_class}}', 'impression');">Edition des documents</button>
       {{/if}}
 
       {{if $facture->_ref_reglements|@count}}
         {{if ($facture->_ref_assurance_maladie->_id && $facture->type_facture == "maladie" && $facture->_ref_assurance_maladie->type_pec == "TS")
         || ($facture->_ref_assurance_accident->_id && $facture->type_facture == "accident" && $facture->_ref_assurance_accident->type_pec == "TS" && "tarmed coefficient pt_maladie"|conf:"CGroups-$g") }}
-          <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 'bvr_TS');">Facture Patient</button>
+          <button class="printPDF" onclick="Facture.printFacture('{{$facture->_id}}', '{{$facture->_class}}', 'bvr_TS');">Facture Patient</button>
         {{/if}}
       {{/if}}
       {{*Modification temporaire!! bvr_justif=impression*}}
-      <button class="print" onclick="printFacture('{{$facture->_id}}', 'bvr_justif');">Impression</button>
+      <button class="print" onclick="Facture.printFacture('{{$facture->_id}}', '{{$facture->_class}}', 'bvr_justif');">Impression</button>
 
       {{if $facture->_is_relancable && $conf.dPfacturation.CRelance.use_relances}}
         <form name="facture_relance" method="post" action="" onsubmit="return Relance.create(this);">
@@ -105,7 +64,7 @@
       {{if $facture->_class == "CFactureEtablissement" && $facture->_ref_sejours|@count}}
         {{assign var="last_op" value=$facture->_ref_last_sejour->_ref_last_operation}}
         {{if $facture->numero == 1}}
-          <button type="button" class="edit" onclick="viewInterv('{{$last_op->_id}}', '{{$last_op->plageop_id}}');" style="float:right;"> Infos interv. </button>
+          <button type="button" class="edit" onclick="Facture.viewInterv('{{$last_op->_id}}', '{{$last_op->plageop_id}}');" style="float:right;"> Infos interv. </button>
         {{/if}}
         <button type="button" class="new" onclick="gestionFacture();">Gestion des factures</button>
       {{/if}}
@@ -130,9 +89,9 @@
       {{mb_script module=compteRendu script=document ajax=true}}
       {{mb_script module=compteRendu script=modele_selector ajax=true}}
       {{mb_script module=files     script=file ajax=true}}
-      <button type="button" class="injection" onclick="dossierBloc('{{$last_op->_id}}');"> Dossier bloc </button>
+      <button type="button" class="injection" onclick="Facture.dossierBloc('{{$last_op->_id}}', '{{$facture->patient_id}}', '{{$facture->_id}}', '{{$facture->_class}}');"> Dossier bloc </button>
       {{if $facture->numero == 1}}
-        <button type="button" class="new" onclick="viewInterv('{{$last_op->_id}}', '{{$last_op->plageop_id}}');"> Infos interv. </button>
+        <button type="button" class="new" onclick="Facture.viewInterv('{{$last_op->_id}}', '{{$last_op->plageop_id}}');"> Infos interv. </button>
       {{/if}}
       <button type="button" class="new" onclick="gestionFacture();">Gestion des factures</button>
     </td>
