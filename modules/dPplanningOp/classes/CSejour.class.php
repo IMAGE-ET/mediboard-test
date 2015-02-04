@@ -4498,17 +4498,21 @@ class CSejour extends CFacturable implements IPatientRelated {
 
         $dates_liaison = $dates[$_liaison->_id];
 
-        $item_facture->_quantite = CMbDT::daysRelative($dates_liaison["debut"], $dates_liaison["fin"]);
+        $quantite = CMbDT::daysRelative($dates_liaison["debut"], $dates_liaison["fin"]);
         if (!$sous_item->_id || $sous_item->niveau == "jour") {
-          $item_facture->_quantite += 1;
+          $quantite += 1;
         }
 
-        // On prend le nom du sous-item et son id400 si présent et s'il fait partie des sous-items de l'item facturé.
-        if ($sous_item->item_prestation_id == $item_facture->_id) {
-          $item_facture->_sous_item_facture = $sous_item;
+        if (!$quantite) {
+          continue;
         }
 
-        $this->_ref_prestations[$date][] = $item_facture;
+        $this->_ref_prestations[$date][] = array(
+          "quantite"  => $quantite,
+          "item"      => $item_facture,
+          // On prend le nom du sous-item et son id400 si présent et s'il fait partie des sous-items de l'item facturé.
+          "sous_item_facture" => $sous_item->item_prestation_id == $item_facture->_id ? $sous_item : ""
+        );
       }
     }
     return $this->_ref_prestations;
