@@ -161,8 +161,8 @@ class CMediusersStats {
       foreach ($this->totals[$_user->_id] as $_date => $_values) {
         foreach($_values as $_part => $_value) {
           if (is_numeric($_value)) {
-            $this->sections[$function->_guid][$_date][$_part] += $_value;
-            $this->sections[$group   ->_guid][$_date][$_part] += $_value;
+            @$this->sections[$function->_guid][$_date][$_part] += $_value;
+            @$this->sections[$group   ->_guid][$_date][$_part] += $_value;
           }
         }
       }
