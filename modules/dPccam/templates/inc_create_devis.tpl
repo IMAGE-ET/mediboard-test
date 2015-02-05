@@ -9,7 +9,8 @@
  * @link       http://www.mediboard.org
 *}}
 
-{{assign var=date value='CMbDT::dateTime'|static_call:null}}
+{{assign var=datetime value='CMbDT::dateTime'|static_call:null}}
+{{assign var=date value='CMbDT::date'|static_call:null}}
 
 <script type="text/javascript">
   callbackDevis = function(devis_id) {
@@ -27,7 +28,8 @@
   <input type="hidden" name="codable_id" value="{{$object->_id}}"/>
   <input type="hidden" name="patient_id" value="{{$object->patient_id}}"/>
   <input type="hidden" name="praticien_id" value="{{$object->_ref_praticien->_id}}"/>
-  <input type="hidden" name="creation_date" value="{{$date}}"/>
+  <input type="hidden" name="creation_date" value="{{$datetime}}"/>
+  <input type="hidden" name="date" value="{{$date}}"/>
 
   <button type="submit" class="new">
     {{tr}}CDevisCodage-title-create{{/tr}}
