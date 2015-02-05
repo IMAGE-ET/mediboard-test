@@ -278,17 +278,27 @@ class CHL7v2MessageXML extends CMbXMLDocument {
       return;
     }
 
+    $control_identifier_type_code = CValue::read($sender->_configs, "control_identifier_type_code");
+
     $search_master_IPP = CValue::read($sender->_configs, "search_master_IPP");
     if ($search_master_IPP) {
       $domain = CDomain::getMasterDomain("CPatient", $sender->group_id);
 
-      if (($this->queryTextNode("CX.5", $node) == "PI") && ($domain->namespace_id == $this->queryTextNode("CX.4/HD.1", $node))) {
+      if ($domain->namespace_id != $this->queryTextNode("CX.4/HD.1", $node)) {
+        return;
+      }
+
+      if ($control_identifier_type_code) {
+        if ($this->queryTextNode("CX.5", $node) == "PI") {
+          $data["PI"] = $this->queryTextNode("CX.1", $node);
+        }
+      }
+      else {
         $data["PI"] = $this->queryTextNode("CX.1", $node);
       }
 
       return;
     }
-
 
     if ($this->queryTextNode("CX.5", $node) == "PI") {
       $data["PI"] = $this->queryTextNode("CX.1", $node);
@@ -311,11 +321,22 @@ class CHL7v2MessageXML extends CMbXMLDocument {
       return;
     }
 
+    $control_identifier_type_code = CValue::read($sender->_configs, "control_identifier_type_code");
+
     $search_master_NDA = CValue::read($sender->_configs, "search_master_NDA");
     if ($search_master_NDA) {
       $domain = CDomain::getMasterDomain("CSejour", $sender->group_id);
 
-      if (($this->queryTextNode("CX.5", $node) == "AN") && ($domain->namespace_id == $this->queryTextNode("CX.4/HD.1", $node))) {
+      if ($domain->namespace_id != $this->queryTextNode("CX.4/HD.1", $node)) {
+        return;
+      }
+
+      if ($control_identifier_type_code) {
+        if ($this->queryTextNode("CX.5", $node) == "AN") {
+          $data["AN"] = $this->queryTextNode("CX.1", $node);
+        }
+      }
+      else {
         $data["AN"] = $this->queryTextNode("CX.1", $node);
       }
 

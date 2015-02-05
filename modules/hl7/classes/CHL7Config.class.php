@@ -69,6 +69,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "manage_npa",
     "change_filler_placer",
     "handle_OBR_identity_identifier",
+    "control_identifier_type_code",
 
     // Send
     "send_assigning_authority",
@@ -134,6 +135,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
   public $manage_npa;
   public $change_filler_placer;
   public $handle_OBR_identity_identifier;
+  public $control_identifier_type_code;
 
   // Send
   public $send_assigning_authority;
@@ -202,7 +204,8 @@ class CHL7Config extends CExchangeDataFormatConfig {
       "ins_integrated",
       "manage_npa",
       "change_filler_placer",
-      "handle_OBR_identity_identifier"
+      "handle_OBR_identity_identifier",
+      "control_identifier_type_code"
     ),
 
     "send" => array(
@@ -279,6 +282,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["ins_integrated"]                 = "bool default|0";
     $props["manage_npa"]                     = "bool default|0";
     $props["change_filler_placer"]           = "bool default|0";
+    $props["control_identifier_type_code"]   = "bool default|1";
     $props["handle_OBR_identity_identifier"] = "str";
     
     // => PID

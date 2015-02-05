@@ -1454,7 +1454,13 @@ class CSetuphl7 extends CSetup {
                 ADD `ITI9_HL7_version` ENUM ('2.1','2.2','2.3','2.3.1','2.4','2.5') DEFAULT '2.5';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.13";
+    $this->makeRevision("1.13");
+
+    $query = "ALTER TABLE `hl7_config`
+                ADD `control_identifier_type_code` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.14";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
