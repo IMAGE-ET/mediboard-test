@@ -10,57 +10,48 @@
   }
 
   refreshList = function(){
-  var oForm = getForm("choice-facture");
-  if(!oForm._pat_name.value){
-    oForm.patient_id.value = '';
-  }
-  var url = new Url("facturation" , "{{$tab}}");
-  url.addElement(oForm.patient_id);
-  url.addElement(oForm.chirSel);
-  url.addElement(oForm._date_min);
-  url.addElement(oForm._date_max);
-  url.addElement(oForm.type_date_search);
-  url.addElement(oForm.num_facture);
-  url.addElement(oForm.page);
+    var oForm = getForm("choice-facture");
+    if(!oForm._pat_name.value){
+      oForm.patient_id.value = '';
+    }
+    var url = new Url("facturation" , "{{$tab}}");
+    url.addElement(oForm.patient_id);
+    url.addElement(oForm.chirSel);
+    url.addElement(oForm._date_min);
+    url.addElement(oForm._date_max);
+    url.addElement(oForm.type_date_search);
+    url.addElement(oForm.num_facture);
+    url.addElement(oForm.page);
 
-  {{if !$conf.dPfacturation.Other.use_search_easy}}
+    {{if !$conf.dPfacturation.Other.use_search_easy}}
     url.addElement(oForm.etat_cloture);
     url.addElement(oForm.numero);
     {{if $conf.dPfacturation.CRelance.use_relances}}
-      url.addParam("etat_relance" , $V(oForm.etat_relance) ? 1 : 0 );
+    url.addParam("etat_relance" , $V(oForm.etat_relance) ? 1 : 0 );
     {{/if}}
     {{if $facture->_class == "CFactureEtablissement"}}
-      url.addParam("etat_cotation" , $V(oForm.etat_cotation) ? 1 : 0 );
+    url.addParam("etat_cotation" , $V(oForm.etat_cotation) ? 1 : 0 );
     {{/if}}
     url.addParam("no_finish_reglement" , $V(oForm.no_finish_reglement) ? 1 : 0);
-  {{else}}
+    {{else}}
     url.addElement(oForm.search_easy);
-  {{/if}}
-  url.requestUpdate("factures");
-}
-
-printFacture = function(facture_id, type_pdf) {
-  var url = new Url('facturation', 'ajax_edit_bvr');
-  url.addParam('facture_class', '{{$facture->_class}}');
-  url.addParam('facture_id'   , facture_id);
-  url.addParam('type_pdf'     , type_pdf);
-  url.addParam('suppressHeaders', '1');
-  url.popup(1000, 600);
-}
-
-viewPatient = function() {
-  var form = getForm("choice-facture");
-  if (form.patient_id.value) {
-    var url = new Url('patients', 'vw_edit_patients', 'tab');
-    url.addElement(form.patient_id);
-    url.redirect();
+    {{/if}}
+    url.requestUpdate("factures");
   }
-}
 
-Main.add(function () {
-  Calendar.regField(getForm("choice-facture")._date_min);
-  Calendar.regField(getForm("choice-facture")._date_max);
-});
+  viewPatient = function() {
+    var form = getForm("choice-facture");
+    if (form.patient_id.value) {
+      var url = new Url('patients', 'vw_edit_patients', 'tab');
+      url.addElement(form.patient_id);
+      url.redirect();
+    }
+  }
+
+  Main.add(function () {
+    Calendar.regField(getForm("choice-facture")._date_min);
+    Calendar.regField(getForm("choice-facture")._date_max);
+  });
 </script>
 
 <div id="factures">
@@ -174,7 +165,7 @@ Main.add(function () {
         <td>
           <select name="chirSel" style="width: 15em;">
             <option value="0" {{if !$chirSel}} selected="selected" {{/if}}>&mdash; Choisir un professionnel</option>
-            {{if $facture->_class == "CFactureEtablissement"}} 
+            {{if $facture->_class == "CFactureEtablissement"}}
               <option value="-1" {{if $chirSel == "-1"}} selected="selected" {{/if}}><b>&mdash; Tous</b></option>
             {{/if}}
             {{mb_include module=mediusers template=inc_options_mediuser selected=$chirSel list=$listChirs}}
@@ -190,7 +181,7 @@ Main.add(function () {
             {{if $conf.dPfacturation.CRelance.use_relances}}
               <label>
                 <input name="etat_relance" value="1" type="checkbox" {{if $etat_relance == 1}}checked="checked"{{/if}}/>
-                 Relancées
+                Relancées
               </label>
             {{/if}}
           </td>
@@ -198,7 +189,7 @@ Main.add(function () {
         <th>Jusqu'au</th>
         <td>{{mb_field object=$filter field="_date_max" form="choice-facture" canNull="false" register=true}}</td>
       </tr>
-      
+
       <tr>
         <th>Numéro de facture</th>
         <td><input name="num_facture" value="{{$num_facture}}" type="text" /></td>
