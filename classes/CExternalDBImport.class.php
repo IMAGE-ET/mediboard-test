@@ -208,13 +208,13 @@ class CExternalDBImport {
       }
 
       if ($id) {
-        $query .= ($key_multi) ? " CONCAT(" . implode(",'|',", $key_multi) . ") > '$id'" : " $object->_key > '$id'";
+        $query .= ($key_multi) ? " CONCAT(TRIM(" . implode("),'|',TRIM(", $key_multi) . ")) > '$id'" : " $object->_key > TRIM('$id')";
       }
     }
 
     if ($order && $order_by || $id) {
       if ($id) {
-        $query .= ($key_multi) ? " ORDER BY CONCAT(" . implode(",'|',", $key_multi) . ") ASC" : " ORDER BY $object->_key ASC";
+        $query .= ($key_multi) ? " ORDER BY CONCAT(TRIM(" . implode("),'|',TRIM(", $key_multi) . ")) ASC" : " ORDER BY TRIM($object->_key) ASC";
       }
       else {
         $query .= " ORDER BY $order_by DESC";
@@ -235,7 +235,7 @@ class CExternalDBImport {
       if ($key_multi) {
         $_values = array();
         foreach ($key_multi as $_col) {
-          $_values[] = $hash[$_col];
+          $_values[] = trim($hash[$_col]);
         }
         $hash[$key_name] = implode("|", $_values);
       }
