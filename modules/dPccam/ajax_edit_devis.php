@@ -24,10 +24,15 @@ if ($devis_id) {
 
 if ($devis->_id) {
   $devis->canDo();
+  $devis->loadRefPatient();
   $devis->loadRefPraticien();
   $devis->getActeExecution();
   $devis->countActes();
   $devis->loadRefsActes();
+
+  foreach ($devis->_ref_actes as $_acte) {
+    $_acte->loadRefExecutant();
+  }
 
   $devis->loadPossibleActes();
 
