@@ -349,58 +349,73 @@ class CAffectation extends CMbObject {
     // Niveaux de prestations réalisées à créer
     // pour une nouvelle affectation (par rapport aux niveaux de prestations du lit)
     if ($store_prestations) {
+      $this->loadRefsAffectations();
       $lit = $this->_ref_lit;
       $liaisons_lit = $lit->loadRefsLiaisonsItems();
       CMbObject::massLoadFwdRef($liaisons_lit, "item_prestation_id");
 
-      $item_liaison = new CItemLiaison();
       $where = array();
       $ljoin = array();
 
       $where["sejour_id"] = "= '$sejour->_id'";
-      // Il faut modifier les liaisons dans l'intervalle de l'affectation
-      $where["date"] = "BETWEEN '" . CMbDT::date($this->entree) . "' AND '" . CMbDT::date($this->sortie) . "'";
       $where["item_prestation.object_class"] = "= 'CPrestationJournaliere'";
       // On teste également le réalisé, si une affectation avait déjà été faite puis supprimée.
       $ljoin["item_prestation"] =
         "item_prestation.item_prestation_id = item_liaison.item_souhait_id
       OR item_prestation.item_prestation_id = item_liaison.item_realise_id";
 
+      $filter_entree = $this->_ref_prev->_id ? CMbDT::date("+1 day", $this->entree) : CMbDT::date($this->entree);
       foreach ($liaisons_lit as $_liaison) {
-        // Chercher les éventuelles liaisons, sinon les créer.
+        $item_liaison = new CItemLiaison();
         $_item = $_liaison->loadRefItemPrestation();
 
+        // Recherche d'une liaison :
+        // - date de début si première affectation
+        // - le jour suivant sinon, car il doit y avoir un passage d'une case pour le calcul des prestations
         $where["item_prestation.object_id"] = "= '$_item->object_id'";
+        $where["date"] = "= '" . $filter_entree . "'";
+        $item_liaison->loadObject($where, null, null, $ljoin);
 
-        $liaisons = $item_liaison->loadList($where, null, null, null, $ljoin);
-
-        if (count($liaisons)) {
-          foreach ($liaisons as $_liaison_item) {
-            $_liaison_item->item_realise_id = $_liaison->item_prestation_id;
-            if ($msg = $_liaison_item->store()) {
-              CAppUI::setMsg($msg, UI_MSG_ERROR);
-            }
+        // Si existante, alors on affecte le réalisé au niveau de prestation du lit
+        if ($item_liaison->_id) {
+          $item_liaison->item_realise_id = $_liaison->item_prestation_id;
+          if ($msg = $item_liaison->store()) {
+            CAppUI::setMsg($msg, UI_MSG_ERROR);
           }
         }
+        // Sinon création d'une liaison
         else {
-          $item_liaison = new CItemLiaison();
-          $item_liaison->sejour_id = $sejour->_id;
-          $item_liaison->date = CMbDT::date($this->entree);
-          $item_liaison->quantite = 0;
+          $item_liaison->sejour_id       = $sejour->_id;
+          $item_liaison->date            = $filter_entree;
+          $item_liaison->quantite        = 0;
           $item_liaison->item_realise_id = $_liaison->item_prestation_id;
 
           // Recherche d'une précédente liaison pour appliquer l'item souhaité s'il existe
-          unset($where["date"]);
+          $where["date"] = "<= '" .CMbDT::date($this->entree) . "'";
           $ljoin["item_prestation"] = "item_prestation.item_prestation_id = item_liaison.item_souhait_id";
-          $_item_liaison_souhait = new CItemLiaison();
+          $_item_liaison_souhait    = new CItemLiaison();
           $_item_liaison_souhait->loadObject($where, "date DESC", null, $ljoin);
 
           if ($_item_liaison_souhait->_id) {
             $item_liaison->item_souhait_id = $_item_liaison_souhait->item_souhait_id;
-            $item_liaison->sous_item_id = $_item_liaison_souhait->sous_item_id;
+            $item_liaison->sous_item_id    = $_item_liaison_souhait->sous_item_id;
           }
 
           if ($msg = $item_liaison->store()) {
+            CAppUI::setMsg($msg, UI_MSG_ERROR);
+          }
+        }
+
+        // Dans tous les cas, il faut parcourir les liaisons existantes entre les dates de début et fin de l'affectation
+        $where["date"] = "BETWEEN '" . $filter_entree . "' AND '" . CMbDT::date($this->sortie) . "'";
+        $ljoin["item_prestation"] =
+          "item_prestation.item_prestation_id = item_liaison.item_souhait_id
+          OR item_prestation.item_prestation_id = item_liaison.item_realise_id";
+        $liaisons_existantes = $item_liaison->loadList($where, null, null, null, $ljoin);
+
+        foreach ($liaisons_existantes as $_liaison_existante) {
+          $_liaison_existante->item_realise_id = $_liaison->item_prestation_id;
+          if ($msg = $_liaison_existante->store()) {
             CAppUI::setMsg($msg, UI_MSG_ERROR);
           }
         }
