@@ -9,7 +9,7 @@
  * @link     http://www.mediboard.org
 *}}
 
-{{mb_default var=objectType value=CPlageConsult}}
+{{mb_default var=objectType value=CPlageconsult}}
 {{mb_default var=mode value=calendar}}
 {{mb_default var=width_mode value=0}}
 
