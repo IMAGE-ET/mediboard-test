@@ -208,13 +208,13 @@ class CExternalDBImport {
       }
 
       if ($id) {
-        $query .= ($key_multi) ? " CONCAT(" . implode(",'|',", $key_multi) . ") > '$id'" : " $object->_key > '$id'";
+        $query .= ($key_multi) ? " CONCAT(TRIM(" . implode("),'|',TRIM(", $key_multi) . ")) > '$id'" : " $object->_key > TRIM('$id')";
       }
     }
 
     if ($order && $order_by || $id) {
       if ($id) {
-        $query .= ($key_multi) ? " ORDER BY CONCAT(" . implode(",'|',", $key_multi) . ") ASC" : " ORDER BY $object->_key ASC";
+        $query .= ($key_multi) ? " ORDER BY CONCAT(TRIM(" . implode("),'|',TRIM(", $key_multi) . ")) ASC" : " ORDER BY TRIM($object->_key) ASC";
       }
       else {
         $query .= " ORDER BY $order_by DESC";
@@ -235,7 +235,7 @@ class CExternalDBImport {
       if ($key_multi) {
         $_values = array();
         foreach ($key_multi as $_col) {
-          $_values[] = $hash[$_col];
+          $_values[] = trim($hash[$_col]);
         }
         $hash[$key_name] = implode("|", $_values);
       }
@@ -449,6 +449,45 @@ class CExternalDBImport {
     }
 
     return $sejour;
+  }
+
+  function findConsultWithPatient($patient, $prat, $date, $store = true) {
+    if (!$patient || !$patient->_id) {
+      CAppUI::setMsg("Patient non retrouvé et non importé : $patient", UI_MSG_WARNING);
+
+      return false;
+    }
+
+    // Trouver le praticien de la consult
+    $mediuser = $this->getMbObjectByClass("CMediusers", $prat);
+    if (!$mediuser->_id) {
+      CAppUI::setMsg("Praticien de la consult non retrouvé : $prat", UI_MSG_WARNING);
+
+      return false;
+    }
+
+    // Recherche d'une consult qui se passe entre 2 jours avant ou 1 jour apres
+    $date_min = CMbDT::date("-2 DAYS", $date);
+    $date_max = CMbDT::date("+1 DAYS", $date);
+
+    $consult = new CConsultation();
+
+    $ljoin = array(
+      "plageconsult" => "consultation.plageconsult_id = plageconsult.plageconsult_id",
+    );
+
+    $where = array(
+      "consultation.patient_id" => "= '$patient->_id'",
+      "plageconsult.chir_id"    => "= '$mediuser->_id'",
+      "plageconsult.date"       => "BETWEEN '$date_min' AND '$date_max'",
+    );
+
+    $consult->loadObject($where, null, null, $ljoin);
+    if (!$consult->_id) {
+      $consult = $this->makeConsult($patient->_id, $mediuser->_id, $date, $store);
+    }
+
+    return $consult;
   }
 
   function findConsult($patient_id, $prat, $date, $store = true) {
