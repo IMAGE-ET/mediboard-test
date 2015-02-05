@@ -209,7 +209,7 @@ if (count($consult->_refs_dossiers_anesth)) {
   $secs = range(0, 60-1, 1);
   $mins = range(0, 15-1, 1);
 
-  $patient->loadRefConstantesMedicales();
+  $patient->loadRefLatestConstantes();
 
   $smarty->assign("secs"    , $secs);
   $smarty->assign("mins"    , $mins);

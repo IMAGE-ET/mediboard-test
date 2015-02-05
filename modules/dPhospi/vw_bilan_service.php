@@ -141,7 +141,7 @@ if ($do) {
   CMbObject::massLoadFwdRef($sejours, "patient_id");
   CMbObject::massCountBackRefs($sejours, "operations");
   foreach ($sejours as $_sejour) {
-    $_sejour->loadRefPatient()->loadRefConstantesMedicales();
+    $_sejour->loadRefPatient()->loadRefLatestConstantes();
     $_sejour->loadRefsOperations();
     $last_op = $_sejour->_ref_last_operation;
 

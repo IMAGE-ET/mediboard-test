@@ -33,7 +33,7 @@ $sejour->loadRefsConsultations();
 $sejour->loadListConstantesMedicales();
 $sejour->loadSuiviMedical();
 $patient = $sejour->_ref_patient;
-$patient->loadRefConstantesMedicales();
+$patient->loadRefLatestConstantes();
 $patient->loadIPP();
 $patient->loadRefDossierMedical();
 $patient->loadRefsCorrespondantsPatient();

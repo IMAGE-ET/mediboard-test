@@ -466,7 +466,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
 
     // Calcul de la Clairance créatinine
     $patient =& $this->_ref_consultation->_ref_patient;
-    $patient->loadRefConstantesMedicales(null, null, $this->_ref_consultation, false);
+    $patient->loadRefLatestConstantes(null, null, $this->_ref_consultation, false);
     $const_med = $patient->_ref_constantes_medicales;
     $const_med->updateFormFields();
     $age = intval($patient->_annees);

@@ -1205,7 +1205,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     if (!$this->_ref_patient) {
       $this->loadRefPatient();
     }
-    $this->_ref_patient->loadRefConstantesMedicales();
+    $this->_ref_patient->loadRefLatestConstantes();
 
     if (!$this->_ref_actes_ccam) {
       $this->loadRefsActesCCAM();
@@ -1406,7 +1406,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
    */
   function loadRefsFwd($cache = true) {
     $this->loadRefPatient($cache);
-    $this->_ref_patient->loadRefConstantesMedicales();
+    $this->_ref_patient->loadRefLatestConstantes();
     $this->loadRefPlageConsult($cache);
     $this->_view = "Consult. de ".$this->_ref_patient->_view." - ".$this->_ref_plageconsult->_ref_chir->_view;
     $this->_view .= " (".CMbDT::format($this->_ref_plageconsult->date, "%d/%m/%Y").")";

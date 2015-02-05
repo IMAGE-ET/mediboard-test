@@ -14,7 +14,7 @@ $operation_id = CValue::get("operation_id");
 
 $interv = new COperation;
 $interv->load($operation_id);
-$interv->loadRefSejour()->loadRefPatient()->loadRefConstantesMedicales();
+$interv->loadRefSejour()->loadRefPatient()->loadRefLatestConstantes();
 $interv->loadRefPlageOp();
 $interv->_ref_sejour->_ref_patient->loadRefDossierMedical();
 

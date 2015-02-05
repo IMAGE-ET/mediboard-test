@@ -77,7 +77,7 @@ foreach ($sejour->_ref_consultations as $consult) {
   $consult->loadExtCodesCCAM();
   $consult->loadRefsActes();
   $consult->loadRefConsultAnesth();
-  $consult->loadRefPatient()->loadRefConstantesMedicales();
+  $consult->loadRefPatient()->loadRefLatestConstantes();
   foreach ($consult->_ref_actes as $_acte) {
     $_acte->loadRefExecutant();
   }

@@ -48,7 +48,7 @@ if ($dossier_medical_sejour->_id) {
 }
 $patient->loadRefPhotoIdentite();
 $dossier_medical_patient = $patient->loadRefDossierMedical();
-$patient->loadRefConstantesMedicales(null, array("poids", "taille"));
+$patient->loadRefLatestConstantes(null, array("poids", "taille"));
 if ($dossier_medical_patient->_id) {
   $dossier_medical_patient->loadRefsAllergies();
   $dossier_medical_patient->loadRefsAntecedents();

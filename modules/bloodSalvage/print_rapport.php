@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage bloodSalvage
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CAppUI::requireModuleFile("bloodSalvage", "inc_personnel");
@@ -26,7 +26,7 @@ if ($blood_salvage_id) {
   $blood_salvage->_ref_operation->loadRefPatient();
   $blood_salvage->_ref_operation->_ref_patient->loadRefs();
   $blood_salvage->_ref_operation->_ref_patient->loadRefDossierMedical();
-  $blood_salvage->_ref_operation->_ref_patient->loadRefConstantesMedicales();
+  $blood_salvage->_ref_operation->_ref_patient->loadRefLatestConstantes();
   if (CModule::getActive("dPmedicament")) {
     $anticoag = new CBcbProduit();
     if ($blood_salvage->anticoagulant_cip) {

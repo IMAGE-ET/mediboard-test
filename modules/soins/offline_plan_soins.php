@@ -199,7 +199,7 @@ foreach ($sejours as $_sejour) {
   }
 
   $patient = $_sejour->loadRefPatient();
-  $patient->loadRefConstantesMedicales(null, array("poids", "taille"));
+  $patient->loadRefLatestConstantes(null, array("poids", "taille"));
   $_sejour->loadNDA();
   $_sejour->loadRefsOperations();
   $_sejour->loadJourOp($date);

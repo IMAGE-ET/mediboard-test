@@ -83,7 +83,7 @@ $consult->loadRefFirstDossierAnesth();
 $tab_op = array();
 foreach ($consult->_refs_dossiers_anesth as $consultation_anesth) {
   $consultation_anesth->loadRelPatient();
-  $consult->_ref_patient->loadRefConstantesMedicales(null, array("poids"), $consult);
+  $consult->_ref_patient->loadRefLatestConstantes(null, array("poids"), $consult);
   $consultation_anesth->_ref_consultation = $consult;
 
   $consultation_anesth->loadRefOperation()->loadRefSejour();

@@ -330,6 +330,8 @@ class CPatient extends CPerson {
   public $_ref_vitale_idsante400;
   /** @var CConstantesMedicales */
   public $_ref_constantes_medicales;
+  /** @var  @var array */
+  public $_latest_constantes_dates;
   /** @var CConstantesMedicales[] */
   public $_refs_all_contantes_medicales;
   /** @var CDevenirDentaire[] */
@@ -1567,7 +1569,7 @@ class CPatient extends CPerson {
   }
 
   /**
-   * Load the CConstantesMedicales of the patient
+   * Load the latest constants of the patient
    *
    * @param string    $datetime  The reference datetime
    * @param array     $selection A selection of constantes to load
@@ -1576,10 +1578,10 @@ class CPatient extends CPerson {
    *
    * @return array
    */
-  function loadRefConstantesMedicales($datetime = null, $selection = array(), $context = null, $use_cache = true) {
+  function loadRefLatestConstantes($datetime = null, $selection = array(), $context = null, $use_cache = true) {
     $latest = CConstantesMedicales::getLatestFor($this, $datetime, $selection, $context, $use_cache);
 
-    list($this->_ref_constantes_medicales, /*$dates*/) = $latest;
+    list($this->_ref_constantes_medicales, $this->_latest_constantes_dates) = $latest;
     $this->_ref_constantes_medicales->updateFormFields();
 
     return $latest;
@@ -1590,7 +1592,7 @@ class CPatient extends CPerson {
    *
    * @return CConstantesMedicales[]
    */
-  function loadRefsAllConstantesMedicales() {
+  function loadRefsConstantesMedicales() {
     return $this->_refs_all_contantes_medicales = $this->loadBackRefs("constantes");
   }
 
@@ -1654,7 +1656,7 @@ class CPatient extends CPerson {
       }
     }
 
-    $this->loadRefConstantesMedicales(null, array("poids", "taille"));
+    $this->loadRefLatestConstantes(null, array("poids", "taille"));
     $const_med = $this->_ref_constantes_medicales;
 
     if ($const_med) {
@@ -2122,7 +2124,7 @@ class CPatient extends CPerson {
     }
 
     $this->loadRefsFwd();
-    $this->loadRefConstantesMedicales(null, array(), null, false);
+    $this->loadRefLatestConstantes(null, array(), null, false);
     $this->loadIPP();
     $this->loadLastINS();
 

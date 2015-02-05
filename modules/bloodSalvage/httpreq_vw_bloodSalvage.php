@@ -41,7 +41,7 @@ if ($op) {
   $selOp->loadRefsConsultAnesth();
   $selOp->loadRefSejour()->loadRefPatient();
   $selOp->_ref_sejour->_ref_patient->loadRefDossierMedical(); 
-  $selOp->_ref_sejour->_ref_patient->loadRefConstantesMedicales();  
+  $selOp->_ref_sejour->_ref_patient->loadRefLatestConstantes();
   
   $blood_salvage = new CBloodSalvage();
   $blood_salvage->operation_id = $op;

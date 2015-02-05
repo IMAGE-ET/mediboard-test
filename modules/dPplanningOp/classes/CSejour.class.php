@@ -3873,7 +3873,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         /** @var CNaissance $naissance */
         $naissance = reset($grossesse->_ref_naissances);
         $enfant = $naissance->loadRefSejourEnfant()->loadRefPatient();
-        $constantes_enfant = reset($enfant->loadRefConstantesMedicales(null, array("poids")));
+        $constantes_enfant = reset($enfant->loadRefLatestConstantes(null, array("poids")));
       }
 
       $template->addProperty("Sejour - Accouchement - Heure de naissance", $naissance->getFormattedValue("_heure"));

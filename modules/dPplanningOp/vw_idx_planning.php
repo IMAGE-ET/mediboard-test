@@ -141,7 +141,7 @@ if ($selPraticien->isAnesth()) {
   foreach ($allInterv as $_interv) {
     $_interv->loadRefAffectation();
     $_interv->loadRefChir()->loadRefFunction();
-    $_interv->loadRefPatient()->loadRefConstantesMedicales(null, array("poids", "taille"));
+    $_interv->loadRefPatient()->loadRefLatestConstantes(null, array("poids", "taille"));
     $_interv->loadRefVisiteAnesth()->loadRefFunction();
     $_interv->loadRefsConsultAnesth()->loadRefConsultation()->loadRefPraticien()->loadRefFunction();
   }

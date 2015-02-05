@@ -17,7 +17,7 @@ $patient = new CPatient();
 $patient->load($patient_id);
 
 if ($patient->_id) {
-  $constantes = $patient->loadRefConstantesMedicales(null, array('poids', 'taille'));
+  $constantes = $patient->loadRefLatestConstantes(null, array('poids', 'taille'));
   echo json_encode(
     array(
       'poids' => $constantes[0]->poids . ' ' . CConstantesMedicales::$list_constantes['poids']['unit'],

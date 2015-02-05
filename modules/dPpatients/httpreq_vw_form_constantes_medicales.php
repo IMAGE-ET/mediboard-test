@@ -55,7 +55,7 @@ foreach (CConstantesMedicales::$list_constantes as $key => $cst) {
 
 $patient_id = $constantes->patient_id ? $constantes->patient_id : $patient_id;
 $patient = CPatient::loadFromGuid("CPatient-$patient_id");
-$patient->loadRefConstantesMedicales(null, array("poids", "taille"), null, false);
+$patient->loadRefLatestConstantes(null, array("poids", "taille"), null, false);
 
 $constantes = new CConstantesMedicales();
 $constantes->load($const_id);

@@ -22,7 +22,7 @@ $tab_op = array();
 foreach ($consult->_refs_dossiers_anesth as $consult_anesth) {
   $consult_anesth->loadRelPatient();
   $consultation = $consult_anesth->_ref_consultation;
-  $consultation->_ref_patient->loadRefConstantesMedicales(null, array("poids"), $consultation);
+  $consultation->_ref_patient->loadRefLatestConstantes(null, array("poids"), $consultation);
 
   if (!$consultation->_ref_patient->_ref_constantes_medicales->poids && $consultation->loadRefSejour()->_id) {
     $date = $consultation->_ref_plageconsult->date;

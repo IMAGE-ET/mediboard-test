@@ -71,7 +71,7 @@ $sejour->loadRefPraticien();
 // Chargement des caracteristiques du patient
 $patient =& $sejour->_ref_patient;
 $patient->loadRefPhotoIdentite();
-$patient->loadRefConstantesMedicales(null, array("poids", "taille"));
+$patient->loadRefLatestConstantes(null, array("poids", "taille"));
 
 $patient->loadRefDossierMedical();
 $dossier_medical = $patient->_ref_dossier_medical;

@@ -21,7 +21,7 @@ $consult_anesth->load($consult_id);
 $patient = new CPatient();
 $patient->load($patient_id);
 
-$constantes = reset($patient->loadRefConstantesMedicales(null, array("poids", "taille")));
+$constantes = reset($patient->loadRefLatestConstantes(null, array("poids", "taille")));
 
 
 $auto_55 = false;
