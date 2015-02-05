@@ -215,6 +215,15 @@
 
                       {{if $show_age_patient}}({{$patient->_age}}){{/if}}
 
+                      {{if "dPhospi vue_tempo show_imc_patient"|conf:"CGroups-$g"}}
+                        {{if $patient->_ref_constantes_medicales->poids}}
+                          - {{mb_value object=$patient->_ref_constantes_medicales field=poids}} kg
+                        {{/if}}
+                        {{if $patient->_ref_constantes_medicales->_imc}}
+                          ({{mb_value object=$patient->_ref_constantes_medicales field=_imc}})
+                        {{/if}}
+                      {{/if}}
+
                     </div>
                     {{if $patient->_overweight}}
                       <img src="images/pictures/overweight.png" />

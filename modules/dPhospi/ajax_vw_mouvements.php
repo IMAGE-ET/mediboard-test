@@ -244,6 +244,12 @@ $sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
 $patients = CMbObject::massLoadFwdRef($sejours, "patient_id");
 CMbObject::massLoadBackRefs($patients, "dossier_medical");
 
+if (CAppUI::conf("dPhospi vue_tempo show_imc_patient", CGroups::loadCurrent())) {
+  foreach ($patients as $patient) {
+    $patient->loadRefConstantesMedicales(null, array("poids", "taille"));
+  }
+}
+
 if (CModule::getActive("dPImeds")) {
   CSejour::massLoadNDA($sejours);
 }

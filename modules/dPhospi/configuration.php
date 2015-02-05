@@ -20,6 +20,9 @@ CConfiguration::register(
         ),
         "vue_tableau" =>  array(
           "show_labo_results" => "bool default|1",
+        ),
+        "vue_tempo" =>  array(
+          "show_imc_patient" => "bool default|0",
         )
       )
     ),
