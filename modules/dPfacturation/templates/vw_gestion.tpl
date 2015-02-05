@@ -1,3 +1,4 @@
+{{mb_script module=facturation script=facture}}
 <script>
   function checkRapport(){
     var oForm = document.printFrm;
@@ -51,22 +52,6 @@
     url.popup(950, 550, "Rapport des actes réalisés");
 
     return false;
-  }
-
-  function printFacture(type_pdf, facture_class) {
-    var oForm = document.printFrm;
-    if(!oForm.chir.value) {
-      alert('Vous devez choisir un praticien');
-      return false;
-    }
-    var url = new Url('facturation', 'ajax_edit_bvr');
-    url.addParam('facture_class'   , facture_class);
-    url.addParam('type_pdf'        , type_pdf);
-    url.addElement(oForm._date_min);
-    url.addElement(oForm._date_max);
-    url.addParam('prat_id'         , oForm.chir.value);
-    url.addParam('suppressHeaders' , '1');
-    url.popup(1000, 600);
   }
 
   function checkBills(facture_class){
@@ -237,8 +222,8 @@
     </tr>
     <tr>
       <td class="button" colspan="2">
-        <button type="button" class="pdf" onclick="printFacture('bvr', 'CFactureCabinet');">Impression des BVR</button>
-        <button type="button" class="pdf" onclick="printFacture('justificatif', 'CFactureCabinet');">Justificatifs de remboursement</button>
+        <button type="button" class="pdf" onclick="Facture.printGestion('bvr', 'CFactureCabinet', document.printFrm);">Impression des BVR</button>
+        <button type="button" class="pdf" onclick="Facture.printGestion('justificatif', 'CFactureCabinet', document.printFrm);">Justificatifs de remboursement</button>
       </td>
       <td colspan="2" rowspan="2" class="text">
         <div class="small-info" id="response_send_bill">
@@ -311,8 +296,8 @@
     </tr>
     <tr>
       <td class="button" colspan="2">
-        <button type="button" class="pdf" onclick="printFacture('bvr', 'CFactureEtablissement');">Impression des BVR</button>
-        <button type="button" class="pdf" onclick="printFacture('justificatif', 'CFactureEtablissement');">Justificatifs de remboursement</button>
+        <button type="button" class="pdf" onclick="Facture.printGestion('bvr', 'CFactureEtablissement', document.printFrm);">Impression des BVR</button>
+        <button type="button" class="pdf" onclick="Facture.printGestion('justificatif', 'CFactureEtablissement', document.printFrm);">Justificatifs de remboursement</button>
       </td>
       <td rowspan="2" colspan="2" class="text">
         <div class="small-info" id="response_send_bill">

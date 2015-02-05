@@ -81,6 +81,21 @@ window.Facture = {
     }
   },
 
+  printGestion: function(type_pdf, facture_class, oForm) {
+    if(!oForm.chir.value) {
+      alert('Vous devez choisir un praticien');
+      return false;
+    }
+    var url = new Url('facturation', 'ajax_edit_bvr');
+    url.addParam('facture_class'   , facture_class);
+    url.addParam('type_pdf'        , type_pdf);
+    url.addElement(oForm._date_min);
+    url.addElement(oForm._date_max);
+    url.addParam('prat_id'         , oForm.chir.value);
+    url.addParam('suppressHeaders' , '1');
+    url.popup(1000, 600);
+  },
+
   viewInterv: function(operation_id, plageop_id) {
     if (plageop_id) {
       var url = new Url("planningOp", "vw_edit_planning", "tab");
