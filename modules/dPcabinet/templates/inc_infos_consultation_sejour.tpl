@@ -6,7 +6,7 @@
       </th>
     </tr>
     <tr>
-      <th>{{mb_label class=CPlageConsult field="chir_id"}}</th>
+      <th>{{mb_label class=CPlageconsult field="chir_id"}}</th>
       <th>{{tr}}Date{{/tr}}</th>
       <th>{{tr}}Hour{{/tr}}</th>
     </tr>
