@@ -52,7 +52,9 @@ class CPhaseInfoCCAM extends CCCAM {
     $this->coeff_unite_oeuvre = $row["COEFFUOEUVRE"];
     $this->code_paiement      = $row["CODEPAIEMENT"];
     $this->prix_unitaire      = $row["PRIXUNITAIRE"];
-    $this->prix_unitaire2     = $row["PRIXUNITAIRE2"];
+    if (array_key_exists('PRIXUNITAIRE2', $row)) {
+      $this->prix_unitaire2 = $row["PRIXUNITAIRE2"];
+    }
     $this->charge_cab         = $row["CHARGESCAB"];
     $this->coeff_dom          = array();
     $this->coeff_dom[]        = $row["COEFFDOM1"];
