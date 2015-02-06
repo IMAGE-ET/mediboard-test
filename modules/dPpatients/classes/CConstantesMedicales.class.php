@@ -2005,6 +2005,152 @@ class CConstantesMedicales extends CMbObject {
   }
 
   /**
+   * Build constantes grid
+   *
+   * @param self  $constante       The CConstantesMedicales object containing the latest values
+   * @param array $dates           An array containing the date of the
+   * @param bool  $full            Display the full list of constantes
+   * @param bool  $only_with_value Only display not null values
+   *
+   * @return array
+   */
+  static function buildGridLatest($constante, $dates, $full = true, $only_with_value = false) {
+    $dates = CMbArray::flip($dates);
+    if (array_key_exists('', $dates)) {
+      unset($dates['']);
+    }
+
+    $grid = array();
+    $selection = array_keys(CConstantesMedicales::$list_constantes);
+    $cumuls_day = array();
+    $reset_hours = array();
+
+    if (!$full) {
+      $conf_constantes = array_filter(CConstantesMedicales::getRanksFor());
+      $selection = array_keys($conf_constantes);
+
+      foreach (CConstantesMedicales::$list_constantes as $_name => $_params) {
+        if ($constante->$_name != '' && !empty($_params["cumul_in"])) {
+          $selection = array_merge($selection, $_params["cumul_in"]);
+        }
+      }
+
+      $selection = array_unique($selection);
+    }
+
+    if ($only_with_value) {
+      $selection = array();
+    }
+
+    $names = $selection;
+
+    foreach ($dates as $_date => $_constants) {
+      if (!isset($grid["$_date"])) {
+        $grid["$_date"] = array(
+          'comment' => '',
+          "values"  => array()
+        );
+      }
+
+      foreach ($_constants as $_name) {
+        $_params = CConstantesMedicales::$list_constantes[$_name];
+        if (in_array($_name, $selection) || $constante->$_name != '') {
+          $value = null;
+          if (isset($_params["cumul_for"]) || isset($_params["formula"])) {
+            // cumul
+            if (!isset($reset_hours[$_name])) {
+              $reset_hours[$_name] = self::getResetHour($_name);
+            }
+            $reset_hour = $reset_hours[$_name];
+
+            $day_24h = CMbDT::transform("-$reset_hour hours", $_date, '%y-%m-%d');
+
+            if (!isset($cumuls_day[$_name][$day_24h])) {
+              $cumuls_day[$_name][$day_24h] = array(
+                "id"    => $constante->_id,
+                "datetime" => $_date,
+                "value" => null,
+                "span"  => 0,
+                "pair"  => (@count($cumuls_day[$_name]) % 2 ? "odd" : "even"),
+                "day"   => CMbDT::transform($day_24h, null, "%a"),
+              );
+            }
+
+            if (isset($_params["cumul_for"])) {
+              // cumul simple sur le meme champ
+              $cumul_for  = $_params["cumul_for"];
+
+              if ($constante->$cumul_for !== null) {
+                $cumuls_day[$_name][$day_24h]["value"] += $constante->$cumul_for;
+              }
+            }
+            else {
+              // cumul de plusieurs champs (avec formule)
+              $formula  = $_params["formula"];
+
+              foreach ($formula as $_field => $_sign) {
+                $_value = $constante->$_field;
+
+                if ($constante->$_field !== null) {
+                  if ($_sign === "+") {
+                    $cumuls_day[$_name][$day_24h]["value"] += $_value;
+                  }
+                  else {
+                    $cumuls_day[$_name][$day_24h]["value"] -= $_value;
+                  }
+                }
+              }
+            }
+
+            $cumuls_day[$_name][$day_24h]["span"]++;
+
+            $value = "__empty__";
+          }
+          else {
+            // valeur normale
+            $spec = self::$list_constantes[$_name];
+            $value = $constante->$_name;
+
+            if (isset($spec["formfields"])) {
+              $arr = array();
+              foreach ($spec["formfields"] as $ff) {
+                if ($constante->$ff != "") {
+                  $arr[] = $constante->$ff;
+                }
+              }
+              $value = implode(" / ", $arr);
+            }
+          }
+
+          $grid["$_date"]["values"][$_name] = $value;
+
+          if (!in_array($_name, $names)) {
+            $names[] = $_name;
+          }
+        }
+      }
+    }
+
+    foreach ($cumuls_day as $_name => &$_days) {
+      $_params = CConstantesMedicales::$list_constantes[$_name];
+
+      foreach ($_days as &$_values) {
+        $_color = CConstantesMedicales::getColor($_values["value"], $_params, null);
+        $_values["color"] = $_color;
+
+        $grid[$_values["datetime"]." ".$_values["id"]]["values"][$_name] = $_values;
+      }
+    }
+
+    $names = self::sortConstNames($names);
+
+    return array(
+      $names, "names" => $names,
+      $grid,  "grid"  => $grid,
+    );
+  }
+
+  /**
    * Sort constant names
    *
    * @param string[]  $names Constants to sort

@@ -2293,10 +2293,11 @@ class CPatient extends CPerson {
     $template->addProperty("Patient - liste des séjours", $sejours, '', false);
 
     $const_med = $this->_ref_constantes_medicales;
+    $const_dates = $this->_latest_constantes_dates;
 
-    $grid_complet = CConstantesMedicales::buildGrid(array($const_med), true);
-    $grid_minimal = CConstantesMedicales::buildGrid(array($const_med), false);
-    $grid_valued  = CConstantesMedicales::buildGrid(array($const_med), false, true);
+    $grid_complet = CConstantesMedicales::buildGridLatest($const_med, $const_dates, true);
+    $grid_minimal = CConstantesMedicales::buildGridLatest($const_med, $const_dates, false);
+    $grid_valued  = CConstantesMedicales::buildGridLatest($const_med, $const_dates, false, true);
 
     $smarty = new CSmartyDP("modules/dPpatients");
 
