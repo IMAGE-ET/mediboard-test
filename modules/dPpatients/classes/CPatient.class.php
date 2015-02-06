@@ -148,7 +148,7 @@ class CPatient extends CPerson {
   public $fin_validite_vitale;
 
   public $pays;
-  public $pays_insee;
+  public $pays_insee;           // warning, this is not the insee code ! iso code here.
   public $lieu_naissance;
   public $cp_naissance;
   public $pays_naissance_insee;
