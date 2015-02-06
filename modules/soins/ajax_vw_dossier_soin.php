@@ -11,6 +11,11 @@
 
 CCanDo::checkRead();
 
+if (CMedicament::getBase() == "vidal") {
+  CAppUI::stepMessage(UI_MSG_WARNING, "Cette fonctionnalité n'est pas encore présente.");
+  CApp::rip();
+}
+
 $group = CGroups::loadCurrent();
 $sejour_id          = CValue::getOrSession("sejour_id");
 $date               = CValue::getOrSession("date_plan_soins");
