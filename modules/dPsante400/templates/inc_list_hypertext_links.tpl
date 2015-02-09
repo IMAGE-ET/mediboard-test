@@ -26,12 +26,10 @@
     </tr>
   </table>
 {{else}}
-  <td>
-    {{foreach from=$hypertext_links item=_hypertext_link name="loop_hyperlink"}}
-      <a href="#" onclick="HyperTextLink.accessLink('{{$_hypertext_link->name}}', '{{$_hypertext_link->link}}')"">{{$_hypertext_link->name}}</a>
-      {{if !$smarty.foreach.loop_hyperlink.first}}<br/>{{/if}}
-    {{foreachelse}}
-      {{tr}}CHyperTextLink.none{{/tr}}
-    {{/foreach}}
-  </td>
+  {{foreach from=$hypertext_links item=_hypertext_link name="loop_hyperlink"}}
+    <a href="#" onclick="HyperTextLink.accessLink('{{$_hypertext_link->name}}', '{{$_hypertext_link->link}}')"">{{$_hypertext_link->name}}</a>
+    {{if !$smarty.foreach.loop_hyperlink.first}}<br/>{{/if}}
+  {{foreachelse}}
+    {{tr}}CHyperTextLink.none{{/tr}}
+  {{/foreach}}
 {{/if}}
