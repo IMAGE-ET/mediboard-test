@@ -57,6 +57,13 @@ if ($select_view || (!$service_id && !$praticien_id && !$function_id && !$sejour
   $select_view = true;
 }
 
+// Chargement de l'utilisateur courant
+$userCourant = CMediusers::get();
+// Preselection du praticien_id
+if (!$praticien_id && $userCourant->isPraticien() && !$service_id && !$praticien_id) {
+  $praticien_id = $userCourant->user_id;
+}
+
 $where = array();
 $where["externe"]   = "= '0'";
 $where["cancelled"] = "= '0'";
