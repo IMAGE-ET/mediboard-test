@@ -34,12 +34,17 @@ HyperTextLink = {
     url.requestUpdate('list-hypertext_links');
   },
 
-  getListForGuid: function(object_id, object_class, show_only, element_guid) {
+  getListForGuid: function(object_id, object_class, show_only, element_guid, count_links) {
     var url = new Url('sante400'  , 'ajax_list_hypertextlinks');
     url.addParam('object_id'      , object_id);
     url.addParam('object_class'   , object_class);
     url.addParam('show_only'      , show_only);
-    url.addParam('count_links'    , 1);
+    if (!Object.isUndefined(count_links)) {
+      url.addParam('count_links'  , count_links);
+    }
+    else {
+      url.addParam('count_links'  , 1);
+    }
     url.requestUpdate('list-hypertext_links-'+element_guid);
   }
 };
