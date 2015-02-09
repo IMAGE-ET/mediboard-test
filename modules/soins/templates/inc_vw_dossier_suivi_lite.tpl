@@ -19,7 +19,7 @@
   {{foreachelse}}
     <tr>
       <td class="empty">
-        {{tr}}CTransmissionMedicale.none{{/tr}}
+        {{tr}}CTransmissionMedicale.none.importante{{/tr}}
       </td>
     </tr>
   {{/foreach}}

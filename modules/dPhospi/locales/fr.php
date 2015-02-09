@@ -856,6 +856,7 @@ $locales['CTransmissionMedicale.cible_mandatory_trans'] = 'Veuillez sélectionner
 $locales['CTransmissionMedicale.degre.high'] = 'Haute';
 $locales['CTransmissionMedicale.degre.low'] = 'Normal';
 $locales['CTransmissionMedicale.none'] = 'Aucune transmission médicale';
+$locales['CTransmissionMedicale.none.importante'] = 'Aucune transmission médicale importante';
 $locales['CTransmissionMedicale.object_class.'] = 'Pas de cible';
 $locales['CTransmissionMedicale.object_class.CAdministration'] = 'Administration';
 $locales['CTransmissionMedicale.object_class.CCategoryPrescription'] = 'Catégorie de prescription';
