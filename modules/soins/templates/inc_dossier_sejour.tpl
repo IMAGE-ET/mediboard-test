@@ -71,6 +71,7 @@
   loadDocuments = function() {
     var url = new Url("hospi", "httpreq_documents_sejour");
     url.addParam("sejour_id" , '{{$sejour->_id}}');
+    url.addParam("with_patient", 1);
     url.requestUpdate("docs");
   };
 
