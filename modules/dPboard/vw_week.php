@@ -11,7 +11,6 @@
  */
 
 CAppUI::requireModuleFile("dPboard", "inc_board");
-
 $date  = CValue::getOrSession("date", CMbDT::date());
 $prec  = CMbDT::date("-1 week", $date);
 $suiv  = CMbDT::date("+1 week", $date);
@@ -31,7 +30,7 @@ if ($mediuser->isPraticien()) {
 }
 
 // Praticien selectionné
-$chirSel = CValue::get("praticien_id");
+$chirSel = CValue::getOrSession("praticien_id");
 if (!$chirSel) {
   $chirSel = $chir ? $chir->user_id : null;
 }
