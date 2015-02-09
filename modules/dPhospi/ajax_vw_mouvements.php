@@ -246,7 +246,7 @@ CMbObject::massLoadBackRefs($patients, "dossier_medical");
 
 if (CAppUI::conf("dPhospi vue_tempo show_imc_patient", CGroups::loadCurrent())) {
   foreach ($patients as $patient) {
-    $patient->loadRefConstantesMedicales(null, array("poids", "taille"));
+    $patient->loadRefLatestConstantes(null, array("poids", "taille"));
   }
 }
 
