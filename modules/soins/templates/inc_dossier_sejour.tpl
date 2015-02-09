@@ -397,7 +397,7 @@
                 </tr>
               {{/if}}
               {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
-                {{mb_script module=tarmed script=actes}}
+                {{mb_script module=tarmed script=actes ajax=true}}
                 <tr id="tarmed_tab" style="display: none;">
                   <td id="tarmed">
                     <div id="listActesTarmed">
