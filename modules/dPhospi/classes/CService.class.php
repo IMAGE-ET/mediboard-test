@@ -47,6 +47,12 @@ class CService extends CMbObject {
   /** @var CValidationRepas[] */
   public $_ref_validrepas;
 
+  /** @var  @var CAffectation[] */
+  public $_ref_affectations;
+
+  /** @var  @var CAffectation[] */
+  public $_ref_affectations_couloir;
+
   /**
    * @see parent::getSpec()
    */
