@@ -40,16 +40,8 @@
         <input type="hidden" name="tab" value="vw_idx_patients" />
         <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
         <h2 style="color: #fff; font-weight: bold; text-align: center;">
-          <span style="font-size: 0.7em;" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+          <span style="font-size: 0.8em;" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
             {{$patient->_view}}
-          </span>
-          -
-          <span style="font-size: 0.7em;" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
-            {{if $rpu}}
-              Admission du {{$rpu->_entree|date_format:"%d/%m/%Y"}}
-            {{else}}
-              {{$sejour->_shortview|replace:"Du":"Séjour du"}}
-            {{/if}}
           </span>
           <span id="atcd_allergies">
             {{mb_include module=soins template=inc_antecedents_allergies patient_guid=$patient->_guid}}
@@ -61,6 +53,14 @@
             <img src="images/icons/isol.png" title="Isolement">
           {{/if}}
           <br/>
+          <span style="font-size: 0.7em;" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
+            {{if $rpu}}
+              Admission du {{$rpu->_entree|date_format:"%d/%m/%Y"}}
+            {{else}}
+              {{$sejour->_shortview|replace:"Du":"Séjour du"}}
+            {{/if}}
+          </span>
+          -
           <span style="font-size: 0.6em;">
             {{$sejour->_motif_complet|spancate:30:"...":false}}
             {{if $sejour->libelle && $sejour->_ref_operations|@count}}
