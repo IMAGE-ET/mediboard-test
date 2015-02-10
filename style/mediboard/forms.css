@@ -335,6 +335,13 @@ input[disabled="disabled"] { /* For IE */
   opacity: 0.5;
 }
 
+input[type=checkbox][disabled],
+input[type=radio][disabled],
+input[type=checkbox][disabled="disabled"],
+input[type=radio][disabled="disabled"] { /* For IE */
+  opacity: 1.0;
+}
+
 button[disabled]:hover,
 a.button.disabled:hover,
 button[disabled="disabled"]:hover { /* For IE */
