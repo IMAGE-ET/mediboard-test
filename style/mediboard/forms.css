@@ -329,10 +329,22 @@ a.button:hover {
 a.button.disabled,
 button[disabled],
 input[disabled],
+select[disabled],
+textarea[disabled],
+
 button[disabled="disabled"],
-input[disabled="disabled"] { /* For IE */
+input[disabled="disabled"],
+select[disabled="disabled"],
+textarea[disabled="disabled"] { /* For IE */
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+input[type=checkbox][disabled],
+input[type=radio][disabled],
+input[type=checkbox][disabled="disabled"],
+input[type=radio][disabled="disabled"] { /* For IE */
+  opacity: 1.0;
 }
 
 button[disabled]:hover,
@@ -1277,6 +1289,12 @@ textarea#htmlarea {
 
 span.highlight {
   background-color: yellow;
+}
+
+.cursor-highlight {
+  outline: 2px dotted red;
+  z-index: 2000;
+  position: relative;
 }
 
 .autocomplete span.highlight {
