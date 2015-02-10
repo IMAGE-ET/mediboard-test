@@ -741,11 +741,18 @@ class CEditPdf{
       $num_fact = "PROVISOIRE";
     }
     $this->pdf->Cell(25, "", $num_fact, null, null, "L");
-    $this->editCell($colonne1, $this->pdf->GetY()+3, 22, "Traitement du:", "R");
-    $this->pdf->Cell(25, "", CMbDT::format($this->facture->_ref_first_consult->_date, "%d %B %Y"), null, null, "L");
-    $this->editCell($colonne1, $this->pdf->GetY()+3, 22, "au:", "R");
-    $this->pdf->Cell(25, "", CMbDT::format($this->facture->cloture, "%d %B %Y"), null, null, "L");
-    
+
+    $use_date_consult = CAppUI::conf("dPfacturation CEditPdf use_date_consult_traitement", CGroups::loadCurrent());
+    if ($this->facture->_class == "CFactureCabinet" && count($this->facture->_ref_consults) == 1 && $use_date_consult) {
+      $this->editCell($colonne1, $this->pdf->GetY()+3, 22, "Consultation du:", "R");
+      $this->pdf->Cell(25, "", CMbDT::format($this->facture->_ref_first_consult->_date, "%d %B %Y"), null, null, "L");
+    }
+    else {
+      $this->editCell($colonne1, $this->pdf->GetY()+3, 22, "Traitement du:", "R");
+      $this->pdf->Cell(25, "", CMbDT::format($this->facture->_ref_first_consult->_date, "%d %B %Y"), null, null, "L");
+      $this->editCell($colonne1, $this->pdf->GetY()+3, 22, "au:", "R");
+      $this->pdf->Cell(25, "", CMbDT::format($this->facture->cloture, "%d %B %Y"), null, null, "L");
+    }
     $montant_facture = sprintf('%0.2f', $montant_facture);
     if ($montant_facture < 0) {
       $montant_facture = sprintf('%0.2f', 0);
@@ -802,6 +809,7 @@ class CEditPdf{
    * @return void
    */
   function editBVR($montant_facture) {
+    $group = CGroups::loadCurrent();
     //le 01 sera fixe car il correspond à un "Codes des genres de justificatifs (BC)" ici :01 = BVR en CHF
     $genre = "01";
     $montant = sprintf('%010d', $montant_facture*100);
@@ -830,28 +838,42 @@ class CEditPdf{
     //Boucle utilisée pour dupliquer les Partie1 et 2 avec un décalage de colonnes
     for ($i = 0; $i<=1; $i++) {
       $decalage = $i*24*$l_colonne + $left_offset;
-      
+      $h_add = !$this->fourn_presta["fct"] ? 3 : 4;
       //Adresse du patient
       $this->pdf->SetTextColor(0);
       $this->pdf->setFont($this->font, '', 8);
-      $nom_auteur_conf = CAppUI::conf("dPfacturation CEditPdf home_nom", CGroups::loadCurrent());
+      $nom_auteur_conf = CAppUI::conf("dPfacturation CEditPdf home_nom", $group);
       $this->auteur["nom"] = $nom_auteur_conf ? $nom_auteur_conf : $this->auteur["nom"];
-      
+      $etab_adresse1 = CAppUI::conf("dPfacturation CEditPdf etab_adresse1", $group);
+      $etab_adresse2 = CAppUI::conf("dPfacturation CEditPdf etab_adresse2", $group);
+
+      if ($etab_adresse1) {
+        $this->pdf->Text($l_colonne + $decalage, $h_ligne*$h_add+$haut_doc , $etab_adresse1);
+        $h_add++;
+        if ($etab_adresse2) {
+          $this->pdf->Text($l_colonne + $decalage, $h_ligne*$h_add+$haut_doc , $etab_adresse2);
+          $h_add++;
+        }
+        $h_add++;
+      }
+
       if (!$this->fourn_presta["fct"]) {
-        $this->pdf->Text($l_colonne + $decalage, $h_ligne*4+$haut_doc , $this->auteur["nom"]);
+        $this->pdf->Text($l_colonne + $decalage, $h_ligne*$h_add+$haut_doc , $this->auteur["nom"]);
       }
       else {
-        $this->pdf->Text($l_colonne + $decalage, $h_ligne*3+$haut_doc , $this->auteur["nom"]);
-        $this->pdf->Text($l_colonne + $decalage, $h_ligne*4+$haut_doc , $this->fourn_presta["fct"]);
+        $this->pdf->Text($l_colonne + $decalage, $h_ligne*$h_add+$haut_doc , $this->auteur["nom"]);
+        $h_add++;
+        $this->pdf->Text($l_colonne + $decalage, $h_ligne*$h_add+$haut_doc , $this->fourn_presta["fct"]);
       }
-      
-      $j = 1;
-      $this->pdf->Text($l_colonne + $decalage, $h_ligne*5+$haut_doc , $this->auteur["adresse1"]);
+
+      $h_add++;
+      $this->pdf->Text($l_colonne + $decalage, $h_ligne*$h_add+$haut_doc , $this->auteur["adresse1"]);
       if ($this->auteur["adresse2"]) {
-        $this->pdf->Text($l_colonne + $decalage, $h_ligne*6+$haut_doc , $this->auteur["adresse2"]);
-        $j = 2;
+        $h_add++;
+        $this->pdf->Text($l_colonne + $decalage, $h_ligne*$h_add+$haut_doc , $this->auteur["adresse2"]);
+        $h_add++;
       }
-      $this->pdf->Text($l_colonne + $decalage, $h_ligne*(5+$j)+$haut_doc , $this->auteur["cp"]." ".$this->auteur["ville"]);
+      $this->pdf->Text($l_colonne + $decalage, $h_ligne*$h_add+$haut_doc , $this->auteur["cp"]." ".$this->auteur["ville"]);
       
       //Numéro adhérent, CHF, Montant1 et Montant2
       $this->pdf->Text($l_colonne*11 + $decalage, $h_ligne*10.75+$haut_doc , $this->adherent);
@@ -978,6 +1000,8 @@ class CEditPdf{
     if (CAppUI::conf("dPfacturation Other use_field_definitive") && !$this->facture->definitive) {
       $num_fact = "PROVISOIRE";
     }
+    $see_diag_justificatif = CAppUI::conf("dPfacturation CEditPdf see_diag_justificatif", CGroups::loadCurrent());
+    $msg_info = $see_diag_justificatif ? "U / Toute demande d'information est à adresser au chirurgien ".$this->praticien->_view : "";
     $lignes = array(
       array("Patient"   , "Nom"             , $this->patient->nom     ,null, "Assurance", $assur_nom),
       array(""          , "Prénom"          , $this->patient->prenom),
@@ -1000,7 +1024,7 @@ class CEditPdf{
       array(""          , "Traitement"      , $traitement, null, $name_rappel, $date_rappel),
       array(""          , "Rôle/ Localité"  , "-"),
       array("Mandataire", "N° EAN/N° RCC"   , $this->praticien->ean." - ".$this->praticien->rcc, null, $this->praticien->_view),
-      array("Diagnostic", "U / Toute demande d'information est à adresser au chirurgien ".$this->praticien->_view),
+      array("Diagnostic", $msg_info),
       array("Liste EAN" , "", "1/".$this->praticien->ean." 2/".$ean2),
       array("Commentaire")
     );
@@ -1145,7 +1169,7 @@ class CEditPdf{
         "EAN"      =>  $this->praticien->ean,
         "RCC"      =>  $this->praticien->rcc
       );
-      if (CAppUI::conf("dPfacturation CEditPdf use_bill_fct", $group)) {
+      if (!CAppUI::conf("dPfacturation CEditPdf use_bill_fct", $group)) {
         $this->fourn_presta["fct"] = "";
       }
     }
