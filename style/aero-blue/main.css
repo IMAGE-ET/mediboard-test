@@ -28,6 +28,10 @@ table#main {
   padding-top:32px;
 }
 
+table#main.dialog {
+  padding-top:0;
+}
+
 /* dropdown menu */
 #main.dialog .tabox {
   padding-top: 0;

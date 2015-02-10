@@ -2,8 +2,6 @@
 
 {{if !$offline && !$dialog}}
 
-{{mb_include style=mediboard template=message nodebug=true}}
-
 <table id="headerMenu">
   <tr>
     <td class="menuTitle" id="modMenu">
@@ -107,12 +105,20 @@
 {{/if}}
 
 <table id="main" class="{{if $dialog}}dialog {{/if}}{{$m}}">
+  {{if !$dialog}}
+    <tr>
+      <td>
+        {{mb_include style=mediboard template=message nodebug=true}}
+      </td>
+    </tr>
+  {{/if}}
+
   <tr>
     <td class="tabox">
       {{mb_include style=mediboard template=obsolete_module}}
-{{if $dialog}}
-    <!-- System messages -->
-    <div id="systemMsg">
-      {{$errorMessage|nl2br|smarty:nodefaults}}
-    </div>
-{{/if}}
+      {{if $dialog}}
+          <!-- System messages -->
+          <div id="systemMsg">
+            {{$errorMessage|nl2br|smarty:nodefaults}}
+          </div>
+      {{/if}}
