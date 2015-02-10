@@ -10,7 +10,7 @@
 
 <table class="tbl">
   <tr>
-    <th>{{tr}}Classname{{/tr}}</th>
+    <th class="narrow">{{tr}}Classname{{/tr}}</th>
     <th>{{tr}}Action{{/tr}}</th>
   </tr>
 
@@ -53,6 +53,11 @@
             if (form && $(form.auto.checked)) {
               CPlageOp.purgeEmpty(form);
             }
+          },
+
+          purgeSome : function() {
+            var url = new Url('bloc', 'vw_purge_plagesop');
+            url.requestModal(800);
           },
 
           mergeDuplicate: function(form) {
@@ -143,8 +148,9 @@
       </div>
 
       <div>
-        <button class="search" onclick="CPlageOp.purgeEmpty()"    >{{tr}}mod-bloc-tab-purge_empty_plagesop{{/tr}}</button>
-        <button class="search" onclick="CPlageOp.mergeDuplicate()">{{tr}}mod-bloc-tab-merge_duplicate_plagesop{{/tr}}</button>
+        <button class="search" onclick="CPlageOp.purgeSome();">{{tr}}bloc-action-Purge some operating ranges{{/tr}}</button>
+        <button class="search" onclick="CPlageOp.purgeEmpty();">{{tr}}mod-bloc-tab-purge_empty_plagesop{{/tr}}</button>
+        <button class="search" onclick="CPlageOp.mergeDuplicate();">{{tr}}mod-bloc-tab-merge_duplicate_plagesop{{/tr}}</button>
       </div>
 
     </td>
