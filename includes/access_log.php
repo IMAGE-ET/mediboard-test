@@ -11,7 +11,7 @@
  * @link       http://www.mediboard.org
  */
 
-if (CAppUI::conf("readonly")) {
+if (CAppUI::conf("readonly") || !CAppUI::conf("log_access")) {
   return;
 }
 

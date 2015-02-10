@@ -55,7 +55,7 @@
     {{mb_include module=system template=inc_config_bool var=debug}}
     {{mb_include module=system template=inc_config_bool var=readonly}}
     {{mb_include module=system template=inc_config_bool var=offline_non_admin}}
-    {{mb_include module=system template=inc_config_bool var=log_js_errors}}
+
     {{mb_include module=system template=inc_config_str var=weinre_debug_host}}
     {{mb_include module=system template=inc_config_str var=base_backup_lockfile_path}}
     {{mb_include module=system template=inc_config_str var=offline_time_start}}
@@ -72,12 +72,22 @@
     {{/if}}
 
     {{*mb_include module=system template=inc_config_bool var=access_logs_buffer*}}
-    {{mb_include module=system template=inc_config_bool var=log_datasource_metrics}}
-    {{mb_include module=system template=inc_config_str var=human_long_request_level numeric=true}}
-    {{mb_include module=system template=inc_config_str var=bot_long_request_level numeric=true}}
     {{mb_include module=system template=inc_config_str var=dataminer_limit numeric=true}}
     {{mb_include module=system template=inc_config_str var=aio_output_path size=50}}
 
+    <tr>
+      <th colspan="2" class="title">
+        {{tr}}common-Logging{{/tr}}
+      </th>
+    </tr>
+
+    {{mb_include module=system template=inc_config_bool var=log_js_errors}}
+    {{mb_include module=system template=inc_config_bool var=error_logs_in_db}}
+    {{mb_include module=system template=inc_config_bool var=log_datasource_metrics}}
+    {{mb_include module=system template=inc_config_bool var=log_access}}
+    {{mb_include module=system template=inc_config_str var=human_long_request_level numeric=true}}
+    {{mb_include module=system template=inc_config_str var=bot_long_request_level numeric=true}}
+    
     <tr>
       <th colspan="2" class="title">
         Sécurité

@@ -121,22 +121,6 @@ showHeader();
           </label>
         </td>
       </tr>
-
-      <tr>
-        <th><label for="error_logs_in_db">Logs d'erreur en base de données</label></th>
-        <td colspan="2">
-          <label>
-            <input type="radio" name="error_logs_in_db" value="0" id="error_logs_in_db_0"
-              <?php if ($dPconfig['error_logs_in_db'] == "0") { echo 'checked'; } ?> />
-            Non
-          </label>
-          <label>
-            <input type="radio" name="error_logs_in_db" value="1" id="error_logs_in_db_1"
-              <?php if ($dPconfig['error_logs_in_db'] == "1") { echo 'checked'; } ?> />
-            Oui
-          </label>
-        </td>
-      </tr>
     </table>
   </fieldset>
 
