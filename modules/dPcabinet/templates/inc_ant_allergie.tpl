@@ -75,7 +75,7 @@
     <ul id="tab_atcd{{$addform}}" class="control_tabs small">
       <li><a href="#atcd_texte_simple{{$addform}}">Texte libre</a></li>
       {{if "dPprescription"|module_active && "dPprescription show_chapters med"|conf:"CGroups-$g"}}
-        {{if $conf.dPmedicament.base == "bcb"}}
+        {{if in_array($conf.dPmedicament.base, array("bcb", "vidal"))}}
           <li><a href="#atcd_base_med{{$addform}}">Allergie à un composant</a></li>
         {{/if}}
         {{if $conf.dPmedicament.base == "compendium"}}
@@ -114,7 +114,7 @@
       </tr>
     </table>
 
-    {{if $conf.dPmedicament.base == "bcb"}}
+    {{if in_array($conf.dPmedicament.base, array("bcb", "vidal"))}}
       <table class="layout" id="atcd_base_med{{$addform}}" style="display: none;">
         <tr>
           <th>
