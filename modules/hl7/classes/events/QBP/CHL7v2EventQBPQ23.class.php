@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Q23 - Query Message - HL7
+ * Q23 -  Get corresponding identifiers  - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -13,7 +13,7 @@
 
 /**
  * Class CHL7v2EventQBPQ23
- * Q23 - Query Message
+ * Q23 - Get corresponding identifiers
  */
 class CHL7v2EventQBPQ23 extends CHL7v2EventQBP implements CHL7EventQBPQ23 {
 

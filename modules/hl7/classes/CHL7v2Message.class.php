@@ -22,7 +22,7 @@ class CHL7v2Message extends CHMessage {
   static $header_segment_name = "MSH";
   static $segment_header_pattern = "[A-Z]{2}[A-Z0-9]";
 
-  protected $keep_original = array("MSH.1", "MSH.2", "NTE.3", "OBX.5");
+  protected $keep_original = array("MSH.1", "MSH.2", "NTE.3", "OBX.5", "QPD.3", "QPD.4", "QPD.5", "QPD.6", "QPD.7", "QPD.8");
 
   public $extension;
   public $i18n_code;

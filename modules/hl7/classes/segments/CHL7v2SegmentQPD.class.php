@@ -41,6 +41,49 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
   function build(CHL7v2Event $event) {
     parent::build($event);
 
+    if ($event->code == "Q22") {
+      $data = $this->buildIHEPDQQuery();
+    }
+    elseif ($event->code == "Q23") {
+      $data = $this->buildIHEPIXQuery();
+    }
+    else {
+      // QPD-1 : Message Query Name (CE)
+      $data[] = null;
+
+      // QPD-2 : Query Tag (ST)
+      $data[] = null;
+
+      // QPD-3 : User Parameters (in successive fields) (Varies) (QIP)
+      $data[] = null;
+
+      // QPD-4 : Search Confidence Threshold (NM)
+      $data[] = null;
+
+      // QPD-5 : Algorithm Name (ST)
+      $data[] = null;
+
+      // QPD-6 : Algorithm Version (ST)
+      $data[] = null;
+
+      // QPD-7 : Algorithm Description (ST)
+      $data[] = null;
+
+      // QPD-8 : What domains returned (CX)
+      $data[] = null;
+    }
+
+    mbTrace($data);
+
+    $this->fill($data);
+  }
+
+  /**
+   * Build PDQ query
+   *
+   * @return array $data
+   */
+  function buildIHEPDQQuery() {
     $patient = $this->patient;
     $sejour  = $this->sejour;
 
@@ -57,8 +100,8 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
 
     // QPD-2: Query Tag (ST)
     $data[] = $QPD2;
-    
-    // QPD-3: User Parameters (in successive fields) (Varies)
+
+    // QPD-3: User Parameters (in successive fields) (Varies) (QIP)
     $QPD3 = array();
     // PID
     if ($patient) {
@@ -71,52 +114,71 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
     CMbArray::removeValue("", $QPD3);
     $data[] = $QPD3;
 
-    // QPD-4 :
+    // QPD-4 : Search Confidence Threshold (NM)
     $data[] = null;
 
-    // QPD-5 :
+    // QPD-5 : Algorithm Name (ST)
     $data[] = null;
 
-    // QPD-6 :
+    // QPD-6 : Algorithm Version (ST)
     $data[] = null;
 
-    // QPD-7 :
+    // QPD-7 : Algorithm Description (ST)
     $data[] = null;
 
-    // QPD-8 : What domains returned
-    if (isset($patient->_domains_returned)) {
-      $domains_returned = $patient->_domains_returned;
-      $QPD8 = array (
-        CMbArray::get($domains_returned, "domains_returned_namespace_id"),
-        CMbArray::get($domains_returned, "domains_returned_universal_id"),
-        CMbArray::get($domains_returned, "domains_returned_universal_id_type")
-      );
-      $QPD8_copy = $QPD8;
+    // QPD-8 : What domains returned (CX)
+    $data[] = $this->addQPD8($patient);
 
-      CMbArray::removeValue(null, $QPD8_copy);
-      if (count($QPD8_copy) == 0) {
-        $data[] = null;
-      }
+    return $data;
+  }
 
-      if (empty($QPD8)) {
-        $data[] = null;
-      }
-      else {
-        $data[] = array(
+  /**
+   * Build PIX query
+   *
+   * @return null
+   */
+  function buildIHEPIXQuery() {
+    $patient = $this->patient;
+
+    // QPD-1 : Message Query Name (CE)
+    $data[] = "IHE PIX Query";
+
+    $QPD2 = null;
+    if (isset($patient->_query_tag) && $patient->_query_tag) {
+      $QPD2 = $patient->_query_tag;
+    }
+    else {
+      $QPD2 = str_replace(".", "", uniqid("", true));
+    }
+
+    // QPD-2: Query Tag (ST)
+    $data[] = $QPD2;
+
+    // QPD-3 : User Parameters (in successive fields) (Varies) (QIP)
+    if (isset($patient->_patient_identifier_list)) {
+      $patient_identifier_list = $patient->_patient_identifier_list;
+
+      $data[] = array(
+        array(
+          CMbArray::get($patient_identifier_list, "person_id_number"),
+          null,
+          null,
           array(
-            null,
-            null,
-            null,
-            $QPD8
+            CMbArray::get($patient_identifier_list, "person_namespace_id"),
+            CMbArray::get($patient_identifier_list, "person_universal_id"),
+            CMbArray::get($patient_identifier_list, "person_universal_id_type")
           )
-        );
-      }
+        )
+      );
     }
     else {
       $data[] = null;
     }
 
-    $this->fill($data);
+    // QPD-4 : What domains returned (CX)
+    $data[] = $this->addQPD8($patient);
+
+    return $data;
   }
 
   /**
@@ -233,12 +295,15 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
 
     $seg = null;
     switch ($object->_class) {
-      case "CPatient" :
+      case "CPatient":
         $seg = "PID";
         break;
-      case "CSejour" :
+
+      case "CSejour":
         $seg = "PV1";
         break;
+
+      default:
     }
 
     if (!$seg) {
@@ -274,17 +339,59 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
 
     $seg = null;
     switch ($object->_class) {
-      case "CPatient" :
+      case "CPatient":
         $seg = "PID";
         break;
-      case "CSejour" :
+
+      case "CSejour":
         $seg = "PV1";
         break;
+
+      default:
     }
 
     return array(
       "@$seg.$field",
       $value
+    );
+  }
+
+  /**
+   * Add QPD8 field
+   *
+   * @param CPatient $patient Person
+   *
+   * @return array
+   */
+  function addQPD8(CPatient $patient) {
+    if (!isset($patient->_domains_returned)) {
+      return null;
+    }
+
+    $domains_returned = $patient->_domains_returned;
+    $QPD8 = array (
+      CMbArray::get($domains_returned, "domains_returned_namespace_id"),
+      CMbArray::get($domains_returned, "domains_returned_universal_id"),
+      CMbArray::get($domains_returned, "domains_returned_universal_id_type")
+    );
+    $QPD8_copy = $QPD8;
+
+    CMbArray::removeValue(null, $QPD8_copy);
+    if (count($QPD8_copy) == 0) {
+      return null;
+    }
+
+    if (empty($QPD8)) {
+      return null;
+    }
+
+    return array(
+      array(
+        null,
+        null,
+        null,
+        $QPD8
+      )
     );
   }
 }

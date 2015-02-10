@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Q23 - Query Message - HL7
+ * Q23 - Get corresponding identifiers - HL7
  *  
  * @category HL7
  * @package  Mediboard
