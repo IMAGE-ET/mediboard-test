@@ -61,7 +61,7 @@ ActesNGAP = {
         if (window.Reglement) {
           Reglement.reload(false);
         }
-        if (DevisCodage) {
+        if (typeof DevisCodage !== 'undefined') {
           DevisCodage.refresh('{{$object->_id}}');
         }
       }
