@@ -10,6 +10,7 @@
     $$('input.manda_types_class').each(function(_elt) {
       var _val = _elt.value;
       if (!fieldTypes.include(_val)) {
+        $(_elt).checked = false;
         $(_elt).up('div').hide();
       }
       else {
