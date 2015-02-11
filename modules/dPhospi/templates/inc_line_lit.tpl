@@ -272,7 +272,7 @@
                       {{if $is_aff && $object->sejour_id}}
                         {{if $conf.dPadmissions.show_deficience}}
                           <span style="margin-top: 3px; margin-right: 3px;">
-                            {{mb_include module=patients template=inc_vw_antecedents patient=$patient type=deficience readonly=1}}
+                            {{mb_include module=patients template=inc_vw_antecedents patient=$patient type=deficience readonly=1 handicap=$sejour->handicap}}
                           </span>
                         {{/if}}
                         {{if $object->uf_hebergement_id && $object->uf_medicale_id && $object->uf_soins_id && $conf.dPhospi.show_uf}}

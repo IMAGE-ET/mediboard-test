@@ -81,7 +81,7 @@
                     <span>
                   {{/if}}
                   <span style="float: right;">
-                    {{mb_include module=patients template=inc_vw_antecedents type=deficience readonly=1}}
+                    {{mb_include module=patients template=inc_vw_antecedents type=deficience readonly=1 handicap=$sejour->handicap}}
                   </span>
                   {{if "dPImeds"|module_active && "dPhospi vue_tableau show_labo_results"|conf:"CGroups-$g"}}
                     {{mb_include module=Imeds template=inc_sejour_labo link="#1"}}

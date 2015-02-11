@@ -61,9 +61,9 @@
             {{/if}}
           {{/if}}
           {{if $conf.dPadmissions.show_deficience}}
-          <span>
-            {{mb_include module=patients template=inc_vw_antecedents type=deficience readonly=1}}
-          </span>
+            <span>
+              {{mb_include module=patients template=inc_vw_antecedents type=deficience readonly=1 handicap=$_sejour->handicap}}
+            </span>
           {{/if}}
           {{if $_affectation->sejour_id != 0 && $_affectation->lit_id}}
             <button type="button" class="door-out notext opacity-40"

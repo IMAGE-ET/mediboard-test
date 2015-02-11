@@ -3,6 +3,7 @@
 {{mb_default var=show_all value=false}}
 {{mb_default var=force_show value=false}}
 {{mb_default var=callback value=""}}
+{{mb_default var=handicap value=0}}
 
 {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
 {{assign var=antecedents value=$dossier_medical->_count_antecedents_by_type}}
@@ -15,7 +16,7 @@
   {{if ($antecedents.$type > 0 || $force_show)}}
     <a src="images/icons/{{$type}}.png"
        class="{{$type}} notext button
-       {{if !$antecedents.$type}}opacity-40{{/if}}"
+       {{if !$antecedents.$type && !$handicap}}opacity-40{{/if}}"
       {{if $antecedents.$type}}
         onmouseover="ObjectTooltip.createEx(this, null, null,
           {'m': 'dPpatients',
@@ -26,6 +27,8 @@
       {{if !$readonly}}
         onclick="Antecedent.editAntecedents('{{$patient->_id}}', '{{$type}}', '{{$callback}}')"
       {{/if}}></a>
+  {{elseif $handicap}}
+    <button class="deficience" title="Handicap"></button>
   {{/if}}
 {{else}}
   {{assign var=antecedents value=$patient->_ref_dossier_medical->_ref_antecedents_by_type}}

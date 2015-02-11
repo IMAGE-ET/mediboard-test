@@ -113,6 +113,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $discipline_id;
   public $ald;
   public $type_pec;
+  public $handicap;
 
   public $date_accident;
   public $nature_accident;
@@ -520,6 +521,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $props["transport_sortie"]         = "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo";
     $props["rques_transport_sortie"]   = "text";
     $props["type_pec"]                 = "enum list|M|C|O";
+    $props["handicap"]                 = "bool default|0";
 
     $props["date_accident"]            = "date";
     $props["nature_accident"]          = "enum list|P|T|D|S|J|C|L|B|U";

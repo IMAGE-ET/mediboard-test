@@ -793,6 +793,13 @@ Main.add( function(){
   </td>
 </tr>
 
+<tr>
+  <th>{{mb_label object=$sejour field="handicap"}}</th>
+  <td>
+    {{mb_field object=$sejour field="handicap"}}
+  </td>
+</tr>
+
 <tbody id="ald_patient" {{if !$conf.dPplanningOp.CSejour.easy_ald_cmu}}class="modeExpert"{{/if}} {{if !$conf.dPplanningOp.CSejour.show_cmu_ald}}style="display: none;"{{/if}}>
   {{mb_include module=planningOp template=inc_check_ald patient=$sejour->_ref_patient onchange="Value.synchronize(this);" display="form"}}
 </tbody>

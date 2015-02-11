@@ -1896,8 +1896,11 @@ class CSetupdPplanningOp extends CSetup {
                 ADD INDEX `operation_id` (`operation_id`);";
       $this->addQuery($query, true);
     }
+    $this->makeRevision("2.04");
 
-    $this->mod_version = '2.04';
-
+    $query = "ALTER TABLE `sejour`
+                ADD `handicap` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    $this->mod_version = '2.05';
   }
 }

@@ -53,7 +53,7 @@
         ({{$_sejour->type|truncate:1:""|capitalize}} - {{$_sejour->_ref_praticien->_shortview}})
         {{/if}}
         <div style="float: right;">
-          {{mb_include module=patients template=inc_vw_antecedents type=deficience readonly=1}}
+          {{mb_include module=patients template=inc_vw_antecedents type=deficience readonly=1 handicap=$_sejour->handicap}}
 
           {{if $_sejour->_couvert_cmu}}
           <strong>
