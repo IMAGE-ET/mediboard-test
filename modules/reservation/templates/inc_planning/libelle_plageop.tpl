@@ -11,7 +11,13 @@
 
 
 <div style="float:right;">{{mb_include module=system template=inc_object_notes object=$plageop }}</div>
-<div class="hover_chir">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$plageop->_ref_chir}}</div>
+<div class="hover_chir">
+  {{if $plageop->chir_id}}
+    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$plageop->_ref_chir}}
+  {{else}}
+    {{mb_include module=mediusers template=inc_vw_function function=$plageop->_ref_spec}}
+  {{/if}}
+</div>
 <p style="text-align: center;">
   {{if $plageop->chir_id}}
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$plageop->_ref_chir}}
