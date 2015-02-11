@@ -41,12 +41,13 @@ class CColorSpec extends CMbFieldSpec {
     $default_color = $this->default ? $this->default : "ffffff";
 
     $reset_value = $this->notNull ? $default_color : "";
+    $bg_reset = $reset_value ? "#$reset_value" : "transparent";
 
     $value = (!$value && ($this->notNull || $this->default)) ? $default_color : $value;
 
     $sHtml = "
     <input type=\"text\" class=\"color_picker\" name=\"$field\" value=\"$value\" $extra />
-    <button type=\"button\" onclick=\"var elem = $(this).previous('input'); \$V(elem, '$reset_value', true); elem.setStyle({backgroundColor: '#$reset_value'});\" class='cancel notext'></button>
+    <button type=\"button\" onclick=\"var elem = $(this).previous('input'); \$V(elem, '$reset_value', true); elem.setStyle({backgroundColor: '$bg_reset'});\" class='cancel notext'></button>
     ";
     if ($form && !$readonly) {
       $js_params = "{}";
