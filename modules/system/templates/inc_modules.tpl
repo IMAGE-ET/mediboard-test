@@ -83,15 +83,15 @@ var Module = {
 <table class="tbl">
   <tr>
     <th colspan="2">{{mb_title class=CModule field=_view}}</th>
-    <th>{{mb_title class=CModule field=mod_type}}</th>
+    <th class="narrow">{{mb_title class=CModule field=mod_type}}</th>
     <th class="narrow">{{tr}}Action{{/tr}}</th>
     {{if $installed}}
-      <th>{{mb_title class=CModule field=_dsns}}</th>
+      <th class="narrow">{{mb_title class=CModule field=_dsns}}</th>
       <th class="narrow">{{mb_title class=CModule field=_configable}}</th>
-      <th>{{mb_title class=CModule field=mod_version}}</th>
-      <th>{{mb_title class=CModule field=mod_active}}</th>
-      <th>{{mb_title class=CModule field=mod_ui_active}}</th>
-      <th>{{mb_title class=CModule field=mod_ui_order}}</th>
+      <th class="narrow">{{mb_title class=CModule field=mod_version}}</th>
+      <th class="narrow">{{mb_title class=CModule field=mod_active}}</th>
+      <th class="narrow">{{mb_title class=CModule field=mod_ui_active}}</th>
+      <th class="narrow">{{mb_title class=CModule field=mod_ui_order}}</th>
     {{/if}}
     <th>{{mb_title class=CModule field=_dependencies}}</th>
   </tr>
