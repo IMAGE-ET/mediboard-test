@@ -1,7 +1,7 @@
 <?php
 
 $purge_start_date = CValue::post('purge_start_date', CMbDT::date());
-$purge_limit      = CValue::post('purge_limit');
+$purge_limit      = CValue::post('purge_limit', '100');
 $practitioner_id  = CValue::post('practitioner_id');
 $just_count       = CValue::post('just_count');
 
