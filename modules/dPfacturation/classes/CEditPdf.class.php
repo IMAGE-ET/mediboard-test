@@ -868,8 +868,8 @@ class CEditPdf{
 
       $h_add++;
       $this->pdf->Text($l_colonne + $decalage, $h_ligne*$h_add+$haut_doc , $this->auteur["adresse1"]);
+      $h_add++;
       if ($this->auteur["adresse2"]) {
-        $h_add++;
         $this->pdf->Text($l_colonne + $decalage, $h_ligne*$h_add+$haut_doc , $this->auteur["adresse2"]);
         $h_add++;
       }
