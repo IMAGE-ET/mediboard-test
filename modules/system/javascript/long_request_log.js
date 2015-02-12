@@ -35,6 +35,33 @@ LongRequestLog = {
     };
 
     confirmDeletion(form, options, Control.Modal.close);
-  }
+  },
 
+  showPurge : function(form) {
+    var url = new Url('system', 'vw_purge_long_request_logs');
+    url.addElement(form.elements.user_id);
+    url.addElement(form.elements.duration);
+    url.addElement(form.elements.duration_operand);
+    url.addElement(form.elements._date_min);
+    url.addElement(form.elements._date_max);
+    url.requestModal(800);
+  },
+
+  purgeSome : function(form, just_count) {
+    var url = new Url('system', 'do_purge_long_request_logs', 'dosql');
+    url.addElement(form.elements._date_min);
+    url.addElement(form.elements._date_max);
+    url.addElement(form.elements.user_id);
+    url.addElement(form.elements.duration);
+    url.addElement(form.elements.duration_operand);
+    url.addElement(form.elements.purge_limit);
+
+    if (just_count) {
+      url.addParam('just_count', 1);
+    }
+
+    // Give some rest to server
+    var onComplete = $('clean_auto').checked ? LongRequestLog.purgeSome.curry(form, just_count) : Prototype.emptyFunction;
+    url.requestUpdate("resultPurgeLogs", {method: 'post', onComplete: function () { onComplete.delay(2); } });
+  }
 };

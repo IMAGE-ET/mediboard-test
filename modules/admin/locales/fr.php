@@ -342,6 +342,7 @@ $locales['CUser_no-user-ldap'] = 'Aucun utilisateur n\'a été trouvé dans l\'annu
 $locales['CUser_one-user-ldap'] = 'Un utilisateur a été trouvé dans l\'annuaire LDAP';
 $locales['CUser_user-ldap-associate'] = 'Associer au LDAP';
 $locales['CUser_user-ldap-create-and-associate'] = 'Créer depuis l\'annuaire LDAP';
+$locales['CUser|all'] = 'Tous les utilisateurs';
 $locales['CViewAccessToken'] = 'Jeton d\'accès';
 $locales['CViewAccessToken-datetime_start'] = 'Horodatage début';
 $locales['CViewAccessToken-datetime_start-court'] = 'Début';

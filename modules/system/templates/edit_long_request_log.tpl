@@ -19,8 +19,7 @@
   {{mb_class object=$log}}
   {{mb_key   object=$log}}
 
-  <table class="form">
-
+  <table class="main form">
   <tr>
     <th>{{mb_label object=$log field=datetime}}</th>
     <td>{{mb_value object=$log field=datetime}}</td>

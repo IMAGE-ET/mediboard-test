@@ -18,19 +18,26 @@ $filter = new CLongRequestLog();
 $filter->_date_min = CValue::get("_date_min");
 $filter->_date_max = CValue::get("_date_max");
 $filter->user_id   = CValue::get("user_id");
+$duration_operand  = CValue::get("duration_operand");
+$filter->duration  = CValue::get("duration");
 
-// Récupération de la liste des requêtes longues correspondantes
+$ds = CSQLDataSource::get('std');
+
 $where = array();
 if ($filter->user_id) {
-  $where["user_id"] = "= '$filter->user_id'";
+  $where["user_id"] = $ds->prepare("= ?", $filter->user_id);
 }
 
 if ($filter->_date_min) {
-  $where[] = "datetime >= '$filter->_date_min'";
+  $where[] = $ds->prepare("`datetime` >= ?", $filter->_date_min);
 }
 
 if ($filter->_date_max) {
-  $where[] = "datetime <= '$filter->_date_max'";
+  $where[] = $ds->prepare("`datetime` >= ?", $filter->_date_max);
+}
+
+if ($filter->duration && in_array($duration_operand, array('<', '<=', '=', '>', '>='))) {
+  $where['duration'] = $ds->prepare("$duration_operand ?", $filter->duration);
 }
 
 $order = "datetime DESC";
@@ -38,6 +45,12 @@ $order = "datetime DESC";
 /** @var CLongRequestLog[] $logs */
 $logs = $filter->loadList($where, $order, "$start, 50");
 $list_count = $filter->countList($where);
+
+CStoredObject::massLoadFwdRef($logs, 'user_id');
+foreach ($logs as $_log) {
+  $_log->loadRefUser();
+  $_log->_ref_user->loadRefFunction();
+}
 
 $smarty = new CSmartyDP();
 

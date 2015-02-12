@@ -14,7 +14,7 @@ CCanDo::checkAdmin();
 
 $filter = new CLongRequestLog();
 
-$filter->_date_min = CValue::get("_date_min", CMbDt::date("-1 month"));
+$filter->_date_min = CValue::get("_date_min", CMbDt::date("-1 MONTH") . ' 00:00:00');
 $filter->_date_max = CValue::get("_date_max");
 $filter->user_id   = CValue::get("user_id");
 
