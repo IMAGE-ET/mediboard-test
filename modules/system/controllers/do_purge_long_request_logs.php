@@ -8,6 +8,8 @@ $duration_operand = CValue::post('duration_operand');
 $purge_limit      = CValue::post('purge_limit', '100');
 $just_count       = CValue::post('just_count');
 
+$purge_limit = ($purge_limit) ? $purge_limit : 100;
+
 $ds  = CSQLDataSource::get('std');
 $log = new CLongRequestLog();
 
