@@ -29,10 +29,10 @@ orderColonne = function(order_col, order_way) {
 
 <table class="tbl">
   <tr>
-    <th></th>
-    <th>{{tr}}Actions{{/tr}}</th>
+    <th class="narrow"></th>
+    <th class="narrow"></th>
+    <th class="narrow">{{tr}}Actions{{/tr}}</th>
     <th>{{mb_title object=$exchange field=$exchange->_spec->key}}</th>
-    <th>{{mb_title object=$exchange field="object_class"}}</th>
     <th>{{mb_title object=$exchange field="object_id"}}</th>
     <th>{{mb_title object=$exchange field="id_permanent"}}</th>
     <th>{{mb_colonne class=$exchange->_class field="date_production" order_col=$order_col order_way=$order_way function=orderColonne}}</th>

@@ -40,6 +40,8 @@ $receivers = $receiver->getObjects();
 
 $tools = array(
   "exchanges" => array(
+    "send",
+    "inject_master_idex_missing",
     "reprocessing",
     "detect_collision",
   ),

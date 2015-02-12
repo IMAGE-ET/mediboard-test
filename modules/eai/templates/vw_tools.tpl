@@ -36,7 +36,7 @@ Main.add(function(){
   
     <table class="main layout">
       <tr>
-        <td class="narrow">
+        <td style="width: 220px">
           {{mb_include module=eai template="inc_tool_`$_tool_class`_`$_tool`"}}
         </td>
         <td id="tools-{{$_tool_class}}-{{$_tool}}">&nbsp;</td>

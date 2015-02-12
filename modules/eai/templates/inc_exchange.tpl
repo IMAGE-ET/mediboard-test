@@ -17,16 +17,29 @@
 {{else}}
 <tr>
   <td class="narrow">
-   {{if $object->_self_sender}}
-     <img src="images/icons/prev.png" alt="&lt;" />
-   {{else}}
-     <img src="images/icons/next.png" alt="&gt;" />
-   {{/if}}
-   {{if $object->_delayed}}
-     <label title='{{$object->_delayed}} min' style="font-weight:bold">
-       <img src="images/icons/hourglass.png" alt="Retard" />
-     </label>
-   {{/if}}
+    {{if $object->_self_sender}}
+      <img src="style/mediboard/images/buttons/door_in.png"
+           alt="{{tr}}CExchangeDataFormat-message sent{{/tr}}" title="{{tr}}CExchangeDataFormat-message sent{{/tr}}"/>
+    {{else}}
+      <img src="style/mediboard/images/buttons/door_out.png"
+           alt="{{tr}}CExchangeDataFormat-message received{{/tr}}" title="{{tr}}CExchangeDataFormat-message received{{/tr}}"/>
+    {{/if}}
+
+    {{if $object->_delayed}}
+      <label title='{{$object->_delayed}}' style="font-weight:bold">
+        <img src="images/icons/hourglass.png" alt="{{tr}}Delayed{{/tr}}" />
+      </label>
+    {{/if}}
+
+    {{if $object->master_idex_missing}}
+      <button class="warning notext" type="button" onclick="ExchangeDataFormat.defineMasterIdexMissing('{{$object->_guid}}')"
+              title="{{tr}}CExchangeDataFormat-master_idex_missing-desc{{/tr}}">
+        {{tr}}CExchangeDataFormat-master_idex_missing-desc{{/tr}}
+      </button>
+    {{/if}}
+  </td>
+  <td class="narrow">
+    {{mb_include module=system template=inc_object_notes object=$object float="none"}}
   </td>
   <td class="narrow">
     <form name="del{{$object->_guid}}" action="" method="post">
@@ -64,13 +77,12 @@
     </button>
   </td>
   <td class="narrow">
-    {{$object->object_class}}
-  </td>
-  <td class="narrow">
     {{if $object->object_id}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$object->object_class}}-{{$object->object_id}}');">
         {{$object->object_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
       </span>
+    {{else}}
+      <em>{{$object->object_class}}</em>
     {{/if}}
   </td>
   <td class="narrow">
@@ -86,7 +98,7 @@
     </label>
   </td>
   {{assign var=emetteur value=$object->_ref_sender}}
-  <td class="{{if $object->sender_id == '0'}}error{{/if}} narrow text">
+  <td class="{{if $object->sender_id == '0'}}error{{/if}} text">
      {{if $object->_self_sender}}
      <label title='[SELF]' style="font-weight:bold">
        [SELF]
@@ -98,7 +110,7 @@
      {{/if}}
   </td>
   {{assign var=destinataire value=$object->_ref_receiver}}
-  <td class="narrow text">
+  <td class="text">
     {{if $object->_self_receiver}}
      <label title='[SELF]' style="font-weight:bold">
        [SELF]

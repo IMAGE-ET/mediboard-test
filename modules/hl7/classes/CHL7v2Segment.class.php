@@ -387,6 +387,11 @@ class CHL7v2Segment extends CHL7v2Entity {
       $assigning_authority = $this->getAssigningAuthority("domain", null, null, $domain);
     }
 
+    $IPP = null;
+    if (!$patient->_IPP && !CValue::read($actor->_configs, "send_not_master_IPP")) {
+      $IPP = "===IPP_MISSING===";
+    }
+
     // Table - 0203
     // RI - Resource identifier
     // PI - Patient internal identifier
@@ -395,7 +400,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     if (CHL7v2Message::$build_mode == "simple") {
       if ($actor->_configs["send_own_identifier"]) {
         $identifiers[] = array(
-          $patient->_IPP,
+          $IPP,
           null,
           null,
           // PID-3-4 Autorité d'affectation
@@ -414,16 +419,16 @@ class CHL7v2Segment extends CHL7v2Entity {
       }
       else {
         $identifiers[] = array(
-          (!$patient->_IPP) ? 0 : $patient->_IPP
+          (!$IPP) ? 0 : $IPP
         );
       }  
       
       return $identifiers;
     }  
 
-    if ($patient->_IPP) {
+    if ($IPP) {
       $identifiers[] = array(
-        $patient->_IPP,
+        $IPP,
         null,
         null,
         // PID-3-4 Autorité d'affectation

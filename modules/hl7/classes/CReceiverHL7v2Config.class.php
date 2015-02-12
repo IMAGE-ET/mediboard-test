@@ -76,6 +76,8 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   public $send_a42_onmerge;
   public $send_expected_discharge_with_affectation;
   public $send_child_admit;
+  public $send_not_master_IPP;
+  public $send_not_master_NDA;
 
   // Build
   public $build_mode;
@@ -123,6 +125,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       "encoding",
       "ER7_segment_terminator",
     ),
+
     "version" => array(
       // PAM
       "ITI30_HL7_version",
@@ -139,6 +142,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       // PIX
       "ITI9_HL7_version",
     ),
+
     "application" => array(
       "receiving_application",
       "receiving_facility",
@@ -147,6 +151,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       "assigning_authority_universal_type_id",
       "country_code"
     ),
+
     "actor options" => array(
       "iti30_option_merge",
       "iti30_option_link_unlink",
@@ -156,6 +161,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       "iti31_temporary_patient_transfer_tracking",
       "iti31_historic_movement",
     ),
+
     "build" => array(
       "build_mode",
       "build_NDA",
@@ -164,6 +170,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       "build_other_residence_number",
       "build_identifier_authority"
     ),
+
     "send" => array(
       "modification_admit_code",
       "modification_before_admit",
@@ -188,7 +195,10 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       "send_a42_onmerge",
       "send_expected_discharge_with_affectation",
       "send_child_admit",
+      "send_not_master_IPP",
+      "send_not_master_NDA",
     ),
+
     "PID" => array(
       "build_PID_3_4",
       "build_PID_6",
@@ -198,6 +208,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       "build_PID_19",
       "build_PID_31",
     ),
+
     "PV1" => array(
       "build_PV1_3_1",
       "build_PV1_3_1_default",
@@ -215,9 +226,11 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       "build_PV1_26",
       "build_PV1_36",
     ),
+
     "PV2" => array(
       "build_PV2_45",
     ),
+
     "ZBE" => array(
       "build_ZBE_7",
       "build_ZBE_8",
@@ -302,6 +315,8 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["send_a42_onmerge"]                         = "bool default|0";
     $props["send_expected_discharge_with_affectation"] = "bool default|1";
     $props["send_child_admit"]                         = "bool default|1";
+    $props["send_not_master_IPP"]                      = "bool default|1";
+    $props["send_not_master_NDA"]                      = "bool default|1";
 
     // Build
     $props["build_mode"]                   = "enum list|normal|simple default|normal";

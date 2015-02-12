@@ -17,15 +17,15 @@ ExchangeDataFormat = {
   editExchange : function (exchange_guid) {
     new Url("eai", "ajax_edit_exchange")
       .addParam("exchange_guid", exchange_guid)
-      .requestModal(400, 180);
+      .requestModal(600, 250);
   },
 
   refreshExchanges : function(exchange_class, exchange_type, exchange_group_id){
-    var url = new Url("eai", "ajax_refresh_exchanges");
-    url.addParam("exchange_class"   , exchange_class);
-    url.addParam("exchange_type"    , exchange_type);
-    url.addParam("exchange_group_id", exchange_group_id);
-    url.requestUpdate("exchanges", { onComplete : function() {
+    new Url("eai", "ajax_refresh_exchanges")
+      .addParam("exchange_class"   , exchange_class)
+      .addParam("exchange_type"    , exchange_type)
+      .addParam("exchange_group_id", exchange_group_id)
+      .requestUpdate("exchanges", { onComplete : function() {
       if (!exchange_type) {
         return;
       }
@@ -52,42 +52,42 @@ ExchangeDataFormat = {
   },
   
   refreshExchangesList : function(form) {
-    var url = new Url("eai", "ajax_refresh_echanges_list");
-    url.addFormData(form);
-    url.requestUpdate("exchangesList");
+    new Url("eai", "ajax_refresh_echanges_list")
+      .addFormData(form)
+      .requestUpdate("exchangesList");
     return false;
   },
   
   viewExchange : function(exchange_guid) {
-    var url = new Url("eai", "ajax_vw_exchange_details");
-    url.addParam("exchange_guid", exchange_guid);
-    url.requestModal(900, 530);
+    new Url("eai", "ajax_vw_exchange_details")
+      .addParam("exchange_guid", exchange_guid)
+      .requestModal(900, 530);
   },
   
   reprocessing : function(exchange_guid){
-    var url = new Url("eai", "ajax_reprocessing_exchange");
-    url.addParam("exchange_guid", exchange_guid);
-    url.requestUpdate("systemMsg", { onComplete:
-      ExchangeDataFormat.refreshExchange.curry(exchange_guid) 
+    new Url("eai", "ajax_reprocessing_exchange")
+      .addParam("exchange_guid", exchange_guid)
+      .requestUpdate("systemMsg", { onComplete:
+        ExchangeDataFormat.refreshExchange.curry(exchange_guid)
     });
   },
 
   refreshExchange : function(exchange_guid){
-    var url = new Url("eai", "ajax_refresh_exchange");
-    url.addParam("exchange_guid", exchange_guid);
-    url.requestUpdate("exchange_"+exchange_guid);
+    new Url("eai", "ajax_refresh_exchange")
+      .addParam("exchange_guid", exchange_guid)
+      .requestUpdate("exchange_"+exchange_guid);
   },
   
   treatmentExchanges : function(source_guid){
-    var url = new Url("eai", "ajax_treatment_exchanges");
-    url.addParam("source_guid", source_guid);
-    url.requestUpdate("CExchangeDataFormat-treatment_exchanges");
+    new Url("eai", "ajax_treatment_exchanges")
+      .addParam("source_guid", source_guid)
+      .requestUpdate("CExchangeDataFormat-treatment_exchanges");
   },
 
   sendMessage : function(exchange_guid, callback){
-    var url = new Url("eai", "ajax_send_message");
-    url.addParam("exchange_guid", exchange_guid);
-    url.requestUpdate("systemMsg",  callback || ExchangeDataFormat.refreshExchange.curry(exchange_guid));
+    new Url("eai", "ajax_send_message")
+      .addParam("exchange_guid", exchange_guid)
+      .requestUpdate("systemMsg",  callback || ExchangeDataFormat.refreshExchange.curry(exchange_guid));
   },
   
   changePage : function(page) {
@@ -117,20 +117,26 @@ ExchangeDataFormat = {
 
   doesExchangeExist : function(exchange_class, exchange_id) {
     if (exchange_id) {
-      var url = new Url('eai', 'ajax_does_exchange_exist');
-      url.addParam('exchange_class', exchange_class);
-      url.addParam('exchange_id'   , exchange_id);
-      url.requestJSON(
-        function(id) {
-          if (id) {
-            ExchangeDataFormat.viewExchange(exchange_class+"-"+id);
-          }
-          else {
-            SystemMessage.notify("<div class='error'>"+$T('CExchangeDataFormat-doesnt-exist')+"</div>");
-          }
+      new Url('eai', 'ajax_does_exchange_exist')
+        .addParam('exchange_class', exchange_class)
+        .addParam('exchange_id'   , exchange_id)
+        .requestJSON(
+          function(id) {
+            if (id) {
+              ExchangeDataFormat.viewExchange(exchange_class+"-"+id);
+            }
+            else {
+              SystemMessage.notify("<div class='error'>"+$T('CExchangeDataFormat-doesnt-exist')+"</div>");
+            }
         });
     }
 
     return false;
+  },
+
+  defineMasterIdexMissing : function(exchange_guid){
+    new Url("eai", "ajax_define_master_idex_missing")
+      .addParam("exchange_guid", exchange_guid)
+      .requestModal(400, 150, ExchangeDataFormat.refreshExchange.curry(exchange_guid));
   }
 }

@@ -153,8 +153,21 @@ class CHL7v2Event extends CHL7Event {
    * @return CExchangeHL7v2
    */
   function updateExchange() {
-    $exchange_hl7v2                 = $this->_exchange_hl7v2;
-    $exchange_hl7v2->_message       = $this->msg_hl7;
+    $exchange_hl7v2 = $this->_exchange_hl7v2;
+    $receiver       = $this->_receiver;
+
+    $exchange_hl7v2->_message = $this->msg_hl7;
+
+    // Si le message HL7 contient une wildcard pour l'IPP et le NDA on flag alors l'échange
+    $pattern = "===NDA_MISSING===";
+    if (!CValue::read($receiver->_configs, "send_not_master_NDA") && strpos($this->msg_hl7, $pattern) !== false) {
+      $exchange_hl7v2->master_idex_missing = true;
+    }
+    $pattern = "===IPP_MISSING===";
+    if (!CValue::read($receiver->_configs, "send_not_master_IPP") && strpos($this->msg_hl7, $pattern) !== false) {
+      $exchange_hl7v2->master_idex_missing = true;
+    }
+
     $exchange_hl7v2->message_valide = $this->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
     $exchange_hl7v2->store();
     

@@ -182,11 +182,18 @@ class CReceiverHL7v2 extends CInteropReceiver {
 
     $exchange = $evenement->_exchange_hl7v2;
 
+    // Si l'échange est invalide
     if (!$exchange->message_valide) {
       return null;
     }
 
+    // Si on n'est pas en synchrone
     if (!$this->synchronous) {
+      return null;
+    }
+
+    // Si on n'a pas d'IPP et NDA
+    if ($exchange->master_idex_missing) {
       return null;
     }
 

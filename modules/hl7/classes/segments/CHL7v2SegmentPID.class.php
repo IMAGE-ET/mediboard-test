@@ -261,8 +261,13 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
       $sejour = $this->sejour;
       $sejour->loadNDA($group->_id);
 
+      $NDA = null;
+      if (!$sejour->_NDA && !CValue::read($receiver->_configs, "send_not_master_NDA")) {
+        $NDA = "===NDA_MISSING===";
+      }
+
       if ($receiver->_configs["build_PID_18"] == "simple") {
-        $data[] = $sejour->_NDA;
+        $data[] = $NDA;
       }
       else {
         // Même traitement que pour l'IPP
@@ -276,9 +281,9 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
             break;
         }
 
-        $data[] = $sejour->_NDA ? array(
+        $data[] = $NDA ? array(
           array(
-            $sejour->_NDA,
+            $NDA,
             null,
             null,
             // PID-3-4 Autorité d'affectation

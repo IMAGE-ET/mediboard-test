@@ -500,6 +500,11 @@ class CSetuphprimxml extends CSetup {
                 ADD `send_insured_without_admit` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.58";
+    $this->makeRevision("0.58");
+    $query = "ALTER TABLE `echange_hprim`
+                ADD `master_idex_missing` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.59";
   }
 }

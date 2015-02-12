@@ -190,13 +190,19 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     // PV1-19: Visit Number (CX) (optional)
     $sejour->loadNDA($group->_id);
     $identifiers = array();
+
+    $NDA = null;
+    if (!$sejour->_NDA && !CValue::read($receiver->_configs, "send_not_master_NDA")) {
+      $NDA = "===NDA_MISSING===";
+    }
+
     if ($receiver->_configs["build_PV1_19"] == "simple") {
-      $identifiers[] = $sejour->_NDA;
+      $identifiers[] = $NDA;
     }
     else {
       if ($receiver->_configs["build_NDA"] == "PV1_19") {
-        $identifiers[] = $sejour->_NDA ? array(
-          $sejour->_NDA,
+        $identifiers[] = $NDA ? array(
+          $NDA,
           null,
           null,
           // PID-3-4 Autorité d'affectation

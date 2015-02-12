@@ -20,7 +20,8 @@ if (!$exchange_guid) {
   CApp::rip();
 }
 
-$exchange      = CMbObject::loadFromGuid($exchange_guid);
+$exchange = CMbObject::loadFromGuid($exchange_guid);
+$exchange->loadRefsNotes();
 
 if (!$exchange || $exchange && !$exchange->_id) {
   CAppUI::displayAjaxMsg("Aucun échange trouvé");

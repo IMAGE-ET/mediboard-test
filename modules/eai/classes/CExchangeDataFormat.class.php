@@ -35,6 +35,7 @@ class CExchangeDataFormat extends CMbMetaObject {
   public $object_id;
   public $object_class;
   public $reprocess;
+  public $master_idex_missing;
   
   // Filter fields
   public $_date_min;
@@ -97,6 +98,7 @@ class CExchangeDataFormat extends CMbMetaObject {
     $props["id_permanent"]        = "str";
     $props["object_id"]           = "ref class|CMbObject meta|object_class unlink";
     $props["reprocess"]           = "num min|0 max|".CAppUI::conf("eai max_reprocess_retries")." default|0";
+    $props["master_idex_missing"] = "bool show|0";
     
     $props["_self_sender"]        = "bool";
     $props["_self_receiver"]      = "bool notNull";
@@ -363,6 +365,112 @@ class CExchangeDataFormat extends CMbMetaObject {
       }
       $this->id_permanent = $mbObject->_NDA;
     }
+  }
+
+  /**
+   * Send exchange
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  function send() {
+    $this->loadRefsInteropActor();
+
+    if (!$this->message_valide) {
+      throw new CMbException("CExchangeDataFormat-msg-Invalid exchange");
+    }
+
+    $receiver = $this->_ref_receiver;
+    $receiver->loadConfigValues();
+
+    $evenement = null;
+
+    $msg = $this->_message;
+    if ($receiver instanceof CReceiverHL7v2) {
+      if ($receiver->_configs["encoding"] == "UTF-8") {
+        $msg = utf8_encode($msg);
+      }
+
+      $evenement   = "evenementsPatient";
+      $data_format = CIHE::getEvent($this);
+    }
+
+    if ($receiver instanceof CDestinataireHprim) {
+      if ($receiver->_configs["encoding"] == "UTF-8") {
+        $msg = utf8_encode($msg);
+      }
+
+      if ($this->type == "patients") {
+        $evenement   = "evenementPatient";
+        $data_format = CHPrimXMLEventPatient::getHPrimXMLEvenements($this->_message);
+      }
+
+      if ($this->type == "pmsi") {
+        $data_format = CHPrimXMLEventServeurActivitePmsi::getHPrimXMLEvenements($this->_message);
+        $evenement = $data_format->sous_type;
+      }
+    }
+
+    if ($receiver instanceof CPhastDestinataire) {
+      $data_format = CPhastEvenementsPN13::getXMLEvenementsPN13($this->_message);
+      $evenement = $data_format->sous_type;
+    }
+
+    if (!$evenement) {
+      throw new CMbException("CExchangeDataFormat-msg-No events defined");
+    }
+
+    $source = CExchangeSource::get("$receiver->_guid-$evenement");
+
+    if (!$source->_id  || !$source->active) {
+      throw new CMbException("CExchangeDataFormat-msg-No source for this actor");
+    }
+
+    // Si on n'a pas d'IPP et NDA
+    if ($this->master_idex_missing) {
+      throw new CMbException("CExchangeDataFormat-msg-Master idex missing");
+    }
+
+    $source->setData($msg, false, $this);
+    $source->send();
+
+    $this->date_echange = CMbDT::dateTime();
+
+    // Si on n'a pas d'acquittement
+    if (!$ack_data = $source->getACQ()) {
+      $this->store();
+      return;
+    }
+
+    if ($this instanceof CEchangeHprim) {
+      $ack_data = utf8_decode($ack_data);
+      $ack = CHPrimXMLAcquittements::getAcquittementEvenementXML($data_format);
+      $ack->loadXML($ack_data);
+      $doc_valid = $ack->schemaValidate();
+      if ($doc_valid) {
+        $this->statut_acquittement = $ack->getStatutAcquittement();
+      }
+    }
+
+    if ($this instanceof CExchangeHL7v2) {
+      $ack = new CHL7v2Acknowledgment($data_format);
+      $ack->handle($ack_data);
+      $this->statut_acquittement = $ack->getStatutAcknowledgment();
+      $this->acquittement_valide = $ack->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
+    }
+
+    if ($this instanceof CExchangePhast) {
+      $ack = new CPhastAcquittementsPN13();
+      $ack->loadXML($ack_data);
+      $doc_valid = $ack->schemaValidate();
+      if ($doc_valid) {
+        $this->statut_acquittement = $ack->getCodeAcquittement();
+      }
+    }
+
+    $this->_acquittement = $ack_data;
+    $this->store();
   }
 
   /**

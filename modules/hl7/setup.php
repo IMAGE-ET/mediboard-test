@@ -1460,7 +1460,22 @@ class CSetuphl7 extends CSetup {
                 ADD `control_identifier_type_code` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.14";
+    $this->makeRevision("1.14");
+    $query = "ALTER TABLE `exchange_hl7v2`
+                ADD `master_idex_missing` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `exchange_hl7v3`
+                ADD `master_idex_missing` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->makeRevision("1.15");
+    $query = "ALTER TABLE `receiver_hl7v2_config`
+                ADD `send_not_master_IPP` ENUM ('0','1') DEFAULT '1',
+                ADD `send_not_master_NDA` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.16";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

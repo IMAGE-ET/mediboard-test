@@ -64,6 +64,9 @@ if (isset($t["acquittement_invalide"])) {
 if (isset($t["no_date_echange"])) {
   $where["date_echange"] = "IS NULL";
 }
+if (isset($t["master_idex_missing"])) {
+  $where["master_idex_missing"] = " = '1'";
+}
 if ($id_permanent) {
   $where["id_permanent"] = " = '$id_permanent'";
 }
@@ -96,11 +99,13 @@ $forceindex[] = "date_production";
 $total_exchanges = $itemExchange->countList($where, null, $ljoin, $forceindex);
 $order = "$order_col $order_way";
 
+/** @var CExchangeDataFormat[] $exchanges */
 $exchanges = $itemExchange->loadList($where, $order, "$page, 25", null, $ljoin, $forceindex);
 foreach ($exchanges as $_exchange) {
   $_exchange->loadRefsBack();
   $_exchange->getObservations();
   $_exchange->loadRefsInteropActor();
+  $_exchange->loadRefsNotes();
 }
 
 // Création du template

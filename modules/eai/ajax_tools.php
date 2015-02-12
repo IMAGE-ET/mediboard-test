@@ -12,7 +12,7 @@
  
 CCanDo::checkAdmin();
 
-$count          = CValue::get("count", 20);
+
 $continue       = CValue::get("continue"); 
 $error_code     = CValue::get("error_code"); 
 $exchange_class = CValue::get("exchange_class"); 
@@ -58,7 +58,7 @@ $exchanges = $exchange->loadList($where, $order, "0, $count", null, $ljoin, $for
 $smarty = new CSmartyDP();
     
 switch ($tool) {
-  case "reprocessing" :
+  case "reprocessing":
     foreach ($exchanges as $_exchange) {
       try {
         $_exchange->reprocessing();
@@ -84,7 +84,7 @@ switch ($tool) {
         $hl7_message = new CHL7v2Message;
         $hl7_message->parse($_exchange->_message);
         
-        $xml = $hl7_message->toXML(null ,false);
+        $xml = $hl7_message->toXML(null, false);
         
         $PV1 = $xml->queryNode("PV1");
         $PV2 = $xml->queryNode("PV2");
@@ -109,6 +109,8 @@ switch ($tool) {
     $smarty->display("inc_detect_collisions.tpl");
       
     break;
+
+  default:
 }
 
 

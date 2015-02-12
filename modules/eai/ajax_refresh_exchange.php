@@ -29,6 +29,7 @@ if (!$exchange) {
 $exchange->loadRefs(); 
 $exchange->loadRefsInteropActor();
 $exchange->getObservations();
+$exchange->loadRefsNotes();
 
 // Création du template
 $smarty = new CSmartyDP();

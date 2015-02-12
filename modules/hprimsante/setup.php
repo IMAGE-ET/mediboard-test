@@ -124,6 +124,11 @@ class CSetuphprimsante extends CSetup {
                 ADD `notifier_entree_reelle` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.7";
+    $this->makeRevision("0.7");
+    $query = "ALTER TABLE `exchange_hprimsante`
+                ADD `master_idex_missing` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.8";
   }
 }

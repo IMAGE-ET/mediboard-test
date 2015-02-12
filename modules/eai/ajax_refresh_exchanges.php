@@ -26,7 +26,7 @@ $page      = CValue::getOrSession('value', 0);
 // Types filtres qu'on peut prendre en compte
 $filtre_types = array(
   'ok'    => array('emetteur', 'destinataire'),
-  'error' => array('no_date_echange','message_invalide', 'acquittement_invalide')
+  'error' => array('no_date_echange','message_invalide', 'acquittement_invalide', 'master_idex_missing')
 );
 
 $types = array();

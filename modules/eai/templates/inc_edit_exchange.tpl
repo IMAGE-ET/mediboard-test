@@ -19,6 +19,8 @@
   <table class="form">
     <tr>
       <th class="title modify text" colspan="2">
+        {{mb_include module=system template=inc_object_notes object=$exchange}}
+
         {{tr}}{{$exchange->_class}}-title-modify{{/tr}} '{{$exchange->_view}}'
       </th>
     </tr>
@@ -51,6 +53,12 @@
         </button>
       </td>
     </tr>
+
+    <tr>
+      <th>{{mb_label object=$exchange field="master_idex_missing"}}</th>
+      <td>{{mb_field object=$exchange field="master_idex_missing"}}</td>
+    </tr>
+
     <tr>
       <td class="button" colspan="2">
         <button type="button" class="cancel" onclick="Control.Modal.close();">{{tr}}Cancel{{/tr}}</button>
