@@ -177,7 +177,7 @@ CMbObject::massLoadFwdRef($consultations, "plageconsult_id");
 foreach ($dossiers_anesth_total as $dossier_anesth) {
   $consultation = $dossier_anesth->loadRefConsultation();
   $consultation->loadRefPlageConsult();
-  $dossier_anesth->_date_consult = $consultation->_date;
+  $consultation->loadRefPraticien()->loadRefFunction();
 }
 
 if (CAppUI::conf("dPadmissions show_deficience")) {

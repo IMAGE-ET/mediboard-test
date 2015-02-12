@@ -30,7 +30,7 @@
   <td class="text" rowspan="{{$dossiers_anesth|@count}}">
     <div class="{{if $curr_consult->chrono == 64}}small-success{{else}}small-info{{/if}}" style="margin: 0;">
       <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_consult->_guid}}')">{{$curr_consult->heure|date_format:$conf.time}}</span>
-      -
+      <br/>
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_consult->_ref_plageconsult->_ref_chir}}
     </div>
   </td>
@@ -76,12 +76,12 @@
       </td>
 
       <td class="text" style="{{$cell_style}}">
-        <div style="float: right;">
-          {{mb_include module=system template=inc_object_notes object=$_sejour}}
+        <div style="">
+          {{mb_include module=system template=inc_object_notes object=$_sejour float=right}}
+          {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$_sejour _show_numdoss_modal=1}}
         </div>
-        {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$_sejour _show_numdoss_modal=1}}
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
-        le {{$_sejour->_entree|date_format:$conf.date}}
+        {{$_sejour->_entree|date_format:$conf.date}}
         </span>
       </td>
 

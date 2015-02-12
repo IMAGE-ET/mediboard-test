@@ -167,11 +167,15 @@
 
 <td>
   {{foreach from=$_sejour->_ref_operations item=_op}}
-    {{if $_op->_ref_consult_anesth->_id}}
-      <div class="{{if $_op->_ref_consult_anesth->_ref_consultation->chrono == 64}}small-success{{else}}small-info{{/if}}" style="margin: 0;">
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_consult_anesth->_ref_consultation->_guid}}');">
-        {{$_op->_ref_consult_anesth->_date_consult|date_format:$conf.date}}
+    {{assign var=dossier_anesth value=$_op->_ref_consult_anesth}}
+    {{if $dossier_anesth->_id}}
+      {{assign var=consult_anesth value=$dossier_anesth->_ref_consultation}}
+      <div class="{{if $consult_anesth->chrono == 64}}small-success{{else}}small-info{{/if}}" style="margin: 0;">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$consult_anesth->_guid}}');">
+          {{mb_value object=$consult_anesth field=_date}}
         </span>
+          <br/>
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$consult_anesth->_ref_praticien}}
       </div>
     {{/if}}
   {{/foreach}}
