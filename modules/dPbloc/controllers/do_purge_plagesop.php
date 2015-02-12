@@ -1,13 +1,15 @@
 <?php
 
 $purge_start_date = CValue::post('purge_start_date', CMbDT::date());
-$purge_limit      = CValue::post('purge_limit', '100');
+$purge_limit      = CValue::post('purge_limit');
 $practitioner_id  = CValue::post('practitioner_id');
 $just_count       = CValue::post('just_count');
 
 if (!$purge_start_date) {
   CAppUI::stepAjax("common-error-You must select a start date", UI_MSG_ERROR);
 }
+
+$purge_limit = ($purge_limit) ? $purge_limit : 100;
 
 $ds       = CSQLDataSource::get('std');
 $plage_op = new CPlageOp();
