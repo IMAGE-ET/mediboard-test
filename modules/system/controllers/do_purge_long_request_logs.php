@@ -29,8 +29,7 @@ if ($duration && in_array($duration_operand, array('<', '<=', '=', '>', '>='))) 
   $where['duration'] = $ds->prepare("$duration_operand ?", $duration);
 }
 
-CSQLDataSource::$trace = true;
-$count                 = $log->countList($where);
+$count = $log->countList($where);
 
 $msg = '%d CLongRequestLog to be removed.';
 if ($count == 1) {
@@ -47,8 +46,7 @@ if ($just_count || !$count) {
   CApp::rip();
 }
 
-$logs                  = $log->loadList($where, null, $purge_limit);
-CSQLDataSource::$trace = false;
+$logs = $log->loadList($where, null, $purge_limit);
 
 if (!$logs) {
   CAppUI::js("\$('clean_auto').checked = false");
