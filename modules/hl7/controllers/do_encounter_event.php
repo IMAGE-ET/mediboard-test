@@ -118,12 +118,31 @@ switch ($event) {
     $sejour->load($sejour_id);
     $sejour->type = CValue::post("type");
 
-    if ($sejour->type == "ambu") {
-      $sejour->sortie_prevue = CMbDT::addTime("+4 HOURS", $sejour->entree);
+    if ($sejour->type == "ambu" || $sejour->type == "urg") {
+      $sejour->sortie_prevue = CMbDT::dateTime("+4 HOURS", $sejour->entree);
 
       if ($sejour->sortie_reelle) {
-        $sejour->sortie_reelle = CMbDT::addTime("+4 HOURS", $sejour->entree_reelle);
+        $sejour->sortie_reelle = CMbDT::dateTime("+4 HOURS", $sejour->entree);
       }
+
+      /* TODO Supprimer ceci après l'ajout des times picker */
+      $sejour->_hour_entree_prevue = null;
+      $sejour->_min_entree_prevue  = null;
+      $sejour->_hour_sortie_prevue = null;
+      $sejour->_min_sortie_prevue  = null;
+    }
+    elseif ($sejour->type == "comp") {
+      $sejour->sortie_prevue = CMbDT::dateTime("+72 HOURS", $sejour->entree);
+
+      if ($sejour->sortie_reelle) {
+        $sejour->sortie_reelle = CMbDT::dateTime("+72 HOURS", $sejour->entree);
+      }
+
+      /* TODO Supprimer ceci après l'ajout des times picker */
+      $sejour->_hour_entree_prevue = null;
+      $sejour->_min_entree_prevue  = null;
+      $sejour->_hour_sortie_prevue = null;
+      $sejour->_min_sortie_prevue  = null;
     }
 
     if ($msg = $sejour->store()) {

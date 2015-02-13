@@ -168,7 +168,7 @@ Main.add(function(){
 
             <tr>
               <th><label for="quantity_limited_request" title="Limite des résultats">Limite des résultats recherchés</label></th>
-              <td><input tabindex="43" type="text" name="quantity_limited_request" size="5" value="" /></td>
+              <td><input tabindex="43" type="text" name="quantity_limited_request" size="5" value="1" /></td>
 
               <td colspan="2"></td>
             </tr>

@@ -78,7 +78,7 @@ switch ($event) {
   case "INSERT":
     $where = array("entree_reelle" => "IS NOT NULL");
     if ($event_type == "event_change_class_inpatient") {
-      $where["type"] = "= 'urg'";
+      $where["type"] = "= 'urg' OR type = 'ambu'";
     }
     if ($event_type == "event_change_class_outpatient") {
       $where["type"] = "= 'comp'";

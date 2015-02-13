@@ -48,16 +48,17 @@
       <td>
         <select id="event_select" name="event_type" onchange="changeEvent(this)">
           <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-          <option value="admit">Admit</option>
-          <option value="event_change_class_inpatient">change patient class to inpatient</option>
-          <option value="event_change_class_outpatient">change patient class to outpatient</option>
-          <option value="discharge_patient">Discharge patient</option
-          <option value="pre_admit">Pre Admit Patient</option>
+          <option value="admit">Admit inpatient</option>
+          <option value="event_change_class_inpatient">Change patient class to inpatient</option>
+          <option value="event_change_class_outpatient">Change patient class to outpatient</option>
+          <option value="discharge_patient">Discharge patient</option>
+          <option value="pre_admit">Pre-admit Patient</option>
           <option value="register_outpatient">Register outpatient</option>
           <option value="transfert_patient">Transfer patient</option>
         </select>
       </td>
     </tr>
+
     <tr>
       <th>Evenement</th>
       <td>

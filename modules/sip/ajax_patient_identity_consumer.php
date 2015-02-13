@@ -61,4 +61,6 @@ foreach ($receivers as $_receiver) {
   $ack_data = $iti_handler->sendITI($profil, $transaction, $message, $code, $patient);
 }
 
-mbTrace($ack_data);
+if ($ack_data) {
+
+}

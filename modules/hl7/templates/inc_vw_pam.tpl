@@ -29,7 +29,7 @@
   <tr>
     <td class="narrow">
       <ul id="menu-pam" class="control_tabs_vertical">
-        <li><a href="#patient">Supplier</a></li>
+        <li><a href="#patient">Patient supplier</a></li>
         <li><a href="#generate">Générer des patients</a></li>
       </ul>
     </td>

@@ -174,8 +174,8 @@ foreach ($receivers as $_receiver) {
   $ack_data = $iti_handler->sendITI($profil, $transaction, $message, $code, $patient);
 }
 
-$objects = array();
-$pointer = null;
+$objects   = array();
+$pointer   = null;
 $query_tag = null;
 
 if ($ack_data) {
