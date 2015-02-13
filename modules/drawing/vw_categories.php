@@ -13,16 +13,16 @@
 
 CCanDo::checkAdmin();
 
-$category = new CDrawingCategory();
-/** @var CDrawingCategory[] $categories */
-$categories = $category->loadList(null, "name ASC");
+// users
+$user = new CMediusers();
+$users = $user->loadUsers(PERM_EDIT);
 
-foreach ($categories as $_cat) {
-  $_cat->loadRefsFiles();
-}
+// functions
+$function = new CFunctions();
+$functions = $function->loadListWithPerms(PERM_EDIT);
 
 // smarty
 $smarty = new CSmartyDP();
-$smarty->assign("category", $category);
-$smarty->assign("categories", $categories);
+$smarty->assign("users", $users);
+$smarty->assign("functions", $functions);
 $smarty->display("vw_categories.tpl");

@@ -41,6 +41,18 @@ class CSetupDrawing extends CSetup {
     $this->makeRevision("0.3");
     $this->addPrefQuery("drawing_advanced_mode", 0);
 
-    $this->mod_version = "0.4";
+    $this->makeRevision("0.4");
+    $query = "ALTER TABLE `drawing_category`
+                CHANGE `description` `description` TEXT,
+                ADD `object_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                ADD `object_class` VARCHAR (80) NOT NULL;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `drawing_category`
+                ADD INDEX (`name`),
+                ADD INDEX (`object_id`),
+                ADD INDEX (`object_class`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.5";
   }
 }

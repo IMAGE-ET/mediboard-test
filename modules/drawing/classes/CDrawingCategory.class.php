@@ -14,7 +14,7 @@
 /**
  * Description
  */
-class CDrawingCategory extends CMbObject {
+class CDrawingCategory extends CMbMetaObject {
   /**
    * @var integer Primary key
    */

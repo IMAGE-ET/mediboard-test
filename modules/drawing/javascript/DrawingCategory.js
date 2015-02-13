@@ -10,9 +10,11 @@
  */
 
 DrawingCategory = {
-  editModal : function(_id, afterClose) {
+  editModal : function(_id, object_class, object_id, afterClose) {
     var url = new Url('drawing', 'ajax_edit_drawing_category');
-    url.addParam("object_id", _id);
+    url.addParam("id", _id);
+    url.addParam("object_class", object_class);
+    url.addParam("object_id", object_id);
     url.requestModal();
     url.modalObject.observe('afterClose', function() {
       if (afterClose) {

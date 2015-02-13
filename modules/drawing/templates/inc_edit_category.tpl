@@ -11,6 +11,8 @@
 
 <form name="editDrawCategory" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close})">
   <input type="hidden" name="m" value="{{$m}}"/>
+  <input type="hidden" name="object_class" value="{{$cat->object_class}}"/>
+  <input type="hidden" name="object_id" value="{{$cat->object_id}}"/>
   {{mb_key object=$cat}}
   {{mb_class object=$cat}}
 
