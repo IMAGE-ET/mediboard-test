@@ -241,16 +241,15 @@ class CSearch {
         $datum_to_index["id"]          = $datum['object_id'];
         $datum_to_index["date"] = str_replace("-", "/", CMbDT::dateTime());
       }
+      $datum_to_index['body'] = mb_convert_encoding($datum_to_index['body'], "UTF-8", "Windows-1252");
+      $datum_to_index['title'] = mb_convert_encoding($datum_to_index['title'], "UTF-8", "Windows-1252");
+      $datum_to_index['body'] = CMbString::normalizeUtf8($datum_to_index['body']);
+      $datum_to_index['title'] = CMbString::normalizeUtf8($datum_to_index['title']);
     }
     else {
       $datum_to_index["id"]          = $datum['object_id'];
       $datum_to_index["date"]        = CMbDT::format(CMbDT::dateTime(), "%Y/%m/%d");
     }
-
-    $datum_to_index['body'] = mb_convert_encoding($datum_to_index['body'], "UTF-8", "Windows-1252");
-    $datum_to_index['title'] = mb_convert_encoding($datum_to_index['title'], "UTF-8", "Windows-1252");
-    $datum_to_index['body'] = CMbString::normalizeUtf8($datum_to_index['body']);
-    $datum_to_index['title'] = CMbString::normalizeUtf8($datum_to_index['title']);
 
     return $datum_to_index;
   }
