@@ -58,7 +58,7 @@
       </td>
     </tr>
     <tr>
-      <th></th>
+      <th>{{tr}}CExchangeDataFormat-msg-Type{{/tr}}</th>
       <td>
         <select name="exchange_class">
           {{foreach from=$exchanges_classes key=sub_classes item=_child_classes}}
@@ -87,8 +87,7 @@
       <td><label><input type="checkbox" name="continue" value="1" title="Automatique" /> Automatique</label></td>
     </tr>
     <tr>
-      <td></td>
-      <td>
+      <td colspan="2">
         <button type="submit" class="change">{{tr}}CEAI-tools-{{$_tool_class}}-{{$_tool}}-button{{/tr}}</button>
       </td>
     </tr>

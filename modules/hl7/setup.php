@@ -1464,9 +1464,15 @@ class CSetuphl7 extends CSetup {
     $query = "ALTER TABLE `exchange_hl7v2`
                 ADD `master_idex_missing` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
+    $query = "ALTER TABLE `exchange_hl7v2`
+                ADD INDEX (`master_idex_missing`);";
+    $this->addQuery($query);
 
     $query = "ALTER TABLE `exchange_hl7v3`
                 ADD `master_idex_missing` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `exchange_hl7v3`
+                ADD INDEX (`master_idex_missing`);";
     $this->addQuery($query);
 
     $this->makeRevision("1.15");

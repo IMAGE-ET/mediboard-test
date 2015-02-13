@@ -2,43 +2,36 @@
 
 CCanDo::checkAdmin();
 
-$exchange_guid = CValue::get("exchange_guid");
+$exchange_class = CValue::get("exchange_class");
+$count          = CValue::get("count");
 
-if (!$exchange_guid) {
-  CAppUI::displayAjaxMsg("Pas d'objet passé en paramètre");
-  CApp::rip();
+$where = array();
+if (!($limit = CAppUI::conf("eai max_files_to_process"))) {
+  return;
+}
+
+if ($count) {
+  $limit = "0, $count";
 }
 
 /** @var CExchangeDataFormat $exchange */
-$exchange = CMbObject::loadFromGuid($exchange_guid);
+$exchange = new $exchange_class;
 
-$master_IPP_missing = false;
-$pattern = "===IPP_MISSING===";
-if (!CValue::read($receiver->_configs, "send_not_master_IPP") && strpos($exchange->_message, $pattern) !== false) {
-  $master_IPP_missing = true;
-}
+$where['master_idex_missing'] = "= '1'";
 
-$master_NDA_missing = false;
-$pattern = "===NDA_MISSING===";
-if (!CValue::read($receiver->_configs, "send_not_master_NDA") && strpos($exchange->_message, $pattern) !== false) {
-  $master_NDA_missing = true;
-}
+$order = $exchange->_spec->key . " ASC";
 
-$patient = null;
-$sejour  = null;
-if ($exchange->object_class && $exchange->object_id) {
-  $object = CMbObject::loadFromGuid("$exchange->object_class-$exchange->object_id");
+/** @var CExchangeDataFormat[] $exchanges */
+$exchanges = $exchange->loadList($where, $order, $limit);
 
-  if ($object instanceof CPatient) {
-    $patient = $object;
-    $patient->loadIPP($exchange->group_id);
+foreach ($exchanges as $_exchange) {
+  try {
+    $_exchange->injectMasterIdexMissing();
+  }
+  catch (CMbException $e) {
+    $e->stepAjax(UI_MSG_WARNING);
+    continue;
   }
 
-  if ($object instanceof CSejour) {
-    $sejour = $object;
-    $sejour->loadNDA($exchange->group_id);
-    $object->loadRefPatient()->loadIPP($exchange->group_id);
-
-    $patient = $sejour->_ref_patient;
-  }
+  CAppUI::stepAjax("CExchangeDataFormat-confirm-Data injected");
 }

@@ -12,7 +12,6 @@
  
 CCanDo::checkAdmin();
 
-
 $continue       = CValue::get("continue"); 
 $error_code     = CValue::get("error_code"); 
 $exchange_class = CValue::get("exchange_class"); 
@@ -112,7 +111,6 @@ switch ($tool) {
 
   default:
 }
-
 
 CAppUI::js("next$tool()");
 

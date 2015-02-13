@@ -504,6 +504,10 @@ class CSetupeai extends CSetup {
                 ADD `master_idex_missing` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
+    $query = "ALTER TABLE `echange_any`
+                ADD INDEX (`master_idex_missing`);";
+    $this->addQuery($query);
+
     $this->mod_version = "0.30";
 
     $query = "SELECT * FROM `authorspecialty_20121112` WHERE `code` = 'G15_10/PAC00';";

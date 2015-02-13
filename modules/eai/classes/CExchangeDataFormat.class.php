@@ -561,4 +561,57 @@ class CExchangeDataFormat extends CMbMetaObject {
       throw new CMbException("CMbObject-msg-store-failed", $msg);
     }
   }
+
+  /**
+   * Inject master idex (IPP/NDA) missing
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  function injectMasterIdexMissing() {
+    $patient = null;
+    $sejour  = null;
+    if ($this->object_class && $this->object_id) {
+      $object = CMbObject::loadFromGuid("$this->object_class-$this->object_id");
+
+      if ($object instanceof CPatient) {
+        $patient = $object;
+        $patient->loadIPP($this->group_id);
+
+        if (!$patient->_IPP) {
+          return;
+        }
+      }
+
+      if ($object instanceof CSejour) {
+        $sejour = $object;
+        $sejour->loadNDA($this->group_id);
+        $object->loadRefPatient()->loadIPP($this->group_id);
+
+        $patient = $sejour->_ref_patient;
+
+        if (!$sejour->_NDA) {
+          return;
+        }
+      }
+    }
+
+    $pattern = "===IPP_MISSING===";
+    if (strpos($this->_message, $pattern) !== false) {
+      $this->_message = str_replace("===IPP_MISSING===", $patient->_IPP, $this->_message);
+    }
+
+    $pattern = "===NDA_MISSING===";
+    if (strpos($this->_message, $pattern) !== false) {
+      $this->_message = str_replace("===NDA_MISSING===", $sejour->_NDA, $this->_message);
+    }
+
+    $this->master_idex_missing = strpos($this->_message, "===NDA_MISSING===") !== false ||
+                                 strpos($this->_message, "===IPP_MISSING===") !== false;
+
+    if ($msg = $this->store()) {
+      throw new CMbException(CAppUI::tr("$this->_class-msg-store-failed") . $msg);
+    }
+  }
 }
