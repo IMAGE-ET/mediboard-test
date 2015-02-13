@@ -4434,21 +4434,21 @@ class CSejour extends CFacturable implements IPatientRelated {
       unset($prev_liaison_id);
 
       foreach ($_liaisons as $date => $_liaison) {
+        $_sous_item = $_liaison->loadRefSousItem();
         if (isset($prev_liaison_id) || $_liaison->_id == $last_liaison->_id) {
           // Utilisation du début de la liaison courante pour indiquer la fin de la liaison précédente
           if (isset($prev_liaison_id)) {
-            $_sous_item = $_liaison->loadRefSousItem();
             $dates[$prev_liaison_id]["fin"] = CMbDT::date($_sous_item->niveau == "nuit" ? "-1 day" : "", $date);
           }
           if ($_liaison->_id == $last_liaison->_id) {
-            $dates[$_liaison->_id]["debut"] = $date;
+            $dates[$_liaison->_id]["debut"] = CMbDT::date(($_sous_item->_id && $_sous_item->niveau == "nuit" && $date != CMbDT::date($this->entree)) ? "-1 day" : "", $date);
             $dates[$_liaison->_id]["fin"] = CMbDT::date($this->sortie);
             continue;
           }
         }
 
         $prev_liaison_id = $_liaison->_id;
-        $dates[$_liaison->_id]["debut"] = $date;
+        $dates[$_liaison->_id]["debut"] = CMbDT::date(($_sous_item->_id && $_sous_item->niveau == "nuit" && $date != CMbDT::date($this->entree)) ? "-1 day" : "", $date);
       }
     }
 
@@ -4462,7 +4462,7 @@ class CSejour extends CFacturable implements IPatientRelated {
               ($_save_liaison->sous_item_id == $_liaison->sous_item_id)) {
             $old_fin = $dates[$_save_liaison->_id]["fin"];
             $new_debut = $dates[$_liaison->_id]["debut"];
-            if (CMbDT::daysRelative($old_fin, $new_debut) == 1) {
+            if (CMbDT::daysRelative($old_fin, $new_debut) == 1 || CMbDT::daysRelative($old_fin, $new_debut) == 0) {
               $dates[$_save_liaison->_id]["fin"] = $dates[$_liaison->_id]["fin"];
               unset($dates[$_liaison->_id]);
               unset($liaisons_j[$prestation_id][$date]);
