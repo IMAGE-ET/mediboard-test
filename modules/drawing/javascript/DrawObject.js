@@ -26,14 +26,18 @@ DrawObject = {
         $V('color_text_cv', obj.target.fill, true);
         $V('bgcolor_text_cv', obj.target.shadow, true);
       }
+
+      $$('#draw_object_tool button, #draw_object_tool input').each(function(elt) {
+        elt.disabled = false;
+      });
     });
 
-    /*
-    // no selection
-    DrawObject.canvas.on('selection:cleared', function(tata) {
-      console.log('unselected');
+    // selection cleared
+    DrawObject.canvas.on('selection:cleared', function(obj) {
+      $$('#draw_object_tool button, #draw_object_tool input').each(function(elt) {
+        elt.disabled = true;
+      });
     });
-    */
 
     return DrawObject.canvas;
 
@@ -66,6 +70,29 @@ DrawObject = {
       var text = button.innerText;
     }
     return DrawObject.canvas.isDrawingMode;
+  },
+
+  changeMode : function(type) {
+    DrawObject.canvas.isDrawingMode = (type == 'draw');
+    return DrawObject.canvas.isDrawingMode;
+  },
+
+  insertFromUpload : function(input) {
+    var file = input.files[0];
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var blob = e.target.result;
+      var img = new Image();
+      img.src = blob;
+      img.onload = function() {
+        var image = new fabric.Image(img);
+        DrawObject.findBetterRatio(image);
+        DrawObject.canvas.add(image);
+        DrawObject.canvas.renderAll();
+      };
+    };
+    reader.readAsDataURL(file);
   },
 
   addEditText : function(str, col, ctr) {
@@ -286,25 +313,29 @@ DrawObject = {
     });
   },
 
+  findBetterRatio : function(img) {
+    //if the pic is bigger than canvas we resize
+    if (img.width && img.height && (img.width > DrawObject.canvas.width || img.height > DrawObject.canvas.height)) {
+      var width_sup_height = img.width > img.height;
+      var ratio = img.width/img.height;
+      img.set({
+        width: width_sup_height ? DrawObject.canvas.width : DrawObject.canvas.height*ratio,
+        height: width_sup_height ? DrawObject.canvas.width/ratio : DrawObject.canvas.height
+      });
+    }
+
+    // positionning
+    img.set({
+      left: (DrawObject.canvas.width - img.width)/2,
+      top: (DrawObject.canvas.height - img.height)/2
+    });
+
+    return img;
+  },
+
   insertImg : function(uri) {
     var imgfjs = fabric.Image.fromURL(uri, function(img) {
-
-      //if the pic is bigger than canvas we resize
-      if (img.width && img.height && (img.width > DrawObject.canvas.width || img.height > DrawObject.canvas.height)) {
-        var width_sup_height = img.width > img.height;
-        var ratio = img.width/img.height;
-        img.set({
-          width: width_sup_height ? DrawObject.canvas.width : DrawObject.canvas.height*ratio,
-          height: width_sup_height ? DrawObject.canvas.width/ratio : DrawObject.canvas.height
-        });
-      }
-
-      // positionning
-      img.set({
-        left: (DrawObject.canvas.width - img.width)/2,
-        top: (DrawObject.canvas.height - img.height)/2
-      });
-
+      DrawObject.findBetterRatio(img);
       DrawObject.canvas.add(img);
       DrawObject.canvas.renderAll.bind(DrawObject.canvas);
     });

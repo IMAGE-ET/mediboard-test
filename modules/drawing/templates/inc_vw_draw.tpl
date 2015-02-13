@@ -54,6 +54,10 @@
 
   saveDraw = function(form, is_export) {
     if (is_export) {
+      var remove_draft = confirm('Voulez-vous supprimer le brouillon ?');
+      if (remove_draft) {
+        $(form.remove_draft, 1);
+      }
       var sdata = DrawObject.getSvgStr();
       $V(form.export, 1);
     }
@@ -64,18 +68,8 @@
     return onSubmitFormAjax(form, {method:'post', onComplete:Control.Modal.close});
   };
 
-  toggleMode = function() {
-    var mode = DrawObject.toggleMode();
-    $$('#draw_tools_0, #draw_tools_1').each(function(elt) {
-      elt.removeClassName('active');
-    });
-    if (mode) {
-      $('draw_tools_1').addUniqueClassName('active');
-    }
-    else {
-
-      $('draw_tools_0').addUniqueClassName('active');
-    }
+  changeMode = function(type) {
+    DrawObject.changeMode(type);
   };
 
   canvas_text = function() {
@@ -98,7 +92,7 @@
     var is_svg = element.get('file_type').indexOf('svg') != -1;
     if (is_svg) {
       //old
-      DrawObject.insertImg("?m=files&a=fileviewer&file_id="+file_id+"&phpThumb=1");
+      DrawObject.insertImg("?m=files&a=fileviewer&file_id="+file_id+"&phpThumb=1&suppressHeaders=1");
     }
     else {
       //new
@@ -143,16 +137,13 @@
   Main.add(function() {
     var tabs = Control.Tabs.create('tabs_draw', false);
 
-    // right click to toggle modes
-    //document.observe('contextmenu', rightclicEvent);
-
     // keyboard down
     //document.observe('keydown', keyBoardEvent);
 
     // init
     DrawObject.init('canvas');
     {{if $draw->_id}}
-    DrawObject.loadDraw({{$draw->_binary_content|smarty:nodefaults}});
+      DrawObject.loadDraw({{$draw->_binary_content|smarty:nodefaults}});
     {{else}}
       DrawObject.canvas.backgroundColor = '#'+Preferences.drawing_background;
       DrawObject.canvas.renderAll();
@@ -172,23 +163,11 @@
       {{if $draw->_id}}Modification{{else}}Création{{/if}} (lié à {{$draw->_ref_object}})
       <ul class="control_tabs" id="tabs_draw">
         <li><a href="#draw_tools"><img src="modules/drawing/images/icon.png" alt="Dessin" style="width: 16px" /></a></li>
-        <li><a href="#notes"><img src="style/mediboard/images/buttons/comment.png" alt="{{tr}}Help{{/tr}}" /></a></li>
         <li><a href="#ressources"><img src="modules/dPfiles/images/icon.png" alt="Fichiers" style="width: 16px" /></a></li>
-        <!--<li><a href="#draw_help"><img src="style/mediboard/images/buttons/help.png" alt="{{tr}}Help{{/tr}}" /></a></li>-->
         <li><a href="#save"><img src="style/mediboard/images/buttons/save.png" alt="{{tr}}Save{{/tr}}" /></a></li>
       </ul>
       <div id="draw_tools">
         {{mb_include module=drawing template=inc_draw/draw_tools}}
-      </div>
-
-      <div id="notes">
-        {{foreach from=$draw->_ref_notes item=_note}}
-          <div class="note">
-            <p>{{$_note}}</p>
-            <p><strong>{{$_note->libelle}}</strong></p>
-            <p>{{$_note->libelle}}</p>
-          </div>
-        {{/foreach}}
       </div>
 
       <div id="ressources" style="height: 500px; overflow-y: auto; display: none;">

@@ -17,13 +17,10 @@ DrawingItem = {
     url.addParam('context_guid', context_guid);
     url.requestModal("1024","680");
 
-    url.modalObject.observe('afterClose', function(a) {
-      if (callback) {
+    if (callback) {
+      url.modalObject.observe('afterClose', function(a) {
         callback();
-      }
-      else {
-        window.location.reload();
-      }
-    });
+      });
+    }
   }
 };

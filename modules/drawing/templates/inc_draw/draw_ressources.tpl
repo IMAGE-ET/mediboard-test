@@ -9,15 +9,22 @@
  * @link     http://www.mediboard.org
 *}}
 
+
+
+<h2>Téléversement</h2>
+<input type="file" name="path" onchange="DrawObject.insertFromUpload(this);"/>
+
 {{if $object}}
   <h2>Contexte</h2>
   <div id="context_ressources">
     {{mb_include module=drawing template=inc_list_files_for_category category=$object}}
   </div>
 {{/if}}
+
 {{if $conf.drawing.drawing_allow_external_ressource}}
-  <input type="text" name="url" id="url_external_draw" value=""/><button onclick="insertFromInternet($V('url_external_draw'));">OK</button>
+  <input type="text" name="url" id="url_external_draw" value="" placeholder="Lien direct web"/><button onclick="insertFromInternet($V('url_external_draw'));">OK</button>
 {{/if}}
+
 <h2>Ressources</h2>
 <form method="get" name="filter_files_draw" onsubmit="return onSubmitFormAjax(this, null, 'target_files')">
   <input type="hidden" name="m" value="drawing"/>

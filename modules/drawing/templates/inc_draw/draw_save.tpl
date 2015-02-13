@@ -50,6 +50,7 @@
     <input type="hidden" name="dosql" value="do_drawfile_aed"/>
     <input type="hidden" name="svg_content" value=""/>
     <input type="hidden" name="export" value="1"/>
+    <input type="hidden" name="remove_draft" value="0"/>
     {{mb_field object=$draw field=author_id hidden=1}}
     {{mb_field object=$draw field=file_type hidden=1}}
     {{mb_field object=$draw field=object_class hidden=1}}

@@ -11,10 +11,11 @@
  * @link     http://www.mediboard.org
  */
 
-$file_id = CValue::post("file_id");
-$content = CValue::post("svg_content");
-$del     = CValue::post("del", 0);
-$export  = CValue::post("export", 0);
+$file_id        = CValue::post("file_id");
+$content        = CValue::post("svg_content");
+$del            = CValue::post("del", 0);
+$export         = CValue::post("export", 0);
+$remove_draft   = CValue::post("remove_draft", 0);
 
 $file = new CFile();
 $file->load($file_id);
@@ -63,6 +64,11 @@ else {
       else {
         CAppUI::stepAjax("Dessin exporté avec succès", UI_MSG_OK);
       }
+    }
+
+    if ($remove_draft) {
+      $msg = $file->delete();
+      CAppUI::stepAjax($msg ? $msg : "CFile-msg-delete", $msg ? UI_MSG_WARNING : UI_MSG_OK);
     }
   }
   // draft store

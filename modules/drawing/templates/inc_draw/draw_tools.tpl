@@ -9,8 +9,8 @@
  * @link     http://www.mediboard.org
 *}}
 
-<fieldset class="active" id="draw_tools_1">
-  <legend>Dessin au crayon</legend>
+<fieldset id="draw_tools_1">
+  <legend><label><input type="radio" name="toggle_type" onclick="changeMode('draw');" checked="checked"/>Dessin au crayon</label></legend>
   <p><label>Largeur du trait<input type="range" min="1" max="10" value="3" onchange="DrawObject.changeDrawWidth($V(this));"/></label></p>
   <p><label>Couleur
       <input type="text" class="color_picker" name="color" value="000000" onchange="colorSelect(this.value);" id="color_picker_draw"/>
@@ -24,34 +24,25 @@
   </p>
 </fieldset>
 
-<button class="switch" onclick="toggleMode();"></button>
-
 <fieldset id="draw_tools_0">
-  <legend>Controles</legend>
-  <button onclick="DrawObject.removeActiveObject();" class="cancel notext">{{tr}}drawobject.delete{{/tr}}</button>
-  <button onclick="DrawObject.zoomInObject()" class="zoom-in notext">{{tr}}drawobject.flipy-desc{{/tr}}</button>
-  <button onclick="DrawObject.zoomOutObject()" class="zoom-out notext">{{tr}}drawobject.flipy-desc{{/tr}}</button>
+  <legend><label><input type="radio" name="toggle_type" onclick="changeMode('edit');" />Controles</label></legend>
+  <div id="draw_object_tool">
+    <button onclick="DrawObject.removeActiveObject();" class="cancel notext">{{tr}}drawobject.delete{{/tr}}</button>
+    <button onclick="DrawObject.zoomInObject()" class="zoom-in notext">{{tr}}drawobject.flipy-desc{{/tr}}</button>
+    <button onclick="DrawObject.zoomOutObject()" class="zoom-out notext">{{tr}}drawobject.flipy-desc{{/tr}}</button>
 
-  {{if $app->user_prefs.drawing_advanced_mode}}
     <button onclick="DrawObject.flipXObject()" class="hslip notext">{{tr}}drawobject.flipx-desc{{/tr}}</button>
     <button onclick="DrawObject.flipYObject()" class="vslip notext">{{tr}}drawobject.flipy-desc{{/tr}}</button>
 
     {{*<button onclick="DrawObject.sendToBack()"     class="down notext">{{tr}}drawobject.flipy-desc{{/tr}}</button>*}}
-    <button onclick="DrawObject.sendBackwards()"  class="down notext">{{tr}}drawobject.flipy-desc{{/tr}}</button>
-    <button onclick="DrawObject.bringForward()"   class="up notext">{{tr}}drawobject.flipy-desc{{/tr}}</button>
+    <button onclick="DrawObject.sendBackwards()"  class="down notext">{{tr}}drawobject.sendBackwards-desc{{/tr}}</button>
+    <button onclick="DrawObject.bringForward()"   class="up notext">{{tr}}drawobject.sendForward-desc{{/tr}}</button>
     {{*<button onclick="DrawObject.bringToFront()"   class="up notext">{{tr}}drawobject.flipy-desc{{/tr}}</button>*}}
 
     <p><label>Opacité<input type="range" min="1" max="100" value="100" onchange="DrawObject.changeOpacty($V(this));"/></label></p>
-  {{/if}}
-
-</fieldset>
-
-<hr/>
-
-<fieldset>
-  <legend>Historique</legend>
-  <button onclick="DrawObject.undo()" class="undo">Annuler le dernier ajout</button>
+  </div>
   <button onclick="DrawObject.clearCanvas();" class="cleanup">Tout effacer</button>
+
 </fieldset>
 
 <hr/>

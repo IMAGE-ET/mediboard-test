@@ -30,8 +30,6 @@
       Droppables.add(td, {
         onDrop: function(from, to, event) {
           Event.stop(event);
-          console.log(to);
-          console.log(from);
           var file_id = from.get("file_id");
           var target_guid = to.get("cat_guid");
           if (target_guid && file_id) {
