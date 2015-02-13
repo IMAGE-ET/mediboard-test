@@ -410,7 +410,7 @@ Main.add(function() {
               <input type="hidden" name="classes_atc" value="{{$classes_atc}}"/>
               <input type="text" name="keywords_atc" class="autocomplete" value="{{$keywords_atc}}"
                 style="font-weight: bold; font-size: 1.3em; width: 300px;"
-                onclick="emptyProduit(); emptyATC(); emptyComposant(); emptyIndication(); emptyCommentaire();"/>
+                onclick="emptyProduit(); emptyComposant(); emptyIndication(); emptyCommentaire();"/>
               <div id="list_atc"></div>
             </td>
           </tr>
