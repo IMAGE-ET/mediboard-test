@@ -124,7 +124,6 @@ Main.add(function() {
   var urlATC = new Url("medicament", "ajax_atc_autocomplete");
   urlATC.autoComplete(form.keywords_atc, null, {
     minChars: 1,
-    dropdown: true,
     updateElement: function(selected) {
       var form = getForm("rechercheDossierClinique");
       $V(form.keywords_atc, selected.select(".view")[0].innerHTML.replace(/<em>|<\/em>/g, ''));
