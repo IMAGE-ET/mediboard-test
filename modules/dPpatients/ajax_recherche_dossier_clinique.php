@@ -383,18 +383,39 @@ if ($one_field_presc) {
     $whereMix[] = "prescription_line_mix_item.atc RLIKE '(^$classes_atc)'";
   }
   else if ($composant) {
-    $composition = new CBcbComposition();
-    $composition->searchProduits($composant);
-    $codes_cip = @CMbArray::pluck($composition->distObj->TabProduit, "CodeCIP");
-    $whereMed[] = "prescription_line_medicament.code_cip " . CSQLDataSource::prepareIn($codes_cip);
-    $whereMix[] = "prescription_line_mix_item.code_cip ".CSQLDataSource::prepareIn($codes_cip);
+    $composition_bdm = new CMedicamentComposant();
+    $produits = $composition_bdm->loadListProduits($composant);
+    switch (CMedicament::getBase()) {
+      default:
+      case "bcb":
+        $codes_cip = @CMbArray::pluck($produits, "code_cip");
+        $whereMed[] = "prescription_line_medicament.code_cip " . CSQLDataSource::prepareIn($codes_cip);
+        $whereMix[] = "prescription_line_mix_item.code_cip ".CSQLDataSource::prepareIn($codes_cip);
+        break;
+      case "vidal":
+        $codes_cis = @CMbArray::pluck($produits, "code_cis");
+        $whereMed[] = "prescription_line_medicament.code_cis " . CSQLDataSource::prepareIn($codes_cis);
+        $whereMix[] = "prescription_line_mix_item.code_cis ".CSQLDataSource::prepareIn($codes_cis);
+    }
   }
   else if ($indication) {
-    $bcb_indication = new CBcbIndication();
-    $produits = $bcb_indication->searchProduits($indication, $type_indication);
-    $codes_cip = CMbArray::pluck($produits, "Code_CIP");
-    $whereMed[] = "prescription_line_medicament.code_cip " . CSQLDataSource::prepareIn($codes_cip);
-    $whereMix[] = "prescription_line_mix_item.code_cip ".CSQLDataSource::prepareIn($codes_cip);
+    switch (CMedicament::getBase()) {
+      default:
+      case "bcb":
+        $bcb_indication = new CBcbIndication();
+        $produits = $bcb_indication->searchProduits($indication, $type_indication);
+        $codes_cip = CMbArray::pluck($produits, "Code_CIP");
+        $whereMed[] = "prescription_line_medicament.code_cip " . CSQLDataSource::prepareIn($codes_cip);
+        $whereMix[] = "prescription_line_mix_item.code_cip ".CSQLDataSource::prepareIn($codes_cip);
+        break;
+      case "vidal":
+        $indication_bdm = new CMedicamentIndication();
+        $produits = $indication_bdm->loadListProduits($indication);
+        $codes_cis = @CMbArray::pluck($produits, "code_cis");
+        $whereMed[] = "prescription_line_medicament.code_cis " . CSQLDataSource::prepareIn($codes_cis);
+        $whereMix[] = "prescription_line_mix_item.code_cis ".CSQLDataSource::prepareIn($codes_cis);
+    }
+
   }
   else if ($commentaire) {
     $whereMed["prescription_line_medicament.commentaire"] = "LIKE '%".addslashes($commentaire)."%'";
