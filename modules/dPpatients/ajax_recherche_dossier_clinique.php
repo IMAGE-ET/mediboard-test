@@ -370,8 +370,8 @@ if ($one_field_presc) {
       "prescription_line_mix_item.prescription_line_mix_id = prescription_line_mix.prescription_line_mix_id";
   }
 
-  $whereMed[] = "prescription_line_medicament.active = 1";
-  $whereMix[] = "prescription_line_mix.active = 1";
+  $whereMed[] = "prescription_line_medicament.active = '1'";
+  $whereMix[] = "prescription_line_mix.active = '1'";
 
   if ($code_cis) {
     $whereMed[] = "prescription_line_medicament.code_cis = '$code_cis'";
