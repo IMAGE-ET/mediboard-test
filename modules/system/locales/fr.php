@@ -2768,3 +2768,4 @@ $locales['utilities-source-file_system-connexion'] = 'Test d\'accessibilité';
 $locales['utilities-source-file_system-getFiles'] = 'Liste des fichiers';
 $locales['utilities-source-file_system-sendFile'] = 'Dépôt d\'un fichier';
 $locales['utilities-source-http'] = 'Utilitaires de la source HTTP';
+$locales['module-system-msg-cache-removal'] = 'Suppression dans le cache de \'%d\' items pour le préfixe \'%s\'';
