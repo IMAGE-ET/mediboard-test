@@ -70,7 +70,7 @@ function graphPatParHeureReveil(
       LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
       WHERE sallesbloc.stats = '1'
       AND operations.date BETWEEN '$debut' AND '$fin'
-      AND '".$tick[1].":00' BETWEEN operations.entree_reveil AND operations.sortie_reveil_possible
+      AND '".$tick[1].":00' BETWEEN operations.entree_reveil AND operations.sortie_reveil_reel
       AND operations.annulee = '0'";
       
     if ($prat_id) {
@@ -112,7 +112,7 @@ function graphPatParHeureReveil(
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
     WHERE sallesbloc.stats = '1'
     AND operations.date BETWEEN '$debut' AND '$fin'
-    AND (operations.entree_reveil IS NULL OR operations.sortie_reveil_possible IS NULL)
+    AND (operations.entree_reveil IS NULL OR operations.sortie_reveil_reel IS NULL)
     AND operations.annulee = '0'";
     
   if ($prat_id) {
